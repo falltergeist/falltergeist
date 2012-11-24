@@ -13,14 +13,13 @@ DatFile::DatFile(std::string filename)
     _frmFiles = new std::map<std::string, FrmFileType *>;
     _palFiles = new std::map<std::string, PalFileType *>;
     _filename = filename;
-    _stream = new std::fstream(filename.c_str(),std::ios::in|std::ios::binary);
+    _stream = new std::fstream(_filename.c_str(),std::ios::in|std::ios::binary);
     if (!_stream->is_open())
     {
         std::string message = "Can't open DAT file: ";
-        message.append(filename);
+        message.append(_filename);
         throw Exception(message);
     }
-
 }
 
 DatFile::~DatFile()

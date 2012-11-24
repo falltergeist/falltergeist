@@ -4,6 +4,7 @@
 #include "Fallout/DatFileItem.h"
 #include "Fallout/FrmFileType.h"
 #include "Fallout/PalFileType.h"
+#include "CrossPlatform.h"
 
 namespace Falltergeist
 {
@@ -11,9 +12,10 @@ namespace Falltergeist
 ResourceManager::ResourceManager()
 {
     _datFiles = new std::list<DatFile *>;
-    // loading all data files
-    _datFiles->push_back(new DatFile("/home/alexeevdv/.fallout/master.dat"));
-    _datFiles->push_back(new DatFile("/home/alexeevdv/.fallout/critter.dat"));
+
+    std::string homepath = CrossPlatform::getHomePath();
+    _datFiles->push_back(new DatFile(homepath + "/.fallout/master.dat"));
+    _datFiles->push_back(new DatFile(homepath + "/.fallout/critter.dat"));
 }
 
 DatFileItem * ResourceManager::getDatFileItem(std::string filename)
