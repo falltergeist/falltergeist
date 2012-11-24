@@ -7,6 +7,8 @@ namespace Falltergeist
 InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width,height,x,y)
 {
     _hovered = false;
+    _leftButtonPressed = false;
+    _rightButtonPressed = false;
     _onKeyboardPress = 0;
     _onKeyboardRelease = 0;
     _onLeftButtonClick = 0;
@@ -23,6 +25,8 @@ InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Su
 InteractiveSurface::InteractiveSurface(Surface * other) : Surface(other)
 {
     _hovered = false;
+    _leftButtonPressed = false;
+    _rightButtonPressed = false;
     _onKeyboardPress = 0;
     _onKeyboardRelease = 0;
     _onLeftButtonClick = 0;
