@@ -14,18 +14,6 @@ DatFileItem::DatFileItem(DatFile * datFile)
     _initialized = false;
 }
 
-DatFileItem::DatFileItem(std::string filename, DatFile * datFile)
-{
-    DatFileItem * item = datFile->getItem(filename);
-    _datFile = datFile;
-    this->isCompressed(item->isCompressed());
-    this->setDataOffset(item->getDataOffset());
-    this->setFilename(item->getFilename());
-    this->setPackedSize(item->getPackedSize());
-    this->setUnpackedSize(item->getUnpackedSize());
-}
-
-
 DatFileItem::~DatFileItem()
 {
     if (_initialized) delete _data;
@@ -63,14 +51,19 @@ unsigned int DatFileItem::getDataOffset()
     return _dataOffset;
 }
 
-unsigned int DatFileItem::getUnpackedSize()
-{
-    return _unpackedSize;
-}
-
 unsigned int DatFileItem::getPackedSize()
 {
     return _packedSize;
+}
+
+/**
+ * Returns unpacked size of the item
+ * @brief DatFileItem::size
+ * @return
+ */
+unsigned int DatFileItem::size()
+{
+    return _unpackedSize;
 }
 
 void DatFileItem::isCompressed(bool isCompressed)
@@ -88,12 +81,12 @@ void DatFileItem::_init()
     if (_initialized) return;
     std::fstream * stream = _datFile->getStream();
     // unpacked data buffer
-    _data = new unsigned char[getUnpackedSize()]();
+    _data = new unsigned char[this->size()]();
     _datFile->seek(getDataOffset());
     //stream->seekg(getDataOffset(), std::ios::beg);
     if (!isCompressed())
     {
-        stream->read((char * )_data, getUnpackedSize());
+        stream->read((char * )_data, this->size());
         _initialized = true;
         return;
     }
@@ -103,10 +96,9 @@ void DatFileItem::_init()
     //stream->seekg(,std::ios::)
     stream->read((char *) packed, getPackedSize());
 
-
     z_stream zStream = {0};
     zStream.total_in  = zStream.avail_in  = getPackedSize();
-    zStream.total_out = zStream.avail_out = getUnpackedSize();
+    zStream.total_out = zStream.avail_out = this->size();
     zStream.next_in  = packed;
     zStream.next_out = _data;
     zStream.zalloc = Z_NULL;
@@ -190,10 +182,6 @@ DatFileItem& DatFileItem::operator >>(int& value)
     return *this;
 }
 
-unsigned int DatFileItem::size()
-{
-    return _unpackedSize;
-}
 
 }
 

@@ -23,12 +23,12 @@ struct FrmDirection {
 };
 
 
-class FrmFileType : public DatFileItem
+class FrmFileType
 {
 
 protected:
-    DatFile * _datFile;
-    bool _readed;
+    DatFileItem * _datFileItem;
+    bool _initialized;
     void _init();
     unsigned int _version; // Frm file version
     unsigned short _fps;  // Frames per second
@@ -38,7 +38,7 @@ protected:
     unsigned int _dataSize;
 
 public:
-    FrmFileType(std::string fileName, DatFile * datFile);
+    FrmFileType(DatFileItem * datFileItem);
     ~FrmFileType();
     unsigned int getVersion();
     void setVersion(unsigned int version);

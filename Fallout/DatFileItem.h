@@ -31,7 +31,6 @@ public:
     void setPackedSize(unsigned int size);
     void setDataOffset(unsigned int offset);
     void isCompressed(bool isCompressed);
-    unsigned int getUnpackedSize();
     unsigned int getPackedSize();
     unsigned int getDataOffset();
     bool isCompressed();

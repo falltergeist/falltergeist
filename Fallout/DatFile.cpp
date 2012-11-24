@@ -9,6 +9,8 @@ namespace Falltergeist
 
 DatFile::DatFile(std::string filename)
 {
+    _frmFiles = new std::map<std::string, FrmFileType *>;
+
     _filename = filename;
     _stream = new std::fstream(filename.c_str(),std::ios::in|std::ios::binary);
     if (!_stream->is_open())
@@ -183,7 +185,20 @@ DatFileItem * DatFile::getItem(std::string filename)
 
 FrmFileType * DatFile::getFrmFileType(std::string filename)
 {
-    FrmFileType * frm = new FrmFileType(filename, this);
+    // if frm file already loaded
+    if (_frmFiles->count(filename))
+    {
+        return _frmFiles->at(filename);
+    }
+
+    // seek for filename
+    DatFileItem * item = this->getItem(filename);
+    if (!item) return 0;
+
+    // create new frm file type
+    FrmFileType * frm = new FrmFileType(item);
+    // insert into frm files map
+    _frmFiles->insert(std::make_pair(filename,frm));
     return frm;
 }
 

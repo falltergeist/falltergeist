@@ -2,6 +2,7 @@
 #define FALLTERGEIST_DATFILE_H
 
 #include <list>
+#include <map>
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -17,7 +18,8 @@ class DatFile
 protected:
     std::string _filename;
     std::fstream * _stream;
-    std::list<DatFileItem*> * _items;
+    std::list<DatFileItem*> * _items;  // items list
+    std::map<std::string, FrmFileType *> * _frmFiles; // opened frmFiles
 public:
     DatFile(std::string filename);
     ~DatFile();
