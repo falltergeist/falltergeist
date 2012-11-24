@@ -1,11 +1,9 @@
 #ifndef FRMFILETYPE_H
 #define FRMFILETYPE_H
 
-#include <string>
-#include "Fallout/DatFileItem.h"
-
 namespace Falltergeist
 {
+class DatFileItem;
 
 struct FrmFrame {
     unsigned short width;
@@ -22,29 +20,33 @@ struct FrmDirection {
     FrmFrame * frames;
 };
 
-
 class FrmFileType
 {
 
 protected:
     DatFileItem * _datFileItem;
     bool _initialized;
-    void _init();
-    unsigned int _version; // Frm file version
-    unsigned short _fps;  // Frames per second
-    unsigned short _actionFrame;
-    unsigned short _framesPerDirection;
-    FrmDirection * _directions;
+    void _init(); // loads all necessary data
+    unsigned int _version; // frm file version
+    unsigned short _framesPerSecond;  // frames per second
+    unsigned short _framesPerDirection; // frames per each direction
+    unsigned short _actionFrame; // number of frame on which action is occurs
     unsigned int _dataSize;
+    FrmDirection * _directions;
 
 public:
     FrmFileType(DatFileItem * datFileItem);
     ~FrmFileType();
+    unsigned short getFramesPerSecond();
+    unsigned short getFramesPerDirection();
     unsigned int getVersion();
-    void setVersion(unsigned int version);
-    unsigned short getFps();
-    void setFps(unsigned short fps);
+    unsigned short getActionFrame();
     FrmDirection * getDirections();
+    void setFramesPerSecond(unsigned short framesNumber);
+    void setFramesPerDirection(unsigned short framesNumber);
+    void setVersion(unsigned int version);
+    void setActionFrame(unsigned short frameNumber);
+    void setDirections(FrmDirection * directions);
 
 };
 
