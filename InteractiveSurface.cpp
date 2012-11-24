@@ -20,6 +20,23 @@ InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Su
     _onRightButtonRelease = 0;
 }
 
+InteractiveSurface::InteractiveSurface(Surface * other) : Surface(other)
+{
+    _hovered = false;
+    _onKeyboardPress = 0;
+    _onKeyboardRelease = 0;
+    _onLeftButtonClick = 0;
+    _onLeftButtonPress = 0;
+    _onLeftButtonRelease = 0;
+    _onMouseIn = 0;
+    _onMouseOut = 0;
+    _onMouseOver = 0;
+    _onRightButtonClick = 0;
+    _onRightButtonPress = 0;
+    _onRightButtonRelease = 0;
+}
+
+
 InteractiveSurface::~InteractiveSurface()
 {
 }

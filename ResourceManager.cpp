@@ -9,10 +9,10 @@
 namespace Falltergeist
 {
 
+ std::list<DatFile *> * ResourceManager::_datFiles = new std::list<DatFile *>;
+
 ResourceManager::ResourceManager()
 {
-    _datFiles = new std::list<DatFile *>;
-
     std::string homepath = CrossPlatform::getHomePath();
     _datFiles->push_back(new DatFile(homepath + "/.fallout/master.dat"));
     _datFiles->push_back(new DatFile(homepath + "/.fallout/critter.dat"));
@@ -77,10 +77,13 @@ Surface * ResourceManager::getSurface(std::string filename)
         {
             // 12 - frame data offset
             unsigned int colorIndex = frm->getData()[i + 12];
-            surface->setPixel(x,y,*pal->getColor(colorIndex));
+            unsigned int color = *pal->getColor(colorIndex);
+            if (colorIndex == 0) color = 0;
+            surface->setPixel(x,y,color);
             i++;
         }
     }
+    SDL_SetColorKey(surface->getSurface(),SDL_SRCCOLORKEY, 0);
     return surface;
 }
 

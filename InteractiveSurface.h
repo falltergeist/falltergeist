@@ -29,6 +29,7 @@ protected:
     EventHandler _onKeyboardRelease;
 public:
     InteractiveSurface(int width, int height, int x = 0, int y = 0);
+    InteractiveSurface(Surface * other);
     virtual ~InteractiveSurface();
     virtual void handle(Event * event, State *state);
     void mouseIn(Event * event, State * state);

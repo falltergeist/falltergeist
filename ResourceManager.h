@@ -15,13 +15,13 @@ class Surface;
 class ResourceManager
 {
 protected:
-    std::list<DatFile *> * _datFiles;
+    static std::list<DatFile *> * _datFiles;
 public:
     ResourceManager();
-    DatFileItem * getDatFileItem(std::string filename);
-    FrmFileType * getFrmFileType(std::string filename);
-    PalFileType * getPalFileType(std::string filename);
-    Surface * getSurface(std::string filename);
+    static DatFileItem * getDatFileItem(std::string filename);
+    static FrmFileType * getFrmFileType(std::string filename);
+    static PalFileType * getPalFileType(std::string filename);
+    static Surface * getSurface(std::string filename);
 };
 
 }

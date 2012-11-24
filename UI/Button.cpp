@@ -7,4 +7,8 @@ Button::Button(int width, int height, int x, int y) : InteractiveSurface(width,h
 {
 }
 
+Button::Button(Surface * surface) : InteractiveSurface(surface)
+{
+}
+
 }

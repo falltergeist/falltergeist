@@ -19,7 +19,8 @@ SOURCES += main.cpp \
     Fallout/FrmFileType.cpp \
     Fallout/PalFileType.cpp \
     ResourceManager.cpp \
-    CrossPlatform.cpp
+    CrossPlatform.cpp \
+    UI/RedCircleButton.cpp
 
 HEADERS += \
     Surface.h \
@@ -38,6 +39,7 @@ HEADERS += \
     Fallout/FrmFileType.h \
     Fallout/PalFileType.h \
     ResourceManager.h \
-    CrossPlatform.h
+    CrossPlatform.h \
+    UI/RedCircleButton.h
 
 LIBS+= -lSDL

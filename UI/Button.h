@@ -10,6 +10,7 @@ class Button : public InteractiveSurface
 {
 public:
     Button(int width, int height, int x = 0, int y = 0);
+    Button(Surface * surface);
 };
 
 }
