@@ -4,6 +4,7 @@
 #include "Fallout/DatFileItem.h"
 #include "Fallout/FrmFileType.h"
 #include "Fallout/PalFileType.h"
+#include "Fallout/LstFileType.h"
 #include "CrossPlatform.h"
 
 namespace Falltergeist
@@ -59,6 +60,21 @@ PalFileType * ResourceManager::getPalFileType(std::string filename)
     }
     return 0;
 }
+
+LstFileType * ResourceManager::getLstFileType(std::string filename)
+{
+    std::list<DatFile *>::iterator it;
+    for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
+    {
+        LstFileType * lst = (*it)->getLstFileType(filename);
+        if (lst)
+        {
+            return lst;
+        }
+    }
+    return 0;
+}
+
 
 Surface * ResourceManager::getSurface(std::string filename)
 {

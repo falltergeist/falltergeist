@@ -13,6 +13,7 @@ namespace Falltergeist
 class DatFileItem;
 class FrmFileType;
 class PalFileType;
+class LstFileType;
 
 class DatFile
 {
@@ -20,8 +21,9 @@ protected:
     std::string _filename;
     std::fstream * _stream;
     std::list<DatFileItem*> * _items;  // items list
-    std::map<std::string, FrmFileType *> * _frmFiles; // opened frmFiles
-    std::map<std::string, PalFileType *> * _palFiles; // opened palFiles
+    std::map<std::string, FrmFileType *> * _frmFiles; // opened FRM Files
+    std::map<std::string, PalFileType *> * _palFiles; // opened PAL Files
+    std::map<std::string, LstFileType *> * _lstFiles; // opened LST Files
 public:
     DatFile(std::string filename);
     ~DatFile();
@@ -39,6 +41,7 @@ public:
     DatFile& operator>> (DatFileItem &value);
     FrmFileType * getFrmFileType(std::string filename);
     PalFileType * getPalFileType(std::string filename);
+    LstFileType * getLstFileType(std::string filename);
 };
 
 }

@@ -5,6 +5,8 @@
 #include "Fallout/DatFileItem.h"
 #include "Fallout/FrmFileType.h"
 #include "Fallout/PalFileType.h"
+#include "Fallout/LstFileType.h"
+#include "ResourceManager.h"
 
 using namespace Falltergeist;
 

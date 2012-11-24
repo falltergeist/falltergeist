@@ -10,6 +10,7 @@ class DatFile;
 class DatFileItem;
 class FrmFileType;
 class PalFileType;
+class LstFileType;
 class Surface;
 
 class ResourceManager
@@ -21,6 +22,7 @@ public:
     static DatFileItem * getDatFileItem(std::string filename);
     static FrmFileType * getFrmFileType(std::string filename);
     static PalFileType * getPalFileType(std::string filename);
+    static LstFileType * getLstFileType(std::string filename);
     static Surface * getSurface(std::string filename);
 };
 

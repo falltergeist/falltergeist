@@ -4,6 +4,7 @@
 #include <algorithm>
 #include "Fallout/FrmFileType.h"
 #include "Fallout/PalFileType.h"
+#include "Fallout/LstFileType.h"
 
 namespace Falltergeist
 {
@@ -12,6 +13,7 @@ DatFile::DatFile(std::string filename)
 {
     _frmFiles = new std::map<std::string, FrmFileType *>;
     _palFiles = new std::map<std::string, PalFileType *>;
+    _lstFiles = new std::map<std::string, LstFileType *>;
     _filename = filename;
     _stream = new std::fstream(_filename.c_str(),std::ios::in|std::ios::binary);
     if (!_stream->is_open())
@@ -258,4 +260,28 @@ PalFileType * DatFile::getPalFileType(std::string filename)
     return pal;
 }
 
+/**
+ * Returns LstFileType object
+ * @brief DatFile::getLstFileType
+ * @param filename
+ * @return
+ */
+LstFileType * DatFile::getLstFileType(std::string filename)
+{
+    // if lst file already loaded
+    if (_lstFiles->count(filename))
+    {
+        return _lstFiles->at(filename);
+    }
+
+    // seek for filename
+    DatFileItem * item = this->getItem(filename);
+    if (!item) return 0;
+
+    // create new lst file type
+    LstFileType * lst = new LstFileType(item);
+    // insert into lst files map
+    _lstFiles->insert(std::make_pair(filename,lst));
+    return lst;
+}
 }

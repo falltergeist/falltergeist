@@ -4,7 +4,6 @@
 namespace Falltergeist
 {
 class DatFileItem;
-class Surface;
 
 struct FrmFrame {
     unsigned short width;
