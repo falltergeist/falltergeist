@@ -12,10 +12,7 @@ public:
     MainMenuState(Game * game);
     void init();
     void think();
-    void onButton1Click();
-    void onButton1Press();
-    void onButton1Release();
-    void onButton2Press();
+    void onExitButtonClick(Event * event);
 };
 
 }

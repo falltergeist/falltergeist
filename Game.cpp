@@ -137,4 +137,9 @@ ResourceManager * Game::getResourceManager()
     return _resourceManager;
 }
 
+void Game::quit()
+{
+    _quit = true;
+}
+
 }

@@ -33,6 +33,7 @@ public:
     void setState(State * state);
     void popState();
     void run();
+    void quit();
 };
 
 }

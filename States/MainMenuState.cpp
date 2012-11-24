@@ -39,6 +39,7 @@ void MainMenuState::init()
 
     // "Exit" button
     RedCircleButton * exitButton = new RedCircleButton(29,19 + 41*5);
+    exitButton->onLeftButtonClick((EventHandler) &MainMenuState::onExitButtonClick);
 
     add(introButton);
     add(newGameButton);
@@ -53,21 +54,9 @@ void MainMenuState::think()
     State::think();
 }
 
-void MainMenuState::onButton1Click()
+void MainMenuState::onExitButtonClick(Event * event)
 {
-    _game->pushState(new SaveMenuState(_game));
-}
-void MainMenuState::onButton1Press()
-{
-    std::cout<< "button1 press" << std::endl;
-}
-void MainMenuState::onButton1Release()
-{
-    std::cout<< "button1 release" << std::endl;
-}
-void MainMenuState::onButton2Press()
-{
-    throw Exception("Test exception...");
+    _game->quit();
 }
 
 }
