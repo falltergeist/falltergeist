@@ -16,7 +16,8 @@ SOURCES += main.cpp \
     States/SaveMenuState.cpp \
     Fallout/DatFile.cpp \
     Fallout/DatFileItem.cpp \
-    Fallout/FrmFileType.cpp
+    Fallout/FrmFileType.cpp \
+    Fallout/PalFileType.cpp
 
 HEADERS += \
     Surface.h \
@@ -32,6 +33,7 @@ HEADERS += \
     States/SaveMenuState.h \
     Fallout/DatFile.h \
     Fallout/DatFileItem.h \
-    Fallout/FrmFileType.h
+    Fallout/FrmFileType.h \
+    Fallout/PalFileType.h
 
 LIBS+= -lSDL

@@ -3,6 +3,7 @@
 #include "Exception.h"
 #include <algorithm>
 #include "Fallout/FrmFileType.h"
+#include "Fallout/PalFileType.h"
 
 namespace Falltergeist
 {
@@ -10,7 +11,7 @@ namespace Falltergeist
 DatFile::DatFile(std::string filename)
 {
     _frmFiles = new std::map<std::string, FrmFileType *>;
-
+    _palFiles = new std::map<std::string, PalFileType *>;
     _filename = filename;
     _stream = new std::fstream(filename.c_str(),std::ios::in|std::ios::binary);
     if (!_stream->is_open())
@@ -24,14 +25,35 @@ DatFile::DatFile(std::string filename)
 
 DatFile::~DatFile()
 {
-    delete _stream;
+    delete _stream; _stream = 0;
 }
 
+/**
+ * Returns DAT file stream
+ * @brief DatFile::getStream
+ * @return
+ */
 std::fstream * DatFile::getStream()
 {
     return _stream;
 }
 
+/**
+ * Sets DAT file stream
+ * @brief DatFile::setStream
+ * @param stream
+ */
+void DatFile::setStream(std::fstream * stream)
+{
+    delete _stream;
+    _stream = stream;
+}
+
+/**
+ * Returns std::list of DAT file items
+ * @brief DatFile::getItems
+ * @return
+ */
 std::list<DatFileItem*> * DatFile::getItems()
 {
     if (_items != 0) return _items;
@@ -62,7 +84,11 @@ std::list<DatFileItem*> * DatFile::getItems()
     return _items;
 }
 
-
+/**
+ * Returns size file
+ * @brief DatFile::size
+ * @return
+ */
 unsigned int DatFile::size()
 {
     unsigned int begin, end, currentPosition, size;
@@ -183,6 +209,12 @@ DatFileItem * DatFile::getItem(std::string filename)
     return 0;
 }
 
+/**
+ * Returns FrmFileType object
+ * @brief DatFile::getFrmFileType
+ * @param filename
+ * @return
+ */
 FrmFileType * DatFile::getFrmFileType(std::string filename)
 {
     // if frm file already loaded
@@ -202,5 +234,29 @@ FrmFileType * DatFile::getFrmFileType(std::string filename)
     return frm;
 }
 
+/**
+ * Returns PalFileType object
+ * @brief DatFile::getPalFileType
+ * @param filename
+ * @return
+ */
+PalFileType * DatFile::getPalFileType(std::string filename)
+{
+    // if pal file already loaded
+    if (_palFiles->count(filename))
+    {
+        return _palFiles->at(filename);
+    }
+
+    // seek for filename
+    DatFileItem * item = this->getItem(filename);
+    if (!item) return 0;
+
+    // create new pal file type
+    PalFileType * pal = new PalFileType(item);
+    // insert into pal files map
+    _palFiles->insert(std::make_pair(filename,pal));
+    return pal;
+}
 
 }

@@ -12,6 +12,7 @@ namespace Falltergeist
 {
 class DatFileItem;
 class FrmFileType;
+class PalFileType;
 
 class DatFile
 {
@@ -20,14 +21,16 @@ protected:
     std::fstream * _stream;
     std::list<DatFileItem*> * _items;  // items list
     std::map<std::string, FrmFileType *> * _frmFiles; // opened frmFiles
+    std::map<std::string, PalFileType *> * _palFiles; // opened palFiles
 public:
     DatFile(std::string filename);
     ~DatFile();
     unsigned int size();
+    std::fstream * getStream();
     std::list<DatFileItem*> * getItems();
     DatFile& seek(unsigned int uint);
     unsigned int pos(void);
-    std::fstream * getStream();
+    void setStream(std::fstream * stream);
     DatFileItem * getItem(std::string filename);
     DatFile& operator>> (unsigned int &value);
     DatFile& operator>> (int &value);
@@ -35,6 +38,7 @@ public:
     DatFile& operator>> (char &value);
     DatFile& operator>> (DatFileItem &value);
     FrmFileType * getFrmFileType(std::string filename);
+    PalFileType * getPalFileType(std::string filename);
 };
 
 }

@@ -154,7 +154,7 @@ FrmDirection * FrmFileType::getDirections()
  */
 void FrmFileType::setDirections(FrmDirection * directions)
 {
-    delete [] _directions; _directions = 0;
+    delete [] _directions;
     _directions = directions;
 }
 
