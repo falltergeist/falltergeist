@@ -1,5 +1,5 @@
-#ifndef FRMFILETYPE_H
-#define FRMFILETYPE_H
+#ifndef FALLTERGEIST_FRMFILETYPE_H
+#define FALLTERGEIST_FRMFILETYPE_H
 
 namespace Falltergeist
 {
@@ -22,7 +22,6 @@ struct FrmDirection {
 
 class FrmFileType
 {
-
 protected:
     DatFileItem * _datFileItem;
     bool _initialized;
@@ -33,7 +32,6 @@ protected:
     unsigned short _actionFrame; // number of frame on which action is occurs
     unsigned int _dataSize;
     FrmDirection * _directions;
-
 public:
     FrmFileType(DatFileItem * datFileItem);
     ~FrmFileType();
@@ -47,8 +45,7 @@ public:
     void setVersion(unsigned int version);
     void setActionFrame(unsigned short frameNumber);
     void setDirections(FrmDirection * directions);
-
 };
 
 }
-#endif // FRMFILETYPE_H
+#endif // FALLTERGEIST_FRMFILETYPE_H

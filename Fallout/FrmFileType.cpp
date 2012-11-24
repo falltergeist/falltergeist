@@ -16,6 +16,10 @@ FrmFileType::~FrmFileType()
     delete [] _directions; _directions = 0;
 }
 
+/**
+ * Reads data from DatFileItem
+ * @brief FrmFileType::_init
+ */
 void FrmFileType::_init()
 {
     if (_initialized) return;
@@ -35,7 +39,6 @@ void FrmFileType::_init()
     {
         // if direction is the same as first
         if (i > 0) if (_directions[i].dataOffset == _directions[0].dataOffset) {
-            //std::cout << "Direction same as first... skiping" << std::endl;
             _directions[i] = _directions[0];
             continue;
         }
@@ -54,51 +57,101 @@ void FrmFileType::_init()
     _initialized = true;
 }
 
+/**
+ * Returns version of FRM file
+ * @brief FrmFileType::getVersion
+ * @return
+ */
 unsigned int FrmFileType::getVersion()
 {
     return _version;
 }
 
+/**
+ * Sets version of FRM file
+ * @brief FrmFileType::setVersion
+ * @param version
+ */
 void FrmFileType::setVersion(unsigned int version)
 {
     _version = version;
 }
 
+/**
+ * Returns frames per second animation rate
+ * @brief FrmFileType::getFramesPerSecond
+ * @return
+ */
 unsigned short FrmFileType::getFramesPerSecond()
 {
     return _framesPerSecond;
 }
 
+/**
+ * Sets frames per second animation rate
+ * @brief FrmFileType::setFramesPerSecond
+ * @param framesNumber
+ */
 void FrmFileType::setFramesPerSecond(unsigned short framesNumber)
 {
     _framesPerSecond = framesNumber;
 }
 
+/**
+ * Returns frames number for each of directions
+ * @brief FrmFileType::getFramesPerDirection
+ * @return
+ */
 unsigned short FrmFileType::getFramesPerDirection()
 {
     return _framesPerDirection;
 }
 
+/**
+ * Sets frames number for each of directions
+ * @brief FrmFileType::setFramesPerDirection
+ * @param framesNumber
+ */
 void FrmFileType::setFramesPerDirection(unsigned short framesNumber)
 {
     _framesPerDirection = framesNumber;
 }
 
+/**
+ * Returns number of frame on which action is occurs
+ * @brief FrmFileType::getActionFrame
+ * @return
+ */
 unsigned short FrmFileType::getActionFrame()
 {
     return _actionFrame;
 }
 
+/**
+ * Sets number of frame on which action is occurs
+ * @brief FrmFileType::setActionFrame
+ * @param frameNumber
+ */
 void FrmFileType::setActionFrame(unsigned short frameNumber)
 {
     _actionFrame = frameNumber;
 }
 
+/**
+ * Returns array of directions
+ * @brief FrmFileType::getDirections
+ * @return
+ */
 FrmDirection * FrmFileType::getDirections()
 {
     return _directions;
 }
 
+/**
+ * Sets array of directions
+ * @brief FrmFileType::setDirections
+ * @param directions
+ */
 void FrmFileType::setDirections(FrmDirection * directions)
 {
     delete [] _directions; _directions = 0;
