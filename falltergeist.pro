@@ -10,7 +10,6 @@ SOURCES += main.cpp \
     Screen.cpp \
     States/StartState.cpp \
     States/MainMenuState.cpp \
-    UI/Button.cpp \
     InteractiveSurface.cpp \
     Event.cpp \
     States/SaveMenuState.cpp \
@@ -30,7 +29,6 @@ HEADERS += \
     Screen.h \
     States/StartState.h \
     States/MainMenuState.h \
-    UI/Button.h \
     InteractiveSurface.h \
     Event.h \
     States/SaveMenuState.h \

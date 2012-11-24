@@ -18,6 +18,9 @@ void RedCircleButton::leftButtonPress(Event *event, State *state)
     loadFromSurface(ResourceManager::getSurface("art/intrface/menudown.frm"));
     setX(x);
     setY(y);
+
+    //@TODO play button press sound
+
     if (_onLeftButtonPress != 0) (state->*_onLeftButtonPress)(event);
 }
 
@@ -41,9 +44,9 @@ void RedCircleButton::mouseIn(Event *event, State *state)
         setX(x);
         setY(y);
     }
-
     if (_onMouseIn != 0) (state->*_onMouseIn)(event);
 }
+
 void RedCircleButton::mouseOut(Event *event, State *state)
 {
     int x = getX();
