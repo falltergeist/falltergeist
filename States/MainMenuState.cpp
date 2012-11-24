@@ -19,8 +19,9 @@ void MainMenuState::init()
 {
     State::init();
     _isFullscreen = true;
-    Surface * background = _game->getResourceManager()->getSurface("art/intrface/mainmenu.frm");
-    add(background);
+    // background
+    add(_game->getResourceManager()->getSurface("art/intrface/mainmenu.frm"));
+    //add(_game->getResourceManager()->getSurface("art/intrface/about.frm"));
 }
 
 void MainMenuState::think()
