@@ -5,14 +5,24 @@ namespace Falltergeist
 {
 class DatFileItem;
 
+struct PalColor
+{
+    unsigned char red;
+    unsigned char green;
+    unsigned char blue;
+};
+
 class PalFileType
 {
 protected:
+    PalColor * _colors;
     DatFileItem * _datFileItem;
     bool _initialized;
     void _init();
 public:
     PalFileType(DatFileItem * datFileItem);
+    ~PalFileType();
+    PalColor * getColor(unsigned char colorIndex);
 };
 
 }

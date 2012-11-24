@@ -4,6 +4,7 @@
 #include "Fallout/DatFile.h"
 #include "Fallout/DatFileItem.h"
 #include "Fallout/FrmFileType.h"
+#include "Fallout/PalFileType.h"
 
 using namespace Falltergeist;
 
@@ -12,9 +13,8 @@ int main()
     try
     {
         DatFile * datFile = new DatFile("/home/alexeevdv/.fallout/master.dat");
-        //FrmFileType * frm1 = new FrmFileType("art/intrface/actarrow.frm", datFile);
-        //FrmFileType * frm1 = new FrmFileType("art/intrface/mainmenu.frm", datFile);
-        std::cout << datFile->getFrmFileType("art/intrface/mainmenu.frm")->getDirections()[0].frames[0].width << std::endl;
+        PalFileType * pal = datFile->getPalFileType("color.pal");
+        std::cout << (int) pal->getColor(1)->red << std::endl;
         return 0;
         Game * game = new Game(640,480,32);
         game->setState(new StartState(game));
