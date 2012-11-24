@@ -1,5 +1,6 @@
 #include "Surface.h"
 #include <iostream>
+#include "Fallout/FrmFileType.h"
 
 namespace Falltergeist
 {
@@ -116,13 +117,11 @@ void Surface::_unlock()
     if(SDL_MUSTLOCK(_surface)) SDL_UnlockSurface(_surface);
 }
 
-void Surface::loadFromBMP(const char * filename)
+void Surface::loadFromSurface(Surface * surface)
 {
-    _surface = SDL_LoadBMP(filename);
-    if (_surface == 0)
-    {
-        throw Exception(SDL_GetError());
-    }
+    _surface = surface->getSurface();
+    _x = surface->getX();
+    _y = surface->getY();
 }
 
 }

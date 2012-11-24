@@ -4,6 +4,8 @@
 #include <iostream>
 #include "UI/Button.h"
 #include "SaveMenuState.h"
+#include "Fallout/FrmFileType.h"
+#include "ResourceManager.h"
 
 namespace Falltergeist
 {
@@ -17,15 +19,8 @@ void MainMenuState::init()
 {
     State::init();
     _isFullscreen = true;
-    Button * button1 = new Button(30,30);
-    button1->loadFromBMP("button.bmp");
-    button1->onLeftButtonPress((EventHandler)&MainMenuState::onButton1Click);
-    add(button1);
-
-    Button * button2 = new Button(30,30,50,50);
-    button2->loadFromBMP("button2.bmp");
-    button2->onLeftButtonPress((EventHandler)&MainMenuState::onButton2Press);
-    add(button2);
+    Surface * background = _game->getResourceManager()->getSurface("art/intrface/mainmenu.frm");
+    add(background);
 }
 
 void MainMenuState::think()

@@ -17,7 +17,8 @@ SOURCES += main.cpp \
     Fallout/DatFile.cpp \
     Fallout/DatFileItem.cpp \
     Fallout/FrmFileType.cpp \
-    Fallout/PalFileType.cpp
+    Fallout/PalFileType.cpp \
+    ResourceManager.cpp
 
 HEADERS += \
     Surface.h \
@@ -34,6 +35,7 @@ HEADERS += \
     Fallout/DatFile.h \
     Fallout/DatFileItem.h \
     Fallout/FrmFileType.h \
-    Fallout/PalFileType.h
+    Fallout/PalFileType.h \
+    ResourceManager.h
 
 LIBS+= -lSDL

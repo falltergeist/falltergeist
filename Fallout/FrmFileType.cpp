@@ -1,5 +1,6 @@
 #include "Fallout/FrmFileType.h"
 #include "Fallout/DatFileItem.h"
+#include "Surface.h"
 
 namespace Falltergeist
 {
@@ -156,6 +157,17 @@ void FrmFileType::setDirections(FrmDirection * directions)
 {
     delete [] _directions;
     _directions = directions;
+}
+
+/**
+ * Returns frames data
+ * @brief FrmFileType::getData
+ * @return
+ */
+unsigned char * FrmFileType::getData()
+{
+    // 62 - frames data offset
+    return _datFileItem->getData() + 62;
 }
 
 }

@@ -12,11 +12,13 @@ namespace Falltergeist
 class State;
 class Exception;
 class Screen;
+class ResourceManager;
 
 class Game
 {
 protected:
-    std::list<State*> _states;
+    ResourceManager * _resourceManager;
+    std::list<State*> _states;    
     Screen * _screen;
     bool _quit;
     bool _initialized;
@@ -26,6 +28,7 @@ public:
     Game(int width, int height, int bpp);
     ~Game();
     Screen * getScreen();
+    ResourceManager * getResourceManager();
     void pushState(State * state);
     void setState(State * state);
     void popState();

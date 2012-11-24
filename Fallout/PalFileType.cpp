@@ -7,12 +7,12 @@ namespace Falltergeist
 
 PalColor::operator int()
 {
-    return (red << 16) | (green << 8) | blue;
+    return ((red * 4) << 16) | ((green * 4) << 8) | (blue * 4);
 }
 
 PalColor::operator unsigned int()
 {
-    return (red << 16) | (green << 8) | blue;
+    return ((red * 4) << 16) | ((green * 4) << 8) | (blue * 4);
 }
 
 PalFileType::PalFileType(DatFileItem * datFileItem)

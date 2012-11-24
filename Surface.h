@@ -6,6 +6,7 @@
 
 namespace Falltergeist
 {
+class FrmFileType;
 
 class Surface
 {
@@ -27,13 +28,12 @@ public:
     void setPixel(int x, int y, unsigned int color);
     SDL_Surface * getSurface();
 
+    void loadFromSurface(Surface * surface);
     void setX(int x);
     void setY(int y);
     void clear();
     virtual void think();
     virtual void blit(Surface * surface);
-    void loadFromBMP(const char * filename);
-
 };
 
 }

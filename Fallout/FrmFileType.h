@@ -4,6 +4,7 @@
 namespace Falltergeist
 {
 class DatFileItem;
+class Surface;
 
 struct FrmFrame {
     unsigned short width;
@@ -39,6 +40,7 @@ public:
     unsigned short getFramesPerDirection();
     unsigned int getVersion();
     unsigned short getActionFrame();
+    unsigned char * getData();
     FrmDirection * getDirections();
     void setFramesPerSecond(unsigned short framesNumber);
     void setFramesPerDirection(unsigned short framesNumber);

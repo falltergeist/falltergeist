@@ -3,6 +3,7 @@
 #include "State.h"
 #include "Screen.h"
 #include "Event.h"
+#include "ResourceManager.h"
 
 namespace Falltergeist
 {
@@ -24,6 +25,9 @@ Game::Game(int width, int height, int bpp) : _states()
     std::string caption = "Falltergeist ";
     caption.append(VERSION);
     SDL_WM_SetCaption(caption.c_str(), 0);
+
+    std::cout << "Loading resource manager..." << std::endl;
+    _resourceManager = new ResourceManager();
 
     _screen = new Screen(width, height,bpp);
     _quit = false;
@@ -126,6 +130,11 @@ void Game::run()
 Screen * Game::getScreen()
 {
     return _screen;
+}
+
+ResourceManager * Game::getResourceManager()
+{
+    return _resourceManager;
 }
 
 }

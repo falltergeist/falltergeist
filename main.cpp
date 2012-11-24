@@ -12,10 +12,6 @@ int main()
 {
     try
     {
-        DatFile * datFile = new DatFile("/home/alexeevdv/.fallout/master.dat");
-        PalFileType * pal = datFile->getPalFileType("color.pal");
-        std::cout << (int) (*pal->getColor(1)) << std::endl;
-        return 0;
         Game * game = new Game(640,480,32);
         game->setState(new StartState(game));
         game->run();
