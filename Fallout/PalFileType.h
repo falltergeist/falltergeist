@@ -10,6 +10,8 @@ struct PalColor
     unsigned char red;
     unsigned char green;
     unsigned char blue;
+    operator int();
+    operator unsigned int();
 };
 
 class PalFileType

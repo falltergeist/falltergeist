@@ -5,6 +5,16 @@
 namespace Falltergeist
 {
 
+PalColor::operator int()
+{
+    return (red << 16) | (green << 8) | blue;
+}
+
+PalColor::operator unsigned int()
+{
+    return (red << 16) | (green << 8) | blue;
+}
+
 PalFileType::PalFileType(DatFileItem * datFileItem)
 {
     _colors = new PalColor[256];
