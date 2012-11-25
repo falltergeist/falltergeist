@@ -24,7 +24,11 @@ SOURCES += main.cpp \
     Fallout/FonFileType.cpp \
     Fallout/AafFileType.cpp \
     UI/TextLabel.cpp \
-    Font.cpp
+    Font.cpp \
+    States/NewGameState.cpp \
+    UI/RedSmallCircleButton.cpp \
+    UI/LeftArrowButton.cpp \
+    UI/RightArrowButton.cpp
 
 HEADERS += \
     Surface.h \
@@ -48,6 +52,10 @@ HEADERS += \
     Fallout/FonFileType.h \
     Fallout/AafFileType.h \
     UI/TextLabel.h \
-    Font.h
+    Font.h \
+    States/NewGameState.h \
+    UI/RedSmallCircleButton.h \
+    UI/LeftArrowButton.h \
+    UI/RightArrowButton.h
 
 LIBS+= -lSDL

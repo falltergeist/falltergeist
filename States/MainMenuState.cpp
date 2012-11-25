@@ -7,6 +7,7 @@
 #include "SaveMenuState.h"
 #include "Fallout/FrmFileType.h"
 #include "ResourceManager.h"
+#include "States/NewGameState.h"
 
 namespace Falltergeist
 {
@@ -28,6 +29,7 @@ void MainMenuState::init()
 
     // "New game" button
     RedCircleButton * newGameButton = new RedCircleButton(29,19 + 41);
+    newGameButton->onLeftButtonClick((EventHandler) &MainMenuState::onNewGameButtonClick);
 
     // "Load game" button
     RedCircleButton * loadGameButton = new RedCircleButton(29,19 + 41*2);
@@ -60,9 +62,6 @@ void MainMenuState::init()
     TextLabel * exitButtonLabel = new TextLabel("EXIT", "font4.aaf",95,20 + 41*5);
     exitButtonLabel->setColor(0xb89c28ff);
 
-    TextLabel * falltergeistVersion = new TextLabel("Falltergeist 0.0.1", "font1.aaf",525,464);
-    falltergeistVersion->setColor(0x00FF00FF);
-
     add(introButton);
     add(newGameButton);
     add(loadGameButton);
@@ -76,8 +75,6 @@ void MainMenuState::init()
     add(optionsButtonLabel);
     add(creditsButtonLabel);
     add(exitButtonLabel);
-
-    add(falltergeistVersion);
 }
 
 void MainMenuState::think()
@@ -88,6 +85,11 @@ void MainMenuState::think()
 void MainMenuState::onExitButtonClick(Event * event)
 {
     _game->quit();
+}
+
+void MainMenuState::onNewGameButtonClick(Event * event)
+{
+    _game->pushState(new NewGameState(_game));
 }
 
 }

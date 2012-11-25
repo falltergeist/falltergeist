@@ -4,6 +4,7 @@
 #include "Screen.h"
 #include "Event.h"
 #include "ResourceManager.h"
+#include "UI/TextLabel.h"
 
 namespace Falltergeist
 {
@@ -72,6 +73,8 @@ void Game::setState(State * state)
 void Game::run()
 {
     std::cout << "Starting main loop..." << std::endl;
+    TextLabel * falltergeistVersion = new TextLabel("Falltergeist 0.0.2", "font1.aaf",525,464);
+    falltergeistVersion->setColor(0x00FF00FF);
 
     while (!_quit)
     {
@@ -117,7 +120,7 @@ void Game::run()
                 (*i)->blit();
             }
             //_fpsCounter->blit(_screen->getSurface());
-            //_cursor->blit(_screen->getSurface());
+            falltergeistVersion->blit(_screen->getSurface());
         }
         _screen->flip();
 

@@ -13,6 +13,7 @@ public:
     void init();
     void think();
     void onExitButtonClick(Event * event);
+    void onNewGameButtonClick(Event * event);
 };
 
 }
