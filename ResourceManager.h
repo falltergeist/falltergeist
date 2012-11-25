@@ -13,7 +13,11 @@ class PalFileType;
 class LstFileType;
 class FonFileType;
 class AafFileType;
+class GcdFileType;
+class MsgFileType;
 class Surface;
+
+const char * _t(unsigned int number, const char * filename);
 
 class ResourceManager
 {
@@ -27,7 +31,9 @@ public:
     static LstFileType * getLstFileType(std::string filename);
     static FonFileType * getFonFileType(std::string filename);
     static AafFileType * getAafFileType(std::string filename);
-    static Surface * getSurface(std::string filename);
+    static GcdFileType * getGcdFileType(std::string filename);
+    static MsgFileType * getMsgFileType(std::string filename);
+    static Surface * getSurface(std::string filename, int x = 0, int y = 0);
 };
 
 }

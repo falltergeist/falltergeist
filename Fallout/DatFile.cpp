@@ -7,6 +7,8 @@
 #include "Fallout/LstFileType.h"
 #include "Fallout/FonFileType.h"
 #include "Fallout/AafFileType.h"
+#include "Fallout/GcdFileType.h"
+#include "Fallout/MsgFileType.h"
 
 namespace Falltergeist
 {
@@ -18,6 +20,8 @@ DatFile::DatFile(std::string filename)
     _lstFiles = new std::map<std::string, LstFileType *>;
     _fonFiles = new std::map<std::string, FonFileType *>;
     _aafFiles = new std::map<std::string, AafFileType *>;
+    _gcdFiles = new std::map<std::string, GcdFileType *>;
+    _msgFiles = new std::map<std::string, MsgFileType *>;
     _filename = filename;
     _stream = new std::fstream(_filename.c_str(),std::ios::in|std::ios::binary);
     if (!_stream->is_open())
@@ -338,5 +342,56 @@ AafFileType * DatFile::getAafFileType(std::string filename)
     _aafFiles->insert(std::make_pair(filename,aaf));
     return aaf;
 }
+
+/**
+ * Returns GcdFileType object
+ * @brief DatFile::getGcdFileType
+ * @param filename
+ * @return
+ */
+GcdFileType * DatFile::getGcdFileType(std::string filename)
+{
+    // if gcd file already loaded
+    if (_gcdFiles->count(filename))
+    {
+        return _gcdFiles->at(filename);
+    }
+
+    // seek for filename
+    DatFileItem * item = this->getItem(filename);
+    if (!item) return 0;
+
+    // create new gcd file type
+    GcdFileType * gcd = new GcdFileType(item);
+    // insert into gcd files map
+    _gcdFiles->insert(std::make_pair(filename,gcd));
+    return gcd;
+}
+
+/**
+ * Returns MsgFileType object
+ * @brief DatFile::getMsgFileType
+ * @param filename
+ * @return
+ */
+MsgFileType * DatFile::getMsgFileType(std::string filename)
+{
+    // if msg file already loaded
+    if (_msgFiles->count(filename))
+    {
+        return _msgFiles->at(filename);
+    }
+
+    // seek for filename
+    DatFileItem * item = this->getItem(filename);
+    if (!item) return 0;
+
+    // create new msg file type
+    MsgFileType * msg = new MsgFileType(item);
+    // insert into msg files map
+    _msgFiles->insert(std::make_pair(filename,msg));
+    return msg;
+}
+
 
 }

@@ -16,6 +16,8 @@ class PalFileType;
 class LstFileType;
 class FonFileType;
 class AafFileType;
+class GcdFileType;
+class MsgFileType;
 
 class DatFile
 {
@@ -28,6 +30,8 @@ protected:
     std::map<std::string, LstFileType *> * _lstFiles; // opened LST Files
     std::map<std::string, FonFileType *> * _fonFiles; // opened FON Files
     std::map<std::string, AafFileType *> * _aafFiles; // opened AAF Files
+    std::map<std::string, GcdFileType *> * _gcdFiles; // opened GCD Files
+    std::map<std::string, MsgFileType *> * _msgFiles; // opened MSG Files
 public:
     DatFile(std::string filename);
     ~DatFile();
@@ -48,6 +52,8 @@ public:
     LstFileType * getLstFileType(std::string filename);
     FonFileType * getFonFileType(std::string filename);
     AafFileType * getAafFileType(std::string filename);
+    GcdFileType * getGcdFileType(std::string filename);
+    MsgFileType * getMsgFileType(std::string filename);
 };
 
 }

@@ -8,6 +8,8 @@
 #include "Fallout/LstFileType.h"
 #include "Fallout/FonFileType.h"
 #include "Fallout/AafFileType.h"
+#include "Fallout/GcdFileType.h"
+#include "Fallout/MsgFileType.h"
 #include "Surface.h"
 #include "ResourceManager.h"
 #include "SDL/SDL.h"

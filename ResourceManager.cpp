@@ -5,12 +5,21 @@
 #include "Fallout/FrmFileType.h"
 #include "Fallout/PalFileType.h"
 #include "Fallout/LstFileType.h"
+#include "Fallout/GcdFileType.h"
+#include "Fallout/MsgFileType.h"
 #include "CrossPlatform.h"
 
 namespace Falltergeist
 {
 
- std::list<DatFile *> * ResourceManager::_datFiles = new std::list<DatFile *>;
+std::list<DatFile *> * ResourceManager::_datFiles = new std::list<DatFile *>;
+
+const char * _t(unsigned int number, const char * filename)
+{
+    MsgFileType * msg = ResourceManager::getMsgFileType(filename);
+    return msg->getText(number);
+}
+
 
 ResourceManager::ResourceManager()
 {
@@ -104,8 +113,36 @@ FonFileType * ResourceManager::getFonFileType(std::string filename)
     return 0;
 }
 
+GcdFileType * ResourceManager::getGcdFileType(std::string filename)
+{
+    std::list<DatFile *>::iterator it;
+    for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
+    {
+        GcdFileType * gcd = (*it)->getGcdFileType(filename);
+        if (gcd)
+        {
+            return gcd;
+        }
+    }
+    return 0;
+}
 
-Surface * ResourceManager::getSurface(std::string filename)
+MsgFileType * ResourceManager::getMsgFileType(std::string filename)
+{
+    std::list<DatFile *>::iterator it;
+    for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
+    {
+        MsgFileType * msg = (*it)->getMsgFileType(filename);
+        if (msg)
+        {
+            return msg;
+        }
+    }
+    return 0;
+}
+
+
+Surface * ResourceManager::getSurface(std::string filename, int posX, int posY)
 {
     FrmFileType * frm = getFrmFileType(filename);
     if (!frm)
@@ -135,6 +172,8 @@ Surface * ResourceManager::getSurface(std::string filename)
             i++;
         }
     }
+    surface->setX(posX);
+    surface->setY(posY);
     SDL_SetColorKey(surface->getSurface(),SDL_SRCCOLORKEY, 0);
     return surface;
 }

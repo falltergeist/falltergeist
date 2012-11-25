@@ -28,7 +28,9 @@ SOURCES += main.cpp \
     States/NewGameState.cpp \
     UI/RedSmallCircleButton.cpp \
     UI/LeftArrowButton.cpp \
-    UI/RightArrowButton.cpp
+    UI/RightArrowButton.cpp \
+    Fallout/GcdFileType.cpp \
+    Fallout/MsgFileType.cpp
 
 HEADERS += \
     Surface.h \
@@ -56,6 +58,8 @@ HEADERS += \
     States/NewGameState.h \
     UI/RedSmallCircleButton.h \
     UI/LeftArrowButton.h \
-    UI/RightArrowButton.h
+    UI/RightArrowButton.h \
+    Fallout/GcdFileType.h \
+    Fallout/MsgFileType.h
 
 LIBS+= -lSDL

@@ -34,7 +34,19 @@ void NewGameState::init()
     backButton->onLeftButtonClick((EventHandler) &NewGameState::onBackButtonClick);
 
     LeftArrowButton * prevCharacterButton = new LeftArrowButton(292,320);
+    prevCharacterButton->onLeftButtonClick((EventHandler) &NewGameState::onPrevCharacterButtonClick);
+
     RightArrowButton * nextCharacterButton = new RightArrowButton(318,320);
+    nextCharacterButton->onLeftButtonClick((EventHandler) &NewGameState::onNextCharacterButtonClick);
+
+    _selectedCharacter = 0;
+
+    _characterImages = new Surface[3];
+    _characterImages[0].loadFromSurface(_game->getResourceManager()->getSurface("art/intrface/combat.frm",27,23));
+    _characterImages[1].loadFromSurface(_game->getResourceManager()->getSurface("art/intrface/stealth.frm",27,23));
+    _characterImages[2].loadFromSurface(_game->getResourceManager()->getSurface("art/intrface/diplomat.frm",27,23));
+
+    _characterImage = _characterImages[_selectedCharacter];
 
     add(beginGameButton);
     add(editButton);
@@ -43,6 +55,7 @@ void NewGameState::init()
     add(prevCharacterButton);
     add(nextCharacterButton);
 
+    add(&_characterImage);
 }
 
 void NewGameState::think()
@@ -53,6 +66,32 @@ void NewGameState::think()
 void NewGameState::onBackButtonClick(Event * event)
 {
     _game->popState();
+}
+
+void NewGameState::onPrevCharacterButtonClick(Event * event)
+{
+    if (_selectedCharacter > 0)
+    {
+        _selectedCharacter--;
+    }
+    else
+    {
+        _selectedCharacter = 2;
+    }
+    _characterImage = _characterImages[_selectedCharacter];
+}
+
+void NewGameState::onNextCharacterButtonClick(Event * event)
+{
+    if (_selectedCharacter < 2)
+    {
+        _selectedCharacter++;
+    }
+    else
+    {
+        _selectedCharacter = 0;
+    }
+    _characterImage = _characterImages[_selectedCharacter];
 }
 
 }
