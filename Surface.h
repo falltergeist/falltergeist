@@ -17,7 +17,7 @@ protected:
     void _lock();
     void _unlock();
 public:
-    Surface(int width, int height, int x = 0, int y = 0);
+    Surface(int width = 0, int height = 0, int x = 0, int y = 0);
     Surface(Surface * other);
     virtual ~Surface();
     int getX();

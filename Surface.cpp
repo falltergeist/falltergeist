@@ -119,6 +119,7 @@ void Surface::_unlock()
 
 void Surface::loadFromSurface(Surface * surface)
 {
+    SDL_FreeSurface(_surface);
     _surface = surface->getSurface();
     _x = surface->getX();
     _y = surface->getY();

@@ -23,7 +23,8 @@ SOURCES += main.cpp \
     Fallout/LstFileType.cpp \
     Fallout/FonFileType.cpp \
     Fallout/AafFileType.cpp \
-    UI/TextLabel.cpp
+    UI/TextLabel.cpp \
+    Font.cpp
 
 HEADERS += \
     Surface.h \
@@ -46,6 +47,7 @@ HEADERS += \
     Fallout/LstFileType.h \
     Fallout/FonFileType.h \
     Fallout/AafFileType.h \
-    UI/TextLabel.h
+    UI/TextLabel.h \
+    Font.h
 
 LIBS+= -lSDL

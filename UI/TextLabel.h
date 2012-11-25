@@ -2,6 +2,7 @@
 #define FALLTERGEIST_TEXTLABEL_H
 
 #include "InteractiveSurface.h"
+#include "Font.h"
 
 namespace Falltergeist
 {
@@ -10,12 +11,13 @@ class AafFileType;
 class TextLabel : public InteractiveSurface
 {
 protected:
-    const char * _text;
-    AafFileType * _aafFileType;
+    const char * _label;
+    Font * _font;
     Surface * _generateSurface();
 public:
-    TextLabel(const char * label, int x = 0, int y = 0);
-    AafFileType * getAafFileType();
+    TextLabel(const char * label, const char * filename, int x = 0, int y = 0);
+    Font * getFont();
+    void setColor(unsigned int color);
 };
 
 }

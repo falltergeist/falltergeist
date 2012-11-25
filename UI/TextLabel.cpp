@@ -9,78 +9,58 @@
 namespace Falltergeist
 {
 
-TextLabel::TextLabel(const char * label, int x, int y) : InteractiveSurface(0,0,x,y)
+TextLabel::TextLabel(const char * label, const char * filename, int x, int y) : InteractiveSurface(0,0,x,y)
 {
-    _text = label;
-    _aafFileType = ResourceManager::getAafFileType("font1.aaf");
-
-    loadFromSurface(_generateSurface());
-    setX(x);
-    setY(y);
-}
-
-AafFileType * TextLabel::getAafFileType()
-{
-    return _aafFileType;
+    _label = label;
+    _font = new Font(filename);
+    //loadFromSurface(_generateSurface());
+    //setColor(0x00FF00FF);
+    //setX(x);
+    //setY(y);
 }
 
 Surface * TextLabel::_generateSurface()
 {
+
     unsigned int i = 0;
     int width = 0;
-    int height = getAafFileType()->getMaximumHeight();
-    while (_text[i] != 0)
+    int height = _font->getHeight();
+    while (_label[i] != 0)
     {
-
-        getAafFileType()->getChar(_text[i]);
-        if (_text[i] != ' ')
-        {
-            width += getAafFileType()->getChar(_text[i])->width;
-            width += getAafFileType()->getHorizontalGap();
-        }
-        else
-        {
-            width += getAafFileType()->getSpaceWidth();
-        }
+            width += _font->getGlyph(_label[i])->getWidth();
+            width += _font->getHorizontalGap();
         i++;
-
     }
+
     Surface * surface = new Surface(width,height);
-    int  x, y;
     i = 0;
-    x = 0;
-    y = 0;
-    while (_text[i] != 0)
+    int x = 0;
+    while (_label[i] != 0)
     {
-        if (_text[i] != ' ')
-        {
-            char * data = getAafFileType()->getChar(_text[i])->data;
-            int width = getAafFileType()->getChar(_text[i])->width;
-            int height = getAafFileType()->getChar(_text[i])->height;
-            int delta = getAafFileType()->getMaximumHeight() - height;
-            int j = 0;
-            for (int yy = 0; yy != height; ++yy)
-            {
-                for (int xx = 0; xx != width; ++xx)
-                {
-                    if (data[j] != 0)
-                    {
-                        unsigned int color = (0 << 24) | (255 << 16) | (0 << 8) | 255;
-                        surface->setPixel(x + xx,y + yy + delta, color);
-                    }
-                    j++;
-                }
-            }
-            x+=width + getAafFileType()->getHorizontalGap();
-        }
-        else
-        {
-            x += getAafFileType()->getSpaceWidth();
-        }
+        Surface * glyph = _font->getGlyph(_label[i]);
+        glyph->setX(x);
+        glyph->blit(surface);
+        x += glyph->getWidth();
+        x += _font->getHorizontalGap();
         i++;
     }
     SDL_SetColorKey(surface->getSurface(),SDL_SRCCOLORKEY,0);
     return surface;
+}
+
+Font * TextLabel::getFont()
+{
+    return _font;
+}
+
+void TextLabel::setColor(unsigned int color)
+{
+    _font->setColor(color);
+    int x = getX();// + 200;
+    int y = getY();
+    loadFromSurface(_generateSurface());
+    setX(x);
+    setY(y);
 }
 
 }
