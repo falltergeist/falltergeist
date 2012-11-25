@@ -11,6 +11,8 @@ class DatFileItem;
 class FrmFileType;
 class PalFileType;
 class LstFileType;
+class FonFileType;
+class AafFileType;
 class Surface;
 
 class ResourceManager
@@ -23,6 +25,8 @@ public:
     static FrmFileType * getFrmFileType(std::string filename);
     static PalFileType * getPalFileType(std::string filename);
     static LstFileType * getLstFileType(std::string filename);
+    static FonFileType * getFonFileType(std::string filename);
+    static AafFileType * getAafFileType(std::string filename);
     static Surface * getSurface(std::string filename);
 };
 

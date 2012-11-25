@@ -14,6 +14,8 @@ class DatFileItem;
 class FrmFileType;
 class PalFileType;
 class LstFileType;
+class FonFileType;
+class AafFileType;
 
 class DatFile
 {
@@ -24,6 +26,8 @@ protected:
     std::map<std::string, FrmFileType *> * _frmFiles; // opened FRM Files
     std::map<std::string, PalFileType *> * _palFiles; // opened PAL Files
     std::map<std::string, LstFileType *> * _lstFiles; // opened LST Files
+    std::map<std::string, FonFileType *> * _fonFiles; // opened FON Files
+    std::map<std::string, AafFileType *> * _aafFiles; // opened AAF Files
 public:
     DatFile(std::string filename);
     ~DatFile();
@@ -42,6 +46,8 @@ public:
     FrmFileType * getFrmFileType(std::string filename);
     PalFileType * getPalFileType(std::string filename);
     LstFileType * getLstFileType(std::string filename);
+    FonFileType * getFonFileType(std::string filename);
+    AafFileType * getAafFileType(std::string filename);
 };
 
 }

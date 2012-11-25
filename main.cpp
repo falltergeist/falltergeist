@@ -6,7 +6,12 @@
 #include "Fallout/FrmFileType.h"
 #include "Fallout/PalFileType.h"
 #include "Fallout/LstFileType.h"
+#include "Fallout/FonFileType.h"
+#include "Fallout/AafFileType.h"
+#include "Surface.h"
 #include "ResourceManager.h"
+#include "SDL/SDL.h"
+#include <algorithm>
 
 using namespace Falltergeist;
 

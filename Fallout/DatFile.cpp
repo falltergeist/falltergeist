@@ -5,6 +5,8 @@
 #include "Fallout/FrmFileType.h"
 #include "Fallout/PalFileType.h"
 #include "Fallout/LstFileType.h"
+#include "Fallout/FonFileType.h"
+#include "Fallout/AafFileType.h"
 
 namespace Falltergeist
 {
@@ -14,6 +16,8 @@ DatFile::DatFile(std::string filename)
     _frmFiles = new std::map<std::string, FrmFileType *>;
     _palFiles = new std::map<std::string, PalFileType *>;
     _lstFiles = new std::map<std::string, LstFileType *>;
+    _fonFiles = new std::map<std::string, FonFileType *>;
+    _aafFiles = new std::map<std::string, AafFileType *>;
     _filename = filename;
     _stream = new std::fstream(_filename.c_str(),std::ios::in|std::ios::binary);
     if (!_stream->is_open())
@@ -284,4 +288,55 @@ LstFileType * DatFile::getLstFileType(std::string filename)
     _lstFiles->insert(std::make_pair(filename,lst));
     return lst;
 }
+
+/**
+ * Returns FonFileType object
+ * @brief DatFile::getFonFileType
+ * @param filename
+ * @return
+ */
+FonFileType * DatFile::getFonFileType(std::string filename)
+{
+    // if fon file already loaded
+    if (_fonFiles->count(filename))
+    {
+        return _fonFiles->at(filename);
+    }
+
+    // seek for filename
+    DatFileItem * item = this->getItem(filename);
+    if (!item) return 0;
+
+    // create new fon file type
+    FonFileType * fon = new FonFileType(item);
+    // insert into fon files map
+    _fonFiles->insert(std::make_pair(filename,fon));
+    return fon;
+}
+
+/**
+ * Returns AafFileType object
+ * @brief DatFile::getAafFileType
+ * @param filename
+ * @return
+ */
+AafFileType * DatFile::getAafFileType(std::string filename)
+{
+    // if aaf file already loaded
+    if (_aafFiles->count(filename))
+    {
+        return _aafFiles->at(filename);
+    }
+
+    // seek for filename
+    DatFileItem * item = this->getItem(filename);
+    if (!item) return 0;
+
+    // create new aaf file type
+    AafFileType * aaf = new AafFileType(item);
+    // insert into aaf files map
+    _aafFiles->insert(std::make_pair(filename,aaf));
+    return aaf;
+}
+
 }

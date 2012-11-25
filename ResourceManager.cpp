@@ -16,7 +16,7 @@ ResourceManager::ResourceManager()
 {
     std::string homepath = CrossPlatform::getHomePath();
     _datFiles->push_back(new DatFile(homepath + "/.fallout/master.dat"));
-    _datFiles->push_back(new DatFile(homepath + "/.fallout/critter.dat"));
+    //_datFiles->push_back(new DatFile(homepath + "/.fallout/critter.dat"));
 }
 
 DatFileItem * ResourceManager::getDatFileItem(std::string filename)
@@ -75,14 +75,50 @@ LstFileType * ResourceManager::getLstFileType(std::string filename)
     return 0;
 }
 
+AafFileType * ResourceManager::getAafFileType(std::string filename)
+{
+    std::list<DatFile *>::iterator it;
+    for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
+    {
+        AafFileType * aaf = (*it)->getAafFileType(filename);
+        if (aaf)
+        {
+            return aaf;
+        }
+    }
+    return 0;
+}
+
+
+FonFileType * ResourceManager::getFonFileType(std::string filename)
+{
+    std::list<DatFile *>::iterator it;
+    for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
+    {
+        FonFileType * fon = (*it)->getFonFileType(filename);
+        if (fon)
+        {
+            return fon;
+        }
+    }
+    return 0;
+}
+
 
 Surface * ResourceManager::getSurface(std::string filename)
 {
     FrmFileType * frm = getFrmFileType(filename);
-    if (!frm) return 0;
+    if (!frm)
+    {
+        std::cout << "No FRM "<< filename << " found" << std::endl;
+        return 0;
+    }
     PalFileType * pal = getPalFileType("color.pal");
-    if (!pal) return 0;
-
+    if (!pal)
+    {
+        std::cout << "No PAL color.pal found" << std::endl;
+        return 0;
+    }
     int width = frm->getDirections()[0].frames->width;
     int height = frm->getDirections()[0].frames->height;
     Surface * surface = new Surface(width,height);

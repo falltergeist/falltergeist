@@ -3,6 +3,7 @@
 #include "Screen.h"
 #include <iostream>
 #include "UI/RedCircleButton.h"
+#include "UI/TextLabel.h"
 #include "SaveMenuState.h"
 #include "Fallout/FrmFileType.h"
 #include "ResourceManager.h"
@@ -41,12 +42,15 @@ void MainMenuState::init()
     RedCircleButton * exitButton = new RedCircleButton(29,19 + 41*5);
     exitButton->onLeftButtonClick((EventHandler) &MainMenuState::onExitButtonClick);
 
+    TextLabel * falltergeistVersion = new TextLabel("Falltergeist 0.0.0.1",520,464);
+
     add(introButton);
     add(newGameButton);
     add(loadGameButton);
     add(settingsButton);
     add(creditsButton);
     add(exitButton);
+    add(falltergeistVersion);
 }
 
 void MainMenuState::think()

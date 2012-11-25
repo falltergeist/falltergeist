@@ -20,7 +20,10 @@ SOURCES += main.cpp \
     ResourceManager.cpp \
     CrossPlatform.cpp \
     UI/RedCircleButton.cpp \
-    Fallout/LstFileType.cpp
+    Fallout/LstFileType.cpp \
+    Fallout/FonFileType.cpp \
+    Fallout/AafFileType.cpp \
+    UI/TextLabel.cpp
 
 HEADERS += \
     Surface.h \
@@ -40,6 +43,9 @@ HEADERS += \
     ResourceManager.h \
     CrossPlatform.h \
     UI/RedCircleButton.h \
-    Fallout/LstFileType.h
+    Fallout/LstFileType.h \
+    Fallout/FonFileType.h \
+    Fallout/AafFileType.h \
+    UI/TextLabel.h
 
 LIBS+= -lSDL
