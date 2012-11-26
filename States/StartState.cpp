@@ -16,7 +16,6 @@ void StartState::init()
 
 void StartState::think()
 {
-    State::think();
     _game->setState(new MainMenuState(_game));
 }
 

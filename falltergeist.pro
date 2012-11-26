@@ -11,7 +11,6 @@ SOURCES += main.cpp \
     States/MainMenuState.cpp \
     InteractiveSurface.cpp \
     Event.cpp \
-    States/SaveMenuState.cpp \
     Fallout/DatFile.cpp \
     Fallout/DatFileItem.cpp \
     Fallout/FrmFileType.cpp \
@@ -38,7 +37,6 @@ HEADERS += \
     States/MainMenuState.h \
     InteractiveSurface.h \
     Event.h \
-    States/SaveMenuState.h \
     Fallout/DatFile.h \
     Fallout/DatFileItem.h \
     Fallout/FrmFileType.h \
