@@ -73,8 +73,9 @@ void Game::setState(State * state)
 void Game::run()
 {
     std::cout << "Starting main loop..." << std::endl;
-    TextLabel * falltergeistVersion = new TextLabel("Falltergeist 0.0.2", "font1.aaf",525,464);
+    TextLabel * falltergeistVersion = new TextLabel("Falltergeist "VERSION, 525, 464);
     falltergeistVersion->setColor(0x00FF00FF);
+    falltergeistVersion->setFont("font1.aaf");
 
     while (!_quit)
     {

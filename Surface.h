@@ -31,6 +31,7 @@ public:
     void loadFromSurface(Surface * surface);
     void setX(int x);
     void setY(int y);
+    void fill(unsigned int color);
     void clear();
     virtual void think();
     virtual void draw();

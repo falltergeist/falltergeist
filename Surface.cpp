@@ -84,6 +84,20 @@ void Surface::draw()
 {
 }
 
+void Surface::fill(unsigned int color)
+{
+    _lock();
+    unsigned int * pixels = (unsigned int *) _surface->pixels;
+    for (int y = 0; y < getHeight(); y++)
+    {
+        for (int x = 0; x < getWidth(); x++)
+        {
+            pixels[(y * _surface->w) + x] = color;
+        }
+    }
+    _unlock();
+}
+
 void Surface::blit(Surface * surface)
 {
     SDL_Rect dest;

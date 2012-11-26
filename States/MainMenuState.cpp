@@ -25,42 +25,60 @@ void MainMenuState::init()
     add(_game->getResourceManager()->getSurface("art/intrface/mainmenu.frm"));
 
     // "Into" button
-    RedCircleButton * introButton = new RedCircleButton(29,19);
+    RedCircleButton * introButton = new RedCircleButton(29, 19);
 
     // "New game" button
-    RedCircleButton * newGameButton = new RedCircleButton(29,19 + 41);
+    RedCircleButton * newGameButton = new RedCircleButton(29, 19 + 41);
     newGameButton->onLeftButtonClick((EventHandler) &MainMenuState::onNewGameButtonClick);
 
     // "Load game" button
-    RedCircleButton * loadGameButton = new RedCircleButton(29,19 + 41*2);
+    RedCircleButton * loadGameButton = new RedCircleButton(29, 19 + 41*2);
 
     // "Settings" button
-    RedCircleButton * settingsButton = new RedCircleButton(29,19 + 41*3);
+    RedCircleButton * settingsButton = new RedCircleButton(29, 19 + 41*3);
 
     // "Credits" button
-    RedCircleButton * creditsButton = new RedCircleButton(29,19 + 41*4);
+    RedCircleButton * creditsButton = new RedCircleButton(29, 19 + 41*4);
 
     // "Exit" button
-    RedCircleButton * exitButton = new RedCircleButton(29,19 + 41*5);
+    RedCircleButton * exitButton = new RedCircleButton(29, 19 + 41*5);
     exitButton->onLeftButtonClick((EventHandler) &MainMenuState::onExitButtonClick);
 
-    TextLabel * introButtonLabel = new TextLabel("INTRO", "font4.aaf",85,20);
+    TextLabel * introButtonLabel = new TextLabel("INTRO", 55, 20);
     introButtonLabel->setColor(0xb89c28ff);
+    introButtonLabel->setFont("font4.aaf");
+    introButtonLabel->setWidth(140);
+    introButtonLabel->setHorizontalAlign(TextLabel::HORIZONTAL_ALIGN_CENTER);
 
-    TextLabel * newGameButtonLabel = new TextLabel("NEW GAME", "font4.aaf",65,20 + 41);
+    TextLabel * newGameButtonLabel = new TextLabel("NEW GAME", 55, 20 + 41);
     newGameButtonLabel->setColor(0xb89c28ff);
+    newGameButtonLabel->setFont("font4.aaf");
+    newGameButtonLabel->setWidth(140);
+    newGameButtonLabel->setHorizontalAlign(TextLabel::HORIZONTAL_ALIGN_CENTER);
 
-    TextLabel * loadGameButtonLabel = new TextLabel("LOAD GAME", "font4.aaf",60,20 + 41*2);
+    TextLabel * loadGameButtonLabel = new TextLabel("LOAD GAME", 55, 20 + 41*2);
     loadGameButtonLabel->setColor(0xb89c28ff);
+    loadGameButtonLabel->setFont("font4.aaf");
+    loadGameButtonLabel->setWidth(140);
+    loadGameButtonLabel->setHorizontalAlign(TextLabel::HORIZONTAL_ALIGN_CENTER);
 
-    TextLabel * optionsButtonLabel = new TextLabel("OPTIONS", "font4.aaf",75,20 + 41*3);
+    TextLabel * optionsButtonLabel = new TextLabel("OPTIONS", 55, 20 + 41*3);
     optionsButtonLabel->setColor(0xb89c28ff);
+    optionsButtonLabel->setFont("font4.aaf");
+    optionsButtonLabel->setWidth(140);
+    optionsButtonLabel->setHorizontalAlign(TextLabel::HORIZONTAL_ALIGN_CENTER);
 
-    TextLabel * creditsButtonLabel = new TextLabel("CREDITS", "font4.aaf",75,20 + 41*4);
+    TextLabel * creditsButtonLabel = new TextLabel("CREDITS", 55, 20 + 41*4);
     creditsButtonLabel->setColor(0xb89c28ff);
+    creditsButtonLabel->setFont("font4.aaf");
+    creditsButtonLabel->setWidth(140);
+    creditsButtonLabel->setHorizontalAlign(TextLabel::HORIZONTAL_ALIGN_CENTER);
 
-    TextLabel * exitButtonLabel = new TextLabel("EXIT", "font4.aaf",95,20 + 41*5);
+    TextLabel * exitButtonLabel = new TextLabel("EXIT", 55, 20 + 41*5);
     exitButtonLabel->setColor(0xb89c28ff);
+    exitButtonLabel->setFont("font4.aaf");
+    exitButtonLabel->setWidth(140);
+    exitButtonLabel->setHorizontalAlign(TextLabel::HORIZONTAL_ALIGN_CENTER);
 
     add(introButton);
     add(newGameButton);

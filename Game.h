@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 #include <SDL/SDL.h>
-#define VERSION "0.0.1"
+#define VERSION "0.0.2"
 
 namespace Falltergeist
 {
