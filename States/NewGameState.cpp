@@ -1,9 +1,7 @@
 #include "NewGameState.h"
 #include "Game.h"
 #include "ResourceManager.h"
-#include "UI/RedSmallCircleButton.h"
-#include "UI/LeftArrowButton.h"
-#include "UI/RightArrowButton.h"
+#include "UI/ImageButton.h"
 
 namespace Falltergeist
 {
@@ -21,22 +19,22 @@ void NewGameState::init()
     add(_game->getResourceManager()->getSurface("art/intrface/pickchar.frm"));
 
     // Begin game button
-    RedSmallCircleButton * beginGameButton= new RedSmallCircleButton(81,322);
+    ImageButton * beginGameButton= new ImageButton("art/intrface/lilredup.frm", "art/intrface/lilreddn.frm", 81,322);
 
     // Edit character button
-    RedSmallCircleButton * editButton= new RedSmallCircleButton(436,319);
+    ImageButton * editButton= new ImageButton("art/intrface/lilredup.frm", "art/intrface/lilreddn.frm", 436,319);
 
     // Create character button
-    RedSmallCircleButton * createButton= new RedSmallCircleButton(81,424);
+    ImageButton * createButton= new ImageButton("art/intrface/lilredup.frm", "art/intrface/lilreddn.frm", 81,424);
 
     // Back to mainmenu button
-    RedSmallCircleButton * backButton= new RedSmallCircleButton(461,424);
+    ImageButton * backButton= new ImageButton("art/intrface/lilredup.frm", "art/intrface/lilreddn.frm", 461,424);
     backButton->onLeftButtonClick((EventHandler) &NewGameState::onBackButtonClick);
 
-    LeftArrowButton * prevCharacterButton = new LeftArrowButton(292,320);
+    ImageButton * prevCharacterButton = new ImageButton("art/intrface/slu.frm", "art/intrface/sld.frm", 292,320);
     prevCharacterButton->onLeftButtonClick((EventHandler) &NewGameState::onPrevCharacterButtonClick);
 
-    RightArrowButton * nextCharacterButton = new RightArrowButton(318,320);
+    ImageButton * nextCharacterButton = new ImageButton("art/intrface/sru.frm", "art/intrface/srd.frm", 318,320);
     nextCharacterButton->onLeftButtonClick((EventHandler) &NewGameState::onNextCharacterButtonClick);
 
     _selectedCharacter = 0;

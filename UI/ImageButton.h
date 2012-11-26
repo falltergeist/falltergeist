@@ -12,8 +12,10 @@ protected:
     char * _releasedImage;
     char * _pressedImage;
 public:
-    ImageButton(char * releasedImage, char * pressedImage, int x = 0, int y = 0);
+    ImageButton(const char * releasedImage = 0, const char * pressedImage = 0, int x = 0, int y = 0);
     virtual void draw();
+    void setReleasedImage(const char * releasedImage);
+    void setPressedImage(const char * pressedImage);
 };
 
 }

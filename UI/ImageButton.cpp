@@ -4,10 +4,10 @@
 namespace Falltergeist
 {
 
-ImageButton::ImageButton(char * releasedImage, char * pressedImage, int x, int y) : InteractiveSurface(0, 0, x, y)
+ImageButton::ImageButton(const char * releasedImage, const char * pressedImage, int x, int y) : InteractiveSurface(0, 0, x, y)
 {
-    _releasedImage = releasedImage;
-    _pressedImage = pressedImage;
+    _releasedImage = (char*)releasedImage;
+    _pressedImage = (char*)pressedImage;
 }
 
 void ImageButton::draw()
@@ -20,6 +20,16 @@ void ImageButton::draw()
     {
         loadFromSurface(ResourceManager::getSurface(_releasedImage, getX(), getY()));
     }
+}
+
+void ImageButton::setPressedImage(const char * pressedImage)
+{
+    _pressedImage = (char*)pressedImage;
+}
+
+void ImageButton::setReleasedImage(const char * releasedImage)
+{
+    _releasedImage = (char*)releasedImage;
 }
 
 }

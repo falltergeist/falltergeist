@@ -2,7 +2,7 @@
 #include "Game.h"
 #include "Screen.h"
 #include <iostream>
-#include "UI/RedCircleButton.h"
+#include "UI/ImageButton.h"
 #include "UI/TextLabel.h"
 #include "SaveMenuState.h"
 #include "Fallout/FrmFileType.h"
@@ -25,23 +25,23 @@ void MainMenuState::init()
     add(_game->getResourceManager()->getSurface("art/intrface/mainmenu.frm"));
 
     // "Into" button
-    RedCircleButton * introButton = new RedCircleButton(29, 19);
+    ImageButton * introButton = new ImageButton("art/intrface/menuup.frm", "art/intrface/menudown.frm", 29, 19);
 
     // "New game" button
-    RedCircleButton * newGameButton = new RedCircleButton(29, 19 + 41);
+    ImageButton * newGameButton = new ImageButton("art/intrface/menuup.frm", "art/intrface/menudown.frm", 29, 19 + 41);
     newGameButton->onLeftButtonClick((EventHandler) &MainMenuState::onNewGameButtonClick);
 
     // "Load game" button
-    RedCircleButton * loadGameButton = new RedCircleButton(29, 19 + 41*2);
+    ImageButton * loadGameButton = new ImageButton("art/intrface/menuup.frm", "art/intrface/menudown.frm", 29, 19 + 41*2);
 
     // "Settings" button
-    RedCircleButton * settingsButton = new RedCircleButton(29, 19 + 41*3);
+    ImageButton * settingsButton = new ImageButton("art/intrface/menuup.frm", "art/intrface/menudown.frm", 29, 19 + 41*3);
 
     // "Credits" button
-    RedCircleButton * creditsButton = new RedCircleButton(29, 19 + 41*4);
+    ImageButton * creditsButton = new ImageButton("art/intrface/menuup.frm", "art/intrface/menudown.frm", 29, 19 + 41*4);
 
     // "Exit" button
-    RedCircleButton * exitButton = new RedCircleButton(29, 19 + 41*5);
+    ImageButton * exitButton = new ImageButton("art/intrface/menuup.frm", "art/intrface/menudown.frm", 29, 19 + 41*5);
     exitButton->onLeftButtonClick((EventHandler) &MainMenuState::onExitButtonClick);
 
     TextLabel * introButtonLabel = new TextLabel("INTRO", 55, 20);

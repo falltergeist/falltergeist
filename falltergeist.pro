@@ -18,16 +18,12 @@ SOURCES += main.cpp \
     Fallout/PalFileType.cpp \
     ResourceManager.cpp \
     CrossPlatform.cpp \
-    UI/RedCircleButton.cpp \
     Fallout/LstFileType.cpp \
     Fallout/FonFileType.cpp \
     Fallout/AafFileType.cpp \
     UI/TextLabel.cpp \
     Font.cpp \
     States/NewGameState.cpp \
-    UI/RedSmallCircleButton.cpp \
-    UI/LeftArrowButton.cpp \
-    UI/RightArrowButton.cpp \
     Fallout/GcdFileType.cpp \
     Fallout/MsgFileType.cpp \
     UI/ImageButton.cpp
@@ -49,16 +45,12 @@ HEADERS += \
     Fallout/PalFileType.h \
     ResourceManager.h \
     CrossPlatform.h \
-    UI/RedCircleButton.h \
     Fallout/LstFileType.h \
     Fallout/FonFileType.h \
     Fallout/AafFileType.h \
     UI/TextLabel.h \
     Font.h \
     States/NewGameState.h \
-    UI/RedSmallCircleButton.h \
-    UI/LeftArrowButton.h \
-    UI/RightArrowButton.h \
     Fallout/GcdFileType.h \
     Fallout/MsgFileType.h \
     UI/ImageButton.h
