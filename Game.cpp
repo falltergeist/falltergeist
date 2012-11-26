@@ -32,7 +32,6 @@ Game::Game(int width, int height, int bpp) : _states()
 
     _screen = new Screen(width, height,bpp);
     _quit = false;
-    _initialized = false;
     _states = new std::list<State *>;
     _deletedStates = new std::list<State *>;
 }
@@ -51,7 +50,6 @@ Game::~Game()
 void Game::pushState(State * state)
 {
     _states->push_back(state);
-    _initialized = false;
 }
 
 /**
@@ -61,7 +59,6 @@ void Game::popState()
 {
     _deletedStates->push_back(_states->back());
     _states->pop_back();
-    _initialized = false;
 }
 
 /**
@@ -92,11 +89,9 @@ void Game::run()
             delete _deletedStates->back();
             _deletedStates->pop_back();
         }
-        if (!_initialized)
-        {
-            if (!_states->back()->initialized) _states->back()->init();
-            _initialized = true;
-        }
+
+        // Init current state
+        if (!_states->back()->initialized) _states->back()->init();
 
         while(SDL_PollEvent(&_event))
         {
@@ -118,26 +113,15 @@ void Game::run()
         _states->back()->think();
 
         // Rendering
-        if (_initialized)
-        {
-            _screen->clear();
-            // render all states that is over the last fullscreen state
-            std::list<State*>::iterator i = _states->end();
-            do
-            {
-                --i;
-            }
-            while(i != _states->begin() && !(*i)->isFullscreen());
-
-            for (; i != _states->end(); ++i)
-            {
-                (*i)->blit();
-            }
-            //_fpsCounter->blit(_screen->getSurface());
-            falltergeistVersion->blit(_screen->getSurface());
-        }
+        _screen->clear();
+        // render all states that is over the last fullscreen state
+        std::list<State*>::iterator i = _states->end();
+        do { --i; }
+        while(i != _states->begin() && !(*i)->isFullscreen());
+        for (; i != _states->end(); ++i) (*i)->blit();
+        //_fpsCounter->blit(_screen->getSurface());
+        falltergeistVersion->blit(_screen->getSurface());
         _screen->flip();
-
         SDL_Delay(1);
     }
 

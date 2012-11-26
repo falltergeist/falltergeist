@@ -22,7 +22,6 @@ protected:
     std::list<State *> * _deletedStates;
     Screen * _screen;
     bool _quit;
-    bool _initialized;
     SDL_Event _event;
 
 public:
