@@ -2,7 +2,7 @@
 #define FALLTERGEIST_SURFACE_H
 
 #include "SDL/SDL.h"
-#include "Exception.h"
+#include "Engine/Exception.h"
 
 namespace Falltergeist
 {

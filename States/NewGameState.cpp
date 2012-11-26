@@ -1,6 +1,6 @@
-#include "NewGameState.h"
-#include "Game.h"
-#include "ResourceManager.h"
+#include "States/NewGameState.h"
+#include "Engine/Game.h"
+#include "Engine/ResourceManager.h"
 #include "UI/ImageButton.h"
 
 #include <iostream>

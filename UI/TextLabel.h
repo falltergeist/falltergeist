@@ -1,8 +1,8 @@
 #ifndef FALLTERGEIST_TEXTLABEL_H
 #define FALLTERGEIST_TEXTLABEL_H
 
-#include "InteractiveSurface.h"
-#include "Font.h"
+#include "Engine/InteractiveSurface.h"
+#include "Engine/Font.h"
 
 namespace Falltergeist
 {

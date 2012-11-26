@@ -1,6 +1,7 @@
-#include "Game.h"
-#include "Exception.h"
-#include "States/StartState.h"
+#include "Engine/Game.h"
+#include "Engine/Exception.h"
+#include "Engine/Surface.h"
+#include "Engine/ResourceManager.h"
 #include "Fallout/DatFile.h"
 #include "Fallout/DatFileItem.h"
 #include "Fallout/FrmFileType.h"
@@ -10,8 +11,7 @@
 #include "Fallout/AafFileType.h"
 #include "Fallout/GcdFileType.h"
 #include "Fallout/MsgFileType.h"
-#include "Surface.h"
-#include "ResourceManager.h"
+#include "States/StartState.h"
 #include "SDL/SDL.h"
 #include <algorithm>
 

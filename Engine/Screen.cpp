@@ -1,5 +1,5 @@
-#include "Screen.h"
-#include "Surface.h"
+#include "Engine/Screen.h"
+#include "Engine/Surface.h"
 
 namespace Falltergeist
 {

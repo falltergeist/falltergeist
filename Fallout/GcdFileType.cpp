@@ -1,5 +1,5 @@
-#include "GcdFileType.h"
-#include "DatFileItem.h"
+#include "Fallout/GcdFileType.h"
+#include "Fallout/DatFileItem.h"
 
 #include <iostream>
 

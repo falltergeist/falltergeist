@@ -1,10 +1,7 @@
-#include "TextLabel.h"
-
+#include "UI/TextLabel.h"
 #include "SDL/SDL.h"
-#include "ResourceManager.h"
+#include "Engine/ResourceManager.h"
 #include "Fallout/AafFileType.h"
-
-#include <iostream>
 
 namespace Falltergeist
 {

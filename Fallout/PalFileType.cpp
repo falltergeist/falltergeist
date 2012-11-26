@@ -1,5 +1,5 @@
-#include "PalFileType.h"
-#include "DatFileItem.h"
+#include "Fallout/PalFileType.h"
+#include "Fallout/DatFileItem.h"
 #include <iostream>
 
 namespace Falltergeist

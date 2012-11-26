@@ -1,5 +1,6 @@
-#include "ResourceManager.h"
-#include "Surface.h"
+#include "Engine/ResourceManager.h"
+#include "Engine/Surface.h"
+#include "Engine/CrossPlatform.h"
 #include "Fallout/DatFile.h"
 #include "Fallout/DatFileItem.h"
 #include "Fallout/FrmFileType.h"
@@ -7,7 +8,6 @@
 #include "Fallout/LstFileType.h"
 #include "Fallout/GcdFileType.h"
 #include "Fallout/MsgFileType.h"
-#include "CrossPlatform.h"
 
 namespace Falltergeist
 {

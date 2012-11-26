@@ -1,9 +1,9 @@
 #ifndef FALLTERGEIST_INTERACTIVESURFACE_H
 #define FALLTERGEIST_INTERACTIVESURFACE_H
 
-#include "State.h"
-#include "Surface.h"
-#include "Event.h"
+#include "Engine/State.h"
+#include "Engine/Surface.h"
+#include "Engine/Event.h"
 
 namespace Falltergeist
 {

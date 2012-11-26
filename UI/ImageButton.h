@@ -1,7 +1,7 @@
 #ifndef FALLTERGEIST_IMAGEBUTTON_H
 #define FALLTERGEIST_IMAGEBUTTON_H
 
-#include "InteractiveSurface.h"
+#include "Engine/InteractiveSurface.h"
 
 namespace Falltergeist
 {

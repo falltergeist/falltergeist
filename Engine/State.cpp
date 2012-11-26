@@ -1,8 +1,8 @@
-#include "State.h"
-#include "Surface.h"
-#include "Game.h"
-#include "Screen.h"
-#include "InteractiveSurface.h"
+#include "Engine/State.h"
+#include "Engine/Surface.h"
+#include "Engine/Game.h"
+#include "Engine/Screen.h"
+#include "Engine/InteractiveSurface.h"
 
 namespace Falltergeist
 {

@@ -1,9 +1,9 @@
-#include "Game.h"
-#include "Exception.h"
-#include "State.h"
-#include "Screen.h"
-#include "Event.h"
-#include "ResourceManager.h"
+#include "Engine/Game.h"
+#include "Engine/Exception.h"
+#include "Engine/State.h"
+#include "Engine/Screen.h"
+#include "Engine/Event.h"
+#include "Engine/ResourceManager.h"
 #include "UI/TextLabel.h"
 
 namespace Falltergeist

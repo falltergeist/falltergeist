@@ -1,5 +1,5 @@
-#include "DatFileItem.h"
-#include "DatFile.h"
+#include "Fallout/DatFileItem.h"
+#include "Fallout/DatFile.h"
 #include "zlib.h"
 #include <algorithm>
 

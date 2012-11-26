@@ -1,10 +1,10 @@
-#include "MainMenuState.h"
-#include "Game.h"
+#include "Engine/Game.h"
+#include "Engine/ResourceManager.h"
+#include "Engine/Animation.h"
 #include "UI/ImageButton.h"
 #include "UI/TextLabel.h"
-#include "ResourceManager.h"
+#include "States/MainMenuState.h"
 #include "States/NewGameState.h"
-#include "Animation.h"
 
 
 namespace Falltergeist

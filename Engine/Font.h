@@ -2,7 +2,7 @@
 #define FALLTERGEIST_FONT_H
 
 #include "Fallout/AafFileType.h"
-#include "Surface.h"
+#include "Engine/Surface.h"
 
 namespace Falltergeist
 {

@@ -2,57 +2,57 @@ TEMPLATE = app
 CONFIG -= qt
 
 SOURCES += main.cpp \
-    Surface.cpp \
-    Exception.cpp \
-    State.cpp \
-    Game.cpp \
-    Screen.cpp \
-    States/StartState.cpp \
-    States/MainMenuState.cpp \
-    InteractiveSurface.cpp \
-    Event.cpp \
+    Engine/Surface.cpp \
+    Engine/Exception.cpp \
+    Engine/State.cpp \
+    Engine/Game.cpp \
+    Engine/Screen.cpp \
+    Engine/InteractiveSurface.cpp \
+    Engine/Event.cpp \
+    Engine/ResourceManager.cpp \
+    Engine/CrossPlatform.cpp \
+    Engine/Font.cpp \
+    Engine/Animation.cpp\
     Fallout/DatFile.cpp \
     Fallout/DatFileItem.cpp \
     Fallout/FrmFileType.cpp \
     Fallout/PalFileType.cpp \
-    ResourceManager.cpp \
-    CrossPlatform.cpp \
     Fallout/LstFileType.cpp \
     Fallout/FonFileType.cpp \
     Fallout/AafFileType.cpp \
-    UI/TextLabel.cpp \
-    Font.cpp \
-    States/NewGameState.cpp \
     Fallout/GcdFileType.cpp \
     Fallout/MsgFileType.cpp \
-    UI/ImageButton.cpp \
-    Animation.cpp
+    States/StartState.cpp \
+    States/MainMenuState.cpp \
+    States/NewGameState.cpp \
+    UI/TextLabel.cpp \
+    UI/ImageButton.cpp 
 
 HEADERS += \
-    Surface.h \
-    Exception.h \
-    State.h \
-    Game.h \
-    Screen.h \
-    States/StartState.h \
-    States/MainMenuState.h \
-    InteractiveSurface.h \
-    Event.h \
+    Engine/Surface.h \
+    Engine/Exception.h \
+    Engine/State.h \
+    Engine/Game.h \
+    Engine/Screen.h \
+    Engine/InteractiveSurface.h \
+    Engine/Event.h \
+    Engine/ResourceManager.h \
+    Engine/CrossPlatform.h \
+    Engine/Font.h \
+    Engine/Animation.h \
     Fallout/DatFile.h \
     Fallout/DatFileItem.h \
     Fallout/FrmFileType.h \
     Fallout/PalFileType.h \
-    ResourceManager.h \
-    CrossPlatform.h \
     Fallout/LstFileType.h \
     Fallout/FonFileType.h \
     Fallout/AafFileType.h \
-    UI/TextLabel.h \
-    Font.h \
-    States/NewGameState.h \
     Fallout/GcdFileType.h \
     Fallout/MsgFileType.h \
-    UI/ImageButton.h \
-    Animation.h
+    States/StartState.h \
+    States/MainMenuState.h \
+    States/NewGameState.h \
+    UI/TextLabel.h \
+    UI/ImageButton.h
 
 LIBS += -lSDL

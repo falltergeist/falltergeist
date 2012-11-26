@@ -1,8 +1,8 @@
 #ifndef FALLTERGEIST_NEWGAMESTATE_H
 #define FALLTERGIEST_NEWGAMESTATE_H
 
-#include "State.h"
-#include "Surface.h"
+#include "Engine/State.h"
+#include "Engine/Surface.h"
 
 namespace Falltergeist
 {

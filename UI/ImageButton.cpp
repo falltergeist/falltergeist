@@ -1,5 +1,5 @@
-#include "ImageButton.h"
-#include "ResourceManager.h"
+#include "UI/ImageButton.h"
+#include "Engine/ResourceManager.h"
 
 namespace Falltergeist
 {

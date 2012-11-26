@@ -1,5 +1,5 @@
-#include "MsgFileType.h"
-#include "DatFileItem.h"
+#include "Fallout/MsgFileType.h"
+#include "Fallout/DatFileItem.h"
 #include <cstring>
 #include <string>
 #include <stdlib.h>

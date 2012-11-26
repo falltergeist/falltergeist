@@ -1,6 +1,6 @@
-#include "StartState.h"
-#include "MainMenuState.h"
-#include "Game.h"
+#include "States/StartState.h"
+#include "States/MainMenuState.h"
+#include "Engine/Game.h"
 
 namespace Falltergeist
 {
