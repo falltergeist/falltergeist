@@ -82,12 +82,12 @@ void MainMenuState::think()
     State::think();
 }
 
-void MainMenuState::onExitButtonClick(Event * event)
+void MainMenuState::onExitButtonClick()
 {
     _game->quit();
 }
 
-void MainMenuState::onNewGameButtonClick(Event * event)
+void MainMenuState::onNewGameButtonClick()
 {
     _game->pushState(new NewGameState(_game));
 }

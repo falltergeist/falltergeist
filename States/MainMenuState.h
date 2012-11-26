@@ -12,8 +12,8 @@ public:
     MainMenuState(Game * game);
     void init();
     void think();
-    void onExitButtonClick(Event * event);
-    void onNewGameButtonClick(Event * event);
+    void onExitButtonClick();
+    void onNewGameButtonClick();
 };
 
 }

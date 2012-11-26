@@ -63,12 +63,12 @@ void NewGameState::think()
     State::think();
 }
 
-void NewGameState::onBackButtonClick(Event * event)
+void NewGameState::onBackButtonClick()
 {
     _game->popState();
 }
 
-void NewGameState::onPrevCharacterButtonClick(Event * event)
+void NewGameState::onPrevCharacterButtonClick()
 {
     if (_selectedCharacter > 0)
     {
@@ -81,7 +81,7 @@ void NewGameState::onPrevCharacterButtonClick(Event * event)
     _characterImage = _characterImages[_selectedCharacter];
 }
 
-void NewGameState::onNextCharacterButtonClick(Event * event)
+void NewGameState::onNextCharacterButtonClick()
 {
     if (_selectedCharacter < 2)
     {

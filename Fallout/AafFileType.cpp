@@ -32,8 +32,8 @@ void AafFileType::_init()
 
     for (int i = 0; i != 255; ++i)
     {
-        int width = _glyphs[i].width;
-        int height = _glyphs[i].height;
+        unsigned int width = _glyphs[i].width;
+        unsigned int height = _glyphs[i].height;
         if ( width * height  == 0) continue;
 
         _glyphs[i].data = new char[width * height];

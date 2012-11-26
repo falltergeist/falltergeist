@@ -1,5 +1,4 @@
 TEMPLATE = app
-CONFIG += console
 CONFIG -= qt
 
 SOURCES += main.cpp \
@@ -62,4 +61,4 @@ HEADERS += \
     Fallout/GcdFileType.h \
     Fallout/MsgFileType.h
 
-LIBS+= -lSDL
+LIBS += -lSDL

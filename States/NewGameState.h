@@ -19,9 +19,9 @@ public:
     NewGameState(Game * game);
     void init();
     void think();
-    void onBackButtonClick(Event * event);
-    void onPrevCharacterButtonClick(Event * event);
-    void onNextCharacterButtonClick(Event * event);
+    void onBackButtonClick();
+    void onPrevCharacterButtonClick();
+    void onNextCharacterButtonClick();
 };
 
 }
