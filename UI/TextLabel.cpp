@@ -44,7 +44,7 @@ void TextLabel::draw()
 
     // Creating new textSurface
     Surface * textSurface = new Surface(width,height);
-    SDL_SetColorKey(textSurface->getSurface(), SDL_SRCCOLORKEY, 0);
+    //SDL_SetColorKey(textSurface->getSurface(), SDL_SRCCOLORKEY, 0);
     i = 0;
     x = 0;
     while (_label[i] != 0)
@@ -72,7 +72,7 @@ void TextLabel::draw()
 
     // using align
     Surface * surface = new Surface(_width,_height,getX(),getY());
-    SDL_SetColorKey(surface->getSurface(), SDL_SRCCOLORKEY, 0);
+    //SDL_SetColorKey(surface->getSurface(), SDL_SRCCOLORKEY, 0);
     x = 0; y = 0;
     switch(_verticalAlign)
     {

@@ -9,6 +9,7 @@ struct FrmFrame {
     unsigned short width;
     unsigned short height;
     unsigned int dataSize;
+    char * data;
     signed short offsetX;
     signed short offsetY;
 };

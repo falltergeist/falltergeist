@@ -4,6 +4,8 @@
 #include "UI/TextLabel.h"
 #include "ResourceManager.h"
 #include "States/NewGameState.h"
+#include "Animation.h"
+
 
 namespace Falltergeist
 {
@@ -85,6 +87,8 @@ void MainMenuState::init()
     exitButtonLabel->setWidth(140);
     exitButtonLabel->setHorizontalAlign(TextLabel::HORIZONTAL_ALIGN_CENTER);
 
+    Animation * wait = new Animation("art/intrface/wait.frm",560,400);
+
     // buttons
     add(introButton);
     add(newGameButton);
@@ -99,10 +103,13 @@ void MainMenuState::init()
     add(optionsButtonLabel);
     add(creditsButtonLabel);
     add(exitButtonLabel);
+
+    add(wait);
 }
 
 void MainMenuState::think()
 {
+    State::think();
 }
 
 void MainMenuState::onExitButtonClick()

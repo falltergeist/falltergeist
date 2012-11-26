@@ -10,6 +10,7 @@ Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y)
     needRedraw = true;
 
     _surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0);
+    SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
 
     if (_surface == 0) throw Exception(SDL_GetError());
 }

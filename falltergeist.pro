@@ -25,7 +25,8 @@ SOURCES += main.cpp \
     States/NewGameState.cpp \
     Fallout/GcdFileType.cpp \
     Fallout/MsgFileType.cpp \
-    UI/ImageButton.cpp
+    UI/ImageButton.cpp \
+    Animation.cpp
 
 HEADERS += \
     Surface.h \
@@ -51,6 +52,7 @@ HEADERS += \
     States/NewGameState.h \
     Fallout/GcdFileType.h \
     Fallout/MsgFileType.h \
-    UI/ImageButton.h
+    UI/ImageButton.h \
+    Animation.h
 
 LIBS += -lSDL

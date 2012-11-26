@@ -165,7 +165,7 @@ Surface * ResourceManager::getSurface(std::string filename, int posX, int posY)
         for (int x = 0; x < width; x++)
         {
             // 12 - frame data offset
-            unsigned int colorIndex = frm->getData()[i + 12];
+            unsigned int colorIndex = frm->getDirections()[0].frames[0].data[i];
             unsigned int color = *pal->getColor(colorIndex);
             if (colorIndex == 0) color = 0;
             surface->setPixel(x,y,color);

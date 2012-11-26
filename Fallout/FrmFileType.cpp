@@ -51,7 +51,12 @@ void FrmFileType::_init()
             (*_datFileItem) >> _directions[i].frames[j].dataSize;
             (*_datFileItem) >> _directions[i].frames[j].offsetX;
             (*_datFileItem) >> _directions[i].frames[j].offsetY;
-            _datFileItem->skip(_directions[i].frames[j].dataSize);
+            _directions[i].frames[j].data = new char[_directions[i].frames[j].dataSize];
+            for (unsigned int z = 0; z != _directions[i].frames[j].dataSize; ++z)
+            {
+                (*_datFileItem) >> _directions[i].frames[j].data[z];
+            }
+            //_datFileItem->skip(_directions[i].frames[j].dataSize);
         }
     }
     _initialized = true;
