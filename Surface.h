@@ -17,6 +17,7 @@ protected:
     void _lock();
     void _unlock();
 public:
+    bool needRedraw;
     Surface(int width = 0, int height = 0, int x = 0, int y = 0);
     Surface(Surface * other);
     virtual ~Surface();
@@ -24,15 +25,15 @@ public:
     int getY();
     int getWidth();
     int getHeight();
-    unsigned int getPixel(int x,int y);
+    SDL_Surface * getSurface();
+    unsigned int getPixel(int x, int y);
     void setPixel(int x, int y, unsigned int color);
-    virtual SDL_Surface * getSurface();
-
     void loadFromSurface(Surface * surface);
     void setX(int x);
     void setY(int y);
     void clear();
     virtual void think();
+    virtual void draw();
     virtual void blit(Surface * surface);
 };
 

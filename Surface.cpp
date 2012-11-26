@@ -7,16 +7,16 @@ namespace Falltergeist
 
 Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y)
 {
-    _surface = SDL_CreateRGBSurface(SDL_SWSURFACE,width,height,32,0xff000000,0x00ff0000,0x0000ff00,0);
-    if (_surface == 0)
-    {
-        throw Exception(SDL_GetError());
-    }
+    needRedraw = true;
+
+    _surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0);
+
+    if (_surface == 0) throw Exception(SDL_GetError());
 }
 
 Surface::Surface(Surface * other)
 {
-    _surface = SDL_ConvertSurface(other->_surface,other->_surface->format,other->_surface->flags);
+    _surface = SDL_ConvertSurface(other->_surface, other->_surface->format, other->_surface->flags);
     _x = other->_x;
     _y = other->_y;
 }
@@ -63,15 +63,24 @@ void Surface::clear()
     rect.y = 0;
     rect.h = getHeight();
     rect.w = getWidth();
-    SDL_FillRect(_surface,&rect,0);
+    SDL_FillRect(_surface, &rect, 0);
 }
 
 SDL_Surface * Surface::getSurface()
 {
+    if (needRedraw)
+    {
+        draw();
+        needRedraw = false;
+    }
     return _surface;
 }
 
 void Surface::think()
+{
+}
+
+void Surface::draw()
 {
 }
 
@@ -80,18 +89,17 @@ void Surface::blit(Surface * surface)
     SDL_Rect dest;
     dest.x = _x;
     dest.y = _y;
-
-    SDL_BlitSurface(_surface, NULL, surface->getSurface() ,&dest);
+    SDL_BlitSurface(getSurface(), NULL, surface->getSurface(), &dest);
 }
 
 unsigned int Surface::getPixel(int x, int y)
 {
     _lock();
-    if (x<0 || y<0) return 0;
+    if (x < 0 || y < 0) return 0;
     if (x > getWidth() || y > getHeight()) return 0;
 
     unsigned int * pixels = (unsigned int *) _surface->pixels;
-    unsigned int color = pixels[ ( y * _surface->w ) + x ];
+    unsigned int color = pixels[(y * _surface->w) + x];
     _unlock();
     return color;
 }
@@ -99,11 +107,11 @@ unsigned int Surface::getPixel(int x, int y)
 void Surface::setPixel(int x, int y, unsigned int color)
 {
     _lock();
-    if (x<0 || y<0) return;
+    if (x < 0 || y < 0) return;
     if (x > getWidth() || y > getHeight()) return;
 
     unsigned int * pixels = (unsigned int *) _surface->pixels;
-    pixels[ ( y * _surface->w ) + x ] = color;
+    pixels[(y * _surface->w) + x] = color;
     _unlock();
 }
 

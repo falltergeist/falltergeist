@@ -8,7 +8,7 @@
 namespace Falltergeist
 {
 
-typedef void (State::* EventHandler)(Event*);
+typedef void (State::*EventHandler)(Event*);
 
 class InteractiveSurface : public Surface
 {
@@ -28,7 +28,7 @@ protected:
     EventHandler _onKeyboardPress;
     EventHandler _onKeyboardRelease;
 public:
-    InteractiveSurface(int width, int height, int x = 0, int y = 0);
+    InteractiveSurface(int width = 0, int height = 0, int x = 0, int y = 0);
     InteractiveSurface(Surface * other);
     virtual ~InteractiveSurface();
     virtual void handle(Event * event, State *state);

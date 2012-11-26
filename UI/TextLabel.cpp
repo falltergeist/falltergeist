@@ -19,6 +19,10 @@ TextLabel::TextLabel(const char * label, const char * filename, int x, int y) : 
     //setY(y);
 }
 
+TextLabel::~TextLabel()
+{
+}
+
 Surface * TextLabel::_generateSurface()
 {
 

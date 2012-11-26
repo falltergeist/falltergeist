@@ -29,7 +29,8 @@ SOURCES += main.cpp \
     UI/LeftArrowButton.cpp \
     UI/RightArrowButton.cpp \
     Fallout/GcdFileType.cpp \
-    Fallout/MsgFileType.cpp
+    Fallout/MsgFileType.cpp \
+    UI/ImageButton.cpp
 
 HEADERS += \
     Surface.h \
@@ -59,6 +60,7 @@ HEADERS += \
     UI/LeftArrowButton.h \
     UI/RightArrowButton.h \
     Fallout/GcdFileType.h \
-    Fallout/MsgFileType.h
+    Fallout/MsgFileType.h \
+    UI/ImageButton.h
 
 LIBS += -lSDL
