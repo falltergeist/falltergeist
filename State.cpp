@@ -7,7 +7,7 @@
 namespace Falltergeist
 {
 
-State::State(Game * game) : _game(game), _surfaces(), _isFullscreen(false)
+State::State(Game * game) : _game(game), _surfaces(), _isFullscreen(false), initialized(false)
 {
 }
 
@@ -21,6 +21,7 @@ State::~State()
 
 void State::init()
 {
+    initialized = true;
 }
 
 void State::think()

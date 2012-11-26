@@ -3,16 +3,22 @@
 #include "ResourceManager.h"
 #include "UI/ImageButton.h"
 
+#include <iostream>
+
 namespace Falltergeist
 {
 
 NewGameState::NewGameState(Game * game) : State(game)
 {
-    init();
+}
+
+NewGameState::~NewGameState()
+{
 }
 
 void NewGameState::init()
 {
+    State::init();
     _isFullscreen = true;
     // background
     add(ResourceManager::getSurface("art/intrface/pickchar.frm"));
@@ -38,14 +44,14 @@ void NewGameState::init()
     ImageButton * nextCharacterButton = new ImageButton("art/intrface/sru.frm", "art/intrface/srd.frm", 318, 320);
     nextCharacterButton->onLeftButtonClick((EventHandler) &NewGameState::onNextCharacterButtonClick);
 
-    _selectedCharacter = 0;
+    //_selectedCharacter = 0;
 
-    _characterImages = new Surface[3];
-    _characterImages[0].loadFromSurface(ResourceManager::getSurface("art/intrface/combat.frm", 27, 23));
-    _characterImages[1].loadFromSurface(ResourceManager::getSurface("art/intrface/stealth.frm", 27, 23));
-    _characterImages[2].loadFromSurface(ResourceManager::getSurface("art/intrface/diplomat.frm", 27, 23));
+    //_characterImages = new Surface[3];
+    //_characterImages[0].loadFromSurface(ResourceManager::getSurface("art/intrface/combat.frm", 27, 23));
+    //_characterImages[1].loadFromSurface(ResourceManager::getSurface("art/intrface/stealth.frm", 27, 23));
+    //_characterImages[2].loadFromSurface(ResourceManager::getSurface("art/intrface/diplomat.frm", 27, 23));
 
-    _characterImage = _characterImages[_selectedCharacter];
+    //_characterImage = &_characterImages[_selectedCharacter];
 
     add(beginGameButton);
     add(editButton);
@@ -54,12 +60,11 @@ void NewGameState::init()
     add(prevCharacterButton);
     add(nextCharacterButton);
 
-    add(&_characterImage);
+    //add(_characterImage);
 }
 
 void NewGameState::think()
 {
-    State::think();
 }
 
 void NewGameState::onBackButtonClick()
@@ -77,7 +82,7 @@ void NewGameState::onPrevCharacterButtonClick()
     {
         _selectedCharacter = 2;
     }
-    _characterImage = _characterImages[_selectedCharacter];
+    //_characterImage = &_characterImages[_selectedCharacter];
 }
 
 void NewGameState::onNextCharacterButtonClick()
@@ -90,7 +95,7 @@ void NewGameState::onNextCharacterButtonClick()
     {
         _selectedCharacter = 0;
     }
-    _characterImage = _characterImages[_selectedCharacter];
+    //_characterImage = &_characterImages[_selectedCharacter];
 }
 
 }

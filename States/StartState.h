@@ -10,7 +10,7 @@ class StartState : public State
 {
 public:
     StartState(Game * game);
-    void init();
+    virtual ~StartState();
     void think();
 };
 

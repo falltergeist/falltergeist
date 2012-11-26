@@ -17,7 +17,8 @@ protected:
     bool _isFullscreen;
 public:
     State(Game * game);
-    ~State();
+    bool initialized;
+    virtual ~State();
     void add(Surface * surface);
     void blit();
     bool isFullscreen();

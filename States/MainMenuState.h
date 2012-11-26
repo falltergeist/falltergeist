@@ -10,6 +10,7 @@ class MainMenuState : public State
 {
 public:
     MainMenuState(Game * game);
+    virtual ~MainMenuState();
     void init();
     void think();
     void onExitButtonClick();

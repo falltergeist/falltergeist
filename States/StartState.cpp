@@ -9,9 +9,8 @@ StartState::StartState(Game * game) : State(game)
 {
 }
 
-void StartState::init()
+StartState::~StartState()
 {
-    State::init();
 }
 
 void StartState::think()

@@ -18,7 +18,8 @@ class Game
 {
 protected:
     ResourceManager * _resourceManager;
-    std::list<State*> _states;    
+    std::list<State *> * _states;
+    std::list<State *> * _deletedStates;
     Screen * _screen;
     bool _quit;
     bool _initialized;

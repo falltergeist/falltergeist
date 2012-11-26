@@ -10,11 +10,15 @@ namespace Falltergeist
 
 MainMenuState::MainMenuState(Game * game) : State(game)
 {
-    init();
+}
+
+MainMenuState::~MainMenuState()
+{
 }
 
 void MainMenuState::init()
 {
+    State::init();
     _isFullscreen = true;
     // Background image
     add(_game->getResourceManager()->getSurface("art/intrface/mainmenu.frm"));
@@ -99,7 +103,6 @@ void MainMenuState::init()
 
 void MainMenuState::think()
 {
-    State::think();
 }
 
 void MainMenuState::onExitButtonClick()

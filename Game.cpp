@@ -33,11 +33,15 @@ Game::Game(int width, int height, int bpp) : _states()
     _screen = new Screen(width, height,bpp);
     _quit = false;
     _initialized = false;
+    _states = new std::list<State *>;
+    _deletedStates = new std::list<State *>;
 }
 
 Game::~Game()
 {
-    delete _screen;
+    delete _screen; _screen = 0;
+    delete _states; _states = 0;
+    delete _deletedStates; _deletedStates = 0;
 }
 
 /**
@@ -46,7 +50,8 @@ Game::~Game()
  */
 void Game::pushState(State * state)
 {
-    _states.push_back(state);
+    _states->push_back(state);
+    _initialized = false;
 }
 
 /**
@@ -54,7 +59,9 @@ void Game::pushState(State * state)
  */
 void Game::popState()
 {
-    _states.pop_back();
+    _deletedStates->push_back(_states->back());
+    _states->pop_back();
+    _initialized = false;
 }
 
 /**
@@ -63,7 +70,7 @@ void Game::popState()
  */
 void Game::setState(State * state)
 {
-    while (_states.size() > 0)
+    while (_states->size() > 0)
     {
         popState();
     }
@@ -79,9 +86,15 @@ void Game::run()
 
     while (!_quit)
     {
+        // Clean up states
+        while (!_deletedStates->empty())
+        {
+            delete _deletedStates->back();
+            _deletedStates->pop_back();
+        }
         if (!_initialized)
         {
-            _states.back()->init();
+            if (!_states->back()->initialized) _states->back()->init();
             _initialized = true;
         }
 
@@ -97,26 +110,26 @@ void Game::run()
                 //_screen->handle(&event);
                 //_cursor->handle(&event);
                 //_fpsCounter->handle(&event);
-                _states.back()->handle(&event);
+                _states->back()->handle(&event);
 
             }
         }
 
-        _states.back()->think();
+        _states->back()->think();
 
         // Rendering
         if (_initialized)
         {
             _screen->clear();
             // render all states that is over the last fullscreen state
-            std::list<State*>::iterator i = _states.end();
+            std::list<State*>::iterator i = _states->end();
             do
             {
                 --i;
             }
-            while(i != _states.begin() && !(*i)->isFullscreen());
+            while(i != _states->begin() && !(*i)->isFullscreen());
 
-            for (; i != _states.end(); ++i)
+            for (; i != _states->end(); ++i)
             {
                 (*i)->blit();
             }

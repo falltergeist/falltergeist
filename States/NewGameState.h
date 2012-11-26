@@ -12,11 +12,12 @@ class Surface;
 class NewGameState : public State
 {
 protected:
-    Surface _characterImage;
+    Surface * _characterImage;
     Surface * _characterImages;
     unsigned char _selectedCharacter;
 public:    
     NewGameState(Game * game);
+    virtual ~NewGameState();
     void init();
     void think();
     void onBackButtonClick();
