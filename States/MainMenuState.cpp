@@ -15,9 +15,8 @@ MainMenuState::MainMenuState(Game * game) : State(game)
 
 void MainMenuState::init()
 {
-    State::init();
     _isFullscreen = true;
-    // background
+    // Background image
     add(_game->getResourceManager()->getSurface("art/intrface/mainmenu.frm"));
 
     // "Into" button

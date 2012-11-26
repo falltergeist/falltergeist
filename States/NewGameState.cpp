@@ -13,7 +13,6 @@ NewGameState::NewGameState(Game * game) : State(game)
 
 void NewGameState::init()
 {
-    State::init();
     _isFullscreen = true;
     // background
     add(ResourceManager::getSurface("art/intrface/pickchar.frm"));

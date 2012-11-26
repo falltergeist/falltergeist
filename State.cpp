@@ -25,7 +25,7 @@ void State::init()
 
 void State::think()
 {
-    for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
+    for (std::vector<Surface *>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
     {
         (*i)->think();
     }
@@ -33,7 +33,7 @@ void State::think()
 
 void State::blit()
 {
-    for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
+    for (std::vector<Surface *>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
     {
         (*i)->blit(_game->getScreen()->getSurface());
     }
@@ -51,9 +51,9 @@ void State::add(Surface * surface)
 
 void State::handle(Event * event)
 {
-    for (std::vector<Surface*>::reverse_iterator i = _surfaces.rbegin(); i < _surfaces.rend(); i++)
+    for (std::vector<Surface *>::reverse_iterator i = _surfaces.rbegin(); i < _surfaces.rend(); i++)
     {
-        InteractiveSurface * surface = dynamic_cast<InteractiveSurface*>(*i);
+        InteractiveSurface * surface = dynamic_cast<InteractiveSurface *>(*i);
         if (surface != 0)
         {
             surface->handle(event,this);
