@@ -83,7 +83,7 @@ void DatFileItem::_init()
     // unpacked data buffer
     _data = new unsigned char[this->size()]();
     _datFile->seek(getDataOffset());
-    //stream->seekg(getDataOffset(), std::ios::beg);
+
     if (!isCompressed())
     {
         stream->read((char * )_data, this->size());
@@ -93,13 +93,13 @@ void DatFileItem::_init()
 
     // packed data buffer
     unsigned char * packed = new unsigned char[getPackedSize()];
-    //stream->seekg(,std::ios::)
     stream->read((char *) packed, getPackedSize());
 
-    z_stream zStream = {0};
+    z_stream zStream;
     zStream.total_in  = zStream.avail_in  = getPackedSize();
-    zStream.total_out = zStream.avail_out = this->size();
+    zStream.avail_in = getPackedSize();
     zStream.next_in  = packed;
+    zStream.total_out = zStream.avail_out = this->size();
     zStream.next_out = _data;
     zStream.zalloc = Z_NULL;
     zStream.zfree = Z_NULL;

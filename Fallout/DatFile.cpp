@@ -15,6 +15,7 @@ namespace Falltergeist
 
 DatFile::DatFile(std::string filename)
 {
+    _items = 0;
     _frmFiles = new std::map<std::string, FrmFileType *>;
     _palFiles = new std::map<std::string, PalFileType *>;
     _lstFiles = new std::map<std::string, LstFileType *>;
