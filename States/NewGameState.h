@@ -8,12 +8,12 @@ namespace Falltergeist
 {
 class GcdFileType;
 class Surface;
+class SurfaceSet;
 
 class NewGameState : public State
 {
 protected:
-    Surface * _characterImage;
-    Surface * _characterImages;
+    SurfaceSet * _characterImages;
     unsigned char _selectedCharacter;
 public:    
     NewGameState(Game * game);

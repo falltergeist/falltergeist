@@ -2,7 +2,7 @@
 #include "Engine/Game.h"
 #include "Engine/ResourceManager.h"
 #include "UI/ImageButton.h"
-
+#include "Engine/SurfaceSet.h"
 #include <iostream>
 
 namespace Falltergeist
@@ -44,14 +44,12 @@ void NewGameState::init()
     ImageButton * nextCharacterButton = new ImageButton("art/intrface/sru.frm", "art/intrface/srd.frm", 318, 320);
     nextCharacterButton->onLeftButtonClick((EventHandler) &NewGameState::onNextCharacterButtonClick);
 
-    //_selectedCharacter = 0;
+    _selectedCharacter = 0;
 
-    //_characterImages = new Surface[3];
-    //_characterImages[0].loadFromSurface(ResourceManager::getSurface("art/intrface/combat.frm", 27, 23));
-    //_characterImages[1].loadFromSurface(ResourceManager::getSurface("art/intrface/stealth.frm", 27, 23));
-    //_characterImages[2].loadFromSurface(ResourceManager::getSurface("art/intrface/diplomat.frm", 27, 23));
-
-    //_characterImage = &_characterImages[_selectedCharacter];
+    _characterImages = new SurfaceSet(27,23);
+    _characterImages->addSurface(ResourceManager::getSurface("art/intrface/combat.frm"));
+    _characterImages->addSurface(ResourceManager::getSurface("art/intrface/stealth.frm"));
+    _characterImages->addSurface(ResourceManager::getSurface("art/intrface/diplomat.frm"));
 
     add(beginGameButton);
     add(editButton);
@@ -60,7 +58,7 @@ void NewGameState::init()
     add(prevCharacterButton);
     add(nextCharacterButton);
 
-    //add(_characterImage);
+    add(_characterImages);
 }
 
 void NewGameState::think()
@@ -82,7 +80,7 @@ void NewGameState::onPrevCharacterButtonClick()
     {
         _selectedCharacter = 2;
     }
-    //_characterImage = &_characterImages[_selectedCharacter];
+    _characterImages->currentSurface = _selectedCharacter;
 }
 
 void NewGameState::onNextCharacterButtonClick()
@@ -95,7 +93,7 @@ void NewGameState::onNextCharacterButtonClick()
     {
         _selectedCharacter = 0;
     }
-    //_characterImage = &_characterImages[_selectedCharacter];
+    _characterImages->currentSurface = _selectedCharacter;
 }
 
 }
