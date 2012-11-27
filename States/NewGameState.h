@@ -9,11 +9,13 @@ namespace Falltergeist
 class GcdFileType;
 class Surface;
 class SurfaceSet;
+class TextArea;
 
 class NewGameState : public State
 {
 protected:
     SurfaceSet * _characterImages;
+    TextArea * _textArea1;
     unsigned char _selectedCharacter;
 public:    
     NewGameState(Game * game);

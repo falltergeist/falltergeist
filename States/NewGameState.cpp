@@ -2,8 +2,10 @@
 #include "Engine/Game.h"
 #include "Engine/ResourceManager.h"
 #include "UI/ImageButton.h"
+#include "UI/TextArea.h"
 #include "Engine/SurfaceSet.h"
 #include <iostream>
+#include <sstream>
 
 namespace Falltergeist
 {
@@ -44,12 +46,25 @@ void NewGameState::init()
     ImageButton * nextCharacterButton = new ImageButton("art/intrface/sru.frm", "art/intrface/srd.frm", 318, 320);
     nextCharacterButton->onLeftButtonClick((EventHandler) &NewGameState::onNextCharacterButtonClick);
 
+    // Characters images
     _selectedCharacter = 0;
-
     _characterImages = new SurfaceSet(27,23);
     _characterImages->addSurface(ResourceManager::getSurface("art/intrface/combat.frm"));
     _characterImages->addSurface(ResourceManager::getSurface("art/intrface/stealth.frm"));
     _characterImages->addSurface(ResourceManager::getSurface("art/intrface/diplomat.frm"));
+
+    // Character data textarea
+
+    std::stringstream ss;
+    ss << "Line: 01\r\n"
+       << "Line2: 003";
+
+    _textArea1 = new TextArea("",300,100);
+    _textArea1->setText((char *)ss.str().c_str());
+    _textArea1->setFont("font1.aaf");
+    _textArea1->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+
+
 
     add(beginGameButton);
     add(editButton);
@@ -59,6 +74,7 @@ void NewGameState::init()
     add(nextCharacterButton);
 
     add(_characterImages);
+    add(_textArea1);
 }
 
 void NewGameState::think()

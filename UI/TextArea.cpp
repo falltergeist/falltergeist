@@ -41,28 +41,27 @@ void TextArea::draw()
     int y = 0;
 
     //calculating size of text surface
-    std::string * line = new std::string("");
+    int lineCount = 0;
+    lines->push_back(new std::string(""));
     //*line = ;
     while (_text[i] != 0)
     {
         if (_text[i] == 0x0A || _text[i] == '\n')
         {
-            lines->push_back(line);
-            delete line;
-            line = new std::string("");
+            lineCount++;
             if (width > maxWidth) maxWidth = width;
             width = 0;
+            lines->push_back(new std::string(""));
             //i++;
         }
         else
         {
-            line->push_back(_text[i]);
+            lines->at(lineCount)->push_back(_text[i]);
             width += _font->getGlyph(_text[i])->getWidth();
             width += _font->getHorizontalGap();
         }
         i++;
     }
-    lines->push_back(line);
     if (width <= maxWidth) width = maxWidth;
     height = (_font->getHeight() * lines->size()) + (_font->getHorizontalGap() * (lines->size() - 1));
 
@@ -89,7 +88,6 @@ void TextArea::draw()
         }
         linesSurfaces->push_back(lineSurface);
     }
-    delete line;
     // Creating new textSurface
     Surface * textSurface = new Surface(width,height);
     // foreach lines surfaces
