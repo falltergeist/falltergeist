@@ -33,12 +33,6 @@ Surface * Screen::getSurface()
 void Screen::clear()
 {
     _surface->clear();
-    SDL_Rect rect;
-    rect.x = 0;
-    rect.y = 0;
-    rect.h = getHeight();
-    rect.w = getWidth();
-    SDL_FillRect(_screen,&rect,0);
 }
 
 int Screen::getHeight()

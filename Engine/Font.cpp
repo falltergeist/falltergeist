@@ -122,7 +122,6 @@ Surface * Font::getGlyph(unsigned char chr)
             i++;
         }
     }
-    SDL_SetColorKey(surface->getSurface(), SDL_SRCCOLORKEY, 0);
     _glyphs[chr] = surface;
     return _glyphs[chr];
 }

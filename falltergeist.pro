@@ -25,8 +25,8 @@ SOURCES += main.cpp \
     States/StartState.cpp \
     States/MainMenuState.cpp \
     States/NewGameState.cpp \
-    UI/TextLabel.cpp \
-    UI/ImageButton.cpp 
+    UI/ImageButton.cpp \ 
+    UI/TextArea.cpp
 
 HEADERS += \
     Engine/Surface.h \
@@ -52,7 +52,7 @@ HEADERS += \
     States/StartState.h \
     States/MainMenuState.h \
     States/NewGameState.h \
-    UI/TextLabel.h \
-    UI/ImageButton.h
+    UI/ImageButton.h \
+    UI/TextArea.h
 
 LIBS += -lSDL

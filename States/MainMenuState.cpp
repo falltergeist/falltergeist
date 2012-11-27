@@ -2,10 +2,12 @@
 #include "Engine/ResourceManager.h"
 #include "Engine/Animation.h"
 #include "UI/ImageButton.h"
-#include "UI/TextLabel.h"
+#include "UI/TextArea.h"
 #include "States/MainMenuState.h"
 #include "States/NewGameState.h"
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <sstream>
 
 namespace Falltergeist
 {
@@ -46,46 +48,49 @@ void MainMenuState::init()
     exitButton->onLeftButtonClick((EventHandler) &MainMenuState::onExitButtonClick);
 
     // "Intro" label
-    TextLabel * introButtonLabel = new TextLabel("INTRO", 55, 20);
+    TextArea * introButtonLabel = new TextArea("INTRO", 55, 20);
     introButtonLabel->setColor(0xb89c28ff);
     introButtonLabel->setFont("font4.aaf");
     introButtonLabel->setWidth(140);
-    introButtonLabel->setHorizontalAlign(TextLabel::HORIZONTAL_ALIGN_CENTER);
+    introButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "New Game" label
-    TextLabel * newGameButtonLabel = new TextLabel("NEW GAME", 55, 20 + 41);
+    TextArea * newGameButtonLabel = new TextArea("NEW GAME", 55, 20 + 41);
     newGameButtonLabel->setColor(0xb89c28ff);
     newGameButtonLabel->setFont("font4.aaf");
     newGameButtonLabel->setWidth(140);
-    newGameButtonLabel->setHorizontalAlign(TextLabel::HORIZONTAL_ALIGN_CENTER);
+    newGameButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Load Game" label
-    TextLabel * loadGameButtonLabel = new TextLabel("LOAD GAME", 55, 20 + 41*2);
+    TextArea * loadGameButtonLabel = new TextArea("LOAD GAME", 55, 20 + 41*2);
     loadGameButtonLabel->setColor(0xb89c28ff);
     loadGameButtonLabel->setFont("font4.aaf");
     loadGameButtonLabel->setWidth(140);
-    loadGameButtonLabel->setHorizontalAlign(TextLabel::HORIZONTAL_ALIGN_CENTER);
+    loadGameButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Options" label
-    TextLabel * optionsButtonLabel = new TextLabel("OPTIONS", 55, 20 + 41*3);
+    TextArea * optionsButtonLabel = new TextArea("OPTIONS", 55, 20 + 41*3);
     optionsButtonLabel->setColor(0xb89c28ff);
     optionsButtonLabel->setFont("font4.aaf");
     optionsButtonLabel->setWidth(140);
-    optionsButtonLabel->setHorizontalAlign(TextLabel::HORIZONTAL_ALIGN_CENTER);
+    optionsButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Credits" label
-    TextLabel * creditsButtonLabel = new TextLabel("CREDITS", 55, 20 + 41*4);
+    TextArea * creditsButtonLabel = new TextArea("CREDITS", 55, 20 + 41*4);
     creditsButtonLabel->setColor(0xb89c28ff);
     creditsButtonLabel->setFont("font4.aaf");
     creditsButtonLabel->setWidth(140);
-    creditsButtonLabel->setHorizontalAlign(TextLabel::HORIZONTAL_ALIGN_CENTER);
+    creditsButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Exit" label
-    TextLabel * exitButtonLabel = new TextLabel("EXIT", 55, 20 + 41*5);
+    TextArea * exitButtonLabel = new TextArea("EXIT", 55, 20 + 41*5);
     exitButtonLabel->setColor(0xb89c28ff);
     exitButtonLabel->setFont("font4.aaf");
     exitButtonLabel->setWidth(140);
-    exitButtonLabel->setHorizontalAlign(TextLabel::HORIZONTAL_ALIGN_CENTER);
+    exitButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+
+    _testArea = new TextArea("testArea",3,470);
+    _testArea->setFont("font1.aaf");
 
     Animation * wait = new Animation("art/intrface/wait.frm",560,400);
 
@@ -96,19 +101,24 @@ void MainMenuState::init()
     add(settingsButton);
     add(creditsButton);
     add(exitButton);
-    // labels
+    // text areas
     add(introButtonLabel);
     add(newGameButtonLabel);
     add(loadGameButtonLabel);
     add(optionsButtonLabel);
     add(creditsButtonLabel);
     add(exitButtonLabel);
-
     add(wait);
+    add(_testArea);
 }
 
 void MainMenuState::think()
 {
+    std::stringstream * ss = new std::stringstream;
+    (*ss) << "SDL_GetTicks() = " << SDL_GetTicks();
+    _testArea->setText((char *)ss->str().c_str());
+    //_testArea->needRedraw = true;
+    delete ss;
     State::think();
 }
 

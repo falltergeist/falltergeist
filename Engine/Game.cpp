@@ -4,7 +4,7 @@
 #include "Engine/Screen.h"
 #include "Engine/Event.h"
 #include "Engine/ResourceManager.h"
-#include "UI/TextLabel.h"
+#include "UI/TextArea.h"
 
 namespace Falltergeist
 {
@@ -77,7 +77,7 @@ void Game::setState(State * state)
 void Game::run()
 {
     std::cout << "Starting main loop..." << std::endl;
-    TextLabel * falltergeistVersion = new TextLabel("Falltergeist "VERSION, 525, 464);
+    TextArea * falltergeistVersion = new TextArea("Falltergeist "VERSION, 525, 464);
     falltergeistVersion->setColor(0x00FF00FF);
     falltergeistVersion->setFont("font1.aaf");
 
@@ -110,10 +110,10 @@ void Game::run()
             }
         }
 
-        _states->back()->think();
 
         // Rendering
         _screen->clear();
+        _states->back()->think();
         // render all states that is over the last fullscreen state
         std::list<State*>::iterator i = _states->end();
         do { --i; }
