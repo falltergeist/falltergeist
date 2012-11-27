@@ -55,14 +55,28 @@ void NewGameState::init()
 
     // Character data textarea
 
+    //std::cout <<    ;
+
+
     std::stringstream ss;
-    ss << "Line: 01\r\n"
-       << "Line2: 003";
+    //ss << _t(100, "text/english/game/stat.msg") << " 01\r\n"
+    //   << _t(101, "text/english/game/stat.msg") << " 01\r\n"
+    ss   << _t(100,"text/english/game/stat.msg") << " 01\r\n";
+    ss   << _t(101,"text/english/game/stat.msg") << " 01\r\n";
+    //ss   << _t(102,"text/english/game/stat.msg") << " 01\r\n";
+    //ss   << _t(103,"text/english/game/stat.msg") << " 01\r\n";
+    //ss   << _t(104,"text/english/game/stat.msg") << " 01\r\n";
+    ss   << _t(105,"text/english/game/stat.msg") << " 01";
+
+
+
+
 
     _textArea1 = new TextArea("",300,100);
     _textArea1->setText((char *)ss.str().c_str());
     _textArea1->setFont("font1.aaf");
     _textArea1->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+
 
 
 

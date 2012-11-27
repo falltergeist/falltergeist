@@ -17,6 +17,7 @@ std::list<DatFile *> * ResourceManager::_datFiles = new std::list<DatFile *>;
 const char * _t(unsigned int number, const char * filename)
 {
     MsgFileType * msg = ResourceManager::getMsgFileType(filename);
+    if (!msg) throw Exception("Cant find msg file");
     return msg->getText(number);
 }
 

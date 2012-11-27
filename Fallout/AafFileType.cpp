@@ -23,12 +23,12 @@ void AafFileType::_init()
     (*_datFileItem) >> _maximumHeight >> _horizontalGap >> _spaceWidth >> _verticalGap;
     _glyphs = new AafGlyph[256];
 
-    for (int i = 0; i != 255; ++i)
+    for (int i = 0; i != 256; ++i)
     {
         (*_datFileItem) >> _glyphs[i].width >> _glyphs[i].height >> _glyphs[i].dataOffset;
     }
 
-    for (int i = 0; i != 255; ++i)
+    for (int i = 0; i != 256; ++i)
     {
         unsigned int width = _glyphs[i].width;
         unsigned int height = _glyphs[i].height;
