@@ -14,6 +14,7 @@ protected:
     SDL_Surface * _surface;
     int _x;
     int _y;
+    unsigned int _borderColor;
     void _lock();
     void _unlock();
 public:
@@ -32,6 +33,7 @@ public:
     void setX(int x);
     void setY(int y);
     void fill(unsigned int color);
+    void border(unsigned int color);
     void clear();
     virtual void think();
     virtual void draw();

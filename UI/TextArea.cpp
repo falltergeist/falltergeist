@@ -123,6 +123,7 @@ void TextArea::draw()
         textSurface->setY(getY());
         loadFromSurface(textSurface);
         delete lines;
+        InteractiveSurface::draw();
         return;
     }
 

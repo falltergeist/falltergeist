@@ -7,7 +7,7 @@ namespace Falltergeist
 Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y)
 {
     needRedraw = true;
-
+    _borderColor = 0;
     _surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0);
     SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
 
@@ -82,6 +82,7 @@ void Surface::think()
 
 void Surface::draw()
 {
+    if (_borderColor) border(_borderColor);
 }
 
 void Surface::fill(unsigned int color)
@@ -96,6 +97,25 @@ void Surface::fill(unsigned int color)
         }
     }
     _unlock();
+}
+
+void Surface::border(unsigned int color)
+{
+    _borderColor = color;
+    _lock();
+    unsigned int * pixels = (unsigned int *) _surface->pixels;
+    for (int y = 0; y < getHeight(); y++)
+    {
+        pixels[(y * _surface->w)] = color;
+        pixels[(y * _surface->w) + _surface->w - 1] = color;
+    }
+    for (int x = 0; x < getWidth(); x++)
+    {
+        pixels[1 + x] = color;
+        pixels[_surface->w * (_surface->h - 1) + x] = color;
+    }
+    _unlock();
+
 }
 
 void Surface::blit(Surface * surface)
