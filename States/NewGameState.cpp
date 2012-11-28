@@ -6,6 +6,7 @@
 #include "Engine/SurfaceSet.h"
 #include "Fallout/GcdFileType.h"
 #include "Fallout/BioFileType.h"
+#include "Player.h"
 #include <iostream>
 #include <sstream>
 
@@ -55,36 +56,29 @@ void NewGameState::init()
     _characterImages->addSurface(ResourceManager::getSurface("art/intrface/stealth.frm"));
     _characterImages->addSurface(ResourceManager::getSurface("art/intrface/diplomat.frm"));
 
-    // Character data textarea
+    _characters = new std::vector<Player *>;
+    _characters->push_back(new Player(ResourceManager::getGcdFileType("premade/combat.gcd")));
+    _characters->at(0)->setBio(ResourceManager::getBioFileType("premade/combat.bio")->getText());
+    _characters->push_back(new Player(ResourceManager::getGcdFileType("premade/stealth.gcd")));
+    _characters->at(1)->setBio(ResourceManager::getBioFileType("premade/stealth.bio")->getText());
+    _characters->push_back(new Player(ResourceManager::getGcdFileType("premade/diplomat.gcd")));    
+    _characters->at(2)->setBio(ResourceManager::getBioFileType("premade/diplomat.bio")->getText());
+    
+    
+    // Character data textareas
+    _playerName = new TextArea("",350,50);
+    _playerName->setFont("font1.aaf");
+    
+    _playerStats1 = new TextArea("",0,80);
+    _playerStats1->setWidth(370);
+    _playerStats1->setFont("font1.aaf");
+    _playerStats1->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    
+    _playerStats2 = new TextArea("",374,80);
+    _playerStats2->setFont("font1.aaf");
 
-    //std::cout <<    ;
-
-    GcdFileType * gcd = ResourceManager::getGcdFileType("premade/combat.gcd");
-
-    std::stringstream ss;
-    ss   << _t(100,"text/english/game/stat.msg") << " " << (gcd->strength < 10 ? "0" : "") << gcd->strength << "\r\n"
-         << _t(101,"text/english/game/stat.msg") << " " << (gcd->perception < 10 ? "0" : "") << gcd->perception << "\r\n"
-         << _t(102,"text/english/game/stat.msg") << " " << (gcd->endurance < 10 ? "0" : "") << gcd->endurance << "\r\n"
-        << _t(103,"text/english/game/stat.msg") << " " << (gcd->charisma < 10 ? "0" : "") << gcd->charisma << "\r\n"
-         << _t(104,"text/english/game/stat.msg") << " " << (gcd->intelligence < 10 ? "0" : "") << gcd->intelligence << "\r\n"
-         << _t(105,"text/english/game/stat.msg") << " " << (gcd->agility < 10 ? "0" : "") << gcd->agility << "\r\n"
-         << _t(106,"text/english/game/stat.msg") << " " << (gcd->luck < 10 ? "0" : "") << gcd->luck << "\r\n" ;
-
-
-
-
-
-    _textStats1 = new TextArea("",300,100);
-    _textStats1->setText((char *)ss.str().c_str());
-    _textStats1->setFont("font1.aaf");
-    _textStats1->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-
-    BioFileType * bio = _game->getResourceManager()->getBioFileType("premade/combat.bio");
-    _textBio = new TextArea("test",450,50);
-    _textBio->setText(bio->getText());
-    _textBio->setFont("font1.aaf");
-
-
+    _playerBio = new TextArea("",430,50);
+    _playerBio->setFont("font1.aaf");
 
 
     add(beginGameButton);
@@ -95,12 +89,16 @@ void NewGameState::init()
     add(nextCharacterButton);
 
     add(_characterImages);
-    add(_textStats1);
-    add(_textBio);
+    add(_playerName);
+    add(_playerStats1);
+    add(_playerStats2);
+    add(_playerBio);
+    
+    changeCharacter();
 }
 
 void NewGameState::think()
-{
+{    
 }
 
 void NewGameState::onBackButtonClick()
@@ -118,7 +116,7 @@ void NewGameState::onPrevCharacterButtonClick()
     {
         _selectedCharacter = 2;
     }
-    _characterImages->currentSurface = _selectedCharacter;
+    changeCharacter();
 }
 
 void NewGameState::onNextCharacterButtonClick()
@@ -131,7 +129,41 @@ void NewGameState::onNextCharacterButtonClick()
     {
         _selectedCharacter = 0;
     }
-    _characterImages->currentSurface = _selectedCharacter;
+    changeCharacter();
+}
+
+void NewGameState::changeCharacter()
+{
+    Player * player = _characters->at(_selectedCharacter);
+    std::stringstream ss;
+    ss   << _t(100,"text/english/game/stat.msg") << " " << (player->strength < 10 ? "0" : "")     << player->strength     << "\r\n"
+         << _t(101,"text/english/game/stat.msg") << " " << (player->perception < 10 ? "0" : "")   << player->perception   << "\r\n"
+         << _t(102,"text/english/game/stat.msg") << " " << (player->endurance < 10 ? "0" : "")    << player->endurance    << "\r\n"
+         << _t(103,"text/english/game/stat.msg") << " " << (player->charisma < 10 ? "0" : "")     << player->charisma     << "\r\n"
+         << _t(104,"text/english/game/stat.msg") << " " << (player->intelligence < 10 ? "0" : "") << player->intelligence << "\r\n"
+         << _t(105,"text/english/game/stat.msg") << " " << (player->agility < 10 ? "0" : "")      << player->agility      << "\r\n"
+         << _t(106,"text/english/game/stat.msg") << " " << (player->luck < 10 ? "0" : "")         << player->luck         << "\r\n" ;
+    _playerStats1->setText(ss.str().c_str());    
+     
+    ss.str("");
+    ss << statToString(player->strength) << "\r\n"
+       << statToString(player->perception) << "\r\n"
+       << statToString(player->endurance) << "\r\n"
+       << statToString(player->charisma) << "\r\n"
+       << statToString(player->intelligence) << "\r\n"
+       << statToString(player->agility) << "\r\n"
+       << statToString(player->luck) << "\r\n";
+    _playerStats2->setText(ss.str().c_str());    
+    
+    _playerBio->setText(player->getBio());
+    _playerName->setText(player->getName());
+
+    _characterImages->currentSurface = _selectedCharacter;    
+}
+
+const char * NewGameState::statToString(unsigned int stat)
+{
+    return _t(stat+300,"text/english/game/stat.msg");
 }
 
 }

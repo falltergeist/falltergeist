@@ -28,7 +28,8 @@ SOURCES += main.cpp \
     UI/ImageButton.cpp \ 
     UI/TextArea.cpp \
     Engine/SurfaceSet.cpp \
-    Fallout/BioFileType.cpp
+    Fallout/BioFileType.cpp \
+    Player.cpp
 
 HEADERS += \
     Engine/Surface.h \
@@ -57,6 +58,7 @@ HEADERS += \
     UI/ImageButton.h \
     UI/TextArea.h \
     Engine/SurfaceSet.h \
-    Fallout/BioFileType.h
+    Fallout/BioFileType.h \
+    Player.h
 
 LIBS += -lSDL
