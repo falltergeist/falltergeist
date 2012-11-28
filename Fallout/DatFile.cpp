@@ -418,7 +418,7 @@ BioFileType * DatFile::getBioFileType(std::string filename)
     BioFileType * bio = new BioFileType(item);
     // insert into bio files map
     _bioFiles->insert(std::make_pair(filename,bio));
-    return bio;
+    return _bioFiles->at(filename);
 }
 
 

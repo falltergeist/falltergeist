@@ -17,6 +17,11 @@ Animation::Animation(const char * filename, int x, int y) : InteractiveSurface(0
     loadFromFrmFile(filename);
 }
 
+Animation::~Animation()
+{
+    delete _surfaceSets;
+}
+
 void Animation::think()
 {
     if(_lastTicks + _frameRate > SDL_GetTicks()) return;

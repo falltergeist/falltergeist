@@ -3,15 +3,15 @@
 
 #include "Fallout/AafFileType.h"
 #include "Engine/Surface.h"
+#include <vector>
 
 namespace Falltergeist
 {
 
-
 class Font
 {
 protected:
-    Surface ** _glyphs;
+    std::vector<Surface *> * _glyphs;
     const char * _filename;
     unsigned int _color;
     AafFileType * _aafFileType;

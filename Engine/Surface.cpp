@@ -131,6 +131,7 @@ unsigned int Surface::getPixel(int x, int y)
     _lock();
     if (x < 0 || y < 0) return 0;
     if (x > getWidth() || y > getHeight()) return 0;
+    if (getWidth()*getHeight() == 0) return 0;
 
     unsigned int * pixels = (unsigned int *) _surface->pixels;
     unsigned int color = pixels[(y * _surface->w) + x];

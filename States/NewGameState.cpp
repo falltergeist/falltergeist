@@ -65,7 +65,7 @@ void NewGameState::init()
     ss   << _t(100,"text/english/game/stat.msg") << " " << (gcd->strength < 10 ? "0" : "") << gcd->strength << "\r\n"
          << _t(101,"text/english/game/stat.msg") << " " << (gcd->perception < 10 ? "0" : "") << gcd->perception << "\r\n"
          << _t(102,"text/english/game/stat.msg") << " " << (gcd->endurance < 10 ? "0" : "") << gcd->endurance << "\r\n"
-         << _t(103,"text/english/game/stat.msg") << " " << (gcd->charisma < 10 ? "0" : "") << gcd->charisma << "\r\n"
+        << _t(103,"text/english/game/stat.msg") << " " << (gcd->charisma < 10 ? "0" : "") << gcd->charisma << "\r\n"
          << _t(104,"text/english/game/stat.msg") << " " << (gcd->intelligence < 10 ? "0" : "") << gcd->intelligence << "\r\n"
          << _t(105,"text/english/game/stat.msg") << " " << (gcd->agility < 10 ? "0" : "") << gcd->agility << "\r\n"
          << _t(106,"text/english/game/stat.msg") << " " << (gcd->luck < 10 ? "0" : "") << gcd->luck << "\r\n" ;
@@ -78,10 +78,10 @@ void NewGameState::init()
     _textStats1->setText((char *)ss.str().c_str());
     _textStats1->setFont("font1.aaf");
     _textStats1->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-    //_textArea1->border(0xFF0000FF);
-    _textBio = new TextArea("",450,50);
-    _textBio->setText(ResourceManager::getBioFileType("premade/combat.bio")->getText());
-    //_textBio->setText("aasdas\r\n\r\nasdfasdf\r\nasdfasdf\r\n");
+
+    BioFileType * bio = _game->getResourceManager()->getBioFileType("premade/combat.bio");
+    _textBio = new TextArea("test",450,50);
+    _textBio->setText(bio->getText());
     _textBio->setFont("font1.aaf");
 
 

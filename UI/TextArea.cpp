@@ -21,14 +21,16 @@ TextArea::TextArea(const char * text, int x, int y) : InteractiveSurface(0,0,x,y
 
 TextArea::~TextArea()
 {
-    if (_text) delete [] _text;
+    if (_text != 0) delete [] _text;
     delete _font; _font = 0;
 }
 
 void TextArea::draw()
 {
     if (!needRedraw) return;
+    
     if (_font == 0) throw Exception("TextArea::draw() - font is not setted");
+    if (_text == 0 || strlen(_text) == 0) throw Exception("TextArea::draw() - text is 0");
 
     std::vector<std::string *> * lines = new std::vector<std::string *>;
     std::vector<Surface *> * linesSurfaces = new std::vector<Surface *>;
@@ -44,6 +46,7 @@ void TextArea::draw()
     int lineCount = 0;
     lines->push_back(new std::string(""));
     //*line = ;
+    //std::cout << i << std::endl;
     while (_text[i] != 0)
     {
         if (_text[i] == 0x0A || _text[i] == '\n')
@@ -76,6 +79,7 @@ void TextArea::draw()
             if (i < (*it)->size() - 1) lineWidth += _font->getHorizontalGap();
         }
 
+        //std::cout << lineWidth << ":" << _font->getHeight() << std::endl;
         Surface * lineSurface = new Surface(lineWidth, _font->getHeight());
         for(i = 0; i != (*it)->size(); ++i)
         {
@@ -112,7 +116,7 @@ void TextArea::draw()
         (*it)->setX(x);
         (*it)->setY(y);
         (*it)->blit(textSurface);
-        delete(*it);
+        //delete(*it);
         y += _font->getHeight() + _font->getVerticalGap();
     }
     delete linesSurfaces;
@@ -237,9 +241,18 @@ char * TextArea::getText()
 
 void TextArea::setText(const char * text)
 {
-    if (_text) delete [] _text;
-    _text = new char[strlen(text)]();
-    strcpy(_text,text);
+    if (text == 0) 
+    {
+        delete [] _text;
+        _text = 0;
+        return;
+    }
+    _text = new char[strlen(text)+1]();
+    for (unsigned int i = 0; i != strlen(text); ++i)
+    {
+        _text[i] = text[i];
+    }
+    //strcpy(_text,text);
     needRedraw = true;
 }
 

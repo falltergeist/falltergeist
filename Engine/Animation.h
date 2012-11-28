@@ -17,6 +17,7 @@ protected:
     unsigned int _lastTicks;
 public:
     Animation(const char * filename, int x = 0, int y = 0);
+    ~Animation();
     SDL_Surface * getSurface();
     void loadFromFrmFile(const char * filename);
     void think();

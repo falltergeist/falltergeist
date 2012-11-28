@@ -8,15 +8,16 @@ namespace Falltergeist
 
 Font::Font(const char * filename, unsigned int color)
 {
-    _glyphs = 0;
+    _color = 0;
+    _glyphs = new std::vector<Surface *>;
     setFilename(filename);
     setColor(color);
-    for (int i = 0; i < 256; i++) _glyphs[i] = 0;
+    for (int i = 0; i < 256; i++) _glyphs->push_back(0);
 }
 
 Font::~Font()
 {
-    delete [] _glyphs;
+    delete _glyphs;
 }
 
 void Font::setFilename(const char * filename)
@@ -32,13 +33,11 @@ const char * Font::getFilename()
 
 void Font::setColor(unsigned int color)
 {
-    if (_glyphs)
-    {
-        delete [] _glyphs;
-        _glyphs = 0;
-    };
-    _glyphs = new Surface*[256];
+    if (_color == color) return;
     _color = color;
+    delete _glyphs;
+    _glyphs = new std::vector<Surface *>;
+    for (int i = 0; i < 256; i++) _glyphs->push_back(0);
 }
 
 unsigned int Font::getColor()
@@ -63,7 +62,7 @@ unsigned short Font::getVerticalGap()
 
 Surface * Font::getGlyph(unsigned char chr)
 {
-    if (_glyphs[chr]) return _glyphs[chr];
+    if (_glyphs->at(chr) != 0) return _glyphs->at(chr);
 
     int charWidth = _aafFileType->getChar(chr)->width;
     int charHeight = _aafFileType->getChar(chr)->height;
@@ -122,8 +121,8 @@ Surface * Font::getGlyph(unsigned char chr)
             i++;
         }
     }
-    _glyphs[chr] = surface;
-    return _glyphs[chr];
+    _glyphs->at(chr) = surface;
+    return _glyphs->at(chr);
 }
 
 }
