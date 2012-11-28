@@ -89,11 +89,6 @@ void MainMenuState::init()
     exitButtonLabel->setWidth(140);
     exitButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
-    _testArea = new TextArea("testArea",3,470);
-    _testArea->setFont("font1.aaf");
-
-    Animation * wait = new Animation("art/intrface/wait.frm",560,400);
-
     // buttons
     add(introButton);
     add(newGameButton);
@@ -108,18 +103,10 @@ void MainMenuState::init()
     add(optionsButtonLabel);
     add(creditsButtonLabel);
     add(exitButtonLabel);
-    add(wait);
-    add(_testArea);
 }
 
 void MainMenuState::think()
 {
-    std::stringstream * ss = new std::stringstream;
-    (*ss) << "SDL_GetTicks() = " << SDL_GetTicks();
-    _testArea->setText((char *)ss->str().c_str());
-    //_testArea->needRedraw = true;
-    delete ss;
-    State::think();
 }
 
 void MainMenuState::onExitButtonClick()

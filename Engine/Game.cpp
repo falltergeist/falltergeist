@@ -80,7 +80,7 @@ void Game::setState(State * state)
 void Game::run()
 {
     std::cout << "Starting main loop..." << std::endl;
-    TextArea * falltergeistVersion = new TextArea("Falltergeist "VERSION, 525, 464);
+    TextArea * falltergeistVersion = new TextArea("Falltergeist "VERSION, 3, 470);
     falltergeistVersion->setColor(0x00FF00FF);
     falltergeistVersion->setFont("font1.aaf");
 
