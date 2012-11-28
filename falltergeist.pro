@@ -13,6 +13,7 @@ SOURCES += main.cpp \
     Engine/CrossPlatform.cpp \
     Engine/Font.cpp \
     Engine/Animation.cpp\
+    Engine/Player.cpp \
     Fallout/DatFile.cpp \
     Fallout/DatFileItem.cpp \
     Fallout/FrmFileType.cpp \
@@ -25,11 +26,11 @@ SOURCES += main.cpp \
     States/StartState.cpp \
     States/MainMenuState.cpp \
     States/NewGameState.cpp \
+    States/PlayerEditState.cpp \
     UI/ImageButton.cpp \ 
     UI/TextArea.cpp \
     Engine/SurfaceSet.cpp \
-    Fallout/BioFileType.cpp \
-    Player.cpp
+    Fallout/BioFileType.cpp 
 
 HEADERS += \
     Engine/Surface.h \
@@ -43,6 +44,7 @@ HEADERS += \
     Engine/CrossPlatform.h \
     Engine/Font.h \
     Engine/Animation.h \
+    Engine/Player.h \
     Fallout/DatFile.h \
     Fallout/DatFileItem.h \
     Fallout/FrmFileType.h \
@@ -55,10 +57,10 @@ HEADERS += \
     States/StartState.h \
     States/MainMenuState.h \
     States/NewGameState.h \
+    States/PlayerEditState.h \
     UI/ImageButton.h \
     UI/TextArea.h \
     Engine/SurfaceSet.h \
-    Fallout/BioFileType.h \
-    Player.h
+    Fallout/BioFileType.h 
 
 LIBS += -lSDL

@@ -2,6 +2,11 @@
 #include "States/MainMenuState.h"
 #include "Engine/Game.h"
 
+
+#include "PlayerEditState.h"
+#include "Engine/ResourceManager.h"
+#include "Engine/Player.h"
+
 namespace Falltergeist
 {
 
@@ -15,7 +20,10 @@ StartState::~StartState()
 
 void StartState::think()
 {
-    _game->setState(new MainMenuState(_game));
+    _game->setPlayer(new Player(ResourceManager::getGcdFileType("premade/blank.gcd")));
+    _game->setState(new PlayerEditState(_game));
+    
+    //_game->setState(new MainMenuState(_game));
 }
 
 }

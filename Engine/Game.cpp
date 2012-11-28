@@ -4,6 +4,7 @@
 #include "Engine/Screen.h"
 #include "Engine/Event.h"
 #include "Engine/ResourceManager.h"
+#include "Engine/Player.h"
 #include "UI/TextArea.h"
 
 namespace Falltergeist
@@ -34,6 +35,7 @@ Game::Game(int width, int height, int bpp) : _states()
     _quit = false;
     _states = new std::list<State *>;
     _deletedStates = new std::list<State *>;
+    _player = 0;
 }
 
 Game::~Game()
@@ -41,6 +43,7 @@ Game::~Game()
     delete _screen; _screen = 0;
     delete _states; _states = 0;
     delete _deletedStates; _deletedStates = 0;
+    delete _player; _player = 0;
 }
 
 /**
@@ -141,6 +144,16 @@ ResourceManager * Game::getResourceManager()
 void Game::quit()
 {
     _quit = true;
+}
+
+void Game::setPlayer(Player * player)
+{
+    _player = player;
+}
+
+Player * Game::getPlayer()
+{
+    return _player;
 }
 
 }

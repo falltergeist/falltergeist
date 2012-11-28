@@ -13,6 +13,7 @@ class State;
 class Exception;
 class Screen;
 class ResourceManager;
+class Player;
 
 class Game
 {
@@ -20,6 +21,7 @@ protected:
     ResourceManager * _resourceManager;
     std::list<State *> * _states;
     std::list<State *> * _deletedStates;
+    Player * _player;
     Screen * _screen;
     bool _quit;
     SDL_Event _event;
@@ -34,6 +36,8 @@ public:
     void popState();
     void run();
     void quit();
+    void setPlayer(Player * player);
+    Player * getPlayer();
 };
 
 }

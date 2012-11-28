@@ -16,7 +16,7 @@ TextArea::TextArea(const char * text, int x, int y) : InteractiveSurface(0,0,x,y
     _width = 0;
     _height = 0;
     _color = 0x00FF00FF;
-    _font = 0;
+    _font = new Font("font1.aaf", _color);
 }
 
 TextArea::~TextArea()

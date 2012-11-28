@@ -31,6 +31,8 @@ public:
     const char * statToString(unsigned int stat);
     void think();
     void onBackButtonClick();
+    void onEditButtonClick();
+    void onCreateButtonClick();
     void onPrevCharacterButtonClick();
     void onNextCharacterButtonClick();
 };

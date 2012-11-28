@@ -1,12 +1,13 @@
 #include "States/NewGameState.h"
+#include "States/PlayerEditState.h"
 #include "Engine/Game.h"
 #include "Engine/ResourceManager.h"
+#include "Engine/SurfaceSet.h"
+#include "Engine/Player.h"
 #include "UI/ImageButton.h"
 #include "UI/TextArea.h"
-#include "Engine/SurfaceSet.h"
 #include "Fallout/GcdFileType.h"
 #include "Fallout/BioFileType.h"
-#include "Player.h"
 #include <iostream>
 #include <sstream>
 
@@ -33,9 +34,11 @@ void NewGameState::init()
 
     // Edit character button
     ImageButton * editButton= new ImageButton("art/intrface/lilredup.frm", "art/intrface/lilreddn.frm", 436, 319);
-
+    editButton->onLeftButtonClick((EventHandler) &NewGameState::onEditButtonClick);
+    
     // Create character button
     ImageButton * createButton= new ImageButton("art/intrface/lilredup.frm", "art/intrface/lilreddn.frm", 81, 424);
+    createButton->onLeftButtonClick((EventHandler) &NewGameState::onCreateButtonClick);
 
     // Back to mainmenu button
     ImageButton * backButton= new ImageButton("art/intrface/lilredup.frm", "art/intrface/lilreddn.frm", 461, 424);
@@ -164,6 +167,18 @@ void NewGameState::changeCharacter()
 const char * NewGameState::statToString(unsigned int stat)
 {
     return _t(stat+300,"text/english/game/stat.msg");
+}
+
+void NewGameState::onEditButtonClick()
+{
+    _game->setPlayer(_characters->at(_selectedCharacter));
+    _game->pushState(new PlayerEditState(_game));
+}
+
+void NewGameState::onCreateButtonClick()
+{
+    _game->setPlayer(new Player(ResourceManager::getGcdFileType("premade/blank.gcd")));
+    _game->pushState(new PlayerEditState(_game));
 }
 
 }
