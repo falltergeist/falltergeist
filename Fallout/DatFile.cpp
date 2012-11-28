@@ -9,6 +9,7 @@
 #include "Fallout/AafFileType.h"
 #include "Fallout/GcdFileType.h"
 #include "Fallout/MsgFileType.h"
+#include "Fallout/BioFileType.h"
 
 namespace Falltergeist
 {
@@ -23,6 +24,7 @@ DatFile::DatFile(std::string filename)
     _aafFiles = new std::map<std::string, AafFileType *>;
     _gcdFiles = new std::map<std::string, GcdFileType *>;
     _msgFiles = new std::map<std::string, MsgFileType *>;
+    _bioFiles = new std::map<std::string, BioFileType *>;
     _filename = filename;
     _stream = new std::fstream(_filename.c_str(),std::ios::in|std::ios::binary);
     if (!_stream->is_open())
@@ -392,6 +394,31 @@ MsgFileType * DatFile::getMsgFileType(std::string filename)
     // insert into msg files map
     _msgFiles->insert(std::make_pair(filename,msg));
     return msg;
+}
+
+/**
+ * Returns BioFileType object
+ * @brief DatFile::getBioFileType
+ * @param filename
+ * @return
+ */
+BioFileType * DatFile::getBioFileType(std::string filename)
+{
+    // if bio file already loaded
+    if (_bioFiles->count(filename))
+    {
+        return _bioFiles->at(filename);
+    }
+
+    // seek for filename
+    DatFileItem * item = this->getItem(filename);
+    if (!item) return 0;
+
+    // create new bio file type
+    BioFileType * bio = new BioFileType(item);
+    // insert into bio files map
+    _bioFiles->insert(std::make_pair(filename,bio));
+    return bio;
 }
 
 

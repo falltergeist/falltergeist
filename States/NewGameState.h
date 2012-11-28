@@ -15,7 +15,8 @@ class NewGameState : public State
 {
 protected:
     SurfaceSet * _characterImages;
-    TextArea * _textArea1;
+    TextArea * _textStats1;
+    TextArea * _textBio;
     unsigned char _selectedCharacter;
 public:    
     NewGameState(Game * game);

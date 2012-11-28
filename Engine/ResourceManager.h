@@ -15,6 +15,7 @@ class FonFileType;
 class AafFileType;
 class GcdFileType;
 class MsgFileType;
+class BioFileType;
 class Surface;
 
 const char * _t(unsigned int number, const char * filename);
@@ -33,6 +34,7 @@ public:
     static AafFileType * getAafFileType(std::string filename);
     static GcdFileType * getGcdFileType(std::string filename);
     static MsgFileType * getMsgFileType(std::string filename);
+    static BioFileType * getBioFileType(std::string filename);
     static Surface * getSurface(std::string filename, int x = 0, int y = 0);
 };
 

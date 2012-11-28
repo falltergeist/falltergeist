@@ -7,7 +7,7 @@
 namespace Falltergeist
 {
 
-TextArea::TextArea(char * text, int x, int y) : InteractiveSurface(0,0,x,y)
+TextArea::TextArea(const char * text, int x, int y) : InteractiveSurface(0,0,x,y)
 {
     _text = 0;
     this->setText(text);
@@ -21,8 +21,8 @@ TextArea::TextArea(char * text, int x, int y) : InteractiveSurface(0,0,x,y)
 
 TextArea::~TextArea()
 {
-    delete _font; _font = 0;
     delete _text;
+    delete _font; _font = 0;
 }
 
 void TextArea::draw()
@@ -235,9 +235,9 @@ char * TextArea::getText()
     return _text;
 }
 
-void TextArea::setText(char * text)
+void TextArea::setText(const char * text)
 {
-    delete _text;
+    delete _text; _text = 0;
     _text = new char[strlen(text)]();
     strcpy(_text,text);
     needRedraw = true;

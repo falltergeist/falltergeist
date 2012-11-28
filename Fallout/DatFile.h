@@ -18,6 +18,7 @@ class FonFileType;
 class AafFileType;
 class GcdFileType;
 class MsgFileType;
+class BioFileType;
 
 class DatFile
 {
@@ -32,6 +33,7 @@ protected:
     std::map<std::string, AafFileType *> * _aafFiles; // opened AAF Files
     std::map<std::string, GcdFileType *> * _gcdFiles; // opened GCD Files
     std::map<std::string, MsgFileType *> * _msgFiles; // opened MSG Files
+    std::map<std::string, BioFileType *> * _bioFiles; // opened BIO Files
 public:
     DatFile(std::string filename);
     ~DatFile();
@@ -54,6 +56,7 @@ public:
     AafFileType * getAafFileType(std::string filename);
     GcdFileType * getGcdFileType(std::string filename);
     MsgFileType * getMsgFileType(std::string filename);
+    BioFileType * getBioFileType(std::string filename);
 };
 
 }

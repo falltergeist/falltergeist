@@ -5,6 +5,7 @@
 #include "UI/TextArea.h"
 #include "Engine/SurfaceSet.h"
 #include "Fallout/GcdFileType.h"
+#include "Fallout/BioFileType.h"
 #include <iostream>
 #include <sstream>
 
@@ -73,11 +74,15 @@ void NewGameState::init()
 
 
 
-    _textArea1 = new TextArea("",300,100);
-    _textArea1->setText((char *)ss.str().c_str());
-    _textArea1->setFont("font1.aaf");
-    _textArea1->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    _textStats1 = new TextArea("",300,100);
+    _textStats1->setText((char *)ss.str().c_str());
+    _textStats1->setFont("font1.aaf");
+    _textStats1->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
     //_textArea1->border(0xFF0000FF);
+    _textBio = new TextArea("",450,50);
+    _textBio->setText(ResourceManager::getBioFileType("premade/combat.bio")->getText());
+    //_textBio->setText("aasdas\r\n\r\nasdfasdf\r\nasdfasdf\r\n");
+    _textBio->setFont("font1.aaf");
 
 
 
@@ -90,7 +95,8 @@ void NewGameState::init()
     add(nextCharacterButton);
 
     add(_characterImages);
-    add(_textArea1);
+    add(_textStats1);
+    add(_textBio);
 }
 
 void NewGameState::think()

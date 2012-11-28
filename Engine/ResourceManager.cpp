@@ -8,6 +8,7 @@
 #include "Fallout/LstFileType.h"
 #include "Fallout/GcdFileType.h"
 #include "Fallout/MsgFileType.h"
+#include "Fallout/BioFileType.h"
 
 namespace Falltergeist
 {
@@ -137,6 +138,20 @@ MsgFileType * ResourceManager::getMsgFileType(std::string filename)
         if (msg)
         {
             return msg;
+        }
+    }
+    return 0;
+}
+
+BioFileType * ResourceManager::getBioFileType(std::string filename)
+{
+    std::list<DatFile *>::iterator it;
+    for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
+    {
+        BioFileType * bio = (*it)->getBioFileType(filename);
+        if (bio)
+        {
+            return bio;
         }
     }
     return 0;
