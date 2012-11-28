@@ -21,7 +21,7 @@ TextArea::TextArea(const char * text, int x, int y) : InteractiveSurface(0,0,x,y
 
 TextArea::~TextArea()
 {
-    delete _text;
+    if (_text) delete [] _text;
     delete _font; _font = 0;
 }
 
@@ -237,7 +237,7 @@ char * TextArea::getText()
 
 void TextArea::setText(const char * text)
 {
-    delete _text; _text = 0;
+    if (_text) delete [] _text;
     _text = new char[strlen(text)]();
     strcpy(_text,text);
     needRedraw = true;
