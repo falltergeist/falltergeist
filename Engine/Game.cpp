@@ -6,6 +6,7 @@
 #include "Engine/ResourceManager.h"
 #include "Engine/Player.h"
 #include "UI/TextArea.h"
+#include "UI/FpsCounter.h"
 
 namespace Falltergeist
 {
@@ -32,6 +33,7 @@ Game::Game(int width, int height, int bpp) : _states()
     _resourceManager = new ResourceManager();
 
     _screen = new Screen(width, height,bpp);
+    _fpsCounter = new FpsCounter();
     _quit = false;
     _states = new std::list<State *>;
     _deletedStates = new std::list<State *>;
@@ -81,9 +83,6 @@ void Game::run()
 {
     std::cout << "Starting main loop..." << std::endl;
     TextArea * falltergeistVersion = new TextArea("Falltergeist "VERSION, 3, 470);
-    falltergeistVersion->setColor(0x00FF00FF);
-    falltergeistVersion->setFont("font1.aaf");
-
     while (!_quit)
     {
         // Clean up states
@@ -117,13 +116,14 @@ void Game::run()
         // Rendering
         _screen->clear();
         _states->back()->think();
+        _fpsCounter->think();
         // render all states that is over the last fullscreen state
         std::list<State*>::iterator i = _states->end();
         do { --i; }
         while(i != _states->begin() && !(*i)->isFullscreen());
         for (; i != _states->end(); ++i) (*i)->blit();
-        //_fpsCounter->blit(_screen->getSurface());
         falltergeistVersion->blit(_screen->getSurface());
+        _fpsCounter->blit(_screen->getSurface());
         _screen->flip();
         SDL_Delay(1);
     }

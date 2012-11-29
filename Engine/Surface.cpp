@@ -118,6 +118,21 @@ void Surface::border(unsigned int color)
 
 }
 
+Surface * Surface::crop(int x, int y, int width, int height)
+{
+    if (width == 0) width = getWidth() - x;
+    if (height == 0) height = getHeight() - y;
+
+    Surface * surface = new Surface(width, height);
+    SDL_Rect src;
+    src.x = x;
+    src.y = y;
+    src.w = width;
+    src.h = height;
+    SDL_BlitSurface(getSurface(), &src, surface->getSurface(), NULL);
+    return surface;
+}
+
 void Surface::blit(Surface * surface)
 {
     SDL_Rect dest;

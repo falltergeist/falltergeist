@@ -20,7 +20,7 @@ StartState::~StartState()
 
 void StartState::think()
 {
-    _game->setPlayer(new Player(ResourceManager::getGcdFileType("premade/blank.gcd")));
+    _game->setPlayer(new Player(ResourceManager::getGcdFileType("premade/combat.gcd")));
     _game->setState(new PlayerEditState(_game));
     
     //_game->setState(new MainMenuState(_game));

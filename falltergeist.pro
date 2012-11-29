@@ -30,7 +30,9 @@ SOURCES += main.cpp \
     UI/ImageButton.cpp \ 
     UI/TextArea.cpp \
     Engine/SurfaceSet.cpp \
-    Fallout/BioFileType.cpp 
+    Fallout/BioFileType.cpp \ 
+    UI/FpsCounter.cpp \
+    UI/BigCounter.cpp
 
 HEADERS += \
     Engine/Surface.h \
@@ -61,6 +63,8 @@ HEADERS += \
     UI/ImageButton.h \
     UI/TextArea.h \
     Engine/SurfaceSet.h \
-    Fallout/BioFileType.h 
+    Fallout/BioFileType.h \ 
+    UI/FpsCounter.h \
+    UI/BigCounter.h
 
 LIBS += -lSDL

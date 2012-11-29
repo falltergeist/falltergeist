@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <sstream>
 
 namespace Falltergeist
 {
@@ -18,6 +19,19 @@ TextArea::TextArea(const char * text, int x, int y) : InteractiveSurface(0,0,x,y
     _color = 0x00FF00FF;
     _font = new Font("font1.aaf", _color);
 }
+
+TextArea::TextArea(int x, int y) : InteractiveSurface(0,0,x,y)
+{
+    _text = 0;
+    this->setText(" ");
+    _horizontalAlign = HORIZONTAL_ALIGN_LEFT;
+    _verticalAlign = VERTICAL_ALIGN_TOP;
+    _width = 0;
+    _height = 0;
+    _color = 0x00FF00FF;
+    _font = new Font("font1.aaf", _color);
+}
+
 
 TextArea::~TextArea()
 {
@@ -237,6 +251,14 @@ void TextArea::setVerticalAlign(unsigned char align)
 char * TextArea::getText()
 {
     return _text;
+}
+
+void TextArea::setText(unsigned int number)
+{
+    std::stringstream ss;
+    ss << number;
+    setText(ss.str().c_str());
+
 }
 
 void TextArea::setText(const char * text)

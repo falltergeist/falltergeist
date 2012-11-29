@@ -14,6 +14,7 @@ class Exception;
 class Screen;
 class ResourceManager;
 class Player;
+class FpsCounter;
 
 class Game
 {
@@ -23,6 +24,7 @@ protected:
     std::list<State *> * _deletedStates;
     Player * _player;
     Screen * _screen;
+    FpsCounter * _fpsCounter;
     bool _quit;
     SDL_Event _event;
 

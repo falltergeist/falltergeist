@@ -4,6 +4,7 @@
 #include "Engine/State.h"
 #include "UI/ImageButton.h"
 #include "UI/TextArea.h"
+#include "UI/BigCounter.h"
 
 namespace Falltergeist
 {
@@ -15,24 +16,31 @@ protected:
     ImageButton * _increaseStrenghtButton;
     ImageButton * _decreaseStrenghtButton;
     TextArea    * _statsStrenghtLabel;
+    BigCounter  * _statsStrenghtCounter;
     ImageButton * _increasePerceptionButton;
     ImageButton * _decreasePerceptionButton;
     TextArea    * _statsPerceptionLabel;
+    BigCounter  * _statsPerceptionCounter;
     ImageButton * _increaseEnduranceButton;
     ImageButton * _decreaseEnduranceButton;
     TextArea    * _statsEnduranceLabel;
+    BigCounter  * _statsEnduranceCounter;
     ImageButton * _increaseCharismaButton;
     ImageButton * _decreaseCharismaButton;
     TextArea    * _statsCharismaLabel;
+    BigCounter  * _statsCharismaCounter;
     ImageButton * _increaseIntelligenceButton;
     ImageButton * _decreaseIntelligenceButton;
     TextArea    * _statsIntelligenceLabel;
+    BigCounter  * _statsIntelligenceCounter;
     ImageButton * _increaseAgilityButton;
     ImageButton * _decreaseAgilityButton;
     TextArea    * _statsAgilityLabel;
+    BigCounter  * _statsAgilityCounter;
     ImageButton * _increaseLuckButton;
     ImageButton * _decreaseLuckButton;
     TextArea    * _statsLuckLabel;
+    BigCounter  * _statsLuckCounter;
     // Traits
     ImageButton * _trait1Button;
     TextArea * _trait1Label;

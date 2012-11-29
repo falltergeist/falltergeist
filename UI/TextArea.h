@@ -22,10 +22,12 @@ public:
     enum { HORIZONTAL_ALIGN_LEFT = 0, HORIZONTAL_ALIGN_CENTER, HORIZONTAL_ALIGN_RIGHT, HORIZONTAL_ALIGN_JUSTIFY };
     enum { VERTICAL_ALIGN_TOP = 0, VERTICAL_ALIGN_CENTER, VERTICAL_ALIGN_BOTTOM, VERTICAL_ALIGN_JUSTIFY };
     TextArea(const char * text, int x = 0, int y = 0);
+    TextArea(int x = 0, int y = 0);
     ~TextArea();
     void draw();
     char * getText();
     void setText(const char * text);
+    void setText(unsigned int number);
     unsigned char getHorizontalAlign();
     void setHorizontalAlign(unsigned char align);
     unsigned char getVerticalAlign();

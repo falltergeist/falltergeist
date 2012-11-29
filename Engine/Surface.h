@@ -35,6 +35,7 @@ public:
     void fill(unsigned int color);
     void border(unsigned int color);
     void clear();
+    Surface * crop(int x = 0, int y = 0, int width = 0, int height = 0);
     virtual void think();
     virtual void draw();
     virtual void blit(Surface * surface);
