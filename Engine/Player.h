@@ -20,6 +20,7 @@ public:
     unsigned int intelligence;
     unsigned int agility;
     unsigned int luck;
+    unsigned int freeStatsPoints;
     
     Player();
     Player(GcdFileType * gcd);

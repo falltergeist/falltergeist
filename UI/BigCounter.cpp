@@ -54,7 +54,7 @@ void BigCounter::draw()
     for (unsigned int i = 0; i < _length; i++)
     {
         int key = 9 -  ('9' - textNumber[i]);
-        std::cout << key << std::endl;
+        //std::cout << key << std::endl;
         Surface * number =  _numbersWhite->at(key);
         number->setX(14*i);
         number->blit(surface);

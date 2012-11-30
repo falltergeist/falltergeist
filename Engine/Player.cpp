@@ -22,6 +22,7 @@ Player::Player(GcdFileType * gcd)
     this->intelligence = gcd->intelligence;
     this->agility = gcd->agility;
     this->luck = gcd->luck;
+    this->freeStatsPoints = gcd->characterPoints;
     this->setName(gcd->name);
 }
 

@@ -41,6 +41,9 @@ protected:
     ImageButton * _decreaseLuckButton;
     TextArea    * _statsLuckLabel;
     BigCounter  * _statsLuckCounter;
+
+    BigCounter * _statsFreeCounter;
+
     // Traits
     ImageButton * _trait1Button;
     TextArea * _trait1Label;
@@ -79,8 +82,20 @@ public:
     PlayerEditState(Game * game);
     void think();
     virtual ~PlayerEditState();
-private:
-
+    void onIncreaseStrenghtButtonClick();
+    void onDecreaseStrenghtButtonClick();
+    void onIncreasePerceptionButtonClick();
+    void onDecreasePerceptionButtonClick();
+    void onIncreaseEnduranceButtonClick();
+    void onDecreaseEnduranceButtonClick();
+    void onIncreaseCharismaButtonClick();
+    void onDecreaseCharismaButtonClick();
+    void onIncreaseIntelligenceButtonClick();
+    void onDecreaseIntelligenceButtonClick();
+    void onIncreaseAgilityButtonClick();
+    void onDecreaseAgilityButtonClick();
+    void onIncreaseLuckButtonClick();
+    void onDecreaseLuckButtonClick();
 };
 
 }

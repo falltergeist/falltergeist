@@ -14,39 +14,55 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     Surface * background = ResourceManager::getSurface("art/intrface/edtrcrte.frm"); 
     
     _increaseStrenghtButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38);
+    _increaseStrenghtButton->onLeftButtonClick((EventHandler)&PlayerEditState::onIncreaseStrenghtButtonClick);
     _decreaseStrenghtButton = new ImageButton("art/intrface/snegoff.frm", "art/intrface/snegon.frm", 149, 49);
+    _decreaseStrenghtButton->onLeftButtonClick((EventHandler)&PlayerEditState::onDecreaseStrenghtButtonClick);
     _statsStrenghtLabel = new TextArea(102, 46);
     _statsStrenghtCounter = new BigCounter(59, 37);
     
     _increasePerceptionButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38 + 33);
+    _increasePerceptionButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreasePerceptionButtonClick);
     _decreasePerceptionButton = new ImageButton("art/intrface/snegoff.frm", "art/intrface/snegon.frm", 149, 49 + 33);
+    _decreasePerceptionButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreasePerceptionButtonClick);
     _statsPerceptionLabel = new TextArea(102, 79);
     _statsPerceptionCounter = new BigCounter(59, 37 + 33);
 
     _increaseEnduranceButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38 + 33*2);
+    _increaseEnduranceButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreaseEnduranceButtonClick);
     _decreaseEnduranceButton = new ImageButton("art/intrface/snegoff.frm", "art/intrface/snegon.frm", 149, 49 + 33*2);
+    _decreaseEnduranceButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreaseEnduranceButtonClick);
     _statsEnduranceLabel = new TextArea(102, 112);
     _statsEnduranceCounter = new BigCounter(59, 37 + 33*2);
 
     _increaseCharismaButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38 + 33*3);
+    _increaseCharismaButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreaseCharismaButtonClick);
     _decreaseCharismaButton = new ImageButton("art/intrface/snegoff.frm", "art/intrface/snegon.frm", 149, 49 + 33*3);
+    _decreaseCharismaButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreaseCharismaButtonClick);
     _statsCharismaLabel = new TextArea(102, 145);
     _statsCharismaCounter = new BigCounter(59, 37 + 33*3);
 
     _increaseIntelligenceButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38 + 33*4);
+    _increaseIntelligenceButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreaseIntelligenceButtonClick);
     _decreaseIntelligenceButton = new ImageButton("art/intrface/snegoff.frm", "art/intrface/snegon.frm", 149, 49 + 33*4);
+    _decreaseIntelligenceButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreaseIntelligenceButtonClick);
     _statsIntelligenceLabel = new TextArea(102, 178);
     _statsIntelligenceCounter = new BigCounter(59, 37 + 33*4);
 
     _increaseAgilityButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38 + 33*5);
+    _increaseAgilityButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreaseAgilityButtonClick);
     _decreaseAgilityButton = new ImageButton("art/intrface/snegoff.frm", "art/intrface/snegon.frm", 149, 49 + 33*5);
+    _decreaseAgilityButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreaseAgilityButtonClick);
     _statsAgilityLabel = new TextArea(102, 211);
     _statsAgilityCounter = new BigCounter(59, 37 + 33*5);
 
     _increaseLuckButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 236);
+    _increaseLuckButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreaseLuckButtonClick);
     _decreaseLuckButton = new ImageButton("art/intrface/snegoff.frm", "art/intrface/snegon.frm", 149, 247);
+    _decreaseLuckButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreaseLuckButtonClick);
     _statsLuckLabel = new TextArea(102, 244);
     _statsLuckCounter = new BigCounter(59, 37 + 33*6);
+
+    _statsFreeCounter = new BigCounter(126,282);
 
     // Traits
     _trait1Button = new ImageButton("art/intrface/tgskloff.frm","art/intrface/tgsklon.frm",23,352);
@@ -146,6 +162,8 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     add(_statsAgilityCounter);
     add(_statsLuckCounter);
 
+    add(_statsFreeCounter);
+
     // trait buttons
     add(_trait1Button);
     add(_trait2Button);
@@ -210,6 +228,141 @@ void PlayerEditState::think()
     _statsLuckLabel->setText(_t(199 + _game->getPlayer()->luck, "text/english/game/editor.msg"));
     _statsLuckCounter->setNumber(_game->getPlayer()->luck);
 
+    _statsFreeCounter->setNumber(_game->getPlayer()->freeStatsPoints);
+
+}
+
+void PlayerEditState::onIncreaseStrenghtButtonClick()
+{
+    if (_game->getPlayer()->freeStatsPoints == 0) return;
+    if (_game->getPlayer()->strength < 10)
+    {
+        _game->getPlayer()->strength++;
+        _game->getPlayer()->freeStatsPoints--;
+    }
+}
+
+void PlayerEditState::onDecreaseStrenghtButtonClick()
+{
+    if (_game->getPlayer()->strength > 1)
+    {
+        _game->getPlayer()->strength--;
+        _game->getPlayer()->freeStatsPoints++;
+    }
+}
+
+void PlayerEditState::onIncreasePerceptionButtonClick()
+{
+    if (_game->getPlayer()->freeStatsPoints == 0) return;
+    if (_game->getPlayer()->perception < 10)
+    {
+        _game->getPlayer()->perception++;
+        _game->getPlayer()->freeStatsPoints--;
+    }
+}
+
+void PlayerEditState::onDecreasePerceptionButtonClick()
+{
+    if (_game->getPlayer()->perception > 1)
+    {
+        _game->getPlayer()->perception--;
+        _game->getPlayer()->freeStatsPoints++;
+    }
+}
+
+void PlayerEditState::onIncreaseEnduranceButtonClick()
+{
+    if (_game->getPlayer()->freeStatsPoints == 0) return;
+    if (_game->getPlayer()->endurance < 10)
+    {
+        _game->getPlayer()->endurance++;
+        _game->getPlayer()->freeStatsPoints--;
+    }
+}
+
+void PlayerEditState::onDecreaseEnduranceButtonClick()
+{
+    if (_game->getPlayer()->endurance > 1)
+    {
+        _game->getPlayer()->endurance--;
+        _game->getPlayer()->freeStatsPoints++;
+    }
+}
+
+void PlayerEditState::onIncreaseCharismaButtonClick()
+{
+    if (_game->getPlayer()->freeStatsPoints == 0) return;
+    if (_game->getPlayer()->charisma < 10)
+    {
+        _game->getPlayer()->charisma++;
+        _game->getPlayer()->freeStatsPoints--;
+    }
+}
+
+void PlayerEditState::onDecreaseCharismaButtonClick()
+{
+    if (_game->getPlayer()->charisma > 1)
+    {
+        _game->getPlayer()->charisma--;
+        _game->getPlayer()->freeStatsPoints++;
+    }
+}
+
+void PlayerEditState::onIncreaseIntelligenceButtonClick()
+{
+    if (_game->getPlayer()->freeStatsPoints == 0) return;
+    if (_game->getPlayer()->intelligence < 10)
+    {
+        _game->getPlayer()->intelligence++;
+        _game->getPlayer()->freeStatsPoints--;
+    }
+}
+
+void PlayerEditState::onDecreaseIntelligenceButtonClick()
+{
+    if (_game->getPlayer()->intelligence > 1)
+    {
+        _game->getPlayer()->intelligence--;
+        _game->getPlayer()->freeStatsPoints++;
+    }
+}
+
+void PlayerEditState::onIncreaseAgilityButtonClick()
+{
+    if (_game->getPlayer()->freeStatsPoints == 0) return;
+    if (_game->getPlayer()->agility < 10)
+    {
+        _game->getPlayer()->agility++;
+        _game->getPlayer()->freeStatsPoints--;
+    }
+}
+
+void PlayerEditState::onDecreaseAgilityButtonClick()
+{
+    if (_game->getPlayer()->agility > 1)
+    {
+        _game->getPlayer()->agility--;
+        _game->getPlayer()->freeStatsPoints++;
+    }
+}
+
+void PlayerEditState::onIncreaseLuckButtonClick()
+{
+    if (_game->getPlayer()->freeStatsPoints == 0) return;
+    if (_game->getPlayer()->luck < 10)
+    {
+        _game->getPlayer()->luck++;
+        _game->getPlayer()->freeStatsPoints--;
+    }
+}
+
+void PlayerEditState::onDecreaseLuckButtonClick()
+{
+    if (_game->getPlayer()->luck > 1)
+    {
+        _game->getPlayer()->luck--;
+        _game->getPlayer()->freeStatsPoints++;
+    }
 }
 
 }
