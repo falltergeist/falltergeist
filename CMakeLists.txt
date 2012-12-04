@@ -2,7 +2,14 @@ cmake_minimum_required(VERSION 2.8)
 
 project(falltergeist)
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
+include(FindSDL)
+IF(SDL_FOUND)
+        message("SDL Found")
+        include_directories(SDL_INCLUDE_DIR)
+else(SDL_FOUND)
+        message("SDL not found")
+        return()
+endif(SDL_FOUND)
 
 set(SOURCES main.cpp
             src/Engine/Animation.cpp
@@ -70,7 +77,8 @@ set(SOURCES main.cpp
             src/UI/TextArea.cpp
             src/UI/TextArea.h)
 
-
-
+set(dir ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+set(EXECUTABLE_OUTPUT_PATH ${dir} CACHE PATH "Build directory" FORCE)
 add_executable(falltergeist ${SOURCES})
 target_link_libraries(falltergeist ${SDL_LIBRARY})
+
