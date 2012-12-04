@@ -1,7 +1,7 @@
 #ifndef FALLTERGEIST_FPSCOUNTER_H
 #define FALLTERGEIST_FPSCOUNTER_H
 
-#include "src/UI/TextArea.h"
+#include "../UI/TextArea.h"
 
 namespace Falltergeist
 {

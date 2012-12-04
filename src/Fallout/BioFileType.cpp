@@ -1,5 +1,5 @@
-#include "src/Fallout/BioFileType.h"
-#include "src/Fallout/DatFileItem.h"
+#include "../Fallout/BioFileType.h"
+#include "../Fallout/DatFileItem.h"
 
 #include <iostream>
 

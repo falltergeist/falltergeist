@@ -1,7 +1,7 @@
 #ifndef FALLTERGEIST_ANIMATION_H
 #define FALLTERGEIST_ANIMATION_H
 
-#include "src/Engine/InteractiveSurface.h"
+#include "../Engine/InteractiveSurface.h"
 #include <vector>
 
 namespace Falltergeist

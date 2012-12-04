@@ -1,10 +1,10 @@
 #ifndef FALLTERGEIST_PLAYEREDITSTATE_H
 #define	FALLTERGEIST_PLAYEREDITSTATE_H
 
-#include "src/Engine/State.h"
-#include "src/UI/ImageButton.h"
-#include "src/UI/TextArea.h"
-#include "src/UI/BigCounter.h"
+#include "../Engine/State.h"
+#include "../UI/ImageButton.h"
+#include "../UI/TextArea.h"
+#include "../UI/BigCounter.h"
 
 namespace Falltergeist
 {

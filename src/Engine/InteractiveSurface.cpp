@@ -1,4 +1,4 @@
-#include "src/Engine/InteractiveSurface.h"
+#include "../Engine/InteractiveSurface.h"
 #include <iostream>
 
 namespace Falltergeist

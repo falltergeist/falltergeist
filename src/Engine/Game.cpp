@@ -1,12 +1,12 @@
-#include "src/Engine/Game.h"
-#include "src/Engine/Exception.h"
-#include "src/Engine/State.h"
-#include "src/Engine/Screen.h"
-#include "src/Engine/Event.h"
-#include "src/Engine/ResourceManager.h"
-#include "src/Engine/Player.h"
-#include "src/UI/TextArea.h"
-#include "src/UI/FpsCounter.h"
+#include "../Engine/Game.h"
+#include "../Engine/Exception.h"
+#include "../Engine/State.h"
+#include "../Engine/Screen.h"
+#include "../Engine/Event.h"
+#include "../Engine/ResourceManager.h"
+#include "../Engine/Player.h"
+#include "../UI/TextArea.h"
+#include "../UI/FpsCounter.h"
 
 namespace Falltergeist
 {

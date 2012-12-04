@@ -1,10 +1,10 @@
-#include "src/Engine/Game.h"
-#include "src/Engine/ResourceManager.h"
-#include "src/Engine/Animation.h"
-#include "src/UI/ImageButton.h"
-#include "src/UI/TextArea.h"
-#include "src/States/MainMenuState.h"
-#include "src/States/NewGameState.h"
+#include "../Engine/Game.h"
+#include "../Engine/ResourceManager.h"
+#include "../Engine/Animation.h"
+#include "../UI/ImageButton.h"
+#include "../UI/TextArea.h"
+#include "../States/MainMenuState.h"
+#include "../States/NewGameState.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <sstream>

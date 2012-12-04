@@ -1,5 +1,5 @@
-#include "src/Fallout/AafFileType.h"
-#include "src/Fallout/DatFileItem.h"
+#include "../Fallout/AafFileType.h"
+#include "../Fallout/DatFileItem.h"
 
 namespace Falltergeist
 {

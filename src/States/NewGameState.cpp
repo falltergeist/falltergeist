@@ -1,13 +1,13 @@
-#include "src/States/NewGameState.h"
-#include "src/States/PlayerEditState.h"
-#include "src/Engine/Game.h"
-#include "src/Engine/ResourceManager.h"
-#include "src/Engine/SurfaceSet.h"
-#include "src/Engine/Player.h"
-#include "src/UI/ImageButton.h"
-#include "src/UI/TextArea.h"
-#include "src/Fallout/GcdFileType.h"
-#include "src/Fallout/BioFileType.h"
+#include "../States/NewGameState.h"
+#include "../States/PlayerEditState.h"
+#include "../Engine/Game.h"
+#include "../Engine/ResourceManager.h"
+#include "../Engine/SurfaceSet.h"
+#include "../Engine/Player.h"
+#include "../UI/ImageButton.h"
+#include "../UI/TextArea.h"
+#include "../Fallout/GcdFileType.h"
+#include "../Fallout/BioFileType.h"
 #include <iostream>
 #include <sstream>
 

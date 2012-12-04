@@ -1,11 +1,11 @@
-#include "src/States/StartState.h"
-#include "src/States/MainMenuState.h"
-#include "src/Engine/Game.h"
+#include "../States/StartState.h"
+#include "../States/MainMenuState.h"
+#include "../Engine/Game.h"
 
 
-#include "src/States/PlayerEditState.h"
-#include "src/Engine/ResourceManager.h"
-#include "src/Engine/Player.h"
+#include "../States/PlayerEditState.h"
+#include "../Engine/ResourceManager.h"
+#include "../Engine/Player.h"
 
 namespace Falltergeist
 {

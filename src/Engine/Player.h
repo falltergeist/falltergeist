@@ -1,6 +1,6 @@
 #ifndef FALLTERGEIST_PLAYER_H
 #define	FALLTERGEIST_PLAYER_H
-#include "src/Fallout/GcdFileType.h"
+#include "../Fallout/GcdFileType.h"
 
 namespace Falltergeist
 {

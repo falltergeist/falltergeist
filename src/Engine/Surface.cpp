@@ -1,5 +1,5 @@
-#include "src/Engine/Surface.h"
-#include "src/Fallout/FrmFileType.h"
+#include "../Engine/Surface.h"
+#include "../Fallout/FrmFileType.h"
 
 namespace Falltergeist
 {

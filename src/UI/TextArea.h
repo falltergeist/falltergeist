@@ -1,7 +1,7 @@
 #ifndef FALLTERGEIST_TEXTAREA_H
 #define FALLTERGEIST_TEXTAREA_H
 
-#include "src/Engine/InteractiveSurface.h"
+#include "../Engine/InteractiveSurface.h"
 
 namespace Falltergeist
 {

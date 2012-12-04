@@ -1,5 +1,5 @@
-#include "src/UI/TextArea.h"
-#include "src/Engine/Font.h"
+#include "../UI/TextArea.h"
+#include "../Engine/Font.h"
 #include <vector>
 #include <string>
 #include <iostream>

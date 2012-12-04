@@ -1,15 +1,15 @@
-#include "src/Fallout/DatFile.h"
-#include "src/Fallout/DatFileItem.h"
-#include "src/Engine/Exception.h"
+#include "../Fallout/DatFile.h"
+#include "../Fallout/DatFileItem.h"
+#include "../Engine/Exception.h"
 #include <algorithm>
-#include "src/Fallout/FrmFileType.h"
-#include "src/Fallout/PalFileType.h"
-#include "src/Fallout/LstFileType.h"
-#include "src/Fallout/FonFileType.h"
-#include "src/Fallout/AafFileType.h"
-#include "src/Fallout/GcdFileType.h"
-#include "src/Fallout/MsgFileType.h"
-#include "src/Fallout/BioFileType.h"
+#include "../Fallout/FrmFileType.h"
+#include "../Fallout/PalFileType.h"
+#include "../Fallout/LstFileType.h"
+#include "../Fallout/FonFileType.h"
+#include "../Fallout/AafFileType.h"
+#include "../Fallout/GcdFileType.h"
+#include "../Fallout/MsgFileType.h"
+#include "../Fallout/BioFileType.h"
 
 namespace Falltergeist
 {

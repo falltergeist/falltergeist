@@ -1,4 +1,4 @@
-#include "src/Engine/SurfaceSet.h"
+#include "../Engine/SurfaceSet.h"
 
 namespace Falltergeist
 {

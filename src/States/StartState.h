@@ -1,7 +1,7 @@
 #ifndef FALLTERGEIST_STARTSTATE_H
 #define FALLTERGEIST_STARTSTATE_H
 
-#include "src/Engine/State.h"
+#include "../Engine/State.h"
 
 namespace Falltergeist
 {

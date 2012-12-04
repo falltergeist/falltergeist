@@ -1,7 +1,7 @@
 #ifndef FALLTERGEIST_HIDDENMASK_H
 #define FALLTERGEIST_HIDDENMASK_H
 
-#include "src/Engine/InteractiveSurface.h"
+#include "../Engine/InteractiveSurface.h"
 
 namespace Falltergeist
 {

@@ -1,11 +1,11 @@
-#include "src/States/PlayerEditState.h"
-#include "src/Engine/Game.h"
-#include "src/Engine/Player.h"
-#include "src/Engine/ResourceManager.h"
-#include "src/UI/ImageButton.h"
-#include "src/Engine/Surface.h"
-#include "src/UI/BigCounter.h"
-#include "src/UI/HiddenMask.h"
+#include "../States/PlayerEditState.h"
+#include "../Engine/Game.h"
+#include "../Engine/Player.h"
+#include "../Engine/ResourceManager.h"
+#include "../UI/ImageButton.h"
+#include "../Engine/Surface.h"
+#include "../UI/BigCounter.h"
+#include "../UI/HiddenMask.h"
 
 namespace Falltergeist
 {

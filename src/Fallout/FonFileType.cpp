@@ -1,5 +1,5 @@
-#include "src/Fallout/FonFileType.h"
-#include "src/Fallout/DatFileItem.h"
+#include "../Fallout/FonFileType.h"
+#include "../Fallout/DatFileItem.h"
 
 #include <iostream>
 

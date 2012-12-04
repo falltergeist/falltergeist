@@ -1,5 +1,5 @@
-#include "src/Fallout/LstFileType.h"
-#include "src/Fallout/DatFileItem.h"
+#include "../Fallout/LstFileType.h"
+#include "../Fallout/DatFileItem.h"
 
 #include <iostream>
 

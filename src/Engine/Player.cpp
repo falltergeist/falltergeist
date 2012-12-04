@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include "src/Engine/Player.h"
+#include "../Engine/Player.h"
 
 namespace Falltergeist
 {

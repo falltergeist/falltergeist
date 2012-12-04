@@ -1,6 +1,9 @@
+cmake_install.cmake
+CMakeCache.txt
 Makefile
 falltergeist
 falltergeist.pro.*
+/CMakeFiles/
 /docs/
 /nbproject/
 *.o

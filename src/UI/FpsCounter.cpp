@@ -1,4 +1,4 @@
-#include "src/UI/FpsCounter.h"
+#include "../UI/FpsCounter.h"
 #include <sstream>
 
 namespace Falltergeist

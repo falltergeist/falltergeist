@@ -1,5 +1,5 @@
-#include "src/UI/BigCounter.h"
-#include "src/Engine/ResourceManager.h"
+#include "../UI/BigCounter.h"
+#include "../Engine/ResourceManager.h"
 #include <sstream>
 #include <iostream>
 

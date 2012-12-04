@@ -1,7 +1,7 @@
 #ifndef FALLTERGEIST_SURFACESET_H
 #define FALLTERGEIST_SURFACESET_H
 
-#include "src/Engine/InteractiveSurface.h"
+#include "../Engine/InteractiveSurface.h"
 #include <vector>
 
 namespace Falltergeist

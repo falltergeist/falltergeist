@@ -1,6 +1,6 @@
-#include "src/Engine/Font.h"
-#include "src/Engine/ResourceManager.h"
-#include "src/Engine/Surface.h"
+#include "../Engine/Font.h"
+#include "../Engine/ResourceManager.h"
+#include "../Engine/Surface.h"
 #include <iostream>
 
 namespace Falltergeist

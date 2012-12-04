@@ -1,7 +1,7 @@
 #ifndef FALLTERGEIST_MAINMENUSTATE_H
 #define FALLTERGEIST_MAINMENUSTATE_H
 
-#include "src/Engine/State.h"
+#include "../Engine/State.h"
 
 namespace Falltergeist
 {

@@ -1,8 +1,8 @@
 #ifndef FALLTERGEIST_FONT_H
 #define FALLTERGEIST_FONT_H
 
-#include "src/Fallout/AafFileType.h"
-#include "src/Engine/Surface.h"
+#include "../Fallout/AafFileType.h"
+#include "../Engine/Surface.h"
 #include <vector>
 
 namespace Falltergeist

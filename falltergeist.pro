@@ -70,3 +70,6 @@ HEADERS += \
     src/UI/HiddenMask.h
 
 LIBS += -lSDL
+
+OTHER_FILES += \
+    CMakeLists.txt
