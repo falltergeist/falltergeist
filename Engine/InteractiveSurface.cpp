@@ -54,7 +54,7 @@ void InteractiveSurface::handle(Event * event, State * state)
         int x = event->getX() - getX();
         int y = event->getY() - getY();
 
-        if ((getPixel(x , y) & 0xFF) > 0)
+        if ((getPixel(x , y) >> 24) > 0)
         {
             switch(event->getSDLEvent()->type)
             {

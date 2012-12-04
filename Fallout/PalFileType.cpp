@@ -9,14 +9,14 @@ PalColor::operator int()
 {
     int color = ((red * 4) << 16) | ((green * 4) << 8) | (blue * 4);
     if (color == 0) return 0;
-    return (color << 8) | 255;
+    return 0xFF000000 | color;
 }
 
 PalColor::operator unsigned int()
 {
     unsigned int color = ((red * 4) << 16) | ((green * 4) << 8) | (blue * 4);
     if (color == 0) return 0;
-    return (color << 8) | 255;
+    return 0xFF000000 | color;
 }
 
 PalFileType::PalFileType(DatFileItem * datFileItem)

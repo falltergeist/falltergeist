@@ -57,7 +57,7 @@ void BigCounter::draw()
         //std::cout << key << std::endl;
         Surface * number =  _numbersWhite->at(key);
         number->setX(14*i);
-        number->blit(surface);
+        number->copyTo(surface);
     }
     delete [] textNumber;
 

@@ -28,6 +28,7 @@ public:
     int getHeight();
     virtual SDL_Surface * getSurface();
     unsigned int getPixel(int x, int y);
+    void copyTo(Surface * surface);
     void setPixel(int x, int y, unsigned int color);
     void loadFromSurface(Surface * surface);
     void setX(int x);

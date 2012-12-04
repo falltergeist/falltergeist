@@ -16,7 +16,7 @@ TextArea::TextArea(const char * text, int x, int y) : InteractiveSurface(0,0,x,y
     _verticalAlign = VERTICAL_ALIGN_TOP;
     _width = 0;
     _height = 0;
-    _color = 0x00FF00FF;
+    _color = 0xFF00FF00;
     _font = new Font("font1.aaf", _color);
 }
 
@@ -28,7 +28,7 @@ TextArea::TextArea(int x, int y) : InteractiveSurface(0,0,x,y)
     _verticalAlign = VERTICAL_ALIGN_TOP;
     _width = 0;
     _height = 0;
-    _color = 0x00FF00FF;
+    _color = 0xFF00FF00;
     _font = new Font("font1.aaf", _color);
 }
 
@@ -99,7 +99,7 @@ void TextArea::draw()
         {
             Surface * glyph = _font->getGlyph((*it)->c_str()[i]);
             glyph->setX(x);
-            glyph->blit(lineSurface);
+            glyph->copyTo(lineSurface);
 
             x += glyph->getWidth();
             if (i < (*it)->size() - 1) x += _font->getHorizontalGap();
@@ -129,7 +129,7 @@ void TextArea::draw()
         }
         (*it)->setX(x);
         (*it)->setY(y);
-        (*it)->blit(textSurface);
+        (*it)->copyTo(textSurface);
         //delete(*it);
         y += _font->getHeight() + _font->getVerticalGap();
     }
@@ -178,7 +178,7 @@ void TextArea::draw()
     }
     textSurface->setX(x);
     textSurface->setY(y);
-    textSurface->blit(surface);
+    textSurface->copyTo(surface);
     loadFromSurface(surface);
     delete lines;
     delete textSurface;

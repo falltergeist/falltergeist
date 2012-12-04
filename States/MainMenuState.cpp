@@ -49,42 +49,42 @@ void MainMenuState::init()
 
     // "Intro" label
     TextArea * introButtonLabel = new TextArea("INTRO", 55, 20);
-    introButtonLabel->setColor(0xb89c28ff);
+    introButtonLabel->setColor(0xffb89c28);
     introButtonLabel->setFont("font4.aaf");
     introButtonLabel->setWidth(140);
     introButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "New Game" label
     TextArea * newGameButtonLabel = new TextArea("NEW GAME", 55, 20 + 41);
-    newGameButtonLabel->setColor(0xb89c28ff);
+    newGameButtonLabel->setColor(0xffb89c28);
     newGameButtonLabel->setFont("font4.aaf");
     newGameButtonLabel->setWidth(140);
     newGameButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Load Game" label
     TextArea * loadGameButtonLabel = new TextArea("LOAD GAME", 55, 20 + 41*2);
-    loadGameButtonLabel->setColor(0xb89c28ff);
+    loadGameButtonLabel->setColor(0xffb89c28);
     loadGameButtonLabel->setFont("font4.aaf");
     loadGameButtonLabel->setWidth(140);
     loadGameButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Options" label
     TextArea * optionsButtonLabel = new TextArea("OPTIONS", 55, 20 + 41*3);
-    optionsButtonLabel->setColor(0xb89c28ff);
+    optionsButtonLabel->setColor(0xffb89c28);
     optionsButtonLabel->setFont("font4.aaf");
     optionsButtonLabel->setWidth(140);
     optionsButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Credits" label
     TextArea * creditsButtonLabel = new TextArea("CREDITS", 55, 20 + 41*4);
-    creditsButtonLabel->setColor(0xb89c28ff);
+    creditsButtonLabel->setColor(0xffb89c28);
     creditsButtonLabel->setFont("font4.aaf");
     creditsButtonLabel->setWidth(140);
     creditsButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Exit" label
     TextArea * exitButtonLabel = new TextArea("EXIT", 55, 20 + 41*5);
-    exitButtonLabel->setColor(0xb89c28ff);
+    exitButtonLabel->setColor(0xffb89c28);
     exitButtonLabel->setFont("font4.aaf");
     exitButtonLabel->setWidth(140);
     exitButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);

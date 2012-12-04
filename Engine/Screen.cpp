@@ -11,6 +11,7 @@ Screen::Screen(int width, int height, int bpp)
 {
     std::cout << "Setting up video mode " << width << "x" << height << "x" << bpp << "...";
     _screen = SDL_SetVideoMode(width, height, bpp, SDL_SWSURFACE);
+    SDL_SetAlpha(_screen, SDL_SRCALPHA, 0);
     if (_screen == 0)
     {
         std::cout << "[FAIL]" << std::endl;
@@ -32,7 +33,8 @@ Surface * Screen::getSurface()
 
 void Screen::clear()
 {
-    _surface->clear();
+    _surface->fill(0xFF000000);
+    //_surface->clear();
 }
 
 int Screen::getHeight()
