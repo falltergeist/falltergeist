@@ -6,18 +6,21 @@ namespace Falltergeist
 
 Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y)
 {
-    needRedraw = true;
+    needRedraw = false;
     _borderColor = 0;
+    _backgroundColor = 0;
     _surface = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, width, height, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xFF000000);
-    clear();
-    //SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
-
     if (_surface == 0) throw Exception(SDL_GetError());
+    clear();
 }
 
 Surface::Surface(Surface * other)
 {
+    needRedraw = false;
+    _borderColor = 0;
+    _backgroundColor = 0;
     _surface = SDL_ConvertSurface(other->_surface, other->_surface->format, other->_surface->flags);
+    if (_surface == 0) throw Exception(SDL_GetError());
     _x = other->_x;
     _y = other->_y;
 }
@@ -37,12 +40,12 @@ int Surface::getY()
     return _y;
 }
 
-int Surface::getWidth()
+unsigned int Surface::getWidth()
 {
     return _surface->w;
 }
 
-int Surface::getHeight()
+unsigned int Surface::getHeight()
 {
     return _surface->h;
 }
@@ -59,16 +62,12 @@ void Surface::setY(int y)
 
 void Surface::clear()
 {
-    fill(0);
+    fill(_backgroundColor);
 }
 
 SDL_Surface * Surface::getSurface()
 {
-    if (needRedraw)
-    {
-        draw();
-        needRedraw = false;
-    }
+    draw();
     return _surface;
 }
 
@@ -78,7 +77,10 @@ void Surface::think()
 
 void Surface::draw()
 {
-    if (_borderColor) border(_borderColor);
+    if (needRedraw == false) return;
+    needRedraw = false;
+    clear();
+    if (_borderColor != 0) _drawBorder();
 }
 
 void Surface::fill(unsigned int color)
@@ -86,23 +88,43 @@ void Surface::fill(unsigned int color)
     SDL_FillRect(_surface, NULL, color);
 }
 
-void Surface::border(unsigned int color)
+void Surface::_drawBorder()
 {
-    _borderColor = color;
     _lock();
     unsigned int * pixels = (unsigned int *) _surface->pixels;
-    for (int y = 0; y < getHeight(); y++)
+    for (unsigned int y = 0; y < getHeight(); y++)
     {
-        pixels[(y * _surface->w)] = color;
-        pixels[(y * _surface->w) + _surface->w - 1] = color;
+        pixels[(y * _surface->w)] = _borderColor;
+        pixels[(y * _surface->w) + _surface->w - 1] = _borderColor;
     }
-    for (int x = 0; x < getWidth(); x++)
+    for (unsigned int x = 0; x < getWidth(); x++)
     {
-        pixels[1 + x] = color;
-        pixels[_surface->w * (_surface->h - 1) + x] = color;
+        pixels[1 + x] = _borderColor;
+        pixels[_surface->w * (_surface->h - 1) + x] = _borderColor;
     }
     _unlock();
+}
 
+void Surface::setBorderColor(unsigned int color)
+{
+    _borderColor = color;
+    needRedraw= true;
+}
+
+unsigned int Surface::getBorderColor()
+{
+    return _borderColor;
+}
+
+void Surface::setBackgroundColor(unsigned int color)
+{
+    _backgroundColor = color;
+    needRedraw = true;
+}
+
+unsigned int Surface::getBackgroundColor()
+{
+    return _backgroundColor;
 }
 
 Surface * Surface::crop(int xOffset, int yOffset, int width, int height)
@@ -134,9 +156,9 @@ void Surface::copyTo(Surface * surface)
     _lock();
     unsigned int * thisPixels = (unsigned int *) _surface->pixels;
     unsigned int * thatPixels = (unsigned int *) surface->_surface->pixels;
-    for (int y = 0; y < getHeight(); y++)
+    for (unsigned int y = 0; y < getHeight(); y++)
     {
-        for (int x = 0; x < getWidth(); x++)
+        for (unsigned int x = 0; x < getWidth(); x++)
         {
             thatPixels[((y + _y) * surface->_surface->w) + x + _x] = thisPixels[(y * _surface->w) + x];
         }
@@ -148,7 +170,7 @@ unsigned int Surface::getPixel(int x, int y)
 {
     _lock();
     if (x < 0 || y < 0) return 0;
-    if (x > getWidth() || y > getHeight()) return 0;
+    if ((unsigned int) x > getWidth() || (unsigned int) y > getHeight()) return 0;
     if (getWidth()*getHeight() == 0) return 0;
 
     unsigned int * pixels = (unsigned int *) _surface->pixels;
@@ -161,7 +183,7 @@ void Surface::setPixel(int x, int y, unsigned int color)
 {
     _lock();
     if (x < 0 || y < 0) return;
-    if (x > getWidth() || y > getHeight()) return;
+    if ((unsigned int) x > getWidth() || (unsigned int) y > getHeight()) return;
 
     unsigned int * pixels = (unsigned int *) _surface->pixels;
     pixels[(y * _surface->w) + x] = color;

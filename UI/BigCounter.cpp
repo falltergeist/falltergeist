@@ -30,6 +30,7 @@ BigCounter::~BigCounter()
 
 void BigCounter::draw()
 {
+    InteractiveSurface::draw();
     // new surface
     Surface * surface = new Surface(14*_length, 24);
     // number as text
@@ -64,7 +65,6 @@ void BigCounter::draw()
     surface->setX(getX());
     surface->setY(getY());
     loadFromSurface(surface);
-    InteractiveSurface::draw();
 }
 
 void BigCounter::setNumber(unsigned int number)

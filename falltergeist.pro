@@ -32,7 +32,8 @@ SOURCES += main.cpp \
     Engine/SurfaceSet.cpp \
     Fallout/BioFileType.cpp \ 
     UI/FpsCounter.cpp \
-    UI/BigCounter.cpp
+    UI/BigCounter.cpp \
+    UI/ClickMask.cpp
 
 HEADERS += \
     Engine/Surface.h \
@@ -65,6 +66,7 @@ HEADERS += \
     Engine/SurfaceSet.h \
     Fallout/BioFileType.h \ 
     UI/FpsCounter.h \
-    UI/BigCounter.h
+    UI/BigCounter.h \
+    UI/ClickMask.h
 
 LIBS += -lSDL

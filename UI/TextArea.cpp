@@ -41,7 +41,7 @@ TextArea::~TextArea()
 
 void TextArea::draw()
 {
-    if (!needRedraw) return;
+    InteractiveSurface::draw();
     
     if (_font == 0) throw Exception("TextArea::draw() - font is not setted");
     if (_text == 0 || strlen(_text) == 0) throw Exception("TextArea::draw() - text is 0");
@@ -141,7 +141,6 @@ void TextArea::draw()
         textSurface->setY(getY());
         loadFromSurface(textSurface);
         delete lines;
-        InteractiveSurface::draw();
         return;
     }
 
@@ -182,8 +181,6 @@ void TextArea::draw()
     loadFromSurface(surface);
     delete lines;
     delete textSurface;
-    InteractiveSurface::draw();
-
 }
 
 unsigned int TextArea::getColor()

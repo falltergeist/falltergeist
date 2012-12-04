@@ -13,10 +13,10 @@ class Game;
 class PlayerEditState : public State
 {
 protected:
-    ImageButton * _increaseStrenghtButton;
-    ImageButton * _decreaseStrenghtButton;
-    TextArea    * _statsStrenghtLabel;
-    BigCounter  * _statsStrenghtCounter;
+    ImageButton * _increaseStrengthButton;
+    ImageButton * _decreaseStrengthButton;
+    TextArea    * _statsStrengthLabel;
+    BigCounter  * _statsStrengthCounter;
     ImageButton * _increasePerceptionButton;
     ImageButton * _decreasePerceptionButton;
     TextArea    * _statsPerceptionLabel;
@@ -82,8 +82,8 @@ public:
     PlayerEditState(Game * game);
     void think();
     virtual ~PlayerEditState();
-    void onIncreaseStrenghtButtonClick();
-    void onDecreaseStrenghtButtonClick();
+    void onIncreaseStrengthButtonClick();
+    void onDecreaseStrengthButtonClick();
     void onIncreasePerceptionButtonClick();
     void onDecreasePerceptionButtonClick();
     void onIncreaseEnduranceButtonClick();
@@ -96,6 +96,10 @@ public:
     void onDecreaseAgilityButtonClick();
     void onIncreaseLuckButtonClick();
     void onDecreaseLuckButtonClick();
+
+    void onStrengthSelected();
+    void onPerceptionSelected();
+
 };
 
 }

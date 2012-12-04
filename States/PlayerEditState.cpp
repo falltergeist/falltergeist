@@ -5,6 +5,7 @@
 #include "UI/ImageButton.h"
 #include "Engine/Surface.h"
 #include "UI/BigCounter.h"
+#include "UI/ClickMask.h"
 
 namespace Falltergeist
 {
@@ -13,19 +14,23 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
 {
     Surface * background = ResourceManager::getSurface("art/intrface/edtrcrte.frm"); 
     
-    _increaseStrenghtButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38);
-    _increaseStrenghtButton->onLeftButtonClick((EventHandler)&PlayerEditState::onIncreaseStrenghtButtonClick);
-    _decreaseStrenghtButton = new ImageButton("art/intrface/snegoff.frm", "art/intrface/snegon.frm", 149, 49);
-    _decreaseStrenghtButton->onLeftButtonClick((EventHandler)&PlayerEditState::onDecreaseStrenghtButtonClick);
-    _statsStrenghtLabel = new TextArea(102, 46);
-    _statsStrenghtCounter = new BigCounter(59, 37);
-    
+    _increaseStrengthButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38);
+    _increaseStrengthButton->onLeftButtonClick((EventHandler)&PlayerEditState::onIncreaseStrengthButtonClick);
+    _decreaseStrengthButton = new ImageButton("art/intrface/snegoff.frm", "art/intrface/snegon.frm", 149, 49);
+    _decreaseStrengthButton->onLeftButtonClick((EventHandler)&PlayerEditState::onDecreaseStrengthButtonClick);
+    _statsStrengthLabel = new TextArea(102, 46);
+    _statsStrengthCounter = new BigCounter(59, 37);
+    ClickMask * statsStrenghtClickMask = new ClickMask(133, 26, 14, 36);
+    statsStrenghtClickMask->onLeftButtonClick((EventHandler) &PlayerEditState::onStrengthSelected);
+
     _increasePerceptionButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38 + 33);
     _increasePerceptionButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreasePerceptionButtonClick);
     _decreasePerceptionButton = new ImageButton("art/intrface/snegoff.frm", "art/intrface/snegon.frm", 149, 49 + 33);
     _decreasePerceptionButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreasePerceptionButtonClick);
     _statsPerceptionLabel = new TextArea(102, 79);
     _statsPerceptionCounter = new BigCounter(59, 37 + 33);
+    ClickMask * statsPerceptionClickMask = new ClickMask(133, 26, 14, 36 + 33);
+    statsPerceptionClickMask->onLeftButtonClick((EventHandler) &PlayerEditState::onPerceptionSelected);
 
     _increaseEnduranceButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38 + 33*2);
     _increaseEnduranceButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreaseEnduranceButtonClick);
@@ -131,8 +136,8 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
 
     add(background);
     // primary stats buttons
-    add(_increaseStrenghtButton);
-    add(_decreaseStrenghtButton);
+    add(_increaseStrengthButton);
+    add(_decreaseStrengthButton);
     add(_increasePerceptionButton);
     add(_decreasePerceptionButton);
     add(_increaseEnduranceButton);
@@ -146,7 +151,7 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     add(_increaseLuckButton);
     add(_decreaseLuckButton);
     // primary stats labels
-    add(_statsStrenghtLabel);
+    add(_statsStrengthLabel);
     add(_statsPerceptionLabel);
     add(_statsEnduranceLabel);
     add(_statsCharismaLabel);
@@ -154,7 +159,7 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     add(_statsAgilityLabel);
     add(_statsLuckLabel);
     // primary stats counters
-    add(_statsStrenghtCounter);
+    add(_statsStrengthCounter);
     add(_statsPerceptionCounter);
     add(_statsEnduranceCounter);
     add(_statsCharismaCounter);
@@ -199,6 +204,8 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     add(_trait15Label);
     add(_trait16Label);
 
+    add(statsStrenghtClickMask);
+    add(statsPerceptionClickMask);
 }
 
 PlayerEditState::~PlayerEditState()
@@ -207,8 +214,8 @@ PlayerEditState::~PlayerEditState()
 
 void PlayerEditState::think()
 {
-    _statsStrenghtLabel->setText(_t(199 + _game->getPlayer()->strength, "text/english/game/editor.msg"));
-    _statsStrenghtCounter->setNumber(_game->getPlayer()->strength);
+    _statsStrengthLabel->setText(_t(199 + _game->getPlayer()->strength, "text/english/game/editor.msg"));
+    _statsStrengthCounter->setNumber(_game->getPlayer()->strength);
 
     _statsPerceptionLabel->setText(_t(199 + _game->getPlayer()->perception, "text/english/game/editor.msg"));
     _statsPerceptionCounter->setNumber(_game->getPlayer()->perception);
@@ -232,7 +239,7 @@ void PlayerEditState::think()
 
 }
 
-void PlayerEditState::onIncreaseStrenghtButtonClick()
+void PlayerEditState::onIncreaseStrengthButtonClick()
 {
     if (_game->getPlayer()->freeStatsPoints == 0) return;
     if (_game->getPlayer()->strength < 10)
@@ -240,15 +247,17 @@ void PlayerEditState::onIncreaseStrenghtButtonClick()
         _game->getPlayer()->strength++;
         _game->getPlayer()->freeStatsPoints--;
     }
+    onStrengthSelected();
 }
 
-void PlayerEditState::onDecreaseStrenghtButtonClick()
+void PlayerEditState::onDecreaseStrengthButtonClick()
 {
     if (_game->getPlayer()->strength > 1)
     {
         _game->getPlayer()->strength--;
         _game->getPlayer()->freeStatsPoints++;
     }
+    onStrengthSelected();
 }
 
 void PlayerEditState::onIncreasePerceptionButtonClick()
@@ -363,6 +372,16 @@ void PlayerEditState::onDecreaseLuckButtonClick()
         _game->getPlayer()->luck--;
         _game->getPlayer()->freeStatsPoints++;
     }
+}
+
+void PlayerEditState::onStrengthSelected()
+{
+    std::cout << "Strength" << std::endl;
+}
+
+void PlayerEditState::onPerceptionSelected()
+{
+    std::cout << "Perception" << std::endl;
 }
 
 }

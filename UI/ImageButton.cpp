@@ -12,6 +12,7 @@ ImageButton::ImageButton(const char * releasedImage, const char * pressedImage, 
 
 void ImageButton::draw()
 {
+    InteractiveSurface::draw();
     if (_hovered && _leftButtonPressed)
     {
         loadFromSurface(ResourceManager::getSurface(_pressedImage, getX(), getY()));
