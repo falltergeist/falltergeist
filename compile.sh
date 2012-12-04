@@ -1,2 +1,2 @@
 #!/bin/bash
-qmake && make && make clean
+cmake . && make

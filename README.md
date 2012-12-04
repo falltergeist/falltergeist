@@ -11,7 +11,7 @@ Current version: 0.0.3
 ```
 OR
 ```
-qmake && make && make clean
+cmake . && make
 ```
 
 ## Running under linux
