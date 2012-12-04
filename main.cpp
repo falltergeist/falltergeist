@@ -2,7 +2,7 @@
 #include "src/Engine/Exception.h"
 #include "src/Engine/Surface.h"
 #include "src/Engine/ResourceManager.h"
-#include "src/Engine/File.h"
+#include "src/Engine/VirtualFile.h"
 #include "src/Fallout/DatFile.h"
 #include "src/Fallout/DatFileItem.h"
 #include "src/Fallout/FrmFileType.h"
@@ -22,8 +22,19 @@ int main()
 {
     try
     {
-        DatFile * dat = new DatFile("/home/alexeevdv/.fallout/master.dat");
-        std::cout << dat->getItems()->front()->getFilename() << std::endl;
+        //DatFile * dat = new DatFile("/home/alexeevdv/.fallout/master.dat");
+
+        char buff[3] = {1,2,3};
+        VirtualFile * file = new VirtualFile();
+        std::cout << file->getSize() << std::endl;
+        file->writeBytes(buff,3);
+        std::cout << file->getSize() << std::endl;
+        file->setPosition(1);
+        char chr;
+        file->readBytes(&chr,1);
+        std::cout << (int) chr << std::endl;
+
+        //std::cout << dat->getItems()->front()->getFilename() << std::endl;
         //ResourceManager * rm = new ResourceManager();
         //std::cout << rm->getPalFileType("color.pal")->getColor(2) << std::endl;
         return 0;

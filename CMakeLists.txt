@@ -22,6 +22,8 @@ set(SOURCES main.cpp
             src/Engine/Exception.h
             src/Engine/File.cpp
             src/Engine/File.h
+            src/Engine/VirtualFile.cpp
+            src/Engine/VirtualFile.h
             src/Engine/Font.cpp
             src/Engine/Font.h
             src/Engine/Game.cpp
