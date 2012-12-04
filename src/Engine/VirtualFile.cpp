@@ -1,12 +1,12 @@
 #include "../Engine/VirtualFile.h"
 #include <cstring>
-#include <iostream>
 
 namespace Falltergeist
 {
 
 VirtualFile::VirtualFile()
 {
+    _byteOrder = ORDER_BIG_ENDIAN;
     _dataSize = 0;
     _position = 0;
     _data = 0;
@@ -97,6 +97,118 @@ void VirtualFile::writeBytes(char * buffer, unsigned int length)
 char * VirtualFile::getData()
 {
     return _data;
+}
+
+void VirtualFile::setByteOrder(unsigned char byteOrder)
+{
+    if (byteOrder == ORDER_LITTLE_ENDIAN)
+    {
+        _byteOrder = ORDER_LITTLE_ENDIAN;
+    }
+    else
+    {
+        _byteOrder = ORDER_BIG_ENDIAN;
+    }
+}
+
+VirtualFile& VirtualFile::operator >> (unsigned int &value)
+{
+    if (_position + 4 > _dataSize)
+    {
+        _position = -1;
+        return *this;
+    }
+    if (_byteOrder == ORDER_LITTLE_ENDIAN)
+    {
+        value =  (_data[_position + 3] << 24) | (_data[_position + 2] << 16) | (_data[_position + 1] << 8) | _data[_position];
+    }
+    else
+    {
+        value =  (_data[_position] << 24) | (_data[_position + 1] << 16) | (_data[_position + 2] << 8) | _data[_position + 3];
+    }
+    _position += 4;
+    return *this;
+}
+
+VirtualFile& VirtualFile::operator >> (int &value)
+{
+    if (_position + 4 > _dataSize)
+    {
+        _position = -1;
+        return *this;
+    }
+    if (_byteOrder == ORDER_LITTLE_ENDIAN)
+    {
+        value =  (_data[_position + 3] << 24) | (_data[_position + 2] << 16) | (_data[_position + 1] << 8) | _data[_position];
+    }
+    else
+    {
+        value =  (_data[_position] << 24) | (_data[_position + 1] << 16) | (_data[_position + 2] << 8) | _data[_position + 3];
+    }
+    _position += 4;
+    return *this;
+}
+
+VirtualFile& VirtualFile::operator >> (unsigned short &value)
+{
+    if (_position + 2 > _dataSize)
+    {
+        _position = -1;
+        return *this;
+    }
+    if (_byteOrder == ORDER_LITTLE_ENDIAN)
+    {
+        value =  (_data[_position + 1] << 8) | _data[_position];
+    }
+    else
+    {
+        value =  (_data[_position] << 8) | (_data[_position + 1]);
+    }
+    _position += 2;
+    return *this;
+}
+
+VirtualFile& VirtualFile::operator >> (short &value)
+{
+    if (_position + 2 > _dataSize)
+    {
+        _position = -1;
+        return *this;
+    }
+    if (_byteOrder == ORDER_LITTLE_ENDIAN)
+    {
+        value =  (_data[_position + 1] << 8) | _data[_position];
+    }
+    else
+    {
+        value =  (_data[_position] << 8) | (_data[_position + 1]);
+    }
+    _position += 2;
+    return *this;
+}
+
+VirtualFile& VirtualFile::operator >> (unsigned char &value)
+{
+    if (_position + 1 > _dataSize)
+    {
+        _position = -1;
+        return *this;
+    }
+    value = _data[_position];
+    _position += 1;
+    return *this;
+}
+
+VirtualFile& VirtualFile::operator >> (char &value)
+{
+    if (_position + 1 > _dataSize)
+    {
+        _position = -1;
+        return *this;
+    }
+    value = _data[_position];
+    _position += 1;
+    return *this;
 }
 
 }

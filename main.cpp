@@ -29,9 +29,9 @@ int main()
         std::cout << file->getSize() << std::endl;
         file->writeBytes(buff,3);
         std::cout << file->getSize() << std::endl;
-        file->setPosition(1);
-        char chr;
-        file->readBytes(&chr,1);
+        file->setPosition(2);
+        unsigned char chr;
+        (*file) >> chr;
         std::cout << (int) chr << std::endl;
 
         //std::cout << dat->getItems()->front()->getFilename() << std::endl;
