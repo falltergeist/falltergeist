@@ -14,6 +14,7 @@ SOURCES += main.cpp \
     Engine/Font.cpp \
     Engine/Animation.cpp\
     Engine/Player.cpp \
+    Engine/SurfaceSet.cpp \
     Fallout/DatFile.cpp \
     Fallout/DatFileItem.cpp \
     Fallout/FrmFileType.cpp \
@@ -23,17 +24,16 @@ SOURCES += main.cpp \
     Fallout/AafFileType.cpp \
     Fallout/GcdFileType.cpp \
     Fallout/MsgFileType.cpp \
+    Fallout/BioFileType.cpp \
     States/StartState.cpp \
     States/MainMenuState.cpp \
     States/NewGameState.cpp \
     States/PlayerEditState.cpp \
     UI/ImageButton.cpp \ 
     UI/TextArea.cpp \
-    Engine/SurfaceSet.cpp \
-    Fallout/BioFileType.cpp \ 
     UI/FpsCounter.cpp \
     UI/BigCounter.cpp \
-    UI/ClickMask.cpp
+    UI/HiddenMask.cpp
 
 HEADERS += \
     Engine/Surface.h \
@@ -48,6 +48,7 @@ HEADERS += \
     Engine/Font.h \
     Engine/Animation.h \
     Engine/Player.h \
+    Engine/SurfaceSet.h \
     Fallout/DatFile.h \
     Fallout/DatFileItem.h \
     Fallout/FrmFileType.h \
@@ -57,16 +58,15 @@ HEADERS += \
     Fallout/AafFileType.h \
     Fallout/GcdFileType.h \
     Fallout/MsgFileType.h \
+    Fallout/BioFileType.h \
     States/StartState.h \
     States/MainMenuState.h \
     States/NewGameState.h \
     States/PlayerEditState.h \
     UI/ImageButton.h \
     UI/TextArea.h \
-    Engine/SurfaceSet.h \
-    Fallout/BioFileType.h \ 
     UI/FpsCounter.h \
     UI/BigCounter.h \
-    UI/ClickMask.h
+    UI/HiddenMask.h
 
 LIBS += -lSDL

@@ -5,7 +5,7 @@
 #include "UI/ImageButton.h"
 #include "Engine/Surface.h"
 #include "UI/BigCounter.h"
-#include "UI/ClickMask.h"
+#include "UI/HiddenMask.h"
 
 namespace Falltergeist
 {
@@ -20,8 +20,8 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _decreaseStrengthButton->onLeftButtonClick((EventHandler)&PlayerEditState::onDecreaseStrengthButtonClick);
     _statsStrengthLabel = new TextArea(102, 46);
     _statsStrengthCounter = new BigCounter(59, 37);
-    ClickMask * statsStrenghtClickMask = new ClickMask(133, 26, 14, 36);
-    statsStrenghtClickMask->onLeftButtonClick((EventHandler) &PlayerEditState::onStrengthSelected);
+    HiddenMask * statsStrenghtHiddenMask = new HiddenMask(133, 26, 14, 36);
+    statsStrenghtHiddenMask->onLeftButtonClick((EventHandler) &PlayerEditState::onStrengthSelected);
 
     _increasePerceptionButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38 + 33);
     _increasePerceptionButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreasePerceptionButtonClick);
@@ -29,8 +29,8 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _decreasePerceptionButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreasePerceptionButtonClick);
     _statsPerceptionLabel = new TextArea(102, 79);
     _statsPerceptionCounter = new BigCounter(59, 37 + 33);
-    ClickMask * statsPerceptionClickMask = new ClickMask(133, 26, 14, 36 + 33);
-    statsPerceptionClickMask->onLeftButtonClick((EventHandler) &PlayerEditState::onPerceptionSelected);
+    HiddenMask * statsPerceptionHiddenMask = new HiddenMask(133, 26, 14, 36 + 33);
+    statsPerceptionHiddenMask->onLeftButtonClick((EventHandler) &PlayerEditState::onPerceptionSelected);
 
     _increaseEnduranceButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38 + 33*2);
     _increaseEnduranceButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreaseEnduranceButtonClick);
@@ -38,8 +38,8 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _decreaseEnduranceButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreaseEnduranceButtonClick);
     _statsEnduranceLabel = new TextArea(102, 112);
     _statsEnduranceCounter = new BigCounter(59, 37 + 33*2);
-    ClickMask * statsEnduranceClickMask = new ClickMask(133, 26, 14, 36 + 33*2);
-    statsEnduranceClickMask->onLeftButtonClick((EventHandler) &PlayerEditState::onEnduranceSelected);
+    HiddenMask * statsEnduranceHiddenMask = new HiddenMask(133, 26, 14, 36 + 33*2);
+    statsEnduranceHiddenMask->onLeftButtonClick((EventHandler) &PlayerEditState::onEnduranceSelected);
 
     _increaseCharismaButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38 + 33*3);
     _increaseCharismaButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreaseCharismaButtonClick);
@@ -47,8 +47,8 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _decreaseCharismaButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreaseCharismaButtonClick);
     _statsCharismaLabel = new TextArea(102, 145);
     _statsCharismaCounter = new BigCounter(59, 37 + 33*3);
-    ClickMask * statsCharismaClickMask = new ClickMask(133, 26, 14, 36 + 33*3);
-    statsCharismaClickMask->onLeftButtonClick((EventHandler) &PlayerEditState::onCharismaSelected);
+    HiddenMask * statsCharismaHiddenMask = new HiddenMask(133, 26, 14, 36 + 33*3);
+    statsCharismaHiddenMask->onLeftButtonClick((EventHandler) &PlayerEditState::onCharismaSelected);
 
     _increaseIntelligenceButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38 + 33*4);
     _increaseIntelligenceButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreaseIntelligenceButtonClick);
@@ -56,8 +56,8 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _decreaseIntelligenceButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreaseIntelligenceButtonClick);
     _statsIntelligenceLabel = new TextArea(102, 178);
     _statsIntelligenceCounter = new BigCounter(59, 37 + 33*4);
-    ClickMask * statsIntelligenceClickMask = new ClickMask(133, 26, 14, 36 + 33*4);
-    statsIntelligenceClickMask->onLeftButtonClick((EventHandler) &PlayerEditState::onIntelligenceSelected);
+    HiddenMask * statsIntelligenceHiddenMask = new HiddenMask(133, 26, 14, 36 + 33*4);
+    statsIntelligenceHiddenMask->onLeftButtonClick((EventHandler) &PlayerEditState::onIntelligenceSelected);
 
     _increaseAgilityButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38 + 33*5);
     _increaseAgilityButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreaseAgilityButtonClick);
@@ -65,8 +65,8 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _decreaseAgilityButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreaseAgilityButtonClick);
     _statsAgilityLabel = new TextArea(102, 211);
     _statsAgilityCounter = new BigCounter(59, 37 + 33*5);
-    ClickMask * statsAgilityClickMask = new ClickMask(133, 26, 14, 36 + 33*5);
-    statsAgilityClickMask->onLeftButtonClick((EventHandler) &PlayerEditState::onAgilitySelected);
+    HiddenMask * statsAgilityHiddenMask = new HiddenMask(133, 26, 14, 36 + 33*5);
+    statsAgilityHiddenMask->onLeftButtonClick((EventHandler) &PlayerEditState::onAgilitySelected);
 
     _increaseLuckButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 236);
     _increaseLuckButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreaseLuckButtonClick);
@@ -74,8 +74,8 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _decreaseLuckButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreaseLuckButtonClick);
     _statsLuckLabel = new TextArea(102, 244);
     _statsLuckCounter = new BigCounter(59, 37 + 33*6);
-    ClickMask * statsLuckClickMask = new ClickMask(133, 26, 14, 36 + 33*6);
-    statsLuckClickMask->onLeftButtonClick((EventHandler) &PlayerEditState::onLuckSelected);
+    HiddenMask * statsLuckHiddenMask = new HiddenMask(133, 26, 14, 36 + 33*6);
+    statsLuckHiddenMask->onLeftButtonClick((EventHandler) &PlayerEditState::onLuckSelected);
 
     _statsFreeCounter = new BigCounter(126,282);
 
@@ -214,13 +214,13 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     add(_trait15Label);
     add(_trait16Label);
 
-    add(statsStrenghtClickMask);
-    add(statsPerceptionClickMask);
-    add(statsEnduranceClickMask);
-    add(statsCharismaClickMask);
-    add(statsIntelligenceClickMask);
-    add(statsAgilityClickMask);
-    add(statsLuckClickMask);
+    add(statsStrenghtHiddenMask);
+    add(statsPerceptionHiddenMask);
+    add(statsEnduranceHiddenMask);
+    add(statsCharismaHiddenMask);
+    add(statsIntelligenceHiddenMask);
+    add(statsAgilityHiddenMask);
+    add(statsLuckHiddenMask);
 
 }
 

@@ -12,6 +12,7 @@ class Surface
 {
 protected:
     SDL_Surface * _surface;
+    bool _visible;
     int _x;
     int _y;
     unsigned int _borderColor;
@@ -33,6 +34,8 @@ public:
     void copyTo(Surface * surface);
     void setPixel(int x, int y, unsigned int color);
     void loadFromSurface(Surface * surface);
+    void show();
+    void hide();
     void setX(int x);
     void setY(int y);
     void fill(unsigned int color);

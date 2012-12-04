@@ -7,6 +7,7 @@ namespace Falltergeist
 Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y)
 {
     needRedraw = false;
+    _visible = true;
     _borderColor = 0;
     _backgroundColor = 0;
     _surface = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, width, height, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xFF000000);
@@ -15,14 +16,15 @@ Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y)
 }
 
 Surface::Surface(Surface * other)
-{
-    needRedraw = false;
-    _borderColor = 0;
-    _backgroundColor = 0;
+{    
     _surface = SDL_ConvertSurface(other->_surface, other->_surface->format, other->_surface->flags);
     if (_surface == 0) throw Exception(SDL_GetError());
     _x = other->_x;
     _y = other->_y;
+    _visible = other->_visible;
+    _backgroundColor = other->_backgroundColor;
+    needRedraw = other->needRedraw;
+    _borderColor = other->_borderColor;
 }
 
 Surface::~Surface()
@@ -69,6 +71,16 @@ SDL_Surface * Surface::getSurface()
 {
     draw();
     return _surface;
+}
+
+void Surface::hide()
+{
+    _visible = false;
+}
+
+void Surface::show()
+{
+    _visible = true;
 }
 
 void Surface::think()
@@ -145,10 +157,17 @@ Surface * Surface::crop(int xOffset, int yOffset, int width, int height)
 
 void Surface::blit(Surface * surface)
 {
-    SDL_Rect dest;
-    dest.x = _x;
-    dest.y = _y;
-    SDL_BlitSurface(getSurface(), NULL, surface->getSurface(), &dest);
+    if (_visible)
+    {
+        SDL_Rect dest;
+        dest.x = _x;
+        dest.y = _y;
+        SDL_BlitSurface(getSurface(), NULL, surface->getSurface(), &dest);
+    }
+    else
+    {
+        getSurface();
+    }
 }
 
 void Surface::copyTo(Surface * surface)
