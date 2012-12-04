@@ -1,7 +1,6 @@
+#include "../Engine/Exception.h"
 #include "../Fallout/DatFile.h"
 #include "../Fallout/DatFileItem.h"
-#include "../Engine/Exception.h"
-#include <algorithm>
 #include "../Fallout/FrmFileType.h"
 #include "../Fallout/PalFileType.h"
 #include "../Fallout/LstFileType.h"
@@ -10,11 +9,12 @@
 #include "../Fallout/GcdFileType.h"
 #include "../Fallout/MsgFileType.h"
 #include "../Fallout/BioFileType.h"
+#include <algorithm>
 
 namespace Falltergeist
 {
 
-DatFile::DatFile(std::string filename)
+DatFile::DatFile(const char * filename) : File(filename)
 {
     _items = 0;
     _frmFiles = new std::map<std::string, FrmFileType *>;
@@ -25,19 +25,26 @@ DatFile::DatFile(std::string filename)
     _gcdFiles = new std::map<std::string, GcdFileType *>;
     _msgFiles = new std::map<std::string, MsgFileType *>;
     _bioFiles = new std::map<std::string, BioFileType *>;
-    _filename = filename;
-    _stream = new std::fstream(_filename.c_str(),std::ios::in|std::ios::binary);
+    //_filename = filename;
+    _stream = new std::fstream(filename,std::ios::in|std::ios::binary);
     if (!_stream->is_open())
     {
         std::string message = "Can't open DAT file: ";
-        message.append(_filename);
+        message.append(filename);
         throw Exception(message);
     }
 }
 
+DatFile::DatFile(std::string filename) : DatFile(filename.c_str())
+{
+    //setFilename(filename.c_str());
+}
+
 DatFile::~DatFile()
 {
-    delete _stream; _stream = 0;
+    delete _items;
+    delete _frmFiles, _palFiles, _lstFiles, _fonFiles, _aafFiles, _gcdFiles, _msgFiles, _bioFiles;
+    delete _stream;
 }
 
 /**
@@ -72,15 +79,15 @@ std::list<DatFileItem*> * DatFile::getItems()
 
     unsigned int datFileSize, dirTreeSize, itemsTotal;
     // 4 bytes Dat file size
-    this->seek(this->size() - 4);
+    this->seek(this->getSize() - 4);
     (*this) >> datFileSize;
 
     // 4 bytes Directory tree size
-    this->seek(this->size() - 8);
+    this->seek(this->getSize() - 8);
     (*this) >> dirTreeSize;
 
     // 4 bytes Items count in DAT file
-    this->seek(this->size() - dirTreeSize - 8);
+    this->seek(this->getSize() - dirTreeSize - 8);
     (*this) >> itemsTotal;
 
     // for each entries...
@@ -95,25 +102,6 @@ std::list<DatFileItem*> * DatFile::getItems()
 
     return _items;
 }
-
-/**
- * Returns size file
- * @brief DatFile::size
- * @return
- */
-unsigned int DatFile::size()
-{
-    unsigned int begin, end, currentPosition, size;
-    currentPosition = _stream->tellg();
-    _stream->seekg(0,std::ios::beg);
-    begin = _stream->tellg();
-    _stream->seekg(0,std::ios::end);
-    end = _stream->tellg();
-    size = end - begin;
-    _stream->seekg(currentPosition,std::ios::beg);
-    return size;
-}
-
 
 DatFile& DatFile::operator >> (unsigned int &value)
 {

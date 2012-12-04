@@ -12,6 +12,7 @@ namespace Falltergeist
 
 StartState::StartState(Game * game) : State(game)
 {
+    std::cout << "StartState..." << std::endl;
 }
 
 StartState::~StartState()

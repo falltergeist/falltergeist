@@ -1,12 +1,12 @@
 #ifndef FALLTERGEIST_DATFILE_H
 #define FALLTERGEIST_DATFILE_H
 
+#include "../Engine/File.h"
 #include <list>
 #include <map>
 #include <string>
 #include <iostream>
 #include <fstream>
-#include "../Engine/Exception.h"
 
 namespace Falltergeist
 {
@@ -20,12 +20,11 @@ class GcdFileType;
 class MsgFileType;
 class BioFileType;
 
-class DatFile
+class DatFile : public File
 {
 protected:
-    std::string _filename;
     std::fstream * _stream;
-    std::list<DatFileItem*> * _items;  // items list
+    std::list<DatFileItem *> * _items;  // items list
     std::map<std::string, FrmFileType *> * _frmFiles; // opened FRM Files
     std::map<std::string, PalFileType *> * _palFiles; // opened PAL Files
     std::map<std::string, LstFileType *> * _lstFiles; // opened LST Files
@@ -35,9 +34,9 @@ protected:
     std::map<std::string, MsgFileType *> * _msgFiles; // opened MSG Files
     std::map<std::string, BioFileType *> * _bioFiles; // opened BIO Files
 public:
+    DatFile(const char * filename);
     DatFile(std::string filename);
-    ~DatFile();
-    unsigned int size();
+    virtual ~DatFile();
     std::fstream * getStream();
     std::list<DatFileItem*> * getItems();
     DatFile& seek(unsigned int uint);

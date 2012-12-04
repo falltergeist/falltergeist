@@ -2,6 +2,7 @@
 #include "src/Engine/Exception.h"
 #include "src/Engine/Surface.h"
 #include "src/Engine/ResourceManager.h"
+#include "src/Engine/File.h"
 #include "src/Fallout/DatFile.h"
 #include "src/Fallout/DatFileItem.h"
 #include "src/Fallout/FrmFileType.h"
@@ -21,6 +22,11 @@ int main()
 {
     try
     {
+        DatFile * dat = new DatFile("/home/alexeevdv/.fallout/master.dat");
+        std::cout << dat->getItems()->front()->getFilename() << std::endl;
+        //ResourceManager * rm = new ResourceManager();
+        //std::cout << rm->getPalFileType("color.pal")->getColor(2) << std::endl;
+        return 0;
         Game * game = new Game(640,480,32);
         game->setState(new StartState(game));
         game->run();
