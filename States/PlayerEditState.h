@@ -99,6 +99,11 @@ public:
 
     void onStrengthSelected();
     void onPerceptionSelected();
+    void onEnduranceSelected();
+    void onCharismaSelected();
+    void onIntelligenceSelected();
+    void onAgilitySelected();
+    void onLuckSelected();
 
 };
 

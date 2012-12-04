@@ -38,6 +38,8 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _decreaseEnduranceButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreaseEnduranceButtonClick);
     _statsEnduranceLabel = new TextArea(102, 112);
     _statsEnduranceCounter = new BigCounter(59, 37 + 33*2);
+    ClickMask * statsEnduranceClickMask = new ClickMask(133, 26, 14, 36 + 33*2);
+    statsEnduranceClickMask->onLeftButtonClick((EventHandler) &PlayerEditState::onEnduranceSelected);
 
     _increaseCharismaButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38 + 33*3);
     _increaseCharismaButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreaseCharismaButtonClick);
@@ -45,6 +47,8 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _decreaseCharismaButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreaseCharismaButtonClick);
     _statsCharismaLabel = new TextArea(102, 145);
     _statsCharismaCounter = new BigCounter(59, 37 + 33*3);
+    ClickMask * statsCharismaClickMask = new ClickMask(133, 26, 14, 36 + 33*3);
+    statsCharismaClickMask->onLeftButtonClick((EventHandler) &PlayerEditState::onCharismaSelected);
 
     _increaseIntelligenceButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38 + 33*4);
     _increaseIntelligenceButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreaseIntelligenceButtonClick);
@@ -52,6 +56,8 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _decreaseIntelligenceButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreaseIntelligenceButtonClick);
     _statsIntelligenceLabel = new TextArea(102, 178);
     _statsIntelligenceCounter = new BigCounter(59, 37 + 33*4);
+    ClickMask * statsIntelligenceClickMask = new ClickMask(133, 26, 14, 36 + 33*4);
+    statsIntelligenceClickMask->onLeftButtonClick((EventHandler) &PlayerEditState::onIntelligenceSelected);
 
     _increaseAgilityButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38 + 33*5);
     _increaseAgilityButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreaseAgilityButtonClick);
@@ -59,6 +65,8 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _decreaseAgilityButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreaseAgilityButtonClick);
     _statsAgilityLabel = new TextArea(102, 211);
     _statsAgilityCounter = new BigCounter(59, 37 + 33*5);
+    ClickMask * statsAgilityClickMask = new ClickMask(133, 26, 14, 36 + 33*5);
+    statsAgilityClickMask->onLeftButtonClick((EventHandler) &PlayerEditState::onAgilitySelected);
 
     _increaseLuckButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 236);
     _increaseLuckButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreaseLuckButtonClick);
@@ -66,6 +74,8 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _decreaseLuckButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreaseLuckButtonClick);
     _statsLuckLabel = new TextArea(102, 244);
     _statsLuckCounter = new BigCounter(59, 37 + 33*6);
+    ClickMask * statsLuckClickMask = new ClickMask(133, 26, 14, 36 + 33*6);
+    statsLuckClickMask->onLeftButtonClick((EventHandler) &PlayerEditState::onLuckSelected);
 
     _statsFreeCounter = new BigCounter(126,282);
 
@@ -206,6 +216,12 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
 
     add(statsStrenghtClickMask);
     add(statsPerceptionClickMask);
+    add(statsEnduranceClickMask);
+    add(statsCharismaClickMask);
+    add(statsIntelligenceClickMask);
+    add(statsAgilityClickMask);
+    add(statsLuckClickMask);
+
 }
 
 PlayerEditState::~PlayerEditState()
@@ -241,27 +257,28 @@ void PlayerEditState::think()
 
 void PlayerEditState::onIncreaseStrengthButtonClick()
 {
+    onStrengthSelected();
     if (_game->getPlayer()->freeStatsPoints == 0) return;
     if (_game->getPlayer()->strength < 10)
     {
         _game->getPlayer()->strength++;
         _game->getPlayer()->freeStatsPoints--;
     }
-    onStrengthSelected();
 }
 
 void PlayerEditState::onDecreaseStrengthButtonClick()
 {
-    if (_game->getPlayer()->strength > 1)
+    onStrengthSelected();
+    if (_game->getPlayer()->strength > 2)
     {
         _game->getPlayer()->strength--;
         _game->getPlayer()->freeStatsPoints++;
     }
-    onStrengthSelected();
 }
 
 void PlayerEditState::onIncreasePerceptionButtonClick()
 {
+    onPerceptionSelected();
     if (_game->getPlayer()->freeStatsPoints == 0) return;
     if (_game->getPlayer()->perception < 10)
     {
@@ -272,7 +289,8 @@ void PlayerEditState::onIncreasePerceptionButtonClick()
 
 void PlayerEditState::onDecreasePerceptionButtonClick()
 {
-    if (_game->getPlayer()->perception > 1)
+    onPerceptionSelected();
+    if (_game->getPlayer()->perception > 2)
     {
         _game->getPlayer()->perception--;
         _game->getPlayer()->freeStatsPoints++;
@@ -281,6 +299,7 @@ void PlayerEditState::onDecreasePerceptionButtonClick()
 
 void PlayerEditState::onIncreaseEnduranceButtonClick()
 {
+    onEnduranceSelected();
     if (_game->getPlayer()->freeStatsPoints == 0) return;
     if (_game->getPlayer()->endurance < 10)
     {
@@ -291,7 +310,8 @@ void PlayerEditState::onIncreaseEnduranceButtonClick()
 
 void PlayerEditState::onDecreaseEnduranceButtonClick()
 {
-    if (_game->getPlayer()->endurance > 1)
+    onEnduranceSelected();
+    if (_game->getPlayer()->endurance > 2)
     {
         _game->getPlayer()->endurance--;
         _game->getPlayer()->freeStatsPoints++;
@@ -300,6 +320,7 @@ void PlayerEditState::onDecreaseEnduranceButtonClick()
 
 void PlayerEditState::onIncreaseCharismaButtonClick()
 {
+    onCharismaSelected();
     if (_game->getPlayer()->freeStatsPoints == 0) return;
     if (_game->getPlayer()->charisma < 10)
     {
@@ -310,7 +331,8 @@ void PlayerEditState::onIncreaseCharismaButtonClick()
 
 void PlayerEditState::onDecreaseCharismaButtonClick()
 {
-    if (_game->getPlayer()->charisma > 1)
+    onCharismaSelected();
+    if (_game->getPlayer()->charisma > 2)
     {
         _game->getPlayer()->charisma--;
         _game->getPlayer()->freeStatsPoints++;
@@ -319,6 +341,7 @@ void PlayerEditState::onDecreaseCharismaButtonClick()
 
 void PlayerEditState::onIncreaseIntelligenceButtonClick()
 {
+    onIntelligenceSelected();
     if (_game->getPlayer()->freeStatsPoints == 0) return;
     if (_game->getPlayer()->intelligence < 10)
     {
@@ -329,7 +352,8 @@ void PlayerEditState::onIncreaseIntelligenceButtonClick()
 
 void PlayerEditState::onDecreaseIntelligenceButtonClick()
 {
-    if (_game->getPlayer()->intelligence > 1)
+    onIntelligenceSelected();
+    if (_game->getPlayer()->intelligence > 2)
     {
         _game->getPlayer()->intelligence--;
         _game->getPlayer()->freeStatsPoints++;
@@ -338,6 +362,7 @@ void PlayerEditState::onDecreaseIntelligenceButtonClick()
 
 void PlayerEditState::onIncreaseAgilityButtonClick()
 {
+    onAgilitySelected();
     if (_game->getPlayer()->freeStatsPoints == 0) return;
     if (_game->getPlayer()->agility < 10)
     {
@@ -348,7 +373,8 @@ void PlayerEditState::onIncreaseAgilityButtonClick()
 
 void PlayerEditState::onDecreaseAgilityButtonClick()
 {
-    if (_game->getPlayer()->agility > 1)
+    onAgilitySelected();
+    if (_game->getPlayer()->agility > 2)
     {
         _game->getPlayer()->agility--;
         _game->getPlayer()->freeStatsPoints++;
@@ -357,6 +383,7 @@ void PlayerEditState::onDecreaseAgilityButtonClick()
 
 void PlayerEditState::onIncreaseLuckButtonClick()
 {
+    onLuckSelected();
     if (_game->getPlayer()->freeStatsPoints == 0) return;
     if (_game->getPlayer()->luck < 10)
     {
@@ -367,7 +394,8 @@ void PlayerEditState::onIncreaseLuckButtonClick()
 
 void PlayerEditState::onDecreaseLuckButtonClick()
 {
-    if (_game->getPlayer()->luck > 1)
+    onLuckSelected();
+    if (_game->getPlayer()->luck > 2)
     {
         _game->getPlayer()->luck--;
         _game->getPlayer()->freeStatsPoints++;
@@ -382,6 +410,31 @@ void PlayerEditState::onStrengthSelected()
 void PlayerEditState::onPerceptionSelected()
 {
     std::cout << "Perception" << std::endl;
+}
+
+void PlayerEditState::onEnduranceSelected()
+{
+    std::cout << "Endurance" << std::endl;
+}
+
+void PlayerEditState::onCharismaSelected()
+{
+    std::cout << "Charisma" << std::endl;
+}
+
+void PlayerEditState::onIntelligenceSelected()
+{
+    std::cout << "Intelligence" << std::endl;
+}
+
+void PlayerEditState::onAgilitySelected()
+{
+    std::cout << "Agility" << std::endl;
+}
+
+void PlayerEditState::onLuckSelected()
+{
+    std::cout << "Luck" << std::endl;
 }
 
 }
