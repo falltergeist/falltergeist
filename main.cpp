@@ -26,13 +26,14 @@ int main()
 
         char buff[3] = {1,2,3};
         VirtualFile * file = new VirtualFile();
-        std::cout << file->getSize() << std::endl;
         file->writeBytes(buff,3);
-        std::cout << file->getSize() << std::endl;
-        file->setPosition(2);
-        unsigned char chr;
-        (*file) >> chr;
-        std::cout << (int) chr << std::endl;
+        file->setPosition(0);
+        while (!file->eof())
+        {
+            unsigned char chr;
+            (*file) >> chr;
+            std::cout << "data: " << (int) chr << std::endl;
+        }
 
         //std::cout << dat->getItems()->front()->getFilename() << std::endl;
         //ResourceManager * rm = new ResourceManager();

@@ -29,6 +29,7 @@ public:
     void setFilename(const char * filename);
     void setByteOrder(unsigned char byteOrder);
     int getPosition();
+    bool eof();
     const char * getFilename();
     VirtualFile& operator>> (unsigned int &value);
     VirtualFile& operator>> (int &value);

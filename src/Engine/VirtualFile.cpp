@@ -51,6 +51,15 @@ unsigned int VirtualFile::getSize()
     return _dataSize;
 }
 
+bool VirtualFile::eof()
+{
+    if (_position == -1)
+    {
+        return true;
+    }
+    return false;
+}
+
 void VirtualFile::skipBytes(unsigned int length)
 {
     if (_position + length >= _dataSize)
@@ -127,6 +136,7 @@ VirtualFile& VirtualFile::operator >> (unsigned int &value)
         value =  (_data[_position] << 24) | (_data[_position + 1] << 16) | (_data[_position + 2] << 8) | _data[_position + 3];
     }
     _position += 4;
+    if (_position == _dataSize) _position = -1;
     return *this;
 }
 
@@ -146,6 +156,7 @@ VirtualFile& VirtualFile::operator >> (int &value)
         value =  (_data[_position] << 24) | (_data[_position + 1] << 16) | (_data[_position + 2] << 8) | _data[_position + 3];
     }
     _position += 4;
+    if (_position == _dataSize) _position = -1;
     return *this;
 }
 
@@ -165,6 +176,7 @@ VirtualFile& VirtualFile::operator >> (unsigned short &value)
         value =  (_data[_position] << 8) | (_data[_position + 1]);
     }
     _position += 2;
+    if (_position == _dataSize) _position = -1;
     return *this;
 }
 
@@ -184,6 +196,7 @@ VirtualFile& VirtualFile::operator >> (short &value)
         value =  (_data[_position] << 8) | (_data[_position + 1]);
     }
     _position += 2;
+    if (_position == _dataSize) _position = -1;
     return *this;
 }
 
@@ -196,6 +209,7 @@ VirtualFile& VirtualFile::operator >> (unsigned char &value)
     }
     value = _data[_position];
     _position += 1;
+    if (_position == _dataSize) _position = -1;
     return *this;
 }
 
@@ -208,6 +222,7 @@ VirtualFile& VirtualFile::operator >> (char &value)
     }
     value = _data[_position];
     _position += 1;
+    if (_position == _dataSize) _position = -1;
     return *this;
 }
 
