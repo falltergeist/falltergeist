@@ -1,18 +1,17 @@
 #ifndef FALLTERGEIST_BIOFILETYPE_H
 #define FALLTERGEIST_BIOFILETYPE_H
 
+#include "../Engine/VirtualFile.h"
+
 namespace Falltergeist
 {
-class DatFileItem;
 
-class BioFileType
+class BioFileType : public VirtualFile
 {
 protected:
-    DatFileItem * _datFileItem;
     void _init();
-    char * _text;
 public:
-    BioFileType(DatFileItem * datFileItem);
+    BioFileType(VirtualFile * virtualFile);
     ~BioFileType();
     char * getText();
 };

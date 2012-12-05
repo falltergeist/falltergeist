@@ -1,10 +1,10 @@
 #ifndef FALLTERGEIST_AAFFILETYPE_H
 #define FALLTERGEIST_AAFFILETYPE_H
 
+#include "../Engine/VirtualFile.h"
+
 namespace Falltergeist
 {
-class DatFileItem;
-
 struct AafGlyph
 {
     unsigned short width;
@@ -13,7 +13,7 @@ struct AafGlyph
     char * data;
 };
 
-class AafFileType
+class AafFileType : public VirtualFile
 {
 protected:
     unsigned short _maximumHeight;
@@ -21,10 +21,9 @@ protected:
     unsigned short _spaceWidth;
     unsigned short _verticalGap;
     AafGlyph * _glyphs;
-    DatFileItem * _datFileItem;
     void _init();
 public:
-    AafFileType(DatFileItem * datFileItem);
+    AafFileType(VirtualFile * virtualFile);
     AafGlyph * getChar(unsigned char chr);
     unsigned short getSpaceWidth();
     unsigned short getHorizontalGap();

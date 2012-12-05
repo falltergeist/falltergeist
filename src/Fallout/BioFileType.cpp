@@ -1,35 +1,27 @@
 #include "../Fallout/BioFileType.h"
-#include "../Fallout/DatFileItem.h"
 
 #include <iostream>
 
 namespace Falltergeist
 {
 
-BioFileType::BioFileType(DatFileItem * datFileItem)
+BioFileType::BioFileType(VirtualFile * virtualFile) : VirtualFile(virtualFile)
 {
-    _datFileItem = datFileItem;
-    _text = 0;
     _init();
 }
 
 BioFileType::~BioFileType()
 {
-    delete [] _text;
 }
 
 void BioFileType::_init()
-{
-    _text = new char[_datFileItem->size() + 1]();
-    for (unsigned int i = 0; i != _datFileItem->size(); ++i)
-    {
-        _text[i] = _datFileItem->getData()[i];
-    }
+{    
+    (*this) << (unsigned char) 0;
 }
 
 char * BioFileType::getText()
 {
-    return _text;
+    return getData();
 }
 
 }

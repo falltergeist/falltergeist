@@ -1,5 +1,6 @@
 #include "../Engine/VirtualFile.h"
 #include <cstring>
+#include <algorithm>
 
 #include <iostream>
 
@@ -11,8 +12,17 @@ VirtualFile::VirtualFile()
     _byteOrder = ORDER_BIG_ENDIAN;
     _dataSize = 0;
     _position = 0;
-    _data = 0;
     _filename = 0;
+    _data = 0;
+}
+
+VirtualFile::VirtualFile(VirtualFile * virtualFile)
+{
+    _byteOrder = virtualFile->_byteOrder;
+    _dataSize= virtualFile->_dataSize;
+    _position = virtualFile->_position;
+    _filename = virtualFile->_filename;
+    _data = virtualFile->_data;
 }
 
 VirtualFile::VirtualFile(const char * filename)
@@ -49,6 +59,8 @@ VirtualFile::VirtualFile(const char * filename, char * data, unsigned int dataLe
 }
 
 
+
+
 VirtualFile::~VirtualFile()
 {
     if (_data != 0) delete [] _data;
@@ -58,8 +70,13 @@ VirtualFile::~VirtualFile()
 void VirtualFile::setFilename(const char * filename)
 {
     if (_filename != 0) delete [] _filename;
-    _filename = new char[strlen(filename) + 1]();
-    strcpy(_filename, filename);
+
+    std::string fname(filename);
+    std::replace(fname.begin(),fname.end(),'\\','/');
+    std::transform(fname.begin(),fname.end(),fname.begin(), ::tolower);
+
+    _filename = new char[strlen(fname.c_str()) + 1]();
+    strcpy(_filename, fname.c_str());
 }
 
 
@@ -169,15 +186,18 @@ VirtualFile& VirtualFile::operator >> (unsigned int &value)
         _position = -1;
         return *this;
     }
+
+    unsigned char * data = new unsigned char[4]();
+    readBytes((char *)data, 4);
     if (_byteOrder == ORDER_LITTLE_ENDIAN)
     {
-        value =  (_data[_position + 3] << 24) | (_data[_position + 2] << 16) | (_data[_position + 1] << 8) | _data[_position];
+        value =  (data[3] << 24) | (data[2] << 16) | (data[1] << 8) | data[0];
     }
     else
     {
-        value =  (_data[_position] << 24) | (_data[_position + 1] << 16) | (_data[_position + 2] << 8) | _data[_position + 3];
+        value =  (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
     }
-    _position += 4;
+    delete [] data;
     if (_position == _dataSize) _position = -1;
     return *this;
 }
@@ -189,15 +209,18 @@ VirtualFile& VirtualFile::operator >> (int &value)
         _position = -1;
         return *this;
     }
+
+    unsigned char * data = new unsigned char[4]();
+    readBytes((char *)data, 4);
     if (_byteOrder == ORDER_LITTLE_ENDIAN)
     {
-        value =  (_data[_position + 3] << 24) | (_data[_position + 2] << 16) | (_data[_position + 1] << 8) | _data[_position];
+        value =  (data[3] << 24) | (data[2] << 16) | (data[1] << 8) | data[0];
     }
     else
     {
-        value =  (_data[_position] << 24) | (_data[_position + 1] << 16) | (_data[_position + 2] << 8) | _data[_position + 3];
+        value =  (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
     }
-    _position += 4;
+    delete [] data;
     if (_position == _dataSize) _position = -1;
     return *this;
 }
@@ -209,15 +232,17 @@ VirtualFile& VirtualFile::operator >> (unsigned short &value)
         _position = -1;
         return *this;
     }
+    unsigned char * data = new unsigned char[2]();
+    readBytes((char *)data, 2);
     if (_byteOrder == ORDER_LITTLE_ENDIAN)
     {
-        value =  (_data[_position + 1] << 8) | _data[_position];
+        value =  (data[1] << 8) | data[0];
     }
     else
     {
-        value =  (_data[_position] << 8) | (_data[_position + 1]);
+        value =  (data[0] << 8) | data[1];
     }
-    _position += 2;
+    delete [] data;
     if (_position == _dataSize) _position = -1;
     return *this;
 }
@@ -229,15 +254,17 @@ VirtualFile& VirtualFile::operator >> (short &value)
         _position = -1;
         return *this;
     }
+    unsigned char * data = new unsigned char[2]();
+    readBytes((char *)data, 2);
     if (_byteOrder == ORDER_LITTLE_ENDIAN)
     {
-        value =  (_data[_position + 1] << 8) | _data[_position];
+        value =  (data[1] << 8) | data[0];
     }
     else
     {
-        value =  (_data[_position] << 8) | (_data[_position + 1]);
+        value =  (data[0] << 8) | data[1];
     }
-    _position += 2;
+    delete [] data;
     if (_position == _dataSize) _position = -1;
     return *this;
 }
@@ -249,8 +276,10 @@ VirtualFile& VirtualFile::operator >> (unsigned char &value)
         _position = -1;
         return *this;
     }
-    value = _data[_position];
-    _position += 1;
+    unsigned char * data = new unsigned char[1]();
+    readBytes((char *)data, 1);
+    value =  data[0];
+    delete [] data;
     if (_position == _dataSize) _position = -1;
     return *this;
 }
@@ -262,8 +291,10 @@ VirtualFile& VirtualFile::operator >> (char &value)
         _position = -1;
         return *this;
     }
-    value = _data[_position];
-    _position += 1;
+    unsigned char * data = new unsigned char[1]();
+    readBytes((char *)data, 1);
+    value =  data[0];
+    delete [] data;
     if (_position == _dataSize) _position = -1;
     return *this;
 }

@@ -1,19 +1,18 @@
 #include "../Fallout/FrmFileType.h"
-#include "../Fallout/DatFileItem.h"
+
+#include <iostream>
 
 namespace Falltergeist
 {
 
-FrmFileType::FrmFileType(DatFileItem * datFileItem)
+FrmFileType::FrmFileType(VirtualFile * virtualFile) : VirtualFile(virtualFile)
 {
-    _datFileItem = datFileItem;
-    _initialized = false;
     _init();
 }
 
 FrmFileType::~FrmFileType()
 {
-    delete [] _directions; _directions = 0;
+    delete [] _directions;
 }
 
 /**
@@ -22,18 +21,26 @@ FrmFileType::~FrmFileType()
  */
 void FrmFileType::_init()
 {
-    if (_initialized) return;
-    _datFileItem->seek(0);
-    (*_datFileItem) >> _version >> _framesPerSecond >> _actionFrame >> _framesPerDirection;
-
+    setPosition(0);
+    (*this) >> _version >> _framesPerSecond >> _actionFrame >> _framesPerDirection;
     _directions = new FrmDirection[6];
 
     unsigned short i,j;
-    for (i = 0; i < 6; i++) (*_datFileItem) >> _directions[i].shiftX;
-    for (i = 0; i < 6; i++) (*_datFileItem) >> _directions[i].shiftY;
-    for (i = 0; i < 6; i++) (*_datFileItem) >> _directions[i].dataOffset;
+    for (i = 0; i < 6; i++)
+    {
+        (*this) >> _directions[i].shiftX;
+    }
+    for (i = 0; i < 6; i++)
+    {
+        (*this) >> _directions[i].shiftY;
+    }
+    for (i = 0; i < 6; i++)
+    {
+        (*this) >> _directions[i].dataOffset;
+    }
 
-    (*_datFileItem) >> _dataSize;
+    (*this) >> _dataSize;
+
     // Reading directions
     for (i = 0; i < 6; i++)
     {
@@ -46,20 +53,19 @@ void FrmFileType::_init()
         _directions[i].frames = new FrmFrame[_framesPerDirection];
         for (j = 0; j < _framesPerDirection; j++)
         {
-            (*_datFileItem) >> _directions[i].frames[j].width;
-            (*_datFileItem) >> _directions[i].frames[j].height;
-            (*_datFileItem) >> _directions[i].frames[j].dataSize;
-            (*_datFileItem) >> _directions[i].frames[j].offsetX;
-            (*_datFileItem) >> _directions[i].frames[j].offsetY;
+            (*this) >> _directions[i].frames[j].width;
+            (*this) >> _directions[i].frames[j].height;
+            (*this) >> _directions[i].frames[j].dataSize;
+            (*this) >> _directions[i].frames[j].offsetX;
+            (*this) >> _directions[i].frames[j].offsetY;
             _directions[i].frames[j].data = new char[_directions[i].frames[j].dataSize];
             for (unsigned int z = 0; z != _directions[i].frames[j].dataSize; ++z)
             {
-                (*_datFileItem) >> _directions[i].frames[j].data[z];
+                (*this) >> _directions[i].frames[j].data[z];
             }
             //_datFileItem->skip(_directions[i].frames[j].dataSize);
         }
     }
-    _initialized = true;
 }
 
 /**
@@ -168,10 +174,12 @@ void FrmFileType::setDirections(FrmDirection * directions)
  * @brief FrmFileType::getData
  * @return
  */
-unsigned char * FrmFileType::getData()
+char * FrmFileType::getData()
 {
+    if (_data == 0) return 0;
     // 62 - frames data offset
-    return _datFileItem->getData() + 62;
+    return _data + 62;
+    //return _datFileItem->getData() + 62;
 }
 
 }

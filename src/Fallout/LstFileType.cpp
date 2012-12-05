@@ -1,14 +1,12 @@
 #include "../Fallout/LstFileType.h"
-#include "../Fallout/DatFileItem.h"
 
 #include <iostream>
 
 namespace Falltergeist
 {
 
-LstFileType::LstFileType(DatFileItem * datFileItem)
+LstFileType::LstFileType(VirtualFile * virtualFile) : VirtualFile(virtualFile)
 {
-    _datFileItem = datFileItem;
     _strings = 0;
 }
 
@@ -26,13 +24,13 @@ std::list<std::string *> * LstFileType::getStrings()
     //read strings
     unsigned int i = 0;
     bool end = false;
-    while (i < _datFileItem->size())
+    while (i < getSize())
     {
         std::string * line = new std::string();
-        while ((_datFileItem->getData()[i] != 0x0D) && (i < _datFileItem->size()))
+        while ((getData()[i] != 0x0D) && (i < getSize()))
         {
-            if (_datFileItem->getData()[i] == 0x20) end = true;
-            if (!end) line->push_back(_datFileItem->getData()[i]);
+            if (getData()[i] == 0x20) end = true;
+            if (!end) line->push_back(getData()[i]);
             i++;
         }
         end = false;

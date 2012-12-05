@@ -22,7 +22,7 @@ public:
     virtual ~File();
     virtual const char * getFilename();
     virtual unsigned int getSize();
-    virtual unsigned int getPosition();
+    virtual int getPosition();
     virtual void readBytes(char * buffer, unsigned int length);
     virtual void writeBytes(char * buffer, unsigned int length);
     virtual void skipBytes(unsigned int length);

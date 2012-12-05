@@ -1,131 +1,129 @@
 #include "../Fallout/GcdFileType.h"
-#include "../Fallout/DatFileItem.h"
 
 #include <iostream>
 
 namespace Falltergeist
 {
 
-GcdFileType::GcdFileType(DatFileItem * datFileItem)
+GcdFileType::GcdFileType(VirtualFile * virtualFile) : VirtualFile(virtualFile)
 {
-    _datFileItem = datFileItem;
     _init();
 }
 
 void GcdFileType::_init()
 {
-    _datFileItem->seek(0);
+    setPosition(0);
     // unknown 4 bytes
-    _datFileItem->skip(4);
+    skipBytes(4);
     // primary stats
-    (*_datFileItem) >> strength
-                    >> perception
-                    >> endurance
-                    >> charisma
-                    >> intelligence
-                    >> agility
-                    >> luck;
+    (*this) >> strength
+            >> perception
+            >> endurance
+            >> charisma
+            >> intelligence
+            >> agility
+            >> luck;
     // secondary stats
-    (*_datFileItem) >> hitPoints
-                    >> actionPoints
-                    >> armorClass;
+    (*this) >> hitPoints
+            >> actionPoints
+            >> armorClass;
     // unknown
-    _datFileItem->skip(4);
-    (*_datFileItem) >> meleeDamage
-                    >> carryWeight
-                    >> sequence
-                    >> healingRate
-                    >> criticalChance
-                    >> criticalHitModifier
-                    >> damageThresholdNormal
-                    >> damageThresholdLaser
-                    >> damageThresholdFire
-                    >> damageThresholdPlasma
-                    >> damageThresholdElectrical
-                    >> damageThresholdEMP
-                    >> damageThresholdExplosive
-                    >> damageResistanceNormal
-                    >> damageResistanceLaser
-                    >> damageResistanceFire
-                    >> damageResistancePlasma
-                    >> damageResistanceElectrical
-                    >> damageResistanceEMP
-                    >> damageResistanceExplosive
-                    >> radiationResistance
-                    >> poisonResistance
-                    >> age
-                    >> gender;
+    skipBytes(4);
+    (*this) >> meleeDamage
+            >> carryWeight
+            >> sequence
+            >> healingRate
+            >> criticalChance
+            >> criticalHitModifier
+            >> damageThresholdNormal
+            >> damageThresholdLaser
+            >> damageThresholdFire
+            >> damageThresholdPlasma
+            >> damageThresholdElectrical
+            >> damageThresholdEMP
+            >> damageThresholdExplosive
+            >> damageResistanceNormal
+            >> damageResistanceLaser
+            >> damageResistanceFire
+            >> damageResistancePlasma
+            >> damageResistanceElectrical
+            >> damageResistanceEMP
+            >> damageResistanceExplosive
+            >> radiationResistance
+            >> poisonResistance
+            >> age
+            >> gender;
     // bonuses to primary stats
-    (*_datFileItem) >> strengthBonus
-                    >> perceptionBonus
-                    >> enduranceBonus
-                    >> charismaBonus
-                    >> intelligenceBonus
-                    >> agilityBonus
-                    >> luckBonus;
+    (*this) >> strengthBonus
+            >> perceptionBonus
+            >> enduranceBonus
+            >> charismaBonus
+            >> intelligenceBonus
+            >> agilityBonus
+            >> luckBonus;
     // bonuses to secondary stats
-    (*_datFileItem) >> hitPointsBonus
-                    >> actionPointsBonus
-                    >> armorClassBonus;
+    (*this) >> hitPointsBonus
+            >> actionPointsBonus
+            >> armorClassBonus;
     // unknown bonus
-    _datFileItem->skip(4);
-    (*_datFileItem) >> meleeDamageBonus
-                    >> carryWeightBonus
-                    >> sequenceBonus
-                    >> healingRateBonus
-                    >> criticalChanceBonus
-                    >> criticalHitModifierBonus
-                    >> damageThresholdNormalBonus
-                    >> damageThresholdLaserBonus
-                    >> damageThresholdFireBonus
-                    >> damageThresholdPlasmaBonus
-                    >> damageThresholdElectricalBonus
-                    >> damageThresholdEMPBonus
-                    >> damageThresholdExplosiveBonus
-                    >> damageResistanceNormalBonus
-                    >> damageResistanceLaserBonus
-                    >> damageResistanceFireBonus
-                    >> damageResistancePlasmaBonus
-                    >> damageResistanceElectricalBonus
-                    >> damageResistanceEMPBonus
-                    >> damageResistanceExplosiveBonus
-                    >> radiationResistanceBonus
-                    >> poisonResistanceBonus
-                    >> ageBonus
-                    >> genderBonus;
+    skipBytes(4);
+    (*this) >> meleeDamageBonus
+            >> carryWeightBonus
+            >> sequenceBonus
+            >> healingRateBonus
+            >> criticalChanceBonus
+            >> criticalHitModifierBonus
+            >> damageThresholdNormalBonus
+            >> damageThresholdLaserBonus
+            >> damageThresholdFireBonus
+            >> damageThresholdPlasmaBonus
+            >> damageThresholdElectricalBonus
+            >> damageThresholdEMPBonus
+            >> damageThresholdExplosiveBonus
+            >> damageResistanceNormalBonus
+            >> damageResistanceLaserBonus
+            >> damageResistanceFireBonus
+            >> damageResistancePlasmaBonus
+            >> damageResistanceElectricalBonus
+            >> damageResistanceEMPBonus
+            >> damageResistanceExplosiveBonus
+            >> radiationResistanceBonus
+            >> poisonResistanceBonus
+            >> ageBonus
+            >> genderBonus;
     //skills
-    (*_datFileItem) >> smallGunsSkill
-                    >> bigGunsSkill
-                    >> energyWeaponsSkill
-                    >> unarmedSkill
-                    >> meleeWeaponsSkill
-                    >> throwingWeaponsSkill
-                    >> firstAidSkill
-                    >> doctorSkill
-                    >> sneakSkill
-                    >> lockpickSkill
-                    >> stealSkill
-                    >> trapsSkill
-                    >> scienceSkill
-                    >> repairSkill
-                    >> speechSkill
-                    >> barterSkill
-                    >> gamblingSkill
-                    >> outdoorsmanSkill;
+    (*this) >> smallGunsSkill
+            >> bigGunsSkill
+            >> energyWeaponsSkill
+            >> unarmedSkill
+            >> meleeWeaponsSkill
+            >> throwingWeaponsSkill
+            >> firstAidSkill
+            >> doctorSkill
+            >> sneakSkill
+            >> lockpickSkill
+            >> stealSkill
+            >> trapsSkill
+            >> scienceSkill
+            >> repairSkill
+            >> speechSkill
+            >> barterSkill
+            >> gamblingSkill
+            >> outdoorsmanSkill;
     // unknown
-    _datFileItem->skip(16);
+    skipBytes(16);
 
     // name
     name = new char[32];
-    for (int i=0; i != 32; ++i) (*_datFileItem) >> name[i];
+    for (int i=0; i != 32; ++i) (*this) >> name[i];
 
-    (*_datFileItem) >> firstTaggedSkill
-                    >> secondTaggedSkill
-                    >> thirdTaggedSkill
-                    >> fourthTaggedSkill
-                    >> firstTrait
-                    >> secondTrait
-                    >> characterPoints;
+    (*this) >> firstTaggedSkill
+            >> secondTaggedSkill
+            >> thirdTaggedSkill
+            >> fourthTaggedSkill
+            >> firstTrait
+            >> secondTrait
+            >> characterPoints;
 }
 
 

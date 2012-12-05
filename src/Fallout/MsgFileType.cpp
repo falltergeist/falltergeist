@@ -1,5 +1,4 @@
 #include "../Fallout/MsgFileType.h"
-#include "../Fallout/DatFileItem.h"
 #include <cstring>
 #include <string>
 #include <stdlib.h>
@@ -10,26 +9,25 @@ namespace Falltergeist
 {
 
 
-MsgFileType::MsgFileType(DatFileItem * datFileItem)
+MsgFileType::MsgFileType(VirtualFile * virtualFile) : VirtualFile(virtualFile)
 {
-    _datFileItem = datFileItem;
     _lines = new std::vector<MsgLine *>;
     _init();
 }
 
 void MsgFileType::_init()
 {
-    _datFileItem->seek(0);
+    setPosition(0);
     unsigned int i = 0;
     unsigned char chr;
-    while (i < _datFileItem->size())
+    while (i < getSize())
     {
-        chr = _datFileItem->getData()[i];
+        chr = getData()[i];
         // = 0;
         std::string line = "";
         while (chr != 0x0D)
         {
-            chr = _datFileItem->getData()[i];
+            chr = getData()[i];
             //std::cout << chr;
             if (chr != 0x0D && chr != 0x0A) line.push_back(chr);
             i++;

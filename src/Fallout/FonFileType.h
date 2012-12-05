@@ -1,9 +1,10 @@
 #ifndef FALLTERGEIST_FONFILETYPE_H
 #define FALLTERGEIST_FONFILETYPE_H
 
+#include "../Engine/VirtualFile.h"
+
 namespace Falltergeist
 {
-class DatFileItem;
 
 struct FonSymbol
 {
@@ -12,17 +13,16 @@ struct FonSymbol
     char * data;
 };
 
-class FonFileType
+class FonFileType : public VirtualFile
 {
 protected:
-    DatFileItem * _datFileItem;
     void _init();
     unsigned int _numberOfCharacters;
     unsigned int _height;
     unsigned int _distance;
     FonSymbol * _symbols;
 public:
-    FonFileType(DatFileItem * datFileItem);
+    FonFileType(VirtualFile * virtualFile);
     ~FonFileType();
 };
 

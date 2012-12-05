@@ -1,14 +1,14 @@
 #ifndef FALLTERGEIST_GCDFILETYPE_H
 #define FALLTERGEIST_GCDFILETYPE_H
 
+#include "../Engine/VirtualFile.h"
+
 namespace Falltergeist
 {
-class DatFileItem;
 
-class GcdFileType
+class GcdFileType : public VirtualFile
 {
 protected:
-    DatFileItem * _datFileItem;
     void _init();
 public:
     // primary stats
@@ -115,7 +115,7 @@ public:
     unsigned int secondTrait;
     unsigned int characterPoints;
 
-    GcdFileType(DatFileItem * datFileItem);
+    GcdFileType(VirtualFile * virtualFile);
 };
 
 }

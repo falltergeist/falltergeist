@@ -3,17 +3,16 @@
 
 #include <list>
 #include <string>
+#include "../Engine/VirtualFile.h"
 namespace Falltergeist
 {
-class DatFileItem;
 
-class LstFileType
+class LstFileType : public VirtualFile
 {
 protected:
-    DatFileItem * _datFileItem;
     std::list<std::string *> * _strings;
 public:
-    LstFileType(DatFileItem * datFileItem);
+    LstFileType(VirtualFile * virtualFile);
     ~LstFileType();
     std::list<std::string *> * getStrings();
 };

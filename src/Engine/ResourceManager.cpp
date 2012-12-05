@@ -1,8 +1,8 @@
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/VirtualFile.h"
 #include "../Fallout/DatFile.h"
-#include "../Fallout/DatFileItem.h"
 #include "../Fallout/FrmFileType.h"
 #include "../Fallout/PalFileType.h"
 #include "../Fallout/LstFileType.h"
@@ -25,17 +25,18 @@ const char * _t(unsigned int number, const char * filename)
 
 ResourceManager::ResourceManager()
 {
-    std::string homepath = CrossPlatform::getHomePath();
-    _datFiles->push_back(new DatFile(homepath + "/.fallout/master.dat"));
+    std::string path = CrossPlatform::getHomePath();
+    path += "/.fallout/master.dat";
+    _datFiles->push_back(new DatFile(path.c_str()));
     //_datFiles->push_back(new DatFile(homepath + "/.fallout/critter.dat"));
 }
 
-DatFileItem * ResourceManager::getDatFileItem(std::string filename)
+VirtualFile * ResourceManager::getDatFileItem(std::string filename)
 {
     std::list<DatFile *>::iterator it;
     for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
     {
-        DatFileItem * item = (*it)->getItem(filename);
+        VirtualFile * item = (*it)->getItem(filename);
         if (item)
         {
             return item;

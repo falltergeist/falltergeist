@@ -7,7 +7,7 @@
 namespace Falltergeist
 {
 class DatFile;
-class DatFileItem;
+class VirtualFile;
 class FrmFileType;
 class PalFileType;
 class LstFileType;
@@ -26,7 +26,7 @@ protected:
     static std::list<DatFile *> * _datFiles;
 public:
     ResourceManager();
-    static DatFileItem * getDatFileItem(std::string filename);
+    static VirtualFile * getDatFileItem(std::string filename);
     static FrmFileType * getFrmFileType(std::string filename);
     static PalFileType * getPalFileType(std::string filename);
     static LstFileType * getLstFileType(std::string filename);

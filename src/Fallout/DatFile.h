@@ -23,8 +23,7 @@ class BioFileType;
 class DatFile : public File
 {
 protected:
-    std::fstream * _stream;
-    std::list<DatFileItem *> * _items;  // items list
+    std::list<VirtualFile *> * _items;  // items list
     std::map<std::string, FrmFileType *> * _frmFiles; // opened FRM Files
     std::map<std::string, PalFileType *> * _palFiles; // opened PAL Files
     std::map<std::string, LstFileType *> * _lstFiles; // opened LST Files
@@ -35,19 +34,9 @@ protected:
     std::map<std::string, BioFileType *> * _bioFiles; // opened BIO Files
 public:
     DatFile(const char * filename);
-    DatFile(std::string filename);
     virtual ~DatFile();
-    std::fstream * getStream();
-    std::list<DatFileItem*> * getItems();
-    DatFile& seek(unsigned int uint);
-    unsigned int pos(void);
-    void setStream(std::fstream * stream);
-    DatFileItem * getItem(std::string filename);
-    DatFile& operator>> (unsigned int &value);
-    DatFile& operator>> (int &value);
-    DatFile& operator>> (unsigned char &value);
-    DatFile& operator>> (char &value);
-    DatFile& operator>> (DatFileItem &value);
+    std::list<VirtualFile *> * getItems();
+    VirtualFile * getItem(std::string filename);
     FrmFileType * getFrmFileType(std::string filename);
     PalFileType * getPalFileType(std::string filename);
     LstFileType * getLstFileType(std::string filename);

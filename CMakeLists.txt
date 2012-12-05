@@ -48,8 +48,6 @@ set(SOURCES main.cpp
             src/Fallout/BioFileType.h
             src/Fallout/DatFile.cpp
             src/Fallout/DatFile.h
-            src/Fallout/DatFileItem.cpp
-            src/Fallout/DatFileItem.h
             src/Fallout/FonFileType.cpp
             src/Fallout/FonFileType.h
             src/Fallout/FrmFileType.cpp

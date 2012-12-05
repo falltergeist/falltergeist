@@ -3,11 +3,9 @@
 
 #include <vector>
 #include <string>
-
+#include "../Engine/VirtualFile.h"
 namespace Falltergeist
 {
-class DatFileItem;
-
 
 struct MsgLine
 {
@@ -16,14 +14,13 @@ struct MsgLine
     std::string * text;
 };
 
-class MsgFileType
+class MsgFileType : public VirtualFile
 {
 protected:
-    DatFileItem * _datFileItem;
     void _init();
     std::vector<MsgLine *> * _lines;
 public:
-    MsgFileType(DatFileItem * datFileItem);
+    MsgFileType(VirtualFile * virtualFile);
     const char * getText(unsigned int number);
 };
 

@@ -3,6 +3,8 @@
 #include "../Engine/Exception.h"
 #include <cstring>
 #include <string>
+#include <algorithm>
+
 #include <iostream>
 
 namespace Falltergeist
@@ -12,17 +14,20 @@ File::File()
 {
     _virtualFile = 0;
     _filename = 0;
+    _byteOrder = ORDER_BIG_ENDIAN;
 }
 
 File::File(const char * filename)
 {
     _virtualFile = 0;
+    _byteOrder = ORDER_BIG_ENDIAN;
     setFilename(filename);
 }
 
 File::File(VirtualFile * virtualFile)
 {
     _virtualFile = virtualFile;
+    _byteOrder = ORDER_BIG_ENDIAN;
     setFilename(_virtualFile->getFilename());
 }
 
@@ -40,8 +45,12 @@ File::~File()
 void File::setFilename(const char * filename)
 {
     if (_filename != 0) delete [] _filename;
-    _filename = new char[strlen(filename) + 1]();
-    strcpy(_filename, filename);
+    std::string fname(filename);
+    std::replace(fname.begin(),fname.end(),'\\','/');
+    std::transform(fname.begin(),fname.end(),fname.begin(), ::tolower);
+
+    _filename = new char[strlen(fname.c_str()) + 1]();
+    strcpy(_filename, fname.c_str());
 }
 
 bool File::open()
@@ -59,7 +68,7 @@ bool File::open()
     return true;
 }
 
-unsigned int File::getPosition()
+int File::getPosition()
 {
     if (_virtualFile != 0)
     {
@@ -179,16 +188,17 @@ File& File::operator >> (unsigned int &value)
         return *this;
     }
     open();
-    unsigned int tmp;
-    _fstream >> tmp;
+    unsigned char * data = new unsigned char[4]();
+    _fstream.readsome((char *)data, 4);
     if (_byteOrder == ORDER_LITTLE_ENDIAN)
     {
-        value = ((tmp&0x000000FF) << 24) | ((tmp&0x0000FF00) << 8) | ((tmp&0x00FF0000) >> 8) | ((tmp&0xFF000000) >> 24);
+        value = ( data[3] << 24) | (data[2] << 16) | ( data[1] << 8) | data[0];
     }
     else
     {
-        value = tmp;
+        value = ( data[0] << 24) | (data[1] << 16) | ( data[2] << 8) | data[3];
     }
+    delete [] data;
     setPosition(_fstream.tellg());
     return *this;
 }
@@ -202,16 +212,17 @@ File& File::operator >> (int &value)
     }
 
     open();
-    int tmp;
-    _fstream >> tmp;
+    unsigned char * data = new unsigned char[4]();
+    _fstream.readsome((char *)data, 4);
     if (_byteOrder == ORDER_LITTLE_ENDIAN)
     {
-        value = ((tmp&0x000000FF) << 24) | ((tmp&0x0000FF00) << 8) | ((tmp&0x00FF0000) >> 8) | ((tmp&0xFF000000) >> 24);
+        value = ( data[3] << 24) | (data[2] << 16) | ( data[1] << 8) | data[0];
     }
     else
     {
-        value = tmp;
+        value = ( data[0] << 24) | (data[1] << 16) | ( data[2] << 8) | data[3];
     }
+    delete [] data;
     setPosition(_fstream.tellg());
     return *this;
 }
@@ -225,16 +236,17 @@ File& File::operator >> (unsigned short &value)
     }
 
     open();
-    unsigned short tmp;
-    _fstream >> tmp;
+    unsigned char * data = new unsigned char[2]();
+    _fstream.readsome((char *)data, 2);
     if (_byteOrder == ORDER_LITTLE_ENDIAN)
     {
-        value = ((tmp&0x00FF) << 8) | ((tmp&0xFF00) >> 8);
+        value = ( data[1] << 8) | data[0];
     }
     else
     {
-        value = tmp;
+        value = ( data[0] << 8) | data[1];
     }
+    delete [] data;
     setPosition(_fstream.tellg());
     return *this;
 }
@@ -248,16 +260,17 @@ File& File::operator >> (short &value)
     }
 
     open();
-    short tmp;
-    _fstream >> tmp;
+    unsigned char * data = new unsigned char[2]();
+    _fstream.readsome((char *)data, 2);
     if (_byteOrder == ORDER_LITTLE_ENDIAN)
     {
-        value = ((tmp&0x00FF) << 8) | ((tmp&0xFF00) >> 8);
+        value = ( data[1] << 8) | data[0];
     }
     else
     {
-        value = tmp;
+        value = ( data[0] << 8) | data[1];
     }
+    delete [] data;
     setPosition(_fstream.tellg());
     return *this;
 }
@@ -271,9 +284,10 @@ File& File::operator >> (unsigned char &value)
     }
 
     open();
-    unsigned char tmp;
-    _fstream >> tmp;
-    value = tmp;
+    unsigned char * data = new unsigned char[1]();
+    _fstream.readsome((char *)data, 1);
+    value = data[0];
+    delete [] data;
     setPosition(_fstream.tellg());
     return *this;
 }
@@ -287,9 +301,10 @@ File& File::operator >> (char &value)
     }
 
     open();
-    char tmp;
-    _fstream >> tmp;
-    value = tmp;
+    unsigned char * data = new unsigned char[1]();
+    _fstream.readsome((char *)data, 1);
+    value = data[0];
+    delete [] data;
     setPosition(_fstream.tellg());
     return *this;
 }
@@ -339,7 +354,7 @@ File& File::operator << (unsigned int value)
     }
 
     open();
-    char * data = new char[4];
+    char * data = new char[4]();
     if (_byteOrder == ORDER_LITTLE_ENDIAN)
     {
         data[0] = (value&0x000000FF);
@@ -380,7 +395,7 @@ File& File::operator << (unsigned short value)
     }
 
     open();
-    char * data = new char[2];
+    char * data = new char[2]();
     if (_byteOrder == ORDER_LITTLE_ENDIAN)
     {
         data[0] = (value&0x00FF);
@@ -416,7 +431,7 @@ File& File::operator << (unsigned char value)
     }
 
     open();
-    char * data = new char[1];
+    char * data = new char[1]();
     data[0] = value;
     writeBytes(data, 1);
     delete [] data;

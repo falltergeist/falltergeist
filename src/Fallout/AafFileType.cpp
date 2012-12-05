@@ -1,13 +1,10 @@
 #include "../Fallout/AafFileType.h"
-#include "../Fallout/DatFileItem.h"
 
 namespace Falltergeist
 {
 
-AafFileType::AafFileType(DatFileItem * datFileItem)
+AafFileType::AafFileType(VirtualFile * virtualFile) : VirtualFile(virtualFile)
 {
-    _datFileItem = datFileItem;
-    _init();
 }
 
 AafFileType::~AafFileType()
@@ -17,15 +14,15 @@ AafFileType::~AafFileType()
 
 void AafFileType::_init()
 {
-    _datFileItem->seek(0);
+    setPosition(0);
     // signature
-    _datFileItem->skip(4);
-    (*_datFileItem) >> _maximumHeight >> _horizontalGap >> _spaceWidth >> _verticalGap;
+    skipBytes(4);
+    (*this) >> _maximumHeight >> _horizontalGap >> _spaceWidth >> _verticalGap;
     _glyphs = new AafGlyph[256];
 
     for (int i = 0; i != 256; ++i)
     {
-        (*_datFileItem) >> _glyphs[i].width >> _glyphs[i].height >> _glyphs[i].dataOffset;
+        (*this) >> _glyphs[i].width >> _glyphs[i].height >> _glyphs[i].dataOffset;
     }
 
     for (int i = 0; i != 256; ++i)
@@ -35,10 +32,9 @@ void AafFileType::_init()
         if ( width * height  == 0) continue;
 
         _glyphs[i].data = new char[width * height];
-        for (unsigned int j = 0; j != width*height; ++j)
-        {
-            _glyphs[i].data[j] = _datFileItem->getData()[0x080C + _glyphs[i].dataOffset + j];
-        }
+
+        setPosition(0x080C);
+        readBytes(_glyphs[i].data, width*height);
     }
 }
 

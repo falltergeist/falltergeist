@@ -1,5 +1,5 @@
 #include "../Fallout/PalFileType.h"
-#include "../Fallout/DatFileItem.h"
+
 #include <iostream>
 
 namespace Falltergeist
@@ -19,11 +19,9 @@ PalColor::operator unsigned int()
     return 0xFF000000 | color;
 }
 
-PalFileType::PalFileType(DatFileItem * datFileItem)
+PalFileType::PalFileType(VirtualFile * virtualFile) : VirtualFile(virtualFile)
 {
     _colors = new PalColor[256];
-    _datFileItem = datFileItem;
-    _initialized = false;
     _init();
 }
 
@@ -38,13 +36,12 @@ PalFileType::~PalFileType()
  */
 void PalFileType::_init()
 {
-    if (_initialized) return;
+    setPosition(0);
     // reading colors from file
     for (unsigned char i = 0; i < 255; i++)
     {
-        (*_datFileItem) >> _colors[i].red >> _colors[i].green >> _colors[i].blue;
+        (*this) >> _colors[i].red >> _colors[i].green >> _colors[i].blue;
     }
-    _initialized = true;
 }
 
 /**

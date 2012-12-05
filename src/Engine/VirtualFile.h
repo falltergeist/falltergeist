@@ -16,6 +16,7 @@ protected:
 public:
     enum { ORDER_LITTLE_ENDIAN = 0, ORDER_BIG_ENDIAN };
     VirtualFile();
+    VirtualFile(VirtualFile * virtualFile);
     VirtualFile(const char * filename);
     VirtualFile(const char * filename, char * data, unsigned int dataLength);
     VirtualFile(char * data, unsigned int dataLength);

@@ -5,7 +5,6 @@
 #include "src/Engine/File.h"
 #include "src/Engine/VirtualFile.h"
 #include "src/Fallout/DatFile.h"
-#include "src/Fallout/DatFileItem.h"
 #include "src/Fallout/FrmFileType.h"
 #include "src/Fallout/PalFileType.h"
 #include "src/Fallout/LstFileType.h"
@@ -23,22 +22,13 @@ int main()
 {
     try
     {
-        //VirtualFile * virtualFile = new VirtualFile("test.bin");
-        //virtualFile->setByteOrder(0);
-        //(*virtualFile) << 1 << 2 << 3;
-        //virtualFile->setByteOrder(1);
-        File * file = new File("test.bin");
-        //file->save();
-        //unsigned char chr;
-        std::cout << "Filesize: " << file->getSize() << std::endl;
-        file->setPosition(file->getSize());
-        (*file) << 1 << 2 << 3;
-        //char * data = new char[3];
-        //file->setPosition(0);
-        //file->readBytes(data, 3);
-        //delete [] data;
-
-        return 0;
+        //DatFile * master = new DatFile("/home/alexeevdv/.fallout/master.dat");
+        //std::cout << master->getFrmFileType("art/intrface/mainmenu.frm")->getDirections()[0].frames[0].width;
+        //for (std::list<VirtualFile *>::iterator it = master->getItems()->begin(); it != master->getItems()->end(); ++it)
+        //{
+        //    std::cout << (*it)->getFilename() << " : " << (*it)->getSize() << std::endl;
+        //}
+        //return 0;
         Game * game = new Game(640,480,32);
         game->setState(new StartState(game));
         game->run();

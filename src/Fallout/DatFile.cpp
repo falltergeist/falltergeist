@@ -1,6 +1,5 @@
 #include "../Engine/Exception.h"
 #include "../Fallout/DatFile.h"
-#include "../Fallout/DatFileItem.h"
 #include "../Fallout/FrmFileType.h"
 #include "../Fallout/PalFileType.h"
 #include "../Fallout/LstFileType.h"
@@ -10,6 +9,7 @@
 #include "../Fallout/MsgFileType.h"
 #include "../Fallout/BioFileType.h"
 #include <algorithm>
+#include <zlib.h>
 
 namespace Falltergeist
 {
@@ -25,47 +25,13 @@ DatFile::DatFile(const char * filename) : File(filename)
     _gcdFiles = new std::map<std::string, GcdFileType *>;
     _msgFiles = new std::map<std::string, MsgFileType *>;
     _bioFiles = new std::map<std::string, BioFileType *>;
-    //_filename = filename;
-    _stream = new std::fstream(filename,std::ios::in|std::ios::binary);
-    if (!_stream->is_open())
-    {
-        std::string message = "Can't open DAT file: ";
-        message.append(filename);
-        throw Exception(message);
-    }
-}
-
-DatFile::DatFile(std::string filename) : DatFile(filename.c_str())
-{
-    //setFilename(filename.c_str());
+    _byteOrder = ORDER_LITTLE_ENDIAN;
 }
 
 DatFile::~DatFile()
 {
     delete _items;
     delete _frmFiles, _palFiles, _lstFiles, _fonFiles, _aafFiles, _gcdFiles, _msgFiles, _bioFiles;
-    delete _stream;
-}
-
-/**
- * Returns DAT file stream
- * @brief DatFile::getStream
- * @return
- */
-std::fstream * DatFile::getStream()
-{
-    return _stream;
-}
-
-/**
- * Sets DAT file stream
- * @brief DatFile::setStream
- * @param stream
- */
-void DatFile::setStream(std::fstream * stream)
-{
-    delete _stream;
-    _stream = stream;
 }
 
 /**
@@ -73,134 +39,105 @@ void DatFile::setStream(std::fstream * stream)
  * @brief DatFile::getItems
  * @return
  */
-std::list<DatFileItem*> * DatFile::getItems()
+std::list<VirtualFile *> * DatFile::getItems()
 {
     if (_items != 0) return _items;
 
     unsigned int datFileSize, dirTreeSize, itemsTotal;
+
     // 4 bytes Dat file size
-    this->seek(this->getSize() - 4);
+    setPosition(getSize() - 4);
     (*this) >> datFileSize;
 
     // 4 bytes Directory tree size
-    this->seek(this->getSize() - 8);
+    setPosition(datFileSize - 8);
     (*this) >> dirTreeSize;
 
     // 4 bytes Items count in DAT file
-    this->seek(this->getSize() - dirTreeSize - 8);
+    setPosition(datFileSize - dirTreeSize - 8);
     (*this) >> itemsTotal;
 
     // for each entries...
-    _items = new std::list<DatFileItem*>;
+    _items = new std::list<VirtualFile *>;
     for (unsigned int i = 0; i < itemsTotal; i++)
     {
-        DatFileItem * item = new DatFileItem(this);
-        (*this) >> *item;
-        //std::cout << item.filename << std::endl;
+        VirtualFile * item = new VirtualFile();
+        // 4 bytes item name length;
+        unsigned int nameLength; (*this) >> nameLength;
+
+        // item name
+        char * filename = new char[nameLength + 1]();
+        this->readBytes(filename,nameLength);
+        item->setFilename(filename);
+        delete [] filename;
+
+        // is compressed?
+        unsigned char isCompressed;
+        (*this) >> isCompressed;
+
+        // unpacked size
+        unsigned int unpackedSize;
+        (*this) >> unpackedSize;
+
+        // packed size
+        unsigned int packedSize;
+        (*this) >> packedSize;
+
+        // data offset
+        unsigned int dataOffset;
+        (*this) >> dataOffset;
+
+        unsigned int oldPosition = getPosition();
+        setPosition(dataOffset);
+        if (!isCompressed)
+        {
+            char * unpackedData = new char[packedSize]();
+            readBytes(unpackedData, packedSize);
+            item->writeBytes(unpackedData,packedSize);
+        }
+        else
+        {
+            char * packedData = new char[packedSize]();
+            char * unpackedData = new char[unpackedSize]();
+            readBytes(packedData, packedSize);
+
+            z_stream zStream;
+            zStream.total_in  = zStream.avail_in  = packedSize;
+            zStream.avail_in = packedSize;
+            zStream.next_in  = (unsigned char *) packedData;
+            zStream.total_out = zStream.avail_out = unpackedSize;
+            zStream.next_out = (unsigned char *) unpackedData;
+            zStream.zalloc = Z_NULL;
+            zStream.zfree = Z_NULL;
+            zStream.opaque = Z_NULL;
+
+            inflateInit( &zStream );            // zlib function
+            inflate( &zStream, Z_FINISH );      // zlib function
+            inflateEnd( &zStream );             // zlib function
+
+            item->writeBytes(unpackedData,unpackedSize);
+            delete [] packedData;
+        }
+        setPosition(oldPosition);
         _items->push_back(item);
     }
 
     return _items;
 }
 
-DatFile& DatFile::operator >> (unsigned int &value)
-{
-    unsigned char byte1,byte2,byte3,byte4;
-    _stream->read((char *)&byte1,1);
-    _stream->read((char *)&byte2,1);
-    _stream->read((char *)&byte3,1);
-    _stream->read((char *)&byte4,1);
-    value =  (byte4 << 24) | (byte3 << 16) | (byte2 << 8) | byte1;
-    return *this;
-}
-
-DatFile& DatFile::operator >> (int &value)
-{
-    unsigned char byte1,byte2,byte3,byte4;
-    _stream->read((char *)&byte1,1);
-    _stream->read((char *)&byte2,1);
-    _stream->read((char *)&byte3,1);
-    _stream->read((char *)&byte4,1);
-    value =  (byte4 << 24) | (byte3 << 16) | (byte2 << 8) | byte1;
-    return *this;
-}
-
-DatFile& DatFile::operator >> (unsigned char &value)
-{
-    unsigned char byte1;
-    _stream->read((char *)&byte1,1);
-    value =  byte1;
-    return *this;
-}
-
-DatFile& DatFile::operator >> (char &value)
-{
-    char byte1;
-    _stream->read((char *)&byte1,1);
-    value =  byte1;
-    return *this;
-}
-
-DatFile& DatFile::operator >> (DatFileItem &item)
-{
-    // 4 bytes item name length;
-    unsigned int nameLength;
-    (*this) >> nameLength;
-
-    // item name
-    char * buffer = new char[nameLength + 1]();
-    _stream->read(buffer,nameLength);
-    std::string itemName(buffer);
-    delete [] buffer;
-    item.setFilename(itemName);
-
-    // is compressed?
-    unsigned char isCompressed;
-    (*this) >> isCompressed;
-    item.isCompressed((bool) isCompressed);
-
-    // unpacked size
-    unsigned int unpackedSize;
-    (*this) >> unpackedSize;
-    item.setUnpackedSize(unpackedSize);
-
-    // packed size
-    unsigned int packedSize;
-    (*this) >> packedSize;
-    item.setPackedSize(packedSize);
-
-    // data offset
-    unsigned int dataOffset;
-    (*this) >> dataOffset;
-    item.setDataOffset(dataOffset);
-
-    return *this;
-}
-
-unsigned int DatFile::pos()
-{
-    return (unsigned int) _stream->tellg();
-}
-
-DatFile& DatFile::seek(unsigned int uint)
-{
-    _stream->seekg(uint,std::ios::beg);
-    return *this;
-}
 
 /**
  * Returns single item or null
  * @param std::string filename
- * @return DatFileItem*
+ * @return VirtualFile*
  */
-DatFileItem * DatFile::getItem(std::string filename)
+VirtualFile * DatFile::getItem(std::string filename)
 {
     std::replace(filename.begin(),filename.end(),'\\','/');
     std::transform(filename.begin(),filename.end(),filename.begin(), ::tolower);
-    std::list<DatFileItem*>::iterator it;
+    std::list<VirtualFile *>::iterator it;
     for (it = this->getItems()->begin(); it != this->getItems()->end(); ++it)
     {
-        //std::cout << (*it)->getFilename() << " : " << (*it)->getDataOffset() <<  std::endl;
         if ((*it)->getFilename() == filename)
         {
             return *it;
@@ -224,7 +161,7 @@ FrmFileType * DatFile::getFrmFileType(std::string filename)
     }
 
     // seek for filename
-    DatFileItem * item = this->getItem(filename);
+    VirtualFile * item = this->getItem(filename);
     if (!item) return 0;
 
     // create new frm file type
@@ -249,7 +186,7 @@ PalFileType * DatFile::getPalFileType(std::string filename)
     }
 
     // seek for filename
-    DatFileItem * item = this->getItem(filename);
+    VirtualFile * item = this->getItem(filename);
     if (!item) return 0;
 
     // create new pal file type
@@ -274,7 +211,7 @@ LstFileType * DatFile::getLstFileType(std::string filename)
     }
 
     // seek for filename
-    DatFileItem * item = this->getItem(filename);
+    VirtualFile * item = this->getItem(filename);
     if (!item) return 0;
 
     // create new lst file type
@@ -299,7 +236,7 @@ FonFileType * DatFile::getFonFileType(std::string filename)
     }
 
     // seek for filename
-    DatFileItem * item = this->getItem(filename);
+    VirtualFile * item = this->getItem(filename);
     if (!item) return 0;
 
     // create new fon file type
@@ -324,7 +261,7 @@ AafFileType * DatFile::getAafFileType(std::string filename)
     }
 
     // seek for filename
-    DatFileItem * item = this->getItem(filename);
+    VirtualFile * item = this->getItem(filename);
     if (!item) return 0;
 
     // create new aaf file type
@@ -349,7 +286,7 @@ GcdFileType * DatFile::getGcdFileType(std::string filename)
     }
 
     // seek for filename
-    DatFileItem * item = this->getItem(filename);
+    VirtualFile * item = this->getItem(filename);
     if (!item) return 0;
 
     // create new gcd file type
@@ -374,7 +311,7 @@ MsgFileType * DatFile::getMsgFileType(std::string filename)
     }
 
     // seek for filename
-    DatFileItem * item = this->getItem(filename);
+    VirtualFile * item = this->getItem(filename);
     if (!item) return 0;
 
     // create new msg file type
@@ -399,7 +336,7 @@ BioFileType * DatFile::getBioFileType(std::string filename)
     }
 
     // seek for filename
-    DatFileItem * item = this->getItem(filename);
+    VirtualFile * item = this->getItem(filename);
     if (!item) return 0;
 
     // create new bio file type

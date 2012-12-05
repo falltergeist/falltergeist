@@ -1,31 +1,30 @@
 #ifndef FALLTERGEIST_FRMFILETYPE_H
 #define FALLTERGEIST_FRMFILETYPE_H
 
+#include "../Engine/VirtualFile.h"
+
 namespace Falltergeist
 {
-class DatFileItem;
 
 struct FrmFrame {
     unsigned short width;
     unsigned short height;
     unsigned int dataSize;
     char * data;
-    signed short offsetX;
-    signed short offsetY;
+    short offsetX;
+    short offsetY;
 };
 
 struct FrmDirection {
-    signed short shiftX;
-    signed short shiftY;
+    short shiftX;
+    short shiftY;
     unsigned int dataOffset;
     FrmFrame * frames;
 };
 
-class FrmFileType
+class FrmFileType : public VirtualFile
 {
 protected:
-    DatFileItem * _datFileItem;
-    bool _initialized;
     void _init(); // loads all necessary data
     unsigned int _version; // frm file version
     unsigned short _framesPerSecond;  // frames per second
@@ -34,13 +33,13 @@ protected:
     unsigned int _dataSize;
     FrmDirection * _directions;
 public:
-    FrmFileType(DatFileItem * datFileItem);
+    FrmFileType(VirtualFile * virtualFile);
     ~FrmFileType();
     unsigned short getFramesPerSecond();
     unsigned short getFramesPerDirection();
     unsigned int getVersion();
     unsigned short getActionFrame();
-    unsigned char * getData();
+    char * getData();
     FrmDirection * getDirections();
     void setFramesPerSecond(unsigned short framesNumber);
     void setFramesPerDirection(unsigned short framesNumber);
