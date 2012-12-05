@@ -22,13 +22,6 @@ int main()
 {
     try
     {
-        //DatFile * master = new DatFile("/home/alexeevdv/.fallout/master.dat");
-        //std::cout << master->getFrmFileType("art/intrface/mainmenu.frm")->getDirections()[0].frames[0].width;
-        //for (std::list<VirtualFile *>::iterator it = master->getItems()->begin(); it != master->getItems()->end(); ++it)
-        //{
-        //    std::cout << (*it)->getFilename() << " : " << (*it)->getSize() << std::endl;
-        //}
-        //return 0;
         Game * game = new Game(640,480,32);
         game->setState(new StartState(game));
         game->run();

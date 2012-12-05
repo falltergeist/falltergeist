@@ -5,6 +5,7 @@ namespace Falltergeist
 
 AafFileType::AafFileType(VirtualFile * virtualFile) : VirtualFile(virtualFile)
 {
+    _init();
 }
 
 AafFileType::~AafFileType()
@@ -25,6 +26,7 @@ void AafFileType::_init()
         (*this) >> _glyphs[i].width >> _glyphs[i].height >> _glyphs[i].dataOffset;
     }
 
+    setPosition(0x080C);
     for (int i = 0; i != 256; ++i)
     {
         unsigned int width = _glyphs[i].width;
@@ -33,7 +35,6 @@ void AafFileType::_init()
 
         _glyphs[i].data = new char[width * height];
 
-        setPosition(0x080C);
         readBytes(_glyphs[i].data, width*height);
     }
 }

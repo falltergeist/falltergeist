@@ -21,6 +21,7 @@ File::File(const char * filename)
 {
     _virtualFile = 0;
     _byteOrder = ORDER_BIG_ENDIAN;
+    _filename = 0;
     setFilename(filename);
 }
 
@@ -28,6 +29,7 @@ File::File(VirtualFile * virtualFile)
 {
     _virtualFile = virtualFile;
     _byteOrder = ORDER_BIG_ENDIAN;
+    _filename = 0;
     setFilename(_virtualFile->getFilename());
 }
 
@@ -51,6 +53,11 @@ void File::setFilename(const char * filename)
 
     _filename = new char[strlen(fname.c_str()) + 1]();
     strcpy(_filename, fname.c_str());
+}
+
+const char * File::getFilename()
+{
+    return _filename;
 }
 
 bool File::open()
@@ -102,11 +109,6 @@ unsigned int File::getSize()
     unsigned int size = _fstream.tellg();
     setPosition(oldPosition);
     return size;
-}
-
-const char * File::getFilename()
-{
-    return _filename;
 }
 
 void File::setByteOrder(unsigned char byteOrder)
