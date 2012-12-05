@@ -22,22 +22,6 @@ int main()
 {
     try
     {
-        //DatFile * dat = new DatFile("/home/alexeevdv/.fallout/master.dat");
-
-        char buff[3] = {1,2,3};
-        VirtualFile * file = new VirtualFile();
-        file->writeBytes(buff,3);
-        file->setPosition(0);
-        while (!file->eof())
-        {
-            unsigned char chr;
-            (*file) >> chr;
-            std::cout << "data: " << (int) chr << std::endl;
-        }
-
-        //std::cout << dat->getItems()->front()->getFilename() << std::endl;
-        //ResourceManager * rm = new ResourceManager();
-        //std::cout << rm->getPalFileType("color.pal")->getColor(2) << std::endl;
         return 0;
         Game * game = new Game(640,480,32);
         game->setState(new StartState(game));

@@ -43,6 +43,12 @@ public:
     VirtualFile& operator<< (short &value);
     VirtualFile& operator<< (unsigned char &value);
     VirtualFile& operator<< (char &value);
+    VirtualFile& operator<< (unsigned int value);
+    VirtualFile& operator<< (int value);
+    VirtualFile& operator<< (unsigned short value);
+    VirtualFile& operator<< (short value);
+    VirtualFile& operator<< (unsigned char value);
+    VirtualFile& operator<< (char value);
 };
 
 }

@@ -1,6 +1,8 @@
 #include "../Engine/VirtualFile.h"
 #include <cstring>
 
+#include <iostream>
+
 namespace Falltergeist
 {
 
@@ -12,6 +14,40 @@ VirtualFile::VirtualFile()
     _data = 0;
     _filename = 0;
 }
+
+VirtualFile::VirtualFile(const char * filename)
+{
+    _byteOrder = ORDER_BIG_ENDIAN;
+    _dataSize = 0;
+    _position = 0;
+    _data = 0;
+    _filename = 0;
+    setFilename(filename);
+}
+
+VirtualFile::VirtualFile(char * data, unsigned int dataLength)
+{
+    _byteOrder = ORDER_BIG_ENDIAN;
+    _dataSize = 0;
+    _position = 0;
+    _data = 0;
+    _filename = 0;
+    _data = new char[dataLength];
+    memcpy(_data, data, dataLength);
+}
+
+VirtualFile::VirtualFile(const char * filename, char * data, unsigned int dataLength)
+{
+    _byteOrder = ORDER_BIG_ENDIAN;
+    _dataSize = 0;
+    _position = 0;
+    _data = 0;
+    _filename = 0;
+    setFilename(filename);
+    _data = new char[dataLength];
+    memcpy(_data, data, dataLength);
+}
+
 
 VirtualFile::~VirtualFile()
 {
@@ -25,6 +61,7 @@ void VirtualFile::setFilename(const char * filename)
     _filename = new char[strlen(filename) + 1]();
     strcpy(_filename, filename);
 }
+
 
 const char * VirtualFile::getFilename()
 {
@@ -225,5 +262,202 @@ VirtualFile& VirtualFile::operator >> (char &value)
     if (_position == _dataSize) _position = -1;
     return *this;
 }
+
+VirtualFile& VirtualFile::operator << (unsigned int &value)
+{
+    char * buffer = new char[4];
+    if (_byteOrder == ORDER_LITTLE_ENDIAN)
+    {
+        buffer[0] = value & 0x000000FF;
+        buffer[1] = (value & 0x0000FF00) >> 8;
+        buffer[2] = (value & 0x00FF0000) >> 16;
+        buffer[3] = (value & 0xFF000000) >> 24;
+    }
+    else
+    {
+        buffer[3] = value & 0x000000FF;
+        buffer[2] = (value & 0x0000FF00) >> 8;
+        buffer[1] = (value & 0x00FF0000) >> 16;
+        buffer[0] = (value & 0xFF000000) >> 24;
+    }
+    writeBytes(buffer, 4);
+    delete [] buffer;
+    return *this;
+}
+
+VirtualFile& VirtualFile::operator << (int &value)
+{
+    char * buffer = new char[4];
+    if (_byteOrder == ORDER_LITTLE_ENDIAN)
+    {
+        buffer[0] = value & 0x000000FF;
+        buffer[1] = (value & 0x0000FF00) >> 8;
+        buffer[2] = (value & 0x00FF0000) >> 16;
+        buffer[3] = (value & 0xFF000000) >> 24;
+    }
+    else
+    {
+        buffer[3] = value & 0x000000FF;
+        buffer[2] = (value & 0x0000FF00) >> 8;
+        buffer[1] = (value & 0x00FF0000) >> 16;
+        buffer[0] = (value & 0xFF000000) >> 24;
+    }
+    writeBytes(buffer, 4);
+    delete [] buffer;
+    return *this;
+}
+
+VirtualFile& VirtualFile::operator << (unsigned short &value)
+{
+    char * buffer = new char[2];
+    if (_byteOrder == ORDER_LITTLE_ENDIAN)
+    {
+        buffer[0] =  value & 0x00FF;
+        buffer[1] = (value & 0xFF00) >> 8;
+    }
+    else
+    {
+        buffer[1] =  value & 0x00FF;
+        buffer[0] = (value & 0xFF00) >> 8;
+    }
+    writeBytes(buffer, 2);
+    delete [] buffer;
+    return *this;
+}
+
+VirtualFile& VirtualFile::operator << (short &value)
+{
+    char * buffer = new char[2];
+    if (_byteOrder == ORDER_LITTLE_ENDIAN)
+    {
+        buffer[0] =  value & 0x00FF;
+        buffer[1] = (value & 0xFF00) >> 8;
+    }
+    else
+    {
+        buffer[1] =  value & 0x00FF;
+        buffer[0] = (value & 0xFF00) >> 8;
+    }
+    writeBytes(buffer, 2);
+    delete [] buffer;
+    return *this;
+}
+
+VirtualFile& VirtualFile::operator << (unsigned char &value)
+{
+    char * buffer = new char[1];
+    buffer[0] =  value;
+    writeBytes(buffer, 1);
+    delete [] buffer;
+    return *this;
+}
+
+VirtualFile& VirtualFile::operator << (char &value)
+{
+    char * buffer = new char[1];
+    buffer[0] =  value;
+    writeBytes(buffer, 1);
+    delete [] buffer;
+    return *this;
+}
+
+VirtualFile& VirtualFile::operator << (unsigned int value)
+{
+    char * buffer = new char[4];
+    if (_byteOrder == ORDER_LITTLE_ENDIAN)
+    {
+        buffer[0] = value & 0x000000FF;
+        buffer[1] = (value & 0x0000FF00) >> 8;
+        buffer[2] = (value & 0x00FF0000) >> 16;
+        buffer[3] = (value & 0xFF000000) >> 24;
+    }
+    else
+    {
+        buffer[3] = value & 0x000000FF;
+        buffer[2] = (value & 0x0000FF00) >> 8;
+        buffer[1] = (value & 0x00FF0000) >> 16;
+        buffer[0] = (value & 0xFF000000) >> 24;
+    }
+    writeBytes(buffer, 4);
+    delete [] buffer;
+    return *this;
+}
+
+VirtualFile& VirtualFile::operator << (int value)
+{
+    char * buffer = new char[4];
+    if (_byteOrder == ORDER_LITTLE_ENDIAN)
+    {
+        buffer[0] = value & 0x000000FF;
+        buffer[1] = (value & 0x0000FF00) >> 8;
+        buffer[2] = (value & 0x00FF0000) >> 16;
+        buffer[3] = (value & 0xFF000000) >> 24;
+    }
+    else
+    {
+        buffer[3] = value & 0x000000FF;
+        buffer[2] = (value & 0x0000FF00) >> 8;
+        buffer[1] = (value & 0x00FF0000) >> 16;
+        buffer[0] = (value & 0xFF000000) >> 24;
+    }
+    writeBytes(buffer, 4);
+    delete [] buffer;
+    return *this;
+}
+
+VirtualFile& VirtualFile::operator << (unsigned short value)
+{
+    char * buffer = new char[2];
+    if (_byteOrder == ORDER_LITTLE_ENDIAN)
+    {
+        buffer[0] =  value & 0x00FF;
+        buffer[1] = (value & 0xFF00) >> 8;
+    }
+    else
+    {
+        buffer[1] =  value & 0x00FF;
+        buffer[0] = (value & 0xFF00) >> 8;
+    }
+    writeBytes(buffer, 2);
+    delete [] buffer;
+    return *this;
+}
+
+VirtualFile& VirtualFile::operator << (short value)
+{
+    char * buffer = new char[2];
+    if (_byteOrder == ORDER_LITTLE_ENDIAN)
+    {
+        buffer[0] =  value & 0x00FF;
+        buffer[1] = (value & 0xFF00) >> 8;
+    }
+    else
+    {
+        buffer[1] =  value & 0x00FF;
+        buffer[0] = (value & 0xFF00) >> 8;
+    }
+    writeBytes(buffer, 2);
+    delete [] buffer;
+    return *this;
+}
+
+VirtualFile& VirtualFile::operator << (unsigned char value)
+{
+    char * buffer = new char[1];
+    buffer[0] =  value;
+    writeBytes(buffer, 1);
+    delete [] buffer;
+    return *this;
+}
+
+VirtualFile& VirtualFile::operator << (char value)
+{
+    char * buffer = new char[1];
+    buffer[0] =  value;
+    writeBytes(buffer, 1);
+    delete [] buffer;
+    return *this;
+}
+
 
 }
