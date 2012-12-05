@@ -109,7 +109,7 @@ void VirtualFile::skipBytes(unsigned int length)
 
 void VirtualFile::readBytes(char * buffer, unsigned int length)
 {
-    if (_position + length >= _dataSize)
+    if (_position + length > _dataSize)
     {
         _position = -1;
         return;
@@ -155,6 +155,11 @@ void VirtualFile::setByteOrder(unsigned char byteOrder)
     {
         _byteOrder = ORDER_BIG_ENDIAN;
     }
+}
+
+unsigned char VirtualFile::getByteOrder()
+{
+    return _byteOrder;
 }
 
 VirtualFile& VirtualFile::operator >> (unsigned int &value)
