@@ -30,8 +30,9 @@ int main()
         File * file = new File("test.bin");
         //file->save();
         //unsigned char chr;
+        std::cout << "Filesize: " << file->getSize() << std::endl;
         file->setPosition(file->getSize());
-        (*file) << 9;
+        (*file) << 1 << 2 << 3;
         //char * data = new char[3];
         //file->setPosition(0);
         //file->readBytes(data, 3);

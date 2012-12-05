@@ -65,6 +65,7 @@ unsigned int File::getPosition()
     {
         return _virtualFile->getPosition();
     }
+    open();
     return _fstream.tellg();
 }
 
@@ -75,6 +76,7 @@ void File::setPosition(unsigned int position)
         _virtualFile->setPosition(position);
         return;
     }
+    open();
     _fstream.seekg(position, std::ios_base::beg);
     _fstream.seekp(position, std::ios_base::beg);
 }
@@ -85,6 +87,7 @@ unsigned int File::getSize()
     {
         return _virtualFile->getSize();
     }
+    open();
     unsigned int oldPosition = getPosition();
     _fstream.seekg(0, std::ios_base::end);
     unsigned int size = _fstream.tellg();
@@ -293,125 +296,37 @@ File& File::operator >> (char &value)
 
 File& File::operator << (unsigned int &value)
 {
-    if (_virtualFile != 0)
-    {
-        (*_virtualFile) << (unsigned int) value;
-        return *this;
-    }
-
-    open();
-    unsigned int tmp;
-    if (_byteOrder == ORDER_LITTLE_ENDIAN)
-    {
-        tmp = ((value&0x000000FF) << 24) | ((value&0x0000FF00) << 8) | ((value&0x00FF0000) >> 8) | ((value&0xFF000000) >> 24);
-    }
-    else
-    {
-        tmp = value;
-    }
-    _fstream << tmp;
-    setPosition(_fstream.tellp());
+    (*this) << (unsigned int) value;
     return *this;
 }
 
 File& File::operator << (int &value)
 {
-    if (_virtualFile != 0)
-    {
-        (*_virtualFile) << (int) value;
-        return *this;
-    }
-
-    open();
-    int tmp;
-    if (_byteOrder == ORDER_LITTLE_ENDIAN)
-    {
-        tmp = ((value&0x000000FF) << 24) | ((value&0x0000FF00) << 8) | ((value&0x00FF0000) >> 8) | ((value&0xFF000000) >> 24);
-    }
-    else
-    {
-        tmp = value;
-    }
-    _fstream << tmp;
-    setPosition(_fstream.tellp());
+    (*this) << (int) value;
     return *this;
 }
 
 File& File::operator << (unsigned short &value)
 {
-    if (_virtualFile != 0)
-    {
-        (*_virtualFile) << (unsigned short) value;
-        return *this;
-    }
-
-    open();
-    unsigned short tmp;
-    if (_byteOrder == ORDER_LITTLE_ENDIAN)
-    {
-        tmp = ((value&0x00FF) << 8) | ((value&0xFF00) >> 8);
-    }
-    else
-    {
-        tmp = value;
-    }
-    _fstream << tmp;
-    setPosition(_fstream.tellp());
+    (*this) << (unsigned short) value;
     return *this;
 }
 
 File& File::operator << (short &value)
 {
-    if (_virtualFile != 0)
-    {
-        (*_virtualFile) << (short) value;
-        return *this;
-    }
-
-    open();
-    short tmp;
-    if (_byteOrder == ORDER_LITTLE_ENDIAN)
-    {
-        tmp = ((value&0x00FF) << 8) | ((value&0xFF00) >> 8);
-    }
-    else
-    {
-        tmp = value;
-    }
-    _fstream << tmp;
-    setPosition(_fstream.tellp());
+    (*this) << (short) value;
     return *this;
 }
 
 File& File::operator << (unsigned char &value)
 {
-    if (_virtualFile != 0)
-    {
-        (*_virtualFile) << (unsigned char) value;
-        return *this;
-    }
-
-    open();
-    unsigned char tmp;
-    tmp = value;
-    _fstream << tmp;
-    setPosition(_fstream.tellp());
+    (*this) << (unsigned char) value;
     return *this;
 }
 
 File& File::operator << (char &value)
 {
-    if (_virtualFile != 0)
-    {
-        (*_virtualFile) << (char) value;
-        return *this;
-    }
-
-    open();
-    char tmp;
-    tmp = value;
-    _fstream << tmp;
-    setPosition(_fstream.tellp());
+    (*this) << (char) value;
     return *this;
 }
 
@@ -424,17 +339,23 @@ File& File::operator << (unsigned int value)
     }
 
     open();
-    unsigned int tmp;
+    char * data = new char[4];
     if (_byteOrder == ORDER_LITTLE_ENDIAN)
     {
-        tmp = ((value&0x000000FF) << 24) | ((value&0x0000FF00) << 8) | ((value&0x00FF0000) >> 8) | ((value&0xFF000000) >> 24);
+        data[0] = (value&0x000000FF);
+        data[1] = (value&0x0000FF00) >> 8;
+        data[2] = (value&0x00FF0000) >> 16;
+        data[3] = (value&0xFF000000) >> 16;
     }
     else
     {
-        tmp = value;
+        data[3] = (value&0x000000FF);
+        data[2] = (value&0x0000FF00) >> 8;
+        data[1] = (value&0x00FF0000) >> 16;
+        data[0] = (value&0xFF000000) >> 16;
     }
-    _fstream << tmp;
-    setPosition(_fstream.tellp());
+    writeBytes(data, 4);
+    delete [] data;
     return *this;
 }
 
@@ -442,22 +363,11 @@ File& File::operator << (int value)
 {
     if (_virtualFile != 0)
     {
-        (*_virtualFile) << (unsigned int) value;
+        (*_virtualFile) << (int) value;
         return *this;
     }
 
-    open();
-    unsigned int tmp;
-    if (_byteOrder == ORDER_LITTLE_ENDIAN)
-    {
-        tmp = ((value&0x000000FF) << 24) | ((value&0x0000FF00) << 8) | ((value&0x00FF0000) >> 8) | ((value&0xFF000000) >> 24);
-    }
-    else
-    {
-        tmp = value;
-    }
-    _fstream << tmp;
-    setPosition(_fstream.tellp());
+    (*this) << (unsigned int) value;
     return *this;
 }
 
@@ -470,17 +380,19 @@ File& File::operator << (unsigned short value)
     }
 
     open();
-    unsigned short tmp;
+    char * data = new char[2];
     if (_byteOrder == ORDER_LITTLE_ENDIAN)
     {
-        tmp = ((value&0x00FF) << 8) | ((value&0xFF00) >> 8);
+        data[0] = (value&0x00FF);
+        data[1] = (value&0xFF00) >> 8;
     }
     else
     {
-        tmp = value;
+        data[1] = (value&0x00FF);
+        data[0] = (value&0xFF00) >> 8;
     }
-    _fstream << tmp;
-    setPosition(_fstream.tellp());
+    writeBytes(data, 2);
+    delete [] data;
     return *this;
 }
 
@@ -491,19 +403,7 @@ File& File::operator << (short value)
         (*_virtualFile) << (short) value;
         return *this;
     }
-
-    open();
-    short tmp;
-    if (_byteOrder == ORDER_LITTLE_ENDIAN)
-    {
-        tmp = ((value&0x00FF) << 8) | ((value&0xFF00) >> 8);
-    }
-    else
-    {
-        tmp = value;
-    }
-    _fstream << tmp;
-    setPosition(_fstream.tellp());
+    (*this) << (unsigned short) value;
     return *this;
 }
 
@@ -516,10 +416,10 @@ File& File::operator << (unsigned char value)
     }
 
     open();
-    unsigned char tmp;
-    tmp = value;
-    _fstream << tmp;
-    setPosition(_fstream.tellp());
+    char * data = new char[1];
+    data[0] = value;
+    writeBytes(data, 1);
+    delete [] data;
     return *this;
 }
 
@@ -530,12 +430,7 @@ File& File::operator << (char value)
         (*_virtualFile) << (char) value;
         return *this;
     }
-
-    open();
-    char tmp;
-    tmp = value;
-    _fstream << tmp;
-    setPosition(_fstream.tellp());
+    (*this) << (unsigned char) value;
     return *this;
 }
 

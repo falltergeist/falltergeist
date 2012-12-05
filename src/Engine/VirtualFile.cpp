@@ -270,99 +270,37 @@ VirtualFile& VirtualFile::operator >> (char &value)
 
 VirtualFile& VirtualFile::operator << (unsigned int &value)
 {
-    char * buffer = new char[4];
-    if (_byteOrder == ORDER_LITTLE_ENDIAN)
-    {
-        buffer[0] = value & 0x000000FF;
-        buffer[1] = (value & 0x0000FF00) >> 8;
-        buffer[2] = (value & 0x00FF0000) >> 16;
-        buffer[3] = (value & 0xFF000000) >> 24;
-    }
-    else
-    {
-        buffer[3] = value & 0x000000FF;
-        buffer[2] = (value & 0x0000FF00) >> 8;
-        buffer[1] = (value & 0x00FF0000) >> 16;
-        buffer[0] = (value & 0xFF000000) >> 24;
-    }
-    writeBytes(buffer, 4);
-    delete [] buffer;
+    (*this) << (unsigned int) value;
     return *this;
 }
 
 VirtualFile& VirtualFile::operator << (int &value)
 {
-    char * buffer = new char[4];
-    if (_byteOrder == ORDER_LITTLE_ENDIAN)
-    {
-        buffer[0] = value & 0x000000FF;
-        buffer[1] = (value & 0x0000FF00) >> 8;
-        buffer[2] = (value & 0x00FF0000) >> 16;
-        buffer[3] = (value & 0xFF000000) >> 24;
-    }
-    else
-    {
-        buffer[3] = value & 0x000000FF;
-        buffer[2] = (value & 0x0000FF00) >> 8;
-        buffer[1] = (value & 0x00FF0000) >> 16;
-        buffer[0] = (value & 0xFF000000) >> 24;
-    }
-    writeBytes(buffer, 4);
-    delete [] buffer;
+    (*this) << (int) value;
     return *this;
 }
 
 VirtualFile& VirtualFile::operator << (unsigned short &value)
 {
-    char * buffer = new char[2];
-    if (_byteOrder == ORDER_LITTLE_ENDIAN)
-    {
-        buffer[0] =  value & 0x00FF;
-        buffer[1] = (value & 0xFF00) >> 8;
-    }
-    else
-    {
-        buffer[1] =  value & 0x00FF;
-        buffer[0] = (value & 0xFF00) >> 8;
-    }
-    writeBytes(buffer, 2);
-    delete [] buffer;
+    (*this) << (unsigned short) value;
     return *this;
 }
 
 VirtualFile& VirtualFile::operator << (short &value)
 {
-    char * buffer = new char[2];
-    if (_byteOrder == ORDER_LITTLE_ENDIAN)
-    {
-        buffer[0] =  value & 0x00FF;
-        buffer[1] = (value & 0xFF00) >> 8;
-    }
-    else
-    {
-        buffer[1] =  value & 0x00FF;
-        buffer[0] = (value & 0xFF00) >> 8;
-    }
-    writeBytes(buffer, 2);
-    delete [] buffer;
+    (*this) << (short) value;
     return *this;
 }
 
 VirtualFile& VirtualFile::operator << (unsigned char &value)
 {
-    char * buffer = new char[1];
-    buffer[0] =  value;
-    writeBytes(buffer, 1);
-    delete [] buffer;
+    (*this) << (unsigned char) value;
     return *this;
 }
 
 VirtualFile& VirtualFile::operator << (char &value)
 {
-    char * buffer = new char[1];
-    buffer[0] =  value;
-    writeBytes(buffer, 1);
-    delete [] buffer;
+    (*this) << (char) value;
     return *this;
 }
 
@@ -378,7 +316,7 @@ VirtualFile& VirtualFile::operator << (unsigned int value)
     }
     else
     {
-        buffer[3] = value & 0x000000FF;
+        buffer[3] =  value & 0x000000FF;
         buffer[2] = (value & 0x0000FF00) >> 8;
         buffer[1] = (value & 0x00FF0000) >> 16;
         buffer[0] = (value & 0xFF000000) >> 24;
@@ -390,23 +328,7 @@ VirtualFile& VirtualFile::operator << (unsigned int value)
 
 VirtualFile& VirtualFile::operator << (int value)
 {
-    char * buffer = new char[4];
-    if (_byteOrder == ORDER_LITTLE_ENDIAN)
-    {
-        buffer[0] = value & 0x000000FF;
-        buffer[1] = (value & 0x0000FF00) >> 8;
-        buffer[2] = (value & 0x00FF0000) >> 16;
-        buffer[3] = (value & 0xFF000000) >> 24;
-    }
-    else
-    {
-        buffer[3] = value & 0x000000FF;
-        buffer[2] = (value & 0x0000FF00) >> 8;
-        buffer[1] = (value & 0x00FF0000) >> 16;
-        buffer[0] = (value & 0xFF000000) >> 24;
-    }
-    writeBytes(buffer, 4);
-    delete [] buffer;
+    (*this) << (unsigned int) value;
     return *this;
 }
 
@@ -430,19 +352,7 @@ VirtualFile& VirtualFile::operator << (unsigned short value)
 
 VirtualFile& VirtualFile::operator << (short value)
 {
-    char * buffer = new char[2];
-    if (_byteOrder == ORDER_LITTLE_ENDIAN)
-    {
-        buffer[0] =  value & 0x00FF;
-        buffer[1] = (value & 0xFF00) >> 8;
-    }
-    else
-    {
-        buffer[1] =  value & 0x00FF;
-        buffer[0] = (value & 0xFF00) >> 8;
-    }
-    writeBytes(buffer, 2);
-    delete [] buffer;
+    (*this) << (unsigned short) value;
     return *this;
 }
 
@@ -457,10 +367,7 @@ VirtualFile& VirtualFile::operator << (unsigned char value)
 
 VirtualFile& VirtualFile::operator << (char value)
 {
-    char * buffer = new char[1];
-    buffer[0] =  value;
-    writeBytes(buffer, 1);
-    delete [] buffer;
+    (*this) << (unsigned char) value;
     return *this;
 }
 
