@@ -34,13 +34,22 @@
 #include "src/States/StartState.h"
 #include <SDL/SDL.h>
 #include <algorithm>
+#include "lib/libfalltergeist/libfalltergeist.h"
 
 using namespace Falltergeist;
+
 
 int main(int argc, char *argv[])
 {
     try
     {
+        // libfalltergeist testing section
+        /*
+        libfalltergeist::DatFile * datFile = new libfalltergeist::DatFile();
+        datFile->open("/home/alexeevdv/.fallout/master.dat");
+        std::cout << "DAT file size: " << datFile->size() << std::endl;
+        datFile->getItems();
+        */
         Game * game = new Game(640,480,32);
         game->setState(new StartState(game));
         game->run();

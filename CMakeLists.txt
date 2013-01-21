@@ -18,8 +18,15 @@
 #
 
 cmake_minimum_required(VERSION 2.8)
+set (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 project(falltergeist)
+
+find_package(LIBFALLTERGEIST REQUIRED)
+if(NOT LIBFALLTERGEIST_FOUND)
+          message(FATAL_ERROR "libfalltergeist library not found")
+endif(NOT LIBFALLTERGEIST_FOUND)
+include_directories(LIBFALLTERGEIST_INCLUDE_DIR)
 
 find_package(SDL REQUIRED)
 if(NOT SDL_FOUND)
@@ -104,5 +111,5 @@ set(SOURCES main.cpp
 set(dir ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 set(EXECUTABLE_OUTPUT_PATH ${dir} CACHE PATH "Build directory" FORCE)
 add_executable(falltergeist ${SOURCES})
-target_link_libraries(falltergeist ${SDL_LIBRARY} ${ZLIB_LIBRARIES})
+target_link_libraries(falltergeist ${SDL_LIBRARY} ${ZLIB_LIBRARIES} ${LIBFALLTERGEIST_LIBRARY})
 
