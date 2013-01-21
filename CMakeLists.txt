@@ -21,14 +21,17 @@ cmake_minimum_required(VERSION 2.8)
 
 project(falltergeist)
 
-include(FindSDL)
-IF(SDL_FOUND)
-        message("SDL Found")
-        include_directories(SDL_INCLUDE_DIR)
-else(SDL_FOUND)
-        message("SDL not found")
-        return()
-endif(SDL_FOUND)
+find_package(SDL REQUIRED)
+if(NOT SDL_FOUND)
+	  message(FATAL_ERROR "SDL library not found")
+endif(NOT SDL_FOUND)
+include_directories(SDL_INCLUDE_DIR)
+
+find_package(ZLIB REQUIRED)
+if(NOT ZLIB_FOUND)
+	  message(FATAL_ERROR "Zlib library not found")
+endif(NOT ZLIB_FOUND)
+include_directories(ZLIB_INCLUDE_DIRS)
 
 set(SOURCES main.cpp
             src/Engine/Animation.cpp
@@ -101,5 +104,5 @@ set(SOURCES main.cpp
 set(dir ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 set(EXECUTABLE_OUTPUT_PATH ${dir} CACHE PATH "Build directory" FORCE)
 add_executable(falltergeist ${SOURCES})
-target_link_libraries(falltergeist ${SDL_LIBRARY})
+target_link_libraries(falltergeist ${SDL_LIBRARY} ${ZLIB_LIBRARIES})
 
