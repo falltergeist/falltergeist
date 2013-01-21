@@ -45,10 +45,11 @@ int main(int argc, char *argv[])
     {
         // libfalltergeist testing section
         /*
-        libfalltergeist::DatFile * datFile = new libfalltergeist::DatFile();
-        datFile->open("/home/alexeevdv/.fallout/master.dat");
-        std::cout << "DAT file size: " << datFile->size() << std::endl;
-        std::cout << datFile->getItems()->at(0)->getFilename() << std::endl;
+        libfalltergeist::DatFile * datFile = new libfalltergeist::DatFile("/home/alexeevdv/.fallout/master.dat");
+        libfalltergeist::DatFileItem * item = datFile->getItems()->back();
+        char * text = new char[item->size() + 1]();
+        item->readBytes(text, item->size());
+        std::cout << text;
         */
         Game * game = new Game(640,480,32);
         game->setState(new StartState(game));
