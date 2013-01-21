@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
         libfalltergeist::DatFile * datFile = new libfalltergeist::DatFile();
         datFile->open("/home/alexeevdv/.fallout/master.dat");
         std::cout << "DAT file size: " << datFile->size() << std::endl;
-        datFile->getItems();
+        std::cout << datFile->getItems()->at(0)->getFilename() << std::endl;
         */
         Game * game = new Game(640,480,32);
         game->setState(new StartState(game));
