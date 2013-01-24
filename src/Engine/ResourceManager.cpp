@@ -32,13 +32,13 @@
 namespace Falltergeist
 {
 
-std::list<DatFile *> * ResourceManager::_datFiles = new std::list<DatFile *>;
+std::list<libfalltergeist::DatFile *> * ResourceManager::_datFiles = new std::list<libfalltergeist::DatFile *>;
 
 const char * _t(unsigned int number, const char * filename)
 {
-    MsgFileType * msg = ResourceManager::getMsgFileType(filename);
+    libfalltergeist::MsgFileType * msg = ResourceManager::getMsgFileType(filename);
     if (!msg) throw Exception("Cant find msg file");
-    return msg->getText(number);
+    //return msg->getText(number);
 }
 
 
@@ -46,16 +46,16 @@ ResourceManager::ResourceManager()
 {
     std::string path = CrossPlatform::getHomePath();
     path += "/.fallout/master.dat";
-    _datFiles->push_back(new DatFile(path.c_str()));
+    _datFiles->push_back(new libfalltergeist::DatFile((char *)path.c_str()));
     //_datFiles->push_back(new DatFile(homepath + "/.fallout/critter.dat"));
 }
 
-VirtualFile * ResourceManager::getDatFileItem(std::string filename)
+libfalltergeist::DatFileItem * ResourceManager::getDatFileItem(std::string filename)
 {
-    std::list<DatFile *>::iterator it;
+    std::list<libfalltergeist::DatFile *>::iterator it;
     for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
     {
-        VirtualFile * item = (*it)->getItem(filename);
+        libfalltergeist::DatFileItem * item = (*it)->getItemByFilename((char *)filename.c_str());
         if (item)
         {
             return item;
@@ -64,115 +64,83 @@ VirtualFile * ResourceManager::getDatFileItem(std::string filename)
     return 0;
 }
 
-FrmFileType * ResourceManager::getFrmFileType(std::string filename)
+libfalltergeist::FrmFileType * ResourceManager::getFrmFileType(std::string filename)
 {
-    std::list<DatFile *>::iterator it;
-    for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
+    libfalltergeist::DatFileItem * item = getDatFileItem(filename);
+    if (item)
     {
-        FrmFileType * frm = (*it)->getFrmFileType(filename);
-        if (frm)
-        {
-            return frm;
-        }
+        return item->asFrmFileType();
     }
     return 0;
 }
 
-PalFileType * ResourceManager::getPalFileType(std::string filename)
+libfalltergeist::PalFileType * ResourceManager::getPalFileType(std::string filename)
 {
-    std::list<DatFile *>::iterator it;
-    for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
+    libfalltergeist::DatFileItem * item = getDatFileItem(filename);
+    if (item)
     {
-        PalFileType * pal = (*it)->getPalFileType(filename);
-        if (pal)
-        {
-            return pal;
-        }
+        return item->asPalFileType();
     }
     return 0;
 }
 
-LstFileType * ResourceManager::getLstFileType(std::string filename)
+libfalltergeist::LstFileType * ResourceManager::getLstFileType(std::string filename)
 {
-    std::list<DatFile *>::iterator it;
-    for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
+    libfalltergeist::DatFileItem * item = getDatFileItem(filename);
+    if (item)
     {
-        LstFileType * lst = (*it)->getLstFileType(filename);
-        if (lst)
-        {
-            return lst;
-        }
+        //return item->asLstFileType();
     }
     return 0;
 }
 
-AafFileType * ResourceManager::getAafFileType(std::string filename)
+libfalltergeist::AafFileType * ResourceManager::getAafFileType(std::string filename)
 {
-    std::list<DatFile *>::iterator it;
-    for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
+    libfalltergeist::DatFileItem * item = getDatFileItem(filename);
+    if (item)
     {
-        AafFileType * aaf = (*it)->getAafFileType(filename);
-        if (aaf)
-        {
-            return aaf;
-        }
+        //return item->asAafFileType();
     }
     return 0;
 }
 
 
-FonFileType * ResourceManager::getFonFileType(std::string filename)
+libfalltergeist::FonFileType * ResourceManager::getFonFileType(std::string filename)
 {
-    std::list<DatFile *>::iterator it;
-    for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
+    libfalltergeist::DatFileItem * item = getDatFileItem(filename);
+    if (item)
     {
-        FonFileType * fon = (*it)->getFonFileType(filename);
-        if (fon)
-        {
-            return fon;
-        }
+        //return item->asFonFileType();
     }
     return 0;
 }
 
-GcdFileType * ResourceManager::getGcdFileType(std::string filename)
+libfalltergeist::GcdFileType * ResourceManager::getGcdFileType(std::string filename)
 {
-    std::list<DatFile *>::iterator it;
-    for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
+    libfalltergeist::DatFileItem * item = getDatFileItem(filename);
+    if (item)
     {
-        GcdFileType * gcd = (*it)->getGcdFileType(filename);
-        if (gcd)
-        {
-            return gcd;
-        }
+        //return item->asGcdFileType();
     }
     return 0;
 }
 
-MsgFileType * ResourceManager::getMsgFileType(std::string filename)
+libfalltergeist::MsgFileType * ResourceManager::getMsgFileType(std::string filename)
 {
-    std::list<DatFile *>::iterator it;
-    for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
+    libfalltergeist::DatFileItem * item = getDatFileItem(filename);
+    if (item)
     {
-        MsgFileType * msg = (*it)->getMsgFileType(filename);
-        if (msg)
-        {
-            return msg;
-        }
+        //return item->asMsgFileType();
     }
     return 0;
 }
 
-BioFileType * ResourceManager::getBioFileType(std::string filename)
+libfalltergeist::BioFileType * ResourceManager::getBioFileType(std::string filename)
 {
-    std::list<DatFile *>::iterator it;
-    for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
+    libfalltergeist::DatFileItem * item = getDatFileItem(filename);
+    if (item)
     {
-        BioFileType * bio = (*it)->getBioFileType(filename);
-        if (bio)
-        {
-            return bio;
-        }
+        //return item->asBioFileType();
     }
     return 0;
 }
@@ -180,37 +148,37 @@ BioFileType * ResourceManager::getBioFileType(std::string filename)
 
 Surface * ResourceManager::getSurface(std::string filename, int posX, int posY)
 {
-    FrmFileType * frm = getFrmFileType(filename);
+    libfalltergeist::FrmFileType * frm = getFrmFileType(filename);
     if (!frm)
     {
         std::cout << "No FRM "<< filename << " found" << std::endl;
         return 0;
     }
-    PalFileType * pal = getPalFileType("color.pal");
+    libfalltergeist::PalFileType * pal = getPalFileType("color.pal");
     if (!pal)
     {
         std::cout << "No PAL color.pal found" << std::endl;
         return 0;
     }
-    int width = frm->getDirections()[0].frames->width;
-    int height = frm->getDirections()[0].frames->height;
+
+    int width = frm->getDirections()->at(0)->getFrames()->at(0)->getWidth();
+    int height = frm->getDirections()->at(0)->getFrames()->at(0)->getHeight();
     Surface * surface = new Surface(width,height);
+
     int i = 0;
-    for (int y = 0; y < height; y++)
+    for (int y = 0; y != height; ++y)
     {
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x != width; ++x)
         {
-            // 12 - frame data offset
-            unsigned int colorIndex = frm->getDirections()[0].frames[0].data[i];
+            unsigned int colorIndex = frm->getDirections()->at(0)->getFrames()->at(0)->getColorIndexes()->at(i);
             unsigned int color = *pal->getColor(colorIndex);
-            if (colorIndex == 0) color = 0;
-            surface->setPixel(x,y,color);
+            surface->setPixel(x, y, color);
             i++;
         }
     }
     surface->setX(posX);
     surface->setY(posY);
-    SDL_SetColorKey(surface->getSurface(),SDL_SRCCOLORKEY, 0);
+    SDL_SetColorKey(surface->getSurface(), SDL_SRCCOLORKEY, 0);
     return surface;
 }
 

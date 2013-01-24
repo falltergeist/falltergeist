@@ -29,7 +29,7 @@ Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y)
     _visible = true;
     _borderColor = 0;
     _backgroundColor = 0;
-    _surface = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, width, height, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xFF000000);
+    _surface = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, width, height, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
     if (_surface == 0) throw Exception(SDL_GetError());
     clear();
 }

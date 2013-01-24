@@ -20,6 +20,7 @@
 #ifndef FALLTERGEIST_PLAYER_H
 #define	FALLTERGEIST_PLAYER_H
 #include "../Fallout/GcdFileType.h"
+#include "../../lib/libfalltergeist/libfalltergeist.h"
 
 namespace Falltergeist
 {
@@ -42,7 +43,7 @@ public:
     unsigned int freeStatsPoints;
     
     Player();
-    Player(GcdFileType * gcd);
+    Player(libfalltergeist::GcdFileType * gcd);
     virtual ~Player();
     void setBio(const char * text);
     void setName(const char * name);

@@ -66,21 +66,22 @@ unsigned int Font::getColor()
 
 unsigned short Font::getHeight()
 {
-    return _aafFileType->getMaximumHeight();
+    //return _aafFileType->getMaximumHeight();
 }
 
 unsigned short Font::getHorizontalGap()
 {
-    return _aafFileType->getHorizontalGap();
+    //return _aafFileType->getHorizontalGap();
 }
 
 unsigned short Font::getVerticalGap()
 {
-    return _aafFileType->getHorizontalGap();
+    //return _aafFileType->getHorizontalGap();
 }
 
 Surface * Font::getGlyph(unsigned char chr)
 {
+    /*
     if (_glyphs->at(chr) != 0) return _glyphs->at(chr);
 
     int charWidth = _aafFileType->getChar(chr)->width;
@@ -142,6 +143,7 @@ Surface * Font::getGlyph(unsigned char chr)
     }
     _glyphs->at(chr) = surface;
     return _glyphs->at(chr);
+    */
 }
 
 }

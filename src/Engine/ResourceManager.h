@@ -22,10 +22,10 @@
 
 #include <list>
 #include <string>
+#include "../../lib/libfalltergeist/libfalltergeist.h"
 
 namespace Falltergeist
 {
-class DatFile;
 class VirtualFile;
 class FrmFileType;
 class PalFileType;
@@ -42,18 +42,18 @@ const char * _t(unsigned int number, const char * filename);
 class ResourceManager
 {
 protected:
-    static std::list<DatFile *> * _datFiles;
+    static std::list<libfalltergeist::DatFile *> * _datFiles;
 public:
     ResourceManager();
-    static VirtualFile * getDatFileItem(std::string filename);
-    static FrmFileType * getFrmFileType(std::string filename);
-    static PalFileType * getPalFileType(std::string filename);
-    static LstFileType * getLstFileType(std::string filename);
-    static FonFileType * getFonFileType(std::string filename);
-    static AafFileType * getAafFileType(std::string filename);
-    static GcdFileType * getGcdFileType(std::string filename);
-    static MsgFileType * getMsgFileType(std::string filename);
-    static BioFileType * getBioFileType(std::string filename);
+    static libfalltergeist::DatFileItem * getDatFileItem(std::string filename);
+    static libfalltergeist::FrmFileType * getFrmFileType(std::string filename);
+    static libfalltergeist::PalFileType * getPalFileType(std::string filename);
+    static libfalltergeist::LstFileType * getLstFileType(std::string filename);
+    static libfalltergeist::FonFileType * getFonFileType(std::string filename);
+    static libfalltergeist::AafFileType * getAafFileType(std::string filename);
+    static libfalltergeist::GcdFileType * getGcdFileType(std::string filename);
+    static libfalltergeist::MsgFileType * getMsgFileType(std::string filename);
+    static libfalltergeist::BioFileType * getBioFileType(std::string filename);
     static Surface * getSurface(std::string filename, int x = 0, int y = 0);
 };
 

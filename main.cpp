@@ -43,17 +43,13 @@ int main(int argc, char *argv[])
 {
     try
     {
-        // libfalltergeist testing section
-        /*
-        libfalltergeist::DatFile * datFile = new libfalltergeist::DatFile("/home/alexeevdv/.fallout/master.dat");
-        libfalltergeist::DatFileItem * item = datFile->getItems()->back();
-        char * text = new char[item->size() + 1]();
-        item->readBytes(text, item->size());
-        std::cout << text;
-        */
-        Game * game = new Game(640,480,32);
-        game->setState(new StartState(game));
-        game->run();
+        ResourceManager * rm = new ResourceManager();
+        Surface * surface = rm->getSurface("art/intrface/mainmenu.frm");
+        SDL_SaveBMP(surface->getSurface(), "test.bmp");
+
+        //Game * game = new Game(640,480,32);
+        //game->setState(new StartState(game));
+        //game->run();
         return 0;
     }
     catch(Exception &e)

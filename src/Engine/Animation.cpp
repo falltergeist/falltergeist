@@ -54,25 +54,25 @@ void Animation::think()
 
 void Animation::loadFromFrmFile(const char * filename)
 {
-    FrmFileType * frm = ResourceManager::getFrmFileType(filename);
+    libfalltergeist::FrmFileType * frm = ResourceManager::getFrmFileType(filename);
     if (!frm)
     {
         std::cout << "can't find FRM file " << filename << std::endl;
     }
-    PalFileType * pal = ResourceManager::getPalFileType("color.pal");
+    libfalltergeist::PalFileType * pal = ResourceManager::getPalFileType("color.pal");
 
     _frameRate = 1000 / frm->getFramesPerSecond();
 
     // for each direction
     for (unsigned int i = 0; i != 6; ++i)
     {
-        if (i > 0 && frm->getDirections()[i].dataOffset == frm->getDirections()[0].dataOffset) break;
+        if (i > 0 && frm->getDirections()->at(i)->getDataOffset() == frm->getDirections()->at(0)->getDataOffset()) break;
         std::vector<Surface *> * frameset = new std::vector<Surface *>;
         // for each frame
         for (unsigned int j = 0; j != frm->getFramesPerDirection(); ++j)
         {
-            int width = frm->getDirections()[i].frames->width;
-            int height = frm->getDirections()[i].frames->height;
+            int width = frm->getDirections()->at(i)->getFrames()->at(j)->getWidth();
+            int height = frm->getDirections()->at(i)->getFrames()->at(j)->getHeight();
             Surface * surface = new Surface(width,height);
             int z = 0;
             for (int y = 0; y < height; y++)
@@ -80,7 +80,7 @@ void Animation::loadFromFrmFile(const char * filename)
                 for (int x = 0; x < width; x++)
                 {
                     // 12 - frame data offset
-                    unsigned int colorIndex = frm->getDirections()[i].frames[j].data[z];
+                    unsigned int colorIndex = frm->getDirections()->at(i)->getFrames()->at(j)->getColorIndexes()->at(z);
                     unsigned int color = *pal->getColor(colorIndex);
                     if (colorIndex == 0) color = 0;
                     surface->setPixel(x,y,color);

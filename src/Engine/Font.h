@@ -22,6 +22,7 @@
 
 #include "../Fallout/AafFileType.h"
 #include "../Engine/Surface.h"
+#include "../../lib/libfalltergeist/libfalltergeist.h"
 #include <vector>
 
 namespace Falltergeist
@@ -33,7 +34,7 @@ protected:
     std::vector<Surface *> * _glyphs;
     const char * _filename;
     unsigned int _color;
-    AafFileType * _aafFileType;
+    libfalltergeist::AafFileType * _aafFileType;
 public:
     Font(const char * filename, unsigned int color = 0x00FF00FF);
     ~Font();

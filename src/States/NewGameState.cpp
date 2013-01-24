@@ -80,11 +80,11 @@ void NewGameState::init()
 
     _characters = new std::vector<Player *>;
     _characters->push_back(new Player(ResourceManager::getGcdFileType("premade/combat.gcd")));
-    _characters->at(0)->setBio(ResourceManager::getBioFileType("premade/combat.bio")->getText());
+    //_characters->at(0)->setBio(ResourceManager::getBioFileType("premade/combat.bio")->getText());
     _characters->push_back(new Player(ResourceManager::getGcdFileType("premade/stealth.gcd")));
-    _characters->at(1)->setBio(ResourceManager::getBioFileType("premade/stealth.bio")->getText());
+    //_characters->at(1)->setBio(ResourceManager::getBioFileType("premade/stealth.bio")->getText());
     _characters->push_back(new Player(ResourceManager::getGcdFileType("premade/diplomat.gcd")));    
-    _characters->at(2)->setBio(ResourceManager::getBioFileType("premade/diplomat.bio")->getText());
+    //_characters->at(2)->setBio(ResourceManager::getBioFileType("premade/diplomat.bio")->getText());
     
     
     // Character data textareas

@@ -30,10 +30,11 @@ Player::Player()
     _name = 0;
 }
 
-Player::Player(GcdFileType * gcd)
+Player::Player(libfalltergeist::GcdFileType * gcd)
 {
     _bio = 0;
     _name = 0;
+    /*
     this->strength = gcd->strength;
     this->perception = gcd->perception;
     this->endurance = gcd->endurance;
@@ -42,7 +43,7 @@ Player::Player(GcdFileType * gcd)
     this->agility = gcd->agility;
     this->luck = gcd->luck;
     this->freeStatsPoints = gcd->characterPoints;
-    this->setName(gcd->name);
+    this->setName(gcd->name);*/
 }
 
 Player::~Player()
