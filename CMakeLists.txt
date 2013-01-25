@@ -71,24 +71,14 @@ set(SOURCES main.cpp
             src/Engine/Surface.h
             src/Engine/SurfaceSet.cpp
             src/Engine/SurfaceSet.h
-            src/Fallout/AafFileType.cpp
-            src/Fallout/AafFileType.h
             src/Fallout/BioFileType.cpp
             src/Fallout/BioFileType.h
-            src/Fallout/DatFile.cpp
-            src/Fallout/DatFile.h
             src/Fallout/FonFileType.cpp
             src/Fallout/FonFileType.h
-            src/Fallout/FrmFileType.cpp
-            src/Fallout/FrmFileType.h
             src/Fallout/GcdFileType.cpp
             src/Fallout/GcdFileType.h
-            src/Fallout/LstFileType.cpp
-            src/Fallout/LstFileType.h
             src/Fallout/MsgFileType.cpp
             src/Fallout/MsgFileType.h
-            src/Fallout/PalFileType.cpp
-            src/Fallout/PalFileType.h
             src/States/MainMenuState.cpp
             src/States/MainMenuState.h
             src/States/NewGameState.cpp

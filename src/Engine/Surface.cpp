@@ -18,7 +18,6 @@
  */
 
 #include "../Engine/Surface.h"
-#include "../Fallout/FrmFileType.h"
 
 namespace Falltergeist
 {

@@ -21,13 +21,10 @@
 #include "../Engine/Surface.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/VirtualFile.h"
-#include "../Fallout/DatFile.h"
-#include "../Fallout/FrmFileType.h"
-#include "../Fallout/PalFileType.h"
-#include "../Fallout/LstFileType.h"
 #include "../Fallout/GcdFileType.h"
 #include "../Fallout/MsgFileType.h"
 #include "../Fallout/BioFileType.h"
+#include <iostream>
 
 namespace Falltergeist
 {

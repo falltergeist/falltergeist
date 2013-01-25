@@ -20,7 +20,6 @@
 #ifndef FALLTERGEIST_FONT_H
 #define FALLTERGEIST_FONT_H
 
-#include "../Fallout/AafFileType.h"
 #include "../Engine/Surface.h"
 #include "../../lib/libfalltergeist/libfalltergeist.h"
 #include <vector>

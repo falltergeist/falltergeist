@@ -19,8 +19,6 @@
 
 #include "../Engine/Animation.h"
 #include "../Engine/ResourceManager.h"
-#include "../Fallout/FrmFileType.h"
-#include "../Fallout/PalFileType.h"
 #include <iostream>
 
 namespace Falltergeist
