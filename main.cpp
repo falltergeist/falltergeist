@@ -43,13 +43,9 @@ int main(int argc, char *argv[])
 {
     try
     {
-        ResourceManager * rm = new ResourceManager();
-        Surface * surface = rm->getSurface("art/intrface/mainmenu.frm");
-        SDL_SaveBMP(surface->getSurface(), "test.bmp");
-
-        //Game * game = new Game(640,480,32);
-        //game->setState(new StartState(game));
-        //game->run();
+        Game * game = new Game(640,480,32);
+        game->setState(new StartState(game));
+        game->run();
         return 0;
     }
     catch(Exception &e)

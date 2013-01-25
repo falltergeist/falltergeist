@@ -89,7 +89,7 @@ libfalltergeist::LstFileType * ResourceManager::getLstFileType(std::string filen
     libfalltergeist::DatFileItem * item = getDatFileItem(filename);
     if (item)
     {
-        //return item->asLstFileType();
+        return item->asLstFileType();
     }
     return 0;
 }
@@ -99,7 +99,7 @@ libfalltergeist::AafFileType * ResourceManager::getAafFileType(std::string filen
     libfalltergeist::DatFileItem * item = getDatFileItem(filename);
     if (item)
     {
-        //return item->asAafFileType();
+        return item->asAafFileType();
     }
     return 0;
 }

@@ -29,7 +29,6 @@ namespace Falltergeist
 class VirtualFile;
 class FrmFileType;
 class PalFileType;
-class LstFileType;
 class FonFileType;
 class AafFileType;
 class GcdFileType;

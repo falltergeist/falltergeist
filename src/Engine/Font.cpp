@@ -66,29 +66,29 @@ unsigned int Font::getColor()
 
 unsigned short Font::getHeight()
 {
-    //return _aafFileType->getMaximumHeight();
+    return _aafFileType->getMaximumHeight();
 }
 
 unsigned short Font::getHorizontalGap()
 {
-    //return _aafFileType->getHorizontalGap();
+    return _aafFileType->getHorizontalGap();
 }
 
 unsigned short Font::getVerticalGap()
 {
-    //return _aafFileType->getHorizontalGap();
+    return _aafFileType->getVerticalGap();
 }
 
 Surface * Font::getGlyph(unsigned char chr)
 {
-    /*
+
     if (_glyphs->at(chr) != 0) return _glyphs->at(chr);
 
-    int charWidth = _aafFileType->getChar(chr)->width;
-    int charHeight = _aafFileType->getChar(chr)->height;
+    int charWidth = _aafFileType->getGlyphs()->at(chr)->getWidth();
+    int charHeight = _aafFileType->getGlyphs()->at(chr)->getHeight();
     int height = getHeight();
     int delta = height - charHeight;
-    char * data = _aafFileType->getChar(chr)->data;
+    //char * data = _aafFileType->getChar(chr)->data;
 
     Surface * surface = new Surface(charWidth,height);
     int i = 0;
@@ -96,10 +96,11 @@ Surface * Font::getGlyph(unsigned char chr)
     {
         for (int x = 0; x != charWidth; ++x)
         {
-            if (data[i] != 0)
+            unsigned char ch = _aafFileType->getGlyphs()->at(chr)->getData()->at(i);
+            if (ch != 0)
             {
                 long lightness;
-                switch (data[i])
+                switch (ch)
                 {
                     case 8:
                         lightness = 1.15;
@@ -143,7 +144,7 @@ Surface * Font::getGlyph(unsigned char chr)
     }
     _glyphs->at(chr) = surface;
     return _glyphs->at(chr);
-    */
+
 }
 
 }
