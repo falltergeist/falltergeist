@@ -52,7 +52,7 @@ libfalltergeist::DatFileItem * ResourceManager::getDatFileItem(std::string filen
     std::list<libfalltergeist::DatFile *>::iterator it;
     for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
     {
-        libfalltergeist::DatFileItem * item = (*it)->getItemByFilename((char *)filename.c_str());
+        libfalltergeist::DatFileItem * item = (*it)->item((char *)filename.c_str());
         if (item)
         {
             return item;
