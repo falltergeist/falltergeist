@@ -76,24 +76,25 @@ void NewGameState::init()
     _characterImages->addSurface(ResourceManager::surface("art/intrface/stealth.frm"));
     _characterImages->addSurface(ResourceManager::surface("art/intrface/diplomat.frm"));
 
+
+
     _characters = new std::vector<Player *>;
     _characters->push_back(new Player(ResourceManager::gcdFileType("premade/combat.gcd")));
-    //_characters->at(0)->setBio(ResourceManager::getBioFileType("premade/combat.bio")->getText());
+    _characters->at(0)->setBio(ResourceManager::bioFileType("premade/combat.bio")->text());
     _characters->push_back(new Player(ResourceManager::gcdFileType("premade/stealth.gcd")));
-    //_characters->at(1)->setBio(ResourceManager::getBioFileType("premade/stealth.bio")->getText());
+    _characters->at(1)->setBio(ResourceManager::bioFileType("premade/stealth.bio")->text());
     _characters->push_back(new Player(ResourceManager::gcdFileType("premade/diplomat.gcd")));
-    //_characters->at(2)->setBio(ResourceManager::getBioFileType("premade/diplomat.bio")->getText());
-    
+    _characters->at(2)->setBio(ResourceManager::bioFileType("premade/diplomat.bio")->text());
     
     // Character data textareas
     _playerName = new TextArea("",350,50);
     _playerName->setFont("font1.aaf");
-    
+
     _playerStats1 = new TextArea("",0,80);
     _playerStats1->setWidth(370);
     _playerStats1->setFont("font1.aaf");
     _playerStats1->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-    
+
     _playerStats2 = new TextArea("",374,80);
     _playerStats2->setFont("font1.aaf");
 
@@ -163,7 +164,7 @@ void NewGameState::changeCharacter()
          << _t(104,"text/english/game/stat.msg") << " " << (player->intelligence < 10 ? "0" : "") << player->intelligence << "\r\n"
          << _t(105,"text/english/game/stat.msg") << " " << (player->agility < 10 ? "0" : "")      << player->agility      << "\r\n"
          << _t(106,"text/english/game/stat.msg") << " " << (player->luck < 10 ? "0" : "")         << player->luck         << "\r\n" ;
-    _playerStats1->setText(ss.str().c_str());    
+    _playerStats1->setText(ss.str().c_str());
      
     ss.str("");
     ss << statToString(player->strength) << "\r\n"
@@ -173,7 +174,7 @@ void NewGameState::changeCharacter()
        << statToString(player->intelligence) << "\r\n"
        << statToString(player->agility) << "\r\n"
        << statToString(player->luck) << "\r\n";
-    _playerStats2->setText(ss.str().c_str());    
+    _playerStats2->setText(ss.str().c_str());
     
     _playerBio->setText(player->bio());
     _playerName->setText(player->name());

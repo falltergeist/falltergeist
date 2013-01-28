@@ -113,7 +113,7 @@ libfalltergeist::GcdFileType * ResourceManager::gcdFileType(std::string filename
     libfalltergeist::DatFileItem * item = datFileItem(filename);
     if (item)
     {
-        //return item->asGcdFileType();
+        return item->asGcdFileType();
     }
     return 0;
 }
@@ -133,7 +133,7 @@ libfalltergeist::BioFileType * ResourceManager::bioFileType(std::string filename
     libfalltergeist::DatFileItem * item = datFileItem(filename);
     if (item)
     {
-        //return item->asBioFileType();
+        return item->asBioFileType();
     }
     return 0;
 }
