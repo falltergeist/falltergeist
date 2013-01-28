@@ -24,7 +24,7 @@ namespace Falltergeist
 
 Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y)
 {
-    needRedraw = false;
+    _needRedraw = false;
     _visible = true;
     _borderColor = 0;
     _backgroundColor = 0;
@@ -41,13 +41,23 @@ Surface::Surface(Surface * other)
     _y = other->_y;
     _visible = other->_visible;
     _backgroundColor = other->_backgroundColor;
-    needRedraw = other->needRedraw;
+    _needRedraw = other->needRedraw();
     _borderColor = other->_borderColor;
 }
 
 Surface::~Surface()
 {
     SDL_FreeSurface(_surface);
+}
+
+void Surface::setNeedRedraw(bool needRedraw)
+{
+    _needRedraw = needRedraw;
+}
+
+bool Surface::needRedraw()
+{
+    return _needRedraw;
 }
 
 int Surface::x()
@@ -107,8 +117,8 @@ void Surface::think()
 
 void Surface::draw()
 {
-    if (needRedraw == false) return;
-    needRedraw = false;
+    if (!needRedraw()) return;
+    setNeedRedraw(false);
     clear();
     if (_borderColor != 0) _drawBorder();
 }
@@ -138,7 +148,7 @@ void Surface::_drawBorder()
 void Surface::setBorderColor(unsigned int color)
 {
     _borderColor = color;
-    needRedraw= true;
+    setNeedRedraw(true);
 }
 
 unsigned int Surface::borderColor()
@@ -149,7 +159,7 @@ unsigned int Surface::borderColor()
 void Surface::setBackgroundColor(unsigned int color)
 {
     _backgroundColor = color;
-    needRedraw = true;
+    setNeedRedraw(true);
 }
 
 unsigned int Surface::backgroundColor()

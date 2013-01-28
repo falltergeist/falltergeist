@@ -31,7 +31,7 @@ const char * _t(unsigned int number, const char * filename)
 {
     libfalltergeist::MsgFileType * msg = ResourceManager::msgFileType(filename);
     if (!msg) throw Exception("Cant find msg file");
-    //return msg->getText(number);
+    return msg->message(number)->text();
 }
 
 
@@ -123,7 +123,7 @@ libfalltergeist::MsgFileType * ResourceManager::msgFileType(std::string filename
     libfalltergeist::DatFileItem * item = datFileItem(filename);
     if (item)
     {
-        //return item->asMsgFileType();
+        return item->asMsgFileType();
     }
     return 0;
 }

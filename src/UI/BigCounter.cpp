@@ -89,7 +89,7 @@ void BigCounter::draw()
 void BigCounter::setNumber(unsigned int number)
 {
     _number = number;
-    needRedraw = true;
+    setNeedRedraw(true);
 }
 
 }

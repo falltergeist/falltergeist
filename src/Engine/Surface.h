@@ -36,11 +36,13 @@ protected:
     int _y;
     unsigned int _borderColor;
     unsigned int _backgroundColor;
+    bool _needRedraw;
     void _lock();
     void _unlock();
     void _drawBorder();
 public:
-    bool needRedraw;
+
+
     Surface(int width = 0, int height = 0, int x = 0, int y = 0);
     Surface(Surface * other);
     virtual ~Surface();
@@ -50,6 +52,9 @@ public:
 
     void setY(int y);
     int y();
+
+    void setNeedRedraw(bool needRedraw);
+    bool needRedraw();
 
     unsigned int width();
 

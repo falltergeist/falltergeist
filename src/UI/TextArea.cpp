@@ -213,7 +213,7 @@ void TextArea::setColor(unsigned int color)
     _color = color;
     if (!_font) return;
     _font->setColor(color);
-    needRedraw = true;
+    setNeedRedraw(true);
 }
 
 unsigned int TextArea::height()
@@ -225,7 +225,7 @@ void TextArea::setHeight(unsigned int height)
 {
     if (height == _height) return;
     _height = height;
-    needRedraw = true;
+    setNeedRedraw(true);
 }
 
 unsigned int TextArea::width()
@@ -237,7 +237,7 @@ void TextArea::setWidth(unsigned int width)
 {
     if (_width == width) return;
     _width = width;
-    needRedraw = true;
+    setNeedRedraw(true);
 }
 
 unsigned char TextArea::horizontalAlign()
@@ -249,7 +249,7 @@ void TextArea::setHorizontalAlign(unsigned char align)
 {
     if (_horizontalAlign == align) return;
     _horizontalAlign = align;
-    needRedraw = true;
+    setNeedRedraw(true);
 }
 
 unsigned char TextArea::verticalAlign()
@@ -261,7 +261,7 @@ void TextArea::setVerticalAlign(unsigned char align)
 {
     if (_verticalAlign == align) return;
     _verticalAlign = align;
-    needRedraw = true;
+    setNeedRedraw(true);
 }
 
 char * TextArea::text()
@@ -290,15 +290,14 @@ void TextArea::setText(const char * text)
     {
         _text[i] = text[i];
     }
-    //strcpy(_text,text);
-    needRedraw = true;
+    setNeedRedraw(true);
 }
 
 void TextArea::setFont(const char * filename)
 {
     delete _font; _font = 0;
     _font = new Font(filename, _color);
-    needRedraw = true;
+    setNeedRedraw(true);
 }
 
 }

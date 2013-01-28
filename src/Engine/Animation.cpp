@@ -93,10 +93,10 @@ void Animation::loadFromFrmFile(const char * filename)
 
 SDL_Surface * Animation::surface()
 {
-    if (needRedraw)
+    if (needRedraw())
     {
         draw();
-        needRedraw = false;
+        setNeedRedraw(false);
     }
     return _surfaceSets->at(_currentSurfaceSet)->at(_currentFrame)->surface();
 }
