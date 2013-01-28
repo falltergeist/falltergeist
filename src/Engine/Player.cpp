@@ -51,7 +51,7 @@ Player::~Player()
     delete [] _bio;
 }
 
-const char * Player::getBio()
+const char * Player::bio()
 {
     return _bio;
 }
@@ -63,7 +63,7 @@ void Player::setBio(const char * text)
     strcpy(_bio,text);
 }
 
-const char * Player::getName()
+const char * Player::name()
 {
     return _name;
 }

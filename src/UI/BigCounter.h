@@ -36,7 +36,9 @@ protected:
 public:
     BigCounter(int x = 0, int y = 0);
     ~BigCounter();
+
     void draw();
+
     void setNumber(unsigned int number);
 };
 

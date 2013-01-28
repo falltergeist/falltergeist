@@ -21,11 +21,6 @@
 #include "src/Engine/Exception.h"
 #include "src/Engine/Surface.h"
 #include "src/Engine/ResourceManager.h"
-#include "src/Engine/File.h"
-#include "src/Engine/VirtualFile.h"
-#include "src/Fallout/FonFileType.h"
-#include "src/Fallout/GcdFileType.h"
-#include "src/Fallout/MsgFileType.h"
 #include "src/States/StartState.h"
 #include <SDL/SDL.h>
 #include <algorithm>
@@ -45,7 +40,7 @@ int main(int argc, char *argv[])
     }
     catch(Exception &e)
     {
-        std::cout << e.getMessage() << std::endl;
+        std::cout << e.message() << std::endl;
         return 1;
     }
 }

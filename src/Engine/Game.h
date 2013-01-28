@@ -50,15 +50,19 @@ protected:
 public:
     Game(int width, int height, int bpp);
     ~Game();
-    Screen * getScreen();
-    ResourceManager * getResourceManager();
+
+    Screen * screen();
+
+    ResourceManager * resourceManager();
+
     void pushState(State * state);
     void setState(State * state);
     void popState();
     void run();
     void quit();
+
     void setPlayer(Player * player);
-    Player * getPlayer();
+    Player * player();
 };
 
 }

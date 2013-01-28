@@ -25,8 +25,6 @@
 #include "../Engine/Player.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
-#include "../Fallout/GcdFileType.h"
-#include "../Fallout/BioFileType.h"
 #include <iostream>
 #include <sstream>
 
@@ -46,7 +44,7 @@ void NewGameState::init()
     State::init();
     _isFullscreen = true;
     // background
-    add(ResourceManager::getSurface("art/intrface/pickchar.frm"));
+    add(ResourceManager::surface("art/intrface/pickchar.frm"));
 
     // Begin game button
     ImageButton * beginGameButton= new ImageButton("art/intrface/lilredup.frm", "art/intrface/lilreddn.frm", 81, 322);
@@ -74,16 +72,16 @@ void NewGameState::init()
     // Characters images
     _selectedCharacter = 0;
     _characterImages = new SurfaceSet(27,23);
-    _characterImages->addSurface(ResourceManager::getSurface("art/intrface/combat.frm"));
-    _characterImages->addSurface(ResourceManager::getSurface("art/intrface/stealth.frm"));
-    _characterImages->addSurface(ResourceManager::getSurface("art/intrface/diplomat.frm"));
+    _characterImages->addSurface(ResourceManager::surface("art/intrface/combat.frm"));
+    _characterImages->addSurface(ResourceManager::surface("art/intrface/stealth.frm"));
+    _characterImages->addSurface(ResourceManager::surface("art/intrface/diplomat.frm"));
 
     _characters = new std::vector<Player *>;
-    _characters->push_back(new Player(ResourceManager::getGcdFileType("premade/combat.gcd")));
+    _characters->push_back(new Player(ResourceManager::gcdFileType("premade/combat.gcd")));
     //_characters->at(0)->setBio(ResourceManager::getBioFileType("premade/combat.bio")->getText());
-    _characters->push_back(new Player(ResourceManager::getGcdFileType("premade/stealth.gcd")));
+    _characters->push_back(new Player(ResourceManager::gcdFileType("premade/stealth.gcd")));
     //_characters->at(1)->setBio(ResourceManager::getBioFileType("premade/stealth.bio")->getText());
-    _characters->push_back(new Player(ResourceManager::getGcdFileType("premade/diplomat.gcd")));    
+    _characters->push_back(new Player(ResourceManager::gcdFileType("premade/diplomat.gcd")));
     //_characters->at(2)->setBio(ResourceManager::getBioFileType("premade/diplomat.bio")->getText());
     
     
@@ -177,8 +175,8 @@ void NewGameState::changeCharacter()
        << statToString(player->luck) << "\r\n";
     _playerStats2->setText(ss.str().c_str());    
     
-    _playerBio->setText(player->getBio());
-    _playerName->setText(player->getName());
+    _playerBio->setText(player->bio());
+    _playerName->setText(player->name());
 
     _characterImages->currentSurface = _selectedCharacter;    
 }
@@ -196,7 +194,7 @@ void NewGameState::onEditButtonClick()
 
 void NewGameState::onCreateButtonClick()
 {
-    _game->setPlayer(new Player(ResourceManager::getGcdFileType("premade/blank.gcd")));
+    _game->setPlayer(new Player(ResourceManager::gcdFileType("premade/blank.gcd")));
     _game->pushState(new PlayerEditState(_game));
 }
 

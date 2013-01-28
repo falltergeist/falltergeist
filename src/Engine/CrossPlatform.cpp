@@ -28,7 +28,7 @@ namespace Falltergeist
 namespace CrossPlatform
 {
 
-const char * getHomePath()
+const char * homePath()
 {
     char const * home = getenv("HOME");
     return home;

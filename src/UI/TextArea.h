@@ -43,20 +43,28 @@ public:
     TextArea(const char * text, int x = 0, int y = 0);
     TextArea(int x = 0, int y = 0);
     ~TextArea();
+
     void draw();
-    char * getText();
+
     void setText(const char * text);
     void setText(unsigned int number);
-    unsigned char getHorizontalAlign();
+    char * text();
+
     void setHorizontalAlign(unsigned char align);
-    unsigned char getVerticalAlign();
+    unsigned char horizontalAlign();
+
     void setVerticalAlign(unsigned char align);
-    unsigned int getHeight();
+    unsigned char verticalAlign();
+
     void setHeight(unsigned int height);
-    unsigned int getWidth();
+    unsigned int height();
+
     void setWidth(unsigned int width);
-    unsigned int getColor();
+    unsigned int width();
+
     void setColor(unsigned int color);
+    unsigned int color();
+
     void setFont(const char * filename);
 };
 

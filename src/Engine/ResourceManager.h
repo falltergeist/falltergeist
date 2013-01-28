@@ -44,16 +44,16 @@ protected:
     static std::list<libfalltergeist::DatFile *> * _datFiles;
 public:
     ResourceManager();
-    static libfalltergeist::DatFileItem * getDatFileItem(std::string filename);
-    static libfalltergeist::FrmFileType * getFrmFileType(std::string filename);
-    static libfalltergeist::PalFileType * getPalFileType(std::string filename);
-    static libfalltergeist::LstFileType * getLstFileType(std::string filename);
-    static libfalltergeist::FonFileType * getFonFileType(std::string filename);
-    static libfalltergeist::AafFileType * getAafFileType(std::string filename);
-    static libfalltergeist::GcdFileType * getGcdFileType(std::string filename);
-    static libfalltergeist::MsgFileType * getMsgFileType(std::string filename);
-    static libfalltergeist::BioFileType * getBioFileType(std::string filename);
-    static Surface * getSurface(std::string filename, int x = 0, int y = 0);
+    static libfalltergeist::DatFileItem * datFileItem(std::string filename);
+    static libfalltergeist::FrmFileType * frmFileType(std::string filename);
+    static libfalltergeist::PalFileType * palFileType(std::string filename);
+    static libfalltergeist::LstFileType * lstFileType(std::string filename);
+    static libfalltergeist::FonFileType * fonFileType(std::string filename);
+    static libfalltergeist::AafFileType * aafFileType(std::string filename);
+    static libfalltergeist::GcdFileType * gcdFileType(std::string filename);
+    static libfalltergeist::MsgFileType * msgFileType(std::string filename);
+    static libfalltergeist::BioFileType * bioFileType(std::string filename);
+    static Surface * surface(std::string filename, int x = 0, int y = 0);
 };
 
 }

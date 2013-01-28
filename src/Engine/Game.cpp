@@ -141,8 +141,8 @@ void Game::run()
         do { --i; }
         while(i != _states->begin() && !(*i)->isFullscreen());
         for (; i != _states->end(); ++i) (*i)->blit();
-        falltergeistVersion->blit(_screen->getSurface());
-        _fpsCounter->blit(_screen->getSurface());
+        falltergeistVersion->blit(_screen->surface());
+        _fpsCounter->blit(_screen->surface());
         _screen->flip();
         SDL_Delay(1);
     }
@@ -150,12 +150,12 @@ void Game::run()
     std::cout << "Stopping main loop...[OK]" << std::endl;
 }
 
-Screen * Game::getScreen()
+Screen * Game::screen()
 {
     return _screen;
 }
 
-ResourceManager * Game::getResourceManager()
+ResourceManager * Game::resourceManager()
 {
     return _resourceManager;
 }
@@ -170,7 +170,7 @@ void Game::setPlayer(Player * player)
     _player = player;
 }
 
-Player * Game::getPlayer()
+Player * Game::player()
 {
     return _player;
 }

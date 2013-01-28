@@ -50,22 +50,22 @@ Surface::~Surface()
     SDL_FreeSurface(_surface);
 }
 
-int Surface::getX()
+int Surface::x()
 {
     return _x;
 }
 
-int Surface::getY()
+int Surface::y()
 {
     return _y;
 }
 
-unsigned int Surface::getWidth()
+unsigned int Surface::width()
 {
     return _surface->w;
 }
 
-unsigned int Surface::getHeight()
+unsigned int Surface::height()
 {
     return _surface->h;
 }
@@ -85,7 +85,7 @@ void Surface::clear()
     fill(_backgroundColor);
 }
 
-SDL_Surface * Surface::getSurface()
+SDL_Surface * Surface::surface()
 {
     draw();
     return _surface;
@@ -122,12 +122,12 @@ void Surface::_drawBorder()
 {
     _lock();
     unsigned int * pixels = (unsigned int *) _surface->pixels;
-    for (unsigned int y = 0; y < getHeight(); y++)
+    for (unsigned int y = 0; y < height(); y++)
     {
         pixels[(y * _surface->w)] = _borderColor;
         pixels[(y * _surface->w) + _surface->w - 1] = _borderColor;
     }
-    for (unsigned int x = 0; x < getWidth(); x++)
+    for (unsigned int x = 0; x < width(); x++)
     {
         pixels[1 + x] = _borderColor;
         pixels[_surface->w * (_surface->h - 1) + x] = _borderColor;
@@ -141,7 +141,7 @@ void Surface::setBorderColor(unsigned int color)
     needRedraw= true;
 }
 
-unsigned int Surface::getBorderColor()
+unsigned int Surface::borderColor()
 {
     return _borderColor;
 }
@@ -152,22 +152,22 @@ void Surface::setBackgroundColor(unsigned int color)
     needRedraw = true;
 }
 
-unsigned int Surface::getBackgroundColor()
+unsigned int Surface::backgroundColor()
 {
     return _backgroundColor;
 }
 
 Surface * Surface::crop(int xOffset, int yOffset, int width, int height)
 {
-    if (width == 0) width = getWidth() - xOffset;
-    if (height == 0) height = getHeight() - yOffset;
+    if (width == 0) width = this->width() - xOffset;
+    if (height == 0) height = this->height() - yOffset;
 
     Surface * surface = new Surface(width, height);
     for (int y = 0; y < height; y++)
     {
         for (int x = 0; x < width; x++)
         {
-            surface->setPixel(x, y, this->getPixel(x + xOffset, y + yOffset));
+            surface->setPixel(x, y, this->pixel(x + xOffset, y + yOffset));
         }
     }
     return surface;
@@ -180,11 +180,11 @@ void Surface::blit(Surface * surface)
         SDL_Rect dest;
         dest.x = _x;
         dest.y = _y;
-        SDL_BlitSurface(getSurface(), NULL, surface->getSurface(), &dest);
+        SDL_BlitSurface(this->surface(), NULL, surface->surface(), &dest);
     }
     else
     {
-        getSurface();
+        this->surface();
     }
 }
 
@@ -193,9 +193,9 @@ void Surface::copyTo(Surface * surface)
     _lock();
     unsigned int * thisPixels = (unsigned int *) _surface->pixels;
     unsigned int * thatPixels = (unsigned int *) surface->_surface->pixels;
-    for (unsigned int y = 0; y < getHeight(); y++)
+    for (unsigned int y = 0; y < height(); y++)
     {
-        for (unsigned int x = 0; x < getWidth(); x++)
+        for (unsigned int x = 0; x < width(); x++)
         {
             thatPixels[((y + _y) * surface->_surface->w) + x + _x] = thisPixels[(y * _surface->w) + x];
         }
@@ -203,12 +203,12 @@ void Surface::copyTo(Surface * surface)
     _unlock();
 }
 
-unsigned int Surface::getPixel(int x, int y)
+unsigned int Surface::pixel(int x, int y)
 {
     _lock();
     if (x < 0 || y < 0) return 0;
-    if ((unsigned int) x > getWidth() || (unsigned int) y > getHeight()) return 0;
-    if (getWidth()*getHeight() == 0) return 0;
+    if ((unsigned int) x > width() || (unsigned int) y > height()) return 0;
+    if (width()*height() == 0) return 0;
 
     unsigned int * pixels = (unsigned int *) _surface->pixels;
     unsigned int color = pixels[(y * _surface->w) + x];
@@ -220,7 +220,7 @@ void Surface::setPixel(int x, int y, unsigned int color)
 {
     _lock();
     if (x < 0 || y < 0) return;
-    if ((unsigned int) x > getWidth() || (unsigned int) y > getHeight()) return;
+    if ((unsigned int) x > width() || (unsigned int) y > height()) return;
 
     unsigned int * pixels = (unsigned int *) _surface->pixels;
     pixels[(y * _surface->w) + x] = color;
@@ -240,9 +240,9 @@ void Surface::_unlock()
 void Surface::loadFromSurface(Surface * surface)
 {
     SDL_FreeSurface(_surface);
-    _surface = surface->getSurface();
-    _x = surface->getX();
-    _y = surface->getY();
+    _surface = surface->surface();
+    _x = surface->x();
+    _y = surface->y();
 }
 
 }

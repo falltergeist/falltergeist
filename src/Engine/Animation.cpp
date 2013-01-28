@@ -52,12 +52,12 @@ void Animation::think()
 
 void Animation::loadFromFrmFile(const char * filename)
 {
-    libfalltergeist::FrmFileType * frm = ResourceManager::getFrmFileType(filename);
+    libfalltergeist::FrmFileType * frm = ResourceManager::frmFileType(filename);
     if (!frm)
     {
         std::cout << "can't find FRM file " << filename << std::endl;
     }
-    libfalltergeist::PalFileType * pal = ResourceManager::getPalFileType("color.pal");
+    libfalltergeist::PalFileType * pal = ResourceManager::palFileType("color.pal");
 
     _frameRate = 1000 / frm->framesPerSecond();
 
@@ -91,14 +91,14 @@ void Animation::loadFromFrmFile(const char * filename)
     }
 }
 
-SDL_Surface * Animation::getSurface()
+SDL_Surface * Animation::surface()
 {
     if (needRedraw)
     {
         draw();
         needRedraw = false;
     }
-    return _surfaceSets->at(_currentSurfaceSet)->at(_currentFrame)->getSurface();
+    return _surfaceSets->at(_currentSurfaceSet)->at(_currentFrame)->surface();
 }
 
 

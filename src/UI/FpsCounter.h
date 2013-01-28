@@ -31,8 +31,9 @@ protected:
     unsigned int _lastTicks;
     unsigned int _frames;
 public:
-    void think();
     FpsCounter(int x = 598, int y = 2);
+
+    void think();
 };
 
 }

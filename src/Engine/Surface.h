@@ -44,26 +44,36 @@ public:
     Surface(int width = 0, int height = 0, int x = 0, int y = 0);
     Surface(Surface * other);
     virtual ~Surface();
-    int getX();
-    int getY();
-    unsigned int getWidth();
-    unsigned int getHeight();
-    unsigned int getPixel(int x, int y);
-    virtual SDL_Surface * getSurface();
-    void copyTo(Surface * surface);
+
+    void setX(int x);
+    int x();
+
+    void setY(int y);
+    int y();
+
+    unsigned int width();
+
+    unsigned int height();
+
     void setPixel(int x, int y, unsigned int color);
+    unsigned int pixel(int x, int y);
+
+    virtual SDL_Surface * surface();
+
+    void copyTo(Surface * surface);
+
     void loadFromSurface(Surface * surface);
+
+    void setBorderColor(unsigned int color);
+    unsigned int borderColor();
+
+    void setBackgroundColor(unsigned int color);
+    unsigned int backgroundColor();
+
+    void fill(unsigned int color);
+    void clear();
     void show();
     void hide();
-    void setX(int x);
-    void setY(int y);
-    void fill(unsigned int color);
-    void border(unsigned int color);
-    void setBorderColor(unsigned int color);
-    unsigned int getBorderColor();
-    void setBackgroundColor(unsigned int color);
-    unsigned int getBackgroundColor();
-    void clear();
     Surface * crop(int x = 0, int y = 0, int width = 0, int height = 0);
     virtual void think();
     virtual void draw();

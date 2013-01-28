@@ -37,14 +37,20 @@ protected:
 public:
     Font(const char * filename, unsigned int color = 0x00FF00FF);
     ~Font();
+
     void setFilename(const char * filename);
-    const char * getFilename();
+    const char * filename();
+
     void setColor(unsigned int color);
-    unsigned int getColor();
-    Surface * getGlyph(unsigned char chr);
-    unsigned short getHorizontalGap();
-    unsigned short getVerticalGap();
-    unsigned short getHeight();
+    unsigned int color();
+
+    Surface * glyph(unsigned char chr);
+
+    unsigned short horizontalGap();
+
+    unsigned short verticalGap();
+
+    unsigned short height();
 };
 
 }

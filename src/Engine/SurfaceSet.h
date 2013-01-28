@@ -33,9 +33,10 @@ protected:
 public:
     SurfaceSet(int x = 0, int y = 0);
     ~SurfaceSet();
+
     unsigned int currentSurface;
     void addSurface(Surface * surface);
-    SDL_Surface * getSurface();
+    SDL_Surface * surface();
 };
 
 }

@@ -34,11 +34,11 @@ void ImageButton::draw()
     InteractiveSurface::draw();
     if (_hovered && _leftButtonPressed)
     {
-        loadFromSurface(ResourceManager::getSurface(_pressedImage, getX(), getY()));
+        loadFromSurface(ResourceManager::surface(_pressedImage, x(), y()));
     }
     else
     {
-        loadFromSurface(ResourceManager::getSurface(_releasedImage, getX(), getY()));
+        loadFromSurface(ResourceManager::surface(_releasedImage, x(), y()));
     }
 }
 

@@ -55,12 +55,12 @@ Event::~Event()
 {
 }
 
-SDL_Event * Event::getSDLEvent()
+SDL_Event * Event::SDLEvent()
 {
     return _event;
 }
 
-InteractiveSurface * Event::getSender()
+InteractiveSurface * Event::sender()
 {
     return _sender;
 }
@@ -80,17 +80,17 @@ bool Event::isKeyboardEvent()
     return _isKeyboardEvent;
 }
 
-int Event::getX()
+int Event::x()
 {
     return _x;
 }
 
-int Event::getY()
+int Event::y()
 {
     return _y;
 }
 
-int Event::getKeyCode()
+int Event::keyCode()
 {
     return _keyCode;
 }

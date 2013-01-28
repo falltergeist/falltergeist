@@ -38,10 +38,15 @@ protected:
 public:
     Screen(int width, int height, int bpp);
     ~Screen();
-    Surface * getSurface();
+
+    Surface * surface();
+
     void clear();
-    int getWidth();
-    int getHeight();
+
+    int width();
+
+    int height();
+
     void flip();
 };
 

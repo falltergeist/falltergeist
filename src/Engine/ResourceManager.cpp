@@ -20,10 +20,6 @@
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
 #include "../Engine/CrossPlatform.h"
-#include "../Engine/VirtualFile.h"
-#include "../Fallout/GcdFileType.h"
-#include "../Fallout/MsgFileType.h"
-#include "../Fallout/BioFileType.h"
 #include <iostream>
 
 namespace Falltergeist
@@ -33,7 +29,7 @@ std::list<libfalltergeist::DatFile *> * ResourceManager::_datFiles = new std::li
 
 const char * _t(unsigned int number, const char * filename)
 {
-    libfalltergeist::MsgFileType * msg = ResourceManager::getMsgFileType(filename);
+    libfalltergeist::MsgFileType * msg = ResourceManager::msgFileType(filename);
     if (!msg) throw Exception("Cant find msg file");
     //return msg->getText(number);
 }
@@ -41,13 +37,13 @@ const char * _t(unsigned int number, const char * filename)
 
 ResourceManager::ResourceManager()
 {
-    std::string path = CrossPlatform::getHomePath();
+    std::string path = CrossPlatform::homePath();
     path += "/.fallout/master.dat";
     _datFiles->push_back(new libfalltergeist::DatFile((char *)path.c_str()));
     //_datFiles->push_back(new DatFile(homepath + "/.fallout/critter.dat"));
 }
 
-libfalltergeist::DatFileItem * ResourceManager::getDatFileItem(std::string filename)
+libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename)
 {
     std::list<libfalltergeist::DatFile *>::iterator it;
     for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
@@ -61,9 +57,9 @@ libfalltergeist::DatFileItem * ResourceManager::getDatFileItem(std::string filen
     return 0;
 }
 
-libfalltergeist::FrmFileType * ResourceManager::getFrmFileType(std::string filename)
+libfalltergeist::FrmFileType * ResourceManager::frmFileType(std::string filename)
 {
-    libfalltergeist::DatFileItem * item = getDatFileItem(filename);
+    libfalltergeist::DatFileItem * item = datFileItem(filename);
     if (item)
     {
         return item->asFrmFileType();
@@ -71,9 +67,9 @@ libfalltergeist::FrmFileType * ResourceManager::getFrmFileType(std::string filen
     return 0;
 }
 
-libfalltergeist::PalFileType * ResourceManager::getPalFileType(std::string filename)
+libfalltergeist::PalFileType * ResourceManager::palFileType(std::string filename)
 {
-    libfalltergeist::DatFileItem * item = getDatFileItem(filename);
+    libfalltergeist::DatFileItem * item = datFileItem(filename);
     if (item)
     {
         return item->asPalFileType();
@@ -81,9 +77,9 @@ libfalltergeist::PalFileType * ResourceManager::getPalFileType(std::string filen
     return 0;
 }
 
-libfalltergeist::LstFileType * ResourceManager::getLstFileType(std::string filename)
+libfalltergeist::LstFileType * ResourceManager::lstFileType(std::string filename)
 {
-    libfalltergeist::DatFileItem * item = getDatFileItem(filename);
+    libfalltergeist::DatFileItem * item = datFileItem(filename);
     if (item)
     {
         return item->asLstFileType();
@@ -91,9 +87,9 @@ libfalltergeist::LstFileType * ResourceManager::getLstFileType(std::string filen
     return 0;
 }
 
-libfalltergeist::AafFileType * ResourceManager::getAafFileType(std::string filename)
+libfalltergeist::AafFileType * ResourceManager::aafFileType(std::string filename)
 {
-    libfalltergeist::DatFileItem * item = getDatFileItem(filename);
+    libfalltergeist::DatFileItem * item = datFileItem(filename);
     if (item)
     {
         return item->asAafFileType();
@@ -102,9 +98,9 @@ libfalltergeist::AafFileType * ResourceManager::getAafFileType(std::string filen
 }
 
 
-libfalltergeist::FonFileType * ResourceManager::getFonFileType(std::string filename)
+libfalltergeist::FonFileType * ResourceManager::fonFileType(std::string filename)
 {
-    libfalltergeist::DatFileItem * item = getDatFileItem(filename);
+    libfalltergeist::DatFileItem * item = datFileItem(filename);
     if (item)
     {
         //return item->asFonFileType();
@@ -112,9 +108,9 @@ libfalltergeist::FonFileType * ResourceManager::getFonFileType(std::string filen
     return 0;
 }
 
-libfalltergeist::GcdFileType * ResourceManager::getGcdFileType(std::string filename)
+libfalltergeist::GcdFileType * ResourceManager::gcdFileType(std::string filename)
 {
-    libfalltergeist::DatFileItem * item = getDatFileItem(filename);
+    libfalltergeist::DatFileItem * item = datFileItem(filename);
     if (item)
     {
         //return item->asGcdFileType();
@@ -122,9 +118,9 @@ libfalltergeist::GcdFileType * ResourceManager::getGcdFileType(std::string filen
     return 0;
 }
 
-libfalltergeist::MsgFileType * ResourceManager::getMsgFileType(std::string filename)
+libfalltergeist::MsgFileType * ResourceManager::msgFileType(std::string filename)
 {
-    libfalltergeist::DatFileItem * item = getDatFileItem(filename);
+    libfalltergeist::DatFileItem * item = datFileItem(filename);
     if (item)
     {
         //return item->asMsgFileType();
@@ -132,9 +128,9 @@ libfalltergeist::MsgFileType * ResourceManager::getMsgFileType(std::string filen
     return 0;
 }
 
-libfalltergeist::BioFileType * ResourceManager::getBioFileType(std::string filename)
+libfalltergeist::BioFileType * ResourceManager::bioFileType(std::string filename)
 {
-    libfalltergeist::DatFileItem * item = getDatFileItem(filename);
+    libfalltergeist::DatFileItem * item = datFileItem(filename);
     if (item)
     {
         //return item->asBioFileType();
@@ -143,15 +139,15 @@ libfalltergeist::BioFileType * ResourceManager::getBioFileType(std::string filen
 }
 
 
-Surface * ResourceManager::getSurface(std::string filename, int posX, int posY)
+Surface * ResourceManager::surface(std::string filename, int posX, int posY)
 {
-    libfalltergeist::FrmFileType * frm = getFrmFileType(filename);
+    libfalltergeist::FrmFileType * frm = frmFileType(filename);
     if (!frm)
     {
         std::cout << "No FRM "<< filename << " found" << std::endl;
         return 0;
     }
-    libfalltergeist::PalFileType * pal = getPalFileType("color.pal");
+    libfalltergeist::PalFileType * pal = palFileType("color.pal");
     if (!pal)
     {
         std::cout << "No PAL color.pal found" << std::endl;
@@ -175,7 +171,7 @@ Surface * ResourceManager::getSurface(std::string filename, int posX, int posY)
     }
     surface->setX(posX);
     surface->setY(posY);
-    SDL_SetColorKey(surface->getSurface(), SDL_SRCCOLORKEY, 0);
+    SDL_SetColorKey(surface->surface(), SDL_SRCCOLORKEY, 0);
     return surface;
 }
 

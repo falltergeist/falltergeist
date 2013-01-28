@@ -46,7 +46,7 @@ Screen::~Screen()
     delete _surface;
 }
 
-Surface * Screen::getSurface()
+Surface * Screen::surface()
 {
     return _surface;
 }
@@ -57,19 +57,19 @@ void Screen::clear()
     _surface->clear();
 }
 
-int Screen::getHeight()
+int Screen::height()
 {
     return _screen->h;
 }
 
-int Screen::getWidth()
+int Screen::width()
 {
     return _screen->w;
 }
 
 void Screen::flip()
 {
-    SDL_BlitSurface(_surface->getSurface(), 0, _screen, 0);
+    SDL_BlitSurface(_surface->surface(), 0, _screen, 0);
 
 
     if (SDL_Flip(_screen) == -1)

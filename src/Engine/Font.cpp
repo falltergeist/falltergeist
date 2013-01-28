@@ -42,10 +42,10 @@ Font::~Font()
 void Font::setFilename(const char * filename)
 {
     _filename = filename;
-    _aafFileType = ResourceManager::getAafFileType(_filename);
+    _aafFileType = ResourceManager::aafFileType(_filename);
 }
 
-const char * Font::getFilename()
+const char * Font::filename()
 {
     return _filename;
 }
@@ -59,34 +59,34 @@ void Font::setColor(unsigned int color)
     for (int i = 0; i < 256; i++) _glyphs->push_back(0);
 }
 
-unsigned int Font::getColor()
+unsigned int Font::color()
 {
     return _color;
 }
 
-unsigned short Font::getHeight()
+unsigned short Font::height()
 {
     return _aafFileType->maximumHeight();
 }
 
-unsigned short Font::getHorizontalGap()
+unsigned short Font::horizontalGap()
 {
     return _aafFileType->horizontalGap();
 }
 
-unsigned short Font::getVerticalGap()
+unsigned short Font::verticalGap()
 {
     return _aafFileType->verticalGap();
 }
 
-Surface * Font::getGlyph(unsigned char chr)
+Surface * Font::glyph(unsigned char chr)
 {
 
     if (_glyphs->at(chr) != 0) return _glyphs->at(chr);
 
     int charWidth = _aafFileType->glyphs()->at(chr)->width();
     int charHeight = _aafFileType->glyphs()->at(chr)->height();
-    int height = getHeight();
+    int height = this->height();
     int delta = height - charHeight;
     //char * data = _aafFileType->getChar(chr)->data;
 
@@ -131,7 +131,7 @@ Surface * Font::getGlyph(unsigned char chr)
                         break;
                 }
 
-                unsigned int color = getColor();
+                unsigned int color = this->color();
                 unsigned int red =   ((color & 0xFF000000) >> 16) / lightness;
                 unsigned int green = ((color & 0x00FF0000) >> 8)  / lightness;
                 unsigned int blue =   (color & 0x0000FF00) / lightness;

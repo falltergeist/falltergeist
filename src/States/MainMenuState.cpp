@@ -44,7 +44,7 @@ void MainMenuState::init()
     State::init();
     _isFullscreen = true;
     // Background image
-    add(_game->getResourceManager()->getSurface("art/intrface/mainmenu.frm"));
+    add(_game->resourceManager()->surface("art/intrface/mainmenu.frm"));
 
     // "Into" button
     ImageButton * introButton = new ImageButton("art/intrface/menuup.frm", "art/intrface/menudown.frm", 29, 19);

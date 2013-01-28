@@ -70,7 +70,7 @@ void TextArea::draw()
 
     unsigned int width = 0;
     unsigned int maxWidth = 0;
-    unsigned int height = _font->getHeight();
+    unsigned int height = _font->height();
     unsigned int i = 0;
     int x = 0;
     int y = 0;
@@ -93,13 +93,13 @@ void TextArea::draw()
         else
         {
             lines->at(lineCount)->push_back(_text[i]);
-            width += _font->getGlyph(_text[i])->getWidth();
-            width += _font->getHorizontalGap();
+            width += _font->glyph(_text[i])->width();
+            width += _font->horizontalGap();
         }
         i++;
     }
     if (width <= maxWidth) width = maxWidth;
-    height = (_font->getHeight() * lines->size()) + (_font->getHorizontalGap() * (lines->size() - 1));
+    height = (_font->height() * lines->size()) + (_font->horizontalGap() * (lines->size() - 1));
 
     // foreach text line
     for (std::vector<std::string *>::iterator it = lines->begin(); it != lines->end(); ++it)
@@ -108,20 +108,20 @@ void TextArea::draw()
         x = 0;
         for(i = 0; i != (*it)->size(); ++i)
         {
-            lineWidth += _font->getGlyph((*it)->c_str()[i])->getWidth();
-            if (i < (*it)->size() - 1) lineWidth += _font->getHorizontalGap();
+            lineWidth += _font->glyph((*it)->c_str()[i])->width();
+            if (i < (*it)->size() - 1) lineWidth += _font->horizontalGap();
         }
 
         //std::cout << lineWidth << ":" << _font->getHeight() << std::endl;
-        Surface * lineSurface = new Surface(lineWidth, _font->getHeight());
+        Surface * lineSurface = new Surface(lineWidth, _font->height());
         for(i = 0; i != (*it)->size(); ++i)
         {
-            Surface * glyph = _font->getGlyph((*it)->c_str()[i]);
+            Surface * glyph = _font->glyph((*it)->c_str()[i]);
             glyph->setX(x);
             glyph->copyTo(lineSurface);
 
-            x += glyph->getWidth();
-            if (i < (*it)->size() - 1) x += _font->getHorizontalGap();
+            x += glyph->width();
+            if (i < (*it)->size() - 1) x += _font->horizontalGap();
         }
         linesSurfaces->push_back(lineSurface);
     }
@@ -137,10 +137,10 @@ void TextArea::draw()
             case HORIZONTAL_ALIGN_LEFT:
                 break;
             case HORIZONTAL_ALIGN_CENTER:
-            x = (width-(*it)->getWidth())/2;
+            x = (width-(*it)->width())/2;
                 break;
             case HORIZONTAL_ALIGN_RIGHT:
-                x = width - (*it)->getWidth();
+                x = width - (*it)->width();
                 break;
             case HORIZONTAL_ALIGN_JUSTIFY:
                 //@todo justify
@@ -150,14 +150,14 @@ void TextArea::draw()
         (*it)->setY(y);
         (*it)->copyTo(textSurface);
         //delete(*it);
-        y += _font->getHeight() + _font->getVerticalGap();
+        y += _font->height() + _font->verticalGap();
     }
     delete linesSurfaces;
 
     if (_width == 0 && _height == 0)
     {
-        textSurface->setX(getX());
-        textSurface->setY(getY());
+        textSurface->setX(this->x());
+        textSurface->setY(this->y());
         loadFromSurface(textSurface);
         delete lines;
         return;
@@ -166,17 +166,17 @@ void TextArea::draw()
     if (_height == 0) _height = height;
 
     // using align
-    Surface * surface = new Surface(_width,_height,getX(),getY());
+    Surface * surface = new Surface(_width,_height,this->x(),this->y());
     x = 0; y = 0;
     switch(_horizontalAlign)
     {
         case HORIZONTAL_ALIGN_LEFT:
             break;
         case HORIZONTAL_ALIGN_CENTER:
-        x = (_width-textSurface->getWidth())/2;
+        x = (_width-textSurface->width())/2;
             break;
         case HORIZONTAL_ALIGN_RIGHT:
-            x = _width - textSurface->getWidth();
+            x = _width - textSurface->width();
             break;
         case HORIZONTAL_ALIGN_JUSTIFY:
             //@todo justify
@@ -202,7 +202,7 @@ void TextArea::draw()
     delete textSurface;
 }
 
-unsigned int TextArea::getColor()
+unsigned int TextArea::color()
 {
     return _color;
 }
@@ -216,7 +216,7 @@ void TextArea::setColor(unsigned int color)
     needRedraw = true;
 }
 
-unsigned int TextArea::getHeight()
+unsigned int TextArea::height()
 {
     return _height;
 }
@@ -228,7 +228,7 @@ void TextArea::setHeight(unsigned int height)
     needRedraw = true;
 }
 
-unsigned int TextArea::getWidth()
+unsigned int TextArea::width()
 {
     return _width;
 }
@@ -240,7 +240,7 @@ void TextArea::setWidth(unsigned int width)
     needRedraw = true;
 }
 
-unsigned char TextArea::getHorizontalAlign()
+unsigned char TextArea::horizontalAlign()
 {
     return _horizontalAlign;
 }
@@ -252,7 +252,7 @@ void TextArea::setHorizontalAlign(unsigned char align)
     needRedraw = true;
 }
 
-unsigned char TextArea::getVerticalAlign()
+unsigned char TextArea::verticalAlign()
 {
     return _verticalAlign;
 }
@@ -264,7 +264,7 @@ void TextArea::setVerticalAlign(unsigned char align)
     needRedraw = true;
 }
 
-char * TextArea::getText()
+char * TextArea::text()
 {
     return _text;
 }

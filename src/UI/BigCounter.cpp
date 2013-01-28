@@ -33,11 +33,11 @@ BigCounter::BigCounter(int x, int y) : InteractiveSurface(0,0, x, y)
     _numbersRed = new std::vector<Surface *>;
     for (int i = 0; i != 10; i++)
     {
-        _numbersWhite->push_back(ResourceManager::getSurface("art/intrface/bignum.frm")->crop(14*i, 0, 14, 24));
+        _numbersWhite->push_back(ResourceManager::surface("art/intrface/bignum.frm")->crop(14*i, 0, 14, 24));
     }
     for (int i = 0; i != 10; i++)
     {
-        _numbersRed->push_back(ResourceManager::getSurface("art/intrface/bignum.frm")->crop(168 + 14*i, 0, 14, 24));
+        _numbersRed->push_back(ResourceManager::surface("art/intrface/bignum.frm")->crop(168 + 14*i, 0, 14, 24));
     }
 }
 
@@ -81,8 +81,8 @@ void BigCounter::draw()
     }
     delete [] textNumber;
 
-    surface->setX(getX());
-    surface->setY(getY());
+    surface->setX(x());
+    surface->setY(y());
     loadFromSurface(surface);
 }
 

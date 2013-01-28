@@ -31,7 +31,7 @@ Exception::~Exception() throw()
 {
 }
 
-std::string Exception::getMessage() throw()
+std::string Exception::message() throw()
 {
     return _message;
 }

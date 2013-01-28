@@ -37,7 +37,9 @@ protected:
 public:
     Animation(const char * filename, int x = 0, int y = 0);
     ~Animation();
-    SDL_Surface * getSurface();
+
+    SDL_Surface * surface();
+
     void loadFromFrmFile(const char * filename);
     void think();
 };

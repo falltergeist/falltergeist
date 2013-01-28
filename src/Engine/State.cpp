@@ -55,7 +55,7 @@ void State::blit()
 {
     for (std::vector<Surface *>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
     {
-        (*i)->blit(_game->getScreen()->getSurface());
+        (*i)->blit(_game->screen()->surface());
     }
 }
 

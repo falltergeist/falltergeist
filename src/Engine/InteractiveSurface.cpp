@@ -70,14 +70,14 @@ void InteractiveSurface::handle(Event * event, State * state)
     if(event->isMouseEvent())
     {
         // check that the surface under the cursor pointer is not transparent
-        int x = event->getX() - getX();
-        int y = event->getY() - getY();
+        int x = event->x() - this->x();
+        int y = event->y() - this->y();
 
-        unsigned int alpha = getPixel(x , y) >> 24;
+        unsigned int alpha = pixel(x , y) >> 24;
         //std::cout << alpha << std::endl;
         if (alpha > 0)
         {
-            switch(event->getSDLEvent()->type)
+            switch(event->SDLEvent()->type)
             {
                 case SDL_MOUSEMOTION:
                     if (!_hovered)
@@ -91,19 +91,19 @@ void InteractiveSurface::handle(Event * event, State * state)
                     }
                     break;
                 case SDL_MOUSEBUTTONDOWN:
-                    if (event->getSDLEvent()->button.button == SDL_BUTTON_LEFT)
+                    if (event->SDLEvent()->button.button == SDL_BUTTON_LEFT)
                     {
                         _leftButtonPressed = true;
                         leftButtonPress(event, state);
                     }
-                    else if (event->getSDLEvent()->button.button == SDL_BUTTON_RIGHT)
+                    else if (event->SDLEvent()->button.button == SDL_BUTTON_RIGHT)
                     {
                         _rightButtonPressed = true;
                         rightButtonPress(event, state);
                     }
                     break;
                 case SDL_MOUSEBUTTONUP:
-                    if (event->getSDLEvent()->button.button == SDL_BUTTON_LEFT)
+                    if (event->SDLEvent()->button.button == SDL_BUTTON_LEFT)
                     {
                         leftButtonRelease(event, state);
                         if (_leftButtonPressed)
@@ -112,7 +112,7 @@ void InteractiveSurface::handle(Event * event, State * state)
                         }
                         _leftButtonPressed = false;
                     }
-                    else if(event->getSDLEvent()->button.button == SDL_BUTTON_RIGHT)
+                    else if(event->SDLEvent()->button.button == SDL_BUTTON_RIGHT)
                     {
                         rightButtonRelease(event, state);
                         if (_rightButtonPressed)
@@ -126,14 +126,14 @@ void InteractiveSurface::handle(Event * event, State * state)
         }
         else
         {
-            if (event->getSDLEvent()->type == SDL_MOUSEMOTION && _hovered)
+            if (event->SDLEvent()->type == SDL_MOUSEMOTION && _hovered)
             {
                 _hovered = false;
                 mouseOut(event, state);
             }
-            else if(event->getSDLEvent()->type == SDL_MOUSEBUTTONUP)
+            else if(event->SDLEvent()->type == SDL_MOUSEBUTTONUP)
             {
-                if (event->getSDLEvent()->button.button == SDL_BUTTON_LEFT)
+                if (event->SDLEvent()->button.button == SDL_BUTTON_LEFT)
                 {
                     if (_leftButtonPressed)
                     {
@@ -141,7 +141,7 @@ void InteractiveSurface::handle(Event * event, State * state)
                         _leftButtonPressed = false;
                     }
                 }
-                else if(event->getSDLEvent()->button.button == SDL_BUTTON_RIGHT)
+                else if(event->SDLEvent()->button.button == SDL_BUTTON_RIGHT)
                 {
                     if (_rightButtonPressed)
                     {
@@ -154,11 +154,11 @@ void InteractiveSurface::handle(Event * event, State * state)
     }
     else if(event->isKeyboardEvent())
     {
-        if(event->getSDLEvent()->type == SDL_KEYDOWN)
+        if(event->SDLEvent()->type == SDL_KEYDOWN)
         {
             keyboardPress(event, state);
         }
-        else if(event->getSDLEvent()->type == SDL_KEYUP)
+        else if(event->SDLEvent()->type == SDL_KEYUP)
         {
             keyboardRelease(event, state);
         }

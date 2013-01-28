@@ -38,9 +38,9 @@ void SurfaceSet::addSurface(Surface * surface)
     _surfaces->push_back(surface);
 }
 
-SDL_Surface * SurfaceSet::getSurface()
+SDL_Surface * SurfaceSet::surface()
 {
-    return _surfaces->at(currentSurface)->getSurface();
+    return _surfaces->at(currentSurface)->surface();
 }
 
 }

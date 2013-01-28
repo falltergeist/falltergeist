@@ -49,10 +49,6 @@ set(SOURCES main.cpp
             src/Engine/Event.h
             src/Engine/Exception.cpp
             src/Engine/Exception.h
-            src/Engine/File.cpp
-            src/Engine/File.h
-            src/Engine/VirtualFile.cpp
-            src/Engine/VirtualFile.h
             src/Engine/Font.cpp
             src/Engine/Font.h
             src/Engine/Game.cpp
@@ -71,14 +67,6 @@ set(SOURCES main.cpp
             src/Engine/Surface.h
             src/Engine/SurfaceSet.cpp
             src/Engine/SurfaceSet.h
-            src/Fallout/BioFileType.cpp
-            src/Fallout/BioFileType.h
-            src/Fallout/FonFileType.cpp
-            src/Fallout/FonFileType.h
-            src/Fallout/GcdFileType.cpp
-            src/Fallout/GcdFileType.h
-            src/Fallout/MsgFileType.cpp
-            src/Fallout/MsgFileType.h
             src/States/MainMenuState.cpp
             src/States/MainMenuState.h
             src/States/NewGameState.cpp

@@ -33,7 +33,8 @@ private:
 public:
     Exception(std::string message) throw();
     ~Exception() throw();
-    std::string getMessage() throw();
+
+    std::string message() throw();
 };
 
 }

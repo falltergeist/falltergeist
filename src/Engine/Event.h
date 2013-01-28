@@ -40,12 +40,18 @@ protected:
 public:
     Event(SDL_Event * event);
     virtual ~Event();
+
     void setSender(InteractiveSurface * sender);
-    InteractiveSurface * getSender();
-    int getX();
-    int getY();
-    int getKeyCode();
-    SDL_Event * getSDLEvent();
+    InteractiveSurface * sender();
+
+    int x();
+
+    int y();
+
+    int keyCode();
+
+    SDL_Event * SDLEvent();
+
     bool isMouseEvent();
     bool isKeyboardEvent();
 };
