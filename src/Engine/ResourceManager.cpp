@@ -158,8 +158,8 @@ Surface * ResourceManager::getSurface(std::string filename, int posX, int posY)
         return 0;
     }
 
-    int width = frm->getDirections()->at(0)->getFrames()->at(0)->getWidth();
-    int height = frm->getDirections()->at(0)->getFrames()->at(0)->getHeight();
+    int width = frm->directions()->at(0)->frames()->at(0)->width();
+    int height = frm->directions()->at(0)->frames()->at(0)->height();
     Surface * surface = new Surface(width,height);
 
     int i = 0;
@@ -167,8 +167,8 @@ Surface * ResourceManager::getSurface(std::string filename, int posX, int posY)
     {
         for (int x = 0; x != width; ++x)
         {
-            unsigned int colorIndex = frm->getDirections()->at(0)->getFrames()->at(0)->getColorIndexes()->at(i);
-            unsigned int color = *pal->getColor(colorIndex);
+            unsigned int colorIndex = frm->directions()->at(0)->frames()->at(0)->colorIndexes()->at(i);
+            unsigned int color = *pal->color(colorIndex);
             surface->setPixel(x, y, color);
             i++;
         }

@@ -59,18 +59,18 @@ void Animation::loadFromFrmFile(const char * filename)
     }
     libfalltergeist::PalFileType * pal = ResourceManager::getPalFileType("color.pal");
 
-    _frameRate = 1000 / frm->getFramesPerSecond();
+    _frameRate = 1000 / frm->framesPerSecond();
 
     // for each direction
     for (unsigned int i = 0; i != 6; ++i)
     {
-        if (i > 0 && frm->getDirections()->at(i)->getDataOffset() == frm->getDirections()->at(0)->getDataOffset()) break;
+        if (i > 0 && frm->directions()->at(i)->dataOffset() == frm->directions()->at(0)->dataOffset()) break;
         std::vector<Surface *> * frameset = new std::vector<Surface *>;
         // for each frame
-        for (unsigned int j = 0; j != frm->getFramesPerDirection(); ++j)
+        for (unsigned int j = 0; j != frm->framesPerDirection(); ++j)
         {
-            int width = frm->getDirections()->at(i)->getFrames()->at(j)->getWidth();
-            int height = frm->getDirections()->at(i)->getFrames()->at(j)->getHeight();
+            int width = frm->directions()->at(i)->frames()->at(j)->width();
+            int height = frm->directions()->at(i)->frames()->at(j)->height();
             Surface * surface = new Surface(width,height);
             int z = 0;
             for (int y = 0; y < height; y++)
@@ -78,8 +78,8 @@ void Animation::loadFromFrmFile(const char * filename)
                 for (int x = 0; x < width; x++)
                 {
                     // 12 - frame data offset
-                    unsigned int colorIndex = frm->getDirections()->at(i)->getFrames()->at(j)->getColorIndexes()->at(z);
-                    unsigned int color = *pal->getColor(colorIndex);
+                    unsigned int colorIndex = frm->directions()->at(i)->frames()->at(j)->colorIndexes()->at(z);
+                    unsigned int color = *pal->color(colorIndex);
                     if (colorIndex == 0) color = 0;
                     surface->setPixel(x,y,color);
                     z++;
