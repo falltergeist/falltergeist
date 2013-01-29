@@ -101,7 +101,7 @@ void Game::setState(State * state)
 void Game::run()
 {
     std::cout << "Starting main loop..." << std::endl;
-    TextArea * falltergeistVersion = new TextArea("Falltergeist "VERSION, 3, 470);
+    TextArea * falltergeistVersion = new TextArea((char*)"Falltergeist "VERSION, 3, 470);
     while (!_quit)
     {
         // Clean up states

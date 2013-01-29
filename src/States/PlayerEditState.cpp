@@ -25,213 +25,164 @@
 #include "../Engine/Surface.h"
 #include "../UI/BigCounter.h"
 #include "../UI/HiddenMask.h"
+#include "../../lib/libfalltergeist/libfalltergeist.h"
 
 namespace Falltergeist
 {
 
 PlayerEditState::PlayerEditState(Game * game) : State(game)
 {
+    _checkedLabels = new std::vector<TextArea *>;
+    _labels = new std::map<std::string, TextArea *>;
+    _counters = new std::map<std::string, BigCounter *>;
+    _buttons = new std::map<std::string, ImageButton *>;
+
     Surface * background = ResourceManager::surface("art/intrface/edtrcrte.frm");
     
-    _increaseStrengthButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38);
-    _increaseStrengthButton->onLeftButtonClick((EventHandler)&PlayerEditState::onIncreaseStrengthButtonClick);
-    _decreaseStrengthButton = new ImageButton("art/intrface/snegoff.frm", "art/intrface/snegon.frm", 149, 49);
-    _decreaseStrengthButton->onLeftButtonClick((EventHandler)&PlayerEditState::onDecreaseStrengthButtonClick);
-    _statsStrengthLabel = new TextArea(102, 46);
-    _statsStrengthCounter = new BigCounter(59, 37);
+    // Primary stats buttons
+    {
+        const char * plusOn   = "art/intrface/splson.frm";
+        const char * plusOff  = "art/intrface/splsoff.frm";
+        const char * minusOn  = "art/intrface/snegon.frm";
+        const char * minusOff = "art/intrface/snegoff.frm";
+
+        _addButton("stats_strength_increase",     new ImageButton(plusOff,  plusOn,  149, 38));
+        _addButton("stats_strength_decrease",     new ImageButton(minusOff, minusOn, 149, 49));
+        _addButton("stats_perception_increase",   new ImageButton(plusOff,  plusOn,  149, 38 + 33));
+        _addButton("stats_perception_decrease",   new ImageButton(minusOff, minusOn, 149, 49 + 33));
+        _addButton("stats_endurance_increase",    new ImageButton(plusOff,  plusOn,  149, 38 + 33*2));
+        _addButton("stats_endurance_decrease",    new ImageButton(minusOff, minusOn, 149, 49 + 33*2));
+        _addButton("stats_charisma_increase",     new ImageButton(plusOff,  plusOn,  149, 38 + 33*3));
+        _addButton("stats_charisma_decrease",     new ImageButton(minusOff, minusOn, 149, 49 + 33*3));
+        _addButton("stats_intelligence_increase", new ImageButton(plusOff,  plusOn,  149, 38 + 33*4));
+        _addButton("stats_intelligence_decrease", new ImageButton(minusOff, minusOn, 149, 49 + 33*4));
+        _addButton("stats_agility_increase",      new ImageButton(plusOff,  plusOn,  149, 38 + 33*5));
+        _addButton("stats_agility_decrease",      new ImageButton(minusOff, minusOn, 149, 49 + 33*5));
+        _addButton("stats_luck_increase",         new ImageButton(plusOff,  plusOn,  149, 236));
+        _addButton("stats_luck_decrease",         new ImageButton(minusOff, minusOn, 149, 247));
+    }
+    // Primary stats labels
+    {
+        _addLabel("stats_strength",     new TextArea(102, 46));
+        _addLabel("stats_perception",   new TextArea(102, 79));
+        _addLabel("stats_endurance",    new TextArea(102, 112));
+        _addLabel("stats_charisma",     new TextArea(102, 145));
+        _addLabel("stats_intelligence", new TextArea(102, 178));
+        _addLabel("stats_agility",      new TextArea(102, 211));
+        _addLabel("stats_luck",         new TextArea(102, 244));
+    }
+    // Primary stats counters
+    {
+        _addCounter("stats_strength",     new BigCounter(59, 37));
+        _addCounter("stats_perception",   new BigCounter(59, 37 + 33));
+        _addCounter("stats_endurance",    new BigCounter(59, 37 + 33*2));
+        _addCounter("stats_charisma",     new BigCounter(59, 37 + 33*3));
+        _addCounter("stats_intelligence", new BigCounter(59, 37 + 33*4));
+        _addCounter("stats_agility",      new BigCounter(59, 37 + 33*5));
+        _addCounter("stats_luck",         new BigCounter(59, 37 + 33*6));
+    }
+
+    // Free stats points counter
+    _addCounter("stats_points", new BigCounter(126, 282));
+
     HiddenMask * statsStrenghtHiddenMask = new HiddenMask(133, 26, 14, 36);
     statsStrenghtHiddenMask->onLeftButtonClick((EventHandler) &PlayerEditState::onStrengthSelected);
 
-    _increasePerceptionButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38 + 33);
-    _increasePerceptionButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreasePerceptionButtonClick);
-    _decreasePerceptionButton = new ImageButton("art/intrface/snegoff.frm", "art/intrface/snegon.frm", 149, 49 + 33);
-    _decreasePerceptionButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreasePerceptionButtonClick);
-    _statsPerceptionLabel = new TextArea(102, 79);
-    _statsPerceptionCounter = new BigCounter(59, 37 + 33);
     HiddenMask * statsPerceptionHiddenMask = new HiddenMask(133, 26, 14, 36 + 33);
     statsPerceptionHiddenMask->onLeftButtonClick((EventHandler) &PlayerEditState::onPerceptionSelected);
 
-    _increaseEnduranceButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38 + 33*2);
-    _increaseEnduranceButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreaseEnduranceButtonClick);
-    _decreaseEnduranceButton = new ImageButton("art/intrface/snegoff.frm", "art/intrface/snegon.frm", 149, 49 + 33*2);
-    _decreaseEnduranceButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreaseEnduranceButtonClick);
-    _statsEnduranceLabel = new TextArea(102, 112);
-    _statsEnduranceCounter = new BigCounter(59, 37 + 33*2);
     HiddenMask * statsEnduranceHiddenMask = new HiddenMask(133, 26, 14, 36 + 33*2);
     statsEnduranceHiddenMask->onLeftButtonClick((EventHandler) &PlayerEditState::onEnduranceSelected);
 
-    _increaseCharismaButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38 + 33*3);
-    _increaseCharismaButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreaseCharismaButtonClick);
-    _decreaseCharismaButton = new ImageButton("art/intrface/snegoff.frm", "art/intrface/snegon.frm", 149, 49 + 33*3);
-    _decreaseCharismaButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreaseCharismaButtonClick);
-    _statsCharismaLabel = new TextArea(102, 145);
-    _statsCharismaCounter = new BigCounter(59, 37 + 33*3);
     HiddenMask * statsCharismaHiddenMask = new HiddenMask(133, 26, 14, 36 + 33*3);
     statsCharismaHiddenMask->onLeftButtonClick((EventHandler) &PlayerEditState::onCharismaSelected);
 
-    _increaseIntelligenceButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38 + 33*4);
-    _increaseIntelligenceButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreaseIntelligenceButtonClick);
-    _decreaseIntelligenceButton = new ImageButton("art/intrface/snegoff.frm", "art/intrface/snegon.frm", 149, 49 + 33*4);
-    _decreaseIntelligenceButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreaseIntelligenceButtonClick);
-    _statsIntelligenceLabel = new TextArea(102, 178);
-    _statsIntelligenceCounter = new BigCounter(59, 37 + 33*4);
     HiddenMask * statsIntelligenceHiddenMask = new HiddenMask(133, 26, 14, 36 + 33*4);
     statsIntelligenceHiddenMask->onLeftButtonClick((EventHandler) &PlayerEditState::onIntelligenceSelected);
 
-    _increaseAgilityButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 38 + 33*5);
-    _increaseAgilityButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreaseAgilityButtonClick);
-    _decreaseAgilityButton = new ImageButton("art/intrface/snegoff.frm", "art/intrface/snegon.frm", 149, 49 + 33*5);
-    _decreaseAgilityButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreaseAgilityButtonClick);
-    _statsAgilityLabel = new TextArea(102, 211);
-    _statsAgilityCounter = new BigCounter(59, 37 + 33*5);
     HiddenMask * statsAgilityHiddenMask = new HiddenMask(133, 26, 14, 36 + 33*5);
     statsAgilityHiddenMask->onLeftButtonClick((EventHandler) &PlayerEditState::onAgilitySelected);
 
-    _increaseLuckButton = new ImageButton("art/intrface/splsoff.frm", "art/intrface/splson.frm", 149, 236);
-    _increaseLuckButton->onLeftButtonClick((EventHandler) &PlayerEditState::onIncreaseLuckButtonClick);
-    _decreaseLuckButton = new ImageButton("art/intrface/snegoff.frm", "art/intrface/snegon.frm", 149, 247);
-    _decreaseLuckButton->onLeftButtonClick((EventHandler) &PlayerEditState::onDecreaseLuckButtonClick);
-    _statsLuckLabel = new TextArea(102, 244);
-    _statsLuckCounter = new BigCounter(59, 37 + 33*6);
     HiddenMask * statsLuckHiddenMask = new HiddenMask(133, 26, 14, 36 + 33*6);
     statsLuckHiddenMask->onLeftButtonClick((EventHandler) &PlayerEditState::onLuckSelected);
 
-    _statsFreeCounter = new BigCounter(126,282);
 
-    // Traits
-    _trait1Button = new ImageButton("art/intrface/tgskloff.frm","art/intrface/tgsklon.frm",23,352);
-    _trait1Label = new TextArea(_t(100,"text/english/game/trait.msg"), 47, 352);
 
-    _trait2Button = new ImageButton("art/intrface/tgskloff.frm","art/intrface/tgsklon.frm",23,352 + 13);
-    _trait2Label = new TextArea(_t(101,"text/english/game/trait.msg"), 47, 352 + 14);
+    // Traits labels
+    {
+        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/trait.msg");
+        _addLabel("traits_1",  new TextArea(msg->message(100), 47, 352));
+        _addLabel("traits_2",  new TextArea(msg->message(101), 47, 352 + 14));
+        _addLabel("traits_3",  new TextArea(msg->message(102), 47, 352 + 14*2));
+        _addLabel("traits_4",  new TextArea(msg->message(103), 47, 352 + 14*3 - 1));
+        _addLabel("traits_5",  new TextArea(msg->message(104), 47, 352 + 14*4 - 1));
+        _addLabel("traits_6",  new TextArea(msg->message(105), 47, 352 + 14*5 - 2));
+        _addLabel("traits_7",  new TextArea(msg->message(106), 47, 352 + 14*6 - 3));
+        _addLabel("traits_8",  new TextArea(msg->message(107), 47, 352 + 14*7 - 3));
+        _addLabel("traits_9",  new TextArea(msg->message(108), 47, 352))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_10", new TextArea(msg->message(109), 47, 352 + 14))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_11", new TextArea(msg->message(110), 47, 352 + 14*2))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_12", new TextArea(msg->message(111), 47, 352 + 14*3 - 1))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_13", new TextArea(msg->message(112), 47, 352 + 14*4 - 1))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_14", new TextArea(msg->message(113), 47, 352 + 14*5 - 2))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_15", new TextArea(msg->message(114), 47, 352 + 14*6 - 3))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_16", new TextArea(msg->message(115), 47, 352 + 14*7 - 3))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    }
+    // Traits buttons
+    {
+        const char * on  = "art/intrface/tgsklon.frm";
+        const char * off = "art/intrface/tgskloff.frm";
+        _addButton("traits_1",  new ImageButton(off, on, 23,  352));
+        _addButton("traits_2",  new ImageButton(off, on, 23,  352 + 13));
+        _addButton("traits_3",  new ImageButton(off, on, 23,  352 + 13*2 + 1));
+        _addButton("traits_4",  new ImageButton(off, on, 23,  352 + 13*3));
+        _addButton("traits_5",  new ImageButton(off, on, 23,  352 + 13*4 + 1));
+        _addButton("traits_6",  new ImageButton(off, on, 23,  352 + 13*5));
+        _addButton("traits_7",  new ImageButton(off, on, 23,  352 + 13*6 + 1));
+        _addButton("traits_8",  new ImageButton(off, on, 23,  352 + 13*7 + 1));
+        _addButton("traits_9",  new ImageButton(off, on, 299, 352));
+        _addButton("traits_10", new ImageButton(off, on, 299, 352 + 13));
+        _addButton("traits_11", new ImageButton(off, on, 299, 352 + 13*2 + 1));
+        _addButton("traits_12", new ImageButton(off, on, 299, 352 + 13*3));
+        _addButton("traits_13", new ImageButton(off, on, 299, 352 + 13*4 + 1));
+        _addButton("traits_14", new ImageButton(off, on, 299, 352 + 13*5));
+        _addButton("traits_15", new ImageButton(off, on, 299, 352 + 13*6 + 1));
+        _addButton("traits_16", new ImageButton(off, on, 299, 352 + 13*7 + 1));
+    }
 
-    _trait3Button = new ImageButton("art/intrface/tgskloff.frm","art/intrface/tgsklon.frm",23,352 + 13*2 + 1);
-    _trait3Label = new TextArea(_t(102,"text/english/game/trait.msg"), 47, 352 + 14*2);
-
-    _trait4Button = new ImageButton("art/intrface/tgskloff.frm","art/intrface/tgsklon.frm",23,352 + 13*3);
-    _trait4Label = new TextArea(_t(103,"text/english/game/trait.msg"), 47, 352 + 14*3 - 1);
-
-    _trait5Button = new ImageButton("art/intrface/tgskloff.frm","art/intrface/tgsklon.frm",23,352 + 13*4 + 1);
-    _trait5Label = new TextArea(_t(104,"text/english/game/trait.msg"), 47, 352 + 14*4 - 1);
-
-    _trait6Button = new ImageButton("art/intrface/tgskloff.frm","art/intrface/tgsklon.frm",23,352 + 13*5);
-    _trait6Label = new TextArea(_t(105,"text/english/game/trait.msg"), 47, 352 + 14*5 - 2);
-
-    _trait7Button = new ImageButton("art/intrface/tgskloff.frm","art/intrface/tgsklon.frm",23,352 + 13*6 + 1);
-    _trait7Label = new TextArea(_t(106,"text/english/game/trait.msg"), 47, 352 + 14*6 - 3);
-
-    _trait8Button = new ImageButton("art/intrface/tgskloff.frm","art/intrface/tgsklon.frm",23,352 + 13*7 + 1);
-    _trait8Label = new TextArea(_t(107,"text/english/game/trait.msg"), 47, 352 + 14*7 - 3);
-
-    _trait9Button = new ImageButton("art/intrface/tgskloff.frm","art/intrface/tgsklon.frm",299,352);
-    _trait9Label = new TextArea(_t(108,"text/english/game/trait.msg"), 47, 352);
-    _trait9Label->setWidth(244);
-    _trait9Label->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-
-    _trait10Button = new ImageButton("art/intrface/tgskloff.frm","art/intrface/tgsklon.frm",299,352 + 13);
-    _trait10Label = new TextArea(_t(109,"text/english/game/trait.msg"), 47, 352 + 14);
-    _trait10Label->setWidth(244);
-    _trait10Label->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-
-    _trait11Button = new ImageButton("art/intrface/tgskloff.frm","art/intrface/tgsklon.frm",299,352 + 13*2 + 1);
-    _trait11Label = new TextArea(_t(110,"text/english/game/trait.msg"), 47, 352 + 14*2);
-    _trait11Label->setWidth(244);
-    _trait11Label->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-
-    _trait12Button = new ImageButton("art/intrface/tgskloff.frm","art/intrface/tgsklon.frm",299,352 + 13*3);
-    _trait12Label = new TextArea(_t(111,"text/english/game/trait.msg"), 47, 352 + 14*3 - 1);
-    _trait12Label->setWidth(244);
-    _trait12Label->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-
-    _trait13Button = new ImageButton("art/intrface/tgskloff.frm","art/intrface/tgsklon.frm",299,352 + 13*4 + 1);
-    _trait13Label = new TextArea(_t(112,"text/english/game/trait.msg"), 47, 352 + 14*4 - 1);
-    _trait13Label->setWidth(244);
-    _trait13Label->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-
-    _trait14Button = new ImageButton("art/intrface/tgskloff.frm","art/intrface/tgsklon.frm",299,352 + 13*5);
-    _trait14Label = new TextArea(_t(113,"text/english/game/trait.msg"), 47, 352 + 14*5 - 2);
-    _trait14Label->setWidth(244);
-    _trait14Label->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-
-    _trait15Button = new ImageButton("art/intrface/tgskloff.frm","art/intrface/tgsklon.frm",299,352 + 13*6 + 1);
-    _trait15Label = new TextArea(_t(114,"text/english/game/trait.msg"), 47, 352 + 14*6 - 3);
-    _trait15Label->setWidth(244);
-    _trait15Label->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-
-    _trait16Button = new ImageButton("art/intrface/tgskloff.frm","art/intrface/tgsklon.frm",299,352 + 13*7 + 1);
-    _trait16Label = new TextArea(_t(115,"text/english/game/trait.msg"), 47, 352 + 14*7 - 3);
-    _trait16Label->setWidth(244);
-    _trait16Label->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    // Event handlers
+    _buttons->at("stats_strength_increase")->onLeftButtonClick(     (EventHandler) &PlayerEditState::onIncreaseStrengthButtonClick);
+    _buttons->at("stats_strength_decrease")->onLeftButtonClick(     (EventHandler) &PlayerEditState::onDecreaseStrengthButtonClick);
+    _buttons->at("stats_perception_increase")->onLeftButtonClick(   (EventHandler) &PlayerEditState::onIncreasePerceptionButtonClick);
+    _buttons->at("stats_perception_decrease")->onLeftButtonClick(   (EventHandler) &PlayerEditState::onDecreasePerceptionButtonClick);
+    _buttons->at("stats_endurance_increase")->onLeftButtonClick(    (EventHandler) &PlayerEditState::onIncreaseEnduranceButtonClick);
+    _buttons->at("stats_endurance_decrease")->onLeftButtonClick(    (EventHandler) &PlayerEditState::onDecreaseEnduranceButtonClick);
+    _buttons->at("stats_charisma_increase")->onLeftButtonClick(     (EventHandler) &PlayerEditState::onIncreaseCharismaButtonClick);
+    _buttons->at("stats_charisma_decrease")->onLeftButtonClick(     (EventHandler) &PlayerEditState::onDecreaseCharismaButtonClick);
+    _buttons->at("stats_intelligence_increase")->onLeftButtonClick( (EventHandler) &PlayerEditState::onIncreaseIntelligenceButtonClick);
+    _buttons->at("stats_intelligence_decrease")->onLeftButtonClick( (EventHandler) &PlayerEditState::onDecreaseIntelligenceButtonClick);
+    _buttons->at("stats_agility_increase")->onLeftButtonClick(      (EventHandler) &PlayerEditState::onIncreaseAgilityButtonClick);
+    _buttons->at("stats_agility_decrease")->onLeftButtonClick(      (EventHandler) &PlayerEditState::onDecreaseAgilityButtonClick);
+    _buttons->at("stats_luck_increase")->onLeftButtonClick(         (EventHandler) &PlayerEditState::onIncreaseLuckButtonClick);
+    _buttons->at("stats_luck_decrease")->onLeftButtonClick(         (EventHandler) &PlayerEditState::onDecreaseLuckButtonClick);
 
     add(background);
-    // primary stats buttons
-    add(_increaseStrengthButton);
-    add(_decreaseStrengthButton);
-    add(_increasePerceptionButton);
-    add(_decreasePerceptionButton);
-    add(_increaseEnduranceButton);
-    add(_decreaseEnduranceButton);
-    add(_increaseCharismaButton);
-    add(_decreaseCharismaButton);
-    add(_increaseIntelligenceButton);
-    add(_decreaseIntelligenceButton);
-    add(_increaseAgilityButton);
-    add(_decreaseAgilityButton);
-    add(_increaseLuckButton);
-    add(_decreaseLuckButton);
-    // primary stats labels
-    add(_statsStrengthLabel);
-    add(_statsPerceptionLabel);
-    add(_statsEnduranceLabel);
-    add(_statsCharismaLabel);
-    add(_statsIntelligenceLabel);
-    add(_statsAgilityLabel);
-    add(_statsLuckLabel);
-    // primary stats counters
-    add(_statsStrengthCounter);
-    add(_statsPerceptionCounter);
-    add(_statsEnduranceCounter);
-    add(_statsCharismaCounter);
-    add(_statsIntelligenceCounter);
-    add(_statsAgilityCounter);
-    add(_statsLuckCounter);
 
-    add(_statsFreeCounter);
-
-    // trait buttons
-    add(_trait1Button);
-    add(_trait2Button);
-    add(_trait3Button);
-    add(_trait4Button);
-    add(_trait5Button);
-    add(_trait6Button);
-    add(_trait7Button);
-    add(_trait8Button);
-    add(_trait9Button);
-    add(_trait10Button);
-    add(_trait11Button);
-    add(_trait12Button);
-    add(_trait13Button);
-    add(_trait14Button);
-    add(_trait15Button);
-    add(_trait16Button);
-    // Trait labels
-    add(_trait1Label);
-    add(_trait2Label);
-    add(_trait3Label);
-    add(_trait4Label);
-    add(_trait5Label);
-    add(_trait6Label);
-    add(_trait7Label);
-    add(_trait8Label);
-    add(_trait9Label);
-    add(_trait10Label);
-    add(_trait11Label);
-    add(_trait12Label);
-    add(_trait13Label);
-    add(_trait14Label);
-    add(_trait15Label);
-    add(_trait16Label);
+    // add buttons to the state
+    {
+        std::map<std::string, ImageButton *>::iterator it;
+        for(it = _buttons->begin(); it != _buttons->end(); ++it) add(it->second);
+    }
+    // add labels to the state
+    {
+        std::map<std::string, TextArea *>::iterator it;
+        for(it = _labels->begin(); it != _labels->end(); ++it) add(it->second);
+    }
+    // add counters to the state
+    {
+        std::map<std::string, BigCounter *>::iterator it;
+        for(it = _counters->begin(); it != _counters->end(); ++it) add(it->second);
+    }
 
     add(statsStrenghtHiddenMask);
     add(statsPerceptionHiddenMask);
@@ -245,32 +196,54 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
 
 PlayerEditState::~PlayerEditState()
 {
+    delete _checkedLabels;
+    delete _labels;
+    delete _buttons;
+    delete _counters;
+}
+
+TextArea * PlayerEditState::_addLabel(std::string name, TextArea * label)
+{
+    _labels->insert(std::pair<std::string,TextArea *>(name, label));
+    return label;
+}
+
+ImageButton * PlayerEditState::_addButton(std::string name, ImageButton * button)
+{
+    _buttons->insert(std::pair<std::string,ImageButton *>(name, button));
+    return button;
+}
+
+BigCounter * PlayerEditState::_addCounter(std::string name, BigCounter * counter)
+{
+    _counters->insert(std::pair<std::string,BigCounter *>(name, counter));
+    return counter;
 }
 
 void PlayerEditState::think()
 {
-    _statsStrengthLabel->setText(_t(199 + _game->player()->strength, "text/english/game/editor.msg"));
-    _statsStrengthCounter->setNumber(_game->player()->strength);
+    // primary stats labels
+    {
+        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+        _labels->at("stats_strength")->setText(msg->message(199 + _game->player()->strength));
+        _labels->at("stats_perception")->setText(msg->message(199 + _game->player()->perception));
+        _labels->at("stats_endurance")->setText(msg->message(199 + _game->player()->endurance));
+        _labels->at("stats_charisma")->setText(msg->message(199 + _game->player()->charisma));
+        _labels->at("stats_intelligence")->setText(msg->message(199 + _game->player()->intelligence));
+        _labels->at("stats_agility")->setText(msg->message(199 + _game->player()->agility));
+        _labels->at("stats_luck")->setText(msg->message(199 + _game->player()->luck));
+    }
+    // primary stats counters
 
-    _statsPerceptionLabel->setText(_t(199 + _game->player()->perception, "text/english/game/editor.msg"));
-    _statsPerceptionCounter->setNumber(_game->player()->perception);
+    _counters->at("stats_strength")->setNumber(_game->player()->strength);
+    _counters->at("stats_perception")->setNumber(_game->player()->perception);
+    _counters->at("stats_endurance")->setNumber(_game->player()->endurance);
+    _counters->at("stats_charisma")->setNumber(_game->player()->charisma);
+    _counters->at("stats_intelligence")->setNumber(_game->player()->intelligence);
+    _counters->at("stats_agility")->setNumber(_game->player()->agility);
+    _counters->at("stats_luck")->setNumber(_game->player()->luck);
 
-    _statsEnduranceLabel->setText(_t(199 + _game->player()->endurance, "text/english/game/editor.msg"));
-    _statsEnduranceCounter->setNumber(_game->player()->endurance);
-
-    _statsCharismaLabel->setText(_t(199 + _game->player()->charisma, "text/english/game/editor.msg"));
-    _statsCharismaCounter->setNumber(_game->player()->charisma);
-
-    _statsIntelligenceLabel->setText(_t(199 + _game->player()->intelligence, "text/english/game/editor.msg"));
-    _statsIntelligenceCounter->setNumber(_game->player()->intelligence);
-
-    _statsAgilityLabel->setText(_t(199 + _game->player()->agility, "text/english/game/editor.msg"));
-    _statsAgilityCounter->setNumber(_game->player()->agility);
-
-    _statsLuckLabel->setText(_t(199 + _game->player()->luck, "text/english/game/editor.msg"));
-    _statsLuckCounter->setNumber(_game->player()->luck);
-
-    _statsFreeCounter->setNumber(_game->player()->freeStatsPoints);
+    _counters->at("stats_points")->setNumber(_game->player()->freeStatsPoints);
 
 }
 

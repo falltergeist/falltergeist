@@ -119,7 +119,7 @@ void NewGameState::init()
 }
 
 void NewGameState::think()
-{    
+{
 }
 
 void NewGameState::onBackButtonClick()

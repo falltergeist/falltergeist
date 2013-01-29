@@ -21,6 +21,7 @@
 #define FALLTERGEIST_TEXTAREA_H
 
 #include "../Engine/InteractiveSurface.h"
+#include "../../lib/libfalltergeist/libfalltergeist.h"
 
 namespace Falltergeist
 {
@@ -40,32 +41,34 @@ protected:
 public:
     enum { HORIZONTAL_ALIGN_LEFT = 0, HORIZONTAL_ALIGN_CENTER, HORIZONTAL_ALIGN_RIGHT, HORIZONTAL_ALIGN_JUSTIFY };
     enum { VERTICAL_ALIGN_TOP = 0, VERTICAL_ALIGN_CENTER, VERTICAL_ALIGN_BOTTOM, VERTICAL_ALIGN_JUSTIFY };
+    TextArea(libfalltergeist::MsgMessage * message, int x = 0, int y = 0);
     TextArea(const char * text, int x = 0, int y = 0);
     TextArea(int x = 0, int y = 0);
     ~TextArea();
 
     void draw();
 
-    void setText(const char * text);
-    void setText(unsigned int number);
+    TextArea * setText(libfalltergeist::MsgMessage * message);
+    TextArea * setText(const char * text);
+    TextArea * setText(unsigned int number);
     char * text();
 
-    void setHorizontalAlign(unsigned char align);
+    TextArea * setHorizontalAlign(unsigned char align);
     unsigned char horizontalAlign();
 
-    void setVerticalAlign(unsigned char align);
+    TextArea * setVerticalAlign(unsigned char align);
     unsigned char verticalAlign();
 
-    void setHeight(unsigned int height);
+    TextArea * setHeight(unsigned int height);
     unsigned int height();
 
-    void setWidth(unsigned int width);
+    TextArea * setWidth(unsigned int width);
     unsigned int width();
 
-    void setColor(unsigned int color);
+    TextArea * setColor(unsigned int color);
     unsigned int color();
 
-    void setFont(const char * filename);
+    TextArea * setFont(const char * filename);
 };
 
 }

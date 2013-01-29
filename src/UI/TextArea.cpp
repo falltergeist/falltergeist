@@ -27,6 +27,18 @@
 namespace Falltergeist
 {
 
+TextArea::TextArea(libfalltergeist::MsgMessage * message, int x, int y) : InteractiveSurface(0,0,x,y)
+{
+    _text = 0;
+    this->setText(message->text());
+    _horizontalAlign = HORIZONTAL_ALIGN_LEFT;
+    _verticalAlign = VERTICAL_ALIGN_TOP;
+    _width = 0;
+    _height = 0;
+    _color = 0xFF00FF00;
+    _font = new Font("font1.aaf", _color);
+}
+
 TextArea::TextArea(const char * text, int x, int y) : InteractiveSurface(0,0,x,y)
 {
     _text = 0;
@@ -207,13 +219,14 @@ unsigned int TextArea::color()
     return _color;
 }
 
-void TextArea::setColor(unsigned int color)
+TextArea * TextArea::setColor(unsigned int color)
 {
-    if (_color == color) return;
+    if (_color == color) return this;
     _color = color;
-    if (!_font) return;
+    if (!_font) return this;
     _font->setColor(color);
     setNeedRedraw(true);
+    return this;
 }
 
 unsigned int TextArea::height()
@@ -221,11 +234,12 @@ unsigned int TextArea::height()
     return _height;
 }
 
-void TextArea::setHeight(unsigned int height)
+TextArea * TextArea::setHeight(unsigned int height)
 {
-    if (height == _height) return;
+    if (height == _height) return this;
     _height = height;
     setNeedRedraw(true);
+    return this;
 }
 
 unsigned int TextArea::width()
@@ -233,11 +247,12 @@ unsigned int TextArea::width()
     return _width;
 }
 
-void TextArea::setWidth(unsigned int width)
+TextArea * TextArea::setWidth(unsigned int width)
 {
-    if (_width == width) return;
+    if (_width == width) return this;
     _width = width;
     setNeedRedraw(true);
+    return this;
 }
 
 unsigned char TextArea::horizontalAlign()
@@ -245,11 +260,12 @@ unsigned char TextArea::horizontalAlign()
     return _horizontalAlign;
 }
 
-void TextArea::setHorizontalAlign(unsigned char align)
+TextArea * TextArea::setHorizontalAlign(unsigned char align)
 {
-    if (_horizontalAlign == align) return;
+    if (_horizontalAlign == align) return this;
     _horizontalAlign = align;
     setNeedRedraw(true);
+    return this;
 }
 
 unsigned char TextArea::verticalAlign()
@@ -257,11 +273,12 @@ unsigned char TextArea::verticalAlign()
     return _verticalAlign;
 }
 
-void TextArea::setVerticalAlign(unsigned char align)
+TextArea * TextArea::setVerticalAlign(unsigned char align)
 {
-    if (_verticalAlign == align) return;
+    if (_verticalAlign == align) return this;
     _verticalAlign = align;
     setNeedRedraw(true);
+    return this;
 }
 
 char * TextArea::text()
@@ -269,21 +286,27 @@ char * TextArea::text()
     return _text;
 }
 
-void TextArea::setText(unsigned int number)
+TextArea * TextArea::setText(libfalltergeist::MsgMessage * message)
+{
+    setText(message->text());
+    return this;
+}
+
+TextArea * TextArea::setText(unsigned int number)
 {
     std::stringstream ss;
     ss << number;
     setText(ss.str().c_str());
-
+    return this;
 }
 
-void TextArea::setText(const char * text)
+TextArea * TextArea::setText(const char * text)
 {
     if (text == 0) 
     {
         delete [] _text;
         _text = 0;
-        return;
+        return this;
     }
     _text = new char[strlen(text)+1]();
     for (unsigned int i = 0; i != strlen(text); ++i)
@@ -291,13 +314,15 @@ void TextArea::setText(const char * text)
         _text[i] = text[i];
     }
     setNeedRedraw(true);
+    return this;
 }
 
-void TextArea::setFont(const char * filename)
+TextArea * TextArea::setFont(const char * filename)
 {
     delete _font; _font = 0;
     _font = new Font(filename, _color);
     setNeedRedraw(true);
+    return this;
 }
 
 }

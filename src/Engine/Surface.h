@@ -31,18 +31,16 @@ class Surface
 {
 protected:
     SDL_Surface * _surface;
-    bool _visible;
-    int _x;
-    int _y;
-    unsigned int _borderColor;
-    unsigned int _backgroundColor;
-    bool _needRedraw;
-    void _lock();
-    void _unlock();
+    int _x; // x position
+    int _y; // y position
+    bool _visible; // if false - not render
+    bool _needRedraw; // surface changed? draw function will be called
+
+    unsigned int _borderColor; // for debugging. @TODO must be removed in future
+    unsigned int _backgroundColor; // for debugging @TODO must be removed in future
     void _drawBorder();
+
 public:
-
-
     Surface(int width = 0, int height = 0, int x = 0, int y = 0);
     Surface(Surface * other);
     virtual ~Surface();
@@ -56,7 +54,10 @@ public:
     void setNeedRedraw(bool needRedraw);
     bool needRedraw();
 
-    unsigned int width();
+    void setVisible(bool visible);
+    bool visible();
+
+    unsigned int width();    
 
     unsigned int height();
 
@@ -77,8 +78,6 @@ public:
 
     void fill(unsigned int color);
     void clear();
-    void show();
-    void hide();
     Surface * crop(int x = 0, int y = 0, int width = 0, int height = 0);
     virtual void think();
     virtual void draw();
