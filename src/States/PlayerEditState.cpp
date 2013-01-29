@@ -21,10 +21,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Player.h"
 #include "../Engine/ResourceManager.h"
-#include "../UI/ImageButton.h"
 #include "../Engine/Surface.h"
-#include "../UI/BigCounter.h"
-#include "../UI/HiddenMask.h"
 #include "../../lib/libfalltergeist/libfalltergeist.h"
 
 namespace Falltergeist
@@ -36,8 +33,9 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _labels = new std::map<std::string, TextArea *>;
     _counters = new std::map<std::string, BigCounter *>;
     _buttons = new std::map<std::string, ImageButton *>;
+    _masks= new std::map<std::string, HiddenMask *>;
 
-    Surface * background = ResourceManager::surface("art/intrface/edtrcrte.frm");
+    Surface * background = _game->resourceManager()->surface("art/intrface/edtrcrte.frm");
     
     // Primary stats buttons
     {
@@ -48,16 +46,16 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
 
         _addButton("stats_strength_increase",     new ImageButton(plusOff,  plusOn,  149, 38));
         _addButton("stats_strength_decrease",     new ImageButton(minusOff, minusOn, 149, 49));
-        _addButton("stats_perception_increase",   new ImageButton(plusOff,  plusOn,  149, 38 + 33));
-        _addButton("stats_perception_decrease",   new ImageButton(minusOff, minusOn, 149, 49 + 33));
-        _addButton("stats_endurance_increase",    new ImageButton(plusOff,  plusOn,  149, 38 + 33*2));
-        _addButton("stats_endurance_decrease",    new ImageButton(minusOff, minusOn, 149, 49 + 33*2));
-        _addButton("stats_charisma_increase",     new ImageButton(plusOff,  plusOn,  149, 38 + 33*3));
-        _addButton("stats_charisma_decrease",     new ImageButton(minusOff, minusOn, 149, 49 + 33*3));
-        _addButton("stats_intelligence_increase", new ImageButton(plusOff,  plusOn,  149, 38 + 33*4));
-        _addButton("stats_intelligence_decrease", new ImageButton(minusOff, minusOn, 149, 49 + 33*4));
-        _addButton("stats_agility_increase",      new ImageButton(plusOff,  plusOn,  149, 38 + 33*5));
-        _addButton("stats_agility_decrease",      new ImageButton(minusOff, minusOn, 149, 49 + 33*5));
+        _addButton("stats_perception_increase",   new ImageButton(plusOff,  plusOn,  149, 71));
+        _addButton("stats_perception_decrease",   new ImageButton(minusOff, minusOn, 149, 82));
+        _addButton("stats_endurance_increase",    new ImageButton(plusOff,  plusOn,  149, 104));
+        _addButton("stats_endurance_decrease",    new ImageButton(minusOff, minusOn, 149, 115));
+        _addButton("stats_charisma_increase",     new ImageButton(plusOff,  plusOn,  149, 137));
+        _addButton("stats_charisma_decrease",     new ImageButton(minusOff, minusOn, 149, 148));
+        _addButton("stats_intelligence_increase", new ImageButton(plusOff,  plusOn,  149, 170));
+        _addButton("stats_intelligence_decrease", new ImageButton(minusOff, minusOn, 149, 181));
+        _addButton("stats_agility_increase",      new ImageButton(plusOff,  plusOn,  149, 203));
+        _addButton("stats_agility_decrease",      new ImageButton(minusOff, minusOn, 149, 214));
         _addButton("stats_luck_increase",         new ImageButton(plusOff,  plusOn,  149, 236));
         _addButton("stats_luck_decrease",         new ImageButton(minusOff, minusOn, 149, 247));
     }
@@ -74,80 +72,68 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     // Primary stats counters
     {
         _addCounter("stats_strength",     new BigCounter(59, 37));
-        _addCounter("stats_perception",   new BigCounter(59, 37 + 33));
-        _addCounter("stats_endurance",    new BigCounter(59, 37 + 33*2));
-        _addCounter("stats_charisma",     new BigCounter(59, 37 + 33*3));
-        _addCounter("stats_intelligence", new BigCounter(59, 37 + 33*4));
-        _addCounter("stats_agility",      new BigCounter(59, 37 + 33*5));
-        _addCounter("stats_luck",         new BigCounter(59, 37 + 33*6));
+        _addCounter("stats_perception",   new BigCounter(59, 70));
+        _addCounter("stats_endurance",    new BigCounter(59, 103));
+        _addCounter("stats_charisma",     new BigCounter(59, 136));
+        _addCounter("stats_intelligence", new BigCounter(59, 169));
+        _addCounter("stats_agility",      new BigCounter(59, 202));
+        _addCounter("stats_luck",         new BigCounter(59, 235));
+        // Free stats points counter
+        _addCounter("stats_points",       new BigCounter(126, 282));
     }
 
-    // Free stats points counter
-    _addCounter("stats_points", new BigCounter(126, 282));
 
-    HiddenMask * statsStrenghtHiddenMask = new HiddenMask(133, 26, 14, 36);
-    statsStrenghtHiddenMask->onLeftButtonClick((EventHandler) &PlayerEditState::onStrengthSelected);
-
-    HiddenMask * statsPerceptionHiddenMask = new HiddenMask(133, 26, 14, 36 + 33);
-    statsPerceptionHiddenMask->onLeftButtonClick((EventHandler) &PlayerEditState::onPerceptionSelected);
-
-    HiddenMask * statsEnduranceHiddenMask = new HiddenMask(133, 26, 14, 36 + 33*2);
-    statsEnduranceHiddenMask->onLeftButtonClick((EventHandler) &PlayerEditState::onEnduranceSelected);
-
-    HiddenMask * statsCharismaHiddenMask = new HiddenMask(133, 26, 14, 36 + 33*3);
-    statsCharismaHiddenMask->onLeftButtonClick((EventHandler) &PlayerEditState::onCharismaSelected);
-
-    HiddenMask * statsIntelligenceHiddenMask = new HiddenMask(133, 26, 14, 36 + 33*4);
-    statsIntelligenceHiddenMask->onLeftButtonClick((EventHandler) &PlayerEditState::onIntelligenceSelected);
-
-    HiddenMask * statsAgilityHiddenMask = new HiddenMask(133, 26, 14, 36 + 33*5);
-    statsAgilityHiddenMask->onLeftButtonClick((EventHandler) &PlayerEditState::onAgilitySelected);
-
-    HiddenMask * statsLuckHiddenMask = new HiddenMask(133, 26, 14, 36 + 33*6);
-    statsLuckHiddenMask->onLeftButtonClick((EventHandler) &PlayerEditState::onLuckSelected);
-
-
+    // Primaty stats hidden masks
+    {
+        _addMask("stats_strength",     new HiddenMask(133, 26, 14, 36));
+        _addMask("stats_perception",   new HiddenMask(133, 26, 14, 36 + 33));
+        _addMask("stats_endurance",    new HiddenMask(133, 26, 14, 36 + 33*2));
+        _addMask("stats_charisma",     new HiddenMask(133, 26, 14, 36 + 33*3));
+        _addMask("stats_intelligence", new HiddenMask(133, 26, 14, 36 + 33*4));
+        _addMask("stats_agility",      new HiddenMask(133, 26, 14, 36 + 33*5));
+        _addMask("stats_luck",         new HiddenMask(133, 26, 14, 36 + 33*6));
+    }
 
     // Traits labels
     {
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/trait.msg");
         _addLabel("traits_1",  new TextArea(msg->message(100), 47, 352));
-        _addLabel("traits_2",  new TextArea(msg->message(101), 47, 352 + 14));
-        _addLabel("traits_3",  new TextArea(msg->message(102), 47, 352 + 14*2));
-        _addLabel("traits_4",  new TextArea(msg->message(103), 47, 352 + 14*3 - 1));
-        _addLabel("traits_5",  new TextArea(msg->message(104), 47, 352 + 14*4 - 1));
-        _addLabel("traits_6",  new TextArea(msg->message(105), 47, 352 + 14*5 - 2));
-        _addLabel("traits_7",  new TextArea(msg->message(106), 47, 352 + 14*6 - 3));
-        _addLabel("traits_8",  new TextArea(msg->message(107), 47, 352 + 14*7 - 3));
+        _addLabel("traits_2",  new TextArea(msg->message(101), 47, 366));
+        _addLabel("traits_3",  new TextArea(msg->message(102), 47, 380));
+        _addLabel("traits_4",  new TextArea(msg->message(103), 47, 393));
+        _addLabel("traits_5",  new TextArea(msg->message(104), 47, 407));
+        _addLabel("traits_6",  new TextArea(msg->message(105), 47, 420));
+        _addLabel("traits_7",  new TextArea(msg->message(106), 47, 433));
+        _addLabel("traits_8",  new TextArea(msg->message(107), 47, 447));
         _addLabel("traits_9",  new TextArea(msg->message(108), 47, 352))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-        _addLabel("traits_10", new TextArea(msg->message(109), 47, 352 + 14))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-        _addLabel("traits_11", new TextArea(msg->message(110), 47, 352 + 14*2))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-        _addLabel("traits_12", new TextArea(msg->message(111), 47, 352 + 14*3 - 1))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-        _addLabel("traits_13", new TextArea(msg->message(112), 47, 352 + 14*4 - 1))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-        _addLabel("traits_14", new TextArea(msg->message(113), 47, 352 + 14*5 - 2))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-        _addLabel("traits_15", new TextArea(msg->message(114), 47, 352 + 14*6 - 3))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-        _addLabel("traits_16", new TextArea(msg->message(115), 47, 352 + 14*7 - 3))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_10", new TextArea(msg->message(109), 47, 366))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_11", new TextArea(msg->message(110), 47, 380))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_12", new TextArea(msg->message(111), 47, 393))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_13", new TextArea(msg->message(112), 47, 407))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_14", new TextArea(msg->message(113), 47, 420))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_15", new TextArea(msg->message(114), 47, 433))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_16", new TextArea(msg->message(115), 47, 447))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
     }
     // Traits buttons
     {
         const char * on  = "art/intrface/tgsklon.frm";
         const char * off = "art/intrface/tgskloff.frm";
         _addButton("traits_1",  new ImageButton(off, on, 23,  352));
-        _addButton("traits_2",  new ImageButton(off, on, 23,  352 + 13));
-        _addButton("traits_3",  new ImageButton(off, on, 23,  352 + 13*2 + 1));
-        _addButton("traits_4",  new ImageButton(off, on, 23,  352 + 13*3));
-        _addButton("traits_5",  new ImageButton(off, on, 23,  352 + 13*4 + 1));
-        _addButton("traits_6",  new ImageButton(off, on, 23,  352 + 13*5));
-        _addButton("traits_7",  new ImageButton(off, on, 23,  352 + 13*6 + 1));
-        _addButton("traits_8",  new ImageButton(off, on, 23,  352 + 13*7 + 1));
+        _addButton("traits_2",  new ImageButton(off, on, 23,  365));
+        _addButton("traits_3",  new ImageButton(off, on, 23,  379));
+        _addButton("traits_4",  new ImageButton(off, on, 23,  391));
+        _addButton("traits_5",  new ImageButton(off, on, 23,  405));
+        _addButton("traits_6",  new ImageButton(off, on, 23,  417));
+        _addButton("traits_7",  new ImageButton(off, on, 23,  431));
+        _addButton("traits_8",  new ImageButton(off, on, 23,  444));
         _addButton("traits_9",  new ImageButton(off, on, 299, 352));
-        _addButton("traits_10", new ImageButton(off, on, 299, 352 + 13));
-        _addButton("traits_11", new ImageButton(off, on, 299, 352 + 13*2 + 1));
-        _addButton("traits_12", new ImageButton(off, on, 299, 352 + 13*3));
-        _addButton("traits_13", new ImageButton(off, on, 299, 352 + 13*4 + 1));
-        _addButton("traits_14", new ImageButton(off, on, 299, 352 + 13*5));
-        _addButton("traits_15", new ImageButton(off, on, 299, 352 + 13*6 + 1));
-        _addButton("traits_16", new ImageButton(off, on, 299, 352 + 13*7 + 1));
+        _addButton("traits_10", new ImageButton(off, on, 299, 365));
+        _addButton("traits_11", new ImageButton(off, on, 299, 379));
+        _addButton("traits_12", new ImageButton(off, on, 299, 391));
+        _addButton("traits_13", new ImageButton(off, on, 299, 405));
+        _addButton("traits_14", new ImageButton(off, on, 299, 417));
+        _addButton("traits_15", new ImageButton(off, on, 299, 431));
+        _addButton("traits_16", new ImageButton(off, on, 299, 444));
     }
 
     // Event handlers
@@ -166,6 +152,15 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _buttons->at("stats_luck_increase")->onLeftButtonClick(         (EventHandler) &PlayerEditState::onIncreaseLuckButtonClick);
     _buttons->at("stats_luck_decrease")->onLeftButtonClick(         (EventHandler) &PlayerEditState::onDecreaseLuckButtonClick);
 
+    _masks->at("stats_strength")->onLeftButtonClick(     (EventHandler) &PlayerEditState::onStrengthSelected);
+    _masks->at("stats_perception")->onLeftButtonClick(   (EventHandler) &PlayerEditState::onPerceptionSelected);
+    _masks->at("stats_endurance")->onLeftButtonClick(    (EventHandler) &PlayerEditState::onEnduranceSelected);
+    _masks->at("stats_charisma")->onLeftButtonClick(     (EventHandler) &PlayerEditState::onCharismaSelected);
+    _masks->at("stats_intelligence")->onLeftButtonClick( (EventHandler) &PlayerEditState::onIntelligenceSelected);
+    _masks->at("stats_agility")->onLeftButtonClick(      (EventHandler) &PlayerEditState::onAgilitySelected);
+    _masks->at("stats_luck")->onLeftButtonClick(         (EventHandler) &PlayerEditState::onLuckSelected);
+
+
     add(background);
 
     // add buttons to the state
@@ -183,14 +178,11 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         std::map<std::string, BigCounter *>::iterator it;
         for(it = _counters->begin(); it != _counters->end(); ++it) add(it->second);
     }
-
-    add(statsStrenghtHiddenMask);
-    add(statsPerceptionHiddenMask);
-    add(statsEnduranceHiddenMask);
-    add(statsCharismaHiddenMask);
-    add(statsIntelligenceHiddenMask);
-    add(statsAgilityHiddenMask);
-    add(statsLuckHiddenMask);
+    // add hidden masks
+    {
+        std::map<std::string, HiddenMask *>::iterator it;
+        for(it = _masks->begin(); it != _masks->end(); ++it) add(it->second);
+    }
 
 }
 
@@ -200,6 +192,7 @@ PlayerEditState::~PlayerEditState()
     delete _labels;
     delete _buttons;
     delete _counters;
+    delete _masks;
 }
 
 TextArea * PlayerEditState::_addLabel(std::string name, TextArea * label)
@@ -218,6 +211,12 @@ BigCounter * PlayerEditState::_addCounter(std::string name, BigCounter * counter
 {
     _counters->insert(std::pair<std::string,BigCounter *>(name, counter));
     return counter;
+}
+
+HiddenMask * PlayerEditState::_addMask(std::string name, HiddenMask * mask)
+{
+    _masks->insert(std::pair<std::string,HiddenMask *>(name, mask));
+    return mask;
 }
 
 void PlayerEditState::think()

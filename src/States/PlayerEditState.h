@@ -24,6 +24,7 @@
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
 #include "../UI/BigCounter.h"
+#include "../UI/HiddenMask.h"
 #include <map>
 #include <vector>
 
@@ -39,10 +40,12 @@ protected:
     std::map<std::string, TextArea *> * _labels;
     std::map<std::string, BigCounter *> * _counters;
     std::map<std::string, ImageButton *> * _buttons;
+    std::map<std::string, HiddenMask *> * _masks;
 
     TextArea * _addLabel(std::string name, TextArea * label);
     ImageButton * _addButton(std::string name, ImageButton * button);
     BigCounter * _addCounter(std::string name, BigCounter * counter);
+    HiddenMask * _addMask(std::string name, HiddenMask * mask);
 
 public:
     PlayerEditState(Game * game);
