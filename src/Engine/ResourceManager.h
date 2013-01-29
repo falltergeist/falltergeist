@@ -22,6 +22,7 @@
 
 #include <list>
 #include <string>
+#include <map>
 #include "../../lib/libfalltergeist/libfalltergeist.h"
 
 namespace Falltergeist
@@ -42,6 +43,8 @@ class ResourceManager
 {
 protected:
     static std::list<libfalltergeist::DatFile *> * _datFiles;
+    static std::map<std::string, Surface *> * _surfaces;
+
 public:
     ResourceManager();
     static libfalltergeist::DatFileItem * datFileItem(std::string filename);

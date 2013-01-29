@@ -35,7 +35,7 @@ class Game;
 class PlayerEditState : public State
 {
 protected:
-
+    Surface * _background;
     std::vector<TextArea *> * _checkedLabels;
     std::map<std::string, TextArea *> * _labels;
     std::map<std::string, BigCounter *> * _counters;

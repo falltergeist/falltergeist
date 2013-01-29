@@ -27,10 +27,13 @@ ImageButton::ImageButton(const char * releasedImage, const char * pressedImage, 
 {
     _releasedImage = (char*)releasedImage;
     _pressedImage = (char*)pressedImage;
+    setNeedRedraw(true);
 }
 
 void ImageButton::draw()
 {
+    if (!needRedraw()) return;
+
     InteractiveSurface::draw();
     if (_hovered && _leftButtonPressed)
     {

@@ -82,7 +82,7 @@ unsigned short Font::verticalGap()
 Surface * Font::glyph(unsigned char chr)
 {
 
-    if (_glyphs->at(chr) != 0) return _glyphs->at(chr);
+    if (_glyphs->at(chr)) return _glyphs->at(chr);
 
     int charWidth = _aafFileType->glyphs()->at(chr)->width();
     int charHeight = _aafFileType->glyphs()->at(chr)->height();

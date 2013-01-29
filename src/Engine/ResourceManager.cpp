@@ -26,6 +26,7 @@ namespace Falltergeist
 {
 
 std::list<libfalltergeist::DatFile *> * ResourceManager::_datFiles = new std::list<libfalltergeist::DatFile *>;
+std::map<std::string, Surface *> * ResourceManager::_surfaces = new std::map<std::string, Surface *>;
 
 const char * _t(unsigned int number, const char * filename)
 {
@@ -41,6 +42,8 @@ ResourceManager::ResourceManager()
     path += "/.fallout/master.dat";
     _datFiles->push_back(new libfalltergeist::DatFile((char *)path.c_str()));
     //_datFiles->push_back(new DatFile(homepath + "/.fallout/critter.dat"));
+
+
 }
 
 libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename)
@@ -141,6 +144,13 @@ libfalltergeist::BioFileType * ResourceManager::bioFileType(std::string filename
 
 Surface * ResourceManager::surface(std::string filename, int posX, int posY)
 {
+    std::cout << filename << std::endl;
+    if (_surfaces->find(filename) != _surfaces->end())
+    {
+        std::cout << "From cache" <<std::endl;
+        return _surfaces->at(filename);
+    }
+
     libfalltergeist::FrmFileType * frm = frmFileType(filename);
     if (!frm)
     {
@@ -172,6 +182,7 @@ Surface * ResourceManager::surface(std::string filename, int posX, int posY)
     surface->setX(posX);
     surface->setY(posY);
     SDL_SetColorKey(surface->surface(), SDL_SRCCOLORKEY, 0);
+    _surfaces->insert(std::pair<std::string, Surface *>(filename, surface));
     return surface;
 }
 

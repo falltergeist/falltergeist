@@ -24,6 +24,8 @@
 #include <iostream>
 #include <sstream>
 
+#include "../Engine/ResourceManager.h"
+
 namespace Falltergeist
 {
 
@@ -37,6 +39,7 @@ TextArea::TextArea(libfalltergeist::MsgMessage * message, int x, int y) : Intera
     _height = 0;
     _color = 0xFF00FF00;
     _font = new Font("font1.aaf", _color);
+    setNeedRedraw(true);
 }
 
 TextArea::TextArea(const char * text, int x, int y) : InteractiveSurface(0,0,x,y)
@@ -49,6 +52,7 @@ TextArea::TextArea(const char * text, int x, int y) : InteractiveSurface(0,0,x,y
     _height = 0;
     _color = 0xFF00FF00;
     _font = new Font("font1.aaf", _color);
+    setNeedRedraw(true);
 }
 
 TextArea::TextArea(int x, int y) : InteractiveSurface(0,0,x,y)
@@ -61,6 +65,7 @@ TextArea::TextArea(int x, int y) : InteractiveSurface(0,0,x,y)
     _height = 0;
     _color = 0xFF00FF00;
     _font = new Font("font1.aaf", _color);
+    setNeedRedraw(true);
 }
 
 
@@ -72,12 +77,12 @@ TextArea::~TextArea()
 
 void TextArea::draw()
 {
+    if (!needRedraw()) return;
     InteractiveSurface::draw();
-    
-    if (_font == 0) throw Exception("TextArea::draw() - font is not setted");
+
+    if (!_font) throw Exception("TextArea::draw() - font is not setted");
     if (_text == 0 || strlen(_text) == 0) throw Exception("TextArea::draw() - text is 0");
 
-    std::vector<std::string *> * lines = new std::vector<std::string *>;
     std::vector<Surface *> * linesSurfaces = new std::vector<Surface *>;
 
     unsigned int width = 0;
@@ -88,15 +93,14 @@ void TextArea::draw()
     int y = 0;
 
     //calculating size of text surface
-    int lineCount = 0;
+    int linesCount = 0;
+    std::vector<std::string *> * lines = new std::vector<std::string *>;
     lines->push_back(new std::string(""));
-    //*line = ;
-    //std::cout << i << std::endl;
     while (_text[i] != 0)
     {
         if (_text[i] == 0x0A || _text[i] == '\n')
         {
-            lineCount++;
+            linesCount++;
             if (width > maxWidth) maxWidth = width;
             width = 0;
             lines->push_back(new std::string(""));
@@ -104,7 +108,7 @@ void TextArea::draw()
         }
         else
         {
-            lines->at(lineCount)->push_back(_text[i]);
+            lines->at(linesCount)->push_back(_text[i]);
             width += _font->glyph(_text[i])->width();
             width += _font->horizontalGap();
         }
@@ -171,6 +175,7 @@ void TextArea::draw()
         textSurface->setX(this->x());
         textSurface->setY(this->y());
         loadFromSurface(textSurface);
+        delete textSurface;
         delete lines;
         return;
     }
@@ -210,8 +215,11 @@ void TextArea::draw()
     textSurface->setY(y);
     textSurface->copyTo(surface);
     loadFromSurface(surface);
+
     delete lines;
     delete textSurface;
+    delete surface;
+    setNeedRedraw(false);
 }
 
 unsigned int TextArea::color()
@@ -302,24 +310,16 @@ TextArea * TextArea::setText(unsigned int number)
 
 TextArea * TextArea::setText(const char * text)
 {
-    if (text == 0) 
-    {
-        delete [] _text;
-        _text = 0;
-        return this;
-    }
+    delete [] _text;
     _text = new char[strlen(text)+1]();
-    for (unsigned int i = 0; i != strlen(text); ++i)
-    {
-        _text[i] = text[i];
-    }
+    strcpy(_text, text);
     setNeedRedraw(true);
     return this;
 }
 
 TextArea * TextArea::setFont(const char * filename)
 {
-    delete _font; _font = 0;
+    delete _font;
     _font = new Font(filename, _color);
     setNeedRedraw(true);
     return this;

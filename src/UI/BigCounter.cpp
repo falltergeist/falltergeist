@@ -39,6 +39,7 @@ BigCounter::BigCounter(int x, int y) : InteractiveSurface(0,0, x, y)
     {
         _numbersRed->push_back(ResourceManager::surface("art/intrface/bignum.frm")->crop(168 + 14*i, 0, 14, 24));
     }
+    setNeedRedraw(true);
 }
 
 BigCounter::~BigCounter()
@@ -49,6 +50,8 @@ BigCounter::~BigCounter()
 
 void BigCounter::draw()
 {
+    if (!needRedraw()) return;
+
     InteractiveSurface::draw();
     // new surface
     Surface * surface = new Surface(14*_length, 24);

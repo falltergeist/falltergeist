@@ -35,7 +35,7 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _buttons = new std::map<std::string, ImageButton *>;
     _masks= new std::map<std::string, HiddenMask *>;
 
-    Surface * background = _game->resourceManager()->surface("art/intrface/edtrcrte.frm");
+    _background = _game->resourceManager()->surface("art/intrface/edtrcrte.frm");
     
     // Primary stats buttons
     {
@@ -85,13 +85,13 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
 
     // Primaty stats hidden masks
     {
-        _addMask("stats_strength",     new HiddenMask(133, 26, 14, 36));
-        _addMask("stats_perception",   new HiddenMask(133, 26, 14, 36 + 33));
-        _addMask("stats_endurance",    new HiddenMask(133, 26, 14, 36 + 33*2));
-        _addMask("stats_charisma",     new HiddenMask(133, 26, 14, 36 + 33*3));
-        _addMask("stats_intelligence", new HiddenMask(133, 26, 14, 36 + 33*4));
-        _addMask("stats_agility",      new HiddenMask(133, 26, 14, 36 + 33*5));
-        _addMask("stats_luck",         new HiddenMask(133, 26, 14, 36 + 33*6));
+        _addMask("stats_strength",     new HiddenMask(133, 29, 14, 36));
+        _addMask("stats_perception",   new HiddenMask(133, 29, 14, 36 + 33));
+        _addMask("stats_endurance",    new HiddenMask(133, 29, 14, 36 + 33*2));
+        _addMask("stats_charisma",     new HiddenMask(133, 29, 14, 36 + 33*3));
+        _addMask("stats_intelligence", new HiddenMask(133, 29, 14, 36 + 33*4));
+        _addMask("stats_agility",      new HiddenMask(133, 29, 14, 36 + 33*5));
+        _addMask("stats_luck",         new HiddenMask(133, 29, 14, 36 + 33*6));
     }
 
     // Traits labels
@@ -161,12 +161,12 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _masks->at("stats_luck")->onLeftButtonClick(         (EventHandler) &PlayerEditState::onLuckSelected);
 
 
-    add(background);
+    add(_background);
 
     // add buttons to the state
     {
         std::map<std::string, ImageButton *>::iterator it;
-        for(it = _buttons->begin(); it != _buttons->end(); ++it) add(it->second);
+        //for(it = _buttons->begin(); it != _buttons->end(); ++it) add(it->second);
     }
     // add labels to the state
     {
@@ -176,12 +176,17 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     // add counters to the state
     {
         std::map<std::string, BigCounter *>::iterator it;
-        for(it = _counters->begin(); it != _counters->end(); ++it) add(it->second);
+        //for(it = _counters->begin(); it != _counters->end(); ++it) add(it->second);
     }
     // add hidden masks
     {
         std::map<std::string, HiddenMask *>::iterator it;
-        for(it = _masks->begin(); it != _masks->end(); ++it) add(it->second);
+        for(it = _masks->begin(); it != _masks->end(); ++it)
+        {
+            it->second->setBorderColor(0xFFFF0000);
+            it->second->setVisible(true);
+            //add(it->second);
+        }
     }
 
 }
@@ -221,6 +226,9 @@ HiddenMask * PlayerEditState::_addMask(std::string name, HiddenMask * mask)
 
 void PlayerEditState::think()
 {
+    //std::cout << _game->resourceManager()->surface("art/intrface/edtrcrte.frm")->width() << std::endl;
+    _background->loadFromSurface(_game->resourceManager()->surface("art/intrface/edtrcrte.frm"));
+    return;
     // primary stats labels
     {
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
@@ -234,6 +242,7 @@ void PlayerEditState::think()
     }
     // primary stats counters
 
+    /*
     _counters->at("stats_strength")->setNumber(_game->player()->strength);
     _counters->at("stats_perception")->setNumber(_game->player()->perception);
     _counters->at("stats_endurance")->setNumber(_game->player()->endurance);
@@ -241,8 +250,8 @@ void PlayerEditState::think()
     _counters->at("stats_intelligence")->setNumber(_game->player()->intelligence);
     _counters->at("stats_agility")->setNumber(_game->player()->agility);
     _counters->at("stats_luck")->setNumber(_game->player()->luck);
-
     _counters->at("stats_points")->setNumber(_game->player()->freeStatsPoints);
+    */
 
 }
 

@@ -298,20 +298,16 @@ void Surface::blit(Surface * surface)
 
 void Surface::copyTo(Surface * surface)
 {
-    // lock surface
-    if(SDL_MUSTLOCK(_surface)) SDL_LockSurface(_surface);
-
-    unsigned int * thisPixels = (unsigned int *) _surface->pixels;
-    unsigned int * thatPixels = (unsigned int *) surface->_surface->pixels;
-    for (unsigned int y = 0; y < height(); y++)
+    for (unsigned int y = 0; y != height(); ++y)
     {
-        for (unsigned int x = 0; x < width(); x++)
+        for (unsigned int x = 0; x != width(); ++x)
         {
-            thatPixels[((y + this->y()) * surface->_surface->w) + x + this->x()] = thisPixels[(y * _surface->w) + x];
+            if (pixel(x, y))
+            {
+                surface->setPixel(x + this->x(), y + this->y(), pixel(x, y));
+            }
         }
     }
-    // unlock surface
-    if(SDL_MUSTLOCK(_surface)) SDL_UnlockSurface(_surface);
 }
 
 /**
@@ -368,7 +364,8 @@ void Surface::setPixel(int x, int y, unsigned int color)
 void Surface::loadFromSurface(Surface * surface)
 {
     SDL_FreeSurface(_surface);
-    _surface = surface->surface();
+    _surface = SDL_ConvertSurface(surface->_surface, surface->_surface->format, surface->_surface->flags);
+    if (_surface == 0) throw Exception(SDL_GetError());
     setX(surface->x());
     setY(surface->y());
 }
