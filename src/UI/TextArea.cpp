@@ -194,6 +194,7 @@ void TextArea::draw()
     loadFromSurface(surface);
 
     delete surface;
+    for (std::vector<Surface *>::iterator it = surfaces->begin(); it != surfaces->end(); ++it) delete *it;
     delete surfaces;
     delete strings;
     delete string;
