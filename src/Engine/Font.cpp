@@ -86,14 +86,12 @@ unsigned short Font::spaceWidth()
 
 Surface * Font::glyph(unsigned char chr)
 {
-
-    if (_glyphs->at(chr)) return _glyphs->at(chr);
+    if (_glyphs->at(chr) != 0) return _glyphs->at(chr);
 
     int charWidth = _aafFileType->glyphs()->at(chr)->width();
     int charHeight = _aafFileType->glyphs()->at(chr)->height();
     int height = this->height();
     int delta = height - charHeight;
-    //char * data = _aafFileType->getChar(chr)->data;
 
     Surface * surface = new Surface(charWidth,height);
     int i = 0;

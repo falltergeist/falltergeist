@@ -35,7 +35,7 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _buttons = new std::map<std::string, ImageButton *>;
     _masks= new std::map<std::string, HiddenMask *>;
 
-    _background = _game->resourceManager()->surface("art/intrface/edtrcrte.frm");
+    _background = new Surface(_game->resourceManager()->surface("art/intrface/edtrcrte.frm"));
 
     // Primary stats buttons
     {
@@ -227,7 +227,6 @@ HiddenMask * PlayerEditState::_addMask(std::string name, HiddenMask * mask)
 void PlayerEditState::think()
 {
     // primary stats labels
-
     {
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
         _labels->at("stats_strength")->setText(msg->message(199 + _game->player()->strength));

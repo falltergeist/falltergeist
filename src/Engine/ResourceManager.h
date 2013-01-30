@@ -36,6 +36,7 @@ class GcdFileType;
 class MsgFileType;
 class BioFileType;
 class Surface;
+class Font;
 
 const char * _t(unsigned int number, const char * filename);
 
@@ -44,6 +45,7 @@ class ResourceManager
 protected:
     static std::list<libfalltergeist::DatFile *> * _datFiles;
     static std::map<std::string, Surface *> * _surfaces;
+    static std::map<std::string, Font *> * _fonts;
 
 public:
     ResourceManager();
@@ -57,6 +59,7 @@ public:
     static libfalltergeist::MsgFileType * msgFileType(std::string filename);
     static libfalltergeist::BioFileType * bioFileType(std::string filename);
     static Surface * surface(std::string filename, int x = 0, int y = 0);
+    static Font * font(std::string filename, unsigned int color = 0x00FF00FF);
 };
 
 }

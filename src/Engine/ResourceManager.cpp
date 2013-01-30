@@ -20,6 +20,7 @@
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/Font.h"
 #include <iostream>
 
 namespace Falltergeist
@@ -27,6 +28,7 @@ namespace Falltergeist
 
 std::list<libfalltergeist::DatFile *> * ResourceManager::_datFiles = new std::list<libfalltergeist::DatFile *>;
 std::map<std::string, Surface *> * ResourceManager::_surfaces = new std::map<std::string, Surface *>;
+std::map<std::string, Font *> * ResourceManager::_fonts = new std::map<std::string, Font *>;
 
 const char * _t(unsigned int number, const char * filename)
 {
@@ -144,10 +146,8 @@ libfalltergeist::BioFileType * ResourceManager::bioFileType(std::string filename
 
 Surface * ResourceManager::surface(std::string filename, int posX, int posY)
 {
-    std::cout << filename << std::endl;
     if (_surfaces->find(filename) != _surfaces->end())
     {
-        std::cout << "From cache" <<std::endl;
         return _surfaces->at(filename);
     }
 
@@ -184,6 +184,18 @@ Surface * ResourceManager::surface(std::string filename, int posX, int posY)
     SDL_SetColorKey(surface->surface(), SDL_SRCCOLORKEY, 0);
     _surfaces->insert(std::pair<std::string, Surface *>(filename, surface));
     return surface;
+}
+
+Font * ResourceManager::font(std::string filename, unsigned int color)
+{
+    if (_fonts->find(filename) != _fonts->end())
+    {
+        return _fonts->at(filename);
+    }
+    Font * font = new Font(filename.c_str(), color);
+    _fonts->insert(std::pair<std::string, Font *>(filename, font));
+    return font;
+
 }
 
 }
