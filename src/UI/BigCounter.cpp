@@ -87,6 +87,7 @@ void BigCounter::draw()
     surface->setX(x());
     surface->setY(y());
     loadFromSurface(surface);
+    delete surface;
 }
 
 void BigCounter::setNumber(unsigned int number)

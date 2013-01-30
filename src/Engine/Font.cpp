@@ -79,6 +79,11 @@ unsigned short Font::verticalGap()
     return _aafFileType->verticalGap();
 }
 
+unsigned short Font::spaceWidth()
+{
+    return _aafFileType->spaceWidth();
+}
+
 Surface * Font::glyph(unsigned char chr)
 {
 

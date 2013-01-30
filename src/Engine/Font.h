@@ -50,6 +50,8 @@ public:
 
     unsigned short verticalGap();
 
+    unsigned short spaceWidth();
+
     unsigned short height();
 };
 

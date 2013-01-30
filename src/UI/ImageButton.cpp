@@ -35,14 +35,20 @@ void ImageButton::draw()
     if (!needRedraw()) return;
 
     InteractiveSurface::draw();
+
+    int x = this->x();
+    int y = this->y();
     if (_hovered && _leftButtonPressed)
     {
-        loadFromSurface(ResourceManager::surface(_pressedImage, x(), y()));
+        loadFromSurface(ResourceManager::surface(_pressedImage));
+
     }
     else
     {
-        loadFromSurface(ResourceManager::surface(_releasedImage, x(), y()));
+        loadFromSurface(ResourceManager::surface(_releasedImage));
     }
+    setX(x);
+    setY(y);
 }
 
 void ImageButton::setPressedImage(const char * pressedImage)

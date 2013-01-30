@@ -80,83 +80,105 @@ void TextArea::draw()
     if (!needRedraw()) return;
     InteractiveSurface::draw();
 
+    // if no font was setted
     if (!_font) throw Exception("TextArea::draw() - font is not setted");
+
+    // if text is empty
     if (_text == 0 || strlen(_text) == 0) throw Exception("TextArea::draw() - text is 0");
 
-    std::vector<Surface *> * linesSurfaces = new std::vector<Surface *>;
-
-    unsigned int width = 0;
-    unsigned int maxWidth = 0;
-    unsigned int height = _font->height();
-    unsigned int i = 0;
-    int x = 0;
-    int y = 0;
-
-    //calculating size of text surface
-    int linesCount = 0;
-    std::vector<std::string *> * lines = new std::vector<std::string *>;
-    lines->push_back(new std::string(""));
-    while (_text[i] != 0)
+    //parse text to the string lines
+    std::vector<std::string *> * strings = new std::vector<std::string *>;
+    std::string * string = new std::string("");;
+    for (unsigned int i = 0; i != strlen(_text); ++i)
     {
-        if (_text[i] == 0x0A || _text[i] == '\n')
+        unsigned char chr = _text[i];
+        if (chr == 0x0A || chr == '\n')
         {
-            linesCount++;
-            if (width > maxWidth) maxWidth = width;
-            width = 0;
-            lines->push_back(new std::string(""));
-            //i++;
+            strings->push_back(string);
+            string = new std::string("");
         }
         else
         {
-            lines->at(linesCount)->push_back(_text[i]);
-            width += _font->glyph(_text[i])->width();
-            width += _font->horizontalGap();
+            string->push_back(chr);
         }
-        i++;
     }
-    if (width <= maxWidth) width = maxWidth;
-    height = (_font->height() * lines->size()) + (_font->horizontalGap() * (lines->size() - 1));
-
-    // foreach text line
-    for (std::vector<std::string *>::iterator it = lines->begin(); it != lines->end(); ++it)
+    if (!string->empty())
     {
-        int lineWidth = 0;
-        x = 0;
-        for(i = 0; i != (*it)->size(); ++i)
-        {
-            lineWidth += _font->glyph((*it)->c_str()[i])->width();
-            if (i < (*it)->size() - 1) lineWidth += _font->horizontalGap();
-        }
-
-        //std::cout << lineWidth << ":" << _font->getHeight() << std::endl;
-        Surface * lineSurface = new Surface(lineWidth, _font->height());
-        for(i = 0; i != (*it)->size(); ++i)
-        {
-            Surface * glyph = _font->glyph((*it)->c_str()[i]);
-            glyph->setX(x);
-            glyph->copyTo(lineSurface);
-
-            x += glyph->width();
-            if (i < (*it)->size() - 1) x += _font->horizontalGap();
-        }
-        linesSurfaces->push_back(lineSurface);
+        strings->push_back(string);
     }
-    // Creating new textSurface
-    Surface * textSurface = new Surface(width,height);
+
+    //convert strings list to surfaces list
+    std::vector<Surface *> * surfaces = new std::vector<Surface *>;
+    for (std::vector<std::string *>::iterator it = strings->begin(); it != strings->end(); ++it)
+    {
+        // calculate surface width
+        unsigned int surfaceWidth = 0;
+        for(unsigned int i = 0; i != (*it)->size(); ++i)
+        {
+            unsigned char chr = (*it)->at(i);
+
+            if (chr == ' ')
+            {
+                surfaceWidth += _font->spaceWidth();
+            }
+            else
+            {
+                surfaceWidth += _font->glyph(chr)->width() + _font->horizontalGap();
+            }
+        }
+
+        //create string surface
+        Surface * surface = new Surface(surfaceWidth, _font->height());
+        //draw characters on string surface
+        unsigned int x = 0;
+        for(unsigned int i = 0; i != (*it)->size(); ++i)
+        {
+            unsigned char chr = (*it)->at(i);
+            if (chr == ' ')
+            {
+                x += _font->spaceWidth();
+            }
+            else
+            {
+                Surface * glyph = _font->glyph(chr);
+                glyph->setX(x);
+                glyph->setY(0);
+                glyph->copyTo(surface);
+                x += glyph->width() + _font->horizontalGap();
+            }
+        }
+        surfaces->push_back(surface);
+    }
+
+// if width or height are unknown then calculate them from text
+//if (!_width || !_height)
+    {
+        // width = max line width
+        for (std::vector<Surface *>::iterator it = surfaces->begin(); it != surfaces->end(); ++it)
+        {
+            if ((*it)->width() > _width) _width = (*it)->width();
+        }
+
+        _height = surfaces->size()*_font->height() + (surfaces->size() - 1)*_font->verticalGap();
+    }
+
+    // Creating resulting surface
+    Surface * surface = new Surface(_width, _height);
+
     // foreach lines surfaces
-    x = 0;
-    y = 0;
-    for (std::vector<Surface *>::iterator it = linesSurfaces->begin(); it != linesSurfaces->end(); ++it)
+    unsigned int x = 0;
+    unsigned int y = 0;
+    for (std::vector<Surface *>::iterator it = surfaces->begin(); it != surfaces->end(); ++it)
     {
         switch(_horizontalAlign)
         {
             case HORIZONTAL_ALIGN_LEFT:
                 break;
             case HORIZONTAL_ALIGN_CENTER:
-            x = (width-(*it)->width())/2;
+                x = (_width-(*it)->width())/2;
                 break;
             case HORIZONTAL_ALIGN_RIGHT:
-                x = width - (*it)->width();
+                x = _width - (*it)->width();
                 break;
             case HORIZONTAL_ALIGN_JUSTIFY:
                 //@todo justify
@@ -164,61 +186,19 @@ void TextArea::draw()
         }
         (*it)->setX(x);
         (*it)->setY(y);
-        (*it)->copyTo(textSurface);
-        //delete(*it);
+        (*it)->copyTo(surface);
         y += _font->height() + _font->verticalGap();
     }
-    delete linesSurfaces;
 
-    if (_width == 0 && _height == 0)
-    {
-        textSurface->setX(this->x());
-        textSurface->setY(this->y());
-        loadFromSurface(textSurface);
-        delete textSurface;
-        delete lines;
-        return;
-    }
-
-    if (_height == 0) _height = height;
-
-    // using align
-    Surface * surface = new Surface(_width,_height,this->x(),this->y());
-    x = 0; y = 0;
-    switch(_horizontalAlign)
-    {
-        case HORIZONTAL_ALIGN_LEFT:
-            break;
-        case HORIZONTAL_ALIGN_CENTER:
-        x = (_width-textSurface->width())/2;
-            break;
-        case HORIZONTAL_ALIGN_RIGHT:
-            x = _width - textSurface->width();
-            break;
-        case HORIZONTAL_ALIGN_JUSTIFY:
-            //@todo justify
-            break;
-    }
-    switch(_verticalAlign)
-    {
-        case VERTICAL_ALIGN_TOP:
-            break;
-        case VERTICAL_ALIGN_CENTER:
-        case VERTICAL_ALIGN_JUSTIFY:
-            y = (_height - height)/2 ;
-            break;
-        case VERTICAL_ALIGN_BOTTOM:
-            y = _height - height;
-            break;
-    }
-    textSurface->setX(x);
-    textSurface->setY(y);
-    textSurface->copyTo(surface);
+    surface->setX(this->x());
+    surface->setY(this->y());
     loadFromSurface(surface);
 
-    delete lines;
-    delete textSurface;
     delete surface;
+    delete surfaces;
+    delete strings;
+    delete string;
+
     setNeedRedraw(false);
 }
 
