@@ -72,7 +72,6 @@ TextArea::TextArea(int x, int y) : InteractiveSurface(0,0,x,y)
 TextArea::~TextArea()
 {
     if (_text != 0) delete [] _text;
-    delete _font; _font = 0;
 }
 
 void TextArea::draw()
@@ -88,14 +87,14 @@ void TextArea::draw()
 
     //parse text to the string lines
     std::vector<std::string *> * strings = new std::vector<std::string *>;
-    std::string * string = new std::string("");;
+    std::string * string = new std::string();
     for (unsigned int i = 0; i != strlen(_text); ++i)
     {
         unsigned char chr = _text[i];
         if (chr == 0x0A || chr == '\n')
         {
             strings->push_back(string);
-            string = new std::string("");
+            string = new std::string();
         }
         else
         {
@@ -128,7 +127,7 @@ void TextArea::draw()
         }
 
         //create string surface
-        Surface * surface = new Surface(surfaceWidth, _font->height());
+        surfaces->push_back(new Surface(surfaceWidth, _font->height()));
         //draw characters on string surface
         unsigned int x = 0;
         for(unsigned int i = 0; i != (*it)->size(); ++i)
@@ -143,11 +142,11 @@ void TextArea::draw()
                 Surface * glyph = _font->glyph(chr);
                 glyph->setX(x);
                 glyph->setY(0);
-                glyph->copyTo(surface);
+                glyph->copyTo(surfaces->back());
                 x += glyph->width() + _font->horizontalGap();
             }
         }
-        surfaces->push_back(surface);
+
     }
 
 // if width or height are unknown then calculate them from text
@@ -299,8 +298,7 @@ TextArea * TextArea::setText(const char * text)
 
 TextArea * TextArea::setFont(const char * filename)
 {
-    delete _font;
-    _font = new Font(filename, _color);
+    _font = ResourceManager::font("font1.aaf", _color);
     setNeedRedraw(true);
     return this;
 }

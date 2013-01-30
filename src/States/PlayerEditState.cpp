@@ -35,7 +35,7 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _buttons = new std::map<std::string, ImageButton *>;
     _masks= new std::map<std::string, HiddenMask *>;
 
-    _background = new Surface(_game->resourceManager()->surface("art/intrface/edtrcrte.frm"));
+    Surface * background = new Surface(_game->resourceManager()->surface("art/intrface/edtrcrte.frm"));
 
     // Primary stats buttons
     {
@@ -161,7 +161,7 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _masks->at("stats_luck")->onLeftButtonClick(         (EventHandler) &PlayerEditState::onLuckSelected);
 
 
-    add(_background);
+    add(background);
 
     // add buttons to the state
     {
