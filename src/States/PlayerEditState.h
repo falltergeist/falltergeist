@@ -40,11 +40,16 @@ protected:
     std::map<std::string, BigCounter *> * _counters;
     std::map<std::string, ImageButton *> * _buttons;
     std::map<std::string, HiddenMask *> * _masks;
+    std::map<std::string, std::string> * _titles;
+    std::map<std::string, std::string> * _descriptions;
+    std::map<std::string, Surface *> * _images;
 
     TextArea * _addLabel(std::string name, TextArea * label);
     ImageButton * _addButton(std::string name, ImageButton * button);
     BigCounter * _addCounter(std::string name, BigCounter * counter);
     HiddenMask * _addMask(std::string name, HiddenMask * mask);
+    void _addTitle(std::string name, std::string title);
+    void _addDescription(std::string name, std::string description);
 
 public:
     PlayerEditState(Game * game);

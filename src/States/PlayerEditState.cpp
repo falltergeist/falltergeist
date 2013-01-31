@@ -33,7 +33,111 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _labels = new std::map<std::string, TextArea *>;
     _counters = new std::map<std::string, BigCounter *>;
     _buttons = new std::map<std::string, ImageButton *>;
-    _masks= new std::map<std::string, HiddenMask *>;
+    _masks = new std::map<std::string, HiddenMask *>;
+    _titles = new std::map<std::string, std::string>;
+    _descriptions = new std::map<std::string, std::string>;
+    _images = new std::map<std::string, Surface *>;
+
+
+    // Stats titles & descriptions
+    {
+        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/stat.msg");
+        _addTitle("stats_strength", msg->message(100)->text());
+        _addTitle("stats_perception", msg->message(101)->text());
+        _addTitle("stats_endurance", msg->message(102)->text());
+        _addTitle("stats_charisma", msg->message(103)->text());
+        _addTitle("stats_intelligence", msg->message(104)->text());
+        _addTitle("stats_agility", msg->message(105)->text());
+        _addTitle("stats_luck", msg->message(106)->text());
+
+        _addDescription("stats_strength", msg->message(200)->text());
+        _addDescription("stats_perception", msg->message(201)->text());
+        _addDescription("stats_endurance", msg->message(202)->text());
+        _addDescription("stats_charisma", msg->message(203)->text());
+        _addDescription("stats_intelligence", msg->message(204)->text());
+        _addDescription("stats_agility", msg->message(205)->text());
+        _addDescription("stats_luck", msg->message(206)->text());
+    }
+
+    // Traits titles & descriptions
+    {
+        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/trait.msg");
+        _addTitle("traits_1", msg->message(100)->text());
+        _addTitle("traits_2", msg->message(101)->text());
+        _addTitle("traits_3", msg->message(102)->text());
+        _addTitle("traits_4", msg->message(103)->text());
+        _addTitle("traits_5", msg->message(104)->text());
+        _addTitle("traits_6", msg->message(105)->text());
+        _addTitle("traits_7", msg->message(106)->text());
+        _addTitle("traits_8", msg->message(107)->text());
+        _addTitle("traits_9", msg->message(108)->text());
+        _addTitle("traits_10", msg->message(109)->text());
+        _addTitle("traits_11", msg->message(110)->text());
+        _addTitle("traits_12", msg->message(111)->text());
+        _addTitle("traits_13", msg->message(112)->text());
+        _addTitle("traits_14", msg->message(113)->text());
+        _addTitle("traits_15", msg->message(114)->text());
+        _addTitle("traits_16", msg->message(115)->text());
+
+        _addDescription("traits_1", msg->messages(200)->text());
+        _addDescription("traits_2", msg->messages(201)->text());
+        _addDescription("traits_3", msg->messages(202)->text());
+        _addDescription("traits_4", msg->messages(203)->text());
+        _addDescription("traits_5", msg->messages(204)->text());
+        _addDescription("traits_6", msg->messages(205)->text());
+        _addDescription("traits_7", msg->messages(206)->text());
+        _addDescription("traits_8", msg->messages(207)->text());
+        _addDescription("traits_9", msg->messages(208)->text());
+        _addDescription("traits_10", msg->messages(209)->text());
+        _addDescription("traits_11", msg->messages(210)->text());
+        _addDescription("traits_12", msg->messages(211)->text());
+        _addDescription("traits_13", msg->messages(212)->text());
+        _addDescription("traits_14", msg->messages(213)->text());
+        _addDescription("traits_15", msg->messages(214)->text());
+        _addDescription("traits_16", msg->messages(215)->text());
+    }
+
+    // Skills titles & descriptions
+    {
+        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/skill.msg");
+        _addTitle("skills_1", msg->message(100)->text());
+        _addTitle("skills_2", msg->message(101)->text());
+        _addTitle("skills_3", msg->message(102)->text());
+        _addTitle("skills_4", msg->message(103)->text());
+        _addTitle("skills_5", msg->message(104)->text());
+        _addTitle("skills_6", msg->message(105)->text());
+        _addTitle("skills_7", msg->message(106)->text());
+        _addTitle("skills_8", msg->message(107)->text());
+        _addTitle("skills_9", msg->message(108)->text());
+        _addTitle("skills_10", msg->message(109)->text());
+        _addTitle("skills_11", msg->message(110)->text());
+        _addTitle("skills_12", msg->message(111)->text());
+        _addTitle("skills_13", msg->message(112)->text());
+        _addTitle("skills_14", msg->message(113)->text());
+        _addTitle("skills_15", msg->message(114)->text());
+        _addTitle("skills_16", msg->message(115)->text());
+        _addTitle("skills_17", msg->message(116)->text());
+        _addTitle("skills_18", msg->message(117)->text());
+
+        _addDescription("skills_1", msg->messages(200)->text());
+        _addDescription("skills_2", msg->messages(201)->text());
+        _addDescription("skills_3", msg->messages(202)->text());
+        _addDescription("skills_4", msg->messages(203)->text());
+        _addDescription("skills_5", msg->messages(204)->text());
+        _addDescription("skills_6", msg->messages(205)->text());
+        _addDescription("skills_7", msg->messages(206)->text());
+        _addDescription("skills_8", msg->messages(207)->text());
+        _addDescription("skills_9", msg->messages(208)->text());
+        _addDescription("skills_10", msg->messages(209)->text());
+        _addDescription("skills_11", msg->messages(210)->text());
+        _addDescription("skills_12", msg->messages(211)->text());
+        _addDescription("skills_13", msg->messages(212)->text());
+        _addDescription("skills_14", msg->messages(213)->text());
+        _addDescription("skills_15", msg->messages(214)->text());
+        _addDescription("skills_16", msg->messages(215)->text());
+        _addDescription("skills_17", msg->messages(216)->text());
+        _addDescription("skills_18", msg->messages(217)->text());
+    }
 
     Surface * background = new Surface(_game->resourceManager()->surface("art/intrface/edtrcrte.frm"));
 
@@ -231,6 +335,9 @@ PlayerEditState::~PlayerEditState()
     delete _buttons;
     delete _counters;
     delete _masks;
+    delete _titles;
+    delete _descriptions;
+    delete _images;
 }
 
 TextArea * PlayerEditState::_addLabel(std::string name, TextArea * label)
@@ -255,6 +362,16 @@ HiddenMask * PlayerEditState::_addMask(std::string name, HiddenMask * mask)
 {
     _masks->insert(std::pair<std::string,HiddenMask *>(name, mask));
     return mask;
+}
+
+void PlayerEditState::_addTitle(std::string name, std::string title)
+{
+    _titles->insert(std::pair<std::string,std::string>(name, title));
+}
+
+void PlayerEditState::_addDescription(std::string name, std::string description)
+{
+    _descriptions->insert(std::pair<std::string,std::string>(name, description));
 }
 
 void PlayerEditState::think()
