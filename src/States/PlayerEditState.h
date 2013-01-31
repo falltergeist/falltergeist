@@ -35,7 +35,7 @@ class Game;
 class PlayerEditState : public State
 {
 protected:
-    std::vector<TextArea *> * _checkedLabels;
+    TextArea * _selectedLabel;
     std::map<std::string, TextArea *> * _labels;
     std::map<std::string, BigCounter *> * _counters;
     std::map<std::string, ImageButton *> * _buttons;
@@ -50,28 +50,10 @@ public:
     PlayerEditState(Game * game);
     void think();
     virtual ~PlayerEditState();
-    void onIncreaseStrengthButtonClick();
-    void onDecreaseStrengthButtonClick();
-    void onIncreasePerceptionButtonClick();
-    void onDecreasePerceptionButtonClick();
-    void onIncreaseEnduranceButtonClick();
-    void onDecreaseEnduranceButtonClick();
-    void onIncreaseCharismaButtonClick();
-    void onDecreaseCharismaButtonClick();
-    void onIncreaseIntelligenceButtonClick();
-    void onDecreaseIntelligenceButtonClick();
-    void onIncreaseAgilityButtonClick();
-    void onDecreaseAgilityButtonClick();
-    void onIncreaseLuckButtonClick();
-    void onDecreaseLuckButtonClick();
 
-    void onStrengthSelected();
-    void onPerceptionSelected();
-    void onEnduranceSelected();
-    void onCharismaSelected();
-    void onIntelligenceSelected();
-    void onAgilitySelected();
-    void onLuckSelected();
+    void onMaskClick(Event * event);
+    void onButtonClick(Event * event);
+    void onLabelClick(Event * event);
 
 };
 

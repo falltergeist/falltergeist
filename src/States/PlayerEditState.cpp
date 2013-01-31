@@ -29,7 +29,7 @@ namespace Falltergeist
 
 PlayerEditState::PlayerEditState(Game * game) : State(game)
 {
-    _checkedLabels = new std::vector<TextArea *>;
+    _selectedLabel = 0;
     _labels = new std::map<std::string, TextArea *>;
     _counters = new std::map<std::string, BigCounter *>;
     _buttons = new std::map<std::string, ImageButton *>;
@@ -105,14 +105,14 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         _addLabel("traits_6",  new TextArea(msg->message(105), 47, 420));
         _addLabel("traits_7",  new TextArea(msg->message(106), 47, 433));
         _addLabel("traits_8",  new TextArea(msg->message(107), 47, 447));
-        _addLabel("traits_9",  new TextArea(msg->message(108), 47, 352))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-        _addLabel("traits_10", new TextArea(msg->message(109), 47, 366))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-        _addLabel("traits_11", new TextArea(msg->message(110), 47, 380))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-        _addLabel("traits_12", new TextArea(msg->message(111), 47, 393))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-        _addLabel("traits_13", new TextArea(msg->message(112), 47, 407))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-        _addLabel("traits_14", new TextArea(msg->message(113), 47, 420))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-        _addLabel("traits_15", new TextArea(msg->message(114), 47, 433))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-        _addLabel("traits_16", new TextArea(msg->message(115), 47, 447))->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_9",  new TextArea(msg->message(108), 169, 352))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_10", new TextArea(msg->message(109), 169, 366))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_11", new TextArea(msg->message(110), 169, 380))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_12", new TextArea(msg->message(111), 169, 393))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_13", new TextArea(msg->message(112), 169, 407))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_14", new TextArea(msg->message(113), 169, 420))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_15", new TextArea(msg->message(114), 169, 433))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+        _addLabel("traits_16", new TextArea(msg->message(115), 169, 447))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
     }
     // Traits buttons
     {
@@ -136,42 +136,28 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         _addButton("traits_16", new ImageButton(off, on, 299, 444));
     }
 
-    // Event handlers
-    _buttons->at("stats_strength_increase")->onLeftButtonClick(     (EventHandler) &PlayerEditState::onIncreaseStrengthButtonClick);
-    _buttons->at("stats_strength_decrease")->onLeftButtonClick(     (EventHandler) &PlayerEditState::onDecreaseStrengthButtonClick);
-    _buttons->at("stats_perception_increase")->onLeftButtonClick(   (EventHandler) &PlayerEditState::onIncreasePerceptionButtonClick);
-    _buttons->at("stats_perception_decrease")->onLeftButtonClick(   (EventHandler) &PlayerEditState::onDecreasePerceptionButtonClick);
-    _buttons->at("stats_endurance_increase")->onLeftButtonClick(    (EventHandler) &PlayerEditState::onIncreaseEnduranceButtonClick);
-    _buttons->at("stats_endurance_decrease")->onLeftButtonClick(    (EventHandler) &PlayerEditState::onDecreaseEnduranceButtonClick);
-    _buttons->at("stats_charisma_increase")->onLeftButtonClick(     (EventHandler) &PlayerEditState::onIncreaseCharismaButtonClick);
-    _buttons->at("stats_charisma_decrease")->onLeftButtonClick(     (EventHandler) &PlayerEditState::onDecreaseCharismaButtonClick);
-    _buttons->at("stats_intelligence_increase")->onLeftButtonClick( (EventHandler) &PlayerEditState::onIncreaseIntelligenceButtonClick);
-    _buttons->at("stats_intelligence_decrease")->onLeftButtonClick( (EventHandler) &PlayerEditState::onDecreaseIntelligenceButtonClick);
-    _buttons->at("stats_agility_increase")->onLeftButtonClick(      (EventHandler) &PlayerEditState::onIncreaseAgilityButtonClick);
-    _buttons->at("stats_agility_decrease")->onLeftButtonClick(      (EventHandler) &PlayerEditState::onDecreaseAgilityButtonClick);
-    _buttons->at("stats_luck_increase")->onLeftButtonClick(         (EventHandler) &PlayerEditState::onIncreaseLuckButtonClick);
-    _buttons->at("stats_luck_decrease")->onLeftButtonClick(         (EventHandler) &PlayerEditState::onDecreaseLuckButtonClick);
-
-    _masks->at("stats_strength")->onLeftButtonClick(     (EventHandler) &PlayerEditState::onStrengthSelected);
-    _masks->at("stats_perception")->onLeftButtonClick(   (EventHandler) &PlayerEditState::onPerceptionSelected);
-    _masks->at("stats_endurance")->onLeftButtonClick(    (EventHandler) &PlayerEditState::onEnduranceSelected);
-    _masks->at("stats_charisma")->onLeftButtonClick(     (EventHandler) &PlayerEditState::onCharismaSelected);
-    _masks->at("stats_intelligence")->onLeftButtonClick( (EventHandler) &PlayerEditState::onIntelligenceSelected);
-    _masks->at("stats_agility")->onLeftButtonClick(      (EventHandler) &PlayerEditState::onAgilitySelected);
-    _masks->at("stats_luck")->onLeftButtonClick(         (EventHandler) &PlayerEditState::onLuckSelected);
-
 
     add(background);
 
     // add buttons to the state
     {
         std::map<std::string, ImageButton *>::iterator it;
-        for(it = _buttons->begin(); it != _buttons->end(); ++it) add(it->second);
+        for(it = _buttons->begin(); it != _buttons->end(); ++it)
+        {
+            it->second->onLeftButtonClick((EventHandler) &PlayerEditState::onButtonClick);
+            add(it->second);
+        }
     }
     // add labels to the state
     {
-        std::map<std::string, TextArea *>::iterator it;
-        for(it = _labels->begin(); it != _labels->end(); ++it) add(it->second);
+        // reverse iterator to change drawing order
+        std::map<std::string, TextArea *>::reverse_iterator it;
+        for(it = _labels->rbegin(); it != _labels->rend(); ++it)
+        {
+            it->second->setBackgroundColor(0x01000000);
+            it->second->onLeftButtonClick((EventHandler) &PlayerEditState::onLabelClick);
+            add(it->second);
+        }
     }
     // add counters to the state
     {
@@ -185,6 +171,7 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         {
             it->second->setBorderColor(0xFFFF0000);
             it->second->setVisible(true);
+            it->second->onLeftButtonClick((EventHandler) &PlayerEditState::onMaskClick);
             add(it->second);
         }
     }
@@ -193,7 +180,6 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
 
 PlayerEditState::~PlayerEditState()
 {
-    delete _checkedLabels;
     delete _labels;
     delete _buttons;
     delete _counters;
@@ -229,6 +215,28 @@ void PlayerEditState::think()
     // primary stats labels
     {
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+        std::map<std::string, TextArea *>::iterator it;
+        for(it = _labels->begin(); it != _labels->end(); ++it)
+        {
+            std::string name = it->first;
+            // default colors
+            //if (name == "stats_strength" || name == "stats_perception" || name == "stats_endurance" || name == "stats_charisma" ||
+            //    name == "stats_intelligence" || name == "stats_agility" || name == "stats_luck")
+            //{
+                it->second->setColor(0xFF00FF00);
+            //}
+
+            // selected color
+            if (_selectedLabel == it->second)
+            {
+                //if (name == "stats_strength" || name == "stats_perception" || name == "stats_endurance" || name == "stats_charisma" ||
+                //    name == "stats_intelligence" || name == "stats_agility" || name == "stats_luck")
+                //{
+                    it->second->setColor(0xFFFDF998);
+                //}
+            }
+        }
+
         _labels->at("stats_strength")->setText(msg->message(199 + _game->player()->strength));
         _labels->at("stats_perception")->setText(msg->message(199 + _game->player()->perception));
         _labels->at("stats_endurance")->setText(msg->message(199 + _game->player()->endurance));
@@ -239,8 +247,6 @@ void PlayerEditState::think()
     }
 
     // primary stats counters
-
-
     _counters->at("stats_strength")->setNumber(_game->player()->strength);
     _counters->at("stats_perception")->setNumber(_game->player()->perception);
     _counters->at("stats_endurance")->setNumber(_game->player()->endurance);
@@ -253,186 +259,138 @@ void PlayerEditState::think()
 
 }
 
-void PlayerEditState::onIncreaseStrengthButtonClick()
+void PlayerEditState::onButtonClick(Event * event)
 {
-    onStrengthSelected();
-    if (_game->player()->freeStatsPoints == 0) return;
-    if (_game->player()->strength < 10)
+    std::map<std::string, ImageButton *>::iterator it;
+    for(it = _buttons->begin(); it != _buttons->end(); ++it)
     {
-        _game->player()->strength++;
-        _game->player()->freeStatsPoints--;
+        if (it->second == event->sender())
+        {
+            std::string name = it->first;
+            if (name == "stats_strength_increase")
+            {
+                _selectedLabel = _labels->at("stats_strength");
+                _game->player()->statsIncrease(Player::STATS_STRENGTH);
+            }
+            if (name == "stats_strength_decrease")
+            {
+                _selectedLabel = _labels->at("stats_strength");
+                _game->player()->statsDecrease(Player::STATS_STRENGTH);
+            }
+            if (name == "stats_perception_increase")
+            {
+                _selectedLabel = _labels->at("stats_perception");
+                _game->player()->statsIncrease(Player::STATS_PERCEPTION);
+            }
+            if (name == "stats_perception_decrease")
+            {
+                _selectedLabel = _labels->at("stats_perception");
+                _game->player()->statsDecrease(Player::STATS_PERCEPTION);
+            }
+            if (name == "stats_endurance_increase")
+            {
+                _selectedLabel = _labels->at("stats_endurance");
+                _game->player()->statsIncrease(Player::STATS_ENDURANCE);
+            }
+            if (name == "stats_endurance_decrease")
+            {
+                _selectedLabel = _labels->at("stats_endurance");
+                _game->player()->statsDecrease(Player::STATS_ENDURANCE);
+            }
+            if (name == "stats_charisma_increase")
+            {
+                _selectedLabel = _labels->at("stats_charisma");
+                _game->player()->statsIncrease(Player::STATS_CHARISMA);
+            }
+            if (name == "stats_charisma_decrease")
+            {
+                _selectedLabel = _labels->at("stats_charisma");
+                _game->player()->statsDecrease(Player::STATS_CHARISMA);
+            }
+            if (name == "stats_intelligence_increase")
+            {
+                _selectedLabel = _labels->at("stats_intelligence");
+                _game->player()->statsIncrease(Player::STATS_INTELLIGENCE);
+            }
+            if (name == "stats_intelligence_decrease")
+            {
+                _selectedLabel = _labels->at("stats_intelligence");
+                _game->player()->statsDecrease(Player::STATS_INTELLIGENCE);
+            }
+            if (name == "stats_agility_increase")
+            {
+                _selectedLabel = _labels->at("stats_agility");
+                _game->player()->statsIncrease(Player::STATS_AGILITY);
+            }
+            if (name == "stats_agility_decrease")
+            {
+                _selectedLabel = _labels->at("stats_agility");
+                _game->player()->statsDecrease(Player::STATS_AGILITY);
+            }
+            if (name == "stats_luck_increase")
+            {
+                _selectedLabel = _labels->at("stats_luck");
+                _game->player()->statsIncrease(Player::STATS_LUCK);
+            }
+            if (name == "stats_luck_decrease")
+            {
+                _selectedLabel = _labels->at("stats_luck");
+                _game->player()->statsDecrease(Player::STATS_LUCK);
+            }
+        }
     }
 }
 
-void PlayerEditState::onDecreaseStrengthButtonClick()
+void PlayerEditState::onLabelClick(Event * event)
 {
-    onStrengthSelected();
-    if (_game->player()->strength > 2)
+    std::map<std::string, TextArea *>::iterator it;
+    for(it = _labels->begin(); it != _labels->end(); ++it)
     {
-        _game->player()->strength--;
-        _game->player()->freeStatsPoints++;
+        if (it->second == event->sender())
+        {
+            _selectedLabel = _labels->at(it->first);
+        }
     }
 }
 
-void PlayerEditState::onIncreasePerceptionButtonClick()
+void PlayerEditState::onMaskClick(Event * event)
 {
-    onPerceptionSelected();
-    if (_game->player()->freeStatsPoints == 0) return;
-    if (_game->player()->perception < 10)
+    std::map<std::string, HiddenMask *>::iterator it;
+    for(it = _masks->begin(); it != _masks->end(); ++it)
     {
-        _game->player()->perception++;
-        _game->player()->freeStatsPoints--;
+        if (it->second == event->sender())
+        {
+            std::string name = it->first;
+            if (name == "stats_strength")
+            {
+                _selectedLabel = _labels->at("stats_strength");
+            }
+            if (name == "stats_perception")
+            {
+                _selectedLabel = _labels->at("stats_perception");
+            }
+            if (name == "stats_endurance")
+            {
+                _selectedLabel = _labels->at("stats_endurance");
+            }
+            if (name == "stats_charisma")
+            {
+                _selectedLabel = _labels->at("stats_charisma");
+            }
+            if (name == "stats_intelligence")
+            {
+                _selectedLabel = _labels->at("stats_intelligence");
+            }
+            if (name == "stats_agility")
+            {
+                _selectedLabel = _labels->at("stats_agility");
+            }
+            if (name == "stats_luck")
+            {
+                _selectedLabel = _labels->at("stats_luck");
+            }
+        }
     }
-}
-
-void PlayerEditState::onDecreasePerceptionButtonClick()
-{
-    onPerceptionSelected();
-    if (_game->player()->perception > 2)
-    {
-        _game->player()->perception--;
-        _game->player()->freeStatsPoints++;
-    }
-}
-
-void PlayerEditState::onIncreaseEnduranceButtonClick()
-{
-    onEnduranceSelected();
-    if (_game->player()->freeStatsPoints == 0) return;
-    if (_game->player()->endurance < 10)
-    {
-        _game->player()->endurance++;
-        _game->player()->freeStatsPoints--;
-    }
-}
-
-void PlayerEditState::onDecreaseEnduranceButtonClick()
-{
-    onEnduranceSelected();
-    if (_game->player()->endurance > 2)
-    {
-        _game->player()->endurance--;
-        _game->player()->freeStatsPoints++;
-    }
-}
-
-void PlayerEditState::onIncreaseCharismaButtonClick()
-{
-    onCharismaSelected();
-    if (_game->player()->freeStatsPoints == 0) return;
-    if (_game->player()->charisma < 10)
-    {
-        _game->player()->charisma++;
-        _game->player()->freeStatsPoints--;
-    }
-}
-
-void PlayerEditState::onDecreaseCharismaButtonClick()
-{
-    onCharismaSelected();
-    if (_game->player()->charisma > 2)
-    {
-        _game->player()->charisma--;
-        _game->player()->freeStatsPoints++;
-    }
-}
-
-void PlayerEditState::onIncreaseIntelligenceButtonClick()
-{
-    onIntelligenceSelected();
-    if (_game->player()->freeStatsPoints == 0) return;
-    if (_game->player()->intelligence < 10)
-    {
-        _game->player()->intelligence++;
-        _game->player()->freeStatsPoints--;
-    }
-}
-
-void PlayerEditState::onDecreaseIntelligenceButtonClick()
-{
-    onIntelligenceSelected();
-    if (_game->player()->intelligence > 2)
-    {
-        _game->player()->intelligence--;
-        _game->player()->freeStatsPoints++;
-    }
-}
-
-void PlayerEditState::onIncreaseAgilityButtonClick()
-{
-    onAgilitySelected();
-    if (_game->player()->freeStatsPoints == 0) return;
-    if (_game->player()->agility < 10)
-    {
-        _game->player()->agility++;
-        _game->player()->freeStatsPoints--;
-    }
-}
-
-void PlayerEditState::onDecreaseAgilityButtonClick()
-{
-    onAgilitySelected();
-    if (_game->player()->agility > 2)
-    {
-        _game->player()->agility--;
-        _game->player()->freeStatsPoints++;
-    }
-}
-
-void PlayerEditState::onIncreaseLuckButtonClick()
-{
-    onLuckSelected();
-    if (_game->player()->freeStatsPoints == 0) return;
-    if (_game->player()->luck < 10)
-    {
-        _game->player()->luck++;
-        _game->player()->freeStatsPoints--;
-    }
-}
-
-void PlayerEditState::onDecreaseLuckButtonClick()
-{
-    onLuckSelected();
-    if (_game->player()->luck > 2)
-    {
-        _game->player()->luck--;
-        _game->player()->freeStatsPoints++;
-    }
-}
-
-void PlayerEditState::onStrengthSelected()
-{
-    std::cout << "Strength" << std::endl;
-}
-
-void PlayerEditState::onPerceptionSelected()
-{
-    std::cout << "Perception" << std::endl;
-}
-
-void PlayerEditState::onEnduranceSelected()
-{
-    std::cout << "Endurance" << std::endl;
-}
-
-void PlayerEditState::onCharismaSelected()
-{
-    std::cout << "Charisma" << std::endl;
-}
-
-void PlayerEditState::onIntelligenceSelected()
-{
-    std::cout << "Intelligence" << std::endl;
-}
-
-void PlayerEditState::onAgilitySelected()
-{
-    std::cout << "Agility" << std::endl;
-}
-
-void PlayerEditState::onLuckSelected()
-{
-    std::cout << "Luck" << std::endl;
 }
 
 }

@@ -75,5 +75,125 @@ void Player::setName(const char * name)
     strcpy(_name,name);    
 }
 
+void Player::statsIncrease(unsigned char stat)
+{
+    if (freeStatsPoints <= 0) return;
+    unsigned char value;
+    switch (stat)
+    {
+        case STATS_STRENGTH:
+            value = strength;
+            break;
+        case STATS_PERCEPTION:
+            value = perception;
+            break;
+        case STATS_ENDURANCE:
+            value = endurance;
+            break;
+        case STATS_CHARISMA:
+            value = charisma;
+            break;
+        case STATS_INTELLIGENCE:
+            value = intelligence;
+            break;
+        case STATS_AGILITY:
+            value = agility;
+            break;
+        case STATS_LUCK:
+            value = luck;
+            break;
+    }
+
+    if (value >= 10) return;
+
+    value++;
+    freeStatsPoints--;
+
+    switch (stat)
+    {
+        case STATS_STRENGTH:
+            strength = value;
+            break;
+        case STATS_PERCEPTION:
+            perception = value;
+            break;
+        case STATS_ENDURANCE:
+            endurance = value;
+            break;
+        case STATS_CHARISMA:
+            charisma = value;
+            break;
+        case STATS_INTELLIGENCE:
+            intelligence = value;
+            break;
+        case STATS_AGILITY:
+            agility = value;
+            break;
+        case STATS_LUCK:
+            luck = value;
+            break;
+    }
+}
+
+void Player::statsDecrease(unsigned char stat)
+{
+    unsigned char value;
+    switch (stat)
+    {
+        case STATS_STRENGTH:
+            value = strength;
+            break;
+        case STATS_PERCEPTION:
+            value = perception;
+            break;
+        case STATS_ENDURANCE:
+            value = endurance;
+            break;
+        case STATS_CHARISMA:
+            value = charisma;
+            break;
+        case STATS_INTELLIGENCE:
+            value = intelligence;
+            break;
+        case STATS_AGILITY:
+            value = agility;
+            break;
+        case STATS_LUCK:
+            value = luck;
+            break;
+    }
+
+    if (value <= 2) return;
+
+    value--;
+    freeStatsPoints++;
+
+    switch (stat)
+    {
+        case STATS_STRENGTH:
+            strength = value;
+            break;
+        case STATS_PERCEPTION:
+            perception = value;
+            break;
+        case STATS_ENDURANCE:
+            endurance = value;
+            break;
+        case STATS_CHARISMA:
+            charisma = value;
+            break;
+        case STATS_INTELLIGENCE:
+            intelligence = value;
+            break;
+        case STATS_AGILITY:
+            agility = value;
+            break;
+        case STATS_LUCK:
+            luck = value;
+            break;
+    }
+}
+
+
 }
 

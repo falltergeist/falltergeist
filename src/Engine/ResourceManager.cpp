@@ -20,7 +20,6 @@
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
 #include "../Engine/CrossPlatform.h"
-#include "../Engine/Font.h"
 #include <iostream>
 
 namespace Falltergeist
@@ -28,7 +27,6 @@ namespace Falltergeist
 
 std::list<libfalltergeist::DatFile *> * ResourceManager::_datFiles = new std::list<libfalltergeist::DatFile *>;
 std::map<std::string, Surface *> * ResourceManager::_surfaces = new std::map<std::string, Surface *>;
-std::map<std::string, Font *> * ResourceManager::_fonts = new std::map<std::string, Font *>;
 
 const char * _t(unsigned int number, const char * filename)
 {
@@ -186,16 +184,5 @@ Surface * ResourceManager::surface(std::string filename, int posX, int posY)
     return surface;
 }
 
-Font * ResourceManager::font(std::string filename, unsigned int color)
-{
-    if (_fonts->find(filename) != _fonts->end())
-    {
-        return _fonts->at(filename);
-    }
-    Font * font = new Font(filename.c_str(), color);
-    _fonts->insert(std::pair<std::string, Font *>(filename, font));
-    return font;
-
-}
 
 }

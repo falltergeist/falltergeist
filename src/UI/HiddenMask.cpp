@@ -24,7 +24,7 @@ namespace Falltergeist
 
 HiddenMask::HiddenMask(unsigned int width, unsigned int height, int x, int y) : InteractiveSurface(width, height, x , y)
 {
-    setBackgroundColor(0x330000FF);
+    //setBackgroundColor(0x330000FF);
     setVisible(false);
 }
 

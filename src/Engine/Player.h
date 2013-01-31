@@ -31,6 +31,7 @@ protected:
     char * _bio;
     char * _name;
 public:
+    enum {STATS_STRENGTH = 0, STATS_PERCEPTION, STATS_ENDURANCE, STATS_CHARISMA, STATS_INTELLIGENCE, STATS_AGILITY, STATS_LUCK };
     // primary stats
     unsigned int strength;
     unsigned int perception;
@@ -50,6 +51,9 @@ public:
 
     void setBio(const char * text);
     const char * name();
+
+    void statsIncrease(unsigned char stat);
+    void statsDecrease(unsigned char stat);
 };
 
 }

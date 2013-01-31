@@ -38,7 +38,7 @@ TextArea::TextArea(libfalltergeist::MsgMessage * message, int x, int y) : Intera
     _width = 0;
     _height = 0;
     _color = 0xFF00FF00;
-    _font = ResourceManager::font("font1.aaf", _color);
+    _font = new Font("font1.aaf", _color);
     setNeedRedraw(true);
 }
 
@@ -51,7 +51,7 @@ TextArea::TextArea(const char * text, int x, int y) : InteractiveSurface(0,0,x,y
     _width = 0;
     _height = 0;
     _color = 0xFF00FF00;
-    _font = ResourceManager::font("font1.aaf", _color);
+    _font = new Font("font1.aaf", _color);
     setNeedRedraw(true);
 }
 
@@ -64,7 +64,7 @@ TextArea::TextArea(int x, int y) : InteractiveSurface(0,0,x,y)
     _width = 0;
     _height = 0;
     _color = 0xFF00FF00;
-    _font = ResourceManager::font("font1.aaf", _color);
+    _font = new Font("font1.aaf", _color);
     setNeedRedraw(true);
 }
 
@@ -163,7 +163,8 @@ void TextArea::draw()
 
     // Creating resulting surface
     Surface * surface = new Surface(_width, _height);
-
+    surface->setBackgroundColor(backgroundColor());
+    surface->clear();
     // foreach lines surfaces
     unsigned int x = 0;
     unsigned int y = 0;
@@ -299,7 +300,7 @@ TextArea * TextArea::setText(const char * text)
 
 TextArea * TextArea::setFont(const char * filename)
 {
-    _font = ResourceManager::font("font1.aaf", _color);
+    _font = new Font("font1.aaf", _color);
     setNeedRedraw(true);
     return this;
 }
