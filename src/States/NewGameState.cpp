@@ -157,23 +157,23 @@ void NewGameState::changeCharacter()
 {
     Player * player = _characters->at(_selectedCharacter);
     std::stringstream ss;
-    ss   << _t(100,"text/english/game/stat.msg") << " " << (player->strength < 10 ? "0" : "")     << player->strength     << "\r\n"
-         << _t(101,"text/english/game/stat.msg") << " " << (player->perception < 10 ? "0" : "")   << player->perception   << "\r\n"
-         << _t(102,"text/english/game/stat.msg") << " " << (player->endurance < 10 ? "0" : "")    << player->endurance    << "\r\n"
-         << _t(103,"text/english/game/stat.msg") << " " << (player->charisma < 10 ? "0" : "")     << player->charisma     << "\r\n"
-         << _t(104,"text/english/game/stat.msg") << " " << (player->intelligence < 10 ? "0" : "") << player->intelligence << "\r\n"
-         << _t(105,"text/english/game/stat.msg") << " " << (player->agility < 10 ? "0" : "")      << player->agility      << "\r\n"
-         << _t(106,"text/english/game/stat.msg") << " " << (player->luck < 10 ? "0" : "")         << player->luck         << "\r\n" ;
+    ss   << _t(100,"text/english/game/stat.msg") << " " << (player->strength() < 10 ? "0" : "")     << player->strength()     << "\r\n"
+         << _t(101,"text/english/game/stat.msg") << " " << (player->perception() < 10 ? "0" : "")   << player->perception()   << "\r\n"
+         << _t(102,"text/english/game/stat.msg") << " " << (player->endurance() < 10 ? "0" : "")    << player->endurance()    << "\r\n"
+         << _t(103,"text/english/game/stat.msg") << " " << (player->charisma() < 10 ? "0" : "")     << player->charisma()     << "\r\n"
+         << _t(104,"text/english/game/stat.msg") << " " << (player->intelligence() < 10 ? "0" : "") << player->intelligence() << "\r\n"
+         << _t(105,"text/english/game/stat.msg") << " " << (player->agility() < 10 ? "0" : "")      << player->agility()      << "\r\n"
+         << _t(106,"text/english/game/stat.msg") << " " << (player->luck() < 10 ? "0" : "")         << player->luck()         << "\r\n" ;
     _playerStats1->setText(ss.str().c_str());
      
     ss.str("");
-    ss << statToString(player->strength) << "\r\n"
-       << statToString(player->perception) << "\r\n"
-       << statToString(player->endurance) << "\r\n"
-       << statToString(player->charisma) << "\r\n"
-       << statToString(player->intelligence) << "\r\n"
-       << statToString(player->agility) << "\r\n"
-       << statToString(player->luck) << "\r\n";
+    ss << statToString(player->strength()) << "\r\n"
+       << statToString(player->perception()) << "\r\n"
+       << statToString(player->endurance()) << "\r\n"
+       << statToString(player->charisma()) << "\r\n"
+       << statToString(player->intelligence()) << "\r\n"
+       << statToString(player->agility()) << "\r\n"
+       << statToString(player->luck()) << "\r\n";
     _playerStats2->setText(ss.str().c_str());
     
     _playerBio->setText(player->bio());

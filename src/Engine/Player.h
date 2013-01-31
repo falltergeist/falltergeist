@@ -30,17 +30,39 @@ protected:
     // text from .bio file
     char * _bio;
     char * _name;
+
+    unsigned int * _stats;
+    unsigned int * _traits;
+    unsigned int * _skills;
+
+    unsigned int _characterPoints;
+
 public:
     enum {STATS_STRENGTH = 0, STATS_PERCEPTION, STATS_ENDURANCE, STATS_CHARISMA, STATS_INTELLIGENCE, STATS_AGILITY, STATS_LUCK };
     // primary stats
-    unsigned int strength;
-    unsigned int perception;
-    unsigned int endurance;
-    unsigned int charisma;
-    unsigned int intelligence;
-    unsigned int agility;
-    unsigned int luck;
-    unsigned int freeStatsPoints;
+    unsigned int strength();
+    void setStrength(unsigned int strength);
+
+    unsigned int perception();
+    void setPerception(unsigned int perception);
+
+    unsigned int endurance();
+    void setEndurance(unsigned int endurance);
+
+    unsigned int charisma();
+    void setCharisma(unsigned int charisma);
+
+    unsigned int intelligence();
+    void setIntelligence(unsigned int intelligence);
+
+    unsigned int agility();
+    void setAgility(unsigned int agility);
+
+    unsigned int luck();
+    void setLuck(unsigned int luck);
+
+    unsigned int characterPoints();
+    void setCharacterPoints(unsigned int characterPoints);
     
     Player();
     Player(libfalltergeist::GcdFileType * gcd);

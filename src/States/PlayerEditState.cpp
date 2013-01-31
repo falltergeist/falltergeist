@@ -237,24 +237,24 @@ void PlayerEditState::think()
             }
         }
 
-        _labels->at("stats_strength")->setText(msg->message(199 + _game->player()->strength));
-        _labels->at("stats_perception")->setText(msg->message(199 + _game->player()->perception));
-        _labels->at("stats_endurance")->setText(msg->message(199 + _game->player()->endurance));
-        _labels->at("stats_charisma")->setText(msg->message(199 + _game->player()->charisma));
-        _labels->at("stats_intelligence")->setText(msg->message(199 + _game->player()->intelligence));
-        _labels->at("stats_agility")->setText(msg->message(199 + _game->player()->agility));
-        _labels->at("stats_luck")->setText(msg->message(199 + _game->player()->luck));
+        _labels->at("stats_strength")->setText(msg->message(199 + _game->player()->strength()));
+        _labels->at("stats_perception")->setText(msg->message(199 + _game->player()->perception()));
+        _labels->at("stats_endurance")->setText(msg->message(199 + _game->player()->endurance()));
+        _labels->at("stats_charisma")->setText(msg->message(199 + _game->player()->charisma()));
+        _labels->at("stats_intelligence")->setText(msg->message(199 + _game->player()->intelligence()));
+        _labels->at("stats_agility")->setText(msg->message(199 + _game->player()->agility()));
+        _labels->at("stats_luck")->setText(msg->message(199 + _game->player()->luck()));
     }
 
     // primary stats counters
-    _counters->at("stats_strength")->setNumber(_game->player()->strength);
-    _counters->at("stats_perception")->setNumber(_game->player()->perception);
-    _counters->at("stats_endurance")->setNumber(_game->player()->endurance);
-    _counters->at("stats_charisma")->setNumber(_game->player()->charisma);
-    _counters->at("stats_intelligence")->setNumber(_game->player()->intelligence);
-    _counters->at("stats_agility")->setNumber(_game->player()->agility);
-    _counters->at("stats_luck")->setNumber(_game->player()->luck);
-    _counters->at("stats_points")->setNumber(_game->player()->freeStatsPoints);
+    _counters->at("stats_strength")->setNumber(_game->player()->strength());
+    _counters->at("stats_perception")->setNumber(_game->player()->perception());
+    _counters->at("stats_endurance")->setNumber(_game->player()->endurance());
+    _counters->at("stats_charisma")->setNumber(_game->player()->charisma());
+    _counters->at("stats_intelligence")->setNumber(_game->player()->intelligence());
+    _counters->at("stats_agility")->setNumber(_game->player()->agility());
+    _counters->at("stats_luck")->setNumber(_game->player()->luck());
+    _counters->at("stats_points")->setNumber(_game->player()->characterPoints());
 
 
 }

@@ -26,29 +26,41 @@ namespace Falltergeist
     
 Player::Player()
 {
-    _bio = 0;
+    _characterPoints = 0;
+    _bio = 0;    
     _name = 0;
+    _stats = new unsigned int[7];
+    _traits = new unsigned int[16];
+    _skills = new unsigned int[10]; // temporary
 }
 
 Player::Player(libfalltergeist::GcdFileType * gcd)
 {
+    _characterPoints = 0;
     _bio = 0;
     _name = 0;
+    _stats = new unsigned int[7];
+    _traits = new unsigned int[16];
+    _skills = new unsigned int[10]; // temporary
 
-    this->strength = gcd->strength();
-    this->perception = gcd->perception();
-    this->endurance = gcd->endurance();
-    this->charisma = gcd->charisma();
-    this->intelligence = gcd->intelligence();
-    this->agility = gcd->agility();
-    this->luck = gcd->luck();
-    this->freeStatsPoints = gcd->characterPoints();
-    this->setName(gcd->name());
+    this->setStrength(        gcd->strength());
+    this->setPerception(     gcd->perception());
+    this->setEndurance(       gcd->endurance());
+    this->setCharisma(        gcd->charisma());
+    this->setIntelligence(    gcd->intelligence());
+    this->setAgility(         gcd->agility());
+    this->setLuck(            gcd->luck());
+    this->setCharacterPoints( gcd->characterPoints());
+    this->setName(            gcd->name());
 }
 
 Player::~Player()
 {
     delete [] _bio;
+    delete [] _name;
+    delete [] _stats;
+    delete [] _traits;
+    delete [] _skills;
 }
 
 const char * Player::bio()
@@ -77,123 +89,102 @@ void Player::setName(const char * name)
 
 void Player::statsIncrease(unsigned char stat)
 {
-    if (freeStatsPoints <= 0) return;
-    unsigned char value;
-    switch (stat)
-    {
-        case STATS_STRENGTH:
-            value = strength;
-            break;
-        case STATS_PERCEPTION:
-            value = perception;
-            break;
-        case STATS_ENDURANCE:
-            value = endurance;
-            break;
-        case STATS_CHARISMA:
-            value = charisma;
-            break;
-        case STATS_INTELLIGENCE:
-            value = intelligence;
-            break;
-        case STATS_AGILITY:
-            value = agility;
-            break;
-        case STATS_LUCK:
-            value = luck;
-            break;
-    }
+    if (_characterPoints <= 0) return;
 
-    if (value >= 10) return;
+    if (_stats[stat] >= 10) return;
 
-    value++;
-    freeStatsPoints--;
+    _stats[stat]++;
+    _characterPoints--;
 
-    switch (stat)
-    {
-        case STATS_STRENGTH:
-            strength = value;
-            break;
-        case STATS_PERCEPTION:
-            perception = value;
-            break;
-        case STATS_ENDURANCE:
-            endurance = value;
-            break;
-        case STATS_CHARISMA:
-            charisma = value;
-            break;
-        case STATS_INTELLIGENCE:
-            intelligence = value;
-            break;
-        case STATS_AGILITY:
-            agility = value;
-            break;
-        case STATS_LUCK:
-            luck = value;
-            break;
-    }
 }
 
 void Player::statsDecrease(unsigned char stat)
 {
-    unsigned char value;
-    switch (stat)
-    {
-        case STATS_STRENGTH:
-            value = strength;
-            break;
-        case STATS_PERCEPTION:
-            value = perception;
-            break;
-        case STATS_ENDURANCE:
-            value = endurance;
-            break;
-        case STATS_CHARISMA:
-            value = charisma;
-            break;
-        case STATS_INTELLIGENCE:
-            value = intelligence;
-            break;
-        case STATS_AGILITY:
-            value = agility;
-            break;
-        case STATS_LUCK:
-            value = luck;
-            break;
-    }
+    if (_stats[stat] <= 2) return;
 
-    if (value <= 2) return;
-
-    value--;
-    freeStatsPoints++;
-
-    switch (stat)
-    {
-        case STATS_STRENGTH:
-            strength = value;
-            break;
-        case STATS_PERCEPTION:
-            perception = value;
-            break;
-        case STATS_ENDURANCE:
-            endurance = value;
-            break;
-        case STATS_CHARISMA:
-            charisma = value;
-            break;
-        case STATS_INTELLIGENCE:
-            intelligence = value;
-            break;
-        case STATS_AGILITY:
-            agility = value;
-            break;
-        case STATS_LUCK:
-            luck = value;
-            break;
-    }
+    _stats[stat]--;
+    _characterPoints++;
 }
 
+unsigned int Player::strength()
+{
+    return _stats[STATS_STRENGTH];
+}
+
+void Player::setStrength(unsigned int strength)
+{
+    _stats[STATS_STRENGTH] = strength;
+}
+
+unsigned int Player::perception()
+{
+    return _stats[STATS_PERCEPTION];
+}
+
+void Player::setPerception(unsigned int perception)
+{
+    _stats[STATS_PERCEPTION] = perception;
+}
+
+unsigned int Player::endurance()
+{
+    return _stats[STATS_ENDURANCE];
+}
+
+void Player::setEndurance(unsigned int endurance)
+{
+    _stats[STATS_ENDURANCE] = endurance;
+}
+
+unsigned int Player::charisma()
+{
+    return _stats[STATS_CHARISMA];
+}
+
+void Player::setCharisma(unsigned int charisma)
+{
+    _stats[STATS_CHARISMA] = charisma;
+}
+
+unsigned int Player::intelligence()
+{
+    return _stats[STATS_INTELLIGENCE];
+}
+
+void Player::setIntelligence(unsigned int intelligence)
+{
+    _stats[STATS_INTELLIGENCE] = intelligence;
+}
+
+unsigned int Player::agility()
+{
+    return _stats[STATS_AGILITY];
+}
+
+void Player::setAgility(unsigned int agility)
+{
+    _stats[STATS_AGILITY] = agility;
+}
+
+unsigned int Player::luck()
+{
+    return _stats[STATS_LUCK];
+}
+
+void Player::setLuck(unsigned int luck)
+{
+    _stats[STATS_LUCK] = luck;
+}
+
+unsigned int Player::characterPoints()
+{
+    return _characterPoints;
+}
+
+void Player::setCharacterPoints(unsigned int characterPoints)
+{
+    _characterPoints = characterPoints;
+}
 
 }
 
