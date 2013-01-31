@@ -20,6 +20,7 @@
 #include <string.h>
 
 #include "../Engine/Player.h"
+#include <iostream>
 
 namespace Falltergeist
 {
@@ -29,9 +30,9 @@ Player::Player()
     _characterPoints = 0;
     _bio = 0;    
     _name = 0;
-    _stats = new unsigned int[7];
-    _traits = new unsigned int[16];
-    _skills = new unsigned int[10]; // temporary
+    _stats = new unsigned int[7]();
+    _traits = new unsigned int[16]();
+    _skills = new unsigned int[10](); // temporary
 }
 
 Player::Player(libfalltergeist::GcdFileType * gcd)
@@ -39,12 +40,12 @@ Player::Player(libfalltergeist::GcdFileType * gcd)
     _characterPoints = 0;
     _bio = 0;
     _name = 0;
-    _stats = new unsigned int[7];
-    _traits = new unsigned int[16];
-    _skills = new unsigned int[10]; // temporary
+    _stats = new unsigned int[7]();
+    _traits = new unsigned int[16]();
+    _skills = new unsigned int[10](); // temporary
 
     this->setStrength(        gcd->strength());
-    this->setPerception(     gcd->perception());
+    this->setPerception(      gcd->perception());
     this->setEndurance(       gcd->endurance());
     this->setCharisma(        gcd->charisma());
     this->setIntelligence(    gcd->intelligence());
@@ -52,6 +53,9 @@ Player::Player(libfalltergeist::GcdFileType * gcd)
     this->setLuck(            gcd->luck());
     this->setCharacterPoints( gcd->characterPoints());
     this->setName(            gcd->name());
+    this->setTrait(gcd->firstTrait(), 1);
+    this->setTrait(gcd->secondTrait(), 1);
+
 }
 
 Player::~Player()
@@ -184,6 +188,36 @@ unsigned int Player::characterPoints()
 void Player::setCharacterPoints(unsigned int characterPoints)
 {
     _characterPoints = characterPoints;
+}
+
+unsigned int Player::trait(unsigned int traitNumber)
+{
+    return _traits[traitNumber];
+}
+
+void Player::setTrait(unsigned int traitNumber, unsigned int value)
+{
+    _traits[traitNumber] = value;
+}
+
+bool Player::traitToggle(unsigned int traitNumber)
+{
+    if (trait(traitNumber))
+    {
+        setTrait(traitNumber, 0);
+        return true;
+    }
+    else
+    {
+        unsigned int selectedTraits = 0;
+        for (unsigned int i = 0; i != 16; ++i) if (trait(i)) selectedTraits++;
+        if (selectedTraits < 2)
+        {
+            setTrait(traitNumber, 1);
+            return true;
+        }
+    }
+    return false;
 }
 
 }

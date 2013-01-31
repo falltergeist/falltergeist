@@ -135,11 +135,11 @@ Surface * Font::glyph(unsigned char chr)
                 }
 
                 unsigned int color = this->color();
-                unsigned int red =   ((color & 0xFF000000) >> 16) / lightness;
-                unsigned int green = ((color & 0x00FF0000) >> 8)  / lightness;
-                unsigned int blue =   (color & 0x0000FF00) / lightness;
-                unsigned int alpha =  (color & 0x000000FF) >> 24;
-                color = (alpha << 24 ) | (red << 16) | (green << 8) | blue;
+                //unsigned int red =   ((color & 0xFF000000) >> 16) / lightness;
+                //unsigned int green = ((color & 0x00FF0000) >> 8)  / lightness;
+                //unsigned int blue =   (color & 0x0000FF00) / lightness;
+                //unsigned int alpha =  (color & 0x000000FF) >> 24;
+                //color = (alpha << 24 ) | (red << 16) | (green << 8) | blue;
                 surface->setPixel(x,delta + y,color);
             }
             i++;

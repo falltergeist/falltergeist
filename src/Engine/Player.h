@@ -39,6 +39,41 @@ protected:
 
 public:
     enum {STATS_STRENGTH = 0, STATS_PERCEPTION, STATS_ENDURANCE, STATS_CHARISMA, STATS_INTELLIGENCE, STATS_AGILITY, STATS_LUCK };
+    enum {TRAITS_1 = 0, // Fast Metabolism
+          TRAITS_2, // Bruiser
+          TRAITS_3, // Small Frame
+          TRAITS_4, // One Handed
+          TRAITS_5, // Finesse
+          TRAITS_6, // Kamikaze
+          TRAITS_7, // Heavy Handed
+          TRAITS_8, // Fast Shot
+          TRAITS_9, // Bloody Mess
+          TRAITS_10, // Jinxed
+          TRAITS_11, // Good Natured
+          TRAITS_12, // Chem Reliant
+          TRAITS_13, // Chem Resistant
+          TRAITS_14, // Sex Appeal
+          TRAITS_15, // Skilled
+          TRAITS_16  // Gifted
+         };
+    enum {TRAITS_FAST_METABOLISM = 0,
+          TRAITS_BRUISER,
+          TRAITS_SMALL_FRAME,
+          TRAITS_ONE_HANDED,
+          TRAITS_FINESSE,
+          TRAITS_KAMIKAZE,
+          TRAITS_HEAVY_HANDED,
+          TRAITS_FAST_SHOT,
+          TRAITS_BLOODY_MESS,
+          TRAITS_JINXED,
+          TRAITS_GOOD_NATURED,
+          TRAITS_CHEM_RELIANT,
+          TRAITS_CHEM_RESISTANT,
+          TRAITS_SEX_APPEAL,
+          TRAITS_SKILLED,
+          TRAITS_GIFTES
+         };
+
     // primary stats
     unsigned int strength();
     void setStrength(unsigned int strength);
@@ -76,6 +111,12 @@ public:
 
     void statsIncrease(unsigned char stat);
     void statsDecrease(unsigned char stat);
+
+    unsigned int trait(unsigned int traitNumber);
+    void setTrait(unsigned int traitNumber, unsigned int value);
+
+    bool traitToggle(unsigned int traitNumber);
+
 };
 
 }

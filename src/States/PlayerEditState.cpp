@@ -220,20 +220,164 @@ void PlayerEditState::think()
         {
             std::string name = it->first;
             // default colors
-            //if (name == "stats_strength" || name == "stats_perception" || name == "stats_endurance" || name == "stats_charisma" ||
-            //    name == "stats_intelligence" || name == "stats_agility" || name == "stats_luck")
-            //{
+            if (name == "stats_strength" || name == "stats_perception" || name == "stats_endurance" || name == "stats_charisma" ||
+                name == "stats_intelligence" || name == "stats_agility" || name == "stats_luck")
+            {
                 it->second->setColor(0xFF00FF00);
-            //}
+            }
+
+            if (name == "traits_1" || name == "traits_2" || name == "traits_3" || name == "traits_4" || name == "traits_5" || name == "traits_6" ||
+                name == "traits_7" || name == "traits_8" || name == "traits_9" || name == "traits_10" || name == "traits_11" || name == "traits_12" ||
+                name == "traits_13" || name == "traits_14" || name == "traits_15" || name == "traits_16" )
+            {
+                it->second->setColor(0xFF00FF00);
+            }
+
+            if (name == "traits_1" && _game->player()->trait(Player::TRAITS_1) == 1)
+            {
+                it->second->setColor(0xFF999999);
+            }
+            if (name == "traits_2" && _game->player()->trait(Player::TRAITS_2) == 1)
+            {
+                it->second->setColor(0xFF999999);
+            }
+            if (name == "traits_3" && _game->player()->trait(Player::TRAITS_3) == 1)
+            {
+                it->second->setColor(0xFF999999);
+            }
+            if (name == "traits_4" && _game->player()->trait(Player::TRAITS_4) == 1)
+            {
+                it->second->setColor(0xFF999999);
+            }
+            if (name == "traits_5" && _game->player()->trait(Player::TRAITS_5) == 1)
+            {
+                it->second->setColor(0xFF999999);
+            }
+            if (name == "traits_6" && _game->player()->trait(Player::TRAITS_6) == 1)
+            {
+                it->second->setColor(0xFF999999);
+            }
+            if (name == "traits_7" && _game->player()->trait(Player::TRAITS_7) == 1)
+            {
+                it->second->setColor(0xFF999999);
+            }
+            if (name == "traits_8" && _game->player()->trait(Player::TRAITS_8) == 1)
+            {
+                it->second->setColor(0xFF999999);
+            }
+            if (name == "traits_9" && _game->player()->trait(Player::TRAITS_9) == 1)
+            {
+                it->second->setColor(0xFF999999);
+            }
+            if (name == "traits_10" && _game->player()->trait(Player::TRAITS_10) == 1)
+            {
+                it->second->setColor(0xFF999999);
+            }
+            if (name == "traits_11" && _game->player()->trait(Player::TRAITS_11) == 1)
+            {
+                it->second->setColor(0xFF999999);
+            }
+            if (name == "traits_12" && _game->player()->trait(Player::TRAITS_12) == 1)
+            {
+                it->second->setColor(0xFF999999);
+            }
+            if (name == "traits_13" && _game->player()->trait(Player::TRAITS_13) == 1)
+            {
+                it->second->setColor(0xFF999999);
+            }
+            if (name == "traits_14" && _game->player()->trait(Player::TRAITS_14) == 1)
+            {
+                it->second->setColor(0xFF999999);
+            }
+            if (name == "traits_15" && _game->player()->trait(Player::TRAITS_15) == 1)
+            {
+                it->second->setColor(0xFF999999);
+            }
+            if (name == "traits_16" && _game->player()->trait(Player::TRAITS_16) == 1)
+            {
+                it->second->setColor(0xFF999999);
+            }
 
             // selected color
             if (_selectedLabel == it->second)
             {
-                //if (name == "stats_strength" || name == "stats_perception" || name == "stats_endurance" || name == "stats_charisma" ||
-                //    name == "stats_intelligence" || name == "stats_agility" || name == "stats_luck")
-                //{
+                if (name == "stats_strength" || name == "stats_perception" || name == "stats_endurance" || name == "stats_charisma" ||
+                    name == "stats_intelligence" || name == "stats_agility" || name == "stats_luck")
+                {
                     it->second->setColor(0xFFFDF998);
-                //}
+                }
+                if (name == "traits_1" || name == "traits_2" || name == "traits_3" || name == "traits_4" || name == "traits_5" || name == "traits_6" ||
+                    name == "traits_7" || name == "traits_8" || name == "traits_9" || name == "traits_10" || name == "traits_11" || name == "traits_12" ||
+                    name == "traits_13" || name == "traits_14" || name == "traits_15" || name == "traits_16" )
+                {
+                    it->second->setColor(0xFFFDF998);
+                }
+
+                if (name == "traits_1" && _game->player()->trait(Player::TRAITS_1) == 1)
+                {
+                    it->second->setColor(0xFFFFFFFF);
+                }
+                if (name == "traits_2" && _game->player()->trait(Player::TRAITS_2) == 1)
+                {
+                    it->second->setColor(0xFFFFFFFF);
+                }
+                if (name == "traits_3" && _game->player()->trait(Player::TRAITS_3) == 1)
+                {
+                    it->second->setColor(0xFFFFFFFF);
+                }
+                if (name == "traits_4" && _game->player()->trait(Player::TRAITS_4) == 1)
+                {
+                    it->second->setColor(0xFFFFFFFF);
+                }
+                if (name == "traits_5" && _game->player()->trait(Player::TRAITS_5) == 1)
+                {
+                    it->second->setColor(0xFFFFFFFF);
+                }
+                if (name == "traits_6" && _game->player()->trait(Player::TRAITS_6) == 1)
+                {
+                    it->second->setColor(0xFFFFFFFF);
+                }
+                if (name == "traits_7" && _game->player()->trait(Player::TRAITS_7) == 1)
+                {
+                    it->second->setColor(0xFFFFFFFF);
+                }
+                if (name == "traits_8" && _game->player()->trait(Player::TRAITS_8) == 1)
+                {
+                    it->second->setColor(0xFFFFFFFF);
+                }
+                if (name == "traits_9" && _game->player()->trait(Player::TRAITS_9) == 1)
+                {
+                    it->second->setColor(0xFFFFFFFF);
+                }
+                if (name == "traits_10" && _game->player()->trait(Player::TRAITS_10) == 1)
+                {
+                    it->second->setColor(0xFFFFFFFF);
+                }
+                if (name == "traits_11" && _game->player()->trait(Player::TRAITS_11) == 1)
+                {
+                    it->second->setColor(0xFFFFFFFF);
+                }
+                if (name == "traits_12" && _game->player()->trait(Player::TRAITS_12) == 1)
+                {
+                    it->second->setColor(0xFFFFFFFF);
+                }
+                if (name == "traits_13" && _game->player()->trait(Player::TRAITS_13) == 1)
+                {
+                    it->second->setColor(0xFFFFFFFF);
+                }
+                if (name == "traits_14" && _game->player()->trait(Player::TRAITS_14) == 1)
+                {
+                    it->second->setColor(0xFFFFFFFF);
+                }
+                if (name == "traits_15" && _game->player()->trait(Player::TRAITS_15) == 1)
+                {
+                    it->second->setColor(0xFFFFFFFF);
+                }
+                if (name == "traits_16" && _game->player()->trait(Player::TRAITS_16) == 1)
+                {
+                    it->second->setColor(0xFFFFFFFF);
+                }
+
             }
         }
 
@@ -261,6 +405,11 @@ void PlayerEditState::think()
 
 void PlayerEditState::onButtonClick(Event * event)
 {
+    for (unsigned int i = 0; i != 16; ++i)
+    {
+        std::cout << "TRAIT " << i << ": " << _game->player()->trait(i) << std::endl;
+    }
+
     std::map<std::string, ImageButton *>::iterator it;
     for(it = _buttons->begin(); it != _buttons->end(); ++it)
     {
@@ -336,6 +485,87 @@ void PlayerEditState::onButtonClick(Event * event)
             {
                 _selectedLabel = _labels->at("stats_luck");
                 _game->player()->statsDecrease(Player::STATS_LUCK);
+            }
+
+            if (name == "traits_1")
+            {
+                _selectedLabel = _labels->at("traits_1");
+                _game->player()->traitToggle(Player::TRAITS_1);
+            }
+            if (name == "traits_2")
+            {
+                _selectedLabel = _labels->at("traits_2");
+                _game->player()->traitToggle(Player::TRAITS_2);
+            }
+            if (name == "traits_3")
+            {
+                _selectedLabel = _labels->at("traits_3");
+                _game->player()->traitToggle(Player::TRAITS_3);
+            }
+            if (name == "traits_4")
+            {
+                _selectedLabel = _labels->at("traits_4");
+                _game->player()->traitToggle(Player::TRAITS_4);
+            }
+            if (name == "traits_5")
+            {
+                _selectedLabel = _labels->at("traits_5");
+                _game->player()->traitToggle(Player::TRAITS_5);
+            }
+            if (name == "traits_6")
+            {
+                _selectedLabel = _labels->at("traits_6");
+                _game->player()->traitToggle(Player::TRAITS_6);
+            }
+            if (name == "traits_7")
+            {
+                _selectedLabel = _labels->at("traits_7");
+                _game->player()->traitToggle(Player::TRAITS_7);
+            }
+            if (name == "traits_8")
+            {
+                _selectedLabel = _labels->at("traits_8");
+                _game->player()->traitToggle(Player::TRAITS_8);
+            }
+            if (name == "traits_9")
+            {
+                _selectedLabel = _labels->at("traits_9");
+                _game->player()->traitToggle(Player::TRAITS_9);
+            }
+            if (name == "traits_10")
+            {
+                _selectedLabel = _labels->at("traits_10");
+                _game->player()->traitToggle(Player::TRAITS_10);
+            }
+            if (name == "traits_11")
+            {
+                _selectedLabel = _labels->at("traits_11");
+                _game->player()->traitToggle(Player::TRAITS_11);
+            }
+            if (name == "traits_12")
+            {
+                _selectedLabel = _labels->at("traits_12");
+                _game->player()->traitToggle(Player::TRAITS_12);
+            }
+            if (name == "traits_13")
+            {
+                _selectedLabel = _labels->at("traits_13");
+                _game->player()->traitToggle(Player::TRAITS_13);
+            }
+            if (name == "traits_14")
+            {
+                _selectedLabel = _labels->at("traits_14");
+                _game->player()->traitToggle(Player::TRAITS_14);
+            }
+            if (name == "traits_15")
+            {
+                _selectedLabel = _labels->at("traits_15");
+                _game->player()->traitToggle(Player::TRAITS_15);
+            }
+            if (name == "traits_16")
+            {
+                _selectedLabel = _labels->at("traits_16");
+                _game->player()->traitToggle(Player::TRAITS_16);
             }
         }
     }
