@@ -80,6 +80,8 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         _addCounter("stats_luck",         new BigCounter(59, 235));
         // Free stats points counter
         _addCounter("stats_points",       new BigCounter(126, 282));
+        // Free skill points counts
+        _addCounter("skills_points",       new BigCounter(522, 228));
     }
 
 
@@ -136,6 +138,51 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         _addButton("traits_16", new ImageButton(off, on, 299, 444));
     }
 
+    // Skills buttons
+    {
+        const char * on  = "art/intrface/tgsklon.frm";
+        const char * off = "art/intrface/tgskloff.frm";
+        _addButton("skills_1",  new ImageButton(off, on, 347,  26));
+        _addButton("skills_2",  new ImageButton(off, on, 347,  26 + 11));
+        _addButton("skills_3",  new ImageButton(off, on, 347,  26 + 11*2));
+        _addButton("skills_4",  new ImageButton(off, on, 347,  26 + 11*3));
+        _addButton("skills_5",  new ImageButton(off, on, 347,  26 + 11*4));
+        _addButton("skills_6",  new ImageButton(off, on, 347,  26 + 11*5));
+        _addButton("skills_7",  new ImageButton(off, on, 347,  26 + 11*6));
+        _addButton("skills_8",  new ImageButton(off, on, 347,  26 + 11*7));
+        _addButton("skills_9",  new ImageButton(off, on, 347,  26 + 11*8));
+        _addButton("skills_10", new ImageButton(off, on, 347,  26 + 11*9));
+        _addButton("skills_11", new ImageButton(off, on, 347,  26 + 11*10));
+        _addButton("skills_12", new ImageButton(off, on, 347,  26 + 11*11));
+        _addButton("skills_13", new ImageButton(off, on, 347,  26 + 11*12));
+        _addButton("skills_14", new ImageButton(off, on, 347,  26 + 11*13));
+        _addButton("skills_15", new ImageButton(off, on, 347,  26 + 11*14));
+        _addButton("skills_16", new ImageButton(off, on, 347,  26 + 11*15));
+        _addButton("skills_17", new ImageButton(off, on, 347,  26 + 11*16));
+        _addButton("skills_18", new ImageButton(off, on, 347,  26 + 11*17));
+    }
+    // Skills labels
+    {
+        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/skill.msg");
+        _addLabel("skills_1",  new TextArea(msg->message(100), 377, 27))->setWidth(240);
+        _addLabel("skills_2",  new TextArea(msg->message(101), 377, 27 + 11))->setWidth(240);
+        _addLabel("skills_3",  new TextArea(msg->message(102), 377, 27 + 11*2))->setWidth(240);
+        _addLabel("skills_4",  new TextArea(msg->message(103), 377, 27 + 11*3))->setWidth(240);
+        _addLabel("skills_5",  new TextArea(msg->message(104), 377, 27 + 11*4))->setWidth(240);
+        _addLabel("skills_6",  new TextArea(msg->message(105), 377, 27 + 11*5))->setWidth(240);
+        _addLabel("skills_7",  new TextArea(msg->message(106), 377, 27 + 11*6))->setWidth(240);
+        _addLabel("skills_8",  new TextArea(msg->message(107), 377, 27 + 11*7))->setWidth(240);
+        _addLabel("skills_9",  new TextArea(msg->message(108), 377, 27 + 11*8))->setWidth(240);
+        _addLabel("skills_10", new TextArea(msg->message(109), 377, 27 + 11*9))->setWidth(240);
+        _addLabel("skills_11", new TextArea(msg->message(110), 377, 27 + 11*10))->setWidth(240);
+        _addLabel("skills_12", new TextArea(msg->message(111), 377, 27 + 11*11))->setWidth(240);
+        _addLabel("skills_13", new TextArea(msg->message(112), 377, 27 + 11*12))->setWidth(240);
+        _addLabel("skills_14", new TextArea(msg->message(113), 377, 27 + 11*13))->setWidth(240);
+        _addLabel("skills_15", new TextArea(msg->message(114), 377, 27 + 11*14))->setWidth(240);
+        _addLabel("skills_16", new TextArea(msg->message(115), 377, 27 + 11*15))->setWidth(240);
+        _addLabel("skills_17", new TextArea(msg->message(116), 377, 27 + 11*16))->setWidth(240);
+        _addLabel("skills_18", new TextArea(msg->message(117), 377, 27 + 11*17))->setWidth(240);
+    }
 
     add(background);
 
@@ -233,70 +280,48 @@ void PlayerEditState::think()
                 it->second->setColor(0xFF00FF00);
             }
 
-            if (name == "traits_1" && _game->player()->trait(Player::TRAITS_1) == 1)
+            if (name == "skills_1" || name == "skills_2" || name == "skills_3" || name == "skills_4" || name == "skills_5" || name == "skills_6" ||
+                name == "skills_7" || name == "skills_8" || name == "skills_9" || name == "skills_10" || name == "skills_11" || name == "skills_12" ||
+                name == "skills_13" || name == "skills_14" || name == "skills_15" || name == "skills_16" || name == "skills_17" || name == "skills_18" )
             {
-                it->second->setColor(0xFF999999);
+                it->second->setColor(0xFF00FF00);
             }
-            if (name == "traits_2" && _game->player()->trait(Player::TRAITS_2) == 1)
-            {
-                it->second->setColor(0xFF999999);
-            }
-            if (name == "traits_3" && _game->player()->trait(Player::TRAITS_3) == 1)
-            {
-                it->second->setColor(0xFF999999);
-            }
-            if (name == "traits_4" && _game->player()->trait(Player::TRAITS_4) == 1)
-            {
-                it->second->setColor(0xFF999999);
-            }
-            if (name == "traits_5" && _game->player()->trait(Player::TRAITS_5) == 1)
-            {
-                it->second->setColor(0xFF999999);
-            }
-            if (name == "traits_6" && _game->player()->trait(Player::TRAITS_6) == 1)
-            {
-                it->second->setColor(0xFF999999);
-            }
-            if (name == "traits_7" && _game->player()->trait(Player::TRAITS_7) == 1)
-            {
-                it->second->setColor(0xFF999999);
-            }
-            if (name == "traits_8" && _game->player()->trait(Player::TRAITS_8) == 1)
-            {
-                it->second->setColor(0xFF999999);
-            }
-            if (name == "traits_9" && _game->player()->trait(Player::TRAITS_9) == 1)
-            {
-                it->second->setColor(0xFF999999);
-            }
-            if (name == "traits_10" && _game->player()->trait(Player::TRAITS_10) == 1)
-            {
-                it->second->setColor(0xFF999999);
-            }
-            if (name == "traits_11" && _game->player()->trait(Player::TRAITS_11) == 1)
-            {
-                it->second->setColor(0xFF999999);
-            }
-            if (name == "traits_12" && _game->player()->trait(Player::TRAITS_12) == 1)
-            {
-                it->second->setColor(0xFF999999);
-            }
-            if (name == "traits_13" && _game->player()->trait(Player::TRAITS_13) == 1)
-            {
-                it->second->setColor(0xFF999999);
-            }
-            if (name == "traits_14" && _game->player()->trait(Player::TRAITS_14) == 1)
-            {
-                it->second->setColor(0xFF999999);
-            }
-            if (name == "traits_15" && _game->player()->trait(Player::TRAITS_15) == 1)
-            {
-                it->second->setColor(0xFF999999);
-            }
-            if (name == "traits_16" && _game->player()->trait(Player::TRAITS_16) == 1)
-            {
-                it->second->setColor(0xFF999999);
-            }
+
+            if (name == "traits_1" && _game->player()->trait(Player::TRAITS_1) == 1) it->second->setColor(0xFF999999);
+            if (name == "traits_2" && _game->player()->trait(Player::TRAITS_2) == 1) it->second->setColor(0xFF999999);
+            if (name == "traits_3" && _game->player()->trait(Player::TRAITS_3) == 1) it->second->setColor(0xFF999999);
+            if (name == "traits_4" && _game->player()->trait(Player::TRAITS_4) == 1) it->second->setColor(0xFF999999);
+            if (name == "traits_5" && _game->player()->trait(Player::TRAITS_5) == 1) it->second->setColor(0xFF999999);
+            if (name == "traits_6" && _game->player()->trait(Player::TRAITS_6) == 1) it->second->setColor(0xFF999999);
+            if (name == "traits_7" && _game->player()->trait(Player::TRAITS_7) == 1) it->second->setColor(0xFF999999);
+            if (name == "traits_8" && _game->player()->trait(Player::TRAITS_8) == 1) it->second->setColor(0xFF999999);
+            if (name == "traits_9" && _game->player()->trait(Player::TRAITS_9) == 1) it->second->setColor(0xFF999999);
+            if (name == "traits_10" && _game->player()->trait(Player::TRAITS_10) == 1) it->second->setColor(0xFF999999);
+            if (name == "traits_11" && _game->player()->trait(Player::TRAITS_11) == 1) it->second->setColor(0xFF999999);
+            if (name == "traits_12" && _game->player()->trait(Player::TRAITS_12) == 1) it->second->setColor(0xFF999999);
+            if (name == "traits_13" && _game->player()->trait(Player::TRAITS_13) == 1) it->second->setColor(0xFF999999);
+            if (name == "traits_14" && _game->player()->trait(Player::TRAITS_14) == 1) it->second->setColor(0xFF999999);
+            if (name == "traits_15" && _game->player()->trait(Player::TRAITS_15) == 1) it->second->setColor(0xFF999999);
+            if (name == "traits_16" && _game->player()->trait(Player::TRAITS_16) == 1) it->second->setColor(0xFF999999);
+
+            if (name == "skills_1" && _game->player()->skill(Player::SKILLS_1) == 1) it->second->setColor(0xFF999999);
+            if (name == "skills_2" && _game->player()->skill(Player::SKILLS_2) == 1) it->second->setColor(0xFF999999);
+            if (name == "skills_3" && _game->player()->skill(Player::SKILLS_3) == 1) it->second->setColor(0xFF999999);
+            if (name == "skills_4" && _game->player()->skill(Player::SKILLS_4) == 1) it->second->setColor(0xFF999999);
+            if (name == "skills_5" && _game->player()->skill(Player::SKILLS_5) == 1) it->second->setColor(0xFF999999);
+            if (name == "skills_6" && _game->player()->skill(Player::SKILLS_6) == 1) it->second->setColor(0xFF999999);
+            if (name == "skills_7" && _game->player()->skill(Player::SKILLS_7) == 1) it->second->setColor(0xFF999999);
+            if (name == "skills_8" && _game->player()->skill(Player::SKILLS_8) == 1) it->second->setColor(0xFF999999);
+            if (name == "skills_9" && _game->player()->skill(Player::SKILLS_9) == 1) it->second->setColor(0xFF999999);
+            if (name == "skills_10" && _game->player()->skill(Player::SKILLS_10) == 1) it->second->setColor(0xFF999999);
+            if (name == "skills_11" && _game->player()->skill(Player::SKILLS_11) == 1) it->second->setColor(0xFF999999);
+            if (name == "skills_12" && _game->player()->skill(Player::SKILLS_12) == 1) it->second->setColor(0xFF999999);
+            if (name == "skills_13" && _game->player()->skill(Player::SKILLS_13) == 1) it->second->setColor(0xFF999999);
+            if (name == "skills_14" && _game->player()->skill(Player::SKILLS_14) == 1) it->second->setColor(0xFF999999);
+            if (name == "skills_15" && _game->player()->skill(Player::SKILLS_15) == 1) it->second->setColor(0xFF999999);
+            if (name == "skills_16" && _game->player()->skill(Player::SKILLS_16) == 1) it->second->setColor(0xFF999999);
+            if (name == "skills_17" && _game->player()->skill(Player::SKILLS_17) == 1) it->second->setColor(0xFF999999);
+            if (name == "skills_18" && _game->player()->skill(Player::SKILLS_18) == 1) it->second->setColor(0xFF999999);
 
             // selected color
             if (_selectedLabel == it->second)
@@ -313,70 +338,48 @@ void PlayerEditState::think()
                     it->second->setColor(0xFFFDF998);
                 }
 
-                if (name == "traits_1" && _game->player()->trait(Player::TRAITS_1) == 1)
+                if (name == "skills_1" || name == "skills_2" || name == "skills_3" || name == "skills_4" || name == "skills_5" || name == "skills_6" ||
+                    name == "skills_7" || name == "skills_8" || name == "skills_9" || name == "skills_10" || name == "skills_11" || name == "skills_12" ||
+                    name == "skills_13" || name == "skills_14" || name == "skills_15" || name == "skills_16" || name == "skills_17" || name == "skills_18" )
                 {
-                    it->second->setColor(0xFFFFFFFF);
+                    it->second->setColor(0xFFFDF998);
                 }
-                if (name == "traits_2" && _game->player()->trait(Player::TRAITS_2) == 1)
-                {
-                    it->second->setColor(0xFFFFFFFF);
-                }
-                if (name == "traits_3" && _game->player()->trait(Player::TRAITS_3) == 1)
-                {
-                    it->second->setColor(0xFFFFFFFF);
-                }
-                if (name == "traits_4" && _game->player()->trait(Player::TRAITS_4) == 1)
-                {
-                    it->second->setColor(0xFFFFFFFF);
-                }
-                if (name == "traits_5" && _game->player()->trait(Player::TRAITS_5) == 1)
-                {
-                    it->second->setColor(0xFFFFFFFF);
-                }
-                if (name == "traits_6" && _game->player()->trait(Player::TRAITS_6) == 1)
-                {
-                    it->second->setColor(0xFFFFFFFF);
-                }
-                if (name == "traits_7" && _game->player()->trait(Player::TRAITS_7) == 1)
-                {
-                    it->second->setColor(0xFFFFFFFF);
-                }
-                if (name == "traits_8" && _game->player()->trait(Player::TRAITS_8) == 1)
-                {
-                    it->second->setColor(0xFFFFFFFF);
-                }
-                if (name == "traits_9" && _game->player()->trait(Player::TRAITS_9) == 1)
-                {
-                    it->second->setColor(0xFFFFFFFF);
-                }
-                if (name == "traits_10" && _game->player()->trait(Player::TRAITS_10) == 1)
-                {
-                    it->second->setColor(0xFFFFFFFF);
-                }
-                if (name == "traits_11" && _game->player()->trait(Player::TRAITS_11) == 1)
-                {
-                    it->second->setColor(0xFFFFFFFF);
-                }
-                if (name == "traits_12" && _game->player()->trait(Player::TRAITS_12) == 1)
-                {
-                    it->second->setColor(0xFFFFFFFF);
-                }
-                if (name == "traits_13" && _game->player()->trait(Player::TRAITS_13) == 1)
-                {
-                    it->second->setColor(0xFFFFFFFF);
-                }
-                if (name == "traits_14" && _game->player()->trait(Player::TRAITS_14) == 1)
-                {
-                    it->second->setColor(0xFFFFFFFF);
-                }
-                if (name == "traits_15" && _game->player()->trait(Player::TRAITS_15) == 1)
-                {
-                    it->second->setColor(0xFFFFFFFF);
-                }
-                if (name == "traits_16" && _game->player()->trait(Player::TRAITS_16) == 1)
-                {
-                    it->second->setColor(0xFFFFFFFF);
-                }
+
+                if (name == "traits_1" && _game->player()->trait(Player::TRAITS_1) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "traits_2" && _game->player()->trait(Player::TRAITS_2) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "traits_3" && _game->player()->trait(Player::TRAITS_3) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "traits_4" && _game->player()->trait(Player::TRAITS_4) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "traits_5" && _game->player()->trait(Player::TRAITS_5) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "traits_6" && _game->player()->trait(Player::TRAITS_6) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "traits_7" && _game->player()->trait(Player::TRAITS_7) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "traits_8" && _game->player()->trait(Player::TRAITS_8) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "traits_9" && _game->player()->trait(Player::TRAITS_9) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "traits_10" && _game->player()->trait(Player::TRAITS_10) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "traits_11" && _game->player()->trait(Player::TRAITS_11) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "traits_12" && _game->player()->trait(Player::TRAITS_12) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "traits_13" && _game->player()->trait(Player::TRAITS_13) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "traits_14" && _game->player()->trait(Player::TRAITS_14) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "traits_15" && _game->player()->trait(Player::TRAITS_15) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "traits_16" && _game->player()->trait(Player::TRAITS_16) == 1) it->second->setColor(0xFFFFFFFF);
+
+                if (name == "skills_1" && _game->player()->skill(Player::SKILLS_1) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "skills_2" && _game->player()->skill(Player::SKILLS_2) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "skills_3" && _game->player()->skill(Player::SKILLS_3) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "skills_4" && _game->player()->skill(Player::SKILLS_4) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "skills_5" && _game->player()->skill(Player::SKILLS_5) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "skills_6" && _game->player()->skill(Player::SKILLS_6) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "skills_7" && _game->player()->skill(Player::SKILLS_7) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "skills_8" && _game->player()->skill(Player::SKILLS_8) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "skills_9" && _game->player()->skill(Player::SKILLS_9) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "skills_10" && _game->player()->skill(Player::SKILLS_10) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "skills_11" && _game->player()->skill(Player::SKILLS_11) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "skills_12" && _game->player()->skill(Player::SKILLS_12) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "skills_13" && _game->player()->skill(Player::SKILLS_13) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "skills_14" && _game->player()->skill(Player::SKILLS_14) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "skills_15" && _game->player()->skill(Player::SKILLS_15) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "skills_16" && _game->player()->skill(Player::SKILLS_16) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "skills_17" && _game->player()->skill(Player::SKILLS_17) == 1) it->second->setColor(0xFFFFFFFF);
+                if (name == "skills_18" && _game->player()->skill(Player::SKILLS_18) == 1) it->second->setColor(0xFFFFFFFF);
 
             }
         }
@@ -399,15 +402,16 @@ void PlayerEditState::think()
     _counters->at("stats_agility")->setNumber(_game->player()->agility());
     _counters->at("stats_luck")->setNumber(_game->player()->luck());
     _counters->at("stats_points")->setNumber(_game->player()->characterPoints());
+    _counters->at("skills_points")->setNumber(_game->player()->skillPoints());
 
 
 }
 
 void PlayerEditState::onButtonClick(Event * event)
 {
-    for (unsigned int i = 0; i != 16; ++i)
+    for (unsigned int i = 0; i != 18; ++i)
     {
-        std::cout << "TRAIT " << i << ": " << _game->player()->trait(i) << std::endl;
+        std::cout << "SKILL "<< i << ": " << (int) _game->player()->skill(i) << std::endl;
     }
 
     std::map<std::string, ImageButton *>::iterator it;
@@ -566,6 +570,96 @@ void PlayerEditState::onButtonClick(Event * event)
             {
                 _selectedLabel = _labels->at("traits_16");
                 _game->player()->traitToggle(Player::TRAITS_16);
+            }
+            if (name == "skills_1")
+            {
+                _selectedLabel = _labels->at("skills_1");
+                _game->player()->skillToggle(Player::SKILLS_1);
+            }
+            if (name == "skills_2")
+            {
+                _selectedLabel = _labels->at("skills_2");
+                _game->player()->skillToggle(Player::SKILLS_2);
+            }
+            if (name == "skills_3")
+            {
+                _selectedLabel = _labels->at("skills_3");
+                _game->player()->skillToggle(Player::SKILLS_3);
+            }
+            if (name == "skills_4")
+            {
+                _selectedLabel = _labels->at("skills_4");
+                _game->player()->skillToggle(Player::SKILLS_4);
+            }
+            if (name == "skills_5")
+            {
+                _selectedLabel = _labels->at("skills_5");
+                _game->player()->skillToggle(Player::SKILLS_5);
+            }
+            if (name == "skills_6")
+            {
+                _selectedLabel = _labels->at("skills_6");
+                _game->player()->skillToggle(Player::SKILLS_6);
+            }
+            if (name == "skills_7")
+            {
+                _selectedLabel = _labels->at("skills_7");
+                _game->player()->skillToggle(Player::SKILLS_7);
+            }
+            if (name == "skills_8")
+            {
+                _selectedLabel = _labels->at("skills_8");
+                _game->player()->skillToggle(Player::SKILLS_8);
+            }
+            if (name == "skills_9")
+            {
+                _selectedLabel = _labels->at("skills_9");
+                _game->player()->skillToggle(Player::SKILLS_9);
+            }
+            if (name == "skills_10")
+            {
+                _selectedLabel = _labels->at("skills_10");
+                _game->player()->skillToggle(Player::SKILLS_10);
+            }
+            if (name == "skills_11")
+            {
+                _selectedLabel = _labels->at("skills_11");
+                _game->player()->skillToggle(Player::SKILLS_11);
+            }
+            if (name == "skills_12")
+            {
+                _selectedLabel = _labels->at("skills_12");
+                _game->player()->skillToggle(Player::SKILLS_12);
+            }
+            if (name == "skills_13")
+            {
+                _selectedLabel = _labels->at("skills_13");
+                _game->player()->skillToggle(Player::SKILLS_13);
+            }
+            if (name == "skills_14")
+            {
+                _selectedLabel = _labels->at("skills_14");
+                _game->player()->skillToggle(Player::SKILLS_14);
+            }
+            if (name == "skills_15")
+            {
+                _selectedLabel = _labels->at("skills_15");
+                _game->player()->skillToggle(Player::SKILLS_15);
+            }
+            if (name == "skills_16")
+            {
+                _selectedLabel = _labels->at("skills_16");
+                _game->player()->skillToggle(Player::SKILLS_16);
+            }
+            if (name == "skills_17")
+            {
+                _selectedLabel = _labels->at("skills_17");
+                _game->player()->skillToggle(Player::SKILLS_17);
+            }
+            if (name == "skills_18")
+            {
+                _selectedLabel = _labels->at("skills_18");
+                _game->player()->skillToggle(Player::SKILLS_18);
             }
         }
     }

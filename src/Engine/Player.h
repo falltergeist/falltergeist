@@ -36,6 +36,7 @@ protected:
     unsigned int * _skills;
 
     unsigned int _characterPoints;
+    unsigned int _skillPoints;
 
 public:
     enum {STATS_STRENGTH = 0, STATS_PERCEPTION, STATS_ENDURANCE, STATS_CHARISMA, STATS_INTELLIGENCE, STATS_AGILITY, STATS_LUCK };
@@ -73,6 +74,44 @@ public:
           TRAITS_SKILLED,
           TRAITS_GIFTES
          };
+    enum { SKILLS_1 = 0, // Small Guns
+           SKILLS_2, // Big Guns
+           SKILLS_3, // Energy Weapons
+           SKILLS_4, // Unarmed
+           SKILLS_5, // Melee Weapons
+           SKILLS_6, // Throwing
+           SKILLS_7, // First Aid
+           SKILLS_8, // Doctor
+           SKILLS_9, // Sneak
+           SKILLS_10, // Lockpick
+           SKILLS_11, // Steal
+           SKILLS_12, // Traps
+           SKILLS_13, // Science
+           SKILLS_14, // Repair
+           SKILLS_15, // Speech
+           SKILLS_16, // Barter
+           SKILLS_17, // Gambling
+           SKILLS_18  // Outdoorsman
+    };
+    enum { SKILLS_SMALL_GUNS = 0,
+           SKILLS_BIG_GUNS,
+           SKILLS_ENERGY_WEAPONS,
+           SKILLS_UNARMED,
+           SKILLS_MELEE_WEAPONS,
+           SKILLS_THROWING,
+           SKILLS_FIRST_AID,
+           SKILLS_DOCTOR,
+           SKILLS_SNEAK,
+           SKILLS_LOCKPICK,
+           SKILLS_STEAL,
+           SKILLS_TRAPS,
+           SKILLS_SCIENCE,
+           SKILLS_REPAIR,
+           SKILLS_SPEECH,
+           SKILLS_BARTER,
+           SKILLS_GAMBLING,
+           SKILLS_OUTDOORSMAN
+    };
 
     // primary stats
     unsigned int strength();
@@ -109,13 +148,22 @@ public:
     void setBio(const char * text);
     const char * name();
 
-    void statsIncrease(unsigned char stat);
-    void statsDecrease(unsigned char stat);
+    bool statsIncrease(unsigned char stat);
+    bool statsDecrease(unsigned char stat);
 
     unsigned int trait(unsigned int traitNumber);
     void setTrait(unsigned int traitNumber, unsigned int value);
 
     bool traitToggle(unsigned int traitNumber);
+
+    unsigned int skill(unsigned int skillNumber);
+    void setSkill(unsigned int skillNumber, unsigned int value);
+
+    bool skillToggle(unsigned int skillNumber);
+
+    unsigned int skillPoints();
+    void setSkillPoints(unsigned int skillPoints);
+
 
 };
 

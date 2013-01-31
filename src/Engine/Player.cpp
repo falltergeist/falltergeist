@@ -28,21 +28,23 @@ namespace Falltergeist
 Player::Player()
 {
     _characterPoints = 0;
+    _skillPoints = 0;
     _bio = 0;    
     _name = 0;
     _stats = new unsigned int[7]();
     _traits = new unsigned int[16]();
-    _skills = new unsigned int[10](); // temporary
+    _skills = new unsigned int[18]();
 }
 
 Player::Player(libfalltergeist::GcdFileType * gcd)
 {
     _characterPoints = 0;
+    _skillPoints = 3;
     _bio = 0;
     _name = 0;
     _stats = new unsigned int[7]();
     _traits = new unsigned int[16]();
-    _skills = new unsigned int[10](); // temporary
+    _skills = new unsigned int[18]();
 
     this->setStrength(        gcd->strength());
     this->setPerception(      gcd->perception());
@@ -56,6 +58,26 @@ Player::Player(libfalltergeist::GcdFileType * gcd)
     this->setTrait(gcd->firstTrait(), 1);
     this->setTrait(gcd->secondTrait(), 1);
 
+    if (gcd->firstTaggedSkill() > 0)
+    {
+        this->setSkill(gcd->firstTaggedSkill(), 1);
+        _skillPoints--;
+    }
+    if (gcd->secondTaggedSkill() > 0)
+    {
+        this->setSkill(gcd->secondTaggedSkill(), 1);
+        _skillPoints--;
+    }
+    if (gcd->thirdTaggedSkill() > 0)
+    {
+        this->setSkill(gcd->thirdTaggedSkill(), 1);
+        _skillPoints--;
+    }
+    if (gcd->fourthTaggedSkill() > 0)
+    {
+        this->setSkill(gcd->fourthTaggedSkill(), 1);
+        if (_skillPoints > 0) _skillPoints--;
+    }
 }
 
 Player::~Player()
@@ -91,23 +113,24 @@ void Player::setName(const char * name)
     strcpy(_name,name);    
 }
 
-void Player::statsIncrease(unsigned char stat)
+bool Player::statsIncrease(unsigned char stat)
 {
-    if (_characterPoints <= 0) return;
+    if (_characterPoints <= 0) return false;
 
-    if (_stats[stat] >= 10) return;
+    if (_stats[stat] >= 10) return false;
 
     _stats[stat]++;
     _characterPoints--;
-
+    return true;
 }
 
-void Player::statsDecrease(unsigned char stat)
+bool Player::statsDecrease(unsigned char stat)
 {
-    if (_stats[stat] <= 2) return;
+    if (_stats[stat] <= 2) return false;
 
     _stats[stat]--;
     _characterPoints++;
+    return true;
 }
 
 unsigned int Player::strength()
@@ -219,6 +242,47 @@ bool Player::traitToggle(unsigned int traitNumber)
     }
     return false;
 }
+
+unsigned int Player::skill(unsigned int skillNumber)
+{
+    return _skills[skillNumber];
+}
+
+void Player::setSkill(unsigned int skillNumber, unsigned int value)
+{
+    _skills[skillNumber] = value;
+}
+
+bool Player::skillToggle(unsigned int skillNumber)
+{
+    if (skill(skillNumber))
+    {
+        setSkill(skillNumber, 0);
+        _skillPoints++;
+        return true;
+    }
+    else
+    {
+        if (_skillPoints > 0)
+        {
+            setSkill(skillNumber, 1);
+            _skillPoints--;
+            return true;
+        }
+    }
+    return false;
+}
+
+unsigned int Player::skillPoints()
+{
+    return _skillPoints;
+}
+
+void Player::setSkillPoints(unsigned int skillPoints)
+{
+    _skillPoints = skillPoints;
+}
+
 
 }
 
