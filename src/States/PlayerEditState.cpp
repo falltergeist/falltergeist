@@ -79,22 +79,22 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         _addTitle("traits_15", msg->message(114)->text());
         _addTitle("traits_16", msg->message(115)->text());
 
-        _addDescription("traits_1", msg->messages(200)->text());
-        _addDescription("traits_2", msg->messages(201)->text());
-        _addDescription("traits_3", msg->messages(202)->text());
-        _addDescription("traits_4", msg->messages(203)->text());
-        _addDescription("traits_5", msg->messages(204)->text());
-        _addDescription("traits_6", msg->messages(205)->text());
-        _addDescription("traits_7", msg->messages(206)->text());
-        _addDescription("traits_8", msg->messages(207)->text());
-        _addDescription("traits_9", msg->messages(208)->text());
-        _addDescription("traits_10", msg->messages(209)->text());
-        _addDescription("traits_11", msg->messages(210)->text());
-        _addDescription("traits_12", msg->messages(211)->text());
-        _addDescription("traits_13", msg->messages(212)->text());
-        _addDescription("traits_14", msg->messages(213)->text());
-        _addDescription("traits_15", msg->messages(214)->text());
-        _addDescription("traits_16", msg->messages(215)->text());
+        _addDescription("traits_1", msg->message(200)->text());
+        _addDescription("traits_2", msg->message(201)->text());
+        _addDescription("traits_3", msg->message(202)->text());
+        _addDescription("traits_4", msg->message(203)->text());
+        _addDescription("traits_5", msg->message(204)->text());
+        _addDescription("traits_6", msg->message(205)->text());
+        _addDescription("traits_7", msg->message(206)->text());
+        _addDescription("traits_8", msg->message(207)->text());
+        _addDescription("traits_9", msg->message(208)->text());
+        _addDescription("traits_10", msg->message(209)->text());
+        _addDescription("traits_11", msg->message(210)->text());
+        _addDescription("traits_12", msg->message(211)->text());
+        _addDescription("traits_13", msg->message(212)->text());
+        _addDescription("traits_14", msg->message(213)->text());
+        _addDescription("traits_15", msg->message(214)->text());
+        _addDescription("traits_16", msg->message(215)->text());
     }
 
     // Skills titles & descriptions
@@ -119,24 +119,24 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         _addTitle("skills_17", msg->message(116)->text());
         _addTitle("skills_18", msg->message(117)->text());
 
-        _addDescription("skills_1", msg->messages(200)->text());
-        _addDescription("skills_2", msg->messages(201)->text());
-        _addDescription("skills_3", msg->messages(202)->text());
-        _addDescription("skills_4", msg->messages(203)->text());
-        _addDescription("skills_5", msg->messages(204)->text());
-        _addDescription("skills_6", msg->messages(205)->text());
-        _addDescription("skills_7", msg->messages(206)->text());
-        _addDescription("skills_8", msg->messages(207)->text());
-        _addDescription("skills_9", msg->messages(208)->text());
-        _addDescription("skills_10", msg->messages(209)->text());
-        _addDescription("skills_11", msg->messages(210)->text());
-        _addDescription("skills_12", msg->messages(211)->text());
-        _addDescription("skills_13", msg->messages(212)->text());
-        _addDescription("skills_14", msg->messages(213)->text());
-        _addDescription("skills_15", msg->messages(214)->text());
-        _addDescription("skills_16", msg->messages(215)->text());
-        _addDescription("skills_17", msg->messages(216)->text());
-        _addDescription("skills_18", msg->messages(217)->text());
+        _addDescription("skills_1", msg->message(200)->text());
+        _addDescription("skills_2", msg->message(201)->text());
+        _addDescription("skills_3", msg->message(202)->text());
+        _addDescription("skills_4", msg->message(203)->text());
+        _addDescription("skills_5", msg->message(204)->text());
+        _addDescription("skills_6", msg->message(205)->text());
+        _addDescription("skills_7", msg->message(206)->text());
+        _addDescription("skills_8", msg->message(207)->text());
+        _addDescription("skills_9", msg->message(208)->text());
+        _addDescription("skills_10", msg->message(209)->text());
+        _addDescription("skills_11", msg->message(210)->text());
+        _addDescription("skills_12", msg->message(211)->text());
+        _addDescription("skills_13", msg->message(212)->text());
+        _addDescription("skills_14", msg->message(213)->text());
+        _addDescription("skills_15", msg->message(214)->text());
+        _addDescription("skills_16", msg->message(215)->text());
+        _addDescription("skills_17", msg->message(216)->text());
+        _addDescription("skills_18", msg->message(217)->text());
     }
 
     Surface * background = new Surface(_game->resourceManager()->surface("art/intrface/edtrcrte.frm"));
