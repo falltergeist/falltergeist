@@ -83,8 +83,9 @@ TextArea::TextArea(int x, int y) : InteractiveSurface(0,0,x,y)
 
 TextArea::~TextArea()
 {
-    if (_text != 0) delete [] _text;
+    delete [] _text;
     delete _lines;
+    delete _font;
 }
 
 
@@ -265,8 +266,13 @@ void TextArea::draw()
     surface->setY(this->y());
     loadFromSurface(surface);
 
-    for (std::vector<Surface *>::iterator it = surfaces->begin(); it != surfaces->end(); ++it) delete *it;
+    while(!surfaces->empty())
+    {
+        delete surfaces->back();
+        surfaces->pop_back();
+    }
     delete surfaces;
+    delete surface;
 
     setNeedRedraw(false);
 }
@@ -382,6 +388,7 @@ TextArea * TextArea::setText(const char * text)
 
 TextArea * TextArea::setFont(const char * filename)
 {
+    delete _font;
     _font = new Font(filename, _color);
     setNeedRedraw(true);
     return this;

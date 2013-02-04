@@ -36,6 +36,11 @@ Font::Font(const char * filename, unsigned int color)
 
 Font::~Font()
 {
+    while (!_glyphs->empty())
+    {
+        delete _glyphs->back();
+        _glyphs->pop_back();
+    }
     delete _glyphs;
 }
 
@@ -54,6 +59,11 @@ void Font::setColor(unsigned int color)
 {
     if (_color == color) return;
     _color = color;
+    while (!_glyphs->empty())
+    {
+        delete _glyphs->back();
+        _glyphs->pop_back();
+    }
     delete _glyphs;
     _glyphs = new std::vector<Surface *>;
     for (int i = 0; i < 256; i++) _glyphs->push_back(0);

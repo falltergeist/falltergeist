@@ -44,7 +44,17 @@ BigCounter::BigCounter(int x, int y) : InteractiveSurface(0,0, x, y)
 
 BigCounter::~BigCounter()
 {
+    while (!_numbersRed->empty())
+    {
+        delete _numbersRed->back();
+        _numbersRed->pop_back();
+    }
     delete _numbersRed;
+    while (!_numbersWhite->empty())
+    {
+        delete _numbersWhite->back();
+        _numbersWhite->pop_back();
+    }
     delete _numbersWhite;
 }
 
