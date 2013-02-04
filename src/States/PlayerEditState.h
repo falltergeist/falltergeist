@@ -36,13 +36,15 @@ class PlayerEditState : public State
 {
 protected:
     TextArea * _selectedLabel;
+    Surface * _selectedImage;
+    Surface * _image;
     std::map<std::string, TextArea *> * _labels;
     std::map<std::string, BigCounter *> * _counters;
     std::map<std::string, ImageButton *> * _buttons;
     std::map<std::string, HiddenMask *> * _masks;
     std::map<std::string, std::string> * _titles;
     std::map<std::string, std::string> * _descriptions;
-    std::map<std::string, Surface *> * _images;
+    std::map<std::string, Surface *> * _images;    
 
     TextArea * _addLabel(std::string name, TextArea * label);
     ImageButton * _addButton(std::string name, ImageButton * button);
@@ -50,6 +52,7 @@ protected:
     HiddenMask * _addMask(std::string name, HiddenMask * mask);
     void _addTitle(std::string name, std::string title);
     void _addDescription(std::string name, std::string description);
+    void _addImage(std::string name, Surface * image);
 
 public:
     PlayerEditState(Game * game);

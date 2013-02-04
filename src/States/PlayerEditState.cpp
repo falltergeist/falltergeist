@@ -30,7 +30,6 @@ namespace Falltergeist
 
 PlayerEditState::PlayerEditState(Game * game) : State(game)
 {
-    _selectedLabel = 0;
     _labels = new std::map<std::string, TextArea *>;
     _counters = new std::map<std::string, BigCounter *>;
     _buttons = new std::map<std::string, ImageButton *>;
@@ -46,7 +45,7 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         for (unsigned int i = 0; i != 16; ++i)
         {
             std::stringstream ss;
-            ss << "stats_" << i;
+            ss << "stats_" << (i+1);
             _addTitle(ss.str(), msg->message(100 + i)->text());
             _addDescription(ss.str(), msg->message(200 + i)->text());
         }
@@ -58,7 +57,7 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         for (unsigned int i = 0; i != 16; ++i)
         {
             std::stringstream ss;
-            ss << "traits_" << i;
+            ss << "traits_" << (i+1);
             _addTitle(ss.str(), msg->message(100 + i)->text());
             _addDescription(ss.str(), msg->message(200 + i)->text());
         }
@@ -70,10 +69,52 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         for (unsigned int i = 0; i != 18; ++i)
         {
             std::stringstream ss;
-            ss << "skills_" << i;
+            ss << "skills_" << (i+1);
             _addTitle(ss.str(), msg->message(100 + i)->text());
             _addDescription(ss.str(), msg->message(200 + i)->text());
         }
+    }
+
+    // Images
+    {
+        const char * stats[] = { "strength", "perceptn", "endur", "charisma", "intel", "agility", "luck"};
+        for (unsigned int i = 0; i != 7; ++i)
+        {
+            std::stringstream name;
+            name << "stats_" << (i+1);
+
+            std::stringstream filename;
+            filename << "art/skilldex/" << stats[i] << ".frm";
+            Surface * surface = _game->resourceManager()->surface(filename.str().c_str());
+            _addImage(name.str(), surface);
+        }
+
+        const char * traits[] = { "fastmeta", "bruiser", "smlframe", "onehand", "finesse", "kamikaze", "heavyhnd", "fastshot",
+                                  "bldmess", "jinxed", "goodnatr", "addict", "drugrest", "empathy", "skilled", "gifted"};
+        for (unsigned int i = 0; i != 16; ++i)
+        {
+            std::stringstream name;
+            name << "traits_" << (i+1);
+
+            std::stringstream filename;
+            filename << "art/skilldex/" << traits[i] << ".frm";
+            Surface * surface = _game->resourceManager()->surface(filename.str().c_str());
+            _addImage(name.str(), surface);
+        }
+
+        const char * skills[] = { "gunsml", "gunbig", "energywp", "unarmed", "melee", "throwing", "firstaid", "doctor", "sneak",
+                                 "lockpick", "steal", "traps", "science", "repair", "speech", "barter", "gambling", "outdoors"};
+        for (unsigned int i = 0; i != 18; ++i)
+        {
+            std::stringstream name;
+            name << "skills_" << (i+1);
+
+            std::stringstream filename;
+            filename << "art/skilldex/" << skills[i] << ".frm";
+            Surface * surface = _game->resourceManager()->surface(filename.str().c_str());
+            _addImage(name.str(), surface);
+        }
+
     }
 
     Surface * background = new Surface(_game->resourceManager()->surface("art/intrface/edtrcrte.frm"));
@@ -263,6 +304,10 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         }
     }
 
+    _selectedImage = _images->at("stats_1");
+    _selectedLabel = _labels->at("stats_1");
+    _image = new Surface(_selectedImage);
+    add(_image);
 }
 
 PlayerEditState::~PlayerEditState()
@@ -274,6 +319,7 @@ PlayerEditState::~PlayerEditState()
     delete _titles;
     delete _descriptions;
     delete _images;
+    delete _image;
 }
 
 TextArea * PlayerEditState::_addLabel(std::string name, TextArea * label)
@@ -309,6 +355,12 @@ void PlayerEditState::_addDescription(std::string name, std::string description)
 {
     _descriptions->insert(std::pair<std::string,std::string>(name, description));
 }
+
+void PlayerEditState::_addImage(std::string name, Surface * image)
+{
+    _images->insert(std::pair<std::string,Surface *>(name, image));
+}
+
 
 void PlayerEditState::think()
 {
@@ -380,7 +432,9 @@ void PlayerEditState::think()
     _counters->at("statsPoints")->setNumber(_game->player()->characterPoints());
     _counters->at("skillsPoints")->setNumber(_game->player()->skillPoints());
 
-
+    _image->loadFromSurface(_selectedImage);
+    _image->setX(480);
+    _image->setY(310);
 }
 
 void PlayerEditState::onButtonClick(Event * event)
@@ -400,6 +454,7 @@ void PlayerEditState::onButtonClick(Event * event)
             if (name.find("stats_") == 0)
             {
                 _selectedLabel = _labels->at(name.substr(0,7));
+                _selectedImage = _images->at(name.substr(0,7));
                 unsigned int number = atoi(name.substr(6,1).c_str());
                 if (name.find("_increase") == 7)
                 {
@@ -415,6 +470,7 @@ void PlayerEditState::onButtonClick(Event * event)
             {
                 unsigned int number = atoi(name.substr(7).c_str());
                 _selectedLabel = _labels->at(name);
+                _selectedImage = _images->at(name);
                 _game->player()->traitToggle(number - 1);
             }
 
@@ -422,6 +478,7 @@ void PlayerEditState::onButtonClick(Event * event)
             {
                 unsigned int number = atoi(name.substr(7).c_str());
                 _selectedLabel = _labels->at(name);
+                _selectedImage = _images->at(name);
                 _game->player()->skillToggle(number - 1);
             }
         }
@@ -436,6 +493,7 @@ void PlayerEditState::onLabelClick(Event * event)
         if (it->second == event->sender())
         {
             _selectedLabel = _labels->at(it->first);
+            _selectedImage = _images->at(it->first);
         }
     }
 }
@@ -451,6 +509,7 @@ void PlayerEditState::onMaskClick(Event * event)
             if (name.find("stats_") == 0)
             {
                 _selectedLabel = _labels->at(name);
+                _selectedImage = _images->at(name);
             }
         }
     }
