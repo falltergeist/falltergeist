@@ -27,17 +27,41 @@ namespace Falltergeist
 {
 class Font;
 
+/**
+ * if (!_width && !_height)
+ * {
+ *     calculate width and height from the text
+ * }
+ * else
+ * {
+ *     (if _wordwrap)
+ *     {
+ *         wrap the whole word
+ *     }
+ *     else
+ *     {
+ *         wrap symbols
+ *     }
+ * }
+ */
+
 class TextArea : public InteractiveSurface
 {
 protected:
     void _init();
+    void _calculateSize();
     char * _text;
+    std::vector<std::string> * lines();
+    std::vector<std::string> * _lines;
     unsigned char _horizontalAlign;
     unsigned char _verticalAlign;
     unsigned int _width;
+    unsigned int _calculatedWidth;
+    unsigned int _calculatedHeight;
     unsigned int _height;
     unsigned int _color;
     Font * _font;
+    bool _wordWrap;
 public:
     enum { HORIZONTAL_ALIGN_LEFT = 0, HORIZONTAL_ALIGN_CENTER, HORIZONTAL_ALIGN_RIGHT, HORIZONTAL_ALIGN_JUSTIFY };
     enum { VERTICAL_ALIGN_TOP = 0, VERTICAL_ALIGN_CENTER, VERTICAL_ALIGN_BOTTOM, VERTICAL_ALIGN_JUSTIFY };
@@ -67,6 +91,9 @@ public:
 
     TextArea * setColor(unsigned int color);
     unsigned int color();
+
+    TextArea * setWordWrap(bool wordWrap);
+    bool wordWrap();
 
     TextArea * setFont(const char * filename);
 };

@@ -37,6 +37,7 @@ class PlayerEditState : public State
 protected:
     TextArea * _selectedLabel;
     TextArea * _title;
+    TextArea * _description;
     //TextArea * _description;
     Surface * _selectedImage;
     Surface * _image;

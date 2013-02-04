@@ -119,13 +119,8 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
 
     Surface * background = new Surface(_game->resourceManager()->surface("art/intrface/edtrcrte.frm"));
 
-    for (unsigned int y = 300; y != 302; ++y)
-    {
-        for (unsigned int x = 350; x != 620; ++x)
-        {
-            background->setPixel(x,y, 0xFF000000);
-        }
-    }
+    // description horizontal line
+    for (unsigned int y = 300; y != 302; ++y) for (unsigned int x = 350; x != 620; ++x) background->setPixel(x,y, 0xFF000000);
 
     // Primary stats buttons
     {
@@ -305,7 +300,7 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         std::map<std::string, HiddenMask *>::iterator it;
         for(it = _masks->begin(); it != _masks->end(); ++it)
         {
-            it->second->setBorderColor(0xFFFF0000);
+            //it->second->setBorderColor(0xFFFF0000);
             it->second->setVisible(true);
             it->second->onLeftButtonClick((EventHandler) &PlayerEditState::onMaskClick);
             add(it->second);
@@ -321,6 +316,13 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _title->setFont("font2.aaf");
     _title->setColor(0xFF000000);
     add(_title);
+
+    _description = new TextArea(" ", 350, 315);
+    _description->setColor(0xFF000000);
+    _description->setWidth(145);
+    _description->setHeight(120);
+    _description->setWordWrap(true);
+    add(_description);
 }
 
 PlayerEditState::~PlayerEditState()
@@ -334,6 +336,7 @@ PlayerEditState::~PlayerEditState()
     delete _images;
     delete _image;
     delete _title;
+    delete _description;
 }
 
 TextArea * PlayerEditState::_addLabel(std::string name, TextArea * label)
@@ -458,6 +461,7 @@ void PlayerEditState::think()
         {
             //std::string name = ;
             _title->setText(_titles->at(it->first).c_str());
+            _description->setText(_descriptions->at(it->first).c_str());
         }
     }
 

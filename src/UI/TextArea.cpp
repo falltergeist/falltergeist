@@ -32,39 +32,51 @@ namespace Falltergeist
 TextArea::TextArea(libfalltergeist::MsgMessage * message, int x, int y) : InteractiveSurface(0,0,x,y)
 {
     _text = 0;
-    this->setText(message->text());
+    _lines = 0;
     _horizontalAlign = HORIZONTAL_ALIGN_LEFT;
     _verticalAlign = VERTICAL_ALIGN_TOP;
     _width = 0;
     _height = 0;
+    _calculatedWidth = 0;
+    _calculatedHeight = 0;
     _color = 0xFF00FF00;
     _font = new Font("font1.aaf", _color);
+    _wordWrap = false;
+    this->setText(message->text());
     setNeedRedraw(true);
 }
 
 TextArea::TextArea(const char * text, int x, int y) : InteractiveSurface(0,0,x,y)
 {
     _text = 0;
-    this->setText(text);
+    _lines = 0;
     _horizontalAlign = HORIZONTAL_ALIGN_LEFT;
     _verticalAlign = VERTICAL_ALIGN_TOP;
     _width = 0;
     _height = 0;
+    _calculatedWidth = 0;
+    _calculatedHeight = 0;
     _color = 0xFF00FF00;
     _font = new Font("font1.aaf", _color);
+    _wordWrap = false;
+    this->setText(text);
     setNeedRedraw(true);
 }
 
 TextArea::TextArea(int x, int y) : InteractiveSurface(0,0,x,y)
 {
     _text = 0;
-    this->setText(" ");
+    _lines = 0;
     _horizontalAlign = HORIZONTAL_ALIGN_LEFT;
     _verticalAlign = VERTICAL_ALIGN_TOP;
     _width = 0;
     _height = 0;
+    _calculatedWidth = 0;
+    _calculatedHeight = 0;
     _color = 0xFF00FF00;
     _font = new Font("font1.aaf", _color);
+    _wordWrap = false;
+    this->setText(" ");
     setNeedRedraw(true);
 }
 
@@ -72,6 +84,111 @@ TextArea::TextArea(int x, int y) : InteractiveSurface(0,0,x,y)
 TextArea::~TextArea()
 {
     if (_text != 0) delete [] _text;
+    delete _lines;
+}
+
+
+std::vector<std::string> * TextArea::lines()
+{
+    if (_lines != 0) return _lines;
+
+    _lines = new std::vector<std::string>;
+
+    unsigned int stringWidth = 0;
+    unsigned int wordWidth = 0;
+    std::string word = "";
+    _lines->push_back("");
+    for (unsigned int i = 0; i != strlen(_text); ++i)
+    {
+        unsigned char chr = _text[i];
+        if (chr == 0x0D) //new line
+        {
+            ++i;
+            _lines->back().append(word);
+            _lines->push_back("");
+            word = "";
+            wordWidth = 0;
+            stringWidth = 0;
+        }
+        else
+        {
+            //if (!word.empty() && chr != 0x20) wordWidth += _font->horizontalGap();
+            word.push_back(chr);
+            if (chr == 0x20)
+            {
+                wordWidth += _font->spaceWidth();
+            }
+            else
+            {
+                wordWidth += _font->glyph(chr)->width() + _font->horizontalGap();
+            }
+
+            if (_width*_height != 0 && (stringWidth + wordWidth >= _width))
+            {
+                if (_wordWrap)
+                {
+                    _lines->push_back("");
+                    stringWidth = 0;
+                }
+                else
+                {
+                    _lines->back().append(word);
+                    _lines->push_back("");
+                    word = "";
+                    wordWidth = 0;
+                    stringWidth = 0;
+                }
+            }
+            else
+            {
+                if (chr == 0x20)  // space
+                {
+                    _lines->back().append(word);
+                    stringWidth += wordWidth;
+                    word = "";
+                    wordWidth = 0;
+                }
+            }
+        }
+    }
+    if (!word.empty())
+    {
+        _lines->back().append(word);
+    }
+
+    return _lines;
+}
+
+
+void TextArea::_calculateSize()
+{
+    _calculatedWidth = 0;
+    _calculatedHeight = 0;
+    // if text is empty
+    if (_text == 0 || strlen(_text) == 0 || !_font) return;
+
+    for (std::vector<std::string>::iterator it = lines()->begin(); it != lines()->end(); ++it)
+    {
+        // calculate surface width
+        unsigned int surfaceWidth = 0;
+        for(unsigned int i = 0; i != (*it).size(); ++i)
+        {
+            unsigned char chr = (*it).at(i);
+
+            if (chr == ' ')
+            {
+                surfaceWidth += _font->spaceWidth();
+            }
+            else
+            {
+                surfaceWidth += _font->glyph(chr)->width() + _font->horizontalGap();
+                if (i == (*it).size() - 1) surfaceWidth -= _font->horizontalGap();
+            }
+        }
+        if (surfaceWidth > _calculatedWidth) _calculatedWidth = surfaceWidth;
+    }
+
+    _calculatedHeight = lines()->size() * _font->height() + (lines()->size() - 1) * _font->verticalGap();
 }
 
 void TextArea::draw()
@@ -85,54 +202,19 @@ void TextArea::draw()
     // if text is empty
     if (_text == 0 || strlen(_text) == 0) throw Exception("TextArea::draw() - text is 0");
 
-    //parse text to the string lines
-    std::vector<std::string *> * strings = new std::vector<std::string *>;
-    std::string * string = new std::string();
-    for (unsigned int i = 0; i != strlen(_text); ++i)
-    {
-        unsigned char chr = _text[i];
-        if (chr == 0x0A || chr == '\n')
-        {
-            strings->push_back(string);
-            string = new std::string();
-        }
-        else
-        {
-            string->push_back(chr);
-        }
-    }
-    if (!string->empty())
-    {
-        strings->push_back(string);
-    }
 
+    _calculateSize();
     //convert strings list to surfaces list
     std::vector<Surface *> * surfaces = new std::vector<Surface *>;
-    for (std::vector<std::string *>::iterator it = strings->begin(); it != strings->end(); ++it)
+    for (std::vector<std::string>::iterator it = lines()->begin(); it != lines()->end(); ++it)
     {
-        // calculate surface width
-        unsigned int surfaceWidth = 0;
-        for(unsigned int i = 0; i != (*it)->size(); ++i)
-        {
-            unsigned char chr = (*it)->at(i);
-
-            if (chr == ' ')
-            {
-                surfaceWidth += _font->spaceWidth();
-            }
-            else
-            {
-                surfaceWidth += _font->glyph(chr)->width() + _font->horizontalGap();
-            }
-        }
-
         //create string surface
-        surfaces->push_back(new Surface(surfaceWidth, _font->height()));
+        surfaces->push_back(new Surface(this->_calculatedWidth, _font->height()));
         //draw characters on string surface
         unsigned int x = 0;
-        for(unsigned int i = 0; i != (*it)->size(); ++i)
+        for(unsigned int i = 0; i != (*it).size(); ++i)
         {
-            unsigned char chr = (*it)->at(i);
+            unsigned char chr = (*it).at(i);
             if (chr == ' ')
             {
                 x += _font->spaceWidth();
@@ -144,41 +226,30 @@ void TextArea::draw()
                 glyph->setY(0);
                 glyph->copyTo(surfaces->back());
                 x += glyph->width() + _font->horizontalGap();
+                if (i == (*it).size() - 1) x -= _font->horizontalGap();
             }
         }
 
     }
 
-// if width or height are unknown then calculate them from text
-//if (!_width || !_height)
-    {
-        // width = max line width
-        for (std::vector<Surface *>::iterator it = surfaces->begin(); it != surfaces->end(); ++it)
-        {
-            if ((*it)->width() > _width) _width = (*it)->width();
-        }
-
-        _height = surfaces->size()*_font->height() + (surfaces->size() - 1)*_font->verticalGap();
-    }
-
     // Creating resulting surface
-    Surface * surface = new Surface(_width, _height);
+    Surface * surface = new Surface(this->width(), this->height());
     surface->setBackgroundColor(backgroundColor());
     surface->clear();
     // foreach lines surfaces
     unsigned int x = 0;
     unsigned int y = 0;
     for (std::vector<Surface *>::iterator it = surfaces->begin(); it != surfaces->end(); ++it)
-    {
+    {        
         switch(_horizontalAlign)
         {
             case HORIZONTAL_ALIGN_LEFT:
                 break;
             case HORIZONTAL_ALIGN_CENTER:
-                x = (_width-(*it)->width())/2;
+                x = (this->width() -(*it)->width())/2;
                 break;
             case HORIZONTAL_ALIGN_RIGHT:
-                x = _width - (*it)->width();
+                x = this->width() - (*it)->width();
                 break;
             case HORIZONTAL_ALIGN_JUSTIFY:
                 //@todo justify
@@ -194,11 +265,8 @@ void TextArea::draw()
     surface->setY(this->y());
     loadFromSurface(surface);
 
-    delete surface;
     for (std::vector<Surface *>::iterator it = surfaces->begin(); it != surfaces->end(); ++it) delete *it;
     delete surfaces;
-    delete strings;
-    delete string;
 
     setNeedRedraw(false);
 }
@@ -220,6 +288,11 @@ TextArea * TextArea::setColor(unsigned int color)
 
 unsigned int TextArea::height()
 {
+    if (_height == 0)
+    {
+        if (_calculatedHeight == 0) _calculateSize();
+        return _calculatedHeight;
+    }
     return _height;
 }
 
@@ -233,6 +306,11 @@ TextArea * TextArea::setHeight(unsigned int height)
 
 unsigned int TextArea::width()
 {
+    if (_width == 0)
+    {
+        if (_calculatedWidth == 0) _calculateSize();
+        return _calculatedWidth;
+    }
     return _width;
 }
 
@@ -291,6 +369,10 @@ TextArea * TextArea::setText(unsigned int number)
 
 TextArea * TextArea::setText(const char * text)
 {
+    _calculatedWidth = 0;
+    _calculatedHeight = 0;
+    delete _lines;
+    _lines = 0;
     delete [] _text;
     _text = new char[strlen(text)+1]();
     strcpy(_text, text);
@@ -303,6 +385,17 @@ TextArea * TextArea::setFont(const char * filename)
     _font = new Font(filename, _color);
     setNeedRedraw(true);
     return this;
+}
+
+TextArea * TextArea::setWordWrap(bool wordWrap)
+{
+    _wordWrap = wordWrap;
+    return this;
+}
+
+bool TextArea::wordWrap()
+{
+    return _wordWrap;
 }
 
 }
