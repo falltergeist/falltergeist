@@ -308,6 +308,11 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _selectedLabel = _labels->at("stats_1");
     _image = new Surface(_selectedImage);
     add(_image);
+
+    _title = new TextArea(" ", 350,275);
+    _title->setFont("font2.aaf");
+    _title->setColor(0xFF000000);
+    add(_title);
 }
 
 PlayerEditState::~PlayerEditState()
@@ -320,6 +325,7 @@ PlayerEditState::~PlayerEditState()
     delete _descriptions;
     delete _images;
     delete _image;
+    delete _title;
 }
 
 TextArea * PlayerEditState::_addLabel(std::string name, TextArea * label)
@@ -435,6 +441,18 @@ void PlayerEditState::think()
     _image->loadFromSurface(_selectedImage);
     _image->setX(480);
     _image->setY(310);
+
+    // Getting title and description by selected image
+    std::map<std::string, Surface *>::iterator it;
+    for(it = _images->begin(); it != _images->end(); ++it)
+    {
+        if (_selectedImage == it->second)
+        {
+            //std::string name = ;
+            _title->setText(_titles->at(it->first).c_str());
+        }
+    }
+
 }
 
 void PlayerEditState::onButtonClick(Event * event)

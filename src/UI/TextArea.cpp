@@ -300,7 +300,7 @@ TextArea * TextArea::setText(const char * text)
 
 TextArea * TextArea::setFont(const char * filename)
 {
-    _font = new Font("font1.aaf", _color);
+    _font = new Font(filename, _color);
     setNeedRedraw(true);
     return this;
 }
