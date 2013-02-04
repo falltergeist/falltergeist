@@ -23,6 +23,7 @@
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
 #include "../../lib/libfalltergeist/libfalltergeist.h"
+#include <sstream>
 
 namespace Falltergeist
 {
@@ -42,101 +43,37 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     // Stats titles & descriptions
     {
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/stat.msg");
-        _addTitle("stats_strength", msg->message(100)->text());
-        _addTitle("stats_perception", msg->message(101)->text());
-        _addTitle("stats_endurance", msg->message(102)->text());
-        _addTitle("stats_charisma", msg->message(103)->text());
-        _addTitle("stats_intelligence", msg->message(104)->text());
-        _addTitle("stats_agility", msg->message(105)->text());
-        _addTitle("stats_luck", msg->message(106)->text());
-
-        _addDescription("stats_strength", msg->message(200)->text());
-        _addDescription("stats_perception", msg->message(201)->text());
-        _addDescription("stats_endurance", msg->message(202)->text());
-        _addDescription("stats_charisma", msg->message(203)->text());
-        _addDescription("stats_intelligence", msg->message(204)->text());
-        _addDescription("stats_agility", msg->message(205)->text());
-        _addDescription("stats_luck", msg->message(206)->text());
+        for (unsigned int i = 0; i != 16; ++i)
+        {
+            std::stringstream ss;
+            ss << "stats_" << i;
+            _addTitle(ss.str(), msg->message(100 + i)->text());
+            _addDescription(ss.str(), msg->message(200 + i)->text());
+        }
     }
 
     // Traits titles & descriptions
     {
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/trait.msg");
-        _addTitle("traits_1", msg->message(100)->text());
-        _addTitle("traits_2", msg->message(101)->text());
-        _addTitle("traits_3", msg->message(102)->text());
-        _addTitle("traits_4", msg->message(103)->text());
-        _addTitle("traits_5", msg->message(104)->text());
-        _addTitle("traits_6", msg->message(105)->text());
-        _addTitle("traits_7", msg->message(106)->text());
-        _addTitle("traits_8", msg->message(107)->text());
-        _addTitle("traits_9", msg->message(108)->text());
-        _addTitle("traits_10", msg->message(109)->text());
-        _addTitle("traits_11", msg->message(110)->text());
-        _addTitle("traits_12", msg->message(111)->text());
-        _addTitle("traits_13", msg->message(112)->text());
-        _addTitle("traits_14", msg->message(113)->text());
-        _addTitle("traits_15", msg->message(114)->text());
-        _addTitle("traits_16", msg->message(115)->text());
-
-        _addDescription("traits_1", msg->message(200)->text());
-        _addDescription("traits_2", msg->message(201)->text());
-        _addDescription("traits_3", msg->message(202)->text());
-        _addDescription("traits_4", msg->message(203)->text());
-        _addDescription("traits_5", msg->message(204)->text());
-        _addDescription("traits_6", msg->message(205)->text());
-        _addDescription("traits_7", msg->message(206)->text());
-        _addDescription("traits_8", msg->message(207)->text());
-        _addDescription("traits_9", msg->message(208)->text());
-        _addDescription("traits_10", msg->message(209)->text());
-        _addDescription("traits_11", msg->message(210)->text());
-        _addDescription("traits_12", msg->message(211)->text());
-        _addDescription("traits_13", msg->message(212)->text());
-        _addDescription("traits_14", msg->message(213)->text());
-        _addDescription("traits_15", msg->message(214)->text());
-        _addDescription("traits_16", msg->message(215)->text());
+        for (unsigned int i = 0; i != 16; ++i)
+        {
+            std::stringstream ss;
+            ss << "traits_" << i;
+            _addTitle(ss.str(), msg->message(100 + i)->text());
+            _addDescription(ss.str(), msg->message(200 + i)->text());
+        }
     }
 
     // Skills titles & descriptions
     {
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/skill.msg");
-        _addTitle("skills_1", msg->message(100)->text());
-        _addTitle("skills_2", msg->message(101)->text());
-        _addTitle("skills_3", msg->message(102)->text());
-        _addTitle("skills_4", msg->message(103)->text());
-        _addTitle("skills_5", msg->message(104)->text());
-        _addTitle("skills_6", msg->message(105)->text());
-        _addTitle("skills_7", msg->message(106)->text());
-        _addTitle("skills_8", msg->message(107)->text());
-        _addTitle("skills_9", msg->message(108)->text());
-        _addTitle("skills_10", msg->message(109)->text());
-        _addTitle("skills_11", msg->message(110)->text());
-        _addTitle("skills_12", msg->message(111)->text());
-        _addTitle("skills_13", msg->message(112)->text());
-        _addTitle("skills_14", msg->message(113)->text());
-        _addTitle("skills_15", msg->message(114)->text());
-        _addTitle("skills_16", msg->message(115)->text());
-        _addTitle("skills_17", msg->message(116)->text());
-        _addTitle("skills_18", msg->message(117)->text());
-
-        _addDescription("skills_1", msg->message(200)->text());
-        _addDescription("skills_2", msg->message(201)->text());
-        _addDescription("skills_3", msg->message(202)->text());
-        _addDescription("skills_4", msg->message(203)->text());
-        _addDescription("skills_5", msg->message(204)->text());
-        _addDescription("skills_6", msg->message(205)->text());
-        _addDescription("skills_7", msg->message(206)->text());
-        _addDescription("skills_8", msg->message(207)->text());
-        _addDescription("skills_9", msg->message(208)->text());
-        _addDescription("skills_10", msg->message(209)->text());
-        _addDescription("skills_11", msg->message(210)->text());
-        _addDescription("skills_12", msg->message(211)->text());
-        _addDescription("skills_13", msg->message(212)->text());
-        _addDescription("skills_14", msg->message(213)->text());
-        _addDescription("skills_15", msg->message(214)->text());
-        _addDescription("skills_16", msg->message(215)->text());
-        _addDescription("skills_17", msg->message(216)->text());
-        _addDescription("skills_18", msg->message(217)->text());
+        for (unsigned int i = 0; i != 18; ++i)
+        {
+            std::stringstream ss;
+            ss << "skills_" << i;
+            _addTitle(ss.str(), msg->message(100 + i)->text());
+            _addDescription(ss.str(), msg->message(200 + i)->text());
+        }
     }
 
     Surface * background = new Surface(_game->resourceManager()->surface("art/intrface/edtrcrte.frm"));
@@ -148,56 +85,55 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         const char * minusOn  = "art/intrface/snegon.frm";
         const char * minusOff = "art/intrface/snegoff.frm";
 
-        _addButton("stats_strength_increase",     new ImageButton(plusOff,  plusOn,  149, 38));
-        _addButton("stats_strength_decrease",     new ImageButton(minusOff, minusOn, 149, 49));
-        _addButton("stats_perception_increase",   new ImageButton(plusOff,  plusOn,  149, 71));
-        _addButton("stats_perception_decrease",   new ImageButton(minusOff, minusOn, 149, 82));
-        _addButton("stats_endurance_increase",    new ImageButton(plusOff,  plusOn,  149, 104));
-        _addButton("stats_endurance_decrease",    new ImageButton(minusOff, minusOn, 149, 115));
-        _addButton("stats_charisma_increase",     new ImageButton(plusOff,  plusOn,  149, 137));
-        _addButton("stats_charisma_decrease",     new ImageButton(minusOff, minusOn, 149, 148));
-        _addButton("stats_intelligence_increase", new ImageButton(plusOff,  plusOn,  149, 170));
-        _addButton("stats_intelligence_decrease", new ImageButton(minusOff, minusOn, 149, 181));
-        _addButton("stats_agility_increase",      new ImageButton(plusOff,  plusOn,  149, 203));
-        _addButton("stats_agility_decrease",      new ImageButton(minusOff, minusOn, 149, 214));
-        _addButton("stats_luck_increase",         new ImageButton(plusOff,  plusOn,  149, 236));
-        _addButton("stats_luck_decrease",         new ImageButton(minusOff, minusOn, 149, 247));
+        _addButton("stats_1_increase", new ImageButton(plusOff,  plusOn,  149, 38));
+        _addButton("stats_1_decrease", new ImageButton(minusOff, minusOn, 149, 49));
+        _addButton("stats_2_increase", new ImageButton(plusOff,  plusOn,  149, 71));
+        _addButton("stats_2_decrease", new ImageButton(minusOff, minusOn, 149, 82));
+        _addButton("stats_3_increase", new ImageButton(plusOff,  plusOn,  149, 104));
+        _addButton("stats_3_decrease", new ImageButton(minusOff, minusOn, 149, 115));
+        _addButton("stats_4_increase", new ImageButton(plusOff,  plusOn,  149, 137));
+        _addButton("stats_4_decrease", new ImageButton(minusOff, minusOn, 149, 148));
+        _addButton("stats_5_increase", new ImageButton(plusOff,  plusOn,  149, 170));
+        _addButton("stats_5_decrease", new ImageButton(minusOff, minusOn, 149, 181));
+        _addButton("stats_6_increase", new ImageButton(plusOff,  plusOn,  149, 203));
+        _addButton("stats_6_decrease", new ImageButton(minusOff, minusOn, 149, 214));
+        _addButton("stats_7_increase", new ImageButton(plusOff,  plusOn,  149, 236));
+        _addButton("stats_7_decrease", new ImageButton(minusOff, minusOn, 149, 247));
     }
     // Primary stats labels
     {
-        _addLabel("stats_strength",     new TextArea(102, 46));
-        _addLabel("stats_perception",   new TextArea(102, 79));
-        _addLabel("stats_endurance",    new TextArea(102, 112));
-        _addLabel("stats_charisma",     new TextArea(102, 145));
-        _addLabel("stats_intelligence", new TextArea(102, 178));
-        _addLabel("stats_agility",      new TextArea(102, 211));
-        _addLabel("stats_luck",         new TextArea(102, 244));
+        _addLabel("stats_1", new TextArea(102, 46));
+        _addLabel("stats_2", new TextArea(102, 79));
+        _addLabel("stats_3", new TextArea(102, 112));
+        _addLabel("stats_4", new TextArea(102, 145));
+        _addLabel("stats_5", new TextArea(102, 178));
+        _addLabel("stats_6", new TextArea(102, 211));
+        _addLabel("stats_7", new TextArea(102, 244));
     }
     // Primary stats counters
     {
-        _addCounter("stats_strength",     new BigCounter(59, 37));
-        _addCounter("stats_perception",   new BigCounter(59, 70));
-        _addCounter("stats_endurance",    new BigCounter(59, 103));
-        _addCounter("stats_charisma",     new BigCounter(59, 136));
-        _addCounter("stats_intelligence", new BigCounter(59, 169));
-        _addCounter("stats_agility",      new BigCounter(59, 202));
-        _addCounter("stats_luck",         new BigCounter(59, 235));
+        _addCounter("stats_1", new BigCounter(59, 37));
+        _addCounter("stats_2", new BigCounter(59, 70));
+        _addCounter("stats_3", new BigCounter(59, 103));
+        _addCounter("stats_4", new BigCounter(59, 136));
+        _addCounter("stats_5", new BigCounter(59, 169));
+        _addCounter("stats_6", new BigCounter(59, 202));
+        _addCounter("stats_7", new BigCounter(59, 235));
         // Free stats points counter
-        _addCounter("stats_points",       new BigCounter(126, 282));
+        _addCounter("statsPoints", new BigCounter(126, 282));
         // Free skill points counts
-        _addCounter("skills_points",       new BigCounter(522, 228));
+        _addCounter("skillsPoints", new BigCounter(522, 228));
     }
-
 
     // Primaty stats hidden masks
     {
-        _addMask("stats_strength",     new HiddenMask(133, 29, 14, 36));
-        _addMask("stats_perception",   new HiddenMask(133, 29, 14, 36 + 33));
-        _addMask("stats_endurance",    new HiddenMask(133, 29, 14, 36 + 33*2));
-        _addMask("stats_charisma",     new HiddenMask(133, 29, 14, 36 + 33*3));
-        _addMask("stats_intelligence", new HiddenMask(133, 29, 14, 36 + 33*4));
-        _addMask("stats_agility",      new HiddenMask(133, 29, 14, 36 + 33*5));
-        _addMask("stats_luck",         new HiddenMask(133, 29, 14, 36 + 33*6));
+        _addMask("stats_1", new HiddenMask(133, 29, 14, 36));
+        _addMask("stats_2", new HiddenMask(133, 29, 14, 36 + 33));
+        _addMask("stats_3", new HiddenMask(133, 29, 14, 36 + 33*2));
+        _addMask("stats_4", new HiddenMask(133, 29, 14, 36 + 33*3));
+        _addMask("stats_5", new HiddenMask(133, 29, 14, 36 + 33*4));
+        _addMask("stats_6", new HiddenMask(133, 29, 14, 36 + 33*5));
+        _addMask("stats_7", new HiddenMask(133, 29, 14, 36 + 33*6));
     }
 
     // Traits labels
@@ -383,143 +319,66 @@ void PlayerEditState::think()
         for(it = _labels->begin(); it != _labels->end(); ++it)
         {
             std::string name = it->first;
-            // default colors
-            if (name == "stats_strength" || name == "stats_perception" || name == "stats_endurance" || name == "stats_charisma" ||
-                name == "stats_intelligence" || name == "stats_agility" || name == "stats_luck")
+
+            // default colors            
+            if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0)
             {
                 it->second->setColor(0xFF00FF00);
             }
 
-            if (name == "traits_1" || name == "traits_2" || name == "traits_3" || name == "traits_4" || name == "traits_5" || name == "traits_6" ||
-                name == "traits_7" || name == "traits_8" || name == "traits_9" || name == "traits_10" || name == "traits_11" || name == "traits_12" ||
-                name == "traits_13" || name == "traits_14" || name == "traits_15" || name == "traits_16" )
+            if (name.find("traits_") == 0)
             {
-                it->second->setColor(0xFF00FF00);
+                unsigned int number = atoi(name.substr(7).c_str());
+                if (_game->player()->trait(number - 1) == 1) it->second->setColor(0xFF999999);
             }
 
-            if (name == "skills_1" || name == "skills_2" || name == "skills_3" || name == "skills_4" || name == "skills_5" || name == "skills_6" ||
-                name == "skills_7" || name == "skills_8" || name == "skills_9" || name == "skills_10" || name == "skills_11" || name == "skills_12" ||
-                name == "skills_13" || name == "skills_14" || name == "skills_15" || name == "skills_16" || name == "skills_17" || name == "skills_18" )
+            if (name.find("skills_") == 0)
             {
-                it->second->setColor(0xFF00FF00);
+                unsigned int number = atoi(name.substr(7).c_str());
+                if (_game->player()->skill(number - 1) == 1) it->second->setColor(0xFF999999);
             }
-
-            if (name == "traits_1" && _game->player()->trait(Player::TRAITS_1) == 1) it->second->setColor(0xFF999999);
-            if (name == "traits_2" && _game->player()->trait(Player::TRAITS_2) == 1) it->second->setColor(0xFF999999);
-            if (name == "traits_3" && _game->player()->trait(Player::TRAITS_3) == 1) it->second->setColor(0xFF999999);
-            if (name == "traits_4" && _game->player()->trait(Player::TRAITS_4) == 1) it->second->setColor(0xFF999999);
-            if (name == "traits_5" && _game->player()->trait(Player::TRAITS_5) == 1) it->second->setColor(0xFF999999);
-            if (name == "traits_6" && _game->player()->trait(Player::TRAITS_6) == 1) it->second->setColor(0xFF999999);
-            if (name == "traits_7" && _game->player()->trait(Player::TRAITS_7) == 1) it->second->setColor(0xFF999999);
-            if (name == "traits_8" && _game->player()->trait(Player::TRAITS_8) == 1) it->second->setColor(0xFF999999);
-            if (name == "traits_9" && _game->player()->trait(Player::TRAITS_9) == 1) it->second->setColor(0xFF999999);
-            if (name == "traits_10" && _game->player()->trait(Player::TRAITS_10) == 1) it->second->setColor(0xFF999999);
-            if (name == "traits_11" && _game->player()->trait(Player::TRAITS_11) == 1) it->second->setColor(0xFF999999);
-            if (name == "traits_12" && _game->player()->trait(Player::TRAITS_12) == 1) it->second->setColor(0xFF999999);
-            if (name == "traits_13" && _game->player()->trait(Player::TRAITS_13) == 1) it->second->setColor(0xFF999999);
-            if (name == "traits_14" && _game->player()->trait(Player::TRAITS_14) == 1) it->second->setColor(0xFF999999);
-            if (name == "traits_15" && _game->player()->trait(Player::TRAITS_15) == 1) it->second->setColor(0xFF999999);
-            if (name == "traits_16" && _game->player()->trait(Player::TRAITS_16) == 1) it->second->setColor(0xFF999999);
-
-            if (name == "skills_1" && _game->player()->skill(Player::SKILLS_1) == 1) it->second->setColor(0xFF999999);
-            if (name == "skills_2" && _game->player()->skill(Player::SKILLS_2) == 1) it->second->setColor(0xFF999999);
-            if (name == "skills_3" && _game->player()->skill(Player::SKILLS_3) == 1) it->second->setColor(0xFF999999);
-            if (name == "skills_4" && _game->player()->skill(Player::SKILLS_4) == 1) it->second->setColor(0xFF999999);
-            if (name == "skills_5" && _game->player()->skill(Player::SKILLS_5) == 1) it->second->setColor(0xFF999999);
-            if (name == "skills_6" && _game->player()->skill(Player::SKILLS_6) == 1) it->second->setColor(0xFF999999);
-            if (name == "skills_7" && _game->player()->skill(Player::SKILLS_7) == 1) it->second->setColor(0xFF999999);
-            if (name == "skills_8" && _game->player()->skill(Player::SKILLS_8) == 1) it->second->setColor(0xFF999999);
-            if (name == "skills_9" && _game->player()->skill(Player::SKILLS_9) == 1) it->second->setColor(0xFF999999);
-            if (name == "skills_10" && _game->player()->skill(Player::SKILLS_10) == 1) it->second->setColor(0xFF999999);
-            if (name == "skills_11" && _game->player()->skill(Player::SKILLS_11) == 1) it->second->setColor(0xFF999999);
-            if (name == "skills_12" && _game->player()->skill(Player::SKILLS_12) == 1) it->second->setColor(0xFF999999);
-            if (name == "skills_13" && _game->player()->skill(Player::SKILLS_13) == 1) it->second->setColor(0xFF999999);
-            if (name == "skills_14" && _game->player()->skill(Player::SKILLS_14) == 1) it->second->setColor(0xFF999999);
-            if (name == "skills_15" && _game->player()->skill(Player::SKILLS_15) == 1) it->second->setColor(0xFF999999);
-            if (name == "skills_16" && _game->player()->skill(Player::SKILLS_16) == 1) it->second->setColor(0xFF999999);
-            if (name == "skills_17" && _game->player()->skill(Player::SKILLS_17) == 1) it->second->setColor(0xFF999999);
-            if (name == "skills_18" && _game->player()->skill(Player::SKILLS_18) == 1) it->second->setColor(0xFF999999);
 
             // selected color
             if (_selectedLabel == it->second)
             {
-                if (name == "stats_strength" || name == "stats_perception" || name == "stats_endurance" || name == "stats_charisma" ||
-                    name == "stats_intelligence" || name == "stats_agility" || name == "stats_luck")
-                {
-                    it->second->setColor(0xFFFDF998);
-                }
-                if (name == "traits_1" || name == "traits_2" || name == "traits_3" || name == "traits_4" || name == "traits_5" || name == "traits_6" ||
-                    name == "traits_7" || name == "traits_8" || name == "traits_9" || name == "traits_10" || name == "traits_11" || name == "traits_12" ||
-                    name == "traits_13" || name == "traits_14" || name == "traits_15" || name == "traits_16" )
+                if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0)
                 {
                     it->second->setColor(0xFFFDF998);
                 }
 
-                if (name == "skills_1" || name == "skills_2" || name == "skills_3" || name == "skills_4" || name == "skills_5" || name == "skills_6" ||
-                    name == "skills_7" || name == "skills_8" || name == "skills_9" || name == "skills_10" || name == "skills_11" || name == "skills_12" ||
-                    name == "skills_13" || name == "skills_14" || name == "skills_15" || name == "skills_16" || name == "skills_17" || name == "skills_18" )
+                if (name.find("traits_") == 0)
                 {
-                    it->second->setColor(0xFFFDF998);
+                    unsigned int number = atoi(name.substr(7).c_str());
+                    if (_game->player()->trait(number - 1) == 1) it->second->setColor(0xFFFFFFFF);
                 }
 
-                if (name == "traits_1" && _game->player()->trait(Player::TRAITS_1) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "traits_2" && _game->player()->trait(Player::TRAITS_2) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "traits_3" && _game->player()->trait(Player::TRAITS_3) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "traits_4" && _game->player()->trait(Player::TRAITS_4) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "traits_5" && _game->player()->trait(Player::TRAITS_5) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "traits_6" && _game->player()->trait(Player::TRAITS_6) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "traits_7" && _game->player()->trait(Player::TRAITS_7) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "traits_8" && _game->player()->trait(Player::TRAITS_8) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "traits_9" && _game->player()->trait(Player::TRAITS_9) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "traits_10" && _game->player()->trait(Player::TRAITS_10) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "traits_11" && _game->player()->trait(Player::TRAITS_11) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "traits_12" && _game->player()->trait(Player::TRAITS_12) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "traits_13" && _game->player()->trait(Player::TRAITS_13) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "traits_14" && _game->player()->trait(Player::TRAITS_14) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "traits_15" && _game->player()->trait(Player::TRAITS_15) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "traits_16" && _game->player()->trait(Player::TRAITS_16) == 1) it->second->setColor(0xFFFFFFFF);
-
-                if (name == "skills_1" && _game->player()->skill(Player::SKILLS_1) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "skills_2" && _game->player()->skill(Player::SKILLS_2) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "skills_3" && _game->player()->skill(Player::SKILLS_3) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "skills_4" && _game->player()->skill(Player::SKILLS_4) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "skills_5" && _game->player()->skill(Player::SKILLS_5) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "skills_6" && _game->player()->skill(Player::SKILLS_6) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "skills_7" && _game->player()->skill(Player::SKILLS_7) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "skills_8" && _game->player()->skill(Player::SKILLS_8) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "skills_9" && _game->player()->skill(Player::SKILLS_9) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "skills_10" && _game->player()->skill(Player::SKILLS_10) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "skills_11" && _game->player()->skill(Player::SKILLS_11) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "skills_12" && _game->player()->skill(Player::SKILLS_12) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "skills_13" && _game->player()->skill(Player::SKILLS_13) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "skills_14" && _game->player()->skill(Player::SKILLS_14) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "skills_15" && _game->player()->skill(Player::SKILLS_15) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "skills_16" && _game->player()->skill(Player::SKILLS_16) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "skills_17" && _game->player()->skill(Player::SKILLS_17) == 1) it->second->setColor(0xFFFFFFFF);
-                if (name == "skills_18" && _game->player()->skill(Player::SKILLS_18) == 1) it->second->setColor(0xFFFFFFFF);
-
+                if (name.find("skills_") == 0)
+                {
+                    unsigned int number = atoi(name.substr(7).c_str());
+                    if (_game->player()->skill(number - 1) == 1) it->second->setColor(0xFFFFFFFF);
+                }
             }
         }
 
-        _labels->at("stats_strength")->setText(msg->message(199 + _game->player()->strength()));
-        _labels->at("stats_perception")->setText(msg->message(199 + _game->player()->perception()));
-        _labels->at("stats_endurance")->setText(msg->message(199 + _game->player()->endurance()));
-        _labels->at("stats_charisma")->setText(msg->message(199 + _game->player()->charisma()));
-        _labels->at("stats_intelligence")->setText(msg->message(199 + _game->player()->intelligence()));
-        _labels->at("stats_agility")->setText(msg->message(199 + _game->player()->agility()));
-        _labels->at("stats_luck")->setText(msg->message(199 + _game->player()->luck()));
+        _labels->at("stats_1")->setText(msg->message(199 + _game->player()->strength()));
+        _labels->at("stats_2")->setText(msg->message(199 + _game->player()->perception()));
+        _labels->at("stats_3")->setText(msg->message(199 + _game->player()->endurance()));
+        _labels->at("stats_4")->setText(msg->message(199 + _game->player()->charisma()));
+        _labels->at("stats_5")->setText(msg->message(199 + _game->player()->intelligence()));
+        _labels->at("stats_6")->setText(msg->message(199 + _game->player()->agility()));
+        _labels->at("stats_7")->setText(msg->message(199 + _game->player()->luck()));
     }
 
     // primary stats counters
-    _counters->at("stats_strength")->setNumber(_game->player()->strength());
-    _counters->at("stats_perception")->setNumber(_game->player()->perception());
-    _counters->at("stats_endurance")->setNumber(_game->player()->endurance());
-    _counters->at("stats_charisma")->setNumber(_game->player()->charisma());
-    _counters->at("stats_intelligence")->setNumber(_game->player()->intelligence());
-    _counters->at("stats_agility")->setNumber(_game->player()->agility());
-    _counters->at("stats_luck")->setNumber(_game->player()->luck());
-    _counters->at("stats_points")->setNumber(_game->player()->characterPoints());
-    _counters->at("skills_points")->setNumber(_game->player()->skillPoints());
+    _counters->at("stats_1")->setNumber(_game->player()->strength());
+    _counters->at("stats_2")->setNumber(_game->player()->perception());
+    _counters->at("stats_3")->setNumber(_game->player()->endurance());
+    _counters->at("stats_4")->setNumber(_game->player()->charisma());
+    _counters->at("stats_5")->setNumber(_game->player()->intelligence());
+    _counters->at("stats_6")->setNumber(_game->player()->agility());
+    _counters->at("stats_7")->setNumber(_game->player()->luck());
+    _counters->at("statsPoints")->setNumber(_game->player()->characterPoints());
+    _counters->at("skillsPoints")->setNumber(_game->player()->skillPoints());
 
 
 }
@@ -528,7 +387,7 @@ void PlayerEditState::onButtonClick(Event * event)
 {
     for (unsigned int i = 0; i != 18; ++i)
     {
-        std::cout << "SKILL "<< i << ": " << (int) _game->player()->skill(i) << std::endl;
+        //std::cout << "SKILL "<< i << ": " << (int) _game->player()->skill(i) << std::endl;
     }
 
     std::map<std::string, ImageButton *>::iterator it;
@@ -537,246 +396,33 @@ void PlayerEditState::onButtonClick(Event * event)
         if (it->second == event->sender())
         {
             std::string name = it->first;
-            if (name == "stats_strength_increase")
+
+            if (name.find("stats_") == 0)
             {
-                _selectedLabel = _labels->at("stats_strength");
-                _game->player()->statsIncrease(Player::STATS_STRENGTH);
-            }
-            if (name == "stats_strength_decrease")
-            {
-                _selectedLabel = _labels->at("stats_strength");
-                _game->player()->statsDecrease(Player::STATS_STRENGTH);
-            }
-            if (name == "stats_perception_increase")
-            {
-                _selectedLabel = _labels->at("stats_perception");
-                _game->player()->statsIncrease(Player::STATS_PERCEPTION);
-            }
-            if (name == "stats_perception_decrease")
-            {
-                _selectedLabel = _labels->at("stats_perception");
-                _game->player()->statsDecrease(Player::STATS_PERCEPTION);
-            }
-            if (name == "stats_endurance_increase")
-            {
-                _selectedLabel = _labels->at("stats_endurance");
-                _game->player()->statsIncrease(Player::STATS_ENDURANCE);
-            }
-            if (name == "stats_endurance_decrease")
-            {
-                _selectedLabel = _labels->at("stats_endurance");
-                _game->player()->statsDecrease(Player::STATS_ENDURANCE);
-            }
-            if (name == "stats_charisma_increase")
-            {
-                _selectedLabel = _labels->at("stats_charisma");
-                _game->player()->statsIncrease(Player::STATS_CHARISMA);
-            }
-            if (name == "stats_charisma_decrease")
-            {
-                _selectedLabel = _labels->at("stats_charisma");
-                _game->player()->statsDecrease(Player::STATS_CHARISMA);
-            }
-            if (name == "stats_intelligence_increase")
-            {
-                _selectedLabel = _labels->at("stats_intelligence");
-                _game->player()->statsIncrease(Player::STATS_INTELLIGENCE);
-            }
-            if (name == "stats_intelligence_decrease")
-            {
-                _selectedLabel = _labels->at("stats_intelligence");
-                _game->player()->statsDecrease(Player::STATS_INTELLIGENCE);
-            }
-            if (name == "stats_agility_increase")
-            {
-                _selectedLabel = _labels->at("stats_agility");
-                _game->player()->statsIncrease(Player::STATS_AGILITY);
-            }
-            if (name == "stats_agility_decrease")
-            {
-                _selectedLabel = _labels->at("stats_agility");
-                _game->player()->statsDecrease(Player::STATS_AGILITY);
-            }
-            if (name == "stats_luck_increase")
-            {
-                _selectedLabel = _labels->at("stats_luck");
-                _game->player()->statsIncrease(Player::STATS_LUCK);
-            }
-            if (name == "stats_luck_decrease")
-            {
-                _selectedLabel = _labels->at("stats_luck");
-                _game->player()->statsDecrease(Player::STATS_LUCK);
+                _selectedLabel = _labels->at(name.substr(0,7));
+                unsigned int number = atoi(name.substr(6,1).c_str());
+                if (name.find("_increase") == 7)
+                {
+                    _game->player()->statsIncrease(number - 1);
+                }
+                else
+                {
+                    _game->player()->statsDecrease(number - 1);
+                }
             }
 
-            if (name == "traits_1")
+            if (name.find("traits_") == 0)
             {
-                _selectedLabel = _labels->at("traits_1");
-                _game->player()->traitToggle(Player::TRAITS_1);
+                unsigned int number = atoi(name.substr(7).c_str());
+                _selectedLabel = _labels->at(name);
+                _game->player()->traitToggle(number - 1);
             }
-            if (name == "traits_2")
+
+            if (name.find("skills_") == 0)
             {
-                _selectedLabel = _labels->at("traits_2");
-                _game->player()->traitToggle(Player::TRAITS_2);
-            }
-            if (name == "traits_3")
-            {
-                _selectedLabel = _labels->at("traits_3");
-                _game->player()->traitToggle(Player::TRAITS_3);
-            }
-            if (name == "traits_4")
-            {
-                _selectedLabel = _labels->at("traits_4");
-                _game->player()->traitToggle(Player::TRAITS_4);
-            }
-            if (name == "traits_5")
-            {
-                _selectedLabel = _labels->at("traits_5");
-                _game->player()->traitToggle(Player::TRAITS_5);
-            }
-            if (name == "traits_6")
-            {
-                _selectedLabel = _labels->at("traits_6");
-                _game->player()->traitToggle(Player::TRAITS_6);
-            }
-            if (name == "traits_7")
-            {
-                _selectedLabel = _labels->at("traits_7");
-                _game->player()->traitToggle(Player::TRAITS_7);
-            }
-            if (name == "traits_8")
-            {
-                _selectedLabel = _labels->at("traits_8");
-                _game->player()->traitToggle(Player::TRAITS_8);
-            }
-            if (name == "traits_9")
-            {
-                _selectedLabel = _labels->at("traits_9");
-                _game->player()->traitToggle(Player::TRAITS_9);
-            }
-            if (name == "traits_10")
-            {
-                _selectedLabel = _labels->at("traits_10");
-                _game->player()->traitToggle(Player::TRAITS_10);
-            }
-            if (name == "traits_11")
-            {
-                _selectedLabel = _labels->at("traits_11");
-                _game->player()->traitToggle(Player::TRAITS_11);
-            }
-            if (name == "traits_12")
-            {
-                _selectedLabel = _labels->at("traits_12");
-                _game->player()->traitToggle(Player::TRAITS_12);
-            }
-            if (name == "traits_13")
-            {
-                _selectedLabel = _labels->at("traits_13");
-                _game->player()->traitToggle(Player::TRAITS_13);
-            }
-            if (name == "traits_14")
-            {
-                _selectedLabel = _labels->at("traits_14");
-                _game->player()->traitToggle(Player::TRAITS_14);
-            }
-            if (name == "traits_15")
-            {
-                _selectedLabel = _labels->at("traits_15");
-                _game->player()->traitToggle(Player::TRAITS_15);
-            }
-            if (name == "traits_16")
-            {
-                _selectedLabel = _labels->at("traits_16");
-                _game->player()->traitToggle(Player::TRAITS_16);
-            }
-            if (name == "skills_1")
-            {
-                _selectedLabel = _labels->at("skills_1");
-                _game->player()->skillToggle(Player::SKILLS_1);
-            }
-            if (name == "skills_2")
-            {
-                _selectedLabel = _labels->at("skills_2");
-                _game->player()->skillToggle(Player::SKILLS_2);
-            }
-            if (name == "skills_3")
-            {
-                _selectedLabel = _labels->at("skills_3");
-                _game->player()->skillToggle(Player::SKILLS_3);
-            }
-            if (name == "skills_4")
-            {
-                _selectedLabel = _labels->at("skills_4");
-                _game->player()->skillToggle(Player::SKILLS_4);
-            }
-            if (name == "skills_5")
-            {
-                _selectedLabel = _labels->at("skills_5");
-                _game->player()->skillToggle(Player::SKILLS_5);
-            }
-            if (name == "skills_6")
-            {
-                _selectedLabel = _labels->at("skills_6");
-                _game->player()->skillToggle(Player::SKILLS_6);
-            }
-            if (name == "skills_7")
-            {
-                _selectedLabel = _labels->at("skills_7");
-                _game->player()->skillToggle(Player::SKILLS_7);
-            }
-            if (name == "skills_8")
-            {
-                _selectedLabel = _labels->at("skills_8");
-                _game->player()->skillToggle(Player::SKILLS_8);
-            }
-            if (name == "skills_9")
-            {
-                _selectedLabel = _labels->at("skills_9");
-                _game->player()->skillToggle(Player::SKILLS_9);
-            }
-            if (name == "skills_10")
-            {
-                _selectedLabel = _labels->at("skills_10");
-                _game->player()->skillToggle(Player::SKILLS_10);
-            }
-            if (name == "skills_11")
-            {
-                _selectedLabel = _labels->at("skills_11");
-                _game->player()->skillToggle(Player::SKILLS_11);
-            }
-            if (name == "skills_12")
-            {
-                _selectedLabel = _labels->at("skills_12");
-                _game->player()->skillToggle(Player::SKILLS_12);
-            }
-            if (name == "skills_13")
-            {
-                _selectedLabel = _labels->at("skills_13");
-                _game->player()->skillToggle(Player::SKILLS_13);
-            }
-            if (name == "skills_14")
-            {
-                _selectedLabel = _labels->at("skills_14");
-                _game->player()->skillToggle(Player::SKILLS_14);
-            }
-            if (name == "skills_15")
-            {
-                _selectedLabel = _labels->at("skills_15");
-                _game->player()->skillToggle(Player::SKILLS_15);
-            }
-            if (name == "skills_16")
-            {
-                _selectedLabel = _labels->at("skills_16");
-                _game->player()->skillToggle(Player::SKILLS_16);
-            }
-            if (name == "skills_17")
-            {
-                _selectedLabel = _labels->at("skills_17");
-                _game->player()->skillToggle(Player::SKILLS_17);
-            }
-            if (name == "skills_18")
-            {
-                _selectedLabel = _labels->at("skills_18");
-                _game->player()->skillToggle(Player::SKILLS_18);
+                unsigned int number = atoi(name.substr(7).c_str());
+                _selectedLabel = _labels->at(name);
+                _game->player()->skillToggle(number - 1);
             }
         }
     }
@@ -802,33 +448,9 @@ void PlayerEditState::onMaskClick(Event * event)
         if (it->second == event->sender())
         {
             std::string name = it->first;
-            if (name == "stats_strength")
+            if (name.find("stats_") == 0)
             {
-                _selectedLabel = _labels->at("stats_strength");
-            }
-            if (name == "stats_perception")
-            {
-                _selectedLabel = _labels->at("stats_perception");
-            }
-            if (name == "stats_endurance")
-            {
-                _selectedLabel = _labels->at("stats_endurance");
-            }
-            if (name == "stats_charisma")
-            {
-                _selectedLabel = _labels->at("stats_charisma");
-            }
-            if (name == "stats_intelligence")
-            {
-                _selectedLabel = _labels->at("stats_intelligence");
-            }
-            if (name == "stats_agility")
-            {
-                _selectedLabel = _labels->at("stats_agility");
-            }
-            if (name == "stats_luck")
-            {
-                _selectedLabel = _labels->at("stats_luck");
+                _selectedLabel = _labels->at(name);
             }
         }
     }
