@@ -20,7 +20,7 @@
 #ifndef FALLTERGEIST_GAME_H
 #define FALLTERGEIST_GAME_H
 
-#include <list>
+#include <vector>
 #include <string>
 #include <iostream>
 #include <SDL/SDL.h>
@@ -39,8 +39,8 @@ class Game
 {
 protected:
     ResourceManager * _resourceManager;
-    std::list<State *> * _states;
-    std::list<State *> * _deletedStates;
+    std::vector<State *> * _states;
+    std::vector<State *> * _deletedStates;
     Player * _player;
     Screen * _screen;
     FpsCounter * _fpsCounter;

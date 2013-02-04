@@ -33,10 +33,24 @@ namespace Falltergeist
 
 NewGameState::NewGameState(Game * game) : State(game)
 {
+    _characterImages = new SurfaceSet(27,23);
+    _characters = new std::vector<Player *>;
 }
+
 
 NewGameState::~NewGameState()
 {
+    delete _characterImages;
+    while (!_characters->empty())
+    {
+        delete _characters->back();
+        _characters->pop_back();
+    }
+    delete _characters;
+    delete _playerStats1;
+    delete _playerStats2;
+    delete _playerBio;
+    delete _playerName;
 }
 
 void NewGameState::init()
@@ -71,20 +85,18 @@ void NewGameState::init()
 
     // Characters images
     _selectedCharacter = 0;
-    _characterImages = new SurfaceSet(27,23);
     _characterImages->addSurface(ResourceManager::surface("art/intrface/combat.frm"));
     _characterImages->addSurface(ResourceManager::surface("art/intrface/stealth.frm"));
     _characterImages->addSurface(ResourceManager::surface("art/intrface/diplomat.frm"));
 
 
 
-    _characters = new std::vector<Player *>;
     _characters->push_back(new Player(ResourceManager::gcdFileType("premade/combat.gcd")));
-    _characters->at(0)->setBio(ResourceManager::bioFileType("premade/combat.bio")->text());
+    _characters->back()->setBio(ResourceManager::bioFileType("premade/combat.bio")->text());
     _characters->push_back(new Player(ResourceManager::gcdFileType("premade/stealth.gcd")));
-    _characters->at(1)->setBio(ResourceManager::bioFileType("premade/stealth.bio")->text());
+    _characters->back()->setBio(ResourceManager::bioFileType("premade/stealth.bio")->text());
     _characters->push_back(new Player(ResourceManager::gcdFileType("premade/diplomat.gcd")));
-    _characters->at(2)->setBio(ResourceManager::bioFileType("premade/diplomat.bio")->text());
+    _characters->back()->setBio(ResourceManager::bioFileType("premade/diplomat.bio")->text());
     
     // Character data textareas
     _playerName = new TextArea("",350,50);

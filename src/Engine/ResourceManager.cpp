@@ -25,7 +25,7 @@
 namespace Falltergeist
 {
 
-std::list<libfalltergeist::DatFile *> * ResourceManager::_datFiles = new std::list<libfalltergeist::DatFile *>;
+std::vector<libfalltergeist::DatFile *> * ResourceManager::_datFiles = new std::vector<libfalltergeist::DatFile *>;
 std::map<std::string, Surface *> * ResourceManager::_surfaces = new std::map<std::string, Surface *>;
 
 const char * _t(unsigned int number, const char * filename)
@@ -38,7 +38,7 @@ const char * _t(unsigned int number, const char * filename)
 
 ResourceManager::ResourceManager()
 {
-    std::string path = CrossPlatform::homePath();
+    std::string path = CrossPlatform::homePath();        
     path += "/.fallout/master.dat";
     _datFiles->push_back(new libfalltergeist::DatFile((char *)path.c_str()));
     //_datFiles->push_back(new DatFile(homepath + "/.fallout/critter.dat"));
@@ -46,9 +46,18 @@ ResourceManager::ResourceManager()
 
 }
 
+ResourceManager::~ResourceManager()
+{
+    while (!_datFiles->empty())
+    {
+        delete _datFiles->back();
+        _datFiles->pop_back();
+    }
+}
+
 libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename)
 {
-    std::list<libfalltergeist::DatFile *>::iterator it;
+    std::vector<libfalltergeist::DatFile *>::iterator it;
     for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
     {
         libfalltergeist::DatFileItem * item = (*it)->item((char *)filename.c_str());

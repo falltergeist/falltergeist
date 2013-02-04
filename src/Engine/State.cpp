@@ -28,14 +28,17 @@ namespace Falltergeist
 
 State::State(Game * game) : _game(game), _surfaces(), _isFullscreen(false), initialized(false)
 {
+    _surfaces = new std::vector<Surface *>;
 }
 
 State::~State()
 {
-    for (std::vector<Surface *>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
+    while (!_surfaces->empty())
     {
-        delete *i;
+        delete _surfaces->back();
+        _surfaces->pop_back();
     }
+    delete _surfaces;
 }
 
 void State::init()
@@ -45,7 +48,7 @@ void State::init()
 
 void State::think()
 {
-    for (std::vector<Surface *>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
+    for (std::vector<Surface *>::iterator i = _surfaces->begin(); i < _surfaces->end(); i++)
     {
         (*i)->think();
     }
@@ -53,7 +56,7 @@ void State::think()
 
 void State::blit()
 {
-    for (std::vector<Surface *>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
+    for (std::vector<Surface *>::iterator i = _surfaces->begin(); i < _surfaces->end(); i++)
     {
         (*i)->blit(_game->screen()->surface());
     }
@@ -66,12 +69,12 @@ bool State::isFullscreen()
 
 void State::add(Surface * surface)
 {
-    _surfaces.push_back(surface);
+    _surfaces->push_back(surface);
 }
 
 void State::handle(Event * event)
 {
-    for (std::vector<Surface *>::reverse_iterator i = _surfaces.rbegin(); i < _surfaces.rend(); i++)
+    for (std::vector<Surface *>::reverse_iterator i = _surfaces->rbegin(); i < _surfaces->rend(); i++)
     {
         InteractiveSurface * surface = dynamic_cast<InteractiveSurface *>(*i);
         if (surface != 0)

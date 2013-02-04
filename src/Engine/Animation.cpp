@@ -36,6 +36,16 @@ Animation::Animation(const char * filename, int x, int y) : InteractiveSurface(0
 
 Animation::~Animation()
 {
+    while (!_surfaceSets->empty())
+    {
+        while (!_surfaceSets->back()->empty())
+        {
+            delete _surfaceSets->back()->back();
+            _surfaceSets->back()->pop_back();
+        }
+        delete _surfaceSets->back();
+        _surfaceSets->pop_back();
+    }
     delete _surfaceSets;
 }
 

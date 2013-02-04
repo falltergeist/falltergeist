@@ -30,6 +30,11 @@ SurfaceSet::SurfaceSet(int x, int y) : InteractiveSurface(0,0,x,y)
 
 SurfaceSet::~SurfaceSet()
 {
+    while (!_surfaces->empty())
+    {
+        delete _surfaces->back();
+        _surfaces->pop_back();
+    }
     delete _surfaces;
 }
 

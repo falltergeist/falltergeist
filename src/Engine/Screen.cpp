@@ -43,6 +43,7 @@ Screen::Screen(int width, int height, int bpp)
 
 Screen::~Screen()
 {
+    SDL_FreeSurface(_screen);
     delete _surface;
 }
 

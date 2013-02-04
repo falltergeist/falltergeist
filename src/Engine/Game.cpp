@@ -54,17 +54,29 @@ Game::Game(int width, int height, int bpp) : _states()
     _screen = new Screen(width, height,bpp);
     _fpsCounter = new FpsCounter();
     _quit = false;
-    _states = new std::list<State *>;
-    _deletedStates = new std::list<State *>;
+    _states = new std::vector<State *>;
+    _deletedStates = new std::vector<State *>;
     _player = 0;
 }
 
 Game::~Game()
 {
-    delete _screen; _screen = 0;
-    delete _states; _states = 0;
-    delete _deletedStates; _deletedStates = 0;
-    delete _player; _player = 0;
+    delete _player;
+    delete _screen;
+
+    while (!_states->empty())
+    {
+        delete _states->back();
+        _states->pop_back();;
+    }
+    delete _states;
+
+    while (!_deletedStates->empty())
+    {
+        delete _deletedStates->back();
+        _deletedStates->pop_back();;
+    }
+    delete _deletedStates;
 }
 
 /**
@@ -137,7 +149,7 @@ void Game::run()
         _states->back()->think();
         _fpsCounter->think();
         // render all states that is over the last fullscreen state
-        std::list<State*>::iterator i = _states->end();
+        std::vector<State*>::iterator i = _states->end();
         do { --i; }
         while(i != _states->begin() && !(*i)->isFullscreen());
         for (; i != _states->end(); ++i) (*i)->blit();

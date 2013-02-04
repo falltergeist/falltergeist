@@ -42,11 +42,12 @@ const char * _t(unsigned int number, const char * filename);
 class ResourceManager
 {
 protected:
-    static std::list<libfalltergeist::DatFile *> * _datFiles;
+    static std::vector<libfalltergeist::DatFile *> * _datFiles;
     static std::map<std::string, Surface *> * _surfaces;
 
 public:
     ResourceManager();
+    ~ResourceManager();
     static libfalltergeist::DatFileItem * datFileItem(std::string filename);
     static libfalltergeist::FrmFileType * frmFileType(std::string filename);
     static libfalltergeist::PalFileType * palFileType(std::string filename);

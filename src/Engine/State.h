@@ -32,7 +32,7 @@ class State
 {
 protected:
     Game * _game;
-    std::vector<Surface *> _surfaces;
+    std::vector<Surface *> * _surfaces;
     bool _isFullscreen;
 public:
     State(Game * game);
