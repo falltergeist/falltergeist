@@ -102,44 +102,46 @@ Surface * Font::glyph(unsigned char chr)
             unsigned char ch = _aafFileType->glyphs()->at(chr)->data()->at(i);
             if (ch != 0)
             {
-                long lightness;
+                float lightness;
                 switch (ch)
                 {
+                    case 9:
+                        lightness = 1.2;
+                        break;
                     case 8:
-                        lightness = 1.15;
+                        lightness = 1.1;
                         break;
                     case 7:
-                        lightness = 1.3;
+                        lightness = 1;
                         break;
                     case 6:
-                        lightness = 1.45;
+                        lightness = 0.9;
                         break;
                     case 5:
-                        lightness = 1.6;
+                        lightness = 0.8;
                         break;
                     case 4:
-                        lightness = 1.75;
+                        lightness = 0.7;
                         break;
                     case 3:
-                        lightness = 2;
+                        lightness = 0.6;
                         break;
                     case 2:
-                        lightness = 2.15;
+                        lightness = 0.5;
                         break;
                     case 1:
-                        lightness = 2.3;
-                        break;
-                    default:
-                        lightness = 1;
+                        lightness = 0.4;
                         break;
                 }
 
                 unsigned int color = this->color();
-                //unsigned int red =   ((color & 0xFF000000) >> 16) / lightness;
-                //unsigned int green = ((color & 0x00FF0000) >> 8)  / lightness;
-                //unsigned int blue =   (color & 0x0000FF00) / lightness;
-                //unsigned int alpha =  (color & 0x000000FF) >> 24;
-                //color = (alpha << 24 ) | (red << 16) | (green << 8) | blue;
+
+                //unsigned char red =   ((color & 0x00FF0000) >> 16) * lightness;
+                //unsigned char green = ((color & 0x0000FF00) >> 8) * lightness;
+                //unsigned char blue =  (color & 0x000000FF) * lightness;
+                //color = 0xFF000000 | red << 16 | green << 8 | blue;
+                color = ((unsigned char)( 0xFF * lightness) << 24) | (0x00FFFFFF & color);
+
                 surface->setPixel(x,delta + y,color);
             }
             i++;

@@ -119,6 +119,14 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
 
     Surface * background = new Surface(_game->resourceManager()->surface("art/intrface/edtrcrte.frm"));
 
+    for (unsigned int y = 300; y != 302; ++y)
+    {
+        for (unsigned int x = 350; x != 620; ++x)
+        {
+            background->setPixel(x,y, 0xFF000000);
+        }
+    }
+
     // Primary stats buttons
     {
         const char * plusOn   = "art/intrface/splson.frm";
