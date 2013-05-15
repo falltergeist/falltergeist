@@ -30,7 +30,7 @@ class FrmFileType;
 class Surface
 {
 protected:
-    SDL_Surface * _surface;
+    SDL_Surface * _sdl_surface;
     int _x; // x position
     int _y; // y position
     bool _visible; // if false - not render
@@ -45,43 +45,43 @@ public:
     Surface(Surface * other);
     virtual ~Surface();
 
-    void setX(int x);
+    Surface * x(int x);
     int x();
 
-    void setY(int y);
+    Surface * y(int y);
     int y();
 
-    void setNeedRedraw(bool needRedraw);
+    Surface * needRedraw(bool needRedraw);
     bool needRedraw();
 
-    void setVisible(bool visible);
+    Surface * visible(bool visible);
     bool visible();
 
     unsigned int width();    
 
     unsigned int height();
 
-    void setPixel(int x, int y, unsigned int color);
+    Surface * pixel(int x, int y, unsigned int color);
     unsigned int pixel(int x, int y);
 
-    virtual SDL_Surface * surface();
+    virtual SDL_Surface * sdl_surface();
 
-    void copyTo(Surface * surface);
+    Surface * copyTo(Surface * surface);
 
-    void loadFromSurface(Surface * surface);
+    Surface * loadFromSurface(Surface * surface);
 
-    void setBorderColor(unsigned int color);
+    Surface * borderColor(unsigned int color);
     unsigned int borderColor();
 
-    void setBackgroundColor(unsigned int color);
+    Surface * backgroundColor(unsigned int color);
     unsigned int backgroundColor();
 
-    void fill(unsigned int color);
-    void clear();
+    Surface * fill(unsigned int color);
+    Surface * clear();
     Surface * crop(int x = 0, int y = 0, int width = 0, int height = 0);
-    virtual void think();
-    virtual void draw();
-    virtual void blit(Surface * surface);
+    virtual Surface * think();
+    virtual Surface * draw();
+    virtual Surface * blit(Surface * surface);
 };
 
 }

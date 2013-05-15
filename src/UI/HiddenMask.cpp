@@ -24,13 +24,13 @@ namespace Falltergeist
 
 HiddenMask::HiddenMask(unsigned int width, unsigned int height, int x, int y) : InteractiveSurface(width, height, x , y)
 {
-    setBackgroundColor(0x01000000);
-    setVisible(false);
+    backgroundColor(0x01000000);
+    visible(false);
 }
 
 HiddenMask::HiddenMask(Surface * other) : InteractiveSurface(other)
 {
-    setVisible(false);
+    visible(false);
 }
 
 }

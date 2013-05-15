@@ -17,30 +17,17 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_BIGCOUNTER_H
-#define FALLTERGEIST_BIGCOUNTER_H
-
-#include "../Engine/InteractiveSurface.h"
-#include <vector>
+#include "../../src/Engine/InteractiveSurface.h"
+#include "../UI/Widget.h"
 
 namespace Falltergeist
 {
-
-class BigCounter : public InteractiveSurface
+namespace UI
 {
-protected:
-    unsigned int _number;
-    unsigned int _length;
-    std::vector<Surface *> * _numbersWhite;
-    std::vector<Surface *> * _numbersRed;
-public:
-    BigCounter(int x = 0, int y = 0);
-    ~BigCounter();
 
-    BigCounter * draw();
-
-    void setNumber(unsigned int number);
-};
+Widget::Widget(int x, int y) : InteractiveSurface(0, 0, x, y)
+{
+}
 
 }
-#endif // FALLTERGEIST_BIGCOUNTER_H
+}

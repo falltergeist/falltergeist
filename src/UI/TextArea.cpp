@@ -29,7 +29,7 @@
 namespace Falltergeist
 {
 
-TextArea::TextArea(libfalltergeist::MsgMessage * message, int x, int y) : InteractiveSurface(0,0,x,y)
+TextArea::TextArea(libfalltergeist::MsgMessage * message, int x, int y) : InteractiveSurface(0, 0, x, y)
 {
     _text = 0;
     _lines = 0;
@@ -43,10 +43,10 @@ TextArea::TextArea(libfalltergeist::MsgMessage * message, int x, int y) : Intera
     _font = new Font("font1.aaf", _color);
     _wordWrap = false;
     this->setText(message->text());
-    setNeedRedraw(true);
+    needRedraw(true);
 }
 
-TextArea::TextArea(const char * text, int x, int y) : InteractiveSurface(0,0,x,y)
+TextArea::TextArea(const char * text, int x, int y) : InteractiveSurface(0, 0, x, y)
 {
     _text = 0;
     _lines = 0;
@@ -60,10 +60,10 @@ TextArea::TextArea(const char * text, int x, int y) : InteractiveSurface(0,0,x,y
     _font = new Font("font1.aaf", _color);
     _wordWrap = false;
     this->setText(text);
-    setNeedRedraw(true);
+    needRedraw(true);
 }
 
-TextArea::TextArea(int x, int y) : InteractiveSurface(0,0,x,y)
+TextArea::TextArea(int x, int y) : InteractiveSurface(0, 0, x, y)
 {
     _text = 0;
     _lines = 0;
@@ -77,7 +77,7 @@ TextArea::TextArea(int x, int y) : InteractiveSurface(0,0,x,y)
     _font = new Font("font1.aaf", _color);
     _wordWrap = false;
     this->setText(" ");
-    setNeedRedraw(true);
+    needRedraw(true);
 }
 
 
@@ -192,9 +192,9 @@ void TextArea::_calculateSize()
     _calculatedHeight = lines()->size() * _font->height() + (lines()->size() - 1) * _font->verticalGap();
 }
 
-void TextArea::draw()
+TextArea * TextArea::draw()
 {
-    if (!needRedraw()) return;    
+    if (!needRedraw()) return this;
     InteractiveSurface::draw();
 
     // if no font was setted
@@ -223,9 +223,9 @@ void TextArea::draw()
             else
             {
                 Surface * glyph = _font->glyph(chr);
-                glyph->setX(x);
-                glyph->setY(0);
-                glyph->copyTo(surfaces->back());
+                glyph->x(x)
+                     ->y(0)
+                     ->copyTo(surfaces->back());
                 x += glyph->width() + _font->horizontalGap();
                 if (i == (*it).size() - 1) x -= _font->horizontalGap();
             }
@@ -235,8 +235,8 @@ void TextArea::draw()
 
     // Creating resulting surface
     Surface * surface = new Surface(this->width(), this->height());
-    surface->setBackgroundColor(backgroundColor());
-    surface->clear();
+    surface->backgroundColor(backgroundColor())
+           ->clear();
     // foreach lines surfaces
     unsigned int x = 0;
     unsigned int y = 0;
@@ -256,14 +256,14 @@ void TextArea::draw()
                 //@todo justify
                 break;
         }
-        (*it)->setX(x);
-        (*it)->setY(y);
+        (*it)->x(x);
+        (*it)->y(y);
         (*it)->copyTo(surface);
         y += _font->height() + _font->verticalGap();
     }
 
-    surface->setX(this->x());
-    surface->setY(this->y());
+    surface->x(this->x());
+    surface->y(this->y());
     loadFromSurface(surface);
 
     while(!surfaces->empty())
@@ -274,7 +274,8 @@ void TextArea::draw()
     delete surfaces;
     delete surface;
 
-    setNeedRedraw(false);
+    needRedraw(false);
+    return this;
 }
 
 unsigned int TextArea::color()
@@ -288,7 +289,7 @@ TextArea * TextArea::setColor(unsigned int color)
     _color = color;
     if (!_font) return this;
     _font->setColor(color);
-    setNeedRedraw(true);
+    needRedraw(true);
     return this;
 }
 
@@ -306,7 +307,7 @@ TextArea * TextArea::setHeight(unsigned int height)
 {
     if (height == _height) return this;
     _height = height;
-    setNeedRedraw(true);
+    needRedraw(true);
     return this;
 }
 
@@ -324,7 +325,7 @@ TextArea * TextArea::setWidth(unsigned int width)
 {
     if (_width == width) return this;
     _width = width;
-    setNeedRedraw(true);
+    needRedraw(true);
     return this;
 }
 
@@ -337,7 +338,7 @@ TextArea * TextArea::setHorizontalAlign(unsigned char align)
 {
     if (_horizontalAlign == align) return this;
     _horizontalAlign = align;
-    setNeedRedraw(true);
+    needRedraw(true);
     return this;
 }
 
@@ -350,7 +351,7 @@ TextArea * TextArea::setVerticalAlign(unsigned char align)
 {
     if (_verticalAlign == align) return this;
     _verticalAlign = align;
-    setNeedRedraw(true);
+    needRedraw(true);
     return this;
 }
 
@@ -382,7 +383,7 @@ TextArea * TextArea::setText(const char * text)
     delete [] _text;
     _text = new char[strlen(text)+1]();
     strcpy(_text, text);
-    setNeedRedraw(true);
+    needRedraw(true);
     return this;
 }
 
@@ -390,7 +391,7 @@ TextArea * TextArea::setFont(const char * filename)
 {
     delete _font;
     _font = new Font(filename, _color);
-    setNeedRedraw(true);
+    needRedraw(true);
     return this;
 }
 

@@ -36,7 +36,7 @@ public:
 
     unsigned int currentSurface;
     void addSurface(Surface * surface);
-    SDL_Surface * surface();
+    Surface * surface();
 };
 
 }

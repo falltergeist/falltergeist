@@ -152,7 +152,7 @@ Surface * Font::glyph(unsigned char chr)
                 //color = 0xFF000000 | red << 16 | green << 8 | blue;
                 color = ((unsigned char)( 0xFF * lightness) << 24) | (0x00FFFFFF & color);
 
-                surface->setPixel(x,delta + y,color);
+                surface->pixel(x,delta + y,color);
             }
             i++;
         }

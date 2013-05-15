@@ -27,12 +27,12 @@ ImageButton::ImageButton(const char * releasedImage, const char * pressedImage, 
 {
     _releasedImage = (char*)releasedImage;
     _pressedImage = (char*)pressedImage;
-    setNeedRedraw(true);
+    needRedraw(true);
 }
 
-void ImageButton::draw()
+ImageButton * ImageButton::draw()
 {
-    if (!needRedraw()) return;
+    if (!needRedraw()) return this;
 
     InteractiveSurface::draw();
 
@@ -47,8 +47,9 @@ void ImageButton::draw()
     {
         loadFromSurface(ResourceManager::surface(_releasedImage));
     }
-    setX(x);
-    setY(y);
+    this->x(x);
+    this->y(y);
+    return this;
 }
 
 void ImageButton::setPressedImage(const char * pressedImage)

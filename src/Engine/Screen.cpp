@@ -38,7 +38,7 @@ Screen::Screen(int width, int height, int bpp)
     std::cout << "[OK]" << std::endl;
 
     _surface = new Surface(width,height);
-    _surface->setBackgroundColor(0xFF000000);
+    _surface->backgroundColor(0xFF000000);
 }
 
 Screen::~Screen()
@@ -70,7 +70,7 @@ int Screen::width()
 
 void Screen::flip()
 {
-    SDL_BlitSurface(_surface->surface(), 0, _screen, 0);
+    SDL_BlitSurface(_surface->sdl_surface(), 0, _screen, 0);
 
 
     if (SDL_Flip(_screen) == -1)

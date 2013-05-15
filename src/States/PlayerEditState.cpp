@@ -120,7 +120,7 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     Surface * background = new Surface(_game->resourceManager()->surface("art/intrface/edtrcrte.frm"));
 
     // description horizontal line
-    for (unsigned int y = 300; y != 302; ++y) for (unsigned int x = 350; x != 620; ++x) background->setPixel(x,y, 0xFF000000);
+    for (unsigned int y = 300; y != 302; ++y) for (unsigned int x = 350; x != 620; ++x) background->pixel(x,y, 0xFF000000);
 
     // Primary stats buttons
     {
@@ -268,6 +268,18 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         _addLabel("skills_18", new TextArea(msg->message(117), 377, 27 + 11*17))->setWidth(240);
     }
 
+    {
+        const char * on = "art/intrface/lilreddn.frm";
+        const char * off = "art/intrface/lilredup.frm";
+        _addButton("options", new ImageButton(off, on, 345, 454));
+        _addButton("next", new ImageButton(off, on, 455, 450));
+        //_addButton("cancel", new ImageButton(off, on, 350, 450));
+
+        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+        _addLabel("options",  new TextArea(msg->message(101), 365, 453))->setColor(0xffb89c28)->setFont("font3.aaf");
+        _addLabel("next",  new TextArea(msg->message(100), 465, 453))->setColor(0xffb89c28)->setFont("font3.aaf");
+    }
+
     add(background);
 
     // add buttons to the state
@@ -285,7 +297,7 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         std::map<std::string, TextArea *>::reverse_iterator it;
         for(it = _labels->rbegin(); it != _labels->rend(); ++it)
         {
-            it->second->setBackgroundColor(0x01000000);
+            it->second->backgroundColor(0x01000000);
             it->second->onLeftButtonClick((EventHandler) &PlayerEditState::onLabelClick);
             add(it->second);
         }
@@ -301,7 +313,7 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         for(it = _masks->begin(); it != _masks->end(); ++it)
         {
             //it->second->setBorderColor(0xFFFF0000);
-            it->second->setVisible(true);
+            it->second->visible(true);
             it->second->onLeftButtonClick((EventHandler) &PlayerEditState::onMaskClick);
             add(it->second);
         }
@@ -449,9 +461,7 @@ void PlayerEditState::think()
     _counters->at("statsPoints")->setNumber(_game->player()->characterPoints());
     _counters->at("skillsPoints")->setNumber(_game->player()->skillPoints());
 
-    _image->loadFromSurface(_selectedImage);
-    _image->setX(480);
-    _image->setY(310);
+    _image->loadFromSurface(_selectedImage)->x(480)->y(310);
 
     // Getting title and description by selected image
     std::map<std::string, Surface *>::iterator it;

@@ -32,7 +32,7 @@ protected:
     char * _pressedImage;
 public:
     ImageButton(const char * releasedImage = 0, const char * pressedImage = 0, int x = 0, int y = 0);
-    virtual void draw();
+    virtual ImageButton * draw();
     void setReleasedImage(const char * releasedImage);
     void setPressedImage(const char * pressedImage);
 };

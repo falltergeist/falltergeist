@@ -49,18 +49,19 @@ Animation::~Animation()
     delete _surfaceSets;
 }
 
-void Animation::think()
+Animation * Animation::think()
 {
-    if(_lastTicks + _frameRate > SDL_GetTicks()) return;
+    if(_lastTicks + _frameRate > SDL_GetTicks()) return this;
     _lastTicks = SDL_GetTicks();
     _currentFrame++;
     if (_currentFrame >= _surfaceSets->at(_currentSurfaceSet)->size())
     {
         _currentFrame = 0;
     }
+    return this;
 }
 
-void Animation::loadFromFrmFile(const char * filename)
+Animation * Animation::loadFromFrmFile(const char * filename)
 {
     libfalltergeist::FrmFileType * frm = ResourceManager::frmFileType(filename);
     if (!frm)
@@ -91,7 +92,7 @@ void Animation::loadFromFrmFile(const char * filename)
                     unsigned int colorIndex = frm->directions()->at(i)->frames()->at(j)->colorIndexes()->at(z);
                     unsigned int color = *pal->color(colorIndex);
                     if (colorIndex == 0) color = 0;
-                    surface->setPixel(x,y,color);
+                    surface->pixel(x,y,color);
                     z++;
                 }
             }
@@ -99,16 +100,17 @@ void Animation::loadFromFrmFile(const char * filename)
         }
         _surfaceSets->push_back(frameset);
     }
+    return this;
 }
 
-SDL_Surface * Animation::surface()
+Surface * Animation::surface()
 {
     if (needRedraw())
     {
         draw();
-        setNeedRedraw(false);
+        needRedraw(false);
     }
-    return _surfaceSets->at(_currentSurfaceSet)->at(_currentFrame)->surface();
+    return _surfaceSets->at(_currentSurfaceSet)->at(_currentFrame);
 }
 
 

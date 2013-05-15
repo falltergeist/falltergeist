@@ -182,13 +182,13 @@ Surface * ResourceManager::surface(std::string filename, int posX, int posY)
         {
             unsigned int colorIndex = frm->directions()->at(0)->frames()->at(0)->colorIndexes()->at(i);
             unsigned int color = *pal->color(colorIndex);
-            surface->setPixel(x, y, color);
+            surface->pixel(x, y, color);
             i++;
         }
     }
-    surface->setX(posX);
-    surface->setY(posY);
-    SDL_SetColorKey(surface->surface(), SDL_SRCCOLORKEY, 0);
+    surface->x(posX);
+    surface->y(posY);
+    SDL_SetColorKey(surface->sdl_surface(), SDL_SRCCOLORKEY, 0);
     _surfaces->insert(std::pair<std::string, Surface *>(filename, surface));
     return surface;
 }

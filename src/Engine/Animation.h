@@ -38,10 +38,10 @@ public:
     Animation(const char * filename, int x = 0, int y = 0);
     ~Animation();
 
-    SDL_Surface * surface();
+    Surface * surface();
 
-    void loadFromFrmFile(const char * filename);
-    void think();
+    Animation * loadFromFrmFile(const char * filename);
+    Animation * think();
 };
 
 }
