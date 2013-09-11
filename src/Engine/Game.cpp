@@ -17,31 +17,34 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../Engine/Game.h"
-#include "../Engine/Exception.h"
-#include "../Engine/State.h"
-#include "../Engine/Screen.h"
+#include "../Engine/CrossPlatform.h"
 #include "../Engine/Event.h"
-#include "../Engine/ResourceManager.h"
+#include "../Engine/Exception.h"
+#include "../Engine/Game.h"
 #include "../Engine/Player.h"
-#include "../UI/TextArea.h"
+#include "../Engine/ResourceManager.h"
+#include "../Engine/Screen.h"
+#include "../Engine/State.h"
 #include "../UI/FpsCounter.h"
+#include "../UI/TextArea.h"
+
+using namespace Falltergeist::CrossPlatform;
 
 namespace Falltergeist
 {
 
 Game::Game(int width, int height, int bpp) : _states()
 {
-    std::cout << "Falltergeist - version " << VERSION << std::endl;
-    std::cout << "Opensource fallout 1/2 game engine" << std::endl;
-    std::cout << "Initializing video...";
+    debug("Falltergeist - version "); debug(VERSION); debug("\n");
+    debug("Opensource Fallout 2 game engine\n");
+    debug("Initializing video");
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
-        std::cout << "[FAIL]" << std::endl;
+        debug(" - [FAIL]\n");
         throw Exception(SDL_GetError());
     }
-    std::cout << "[OK]" << std::endl;
+    debug(" - [OK]\n");
 
     // Window caption
     std::string caption = "Falltergeist ";

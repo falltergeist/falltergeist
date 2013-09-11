@@ -20,6 +20,10 @@
 #include "../UI/FpsCounter.h"
 #include <sstream>
 
+#include "../Engine/CrossPlatform.h"
+
+using namespace Falltergeist::CrossPlatform;
+
 namespace Falltergeist
 {
 

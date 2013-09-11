@@ -20,7 +20,11 @@
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
 #include "../Engine/CrossPlatform.h"
+#include <string>
 #include <iostream>
+#include <fstream>
+
+using namespace Falltergeist::CrossPlatform;
 
 namespace Falltergeist
 {
@@ -39,10 +43,38 @@ const char * _t(unsigned int number, const char * filename)
 ResourceManager::ResourceManager()
 {
     std::string path(CrossPlatform::findDataPath());
-    path += "/.master.dat";
+    path.append("/master.dat");
     _datFiles->push_back(new libfalltergeist::DatFile((char *)path.c_str()));
     //_datFiles->push_back(new DatFile(homepath + "/.fallout/critter.dat"));
+}
 
+void ResourceManager::extract(const char * path)
+{
+    std::vector<libfalltergeist::DatFile *>::iterator it;
+    for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
+    {
+        std::vector<libfalltergeist::DatFileItem *>::iterator itt;
+        for (itt = (*it)->items()->begin(); itt != (*it)->items()->end(); ++itt)
+        {
+            std::string file(path);
+            file.append((*itt)->filename());
+            std::fstream stream;
+            stream.open(file.c_str(), std::ios_base::out);
+
+            if (stream.is_open())
+            {
+                //std::cout << file.c_str() << " [OK]" << std::endl;
+                stream.write((*itt)->getData(), (*itt)->size());
+                stream.close();
+            }
+            else
+            {
+                std::cout << file.c_str() << " [FAIL]" << std::endl;
+            }
+
+        }
+
+    }
 
 }
 

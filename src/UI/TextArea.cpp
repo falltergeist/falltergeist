@@ -25,6 +25,9 @@
 #include <sstream>
 
 #include "../Engine/ResourceManager.h"
+#include "../Engine/CrossPlatform.h"
+
+using namespace Falltergeist::CrossPlatform;
 
 namespace Falltergeist
 {

@@ -17,8 +17,11 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "../Engine/CrossPlatform.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Surface.h"
+
+using namespace Falltergeist::CrossPlatform;
 
 namespace Falltergeist
 {

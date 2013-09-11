@@ -18,7 +18,10 @@
  */
 
 #include "../Engine/InteractiveSurface.h"
+#include "../Engine/CrossPlatform.h"
 #include <iostream>
+
+using namespace Falltergeist::CrossPlatform;
 
 namespace Falltergeist
 {
