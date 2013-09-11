@@ -38,8 +38,8 @@ const char * _t(unsigned int number, const char * filename)
 
 ResourceManager::ResourceManager()
 {
-    std::string path = CrossPlatform::homePath();        
-    path += "/.fallout/master.dat";
+    std::string path(CrossPlatform::findDataPath());
+    path += "/.master.dat";
     _datFiles->push_back(new libfalltergeist::DatFile((char *)path.c_str()));
     //_datFiles->push_back(new DatFile(homepath + "/.fallout/critter.dat"));
 

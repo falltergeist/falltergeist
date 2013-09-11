@@ -26,7 +26,8 @@ namespace Falltergeist
 {
 namespace CrossPlatform
 {
-    const char * homePath();
+    char * findDataPath();
+    void debug(const char * message, unsigned char level);
 }
 }
 

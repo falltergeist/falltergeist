@@ -18,7 +18,9 @@
  */
 
 #include "../Engine/CrossPlatform.h"
+#include <unistd.h>
 #include <iostream>
+#include <fstream>
 #include <stdlib.h>
 
 
@@ -28,10 +30,63 @@ namespace Falltergeist
 namespace CrossPlatform
 {
 
-const char * homePath()
+void debug(const char * message, unsigned char level = 1)
 {
-    char const * home = getenv("HOME");
-    return home;
+    std::cout << message;
+}
+
+char * findDataPath()
+{
+
+    debug("* Searching for Fallout data files\n");
+
+    // Сначала ищем в текущей папке
+    {
+        debug(" - Searching in current directory: ");
+        char buffer[512];
+        char * cwd = getcwd(buffer, sizeof(buffer));
+        std::string path(cwd);
+        path.append("/master.dat");
+        std::ifstream stream(path.c_str());
+        debug(cwd);
+        if (stream)
+        {
+            debug(" - [OK]\n");
+
+            return cwd;
+        }
+        else
+        {
+            debug(" - [FAIL]\n");
+        }
+    }
+    // Потом ищем в домашней папке .falltergeist
+    {
+        debug(" - Searching in home directory: ");
+        char * cwd = getenv("HOME");
+        std::string path(cwd);
+        path.append("/.falltergeist/master.dat");
+        std::ifstream stream(path.c_str());
+        debug(cwd);
+        debug("/.falltergeist");
+        if (stream)
+        {
+            path.clear();
+            path.append(cwd);
+            path.append("/.falltergeist");
+            debug(" - [OK]\n");
+            return (char *) path.c_str();
+        }
+        else
+        {
+            debug(" - [FAIL]\n");
+        }
+    }
+
+    // Потом ищем подключенные диски и файлы в их корне
+    // @TODO
+    debug("[CRITICAL] Fallout data files are not founded\n", 0);
+    return 0;
 }
 
 

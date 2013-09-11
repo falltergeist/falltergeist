@@ -22,6 +22,7 @@
 #include "src/Engine/Surface.h"
 #include "src/Engine/ResourceManager.h"
 #include "src/States/StartState.h"
+#include "src/Engine/CrossPlatform.h"
 #include <SDL/SDL.h>
 #include <algorithm>
 #include "lib/libfalltergeist/libfalltergeist.h"
