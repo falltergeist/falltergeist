@@ -21,12 +21,16 @@
 #define FALLTERGEIST_CROSSPLATFORM_H
 
 #include <string>
+#include <list>
+#include <vector>
 
 namespace Falltergeist
 {
 namespace CrossPlatform
 {
-    char * findDataPath();
+    const char * findFileAlias(char * path, char * filename);
+    const char * findDataPath();
+    std::vector<std::string> * findDataFiles();
     void debug(const char * message, unsigned char level = 1);
 }
 }

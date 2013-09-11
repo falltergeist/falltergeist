@@ -30,6 +30,7 @@ namespace Falltergeist
 {
 
 std::vector<libfalltergeist::DatFile *> * ResourceManager::_datFiles = new std::vector<libfalltergeist::DatFile *>;
+std::map<std::string, libfalltergeist::DatFileItem *> * ResourceManager::_datFilesItems = new std::map<std::string, libfalltergeist::DatFileItem *>;
 std::map<std::string, Surface *> * ResourceManager::_surfaces = new std::map<std::string, Surface *>;
 
 const char * _t(unsigned int number, const char * filename)
@@ -42,10 +43,15 @@ const char * _t(unsigned int number, const char * filename)
 
 ResourceManager::ResourceManager()
 {
-    std::string path(CrossPlatform::findDataPath());
-    path.append("/master.dat");
-    _datFiles->push_back(new libfalltergeist::DatFile((char *)path.c_str()));
-    //_datFiles->push_back(new DatFile(homepath + "/.fallout/critter.dat"));
+    std::vector<std::string> * files = findDataFiles();
+    std::vector<std::string>::iterator it;
+    for (it = files->begin(); it != files->end(); ++it)
+    {
+        std::string path(CrossPlatform::findDataPath());
+        path.append("/");
+        path.append(*it);
+        _datFiles->push_back(new libfalltergeist::DatFile((char *)path.c_str()));
+    }
 }
 
 void ResourceManager::extract(const char * path)
@@ -71,11 +77,8 @@ void ResourceManager::extract(const char * path)
             {
                 std::cout << file.c_str() << " [FAIL]" << std::endl;
             }
-
         }
-
     }
-
 }
 
 ResourceManager::~ResourceManager()
@@ -89,12 +92,37 @@ ResourceManager::~ResourceManager()
 
 libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename)
 {
-    std::vector<libfalltergeist::DatFile *>::iterator it;
-    for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
+    // Return item from cache
+    if (_datFilesItems->find(filename) != _datFilesItems->end()) return _datFilesItems->at(filename);
+
+    // Searching file in Data directory
+    {
+        const char * alias = findFileAlias((char *) findDataPath(), (char *) filename.c_str());
+        if (alias)
+        {
+            std::string path(findDataPath());
+            path.append("/").append(alias);
+            std::ifstream stream(path.c_str());
+            if (stream.is_open())
+            {
+                //libfalltergeist::DatFileItem * item = new libfalltergeist::DatFileItem(0);
+                //item->setCompressed(false);
+                //
+                //item->setUnpackedSize(stream.);
+                //
+                //_datFilesItems->insert(std::make_pair(filename, item));
+                //return item;
+            }
+        }
+    }
+
+    std::vector<libfalltergeist::DatFile *>::reverse_iterator it;
+    for (it = _datFiles->rbegin(); it != _datFiles->rend(); ++it)
     {
         libfalltergeist::DatFileItem * item = (*it)->item((char *)filename.c_str());
         if (item)
         {
+            _datFilesItems->insert(std::make_pair(filename, item));
             return item;
         }
     }
