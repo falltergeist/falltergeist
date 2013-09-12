@@ -48,4 +48,10 @@ Surface * SurfaceSet::surface()
     return _surfaces->at(currentSurface);
 }
 
+SDL_Surface * SurfaceSet::sdl_surface()
+{
+    return surface()->sdl_surface();
+}
+
+
 }
