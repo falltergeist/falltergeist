@@ -31,6 +31,8 @@ protected:
     char * _bio;
     char * _name;
 
+    char _gender;
+
     unsigned int * _stats;
     unsigned int * _traits;
     unsigned int * _skills;
@@ -39,6 +41,7 @@ protected:
     unsigned int _skillPoints;
 
 public:
+    enum {GENDER_MALE = 0, GENDER_FEMALE = 1};
     enum {STATS_STRENGTH = 0, STATS_PERCEPTION, STATS_ENDURANCE, STATS_CHARISMA, STATS_INTELLIGENCE, STATS_AGILITY, STATS_LUCK };
     enum {TRAITS_1 = 0, // Fast Metabolism
           TRAITS_2, // Bruiser
@@ -164,6 +167,8 @@ public:
     unsigned int skillPoints();
     void setSkillPoints(unsigned int skillPoints);
 
+    char gender();
+    void setGender(char gender);
 
 };
 

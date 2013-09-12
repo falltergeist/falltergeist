@@ -38,6 +38,7 @@ protected:
     TextArea * _selectedLabel;
     TextArea * _title;
     TextArea * _description;
+    TextArea * _gender;
     //TextArea * _description;
     Surface * _selectedImage;
     Surface * _image;

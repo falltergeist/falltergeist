@@ -31,6 +31,7 @@ Player::Player()
     _skillPoints = 0;
     _bio = 0;    
     _name = 0;
+    _gender = 0;
     _stats = new unsigned int[7]();
     _traits = new unsigned int[16]();
     _skills = new unsigned int[18]();
@@ -42,6 +43,7 @@ Player::Player(libfalltergeist::GcdFileType * gcd)
     _skillPoints = 3;
     _bio = 0;
     _name = 0;
+    _gender = 0;
     _stats = new unsigned int[7]();
     _traits = new unsigned int[16]();
     _skills = new unsigned int[18]();
@@ -78,6 +80,8 @@ Player::Player(libfalltergeist::GcdFileType * gcd)
         this->setSkill(gcd->fourthTaggedSkill(), 1);
         if (_skillPoints > 0) _skillPoints--;
     }
+
+    this->setGender(gcd->gender());
 }
 
 Player::~Player()
@@ -283,6 +287,15 @@ void Player::setSkillPoints(unsigned int skillPoints)
     _skillPoints = skillPoints;
 }
 
+char Player::gender()
+{
+    return _gender;
+}
+
+void Player::setGender(char gender)
+{
+    _gender = gender;
+}
 
 }
 

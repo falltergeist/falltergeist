@@ -39,6 +39,7 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _images = new std::map<std::string, Surface *>;
 
 
+
     // Stats titles & descriptions
     {
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/stat.msg");
@@ -272,13 +273,37 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         const char * on = "art/intrface/lilreddn.frm";
         const char * off = "art/intrface/lilredup.frm";
         _addButton("options", new ImageButton(off, on, 345, 454));
-        _addButton("next", new ImageButton(off, on, 455, 450));
-        //_addButton("cancel", new ImageButton(off, on, 350, 450));
+        _addButton("next", new ImageButton(off, on, 455, 454));
+        _addButton("cancel", new ImageButton(off, on, 554, 454));
 
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
         _addLabel("options",  new TextArea(msg->message(101), 365, 453))->setColor(0xffb89c28)->setFont("font3.aaf");
-        _addLabel("next",  new TextArea(msg->message(100), 465, 453))->setColor(0xffb89c28)->setFont("font3.aaf");
+        _addLabel("next",  new TextArea(msg->message(100), 473, 453))->setColor(0xffb89c28)->setFont("font3.aaf");
+        _addLabel("cancel",  new TextArea(msg->message(102), 571, 453))->setColor(0xffb89c28)->setFont("font3.aaf");
+        //_addLabel("name",  new TextArea(_game->player()->name(), 17, 7))->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setColor(0xffb89c28)->setFont("font3.aaf");
+        //_addLabel("age",  new TextArea("AGE 21", 167, 7))->setColor(0xffb89c28)->setFont("font3.aaf");
+        _addLabel("gender",  new TextArea(msg->message(_game->player()->gender() == Player::GENDER_MALE ? 107 : 108), 255, 7))->setColor(0xffb89c28)->setFont("font3.aaf");
+
     }
+    // Name change button
+    {
+        const char * on  = "art/intrface/nameon.frm";
+        const char * off = "art/intrface/nameoff.frm";
+        _addButton("name",  new ImageButton(off, on, 13, 0));
+    }
+    // Age change button
+    {
+        const char * on  = "art/intrface/ageon.frm";
+        const char * off = "art/intrface/ageoff.frm";
+        _addButton("age",  new ImageButton(off, on, 156, 0));
+    }
+    //Gender change button
+    {
+        const char * on  = "art/intrface/sexon.frm";
+        const char * off = "art/intrface/sexoff.frm";
+        _addButton("gender",  new ImageButton(off, on, 236, 0));
+    }
+
 
     add(background);
 
@@ -335,6 +360,15 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _description->setHeight(120);
     _description->setWordWrap(true);
     add(_description);
+
+    // maleon.frm
+    // maleoff.frm
+    {
+        //libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+        //_gender = new TextArea(msg->message(_game->player()->gender() == Player::GENDER_MALE ? 107 : 108), 255, 7);
+        //_gender->setColor(0xffb89c28)->setFont("font3.aaf");
+        //add(_gender);
+    }
 }
 
 PlayerEditState::~PlayerEditState()
