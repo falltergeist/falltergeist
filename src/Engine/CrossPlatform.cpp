@@ -40,47 +40,47 @@ void debug(const char * message, unsigned char level)
 
 const char * findDataPath()
 {
-    debug("* Searching for Fallout data files\n");
+    //debug("* Searching for Fallout data files\n");
 
     // Сначала ищем в текущей папке
     {
-        debug(" - Searching in current directory: ");
+        //debug(" - Searching in current directory: ");
         char buffer[512];
         char * cwd = getcwd(buffer, sizeof(buffer));
         std::string path(cwd);
         path.append("/master.dat");
         std::ifstream stream(path.c_str());
-        debug(cwd);
+        //debug(cwd);
         if (stream)
         {
-            debug(" - [OK]\n");
+            //debug(" - [OK]\n");
             return cwd;
         }
         else
         {
-            debug(" - [FAIL]\n");
+            //debug(" - [FAIL]\n");
         }
     }
     // Потом ищем в домашней папке .falltergeist
     {
-        debug(" - Searching in home directory: ");
+        //debug(" - Searching in home directory: ");
         char * cwd = getenv("HOME");
         std::string path(cwd);
         path.append("/.falltergeist/master.dat");
         std::ifstream stream(path.c_str());
-        debug(cwd);
-        debug("/.falltergeist");
+        //debug(cwd);
+        //debug("/.falltergeist");
         if (stream)
         {
             path.clear();
             path.append(cwd);
             path.append("/.falltergeist");
-            debug(" - [OK]\n");
+            //debug(" - [OK]\n");
             return (char *) path.c_str();
         }
         else
         {
-            debug(" - [FAIL]\n");
+            //debug(" - [FAIL]\n");
         }
     }
 

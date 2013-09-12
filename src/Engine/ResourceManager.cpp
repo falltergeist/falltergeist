@@ -88,12 +88,25 @@ ResourceManager::~ResourceManager()
         delete _datFiles->back();
         _datFiles->pop_back();
     }
+
+    // @TODO
+    //while (!_datFilesItems->empty())
+    //{
+    //    delete _datFilesItems->back();
+    //    _datFilesItems->pop_back();
+    //}
+
 }
 
 libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename)
 {
+    std::cout << "[RESOURCE MANAGER] - Loading file: " << filename;
     // Return item from cache
-    if (_datFilesItems->find(filename) != _datFilesItems->end()) return _datFilesItems->at(filename);
+    if (_datFilesItems->find(filename) != _datFilesItems->end())
+    {
+        std::cout << " - [FROM CACHE]" << std::endl;
+        return _datFilesItems->at(filename);
+    }
 
     // Searching file in Data directory
     {
@@ -105,13 +118,20 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
             std::ifstream stream(path.c_str());
             if (stream.is_open())
             {
-                //libfalltergeist::DatFileItem * item = new libfalltergeist::DatFileItem(0);
-                //item->setCompressed(false);
-                //
-                //item->setUnpackedSize(stream.);
-                //
-                //_datFilesItems->insert(std::make_pair(filename, item));
-                //return item;
+                libfalltergeist::DatFileItem * item = new libfalltergeist::DatFileItem(0);
+                item->isOpened(true);
+                item->setFilename((char *) filename.c_str());
+                item->setCompressed(false);
+                stream.seekg(0,std::ios::end);
+                item->setUnpackedSize(stream.tellg());
+                item->setPackedSize(stream.tellg());
+                stream.seekg(0, std::ios::beg);
+                char * data = new char[item->unpackedSize()];
+                stream.read(data, item->unpackedSize());
+                item->setData(data);
+                _datFilesItems->insert(std::make_pair(filename, item));
+                std::cout << " - [FROM DATA DIR]" << std::endl;
+                return item;
             }
         }
     }
@@ -123,6 +143,7 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
         if (item)
         {
             _datFilesItems->insert(std::make_pair(filename, item));
+            std::cout << " - [FROM DAT FILE " <<  (*it)->pathToFile() << "]" << std::endl;
             return item;
         }
     }
