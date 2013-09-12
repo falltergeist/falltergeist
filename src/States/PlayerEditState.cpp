@@ -280,8 +280,8 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         _addLabel("options",  new TextArea(msg->message(101), 365, 453))->setColor(0xffb89c28)->setFont("font3.aaf");
         _addLabel("next",  new TextArea(msg->message(100), 473, 453))->setColor(0xffb89c28)->setFont("font3.aaf");
         _addLabel("cancel",  new TextArea(msg->message(102), 571, 453))->setColor(0xffb89c28)->setFont("font3.aaf");
-        //_addLabel("name",  new TextArea(_game->player()->name(), 17, 7))->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setColor(0xffb89c28)->setFont("font3.aaf");
-        //_addLabel("age",  new TextArea("AGE 21", 167, 7))->setColor(0xffb89c28)->setFont("font3.aaf");
+        _addLabel("name",  new TextArea(_game->player()->name(), 17, 7))->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setColor(0xffb89c28)->setFont("font3.aaf");
+        //_addLabel("age",  new TextArea("AGE 28", 167, 7))->setColor(0xffb89c28)->setFont("font3.aaf");
         _addLabel("gender",  new TextArea(msg->message(_game->player()->gender() == Player::GENDER_MALE ? 107 : 108), 255, 7))->setColor(0xffb89c28)->setFont("font3.aaf");
 
     }
@@ -513,10 +513,10 @@ void PlayerEditState::think()
 
 void PlayerEditState::onButtonClick(Event * event)
 {
-    for (unsigned int i = 0; i != 18; ++i)
-    {
+    //for (unsigned int i = 0; i != 18; ++i)
+    //{
         //std::cout << "SKILL "<< i << ": " << (int) _game->player()->skill(i) << std::endl;
-    }
+    //}
 
     std::map<std::string, ImageButton *>::iterator it;
     for(it = _buttons->begin(); it != _buttons->end(); ++it)
@@ -564,10 +564,14 @@ void PlayerEditState::onLabelClick(Event * event)
     std::map<std::string, TextArea *>::iterator it;
     for(it = _labels->begin(); it != _labels->end(); ++it)
     {
+        std::string name = it->first;
         if (it->second == event->sender())
         {
-            _selectedLabel = _labels->at(it->first);
-            _selectedImage = _images->at(it->first);
+            if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0)
+            {
+                _selectedLabel = _labels->at(it->first);
+                _selectedImage = _images->at(it->first);
+            }
         }
     }
 }
