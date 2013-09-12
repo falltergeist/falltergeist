@@ -55,6 +55,8 @@ set(SOURCES main.cpp
             src/Engine/Game.h
             src/Engine/InteractiveSurface.cpp
             src/Engine/InteractiveSurface.h
+            src/Engine/Mouse.cpp
+            src/Engine/Mouse.h
             src/Engine/Player.cpp
             src/Engine/Player.h
             src/Engine/ResourceManager.cpp

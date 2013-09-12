@@ -34,6 +34,7 @@ class Screen;
 class ResourceManager;
 class Player;
 class FpsCounter;
+class Mouse;
 
 class Game
 {
@@ -43,6 +44,7 @@ protected:
     std::vector<State *> * _deletedStates;
     Player * _player;
     Screen * _screen;
+    Mouse * _mouse;
     FpsCounter * _fpsCounter;
     bool _quit;
     SDL_Event _event;

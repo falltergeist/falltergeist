@@ -24,6 +24,7 @@
 #include "../Engine/Player.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Screen.h"
+#include "../Engine/Mouse.h"
 #include "../Engine/State.h"
 #include "../UI/FpsCounter.h"
 #include "../UI/TextArea.h"
@@ -55,6 +56,7 @@ Game::Game(int width, int height, int bpp) : _states()
     _resourceManager = new ResourceManager();
 
     _screen = new Screen(width, height,bpp);
+    _mouse = new Mouse();
     _fpsCounter = new FpsCounter();
     _quit = false;
     _states = new std::vector<State *>;
@@ -66,6 +68,7 @@ Game::~Game()
 {
     delete _player;
     delete _screen;
+    delete _mouse;
 
     while (!_states->empty())
     {
@@ -151,6 +154,8 @@ void Game::run()
         _screen->clear();
         _states->back()->think();
         _fpsCounter->think();
+        _mouse->think();
+
         // render all states that is over the last fullscreen state
         std::vector<State*>::iterator i = _states->end();
         do { --i; }
@@ -158,6 +163,7 @@ void Game::run()
         for (; i != _states->end(); ++i) (*i)->blit();
         falltergeistVersion->blit(_screen->surface());
         _fpsCounter->blit(_screen->surface());
+        _mouse->blit(_screen->surface());
         _screen->flip();
         SDL_Delay(1);
     }
