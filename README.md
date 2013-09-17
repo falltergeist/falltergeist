@@ -16,7 +16,7 @@ cmake . && make
 
 ## Running under linux
 
-Put master.dat and critter.dat files into ~/.fallout/ folder
+Put master.dat and critter.dat files into ~/.falltergeist/ folder
 then run 
 ```
 ./falltergeist
