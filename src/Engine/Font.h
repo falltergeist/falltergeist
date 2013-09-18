@@ -35,7 +35,7 @@ protected:
     unsigned int _color;
     libfalltergeist::AafFileType * _aafFileType;
 public:
-    Font(const char * filename, unsigned int color = 0x00FF00FF);
+    Font(const char * filename, unsigned int color = 0xFF3FF800);
     ~Font();
 
     void setFilename(const char * filename);

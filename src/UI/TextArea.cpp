@@ -42,7 +42,7 @@ TextArea::TextArea(libfalltergeist::MsgMessage * message, int x, int y) : Intera
     _height = 0;
     _calculatedWidth = 0;
     _calculatedHeight = 0;
-    _color = 0xFF00FF00;
+    _color = 0xFF3FF800;
     _font = new Font("font1.aaf", _color);
     _wordWrap = false;
     this->setText(message->text());

@@ -76,6 +76,28 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         }
     }
 
+    // Health condition titles & descriptions
+    {
+        _addDescription("health_1", _game->resourceManager()->msgFileType("text/english/game/stat.msg")->message(207)->text());
+        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+        _addTitle("health_1", msg->message(300)->text());
+
+        for (unsigned int i = 0; i != 7; ++i)
+        {
+            std::stringstream ss;
+            ss << "health_" << (i+2);
+            _addTitle(ss.str(), msg->message(312 + i)->text());
+            _addDescription(ss.str(), msg->message(400 + i)->text());
+        }
+    }
+
+    // Player params
+    {
+        //libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+
+    }
+
+
     // Images
     {
         const char * stats[] = { "strength", "perceptn", "endur", "charisma", "intel", "agility", "luck"};
@@ -115,6 +137,31 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
             Surface * surface = _game->resourceManager()->surface(filename.str().c_str());
             _addImage(name.str(), surface);
         }
+
+        const char * health[] = { "hitpoint", "poisoned", "radiated", "eyedamag", "armright", "armleft", "legright", "legleft"};
+        for (unsigned int i = 0; i != 8; ++i)
+        {
+            std::stringstream name;
+            name << "health_" << (i+1);
+
+            std::stringstream filename;
+            filename << "art/skilldex/" << health[i] << ".frm";
+            Surface * surface = _game->resourceManager()->surface(filename.str().c_str());
+            _addImage(name.str(), surface);
+        }
+
+        const char * params[] = {"armorcls", "actionpt", "carryamt", "meleedam", "damresis", "poisnres", "radresis", "sequence", "healrate", "critchnc"};
+        for (unsigned int i = 0; i != 10; ++i)
+        {
+            std::stringstream name;
+            name << "params_" << (i+1);
+
+            std::stringstream filename;
+            filename << "art/skilldex/" << params[i] << ".frm";
+            Surface * surface = _game->resourceManager()->surface(filename.str().c_str());
+            _addImage(name.str(), surface);
+        }
+
 
     }
 
@@ -268,19 +315,48 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         _addLabel("skills_17", new TextArea(msg->message(116), 377, 27 + 11*16))->setWidth(240);
         _addLabel("skills_18", new TextArea(msg->message(117), 377, 27 + 11*17))->setWidth(240);
     }
+    // Health condition
+    {
+        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+
+        _addLabel("health_1",  new TextArea(msg->message(300), 194, 46)); //health
+        _addLabel("health_2",  new TextArea(msg->message(312), 194, 46 + 13*1))->setColor(0xFF183018); //poisoning
+        _addLabel("health_3",  new TextArea(msg->message(313), 194, 46 + 13*2))->setColor(0xFF183018);
+        _addLabel("health_4",  new TextArea(msg->message(314), 194, 46 + 13*3))->setColor(0xFF183018);
+        _addLabel("health_5",  new TextArea(msg->message(315), 194, 46 + 13*4))->setColor(0xFF183018);
+        _addLabel("health_6",  new TextArea(msg->message(316), 194, 46 + 13*5))->setColor(0xFF183018);
+        _addLabel("health_7",  new TextArea(msg->message(317), 194, 46 + 13*6))->setColor(0xFF183018);
+        _addLabel("health_8",  new TextArea(msg->message(318), 194, 46 + 13*7))->setColor(0xFF183018);
+    }
+    // Player params
+    {
+        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+
+        _addLabel("params_1",  new TextArea(msg->message(302), 194, 182));
+        _addLabel("params_2",  new TextArea(msg->message(301), 194, 182 + 13*1));
+        _addLabel("params_3",  new TextArea(msg->message(311), 194, 182 + 13*2));
+        _addLabel("params_4",  new TextArea(msg->message(304), 194, 182 + 13*3));
+        _addLabel("params_5",  new TextArea(msg->message(305), 194, 182 + 13*4));
+        _addLabel("params_6",  new TextArea(msg->message(306), 194, 182 + 13*5));
+        _addLabel("params_7",  new TextArea(msg->message(307), 194, 182 + 13*6));
+        _addLabel("params_8",  new TextArea(msg->message(308), 194, 182 + 13*7));
+        _addLabel("params_9",  new TextArea(msg->message(309), 194, 182 + 13*8));
+        _addLabel("params_10", new TextArea(msg->message(310), 194, 182 + 13*9));
+    }
+
 
     {
         const char * on = "art/intrface/lilreddn.frm";
         const char * off = "art/intrface/lilredup.frm";
         _addButton("options", new ImageButton(off, on, 345, 454));
-        _addButton("next", new ImageButton(off, on, 455, 454));
-        _addButton("cancel", new ImageButton(off, on, 554, 454));
+        _addButton("next",    new ImageButton(off, on, 455, 454));
+        _addButton("cancel",  new ImageButton(off, on, 554, 454));
 
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
-        _addLabel("options",  new TextArea(msg->message(101), 365, 453))->setColor(0xffb89c28)->setFont("font3.aaf");
-        _addLabel("next",  new TextArea(msg->message(100), 473, 453))->setColor(0xffb89c28)->setFont("font3.aaf");
+        _addLabel("options", new TextArea(msg->message(101), 365, 453))->setColor(0xffb89c28)->setFont("font3.aaf");
+        _addLabel("next",    new TextArea(msg->message(100), 473, 453))->setColor(0xffb89c28)->setFont("font3.aaf");
         _addLabel("cancel",  new TextArea(msg->message(102), 571, 453))->setColor(0xffb89c28)->setFont("font3.aaf");
-        _addLabel("name",  new TextArea(_game->player()->name(), 17, 7))->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setColor(0xffb89c28)->setFont("font3.aaf");
+        _addLabel("name",    new TextArea(_game->player()->name(), 17, 7))->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setColor(0xffb89c28)->setFont("font3.aaf");
         //_addLabel("age",  new TextArea("AGE 28", 167, 7))->setColor(0xffb89c28)->setFont("font3.aaf");
         _addLabel("gender",  new TextArea(msg->message(_game->player()->gender() == Player::GENDER_MALE ? 107 : 108), 255, 7))->setColor(0xffb89c28)->setFont("font3.aaf");
 
@@ -438,19 +514,31 @@ void PlayerEditState::think()
             // default colors            
             if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0)
             {
-                it->second->setColor(0xFF00FF00);
+                it->second->setColor(0xFF3FF800);
             }
 
             if (name.find("traits_") == 0)
             {
                 unsigned int number = atoi(name.substr(7).c_str());
-                if (_game->player()->trait(number - 1) == 1) it->second->setColor(0xFF999999);
+                if (_game->player()->trait(number - 1) == 1) it->second->setColor(0xFFA0A0A0);
             }
 
             if (name.find("skills_") == 0)
             {
                 unsigned int number = atoi(name.substr(7).c_str());
-                if (_game->player()->skill(number - 1) == 1) it->second->setColor(0xFF999999);
+                if (_game->player()->skill(number - 1) == 1) it->second->setColor(0xFFA0A0A0);
+            }
+
+            if (name.find("health_") == 0)
+            {
+                if (name.compare("health_1") == 0)
+                {
+                    it->second->setColor(0xFF3FF800);
+                }
+                else
+                {
+                    it->second->setColor(0xFF183018);
+                }
             }
 
             // selected color
@@ -458,7 +546,7 @@ void PlayerEditState::think()
             {
                 if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0)
                 {
-                    it->second->setColor(0xFFFDF998);
+                    it->second->setColor(0xFFFFFF7F);
                 }
 
                 if (name.find("traits_") == 0)
@@ -471,6 +559,18 @@ void PlayerEditState::think()
                 {
                     unsigned int number = atoi(name.substr(7).c_str());
                     if (_game->player()->skill(number - 1) == 1) it->second->setColor(0xFFFFFFFF);
+                }
+
+                if (name.find("health_") == 0)
+                {
+                    if (name.compare("health_1") == 0)
+                    {
+                        it->second->setColor(0xFFFFFF7F);
+                    }
+                    else
+                    {
+                        it->second->setColor(0xFF707820);
+                    }
                 }
             }
         }
@@ -567,7 +667,7 @@ void PlayerEditState::onLabelClick(Event * event)
         std::string name = it->first;
         if (it->second == event->sender())
         {
-            if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0)
+            if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0)
             {
                 _selectedLabel = _labels->at(it->first);
                 _selectedImage = _images->at(it->first);
