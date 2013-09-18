@@ -49,8 +49,8 @@ ResourceManager::ResourceManager()
     {
         std::string path(CrossPlatform::findDataPath());
         path.append("/");
-        path.append(*it);
-        _datFiles->push_back(new libfalltergeist::DatFile((char *)path.c_str()));
+        path.append((*it));
+        _datFiles->push_back(new libfalltergeist::DatFile(path.c_str()));
     }
 }
 
@@ -108,6 +108,7 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
         return _datFilesItems->at(filename);
     }
 
+
     // Searching file in Data directory
     {
         const char * alias = findFileAlias((char *) findDataPath(), (char *) filename.c_str());
@@ -139,7 +140,7 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
     std::vector<libfalltergeist::DatFile *>::reverse_iterator it;
     for (it = _datFiles->rbegin(); it != _datFiles->rend(); ++it)
     {
-        libfalltergeist::DatFileItem * item = (*it)->item((char *)filename.c_str());
+        libfalltergeist::DatFileItem * item = (*it)->item(filename.c_str());
         if (item)
         {
             _datFilesItems->insert(std::make_pair(filename, item));
