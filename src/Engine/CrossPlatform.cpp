@@ -86,7 +86,7 @@ const char * findDataPath()
 
     // Потом ищем подключенные диски и файлы в их корне
     // @TODO
-    debug("[CRITICAL] Fallout data files are not founded\n", 0);
+    debug("[CRITICAL] Fallout data files were not found\n", 0);
     return 0;
 }
 
@@ -101,7 +101,7 @@ std::vector<std::string> * findDataFiles()
     struct dirent * pxItem = NULL;
     if(pxDir != NULL)
     {
-        while(pxItem = readdir(pxDir))
+        while((pxItem = readdir(pxDir)))
         {
             std::string filename(pxItem->d_name);
             std::transform(filename.begin(),filename.end(),filename.begin(), ::tolower);
@@ -149,8 +149,8 @@ const char * findFileAlias(char * path, char * filename)
         std::string sfilename(filename);
         std::string spath(path);
         std::string folder(sfilename.substr(0, pos));
-        // Проверить есть ли такая папка
-        while (entry = readdir(dir))
+        // check whether there is a folder
+        while ((entry = readdir(dir)))
         {
             std::string dirname(entry->d_name);
             std::transform(dirname.begin(),dirname.end(),dirname.begin(), ::tolower);
@@ -171,7 +171,7 @@ const char * findFileAlias(char * path, char * filename)
     }
     else
     {
-        while (entry = readdir(dir))
+        while ((entry = readdir(dir)))
         {
             std::string fname(entry->d_name);
             std::transform(fname.begin(),fname.end(),fname.begin(), ::tolower);

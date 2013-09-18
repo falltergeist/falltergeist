@@ -34,12 +34,6 @@ if(NOT SDL_FOUND)
 endif(NOT SDL_FOUND)
 include_directories(SDL_INCLUDE_DIR)
 
-find_package(ZLIB REQUIRED)
-if(NOT ZLIB_FOUND)
-	  message(FATAL_ERROR "Zlib library not found")
-endif(NOT ZLIB_FOUND)
-include_directories(ZLIB_INCLUDE_DIRS)
-
 set(SOURCES main.cpp
             src/Engine/Animation.cpp
             src/Engine/Animation.h
@@ -92,5 +86,5 @@ set(CMAKE_BUILD_TYPE Debug)
 set(dir ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 set(EXECUTABLE_OUTPUT_PATH ${dir} CACHE PATH "Build directory" FORCE)
 add_executable(falltergeist ${SOURCES})
-target_link_libraries(falltergeist ${SDL_LIBRARY} ${ZLIB_LIBRARIES} ${LIBFALLTERGEIST_LIBRARY})
+target_link_libraries(falltergeist ${SDL_LIBRARY} ${LIBFALLTERGEIST_LIBRARY})
 
