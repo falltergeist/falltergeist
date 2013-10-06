@@ -28,8 +28,8 @@ namespace Falltergeist
 {
 namespace CrossPlatform
 {
-    const char * findFileAlias(char * path, char * filename);
-    const char * findDataPath();
+    std::string findFileAlias(std::string path, std::string filename);
+    std::string findDataPath();
     std::vector<std::string> * findDataFiles();
     void debug(const char * message, unsigned char level = 1);
 }

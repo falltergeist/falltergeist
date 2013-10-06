@@ -38,7 +38,7 @@ void debug(const char * message, unsigned char level)
     std::cout << message;
 }
 
-const char * findDataPath()
+std::string findDataPath()
 {
     //debug("* Searching for Fallout data files\n");
 
@@ -49,12 +49,15 @@ const char * findDataPath()
         char * cwd = getcwd(buffer, sizeof(buffer));
         std::string path(cwd);
         path.append("/master.dat");
+        std::cout << path << std::endl;
         std::ifstream stream(path.c_str());
         //debug(cwd);
         if (stream)
         {
             //debug(" - [OK]\n");
-            return cwd;
+            path.clear();
+            path.append(cwd);
+            return path;
         }
         else
         {
@@ -76,7 +79,7 @@ const char * findDataPath()
             path.append(cwd);
             path.append("/.falltergeist");
             //debug(" - [OK]\n");
-            return (char *) path.c_str();
+            return path;
         }
         else
         {
@@ -92,12 +95,12 @@ const char * findDataPath()
 
 std::vector<std::string> * findDataFiles()
 {
-    debug("* Getting list of data files\n");
+    //debug("* Getting list of data files\n");
     std::vector<std::string> * files = new std::vector<std::string>;
     files->push_back(""); // for master.dat
     files->push_back(""); // for critter.dat
 
-    DIR * pxDir = opendir(findDataPath());
+    DIR * pxDir = opendir(findDataPath().c_str());
     struct dirent * pxItem = NULL;
     if(pxDir != NULL)
     {
@@ -133,22 +136,21 @@ std::vector<std::string> * findDataFiles()
         debug("[CRITICAL] critter.dat not found!\n");
         return 0;
     }
-    std::cout << "Found: " << files->size() << std::endl;
+    //std::cout << "Found: " << files->size() << std::endl;
     return files;
 }
 
-const char * findFileAlias(char * path, char * filename)
+std::string findFileAlias(std::string path, std::string filename)
 {
-    DIR * dir = opendir(path);
+    DIR * dir = opendir(path.c_str());
     if (!dir) return 0;
     struct dirent * entry;
+
+    int pos = filename.find('/');
     //complex filename
-    if (char * chr = strchr(filename, '/'))
+    if (pos > 0)
     {
-        int pos = chr - filename;
-        std::string sfilename(filename);
-        std::string spath(path);
-        std::string folder(sfilename.substr(0, pos));
+        std::string folder(filename.substr(0, pos));
         // check whether there is a folder
         while ((entry = readdir(dir)))
         {
@@ -156,15 +158,15 @@ const char * findFileAlias(char * path, char * filename)
             std::transform(dirname.begin(),dirname.end(),dirname.begin(), ::tolower);
             if (dirname.compare(folder) == 0 && entry->d_type == DT_DIR)
             {
-                spath.append("/").append(entry->d_name);
-                const char * alias = findFileAlias((char *) spath.c_str(), (char *) sfilename.substr(pos+1, sfilename.length()).c_str());
-                if (alias)
+                path.append("/").append(entry->d_name);
+                std::string alias = findFileAlias(path, filename.substr(pos+1, filename.length()));
+                if (alias.length())
                 {
                     std::string newname(entry->d_name);
                     newname.append("/");
                     newname.append(alias);
                     closedir(dir);
-                    return newname.c_str();
+                    return newname;
                 }
             }
         }
@@ -177,7 +179,9 @@ const char * findFileAlias(char * path, char * filename)
             std::transform(fname.begin(),fname.end(),fname.begin(), ::tolower);
             if (fname.compare(filename) == 0 && entry->d_type != DT_DIR)
             {
-                return entry->d_name;
+                fname.clear();
+                fname.append(entry->d_name);
+                return fname;
             }
         }
     }

@@ -32,6 +32,7 @@ Player::Player()
     _bio = 0;    
     _name = 0;
     _gender = 0;
+    _age = 0;
     _stats = new unsigned int[7]();
     _traits = new unsigned int[16]();
     _skills = new unsigned int[18]();
@@ -57,6 +58,7 @@ Player::Player(libfalltergeist::GcdFileType * gcd)
     this->setLuck(            gcd->luck());
     this->setCharacterPoints( gcd->characterPoints());
     this->setName(            gcd->name());
+    this->setAge(             gcd->age());
     this->setTrait(gcd->firstTrait(), 1);
     this->setTrait(gcd->secondTrait(), 1);
 
@@ -295,6 +297,16 @@ char Player::gender()
 void Player::setGender(char gender)
 {
     _gender = gender;
+}
+
+void Player::setAge(unsigned char age)
+{
+    _age = age;
+}
+
+unsigned char Player::age()
+{
+    return _age;
 }
 
 }

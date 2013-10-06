@@ -30,6 +30,7 @@ protected:
     // text from .bio file
     char * _bio;
     char * _name;
+    unsigned char _age;
 
     char _gender;
 
@@ -147,6 +148,9 @@ public:
 
     void setName(const char * name);    
     const char * bio();
+
+    void setAge(unsigned char age);
+    unsigned char age();
 
     void setBio(const char * text);
     const char * name();

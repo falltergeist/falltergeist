@@ -65,8 +65,10 @@ public:
 
     void onMaskClick(Event * event);
     void onButtonClick(Event * event);
+    void onAgeButtonClick(Event * event);
+    void onNameButtonClick(Event * event);
+    void onGenderButtonClick(Event * event);
     void onLabelClick(Event * event);
-
 };
 
 }

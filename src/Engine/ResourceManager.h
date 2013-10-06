@@ -45,6 +45,7 @@ protected:
     static std::vector<libfalltergeist::DatFile *> * _datFiles;
     static std::map<std::string, libfalltergeist::DatFileItem *> * _datFilesItems;
     static std::map<std::string, Surface *> * _surfaces;
+    static std::string _dataPath;
 
 public:
     ResourceManager();

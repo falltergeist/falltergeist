@@ -18,6 +18,7 @@
  */
 
 #include "../States/PlayerEditState.h"
+#include "../States/PlayerEditAgeState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Player.h"
 #include "../Engine/ResourceManager.h"
@@ -357,7 +358,7 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         _addLabel("next",    new TextArea(msg->message(100), 473, 453))->setColor(0xffb89c28)->setFont("font3.aaf");
         _addLabel("cancel",  new TextArea(msg->message(102), 571, 453))->setColor(0xffb89c28)->setFont("font3.aaf");
         _addLabel("name",    new TextArea(_game->player()->name(), 17, 7))->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setColor(0xffb89c28)->setFont("font3.aaf");
-        //_addLabel("age",  new TextArea("AGE 28", 167, 7))->setColor(0xffb89c28)->setFont("font3.aaf");
+        _addLabel("age",     new TextArea("AGE", 163, 7))->setColor(0xffb89c28)->setFont("font3.aaf");
         _addLabel("gender",  new TextArea(msg->message(_game->player()->gender() == Player::GENDER_MALE ? 107 : 108), 255, 7))->setColor(0xffb89c28)->setFont("font3.aaf");
 
     }
@@ -511,6 +512,14 @@ void PlayerEditState::think()
         {
             std::string name = it->first;
 
+            if (name.compare("age") == 0)
+            {
+                std::stringstream ss;
+                ss << msg->message(104)->text() << " " << (unsigned int) _game->player()->age();
+                it->second->setText(ss.str().c_str());
+
+            }
+
             // default colors            
             if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0)
             {
@@ -609,10 +618,11 @@ void PlayerEditState::think()
         }
     }
 
+
 }
 
 void PlayerEditState::onButtonClick(Event * event)
-{
+{    
     //for (unsigned int i = 0; i != 18; ++i)
     //{
         //std::cout << "SKILL "<< i << ": " << (int) _game->player()->skill(i) << std::endl;
@@ -624,6 +634,19 @@ void PlayerEditState::onButtonClick(Event * event)
         if (it->second == event->sender())
         {
             std::string name = it->first;
+
+            if (name.compare("name") == 0)
+            {
+                return onNameButtonClick(event);
+            }
+            if (name.compare("age") == 0)
+            {
+                return onAgeButtonClick(event);
+            }
+            if (name.compare("gender") == 0)
+            {
+                return onGenderButtonClick(event);
+            }
 
             if (name.find("stats_") == 0)
             {
@@ -691,6 +714,24 @@ void PlayerEditState::onMaskClick(Event * event)
             }
         }
     }
+}
+
+
+void PlayerEditState::onNameButtonClick(Event * event)
+{
+    //std::cout << "Name BUTTON CLICKED" << std::endl;
+    //_game->quit();
+}
+
+void PlayerEditState::onAgeButtonClick(Event * event)
+{
+    _game->pushState(new PlayerEditAgeState(_game));
+}
+
+void PlayerEditState::onGenderButtonClick(Event * event)
+{
+    //std::cout << "Gender BUTTON CLICKED" << std::endl;
+    //_game->quit();
 }
 
 }
