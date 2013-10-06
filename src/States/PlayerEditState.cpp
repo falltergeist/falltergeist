@@ -20,6 +20,7 @@
 #include "../States/PlayerEditState.h"
 #include "../States/PlayerEditAgeState.h"
 #include "../States/PlayerEditGenderState.h"
+#include "../States/PlayerEditNameState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Player.h"
 #include "../Engine/ResourceManager.h"
@@ -505,6 +506,11 @@ void PlayerEditState::think()
         {
             std::string name = it->first;
 
+            if (name.compare("name") == 0)
+            {
+                it->second->setText(_game->player()->name());
+            }
+
             if (name.compare("age") == 0)
             {
                 std::stringstream ss;
@@ -717,8 +723,7 @@ void PlayerEditState::onMaskClick(Event * event)
 
 void PlayerEditState::onNameButtonClick(Event * event)
 {
-    //std::cout << "Name BUTTON CLICKED" << std::endl;
-    //_game->quit();
+    _game->pushState(new PlayerEditNameState(_game));
 }
 
 void PlayerEditState::onAgeButtonClick(Event * event)

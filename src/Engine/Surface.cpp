@@ -115,7 +115,7 @@ Surface * Surface::visible(bool visible)
 
 bool Surface::visible()
 {
-    return _visible;
+    return (bool)_visible;
 }
 
 Surface * Surface::think()
@@ -125,6 +125,7 @@ Surface * Surface::think()
 
 Surface * Surface::draw()
 {
+    if (!visible()) return this;
     if (!needRedraw()) return this;
     needRedraw(false);
     clear();
@@ -197,17 +198,19 @@ Surface * Surface::crop(int xOffset, int yOffset, int width, int height)
 
 Surface * Surface::blit(Surface * surface)
 {
-    if (visible())
-    {
-        draw();
-        SDL_Rect dest = {x(), y(), width(), height()};
-        SDL_BlitSurface(this->sdl_surface(), NULL, surface->sdl_surface(), &dest);
-    }
+    if (!visible()) return this;
+
+    draw();
+    SDL_Rect dest = {x(), y(), width(), height()};
+    SDL_BlitSurface(this->sdl_surface(), NULL, surface->sdl_surface(), &dest);
+
     return this;
 }
 
 Surface * Surface::copyTo(Surface * surface)
 {
+    if (!visible()) return this;
+
     for (unsigned int y = 0; y != height(); ++y)
     {
         for (unsigned int x = 0; x != width(); ++x)
@@ -223,6 +226,7 @@ Surface * Surface::copyTo(Surface * surface)
 
 unsigned int Surface::pixel(int x, int y)
 {
+    if (!visible()) return 0;
     // if out of bounds
     if (x < 0 || y < 0 || ((unsigned int) x > width() - 1) || ((unsigned int) y > height() - 1) ) return 0;
 

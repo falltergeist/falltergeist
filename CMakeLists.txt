@@ -73,6 +73,8 @@ set(SOURCES main.cpp
             src/States/PlayerEditAgeState.h
             src/States/PlayerEditGenderState.cpp
             src/States/PlayerEditGenderState.h
+            src/States/PlayerEditNameState.cpp
+            src/States/PlayerEditNameState.h
             src/States/StartState.cpp
             src/States/StartState.h
             src/UI/BigCounter.cpp

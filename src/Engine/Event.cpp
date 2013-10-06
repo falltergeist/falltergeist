@@ -18,6 +18,7 @@
  */
 
 #include "../Engine/Event.h"
+#include <iostream>
 
 namespace Falltergeist
 {

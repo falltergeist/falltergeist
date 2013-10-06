@@ -33,7 +33,7 @@ protected:
     SDL_Surface * _sdl_surface;
     int _x; // x position
     int _y; // y position
-    bool _visible; // if false - not render
+    bool _visible; // if false - do not render
     bool _needRedraw; // surface changed? draw function will be called
 
     unsigned int _borderColor; // for debugging. @TODO must be removed in future

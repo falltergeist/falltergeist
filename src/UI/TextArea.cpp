@@ -59,7 +59,7 @@ TextArea::TextArea(const char * text, int x, int y) : InteractiveSurface(0, 0, x
     _height = 0;
     _calculatedWidth = 0;
     _calculatedHeight = 0;
-    _color = 0xFF00FF00;
+    _color = 0xFF3FF800;
     _font = new Font("font1.aaf", _color);
     _wordWrap = false;
     this->setText(text);
@@ -204,7 +204,13 @@ TextArea * TextArea::draw()
     if (!_font) throw Exception("TextArea::draw() - font is not setted");
 
     // if text is empty
-    if (_text == 0 || strlen(_text) == 0) throw Exception("TextArea::draw() - text is 0");
+    if (_text == 0 || strlen(_text) == 0)
+    {
+        loadFromSurface(new Surface(0, 0, this->x(), this->y()));
+        //throw Exception("TextArea::draw() - text is 0");
+
+        return this;
+    }
 
 
     _calculateSize();
