@@ -23,7 +23,22 @@
 
 namespace Falltergeist
 {
-    
+/*
+
+СИЛА:
+    Здоровье = 15 + 1*СИ + 2*ВН
+    Максимальный груз = 25 + 25*СИ
+    Урон х.ор. = 1 1 1 1 1 1 2 3 4 5
+
+    Без оружия
+    Холодное
+
+
+
+
+
+
+*/
 class Player
 {
 protected:
@@ -31,10 +46,12 @@ protected:
     char * _bio;
     char * _name;
     unsigned char _age;
+    int _hitPoints;
 
     char _gender;
 
     unsigned int * _stats;
+    unsigned int * _statsBonus;
     unsigned int * _traits;
     unsigned int * _skills;
 
@@ -76,7 +93,7 @@ public:
           TRAITS_CHEM_RESISTANT,
           TRAITS_SEX_APPEAL,
           TRAITS_SKILLED,
-          TRAITS_GIFTES
+          TRAITS_GIFTED
          };
     enum { SKILLS_1 = 0, // Small Guns
            SKILLS_2, // Big Guns
@@ -120,24 +137,38 @@ public:
     // primary stats
     unsigned int strength();
     void setStrength(unsigned int strength);
+    unsigned int strengthBonus();
+    void setStrengthBonus(unsigned int bonus);
 
     unsigned int perception();
     void setPerception(unsigned int perception);
+    unsigned int perceptionBonus();
+    void setPerceptionBonus(unsigned int bonus);
 
     unsigned int endurance();
     void setEndurance(unsigned int endurance);
+    unsigned int enduranceBonus();
+    void setEnduranceBonus(unsigned int bonus);
 
     unsigned int charisma();
     void setCharisma(unsigned int charisma);
+    unsigned int charismaBonus();
+    void setCharismaBonus(unsigned int bonus);
 
     unsigned int intelligence();
     void setIntelligence(unsigned int intelligence);
+    unsigned int intelligenceBonus();
+    void setIntelligenceBonus(unsigned int bonus);
 
     unsigned int agility();
     void setAgility(unsigned int agility);
+    unsigned int agilityBonus();
+    void setAgilityBonus(unsigned int bonus);
 
     unsigned int luck();
     void setLuck(unsigned int luck);
+    unsigned int luckBonus();
+    void setLuckBonus(unsigned int bonus);
 
     unsigned int characterPoints();
     void setCharacterPoints(unsigned int characterPoints);
@@ -170,6 +201,9 @@ public:
 
     unsigned int skillPoints();
     void setSkillPoints(unsigned int skillPoints);
+
+    int hitPoints();
+    void setHitPoints(int hitPoints);
 
     char gender();
     void setGender(char gender);

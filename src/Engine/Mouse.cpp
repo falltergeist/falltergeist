@@ -7,7 +7,8 @@ namespace Falltergeist
 
 Mouse::Mouse()
 {
-    loadFromSurface(ResourceManager::surface("art/intrface/actarrow.frm"));
+    //loadFromSurface(ResourceManager::surface("art/intrface/actarrow.frm"));
+    loadFromSurface(ResourceManager::surface("art/intrface/stdarrow.frm"));
     // Hide cursor
     SDL_ShowCursor(0);
 }

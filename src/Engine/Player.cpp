@@ -31,9 +31,11 @@ Player::Player()
     _skillPoints = 0;
     _bio = 0;    
     _name = 0;
+    _hitPoints = 0;
     _gender = 0;
     _age = 0;
     _stats = new unsigned int[7]();
+    _statsBonus = new unsigned int[7]();
     _traits = new unsigned int[16]();
     _skills = new unsigned int[18]();
 }
@@ -44,21 +46,43 @@ Player::Player(libfalltergeist::GcdFileType * gcd)
     _skillPoints = 3;
     _bio = 0;
     _name = 0;
+    _hitPoints = 0;
     _gender = 0;
     _stats = new unsigned int[7]();
+    _statsBonus = new unsigned int[7]();
     _traits = new unsigned int[16]();
     _skills = new unsigned int[18]();
 
     this->setStrength(        gcd->strength());
+    this->setStrengthBonus(   gcd->strengthBonus());
+
     this->setPerception(      gcd->perception());
+    this->setPerceptionBonus( gcd->perceptionBonus());
+
     this->setEndurance(       gcd->endurance());
+    this->setEnduranceBonus(  gcd->enduranceBonus());
+
     this->setCharisma(        gcd->charisma());
+    this->setCharismaBonus(   gcd->charismaBonus());
+
     this->setIntelligence(    gcd->intelligence());
+    this->setIntelligenceBonus(gcd->intelligenceBonus());
+
     this->setAgility(         gcd->agility());
+    this->setAgilityBonus(    gcd->agilityBonus());
+
     this->setLuck(            gcd->luck());
+    this->setLuckBonus(       gcd->luckBonus());
+
     this->setCharacterPoints( gcd->characterPoints());
     this->setName(            gcd->name());
     this->setAge(             gcd->age());
+
+    //this->setHitPoints(       gcd->hitPoints());
+
+    //std::cout << "STR bonus: " << gcd->strengthBonus() << std::endl;
+    //std::cout << "Hit points bonus: " << gcd->hitPointsBonus() << std::endl;
+
     this->setTrait(gcd->firstTrait(), 1);
     this->setTrait(gcd->secondTrait(), 1);
 
@@ -132,7 +156,7 @@ bool Player::statsIncrease(unsigned char stat)
 
 bool Player::statsDecrease(unsigned char stat)
 {
-    if (_stats[stat] <= 2) return false;
+    if (_stats[stat] <= 2 + _statsBonus[stat]) return false;
 
     _stats[stat]--;
     _characterPoints++;
@@ -149,6 +173,19 @@ void Player::setStrength(unsigned int strength)
     _stats[STATS_STRENGTH] = strength;
 }
 
+unsigned int Player::strengthBonus()
+{
+    unsigned int bonus = 0;
+    if (this->trait(TRAITS_GIFTED)) bonus += 1;
+    if (this->trait(TRAITS_BRUISER)) bonus += 2;
+    return _statsBonus[STATS_STRENGTH] + bonus;
+}
+
+void Player::setStrengthBonus(unsigned int bonus)
+{
+    _statsBonus[STATS_STRENGTH] = bonus;
+}
+
 unsigned int Player::perception()
 {
     return _stats[STATS_PERCEPTION];
@@ -157,6 +194,18 @@ unsigned int Player::perception()
 void Player::setPerception(unsigned int perception)
 {
     _stats[STATS_PERCEPTION] = perception;
+}
+
+unsigned int Player::perceptionBonus()
+{
+    unsigned int bonus = 0;
+    if (this->trait(TRAITS_GIFTED)) bonus += 1;
+    return _statsBonus[STATS_PERCEPTION] + bonus;
+}
+
+void Player::setPerceptionBonus(unsigned int bonus)
+{
+    _statsBonus[STATS_PERCEPTION] = bonus;
 }
 
 unsigned int Player::endurance()
@@ -169,6 +218,18 @@ void Player::setEndurance(unsigned int endurance)
     _stats[STATS_ENDURANCE] = endurance;
 }
 
+unsigned int Player::enduranceBonus()
+{
+    unsigned int bonus = 0;
+    if (this->trait(TRAITS_GIFTED)) bonus += 1;
+    return _statsBonus[STATS_ENDURANCE] + bonus;
+}
+
+void Player::setEnduranceBonus(unsigned int bonus)
+{
+    _statsBonus[STATS_ENDURANCE] = bonus;
+}
+
 unsigned int Player::charisma()
 {
     return _stats[STATS_CHARISMA];
@@ -177,6 +238,18 @@ unsigned int Player::charisma()
 void Player::setCharisma(unsigned int charisma)
 {
     _stats[STATS_CHARISMA] = charisma;
+}
+
+unsigned int Player::charismaBonus()
+{
+    unsigned int bonus = 0;
+    if (this->trait(TRAITS_GIFTED)) bonus += 1;
+    return _statsBonus[STATS_CHARISMA] + bonus;
+}
+
+void Player::setCharismaBonus(unsigned int bonus)
+{
+    _statsBonus[STATS_CHARISMA] = bonus;
 }
 
 unsigned int Player::intelligence()
@@ -189,6 +262,18 @@ void Player::setIntelligence(unsigned int intelligence)
     _stats[STATS_INTELLIGENCE] = intelligence;
 }
 
+unsigned int Player::intelligenceBonus()
+{
+    unsigned int bonus = 0;
+    if (this->trait(TRAITS_GIFTED)) bonus += 1;
+    return _statsBonus[STATS_INTELLIGENCE] + bonus;
+}
+
+void Player::setIntelligenceBonus(unsigned int bonus)
+{
+    _statsBonus[STATS_INTELLIGENCE] = bonus;
+}
+
 unsigned int Player::agility()
 {
     return _stats[STATS_AGILITY];
@@ -199,6 +284,19 @@ void Player::setAgility(unsigned int agility)
     _stats[STATS_AGILITY] = agility;
 }
 
+unsigned int Player::agilityBonus()
+{
+    unsigned int bonus = 0;
+    if (this->trait(TRAITS_SMALL_FRAME)) bonus += 1;
+    if (this->trait(TRAITS_GIFTED)) bonus += 1;
+    return _statsBonus[STATS_AGILITY] + bonus;
+}
+
+void Player::setAgilityBonus(unsigned int bonus)
+{
+    _statsBonus[STATS_AGILITY] = bonus;
+}
+
 unsigned int Player::luck()
 {
     return _stats[STATS_LUCK];
@@ -207,6 +305,18 @@ unsigned int Player::luck()
 void Player::setLuck(unsigned int luck)
 {
     _stats[STATS_LUCK] = luck;
+}
+
+unsigned int Player::luckBonus()
+{
+    unsigned int bonus = 0;
+    if (this->trait(TRAITS_GIFTED)) bonus += 1;
+    return _statsBonus[STATS_LUCK] + bonus;
+}
+
+void Player::setLuckBonus(unsigned int bonus)
+{
+    _statsBonus[STATS_LUCK] = bonus;
 }
 
 unsigned int Player::characterPoints()
@@ -308,6 +418,18 @@ unsigned char Player::age()
 {
     return _age;
 }
+
+int Player::hitPoints()
+{
+    return _hitPoints;
+}
+
+void Player::setHitPoints(int hitPoints)
+{
+    _hitPoints = hitPoints;
+}
+
+
 
 }
 

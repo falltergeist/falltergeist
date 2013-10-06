@@ -96,8 +96,15 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
 
     // Player params
     {
-        //libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
-
+        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/stat.msg");
+        const int params[] = {109, 108, 112, 111, 124, 132, 131, 113, 114, 115};
+        for (unsigned int i = 0; i != 10; ++i)
+        {
+            std::stringstream ss;
+            ss << "params_" << (i+1);
+            _addTitle(ss.str(), msg->message(params[i])->text());
+            _addDescription(ss.str(), msg->message(params[i] + 100)->text());
+        }
     }
 
 
@@ -498,6 +505,8 @@ void PlayerEditState::_addImage(std::string name, Surface * image)
 
 void PlayerEditState::think()
 {
+    Player * player = _game->player();
+
     // primary stats labels
     {
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
@@ -525,7 +534,7 @@ void PlayerEditState::think()
             }
 
             // default colors            
-            if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0)
+            if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0 || name.find("params_") == 0)
             {
                 it->second->setColor(0xFF3FF800);
             }
@@ -557,7 +566,7 @@ void PlayerEditState::think()
             // selected color
             if (_selectedLabel == it->second)
             {
-                if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0)
+                if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0 || name.find("params_") == 0)
                 {
                     it->second->setColor(0xFFFFFF7F);
                 }
@@ -588,23 +597,43 @@ void PlayerEditState::think()
             }
         }
 
-        _labels->at("stats_1")->setText(msg->message(199 + _game->player()->strength()));
-        _labels->at("stats_2")->setText(msg->message(199 + _game->player()->perception()));
-        _labels->at("stats_3")->setText(msg->message(199 + _game->player()->endurance()));
-        _labels->at("stats_4")->setText(msg->message(199 + _game->player()->charisma()));
-        _labels->at("stats_5")->setText(msg->message(199 + _game->player()->intelligence()));
-        _labels->at("stats_6")->setText(msg->message(199 + _game->player()->agility()));
-        _labels->at("stats_7")->setText(msg->message(199 + _game->player()->luck()));
+        unsigned int val = player->strength() + player->strengthBonus();
+        if (val > 10) val = 10; if (val < 1) val = 1;
+        _labels->at("stats_1")->setText(msg->message(199 + val));
+
+        val = player->perception() + player->perceptionBonus();
+        if (val > 10) val = 10; if (val < 1) val = 1;
+        _labels->at("stats_2")->setText(msg->message(199 + val));
+
+        val = player->endurance() + player->enduranceBonus();
+        if (val > 10) val = 10; if (val < 1) val = 1;
+        _labels->at("stats_3")->setText(msg->message(199 + val));
+
+        val = player->charisma() + player->charismaBonus();
+        if (val > 10) val = 10; if (val < 1) val = 1;
+        _labels->at("stats_4")->setText(msg->message(199 + val));
+
+        val = player->intelligence() + player->intelligenceBonus();
+        if (val > 10) val = 10; if (val < 1) val = 1;
+        _labels->at("stats_5")->setText(msg->message(199 + val));
+
+        val = player->agility() + player->agilityBonus();
+        if (val > 10) val = 10; if (val < 1) val = 1;
+        _labels->at("stats_6")->setText(msg->message(199 + val));
+
+        val = player->luck() + player->luckBonus();
+        if (val > 10) val = 10; if (val < 1) val = 1;
+        _labels->at("stats_7")->setText(msg->message(199 + val));
     }
 
     // primary stats counters
-    _counters->at("stats_1")->setNumber(_game->player()->strength());
-    _counters->at("stats_2")->setNumber(_game->player()->perception());
-    _counters->at("stats_3")->setNumber(_game->player()->endurance());
-    _counters->at("stats_4")->setNumber(_game->player()->charisma());
-    _counters->at("stats_5")->setNumber(_game->player()->intelligence());
-    _counters->at("stats_6")->setNumber(_game->player()->agility());
-    _counters->at("stats_7")->setNumber(_game->player()->luck());
+    _counters->at("stats_1")->setNumber(player->strength() + player->strengthBonus());
+    _counters->at("stats_2")->setNumber(player->perception() + player->perceptionBonus());
+    _counters->at("stats_3")->setNumber(player->endurance() + player->enduranceBonus());
+    _counters->at("stats_4")->setNumber(player->charisma() + player->charismaBonus());
+    _counters->at("stats_5")->setNumber(player->intelligence() + player->intelligenceBonus());
+    _counters->at("stats_6")->setNumber(player->agility() + player->agilityBonus());
+    _counters->at("stats_7")->setNumber(player->luck() + player->luckBonus());
     _counters->at("statsPoints")->setNumber(_game->player()->characterPoints());
     _counters->at("skillsPoints")->setNumber(_game->player()->skillPoints());
 
@@ -694,7 +723,7 @@ void PlayerEditState::onLabelClick(Event * event)
         std::string name = it->first;
         if (it->second == event->sender())
         {
-            if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0)
+            if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0)
             {
                 _selectedLabel = _labels->at(it->first);
                 _selectedImage = _images->at(it->first);
