@@ -37,7 +37,6 @@ void PlayerEditAgeState::init()
     ImageButton * incButton = new ImageButton("art/intrface/sru.frm", "art/intrface/srd.frm", 262, 14);
     incButton->onLeftButtonClick((EventHandler) &PlayerEditAgeState::onIncButtonClick);
 
-    // Create character button
     ImageButton * doneButton= new ImageButton("art/intrface/lilredup.frm", "art/intrface/lilreddn.frm", 188, 43);
     doneButton->onLeftButtonClick((EventHandler) &PlayerEditAgeState::onDoneButtonClick);
 

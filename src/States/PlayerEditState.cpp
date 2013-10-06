@@ -19,6 +19,7 @@
 
 #include "../States/PlayerEditState.h"
 #include "../States/PlayerEditAgeState.h"
+#include "../States/PlayerEditGenderState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Player.h"
 #include "../Engine/ResourceManager.h"
@@ -438,14 +439,6 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _description->setWordWrap(true);
     add(_description);
 
-    // maleon.frm
-    // maleoff.frm
-    {
-        //libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
-        //_gender = new TextArea(msg->message(_game->player()->gender() == Player::GENDER_MALE ? 107 : 108), 255, 7);
-        //_gender->setColor(0xffb89c28)->setFont("font3.aaf");
-        //add(_gender);
-    }
 }
 
 PlayerEditState::~PlayerEditState()
@@ -518,6 +511,11 @@ void PlayerEditState::think()
                 ss << msg->message(104)->text() << " " << (unsigned int) _game->player()->age();
                 it->second->setText(ss.str().c_str());
 
+            }
+
+            if (name.compare("gender") == 0)
+            {
+                it->second->setText(msg->message(_game->player()->gender() == Player::GENDER_MALE ? 107 : 108));
             }
 
             // default colors            
@@ -730,8 +728,7 @@ void PlayerEditState::onAgeButtonClick(Event * event)
 
 void PlayerEditState::onGenderButtonClick(Event * event)
 {
-    //std::cout << "Gender BUTTON CLICKED" << std::endl;
-    //_game->quit();
+    _game->pushState(new PlayerEditGenderState(_game));
 }
 
 }

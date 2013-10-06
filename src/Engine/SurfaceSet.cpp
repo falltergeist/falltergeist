@@ -38,6 +38,11 @@ SurfaceSet::~SurfaceSet()
     delete _surfaces;
 }
 
+void SurfaceSet::setCurrentSurface(unsigned int number)
+{
+    currentSurface = number;
+}
+
 void SurfaceSet::addSurface(Surface * surface)
 {
     _surfaces->push_back(surface);
@@ -45,7 +50,7 @@ void SurfaceSet::addSurface(Surface * surface)
 
 Surface * SurfaceSet::surface()
 {
-    return _surfaces->at(currentSurface);
+    return new Surface(_surfaces->at(currentSurface));
 }
 
 SDL_Surface * SurfaceSet::sdl_surface()

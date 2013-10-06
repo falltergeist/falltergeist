@@ -89,12 +89,12 @@ int Surface::y()
 
 unsigned int Surface::width()
 {
-    return _sdl_surface->w;
+    return sdl_surface()->w;
 }
 
 unsigned int Surface::height()
 {
-    return _sdl_surface->h;
+    return sdl_surface()->h;
 }
 
 Surface * Surface::clear()

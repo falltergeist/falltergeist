@@ -76,6 +76,11 @@ void InteractiveSurface::handle(Event * event, State * state)
         int x = event->x() - this->x();
         int y = event->y() - this->y();
 
+        //if (event->SDLEvent()->type == SDL_MOUSEBUTTONDOWN)
+        {
+            //std::cout << x << " : " << y << std::endl;
+        }
+
         unsigned int alpha = pixel(x , y) >> 24;
         //std::cout << alpha << std::endl;
         if (alpha > 0)
