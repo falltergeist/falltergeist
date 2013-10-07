@@ -47,8 +47,11 @@ protected:
     char * _name;
     unsigned char _age;
     int _hitPoints;
+    unsigned int _level;
+    unsigned int _experience;
 
     char _gender;
+
 
     unsigned int * _stats;
     unsigned int * _statsBonus;
@@ -188,6 +191,8 @@ public:
 
     bool statsIncrease(unsigned char stat);
     bool statsDecrease(unsigned char stat);
+    unsigned int stat(unsigned int number);
+    unsigned int statBonus(unsigned int number);
 
     unsigned int trait(unsigned int traitNumber);
     void setTrait(unsigned int traitNumber, unsigned int value);
@@ -196,7 +201,7 @@ public:
 
     unsigned int skill(unsigned int skillNumber);
     void setSkill(unsigned int skillNumber, unsigned int value);
-
+    int skillValue(unsigned int skillNumber);
     bool skillToggle(unsigned int skillNumber);
 
     unsigned int skillPoints();
@@ -204,10 +209,36 @@ public:
 
     int hitPoints();
     void setHitPoints(int hitPoints);
+    unsigned int hitPointsMaximum();
 
     char gender();
     void setGender(char gender);
 
+    unsigned int level();
+    void setLevel(unsigned int level);
+
+    unsigned int experience();
+    void setExperience(unsigned int experience);
+
+    unsigned int armorClass();
+
+    unsigned int actionPoints();
+
+    unsigned int carryWeight();
+
+    unsigned int meleeDamage();
+
+    unsigned int damageResistance();
+
+    unsigned int poisonResistance();
+
+    unsigned int radiationResistance();
+
+    unsigned int sequence();
+
+    unsigned int healingRate();
+
+    unsigned int criticalChance();
 };
 
 }

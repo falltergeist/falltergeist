@@ -21,6 +21,7 @@
 
 #include "../Engine/Player.h"
 #include <iostream>
+#include <cmath>
 
 namespace Falltergeist
 {
@@ -34,6 +35,8 @@ Player::Player()
     _hitPoints = 0;
     _gender = 0;
     _age = 0;
+    _level = 1;
+    _experience = 0;
     _stats = new unsigned int[7]();
     _statsBonus = new unsigned int[7]();
     _traits = new unsigned int[16]();
@@ -48,6 +51,8 @@ Player::Player(libfalltergeist::GcdFileType * gcd)
     _name = 0;
     _hitPoints = 0;
     _gender = 0;
+    _level = 1;
+    _experience = 0;
     _stats = new unsigned int[7]();
     _statsBonus = new unsigned int[7]();
     _traits = new unsigned int[16]();
@@ -78,30 +83,27 @@ Player::Player(libfalltergeist::GcdFileType * gcd)
     this->setName(            gcd->name());
     this->setAge(             gcd->age());
 
-    //this->setHitPoints(       gcd->hitPoints());
-
-    //std::cout << "STR bonus: " << gcd->strengthBonus() << std::endl;
-    //std::cout << "Hit points bonus: " << gcd->hitPointsBonus() << std::endl;
+    this->setHitPoints(       gcd->hitPoints() + gcd->hitPointsBonus());
 
     this->setTrait(gcd->firstTrait(), 1);
     this->setTrait(gcd->secondTrait(), 1);
 
-    if (gcd->firstTaggedSkill() > 0)
+    if (gcd->firstTaggedSkill() >= 0)
     {
         this->setSkill(gcd->firstTaggedSkill(), 1);
         _skillPoints--;
     }
-    if (gcd->secondTaggedSkill() > 0)
+    if (gcd->secondTaggedSkill() >= 0)
     {
         this->setSkill(gcd->secondTaggedSkill(), 1);
         _skillPoints--;
     }
-    if (gcd->thirdTaggedSkill() > 0)
+    if (gcd->thirdTaggedSkill() >= 0)
     {
         this->setSkill(gcd->thirdTaggedSkill(), 1);
         _skillPoints--;
     }
-    if (gcd->fourthTaggedSkill() > 0)
+    if (gcd->fourthTaggedSkill() >= 0)
     {
         this->setSkill(gcd->fourthTaggedSkill(), 1);
         if (_skillPoints > 0) _skillPoints--;
@@ -147,7 +149,7 @@ bool Player::statsIncrease(unsigned char stat)
 {
     if (_characterPoints <= 0) return false;
 
-    if (_stats[stat] >= 10) return false;
+    if (this->stat(stat) + this->statBonus(stat) >= 10) return false;
 
     _stats[stat]++;
     _characterPoints--;
@@ -156,7 +158,7 @@ bool Player::statsIncrease(unsigned char stat)
 
 bool Player::statsDecrease(unsigned char stat)
 {
-    if (_stats[stat] <= 2 + _statsBonus[stat]) return false;
+    if (_stats[stat] <= 1 + _statsBonus[stat]) return false;
 
     _stats[stat]--;
     _characterPoints++;
@@ -369,6 +371,97 @@ void Player::setSkill(unsigned int skillNumber, unsigned int value)
     _skills[skillNumber] = value;
 }
 
+int Player::skillValue(unsigned int skillNumber)
+{
+    int value = 0;
+    unsigned int st = strength() + strengthBonus();
+    unsigned int pe = perception() + perceptionBonus();
+    unsigned int en = endurance() + enduranceBonus();
+    unsigned int ch = charisma() + charismaBonus();
+    unsigned int in = intelligence() + intelligenceBonus();
+    unsigned int ag = agility() + agilityBonus();
+    unsigned int lk = luck() + luckBonus();
+    switch(skillNumber)
+    {
+        case SKILLS_SMALL_GUNS:
+            value += 5 + 4 * ag;
+            if (trait(TRAITS_GOOD_NATURED)) value -= 10;
+            break;
+        case SKILLS_BIG_GUNS:
+            value += 2*ag;
+            if (trait(TRAITS_GOOD_NATURED)) value -= 10;
+            break;
+        case SKILLS_ENERGY_WEAPONS:
+            value += 2*ag;
+            if (trait(TRAITS_GOOD_NATURED)) value -= 10;
+            break;
+        case SKILLS_UNARMED:
+            value += 30 + 2*(ag + st);
+            if (trait(TRAITS_GOOD_NATURED)) value -= 10;
+            break;
+        case SKILLS_MELEE_WEAPONS:
+            value += 20 + 2*(ag + st);
+            if (trait(TRAITS_GOOD_NATURED)) value -= 10;
+            break;
+        case SKILLS_THROWING:
+            value += 4*ag;
+            if (trait(TRAITS_GOOD_NATURED)) value -= 10;
+            break;
+        case SKILLS_FIRST_AID:
+            value += 2*(pe + in);
+            if (trait(TRAITS_GOOD_NATURED)) value += 15;
+            break;
+        case SKILLS_DOCTOR:
+            value += 5 + (pe + in);
+            if (trait(TRAITS_GOOD_NATURED)) value += 15;
+            break;
+        case SKILLS_SNEAK:
+            value += 5 + 3*ag;
+            break;
+        case SKILLS_LOCKPICK:
+            value += 10 + (pe + ag);
+            break;
+        case SKILLS_STEAL:
+            value += 3*ag;
+            break;
+        case SKILLS_TRAPS:
+            value += 10 + (pe + ag);
+            break;
+        case SKILLS_SCIENCE:
+            value += 4*in;
+            break;
+        case SKILLS_REPAIR:
+            value += 3*in;
+            break;
+        case SKILLS_SPEECH:
+            value += 5*ch;
+            if (trait(TRAITS_GOOD_NATURED)) value += 15;
+            break;
+        case SKILLS_BARTER:
+            value += 4*ch;
+            if (trait(TRAITS_GOOD_NATURED)) value += 15;
+            break;
+        case SKILLS_GAMBLING:
+            value += 5*lk;
+            break;
+        case SKILLS_OUTDOORSMAN:
+            value += 2 * (en + in);
+            break;
+    }
+
+    if (trait(TRAITS_GIFTED))
+    {
+        value -= 10;
+    }
+
+    if (skill(skillNumber))
+    {
+        value += 20;
+    }
+
+    return value;
+}
+
 bool Player::skillToggle(unsigned int skillNumber)
 {
     if (skill(skillNumber))
@@ -429,7 +522,188 @@ void Player::setHitPoints(int hitPoints)
     _hitPoints = hitPoints;
 }
 
+unsigned int Player::hitPointsMaximum()
+{
+    unsigned int en = endurance() + enduranceBonus();
+    unsigned int hitPoints = 15;
+    hitPoints += en * 2;
+    hitPoints += strength() + strengthBonus();
+    hitPoints += (2 + ceil(en/2))*(level() - 1);
+    return hitPoints;
+}
 
+unsigned int Player::level()
+{
+    return _level;
+}
+
+void Player::setLevel(unsigned int level)
+{
+    _level = level;
+}
+
+unsigned int Player::experience()
+{
+    return _experience;
+}
+
+void Player::setExperience(unsigned int experience)
+{
+    _experience = experience;
+}
+
+unsigned int Player::armorClass()
+{
+    unsigned int armorClass = 0;
+    unsigned int ag = agility() + agilityBonus();
+    if (!trait(TRAITS_KAMIKAZE))
+    {
+        armorClass += ag > 10 ? 10 : ag;
+    }
+    return armorClass;
+}
+
+unsigned int Player::actionPoints()
+{
+    unsigned int actionPoints = 0;
+    unsigned int ag = agility() + agilityBonus();
+    actionPoints += 5 + ceil(ag/2);
+    if (trait(TRAITS_BRUISER))
+    {
+        actionPoints -= 2;
+    }
+    return actionPoints;
+}
+
+unsigned int Player::carryWeight()
+{
+    unsigned int carryWeight = 0;
+    unsigned int st = strength() + strengthBonus();
+
+    if (trait(TRAITS_SMALL_FRAME))
+    {
+        carryWeight += 25 + 15*(st > 10 ? 10 : st);
+        if (trait(TRAITS_GIFTED) && st <= 10)
+        {
+            carryWeight += 10;
+        }
+    }
+    else
+    {
+        carryWeight += 25 + 25*(st > 10 ? 10 : st);
+    }
+    return carryWeight;
+}
+
+unsigned int Player::stat(unsigned int number)
+{
+    switch (number)
+    {
+        case STATS_STRENGTH: return strength();
+        case STATS_PERCEPTION: return perception();
+        case STATS_ENDURANCE: return endurance();
+        case STATS_CHARISMA: return charisma();
+        case STATS_INTELLIGENCE: return intelligence();
+        case STATS_AGILITY: return agility();
+        case STATS_LUCK: return luck();
+    }
+    return 0;
+}
+
+unsigned int Player::statBonus(unsigned int number)
+{
+    switch (number)
+    {
+        case STATS_STRENGTH: return strengthBonus();
+        case STATS_PERCEPTION: return perceptionBonus();
+        case STATS_ENDURANCE: return enduranceBonus();
+        case STATS_CHARISMA: return charismaBonus();
+        case STATS_INTELLIGENCE: return intelligenceBonus();
+        case STATS_AGILITY: return agilityBonus();
+        case STATS_LUCK: return luckBonus();
+    }
+    return 0;
+}
+
+unsigned int Player::meleeDamage()
+{
+    unsigned int meleeDamage = 0;
+    unsigned int st = strength() + strengthBonus();
+    if (st > 10) st = 10;
+    meleeDamage += st > 5 ? st - 5 : 1;
+    if (trait(TRAITS_HEAVY_HANDED))
+    {
+        meleeDamage += 4;
+    }
+    return meleeDamage;
+}
+
+unsigned int Player::damageResistance()
+{
+    unsigned int resistance = 0;
+
+    return resistance;
+}
+
+unsigned int Player::poisonResistance()
+{
+    unsigned int resistance = 0;
+    unsigned int en = endurance() + enduranceBonus();
+    if (!trait(TRAITS_FAST_METABOLISM))
+    {
+        resistance += 5*en;
+    }
+    return resistance;
+}
+
+unsigned int Player::radiationResistance()
+{
+    unsigned int resistance = 0;
+    unsigned int en = endurance() + enduranceBonus();
+    if (!trait(TRAITS_FAST_METABOLISM))
+    {
+        resistance += 2*en;
+    }
+    return resistance;
+}
+
+unsigned int Player::sequence()
+{
+    unsigned int sequence = 0;
+    unsigned int pe = perception() + perceptionBonus();
+    sequence += 2*(pe > 10 ? 10 : pe);
+    if (trait(TRAITS_KAMIKAZE))
+    {
+        sequence += 5;
+    }
+    return sequence;
+}
+
+unsigned int Player::healingRate()
+{
+    unsigned int rate = 0;
+    unsigned int en = endurance() + enduranceBonus();
+    rate += ceil((en > 10 ? 10 : en) / 3);
+    if (rate == 0) rate = 1;
+
+    if (trait(TRAITS_FAST_METABOLISM))
+    {
+        rate += 2;
+    }
+    return rate;
+}
+
+unsigned int Player::criticalChance()
+{
+    unsigned int chance = 0;
+    unsigned int lk = luck() + luckBonus();
+    chance += lk > 10 ? 10 : lk;
+    if (trait(TRAITS_FINESSE))
+    {
+        chance += 10;
+    }
+    return chance;
+}
 
 }
 

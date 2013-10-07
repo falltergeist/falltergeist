@@ -195,6 +195,14 @@ void TextArea::_calculateSize()
     _calculatedHeight = lines()->size() * _font->height() + (lines()->size() - 1) * _font->verticalGap();
 }
 
+TextArea * TextArea::appendText(const char * text)
+{
+    std::string str = "";
+    str += this->text();
+    str += text;
+    setText(str.c_str());
+}
+
 TextArea * TextArea::draw()
 {
     if (!needRedraw()) return this;
@@ -385,6 +393,13 @@ TextArea * TextArea::setText(unsigned int number)
 
 TextArea * TextArea::setText(const char * text)
 {
+    if (_text != 0)
+    {
+        std::string oldText(_text);
+        std::string newText(text);
+        if (oldText.compare(newText) == 0) return this;
+    }
+
     _calculatedWidth = 0;
     _calculatedHeight = 0;
     delete _lines;

@@ -75,6 +75,7 @@ public:
     TextArea * setText(libfalltergeist::MsgMessage * message);
     TextArea * setText(const char * text);
     TextArea * setText(unsigned int number);
+    TextArea * appendText(const char * text);
     char * text();
 
     TextArea * setHorizontalAlign(unsigned char align);
