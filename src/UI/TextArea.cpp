@@ -107,7 +107,7 @@ std::vector<std::string> * TextArea::lines()
         unsigned char chr = _text[i];
         if (chr == 0x0D) //new line
         {
-            ++i;
+            //++i;
             _lines->back().append(word);
             _lines->push_back("");
             word = "";

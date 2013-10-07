@@ -71,6 +71,8 @@ set(SOURCES main.cpp
             src/States/PlayerEditState.h
             src/States/PlayerEditAgeState.cpp
             src/States/PlayerEditAgeState.h
+            src/States/PlayerEditAlertState.cpp
+            src/States/PlayerEditAlertState.h
             src/States/PlayerEditGenderState.cpp
             src/States/PlayerEditGenderState.h
             src/States/PlayerEditNameState.cpp

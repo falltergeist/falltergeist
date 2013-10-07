@@ -21,6 +21,7 @@
 #include "../States/PlayerEditAgeState.h"
 #include "../States/PlayerEditGenderState.h"
 #include "../States/PlayerEditNameState.h"
+#include "../States/PlayerEditAlertState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Player.h"
 #include "../Engine/ResourceManager.h"
@@ -324,24 +325,24 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         _addLabel("skills_16", new TextArea(msg->message(115), 377, 27 + 11*15))->setWidth(240);
         _addLabel("skills_17", new TextArea(msg->message(116), 377, 27 + 11*16))->setWidth(240);
         _addLabel("skills_18", new TextArea(msg->message(117), 377, 27 + 11*17))->setWidth(240);
-        _addLabel("skills_1_value",  new TextArea("0%", 577, 27));
-        _addLabel("skills_2_value",  new TextArea("0%", 577, 27 + 11));
-        _addLabel("skills_3_value",  new TextArea("0%", 577, 27 + 11*2));
-        _addLabel("skills_4_value",  new TextArea("0%", 577, 27 + 11*3));
-        _addLabel("skills_5_value",  new TextArea("0%", 577, 27 + 11*4));
-        _addLabel("skills_6_value",  new TextArea("0%", 577, 27 + 11*5));
-        _addLabel("skills_7_value",  new TextArea("0%", 577, 27 + 11*6));
-        _addLabel("skills_8_value",  new TextArea("0%", 577, 27 + 11*7));
-        _addLabel("skills_9_value",  new TextArea("0%", 577, 27 + 11*8));
-        _addLabel("skills_10_value", new TextArea("0%", 577, 27 + 11*9));
-        _addLabel("skills_11_value", new TextArea("0%", 577, 27 + 11*10));
-        _addLabel("skills_12_value", new TextArea("0%", 577, 27 + 11*11));
-        _addLabel("skills_13_value", new TextArea("0%", 577, 27 + 11*12));
-        _addLabel("skills_14_value", new TextArea("0%", 577, 27 + 11*13));
-        _addLabel("skills_15_value", new TextArea("0%", 577, 27 + 11*14));
-        _addLabel("skills_16_value", new TextArea("0%", 577, 27 + 11*15));
-        _addLabel("skills_17_value", new TextArea("0%", 577, 27 + 11*16));
-        _addLabel("skills_18_value", new TextArea("0%", 577, 27 + 11*17));
+        _addLabel("skills_1_value",  new TextArea("", 577, 27));
+        _addLabel("skills_2_value",  new TextArea("", 577, 27 + 11));
+        _addLabel("skills_3_value",  new TextArea("", 577, 27 + 11*2));
+        _addLabel("skills_4_value",  new TextArea("", 577, 27 + 11*3));
+        _addLabel("skills_5_value",  new TextArea("", 577, 27 + 11*4));
+        _addLabel("skills_6_value",  new TextArea("", 577, 27 + 11*5));
+        _addLabel("skills_7_value",  new TextArea("", 577, 27 + 11*6));
+        _addLabel("skills_8_value",  new TextArea("", 577, 27 + 11*7));
+        _addLabel("skills_9_value",  new TextArea("", 577, 27 + 11*8));
+        _addLabel("skills_10_value", new TextArea("", 577, 27 + 11*9));
+        _addLabel("skills_11_value", new TextArea("", 577, 27 + 11*10));
+        _addLabel("skills_12_value", new TextArea("", 577, 27 + 11*11));
+        _addLabel("skills_13_value", new TextArea("", 577, 27 + 11*12));
+        _addLabel("skills_14_value", new TextArea("", 577, 27 + 11*13));
+        _addLabel("skills_15_value", new TextArea("", 577, 27 + 11*14));
+        _addLabel("skills_16_value", new TextArea("", 577, 27 + 11*15));
+        _addLabel("skills_17_value", new TextArea("", 577, 27 + 11*16));
+        _addLabel("skills_18_value", new TextArea("", 577, 27 + 11*17));
     }
     // Health condition
     {
@@ -399,6 +400,22 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         _addLabel("name",    new TextArea(_game->player()->name(), 17, 7))->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setColor(0xffb89c28)->setFont("font3.aaf");
         _addLabel("age",     new TextArea("AGE", 163, 7))->setColor(0xffb89c28)->setFont("font3.aaf");
         _addLabel("gender",  new TextArea(msg->message(_game->player()->gender() == Player::GENDER_MALE ? 107 : 108), 255, 7))->setColor(0xffb89c28)->setFont("font3.aaf");
+        _addLabel("label_1", new TextArea(msg->message(112), 18, 286))->setColor(0xffb89c28)->setFont("font3.aaf"); // ДОП. ОЧКИ
+        _addLabel("label_2", new TextArea(msg->message(139), 50, 326))->setColor(0xffb89c28)->setFont("font3.aaf"); // ДОП. ОСОБЕННОСТИ
+        _addLabel("label_3", new TextArea(msg->message(117), 383, 5))->setColor(0xffb89c28)->setFont("font3.aaf");  // НАВЫКИ
+        _addLabel("label_4", new TextArea(msg->message(138), 428, 233))->setColor(0xffb89c28)->setFont("font3.aaf"); // ОСНОВН.
+        _addTitle("label_1", msg->message(120)->text());
+        _addTitle("label_2", msg->message(146)->text());
+        _addTitle("label_3", msg->message(150)->text());
+        _addTitle("label_4", msg->message(144)->text());
+        _addDescription("label_1", msg->message(121)->text());
+        _addDescription("label_2", msg->message(147)->text());
+        _addDescription("label_3", msg->message(151)->text());
+        _addDescription("label_4", msg->message(145)->text());
+        _addImage("label_1", _game->resourceManager()->surface("art/skilldex/generic.frm"));
+        _addImage("label_2", _game->resourceManager()->surface("art/skilldex/traits.frm"));
+        _addImage("label_3", _game->resourceManager()->surface("art/skilldex/skills.frm"));
+        _addImage("label_4", _game->resourceManager()->surface("art/skilldex/skills.frm"));
 
     }
     // Name change button
@@ -689,19 +706,21 @@ void PlayerEditState::think()
     _counters->at("statsPoints")->setNumber(_game->player()->characterPoints());
     _counters->at("skillsPoints")->setNumber(_game->player()->skillPoints());
 
-    _image->loadFromSurface(_selectedImage)->x(480)->y(310);
 
-    // Getting title and description by selected image
-    std::map<std::string, Surface *>::iterator it;
-    for(it = _images->begin(); it != _images->end(); ++it)
+    // Getting image and description by selected label
+    std::map<std::string, TextArea *>::iterator it;
+    for(it = _labels->begin(); it != _labels->end(); ++it)
     {
-        if (_selectedImage == it->second)
+        if (_selectedLabel == it->second)
         {
             //std::string name = ;
             _title->setText(_titles->at(it->first).c_str());
             _description->setText(_descriptions->at(it->first).c_str());
+            _selectedImage = _images->at(it->first);
+            _image->loadFromSurface(_selectedImage)->x(480)->y(310);
         }
     }
+
 
     libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
     std::stringstream ss;
@@ -774,7 +793,16 @@ void PlayerEditState::onButtonClick(Event * event)
                 unsigned int number = atoi(name.substr(7).c_str());
                 _selectedLabel = _labels->at(name);
                 _selectedImage = _images->at(name);
-                _game->player()->traitToggle(number - 1);
+                if (!_game->player()->traitToggle(number - 1))
+                {
+                    PlayerEditAlertState * state = new PlayerEditAlertState(_game);
+                    libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+                    std::string text = msg->message(148)->text();
+                    text += "\r";
+                    text += msg->message(149)->text();
+                    state->setMessage(text);
+                    _game->pushState(state);
+                }
             }
 
             if (name.find("skills_") == 0)
@@ -782,7 +810,16 @@ void PlayerEditState::onButtonClick(Event * event)
                 unsigned int number = atoi(name.substr(7).c_str());
                 _selectedLabel = _labels->at(name);
                 _selectedImage = _images->at(name);
-                _game->player()->skillToggle(number - 1);
+                if (!_game->player()->skillToggle(number - 1))
+                {
+                    PlayerEditAlertState * state = new PlayerEditAlertState(_game);
+                    libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+                    std::string text = msg->message(140)->text();
+                    text += "\r";
+                    text += msg->message(141)->text();
+                    state->setMessage(text);
+                    _game->pushState(state);
+                }
             }
         }
     }
@@ -796,7 +833,7 @@ void PlayerEditState::onLabelClick(Event * event)
         std::string name = it->first;
         if (it->second == event->sender())
         {
-            if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0)
+            if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0 || name.find("label_") == 0)
             {
                 std::string label = name;
                 if (name.find("_value") > 0)
