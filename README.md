@@ -5,6 +5,8 @@ Opensource crossplatform Fallout 2™ engine writen in C++ and SDL
 
 Current version: 0.0.3
 
+![Image](http://alexeevdv.ru/falltergeist/falltergeist.png)
+
 ##Compilation under linux
 ```
 ./compile.sh
