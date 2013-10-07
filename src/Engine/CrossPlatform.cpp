@@ -186,7 +186,7 @@ std::string findFileAlias(std::string path, std::string filename)
         }
     }
     closedir(dir);
-    return 0;
+    return "";
 }
 
 
