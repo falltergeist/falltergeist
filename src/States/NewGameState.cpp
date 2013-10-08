@@ -85,9 +85,9 @@ void NewGameState::init()
 
     // Characters images
     _selectedCharacter = 0;
-    _characterImages->addSurface(ResourceManager::surface("art/intrface/combat.frm"));
-    _characterImages->addSurface(ResourceManager::surface("art/intrface/stealth.frm"));
-    _characterImages->addSurface(ResourceManager::surface("art/intrface/diplomat.frm"));
+    _characterImages->addSurface(new Surface(_game->resourceManager()->surface("art/intrface/combat.frm")));
+    _characterImages->addSurface(new Surface(_game->resourceManager()->surface("art/intrface/stealth.frm")));
+    _characterImages->addSurface(new Surface(_game->resourceManager()->surface("art/intrface/diplomat.frm")));
 
 
 
@@ -176,7 +176,7 @@ void NewGameState::changeCharacter()
          << _t(104,"text/english/game/stat.msg") << " " << (player->intelligence() < 10 ? "0" : "") << player->intelligence() << "\r\n"
          << _t(105,"text/english/game/stat.msg") << " " << (player->agility() < 10 ? "0" : "")      << player->agility()      << "\r\n"
          << _t(106,"text/english/game/stat.msg") << " " << (player->luck() < 10 ? "0" : "")         << player->luck()         << "\r\n" ;
-    _playerStats1->setText(ss.str().c_str());
+    _playerStats1->setText(ss.str());
      
     ss.str("");
     ss << statToString(player->strength()) << "\r\n"
@@ -186,7 +186,7 @@ void NewGameState::changeCharacter()
        << statToString(player->intelligence()) << "\r\n"
        << statToString(player->agility()) << "\r\n"
        << statToString(player->luck()) << "\r\n";
-    _playerStats2->setText(ss.str().c_str());
+    _playerStats2->setText(ss.str());
     
     _playerBio->setText(player->bio());
     _playerName->setText(player->name());

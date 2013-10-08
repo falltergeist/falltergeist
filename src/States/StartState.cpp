@@ -21,7 +21,7 @@
 #include "../States/MainMenuState.h"
 #include "../Engine/Game.h"
 
-
+#include "../States/LocationState.h"
 #include "../States/PlayerEditState.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Player.h"
@@ -40,10 +40,10 @@ StartState::~StartState()
 
 void StartState::think()
 {
-    _game->setPlayer(new Player(ResourceManager::gcdFileType("premade/combat.gcd")));
-    _game->setState(new PlayerEditState(_game));
+    //_game->setPlayer(new Player(ResourceManager::gcdFileType("premade/combat.gcd")));
+    //_game->setState(new LocationState(_game));
     
-    //_game->setState(new MainMenuState(_game));
+    _game->setState(new MainMenuState(_game));
 }
 
 }

@@ -235,6 +235,17 @@ libfalltergeist::BioFileType * ResourceManager::bioFileType(std::string filename
     return 0;
 }
 
+libfalltergeist::MapFileType * ResourceManager::mapFileType(std::string filename)
+{
+    libfalltergeist::DatFileItem * item = datFileItem(filename);
+    if (item)
+    {
+        return item->asMapFileType();
+    }
+    return 0;
+}
+
+
 
 Surface * ResourceManager::surface(std::string filename, int posX, int posY)
 {

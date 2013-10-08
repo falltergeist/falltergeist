@@ -49,6 +49,10 @@ set(SOURCES main.cpp
             src/Engine/Game.h
             src/Engine/InteractiveSurface.cpp
             src/Engine/InteractiveSurface.h
+            src/Engine/Location.cpp
+            src/Engine/Location.h
+            src/Engine/Map.cpp
+            src/Engine/Map.h
             src/Engine/Mouse.cpp
             src/Engine/Mouse.h
             src/Engine/Player.cpp
@@ -63,6 +67,8 @@ set(SOURCES main.cpp
             src/Engine/Surface.h
             src/Engine/SurfaceSet.cpp
             src/Engine/SurfaceSet.h
+            src/States/LocationState.cpp
+            src/States/LocationState.h
             src/States/MainMenuState.cpp
             src/States/MainMenuState.h
             src/States/NewGameState.cpp

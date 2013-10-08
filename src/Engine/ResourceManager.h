@@ -34,6 +34,7 @@ class FonFileType;
 class AafFileType;
 class GcdFileType;
 class MsgFileType;
+class MapFileType;
 class BioFileType;
 class Surface;
 
@@ -57,6 +58,7 @@ public:
     static libfalltergeist::FonFileType * fonFileType(std::string filename);
     static libfalltergeist::AafFileType * aafFileType(std::string filename);
     static libfalltergeist::GcdFileType * gcdFileType(std::string filename);
+    static libfalltergeist::MapFileType * mapFileType(std::string filename);
     static libfalltergeist::MsgFileType * msgFileType(std::string filename);
     static libfalltergeist::BioFileType * bioFileType(std::string filename);
     static Surface * surface(std::string filename, int x = 0, int y = 0);

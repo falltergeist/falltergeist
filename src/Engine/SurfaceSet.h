@@ -37,6 +37,7 @@ public:
     unsigned int currentSurface;
     void addSurface(Surface * surface);
     void setCurrentSurface(unsigned int number);
+    Surface * draw();
     Surface * surface();
     SDL_Surface * sdl_surface();
 };
