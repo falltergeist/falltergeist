@@ -34,52 +34,41 @@ namespace Falltergeist
 
 TextArea::TextArea(libfalltergeist::MsgMessage * message, int x, int y) : InteractiveSurface(0, 0, x, y)
 {
-    _text = 0;
-    _lines = 0;
-    _horizontalAlign = HORIZONTAL_ALIGN_LEFT;
-    _verticalAlign = VERTICAL_ALIGN_TOP;
-    _width = 0;
-    _height = 0;
-    _calculatedWidth = 0;
-    _calculatedHeight = 0;
-    _color = 0xFF3FF800;
-    _font = new Font("font1.aaf", _color);
-    _wordWrap = false;
-    this->setText(message->text());
-    needRedraw(true);
+    init();
+    setText(message->text());
 }
 
 TextArea::TextArea(const char * text, int x, int y) : InteractiveSurface(0, 0, x, y)
 {
-    _text = 0;
-    _lines = 0;
-    _horizontalAlign = HORIZONTAL_ALIGN_LEFT;
-    _verticalAlign = VERTICAL_ALIGN_TOP;
-    _width = 0;
-    _height = 0;
-    _calculatedWidth = 0;
-    _calculatedHeight = 0;
-    _color = 0xFF3FF800;
-    _font = new Font("font1.aaf", _color);
-    _wordWrap = false;
-    this->setText(text);
-    needRedraw(true);
+    init();
+    setText(text);
 }
 
 TextArea::TextArea(int x, int y) : InteractiveSurface(0, 0, x, y)
 {
+    init();
+}
+
+TextArea::TextArea(std::string text, int x, int y) : InteractiveSurface(0, 0, x, y)
+{
+    init();
+    setText(text);
+}
+
+void TextArea::init()
+{
     _text = 0;
-    _lines = 0;
+    _textLines = 0;
+    _textSurfaces = 0;
     _horizontalAlign = HORIZONTAL_ALIGN_LEFT;
     _verticalAlign = VERTICAL_ALIGN_TOP;
     _width = 0;
     _height = 0;
     _calculatedWidth = 0;
     _calculatedHeight = 0;
-    _color = 0xFF00FF00;
+    _color = 0xFF3FF800; //Green
     _font = new Font("font1.aaf", _color);
     _wordWrap = false;
-    this->setText(" ");
     needRedraw(true);
 }
 
@@ -87,59 +76,61 @@ TextArea::TextArea(int x, int y) : InteractiveSurface(0, 0, x, y)
 TextArea::~TextArea()
 {
     delete [] _text;
-    delete _lines;
+    delete _textLines;
+
+    while (!_textSurfaces->empty())
+    {
+        delete _textSurfaces->back();
+        _textSurfaces->pop_back();
+    }
+    delete _textSurfaces;
+
     delete _font;
 }
 
-
-std::vector<std::string> * TextArea::lines()
+std::vector<std::string> * TextArea::textLines()
 {
-    if (_lines != 0) return _lines;
+    if (_textLines != 0) return _textLines;
 
-    _lines = new std::vector<std::string>;
+    _textLines = new std::vector<std::string>;
 
     unsigned int stringWidth = 0;
     unsigned int wordWidth = 0;
     std::string word = "";
-    _lines->push_back("");
+    _textLines->push_back("");
+
     for (unsigned int i = 0; i != strlen(_text); ++i)
     {
         unsigned char chr = _text[i];
-        if (chr == 0x0D) //new line
+        if (chr == 0x0D) // "\r"
         {
-            //++i;
-            _lines->back().append(word);
-            _lines->push_back("");
+            _textLines->back() += word; // add current word to the last line
             word = "";
             wordWidth = 0;
+
+            _textLines->push_back(""); // add new empty line
             stringWidth = 0;
         }
         else
         {
-            //if (!word.empty() && chr != 0x20) wordWidth += _font->horizontalGap();
-            word.push_back(chr);
-            if (chr == 0x20)
-            {
-                wordWidth += _font->spaceWidth();
-            }
-            else
-            {
-                wordWidth += _font->glyph(chr)->width() + _font->horizontalGap();
-            }
+            word += chr;
+            wordWidth += (chr == 0x20) ? (_font->spaceWidth()) : (_font->glyph(chr)->width() + _font->horizontalGap());
 
-            if (_width*_height != 0 && (stringWidth + wordWidth >= _width))
+            // If text area size set and string becomes too long
+            if (_width > 0 && (stringWidth + wordWidth >= _width))
             {
                 if (_wordWrap)
                 {
-                    _lines->push_back("");
+                    _textLines->push_back(""); //add new empty line
                     stringWidth = 0;
                 }
                 else
                 {
-                    _lines->back().append(word);
-                    _lines->push_back("");
+                    _textLines->back() += word;
                     word = "";
                     wordWidth = 0;
+
+                    _textLines->push_back("");
                     stringWidth = 0;
                 }
             }
@@ -147,52 +138,59 @@ std::vector<std::string> * TextArea::lines()
             {
                 if (chr == 0x20)  // space
                 {
-                    _lines->back().append(word);
+                    _textLines->back() += word;
                     stringWidth += wordWidth;
                     word = "";
                     wordWidth = 0;
+
                 }
             }
         }
     }
     if (!word.empty())
     {
-        _lines->back().append(word);
+        _textLines->back() += word;
     }
 
-    return _lines;
+    return _textLines;
+}
+
+std::vector<Surface *> * TextArea::textSurfaces()
+{
+    if (_textSurfaces != 0) return _textSurfaces;
+
+    _textSurfaces = new std::vector<Surface *>;
+
+    std::vector<std::string>::iterator it;
+
+    for (it = textLines()->begin(); it != textLines()->end(); ++it)
+    {
+        unsigned int width = 0;
+        for (unsigned int i = 0; i < (*it).length(); i++)
+        {
+            width += ((*it).c_str()[i] == 0x20) ? (_font->spaceWidth()) : (_font->glyph((*it).c_str()[i])->width() + _font->horizontalGap());
+        }
+        _textSurfaces->push_back(new Surface(width, _font->height()));
+    }
+
+    return _textSurfaces;
 }
 
 
 void TextArea::_calculateSize()
 {
+    if (_text == 0 || strlen(_text) == 0 || _font == 0) return;
+
     _calculatedWidth = 0;
     _calculatedHeight = 0;
-    // if text is empty
-    if (_text == 0 || strlen(_text) == 0 || !_font) return;
 
-    for (std::vector<std::string>::iterator it = lines()->begin(); it != lines()->end(); ++it)
+    // searching for maximum width
+    for (std::vector<Surface *>::iterator it = textSurfaces()->begin(); it != textSurfaces()->end(); ++it)
     {
-        // calculate surface width
-        unsigned int surfaceWidth = 0;
-        for(unsigned int i = 0; i != (*it).size(); ++i)
-        {
-            unsigned char chr = (*it).at(i);
-
-            if (chr == ' ')
-            {
-                surfaceWidth += _font->spaceWidth();
-            }
-            else
-            {
-                surfaceWidth += _font->glyph(chr)->width() + _font->horizontalGap();
-                if (i == (*it).size() - 1) surfaceWidth -= _font->horizontalGap();
-            }
-        }
-        if (surfaceWidth > _calculatedWidth) _calculatedWidth = surfaceWidth;
+        if ((*it)->width() > _calculatedWidth) _calculatedWidth = (*it)->width();
     }
 
-    _calculatedHeight = lines()->size() * _font->height() + (lines()->size() - 1) * _font->verticalGap();
+    _calculatedHeight = textLines()->size() * _font->height() + (textLines()->size() - 1) * _font->verticalGap();
 }
 
 TextArea * TextArea::appendText(const char * text)
@@ -208,26 +206,21 @@ TextArea * TextArea::draw()
     if (!needRedraw()) return this;
     InteractiveSurface::draw();
 
-    // if no font was setted
     if (!_font) throw Exception("TextArea::draw() - font is not setted");
 
     // if text is empty
     if (_text == 0 || strlen(_text) == 0)
     {
         loadFromSurface(new Surface(0, 0, this->x(), this->y()));
-        //throw Exception("TextArea::draw() - text is 0");
-
         return this;
     }
 
+    //textSurfaces();
+    //_calculateSize();
 
-    _calculateSize();
-    //convert strings list to surfaces list
-    std::vector<Surface *> * surfaces = new std::vector<Surface *>;
-    for (std::vector<std::string>::iterator it = lines()->begin(); it != lines()->end(); ++it)
+    unsigned int line = 0;
+    for (std::vector<std::string>::iterator it = textLines()->begin(); it != textLines()->end(); ++it)
     {
-        //create string surface
-        surfaces->push_back(new Surface(this->_calculatedWidth, _font->height()));
         //draw characters on string surface
         unsigned int x = 0;
         for(unsigned int i = 0; i != (*it).size(); ++i)
@@ -242,12 +235,12 @@ TextArea * TextArea::draw()
                 Surface * glyph = _font->glyph(chr);
                 glyph->x(x)
                      ->y(0)
-                     ->copyTo(surfaces->back());
+                     ->copyTo(textSurfaces()->at(line));
                 x += glyph->width() + _font->horizontalGap();
                 if (i == (*it).size() - 1) x -= _font->horizontalGap();
             }
         }
-
+        line++;
     }
 
     // Creating resulting surface
@@ -257,7 +250,7 @@ TextArea * TextArea::draw()
     // foreach lines surfaces
     unsigned int x = 0;
     unsigned int y = 0;
-    for (std::vector<Surface *>::iterator it = surfaces->begin(); it != surfaces->end(); ++it)
+    for (std::vector<Surface *>::iterator it = textSurfaces()->begin(); it != textSurfaces()->end(); ++it)
     {        
         switch(_horizontalAlign)
         {
@@ -283,12 +276,12 @@ TextArea * TextArea::draw()
     surface->y(this->y());
     loadFromSurface(surface);
 
-    while(!surfaces->empty())
-    {
-        delete surfaces->back();
-        surfaces->pop_back();
-    }
-    delete surfaces;
+    //while(!_textSurfaces->empty())
+    //{
+        //delete _textSurfaces->back();
+        //_textSurfaces->pop_back();
+    //}
+    //delete _textSurfaces; _textSurfaces = 0;
     delete surface;
 
     needRedraw(false);
@@ -379,36 +372,49 @@ char * TextArea::text()
 
 TextArea * TextArea::setText(libfalltergeist::MsgMessage * message)
 {
-    setText(message->text());
-    return this;
+    return setText(message->text());
 }
 
 TextArea * TextArea::setText(unsigned int number)
 {
     std::stringstream ss;
     ss << number;
-    setText(ss.str().c_str());
-    return this;
+    return setText(ss.str());
 }
 
 TextArea * TextArea::setText(const char * text)
 {
-    if (_text != 0)
+    std::string txt(text);
+    return setText(txt);
+}
+
+TextArea * TextArea::setText(std::string text)
+{
+    if (_text != 0) // if text not empty
     {
         std::string oldText(_text);
         std::string newText(text);
-        if (oldText.compare(newText) == 0) return this;
+        if (oldText.compare(newText) == 0) return this; // if text not changed
     }
 
     _calculatedWidth = 0;
     _calculatedHeight = 0;
-    delete _lines;
-    _lines = 0;
+    delete _textLines; _textLines = 0;
+    if (_textSurfaces != 0)
+    {
+        while (!_textSurfaces->empty())
+        {
+            delete _textSurfaces->back();
+            _textSurfaces->pop_back();
+        }
+        delete _textSurfaces; _textSurfaces = 0;
+    }
     delete [] _text;
-    _text = new char[strlen(text)+1]();
-    strcpy(_text, text);
+    _text = new char[text.length()+1]();
+    strcpy(_text, text.c_str());
     needRedraw(true);
     return this;
+
 }
 
 TextArea * TextArea::setFont(const char * filename)
