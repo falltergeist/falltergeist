@@ -703,6 +703,22 @@ void PlayerEditState::think()
     _counters->at("stats_5")->setNumber(player->intelligence() + player->intelligenceBonus());
     _counters->at("stats_6")->setNumber(player->agility() + player->agilityBonus());
     _counters->at("stats_7")->setNumber(player->luck() + player->luckBonus());
+
+    for (std::map<std::string, BigCounter *>::iterator it = _counters->begin(); it != _counters->end(); ++it)
+    {
+        if (it->first.find("stats_") == 0)
+        {
+            if (it->second->number() > 10)
+            {
+                it->second->setColor(BigCounter::COLOR_RED);
+            }
+            else
+            {
+                it->second->setColor(BigCounter::COLOR_WHITE);
+            }
+        }
+    }
+
     _counters->at("statsPoints")->setNumber(_game->player()->characterPoints());
     _counters->at("skillsPoints")->setNumber(_game->player()->skillPoints());
 

@@ -72,19 +72,20 @@ void TextArea::init()
     needRedraw(true);
 }
 
-
 TextArea::~TextArea()
 {
     delete [] _text;
     delete _textLines;
 
-    while (!_textSurfaces->empty())
+    if (_textSurfaces != 0)
     {
-        delete _textSurfaces->back();
-        _textSurfaces->pop_back();
+        while (!_textSurfaces->empty())
+        {
+            delete _textSurfaces->back();
+            _textSurfaces->pop_back();
+        }
+        delete _textSurfaces;
     }
-    delete _textSurfaces;
-
     delete _font;
 }
 
@@ -215,9 +216,6 @@ TextArea * TextArea::draw()
         return this;
     }
 
-    //textSurfaces();
-    //_calculateSize();
-
     unsigned int line = 0;
     for (std::vector<std::string>::iterator it = textLines()->begin(); it != textLines()->end(); ++it)
     {
@@ -276,15 +274,16 @@ TextArea * TextArea::draw()
     surface->y(this->y());
     loadFromSurface(surface);
 
-    //while(!_textSurfaces->empty())
-    //{
-        //delete _textSurfaces->back();
-        //_textSurfaces->pop_back();
-    //}
-    //delete _textSurfaces; _textSurfaces = 0;
+    // clear used memory
+
+    while(!_textSurfaces->empty())
+    {
+        delete _textSurfaces->back();
+        _textSurfaces->pop_back();
+    }
+    delete _textSurfaces; _textSurfaces = 0;
     delete surface;
 
-    needRedraw(false);
     return this;
 }
 
@@ -375,7 +374,7 @@ TextArea * TextArea::setText(libfalltergeist::MsgMessage * message)
     return setText(message->text());
 }
 
-TextArea * TextArea::setText(unsigned int number)
+TextArea * TextArea::setText(int number)
 {
     std::stringstream ss;
     ss << number;

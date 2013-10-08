@@ -28,6 +28,7 @@ namespace Falltergeist
 BigCounter::BigCounter(int x, int y) : InteractiveSurface(0,0, x, y)
 {
     _number = 0;
+    _color = COLOR_WHITE;
     _length = 2;
     _numbersWhite = new std::vector<Surface *>;
     _numbersRed = new std::vector<Surface *>;
@@ -88,7 +89,16 @@ BigCounter * BigCounter::draw()
     {
         int key = 9 -  ('9' - textNumber[i]);
         //std::cout << key << std::endl;
-        Surface * number =  _numbersWhite->at(key);
+        Surface * number;
+        switch (_color)
+        {
+            case COLOR_WHITE:
+                number =  _numbersWhite->at(key);
+                break;
+            case COLOR_RED:
+                number =  _numbersRed->at(key);
+                break;
+        }
         number->x(14*i)
               ->copyTo(surface);
     }
@@ -105,6 +115,32 @@ void BigCounter::setNumber(unsigned int number)
 {
     _number = number;
     needRedraw(true);
+}
+
+unsigned int BigCounter::number()
+{
+    return _number;
+}
+
+
+void BigCounter::setColor(unsigned char color)
+{
+    switch(color)
+    {
+        case COLOR_WHITE:
+        case COLOR_RED:
+            if (_color != color)
+            {
+                _color = color;
+                needRedraw(true);
+            }
+            break;
+    }
+}
+
+unsigned char BigCounter::color()
+{
+    return _color;
 }
 
 }

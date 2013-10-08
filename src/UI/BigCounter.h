@@ -29,17 +29,23 @@ namespace Falltergeist
 class BigCounter : public InteractiveSurface
 {
 protected:
+    unsigned char _color;
     unsigned int _number;
     unsigned int _length;
     std::vector<Surface *> * _numbersWhite;
     std::vector<Surface *> * _numbersRed;
 public:
+    enum {COLOR_WHITE = 1, COLOR_RED};
     BigCounter(int x = 0, int y = 0);
     ~BigCounter();
 
     BigCounter * draw();
 
+    void setColor(unsigned char color);
+    unsigned char color();
+
     void setNumber(unsigned int number);
+    unsigned int number();
 };
 
 }

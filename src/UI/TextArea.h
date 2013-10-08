@@ -77,7 +77,7 @@ public:
 
     TextArea * setText(libfalltergeist::MsgMessage * message);
     TextArea * setText(const char * text);
-    TextArea * setText(unsigned int number);
+    TextArea * setText(int number);
     TextArea * appendText(const char * text);
     TextArea * setText(std::string text);
     char * text();
