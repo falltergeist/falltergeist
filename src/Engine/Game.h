@@ -24,7 +24,7 @@
 #include <string>
 #include <iostream>
 #include <SDL/SDL.h>
-#define VERSION "0.0.4"
+#define VERSION "0.0.5"
 
 namespace Falltergeist
 {
