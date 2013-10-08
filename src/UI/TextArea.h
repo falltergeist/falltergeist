@@ -79,6 +79,7 @@ public:
     TextArea * setText(const char * text);
     TextArea * setText(int number);
     TextArea * appendText(const char * text);
+    TextArea * appendText(int number);
     TextArea * setText(std::string text);
     char * text();
 

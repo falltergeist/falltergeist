@@ -60,6 +60,7 @@ protected:
 
 public:
     PlayerEditState(Game * game);
+    void init();
     void think();
     virtual ~PlayerEditState();
 

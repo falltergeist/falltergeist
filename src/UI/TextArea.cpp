@@ -103,7 +103,7 @@ std::vector<std::string> * TextArea::textLines()
     for (unsigned int i = 0; i != strlen(_text); ++i)
     {
         unsigned char chr = _text[i];
-        if (chr == 0x0D) // "\r"
+        if (chr == '\n')
         {
             _textLines->back() += word; // add current word to the last line
             word = "";
@@ -115,7 +115,7 @@ std::vector<std::string> * TextArea::textLines()
         else
         {
             word += chr;
-            wordWidth += (chr == 0x20) ? (_font->spaceWidth()) : (_font->glyph(chr)->width() + _font->horizontalGap());
+            wordWidth += (chr == ' ') ? (_font->spaceWidth()) : (_font->glyph(chr)->width() + _font->horizontalGap());
 
             // If text area size set and string becomes too long
             if (_width > 0 && (stringWidth + wordWidth >= _width))
@@ -137,7 +137,7 @@ std::vector<std::string> * TextArea::textLines()
             }
             else
             {
-                if (chr == 0x20)  // space
+                if (chr == ' ')  // space
                 {
                     _textLines->back() += word;
                     stringWidth += wordWidth;
@@ -196,10 +196,18 @@ void TextArea::_calculateSize()
 
 TextArea * TextArea::appendText(const char * text)
 {
-    std::string str = "";
+    std::string str;
     str += this->text();
     str += text;
-    setText(str.c_str());
+    return setText(str);
+}
+
+
+TextArea * TextArea::appendText(int number)
+{
+    std::stringstream ss;
+    ss << number;
+    return appendText(ss.str().c_str());
 }
 
 TextArea * TextArea::draw()

@@ -43,48 +43,92 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _images = new std::map<std::string, Surface *>;
 
 
-
-    // Stats titles & descriptions
+    // STATS
     {
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/stat.msg");
-        for (unsigned int i = 0; i != 16; ++i)
+        std::string images[] = { "strength", "perceptn", "endur", "charisma", "intel", "agility", "luck"};
+        const char * plusOn   = "art/intrface/splson.frm";
+        const char * plusOff  = "art/intrface/splsoff.frm";
+        const char * minusOn  = "art/intrface/snegon.frm";
+        const char * minusOff = "art/intrface/snegoff.frm";
+        for (unsigned int i = 0; i != 7; ++i)
         {
             std::stringstream ss;
             ss << "stats_" << (i+1);
-            _addTitle(ss.str(), msg->message(100 + i)->text());
-            _addDescription(ss.str(), msg->message(200 + i)->text());
+
+            _addTitle(ss.str(), msg->message(100 + i)->text());       // stat title
+            _addDescription(ss.str(), msg->message(200 + i)->text()); // stat description
+            _addImage(ss.str(), _game->resourceManager()->surface("art/skilldex/" + images[i] + ".frm")); // stat image
+            _addLabel(ss.str(), new TextArea(102, 46 + 33*i));          // stat value label
+            _addCounter(ss.str(), new BigCounter(59, 37 + 33*i));       // stat value counter
+            _addMask(ss.str(), new HiddenMask(133, 29, 14, 36 + 33*i)); // stat click mask
+            _addButton(ss.str() + "_increase", new ImageButton(plusOff,  plusOn,  149, 38 + 33*i)); // stat increase button
+            _addButton(ss.str() + "_decrease", new ImageButton(minusOff, minusOn, 149, 49 + 33*i)); // stat decrease button
         }
+
+        _addCounter("statsPoints", new BigCounter(126, 282)); // Free stats points counter
     }
 
-    // Traits titles & descriptions
+    // TRAITS
     {
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/trait.msg");
+        std::string images[] = { "fastmeta", "bruiser", "smlframe", "onehand", "finesse", "kamikaze", "heavyhnd", "fastshot",
+                                  "bldmess", "jinxed", "goodnatr", "addict", "drugrest", "empathy", "skilled", "gifted"};
+        const char * on  = "art/intrface/tgsklon.frm";
+        const char * off = "art/intrface/tgskloff.frm";
+
         for (unsigned int i = 0; i != 16; ++i)
         {
             std::stringstream ss;
             ss << "traits_" << (i+1);
-            _addTitle(ss.str(), msg->message(100 + i)->text());
-            _addDescription(ss.str(), msg->message(200 + i)->text());
+            _addTitle(ss.str(), msg->message(100 + i)->text()); // trait title
+            _addDescription(ss.str(), msg->message(200 + i)->text()); // trait description
+            _addImage(ss.str(), _game->resourceManager()->surface("art/skilldex/" + images[i] + ".frm")); // trait image
+            // left column
+            if (i <= 7)
+            {
+                _addLabel(ss.str(),  new TextArea(msg->message(100 + i), 48, 353 + 13*i)); // trate label
+                _addButton(ss.str(),  new ImageButton(off, on, 23,  352 + 13*i)); // trate toggle button
+            }
+            //right column
+            else
+            {
+                _addLabel(ss.str(),  new TextArea(msg->message(100 + i), 169, 353 + 13*(i-8)))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT); // trate label
+                _addButton(ss.str(),  new ImageButton(off, on, 299, 352 + 13*(i-8))); // trate toggle button
+            }
         }
     }
 
-    // Skills titles & descriptions
+    // SKILLS
     {
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/skill.msg");
+        std::string images[] = { "gunsml", "gunbig", "energywp", "unarmed", "melee", "throwing", "firstaid", "doctor", "sneak",
+                                 "lockpick", "steal", "traps", "science", "repair", "speech", "barter", "gambling", "outdoors"};
+        const char * on  = "art/intrface/tgsklon.frm";
+        const char * off = "art/intrface/tgskloff.frm";
         for (unsigned int i = 0; i != 18; ++i)
         {
             std::stringstream ss;
             ss << "skills_" << (i+1);
             _addTitle(ss.str(), msg->message(100 + i)->text());
             _addDescription(ss.str(), msg->message(200 + i)->text());
+            _addImage(ss.str(), _game->resourceManager()->surface("art/skilldex/" + images[i] + ".frm"));
+            _addButton(ss.str(),  new ImageButton(off, on, 347,  26 + 11*i));
+            _addLabel(ss.str(),  new TextArea(msg->message(100 + i), 377, 27 + 11*i))->setWidth(240);
+            _addLabel(ss.str() + "_value",  new TextArea("", 577, 27 + 11*i));
         }
+        // Free skill points counts
+        _addCounter("skillsPoints", new BigCounter(522, 228));
     }
 
-    // Health condition titles & descriptions
+    // HEALTH CONDITION
     {
-        _addDescription("health_1", _game->resourceManager()->msgFileType("text/english/game/stat.msg")->message(207)->text());
+        std::string images[] = { "hitpoint", "poisoned", "radiated", "eyedamag", "armright", "armleft", "legright", "legleft"};
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
         _addTitle("health_1", msg->message(300)->text());
+        _addLabel("health_1",  new TextArea(msg->message(300), 194, 46)); //health
+        _addDescription("health_1", _game->resourceManager()->msgFileType("text/english/game/stat.msg")->message(207)->text());
+        _addImage("health_1", _game->resourceManager()->surface("art/skilldex/" + images[0] + ".frm"));
 
         for (unsigned int i = 0; i != 7; ++i)
         {
@@ -92,298 +136,36 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
             ss << "health_" << (i+2);
             _addTitle(ss.str(), msg->message(312 + i)->text());
             _addDescription(ss.str(), msg->message(400 + i)->text());
+            _addLabel(ss.str(),  new TextArea(msg->message(312+i), 194, 46 + 13*(i+1)))->setColor(0xFF183018);
+            _addImage(ss.str(), _game->resourceManager()->surface("art/skilldex/" + images[i+1] + ".frm"));
         }
     }
 
-    // Player params
+    // PLAYER PARAMS
     {
-        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/stat.msg");
+        std::string images[] = {"armorcls", "actionpt", "carryamt", "meleedam", "damresis", "poisnres", "radresis", "sequence", "healrate", "critchnc"};
+        unsigned int labels[] = {302, 301, 311, 304, 305, 306, 307, 308, 309, 310};
+        libfalltergeist::MsgFileType * msgStat = _game->resourceManager()->msgFileType("text/english/game/stat.msg");
+        libfalltergeist::MsgFileType * msgEditor = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
         const int params[] = {109, 108, 112, 111, 124, 132, 131, 113, 114, 115};
         for (unsigned int i = 0; i != 10; ++i)
         {
             std::stringstream ss;
             ss << "params_" << (i+1);
-            _addTitle(ss.str(), msg->message(params[i])->text());
-            _addDescription(ss.str(), msg->message(params[i] + 100)->text());
+            _addTitle(ss.str(), msgStat->message(params[i])->text());
+            _addDescription(ss.str(), msgStat->message(params[i] + 100)->text());
+            _addImage(ss.str(), _game->resourceManager()->surface("art/skilldex/" + images[i] + ".frm"));
+            _addLabel(ss.str(),  new TextArea(msgEditor->message(labels[i]), 194, 182 + 13*i));
+            _addLabel(ss.str() + "_value",  new TextArea("", 288, 182 + 13*i));
         }
     }
 
-
-    // Images
-    {
-        const char * stats[] = { "strength", "perceptn", "endur", "charisma", "intel", "agility", "luck"};
-        for (unsigned int i = 0; i != 7; ++i)
-        {
-            std::stringstream name;
-            name << "stats_" << (i+1);
-
-            std::stringstream filename;
-            filename << "art/skilldex/" << stats[i] << ".frm";
-            Surface * surface = _game->resourceManager()->surface(filename.str().c_str());
-            _addImage(name.str(), surface);
-        }
-
-        const char * traits[] = { "fastmeta", "bruiser", "smlframe", "onehand", "finesse", "kamikaze", "heavyhnd", "fastshot",
-                                  "bldmess", "jinxed", "goodnatr", "addict", "drugrest", "empathy", "skilled", "gifted"};
-        for (unsigned int i = 0; i != 16; ++i)
-        {
-            std::stringstream name;
-            name << "traits_" << (i+1);
-
-            std::stringstream filename;
-            filename << "art/skilldex/" << traits[i] << ".frm";
-            Surface * surface = _game->resourceManager()->surface(filename.str().c_str());
-            _addImage(name.str(), surface);
-        }
-
-        const char * skills[] = { "gunsml", "gunbig", "energywp", "unarmed", "melee", "throwing", "firstaid", "doctor", "sneak",
-                                 "lockpick", "steal", "traps", "science", "repair", "speech", "barter", "gambling", "outdoors"};
-        for (unsigned int i = 0; i != 18; ++i)
-        {
-            std::stringstream name;
-            name << "skills_" << (i+1);
-
-            std::stringstream filename;
-            filename << "art/skilldex/" << skills[i] << ".frm";
-            Surface * surface = _game->resourceManager()->surface(filename.str().c_str());
-            _addImage(name.str(), surface);
-        }
-
-        const char * health[] = { "hitpoint", "poisoned", "radiated", "eyedamag", "armright", "armleft", "legright", "legleft"};
-        for (unsigned int i = 0; i != 8; ++i)
-        {
-            std::stringstream name;
-            name << "health_" << (i+1);
-
-            std::stringstream filename;
-            filename << "art/skilldex/" << health[i] << ".frm";
-            Surface * surface = _game->resourceManager()->surface(filename.str().c_str());
-            _addImage(name.str(), surface);
-        }
-
-        const char * params[] = {"armorcls", "actionpt", "carryamt", "meleedam", "damresis", "poisnres", "radresis", "sequence", "healrate", "critchnc"};
-        for (unsigned int i = 0; i != 10; ++i)
-        {
-            std::stringstream name;
-            name << "params_" << (i+1);
-
-            std::stringstream filename;
-            filename << "art/skilldex/" << params[i] << ".frm";
-            Surface * surface = _game->resourceManager()->surface(filename.str().c_str());
-            _addImage(name.str(), surface);
-        }
-
-
-    }
 
     Surface * background = new Surface(_game->resourceManager()->surface("art/intrface/edtrcrte.frm"));
 
     // description horizontal line
     for (unsigned int y = 300; y != 302; ++y) for (unsigned int x = 350; x != 620; ++x) background->pixel(x,y, 0xFF000000);
 
-    // Primary stats buttons
-    {
-        const char * plusOn   = "art/intrface/splson.frm";
-        const char * plusOff  = "art/intrface/splsoff.frm";
-        const char * minusOn  = "art/intrface/snegon.frm";
-        const char * minusOff = "art/intrface/snegoff.frm";
-
-        _addButton("stats_1_increase", new ImageButton(plusOff,  plusOn,  149, 38));
-        _addButton("stats_1_decrease", new ImageButton(minusOff, minusOn, 149, 49));
-        _addButton("stats_2_increase", new ImageButton(plusOff,  plusOn,  149, 71));
-        _addButton("stats_2_decrease", new ImageButton(minusOff, minusOn, 149, 82));
-        _addButton("stats_3_increase", new ImageButton(plusOff,  plusOn,  149, 104));
-        _addButton("stats_3_decrease", new ImageButton(minusOff, minusOn, 149, 115));
-        _addButton("stats_4_increase", new ImageButton(plusOff,  plusOn,  149, 137));
-        _addButton("stats_4_decrease", new ImageButton(minusOff, minusOn, 149, 148));
-        _addButton("stats_5_increase", new ImageButton(plusOff,  plusOn,  149, 170));
-        _addButton("stats_5_decrease", new ImageButton(minusOff, minusOn, 149, 181));
-        _addButton("stats_6_increase", new ImageButton(plusOff,  plusOn,  149, 203));
-        _addButton("stats_6_decrease", new ImageButton(minusOff, minusOn, 149, 214));
-        _addButton("stats_7_increase", new ImageButton(plusOff,  plusOn,  149, 236));
-        _addButton("stats_7_decrease", new ImageButton(minusOff, minusOn, 149, 247));
-    }
-    // Primary stats labels
-    {
-        _addLabel("stats_1", new TextArea(102, 46));
-        _addLabel("stats_2", new TextArea(102, 79));
-        _addLabel("stats_3", new TextArea(102, 112));
-        _addLabel("stats_4", new TextArea(102, 145));
-        _addLabel("stats_5", new TextArea(102, 178));
-        _addLabel("stats_6", new TextArea(102, 211));
-        _addLabel("stats_7", new TextArea(102, 244));
-    }
-    // Primary stats counters
-    {
-        _addCounter("stats_1", new BigCounter(59, 37));
-        _addCounter("stats_2", new BigCounter(59, 70));
-        _addCounter("stats_3", new BigCounter(59, 103));
-        _addCounter("stats_4", new BigCounter(59, 136));
-        _addCounter("stats_5", new BigCounter(59, 169));
-        _addCounter("stats_6", new BigCounter(59, 202));
-        _addCounter("stats_7", new BigCounter(59, 235));
-        // Free stats points counter
-        _addCounter("statsPoints", new BigCounter(126, 282));
-        // Free skill points counts
-        _addCounter("skillsPoints", new BigCounter(522, 228));
-    }
-
-    // Primaty stats hidden masks
-    {
-        _addMask("stats_1", new HiddenMask(133, 29, 14, 36));
-        _addMask("stats_2", new HiddenMask(133, 29, 14, 36 + 33));
-        _addMask("stats_3", new HiddenMask(133, 29, 14, 36 + 33*2));
-        _addMask("stats_4", new HiddenMask(133, 29, 14, 36 + 33*3));
-        _addMask("stats_5", new HiddenMask(133, 29, 14, 36 + 33*4));
-        _addMask("stats_6", new HiddenMask(133, 29, 14, 36 + 33*5));
-        _addMask("stats_7", new HiddenMask(133, 29, 14, 36 + 33*6));
-    }
-
-    // Traits labels
-    {
-        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/trait.msg");
-        _addLabel("traits_1",  new TextArea(msg->message(100), 47, 352));
-        _addLabel("traits_2",  new TextArea(msg->message(101), 47, 366));
-        _addLabel("traits_3",  new TextArea(msg->message(102), 47, 380));
-        _addLabel("traits_4",  new TextArea(msg->message(103), 47, 393));
-        _addLabel("traits_5",  new TextArea(msg->message(104), 47, 407));
-        _addLabel("traits_6",  new TextArea(msg->message(105), 47, 420));
-        _addLabel("traits_7",  new TextArea(msg->message(106), 47, 433));
-        _addLabel("traits_8",  new TextArea(msg->message(107), 47, 447));
-        _addLabel("traits_9",  new TextArea(msg->message(108), 169, 352))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-        _addLabel("traits_10", new TextArea(msg->message(109), 169, 366))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-        _addLabel("traits_11", new TextArea(msg->message(110), 169, 380))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-        _addLabel("traits_12", new TextArea(msg->message(111), 169, 393))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-        _addLabel("traits_13", new TextArea(msg->message(112), 169, 407))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-        _addLabel("traits_14", new TextArea(msg->message(113), 169, 420))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-        _addLabel("traits_15", new TextArea(msg->message(114), 169, 433))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-        _addLabel("traits_16", new TextArea(msg->message(115), 169, 447))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-    }
-    // Traits buttons
-    {
-        const char * on  = "art/intrface/tgsklon.frm";
-        const char * off = "art/intrface/tgskloff.frm";
-        _addButton("traits_1",  new ImageButton(off, on, 23,  352));
-        _addButton("traits_2",  new ImageButton(off, on, 23,  365));
-        _addButton("traits_3",  new ImageButton(off, on, 23,  379));
-        _addButton("traits_4",  new ImageButton(off, on, 23,  391));
-        _addButton("traits_5",  new ImageButton(off, on, 23,  405));
-        _addButton("traits_6",  new ImageButton(off, on, 23,  417));
-        _addButton("traits_7",  new ImageButton(off, on, 23,  431));
-        _addButton("traits_8",  new ImageButton(off, on, 23,  444));
-        _addButton("traits_9",  new ImageButton(off, on, 299, 352));
-        _addButton("traits_10", new ImageButton(off, on, 299, 365));
-        _addButton("traits_11", new ImageButton(off, on, 299, 379));
-        _addButton("traits_12", new ImageButton(off, on, 299, 391));
-        _addButton("traits_13", new ImageButton(off, on, 299, 405));
-        _addButton("traits_14", new ImageButton(off, on, 299, 417));
-        _addButton("traits_15", new ImageButton(off, on, 299, 431));
-        _addButton("traits_16", new ImageButton(off, on, 299, 444));
-    }
-
-    // Skills buttons
-    {
-        const char * on  = "art/intrface/tgsklon.frm";
-        const char * off = "art/intrface/tgskloff.frm";
-        _addButton("skills_1",  new ImageButton(off, on, 347,  26));
-        _addButton("skills_2",  new ImageButton(off, on, 347,  26 + 11));
-        _addButton("skills_3",  new ImageButton(off, on, 347,  26 + 11*2));
-        _addButton("skills_4",  new ImageButton(off, on, 347,  26 + 11*3));
-        _addButton("skills_5",  new ImageButton(off, on, 347,  26 + 11*4));
-        _addButton("skills_6",  new ImageButton(off, on, 347,  26 + 11*5));
-        _addButton("skills_7",  new ImageButton(off, on, 347,  26 + 11*6));
-        _addButton("skills_8",  new ImageButton(off, on, 347,  26 + 11*7));
-        _addButton("skills_9",  new ImageButton(off, on, 347,  26 + 11*8));
-        _addButton("skills_10", new ImageButton(off, on, 347,  26 + 11*9));
-        _addButton("skills_11", new ImageButton(off, on, 347,  26 + 11*10));
-        _addButton("skills_12", new ImageButton(off, on, 347,  26 + 11*11));
-        _addButton("skills_13", new ImageButton(off, on, 347,  26 + 11*12));
-        _addButton("skills_14", new ImageButton(off, on, 347,  26 + 11*13));
-        _addButton("skills_15", new ImageButton(off, on, 347,  26 + 11*14));
-        _addButton("skills_16", new ImageButton(off, on, 347,  26 + 11*15));
-        _addButton("skills_17", new ImageButton(off, on, 347,  26 + 11*16));
-        _addButton("skills_18", new ImageButton(off, on, 347,  26 + 11*17));
-    }
-    // Skills labels
-    {
-        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/skill.msg");
-        _addLabel("skills_1",  new TextArea(msg->message(100), 377, 27))->setWidth(240);
-        _addLabel("skills_2",  new TextArea(msg->message(101), 377, 27 + 11))->setWidth(240);
-        _addLabel("skills_3",  new TextArea(msg->message(102), 377, 27 + 11*2))->setWidth(240);
-        _addLabel("skills_4",  new TextArea(msg->message(103), 377, 27 + 11*3))->setWidth(240);
-        _addLabel("skills_5",  new TextArea(msg->message(104), 377, 27 + 11*4))->setWidth(240);
-        _addLabel("skills_6",  new TextArea(msg->message(105), 377, 27 + 11*5))->setWidth(240);
-        _addLabel("skills_7",  new TextArea(msg->message(106), 377, 27 + 11*6))->setWidth(240);
-        _addLabel("skills_8",  new TextArea(msg->message(107), 377, 27 + 11*7))->setWidth(240);
-        _addLabel("skills_9",  new TextArea(msg->message(108), 377, 27 + 11*8))->setWidth(240);
-        _addLabel("skills_10", new TextArea(msg->message(109), 377, 27 + 11*9))->setWidth(240);
-        _addLabel("skills_11", new TextArea(msg->message(110), 377, 27 + 11*10))->setWidth(240);
-        _addLabel("skills_12", new TextArea(msg->message(111), 377, 27 + 11*11))->setWidth(240);
-        _addLabel("skills_13", new TextArea(msg->message(112), 377, 27 + 11*12))->setWidth(240);
-        _addLabel("skills_14", new TextArea(msg->message(113), 377, 27 + 11*13))->setWidth(240);
-        _addLabel("skills_15", new TextArea(msg->message(114), 377, 27 + 11*14))->setWidth(240);
-        _addLabel("skills_16", new TextArea(msg->message(115), 377, 27 + 11*15))->setWidth(240);
-        _addLabel("skills_17", new TextArea(msg->message(116), 377, 27 + 11*16))->setWidth(240);
-        _addLabel("skills_18", new TextArea(msg->message(117), 377, 27 + 11*17))->setWidth(240);
-        _addLabel("skills_1_value",  new TextArea("", 577, 27));
-        _addLabel("skills_2_value",  new TextArea("", 577, 27 + 11));
-        _addLabel("skills_3_value",  new TextArea("", 577, 27 + 11*2));
-        _addLabel("skills_4_value",  new TextArea("", 577, 27 + 11*3));
-        _addLabel("skills_5_value",  new TextArea("", 577, 27 + 11*4));
-        _addLabel("skills_6_value",  new TextArea("", 577, 27 + 11*5));
-        _addLabel("skills_7_value",  new TextArea("", 577, 27 + 11*6));
-        _addLabel("skills_8_value",  new TextArea("", 577, 27 + 11*7));
-        _addLabel("skills_9_value",  new TextArea("", 577, 27 + 11*8));
-        _addLabel("skills_10_value", new TextArea("", 577, 27 + 11*9));
-        _addLabel("skills_11_value", new TextArea("", 577, 27 + 11*10));
-        _addLabel("skills_12_value", new TextArea("", 577, 27 + 11*11));
-        _addLabel("skills_13_value", new TextArea("", 577, 27 + 11*12));
-        _addLabel("skills_14_value", new TextArea("", 577, 27 + 11*13));
-        _addLabel("skills_15_value", new TextArea("", 577, 27 + 11*14));
-        _addLabel("skills_16_value", new TextArea("", 577, 27 + 11*15));
-        _addLabel("skills_17_value", new TextArea("", 577, 27 + 11*16));
-        _addLabel("skills_18_value", new TextArea("", 577, 27 + 11*17));
-    }
-    // Health condition
-    {
-        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
-
-        _addLabel("health_1",  new TextArea(msg->message(300), 194, 46)); //health
-        _addLabel("health_2",  new TextArea(msg->message(312), 194, 46 + 13*1))->setColor(0xFF183018); //poisoning
-        _addLabel("health_3",  new TextArea(msg->message(313), 194, 46 + 13*2))->setColor(0xFF183018);
-        _addLabel("health_4",  new TextArea(msg->message(314), 194, 46 + 13*3))->setColor(0xFF183018);
-        _addLabel("health_5",  new TextArea(msg->message(315), 194, 46 + 13*4))->setColor(0xFF183018);
-        _addLabel("health_6",  new TextArea(msg->message(316), 194, 46 + 13*5))->setColor(0xFF183018);
-        _addLabel("health_7",  new TextArea(msg->message(317), 194, 46 + 13*6))->setColor(0xFF183018);
-        _addLabel("health_8",  new TextArea(msg->message(318), 194, 46 + 13*7))->setColor(0xFF183018);
-    }
-    // Player params
-    {
-        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
-
-        _addLabel("params_1",  new TextArea(msg->message(302), 194, 182));
-        _addLabel("params_2",  new TextArea(msg->message(301), 194, 182 + 13*1));
-        _addLabel("params_3",  new TextArea(msg->message(311), 194, 182 + 13*2));
-        _addLabel("params_4",  new TextArea(msg->message(304), 194, 182 + 13*3));
-        _addLabel("params_5",  new TextArea(msg->message(305), 194, 182 + 13*4));
-        _addLabel("params_6",  new TextArea(msg->message(306), 194, 182 + 13*5));
-        _addLabel("params_7",  new TextArea(msg->message(307), 194, 182 + 13*6));
-        _addLabel("params_8",  new TextArea(msg->message(308), 194, 182 + 13*7));
-        _addLabel("params_9",  new TextArea(msg->message(309), 194, 182 + 13*8));
-        _addLabel("params_10", new TextArea(msg->message(310), 194, 182 + 13*9));
-
-        _addLabel("params_1_value",  new TextArea("1", 288, 182));
-        _addLabel("params_2_value",  new TextArea("2", 288, 182 + 13*1));
-        _addLabel("params_3_value",  new TextArea("3", 288, 182 + 13*2));
-        _addLabel("params_4_value",  new TextArea("4", 288, 182 + 13*3));
-        _addLabel("params_5_value",  new TextArea("5", 288, 182 + 13*4));
-        _addLabel("params_6_value",  new TextArea("6", 288, 182 + 13*5));
-        _addLabel("params_7_value",  new TextArea("7", 288, 182 + 13*6));
-        _addLabel("params_8_value",  new TextArea("8", 288, 182 + 13*7));
-        _addLabel("params_9_value",  new TextArea("9", 288, 182 + 13*8));
-        _addLabel("params_10_value", new TextArea("0", 288, 182 + 13*9));
-
-    }
 
 
     {
@@ -482,16 +264,12 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     _image = new Surface(_selectedImage);
     add(_image);
 
-    _title = new TextArea(" ", 350,275);
-    _title->setFont("font2.aaf");
-    _title->setColor(0xFF000000);
+    _title = new TextArea("", 350,275);
+    _title->setFont("font2.aaf")->setColor(0xFF000000);
     add(_title);
 
-    _description = new TextArea(" ", 350, 315);
-    _description->setColor(0xFF000000);
-    _description->setWidth(145);
-    _description->setHeight(120);
-    _description->setWordWrap(true);
+    _description = new TextArea("", 350, 315);
+    _description->setColor(0xFF000000)->setWidth(145)->setHeight(120)->setWordWrap(true);
     add(_description);
 
 }
@@ -508,6 +286,10 @@ PlayerEditState::~PlayerEditState()
     delete _image;
     delete _title;
     delete _description;
+}
+
+void PlayerEditState::init()
+{
 }
 
 TextArea * PlayerEditState::_addLabel(std::string name, TextArea * label)
@@ -553,196 +335,16 @@ void PlayerEditState::_addImage(std::string name, Surface * image)
 void PlayerEditState::think()
 {
     Player * player = _game->player();
+    libfalltergeist::MsgFileType * msgEditor = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
 
-    // primary stats labels
-    {
-        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
-        std::map<std::string, TextArea *>::iterator it;
-        // default colors and values
-        for(it = _labels->begin(); it != _labels->end(); ++it)
-        {
-            std::string name = it->first;
+    _labels->at("name")->setText(player->name());
+    _labels->at("age")->setText(msgEditor->message(104))->appendText(" ")->appendText(player->age());
+    _labels->at("gender")->setText(msgEditor->message(player->gender() == Player::GENDER_MALE ? 107 : 108));
 
-            if (name.compare("name") == 0)
-            {
-                it->second->setText(_game->player()->name());
-            }
+    _counters->at("statsPoints")->setNumber(player->characterPoints());
+    _counters->at("skillsPoints")->setNumber(player->skillPoints());
 
-            if (name.compare("age") == 0)
-            {
-                std::stringstream ss;
-                ss << msg->message(104)->text() << " " << (unsigned int) _game->player()->age();
-                it->second->setText(ss.str().c_str());
-            }
-
-            if (name.compare("gender") == 0)
-            {
-                it->second->setText(msg->message(_game->player()->gender() == Player::GENDER_MALE ? 107 : 108));
-            }
-
-            if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0 || name.find("params_") == 0)
-            {
-                it->second->setColor(0xFF3FF800);
-            }
-
-            if (name.find("traits_") == 0)
-            {
-                unsigned int number = atoi(name.substr(7).c_str());
-                if (_game->player()->trait(number - 1) == 1) it->second->setColor(0xFFA0A0A0);
-            }
-
-            if (name.find("skills_") == 0)
-            {
-                unsigned int number = atoi(name.substr(7).c_str());
-                if (_game->player()->skill(number - 1) == 1)
-                {
-                    it->second->setColor(0xFFA0A0A0);
-                    //_labels->at(name+"_value")->setColor(0xFFA0A0A0);
-                }
-            }
-
-            if (name.find("health_") == 0)
-            {
-                if (name.compare("health_1") == 0)
-                {
-                    it->second->setColor(0xFF3FF800);
-                }
-                else
-                {
-                    it->second->setColor(0xFF183018);
-                }
-            }
-        }
-
-        // selected label colors and values
-        for(it = _labels->begin(); it != _labels->end(); ++it)
-        {
-            if (_selectedLabel != it->second) continue;
-
-            std::string name = it->first;
-
-            if (name.find("stats_") == 0 || name.find("traits_") == 0)
-            {
-                it->second->setColor(0xFFFFFF7F);
-            }
-
-            if (name.find("params_") == 0 || name.find("skills_") == 0)
-            {
-                it->second->setColor(0xFFFFFF7F);
-                _labels->at(name+"_value")->setColor(0xFFFFFF7F);
-            }
-
-            if (name.find("traits_") == 0)
-            {
-                unsigned int number = atoi(name.substr(7).c_str());
-                if (_game->player()->trait(number - 1) == 1) it->second->setColor(0xFFFFFFFF);
-            }
-
-            if (name.find("skills_") == 0)
-            {
-                unsigned int number = atoi(name.substr(7).c_str());
-                if (_game->player()->skill(number - 1) == 1)
-                {
-                    it->second->setColor(0xFFFFFFFF);
-                    std::string label = name;
-                    if (name.find("_value") > 0)
-                    {
-                        label = name.substr(0, name.find("_value"));
-                    }
-                    _labels->at(label+"_value")->setColor(0xFFFFFFFF);
-                }
-            }
-
-            if (name.find("health_") == 0)
-            {
-                if (name.compare("health_1") == 0)
-                {
-                    it->second->setColor(0xFFFFFF7F);
-                }
-                else
-                {
-                    it->second->setColor(0xFF707820);
-                }
-            }
-        }
-
-        unsigned int val = player->strength() + player->strengthBonus();
-        if (val > 10) val = 10; if (val < 1) val = 1;
-        _labels->at("stats_1")->setText(msg->message(199 + val));
-
-        val = player->perception() + player->perceptionBonus();
-        if (val > 10) val = 10; if (val < 1) val = 1;
-        _labels->at("stats_2")->setText(msg->message(199 + val));
-
-        val = player->endurance() + player->enduranceBonus();
-        if (val > 10) val = 10; if (val < 1) val = 1;
-        _labels->at("stats_3")->setText(msg->message(199 + val));
-
-        val = player->charisma() + player->charismaBonus();
-        if (val > 10) val = 10; if (val < 1) val = 1;
-        _labels->at("stats_4")->setText(msg->message(199 + val));
-
-        val = player->intelligence() + player->intelligenceBonus();
-        if (val > 10) val = 10; if (val < 1) val = 1;
-        _labels->at("stats_5")->setText(msg->message(199 + val));
-
-        val = player->agility() + player->agilityBonus();
-        if (val > 10) val = 10; if (val < 1) val = 1;
-        _labels->at("stats_6")->setText(msg->message(199 + val));
-
-        val = player->luck() + player->luckBonus();
-        if (val > 10) val = 10; if (val < 1) val = 1;
-        _labels->at("stats_7")->setText(msg->message(199 + val));
-    }
-
-    // primary stats counters
-    _counters->at("stats_1")->setNumber(player->strength() + player->strengthBonus());
-    _counters->at("stats_2")->setNumber(player->perception() + player->perceptionBonus());
-    _counters->at("stats_3")->setNumber(player->endurance() + player->enduranceBonus());
-    _counters->at("stats_4")->setNumber(player->charisma() + player->charismaBonus());
-    _counters->at("stats_5")->setNumber(player->intelligence() + player->intelligenceBonus());
-    _counters->at("stats_6")->setNumber(player->agility() + player->agilityBonus());
-    _counters->at("stats_7")->setNumber(player->luck() + player->luckBonus());
-
-    for (std::map<std::string, BigCounter *>::iterator it = _counters->begin(); it != _counters->end(); ++it)
-    {
-        if (it->first.find("stats_") == 0)
-        {
-            if (it->second->number() > 10)
-            {
-                it->second->setColor(BigCounter::COLOR_RED);
-            }
-            else
-            {
-                it->second->setColor(BigCounter::COLOR_WHITE);
-            }
-        }
-    }
-
-    _counters->at("statsPoints")->setNumber(_game->player()->characterPoints());
-    _counters->at("skillsPoints")->setNumber(_game->player()->skillPoints());
-
-
-    // Getting image and description by selected label
-    std::map<std::string, TextArea *>::iterator it;
-    for(it = _labels->begin(); it != _labels->end(); ++it)
-    {
-        if (_selectedLabel == it->second)
-        {
-            //std::string name = ;
-            _title->setText(_titles->at(it->first).c_str());
-            _description->setText(_descriptions->at(it->first).c_str());
-            _selectedImage = _images->at(it->first);
-            _image->loadFromSurface(_selectedImage)->x(480)->y(310);
-        }
-    }
-
-
-    libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
-    std::stringstream ss;
-    ss << msg->message(300)->text() << "  " << player->hitPointsMaximum() << "/" << player->hitPointsMaximum();
-    _labels->at("health_1")->setText(ss.str().c_str());
-
+    _labels->at("health_1")->setText(msgEditor->message(300))->appendText("  ")->appendText(player->hitPointsMaximum())->appendText("/")->appendText(player->hitPointsMaximum());
     _labels->at("params_1_value")->setText(player->armorClass());
     _labels->at("params_2_value")->setText(player->actionPoints());
     _labels->at("params_3_value")->setText(player->carryWeight());
@@ -754,20 +356,107 @@ void PlayerEditState::think()
     _labels->at("params_9_value")->setText(player->healingRate());
     _labels->at("params_10_value")->setText(player->criticalChance())->appendText("%");
 
-    for (unsigned int i = 1; i != 19; ++i)
+    // Stats counters and labels
+    for (unsigned int i = 0; i != 7; ++i)
     {
         std::stringstream ss;
-        ss << "skills_" << i << "_value";
-        _labels->at(ss.str().c_str())->setText(player->skillValue(i-1))->appendText("%");
+        ss << "stats_" << (i+1);
+        unsigned int val = player->stat(i) + player->statBonus(i);
+        _counters->at(ss.str())->setNumber(val);
+        _counters->at(ss.str())->setColor(BigCounter::COLOR_WHITE);
+        if (val > 10)
+        {
+            val = 10;
+            _counters->at(ss.str())->setColor(BigCounter::COLOR_RED);
+        }
+        _labels->at(ss.str())->setText(msgEditor->message(199 + (val < 1 ? 1 : val)));
     }
+
+    // Skills values
+    for (unsigned int i = 0; i != 18; ++i)
+    {
+        std::stringstream ss;
+        ss << "skills_" << (i + 1) << "_value";
+        _labels->at(ss.str())->setText(player->skillValue(i))->appendText("%");
+    }
+
+
+    std::map<std::string, TextArea *>::iterator it;
+    // Default labels colors
+    for(it = _labels->begin(); it != _labels->end(); ++it)
+    {
+        std::string name = it->first;
+
+
+        if (name.find("stats_") == 0 || name.find("params_") == 0)
+        {
+            it->second->setColor(0xFF3FF800);
+        }
+
+        if (name.find("traits_") == 0)
+        {
+            unsigned int number = atoi(name.substr(7).c_str());
+            it->second->setColor(player->trait(number - 1) ? 0xFFA0A0A0 : 0xFF3FF800);
+        }
+
+        if (name.find("skills_") == 0)
+        {
+            unsigned int number = atoi(name.substr(7).c_str());
+            it->second->setColor(player->skill(number - 1) ? 0xFFA0A0A0 : 0xFF3FF800);
+        }
+
+        if (name.find("health_") == 0)
+        {
+            it->second->setColor(name.compare("health_1") == 0 ? 0xFF3FF800 : 0xFF183018);
+        }
+    }
+
+    // Selected labels colors
+    for(it = _labels->begin(); it != _labels->end(); ++it)
+    {
+        if (_selectedLabel != it->second) continue;
+
+        std::string name = it->first;
+
+        _title->setText(_titles->at(name));
+        _description->setText(_descriptions->at(name));
+        _selectedImage = _images->at(name);
+        _image->loadFromSurface(_selectedImage)->x(480)->y(310);
+
+        if (name.find("stats_") == 0)
+        {
+            it->second->setColor(0xFFFFFF7F);
+        }
+
+        if (name.find("params_") == 0)
+        {
+            it->second->setColor(0xFFFFFF7F);
+            _labels->at(name+"_value")->setColor(0xFFFFFF7F);
+        }
+
+        if (name.find("traits_") == 0)
+        {
+            unsigned int number = atoi(name.substr(7).c_str());
+            it->second->setColor(player->trait(number - 1) ? 0xFFFFFFFF : 0xFFFFFF7F);
+        }
+
+        if (name.find("skills_") == 0)
+        {
+            unsigned int number = atoi(name.substr(7).c_str());
+            it->second->setColor(player->skill(number - 1) ? 0xFFFFFFFF : 0xFFFFFF7F);
+            _labels->at(name+"_value")->setColor(player->skill(number - 1) ? 0xFFFFFFFF : 0xFFFFFF7F);
+        }
+
+        if (name.find("health_") == 0)
+        {
+            it->second->setColor(name.compare("health_1") == 0 ? 0xFFFFFF7F : 0xFF707820);
+        }
+    }
+
 }
 
 void PlayerEditState::onButtonClick(Event * event)
 {    
-    //for (unsigned int i = 0; i != 18; ++i)
-    //{
-        //std::cout << "SKILL "<< i << ": " << (int) _game->player()->skill(i) << std::endl;
-    //}
 
     std::map<std::string, ImageButton *>::iterator it;
     for(it = _buttons->begin(); it != _buttons->end(); ++it)
@@ -776,18 +465,9 @@ void PlayerEditState::onButtonClick(Event * event)
         {
             std::string name = it->first;
 
-            if (name.compare("name") == 0)
-            {
-                return onNameButtonClick(event);
-            }
-            if (name.compare("age") == 0)
-            {
-                return onAgeButtonClick(event);
-            }
-            if (name.compare("gender") == 0)
-            {
-                return onGenderButtonClick(event);
-            }
+            if (name.compare("name") == 0) return onNameButtonClick(event);
+            if (name.compare("age") == 0) return onAgeButtonClick(event);
+            if (name.compare("gender") == 0) return onGenderButtonClick(event);
 
             if (name.find("stats_") == 0)
             {
@@ -814,7 +494,7 @@ void PlayerEditState::onButtonClick(Event * event)
                     PlayerEditAlertState * state = new PlayerEditAlertState(_game);
                     libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
                     std::string text = msg->message(148)->text();
-                    text += "\r";
+                    text += "\n";
                     text += msg->message(149)->text();
                     state->setMessage(text);
                     _game->pushState(state);
@@ -831,7 +511,7 @@ void PlayerEditState::onButtonClick(Event * event)
                     PlayerEditAlertState * state = new PlayerEditAlertState(_game);
                     libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
                     std::string text = msg->message(140)->text();
-                    text += "\r";
+                    text += "\n";
                     text += msg->message(141)->text();
                     state->setMessage(text);
                     _game->pushState(state);
