@@ -52,6 +52,7 @@ Player::Player(libfalltergeist::GcdFileType * gcd)
     _hitPoints = 0;
     _gender = 0;
     _level = 1;
+    _age = 0;
     _experience = 0;
     _stats = new unsigned int[7]();
     _statsBonus = new unsigned int[7]();
@@ -84,6 +85,7 @@ Player::Player(libfalltergeist::GcdFileType * gcd)
     this->setAge(             gcd->age());
 
     this->setHitPoints(       gcd->hitPoints() + gcd->hitPointsBonus());
+
 
     this->setTrait(gcd->firstTrait(), 1);
     this->setTrait(gcd->secondTrait(), 1);
@@ -336,9 +338,20 @@ unsigned int Player::trait(unsigned int traitNumber)
     return _traits[traitNumber];
 }
 
-void Player::setTrait(unsigned int traitNumber, unsigned int value)
+void Player::setTrait(int traitNumber, unsigned int value)
 {
-    _traits[traitNumber] = value;
+    if (traitNumber > 0 && traitNumber < 16)
+    {
+        _traits[traitNumber] = value;
+    }
+    else if (traitNumber == -1)
+    {
+        return;
+    }
+    else
+    {
+        std::cout << "Player::setTrait() - traitNumber out of range: " << (int) traitNumber << std::endl;
+    }
 }
 
 bool Player::traitToggle(unsigned int traitNumber)
@@ -366,9 +379,16 @@ unsigned int Player::skill(unsigned int skillNumber)
     return _skills[skillNumber];
 }
 
-void Player::setSkill(unsigned int skillNumber, unsigned int value)
+void Player::setSkill(int skillNumber, unsigned int value)
 {
-    _skills[skillNumber] = value;
+    if (skillNumber >= 0 && skillNumber < 18)
+    {
+        _skills[skillNumber] = value;
+    }
+    else
+    {
+        std::cout << "Player::setSkill() - skillNumber out of range: " << skillNumber << std::endl;
+    }
 }
 
 int Player::skillValue(unsigned int skillNumber)

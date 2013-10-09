@@ -49,11 +49,11 @@ public:
     void init();
     const char * statToString(unsigned int stat);
     void think();
-    void onBackButtonClick();
-    void onEditButtonClick();
-    void onCreateButtonClick();
-    void onPrevCharacterButtonClick();
-    void onNextCharacterButtonClick();
+    void onBackButtonClick(Event * event);
+    void onEditButtonClick(Event * event);
+    void onCreateButtonClick(Event * event);
+    void onPrevCharacterButtonClick(Event * event);
+    void onNextCharacterButtonClick(Event * event);
 };
 
 }

@@ -194,10 +194,10 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         _addDescription("label_2", msg->message(147)->text());
         _addDescription("label_3", msg->message(151)->text());
         _addDescription("label_4", msg->message(145)->text());
-        _addImage("label_1", _game->resourceManager()->surface("art/skilldex/generic.frm"));
-        _addImage("label_2", _game->resourceManager()->surface("art/skilldex/traits.frm"));
-        _addImage("label_3", _game->resourceManager()->surface("art/skilldex/skills.frm"));
-        _addImage("label_4", _game->resourceManager()->surface("art/skilldex/skills.frm"));
+        _addImage("label_1", new Surface(_game->resourceManager()->surface("art/skilldex/generic.frm")));
+        _addImage("label_2", new Surface(_game->resourceManager()->surface("art/skilldex/traits.frm")));
+        _addImage("label_3", new Surface(_game->resourceManager()->surface("art/skilldex/skills.frm")));
+        _addImage("label_4", new Surface(_game->resourceManager()->surface("art/skilldex/skills.frm")));
 
     }
     // Name change button
@@ -280,12 +280,13 @@ PlayerEditState::~PlayerEditState()
     delete _buttons;
     delete _counters;
     delete _masks;
+
     delete _titles;
     delete _descriptions;
+
+    //std::map<std::string, Surface *>::iterator it;
+    //for (it = _images->begin(); it != _images->end(); ++it) delete it->second;
     delete _images;
-    delete _image;
-    delete _title;
-    delete _description;
 }
 
 void PlayerEditState::init()
@@ -468,6 +469,7 @@ void PlayerEditState::onButtonClick(Event * event)
             if (name.compare("name") == 0) return onNameButtonClick(event);
             if (name.compare("age") == 0) return onAgeButtonClick(event);
             if (name.compare("gender") == 0) return onGenderButtonClick(event);
+            if (name.compare("cancel") == 0) return onBackButtonClick(event);
 
             if (name.find("stats_") == 0)
             {
@@ -574,6 +576,11 @@ void PlayerEditState::onAgeButtonClick(Event * event)
 void PlayerEditState::onGenderButtonClick(Event * event)
 {
     _game->pushState(new PlayerEditGenderState(_game));
+}
+
+void PlayerEditState::onBackButtonClick(Event *event)
+{
+    _game->popState();
 }
 
 }

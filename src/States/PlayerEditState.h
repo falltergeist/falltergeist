@@ -38,7 +38,6 @@ protected:
     TextArea * _selectedLabel;
     TextArea * _title;
     TextArea * _description;
-    TextArea * _gender;
     //TextArea * _description;
     Surface * _selectedImage;
     Surface * _image;
@@ -70,6 +69,7 @@ public:
     void onNameButtonClick(Event * event);
     void onGenderButtonClick(Event * event);
     void onLabelClick(Event * event);
+    void onBackButtonClick(Event * event);
 };
 
 }

@@ -195,12 +195,12 @@ public:
     unsigned int statBonus(unsigned int number);
 
     unsigned int trait(unsigned int traitNumber);
-    void setTrait(unsigned int traitNumber, unsigned int value);
+    void setTrait(int traitNumber, unsigned int value);
 
     bool traitToggle(unsigned int traitNumber);
 
     unsigned int skill(unsigned int skillNumber);
-    void setSkill(unsigned int skillNumber, unsigned int value);
+    void setSkill(int skillNumber, unsigned int value);
     int skillValue(unsigned int skillNumber);
     bool skillToggle(unsigned int skillNumber);
 

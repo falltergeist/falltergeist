@@ -40,17 +40,17 @@ NewGameState::NewGameState(Game * game) : State(game)
 
 NewGameState::~NewGameState()
 {
-    delete _characterImages;
+    //delete _characterImages;
     while (!_characters->empty())
     {
         delete _characters->back();
         _characters->pop_back();
     }
     delete _characters;
-    delete _playerStats1;
-    delete _playerStats2;
-    delete _playerBio;
-    delete _playerName;
+   // delete _playerStats1;
+    //delete _playerStats2;
+    //delete _playerBio;
+    //delete _playerName;
 }
 
 void NewGameState::init()
@@ -58,7 +58,7 @@ void NewGameState::init()
     State::init();
     _isFullscreen = true;
     // background
-    add(ResourceManager::surface("art/intrface/pickchar.frm"));
+    add(new Surface(ResourceManager::surface("art/intrface/pickchar.frm")));
 
     // Begin game button
     ImageButton * beginGameButton= new ImageButton("art/intrface/lilredup.frm", "art/intrface/lilreddn.frm", 81, 322);
@@ -134,12 +134,12 @@ void NewGameState::think()
 {
 }
 
-void NewGameState::onBackButtonClick()
+void NewGameState::onBackButtonClick(Event * event)
 {
     _game->popState();
 }
 
-void NewGameState::onPrevCharacterButtonClick()
+void NewGameState::onPrevCharacterButtonClick(Event * event)
 {
     if (_selectedCharacter > 0)
     {
@@ -152,7 +152,7 @@ void NewGameState::onPrevCharacterButtonClick()
     changeCharacter();
 }
 
-void NewGameState::onNextCharacterButtonClick()
+void NewGameState::onNextCharacterButtonClick(Event * event)
 {
     if (_selectedCharacter < 2)
     {
@@ -199,13 +199,13 @@ const char * NewGameState::statToString(unsigned int stat)
     return _t(stat+300,"text/english/game/stat.msg");
 }
 
-void NewGameState::onEditButtonClick()
+void NewGameState::onEditButtonClick(Event * event)
 {
     _game->setPlayer(_characters->at(_selectedCharacter));
     _game->pushState(new PlayerEditState(_game));
 }
 
-void NewGameState::onCreateButtonClick()
+void NewGameState::onCreateButtonClick(Event * event)
 {
     _game->setPlayer(new Player(ResourceManager::gcdFileType("premade/blank.gcd")));
     _game->pushState(new PlayerEditState(_game));
