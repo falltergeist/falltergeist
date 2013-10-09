@@ -66,46 +66,48 @@ void MainMenuState::init()
     ImageButton * exitButton = new ImageButton("art/intrface/menuup.frm", "art/intrface/menudown.frm", 29, 19 + 41*5);
     exitButton->onLeftButtonClick((EventHandler) &MainMenuState::onExitButtonClick);
 
+    libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/misc.msg");
+
     // "Intro" label
-    TextArea * introButtonLabel = new TextArea("INTRO", 55, 20);
+    TextArea * introButtonLabel = new TextArea(msg->message(9), 55, 20);
     introButtonLabel->setColor(0xffb89c28);
     introButtonLabel->setFont("font4.aaf");
-    introButtonLabel->setWidth(140);
+    introButtonLabel->setWidth(150);
     introButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "New Game" label
-    TextArea * newGameButtonLabel = new TextArea("NEW GAME", 55, 20 + 41);
+    TextArea * newGameButtonLabel = new TextArea(msg->message(10), 50, 20 + 41);
     newGameButtonLabel->setColor(0xffb89c28);
     newGameButtonLabel->setFont("font4.aaf");
-    newGameButtonLabel->setWidth(140);
+    newGameButtonLabel->setWidth(150);
     newGameButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Load Game" label
-    TextArea * loadGameButtonLabel = new TextArea("LOAD GAME", 55, 20 + 41*2);
+    TextArea * loadGameButtonLabel = new TextArea(msg->message(11), 50, 20 + 41*2);
     loadGameButtonLabel->setColor(0xffb89c28);
     loadGameButtonLabel->setFont("font4.aaf");
-    loadGameButtonLabel->setWidth(140);
+    loadGameButtonLabel->setWidth(150);
     loadGameButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Options" label
-    TextArea * optionsButtonLabel = new TextArea("OPTIONS", 55, 20 + 41*3);
+    TextArea * optionsButtonLabel = new TextArea(msg->message(12), 50, 20 + 41*3);
     optionsButtonLabel->setColor(0xffb89c28);
     optionsButtonLabel->setFont("font4.aaf");
-    optionsButtonLabel->setWidth(140);
+    optionsButtonLabel->setWidth(150);
     optionsButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Credits" label
-    TextArea * creditsButtonLabel = new TextArea("CREDITS", 55, 20 + 41*4);
+    TextArea * creditsButtonLabel = new TextArea(msg->message(13), 50, 20 + 41*4);
     creditsButtonLabel->setColor(0xffb89c28);
     creditsButtonLabel->setFont("font4.aaf");
-    creditsButtonLabel->setWidth(140);
+    creditsButtonLabel->setWidth(150);
     creditsButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Exit" label
-    TextArea * exitButtonLabel = new TextArea("EXIT", 55, 20 + 41*5);
+    TextArea * exitButtonLabel = new TextArea(msg->message(14), 50, 20 + 41*5);
     exitButtonLabel->setColor(0xffb89c28);
     exitButtonLabel->setFont("font4.aaf");
-    exitButtonLabel->setWidth(140);
+    exitButtonLabel->setWidth(150);
     exitButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // buttons
