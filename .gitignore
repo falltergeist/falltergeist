@@ -10,3 +10,4 @@ CMakeLists.txt.*
 /docs/
 /nbproject/
 *.o
+*.bmp

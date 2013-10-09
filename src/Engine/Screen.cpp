@@ -41,7 +41,7 @@ Screen::Screen(int width, int height, int bpp)
     std::cout << "[OK]" << std::endl;
 
     _surface = new Surface(width,height);
-    _surface->backgroundColor(0xFF000000);
+    _surface->backgroundColor(0xFF000000);    
 }
 
 Screen::~Screen()

@@ -28,6 +28,7 @@
 #include "../Engine/State.h"
 #include "../UI/FpsCounter.h"
 #include "../UI/TextArea.h"
+#include <sstream>
 
 using namespace Falltergeist::CrossPlatform;
 
@@ -144,6 +145,16 @@ void Game::run()
                 //_screen->handle(&event);
                 //_cursor->handle(&event);
                 //_fpsCounter->handle(&event);
+
+                // Screenshot function
+                if (event.isKeyboardEvent() && event.SDLEvent()->type == SDL_KEYUP && event.keyCode() == 96)
+                {
+                    std::stringstream ss;
+                    ss << SDL_GetTicks() << ".bmp";
+                    SDL_SaveBMP(_screen->surface()->sdl_surface(), ss.str().c_str());
+                    std::cout << "Screenshot saved to " << ss.str() << std::endl;
+                }
+
                 _states->back()->handle(&event);
 
             }
