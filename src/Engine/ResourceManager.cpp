@@ -344,4 +344,10 @@ libfalltergeist::ProFileType * ResourceManager::getPrototype(unsigned int PID)
     return 0;
 }
 
+void ResourceManager::unloadResources()
+{
+    _surfaces->clear();
+    _datFilesItems->clear();
+}
+
 }
