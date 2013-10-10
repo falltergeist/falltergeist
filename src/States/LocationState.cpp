@@ -18,7 +18,7 @@ void LocationState::init()
 {
     State::init();
 
-    _game->resourceManager()->mapFileType("maps/artemple.map");
+    _game->resourceManager()->mapFileType("maps/mbase12.map");
 
 }
 

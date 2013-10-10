@@ -240,11 +240,20 @@ libfalltergeist::MapFileType * ResourceManager::mapFileType(std::string filename
     libfalltergeist::DatFileItem * item = datFileItem(filename);
     if (item)
     {
-        return item->asMapFileType();
+        return item->asMapFileType(&ResourceManager::getPrototype);
     }
     return 0;
 }
 
+libfalltergeist::ProFileType * ResourceManager::proFileType(std::string filename)
+{
+    libfalltergeist::DatFileItem * item = datFileItem(filename);
+    if (item)
+    {
+        return item->asProFileType();
+    }
+    return 0;
+}
 
 
 Surface * ResourceManager::surface(std::string filename, int posX, int posY)
@@ -289,5 +298,50 @@ Surface * ResourceManager::surface(std::string filename, int posX, int posY)
     return surface;
 }
 
+libfalltergeist::ProFileType * ResourceManager::getPrototype(unsigned int PID)
+{
+    unsigned int typeId = PID >> 24;
+    std::string listFile;
+    switch (typeId)
+    {
+        case libfalltergeist::ProFileType::TYPE_ITEM:
+            listFile += "proto/items/items.lst";
+            break;
+        case libfalltergeist::ProFileType::TYPE_CRITTER:
+            listFile += "proto/critters/critters.lst";
+            break;
+        case libfalltergeist::ProFileType::TYPE_SCENERY:
+            listFile += "proto/scenery/scenery.lst";
+            break;
+        case libfalltergeist::ProFileType::TYPE_WALL:
+        listFile += "proto/walls/walls.lst";
+            break;
+        case libfalltergeist::ProFileType::TYPE_TILE:
+            listFile += "proto/tiles/tiles.lst";
+            break;
+        case libfalltergeist::ProFileType::TYPE_MISC:
+            listFile += "proto/misc/misc.lst";
+            break;
+    }
+
+    libfalltergeist::LstFileType * lst = lstFileType(listFile);
+    std::string protoName = lst->strings()->at(0x00FFFFFF & PID);
+    switch (typeId)
+    {
+        case libfalltergeist::ProFileType::TYPE_ITEM:
+            return proFileType("proto/items/" + protoName);
+        case libfalltergeist::ProFileType::TYPE_CRITTER:
+            return proFileType("proto/critters/" + protoName);
+        case libfalltergeist::ProFileType::TYPE_SCENERY:
+            return proFileType("proto/scenery/" + protoName);
+        case libfalltergeist::ProFileType::TYPE_WALL:
+            return proFileType("proto/walls/" + protoName);
+        case libfalltergeist::ProFileType::TYPE_TILE:
+            return proFileType("proto/tiles/" + protoName);
+        case libfalltergeist::ProFileType::TYPE_MISC:
+            return proFileType("proto/misc/" + protoName);
+    }
+    return 0;
+}
 
 }

@@ -36,6 +36,7 @@ class GcdFileType;
 class MsgFileType;
 class MapFileType;
 class BioFileType;
+class ProFileType;
 class Surface;
 
 const char * _t(unsigned int number, const char * filename);
@@ -61,8 +62,10 @@ public:
     static libfalltergeist::MapFileType * mapFileType(std::string filename);
     static libfalltergeist::MsgFileType * msgFileType(std::string filename);
     static libfalltergeist::BioFileType * bioFileType(std::string filename);
+    static libfalltergeist::ProFileType * proFileType(std::string filename);
     static Surface * surface(std::string filename, int x = 0, int y = 0);
     static void extract(const char * path);
+    static libfalltergeist::ProFileType * getPrototype(unsigned int PID);
 };
 
 }
