@@ -256,7 +256,7 @@ libfalltergeist::ProFileType * ResourceManager::proFileType(std::string filename
 }
 
 
-Surface * ResourceManager::surface(std::string filename, int posX, int posY)
+Surface * ResourceManager::surface(std::string filename, int posX, int posY, unsigned int direction, unsigned int frame)
 {
     if (_surfaces->find(filename) != _surfaces->end())
     {
@@ -276,8 +276,8 @@ Surface * ResourceManager::surface(std::string filename, int posX, int posY)
         return 0;
     }
 
-    int width = frm->directions()->at(0)->frames()->at(0)->width();
-    int height = frm->directions()->at(0)->frames()->at(0)->height();
+    int width = frm->directions()->at(direction)->frames()->at(frame)->width();
+    int height = frm->directions()->at(direction)->frames()->at(frame)->height();
     Surface * surface = new Surface(width,height);
 
     int i = 0;
@@ -285,14 +285,25 @@ Surface * ResourceManager::surface(std::string filename, int posX, int posY)
     {
         for (int x = 0; x != width; ++x)
         {
-            unsigned int colorIndex = frm->directions()->at(0)->frames()->at(0)->colorIndexes()->at(i);
+            unsigned int colorIndex = frm->directions()->at(direction)->frames()->at(frame)->colorIndexes()->at(i);
             unsigned int color = *pal->color(colorIndex);
             surface->pixel(x, y, color);
             i++;
         }
     }
-    surface->x(posX + frm->directions()->at(0)->shiftX() + frm->directions()->at(0)->frames()->at(0)->offsetX());
-    surface->y(posY + frm->directions()->at(0)->shiftY() + frm->directions()->at(0)->frames()->at(0)->offsetY());
+
+    int shiftX = frm->directions()->at(direction)->shiftX();
+    int offsetX = frm->directions()->at(direction)->frames()->at(frame)->offsetX();
+    int shiftY = frm->directions()->at(direction)->shiftY();
+    int offsetY = frm->directions()->at(direction)->frames()->at(frame)->offsetY();
+    if (shiftX != 0 || offsetX != 0)
+    {
+        std::cout << filename << std::endl;
+        std::cout << std::dec << "S: " << shiftX << "," << shiftY << " O: " << offsetX << "," << offsetY << " - " << std::endl;
+    }
+
+    surface->x(posX + shiftX + offsetX);
+    surface->y(posY + shiftY + offsetY);
     SDL_SetColorKey(surface->sdl_surface(), SDL_SRCCOLORKEY, 0);
     _surfaces->insert(std::pair<std::string, Surface *>(filename, surface));
     return surface;
@@ -314,7 +325,7 @@ libfalltergeist::ProFileType * ResourceManager::getPrototype(unsigned int PID)
             listFile += "proto/scenery/scenery.lst";
             break;
         case libfalltergeist::ProFileType::TYPE_WALL:
-        listFile += "proto/walls/walls.lst";
+            listFile += "proto/walls/walls.lst";
             break;
         case libfalltergeist::ProFileType::TYPE_TILE:
             listFile += "proto/tiles/tiles.lst";
@@ -350,7 +361,7 @@ void ResourceManager::unloadResources()
     _datFilesItems->clear();
 }
 
-Surface * ResourceManager::surface(unsigned int FID)
+libfalltergeist::FrmFileType * ResourceManager::frmFileType(unsigned int FID)
 {
     std::string prefix;
     std::string lstFile;
@@ -398,7 +409,62 @@ Surface * ResourceManager::surface(unsigned int FID)
         return 0;
     }
 
-    return surface(prefix + lst->strings()->at(frmId));
+    //std::cout << std::hex << FID << std::endl;
+    return frmFileType(prefix + lst->strings()->at(frmId));
+}
+
+
+
+Surface * ResourceManager::surface(unsigned int FID, unsigned int direction, unsigned int frame)
+{
+    std::string prefix;
+    std::string lstFile;
+    switch(FID >> 24)
+    {
+        case libfalltergeist::FrmFileType::TYPE_ITEM:
+            prefix = "art/items/";
+            lstFile = "items.lst";
+            break;
+        case libfalltergeist::FrmFileType::TYPE_CRITTER:
+            prefix = "art/critters/";
+            lstFile = "critters.lst";
+            break;
+        case libfalltergeist::FrmFileType::TYPE_SCENERY:
+            prefix = "art/scenery/";
+            lstFile = "scenery.lst";
+            break;
+        case libfalltergeist::FrmFileType::TYPE_WALL:
+            prefix = "art/walls/";
+            lstFile = "walls.lst";
+            break;
+        case libfalltergeist::FrmFileType::TYPE_TILE:
+            prefix = "art/tiles/";
+            lstFile = "tiles.lst";
+            break;
+        case libfalltergeist::FrmFileType::TYPE_BACKGROUND:
+            prefix = "art/backgrnd/";
+            lstFile = "backgrnd.lst";
+            break;
+        case libfalltergeist::FrmFileType::TYPE_INTERFACE:
+            prefix = "art/intrface/";
+            lstFile = "intrface.lst";
+            break;
+        case libfalltergeist::FrmFileType::TYPE_INVENTORY:
+            prefix = "art/inven/";
+            lstFile = "inven.lst";
+            break;
+    }
+    libfalltergeist::LstFileType * lst = lstFileType(prefix + lstFile);
+    unsigned int frmId = 0x0000FFFF & FID;
+
+    if (frmId >= lst->strings()->size())
+    {
+        std::cout << "Size: " << lst->strings()->size() << " frmId: " << frmId << std::endl;
+        return 0;
+    }
+
+    //std::cout << std::hex << FID << std::endl;
+    return surface(prefix + lst->strings()->at(frmId), direction, frame);
 }
 
 }

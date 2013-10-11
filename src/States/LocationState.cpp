@@ -2,6 +2,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Location.h"
+#include "../UI/TextArea.h"
 #include <cmath>
 
 namespace Falltergeist
@@ -18,8 +19,10 @@ LocationState::~LocationState()
 void LocationState::init()
 {
     State::init();
+
     Location * location = new Location(100, 100);
     libfalltergeist::MapFileType * map = _game->resourceManager()->mapFileType("maps/artemple.map");
+
     libfalltergeist::LstFileType * lst = _game->resourceManager()->lstFileType("art/tiles/tiles.lst");
 
     Surface * hexagon = _game->resourceManager()->surface("art/intrface/msef000.frm"); // 001 - solid green  002 - solid red
@@ -34,8 +37,10 @@ void LocationState::init()
     _cameraY = 1300;
     _direction = 0; //left
 
-    _elevation = new Surface(width, height);
+    _elevation = new Surface(width, height);    
     _elevation->fill(0xFF000000);
+    add(_elevation);
+
     for (unsigned int y = 0; y != rows; ++y)
     {
         for (unsigned int x = 0; x != cols; ++x)
@@ -44,7 +49,6 @@ void LocationState::init()
 
             std::string frmName = lst->strings()->at(map->elevations()->at(0)->floorTiles[i]);
             Surface * tile = _game->resourceManager()->surface("art/tiles/" + frmName);
-
             unsigned int tileX = (cols - y - 1)*48 + 32*x;
             unsigned int tileY = x*24 + y*12;
 
@@ -60,46 +64,73 @@ void LocationState::init()
         }
     }
 
+    /*
     for (unsigned int i = 0; i != 200*200; i++)
     {
         unsigned int centerX = location->hexagonToX(i);
         unsigned int centerY = location->hexagonToY(i);
 
-        hexagon->x(centerX - 16 + 16);
-        hexagon->y(centerY - 8 + 8);
-        hexagon->copyTo(_elevation);
-    }
+        hexagon->x(centerX - 16);
+        hexagon->y(centerY - 8);
 
-    /*
+        hexagon->copyTo(_elevation);
+
+        //TextArea * num = new TextArea("", centerX - 16, centerY - 8);
+        //num->setText(i);
+        //num->blit(_elevation);
+        //delete num;
+    }*/
+
+
     std::list<libfalltergeist::MapObject *>::iterator it;
     std::list<libfalltergeist::MapObject *> * objects;
     objects = map->elevations()->at(0)->objects();
+
     for (it = objects->begin(); it !=  objects->end(); ++it)
     {
         unsigned int frmTypeId = (*it)->frmTypeId();
         unsigned int frmId = (*it)->frmId();
         unsigned int FID = (frmTypeId << 24) | frmId;
 
+        //if (FID != 0x2000563) continue; //fire pit
+
+        unsigned int PID = ((*it)->objectTypeId() << 24) | (*it)->objectId();
+        //std::cout << "PID: 0x" << std::hex << PID << std::endl;
+
+        libfalltergeist::ProFileType * pro = _game->resourceManager()->getPrototype(PID);
+
+        if (pro->frmOffset() != 0)
+        {
+            std::cout << "OFFSET: " << pro->frmOffset() <<  std::endl;
+        }
+
         if ((*it)->objectTypeId() == 5) continue;
 
-        Surface * obj = _game->resourceManager()->surface(FID);
-        if (obj == 0) continue;
+        Surface * obj = _game->resourceManager()->surface(FID, 0, (*it)->frameNumber());
+        if (obj == 0)
+        {
+            //std::cout << "FID: " << FID << " : is null" << std::endl;
+            continue;
+        }
 
         int hexPosition = (*it)->hexPosition();
         if (hexPosition < 0) continue;
 
-        obj->x(location->hexagonToX(hexPosition));
-        obj->y(location->hexagonToY(hexPosition));
-        obj->copyTo(_elevation);
+        libfalltergeist::FrmFileType * frm = _game->resourceManager()->frmFileType(FID);
+
+
+        obj->x(frm->directions()->at(0)->shiftX() + location->hexagonToX(hexPosition) - (obj->width() - (int)floor(obj->width()/2)));
+        obj->y(frm->directions()->at(0)->shiftY() + frm->directions()->at(0)->frames()->at(0)->offsetY() + location->hexagonToY(hexPosition) - obj->height());
+        obj->blit(_elevation);
 
     }
-    */
-    player->x(location->hexagonToX(map->defaultPosition()));
-    player->y(location->hexagonToY(map->defaultPosition()));
+
+    player->x(location->hexagonToX(map->defaultPosition()) - 16);
+    player->y(location->hexagonToY(map->defaultPosition()) - 8);
     player->copyTo(_elevation);
 
     //_camera = _elevation->crop(_cameraX, _cameraY, 640, 480);
-    add(_elevation);
+
     _elevation->x(-_cameraX);
     _elevation->y(-_cameraY);
 

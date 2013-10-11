@@ -26,9 +26,9 @@ int Location::hexagonToX(unsigned int hexagon)
 
         if (((unsigned int)ceil(hexagon/200))%2 == 1)
         {
-            centerX += 8;
+            centerX -= 8;
         }
-    return centerX;
+    return centerX + 17;
 }
 
 int Location::hexagonToY(unsigned int hexagon)
@@ -42,9 +42,9 @@ int Location::hexagonToY(unsigned int hexagon)
 
         if (((unsigned int)ceil(hexagon/200))%2 == 1)
         {
-            centerY += 6;
+            centerY -= 6;
         }
-    return centerY;
+    return centerY + 12;
 
 }
 
