@@ -50,6 +50,7 @@ public:
     const char * statToString(unsigned int stat);
     void think();
     void onBackButtonClick(Event * event);
+    void onBeginGameButtonClick(Event * event);
     void onEditButtonClick(Event * event);
     void onCreateButtonClick(Event * event);
     void onPrevCharacterButtonClick(Event * event);

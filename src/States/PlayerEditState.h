@@ -70,6 +70,7 @@ public:
     void onGenderButtonClick(Event * event);
     void onLabelClick(Event * event);
     void onBackButtonClick(Event * event);
+    void onDoneButtonClick(Event * event);
 };
 
 }

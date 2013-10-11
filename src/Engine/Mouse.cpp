@@ -9,11 +9,12 @@ namespace Falltergeist
 Mouse::Mouse() : InteractiveSurface()
 {
     //loadFromSurface(ResourceManager::surface("art/intrface/actarrow.frm"));
-    loadFromSurface(ResourceManager::surface("art/intrface/stdarrow.frm"));
+
     // Hide cursor
     SDL_ShowCursor(0);
     _cursorX = 320;
     _cursorY = 240;
+    setCursor(BIG_ARROW);
 }
 
 Surface * Mouse::think()

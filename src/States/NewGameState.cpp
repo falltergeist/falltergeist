@@ -19,6 +19,7 @@
 
 #include "../States/NewGameState.h"
 #include "../States/PlayerEditState.h"
+#include "../States/LocationState.h"
 #include "../Engine/Game.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/SurfaceSet.h"
@@ -62,6 +63,7 @@ void NewGameState::init()
 
     // Begin game button
     ImageButton * beginGameButton= new ImageButton("art/intrface/lilredup.frm", "art/intrface/lilreddn.frm", 81, 322);
+    beginGameButton->onLeftButtonClick((EventHandler) &NewGameState::onBeginGameButtonClick);
 
     // Edit character button
     ImageButton * editButton= new ImageButton("art/intrface/lilredup.frm", "art/intrface/lilreddn.frm", 436, 319);
@@ -209,6 +211,12 @@ void NewGameState::onCreateButtonClick(Event * event)
 {
     _game->setPlayer(new Player(ResourceManager::gcdFileType("premade/blank.gcd")));
     _game->pushState(new PlayerEditState(_game));
+}
+
+void NewGameState::onBeginGameButtonClick(Event * event)
+{
+    _game->setPlayer(_characters->at(_selectedCharacter));
+    _game->setState(new LocationState(_game));
 }
 
 }

@@ -22,6 +22,7 @@
 #include "../States/PlayerEditGenderState.h"
 #include "../States/PlayerEditNameState.h"
 #include "../States/PlayerEditAlertState.h"
+#include "../States/LocationState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Player.h"
 #include "../Engine/ResourceManager.h"
@@ -172,7 +173,7 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         const char * on = "art/intrface/lilreddn.frm";
         const char * off = "art/intrface/lilredup.frm";
         _addButton("options", new ImageButton(off, on, 345, 454));
-        _addButton("next",    new ImageButton(off, on, 455, 454));
+        _addButton("done",    new ImageButton(off, on, 455, 454));
         _addButton("cancel",  new ImageButton(off, on, 554, 454));
 
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
@@ -470,6 +471,7 @@ void PlayerEditState::onButtonClick(Event * event)
             if (name.compare("age") == 0) return onAgeButtonClick(event);
             if (name.compare("gender") == 0) return onGenderButtonClick(event);
             if (name.compare("cancel") == 0) return onBackButtonClick(event);
+            if (name.compare("done") == 0) return onDoneButtonClick(event);
 
             if (name.find("stats_") == 0)
             {
@@ -581,6 +583,11 @@ void PlayerEditState::onGenderButtonClick(Event * event)
 void PlayerEditState::onBackButtonClick(Event *event)
 {
     _game->popState();
+}
+
+void PlayerEditState::onDoneButtonClick(Event * event)
+{
+    _game->setState(new LocationState(_game));
 }
 
 }
