@@ -31,6 +31,7 @@ class Surface
 {
 protected:
     SDL_Surface * _sdl_surface;
+
     int _x; // x position
     int _y; // y position
     bool _visible; // if false - do not render
@@ -46,10 +47,10 @@ public:
     virtual ~Surface();
 
     Surface * x(int x);
-    int x();
+    virtual int x();
 
     Surface * y(int y);
-    int y();
+    virtual int y();
 
     Surface * needRedraw(bool needRedraw);
     bool needRedraw();

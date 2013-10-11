@@ -12,12 +12,12 @@ class LocationState : public State
 {
 protected:    
     Location * _location;
-    Surface * _elevation;
+    Surface * _background;
     Surface * _camera;
     unsigned int _direction;
     unsigned int _cameraX;
     unsigned int _cameraY;
-    unsigned int _lastTicks;
+    unsigned int _scrollTicks;
 public:
     LocationState(Game * game);
     ~LocationState();

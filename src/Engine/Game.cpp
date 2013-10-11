@@ -207,4 +207,9 @@ Player * Game::player()
     return _player;
 }
 
+Mouse * Game::mouse()
+{
+    return _mouse;
+}
+
 }

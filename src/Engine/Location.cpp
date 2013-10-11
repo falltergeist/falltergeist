@@ -1,18 +1,67 @@
 #include "../Engine/Location.h"
+#include "../Engine/ResourceManager.h"
+#include "../Engine/Surface.h"
 #include <cmath>
+#include <iostream>
 
 namespace Falltergeist
 {
 
-Location::Location(unsigned int cols = 100, unsigned int rows = 100) : InteractiveSurface()
+Location::Location(libfalltergeist::MapFileType * mapFile)
 {
-    _cols = cols;
-    _rows = rows;
+
+    _cols = 100;
+    _rows = 100;
+    _mapFile = mapFile;
+    _tilesLst = ResourceManager::lstFileType("art/tiles/tiles.lst");
+    _tilesBackground = new Surface(640, 480);
+    _tilesBackground->fill(0xFF000000);
+
+    init();
+}
+
+Location::~Location()
+{
+    delete _tilesLst;
+    //delete _tilesBackground;
 }
 
 void Location::init()
 {
-    //Surface()
+    // Инициализируем положение камеры
+    unsigned int defaultPosition = _mapFile->defaultPosition();
+    _cameraX = hexagonToX(defaultPosition);
+    _cameraY = hexagonToY(defaultPosition);
+
+    _elevation = _mapFile->defaultElevation();
+
+    generateBackground();
+}
+
+
+void Location::generateBackground()
+{
+    _tilesBackground->fill(0xFF000000);
+    // Инициализируем тайловый фон
+    for (unsigned int i = 0; i != _cols*_rows; ++i)
+    {
+        int tileX = tileToX(i);
+        int tileY = tileToY(i);
+
+        // Проверяем не выходят ли тайлы за пределы зоны видимости
+        if (tileX + TILE_WIDTH < _cameraX - 320) continue;
+        if (tileX > _cameraX + 320) continue;
+        if (tileY + TILE_HEIGHT < _cameraY - 240) continue;
+        if (tileY > _cameraY + 240) continue;
+
+
+        std::string frmName = _tilesLst->strings()->at(_mapFile->elevations()->at(_elevation)->floorTiles[i]);
+        Surface * tile = ResourceManager::surface("art/tiles/" + frmName);
+
+        tile->x(tileX - _cameraX + 320);
+        tile->y(tileY - _cameraY + 240);
+        tile->blit(_tilesBackground);
+    }
 }
 
 int Location::hexagonToX(unsigned int hexagon)
@@ -46,6 +95,74 @@ int Location::hexagonToY(unsigned int hexagon)
         }
     return centerY + 12;
 
+}
+
+libfalltergeist::MapFileType * Location::mapFile()
+{
+    return _mapFile;
+}
+
+int Location::tileToX(unsigned int tile)
+{
+    return (_cols - tile % _cols - 1)*48 + 32*ceil(tile / _cols);
+}
+
+int Location::tileToY(unsigned int tile)
+{
+    return ceil(tile / _cols)*24 + (tile % _cols)*12;
+}
+
+Surface * Location::tilesBackground()
+{
+    return _tilesBackground;
+}
+
+bool Location::scroll(bool up, bool down, bool left, bool right)
+{
+    bool changed = false;
+
+    if (up)
+    {
+        if (_cameraY >= 3 + 240)
+        {
+            _cameraY -= 3;
+            changed = true;
+        }
+    }
+    if (left)
+    {
+        if (_cameraX >= 3 + 320)
+        {
+            _cameraX -= 3;
+            changed = true;
+        }
+    }
+    if (down)
+    {
+
+        unsigned int height = 12*_cols + 24*_rows;
+        if (_cameraY < height - 3 - 240)
+        {
+            _cameraY += 3;
+            changed = true;
+        }
+    }
+    if (right)
+    {
+        unsigned int width = 48*_cols + 32*_rows;
+        if (_cameraX < width - 3 - 320)
+        {
+            _cameraX += 3;
+            changed = true;
+        }
+    }
+
+
+    if (changed)
+    {
+        generateBackground();
+    }
+    return changed;
 }
 
 }

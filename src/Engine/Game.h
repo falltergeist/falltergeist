@@ -65,6 +65,7 @@ public:
 
     void setPlayer(Player * player);
     Player * player();
+    Mouse * mouse();
 };
 
 }

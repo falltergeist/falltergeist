@@ -3,6 +3,7 @@
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Location.h"
 #include "../UI/TextArea.h"
+#include "../Engine/Mouse.h"
 #include <cmath>
 
 namespace Falltergeist
@@ -10,6 +11,7 @@ namespace Falltergeist
 
 LocationState::LocationState(Game * game) : State(game)
 {
+    _scrollTicks = 0;
 }
 
 LocationState::~LocationState()
@@ -20,49 +22,14 @@ void LocationState::init()
 {
     State::init();
 
-    Location * location = new Location(100, 100);
-    libfalltergeist::MapFileType * map = _game->resourceManager()->mapFileType("maps/artemple.map");
+    _location = new Location(_game->resourceManager()->mapFileType("maps/artemple.map"));
 
-    libfalltergeist::LstFileType * lst = _game->resourceManager()->lstFileType("art/tiles/tiles.lst");
+    //Surface * hexagon = _game->resourceManager()->surface("art/intrface/msef000.frm"); // 001 - solid green  002 - solid red
+    //Surface * player  = _game->resourceManager()->surface("art/intrface/msef001.frm");
 
-    Surface * hexagon = _game->resourceManager()->surface("art/intrface/msef000.frm"); // 001 - solid green  002 - solid red
-    Surface * player  = _game->resourceManager()->surface("art/intrface/msef001.frm");
+    _background = new Surface(_location->tilesBackground());
+    add(_background);
 
-    unsigned int cols = 100;
-    unsigned int rows = 100;
-    unsigned int width = 48*cols + 32*rows; // 80*100 ??
-    unsigned int height = 12*cols + 24*rows;// 36*100 ??
-
-    _cameraX = 3750; //3750
-    _cameraY = 1300;
-    _direction = 0; //left
-
-    _elevation = new Surface(width, height);    
-    _elevation->fill(0xFF000000);
-    add(_elevation);
-
-    for (unsigned int y = 0; y != rows; ++y)
-    {
-        for (unsigned int x = 0; x != cols; ++x)
-        {
-            unsigned int i = cols * x + y;
-
-            std::string frmName = lst->strings()->at(map->elevations()->at(0)->floorTiles[i]);
-            Surface * tile = _game->resourceManager()->surface("art/tiles/" + frmName);
-            unsigned int tileX = (cols - y - 1)*48 + 32*x;
-            unsigned int tileY = x*24 + y*12;
-
-            //if (tileX >= _cameraX - 80 && tileX <= _cameraX + 640)
-            {
-                //if (tileY >= _cameraY - 32 && tileY <= _cameraY + 480)
-                {
-                    tile->x(tileX);
-                    tile->y(tileY);
-                    tile->blit(_elevation);
-                }
-            }
-        }
-    }
 
     /*
     for (unsigned int i = 0; i != 200*200; i++)
@@ -81,7 +48,7 @@ void LocationState::init()
         //delete num;
     }*/
 
-
+    /*
     std::list<libfalltergeist::MapObject *>::iterator it;
     std::list<libfalltergeist::MapObject *> * objects;
     objects = map->elevations()->at(0)->objects();
@@ -128,14 +95,14 @@ void LocationState::init()
     player->x(location->hexagonToX(map->defaultPosition()) - 16);
     player->y(location->hexagonToY(map->defaultPosition()) - 8);
     player->copyTo(_elevation);
-
+    */
     //_camera = _elevation->crop(_cameraX, _cameraY, 640, 480);
 
-    _elevation->x(-_cameraX);
-    _elevation->y(-_cameraY);
+    //_elevation->x(-_cameraX);
+    //_elevation->y(-_cameraY);
 
 
-    SDL_SaveBMP(_elevation->sdl_surface(), "elevation2.bmp");
+    //SDL_SaveBMP(_elevation->sdl_surface(), "elevation2.bmp");
 
 
 
@@ -143,66 +110,123 @@ void LocationState::init()
 
 void LocationState::think()
 {
-    return;
-    unsigned int radius = 200;
-
-    if (_lastTicks + 20 < SDL_GetTicks())
+    if (SDL_GetTicks() >= _scrollTicks + 1)
     {
-        _lastTicks = SDL_GetTicks();
-
-        switch(_direction)
+        bool moved;
+        _scrollTicks = SDL_GetTicks();
+        if (_game->mouse()->cursorX() < 4) // LEFT
         {
-            case 0: //left
-                if (_cameraX > 3750 - radius)
+            if (_game->mouse()->cursorY() < 4) //  LEFT-UP
+            {
+                moved = _location->scroll(true, false, true, false);
+                if (moved)
                 {
-                    _cameraX -= 1;
+                    _game->mouse()->setCursor(Mouse::SCROLL_NW);
                 }
                 else
                 {
-                    _direction = 1;
+                    _game->mouse()->setCursor(Mouse::SCROLL_NW_X);
                 }
-
-                break;
-            case 1: //up
-                if (_cameraY > 1300 - radius)
+            }
+            else if (_game->mouse()->cursorY() > 476) //LEFT-DOWN
+            {
+                moved = _location->scroll(false, true, true, false);
+                if (moved)
                 {
-                    _cameraY -= 1;
+                    _game->mouse()->setCursor(Mouse::SCROLL_SW);
                 }
                 else
                 {
-                    _direction = 2;
+                    _game->mouse()->setCursor(Mouse::SCROLL_SW_X);
                 }
-                break;
-            case 2: //right
-                if (_cameraX < 3750 + radius)
+            }
+            else
+            {
+                moved = _location->scroll(false, false, true, false);
+                if (moved)
                 {
-                    _cameraX += 1;
+                    _game->mouse()->setCursor(Mouse::SCROLL_W);
                 }
                 else
                 {
-                    _direction = 3;
+                    _game->mouse()->setCursor(Mouse::SCROLL_W_X);
                 }
-                break;
-            case 3: //down
-                if (_cameraY < 1300 + radius)
+            }
+        }
+        else if (_game->mouse()->cursorX() > 636) // RIGHT
+        {
+            if (_game->mouse()->cursorY() < 4) //  RIGHT-UP
+            {
+                moved = _location->scroll(true, false, false, true);
+                if (moved)
                 {
-                    _cameraY += 1;
+                    _game->mouse()->setCursor(Mouse::SCROLL_NE);
                 }
                 else
                 {
-                    _direction = 0;
+                    _game->mouse()->setCursor(Mouse::SCROLL_NE_X);
                 }
-                break;
+            }
+            else if (_game->mouse()->cursorY() > 476) //RIGHT-DOWN
+            {
+                moved = _location->scroll(false, true, false, true);
+                if (moved)
+                {
+                    _game->mouse()->setCursor(Mouse::SCROLL_SE);
+                }
+                else
+                {
+                    _game->mouse()->setCursor(Mouse::SCROLL_SE_X);
+                }
+            }
+            else
+            {
+                moved = _location->scroll(false, false, false, true);
+                if (moved)
+                {
+                    _game->mouse()->setCursor(Mouse::SCROLL_E);
+                }
+                else
+                {
+                    _game->mouse()->setCursor(Mouse::SCROLL_E_X);
+                }
+            }
+        }
+        else if (_game->mouse()->cursorY() < 5) // UP
+        {
+            moved = _location->scroll(true, false, false, false);
+            if (moved)
+            {
+                _game->mouse()->setCursor(Mouse::SCROLL_N);
+            }
+            else
+            {
+                _game->mouse()->setCursor(Mouse::SCROLL_N_X);
+            }
+        }
+        else if (_game->mouse()->cursorY() > 476) // DOWN
+        {
+            moved = _location->scroll(false, true, false, false);
+            if (moved)
+            {
+                _game->mouse()->setCursor(Mouse::SCROLL_S);
+            }
+            else
+            {
+                _game->mouse()->setCursor(Mouse::SCROLL_S_X);
+            }
+        }
+        else
+        {
+            _game->mouse()->setCursor(Mouse::BIG_ARROW);
         }
 
-
-        _elevation->x(-_cameraX);
-        _elevation->y(-_cameraY);
-
-        //delete _camera;
-        //_camera->x(-10);
-        //_camera = _elevation->crop(_cameraX, _cameraY, 640, 480);
+        if(moved)
+        {
+            _background->loadFromSurface(_location->tilesBackground());
+        }
     }
+
 }
 
 }
