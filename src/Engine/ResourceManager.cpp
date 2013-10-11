@@ -291,8 +291,8 @@ Surface * ResourceManager::surface(std::string filename, int posX, int posY)
             i++;
         }
     }
-    surface->x(posX);
-    surface->y(posY);
+    surface->x(posX + frm->directions()->at(0)->shiftX() + frm->directions()->at(0)->frames()->at(0)->offsetX());
+    surface->y(posY + frm->directions()->at(0)->shiftY() + frm->directions()->at(0)->frames()->at(0)->offsetY());
     SDL_SetColorKey(surface->sdl_surface(), SDL_SRCCOLORKEY, 0);
     _surfaces->insert(std::pair<std::string, Surface *>(filename, surface));
     return surface;
@@ -348,6 +348,57 @@ void ResourceManager::unloadResources()
 {
     _surfaces->clear();
     _datFilesItems->clear();
+}
+
+Surface * ResourceManager::surface(unsigned int FID)
+{
+    std::string prefix;
+    std::string lstFile;
+    switch(FID >> 24)
+    {
+        case libfalltergeist::FrmFileType::TYPE_ITEM:
+            prefix = "art/items/";
+            lstFile = "items.lst";
+            break;
+        case libfalltergeist::FrmFileType::TYPE_CRITTER:
+            prefix = "art/critters/";
+            lstFile = "critters.lst";
+            break;
+        case libfalltergeist::FrmFileType::TYPE_SCENERY:
+            prefix = "art/scenery/";
+            lstFile = "scenery.lst";
+            break;
+        case libfalltergeist::FrmFileType::TYPE_WALL:
+            prefix = "art/walls/";
+            lstFile = "walls.lst";
+            break;
+        case libfalltergeist::FrmFileType::TYPE_TILE:
+            prefix = "art/tiles/";
+            lstFile = "tiles.lst";
+            break;
+        case libfalltergeist::FrmFileType::TYPE_BACKGROUND:
+            prefix = "art/backgrnd/";
+            lstFile = "backgrnd.lst";
+            break;
+        case libfalltergeist::FrmFileType::TYPE_INTERFACE:
+            prefix = "art/intrface/";
+            lstFile = "intrface.lst";
+            break;
+        case libfalltergeist::FrmFileType::TYPE_INVENTORY:
+            prefix = "art/inven/";
+            lstFile = "inven.lst";
+            break;
+    }
+    libfalltergeist::LstFileType * lst = lstFileType(prefix + lstFile);
+    unsigned int frmId = 0x0000FFFF & FID;
+
+    if (frmId >= lst->strings()->size())
+    {
+        std::cout << "Size: " << lst->strings()->size() << " frmId: " << frmId << std::endl;
+        return 0;
+    }
+
+    return surface(prefix + lst->strings()->at(frmId));
 }
 
 }

@@ -64,6 +64,7 @@ public:
     static libfalltergeist::BioFileType * bioFileType(std::string filename);
     static libfalltergeist::ProFileType * proFileType(std::string filename);
     static Surface * surface(std::string filename, int x = 0, int y = 0);
+    static Surface * surface(unsigned int FID);
     static void extract(const char * path);
     static libfalltergeist::ProFileType * getPrototype(unsigned int PID);
     static void unloadResources();

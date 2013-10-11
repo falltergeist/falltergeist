@@ -14,6 +14,8 @@ protected:
 public:
     Location(unsigned int cols, unsigned int rows);
     void init();
+    int hexagonToX(unsigned int hexagon);
+    int hexagonToY(unsigned int hexagon);
 };
 
 

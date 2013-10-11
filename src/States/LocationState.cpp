@@ -2,6 +2,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Location.h"
+#include <cmath>
 
 namespace Falltergeist
 {
@@ -17,16 +18,19 @@ LocationState::~LocationState()
 void LocationState::init()
 {
     State::init();
-
+    Location * location = new Location(100, 100);
     libfalltergeist::MapFileType * map = _game->resourceManager()->mapFileType("maps/artemple.map");
     libfalltergeist::LstFileType * lst = _game->resourceManager()->lstFileType("art/tiles/tiles.lst");
+
+    Surface * hexagon = _game->resourceManager()->surface("art/intrface/msef000.frm"); // 001 - solid green  002 - solid red
+    Surface * player  = _game->resourceManager()->surface("art/intrface/msef001.frm");
 
     unsigned int cols = 100;
     unsigned int rows = 100;
     unsigned int width = 48*cols + 32*rows; // 80*100 ??
     unsigned int height = 12*cols + 24*rows;// 36*100 ??
 
-    _cameraX = 3750;
+    _cameraX = 3750; //3750
     _cameraY = 1300;
     _direction = 0; //left
 
@@ -56,11 +60,51 @@ void LocationState::init()
         }
     }
 
+    for (unsigned int i = 0; i != 200*200; i++)
+    {
+        unsigned int centerX = location->hexagonToX(i);
+        unsigned int centerY = location->hexagonToY(i);
+
+        hexagon->x(centerX - 16 + 16);
+        hexagon->y(centerY - 8 + 8);
+        hexagon->copyTo(_elevation);
+    }
+
+    /*
+    std::list<libfalltergeist::MapObject *>::iterator it;
+    std::list<libfalltergeist::MapObject *> * objects;
+    objects = map->elevations()->at(0)->objects();
+    for (it = objects->begin(); it !=  objects->end(); ++it)
+    {
+        unsigned int frmTypeId = (*it)->frmTypeId();
+        unsigned int frmId = (*it)->frmId();
+        unsigned int FID = (frmTypeId << 24) | frmId;
+
+        if ((*it)->objectTypeId() == 5) continue;
+
+        Surface * obj = _game->resourceManager()->surface(FID);
+        if (obj == 0) continue;
+
+        int hexPosition = (*it)->hexPosition();
+        if (hexPosition < 0) continue;
+
+        obj->x(location->hexagonToX(hexPosition));
+        obj->y(location->hexagonToY(hexPosition));
+        obj->copyTo(_elevation);
+
+    }
+    */
+    player->x(location->hexagonToX(map->defaultPosition()));
+    player->y(location->hexagonToY(map->defaultPosition()));
+    player->copyTo(_elevation);
+
     //_camera = _elevation->crop(_cameraX, _cameraY, 640, 480);
     add(_elevation);
+    _elevation->x(-_cameraX);
+    _elevation->y(-_cameraY);
 
 
-    //SDL_SaveBMP(elevation->sdl_surface(), "elevation2.bmp");
+    SDL_SaveBMP(_elevation->sdl_surface(), "elevation2.bmp");
 
 
 
@@ -68,6 +112,7 @@ void LocationState::init()
 
 void LocationState::think()
 {
+    return;
     unsigned int radius = 200;
 
     if (_lastTicks + 20 < SDL_GetTicks())
