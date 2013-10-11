@@ -60,6 +60,7 @@ void PlayerEditNameState::init()
 
     Surface * bg = new Surface(_game->resourceManager()->surface("art/intrface/charwin.frm"));
     bg->x(22);
+    bg->y(0);
 
     Surface * nameBox = new Surface(_game->resourceManager()->surface("art/intrface/namebox.frm"));
     nameBox->x(35);

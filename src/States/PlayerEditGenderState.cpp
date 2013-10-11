@@ -31,6 +31,7 @@ void PlayerEditGenderState::init()
 
     Surface * bg = new Surface(_game->resourceManager()->surface("art/intrface/charwin.frm"));
     bg->x(236);
+    bg->y(0);
 
     Surface * doneBox = new Surface(_game->resourceManager()->surface("art/intrface/donebox.frm"));
     doneBox->x(250);

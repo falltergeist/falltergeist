@@ -22,6 +22,7 @@ void PlayerEditAgeState::init()
 
     Surface * bg = new Surface(_game->resourceManager()->surface("art/intrface/charwin.frm"));
     bg->x(160);
+    bg->y(0);
 
     Surface * ageBox = new Surface(_game->resourceManager()->surface("art/intrface/agebox.frm"));
     ageBox->x(168);
