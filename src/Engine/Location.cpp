@@ -111,6 +111,14 @@ void Location::init()
             {
                 frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
             }
+            else if (mapObject->objectId() == 21)  // exit
+            {
+                frm = ResourceManager::frmFileType("art/intrface/msef002.frm");
+            }
+            else if (mapObject->objectId() == 22)  // exit
+            {
+                frm = ResourceManager::frmFileType("art/intrface/msef002.frm");
+            }
             else if (mapObject->objectId() == 23)  // exit to temple
             {
                 frm = ResourceManager::frmFileType("art/intrface/msef002.frm");
@@ -164,7 +172,7 @@ void Location::init()
                 break;
         }
         */
-        int locX = locationObject->x() + hexagonToX(mapObject->hexPosition()) - (locationObject->width() - floor(locationObject->width()/2));
+        int locX = locationObject->x() + hexagonToX(mapObject->hexPosition()) - ceil(locationObject->width()/2);
         int locY = locationObject->y() + hexagonToY(mapObject->hexPosition()) - locationObject->height();
 
         locationObject->x(locX);

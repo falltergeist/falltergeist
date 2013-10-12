@@ -152,6 +152,10 @@ void Mouse::setCursor(unsigned int type)
             loadFromSurface(ResourceManager::surface("art/intrface/scrsex.frm"));
             _x =  - width(); _y = - height();
             break;
+        case HEXAGON_RED:
+            loadFromSurface(ResourceManager::surface("art/intrface/msef000.frm"));
+            _x =  - ceil(width()/2); _y = - ceil(height()/2);
+            break;
 
 
     }

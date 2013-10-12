@@ -50,7 +50,9 @@ public:
           SCROLL_S,
           SCROLL_S_X,
           SCROLL_SW,
-          SCROLL_SW_X};
+          SCROLL_SW_X,
+          HEXAGON_RED
+         };
     Mouse();
     ~Mouse();
     virtual void think();
