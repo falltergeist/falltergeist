@@ -22,5 +22,5 @@ cmake . && make
 Put master.dat and critter.dat files into ~/.falltergeist/ folder
 then run 
 ```
-./bin/falltergeist
+bin/falltergeist
 ```
