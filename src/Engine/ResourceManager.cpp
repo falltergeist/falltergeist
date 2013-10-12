@@ -269,42 +269,11 @@ Surface * ResourceManager::surface(std::string filename, int posX, int posY, uns
         std::cout << "No FRM "<< filename << " found" << std::endl;
         return 0;
     }
-    libfalltergeist::PalFileType * pal = palFileType("color.pal");
-    if (!pal)
-    {
-        std::cout << "No PAL color.pal found" << std::endl;
-        return 0;
-    }
+    Surface * surface = new Surface(frm, direction, frame);
 
-    int width = frm->directions()->at(direction)->frames()->at(frame)->width();
-    int height = frm->directions()->at(direction)->frames()->at(frame)->height();
-    Surface * surface = new Surface(width,height);
+    surface->x(posX + surface->x());
+    surface->y(posY + surface->y());
 
-    int i = 0;
-    for (int y = 0; y != height; ++y)
-    {
-        for (int x = 0; x != width; ++x)
-        {
-            unsigned int colorIndex = frm->directions()->at(direction)->frames()->at(frame)->colorIndexes()->at(i);
-            unsigned int color = *pal->color(colorIndex);
-            surface->pixel(x, y, color);
-            i++;
-        }
-    }
-
-    int shiftX = frm->directions()->at(direction)->shiftX();
-    int offsetX = frm->directions()->at(direction)->frames()->at(frame)->offsetX();
-    int shiftY = frm->directions()->at(direction)->shiftY();
-    int offsetY = frm->directions()->at(direction)->frames()->at(frame)->offsetY();
-    if (shiftX != 0 || offsetX != 0)
-    {
-        std::cout << filename << std::endl;
-        std::cout << std::dec << "S: " << shiftX << "," << shiftY << " O: " << offsetX << "," << offsetY << " - " << std::endl;
-    }
-
-    surface->x(posX + shiftX + offsetX);
-    surface->y(posY + shiftY + offsetY);
-    SDL_SetColorKey(surface->sdl_surface(), SDL_SRCCOLORKEY, 0);
     _surfaces->insert(std::pair<std::string, Surface *>(filename, surface));
     return surface;
 }

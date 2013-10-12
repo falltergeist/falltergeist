@@ -1,7 +1,9 @@
 #include "../States/LocationState.h"
 #include "../Engine/Game.h"
+#include "../Engine/Screen.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Location.h"
+#include "../Engine/LocationObject.h"
 #include "../UI/TextArea.h"
 #include "../Engine/Mouse.h"
 #include <cmath>
@@ -12,6 +14,8 @@ namespace Falltergeist
 LocationState::LocationState(Game * game) : State(game)
 {
     _scrollTicks = 0;
+    _location = 0;
+    _background = 0;
 }
 
 LocationState::~LocationState()
@@ -108,8 +112,39 @@ void LocationState::init()
 
 }
 
+void LocationState::blit()
+{
+    State::blit();
+
+    if (_location == 0) return;
+
+    for (std::vector<LocationObject *>::iterator it = _location->objects()->begin(); it != _location->objects()->end(); ++it)
+    {
+        LocationObject * object = *it;
+        if (!object->visible()) continue;
+
+        int oldX = object->x();
+        int oldY = object->y();
+        int newX = oldX - _location->cameraX() + 320;
+        int newY = oldY - _location->cameraY() + 240;
+        //std::cout << std::dec << newX << ":" << newY << " " << _location->cameraX() << ":" << _location->cameraY() << std::endl;
+
+        //if (newX < 0 || newY < 0) continue;
+
+        object->x(newX);
+        object->y(newY);
+        object->blit(_game->screen()->surface());
+        object->x(oldX);
+        object->y(oldY);
+    }
+
+}
+
 void LocationState::think()
 {
+    if (!_location) return;
+    _location->think();
+
     if (SDL_GetTicks() >= _scrollTicks + 1)
     {
         bool moved;

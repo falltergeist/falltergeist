@@ -22,6 +22,7 @@
 
 #include <SDL/SDL.h>
 #include "../Engine/Exception.h"
+#include "../Engine/ResourceManager.h"
 
 namespace Falltergeist
 {
@@ -43,6 +44,7 @@ protected:
 
 public:
     Surface(int width = 0, int height = 0, int x = 0, int y = 0);
+    Surface(libfalltergeist::FrmFileType * frm, unsigned int direction = 0, unsigned int frame = 0);
     Surface(Surface * other);
     virtual ~Surface();
 

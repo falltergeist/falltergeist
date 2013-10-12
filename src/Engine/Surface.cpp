@@ -20,6 +20,7 @@
 #include "../Engine/Surface.h"
 
 #include "../Engine/CrossPlatform.h"
+#include <iostream>
 
 using namespace Falltergeist::CrossPlatform;
 
@@ -35,6 +36,49 @@ Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _needRedra
     if (sdl_surface() == 0) throw Exception(SDL_GetError());
     clear();
 }
+
+Surface::Surface(libfalltergeist::FrmFileType * frm, unsigned int direction, unsigned int frame)
+{
+    _needRedraw = false;
+    _visible = true;
+    _borderColor = 0;
+    _backgroundColor = 0;
+
+    libfalltergeist::PalFileType * pal = ResourceManager::palFileType("color.pal");
+
+    int width = frm->directions()->at(direction)->frames()->at(frame)->width();
+    int height = frm->directions()->at(direction)->frames()->at(frame)->height();
+    //                                                                               red         green       blue        alpha
+    _sdl_surface = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, width, height, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
+    if (sdl_surface() == 0) throw Exception(SDL_GetError());
+    clear();
+
+    int i = 0;
+    for (int y = 0; y != height; ++y)
+    {
+        for (int x = 0; x != width; ++x)
+        {
+            unsigned int colorIndex = frm->directions()->at(direction)->frames()->at(frame)->colorIndexes()->at(i);
+            unsigned int color = *pal->color(colorIndex);
+            this->pixel(x, y, color);
+            i++;
+        }
+    }
+
+    int shiftX = frm->directions()->at(direction)->shiftX();
+    int offsetX = frm->directions()->at(direction)->frames()->at(frame)->offsetX();
+    int shiftY = frm->directions()->at(direction)->shiftY();
+    int offsetY = frm->directions()->at(direction)->frames()->at(frame)->offsetY();
+
+    //std::cout <<std::dec << this->x() << ":" << this->y() << std::endl;
+
+    _x = shiftX + offsetX;
+    _y = shiftY + offsetY;
+
+    SDL_SetColorKey(this->sdl_surface(), SDL_SRCCOLORKEY, 0);
+
+}
+
 
 Surface::Surface(Surface * other)
 {    

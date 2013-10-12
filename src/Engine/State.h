@@ -40,7 +40,7 @@ public:
 
     bool initialized;
     void add(Surface * surface);
-    void blit();
+    virtual void blit();
     bool isFullscreen();
     virtual void init();
     virtual void think();

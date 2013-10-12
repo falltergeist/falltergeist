@@ -13,7 +13,6 @@ class LocationState : public State
 protected:    
     Location * _location;
     Surface * _background;
-    Surface * _camera;
     unsigned int _direction;
     unsigned int _cameraX;
     unsigned int _cameraY;
@@ -21,8 +20,9 @@ protected:
 public:
     LocationState(Game * game);
     ~LocationState();
-    void init();
-    void think();
+    virtual void init();
+    virtual void think();
+    virtual void blit();
 };
 
 }
