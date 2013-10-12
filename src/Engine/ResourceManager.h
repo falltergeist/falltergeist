@@ -39,7 +39,7 @@ class BioFileType;
 class ProFileType;
 class Surface;
 
-const char * _t(unsigned int number, const char * filename);
+std::string _t(unsigned int number, std::string filename);
 
 class ResourceManager
 {
@@ -64,10 +64,10 @@ public:
     static libfalltergeist::MsgFileType * msgFileType(std::string filename);
     static libfalltergeist::BioFileType * bioFileType(std::string filename);
     static libfalltergeist::ProFileType * proFileType(std::string filename);
+    static libfalltergeist::ProFileType * proFileType(unsigned int PID);
     static Surface * surface(std::string filename, int x = 0, int y = 0, unsigned int direction = 0, unsigned int frame = 0);
     static Surface * surface(unsigned int FID, unsigned int direction = 0, unsigned int frame = 0);
     static void extract(const char * path);
-    static libfalltergeist::ProFileType * getPrototype(unsigned int PID);
     static void unloadResources();
 };
 

@@ -37,10 +37,10 @@ Mouse::Mouse() : InteractiveSurface()
     setCursor(BIG_ARROW);
 }
 
-Surface * Mouse::think()
+void Mouse::think()
 {
     SDL_GetMouseState(&_cursorX, &_cursorY);
-    return this;
+
 }
 
 Mouse::~Mouse()

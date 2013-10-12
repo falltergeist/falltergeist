@@ -1,0 +1,30 @@
+Falltergeist - version 0.0.6
+Opensource Fallout 2 game engine
+Initializing video - [OK]
+Loading resource manager...
+/home/alexeevdv/falltergeist/bin/master.dat
+/home/alexeevdv/falltergeist/bin/master.dat
+Setting up video mode 640x480x32...[OK]
+StartState...
+Starting main loop...
+Version: 20
+Name: ARTEMPLE.MAP
+Default Position: 18492
+Default Elevation: 0
+Default Orientaion: 0
+Local Vars: 0
+Script Id: 745
+Elevations flag: 12
+Elevation Flag: UNKNOWN
+Elevation Flag: 0
+Global Vars: 0
+Map Id: 126
+Time ticks: 0
+COUNT: 0
+COUNT: 0
+COUNT: 0
+COUNT: 2
+COUNT: 1
+Objects total: 567
+Objects on elevation: 567
+Stopping main loop...[OK]

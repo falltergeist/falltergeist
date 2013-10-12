@@ -33,7 +33,7 @@ protected:
 public:
     FpsCounter(int x = 598, int y = 2);
 
-    FpsCounter * think();
+    virtual void think();
 };
 
 }

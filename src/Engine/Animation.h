@@ -35,13 +35,16 @@ protected:
     unsigned int _currentSurfaceSet;
     unsigned int _lastTicks;
 public:
+    Animation(libfalltergeist::FrmFileType * frm, int x = 0, int y = 0);
     Animation(const char * filename, int x = 0, int y = 0);
     ~Animation();
 
     Surface * surface();
 
     Animation * loadFromFrmFile(const char * filename);
-    Animation * think();
+    Animation * loadFromFrmFile(libfalltergeist::FrmFileType * frm);
+    void think();
+    virtual SDL_Surface * sdl_surface();
 };
 
 }

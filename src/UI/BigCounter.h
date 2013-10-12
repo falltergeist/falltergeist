@@ -39,7 +39,7 @@ public:
     BigCounter(int x = 0, int y = 0);
     ~BigCounter();
 
-    BigCounter * draw();
+    virtual void draw();
 
     void setColor(unsigned char color);
     unsigned char color();

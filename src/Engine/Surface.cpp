@@ -162,19 +162,17 @@ bool Surface::visible()
     return (bool)_visible;
 }
 
-Surface * Surface::think()
+void Surface::think()
 {
-    return this;
 }
 
-Surface * Surface::draw()
+void Surface::draw()
 {
-    if (!visible()) return this;
-    if (!needRedraw()) return this;
+    if (!visible()) return;
+    if (!needRedraw()) return;
     needRedraw(false);
     clear();
     if (_borderColor != 0) _drawBorder();
-    return this;
 }
 
 Surface * Surface::fill(unsigned int color)
@@ -240,15 +238,13 @@ Surface * Surface::crop(int xOffset, int yOffset, int width, int height)
 }
 
 
-Surface * Surface::blit(Surface * surface)
+void Surface::blit(Surface * surface)
 {
-    if (!visible()) return this;
+    if (!visible()) return;
 
     draw();
     SDL_Rect dest = {x(), y(), width(), height()};
     SDL_BlitSurface(this->sdl_surface(), NULL, surface->sdl_surface(), &dest);
-
-    return this;
 }
 
 Surface * Surface::copyTo(Surface * surface)

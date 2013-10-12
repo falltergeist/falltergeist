@@ -82,9 +82,9 @@ public:
     Surface * fill(unsigned int color);
     Surface * clear();
     Surface * crop(int x = 0, int y = 0, int width = 0, int height = 0);
-    virtual Surface * think();
-    virtual Surface * draw();
-    virtual Surface * blit(Surface * surface);
+    virtual void think();
+    virtual void draw();
+    virtual void blit(Surface * surface);
 };
 
 }

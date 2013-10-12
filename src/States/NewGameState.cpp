@@ -196,7 +196,7 @@ void NewGameState::changeCharacter()
     _characterImages->currentSurface = _selectedCharacter;    
 }
 
-const char * NewGameState::statToString(unsigned int stat)
+std::string NewGameState::statToString(unsigned int stat)
 {
     return _t(stat+300,"text/english/game/stat.msg");
 }

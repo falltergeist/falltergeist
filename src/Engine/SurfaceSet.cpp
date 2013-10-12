@@ -38,10 +38,9 @@ SurfaceSet::~SurfaceSet()
     delete _surfaces;
 }
 
-Surface * SurfaceSet::draw()
+void SurfaceSet::draw()
 {
     needRedraw(false);
-    return this;
 }
 
 void SurfaceSet::setCurrentSurface(unsigned int number)

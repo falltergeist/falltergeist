@@ -59,9 +59,9 @@ BigCounter::~BigCounter()
     delete _numbersWhite;
 }
 
-BigCounter * BigCounter::draw()
+void BigCounter::draw()
 {
-    if (!needRedraw()) return this;
+    if (!needRedraw()) return;
 
     InteractiveSurface::draw();
     // new surface
@@ -108,7 +108,6 @@ BigCounter * BigCounter::draw()
            ->y(y());
     loadFromSurface(surface);
     delete surface;
-    return this;
 }
 
 void BigCounter::setNumber(unsigned int number)

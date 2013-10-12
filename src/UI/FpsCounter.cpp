@@ -36,7 +36,7 @@ FpsCounter::FpsCounter(int x, int y) : TextArea(x,y)
     setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 }
 
-FpsCounter * FpsCounter::think()
+void FpsCounter::think()
 {
     if (_lastTicks + 1000 > SDL_GetTicks())
     {
@@ -48,7 +48,6 @@ FpsCounter * FpsCounter::think()
         _frames = 0;
         _lastTicks = SDL_GetTicks();
     }
-    return this;
 }
 
 }

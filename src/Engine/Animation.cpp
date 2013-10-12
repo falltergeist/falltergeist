@@ -24,6 +24,16 @@
 namespace Falltergeist
 {
 
+Animation::Animation(libfalltergeist::FrmFileType * frm, int x, int y)
+{
+    _surfaceSets = new std::vector<std::vector<Surface *> *>;
+    _currentFrame = 0;
+    _currentSurfaceSet = 0;
+    _frameRate = 400;
+    _lastTicks = SDL_GetTicks();
+    loadFromFrmFile(frm);
+}
+
 Animation::Animation(const char * filename, int x, int y) : InteractiveSurface(0, 0, x, y)
 {
     _surfaceSets = new std::vector<std::vector<Surface *> *>;
@@ -49,25 +59,19 @@ Animation::~Animation()
     delete _surfaceSets;
 }
 
-Animation * Animation::think()
+void Animation::think()
 {
-    if(_lastTicks + _frameRate > SDL_GetTicks()) return this;
+    if(_lastTicks + _frameRate > SDL_GetTicks()) return;
     _lastTicks = SDL_GetTicks();
     _currentFrame++;
     if (_currentFrame >= _surfaceSets->at(_currentSurfaceSet)->size())
     {
         _currentFrame = 0;
     }
-    return this;
 }
 
-Animation * Animation::loadFromFrmFile(const char * filename)
+Animation * Animation::loadFromFrmFile(libfalltergeist::FrmFileType * frm)
 {
-    libfalltergeist::FrmFileType * frm = ResourceManager::frmFileType(filename);
-    if (!frm)
-    {
-        std::cout << "can't find FRM file " << filename << std::endl;
-    }
     libfalltergeist::PalFileType * pal = ResourceManager::palFileType("color.pal");
 
     _frameRate = 1000 / frm->framesPerSecond();
@@ -80,6 +84,8 @@ Animation * Animation::loadFromFrmFile(const char * filename)
         // for each frame
         for (unsigned int j = 0; j != frm->framesPerDirection(); ++j)
         {
+            Surface * surface = new Surface(frm, i, j);
+            /*
             int width = frm->directions()->at(i)->frames()->at(j)->width();
             int height = frm->directions()->at(i)->frames()->at(j)->height();
             Surface * surface = new Surface(width,height);
@@ -96,11 +102,22 @@ Animation * Animation::loadFromFrmFile(const char * filename)
                     z++;
                 }
             }
+            */
             frameset->push_back(surface);
         }
         _surfaceSets->push_back(frameset);
     }
     return this;
+}
+
+Animation * Animation::loadFromFrmFile(const char * filename)
+{
+    libfalltergeist::FrmFileType * frm = ResourceManager::frmFileType(filename);
+    if (!frm)
+    {
+        std::cout << "can't find FRM file " << filename << std::endl;
+    }
+    return loadFromFrmFile(frm);
 }
 
 Surface * Animation::surface()
@@ -111,6 +128,11 @@ Surface * Animation::surface()
         needRedraw(false);
     }
     return _surfaceSets->at(_currentSurfaceSet)->at(_currentFrame);
+}
+
+SDL_Surface * Animation::sdl_surface()
+{
+    return surface()->sdl_surface();
 }
 
 

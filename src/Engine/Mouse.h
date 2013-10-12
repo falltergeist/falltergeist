@@ -53,7 +53,7 @@ public:
           SCROLL_SW_X};
     Mouse();
     ~Mouse();
-    virtual Surface * think();
+    virtual void think();
     int cursorX();
     int cursorY();
     void setCursorX(int x);

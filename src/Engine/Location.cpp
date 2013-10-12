@@ -22,6 +22,7 @@
 #include "../Engine/LocationObject.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
+#include "../Engine/Animation.h"
 #include <cmath>
 #include <iostream>
 
@@ -62,19 +63,81 @@ void Location::init()
     {
         libfalltergeist::MapObject * mapObject = *it;
 
-        if (mapObject->objectTypeId() == 1) continue; // SKIP critters for now
-        if (mapObject->objectTypeId() == 5) continue; // SKIP critters for now
+        LocationObject * locationObject = new LocationObject();
+        locationObject->setObjectId(mapObject->objectId());
+        locationObject->setObjectTypeId(mapObject->objectTypeId());
+
+        unsigned int PID = (mapObject->objectTypeId() << 24) | mapObject->objectId();
+        locationObject->setDescriptionId(ResourceManager::proFileType(PID)->messageId());
+
+        if (mapObject->objectTypeId() == 1)
+        {
+            std::cout << std::dec << locationObject->objectTypeId() << " - " << locationObject->descriptionId() << " : ";
+            std::cout << locationObject->name() << " | " << locationObject->description() << std::endl;
+            continue; // SKIP critters for now
+        }
+        if (mapObject->objectTypeId() == 5)
+        {
+        }
 
         unsigned int FID = (mapObject->frmTypeId() << 24) | mapObject->frmId();
         libfalltergeist::FrmFileType * frm = ResourceManager::frmFileType(FID);
+
+        //if (frm == 0) std::cout << mapObject->objectTypeId() << " - " << mapObject->objectId() << " NO FRM" << std::endl;
+
+        if (mapObject->objectTypeId() == 5)
+        {
+            if (mapObject->objectId() == 12) // какая то хрень выстроенная форму прямоугольника
+            {
+                frm = ResourceManager::frmFileType("art/intrface/msef000.frm");
+            }
+            else if (mapObject->objectId() == 16) // exit
+            {
+                frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
+            }
+            else if (mapObject->objectId() == 17) // exit
+            {
+                frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
+            }
+            else if (mapObject->objectId() == 18) // exit
+            {
+                frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
+            }
+            else if (mapObject->objectId() == 19) // exit
+            {
+                frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
+            }
+            else if (mapObject->objectId() == 20) // exit
+            {
+                frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
+            }
+            else if (mapObject->objectId() == 23)  // exit to temple
+            {
+                frm = ResourceManager::frmFileType("art/intrface/msef002.frm");
+            }
+            else
+            {
+                std::cout << std::dec << locationObject->objectTypeId() << " - " << locationObject->objectId() << " - " << locationObject->descriptionId() << " : ";
+                std::cout << locationObject->name() << " | " << locationObject->description() << std::endl;
+                //continue; // SKIP MISC for now
+            }
+        }
+
         if (frm == 0)
         {
             std::cout << "FRM == 0 :( " << std::endl;
+            delete locationObject;
             continue;
         }
-        LocationObject * locationObject = new LocationObject();
-        locationObject->loadFromSurface(new Surface(frm, 0, 0));
 
+        if (frm->framesPerDirection() > 1)
+        {
+            locationObject->setAnimation(new Animation(frm));
+        }
+        else
+        {
+            locationObject->loadFromSurface(new Surface(frm));
+        }
 
 
         //if (frm->framesPerDirection() > 1)

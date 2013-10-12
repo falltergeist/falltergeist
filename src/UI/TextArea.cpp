@@ -210,9 +210,9 @@ TextArea * TextArea::appendText(int number)
     return appendText(ss.str().c_str());
 }
 
-TextArea * TextArea::draw()
+void TextArea::draw()
 {
-    if (!needRedraw()) return this;
+    if (!needRedraw()) return;
     InteractiveSurface::draw();
 
     if (!_font) throw Exception("TextArea::draw() - font is not setted");
@@ -221,7 +221,7 @@ TextArea * TextArea::draw()
     if (_text == 0 || strlen(_text) == 0)
     {
         loadFromSurface(new Surface(0, 0, this->x(), this->y()));
-        return this;
+        return;
     }
 
     unsigned int line = 0;
@@ -291,8 +291,6 @@ TextArea * TextArea::draw()
     }
     delete _textSurfaces; _textSurfaces = 0;
     delete surface;
-
-    return this;
 }
 
 unsigned int TextArea::color()

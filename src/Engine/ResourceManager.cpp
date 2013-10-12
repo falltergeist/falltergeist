@@ -34,7 +34,7 @@ std::map<std::string, libfalltergeist::DatFileItem *> * ResourceManager::_datFil
 std::map<std::string, Surface *> * ResourceManager::_surfaces = new std::map<std::string, Surface *>;
 std::string ResourceManager::_dataPath = "";
 
-const char * _t(unsigned int number, const char * filename)
+std::string _t(unsigned int number, std::string filename)
 {
     libfalltergeist::MsgFileType * msg = ResourceManager::msgFileType(filename);
     if (!msg) throw Exception("Cant find msg file");
@@ -240,7 +240,7 @@ libfalltergeist::MapFileType * ResourceManager::mapFileType(std::string filename
     libfalltergeist::DatFileItem * item = datFileItem(filename);
     if (item)
     {
-        return item->asMapFileType(&ResourceManager::getPrototype);
+        return item->asMapFileType(&ResourceManager::proFileType);
     }
     return 0;
 }
@@ -278,7 +278,7 @@ Surface * ResourceManager::surface(std::string filename, int posX, int posY, uns
     return surface;
 }
 
-libfalltergeist::ProFileType * ResourceManager::getPrototype(unsigned int PID)
+libfalltergeist::ProFileType * ResourceManager::proFileType(unsigned int PID)
 {
     unsigned int typeId = PID >> 24;
     std::string listFile;
@@ -374,7 +374,7 @@ libfalltergeist::FrmFileType * ResourceManager::frmFileType(unsigned int FID)
 
     if (frmId >= lst->strings()->size())
     {
-        std::cout << "Size: " << lst->strings()->size() << " frmId: " << frmId << std::endl;
+        //std::cout << "Size: " << lst->strings()->size() << " frmId: " << frmId << std::endl;
         return 0;
     }
 

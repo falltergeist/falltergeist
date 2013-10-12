@@ -47,7 +47,7 @@ public:
     virtual ~NewGameState();
     void changeCharacter();
     void init();
-    const char * statToString(unsigned int stat);
+    std::string statToString(unsigned int stat);
     void think();
     void onBackButtonClick(Event * event);
     void onBeginGameButtonClick(Event * event);

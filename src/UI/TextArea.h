@@ -73,7 +73,7 @@ public:
 
     void init();
 
-    TextArea * draw();
+    virtual void draw();
 
     TextArea * setText(libfalltergeist::MsgMessage * message);
     TextArea * setText(const char * text);
