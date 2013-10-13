@@ -177,6 +177,11 @@ void Location::init()
         }
         //if (frm == 0) std::cout << mapObject->objectTypeId() << " - " << mapObject->objectId() << " NO FRM" << std::endl;
 
+        if (mapObject->objectId() == 0xf2)
+        {
+            std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+        }
+
         if (mapObject->objectTypeId() == 5)
         {
             if (mapObject->objectId() == 12) // какая то хрень выстроенная форму прямоугольника
