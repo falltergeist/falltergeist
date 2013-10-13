@@ -70,19 +70,111 @@ void Location::init()
         unsigned int PID = (mapObject->objectTypeId() << 24) | mapObject->objectId();
         locationObject->setDescriptionId(ResourceManager::proFileType(PID)->messageId());
 
+        libfalltergeist::FrmFileType * frm;
+
         if (mapObject->objectTypeId() == 1)
         {
-            std::cout << std::dec << locationObject->objectTypeId() << " - " << locationObject->descriptionId() << " : ";
-            std::cout << locationObject->name() << " | " << locationObject->description() << std::endl;
-            continue; // SKIP critters for now
+            //std::cout << std::dec << locationObject->objectTypeId() << " - " << locationObject->descriptionId() << " : ";
+            //std::cout << locationObject->name() << " | " << locationObject->description() << std::endl;
+            //std::cout << "FrmId: " << mapObject->frmId() << std::endl;
+            //std::cout << "FrmTypeId: " << mapObject->frmTypeId() << std::endl;
+            //std::cout << "ID1: " << mapObject->objectID1() << std::endl;
+            //std::cout << "ID2: " << mapObject->objectID2() << std::endl;
+            //std::cout << "ID3: " << mapObject->objectID3() << std::endl;
+
+            libfalltergeist::LstFileType * lst = ResourceManager::lstFileType("art/critters/critters.lst");
+            std::string frmName = lst->strings()->at(mapObject->frmId());
+            std::string frmBase = frmName.substr(0, 6);
+
+            unsigned int ID1 = mapObject->objectID1();
+            unsigned int ID2 = mapObject->objectID2();
+
+            if (ID2 >= 0x26 && ID2 <= 0x2F)
+            {
+                if (ID1 >= 0x0B || ID1 == 0)
+                {
+                    std::cout << "Unsupported value" << std::endl;
+                }
+                else
+                {
+                    frmBase += ID1 + 0x63;
+                    frmBase += ID2 + 0x3D;
+                }
+            }
+            else if (ID2 == 0x24)
+            {
+                frmBase += "ch";
+            }
+            else if (ID2 == 0x25)
+            {
+                frmBase += "cj";
+            }
+            else if (ID2 == 0x40)
+            {
+                frmBase += "na";
+            }
+            else if (ID2 >= 0x30)
+            {
+                frmBase += "r";
+                frmBase += ID2 + 0x31;
+            }
+            else if (ID2 >= 0x14)
+            {
+                frmBase += "b";
+                frmBase += ID2 + 0x4d;
+            }
+            else if (ID2 == 0x12)
+            {
+                if (ID1 == 0x01)
+                {
+                    frmBase += "dm";
+                }
+                else if (ID1 == 0x04)
+                {
+                    frmBase += "gm";
+                }
+                else
+                {
+                    frmBase += "as";
+                }
+            }
+            else if (ID2 == 0x0D)
+            {
+                if (ID1 > 0)
+                {
+                    frmBase += ID1 + 0x63;
+                    frmBase += "e";
+                }
+                else
+                {
+                    frmBase += "an";
+                }
+            }
+            else if (ID2 <= 0x01 && ID1 > 0)
+            {
+                frmBase += ID1 + 0x63;
+                frmBase += ID2 + 0x61;
+            }
+            else
+            {
+                frmBase += "a";
+                frmBase += ID2 + 0x61;
+            }
+
+            std::string extensions[] = {"frm", "frm0", "frm1", "frm2", "fr3", "frm4", "frm5", "frm6"};
+            frmBase += "." + extensions[mapObject->objectID3()];
+
+            //std::cout << frmBase << std::endl;
+
+
+            frm = ResourceManager::frmFileType("art/critters/" + frmBase);
+            //std::cout << "Frm: " << frm << std::endl;
         }
-        if (mapObject->objectTypeId() == 5)
+        else
         {
+            unsigned int FID = (mapObject->frmTypeId() << 24) | mapObject->frmId();
+            frm = ResourceManager::frmFileType(FID);
         }
-
-        unsigned int FID = (mapObject->frmTypeId() << 24) | mapObject->frmId();
-        libfalltergeist::FrmFileType * frm = ResourceManager::frmFileType(FID);
-
         //if (frm == 0) std::cout << mapObject->objectTypeId() << " - " << mapObject->objectId() << " NO FRM" << std::endl;
 
         if (mapObject->objectTypeId() == 5)
@@ -91,6 +183,9 @@ void Location::init()
             {
                 //frm = ResourceManager::frmFileType("art/intrface/msef000.frm");
                 frm = 0;
+                delete locationObject;
+                continue;
+
             }
             else if (mapObject->objectId() == 16) // exit
             {
@@ -114,15 +209,15 @@ void Location::init()
             }
             else if (mapObject->objectId() == 21)  // exit
             {
-                frm = ResourceManager::frmFileType("art/intrface/msef002.frm");
+                frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
             }
             else if (mapObject->objectId() == 22)  // exit
             {
-                frm = ResourceManager::frmFileType("art/intrface/msef002.frm");
+                frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
             }
             else if (mapObject->objectId() == 23)  // exit to temple
             {
-                frm = ResourceManager::frmFileType("art/intrface/msef002.frm");
+                frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
             }
             else
             {
@@ -134,7 +229,7 @@ void Location::init()
 
         if (frm == 0)
         {
-            std::cout << "FRM == 0 :( " << std::endl;
+            std::cout << "FRM == 0 TId: "<< locationObject->objectTypeId() << " ID: " << locationObject->objectId() << std::endl;
             delete locationObject;
             continue;
         }
@@ -148,37 +243,22 @@ void Location::init()
             locationObject->loadFromSurface(new Surface(frm));
         }
 
-
-        //if (frm->framesPerDirection() > 1)
-        //{
-            //std::cout << "ANIMATION" << std::endl;
-        //}
-        //locationObject->loadFromSurface()
-
-        /*
-        switch (mapObject->objectTypeId())
-        {
-            case libfalltergeist::ProFileType::TYPE_ITEM:
-                break;
-            case libfalltergeist::ProFileType::TYPE_CRITTER:
-                break;
-            case libfalltergeist::ProFileType::TYPE_SCENERY:
-
-                break;
-            case libfalltergeist::ProFileType::TYPE_TILE:
-                break;
-            case libfalltergeist::ProFileType::TYPE_WALL:
-                break;
-            case libfalltergeist::ProFileType::TYPE_MISC:
-                break;
-        }
-        */
-
         locationObject->setX(hexagonToX(mapObject->hexPosition()));
         locationObject->setY(hexagonToY(mapObject->hexPosition()));
 
         _objects->push_back(locationObject);
     }
+
+    LocationObject * player = new LocationObject();
+
+    Animation * animation = new Animation(ResourceManager::frmFileType("art/critters/hmbmetbl.fr3"));
+
+    player->setAnimation(animation);
+
+    player->setX(hexagonToX(_mapFile->defaultPosition()));
+    player->setY(hexagonToY(_mapFile->defaultPosition()));
+    //add(animation);
+    _objects->push_back(player);
 
     generateBackground();
 }

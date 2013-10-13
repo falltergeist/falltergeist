@@ -30,7 +30,7 @@ Animation::Animation(libfalltergeist::FrmFileType * frm, int x, int y)
     _surfaceSets = new std::vector<std::vector<Surface *> *>;
     _currentFrame = 0;
     _currentSurfaceSet = 0;
-    _frameRate = 100;
+    _frameRate = 200;
     _lastTicks = SDL_GetTicks();
     loadFromFrmFile(frm);
 }
@@ -40,7 +40,7 @@ Animation::Animation(const char * filename, int x, int y) : InteractiveSurface(0
     _surfaceSets = new std::vector<std::vector<Surface *> *>;
     _currentFrame = 0;
     _currentSurfaceSet = 0;
-    _frameRate = 100;
+    _frameRate = 200;
     _lastTicks = SDL_GetTicks();
     loadFromFrmFile(filename);
 }
@@ -79,8 +79,12 @@ void Animation::draw()
 int Animation::xOffset()
 {
     int offset = 0;
-    offset += ceil(surfaces()->at(0)->width()/2);
-    offset -= ceil(surface()->width()/2);
+    offset += InteractiveSurface::xOffset();
+    offset += ceil(surfaces()->at(0)->width()/2 + 0.1);
+    offset -= ceil(surface()->width()/2 + 0.1);
+
+    //offset -= surface()->width()%2;
+
 
     for (unsigned int i = 0; i <= _currentFrame; i++)
     {
@@ -92,6 +96,7 @@ int Animation::xOffset()
 int Animation::yOffset()
 {
     int offset = 0;
+    offset += InteractiveSurface::yOffset();
     offset += surfaces()->at(0)->height();
     offset -= surface()->height();
 
@@ -111,7 +116,10 @@ void Animation::loadFromFrmFile(libfalltergeist::FrmFileType * frm)
 {
     libfalltergeist::PalFileType * pal = ResourceManager::palFileType("color.pal");
 
-    _frameRate = ceil(1000 / frm->framesPerSecond());
+    if (frm->framesPerSecond() > 0)
+    {
+        _frameRate = ceil(1000 / frm->framesPerSecond());
+    }
 
     // for each direction
     for (unsigned int i = 0; i != 6; ++i)
