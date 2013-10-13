@@ -20,6 +20,7 @@
 #include "../Engine/Animation.h"
 #include "../Engine/ResourceManager.h"
 #include <iostream>
+#include <cmath>
 
 namespace Falltergeist
 {
@@ -29,7 +30,7 @@ Animation::Animation(libfalltergeist::FrmFileType * frm, int x, int y)
     _surfaceSets = new std::vector<std::vector<Surface *> *>;
     _currentFrame = 0;
     _currentSurfaceSet = 0;
-    _frameRate = 400;
+    _frameRate = 100;
     _lastTicks = SDL_GetTicks();
     loadFromFrmFile(frm);
 }
@@ -39,7 +40,7 @@ Animation::Animation(const char * filename, int x, int y) : InteractiveSurface(0
     _surfaceSets = new std::vector<std::vector<Surface *> *>;
     _currentFrame = 0;
     _currentSurfaceSet = 0;
-    _frameRate = 400;
+    _frameRate = 100;
     _lastTicks = SDL_GetTicks();
     loadFromFrmFile(filename);
 }
@@ -70,11 +71,47 @@ void Animation::think()
     }
 }
 
-Animation * Animation::loadFromFrmFile(libfalltergeist::FrmFileType * frm)
+void Animation::draw()
+{
+
+}
+
+int Animation::xOffset()
+{
+    int offset = 0;
+    offset += ceil(surfaces()->at(0)->width()/2);
+    offset -= ceil(surface()->width()/2);
+
+    for (unsigned int i = 0; i <= _currentFrame; i++)
+    {
+        offset += surfaces()->at(i)->xOffset();
+    }
+    return offset;
+}
+
+int Animation::yOffset()
+{
+    int offset = 0;
+    offset += surfaces()->at(0)->height();
+    offset -= surface()->height();
+
+    for (unsigned int i = 0; i <= _currentFrame; i++)
+    {
+        offset += surfaces()->at(i)->yOffset();
+    }
+    return offset;
+}
+
+std::vector<Surface *> * Animation::surfaces()
+{
+    return _surfaceSets->at(_currentSurfaceSet);
+}
+
+void Animation::loadFromFrmFile(libfalltergeist::FrmFileType * frm)
 {
     libfalltergeist::PalFileType * pal = ResourceManager::palFileType("color.pal");
 
-    _frameRate = 1000 / frm->framesPerSecond();
+    _frameRate = ceil(1000 / frm->framesPerSecond());
 
     // for each direction
     for (unsigned int i = 0; i != 6; ++i)
@@ -85,32 +122,23 @@ Animation * Animation::loadFromFrmFile(libfalltergeist::FrmFileType * frm)
         for (unsigned int j = 0; j != frm->framesPerDirection(); ++j)
         {
             Surface * surface = new Surface(frm, i, j);
-            /*
-            int width = frm->directions()->at(i)->frames()->at(j)->width();
-            int height = frm->directions()->at(i)->frames()->at(j)->height();
-            Surface * surface = new Surface(width,height);
-            int z = 0;
-            for (int y = 0; y < height; y++)
+            if (j == 0)
             {
-                for (int x = 0; x < width; x++)
-                {
-                    // 12 - frame data offset
-                    unsigned int colorIndex = frm->directions()->at(i)->frames()->at(j)->colorIndexes()->at(z);
-                    unsigned int color = *pal->color(colorIndex);
-                    if (colorIndex == 0) color = 0;
-                    surface->pixel(x,y,color);
-                    z++;
-                }
+                surface->setXOffset(frm->directions()->at(i)->shiftX());
+                surface->setYOffset(frm->directions()->at(i)->shiftY());
             }
-            */
+            else
+            {
+                surface->setXOffset(frm->directions()->at(i)->frames()->at(j)->offsetX());
+                surface->setYOffset(frm->directions()->at(i)->frames()->at(j)->offsetY());
+            }
             frameset->push_back(surface);
         }
         _surfaceSets->push_back(frameset);
     }
-    return this;
 }
 
-Animation * Animation::loadFromFrmFile(const char * filename)
+void Animation::loadFromFrmFile(const char * filename)
 {
     libfalltergeist::FrmFileType * frm = ResourceManager::frmFileType(filename);
     if (!frm)
@@ -125,7 +153,7 @@ Surface * Animation::surface()
     if (needRedraw())
     {
         draw();
-        needRedraw(false);
+        setNeedRedraw(false);
     }
     return _surfaceSets->at(_currentSurfaceSet)->at(_currentFrame);
 }

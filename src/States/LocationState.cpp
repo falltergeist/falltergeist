@@ -26,6 +26,7 @@
 #include "../Engine/LocationObject.h"
 #include "../UI/TextArea.h"
 #include "../Engine/Mouse.h"
+#include "../Engine/Animation.h"
 #include <cmath>
 
 namespace Falltergeist
@@ -49,14 +50,6 @@ void LocationState::init()
     _location = new Location(_game->resourceManager()->mapFileType("maps/broken1.map"));
     _background = new Surface(_location->tilesBackground());
     add(_background);
-
-
-
-
-    //SDL_SaveBMP(_elevation->sdl_surface(), "elevation2.bmp");
-
-
-
 }
 
 void LocationState::blit()
@@ -74,15 +67,12 @@ void LocationState::blit()
         int oldY = object->y();
         int newX = oldX - _location->cameraX() + 320;
         int newY = oldY - _location->cameraY() + 240;
-        //std::cout << std::dec << newX << ":" << newY << " " << _location->cameraX() << ":" << _location->cameraY() << std::endl;
 
-        //if (newX < 0 || newY < 0) continue;
-
-        object->x(newX);
-        object->y(newY);
+        object->setX(newX);
+        object->setY(newY);
         object->blit(_game->screen()->surface());
-        object->x(oldX);
-        object->y(oldY);
+        object->setX(oldX);
+        object->setY(oldY);
     }
 
 }
@@ -96,9 +86,9 @@ void LocationState::think()
     {
         bool moved;
         _scrollTicks = SDL_GetTicks();
-        if (_game->mouse()->cursorX() < 4) // LEFT
+        if (_game->mouse()->cursorX() < 5) // LEFT
         {
-            if (_game->mouse()->cursorY() < 4) //  LEFT-UP
+            if (_game->mouse()->cursorY() < 5) //  LEFT-UP
             {
                 moved = _location->scroll(true, false, true, false);
                 if (moved)
@@ -110,7 +100,7 @@ void LocationState::think()
                     _game->mouse()->setCursor(Mouse::SCROLL_NW_X);
                 }
             }
-            else if (_game->mouse()->cursorY() > 476) //LEFT-DOWN
+            else if (_game->mouse()->cursorY() > 475) //LEFT-DOWN
             {
                 moved = _location->scroll(false, true, true, false);
                 if (moved)
@@ -135,9 +125,9 @@ void LocationState::think()
                 }
             }
         }
-        else if (_game->mouse()->cursorX() > 636) // RIGHT
+        else if (_game->mouse()->cursorX() > 635) // RIGHT
         {
-            if (_game->mouse()->cursorY() < 4) //  RIGHT-UP
+            if (_game->mouse()->cursorY() < 5) //  RIGHT-UP
             {
                 moved = _location->scroll(true, false, false, true);
                 if (moved)
@@ -149,7 +139,7 @@ void LocationState::think()
                     _game->mouse()->setCursor(Mouse::SCROLL_NE_X);
                 }
             }
-            else if (_game->mouse()->cursorY() > 476) //RIGHT-DOWN
+            else if (_game->mouse()->cursorY() > 475) //RIGHT-DOWN
             {
                 moved = _location->scroll(false, true, false, true);
                 if (moved)
@@ -186,7 +176,7 @@ void LocationState::think()
                 _game->mouse()->setCursor(Mouse::SCROLL_N_X);
             }
         }
-        else if (_game->mouse()->cursorY() > 476) // DOWN
+        else if (_game->mouse()->cursorY() > 475) // DOWN
         {
             moved = _location->scroll(false, true, false, false);
             if (moved)

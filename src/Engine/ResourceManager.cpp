@@ -271,8 +271,9 @@ Surface * ResourceManager::surface(std::string filename, int posX, int posY, uns
     }
     Surface * surface = new Surface(frm, direction, frame);
 
-    surface->x(posX + surface->x());
-    surface->y(posY + surface->y());
+    surface->setX(posX);
+    surface->setY(posY);
+
 
     _surfaces->insert(std::pair<std::string, Surface *>(filename, surface));
     return surface;

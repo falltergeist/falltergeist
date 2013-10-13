@@ -41,16 +41,22 @@ void PlayerEditAgeState::init()
     State::init();
 
     Surface * bg = new Surface(_game->resourceManager()->surface("art/intrface/charwin.frm"));
-    bg->x(160);
-    bg->y(0);
+    bg->setX(160);
+    bg->setY(0);
+    bg->setXOffset(0);
+    bg->setYOffset(0);
 
     Surface * ageBox = new Surface(_game->resourceManager()->surface("art/intrface/agebox.frm"));
-    ageBox->x(168);
-    ageBox->y(10);
+    ageBox->setX(168);
+    ageBox->setY(10);
+    ageBox->setXOffset(0);
+    ageBox->setYOffset(0);
 
     Surface * doneBox = new Surface(_game->resourceManager()->surface("art/intrface/donebox.frm"));
-    doneBox->x(175);
-    doneBox->y(40);
+    doneBox->setX(175);
+    doneBox->setY(40);
+    doneBox->setXOffset(0);
+    doneBox->setYOffset(0);
 
     ImageButton * decButton = new ImageButton("art/intrface/slu.frm", "art/intrface/sld.frm", 178, 14);
     decButton->onLeftButtonClick((EventHandler) &PlayerEditAgeState::onDecButtonClick);

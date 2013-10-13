@@ -40,10 +40,18 @@ public:
     ~Animation();
 
     Surface * surface();
-
-    Animation * loadFromFrmFile(const char * filename);
-    Animation * loadFromFrmFile(libfalltergeist::FrmFileType * frm);
+    std::vector<Surface *> * surfaces();
+    void loadFromFrmFile(const char * filename);
+    void loadFromFrmFile(libfalltergeist::FrmFileType * frm);
     void think();
+    //virtual unsigned int width();
+    //virtual unsigned int height();
+    virtual int xOffset();
+    virtual int yOffset();
+    virtual void draw();
+    int frameXPosition(unsigned int frame);
+    int frameYPosition(unsigned int frame);
+
     virtual SDL_Surface * sdl_surface();
 };
 

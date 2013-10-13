@@ -39,7 +39,7 @@ public:
     void setCurrentSurface(unsigned int number);
     virtual void draw();
     Surface * surface();
-    SDL_Surface * sdl_surface();
+    virtual SDL_Surface * sdl_surface();
 };
 
 }

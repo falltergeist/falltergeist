@@ -21,6 +21,7 @@
 #include "../Engine/LocationObject.h"
 #include "../Engine/Animation.h"
 #include <iostream>
+#include <cmath>
 
 namespace Falltergeist
 {
@@ -132,53 +133,30 @@ SDL_Surface * LocationObject::sdl_surface()
     return _animation->sdl_surface();
 }
 
-void LocationObject::x(int x)
+int LocationObject::xOffset()
 {
     if (_animation == 0)
     {
-        InteractiveSurface::x(x);
+        return InteractiveSurface::xOffset() - ceil(width()/2);
     }
     else
     {
-        InteractiveSurface::x(x - _animation->surface()->x());
+        return - ceil(_animation->surfaces()->at(0)->width()/2) + _animation->xOffset();
     }
 }
 
-void LocationObject::y(int y)
+int LocationObject::yOffset()
 {
     if (_animation == 0)
     {
-        InteractiveSurface::y(y);
+        return InteractiveSurface::yOffset() - height();
     }
     else
     {
-        InteractiveSurface::y(y - _animation->surface()->y());
+        return - _animation->surfaces()->at(0)->height() + _animation->yOffset();
     }
 }
 
-int LocationObject::x()
-{
-    if (_animation == 0)
-    {
-        return InteractiveSurface::x();
-    }
-    else
-    {
-        return InteractiveSurface::x() + _animation->surface()->x();
-    }
-}
-
-int LocationObject::y()
-{
-    if (_animation == 0)
-    {
-        return InteractiveSurface::y();
-    }
-    else
-    {
-        return InteractiveSurface::y() + _animation->surface()->y();
-    }
-}
 
 unsigned int LocationObject::objectTypeId() { return _objectTypeId; }
         void LocationObject::setObjectTypeId(unsigned int value) { _objectTypeId = value; }

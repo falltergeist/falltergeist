@@ -46,8 +46,10 @@ void PlayerEditAlertState::init()
     State::init();
 
     Surface * bg = new Surface(_game->resourceManager()->surface("art/intrface/lgdialog.frm"));
-    bg->x(164);
-    bg->y(173);
+    bg->setX(164);
+    bg->setY(173);
+    bg->setXOffset(0);
+    bg->setYOffset(0);
 
     TextArea * message = new TextArea(_message.c_str(), 194, 213);
     message->setWidth(250);
@@ -55,8 +57,10 @@ void PlayerEditAlertState::init()
     message->setColor(0xFFFF9F48);
 
     Surface * doneBox = new Surface(_game->resourceManager()->surface("art/intrface/donebox.frm"));
-    doneBox->x(254);
-    doneBox->y(270);
+    doneBox->setX(254);
+    doneBox->setY(270);
+    doneBox->setXOffset(0);
+    doneBox->setYOffset(0);
 
     ImageButton * doneButton= new ImageButton("art/intrface/lilredup.frm", "art/intrface/lilreddn.frm", 264, 273);
     doneButton->onLeftButtonClick((EventHandler) &PlayerEditAlertState::onDoneButtonClick);

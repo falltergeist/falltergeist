@@ -27,7 +27,7 @@ ImageButton::ImageButton(const char * releasedImage, const char * pressedImage, 
 {
     _releasedImage = (char*)releasedImage;
     _pressedImage = (char*)pressedImage;
-    needRedraw(true);
+    setNeedRedraw(true);
 }
 
 void ImageButton::draw()
@@ -47,8 +47,10 @@ void ImageButton::draw()
     {
         loadFromSurface(ResourceManager::surface(_releasedImage));
     }
-    this->x(x);
-    this->y(y);
+    this->setX(x);
+    this->setY(y);
+    this->setXOffset(0);
+    this->setYOffset(0);
 }
 
 void ImageButton::setPressedImage(const char * pressedImage)

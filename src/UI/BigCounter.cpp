@@ -40,7 +40,7 @@ BigCounter::BigCounter(int x, int y) : InteractiveSurface(0,0, x, y)
     {
         _numbersRed->push_back(ResourceManager::surface("art/intrface/bignum.frm")->crop(168 + 14*i, 0, 14, 24));
     }
-    needRedraw(true);
+    setNeedRedraw(true);
 }
 
 BigCounter::~BigCounter()
@@ -99,13 +99,16 @@ void BigCounter::draw()
                 number =  _numbersRed->at(key);
                 break;
         }
-        number->x(14*i)
-              ->copyTo(surface);
+        number->setX(14*i);
+        number->copyTo(surface);
     }
     delete [] textNumber;
 
-    surface->x(x())
-           ->y(y());
+    surface->setX(this->x());
+    surface->setY(this->y());
+    surface->setXOffset(0);
+    surface->setYOffset(0);
+
     loadFromSurface(surface);
     delete surface;
 }
@@ -113,7 +116,7 @@ void BigCounter::draw()
 void BigCounter::setNumber(unsigned int number)
 {
     _number = number;
-    needRedraw(true);
+    setNeedRedraw(true);
 }
 
 unsigned int BigCounter::number()
@@ -131,7 +134,7 @@ void BigCounter::setColor(unsigned char color)
             if (_color != color)
             {
                 _color = color;
-                needRedraw(true);
+                setNeedRedraw(true);
             }
             break;
     }

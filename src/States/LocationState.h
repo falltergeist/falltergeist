@@ -27,10 +27,12 @@ namespace Falltergeist
 {
 class Game;
 class Location;
+class Animation;
 
 class LocationState : public State
 {
 protected:    
+    Animation * _animation;
     Location * _location;
     Surface * _background;
     unsigned int _direction;

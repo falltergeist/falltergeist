@@ -89,7 +89,8 @@ void Location::init()
         {
             if (mapObject->objectId() == 12) // какая то хрень выстроенная форму прямоугольника
             {
-                frm = ResourceManager::frmFileType("art/intrface/msef000.frm");
+                //frm = ResourceManager::frmFileType("art/intrface/msef000.frm");
+                frm = 0;
             }
             else if (mapObject->objectId() == 16) // exit
             {
@@ -172,11 +173,9 @@ void Location::init()
                 break;
         }
         */
-        int locX = locationObject->x() + hexagonToX(mapObject->hexPosition()) - ceil(locationObject->width()/2);
-        int locY = locationObject->y() + hexagonToY(mapObject->hexPosition()) - locationObject->height();
 
-        locationObject->x(locX);
-        locationObject->y(locY);
+        locationObject->setX(hexagonToX(mapObject->hexPosition()));
+        locationObject->setY(hexagonToY(mapObject->hexPosition()));
 
         _objects->push_back(locationObject);
     }
@@ -212,8 +211,8 @@ void Location::generateBackground()
         std::string frmName = _tilesLst->strings()->at(_mapFile->elevations()->at(_elevation)->floorTiles[i]);
         Surface * tile = ResourceManager::surface("art/tiles/" + frmName);
 
-        tile->x(tileX - _cameraX + 320);
-        tile->y(tileY - _cameraY + 240);
+        tile->setX(tileX - _cameraX + 320);
+        tile->setY(tileY - _cameraY + 240);
         tile->blit(_tilesBackground);
     }
 }
@@ -277,34 +276,34 @@ bool Location::scroll(bool up, bool down, bool left, bool right)
 
     if (up)
     {
-        if (_cameraY >= 3 + 240)
+        if (_cameraY >= 4 + 240)
         {
-            _cameraY -= 3;
+            _cameraY -= 4;
             changed = true;
         }
     }
     if (left)
     {
-        if (_cameraX >= 3 + 320)
+        if (_cameraX >= 4 + 320)
         {
-            _cameraX -= 3;
+            _cameraX -= 4;
             changed = true;
         }
     }
     if (down)
     {
 
-        if (_cameraY < height() - 3 - 240)
+        if (_cameraY < height() - 4 - 240)
         {
-            _cameraY += 3;
+            _cameraY += 4;
             changed = true;
         }
     }
     if (right)
     {
-        if (_cameraX < width() - 3 - 320)
+        if (_cameraX < width() - 4 - 320)
         {
-            _cameraX += 3;
+            _cameraX += 4;
             changed = true;
         }
     }

@@ -35,6 +35,8 @@ protected:
 
     int _x; // x position
     int _y; // y position
+    int _xOffset;
+    int _yOffset;
     bool _visible; // if false - do not render
     bool _needRedraw; // surface changed? draw function will be called
 
@@ -48,40 +50,45 @@ public:
     Surface(Surface * other);
     virtual ~Surface();
 
-    Surface * x(int x);
+    virtual void setX(int x);
     virtual int x();
 
-    Surface * y(int y);
+    virtual void setXOffset(int offset);
+    virtual int xOffset();
+
+    virtual void setY(int y);
     virtual int y();
 
-    Surface * needRedraw(bool needRedraw);
-    bool needRedraw();
+    virtual void setYOffset(int offset);
+    virtual int yOffset();
 
-    Surface * visible(bool visible);
-    bool visible();
+    virtual void setNeedRedraw(bool needRedraw);
+    virtual bool needRedraw();
 
-    unsigned int width();    
+    virtual void setVisible(bool visible);
+    virtual bool visible();
 
-    unsigned int height();
+    virtual unsigned int width();
+    virtual unsigned int height();
 
-    Surface * pixel(int x, int y, unsigned int color);
-    unsigned int pixel(int x, int y);
+    virtual void setPixel(int x, int y, unsigned int color);
+    virtual unsigned int pixel(int x, int y);
 
     virtual SDL_Surface * sdl_surface();
 
-    Surface * copyTo(Surface * surface);
+    virtual void copyTo(Surface * surface);
 
-    Surface * loadFromSurface(Surface * surface);
+    virtual void loadFromSurface(Surface * surface);
 
-    Surface * borderColor(unsigned int color);
-    unsigned int borderColor();
+    virtual void setBorderColor(unsigned int color);
+    virtual unsigned int borderColor();
 
-    Surface * backgroundColor(unsigned int color);
-    unsigned int backgroundColor();
+    virtual void setBackgroundColor(unsigned int color);
+    virtual unsigned int backgroundColor();
 
-    Surface * fill(unsigned int color);
-    Surface * clear();
-    Surface * crop(int x = 0, int y = 0, int width = 0, int height = 0);
+    virtual void fill(unsigned int color);
+    virtual void clear();
+    virtual Surface * crop(int x = 0, int y = 0, int width = 0, int height = 0);
     virtual void think();
     virtual void draw();
     virtual void blit(Surface * surface);

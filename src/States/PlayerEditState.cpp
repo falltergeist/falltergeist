@@ -165,7 +165,7 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     Surface * background = new Surface(_game->resourceManager()->surface("art/intrface/edtrcrte.frm"));
 
     // description horizontal line
-    for (unsigned int y = 300; y != 302; ++y) for (unsigned int x = 350; x != 620; ++x) background->pixel(x,y, 0xFF000000);
+    for (unsigned int y = 300; y != 302; ++y) for (unsigned int x = 350; x != 620; ++x) background->setPixel(x,y, 0xFF000000);
 
 
 
@@ -238,7 +238,7 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         std::map<std::string, TextArea *>::reverse_iterator it;
         for(it = _labels->rbegin(); it != _labels->rend(); ++it)
         {
-            it->second->backgroundColor(0x01000000);
+            it->second->setBackgroundColor(0x01000000);
             it->second->onLeftButtonClick((EventHandler) &PlayerEditState::onLabelClick);
             add(it->second);
         }
@@ -254,7 +254,7 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         for(it = _masks->begin(); it != _masks->end(); ++it)
         {
             //it->second->setBorderColor(0xFFFF0000);
-            it->second->visible(true);
+            it->second->setVisible(true);
             it->second->onLeftButtonClick((EventHandler) &PlayerEditState::onMaskClick);
             add(it->second);
         }
@@ -423,7 +423,11 @@ void PlayerEditState::think()
         _title->setText(_titles->at(name));
         _description->setText(_descriptions->at(name));
         _selectedImage = _images->at(name);
-        _image->loadFromSurface(_selectedImage)->x(480)->y(310);
+        _image->loadFromSurface(_selectedImage);
+        _image->setX(480);
+        _image->setY(310);
+        _image->setXOffset(0);
+        _image->setYOffset(0);
 
         if (name.find("stats_") == 0)
         {

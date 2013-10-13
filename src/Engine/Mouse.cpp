@@ -85,76 +85,94 @@ void Mouse::setCursor(unsigned int type)
     {
         case BIG_ARROW:
             loadFromSurface(ResourceManager::surface("art/intrface/stdarrow.frm"));
-            _x = 0; _y = 0;
+            setXOffset(0);
+            setYOffset(0);
             break;
         case SCROLL_W:
             loadFromSurface(ResourceManager::surface("art/intrface/scrwest.frm"));
-            _x = 0; _y = - ceil(height()/2);
+            setYOffset( - ceil(height()/2));
+            setXOffset(0);
             break;
         case SCROLL_W_X:
             loadFromSurface(ResourceManager::surface("art/intrface/scrwx.frm"));
-            _x = 0; _y = - ceil(height()/2);
+            setYOffset( - ceil(height()/2));
+            setXOffset(0);
             break;
         case SCROLL_N:
             loadFromSurface(ResourceManager::surface("art/intrface/scrnorth.frm"));
-            _x = - ceil(width()/2); _y = 0;
+            setXOffset( - ceil(width()/2));
+            setYOffset(0);
             break;
         case SCROLL_N_X:
             loadFromSurface(ResourceManager::surface("art/intrface/scrnx.frm"));
-            _x = - ceil(width()/2); _y = 0;
+            setXOffset( - ceil(width()/2));
+            setYOffset(0);
             break;
         case SCROLL_S:
             loadFromSurface(ResourceManager::surface("art/intrface/scrsouth.frm"));
-            _x = - ceil(width()/2);  _y = - height();
+            setXOffset( - ceil(width()/2));
+            setYOffset( - height());
             break;
         case SCROLL_S_X:
             loadFromSurface(ResourceManager::surface("art/intrface/scrsx.frm"));
-            _x = - ceil(width()/2); _y = - height();
+            setXOffset(- ceil(width()/2));
+            setYOffset(- height());
             break;
         case SCROLL_E:
             loadFromSurface(ResourceManager::surface("art/intrface/screast.frm"));
-            _x = - width(); _y = - ceil(height()/2);
+            setXOffset( - width());
+            setYOffset( - ceil(height()/2));
             break;
         case SCROLL_E_X:
             loadFromSurface(ResourceManager::surface("art/intrface/screx.frm"));
-            _x = - width(); _y = - ceil(height()/2);
+            setXOffset(- width());
+            setYOffset(- ceil(height()/2));
             break;
         case SCROLL_NW:
             loadFromSurface(ResourceManager::surface("art/intrface/scrnwest.frm"));
-            _x = 0; _y = 0;
+            setXOffset(0);
+            setYOffset(0);
             break;
         case SCROLL_NW_X:
             loadFromSurface(ResourceManager::surface("art/intrface/scrnwx.frm"));
-            _x = 0; _y = 0;
+            setXOffset(0);
+            setYOffset(0);
             break;
         case SCROLL_SW:
             loadFromSurface(ResourceManager::surface("art/intrface/scrswest.frm"));
-            _x = 0; _y = - height();
+            setXOffset(0);
+            setYOffset(- height());
             break;
         case SCROLL_SW_X:
             loadFromSurface(ResourceManager::surface("art/intrface/scrswx.frm"));
-            _x = 0; _y = - height();
+            setXOffset(0);
+            setYOffset(- height());
             break;
 
         case SCROLL_NE:
             loadFromSurface(ResourceManager::surface("art/intrface/scrneast.frm"));
-            _x =  - width(); _y = 0;
+            setXOffset(- width());
+            setYOffset(0);
             break;
         case SCROLL_NE_X:
             loadFromSurface(ResourceManager::surface("art/intrface/scrnex.frm"));
-            _x =  - width(); _y = 0;
+            setXOffset(- width());
+            setYOffset(0);
             break;
         case SCROLL_SE:
             loadFromSurface(ResourceManager::surface("art/intrface/scrseast.frm"));
-            _x =  - width(); _y = - height();
+            setXOffset(- width());
+            setYOffset(- height());
             break;
         case SCROLL_SE_X:
             loadFromSurface(ResourceManager::surface("art/intrface/scrsex.frm"));
-            _x =  - width(); _y = - height();
+            setXOffset(- width());
+            setYOffset(- height());
             break;
         case HEXAGON_RED:
             loadFromSurface(ResourceManager::surface("art/intrface/msef000.frm"));
-            _x =  - ceil(width()/2); _y = - ceil(height()/2);
+            setXOffset(- ceil(width()/2));
+            setYOffset(- ceil(height()/2));
             break;
 
 

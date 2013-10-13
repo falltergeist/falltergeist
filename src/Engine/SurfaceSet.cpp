@@ -40,7 +40,7 @@ SurfaceSet::~SurfaceSet()
 
 void SurfaceSet::draw()
 {
-    needRedraw(false);
+    setNeedRedraw(false);
 }
 
 void SurfaceSet::setCurrentSurface(unsigned int number)

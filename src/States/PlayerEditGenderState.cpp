@@ -50,12 +50,17 @@ void PlayerEditGenderState::init()
     if (_game->player()->gender() == Player::GENDER_FEMALE) _femaleImage->setCurrentSurface(1);
 
     Surface * bg = new Surface(_game->resourceManager()->surface("art/intrface/charwin.frm"));
-    bg->x(236);
-    bg->y(0);
+    bg->setX(236);
+    bg->setY(0);
+    bg->setXOffset(0);
+    bg->setYOffset(0);
+
 
     Surface * doneBox = new Surface(_game->resourceManager()->surface("art/intrface/donebox.frm"));
-    doneBox->x(250);
-    doneBox->y(42);
+    doneBox->setX(250);
+    doneBox->setY(42);
+    doneBox->setXOffset(0);
+    doneBox->setYOffset(0);
 
     libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
     TextArea * doneLabel = new TextArea(msg->message(100), 281, 45);

@@ -31,6 +31,8 @@ Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _needRedra
 {
     _borderColor = 0;
     _backgroundColor = 0;
+    setXOffset(0);
+    setYOffset(0);
     //                                                                               red         green       blue        alpha
     _sdl_surface = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, width, height, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
     if (sdl_surface() == 0) throw Exception(SDL_GetError());
@@ -60,7 +62,7 @@ Surface::Surface(libfalltergeist::FrmFileType * frm, unsigned int direction, uns
         {
             unsigned int colorIndex = frm->directions()->at(direction)->frames()->at(frame)->colorIndexes()->at(i);
             unsigned int color = *pal->color(colorIndex);
-            this->pixel(x, y, color);
+            this->setPixel(x, y, color);
             i++;
         }
     }
@@ -70,10 +72,10 @@ Surface::Surface(libfalltergeist::FrmFileType * frm, unsigned int direction, uns
     int shiftY = frm->directions()->at(direction)->shiftY();
     int offsetY = frm->directions()->at(direction)->frames()->at(frame)->offsetY();
 
-    //std::cout <<std::dec << this->x() << ":" << this->y() << std::endl;
-
-    _x = shiftX + offsetX;
-    _y = shiftY + offsetY;
+    setX(0);
+    setY(0);
+    setXOffset(shiftX + offsetX);
+    setYOffset(shiftY + offsetY);
 
     SDL_SetColorKey(this->sdl_surface(), SDL_SRCCOLORKEY, 0);
 
@@ -84,10 +86,12 @@ Surface::Surface(Surface * other)
 {    
     _sdl_surface = SDL_ConvertSurface(other->sdl_surface(), other->sdl_surface()->format, other->sdl_surface()->flags);
     if (sdl_surface() == 0) throw Exception(SDL_GetError());
-    x(other->x());
-    y(other->y());
-    visible(other->visible());
-    needRedraw(other->needRedraw());
+    setX(other->x());
+    setY(other->y());
+    setXOffset(other->xOffset());
+    setYOffset(other->yOffset());
+    setVisible(other->visible());
+    setNeedRedraw(other->needRedraw());
 
     _backgroundColor = other->_backgroundColor;
     _borderColor = other->_borderColor;
@@ -98,10 +102,9 @@ Surface::~Surface()
     SDL_FreeSurface(sdl_surface());
 }
 
-Surface * Surface::needRedraw(bool needRedraw)
+void Surface::setNeedRedraw(bool needRedraw)
 {
     _needRedraw = needRedraw;
-    return this;
 }
 
 bool Surface::needRedraw()
@@ -109,10 +112,9 @@ bool Surface::needRedraw()
     return _needRedraw;
 }
 
-Surface * Surface::x(int x)
+void Surface::setX(int x)
 {
     _x = x;
-    return this;
 }
 
 int Surface::x()
@@ -120,15 +122,35 @@ int Surface::x()
     return _x;
 }
 
-Surface * Surface::y(int y)
+void Surface::setXOffset(int offset)
+{
+    _xOffset = offset;
+}
+
+int Surface::xOffset()
+{
+    return _xOffset;
+}
+
+
+void Surface::setY(int y)
 {
     _y = y;
-    return this;
 }
 
 int Surface::y()
 {
     return _y;
+}
+
+void Surface::setYOffset(int offset)
+{
+    _yOffset = offset;
+}
+
+int Surface::yOffset()
+{
+    return _yOffset;
 }
 
 unsigned int Surface::width()
@@ -141,9 +163,9 @@ unsigned int Surface::height()
     return sdl_surface()->h;
 }
 
-Surface * Surface::clear()
+void Surface::clear()
 {
-    return fill(backgroundColor());
+    fill(backgroundColor());
 }
 
 SDL_Surface * Surface::sdl_surface()
@@ -151,10 +173,9 @@ SDL_Surface * Surface::sdl_surface()
     return _sdl_surface;
 }
 
-Surface * Surface::visible(bool visible)
+void Surface::setVisible(bool visible)
 {
     _visible = visible;
-    return this;
 }
 
 bool Surface::visible()
@@ -170,15 +191,14 @@ void Surface::draw()
 {
     if (!visible()) return;
     if (!needRedraw()) return;
-    needRedraw(false);
+    setNeedRedraw(false);
     clear();
     if (_borderColor != 0) _drawBorder();
 }
 
-Surface * Surface::fill(unsigned int color)
+void Surface::fill(unsigned int color)
 {
     SDL_FillRect(sdl_surface(), NULL, color);
-    return this;
 }
 
 void Surface::_drawBorder()
@@ -186,23 +206,23 @@ void Surface::_drawBorder()
     for (unsigned int y = 0; y < height(); y++)
     {
         // left border
-        pixel(0, y, _borderColor);
+        setPixel(0, y, _borderColor);
         // right border
-        pixel(width() - 1, y, _borderColor);
+        setPixel(width() - 1, y, _borderColor);
     }
     for (unsigned int x = 0; x < width(); x++)
     {
         // top border
-        pixel(x, 0, _borderColor);
+        setPixel(x, 0, _borderColor);
         // bottom border
-        pixel(x, height() - 1, _borderColor);
+        setPixel(x, height() - 1, _borderColor);
     }
 }
 
-Surface * Surface::borderColor(unsigned int color)
+void Surface::setBorderColor(unsigned int color)
 {
     _borderColor = color;
-    return needRedraw(true);
+    setNeedRedraw(true);
 }
 
 unsigned int Surface::borderColor()
@@ -210,10 +230,10 @@ unsigned int Surface::borderColor()
     return _borderColor;
 }
 
-Surface * Surface::backgroundColor(unsigned int color)
+void Surface::setBackgroundColor(unsigned int color)
 {
     _backgroundColor = color;
-    return needRedraw(true);
+    setNeedRedraw(true);
 }
 
 unsigned int Surface::backgroundColor()
@@ -223,15 +243,15 @@ unsigned int Surface::backgroundColor()
 
 Surface * Surface::crop(int xOffset, int yOffset, int width, int height)
 {
-    if (width == 0) width = this->width() - xOffset;
-    if (height == 0) height = this->height() - yOffset;
+    if (width == 0) width = this->sdl_surface()->w - xOffset;
+    if (height == 0) height = this->sdl_surface()->h - yOffset;
 
     Surface * surface = new Surface(width, height);
     for (int y = 0; y < height; y++)
     {
         for (int x = 0; x < width; x++)
         {
-            surface->pixel(x, y, this->pixel(x + xOffset, y + yOffset));
+            surface->setPixel(x, y, this->pixel(x + xOffset, y + yOffset));
         }
     }
     return surface;
@@ -243,69 +263,70 @@ void Surface::blit(Surface * surface)
     if (!visible()) return;
 
     draw();
-    SDL_Rect dest = {x(), y(), width(), height()};
+    SDL_Rect dest = {x() + xOffset(), y()+yOffset(), sdl_surface()->w, sdl_surface()->h};
     SDL_BlitSurface(this->sdl_surface(), NULL, surface->sdl_surface(), &dest);
 }
 
-Surface * Surface::copyTo(Surface * surface)
+void Surface::copyTo(Surface * surface)
 {
-    if (!visible()) return this;
+    if (!visible()) return;
 
-    for (unsigned int y = 0; y != height(); ++y)
+    for (unsigned int y = 0; y != sdl_surface()->h; ++y)
     {
-        for (unsigned int x = 0; x != width(); ++x)
+        for (unsigned int x = 0; x != sdl_surface()->w; ++x)
         {
             if (pixel(x, y))
             {
-                surface->pixel(x + this->x(), y + this->y(), pixel(x, y));
+                surface->setPixel(x + this->x() + this->xOffset(), y + this->y() + this->yOffset(), pixel(x, y));
             }
         }
     }
-    return this;
 }
 
 unsigned int Surface::pixel(int x, int y)
 {
     if (!visible()) return 0;
     // if out of bounds
-    if (x < 0 || y < 0 || ((unsigned int) x > width() - 1) || ((unsigned int) y > height() - 1) ) return 0;
+    if (x < 0 || y < 0 || ((unsigned int) x > sdl_surface()->w - 1) || ((unsigned int) y > sdl_surface()->h - 1) ) return 0;
 
     // if empty surface
-    if ( width() * height() == 0) return 0;
+    if ( sdl_surface()->w*sdl_surface()->h == 0) return 0;
 
     // color value
     unsigned int * pixels = (unsigned int *) sdl_surface()->pixels;
-    return pixels[(y * width()) + x];
+    unsigned int index = (y * sdl_surface()->w) + x;
+    if (index >=  sdl_surface()->h*sdl_surface()->w) return 0;
+    return pixels[index];
 }
 
-Surface * Surface::pixel(int x, int y, unsigned int color)
+void Surface::setPixel(int x, int y, unsigned int color)
 {
     // lock surface
     if(SDL_MUSTLOCK(sdl_surface())) SDL_LockSurface(sdl_surface());
 
     // if out of bounds
-    if (x < 0 || y < 0 || ((unsigned int) x > width() - 1) || ((unsigned int) y > height() - 1) ) return this;
+    if (x < 0 || y < 0 || ((unsigned int) x > sdl_surface()->w - 1) || ((unsigned int) y > sdl_surface()->h - 1) ) return;
 
     // if empty surface
-    if ( width() * height() == 0) return this;
+    if ( sdl_surface()->w * sdl_surface()->h == 0) return;
 
     // color value
     unsigned int * pixels = (unsigned int *) sdl_surface()->pixels;
-    pixels[(y * width()) + x] = color;
+    pixels[(y * sdl_surface()->w) + x] = color;
 
     // unlock surface
     if(SDL_MUSTLOCK(sdl_surface())) SDL_UnlockSurface(sdl_surface());
-    return this;
 }
 
-Surface * Surface::loadFromSurface(Surface * surface)
+void Surface::loadFromSurface(Surface * surface)
 {
     SDL_FreeSurface(sdl_surface());
     _sdl_surface = SDL_ConvertSurface(surface->sdl_surface(), surface->sdl_surface()->format, surface->sdl_surface()->flags);
     if (sdl_surface() == 0) throw Exception(SDL_GetError());
-    x(surface->x());
-    y(surface->y());
-    return this;
+    setX(surface->x());
+    setY(surface->y());
+    setXOffset(surface->xOffset());
+    setYOffset(surface->yOffset());
 }
 
 }

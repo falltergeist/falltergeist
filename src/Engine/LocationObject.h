@@ -53,10 +53,8 @@ public:
     Animation * animation();
     void setAnimation(Animation * animation);
 
-    int x();
-    int y();
-    void x(int x);
-    void y(int y);
+    virtual int xOffset();
+    virtual int yOffset();
     virtual void think();
 };
 

@@ -79,16 +79,22 @@ void PlayerEditNameState::init()
     _timer = SDL_GetTicks();
 
     Surface * bg = new Surface(_game->resourceManager()->surface("art/intrface/charwin.frm"));
-    bg->x(22);
-    bg->y(0);
+    bg->setX(22);
+    bg->setY(0);
+    bg->setXOffset(0);
+    bg->setYOffset(0);
 
     Surface * nameBox = new Surface(_game->resourceManager()->surface("art/intrface/namebox.frm"));
-    nameBox->x(35);
-    nameBox->y(10);
+    nameBox->setX(35);
+    nameBox->setY(10);
+    nameBox->setXOffset(0);
+    nameBox->setYOffset(0);
 
     Surface * doneBox = new Surface(_game->resourceManager()->surface("art/intrface/donebox.frm"));
-    doneBox->x(35);
-    doneBox->y(40);
+    doneBox->setX(35);
+    doneBox->setY(40);
+    doneBox->setXOffset(0);
+    doneBox->setYOffset(0);
 
     libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
     TextArea * doneLabel = new TextArea(msg->message(100), 65, 43);
@@ -174,16 +180,16 @@ void PlayerEditNameState::think()
     {
         if (_cursor->visible())
         {
-            _cursor->visible(false);
+            _cursor->setVisible(false);
         }
         else
         {
-            _cursor->visible(true);
+            _cursor->setVisible(true);
         }
         _timer = SDL_GetTicks();
     }
 
-    _cursor->x(_name->width() + 45);
+    _cursor->setX(_name->width() + 45);
 }
 
 }
