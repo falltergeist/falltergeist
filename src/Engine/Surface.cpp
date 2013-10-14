@@ -20,6 +20,7 @@
 #include "../Engine/Surface.h"
 
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/AnimatedPalette.h"
 #include <iostream>
 
 using namespace Falltergeist::CrossPlatform;
@@ -27,8 +28,11 @@ using namespace Falltergeist::CrossPlatform;
 namespace Falltergeist
 {
 
+AnimatedPalette * Surface::animatedPalette = new AnimatedPalette();
+
 Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _needRedraw(false), _visible(true)
 {
+    _animatedPixels = 0;
     _borderColor = 0;
     _backgroundColor = 0;
     setXOffset(0);
@@ -41,6 +45,7 @@ Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _needRedra
 
 Surface::Surface(libfalltergeist::FrmFileType * frm, unsigned int direction, unsigned int frame)
 {
+    _animatedPixels = 0;
     _needRedraw = false;
     _visible = true;
     _borderColor = 0;
@@ -61,8 +66,19 @@ Surface::Surface(libfalltergeist::FrmFileType * frm, unsigned int direction, uns
         for (int x = 0; x != width; ++x)
         {
             unsigned int colorIndex = frm->directions()->at(direction)->frames()->at(frame)->colorIndexes()->at(i);
-            unsigned int color = *pal->color(colorIndex);
-            this->setPixel(x, y, color);
+
+            if (colorIndex >= 229 && colorIndex <= 254)
+            {
+                    if (_animatedPixels == 0) _animatedPixels = new std::vector<unsigned int>;
+                    _animatedPixels->push_back(x);
+                    _animatedPixels->push_back(y);
+                    _animatedPixels->push_back(colorIndex);
+            }
+            else
+            {
+                    unsigned int color = *pal->color(colorIndex);
+                    this->setPixel(x, y, color);                
+            }
             i++;
         }
     }
@@ -83,7 +99,19 @@ Surface::Surface(libfalltergeist::FrmFileType * frm, unsigned int direction, uns
 
 
 Surface::Surface(Surface * other)
-{    
+{
+    _animatedPixels = 0;
+
+    if (other->_animatedPixels != 0)
+    {
+        _animatedPixels = new std::vector<unsigned int>;
+        for (std::vector<unsigned int>::iterator it = other->_animatedPixels->begin(); it != other->_animatedPixels->end(); ++it)
+        {
+            _animatedPixels->push_back(*it);
+        }
+
+    }
+
     _sdl_surface = SDL_ConvertSurface(other->sdl_surface(), other->sdl_surface()->format, other->sdl_surface()->flags);
     if (sdl_surface() == 0) throw Exception(SDL_GetError());
     setX(other->x());
@@ -100,6 +128,7 @@ Surface::Surface(Surface * other)
 Surface::~Surface()
 {
     SDL_FreeSurface(sdl_surface());
+    delete _animatedPixels;
 }
 
 void Surface::setNeedRedraw(bool needRedraw)
@@ -190,6 +219,15 @@ void Surface::think()
 void Surface::draw()
 {
     if (!visible()) return;
+
+    if (_animatedPixels != 0)
+    {
+        for (std::vector<unsigned int>::iterator it = _animatedPixels->begin(); it != _animatedPixels->end(); it += 3)
+        {
+            setPixel(*(it), *(it+1), animatedPalette->color(*(it+2)));
+        }
+    }
+
     if (!needRedraw()) return;
     setNeedRedraw(false);
     clear();
@@ -270,7 +308,7 @@ void Surface::blit(Surface * surface)
 void Surface::copyTo(Surface * surface)
 {
     if (!visible()) return;
-
+    draw();
     for (unsigned int y = 0; y != sdl_surface()->h; ++y)
     {
         for (unsigned int x = 0; x != sdl_surface()->w; ++x)
@@ -323,6 +361,19 @@ void Surface::loadFromSurface(Surface * surface)
     SDL_FreeSurface(sdl_surface());
     _sdl_surface = SDL_ConvertSurface(surface->sdl_surface(), surface->sdl_surface()->format, surface->sdl_surface()->flags);
     if (sdl_surface() == 0) throw Exception(SDL_GetError());
+
+    delete _animatedPixels;
+    _animatedPixels = 0;
+    if (surface->_animatedPixels != 0)
+    {
+        _animatedPixels = new std::vector<unsigned int>;
+        for (std::vector<unsigned int>::iterator it = surface->_animatedPixels->begin(); it != surface->_animatedPixels->end(); ++it)
+        {
+            _animatedPixels->push_back(*it);
+        }
+    }
+
+
     setX(surface->x());
     setY(surface->y());
     setXOffset(surface->xOffset());

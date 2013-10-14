@@ -23,10 +23,12 @@
 #include <SDL/SDL.h>
 #include "../Engine/Exception.h"
 #include "../Engine/ResourceManager.h"
+#include <vector>
 
 namespace Falltergeist
 {
 class FrmFileType;
+class AnimatedPalette;
 
 class Surface
 {
@@ -39,12 +41,15 @@ protected:
     int _yOffset;
     bool _visible; // if false - do not render
     bool _needRedraw; // surface changed? draw function will be called
+    std::vector<unsigned int> * _animatedPixels;
 
     unsigned int _borderColor; // for debugging. @TODO must be removed in future
     unsigned int _backgroundColor; // for debugging @TODO must be removed in future
     void _drawBorder();
 
 public:
+    static AnimatedPalette * animatedPalette;
+
     Surface(int width = 0, int height = 0, int x = 0, int y = 0);
     Surface(libfalltergeist::FrmFileType * frm, unsigned int direction = 0, unsigned int frame = 0);
     Surface(Surface * other);
@@ -92,6 +97,8 @@ public:
     virtual void think();
     virtual void draw();
     virtual void blit(Surface * surface);
+
+
 };
 
 }

@@ -71,11 +71,6 @@ void Animation::think()
     }
 }
 
-void Animation::draw()
-{
-
-}
-
 int Animation::xOffset()
 {
     int offset = 0;

@@ -48,7 +48,6 @@ public:
     //virtual unsigned int height();
     virtual int xOffset();
     virtual int yOffset();
-    virtual void draw();
     int frameXPosition(unsigned int frame);
     int frameYPosition(unsigned int frame);
 

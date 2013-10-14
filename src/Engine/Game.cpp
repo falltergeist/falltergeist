@@ -28,6 +28,7 @@
 #include "../Engine/State.h"
 #include "../UI/FpsCounter.h"
 #include "../UI/TextArea.h"
+#include "../Engine/AnimatedPalette.h"
 #include <sstream>
 
 using namespace Falltergeist::CrossPlatform;
@@ -119,8 +120,10 @@ void Game::setState(State * state)
 
 void Game::run()
 {
+
     std::cout << "Starting main loop..." << std::endl;
     TextArea * falltergeistVersion = new TextArea((char*)"Falltergeist "VERSION, 3, 470);
+
     while (!_quit)
     {
         // Clean up states
@@ -166,6 +169,7 @@ void Game::run()
         _states->back()->think();
         _fpsCounter->think();
         _mouse->think();
+        Surface::animatedPalette->think();
 
         // render all states that is over the last fullscreen state
         std::vector<State*>::iterator i = _states->end();

@@ -35,6 +35,8 @@ endif(NOT SDL_FOUND)
 include_directories(SDL_INCLUDE_DIR)
 
 set(SOURCES main.cpp
+            src/Engine/AnimatedPalette.cpp
+            src/Engine/AnimatedPalette.h
             src/Engine/Animation.cpp
             src/Engine/Animation.h
             src/Engine/CrossPlatform.cpp
