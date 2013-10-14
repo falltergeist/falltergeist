@@ -34,6 +34,7 @@ public:
     FpsCounter(int x = 598, int y = 2);
 
     virtual void think();
+    unsigned int frames();
 };
 
 }

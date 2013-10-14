@@ -175,12 +175,8 @@ void Location::init()
             unsigned int FID = (mapObject->frmTypeId() << 24) | mapObject->frmId();
             frm = ResourceManager::frmFileType(FID);
         }
-        //if (frm == 0) std::cout << mapObject->objectTypeId() << " - " << mapObject->objectId() << " NO FRM" << std::endl;
+        if (frm == 0) std::cout << mapObject->objectTypeId() << " - " << mapObject->objectId() << " NO FRM" << std::endl;
 
-        if (mapObject->objectId() == 0xf2)
-        {
-            std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
-        }
 
         if (mapObject->objectTypeId() == 5)
         {
@@ -256,7 +252,7 @@ void Location::init()
 
     LocationObject * player = new LocationObject();
 
-    Animation * animation = new Animation(ResourceManager::frmFileType("art/critters/hmbmetbl.fr3"));
+    Animation * animation = new Animation(ResourceManager::frmFileType("art/critters/hanpwrga.frm"));
 
     player->setAnimation(animation);
 

@@ -50,4 +50,9 @@ void FpsCounter::think()
     }
 }
 
+unsigned int FpsCounter::frames()
+{
+    return _frames;
+}
+
 }

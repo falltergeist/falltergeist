@@ -47,7 +47,23 @@ void LocationState::init()
 {
     State::init();
 
-    _location = new Location(_game->resourceManager()->mapFileType("maps/broken1.map"));
+    std::string maps[] = {"arbridge.map", "broken2.map", "city1.map", "coast12.map", "cowbomb.map", "desert4.map", "dnslvrun.map", "geckpwpl.map", "klaratcv.map", "modshit.map", "ncr2.map",
+                          "newrba.map", "redmtun.map", "rndholy2.map", "sfelronb.map", "vault15.map", "arcaves.map", "cardesrt.map" ,"city2.map", "coast1.map", "denbus1.map", "desert5.map",
+                          "encdet.map", "gecksetl.map", "klatoxcv.map", "modwell.map", "ncr3.map", "newrcs.map", "redwame.map", "rndparih.map", "sfshutl1.map", "vctycocl.map", "ardead.map",
+                          "cave0.map", "city3.map", "coast2.map", "denbus2.map", "desert6.map", "encdock.map", "gecktunl.map", "klatrap.map", "mountn1.map", "ncr4.map", "newrgo.map", "redwan1.map",
+                          "rndshutl.map", "sfshutl2.map", "vctyctyd.map", "argarden.map", "cave1.map", "city4.map", "coast3.map", "denres1.map", "desert7.map", "encfite.map", "gstcav1.map", "mbase12.map", "mountn2.map",
+                          "ncrent.map", "newrst.map", "rndbess.map", "rndtinwd.map", "sftanker.map", "vctydwtn.map", "artemple.map", "cave2.map", "city5.map", "coast4.map", "depolv1.map", "desert8.map",
+                          "encgd.map", "gstcav2.map", "mbase34.map", "mountn3.map", "newr1a.map", "newrvb.map", "rndbhead.map", "rndtoxic.map", "v13ent.map", "vctyvlt.map", "arvill2.map", "cave3.map", "city6.map",
+                          "coast5.map", "depolva.map", "desert9.map", "encpres.map", "gstfarm.map", "mbclose.map", "mountn4.map", "newr1.map", "raiders1.map", "rndbridg.map", "rnduvilg.map", "v13_orig.map",
+                          "arvillag.map", "cave4.map", "city7.map", "coast6.map", "depolvb.map", "desrt10.map", "encrctr.map", "klacanyn.map", "modbrah.map", "mountn5.map", "newr2a.map", "raiders2.map",
+                          "rndcafe.map", "rndwhale.map", "v15ent.map", "bhrnddst.map", "cave5.map", "city8.map", "coast7.map", "desert1.map", "desrt11.map", "enctrp.map", "kladwtwn.map", "modgard.map",
+                          "mountn6.map", "newr2.map", "reddown.map", "rndexcow.map", "sfchina2.map", "v15_orig.map", "bhrndmtn.map", "cave6.map", "coast10.map", "coast8.map", "desert2.map",
+                          "desrt12.map", "gammovie.map", "klagraz.map", "modinn.map", "navarro.map", "newr3.map", "reddtun.map", "rndforvr.map", "sfchina.map", "v15sent.map", "broken1.map", "cave7.map",
+                          "coast11.map", "coast9.map", "desert3.map", "desrt13.map", "geckjunk.map", "klamall.map", "modmain.map", "ncr1.map", "newr4.map", "redment.map", "rndholy1.map", "sfdock.map", "vault13.map" };
+
+
+
+    _location = new Location(_game->resourceManager()->mapFileType("maps/artemple.map"));
     _background = new Surface(_location->tilesBackground());
     add(_background);
 }

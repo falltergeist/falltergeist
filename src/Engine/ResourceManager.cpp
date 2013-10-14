@@ -304,7 +304,7 @@ libfalltergeist::ProFileType * ResourceManager::proFileType(unsigned int PID)
             listFile += "proto/misc/misc.lst";
             break;
         default:
-            std::cout << "Wrong PID: " << std::hex << PID << std::endl;
+            std::cout << "Wrong PID: " << std::dec << PID << std::endl;
             return 0;
     }
 
@@ -312,13 +312,16 @@ libfalltergeist::ProFileType * ResourceManager::proFileType(unsigned int PID)
 
     unsigned int index = 0x00000FFF & PID;
 
-    if (index >= lst->strings()->size())
+    if (index > lst->strings()->size())
     {
-        std::cout << "Wrong PID: " << std::hex << PID << std::endl;
+        std::cout << listFile << std::endl;
+        std::cout << "Lst size: " << std::dec << lst->strings()->size() << std::endl;
+        std::cout << "Wrong PID: " << std::dec << index << std::endl;
         return 0;
     }
 
-    std::string protoName = lst->strings()->at(index);
+    std::string protoName = lst->strings()->at(index-1);
+
     switch (typeId)
     {
         case libfalltergeist::ProFileType::TYPE_ITEM:
