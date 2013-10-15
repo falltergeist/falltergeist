@@ -125,13 +125,13 @@ unsigned int AnimatedPalette::color(unsigned char index)
 
     if (index >= 238 && index <= 242) // slow fire
     {
-        unsigned int newIndex = (index - 248 + _fireSlowCounter)%5;
+        unsigned int newIndex = (index - 348 + _fireSlowCounter)%5;
         return _fireSlowPalette[newIndex];
     }
 
     if (index >= 243 && index <= 247) // fast fire
     {
-        unsigned int newIndex = (index - 248 + _fireFastCounter)%5;
+        unsigned int newIndex = (index - 243 + _fireFastCounter)%5;
         return _fireFastPalette[newIndex];
     }
 

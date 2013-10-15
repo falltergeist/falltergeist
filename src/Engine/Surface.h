@@ -46,6 +46,8 @@ protected:
     unsigned int _borderColor; // for debugging. @TODO must be removed in future
     unsigned int _backgroundColor; // for debugging @TODO must be removed in future
     void _drawBorder();
+    void _copyAnimatedPixelsFrom(Surface * surface);
+    void _copyAnimatedPixelsTo(Surface * surface);
 
 public:
     static AnimatedPalette * animatedPalette;

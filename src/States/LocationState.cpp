@@ -63,7 +63,7 @@ void LocationState::init()
 
 
 
-    _location = new Location(_game->resourceManager()->mapFileType("maps/sfchina2.map"));
+    _location = new Location(_game->resourceManager()->mapFileType("maps/broken1.map"));
     _background = new Surface(_location->tilesBackground());
     add(_background);
 }

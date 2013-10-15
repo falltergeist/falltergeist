@@ -38,6 +38,9 @@ protected:
     unsigned int _cameraX;
     unsigned int _cameraY;
 
+    unsigned int _lastCameraX;
+    unsigned int _lastCameraY;
+
     unsigned int _elevation;
 
     Surface * _tilesBackground;

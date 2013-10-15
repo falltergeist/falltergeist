@@ -33,6 +33,8 @@ Location::Location(libfalltergeist::MapFileType * mapFile)
 {
     _cols = 100;
     _rows = 100;
+    _lastCameraX = 0;
+    _lastCameraY = 0;
     _mapFile = mapFile;
     _tilesLst = ResourceManager::lstFileType("art/tiles/tiles.lst");
     _tilesBackground = new Surface(640, 480);
@@ -275,6 +277,10 @@ void Location::think()
 
 void Location::generateBackground()
 {
+    if (_cameraX == _lastCameraX && _cameraY == _lastCameraY) return;
+    _lastCameraX = _cameraX;
+    _lastCameraY = _cameraY;
+
     _tilesBackground->fill(0xFF000000);
     // Инициализируем тайловый фон
     for (unsigned int i = 0; i != _cols*_rows; ++i)
@@ -313,6 +319,17 @@ int Location::hexagonToX(unsigned int hexagon)
         }
     return centerX + 17;
 }
+
+/*
+
+    y = ceil(hexagon/200);
+    centerX = 48*(_cols - 1) + 48 + 16*(hexagon%200) - 24*y;b
+    centerY = (hexagon%200)*12 + 6*y ;
+
+
+
+ */
+
 
 int Location::hexagonToY(unsigned int hexagon)
 {
@@ -355,36 +372,38 @@ bool Location::scroll(bool up, bool down, bool left, bool right)
 {
     bool changed = false;
 
+    unsigned int scrollDelta = 5;
+
     if (up)
     {
-        if (_cameraY >= 4 + 240)
+        if (_cameraY >= scrollDelta + 240)
         {
-            _cameraY -= 4;
+            _cameraY -= scrollDelta;
             changed = true;
         }
     }
     if (left)
     {
-        if (_cameraX >= 4 + 320)
+        if (_cameraX >= scrollDelta + 320)
         {
-            _cameraX -= 4;
+            _cameraX -= scrollDelta;
             changed = true;
         }
     }
     if (down)
     {
 
-        if (_cameraY < height() - 4 - 240)
+        if (_cameraY < height() - scrollDelta - 240)
         {
-            _cameraY += 4;
+            _cameraY += scrollDelta;
             changed = true;
         }
     }
     if (right)
     {
-        if (_cameraX < width() - 4 - 320)
+        if (_cameraX < width() - scrollDelta - 320)
         {
-            _cameraX += 4;
+            _cameraX += scrollDelta;
             changed = true;
         }
     }
