@@ -22,16 +22,17 @@
 #include <cmath>
 
 // Falltergeist includes
-#include "../States/LocationState.h"
+#include "../Engine/Animation.h"
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
 #include "../Engine/ResourceManager.h"
+#include "../Engine/InteractiveSurface.h"
 #include "../Engine/Location.h"
 #include "../Engine/LocationCamera.h"
 #include "../Engine/LocationObject.h"
-#include "../UI/TextArea.h"
+#include "../States/LocationState.h"
 #include "../Engine/Mouse.h"
-#include "../Engine/Animation.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 
@@ -70,25 +71,32 @@ void LocationState::init()
 
 
     _location = new Location(_game->resourceManager()->mapFileType("maps/broken1.map"));
-    _background = new Surface(_location->tilesBackground());
+    _background = new InteractiveSurface(_location->tilesBackground());
     add(_background);
+
+    _background->onLeftButtonClick((EventHandler) &LocationState::onBackgroundClick);
+}
+
+void LocationState::onBackgroundClick(Event * event)
+{
+    std::cout << "test" << std::endl;
 }
 
 void LocationState::blit()
 {
+
     State::blit();
 
     if (_location == 0) return;
 
-    for (std::vector<LocationObject *>::iterator it = _location->objects()->begin(); it != _location->objects()->end(); ++it)
+    for (std::vector<LocationObject *>::iterator it = _location->objectsToRender()->begin(); it != _location->objectsToRender()->end(); ++it)
     {
         LocationObject * object = *it;
-        if (!object->visible()) continue;
 
         int oldX = object->x();
         int oldY = object->y();
-        int newX = oldX - _location->camera()->x() + 320;
-        int newY = oldY - _location->camera()->y() + 240;
+        int newX = oldX - _location->camera()->x();
+        int newY = oldY - _location->camera()->y();
 
         object->setX(newX);
         object->setY(newY);
@@ -96,7 +104,6 @@ void LocationState::blit()
         object->setX(oldX);
         object->setY(oldY);
     }
-
 }
 
 void LocationState::think()
@@ -104,7 +111,7 @@ void LocationState::think()
     if (!_location) return;
     _location->think();
 
-    if (SDL_GetTicks() >= _scrollTicks + 1)
+    if (SDL_GetTicks() >= _scrollTicks + 10)
     {
         bool moved;
         _scrollTicks = SDL_GetTicks();

@@ -40,6 +40,11 @@ public:
     virtual void draw();
     void setReleasedImage(const char * releasedImage);
     void setPressedImage(const char * pressedImage);
+    void mouseInHandler(Event * event);
+    void mouseOutHandler(Event * event);
+    void mouseDownHandler(Event * event);
+    void mouseUpHandler(Event * event);
+
 };
 
 }

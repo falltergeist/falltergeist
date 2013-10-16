@@ -37,7 +37,7 @@ const double Screen::BASE_HEIGHT = 480.0;
 Screen::Screen(int width, int height, int bpp)
 {
     std::cout << "Setting up video mode " << width << "x" << height << "x" << bpp << "...";
-    _screen = SDL_SetVideoMode(width, height, bpp, SDL_SWSURFACE);
+    _screen = SDL_SetVideoMode(width, height, bpp, SDL_HWSURFACE | SDL_DOUBLEBUF);
     SDL_SetAlpha(_screen, SDL_SRCALPHA, 0);
     if (_screen == 0)
     {

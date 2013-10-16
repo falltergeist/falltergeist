@@ -97,7 +97,7 @@ Surface::Surface(libfalltergeist::FrmFileType * frm, unsigned int direction, uns
     setXOffset(shiftX + offsetX);
     setYOffset(shiftY + offsetY);
 
-    SDL_SetColorKey(this->sdl_surface(), SDL_RLEACCEL|SDL_SRCCOLORKEY, 0);
+    SDL_SetColorKey(this->sdl_surface(), SDL_RLEACCEL | SDL_SRCCOLORKEY, 0);
 
 }
 
@@ -366,16 +366,25 @@ void Surface::copyTo(Surface * surface)
 unsigned int Surface::pixel(int x, int y)
 {
     if (!visible()) return 0;
+
     // if out of bounds
     if (x < 0 || y < 0 || (x > width() - 1) || (y > height() - 1) ) return 0;
     // if empty surface
     if ( width()*height() == 0) return 0;
 
+    if(SDL_MUSTLOCK(sdl_surface())) SDL_LockSurface(sdl_surface());
+
     // color value
     unsigned int * pixels = (unsigned int *) sdl_surface()->pixels;
     unsigned int index = (y * width()) + x;
-    if (index >=  height()*width()) return 0;
-    return pixels[index];
+
+    if (!pixels) return 0;
+
+    unsigned int pixel = pixels[index];
+
+    if(SDL_MUSTLOCK(sdl_surface())) SDL_UnlockSurface(sdl_surface());
+
+    return pixel;
 }
 
 void Surface::setPixel(int x, int y, unsigned int color)

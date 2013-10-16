@@ -40,13 +40,14 @@ Location::Location(libfalltergeist::MapFileType * mapFile)
     _cols = 100;
     _rows = 100;
 
+    _objects = new std::vector<LocationObject *>;
+    _objectsToRender = new std::vector<LocationObject *>;
     _camera = new LocationCamera(640, 480, 0, 0);
 
     _mapFile = mapFile;
     _tilesLst = ResourceManager::lstFileType("art/tiles/tiles.lst");
     _tilesBackground = new Surface(640, 480);
     _tilesBackground->fill(0xFF000000);
-    _objects = new std::vector<LocationObject *>;
     init();
 }
 
@@ -55,7 +56,9 @@ Location::~Location()
     delete _tilesLst;
     //delete _tilesBackground;
     delete _objects;
+    delete _objectsToRender;
     delete _camera;
+
 }
 
 LocationCamera * Location::camera()
@@ -67,8 +70,8 @@ void Location::init()
 {
     // Инициализируем положение камеры
     unsigned int defaultPosition = _mapFile->defaultPosition();
-    camera()->setX(hexagonToX(defaultPosition));
-    camera()->setY(hexagonToY(defaultPosition));
+    camera()->setXPosition(hexagonToX(defaultPosition));
+    camera()->setYPosition(hexagonToY(defaultPosition));
 
     _elevation = _mapFile->defaultElevation();
 
@@ -276,7 +279,8 @@ void Location::init()
     //add(animation);
     _objects->push_back(player);
 
-    generateBackground();
+    _generateBackground();
+    _checkObjectsToRender();
 }
 
 void Location::think()
@@ -288,12 +292,42 @@ void Location::think()
     }
 }
 
-void Location::generateBackground()
-{
-    //if (_cameraX == _lastCameraX && _cameraY == _lastCameraY) return;
-    //_lastCameraX = _cameraX;
-    //_lastCameraY = _cameraY;
 
+void Location::_checkObjectsToRender()
+{
+    _objectsToRender->clear();
+
+    for (std::vector<LocationObject *>::iterator it = _objects->begin(); it != _objects->end(); ++it)
+    {
+        LocationObject * object = *it;
+
+        // if object is out of camera borders
+        if (object->x() + object->xOffset() + object->width() < camera()->x()) continue;
+        if (object->y() + object->yOffset() + object->height() < camera()->y()) continue;
+
+        if (object->x() + object->xOffset() > camera()->x() + camera()->width()) continue;
+        if (object->y() + object->yOffset() > camera()->y() + camera()->height()) continue;
+
+        if (object->animation())
+        {
+            //if (object->x()  - object->animation()->surfaces()->at(0)->width()/2 + object->animation()->xOffsetMin() > camera()->x() + camera()->width()) continue;
+            if (object->x() + object->xOffset() > camera()->x() + camera()->width()) continue;
+            if (object->y() + object->yOffset() > camera()->y() + camera()->height()) continue;
+        }
+        else
+        {
+            if (object->x() + object->xOffset() > camera()->x() + camera()->width()) continue;
+            if (object->y() + object->yOffset() > camera()->y() + camera()->height()) continue;
+        }
+
+
+        _objectsToRender->push_back(object);
+    }
+}
+
+
+void Location::_generateBackground()
+{
     _tilesBackground->fill(0xFF000000);
     // Инициализируем тайловый фон
     for (unsigned int i = 0; i != _cols*_rows; ++i)
@@ -302,17 +336,17 @@ void Location::generateBackground()
         int tileY = tileToY(i);
 
         // Проверяем не выходят ли тайлы за пределы зоны видимости
-        if (tileX + TILE_WIDTH < camera()->x() - 320) continue;
-        if (tileX > camera()->x() + 320) continue;
-        if (tileY + TILE_HEIGHT < camera()->y() - 240) continue;
-        if (tileY > camera()->y() + 240) continue;
-
+        if (tileX + TILE_WIDTH < camera()->x()) continue;
+        if (tileX > camera()->x() + camera()->width()) continue;
+        if (tileY + TILE_HEIGHT < camera()->y()) continue;
+        if (tileY > camera()->y() + camera()->height()) continue;
 
         std::string frmName = _tilesLst->strings()->at(_mapFile->elevations()->at(_elevation)->floorTiles[i]);
         Surface * tile = ResourceManager::surface("art/tiles/" + frmName);
 
-        tile->setX(tileX - camera()->x() + 320);
-        tile->setY(tileY - camera()->y() + 240);
+
+        tile->setX(tileX - camera()->x());
+        tile->setY(tileY - camera()->y());
         tile->blit(_tilesBackground);
     }
 }
@@ -332,17 +366,6 @@ int Location::hexagonToX(unsigned int hexagon)
         }
     return centerX + 17;
 }
-
-/*
-
-    y = ceil(hexagon/200);
-    centerX = 48*(_cols - 1) + 48 + 16*(hexagon%200) - 24*y;b
-    centerY = (hexagon%200)*12 + 6*y ;
-
-
-
- */
-
 
 int Location::hexagonToY(unsigned int hexagon)
 {
@@ -389,42 +412,42 @@ bool Location::scroll(bool up, bool down, bool left, bool right)
 
     if (up)
     {
-        if (camera()->y() >= scrollDelta + 240)
+        if (camera()->y() >= scrollDelta)
         {
-            camera()->setY(camera()->y() - scrollDelta);
+            camera()->setYPosition(camera()->yPosition() - scrollDelta);
             changed = true;
         }
     }
     if (left)
     {
-        if (camera()->x() >= scrollDelta + 320)
+        if (camera()->x() >= scrollDelta)
         {
-            camera()->setX(camera()->x() - scrollDelta);
+            camera()->setXPosition(camera()->xPosition() - scrollDelta);
             changed = true;
         }
     }
     if (down)
     {
 
-        if (camera()->y() < height() - scrollDelta - 240)
+        if (camera()->yPosition() < height() - scrollDelta - camera()->height())
         {
-            camera()->setY(camera()->y() + scrollDelta);
+            camera()->setYPosition(camera()->yPosition() + scrollDelta);
             changed = true;
         }
     }
     if (right)
     {
-        if (camera()->x() < width() - scrollDelta - 320)
+        if (camera()->x() < width() - scrollDelta - camera()->width())
         {
-            camera()->setX(camera()->x() + scrollDelta);
+            camera()->setXPosition(camera()->xPosition() + scrollDelta);
             changed = true;
         }
     }
 
-
     if (changed)
     {
-        generateBackground();
+        _generateBackground();
+        _checkObjectsToRender();
     }
     return changed;
 }
@@ -432,6 +455,11 @@ bool Location::scroll(bool up, bool down, bool left, bool right)
 std::vector<LocationObject *> * Location::objects()
 {
     return _objects;
+}
+
+std::vector<LocationObject *> * Location::objectsToRender()
+{
+    return _objectsToRender;
 }
 
 unsigned int Location::width()

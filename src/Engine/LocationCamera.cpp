@@ -27,12 +27,12 @@
 namespace Falltergeist
 {
 
-LocationCamera::LocationCamera(unsigned int width, unsigned int height, unsigned int x, unsigned int y)
+LocationCamera::LocationCamera(unsigned int width, unsigned int height, unsigned int xPosition, unsigned int yPosition)
 {
-    _x = x;
-    _y = y;
-    _width = width;
-    _height = height;
+    setXPosition(xPosition);
+    setYPosition(yPosition);
+    setWidth(width);
+    setHeight(height);
 }
 
 LocationCamera::~LocationCamera()
@@ -41,22 +41,47 @@ LocationCamera::~LocationCamera()
 
 unsigned int LocationCamera::x()
 {
-    return _x;
+    return xPosition() - width()/2;
 }
 
-void LocationCamera::setX(unsigned int value)
-{
-    _x = value;
-}
 
 unsigned int LocationCamera::y()
 {
-    return _y;
+    return yPosition() - height()/2;
 }
 
-void LocationCamera::setY(unsigned int value)
+unsigned int LocationCamera::xPosition()
 {
-    _y = value;
+    return _xPosition;
+}
+
+void LocationCamera::setXPosition(unsigned int value)
+{
+    if (value < width()/2)
+    {
+        _xPosition = width()/2;
+    }
+    else
+    {
+        _xPosition = value;
+    }
+}
+
+unsigned int LocationCamera::yPosition()
+{
+    return _yPosition;
+}
+
+void LocationCamera::setYPosition(unsigned int value)
+{
+    if (value < height()/2)
+    {
+        _yPosition = height()/2;
+    }
+    else
+    {
+        _yPosition = value;
+    }
 }
 
 unsigned int LocationCamera::width()

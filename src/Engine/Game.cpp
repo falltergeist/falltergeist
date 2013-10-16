@@ -58,6 +58,7 @@ Game::Game(int width, int height, int bpp) : _states()
     std::string caption = "Falltergeist ";
     caption.append(VERSION);
     SDL_WM_SetCaption(caption.c_str(), 0);
+    putenv(strdup("SDL_VIDEO_CENTERED=1"));
 
     std::cout << "Loading resource manager..." << std::endl;
     _resourceManager = new ResourceManager();

@@ -33,13 +33,14 @@ namespace Falltergeist
 class Game;
 class Location;
 class Animation;
+class InteractiveSurface;
 
 class LocationState : public State
 {
 protected:    
     Animation * _animation;
     Location * _location;
-    Surface * _background;
+    InteractiveSurface * _background;
     unsigned int _direction;
     unsigned int _cameraX;
     unsigned int _cameraY;
@@ -50,6 +51,8 @@ public:
     virtual void init();
     virtual void think();
     virtual void blit();
+
+    void onBackgroundClick(Event * event);
 };
 
 }

@@ -38,11 +38,15 @@ class Location
 {
 protected:
     std::vector<LocationObject *> * _objects;
+    std::vector<LocationObject *> * _objectsToRender;
+
+    void _checkObjectsToRender();
+    void _generateBackground();
+
     unsigned int _cols;
     unsigned int _rows;
 
     LocationCamera * _camera;
-
     unsigned int _elevation;
 
     Surface * _tilesBackground;
@@ -52,13 +56,12 @@ protected:
 
 
 public:
-    enum { TILE_WIDTH = 80, TILE_HEIGHT = 36 };
+    enum Tile { TILE_WIDTH = 80, TILE_HEIGHT = 36 };
 
     Location(libfalltergeist::MapFileType * mapFile);
     ~Location();
     void init();
     void think();
-    void generateBackground();
     bool scroll(bool up = false, bool down = false, bool left = false, bool right = false);
     int hexagonToX(unsigned int hexagon);
     int hexagonToY(unsigned int hexagon);
@@ -73,6 +76,7 @@ public:
     libfalltergeist::MapFileType * mapFile();
     Surface * tilesBackground();
     std::vector<LocationObject *> * objects();
+    std::vector<LocationObject *> * objectsToRender();
 };
 
 
