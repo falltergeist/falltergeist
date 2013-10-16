@@ -53,6 +53,8 @@ set(SOURCES main.cpp
             src/Engine/InteractiveSurface.h
             src/Engine/Location.cpp
             src/Engine/Location.h
+            src/Engine/LocationCamera.cpp
+            src/Engine/LocationCamera.h
             src/Engine/LocationObject.cpp
             src/Engine/LocationObject.h
             src/Engine/Map.cpp

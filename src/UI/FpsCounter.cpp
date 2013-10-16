@@ -17,10 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../UI/FpsCounter.h"
+// C++ standard includes
 #include <sstream>
 
+// Falltergeist includes
 #include "../Engine/CrossPlatform.h"
+#include "../UI/FpsCounter.h"
+
+// Third party includes
 
 using namespace Falltergeist::CrossPlatform;
 

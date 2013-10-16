@@ -20,8 +20,13 @@
 #ifndef FALLTERGEIST_ANIMATION_H
 #define FALLTERGEIST_ANIMATION_H
 
-#include "../Engine/InteractiveSurface.h"
+// C++ standard includes
 #include <vector>
+
+// Falltergeist includes
+#include "../Engine/InteractiveSurface.h"
+
+// Third party includes
 
 namespace Falltergeist
 {

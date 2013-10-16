@@ -20,8 +20,13 @@
 #ifndef FALLTERGEIST_EXCEPTION_H
 #define FALLTERGEIST_EXCEPTION_H
 
+// C++ standard includes
 #include <exception>
 #include <string>
+
+// Falltergeist includes
+
+// Third party includes
 
 namespace Falltergeist
 {

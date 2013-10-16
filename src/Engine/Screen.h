@@ -20,7 +20,12 @@
 #ifndef FALLTERGEIST_SCREEN_H
 #define FALLTERGEIST_SCREEN_H
 
+// C++ standard includes
 #include <iostream>
+
+// Falltergeist includes
+
+// Third party includes
 #include <SDL/SDL.h>
 
 namespace Falltergeist

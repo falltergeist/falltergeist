@@ -21,8 +21,13 @@
 #ifndef FALLTERGEIST_PLAYEREDITNAMESTATE_H
 #define FALLTERGEIST_PLAYEREDITNAMESTATE_H
 
+// C++ standard includes
+#include <map>
+
+// Falltergeist includes
 #include "../Engine/State.h"
-#include "map"
+
+// Third party includes
 
 namespace Falltergeist
 {

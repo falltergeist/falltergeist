@@ -21,7 +21,12 @@
 #ifndef FALLTERGEIST_LOCATIONSTATE_H
 #define FALLTERGEIST_LOCATIONSTATE_H
 
+// C++ standard includes
+
+// Falltergeist includes
 #include "../Engine/State.h"
+
+// Third party includes
 
 namespace Falltergeist
 {

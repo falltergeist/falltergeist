@@ -17,11 +17,16 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// C++ standard includes
+
+// Falltergeist includes
 #include "../Engine/State.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
 #include "../Engine/InteractiveSurface.h"
+
+// Third party includes
 
 namespace Falltergeist
 {

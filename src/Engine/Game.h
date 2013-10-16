@@ -20,10 +20,16 @@
 #ifndef FALLTERGEIST_GAME_H
 #define FALLTERGEIST_GAME_H
 
+// C++ standard includes
 #include <vector>
 #include <string>
 #include <iostream>
+
+// Falltergeist includes
+
+// Third party includes
 #include <SDL/SDL.h>
+
 #define VERSION "0.0.7"
 
 namespace Falltergeist

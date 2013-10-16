@@ -21,7 +21,12 @@
 #ifndef FALLTERGEIST_LOCATIONOBJECT_H
 #define FALLTERGEIST_LOCATIONOBJECT_H
 
+// C++ standard includes
+
+// Falltergeist includes
 #include "../Engine/InteractiveSurface.h"
+
+// Third party includes
 
 namespace Falltergeist
 {

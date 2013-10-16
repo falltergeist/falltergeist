@@ -18,6 +18,9 @@
  *
  */
 
+// C++ standard includes
+
+// Falltergeist includes
 #include "../States/PlayerEditAgeState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Player.h"
@@ -26,6 +29,8 @@
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
 #include "../UI/BigCounter.h"
+
+// Third party includes
 
 namespace Falltergeist
 {

@@ -18,13 +18,19 @@
  *
  */
 
+// C++ standard includes
+#include <cmath>
+#include <iostream>
+
+// Falltergeist includes
 #include "../Engine/Location.h"
 #include "../Engine/LocationObject.h"
+#include "../Engine/LocationCamera.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Animation.h"
-#include <cmath>
-#include <iostream>
+
+// Third party includes
 
 namespace Falltergeist
 {
@@ -33,8 +39,9 @@ Location::Location(libfalltergeist::MapFileType * mapFile)
 {
     _cols = 100;
     _rows = 100;
-    _lastCameraX = 0;
-    _lastCameraY = 0;
+
+    _camera = new LocationCamera(640, 480, 0, 0);
+
     _mapFile = mapFile;
     _tilesLst = ResourceManager::lstFileType("art/tiles/tiles.lst");
     _tilesBackground = new Surface(640, 480);
@@ -48,14 +55,20 @@ Location::~Location()
     delete _tilesLst;
     //delete _tilesBackground;
     delete _objects;
+    delete _camera;
+}
+
+LocationCamera * Location::camera()
+{
+    return _camera;
 }
 
 void Location::init()
 {
     // Инициализируем положение камеры
     unsigned int defaultPosition = _mapFile->defaultPosition();
-    _cameraX = hexagonToX(defaultPosition);
-    _cameraY = hexagonToY(defaultPosition);
+    camera()->setX(hexagonToX(defaultPosition));
+    camera()->setY(hexagonToY(defaultPosition));
 
     _elevation = _mapFile->defaultElevation();
 
@@ -277,9 +290,9 @@ void Location::think()
 
 void Location::generateBackground()
 {
-    if (_cameraX == _lastCameraX && _cameraY == _lastCameraY) return;
-    _lastCameraX = _cameraX;
-    _lastCameraY = _cameraY;
+    //if (_cameraX == _lastCameraX && _cameraY == _lastCameraY) return;
+    //_lastCameraX = _cameraX;
+    //_lastCameraY = _cameraY;
 
     _tilesBackground->fill(0xFF000000);
     // Инициализируем тайловый фон
@@ -289,17 +302,17 @@ void Location::generateBackground()
         int tileY = tileToY(i);
 
         // Проверяем не выходят ли тайлы за пределы зоны видимости
-        if (tileX + TILE_WIDTH < _cameraX - 320) continue;
-        if (tileX > _cameraX + 320) continue;
-        if (tileY + TILE_HEIGHT < _cameraY - 240) continue;
-        if (tileY > _cameraY + 240) continue;
+        if (tileX + TILE_WIDTH < camera()->x() - 320) continue;
+        if (tileX > camera()->x() + 320) continue;
+        if (tileY + TILE_HEIGHT < camera()->y() - 240) continue;
+        if (tileY > camera()->y() + 240) continue;
 
 
         std::string frmName = _tilesLst->strings()->at(_mapFile->elevations()->at(_elevation)->floorTiles[i]);
         Surface * tile = ResourceManager::surface("art/tiles/" + frmName);
 
-        tile->setX(tileX - _cameraX + 320);
-        tile->setY(tileY - _cameraY + 240);
+        tile->setX(tileX - camera()->x() + 320);
+        tile->setY(tileY - camera()->y() + 240);
         tile->blit(_tilesBackground);
     }
 }
@@ -376,34 +389,34 @@ bool Location::scroll(bool up, bool down, bool left, bool right)
 
     if (up)
     {
-        if (_cameraY >= scrollDelta + 240)
+        if (camera()->y() >= scrollDelta + 240)
         {
-            _cameraY -= scrollDelta;
+            camera()->setY(camera()->y() - scrollDelta);
             changed = true;
         }
     }
     if (left)
     {
-        if (_cameraX >= scrollDelta + 320)
+        if (camera()->x() >= scrollDelta + 320)
         {
-            _cameraX -= scrollDelta;
+            camera()->setX(camera()->x() - scrollDelta);
             changed = true;
         }
     }
     if (down)
     {
 
-        if (_cameraY < height() - scrollDelta - 240)
+        if (camera()->y() < height() - scrollDelta - 240)
         {
-            _cameraY += scrollDelta;
+            camera()->setY(camera()->y() + scrollDelta);
             changed = true;
         }
     }
     if (right)
     {
-        if (_cameraX < width() - scrollDelta - 320)
+        if (camera()->x() < width() - scrollDelta - 320)
         {
-            _cameraX += scrollDelta;
+            camera()->setX(camera()->x() + scrollDelta);
             changed = true;
         }
     }
@@ -431,14 +444,5 @@ unsigned int Location::height()
     return 12*_cols + 24*_rows;
 }
 
-unsigned int Location::cameraX()
-{
-    return _cameraX;
-}
-
-unsigned int Location::cameraY()
-{
-    return _cameraY;
-}
 
 }

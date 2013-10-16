@@ -17,15 +17,19 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../UI/TextArea.h"
-#include "../Engine/Font.h"
+// C++ standard includes
 #include <vector>
 #include <string>
 #include <iostream>
 #include <sstream>
 
+// Falltergeist includes
+#include "../Engine/Font.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/CrossPlatform.h"
+#include "../UI/TextArea.h"
+
+// Third party includes
 
 using namespace Falltergeist::CrossPlatform;
 

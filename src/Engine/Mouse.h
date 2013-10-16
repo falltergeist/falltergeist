@@ -21,9 +21,14 @@
 #ifndef FALLTERGEIST_MOUSE_H
 #define FALLTERGEIST_MOUSE_H
 
-#include <SDL/SDL.h>
+// C++ standard includes
+
+// Falltergeist includes
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/ResourceManager.h"
+
+// Third party includes
+#include <SDL/SDL.h>
 
 namespace Falltergeist
 {

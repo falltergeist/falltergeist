@@ -17,30 +17,42 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_IMAGEBUTTON_H
-#define FALLTERGEIST_IMAGEBUTTON_H
+#ifndef FALLTERGEIST_LOCATIONCAMERA_H
+#define FALLTERGEIST_LOCATIONCAMERA_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/InteractiveSurface.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class ImageButton : public InteractiveSurface
+class LocationCamera
 {
 protected:
-    char * _releasedImage;
-    char * _pressedImage;
+    unsigned int _x;
+    unsigned int _y;
+    unsigned int _width;
+    unsigned int _height;
+
 public:
-    ImageButton(const char * releasedImage = 0, const char * pressedImage = 0, int x = 0, int y = 0);
-    virtual void draw();
-    void setReleasedImage(const char * releasedImage);
-    void setPressedImage(const char * pressedImage);
+    LocationCamera(unsigned int width, unsigned int height, unsigned int x, unsigned int y);
+    ~LocationCamera();
+
+    unsigned int x();
+    void setX(unsigned int value);
+
+    unsigned int y();
+    void setY(unsigned int value);
+
+    unsigned int height();
+    void setHeight(unsigned int value);
+
+    unsigned int width();
+    void setWidth(unsigned int value);
 };
 
 }
-#endif // FALLTERGEIST_IMAGEBUTTON_H
+#endif // FALLTERGEIST_LOCATIONCAMERA_H

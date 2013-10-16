@@ -20,10 +20,15 @@
 #ifndef FALLTERGEIST_SURFACE_H
 #define FALLTERGEIST_SURFACE_H
 
-#include <SDL/SDL.h>
+// C++ standard includes
+#include <vector>
+
+// Falltergeist includes
 #include "../Engine/Exception.h"
 #include "../Engine/ResourceManager.h"
-#include <vector>
+
+// Third party includes
+#include <SDL/SDL.h>
 
 namespace Falltergeist
 {

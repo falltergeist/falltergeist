@@ -17,30 +17,66 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_IMAGEBUTTON_H
-#define FALLTERGEIST_IMAGEBUTTON_H
-
-// C++ standard includes
+// C++ includes
 
 // Falltergeist includes
-#include "../Engine/InteractiveSurface.h"
+#include "../Engine/LocationCamera.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class ImageButton : public InteractiveSurface
+LocationCamera::LocationCamera(unsigned int width, unsigned int height, unsigned int x, unsigned int y)
 {
-protected:
-    char * _releasedImage;
-    char * _pressedImage;
-public:
-    ImageButton(const char * releasedImage = 0, const char * pressedImage = 0, int x = 0, int y = 0);
-    virtual void draw();
-    void setReleasedImage(const char * releasedImage);
-    void setPressedImage(const char * pressedImage);
-};
+    _x = x;
+    _y = y;
+    _width = width;
+    _height = height;
+}
+
+LocationCamera::~LocationCamera()
+{
+}
+
+unsigned int LocationCamera::x()
+{
+    return _x;
+}
+
+void LocationCamera::setX(unsigned int value)
+{
+    _x = value;
+}
+
+unsigned int LocationCamera::y()
+{
+    return _y;
+}
+
+void LocationCamera::setY(unsigned int value)
+{
+    _y = value;
+}
+
+unsigned int LocationCamera::width()
+{
+    return _width;
+}
+
+void LocationCamera::setWidth(unsigned int value)
+{
+    _width = value;
+}
+
+unsigned int LocationCamera::height()
+{
+    return _height;
+}
+
+void LocationCamera::setHeight(unsigned int value)
+{
+    _height = value;
+}
 
 }
-#endif // FALLTERGEIST_IMAGEBUTTON_H

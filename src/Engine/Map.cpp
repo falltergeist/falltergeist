@@ -18,7 +18,12 @@
  *
  */
 
+// C++ standard includes
+
+// Falltergeist includes
 #include "../Engine/Map.h"
+
+// Third party includes
 
 namespace Falltergeist
 {

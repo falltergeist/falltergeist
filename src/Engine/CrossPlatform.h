@@ -20,9 +20,14 @@
 #ifndef FALLTERGEIST_CROSSPLATFORM_H
 #define FALLTERGEIST_CROSSPLATFORM_H
 
+// C++ standard includes
 #include <string>
 #include <list>
 #include <vector>
+
+// Falltergeist includes
+
+// Third party includes
 
 namespace Falltergeist
 {

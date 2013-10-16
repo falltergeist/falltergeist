@@ -17,7 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// C++ standard includes
+
+// Falltergeist includes
 #include "../UI/HiddenMask.h"
+
+// Third party includes
 
 namespace Falltergeist
 {

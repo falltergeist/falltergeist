@@ -17,6 +17,11 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// C++ standard includes
+#include <iostream>
+#include <sstream>
+
+// Falltergeist includes
 #include "../States/NewGameState.h"
 #include "../States/PlayerEditState.h"
 #include "../States/LocationState.h"
@@ -26,8 +31,8 @@
 #include "../Engine/Player.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
-#include <iostream>
-#include <sstream>
+
+// Third party includes
 
 namespace Falltergeist
 {

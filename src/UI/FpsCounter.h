@@ -20,7 +20,12 @@
 #ifndef FALLTERGEIST_FPSCOUNTER_H
 #define FALLTERGEIST_FPSCOUNTER_H
 
+// C++ standard includes
+
+// Falltergeist includes
 #include "../UI/TextArea.h"
+
+// Third party includes
 
 namespace Falltergeist
 {

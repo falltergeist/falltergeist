@@ -17,9 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// C++ standard includes
+#include <iostream>
+
+// Falltergeist includes
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/CrossPlatform.h"
-#include <iostream>
+
+// Third party includes
 
 using namespace Falltergeist::CrossPlatform;
 

@@ -18,10 +18,15 @@
  *
  */
 
-#include "../Engine/Mouse.h"
-#include "../Engine/ResourceManager.h"
+// C++ standard includes
 #include <iostream>
 #include <cmath>
+
+// Falltergeist includes
+#include "../Engine/Mouse.h"
+#include "../Engine/ResourceManager.h"
+
+// Third party includes
 
 namespace Falltergeist
 {

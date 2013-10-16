@@ -17,14 +17,18 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../States/StartState.h"
-#include "../States/MainMenuState.h"
-#include "../Engine/Game.h"
+// C++ standard includes
 
-#include "../States/LocationState.h"
-#include "../States/PlayerEditState.h"
-#include "../Engine/ResourceManager.h"
+// Falltergeist includes
+#include "../Engine/Game.h"
 #include "../Engine/Player.h"
+#include "../Engine/ResourceManager.h"
+#include "../States/LocationState.h"
+#include "../States/MainMenuState.h"
+#include "../States/PlayerEditState.h"
+#include "../States/StartState.h"
+
+// Third party includes
 
 namespace Falltergeist
 {

@@ -18,10 +18,15 @@
  *
  */
 
-#include "../Engine/LocationObject.h"
-#include "../Engine/Animation.h"
+// C++ standard includes
 #include <iostream>
 #include <cmath>
+
+// Falltergeist includes
+#include "../Engine/LocationObject.h"
+#include "../Engine/Animation.h"
+
+// Third party includes
 
 namespace Falltergeist
 {

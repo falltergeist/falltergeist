@@ -18,16 +18,22 @@
  *
  */
 
+// C++ standard includes
+#include <cmath>
+
+// Falltergeist includes
 #include "../States/LocationState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Location.h"
+#include "../Engine/LocationCamera.h"
 #include "../Engine/LocationObject.h"
 #include "../UI/TextArea.h"
 #include "../Engine/Mouse.h"
 #include "../Engine/Animation.h"
-#include <cmath>
+
+// Third party includes
 
 namespace Falltergeist
 {
@@ -81,8 +87,8 @@ void LocationState::blit()
 
         int oldX = object->x();
         int oldY = object->y();
-        int newX = oldX - _location->cameraX() + 320;
-        int newY = oldY - _location->cameraY() + 240;
+        int newX = oldX - _location->camera()->x() + 320;
+        int newY = oldY - _location->camera()->y() + 240;
 
         object->setX(newX);
         object->setY(newY);

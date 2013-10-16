@@ -20,7 +20,12 @@
 #ifndef FALLTERGEIST_HIDDENMASK_H
 #define FALLTERGEIST_HIDDENMASK_H
 
+// C++ standard includes
+
+// Falltergeist includes
 #include "../Engine/InteractiveSurface.h"
+
+// Third party includes
 
 namespace Falltergeist
 {

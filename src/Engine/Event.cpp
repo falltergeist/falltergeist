@@ -17,8 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../Engine/Event.h"
+// C++ standard includes
 #include <iostream>
+
+// Falltergeist includes
+#include "../Engine/Event.h"
+
+// Third party includes
 
 namespace Falltergeist
 {
