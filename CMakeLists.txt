@@ -53,6 +53,8 @@ set(SOURCES main.cpp
             src/Engine/InteractiveSurface.h
             src/Engine/Location.cpp
             src/Engine/Location.h
+            src/Engine/LocationCamera.cpp
+            src/Engine/LocationCamera.h
             src/Engine/LocationObject.cpp
             src/Engine/LocationObject.h
             src/Engine/Map.cpp
@@ -63,8 +65,12 @@ set(SOURCES main.cpp
             src/Engine/Player.h
             src/Engine/ResourceManager.cpp
             src/Engine/ResourceManager.h
+            src/Engine/Renderer.cpp
+            src/Engine/Renderer.h
             src/Engine/Screen.cpp
             src/Engine/Screen.h
+            src/Engine/SdlRenderer.cpp
+            src/Engine/SdlRenderer.h
             src/Engine/State.cpp
             src/Engine/State.h
             src/Engine/Surface.cpp

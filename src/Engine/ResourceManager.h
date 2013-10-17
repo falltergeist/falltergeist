@@ -20,9 +20,14 @@
 #ifndef FALLTERGEIST_RESOURCEMANAGER_H
 #define FALLTERGEIST_RESOURCEMANAGER_H
 
+// C++ standard includes
 #include <list>
 #include <string>
 #include <map>
+
+// Falltergeist includes
+
+// Third party includes
 #include "../../lib/libfalltergeist/libfalltergeist.h"
 
 namespace Falltergeist

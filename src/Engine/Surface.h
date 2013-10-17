@@ -20,10 +20,15 @@
 #ifndef FALLTERGEIST_SURFACE_H
 #define FALLTERGEIST_SURFACE_H
 
-#include <SDL/SDL.h>
+// C++ standard includes
+#include <vector>
+
+// Falltergeist includes
 #include "../Engine/Exception.h"
 #include "../Engine/ResourceManager.h"
-#include <vector>
+
+// Third party includes
+#include <SDL/SDL.h>
 
 namespace Falltergeist
 {
@@ -46,6 +51,8 @@ protected:
     unsigned int _borderColor; // for debugging. @TODO must be removed in future
     unsigned int _backgroundColor; // for debugging @TODO must be removed in future
     void _drawBorder();
+    void _copyAnimatedPixelsFrom(Surface * surface);
+    void _copyAnimatedPixelsTo(Surface * surface);
 
 public:
     static AnimatedPalette * animatedPalette;

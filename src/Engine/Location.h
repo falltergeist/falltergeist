@@ -21,23 +21,32 @@
 #ifndef FALLTERGEIST_LOCATION_H
 #define FALLTERGEIST_LOCATION_H
 
+// C++ standard includes
+
+// Falltergeist includes
+
+// Third party includes
 #include "../../lib/libfalltergeist/libfalltergeist.h"
 
 namespace Falltergeist
 {
 class Surface;
 class LocationObject;
+class LocationCamera;
 
 class Location
 {
 protected:
     std::vector<LocationObject *> * _objects;
+    std::vector<LocationObject *> * _objectsToRender;
+
+    void _checkObjectsToRender();
+    void _generateBackground();
+
     unsigned int _cols;
     unsigned int _rows;
 
-    unsigned int _cameraX;
-    unsigned int _cameraY;
-
+    LocationCamera * _camera;
     unsigned int _elevation;
 
     Surface * _tilesBackground;
@@ -47,13 +56,12 @@ protected:
 
 
 public:
-    enum { TILE_WIDTH = 80, TILE_HEIGHT = 36 };
+    enum Tile { TILE_WIDTH = 80, TILE_HEIGHT = 36 };
 
     Location(libfalltergeist::MapFileType * mapFile);
     ~Location();
     void init();
     void think();
-    void generateBackground();
     bool scroll(bool up = false, bool down = false, bool left = false, bool right = false);
     int hexagonToX(unsigned int hexagon);
     int hexagonToY(unsigned int hexagon);
@@ -61,12 +69,14 @@ public:
     int tileToY(unsigned int tile);
     unsigned int width();
     unsigned int height();
-    unsigned int cameraX();
-    unsigned int cameraY();
+
+    LocationCamera * camera();
+
 
     libfalltergeist::MapFileType * mapFile();
     Surface * tilesBackground();
     std::vector<LocationObject *> * objects();
+    std::vector<LocationObject *> * objectsToRender();
 };
 
 

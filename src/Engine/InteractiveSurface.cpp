@@ -17,9 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// C++ standard includes
+#include <iostream>
+
+// Falltergeist includes
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/CrossPlatform.h"
-#include <iostream>
+
+// Third party includes
 
 using namespace Falltergeist::CrossPlatform;
 
@@ -175,57 +180,57 @@ void InteractiveSurface::handle(Event * event, State * state)
 
 void InteractiveSurface::mouseIn(Event * event, State * state)
 {
-    setNeedRedraw(true);
+    //setNeedRedraw(true);
     if (_onMouseIn != 0) (state->*_onMouseIn)(event);
 }
 void InteractiveSurface::mouseOut(Event * event, State * state)
 {
-    setNeedRedraw(true);
+    //setNeedRedraw(true);
     if (_onMouseOut != 0) (state->*_onMouseOut)(event);
 }
 void InteractiveSurface::mouseOver(Event * event, State * state)
 {
-    setNeedRedraw(true);
+    //setNeedRedraw(true);
     if (_onMouseOver != 0) (state->*_onMouseOver)(event);
 }
 void InteractiveSurface::leftButtonPress(Event * event, State * state)
 {
-    setNeedRedraw(true);
+    //setNeedRedraw(true);
     if (_onLeftButtonPress != 0) (state->*_onLeftButtonPress)(event);
 }
 void InteractiveSurface::leftButtonRelease(Event * event, State * state)
 {
-    setNeedRedraw(true);
+    //setNeedRedraw(true);
     if (_onLeftButtonRelease != 0) (state->*_onLeftButtonRelease)(event);
 }
 void InteractiveSurface::leftButtonClick(Event * event, State * state)
 {
-    setNeedRedraw(true);
+    //setNeedRedraw(true);
     if (_onLeftButtonClick != 0) (state->*_onLeftButtonClick)(event);
 }
 void InteractiveSurface::rightButtonPress(Event * event, State * state)
 {
-    setNeedRedraw(true);
+    //setNeedRedraw(true);
     if (_onRightButtonPress != 0) (state->*_onRightButtonPress)(event);
 }
 void InteractiveSurface::rightButtonRelease(Event * event, State * state)
 {
-    setNeedRedraw(true);
+    //setNeedRedraw(true);
     if (_onRightButtonRelease != 0) (state->*_onRightButtonRelease)(event);
 }
 void InteractiveSurface::rightButtonClick(Event * event, State * state)
 {
-    setNeedRedraw(true);
+    //setNeedRedraw(true);
     if (_onRightButtonClick != 0) (state->*_onRightButtonClick)(event);
 }
 void InteractiveSurface::keyboardPress(Event * event, State * state)
 {
-    setNeedRedraw(true);
+    //setNeedRedraw(true);
     if (_onKeyboardPress != 0) (state->*_onKeyboardPress)(event);
 }
 void InteractiveSurface::keyboardRelease(Event * event, State * state)
 {
-    setNeedRedraw(true);
+    //setNeedRedraw(true);
     if (_onKeyboardRelease != 0) (state->*_onKeyboardRelease)(event);
 }
 

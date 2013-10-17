@@ -19,26 +19,17 @@
 
 #ifndef FALLTERGEIST_PLAYER_H
 #define	FALLTERGEIST_PLAYER_H
+
+// C++ standard includes
+
+// Falltergeist includes
+
+// Third party includes
 #include "../../lib/libfalltergeist/libfalltergeist.h"
 
 namespace Falltergeist
 {
-/*
 
-СИЛА:
-    Здоровье = 15 + 1*СИ + 2*ВН
-    Максимальный груз = 25 + 25*СИ
-    Урон х.ор. = 1 1 1 1 1 1 2 3 4 5
-
-    Без оружия
-    Холодное
-
-
-
-
-
-
-*/
 class Player
 {
 protected:

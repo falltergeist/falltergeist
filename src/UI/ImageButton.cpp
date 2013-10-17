@@ -17,8 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// C++ standard includes
+
+// Falltergeist includes
 #include "../UI/ImageButton.h"
 #include "../Engine/ResourceManager.h"
+
+// Third party includes
 
 namespace Falltergeist
 {
@@ -28,6 +33,10 @@ ImageButton::ImageButton(const char * releasedImage, const char * pressedImage, 
     _releasedImage = (char*)releasedImage;
     _pressedImage = (char*)pressedImage;
     setNeedRedraw(true);
+    onMouseIn((EventHandler) &ImageButton::mouseInHandler);
+    onMouseOut((EventHandler) &ImageButton::mouseOutHandler);
+    onLeftButtonPress((EventHandler) &ImageButton::mouseUpHandler);
+    onLeftButtonRelease((EventHandler) &ImageButton::mouseDownHandler);
 }
 
 void ImageButton::draw()
@@ -51,6 +60,38 @@ void ImageButton::draw()
     this->setY(y);
     this->setXOffset(0);
     this->setYOffset(0);
+}
+
+void ImageButton::mouseInHandler(Event * event)
+{
+    if (_leftButtonPressed && _hovered)
+    {
+        event->sender()->setNeedRedraw(true);
+    }
+}
+
+void ImageButton::mouseOutHandler(Event * event)
+{
+    if (_leftButtonPressed)
+    {
+        event->sender()->setNeedRedraw(true);
+    }
+}
+
+void ImageButton::mouseUpHandler(Event * event)
+{
+    if (_hovered)
+    {
+        event->sender()->setNeedRedraw(true);
+    }
+}
+
+void ImageButton::mouseDownHandler(Event * event)
+{
+    if (_hovered)
+    {
+        event->sender()->setNeedRedraw(true);
+    }
 }
 
 void ImageButton::setPressedImage(const char * pressedImage)

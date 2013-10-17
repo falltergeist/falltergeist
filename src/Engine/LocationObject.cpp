@@ -18,10 +18,15 @@
  *
  */
 
-#include "../Engine/LocationObject.h"
-#include "../Engine/Animation.h"
+// C++ standard includes
 #include <iostream>
 #include <cmath>
+
+// Falltergeist includes
+#include "../Engine/LocationObject.h"
+#include "../Engine/Animation.h"
+
+// Third party includes
 
 namespace Falltergeist
 {
@@ -137,11 +142,11 @@ int LocationObject::xOffset()
 {
     if (_animation == 0)
     {
-        return InteractiveSurface::xOffset() - ceil(width()/2);
+        return InteractiveSurface::xOffset() - width()/2;
     }
     else
     {
-        return - ceil(_animation->surfaces()->at(0)->width()/2) + _animation->xOffset();
+        return InteractiveSurface::xOffset() - _animation->surfaces()->at(0)->width()/2 + _animation->xOffset();
     }
 }
 
@@ -153,7 +158,7 @@ int LocationObject::yOffset()
     }
     else
     {
-        return - _animation->surfaces()->at(0)->height() + _animation->yOffset();
+        return InteractiveSurface::yOffset() - _animation->surfaces()->at(0)->height() + _animation->yOffset();
     }
 }
 

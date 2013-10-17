@@ -17,41 +17,28 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_BIGCOUNTER_H
-#define FALLTERGEIST_BIGCOUNTER_H
+#ifndef FALLTERGEIST_RENDERER_H
+#define FALLTERGEIST_RENDERER_H
 
 // C++ standard includes
-#include <vector>
 
 // Falltergeist includes
-#include "../Engine/InteractiveSurface.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class BigCounter : public InteractiveSurface
+class Renderer
 {
 protected:
-    unsigned char _color;
-    unsigned int _number;
-    unsigned int _length;
-    std::vector<Surface *> * _numbersWhite;
-    std::vector<Surface *> * _numbersRed;
+    unsigned int _frameLimit;
+
 public:
-    enum {COLOR_WHITE = 1, COLOR_RED};
-    BigCounter(int x = 0, int y = 0);
-    ~BigCounter();
-
-    virtual void draw();
-
-    void setColor(unsigned char color);
-    unsigned char color();
-
-    void setNumber(unsigned int number);
-    unsigned int number();
+    Renderer();
+    ~Renderer();
+    unsigned int frameLimit();
 };
 
 }
-#endif // FALLTERGEIST_BIGCOUNTER_H
+#endif // FALLTERGEIST_RENDERER_H

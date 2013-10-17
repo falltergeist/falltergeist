@@ -17,10 +17,15 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../Engine/Animation.h"
-#include "../Engine/ResourceManager.h"
+// C++ standard includes
 #include <iostream>
 #include <cmath>
+
+// Falltergeist includes
+#include "../Engine/Animation.h"
+#include "../Engine/ResourceManager.h"
+
+// Third party includes
 
 namespace Falltergeist
 {
@@ -75,11 +80,8 @@ int Animation::xOffset()
 {
     int offset = 0;
     offset += InteractiveSurface::xOffset();
-    offset += ceil(surfaces()->at(0)->width()/2 + 0.1);
-    offset -= ceil(surface()->width()/2 + 0.1);
-
-    //offset -= surface()->width()%2;
-
+    offset += surfaces()->at(0)->width()/2;
+    offset -= surface()->width()/2;
 
     for (unsigned int i = 0; i <= _currentFrame; i++)
     {
@@ -139,6 +141,29 @@ void Animation::loadFromFrmFile(libfalltergeist::FrmFileType * frm)
         }
         _surfaceSets->push_back(frameset);
     }
+}
+
+int Animation::xOffsetMin()
+{
+    int offsetMin = 0;
+
+    for (unsigned int j = 0; j != surfaces()->size(); ++j)
+    {
+        int offset = 0;
+        offset += InteractiveSurface::xOffset();
+        offset += surfaces()->at(0)->width()/2;
+        offset -= surfaces()->at(j)->width()/2;
+
+        for (unsigned int i = 0; i <= j; i++)
+        {
+            offset += surfaces()->at(i)->xOffset();
+        }
+
+        if (offset < offsetMin) offsetMin = offset;
+    }
+
+    std::cout << offsetMin << std::endl;
+    return offsetMin;
 }
 
 void Animation::loadFromFrmFile(const char * filename)

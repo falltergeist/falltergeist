@@ -20,9 +20,14 @@
 #ifndef FALLTERGEIST_FONT_H
 #define FALLTERGEIST_FONT_H
 
-#include "../Engine/Surface.h"
-#include "../../lib/libfalltergeist/libfalltergeist.h"
+// C++ standard includes
 #include <vector>
+
+// Falltergeist includes
+#include "../Engine/Surface.h"
+
+// Third party includes
+#include "../../lib/libfalltergeist/libfalltergeist.h"
 
 namespace Falltergeist
 {

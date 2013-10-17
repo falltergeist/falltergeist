@@ -21,6 +21,12 @@
 #ifndef FALLTERGEIST_MAP_H
 #define FALLTERGEIST_MAP_H
 
+// C++ standard includes
+
+// Falltergeist includes
+
+// Third party includes
+
 namespace Falltergeist
 {
 

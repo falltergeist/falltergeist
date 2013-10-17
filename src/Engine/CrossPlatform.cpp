@@ -17,7 +17,7 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../Engine/CrossPlatform.h"
+// C++ standard includes
 #include <unistd.h>
 #include <dirent.h>
 #include <iostream>
@@ -26,7 +26,8 @@
 #include <algorithm>
 #include <string.h>
 
-
+// Falltergeist includes
+#include "../Engine/CrossPlatform.h"
 
 namespace Falltergeist
 {

@@ -17,6 +17,10 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// C++ standard includes
+#include <sstream>
+
+// Falltergeist includes
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Event.h"
 #include "../Engine/Exception.h"
@@ -29,7 +33,8 @@
 #include "../UI/FpsCounter.h"
 #include "../UI/TextArea.h"
 #include "../Engine/AnimatedPalette.h"
-#include <sstream>
+
+// Third patry includes
 
 using namespace Falltergeist::CrossPlatform;
 
@@ -53,6 +58,7 @@ Game::Game(int width, int height, int bpp) : _states()
     std::string caption = "Falltergeist ";
     caption.append(VERSION);
     SDL_WM_SetCaption(caption.c_str(), 0);
+    putenv(strdup("SDL_VIDEO_CENTERED=1"));
 
     std::cout << "Loading resource manager..." << std::endl;
     _resourceManager = new ResourceManager();

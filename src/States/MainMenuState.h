@@ -20,7 +20,12 @@
 #ifndef FALLTERGEIST_MAINMENUSTATE_H
 #define FALLTERGEIST_MAINMENUSTATE_H
 
+// C++ standard includes
+
+// Falltergeist includes
 #include "../Engine/State.h"
+
+// Third party includes
 
 namespace Falltergeist
 {

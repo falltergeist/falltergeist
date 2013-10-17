@@ -20,7 +20,12 @@
 #ifndef FALLTERGEIST_STATE_H
 #define FALLTERGEIST_STATE_H
 
+// C++ standard includes
 #include <vector>
+
+// Falltergeist includes
+
+// Third party includes
 
 namespace Falltergeist
 {

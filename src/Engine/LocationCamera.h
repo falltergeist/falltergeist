@@ -17,41 +17,45 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_BIGCOUNTER_H
-#define FALLTERGEIST_BIGCOUNTER_H
+#ifndef FALLTERGEIST_LOCATIONCAMERA_H
+#define FALLTERGEIST_LOCATIONCAMERA_H
 
 // C++ standard includes
-#include <vector>
 
 // Falltergeist includes
-#include "../Engine/InteractiveSurface.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class BigCounter : public InteractiveSurface
+class LocationCamera
 {
 protected:
-    unsigned char _color;
-    unsigned int _number;
-    unsigned int _length;
-    std::vector<Surface *> * _numbersWhite;
-    std::vector<Surface *> * _numbersRed;
+    unsigned int _xPosition;
+    unsigned int _yPosition;
+    unsigned int _width;
+    unsigned int _height;
+
 public:
-    enum {COLOR_WHITE = 1, COLOR_RED};
-    BigCounter(int x = 0, int y = 0);
-    ~BigCounter();
+    LocationCamera(unsigned int width, unsigned int height, unsigned int xPosition, unsigned int yPosition);
+    ~LocationCamera();
 
-    virtual void draw();
+    unsigned int x();
+    unsigned int y();
 
-    void setColor(unsigned char color);
-    unsigned char color();
+    unsigned int xPosition();
+    void setXPosition(unsigned int value);
 
-    void setNumber(unsigned int number);
-    unsigned int number();
+    unsigned int yPosition();
+    void setYPosition(unsigned int value);
+
+    unsigned int height();
+    void setHeight(unsigned int value);
+
+    unsigned int width();
+    void setWidth(unsigned int value);
 };
 
 }
-#endif // FALLTERGEIST_BIGCOUNTER_H
+#endif // FALLTERGEIST_LOCATIONCAMERA_H

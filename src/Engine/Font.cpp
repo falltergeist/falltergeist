@@ -17,10 +17,15 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// C++ standard includes
+#include <iostream>
+
+// Falltergeist includes
 #include "../Engine/Font.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
-#include <iostream>
+
+// Third party includes
 
 namespace Falltergeist
 {

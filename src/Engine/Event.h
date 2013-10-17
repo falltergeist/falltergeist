@@ -20,6 +20,11 @@
 #ifndef FALLTERGEIST_EVENT_H
 #define FALLTERGEIST_EVENT_H
 
+// C++ standard includes
+
+// Falltergeist includes
+
+// Third party includes
 #include <SDL/SDL.h>
 
 namespace Falltergeist

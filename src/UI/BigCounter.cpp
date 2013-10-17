@@ -17,10 +17,15 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../UI/BigCounter.h"
-#include "../Engine/ResourceManager.h"
+// C++ standard includes
 #include <sstream>
 #include <iostream>
+
+// Falltergeist includes
+#include "../UI/BigCounter.h"
+#include "../Engine/ResourceManager.h"
+
+// Third party includes
 
 namespace Falltergeist
 {

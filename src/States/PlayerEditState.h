@@ -20,13 +20,18 @@
 #ifndef FALLTERGEIST_PLAYEREDITSTATE_H
 #define	FALLTERGEIST_PLAYEREDITSTATE_H
 
+// C++ standard includes
+#include <map>
+#include <vector>
+
+// Falltergeist includes
 #include "../Engine/State.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
 #include "../UI/BigCounter.h"
 #include "../UI/HiddenMask.h"
-#include <map>
-#include <vector>
+
+// Third party includes
 
 namespace Falltergeist
 {

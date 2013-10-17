@@ -20,8 +20,13 @@
 #ifndef FALLTERGEIST_ANIMATION_H
 #define FALLTERGEIST_ANIMATION_H
 
-#include "../Engine/InteractiveSurface.h"
+// C++ standard includes
 #include <vector>
+
+// Falltergeist includes
+#include "../Engine/InteractiveSurface.h"
+
+// Third party includes
 
 namespace Falltergeist
 {
@@ -43,11 +48,13 @@ public:
     std::vector<Surface *> * surfaces();
     void loadFromFrmFile(const char * filename);
     void loadFromFrmFile(libfalltergeist::FrmFileType * frm);
-    void think();
-    //virtual unsigned int width();
-    //virtual unsigned int height();
+    virtual void think();
+
     virtual int xOffset();
     virtual int yOffset();
+
+    int xOffsetMin();
+
     int frameXPosition(unsigned int frame);
     int frameYPosition(unsigned int frame);
 

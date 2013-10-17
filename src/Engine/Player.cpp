@@ -17,11 +17,15 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// C++ standard includes
 #include <string.h>
-
-#include "../Engine/Player.h"
 #include <iostream>
 #include <cmath>
+
+// Falltergeist includes
+#include "../Engine/Player.h"
+
+// Third party includes
 
 namespace Falltergeist
 {

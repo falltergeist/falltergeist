@@ -20,9 +20,14 @@
 #ifndef FALLTERGEIST_INTERACTIVESURFACE_H
 #define FALLTERGEIST_INTERACTIVESURFACE_H
 
+// C++ standard includes
+
+// Falltergeist includes
 #include "../Engine/State.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Event.h"
+
+// Third party includes
 
 namespace Falltergeist
 {

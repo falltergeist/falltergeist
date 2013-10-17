@@ -20,30 +20,17 @@
 #ifndef FALLTERGEIST_TEXTAREA_H
 #define FALLTERGEIST_TEXTAREA_H
 
+// C++ standard includes
+
+// Falltergeist includes
 #include "../Engine/InteractiveSurface.h"
+
+// Third party includes
 #include "../../lib/libfalltergeist/libfalltergeist.h"
 
 namespace Falltergeist
 {
 class Font;
-
-/**
- * if (!_width && !_height)
- * {
- *     calculate width and height from the text
- * }
- * else
- * {
- *     (if _wordwrap)
- *     {
- *         wrap the whole word
- *     }
- *     else
- *     {
- *         wrap symbols
- *     }
- * }
- */
 
 class TextArea : public InteractiveSurface
 {
