@@ -53,7 +53,7 @@ Surface::Surface(libfalltergeist::FrmFileType * frm, unsigned int direction, uns
     _needRedraw = false;
     _visible = true;
     _borderColor = 0;
-    _backgroundColor = 0;
+    setBackgroundColor(0);
 
     libfalltergeist::PalFileType * pal = ResourceManager::palFileType("color.pal");
 
