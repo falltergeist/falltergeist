@@ -33,8 +33,8 @@ AnimatedPalette * Surface::animatedPalette = new AnimatedPalette();
 Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _needRedraw(false), _visible(true)
 {
     _animatedPixels = 0;
-    _borderColor = 0;
-    _backgroundColor = 0;
+    setBorderColor(0);
+    setBackgroundColor(0);
     setXOffset(0);
     setYOffset(0);
     //                                                                               red         green       blue        alpha
