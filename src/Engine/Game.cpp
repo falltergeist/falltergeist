@@ -171,13 +171,13 @@ void Game::run()
 
 
         // Rendering
-        _screen->clear();
         _states->back()->think();
         _fpsCounter->think();
         _mouse->think();
         Surface::animatedPalette->think();
 
         // render all states that is over the last fullscreen state
+        _screen->clear();
         std::vector<State*>::iterator i = _states->end();
         do { --i; }
         while(i != _states->begin() && !(*i)->isFullscreen());

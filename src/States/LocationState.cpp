@@ -70,13 +70,8 @@ void LocationState::init()
 
 
 
-<<<<<<< HEAD
-    _location = new Location(_game->resourceManager()->mapFileType("maps/klagraz.map"));
-    _background = new Surface(_location->tilesBackground());
-=======
     _location = new Location(_game->resourceManager()->mapFileType("maps/broken1.map"));
     _background = new InteractiveSurface(_location->tilesBackground());
->>>>>>> dd261c0efe3c174b560e82322b107b3e802bcd6f
     add(_background);
 
     _background->onLeftButtonClick((EventHandler) &LocationState::onBackgroundClick);

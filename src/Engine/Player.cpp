@@ -34,8 +34,6 @@ Player::Player()
 {
     _characterPoints = 0;
     _skillPoints = 0;
-    _bio = 0;    
-    _name = 0;
     _hitPoints = 0;
     _gender = 0;
     _age = 0;
@@ -51,8 +49,6 @@ Player::Player(libfalltergeist::GcdFileType * gcd)
 {
     _characterPoints = 0;
     _skillPoints = 3;
-    _bio = 0;
-    _name = 0;
     _hitPoints = 0;
     _gender = 0;
     _level = 1;
@@ -120,35 +116,29 @@ Player::Player(libfalltergeist::GcdFileType * gcd)
 
 Player::~Player()
 {
-    delete [] _bio;
-    delete [] _name;
     delete [] _stats;
     delete [] _traits;
     delete [] _skills;
 }
 
-const char * Player::bio()
+std::string Player::bio()
 {
     return _bio;
 }
 
-void Player::setBio(const char * text)
+void Player::setBio(std::string text)
 {
-    delete _bio;
-    _bio = new char[strlen(text)+1]();
-    strcpy(_bio,text);
+    _bio = text;
 }
 
-const char * Player::name()
+std::string Player::name()
 {
     return _name;
 }
 
-void Player::setName(const char * name)
+void Player::setName(std::string name)
 {
-    delete _name;
-    _name = new char[strlen(name)+1]();
-    strcpy(_name,name);    
+    _name = name;
 }
 
 bool Player::statsIncrease(unsigned char stat)

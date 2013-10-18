@@ -21,6 +21,7 @@
 #define	FALLTERGEIST_PLAYER_H
 
 // C++ standard includes
+#include <string>
 
 // Falltergeist includes
 
@@ -34,8 +35,8 @@ class Player
 {
 protected:
     // text from .bio file
-    char * _bio;
-    char * _name;
+    std::string _bio;
+    std::string _name;
     unsigned char _age;
     int _hitPoints;
     unsigned int _level;
@@ -171,14 +172,14 @@ public:
     Player(libfalltergeist::GcdFileType * gcd);
     virtual ~Player();
 
-    void setName(const char * name);    
-    const char * bio();
+    void setName(std::string name);
+    std::string bio();
 
     void setAge(unsigned char age);
     unsigned char age();
 
-    void setBio(const char * text);
-    const char * name();
+    void setBio(std::string text);
+    std::string name();
 
     bool statsIncrease(unsigned char stat);
     bool statsDecrease(unsigned char stat);
