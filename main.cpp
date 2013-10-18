@@ -38,10 +38,16 @@ int main(int argc, char *argv[])
         game->run();
         return 0;
     }
+    catch(libfalltergeist::Exception &e)
+    {
+        std::cout << e.message() << std::endl;
+        return 1;
+    }
     catch(Exception &e)
     {
         std::cout << e.message() << std::endl;
         return 1;
     }
+
 }
 
