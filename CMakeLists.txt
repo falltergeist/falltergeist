@@ -32,7 +32,7 @@ find_package(SDL REQUIRED)
 if(NOT SDL_FOUND)
 	  message(FATAL_ERROR "SDL library not found")
 endif(NOT SDL_FOUND)
-include_directories(SDL_INCLUDE_DIR)
+include_directories(${SDL_INCLUDE_DIR})
 
 set(SOURCES main.cpp
             src/Engine/AnimatedPalette.cpp
