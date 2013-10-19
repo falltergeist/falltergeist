@@ -114,7 +114,8 @@ Surface * Font::glyph(unsigned char chr)
     {
         for (int x = 0; x != charWidth; ++x)
         {
-            unsigned char ch = _aafFileType->glyphs()->at(chr)->data()->at(i);
+            std::string tmpStr(_aafFileType->glyphs()->at(chr)->data());
+            unsigned char ch = tmpStr.at(i);
             if (ch != 0)
             {
                 float lightness;
