@@ -28,7 +28,7 @@
 // Falltergeist includes
 
 // Third party includes
-#include <SDL/SDL.h>
+#include "SDL.h"
 
 #define VERSION "0.0.7"
 
