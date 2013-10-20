@@ -270,12 +270,14 @@ void Location::init()
 
     LocationObject * player = new LocationObject();
 
-    Animation * animation = new Animation(ResourceManager::frmFileType("art/critters/hanpwrga.frm"));
+    //Animation * animation = new Animation(ResourceManager::frmFileType("art/critters/hanpwrga.frm"));
 
-    player->setAnimation(animation);
-
+    //player->setAnimation(animation);
+    player->loadFromSurface(ResourceManager::surface("art/intrface/msef000.frm"));
     player->setX(hexagonToX(_mapFile->defaultPosition()));
     player->setY(hexagonToY(_mapFile->defaultPosition()));
+    player->setXOffset(0);
+    player->setYOffset(player->height()/2);
     //add(animation);
     _objects->push_back(player);
 
@@ -349,6 +351,16 @@ void Location::_generateBackground()
         tile->setY(tileY - camera()->y());
         tile->blit(_tilesBackground);
     }
+
+    /*
+    int x1 = hexagonToX(_mapFile->defaultPosition()) - camera()->x();
+    int y1 = hexagonToY(_mapFile->defaultPosition()) - camera()->y();
+    int x2 = hexagonToX(_mapFile->defaultPosition() + 2) - camera()->x();
+    int y2 = hexagonToY(_mapFile->defaultPosition() + 2) - camera()->y();
+    _tilesBackground->drawLine(x1, y1, x2, y2, 0xFFFF0000);
+    _tilesBackground->drawLine(319, 0, 319, 479, 0xFF00FF00);
+    _tilesBackground->drawLine(0, 239, 639, 239, 0xFF00FF00);
+    */
 }
 
 int Location::hexagonToX(unsigned int hexagon)
@@ -360,7 +372,7 @@ int Location::hexagonToX(unsigned int hexagon)
     unsigned int y = ceil(hexagon/200);
     int centerX = 48*(_cols-1) + 48 + 16*(hexagon%200) - 24*y;
 
-        if (((unsigned int)ceil(hexagon/200))%2 == 1)
+        if ((hexagon/200)%2 == 1)
         {
             centerX -= 8;
         }
@@ -376,7 +388,7 @@ int Location::hexagonToY(unsigned int hexagon)
     unsigned int y = ceil(hexagon/200);
     int centerY = (hexagon%200)*12 + 6*y ;
 
-        if (((unsigned int)ceil(hexagon/200))%2 == 1)
+        if ((hexagon/200)%2 == 1)
         {
             centerY -= 6;
         }

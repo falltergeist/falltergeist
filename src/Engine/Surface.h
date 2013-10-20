@@ -85,6 +85,7 @@ public:
 
     virtual void setPixel(int x, int y, unsigned int color);
     virtual unsigned int pixel(int x, int y);
+    virtual void drawLine(int x1, int y1, int x2, int y2, unsigned int color);
 
     virtual SDL_Surface * sdl_surface();
 

@@ -34,7 +34,7 @@ namespace Falltergeist
 namespace CrossPlatform
 {
 
-void debug(const char * message, unsigned char level)
+void debug(std::string message, unsigned char level)
 {
     std::cout << message;
 }

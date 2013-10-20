@@ -30,8 +30,6 @@
 // Third party includes
 #include "SDL.h"
 
-#define VERSION "0.0.7"
-
 namespace Falltergeist
 {
 class State;
@@ -45,6 +43,7 @@ class Mouse;
 class Game
 {
 protected:
+    std::string _version;
     ResourceManager * _resourceManager;
     std::vector<State *> * _states;
     std::vector<State *> * _deletedStates;

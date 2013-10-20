@@ -18,7 +18,6 @@
  */
 
 // C++ standard includes
-#include <iostream>
 
 // Falltergeist includes
 #include "../Engine/Surface.h"
@@ -412,6 +411,29 @@ void Surface::loadFromSurface(Surface * surface)
     setY(surface->y());
     setXOffset(surface->xOffset());
     setYOffset(surface->yOffset());
+}
+
+void Surface::drawLine(int x1, int y1, int x2, int y2, unsigned int color)
+{
+    double dy = y2 - y1;
+    double dx = x2 - x1;
+
+    if (dy == 0)
+    {
+        for (unsigned int x = x1; x != x2; x1 > x2 ? x-- : x++) setPixel(x, y1, color);
+    }
+    else if (dx == 0)
+    {
+        for (unsigned int y = y1; y != y2; y1 > y2 ? y-- : y++) setPixel(x1, y, color);
+    }
+    else
+    {
+        for (unsigned int x = x1; x != x2; x1 > x2 ? x-- : x++)
+        {
+            int y = y1 + (dy/dx) * x;
+            setPixel(x, y, color);
+        }
+    }
 }
 
 }

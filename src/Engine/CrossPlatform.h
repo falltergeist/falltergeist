@@ -33,10 +33,11 @@ namespace Falltergeist
 {
 namespace CrossPlatform
 {
+    enum DebugLevel { DEBUG_INFO = 0, DEBUG_ERROR, DEBUG_CRITICAL };
     std::string findFileAlias(std::string path, std::string filename);
     std::string findDataPath();
     std::vector<std::string> * findDataFiles();
-    void debug(const char * message, unsigned char level = 1);
+    void debug(std::string message, unsigned char level = 0);
 }
 }
 

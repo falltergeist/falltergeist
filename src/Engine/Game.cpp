@@ -43,26 +43,22 @@ namespace Falltergeist
 
 Game::Game(int width, int height, int bpp) : _states()
 {
-    debug("Falltergeist - version "); debug(VERSION); debug("\n");
-    debug("Opensource Fallout 2 game engine\n");
-    debug("Initializing video");
+    _version = "0.0.7";
+    debug("Falltergeist - version " + _version + "\n", DEBUG_INFO);
+    debug("Opensource Fallout 2 game engine\n", DEBUG_INFO);
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
-        debug(" - [FAIL]\n");
+        debug("Initializing video - [FAIL]\n", DEBUG_CRITICAL);
         throw Exception(SDL_GetError());
     }
-    debug(" - [OK]\n");
+    debug("Initializing video - [OK]\n", DEBUG_INFO);
 
-    // Window caption
-    std::string caption = "Falltergeist ";
-    caption.append(VERSION);
+    std::string caption = "Falltergeist " + _version;
     SDL_WM_SetCaption(caption.c_str(), 0);
     putenv(strdup("SDL_VIDEO_CENTERED=1"));
 
-    std::cout << "Loading resource manager..." << std::endl;
     _resourceManager = new ResourceManager();
-
     _screen = new Screen(width, height,bpp);
     _mouse = new Mouse();
     _fpsCounter = new FpsCounter();
@@ -127,8 +123,8 @@ void Game::setState(State * state)
 void Game::run()
 {
 
-    std::cout << "Starting main loop..." << std::endl;
-    TextArea * falltergeistVersion = new TextArea((char*)"Falltergeist "VERSION, 3, 470);
+    debug("Starting main loop...\n", DEBUG_INFO);
+    TextArea * falltergeistVersion = new TextArea("Falltergeist " + _version, 3, 470);
 
     while (!_quit)
     {
@@ -161,7 +157,7 @@ void Game::run()
                     std::stringstream ss;
                     ss << SDL_GetTicks() << ".bmp";
                     SDL_SaveBMP(_screen->surface()->sdl_surface(), ss.str().c_str());
-                    std::cout << "Screenshot saved to " << ss.str() << std::endl;
+                    debug("Screenshot saved to " + ss.str() + "\n", DEBUG_INFO);
                 }
 
                 _states->back()->handle(&event);
@@ -189,7 +185,7 @@ void Game::run()
         SDL_Delay(1);
     }
 
-    std::cout << "Stopping main loop...[OK]" << std::endl;
+    debug("Stopping main loop...[OK]\n", DEBUG_INFO);
 }
 
 Screen * Game::screen()
