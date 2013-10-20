@@ -114,12 +114,11 @@ Surface * Font::glyph(unsigned char chr)
     {
         for (int x = 0; x != charWidth; ++x)
         {
-            std::string tmpStr(_aafFileType->glyphs()->at(chr)->data());
-            unsigned char ch = tmpStr.at(i);
-            if (ch != 0)
+            unsigned char alpha = _aafFileType->glyphs()->at(chr)->data()[i]; // binary data
+            if (alpha != 0)
             {
                 float lightness;
-                switch (ch)
+                switch (alpha)
                 {
                     case 9:
                         lightness = 1.2;
@@ -151,13 +150,7 @@ Surface * Font::glyph(unsigned char chr)
                 }
 
                 unsigned int color = this->color();
-
-                //unsigned char red =   ((color & 0x00FF0000) >> 16) * lightness;
-                //unsigned char green = ((color & 0x0000FF00) >> 8) * lightness;
-                //unsigned char blue =  (color & 0x000000FF) * lightness;
-                //color = 0xFF000000 | red << 16 | green << 8 | blue;
                 color = ((unsigned char)( 0xFF * lightness) << 24) | (0x00FFFFFF & color);
-
                 surface->setPixel(x,delta + y,color);
             }
             i++;

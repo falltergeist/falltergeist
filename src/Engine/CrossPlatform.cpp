@@ -39,68 +39,62 @@ void debug(std::string message, unsigned char level)
     std::cout << message;
 }
 
+// This method is trying to find out where are the DAT files located
 std::string findDataPath()
 {
-    //debug("* Searching for Fallout data files\n");
+    if (dataPath.length() > 0) return dataPath;
+    debug("Looking for Fallout data files\n", DEBUG_INFO);
 
-    // Сначала ищем в текущей папке
-    {
-        //debug(" - Searching in current directory: ");
+    // First of all we are trying to look in the current folder (where the binary file located)
+    {       
         char buffer[512];
         char * cwd = getcwd(buffer, sizeof(buffer));
-        std::string path(cwd);
-        path.append("/master.dat");
-        std::cout << path << std::endl;
+        std::string path = cwd + std::string("/master.dat");
         std::ifstream stream(path.c_str());
-        //debug(cwd);
         if (stream)
         {
-            //debug(" - [OK]\n");
-            path.clear();
-            path.append(cwd);
-            return path;
+            debug("Searching in current directory: " + std::string(cwd) + " [FOUND]\n", DEBUG_INFO);
+            dataPath = cwd;
+            return cwd;
         }
         else
         {
-            //debug(" - [FAIL]\n");
-        }
-    }
-    // Потом ищем в домашней папке .falltergeist
-    {
-        //debug(" - Searching in home directory: ");
-        char * cwd = getenv("HOME");
-        std::string path(cwd);
-        path.append("/.falltergeist/master.dat");
-        std::ifstream stream(path.c_str());
-        //debug(cwd);
-        //debug("/.falltergeist");
-        if (stream)
-        {
-            path.clear();
-            path.append(cwd);
-            path.append("/.falltergeist");
-            //debug(" - [OK]\n");
-            return path;
-        }
-        else
-        {
-            //debug(" - [FAIL]\n");
+            debug("Searching in current directory: " + std::string(cwd) + " [NOT FOUND]\n", DEBUG_INFO);
         }
     }
 
-    // Потом ищем подключенные диски и файлы в их корне
-    // @TODO
-    debug("[CRITICAL] Fallout data files were not found\n", 0);
+    // Then trying to search in user home directory  ~/.falltergeist
+    {
+        char * cwd = getenv("HOME");
+        std::string path(std::string(cwd) + "/.falltergeist/master.dat");
+        std::ifstream stream(path.c_str());
+        if (stream)
+        {
+            path = std::string(cwd) + "/.falltergeist";
+            debug("Searching in home directory: " + path + " [FOUND]\n", DEBUG_INFO);
+            dataPath = path;
+            return path;
+        }
+        else
+        {
+            debug("Searching in home directory: " + std::string(cwd) + "/.falltergeist" + " [NOT FOUND]\n", DEBUG_INFO);
+        }
+    }
+
+    // @TODO search on external storages (flash drives, CD-ROMs... etc)...
+
+    debug("Fallout data files are not found\n", DEBUG_CRITICAL);
     return 0;
 }
 
+// this method looks for available dat files
 std::vector<std::string> * findDataFiles()
 {
-    //debug("* Getting list of data files\n");
     std::vector<std::string> * files = new std::vector<std::string>;
-    files->push_back(""); // for master.dat
-    files->push_back(""); // for critter.dat
+    files->push_back(""); // reserverd for master.dat
+    files->push_back(""); // reserverd for critter.dat
 
+    // looking for all available dat files in directory
     DIR * pxDir = opendir(findDataPath().c_str());
     struct dirent * pxItem = NULL;
     if(pxDir != NULL)
@@ -124,23 +118,27 @@ std::vector<std::string> * findDataFiles()
     }
     else
     {
-        std::cout << "Unable to open specified directory." << std::endl;
+        debug("Unable to read data files directory\n", DEBUG_CRITICAL);
     }
 
     if (files->at(0).compare("master.dat") != 0)
     {
-        debug("[CRITICAL] master.dat not found!\n");
+        debug("master.dat not found!\n", DEBUG_CRITICAL);
         return 0;
     }
     if (files->at(1).compare("critter.dat") != 0)
     {
-        debug("[CRITICAL] critter.dat not found!\n");
+        debug("critter.dat not found!\n", DEBUG_CRITICAL);
         return 0;
     }
-    //std::cout << "Found: " << files->size() << std::endl;
     return files;
 }
 
+// Fallout data files names can be in upper,lower or even mixed case.
+// In falltergeist all filenames are in lower case
+// This method looks for file aliases
+// Example: "maps/ARDEAD.map" is alias of "maps/ardead.map"
+// It needed when we are reading unpacked files from data directory
 std::string findFileAlias(std::string path, std::string filename)
 {
     DIR * dir = opendir(path.c_str());
@@ -152,7 +150,7 @@ std::string findFileAlias(std::string path, std::string filename)
     if (pos > 0)
     {
         std::string folder(filename.substr(0, pos));
-        // check whether there is a folder
+        // check if there is a folder
         while ((entry = readdir(dir)))
         {
             std::string dirname(entry->d_name);
@@ -163,9 +161,7 @@ std::string findFileAlias(std::string path, std::string filename)
                 std::string alias = findFileAlias(path, filename.substr(pos+1, filename.length()));
                 if (alias.length())
                 {
-                    std::string newname(entry->d_name);
-                    newname.append("/");
-                    newname.append(alias);
+                    std::string newname = std::string(entry->d_name) + "/" + alias;
                     closedir(dir);
                     return newname;
                 }
@@ -176,20 +172,18 @@ std::string findFileAlias(std::string path, std::string filename)
     {
         while ((entry = readdir(dir)))
         {
-            std::string fname(entry->d_name);
+            std::string fname = entry->d_name;
             std::transform(fname.begin(),fname.end(),fname.begin(), ::tolower);
             if (fname.compare(filename) == 0 && entry->d_type != DT_DIR)
             {
-                fname.clear();
-                fname.append(entry->d_name);
+                fname = entry->d_name;
                 return fname;
             }
         }
     }
     closedir(dir);
-    return "";
+    return ""; // empty string if nothing found
 }
-
 
 }
 }

@@ -270,14 +270,14 @@ void Location::init()
 
     LocationObject * player = new LocationObject();
 
-    //Animation * animation = new Animation(ResourceManager::frmFileType("art/critters/hanpwrga.frm"));
+    Animation * animation = new Animation(ResourceManager::frmFileType("art/critters/hanpwrga.frm"));
 
-    //player->setAnimation(animation);
+    player->setAnimation(animation);
     player->loadFromSurface(ResourceManager::surface("art/intrface/msef000.frm"));
     player->setX(hexagonToX(_mapFile->defaultPosition()));
     player->setY(hexagonToY(_mapFile->defaultPosition()));
-    player->setXOffset(0);
-    player->setYOffset(player->height()/2);
+    //player->setXOffset(0);
+    //player->setYOffset(player->height()/2);
     //add(animation);
     _objects->push_back(player);
 
