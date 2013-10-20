@@ -18,7 +18,6 @@
  */
 
 // C++ standard includes
-#include <iostream>
 
 // Falltergeist includes
 #include "../Engine/Font.h"
@@ -30,7 +29,7 @@
 namespace Falltergeist
 {
 
-Font::Font(const char * filename, unsigned int color)
+Font::Font(std::string filename, unsigned int color)
 {
     _color = 0;
     _glyphs = new std::vector<Surface *>;
@@ -49,13 +48,13 @@ Font::~Font()
     delete _glyphs;
 }
 
-void Font::setFilename(const char * filename)
+void Font::setFilename(std::string filename)
 {
     _filename = filename;
-    _aafFileType = ResourceManager::aafFileType(_filename);
+    _aafFileType = ResourceManager::aafFileType(filename);
 }
 
-const char * Font::filename()
+std::string Font::filename()
 {
     return _filename;
 }
@@ -114,7 +113,7 @@ Surface * Font::glyph(unsigned char chr)
     {
         for (int x = 0; x != charWidth; ++x)
         {
-            unsigned char alpha = _aafFileType->glyphs()->at(chr)->data()[i]; // binary data
+            unsigned char alpha = _aafFileType->glyphs()->at(chr)->data()->at(i); // binary data
             if (alpha != 0)
             {
                 float lightness;

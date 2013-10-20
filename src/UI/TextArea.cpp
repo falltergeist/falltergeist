@@ -18,9 +18,6 @@
  */
 
 // C++ standard includes
-#include <vector>
-#include <string>
-#include <iostream>
 #include <sstream>
 
 // Falltergeist includes
@@ -42,12 +39,6 @@ TextArea::TextArea(libfalltergeist::MsgMessage * message, int x, int y) : Intera
     setText(message->text());
 }
 
-TextArea::TextArea(const char * text, int x, int y) : InteractiveSurface(0, 0, x, y)
-{
-    init();
-    setText(text);
-}
-
 TextArea::TextArea(int x, int y) : InteractiveSurface(0, 0, x, y)
 {
     init();
@@ -61,7 +52,6 @@ TextArea::TextArea(std::string text, int x, int y) : InteractiveSurface(0, 0, x,
 
 void TextArea::init()
 {
-    _text = 0;
     _textLines = 0;
     _textSurfaces = 0;
     _horizontalAlign = HORIZONTAL_ALIGN_LEFT;
@@ -78,7 +68,6 @@ void TextArea::init()
 
 TextArea::~TextArea()
 {
-    delete [] _text;
     delete _textLines;
 
     if (_textSurfaces != 0)
@@ -104,9 +93,9 @@ std::vector<std::string> * TextArea::textLines()
     std::string word = "";
     _textLines->push_back("");
 
-    for (unsigned int i = 0; i != strlen(_text); ++i)
+    for (unsigned int i = 0; i != _text.length(); ++i)
     {
-        unsigned char chr = _text[i];
+        unsigned char chr = this->text().at(i);
         if (chr == '\n')
         {
             _textLines->back() += word; // add current word to the last line
@@ -184,7 +173,7 @@ std::vector<Surface *> * TextArea::textSurfaces()
 
 void TextArea::_calculateSize()
 {
-    if (_text == 0 || strlen(_text) == 0 || _font == 0) return;
+    if (_text.length() == 0 || _font == 0) return;
 
     _calculatedWidth = 0;
     _calculatedHeight = 0;
@@ -198,12 +187,10 @@ void TextArea::_calculateSize()
     _calculatedHeight = textLines()->size() * _font->height() + (textLines()->size() - 1) * _font->verticalGap();
 }
 
-TextArea * TextArea::appendText(const char * text)
+TextArea * TextArea::appendText(std::string text)
 {
-    std::string str;
-    str += this->text();
-    str += text;
-    return setText(str);
+    _text += text;
+    return this;
 }
 
 
@@ -211,7 +198,7 @@ TextArea * TextArea::appendText(int number)
 {
     std::stringstream ss;
     ss << number;
-    return appendText(ss.str().c_str());
+    return appendText(ss.str());
 }
 
 void TextArea::draw()
@@ -222,7 +209,7 @@ void TextArea::draw()
     if (!_font) throw Exception("TextArea::draw() - font is not setted");
 
     // if text is empty
-    if (_text == 0 || strlen(_text) == 0)
+    if (_text.length() == 0)
     {
         loadFromSurface(new Surface(0, 0, this->x(), this->y()));
         return;
@@ -374,7 +361,7 @@ TextArea * TextArea::setVerticalAlign(unsigned char align)
     return this;
 }
 
-char * TextArea::text()
+std::string TextArea::text()
 {
     return _text;
 }
@@ -391,20 +378,9 @@ TextArea * TextArea::setText(int number)
     return setText(ss.str());
 }
 
-TextArea * TextArea::setText(const char * text)
-{
-    std::string txt(text);
-    return setText(txt);
-}
-
 TextArea * TextArea::setText(std::string text)
 {
-    if (_text != 0) // if text not empty
-    {
-        std::string oldText(_text);
-        std::string newText(text);
-        if (oldText.compare(newText) == 0) return this; // if text not changed
-    }
+    if (_text.compare(text) == 0) return this; // if text not changed
 
     _calculatedWidth = 0;
     _calculatedHeight = 0;
@@ -418,15 +394,12 @@ TextArea * TextArea::setText(std::string text)
         }
         delete _textSurfaces; _textSurfaces = 0;
     }
-    delete [] _text;
-    _text = new char[text.length()+1]();
-    strcpy(_text, text.c_str());
+    _text = text;
     setNeedRedraw(true);
     return this;
-
 }
 
-TextArea * TextArea::setFont(const char * filename)
+TextArea * TextArea::setFont(std::string filename)
 {
     delete _font;
     _font = new Font(filename, _color);

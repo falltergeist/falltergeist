@@ -21,6 +21,7 @@
 #define FALLTERGEIST_IMAGEBUTTON_H
 
 // C++ standard includes
+#include <string>
 
 // Falltergeist includes
 #include "../Engine/InteractiveSurface.h"
@@ -33,13 +34,13 @@ namespace Falltergeist
 class ImageButton : public InteractiveSurface
 {
 protected:
-    char * _releasedImage;
-    char * _pressedImage;
+    std::string _releasedImage;
+    std::string _pressedImage;
 public:
-    ImageButton(const char * releasedImage = 0, const char * pressedImage = 0, int x = 0, int y = 0);
+    ImageButton(std::string releasedImage = 0, std::string pressedImage = 0, int x = 0, int y = 0);
     virtual void draw();
-    void setReleasedImage(const char * releasedImage);
-    void setPressedImage(const char * pressedImage);
+    void setReleasedImage(std::string releasedImage);
+    void setPressedImage(std::string pressedImage);
     void mouseInHandler(Event * event);
     void mouseOutHandler(Event * event);
     void mouseDownHandler(Event * event);

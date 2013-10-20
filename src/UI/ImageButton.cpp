@@ -28,10 +28,10 @@
 namespace Falltergeist
 {
 
-ImageButton::ImageButton(const char * releasedImage, const char * pressedImage, int x, int y) : InteractiveSurface(0, 0, x, y)
+ImageButton::ImageButton(std::string releasedImage, std::string pressedImage, int x, int y) : InteractiveSurface(0, 0, x, y)
 {
-    _releasedImage = (char*)releasedImage;
-    _pressedImage = (char*)pressedImage;
+    _releasedImage = releasedImage;
+    _pressedImage = pressedImage;
     setNeedRedraw(true);
     onMouseIn((EventHandler) &ImageButton::mouseInHandler);
     onMouseOut((EventHandler) &ImageButton::mouseOutHandler);
@@ -94,14 +94,14 @@ void ImageButton::mouseDownHandler(Event * event)
     }
 }
 
-void ImageButton::setPressedImage(const char * pressedImage)
+void ImageButton::setPressedImage(std::string pressedImage)
 {
-    _pressedImage = (char*)pressedImage;
+    _pressedImage = pressedImage;
 }
 
-void ImageButton::setReleasedImage(const char * releasedImage)
+void ImageButton::setReleasedImage(std::string releasedImage)
 {
-    _releasedImage = (char*)releasedImage;
+    _releasedImage = releasedImage;
 }
 
 }

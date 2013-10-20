@@ -21,6 +21,8 @@
 #define FALLTERGEIST_TEXTAREA_H
 
 // C++ standard includes
+#include <string>
+#include <vector>
 
 // Falltergeist includes
 #include "../Engine/InteractiveSurface.h"
@@ -37,7 +39,7 @@ class TextArea : public InteractiveSurface
 protected:
     void _init();
     void _calculateSize();
-    char * _text;
+    std::string _text;
     std::vector<std::string> * _textLines;
     std::vector<Surface *> * _textSurfaces;
     unsigned char _horizontalAlign;
@@ -53,9 +55,8 @@ public:
     enum { HORIZONTAL_ALIGN_LEFT = 0, HORIZONTAL_ALIGN_CENTER, HORIZONTAL_ALIGN_RIGHT, HORIZONTAL_ALIGN_JUSTIFY };
     enum { VERTICAL_ALIGN_TOP = 0, VERTICAL_ALIGN_CENTER, VERTICAL_ALIGN_BOTTOM, VERTICAL_ALIGN_JUSTIFY };    
     TextArea(libfalltergeist::MsgMessage * message, int x = 0, int y = 0);
-    TextArea(const char * text, int x = 0, int y = 0);
-    TextArea(int x = 0, int y = 0);
     TextArea(std::string text, int x = 0, int y = 0);
+    TextArea(int x = 0, int y = 0);
     ~TextArea();
 
     void init();
@@ -63,12 +64,11 @@ public:
     virtual void draw();
 
     TextArea * setText(libfalltergeist::MsgMessage * message);
-    TextArea * setText(const char * text);
     TextArea * setText(int number);
-    TextArea * appendText(const char * text);
-    TextArea * appendText(int number);
     TextArea * setText(std::string text);
-    char * text();
+    TextArea * appendText(std::string text);
+    TextArea * appendText(int number);
+    std::string text();
 
     std::vector<std::string> * textLines();
     std::vector<Surface *> * textSurfaces();
@@ -92,7 +92,7 @@ public:
     TextArea * setWordWrap(bool wordWrap);
     bool wordWrap();
 
-    TextArea * setFont(const char * filename);
+    TextArea * setFont(std::string filename);
 };
 
 }

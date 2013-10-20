@@ -75,9 +75,9 @@ void Location::init()
 
     _elevation = _mapFile->defaultElevation();
 
-    std::list<libfalltergeist::MapObject *> * mapObjects = _mapFile->elevations()->at(_elevation)->objects();
+    std::vector<libfalltergeist::MapObject *> * mapObjects = _mapFile->elevations()->at(_elevation)->objects();
 
-    for (std::list<libfalltergeist::MapObject *>::iterator it = mapObjects->begin(); it != mapObjects->end(); ++it)
+    for (std::vector<libfalltergeist::MapObject *>::iterator it = mapObjects->begin(); it != mapObjects->end(); ++it)
     {
         libfalltergeist::MapObject * mapObject = *it;
 
@@ -343,7 +343,7 @@ void Location::_generateBackground()
         if (tileY + TILE_HEIGHT < camera()->y()) continue;
         if (tileY > camera()->y() + camera()->height()) continue;
 
-        std::string frmName = _tilesLst->strings()->at(_mapFile->elevations()->at(_elevation)->floorTiles[i]);
+        std::string frmName = _tilesLst->strings()->at(_mapFile->elevations()->at(_elevation)->floorTiles()->at(i));
         Surface * tile = ResourceManager::surface("art/tiles/" + frmName);
 
 

@@ -62,7 +62,7 @@ ResourceManager::ResourceManager()
     }
 }
 
-void ResourceManager::extract(const char * path)
+void ResourceManager::extract(std::string path)
 {
     std::vector<libfalltergeist::DatFile *>::iterator it;
     for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
@@ -70,20 +70,17 @@ void ResourceManager::extract(const char * path)
         std::vector<libfalltergeist::DatFileItem *>::iterator itt;
         for (itt = (*it)->items()->begin(); itt != (*it)->items()->end(); ++itt)
         {
-            std::string file(path);
-            file.append((*itt)->filename());
+            std::string file = path + (*itt)->filename();
             std::fstream stream;
             stream.open(file.c_str(), std::ios_base::out);
 
             if (stream.is_open())
             {
-                //std::cout << file.c_str() << " [OK]" << std::endl;
                 stream.write((*itt)->getData(), (*itt)->size());
                 stream.close();
             }
             else
             {
-                std::cout << file.c_str() << " [FAIL]" << std::endl;
             }
         }
     }
@@ -122,8 +119,7 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
         std::string alias = findFileAlias(_dataPath, filename);
         if (alias.length())
         {
-            std::string path(_dataPath);
-            path.append("/").append(alias);
+            std::string path = _dataPath + "/" + alias;
             std::ifstream stream(path.c_str());
             if (stream.is_open())
             {
@@ -131,7 +127,7 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
                 item->isOpened(true);
                 item->setFilename((char *) filename.c_str());
                 item->setCompressed(false);
-                stream.seekg(0,std::ios::end);
+                stream.seekg(0, std::ios::end);
                 item->setUnpackedSize(stream.tellg());
                 item->setPackedSize(stream.tellg());
                 stream.seekg(0, std::ios::beg);

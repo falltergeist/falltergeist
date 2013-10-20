@@ -72,7 +72,7 @@ public:
     static libfalltergeist::ProFileType * proFileType(unsigned int PID);
     static Surface * surface(std::string filename, int x = 0, int y = 0, unsigned int direction = 0, unsigned int frame = 0);
     static Surface * surface(unsigned int FID, unsigned int direction = 0, unsigned int frame = 0);
-    static void extract(const char * path);
+    static void extract(std::string path);
     static void unloadResources();
 };
 

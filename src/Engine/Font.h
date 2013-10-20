@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <vector>
+#include <string>
 
 // Falltergeist includes
 #include "../Engine/Surface.h"
@@ -36,15 +37,15 @@ class Font
 {
 protected:
     std::vector<Surface *> * _glyphs;
-    const char * _filename;
+    std::string _filename;
     unsigned int _color;
     libfalltergeist::AafFileType * _aafFileType;
 public:
-    Font(const char * filename, unsigned int color = 0xFF3FF800);
+    Font(std::string filename, unsigned int color = 0xFF3FF800);
     ~Font();
 
-    void setFilename(const char * filename);
-    const char * filename();
+    void setFilename(std::string filename);
+    std::string filename();
 
     void setColor(unsigned int color);
     unsigned int color();
