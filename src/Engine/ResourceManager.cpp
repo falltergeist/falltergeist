@@ -123,17 +123,23 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
             stream->open(path.c_str(), std::ios_base::binary);
             if (stream->is_open())
             {
-                libfalltergeist::DatFileItem * item = new libfalltergeist::DatFileItem(stream);
-                //item->isOpened(true);
+                std::string extension = filename.substr(filename.length() - 3, 3);
+
+                libfalltergeist::DatFileItem * item;
+                     if (extension == "aaf") item = new libfalltergeist::AafFileType(stream);
+                else if (extension == "bio") item = new libfalltergeist::BioFileType(stream);
+                else if (extension == "frm") item = new libfalltergeist::FrmFileType(stream);
+                else if (extension == "gcd") item = new libfalltergeist::GcdFileType(stream);
+                else if (extension == "lst") item = new libfalltergeist::LstFileType(stream);
+                else if (extension == "msg") item = new libfalltergeist::MsgFileType(stream);
+                else if (extension == "pal") item = new libfalltergeist::PalFileType(stream);
+                else if (extension == "pro") item = new libfalltergeist::ProFileType(stream);
+                else
+                {
+                    item = new libfalltergeist::DatFileItem(stream);
+                }
+
                 item->setFilename((char *) filename.c_str());
-                //item->setCompressed(false);
-                //stream.seekg(0, std::ios::end);
-                //item->setUnpackedSize(stream.tellg());
-                //item->setPackedSize(stream.tellg());
-                //stream.seekg(0, std::ios::beg);
-                //char * data = new char[item->unpackedSize()];
-                //stream.read(data, item->unpackedSize());
-                //item->setData(data);
                 _datFilesItems->insert(std::make_pair(filename, item));
                 std::cout << " [FROM DATA DIR]" << std::endl;
                 return item;
@@ -142,6 +148,7 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
         }
     }
 
+    // Search in DAT files
     std::vector<libfalltergeist::DatFile *>::iterator it;
     for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
     {
@@ -159,42 +166,22 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
 
 libfalltergeist::FrmFileType * ResourceManager::frmFileType(std::string filename)
 {
-    libfalltergeist::DatFileItem * item = datFileItem(filename);
-    if (item)
-    {
-        return item->asFrmFileType();
-    }
-    return 0;
+    return dynamic_cast<libfalltergeist::FrmFileType *>(datFileItem(filename));
 }
 
 libfalltergeist::PalFileType * ResourceManager::palFileType(std::string filename)
 {
-    libfalltergeist::DatFileItem * item = datFileItem(filename);
-    if (item)
-    {
-        return item->asPalFileType();
-    }
-    return 0;
+    return dynamic_cast<libfalltergeist::PalFileType *>(datFileItem(filename));
 }
 
 libfalltergeist::LstFileType * ResourceManager::lstFileType(std::string filename)
 {
-    libfalltergeist::DatFileItem * item = datFileItem(filename);
-    if (item)
-    {
-        return item->asLstFileType();
-    }
-    return 0;
+    return dynamic_cast<libfalltergeist::LstFileType *>(datFileItem(filename));
 }
 
 libfalltergeist::AafFileType * ResourceManager::aafFileType(std::string filename)
 {
-    libfalltergeist::DatFileItem * item = datFileItem(filename);
-    if (item)
-    {
-        return item->asAafFileType();
-    }
-    return 0;
+    return dynamic_cast<libfalltergeist::AafFileType *>(datFileItem(filename));
 }
 
 
@@ -210,32 +197,17 @@ libfalltergeist::FonFileType * ResourceManager::fonFileType(std::string filename
 
 libfalltergeist::GcdFileType * ResourceManager::gcdFileType(std::string filename)
 {
-    libfalltergeist::DatFileItem * item = datFileItem(filename);
-    if (item)
-    {
-        return item->asGcdFileType();
-    }
-    return 0;
+    return dynamic_cast<libfalltergeist::GcdFileType *>(datFileItem(filename));
 }
 
 libfalltergeist::MsgFileType * ResourceManager::msgFileType(std::string filename)
 {
-    libfalltergeist::DatFileItem * item = datFileItem(filename);
-    if (item)
-    {
-        return item->asMsgFileType();
-    }
-    return 0;
+    return dynamic_cast<libfalltergeist::MsgFileType *>(datFileItem(filename));
 }
 
 libfalltergeist::BioFileType * ResourceManager::bioFileType(std::string filename)
 {
-    libfalltergeist::DatFileItem * item = datFileItem(filename);
-    if (item)
-    {
-        return item->asBioFileType();
-    }
-    return 0;
+    return dynamic_cast<libfalltergeist::BioFileType *>(datFileItem(filename));
 }
 
 libfalltergeist::MapFileType * ResourceManager::mapFileType(std::string filename)
@@ -250,12 +222,7 @@ libfalltergeist::MapFileType * ResourceManager::mapFileType(std::string filename
 
 libfalltergeist::ProFileType * ResourceManager::proFileType(std::string filename)
 {
-    libfalltergeist::DatFileItem * item = datFileItem(filename);
-    if (item)
-    {
-        return item->asProFileType();
-    }
-    return 0;
+    return dynamic_cast<libfalltergeist::ProFileType *>(datFileItem(filename));
 }
 
 
