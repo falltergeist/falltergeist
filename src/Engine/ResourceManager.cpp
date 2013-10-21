@@ -76,7 +76,7 @@ void ResourceManager::extract(std::string path)
 
             if (stream.is_open())
             {
-                stream.write((*itt)->getData(), (*itt)->size());
+                //stream.write((*itt)->getData(), (*itt)->size());
                 stream.close();
             }
             else
@@ -105,14 +105,13 @@ ResourceManager::~ResourceManager()
 
 libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename)
 {
-    //std::cout << "[RESOURCE MANAGER] - Loading file: " << filename;
+    std::cout << "[RESOURCE MANAGER] - Loading file: " << filename;
     // Return item from cache
     if (_datFilesItems->find(filename) != _datFilesItems->end())
     {
-        //std::cout << " - [FROM CACHE]" << std::endl;
+        std::cout << " - [FROM CACHE]" << std::endl;
         return _datFilesItems->at(filename);
     }
-
 
     // Searching file in Data directory
     {
@@ -120,38 +119,41 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
         if (alias.length())
         {
             std::string path = _dataPath + "/" + alias;
-            std::ifstream stream(path.c_str());
-            if (stream.is_open())
+            std::ifstream * stream = new std::ifstream();
+            stream->open(path.c_str(), std::ios_base::binary);
+            if (stream->is_open())
             {
-                libfalltergeist::DatFileItem * item = new libfalltergeist::DatFileItem(0);
-                item->isOpened(true);
+                libfalltergeist::DatFileItem * item = new libfalltergeist::DatFileItem(stream);
+                //item->isOpened(true);
                 item->setFilename((char *) filename.c_str());
-                item->setCompressed(false);
-                stream.seekg(0, std::ios::end);
-                item->setUnpackedSize(stream.tellg());
-                item->setPackedSize(stream.tellg());
-                stream.seekg(0, std::ios::beg);
-                char * data = new char[item->unpackedSize()];
-                stream.read(data, item->unpackedSize());
-                item->setData(data);
+                //item->setCompressed(false);
+                //stream.seekg(0, std::ios::end);
+                //item->setUnpackedSize(stream.tellg());
+                //item->setPackedSize(stream.tellg());
+                //stream.seekg(0, std::ios::beg);
+                //char * data = new char[item->unpackedSize()];
+                //stream.read(data, item->unpackedSize());
+                //item->setData(data);
                 _datFilesItems->insert(std::make_pair(filename, item));
-                //std::cout << " - [FROM DATA DIR]" << std::endl;
+                std::cout << " [FROM DATA DIR]" << std::endl;
                 return item;
             }
+            delete stream;
         }
     }
 
-    std::vector<libfalltergeist::DatFile *>::reverse_iterator it;
-    for (it = _datFiles->rbegin(); it != _datFiles->rend(); ++it)
+    std::vector<libfalltergeist::DatFile *>::iterator it;
+    for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
     {
         libfalltergeist::DatFileItem * item = (*it)->item(filename.c_str());
         if (item)
         {
             _datFilesItems->insert(std::make_pair(filename, item));
-            //std::cout << " - [FROM DAT FILE " <<  (*it)->pathToFile() << "]" << std::endl;
+            std::cout << " [FROM DAT FILE]" << std::endl;
             return item;
         }
     }
+    std::cout << " [NOT FOUND]" << std::endl;
     return 0;
 }
 

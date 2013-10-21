@@ -33,10 +33,16 @@ int main(int argc, char *argv[])
 {
     try
     {
+        //Game * game = new Game(640,480,32);
+        //libfalltergeist::LstFileType * lst = ResourceManager::lstFileType("art/tiles/tiles.lst");
+        //std::cout << lst << std::endl;
+        //return 0;
+
         Game * game = new Game(640,480,32);
         game->setState(new StartState(game));
         game->run();
         return 0;
+
     }
     catch(libfalltergeist::Exception &e)
     {
