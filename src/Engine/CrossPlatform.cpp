@@ -19,12 +19,16 @@
 
 // C++ standard includes
 #include <unistd.h>
-#include <dirent.h>
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
 #include <algorithm>
 #include <string.h>
+
+// Platform specific includes
+#if defined(_WIN32)
+#include <shlobj.h>
+#endif
 
 // Falltergeist includes
 #include "../Engine/CrossPlatform.h"
@@ -65,7 +69,12 @@ std::string findDataPath()
 
     // Then trying to search in user home directory  ~/.falltergeist
     {
-        char * cwd = getenv("HOME");
+        char * cwd;
+#if defined(_WIN32)
+        SHGetSpecialFolderPath(0, cwd, CSIDL_PROFILE, FALSE);
+#else
+        cwd = getenv("HOME");
+#endif
         std::string path(std::string(cwd) + "/.falltergeist/master.dat");
         std::ifstream stream(path.c_str());
         if (stream)
@@ -91,46 +100,18 @@ std::string findDataPath()
 std::vector<std::string> * findDataFiles()
 {
     std::vector<std::string> * files = new std::vector<std::string>;
-    files->push_back(""); // reserverd for master.dat
-    files->push_back(""); // reserverd for critter.dat
+    files->push_back("master.dat"); // reserverd for master.dat
+    files->push_back("critter.dat"); // reserverd for critter.dat
 
-    // looking for all available dat files in directory
-    DIR * pxDir = opendir(findDataPath().c_str());
-    struct dirent * pxItem = NULL;
-    if(pxDir != NULL)
-    {
-        while((pxItem = readdir(pxDir)))
-        {
-            std::string filename(pxItem->d_name);
-            std::transform(filename.begin(),filename.end(),filename.begin(), ::tolower);
-            if (filename.length() > 4)
-            {
-                std::string ext = filename.substr(filename.size()-4,4);
-                if (ext.compare(".dat") == 0)
-                {
-                    if (filename.compare("master.dat") == 0) files->at(0).append("master.dat");
-                    if (filename.compare("critter.dat") == 0) files->at(1).append("critter.dat");
-                    if (filename.length() == 12 && filename.substr(0,5).compare("patch") == 0) files->push_back(filename);
-                }
-            }
+    for (int i = 0; i < files->size(); i++) {
+        std::string path = findDataPath() + "/" + files->at(i);
+        std::ifstream stream(path.c_str());
+        if (!stream) {
+            debug(files->at(i) + " not found!\n", DEBUG_CRITICAL);
+            return 0;
         }
-        closedir(pxDir);
-    }
-    else
-    {
-        debug("Unable to read data files directory\n", DEBUG_CRITICAL);
     }
 
-    if (files->at(0).compare("master.dat") != 0)
-    {
-        debug("master.dat not found!\n", DEBUG_CRITICAL);
-        return 0;
-    }
-    if (files->at(1).compare("critter.dat") != 0)
-    {
-        debug("critter.dat not found!\n", DEBUG_CRITICAL);
-        return 0;
-    }
     return files;
 }
 
@@ -141,48 +122,13 @@ std::vector<std::string> * findDataFiles()
 // It needed when we are reading unpacked files from data directory
 std::string findFileAlias(std::string path, std::string filename)
 {
-    DIR * dir = opendir(path.c_str());
-    if (!dir) return 0;
-    struct dirent * entry;
-
-    int pos = filename.find('/');
-    //complex filename
-    if (pos > 0)
-    {
-        std::string folder(filename.substr(0, pos));
-        // check if there is a folder
-        while ((entry = readdir(dir)))
-        {
-            std::string dirname(entry->d_name);
-            std::transform(dirname.begin(),dirname.end(),dirname.begin(), ::tolower);
-            if (dirname.compare(folder) == 0 && entry->d_type == DT_DIR)
-            {
-                path.append("/").append(entry->d_name);
-                std::string alias = findFileAlias(path, filename.substr(pos+1, filename.length()));
-                if (alias.length())
-                {
-                    std::string newname = std::string(entry->d_name) + "/" + alias;
-                    closedir(dir);
-                    return newname;
-                }
-            }
-        }
+    std::string full_path = path + "/" + filename;
+    std::ifstream stream(full_path.c_str());
+    if (!stream) {
+        debug(full_path + " not found!\n", DEBUG_CRITICAL);
+        return "";
     }
-    else
-    {
-        while ((entry = readdir(dir)))
-        {
-            std::string fname = entry->d_name;
-            std::transform(fname.begin(),fname.end(),fname.begin(), ::tolower);
-            if (fname.compare(filename) == 0 && entry->d_type != DT_DIR)
-            {
-                fname = entry->d_name;
-                return fname;
-            }
-        }
-    }
-    closedir(dir);
-    return ""; // empty string if nothing found
+    return full_path;
 }
 
 }
