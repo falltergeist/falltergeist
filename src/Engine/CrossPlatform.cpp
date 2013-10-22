@@ -43,10 +43,12 @@ void debug(std::string message, unsigned char level)
 std::string getVersion()
 {
     std::string version = "Falltergeist 0.0.7";
-#ifdef __WIN32__
+#if defined(_WIN32) || defined(WIN32)
     version += " (Windows)";
-#elif __unix__
+#elif defined(__unix__)
     version += " (Linux)";
+#elif defined(__MACH__)
+    version += " (Apple)";
 #endif
     return version;
 }
