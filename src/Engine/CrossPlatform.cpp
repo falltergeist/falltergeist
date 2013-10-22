@@ -29,6 +29,13 @@
 // Falltergeist includes
 #include "../Engine/CrossPlatform.h"
 
+// Third party includes
+
+// Platform dependent includes
+#if defined(_WIN32) || defined(WIN32)
+        #include <windows.h>
+#endif
+
 namespace Falltergeist
 {
 namespace CrossPlatform
@@ -95,8 +102,29 @@ std::string findDataPath()
         }
     }
 
-    // @TODO search on external storages (flash drives, CD-ROMs... etc)...
-
+ #if defined(_WIN32) || defined(WIN32)
+    char buf[26];
+    GetLogicalDriveStringsA(sizeof(buf),buf);
+    for(char * s = buf; *s; s += strlen(s)+1)
+    {
+        if (GetDriveTypeA(s) == DRIVE_CDROM)
+        {
+            std::string path = std::string(s) + "master.dat";
+            std::ifstream stream(path.c_str());
+            if (stream)
+            {
+                dataPath = s;
+                debug("Searching in CD-ROM drive " + dataPath + " [FOUND]\n", DEBUG_INFO);
+                return dataPath;
+            }
+            else
+            {
+                debug("Searching in CD-ROM drive " + std::string(s) + " [NOT FOUND]\n", DEBUG_INFO);
+            }            
+        }
+    }
+#endif
+    
     debug("Fallout data files are not found\n", DEBUG_CRITICAL);
     return 0;
 }
