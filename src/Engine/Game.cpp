@@ -43,8 +43,7 @@ namespace Falltergeist
 
 Game::Game(int width, int height, int bpp) : _states()
 {
-    _version = "0.0.7";
-    debug("Falltergeist - version " + _version + "\n", DEBUG_INFO);
+    debug("Falltergeist - " + CrossPlatform::getVersion() + "\n", DEBUG_INFO);
     debug("Opensource Fallout 2 game engine\n", DEBUG_INFO);
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -54,7 +53,8 @@ Game::Game(int width, int height, int bpp) : _states()
     }
     debug("Initializing video - [OK]\n", DEBUG_INFO);
 
-    std::string caption = "Falltergeist " + _version;
+    std::string caption = CrossPlatform::getVersion();
+
     SDL_WM_SetCaption(caption.c_str(), 0);
     putenv(strdup("SDL_VIDEO_CENTERED=1"));
 
@@ -124,8 +124,7 @@ void Game::run()
 {
 
     debug("Starting main loop...\n", DEBUG_INFO);
-    TextArea * falltergeistVersion = new TextArea("Falltergeist " + _version, 3, 470);
-
+    TextArea * falltergeistVersion = new TextArea(CrossPlatform::getVersion(), 3, 470);
     while (!_quit)
     {
         // Clean up states

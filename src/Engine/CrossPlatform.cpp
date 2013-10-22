@@ -34,9 +34,21 @@ namespace Falltergeist
 namespace CrossPlatform
 {
 
+
 void debug(std::string message, unsigned char level)
 {
     std::cout << message;
+}
+
+std::string getVersion()
+{
+    std::string version = "Falltergeist 0.0.7";
+#ifdef __WIN32__
+    version += " (Windows)";
+#elif __unix__
+    version += " (Linux)";
+#endif
+    return version;
 }
 
 // This method is trying to find out where are the DAT files located
