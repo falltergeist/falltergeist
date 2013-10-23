@@ -78,80 +78,90 @@ std::string CrossPlatform::getVersion()
     return _version;
 }
 
+std::string CrossPlatform::getHomeDirectory() {
+#if defined(_WIN32) || defined(WIN32)        
+    char cwd[256];
+    LPITEMIDLIST pidl;
+    SHGetSpecialFolderLocation(NULL, CSIDL_PROFILE  ,&pidl);
+    SHGetPathFromIDList(pidl, cwd);
+#else
+    char * cwd = getenv("HOME");
+#endif
+    return std::string(cwd);
+}
+
+std::string CrossPlatform::getCurrentDirectory() {
+    char buffer[512];
+    char * cwd = getcwd(buffer, sizeof(buffer));
+    return std::string(cwd);
+}
+
+std::vector<std::string> CrossPlatform::getCdDrivePaths() {
+ #if defined(_WIN32) || defined(WIN32)
+    std::vector<std::string> result;
+    // Looking for data files on CD-ROM drives
+    char buf[256];
+    GetLogicalDriveStringsA(sizeof(buf), buf);
+
+    for(char * s = buf; *s; s += strlen(s) + 1)
+    {
+        if (GetDriveTypeA(s) == DRIVE_CDROM)
+        {
+            result.push_back(std::string(s));
+        }
+    }
+
+    return result;
+#else
+    throw Exception("not supported");
+#endif
+}
+
 // This method is trying to find out where are the DAT files located
 std::string CrossPlatform::findDataPath()
 {
     if (_dataPath.length() > 0) return _dataPath;
     debug("Looking for Fallout data files\n", DEBUG_INFO);
+    std::vector<std::string> directories;
+    directories.push_back(getCurrentDirectory());
+    directories.push_back(getHomeDirectory() + "/.falltergeist");
 
-    // First of all we are trying to look in the current folder (where the binary file located)
-    {       
-        char buffer[512];
-        char * cwd = getcwd(buffer, sizeof(buffer));
-        std::string path = cwd + std::string("/master.dat");
-        std::ifstream stream(path.c_str());
-        if (stream)
-        {
-            debug("Searching in current directory: " + std::string(cwd) + " [FOUND]\n", DEBUG_INFO);
-            _dataPath = cwd;
-            return cwd;
-        }
-        else
-        {
-            debug("Searching in current directory: " + std::string(cwd) + " [NOT FOUND]\n", DEBUG_INFO);
-        }
+    try {
+        std::vector<std::string> cdDrives = getCdDrivePaths();
+        directories.insert(directories.end(), cdDrives.begin(), cdDrives.end());
+    }
+    catch(Exception e) {
+        debug("cdrom drive detection not supported");
     }
 
-    // Then trying to search in user home directory  ~/.falltergeist
-    {
-#if defined(_WIN32) || defined(WIN32)        
-        char cwd[256];
-        LPITEMIDLIST pidl;
-        SHGetSpecialFolderLocation(NULL, CSIDL_PROFILE  ,&pidl);
-        SHGetPathFromIDList(pidl, cwd);
-#else
-        char * cwd = getenv("HOME");
-#endif
-        std::string path(std::string(cwd) + "/.falltergeist/master.dat");
-        std::ifstream stream(path.c_str());
-        if (stream)
-        {
-            path = std::string(cwd) + "/.falltergeist";
-            debug("Searching in user directory: " + path + " [FOUND]\n", DEBUG_INFO);
-            _dataPath = path;
-            return path;
-        }
-        else
-        {
-            debug("Searching in user directory: " + std::string(cwd) + "/.falltergeist" + " [NOT FOUND]\n", DEBUG_INFO);
-        }
-    }
+    std::vector<std::string> necessaryFiles;
+    necessaryFiles.push_back("master.dat");
+    necessaryFiles.push_back("critter.dat");
 
- #if defined(_WIN32) || defined(WIN32)
-    // Looking for data files on CD-ROM drives
-    {
-        char buf[256];
-        GetLogicalDriveStringsA(sizeof(buf), buf);
-        for(char * s = buf; *s; s += strlen(s) + 1)
-        {
-            if (GetDriveTypeA(s) == DRIVE_CDROM)
+    for (int j = 0; j < directories.size();j++) {
+
+        bool dataFound = true;
+        for (int i = 0; i < necessaryFiles.size(); i++) {
+            std::string path(directories.at(j)); 
+            path.append("/");
+            path.append(necessaryFiles.at(i));
+            std::ifstream stream(path.c_str());
+            if (stream)
             {
-                std::string path = std::string(s) + "master.dat";
-                std::ifstream stream(path.c_str());
-                if (stream)
-                {
-                    _dataPath = s;
-                    debug("Searching in CD-ROM drive " + _dataPath + " [FOUND]\n", DEBUG_INFO);
-                    return _dataPath;
-                }
-                else
-                {
-                    debug("Searching in CD-ROM drive " + std::string(s) + " [NOT FOUND]\n", DEBUG_INFO);
-                }
+                debug("Searching in directory: " + directories.at(j) + " " + necessaryFiles.at(i) + " [FOUND]\n", DEBUG_INFO);
+            }
+            else
+            {
+                dataFound = false;
+                debug("Searching in directory: " + directories.at(j) + " " + necessaryFiles.at(i) + " [NOT FOUND]\n", DEBUG_INFO);
             }
         }
+
+        if (dataFound) {
+            _dataPath = directories.at(j);
+            return _dataPath;
+        }
     }
-#endif
 
     throw Exception("Fallout data files are not found!");
 }
