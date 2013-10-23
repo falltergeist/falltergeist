@@ -18,13 +18,10 @@
  */
 
 // C++ standard includes
-#include <unistd.h>
 #include <dirent.h>
 #include <iostream>
 #include <fstream>
-#include <stdlib.h>
-//#include <algorithm>
-//#include <string.h>
+#include <cstdlib>
 
 // Falltergeist includes
 #include "../Engine/CrossPlatform.h"
@@ -34,8 +31,10 @@
 
 // Platform specific includes
 #if defined(_WIN32) || defined(WIN32)
-        #include <windows.h>
-        #include <shlobj.h>
+    #include <windows.h>
+    #include <shlobj.h>
+#elif defined(__unix__)
+    #include <unistd.h>
 #endif
 
 namespace Falltergeist
@@ -130,24 +129,26 @@ std::string CrossPlatform::findDataPath()
 
  #if defined(_WIN32) || defined(WIN32)
     // Looking for data files on CD-ROM drives
-    char buf[26];
-    GetLogicalDriveStringsA(sizeof(buf),buf);
-    for(char * s = buf; *s; s += strlen(s)+1)
     {
-        if (GetDriveTypeA(s) == DRIVE_CDROM)
+        char buf[256];
+        GetLogicalDriveStringsA(sizeof(buf), buf);
+        for(char * s = buf; *s; s += strlen(s) + 1)
         {
-            std::string path = std::string(s) + "master.dat";
-            std::ifstream stream(path.c_str());
-            if (stream)
+            if (GetDriveTypeA(s) == DRIVE_CDROM)
             {
-                _dataPath = s;
-                debug("Searching in CD-ROM drive " + _dataPath + " [FOUND]\n", DEBUG_INFO);
-                return _dataPath;
+                std::string path = std::string(s) + "master.dat";
+                std::ifstream stream(path.c_str());
+                if (stream)
+                {
+                    _dataPath = s;
+                    debug("Searching in CD-ROM drive " + _dataPath + " [FOUND]\n", DEBUG_INFO);
+                    return _dataPath;
+                }
+                else
+                {
+                    debug("Searching in CD-ROM drive " + std::string(s) + " [NOT FOUND]\n", DEBUG_INFO);
+                }
             }
-            else
-            {
-                debug("Searching in CD-ROM drive " + std::string(s) + " [NOT FOUND]\n", DEBUG_INFO);
-            }            
         }
     }
 #endif
