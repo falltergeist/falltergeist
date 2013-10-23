@@ -47,6 +47,9 @@ public:
     ~CrossPlatform();
 
     static std::string getVersion();
+    static std::string getHomeDirectory();
+    static std::string getCurrentDirectory(); 
+    static std::vector<std::string> getCdDrivePaths();
     static std::string findDataPath();
     static std::vector<std::string> * findDataFiles();
     static void debug(std::string message, unsigned char level = 0);
