@@ -23,47 +23,66 @@
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
-#include <algorithm>
-#include <string.h>
+//#include <algorithm>
+//#include <string.h>
 
 // Falltergeist includes
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/Exception.h"
 
 // Third party includes
 
-// Platform dependent includes
+// Platform specific includes
 #if defined(_WIN32) || defined(WIN32)
         #include <windows.h>
+        #include <shlobj.h>
 #endif
 
 namespace Falltergeist
 {
-namespace CrossPlatform
-{
-
 
 void debug(std::string message, unsigned char level)
+{
+    CrossPlatform::debug(message, level);
+}
+
+// static members initialization
+std::string CrossPlatform::_version;
+std::string CrossPlatform::_dataPath;
+std::vector<std::string> * CrossPlatform::_dataFiles = 0;
+
+
+CrossPlatform::CrossPlatform()
+{
+}
+
+CrossPlatform::~CrossPlatform()
+{
+}
+
+void CrossPlatform::debug(std::string message, unsigned char level)
 {
     std::cout << message;
 }
 
-std::string getVersion()
+std::string CrossPlatform::getVersion()
 {
-    std::string version = "Falltergeist 0.0.7";
+    if (_version.length() > 0) return _version;
+    _version = "Falltergeist 0.0.7";
 #if defined(_WIN32) || defined(WIN32)
-    version += " (Windows)";
+    _version += " (Windows)";
 #elif defined(__unix__)
-    version += " (Linux)";
+    _version += " (Linux)";
 #elif defined(__MACH__)
-    version += " (Apple)";
+    _version += " (Apple)";
 #endif
-    return version;
+    return _version;
 }
 
 // This method is trying to find out where are the DAT files located
-std::string findDataPath()
+std::string CrossPlatform::findDataPath()
 {
-    if (dataPath.length() > 0) return dataPath;
+    if (_dataPath.length() > 0) return _dataPath;
     debug("Looking for Fallout data files\n", DEBUG_INFO);
 
     // First of all we are trying to look in the current folder (where the binary file located)
@@ -75,7 +94,7 @@ std::string findDataPath()
         if (stream)
         {
             debug("Searching in current directory: " + std::string(cwd) + " [FOUND]\n", DEBUG_INFO);
-            dataPath = cwd;
+            _dataPath = cwd;
             return cwd;
         }
         else
@@ -86,23 +105,29 @@ std::string findDataPath()
 
     // Then trying to search in user home directory  ~/.falltergeist
     {
-        char * cwd = getenv("HOME");
+        char * cwd;
+#if defined(_WIN32) || defined(WIN32)
+        SHGetSpecialFolderPath(0, cwd, CSIDL_PROFILE, FALSE);
+#else
+        cwd = getenv("HOME");
+#endif
         std::string path(std::string(cwd) + "/.falltergeist/master.dat");
         std::ifstream stream(path.c_str());
         if (stream)
         {
             path = std::string(cwd) + "/.falltergeist";
-            debug("Searching in home directory: " + path + " [FOUND]\n", DEBUG_INFO);
-            dataPath = path;
+            debug("Searching in user directory: " + path + " [FOUND]\n", DEBUG_INFO);
+            _dataPath = path;
             return path;
         }
         else
         {
-            debug("Searching in home directory: " + std::string(cwd) + "/.falltergeist" + " [NOT FOUND]\n", DEBUG_INFO);
+            debug("Searching in user directory: " + std::string(cwd) + "/.falltergeist" + " [NOT FOUND]\n", DEBUG_INFO);
         }
     }
 
  #if defined(_WIN32) || defined(WIN32)
+    // Looking for data files on CD-ROM drives
     char buf[26];
     GetLogicalDriveStringsA(sizeof(buf),buf);
     for(char * s = buf; *s; s += strlen(s)+1)
@@ -113,9 +138,9 @@ std::string findDataPath()
             std::ifstream stream(path.c_str());
             if (stream)
             {
-                dataPath = s;
-                debug("Searching in CD-ROM drive " + dataPath + " [FOUND]\n", DEBUG_INFO);
-                return dataPath;
+                _dataPath = s;
+                debug("Searching in CD-ROM drive " + _dataPath + " [FOUND]\n", DEBUG_INFO);
+                return _dataPath;
             }
             else
             {
@@ -124,108 +149,46 @@ std::string findDataPath()
         }
     }
 #endif
-    
-    debug("Fallout data files are not found\n", DEBUG_CRITICAL);
-    return 0;
+
+    throw Exception("Fallout data files are not found!");
 }
 
 // this method looks for available dat files
-std::vector<std::string> * findDataFiles()
+std::vector<std::string> * CrossPlatform::findDataFiles()
 {
-    std::vector<std::string> * files = new std::vector<std::string>;
-    files->push_back(""); // reserverd for master.dat
-    files->push_back(""); // reserverd for critter.dat
+    if (_dataFiles) return _dataFiles;
+
+    _dataFiles = new std::vector<std::string>;
+    _dataFiles->push_back(""); // reserverd for master.dat
+    _dataFiles->push_back(""); // reserverd for critter.dat
 
     // looking for all available dat files in directory
-    DIR * pxDir = opendir(findDataPath().c_str());
-    struct dirent * pxItem = NULL;
-    if(pxDir != NULL)
+    DIR * pxDir = opendir(CrossPlatform::findDataPath().c_str());
+    if (!pxDir)
     {
-        while((pxItem = readdir(pxDir)))
+        throw Exception("Can't open data directory: " + CrossPlatform::findDataPath());
+    }
+    struct dirent * pxItem = 0;
+    while((pxItem = readdir(pxDir)))
+    {
+        std::string filename(pxItem->d_name);
+        if (filename.length() > 4) // exclude . and ..
         {
-            std::string filename(pxItem->d_name);
-            std::transform(filename.begin(),filename.end(),filename.begin(), ::tolower);
-            if (filename.length() > 4)
+            std::string ext = filename.substr(filename.size()-4, 4);
+            if (ext == ".dat")
             {
-                std::string ext = filename.substr(filename.size()-4,4);
-                if (ext.compare(".dat") == 0)
-                {
-                    if (filename.compare("master.dat") == 0) files->at(0).append("master.dat");
-                    if (filename.compare("critter.dat") == 0) files->at(1).append("critter.dat");
-                    if (filename.length() == 12 && filename.substr(0,5).compare("patch") == 0) files->push_back(filename);
-                }
-            }
-        }
-        closedir(pxDir);
-    }
-    else
-    {
-        debug("Unable to read data files directory\n", DEBUG_CRITICAL);
-    }
-
-    if (files->at(0).compare("master.dat") != 0)
-    {
-        debug("master.dat not found!\n", DEBUG_CRITICAL);
-        return 0;
-    }
-    if (files->at(1).compare("critter.dat") != 0)
-    {
-        debug("critter.dat not found!\n", DEBUG_CRITICAL);
-        return 0;
-    }
-    return files;
-}
-
-// Fallout data files names can be in upper,lower or even mixed case.
-// In falltergeist all filenames are in lower case
-// This method looks for file aliases
-// Example: "maps/ARDEAD.map" is alias of "maps/ardead.map"
-// It needed when we are reading unpacked files from data directory
-std::string findFileAlias(std::string path, std::string filename)
-{
-    DIR * dir = opendir(path.c_str());
-    if (!dir) return 0;
-    struct dirent * entry;
-
-    int pos = filename.find('/');
-    //complex filename
-    if (pos > 0)
-    {
-        std::string folder(filename.substr(0, pos));
-        // check if there is a folder
-        while ((entry = readdir(dir)))
-        {
-            std::string dirname(entry->d_name);
-            std::transform(dirname.begin(),dirname.end(),dirname.begin(), ::tolower);
-            if (dirname.compare(folder) == 0 && entry->d_type == DT_DIR)
-            {
-                path.append("/").append(entry->d_name);
-                std::string alias = findFileAlias(path, filename.substr(pos+1, filename.length()));
-                if (alias.length())
-                {
-                    std::string newname = std::string(entry->d_name) + "/" + alias;
-                    closedir(dir);
-                    return newname;
-                }
+                if (filename == "master.dat")  _dataFiles->at(0) = "master.dat";
+                if (filename == "critter.dat") _dataFiles->at(1) = "critter.dat";
+                if (filename.length() == 12 && filename.substr(0,5) == "patch") _dataFiles->push_back(filename);
             }
         }
     }
-    else
-    {
-        while ((entry = readdir(dir)))
-        {
-            std::string fname = entry->d_name;
-            std::transform(fname.begin(),fname.end(),fname.begin(), ::tolower);
-            if (fname.compare(filename) == 0 && entry->d_type != DT_DIR)
-            {
-                fname = entry->d_name;
-                return fname;
-            }
-        }
-    }
-    closedir(dir);
-    return ""; // empty string if nothing found
+    closedir(pxDir);
+
+    if (_dataFiles->at(0) != "master.dat")  throw Exception("master.dat not found!");
+    if (_dataFiles->at(1) != "critter.dat") throw Exception("critter.dat not found!");
+
+    return _dataFiles;
 }
 
-}
 }

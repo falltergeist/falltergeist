@@ -36,8 +36,6 @@
 
 // Third patry includes
 
-using namespace Falltergeist::CrossPlatform;
-
 namespace Falltergeist
 {
 

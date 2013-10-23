@@ -28,8 +28,6 @@
 
 // Third party includes
 
-using namespace Falltergeist::CrossPlatform;
-
 namespace Falltergeist
 {
 

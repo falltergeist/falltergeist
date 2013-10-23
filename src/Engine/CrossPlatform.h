@@ -31,16 +31,26 @@
 
 namespace Falltergeist
 {
-namespace CrossPlatform
-{
-    static std::string dataPath;
-    std::string getVersion();
-    enum DebugLevel { DEBUG_INFO = 0, DEBUG_ERROR, DEBUG_CRITICAL };
-    std::string findFileAlias(std::string path, std::string filename);
-    std::string findDataPath();
-    std::vector<std::string> * findDataFiles();
-    void debug(std::string message, unsigned char level = 0);
-}
-}
 
+enum DebugLevel { DEBUG_INFO = 0, DEBUG_ERROR, DEBUG_CRITICAL };
+
+void debug(std::string message, unsigned char level = 0);
+
+class CrossPlatform
+{
+protected:
+    static std::string _dataPath;
+    static std::vector<std::string> * _dataFiles;
+    static std::string _version;
+public:
+    CrossPlatform();
+    ~CrossPlatform();
+
+    static std::string getVersion();
+    static std::string findDataPath();
+    static std::vector<std::string> * findDataFiles();
+    static void debug(std::string message, unsigned char level = 0);
+};
+
+}
 #endif // FALLTERGEIST_CROSSPLATFORM_H

@@ -29,8 +29,6 @@
 
 // Third party includes
 
-using namespace Falltergeist::CrossPlatform;
-
 namespace Falltergeist
 {
 
@@ -52,7 +50,7 @@ ResourceManager::ResourceManager()
     _dataPath.clear();
     _dataPath.append(CrossPlatform::findDataPath());
     //std::cout << "Datapath: " << _dataPath << std::endl;
-    std::vector<std::string> * files = findDataFiles();
+    std::vector<std::string> * files = CrossPlatform::findDataFiles();
     std::vector<std::string>::iterator it;
     for (it = files->begin(); it != files->end(); ++it)
     {
@@ -115,37 +113,33 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
 
     // Searching file in Data directory
     {
-        std::string alias = findFileAlias(_dataPath, filename);
-        if (alias.length())
+        std::string path = _dataPath + "/" + filename;
+        std::ifstream * stream = new std::ifstream();
+        stream->open(path.c_str(), std::ios_base::binary);
+        if (stream->is_open())
         {
-            std::string path = _dataPath + "/" + alias;
-            std::ifstream * stream = new std::ifstream();
-            stream->open(path.c_str(), std::ios_base::binary);
-            if (stream->is_open())
+            std::string extension = filename.substr(filename.length() - 3, 3);
+
+            libfalltergeist::DatFileItem * item;
+                 if (extension == "aaf") item = new libfalltergeist::AafFileType(stream);
+            else if (extension == "bio") item = new libfalltergeist::BioFileType(stream);
+            else if (extension == "frm") item = new libfalltergeist::FrmFileType(stream);
+            else if (extension == "gcd") item = new libfalltergeist::GcdFileType(stream);
+            else if (extension == "lst") item = new libfalltergeist::LstFileType(stream);
+            else if (extension == "msg") item = new libfalltergeist::MsgFileType(stream);
+            else if (extension == "pal") item = new libfalltergeist::PalFileType(stream);
+            else if (extension == "pro") item = new libfalltergeist::ProFileType(stream);
+            else
             {
-                std::string extension = filename.substr(filename.length() - 3, 3);
-
-                libfalltergeist::DatFileItem * item;
-                     if (extension == "aaf") item = new libfalltergeist::AafFileType(stream);
-                else if (extension == "bio") item = new libfalltergeist::BioFileType(stream);
-                else if (extension == "frm") item = new libfalltergeist::FrmFileType(stream);
-                else if (extension == "gcd") item = new libfalltergeist::GcdFileType(stream);
-                else if (extension == "lst") item = new libfalltergeist::LstFileType(stream);
-                else if (extension == "msg") item = new libfalltergeist::MsgFileType(stream);
-                else if (extension == "pal") item = new libfalltergeist::PalFileType(stream);
-                else if (extension == "pro") item = new libfalltergeist::ProFileType(stream);
-                else
-                {
-                    item = new libfalltergeist::DatFileItem(stream);
-                }
-
-                item->setFilename((char *) filename.c_str());
-                _datFilesItems->insert(std::make_pair(filename, item));
-                std::cout << " [FROM DATA DIR]" << std::endl;
-                return item;
+                item = new libfalltergeist::DatFileItem(stream);
             }
-            delete stream;
+
+            item->setFilename((char *) filename.c_str());
+            _datFilesItems->insert(std::make_pair(filename, item));
+            std::cout << " [FROM DATA DIR]" << std::endl;
+            return item;
         }
+        delete stream;
     }
 
     // Search in DAT files
