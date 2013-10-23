@@ -44,10 +44,10 @@ protected:
     std::vector<Surface *> * _textSurfaces;
     unsigned char _horizontalAlign;
     unsigned char _verticalAlign;
-    unsigned int _width;
-    unsigned int _calculatedWidth;
-    unsigned int _calculatedHeight;
-    unsigned int _height;
+    int _width;
+    int _height;
+    int _calculatedWidth;
+    int _calculatedHeight;
     unsigned int _color;
     Font * _font;
     bool _wordWrap;
@@ -80,11 +80,11 @@ public:
     TextArea * setVerticalAlign(unsigned char align);
     unsigned char verticalAlign();
 
-    TextArea * setHeight(unsigned int height);
-    unsigned int height();
+    TextArea * setHeight(int height);
+    int height();
 
-    TextArea * setWidth(unsigned int width);
-    unsigned int width();
+    TextArea * setWidth(int width);
+    int width();
 
     TextArea * setColor(unsigned int color);
     unsigned int color();

@@ -37,7 +37,6 @@ Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _needRedra
     _animatedPixels = 0;
     _borderColor = 0;
     _backgroundColor = 0;
-    //setBorderColor(0);
     //setBackgroundColor(0);
     setXOffset(0);
     setYOffset(0);
@@ -47,11 +46,9 @@ Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _needRedra
     clear();
 }
 
-Surface::Surface(libfalltergeist::FrmFileType * frm, unsigned int direction, unsigned int frame)
+Surface::Surface(libfalltergeist::FrmFileType * frm, unsigned int direction, unsigned int frame) : _needRedraw(false), _visible(true)
 {
     _animatedPixels = 0;
-    _needRedraw = false;
-    _visible = true;
     _borderColor = 0;
     _backgroundColor = 0;
     //setBackgroundColor(0);
@@ -103,7 +100,7 @@ Surface::Surface(libfalltergeist::FrmFileType * frm, unsigned int direction, uns
 }
 
 
-Surface::Surface(Surface * other)
+Surface::Surface(Surface * other)  : _needRedraw(false), _visible(true)
 {
     _animatedPixels = 0;
 
@@ -172,7 +169,7 @@ void Surface::setY(int y)
     _y = y;
 }
 
-int Surface::y()
+int Surface::   y()
 {
     return _y;
 }
@@ -187,12 +184,12 @@ int Surface::yOffset()
     return _yOffset;
 }
 
-unsigned int Surface::width()
+int Surface::width()
 {
     return sdl_surface()->w;
 }
 
-unsigned int Surface::height()
+int Surface::height()
 {
     return sdl_surface()->h;
 }
@@ -248,14 +245,14 @@ void Surface::fill(unsigned int color)
 
 void Surface::_drawBorder()
 {
-    for (unsigned int y = 0; y < height(); y++)
+    for (auto y = 0; y < height(); y++)
     {
         // left border
         setPixel(0, y, _borderColor);
         // right border
         setPixel(width() - 1, y, _borderColor);
     }
-    for (unsigned int x = 0; x < width(); x++)
+    for (auto x = 0; x < width(); x++)
     {
         // top border
         setPixel(x, 0, _borderColor);
@@ -310,7 +307,12 @@ void Surface::blit(Surface * surface)
 
     if (this->x() + this->xOffset() + this->width() < 0 && this->y() + this->yOffset() + this->height() < 0) return;
 
-    SDL_Rect dest = {x() + xOffset(), y() + yOffset(), width(), height()};
+    short dX = x() + xOffset();
+    short dY = y() + yOffset();
+    unsigned short dW = width();
+    unsigned short dH = height();
+
+    SDL_Rect dest = {dX, dY, dW, dH};
     SDL_BlitSurface(this->sdl_surface(), NULL, surface->sdl_surface(), &dest);
 
     _copyAnimatedPixelsTo(surface);
@@ -351,9 +353,9 @@ void Surface::copyTo(Surface * surface)
 
     if (this->x() + this->xOffset() + this->width() < 0 && this->y() + this->yOffset() + this->height() < 0) return;
 
-    for (unsigned int y = 0; y != height(); ++y)
+    for (int y = 0; y != height(); ++y)
     {
-        for (unsigned int x = 0; x != width(); ++x)
+        for (int x = 0; x != width(); ++x)
         {
             if (pixel(x, y))
             {
@@ -421,15 +423,15 @@ void Surface::drawLine(int x1, int y1, int x2, int y2, unsigned int color)
 
     if (dy == 0)
     {
-        for (unsigned int x = x1; x != x2; x1 > x2 ? x-- : x++) setPixel(x, y1, color);
+        for (int x = x1; x != x2; x1 > x2 ? x-- : x++) setPixel(x, y1, color);
     }
     else if (dx == 0)
     {
-        for (unsigned int y = y1; y != y2; y1 > y2 ? y-- : y++) setPixel(x1, y, color);
+        for (int y = y1; y != y2; y1 > y2 ? y-- : y++) setPixel(x1, y, color);
     }
     else
     {
-        for (unsigned int x = x1; x != x2; x1 > x2 ? x-- : x++)
+        for (int x = x1; x != x2; x1 > x2 ? x-- : x++)
         {
             int y = y1 + (dy/dx) * x;
             setPixel(x, y, color);

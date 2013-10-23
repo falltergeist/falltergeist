@@ -106,7 +106,7 @@ set(SOURCES main.cpp
             src/UI/TextArea.cpp
             src/UI/TextArea.h)
 
-add_definitions (-std=c++11)
+add_definitions (-std=c++11 -Wall)
 set(CMAKE_BUILD_TYPE Debug)
 set(dir ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 set(EXECUTABLE_OUTPUT_PATH ${dir} CACHE PATH "Build directory" FORCE)

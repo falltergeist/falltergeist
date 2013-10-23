@@ -11,3 +11,4 @@ CMakeLists.txt.*
 /nbproject/
 *.o
 *.bmp
+*.dat

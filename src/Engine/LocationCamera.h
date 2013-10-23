@@ -32,29 +32,29 @@ namespace Falltergeist
 class LocationCamera
 {
 protected:
-    unsigned int _xPosition;
-    unsigned int _yPosition;
-    unsigned int _width;
-    unsigned int _height;
+    int _xPosition;
+    int _yPosition;
+    int _width;
+    int _height;
 
 public:
     LocationCamera(unsigned int width, unsigned int height, unsigned int xPosition, unsigned int yPosition);
     ~LocationCamera();
 
-    unsigned int x();
-    unsigned int y();
+    int x();
+    int y();
 
-    unsigned int xPosition();
-    void setXPosition(unsigned int value);
+    int xPosition();
+    void setXPosition(int value);
 
-    unsigned int yPosition();
-    void setYPosition(unsigned int value);
+    int yPosition();
+    void setYPosition(int value);
 
-    unsigned int height();
-    void setHeight(unsigned int value);
+    int height();
+    void setHeight(int value);
 
-    unsigned int width();
-    void setWidth(unsigned int value);
+    int width();
+    void setWidth(int value);
 };
 
 }

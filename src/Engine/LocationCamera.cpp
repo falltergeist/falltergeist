@@ -39,23 +39,23 @@ LocationCamera::~LocationCamera()
 {
 }
 
-unsigned int LocationCamera::x()
+int LocationCamera::x()
 {
     return xPosition() - width()/2;
 }
 
 
-unsigned int LocationCamera::y()
+int LocationCamera::y()
 {
     return yPosition() - height()/2;
 }
 
-unsigned int LocationCamera::xPosition()
+int LocationCamera::xPosition()
 {
     return _xPosition;
 }
 
-void LocationCamera::setXPosition(unsigned int value)
+void LocationCamera::setXPosition(int value)
 {
     if (value < width()/2)
     {
@@ -67,12 +67,12 @@ void LocationCamera::setXPosition(unsigned int value)
     }
 }
 
-unsigned int LocationCamera::yPosition()
+int LocationCamera::yPosition()
 {
     return _yPosition;
 }
 
-void LocationCamera::setYPosition(unsigned int value)
+void LocationCamera::setYPosition(int value)
 {
     if (value < height()/2)
     {
@@ -84,22 +84,22 @@ void LocationCamera::setYPosition(unsigned int value)
     }
 }
 
-unsigned int LocationCamera::width()
+int LocationCamera::width()
 {
     return _width;
 }
 
-void LocationCamera::setWidth(unsigned int value)
+void LocationCamera::setWidth(int value)
 {
     _width = value;
 }
 
-unsigned int LocationCamera::height()
+int LocationCamera::height()
 {
     return _height;
 }
 
-void LocationCamera::setHeight(unsigned int value)
+void LocationCamera::setHeight(int value)
 {
     _height = value;
 }

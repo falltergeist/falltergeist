@@ -111,8 +111,6 @@ std::vector<Surface *> * Animation::surfaces()
 
 void Animation::loadFromFrmFile(libfalltergeist::FrmFileType * frm)
 {
-    libfalltergeist::PalFileType * pal = ResourceManager::palFileType("color.pal");
-
     if (frm->framesPerSecond() > 0)
     {
         _frameRate = ceil(1000 / frm->framesPerSecond());

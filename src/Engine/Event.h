@@ -54,7 +54,6 @@ public:
     int y();
 
     int keyCode();
-    unsigned char keyChar();
 
     SDL_Event * SDLEvent();
 

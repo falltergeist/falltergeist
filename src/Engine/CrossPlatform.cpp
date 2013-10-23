@@ -138,10 +138,10 @@ std::string CrossPlatform::findDataPath()
     necessaryFiles.push_back("master.dat");
     necessaryFiles.push_back("critter.dat");
 
-    for (int j = 0; j < directories.size();j++) {
+    for (unsigned int j = 0; j < directories.size();j++) {
 
         bool dataFound = true;
-        for (int i = 0; i < necessaryFiles.size(); i++) {
+        for (unsigned int i = 0; i < necessaryFiles.size(); i++) {
             std::string path(directories.at(j)); 
             path.append("/");
             path.append(necessaryFiles.at(i));

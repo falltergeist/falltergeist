@@ -86,8 +86,8 @@ std::vector<std::string> * TextArea::textLines()
 
     _textLines = new std::vector<std::string>;
 
-    unsigned int stringWidth = 0;
-    unsigned int wordWidth = 0;
+    int stringWidth = 0;
+    int wordWidth = 0;
     std::string word = "";
     _textLines->push_back("");
 
@@ -297,7 +297,7 @@ TextArea * TextArea::setColor(unsigned int color)
     return this;
 }
 
-unsigned int TextArea::height()
+int TextArea::height()
 {
     if (_height == 0)
     {
@@ -307,7 +307,7 @@ unsigned int TextArea::height()
     return _height;
 }
 
-TextArea * TextArea::setHeight(unsigned int height)
+TextArea * TextArea::setHeight(int height)
 {
     if (height == _height) return this;
     _height = height;
@@ -315,7 +315,7 @@ TextArea * TextArea::setHeight(unsigned int height)
     return this;
 }
 
-unsigned int TextArea::width()
+int TextArea::width()
 {
     if (_width == 0)
     {
@@ -325,7 +325,7 @@ unsigned int TextArea::width()
     return _width;
 }
 
-TextArea * TextArea::setWidth(unsigned int width)
+TextArea * TextArea::setWidth(int width)
 {
     if (_width == width) return this;
     _width = width;

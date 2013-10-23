@@ -401,12 +401,12 @@ libfalltergeist::MapFileType * Location::mapFile()
     return _mapFile;
 }
 
-int Location::tileToX(unsigned int tile)
+unsigned int Location::tileToX(unsigned int tile)
 {
     return (_cols - tile % _cols - 1)*48 + 32*ceil(tile / _cols);
 }
 
-int Location::tileToY(unsigned int tile)
+unsigned int Location::tileToY(unsigned int tile)
 {
     return ceil(tile / _cols)*24 + (tile % _cols)*12;
 }
@@ -420,7 +420,7 @@ bool Location::scroll(bool up, bool down, bool left, bool right)
 {
     bool changed = false;
 
-    unsigned int scrollDelta = 5;
+    int scrollDelta = 5;
 
     if (up)
     {
@@ -474,12 +474,12 @@ std::vector<LocationObject *> * Location::objectsToRender()
     return _objectsToRender;
 }
 
-unsigned int Location::width()
+int Location::width()
 {
     return 48*_cols + 32*_rows;
 }
 
-unsigned int Location::height()
+int Location::height()
 {
     return 12*_cols + 24*_rows;
 }

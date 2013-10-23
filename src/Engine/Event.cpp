@@ -101,11 +101,6 @@ int Event::keyCode()
     return _keyCode;
 }
 
-unsigned char Event::keyChar()
-{
-
-}
-
 bool Event::shiftPressed()
 {
     return SDLEvent()->key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT);

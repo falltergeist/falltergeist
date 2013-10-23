@@ -65,10 +65,10 @@ public:
     bool scroll(bool up = false, bool down = false, bool left = false, bool right = false);
     int hexagonToX(unsigned int hexagon);
     int hexagonToY(unsigned int hexagon);
-    int tileToX(unsigned int tile);
-    int tileToY(unsigned int tile);
-    unsigned int width();
-    unsigned int height();
+    unsigned int tileToX(unsigned int tile);
+    unsigned int tileToY(unsigned int tile);
+    int width();
+    int height();
 
     LocationCamera * camera();
 

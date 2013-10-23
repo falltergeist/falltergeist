@@ -44,8 +44,8 @@ protected:
     int _y; // y position
     int _xOffset;
     int _yOffset;
-    bool _visible; // if false - do not render
     bool _needRedraw; // surface changed? draw function will be called
+    bool _visible; // if false - do not render
     std::vector<unsigned int> * _animatedPixels;
 
     unsigned int _borderColor; // for debugging. @TODO must be removed in future
@@ -80,8 +80,8 @@ public:
     virtual void setVisible(bool visible);
     virtual bool visible();
 
-    virtual unsigned int width();
-    virtual unsigned int height();
+    virtual int width();
+    virtual int height();
 
     virtual void setPixel(int x, int y, unsigned int color);
     virtual unsigned int pixel(int x, int y);
