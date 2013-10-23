@@ -67,7 +67,7 @@ void PlayerEditAlertState::init()
     doneBox->setXOffset(0);
     doneBox->setYOffset(0);
 
-    ImageButton * doneButton= new ImageButton("art/intrface/lilredup.frm", "art/intrface/lilreddn.frm", 264, 273);
+    ImageButton * doneButton= new ImageButton(ImageButton::BUTTON_SMALL_RED_CIRCLE, 264, 273);
     doneButton->onLeftButtonClick((EventHandler) &PlayerEditAlertState::onDoneButtonClick);
 
     libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");

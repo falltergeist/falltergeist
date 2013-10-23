@@ -39,6 +39,47 @@ ImageButton::ImageButton(std::string releasedImage, std::string pressedImage, in
     onLeftButtonRelease((EventHandler) &ImageButton::mouseDownHandler);
 }
 
+ImageButton::ImageButton(unsigned int type, int x, int y) : InteractiveSurface(0, 0, x, y)
+{
+    switch (type)
+    {
+        case BUTTON_SMALL_RED_CIRCLE:
+            _pressedImage  = "art/intrface/lilreddn.frm";
+            _releasedImage = "art/intrface/lilredup.frm";
+            break;
+        case BUTTON_BIG_RED_CIRCLE:
+            _pressedImage  = "art/intrface/menudown.frm";
+            _releasedImage = "art/intrface/menuup.frm";
+            break;
+        case BUTTON_SKILL_TOGGLE:
+            _pressedImage  = "art/intrface/tgsklon.frm";
+            _releasedImage = "art/intrface/tgskloff.frm";
+            break;
+        case BUTTON_PLUS:
+            _pressedImage  = "art/intrface/splson.frm";
+            _releasedImage = "art/intrface/splsoff.frm";
+            break;
+        case BUTTON_MINUS:
+            _pressedImage  = "art/intrface/snegon.frm";
+            _releasedImage = "art/intrface/snegoff.frm";
+            break;
+        case BUTTON_LEFT_ARROW:
+            _pressedImage  = "art/intrface/sld.frm";
+            _releasedImage = "art/intrface/slu.frm";
+            break;
+        case BUTTON_RIGHT_ARROW:
+            _pressedImage  = "art/intrface/srd.frm";
+            _releasedImage = "art/intrface/sru.frm";
+            break;
+    }
+
+    setNeedRedraw(true);
+    onMouseIn((EventHandler) &ImageButton::mouseInHandler);
+    onMouseOut((EventHandler) &ImageButton::mouseOutHandler);
+    onLeftButtonPress((EventHandler) &ImageButton::mouseUpHandler);
+    onLeftButtonRelease((EventHandler) &ImageButton::mouseDownHandler);
+}
+
 void ImageButton::draw()
 {
     if (!needRedraw()) return;

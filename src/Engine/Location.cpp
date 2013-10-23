@@ -273,7 +273,7 @@ void Location::init()
     Animation * animation = new Animation(ResourceManager::frmFileType("art/critters/hanpwrga.frm"));
 
     player->setAnimation(animation);
-    player->loadFromSurface(ResourceManager::surface("art/intrface/msef000.frm"));
+    //player->loadFromSurface(ResourceManager::surface("art/intrface/msef000.frm"));
     player->setX(hexagonToX(_mapFile->defaultPosition()));
     player->setY(hexagonToY(_mapFile->defaultPosition()));
     //player->setXOffset(0);

@@ -63,13 +63,13 @@ void PlayerEditAgeState::init()
     doneBox->setXOffset(0);
     doneBox->setYOffset(0);
 
-    ImageButton * decButton = new ImageButton("art/intrface/slu.frm", "art/intrface/sld.frm", 178, 14);
+    ImageButton * decButton = new ImageButton(ImageButton::BUTTON_LEFT_ARROW, 178, 14);
     decButton->onLeftButtonClick((EventHandler) &PlayerEditAgeState::onDecButtonClick);
 
-    ImageButton * incButton = new ImageButton("art/intrface/sru.frm", "art/intrface/srd.frm", 262, 14);
+    ImageButton * incButton = new ImageButton(ImageButton::BUTTON_RIGHT_ARROW, 262, 14);
     incButton->onLeftButtonClick((EventHandler) &PlayerEditAgeState::onIncButtonClick);
 
-    ImageButton * doneButton= new ImageButton("art/intrface/lilredup.frm", "art/intrface/lilreddn.frm", 188, 43);
+    ImageButton * doneButton= new ImageButton(ImageButton::BUTTON_SMALL_RED_CIRCLE, 188, 43);
     doneButton->onLeftButtonClick((EventHandler) &PlayerEditAgeState::onDoneButtonClick);
 
     libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");

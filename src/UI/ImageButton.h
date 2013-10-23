@@ -37,7 +37,9 @@ protected:
     std::string _releasedImage;
     std::string _pressedImage;
 public:
+    enum ButtonType {BUTTON_SMALL_RED_CIRCLE = 1, BUTTON_BIG_RED_CIRCLE, BUTTON_SKILL_TOGGLE, BUTTON_PLUS, BUTTON_MINUS, BUTTON_LEFT_ARROW, BUTTON_RIGHT_ARROW};
     ImageButton(std::string releasedImage = 0, std::string pressedImage = 0, int x = 0, int y = 0);
+    ImageButton(unsigned int type, int x = 0, int y = 0);
     virtual void draw();
     void setReleasedImage(std::string releasedImage);
     void setPressedImage(std::string pressedImage);

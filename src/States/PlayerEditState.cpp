@@ -40,23 +40,18 @@ namespace Falltergeist
 
 PlayerEditState::PlayerEditState(Game * game) : State(game)
 {
-    _labels = new std::map<std::string, TextArea *>;
-    _counters = new std::map<std::string, BigCounter *>;
-    _buttons = new std::map<std::string, ImageButton *>;
-    _masks = new std::map<std::string, HiddenMask *>;
-    _titles = new std::map<std::string, std::string>;
+    _labels       = new std::map<std::string, TextArea *>;
+    _counters     = new std::map<std::string, BigCounter *>;
+    _buttons      = new std::map<std::string, ImageButton *>;
+    _masks        = new std::map<std::string, HiddenMask *>;
+    _titles       = new std::map<std::string, std::string>;
     _descriptions = new std::map<std::string, std::string>;
-    _images = new std::map<std::string, Surface *>;
-
+    _images       = new std::map<std::string, Surface *>;
 
     // STATS
     {
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/stat.msg");
         std::string images[] = { "strength", "perceptn", "endur", "charisma", "intel", "agility", "luck"};
-        const char * plusOn   = "art/intrface/splson.frm";
-        const char * plusOff  = "art/intrface/splsoff.frm";
-        const char * minusOn  = "art/intrface/snegon.frm";
-        const char * minusOff = "art/intrface/snegoff.frm";
         for (unsigned int i = 0; i != 7; ++i)
         {
             std::stringstream ss;
@@ -68,8 +63,8 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
             _addLabel(ss.str(), new TextArea(102, 46 + 33*i));          // stat value label
             _addCounter(ss.str(), new BigCounter(59, 37 + 33*i));       // stat value counter
             _addMask(ss.str(), new HiddenMask(133, 29, 14, 36 + 33*i)); // stat click mask
-            _addButton(ss.str() + "_increase", new ImageButton(plusOff,  plusOn,  149, 38 + 33*i)); // stat increase button
-            _addButton(ss.str() + "_decrease", new ImageButton(minusOff, minusOn, 149, 49 + 33*i)); // stat decrease button
+            _addButton(ss.str() + "_increase", new ImageButton(ImageButton::BUTTON_PLUS,  149, 38 + 33*i)); // stat increase button
+            _addButton(ss.str() + "_decrease", new ImageButton(ImageButton::BUTTON_MINUS, 149, 49 + 33*i)); // stat decrease button
         }
 
         _addCounter("statsPoints", new BigCounter(126, 282)); // Free stats points counter
@@ -80,8 +75,6 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/trait.msg");
         std::string images[] = { "fastmeta", "bruiser", "smlframe", "onehand", "finesse", "kamikaze", "heavyhnd", "fastshot",
                                   "bldmess", "jinxed", "goodnatr", "addict", "drugrest", "empathy", "skilled", "gifted"};
-        const char * on  = "art/intrface/tgsklon.frm";
-        const char * off = "art/intrface/tgskloff.frm";
 
         for (unsigned int i = 0; i != 16; ++i)
         {
@@ -94,13 +87,13 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
             if (i <= 7)
             {
                 _addLabel(ss.str(),  new TextArea(msg->message(100 + i), 48, 353 + 13*i)); // trate label
-                _addButton(ss.str(),  new ImageButton(off, on, 23,  352 + 13*i)); // trate toggle button
+                _addButton(ss.str(),  new ImageButton(ImageButton::BUTTON_SKILL_TOGGLE, 23,  352 + 13*i)); // trate toggle button
             }
             //right column
             else
             {
                 _addLabel(ss.str(),  new TextArea(msg->message(100 + i), 169, 353 + 13*(i-8)))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT); // trate label
-                _addButton(ss.str(),  new ImageButton(off, on, 299, 352 + 13*(i-8))); // trate toggle button
+                _addButton(ss.str(),  new ImageButton(ImageButton::BUTTON_SKILL_TOGGLE, 299, 352 + 13*(i-8))); // trate toggle button
             }
         }
     }
@@ -110,8 +103,6 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/skill.msg");
         std::string images[] = { "gunsml", "gunbig", "energywp", "unarmed", "melee", "throwing", "firstaid", "doctor", "sneak",
                                  "lockpick", "steal", "traps", "science", "repair", "speech", "barter", "gambling", "outdoors"};
-        const char * on  = "art/intrface/tgsklon.frm";
-        const char * off = "art/intrface/tgskloff.frm";
         for (unsigned int i = 0; i != 18; ++i)
         {
             std::stringstream ss;
@@ -119,7 +110,7 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
             _addTitle(ss.str(), msg->message(100 + i)->text());
             _addDescription(ss.str(), msg->message(200 + i)->text());
             _addImage(ss.str(), _game->resourceManager()->surface("art/skilldex/" + images[i] + ".frm"));
-            _addButton(ss.str(),  new ImageButton(off, on, 347,  26 + 11*i));
+            _addButton(ss.str(),  new ImageButton(ImageButton::BUTTON_SKILL_TOGGLE, 347,  26 + 11*i));
             _addLabel(ss.str(),  new TextArea(msg->message(100 + i), 377, 27 + 11*i))->setWidth(240);
             _addLabel(ss.str() + "_value",  new TextArea("", 577, 27 + 11*i));
         }
@@ -168,18 +159,17 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
 
 
     Surface * background = new Surface(_game->resourceManager()->surface("art/intrface/edtrcrte.frm"));
+    background->setX(0);
+    background->setY(0);
+    background->setXOffset(0);
+    background->setYOffset(0);
 
     // description horizontal line
     for (unsigned int y = 300; y != 302; ++y) for (unsigned int x = 350; x != 620; ++x) background->setPixel(x,y, 0xFF000000);
-
-
-
     {
-        const char * on = "art/intrface/lilreddn.frm";
-        const char * off = "art/intrface/lilredup.frm";
-        _addButton("options", new ImageButton(off, on, 345, 454));
-        _addButton("done",    new ImageButton(off, on, 455, 454));
-        _addButton("cancel",  new ImageButton(off, on, 554, 454));
+        _addButton("options", new ImageButton(ImageButton::BUTTON_SMALL_RED_CIRCLE, 345, 454));
+        _addButton("done",    new ImageButton(ImageButton::BUTTON_SMALL_RED_CIRCLE, 455, 454));
+        _addButton("cancel",  new ImageButton(ImageButton::BUTTON_SMALL_RED_CIRCLE, 554, 454));
 
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
         _addLabel("options", new TextArea(msg->message(101), 365, 453))->setColor(0xffb89c28)->setFont("font3.aaf");

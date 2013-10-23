@@ -71,7 +71,7 @@ void PlayerEditGenderState::init()
     TextArea * doneLabel = new TextArea(msg->message(100), 281, 45);
     doneLabel->setColor(0xffb89c28)->setFont("font3.aaf");
 
-    ImageButton * doneButton= new ImageButton("art/intrface/lilredup.frm", "art/intrface/lilreddn.frm", 260, 45);
+    ImageButton * doneButton= new ImageButton(ImageButton::BUTTON_SMALL_RED_CIRCLE, 260, 45);
     doneButton->onLeftButtonClick((EventHandler) &PlayerEditGenderState::onDoneButtonClick);
 
     add(bg);
