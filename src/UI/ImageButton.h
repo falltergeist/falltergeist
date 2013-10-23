@@ -42,6 +42,8 @@ public:
     ImageButton(unsigned int type, int x = 0, int y = 0);
     ~ImageButton();
     virtual SDL_Surface * sdl_surface();
+    void setPressedImage(std::string image);
+    void setReleasedImage(std::string image);
 
 };
 

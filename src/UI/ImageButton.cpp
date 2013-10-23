@@ -30,16 +30,14 @@ namespace Falltergeist
 
 ImageButton::ImageButton(std::string releasedImage, std::string pressedImage, int x, int y) : InteractiveSurface(0, 0, x, y)
 {
-    _releasedSurface = new Surface(ResourceManager::surface(releasedImage));
-    _releasedSurface->setXOffset(0);
-    _releasedSurface->setYOffset(0);
-    _pressedSurface = new Surface(ResourceManager::surface(pressedImage));
-    _pressedSurface->setXOffset(0);
-    _pressedSurface->setYOffset(0);
+    _releasedSurface = 0; _pressedSurface = 0;
+    setReleasedImage(releasedImage);
+    setPressedImage(pressedImage);
 }
 
 ImageButton::ImageButton(unsigned int type, int x, int y) : InteractiveSurface(0, 0, x, y)
 {
+    _releasedSurface = 0; _pressedSurface = 0;
     std::string pressedImage, releasedImage;
 
     switch (type)
@@ -75,18 +73,30 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : InteractiveSurface(0
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
     }
-    _releasedSurface = new Surface(ResourceManager::surface(releasedImage));
-    _releasedSurface->setXOffset(0);
-    _releasedSurface->setYOffset(0);
-    _pressedSurface = new Surface(ResourceManager::surface(pressedImage));
-    _pressedSurface->setXOffset(0);
-    _pressedSurface->setYOffset(0);
+    setReleasedImage(releasedImage);
+    setPressedImage(pressedImage);
 }
 
 ImageButton::~ImageButton()
 {
     delete _releasedSurface;
     delete _pressedSurface;
+}
+
+void ImageButton::setPressedImage(std::string image)
+{
+    delete _pressedSurface;
+    _pressedSurface = new Surface(ResourceManager::surface(image));
+    _pressedSurface->setXOffset(0);
+    _pressedSurface->setYOffset(0);
+}
+
+void ImageButton::setReleasedImage(std::string image)
+{
+    delete _releasedSurface;
+    _releasedSurface = new Surface(ResourceManager::surface(image));
+    _releasedSurface->setXOffset(0);
+    _releasedSurface->setYOffset(0);
 }
 
 SDL_Surface * ImageButton::sdl_surface()
