@@ -108,8 +108,6 @@ set(SOURCES main.cpp
 
 add_definitions (-std=c++11 -Wall)
 set(CMAKE_BUILD_TYPE Debug)
-set(dir ${CMAKE_CURRENT_SOURCE_DIR}/bin)
-set(EXECUTABLE_OUTPUT_PATH ${dir} CACHE PATH "Build directory" FORCE)
 add_executable(falltergeist ${SOURCES})
 target_link_libraries(falltergeist ${SDL_LIBRARY} ${LIBFALLTERGEIST_LIBRARY})
 
