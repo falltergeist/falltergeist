@@ -55,7 +55,7 @@ protected:
     SDL_Event _event;
 
 public:
-    Game(int width, int height, int bpp);
+    Game(unsigned int width = 640, unsigned int height = 480, unsigned int bpp = 32);
     ~Game();
 
     Screen * screen();

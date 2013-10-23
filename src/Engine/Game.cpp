@@ -39,7 +39,7 @@
 namespace Falltergeist
 {
 
-Game::Game(int width, int height, int bpp) : _states()
+Game::Game(unsigned int width, unsigned int height, unsigned int bpp)
 {
     debug(CrossPlatform::getVersion() + "\n", DEBUG_INFO);
     debug("Opensource Fallout 2 game engine\n", DEBUG_INFO);
