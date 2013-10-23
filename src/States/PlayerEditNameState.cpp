@@ -44,42 +44,42 @@ void PlayerEditNameState::init()
     State::init();
 
     _keyCodes = new std::map<char, char>;
-    _keyCodes->insert(std::make_pair(38, 'a'));
-    _keyCodes->insert(std::make_pair(56, 'b'));
-    _keyCodes->insert(std::make_pair(54, 'c'));
-    _keyCodes->insert(std::make_pair(40, 'd'));
-    _keyCodes->insert(std::make_pair(26, 'e'));
-    _keyCodes->insert(std::make_pair(41, 'f'));
-    _keyCodes->insert(std::make_pair(42, 'g'));
-    _keyCodes->insert(std::make_pair(43, 'h'));
-    _keyCodes->insert(std::make_pair(31, 'i'));
-    _keyCodes->insert(std::make_pair(44, 'j'));
-    _keyCodes->insert(std::make_pair(45, 'k'));
-    _keyCodes->insert(std::make_pair(46, 'l'));
-    _keyCodes->insert(std::make_pair(58, 'm'));
-    _keyCodes->insert(std::make_pair(57, 'n'));
-    _keyCodes->insert(std::make_pair(32, 'o'));
-    _keyCodes->insert(std::make_pair(33, 'p'));
-    _keyCodes->insert(std::make_pair(24, 'q'));
-    _keyCodes->insert(std::make_pair(27, 'r'));
-    _keyCodes->insert(std::make_pair(39, 's'));
-    _keyCodes->insert(std::make_pair(28, 't'));
-    _keyCodes->insert(std::make_pair(30, 'u'));
-    _keyCodes->insert(std::make_pair(55, 'v'));
-    _keyCodes->insert(std::make_pair(25, 'w'));
-    _keyCodes->insert(std::make_pair(53, 'x'));
-    _keyCodes->insert(std::make_pair(29, 'y'));
-    _keyCodes->insert(std::make_pair(52, 'z'));
-    _keyCodes->insert(std::make_pair(10, '1'));
-    _keyCodes->insert(std::make_pair(11, '2'));
-    _keyCodes->insert(std::make_pair(12, '3'));
-    _keyCodes->insert(std::make_pair(13, '4'));
-    _keyCodes->insert(std::make_pair(14, '5'));
-    _keyCodes->insert(std::make_pair(15, '6'));
-    _keyCodes->insert(std::make_pair(16, '7'));
-    _keyCodes->insert(std::make_pair(17, '8'));
-    _keyCodes->insert(std::make_pair(18, '9'));
-    _keyCodes->insert(std::make_pair(19, '0'));
+    _keyCodes->insert(std::make_pair(SDLK_a, 'a'));
+    _keyCodes->insert(std::make_pair(SDLK_b, 'b'));
+    _keyCodes->insert(std::make_pair(SDLK_c, 'c'));
+    _keyCodes->insert(std::make_pair(SDLK_d, 'd'));
+    _keyCodes->insert(std::make_pair(SDLK_e, 'e'));
+    _keyCodes->insert(std::make_pair(SDLK_f, 'f'));
+    _keyCodes->insert(std::make_pair(SDLK_g, 'g'));
+    _keyCodes->insert(std::make_pair(SDLK_h, 'h'));
+    _keyCodes->insert(std::make_pair(SDLK_i, 'i'));
+    _keyCodes->insert(std::make_pair(SDLK_j, 'j'));
+    _keyCodes->insert(std::make_pair(SDLK_k, 'k'));
+    _keyCodes->insert(std::make_pair(SDLK_l, 'l'));
+    _keyCodes->insert(std::make_pair(SDLK_m, 'm'));
+    _keyCodes->insert(std::make_pair(SDLK_n, 'n'));
+    _keyCodes->insert(std::make_pair(SDLK_o, 'o'));
+    _keyCodes->insert(std::make_pair(SDLK_p, 'p'));
+    _keyCodes->insert(std::make_pair(SDLK_q, 'q'));
+    _keyCodes->insert(std::make_pair(SDLK_r, 'r'));
+    _keyCodes->insert(std::make_pair(SDLK_s, 's'));
+    _keyCodes->insert(std::make_pair(SDLK_t, 't'));
+    _keyCodes->insert(std::make_pair(SDLK_u, 'u'));
+    _keyCodes->insert(std::make_pair(SDLK_v, 'v'));
+    _keyCodes->insert(std::make_pair(SDLK_w, 'w'));
+    _keyCodes->insert(std::make_pair(SDLK_x, 'x'));
+    _keyCodes->insert(std::make_pair(SDLK_y, 'y'));
+    _keyCodes->insert(std::make_pair(SDLK_z, 'z'));
+    _keyCodes->insert(std::make_pair(SDLK_1, '1'));
+    _keyCodes->insert(std::make_pair(SDLK_2, '2'));
+    _keyCodes->insert(std::make_pair(SDLK_3, '3'));
+    _keyCodes->insert(std::make_pair(SDLK_4, '4'));
+    _keyCodes->insert(std::make_pair(SDLK_5, '5'));
+    _keyCodes->insert(std::make_pair(SDLK_6, '6'));
+    _keyCodes->insert(std::make_pair(SDLK_7, '7'));
+    _keyCodes->insert(std::make_pair(SDLK_8, '8'));
+    _keyCodes->insert(std::make_pair(SDLK_9, '9'));
+    _keyCodes->insert(std::make_pair(SDLK_0, '0'));
 
     _timer = SDL_GetTicks();
 
@@ -128,7 +128,7 @@ void PlayerEditNameState::onKeyboardPress(Event * event)
 
     std::string text(_name->text());
 
-    if (event->keyCode() == 22) //backspace
+    if (event->SDLEvent()->key.keysym.sym == SDLK_BACKSPACE) //backspace
     {
         if (text.length() > 0)
         {
@@ -139,7 +139,7 @@ void PlayerEditNameState::onKeyboardPress(Event * event)
         return;
     }
 
-    if (event->keyCode() == 36) //enter
+    if (event->SDLEvent()->key.keysym.sym == SDLK_RETURN) //enter
     {
         return onDoneButtonClick(event);
     }
@@ -147,9 +147,9 @@ void PlayerEditNameState::onKeyboardPress(Event * event)
 
     if (text.length() == 11) return;
 
-    if (_keyCodes->find(event->keyCode()) != _keyCodes->end())
+    if (_keyCodes->find(event->SDLEvent()->key.keysym.sym) != _keyCodes->end())
     {
-        char chr = _keyCodes->at(event->keyCode());
+        char chr = _keyCodes->at(event->SDLEvent()->key.keysym.sym);
 
         if (event->SDLEvent()->key.keysym.mod & (KMOD_CAPS | KMOD_LSHIFT))
         {

@@ -149,7 +149,7 @@ void Game::run()
                 //_fpsCounter->handle(&event);
 
                 // Screenshot function
-                if (event.isKeyboardEvent() && event.SDLEvent()->type == SDL_KEYUP && event.keyCode() == 96) // F12
+                if (event.isKeyboardEvent() && event.SDLEvent()->type == SDL_KEYUP && event.SDLEvent()->key.keysym.sym == SDLK_F12) // F12
                 {
                     std::stringstream ss;
                     ss << SDL_GetTicks() << ".bmp";
