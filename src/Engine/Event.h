@@ -54,11 +54,13 @@ public:
     int y();
 
     int keyCode();
+    unsigned char keyChar();
 
     SDL_Event * SDLEvent();
 
     bool isMouseEvent();
     bool isKeyboardEvent();
+    bool shiftPressed();
 };
 
 }

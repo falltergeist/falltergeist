@@ -86,7 +86,7 @@ void LocationState::onBackgroundClick(Event * event)
 
 void LocationState::onKeyboardRelease(Event * event)
 {
-    if (event->SDLEvent()->key.keysym.sym == SDLK_g) // "g" button - enable\disable hex grid
+    if (event->keyCode() == SDLK_g) // "g" button - enable\disable hex grid
     {
         if (_hexagonalGrid)
         {

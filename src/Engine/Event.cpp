@@ -52,7 +52,7 @@ Event::Event(SDL_Event * event) : _event(event)
         case SDL_KEYDOWN:
         case SDL_KEYUP:
             _isKeyboardEvent = true;
-            _keyCode = event->key.keysym.scancode;
+            _keyCode = event->key.keysym.sym;
             break;
     }
 }
@@ -99,6 +99,16 @@ int Event::y()
 int Event::keyCode()
 {
     return _keyCode;
+}
+
+unsigned char Event::keyChar()
+{
+
+}
+
+bool Event::shiftPressed()
+{
+    return SDLEvent()->key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT);
 }
 
 }

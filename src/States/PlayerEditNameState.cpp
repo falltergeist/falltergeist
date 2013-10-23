@@ -128,7 +128,7 @@ void PlayerEditNameState::onKeyboardPress(Event * event)
 
     std::string text(_name->text());
 
-    if (event->SDLEvent()->key.keysym.sym == SDLK_BACKSPACE) //backspace
+    if (event->keyCode() == SDLK_BACKSPACE) //backspace
     {
         if (text.length() > 0)
         {
@@ -139,19 +139,22 @@ void PlayerEditNameState::onKeyboardPress(Event * event)
         return;
     }
 
-    if (event->SDLEvent()->key.keysym.sym == SDLK_RETURN) //enter
+    if (event->keyCode() == SDLK_RETURN) //enter
     {
         return onDoneButtonClick(event);
     }
 
+    if (event->keyCode() == SDLK_LSHIFT || event->keyCode() == SDLK_RSHIFT) return;
+    if (event->keyCode() == SDLK_LCTRL || event->keyCode() == SDLK_RCTRL) return;
+    if (event->keyCode() == SDLK_LALT || event->keyCode() == SDLK_RALT) return;
 
     if (text.length() == 11) return;
 
-    if (_keyCodes->find(event->SDLEvent()->key.keysym.sym) != _keyCodes->end())
+    if (_keyCodes->find(event->keyCode()) != _keyCodes->end())
     {
-        char chr = _keyCodes->at(event->SDLEvent()->key.keysym.sym);
+        char chr = _keyCodes->at(event->keyCode());
 
-        if (event->SDLEvent()->key.keysym.mod & (KMOD_CAPS | KMOD_LSHIFT))
+        if (event->shiftPressed())
         {
             text += toupper(chr);
         }
