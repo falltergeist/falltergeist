@@ -197,24 +197,13 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
 
     }
     // Name change button
-    {
-        const char * on  = "art/intrface/nameon.frm";
-        const char * off = "art/intrface/nameoff.frm";
-        _addButton("name",  new ImageButton(off, on, 13, 0));
-    }
-    // Age change button
-    {
-        const char * on  = "art/intrface/ageon.frm";
-        const char * off = "art/intrface/ageoff.frm";
-        _addButton("age",  new ImageButton(off, on, 156, 0));
-    }
-    //Gender change button
-    {
-        const char * on  = "art/intrface/sexon.frm";
-        const char * off = "art/intrface/sexoff.frm";
-        _addButton("gender",  new ImageButton(off, on, 236, 0));
-    }
+    _addButton("name",  new ImageButton("art/intrface/nameoff.frm", "art/intrface/nameon.frm", 13, 0));
 
+    // Age change button
+    _addButton("age",  new ImageButton("art/intrface/ageoff.frm", "art/intrface/ageon.frm", 156, 0));
+
+    //Gender change button
+    _addButton("gender",  new ImageButton("art/intrface/sexoff.frm", "art/intrface/sexon.frm", 236, 0));
 
     add(background);
 
@@ -280,8 +269,6 @@ PlayerEditState::~PlayerEditState()
     delete _titles;
     delete _descriptions;
 
-    //std::map<std::string, Surface *>::iterator it;
-    //for (it = _images->begin(); it != _images->end(); ++it) delete it->second;
     delete _images;
 }
 
@@ -466,11 +453,11 @@ void PlayerEditState::onButtonClick(Event * event)
         {
             std::string name = it->first;
 
-            if (name.compare("name") == 0) return onNameButtonClick(event);
-            if (name.compare("age") == 0) return onAgeButtonClick(event);
-            if (name.compare("gender") == 0) return onGenderButtonClick(event);
-            if (name.compare("cancel") == 0) return onBackButtonClick(event);
-            if (name.compare("done") == 0) return onDoneButtonClick(event);
+            if (name == "name") return onNameButtonClick(event);
+            if (name == "age") return onAgeButtonClick(event);
+            if (name == "gender") return onGenderButtonClick(event);
+            if (name == "cancel") return onBackButtonClick(event);
+            if (name == "done") return onDoneButtonClick(event);
 
             if (name.find("stats_") == 0)
             {
@@ -496,9 +483,7 @@ void PlayerEditState::onButtonClick(Event * event)
                 {
                     PlayerEditAlertState * state = new PlayerEditAlertState(_game);
                     libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
-                    std::string text = msg->message(148)->text();
-                    text += "\n";
-                    text += msg->message(149)->text();
+                    std::string text = msg->message(148)->text() + "\n" + msg->message(149)->text();
                     state->setMessage(text);
                     _game->pushState(state);
                 }
@@ -513,9 +498,7 @@ void PlayerEditState::onButtonClick(Event * event)
                 {
                     PlayerEditAlertState * state = new PlayerEditAlertState(_game);
                     libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
-                    std::string text = msg->message(140)->text();
-                    text += "\n";
-                    text += msg->message(141)->text();
+                    std::string text = msg->message(140)->text() + "\n" + msg->message(141)->text();
                     state->setMessage(text);
                     _game->pushState(state);
                 }
