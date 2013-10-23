@@ -45,9 +45,9 @@ StartState::~StartState()
 void StartState::think()
 {
     //_game->setPlayer(new Player(ResourceManager::gcdFileType("premade/combat.gcd")));
-    //_game->setState(new LocationState(_game));
+    _game->setState(new LocationState(_game));
     
-    _game->setState(new MainMenuState(_game));
+    //_game->setState(new MainMenuState(_game));
 }
 
 }

@@ -44,6 +44,7 @@ LocationState::LocationState(Game * game) : State(game)
     _scrollTicks = 0;
     _location = 0;
     _background = 0;
+    _hexagonalGrid = false;
 }
 
 LocationState::~LocationState()
@@ -70,16 +71,32 @@ void LocationState::init()
 
 
 
-    _location = new Location(_game->resourceManager()->mapFileType("maps/broken1.map"));
+    _location = new Location(_game->resourceManager()->mapFileType("maps/artemple.map"));
     _background = new InteractiveSurface(_location->tilesBackground());
     add(_background);
 
     _background->onLeftButtonClick((EventHandler) &LocationState::onBackgroundClick);
+    _background->onKeyboardRelease((EventHandler) &LocationState::onKeyboardRelease);
 }
 
 void LocationState::onBackgroundClick(Event * event)
 {
     std::cout << "test" << std::endl;
+}
+
+void LocationState::onKeyboardRelease(Event * event)
+{
+    if (event->keyCode() == 42) // "g" button - enable\disable hex grid
+    {
+        if (_hexagonalGrid)
+        {
+            _hexagonalGrid = false;
+        }
+        else
+        {
+            _hexagonalGrid = true;
+        }
+    }
 }
 
 void LocationState::blit()
@@ -88,6 +105,8 @@ void LocationState::blit()
     State::blit();
 
     if (_location == 0) return;
+
+    _drawHexagonalGrid();
 
     for (std::vector<LocationObject *>::iterator it = _location->objectsToRender()->begin(); it != _location->objectsToRender()->end(); ++it)
     {
@@ -103,6 +122,22 @@ void LocationState::blit()
         object->blit(_game->screen()->surface());
         object->setX(oldX);
         object->setY(oldY);
+    }
+}
+
+void LocationState::_drawHexagonalGrid()
+{
+    if (!_hexagonalGrid) return;
+    Surface * hexagon = ResourceManager::surface("art/intrface/msef000.frm");
+    hexagon->setXOffset(0 - hexagon->width()/2);
+    hexagon->setYOffset(0 - hexagon->height()/2);
+    for (unsigned int i = 0; i != 200*200; ++i)
+    {
+        int x = _location->hexagonToX(i) - _location->camera()->x();
+        int y = _location->hexagonToY(i) - _location->camera()->y();
+        hexagon->setX(x);
+        hexagon->setY(y);
+        hexagon->blit(_game->screen()->surface());
     }
 }
 

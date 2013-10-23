@@ -38,6 +38,7 @@ class InteractiveSurface;
 class LocationState : public State
 {
 protected:    
+    bool _hexagonalGrid;
     Animation * _animation;
     Location * _location;
     InteractiveSurface * _background;
@@ -45,6 +46,7 @@ protected:
     unsigned int _cameraX;
     unsigned int _cameraY;
     unsigned int _scrollTicks;
+    void _drawHexagonalGrid();
 public:
     LocationState(Game * game);
     ~LocationState();
@@ -53,6 +55,7 @@ public:
     virtual void blit();
 
     void onBackgroundClick(Event * event);
+    void onKeyboardRelease(Event * event);
 };
 
 }
