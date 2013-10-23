@@ -30,119 +30,71 @@ namespace Falltergeist
 
 ImageButton::ImageButton(std::string releasedImage, std::string pressedImage, int x, int y) : InteractiveSurface(0, 0, x, y)
 {
-    _releasedImage = releasedImage;
-    _pressedImage = pressedImage;
-    setNeedRedraw(true);
-    onMouseIn((EventHandler) &ImageButton::mouseInHandler);
-    onMouseOut((EventHandler) &ImageButton::mouseOutHandler);
-    onLeftButtonPress((EventHandler) &ImageButton::mouseUpHandler);
-    onLeftButtonRelease((EventHandler) &ImageButton::mouseDownHandler);
+    _releasedSurface = new Surface(ResourceManager::surface(releasedImage));
+    _releasedSurface->setXOffset(0);
+    _releasedSurface->setYOffset(0);
+    _pressedSurface = new Surface(ResourceManager::surface(pressedImage));
+    _pressedSurface->setXOffset(0);
+    _pressedSurface->setYOffset(0);
 }
 
 ImageButton::ImageButton(unsigned int type, int x, int y) : InteractiveSurface(0, 0, x, y)
 {
+    std::string pressedImage, releasedImage;
+
     switch (type)
     {
         case BUTTON_SMALL_RED_CIRCLE:
-            _pressedImage  = "art/intrface/lilreddn.frm";
-            _releasedImage = "art/intrface/lilredup.frm";
+            pressedImage  = "art/intrface/lilreddn.frm";
+            releasedImage = "art/intrface/lilredup.frm";
             break;
         case BUTTON_BIG_RED_CIRCLE:
-            _pressedImage  = "art/intrface/menudown.frm";
-            _releasedImage = "art/intrface/menuup.frm";
+            pressedImage  = "art/intrface/menudown.frm";
+            releasedImage = "art/intrface/menuup.frm";
             break;
         case BUTTON_SKILL_TOGGLE:
-            _pressedImage  = "art/intrface/tgsklon.frm";
-            _releasedImage = "art/intrface/tgskloff.frm";
+            pressedImage  = "art/intrface/tgsklon.frm";
+            releasedImage = "art/intrface/tgskloff.frm";
             break;
         case BUTTON_PLUS:
-            _pressedImage  = "art/intrface/splson.frm";
-            _releasedImage = "art/intrface/splsoff.frm";
+            pressedImage  = "art/intrface/splson.frm";
+            releasedImage = "art/intrface/splsoff.frm";
             break;
         case BUTTON_MINUS:
-            _pressedImage  = "art/intrface/snegon.frm";
-            _releasedImage = "art/intrface/snegoff.frm";
+            pressedImage  = "art/intrface/snegon.frm";
+            releasedImage = "art/intrface/snegoff.frm";
             break;
         case BUTTON_LEFT_ARROW:
-            _pressedImage  = "art/intrface/sld.frm";
-            _releasedImage = "art/intrface/slu.frm";
+            pressedImage  = "art/intrface/sld.frm";
+            releasedImage = "art/intrface/slu.frm";
             break;
         case BUTTON_RIGHT_ARROW:
-            _pressedImage  = "art/intrface/srd.frm";
-            _releasedImage = "art/intrface/sru.frm";
+            pressedImage  = "art/intrface/srd.frm";
+            releasedImage = "art/intrface/sru.frm";
             break;
+        default:
+            throw Exception("ImageButton::Imagebutton() - wrong button type");
     }
-
-    setNeedRedraw(true);
-    onMouseIn((EventHandler) &ImageButton::mouseInHandler);
-    onMouseOut((EventHandler) &ImageButton::mouseOutHandler);
-    onLeftButtonPress((EventHandler) &ImageButton::mouseUpHandler);
-    onLeftButtonRelease((EventHandler) &ImageButton::mouseDownHandler);
+    _releasedSurface = new Surface(ResourceManager::surface(releasedImage));
+    _releasedSurface->setXOffset(0);
+    _releasedSurface->setYOffset(0);
+    _pressedSurface = new Surface(ResourceManager::surface(pressedImage));
+    _pressedSurface->setXOffset(0);
+    _pressedSurface->setYOffset(0);
 }
 
-void ImageButton::draw()
+ImageButton::~ImageButton()
 {
-    if (!needRedraw()) return;
-
-    InteractiveSurface::draw();
-
-    int x = this->x();
-    int y = this->y();
-    if (_hovered && _leftButtonPressed)
-    {
-        loadFromSurface(ResourceManager::surface(_pressedImage));
-
-    }
-    else
-    {
-        loadFromSurface(ResourceManager::surface(_releasedImage));
-    }
-    this->setX(x);
-    this->setY(y);
-    this->setXOffset(0);
-    this->setYOffset(0);
+    delete _releasedSurface;
+    delete _pressedSurface;
 }
 
-void ImageButton::mouseInHandler(Event * event)
+SDL_Surface * ImageButton::sdl_surface()
 {
-    if (_leftButtonPressed && _hovered)
-    {
-        event->sender()->setNeedRedraw(true);
-    }
+    if (_hovered && _leftButtonPressed) return _pressedSurface->sdl_surface();
+
+    return _releasedSurface->sdl_surface();
 }
 
-void ImageButton::mouseOutHandler(Event * event)
-{
-    if (_leftButtonPressed)
-    {
-        event->sender()->setNeedRedraw(true);
-    }
-}
-
-void ImageButton::mouseUpHandler(Event * event)
-{
-    if (_hovered)
-    {
-        event->sender()->setNeedRedraw(true);
-    }
-}
-
-void ImageButton::mouseDownHandler(Event * event)
-{
-    if (_hovered)
-    {
-        event->sender()->setNeedRedraw(true);
-    }
-}
-
-void ImageButton::setPressedImage(std::string pressedImage)
-{
-    _pressedImage = pressedImage;
-}
-
-void ImageButton::setReleasedImage(std::string releasedImage)
-{
-    _releasedImage = releasedImage;
-}
 
 }
