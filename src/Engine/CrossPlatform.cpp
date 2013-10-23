@@ -105,9 +105,11 @@ std::string CrossPlatform::findDataPath()
 
     // Then trying to search in user home directory  ~/.falltergeist
     {
-        char * cwd;
-#if defined(_WIN32) || defined(WIN32)
-        SHGetSpecialFolderPath(0, cwd, CSIDL_PROFILE, FALSE);
+        char cwd[256];
+#if defined(_WIN32) || defined(WIN32)        
+	LPITEMIDLIST pidl; 
+	SHGetSpecialFolderLocation(NULL, CSIDL_PROFILE  ,&pidl);
+	SHGetPathFromIDList(pidl, cwd);
 #else
         cwd = getenv("HOME");
 #endif
