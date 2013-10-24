@@ -46,7 +46,7 @@ public:
 
     Surface * surface();
     std::vector<Surface *> * surfaces();
-    void loadFromFrmFile(const char * filename);
+    void loadFromFrmFile(std::string filename);
     void loadFromFrmFile(libfalltergeist::FrmFileType * frm);
     virtual void think();
 

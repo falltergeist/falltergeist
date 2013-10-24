@@ -18,12 +18,11 @@
  */
 
 // C++ standard includes
-#include <string.h>
-#include <iostream>
 #include <cmath>
 
 // Falltergeist includes
 #include "../Engine/Player.h"
+#include "../Engine/CrossPlatform.h"
 
 // Third party includes
 
@@ -344,7 +343,7 @@ void Player::setTrait(int traitNumber, unsigned int value)
     }
     else
     {
-        std::cout << "Player::setTrait() - traitNumber out of range: " << (int) traitNumber << std::endl;
+        debug("Player::setTrait() - traitNumber out of range: " + std::to_string(traitNumber) + "\n", DEBUG_ERROR);
     }
 }
 
@@ -381,7 +380,7 @@ void Player::setSkill(int skillNumber, unsigned int value)
     }
     else
     {
-        std::cout << "Player::setSkill() - skillNumber out of range: " << skillNumber << std::endl;
+        debug("Player::setSkill() - skillNumber out of range: " + std::to_string(skillNumber) + "\n", DEBUG_ERROR);
     }
 }
 

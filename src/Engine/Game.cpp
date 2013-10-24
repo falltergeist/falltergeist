@@ -19,7 +19,6 @@
 
 // C++ standard includes
 #include <sstream>
-//#include <>
 #include <cstring>
 
 // Falltergeist includes

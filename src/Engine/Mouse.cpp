@@ -19,7 +19,6 @@
  */
 
 // C++ standard includes
-#include <iostream>
 #include <cmath>
 
 // Falltergeist includes

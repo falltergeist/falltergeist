@@ -18,12 +18,12 @@
  */
 
 // C++ standard includes
-#include <iostream>
 #include <cmath>
 
 // Falltergeist includes
 #include "../Engine/Animation.h"
 #include "../Engine/ResourceManager.h"
+#include "../Engine/CrossPlatform.h"
 
 // Third party includes
 
@@ -159,17 +159,15 @@ int Animation::xOffsetMin()
 
         if (offset < offsetMin) offsetMin = offset;
     }
-
-    std::cout << offsetMin << std::endl;
     return offsetMin;
 }
 
-void Animation::loadFromFrmFile(const char * filename)
+void Animation::loadFromFrmFile(std::string filename)
 {
     libfalltergeist::FrmFileType * frm = ResourceManager::frmFileType(filename);
     if (!frm)
     {
-        std::cout << "can't find FRM file " << filename << std::endl;
+        debug("Can't find FRM file "+ filename + "\n", DEBUG_ERROR);
     }
     return loadFromFrmFile(frm);
 }

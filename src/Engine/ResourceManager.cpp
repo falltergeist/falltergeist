@@ -19,7 +19,6 @@
 
 // C++ standard includes
 #include <string>
-#include <iostream>
 #include <fstream>
 
 // Falltergeist includes
@@ -102,12 +101,11 @@ ResourceManager::~ResourceManager()
 }
 
 libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename)
-{
-    std::cout << "[RESOURCE MANAGER] - Loading file: " << filename;
+{    
     // Return item from cache
     if (_datFilesItems->find(filename) != _datFilesItems->end())
     {
-        std::cout << " - [FROM CACHE]" << std::endl;
+        debug("[RESOURCE MANAGER] - Loading file: " + filename + " [FROM CACHE]\n", DEBUG_INFO);
         return _datFilesItems->at(filename);
     }
 
@@ -136,7 +134,7 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
 
             item->setFilename((char *) filename.c_str());
             _datFilesItems->insert(std::make_pair(filename, item));
-            std::cout << " [FROM DATA DIR]" << std::endl;
+            debug("[RESOURCE MANAGER] - Loading file: " + filename + " [FROM DATA DIR]\n", DEBUG_INFO);
             return item;
         }
         delete stream;
@@ -150,11 +148,11 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
         if (item)
         {
             _datFilesItems->insert(std::make_pair(filename, item));
-            std::cout << " [FROM DAT FILE]" << std::endl;
+            debug("[RESOURCE MANAGER] - Loading file: " + filename + " [FROM DAT FILE]\n", DEBUG_INFO);
             return item;
         }
     }
-    std::cout << " [NOT FOUND]" << std::endl;
+    debug("[RESOURCE MANAGER] - Loading file: " + filename + " [ NOT FOUND]\n", DEBUG_ERROR);
     return 0;
 }
 
@@ -228,11 +226,8 @@ Surface * ResourceManager::surface(std::string filename, int posX, int posY, uns
     }
 
     libfalltergeist::FrmFileType * frm = frmFileType(filename);
-    if (!frm)
-    {
-        std::cout << "No FRM "<< filename << " found" << std::endl;
-        return 0;
-    }
+    if (!frm) return 0;
+
     Surface * surface = new Surface(frm, direction, frame);
 
     surface->setX(posX);
@@ -268,7 +263,7 @@ libfalltergeist::ProFileType * ResourceManager::proFileType(unsigned int PID)
             listFile += "proto/misc/misc.lst";
             break;
         default:
-            std::cout << "Wrong PID: " << std::dec << PID << std::endl;
+            debug("ResourceManager::proFileType(unsigned int) - wrong PID: " + std::to_string(PID) + "\n", DEBUG_ERROR);
             return 0;
     }
 
@@ -278,9 +273,7 @@ libfalltergeist::ProFileType * ResourceManager::proFileType(unsigned int PID)
 
     if (index > lst->strings()->size())
     {
-        std::cout << listFile << std::endl;
-        std::cout << "Lst size: " << std::dec << lst->strings()->size() << std::endl;
-        std::cout << "Wrong PID: " << std::dec << index << std::endl;
+        debug("ResourceManager::proFileType(unsigned int) - LST size < PID: " + std::to_string(PID) + "\n", DEBUG_ERROR);
         return 0;
     }
 
@@ -408,7 +401,7 @@ Surface * ResourceManager::surface(unsigned int FID, unsigned int direction, uns
 
     if (frmId >= lst->strings()->size())
     {
-        std::cout << "Size: " << lst->strings()->size() << " frmId: " << frmId << std::endl;
+        debug("ResourceManager::surface(unsigned int, unsigned int, unsigned int) - LST size <= FID: " + std::to_string(FID) + "\n", DEBUG_ERROR);
         return 0;
     }
 
