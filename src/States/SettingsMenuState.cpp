@@ -47,15 +47,14 @@ void SettingsMenuState::init()
     background->setXOffset(0);
     background->setYOffset(0);
     
-    auto bigSwitches = ResourceManager::surface("art/intrface/prfbknbs.frm");
-    
-    auto switch1 = new MultistateImageButton(100, 100);
-    switch1->addState(bigSwitches->crop(0, 47*0, 46, 47));
-    switch1->addState(bigSwitches->crop(0, 47*1, 46, 47));
-    switch1->addState(bigSwitches->crop(0, 47*2, 46, 47));
-    switch1->addState(bigSwitches->crop(0, 47*3, 46, 47));
-    switch1->setModeFactor(-1);
-    //MultistateImageButton
+    auto bigSwitchesSurface = ResourceManager::surface("art/intrface/prfbknbs.frm");
+    auto bigSwitchSet = new SurfaceSet();
+    bigSwitchSet->addSurface(bigSwitchesSurface->crop(0, 47*0, 46, 47));
+    bigSwitchSet->addSurface(bigSwitchesSurface->crop(0, 47*1, 46, 47));
+    bigSwitchSet->addSurface(bigSwitchesSurface->crop(0, 47*2, 46, 47));
+    bigSwitchSet->addSurface(bigSwitchesSurface->crop(0, 47*3, 46, 47));
+
+    auto switch1 = new MultistateImageButton(bigSwitchSet, 100, 100);
     // prfbknbs.frm - 4 больших переключателя - расположены вертикально // 46x188
     // prflknbs.frm - 2 маленьких переключателя - расположены вертикально
     

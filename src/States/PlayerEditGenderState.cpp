@@ -42,15 +42,17 @@ void PlayerEditGenderState::init()
 {
     State::init();
 
-    _maleImage = new SurfaceSet(260, 2);
-    _maleImage->addSurface(new Surface(_game->resourceManager()->surface("art/intrface/maleoff.frm")));
-    _maleImage->addSurface(new Surface(_game->resourceManager()->surface("art/intrface/maleon.frm")));
+    _maleImage = new SurfaceSet((std::vector<std::string>){
+                                    "art/intrface/maleoff.frm",
+                                    "art/intrface/maleon.frm"
+                                }, 260, 2);
     _maleImage->onLeftButtonPress((EventHandler) &PlayerEditGenderState::onMaleButtonPress);
     if (_game->player()->gender() == Player::GENDER_MALE) _maleImage->setCurrentSurface(1);
 
-    _femaleImage = new SurfaceSet(310,2);
-    _femaleImage->addSurface(new Surface(_game->resourceManager()->surface("art/intrface/femoff.frm")));
-    _femaleImage->addSurface(new Surface(_game->resourceManager()->surface("art/intrface/femon.frm")));
+    _femaleImage = new SurfaceSet((std::vector<std::string>){
+                                      "art/intrface/femoff.frm",
+                                      "art/intrface/femon.frm"
+                                  }, 310, 2);
     _femaleImage->onLeftButtonPress((EventHandler) &PlayerEditGenderState::onFemaleButtonPress);
     if (_game->player()->gender() == Player::GENDER_FEMALE) _femaleImage->setCurrentSurface(1);
 

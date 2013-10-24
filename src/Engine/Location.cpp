@@ -345,8 +345,6 @@ void Location::_generateBackground()
 
         std::string frmName = _tilesLst->strings()->at(_mapFile->elevations()->at(_elevation)->floorTiles()->at(i));
         Surface * tile = ResourceManager::surface("art/tiles/" + frmName);
-
-
         tile->setX(tileX - camera()->x());
         tile->setY(tileY - camera()->y());
         tile->blit(_tilesBackground);

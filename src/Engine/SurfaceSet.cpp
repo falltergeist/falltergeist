@@ -27,6 +27,18 @@
 namespace Falltergeist
 {
 
+SurfaceSet::SurfaceSet(std::vector<std::string> surfacesList, int x, int y) : InteractiveSurface(0,0,x,y)
+{
+    _surfaces = new std::vector<Surface*>;
+    for (auto& frmName : surfacesList) addSurface(new Surface(ResourceManager::surface(frmName)));
+}
+
+SurfaceSet::SurfaceSet(std::vector<Surface*> surfacesList, int x, int y) : InteractiveSurface(0,0,x,y)
+{
+    _surfaces = new std::vector<Surface*>;
+    for (auto& surface : surfacesList) addSurface(new Surface(surface));
+}
+
 SurfaceSet::SurfaceSet(int x, int y) : InteractiveSurface(0,0,x,y)
 {
     _surfaces = new std::vector<Surface*>;
@@ -62,6 +74,11 @@ Surface* SurfaceSet::surface()
 {
     //return new Surface(_surfaces->at(currentSurface));
     return _surfaces->at(currentSurface);
+}
+
+std::vector<Surface *> * SurfaceSet::surfaces()
+{
+    return _surfaces;
 }
 
 SDL_Surface* SurfaceSet::sdl_surface()

@@ -39,7 +39,6 @@ namespace Falltergeist
 
 NewGameState::NewGameState(Game * game) : State(game)
 {
-    _characterImages = new SurfaceSet(27,23);
     _characters = new std::vector<Player *>;
 }
 
@@ -87,11 +86,11 @@ void NewGameState::init()
 
     // Characters images
     _selectedCharacter = 0;
-    _characterImages->addSurface(new Surface(_game->resourceManager()->surface("art/intrface/combat.frm")));
-    _characterImages->addSurface(new Surface(_game->resourceManager()->surface("art/intrface/stealth.frm")));
-    _characterImages->addSurface(new Surface(_game->resourceManager()->surface("art/intrface/diplomat.frm")));
-
-
+    _characterImages = new SurfaceSet({
+                                          "art/intrface/combat.frm",
+                                          "art/intrface/stealth.frm",
+                                          "art/intrface/diplomat.frm"
+                                      }, 27, 23);
 
     _characters->push_back(new Player(ResourceManager::gcdFileType("premade/combat.gcd")));
     _characters->back()->setBio(ResourceManager::bioFileType("premade/combat.bio")->text());
@@ -101,18 +100,18 @@ void NewGameState::init()
     _characters->back()->setBio(ResourceManager::bioFileType("premade/diplomat.bio")->text());
     
     // Character data textareas
-    _playerName = new TextArea("",350,50);
+    _playerName = new TextArea(350, 50);
     _playerName->setFont("font1.aaf");
 
-    _playerStats1 = new TextArea("",0,80);
+    _playerStats1 = new TextArea(0, 80);
     _playerStats1->setWidth(370);
     _playerStats1->setFont("font1.aaf");
     _playerStats1->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
-    _playerStats2 = new TextArea("",374,80);
+    _playerStats2 = new TextArea(374, 80);
     _playerStats2->setFont("font1.aaf");
 
-    _playerBio = new TextArea("",430,50);
+    _playerBio = new TextArea(430, 50);
     _playerBio->setFont("font1.aaf");
 
 

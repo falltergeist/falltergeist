@@ -40,7 +40,7 @@ class Player;
 class NewGameState : public State
 {
 protected:
-    SurfaceSet * _characterImages;
+    SurfaceSet * _characterImages = 0;
     std::vector<Player *> * _characters;
     TextArea * _playerStats1;
     TextArea * _playerStats2;

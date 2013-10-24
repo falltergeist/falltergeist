@@ -25,7 +25,7 @@
 
 // Falltergeist includes
 #include "../Engine/InteractiveSurface.h"
-
+#include "../Engine/SurfaceSet.h"
 // Third party includes
 
 namespace Falltergeist
@@ -34,17 +34,20 @@ namespace Falltergeist
 class MultistateImageButton : public InteractiveSurface
 {
 protected:
-    std::vector<Surface*> _states;
+    SurfaceSet _surfaceSet;
     unsigned int _currentState = 0;
-    int _mode = MODE_PROGRESSION;
+    int _mode = MODE_CYCLIC;
     int _modeFactor = 1; // or -1
 public:
     enum {MODE_PROGRESSION = 1, MODE_CYCLIC};
     MultistateImageButton(int x = 0, int y = 0);
+    MultistateImageButton(SurfaceSet* surfaceSet, int x = 0, int y = 0);
+    MultistateImageButton(SurfaceSet surfaceSet, int x = 0, int y = 0);
     virtual ~MultistateImageButton();
     virtual void leftButtonClick(Event* event, State* state);
-    void addState(Surface * surface);
+    void addSurface(Surface * surface);
     int state();
+    void setState(int state);
     void setMode(int mode);    
     int mode();
     void setModeFactor(int factor);

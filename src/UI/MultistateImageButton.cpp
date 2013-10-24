@@ -22,27 +22,44 @@
 // Falltergeist includes
 #include "../UI/MultistateImageButton.h"
 #include "../Engine/Exception.h"
+
 // Third party includes
 
 namespace Falltergeist
 {
 
-MultistateImageButton::MultistateImageButton(int x, int y) : InteractiveSurface(0, 0, x, y) 
+MultistateImageButton::MultistateImageButton(int x, int y) : InteractiveSurface(0, 0, x, y)
 {
 }
+
+MultistateImageButton::MultistateImageButton(SurfaceSet surfaceSet, int x, int y) : InteractiveSurface(0, 0, x, y)
+{
+    for (auto surface : *surfaceSet.surfaces()) _surfaceSet.addSurface(surface);
+}
+
+MultistateImageButton::MultistateImageButton(SurfaceSet* surfaceSet, int x, int y) : InteractiveSurface(0, 0, x, y)
+{
+    for (auto surface : *surfaceSet->surfaces()) _surfaceSet.addSurface(surface);
+}
+
 
 MultistateImageButton::~MultistateImageButton()
 {
 }
 
-void MultistateImageButton::addState(Surface* surface)
+void MultistateImageButton::addSurface(Surface* surface)
 {
-    _states.push_back(surface);
+    _surfaceSet.addSurface(surface);
 }
 
 int MultistateImageButton::state()
 {
     return _currentState;
+}
+
+void MultistateImageButton::setState(int state)
+{
+    _currentState = state;
 }
 
 void MultistateImageButton::setMode(int mode)
@@ -69,33 +86,31 @@ void MultistateImageButton::leftButtonClick(Event* event, State* state)
     {
         if (modeFactor() > 0)
         {
-            if (_currentState < _states.size() - 1)
-            {
-                _currentState+= modeFactor();
-            }
-            else
-            {
-                _currentState = 0;
-            }
+            _currentState = (_currentState < _surfaceSet.surfaces()->size() - 1) ? _currentState + modeFactor() : 0;
         }
         else
         {
-            if (_currentState > 0)
-            {
-                _currentState+= modeFactor();
-            }
-            else
-            {
-                _currentState = _states.size() - 1;
-            }            
+            _currentState = (_currentState > 0) ? _currentState + modeFactor() : _surfaceSet.surfaces()->size() - 1;
         }
     }        
+    else // MODE_CYCLIC
+    {
+        if (modeFactor() > 0)
+        {
+            if (_currentState == _surfaceSet.surfaces()->size() - 1) setModeFactor(-modeFactor());
+        }
+        else
+        {
+            if (_currentState == 0) setModeFactor(-modeFactor());
+        }
+        _currentState += modeFactor();
+    }
     InteractiveSurface::leftButtonClick(event, state);
 }
 
 SDL_Surface* MultistateImageButton::sdl_surface()
 {
-    return _states.at(_currentState)->sdl_surface();
+    return _surfaceSet.surfaces()->at(_currentState)->sdl_surface();
 }
 
 void MultistateImageButton::setModeFactor(int factor)
