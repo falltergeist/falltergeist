@@ -20,6 +20,7 @@
 // C++ standard includes
 #include <dirent.h>
 #include <iostream>
+#include <algorithm>
 #include <fstream>
 #include <cstdlib>
 
@@ -49,6 +50,7 @@ void debug(std::string message, unsigned char level)
 std::string CrossPlatform::_version;
 std::string CrossPlatform::_dataPath;
 std::vector<std::string> * CrossPlatform::_dataFiles = 0;
+const std::vector<std::string> CrossPlatform::necessaryDatFiles = {"master.dat", "critter.dat"};
 
 
 CrossPlatform::CrossPlatform()
@@ -134,31 +136,26 @@ std::string CrossPlatform::findDataPath()
         debug("cdrom drive detection not supported");
     }
 
-    std::vector<std::string> necessaryFiles;
-    necessaryFiles.push_back("master.dat");
-    necessaryFiles.push_back("critter.dat");
-
-    for (unsigned int j = 0; j < directories.size();j++) {
-
-        bool dataFound = true;
-        for (unsigned int i = 0; i < necessaryFiles.size(); i++) {
-            std::string path(directories.at(j)); 
-            path.append("/");
-            path.append(necessaryFiles.at(i));
-            std::ifstream stream(path.c_str());
-            if (stream)
-            {
-                debug("Searching in directory: " + directories.at(j) + " " + necessaryFiles.at(i) + " [FOUND]\n", DEBUG_INFO);
-            }
-            else
-            {
-                dataFound = false;
-                debug("Searching in directory: " + directories.at(j) + " " + necessaryFiles.at(i) + " [NOT FOUND]\n", DEBUG_INFO);
-            }
-        }
-
-        if (dataFound) {
-            _dataPath = directories.at(j);
+    for (auto& directory : directories) {
+        if (std::all_of(
+                necessaryDatFiles.begin(),
+                necessaryDatFiles.end(),
+                [directory](std::string file) {
+                    std::ifstream stream(directory + "/" + file);
+                    if (stream)
+                    {
+                        debug("Searching in directory: " + directory + " " + file + " [FOUND]\n", DEBUG_INFO);
+                        return true;
+                    }
+                    else
+                    {
+                        debug("Searching in directory: " + directory + " " + file + " [NOT FOUND]\n", DEBUG_INFO);
+                        return false;
+                    }
+                })
+           )
+        {
+            _dataPath = directory;
             return _dataPath;
         }
     }

@@ -42,6 +42,7 @@ protected:
     static std::string _dataPath;
     static std::vector<std::string> * _dataFiles;
     static std::string _version;
+    const static std::vector<std::string> necessaryDatFiles;
 public:
     CrossPlatform();
     ~CrossPlatform();
