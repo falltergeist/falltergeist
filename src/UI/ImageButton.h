@@ -34,16 +34,32 @@ namespace Falltergeist
 class ImageButton : public InteractiveSurface
 {
 protected:
-    Surface * _releasedSurface;
-    Surface * _pressedSurface;
+    Surface* _releasedSurface = 0;
+    Surface* _pressedSurface = 0;
+    bool _pressed = false;
+    bool _switchMode = false;
 public:
-    enum ButtonType {BUTTON_SMALL_RED_CIRCLE = 1, BUTTON_BIG_RED_CIRCLE, BUTTON_SKILL_TOGGLE, BUTTON_PLUS, BUTTON_MINUS, BUTTON_LEFT_ARROW, BUTTON_RIGHT_ARROW};
+    enum ButtonType {
+        BUTTON_SMALL_RED_CIRCLE = 1, 
+        BUTTON_BIG_RED_CIRCLE, 
+        BUTTON_SKILL_TOGGLE, 
+        BUTTON_PLUS, 
+        BUTTON_MINUS, 
+        BUTTON_LEFT_ARROW, 
+        BUTTON_RIGHT_ARROW,
+        BUTTON_CHECKBOX
+    };
     ImageButton(std::string releasedImage = 0, std::string pressedImage = 0, int x = 0, int y = 0);
     ImageButton(unsigned int type, int x = 0, int y = 0);
     ~ImageButton();
-    virtual SDL_Surface * sdl_surface();
+    virtual SDL_Surface* sdl_surface();
+    bool pressed();
+    void setPressed(bool mode);
+    bool switchMode();
+    void setSwitchMode(bool mode);
     void setPressedImage(std::string image);
     void setReleasedImage(std::string image);
+    virtual void leftButtonClick(Event* event, State* state);
 
 };
 

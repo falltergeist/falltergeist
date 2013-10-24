@@ -30,16 +30,13 @@ namespace Falltergeist
 
 ImageButton::ImageButton(std::string releasedImage, std::string pressedImage, int x, int y) : InteractiveSurface(0, 0, x, y)
 {
-    _releasedSurface = 0; _pressedSurface = 0;
     setReleasedImage(releasedImage);
     setPressedImage(pressedImage);
 }
 
 ImageButton::ImageButton(unsigned int type, int x, int y) : InteractiveSurface(0, 0, x, y)
 {
-    _releasedSurface = 0; _pressedSurface = 0;
     std::string pressedImage, releasedImage;
-
     switch (type)
     {
         case BUTTON_SMALL_RED_CIRCLE:
@@ -70,6 +67,10 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : InteractiveSurface(0
             pressedImage  = "art/intrface/srd.frm";
             releasedImage = "art/intrface/sru.frm";
             break;
+        case BUTTON_CHECKBOX:
+            releasedImage = "art/intrface/prefxout.frm";
+            pressedImage  = "art/intrface/prefxin.frm";
+            break;
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
     }
@@ -81,6 +82,31 @@ ImageButton::~ImageButton()
 {
     delete _releasedSurface;
     delete _pressedSurface;
+}
+
+void ImageButton::setSwitchMode(bool mode)
+{
+    _switchMode = true;
+}
+
+bool ImageButton::switchMode()
+{
+    return _switchMode;
+}
+
+void ImageButton::setPressed(bool mode)
+{
+    _pressed = mode;
+}
+
+bool ImageButton::pressed()
+{
+    if (_switchMode)
+    {
+        return _pressed;
+    }
+    if (_hovered && _leftButtonPressed) return true;        
+    return false;
 }
 
 void ImageButton::setPressedImage(std::string image)
@@ -101,9 +127,25 @@ void ImageButton::setReleasedImage(std::string image)
 
 SDL_Surface * ImageButton::sdl_surface()
 {
-    if (_hovered && _leftButtonPressed) return _pressedSurface->sdl_surface();
+    if (pressed()) return _pressedSurface->sdl_surface();
 
     return _releasedSurface->sdl_surface();
+}
+
+void ImageButton::leftButtonClick(Event* event, State* state)
+{
+    if (switchMode())
+    {
+        if (pressed())
+        {
+            setPressed(false);
+        }
+        else
+        {
+            setPressed(true);
+        }
+    }
+    InteractiveSurface::leftButtonClick(event, state);
 }
 
 

@@ -25,6 +25,7 @@
 
 // Falltergeist includes
 #include "../Engine/State.h"
+#include "../Engine/IniFile.h"
 
 // Third party includes
 
@@ -33,15 +34,18 @@ namespace Falltergeist
 
 class SettingsMenuState : public State
 {
+protected:
+    IniFileSection _getDefaultSettings();
+    IniFileSection _getSettings();
 public:
     SettingsMenuState(Game * game);
     virtual ~SettingsMenuState();
     virtual void init();
     virtual void think();
-private:
-
+    void onDefaultButtonClick(Event * event);
+    void onCancelButtonClick(Event * event);
+    void onSaveButtonClick(Event * event);
 };
 
 }
 #endif	// FALLTERGEIST_SETTINGSMENUSTATE_H
-

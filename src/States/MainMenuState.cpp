@@ -55,50 +55,50 @@ void MainMenuState::init()
     background->setYOffset(0);
 
     // "Into" button
-    ImageButton * introButton = new ImageButton(ImageButton::BUTTON_BIG_RED_CIRCLE, 29, 19);
+    auto introButton = new ImageButton(ImageButton::BUTTON_BIG_RED_CIRCLE, 29, 19);
 
     // "New game" button
-    ImageButton * newGameButton = new ImageButton(ImageButton::BUTTON_BIG_RED_CIRCLE, 29, 19 + 41);
+    auto newGameButton = new ImageButton(ImageButton::BUTTON_BIG_RED_CIRCLE, 29, 19 + 41);
     newGameButton->onLeftButtonClick((EventHandler) &MainMenuState::onNewGameButtonClick);
 
     // "Load game" button
-    ImageButton * loadGameButton = new ImageButton(ImageButton::BUTTON_BIG_RED_CIRCLE, 29, 19 + 41*2);
+    auto loadGameButton = new ImageButton(ImageButton::BUTTON_BIG_RED_CIRCLE, 29, 19 + 41*2);
 
     // "Settings" button
-    ImageButton * settingsButton = new ImageButton(ImageButton::BUTTON_BIG_RED_CIRCLE, 29, 19 + 41*3);
+    auto settingsButton = new ImageButton(ImageButton::BUTTON_BIG_RED_CIRCLE, 29, 19 + 41*3);
     settingsButton->onLeftButtonClick((EventHandler) &MainMenuState::onSettingsButtonClick);
 
     // "Credits" button
-    ImageButton * creditsButton = new ImageButton(ImageButton::BUTTON_BIG_RED_CIRCLE, 29, 19 + 41*4);
-
+    auto creditsButton = new ImageButton(ImageButton::BUTTON_BIG_RED_CIRCLE, 29, 19 + 41*4);
+    
     // "Exit" button
-    ImageButton * exitButton = new ImageButton(ImageButton::BUTTON_BIG_RED_CIRCLE, 29, 19 + 41*5);
+    auto exitButton = new ImageButton(ImageButton::BUTTON_BIG_RED_CIRCLE, 29, 19 + 41*5);
     exitButton->onLeftButtonClick((EventHandler) &MainMenuState::onExitButtonClick);
 
-    libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/misc.msg");
+    auto msg = _game->resourceManager()->msgFileType("text/english/game/misc.msg");
 
     // "Intro" label
-    TextArea * introButtonLabel = new TextArea(msg->message(9), 55, 20);
+    auto introButtonLabel = new TextArea(msg->message(9), 55, 20);
     introButtonLabel->setColor(0xffb89c28)->setFont("font4.aaf")->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "New Game" label
-    TextArea * newGameButtonLabel = new TextArea(msg->message(10), 50, 20 + 41);
+    auto newGameButtonLabel = new TextArea(msg->message(10), 50, 20 + 41);
     newGameButtonLabel->setColor(0xffb89c28)->setFont("font4.aaf")->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Load Game" label
-    TextArea * loadGameButtonLabel = new TextArea(msg->message(11), 50, 20 + 41*2);
+    auto loadGameButtonLabel = new TextArea(msg->message(11), 50, 20 + 41*2);
     loadGameButtonLabel->setColor(0xffb89c28)->setFont("font4.aaf")->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Options" label
-    TextArea * optionsButtonLabel = new TextArea(msg->message(12), 50, 20 + 41*3);
+    auto optionsButtonLabel = new TextArea(msg->message(12), 50, 20 + 41*3);
     optionsButtonLabel->setColor(0xffb89c28)->setFont("font4.aaf")->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Credits" label
-    TextArea * creditsButtonLabel = new TextArea(msg->message(13), 50, 20 + 41*4);
+    auto creditsButtonLabel = new TextArea(msg->message(13), 50, 20 + 41*4);
     creditsButtonLabel->setColor(0xffb89c28)->setFont("font4.aaf")->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Exit" label
-    TextArea * exitButtonLabel = new TextArea(msg->message(14), 50, 20 + 41*5);
+    auto exitButtonLabel = new TextArea(msg->message(14), 50, 20 + 41*5);
     exitButtonLabel->setColor(0xffb89c28)->setFont("font4.aaf")->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     add(background);
@@ -134,7 +134,7 @@ void MainMenuState::onNewGameButtonClick()
 
 void MainMenuState::onSettingsButtonClick()
 {
-    //_game->pushState(new SettingsMenuState(_game));
+    _game->pushState(new SettingsMenuState(_game));
 }
 
 

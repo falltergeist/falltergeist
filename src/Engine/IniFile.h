@@ -55,4 +55,3 @@ public:
 
 }
 #endif	// FALLTERGEIST_INIFILE_H 
-
