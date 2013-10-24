@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_SURFACESET_H
-#define FALLTERGEIST_SURFACESET_H
+#ifndef FALLTERGEIST_MULTISTATEIMAGEBUTTON_H
+#define	FALLTERGEIST_MULTISTATEIMAGEBUTTON_H
 
 // C++ standard includes
 #include <vector>
@@ -31,21 +31,27 @@
 namespace Falltergeist
 {
 
-class SurfaceSet : public InteractiveSurface
+class MultistateImageButton : public InteractiveSurface
 {
 protected:
-    std::vector<Surface*>* _surfaces;
+    std::vector<Surface*> _states;
+    unsigned int _currentState = 0;
+    int _mode = MODE_PROGRESSION;
+    int _modeFactor = 1; // or -1
 public:
-    SurfaceSet(int x = 0, int y = 0);
-    ~SurfaceSet();
-
-    unsigned int currentSurface;
-    void addSurface(Surface* surface);
-    void setCurrentSurface(unsigned int number);
-    virtual void draw();
-    Surface* surface();
+    enum {MODE_PROGRESSION = 1, MODE_CYCLIC};
+    MultistateImageButton(int x = 0, int y = 0);
+    virtual ~MultistateImageButton();
+    virtual void leftButtonClick(Event* event, State* state);
+    void addState(Surface * surface);
+    int state();
+    void setMode(int mode);    
+    int mode();
+    void setModeFactor(int factor);
+    int modeFactor();
     virtual SDL_Surface* sdl_surface();
 };
 
 }
-#endif // FALLTERGEIST_SURFACESET_H
+#endif	/* FALLTERGEIST_MULTISTATEIMAGEBUTTON_H */
+

@@ -125,7 +125,7 @@ void ImageButton::setReleasedImage(std::string image)
     _releasedSurface->setYOffset(0);
 }
 
-SDL_Surface * ImageButton::sdl_surface()
+SDL_Surface* ImageButton::sdl_surface()
 {
     if (pressed()) return _pressedSurface->sdl_surface();
 

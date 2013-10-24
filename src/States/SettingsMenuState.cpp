@@ -24,13 +24,14 @@
 #include "../States/SettingsMenuState.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
+#include "../UI/MultistateImageButton.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-SettingsMenuState::SettingsMenuState(Game * game) : State(game)
+SettingsMenuState::SettingsMenuState(Game* game) : State(game)
 {
 }
 
@@ -40,14 +41,27 @@ SettingsMenuState::~SettingsMenuState()
 
 void SettingsMenuState::init()
 {    
-    Surface * background = new Surface(ResourceManager::surface("art/intrface/prefscrn.frm", 0, 0));
+    State::init();
+    
+    auto background = new Surface(ResourceManager::surface("art/intrface/prefscrn.frm", 0, 0));
     background->setXOffset(0);
     background->setYOffset(0);
     
+    auto bigSwitches = ResourceManager::surface("art/intrface/prfbknbs.frm");
     
+    auto switch1 = new MultistateImageButton(100, 100);
+    switch1->addState(bigSwitches->crop(0, 47*0, 46, 47));
+    switch1->addState(bigSwitches->crop(0, 47*1, 46, 47));
+    switch1->addState(bigSwitches->crop(0, 47*2, 46, 47));
+    switch1->addState(bigSwitches->crop(0, 47*3, 46, 47));
+    switch1->setModeFactor(-1);
+    //MultistateImageButton
+    // prfbknbs.frm - 4 больших переключателя - расположены вертикально // 46x188
+    // prflknbs.frm - 2 маленьких переключателя - расположены вертикально
     
     
     add(background);    
+    add(switch1);
 }
 
 void SettingsMenuState::think()

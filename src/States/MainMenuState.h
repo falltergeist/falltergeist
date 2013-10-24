@@ -29,12 +29,9 @@
 
 namespace Falltergeist
 {
-class TextArea;
-
+    
 class MainMenuState : public State
 {
-protected:
-    TextArea * _testArea;
 public:
     MainMenuState(Game * game);
     virtual ~MainMenuState();

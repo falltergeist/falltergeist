@@ -38,7 +38,7 @@ class AnimatedPalette;
 class Surface
 {
 protected:
-    SDL_Surface * _sdl_surface;
+    SDL_Surface* _sdl_surface;
 
     int _x; // x position
     int _y; // y position
@@ -46,20 +46,20 @@ protected:
     int _yOffset;
     bool _needRedraw; // surface changed? draw function will be called
     bool _visible; // if false - do not render
-    std::vector<unsigned int> * _animatedPixels;
+    std::vector<unsigned int>* _animatedPixels;
 
     unsigned int _borderColor; // for debugging. @TODO must be removed in future
     unsigned int _backgroundColor; // for debugging @TODO must be removed in future
     void _drawBorder();
-    void _copyAnimatedPixelsFrom(Surface * surface);
-    void _copyAnimatedPixelsTo(Surface * surface);
+    void _copyAnimatedPixelsFrom(Surface* surface);
+    void _copyAnimatedPixelsTo(Surface* surface);
 
 public:
-    static AnimatedPalette * animatedPalette;
+    static AnimatedPalette* animatedPalette;
 
     Surface(int width = 0, int height = 0, int x = 0, int y = 0);
-    Surface(libfalltergeist::FrmFileType * frm, unsigned int direction = 0, unsigned int frame = 0);
-    Surface(Surface * other);
+    Surface(libfalltergeist::FrmFileType* frm, unsigned int direction = 0, unsigned int frame = 0);
+    Surface(Surface* other);
     virtual ~Surface();
 
     virtual void setX(int x);
@@ -87,11 +87,11 @@ public:
     virtual unsigned int pixel(int x, int y);
     virtual void drawLine(int x1, int y1, int x2, int y2, unsigned int color);
 
-    virtual SDL_Surface * sdl_surface();
+    virtual SDL_Surface* sdl_surface();
 
-    virtual void copyTo(Surface * surface);
+    virtual void copyTo(Surface* surface);
 
-    virtual void loadFromSurface(Surface * surface);
+    virtual void loadFromSurface(Surface* surface);
 
     virtual void setBorderColor(unsigned int color);
     virtual unsigned int borderColor();
@@ -101,7 +101,7 @@ public:
 
     virtual void fill(unsigned int color);
     virtual void clear();
-    virtual Surface * crop(int x = 0, int y = 0, int width = 0, int height = 0);
+    virtual Surface* crop(int x = 0, int y = 0, int width = 0, int height = 0);
     virtual void think();
     virtual void draw();
     virtual void blit(Surface * surface);

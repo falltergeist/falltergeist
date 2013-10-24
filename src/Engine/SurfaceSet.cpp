@@ -29,7 +29,7 @@ namespace Falltergeist
 
 SurfaceSet::SurfaceSet(int x, int y) : InteractiveSurface(0,0,x,y)
 {
-    _surfaces = new std::vector<Surface *>;
+    _surfaces = new std::vector<Surface*>;
     currentSurface = 0;
 }
 
@@ -53,18 +53,18 @@ void SurfaceSet::setCurrentSurface(unsigned int number)
     currentSurface = number;
 }
 
-void SurfaceSet::addSurface(Surface * surface)
+void SurfaceSet::addSurface(Surface* surface)
 {
     _surfaces->push_back(surface);
 }
 
-Surface * SurfaceSet::surface()
+Surface* SurfaceSet::surface()
 {
     //return new Surface(_surfaces->at(currentSurface));
     return _surfaces->at(currentSurface);
 }
 
-SDL_Surface * SurfaceSet::sdl_surface()
+SDL_Surface* SurfaceSet::sdl_surface()
 {
     return surface()->sdl_surface();
 }

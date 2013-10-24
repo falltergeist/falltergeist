@@ -38,13 +38,13 @@ protected:
     IniFileSection _getDefaultSettings();
     IniFileSection _getSettings();
 public:
-    SettingsMenuState(Game * game);
+    SettingsMenuState(Game* game);
     virtual ~SettingsMenuState();
     virtual void init();
     virtual void think();
-    void onDefaultButtonClick(Event * event);
-    void onCancelButtonClick(Event * event);
-    void onSaveButtonClick(Event * event);
+    void onDefaultButtonClick(Event* event);
+    void onCancelButtonClick(Event* event);
+    void onSaveButtonClick(Event* event);
 };
 
 }

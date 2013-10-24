@@ -29,7 +29,7 @@
 namespace Falltergeist
 {
 
-AnimatedPalette * Surface::animatedPalette = new AnimatedPalette();
+AnimatedPalette* Surface::animatedPalette = new AnimatedPalette();
 
 Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _needRedraw(false), _visible(true)
 {
@@ -45,14 +45,14 @@ Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _needRedra
     clear();
 }
 
-Surface::Surface(libfalltergeist::FrmFileType * frm, unsigned int direction, unsigned int frame) : _needRedraw(false), _visible(true)
+Surface::Surface(libfalltergeist::FrmFileType* frm, unsigned int direction, unsigned int frame) : _needRedraw(false), _visible(true)
 {
     _animatedPixels = 0;
     _borderColor = 0;
     _backgroundColor = 0;
     //setBackgroundColor(0);
 
-    libfalltergeist::PalFileType * pal = ResourceManager::palFileType("color.pal");
+    libfalltergeist::PalFileType* pal = ResourceManager::palFileType("color.pal");
 
     int width = frm->directions()->at(direction)->frames()->at(frame)->width();
     int height = frm->directions()->at(direction)->frames()->at(frame)->height();
@@ -99,7 +99,7 @@ Surface::Surface(libfalltergeist::FrmFileType * frm, unsigned int direction, uns
 }
 
 
-Surface::Surface(Surface * other)  : _needRedraw(false), _visible(true)
+Surface::Surface(Surface* other)  : _needRedraw(false), _visible(true)
 {
     _animatedPixels = 0;
 
@@ -198,7 +198,7 @@ void Surface::clear()
     fill(backgroundColor());
 }
 
-SDL_Surface * Surface::sdl_surface()
+SDL_Surface* Surface::sdl_surface()
 {
     return _sdl_surface;
 }
@@ -282,7 +282,7 @@ unsigned int Surface::backgroundColor()
     return _backgroundColor;
 }
 
-Surface * Surface::crop(int xOffset, int yOffset, int width, int height)
+Surface* Surface::crop(int xOffset, int yOffset, int width, int height)
 {
     if (width  == 0) width  = this->width()  - xOffset;
     if (height == 0) height = this->height() - yOffset;
@@ -317,7 +317,7 @@ void Surface::blit(Surface * surface)
     _copyAnimatedPixelsTo(surface);
 }
 
-void Surface::_copyAnimatedPixelsFrom(Surface * surface)
+void Surface::_copyAnimatedPixelsFrom(Surface* surface)
 {
     delete _animatedPixels;
     _animatedPixels = 0;
@@ -331,7 +331,7 @@ void Surface::_copyAnimatedPixelsFrom(Surface * surface)
     }
 }
 
-void Surface::_copyAnimatedPixelsTo(Surface * surface)
+void Surface::_copyAnimatedPixelsTo(Surface* surface)
 {
     if (_animatedPixels != 0)
     {
@@ -345,7 +345,7 @@ void Surface::_copyAnimatedPixelsTo(Surface * surface)
     }
 }
 
-void Surface::copyTo(Surface * surface)
+void Surface::copyTo(Surface* surface)
 {
     if (!visible()) return;
     draw();    
@@ -377,7 +377,7 @@ unsigned int Surface::pixel(int x, int y)
     if(SDL_MUSTLOCK(sdl_surface())) SDL_LockSurface(sdl_surface());
 
     // color value
-    unsigned int * pixels = (unsigned int *) sdl_surface()->pixels;
+    unsigned int* pixels = (unsigned int*) sdl_surface()->pixels;
     unsigned int index = (y * width()) + x;
 
     if (!pixels) return 0;
@@ -397,11 +397,11 @@ void Surface::setPixel(int x, int y, unsigned int color)
     if ( width()*height() == 0) return;
 
     // color value
-    unsigned int * pixels = (unsigned int *) sdl_surface()->pixels;
+    unsigned int* pixels = (unsigned int*) sdl_surface()->pixels;
     pixels[(y * width()) + x] = color;
 }
 
-void Surface::loadFromSurface(Surface * surface)
+void Surface::loadFromSurface(Surface* surface)
 {
     SDL_FreeSurface(sdl_surface());
     _sdl_surface = SDL_ConvertSurface(surface->sdl_surface(), surface->sdl_surface()->format, surface->sdl_surface()->flags);

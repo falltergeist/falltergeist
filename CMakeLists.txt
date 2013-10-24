@@ -107,6 +107,8 @@ set(SOURCES main.cpp
             src/UI/HiddenMask.h
             src/UI/ImageButton.cpp
             src/UI/ImageButton.h
+            src/UI/MultistateImageButton.cpp
+            src/UI/MultistateImageButton.h
             src/UI/TextArea.cpp
             src/UI/TextArea.h)
 
