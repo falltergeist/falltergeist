@@ -18,8 +18,6 @@
  */
 
 // C++ standard includes
-#include <stdio.h>
-#include <stdlib.h>
 #include <sstream>
 
 // Falltergeist includes
@@ -29,6 +27,7 @@
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
 #include "../States/MainMenuState.h"
+#include "../States/SettingsMenuState.h"
 #include "../States/NewGameState.h"
 
 // Third party includes
@@ -67,6 +66,7 @@ void MainMenuState::init()
 
     // "Settings" button
     ImageButton * settingsButton = new ImageButton(ImageButton::BUTTON_BIG_RED_CIRCLE, 29, 19 + 41*3);
+    settingsButton->onLeftButtonClick((EventHandler) &MainMenuState::onSettingsButtonClick);
 
     // "Credits" button
     ImageButton * creditsButton = new ImageButton(ImageButton::BUTTON_BIG_RED_CIRCLE, 29, 19 + 41*4);
@@ -131,5 +131,11 @@ void MainMenuState::onNewGameButtonClick()
 {
     _game->pushState(new NewGameState(_game));
 }
+
+void MainMenuState::onSettingsButtonClick()
+{
+    //_game->pushState(new SettingsMenuState(_game));
+}
+
 
 }

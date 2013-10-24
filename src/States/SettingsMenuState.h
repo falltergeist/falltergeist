@@ -15,10 +15,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-#ifndef FALLTERGEIST_MAINMENUSTATE_H
-#define FALLTERGEIST_MAINMENUSTATE_H
+#ifndef FALLTERGEIST_SETTINGSMENUSTATE_H
+#define	FALLTERGEIST_SETTINGSMENUSTATE_H
 
 // C++ standard includes
 
@@ -29,21 +30,18 @@
 
 namespace Falltergeist
 {
-class TextArea;
 
-class MainMenuState : public State
+class SettingsMenuState : public State
 {
-protected:
-    TextArea * _testArea;
 public:
-    MainMenuState(Game * game);
-    virtual ~MainMenuState();
+    SettingsMenuState(Game * game);
+    virtual ~SettingsMenuState();
     virtual void init();
     virtual void think();
-    void onExitButtonClick();
-    void onNewGameButtonClick();
-    void onSettingsButtonClick();
+private:
+
 };
 
 }
-#endif // FALLTERGEIST_MAINMENUSTATE_H
+#endif	// FALLTERGEIST_SETTINGSMENUSTATE_H
+

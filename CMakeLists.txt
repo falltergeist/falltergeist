@@ -49,6 +49,8 @@ set(SOURCES main.cpp
             src/Engine/Font.h
             src/Engine/Game.cpp
             src/Engine/Game.h
+            src/Engine/IniFile.cpp
+            src/Engine/IniFile.h
             src/Engine/InteractiveSurface.cpp
             src/Engine/InteractiveSurface.h
             src/Engine/Location.cpp
@@ -93,6 +95,8 @@ set(SOURCES main.cpp
             src/States/PlayerEditGenderState.h
             src/States/PlayerEditNameState.cpp
             src/States/PlayerEditNameState.h
+            src/States/SettingsMenuState.cpp
+            src/States/SettingsMenuState.h
             src/States/StartState.cpp
             src/States/StartState.h
             src/UI/BigCounter.cpp

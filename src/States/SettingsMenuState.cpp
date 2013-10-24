@@ -15,35 +15,33 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
-
-#ifndef FALLTERGEIST_MAINMENUSTATE_H
-#define FALLTERGEIST_MAINMENUSTATE_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/State.h"
+#include "../States/SettingsMenuState.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-class TextArea;
 
-class MainMenuState : public State
+SettingsMenuState::SettingsMenuState(Game * game) : State(game)
 {
-protected:
-    TextArea * _testArea;
-public:
-    MainMenuState(Game * game);
-    virtual ~MainMenuState();
-    virtual void init();
-    virtual void think();
-    void onExitButtonClick();
-    void onNewGameButtonClick();
-    void onSettingsButtonClick();
-};
+}
+
+void SettingsMenuState::init()
+{    
+}
+
+void SettingsMenuState::think()
+{    
+}
+
+SettingsMenuState::~SettingsMenuState()
+{
+}
 
 }
-#endif // FALLTERGEIST_MAINMENUSTATE_H

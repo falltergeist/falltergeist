@@ -15,35 +15,44 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-#ifndef FALLTERGEIST_MAINMENUSTATE_H
-#define FALLTERGEIST_MAINMENUSTATE_H
+#ifndef FALLTERGEIST_INIFILE_H
+#define	FALLTERGEIST_INIFILE_H
 
 // C++ standard includes
-
+#include <fstream>
+#include <string>
+#include <map>
 // Falltergeist includes
-#include "../Engine/State.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-class TextArea;
 
-class MainMenuState : public State
+typedef std::map<std::string, std::string> IniFileSection;    
+
+class IniFile 
 {
 protected:
-    TextArea * _testArea;
+    std::string _filename;
+    std::map<std::string, IniFileSection *> _sections;
 public:
-    MainMenuState(Game * game);
-    virtual ~MainMenuState();
-    virtual void init();
-    virtual void think();
-    void onExitButtonClick();
-    void onNewGameButtonClick();
-    void onSettingsButtonClick();
+    IniFile(std::string filename);
+    virtual ~IniFile();
+    void removeSection(std::string name);
+    IniFileSection * addSection(std::string name);
+    IniFileSection * getSection(std::string name);
+    bool hasSection(std::string name);
+    void save();
+    void parse();
+    
+    void setFilename(std::string filename);
+    std::string filename();
 };
 
 }
-#endif // FALLTERGEIST_MAINMENUSTATE_H
+#endif	// FALLTERGEIST_INIFILE_H 
+
