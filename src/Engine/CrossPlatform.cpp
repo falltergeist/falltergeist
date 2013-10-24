@@ -168,16 +168,13 @@ std::vector<std::string> * CrossPlatform::findDataFiles()
 {
     if (_dataFiles) return _dataFiles;
 
-    _dataFiles = new std::vector<std::string>;
-    _dataFiles->push_back(""); // reserverd for master.dat
-    _dataFiles->push_back(""); // reserverd for critter.dat
-
     // looking for all available dat files in directory
     DIR * pxDir = opendir(CrossPlatform::findDataPath().c_str());
     if (!pxDir)
     {
         throw Exception("Can't open data directory: " + CrossPlatform::findDataPath());
     }
+    _dataFiles = new std::vector<std::string>(necessaryDatFiles);
     struct dirent * pxItem = 0;
     while((pxItem = readdir(pxDir)))
     {
@@ -187,16 +184,11 @@ std::vector<std::string> * CrossPlatform::findDataFiles()
             std::string ext = filename.substr(filename.size()-4, 4);
             if (ext == ".dat")
             {
-                if (filename == "master.dat")  _dataFiles->at(0) = "master.dat";
-                if (filename == "critter.dat") _dataFiles->at(1) = "critter.dat";
                 if (filename.length() == 12 && filename.substr(0,5) == "patch") _dataFiles->push_back(filename);
             }
         }
     }
     closedir(pxDir);
-
-    if (_dataFiles->at(0) != "master.dat")  throw Exception("master.dat not found!");
-    if (_dataFiles->at(1) != "critter.dat") throw Exception("critter.dat not found!");
 
     return _dataFiles;
 }
