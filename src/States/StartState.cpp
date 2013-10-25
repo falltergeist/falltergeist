@@ -26,6 +26,7 @@
 #include "../States/LocationState.h"
 #include "../States/MainMenuState.h"
 #include "../States/PlayerEditState.h"
+#include "../States/SettingsMenuState.h"
 #include "../States/StartState.h"
 
 // Third party includes
@@ -45,8 +46,8 @@ StartState::~StartState()
 void StartState::think()
 {
     //_game->setPlayer(new Player(ResourceManager::gcdFileType("premade/combat.gcd")));
-    //_game->setState(new LocationState(_game));
-    
+    //_game->setState(new LocationState(_game));    
+    //_game->setState(new SettingsMenuState(_game));
     _game->setState(new MainMenuState(_game));
 }
 

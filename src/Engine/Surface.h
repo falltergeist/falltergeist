@@ -92,6 +92,7 @@ public:
     virtual void copyTo(Surface* surface);
 
     virtual void loadFromSurface(Surface* surface);
+    virtual void loadFromBmpFile(std::string path);
 
     virtual void setBorderColor(unsigned int color);
     virtual unsigned int borderColor();

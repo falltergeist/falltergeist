@@ -22,6 +22,7 @@
 #define	FALLTERGEIST_SETTINGSMENUSTATE_H
 
 // C++ standard includes
+#include <map>
 
 // Falltergeist includes
 #include "../Engine/State.h"
@@ -31,12 +32,17 @@
 
 namespace Falltergeist
 {
-
+class TextArea;
+class InteractiveSurface;
+    
 class SettingsMenuState : public State
 {
 protected:
+    InteractiveSurface * _fon;    
+    std::map<std::string, TextArea*> _labels;
     IniFileSection _getDefaultSettings();
     IniFileSection _getSettings();
+    TextArea* _addLabel(std::string name, TextArea* label);
 public:
     SettingsMenuState(Game* game);
     virtual ~SettingsMenuState();
@@ -45,6 +51,8 @@ public:
     void onDefaultButtonClick(Event* event);
     void onCancelButtonClick(Event* event);
     void onSaveButtonClick(Event* event);
+    
+    void onButtonPress(Event* event);
 };
 
 }

@@ -438,4 +438,11 @@ void Surface::drawLine(int x1, int y1, int x2, int y2, unsigned int color)
     }
 }
 
+void Surface::loadFromBmpFile(std::string path)
+{    
+    SDL_FreeSurface(_sdl_surface);
+    _sdl_surface = SDL_LoadBMP(path.c_str());
+    if (sdl_surface() == 0) throw Exception(SDL_GetError());
+}
+
 }
