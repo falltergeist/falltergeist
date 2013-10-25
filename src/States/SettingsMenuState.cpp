@@ -58,7 +58,10 @@ void SettingsMenuState::init()
     background->setYOffset(0);
     
     auto switch1 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 71);
-    auto switch2 = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, 176, 71);
+    auto switch2 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 149);
+    auto switch3 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 227);
+    auto switch4 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 309);
+    auto switch5 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 387);
 
     // LABELS
     auto msg = ResourceManager::msgFileType("text/english/game/options.msg");
@@ -132,8 +135,13 @@ void SettingsMenuState::init()
     auto title23 = new TextArea(title13, 283, 449);
     title23->setText(msg->message(121));
 
-    auto label1 = new TextArea(msg->message(203), 43, 81);
-    label1->setColor(0xffb89c28);
+    auto label1 = new TextArea(msg->message(203), 43, 81); label1->setColor(0xffb89c28);
+    auto label2 = new TextArea(msg->message(204), 68, 67); label2->setColor(0xffb89c28);
+    auto label3 = new TextArea(msg->message(205), 123, 81); label3->setColor(0xffb89c28);
+
+    auto label4 = new TextArea(msg->message(206), 13, 159); label4->setColor(0xffb89c28);
+    auto label5 = new TextArea(msg->message(207), 68, 145); label5->setColor(0xffb89c28);
+    auto label6 = new TextArea(msg->message(208), 123, 159); label6->setColor(0xffb89c28);
 
     // BUTTONS
 
@@ -182,11 +190,11 @@ void SettingsMenuState::init()
      
      */
     add({ title1, title2, title3, title4, title5, title6,
-         title7, title8, title9, title10, title11, title12, title13,
-         title14, title15, title16, title17, title18, title19, title20,
-         title21, title22, title23, button1, button2, button3, label1 });
-    add(switch1);
-    add(switch2);
+          title7, title8, title9, title10, title11, title12, title13,
+          title14, title15, title16, title17, title18, title19, title20,
+          title21, title22, title23, button1, button2, button3,
+          label1, label2, label3, label4, label5, label6 });
+    add({switch1, switch2, switch3, switch4, switch5});
 
     //for (auto& label : _labels) add(label.second);
     
