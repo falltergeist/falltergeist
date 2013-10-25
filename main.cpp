@@ -26,8 +26,26 @@
 #include "SDL.h"
 #include <algorithm>
 #include "lib/libfalltergeist/libfalltergeist.h"
+#include <thread>
 
 using namespace Falltergeist;
+
+void function1()
+{
+    while(1)
+    {
+        std::cout << "1" << std::endl;
+    }
+}
+
+void function2()
+{
+    while(1)
+    {
+        std::cout << "2" << std::endl;
+    }
+}
+
 
 int main(int argc, char *argv[])
 {

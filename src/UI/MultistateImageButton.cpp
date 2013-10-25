@@ -32,6 +32,29 @@ MultistateImageButton::MultistateImageButton(int x, int y) : InteractiveSurface(
 {
 }
 
+MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : InteractiveSurface(0, 0, x, y)
+{
+    Surface * surface;
+    switch (type)
+    {
+        case BUTTON_BIG_SWITCH:
+            surface = ResourceManager::surface("art/intrface/prfbknbs.frm");
+            addSurface(surface->crop(0, 47*0, 46, 47));
+            addSurface(surface->crop(0, 47*1, 46, 47));
+            addSurface(surface->crop(0, 47*2, 46, 47));
+            addSurface(surface->crop(0, 47*3, 46, 47));
+            break;
+        case BUTTON_SMALL_SWITCH:
+            surface = ResourceManager::surface("art/intrface/prflknbs.frm");
+            addSurface(surface->crop(0, 0, 22, 25));
+            addSurface(surface->crop(0, 25, 22, 50));
+            break;
+        default:
+            throw Exception("MultistateImageButton::MultistateImageButton(unsigned int type, x, y) - unsupported type");
+    }
+}
+
+
 MultistateImageButton::MultistateImageButton(SurfaceSet surfaceSet, int x, int y) : InteractiveSurface(0, 0, x, y)
 {
     for (auto surface : *surfaceSet.surfaces()) _surfaceSet.addSurface(surface);
@@ -123,5 +146,26 @@ int MultistateImageButton::modeFactor()
     if (_modeFactor >= 0) return 1;
     return -1;
 }
+
+void MultistateImageButton::setMaxState(int value)
+{
+    _maxState = value;
+}
+
+int MultistateImageButton::maxState()
+{
+    return _maxState;
+}
+
+void MultistateImageButton::setMinState(int value)
+{
+    _minState = value;
+}
+
+int MultistateImageButton::minState()
+{
+    return _minState;
+}
+
 
 }

@@ -24,7 +24,9 @@
 #include "../States/SettingsMenuState.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
+#include "../Engine/Game.h"
 #include "../UI/MultistateImageButton.h"
+#include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
 #include "../Engine/CrossPlatform.h"
 
@@ -46,27 +48,18 @@ void SettingsMenuState::init()
     State::init();
     
     
-    //_fon = new InteractiveSurface(); 
-    //_fon->loadFromBmpFile(CrossPlatform::findDataPath() + "/scr00000.bmp");
-    //_fon->onKeyboardRelease((EventHandler) &SettingsMenuState::onButtonPress);
-    //add(_fon);
+    _fon = new InteractiveSurface();
+    _fon->loadFromBmpFile(CrossPlatform::findDataPath() + "/scr00000.bmp");
+    _fon->onKeyboardRelease((EventHandler) &SettingsMenuState::onButtonPress);
+    add(_fon);
     
     auto background = new Surface(ResourceManager::surface("art/intrface/prefscrn.frm", 0, 0));
     background->setXOffset(0);
     background->setYOffset(0);
     
-    auto bigSwitchesSurface = ResourceManager::surface("art/intrface/prfbknbs.frm");
-    auto bigSwitchSet = new SurfaceSet();
-    bigSwitchSet->addSurface(bigSwitchesSurface->crop(0, 47*0, 46, 47));
-    bigSwitchSet->addSurface(bigSwitchesSurface->crop(0, 47*1, 46, 47));
-    bigSwitchSet->addSurface(bigSwitchesSurface->crop(0, 47*2, 46, 47));
-    bigSwitchSet->addSurface(bigSwitchesSurface->crop(0, 47*3, 46, 47));
+    auto switch1 = new MultistateImageButton(MultistateImageButton::BUTTON_BIG_SWITCH, 76, 71);
+    auto switch2 = new MultistateImageButton(MultistateImageButton::BUTTON_SMALL_SWITCH, 176, 71);
 
-    auto switch1 = new MultistateImageButton(bigSwitchSet, 100, 100);
-    // prfbknbs.frm - 4 больших переключателя - расположены вертикально // 46x188
-    // prflknbs.frm - 2 маленьких переключателя - расположены вертикально
-    
-    
     // LABELS
     auto msg = ResourceManager::msgFileType("text/english/game/options.msg");
     
@@ -129,10 +122,33 @@ void SettingsMenuState::init()
     
     auto title20 = new TextArea(title13, 384, 165 + 51*5);
     title20->setText(msg->message(119));
-    
+
+    auto title21 = new TextArea(title13, 43, 449);
+    title21->setText(msg->message(120));
+
+    auto title22 = new TextArea(title13, 169, 449);
+    title22->setText(msg->message(300));
+
+    auto title23 = new TextArea(title13, 283, 449);
+    title23->setText(msg->message(121));
+
+    auto label1 = new TextArea(msg->message(203), 43, 81);
+    label1->setColor(0xffb89c28);
+
+    // BUTTONS
+
+    auto button1 = new ImageButton(ImageButton::BUTTON_SMALL_RED_CIRCLE, 23, 450);
+    button1->onLeftButtonClick((EventHandler) &SettingsMenuState::onDefaultButtonClick);
+
+    auto button2 = new ImageButton(ImageButton::BUTTON_SMALL_RED_CIRCLE, 148, 450);
+    button2->onLeftButtonClick((EventHandler) &SettingsMenuState::onSaveButtonClick);
+
+    auto button3 = new ImageButton(ImageButton::BUTTON_SMALL_RED_CIRCLE, 263, 450);
+    button3->onLeftButtonClick((EventHandler) &SettingsMenuState::onCancelButtonClick);
+
+
+
     /*
-{120}{}{СТАНД.}
-{121}{}{ОТМЕНА}
 {122}{}{Влияние на скорость игрока}
 {123}{}{Речь Pipboy}
 #
@@ -165,11 +181,13 @@ void SettingsMenuState::init()
 
      
      */
-    add({background, title1, title2, title3, title4, title5, title6,
+    add({ title1, title2, title3, title4, title5, title6,
          title7, title8, title9, title10, title11, title12, title13,
-         title14, title15, title16, title17, title18, title19, title20});
-    //add(switch1);
-    
+         title14, title15, title16, title17, title18, title19, title20,
+         title21, title22, title23, button1, button2, button3, label1 });
+    add(switch1);
+    add(switch2);
+
     //for (auto& label : _labels) add(label.second);
     
 }
@@ -218,6 +236,20 @@ TextArea* SettingsMenuState::_addLabel(std::string name, TextArea* label)
 void SettingsMenuState::onButtonPress(Event* event)
 {
     event->sender()->setVisible(!event->sender()->visible());
+}
+
+void SettingsMenuState::onCancelButtonClick(Event* event)
+{
+    _game->popState();
+}
+
+void SettingsMenuState::onSaveButtonClick(Event* event)
+{
+    _game->popState();
+}
+
+void SettingsMenuState::onDefaultButtonClick(Event* event)
+{
 }
 
 }
