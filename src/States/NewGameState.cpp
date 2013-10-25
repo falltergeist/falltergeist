@@ -61,27 +61,27 @@ void NewGameState::init()
     add(new Surface(ResourceManager::surface("art/intrface/pickchar.frm")));
 
     // Begin game button
-    ImageButton * beginGameButton= new ImageButton(ImageButton::BUTTON_SMALL_RED_CIRCLE, 81, 322);
+    ImageButton * beginGameButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 322);
     beginGameButton->onLeftButtonClick((EventHandler) &NewGameState::onBeginGameButtonClick);
 
     // Edit character button
-    ImageButton * editButton= new ImageButton(ImageButton::BUTTON_SMALL_RED_CIRCLE, 436, 319);
+    ImageButton * editButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 436, 319);
     editButton->onLeftButtonClick((EventHandler) &NewGameState::onEditButtonClick);
     
     // Create character button
-    ImageButton * createButton= new ImageButton(ImageButton::BUTTON_SMALL_RED_CIRCLE, 81, 424);
+    ImageButton * createButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 424);
     createButton->onLeftButtonClick((EventHandler) &NewGameState::onCreateButtonClick);
 
     // Back to mainmenu button
-    ImageButton * backButton= new ImageButton(ImageButton::BUTTON_SMALL_RED_CIRCLE, 461, 424);
+    ImageButton * backButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 461, 424);
     backButton->onLeftButtonClick((EventHandler) &NewGameState::onBackButtonClick);
 
     // Previous character button
-    ImageButton * prevCharacterButton = new ImageButton(ImageButton::BUTTON_LEFT_ARROW, 292, 320);
+    ImageButton * prevCharacterButton = new ImageButton(ImageButton::TYPE_LEFT_ARROW, 292, 320);
     prevCharacterButton->onLeftButtonClick((EventHandler) &NewGameState::onPrevCharacterButtonClick);
 
     // Next character button
-    ImageButton * nextCharacterButton = new ImageButton(ImageButton::BUTTON_RIGHT_ARROW, 318, 320);
+    ImageButton * nextCharacterButton = new ImageButton(ImageButton::TYPE_RIGHT_ARROW, 318, 320);
     nextCharacterButton->onLeftButtonClick((EventHandler) &NewGameState::onNextCharacterButtonClick);
 
     // Characters images

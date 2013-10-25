@@ -55,24 +55,24 @@ void MainMenuState::init()
     background->setYOffset(0);
 
     // "Into" button
-    auto introButton = new ImageButton(ImageButton::BUTTON_BIG_RED_CIRCLE, 29, 19);
+    auto introButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19);
 
     // "New game" button
-    auto newGameButton = new ImageButton(ImageButton::BUTTON_BIG_RED_CIRCLE, 29, 19 + 41);
+    auto newGameButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41);
     newGameButton->onLeftButtonClick((EventHandler) &MainMenuState::onNewGameButtonClick);
 
     // "Load game" button
-    auto loadGameButton = new ImageButton(ImageButton::BUTTON_BIG_RED_CIRCLE, 29, 19 + 41*2);
+    auto loadGameButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*2);
 
     // "Settings" button
-    auto settingsButton = new ImageButton(ImageButton::BUTTON_BIG_RED_CIRCLE, 29, 19 + 41*3);
+    auto settingsButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*3);
     settingsButton->onLeftButtonClick((EventHandler) &MainMenuState::onSettingsButtonClick);
 
     // "Credits" button
-    auto creditsButton = new ImageButton(ImageButton::BUTTON_BIG_RED_CIRCLE, 29, 19 + 41*4);
+    auto creditsButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*4);
     
     // "Exit" button
-    auto exitButton = new ImageButton(ImageButton::BUTTON_BIG_RED_CIRCLE, 29, 19 + 41*5);
+    auto exitButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*5);
     exitButton->onLeftButtonClick((EventHandler) &MainMenuState::onExitButtonClick);
 
     auto msg = _game->resourceManager()->msgFileType("text/english/game/misc.msg");

@@ -57,8 +57,8 @@ void SettingsMenuState::init()
     background->setXOffset(0);
     background->setYOffset(0);
     
-    auto switch1 = new MultistateImageButton(MultistateImageButton::BUTTON_BIG_SWITCH, 76, 71);
-    auto switch2 = new MultistateImageButton(MultistateImageButton::BUTTON_SMALL_SWITCH, 176, 71);
+    auto switch1 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 71);
+    auto switch2 = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, 176, 71);
 
     // LABELS
     auto msg = ResourceManager::msgFileType("text/english/game/options.msg");
@@ -137,13 +137,13 @@ void SettingsMenuState::init()
 
     // BUTTONS
 
-    auto button1 = new ImageButton(ImageButton::BUTTON_SMALL_RED_CIRCLE, 23, 450);
+    auto button1 = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 23, 450);
     button1->onLeftButtonClick((EventHandler) &SettingsMenuState::onDefaultButtonClick);
 
-    auto button2 = new ImageButton(ImageButton::BUTTON_SMALL_RED_CIRCLE, 148, 450);
+    auto button2 = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 148, 450);
     button2->onLeftButtonClick((EventHandler) &SettingsMenuState::onSaveButtonClick);
 
-    auto button3 = new ImageButton(ImageButton::BUTTON_SMALL_RED_CIRCLE, 263, 450);
+    auto button3 = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 263, 450);
     button3->onLeftButtonClick((EventHandler) &SettingsMenuState::onCancelButtonClick);
 
 

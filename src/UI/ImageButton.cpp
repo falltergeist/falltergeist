@@ -39,35 +39,35 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : InteractiveSurface(0
     std::string pressedImage, releasedImage;
     switch (type)
     {
-        case BUTTON_SMALL_RED_CIRCLE:
+        case TYPE_SMALL_RED_CIRCLE:
             pressedImage  = "art/intrface/lilreddn.frm";
             releasedImage = "art/intrface/lilredup.frm";
             break;
-        case BUTTON_BIG_RED_CIRCLE:
+        case TYPE_BIG_RED_CIRCLE:
             pressedImage  = "art/intrface/menudown.frm";
             releasedImage = "art/intrface/menuup.frm";
             break;
-        case BUTTON_SKILL_TOGGLE:
+        case TYPE_SKILL_TOGGLE:
             pressedImage  = "art/intrface/tgsklon.frm";
             releasedImage = "art/intrface/tgskloff.frm";
             break;
-        case BUTTON_PLUS:
+        case TYPE_PLUS:
             pressedImage  = "art/intrface/splson.frm";
             releasedImage = "art/intrface/splsoff.frm";
             break;
-        case BUTTON_MINUS:
+        case TYPE_MINUS:
             pressedImage  = "art/intrface/snegon.frm";
             releasedImage = "art/intrface/snegoff.frm";
             break;
-        case BUTTON_LEFT_ARROW:
+        case TYPE_LEFT_ARROW:
             pressedImage  = "art/intrface/sld.frm";
             releasedImage = "art/intrface/slu.frm";
             break;
-        case BUTTON_RIGHT_ARROW:
+        case TYPE_RIGHT_ARROW:
             pressedImage  = "art/intrface/srd.frm";
             releasedImage = "art/intrface/sru.frm";
             break;
-        case BUTTON_CHECKBOX:
+        case TYPE_CHECKBOX:
             releasedImage = "art/intrface/prefxout.frm";
             pressedImage  = "art/intrface/prefxin.frm";
             break;

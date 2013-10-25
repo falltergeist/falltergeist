@@ -63,8 +63,8 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
             _addLabel(ss.str(), new TextArea(102, 46 + 33*i));          // stat value label
             _addCounter(ss.str(), new BigCounter(59, 37 + 33*i));       // stat value counter
             _addMask(ss.str(), new HiddenMask(133, 29, 14, 36 + 33*i)); // stat click mask
-            _addButton(ss.str() + "_increase", new ImageButton(ImageButton::BUTTON_PLUS,  149, 38 + 33*i)); // stat increase button
-            _addButton(ss.str() + "_decrease", new ImageButton(ImageButton::BUTTON_MINUS, 149, 49 + 33*i)); // stat decrease button
+            _addButton(ss.str() + "_increase", new ImageButton(ImageButton::TYPE_PLUS,  149, 38 + 33*i)); // stat increase button
+            _addButton(ss.str() + "_decrease", new ImageButton(ImageButton::TYPE_MINUS, 149, 49 + 33*i)); // stat decrease button
         }
 
         _addCounter("statsPoints", new BigCounter(126, 282)); // Free stats points counter
@@ -87,13 +87,13 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
             if (i <= 7)
             {
                 _addLabel(ss.str(),  new TextArea(msg->message(100 + i), 48, 353 + 13*i)); // trate label
-                _addButton(ss.str(),  new ImageButton(ImageButton::BUTTON_SKILL_TOGGLE, 23,  352 + 13*i)); // trate toggle button
+                _addButton(ss.str(),  new ImageButton(ImageButton::TYPE_SKILL_TOGGLE, 23,  352 + 13*i)); // trate toggle button
             }
             //right column
             else
             {
                 _addLabel(ss.str(),  new TextArea(msg->message(100 + i), 169, 353 + 13*(i-8)))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT); // trate label
-                _addButton(ss.str(),  new ImageButton(ImageButton::BUTTON_SKILL_TOGGLE, 299, 352 + 13*(i-8))); // trate toggle button
+                _addButton(ss.str(),  new ImageButton(ImageButton::TYPE_SKILL_TOGGLE, 299, 352 + 13*(i-8))); // trate toggle button
             }
         }
     }
@@ -110,7 +110,7 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
             _addTitle(ss.str(), msg->message(100 + i)->text());
             _addDescription(ss.str(), msg->message(200 + i)->text());
             _addImage(ss.str(), _game->resourceManager()->surface("art/skilldex/" + images[i] + ".frm"));
-            _addButton(ss.str(),  new ImageButton(ImageButton::BUTTON_SKILL_TOGGLE, 347,  26 + 11*i));
+            _addButton(ss.str(),  new ImageButton(ImageButton::TYPE_SKILL_TOGGLE, 347,  26 + 11*i));
             _addLabel(ss.str(),  new TextArea(msg->message(100 + i), 377, 27 + 11*i))->setWidth(240);
             _addLabel(ss.str() + "_value",  new TextArea("", 577, 27 + 11*i));
         }
@@ -167,9 +167,9 @@ PlayerEditState::PlayerEditState(Game * game) : State(game)
     // description horizontal line
     for (unsigned int y = 300; y != 302; ++y) for (unsigned int x = 350; x != 620; ++x) background->setPixel(x,y, 0xFF000000);
     {
-        _addButton("options", new ImageButton(ImageButton::BUTTON_SMALL_RED_CIRCLE, 345, 454));
-        _addButton("done",    new ImageButton(ImageButton::BUTTON_SMALL_RED_CIRCLE, 455, 454));
-        _addButton("cancel",  new ImageButton(ImageButton::BUTTON_SMALL_RED_CIRCLE, 554, 454));
+        _addButton("options", new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 345, 454));
+        _addButton("done",    new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 455, 454));
+        _addButton("cancel",  new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 554, 454));
 
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
         _addLabel("options", new TextArea(msg->message(101), 365, 453))->setColor(0xffb89c28)->setFont("font3.aaf");

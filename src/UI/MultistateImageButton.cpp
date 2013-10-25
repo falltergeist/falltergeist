@@ -37,14 +37,14 @@ MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : 
     Surface * surface;
     switch (type)
     {
-        case BUTTON_BIG_SWITCH:
+        case TYPE_BIG_SWITCH:
             surface = ResourceManager::surface("art/intrface/prfbknbs.frm");
             addSurface(surface->crop(0, 47*0, 46, 47));
             addSurface(surface->crop(0, 47*1, 46, 47));
             addSurface(surface->crop(0, 47*2, 46, 47));
             addSurface(surface->crop(0, 47*3, 46, 47));
             break;
-        case BUTTON_SMALL_SWITCH:
+        case TYPE_SMALL_SWITCH:
             surface = ResourceManager::surface("art/intrface/prflknbs.frm");
             addSurface(surface->crop(0, 0, 22, 25));
             addSurface(surface->crop(0, 25, 22, 50));

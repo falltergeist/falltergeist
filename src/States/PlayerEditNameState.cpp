@@ -105,7 +105,7 @@ void PlayerEditNameState::init()
     TextArea * doneLabel = new TextArea(msg->message(100), 65, 43);
     doneLabel->setColor(0xffb89c28)->setFont("font3.aaf");
 
-    ImageButton * doneButton= new ImageButton(ImageButton::BUTTON_SMALL_RED_CIRCLE, 45, 43);
+    ImageButton * doneButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 45, 43);
     doneButton->onLeftButtonClick((EventHandler) &PlayerEditNameState::onDoneButtonClick);
 
     _name = new TextArea(_game->player()->name(), 43, 15);

@@ -42,7 +42,7 @@ protected:
     int _minState = -1;
 public:
     enum {MODE_PROGRESSION = 1, MODE_CYCLIC};
-    enum {BUTTON_BIG_SWITCH = 1, BUTTON_SMALL_SWITCH};
+    enum {TYPE_BIG_SWITCH = 1, TYPE_SMALL_SWITCH};
     MultistateImageButton(int x = 0, int y = 0);
     MultistateImageButton(unsigned int type, int x = 0, int y = 0);
     MultistateImageButton(SurfaceSet* surfaceSet, int x = 0, int y = 0);

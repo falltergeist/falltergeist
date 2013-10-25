@@ -40,14 +40,14 @@ protected:
     bool _switchMode = false;
 public:
     enum ButtonType {
-        BUTTON_SMALL_RED_CIRCLE = 1, 
-        BUTTON_BIG_RED_CIRCLE, 
-        BUTTON_SKILL_TOGGLE, 
-        BUTTON_PLUS, 
-        BUTTON_MINUS, 
-        BUTTON_LEFT_ARROW, 
-        BUTTON_RIGHT_ARROW,
-        BUTTON_CHECKBOX
+        TYPE_SMALL_RED_CIRCLE = 1,
+        TYPE_BIG_RED_CIRCLE,
+        TYPE_SKILL_TOGGLE,
+        TYPE_PLUS,
+        TYPE_MINUS,
+        TYPE_LEFT_ARROW,
+        TYPE_RIGHT_ARROW,
+        TYPE_CHECKBOX
     };
     ImageButton(std::string releasedImage = 0, std::string pressedImage = 0, int x = 0, int y = 0);
     ImageButton(unsigned int type, int x = 0, int y = 0);
