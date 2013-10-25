@@ -40,8 +40,8 @@ protected:
     void _init();
     void _calculateSize();
     std::string _text;
-    std::vector<std::string> * _textLines;
-    std::vector<Surface *> * _textSurfaces;
+    std::vector<std::string>* _textLines;
+    std::vector<Surface*>* _textSurfaces;
     unsigned char _horizontalAlign;
     unsigned char _verticalAlign;
     int _width;
@@ -49,50 +49,52 @@ protected:
     int _calculatedWidth;
     int _calculatedHeight;
     unsigned int _color;
-    Font * _font;
+    Font* _font;
     bool _wordWrap;
 public:
     enum { HORIZONTAL_ALIGN_LEFT = 0, HORIZONTAL_ALIGN_CENTER, HORIZONTAL_ALIGN_RIGHT, HORIZONTAL_ALIGN_JUSTIFY };
     enum { VERTICAL_ALIGN_TOP = 0, VERTICAL_ALIGN_CENTER, VERTICAL_ALIGN_BOTTOM, VERTICAL_ALIGN_JUSTIFY };    
-    TextArea(libfalltergeist::MsgMessage * message, int x = 0, int y = 0);
+    TextArea(libfalltergeist::MsgMessage* message, int x = 0, int y = 0);
     TextArea(std::string text, int x = 0, int y = 0);
     TextArea(int x = 0, int y = 0);
+    TextArea(TextArea* textArea, int x = 0, int y = 0);
     ~TextArea();
 
     void init();
 
     virtual void draw();
 
-    TextArea * setText(libfalltergeist::MsgMessage * message);
-    TextArea * setText(int number);
-    TextArea * setText(std::string text);
-    TextArea * appendText(std::string text);
-    TextArea * appendText(int number);
+    TextArea* setText(libfalltergeist::MsgMessage* message);
+    TextArea* setText(int number);
+    TextArea* setText(std::string text);
+    TextArea* appendText(std::string text);
+    TextArea* appendText(int number);
     std::string text();
 
-    std::vector<std::string> * textLines();
-    std::vector<Surface *> * textSurfaces();
+    std::vector<std::string>* textLines();
+    std::vector<Surface*>* textSurfaces();
 
 
-    TextArea * setHorizontalAlign(unsigned char align);
+    TextArea* setHorizontalAlign(unsigned char align);
     unsigned char horizontalAlign();
 
-    TextArea * setVerticalAlign(unsigned char align);
+    TextArea* setVerticalAlign(unsigned char align);
     unsigned char verticalAlign();
 
-    TextArea * setHeight(int height);
+    TextArea* setHeight(int height);
     int height();
 
-    TextArea * setWidth(int width);
+    TextArea* setWidth(int width);
     int width();
 
-    TextArea * setColor(unsigned int color);
+    TextArea* setColor(unsigned int color);
     unsigned int color();
 
-    TextArea * setWordWrap(bool wordWrap);
+    TextArea* setWordWrap(bool wordWrap);
     bool wordWrap();
 
-    TextArea * setFont(std::string filename);
+    TextArea* setFont(std::string filename);
+    Font* font();
 };
 
 }

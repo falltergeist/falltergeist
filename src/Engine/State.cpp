@@ -31,9 +31,9 @@
 namespace Falltergeist
 {
 
-State::State(Game * game) : _game(game), _surfaces(), _isFullscreen(false), initialized(false)
+State::State(Game* game) : _game(game), _surfaces(), _isFullscreen(false), initialized(false)
 {
-    _surfaces = new std::vector<Surface *>;
+    _surfaces = new std::vector<Surface*>;
 }
 
 State::~State()
@@ -72,12 +72,17 @@ bool State::isFullscreen()
     return _isFullscreen;
 }
 
-void State::add(Surface * surface)
+void State::add(Surface* surface)
 {
     _surfaces->push_back(surface);
 }
 
-void State::handle(Event * event)
+void State::add(std::vector<Surface*> surfaces)
+{
+    for (auto& surface : surfaces) _surfaces->push_back(surface);
+}
+
+void State::handle(Event* event)
 {
     for (std::vector<Surface *>::reverse_iterator i = _surfaces->rbegin(); i < _surfaces->rend(); i++)
     {

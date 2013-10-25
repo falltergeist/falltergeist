@@ -31,7 +31,7 @@
 namespace Falltergeist
 {
 
-TextArea::TextArea(libfalltergeist::MsgMessage * message, int x, int y) : InteractiveSurface(0, 0, x, y)
+TextArea::TextArea(libfalltergeist::MsgMessage* message, int x, int y) : InteractiveSurface(0, 0, x, y)
 {
     init();
     setText(message->text());
@@ -46,6 +46,19 @@ TextArea::TextArea(std::string text, int x, int y) : InteractiveSurface(0, 0, x,
 {
     init();
     setText(text);
+}
+
+TextArea::TextArea(TextArea* textArea, int x, int y) : InteractiveSurface(0, 0, x, y)
+{
+    init();
+    setText(textArea->text());
+    setColor(textArea->color());
+    setHorizontalAlign(textArea->horizontalAlign());
+    setVerticalAlign(textArea->verticalAlign());
+    if (textArea->_width) setWidth(textArea->width());
+    if (textArea->_height) setWidth(textArea->height());
+    setFont(textArea->font()->filename());
+    setWordWrap(textArea->wordWrap());
 }
 
 void TextArea::init()
@@ -78,6 +91,11 @@ TextArea::~TextArea()
         delete _textSurfaces;
     }
     delete _font;
+}
+
+Font * TextArea::font()
+{
+    return _font;
 }
 
 std::vector<std::string> * TextArea::textLines()

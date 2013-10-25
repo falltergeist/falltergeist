@@ -67,73 +67,70 @@ void SettingsMenuState::init()
     // prflknbs.frm - 2 маленьких переключателя - расположены вертикально
     
     
-    // labels    
+    // LABELS
     auto msg = ResourceManager::msgFileType("text/english/game/options.msg");
-    _addLabel("title_1", new TextArea(msg->message(100), 74, 10))->setFont("font4.aaf")->setColor(0xffb89c28);    
-    _addLabel("title_2", new TextArea(msg->message(101), 21, 48))
-            ->setFont("font3.aaf")
-            ->setColor(0xffb89c28)
-            ->setWidth(158)
-            ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);    
-    _addLabel("title_21", new TextArea(msg->message(102), 21, 48 + 77))
-            ->setFont("font3.aaf")
-            ->setColor(0xffb89c28)
-            ->setWidth(158)
-            ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);    
-    _addLabel("title_22", new TextArea(msg->message(103), 21, 48 + 156))
-            ->setFont("font3.aaf")
-            ->setColor(0xffb89c28)
-            ->setWidth(158)
-            ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);                
-    _addLabel("title_23", new TextArea(msg->message(104), 21, 48 + 158+80))
-            ->setFont("font3.aaf")
-            ->setColor(0xffb89c28)
-            ->setWidth(158)
-            ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);                
-    _addLabel("title_24", new TextArea(msg->message(105), 21, 48 + 235+80))
-            ->setFont("font3.aaf")
-            ->setColor(0xffb89c28)
-            ->setWidth(158)
-            ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);                  
     
-    _addLabel("title_3", new TextArea(msg->message(106), 206, 49))->setFont("font3.aaf")->setColor(0xffb89c28);        
-    _addLabel("title_31", new TextArea(msg->message(107), 206, 49 + 66))->setFont("font3.aaf")->setColor(0xffb89c28);        
-    _addLabel("title_32", new TextArea(msg->message(108), 206, 49 + 66*2))->setFont("font3.aaf")->setColor(0xffb89c28);        
-    _addLabel("title_33", new TextArea(msg->message(109), 206, 49 + 66*3))->setFont("font3.aaf")->setColor(0xffb89c28);        
-    _addLabel("title_34", new TextArea(msg->message(110), 206, 49 + 66*4))->setFont("font3.aaf")->setColor(0xffb89c28);        
-    _addLabel("title_35", new TextArea(msg->message(111), 206, 49 + 66*5))->setFont("font3.aaf")->setColor(0xffb89c28);        
+    auto title1 = new TextArea(msg->message(100), 74, 10);
+    title1->setFont("font4.aaf")->setColor(0xffb89c28);
     
-    _addLabel("title_4", new TextArea(msg->message(112), 384, 19))->setFont("font3.aaf")->setColor(0xffb89c28);
-    _addLabel("title_5", new TextArea(msg->message(113), 384, 94))->setFont("font3.aaf")->setColor(0xffb89c28);
-    _addLabel("title_6", new TextArea(msg->message(114), 384, 165))->setFont("font3.aaf")->setColor(0xffb89c28);
-    _addLabel("title_7", new TextArea(msg->message(115), 384, 165 + 51))->setFont("font3.aaf")->setColor(0xffb89c28);
-    _addLabel("title_8", new TextArea(msg->message(116), 384, 165 + 51*2))->setFont("font3.aaf")->setColor(0xffb89c28);
-    _addLabel("title_9", new TextArea(msg->message(117), 384, 165 + 51*3))->setFont("font3.aaf")->setColor(0xffb89c28);
-    _addLabel("title_10", new TextArea(msg->message(118), 384, 165 + 51*4))->setFont("font3.aaf")->setColor(0xffb89c28);
-    _addLabel("title_11", new TextArea(msg->message(119), 384, 165 + 51*5))->setFont("font3.aaf")->setColor(0xffb89c28);
+    auto title2 = new TextArea(msg->message(101), 21, 48);
+    title2->setColor(0xffb89c28)->setWidth(158)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setFont("font3.aaf");
+
+    auto title3 = new TextArea(title2, 21, 48 + 77);
+    title2->setText(msg->message(102));
+
+    auto title4 = new TextArea(title2, 21, 48 + 156);
+    title4->setText(msg->message(103));
+    
+    auto title5 = new TextArea(title2, 21, 128+ 158);
+    title5->setText(msg->message(104));
+    
+    auto title6 = new TextArea(title2, 21, 128 + 235);
+    title6->setText(msg->message(105));
+    
+    auto title7 = new TextArea(msg->message(106), 206, 49);
+    title7->setFont("font3.aaf")->setColor(0xffb89c28);
+    
+    auto title8 = new TextArea(title7, 206, 49 + 66);
+    title8->setText(msg->message(107));
+    
+    auto title9 = new TextArea(title7, 206, 49 + 66*2);
+    title9->setText(msg->message(108));
+    
+    auto title10 = new TextArea(title7, 206, 49 + 66*3);
+    title10->setText(msg->message(109));
+    
+    auto title11 = new TextArea(title7, 206, 49 + 66*4);
+    title11->setText(msg->message(110));
+    
+    auto title12 = new TextArea(title7, 206, 49 + 66*5);
+    title12->setText(msg->message(111));
+    
+    auto title13 = new TextArea(msg->message(112), 384, 19);
+    title13->setFont("font3.aaf")->setColor(0xffb89c28);
+
+    auto title14 = new TextArea(title13, 384, 94);
+    title14->setText(msg->message(113));
+    
+    auto title15 = new TextArea(title13, 384, 165);
+    title15->setText(msg->message(114));
+    
+    auto title16 = new TextArea(title13, 384, 165 + 51);
+    title16->setText(msg->message(115));
+    
+    auto title17 = new TextArea(title13, 384, 165 + 51*2);
+    title17->setText(msg->message(116));
+    
+    auto title18 = new TextArea(title13, 384, 165 + 51*3);
+    title18->setText(msg->message(117));
+    
+    auto title19 = new TextArea(title13, 384, 165 + 51*4);
+    title19->setText(msg->message(118));
+    
+    auto title20 = new TextArea(title13, 384, 165 + 51*5);
+    title20->setText(msg->message(119));
     
     /*
-     
-{100}{}{НАСТРОЙКИ}
-{101}{}{СЛОЖНОСТЬ ИГРЫ}
-{102}{}{СЛОЖНОСТЬ БОЯ}
-{103}{}{УРОВЕНЬ НАСИЛИЯ}
-{104}{}{ВЫДЕЛЕНИЕ ЦЕЛИ}
-{105}{}{ИНФО В БОЮ}
-{106}{}{СООБЩ. В БОЮ}
-{107}{}{НАСМЕШКИ В БОЮ}
-{108}{}{ФИЛЬТР РУГАНИ}
-{109}{}{БЕГ}
-{110}{}{СУБТИТРЫ}
-{111}{}{ВЫДЕЛ. ПРЕДМ.}
-{112}{}{СКОРОСТЬ БОЯ}
-{113}{}{ЗАДЕРЖКА ТЕКСТА}
-{114}{}{ОБЩ. ГРОМКОСТЬ}
-{115}{}{ГРОМКОСТЬ МУЗЫКИ/ВИДЕО}
-{116}{}{ГРОМКОСТЬ ЭФФЕКТОВ}
-{117}{}{ГРОМКОСТЬ РЕЧИ}
-{118}{}{УРОВЕНЬ ЯРКОСТИ}
-{119}{}{ЧУВСТВИТЕЛЬНОСТЬ МЫШИ}
 {120}{}{СТАНД.}
 {121}{}{ОТМЕНА}
 {122}{}{Влияние на скорость игрока}
@@ -168,11 +165,12 @@ void SettingsMenuState::init()
 
      
      */
-    
-    add(background);    
+    add({background, title1, title2, title3, title4, title5, title6,
+         title7, title8, title9, title10, title11, title12, title13,
+         title14, title15, title16, title17, title18, title19, title20});
     //add(switch1);
     
-    for (auto& label : _labels) add(label.second);
+    //for (auto& label : _labels) add(label.second);
     
 }
 

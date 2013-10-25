@@ -36,20 +36,21 @@ class Event;
 class State
 {
 protected:
-    Game * _game;
-    std::vector<Surface *> * _surfaces;
+    Game* _game;
+    std::vector<Surface*>* _surfaces;
     bool _isFullscreen;
 public:
-    State(Game * game);
+    State(Game* game);
     virtual ~State();
 
     bool initialized;
-    void add(Surface * surface);
+    void add(Surface* surface);
+    void add(std::vector<Surface*> surfaces);
     virtual void blit();
     bool isFullscreen();
     virtual void init();
     virtual void think();
-    virtual void handle(Event * event);
+    virtual void handle(Event* event);
 };
 
 }
