@@ -42,15 +42,15 @@ namespace Falltergeist
 
 Game::Game(unsigned int width, unsigned int height, unsigned int bpp)
 {
-    debug(CrossPlatform::getVersion() + "\n", DEBUG_INFO);
-    debug("Opensource Fallout 2 game engine\n", DEBUG_INFO);
+    debug(CrossPlatform::getVersion(), DEBUG_INFO);
+    debug("Opensource Fallout 2 game engine", DEBUG_INFO);
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
-        debug("Initializing video - [FAIL]\n", DEBUG_CRITICAL);
+        debug("Initializing video - [FAIL]", DEBUG_CRITICAL);
         throw Exception(SDL_GetError());
     }
-    debug("Initializing video - [OK]\n", DEBUG_INFO);
+    debug("Initializing video - [OK]", DEBUG_INFO);
 
     std::string caption = CrossPlatform::getVersion();
 
@@ -122,7 +122,7 @@ void Game::setState(State * state)
 void Game::run()
 {
 
-    debug("Starting main loop...\n", DEBUG_INFO);
+    debug("Starting main loop...", DEBUG_INFO);
     TextArea * falltergeistVersion = new TextArea(CrossPlatform::getVersion(), 3, 470);
     while (!_quit)
     {
@@ -155,7 +155,7 @@ void Game::run()
                     std::stringstream ss;
                     ss << SDL_GetTicks() << ".bmp";
                     SDL_SaveBMP(_screen->surface()->sdl_surface(), ss.str().c_str());
-                    debug("Screenshot saved to " + ss.str() + "\n", DEBUG_INFO);
+                    debug("Screenshot saved to " + ss.str(), DEBUG_INFO);
                 }
 
                 _states->back()->handle(&event);
@@ -183,7 +183,7 @@ void Game::run()
         SDL_Delay(1);
     }
 
-    debug("Stopping main loop...[OK]\n", DEBUG_INFO);
+    debug("Stopping main loop...[OK]", DEBUG_INFO);
 }
 
 Screen * Game::screen()

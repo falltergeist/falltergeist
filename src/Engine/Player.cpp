@@ -343,7 +343,7 @@ void Player::setTrait(int traitNumber, unsigned int value)
     }
     else
     {
-        debug("Player::setTrait() - traitNumber out of range: " + std::to_string(traitNumber) + "\n", DEBUG_ERROR);
+        debug("Player::setTrait() - traitNumber out of range: " + std::to_string(traitNumber), DEBUG_ERROR);
     }
 }
 
@@ -380,7 +380,7 @@ void Player::setSkill(int skillNumber, unsigned int value)
     }
     else
     {
-        debug("Player::setSkill() - skillNumber out of range: " + std::to_string(skillNumber) + "\n", DEBUG_ERROR);
+        debug("Player::setSkill() - skillNumber out of range: " + std::to_string(skillNumber), DEBUG_ERROR);
     }
 }
 

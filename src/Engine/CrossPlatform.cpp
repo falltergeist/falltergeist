@@ -63,7 +63,7 @@ CrossPlatform::~CrossPlatform()
 
 void CrossPlatform::debug(std::string message, unsigned char level)
 {
-    std::cout << message;
+    std::cout << message << std::endl;
 }
 
 std::string CrossPlatform::getVersion()
@@ -115,7 +115,7 @@ std::vector<std::string> CrossPlatform::getCdDrivePaths() {
 
     return result;
 #else
-    throw Exception("not supported");
+    throw Exception("CD-ROM detection not supported");
 #endif
 }
 
@@ -123,7 +123,7 @@ std::vector<std::string> CrossPlatform::getCdDrivePaths() {
 std::string CrossPlatform::findDataPath()
 {
     if (_dataPath.length() > 0) return _dataPath;
-    debug("Looking for Fallout data files\n", DEBUG_INFO);
+    debug("Looking for Fallout data files", DEBUG_INFO);
     std::vector<std::string> directories;
     directories.push_back(getCurrentDirectory());
     directories.push_back(getHomeDirectory() + "/.falltergeist");
@@ -133,23 +133,24 @@ std::string CrossPlatform::findDataPath()
         directories.insert(directories.end(), cdDrives.begin(), cdDrives.end());
     }
     catch(Exception e) {
-        debug("cdrom drive detection not supported");
+        debug(e.message());
     }
 
     for (auto& directory : directories) {
         if (std::all_of(
                 necessaryDatFiles.begin(),
                 necessaryDatFiles.end(),
-                [directory](std::string file) {
+                [directory](std::string file) 
+                {
                     std::ifstream stream(directory + "/" + file);
                     if (stream)
                     {
-                        debug("Searching in directory: " + directory + " " + file + " [FOUND]\n", DEBUG_INFO);
+                        debug("Searching in directory: " + directory + " " + file + " [FOUND]", DEBUG_INFO);
                         return true;
                     }
                     else
                     {
-                        debug("Searching in directory: " + directory + " " + file + " [NOT FOUND]\n", DEBUG_INFO);
+                        debug("Searching in directory: " + directory + " " + file + " [NOT FOUND]", DEBUG_INFO);
                         return false;
                     }
                 })

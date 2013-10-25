@@ -167,7 +167,7 @@ void Animation::loadFromFrmFile(std::string filename)
     libfalltergeist::FrmFileType * frm = ResourceManager::frmFileType(filename);
     if (!frm)
     {
-        debug("Can't find FRM file "+ filename + "\n", DEBUG_ERROR);
+        debug("Can't find FRM file "+ filename, DEBUG_ERROR);
     }
     return loadFromFrmFile(frm);
 }
