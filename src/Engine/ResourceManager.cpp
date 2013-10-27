@@ -105,7 +105,7 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
     // Return item from cache
     if (_datFilesItems->find(filename) != _datFilesItems->end())
     {
-        debug("[RESOURCE MANAGER] - Loading file: " + filename + " [FROM CACHE]", DEBUG_INFO);
+        //debug("[RESOURCE MANAGER] - Loading file: " + filename + " [FROM CACHE]", DEBUG_INFO);
         return _datFilesItems->at(filename);
     }
 
@@ -124,6 +124,7 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
             else if (extension == "frm") item = new libfalltergeist::FrmFileType(stream);
             else if (extension == "gcd") item = new libfalltergeist::GcdFileType(stream);
             else if (extension == "lst") item = new libfalltergeist::LstFileType(stream);
+            else if (extension == "map") item = new libfalltergeist::MapFileType(stream);
             else if (extension == "msg") item = new libfalltergeist::MsgFileType(stream);
             else if (extension == "pal") item = new libfalltergeist::PalFileType(stream);
             else if (extension == "pro") item = new libfalltergeist::ProFileType(stream);
@@ -148,7 +149,7 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
         if (item)
         {
             _datFilesItems->insert(std::make_pair(filename, item));
-            debug("[RESOURCE MANAGER] - Loading file: " + filename + " [FROM DAT FILE]", DEBUG_INFO);
+            debug("[RESOURCE MANAGER] - Loading file: " + filename + " [FROM "+ (*it)->filename() + "]", DEBUG_INFO);
             return item;
         }
     }
@@ -204,12 +205,12 @@ libfalltergeist::BioFileType * ResourceManager::bioFileType(std::string filename
 
 libfalltergeist::MapFileType * ResourceManager::mapFileType(std::string filename)
 {
-    libfalltergeist::DatFileItem * item = datFileItem(filename);
+    auto item = dynamic_cast<libfalltergeist::MapFileType*>(datFileItem(filename));
     if (item)
     {
-        return item->asMapFileType(&ResourceManager::proFileType);
+        item->setCallback(&ResourceManager::proFileType);
     }
-    return 0;
+    return item;
 }
 
 libfalltergeist::ProFileType * ResourceManager::proFileType(std::string filename)
