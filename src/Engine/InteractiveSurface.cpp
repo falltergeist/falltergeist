@@ -30,38 +30,10 @@ namespace Falltergeist
 
 InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y)
 {
-    _hovered = false;
-    _leftButtonPressed = false;
-    _rightButtonPressed = false;
-    _onKeyboardPress = 0;
-    _onKeyboardRelease = 0;
-    _onLeftButtonClick = 0;
-    _onLeftButtonPress = 0;
-    _onLeftButtonRelease = 0;
-    _onMouseIn = 0;
-    _onMouseOut = 0;
-    _onMouseOver = 0;
-    _onRightButtonClick = 0;
-    _onRightButtonPress = 0;
-    _onRightButtonRelease = 0;
 }
 
 InteractiveSurface::InteractiveSurface(Surface* other) : Surface(other)
 {
-    _hovered = false;
-    _leftButtonPressed = false;
-    _rightButtonPressed = false;
-    _onKeyboardPress = 0;
-    _onKeyboardRelease = 0;
-    _onLeftButtonClick = 0;
-    _onLeftButtonPress = 0;
-    _onLeftButtonRelease = 0;
-    _onMouseIn = 0;
-    _onMouseOut = 0;
-    _onMouseOver = 0;
-    _onRightButtonClick = 0;
-    _onRightButtonPress = 0;
-    _onRightButtonRelease = 0;
 }
 
 InteractiveSurface::~InteractiveSurface()
@@ -75,21 +47,27 @@ void InteractiveSurface::handle(Event* event, State* state)
     if(event->isMouseEvent())
     {
         // check that the surface under the cursor pointer is not transparent
-        int x = event->x() - this->x();
-        int y = event->y() - this->y();
-
-        //if (event->SDLEvent()->type == SDL_MOUSEBUTTONDOWN)
-        {
-            //std::cout << x << " : " << y << std::endl;
-        }
+        int x = event->x() - this->x() - this->xOffset();
+        int y = event->y() - this->y() - this->yOffset();
 
         unsigned int alpha = pixel(x , y) >> 24;
-        //std::cout << alpha << std::endl;
         if (alpha > 0)
         {
             switch(event->SDLEvent()->type)
             {
                 case SDL_MOUSEMOTION:
+                    if (_leftButtonPressed)
+                    {
+                        if (!_drag)
+                        {
+                            _drag = true;
+                            dragStart(event, state);
+                        }
+                        else
+                        {
+                            drag(event, state);
+                        }
+                    }
                     if (!_hovered)
                     {
                         _hovered = true;
@@ -112,12 +90,17 @@ void InteractiveSurface::handle(Event* event, State* state)
                         rightButtonPress(event, state);
                     }
                     break;
-                case SDL_MOUSEBUTTONUP:
+                case SDL_MOUSEBUTTONUP:                
                     if (event->SDLEvent()->button.button == SDL_BUTTON_LEFT)
                     {
                         leftButtonRelease(event, state);
                         if (_leftButtonPressed)
                         {
+                            if (_drag)
+                            {
+                                _drag = false;
+                                dragStop(event, state);
+                            }
                             leftButtonClick(event, state);
                         }
                         _leftButtonPressed = false;
@@ -138,8 +121,20 @@ void InteractiveSurface::handle(Event* event, State* state)
         {
             if (event->SDLEvent()->type == SDL_MOUSEMOTION && _hovered)
             {
+                if (_drag)
+                {
+                    drag(event, state);
+                }
                 _hovered = false;
                 mouseOut(event, state);
+
+            }
+            else if (event->SDLEvent()->type == SDL_MOUSEMOTION && !_hovered)
+            {
+                if (_drag)
+                {
+                    drag(event, state);
+                }
             }
             else if(event->SDLEvent()->type == SDL_MOUSEBUTTONUP)
             {
@@ -147,6 +142,11 @@ void InteractiveSurface::handle(Event* event, State* state)
                 {
                     if (_leftButtonPressed)
                     {
+                        if (_drag)
+                        {
+                            _drag = false;
+                            dragStop(event, state);
+                        }
                         leftButtonRelease(event, state);
                         _leftButtonPressed = false;
                     }
@@ -186,6 +186,18 @@ void InteractiveSurface::mouseOut(Event* event, State* state)
 void InteractiveSurface::mouseOver(Event* event, State* state)
 {
     if (_onMouseOver != 0) (state->*_onMouseOver)(event);
+}
+void InteractiveSurface::dragStart(Event* event, State* state)
+{
+    if (_onDragStart != 0) (state->*_onDragStart)(event);
+}
+void InteractiveSurface::dragStop(Event* event, State* state)
+{
+    if (_onDragStop != 0) (state->*_onDragStop)(event);
+}
+void InteractiveSurface::drag(Event* event, State* state)
+{
+    if (_onDrag != 0) (state->*_onDrag)(event);
 }
 void InteractiveSurface::leftButtonPress(Event* event, State* state)
 {
@@ -233,6 +245,21 @@ void InteractiveSurface::onMouseOut(EventHandler handler)
 void InteractiveSurface::onMouseOver(EventHandler handler)
 {
     _onMouseOver = handler;
+}
+
+void InteractiveSurface::onDragStart(EventHandler handler)
+{
+    _onDragStart = handler;
+}
+
+void InteractiveSurface::onDragStop(EventHandler handler)
+{
+    _onDragStop = handler;
+}
+
+void InteractiveSurface::onDrag(EventHandler handler)
+{
+    _onDrag = handler;
 }
 
 void InteractiveSurface::onLeftButtonClick(EventHandler handler)

@@ -15,46 +15,24 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
-#ifndef FALLTERGEIST_SETTINGSMENUSTATE_H
-#define	FALLTERGEIST_SETTINGSMENUSTATE_H
-
 // C++ standard includes
-#include <map>
 
 // Falltergeist includes
-#include "../Engine/State.h"
-#include "../Engine/IniFile.h"
+#include "../UI/Slider.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-class TextArea;
-class InteractiveSurface;
-    
-class SettingsMenuState : public State
-{
-protected:
-    InteractiveSurface * _fon;    
-    std::map<std::string, TextArea*> _labels;
-    IniFileSection _getDefaultSettings();
-    IniFileSection _getSettings();
-    TextArea* _addLabel(std::string name, TextArea* label);
-public:
-    SettingsMenuState(Game* game);
-    virtual ~SettingsMenuState();
-    virtual void init();
-    virtual void think();
-    void onDefaultButtonClick(Event* event);
-    void onCancelButtonClick(Event* event);
-    void onSaveButtonClick(Event* event);
-    
-    void onButtonPress(Event* event);
 
-};
+Slider::Slider(int x, int y) : InteractiveSurface(0, 0, x, y)
+{
+}
+
+Slider::~Slider()
+{
+}
 
 }
-#endif	// FALLTERGEIST_SETTINGSMENUSTATE_H

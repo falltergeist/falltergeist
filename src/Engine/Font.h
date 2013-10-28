@@ -36,10 +36,10 @@ namespace Falltergeist
 class Font
 {
 protected:
-    std::vector<Surface *> * _glyphs;
+    std::vector<Surface*>* _glyphs;
     std::string _filename;
     unsigned int _color;
-    libfalltergeist::AafFileType * _aafFileType;
+    libfalltergeist::AafFileType* _aafFileType;
 public:
     Font(std::string filename, unsigned int color = 0xFF3FF800);
     ~Font();
@@ -50,7 +50,7 @@ public:
     void setColor(unsigned int color);
     unsigned int color();
 
-    Surface * glyph(unsigned char chr);
+    Surface* glyph(unsigned char chr);
 
     unsigned short horizontalGap();
 

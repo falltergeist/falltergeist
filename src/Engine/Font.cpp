@@ -32,7 +32,7 @@ namespace Falltergeist
 Font::Font(std::string filename, unsigned int color)
 {
     _color = 0;
-    _glyphs = new std::vector<Surface *>;
+    _glyphs = new std::vector<Surface*>;
     setFilename(filename);
     setColor(color);
     for (int i = 0; i < 256; i++) _glyphs->push_back(0);
@@ -69,7 +69,7 @@ void Font::setColor(unsigned int color)
         _glyphs->pop_back();
     }
     delete _glyphs;
-    _glyphs = new std::vector<Surface *>;
+    _glyphs = new std::vector<Surface*>;
     for (int i = 0; i < 256; i++) _glyphs->push_back(0);
 }
 
@@ -98,7 +98,7 @@ unsigned short Font::spaceWidth()
     return _aafFileType->spaceWidth();
 }
 
-Surface * Font::glyph(unsigned char chr)
+Surface* Font::glyph(unsigned char chr)
 {
     if (_glyphs->at(chr) != 0) return _glyphs->at(chr);
 
@@ -107,7 +107,7 @@ Surface * Font::glyph(unsigned char chr)
     int height = this->height();
     int delta = height - charHeight;
 
-    Surface * surface = new Surface(charWidth,height);
+    Surface* surface = new Surface(charWidth,height);
     int i = 0;
     for(int y = 0; y != charHeight; ++y)
     {

@@ -35,27 +35,31 @@ class InteractiveSurface;
 class Event
 {
 protected:
-    SDL_Event * _event;
-    InteractiveSurface * _sender;
+    SDL_Event* _event;
+    InteractiveSurface* _sender;
     int _x;
     int _y;
+    int _xOffset = 0;
+    int _yOffset = 0;
     int _keyCode;
     bool _isMouseEvent;
     bool _isKeyboardEvent;
 public:
-    Event(SDL_Event * event);
+    Event(SDL_Event* event);
     virtual ~Event();
 
-    void setSender(InteractiveSurface * sender);
-    InteractiveSurface * sender();
+    void setSender(InteractiveSurface* sender);
+    InteractiveSurface* sender();
 
     int x();
+    int xOffset();
 
     int y();
+    int yOffset();
 
     int keyCode();
 
-    SDL_Event * SDLEvent();
+    SDL_Event* SDLEvent();
 
     bool isMouseEvent();
     bool isKeyboardEvent();

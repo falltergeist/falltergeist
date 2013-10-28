@@ -37,20 +37,24 @@ typedef void (State::*EventHandler)(Event*);
 class InteractiveSurface : public Surface
 {
 protected:
-    bool _hovered;
-    bool _leftButtonPressed;
-    bool _rightButtonPressed;
-    EventHandler _onMouseIn;
-    EventHandler _onMouseOut;
-    EventHandler _onMouseOver;
-    EventHandler _onLeftButtonPress;
-    EventHandler _onLeftButtonRelease;
-    EventHandler _onLeftButtonClick;
-    EventHandler _onRightButtonRelease;
-    EventHandler _onRightButtonPress;
-    EventHandler _onRightButtonClick;
-    EventHandler _onKeyboardPress;
-    EventHandler _onKeyboardRelease;
+    bool _hovered = false;
+    bool _drag = false;
+    bool _leftButtonPressed = false;
+    bool _rightButtonPressed = false;
+    EventHandler _onMouseIn = 0;
+    EventHandler _onMouseOut = 0;
+    EventHandler _onMouseOver = 0;
+    EventHandler _onDragStart = 0;
+    EventHandler _onDragStop = 0;
+    EventHandler _onDrag = 0;
+    EventHandler _onLeftButtonPress = 0;
+    EventHandler _onLeftButtonRelease = 0;
+    EventHandler _onLeftButtonClick = 0;
+    EventHandler _onRightButtonRelease = 0;
+    EventHandler _onRightButtonPress = 0;
+    EventHandler _onRightButtonClick = 0;
+    EventHandler _onKeyboardPress = 0;
+    EventHandler _onKeyboardRelease = 0;
 public:
     InteractiveSurface(int width = 0, int height = 0, int x = 0, int y = 0);
     InteractiveSurface(Surface* other);
@@ -59,6 +63,9 @@ public:
     virtual void mouseIn(Event* event, State* state);
     virtual void mouseOver(Event* event, State* state);
     virtual void mouseOut(Event* event, State* state);
+    virtual void dragStart(Event* event, State* state);
+    virtual void dragStop(Event* event, State* state);
+    virtual void drag(Event* event, State* state);
     virtual void leftButtonPress(Event* event, State* state);
     virtual void leftButtonRelease(Event* event, State* state);
     virtual void leftButtonClick(Event* event, State* state);
@@ -70,6 +77,9 @@ public:
     virtual void onMouseIn(EventHandler handler);
     virtual void onMouseOut(EventHandler handler);
     virtual void onMouseOver(EventHandler handler);
+    virtual void onDragStart(EventHandler handler);
+    virtual void onDragStop(EventHandler handler);
+    virtual void onDrag(EventHandler handler);
     virtual void onLeftButtonPress(EventHandler handler);
     virtual void onLeftButtonRelease(EventHandler handler);
     virtual void onLeftButtonClick(EventHandler handler);

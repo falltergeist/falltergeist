@@ -27,6 +27,7 @@
 #include "../Engine/Game.h"
 #include "../UI/MultistateImageButton.h"
 #include "../UI/ImageButton.h"
+#include "../UI/Slider.h"
 #include "../UI/TextArea.h"
 #include "../Engine/CrossPlatform.h"
 
@@ -53,6 +54,7 @@ void SettingsMenuState::init()
     _fon->onKeyboardRelease((EventHandler) &SettingsMenuState::onButtonPress);
     add(_fon);
     */
+
     auto background = new Surface(ResourceManager::surface("art/intrface/prefscrn.frm", 0, 0));
     background->setXOffset(0);
     background->setYOffset(0);
@@ -201,6 +203,7 @@ void SettingsMenuState::init()
 
 
 
+
     /*
 {122}{}{Влияние на скорость игрока}
 {123}{}{Речь Pipboy}
@@ -232,7 +235,6 @@ void SettingsMenuState::init()
 {223}{}{Ярче}
 {224}{}{Широко}     
      */
-
     add(background);
     add({ title1, title2, title3, title4, title5, title6,
           title7, title8, title9, title10, title11, title12, title13,

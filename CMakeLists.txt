@@ -109,6 +109,8 @@ set(SOURCES main.cpp
             src/UI/ImageButton.h
             src/UI/MultistateImageButton.cpp
             src/UI/MultistateImageButton.h
+            src/UI/Slider.cpp
+            src/UI/Slider.h
             src/UI/TextArea.cpp
             src/UI/TextArea.h)
 

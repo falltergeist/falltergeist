@@ -27,7 +27,7 @@
 namespace Falltergeist
 {
 
-Event::Event(SDL_Event * event) : _event(event)
+Event::Event(SDL_Event* event) : _event(event)
 {
     _isMouseEvent = false;
     _isKeyboardEvent = false;
@@ -47,6 +47,8 @@ Event::Event(SDL_Event * event) : _event(event)
             _isMouseEvent = true;
             _x = event->motion.x;
             _y = event->motion.y;
+            _xOffset = event->motion.xrel;
+            _yOffset = event->motion.yrel;
             break;
         case SDL_KEYDOWN:
         case SDL_KEYUP:
@@ -60,17 +62,17 @@ Event::~Event()
 {
 }
 
-SDL_Event * Event::SDLEvent()
+SDL_Event* Event::SDLEvent()
 {
     return _event;
 }
 
-InteractiveSurface * Event::sender()
+InteractiveSurface* Event::sender()
 {
     return _sender;
 }
 
-void Event::setSender(InteractiveSurface * sender)
+void Event::setSender(InteractiveSurface* sender)
 {
     _sender = sender;
 }
@@ -90,9 +92,19 @@ int Event::x()
     return _x;
 }
 
+int Event::xOffset()
+{
+    return _xOffset;
+}
+
 int Event::y()
 {
     return _y;
+}
+
+int Event::yOffset()
+{
+    return _yOffset;
 }
 
 int Event::keyCode()
