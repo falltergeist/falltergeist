@@ -47,13 +47,6 @@ SettingsMenuState::~SettingsMenuState()
 void SettingsMenuState::init()
 {    
     State::init();
-    
-    /*
-    _fon = new InteractiveSurface();
-    _fon->loadFromBmpFile(CrossPlatform::findDataPath() + "/scr00000.bmp");
-    _fon->onKeyboardRelease((EventHandler) &SettingsMenuState::onButtonPress);
-    add(_fon);
-    */
 
     auto background = new Surface(ResourceManager::surface("art/intrface/prefscrn.frm", 0, 0));
     background->setXOffset(0);
@@ -190,6 +183,42 @@ void SettingsMenuState::init()
     label26->setText(msg->message(202));
     auto label27 = new TextArea(msg->message(201), 320, 69 + 64 + 67 + 66 + 65 + 68); label27->setColor(0xffb89c28);
 
+    auto label28 = new TextArea(msg->message(122), 405, 72); label28->setColor(0xffb89c28);
+
+    auto label29 = new TextArea(msg->message(209), 384, 38); label29->setColor(0xffb89c28);
+    auto label30 = new TextArea(msg->message(210), 524, 38);
+         label30->setColor(0xffb89c28)
+                ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT)
+                ->setWidth(100);
+
+    auto label31 = new TextArea(msg->message(217), 384, 113); label31->setColor(0xffb89c28);
+    auto label32 = new TextArea(msg->message(209), 469, 113); label32->setColor(0xffb89c28);
+    auto label33 = new TextArea(label30, 524, 113); label33->setText(msg->message(218));
+
+    auto label34 = new TextArea(msg->message(202), 384, 184); label34->setColor(0xffb89c28);
+    auto label35 = new TextArea(msg->message(221), 450, 184); label35->setColor(0xffb89c28);
+    auto label36 = new TextArea(msg->message(209), 494, 184); label36->setColor(0xffb89c28);
+    auto label37 = new TextArea(label30, 524, 184); label37->setText(msg->message(222));
+
+    auto label38 = new TextArea(msg->message(202), 384, 184+51); label38->setColor(0xffb89c28);
+    auto label39 = new TextArea(msg->message(221), 450, 184+51); label39->setColor(0xffb89c28);
+    auto label40 = new TextArea(msg->message(209), 494, 184+51); label40->setColor(0xffb89c28);
+    auto label41 = new TextArea(label30, 524, 184+51); label41->setText(msg->message(222));
+
+    auto label42 = new TextArea(msg->message(202), 384, 184+51*2); label42->setColor(0xffb89c28);
+    auto label43 = new TextArea(msg->message(221), 450, 184+51*2); label43->setColor(0xffb89c28);
+    auto label44 = new TextArea(msg->message(209), 494, 184+51*2); label44->setColor(0xffb89c28);
+    auto label45 = new TextArea(label30, 524, 184+51*2); label45->setText(msg->message(222));
+
+    auto label46 = new TextArea(msg->message(202), 384, 184+51*3); label46->setColor(0xffb89c28);
+    auto label47 = new TextArea(msg->message(221), 450, 184+51*3); label47->setColor(0xffb89c28);
+    auto label48 = new TextArea(msg->message(209), 494, 184+51*3); label48->setColor(0xffb89c28);
+    auto label49 = new TextArea(label30, 524, 184+51*3); label49->setText(msg->message(222));
+
+    auto label50 = new TextArea(msg->message(209), 384, 184+51*4); label50->setColor(0xffb89c28);
+    auto label51 = new TextArea(msg->message(209), 384, 184+51*5); label51->setColor(0xffb89c28);
+    auto label52 = new TextArea(label30, 524, 184+51*4); label52->setText(msg->message(223));
+    auto label53 = new TextArea(label30, 524, 184+51*5); label53->setText(msg->message(218));
     // BUTTONS
 
     auto button1 = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 23, 450);
@@ -200,6 +229,8 @@ void SettingsMenuState::init()
 
     auto button3 = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 263, 450);
     button3->onLeftButtonClick((EventHandler) &SettingsMenuState::onCancelButtonClick);
+
+    auto button4 = new ImageButton(ImageButton::TYPE_CHECKBOX, 383, 68);
 
 
     // SLIDERS
@@ -213,47 +244,19 @@ void SettingsMenuState::init()
     auto slider7 = new Slider(384, 196 + 51*4);
     auto slider8 = new Slider(384, 196 + 51*5);
 
-
-    /*
-{122}{}{Влияние на скорость игрока}
-{123}{}{Речь Pipboy}
-#
-# Label text
-#
-{201}{}{Вкл.}
-{202}{}{Выкл.}
-{203}{}{Легко}
-{204}{}{Нормально}
-{205}{}{Сложно}
-{206}{}{По-детски}
-{207}{}{Нормально}
-{208}{}{Круто}
-{209}{}{Нормально}
-{210}{}{Очень быстро}
-{211}{}{Развернуто}
-{212}{}{Кратко}
-{213}{}{Только наведение}
-{214}{}{Нет}
-{215}{}{Минимально}
-{216}{}{Максимум крови}
-{217}{}{Медленно}
-{218}{}{Быстрее}
-{219}{}{Всегда}
-{220}{}{Много}
-{221}{}{Тихо}
-{222}{}{Громко}
-{223}{}{Ярче}
-{224}{}{Широко}     
-     */
     add(background);
     add({ title1, title2, title3, title4, title5, title6,
           title7, title8, title9, title10, title11, title12, title13,
           title14, title15, title16, title17, title18, title19, title20,
-          title21, title22, title23, button1, button2, button3,
+          title21, title22, title23,
+          button1, button2, button3, button4,
           label1, label2, label3, label4, label5, label6, label7, label8,
           label9, label10, label11, label12, label13, label14, label15,
           label16, label17, label18, label19, label20, label21, label22, label23,
-          label24, label25, label26, label27
+          label24, label25, label26, label27, label28, label29, label30, label31,
+          label32, label33, label34, label35, label36, label37, label38, label39,
+          label40, label41, label42, label43, label44, label45, label46, label47,
+          label48, label49, label50, label51, label52, label53
     });
     add({switch1, switch2, switch3, switch4, switch5,
          switch6, switch7, switch8, switch9, switch10, switch11

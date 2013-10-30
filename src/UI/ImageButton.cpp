@@ -68,8 +68,9 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : InteractiveSurface(0
             releasedImage = "art/intrface/sru.frm";
             break;
         case TYPE_CHECKBOX:
-            releasedImage = "art/intrface/prefxout.frm";
-            pressedImage  = "art/intrface/prefxin.frm";
+            pressedImage  = "art/intrface/prfxin.frm";
+            releasedImage = "art/intrface/prfxout.frm";
+            setSwitchMode(true);
             break;
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");

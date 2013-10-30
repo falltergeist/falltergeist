@@ -38,7 +38,6 @@ class InteractiveSurface;
 class SettingsMenuState : public State
 {
 protected:
-    InteractiveSurface * _fon;    
     std::map<std::string, TextArea*> _labels;
     IniFileSection _getDefaultSettings();
     IniFileSection _getSettings();
