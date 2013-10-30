@@ -18,6 +18,7 @@
  */
 
 // C++ standard includes
+#include <iostream>
 
 // Falltergeist includes
 #include "../UI/Slider.h"
@@ -29,10 +30,60 @@ namespace Falltergeist
 
 Slider::Slider(int x, int y) : InteractiveSurface(0, 0, x, y)
 {
+    _surfaceSet.addSurface(ResourceManager::surface("art/intrface/prfsldon.frm"));
+    _surfaceSet.addSurface(ResourceManager::surface("art/intrface/prfsldof.frm"));
 }
 
 Slider::~Slider()
 {
+}
+
+void Slider::drag(Event* event, State* state)
+{
+    auto newOffset = xOffset() + event->xOffset();
+    if (newOffset <= 218 && newOffset >= 0)
+    {
+        setXOffset(newOffset);
+        _value = ((maxValue() - minValue())/218)*xOffset();
+    }
+    InteractiveSurface::drag(event, state);
+}
+
+SDL_Surface* Slider::sdl_surface()
+{
+    if (_drag) return _surfaceSet.surfaces()->at(0)->sdl_surface();
+    return _surfaceSet.surfaces()->at(1)->sdl_surface();
+}
+
+double Slider::minValue()
+{
+    return _minValue;
+}
+
+void Slider::setMinValue(double value)
+{
+    _minValue = value;
+}
+
+double Slider::maxValue()
+{
+    return _maxValue;
+}
+
+void Slider::setMaxValue(double value)
+{
+    _maxValue = value;
+}
+
+double Slider::value()
+{
+    return _value;
+}
+
+void Slider::setValue(double value)
+{
+    _value = value;
+    _xOffset = (218/(maxValue() - minValue())) * _value;
 }
 
 }

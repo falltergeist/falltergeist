@@ -202,6 +202,16 @@ void SettingsMenuState::init()
     button3->onLeftButtonClick((EventHandler) &SettingsMenuState::onCancelButtonClick);
 
 
+    // SLIDERS
+    auto slider1 = new Slider(384, 50);
+    auto slider2 = new Slider(384, 125);
+    slider2->setValue(0.5);
+    auto slider3 = new Slider(384, 196);
+    auto slider4 = new Slider(384, 196 + 51);
+    auto slider5 = new Slider(384, 196 + 51*2);
+    auto slider6 = new Slider(384, 196 + 51*3);
+    auto slider7 = new Slider(384, 196 + 51*4);
+    auto slider8 = new Slider(384, 196 + 51*5);
 
 
     /*
@@ -248,7 +258,7 @@ void SettingsMenuState::init()
     add({switch1, switch2, switch3, switch4, switch5,
          switch6, switch7, switch8, switch9, switch10, switch11
     });
-
+    add({slider1, slider2, slider3, slider4, slider5, slider6, slider7, slider8});
 }
 
 void SettingsMenuState::think()

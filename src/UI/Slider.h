@@ -24,6 +24,7 @@
 
 // Falltergeist includes
 #include "../Engine/InteractiveSurface.h"
+#include "../Engine/SurfaceSet.h"
 
 // Third party includes
 
@@ -32,9 +33,22 @@ namespace Falltergeist
 
 class Slider : public InteractiveSurface
 {
+protected:
+    SurfaceSet _surfaceSet;
+    double _minValue = 0;
+    double _maxValue = 1;
+    double _value = 0;
 public:
     Slider(int x, int y);
     virtual ~Slider();
+    virtual void drag(Event* event, State* state);
+    virtual SDL_Surface* sdl_surface();
+    double minValue();
+    void setMinValue(double value);
+    double maxValue();
+    void setMaxValue(double value);
+    double value();
+    void setValue(double value);
 };
 
 }
