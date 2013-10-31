@@ -333,7 +333,7 @@ unsigned int Player::trait(unsigned int traitNumber)
 
 void Player::setTrait(int traitNumber, unsigned int value)
 {
-    if (traitNumber > 0 && traitNumber < 16)
+    if (traitNumber >= 0 && traitNumber < 16)
     {
         _traits[traitNumber] = value;
     }
