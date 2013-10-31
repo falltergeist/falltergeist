@@ -38,8 +38,8 @@ protected:
     unsigned int _currentState = 0;
     int _mode = MODE_CYCLIC;
     int _modeFactor = 1; // or -1
-    int _maxState = -1;
-    int _minState = -1;
+    unsigned int _maxState = 0;
+    unsigned int _minState = 0;
 public:
     enum {MODE_PROGRESSION = 1, MODE_CYCLIC};
     enum {TYPE_BIG_SWITCH = 1, TYPE_SMALL_SWITCH};
@@ -50,12 +50,12 @@ public:
     virtual ~MultistateImageButton();
     virtual void leftButtonClick(Event* event, State* state);
     void addSurface(Surface * surface);
-    int state();
-    void setState(int state);
-    int minState();
-    void setMinState(int value);
-    int maxState();
-    void setMaxState(int value);
+    unsigned int state();
+    void setState(unsigned int state);
+    unsigned int minState();
+    void setMinState(unsigned int value);
+    unsigned int maxState();
+    void setMaxState(unsigned int value);
     void setMode(int mode);    
     int mode();
     void setModeFactor(int factor);

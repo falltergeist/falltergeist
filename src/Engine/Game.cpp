@@ -83,7 +83,7 @@ Game::~Game()
     while (!_deletedStates->empty())
     {
         delete _deletedStates->back();
-        _deletedStates->pop_back();;
+        _deletedStates->pop_back();
     }
     delete _deletedStates;
 }
@@ -121,7 +121,6 @@ void Game::setState(State * state)
 
 void Game::run()
 {
-
     debug("Starting main loop...", DEBUG_INFO);
     TextArea * falltergeistVersion = new TextArea(CrossPlatform::getVersion(), 3, 470);
     while (!_quit)

@@ -73,14 +73,15 @@ MultistateImageButton::~MultistateImageButton()
 void MultistateImageButton::addSurface(Surface* surface)
 {
     _surfaceSet.addSurface(surface);
+    _maxState++;
 }
 
-int MultistateImageButton::state()
+unsigned int MultistateImageButton::state()
 {
     return _currentState;
 }
 
-void MultistateImageButton::setState(int state)
+void MultistateImageButton::setState(unsigned int state)
 {
     _currentState = state;
 }
@@ -109,18 +110,18 @@ void MultistateImageButton::leftButtonClick(Event* event, State* state)
     {
         if (modeFactor() > 0)
         {
-            _currentState = (_currentState < _surfaceSet.surfaces()->size() - 1) ? _currentState + modeFactor() : 0;
+            _currentState = (_currentState < _maxState - 1) ? _currentState + modeFactor() : 0;
         }
         else
         {
-            _currentState = (_currentState > 0) ? _currentState + modeFactor() : _surfaceSet.surfaces()->size() - 1;
+            _currentState = (_currentState > 0) ? _currentState + modeFactor() : _maxState - 1;
         }
     }        
     else // MODE_CYCLIC
     {
         if (modeFactor() > 0)
         {
-            if (_currentState == _surfaceSet.surfaces()->size() - 1) setModeFactor(-modeFactor());
+            if (_currentState == _maxState - 1) setModeFactor(-modeFactor());
         }
         else
         {
@@ -147,22 +148,24 @@ int MultistateImageButton::modeFactor()
     return -1;
 }
 
-void MultistateImageButton::setMaxState(int value)
+void MultistateImageButton::setMaxState(unsigned int value)
 {
     _maxState = value;
+    if (_currentState > _maxState) _currentState = _maxState;
 }
 
-int MultistateImageButton::maxState()
+unsigned int MultistateImageButton::maxState()
 {
     return _maxState;
 }
 
-void MultistateImageButton::setMinState(int value)
+void MultistateImageButton::setMinState(unsigned int value)
 {
     _minState = value;
+    if (_currentState < _minState) _currentState = _minState;
 }
 
-int MultistateImageButton::minState()
+unsigned int MultistateImageButton::minState()
 {
     return _minState;
 }

@@ -29,8 +29,8 @@ namespace Falltergeist
 
 Slider::Slider(int x, int y) : InteractiveSurface(0, 0, x, y)
 {
-    _surfaceSet.addSurface(ResourceManager::surface("art/intrface/prfsldon.frm"));
-    _surfaceSet.addSurface(ResourceManager::surface("art/intrface/prfsldof.frm"));
+    _surfaceSet.addSurface(new Surface(ResourceManager::surface("art/intrface/prfsldon.frm")));
+    _surfaceSet.addSurface(new Surface(ResourceManager::surface("art/intrface/prfsldof.frm")));
 }
 
 Slider::~Slider()

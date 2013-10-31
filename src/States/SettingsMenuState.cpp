@@ -48,15 +48,21 @@ void SettingsMenuState::init()
 {    
     State::init();
 
+    unsigned int color = 0xff907824;
+    
     auto background = new Surface(ResourceManager::surface("art/intrface/prefscrn.frm", 0, 0));
     background->setXOffset(0);
     background->setYOffset(0);
     
     auto switch1 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 71);
+    switch1->setMaxState(3);
     auto switch2 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 149);
+    switch2->setMaxState(3);
     auto switch3 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 227);
     auto switch4 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 309);
+    switch4->setMaxState(3);
     auto switch5 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 387);
+    switch5->setMaxState(2);
 
     auto switch6 = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, 299, 74);
     auto switch7 = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, 299, 74 + 66);
@@ -69,10 +75,10 @@ void SettingsMenuState::init()
     auto msg = ResourceManager::msgFileType("text/english/game/options.msg");
     
     auto title1 = new TextArea(msg->message(100), 74, 10);
-    title1->setFont("font4.aaf")->setColor(0xffb89c28);
+    title1->setFont("font4.aaf")->setColor(color);
     
     auto title2 = new TextArea(msg->message(102), 21, 48);
-    title2->setColor(0xffb89c28)->setWidth(158)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setFont("font3.aaf");
+    title2->setColor(color)->setWidth(158)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setFont("font3.aaf");
 
     auto title3 = new TextArea(title2, 21, 48 + 77);
     title2->setText(msg->message(101));
@@ -87,7 +93,7 @@ void SettingsMenuState::init()
     title6->setText(msg->message(105));
     
     auto title7 = new TextArea(msg->message(106), 206, 49);
-    title7->setFont("font3.aaf")->setColor(0xffb89c28);
+    title7->setFont("font3.aaf")->setColor(color);
     
     auto title8 = new TextArea(title7, 206, 49 + 66);
     title8->setText(msg->message(107));
@@ -105,7 +111,7 @@ void SettingsMenuState::init()
     title12->setText(msg->message(111));
     
     auto title13 = new TextArea(msg->message(112), 384, 19);
-    title13->setFont("font3.aaf")->setColor(0xffb89c28);
+    title13->setFont("font3.aaf")->setColor(color);
 
     auto title14 = new TextArea(title13, 384, 94);
     title14->setText(msg->message(113));
@@ -137,86 +143,86 @@ void SettingsMenuState::init()
     auto title23 = new TextArea(title13, 283, 449);
     title23->setText(msg->message(121));
 
-    auto label1 = new TextArea(msg->message(203), 43, 81); label1->setColor(0xffb89c28);
-    auto label2 = new TextArea(msg->message(204), 68, 67); label2->setColor(0xffb89c28);
-    auto label3 = new TextArea(msg->message(205), 122, 81); label3->setColor(0xffb89c28);
+    auto label1 = new TextArea(msg->message(203), 43, 81); label1->setColor(color);
+    auto label2 = new TextArea(msg->message(204), 68, 67); label2->setColor(color);
+    auto label3 = new TextArea(msg->message(205), 122, 81); label3->setColor(color);
 
-    auto label4 = new TextArea(msg->message(206), 13, 159); label4->setColor(0xffb89c28);
-    auto label5 = new TextArea(msg->message(207), 68, 145); label5->setColor(0xffb89c28);
-    auto label6 = new TextArea(msg->message(208), 122, 159); label6->setColor(0xffb89c28);
+    auto label4 = new TextArea(msg->message(206), 13, 159); label4->setColor(color);
+    auto label5 = new TextArea(msg->message(207), 68, 145); label5->setColor(color);
+    auto label6 = new TextArea(msg->message(208), 122, 159); label6->setColor(color);
 
-    auto label7 = new TextArea(msg->message(214), 56, 236); label7->setColor(0xffb89c28);
-    auto label8 = new TextArea(msg->message(215), 65, 222); label8->setColor(0xffb89c28);
-    auto label9 = new TextArea(msg->message(207), 122, 236); label9->setColor(0xffb89c28);
-    auto label10 = new TextArea(msg->message(216), 122, 257); label10->setColor(0xffb89c28)->setWidth(60);
+    auto label7 = new TextArea(msg->message(214), 56, 236); label7->setColor(color);
+    auto label8 = new TextArea(msg->message(215), 65, 222); label8->setColor(color);
+    auto label9 = new TextArea(msg->message(207), 122, 236); label9->setColor(color);
+    auto label10 = new TextArea(msg->message(216), 122, 257); label10->setColor(color)->setWidth(60);
 
-    auto label11 = new TextArea(msg->message(202), 42, 319); label11->setColor(0xffb89c28);
-    auto label12 = new TextArea(msg->message(201), 88, 305); label12->setColor(0xffb89c28);
-    auto label13 = new TextArea(msg->message(213), 122, 319); label13->setColor(0xffb89c28)->setWidth(70)->setWordWrap(true);
+    auto label11 = new TextArea(msg->message(202), 42, 319); label11->setColor(color);
+    auto label12 = new TextArea(msg->message(201), 88, 305); label12->setColor(color);
+    auto label13 = new TextArea(msg->message(213), 122, 319); label13->setColor(color)->setWidth(70)->setWordWrap(true);
 
-    auto label14 = new TextArea(msg->message(202), 42, 397); label14->setColor(0xffb89c28);
-    auto label15 = new TextArea(msg->message(201), 88, 383); label15->setColor(0xffb89c28);
+    auto label14 = new TextArea(msg->message(202), 42, 397); label14->setColor(color);
+    auto label15 = new TextArea(msg->message(201), 88, 383); label15->setColor(color);
 
-    auto label16 = new TextArea(msg->message(211), 203, 69); label16->setColor(0xffb89c28);
-         label16->setColor(0xffb89c28)
+    auto label16 = new TextArea(msg->message(211), 203, 69); label16->setColor(color);
+         label16->setColor(color)
                  ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT)
                  ->setWidth(100);
-    auto label17 = new TextArea(msg->message(212), 320, 69); label17->setColor(0xffb89c28);
+    auto label17 = new TextArea(msg->message(212), 320, 69); label17->setColor(color);
 
     auto label18 = new TextArea(label16, 203, 69 + 67);
     label18->setText(msg->message(202));
-    auto label19 = new TextArea(msg->message(201), 320, 69 + 67); label19->setColor(0xffb89c28);
+    auto label19 = new TextArea(msg->message(201), 320, 69 + 67); label19->setColor(color);
 
     auto label20 = new TextArea(label16, 203, 69 + 67 + 66);
     label20->setText(msg->message(202));
-    auto label21 = new TextArea(msg->message(201), 320, 69 + 67 + 66); label21->setColor(0xffb89c28);
+    auto label21 = new TextArea(msg->message(201), 320, 69 + 67 + 66); label21->setColor(color);
 
     auto label22 = new TextArea(label16, 203, 69 + 67 + 66 + 64);
     label22->setText(msg->message(209));
-    auto label23 = new TextArea(msg->message(219), 320, 69 + 67 + 66 + 64); label23->setColor(0xffb89c28);
+    auto label23 = new TextArea(msg->message(219), 320, 69 + 67 + 66 + 64); label23->setColor(color);
 
     auto label24 = new TextArea(label16, 203, 69 + 67 + 66 + 66 + 65);
     label24->setText(msg->message(202));
-    auto label25 = new TextArea(msg->message(201), 320, 69 + 66 + 67 + 66 + 65); label25->setColor(0xffb89c28);
+    auto label25 = new TextArea(msg->message(201), 320, 69 + 66 + 67 + 66 + 65); label25->setColor(color);
 
     auto label26 = new TextArea(label16, 203, 69 + 67 + 66 + 64 + 65 + 68);
     label26->setText(msg->message(202));
-    auto label27 = new TextArea(msg->message(201), 320, 69 + 64 + 67 + 66 + 65 + 68); label27->setColor(0xffb89c28);
+    auto label27 = new TextArea(msg->message(201), 320, 69 + 64 + 67 + 66 + 65 + 68); label27->setColor(color);
 
-    auto label28 = new TextArea(msg->message(122), 405, 72); label28->setColor(0xffb89c28);
+    auto label28 = new TextArea(msg->message(122), 405, 72); label28->setColor(color);
 
-    auto label29 = new TextArea(msg->message(209), 384, 38); label29->setColor(0xffb89c28);
+    auto label29 = new TextArea(msg->message(209), 384, 38); label29->setColor(color);
     auto label30 = new TextArea(msg->message(210), 524, 38);
-         label30->setColor(0xffb89c28)
+         label30->setColor(color)
                 ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT)
                 ->setWidth(100);
 
-    auto label31 = new TextArea(msg->message(217), 384, 113); label31->setColor(0xffb89c28);
-    auto label32 = new TextArea(msg->message(209), 469, 113); label32->setColor(0xffb89c28);
+    auto label31 = new TextArea(msg->message(217), 384, 113); label31->setColor(color);
+    auto label32 = new TextArea(msg->message(209), 469, 113); label32->setColor(color);
     auto label33 = new TextArea(label30, 524, 113); label33->setText(msg->message(218));
 
-    auto label34 = new TextArea(msg->message(202), 384, 184); label34->setColor(0xffb89c28);
-    auto label35 = new TextArea(msg->message(221), 450, 184); label35->setColor(0xffb89c28);
-    auto label36 = new TextArea(msg->message(209), 494, 184); label36->setColor(0xffb89c28);
+    auto label34 = new TextArea(msg->message(202), 384, 184); label34->setColor(color);
+    auto label35 = new TextArea(msg->message(221), 450, 184); label35->setColor(color);
+    auto label36 = new TextArea(msg->message(209), 494, 184); label36->setColor(color);
     auto label37 = new TextArea(label30, 524, 184); label37->setText(msg->message(222));
 
-    auto label38 = new TextArea(msg->message(202), 384, 184+51); label38->setColor(0xffb89c28);
-    auto label39 = new TextArea(msg->message(221), 450, 184+51); label39->setColor(0xffb89c28);
-    auto label40 = new TextArea(msg->message(209), 494, 184+51); label40->setColor(0xffb89c28);
+    auto label38 = new TextArea(msg->message(202), 384, 184+51); label38->setColor(color);
+    auto label39 = new TextArea(msg->message(221), 450, 184+51); label39->setColor(color);
+    auto label40 = new TextArea(msg->message(209), 494, 184+51); label40->setColor(color);
     auto label41 = new TextArea(label30, 524, 184+51); label41->setText(msg->message(222));
 
-    auto label42 = new TextArea(msg->message(202), 384, 184+51*2); label42->setColor(0xffb89c28);
-    auto label43 = new TextArea(msg->message(221), 450, 184+51*2); label43->setColor(0xffb89c28);
-    auto label44 = new TextArea(msg->message(209), 494, 184+51*2); label44->setColor(0xffb89c28);
+    auto label42 = new TextArea(msg->message(202), 384, 184+51*2); label42->setColor(color);
+    auto label43 = new TextArea(msg->message(221), 450, 184+51*2); label43->setColor(color);
+    auto label44 = new TextArea(msg->message(209), 494, 184+51*2); label44->setColor(color);
     auto label45 = new TextArea(label30, 524, 184+51*2); label45->setText(msg->message(222));
 
-    auto label46 = new TextArea(msg->message(202), 384, 184+51*3); label46->setColor(0xffb89c28);
-    auto label47 = new TextArea(msg->message(221), 450, 184+51*3); label47->setColor(0xffb89c28);
-    auto label48 = new TextArea(msg->message(209), 494, 184+51*3); label48->setColor(0xffb89c28);
+    auto label46 = new TextArea(msg->message(202), 384, 184+51*3); label46->setColor(color);
+    auto label47 = new TextArea(msg->message(221), 450, 184+51*3); label47->setColor(color);
+    auto label48 = new TextArea(msg->message(209), 494, 184+51*3); label48->setColor(color);
     auto label49 = new TextArea(label30, 524, 184+51*3); label49->setText(msg->message(222));
 
-    auto label50 = new TextArea(msg->message(209), 384, 184+51*4); label50->setColor(0xffb89c28);
-    auto label51 = new TextArea(msg->message(209), 384, 184+51*5); label51->setColor(0xffb89c28);
+    auto label50 = new TextArea(msg->message(209), 384, 184+51*4); label50->setColor(color);
+    auto label51 = new TextArea(msg->message(209), 384, 184+51*5); label51->setColor(color);
     auto label52 = new TextArea(label30, 524, 184+51*4); label52->setText(msg->message(223));
     auto label53 = new TextArea(label30, 524, 184+51*5); label53->setText(msg->message(218));
     // BUTTONS
