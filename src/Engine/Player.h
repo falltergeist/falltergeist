@@ -48,8 +48,8 @@ protected:
 
     std::vector<unsigned int> _stats = {0, 0, 0, 0, 0, 0, 0};
     std::vector<unsigned int> _statsBonus = {0, 0, 0, 0, 0, 0, 0};
-    unsigned int* _traits;
-    unsigned int* _skills;
+    std::vector<unsigned int> _traits = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<unsigned int> _skills = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     unsigned int _characterPoints = 0;
     unsigned int _skillPoints = 3;
@@ -155,7 +155,7 @@ public:
     void setStatBonus(unsigned int number, unsigned int value);
 
     unsigned int trait(unsigned int traitNumber);
-    void setTrait(int traitNumber, unsigned int value);
+    void setTrait(unsigned int traitNumber, unsigned int value);
 
     bool traitToggle(unsigned int traitNumber);
 

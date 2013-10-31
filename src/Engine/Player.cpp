@@ -32,15 +32,10 @@ namespace Falltergeist
     
 Player::Player()
 {
-    _traits = new unsigned int[16]();
-    _skills = new unsigned int[18]();
 }
 
-Player::Player(libfalltergeist::GcdFileType * gcd)
+Player::Player(libfalltergeist::GcdFileType* gcd)
 {
-    _traits = new unsigned int[16]();
-    _skills = new unsigned int[18]();
-
     for (unsigned int i = STATS_STRENGTH; i <= STATS_LUCK; i++)
     {
         setStat(i, gcd->stat(i));
@@ -83,8 +78,6 @@ Player::Player(libfalltergeist::GcdFileType * gcd)
 
 Player::~Player()
 {
-    delete [] _traits;
-    delete [] _skills;
 }
 
 std::string Player::bio()
@@ -114,13 +107,13 @@ unsigned int Player::statTotal(unsigned int number)
 
 void Player::setStat(unsigned int number, unsigned int value)
 {
-    if (number > 7) throw Exception("Player::setStat() - number out of range: " + std::to_string(number));
+    if (number > 6) throw Exception("Player::setStat() - number out of range: " + std::to_string(number));
     _stats.at(number) = value;
 }
 
 void Player::setStatBonus(unsigned int number, unsigned int value)
 {
-    if (number > 7) throw Exception("Player::setStatBonus() - number out of range: " + std::to_string(number));
+    if (number > 6) throw Exception("Player::setStatBonus() - number out of range: " + std::to_string(number));
     _statsBonus.at(number) = value;
 }
 
@@ -154,32 +147,23 @@ void Player::setCharacterPoints(unsigned int characterPoints)
     _characterPoints = characterPoints;
 }
 
-unsigned int Player::trait(unsigned int traitNumber)
+unsigned int Player::trait(unsigned int number)
 {
-    return _traits[traitNumber];
+    if (number > 15) throw Exception("Player::trait() - number out of range: " + std::to_string(number));
+    return _traits.at(number);
 }
 
-void Player::setTrait(int traitNumber, unsigned int value)
+void Player::setTrait(unsigned int number, unsigned int value)
 {
-    if (traitNumber >= 0 && traitNumber < 16)
-    {
-        _traits[traitNumber] = value;
-    }
-    else if (traitNumber == -1)
-    {
-        return;
-    }
-    else
-    {
-        debug("Player::setTrait() - traitNumber out of range: " + std::to_string(traitNumber), DEBUG_ERROR);
-    }
+    if (number > 15) throw Exception("Player::setTrait() - number out of range: " + std::to_string(number));
+    _traits.at(number) = value;
 }
 
-bool Player::traitToggle(unsigned int traitNumber)
+bool Player::traitToggle(unsigned int number)
 {
-    if (trait(traitNumber))
+    if (trait(number))
     {
-        setTrait(traitNumber, 0);
+        setTrait(number, 0);
         return true;
     }
     else
@@ -188,28 +172,23 @@ bool Player::traitToggle(unsigned int traitNumber)
         for (unsigned int i = 0; i != 16; ++i) if (trait(i)) selectedTraits++;
         if (selectedTraits < 2)
         {
-            setTrait(traitNumber, 1);
+            setTrait(number, 1);
             return true;
         }
     }
     return false;
 }
 
-unsigned int Player::skill(unsigned int skillNumber)
+unsigned int Player::skill(unsigned int number)
 {
-    return _skills[skillNumber];
+    if (number > 17) throw Exception("Player::skill() - number out of range: " + std::to_string(number));
+    return _skills.at(number);
 }
 
-void Player::setSkill(int skillNumber, unsigned int value)
+void Player::setSkill(int number, unsigned int value)
 {
-    if (skillNumber >= 0 && skillNumber < 18)
-    {
-        _skills[skillNumber] = value;
-    }
-    else
-    {
-        debug("Player::setSkill() - skillNumber out of range: " + std::to_string(skillNumber), DEBUG_ERROR);
-    }
+    if (number > 17) throw Exception("Player::setSkill() - number out of range: " + std::to_string(number));
+    _skills.at(number) = value;
 }
 
 int Player::skillValue(unsigned int skillNumber)
