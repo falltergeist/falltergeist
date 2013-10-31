@@ -40,16 +40,16 @@ class Surface
 protected:
     SDL_Surface* _sdl_surface;
 
-    int _x; // x position
-    int _y; // y position
-    int _xOffset;
-    int _yOffset;
-    bool _needRedraw; // surface changed? draw function will be called
-    bool _visible; // if false - do not render
-    std::vector<unsigned int>* _animatedPixels;
+    int _x = 0; // x position
+    int _y = 0; // y position
+    int _xOffset = 0;
+    int _yOffset = 0;
+    bool _needRedraw = false; // surface changed? draw function will be called
+    bool _visible = true; // if false - do not render
+    std::vector<unsigned int>* _animatedPixels = 0;
 
-    unsigned int _borderColor; // for debugging. @TODO must be removed in future
-    unsigned int _backgroundColor; // for debugging @TODO must be removed in future
+    unsigned int _borderColor = 0; // for debugging. @TODO must be removed in future
+    unsigned int _backgroundColor = 0; // for debugging @TODO must be removed in future
     void _drawBorder();
     void _copyAnimatedPixelsFrom(Surface* surface);
     void _copyAnimatedPixelsTo(Surface* surface);

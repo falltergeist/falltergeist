@@ -32,25 +32,20 @@ namespace Falltergeist
 
 Mouse::Mouse() : InteractiveSurface()
 {
-    //loadFromSurface(ResourceManager::surface("art/intrface/actarrow.frm"));
-
     // Hide cursor
     SDL_ShowCursor(0);
-    _cursorX = 320;
-    _cursorY = 240;
-    setCursor(BIG_ARROW);
-}
-
-void Mouse::think()
-{
-    SDL_GetMouseState(&_cursorX, &_cursorY);
-
+    setType(BIG_ARROW);
 }
 
 Mouse::~Mouse()
 {
     // Show cursor
     SDL_ShowCursor(1);
+}
+
+void Mouse::think()
+{
+    SDL_GetMouseState(&_cursorX, &_cursorY);
 }
 
 int Mouse::cursorX()
@@ -83,9 +78,15 @@ int Mouse::y()
     return _y + _cursorY;
 }
 
-void Mouse::setCursor(unsigned int type)
+int Mouse::type()
 {
-    switch(type)
+    return _type;
+}
+
+void Mouse::setType(int type)
+{
+    _type = type;
+    switch(_type)
     {
         case BIG_ARROW:
             loadFromSurface(ResourceManager::surface("art/intrface/stdarrow.frm"));
@@ -152,7 +153,6 @@ void Mouse::setCursor(unsigned int type)
             setXOffset(0);
             setYOffset(- height());
             break;
-
         case SCROLL_NE:
             loadFromSurface(ResourceManager::surface("art/intrface/scrneast.frm"));
             setXOffset(- width());
@@ -174,12 +174,7 @@ void Mouse::setCursor(unsigned int type)
             setYOffset(- height());
             break;
         case HEXAGON_RED:
-            loadFromSurface(ResourceManager::surface("art/intrface/msef000.frm"));
-            setXOffset(- ceil(width()/2));
-            setYOffset(- ceil(height()/2));
             break;
-
-
     }
 }
 

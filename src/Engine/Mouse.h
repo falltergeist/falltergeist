@@ -35,8 +35,9 @@ namespace Falltergeist
 class Mouse : public InteractiveSurface
 {
 protected:
-    int _cursorX;
-    int _cursorY;
+    int _cursorX = 320;
+    int _cursorY = 240;
+    int _type = BIG_ARROW;
 public:
     enum {BIG_ARROW = 1,
           SCROLL_W,
@@ -64,7 +65,8 @@ public:
     int cursorY();
     void setCursorX(int x);
     void setCursorY(int y);
-    void setCursor(unsigned int type);
+    int type();
+    void setType(int type);
     virtual int x();
     virtual int y();
 

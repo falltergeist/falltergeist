@@ -31,26 +31,15 @@ namespace Falltergeist
 
 AnimatedPalette* Surface::animatedPalette = new AnimatedPalette();
 
-Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _needRedraw(false), _visible(true)
+Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y)
 {
-    _animatedPixels = 0;
-    _borderColor = 0;
-    _backgroundColor = 0;
-    //setBackgroundColor(0);
-    setXOffset(0);
-    setYOffset(0);
-    //                                                                               red         green       blue        alpha
     _sdl_surface = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, width, height, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
     if (sdl_surface() == 0) throw Exception(SDL_GetError());
     clear();
 }
 
-Surface::Surface(libfalltergeist::FrmFileType* frm, unsigned int direction, unsigned int frame) : _needRedraw(false), _visible(true)
+Surface::Surface(libfalltergeist::FrmFileType* frm, unsigned int direction, unsigned int frame)
 {
-    _animatedPixels = 0;
-    _borderColor = 0;
-    _backgroundColor = 0;
-    //setBackgroundColor(0);
 
     libfalltergeist::PalFileType* pal = ResourceManager::palFileType("color.pal");
 
@@ -99,10 +88,8 @@ Surface::Surface(libfalltergeist::FrmFileType* frm, unsigned int direction, unsi
 }
 
 
-Surface::Surface(Surface* other)  : _needRedraw(false), _visible(true)
+Surface::Surface(Surface* other)
 {
-    _animatedPixels = 0;
-
     if (other->_animatedPixels != 0)
     {
         _animatedPixels = new std::vector<unsigned int>;

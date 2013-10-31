@@ -41,14 +41,14 @@ namespace Falltergeist
 
 LocationState::LocationState(Game * game) : State(game)
 {
-    _scrollTicks = 0;
-    _location = 0;
-    _background = 0;
-    _hexagonalGrid = false;
+    _hexCursor = new Surface(ResourceManager::surface("art/intrface/msef000.frm"));
+    _hexCursor->setXOffset(- ceil(_hexCursor->width()/2));
+    _hexCursor->setYOffset(- ceil(_hexCursor->height()/2));
 }
 
 LocationState::~LocationState()
 {
+    delete _hexCursor;
 }
 
 void LocationState::init()
@@ -61,11 +61,16 @@ void LocationState::init()
     _background->onKeyboardRelease((EventHandler) &LocationState::onKeyboardRelease);
 
     add(_background);
+    add(_hexCursor);
 }
 
 void LocationState::onBackgroundClick(Event * event)
 {
-    std::cout << "test" << std::endl;
+    int x = _location->camera()->x() + event->x();
+    int y = _location->camera()->y() + event->y();
+    unsigned int hexagon = _location->positionToHexagon(x, y);
+
+    std::cout << x << " : " << y << " > " << hexagon << std::endl;
 }
 
 void LocationState::onKeyboardRelease(Event * event)
@@ -92,6 +97,8 @@ void LocationState::blit()
 
     _drawHexagonalGrid();
 
+    _hexCursor->blit(_game->screen()->surface());
+
     for (std::vector<LocationObject *>::iterator it = _location->objectsToRender()->begin(); it != _location->objectsToRender()->end(); ++it)
     {
         LocationObject * object = *it;
@@ -106,6 +113,7 @@ void LocationState::blit()
         object->blit(_game->screen()->surface());
         object->setX(oldX);
         object->setY(oldY);
+
     }
 }
 
@@ -127,8 +135,16 @@ void LocationState::_drawHexagonalGrid()
 
 void LocationState::think()
 {
+
     if (!_location) return;
     _location->think();
+
+    int x = _location->camera()->x() + _game->mouse()->x();
+    int y = _location->camera()->y() + _game->mouse()->y();
+    unsigned int hexagon = _location->positionToHexagon(x, y);
+
+    _hexCursor->setX(_location->hexagonToX(hexagon) - _location->camera()->x());
+    _hexCursor->setY(_location->hexagonToY(hexagon) - _location->camera()->y());
 
     if (SDL_GetTicks() >= _scrollTicks + 10)
     {
@@ -141,11 +157,11 @@ void LocationState::think()
                 moved = _location->scroll(true, false, true, false);
                 if (moved)
                 {
-                    _game->mouse()->setCursor(Mouse::SCROLL_NW);
+                    _game->mouse()->setType(Mouse::SCROLL_NW);
                 }
                 else
                 {
-                    _game->mouse()->setCursor(Mouse::SCROLL_NW_X);
+                    _game->mouse()->setType(Mouse::SCROLL_NW_X);
                 }
             }
             else if (_game->mouse()->cursorY() > 475) //LEFT-DOWN
@@ -153,11 +169,11 @@ void LocationState::think()
                 moved = _location->scroll(false, true, true, false);
                 if (moved)
                 {
-                    _game->mouse()->setCursor(Mouse::SCROLL_SW);
+                    _game->mouse()->setType(Mouse::SCROLL_SW);
                 }
                 else
                 {
-                    _game->mouse()->setCursor(Mouse::SCROLL_SW_X);
+                    _game->mouse()->setType(Mouse::SCROLL_SW_X);
                 }
             }
             else
@@ -165,11 +181,11 @@ void LocationState::think()
                 moved = _location->scroll(false, false, true, false);
                 if (moved)
                 {
-                    _game->mouse()->setCursor(Mouse::SCROLL_W);
+                    _game->mouse()->setType(Mouse::SCROLL_W);
                 }
                 else
                 {
-                    _game->mouse()->setCursor(Mouse::SCROLL_W_X);
+                    _game->mouse()->setType(Mouse::SCROLL_W_X);
                 }
             }
         }
@@ -180,11 +196,11 @@ void LocationState::think()
                 moved = _location->scroll(true, false, false, true);
                 if (moved)
                 {
-                    _game->mouse()->setCursor(Mouse::SCROLL_NE);
+                    _game->mouse()->setType(Mouse::SCROLL_NE);
                 }
                 else
                 {
-                    _game->mouse()->setCursor(Mouse::SCROLL_NE_X);
+                    _game->mouse()->setType(Mouse::SCROLL_NE_X);
                 }
             }
             else if (_game->mouse()->cursorY() > 475) //RIGHT-DOWN
@@ -192,11 +208,11 @@ void LocationState::think()
                 moved = _location->scroll(false, true, false, true);
                 if (moved)
                 {
-                    _game->mouse()->setCursor(Mouse::SCROLL_SE);
+                    _game->mouse()->setType(Mouse::SCROLL_SE);
                 }
                 else
                 {
-                    _game->mouse()->setCursor(Mouse::SCROLL_SE_X);
+                    _game->mouse()->setType(Mouse::SCROLL_SE_X);
                 }
             }
             else
@@ -204,11 +220,11 @@ void LocationState::think()
                 moved = _location->scroll(false, false, false, true);
                 if (moved)
                 {
-                    _game->mouse()->setCursor(Mouse::SCROLL_E);
+                    _game->mouse()->setType(Mouse::SCROLL_E);
                 }
                 else
                 {
-                    _game->mouse()->setCursor(Mouse::SCROLL_E_X);
+                    _game->mouse()->setType(Mouse::SCROLL_E_X);
                 }
             }
         }
@@ -217,11 +233,11 @@ void LocationState::think()
             moved = _location->scroll(true, false, false, false);
             if (moved)
             {
-                _game->mouse()->setCursor(Mouse::SCROLL_N);
+                _game->mouse()->setType(Mouse::SCROLL_N);
             }
             else
             {
-                _game->mouse()->setCursor(Mouse::SCROLL_N_X);
+                _game->mouse()->setType(Mouse::SCROLL_N_X);
             }
         }
         else if (_game->mouse()->cursorY() > 475) // DOWN
@@ -229,16 +245,16 @@ void LocationState::think()
             moved = _location->scroll(false, true, false, false);
             if (moved)
             {
-                _game->mouse()->setCursor(Mouse::SCROLL_S);
+                _game->mouse()->setType(Mouse::SCROLL_S);
             }
             else
             {
-                _game->mouse()->setCursor(Mouse::SCROLL_S_X);
+                _game->mouse()->setType(Mouse::SCROLL_S_X);
             }
         }
         else
         {
-            _game->mouse()->setCursor(Mouse::BIG_ARROW);
+            _game->mouse()->setType(Mouse::BIG_ARROW);
         }
 
         if(moved)

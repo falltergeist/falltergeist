@@ -54,7 +54,6 @@ Location::Location(libfalltergeist::MapFileType * mapFile)
 Location::~Location()
 {
     delete _tilesLst;
-    //delete _tilesBackground;
     delete _objects;
     delete _objectsToRender;
     delete _camera;
@@ -325,6 +324,7 @@ void Location::_checkObjectsToRender()
 
         _objectsToRender->push_back(object);
     }
+
 }
 
 
@@ -363,12 +363,13 @@ void Location::_generateBackground()
 
 int Location::hexagonToX(unsigned int hexagon)
 {
+    unsigned int cols = 100;
     unsigned int a = hexagon % 200;
     unsigned int b = ceil(hexagon/200);
     hexagon = a*200 + b;
 
     unsigned int y = ceil(hexagon/200);
-    int centerX = 48*(_cols-1) + 48 + 16*(hexagon%200) - 24*y;
+    int centerX = 48*(cols-1) + 48 + 16*(hexagon%200) - 24*y;
 
         if ((hexagon/200)%2 == 1)
         {
@@ -392,6 +393,22 @@ int Location::hexagonToY(unsigned int hexagon)
         }
     return centerY + 12;
 
+}
+
+unsigned int Location::positionToHexagon(int x, int y)
+{
+    for (unsigned int i = 0; i != 200*200; ++i)
+    {
+        int hX = hexagonToX(i);
+        int hY = hexagonToY(i);
+
+       if (y >= hY - 8 && y < hY + 4)
+       if (x >= hX - 16 && x < hX + 16)
+       {
+           return i;
+       }
+    }
+    return 0;
 }
 
 libfalltergeist::MapFileType * Location::mapFile()

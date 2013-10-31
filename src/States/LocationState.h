@@ -38,14 +38,15 @@ class InteractiveSurface;
 class LocationState : public State
 {
 protected:    
-    bool _hexagonalGrid;
-    Animation * _animation;
-    Location * _location;
+    bool _hexagonalGrid = false;
+    Surface * _hexCursor;
+    Animation * _animation = 0;
+    Location * _location = 0;
     InteractiveSurface * _background;
     unsigned int _direction;
     unsigned int _cameraX;
     unsigned int _cameraY;
-    unsigned int _scrollTicks;
+    unsigned int _scrollTicks = 0;
     void _drawHexagonalGrid();
 public:
     LocationState(Game * game);
