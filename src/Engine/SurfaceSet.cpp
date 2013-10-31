@@ -42,7 +42,6 @@ SurfaceSet::SurfaceSet(std::vector<Surface*> surfacesList, int x, int y) : Inter
 SurfaceSet::SurfaceSet(int x, int y) : InteractiveSurface(0,0,x,y)
 {
     _surfaces = new std::vector<Surface*>;
-    currentSurface = 0;
 }
 
 SurfaceSet::~SurfaceSet()
@@ -60,9 +59,14 @@ void SurfaceSet::draw()
     setNeedRedraw(false);
 }
 
+unsigned int SurfaceSet::currentSurface()
+{
+    return _currentSurface;
+}
+
 void SurfaceSet::setCurrentSurface(unsigned int number)
 {
-    currentSurface = number;
+    _currentSurface = number;
 }
 
 void SurfaceSet::addSurface(Surface* surface)
@@ -72,8 +76,7 @@ void SurfaceSet::addSurface(Surface* surface)
 
 Surface* SurfaceSet::surface()
 {
-    //return new Surface(_surfaces->at(currentSurface));
-    return _surfaces->at(currentSurface);
+    return _surfaces->at(currentSurface());
 }
 
 std::vector<Surface *> * SurfaceSet::surfaces()

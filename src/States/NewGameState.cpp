@@ -192,7 +192,7 @@ void NewGameState::changeCharacter()
     _playerBio->setText(player->bio());
     _playerName->setText(player->name());
 
-    _characterImages->currentSurface = _selectedCharacter;    
+    _characterImages->setCurrentSurface(_selectedCharacter);    
 }
 
 std::string NewGameState::statToString(unsigned int stat)

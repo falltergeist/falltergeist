@@ -35,15 +35,16 @@ class SurfaceSet : public InteractiveSurface
 {
 protected:
     std::vector<Surface*>* _surfaces;
+    unsigned int _currentSurface = 0;
 public:
     SurfaceSet(std::vector<std::string> surfacesList, int x = 0, int y = 0);
     SurfaceSet(std::vector<Surface*> surfacesList, int x = 0, int y = 0);
     SurfaceSet(int x = 0, int y = 0);
     ~SurfaceSet();
 
-    unsigned int currentSurface;
     void addSurface(Surface* surface);
     void setCurrentSurface(unsigned int number);
+    unsigned int currentSurface();
     virtual void draw();
     Surface* surface();
     std::vector<Surface*> * surfaces();
