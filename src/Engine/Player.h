@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <string>
+#include <vector>
 
 // Falltergeist includes
 
@@ -37,21 +38,21 @@ protected:
     // text from .bio file
     std::string _bio;
     std::string _name;
-    unsigned char _age;
-    int _hitPoints;
-    unsigned int _level;
-    unsigned int _experience;
+    unsigned char _age = 0;
+    int _hitPoints = 0;
+    unsigned int _level = 1;
+    unsigned int _experience = 0;
 
-    char _gender;
+    char _gender = 0;
 
 
-    unsigned int * _stats;
-    unsigned int * _statsBonus;
-    unsigned int * _traits;
-    unsigned int * _skills;
+    std::vector<unsigned int> _stats = {0, 0, 0, 0, 0, 0, 0};
+    std::vector<unsigned int> _statsBonus = {0, 0, 0, 0, 0, 0, 0};
+    unsigned int* _traits;
+    unsigned int* _skills;
 
-    unsigned int _characterPoints;
-    unsigned int _skillPoints;
+    unsigned int _characterPoints = 0;
+    unsigned int _skillPoints = 3;
 
 public:
     enum {GENDER_MALE = 0, GENDER_FEMALE = 1};
@@ -129,47 +130,11 @@ public:
            SKILLS_OUTDOORSMAN
     };
 
-    // primary stats
-    unsigned int strength();
-    void setStrength(unsigned int strength);
-    unsigned int strengthBonus();
-    void setStrengthBonus(unsigned int bonus);
-
-    unsigned int perception();
-    void setPerception(unsigned int perception);
-    unsigned int perceptionBonus();
-    void setPerceptionBonus(unsigned int bonus);
-
-    unsigned int endurance();
-    void setEndurance(unsigned int endurance);
-    unsigned int enduranceBonus();
-    void setEnduranceBonus(unsigned int bonus);
-
-    unsigned int charisma();
-    void setCharisma(unsigned int charisma);
-    unsigned int charismaBonus();
-    void setCharismaBonus(unsigned int bonus);
-
-    unsigned int intelligence();
-    void setIntelligence(unsigned int intelligence);
-    unsigned int intelligenceBonus();
-    void setIntelligenceBonus(unsigned int bonus);
-
-    unsigned int agility();
-    void setAgility(unsigned int agility);
-    unsigned int agilityBonus();
-    void setAgilityBonus(unsigned int bonus);
-
-    unsigned int luck();
-    void setLuck(unsigned int luck);
-    unsigned int luckBonus();
-    void setLuckBonus(unsigned int bonus);
-
     unsigned int characterPoints();
     void setCharacterPoints(unsigned int characterPoints);
     
     Player();
-    Player(libfalltergeist::GcdFileType * gcd);
+    Player(libfalltergeist::GcdFileType* gcd);
     virtual ~Player();
 
     void setName(std::string name);
@@ -184,7 +149,10 @@ public:
     bool statsIncrease(unsigned char stat);
     bool statsDecrease(unsigned char stat);
     unsigned int stat(unsigned int number);
+    unsigned int statTotal(unsigned int number);
+    void setStat(unsigned int number, unsigned int value);
     unsigned int statBonus(unsigned int number);
+    void setStatBonus(unsigned int number, unsigned int value);
 
     unsigned int trait(unsigned int traitNumber);
     void setTrait(int traitNumber, unsigned int value);

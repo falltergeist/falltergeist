@@ -23,6 +23,7 @@
 // Falltergeist includes
 #include "../Engine/Player.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/Exception.h"
 
 // Third party includes
 
@@ -31,53 +32,20 @@ namespace Falltergeist
     
 Player::Player()
 {
-    _characterPoints = 0;
-    _skillPoints = 0;
-    _hitPoints = 0;
-    _gender = 0;
-    _age = 0;
-    _level = 1;
-    _experience = 0;
-    _stats = new unsigned int[7]();
-    _statsBonus = new unsigned int[7]();
     _traits = new unsigned int[16]();
     _skills = new unsigned int[18]();
 }
 
 Player::Player(libfalltergeist::GcdFileType * gcd)
 {
-    _characterPoints = 0;
-    _skillPoints = 3;
-    _hitPoints = 0;
-    _gender = 0;
-    _level = 1;
-    _age = 0;
-    _experience = 0;
-    _stats = new unsigned int[7]();
-    _statsBonus = new unsigned int[7]();
     _traits = new unsigned int[16]();
     _skills = new unsigned int[18]();
 
-    this->setStrength(        gcd->strength());
-    this->setStrengthBonus(   gcd->strengthBonus());
-
-    this->setPerception(      gcd->perception());
-    this->setPerceptionBonus( gcd->perceptionBonus());
-
-    this->setEndurance(       gcd->endurance());
-    this->setEnduranceBonus(  gcd->enduranceBonus());
-
-    this->setCharisma(        gcd->charisma());
-    this->setCharismaBonus(   gcd->charismaBonus());
-
-    this->setIntelligence(    gcd->intelligence());
-    this->setIntelligenceBonus(gcd->intelligenceBonus());
-
-    this->setAgility(         gcd->agility());
-    this->setAgilityBonus(    gcd->agilityBonus());
-
-    this->setLuck(            gcd->luck());
-    this->setLuckBonus(       gcd->luckBonus());
+    for (unsigned int i = STATS_STRENGTH; i <= STATS_LUCK; i++)
+    {
+        setStat(i, gcd->stat(i));
+        //setStatBonus(i, gcd->statBonus(i));
+    }
 
     this->setCharacterPoints( gcd->characterPoints());
     this->setName(            gcd->name());
@@ -115,7 +83,6 @@ Player::Player(libfalltergeist::GcdFileType * gcd)
 
 Player::~Player()
 {
-    delete [] _stats;
     delete [] _traits;
     delete [] _skills;
 }
@@ -140,180 +107,41 @@ void Player::setName(std::string name)
     _name = name;
 }
 
+unsigned int Player::statTotal(unsigned int number)
+{
+    return stat(number) + statBonus(number);
+}
+
+void Player::setStat(unsigned int number, unsigned int value)
+{
+    if (number > 7) throw Exception("Player::setStat() - number out of range: " + std::to_string(number));
+    _stats.at(number) = value;
+}
+
+void Player::setStatBonus(unsigned int number, unsigned int value)
+{
+    if (number > 7) throw Exception("Player::setStatBonus() - number out of range: " + std::to_string(number));
+    _statsBonus.at(number) = value;
+}
+
 bool Player::statsIncrease(unsigned char stat)
 {
     if (_characterPoints <= 0) return false;
 
     if (this->stat(stat) + this->statBonus(stat) >= 10) return false;
 
-    _stats[stat]++;
+    this->setStat(stat, this->stat(stat) + 1);
     _characterPoints--;
     return true;
 }
 
 bool Player::statsDecrease(unsigned char stat)
 {
-    if (_stats[stat] <= 1 + _statsBonus[stat]) return false;
+    if (this->stat(stat) <= 1 + this->statBonus(stat)) return false;
 
-    _stats[stat]--;
+     this->setStat(stat, this->stat(stat) - 1);
     _characterPoints++;
     return true;
-}
-
-unsigned int Player::strength()
-{
-    return _stats[STATS_STRENGTH];
-}
-
-void Player::setStrength(unsigned int strength)
-{
-    _stats[STATS_STRENGTH] = strength;
-}
-
-unsigned int Player::strengthBonus()
-{
-    unsigned int bonus = 0;
-    if (this->trait(TRAITS_GIFTED)) bonus += 1;
-    if (this->trait(TRAITS_BRUISER)) bonus += 2;
-    return _statsBonus[STATS_STRENGTH] + bonus;
-}
-
-void Player::setStrengthBonus(unsigned int bonus)
-{
-    _statsBonus[STATS_STRENGTH] = bonus;
-}
-
-unsigned int Player::perception()
-{
-    return _stats[STATS_PERCEPTION];
-}
-
-void Player::setPerception(unsigned int perception)
-{
-    _stats[STATS_PERCEPTION] = perception;
-}
-
-unsigned int Player::perceptionBonus()
-{
-    unsigned int bonus = 0;
-    if (this->trait(TRAITS_GIFTED)) bonus += 1;
-    return _statsBonus[STATS_PERCEPTION] + bonus;
-}
-
-void Player::setPerceptionBonus(unsigned int bonus)
-{
-    _statsBonus[STATS_PERCEPTION] = bonus;
-}
-
-unsigned int Player::endurance()
-{
-    return _stats[STATS_ENDURANCE];
-}
-
-void Player::setEndurance(unsigned int endurance)
-{
-    _stats[STATS_ENDURANCE] = endurance;
-}
-
-unsigned int Player::enduranceBonus()
-{
-    unsigned int bonus = 0;
-    if (this->trait(TRAITS_GIFTED)) bonus += 1;
-    return _statsBonus[STATS_ENDURANCE] + bonus;
-}
-
-void Player::setEnduranceBonus(unsigned int bonus)
-{
-    _statsBonus[STATS_ENDURANCE] = bonus;
-}
-
-unsigned int Player::charisma()
-{
-    return _stats[STATS_CHARISMA];
-}
-
-void Player::setCharisma(unsigned int charisma)
-{
-    _stats[STATS_CHARISMA] = charisma;
-}
-
-unsigned int Player::charismaBonus()
-{
-    unsigned int bonus = 0;
-    if (this->trait(TRAITS_GIFTED)) bonus += 1;
-    return _statsBonus[STATS_CHARISMA] + bonus;
-}
-
-void Player::setCharismaBonus(unsigned int bonus)
-{
-    _statsBonus[STATS_CHARISMA] = bonus;
-}
-
-unsigned int Player::intelligence()
-{
-    return _stats[STATS_INTELLIGENCE];
-}
-
-void Player::setIntelligence(unsigned int intelligence)
-{
-    _stats[STATS_INTELLIGENCE] = intelligence;
-}
-
-unsigned int Player::intelligenceBonus()
-{
-    unsigned int bonus = 0;
-    if (this->trait(TRAITS_GIFTED)) bonus += 1;
-    return _statsBonus[STATS_INTELLIGENCE] + bonus;
-}
-
-void Player::setIntelligenceBonus(unsigned int bonus)
-{
-    _statsBonus[STATS_INTELLIGENCE] = bonus;
-}
-
-unsigned int Player::agility()
-{
-    return _stats[STATS_AGILITY];
-}
-
-void Player::setAgility(unsigned int agility)
-{
-    _stats[STATS_AGILITY] = agility;
-}
-
-unsigned int Player::agilityBonus()
-{
-    unsigned int bonus = 0;
-    if (this->trait(TRAITS_SMALL_FRAME)) bonus += 1;
-    if (this->trait(TRAITS_GIFTED)) bonus += 1;
-    return _statsBonus[STATS_AGILITY] + bonus;
-}
-
-void Player::setAgilityBonus(unsigned int bonus)
-{
-    _statsBonus[STATS_AGILITY] = bonus;
-}
-
-unsigned int Player::luck()
-{
-    return _stats[STATS_LUCK];
-}
-
-void Player::setLuck(unsigned int luck)
-{
-    _stats[STATS_LUCK] = luck;
-}
-
-unsigned int Player::luckBonus()
-{
-    unsigned int bonus = 0;
-    if (this->trait(TRAITS_GIFTED)) bonus += 1;
-    return _statsBonus[STATS_LUCK] + bonus;
-}
-
-void Player::setLuckBonus(unsigned int bonus)
-{
-    _statsBonus[STATS_LUCK] = bonus;
 }
 
 unsigned int Player::characterPoints()
@@ -387,78 +215,72 @@ void Player::setSkill(int skillNumber, unsigned int value)
 int Player::skillValue(unsigned int skillNumber)
 {
     int value = 0;
-    unsigned int st = strength() + strengthBonus();
-    unsigned int pe = perception() + perceptionBonus();
-    unsigned int en = endurance() + enduranceBonus();
-    unsigned int ch = charisma() + charismaBonus();
-    unsigned int in = intelligence() + intelligenceBonus();
-    unsigned int ag = agility() + agilityBonus();
-    unsigned int lk = luck() + luckBonus();
+
     switch(skillNumber)
     {
         case SKILLS_SMALL_GUNS:
-            value += 5 + 4 * ag;
+            value += 5 + 4 * statTotal(STATS_AGILITY);
             if (trait(TRAITS_GOOD_NATURED)) value -= 10;
             break;
         case SKILLS_BIG_GUNS:
-            value += 2*ag;
+            value += 2*statTotal(STATS_AGILITY);
             if (trait(TRAITS_GOOD_NATURED)) value -= 10;
             break;
         case SKILLS_ENERGY_WEAPONS:
-            value += 2*ag;
+            value += 2*statTotal(STATS_AGILITY);
             if (trait(TRAITS_GOOD_NATURED)) value -= 10;
             break;
         case SKILLS_UNARMED:
-            value += 30 + 2*(ag + st);
+            value += 30 + 2*(statTotal(STATS_AGILITY) + statTotal(STATS_STRENGTH));
             if (trait(TRAITS_GOOD_NATURED)) value -= 10;
             break;
         case SKILLS_MELEE_WEAPONS:
-            value += 20 + 2*(ag + st);
+            value += 20 + 2*(statTotal(STATS_AGILITY) + statTotal(STATS_STRENGTH));
             if (trait(TRAITS_GOOD_NATURED)) value -= 10;
             break;
         case SKILLS_THROWING:
-            value += 4*ag;
+            value += 4*statTotal(STATS_AGILITY);
             if (trait(TRAITS_GOOD_NATURED)) value -= 10;
             break;
         case SKILLS_FIRST_AID:
-            value += 2*(pe + in);
+            value += 2*(statTotal(STATS_PERCEPTION) + statTotal(STATS_INTELLIGENCE));
             if (trait(TRAITS_GOOD_NATURED)) value += 15;
             break;
         case SKILLS_DOCTOR:
-            value += 5 + (pe + in);
+            value += 5 + (statTotal(STATS_PERCEPTION) + statTotal(STATS_INTELLIGENCE));
             if (trait(TRAITS_GOOD_NATURED)) value += 15;
             break;
         case SKILLS_SNEAK:
-            value += 5 + 3*ag;
+            value += 5 + 3*statTotal(STATS_AGILITY);
             break;
         case SKILLS_LOCKPICK:
-            value += 10 + (pe + ag);
+            value += 10 + (statTotal(STATS_PERCEPTION) + statTotal(STATS_AGILITY));
             break;
         case SKILLS_STEAL:
-            value += 3*ag;
+            value += 3*statTotal(STATS_AGILITY);
             break;
         case SKILLS_TRAPS:
-            value += 10 + (pe + ag);
+            value += 10 + (statTotal(STATS_PERCEPTION) + statTotal(STATS_AGILITY));
             break;
         case SKILLS_SCIENCE:
-            value += 4*in;
+            value += 4*statTotal(STATS_INTELLIGENCE);
             break;
         case SKILLS_REPAIR:
-            value += 3*in;
+            value += 3*statTotal(STATS_INTELLIGENCE);
             break;
         case SKILLS_SPEECH:
-            value += 5*ch;
+            value += 5*statTotal(STATS_CHARISMA);
             if (trait(TRAITS_GOOD_NATURED)) value += 15;
             break;
         case SKILLS_BARTER:
-            value += 4*ch;
+            value += 4*statTotal(STATS_CHARISMA);
             if (trait(TRAITS_GOOD_NATURED)) value += 15;
             break;
         case SKILLS_GAMBLING:
-            value += 5*lk;
+            value += 5*statTotal(STATS_LUCK);
             break;
         case SKILLS_OUTDOORSMAN:
-            value += 2 * (en + in);
+            value += 2 * (statTotal(STATS_ENDURANCE) + statTotal(STATS_INTELLIGENCE));
             break;
     }
 
@@ -537,12 +359,11 @@ void Player::setHitPoints(int hitPoints)
 
 unsigned int Player::hitPointsMaximum()
 {
-    unsigned int en = endurance() + enduranceBonus();
-    unsigned int hitPoints = 15;
-    hitPoints += en * 2;
-    hitPoints += strength() + strengthBonus();
-    hitPoints += (2 + ceil(en/2))*(level() - 1);
-    return hitPoints;
+    unsigned int value = 15;
+    value += statTotal(STATS_ENDURANCE) * 2;
+    value += statTotal(STATS_STRENGTH);
+    value += (2 + ceil(statTotal(STATS_ENDURANCE)/2))*(level() - 1);
+    return value;
 }
 
 unsigned int Player::level()
@@ -567,88 +388,95 @@ void Player::setExperience(unsigned int experience)
 
 unsigned int Player::armorClass()
 {
-    unsigned int armorClass = 0;
-    unsigned int ag = agility() + agilityBonus();
+    unsigned int value = 0;
     if (!trait(TRAITS_KAMIKAZE))
     {
-        armorClass += ag > 10 ? 10 : ag;
+        value += statTotal(STATS_AGILITY) > 10 ? 10 : statTotal(STATS_AGILITY);
     }
-    return armorClass;
+    return value;
 }
 
 unsigned int Player::actionPoints()
 {
-    unsigned int actionPoints = 0;
-    unsigned int ag = agility() + agilityBonus();
-    actionPoints += 5 + ceil(ag/2);
+    unsigned int value = 0;
+    value += 5 + ceil(statTotal(STATS_AGILITY)/2);
     if (trait(TRAITS_BRUISER))
     {
-        actionPoints -= 2;
+        value -= 2;
     }
-    return actionPoints;
+    return value;
 }
 
 unsigned int Player::carryWeight()
 {
-    unsigned int carryWeight = 0;
-    unsigned int st = strength() + strengthBonus();
+    unsigned int value = 0;
+    unsigned int st = statTotal(STATS_STRENGTH);
 
     if (trait(TRAITS_SMALL_FRAME))
     {
-        carryWeight += 25 + 15*(st > 10 ? 10 : st);
+        value += 25 + 15*(st > 10 ? 10 : st);
         if (trait(TRAITS_GIFTED) && st <= 10)
         {
-            carryWeight += 10;
+            value += 10;
         }
     }
     else
     {
-        carryWeight += 25 + 25*(st > 10 ? 10 : st);
+        value += 25 + 25*(st > 10 ? 10 : st);
     }
-    return carryWeight;
+    return value;
 }
 
 unsigned int Player::stat(unsigned int number)
 {
-    switch (number)
-    {
-        case STATS_STRENGTH: return strength();
-        case STATS_PERCEPTION: return perception();
-        case STATS_ENDURANCE: return endurance();
-        case STATS_CHARISMA: return charisma();
-        case STATS_INTELLIGENCE: return intelligence();
-        case STATS_AGILITY: return agility();
-        case STATS_LUCK: return luck();
-    }
-    return 0;
+    if (number > 7) throw Exception("Player::stat() - number out of range" + std::to_string(number));
+    return _stats.at(number);
 }
 
 unsigned int Player::statBonus(unsigned int number)
 {
+    if (number > 7) throw Exception("Player::stat() - number out of range" + std::to_string(number));
+    unsigned int bonus = 0;
     switch (number)
     {
-        case STATS_STRENGTH: return strengthBonus();
-        case STATS_PERCEPTION: return perceptionBonus();
-        case STATS_ENDURANCE: return enduranceBonus();
-        case STATS_CHARISMA: return charismaBonus();
-        case STATS_INTELLIGENCE: return intelligenceBonus();
-        case STATS_AGILITY: return agilityBonus();
-        case STATS_LUCK: return luckBonus();
+        case STATS_STRENGTH:
+            if (trait(TRAITS_GIFTED))  bonus += 1;
+            if (trait(TRAITS_BRUISER)) bonus += 2;
+            break;
+        case STATS_PERCEPTION:
+            if (trait(TRAITS_GIFTED))  bonus += 1;
+            break;
+        case STATS_ENDURANCE:
+            if (trait(TRAITS_GIFTED))  bonus += 1;
+            break;
+        case STATS_CHARISMA:
+            if (trait(TRAITS_GIFTED)) bonus += 1;
+            break;
+        case STATS_INTELLIGENCE:
+            if (trait(TRAITS_GIFTED)) bonus += 1;
+            break;
+        case STATS_AGILITY:
+            if (trait(TRAITS_SMALL_FRAME)) bonus += 1;
+            if (trait(TRAITS_GIFTED)) bonus += 1;
+            break;
+        case STATS_LUCK:
+            if (this->trait(TRAITS_GIFTED)) bonus += 1;
+            break;
     }
-    return 0;
+    return _statsBonus.at(number) + bonus;
 }
 
 unsigned int Player::meleeDamage()
 {
-    unsigned int meleeDamage = 0;
-    unsigned int st = strength() + strengthBonus();
+    unsigned int value = 0;
+    unsigned int st = statTotal(STATS_STRENGTH);
     if (st > 10) st = 10;
-    meleeDamage += st > 5 ? st - 5 : 1;
+    value += st > 5 ? st - 5 : 1;
     if (trait(TRAITS_HEAVY_HANDED))
     {
-        meleeDamage += 4;
+        value += 4;
     }
-    return meleeDamage;
+    return value;
 }
 
 unsigned int Player::damageResistance()
@@ -660,62 +488,60 @@ unsigned int Player::damageResistance()
 
 unsigned int Player::poisonResistance()
 {
-    unsigned int resistance = 0;
-    unsigned int en = endurance() + enduranceBonus();
+    unsigned int value = 0;
     if (!trait(TRAITS_FAST_METABOLISM))
     {
-        resistance += 5*en;
+        value += 5*statTotal(STATS_ENDURANCE);
     }
-    return resistance;
+    return value;
 }
 
 unsigned int Player::radiationResistance()
 {
-    unsigned int resistance = 0;
-    unsigned int en = endurance() + enduranceBonus();
+    unsigned int value = 0;
     if (!trait(TRAITS_FAST_METABOLISM))
     {
-        resistance += 2*en;
+        value += 2*statTotal(STATS_ENDURANCE);
     }
-    return resistance;
+    return value;
 }
 
 unsigned int Player::sequence()
 {
-    unsigned int sequence = 0;
-    unsigned int pe = perception() + perceptionBonus();
-    sequence += 2*(pe > 10 ? 10 : pe);
+    unsigned int value = 0;
+    unsigned int pe = statTotal(STATS_PERCEPTION);
+    value += 2*(pe > 10 ? 10 : pe);
     if (trait(TRAITS_KAMIKAZE))
     {
-        sequence += 5;
+        value += 5;
     }
-    return sequence;
+    return value;
 }
 
 unsigned int Player::healingRate()
 {
-    unsigned int rate = 0;
-    unsigned int en = endurance() + enduranceBonus();
-    rate += ceil((en > 10 ? 10 : en) / 3);
-    if (rate == 0) rate = 1;
+    unsigned int value = 0;
+    unsigned int en = statTotal(STATS_ENDURANCE);
+    value += ceil((en > 10 ? 10 : en) / 3);
+    if (value == 0) value = 1;
 
     if (trait(TRAITS_FAST_METABOLISM))
     {
-        rate += 2;
+        value += 2;
     }
-    return rate;
+    return value;
 }
 
 unsigned int Player::criticalChance()
 {
-    unsigned int chance = 0;
-    unsigned int lk = luck() + luckBonus();
-    chance += lk > 10 ? 10 : lk;
+    unsigned int value = 0;
+    unsigned int lk = statTotal(STATS_LUCK);
+    value += lk > 10 ? 10 : lk;
     if (trait(TRAITS_FINESSE))
     {
-        chance += 10;
+        value += 10;
     }
-    return chance;
+    return value;
 }
 
 }

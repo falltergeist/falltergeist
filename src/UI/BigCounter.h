@@ -34,9 +34,9 @@ namespace Falltergeist
 class BigCounter : public InteractiveSurface
 {
 protected:
-    unsigned char _color;
-    unsigned int _number;
-    unsigned int _length;
+    unsigned char _color = COLOR_WHITE;
+    unsigned int _number = 0;
+    unsigned int _length = 2;
     std::vector<Surface *> * _numbersWhite;
     std::vector<Surface *> * _numbersRed;
 public:

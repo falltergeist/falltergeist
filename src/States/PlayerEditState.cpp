@@ -341,11 +341,11 @@ void PlayerEditState::think()
     _labels->at("params_10_value")->setText(player->criticalChance())->appendText("%");
 
     // Stats counters and labels
-    for (unsigned int i = 0; i != 7; ++i)
+    for (unsigned int i = Player::STATS_STRENGTH; i <= Player::STATS_LUCK; i++)
     {
         std::stringstream ss;
         ss << "stats_" << (i+1);
-        unsigned int val = player->stat(i) + player->statBonus(i);
+        unsigned int val = player->statTotal(i);
         _counters->at(ss.str())->setNumber(val);
         _counters->at(ss.str())->setColor(BigCounter::COLOR_WHITE);
         if (val > 10)

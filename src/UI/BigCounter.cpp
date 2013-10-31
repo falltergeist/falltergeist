@@ -31,9 +31,6 @@ namespace Falltergeist
 
 BigCounter::BigCounter(int x, int y) : InteractiveSurface(0,0, x, y)
 {
-    _number = 0;
-    _color = COLOR_WHITE;
-    _length = 2;
     _numbersWhite = new std::vector<Surface *>;
     _numbersRed = new std::vector<Surface *>;
     for (int i = 0; i != 10; i++)
