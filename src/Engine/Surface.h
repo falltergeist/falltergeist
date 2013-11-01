@@ -33,6 +33,7 @@
 namespace Falltergeist
 {
 class FrmFileType;
+class RixFileType;
 class AnimatedPalette;
 
 class Surface
@@ -59,6 +60,7 @@ public:
 
     Surface(int width = 0, int height = 0, int x = 0, int y = 0);
     Surface(libfalltergeist::FrmFileType* frm, unsigned int direction = 0, unsigned int frame = 0);
+    Surface(libfalltergeist::RixFileType* rix);
     Surface(Surface* other);
     virtual ~Surface();
 

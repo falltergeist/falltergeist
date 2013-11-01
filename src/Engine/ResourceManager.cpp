@@ -121,6 +121,7 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
             libfalltergeist::DatFileItem * item;
                  if (extension == "aaf") item = new libfalltergeist::AafFileType(stream);
             else if (extension == "bio") item = new libfalltergeist::BioFileType(stream);
+            else if (extension == "fon") item = new libfalltergeist::FonFileType(stream);
             else if (extension == "frm") item = new libfalltergeist::FrmFileType(stream);
             else if (extension == "gcd") item = new libfalltergeist::GcdFileType(stream);
             else if (extension == "lst") item = new libfalltergeist::LstFileType(stream);
@@ -128,12 +129,13 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
             else if (extension == "msg") item = new libfalltergeist::MsgFileType(stream);
             else if (extension == "pal") item = new libfalltergeist::PalFileType(stream);
             else if (extension == "pro") item = new libfalltergeist::ProFileType(stream);
+            else if (extension == "rix") item = new libfalltergeist::RixFileType(stream);
             else
             {
                 item = new libfalltergeist::DatFileItem(stream);
             }
 
-            item->setFilename((char *) filename.c_str());
+            item->setFilename((char*) filename.c_str());
             _datFilesItems->insert(std::make_pair(filename, item));
             debug("[RESOURCE MANAGER] - Loading file: " + filename + " [FROM DATA DIR]", DEBUG_INFO);
             return item;
@@ -142,10 +144,10 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
     }
 
     // Search in DAT files
-    std::vector<libfalltergeist::DatFile *>::iterator it;
+    std::vector<libfalltergeist::DatFile*>::iterator it;
     for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
     {
-        libfalltergeist::DatFileItem * item = (*it)->item(filename.c_str());
+        libfalltergeist::DatFileItem* item = (*it)->item(filename.c_str());
         if (item)
         {
             _datFilesItems->insert(std::make_pair(filename, item));
@@ -157,53 +159,47 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
     return 0;
 }
 
-libfalltergeist::FrmFileType * ResourceManager::frmFileType(std::string filename)
+libfalltergeist::FrmFileType* ResourceManager::frmFileType(std::string filename)
 {
-    return dynamic_cast<libfalltergeist::FrmFileType *>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::FrmFileType*>(datFileItem(filename));
 }
 
-libfalltergeist::PalFileType * ResourceManager::palFileType(std::string filename)
+libfalltergeist::PalFileType* ResourceManager::palFileType(std::string filename)
 {
-    return dynamic_cast<libfalltergeist::PalFileType *>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::PalFileType*>(datFileItem(filename));
 }
 
-libfalltergeist::LstFileType * ResourceManager::lstFileType(std::string filename)
+libfalltergeist::LstFileType* ResourceManager::lstFileType(std::string filename)
 {
-    return dynamic_cast<libfalltergeist::LstFileType *>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::LstFileType*>(datFileItem(filename));
 }
 
-libfalltergeist::AafFileType * ResourceManager::aafFileType(std::string filename)
+libfalltergeist::AafFileType* ResourceManager::aafFileType(std::string filename)
 {
-    return dynamic_cast<libfalltergeist::AafFileType *>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::AafFileType*>(datFileItem(filename));
 }
 
-
-libfalltergeist::FonFileType * ResourceManager::fonFileType(std::string filename)
+libfalltergeist::FonFileType* ResourceManager::fonFileType(std::string filename)
 {
-    libfalltergeist::DatFileItem * item = datFileItem(filename);
-    if (item)
-    {
-        //return item->asFonFileType();
-    }
-    return 0;
+    return dynamic_cast<libfalltergeist::FonFileType*>(datFileItem(filename));
 }
 
-libfalltergeist::GcdFileType * ResourceManager::gcdFileType(std::string filename)
+libfalltergeist::GcdFileType* ResourceManager::gcdFileType(std::string filename)
 {
-    return dynamic_cast<libfalltergeist::GcdFileType *>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::GcdFileType*>(datFileItem(filename));
 }
 
-libfalltergeist::MsgFileType * ResourceManager::msgFileType(std::string filename)
+libfalltergeist::MsgFileType* ResourceManager::msgFileType(std::string filename)
 {
-    return dynamic_cast<libfalltergeist::MsgFileType *>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::MsgFileType*>(datFileItem(filename));
 }
 
-libfalltergeist::BioFileType * ResourceManager::bioFileType(std::string filename)
+libfalltergeist::BioFileType* ResourceManager::bioFileType(std::string filename)
 {
-    return dynamic_cast<libfalltergeist::BioFileType *>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::BioFileType*>(datFileItem(filename));
 }
 
-libfalltergeist::MapFileType * ResourceManager::mapFileType(std::string filename)
+libfalltergeist::MapFileType* ResourceManager::mapFileType(std::string filename)
 {
     auto item = dynamic_cast<libfalltergeist::MapFileType*>(datFileItem(filename));
     if (item)
@@ -213,11 +209,15 @@ libfalltergeist::MapFileType * ResourceManager::mapFileType(std::string filename
     return item;
 }
 
-libfalltergeist::ProFileType * ResourceManager::proFileType(std::string filename)
+libfalltergeist::ProFileType* ResourceManager::proFileType(std::string filename)
 {
-    return dynamic_cast<libfalltergeist::ProFileType *>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::ProFileType*>(datFileItem(filename));
 }
 
+libfalltergeist::RixFileType* ResourceManager::rixFileType(std::string filename)
+{
+    return dynamic_cast<libfalltergeist::RixFileType*>(datFileItem(filename));
+}
 
 Surface * ResourceManager::surface(std::string filename, int posX, int posY, unsigned int direction, unsigned int frame)
 {
@@ -225,15 +225,30 @@ Surface * ResourceManager::surface(std::string filename, int posX, int posY, uns
     {
         return _surfaces->at(filename);
     }
+    
+    std::string ext = filename.substr(filename.length() - 4);
 
-    libfalltergeist::FrmFileType * frm = frmFileType(filename);
-    if (!frm) return 0;
-
-    Surface * surface = new Surface(frm, direction, frame);
-
+    Surface * surface;
+    
+    if (ext == ".rix")
+    {
+        libfalltergeist::RixFileType* rix = rixFileType(filename);
+        if (!rix) return 0;
+        surface = new Surface(rix);
+    }
+    else if (ext == ".frm")
+    {
+        libfalltergeist::FrmFileType * frm = frmFileType(filename);
+        if (!frm) return 0;
+        surface = new Surface(frm, direction, frame);        
+    }
+    else
+    {
+        throw Exception("ResourceManager::surface() - unknow image type:" + filename);
+    }
+    
     surface->setX(posX);
     surface->setY(posY);
-
 
     _surfaces->insert(std::pair<std::string, Surface *>(filename, surface));
     return surface;

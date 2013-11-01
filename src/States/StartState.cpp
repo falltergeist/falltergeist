@@ -18,6 +18,8 @@
  */
 
 // C++ standard includes
+#include <vector>
+#include <string>
 
 // Falltergeist includes
 #include "../Engine/Game.h"
@@ -43,12 +45,28 @@ StartState::~StartState()
 {
 }
 
-void StartState::think()
+void StartState::init()
 {
-    //_game->setPlayer(new Player(ResourceManager::gcdFileType("premade/combat.gcd")));
-    //_game->setState(new LocationState(_game));
-    //_game->setState(new SettingsMenuState(_game));
-    _game->setState(new MainMenuState(_game));
+    if (initialized) return;
+    State::init();
+    
+    std::vector<std::string> splashes = {"splash0.rix", "splash1.rix", "splash2.rix", "splash3.rix", "splash4.rix", "splash5.rix", "splash6.rix"};
+    
+    srand(time(NULL)); // seed
+    Surface * splash = ResourceManager::surface("art/splash/" + splashes.at(rand() % splashes.size()));
+    add(splash);
+    _splashTicks = SDL_GetTicks(); 
+}
+
+void StartState::think()
+{    
+    if (_splashTicks + 3000 < SDL_GetTicks())
+    {        
+        //_game->setPlayer(new Player(ResourceManager::gcdFileType("premade/combat.gcd")));
+        //_game->setState(new LocationState(_game));
+        //_game->setState(new SettingsMenuState(_game));
+        _game->setState(new MainMenuState(_game));
+    }    
 }
 
 }

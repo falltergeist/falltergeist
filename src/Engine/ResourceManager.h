@@ -32,16 +32,6 @@
 
 namespace Falltergeist
 {
-class VirtualFile;
-class FrmFileType;
-class PalFileType;
-class FonFileType;
-class AafFileType;
-class GcdFileType;
-class MsgFileType;
-class MapFileType;
-class BioFileType;
-class ProFileType;
 class Surface;
 
 std::string _t(unsigned int number, std::string filename);
@@ -70,6 +60,7 @@ public:
     static libfalltergeist::BioFileType * bioFileType(std::string filename);
     static libfalltergeist::ProFileType * proFileType(std::string filename);
     static libfalltergeist::ProFileType * proFileType(unsigned int PID);
+    static libfalltergeist::RixFileType * rixFileType(std::string filename);
     static Surface * surface(std::string filename, int x = 0, int y = 0, unsigned int direction = 0, unsigned int frame = 0);
     static Surface * surface(unsigned int FID, unsigned int direction = 0, unsigned int frame = 0);
     static void extract(std::string path);
