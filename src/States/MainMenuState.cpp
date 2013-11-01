@@ -24,6 +24,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Animation.h"
+#include "../Engine/Mouse.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
 #include "../States/MainMenuState.h"
@@ -46,6 +47,9 @@ MainMenuState::~MainMenuState()
 void MainMenuState::init()
 {
     State::init();
+
+    _game->mouse()->setType(Mouse::BIG_ARROW);
+
     // Background image
     auto background = new Surface(_game->resourceManager()->surface("art/intrface/mainmenu.frm"));
     background->setX(0);

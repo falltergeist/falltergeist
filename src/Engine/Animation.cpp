@@ -30,39 +30,28 @@
 namespace Falltergeist
 {
 
-Animation::Animation(libfalltergeist::FrmFileType * frm, int x, int y)
+Animation::Animation(libfalltergeist::FrmFileType* frm, int x, int y)
 {
-    _surfaceSets = new std::vector<std::vector<Surface *> *>;
-    _currentFrame = 0;
-    _currentSurfaceSet = 0;
-    _frameRate = 200;
-    _lastTicks = SDL_GetTicks();
     loadFromFrmFile(frm);
 }
 
-Animation::Animation(const char * filename, int x, int y) : InteractiveSurface(0, 0, x, y)
+Animation::Animation(std::string filename, int x, int y) : InteractiveSurface(0, 0, x, y)
 {
-    _surfaceSets = new std::vector<std::vector<Surface *> *>;
-    _currentFrame = 0;
-    _currentSurfaceSet = 0;
-    _frameRate = 200;
-    _lastTicks = SDL_GetTicks();
     loadFromFrmFile(filename);
 }
 
 Animation::~Animation()
 {
-    while (!_surfaceSets->empty())
+    while (!_surfaceSets.empty())
     {
-        while (!_surfaceSets->back()->empty())
+        while (!_surfaceSets.back()->empty())
         {
-            delete _surfaceSets->back()->back();
-            _surfaceSets->back()->pop_back();
+            delete _surfaceSets.back()->back();
+            _surfaceSets.back()->pop_back();
         }
-        delete _surfaceSets->back();
-        _surfaceSets->pop_back();
+        delete _surfaceSets.back();
+        _surfaceSets.pop_back();
     }
-    delete _surfaceSets;
 }
 
 void Animation::think()
@@ -70,7 +59,7 @@ void Animation::think()
     if(_lastTicks + _frameRate > SDL_GetTicks()) return;
     _lastTicks = SDL_GetTicks();
     _currentFrame++;
-    if (_currentFrame >= _surfaceSets->at(_currentSurfaceSet)->size())
+    if (_currentFrame >= _surfaceSets.at(_currentSurfaceSet)->size())
     {
         _currentFrame = 0;
     }
@@ -104,12 +93,12 @@ int Animation::yOffset()
     return offset;
 }
 
-std::vector<Surface *> * Animation::surfaces()
+std::vector<Surface*>* Animation::surfaces()
 {
-    return _surfaceSets->at(_currentSurfaceSet);
+    return _surfaceSets.at(_currentSurfaceSet);
 }
 
-void Animation::loadFromFrmFile(libfalltergeist::FrmFileType * frm)
+void Animation::loadFromFrmFile(libfalltergeist::FrmFileType* frm)
 {
     if (frm->framesPerSecond() > 0)
     {
@@ -120,7 +109,7 @@ void Animation::loadFromFrmFile(libfalltergeist::FrmFileType * frm)
     for (unsigned int i = 0; i != 6; ++i)
     {
         if (i > 0 && frm->directions()->at(i)->dataOffset() == frm->directions()->at(0)->dataOffset()) break;
-        std::vector<Surface *> * frameset = new std::vector<Surface *>;
+        std::vector<Surface*>* frameset = new std::vector<Surface*>;
         // for each frame
         for (unsigned int j = 0; j != frm->framesPerDirection(); ++j)
         {
@@ -137,52 +126,26 @@ void Animation::loadFromFrmFile(libfalltergeist::FrmFileType * frm)
             }
             frameset->push_back(surface);
         }
-        _surfaceSets->push_back(frameset);
+        _surfaceSets.push_back(frameset);
     }
-}
-
-int Animation::xOffsetMin()
-{
-    int offsetMin = 0;
-
-    for (unsigned int j = 0; j != surfaces()->size(); ++j)
-    {
-        int offset = 0;
-        offset += InteractiveSurface::xOffset();
-        offset += surfaces()->at(0)->width()/2;
-        offset -= surfaces()->at(j)->width()/2;
-
-        for (unsigned int i = 0; i <= j; i++)
-        {
-            offset += surfaces()->at(i)->xOffset();
-        }
-
-        if (offset < offsetMin) offsetMin = offset;
-    }
-    return offsetMin;
 }
 
 void Animation::loadFromFrmFile(std::string filename)
 {
-    libfalltergeist::FrmFileType * frm = ResourceManager::frmFileType(filename);
+    auto frm = ResourceManager::frmFileType(filename);
     if (!frm)
     {
-        debug("Can't find FRM file "+ filename, DEBUG_ERROR);
+        debug("Animation::loadFromFrmFile() - can't find FRM file: " + filename, DEBUG_ERROR);
     }
     return loadFromFrmFile(frm);
 }
 
-Surface * Animation::surface()
+Surface* Animation::surface()
 {
-    if (needRedraw())
-    {
-        draw();
-        setNeedRedraw(false);
-    }
-    return _surfaceSets->at(_currentSurfaceSet)->at(_currentFrame);
+    return _surfaceSets.at(_currentSurfaceSet)->at(_currentFrame);
 }
 
-SDL_Surface * Animation::sdl_surface()
+SDL_Surface* Animation::sdl_surface()
 {
     return surface()->sdl_surface();
 }

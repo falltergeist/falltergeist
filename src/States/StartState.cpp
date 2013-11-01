@@ -23,6 +23,7 @@
 
 // Falltergeist includes
 #include "../Engine/Game.h"
+#include "../Engine/Mouse.h"
 #include "../Engine/Player.h"
 #include "../Engine/ResourceManager.h"
 #include "../States/LocationState.h"
@@ -54,6 +55,8 @@ void StartState::init()
     Surface * splash = ResourceManager::surface("art/splash/" + splashes.at(rand() % splashes.size()));
     add(splash);
     _splashTicks = SDL_GetTicks(); 
+
+    _game->mouse()->setType(Mouse::WAIT);
 }
 
 void StartState::think()

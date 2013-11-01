@@ -31,10 +31,12 @@
 
 namespace Falltergeist
 {
+class Animation;
 
 class Mouse : public InteractiveSurface
 {
 protected:
+    Animation * _animation = 0;
     int _cursorX = 320;
     int _cursorY = 240;
     int _type = BIG_ARROW;
@@ -56,7 +58,8 @@ public:
           SCROLL_S_X,
           SCROLL_SW,
           SCROLL_SW_X,
-          HEXAGON_RED
+          HEXAGON_RED,
+          WAIT
          };
     Mouse();
     ~Mouse();
@@ -69,6 +72,7 @@ public:
     void setType(int type);
     virtual int x();
     virtual int y();
+    virtual SDL_Surface* sdl_surface();
 
 };
 

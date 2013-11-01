@@ -32,7 +32,7 @@ namespace Falltergeist
 Screen::Screen(int width, int height, int bpp)
 {
     std::string message = "[VIDEO] - SDL_Init - ";
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
     {
         debug(message + "[FAIL]", DEBUG_CRITICAL);
         throw Exception(SDL_GetError());
@@ -41,7 +41,6 @@ Screen::Screen(int width, int height, int bpp)
     
     message =  "[VIDEO] - SDL_SetVideoMode " + std::to_string(width) + "x" + std::to_string(height) + "x" +std::to_string(bpp)+ " - ";
     _screen = SDL_SetVideoMode(width, height, bpp, SDL_SWSURFACE | SDL_DOUBLEBUF);
-    SDL_SetAlpha(_screen, SDL_SRCALPHA, 0);
     if (!_screen)
     {
         throw Exception(message + "[FAIL]");
@@ -80,6 +79,7 @@ int Screen::width()
 
 void Screen::flip()
 {
+
     SDL_BlitSurface(_surface->sdl_surface(), 0, _screen, 0);
 
     if (SDL_Flip(_screen) == -1)

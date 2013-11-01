@@ -22,6 +22,7 @@
 #include <cmath>
 
 // Falltergeist includes
+#include "../Engine/Animation.h"
 #include "../Engine/Mouse.h"
 #include "../Engine/ResourceManager.h"
 
@@ -39,12 +40,14 @@ Mouse::Mouse() : InteractiveSurface()
 
 Mouse::~Mouse()
 {
+    delete _animation;
     // Show cursor
     SDL_ShowCursor(1);
 }
 
 void Mouse::think()
 {
+    if (_animation) _animation->think();
     SDL_GetMouseState(&_cursorX, &_cursorY);
 }
 
@@ -85,6 +88,7 @@ int Mouse::type()
 
 void Mouse::setType(int type)
 {
+    delete _animation; _animation = 0;
     _type = type;
     switch(_type)
     {
@@ -175,7 +179,19 @@ void Mouse::setType(int type)
             break;
         case HEXAGON_RED:
             break;
+        case WAIT:
+            _animation = new Animation("art/intrface/wait.frm");
+            setXOffset(0);
+            setYOffset(0);
+            break;
+
     }
+}
+
+SDL_Surface* Mouse::sdl_surface()
+{
+    if (_animation) return _animation->surface()->sdl_surface();
+    return InteractiveSurface::sdl_surface();
 }
 
 }

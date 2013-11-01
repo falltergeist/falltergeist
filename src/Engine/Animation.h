@@ -34,31 +34,29 @@ namespace Falltergeist
 class Animation : public InteractiveSurface
 {   
 protected:
-    std::vector<std::vector<Surface *> *>  * _surfaceSets;
-    unsigned int _frameRate;
-    unsigned int _currentFrame;
-    unsigned int _currentSurfaceSet;
-    unsigned int _lastTicks;
+    std::vector<std::vector<Surface*>*> _surfaceSets;
+    unsigned int _frameRate = 200;
+    unsigned int _currentFrame = 0;
+    unsigned int _currentSurfaceSet = 0;
+    unsigned int _lastTicks = SDL_GetTicks();
 public:
-    Animation(libfalltergeist::FrmFileType * frm, int x = 0, int y = 0);
-    Animation(const char * filename, int x = 0, int y = 0);
+    Animation(libfalltergeist::FrmFileType* frm, int x = 0, int y = 0);
+    Animation(std::string filename, int x = 0, int y = 0);
     ~Animation();
 
-    Surface * surface();
-    std::vector<Surface *> * surfaces();
+    Surface* surface();
+    std::vector<Surface*>* surfaces();
     void loadFromFrmFile(std::string filename);
-    void loadFromFrmFile(libfalltergeist::FrmFileType * frm);
+    void loadFromFrmFile(libfalltergeist::FrmFileType* frm);
     virtual void think();
 
     virtual int xOffset();
     virtual int yOffset();
 
-    int xOffsetMin();
-
     int frameXPosition(unsigned int frame);
     int frameYPosition(unsigned int frame);
 
-    virtual SDL_Surface * sdl_surface();
+    virtual SDL_Surface* sdl_surface();
 };
 
 }
