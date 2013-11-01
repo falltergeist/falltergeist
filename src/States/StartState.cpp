@@ -38,7 +38,6 @@ namespace Falltergeist
 
 StartState::StartState(Game * game) : State(game)
 {
-    std::cout << "StartState..." << std::endl;
 }
 
 StartState::~StartState()
@@ -47,7 +46,6 @@ StartState::~StartState()
 
 void StartState::init()
 {
-    if (initialized) return;
     State::init();
     
     std::vector<std::string> splashes = {"splash0.rix", "splash1.rix", "splash2.rix", "splash3.rix", "splash4.rix", "splash5.rix", "splash6.rix"};

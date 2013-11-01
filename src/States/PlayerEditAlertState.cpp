@@ -49,6 +49,7 @@ void PlayerEditAlertState::setMessage(std::string message)
 void PlayerEditAlertState::init()
 {
     State::init();
+    setFullscreen(false);
 
     Surface * bg = new Surface(_game->resourceManager()->surface("art/intrface/lgdialog.frm"));
     bg->setX(164);

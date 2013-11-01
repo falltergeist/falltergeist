@@ -41,6 +41,7 @@ PlayerEditGenderState::PlayerEditGenderState(Game * game) : State(game)
 void PlayerEditGenderState::init()
 {
     State::init();
+    setFullscreen(false);
 
     _maleImage = new SurfaceSet((std::vector<std::string>){
                                     "art/intrface/maleoff.frm",

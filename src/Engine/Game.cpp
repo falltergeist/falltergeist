@@ -19,7 +19,6 @@
 
 // C++ standard includes
 #include <sstream>
-#include <cstring>
 
 // Falltergeist includes
 #include "../Engine/CrossPlatform.h"
@@ -62,8 +61,6 @@ Game::Game(unsigned int width, unsigned int height, unsigned int bpp)
     _mouse = new Mouse();
     _fpsCounter = new FpsCounter();
     _quit = false;
-    _states = new std::vector<State *>;
-    _deletedStates = new std::vector<State *>;
     _player = 0;
 }
 
@@ -73,19 +70,17 @@ Game::~Game()
     delete _screen;
     delete _mouse;
 
-    while (!_states->empty())
+    while (!_states.empty())
     {
-        delete _states->back();
-        _states->pop_back();;
+        delete _states.back();
+        _states.pop_back();
     }
-    delete _states;
 
-    while (!_deletedStates->empty())
+    while (!_deletedStates.empty())
     {
-        delete _deletedStates->back();
-        _deletedStates->pop_back();
+        delete _deletedStates.back();
+        _deletedStates.pop_back();
     }
-    delete _deletedStates;
 }
 
 /**
@@ -94,7 +89,8 @@ Game::~Game()
  */
 void Game::pushState(State * state)
 {
-    _states->push_back(state);
+    if (!state->initialized()) state->init();
+    _states.push_back(state);
 }
 
 /**
@@ -102,8 +98,8 @@ void Game::pushState(State * state)
  */
 void Game::popState()
 {
-    _deletedStates->push_back(_states->back());
-    _states->pop_back();
+    _deletedStates.push_back(_states.back());
+    _states.pop_back();
 }
 
 /**
@@ -112,10 +108,11 @@ void Game::popState()
  */
 void Game::setState(State * state)
 {
-    while (_states->size() > 0)
+    while (_states.size() > 0)
     {
         popState();
     }
+    if (!state->initialized()) state->init();
     pushState(state);
 }
 
@@ -126,14 +123,11 @@ void Game::run()
     while (!_quit)
     {
         // Clean up states
-        while (!_deletedStates->empty())
+        while (!_deletedStates.empty())
         {
-            delete _deletedStates->back();
-            _deletedStates->pop_back();
+            delete _deletedStates.back();
+            _deletedStates.pop_back();
         }
-
-        // Init current state
-        if (!_states->back()->initialized) _states->back()->init();
 
         while(SDL_PollEvent(&_event))
         {
@@ -144,10 +138,7 @@ void Game::run()
             else
             {
                 Event event = Event(&_event);
-                //_screen->handle(&event);
-                //_cursor->handle(&event);
-                //_fpsCounter->handle(&event);
-
+                
                 // Screenshot function
                 if (event.isKeyboardEvent() && event.SDLEvent()->type == SDL_KEYUP && event.keyCode() == SDLK_F12) // F12
                 {
@@ -156,25 +147,31 @@ void Game::run()
                     SDL_SaveBMP(_screen->surface()->sdl_surface(), ss.str().c_str());
                     debug("Screenshot saved to " + ss.str(), DEBUG_INFO);
                 }
-
-                _states->back()->handle(&event);
-
+                _states.back()->handle(&event);
             }
         }
 
 
-        // Rendering
-        _states->back()->think();
+        // thinking
+        _states.back()->think();
         _fpsCounter->think();
         _mouse->think();
         Surface::animatedPalette->think();
-
+        
         // render all states that is over the last fullscreen state
         _screen->clear();
-        std::vector<State*>::iterator i = _states->end();
-        do { --i; }
-        while(i != _states->begin() && !(*i)->isFullscreen());
-        for (; i != _states->end(); ++i) (*i)->blit();
+        
+        auto it = _states.end();
+        do
+        {
+            --it; 
+        }
+        while(it != _states.begin() && !(*it)->fullscreen());
+        
+        for (; it != _states.end(); ++it)
+        {
+            (*it)->blit();
+        }
         falltergeistVersion->blit(_screen->surface());
         _fpsCounter->blit(_screen->surface());
         _mouse->blit(_screen->surface());

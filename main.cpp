@@ -17,34 +17,18 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// C++ standard includes
+
+// Falltergeist includes
+#include "src/Engine/CrossPlatform.h"
 #include "src/Engine/Game.h"
 #include "src/Engine/Exception.h"
-#include "src/Engine/Surface.h"
-#include "src/Engine/ResourceManager.h"
 #include "src/States/StartState.h"
-#include "src/Engine/CrossPlatform.h"
-#include "SDL.h"
-#include <algorithm>
 #include "lib/libfalltergeist/libfalltergeist.h"
-#include <thread>
+
+// Third party includes
 
 using namespace Falltergeist;
-
-void function1()
-{
-    while(1)
-    {
-        std::cout << "1" << std::endl;
-    }
-}
-
-void function2()
-{
-    while(1)
-    {
-        std::cout << "2" << std::endl;
-    }
-}
 
 
 int main(int argc, char *argv[])
@@ -59,12 +43,12 @@ int main(int argc, char *argv[])
     }
     catch(libfalltergeist::Exception &e)
     {
-        std::cout << e.message() << std::endl;
+        debug(e.message(), DEBUG_CRITICAL);
         return 1;
     }
     catch(Exception &e)
     {
-        std::cout << e.message() << std::endl;
+        debug(e.message(), DEBUG_CRITICAL);
         return 1;
     }
 

@@ -31,29 +31,27 @@
 namespace Falltergeist
 {
 
-State::State(Game* game) : _game(game), _surfaces(), _isFullscreen(false), initialized(false)
+State::State(Game* game) : _game(game)
 {
-    _surfaces = new std::vector<Surface*>;
 }
 
 State::~State()
 {
-    while (!_surfaces->empty())
+    while (!_surfaces.empty())
     {
-        delete _surfaces->back();
-        _surfaces->pop_back();
+        delete _surfaces.back();
+        _surfaces.pop_back();
     }
-    delete _surfaces;
 }
 
 void State::init()
 {
-    initialized = true;
+    _initialized = true;
 }
 
 void State::think()
 {
-    for (std::vector<Surface *>::iterator i = _surfaces->begin(); i < _surfaces->end(); i++)
+    for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
     {
         (*i)->think();
     }
@@ -61,33 +59,43 @@ void State::think()
 
 void State::blit()
 {
-    for (std::vector<Surface *>::iterator i = _surfaces->begin(); i < _surfaces->end(); i++)
+    for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
     {
         (*i)->blit(_game->screen()->surface());
     }
 }
 
-bool State::isFullscreen()
+bool State::initialized()
 {
-    return _isFullscreen;
+    return _initialized;
+}
+
+bool State::fullscreen()
+{
+    return _fullscreen;
+}
+
+void State::setFullscreen(bool value)
+{
+    _fullscreen = value;
 }
 
 void State::add(Surface* surface)
 {
-    _surfaces->push_back(surface);
+    _surfaces.push_back(surface);
 }
 
 void State::add(std::vector<Surface*> surfaces)
 {
-    for (auto& surface : surfaces) _surfaces->push_back(surface);
+    for (auto& surface : surfaces) _surfaces.push_back(surface);
 }
 
 void State::handle(Event* event)
 {
-    for (std::vector<Surface *>::reverse_iterator i = _surfaces->rbegin(); i < _surfaces->rend(); i++)
+    for (std::vector<Surface*>::reverse_iterator i = _surfaces.rbegin(); i < _surfaces.rend(); i++)
     {
-        InteractiveSurface * surface = dynamic_cast<InteractiveSurface *>(*i);
-        if (surface != 0)
+        auto surface = dynamic_cast<InteractiveSurface *>(*i);
+        if (surface)
         {
             surface->handle(event,this);
         }

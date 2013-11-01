@@ -23,7 +23,6 @@
 // C++ standard includes
 #include <vector>
 #include <string>
-#include <iostream>
 
 // Falltergeist includes
 
@@ -44,12 +43,12 @@ class Game
 {
 protected:
     std::string _version;
-    ResourceManager * _resourceManager;
-    std::vector<State *> * _states;
-    std::vector<State *> * _deletedStates;
-    Player * _player;
-    Screen * _screen;
-    Mouse * _mouse;
+    ResourceManager* _resourceManager;
+    std::vector<State*> _states;
+    std::vector<State*> _deletedStates;
+    Player* _player;
+    Screen* _screen;
+    Mouse* _mouse;
     FpsCounter * _fpsCounter;
     bool _quit;
     SDL_Event _event;

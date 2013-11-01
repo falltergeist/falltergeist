@@ -44,6 +44,7 @@ PlayerEditAgeState::PlayerEditAgeState(Game * game):State(game)
 void PlayerEditAgeState::init()
 {
     State::init();
+    setFullscreen(false);
 
     Surface * bg = new Surface(_game->resourceManager()->surface("art/intrface/charwin.frm"));
     bg->setX(160);

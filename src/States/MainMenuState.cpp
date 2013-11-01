@@ -46,7 +46,6 @@ MainMenuState::~MainMenuState()
 void MainMenuState::init()
 {
     State::init();
-    _isFullscreen = true;
     // Background image
     auto background = new Surface(_game->resourceManager()->surface("art/intrface/mainmenu.frm"));
     background->setX(0);

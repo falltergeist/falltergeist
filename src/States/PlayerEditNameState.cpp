@@ -42,7 +42,8 @@ PlayerEditNameState::PlayerEditNameState(Game * game) : State(game)
 void PlayerEditNameState::init()
 {
     State::init();
-
+    setFullscreen(false);
+    
     _keyCodes = new std::map<char, char>;
     _keyCodes->insert(std::make_pair(SDLK_a, 'a'));
     _keyCodes->insert(std::make_pair(SDLK_b, 'b'));
@@ -182,8 +183,7 @@ PlayerEditNameState::~PlayerEditNameState()
 }
 
 void PlayerEditNameState::think()
-{
-    if (!initialized) return;
+{   
     if (SDL_GetTicks() - _timer > 300)
     {
         if (_cursor->visible())
