@@ -110,6 +110,7 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
             else if (extension == "fon") item = new libfalltergeist::FonFileType(stream);
             else if (extension == "frm") item = new libfalltergeist::FrmFileType(stream);
             else if (extension == "gcd") item = new libfalltergeist::GcdFileType(stream);
+            else if (extension == "int") item = new libfalltergeist::IntFileType(stream);
             else if (extension == "lst") item = new libfalltergeist::LstFileType(stream);
             else if (extension == "map") item = new libfalltergeist::MapFileType(stream);
             else if (extension == "msg") item = new libfalltergeist::MsgFileType(stream);
@@ -173,6 +174,11 @@ libfalltergeist::FonFileType* ResourceManager::fonFileType(std::string filename)
 libfalltergeist::GcdFileType* ResourceManager::gcdFileType(std::string filename)
 {
     return dynamic_cast<libfalltergeist::GcdFileType*>(datFileItem(filename));
+}
+
+libfalltergeist::IntFileType* ResourceManager::intFileType(std::string filename)
+{
+    return dynamic_cast<libfalltergeist::IntFileType*>(datFileItem(filename));
 }
 
 libfalltergeist::MsgFileType* ResourceManager::msgFileType(std::string filename)
