@@ -36,15 +36,13 @@ class Surface;
 class Screen
 {
 protected:
-    static const double BASE_WIDTH;
-    static const double BASE_HEIGHT;
-    SDL_Surface * _screen;
-    Surface * _surface;
+    SDL_Surface* _screen;
+    Surface* _surface;
 public:
     Screen(int width, int height, int bpp);
     ~Screen();
 
-    Surface * surface();
+    Surface* surface();
 
     void clear();
 

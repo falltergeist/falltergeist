@@ -29,21 +29,26 @@
 namespace Falltergeist
 {
 
-const double Screen::BASE_WIDTH = 640.0;
-const double Screen::BASE_HEIGHT = 480.0;
-
 Screen::Screen(int width, int height, int bpp)
 {
-    std::cout << "Setting up video mode " << width << "x" << height << "x" << bpp << "...";
-    _screen = SDL_SetVideoMode(width, height, bpp, SDL_HWSURFACE | SDL_DOUBLEBUF);
-    SDL_SetAlpha(_screen, SDL_SRCALPHA, 0);
-    if (_screen == 0)
+    std::string message = "[VIDEO] - SDL_Init - ";
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
-        std::cout << "[FAIL]" << std::endl;
+        debug(message + "[FAIL]", DEBUG_CRITICAL);
+        throw Exception(SDL_GetError());
     }
-    std::cout << "[OK]" << std::endl;
+    debug(message + "[OK]", DEBUG_INFO);    
+    
+    message =  "[VIDEO] - SDL_SetVideoMode " + std::to_string(width) + "x" + std::to_string(height) + "x" +std::to_string(bpp)+ " - ";
+    _screen = SDL_SetVideoMode(width, height, bpp, SDL_SWSURFACE | SDL_DOUBLEBUF);
+    SDL_SetAlpha(_screen, SDL_SRCALPHA, 0);
+    if (!_screen)
+    {
+        throw Exception(message + "[FAIL]");
+    }
+    debug(message + "[OK]", DEBUG_INFO);
 
-    _surface = new Surface(width,height);
+    _surface = new Surface(width, height);
     _surface->setBackgroundColor(0xFF000000);
 }
 
@@ -53,14 +58,13 @@ Screen::~Screen()
     delete _surface;
 }
 
-Surface * Screen::surface()
+Surface* Screen::surface()
 {
     return _surface;
 }
 
 void Screen::clear()
 {
-    //_surface->fill(0xFF000000);
     _surface->clear();
 }
 
@@ -78,10 +82,9 @@ void Screen::flip()
 {
     SDL_BlitSurface(_surface->sdl_surface(), 0, _screen, 0);
 
-
     if (SDL_Flip(_screen) == -1)
     {
-        std::cout << "[ERROR]Can't flip screen" << std::endl;
+        debug("[VIDEO] - Can't flip screen", DEBUG_CRITICAL);
         throw Exception(SDL_GetError());
     }
 }

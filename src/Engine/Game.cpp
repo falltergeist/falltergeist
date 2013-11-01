@@ -41,15 +41,9 @@ namespace Falltergeist
 
 Game::Game(unsigned int width, unsigned int height, unsigned int bpp)
 {
-    debug(CrossPlatform::getVersion(), DEBUG_INFO);
-    debug("Opensource Fallout 2 game engine", DEBUG_INFO);
+    debug("[GAME] - " + CrossPlatform::getVersion(), DEBUG_INFO);
+    debug("[GAME] - Opensource Fallout 2 game engine", DEBUG_INFO);
 
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
-        debug("Initializing video - [FAIL]", DEBUG_CRITICAL);
-        throw Exception(SDL_GetError());
-    }
-    debug("Initializing video - [OK]", DEBUG_INFO);
 
     std::string caption = CrossPlatform::getVersion();
 
@@ -87,7 +81,7 @@ Game::~Game()
  * Pushes a new state into the state stack
  * @param state
  */
-void Game::pushState(State * state)
+void Game::pushState(State* state)
 {
     if (!state->initialized()) state->init();
     _states.push_back(state);
@@ -118,8 +112,8 @@ void Game::setState(State * state)
 
 void Game::run()
 {
-    debug("Starting main loop...", DEBUG_INFO);
-    TextArea * falltergeistVersion = new TextArea(CrossPlatform::getVersion(), 3, 470);
+    debug("[GAME] - Starting main loop", DEBUG_INFO);
+    TextArea* falltergeistVersion = new TextArea(CrossPlatform::getVersion(), 3, 470);
     while (!_quit)
     {
         // Clean up states
@@ -145,7 +139,7 @@ void Game::run()
                     std::stringstream ss;
                     ss << SDL_GetTicks() << ".bmp";
                     SDL_SaveBMP(_screen->surface()->sdl_surface(), ss.str().c_str());
-                    debug("Screenshot saved to " + ss.str(), DEBUG_INFO);
+                    debug("[GAME] - Screenshot saved to " + ss.str(), DEBUG_INFO);
                 }
                 _states.back()->handle(&event);
             }
@@ -179,15 +173,15 @@ void Game::run()
         SDL_Delay(1);
     }
 
-    debug("Stopping main loop...[OK]", DEBUG_INFO);
+    debug("[GAME] - Stopping main loop", DEBUG_INFO);
 }
 
-Screen * Game::screen()
+Screen* Game::screen()
 {
     return _screen;
 }
 
-ResourceManager * Game::resourceManager()
+ResourceManager* Game::resourceManager()
 {
     return _resourceManager;
 }
@@ -197,17 +191,17 @@ void Game::quit()
     _quit = true;
 }
 
-void Game::setPlayer(Player * player)
+void Game::setPlayer(Player* player)
 {
     _player = player;
 }
 
-Player * Game::player()
+Player* Game::player()
 {
     return _player;
 }
 
-Mouse * Game::mouse()
+Mouse* Game::mouse()
 {
     return _mouse;
 }
