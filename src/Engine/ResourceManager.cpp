@@ -18,7 +18,6 @@
  */
 
 // C++ standard includes
-#include <string>
 #include <fstream>
 
 // Falltergeist includes
@@ -34,14 +33,6 @@ namespace Falltergeist
 std::vector<libfalltergeist::DatFile*> ResourceManager::_datFiles;
 std::map<std::string, libfalltergeist::DatFileItem*> ResourceManager::_datFilesItems;
 std::map<std::string, Surface*> ResourceManager::_surfaces;
-
-std::string _t(unsigned int number, std::string filename)
-{
-    libfalltergeist::MsgFileType * msg = ResourceManager::msgFileType(filename);
-    if (!msg) throw Exception("Cant find msg file");
-    return msg->message(number)->text();
-}
-
 
 ResourceManager::ResourceManager()
 {

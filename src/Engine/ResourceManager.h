@@ -34,8 +34,6 @@ namespace Falltergeist
 {
 class Surface;
 
-std::string _t(unsigned int number, std::string filename);
-
 class ResourceManager
 {
 protected:

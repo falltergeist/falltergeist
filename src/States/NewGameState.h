@@ -40,25 +40,25 @@ class Player;
 class NewGameState : public State
 {
 protected:
-    SurfaceSet * _characterImages = 0;
-    std::vector<Player *> * _characters;
-    TextArea * _playerStats1;
-    TextArea * _playerStats2;
-    TextArea * _playerBio;
-    TextArea * _playerName;
-    unsigned char _selectedCharacter;
+    SurfaceSet* _characterImages = 0;
+    std::vector<Player*> _characters;
+    TextArea* _playerStats1 = 0;
+    TextArea* _playerStats2 = 0;
+    TextArea* _playerBio = 0;
+    TextArea* _playerName = 0;
+    unsigned char _selectedCharacter = 0;
 public:    
-    NewGameState(Game * game);
+    NewGameState(Game* game);
     virtual ~NewGameState();
     void changeCharacter();
     void init();
     std::string statToString(unsigned int stat);
     void think();
-    void onBackButtonClick(Event * event);
-    void onBeginGameButtonClick(Event * event);
-    void onEditButtonClick(Event * event);
-    void onCreateButtonClick(Event * event);
-    void onPrevCharacterButtonClick(Event * event);
+    void onBackButtonClick(Event* event);
+    void onBeginGameButtonClick(Event* event);
+    void onEditButtonClick(Event* event);
+    void onCreateButtonClick(Event* event);
+    void onPrevCharacterButtonClick(Event* event);
     void onNextCharacterButtonClick(Event * event);
 };
 

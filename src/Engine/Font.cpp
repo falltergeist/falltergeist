@@ -31,7 +31,6 @@ namespace Falltergeist
 
 Font::Font(std::string filename, unsigned int color)
 {
-    _color = 0;
     _glyphs = new std::vector<Surface*>;
     setFilename(filename);
     setColor(color);

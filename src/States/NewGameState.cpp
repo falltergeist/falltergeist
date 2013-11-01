@@ -18,7 +18,6 @@
  */
 
 // C++ standard includes
-#include <iostream>
 #include <sstream>
 
 // Falltergeist includes
@@ -39,49 +38,47 @@ namespace Falltergeist
 
 NewGameState::NewGameState(Game * game) : State(game)
 {
-    _characters = new std::vector<Player *>;
 }
 
 
 NewGameState::~NewGameState()
 {
-    while (!_characters->empty())
+    while (!_characters.empty())
     {
-        delete _characters->back();
-        _characters->pop_back();
+        delete _characters.back();
+        _characters.pop_back();
     }
-    delete _characters;
 }
 
 void NewGameState::init()
 {
     State::init();
-    _isFullscreen = true;
+    
     // background
     add(new Surface(ResourceManager::surface("art/intrface/pickchar.frm")));
 
     // Begin game button
-    ImageButton * beginGameButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 322);
+    auto beginGameButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 322);
     beginGameButton->onLeftButtonClick((EventHandler) &NewGameState::onBeginGameButtonClick);
 
     // Edit character button
-    ImageButton * editButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 436, 319);
+    auto editButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 436, 319);
     editButton->onLeftButtonClick((EventHandler) &NewGameState::onEditButtonClick);
     
     // Create character button
-    ImageButton * createButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 424);
+    auto createButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 424);
     createButton->onLeftButtonClick((EventHandler) &NewGameState::onCreateButtonClick);
 
     // Back to mainmenu button
-    ImageButton * backButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 461, 424);
+    auto backButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 461, 424);
     backButton->onLeftButtonClick((EventHandler) &NewGameState::onBackButtonClick);
 
     // Previous character button
-    ImageButton * prevCharacterButton = new ImageButton(ImageButton::TYPE_LEFT_ARROW, 292, 320);
+    auto prevCharacterButton = new ImageButton(ImageButton::TYPE_LEFT_ARROW, 292, 320);
     prevCharacterButton->onLeftButtonClick((EventHandler) &NewGameState::onPrevCharacterButtonClick);
 
     // Next character button
-    ImageButton * nextCharacterButton = new ImageButton(ImageButton::TYPE_RIGHT_ARROW, 318, 320);
+    auto nextCharacterButton = new ImageButton(ImageButton::TYPE_RIGHT_ARROW, 318, 320);
     nextCharacterButton->onLeftButtonClick((EventHandler) &NewGameState::onNextCharacterButtonClick);
 
     // Characters images
@@ -92,27 +89,23 @@ void NewGameState::init()
                                           "art/intrface/diplomat.frm"
                                       }, 27, 23);
 
-    _characters->push_back(new Player(ResourceManager::gcdFileType("premade/combat.gcd")));
-    _characters->back()->setBio(ResourceManager::bioFileType("premade/combat.bio")->text());
-    _characters->push_back(new Player(ResourceManager::gcdFileType("premade/stealth.gcd")));
-    _characters->back()->setBio(ResourceManager::bioFileType("premade/stealth.bio")->text());
-    _characters->push_back(new Player(ResourceManager::gcdFileType("premade/diplomat.gcd")));
-    _characters->back()->setBio(ResourceManager::bioFileType("premade/diplomat.bio")->text());
+    _characters.push_back(new Player(ResourceManager::gcdFileType("premade/combat.gcd")));
+    _characters.back()->setBio(ResourceManager::bioFileType("premade/combat.bio")->text());
+    _characters.push_back(new Player(ResourceManager::gcdFileType("premade/stealth.gcd")));
+    _characters.back()->setBio(ResourceManager::bioFileType("premade/stealth.bio")->text());
+    _characters.push_back(new Player(ResourceManager::gcdFileType("premade/diplomat.gcd")));
+    _characters.back()->setBio(ResourceManager::bioFileType("premade/diplomat.bio")->text());
     
     // Character data textareas
     _playerName = new TextArea(350, 50);
-    _playerName->setFont("font1.aaf");
 
     _playerStats1 = new TextArea(0, 80);
-    _playerStats1->setWidth(370);
-    _playerStats1->setFont("font1.aaf");
-    _playerStats1->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    _playerStats1->setWidth(370)
+                 ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
     _playerStats2 = new TextArea(374, 80);
-    _playerStats2->setFont("font1.aaf");
 
     _playerBio = new TextArea(430, 50);
-    _playerBio->setFont("font1.aaf");
 
 
     add(beginGameButton);
@@ -135,12 +128,12 @@ void NewGameState::think()
 {
 }
 
-void NewGameState::onBackButtonClick(Event * event)
+void NewGameState::onBackButtonClick(Event* event)
 {
     _game->popState();
 }
 
-void NewGameState::onPrevCharacterButtonClick(Event * event)
+void NewGameState::onPrevCharacterButtonClick(Event* event)
 {
     if (_selectedCharacter > 0)
     {
@@ -153,7 +146,7 @@ void NewGameState::onPrevCharacterButtonClick(Event * event)
     changeCharacter();
 }
 
-void NewGameState::onNextCharacterButtonClick(Event * event)
+void NewGameState::onNextCharacterButtonClick(Event* event)
 {
     if (_selectedCharacter < 2)
     {
@@ -168,15 +161,16 @@ void NewGameState::onNextCharacterButtonClick(Event * event)
 
 void NewGameState::changeCharacter()
 {
-    Player * player = _characters->at(_selectedCharacter);
+    Player * player = _characters.at(_selectedCharacter);
     std::stringstream ss;
-    ss   << _t(100,"text/english/game/stat.msg") << " " << (player->stat(Player::STATS_STRENGTH)    < 10 ? "0" : "") << player->stat(Player::STATS_STRENGTH)     << "\n"
-         << _t(101,"text/english/game/stat.msg") << " " << (player->stat(Player::STATS_PERCEPTION)  < 10 ? "0" : "") << player->stat(Player::STATS_PERCEPTION)   << "\n"
-         << _t(102,"text/english/game/stat.msg") << " " << (player->stat(Player::STATS_ENDURANCE)   < 10 ? "0" : "") << player->stat(Player::STATS_ENDURANCE)    << "\n"
-         << _t(103,"text/english/game/stat.msg") << " " << (player->stat(Player::STATS_CHARISMA)    < 10 ? "0" : "") << player->stat(Player::STATS_CHARISMA)     << "\n"
-         << _t(104,"text/english/game/stat.msg") << " " << (player->stat(Player::STATS_INTELLIGENCE)< 10 ? "0" : "") << player->stat(Player::STATS_INTELLIGENCE) << "\n"
-         << _t(105,"text/english/game/stat.msg") << " " << (player->stat(Player::STATS_AGILITY)     < 10 ? "0" : "") << player->stat(Player::STATS_AGILITY)      << "\n"
-         << _t(106,"text/english/game/stat.msg") << " " << (player->stat(Player::STATS_LUCK)        < 10 ? "0" : "") << player->stat(Player::STATS_LUCK)         << "\n" ;
+    auto msg = ResourceManager::msgFileType("text/english/game/stat.msg");
+    ss   << msg->message(100)->text() << " " << (player->stat(Player::STATS_STRENGTH)    < 10 ? "0" : "") << player->stat(Player::STATS_STRENGTH)     << "\n"
+         << msg->message(101)->text() << " " << (player->stat(Player::STATS_PERCEPTION)  < 10 ? "0" : "") << player->stat(Player::STATS_PERCEPTION)   << "\n"
+         << msg->message(102)->text() << " " << (player->stat(Player::STATS_ENDURANCE)   < 10 ? "0" : "") << player->stat(Player::STATS_ENDURANCE)    << "\n"
+         << msg->message(103)->text() << " " << (player->stat(Player::STATS_CHARISMA)    < 10 ? "0" : "") << player->stat(Player::STATS_CHARISMA)     << "\n"
+         << msg->message(104)->text() << " " << (player->stat(Player::STATS_INTELLIGENCE)< 10 ? "0" : "") << player->stat(Player::STATS_INTELLIGENCE) << "\n"
+         << msg->message(105)->text() << " " << (player->stat(Player::STATS_AGILITY)     < 10 ? "0" : "") << player->stat(Player::STATS_AGILITY)      << "\n"
+         << msg->message(106)->text() << " " << (player->stat(Player::STATS_LUCK)        < 10 ? "0" : "") << player->stat(Player::STATS_LUCK)         << "\n";
     _playerStats1->setText(ss.str());
      
     ss.str("");
@@ -197,24 +191,25 @@ void NewGameState::changeCharacter()
 
 std::string NewGameState::statToString(unsigned int stat)
 {
-    return _t(stat+300,"text/english/game/stat.msg");
+    auto msg = ResourceManager::msgFileType("text/english/game/stat.msg");
+    return msg->message(stat+300)->text();
 }
 
-void NewGameState::onEditButtonClick(Event * event)
+void NewGameState::onEditButtonClick(Event* event)
 {
-    _game->setPlayer(_characters->at(_selectedCharacter));
+    _game->setPlayer(_characters.at(_selectedCharacter));
     _game->pushState(new PlayerEditState(_game));
 }
 
-void NewGameState::onCreateButtonClick(Event * event)
+void NewGameState::onCreateButtonClick(Event* event)
 {
     _game->setPlayer(new Player(ResourceManager::gcdFileType("premade/blank.gcd")));
     _game->pushState(new PlayerEditState(_game));
 }
 
-void NewGameState::onBeginGameButtonClick(Event * event)
+void NewGameState::onBeginGameButtonClick(Event* event)
 {
-    _game->setPlayer(_characters->at(_selectedCharacter));
+    _game->setPlayer(_characters.at(_selectedCharacter));
     _game->setState(new LocationState(_game));
 }
 

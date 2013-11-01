@@ -38,7 +38,7 @@ class Font
 protected:
     std::vector<Surface*>* _glyphs;
     std::string _filename;
-    unsigned int _color;
+    unsigned int _color = 0;
     libfalltergeist::AafFileType* _aafFileType;
 public:
     Font(std::string filename, unsigned int color = 0xFF3FF800);
