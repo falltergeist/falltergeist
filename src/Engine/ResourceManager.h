@@ -39,30 +39,29 @@ std::string _t(unsigned int number, std::string filename);
 class ResourceManager
 {
 protected:
-    static std::vector<libfalltergeist::DatFile *> * _datFiles;
-    static std::map<std::string, libfalltergeist::DatFileItem *> * _datFilesItems;
-    static std::map<std::string, Surface *> * _surfaces;
-    static std::string _dataPath;
+    static std::vector<libfalltergeist::DatFile*> _datFiles;
+    static std::map<std::string, libfalltergeist::DatFileItem*> _datFilesItems;
+    static std::map<std::string, Surface*> _surfaces;
 
 public:
     ResourceManager();
     ~ResourceManager();
-    static libfalltergeist::DatFileItem * datFileItem(std::string filename);
-    static libfalltergeist::FrmFileType * frmFileType(std::string filename);
-    static libfalltergeist::FrmFileType * frmFileType(unsigned int FID);
-    static libfalltergeist::PalFileType * palFileType(std::string filename);
-    static libfalltergeist::LstFileType * lstFileType(std::string filename);
-    static libfalltergeist::FonFileType * fonFileType(std::string filename);
-    static libfalltergeist::AafFileType * aafFileType(std::string filename);
-    static libfalltergeist::GcdFileType * gcdFileType(std::string filename);
-    static libfalltergeist::MapFileType * mapFileType(std::string filename);
-    static libfalltergeist::MsgFileType * msgFileType(std::string filename);
-    static libfalltergeist::BioFileType * bioFileType(std::string filename);
-    static libfalltergeist::ProFileType * proFileType(std::string filename);
-    static libfalltergeist::ProFileType * proFileType(unsigned int PID);
-    static libfalltergeist::RixFileType * rixFileType(std::string filename);
-    static Surface * surface(std::string filename, int x = 0, int y = 0, unsigned int direction = 0, unsigned int frame = 0);
-    static Surface * surface(unsigned int FID, unsigned int direction = 0, unsigned int frame = 0);
+    static libfalltergeist::DatFileItem* datFileItem(std::string filename);
+    static libfalltergeist::FrmFileType* frmFileType(std::string filename);
+    static libfalltergeist::FrmFileType* frmFileType(unsigned int FID);
+    static libfalltergeist::PalFileType* palFileType(std::string filename);
+    static libfalltergeist::LstFileType* lstFileType(std::string filename);
+    static libfalltergeist::FonFileType* fonFileType(std::string filename);
+    static libfalltergeist::AafFileType* aafFileType(std::string filename);
+    static libfalltergeist::GcdFileType* gcdFileType(std::string filename);
+    static libfalltergeist::MapFileType* mapFileType(std::string filename);
+    static libfalltergeist::MsgFileType* msgFileType(std::string filename);
+    static libfalltergeist::BioFileType* bioFileType(std::string filename);
+    static libfalltergeist::ProFileType* proFileType(std::string filename);
+    static libfalltergeist::ProFileType* proFileType(unsigned int PID);
+    static libfalltergeist::RixFileType* rixFileType(std::string filename);
+    static Surface* surface(std::string filename, int x = 0, int y = 0, unsigned int direction = 0, unsigned int frame = 0);
+    static Surface* surface(unsigned int FID, unsigned int direction = 0, unsigned int frame = 0);
     static void extract(std::string path);
     static void unloadResources();
 };

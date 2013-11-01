@@ -31,10 +31,9 @@
 namespace Falltergeist
 {
 
-std::vector<libfalltergeist::DatFile *> * ResourceManager::_datFiles = new std::vector<libfalltergeist::DatFile *>;
-std::map<std::string, libfalltergeist::DatFileItem *> * ResourceManager::_datFilesItems = new std::map<std::string, libfalltergeist::DatFileItem *>;
-std::map<std::string, Surface *> * ResourceManager::_surfaces = new std::map<std::string, Surface *>;
-std::string ResourceManager::_dataPath = "";
+std::vector<libfalltergeist::DatFile*> ResourceManager::_datFiles;
+std::map<std::string, libfalltergeist::DatFileItem*> ResourceManager::_datFilesItems;
+std::map<std::string, Surface*> ResourceManager::_surfaces;
 
 std::string _t(unsigned int number, std::string filename)
 {
@@ -46,34 +45,28 @@ std::string _t(unsigned int number, std::string filename)
 
 ResourceManager::ResourceManager()
 {
-    _dataPath.clear();
-    _dataPath.append(CrossPlatform::findDataPath());
-    //std::cout << "Datapath: " << _dataPath << std::endl;
     std::vector<std::string> * files = CrossPlatform::findDataFiles();
-    std::vector<std::string>::iterator it;
-    for (it = files->begin(); it != files->end(); ++it)
+    for (auto it = files->begin(); it != files->end(); ++it)
     {
-        std::string path(_dataPath);
-        path.append("/").append(*it);
-        _datFiles->push_back(new libfalltergeist::DatFile(path));
+        std::string path = CrossPlatform::findDataPath() + "/" + (*it);
+        _datFiles.push_back(new libfalltergeist::DatFile(path));
     }
 }
 
 void ResourceManager::extract(std::string path)
 {
     std::vector<libfalltergeist::DatFile *>::iterator it;
-    for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
+    for (it = _datFiles.begin(); it != _datFiles.end(); ++it)
     {
         std::vector<libfalltergeist::DatFileItem *>::iterator itt;
         for (itt = (*it)->items()->begin(); itt != (*it)->items()->end(); ++itt)
         {
             std::string file = path + (*itt)->filename();
             std::fstream stream;
-            stream.open(file.c_str(), std::ios_base::out);
+            stream.open(file, std::ios_base::out);
 
             if (stream.is_open())
             {
-                //stream.write((*itt)->getData(), (*itt)->size());
                 stream.close();
             }
             else
@@ -85,40 +78,42 @@ void ResourceManager::extract(std::string path)
 
 ResourceManager::~ResourceManager()
 {
-    while (!_datFiles->empty())
+    while (!_datFiles.empty())
     {
-        delete _datFiles->back();
-        _datFiles->pop_back();
+        delete _datFiles.back();
+        _datFiles.pop_back();
     }
-
-    // @TODO
-    //while (!_datFilesItems->empty())
-    //{
-    //    delete _datFilesItems->back();
-    //    _datFilesItems->pop_back();
-    //}
-
+    
+    for (auto it = _datFilesItems.begin(); it != _datFilesItems.end(); ++it)
+    {
+        delete it->second;
+    }
+    
+    for (auto it = _surfaces.begin(); it != _surfaces.end(); ++it)
+    {
+        delete it->second;
+    }
 }
 
 libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename)
 {    
     // Return item from cache
-    if (_datFilesItems->find(filename) != _datFilesItems->end())
+    if (_datFilesItems.find(filename) != _datFilesItems.end())
     {
         //debug("[RESOURCE MANAGER] - Loading file: " + filename + " [FROM CACHE]", DEBUG_INFO);
-        return _datFilesItems->at(filename);
+        return _datFilesItems.at(filename);
     }
 
     // Searching file in Data directory
     {
-        std::string path = _dataPath + "/" + filename;
-        std::ifstream * stream = new std::ifstream();
-        stream->open(path.c_str(), std::ios_base::binary);
+        std::string path = CrossPlatform::findDataPath() + "/" + filename;
+        std::ifstream* stream = new std::ifstream();
+        stream->open(path, std::ios_base::binary);
         if (stream->is_open())
         {
             std::string extension = filename.substr(filename.length() - 3, 3);
 
-            libfalltergeist::DatFileItem * item;
+            libfalltergeist::DatFileItem* item;
                  if (extension == "aaf") item = new libfalltergeist::AafFileType(stream);
             else if (extension == "bio") item = new libfalltergeist::BioFileType(stream);
             else if (extension == "fon") item = new libfalltergeist::FonFileType(stream);
@@ -135,8 +130,8 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
                 item = new libfalltergeist::DatFileItem(stream);
             }
 
-            item->setFilename((char*) filename.c_str());
-            _datFilesItems->insert(std::make_pair(filename, item));
+            item->setFilename(filename);
+            _datFilesItems.insert(std::make_pair(filename, item));
             debug("[RESOURCE MANAGER] - Loading file: " + filename + " [FROM DATA DIR]", DEBUG_INFO);
             return item;
         }
@@ -145,12 +140,12 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
 
     // Search in DAT files
     std::vector<libfalltergeist::DatFile*>::iterator it;
-    for (it = _datFiles->begin(); it != _datFiles->end(); ++it)
+    for (it = _datFiles.begin(); it != _datFiles.end(); ++it)
     {
         libfalltergeist::DatFileItem* item = (*it)->item(filename.c_str());
         if (item)
         {
-            _datFilesItems->insert(std::make_pair(filename, item));
+            _datFilesItems.insert(std::make_pair(filename, item));
             debug("[RESOURCE MANAGER] - Loading file: " + filename + " [FROM "+ (*it)->filename() + "]", DEBUG_INFO);
             return item;
         }
@@ -221,9 +216,9 @@ libfalltergeist::RixFileType* ResourceManager::rixFileType(std::string filename)
 
 Surface * ResourceManager::surface(std::string filename, int posX, int posY, unsigned int direction, unsigned int frame)
 {
-    if (_surfaces->find(filename) != _surfaces->end())
+    if (_surfaces.find(filename) != _surfaces.end())
     {
-        return _surfaces->at(filename);
+        return _surfaces.at(filename);
     }
     
     std::string ext = filename.substr(filename.length() - 4);
@@ -238,7 +233,7 @@ Surface * ResourceManager::surface(std::string filename, int posX, int posY, uns
     }
     else if (ext == ".frm")
     {
-        libfalltergeist::FrmFileType * frm = frmFileType(filename);
+        libfalltergeist::FrmFileType* frm = frmFileType(filename);
         if (!frm) return 0;
         surface = new Surface(frm, direction, frame);        
     }
@@ -250,11 +245,11 @@ Surface * ResourceManager::surface(std::string filename, int posX, int posY, uns
     surface->setX(posX);
     surface->setY(posY);
 
-    _surfaces->insert(std::pair<std::string, Surface *>(filename, surface));
+    _surfaces.insert(std::pair<std::string, Surface*>(filename, surface));
     return surface;
 }
 
-libfalltergeist::ProFileType * ResourceManager::proFileType(unsigned int PID)
+libfalltergeist::ProFileType* ResourceManager::proFileType(unsigned int PID)
 {
     unsigned int typeId = PID >> 24;
     std::string listFile;
@@ -315,8 +310,18 @@ libfalltergeist::ProFileType * ResourceManager::proFileType(unsigned int PID)
 
 void ResourceManager::unloadResources()
 {
-    _surfaces->clear();
-    _datFilesItems->clear();
+    for (auto it = _datFilesItems.begin(); it != _datFilesItems.end(); ++it)
+    {
+        delete it->second;
+    }
+    _datFilesItems.clear();
+    
+    for (auto it = _surfaces.begin(); it != _surfaces.end(); ++it)
+    {
+        delete it->second;
+    }
+    _surfaces.clear();
+
 }
 
 libfalltergeist::FrmFileType * ResourceManager::frmFileType(unsigned int FID)
