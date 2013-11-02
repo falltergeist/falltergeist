@@ -41,6 +41,7 @@ public:
     void push(VMStackValue* value);
     VMStackValue* pop();
     int size();
+    void swap();
 };
 
 }

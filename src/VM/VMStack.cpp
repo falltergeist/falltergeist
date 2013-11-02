@@ -22,6 +22,7 @@
 // Falltergeist includes
 #include "../VM/VMStack.h"
 #include "../VM/VMStackValue.h"
+#include "../Engine/Exception.h"
 
 // Third party includes
 
@@ -43,6 +44,7 @@ void VMStack::push(VMStackValue* value)
 
 VMStackValue* VMStack::pop()
 {
+    if (_values.size() == 0) throw Exception("VMStack::pop() - stack is empty");
     auto value = _values.back();
     _values.pop_back();
     return value;
@@ -51,6 +53,17 @@ VMStackValue* VMStack::pop()
 int VMStack::size()
 {
     return _values.size();
+}
+
+void VMStack::swap()
+{
+    if (_values.size() < 2) throw Exception("VMStack::swap() - size is < 2");
+
+    auto value1 = _values.back(); _values.pop_back();
+    auto value2 = _values.back(); _values.pop_back();
+    _values.push_back(value1);
+    _values.push_back(value2);
+
 }
 
 }

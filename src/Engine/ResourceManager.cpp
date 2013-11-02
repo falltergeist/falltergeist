@@ -1,4 +1,4 @@
-    /*
+/*
  * Copyright 2012-2013 Falltergeist Developers.
  *
  * This file is part of Falltergeist.

@@ -25,6 +25,7 @@
 #include "src/Engine/Exception.h"
 #include "src/States/StartState.h"
 #include "src/Engine/ResourceManager.h"
+#include "src/VM/VM.h"
 #include "lib/libfalltergeist/libfalltergeist.h"
 
 // Third party includes
@@ -37,11 +38,6 @@ int main(int argc, char *argv[])
     try
     {
         Game * game = new Game();
-        /*
-        auto script = ResourceManager::intFileType("scripts/bonebody.int");
-        script->test();
-        return 0;
-        */
         game->setState(new StartState(game));
         game->run();
         return 0;

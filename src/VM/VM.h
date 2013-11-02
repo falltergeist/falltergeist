@@ -21,8 +21,11 @@
 #define FALLTERGEIST_VM_H
 
 // C++ standard includes
+#include <string>
 
 // Falltergeist includes
+#include "../VM/VMStack.h"
+#include "../../lib/libfalltergeist/libfalltergeist.h"
 
 // Third party includes
 
@@ -31,9 +34,25 @@ namespace Falltergeist
 
 class VM
 {
+protected:
+    libfalltergeist::IntFileType * _script = 0;
+    bool _initialized = false;
+    VMStack _dataStack;
+    VMStack _returnStack;
+    int _programCounter = 0;
+    int _localVarBase = 0;
+    int _scriptVarsBase = 0;
+
+    int _popDataInteger();
+    int _metarule(int type, int value);
+    void _pushDataInteger(int value);
 public:
-    VM();
+    VM(libfalltergeist::IntFileType * script);
+    VM(std::string filename);
     virtual ~VM();
+    void run();
+    void initialize();
+    void call(std::string name);
 };
 
 }
