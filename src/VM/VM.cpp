@@ -20,43 +20,20 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "src/Engine/CrossPlatform.h"
-#include "src/Engine/Game.h"
-#include "src/Engine/Exception.h"
-#include "src/States/StartState.h"
-#include "src/Engine/ResourceManager.h"
-#include "lib/libfalltergeist/libfalltergeist.h"
+#include "../VM/VM.h"
 
 // Third party includes
 
-using namespace Falltergeist;
-
-
-int main(int argc, char *argv[])
+namespace Falltergeist
 {
-    try
-    {
-        Game * game = new Game();
-        /*
-        auto script = ResourceManager::intFileType("scripts/bonebody.int");
-        script->test();
-        return 0;
-        */
-        game->setState(new StartState(game));
-        game->run();
-        return 0;
 
-    }
-    catch(libfalltergeist::Exception &e)
-    {
-        debug(e.message(), DEBUG_CRITICAL);
-        return 1;
-    }
-    catch(Exception &e)
-    {
-        debug(e.message(), DEBUG_CRITICAL);
-        return 1;
-    }
+VM::VM()
+{
+}
+
+VM::~VM()
+{
 
 }
 
+}

@@ -112,7 +112,18 @@ set(SOURCES main.cpp
             src/UI/Slider.cpp
             src/UI/Slider.h
             src/UI/TextArea.cpp
-            src/UI/TextArea.h)
+            src/UI/TextArea.h
+            src/VM/VM.cpp
+            src/VM/VM.h
+            src/VM/VMStack.cpp
+            src/VM/VMStack.h
+            src/VM/VMStackValue.cpp
+            src/VM/VMStackValue.h
+            src/VM/VMStackFloatValue.cpp
+            src/VM/VMStackFloatValue.h
+            src/VM/VMStackIntValue.cpp
+            src/VM/VMStackIntValue.h
+            )
 
 add_definitions (-std=c++11 -Wall)
 set(CMAKE_BUILD_TYPE Debug)
