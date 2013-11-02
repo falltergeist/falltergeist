@@ -17,33 +17,33 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_VMSTACK_H
-#define FALLTERGEIST_VMSTACK_H
-
 // C++ standard includes
-#include <vector>
 
-// libfalltergeist includes
+// Falltergeist includes
+#include "../VM/VMStackPointerValue.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-class VMStackValue;
 
-class VMStack
+VMStackPointerValue::VMStackPointerValue(void* value) : VMStackValue(TYPE_POINTER)
 {
-protected:
-    std::vector<VMStackValue*> _values;
-public:
-    VMStack();
-    ~VMStack();
-    void push(VMStackValue* value);
-    VMStackValue* pop();
-    std::vector<VMStackValue*>* values();
-    int size();
-    void swap();
-};
+    _value = value;
+}
+
+VMStackPointerValue::~VMStackPointerValue()
+{
+}
+
+void VMStackPointerValue::setValue(void* value)
+{
+    _value = value;
+}
+
+void* VMStackPointerValue::value()
+{
+    return _value;
+}
 
 }
-#endif // FALLTERGEIST_VMSTACK_H

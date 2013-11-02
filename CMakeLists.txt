@@ -123,6 +123,8 @@ set(SOURCES main.cpp
             src/VM/VMStackFloatValue.h
             src/VM/VMStackIntValue.cpp
             src/VM/VMStackIntValue.h
+            src/VM/VMStackPointerValue.cpp
+            src/VM/VMStackPointerValue.h
             )
 
 add_definitions (-std=c++11 -Wall)

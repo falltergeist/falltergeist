@@ -63,7 +63,11 @@ void VMStack::swap()
     auto value2 = _values.back(); _values.pop_back();
     _values.push_back(value1);
     _values.push_back(value2);
+}
 
+std::vector<VMStackValue*>* VMStack::values()
+{
+    return &_values;
 }
 
 }

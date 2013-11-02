@@ -31,21 +31,31 @@
 
 namespace Falltergeist
 {
+class VMStackPointerValue;
 
 class VM
 {
 protected:
-    libfalltergeist::IntFileType * _script = 0;
+    libfalltergeist::IntFileType * _script = 0;    
     bool _initialized = false;
     VMStack _dataStack;
     VMStack _returnStack;
-    int _programCounter = 0;
+    unsigned int _programCounter = 0;
     int _localVarBase = 0;
     int _scriptVarsBase = 0;
 
     int _popDataInteger();
-    int _metarule(int type, int value);
     void _pushDataInteger(int value);
+    int _popReturnInteger();
+    void _pushReturnInteger(int value);
+    void* _popDataPointer();
+    void _pushDataPointer(void* value);
+
+    int _metarule(int type, int value);
+    std::string* _createObject(int PID, int position, int elevation, int SID);
+    std::string* _dudeObject();
+    void _addObjectsToInventory(std::string* who, std::string* item, int count);
+
 public:
     VM(libfalltergeist::IntFileType * script);
     VM(std::string filename);

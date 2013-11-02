@@ -25,6 +25,7 @@
 #include "../Engine/Exception.h"
 #include "../VM/VM.h"
 #include "../VM/VMStackIntValue.h"
+#include "../VM/VMStackPointerValue.h"
 
 // Third party includes
 
@@ -62,14 +63,11 @@ void VM::initialize()
 
 void VM::run()
 {
-    unsigned short opcode;
-    VMStackValue* stackValue;
-    VMStackIntValue* stackIntValue;
-
     while (_programCounter != _script->size())
     {
         _script->setPosition(_programCounter);
 
+        unsigned short opcode;
         *_script >> opcode;
         std::cout << "0x" << std::hex << _programCounter << " > ";
         switch (opcode)
@@ -90,21 +88,22 @@ void VM::run()
                 std::cout << "unlock" << std::endl;
                 break;
             case 0x8004:
-                stackValue = _dataStack.pop();
-                if (stackValue->type() == VMStackValue::TYPE_INTEGER)
-                {
-                    stackIntValue = dynamic_cast<VMStackIntValue*>(stackValue);
-                    _programCounter = stackIntValue->value();
-                }
-                else
-                {
-                    throw Exception("VM::opcode[8004] - stack value is not integer");
-                }
                 std::cout << "[*] pop_d => jmp" << std::endl;
+                _programCounter = _popDataInteger();
                 break;
             case 0x8005:
+            {
                 std::cout << "call" << std::endl;
+                auto functionIndex = _popDataInteger();
+                auto paramsNumber = _popDataInteger();
+                if (paramsNumber != 0)
+                {
+                    throw Exception("Call Op - params number != 0");
+                }
+                _programCounter = _script->function(functionIndex);
+                std::cout << "Calling: " << std::hex << _programCounter << std::endl;
                 break;
+            }
             case 0x800c:
                 std::cout << "[*] pop_r => push_d" << std::endl;
                 _dataStack.push(_returnStack.pop());
@@ -144,29 +143,11 @@ void VM::run()
                 break;
             case 0x801c:
                 std::cout << "[*] restpc - pop_r => $pc" << std::endl;
-                stackValue = _returnStack.pop();
-                if (stackValue->type() == VMStackValue::TYPE_INTEGER)
-                {
-                    stackIntValue = dynamic_cast<VMStackIntValue*>(stackValue);
-                    _programCounter = stackIntValue->value();
-                }
-                else
-                {
-                    throw Exception("VM::opcode[801c] - stack value is not integer");
-                }
+                _programCounter = _popReturnInteger();
                 break;
             case 0x8029:
                 std::cout << "[*] popbase - pop_r => $lvar_base" << std::endl;
-                stackValue = _returnStack.pop();
-                if (stackValue->type() == VMStackValue::TYPE_INTEGER)
-                {
-                    stackIntValue = dynamic_cast<VMStackIntValue*>(stackValue);
-                    _localVarBase = stackIntValue->value();
-                }
-                else
-                {
-                    throw Exception("VM::opcode[8029] - stack value is not integer");
-                }
+                _localVarBase = _popReturnInteger();
                 break;
             case 0x802a:
                 std::cout << "[*] clrargs - pop_d while $dstack.size() != $lvar_base" << std::endl;
@@ -199,11 +180,20 @@ void VM::run()
                 break;
             }
             case 0x8031:
-                std::cout << "LVAR[num] = value" << std::endl;
+            {
+                std::cout << "[*] LVAR[num] = value" << std::endl;
+                auto num = _popDataInteger();
+                auto value = _dataStack.pop();
+                _dataStack.values()->at(_localVarBase + num) = value;
                 break;
+            }
             case 0x8032:
-                std::cout << "stack = LVAR[num]" << std::endl;
+            {
+                std::cout << "[*] stack = LVAR[num]" << std::endl;
+                auto num = _popDataInteger();
+                _dataStack.push(_dataStack.values()->at(_localVarBase + num));
                 break;
+            }
             case 0x8033:
                 std::cout << "eq (pop_d a, pop_d b)  a == b ? push_d 1 : push_d 0" << std::endl;
                 break;
@@ -247,8 +237,12 @@ void VM::run()
                 std::cout << "stack:=NOT(p1) - logical not" << std::endl;
                 break;
             case 0x8046:
-                std::cout << " - value (change sign)" << std::endl;
+            {
+                std::cout << "[*] - value (change sign)" << std::endl;
+                auto value = _popDataInteger();
+                _pushDataInteger(-value);
                 break;
+            }
             case 0x80a9:
                 std::cout << "void override_map_start(int x, int y, int elev, int rot)" << std::endl;
                 break;
@@ -259,8 +253,15 @@ void VM::run()
                 std::cout << "int move_to(ObjectPtr obj, int tile_num, int elev)" << std::endl;
                 break;
             case 0x80b7:
-                std::cout << "ObjectPtr create_object_sid(int pid, int tile_num, int elev, int sid)" << std::endl;
+            {
+                std::cout << "[*] ObjectPtr create_object_sid(int pid, int tile_num, int elev, int sid)" << std::endl;
+                auto SID = _popDataInteger();
+                auto elevation = _popDataInteger();
+                auto position = _popDataInteger();
+                auto PID = _popDataInteger();
+                _pushDataPointer(_createObject(PID, position, elevation, SID));
                 break;
+            }
             case 0x80b8:
                 std::cout << "pop_d pointer; display_msg(pointer) " << std::endl;
                 break;
@@ -274,7 +275,8 @@ void VM::run()
                 std::cout << "stack:=source_obj" << std::endl;
                 break;
             case 0x80bf:
-                std::cout << "stack:=dude_obj" << std::endl;
+                std::cout << "[*] stack:=dude_obj" << std::endl;
+                _pushDataPointer(_dudeObject());
                 break;
             case 0x80c1:
                 std::cout << "value = local_var(index) " << std::endl;
@@ -321,8 +323,14 @@ void VM::run()
                 break;
             }
             case 0x8116:
-                std::cout << "void add_mult_objs_to_inven(ObjectPtr who, ObjectPtr item, int count)" << std::endl;
+            {
+                std::cout << "[*] void add_mult_objs_to_inven(ObjectPtr who, ObjectPtr item, int count)" << std::endl;
+                auto count = _popDataInteger();
+                auto item = _popDataPointer();
+                auto who = _popDataPointer();
+                _addObjectsToInventory((std::string*)who, (std::string*)item, count);
                 break;
+            }
             case 0x8118:
                 std::cout << "int get_month" << std::endl;
                 break;
@@ -350,14 +358,52 @@ int VM::_popDataInteger()
     if (stackValue->type() == VMStackValue::TYPE_INTEGER)
     {
         auto stackIntValue = dynamic_cast<VMStackIntValue*>(stackValue);
-        return stackIntValue->value();
+        auto value = stackIntValue->value();
+        std::cout << ">Pop integer: " << std::dec << value << std::endl;
+        return value;
     }
     throw Exception("VM::_popDataInteger() - stack value is not integer");
 }
 
 void VM::_pushDataInteger(int value)
 {
+    std::cout << ">Push integer: " << std::dec << value << std::endl;
     _dataStack.push(new VMStackIntValue(value));
+}
+
+void* VM::_popDataPointer()
+{
+    auto stackValue = _dataStack.pop();
+    if (stackValue->type() == VMStackValue::TYPE_POINTER)
+    {
+        auto stackIntValue = dynamic_cast<VMStackPointerValue*>(stackValue);
+        auto value = stackIntValue->value();
+        std::cout << ">Pop pointer: " <<  value << std::endl;
+        return value;
+    }
+    throw Exception("VM::_popDataPointer() - stack value is not a pointer");
+}
+
+void VM::_pushDataPointer(void* value)
+{
+    std::cout << ">Push pointer: " <<  value << std::endl;
+    _dataStack.push(new VMStackPointerValue(value));
+}
+
+int VM::_popReturnInteger()
+{
+    auto stackValue = _returnStack.pop();
+    if (stackValue->type() == VMStackValue::TYPE_INTEGER)
+    {
+        auto stackIntValue = dynamic_cast<VMStackIntValue*>(stackValue);
+        return stackIntValue->value();
+    }
+    throw Exception("VM::_popReturnInteger() - stack value is not integer");
+}
+
+void VM::_pushReturnInteger(int value)
+{
+    _returnStack.push(new VMStackIntValue(value));
 }
 
 int VM::_metarule(int type, int value)
@@ -370,6 +416,24 @@ int VM::_metarule(int type, int value)
             return 1;
     }
     throw Exception("VM::_metarule() - unknown type: " + std::to_string(type));
+}
+
+std::string* VM::_createObject(int PID, int position, int elevation, int SID)
+{
+    return new std::string("I am new object"); // just for testing
+}
+
+std::string* VM::_dudeObject()
+{
+    return new std::string("I am Dude object");
+}
+
+void VM::_addObjectsToInventory(std::string* who, std::string* item, int count)
+{
+    std::cout << "Adding objects to inventory" << std::endl;
+    std::cout << *who << std::endl;
+    std::cout << *item << std::endl;
+    std::cout << count << std::endl;
 }
 
 }
