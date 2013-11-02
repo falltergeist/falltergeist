@@ -27,6 +27,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Player.h"
 #include "../Engine/ResourceManager.h"
+#include "../Engine/Location.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Mouse.h"
 #include "../Engine/State.h"
@@ -39,8 +40,10 @@
 namespace Falltergeist
 {
 
-Game::Game(unsigned int width, unsigned int height, unsigned int bpp)
+Game& Game::getInstance()
 {
+    static Game instance;
+
     debug("[GAME] - " + CrossPlatform::getVersion(), DEBUG_INFO);
     debug("[GAME] - Opensource Fallout 2 game engine", DEBUG_INFO);
 
@@ -50,12 +53,13 @@ Game::Game(unsigned int width, unsigned int height, unsigned int bpp)
     SDL_WM_SetCaption(caption.c_str(), 0);
     putenv(strdup("SDL_VIDEO_CENTERED=1"));
 
-    _resourceManager = new ResourceManager();
-    _screen = new Screen(width, height,bpp);
-    _mouse = new Mouse();
-    _fpsCounter = new FpsCounter();
-    _quit = false;
-    _player = 0;
+    instance._resourceManager = new ResourceManager();
+    instance._screen = new Screen(640, 480, 32);
+    instance._mouse = new Mouse();
+    instance._fpsCounter = new FpsCounter();
+    instance._quit = false;
+    instance._player = 0;
+    return instance;
 }
 
 Game::~Game()
@@ -204,6 +208,16 @@ Player* Game::player()
 Mouse* Game::mouse()
 {
     return _mouse;
+}
+
+void Game::setLocation(Location* location)
+{
+    _location = location;
+}
+
+Location* Game::location()
+{
+    return _location;
 }
 
 }

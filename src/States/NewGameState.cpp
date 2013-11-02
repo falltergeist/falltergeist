@@ -36,7 +36,7 @@
 namespace Falltergeist
 {
 
-NewGameState::NewGameState(Game * game) : State(game)
+NewGameState::NewGameState() : State()
 {
 }
 
@@ -198,19 +198,19 @@ std::string NewGameState::statToString(unsigned int stat)
 void NewGameState::onEditButtonClick(Event* event)
 {
     _game->setPlayer(_characters.at(_selectedCharacter));
-    _game->pushState(new PlayerEditState(_game));
+    _game->pushState(new PlayerEditState());
 }
 
 void NewGameState::onCreateButtonClick(Event* event)
 {
     _game->setPlayer(new Player(ResourceManager::gcdFileType("premade/blank.gcd")));
-    _game->pushState(new PlayerEditState(_game));
+    _game->pushState(new PlayerEditState());
 }
 
 void NewGameState::onBeginGameButtonClick(Event* event)
 {
     _game->setPlayer(_characters.at(_selectedCharacter));
-    _game->setState(new LocationState(_game));
+    _game->setState(new LocationState());
 }
 
 }

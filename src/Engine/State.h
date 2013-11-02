@@ -41,7 +41,7 @@ protected:
     bool _fullscreen = true;
     bool _initialized = false;
 public:
-    State(Game* game);
+    State();
     virtual ~State();
 
     void add(Surface* surface);

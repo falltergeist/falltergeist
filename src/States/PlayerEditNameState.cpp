@@ -35,7 +35,7 @@
 namespace Falltergeist
 {
 
-PlayerEditNameState::PlayerEditNameState(Game * game) : State(game)
+PlayerEditNameState::PlayerEditNameState() : State()
 {
 }
 

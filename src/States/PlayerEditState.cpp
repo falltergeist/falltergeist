@@ -38,7 +38,7 @@
 namespace Falltergeist
 {
 
-PlayerEditState::PlayerEditState(Game * game) : State(game)
+PlayerEditState::PlayerEditState() : State()
 {
     _labels       = new std::map<std::string, TextArea *>;
     _counters     = new std::map<std::string, BigCounter *>;
@@ -481,7 +481,7 @@ void PlayerEditState::onButtonClick(Event * event)
                 _selectedImage = _images->at(name);
                 if (!_game->player()->traitToggle(number - 1))
                 {
-                    PlayerEditAlertState * state = new PlayerEditAlertState(_game);
+                    PlayerEditAlertState * state = new PlayerEditAlertState();
                     libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
                     std::string text = msg->message(148)->text() + "\n" + msg->message(149)->text();
                     state->setMessage(text);
@@ -496,7 +496,7 @@ void PlayerEditState::onButtonClick(Event * event)
                 _selectedImage = _images->at(name);
                 if (!_game->player()->skillToggle(number - 1))
                 {
-                    PlayerEditAlertState * state = new PlayerEditAlertState(_game);
+                    PlayerEditAlertState * state = new PlayerEditAlertState();
                     libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
                     std::string text = msg->message(140)->text() + "\n" + msg->message(141)->text();
                     state->setMessage(text);
@@ -549,17 +549,17 @@ void PlayerEditState::onMaskClick(Event * event)
 
 void PlayerEditState::onNameButtonClick(Event * event)
 {
-    _game->pushState(new PlayerEditNameState(_game));
+    _game->pushState(new PlayerEditNameState());
 }
 
 void PlayerEditState::onAgeButtonClick(Event * event)
 {
-    _game->pushState(new PlayerEditAgeState(_game));
+    _game->pushState(new PlayerEditAgeState());
 }
 
 void PlayerEditState::onGenderButtonClick(Event * event)
 {
-    _game->pushState(new PlayerEditGenderState(_game));
+    _game->pushState(new PlayerEditGenderState());
 }
 
 void PlayerEditState::onBackButtonClick(Event *event)
@@ -569,7 +569,7 @@ void PlayerEditState::onBackButtonClick(Event *event)
 
 void PlayerEditState::onDoneButtonClick(Event * event)
 {
-    _game->setState(new LocationState(_game));
+    _game->setState(new LocationState());
 }
 
 }

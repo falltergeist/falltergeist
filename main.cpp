@@ -18,6 +18,7 @@
  */
 
 // C++ standard includes
+#include <iostream>
 
 // Falltergeist includes
 #include "src/Engine/CrossPlatform.h"
@@ -37,14 +38,14 @@ int main(int argc, char *argv[])
 {
     try
     {
-        Game * game = new Game();
+        auto game = &Game::getInstance();
         /*
         auto script = new VM("scripts/artemple.int");
         script->initialize();
         script->call("map_update_p_proc");
         return 0;
         */
-        game->setState(new StartState(game));
+        game->setState(new StartState());
         game->run();
         return 0;
 

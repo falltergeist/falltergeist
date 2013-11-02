@@ -30,7 +30,6 @@
 
 namespace Falltergeist
 {
-class Game;
 class Location;
 class Animation;
 class InteractiveSurface;
@@ -49,7 +48,7 @@ protected:
     unsigned int _scrollTicks = 0;
     void _drawHexagonalGrid();
 public:
-    LocationState(Game * game);
+    LocationState();
     ~LocationState();
     virtual void init();
     virtual void think();

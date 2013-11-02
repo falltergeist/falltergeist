@@ -31,7 +31,6 @@
 
 namespace Falltergeist
 {
-class Game;
 class TextArea;
 
 class PlayerEditNameState : public State
@@ -42,7 +41,7 @@ protected:
     Surface * _cursor;
     std::map<char,char> * _keyCodes;
 public:
-    PlayerEditNameState(Game * game);
+    PlayerEditNameState();
     ~PlayerEditNameState();
     void init();
     void think();

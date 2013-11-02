@@ -48,7 +48,7 @@ protected:
     TextArea* _playerName = 0;
     unsigned char _selectedCharacter = 0;
 public:    
-    NewGameState(Game* game);
+    NewGameState();
     virtual ~NewGameState();
     void changeCharacter();
     void init();

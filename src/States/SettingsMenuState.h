@@ -43,7 +43,7 @@ protected:
     IniFileSection _getSettings();
     TextArea* _addLabel(std::string name, TextArea* label);
 public:
-    SettingsMenuState(Game* game);
+    SettingsMenuState();
     virtual ~SettingsMenuState();
     virtual void init();
     virtual void think();

@@ -39,7 +39,7 @@
 namespace Falltergeist
 {
 
-LocationState::LocationState(Game * game) : State(game)
+LocationState::LocationState() : State()
 {
     _hexCursor = new Surface(ResourceManager::surface("art/intrface/msef000.frm"));
     _hexCursor->setXOffset(- ceil(_hexCursor->width()/2));
@@ -48,6 +48,7 @@ LocationState::LocationState(Game * game) : State(game)
 
 LocationState::~LocationState()
 {
+    _game->setLocation(0);
     delete _hexCursor;
 }
 
@@ -56,6 +57,7 @@ void LocationState::init()
     State::init();
 
     _location = new Location(_game->resourceManager()->mapFileType("maps/artemple.map"));
+    _game->setLocation(_location);
     _background = new InteractiveSurface(_location->tilesBackground());
     _background->onLeftButtonClick((EventHandler) &LocationState::onBackgroundClick);
     _background->onKeyboardRelease((EventHandler) &LocationState::onKeyboardRelease);

@@ -38,6 +38,7 @@ class ResourceManager;
 class Player;
 class FpsCounter;
 class Mouse;
+class Location;
 
 class Game
 {
@@ -49,13 +50,18 @@ protected:
     Player* _player;
     Screen* _screen;
     Mouse* _mouse;
+    Location* _location = 0;
     FpsCounter * _fpsCounter;
     bool _quit;
     SDL_Event _event;
 
+private:
+    Game() {}
+    Game(Game const&);
+    void operator=(Game const&);
 public:
-    Game(unsigned int width = 640, unsigned int height = 480, unsigned int bpp = 32);
     ~Game();
+    static Game& getInstance();
 
     Screen * screen();
 
@@ -70,6 +76,8 @@ public:
     void setPlayer(Player * player);
     Player * player();
     Mouse * mouse();
+    void setLocation(Location* location);
+    Location* location();
 };
 
 }

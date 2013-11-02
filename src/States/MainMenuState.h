@@ -33,7 +33,7 @@ namespace Falltergeist
 class MainMenuState : public State
 {
 public:
-    MainMenuState(Game * game);
+    MainMenuState();
     virtual ~MainMenuState();
     virtual void init();
     virtual void think();

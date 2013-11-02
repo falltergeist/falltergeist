@@ -35,7 +35,6 @@
 
 namespace Falltergeist
 {
-class Game;
     
 class PlayerEditState : public State
 {
@@ -63,7 +62,7 @@ protected:
     void _addImage(std::string name, Surface * image);
 
 public:
-    PlayerEditState(Game * game);
+    PlayerEditState();
     void init();
     void think();
     virtual ~PlayerEditState();

@@ -36,7 +36,7 @@
 namespace Falltergeist
 {
 
-MainMenuState::MainMenuState(Game * game) : State(game)
+MainMenuState::MainMenuState() : State()
 {
 }
 
@@ -132,12 +132,12 @@ void MainMenuState::onExitButtonClick()
 
 void MainMenuState::onNewGameButtonClick()
 {
-    _game->pushState(new NewGameState(_game));
+    _game->pushState(new NewGameState());
 }
 
 void MainMenuState::onSettingsButtonClick()
 {
-    _game->pushState(new SettingsMenuState(_game));
+    _game->pushState(new SettingsMenuState());
 }
 
 

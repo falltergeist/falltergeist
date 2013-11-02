@@ -30,15 +30,14 @@
 
 namespace Falltergeist
 {
-class Game;
 class BigCounter;
 
 class PlayerEditAgeState : public State
 {
 protected:
-    BigCounter * _counter;
+    BigCounter* _counter;
 public:
-    PlayerEditAgeState(Game * game);
+    PlayerEditAgeState();
     void init();
     ~PlayerEditAgeState();
     void onIncButtonClick(Event * event);

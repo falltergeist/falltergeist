@@ -30,7 +30,6 @@
 
 namespace Falltergeist
 {
-class Game;
 class SurfaceSet;
 
 class PlayerEditGenderState : public State
@@ -39,7 +38,7 @@ protected:
     SurfaceSet * _maleImage;
     SurfaceSet * _femaleImage;
 public:
-    PlayerEditGenderState(Game * game);
+    PlayerEditGenderState();
     void init();
     void onFemaleButtonPress(Event * event);
     void onMaleButtonPress(Event * event);

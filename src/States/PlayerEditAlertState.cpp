@@ -33,7 +33,7 @@
 namespace Falltergeist
 {
 
-PlayerEditAlertState::PlayerEditAlertState(Game * game) : State(game)
+PlayerEditAlertState::PlayerEditAlertState() : State()
 {
 }
 

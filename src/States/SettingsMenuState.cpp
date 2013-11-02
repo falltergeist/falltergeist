@@ -36,7 +36,7 @@
 namespace Falltergeist
 {
 
-SettingsMenuState::SettingsMenuState(Game* game) : State(game)
+SettingsMenuState::SettingsMenuState() : State()
 {
 }
 

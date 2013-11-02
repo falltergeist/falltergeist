@@ -34,7 +34,7 @@
 namespace Falltergeist
 {
 
-PlayerEditGenderState::PlayerEditGenderState(Game * game) : State(game)
+PlayerEditGenderState::PlayerEditGenderState() : State()
 {
 }
 

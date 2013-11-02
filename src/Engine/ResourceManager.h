@@ -53,6 +53,7 @@ public:
     static libfalltergeist::AafFileType* aafFileType(std::string filename);
     static libfalltergeist::GcdFileType* gcdFileType(std::string filename);
     static libfalltergeist::IntFileType* intFileType(std::string filename);
+    static libfalltergeist::IntFileType* intFileType(unsigned int SID);
     static libfalltergeist::MapFileType* mapFileType(std::string filename);
     static libfalltergeist::MsgFileType* msgFileType(std::string filename);
     static libfalltergeist::BioFileType* bioFileType(std::string filename);

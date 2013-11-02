@@ -31,11 +31,12 @@
 
 namespace Falltergeist
 {
-class VMStackPointerValue;
+class Game;
 
 class VM
 {
 protected:
+    Game* _game = 0;
     libfalltergeist::IntFileType * _script = 0;    
     bool _initialized = false;
     VMStack _dataStack;
@@ -64,8 +65,8 @@ protected:
     void _setGlobalVar(int num, int value);
     int _rand(int min, int max);
 public:
-    VM(libfalltergeist::IntFileType * script);
-    VM(std::string filename);
+    VM(Game* _game, libfalltergeist::IntFileType * script);
+    VM(Game* _game, std::string filename);
     virtual ~VM();
     void run();
     void initialize();

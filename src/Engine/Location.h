@@ -57,7 +57,6 @@ protected:
 
 public:
     enum Tile { TILE_WIDTH = 80, TILE_HEIGHT = 36 };
-
     Location(libfalltergeist::MapFileType* mapFile);
     ~Location();
     void init();

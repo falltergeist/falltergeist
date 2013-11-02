@@ -33,13 +33,15 @@
 namespace Falltergeist
 {
 
-VM::VM(libfalltergeist::IntFileType* script)
+VM::VM(Game* game, libfalltergeist::IntFileType* script)
 {
+    _game = game;
     _script = script;
 }
 
-VM::VM(std::string filename)
+VM::VM(Game* game, std::string filename)
 {
+    _game = game;
     _script = ResourceManager::intFileType(filename);
 }
 

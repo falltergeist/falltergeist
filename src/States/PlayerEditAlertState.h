@@ -31,14 +31,13 @@
 
 namespace Falltergeist
 {
-class Game;
 
 class PlayerEditAlertState : public State
 {
 protected:
     std::string _message;
 public:
-    PlayerEditAlertState(Game * game);
+    PlayerEditAlertState();
     ~PlayerEditAlertState();
     void setMessage(std::string message);
     void init();

@@ -36,7 +36,7 @@ class StartState : public State
 protected:
     unsigned int _splashTicks = 0;
 public:
-    StartState(Game * game);
+    StartState();
     virtual ~StartState();
     virtual void think();
     virtual void init();

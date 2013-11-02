@@ -31,8 +31,9 @@
 namespace Falltergeist
 {
 
-State::State(Game* game) : _game(game)
+State::State()
 {
+    _game = &Game::getInstance();
 }
 
 State::~State()
