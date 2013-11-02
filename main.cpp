@@ -38,6 +38,12 @@ int main(int argc, char *argv[])
     try
     {
         Game * game = new Game();
+        /*
+        auto script = new VM("scripts/artemple.int");
+        script->initialize();
+        script->call("map_update_p_proc");
+        return 0;
+        */
         game->setState(new StartState(game));
         game->run();
         return 0;

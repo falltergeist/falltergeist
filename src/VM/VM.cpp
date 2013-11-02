@@ -25,6 +25,7 @@
 #include "../Engine/Exception.h"
 #include "../VM/VM.h"
 #include "../VM/VMStackIntValue.h"
+#include "../VM/VMStackFloatValue.h"
 #include "../VM/VMStackPointerValue.h"
 
 // Third party includes
@@ -50,8 +51,10 @@ VM::~VM()
 void VM::call(std::string name)
 {
     std::cout << std::endl << "CALLED: " << name << std::endl;
+    _pushReturnInteger(0);
     _programCounter = _script->function(name);
     run();
+    std::cout << "Function ended" << std::endl;
 }
 
 void VM::initialize()
@@ -65,11 +68,12 @@ void VM::run()
 {
     while (_programCounter != _script->size())
     {
-        _script->setPosition(_programCounter);
+        if (_programCounter == 0 && _initialized) return;
 
+        _script->setPosition(_programCounter);
         unsigned short opcode;
         *_script >> opcode;
-        std::cout << "0x" << std::hex << _programCounter << " > ";
+        std::cout << "0x" << std::hex << _programCounter << " [" << opcode << "] ";
         switch (opcode)
         {
             case 0xC001:
@@ -88,19 +92,21 @@ void VM::run()
                 std::cout << "unlock" << std::endl;
                 break;
             case 0x8004:
-                std::cout << "[*] pop_d => jmp" << std::endl;
+                std::cout << "[*] void jmp(int addr)" << std::endl;
                 _programCounter = _popDataInteger();
                 break;
             case 0x8005:
             {
-                std::cout << "call" << std::endl;
+                std::cout << "[?] call" << std::endl;
                 auto functionIndex = _popDataInteger();
                 auto paramsNumber = _popDataInteger();
                 if (paramsNumber != 0)
                 {
                     throw Exception("Call Op - params number != 0");
                 }
+                _pushReturnInteger(_programCounter);
                 _programCounter = _script->function(functionIndex);
+
                 std::cout << "Calling: " << std::hex << _programCounter << std::endl;
                 break;
             }
@@ -118,11 +124,20 @@ void VM::run()
                 return;
                 break;
             case 0x8012:
-                std::cout << "pop_d number; value = SVAR[number]; push_d value;" << std::endl;
+            {
+                std::cout << "[*] value = SVAR[number];" << std::endl;
+                auto number = _popDataInteger();
+                _dataStack.push(_dataStack.values()->at(_scriptVarsBase + number));
                 break;
+            }
             case 0x8013:
-                std::cout << "pop_d number, pop_d value, SVAR[num] = value" << std::endl;
+            {
+                std::cout << "[*] SVAR[num] = value" << std::endl;
+                auto number = _popDataInteger();
+                auto value = _dataStack.pop();
+                _dataStack.values()->at(_scriptVarsBase + number) = value;
                 break;
+            }
             case 0x8016:
                 std::cout << "exportv" << std::endl;
                 break;
@@ -151,16 +166,21 @@ void VM::run()
                 break;
             case 0x802a:
                 std::cout << "[*] clrargs - pop_d while $dstack.size() != $lvar_base" << std::endl;
-                while (_dataStack.size() != _localVarBase) _dataStack.pop();
+                std::cout << "lvar_base: " << _localVarBase << " | size: " << _dataStack.size() << std::endl;
+                while (_dataStack.size() != _localVarBase)
+                {
+                    _dataStack.pop();
+                }
                 break;
             case 0x802b:
                 std::cout << "[*] push_r $lvar_base" << std::endl;
-                std::cout << "$lvar_base = " << std::dec << _localVarBase << std::endl;
-                _returnStack.push(new VMStackIntValue(_localVarBase));
+                //std::cout << "$lvar_base = " << std::dec << _localVarBase << std::endl;
+                _pushReturnInteger(_localVarBase);
+                _localVarBase = _dataStack.size();
                 break;
             case 0x802c:
                 std::cout << "[*] $dstack.size() => $svar_base" << std::endl;
-                std::cout << "$dstack.size() = " << std::dec << _dataStack.size() << std::endl;
+                //std::cout << "$dstack.size() = " << std::dec << _dataStack.size() << std::endl;
                 _scriptVarsBase = _dataStack.size();
                 break;
             case 0x802f:
@@ -195,44 +215,189 @@ void VM::run()
                 break;
             }
             case 0x8033:
-                std::cout << "eq (pop_d a, pop_d b)  a == b ? push_d 1 : push_d 0" << std::endl;
+            {
+                std::cout << "[*] eq ==" << std::endl;
+                auto b = _popDataInteger();
+                auto a = _popDataInteger();
+                _pushDataInteger(a == b ? 1 : 0);
                 break;
+            }
             case 0x8034:
-                std::cout << "neq !=" << std::endl;
+            {
+                std::cout << "[*] neq !=" << std::endl;
+                auto b = _popDataInteger();
+                auto a = _popDataInteger();
+                _pushDataInteger(a != b ? 1 : 0);
                 break;
+            }
             case 0x8035:
-                std::cout << "leq <=" << std::endl;
+            {
+                std::cout << "[*] leq <=" << std::endl;
+                auto b = _popDataInteger();
+                auto a = _popDataInteger();
+                _pushDataInteger(a <= b ? 1 : 0);
                 break;
+            }
             case 0x8036:
-                std::cout << "geq >=" << std::endl;
+            {
+                std::cout << "[*] geq >=" << std::endl;
+                auto b = _popDataInteger();
+                auto a = _popDataInteger();
+                _pushDataInteger(a >= b ? 1 : 0);
                 break;
+            }
             case 0x8037:
-                std::cout << "lt <" << std::endl;
+            {
+                std::cout << "[*] lt <" << std::endl;
+                auto b = _popDataInteger();
+                auto a = _popDataInteger();
+                _pushDataInteger(a < b ? 1 : 0);
                 break;
+            }
             case 0x8038:
-                std::cout << "gt >" << std::endl;
+            {
+                std::cout << "[*] gt >" << std::endl;
+                auto b = _popDataInteger();
+                auto a = _popDataInteger();
+                _pushDataInteger(a > b ? 1 : 0);
                 break;
+            }
             case 0x8039:
-                std::cout << "plus +" << std::endl;
+            {
+                std::cout << "[*] plus +" << std::endl;
+                auto b = _dataStack.pop();
+                auto a = _dataStack.pop();
+                switch (a->type())
+                {
+                    case VMStackValue::TYPE_POINTER: // string
+                    {
+                        auto p1 = dynamic_cast<VMStackPointerValue*>(a);
+                        auto s1 = (std::string*) p1->value();
+                        switch(b->type())
+                        {
+                            case VMStackValue::TYPE_POINTER: // string
+                            {
+                                auto p2 = dynamic_cast<VMStackPointerValue*>(b);
+                                auto s2 = (std::string*) p2->value();
+                                _pushDataPointer(new std::string(*s1 + *s2));
+                                break;
+                            }
+                            case VMStackValue::TYPE_FLOAT:
+                            {
+                                auto p2 = dynamic_cast<VMStackFloatValue*>(b);
+                                auto s2 = std::to_string(p2->value());
+                                _pushDataPointer(new std::string(*s1 + s2));
+                                break;
+                            }
+                            case VMStackValue::TYPE_INTEGER:
+                            {
+                                auto p2 = dynamic_cast<VMStackIntValue*>(b);
+                                auto s2 = std::to_string(p2->value());
+                                _pushDataPointer(new std::string(*s1 + s2));
+                                break;
+                            }
+                        }
+
+                        break;
+                    }
+                    case VMStackValue::TYPE_INTEGER:
+                    {
+                        auto p1 = dynamic_cast<VMStackIntValue*>(a);
+                        switch (b->type())
+                        {
+                            case VMStackValue::TYPE_INTEGER:
+                            {
+                                auto p2 = dynamic_cast<VMStackIntValue*>(b);
+                                _pushDataInteger(p1->value() + p2->value());
+                                break;
+                            }
+                            case VMStackValue::TYPE_FLOAT:
+                            {
+                                auto p2 = dynamic_cast<VMStackFloatValue*>(b);
+                                _pushDataFloat(p1->value() + p2->value());
+                                break;
+                            }
+                            default:
+                            {
+                                throw Exception("VM::opcode PLUS - second argument is a pointer");
+                            }
+                        }
+                        break;
+                    }
+                    case VMStackValue::TYPE_FLOAT:
+                    {
+                        auto p1 = dynamic_cast<VMStackFloatValue*>(a);
+                        switch (b->type())
+                        {
+                            case VMStackValue::TYPE_INTEGER:
+                            {
+                                auto p2 = dynamic_cast<VMStackIntValue*>(b);
+                                _pushDataFloat(p1->value() + p2->value());
+                                break;
+                            }
+                            case VMStackValue::TYPE_FLOAT:
+                            {
+                                auto p2 = dynamic_cast<VMStackFloatValue*>(b);
+                                _pushDataFloat(p1->value() + p2->value());
+                                break;
+                            }
+                            default:
+                            {
+                                throw Exception("VM::opcode PLUS - second argument is a pointer");
+                            }
+                        }
+                        break;
+                    }
+                }
                 break;
+            }
             case 0x803a:
-                std::cout << "minus -" << std::endl;
+            {
+                std::cout << "[*] minus -" << std::endl;
+                auto b = _popDataInteger();
+                auto a = _popDataInteger();
+                _pushDataInteger(a-b);
                 break;
+            }
             case 0x803b:
                 std::cout << "mult *" << std::endl;
                 break;
             case 0x803c:
-                std::cout << "div /" << std::endl;
+            {
+                std::cout << "[*] div /" << std::endl;
+                auto b = _dataStack.pop();
+                auto a = _dataStack.pop();
+                auto p1 = dynamic_cast<VMStackIntValue*>(a);
+                auto p2 = dynamic_cast<VMStackIntValue*>(b);
+                _pushDataInteger(p1->value()/p2->value());
                 break;
+            }
             case 0x803d:
-                std::cout << "mod %" << std::endl;
+            {
+                std::cout << "[*] mod %" << std::endl;
+                auto b = _dataStack.pop();
+                auto a = _dataStack.pop();
+                auto p1 = dynamic_cast<VMStackIntValue*>(a);
+                auto p2 = dynamic_cast<VMStackIntValue*>(b);
+                _pushDataInteger(p1->value()%p2->value());
                 break;
+            }
             case 0x803e:
-                std::cout << "AND" << std::endl;
+            {
+                std::cout << "[*] AND" << std::endl;
+                auto b = _popDataInteger();
+                auto a = _popDataInteger();
+                _pushDataInteger(a & b);
                 break;
+            }
             case 0x803f:
+            {
                 std::cout << "OR" << std::endl;
+                auto b = _popDataInteger();
+                auto a = _popDataInteger();
+                _pushDataInteger(a | b);
                 break;
+            }
             case 0x8045:
                 std::cout << "stack:=NOT(p1) - logical not" << std::endl;
                 break;
@@ -244,11 +409,23 @@ void VM::run()
                 break;
             }
             case 0x80a9:
-                std::cout << "void override_map_start(int x, int y, int elev, int rot)" << std::endl;
+            {
+                std::cout << "[*]void override_map_start(int x, int y, int elev, int rot)" << std::endl;
+                auto direction = _popDataInteger();
+                auto elevation = _popDataInteger();
+                auto y = _popDataInteger();
+                auto x = _popDataInteger();
+                _overrideMapStart(x, y, elevation, direction);
                 break;
+            }
             case 0x80b4:
-                std::cout << "pop_max, pop_min, value = rand (min, max), push_d value;" << std::endl;
+            {
+                std::cout << "[*] int = rand (min, max)" << std::endl;
+                auto max = _popDataInteger();
+                auto min = _popDataInteger();
+                _pushDataInteger(_rand(min, max));
                 break;
+            }
             case 0x80b6:
                 std::cout << "int move_to(ObjectPtr obj, int tile_num, int elev)" << std::endl;
                 break;
@@ -285,11 +462,19 @@ void VM::run()
                 std::cout << "set_local_var(index, value)" << std::endl;
                 break;
             case 0x80c6:
-                std::cout << "void set_global_var(unsigned int var_index, int value)" << std::endl;
+            {
+                std::cout << "[*] GVAR[num] = value" << std::endl;
+                auto value = _popDataInteger();
+                auto num = _popDataInteger();
+                _setGlobalVar(num, value);
                 break;
+            }
             case 0x80c7:
-                std::cout << "int script_action()" << std::endl;
+            {
+                std::cout << "[*] int script_action()" << std::endl;
+                _pushDataInteger(21);
                 break;
+            }
             case 0x80c8:
                 std::cout << "stack:=obj_type(p1)" << std::endl;
                 break;
@@ -303,14 +488,21 @@ void VM::run()
                 std::cout << "wm_area_set_pos(p3,p2,p1)" << std::endl;
                 break;
             case 0x80e9:
-                std::cout << "void set_light_level(int level)" << std::endl;
+            {
+                std::cout << "[*] void set_light_level(int level)" << std::endl;
+                auto level = _popDataInteger();
+                _setLightLevel(level);
                 break;
+            }
             case 0x80ef:
                 std::cout << "void critter_dmg(ObjectPtr who, int dmg_amount, int dmg_type)" << std::endl;
                 break;
             case 0x80f6:
-                std::cout << "int game_time_hour" << std::endl;
+            {
+                std::cout << "[*] int game_time_hour" << std::endl;
+                _pushDataInteger(_getTime());
                 break;
+            }
             case 0x8105:
                 std::cout << "pop_d num, pop_d list, char* pointer = message_str(int msg_list, int msg_num); push_d pointer;" << std::endl;
                 break;
@@ -332,7 +524,8 @@ void VM::run()
                 break;
             }
             case 0x8118:
-                std::cout << "int get_month" << std::endl;
+                std::cout << "[*] int get_month" << std::endl;
+                _pushDataInteger(_getMonth());
                 break;
             case 0x814b:
                 std::cout << "ObjectPtr party_member_obj(int pid)" << std::endl;
@@ -359,7 +552,7 @@ int VM::_popDataInteger()
     {
         auto stackIntValue = dynamic_cast<VMStackIntValue*>(stackValue);
         auto value = stackIntValue->value();
-        std::cout << ">Pop integer: " << std::dec << value << std::endl;
+        std::cout << "        >Pop integer: " << std::dec << value << std::endl;
         return value;
     }
     throw Exception("VM::_popDataInteger() - stack value is not integer");
@@ -367,8 +560,27 @@ int VM::_popDataInteger()
 
 void VM::_pushDataInteger(int value)
 {
-    std::cout << ">Push integer: " << std::dec << value << std::endl;
+    std::cout << "        >Push integer: " << std::dec << value << std::endl;
     _dataStack.push(new VMStackIntValue(value));
+}
+
+float VM::_popDataFloat()
+{
+    auto stackValue = _dataStack.pop();
+    if (stackValue->type() == VMStackValue::TYPE_FLOAT)
+    {
+        auto stackIntValue = dynamic_cast<VMStackFloatValue*>(stackValue);
+        auto value = stackIntValue->value();
+        std::cout << "        >Pop float: " << std::dec << value << std::endl;
+        return value;
+    }
+    throw Exception("VM::_popDataFloat() - stack value is not float");
+}
+
+void VM::_pushDataFloat(float value)
+{
+    std::cout << "        >Push float: " << std::dec << value << std::endl;
+    _dataStack.push(new VMStackFloatValue(value));
 }
 
 void* VM::_popDataPointer()
@@ -378,7 +590,7 @@ void* VM::_popDataPointer()
     {
         auto stackIntValue = dynamic_cast<VMStackPointerValue*>(stackValue);
         auto value = stackIntValue->value();
-        std::cout << ">Pop pointer: " <<  value << std::endl;
+        std::cout << "        >Pop pointer: " <<  value << std::endl;
         return value;
     }
     throw Exception("VM::_popDataPointer() - stack value is not a pointer");
@@ -386,7 +598,7 @@ void* VM::_popDataPointer()
 
 void VM::_pushDataPointer(void* value)
 {
-    std::cout << ">Push pointer: " <<  value << std::endl;
+    std::cout << "        >Push pointer: " <<  value << std::endl;
     _dataStack.push(new VMStackPointerValue(value));
 }
 
@@ -396,6 +608,7 @@ int VM::_popReturnInteger()
     if (stackValue->type() == VMStackValue::TYPE_INTEGER)
     {
         auto stackIntValue = dynamic_cast<VMStackIntValue*>(stackValue);
+        std::cout << "        >dPop integer: " << std::dec << stackIntValue->value() << std::endl;
         return stackIntValue->value();
     }
     throw Exception("VM::_popReturnInteger() - stack value is not integer");
@@ -403,6 +616,7 @@ int VM::_popReturnInteger()
 
 void VM::_pushReturnInteger(int value)
 {
+    std::cout << "        >dPush integer: " << std::dec << value << std::endl;
     _returnStack.push(new VMStackIntValue(value));
 }
 
@@ -434,6 +648,42 @@ void VM::_addObjectsToInventory(std::string* who, std::string* item, int count)
     std::cout << *who << std::endl;
     std::cout << *item << std::endl;
     std::cout << count << std::endl;
+}
+
+int VM::_getMonth()
+{
+    return 1; // January
+}
+
+int VM::_getTime()
+{
+    return 1212; //12 hours 12 minutes
+}
+
+void VM::_setLightLevel(int level)
+{
+    std::cout << "     Setting light level to: " << level << std::endl;
+}
+
+void VM::_overrideMapStart(int x, int y, int elevation, int direction)
+{
+    std::cout << "      Overriding map start" << std::endl;
+    std::cout << "      x: " << x << std::endl;
+    std::cout << "      y: " << y << std::endl;
+    std::cout << "      elevation: " << elevation << std::endl;
+    std::cout << "      direction: " << direction << std::endl;
+}
+
+void VM::_setGlobalVar(int num, int value)
+{
+    std::cout << "      Setting global var" << std::endl;
+    std::cout << "      num: " << num << std::endl;
+    std::cout << "      value: " << value << std::endl;
+}
+
+int VM::_rand(int min, int max)
+{
+    return min;
 }
 
 }

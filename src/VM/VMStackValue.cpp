@@ -50,4 +50,5 @@ int VMStackValue::type()
 {
     return _type;
 }
+
 }

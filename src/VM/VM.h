@@ -44,10 +44,12 @@ protected:
     int _localVarBase = 0;
     int _scriptVarsBase = 0;
 
-    int _popDataInteger();
-    void _pushDataInteger(int value);
     int _popReturnInteger();
     void _pushReturnInteger(int value);
+    int _popDataInteger();
+    void _pushDataInteger(int value);
+    float _popDataFloat();
+    void _pushDataFloat(float value);
     void* _popDataPointer();
     void _pushDataPointer(void* value);
 
@@ -55,7 +57,12 @@ protected:
     std::string* _createObject(int PID, int position, int elevation, int SID);
     std::string* _dudeObject();
     void _addObjectsToInventory(std::string* who, std::string* item, int count);
-
+    int _getMonth();
+    int _getTime();
+    void _setLightLevel(int level);
+    void _overrideMapStart(int x, int y, int elevation, int direction);
+    void _setGlobalVar(int num, int value);
+    int _rand(int min, int max);
 public:
     VM(libfalltergeist::IntFileType * script);
     VM(std::string filename);
