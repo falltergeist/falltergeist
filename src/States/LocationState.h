@@ -53,9 +53,11 @@ public:
     virtual void init();
     virtual void think();
     virtual void blit();
+    virtual void handle(Event* event);
 
     void onBackgroundClick(Event * event);
     void onKeyboardRelease(Event * event);
+    void onObjectClick(Event * event);
 };
 
 }

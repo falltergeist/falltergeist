@@ -60,7 +60,7 @@ void LocationState::init()
     _game->setLocation(_location);
     _background = new InteractiveSurface(_location->tilesBackground());
     _background->onLeftButtonClick((EventHandler) &LocationState::onBackgroundClick);
-    _background->onKeyboardRelease((EventHandler) &LocationState::onKeyboardRelease);
+    //_background->onKeyboardRelease((EventHandler) &LocationState::onKeyboardRelease);
 
     add(_background);
     add(_hexCursor);
@@ -73,6 +73,17 @@ void LocationState::onBackgroundClick(Event * event)
     unsigned int hexagon = _location->positionToHexagon(x, y);
 
     std::cout << x << " : " << y << " > " << hexagon << std::endl;
+}
+
+void LocationState::onObjectClick(Event* event)
+{
+    auto object = dynamic_cast<LocationObject*>(event->sender());
+    if (object)
+    {
+        std::cout << "object:" << object->PID() << std::endl;
+        std::cout << object->descriptionId() << std::endl;
+        std::cout << object->description() << std::endl;
+    }
 }
 
 void LocationState::onKeyboardRelease(Event * event)
@@ -140,6 +151,12 @@ void LocationState::think()
 
     if (!_location) return;
     _location->think();
+
+    for(auto it = _location->objectsToRender()->begin(); it != _location->objectsToRender()->end(); ++it)
+    {
+        LocationObject* object = *it;
+        object->onLeftButtonClick((EventHandler) &LocationState::onObjectClick);
+    }
 
     int x = _location->camera()->x() + _game->mouse()->x();
     int y = _location->camera()->y() + _game->mouse()->y();
@@ -265,6 +282,32 @@ void LocationState::think()
         }
     }
 
+}
+
+void LocationState::handle(Event* event)
+{
+    if (event->isMouseEvent())
+    {
+        auto oldX = event->x();
+        auto oldY = event->y();
+        event->setX(oldX + _location->camera()->x());
+        event->setY(oldY + _location->camera()->y());
+        for (auto i = _location->objectsToRender()->rbegin(); i < _location->objectsToRender()->rend(); i++)
+        {
+            auto surface = dynamic_cast<InteractiveSurface *>(*i);
+            if (surface)
+            {
+                surface->handle(event,this);
+            }
+        }
+        State::handle(event);
+        event->setX(oldX);
+        event->setY(oldY);
+    }
+    else
+    {
+        State::handle(event);
+    }
 }
 
 }

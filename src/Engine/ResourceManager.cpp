@@ -428,12 +428,12 @@ Surface * ResourceManager::surface(unsigned int FID, unsigned int direction, uns
 libfalltergeist::IntFileType * ResourceManager::intFileType(unsigned int SID)
 {
     auto lst = lstFileType("scripts/scripts.lst");
-    if (SID >= lst->strings()->size())
+    if (SID-1 >= lst->strings()->size())
     {
         throw Exception("ResourceManager::intFileType() - wrong SID: " + std::to_string(SID));
     }
 
-    return intFileType("scripts/" + lst->strings()->at(SID));
+    return intFileType("scripts/" + lst->strings()->at(SID-1));
 }
 
 

@@ -150,5 +150,9 @@ SDL_Surface* Animation::sdl_surface()
     return surface()->sdl_surface();
 }
 
+void Animation::setCurrentSurfaceSet(unsigned int value)
+{
+    _currentSurfaceSet = value;
+}
 
 }

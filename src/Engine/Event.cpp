@@ -92,6 +92,11 @@ int Event::x()
     return _x;
 }
 
+void Event::setX(int x)
+{
+    _x = x;
+}
+
 int Event::xOffset()
 {
     return _xOffset;
@@ -100,6 +105,11 @@ int Event::xOffset()
 int Event::y()
 {
     return _y;
+}
+
+void Event::setY(int y)
+{
+    _y = y;
 }
 
 int Event::yOffset()

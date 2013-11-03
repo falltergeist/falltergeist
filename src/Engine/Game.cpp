@@ -43,6 +43,14 @@ namespace Falltergeist
 Game& Game::getInstance()
 {
     static Game instance;
+    instance._initialize();
+    return instance;
+}
+
+void Game::_initialize()
+{
+    if (_initialized) return;
+    _initialized = true;
 
     debug("[GAME] - " + CrossPlatform::getVersion(), DEBUG_INFO);
     debug("[GAME] - Opensource Fallout 2 game engine", DEBUG_INFO);
@@ -53,13 +61,10 @@ Game& Game::getInstance()
     SDL_WM_SetCaption(caption.c_str(), 0);
     putenv(strdup("SDL_VIDEO_CENTERED=1"));
 
-    instance._resourceManager = new ResourceManager();
-    instance._screen = new Screen(640, 480, 32);
-    instance._mouse = new Mouse();
-    instance._fpsCounter = new FpsCounter();
-    instance._quit = false;
-    instance._player = 0;
-    return instance;
+    _resourceManager = new ResourceManager();
+    _screen = new Screen(640, 480, 32);
+    _mouse = new Mouse();
+    _fpsCounter = new FpsCounter();
 }
 
 Game::~Game()
@@ -67,18 +72,6 @@ Game::~Game()
     delete _player;
     delete _screen;
     delete _mouse;
-
-    while (!_states.empty())
-    {
-        delete _states.back();
-        _states.pop_back();
-    }
-
-    while (!_deletedStates.empty())
-    {
-        delete _deletedStates.back();
-        _deletedStates.pop_back();
-    }
 }
 
 /**

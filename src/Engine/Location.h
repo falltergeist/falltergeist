@@ -33,10 +33,13 @@ namespace Falltergeist
 class Surface;
 class LocationObject;
 class LocationCamera;
+class VM;
 
 class Location
 {
 protected:
+    VM* _locationScript = 0;
+    LocationObject* _player = 0;
     std::vector<LocationObject*>* _objects = 0;
     std::vector<LocationObject*>* _objectsToRender = 0;
 
@@ -51,9 +54,9 @@ protected:
 
     Surface* _tilesBackground;
 
-    libfalltergeist::MapFileType* _mapFile;
-    libfalltergeist::LstFileType* _tilesLst;
-
+    libfalltergeist::MapFileType* _mapFile = 0;
+    libfalltergeist::LstFileType* _tilesLst = 0;
+    bool _initialized = false;
 
 public:
     enum Tile { TILE_WIDTH = 80, TILE_HEIGHT = 36 };
@@ -72,6 +75,7 @@ public:
 
     LocationCamera* camera();
 
+    LocationObject* player();
 
     libfalltergeist::MapFileType* mapFile();
     Surface* tilesBackground();

@@ -31,7 +31,6 @@
 
 namespace Falltergeist
 {
-class Game;
 
 class VM
 {
@@ -42,8 +41,8 @@ protected:
     VMStack _dataStack;
     VMStack _returnStack;
     unsigned int _programCounter = 0;
-    int _localVarBase = 0;
-    int _scriptVarsBase = 0;
+    int _DVAR_base = 0;
+    int _SVAR_base = 0;
 
     int _popReturnInteger();
     void _pushReturnInteger(int value);
@@ -62,11 +61,16 @@ protected:
     int _getTime();
     void _setLightLevel(int level);
     void _overrideMapStart(int x, int y, int elevation, int direction);
-    void _setGlobalVar(int num, int value);
+    void _gvar(int num, int value);
+    int _gvar(int num);
+    void _mvar(int num, int value);
+    int _mvar(int num);
+    void _lvar(int num, int value);
+    int _lvar(int num);
     int _rand(int min, int max);
 public:
-    VM(Game* _game, libfalltergeist::IntFileType * script);
-    VM(Game* _game, std::string filename);
+    VM(libfalltergeist::IntFileType * script);
+    VM(std::string filename);
     virtual ~VM();
     void run();
     void initialize();

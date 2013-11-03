@@ -23,6 +23,9 @@
 // Falltergeist includes
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Exception.h"
+#include "../Engine/Game.h"
+#include "../Engine/Location.h"
+#include "../Engine/LocationObject.h"
 #include "../VM/VM.h"
 #include "../VM/VMStackIntValue.h"
 #include "../VM/VMStackFloatValue.h"
@@ -33,15 +36,15 @@
 namespace Falltergeist
 {
 
-VM::VM(Game* game, libfalltergeist::IntFileType* script)
+VM::VM(libfalltergeist::IntFileType* script)
 {
-    _game = game;
+    _game = &Game::getInstance();
     _script = script;
 }
 
-VM::VM(Game* game, std::string filename)
+VM::VM(std::string filename)
 {
-    _game = game;
+    _game = &Game::getInstance();
     _script = ResourceManager::intFileType(filename);
 }
 
@@ -52,11 +55,18 @@ VM::~VM()
 
 void VM::call(std::string name)
 {
-    std::cout << std::endl << "CALLED: " << name << std::endl;
-    _pushReturnInteger(0);
-    _programCounter = _script->function(name);
-    run();
-    std::cout << "Function ended" << std::endl;
+    try
+    {
+        _programCounter = _script->function(name);
+        _pushReturnInteger(0);
+        std::cout << std::endl << "CALLED: " << name << std::endl;
+        run();
+        std::cout << "Function ended" << std::endl;
+    }
+    catch (libfalltergeist::Exception &e)
+    {
+        std::cout << "Function not exist: " << name << std::endl;
+    }
 }
 
 void VM::initialize()
@@ -129,7 +139,7 @@ void VM::run()
             {
                 std::cout << "[*] value = SVAR[number];" << std::endl;
                 auto number = _popDataInteger();
-                _dataStack.push(_dataStack.values()->at(_scriptVarsBase + number));
+                _dataStack.push(_dataStack.values()->at(_SVAR_base + number));
                 break;
             }
             case 0x8013:
@@ -137,7 +147,7 @@ void VM::run()
                 std::cout << "[*] SVAR[num] = value" << std::endl;
                 auto number = _popDataInteger();
                 auto value = _dataStack.pop();
-                _dataStack.values()->at(_scriptVarsBase + number) = value;
+                _dataStack.values()->at(_SVAR_base + number) = value;
                 break;
             }
             case 0x8016:
@@ -163,27 +173,26 @@ void VM::run()
                 _programCounter = _popReturnInteger();
                 break;
             case 0x8029:
-                std::cout << "[*] popbase - pop_r => $lvar_base" << std::endl;
-                _localVarBase = _popReturnInteger();
+                std::cout << "[*] DVAR restore" << std::endl;
+                _DVAR_base = _popReturnInteger();
                 break;
             case 0x802a:
-                std::cout << "[*] clrargs - pop_d while $dstack.size() != $lvar_base" << std::endl;
-                std::cout << "lvar_base: " << _localVarBase << " | size: " << _dataStack.size() << std::endl;
-                while (_dataStack.size() != _localVarBase)
+                std::cout << "[*] clrargs" << std::endl;
+                while (_dataStack.size() != _DVAR_base)
                 {
                     _dataStack.pop();
                 }
                 break;
             case 0x802b:
-                std::cout << "[*] push_r $lvar_base" << std::endl;
-                //std::cout << "$lvar_base = " << std::dec << _localVarBase << std::endl;
-                _pushReturnInteger(_localVarBase);
-                _localVarBase = _dataStack.size();
+                std::cout << "[*] set DVAR base = ";
+                _pushReturnInteger(_DVAR_base);
+                _DVAR_base = _dataStack.size();
+                std::cout << _DVAR_base << std::endl;
                 break;
             case 0x802c:
-                std::cout << "[*] $dstack.size() => $svar_base" << std::endl;
-                //std::cout << "$dstack.size() = " << std::dec << _dataStack.size() << std::endl;
-                _scriptVarsBase = _dataStack.size();
+                std::cout << "[*] set SVAR_base = ";
+                _SVAR_base = _dataStack.size();
+                std::cout << _SVAR_base << std::endl;
                 break;
             case 0x802f:
             {
@@ -203,17 +212,17 @@ void VM::run()
             }
             case 0x8031:
             {
-                std::cout << "[*] LVAR[num] = value" << std::endl;
+                std::cout << "[*] DVAR[num] = value" << std::endl;
                 auto num = _popDataInteger();
                 auto value = _dataStack.pop();
-                _dataStack.values()->at(_localVarBase + num) = value;
+                _dataStack.values()->at(_DVAR_base + num) = value;
                 break;
             }
             case 0x8032:
             {
-                std::cout << "[*] stack = LVAR[num]" << std::endl;
+                std::cout << "[*] DVAR[num]" << std::endl;
                 auto num = _popDataInteger();
-                _dataStack.push(_dataStack.values()->at(_localVarBase + num));
+                _dataStack.push(_dataStack.values()->at(_DVAR_base + num));
                 break;
             }
             case 0x8033:
@@ -458,17 +467,48 @@ void VM::run()
                 _pushDataPointer(_dudeObject());
                 break;
             case 0x80c1:
-                std::cout << "value = local_var(index) " << std::endl;
+            {
+                std::cout << "[*] LVAR[num]" << std::endl;
+                auto num = _popDataInteger();
+                _pushDataInteger(_lvar(num));
                 break;
+            }
             case 0x80c2:
-                std::cout << "set_local_var(index, value)" << std::endl;
+            {
+                std::cout << "[*] LVAR[num] = value" << std::endl;
+                auto value = _popDataInteger();
+                auto num = _popDataInteger();
+                _lvar(num, value);
                 break;
+            }
+            case 0x80c3:
+            {
+                std::cout << "[*] MVAR[num]" << std::endl;
+                auto num = _popDataInteger();
+                _pushDataInteger(_mvar(num));
+                break;
+            }
+            case 0x80c4:
+            {
+                std::cout << "[*] MVAR[num] = valuw" << std::endl;
+                auto value = _popDataInteger();
+                auto num = _popDataInteger();
+                _mvar(num, value);
+                break;
+            }
+            case 0x80c5:
+            {
+                std::cout << "[*] GVAR[num];" << std::endl;
+                auto num = _popDataInteger();
+                _pushDataInteger(_gvar(num));
+                break;
+            }
             case 0x80c6:
             {
                 std::cout << "[*] GVAR[num] = value" << std::endl;
                 auto value = _popDataInteger();
                 auto num = _popDataInteger();
-                _setGlobalVar(num, value);
+                _gvar(num, value);
                 break;
             }
             case 0x80c7:
@@ -485,6 +525,9 @@ void VM::run()
                 break;
             case 0x80d3:
                 std::cout << "stack:=tile_distance_objs(p2,p1)" << std::endl;
+                break;
+            case 0x80d4:
+                std::cout << "int objectPosition(ObjectPtr obj)" << std::endl;
                 break;
             case 0x80e5:
                 std::cout << "wm_area_set_pos(p3,p2,p1)" << std::endl;
@@ -505,6 +548,9 @@ void VM::run()
                 _pushDataInteger(_getTime());
                 break;
             }
+            case 0x8102:
+                std::cout << "int critter_add_trait(ObjectPtr who, int trait_type, int trait, int amount) " << std::endl;
+                break;
             case 0x8105:
                 std::cout << "pop_d num, pop_d list, char* pointer = message_str(int msg_list, int msg_num); push_d pointer;" << std::endl;
                 break;
@@ -554,7 +600,7 @@ int VM::_popDataInteger()
     {
         auto stackIntValue = dynamic_cast<VMStackIntValue*>(stackValue);
         auto value = stackIntValue->value();
-        std::cout << "        >Pop integer: " << std::dec << value << std::endl;
+        //std::cout << "        >Pop integer: " << std::dec << value << std::endl;
         return value;
     }
     throw Exception("VM::_popDataInteger() - stack value is not integer");
@@ -562,7 +608,7 @@ int VM::_popDataInteger()
 
 void VM::_pushDataInteger(int value)
 {
-    std::cout << "        >Push integer: " << std::dec << value << std::endl;
+    //std::cout << "        >Push integer: " << std::dec << value << std::endl;
     _dataStack.push(new VMStackIntValue(value));
 }
 
@@ -573,7 +619,7 @@ float VM::_popDataFloat()
     {
         auto stackIntValue = dynamic_cast<VMStackFloatValue*>(stackValue);
         auto value = stackIntValue->value();
-        std::cout << "        >Pop float: " << std::dec << value << std::endl;
+        //std::cout << "        >Pop float: " << std::dec << value << std::endl;
         return value;
     }
     throw Exception("VM::_popDataFloat() - stack value is not float");
@@ -581,7 +627,7 @@ float VM::_popDataFloat()
 
 void VM::_pushDataFloat(float value)
 {
-    std::cout << "        >Push float: " << std::dec << value << std::endl;
+    //std::cout << "        >Push float: " << std::dec << value << std::endl;
     _dataStack.push(new VMStackFloatValue(value));
 }
 
@@ -592,7 +638,7 @@ void* VM::_popDataPointer()
     {
         auto stackIntValue = dynamic_cast<VMStackPointerValue*>(stackValue);
         auto value = stackIntValue->value();
-        std::cout << "        >Pop pointer: " <<  value << std::endl;
+        //std::cout << "        >Pop pointer: " <<  value << std::endl;
         return value;
     }
     throw Exception("VM::_popDataPointer() - stack value is not a pointer");
@@ -600,7 +646,7 @@ void* VM::_popDataPointer()
 
 void VM::_pushDataPointer(void* value)
 {
-    std::cout << "        >Push pointer: " <<  value << std::endl;
+    //std::cout << "        >Push pointer: " <<  value << std::endl;
     _dataStack.push(new VMStackPointerValue(value));
 }
 
@@ -610,7 +656,7 @@ int VM::_popReturnInteger()
     if (stackValue->type() == VMStackValue::TYPE_INTEGER)
     {
         auto stackIntValue = dynamic_cast<VMStackIntValue*>(stackValue);
-        std::cout << "        >dPop integer: " << std::dec << stackIntValue->value() << std::endl;
+        //std::cout << "        >dPop integer: " << std::dec << stackIntValue->value() << std::endl;
         return stackIntValue->value();
     }
     throw Exception("VM::_popReturnInteger() - stack value is not integer");
@@ -618,7 +664,7 @@ int VM::_popReturnInteger()
 
 void VM::_pushReturnInteger(int value)
 {
-    std::cout << "        >dPush integer: " << std::dec << value << std::endl;
+    //std::cout << "        >dPush integer: " << std::dec << value << std::endl;
     _returnStack.push(new VMStackIntValue(value));
 }
 
@@ -674,13 +720,40 @@ void VM::_overrideMapStart(int x, int y, int elevation, int direction)
     std::cout << "      y: " << y << std::endl;
     std::cout << "      elevation: " << elevation << std::endl;
     std::cout << "      direction: " << direction << std::endl;
+    auto position = y*200 + x;
+    auto player = _game->location()->player();
+    player->setX(_game->location()->hexagonToX(position));
+    player->setY(_game->location()->hexagonToY(position));
+    player->setOrientation(direction);
+    player->setElevation(elevation);
+
 }
 
-void VM::_setGlobalVar(int num, int value)
+void VM::_gvar(int num, int value)
 {
-    std::cout << "      Setting global var" << std::endl;
-    std::cout << "      num: " << num << std::endl;
-    std::cout << "      value: " << value << std::endl;
+}
+
+int VM::_gvar(int num)
+{
+    return 0;
+}
+
+void VM::_mvar(int num, int value)
+{
+}
+
+int VM::_mvar(int num)
+{
+    return 0;
+}
+
+void VM::_lvar(int num, int value)
+{
+}
+
+int VM::_lvar(int num)
+{
+    return 0;
 }
 
 int VM::_rand(int min, int max)

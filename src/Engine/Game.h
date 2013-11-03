@@ -44,17 +44,18 @@ class Game
 {
 protected:
     std::string _version;
-    ResourceManager* _resourceManager;
+    ResourceManager* _resourceManager = 0;
     std::vector<State*> _states;
     std::vector<State*> _deletedStates;
-    Player* _player;
-    Screen* _screen;
-    Mouse* _mouse;
+    Player* _player = 0;
+    Screen* _screen = 0;
+    Mouse* _mouse = 0;
     Location* _location = 0;
-    FpsCounter * _fpsCounter;
-    bool _quit;
+    FpsCounter * _fpsCounter = 0;
+    bool _quit = false;
     SDL_Event _event;
-
+    bool _initialized = false;
+    void _initialize();
 private:
     Game() {}
     Game(Game const&);

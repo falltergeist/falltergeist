@@ -48,6 +48,8 @@ public:
     std::vector<Surface*>* surfaces();
     void loadFromFrmFile(std::string filename);
     void loadFromFrmFile(libfalltergeist::FrmFileType* frm);
+
+    void setCurrentSurfaceSet(unsigned int value);
     virtual void think();
 
     virtual int xOffset();

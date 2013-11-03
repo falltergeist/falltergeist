@@ -52,9 +52,11 @@ public:
     InteractiveSurface* sender();
 
     int x();
+    void setX(int x);
     int xOffset();
 
     int y();
+    void setY(int y);
     int yOffset();
 
     int keyCode();

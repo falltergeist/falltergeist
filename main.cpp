@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
         script->call("map_update_p_proc");
         return 0;
         */
+
         game->setState(new StartState());
         game->run();
         return 0;

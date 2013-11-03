@@ -29,6 +29,7 @@
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Animation.h"
+#include "../VM/VM.h"
 
 // Third party includes
 
@@ -80,212 +81,103 @@ void Location::init()
     {
         libfalltergeist::MapObject * mapObject = *it;
 
-        LocationObject * locationObject = new LocationObject();
-        locationObject->setObjectId(mapObject->objectId());
-        locationObject->setObjectTypeId(mapObject->objectTypeId());
+        auto object = new LocationObject();
+        object->setPID(mapObject->PID());
+        object->setFID(mapObject->FID());
+        object->setOrientation(mapObject->orientation());
+        object->setElevation(mapObject->elevation());
 
-        unsigned int PID = (mapObject->objectTypeId() << 24) | mapObject->objectId();
-        locationObject->setDescriptionId(ResourceManager::proFileType(PID)->messageId());
-
-        libfalltergeist::FrmFileType * frm;
-
-        if (mapObject->objectTypeId() == 1)
+        if (mapObject->scriptId() != -1)
         {
-            //std::cout << std::dec << locationObject->objectTypeId() << " - " << locationObject->descriptionId() << " : ";
-            //std::cout << locationObject->name() << " | " << locationObject->description() << std::endl;
-            //std::cout << "FrmId: " << mapObject->frmId() << std::endl;
-            //std::cout << "FrmTypeId: " << mapObject->frmTypeId() << std::endl;
-            //std::cout << "ID1: " << mapObject->objectID1() << std::endl;
-            //std::cout << "ID2: " << mapObject->objectID2() << std::endl;
-            //std::cout << "ID3: " << mapObject->objectID3() << std::endl;
-
-            libfalltergeist::LstFileType * lst = ResourceManager::lstFileType("art/critters/critters.lst");
-            std::string frmName = lst->strings()->at(mapObject->frmId());
-            std::string frmBase = frmName.substr(0, 6);
-
-            unsigned int ID1 = mapObject->objectID1();
-            unsigned int ID2 = mapObject->objectID2();
-
-            if (ID2 >= 0x26 && ID2 <= 0x2F)
-            {
-                if (ID1 >= 0x0B || ID1 == 0)
-                {
-                    std::cout << "Unsupported value" << std::endl;
-                }
-                else
-                {
-                    frmBase += ID1 + 0x63;
-                    frmBase += ID2 + 0x3D;
-                }
-            }
-            else if (ID2 == 0x24)
-            {
-                frmBase += "ch";
-            }
-            else if (ID2 == 0x25)
-            {
-                frmBase += "cj";
-            }
-            else if (ID2 == 0x40)
-            {
-                frmBase += "na";
-            }
-            else if (ID2 >= 0x30)
-            {
-                frmBase += "r";
-                frmBase += ID2 + 0x31;
-            }
-            else if (ID2 >= 0x14)
-            {
-                frmBase += "b";
-                frmBase += ID2 + 0x4d;
-            }
-            else if (ID2 == 0x12)
-            {
-                if (ID1 == 0x01)
-                {
-                    frmBase += "dm";
-                }
-                else if (ID1 == 0x04)
-                {
-                    frmBase += "gm";
-                }
-                else
-                {
-                    frmBase += "as";
-                }
-            }
-            else if (ID2 == 0x0D)
-            {
-                if (ID1 > 0)
-                {
-                    frmBase += ID1 + 0x63;
-                    frmBase += "e";
-                }
-                else
-                {
-                    frmBase += "an";
-                }
-            }
-            else if (ID2 <= 0x01 && ID1 > 0)
-            {
-                frmBase += ID1 + 0x63;
-                frmBase += ID2 + 0x61;
-            }
-            else
-            {
-                frmBase += "a";
-                frmBase += ID2 + 0x61;
-            }
-
-            std::string extensions[] = {"frm", "frm0", "frm1", "frm2", "fr3", "frm4", "frm5", "frm6"};
-            frmBase += "." + extensions[mapObject->objectID3()];
-
-            //std::cout << frmBase << std::endl;
-
-
-            frm = ResourceManager::frmFileType("art/critters/" + frmBase);
-            //std::cout << "Frm: " << frm << std::endl;
+            int sid = mapObject->scriptId();
+            auto lst = ResourceManager::lstFileType("scripts/scripts.lst");
+            std::cout << "sid: " << std::dec << sid << " of " << lst->strings()->size() << std::endl;
+            auto filename = lst->strings()->at(sid - 1);
+            object->addScript(filename, new VM(ResourceManager::intFileType(sid)));
+            object->script(filename)->initialize();
         }
-        else
+        if (mapObject->mapScriptId() != -1 && mapObject->mapScriptId() != mapObject->scriptId())
         {
-            unsigned int FID = (mapObject->frmTypeId() << 24) | mapObject->frmId();
-            frm = ResourceManager::frmFileType(FID);
+            int sid = mapObject->mapScriptId();
+            std::cout << "msid: " << sid << std::endl;
+            auto lst = ResourceManager::lstFileType("scripts/scripts.lst");
+            auto filename = lst->strings()->at(sid - 1);
+            object->addScript(filename, new VM(ResourceManager::intFileType(sid)));
+            object->script(filename)->initialize();
         }
-        if (frm == 0) std::cout << mapObject->objectTypeId() << " - " << mapObject->objectId() << " NO FRM" << std::endl;
-
-
-        if (mapObject->objectTypeId() == 5)
+        auto proto = ResourceManager::proFileType(mapObject->PID());
+        if (proto->scriptId() != -1)
         {
-            if (mapObject->objectId() == 12) // какая то хрень выстроенная форму прямоугольника
-            {
-                //frm = ResourceManager::frmFileType("art/intrface/msef000.frm");
-                frm = 0;
-                delete locationObject;
-                continue;
-
-            }
-            else if (mapObject->objectId() == 16) // exit
-            {
-                frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
-            }
-            else if (mapObject->objectId() == 17) // exit
-            {
-                frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
-            }
-            else if (mapObject->objectId() == 18) // exit
-            {
-                frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
-            }
-            else if (mapObject->objectId() == 19) // exit
-            {
-                frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
-            }
-            else if (mapObject->objectId() == 20) // exit
-            {
-                frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
-            }
-            else if (mapObject->objectId() == 21)  // exit
-            {
-                frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
-            }
-            else if (mapObject->objectId() == 22)  // exit
-            {
-                frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
-            }
-            else if (mapObject->objectId() == 23)  // exit to temple
-            {
-                frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
-            }
-            else
-            {
-                std::cout << std::dec << locationObject->objectTypeId() << " - " << locationObject->objectId() << " - " << locationObject->descriptionId() << " : ";
-                std::cout << locationObject->name() << " | " << locationObject->description() << std::endl;
-                //continue; // SKIP MISC for now
-            }
+            int sid = proto->scriptId();
+            std::cout << "psid: " << sid << std::endl;
+            auto lst = ResourceManager::lstFileType("scripts/scripts.lst");
+            auto filename = lst->strings()->at(sid - 1);
+            object->addScript(filename, new VM(ResourceManager::intFileType(sid)));
+            object->script(filename)->initialize();
         }
 
-        if (frm == 0)
-        {
-            std::cout << "FRM == 0 TId: "<< locationObject->objectTypeId() << " ID: " << locationObject->objectId() << std::endl;
-            delete locationObject;
-            continue;
-        }
+        object->setDescriptionId(ResourceManager::proFileType(mapObject->PID())->messageId());
 
-        if (frm->framesPerDirection() > 1)
-        {
-            locationObject->setAnimation(new Animation(frm));
-        }
-        else
-        {
-            locationObject->loadFromSurface(new Surface(frm));
-        }
+        object->setX(hexagonToX(mapObject->hexPosition()));
+        object->setY(hexagonToY(mapObject->hexPosition()));
 
-        locationObject->setX(hexagonToX(mapObject->hexPosition()));
-        locationObject->setY(hexagonToY(mapObject->hexPosition()));
-
-        _objects->push_back(locationObject);
+        _objects->push_back(object);
     }
 
-    LocationObject * player = new LocationObject();
+    _player = new LocationObject();
 
-    Animation * animation = new Animation(ResourceManager::frmFileType("art/critters/hanpwrga.frm"));
+    //Animation * animation = new Animation(ResourceManager::frmFileType("art/critters/hanpwrga.frm"));
 
-    player->setAnimation(animation);
+    //_player->setAnimation(animation);
+    _player->setPID(0x01000040);
+    _player->setFID(0x01000040);
     //player->loadFromSurface(ResourceManager::surface("art/intrface/msef000.frm"));
-    player->setX(hexagonToX(_mapFile->defaultPosition()));
-    player->setY(hexagonToY(_mapFile->defaultPosition()));
+    _player->setX(hexagonToX(_mapFile->defaultPosition()));
+    _player->setY(hexagonToY(_mapFile->defaultPosition()));
     //player->setXOffset(0);
     //player->setYOffset(player->height()/2);
     //add(animation);
-    _objects->push_back(player);
+    _objects->push_back(_player);
+
+    // ON MAP LOADED
+    _locationScript = new VM(ResourceManager::intFileType(_mapFile->scriptId()));
+    _locationScript->initialize();
+    // -----------------------
 
     _generateBackground();
     _checkObjectsToRender();
 }
 
+LocationObject* Location::player()
+{
+    return _player;
+}
+
 void Location::think()
 {
+    // ON MAP ENTERED
+    if (!_initialized)
+    {
+        _initialized = true;
+        _locationScript->call("map_enter_p_proc");
+
+        for (auto it = _objects->begin(); it != _objects->end(); ++it)
+        {
+            LocationObject* object = *it;
+            for (auto itt = object->scripts()->begin(); itt != object->scripts()->end(); ++itt)
+            {
+                VM* script = itt->second;
+                std::cout << itt->first << std::endl;
+                script->call("map_enter_p_proc");
+            }
+        }
+    }
+    else
+    {
+
+    }
+    // -----------------
+
     for (std::vector<LocationObject *>::iterator it = _objects->begin(); it != _objects->end(); ++it)
     {
         LocationObject * object = *it;

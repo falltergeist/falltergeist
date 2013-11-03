@@ -22,6 +22,7 @@
 #define FALLTERGEIST_LOCATIONOBJECT_H
 
 // C++ standard includes
+#include <map>
 
 // Falltergeist includes
 #include "../Engine/InteractiveSurface.h"
@@ -31,15 +32,21 @@
 namespace Falltergeist
 {
 class Animation;
+class VM;
 
 class LocationObject : public InteractiveSurface
 {
 protected:
-    unsigned int _objectId;
-    unsigned int _objectTypeId;
-    unsigned int _descriptionId;
-    Animation * _animation;
+    unsigned int _PID;
+    unsigned int _FID;
 
+    unsigned int _orientation;
+    unsigned int _elevation;
+
+    unsigned int _descriptionId;    
+
+    Animation * _animation = 0;
+    std::map<std::string, VM*> _scripts;
 public:
     LocationObject(int x = 0, int y = 0);
     ~LocationObject();
@@ -49,18 +56,35 @@ public:
     std::string name();
     std::string description();
 
-    void setObjectId(unsigned int value);
-    unsigned int objectId();
-    void setObjectTypeId(unsigned int value);
-    unsigned int objectTypeId();
+    void setPID(unsigned int value);
+    unsigned int PID();
+
+    void setFID(unsigned int value);
+    unsigned int FID();
+
     void setDescriptionId(unsigned int value);
     unsigned int descriptionId();
+
+    void setOrientation(unsigned int value);
+    unsigned int orientation();
+
+    void setElevation(unsigned int value);
+    unsigned int elevation();
+
     Animation * animation();
     void setAnimation(Animation * animation);
 
     virtual int xOffset();
     virtual int yOffset();
     virtual void think();
+
+    VM* script(std::string name);
+    std::map<std::string, VM*>* scripts();
+    void addScript(std::string name, VM* script);
+    void removeScript(std::string name);
+    void removeScripts();
+
+
 };
 
 }
