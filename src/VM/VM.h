@@ -68,6 +68,11 @@ protected:
     void _lvar(int num, int value);
     int _lvar(int num);
     int _rand(int min, int max);
+    void _exportVar(std::string* name);
+    void _exportVar(std::string* name, int value);
+    void _playMovie(int movieNum);
+    std::string* _msgMessage(int msgList, int msgNum);
+    void _displayString(std::string* str);
 public:
     VM(libfalltergeist::IntFileType * script);
     VM(std::string filename);

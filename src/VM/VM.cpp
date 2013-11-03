@@ -94,6 +94,9 @@ void VM::run()
             case 0xC001:
                 _programCounter += 6;
                 break;
+            case 0x9001:
+                _programCounter += 6;
+                break;
             default:
                 _programCounter += 2;
                 break;
@@ -107,15 +110,17 @@ void VM::run()
                 std::cout << "unlock" << std::endl;
                 break;
             case 0x8004:
-                std::cout << "[*] void jmp(int addr)" << std::endl;
+                std::cout << "[*] goto(addr)" << std::endl;
                 _programCounter = _popDataInteger();
                 break;
             case 0x8005:
             {
-                std::cout << "[*] call" << std::endl;
+            std::cout << "[*] call(0x";
                 auto functionIndex = _popDataInteger();
+                std::cout << std::hex << functionIndex << ") = ";
                 _pushReturnInteger(_programCounter);
                 _programCounter = _script->function(functionIndex);
+                std::cout << _programCounter << std::endl;
                 break;
             }
             case 0x800c:
@@ -127,7 +132,7 @@ void VM::run()
                 _returnStack.push(_dataStack.pop());
                 break;
             case 0x8010:
-                std::cout << "[*] strtdone" << std::endl;
+                std::cout << "[*] startdone" << std::endl;
                 _initialized = true;
                 return;
                 break;
@@ -146,12 +151,21 @@ void VM::run()
                 _dataStack.values()->at(_SVAR_base + number) = value;
                 break;
             }
+            case 0x8015:
+            {
+                std::cout << "[*] export(value, name)" << std::endl;
+                auto pointer = _popDataPointer();
+                auto value = _popDataInteger();
+                _exportVar((std::string*)pointer, value);
+                break;
+            }
             case 0x8016:
-                std::cout << "exportv" << std::endl;
+            {
+                std::cout << "[*] export(name)" << std::endl;
+                auto pointer = _popDataPointer();
+                _exportVar((std::string*)pointer);
                 break;
-            case 0x8017:
-                std::cout << "exportp`" << std::endl;
-                break;
+            }
             case 0x8018:
                 std::cout << "[*] dswap" << std::endl;
                 _dataStack.swap();
@@ -161,11 +175,11 @@ void VM::run()
                 _returnStack.swap();
                 break;
             case 0x801a:
-                std::cout << "[*] pop_d and discard" << std::endl;
+                std::cout << "[*] pop_d" << std::endl;
                 _dataStack.pop();
                 break;
             case 0x801c:
-                std::cout << "[*] restpc - pop_r => $pc" << std::endl;
+                std::cout << "[*] ret" << std::endl;
                 _programCounter = _popReturnInteger();
                 break;
             case 0x8029:
@@ -173,7 +187,7 @@ void VM::run()
                 _DVAR_base = _popReturnInteger();
                 break;
             case 0x802a:
-                std::cout << "[*] clrargs" << std::endl;
+                std::cout << "[*] clear_args" << std::endl;
                 while (_dataStack.size() != _DVAR_base)
                 {
                     _dataStack.pop();
@@ -197,17 +211,12 @@ void VM::run()
             }
             case 0x802f:
             {
-                std::cout << "[*] ifthen (pop_d condition_value, pop_d address) if (condition == 0) jmp address" << std::endl;
+                std::cout << "[*] ifthen(address, condition)" << std::endl;
                 auto condition = _popDataInteger();
                 auto address = _popDataInteger();
                 if (condition == 0)
                 {
-                    std::cout  << "condition == 0" << std::endl;
                     _programCounter = address;
-                }
-                else
-                {
-                    std::cout  << "condition != 0" << std::endl;
                 }
                 break;
             }
@@ -404,15 +413,12 @@ void VM::run()
             }
             case 0x803f:
             {
-                std::cout << "OR" << std::endl;
+                std::cout << "[*] OR" << std::endl;
                 auto b = _popDataInteger();
                 auto a = _popDataInteger();
                 _pushDataInteger(a | b);
                 break;
             }
-            case 0x8045:
-                std::cout << "stack:=NOT(p1) - logical not" << std::endl;
-                break;
             case 0x8046:
             {
                 std::cout << "[*] - value (change sign)" << std::endl;
@@ -422,7 +428,7 @@ void VM::run()
             }
             case 0x80a9:
             {
-                std::cout << "[*]void override_map_start(int x, int y, int elev, int rot)" << std::endl;
+                std::cout << "[*] void override_map_start(int x, int y, int elev, int rot)" << std::endl;
                 auto direction = _popDataInteger();
                 auto elevation = _popDataInteger();
                 auto y = _popDataInteger();
@@ -438,9 +444,6 @@ void VM::run()
                 _pushDataInteger(_rand(min, max));
                 break;
             }
-            case 0x80b6:
-                std::cout << "int move_to(ObjectPtr obj, int tile_num, int elev)" << std::endl;
-                break;
             case 0x80b7:
             {
                 std::cout << "[*] ObjectPtr create_object_sid(int pid, int tile_num, int elev, int sid)" << std::endl;
@@ -452,8 +455,11 @@ void VM::run()
                 break;
             }
             case 0x80b8:
-                std::cout << "pop_d pointer; display_msg(pointer) " << std::endl;
+            {
+                std::cout << "[*] void display_msg(string*)" << std::endl;
+                _displayString((std::string*)_popDataPointer());
                 break;
+            }
             case 0x80b9:
                 std::cout << "script_overrides" << std::endl;
                 break;
@@ -553,23 +559,34 @@ void VM::run()
                 std::cout << "int critter_add_trait(ObjectPtr who, int trait_type, int trait, int amount) " << std::endl;
                 break;
             case 0x8105:
-                std::cout << "pop_d num, pop_d list, char* pointer = message_str(int msg_list, int msg_num); push_d pointer;" << std::endl;
+            {
+                std::cout << "string* msgMessage(int msg_list, int msg_num);" << std::endl;
+                auto msgNum = _popDataInteger();
+                auto msgList = _popDataInteger();
+                _pushDataPointer(_msgMessage(msgList, msgNum));
                 break;
+            }
             case 0x810b:
             {
-                std::cout << "[*] stack:=metarule(p2,p1)" << std::endl;
+                std::cout << "[*] int metarule(p2, p1)" << std::endl;
                 auto p1 = _popDataInteger();
                 auto p2 = _popDataInteger();
                 _pushDataInteger(_metarule(p2, p1));
                 break;
             }
+            case 0x8115:
+            {
+                std::cout << "[*] void playMovie(movieNum)" << std::endl;
+                _playMovie(_popDataInteger());
+                break;
+            }
             case 0x8116:
             {
-                std::cout << "[*] void add_mult_objs_to_inven(ObjectPtr who, ObjectPtr item, int count)" << std::endl;
-                auto count = _popDataInteger();
-                auto item = _popDataPointer();
-                auto who = _popDataPointer();
-                _addObjectsToInventory((std::string*)who, (std::string*)item, count);
+                std::cout << "void add_mult_objs_to_inven(ObjectPtr who, ObjectPtr item, int count)" << std::endl;
+                //auto count = _popDataInteger();
+                //auto item = _popDataPointer();
+                //auto who = _popDataPointer();
+                //_addObjectsToInventory((std::string*)who, (std::string*)item, count);
                 break;
             }
             case 0x8118:
@@ -580,12 +597,37 @@ void VM::run()
                 std::cout << "ObjectPtr party_member_obj(int pid)" << std::endl;
                 break;
 
+            case 0x9001:
+            {
+                unsigned int value;
+                unsigned short nextOpcode;
+                *_script >> value >> nextOpcode;
+
+                switch(nextOpcode)
+                {
+                    case 0x8015: // set exported var value
+                    case 0x8016: // export var
+                    {
+                        void* pointer = &_script->identificators()->at(value);
+                        _pushDataPointer(pointer);
+                        std::cout << "[*] push_d " << pointer << std::endl;
+                        break;
+                    }
+                    default:
+                        std::cout << std::hex << "0x" << value << std::endl;
+                        // @todo: load string pointer from strings table
+                        break;
+                }
+                break;
+            }
             case 0xC001:
+            {
                 unsigned int value;
                 *_script >> value;
                 _dataStack.push(new VMStackIntValue(value));
                 std::cout << "[*] push_d 0x" << std::hex << value << std::endl;
                 break;
+            }
             default:
                 std::cout << "0x" << std::hex << opcode << std::endl;
                 break;
@@ -760,6 +802,32 @@ int VM::_lvar(int num)
 int VM::_rand(int min, int max)
 {
     return min;
+}
+
+void VM::_exportVar(std::string* name)
+{
+    //std::cout << "Exporting variable: " << *name << std::endl;
+}
+
+void VM::_exportVar(std::string* name, int value)
+{
+    //std::cout << "Setting exported variable: " << *name << " = " << value << std::endl;
+}
+
+void VM::_playMovie(int movieNum)
+{
+
+}
+
+std::string* VM::_msgMessage(int msgList, int msgNum)
+{
+    auto msg = new std::string("Testing message to display");
+    return msg;
+}
+
+void VM::_displayString(std::string* str)
+{
+    std::cout << *str << std::endl;
 }
 
 }

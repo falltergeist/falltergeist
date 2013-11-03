@@ -37,12 +37,12 @@ using namespace Falltergeist;
 int main(int argc, char *argv[])
 {
     try
-    {
+    {        
         auto game = &Game::getInstance();
         /*
-        auto script = new VM("scripts/artemple.int");
+        auto script = new VM("scripts/arvillag.int");
         script->initialize();
-        script->call("map_update_p_proc");
+        script->call("map_enter_p_proc");
         return 0;
         */
 
