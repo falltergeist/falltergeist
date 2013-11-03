@@ -58,9 +58,11 @@ void VM::call(std::string name)
     try
     {
         _programCounter = _script->function(name);
-        _pushReturnInteger(0);
+        _pushDataInteger(0); // arguments counter;
+        _pushReturnInteger(0); // return adrress
         std::cout << std::endl << "CALLED: " << name << std::endl;
         run();
+        _popDataInteger(); // remove function result
         std::cout << "Function ended" << std::endl;
     }
     catch (libfalltergeist::Exception &e)
@@ -72,8 +74,9 @@ void VM::call(std::string name)
 void VM::initialize()
 {
     if (_initialized) return;
-    _programCounter = 0;
+    _programCounter = 0;   
     run();
+    _popDataInteger(); // remove @start function result
 }
 
 void VM::run()
@@ -109,17 +112,10 @@ void VM::run()
                 break;
             case 0x8005:
             {
-                std::cout << "[?] call" << std::endl;
+                std::cout << "[*] call" << std::endl;
                 auto functionIndex = _popDataInteger();
-                auto paramsNumber = _popDataInteger();
-                if (paramsNumber != 0)
-                {
-                    throw Exception("Call Op - params number != 0");
-                }
                 _pushReturnInteger(_programCounter);
                 _programCounter = _script->function(functionIndex);
-
-                std::cout << "Calling: " << std::hex << _programCounter << std::endl;
                 break;
             }
             case 0x800c:
@@ -184,16 +180,21 @@ void VM::run()
                 }
                 break;
             case 0x802b:
+            {
                 std::cout << "[*] set DVAR base = ";
+                auto argumentsCounter = _popDataInteger();
                 _pushReturnInteger(_DVAR_base);
-                _DVAR_base = _dataStack.size();
+                _DVAR_base = _dataStack.size() - argumentsCounter;
                 std::cout << _DVAR_base << std::endl;
                 break;
+            }
             case 0x802c:
+            {
                 std::cout << "[*] set SVAR_base = ";
                 _SVAR_base = _dataStack.size();
                 std::cout << _SVAR_base << std::endl;
                 break;
+            }
             case 0x802f:
             {
                 std::cout << "[*] ifthen (pop_d condition_value, pop_d address) if (condition == 0) jmp address" << std::endl;
