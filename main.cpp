@@ -37,7 +37,7 @@ using namespace Falltergeist;
 int main(int argc, char *argv[])
 {
     try
-    {        
+    {
         auto game = &Game::getInstance();
         /*
         auto script = new VM("scripts/arvillag.int");

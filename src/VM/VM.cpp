@@ -426,6 +426,12 @@ void VM::run()
                 _pushDataInteger(-value);
                 break;
             }
+            case 0x80a1:
+            {
+                std::cout << "[*] void giveExpPoints(value)" << std::endl;
+                _giveExpPoints(_popDataInteger());
+                break;
+            }
             case 0x80a9:
             {
                 std::cout << "[*] void override_map_start(int x, int y, int elev, int rot)" << std::endl;
@@ -596,7 +602,12 @@ void VM::run()
             case 0x814b:
                 std::cout << "ObjectPtr party_member_obj(int pid)" << std::endl;
                 break;
-
+            case 0x8154:
+            {
+                std::cout << "[*] void debug(string*)" << std::endl;
+                _debugMessage((std::string*)_popDataPointer());
+                break;
+            }
             case 0x9001:
             {
                 unsigned int value;
@@ -614,9 +625,12 @@ void VM::run()
                         break;
                     }
                     default:
-                        std::cout << std::hex << "0x" << value << std::endl;
-                        // @todo: load string pointer from strings table
+                    {
+                        void* pointer = &_script->strings()->at(value);
+                        _pushDataPointer(pointer);
+                        std::cout << "[*] push_d " << pointer << std::endl;
                         break;
+                     }
                 }
                 break;
             }
@@ -828,6 +842,15 @@ std::string* VM::_msgMessage(int msgList, int msgNum)
 void VM::_displayString(std::string* str)
 {
     std::cout << *str << std::endl;
+}
+
+void VM::_debugMessage(std::string* str)
+{
+    std::cout << *str << std::endl;
+}
+
+void VM::_giveExpPoints(int value)
+{
 }
 
 }

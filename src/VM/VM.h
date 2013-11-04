@@ -73,6 +73,8 @@ protected:
     void _playMovie(int movieNum);
     std::string* _msgMessage(int msgList, int msgNum);
     void _displayString(std::string* str);
+    void _debugMessage(std::string* str);
+    void _giveExpPoints(int value);
 public:
     VM(libfalltergeist::IntFileType * script);
     VM(std::string filename);
