@@ -41,12 +41,20 @@ VM::VM(libfalltergeist::IntFileType* script)
 {
     _game = &Game::getInstance();
     _script = script;
+    if (!_script)
+    {
+        throw Exception("VM::VM() - script is null");
+    }
 }
 
 VM::VM(std::string filename)
 {
     _game = &Game::getInstance();
     _script = ResourceManager::intFileType(filename);
+    if (!_script)
+    {
+        throw Exception("VM::VM() - script is null: " + filename);
+    }
 }
 
 VM::~VM()
@@ -214,7 +222,7 @@ void VM::run()
             }
             case 0x802a:
             {
-                std::cout << "[*] clear_args" << std::endl;
+                std::cout << "[*] DVAR clear" << std::endl;
                 while (_dataStack.size() != _DVAR_base)
                 {
                     _dataStack.pop();
@@ -226,7 +234,7 @@ void VM::run()
                 std::cout << "[*] set DVAR base = ";
                 auto argumentsCounter = _popDataInteger();
                 _pushReturnInteger(_DVAR_base);
-                _DVAR_base = _dataStack.size() - argumentsCounter - 1;
+                _DVAR_base = _dataStack.size() - argumentsCounter-1;
                 std::cout << _DVAR_base << std::endl;
                 break;
             }
@@ -262,18 +270,18 @@ void VM::run()
             {
                 std::cout << "[*] DVAR[num] = value ";
                 auto num = _popDataInteger();
-                std::cout << "num = " << std::hex << num;
                 auto value = _dataStack.pop();
-                std::cout << " value = " << std::hex << value << std::endl;
-                _dataStack.values()->at(_DVAR_base + num) = value;
+                std::cout << "num = " << std::hex << num << " type = " << value->type() << std::endl;
+                _dataStack.values()->at(_DVAR_base + num - 1) = value;
                 break;
             }
             case 0x8032:
             {
                 std::cout << "[*] DVAR[num] ";
                 auto num = _popDataInteger();
-                std::cout << "num = " << std::hex << num << std::endl;
-                _dataStack.push(_dataStack.values()->at(_DVAR_base + num));
+                auto value = _dataStack.values()->at(_DVAR_base + num - 1);
+                _dataStack.push(value);
+                std::cout << "num = " << std::hex << num << " type = " << value->type() << std::endl;
                 break;
             }
             case 0x8033:
@@ -543,7 +551,7 @@ void VM::run()
                 std::cout << "[*] |" << std::endl;
                 auto b = _popDataInteger();
                 auto a = _popDataInteger();
-                _pushDataInteger(a & b);
+                _pushDataInteger(a | b);
                 break;
             }
             case 0x8045:
@@ -630,7 +638,6 @@ void VM::run()
                 break;
             }
             case 0x80bb:
-
             {
                 std::cout << "[*] int tile_contains_obj_pid(int tile, int elev, int pid)" << std::endl;
                 auto pid = _popDataInteger();
@@ -786,7 +793,7 @@ void VM::run()
                 std::cout << "[*] int metarule3(int meta, int p1, int p2, int p3)" << std::endl;
                 auto p3 = _popDataInteger();
                 auto p2 = _popDataInteger();
-                auto p1 = _popDataInteger();
+                auto p1 = _dataStack.pop();
                 auto meta = _popDataInteger();
                 _pushDataInteger(_metarule3(meta, p1, p2, p3));
                 break;
@@ -927,6 +934,14 @@ void VM::run()
                 _pushDataInteger(_metarule(p2, p1));
                 break;
             }
+            case 0x810d:
+            {
+                std::cout << "[=] void* obj_carrying_pid_obj(void* who, int pid)" << std::endl;
+                _popDataInteger();
+                _popDataPointer();
+                _pushDataPointer(0);
+                break;
+            }
             case 0x810e:
             {
                 std::cout << "[=] void reg_anim_func(int p1, int p2)" << std::endl;
@@ -972,6 +987,12 @@ void VM::run()
                 _popDataPointer();
                 break;
             }
+            case 0x8132:
+            {
+                std::cout << "[=] void obj_close(void* obj) " << std::endl;
+                _popDataPointer();
+                break;
+            }
             case 0x8138:
             {
                 std::cout << "[=] int item_caps_total(void* obj)" << std::endl;
@@ -992,6 +1013,14 @@ void VM::run()
                 std::cout << "[*] void* party_member_obj(int pid)" << std::endl;
                 _popDataInteger();
                 _pushDataPointer(0);
+                break;
+            }
+            case 0x814c:
+            {
+                std::cout << "[=] int rotation_to_tile(int srcTile, int destTile)" << std::endl;
+                _popDataInteger();
+                _popDataInteger();
+                _pushDataInteger(0);
                 break;
             }
             case 0x814e:
@@ -1139,6 +1168,8 @@ int VM::_metarule(int type, int value)
         case 22: // METARULE_IS_LOADGAME
             // Игра загружается?
             return 0;  // 0 - false
+        case 30: // METARULE_CAR_CURRENT_TOWN
+            return 0;
         case 44: // METARULE_GET_WORLDMAP_XPOS
             // позиция по x на карте мира
             return 300;
@@ -1303,7 +1334,7 @@ int VM::_getElevation(void* obj)
 VMStackValue* VM::_getExported(std::string* name)
 {
     std::cout << "name: " << *name << std::endl;
-    return 0;
+    return new VMStackIntValue(0);
 }
 
 void* VM::_self_obj()
@@ -1325,10 +1356,12 @@ void VM::_anim(void* who, int anim, int direction)
 {
 }
 
-int VM::_metarule3(int meta, int p1, int p2, int p3)
+int VM::_metarule3(int meta, VMStackValue* p1, int p2, int p3)
 {
     switch(meta)
     {
+        case 100: // rm_fixed_timer_event
+            return 0;
         case 110:   // unknown
             return 0;
     }

@@ -87,40 +87,47 @@ void Location::init()
         object->setOrientation(mapObject->orientation());
         object->setElevation(mapObject->elevation());
 
-        if (mapObject->scriptId() != -1)
+        if (mapObject->scriptId() > 0)
         {
             int sid = mapObject->scriptId();
             auto lst = ResourceManager::lstFileType("scripts/scripts.lst");
             std::cout << "sid: " << std::dec << sid << " of " << lst->strings()->size() << std::endl;
             auto filename = lst->strings()->at(sid);
             auto script = ResourceManager::intFileType(sid);
-            if (!script) break;
-            object->addScript(filename, new VM(script));
-            object->script(filename)->initialize();
+            if (script)
+            {
+                object->addScript(filename, new VM(script));
+                object->script(filename)->initialize();
+            }
         }
-        if (mapObject->mapScriptId() != -1 && mapObject->mapScriptId() != mapObject->scriptId())
+        if (mapObject->mapScriptId() > 0 && mapObject->mapScriptId() != mapObject->scriptId())
         {
             int sid = mapObject->mapScriptId();
             std::cout << "msid: " << sid << std::endl;
             auto lst = ResourceManager::lstFileType("scripts/scripts.lst");
             auto filename = lst->strings()->at(sid);
             auto script = ResourceManager::intFileType(sid);
-            if (!script) break;
-            object->addScript(filename, new VM(script));
-            object->script(filename)->initialize();
+            if (!script)
+            {
+                object->addScript(filename, new VM(script));
+                object->script(filename)->initialize();
+            }
         }
         auto proto = ResourceManager::proFileType(mapObject->PID());
-        if (proto->scriptId() != -1)
+        if (proto->scriptId() > 0)
         {
             int sid = proto->scriptId();
             std::cout << "psid: " << sid << std::endl;
             auto lst = ResourceManager::lstFileType("scripts/scripts.lst");
             auto filename = lst->strings()->at(sid);
             auto script = ResourceManager::intFileType(sid);
-            if (!script) break;
-            object->addScript(filename, new VM(script));
-            object->script(filename)->initialize();
+            if (!script)
+            {
+                object->addScript(filename, new VM(script));
+                object->script(filename)->initialize();
+            }
         }
+
 
         object->setDescriptionId(ResourceManager::proFileType(mapObject->PID())->messageId());
 
@@ -140,8 +147,12 @@ void Location::init()
     _objects->push_back(_player);
 
     // ON MAP LOADED
-    _locationScript = new VM(ResourceManager::intFileType(_mapFile->scriptId()-1));
-    _locationScript->initialize();
+    if (_mapFile->scriptId() > 0)
+    {
+        _locationScript = new VM(ResourceManager::intFileType(_mapFile->scriptId()-1));
+        _locationScript->initialize();
+    }
+
     // -----------------------
 
     _generateBackground();
@@ -159,7 +170,11 @@ void Location::think()
     if (!_initialized)
     {
         _initialized = true;
-        _locationScript->call("map_enter_p_proc");
+        if (_locationScript)
+        {
+            _locationScript->call("map_enter_p_proc");
+        }
+
 
         for (auto it = _objects->begin(); it != _objects->end(); ++it)
         {
