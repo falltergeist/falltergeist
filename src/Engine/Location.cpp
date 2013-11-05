@@ -107,7 +107,7 @@ void Location::init()
             auto script = ResourceManager::intFileType(sid);
             if (script)
             {
-                object->addScript(filename, new VM(script));
+                object->addScript(filename, new VM(script, object));
                 object->script(filename)->initialize();
             }
         }
@@ -120,7 +120,7 @@ void Location::init()
             auto script = ResourceManager::intFileType(sid);
             if (!script)
             {
-                object->addScript(filename, new VM(script));
+                object->addScript(filename, new VM(script, object));
                 object->script(filename)->initialize();
             }
         }
@@ -134,7 +134,7 @@ void Location::init()
             auto script = ResourceManager::intFileType(sid);
             if (!script)
             {
-                object->addScript(filename, new VM(script));
+                object->addScript(filename, new VM(script, object));
                 object->script(filename)->initialize();
             }
         }
@@ -160,7 +160,7 @@ void Location::init()
     // ON MAP LOADED
     if (_mapFile->scriptId() > 0)
     {
-        _locationScript = new VM(ResourceManager::intFileType(_mapFile->scriptId()-1));
+        _locationScript = new VM(ResourceManager::intFileType(_mapFile->scriptId()-1), this);
         _locationScript->initialize();
     }
 
@@ -195,6 +195,7 @@ void Location::think()
                 VM* script = itt->second;
                 std::cout << itt->first << std::endl;
                 script->call("map_enter_p_proc");
+                script->call("talk_p_proc");
             }
         }
     }

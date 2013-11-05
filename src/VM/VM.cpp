@@ -37,8 +37,9 @@
 namespace Falltergeist
 {
 
-VM::VM(libfalltergeist::IntFileType* script)
+VM::VM(libfalltergeist::IntFileType* script, void* owner)
 {
+    _owner = owner;
     _game = &Game::getInstance();
     _script = script;
     if (!_script)
@@ -47,8 +48,9 @@ VM::VM(libfalltergeist::IntFileType* script)
     }
 }
 
-VM::VM(std::string filename)
+VM::VM(std::string filename, void* owner)
 {
+    _owner = owner;
     _game = &Game::getInstance();
     _script = ResourceManager::intFileType(filename);
     if (!_script)
@@ -648,8 +650,8 @@ void VM::run()
             }
             case 0x80bc:
             {
-                std::cout << "[*] void* self_obj()" << std::endl;
-                _pushDataPointer(_self_obj());
+                std::cout << "[+] void* self_obj()" << std::endl;
+                _pushDataPointer(_owner);
                 break;
             }
             case 0x80bd:
@@ -659,8 +661,8 @@ void VM::run()
                 break;
             }
             case 0x80bf:
-                std::cout << "[*] void* dude_obj()" << std::endl;
-                _pushDataPointer(_dudeObject());
+                std::cout << "[+] void* dude_obj()" << std::endl;
+                _pushDataPointer(_game->location()->player());
                 break;
             case 0x80c1:
             {
@@ -786,6 +788,21 @@ void VM::run()
                 _popDataPointer();
                 _popDataPointer();
                 _pushDataInteger(1);
+                break;
+            }
+            case 0x80de:
+            {
+                std::cout << "[*] void start_gdialog(int msgFileNum, ObjectPtr who, int mood, int headNum, int backgroundIdx)" << std::endl;
+                _popDataInteger();
+                _popDataInteger();
+                _popDataInteger();
+                _popDataPointer();
+                _popDataInteger();
+                break;
+            }
+            case 0x80df:
+            {
+                std::cout << "[?] end_dialogue" << std::endl;
                 break;
             }
             case 0x80e1:
@@ -968,6 +985,33 @@ void VM::run()
                 std::cout << "[*] int get_month" << std::endl;
                 _pushDataInteger(_getMonth());
                 break;
+            case 0x811c:
+            {
+                std::cout << "[?] gsay_start" << std::endl;
+                break;
+            }
+            case 0x811d:
+            {
+                std::cout << "[?] gsay_end" << std::endl;
+                break;
+            }
+            case 0x811e:
+            {
+                std::cout << "[=] void gSay_Reply(int msg_list, int msg_num)" << std::endl;
+                _popDataInteger();
+                _popDataInteger();
+                break;
+            }
+            case 0x8121:
+            {
+                std::cout << "[=] void giQ_Option(int iq_test, int msg_list, int msg_num, procedure target, int reaction)" << std::endl;
+                _popDataInteger();
+                _popDataInteger();
+                _popDataInteger();
+                _popDataInteger();
+                _popDataInteger();
+                break;
+            }
             case 0x8126:
             {
                 std::cout << "[=] void reg_anim_animate_forever(void* obj , int delay)" << std::endl;
@@ -1006,6 +1050,14 @@ void VM::run()
                 _popDataInteger();
                 _popDataPointer();
                 _pushDataInteger(0);
+                break;
+            }
+            case 0x8149:
+            {
+                std::cout << "[+] int obj_art_fid(void* obj)" << std::endl;
+                auto object = (LocationObject*)_popDataPointer();
+                if (!object) throw Exception("VM::opcode8149() - can't convert pointer to object");
+                _pushDataInteger(object->FID());
                 break;
             }
             case 0x814b:
@@ -1186,11 +1238,6 @@ void* VM::_createObject(int PID, int position, int elevation, int SID)
     return 0;
 }
 
-void* VM::_dudeObject()
-{
-    return 0;
-}
-
 void VM::_addObjectsToInventory(void* who, void* item, int count)
 {
 }
@@ -1230,25 +1277,6 @@ void VM::_overrideMapStart(int x, int y, int elevation, int direction)
     player->setOrientation(direction);
     player->setElevation(elevation);
 
-}
-
-void VM::
-_gvar(int num, int value)
-{
-}
-
-int VM::_gvar(int num)
-{
-    return 0;
-}
-
-void VM::_mvar(int num, int value)
-{
-}
-
-int VM::_mvar(int num)
-{
-    return 0;
 }
 
 void VM::_lvar(int num, int value)
@@ -1335,11 +1363,6 @@ VMStackValue* VM::_getExported(std::string* name)
 {
     std::cout << "name: " << *name << std::endl;
     return new VMStackIntValue(0);
-}
-
-void* VM::_self_obj()
-{
-    return 0;
 }
 
 int VM::_obj_is_carrying_obj_pid(void* obj, int pid)

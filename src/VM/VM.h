@@ -36,6 +36,7 @@ class VM
 {
 protected:
     Game* _game = 0;
+    void* _owner;
     libfalltergeist::IntFileType * _script = 0;    
     bool _initialized = false;
     VMStack _dataStack;
@@ -56,16 +57,11 @@ protected:
     int _metarule(int type, int value);
     int _metarule3(int meta, VMStackValue* p1, int p2, int p3);
     void* _createObject(int PID, int position, int elevation, int SID);
-    void* _dudeObject();
     void _addObjectsToInventory(void* who, void* item, int count);
     int _getMonth();
     int _getTime();
     void _setLightLevel(int level);
     void _overrideMapStart(int x, int y, int elevation, int direction);
-    void _gvar(int num, int value);
-    int _gvar(int num);
-    void _mvar(int num, int value);
-    int _mvar(int num);
     void _lvar(int num, int value);
     int _lvar(int num);
     int _rand(int min, int max);
@@ -83,13 +79,12 @@ protected:
     int _move_to(void* obj, int tile_num, int elev);
     int _tile_contains_obj_pid(int tile, int elev, int pid);
     int _getElevation(void* obj);
-    void* _self_obj();
     int _obj_is_carrying_obj_pid(void* obj, int pid);
     int _critter_add_trait(void* who, int trait_type, int trait, int amount);
     void _anim(void* who, int anim, int direction);
 public:
-    VM(libfalltergeist::IntFileType * script);
-    VM(std::string filename);
+    VM(libfalltergeist::IntFileType * script, void* owner);
+    VM(std::string filename, void* owner);
     virtual ~VM();
     void run();
     void initialize();
