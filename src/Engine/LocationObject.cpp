@@ -314,7 +314,7 @@ void LocationObject::setOrientation(unsigned int value)
     {
             if (id == 12) // какая то хрень выстроенная форму прямоугольника
             {
-                frm = ResourceManager::frmFileType("art/intrface/msef000.frm");
+                //frm = ResourceManager::frmFileType("art/intrface/msef000.frm");
             }
             else if (id >= 16 && id <= 23) // exit
             {

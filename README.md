@@ -4,7 +4,7 @@ Falltergeist
 Opensource crossplatform Fallout 2™ engine writen in C++ and SDL.
 http://falltergeist.org/
 
-Current version: 0.0.8
+Current version: 0.0.9
 
 [![ScreenShot](http://alexeevdv.ru/falltergeist/falltergeist.png)](http://www.youtube.com/watch?v=C6pnobO9nJY)
 
