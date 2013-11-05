@@ -70,4 +70,9 @@ std::vector<VMStackValue*>* VMStack::values()
     return &_values;
 }
 
+VMStackValue* VMStack::top()
+{
+    return _values.back();
+}
+
 }

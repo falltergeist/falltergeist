@@ -40,6 +40,7 @@ public:
     ~VMStack();
     void push(VMStackValue* value);
     VMStackValue* pop();
+    VMStackValue* top();
     std::vector<VMStackValue*> * values();
     int size();
     void swap();

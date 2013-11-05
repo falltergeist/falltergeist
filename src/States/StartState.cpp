@@ -61,7 +61,8 @@ void StartState::init()
 
 void StartState::think()
 {    
-    //_game->setState(new LocationState());
+    //_game->setState(new LocationState()); return;
+
     if (_splashTicks + 3000 < SDL_GetTicks())
     {
         //_game->setPlayer(new Player(ResourceManager::gcdFileType("premade/combat.gcd")));

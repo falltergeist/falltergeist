@@ -92,8 +92,10 @@ void Location::init()
             int sid = mapObject->scriptId();
             auto lst = ResourceManager::lstFileType("scripts/scripts.lst");
             std::cout << "sid: " << std::dec << sid << " of " << lst->strings()->size() << std::endl;
-            auto filename = lst->strings()->at(sid - 1);
-            object->addScript(filename, new VM(ResourceManager::intFileType(sid)));
+            auto filename = lst->strings()->at(sid);
+            auto script = ResourceManager::intFileType(sid);
+            if (!script) break;
+            object->addScript(filename, new VM(script));
             object->script(filename)->initialize();
         }
         if (mapObject->mapScriptId() != -1 && mapObject->mapScriptId() != mapObject->scriptId())
@@ -101,8 +103,10 @@ void Location::init()
             int sid = mapObject->mapScriptId();
             std::cout << "msid: " << sid << std::endl;
             auto lst = ResourceManager::lstFileType("scripts/scripts.lst");
-            auto filename = lst->strings()->at(sid - 1);
-            object->addScript(filename, new VM(ResourceManager::intFileType(sid)));
+            auto filename = lst->strings()->at(sid);
+            auto script = ResourceManager::intFileType(sid);
+            if (!script) break;
+            object->addScript(filename, new VM(script));
             object->script(filename)->initialize();
         }
         auto proto = ResourceManager::proFileType(mapObject->PID());
@@ -111,8 +115,10 @@ void Location::init()
             int sid = proto->scriptId();
             std::cout << "psid: " << sid << std::endl;
             auto lst = ResourceManager::lstFileType("scripts/scripts.lst");
-            auto filename = lst->strings()->at(sid - 1);
-            object->addScript(filename, new VM(ResourceManager::intFileType(sid)));
+            auto filename = lst->strings()->at(sid);
+            auto script = ResourceManager::intFileType(sid);
+            if (!script) break;
+            object->addScript(filename, new VM(script));
             object->script(filename)->initialize();
         }
 
@@ -126,21 +132,15 @@ void Location::init()
 
     _player = new LocationObject();
 
-    //Animation * animation = new Animation(ResourceManager::frmFileType("art/critters/hanpwrga.frm"));
-
-    //_player->setAnimation(animation);
     _player->setPID(0x01000040);
     _player->setFID(0x01000040);
-    //player->loadFromSurface(ResourceManager::surface("art/intrface/msef000.frm"));
+    _player->setOrientation(_mapFile->defaultOrientation());
     _player->setX(hexagonToX(_mapFile->defaultPosition()));
     _player->setY(hexagonToY(_mapFile->defaultPosition()));
-    //player->setXOffset(0);
-    //player->setYOffset(player->height()/2);
-    //add(animation);
     _objects->push_back(_player);
 
     // ON MAP LOADED
-    _locationScript = new VM(ResourceManager::intFileType(_mapFile->scriptId()));
+    _locationScript = new VM(ResourceManager::intFileType(_mapFile->scriptId()-1));
     _locationScript->initialize();
     // -----------------------
 
