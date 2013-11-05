@@ -42,6 +42,7 @@ protected:
     LocationObject* _player = 0;
     std::vector<LocationObject*>* _objects = 0;
     std::vector<LocationObject*>* _objectsToRender = 0;
+    std::vector<int> _MVARS;
 
     void _checkObjectsToRender();
     void _generateBackground();
@@ -81,6 +82,10 @@ public:
     Surface* tilesBackground();
     std::vector<LocationObject*>* objects();
     std::vector<LocationObject*>* objectsToRender();
+
+    void setMVAR(unsigned int number, int value);
+    int MVAR(unsigned int number);
+
 };
 
 

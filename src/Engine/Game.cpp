@@ -213,4 +213,34 @@ Location* Game::location()
     return _location;
 }
 
+void Game::setGVAR(unsigned int number, int value)
+{
+    _initGVARS();
+    if (number >= _GVARS.size())
+    {
+        throw Exception("Game::setGVAR(num, value) - num out of range: " + std::to_string(number));
+    }
+    _GVARS.at(number) = value;
+}
+
+int Game::GVAR(unsigned int number)
+{
+    _initGVARS();
+    if (number >= _GVARS.size())
+    {
+        throw Exception("Game::GVAR(num) - num out of range: " + std::to_string(number));
+    }
+    return _GVARS.at(number);
+}
+
+void Game::_initGVARS()
+{
+    if (_GVARS.size() > 0) return;
+    auto gam = ResourceManager::gamFileType("data/vault13.gam");
+    for (auto gvar : *gam->GVARS())
+    {
+        _GVARS.push_back(gvar.second);
+    }
+}
+
 }

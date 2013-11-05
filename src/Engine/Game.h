@@ -43,6 +43,7 @@ class Location;
 class Game
 {
 protected:
+    std::vector<int> _GVARS;
     std::string _version;
     ResourceManager* _resourceManager = 0;
     std::vector<State*> _states;
@@ -56,6 +57,7 @@ protected:
     SDL_Event _event;
     bool _initialized = false;
     void _initialize();
+    void _initGVARS();
 private:
     Game() {}
     Game(Game const&);
@@ -79,6 +81,8 @@ public:
     Mouse * mouse();
     void setLocation(Location* location);
     Location* location();
+    void setGVAR(unsigned int number, int value);
+    int GVAR(unsigned int number);
 };
 
 }

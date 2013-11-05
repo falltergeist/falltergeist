@@ -681,30 +681,30 @@ void VM::run()
             {
                 std::cout << "[*] MVAR[num]" << std::endl;
                 auto num = _popDataInteger();
-                _pushDataInteger(_mvar(num));
+                _pushDataInteger(_game->location()->MVAR(num));
                 break;
             }
             case 0x80c4:
             {
-                std::cout << "[*] MVAR[num] = value" << std::endl;
+                std::cout << "[+] MVAR[num] = value" << std::endl;
                 auto value = _popDataInteger();
                 auto num = _popDataInteger();
-                _mvar(num, value);
+                _game->location()->setMVAR(num, value);
                 break;
             }
             case 0x80c5:
             {
-                std::cout << "[*] GVAR[num];" << std::endl;
+                std::cout << "[+] GVAR[num]" << std::endl;
                 auto num = _popDataInteger();
-                _pushDataInteger(_gvar(num));
+                _pushDataInteger(_game->GVAR(num));
                 break;
             }
             case 0x80c6:
             {
-                std::cout << "[*] GVAR[num] = value" << std::endl;
+                std::cout << "[+] GVAR[num] = value" << std::endl;
                 auto value = _popDataInteger();
                 auto num = _popDataInteger();
-                _gvar(num, value);
+                _game->setGVAR(num, value);
                 break;
             }
             case 0x80c7:

@@ -73,6 +73,17 @@ void Location::init()
     camera()->setXPosition(hexagonToX(defaultPosition));
     camera()->setYPosition(hexagonToY(defaultPosition));
 
+    // Initialize MAP vars
+    if (_mapFile->MVARsize() > 0)
+    {
+        auto name = _mapFile->name();
+        auto gam = ResourceManager::gamFileType("maps/" + name.substr(0, name.find(".")) + ".gam");
+        for (auto mvar : *gam->MVARS())
+        {
+            _MVARS.push_back(mvar.second);
+        }
+    }
+
     _elevation = _mapFile->defaultElevation();
 
     std::vector<libfalltergeist::MapObject *> * mapObjects = _mapFile->elevations()->at(_elevation)->objects();
@@ -406,5 +417,22 @@ int Location::height()
     return 12*_cols + 24*_rows;
 }
 
+void Location::setMVAR(unsigned int number, int value)
+{
+    if (number >= _MVARS.size())
+    {
+        throw Exception("Location::setMVAR(num, value) - num out of range: " + std::to_string(number));
+    }
+    _MVARS.at(number) = value;
+}
+
+int Location::MVAR(unsigned int number)
+{
+    if (number >= _MVARS.size())
+    {
+        throw Exception("Location::MVAR(num) - num out of range: " + std::to_string(number));
+    }
+    return _MVARS.at(number);
+}
 
 }
