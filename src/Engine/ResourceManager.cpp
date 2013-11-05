@@ -109,6 +109,7 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
             else if (extension == "bio") item = new libfalltergeist::BioFileType(stream);
             else if (extension == "fon") item = new libfalltergeist::FonFileType(stream);
             else if (extension == "frm") item = new libfalltergeist::FrmFileType(stream);
+            else if (extension == "gam") item = new libfalltergeist::GamFileType(stream);
             else if (extension == "gcd") item = new libfalltergeist::GcdFileType(stream);
             else if (extension == "int") item = new libfalltergeist::IntFileType(stream);
             else if (extension == "lst") item = new libfalltergeist::LstFileType(stream);
@@ -169,6 +170,11 @@ libfalltergeist::AafFileType* ResourceManager::aafFileType(std::string filename)
 libfalltergeist::FonFileType* ResourceManager::fonFileType(std::string filename)
 {
     return dynamic_cast<libfalltergeist::FonFileType*>(datFileItem(filename));
+}
+
+libfalltergeist::GamFileType* ResourceManager::gamFileType(std::string filename)
+{
+    return dynamic_cast<libfalltergeist::GamFileType*>(datFileItem(filename));
 }
 
 libfalltergeist::GcdFileType* ResourceManager::gcdFileType(std::string filename)

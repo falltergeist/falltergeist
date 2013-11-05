@@ -44,19 +44,20 @@ protected:
 public:
     ResourceManager();
     ~ResourceManager();
+    static libfalltergeist::AafFileType* aafFileType(std::string filename);
+    static libfalltergeist::BioFileType* bioFileType(std::string filename);
     static libfalltergeist::DatFileItem* datFileItem(std::string filename);
     static libfalltergeist::FrmFileType* frmFileType(std::string filename);
     static libfalltergeist::FrmFileType* frmFileType(unsigned int FID);
-    static libfalltergeist::PalFileType* palFileType(std::string filename);
-    static libfalltergeist::LstFileType* lstFileType(std::string filename);
     static libfalltergeist::FonFileType* fonFileType(std::string filename);
-    static libfalltergeist::AafFileType* aafFileType(std::string filename);
+    static libfalltergeist::GamFileType* gamFileType(std::string filename);
     static libfalltergeist::GcdFileType* gcdFileType(std::string filename);
+    static libfalltergeist::PalFileType* palFileType(std::string filename);
     static libfalltergeist::IntFileType* intFileType(std::string filename);
     static libfalltergeist::IntFileType* intFileType(unsigned int SID);
+    static libfalltergeist::LstFileType* lstFileType(std::string filename);
     static libfalltergeist::MapFileType* mapFileType(std::string filename);
     static libfalltergeist::MsgFileType* msgFileType(std::string filename);
-    static libfalltergeist::BioFileType* bioFileType(std::string filename);
     static libfalltergeist::ProFileType* proFileType(std::string filename);
     static libfalltergeist::ProFileType* proFileType(unsigned int PID);
     static libfalltergeist::RixFileType* rixFileType(std::string filename);
