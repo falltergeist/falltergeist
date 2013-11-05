@@ -61,7 +61,6 @@ protected:
     int _getMonth();
     int _getTime();
     void _setLightLevel(int level);
-    void _overrideMapStart(int x, int y, int elevation, int direction);
     void _lvar(int num, int value);
     int _lvar(int num);
     int _rand(int min, int max);
@@ -78,7 +77,6 @@ protected:
     int _critter_attempt_placement(void* who, int hex, int elev);
     int _move_to(void* obj, int tile_num, int elev);
     int _tile_contains_obj_pid(int tile, int elev, int pid);
-    int _getElevation(void* obj);
     int _obj_is_carrying_obj_pid(void* obj, int pid);
     int _critter_add_trait(void* who, int trait_type, int trait, int amount);
     void _anim(void* who, int anim, int direction);

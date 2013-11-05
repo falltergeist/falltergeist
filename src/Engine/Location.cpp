@@ -196,6 +196,8 @@ void Location::think()
                 std::cout << itt->first << std::endl;
                 script->call("map_enter_p_proc");
                 script->call("talk_p_proc");
+                script->call("look_at_p_proc");
+                script->call("description_p_proc");
             }
         }
     }

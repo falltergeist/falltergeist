@@ -71,7 +71,7 @@ void VM::call(std::string name)
         _programCounter = _script->function(name);
         _pushDataInteger(0); // arguments counter;
         _pushReturnInteger(0); // return adrress
-        std::cout << std::endl << "CALLED: " << name << std::endl;
+        std::cout << std::endl << "CALLED: " << name << " [" << _script->filename() <<  "]"<< std::endl;
         run();
         _popDataInteger(); // remove function result
         std::cout << "Function ended" << std::endl;
@@ -591,8 +591,59 @@ void VM::run()
                 auto direction = _popDataInteger();
                 auto elevation = _popDataInteger();
                 auto y = _popDataInteger();
-                auto x = _popDataInteger();
-                _overrideMapStart(x, y, elevation, direction);
+                auto x = _popDataInteger();                
+                auto position = y*200 + x;
+                auto player = _game->location()->player();
+                player->setX(_game->location()->hexagonToX(position));
+                player->setY(_game->location()->hexagonToY(position));
+                player->setOrientation(direction);
+                player->setElevation(elevation);
+                break;
+            }
+            case 0x80ac:
+            {
+                std::cout << "[=] int roll_vs_skill(ObjectPtr who, int skill, int modifier)" << std::endl;
+                _popDataInteger();
+                _popDataInteger();
+                _popDataPointer();
+                _pushDataInteger(2);
+                break;
+            }
+            case 0x80ae:
+            {
+                std::cout << "[=] int do_check(ObjectPtr who, int check, int modifier)" << std::endl;
+                _popDataInteger();
+                _popDataInteger();
+                _popDataPointer();
+                _pushDataInteger(2);
+                break;
+            }
+            case 0x80af:
+            {
+                std::cout << "[*] int is_success(int val)" << std::endl;
+                auto value = _popDataInteger();
+                if (value == 2 || value == 3)
+                {
+                    _pushDataInteger(1); // true;
+                }
+                else
+                {
+                    _pushDataInteger(0);
+                }
+                break;
+            }
+            case 0x80b0:
+            {
+                std::cout << "[*] int is_critical(int val)" << std::endl;
+                auto value = _popDataInteger();
+                if (value == 0 || value == 3)
+                {
+                    _pushDataInteger(1);
+                }
+                else
+                {
+                    _pushDataInteger(0);
+                }
                 break;
             }
             case 0x80b4:
@@ -716,10 +767,19 @@ void VM::run()
                 break;
             }
             case 0x80c8:
+            {
                 std::cout << "[=] int obj_type(void* obj)" << std::endl;
                 _popDataPointer();
                 _pushDataInteger(0);
                 break;
+            }
+            case 0x80c9:
+            {
+                std::cout << "[=] int obj_item_subtype(void* obj)" << std::endl;
+                _popDataPointer();
+                _pushDataInteger(0);
+                break;
+            }
             case 0x80ca:
             {
                 std::cout << "[=] int get_critter_stat(void* who, int stat)" << std::endl;
@@ -845,8 +905,9 @@ void VM::run()
             }
             case 0x80ec:
             {
-                std::cout << "[*] int elevation(void* obj)" << std::endl;
-                _pushDataInteger(_getElevation(_popDataPointer()));
+                std::cout << "[+] int elevation(void* obj)" << std::endl;
+                auto object = (LocationObject*)_popDataPointer();
+                _pushDataInteger(object->elevation());
                 break;
             }
             case 0x80ef:
@@ -855,7 +916,7 @@ void VM::run()
                 break;
             case 0x80f0:
             {
-                std::cout << "[=] void add_timer_event(void* obj, int time, int info)";
+                std::cout << "[=] void add_timer_event(void* obj, int time, int info)" << std::endl;
                 _popDataInteger();
                 _popDataInteger();
                 _popDataPointer();
@@ -869,7 +930,7 @@ void VM::run()
             }
             case 0x80f2:
             {
-                std::cout << "[=] int game_ticks(int seconds)";
+                std::cout << "[=] int game_ticks(int seconds)" << std::endl;
                 auto seconds = _popDataInteger();
                 _pushDataInteger(seconds*1000);
                 break;
@@ -928,10 +989,29 @@ void VM::run()
             }
             case 0x8105:
             {
-                std::cout << "string* msgMessage(int msg_list, int msg_num);" << std::endl;
+                std::cout << "[*] string* msgMessage(int msg_list, int msg_num);" << std::endl;
                 auto msgNum = _popDataInteger();
                 auto msgList = _popDataInteger();
                 _pushDataPointer(_msgMessage(msgList, msgNum));
+                break;
+            }
+            case 0x8106:
+            {
+                std::cout << "[=] void* (int) critter_inven_obj(void* who, int where)" << std::endl;
+                auto where = _popDataInteger();
+                switch (where)
+                {
+                    case 0: // ARMOR SLOT
+                    case 1: // RIGHT HAND SLOT
+                    case 2: // LEFT HAND SLOT
+                        _pushDataPointer(0);
+                        break;
+                    case -2: // INVENTORY COUNT
+                        _pushDataInteger(0);
+                        break;
+                    default:
+                        throw Exception("VM::opcode8106 error");
+                }
                 break;
             }
             case 0x810c:
@@ -1257,27 +1337,6 @@ void VM::_setLightLevel(int level)
     std::cout << "     Setting light level to: " << level << std::endl;
 }
 
-void VM::_overrideMapStart(int x, int y, int elevation, int direction)
-{
-    if (!_game->location())
-    {
-        std::cout << "NO LOCATION FOUND" << std::endl;
-        return;
-    }
-
-    std::cout << "      Overriding map start" << std::endl;
-    std::cout << "      x: " << x << std::endl;
-    std::cout << "      y: " << y << std::endl;
-    std::cout << "      elevation: " << elevation << std::endl;
-    std::cout << "      direction: " << direction << std::endl;
-    auto position = y*200 + x;
-    auto player = _game->location()->player();
-    player->setX(_game->location()->hexagonToX(position));
-    player->setY(_game->location()->hexagonToY(position));
-    player->setOrientation(direction);
-    player->setElevation(elevation);
-
-}
 
 void VM::_lvar(int num, int value)
 {
@@ -1311,8 +1370,26 @@ void VM::_playMovie(int movieNum)
 
 std::string* VM::_msgMessage(int msgList, int msgNum)
 {
-    auto msg = new std::string("Testing message to display");
-    return msg;
+    libfalltergeist::MsgFileType* msg = 0;
+    switch (msgList)
+    {
+        case 0xd:
+            msg = ResourceManager::msgFileType("text/english/dialog/door.msg");
+            break;
+        case 0x14:
+            msg = ResourceManager::msgFileType("text/english/dialog/zclscorp.msg");
+            break;
+        case 0x19:
+            msg = ResourceManager::msgFileType("text/english/dialog/arcaves.msg");
+            break;
+        default:
+            std::cout << std::hex << msgList << std::endl;
+            break;
+    }
+
+    if (!msg) return new std::string("Unknown MSG number");
+
+    return msg->message(msgNum)->textPointer();
 }
 
 void VM::_displayString(std::string* str)
@@ -1350,11 +1427,6 @@ int VM::_move_to(void* obj, int tile_num, int elev)
 }
 
 int VM::_tile_contains_obj_pid(int tile, int elev, int pid)
-{
-    return 0;
-}
-
-int VM::_getElevation(void* obj)
 {
     return 0;
 }
