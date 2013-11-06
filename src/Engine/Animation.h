@@ -55,6 +55,7 @@ public:
 
     virtual int xOffset();
     virtual int yOffset();
+    
     bool enabled();
     void setEnabled(bool value);
 

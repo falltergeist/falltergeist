@@ -64,7 +64,7 @@ void AnimationQueue::clear()
 
 void AnimationQueue::think()
 {
-
+    this->animation()->think();
 }
 
 Surface* AnimationQueue::surface()

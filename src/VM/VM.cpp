@@ -30,6 +30,7 @@
 #include "../Engine/LocationObject.h"
 #include "../Game/GameDefines.h"
 #include "../Game/GameObject.h"
+#include "../Game/GameDudeObject.h"
 #include "../VM/VM.h"
 #include "../VM/VMStackIntValue.h"
 #include "../VM/VMStackFloatValue.h"
@@ -655,10 +656,9 @@ void VM::run()
                 auto position = y*200 + x;
                 auto object = (GameObject*)_owner;
                 auto player = object->location()->player();
-                player->setX(object->location()->hexagonToX(position));
-                player->setY(object->location()->hexagonToY(position));
-                player->setOrientation(direction);
-                player->setElevation(elevation);
+                //player->setPosition(position);
+                //player->setOrientation(direction);
+                //player->setElevation(elevation);
                 break;
             }
             case 0x80aa:
@@ -792,7 +792,8 @@ void VM::run()
             {
                 std::cout << "[+] void* dude_obj()" << std::endl;
                 auto object = (GameObject*)_owner;
-                _pushDataPointer(object->location()->player());
+                //_pushDataPointer(object->location()->player());
+                _pushDataPointer(0);
                 break;
             }
             case 0x80c1:
@@ -1366,7 +1367,7 @@ void VM::run()
                 std::cout << "[+] void reg_anim_animate_forever(void* obj , int delay)" << std::endl;
                 _popDataInteger(); // delay - must be -1
                 auto object = (LocationObject*)_popDataPointer();
-                object->animation()->setEnabled(true);
+                //object->animation()->setEnabled(true);
                 break;
             }
             case 0x8128:

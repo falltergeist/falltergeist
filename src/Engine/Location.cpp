@@ -214,6 +214,34 @@ void Location::init()
         object->setOrientation( mapObject->orientation() );
         object->setPosition( mapObject->hexPosition() );
 
+        auto frm = ResourceManager::frmFileType(object->FID());
+        if (frm)
+        {
+            auto id = mapObject->objectId();
+            auto type = mapObject->objectTypeId();
+            if (type == 5 && id == 12) continue; // Map scroll blockers
+            if (type == 5 && id >= 16 && id <= 23) // exit tiles
+            {
+                frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
+            }
+
+            if (frm->framesPerSecond() > 0)
+            {
+                auto animation = new Animation(frm);
+                animation->setCurrentSurfaceSet(object->orientation());
+                animation->setX(hexagonToX(object->position()));
+                animation->setY(hexagonToY(object->position()));
+                object->animationQueue()->add(animation);
+            }
+            else
+            {
+                auto surface = new InteractiveSurface(frm, object->orientation());
+                surface->setX(hexagonToX(object->position()));
+                surface->setY(hexagonToY(object->position()));
+                object->setSurface(surface);
+            }
+        }
+
         if (mapObject->scriptId() > 0)
         {
             auto intFile = ResourceManager::intFileType(mapObject->scriptId());
@@ -293,31 +321,29 @@ void Location::_checkObjectsToRender()
 
     for (auto object : _objects)
     {
-        // if object is out of camera borders
-        if (object->x() + object->xOffset() + object->width() < camera()->x()) continue;
-        if (object->y() + object->yOffset() + object->height() < camera()->y()) continue;
+        if (!object->surface()) continue;
+        // if object is out of camera borders        
+        if (object->surface()->x() + object->surface()->xOffset() + object->surface()->width() < camera()->x()) continue;
+        if (object->surface()->y() + object->surface()->yOffset() + object->surface()->height() < camera()->y()) continue;
 
-        if (object->x() + object->xOffset() > camera()->x() + camera()->width()) continue;
-        if (object->y() + object->yOffset() > camera()->y() + camera()->height()) continue;
+        if (object->surface()->x() + object->surface()->xOffset() > camera()->x() + camera()->width()) continue;
+        if (object->surface()->y() + object->surface()->yOffset() > camera()->y() + camera()->height()) continue;
 
-        if (object->animation())
+        if (object->animationQueue()->queue()->size() > 0)
         {
             //if (object->x()  - object->animation()->surfaces()->at(0)->width()/2 + object->animation()->xOffsetMin() > camera()->x() + camera()->width()) continue;
-            if (object->x() + object->xOffset() > camera()->x() + camera()->width()) continue;
-            if (object->y() + object->yOffset() > camera()->y() + camera()->height()) continue;
+            if (object->surface()->x() + object->surface()->xOffset() > camera()->x() + camera()->width()) continue;
+            if (object->surface()->y() + object->surface()->yOffset() > camera()->y() + camera()->height()) continue;
         }
         else
         {
-            if (object->x() + object->xOffset() > camera()->x() + camera()->width()) continue;
-            if (object->y() + object->yOffset() > camera()->y() + camera()->height()) continue;
+            if (object->surface()->x() + object->surface()->xOffset() > camera()->x() + camera()->width()) continue;
+            if (object->surface()->y() + object->surface()->yOffset() > camera()->y() + camera()->height()) continue;
         }
 
-
-        _objectsToRender->push_back(object);
+        _objectsToRender.push_back(object);
     }
-
 }
-
 
 void Location::_generateBackground()
 {

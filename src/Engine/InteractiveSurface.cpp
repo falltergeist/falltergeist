@@ -28,6 +28,10 @@
 namespace Falltergeist
 {
 
+InteractiveSurface::InteractiveSurface(libfalltergeist::FrmFileType* frm, unsigned int direction, unsigned int frame) : Surface(frm, direction, frame)
+{
+}
+
 InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y)
 {
 }

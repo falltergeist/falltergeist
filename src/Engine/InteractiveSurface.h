@@ -56,6 +56,7 @@ protected:
     EventHandler _onKeyboardPress = 0;
     EventHandler _onKeyboardRelease = 0;
 public:
+    InteractiveSurface(libfalltergeist::FrmFileType* frm, unsigned int direction = 0, unsigned int frame = 0);
     InteractiveSurface(int width = 0, int height = 0, int x = 0, int y = 0);
     InteractiveSurface(Surface* other);
     virtual ~InteractiveSurface();

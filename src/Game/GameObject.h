@@ -47,7 +47,7 @@ protected:
     std::vector<VM*> _scripts;
     Location* _location = 0;
     InteractiveSurface* _surface = 0;
-    AnimationQueue _animation;
+    AnimationQueue _animationQueue;
 public:
     GameObject();
     virtual ~GameObject();
@@ -71,6 +71,10 @@ public:
 
     Location* location();
     void setLocation(Location* value);
+
+    AnimationQueue* animationQueue();
+    InteractiveSurface* surface();
+    void setSurface(InteractiveSurface* surface);
 
 };
 

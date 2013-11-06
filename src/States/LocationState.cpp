@@ -29,7 +29,7 @@
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Location.h"
 #include "../Engine/LocationCamera.h"
-#include "../Engine/LocationObject.h"
+#include "../Game/GameObject.h"
 #include "../States/LocationState.h"
 #include "../Engine/Mouse.h"
 #include "../UI/TextArea.h"
@@ -77,12 +77,12 @@ void LocationState::onBackgroundClick(Event * event)
 
 void LocationState::onObjectClick(Event* event)
 {
-    auto object = dynamic_cast<LocationObject*>(event->sender());
+    auto object = dynamic_cast<GameObject*>(event->sender());
     if (object)
     {
         std::cout << "object:" << object->PID() << std::endl;
-        std::cout << object->descriptionId() << std::endl;
-        std::cout << object->description() << std::endl;
+        //std::cout << object->descriptionId() << std::endl;
+        //std::cout << object->description() << std::endl;
     }
 }
 
@@ -112,20 +112,18 @@ void LocationState::blit()
 
     _hexCursor->blit(_game->screen()->surface());
 
-    for (std::vector<LocationObject *>::iterator it = _location->objectsToRender()->begin(); it != _location->objectsToRender()->end(); ++it)
+    for (auto object : *_location->objectsToRender())
     {
-        LocationObject * object = *it;
-
-        int oldX = object->x();
-        int oldY = object->y();
+        int oldX = object->surface()->x();
+        int oldY = object->surface()->y();
         int newX = oldX - _location->camera()->x();
         int newY = oldY - _location->camera()->y();
 
-        object->setX(newX);
-        object->setY(newY);
-        object->blit(_game->screen()->surface());
-        object->setX(oldX);
-        object->setY(oldY);
+        object->surface()->setX(newX);
+        object->surface()->setY(newY);
+        object->surface()->blit(_game->screen()->surface());
+        object->surface()->setX(oldX);
+        object->surface()->setY(oldY);
 
     }
 }
@@ -152,10 +150,9 @@ void LocationState::think()
     if (!_location) return;
     _location->think();
 
-    for(auto it = _location->objectsToRender()->begin(); it != _location->objectsToRender()->end(); ++it)
+    for(auto object : *_location->objectsToRender())
     {
-        LocationObject* object = *it;
-        object->onLeftButtonClick((EventHandler) &LocationState::onObjectClick);
+        object->surface()->onLeftButtonClick((EventHandler) &LocationState::onObjectClick);
     }
 
     int x = _location->camera()->x() + _game->mouse()->x();

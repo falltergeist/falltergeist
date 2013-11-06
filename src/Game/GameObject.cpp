@@ -113,4 +113,27 @@ void GameObject::setLocation(Location* value)
     _location = value;
 }
 
+AnimationQueue* GameObject::animationQueue()
+{
+    return &_animationQueue;
+}
+
+InteractiveSurface* GameObject::surface()
+{
+    if (!_surface)
+    {
+        if (_animationQueue.queue()->size() > 0)
+        {
+            return (InteractiveSurface*)_animationQueue.animation();
+        }
+    }
+    return _surface;
+}
+
+void GameObject::setSurface(InteractiveSurface* surface)
+{
+    _surface = surface;
+}
+
+
 }
