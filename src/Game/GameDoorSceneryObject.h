@@ -33,9 +33,19 @@ namespace Falltergeist
 
 class GameDoorSceneryObject : public GameSceneryObject
 {
+protected:
+    bool _opened = false;
+    bool _locked = false;
 public:
     GameDoorSceneryObject();
     virtual ~GameDoorSceneryObject();
+
+    bool opened();
+    void setOpened(bool value);
+
+    bool locked();
+    void setLocked(bool value);
+
 };
 
 }

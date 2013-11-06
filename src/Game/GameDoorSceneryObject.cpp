@@ -36,4 +36,24 @@ GameDoorSceneryObject::~GameDoorSceneryObject()
 {
 }
 
+bool GameDoorSceneryObject::opened()
+{
+    return _opened;
+}
+
+void GameDoorSceneryObject::setOpened(bool value)
+{
+    _opened = value;
+}
+
+bool GameDoorSceneryObject::locked()
+{
+    return _locked;
+}
+
+void GameDoorSceneryObject::setLocked(bool value)
+{
+    _locked = value;
+}
+
 }
