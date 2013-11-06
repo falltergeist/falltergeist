@@ -31,7 +31,7 @@
 namespace Falltergeist
 {
 
-class GameWallObject : GameObject
+class GameWallObject : public GameObject
 {
 public:
     GameWallObject();

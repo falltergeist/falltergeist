@@ -24,6 +24,7 @@
 
 // Falltergeist includes
 #include "../Engine/LocationObject.h"
+#include "../Game/GameObject.h"
 #include "../Engine/Animation.h"
 #include "../Engine/Exception.h"
 #include "../VM/VM.h"
@@ -354,6 +355,16 @@ void LocationObject::setOrientation(unsigned int value)
         loadFromSurface(new Surface(frm));
     }
 
+}
+
+GameObject* LocationObject::gameObject()
+{
+    return _gameObject;
+}
+
+void LocationObject::setGameObject(GameObject* value)
+{
+    _gameObject = value;
 }
 
 unsigned int LocationObject::elevation() { return _elevation; }

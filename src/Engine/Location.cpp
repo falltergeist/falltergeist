@@ -29,6 +29,20 @@
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Animation.h"
+#include "../Game/GameCritterObject.h"
+#include "../Game/GameAmmoItemObject.h"
+#include "../Game/GameArmorItemObject.h"
+#include "../Game/GameContainerItemObject.h"
+#include "../Game/GameDrugItemObject.h"
+#include "../Game/GameKeyItemObject.h"
+#include "../Game/GameMiscItemObject.h"
+#include "../Game/GameWeaponItemObject.h"
+#include "../Game/GameDoorSceneryObject.h"
+#include "../Game/GameElevatorSceneryObject.h"
+#include "../Game/GameGenericSceneryObject.h"
+#include "../Game/GameStairsSceneryObject.h"
+#include "../Game/GameWallObject.h"
+#include "../Game/GameMiscObject.h"
 #include "../VM/VM.h"
 
 // Third party includes
@@ -92,11 +106,121 @@ void Location::init()
     {
         libfalltergeist::MapObject * mapObject = *it;
 
-        auto object = new LocationObject();
+        auto object = new LocationObject();        
         object->setPID(mapObject->PID());
         object->setFID(mapObject->FID());
         object->setOrientation(mapObject->orientation());
         object->setElevation(mapObject->elevation());
+
+        GameObject* gameObject;
+
+        switch (mapObject->objectTypeId())
+        {
+            case libfalltergeist::ProFileType::TYPE_ITEM:
+            {
+                switch(mapObject->objectSubtypeId())
+                {
+                    case libfalltergeist::ProFileType::TYPE_ITEM_AMMO:
+                    {
+                        gameObject = new GameAmmoItemObject();
+                        break;
+                    }
+                    case libfalltergeist::ProFileType::TYPE_ITEM_ARMOR:
+                    {
+                        gameObject = new GameArmorItemObject();
+                        break;
+                    }
+                    case libfalltergeist::ProFileType::TYPE_ITEM_CONTAINER:
+                    {
+                        gameObject = new GameContainerItemObject();
+                        break;
+                    }
+                    case libfalltergeist::ProFileType::TYPE_ITEM_DRUG:
+                    {
+                        gameObject = new GameDrugItemObject();
+                        break;
+                    }
+                    case libfalltergeist::ProFileType::TYPE_ITEM_KEY:
+                    {
+                        gameObject = new GameKeyItemObject();
+                        break;
+                    }
+                    case libfalltergeist::ProFileType::TYPE_ITEM_MISC:
+                    {
+                        gameObject = new GameMiscItemObject();
+                        break;
+                    }
+                    case libfalltergeist::ProFileType::TYPE_ITEM_WEAPON:
+                    {
+                        gameObject = new GameWeaponItemObject();
+                        break;
+                    }
+                }
+                break;
+            }
+            case libfalltergeist::ProFileType::TYPE_CRITTER:
+            {
+                gameObject = new GameCritterObject();
+                break;
+            }
+            case libfalltergeist::ProFileType::TYPE_SCENERY:
+            {
+                switch (mapObject->objectSubtypeId())
+                {
+                    case libfalltergeist::ProFileType::TYPE_SCENERY_DOOR:
+                    {
+                        gameObject = new GameDoorSceneryObject();
+                        break;
+                    }
+                    case libfalltergeist::ProFileType::TYPE_SCENERY_ELEVATOR:
+                    {
+                        gameObject = new GameElevatorSceneryObject();
+                        break;
+                    }
+                    case libfalltergeist::ProFileType::TYPE_SCENERY_GENERIC:
+                    {
+                        gameObject = new GameGenericSceneryObject();
+                        break;
+                    }
+                    case libfalltergeist::ProFileType::TYPE_SCENERY_LADDER_BOTTOM:
+                    {
+                        throw 0;
+                        break;
+                    }
+                    case libfalltergeist::ProFileType::TYPE_SCENERY_LADDER_TOP:
+                    {
+                        throw 0;
+                        break;
+                    }
+                    case libfalltergeist::ProFileType::TYPE_SCENERY_STAIRS:
+                    {
+                        gameObject = new GameStairsSceneryObject();
+                        break;
+                    }
+                }
+                break;
+            }
+            case libfalltergeist::ProFileType::TYPE_WALL:
+            {
+                gameObject = new GameWallObject();
+                break;
+            }
+            case libfalltergeist::ProFileType::TYPE_TILE:
+            {
+                throw 1;
+                break;
+            }
+            case libfalltergeist::ProFileType::TYPE_MISC:
+            {
+                gameObject = new GameMiscObject();
+                break;
+            }
+        }
+        gameObject->setFID( mapObject->FID() );
+        gameObject->setPID( mapObject->PID() );
+        gameObject->setElevation( mapObject->elevation() );
+        gameObject->setOrientation( mapObject->orientation() );
+        gameObject->setPosition( mapObject->hexPosition() );
 
         if (mapObject->scriptId() > 0)
         {

@@ -31,7 +31,7 @@
 namespace Falltergeist
 {
 
-class GameStairsSceneryObject : GameSceneryObject
+class GameStairsSceneryObject : public GameSceneryObject
 {
 public:
     GameStairsSceneryObject();

@@ -36,4 +36,9 @@ GameContainerItemObject::~GameContainerItemObject()
 {
 }
 
+std::vector<GameItemObject*>* GameContainerItemObject::inventory()
+{
+    return &_inventory;
+}
+
 }

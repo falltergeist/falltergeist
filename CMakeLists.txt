@@ -91,6 +91,8 @@ set(SOURCES main.cpp
             src/Game/GameArmorItemObject.h
             src/Game/GameContainerItemObject.cpp
             src/Game/GameContainerItemObject.h
+            src/Game/GameDrugItemObject.cpp
+            src/Game/GameDrugItemObject.h
             src/Game/GameKeyItemObject.cpp
             src/Game/GameKeyItemObject.h
             src/Game/GameMiscItemObject.cpp

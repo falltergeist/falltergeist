@@ -22,6 +22,7 @@
 #define FALLTERGEIST_GAMECRITTEROBJECT_H
 
 // C++ standard includes
+#include <vector>
 
 // Falltergeist includes
 #include "../Game/GameObject.h"
@@ -30,12 +31,16 @@
 
 namespace Falltergeist
 {
+class GameItemObject;
 
 class GameCritterObject : public GameObject
 {
+protected:
+    std::vector<GameItemObject*> _inventory;
 public:
     GameCritterObject();
     virtual ~GameCritterObject();
+    std::vector<GameItemObject*>* inventory();
 };
 
 }

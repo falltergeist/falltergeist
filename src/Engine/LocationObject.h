@@ -33,6 +33,7 @@ namespace Falltergeist
 {
 class Animation;
 class VM;
+class GameObject;
 
 class LocationObject : public InteractiveSurface
 {
@@ -47,6 +48,8 @@ protected:
 
     Animation * _animation = 0;
     std::map<std::string, VM*> _scripts;
+    GameObject* _gameObject = 0;
+
 public:
     LocationObject(int x = 0, int y = 0);
     ~LocationObject();
@@ -84,6 +87,8 @@ public:
     void removeScript(std::string name);
     void removeScripts();
 
+    GameObject* gameObject();
+    void setGameObject(GameObject* value);
 
 };
 

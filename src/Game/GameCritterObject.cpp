@@ -36,4 +36,9 @@ GameCritterObject::~GameCritterObject()
 {
 }
 
+std::vector<GameItemObject*>* GameCritterObject::inventory()
+{
+    return &_inventory;
+}
+
 }
