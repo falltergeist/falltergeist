@@ -43,6 +43,7 @@
 #include "../Game/GameStairsSceneryObject.h"
 #include "../Game/GameWallObject.h"
 #include "../Game/GameMiscObject.h"
+#include "../Game/GameDudeObject.h"
 #include "../VM/VM.h"
 
 // Third party includes
@@ -235,22 +236,19 @@ void Location::init()
         _objects.push_back(object);
     }
 
-    _player = new LocationObject();
+    _player = new GameDudeObject();
     _player->setPID(0x01000040);
     _player->setFID(0x01000040);
     _player->setOrientation(_mapFile->defaultOrientation());
-    _player->setX(hexagonToX(_mapFile->defaultPosition()));
-    _player->setY(hexagonToY(_mapFile->defaultPosition()));
+    _player->setPosition(_mapFile->defaultPosition());
     auto script = new VM(ResourceManager::intFileType(0), _player);
-    script->initialize();
-    _player->addScript("obj_dude.int", script);
-    _objects->push_back(_player);
+    _player->scripts()->push_back(script);
+    _objects.push_back(_player);
 
     // ON MAP LOADED
     if (_mapFile->scriptId() > 0)
     {
-        _locationScript = new VM(ResourceManager::intFileType(_mapFile->scriptId()-1), this);
-        _locationScript->initialize();
+        _script = new VM(ResourceManager::intFileType(_mapFile->scriptId()-1), this);
     }
 
     // -----------------------
@@ -258,7 +256,7 @@ void Location::init()
     _checkObjectsToRender();
 }
 
-GameObject* Location::player()
+GameDudeObject* Location::player()
 {
     return _player;
 }

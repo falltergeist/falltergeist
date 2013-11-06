@@ -79,6 +79,8 @@ set(SOURCES main.cpp
             src/Engine/Surface.h
             src/Engine/SurfaceSet.cpp
             src/Engine/SurfaceSet.h
+            src/Game/GameDudeObject.cpp
+            src/Game/GameDudeObject.h
             src/Game/GameObject.cpp
             src/Game/GameObject.h
             src/Game/GameCritterObject.cpp

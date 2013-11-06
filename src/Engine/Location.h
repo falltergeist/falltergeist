@@ -32,6 +32,7 @@ namespace Falltergeist
 {
 class Surface;
 class GameObject;
+class GameDudeObject;
 class LocationCamera;
 class VM;
 
@@ -39,7 +40,7 @@ class Location
 {
 protected:
     VM* _script = 0;
-    GameObject* _player = 0;
+    GameDudeObject* _player = 0;
     std::vector<GameObject*> _objects;
     std::vector<GameObject*> _objectsToRender;
     std::vector<int> _MVARS;
@@ -76,7 +77,7 @@ public:
 
     LocationCamera* camera();
 
-    GameObject* player();
+    GameDudeObject* player();
 
     libfalltergeist::MapFileType* mapFile();
     Surface* tilesBackground();
