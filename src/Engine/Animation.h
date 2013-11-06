@@ -35,6 +35,7 @@ class Animation : public InteractiveSurface
 {   
 protected:
     std::vector<std::vector<Surface*>*> _surfaceSets;
+    bool _enabled = false;
     unsigned int _frameRate = 200;
     unsigned int _currentFrame = 0;
     unsigned int _currentSurfaceSet = 0;
@@ -54,6 +55,9 @@ public:
 
     virtual int xOffset();
     virtual int yOffset();
+    bool enabled();
+    void setEnabled(bool value);
+
 
     int frameXPosition(unsigned int frame);
     int frameYPosition(unsigned int frame);

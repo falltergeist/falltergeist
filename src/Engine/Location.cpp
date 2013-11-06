@@ -155,6 +155,9 @@ void Location::init()
     _player->setOrientation(_mapFile->defaultOrientation());
     _player->setX(hexagonToX(_mapFile->defaultPosition()));
     _player->setY(hexagonToY(_mapFile->defaultPosition()));
+    auto script = new VM(ResourceManager::intFileType(0), _player);
+    script->initialize();
+    _player->addScript("obj_dude.int", script);
     _objects->push_back(_player);
 
     // ON MAP LOADED
@@ -165,7 +168,6 @@ void Location::init()
     }
 
     // -----------------------
-
     _generateBackground();
     _checkObjectsToRender();
 }
@@ -198,6 +200,7 @@ void Location::think()
                 script->call("talk_p_proc");
                 script->call("look_at_p_proc");
                 script->call("description_p_proc");
+                script->call("critter_p_proc");
                 script->call("Node001");
                 script->call("Node002");
                 script->call("Node003");
@@ -211,7 +214,17 @@ void Location::think()
     }
     else
     {
+        for (auto it = _objects->begin(); it != _objects->end(); ++it)
+        {
+            LocationObject* object = *it;
+            for (auto itt = object->scripts()->begin(); itt != object->scripts()->end(); ++itt)
+            {
+                VM* script = itt->second;
+                script->call("map_update_p_proc");
+                script->call("critter_p_proc");
 
+            }
+        }
     }
     // -----------------
 

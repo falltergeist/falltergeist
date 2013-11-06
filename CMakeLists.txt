@@ -79,6 +79,38 @@ set(SOURCES main.cpp
             src/Engine/Surface.h
             src/Engine/SurfaceSet.cpp
             src/Engine/SurfaceSet.h
+            src/Game/GameObject.cpp
+            src/Game/GameObject.h
+            src/Game/GameCritterObject.cpp
+            src/Game/GameCritterObject.h
+            src/Game/GameItemObject.cpp
+            src/Game/GameItemObject.h
+            src/Game/GameAmmoItemObject.cpp
+            src/Game/GameAmmoItemObject.h
+            src/Game/GameArmorItemObject.cpp
+            src/Game/GameArmorItemObject.h
+            src/Game/GameContainerItemObject.cpp
+            src/Game/GameContainerItemObject.h
+            src/Game/GameKeyItemObject.cpp
+            src/Game/GameKeyItemObject.h
+            src/Game/GameMiscItemObject.cpp
+            src/Game/GameMiscItemObject.h
+            src/Game/GameWeaponItemObject.cpp
+            src/Game/GameWeaponItemObject.h
+            src/Game/GameSceneryObject.cpp
+            src/Game/GameSceneryObject.h
+            src/Game/GameDoorSceneryObject.cpp
+            src/Game/GameDoorSceneryObject.h
+            src/Game/GameGenericSceneryObject.cpp
+            src/Game/GameGenericSceneryObject.h
+            src/Game/GameStairsSceneryObject.cpp
+            src/Game/GameStairsSceneryObject.h
+            src/Game/GameElevatorSceneryObject.cpp
+            src/Game/GameElevatorSceneryObject.h
+            src/Game/GameWallObject.cpp
+            src/Game/GameWallObject.h
+            src/Game/GameMiscObject.cpp
+            src/Game/GameMiscObject.h
             src/States/LocationState.cpp
             src/States/LocationState.h
             src/States/MainMenuState.cpp

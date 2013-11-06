@@ -56,7 +56,7 @@ protected:
     bool _popDataLogical();
 
 
-    int _metarule(int type, int value);
+    int _metarule(int type, VMStackValue* value);
     int _metarule3(int meta, VMStackValue* p1, int p2, int p3);
     void* _createObject(int PID, int position, int elevation, int SID);
     void _addObjectsToInventory(void* who, void* item, int count);

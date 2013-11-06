@@ -25,6 +25,7 @@
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
+#include "../Engine/Animation.h"
 #include "../Engine/Location.h"
 #include "../Engine/LocationObject.h"
 #include "../VM/VM.h"
@@ -215,11 +216,31 @@ void VM::run()
                 _dataStack.pop();
                 break;
             }
+            case 0x801b:
+            {
+                std::cout << "[?] dup_r" << std::endl;
+                _returnStack.push(_returnStack.top());
+                break;
+            }
             case 0x801c:
             {
                 std::cout << "[*] ret = 0x";
                 _programCounter = _popReturnInteger();
                 std::cout << std::hex << _programCounter << std::endl;
+                break;
+            }
+            case 0x8027:
+            {
+                std::cout << "[?] unknown pop_d pop_d" << std::endl;
+                _dataStack.pop();
+                _dataStack.pop();
+                break;
+            }
+            case 0x8028:
+            {
+                std::cout << "[?] ? lookup_string_proc(? p1)" << std::endl;
+                _popDataInteger();
+                _pushDataPointer(0);
                 break;
             }
             case 0x8029:
@@ -363,9 +384,17 @@ void VM::run()
                     }
                     case VMStackValue::TYPE_POINTER:
                     {
-                        auto p2 = _popDataPointer();
-                        auto p1 = _popDataPointer();
-                        _pushDataInteger(p1 != p2);
+                        auto p2 = (int)(bool)_popDataPointer();
+                        if (_dataStack.top()->type() == VMStackValue::TYPE_POINTER) // to check if the pointer is null
+                        {
+                            auto p1 = (int)(bool)_popDataPointer();
+                            _pushDataInteger(p1 != p2);
+                        }
+                        else
+                        {
+                            auto p1 = _popDataInteger();
+                            _pushDataInteger(p1 != p2);
+                        }
                         break;
                     }
                     case VMStackValue::TYPE_FLOAT:
@@ -584,11 +613,24 @@ void VM::run()
                 _giveExpPoints(_popDataInteger());
                 break;
             }
+            case 0x80a3:
+            {
+                std::cout << "[=] void play_sfx(string* p1)" << std::endl;
+                _popDataPointer();
+                break;
+            }
             case 0x80a4:
             {
                 std::cout << "[=] char* obj_name(void* what)" << std::endl;
                 _popDataPointer();
                 _pushDataPointer((void*)new std::string("object name"));
+                break;
+            }
+            case 0x80a6:
+            {
+                std::cout << "[=] int SkillPoints(int PCStatNum)" << std::endl;
+                _popDataInteger();
+                _pushDataInteger(0);
                 break;
             }
             case 0x80a7:
@@ -598,6 +640,15 @@ void VM::run()
                 _popDataInteger();
                 _popDataInteger();
                 _pushDataPointer(0);
+                break;
+            }
+            case 0x80a8:
+            {
+                std::cout << "[=] void set_map_start(int x, int y, int elev, int rot)" << std::endl;
+                _popDataInteger();
+                _popDataInteger();
+                _popDataInteger();
+                _popDataInteger();
                 break;
             }
             case 0x80a9:
@@ -667,6 +718,14 @@ void VM::run()
                 {
                     _pushDataInteger(0);
                 }
+                break;
+            }
+            case 0x80b2:
+            {
+                std::cout << "[=] void mark_area_known(int AREA_MARK_TYPE, int AreaNum, int MARK_STATE);" << std::endl;
+                _popDataInteger();
+                _popDataInteger();
+                _popDataInteger();
                 break;
             }
             case 0x80b4:
@@ -821,12 +880,37 @@ void VM::run()
                 _pushDataInteger(1);
                 break;
             }
+            case 0x80cb:
+            {
+                std::cout << "[=] int set_critter_stat(void* who, int stat, int amount)  " << std::endl;
+                _popDataInteger();
+                _popDataInteger();
+                _popDataPointer();
+                _pushDataInteger(-1);
+                break;
+            }
+            case 0x80cc:
+            {
+                std::cout << "[=] void animate_stand_obj(void* obj)" << std::endl;
+                _popDataPointer();
+                break;
+            }
             case 0x80ce:
             {
                 std::cout << "[=] void animate_move_obj_to_tile(void* who, int tile, int speed)" << std::endl;
                 _popDataInteger();
                 _popDataInteger();
                 _popDataPointer();
+                break;
+            }
+            case 0x80cf:
+            {
+                std::cout << "[=] int tile_in_tile_rect(int tile1, int tile2, int tile3, int tile4, int tile)" << std::endl;
+                _popDataInteger();
+                _popDataInteger();
+                _popDataInteger();
+                _popDataInteger();
+                _pushDataInteger(0);
                 break;
             }
             case 0x80d0:
@@ -851,8 +935,13 @@ void VM::run()
                 break;
             }
             case 0x80d3:
-                std::cout << "stack:=tile_distance_objs(p2,p1)" << std::endl;
+            {
+                std::cout << "int tile_distance_objs(void* p2, void* p1)" << std::endl;
+                _popDataPointer();
+                _popDataPointer();
+                _pushDataInteger(10);
                 break;
+            }
             case 0x80d4:
             {
                 std::cout << "[=] int objectPosition(void* obj)" << std::endl;
@@ -930,12 +1019,26 @@ void VM::run()
                 _popDataPointer();
                 break;
             }
+            case 0x80e4:
+            {
+                std::cout << "[=] void load_map(string* map, int param)" << std::endl;
+                _popDataInteger();
+                _popDataPointer();
+                break;
+            }
             case 0x80e5:
             {
                 std::cout << "[=] void wm_area_set_pos(int areaIdx, int xPos, int yPos)" << std::endl;
                 _popDataInteger();
                 _popDataInteger();
                 _popDataInteger();
+                break;
+            }
+            case 0x80e7:
+            {
+                std::cout << "[=] int anim_busy(void* obj)" << std::endl;
+                auto obj = (LocationObject*)_popDataPointer();
+                _pushDataInteger(obj->animation()->enabled());
                 break;
             }
             case 0x80e9:
@@ -1011,6 +1114,11 @@ void VM::run()
                 _pushDataInteger(1);
                 break;
             }
+            case 0x80f9:
+            {
+                std::cout << "[=] void dialogue_system_enter()" << std::endl;
+                break;
+            }
             case 0x80fa:
             {
                 std::cout << "[=] int action_being_used()" << std::endl;
@@ -1037,6 +1145,20 @@ void VM::run()
                 auto hex = _popDataInteger();
                 auto who = _popDataPointer();
                 _pushDataInteger(_critter_attempt_placement(who, hex, elev));
+                break;
+            }
+            case 0x8100:
+            {
+                std::cout << "[+] int obj_pid(void* obj)" << std::endl;
+                auto obj = (LocationObject*)_popDataPointer();
+                if (obj)
+                {
+                    _pushDataInteger(obj->PID());
+                }
+                else
+                {
+                    _pushDataInteger(-1);
+                }
                 break;
             }
             case 0x8101:
@@ -1103,7 +1225,7 @@ void VM::run()
             case 0x810b:
             {
                 std::cout << "[*] int metarule(p2, p1)" << std::endl;
-                auto p1 = _popDataInteger();
+                auto p1 = _dataStack.pop();
                 auto p2 = _popDataInteger();
                 _pushDataInteger(_metarule(p2, p1));
                 break;
@@ -1119,14 +1241,44 @@ void VM::run()
             case 0x810e:
             {
                 std::cout << "[=] void reg_anim_func(int p1, int p2)" << std::endl;
-                _dataStack.pop(); // pointer or integer
-                _popDataInteger();
+                auto p2 = _dataStack.pop(); // pointer or integer
+                auto p1 = _popDataInteger();
+                _dataStack.push(p2);
+                switch (p1)
+                {
+                    case 0x1: // ANIM_BEGIN
+                    {
+                        auto p2 = _popDataInteger();
+                        // RB_UNRESERVED (1) - незарезервированная последовательность, может не воспроизвестись, если отсутствуют свободные слоты
+                        // RB_RESERVED (2) - зарезервированная последовательность, должна воспроизвестись в любом случае
+                        break;
+                    }
+                    case 0x2: // ANIM_CLEAR
+                    {
+                        auto obj = (LocationObject*)_popDataPointer();
+                        obj->animation()->setEnabled(true);
+                        break;
+                    }
+                    case 0x3: // ANIMATION_END
+                    {
+                        _popDataInteger(); // always 0
+                        break;
+                    }
+                }
                 break;
             }
             case 0x810f:
             {
                 std::cout << "[=] void reg_anim_animate(void* what, int anim, int delay) " << std::endl;
                 _popDataInteger();
+                _popDataInteger();
+                _popDataPointer();
+                break;
+            }
+            case 0x8113:
+            {
+                std::cout << "[=] void reg_anim_obj_move_to_tile(void* who, int dest_tile, int delay)" << std::endl;
+                _popDataInteger(); // -1
                 _popDataInteger();
                 _popDataPointer();
                 break;
@@ -1194,6 +1346,13 @@ void VM::run()
                 _popDataInteger();
                 break;
             }
+            case 0x8123:
+            {
+                std::cout << "[=] int GetPoison(void* obj)" << std::endl;
+                _popDataPointer();
+                _pushDataInteger(0);
+                break;
+            }
             case 0x8125:
             {
                 std::cout << "[=] void party_remove(void* who)" << std::endl;
@@ -1202,9 +1361,10 @@ void VM::run()
             }
             case 0x8126:
             {
-                std::cout << "[=] void reg_anim_animate_forever(void* obj , int delay)" << std::endl;
-                _popDataInteger();
-                _popDataPointer();
+                std::cout << "[+] void reg_anim_animate_forever(void* obj , int delay)" << std::endl;
+                _popDataInteger(); // delay - must be -1
+                auto object = (LocationObject*)_popDataPointer();
+                object->animation()->setEnabled(true);
                 break;
             }
             case 0x8128:
@@ -1238,6 +1398,13 @@ void VM::run()
                 _popDataPointer();
                 break;
             }
+            case 0x8130:
+            {
+                std::cout << "[=] int obj_is_open(void* what) " << std::endl;
+                _popDataPointer();
+                _pushDataInteger(1);
+                break;
+            }
             case 0x8132:
             {
                 std::cout << "[=] void obj_close(void* obj) " << std::endl;
@@ -1269,6 +1436,13 @@ void VM::run()
                 _popDataInteger();
                 _popDataPointer();
                 _pushDataInteger(0);
+                break;
+            }
+            case 0x8143:
+            {
+                std::cout << "[=] void attack_setup(ObjectPtr who, ObjectPtr victim)" << std::endl;
+                _popDataPointer();
+                _popDataPointer();
                 break;
             }
             case 0x8147:
@@ -1305,6 +1479,20 @@ void VM::run()
             {
                 std::cout << "[=] void gdialog_set_barter_mod(int mod)" << std::endl;
                 _popDataInteger();
+                break;
+            }
+            case 0x8150:
+            {
+                std::cout << "[=] int obj_on_screen(void* obj)" << std::endl;
+                _popDataPointer();
+                _pushDataInteger(1);
+                break;
+            }
+            case 0x8151:
+            {
+                std::cout << "[=] int critter_is_fleeing(void* who)" << std::endl;
+                _popDataPointer();
+                _pushDataInteger(0);
                 break;
             }
             case 0x8153:
@@ -1443,7 +1631,7 @@ bool VM::_popDataLogical()
     throw Exception("VM::_popDataLogical() - something strange happened");
 }
 
-int VM::_metarule(int type, int value)
+int VM::_metarule(int type, VMStackValue* value)
 {
     switch(type)
     {
@@ -1454,12 +1642,16 @@ int VM::_metarule(int type, int value)
             return 0;
         case 17: //  METARULE_AREA_KNOWN
             return 1;
+        case 18: // METARULE_WHO_ON_DRUGS
+            return 0;
         case 19: // METARULE_MAP_KNOWN
             return 1;
         case 22: // METARULE_IS_LOADGAME
             // Игра загружается?
             return 0;  // 0 - false
         case 30: // METARULE_CAR_CURRENT_TOWN
+            return 0;
+        case 40: // METARULE_SKILL_CHECK_TAG
             return 0;
         case 44: // METARULE_GET_WORLDMAP_XPOS
             // позиция по x на карте мира

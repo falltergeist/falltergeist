@@ -56,6 +56,8 @@ Animation::~Animation()
 
 void Animation::think()
 {
+    if (!_enabled) return; // if animation disabled
+
     if(_lastTicks + _frameRate > SDL_GetTicks()) return;
     _lastTicks = SDL_GetTicks();
     _currentFrame++;
@@ -153,6 +155,16 @@ SDL_Surface* Animation::sdl_surface()
 void Animation::setCurrentSurfaceSet(unsigned int value)
 {
     _currentSurfaceSet = value;
+}
+
+bool Animation::enabled()
+{
+    return _enabled;
+}
+
+void Animation::setEnabled(bool value)
+{
+    _enabled = value;
 }
 
 }
