@@ -29,6 +29,7 @@
 #include "../Engine/Location.h"
 #include "../Engine/LocationObject.h"
 #include "../Game/GameDefines.h"
+#include "../Game/GameObject.h"
 #include "../VM/VM.h"
 #include "../VM/VMStackIntValue.h"
 #include "../VM/VMStackFloatValue.h"
@@ -42,23 +43,15 @@ namespace Falltergeist
 VM::VM(libfalltergeist::IntFileType* script, void* owner)
 {
     _owner = owner;
-    _game = &Game::getInstance();
     _script = script;
-    if (!_script)
-    {
-        throw Exception("VM::VM() - script is null");
-    }
+    if (!_script) throw Exception("VM::VM() - script is null");
 }
 
 VM::VM(std::string filename, void* owner)
 {
     _owner = owner;
-    _game = &Game::getInstance();
     _script = ResourceManager::intFileType(filename);
-    if (!_script)
-    {
-        throw Exception("VM::VM() - script is null: " + filename);
-    }
+    if (!_script) throw Exception("VM::VM() - script is null: " + filename);
 }
 
 VM::~VM()
@@ -660,9 +653,10 @@ void VM::run()
                 auto y = _popDataInteger();
                 auto x = _popDataInteger();                
                 auto position = y*200 + x;
-                auto player = _game->location()->player();
-                player->setX(_game->location()->hexagonToX(position));
-                player->setY(_game->location()->hexagonToY(position));
+                auto object = (GameObject*)_owner;
+                auto player = object->location()->player();
+                player->setX(object->location()->hexagonToX(position));
+                player->setY(object->location()->hexagonToY(position));
                 player->setOrientation(direction);
                 player->setElevation(elevation);
                 break;
@@ -795,9 +789,12 @@ void VM::run()
                 break;
             }
             case 0x80bf:
+            {
                 std::cout << "[+] void* dude_obj()" << std::endl;
-                _pushDataPointer(_game->location()->player());
+                auto object = (GameObject*)_owner;
+                _pushDataPointer(object->location()->player());
                 break;
+            }
             case 0x80c1:
             {
                 std::cout << "[*] LVAR[num]" << std::endl;
@@ -822,7 +819,8 @@ void VM::run()
                     _pushDataInteger(0);
                     break;
                 }
-                _pushDataInteger(_game->location()->MVAR(num));
+                auto object = (GameObject*)_owner;
+                _pushDataInteger(object->location()->MVAR(num));
                 break;
             }
             case 0x80c4:
@@ -830,7 +828,8 @@ void VM::run()
                 std::cout << "[+] MVAR[num] = value" << std::endl;
                 auto value = _popDataInteger();
                 auto num = _popDataInteger();                
-                _game->location()->setMVAR(num, value);
+                auto object = (GameObject*)_owner;
+                object->location()->setMVAR(num, value);
                 break;
             }
             case 0x80c5:
@@ -842,7 +841,8 @@ void VM::run()
                     _pushDataInteger(0);
                     break;
                 }
-                _pushDataInteger(_game->GVAR(num));
+                auto game = &Game::getInstance();
+                _pushDataInteger(game->GVAR(num));
                 break;
             }
             case 0x80c6:
@@ -850,7 +850,8 @@ void VM::run()
                 std::cout << "[+] GVAR[num] = value" << std::endl;
                 auto value = _popDataInteger();
                 auto num = _popDataInteger();
-                _game->setGVAR(num, value);
+                auto game = &Game::getInstance();
+                game->setGVAR(num, value);
                 break;
             }
             case 0x80c7:

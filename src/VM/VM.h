@@ -35,7 +35,6 @@ namespace Falltergeist
 class VM
 {
 protected:
-    Game* _game = 0;
     void* _owner;
     libfalltergeist::IntFileType * _script = 0;    
     bool _initialized = false;

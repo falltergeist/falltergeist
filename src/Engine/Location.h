@@ -24,24 +24,24 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../lib/libfalltergeist/libfalltergeist.h"
 
 // Third party includes
-#include "../../lib/libfalltergeist/libfalltergeist.h"
 
 namespace Falltergeist
 {
 class Surface;
-class LocationObject;
+class GameObject;
 class LocationCamera;
 class VM;
 
 class Location
 {
 protected:
-    VM* _locationScript = 0;
-    LocationObject* _player = 0;
-    std::vector<LocationObject*>* _objects = 0;
-    std::vector<LocationObject*>* _objectsToRender = 0;
+    VM* _script = 0;
+    GameObject* _player = 0;
+    std::vector<GameObject*> _objects;
+    std::vector<GameObject*> _objectsToRender;
     std::vector<int> _MVARS;
 
     void _checkObjectsToRender();
@@ -76,12 +76,12 @@ public:
 
     LocationCamera* camera();
 
-    LocationObject* player();
+    GameObject* player();
 
     libfalltergeist::MapFileType* mapFile();
     Surface* tilesBackground();
-    std::vector<LocationObject*>* objects();
-    std::vector<LocationObject*>* objectsToRender();
+    std::vector<GameObject*>* objects();
+    std::vector<GameObject*>* objectsToRender();
 
     void setMVAR(unsigned int number, int value);
     int MVAR(unsigned int number);

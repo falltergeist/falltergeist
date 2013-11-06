@@ -55,8 +55,6 @@ Location::Location(libfalltergeist::MapFileType * mapFile)
     _cols = 100;
     _rows = 100;
 
-    _objects = new std::vector<LocationObject *>;
-    _objectsToRender = new std::vector<LocationObject *>;
     _camera = new LocationCamera(640, 480, 0, 0);
 
     _mapFile = mapFile;
@@ -69,8 +67,6 @@ Location::Location(libfalltergeist::MapFileType * mapFile)
 Location::~Location()
 {
     delete _tilesLst;
-    delete _objects;
-    delete _objectsToRender;
     delete _camera;
 
 }
@@ -104,15 +100,8 @@ void Location::init()
 
     for (std::vector<libfalltergeist::MapObject *>::iterator it = mapObjects->begin(); it != mapObjects->end(); ++it)
     {
-        libfalltergeist::MapObject * mapObject = *it;
-
-        auto object = new LocationObject();        
-        object->setPID(mapObject->PID());
-        object->setFID(mapObject->FID());
-        object->setOrientation(mapObject->orientation());
-        object->setElevation(mapObject->elevation());
-
-        GameObject* gameObject;
+        auto mapObject = *it;
+        GameObject* object = 0;
 
         switch (mapObject->objectTypeId())
         {
@@ -122,37 +111,37 @@ void Location::init()
                 {
                     case libfalltergeist::ProFileType::TYPE_ITEM_AMMO:
                     {
-                        gameObject = new GameAmmoItemObject();
+                        object = new GameAmmoItemObject();
                         break;
                     }
                     case libfalltergeist::ProFileType::TYPE_ITEM_ARMOR:
                     {
-                        gameObject = new GameArmorItemObject();
+                        object = new GameArmorItemObject();
                         break;
                     }
                     case libfalltergeist::ProFileType::TYPE_ITEM_CONTAINER:
                     {
-                        gameObject = new GameContainerItemObject();
+                        object = new GameContainerItemObject();
                         break;
                     }
                     case libfalltergeist::ProFileType::TYPE_ITEM_DRUG:
                     {
-                        gameObject = new GameDrugItemObject();
+                        object = new GameDrugItemObject();
                         break;
                     }
                     case libfalltergeist::ProFileType::TYPE_ITEM_KEY:
                     {
-                        gameObject = new GameKeyItemObject();
+                        object = new GameKeyItemObject();
                         break;
                     }
                     case libfalltergeist::ProFileType::TYPE_ITEM_MISC:
                     {
-                        gameObject = new GameMiscItemObject();
+                        object = new GameMiscItemObject();
                         break;
                     }
                     case libfalltergeist::ProFileType::TYPE_ITEM_WEAPON:
                     {
-                        gameObject = new GameWeaponItemObject();
+                        object = new GameWeaponItemObject();
                         break;
                     }
                 }
@@ -160,7 +149,7 @@ void Location::init()
             }
             case libfalltergeist::ProFileType::TYPE_CRITTER:
             {
-                gameObject = new GameCritterObject();
+                object = new GameCritterObject();
                 break;
             }
             case libfalltergeist::ProFileType::TYPE_SCENERY:
@@ -169,17 +158,17 @@ void Location::init()
                 {
                     case libfalltergeist::ProFileType::TYPE_SCENERY_DOOR:
                     {
-                        gameObject = new GameDoorSceneryObject();
+                        object = new GameDoorSceneryObject();
                         break;
                     }
                     case libfalltergeist::ProFileType::TYPE_SCENERY_ELEVATOR:
                     {
-                        gameObject = new GameElevatorSceneryObject();
+                        object = new GameElevatorSceneryObject();
                         break;
                     }
                     case libfalltergeist::ProFileType::TYPE_SCENERY_GENERIC:
                     {
-                        gameObject = new GameGenericSceneryObject();
+                        object = new GameGenericSceneryObject();
                         break;
                     }
                     case libfalltergeist::ProFileType::TYPE_SCENERY_LADDER_BOTTOM:
@@ -194,7 +183,7 @@ void Location::init()
                     }
                     case libfalltergeist::ProFileType::TYPE_SCENERY_STAIRS:
                     {
-                        gameObject = new GameStairsSceneryObject();
+                        object = new GameStairsSceneryObject();
                         break;
                     }
                 }
@@ -202,7 +191,7 @@ void Location::init()
             }
             case libfalltergeist::ProFileType::TYPE_WALL:
             {
-                gameObject = new GameWallObject();
+                object = new GameWallObject();
                 break;
             }
             case libfalltergeist::ProFileType::TYPE_TILE:
@@ -212,67 +201,38 @@ void Location::init()
             }
             case libfalltergeist::ProFileType::TYPE_MISC:
             {
-                gameObject = new GameMiscObject();
+                object = new GameMiscObject();
                 break;
             }
         }
 
-        gameObject->setLocation(this);
-        gameObject->setFID( mapObject->FID() );
-        gameObject->setPID( mapObject->PID() );
-        gameObject->setElevation( mapObject->elevation() );
-        gameObject->setOrientation( mapObject->orientation() );
-        gameObject->setPosition( mapObject->hexPosition() );
+        object->setLocation(this);
+        object->setFID( mapObject->FID() );
+        object->setPID( mapObject->PID() );
+        object->setElevation( mapObject->elevation() );
+        object->setOrientation( mapObject->orientation() );
+        object->setPosition( mapObject->hexPosition() );
 
         if (mapObject->scriptId() > 0)
         {
-            int sid = mapObject->scriptId();
-            auto lst = ResourceManager::lstFileType("scripts/scripts.lst");
-            std::cout << "sid: " << std::dec << sid << " of " << lst->strings()->size() << std::endl;
-            auto filename = lst->strings()->at(sid);
-            auto script = ResourceManager::intFileType(sid);
-            if (script)
-            {
-                object->addScript(filename, new VM(script, object));
-                object->script(filename)->initialize();
-            }
-            gameObject->scripts()->push_back(new VM(script, gameObject));
+            auto intFile = ResourceManager::intFileType(mapObject->scriptId());
+            if (intFile) object->scripts()->push_back(new VM(intFile, object));
         }
         if (mapObject->mapScriptId() > 0 && mapObject->mapScriptId() != mapObject->scriptId())
         {
-            int sid = mapObject->mapScriptId();
-            std::cout << "msid: " << sid << std::endl;
-            auto lst = ResourceManager::lstFileType("scripts/scripts.lst");
-            auto filename = lst->strings()->at(sid);
-            auto script = ResourceManager::intFileType(sid);
-            if (!script)
-            {
-                object->addScript(filename, new VM(script, object));
-                object->script(filename)->initialize();
-            }
-            gameObject->scripts()->push_back(new VM(script, gameObject));
+            auto intFile = ResourceManager::intFileType(mapObject->mapScriptId());
+            if (intFile) object->scripts()->push_back(new VM(intFile, object));
         }
-        auto proto = ResourceManager::proFileType(mapObject->PID());
+        auto proto = ResourceManager::proFileType(object->PID());
         if (proto->scriptId() > 0)
         {
-            int sid = proto->scriptId();
-            std::cout << "psid: " << sid << std::endl;
-            auto lst = ResourceManager::lstFileType("scripts/scripts.lst");
-            auto filename = lst->strings()->at(sid);
-            auto script = ResourceManager::intFileType(sid);
-            if (!script)
-            {
-                object->addScript(filename, new VM(script, object));
-                object->script(filename)->initialize();
-            }
-            gameObject->scripts()->push_back(new VM(script, gameObject));
+            auto intFile = ResourceManager::intFileType(proto->scriptId());
+            if (intFile) object->scripts()->push_back(new VM(intFile, object));
         }
 
-        object->setDescriptionId(ResourceManager::proFileType(mapObject->PID())->messageId());
-        object->setX(hexagonToX(mapObject->hexPosition()));
-        object->setY(hexagonToY(mapObject->hexPosition()));
+        //object->setDescriptionId(ResourceManager::proFileType(mapObject->PID())->messageId());
 
-        _objects->push_back(object);
+        _objects.push_back(object);
     }
 
     _player = new LocationObject();
@@ -298,7 +258,7 @@ void Location::init()
     _checkObjectsToRender();
 }
 
-LocationObject* Location::player()
+GameObject* Location::player()
 {
     return _player;
 }
@@ -547,14 +507,14 @@ bool Location::scroll(bool up, bool down, bool left, bool right)
     return changed;
 }
 
-std::vector<LocationObject *> * Location::objects()
+std::vector<GameObject*>* Location::objects()
 {
-    return _objects;
+    return &_objects;
 }
 
-std::vector<LocationObject *> * Location::objectsToRender()
+std::vector<GameObject*>* Location::objectsToRender()
 {
-    return _objectsToRender;
+    return &_objectsToRender;
 }
 
 int Location::width()
