@@ -53,6 +53,8 @@ protected:
     void _pushDataFloat(float value);
     void* _popDataPointer();
     void _pushDataPointer(void* value);
+    bool _popDataLogical();
+
 
     int _metarule(int type, int value);
     int _metarule3(int meta, VMStackValue* p1, int p2, int p3);

@@ -198,6 +198,14 @@ void Location::think()
                 script->call("talk_p_proc");
                 script->call("look_at_p_proc");
                 script->call("description_p_proc");
+                script->call("Node001");
+                script->call("Node002");
+                script->call("Node003");
+                script->call("Node004");
+                script->call("Node005");
+                script->call("Node006");
+                script->call("Node007");
+                script->call("Node008");
             }
         }
     }
@@ -424,7 +432,7 @@ void Location::setMVAR(unsigned int number, int value)
 {
     if (number >= _MVARS.size())
     {
-        throw Exception("Location::setMVAR(num, value) - num out of range: " + std::to_string(number));
+        throw Exception("Location::setMVAR(num, value) - num out of range: " + std::to_string((int)number));
     }
     _MVARS.at(number) = value;
 }
@@ -433,7 +441,7 @@ int Location::MVAR(unsigned int number)
 {
     if (number >= _MVARS.size())
     {
-        throw Exception("Location::MVAR(num) - num out of range: " + std::to_string(number));
+        throw Exception("Location::MVAR(num) - num out of range: " + std::to_string((int)number));
     }
     return _MVARS.at(number);
 }
