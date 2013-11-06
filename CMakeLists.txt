@@ -39,6 +39,8 @@ set(SOURCES main.cpp
             src/Engine/AnimatedPalette.h
             src/Engine/Animation.cpp
             src/Engine/Animation.h
+            src/Engine/AnimationQueue.cpp
+            src/Engine/AnimationQueue.h
             src/Engine/CrossPlatform.cpp
             src/Engine/CrossPlatform.h
             src/Engine/Event.cpp

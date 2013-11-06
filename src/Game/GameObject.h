@@ -25,6 +25,7 @@
 #include <vector>
 
 // Falltergeist includes
+#include "../Engine/AnimationQueue.h"
 
 // Third party includes
 
@@ -32,6 +33,8 @@ namespace Falltergeist
 {
 class VM;
 class Location;
+class InteractiveSurface;
+class AnimationQueue;
 
 class GameObject
 {
@@ -43,6 +46,8 @@ protected:
     int _orientation = 0;
     std::vector<VM*> _scripts;
     Location* _location = 0;
+    InteractiveSurface* _surface = 0;
+    AnimationQueue _animation;
 public:
     GameObject();
     virtual ~GameObject();

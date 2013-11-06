@@ -22,6 +22,7 @@
 #include <string>
 
 // Falltergeist includes
+#include "../Engine/InteractiveSurface.h"
 #include "../Game/GameObject.h"
 #include "../Game/GameDefines.h"
 #include "../Engine/Exception.h"

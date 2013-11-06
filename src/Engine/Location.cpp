@@ -263,71 +263,36 @@ GameDudeObject* Location::player()
 
 void Location::think()
 {
-    // ON MAP ENTERED
     if (!_initialized)
     {
         _initialized = true;
-        if (_locationScript)
-        {
-            _locationScript->call("map_enter_p_proc");
-        }
+        if (_script) _script->initialize();
 
+        // initialize scripts
+        for (auto object : _objects) for (auto script : *object->scripts()) script->initialize();
 
-        for (auto it = _objects->begin(); it != _objects->end(); ++it)
-        {
-            LocationObject* object = *it;
-            for (auto itt = object->scripts()->begin(); itt != object->scripts()->end(); ++itt)
-            {
-                VM* script = itt->second;
-                std::cout << itt->first << std::endl;
-                script->call("map_enter_p_proc");
-                script->call("talk_p_proc");
-                script->call("look_at_p_proc");
-                script->call("description_p_proc");
-                script->call("critter_p_proc");
-                script->call("Node001");
-                script->call("Node002");
-                script->call("Node003");
-                script->call("Node004");
-                script->call("Node005");
-                script->call("Node006");
-                script->call("Node007");
-                script->call("Node008");
-            }
-        }
+        // map_enter_p_proc
+        if (_script) _script->call("map_enter_p_proc");
+        for (auto object : _objects) for (auto script : *object->scripts()) script->call("map_enter_p_proc");
+
     }
     else
     {
-        for (auto it = _objects->begin(); it != _objects->end(); ++it)
+        for (auto object : _objects) for (auto script : *object->scripts())
         {
-            LocationObject* object = *it;
-            for (auto itt = object->scripts()->begin(); itt != object->scripts()->end(); ++itt)
-            {
-                VM* script = itt->second;
-                script->call("map_update_p_proc");
-                script->call("critter_p_proc");
-
-            }
+            script->call("map_update_p_proc");
         }
     }
-    // -----------------
 
-    for (std::vector<LocationObject *>::iterator it = _objects->begin(); it != _objects->end(); ++it)
-    {
-        LocationObject * object = *it;
-        object->think();
-    }
 }
 
 
 void Location::_checkObjectsToRender()
 {
-    _objectsToRender->clear();
+    _objectsToRender.clear();
 
-    for (std::vector<LocationObject *>::iterator it = _objects->begin(); it != _objects->end(); ++it)
+    for (auto object : _objects)
     {
-        LocationObject * object = *it;
-
         // if object is out of camera borders
         if (object->x() + object->xOffset() + object->width() < camera()->x()) continue;
         if (object->y() + object->yOffset() + object->height() < camera()->y()) continue;
