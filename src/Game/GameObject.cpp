@@ -19,9 +19,12 @@
  */
 
 // C++ standard includes
+#include <string>
 
 // Falltergeist includes
 #include "../Game/GameObject.h"
+#include "../Game/GameDefines.h"
+#include "../Engine/Exception.h"
 
 // Third party includes
 
@@ -34,6 +37,64 @@ GameObject::GameObject()
 
 GameObject::~GameObject()
 {
+}
+
+int GameObject::PID()
+{
+    return _PID;
+}
+
+void GameObject::setPID(int value)
+{
+    _PID = value;
+}
+
+int GameObject::FID()
+{
+    return _FID;
+}
+
+void GameObject::setFID(int value)
+{
+    _FID = value;
+}
+
+int GameObject::position()
+{
+    return _position;
+}
+
+void GameObject::setPosition(int value)
+{
+    _position = value;
+}
+
+int GameObject::elevation()
+{
+    return _elevation;
+}
+
+void GameObject::setElevation(int value)
+{
+    if (value < 0 || value > 3)
+    {
+        throw Exception("GameObject::setElevation() - value out of range: " + std::to_string(value));
+    }
+    _elevation = value;
+}
+
+int GameObject::orientation()
+{
+    return _orientation;
+}
+
+void GameObject::setOrientation(int value)
+{
+    if (value < 0 || value > 5)
+    {
+        throw Exception("GameObject::setOrientation() - value out of range: " + std::to_string(value));
+    }
+    _orientation = value;
 }
 
 }

@@ -28,6 +28,7 @@
 #include "../Engine/Animation.h"
 #include "../Engine/Location.h"
 #include "../Engine/LocationObject.h"
+#include "../Game/GameDefines.h"
 #include "../VM/VM.h"
 #include "../VM/VMStackIntValue.h"
 #include "../VM/VMStackFloatValue.h"

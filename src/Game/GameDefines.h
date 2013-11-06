@@ -18,45 +18,16 @@
  *
  */
 
-#ifndef FALLTERGEIST_GAMEOBJECT_H
-#define FALLTERGEIST_GAMEOBJECT_H
+#ifndef FALLTERGEIST_GAMEDEFINES_H
+#define FALLTERGEIST_GAMEDEFINES_H
 
-// C++ standard includes
+// Object orientation
+#define ORIENTATION_NE 0
+#define ORIENTATION_E  1
+#define ORIENTATION_SE 2
+#define ORIENTATION_SW 3
+#define ORIENTATION_W  4
+#define ORIENTATION_NW 5
 
-// Falltergeist includes
 
-// Third party includes
-
-namespace Falltergeist
-{
-
-class GameObject
-{
-protected:
-    int _PID = -1;
-    int _FID = -1;
-    int _position = -1;
-    int _elevation = 0;
-    int _orientation = 0;
-public:
-    GameObject();
-    virtual ~GameObject();
-
-    int PID();
-    void setPID(int value);
-
-    int FID();
-    void setFID(int value);
-
-    int position();
-    void setPosition(int value);
-
-    int elevation();
-    void setElevation(int value);
-
-    int orientation();
-    void setOrientation(int value);
-};
-
-}
-#endif // FALLTERGEIST_GAMEOBJECT_H
+#endif // FALLTERGEIST_GAMEDEFINES_H
