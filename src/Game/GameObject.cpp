@@ -97,4 +97,9 @@ void GameObject::setOrientation(int value)
     _orientation = value;
 }
 
+std::vector<VM*>* GameObject::scripts()
+{
+    return &_scripts;
+}
+
 }

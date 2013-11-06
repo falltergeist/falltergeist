@@ -216,6 +216,7 @@ void Location::init()
                 break;
             }
         }
+
         gameObject->setFID( mapObject->FID() );
         gameObject->setPID( mapObject->PID() );
         gameObject->setElevation( mapObject->elevation() );
@@ -234,6 +235,7 @@ void Location::init()
                 object->addScript(filename, new VM(script, object));
                 object->script(filename)->initialize();
             }
+            gameObject->scripts()->push_back(new VM(script, gameObject));
         }
         if (mapObject->mapScriptId() > 0 && mapObject->mapScriptId() != mapObject->scriptId())
         {
@@ -247,6 +249,7 @@ void Location::init()
                 object->addScript(filename, new VM(script, object));
                 object->script(filename)->initialize();
             }
+            gameObject->scripts()->push_back(new VM(script, gameObject));
         }
         auto proto = ResourceManager::proFileType(mapObject->PID());
         if (proto->scriptId() > 0)
@@ -261,11 +264,10 @@ void Location::init()
                 object->addScript(filename, new VM(script, object));
                 object->script(filename)->initialize();
             }
+            gameObject->scripts()->push_back(new VM(script, gameObject));
         }
 
-
         object->setDescriptionId(ResourceManager::proFileType(mapObject->PID())->messageId());
-
         object->setX(hexagonToX(mapObject->hexPosition()));
         object->setY(hexagonToY(mapObject->hexPosition()));
 
@@ -273,7 +275,6 @@ void Location::init()
     }
 
     _player = new LocationObject();
-
     _player->setPID(0x01000040);
     _player->setFID(0x01000040);
     _player->setOrientation(_mapFile->defaultOrientation());

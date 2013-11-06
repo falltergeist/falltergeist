@@ -181,6 +181,7 @@ void Mouse::setType(int type)
             break;
         case WAIT:
             _animation = new Animation("art/intrface/wait.frm");
+            _animation->setEnabled(true);
             setXOffset(0);
             setYOffset(0);
             break;

@@ -22,6 +22,7 @@
 #define FALLTERGEIST_GAMEOBJECT_H
 
 // C++ standard includes
+#include <vector>
 
 // Falltergeist includes
 
@@ -29,6 +30,7 @@
 
 namespace Falltergeist
 {
+class VM;
 
 class GameObject
 {
@@ -38,6 +40,7 @@ protected:
     int _position = -1;
     int _elevation = 0;
     int _orientation = 0;
+    std::vector<VM*> _scripts;
 public:
     GameObject();
     virtual ~GameObject();
@@ -56,6 +59,8 @@ public:
 
     int orientation();
     void setOrientation(int value);
+
+    std::vector<VM*>* scripts();
 };
 
 }
