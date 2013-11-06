@@ -217,6 +217,7 @@ void Location::init()
             }
         }
 
+        gameObject->setLocation(this);
         gameObject->setFID( mapObject->FID() );
         gameObject->setPID( mapObject->PID() );
         gameObject->setElevation( mapObject->elevation() );

@@ -31,6 +31,7 @@
 namespace Falltergeist
 {
 class VM;
+class Location;
 
 class GameObject
 {
@@ -41,6 +42,7 @@ protected:
     int _elevation = 0;
     int _orientation = 0;
     std::vector<VM*> _scripts;
+    Location* _location = 0;
 public:
     GameObject();
     virtual ~GameObject();
@@ -61,6 +63,10 @@ public:
     void setOrientation(int value);
 
     std::vector<VM*>* scripts();
+
+    Location* location();
+    void setLocation(Location* value);
+
 };
 
 }

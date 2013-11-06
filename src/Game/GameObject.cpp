@@ -102,4 +102,14 @@ std::vector<VM*>* GameObject::scripts()
     return &_scripts;
 }
 
+Location* GameObject::location()
+{
+    return _location;
+}
+
+void GameObject::setLocation(Location* value)
+{
+    _location = value;
+}
+
 }
