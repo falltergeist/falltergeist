@@ -55,12 +55,6 @@ void Game::_initialize()
     debug("[GAME] - " + CrossPlatform::getVersion(), DEBUG_INFO);
     debug("[GAME] - Opensource Fallout 2 game engine", DEBUG_INFO);
 
-
-    std::string caption = CrossPlatform::getVersion();
-
-    SDL_WM_SetCaption(caption.c_str(), 0);
-    putenv(strdup("SDL_VIDEO_CENTERED=1"));
-
     _resourceManager = new ResourceManager();
     _screen = new Screen(640, 480, 32);
     _mouse = new Mouse();

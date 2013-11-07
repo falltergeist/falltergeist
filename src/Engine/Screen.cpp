@@ -37,7 +37,12 @@ Screen::Screen(int width, int height, int bpp)
         debug(message + "[FAIL]", DEBUG_CRITICAL);
         throw Exception(SDL_GetError());
     }
-    debug(message + "[OK]", DEBUG_INFO);    
+
+    std::string caption = CrossPlatform::getVersion();
+    SDL_WM_SetCaption(caption.c_str(), 0);
+    putenv(strdup("SDL_VIDEO_CENTERED=1"));
+
+    debug(message + "[OK]", DEBUG_INFO);
     
     message =  "[VIDEO] - SDL_SetVideoMode " + std::to_string(width) + "x" + std::to_string(height) + "x" +std::to_string(bpp)+ " - ";
     _screen = SDL_SetVideoMode(width, height, bpp, SDL_SWSURFACE | SDL_DOUBLEBUF);
