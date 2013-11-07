@@ -35,7 +35,7 @@ class Animation : public InteractiveSurface
 {   
 protected:
     std::vector<std::vector<Surface*>*> _surfaceSets;
-    bool _enabled = true;
+    bool _enabled = false;
     unsigned int _frameRate = 200;
     unsigned int _currentFrame = 0;
     unsigned int _currentSurfaceSet = 0;

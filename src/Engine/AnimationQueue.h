@@ -37,6 +37,7 @@ class AnimationQueue
 {
 protected:
     int _currentAnimation = 0;
+    int _repeat = -1; // forever
     bool _enabled = false;
     std::map<Animation*, int> _queue; // Animation and delay before start
 public:
@@ -44,7 +45,11 @@ public:
     virtual ~AnimationQueue();
 
     bool enabled();
-    void setEnabled(bool value);
+    void start();
+    void stop();
+
+    int repeat();
+    void setRepeat(int value);
 
     int currentAnimation();
     void setCurrentAnimation(int value);
@@ -56,7 +61,6 @@ public:
 
     void think();
     Animation* animation();
-    Surface* surface();
 };
 
 }

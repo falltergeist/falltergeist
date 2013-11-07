@@ -261,34 +261,39 @@ GameDudeObject* Location::player()
 
 void Location::think()
 {
-    for (auto object : _objects)
+    if (!_initialized)
     {
-        if (!_initialized)
-        {
-            _initialized = true;
-            if (_script) _script->initialize();
+        _initialized = true;
+        if (_script) _script->initialize();
+        if (_script) _script->call("map_enter_p_proc");
 
+        for (auto object : _objects)
+        {
             // initialize scripts
             for (auto script : *object->scripts()) script->initialize();
 
             // map_enter_p_proc
-            if (_script) _script->call("map_enter_p_proc");
             for (auto script : *object->scripts()) script->call("map_enter_p_proc");
-
         }
-        else
+
+    }
+    else
+    {
+        for (auto object : _objects)
         {
             for (auto script : *object->scripts())
             {
                 script->call("map_update_p_proc");
+                script->call("critter_p_proc");
+            }
+
+            if (Animation* animation = object->animationQueue()->animation())
+            {
+                animation->think();
             }
         }
-
-        if (Animation* animation = object->animationQueue()->animation())
-        {
-            animation->think();
-        }
     }
+
 
 }
 

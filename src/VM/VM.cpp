@@ -778,7 +778,7 @@ void VM::run()
             }
             case 0x80bc:
             {
-                std::cout << "[+] void* self_obj()" << std::endl;
+                std::cout << "[+] GameObject* self_obj()" << std::endl;
                 _pushDataPointer(_owner);
                 break;
             }
@@ -790,10 +790,9 @@ void VM::run()
             }
             case 0x80bf:
             {
-                std::cout << "[+] void* dude_obj()" << std::endl;
+                std::cout << "[+] GameDudeObject* dude_obj()" << std::endl;
                 auto game = &Game::getInstance();
                 _pushDataPointer(game->location()->player());
-                _pushDataPointer(0);
                 break;
             }
             case 0x80c1:
@@ -1364,10 +1363,15 @@ void VM::run()
             }
             case 0x8126:
             {
-                std::cout << "[+] void reg_anim_animate_forever(void* obj , int delay)" << std::endl;
+                std::cout << "[+] void reg_anim_animate_forever(GameObject* obj , int delay)" << std::endl;
                 _popDataInteger(); // delay - must be -1
-                auto object = (LocationObject*)_popDataPointer();
-                //object->animation()->setEnabled(true);
+                auto object = (GameObject*)_popDataPointer();
+                if (object->animationQueue()->animation())
+                {
+                    object->animationQueue()->stop();
+                    object->animationQueue()->setRepeat(-1); // forever
+                    object->animationQueue()->start();
+                }
                 break;
             }
             case 0x8128:

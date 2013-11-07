@@ -42,9 +42,28 @@ bool AnimationQueue::enabled()
     return _enabled;
 }
 
-void AnimationQueue::setEnabled(bool value)
+void AnimationQueue::start()
+{    
+    _enabled = true;
+    if (animation()) animation()->setEnabled(true);
+}
+
+void AnimationQueue::stop()
 {
-    _enabled = value;
+    _enabled = false;
+    if (animation()) animation()->setEnabled(false);
+    _currentAnimation = 0;
+    if (animation()) animation()->setEnabled(false);
+}
+
+int AnimationQueue::repeat()
+{
+    return _repeat;
+}
+
+void AnimationQueue::setRepeat(int value)
+{
+    _repeat = value;
 }
 
 std::map<Animation*, int>* AnimationQueue::queue()
@@ -65,15 +84,6 @@ void AnimationQueue::clear()
 void AnimationQueue::think()
 {
     this->animation()->think();
-}
-
-Surface* AnimationQueue::surface()
-{
-    if (this->animation())
-    {
-        return this->animation()->surface();
-    }
-    return 0;
 }
 
 Animation* AnimationQueue::animation()
