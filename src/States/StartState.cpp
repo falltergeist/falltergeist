@@ -30,6 +30,7 @@
 #include "../States/MainMenuState.h"
 #include "../States/PlayerEditState.h"
 #include "../States/SettingsMenuState.h"
+#include "../States/CritterDialogState.h"
 #include "../States/StartState.h"
 
 // Third party includes
@@ -62,7 +63,7 @@ void StartState::init()
 void StartState::think()
 {    
     //_game->setState(new LocationState()); return;
-
+    //_game->setState(new CritterDialogState()); return;
     if (_splashTicks + 3000 < SDL_GetTicks())
     {
         //_game->setPlayer(new Player(ResourceManager::gcdFileType("premade/combat.gcd")));

@@ -96,7 +96,7 @@ void Location::init()
         }
     }
 
-    for (auto i = 0; i != 10; ++i)
+    for (auto i = 0; i != 64; ++i)
     {
         _LVARS.push_back(0);
     }
@@ -270,6 +270,7 @@ GameObject* Location::createObject(int PID)
 
 void Location::think()
 {
+
     if (!_initialized)
     {
         _initialized = true;
@@ -290,13 +291,19 @@ void Location::think()
     {
         for (auto object : _objects)
         {
-            for (auto script : *object->scripts())
+
+            if (_scriptsTicks + 500 < SDL_GetTicks())
             {
-                script->call("map_update_p_proc");
-                script->call("look_at_p_proc");
-                script->call("description_p_proc");
-                script->call("critter_p_proc");
-                //script->call("timed_event_p_proc");
+                _scriptsTicks = SDL_GetTicks();
+
+                for (auto script : *object->scripts())
+                {
+                    script->call("map_update_p_proc");
+                    script->call("look_at_p_proc");
+                    script->call("description_p_proc");
+                    script->call("critter_p_proc");
+                    //script->call("timed_event_p_proc");
+                }
             }
 
             if (Animation* animation = object->animationQueue()->animation())

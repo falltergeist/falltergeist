@@ -224,9 +224,7 @@ int Game::GVAR(unsigned int number)
     {
         throw Exception("Game::GVAR(num) - num out of range: " + std::to_string(number));
     }
-    int value = _GVARS.at(number);
-    std::cout << value << std::endl;
-    return value;
+    return _GVARS.at(number);
 }
 
 void Game::_initGVARS()

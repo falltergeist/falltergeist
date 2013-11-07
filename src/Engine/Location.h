@@ -47,6 +47,7 @@ protected:
     std::vector<int> _MVARS;
     std::vector<int> _LVARS;
     std::map<std::string, VMStackValue*> _EVARS;
+    int _scriptsTicks = 0;
 
     void _checkObjectsToRender();
     void _generateBackground();

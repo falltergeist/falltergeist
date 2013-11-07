@@ -119,6 +119,10 @@ set(SOURCES main.cpp
             src/Game/GameWallObject.h
             src/Game/GameMiscObject.cpp
             src/Game/GameMiscObject.h
+            src/States/CritterDialogState.cpp
+            src/States/CritterDialogState.h
+            src/States/InventoryState.cpp
+            src/States/InventoryState.h
             src/States/LocationState.cpp
             src/States/LocationState.h
             src/States/MainMenuState.cpp
