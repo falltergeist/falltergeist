@@ -44,6 +44,7 @@ protected:
     std::vector<GameObject*> _objects;
     std::vector<GameObject*> _objectsToRender;
     std::vector<int> _MVARS;
+    std::vector<int> _LVARS;
 
     void _checkObjectsToRender();
     void _generateBackground();
@@ -78,6 +79,7 @@ public:
     LocationCamera* camera();
 
     GameDudeObject* player();
+    static GameObject* createObject(int PID);
 
     libfalltergeist::MapFileType* mapFile();
     Surface* tilesBackground();
@@ -86,6 +88,8 @@ public:
 
     void setMVAR(unsigned int number, int value);
     int MVAR(unsigned int number);
+    void setLVAR(unsigned int number, int value);
+    int LVAR(unsigned int number);
 
 };
 

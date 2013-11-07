@@ -36,5 +36,15 @@ GameItemObject::~GameItemObject()
 {
 }
 
+int GameItemObject::amount()
+{
+    return _amount;
+}
+
+void GameItemObject::setAmount(int value)
+{
+    _amount = value;
+}
+
 }
 

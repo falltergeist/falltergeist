@@ -57,13 +57,9 @@ protected:
 
     int _metarule(int type, VMStackValue* value);
     int _metarule3(int meta, VMStackValue* p1, int p2, int p3);
-    void* _createObject(int PID, int position, int elevation, int SID);
-    void _addObjectsToInventory(void* who, void* item, int count);
     int _getMonth();
     int _getTime();
     void _setLightLevel(int level);
-    void _lvar(int num, int value);
-    int _lvar(int num);
     int _rand(int min, int max);
     void _exportVar(std::string* name);
     void _exportVar(std::string* name, VMStackValue* value);
@@ -73,11 +69,7 @@ protected:
     void _displayString(std::string* str);
     void _debugMessage(std::string* str);
     void _giveExpPoints(int value);
-    int _gameTime();
     int _tile_num_in_direction(int start_tile, int dir, int distance);
-    int _critter_attempt_placement(void* who, int hex, int elev);
-    int _move_to(void* obj, int tile_num, int elev);
-    int _tile_contains_obj_pid(int tile, int elev, int pid);
     int _obj_is_carrying_obj_pid(void* obj, int pid);
     int _critter_add_trait(void* who, int trait_type, int trait, int amount);
     void _anim(void* who, int anim, int direction);

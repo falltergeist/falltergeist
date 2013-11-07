@@ -109,6 +109,8 @@ set(SOURCES main.cpp
             src/Game/GameDoorSceneryObject.h
             src/Game/GameGenericSceneryObject.cpp
             src/Game/GameGenericSceneryObject.h
+            src/Game/GameLadderSceneryObject.cpp
+            src/Game/GameLadderSceneryObject.h
             src/Game/GameStairsSceneryObject.cpp
             src/Game/GameStairsSceneryObject.h
             src/Game/GameElevatorSceneryObject.cpp

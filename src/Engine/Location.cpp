@@ -41,6 +41,7 @@
 #include "../Game/GameElevatorSceneryObject.h"
 #include "../Game/GameGenericSceneryObject.h"
 #include "../Game/GameStairsSceneryObject.h"
+#include "../Game/GameLadderSceneryObject.h"
 #include "../Game/GameWallObject.h"
 #include "../Game/GameMiscObject.h"
 #include "../Game/GameDudeObject.h"
@@ -95,6 +96,11 @@ void Location::init()
         }
     }
 
+    for (auto i = 0; i != 10; ++i)
+    {
+        _LVARS.push_back(0);
+    }
+
     _elevation = _mapFile->defaultElevation();
 
     std::vector<libfalltergeist::MapObject *> * mapObjects = _mapFile->elevations()->at(_elevation)->objects();
@@ -102,110 +108,7 @@ void Location::init()
     for (std::vector<libfalltergeist::MapObject *>::iterator it = mapObjects->begin(); it != mapObjects->end(); ++it)
     {
         auto mapObject = *it;
-        GameObject* object = 0;
-
-        switch (mapObject->objectTypeId())
-        {
-            case libfalltergeist::ProFileType::TYPE_ITEM:
-            {
-                switch(mapObject->objectSubtypeId())
-                {
-                    case libfalltergeist::ProFileType::TYPE_ITEM_AMMO:
-                    {
-                        object = new GameAmmoItemObject();
-                        break;
-                    }
-                    case libfalltergeist::ProFileType::TYPE_ITEM_ARMOR:
-                    {
-                        object = new GameArmorItemObject();
-                        break;
-                    }
-                    case libfalltergeist::ProFileType::TYPE_ITEM_CONTAINER:
-                    {
-                        object = new GameContainerItemObject();
-                        break;
-                    }
-                    case libfalltergeist::ProFileType::TYPE_ITEM_DRUG:
-                    {
-                        object = new GameDrugItemObject();
-                        break;
-                    }
-                    case libfalltergeist::ProFileType::TYPE_ITEM_KEY:
-                    {
-                        object = new GameKeyItemObject();
-                        break;
-                    }
-                    case libfalltergeist::ProFileType::TYPE_ITEM_MISC:
-                    {
-                        object = new GameMiscItemObject();
-                        break;
-                    }
-                    case libfalltergeist::ProFileType::TYPE_ITEM_WEAPON:
-                    {
-                        object = new GameWeaponItemObject();
-                        break;
-                    }
-                }
-                break;
-            }
-            case libfalltergeist::ProFileType::TYPE_CRITTER:
-            {
-                object = new GameCritterObject();
-                break;
-            }
-            case libfalltergeist::ProFileType::TYPE_SCENERY:
-            {
-                switch (mapObject->objectSubtypeId())
-                {
-                    case libfalltergeist::ProFileType::TYPE_SCENERY_DOOR:
-                    {
-                        object = new GameDoorSceneryObject();
-                        break;
-                    }
-                    case libfalltergeist::ProFileType::TYPE_SCENERY_ELEVATOR:
-                    {
-                        object = new GameElevatorSceneryObject();
-                        break;
-                    }
-                    case libfalltergeist::ProFileType::TYPE_SCENERY_GENERIC:
-                    {
-                        object = new GameGenericSceneryObject();
-                        break;
-                    }
-                    case libfalltergeist::ProFileType::TYPE_SCENERY_LADDER_BOTTOM:
-                    {
-                        continue;
-                        break;
-                    }
-                    case libfalltergeist::ProFileType::TYPE_SCENERY_LADDER_TOP:
-                    {
-                        continue;
-                        break;
-                    }
-                    case libfalltergeist::ProFileType::TYPE_SCENERY_STAIRS:
-                    {
-                        object = new GameStairsSceneryObject();
-                        break;
-                    }
-                }
-                break;
-            }
-            case libfalltergeist::ProFileType::TYPE_WALL:
-            {
-                object = new GameWallObject();
-                break;
-            }
-            case libfalltergeist::ProFileType::TYPE_TILE:
-            {
-                throw 1;
-                break;
-            }
-            case libfalltergeist::ProFileType::TYPE_MISC:
-            {
-                object = new GameMiscObject();
-                break;
-            }
-        }
+        GameObject* object = createObject(mapObject->PID());
 
         object->setLocation(this);
         object->setFID( mapObject->FID() );
@@ -222,12 +125,6 @@ void Location::init()
         if (mapObject->mapScriptId() > 0 && mapObject->mapScriptId() != mapObject->scriptId())
         {
             auto intFile = ResourceManager::intFileType(mapObject->mapScriptId());
-            if (intFile) object->scripts()->push_back(new VM(intFile, object));
-        }
-        auto proto = ResourceManager::proFileType(object->PID());
-        if (proto->scriptId() > 0)
-        {
-            auto intFile = ResourceManager::intFileType(proto->scriptId());
             if (intFile) object->scripts()->push_back(new VM(intFile, object));
         }
 
@@ -259,6 +156,118 @@ GameDudeObject* Location::player()
     return _player;
 }
 
+GameObject* Location::createObject(int PID)
+{
+    auto proto = ResourceManager::proFileType(PID);
+    GameObject* object = 0;
+    switch (proto->objectTypeId())
+    {
+        case libfalltergeist::ProFileType::TYPE_ITEM:
+        {
+            switch(proto->objectSubtypeId())
+            {
+                case libfalltergeist::ProFileType::TYPE_ITEM_AMMO:
+                {
+                    object = new GameAmmoItemObject();
+                    break;
+                }
+                case libfalltergeist::ProFileType::TYPE_ITEM_ARMOR:
+                {
+                    object = new GameArmorItemObject();
+                    break;
+                }
+                case libfalltergeist::ProFileType::TYPE_ITEM_CONTAINER:
+                {
+                    object = new GameContainerItemObject();
+                    break;
+                }
+                case libfalltergeist::ProFileType::TYPE_ITEM_DRUG:
+                {
+                    object = new GameDrugItemObject();
+                    break;
+                }
+                case libfalltergeist::ProFileType::TYPE_ITEM_KEY:
+                {
+                    object = new GameKeyItemObject();
+                    break;
+                }
+                case libfalltergeist::ProFileType::TYPE_ITEM_MISC:
+                {
+                    object = new GameMiscItemObject();
+                    break;
+                }
+                case libfalltergeist::ProFileType::TYPE_ITEM_WEAPON:
+                {
+                    object = new GameWeaponItemObject();
+                    break;
+                }
+            }
+            break;
+        }
+        case libfalltergeist::ProFileType::TYPE_CRITTER:
+        {
+            object = new GameCritterObject();
+            break;
+        }
+        case libfalltergeist::ProFileType::TYPE_SCENERY:
+        {
+            switch (proto->objectSubtypeId())
+            {
+                case libfalltergeist::ProFileType::TYPE_SCENERY_DOOR:
+                {
+                    object = new GameDoorSceneryObject();
+                    break;
+                }
+                case libfalltergeist::ProFileType::TYPE_SCENERY_ELEVATOR:
+                {
+                    object = new GameElevatorSceneryObject();
+                    break;
+                }
+                case libfalltergeist::ProFileType::TYPE_SCENERY_GENERIC:
+                {
+                    object = new GameGenericSceneryObject();
+                    break;
+                }
+                case libfalltergeist::ProFileType::TYPE_SCENERY_LADDER_TOP:
+                case libfalltergeist::ProFileType::TYPE_SCENERY_LADDER_BOTTOM:
+                {
+                    object = new GameLadderSceneryObject();
+                    break;
+                }
+                case libfalltergeist::ProFileType::TYPE_SCENERY_STAIRS:
+                {
+                    object = new GameStairsSceneryObject();
+                    break;
+                }
+            }
+            break;
+        }
+        case libfalltergeist::ProFileType::TYPE_WALL:
+        {
+            object = new GameWallObject();
+            break;
+        }
+        case libfalltergeist::ProFileType::TYPE_TILE:
+        {
+            throw 1;
+            break;
+        }
+        case libfalltergeist::ProFileType::TYPE_MISC:
+        {
+            object = new GameMiscObject();
+            break;
+        }
+    }
+    object->setPID(PID);
+    if (proto->scriptId() > 0)
+    {
+        auto intFile = ResourceManager::intFileType(proto->scriptId());
+        if (intFile) object->scripts()->push_back(new VM(intFile, object));
+    }
+
+    return object;
+}
+
 void Location::think()
 {
     if (!_initialized)
@@ -284,7 +293,10 @@ void Location::think()
             for (auto script : *object->scripts())
             {
                 script->call("map_update_p_proc");
+                script->call("look_at_p_proc");
+                script->call("description_p_proc");
                 script->call("critter_p_proc");
+                script->call("timed_event_p_proc");
             }
 
             if (Animation* animation = object->animationQueue()->animation())
@@ -520,6 +532,24 @@ int Location::MVAR(unsigned int number)
         throw Exception("Location::MVAR(num) - num out of range: " + std::to_string((int)number));
     }
     return _MVARS.at(number);
+}
+
+void Location::setLVAR(unsigned int number, int value)
+{
+    if (number >= _LVARS.size())
+    {
+        throw Exception("Location::setLVAR(num, value) - num out of range: " + std::to_string((int)number));
+    }
+    _LVARS.at(number) = value;
+}
+
+int Location::LVAR(unsigned int number)
+{
+    if (number >= _LVARS.size())
+    {
+        throw Exception("Location::LVAR(num) - num out of range: " + std::to_string((int)number));
+    }
+    return _LVARS.at(number);
 }
 
 }

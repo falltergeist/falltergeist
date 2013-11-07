@@ -31,6 +31,8 @@
 #include "../Game/GameDefines.h"
 #include "../Game/GameObject.h"
 #include "../Game/GameDudeObject.h"
+#include "../Game/GameContainerItemObject.h"
+#include "../Game/GameDoorSceneryObject.h"
 #include "../VM/VM.h"
 #include "../VM/VMStackIntValue.h"
 #include "../VM/VMStackFloatValue.h"
@@ -322,19 +324,19 @@ void VM::run()
                             case VMStackValue::TYPE_INTEGER:
                             {
                                 auto p1 = _popDataInteger();
-                                _pushDataInteger(p1 == p2);
+                                _pushDataInteger(p1 == p2 ? 0 : 1);
                                 break;
                             }
                             case VMStackValue::TYPE_FLOAT:
                             {
                                 auto p1 = _popDataFloat();
-                                _pushDataInteger(p1 == p2);
+                                _pushDataInteger(p1 == p2 ? 0 : 1);
                                 break;
                             }
                             case VMStackValue::TYPE_POINTER:
                             {
                                 auto p1 = (int)(bool)_popDataPointer();
-                                _pushDataInteger(p1 == p2);
+                                _pushDataInteger(p1 == p2 ? 0 : 1);
                                 break;
                             }
                         }
@@ -344,14 +346,14 @@ void VM::run()
                     {
                         auto p2 = _popDataPointer();
                         auto p1 = _popDataPointer();
-                        _pushDataInteger(p1 == p2);
+                        _pushDataInteger(p1 == p2 ? 0 : 1);
                         break;
                     }
                     case VMStackValue::TYPE_FLOAT:
                     {
                         auto p2 = _popDataFloat();
                         auto p1 = _popDataFloat();
-                        _pushDataInteger(p1 == p2);
+                        _pushDataInteger(p1 == p2 ? 0 : 1);
                         break;
                     }
                 }
@@ -368,12 +370,12 @@ void VM::run()
                         if (_dataStack.top()->type() == VMStackValue::TYPE_POINTER) // to check if the pointer is null
                         {
                             auto p1 = (int)(bool)_popDataPointer();
-                            _pushDataInteger(p1 != p2);
+                            _pushDataInteger(p1 != p2 ? 0 : 1);
                         }
                         else
                         {
                             auto p1 = _popDataInteger();
-                            _pushDataInteger(p1 != p2);
+                            _pushDataInteger(p1 != p2 ? 0 : 1);
                         }
                         break;
                     }
@@ -383,12 +385,12 @@ void VM::run()
                         if (_dataStack.top()->type() == VMStackValue::TYPE_POINTER) // to check if the pointer is null
                         {
                             auto p1 = (int)(bool)_popDataPointer();
-                            _pushDataInteger(p1 != p2);
+                            _pushDataInteger(p1 != p2 ? 0 : 1);
                         }
                         else
                         {
                             auto p1 = _popDataInteger();
-                            _pushDataInteger(p1 != p2);
+                            _pushDataInteger(p1 != p2 ? 0 : 1);
                         }
                         break;
                     }
@@ -396,7 +398,7 @@ void VM::run()
                     {
                         auto p2 = _popDataFloat();
                         auto p1 = _popDataFloat();
-                        _pushDataInteger(p1 != p2);
+                        _pushDataInteger(p1 != p2 ? 0 : 1);
                         break;
                     }
                 }
@@ -407,7 +409,7 @@ void VM::run()
                 std::cout << "[*] leq <=" << std::endl;
                 auto b = _popDataInteger();
                 auto a = _popDataInteger();
-                _pushDataInteger(a <= b ? 1 : 0);
+                _pushDataInteger(a <= b ? 0 : 1);
                 break;
             }
             case 0x8036:
@@ -415,7 +417,7 @@ void VM::run()
                 std::cout << "[*] geq >=" << std::endl;
                 auto b = _popDataInteger();
                 auto a = _popDataInteger();
-                _pushDataInteger(a >= b ? 1 : 0);
+                _pushDataInteger(a >= b ? 0 : 1);
                 break;
             }
             case 0x8037:
@@ -423,7 +425,7 @@ void VM::run()
                 std::cout << "[*] lt <" << std::endl;
                 auto b = _popDataInteger();
                 auto a = _popDataInteger();
-                _pushDataInteger(a < b ? 1 : 0);
+                _pushDataInteger(a < b ? 0 : 1);
                 break;
             }
             case 0x8038:
@@ -431,7 +433,7 @@ void VM::run()
                 std::cout << "[*] gt >" << std::endl;
                 auto b = _popDataInteger();
                 auto a = _popDataInteger();
-                _pushDataInteger(a > b ? 1 : 0);
+                _pushDataInteger(a > b ? 0 : 1);
                 break;
             }
             case 0x8039:
@@ -630,11 +632,20 @@ void VM::run()
             }
             case 0x80a7:
             {
-                std::cout << "[=] void* tile_contains_pid_obj(int tile, int elev, int pid)" << std::endl;
-                _popDataInteger();
-                _popDataInteger();
-                _popDataInteger();
-                _pushDataPointer(0);
+                std::cout << "[+] GameObject* tile_contains_pid_obj(int position, int elevation, int PID)" << std::endl;
+                auto PID = _popDataInteger();
+                auto elevation = _popDataInteger();
+                auto position = _popDataInteger();
+                auto game = &Game::getInstance();
+                GameObject* found = 0;
+                for (auto object : *game->location()->objects())
+                {
+                    if (object->PID() == PID && object->elevation() == elevation && object->position() == position)
+                    {
+                        found = object;
+                    }
+                }
+                _pushDataPointer(found);
                 break;
             }
             case 0x80a8:
@@ -648,7 +659,7 @@ void VM::run()
             }
             case 0x80a9:
             {
-                std::cout << "[*] void override_map_start(int x, int y, int elev, int rot)" << std::endl;
+                std::cout << "[+] void override_map_start(int x, int y, int elevation, int orientation)" << std::endl;
                 auto orientation = _popDataInteger();
                 auto elevation = _popDataInteger();
                 auto y = _popDataInteger();
@@ -667,6 +678,14 @@ void VM::run()
                 _popDataInteger();
                 _popDataPointer();
                 _pushDataInteger(10);
+                break;
+            }
+            case 0x80ab:
+            {
+                std::cout << "[=] int using_skill(GameCritterObject* who, int skill)" << std::endl;
+                _popDataInteger();
+                _popDataPointer();
+                _pushDataInteger(0);
                 break;
             }
             case 0x80ac:
@@ -733,21 +752,31 @@ void VM::run()
             }
             case 0x80b6:
             {
-                std::cout << "[*] int move_to(ObjectPtr obj, int tile_num, int elev)" << std::endl;
-                auto elev = _popDataInteger();
-                auto tile_num = _popDataInteger();
-                auto obj = _popDataPointer();
-                _pushDataInteger(_move_to(obj, tile_num, elev));
+                std::cout << "[*] int move_to(GameObject* object, int position, int elevation)" << std::endl;
+                auto elevation = _popDataInteger();
+                auto position = _popDataInteger();
+                auto object = (GameObject*)_popDataPointer();
+                object->setPosition(position);
+                object->setElevation(elevation);
+                _pushDataInteger(1);
                 break;
             }
             case 0x80b7:
             {
-                std::cout << "[*] void* create_object_sid(int pid, int tile_num, int elev, int sid)" << std::endl;
+                std::cout << "[+] GameObject* create_object_sid(int PID, int position, int elevation, int SID)" << std::endl;
                 auto SID = _popDataInteger();
                 auto elevation = _popDataInteger();
                 auto position = _popDataInteger();
                 auto PID = _popDataInteger();
-                _pushDataPointer(_createObject(PID, position, elevation, SID));
+                auto object = Location::createObject(PID);
+                object->setPosition(position);
+                object->setElevation(elevation);
+                if (SID > 0)
+                {
+                    auto intFile = ResourceManager::intFileType(SID);
+                    if (intFile) object->scripts()->push_back(new VM(intFile, object));
+                }
+                _pushDataPointer(object);
                 break;
             }
             case 0x80b8:
@@ -769,11 +798,20 @@ void VM::run()
             }
             case 0x80bb:
             {
-                std::cout << "[*] int tile_contains_obj_pid(int tile, int elev, int pid)" << std::endl;
-                auto pid = _popDataInteger();
-                auto elev = _popDataInteger();
-                auto tile = _popDataInteger();
-                _pushDataInteger(_tile_contains_obj_pid(tile, elev, pid));
+                std::cout << "[+] int tile_contains_obj_pid(int position, int elevation, int PID)" << std::endl;
+                auto PID = _popDataInteger();
+                auto elevation = _popDataInteger();
+                auto position = _popDataInteger();
+                auto game = &Game::getInstance();
+                int found = 0;
+                for (auto object : *game->location()->objects())
+                {
+                    if (object->PID() == PID && object->elevation() == elevation && object->position() == position)
+                    {
+                        found = 1;
+                    }
+                }
+                _pushDataInteger(found);
                 break;
             }
             case 0x80bc:
@@ -799,7 +837,8 @@ void VM::run()
             {
                 std::cout << "[*] LVAR[num]" << std::endl;
                 auto num = _popDataInteger();
-                _pushDataInteger(_lvar(num));
+                auto game = &Game::getInstance();
+                _pushDataInteger(game->location()->LVAR(num));
                 break;
             }
             case 0x80c2:
@@ -807,7 +846,8 @@ void VM::run()
                 std::cout << "[*] LVAR[num] = value" << std::endl;
                 auto value = _popDataInteger();
                 auto num = _popDataInteger();
-                _lvar(num, value);
+                auto game = &Game::getInstance();
+                game->location()->setLVAR(num, value);
                 break;
             }
             case 0x80c3:
@@ -819,8 +859,8 @@ void VM::run()
                     _pushDataInteger(0);
                     break;
                 }
-                auto object = (GameObject*)_owner;
-                _pushDataInteger(object->location()->MVAR(num));
+                auto game = &Game::getInstance();
+                _pushDataInteger(game->location()->MVAR(num));
                 break;
             }
             case 0x80c4:
@@ -828,8 +868,8 @@ void VM::run()
                 std::cout << "[+] MVAR[num] = value" << std::endl;
                 auto value = _popDataInteger();
                 auto num = _popDataInteger();                
-                auto object = (GameObject*)_owner;
-                object->location()->setMVAR(num, value);
+                auto game = &Game::getInstance();
+                game->location()->setMVAR(num, value);
                 break;
             }
             case 0x80c5:
@@ -946,9 +986,9 @@ void VM::run()
             }
             case 0x80d4:
             {
-                std::cout << "[=] int objectPosition(void* obj)" << std::endl;
-                _popDataPointer();
-                _pushDataInteger(100*100);
+                std::cout << "[+] int objectPosition(GameObject* object)" << std::endl;
+                auto object = (GameObject*)_popDataPointer();
+                _pushDataInteger(object->position());
                 break;
             }
             case 0x80d5:
@@ -983,10 +1023,10 @@ void VM::run()
             }
             case 0x80dc:
             {
-                std::cout << "[=] boolean obj_can_see_obj(ObjectPtr src_obj, ObjectPtr dst_obj)" << std::endl;
+                std::cout << "[=] int obj_can_see_obj(GameObject* src_obj, GameObject* dst_obj)" << std::endl;
                 _popDataPointer();
                 _popDataPointer();
-                _pushDataInteger(1);
+                _pushDataInteger(0);
                 break;
             }
             case 0x80de:
@@ -1039,8 +1079,8 @@ void VM::run()
             case 0x80e7:
             {
                 std::cout << "[=] int anim_busy(void* obj)" << std::endl;
-                auto obj = (LocationObject*)_popDataPointer();
-                _pushDataInteger(obj->animation()->enabled());
+                auto object = (GameObject*)_popDataPointer();
+                _pushDataInteger(object->animationQueue()->enabled());
                 break;
             }
             case 0x80e9:
@@ -1053,14 +1093,14 @@ void VM::run()
             case 0x80ea:
             {
                 std::cout << "[*] int gameTime()" << std::endl;
-                _pushDataInteger(_gameTime());
+                _pushDataInteger(SDL_GetTicks() / 10);
                 break;
             }
             case 0x80ec:
             {
                 std::cout << "[=] int elevation(void* obj)" << std::endl;
-                auto object = (LocationObject*)_popDataPointer();
-                _pushDataInteger(0);
+                auto object = (GameObject*)_popDataPointer();
+                _pushDataInteger(object->elevation());
                 break;
             }
             case 0x80ef:
@@ -1142,25 +1182,20 @@ void VM::run()
             }
             case 0x80ff:
             {
-                std::cout << "[*] int critter_attempt_placement(ObjectPtr who, int hex, int elev)" << std::endl;
-                auto elev = _popDataInteger();
-                auto hex = _popDataInteger();
-                auto who = _popDataPointer();
-                _pushDataInteger(_critter_attempt_placement(who, hex, elev));
+                std::cout << "[*] int critter_attempt_placement(GameCritterObject* critter, int position, int elevation)" << std::endl;
+                auto elevation = _popDataInteger();
+                auto position = _popDataInteger();
+                auto critter = (GameCritterObject*)_popDataPointer();
+                critter->setElevation(elevation);
+                critter->setPosition(position);
+                _pushDataInteger(1);
                 break;
             }
             case 0x8100:
             {
                 std::cout << "[+] int obj_pid(void* obj)" << std::endl;
-                auto obj = (LocationObject*)_popDataPointer();
-                if (obj)
-                {
-                    _pushDataInteger(obj->PID());
-                }
-                else
-                {
-                    _pushDataInteger(-1);
-                }
+                auto object = (GameObject*)_popDataPointer();
+                _pushDataInteger(object->PID());
                 break;
             }
             case 0x8101:
@@ -1257,8 +1292,8 @@ void VM::run()
                     }
                     case 0x2: // ANIM_CLEAR
                     {
-                        auto obj = (LocationObject*)_popDataPointer();
-                        obj->animation()->setEnabled(true);
+                        auto object = (GameObject*)_popDataPointer();
+                        object->animationQueue()->start();
                         break;
                     }
                     case 0x3: // ANIMATION_END
@@ -1293,11 +1328,26 @@ void VM::run()
             }
             case 0x8116:
             {
-                std::cout << "[*] void add_mult_objs_to_inven(void* who, void* item, int count)" << std::endl;
-                auto count = _popDataInteger();
-                auto item = _popDataPointer();
-                auto who = _popDataPointer();
-                _addObjectsToInventory(who, item, count);
+                std::cout << "[+] void add_mult_objs_to_inven(GameObject* who, GameItemObject* item, int amount)" << std::endl;
+                auto amount = _popDataInteger();
+                auto item =(GameItemObject*)_popDataPointer();
+                if (!item) throw Exception("VM::opcode8116 - item not instanceof GameItemObject");
+                item->setAmount(amount);
+
+                // who can be critter or container
+                auto pointer = _popDataPointer();
+                if (auto critter = (GameCritterObject*)pointer)
+                {
+                    critter->inventory()->push_back(item);
+                }
+                else if (auto container = (GameContainerItemObject*)pointer)
+                {
+                    container->inventory()->push_back(item);
+                }
+                else
+                {
+                    throw Exception("VM::opcode8116 - wrong WHO parameter");
+                }
                 break;
             }
             case 0x8117:
@@ -1388,34 +1438,49 @@ void VM::run()
             }
             case 0x812d:
             {
-                std::cout << "[=] int obj_is_locked(void* obj)" << std::endl;
-                _popDataPointer();
-                _pushDataInteger(0); // false
+                std::cout << "[+] int is_locked(GameDoorSceneryObject* object)" << std::endl;
+                auto object = (GameDoorSceneryObject*)_popDataPointer();
+                _pushDataInteger(object->locked());
                 break;
             }
             case 0x812e:
             {
-                std::cout << "[=] void obj_lock(void* obj)" << std::endl;
-                _popDataPointer();
+                std::cout << "[+] void lock(GameDoorSceneryObject* object)" << std::endl;
+                auto object = (GameDoorSceneryObject*)_popDataPointer();
+                object->setLocked(true);
                 break;
             }
             case 0x812f:
             {
-                std::cout << "[=] void obj_unlock(void* obj)" << std::endl;
-                _popDataPointer();
+                std::cout << "[+] void unlock(GameDoorSceneryObject* object)" << std::endl;
+                auto object = (GameDoorSceneryObject*)_popDataPointer();
+                object->setLocked(false);
                 break;
             }
             case 0x8130:
             {
-                std::cout << "[=] int obj_is_open(void* what) " << std::endl;
-                _popDataPointer();
-                _pushDataInteger(1);
+                std::cout << "[+] int is_opened(GameDoorSceneryObject* object) " << std::endl;
+                auto object = (GameDoorSceneryObject*)_popDataPointer();
+                _pushDataInteger(object->opened());
+                break;
+            }
+            case 0x8131:
+            {
+                std::cout << "[+] void open(GameDoorSceneryObject* object) " << std::endl;
+                auto object = (GameDoorSceneryObject*)_popDataPointer();
+                object->setOpened(true);
                 break;
             }
             case 0x8132:
             {
-                std::cout << "[=] void obj_close(void* obj) " << std::endl;
-                _popDataPointer();
+                std::cout << "[+] void close(GameDoorSceneryObject* object) " << std::endl;
+                auto object = (GameDoorSceneryObject*)_popDataPointer();
+                object->setOpened(false);
+                break;
+            }
+            case 0x8134:
+            {
+                std::cout << "[=] void game_ui_enable()" << std::endl;
                 break;
             }
             case 0x8136:
@@ -1462,7 +1527,7 @@ void VM::run()
             case 0x8149:
             {
                 std::cout << "[+] int obj_art_fid(void* obj)" << std::endl;
-                auto object = (LocationObject*)_popDataPointer();
+                auto object = (GameObject*)_popDataPointer();
                 if (!object) throw Exception("VM::opcode8149() - can't convert pointer to object");
                 _pushDataInteger(object->FID());
                 break;
@@ -1644,7 +1709,7 @@ int VM::_metarule(int type, VMStackValue* value)
     {
         case 14: // METARULE_TEST_FIRSTRUN
             // Если карта открывается в первый раз, то возвращает TRUE;
-            return 1;
+            return 0;
         case 16: // METARULE_PARTY_COUNT
             return 0;
         case 17: //  METARULE_AREA_KNOWN
@@ -1674,15 +1739,6 @@ int VM::_metarule(int type, VMStackValue* value)
     throw Exception("VM::_metarule() - unknown type: " + std::to_string(type));
 }
 
-void* VM::_createObject(int PID, int position, int elevation, int SID)
-{
-    return 0;
-}
-
-void VM::_addObjectsToInventory(void* who, void* item, int count)
-{
-}
-
 int VM::_getMonth()
 {
     return 1; // January
@@ -1696,16 +1752,6 @@ int VM::_getTime()
 void VM::_setLightLevel(int level)
 {
     std::cout << "     Setting light level to: " << level << std::endl;
-}
-
-
-void VM::_lvar(int num, int value)
-{
-}
-
-int VM::_lvar(int num)
-{
-    return 0;
 }
 
 int VM::_rand(int min, int max)
@@ -1767,29 +1813,9 @@ void VM::_giveExpPoints(int value)
 {
 }
 
-int VM::_gameTime()
-{
-    return SDL_GetTicks();
-}
-
 int VM::_tile_num_in_direction(int start_tile, int dir, int distance)
 {
     return start_tile + 20;
-}
-
-int VM::_critter_attempt_placement(void* who, int hex, int elev)
-{
-    return 0;
-}
-
-int VM::_move_to(void* obj, int tile_num, int elev)
-{
-    return 0;
-}
-
-int VM::_tile_contains_obj_pid(int tile, int elev, int pid)
-{
-    return 0;
 }
 
 VMStackValue* VM::_getExported(std::string* name)

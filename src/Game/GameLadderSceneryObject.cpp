@@ -18,30 +18,22 @@
  *
  */
 
-#ifndef FALLTERGEIST_GAMEITEMOBJECT_H
-#define FALLTERGEIST_GAMEITEMOBJECT_H
-
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Game/GameObject.h"
+#include "../Game/GameLadderSceneryObject.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class GameItemObject : public GameObject
+GameLadderSceneryObject::GameLadderSceneryObject() : GameSceneryObject()
 {
-protected:
-    int _amount = 1;
-public:
-    GameItemObject();
-    virtual ~GameItemObject();
+}
 
-    int amount();
-    void setAmount(int value);
-};
+GameLadderSceneryObject::~GameLadderSceneryObject()
+{
+}
 
 }
-#endif // FALLTERGEIST_GAMEITEMOBJECT_H
