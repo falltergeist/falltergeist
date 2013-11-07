@@ -26,6 +26,7 @@
 
 // Falltergeist includes
 #include "../Game/GameObject.h"
+#include "../Game/GameArmorItemObject.h"
 
 // Third party includes
 
@@ -37,6 +38,9 @@ class GameCritterObject : public GameObject
 {
 protected:
     std::vector<GameItemObject*> _inventory;
+    GameArmorItemObject* _armorSlot = 0;
+    GameItemObject* _leftHandSlot = 0;
+    GameItemObject* _rightHandSlot = 0;
 public:
     GameCritterObject();
     virtual ~GameCritterObject();
@@ -44,6 +48,14 @@ public:
     std::vector<GameItemObject*>* inventory();
     virtual void setOrientation(int value);
 
+    GameArmorItemObject* armorSlot();
+    void setArmorSlot(GameArmorItemObject* object);
+
+    GameItemObject* leftHandSlot();
+    void setLeftHandSlot(GameItemObject* object);
+
+    GameItemObject* rightHandSlot();
+    void setRightHandSlot(GameItemObject* object);
 };
 
 }

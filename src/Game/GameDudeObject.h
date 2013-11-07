@@ -33,9 +33,14 @@ namespace Falltergeist
 
 class GameDudeObject : public GameCritterObject
 {
+protected:
+    int _experience = 0;
 public:
     GameDudeObject();
     virtual ~GameDudeObject();
+
+    int experience();
+    void setExperience(int value);
 };
 
 }

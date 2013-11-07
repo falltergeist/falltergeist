@@ -138,4 +138,34 @@ void GameCritterObject::setOrientation(int value)
     animationQueue()->add(animation);
 }
 
+GameArmorItemObject* GameCritterObject::armorSlot()
+{
+    return _armorSlot;
+}
+
+void GameCritterObject::setArmorSlot(GameArmorItemObject* object)
+{
+    _armorSlot = object;
+}
+
+GameItemObject* GameCritterObject::leftHandSlot()
+{
+    return _leftHandSlot;
+}
+
+void GameCritterObject::setLeftHandSlot(GameItemObject* object)
+{
+    _leftHandSlot = object;
+}
+
+GameItemObject* GameCritterObject::rightHandSlot()
+{
+    return _rightHandSlot;
+}
+
+void GameCritterObject::setRightHandSlot(GameItemObject* object)
+{
+    _rightHandSlot = object;
+}
+
 }

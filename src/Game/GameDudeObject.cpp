@@ -36,4 +36,14 @@ GameDudeObject::~GameDudeObject()
 {
 }
 
+int GameDudeObject::experience()
+{
+    return _experience;
+}
+
+void GameDudeObject::setExperience(int value)
+{
+    _experience = value;
+}
+
 }

@@ -296,7 +296,7 @@ void Location::think()
                 script->call("look_at_p_proc");
                 script->call("description_p_proc");
                 script->call("critter_p_proc");
-                script->call("timed_event_p_proc");
+                //script->call("timed_event_p_proc");
             }
 
             if (Animation* animation = object->animationQueue()->animation())
@@ -550,6 +550,11 @@ int Location::LVAR(unsigned int number)
         throw Exception("Location::LVAR(num) - num out of range: " + std::to_string((int)number));
     }
     return _LVARS.at(number);
+}
+
+std::map<std::string, VMStackValue*>* Location::EVARS()
+{
+    return &_EVARS;
 }
 
 }

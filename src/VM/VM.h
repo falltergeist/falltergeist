@@ -60,17 +60,11 @@ protected:
     int _getMonth();
     int _getTime();
     void _setLightLevel(int level);
-    int _rand(int min, int max);
-    void _exportVar(std::string* name);
-    void _exportVar(std::string* name, VMStackValue* value);
-    VMStackValue* _getExported(std::string* name);
     void _playMovie(int movieNum);
     std::string* _msgMessage(int msgList, int msgNum);
     void _displayString(std::string* str);
     void _debugMessage(std::string* str);
-    void _giveExpPoints(int value);
     int _tile_num_in_direction(int start_tile, int dir, int distance);
-    int _obj_is_carrying_obj_pid(void* obj, int pid);
     int _critter_add_trait(void* who, int trait_type, int trait, int amount);
     void _anim(void* who, int anim, int direction);
 public:

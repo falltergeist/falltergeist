@@ -35,6 +35,7 @@ class GameObject;
 class GameDudeObject;
 class LocationCamera;
 class VM;
+class VMStackValue;
 
 class Location
 {
@@ -45,6 +46,7 @@ protected:
     std::vector<GameObject*> _objectsToRender;
     std::vector<int> _MVARS;
     std::vector<int> _LVARS;
+    std::map<std::string, VMStackValue*> _EVARS;
 
     void _checkObjectsToRender();
     void _generateBackground();
@@ -90,6 +92,7 @@ public:
     int MVAR(unsigned int number);
     void setLVAR(unsigned int number, int value);
     int LVAR(unsigned int number);
+    std::map<std::string, VMStackValue*>* EVARS();
 
 };
 

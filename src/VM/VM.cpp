@@ -32,6 +32,12 @@
 #include "../Game/GameObject.h"
 #include "../Game/GameDudeObject.h"
 #include "../Game/GameContainerItemObject.h"
+#include "../Game/GameArmorItemObject.h"
+#include "../Game/GameAmmoItemObject.h"
+#include "../Game/GameDrugItemObject.h"
+#include "../Game/GameKeyItemObject.h"
+#include "../Game/GameWeaponItemObject.h"
+#include "../Game/GameMiscItemObject.h"
 #include "../Game/GameDoorSceneryObject.h"
 #include "../VM/VM.h"
 #include "../VM/VMStackIntValue.h"
@@ -167,13 +173,15 @@ void VM::run()
             case 0x8014:
             {
                 std::cout << "[*] getExported(name)" << std::endl;
+                auto game = &Game::getInstance();
+                auto EVARS = game->location()->EVARS();
                 switch (_dataStack.top()->type())
                 {
                     case VMStackValue::TYPE_INTEGER:
-                        _dataStack.push(_getExported(&_script->identificators()->at(_popDataInteger())));
+                        _dataStack.push(EVARS->at(_script->identificators()->at(_popDataInteger())));
                         break;
                     case VMStackValue::TYPE_POINTER:
-                        _dataStack.push(_getExported((std::string*)_popDataPointer()));
+                        _dataStack.push(EVARS->at(*(std::string*)_popDataPointer()));
                         break;
                     default:
                         throw Exception("VM::opcode8014 error");
@@ -183,16 +191,23 @@ void VM::run()
             case 0x8015:
             {
                 std::cout << "[*] export(value, name)" << std::endl;
-                auto pointer = _popDataPointer();
+                auto name = (std::string*)_popDataPointer();
                 auto value = _dataStack.pop();
-                _exportVar((std::string*)pointer, value);
+                auto game = &Game::getInstance();
+                auto EVARS = game->location()->EVARS();
+                EVARS->at(*name) = value;
                 break;
             }
             case 0x8016:
             {
                 std::cout << "[*] export(name)" << std::endl;
-                auto pointer = _popDataPointer();
-                _exportVar((std::string*)pointer);
+                auto name = (std::string*)_popDataPointer();
+                auto game = &Game::getInstance();
+                auto EVARS = game->location()->EVARS();
+                if (EVARS->find(*name) == EVARS->end())
+                {
+                    EVARS->insert(std::make_pair(*name, (VMStackValue*)0));
+                }
                 break;
             }
             case 0x8018:
@@ -606,8 +621,10 @@ void VM::run()
             }
             case 0x80a1:
             {
-                std::cout << "[*] void giveExpPoints(value)" << std::endl;
-                _giveExpPoints(_popDataInteger());
+                std::cout << "[+] void giveExpPoints(int points)" << std::endl;
+                auto points = _popDataInteger();
+                auto game = &Game::getInstance();
+                game->location()->player()->setExperience(game->location()->player()->experience() + points);
                 break;
             }
             case 0x80a3:
@@ -744,15 +761,16 @@ void VM::run()
             }
             case 0x80b4:
             {
-                std::cout << "[*] int = rand (min, max)" << std::endl;
+                std::cout << "[+] int rand(int min, int max)" << std::endl;
                 auto max = _popDataInteger();
                 auto min = _popDataInteger();
-                _pushDataInteger(_rand(min, max));
+                srand(time(0));
+                _pushDataInteger(rand()%(max - min + 1) + min);
                 break;
             }
             case 0x80b6:
             {
-                std::cout << "[*] int move_to(GameObject* object, int position, int elevation)" << std::endl;
+                std::cout << "[+] int move_to(GameObject* object, int position, int elevation)" << std::endl;
                 auto elevation = _popDataInteger();
                 auto position = _popDataInteger();
                 auto object = (GameObject*)_popDataPointer();
@@ -790,10 +808,23 @@ void VM::run()
                 break;
             case 0x80ba:
             {
-                std::cout << "[*] int obj_is_carrying_obj_pid(void* obj, int pid)" << std::endl;
-                auto pid = _popDataInteger();
-                auto obj = _popDataPointer();
-                _pushDataInteger(_obj_is_carrying_obj_pid(obj, pid));
+                std::cout << "[+] int obj_is_carrying_obj_pid(GameObject* object, int PID)" << std::endl;
+                auto PID = _popDataInteger();
+                auto pointer = _popDataPointer();
+                int amount = 0;
+                if (auto critter = dynamic_cast<GameCritterObject*>((GameObject*)pointer))
+                {
+                    for (auto object : *critter->inventory()) if (object->PID() == PID) amount += object->amount();
+                }
+                else if (auto container = dynamic_cast<GameContainerItemObject*>((GameObject*)pointer))
+                {
+                    for (auto object : *container->inventory()) if (object->PID() == PID) amount += object->amount();
+                }
+                else
+                {
+                    throw Exception("VM::opcode80ba - unknown object type");
+                }
+                _pushDataInteger(amount);
                 break;
             }
             case 0x80bb:
@@ -909,9 +940,16 @@ void VM::run()
             }
             case 0x80c9:
             {
-                std::cout << "[=] int obj_item_subtype(void* obj)" << std::endl;
-                _popDataPointer();
-                _pushDataInteger(0);
+                std::cout << "[+] int obj_item_subtype(GameItemObject* object)" << std::endl;
+                auto pointer = _popDataPointer();
+                     if (dynamic_cast<GameArmorItemObject*>((GameObject*)pointer))     _pushDataInteger(0);
+                else if (dynamic_cast<GameContainerItemObject*>((GameObject*)pointer)) _pushDataInteger(1);
+                else if (dynamic_cast<GameDrugItemObject*>((GameObject*)pointer))      _pushDataInteger(2);
+                else if (dynamic_cast<GameWeaponItemObject*>((GameObject*)pointer))    _pushDataInteger(3);
+                else if (dynamic_cast<GameAmmoItemObject*>((GameObject*)pointer))      _pushDataInteger(4);
+                else if (dynamic_cast<GameMiscItemObject*>((GameObject*)pointer))      _pushDataInteger(5);
+                else if (dynamic_cast<GameKeyItemObject*>((GameObject*)pointer))       _pushDataInteger(6);
+                else _pushDataInteger(-1);
                 break;
             }
             case 0x80ca:
@@ -1026,7 +1064,7 @@ void VM::run()
                 std::cout << "[=] int obj_can_see_obj(GameObject* src_obj, GameObject* dst_obj)" << std::endl;
                 _popDataPointer();
                 _popDataPointer();
-                _pushDataInteger(0);
+                _pushDataInteger(1);
                 break;
             }
             case 0x80de:
@@ -1224,18 +1262,22 @@ void VM::run()
             }
             case 0x8106:
             {
-                std::cout << "[=] void* (int) critter_inven_obj(void* who, int where)" << std::endl;
+                std::cout << "[=] void* (int) critter_inven_obj(GameCritterObject* critter, int where)" << std::endl;
                 auto where = _popDataInteger();
-                _popDataPointer(); // who
+                auto critter = dynamic_cast<GameCritterObject*>((GameObject*)_popDataPointer());
                 switch (where)
                 {
                     case 0: // ARMOR SLOT
+                        _pushDataPointer(critter->armorSlot());
+                        break;
                     case 1: // RIGHT HAND SLOT
+                        _pushDataPointer(critter->rightHandSlot());
+                        break;
                     case 2: // LEFT HAND SLOT
-                        _pushDataPointer(0);
+                        _pushDataPointer(critter->leftHandSlot());
                         break;
                     case -2: // INVENTORY COUNT
-                        _pushDataInteger(0);
+                        _pushDataInteger(critter->inventory()->size());
                         break;
                     default:
                         throw Exception("VM::opcode8106 error");
@@ -1336,11 +1378,11 @@ void VM::run()
 
                 // who can be critter or container
                 auto pointer = _popDataPointer();
-                if (auto critter = (GameCritterObject*)pointer)
+                if (auto critter = dynamic_cast<GameCritterObject*>((GameObject*)pointer))
                 {
                     critter->inventory()->push_back(item);
                 }
-                else if (auto container = (GameContainerItemObject*)pointer)
+                else if (auto container = dynamic_cast<GameContainerItemObject*>((GameObject*)pointer))
                 {
                     container->inventory()->push_back(item);
                 }
@@ -1754,22 +1796,6 @@ void VM::_setLightLevel(int level)
     std::cout << "     Setting light level to: " << level << std::endl;
 }
 
-int VM::_rand(int min, int max)
-{
-    srand(time(0));
-    return rand()%(max - min + 1) + min;
-}
-
-void VM::_exportVar(std::string* name)
-{
-    //std::cout << "Exporting variable: " << *name << std::endl;
-}
-
-void VM::_exportVar(std::string* name, VMStackValue* value)
-{
-    //std::cout << "Setting exported variable: " << *name << " = " << value << std::endl;
-}
-
 void VM::_playMovie(int movieNum)
 {
 
@@ -1809,24 +1835,9 @@ void VM::_debugMessage(std::string* str)
     std::cout << *str << std::endl;
 }
 
-void VM::_giveExpPoints(int value)
-{
-}
-
 int VM::_tile_num_in_direction(int start_tile, int dir, int distance)
 {
     return start_tile + 20;
-}
-
-VMStackValue* VM::_getExported(std::string* name)
-{
-    std::cout << "name: " << *name << std::endl;
-    return new VMStackPointerValue(0);
-}
-
-int VM::_obj_is_carrying_obj_pid(void* obj, int pid)
-{
-    return 0;
 }
 
 int VM::_critter_add_trait(void* who, int trait_type, int trait, int amount)
