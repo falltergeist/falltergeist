@@ -174,12 +174,12 @@ void Location::init()
                     }
                     case libfalltergeist::ProFileType::TYPE_SCENERY_LADDER_BOTTOM:
                     {
-                        throw 0;
+                        continue;
                         break;
                     }
                     case libfalltergeist::ProFileType::TYPE_SCENERY_LADDER_TOP:
                     {
-                        throw 0;
+                        continue;
                         break;
                     }
                     case libfalltergeist::ProFileType::TYPE_SCENERY_STAIRS:
@@ -225,7 +225,7 @@ void Location::init()
                 frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
             }
 
-            if (frm->framesPerSecond() > 0)
+            if (frm->framesPerDirection() > 1)
             {
                 auto animation = new Animation(frm);
                 animation->setCurrentSurfaceSet(object->orientation());
@@ -236,8 +236,6 @@ void Location::init()
             else
             {
                 auto surface = new InteractiveSurface(frm, object->orientation());
-                surface->setX(hexagonToX(object->position()));
-                surface->setY(hexagonToY(object->position()));
                 object->setSurface(surface);
             }
         }
@@ -291,24 +289,32 @@ GameDudeObject* Location::player()
 
 void Location::think()
 {
-    if (!_initialized)
+    for (auto object : _objects) for (auto script : *object->scripts())
     {
-        _initialized = true;
-        if (_script) _script->initialize();
-
-        // initialize scripts
-        for (auto object : _objects) for (auto script : *object->scripts()) script->initialize();
-
-        // map_enter_p_proc
-        if (_script) _script->call("map_enter_p_proc");
-        for (auto object : _objects) for (auto script : *object->scripts()) script->call("map_enter_p_proc");
-
-    }
-    else
-    {
-        for (auto object : _objects) for (auto script : *object->scripts())
+        if (!_initialized)
         {
-            script->call("map_update_p_proc");
+            _initialized = true;
+            //if (_script) _script->initialize();
+
+            // initialize scripts
+            //for (auto script : *object->scripts()) script->initialize();
+
+            // map_enter_p_proc
+            //if (_script) _script->call("map_enter_p_proc");
+            //for (auto script : *object->scripts()) script->call("map_enter_p_proc");
+
+        }
+        else
+        {
+            for (auto script : *object->scripts())
+            {
+                //script->call("map_update_p_proc");
+            }
+        }
+
+        if (Animation* animation = object->animationQueue()->animation())
+        {
+            animation->think();
         }
     }
 
@@ -319,27 +325,32 @@ void Location::_checkObjectsToRender()
 {
     _objectsToRender.clear();
 
-    for (auto object : _objects)
+    for (GameObject* object : _objects)
     {
-        if (!object->surface()) continue;
-        // if object is out of camera borders        
-        if (object->surface()->x() + object->surface()->xOffset() + object->surface()->width() < camera()->x()) continue;
-        if (object->surface()->y() + object->surface()->yOffset() + object->surface()->height() < camera()->y()) continue;
+        if (!object->surface() && !object->animationQueue()->animation()) continue;
 
-        if (object->surface()->x() + object->surface()->xOffset() > camera()->x() + camera()->width()) continue;
-        if (object->surface()->y() + object->surface()->yOffset() > camera()->y() + camera()->height()) continue;
-
-        if (object->animationQueue()->queue()->size() > 0)
+        int x,y, width, height;
+        if (Animation* animation = object->animationQueue()->animation())
         {
-            //if (object->x()  - object->animation()->surfaces()->at(0)->width()/2 + object->animation()->xOffsetMin() > camera()->x() + camera()->width()) continue;
-            if (object->surface()->x() + object->surface()->xOffset() > camera()->x() + camera()->width()) continue;
-            if (object->surface()->y() + object->surface()->yOffset() > camera()->y() + camera()->height()) continue;
+            x = Location::hexagonToX(object->position()) + animation->xOffset() - animation->surfaces()->at(0)->width()/2;
+            y = Location::hexagonToY(object->position()) + animation->yOffset() - animation->surfaces()->at(0)->height();
+            width = animation->width();
+            height = animation->height();
         }
         else
         {
-            if (object->surface()->x() + object->surface()->xOffset() > camera()->x() + camera()->width()) continue;
-            if (object->surface()->y() + object->surface()->yOffset() > camera()->y() + camera()->height()) continue;
+            Surface* surface = object->surface();
+            x = Location::hexagonToX(object->position()) + surface->xOffset() - surface->width()/2;
+            y = Location::hexagonToY(object->position()) + surface->yOffset() - surface->height();
+            width = surface->width();
+            height = surface->height();
         }
+
+        // check if object is out of camera borders
+        if (x + width < camera()->x()) continue; // right
+        if (y + height < camera()->y()) continue; // bottom
+        if (x > camera()->x() + camera()->width()) continue; // left
+        if (y > camera()->y() + camera()->height()) continue; // top
 
         _objectsToRender.push_back(object);
     }

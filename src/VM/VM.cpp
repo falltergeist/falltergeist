@@ -1059,9 +1059,9 @@ void VM::run()
             }
             case 0x80ec:
             {
-                std::cout << "[+] int elevation(void* obj)" << std::endl;
+                std::cout << "[=] int elevation(void* obj)" << std::endl;
                 auto object = (LocationObject*)_popDataPointer();
-                _pushDataInteger(object->elevation());
+                _pushDataInteger(0);
                 break;
             }
             case 0x80ef:

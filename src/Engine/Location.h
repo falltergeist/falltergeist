@@ -67,9 +67,9 @@ public:
     void init();
     void think();
     bool scroll(bool up = false, bool down = false, bool left = false, bool right = false);
-    int hexagonToX(unsigned int hexagon);
-    int hexagonToY(unsigned int hexagon);
-    unsigned int positionToHexagon(int x, int y);
+    static int hexagonToX(unsigned int hexagon);
+    static int hexagonToY(unsigned int hexagon);
+    static unsigned int positionToHexagon(int x, int y);
     unsigned int tileToX(unsigned int tile);
     unsigned int tileToY(unsigned int tile);
     int width();

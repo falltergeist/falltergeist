@@ -112,20 +112,28 @@ void LocationState::blit()
 
     _hexCursor->blit(_game->screen()->surface());
 
-    for (auto object : *_location->objectsToRender())
-    {
-        int oldX = object->surface()->x();
-        int oldY = object->surface()->y();
-        int newX = oldX - _location->camera()->x();
-        int newY = oldY - _location->camera()->y();
+    for (GameObject* object : *_location->objectsToRender())
+    {        
+        int x, y;
+        if (Animation* animation = object->animationQueue()->animation())
+        {
+            x = Location::hexagonToX(object->position()) - animation->surfaces()->at(0)->width()/2 - _location->camera()->x();
+            y = Location::hexagonToY(object->position()) - animation->surfaces()->at(0)->height() - _location->camera()->y();
+            animation->setX(x);
+            animation->setY(y);
+            animation->blit(_game->screen()->surface());
 
-        object->surface()->setX(newX);
-        object->surface()->setY(newY);
-        object->surface()->blit(_game->screen()->surface());
-        object->surface()->setX(oldX);
-        object->surface()->setY(oldY);
-
-    }
+        }
+        else
+        {
+            auto surface = object->surface();
+            x = Location::hexagonToX(object->position()) - surface->width()/2 - _location->camera()->x();
+            y = Location::hexagonToY(object->position()) - surface->height() - _location->camera()->y();
+            surface->setX(x);
+            surface->setY(y);
+            surface->blit(_game->screen()->surface());
+        }
+   }
 }
 
 void LocationState::_drawHexagonalGrid()
