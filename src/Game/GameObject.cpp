@@ -23,6 +23,7 @@
 
 // Falltergeist includes
 #include "../Engine/InteractiveSurface.h"
+#include "../Engine/Animation.h"
 #include "../Game/GameObject.h"
 #include "../Game/GameDefines.h"
 #include "../Engine/Exception.h"
@@ -85,7 +86,7 @@ void GameObject::setElevation(int value)
 }
 
 int GameObject::orientation()
-{
+{    
     return _orientation;
 }
 
@@ -96,6 +97,36 @@ void GameObject::setOrientation(int value)
         throw Exception("GameObject::setOrientation() - value out of range: " + std::to_string(value));
     }
     _orientation = value;
+    animationQueue()->clear();
+    delete _surface; _surface = 0;
+
+    auto frm = ResourceManager::frmFileType(FID());
+    if (frm)
+    {
+        auto id = PID() & 0x00000FFF;
+        auto type = (PID() & 0x0F000000) >> 24;
+        if (type == 5 && id == 12) // Map scroll blockers
+        {
+            return;
+            //frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
+        }
+        if (type == 5 && id >= 16 && id <= 23) // exit tiles
+        {
+            frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
+        }
+
+        if (frm->framesPerDirection() > 1)
+        {
+            auto animation = new Animation(frm);
+            animation->setCurrentSurfaceSet(this->orientation());
+            this->animationQueue()->add(animation);
+        }
+        else
+        {
+            auto surface = new InteractiveSurface(frm, this->orientation());
+            this->setSurface(surface);
+        }
+    }
 }
 
 std::vector<VM*>* GameObject::scripts()

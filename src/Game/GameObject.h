@@ -65,7 +65,7 @@ public:
     void setElevation(int value);
 
     int orientation();
-    void setOrientation(int value);
+    virtual void setOrientation(int value);
 
     std::vector<VM*>* scripts();
 

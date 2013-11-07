@@ -40,7 +40,10 @@ protected:
 public:
     GameCritterObject();
     virtual ~GameCritterObject();
+
     std::vector<GameItemObject*>* inventory();
+    virtual void setOrientation(int value);
+
 };
 
 }

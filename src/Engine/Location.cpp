@@ -214,32 +214,6 @@ void Location::init()
         object->setOrientation( mapObject->orientation() );
         object->setPosition( mapObject->hexPosition() );
 
-        auto frm = ResourceManager::frmFileType(object->FID());
-        if (frm)
-        {
-            auto id = mapObject->objectId();
-            auto type = mapObject->objectTypeId();
-            if (type == 5 && id == 12) continue; // Map scroll blockers
-            if (type == 5 && id >= 16 && id <= 23) // exit tiles
-            {
-                frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
-            }
-
-            if (frm->framesPerDirection() > 1)
-            {
-                auto animation = new Animation(frm);
-                animation->setCurrentSurfaceSet(object->orientation());
-                animation->setX(hexagonToX(object->position()));
-                animation->setY(hexagonToY(object->position()));
-                object->animationQueue()->add(animation);
-            }
-            else
-            {
-                auto surface = new InteractiveSurface(frm, object->orientation());
-                object->setSurface(surface);
-            }
-        }
-
         if (mapObject->scriptId() > 0)
         {
             auto intFile = ResourceManager::intFileType(mapObject->scriptId());
@@ -256,8 +230,6 @@ void Location::init()
             auto intFile = ResourceManager::intFileType(proto->scriptId());
             if (intFile) object->scripts()->push_back(new VM(intFile, object));
         }
-
-        //object->setDescriptionId(ResourceManager::proFileType(mapObject->PID())->messageId());
 
         _objects.push_back(object);
     }
@@ -289,26 +261,26 @@ GameDudeObject* Location::player()
 
 void Location::think()
 {
-    for (auto object : _objects) for (auto script : *object->scripts())
+    for (auto object : _objects)
     {
         if (!_initialized)
         {
             _initialized = true;
-            //if (_script) _script->initialize();
+            if (_script) _script->initialize();
 
             // initialize scripts
-            //for (auto script : *object->scripts()) script->initialize();
+            for (auto script : *object->scripts()) script->initialize();
 
             // map_enter_p_proc
-            //if (_script) _script->call("map_enter_p_proc");
-            //for (auto script : *object->scripts()) script->call("map_enter_p_proc");
+            if (_script) _script->call("map_enter_p_proc");
+            for (auto script : *object->scripts()) script->call("map_enter_p_proc");
 
         }
         else
         {
             for (auto script : *object->scripts())
             {
-                //script->call("map_update_p_proc");
+                script->call("map_update_p_proc");
             }
         }
 

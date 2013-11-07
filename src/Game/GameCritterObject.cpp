@@ -19,9 +19,13 @@
  */
 
 // C++ standard includes
+#include <string>
 
 // Falltergeist includes
 #include "../Game/GameCritterObject.h"
+#include "../Engine/Exception.h"
+#include "../Engine/ResourceManager.h"
+#include "../Engine/Animation.h"
 
 // Third party includes
 
@@ -39,6 +43,99 @@ GameCritterObject::~GameCritterObject()
 std::vector<GameItemObject*>* GameCritterObject::inventory()
 {
     return &_inventory;
+}
+
+void GameCritterObject::setOrientation(int value)
+{
+    GameObject::setOrientation(value);
+
+    unsigned int frmId = FID() & 0x00000FFF;
+    unsigned int ID1 = (FID() & 0x0000F000) >> 12;
+    unsigned int ID2 = (FID() & 0x00FF0000) >> 16;
+    unsigned int ID3 = (FID() & 0xF0000000) >> 28;
+    auto lst = ResourceManager::lstFileType("art/critters/critters.lst");
+    std::string frmName = lst->strings()->at(frmId);
+    std::string frmBase = frmName.substr(0, 6);
+
+    if (ID2 >= 0x26 && ID2 <= 0x2F)
+    {
+        if (ID1 >= 0x0B || ID1 == 0) throw Exception("Critter ID1 unsupported value");
+        frmBase += ID1 + 0x63;
+        frmBase += ID2 + 0x3D;
+    }
+    else if (ID2 == 0x24)
+    {
+        frmBase += "ch";
+    }
+    else if (ID2 == 0x25)
+    {
+        frmBase += "cj";
+    }
+    else if (ID2 == 0x40)
+    {
+        frmBase += "na";
+    }
+    else if (ID2 >= 0x30)
+    {
+        frmBase += "r";
+        frmBase += ID2 + 0x31;
+    }
+    else if (ID2 >= 0x14)
+    {
+        frmBase += "b";
+        frmBase += ID2 + 0x4d;
+    }
+    else if (ID2 == 0x12)
+    {
+        if (ID1 == 0x01)
+        {
+            frmBase += "dm";
+        }
+        else if (ID1 == 0x04)
+        {
+            frmBase += "gm";
+        }
+        else
+        {
+            frmBase += "as";
+        }
+    }
+    else if (ID2 == 0x0D)
+    {
+        if (ID1 > 0)
+        {
+            frmBase += ID1 + 0x63;
+            frmBase += "e";
+        }
+        else
+        {
+            frmBase += "an";
+        }
+    }
+    else if (ID2 <= 0x01 && ID1 > 0)
+    {
+        frmBase += ID1 + 0x63;
+        frmBase += ID2 + 0x61;
+    }
+    else
+    {
+        frmBase += "a";
+        frmBase += ID2 + 0x61;
+    }
+
+    std::string extensions[] = {"frm", "frm0", "frm1", "frm2", "fr3", "frm4", "frm5", "frm6"};
+    frmBase += "." + extensions[ID3];
+
+    auto frm = ResourceManager::frmFileType("art/critters/" + frmBase);
+    animationQueue()->clear();
+
+    auto animation = new Animation(frm);
+
+    if (ID3 == 0)
+    {
+        animation->setCurrentSurfaceSet(this->orientation());
+    }
+    animationQueue()->add(animation);
 }
 
 }

@@ -649,16 +649,16 @@ void VM::run()
             case 0x80a9:
             {
                 std::cout << "[*] void override_map_start(int x, int y, int elev, int rot)" << std::endl;
-                auto direction = _popDataInteger();
+                auto orientation = _popDataInteger();
                 auto elevation = _popDataInteger();
                 auto y = _popDataInteger();
                 auto x = _popDataInteger();                
                 auto position = y*200 + x;
-                auto object = (GameObject*)_owner;
-                auto player = object->location()->player();
-                //player->setPosition(position);
-                //player->setOrientation(direction);
-                //player->setElevation(elevation);
+                auto game = &Game::getInstance();
+                auto player = game->location()->player();
+                player->setPosition(position);
+                player->setOrientation(orientation);
+                player->setElevation(elevation);
                 break;
             }
             case 0x80aa:
@@ -791,8 +791,8 @@ void VM::run()
             case 0x80bf:
             {
                 std::cout << "[+] void* dude_obj()" << std::endl;
-                auto object = (GameObject*)_owner;
-                //_pushDataPointer(object->location()->player());
+                auto game = &Game::getInstance();
+                _pushDataPointer(game->location()->player());
                 _pushDataPointer(0);
                 break;
             }
