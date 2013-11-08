@@ -30,6 +30,7 @@
 #include "../Engine/Surface.h"
 #include "../Engine/Animation.h"
 #include "../Engine/Mouse.h"
+#include "../Game/GameDefines.h"
 #include "../Game/GameCritterObject.h"
 #include "../Game/GameAmmoItemObject.h"
 #include "../Game/GameArmorItemObject.h"
@@ -133,12 +134,12 @@ void Location::init()
     }
 
     _player = new GameDudeObject();
-    _player->setPID(0x01000040);
-    _player->setFID(0x01000040);
+    _player->setPID(0x01000001);
+    _player->setFID(FID_HERO_MALE);
     _player->setOrientation(_mapFile->defaultOrientation());
     _player->setPosition(_mapFile->defaultPosition());
-    auto script = new VM(ResourceManager::intFileType(0), _player);
-    _player->scripts()->push_back(script);
+    //auto script = new VM(ResourceManager::intFileType(0), _player);
+    //_player->scripts()->push_back(script);
     _objects.push_back(_player);
 
     // ON MAP LOADED
