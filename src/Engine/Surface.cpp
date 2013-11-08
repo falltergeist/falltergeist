@@ -131,6 +131,16 @@ Surface::~Surface()
     delete _animatedPixels;
 }
 
+void Surface::setOwner(void* owner)
+{
+    _owner = owner;
+}
+
+void* Surface::owner()
+{
+    return _owner;
+}
+
 void Surface::setNeedRedraw(bool needRedraw)
 {
     _needRedraw = needRedraw;

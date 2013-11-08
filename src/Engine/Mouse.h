@@ -40,8 +40,11 @@ protected:
     int _cursorX = 320;
     int _cursorY = 240;
     int _type = BIG_ARROW;
+    int _lastType = BIG_ARROW;
 public:
-    enum {BIG_ARROW = 1,
+    enum {
+          NONE = 0,
+          BIG_ARROW,
           SCROLL_W,
           SCROLL_W_X,
           SCROLL_NW,
@@ -59,7 +62,19 @@ public:
           SCROLL_SW,
           SCROLL_SW_X,
           HEXAGON_RED,
-          WAIT
+          WAIT,
+          ACTION,
+          ACTION_REVERSE
+         };
+    enum {ICON_ROTATE = 1,
+          ICON_SKILL,
+          ICON_INVENTORY,
+          ICON_CANCEL,
+          ICON_LOOK,
+          ICON_TALK,
+          ICON_PUSH,
+          ICON_UNLOAD,
+          ICON_USE
          };
     Mouse();
     ~Mouse();
@@ -70,6 +85,7 @@ public:
     void setCursorY(int y);
     int type();
     void setType(int type);
+    virtual void handle(Event* event);
     virtual int x();
     virtual int y();
     virtual SDL_Surface* sdl_surface();

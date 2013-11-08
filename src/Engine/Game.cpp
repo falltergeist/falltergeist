@@ -31,6 +31,7 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Mouse.h"
 #include "../Engine/State.h"
+#include "../States/LocationState.h"
 #include "../UI/FpsCounter.h"
 #include "../UI/TextArea.h"
 #include "../Engine/AnimatedPalette.h"
@@ -205,6 +206,13 @@ void Game::setLocation(Location* location)
 Location* Game::location()
 {
     return _location;
+}
+
+bool Game::locationState()
+{
+    auto state = dynamic_cast<LocationState*>(_states.back());
+    if (state) return true;
+    return false;
 }
 
 void Game::setGVAR(unsigned int number, int value)

@@ -18,10 +18,11 @@
  *
  */
 
-#ifndef FALLTERGEIST_LOCATIONSTATE_H
-#define FALLTERGEIST_LOCATIONSTATE_H
+#ifndef FALLTERGEIST_CURSORDROPDOWNSTATE_H
+#define FALLTERGEIST_CURSORDROPDOWNSTATE_H
 
 // C++ standard includes
+#include <vector>
 
 // Falltergeist includes
 #include "../Engine/State.h"
@@ -30,37 +31,33 @@
 
 namespace Falltergeist
 {
-class Location;
-class Animation;
-class InteractiveSurface;
-class GameObject;
+class Surface;
+class HiddenMask;
 
-class LocationState : public State
+class CursorDropdownState : public State
 {
-protected:    
-    bool _hexagonalGrid = false;
-    Animation * _animation = 0;
-    Location * _location = 0;
-    InteractiveSurface * _background;
-    unsigned int _direction;
-    unsigned int _cameraX;
-    unsigned int _cameraY;
-    unsigned int _scrollTicks = 0;
-    void _drawHexagonalGrid();
+protected:
+    void* _object = 0;
+    int _initialType;
+    std::vector<int> _icons;
+    int _initialX;
+    int _initialY;
+    int _currentSurface = 0;
+    std::vector<Surface*> _activeSurfaces;
+    std::vector<Surface*> _inactiveSurfaces;
+    Surface* _surface = 0;
+    HiddenMask* _mask = 0;
+    Surface* _cursor = 0;
 public:
-    LocationState();
-    ~LocationState();
+    CursorDropdownState(std::vector<int> icons);
+    virtual ~CursorDropdownState();
     virtual void init();
-    virtual void think();
     virtual void blit();
-    virtual void handle(Event* event);
-
-    void onBackgroundClick(Event * event);
-    void onKeyboardRelease(Event * event);
-    void onObjectClick(Event * event);
-    void onMouseDown(Event* event);
+    virtual void think();
+    void onLeftButtonRelease(Event* event);
+    void* object();
+    void setObject(void* object);
 };
 
 }
-
-#endif // FALLTERGEIST_LOCATIONSTATE_H
+#endif // FALLTERGEIST_CURSORDROPDOWNSTATE_H

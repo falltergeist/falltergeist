@@ -20,9 +20,13 @@
 
 // C++ standard includes
 #include <cmath>
+#include <iostream>
 
 // Falltergeist includes
 #include "../Engine/Animation.h"
+#include "../Engine/Game.h"
+#include "../Engine/Location.h"
+#include "../Engine/LocationCamera.h"
 #include "../Engine/Mouse.h"
 #include "../Engine/ResourceManager.h"
 
@@ -49,6 +53,76 @@ void Mouse::think()
 {
     if (_animation) _animation->think();
     SDL_GetMouseState(&_cursorX, &_cursorY);
+
+    auto game = &Game::getInstance();
+    auto location = game->location();
+
+    if (location && game->locationState())
+    {
+        //check if cursor in the scrolling area
+        if (cursorX() < 5) // LEFT
+        {
+            if (cursorY() < 5) //  LEFT-UP
+            {
+                auto moved = location->scroll(true, false, true, false);
+                setType( moved ? Mouse::SCROLL_NW : Mouse::SCROLL_NW_X);
+            }
+            else if (cursorY() > 475) //LEFT-DOWN
+            {
+                auto moved = location->scroll(false, true, true, false);
+                setType(moved ? Mouse::SCROLL_SW : Mouse::SCROLL_SW_X);
+            }
+            else
+            {
+                auto moved = location->scroll(false, false, true, false);
+                setType(moved ? Mouse::SCROLL_W : Mouse::SCROLL_W_X);
+            }
+        }
+        else if (cursorX() > 635) // RIGHT
+        {
+            if (cursorY() < 5) //  RIGHT-UP
+            {
+                auto moved = location->scroll(true, false, false, true);
+                setType(moved ? Mouse::SCROLL_NE : Mouse::SCROLL_NE_X);
+            }
+            else if (cursorY() > 475) //RIGHT-DOWN
+            {
+                auto moved = location->scroll(false, true, false, true);
+                setType(moved ? Mouse::SCROLL_SE : Mouse::SCROLL_SE_X);
+            }
+            else
+            {
+                auto moved = location->scroll(false, false, false, true);
+                setType(moved ? Mouse::SCROLL_E : Mouse::SCROLL_E_X);
+            }
+        }
+        else if (cursorY() < 5) // UP
+        {
+            auto moved = location->scroll(true, false, false, false);
+            setType(moved ? Mouse::SCROLL_N : Mouse::SCROLL_N_X);
+        }
+        else if (cursorY() > 475) // DOWN
+        {
+            auto moved = location->scroll(false, true, false, false);
+            setType(moved ? Mouse::SCROLL_S : Mouse::SCROLL_S_X);
+        }
+        else if (_type != _lastType)
+        {
+            setType(_lastType);
+        }
+
+        switch (type())
+        {
+            case HEXAGON_RED:
+                auto location = Game::getInstance().location();
+                int x = location->camera()->x() + this->cursorX();
+                int y = location->camera()->y() + this->cursorY();
+                unsigned int hexagon = location->positionToHexagon(x, y);
+                setCursorX(location->hexagonToX(hexagon) - location->camera()->x());
+                setCursorY(location->hexagonToY(hexagon) - location->camera()->y());
+                break;
+        }
+    }
 }
 
 int Mouse::cursorX()
@@ -68,7 +142,7 @@ void Mouse::setCursorX(int x)
 
 void Mouse::setCursorY(int y)
 {
-    _cursorY = y;
+    _cursorY = y;    
 }
 
 int Mouse::x()
@@ -96,6 +170,7 @@ void Mouse::setType(int type)
             loadFromSurface(ResourceManager::surface("art/intrface/stdarrow.frm"));
             setXOffset(0);
             setYOffset(0);
+            _lastType = _type;
             break;
         case SCROLL_W:
             loadFromSurface(ResourceManager::surface("art/intrface/scrwest.frm"));
@@ -178,15 +253,43 @@ void Mouse::setType(int type)
             setYOffset(- height());
             break;
         case HEXAGON_RED:
+            loadFromSurface(ResourceManager::surface("art/intrface/msef000.frm"));
+            setXOffset(- width()/2);
+            setYOffset(- height()/2);
+            _lastType = _type;
+            break;
+        case ACTION:
+            loadFromSurface(ResourceManager::surface("art/intrface/actarrow.frm"));
+            setXOffset(0);
+            setYOffset(0);
+            _lastType = _type;
             break;
         case WAIT:
             _animation = new Animation("art/intrface/wait.frm");
             _animation->setEnabled(true);
-            setXOffset(0);
-            setYOffset(0);
+            setXOffset(- width()/2);
+            setYOffset(- height()/2);
+            _lastType = _type;
             break;
-
+        case NONE:
+            loadFromSurface(new Surface());
+            break;
     }
+}
+
+void Mouse::handle(Event* event)
+{
+    // use_on
+
+    //x hexagon
+    //x arrow
+        //x лицо \/ x стрелки поворота |/ x* рука
+        //x* бинокль
+        //x* рюкзак
+        //x* голова
+        //x* отмена
+
+    //* aim
 }
 
 SDL_Surface* Mouse::sdl_surface()

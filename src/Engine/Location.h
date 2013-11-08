@@ -40,6 +40,8 @@ class VMStackValue;
 class Location
 {
 protected:
+    unsigned int _scrollTicks = 0;
+    bool _scrollStatus = false;
     VM* _script = 0;
     GameDudeObject* _player = 0;
     std::vector<GameObject*> _objects;
@@ -78,6 +80,7 @@ public:
     unsigned int tileToY(unsigned int tile);
     int width();
     int height();
+    void handleAction(GameObject* object, int action);
 
     LocationCamera* camera();
 

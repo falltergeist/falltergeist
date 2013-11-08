@@ -39,7 +39,8 @@ class AnimatedPalette;
 class Surface
 {
 protected:
-    SDL_Surface* _sdl_surface;
+    SDL_Surface* _sdl_surface = 0;
+    void* _owner = 0;
 
     int _x = 0; // x position
     int _y = 0; // y position
@@ -63,6 +64,9 @@ public:
     Surface(libfalltergeist::RixFileType* rix);
     Surface(Surface* other);
     virtual ~Surface();
+
+    virtual void setOwner(void* owner);
+    virtual void* owner();
 
     virtual void setX(int x);
     virtual int x();

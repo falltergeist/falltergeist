@@ -29,6 +29,7 @@
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Animation.h"
+#include "../Engine/Mouse.h"
 #include "../Game/GameCritterObject.h"
 #include "../Game/GameAmmoItemObject.h"
 #include "../Game/GameArmorItemObject.h"
@@ -268,6 +269,22 @@ GameObject* Location::createObject(int PID)
     return object;
 }
 
+void Location::handleAction(GameObject* object, int action)
+{
+    switch (action)
+    {
+        case Mouse::ICON_ROTATE:
+            auto dude = dynamic_cast<GameDudeObject*>(object);
+            if (!dude) break; //throw Exception("LocationState::handleAction() - only Dude can be rotated");
+
+            int orientation = dude->orientation() + 1;
+            if (orientation > 5) orientation = 0;
+            dude->setOrientation(orientation);
+
+            break;
+    }
+}
+
 void Location::think()
 {
 
@@ -456,26 +473,22 @@ Surface * Location::tilesBackground()
 }
 
 bool Location::scroll(bool up, bool down, bool left, bool right)
-{
-    bool changed = false;
+{    
+    if (SDL_GetTicks() < _scrollTicks + 10) return _scrollStatus;
+    _scrollTicks = SDL_GetTicks();
 
+    _scrollStatus = false;
     int scrollDelta = 5;
 
-    if (up)
+    if (up && camera()->y() >= scrollDelta)
     {
-        if (camera()->y() >= scrollDelta)
-        {
-            camera()->setYPosition(camera()->yPosition() - scrollDelta);
-            changed = true;
-        }
+        camera()->setYPosition(camera()->yPosition() - scrollDelta);
+        _scrollStatus = true;
     }
-    if (left)
+    if (left && camera()->x() >= scrollDelta)
     {
-        if (camera()->x() >= scrollDelta)
-        {
-            camera()->setXPosition(camera()->xPosition() - scrollDelta);
-            changed = true;
-        }
+        camera()->setXPosition(camera()->xPosition() - scrollDelta);
+        _scrollStatus = true;
     }
     if (down)
     {
@@ -483,7 +496,7 @@ bool Location::scroll(bool up, bool down, bool left, bool right)
         if (camera()->yPosition() < height() - scrollDelta - camera()->height())
         {
             camera()->setYPosition(camera()->yPosition() + scrollDelta);
-            changed = true;
+            _scrollStatus = true;
         }
     }
     if (right)
@@ -491,16 +504,16 @@ bool Location::scroll(bool up, bool down, bool left, bool right)
         if (camera()->x() < width() - scrollDelta - camera()->width())
         {
             camera()->setXPosition(camera()->xPosition() + scrollDelta);
-            changed = true;
+            _scrollStatus = true;
         }
     }
 
-    if (changed)
+    if (_scrollStatus)
     {
         _generateBackground();
         _checkObjectsToRender();
     }
-    return changed;
+    return _scrollStatus;
 }
 
 std::vector<GameObject*>* Location::objects()

@@ -73,12 +73,13 @@ public:
     void pushState(State * state);
     void setState(State * state);
     void popState();
+    bool locationState();
     void run();
     void quit();
 
     void setPlayer(Player * player);
-    Player * player();
-    Mouse * mouse();
+    Player* player();
+    Mouse* mouse();
     void setLocation(Location* location);
     Location* location();
     void setGVAR(unsigned int number, int value);

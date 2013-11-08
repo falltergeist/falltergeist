@@ -31,6 +31,7 @@
 #include "../Engine/LocationCamera.h"
 #include "../Game/GameObject.h"
 #include "../States/LocationState.h"
+#include "../States/CursorDropdownState.h"
 #include "../Engine/Mouse.h"
 #include "../UI/TextArea.h"
 
@@ -41,15 +42,11 @@ namespace Falltergeist
 
 LocationState::LocationState() : State()
 {
-    _hexCursor = new Surface(ResourceManager::surface("art/intrface/msef000.frm"));
-    _hexCursor->setXOffset(- ceil(_hexCursor->width()/2));
-    _hexCursor->setYOffset(- ceil(_hexCursor->height()/2));
 }
 
 LocationState::~LocationState()
 {
     _game->setLocation(0);
-    delete _hexCursor;
 }
 
 void LocationState::init()
@@ -58,12 +55,19 @@ void LocationState::init()
 
     _location = new Location(_game->resourceManager()->mapFileType("maps/artemple.map"));
     _game->setLocation(_location);
+    _game->mouse()->setType(Mouse::ACTION);
     _background = new InteractiveSurface(_location->tilesBackground());
     _background->onLeftButtonClick((EventHandler) &LocationState::onBackgroundClick);
     //_background->onKeyboardRelease((EventHandler) &LocationState::onKeyboardRelease);
 
     add(_background);
-    add(_hexCursor);
+}
+
+void LocationState::onMouseDown(Event* event)
+{
+    auto state = new CursorDropdownState({ Mouse::ICON_ROTATE, Mouse::ICON_USE, Mouse::ICON_SKILL, Mouse::ICON_INVENTORY, Mouse::ICON_UNLOAD, Mouse::ICON_CANCEL});
+    state->setObject(event->sender()->owner());
+    _game->pushState(state);
 }
 
 void LocationState::onBackgroundClick(Event * event)
@@ -72,7 +76,7 @@ void LocationState::onBackgroundClick(Event * event)
     int y = _location->camera()->y() + event->y();
     unsigned int hexagon = _location->positionToHexagon(x, y);
 
-    std::cout << x << " : " << y << " > " << hexagon << std::endl;
+    std::cout << std::dec << x << " : " << y << " > " << hexagon << std::endl;
 }
 
 void LocationState::onObjectClick(Event* event)
@@ -110,7 +114,6 @@ void LocationState::blit()
 
     _drawHexagonalGrid();
 
-    _hexCursor->blit(_game->screen()->surface());
 
     for (GameObject* object : *_location->objectsToRender())
     {        
@@ -158,156 +161,41 @@ void LocationState::think()
     if (!_location) return;
     _location->think();
 
-    for(auto object : *_location->objectsToRender())
+    _background->loadFromSurface(_location->tilesBackground());
+
+    for(GameObject* object : *_location->objectsToRender())
     {
-        object->surface()->onLeftButtonClick((EventHandler) &LocationState::onObjectClick);
-    }
 
-    int x = _location->camera()->x() + _game->mouse()->x();
-    int y = _location->camera()->y() + _game->mouse()->y();
-    unsigned int hexagon = _location->positionToHexagon(x, y);
-
-    _hexCursor->setX(_location->hexagonToX(hexagon) - _location->camera()->x());
-    _hexCursor->setY(_location->hexagonToY(hexagon) - _location->camera()->y());
-
-    if (SDL_GetTicks() >= _scrollTicks + 10)
-    {
-        bool moved;
-        _scrollTicks = SDL_GetTicks();
-        if (_game->mouse()->cursorX() < 5) // LEFT
+        if (Animation* animation = object->animationQueue()->animation())
         {
-            if (_game->mouse()->cursorY() < 5) //  LEFT-UP
-            {
-                moved = _location->scroll(true, false, true, false);
-                if (moved)
-                {
-                    _game->mouse()->setType(Mouse::SCROLL_NW);
-                }
-                else
-                {
-                    _game->mouse()->setType(Mouse::SCROLL_NW_X);
-                }
-            }
-            else if (_game->mouse()->cursorY() > 475) //LEFT-DOWN
-            {
-                moved = _location->scroll(false, true, true, false);
-                if (moved)
-                {
-                    _game->mouse()->setType(Mouse::SCROLL_SW);
-                }
-                else
-                {
-                    _game->mouse()->setType(Mouse::SCROLL_SW_X);
-                }
-            }
-            else
-            {
-                moved = _location->scroll(false, false, true, false);
-                if (moved)
-                {
-                    _game->mouse()->setType(Mouse::SCROLL_W);
-                }
-                else
-                {
-                    _game->mouse()->setType(Mouse::SCROLL_W_X);
-                }
-            }
-        }
-        else if (_game->mouse()->cursorX() > 635) // RIGHT
-        {
-            if (_game->mouse()->cursorY() < 5) //  RIGHT-UP
-            {
-                moved = _location->scroll(true, false, false, true);
-                if (moved)
-                {
-                    _game->mouse()->setType(Mouse::SCROLL_NE);
-                }
-                else
-                {
-                    _game->mouse()->setType(Mouse::SCROLL_NE_X);
-                }
-            }
-            else if (_game->mouse()->cursorY() > 475) //RIGHT-DOWN
-            {
-                moved = _location->scroll(false, true, false, true);
-                if (moved)
-                {
-                    _game->mouse()->setType(Mouse::SCROLL_SE);
-                }
-                else
-                {
-                    _game->mouse()->setType(Mouse::SCROLL_SE_X);
-                }
-            }
-            else
-            {
-                moved = _location->scroll(false, false, false, true);
-                if (moved)
-                {
-                    _game->mouse()->setType(Mouse::SCROLL_E);
-                }
-                else
-                {
-                    _game->mouse()->setType(Mouse::SCROLL_E_X);
-                }
-            }
-        }
-        else if (_game->mouse()->cursorY() < 5) // UP
-        {
-            moved = _location->scroll(true, false, false, false);
-            if (moved)
-            {
-                _game->mouse()->setType(Mouse::SCROLL_N);
-            }
-            else
-            {
-                _game->mouse()->setType(Mouse::SCROLL_N_X);
-            }
-        }
-        else if (_game->mouse()->cursorY() > 475) // DOWN
-        {
-            moved = _location->scroll(false, true, false, false);
-            if (moved)
-            {
-                _game->mouse()->setType(Mouse::SCROLL_S);
-            }
-            else
-            {
-                _game->mouse()->setType(Mouse::SCROLL_S_X);
-            }
+            animation->onLeftButtonPress((EventHandler) &LocationState::onMouseDown);
+            animation->setOwner(object);
         }
         else
         {
-            _game->mouse()->setType(Mouse::BIG_ARROW);
-        }
-
-        if(moved)
-        {
-            _background->loadFromSurface(_location->tilesBackground());
+            object->surface()->onLeftButtonPress((EventHandler) &LocationState::onMouseDown);
+            object->surface()->setOwner(object);
         }
     }
-
 }
 
 void LocationState::handle(Event* event)
 {
     if (event->isMouseEvent())
     {
-        auto oldX = event->x();
-        auto oldY = event->y();
-        event->setX(oldX + _location->camera()->x());
-        event->setY(oldY + _location->camera()->y());
-        for (auto i = _location->objectsToRender()->rbegin(); i < _location->objectsToRender()->rend(); i++)
-        {
-            auto surface = dynamic_cast<InteractiveSurface *>(*i);
-            if (surface)
+        // Handle objects
+        for (auto object : *_location->objectsToRender())
+        {            
+            if (Animation* animation = object->animationQueue()->animation())
             {
-                surface->handle(event,this);
+                animation->handle(event, this);
+            }
+            else
+            {
+                object->surface()->handle(event, this);
             }
         }
         State::handle(event);
-        event->setX(oldX);
-        event->setY(oldY);
     }
     else
     {
