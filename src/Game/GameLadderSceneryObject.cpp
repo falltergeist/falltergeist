@@ -30,6 +30,7 @@ namespace Falltergeist
 
 GameLadderSceneryObject::GameLadderSceneryObject() : GameSceneryObject()
 {
+    _subtype = TYPE_SCENERY_LADDER;
 }
 
 GameLadderSceneryObject::~GameLadderSceneryObject()

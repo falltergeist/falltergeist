@@ -33,6 +33,7 @@ namespace Falltergeist
 
 class GameMiscObject : public GameObject
 {
+protected:
 public:
     GameMiscObject();
     virtual ~GameMiscObject();

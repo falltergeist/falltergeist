@@ -30,6 +30,7 @@ namespace Falltergeist
 
 GameDrugItemObject::GameDrugItemObject() : GameItemObject()
 {
+    _subtype = TYPE_ITEM_DRUG;
 }
 
 GameDrugItemObject::~GameDrugItemObject()

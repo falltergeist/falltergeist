@@ -67,8 +67,31 @@ void LocationState::init()
 
 void LocationState::onMouseDown(Event* event)
 {
-    auto state = new CursorDropdownState({ Mouse::ICON_ROTATE, Mouse::ICON_USE, Mouse::ICON_SKILL, Mouse::ICON_INVENTORY, Mouse::ICON_UNLOAD, Mouse::ICON_CANCEL});
-    state->setObject(event->sender()->owner());
+    auto object = dynamic_cast<GameObject*>((GameObject*)event->sender()->owner());
+    if (!object) return;
+
+    std::vector<int> icons;
+
+    switch(object->type())
+    {
+        case GameObject::TYPE_DUDE:
+            icons.push_back(Mouse::ICON_ROTATE);
+            break;
+        case GameObject::TYPE_SCENERY:
+            icons.push_back(Mouse::ICON_LOOK);
+            break;
+        case GameObject::TYPE_CRITTER:
+            icons.push_back(Mouse::ICON_TALK);
+            break;
+        default:
+            return;
+    }
+    icons.push_back(Mouse::ICON_INVENTORY);
+    icons.push_back(Mouse::ICON_SKILL);
+    icons.push_back(Mouse::ICON_CANCEL);
+
+    auto state = new CursorDropdownState(icons);
+    state->setObject(object);
     _game->pushState(state);
 }
 

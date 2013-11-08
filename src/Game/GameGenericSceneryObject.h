@@ -33,6 +33,7 @@ namespace Falltergeist
 
 class GameGenericSceneryObject : public GameSceneryObject
 {
+protected:
 public:
     GameGenericSceneryObject();
     virtual ~GameGenericSceneryObject();

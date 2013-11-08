@@ -30,6 +30,7 @@ namespace Falltergeist
 
 GameKeyItemObject::GameKeyItemObject() : GameItemObject()
 {
+    _subtype = TYPE_ITEM_KEY;
 }
 
 GameKeyItemObject::~GameKeyItemObject()

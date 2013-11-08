@@ -30,6 +30,7 @@ namespace Falltergeist
 
 GameArmorItemObject::GameArmorItemObject() : GameItemObject()
 {
+    _subtype = TYPE_ITEM_ARMOR;
 }
 
 GameArmorItemObject::~GameArmorItemObject()

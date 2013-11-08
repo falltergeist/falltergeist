@@ -33,6 +33,7 @@ namespace Falltergeist
 
 class GameWeaponItemObject : public GameItemObject
 {
+protected:
 public:
     GameWeaponItemObject();
     virtual ~GameWeaponItemObject();

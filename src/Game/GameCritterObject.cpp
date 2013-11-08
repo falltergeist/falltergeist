@@ -34,6 +34,7 @@ namespace Falltergeist
 
 GameCritterObject::GameCritterObject() : GameObject()
 {
+    _type = TYPE_CRITTER;
 }
 
 GameCritterObject::~GameCritterObject()

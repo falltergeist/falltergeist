@@ -33,6 +33,7 @@ namespace Falltergeist
 
 class GameDrugItemObject : public GameItemObject
 {
+protected:
 public:
     GameDrugItemObject();
     virtual ~GameDrugItemObject();

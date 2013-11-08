@@ -41,6 +41,16 @@ GameObject::~GameObject()
 {
 }
 
+int GameObject::type()
+{
+    return _type;
+}
+
+int GameObject::subtype()
+{
+    return _subtype;
+}
+
 int GameObject::PID()
 {
     return _PID;

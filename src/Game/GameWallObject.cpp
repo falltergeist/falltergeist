@@ -30,6 +30,7 @@ namespace Falltergeist
 
 GameWallObject::GameWallObject() : GameObject()
 {
+    _type = TYPE_WALL;
 }
 
 GameWallObject::~GameWallObject()

@@ -30,6 +30,7 @@ namespace Falltergeist
 
 GameDudeObject::GameDudeObject() : GameCritterObject()
 {
+    _type = TYPE_DUDE;
 }
 
 GameDudeObject::~GameDudeObject()

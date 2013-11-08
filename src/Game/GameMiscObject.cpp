@@ -30,6 +30,7 @@ namespace Falltergeist
 
 GameMiscObject::GameMiscObject() : GameObject()
 {
+    _type = TYPE_MISC;
 }
 
 GameMiscObject::~GameMiscObject()

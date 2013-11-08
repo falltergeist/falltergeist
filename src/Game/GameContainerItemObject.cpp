@@ -30,6 +30,7 @@ namespace Falltergeist
 
 GameContainerItemObject::GameContainerItemObject() : GameItemObject()
 {
+    _subtype = TYPE_ITEM_CONTAINER;
 }
 
 GameContainerItemObject::~GameContainerItemObject()

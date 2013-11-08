@@ -30,6 +30,7 @@ namespace Falltergeist
 
 GameGenericSceneryObject::GameGenericSceneryObject() : GameSceneryObject()
 {
+    _subtype = TYPE_SCENERY_GENERIC;
 }
 
 GameGenericSceneryObject::~GameGenericSceneryObject()

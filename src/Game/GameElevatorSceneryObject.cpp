@@ -30,6 +30,7 @@ namespace Falltergeist
 
 GameElevatorSceneryObject::GameElevatorSceneryObject() : GameSceneryObject()
 {
+    _subtype = TYPE_SCENERY_ELEVATOR;
 }
 
 GameElevatorSceneryObject::~GameElevatorSceneryObject()
