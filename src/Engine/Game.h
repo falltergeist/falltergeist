@@ -70,10 +70,10 @@ public:
 
     ResourceManager * resourceManager();
 
+    std::vector<State*>* states();
     void pushState(State * state);
     void setState(State * state);
     void popState();
-    bool locationState();
     void run();
     void quit();
 

@@ -51,7 +51,9 @@ LocationState::~LocationState()
 
 void LocationState::init()
 {
+    if (initialized()) return;
     State::init();
+    setScrollable(true);
 
     _location = new Location(_game->resourceManager()->mapFileType("maps/artemple.map"));
     _game->setLocation(_location);

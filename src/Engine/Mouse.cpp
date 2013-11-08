@@ -57,7 +57,7 @@ void Mouse::think()
     auto game = &Game::getInstance();
     auto location = game->location();
 
-    if (location && game->locationState())
+    if (location && game->states()->back()->scrollable())
     {
         //check if cursor in the scrolling area
         if (cursorX() < 5) // LEFT
@@ -275,21 +275,6 @@ void Mouse::setType(int type)
             loadFromSurface(new Surface());
             break;
     }
-}
-
-void Mouse::handle(Event* event)
-{
-    // use_on
-
-    //x hexagon
-    //x arrow
-        //x лицо \/ x стрелки поворота |/ x* рука
-        //x* бинокль
-        //x* рюкзак
-        //x* голова
-        //x* отмена
-
-    //* aim
 }
 
 SDL_Surface* Mouse::sdl_surface()

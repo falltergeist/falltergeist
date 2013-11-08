@@ -81,6 +81,16 @@ void State::setFullscreen(bool value)
     _fullscreen = value;
 }
 
+bool State::scrollable()
+{
+    return _scrollable;
+}
+
+void State::setScrollable(bool value)
+{
+    _scrollable = value;
+}
+
 void State::add(Surface* surface)
 {
     _surfaces.push_back(surface);

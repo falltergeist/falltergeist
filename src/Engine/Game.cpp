@@ -208,13 +208,6 @@ Location* Game::location()
     return _location;
 }
 
-bool Game::locationState()
-{
-    auto state = dynamic_cast<LocationState*>(_states.back());
-    if (state) return true;
-    return false;
-}
-
 void Game::setGVAR(unsigned int number, int value)
 {
     _initGVARS();
@@ -243,6 +236,11 @@ void Game::_initGVARS()
     {
         _GVARS.push_back(gvar.second);
     }
+}
+
+std::vector<State*>* Game::states()
+{
+    return &_states;
 }
 
 }

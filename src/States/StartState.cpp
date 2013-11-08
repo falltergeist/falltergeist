@@ -62,7 +62,7 @@ void StartState::init()
 
 void StartState::think()
 {    
-    _game->setState(new LocationState()); return;
+    //_game->setState(new LocationState()); return;
     //_game->setState(new CritterDialogState()); return;
     if (_splashTicks + 3000 < SDL_GetTicks())
     {

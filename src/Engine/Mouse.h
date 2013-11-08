@@ -85,7 +85,6 @@ public:
     void setCursorY(int y);
     int type();
     void setType(int type);
-    virtual void handle(Event* event);
     virtual int x();
     virtual int y();
     virtual SDL_Surface* sdl_surface();
