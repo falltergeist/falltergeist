@@ -29,13 +29,14 @@
 #include "../Engine/LocationCamera.h"
 #include "../Engine/Mouse.h"
 #include "../Engine/ResourceManager.h"
+#include "../Engine/State.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Mouse::Mouse() : InteractiveSurface()
+Mouse::Mouse() : Surface()
 {
     // Hide cursor
     SDL_ShowCursor(0);
@@ -280,7 +281,7 @@ void Mouse::setType(int type)
 SDL_Surface* Mouse::sdl_surface()
 {
     if (_animation) return _animation->surface()->sdl_surface();
-    return InteractiveSurface::sdl_surface();
+    return Surface::sdl_surface();
 }
 
 }

@@ -29,6 +29,7 @@ namespace Falltergeist
 
 Slider::Slider(int x, int y) : InteractiveSurface(0, 0, x, y)
 {
+    addEventHandler("mousedrag", this, (EventRecieverMethod) &Slider::_onDrag);
     _surfaceSet.addSurface(new Surface(ResourceManager::surface("art/intrface/prfsldon.frm")));
     _surfaceSet.addSurface(new Surface(ResourceManager::surface("art/intrface/prfsldof.frm")));
 }
@@ -37,7 +38,7 @@ Slider::~Slider()
 {
 }
 
-void Slider::drag(Event* event, State* state)
+void Slider::_onDrag(MouseEvent* event)
 {
     auto newOffset = xOffset() + event->xOffset();
     if (newOffset <= 218 && newOffset >= 0)
@@ -45,7 +46,6 @@ void Slider::drag(Event* event, State* state)
         setXOffset(newOffset);
         _value = ((maxValue() - minValue())/218)*xOffset();
     }
-    InteractiveSurface::drag(event, state);
 }
 
 SDL_Surface* Slider::sdl_surface()

@@ -40,6 +40,7 @@ protected:
     int _modeFactor = 1; // or -1
     unsigned int _maxState = 0;
     unsigned int _minState = 0;
+    void _onLeftButtonClick(MouseEvent* event);
 public:
     enum {MODE_PROGRESSION = 1, MODE_CYCLIC};
     enum {TYPE_BIG_SWITCH = 1, TYPE_SMALL_SWITCH};
@@ -48,7 +49,6 @@ public:
     MultistateImageButton(SurfaceSet* surfaceSet, int x = 0, int y = 0);
     MultistateImageButton(SurfaceSet surfaceSet, int x = 0, int y = 0);
     virtual ~MultistateImageButton();
-    virtual void leftButtonClick(Event* event, State* state);
     void addSurface(Surface * surface);
     unsigned int state();
     void setState(unsigned int state);

@@ -43,8 +43,18 @@ set(SOURCES main.cpp
             src/Engine/AnimationQueue.h
             src/Engine/CrossPlatform.cpp
             src/Engine/CrossPlatform.h
-            src/Engine/Event.cpp
-            src/Engine/Event.h
+            src/Engine/Event/Event.cpp
+            src/Engine/Event/Event.h
+            src/Engine/Event/EventReciever.cpp
+            src/Engine/Event/EventReciever.h
+            src/Engine/Event/EventHandler.cpp
+            src/Engine/Event/EventHandler.h
+            src/Engine/Event/EventEmitter.cpp
+            src/Engine/Event/EventEmitter.h
+            src/Engine/Event/MouseEvent.cpp
+            src/Engine/Event/MouseEvent.h
+            src/Engine/Event/KeyboardEvent.cpp
+            src/Engine/Event/KeyboardEvent.h
             src/Engine/Exception.cpp
             src/Engine/Exception.h
             src/Engine/Font.cpp

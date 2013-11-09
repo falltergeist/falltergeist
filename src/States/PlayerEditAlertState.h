@@ -41,7 +41,7 @@ public:
     ~PlayerEditAlertState();
     void setMessage(std::string message);
     void init();
-    void onDoneButtonClick(Event * event);
+    void onDoneButtonClick(MouseEvent * event);
 };
 
 }

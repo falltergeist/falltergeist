@@ -59,15 +59,17 @@ void LocationState::init()
     _game->setLocation(_location);
     _game->mouse()->setType(Mouse::ACTION);
     _background = new InteractiveSurface(_location->tilesBackground());
-    _background->onLeftButtonClick((EventHandler) &LocationState::onBackgroundClick);
+    _background->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onBackgroundClick);
     //_background->onKeyboardRelease((EventHandler) &LocationState::onKeyboardRelease);
 
     add(_background);
 }
 
-void LocationState::onMouseDown(Event* event)
+void LocationState::onMouseDown(MouseEvent* event)
 {
-    auto object = dynamic_cast<GameObject*>((GameObject*)event->sender()->owner());
+    auto sender = dynamic_cast<InteractiveSurface*>(event->emitter());
+    if (!sender) return;
+    auto object = dynamic_cast<GameObject*>((GameObject*)sender->owner());
     if (!object) return;
 
     std::vector<int> icons;
@@ -93,9 +95,10 @@ void LocationState::onMouseDown(Event* event)
     auto state = new CursorDropdownState(icons);
     state->setObject(object);
     _game->pushState(state);
+
 }
 
-void LocationState::onBackgroundClick(Event * event)
+void LocationState::onBackgroundClick(MouseEvent* event)
 {
     int x = _location->camera()->x() + event->x();
     int y = _location->camera()->y() + event->y();
@@ -104,9 +107,9 @@ void LocationState::onBackgroundClick(Event * event)
     std::cout << std::dec << x << " : " << y << " > " << hexagon << std::endl;
 }
 
-void LocationState::onObjectClick(Event* event)
+void LocationState::onObjectClick(MouseEvent* event)
 {
-    auto object = dynamic_cast<GameObject*>(event->sender());
+    auto object = dynamic_cast<GameObject*>(event->emitter());
     if (object)
     {
         std::cout << "object:" << object->PID() << std::endl;
@@ -115,8 +118,9 @@ void LocationState::onObjectClick(Event* event)
     }
 }
 
-void LocationState::onKeyboardRelease(Event * event)
+void LocationState::onKeyboardRelease(KeyboardEvent * event)
 {
+    /*
     if (event->keyCode() == SDLK_g) // "g" button - enable\disable hex grid
     {
         if (_hexagonalGrid)
@@ -128,6 +132,7 @@ void LocationState::onKeyboardRelease(Event * event)
             _hexagonalGrid = true;
         }
     }
+    */
 }
 
 void LocationState::blit()
@@ -193,12 +198,14 @@ void LocationState::think()
 
         if (Animation* animation = object->animationQueue()->animation())
         {
-            animation->onLeftButtonPress((EventHandler) &LocationState::onMouseDown);
+            animation->removeEventHandlers("mouseleftdown");
+            animation->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &LocationState::onMouseDown);
             animation->setOwner(object);
         }
         else
         {
-            object->surface()->onLeftButtonPress((EventHandler) &LocationState::onMouseDown);
+            object->surface()->removeEventHandlers("mouseleftdown");
+            object->surface()->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &LocationState::onMouseDown);
             object->surface()->setOwner(object);
         }
     }
@@ -206,21 +213,21 @@ void LocationState::think()
 
 void LocationState::handle(Event* event)
 {
-    if (event->isMouseEvent())
+    if (auto mouseEvent = dynamic_cast<MouseEvent*>(event))
     {
         // Handle objects
         for (auto object : *_location->objectsToRender())
         {            
             if (Animation* animation = object->animationQueue()->animation())
             {
-                animation->handle(event, this);
+                animation->handle(mouseEvent);
             }
             else
             {
-                object->surface()->handle(event, this);
+                object->surface()->handle(mouseEvent);
             }
         }
-        State::handle(event);
+        State::handle(mouseEvent);
     }
     else
     {

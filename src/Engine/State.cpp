@@ -31,7 +31,7 @@
 namespace Falltergeist
 {
 
-State::State()
+State::State() : EventReciever()
 {
     _game = &Game::getInstance();
 }
@@ -108,7 +108,7 @@ void State::handle(Event* event)
         auto surface = dynamic_cast<InteractiveSurface *>(*i);
         if (surface)
         {
-            surface->handle(event,this);
+            surface->handle(event);
         }
     }
 }

@@ -52,9 +52,12 @@ public:
     CursorDropdownState(std::vector<int> icons);
     virtual ~CursorDropdownState();
     virtual void init();
+
     virtual void blit();
     virtual void think();
-    void onLeftButtonRelease(Event* event);
+
+    void onLeftButtonUp(MouseEvent* event);
+
     void* object();
     void setObject(void* object);
 };

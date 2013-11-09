@@ -47,11 +47,10 @@ public:
     virtual ~SettingsMenuState();
     virtual void init();
     virtual void think();
-    void onDefaultButtonClick(Event* event);
-    void onCancelButtonClick(Event* event);
-    void onSaveButtonClick(Event* event);
-    
-    void onButtonPress(Event* event);
+
+    void onDefaultButtonClick(MouseEvent* event);
+    void onCancelButtonClick(MouseEvent* event);
+    void onSaveButtonClick(MouseEvent* event);
 
 };
 

@@ -22,21 +22,32 @@
 // Falltergeist includes
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/Event/MouseEvent.h"
+#include "../Engine/Event/KeyboardEvent.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-InteractiveSurface::InteractiveSurface(libfalltergeist::FrmFileType* frm, unsigned int direction, unsigned int frame) : Surface(frm, direction, frame)
+InteractiveSurface::InteractiveSurface(libfalltergeist::FrmFileType* frm, unsigned int direction, unsigned int frame)
+    : EventReciever(),
+      EventEmitter(),
+      Surface(frm, direction, frame)
 {
 }
 
-InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y)
+InteractiveSurface::InteractiveSurface(int width, int height, int x, int y)
+    : EventReciever(),
+      EventEmitter(),
+      Surface(width, height, x, y)
 {
 }
 
-InteractiveSurface::InteractiveSurface(Surface* other) : Surface(other)
+InteractiveSurface::InteractiveSurface(Surface* other)
+    : EventReciever(),
+      EventEmitter(),
+      Surface(other)
 {
 }
 
@@ -44,267 +55,143 @@ InteractiveSurface::~InteractiveSurface()
 {
 }
 
-void InteractiveSurface::handle(Event* event, State* state)
+void InteractiveSurface::handle(Event* event)
 {
-    event->setSender(this);
+    event->setEmitter(this);
 
-    if(event->isMouseEvent())
+    if(auto mouseEvent = dynamic_cast<MouseEvent*>(event))
     {
+        auto event = new MouseEvent(mouseEvent);
         // check that the surface under the cursor pointer is not transparent
-        int x = event->x() - this->x() - this->xOffset();
-        int y = event->y() - this->y() - this->yOffset();
+        int x = mouseEvent->x() - this->x() - this->xOffset();
+        int y = mouseEvent->y() - this->y() - this->yOffset();
 
         unsigned int alpha = pixel(x , y) >> 24;
         if (alpha > 0)
         {
-            switch(event->SDLEvent()->type)
+            if (mouseEvent->name() == "mousemove")
             {
-                case SDL_MOUSEMOTION:
                     if (_leftButtonPressed)
                     {
-                        if (!_drag)
-                        {
-                            _drag = true;
-                            dragStart(event, state);
-                        }
-                        else
-                        {
-                            drag(event, state);
-                        }
+                        event->setName( _drag ? "mousedrag" : "mousedragstart");
+                        if (!_drag) _drag = true;
+                        emitEvent(event);
                     }
                     if (!_hovered)
                     {
                         _hovered = true;
-                        mouseIn(event, state);
+                        event->setName("mousein");
+                        emitEvent(event);
                     }
                     else
                     {
-                        mouseOver(event, state);
+                        event->setName("mousemove");
+                        emitEvent(event);
                     }
-                    break;
-                case SDL_MOUSEBUTTONDOWN:
-                    if (event->SDLEvent()->button.button == SDL_BUTTON_LEFT)
+            }
+            else if (mouseEvent->name() == "mousedown")
+            {
+                    if (mouseEvent->leftButton())
                     {
                         _leftButtonPressed = true;
-                        leftButtonPress(event, state);
+                        event->setName("mouseleftdown");
+                        emitEvent(event);
                     }
-                    else if (event->SDLEvent()->button.button == SDL_BUTTON_RIGHT)
+                    else if (mouseEvent->rightButton())
                     {
                         _rightButtonPressed = true;
-                        rightButtonPress(event, state);
+                        event->setName("mouserightdown");
+                        emitEvent(event);
                     }
-                    break;
-                case SDL_MOUSEBUTTONUP:                
-                    if (event->SDLEvent()->button.button == SDL_BUTTON_LEFT)
+            }
+            else if (mouseEvent->name() == "mouseup")
+            {
+                if (mouseEvent->leftButton())
                     {
-                        leftButtonRelease(event, state);
+                        event->setName("mouseleftup");
+                        emitEvent(event);
                         if (_leftButtonPressed)
                         {
                             if (_drag)
                             {
                                 _drag = false;
-                                dragStop(event, state);
+                                event->setName("mousedragstop");
+                                emitEvent(event);
                             }
-                            leftButtonClick(event, state);
+                            event->setName("mouseleftclick");
+                            emitEvent(event);
                         }
                         _leftButtonPressed = false;
                     }
-                    else if(event->SDLEvent()->button.button == SDL_BUTTON_RIGHT)
+                    else if(mouseEvent->rightButton())
                     {
-                        rightButtonRelease(event, state);
+                        event->setName("mouserightup");
+                        emitEvent(event);
                         if (_rightButtonPressed)
                         {
-                            rightButtonClick(event, state);
+                            event->setName("mouserightclick");
+                            emitEvent(event);
                         }
                         _rightButtonPressed = false;
                     }
-                    break;
-            }
+             }
         }
         else
         {
-            if (event->SDLEvent()->type == SDL_MOUSEMOTION && _hovered)
+            if (mouseEvent->name() == "mousemove"&& _hovered)
             {
                 if (_drag)
                 {
-                    drag(event, state);
+                    event->setName("mousedrag");
+                    emitEvent(event);
                 }
                 _hovered = false;
-                mouseOut(event, state);
-
+                event->setName("mouseout");
+                emitEvent(event);
             }
-            else if (event->SDLEvent()->type == SDL_MOUSEMOTION && !_hovered)
+            else if (mouseEvent->name() == "mousemove" && !_hovered)
             {
                 if (_drag)
                 {
-                    drag(event, state);
+                    event->setName("mousedrag");
+                    emitEvent(event);
                 }
             }
-            else if(event->SDLEvent()->type == SDL_MOUSEBUTTONUP)
+            else if(mouseEvent->name() == "mouseup")
             {
-                if (event->SDLEvent()->button.button == SDL_BUTTON_LEFT)
+                if (mouseEvent->leftButton())
                 {
                     if (_leftButtonPressed)
                     {
                         if (_drag)
                         {
                             _drag = false;
-                            dragStop(event, state);
+                            event->setName("mousedragstop");
+                            emitEvent(event);
                         }
-                        leftButtonRelease(event, state);
+                        event->setName("mouseleftup");
+                        emitEvent(event);
                         _leftButtonPressed = false;
                     }
                 }
-                else if(event->SDLEvent()->button.button == SDL_BUTTON_RIGHT)
+                else if(mouseEvent->rightButton())
                 {
                     if (_rightButtonPressed)
                     {
-                        rightButtonRelease(event, state);
+                        event->setName("mouserightup");
+                        emitEvent(event);
                         _rightButtonPressed = false;
                     }
                 }
             }
         }
     }
-    else if(event->isKeyboardEvent())
+    else if(auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
     {
-        if(event->SDLEvent()->type == SDL_KEYDOWN)
-        {
-            keyboardPress(event, state);
-        }
-        else if(event->SDLEvent()->type == SDL_KEYUP)
-        {
-            keyboardRelease(event, state);
-        }
+        emitEvent(keyboardEvent);
     }
 }
 
-void InteractiveSurface::mouseIn(Event* event, State* state)
-{
-    if (_onMouseIn != 0) (state->*_onMouseIn)(event);
-}
-void InteractiveSurface::mouseOut(Event* event, State* state)
-{
-    if (_onMouseOut != 0) (state->*_onMouseOut)(event);
-}
-void InteractiveSurface::mouseOver(Event* event, State* state)
-{
-    if (_onMouseOver != 0) (state->*_onMouseOver)(event);
-}
-void InteractiveSurface::dragStart(Event* event, State* state)
-{
-    if (_onDragStart != 0) (state->*_onDragStart)(event);
-}
-void InteractiveSurface::dragStop(Event* event, State* state)
-{
-    if (_onDragStop != 0) (state->*_onDragStop)(event);
-}
-void InteractiveSurface::drag(Event* event, State* state)
-{
-    if (_onDrag != 0) (state->*_onDrag)(event);
-}
-void InteractiveSurface::leftButtonPress(Event* event, State* state)
-{
-    if (_onLeftButtonPress != 0) (state->*_onLeftButtonPress)(event);
-}
-void InteractiveSurface::leftButtonRelease(Event* event, State* state)
-{
-    if (_onLeftButtonRelease != 0) (state->*_onLeftButtonRelease)(event);
-}
-void InteractiveSurface::leftButtonClick(Event* event, State* state)
-{
-    if (_onLeftButtonClick != 0) (state->*_onLeftButtonClick)(event);
-}
-void InteractiveSurface::rightButtonPress(Event* event, State* state)
-{
-    if (_onRightButtonPress != 0) (state->*_onRightButtonPress)(event);
-}
-void InteractiveSurface::rightButtonRelease(Event* event, State* state)
-{
-    if (_onRightButtonRelease != 0) (state->*_onRightButtonRelease)(event);
-}
-void InteractiveSurface::rightButtonClick(Event* event, State* state)
-{
-    if (_onRightButtonClick != 0) (state->*_onRightButtonClick)(event);
-}
-void InteractiveSurface::keyboardPress(Event* event, State* state)
-{
-    if (_onKeyboardPress != 0) (state->*_onKeyboardPress)(event);
-}
-void InteractiveSurface::keyboardRelease(Event* event, State* state)
-{
-    if (_onKeyboardRelease != 0) (state->*_onKeyboardRelease)(event);
-}
-
-void InteractiveSurface::onMouseIn(EventHandler handler)
-{
-    _onMouseIn = handler;
-}
-
-void InteractiveSurface::onMouseOut(EventHandler handler)
-{
-    _onMouseOut = handler;
-}
-
-void InteractiveSurface::onMouseOver(EventHandler handler)
-{
-    _onMouseOver = handler;
-}
-
-void InteractiveSurface::onDragStart(EventHandler handler)
-{
-    _onDragStart = handler;
-}
-
-void InteractiveSurface::onDragStop(EventHandler handler)
-{
-    _onDragStop = handler;
-}
-
-void InteractiveSurface::onDrag(EventHandler handler)
-{
-    _onDrag = handler;
-}
-
-void InteractiveSurface::onLeftButtonClick(EventHandler handler)
-{
-    _onLeftButtonClick = handler;
-}
-
-void InteractiveSurface::onLeftButtonPress(EventHandler handler)
-{
-    _onLeftButtonPress = handler;
-}
-
-void InteractiveSurface::onLeftButtonRelease(EventHandler handler)
-{
-    _onLeftButtonRelease = handler;
-}
-
-void InteractiveSurface::onRightButtonClick(EventHandler handler)
-{
-    _onRightButtonClick = handler;
-}
-
-void InteractiveSurface::onRightButtonPress(EventHandler handler)
-{
-    _onRightButtonPress = handler;
-}
-
-void InteractiveSurface::onRightButtonRelease(EventHandler handler)
-{
-    _onRightButtonRelease = handler;
-}
-
-void InteractiveSurface::onKeyboardPress(EventHandler handler)
-{
-    _onKeyboardPress = handler;
-}
-
-void InteractiveSurface::onKeyboardRelease(EventHandler handler)
-{
-    _onKeyboardRelease = handler;
-}
 
 }
 

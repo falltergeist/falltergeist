@@ -23,72 +23,32 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/State.h"
 #include "../Engine/Surface.h"
-#include "../Engine/Event.h"
+#include "../Engine/Event/Event.h"
+#include "../Engine/Event/EventReciever.h"
+#include "../Engine/Event/EventEmitter.h"
+#include "../Engine/Event/MouseEvent.h"
+#include "../Engine/Event/KeyboardEvent.h"
+
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-typedef void (State::*EventHandler)(Event*);
-
-class InteractiveSurface : public Surface
+class InteractiveSurface : public EventReciever, public EventEmitter, public Surface
 {
 protected:
     bool _hovered = false;
     bool _drag = false;
     bool _leftButtonPressed = false;
     bool _rightButtonPressed = false;
-    EventHandler _onMouseIn = 0;
-    EventHandler _onMouseOut = 0;
-    EventHandler _onMouseOver = 0;
-    EventHandler _onDragStart = 0;
-    EventHandler _onDragStop = 0;
-    EventHandler _onDrag = 0;
-    EventHandler _onLeftButtonPress = 0;
-    EventHandler _onLeftButtonRelease = 0;
-    EventHandler _onLeftButtonClick = 0;
-    EventHandler _onRightButtonRelease = 0;
-    EventHandler _onRightButtonPress = 0;
-    EventHandler _onRightButtonClick = 0;
-    EventHandler _onKeyboardPress = 0;
-    EventHandler _onKeyboardRelease = 0;
 public:
     InteractiveSurface(libfalltergeist::FrmFileType* frm, unsigned int direction = 0, unsigned int frame = 0);
     InteractiveSurface(int width = 0, int height = 0, int x = 0, int y = 0);
     InteractiveSurface(Surface* other);
     virtual ~InteractiveSurface();
-    virtual void handle(Event* event, State* state);
-    virtual void mouseIn(Event* event, State* state);
-    virtual void mouseOver(Event* event, State* state);
-    virtual void mouseOut(Event* event, State* state);
-    virtual void dragStart(Event* event, State* state);
-    virtual void dragStop(Event* event, State* state);
-    virtual void drag(Event* event, State* state);
-    virtual void leftButtonPress(Event* event, State* state);
-    virtual void leftButtonRelease(Event* event, State* state);
-    virtual void leftButtonClick(Event* event, State* state);
-    virtual void rightButtonPress(Event* event, State* state);
-    virtual void rightButtonRelease(Event* event, State* state);
-    virtual void rightButtonClick(Event* event, State* state);
-    virtual void keyboardPress(Event* event, State* state);
-    virtual void keyboardRelease(Event* event, State* state);
-    virtual void onMouseIn(EventHandler handler);
-    virtual void onMouseOut(EventHandler handler);
-    virtual void onMouseOver(EventHandler handler);
-    virtual void onDragStart(EventHandler handler);
-    virtual void onDragStop(EventHandler handler);
-    virtual void onDrag(EventHandler handler);
-    virtual void onLeftButtonPress(EventHandler handler);
-    virtual void onLeftButtonRelease(EventHandler handler);
-    virtual void onLeftButtonClick(EventHandler handler);
-    virtual void onRightButtonPress(EventHandler handler);
-    virtual void onRightButtonRelease(EventHandler handler);
-    virtual void onRightButtonClick(EventHandler handler);
-    virtual void onKeyboardPress(EventHandler handler);
-    virtual void onKeyboardRelease(EventHandler handler);
+    virtual void handle(Event* event);
 };
 
 }

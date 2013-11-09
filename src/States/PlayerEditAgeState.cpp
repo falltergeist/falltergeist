@@ -65,13 +65,13 @@ void PlayerEditAgeState::init()
     doneBox->setYOffset(0);
 
     ImageButton * decButton = new ImageButton(ImageButton::TYPE_LEFT_ARROW, 178, 14);
-    decButton->onLeftButtonClick((EventHandler) &PlayerEditAgeState::onDecButtonClick);
+    decButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditAgeState::onDecButtonClick);
 
     ImageButton * incButton = new ImageButton(ImageButton::TYPE_RIGHT_ARROW, 262, 14);
-    incButton->onLeftButtonClick((EventHandler) &PlayerEditAgeState::onIncButtonClick);
+    incButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditAgeState::onIncButtonClick);
 
     ImageButton * doneButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 188, 43);
-    doneButton->onLeftButtonClick((EventHandler) &PlayerEditAgeState::onDoneButtonClick);
+    doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditAgeState::onDoneButtonClick);
 
     libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
     TextArea * doneLabel = new TextArea(msg->message(100), 210, 43);
@@ -96,7 +96,7 @@ PlayerEditAgeState::~PlayerEditAgeState()
     //delete _counter;
 }
 
-void PlayerEditAgeState::onDecButtonClick(Event * event)
+void PlayerEditAgeState::onDecButtonClick(MouseEvent* event)
 {
     unsigned char age = _game->player()->age();
     if (age > 16)
@@ -107,7 +107,7 @@ void PlayerEditAgeState::onDecButtonClick(Event * event)
     }
 }
 
-void PlayerEditAgeState::onIncButtonClick(Event * event)
+void PlayerEditAgeState::onIncButtonClick(MouseEvent* event)
 {
     unsigned char age = _game->player()->age();
     if (age < 35)
@@ -118,7 +118,7 @@ void PlayerEditAgeState::onIncButtonClick(Event * event)
     }
 }
 
-void PlayerEditAgeState::onDoneButtonClick(Event * event)
+void PlayerEditAgeState::onDoneButtonClick(MouseEvent* event)
 {
     _game->popState();
 }

@@ -19,6 +19,7 @@
 
 // C++ standard includes
 #include <sstream>
+#include <iostream>
 
 // Falltergeist includes
 #include "../States/PlayerEditState.h"
@@ -212,7 +213,7 @@ PlayerEditState::PlayerEditState() : State()
         std::map<std::string, ImageButton *>::iterator it;
         for(it = _buttons->begin(); it != _buttons->end(); ++it)
         {
-            it->second->onLeftButtonClick((EventHandler) &PlayerEditState::onButtonClick);
+            it->second->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditState::onButtonClick);
             add(it->second);
         }
     }
@@ -223,7 +224,7 @@ PlayerEditState::PlayerEditState() : State()
         for(it = _labels->rbegin(); it != _labels->rend(); ++it)
         {
             it->second->setBackgroundColor(0x01000000);
-            it->second->onLeftButtonClick((EventHandler) &PlayerEditState::onLabelClick);
+            it->second->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditState::onLabelClick);
             add(it->second);
         }
     }
@@ -239,7 +240,7 @@ PlayerEditState::PlayerEditState() : State()
         {
             //it->second->setBorderColor(0xFFFF0000);
             it->second->setVisible(true);
-            it->second->onLeftButtonClick((EventHandler) &PlayerEditState::onMaskClick);
+            it->second->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditState::onMaskClick);
             add(it->second);
         }
     }
@@ -443,18 +444,19 @@ void PlayerEditState::think()
 
 }
 
-void PlayerEditState::onButtonClick(Event * event)
+void PlayerEditState::onButtonClick(MouseEvent* event)
 {    
-
+    auto sender = dynamic_cast<ImageButton*>(event->emitter());
+    std::cout << sender << std::endl;
     std::map<std::string, ImageButton *>::iterator it;
     for(it = _buttons->begin(); it != _buttons->end(); ++it)
     {
-        if (it->second == event->sender())
+        if (it->second == sender)
         {
             std::string name = it->first;
 
             if (name == "name") return onNameButtonClick(event);
-            if (name == "age") return onAgeButtonClick(event);
+            if (name == "age")  return onAgeButtonClick(event);
             if (name == "gender") return onGenderButtonClick(event);
             if (name == "cancel") return onBackButtonClick(event);
             if (name == "done") return onDoneButtonClick(event);
@@ -507,13 +509,13 @@ void PlayerEditState::onButtonClick(Event * event)
     }
 }
 
-void PlayerEditState::onLabelClick(Event * event)
+void PlayerEditState::onLabelClick(MouseEvent * event)
 {
     std::map<std::string, TextArea *>::iterator it;
     for(it = _labels->begin(); it != _labels->end(); ++it)
     {
         std::string name = it->first;
-        if (it->second == event->sender())
+        if (it->second == event->emitter())
         {
             if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0 || name.find("label_") == 0)
             {
@@ -529,12 +531,12 @@ void PlayerEditState::onLabelClick(Event * event)
     }
 }
 
-void PlayerEditState::onMaskClick(Event * event)
+void PlayerEditState::onMaskClick(MouseEvent * event)
 {
     std::map<std::string, HiddenMask *>::iterator it;
     for(it = _masks->begin(); it != _masks->end(); ++it)
     {
-        if (it->second == event->sender())
+        if (it->second == event->emitter())
         {
             std::string name = it->first;
             if (name.find("stats_") == 0)
@@ -547,27 +549,27 @@ void PlayerEditState::onMaskClick(Event * event)
 }
 
 
-void PlayerEditState::onNameButtonClick(Event * event)
+void PlayerEditState::onNameButtonClick(MouseEvent * event)
 {
     _game->pushState(new PlayerEditNameState());
 }
 
-void PlayerEditState::onAgeButtonClick(Event * event)
+void PlayerEditState::onAgeButtonClick(MouseEvent * event)
 {
     _game->pushState(new PlayerEditAgeState());
 }
 
-void PlayerEditState::onGenderButtonClick(Event * event)
+void PlayerEditState::onGenderButtonClick(MouseEvent * event)
 {
     _game->pushState(new PlayerEditGenderState());
 }
 
-void PlayerEditState::onBackButtonClick(Event *event)
+void PlayerEditState::onBackButtonClick(MouseEvent *event)
 {
     _game->popState();
 }
 
-void PlayerEditState::onDoneButtonClick(Event * event)
+void PlayerEditState::onDoneButtonClick(MouseEvent * event)
 {
     _game->setState(new LocationState());
 }

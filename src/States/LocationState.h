@@ -55,10 +55,10 @@ public:
     virtual void blit();
     virtual void handle(Event* event);
 
-    void onBackgroundClick(Event * event);
-    void onKeyboardRelease(Event * event);
-    void onObjectClick(Event * event);
-    void onMouseDown(Event* event);
+    void onBackgroundClick(MouseEvent * event);
+    void onKeyboardRelease(KeyboardEvent * event);
+    void onObjectClick(MouseEvent * event);
+    void onMouseDown(MouseEvent* event);
 };
 
 }

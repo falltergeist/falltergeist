@@ -40,9 +40,9 @@ public:
     PlayerEditAgeState();
     void init();
     ~PlayerEditAgeState();
-    void onIncButtonClick(Event * event);
-    void onDecButtonClick(Event * event);
-    void onDoneButtonClick(Event * event);
+    void onIncButtonClick(MouseEvent * event);
+    void onDecButtonClick(MouseEvent * event);
+    void onDoneButtonClick(MouseEvent * event);
 };
 }
 

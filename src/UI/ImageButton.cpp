@@ -30,12 +30,14 @@ namespace Falltergeist
 
 ImageButton::ImageButton(std::string releasedImage, std::string pressedImage, int x, int y) : InteractiveSurface(0, 0, x, y)
 {
+    addEventHandler("leftmouseclick", this, (EventRecieverMethod) &ImageButton::_onLeftButtonClick);
     setReleasedImage(releasedImage);
     setPressedImage(pressedImage);
 }
 
 ImageButton::ImageButton(unsigned int type, int x, int y) : InteractiveSurface(0, 0, x, y)
 {
+    addEventHandler("leftmouseclick", this, (EventRecieverMethod) &ImageButton::_onLeftButtonClick);
     std::string pressedImage, releasedImage;
     switch (type)
     {
@@ -133,7 +135,7 @@ SDL_Surface* ImageButton::sdl_surface()
     return _releasedSurface->sdl_surface();
 }
 
-void ImageButton::leftButtonClick(Event* event, State* state)
+void ImageButton::_onLeftButtonClick(MouseEvent* event)
 {
     if (switchMode())
     {
@@ -146,7 +148,6 @@ void ImageButton::leftButtonClick(Event* event, State* state)
             setPressed(true);
         }
     }
-    InteractiveSurface::leftButtonClick(event, state);
 }
 
 

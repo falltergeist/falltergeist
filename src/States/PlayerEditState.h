@@ -67,14 +67,14 @@ public:
     void think();
     virtual ~PlayerEditState();
 
-    void onMaskClick(Event * event);
-    void onButtonClick(Event * event);
-    void onAgeButtonClick(Event * event);
-    void onNameButtonClick(Event * event);
-    void onGenderButtonClick(Event * event);
-    void onLabelClick(Event * event);
-    void onBackButtonClick(Event * event);
-    void onDoneButtonClick(Event * event);
+    void onMaskClick(MouseEvent * event);
+    void onButtonClick(MouseEvent * event);
+    void onAgeButtonClick(MouseEvent * event);
+    void onNameButtonClick(MouseEvent * event);
+    void onGenderButtonClick(MouseEvent * event);
+    void onLabelClick(MouseEvent * event);
+    void onBackButtonClick(MouseEvent * event);
+    void onDoneButtonClick(MouseEvent * event);
 };
 
 }

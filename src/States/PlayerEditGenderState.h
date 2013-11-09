@@ -40,9 +40,9 @@ protected:
 public:
     PlayerEditGenderState();
     void init();
-    void onFemaleButtonPress(Event * event);
-    void onMaleButtonPress(Event * event);
-    void onDoneButtonClick(Event * event);
+    void onFemaleButtonPress(MouseEvent * event);
+    void onMaleButtonPress(MouseEvent * event);
+    void onDoneButtonClick(MouseEvent * event);
 };
 
 }

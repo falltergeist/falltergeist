@@ -228,13 +228,13 @@ void SettingsMenuState::init()
     // BUTTONS
 
     auto button1 = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 23, 450);
-    button1->onLeftButtonClick((EventHandler) &SettingsMenuState::onDefaultButtonClick);
+    button1->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SettingsMenuState::onDefaultButtonClick);
 
     auto button2 = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 148, 450);
-    button2->onLeftButtonClick((EventHandler) &SettingsMenuState::onSaveButtonClick);
+    button2->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SettingsMenuState::onSaveButtonClick);
 
     auto button3 = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 263, 450);
-    button3->onLeftButtonClick((EventHandler) &SettingsMenuState::onCancelButtonClick);
+    button3->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SettingsMenuState::onCancelButtonClick);
 
     auto button4 = new ImageButton(ImageButton::TYPE_CHECKBOX, 383, 68);
 
@@ -311,22 +311,17 @@ TextArea* SettingsMenuState::_addLabel(std::string name, TextArea* label)
     return label;
 }
 
-void SettingsMenuState::onButtonPress(Event* event)
-{
-    event->sender()->setVisible(!event->sender()->visible());
-}
-
-void SettingsMenuState::onCancelButtonClick(Event* event)
+void SettingsMenuState::onCancelButtonClick(MouseEvent* event)
 {
     _game->popState();
 }
 
-void SettingsMenuState::onSaveButtonClick(Event* event)
+void SettingsMenuState::onSaveButtonClick(MouseEvent* event)
 {
     _game->popState();
 }
 
-void SettingsMenuState::onDefaultButtonClick(Event* event)
+void SettingsMenuState::onDefaultButtonClick(MouseEvent* event)
 {
 }
 

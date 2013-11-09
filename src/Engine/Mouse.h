@@ -33,7 +33,7 @@ namespace Falltergeist
 {
 class Animation;
 
-class Mouse : public InteractiveSurface
+class Mouse : public Surface
 {
 protected:
     Animation * _animation = 0;

@@ -123,8 +123,47 @@ void Game::run()
             }
             else
             {
-                Event event = Event(&_event);
+                switch (_event.type)
+                {
+                    case SDL_MOUSEBUTTONDOWN:
+                    {
+                        auto event = new MouseEvent("mousedown");
+                        event->setX(_event.button.x);
+                        event->setY(_event.button.y);
+                        event->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
+                        event->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
+                        _states.back()->handle(event);
+                        delete event;
+                        break;
+                    }
+                    case SDL_MOUSEBUTTONUP:
+                    {
+                        auto event = new MouseEvent("mouseup");
+                        event->setX(_event.button.x);
+                        event->setY(_event.button.y);
+                        event->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
+                        event->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
+                        _states.back()->handle(event);
+                        delete event;
+                        break;
+                    }
+                    case SDL_MOUSEMOTION:
+                    {
+                        auto event = new MouseEvent("mousemove");
+                        event->setX(_event.motion.x);
+                        event->setY(_event.motion.y);
+                        event->setXOffset(_event.motion.xrel);
+                        event->setYOffset(_event.motion.yrel);
+                        _states.back()->handle(event);
+                        delete event;
+                        break;
+                    }
+                    case SDL_KEYDOWN:
+                    case SDL_KEYUP:
+                        break;
+                }
                 
+                /*
                 // Screenshot function
                 if (event.isKeyboardEvent() && event.SDLEvent()->type == SDL_KEYUP && event.keyCode() == SDLK_F12) // F12
                 {
@@ -133,7 +172,8 @@ void Game::run()
                     SDL_SaveBMP(_screen->surface()->sdl_surface(), ss.str().c_str());
                     debug("[GAME] - Screenshot saved to " + ss.str(), DEBUG_INFO);
                 }
-                _states.back()->handle(&event);
+                */
+
             }
         }
 
@@ -150,7 +190,7 @@ void Game::run()
         auto it = _states.end();
         do
         {
-            --it; 
+            --it;
         }
         while(it != _states.begin() && !(*it)->fullscreen());
         

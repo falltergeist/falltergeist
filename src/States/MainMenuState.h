@@ -37,9 +37,10 @@ public:
     virtual ~MainMenuState();
     virtual void init();
     virtual void think();
-    void onExitButtonClick();
-    void onNewGameButtonClick();
-    void onSettingsButtonClick();
+
+    void onExitButtonClick(MouseEvent* event);
+    void onNewGameButtonClick(MouseEvent* event);
+    void onSettingsButtonClick(MouseEvent* event);
 };
 
 }

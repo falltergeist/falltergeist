@@ -136,7 +136,7 @@ void CursorDropdownState::init()
 
 
     _mask = new HiddenMask(640, 480);
-    _mask->onLeftButtonRelease((EventHandler) &CursorDropdownState::onLeftButtonRelease);
+    _mask->addEventHandler("mouseleftup", this, (EventRecieverMethod) &CursorDropdownState::onLeftButtonUp);
     _mask->setVisible(true);
     add(_cursor);
     add(_surface);
@@ -145,9 +145,11 @@ void CursorDropdownState::init()
 
 void CursorDropdownState::blit()
 {
-    for (auto surface : _inactiveSurfaces) surface->copyTo(_surface);
+    for (auto surface : _inactiveSurfaces)
+    {
+        surface->copyTo(_surface);
+    }
     _activeSurfaces.at(_currentSurface)->copyTo(_surface);
-
     State::blit();
 }
 
@@ -172,7 +174,7 @@ void CursorDropdownState::think()
     _currentSurface = currentSurface;
 }
 
-void CursorDropdownState::onLeftButtonRelease(Event* event)
+void CursorDropdownState::onLeftButtonUp(MouseEvent* event)
 {
     SDL_WarpMouse(_initialX, _initialY);
     _game->mouse()->setType(_initialType);

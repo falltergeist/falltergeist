@@ -69,7 +69,7 @@ void PlayerEditAlertState::init()
     doneBox->setYOffset(0);
 
     ImageButton * doneButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 264, 273);
-    doneButton->onLeftButtonClick((EventHandler) &PlayerEditAlertState::onDoneButtonClick);
+    doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditAlertState::onDoneButtonClick);
 
     libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
     TextArea * doneLabel = new TextArea(msg->message(100), 284, 273);
@@ -82,7 +82,7 @@ void PlayerEditAlertState::init()
     add(doneLabel);
 }
 
-void PlayerEditAlertState::onDoneButtonClick(Event * event)
+void PlayerEditAlertState::onDoneButtonClick(MouseEvent* event)
 {
     _game->popState();
 }

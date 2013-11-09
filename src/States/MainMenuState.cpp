@@ -62,21 +62,21 @@ void MainMenuState::init()
 
     // "New game" button
     auto newGameButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41);
-    newGameButton->onLeftButtonClick((EventHandler) &MainMenuState::onNewGameButtonClick);
+    newGameButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod)&MainMenuState::onNewGameButtonClick);
 
     // "Load game" button
     auto loadGameButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*2);
 
     // "Settings" button
     auto settingsButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*3);
-    settingsButton->onLeftButtonClick((EventHandler) &MainMenuState::onSettingsButtonClick);
+    settingsButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MainMenuState::onSettingsButtonClick);
 
     // "Credits" button
     auto creditsButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*4);
     
     // "Exit" button
     auto exitButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*5);
-    exitButton->onLeftButtonClick((EventHandler) &MainMenuState::onExitButtonClick);
+    exitButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MainMenuState::onExitButtonClick);
 
     auto msg = _game->resourceManager()->msgFileType("text/english/game/misc.msg");
 
@@ -125,17 +125,17 @@ void MainMenuState::think()
 {
 }
 
-void MainMenuState::onExitButtonClick()
+void MainMenuState::onExitButtonClick(MouseEvent* event)
 {
     _game->quit();
 }
 
-void MainMenuState::onNewGameButtonClick()
+void MainMenuState::onNewGameButtonClick(MouseEvent* event)
 {
     _game->pushState(new NewGameState());
 }
 
-void MainMenuState::onSettingsButtonClick()
+void MainMenuState::onSettingsButtonClick(MouseEvent* event)
 {
     _game->pushState(new SettingsMenuState());
 }

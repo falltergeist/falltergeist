@@ -30,10 +30,12 @@ namespace Falltergeist
 
 MultistateImageButton::MultistateImageButton(int x, int y) : InteractiveSurface(0, 0, x, y)
 {
+    addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MultistateImageButton::_onLeftButtonClick);
 }
 
 MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : InteractiveSurface(0, 0, x, y)
 {
+    addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MultistateImageButton::_onLeftButtonClick);
     Surface * surface;
     switch (type)
     {
@@ -57,11 +59,13 @@ MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : 
 
 MultistateImageButton::MultistateImageButton(SurfaceSet surfaceSet, int x, int y) : InteractiveSurface(0, 0, x, y)
 {
+    addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MultistateImageButton::_onLeftButtonClick);
     for (auto surface : *surfaceSet.surfaces()) _surfaceSet.addSurface(surface);
 }
 
 MultistateImageButton::MultistateImageButton(SurfaceSet* surfaceSet, int x, int y) : InteractiveSurface(0, 0, x, y)
 {
+    addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MultistateImageButton::_onLeftButtonClick);
     for (auto surface : *surfaceSet->surfaces()) _surfaceSet.addSurface(surface);
 }
 
@@ -104,7 +108,7 @@ int MultistateImageButton::mode()
     return _mode;
 }
 
-void MultistateImageButton::leftButtonClick(Event* event, State* state)
+void MultistateImageButton::_onLeftButtonClick(MouseEvent* event)
 {
     if (mode() == MODE_PROGRESSION)
     {
@@ -129,7 +133,6 @@ void MultistateImageButton::leftButtonClick(Event* event, State* state)
         }
         _currentState += modeFactor();
     }
-    InteractiveSurface::leftButtonClick(event, state);
 }
 
 SDL_Surface* MultistateImageButton::sdl_surface()

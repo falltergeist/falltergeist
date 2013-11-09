@@ -15,41 +15,32 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
-
-#ifndef FALLTERGEIST_SLIDER_H
-#define FALLTERGEIST_SLIDER_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/InteractiveSurface.h"
-#include "../Engine/SurfaceSet.h"
+#include "../Event/EventHandler.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class Slider : public InteractiveSurface
+EventHandler::EventHandler(EventReciever* reciever, EventRecieverMethod method)
 {
-protected:
-    SurfaceSet _surfaceSet;
-    double _minValue = 0;
-    double _maxValue = 1;
-    double _value = 0;
-    void _onDrag(MouseEvent* event);
-public:
-    Slider(int x, int y);
-    virtual ~Slider();
-    virtual SDL_Surface* sdl_surface();
-    double minValue();
-    void setMinValue(double value);
-    double maxValue();
-    void setMaxValue(double value);
-    double value();
-    void setValue(double value);
-};
+    _reciever = reciever;
+    _method = method;
+}
+
+EventHandler::~EventHandler()
+{
+}
+
+void EventHandler::operator()(Event* event)
+{
+    (_reciever->*_method)(event);
+}
 
 }
-#endif // FALLTERGEIST_SLIDER_H

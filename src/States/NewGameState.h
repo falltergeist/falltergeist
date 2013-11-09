@@ -54,12 +54,13 @@ public:
     void init();
     std::string statToString(unsigned int stat);
     void think();
-    void onBackButtonClick(Event* event);
-    void onBeginGameButtonClick(Event* event);
-    void onEditButtonClick(Event* event);
-    void onCreateButtonClick(Event* event);
-    void onPrevCharacterButtonClick(Event* event);
-    void onNextCharacterButtonClick(Event * event);
+
+    void onBackButtonClick(MouseEvent* event);
+    void onBeginGameButtonClick(MouseEvent* event);
+    void onEditButtonClick(MouseEvent* event);
+    void onCreateButtonClick(MouseEvent* event);
+    void onPrevCharacterButtonClick(MouseEvent* event);
+    void onNextCharacterButtonClick(MouseEvent * event);
 };
 
 }

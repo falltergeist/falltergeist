@@ -38,6 +38,7 @@ protected:
     Surface* _pressedSurface = 0;
     bool _pressed = false;
     bool _switchMode = false;
+    void _onLeftButtonClick(MouseEvent* event);
 public:
     enum ButtonType {
         TYPE_SMALL_RED_CIRCLE = 1,
@@ -59,7 +60,6 @@ public:
     void setSwitchMode(bool mode);
     void setPressedImage(std::string image);
     void setReleasedImage(std::string image);
-    virtual void leftButtonClick(Event* event, State* state);
 
 };
 

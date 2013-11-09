@@ -107,10 +107,10 @@ void PlayerEditNameState::init()
     doneLabel->setColor(0xffb89c28)->setFont("font3.aaf");
 
     ImageButton * doneButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 45, 43);
-    doneButton->onLeftButtonClick((EventHandler) &PlayerEditNameState::onDoneButtonClick);
+    doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditNameState::onDoneButtonClick);
 
     _name = new TextArea(_game->player()->name(), 43, 15);
-    _name->onKeyboardRelease((EventHandler) &PlayerEditNameState::onKeyboardPress);
+    _name->addEventHandler("keyup", this, (EventRecieverMethod) &PlayerEditNameState::onKeyboardPress);
 
     _cursor = new Surface(5, 8, 83, 15);
     _cursor->fill(0xFF3FF800);
@@ -124,9 +124,9 @@ void PlayerEditNameState::init()
     add(_cursor);
 }
 
-void PlayerEditNameState::onKeyboardPress(Event * event)
+void PlayerEditNameState::onKeyboardPress(KeyboardEvent * event)
 {
-
+    /*
     std::string text(_name->text());
 
     if (event->keyCode() == SDLK_BACKSPACE) //backspace
@@ -165,9 +165,10 @@ void PlayerEditNameState::onKeyboardPress(Event * event)
         }
         _name->setText(text.c_str());
     }
+    */
 }
 
-void PlayerEditNameState::onDoneButtonClick(Event * event)
+void PlayerEditNameState::onDoneButtonClick(MouseEvent * event)
 {
     std::string text(_name->text());
     if (text.length() > 0)

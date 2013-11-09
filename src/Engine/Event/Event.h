@@ -17,39 +17,38 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_SLIDER_H
-#define FALLTERGEIST_SLIDER_H
+#ifndef FALLTERGEIST_EVENT_H
+#define FALLTERGEIST_EVENT_H
 
 // C++ standard includes
+#include <string>
 
 // Falltergeist includes
-#include "../Engine/InteractiveSurface.h"
-#include "../Engine/SurfaceSet.h"
+#include "../Event/EventEmitter.h"
+#include "../Event/EventHandler.h"
+#include "../Event/EventReciever.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class Slider : public InteractiveSurface
+class InteractiveSurface;
+
+class Event
 {
 protected:
-    SurfaceSet _surfaceSet;
-    double _minValue = 0;
-    double _maxValue = 1;
-    double _value = 0;
-    void _onDrag(MouseEvent* event);
+    std::string _name;
+    EventEmitter* _emitter = 0;
 public:
-    Slider(int x, int y);
-    virtual ~Slider();
-    virtual SDL_Surface* sdl_surface();
-    double minValue();
-    void setMinValue(double value);
-    double maxValue();
-    void setMaxValue(double value);
-    double value();
-    void setValue(double value);
+    Event(std::string name);
+    virtual ~Event();
+    std::string name();
+    void setName(std::string name);
+
+    EventEmitter* emitter();
+    void setEmitter(EventEmitter* value);
 };
 
 }
-#endif // FALLTERGEIST_SLIDER_H
+#endif // FALLTERGEIST_EVENT_H

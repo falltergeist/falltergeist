@@ -47,14 +47,14 @@ void PlayerEditGenderState::init()
                                     "art/intrface/maleoff.frm",
                                     "art/intrface/maleon.frm"
                                 }, 260, 2);
-    _maleImage->onLeftButtonPress((EventHandler) &PlayerEditGenderState::onMaleButtonPress);
+    _maleImage->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditGenderState::onMaleButtonPress);
     if (_game->player()->gender() == Player::GENDER_MALE) _maleImage->setCurrentSurface(1);
 
     _femaleImage = new SurfaceSet((std::vector<std::string>){
                                       "art/intrface/femoff.frm",
                                       "art/intrface/femon.frm"
                                   }, 310, 2);
-    _femaleImage->onLeftButtonPress((EventHandler) &PlayerEditGenderState::onFemaleButtonPress);
+    _femaleImage->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditGenderState::onFemaleButtonPress);
     if (_game->player()->gender() == Player::GENDER_FEMALE) _femaleImage->setCurrentSurface(1);
 
     Surface * bg = new Surface(_game->resourceManager()->surface("art/intrface/charwin.frm"));
@@ -75,7 +75,7 @@ void PlayerEditGenderState::init()
     doneLabel->setColor(0xffb89c28)->setFont("font3.aaf");
 
     ImageButton * doneButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 260, 45);
-    doneButton->onLeftButtonClick((EventHandler) &PlayerEditGenderState::onDoneButtonClick);
+    doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditGenderState::onDoneButtonClick);
 
     add(bg);
     add(doneBox);
@@ -85,19 +85,19 @@ void PlayerEditGenderState::init()
     add(_femaleImage);
 }
 
-void PlayerEditGenderState::onDoneButtonClick(Event * event)
+void PlayerEditGenderState::onDoneButtonClick(MouseEvent* event)
 {
     _game->popState();
 }
 
-void PlayerEditGenderState::onFemaleButtonPress(Event * event)
+void PlayerEditGenderState::onFemaleButtonPress(MouseEvent* event)
 {
     _game->player()->setGender(Player::GENDER_FEMALE);
     _maleImage->setCurrentSurface(0);
     _femaleImage->setCurrentSurface(1);
 }
 
-void PlayerEditGenderState::onMaleButtonPress(Event * event)
+void PlayerEditGenderState::onMaleButtonPress(MouseEvent* event)
 {
     _game->player()->setGender(Player::GENDER_MALE);
     _maleImage->setCurrentSurface(1);

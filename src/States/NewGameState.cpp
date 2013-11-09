@@ -59,27 +59,27 @@ void NewGameState::init()
 
     // Begin game button
     auto beginGameButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 322);
-    beginGameButton->onLeftButtonClick((EventHandler) &NewGameState::onBeginGameButtonClick);
+    beginGameButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onBeginGameButtonClick);
 
     // Edit character button
     auto editButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 436, 319);
-    editButton->onLeftButtonClick((EventHandler) &NewGameState::onEditButtonClick);
+    editButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onEditButtonClick);
     
     // Create character button
     auto createButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 424);
-    createButton->onLeftButtonClick((EventHandler) &NewGameState::onCreateButtonClick);
+    createButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onCreateButtonClick);
 
     // Back to mainmenu button
     auto backButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 461, 424);
-    backButton->onLeftButtonClick((EventHandler) &NewGameState::onBackButtonClick);
+    backButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onBackButtonClick);
 
     // Previous character button
     auto prevCharacterButton = new ImageButton(ImageButton::TYPE_LEFT_ARROW, 292, 320);
-    prevCharacterButton->onLeftButtonClick((EventHandler) &NewGameState::onPrevCharacterButtonClick);
+    prevCharacterButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onPrevCharacterButtonClick);
 
     // Next character button
     auto nextCharacterButton = new ImageButton(ImageButton::TYPE_RIGHT_ARROW, 318, 320);
-    nextCharacterButton->onLeftButtonClick((EventHandler) &NewGameState::onNextCharacterButtonClick);
+    nextCharacterButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onNextCharacterButtonClick);
 
     // Characters images
     _selectedCharacter = 0;
@@ -128,12 +128,12 @@ void NewGameState::think()
 {
 }
 
-void NewGameState::onBackButtonClick(Event* event)
+void NewGameState::onBackButtonClick(MouseEvent* event)
 {
     _game->popState();
 }
 
-void NewGameState::onPrevCharacterButtonClick(Event* event)
+void NewGameState::onPrevCharacterButtonClick(MouseEvent* event)
 {
     if (_selectedCharacter > 0)
     {
@@ -146,7 +146,7 @@ void NewGameState::onPrevCharacterButtonClick(Event* event)
     changeCharacter();
 }
 
-void NewGameState::onNextCharacterButtonClick(Event* event)
+void NewGameState::onNextCharacterButtonClick(MouseEvent* event)
 {
     if (_selectedCharacter < 2)
     {
@@ -195,19 +195,19 @@ std::string NewGameState::statToString(unsigned int stat)
     return msg->message(stat+300)->text();
 }
 
-void NewGameState::onEditButtonClick(Event* event)
+void NewGameState::onEditButtonClick(MouseEvent* event)
 {
     _game->setPlayer(_characters.at(_selectedCharacter));
     _game->pushState(new PlayerEditState());
 }
 
-void NewGameState::onCreateButtonClick(Event* event)
+void NewGameState::onCreateButtonClick(MouseEvent* event)
 {
     _game->setPlayer(new Player(ResourceManager::gcdFileType("premade/blank.gcd")));
     _game->pushState(new PlayerEditState());
 }
 
-void NewGameState::onBeginGameButtonClick(Event* event)
+void NewGameState::onBeginGameButtonClick(MouseEvent* event)
 {
     _game->setPlayer(_characters.at(_selectedCharacter));
     _game->setState(new LocationState());

@@ -24,6 +24,9 @@
 #include <vector>
 
 // Falltergeist includes
+#include "../Engine/Event/EventReciever.h"
+#include "../Engine/Event/MouseEvent.h"
+#include "../Engine/Event/KeyboardEvent.h"
 
 // Third party includes
 
@@ -33,7 +36,7 @@ class Game;
 class Surface;
 class Event;
 
-class State
+class State : public EventReciever
 {
 protected:
     Game* _game;
