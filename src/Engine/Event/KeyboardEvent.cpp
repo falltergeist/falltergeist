@@ -16,4 +16,24 @@ KeyboardEvent::~KeyboardEvent()
 {
 }
 
+int KeyboardEvent::keyCode()
+{
+    return _keyCode;
+}
+
+void KeyboardEvent::setKeyCode(int value)
+{
+    _keyCode = value;
+}
+
+bool KeyboardEvent::shiftPressed()
+{
+    return _shiftPressed;
+}
+
+void  KeyboardEvent::setShiftPressed(bool value)
+{
+    _shiftPressed = value;
+}
+
 }

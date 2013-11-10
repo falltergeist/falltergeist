@@ -126,7 +126,6 @@ void PlayerEditNameState::init()
 
 void PlayerEditNameState::onKeyboardPress(KeyboardEvent * event)
 {
-    /*
     std::string text(_name->text());
 
     if (event->keyCode() == SDLK_BACKSPACE) //backspace
@@ -142,6 +141,7 @@ void PlayerEditNameState::onKeyboardPress(KeyboardEvent * event)
 
     if (event->keyCode() == SDLK_RETURN) //enter
     {
+        auto event = new MouseEvent("mouseleftclick");
         return onDoneButtonClick(event);
     }
 
@@ -165,7 +165,7 @@ void PlayerEditNameState::onKeyboardPress(KeyboardEvent * event)
         }
         _name->setText(text.c_str());
     }
-    */
+
 }
 
 void PlayerEditNameState::onDoneButtonClick(MouseEvent * event)

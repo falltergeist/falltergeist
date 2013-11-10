@@ -56,7 +56,7 @@ public:
     virtual void handle(Event* event);
 
     void onBackgroundClick(MouseEvent * event);
-    void onKeyboardRelease(KeyboardEvent * event);
+    void onKeyUp(KeyboardEvent * event);
     void onObjectClick(MouseEvent * event);
     void onMouseDown(MouseEvent* event);
 };

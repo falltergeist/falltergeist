@@ -60,7 +60,7 @@ void LocationState::init()
     _game->mouse()->setType(Mouse::ACTION);
     _background = new InteractiveSurface(_location->tilesBackground());
     _background->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onBackgroundClick);
-    //_background->onKeyboardRelease((EventHandler) &LocationState::onKeyboardRelease);
+    _background->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyUp);
 
     add(_background);
 }
@@ -118,9 +118,9 @@ void LocationState::onObjectClick(MouseEvent* event)
     }
 }
 
-void LocationState::onKeyboardRelease(KeyboardEvent * event)
+void LocationState::onKeyUp(KeyboardEvent * event)
 {
-    /*
+
     if (event->keyCode() == SDLK_g) // "g" button - enable\disable hex grid
     {
         if (_hexagonalGrid)
@@ -132,7 +132,7 @@ void LocationState::onKeyboardRelease(KeyboardEvent * event)
             _hexagonalGrid = true;
         }
     }
-    */
+
 }
 
 void LocationState::blit()

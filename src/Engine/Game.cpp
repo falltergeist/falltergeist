@@ -22,7 +22,7 @@
 
 // Falltergeist includes
 #include "../Engine/CrossPlatform.h"
-#include "../Engine/Event.h"
+#include "../Engine/Event/Event.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Player.h"
@@ -159,21 +159,33 @@ void Game::run()
                         break;
                     }
                     case SDL_KEYDOWN:
-                    case SDL_KEYUP:
+                    {
+                        auto event = new KeyboardEvent("keydown");
+                        event->setKeyCode(_event.key.keysym.sym);
+                        event->setShiftPressed(_event.key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
+                        _states.back()->handle(event);
+                        delete event;
                         break;
-                }
-                
-                /*
-                // Screenshot function
-                if (event.isKeyboardEvent() && event.SDLEvent()->type == SDL_KEYUP && event.keyCode() == SDLK_F12) // F12
-                {
-                    std::stringstream ss;
-                    ss << SDL_GetTicks() << ".bmp";
-                    SDL_SaveBMP(_screen->surface()->sdl_surface(), ss.str().c_str());
-                    debug("[GAME] - Screenshot saved to " + ss.str(), DEBUG_INFO);
-                }
-                */
+                    }
+                    case SDL_KEYUP:
+                    {
+                        auto event = new KeyboardEvent("keyup");
+                        event->setKeyCode(_event.key.keysym.sym);
+                        event->setShiftPressed(_event.key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
+                        _states.back()->handle(event);
 
+                        if (event->keyCode() == SDLK_F12)
+                        {
+                            std::stringstream ss;
+                            ss << SDL_GetTicks() << ".bmp";
+                            SDL_SaveBMP(_screen->surface()->sdl_surface(), ss.str().c_str());
+                            debug("[GAME] - Screenshot saved to " + ss.str(), DEBUG_INFO);
+                        }
+
+                        delete event;
+                        break;
+                    }
+                }
             }
         }
 
