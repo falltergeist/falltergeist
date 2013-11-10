@@ -19,7 +19,6 @@
  */
 
 // C++ standard includes
-#include <string>
 
 // Falltergeist includes
 #include "../Engine/InteractiveSurface.h"
@@ -139,6 +138,26 @@ void GameObject::setOrientation(int value)
     }
 }
 
+std::string GameObject::name()
+{
+    return _name;
+}
+
+void GameObject::setName(std::string value)
+{
+    _name = value;
+}
+
+std::string GameObject::description()
+{
+    return _description;
+}
+
+void GameObject::setDescription(std::string value)
+{
+    _description = value;
+}
+
 std::vector<VM*>* GameObject::scripts()
 {
     return &_scripts;
@@ -175,6 +194,5 @@ void GameObject::setSurface(InteractiveSurface* surface)
 {
     _surface = surface;
 }
-
 
 }

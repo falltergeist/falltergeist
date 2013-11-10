@@ -204,11 +204,25 @@ GameObject* Location::createObject(int PID)
                     break;
                 }
             }
+            auto msg = ResourceManager::msgFileType("text/english/game/pro_item.msg");
+            try
+            {
+                object->setName(msg->message(proto->messageId())->text());
+                object->setDescription(msg->message(proto->messageId() + 1)->text());
+            }
+            catch (libfalltergeist::Exception) {}
             break;
         }
         case libfalltergeist::ProFileType::TYPE_CRITTER:
         {
             object = new GameCritterObject();
+            auto msg = ResourceManager::msgFileType("text/english/game/pro_crit.msg");
+            try
+            {
+                object->setName(msg->message(proto->messageId())->text());
+                object->setDescription(msg->message(proto->messageId() + 1)->text());
+            }
+            catch (libfalltergeist::Exception) {}
             break;
         }
         case libfalltergeist::ProFileType::TYPE_SCENERY:
@@ -242,21 +256,44 @@ GameObject* Location::createObject(int PID)
                     break;
                 }
             }
+            auto msg = ResourceManager::msgFileType("text/english/game/pro_scen.msg");
+            try
+            {
+                object->setName(msg->message(proto->messageId())->text());
+                object->setDescription(msg->message(proto->messageId() + 1)->text());
+            }
+            catch (libfalltergeist::Exception) {}
             break;
         }
         case libfalltergeist::ProFileType::TYPE_WALL:
         {
             object = new GameWallObject();
+            auto msg = ResourceManager::msgFileType("text/english/game/pro_wall.msg");
+            try
+            {
+                object->setName(msg->message(proto->messageId())->text());
+                object->setDescription(msg->message(proto->messageId() + 1)->text());
+            }
+            catch (libfalltergeist::Exception) {}
             break;
         }
         case libfalltergeist::ProFileType::TYPE_TILE:
         {
+            //auto msg = ResourceManager::msgFileType("text/english/game/pro_tile.msg");
             throw 1;
+            //object->setName(msg->message(proto->messageId())->text());
             break;
         }
         case libfalltergeist::ProFileType::TYPE_MISC:
         {
             object = new GameMiscObject();
+            auto msg = ResourceManager::msgFileType("text/english/game/pro_misc.msg");
+            try
+            {
+                object->setName(msg->message(proto->messageId())->text());
+                object->setDescription(msg->message(proto->messageId() + 1)->text());
+            }
+            catch (libfalltergeist::Exception) {}
             break;
         }
     }

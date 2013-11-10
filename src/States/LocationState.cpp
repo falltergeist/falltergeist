@@ -104,18 +104,18 @@ void LocationState::onBackgroundClick(MouseEvent* event)
     int y = _location->camera()->y() + event->y();
     unsigned int hexagon = _location->positionToHexagon(x, y);
 
-    std::cout << std::dec << x << " : " << y << " > " << hexagon << std::endl;
+    //std::cout << std::dec << x << " : " << y << " > " << hexagon << std::endl;
 }
 
 void LocationState::onObjectClick(MouseEvent* event)
 {
-    auto object = dynamic_cast<GameObject*>(event->emitter());
-    if (object)
-    {
-        std::cout << "object:" << object->PID() << std::endl;
-        //std::cout << object->descriptionId() << std::endl;
-        //std::cout << object->description() << std::endl;
-    }
+    auto surface = dynamic_cast<InteractiveSurface*>(event->emitter());
+    if (!surface) return;
+    auto object = dynamic_cast<GameObject*>((GameObject*)surface->owner());
+    if (!object) return;
+        std::cout << "object: " << object->PID()
+                  << "name: " << object->name()
+                  << "description: " << object->description() << std::endl;
 }
 
 void LocationState::onKeyUp(KeyboardEvent * event)
@@ -200,12 +200,16 @@ void LocationState::think()
         {
             animation->removeEventHandlers("mouseleftdown");
             animation->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &LocationState::onMouseDown);
+            animation->removeEventHandlers("mouseleftclick");
+            animation->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onObjectClick);
             animation->setOwner(object);
         }
         else
         {
             object->surface()->removeEventHandlers("mouseleftdown");
             object->surface()->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &LocationState::onMouseDown);
+            object->surface()->removeEventHandlers("mouseleftclick");
+            object->surface()->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onObjectClick);
             object->surface()->setOwner(object);
         }
     }

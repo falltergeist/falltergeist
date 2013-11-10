@@ -23,6 +23,7 @@
 
 // C++ standard includes
 #include <vector>
+#include <string>
 
 // Falltergeist includes
 #include "../Engine/AnimationQueue.h"
@@ -46,6 +47,8 @@ protected:
     int _position = -1;
     int _elevation = 0;
     int _orientation = 0;
+    std::string _name;
+    std::string _description;
     std::vector<VM*> _scripts;
     Location* _location = 0;
     InteractiveSurface* _surface = 0;
@@ -75,6 +78,12 @@ public:
 
     int orientation();
     virtual void setOrientation(int value);
+
+    std::string name();
+    void setName(std::string value);
+
+    std::string description();
+    void setDescription(std::string value);
 
     std::vector<VM*>* scripts();
 
