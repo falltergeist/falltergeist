@@ -141,8 +141,7 @@ void PlayerEditNameState::onKeyboardPress(KeyboardEvent * event)
 
     if (event->keyCode() == SDLK_RETURN) //enter
     {
-        auto event = new MouseEvent("mouseleftclick");
-        return onDoneButtonClick(event);
+        return onDoneButtonClick();
     }
 
     if (event->keyCode() == SDLK_LSHIFT || event->keyCode() == SDLK_RSHIFT) return;
@@ -168,7 +167,7 @@ void PlayerEditNameState::onKeyboardPress(KeyboardEvent * event)
 
 }
 
-void PlayerEditNameState::onDoneButtonClick(MouseEvent * event)
+void PlayerEditNameState::onDoneButtonClick()
 {
     std::string text(_name->text());
     if (text.length() > 0)

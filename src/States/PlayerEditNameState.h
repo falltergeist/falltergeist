@@ -45,7 +45,7 @@ public:
     ~PlayerEditNameState();
     void init();
     void think();
-    void onDoneButtonClick(MouseEvent * event);
+    void onDoneButtonClick();
     void onKeyboardPress(KeyboardEvent * event);
 };
 

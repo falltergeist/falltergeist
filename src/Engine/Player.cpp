@@ -48,9 +48,8 @@ Player::Player(libfalltergeist::GcdFileType* gcd)
 
     this->setHitPoints(       gcd->hitPoints() + gcd->hitPointsBonus());
 
-
-    this->setTrait(gcd->firstTrait(), 1);
-    this->setTrait(gcd->secondTrait(), 1);
+    if (gcd->firstTrait() >= 0) this->setTrait(gcd->firstTrait(), 1);
+    if (gcd->secondTrait() >= 0) this->setTrait(gcd->secondTrait(), 1);
 
     if (gcd->firstTaggedSkill() >= 0)
     {
@@ -149,13 +148,13 @@ void Player::setCharacterPoints(unsigned int characterPoints)
 
 unsigned int Player::trait(unsigned int number)
 {
-    if (number > 15) throw Exception("Player::trait() - number out of range: " + std::to_string(number));
+    if (number > 15) throw Exception("Player::trait() - number out of range: " + std::to_string((int)number));
     return _traits.at(number);
 }
 
 void Player::setTrait(unsigned int number, unsigned int value)
 {
-    if (number > 15) throw Exception("Player::setTrait() - number out of range: " + std::to_string(number));
+    if (number > 15) throw Exception("Player::setTrait() - number out of range: " + std::to_string((int)number));
     _traits.at(number) = value;
 }
 
