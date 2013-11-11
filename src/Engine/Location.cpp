@@ -162,11 +162,11 @@ GameObject* Location::createObject(int PID)
 {
     auto proto = ResourceManager::proFileType(PID);
     GameObject* object = 0;
-    switch (proto->objectTypeId())
+    switch (proto->typeId())
     {
         case libfalltergeist::ProFileType::TYPE_ITEM:
         {
-            switch(proto->objectSubtypeId())
+            switch(proto->subtypeId())
             {
                 case libfalltergeist::ProFileType::TYPE_ITEM_AMMO:
                 {
@@ -227,7 +227,7 @@ GameObject* Location::createObject(int PID)
         }
         case libfalltergeist::ProFileType::TYPE_SCENERY:
         {
-            switch (proto->objectSubtypeId())
+            switch (proto->subtypeId())
             {
                 case libfalltergeist::ProFileType::TYPE_SCENERY_DOOR:
                 {
