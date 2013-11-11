@@ -34,7 +34,7 @@
 #if defined(_WIN32) || defined(WIN32)
     #include <windows.h>
     #include <shlobj.h>
-#elif defined(__unix__) || defined(__APPLE__)
+#elif defined(__unix__) || defined(__MACH__)
     #include <unistd.h>
 #endif
 
