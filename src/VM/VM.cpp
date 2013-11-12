@@ -691,10 +691,12 @@ void VM::run()
             }
             case 0x80aa:
             {
-                std::cout << "[=] int has_skill(void* who, int skill) " << std::endl;
-                _popDataInteger();
-                _popDataPointer();
-                _pushDataInteger(10);
+                std::cout << "[+] int get_skill(GameCritterObject* who, int number) " << std::endl;
+                int number = _popDataInteger();
+                if (number > 17) throw Exception("VM::opcode80AA - number out of range: " + std::to_string(number));
+                auto object = dynamic_cast<GameCritterObject*>((GameObject*)_popDataPointer());
+                if (!object) throw Exception("VM::opcode80AA pointer error");
+                _pushDataInteger(object->skill(number));
                 break;
             }
             case 0x80ab:
@@ -954,19 +956,31 @@ void VM::run()
             }
             case 0x80ca:
             {
-                std::cout << "[=] int get_critter_stat(void* who, int stat)" << std::endl;
-                _popDataInteger();
-                _popDataPointer();
-                _pushDataInteger(1);
+                std::cout << "[+] int get_critter_stat(GameCritterObject* who, int number)" << std::endl;
+                int number = _popDataInteger();
+                if (number > 6) throw Exception("VM::opcode80CA - number out of range:" + std::to_string(number));
+                auto object = dynamic_cast<GameCritterObject*>((GameObject*)_popDataPointer());
+                if (!object) throw Exception("VM::opcode80CA pointer error");
+                _pushDataInteger(object->stat(number) + object->statBonus(number));
                 break;
             }
             case 0x80cb:
             {
-                std::cout << "[=] int set_critter_stat(void* who, int stat, int amount)  " << std::endl;
-                _popDataInteger();
-                _popDataInteger();
-                _popDataPointer();
-                _pushDataInteger(-1);
+                std::cout << "[+] int set_critter_stat(GameCritterObject* who, int number, int value)" << std::endl;
+                int value = _popDataInteger();
+                int number = _popDataInteger();
+                if (number > 6) throw Exception("VM::opcode80CB - number out of range:" + std::to_string(number));
+                auto object = dynamic_cast<GameCritterObject*>((GameObject*)_popDataPointer());
+                if (!object) throw Exception("VM::opcode80CB pointer error");
+                object->setStat(number, value);
+                if (dynamic_cast<GameDudeObject*>(object))
+                {
+                    _pushDataInteger(3); // for dude
+                }
+                else
+                {
+                    _pushDataInteger(-1); // for critter
+                }
                 break;
             }
             case 0x80cc:
