@@ -223,6 +223,16 @@ GameObject* Location::createObject(int PID)
                 object->setDescription(msg->message(proto->messageId() + 1)->text());
             }
             catch (libfalltergeist::Exception) {}
+
+            for (unsigned int i = 0; i != 7; ++i)
+            {
+                ((GameCritterObject*)object)->setStat(i, proto->critterStats()->at(i));
+                ((GameCritterObject*)object)->setStatBonus(i, proto->critterStatsBonus()->at(i));
+            }
+            for (unsigned int i = 0; i != 18; ++i)
+            {
+                ((GameCritterObject*)object)->setSkill(i, proto->critterSkills()->at(i));
+            }
             break;
         }
         case libfalltergeist::ProFileType::TYPE_SCENERY:

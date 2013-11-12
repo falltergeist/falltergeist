@@ -20,6 +20,7 @@
 
 // C++ standard includes
 #include <string>
+#include <iostream>
 
 // Falltergeist includes
 #include "../Game/GameCritterObject.h"
@@ -167,6 +168,53 @@ GameItemObject* GameCritterObject::rightHandSlot()
 void GameCritterObject::setRightHandSlot(GameItemObject* object)
 {
     _rightHandSlot = object;
+}
+
+int GameCritterObject::gender()
+{
+    return _gender;
+}
+
+void GameCritterObject::setGender(unsigned int value)
+{
+    if (value > 1) throw Exception("GameCritterObject::setGender(value) - value out of range:" + std::to_string(value));
+    _gender = value;
+}
+
+int GameCritterObject::stat(unsigned int num)
+{
+    if (num >= _stats.size()) throw Exception("GameCritterObject::stat(num) - num out of range:" + std::to_string(num));
+    return _stats.at(num);
+}
+
+void GameCritterObject::setStat(unsigned int num, int value)
+{
+    if (num >= _stats.size()) throw Exception("GameCritterObject::setStat(num, value) - num out of range:" + std::to_string(num));
+    _stats.at(num) = value;
+}
+
+int GameCritterObject::statBonus(unsigned int num)
+{
+    if (num >= _statsBonus.size()) throw Exception("GameCritterObject::statBonus(num) - num out of range:" + std::to_string(num));
+    return _statsBonus.at(num);
+}
+
+void GameCritterObject::setStatBonus(unsigned int num, int value)
+{
+    if (num >= _statsBonus.size()) throw Exception("GameCritterObject::setStatBonus(num, value) - num out of range:" + std::to_string(num));
+    _statsBonus.at(num) = value;
+}
+
+int GameCritterObject::skill(unsigned int num)
+{
+    if (num >= _skills.size()) throw Exception("GameCritterObject::skill(num) - num out of range:" + std::to_string(num));
+    return _skills.at(num);
+}
+
+void GameCritterObject::setSkill(unsigned int num, int value)
+{
+    if (num >= _skills.size()) throw Exception("GameCritterObject::setSkill(num, value) - num out of range:" + std::to_string(num));
+    _skills.at(num) = value;
 }
 
 }
