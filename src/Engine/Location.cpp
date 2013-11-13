@@ -354,13 +354,11 @@ void Location::think()
     }
     else
     {
-        for (auto object : _objects)
+        if (_scriptsTicks + 500 < SDL_GetTicks())
         {
-
-            //if (_scriptsTicks + 500 < SDL_GetTicks())
+            _scriptsTicks = SDL_GetTicks();
+            for (auto object : _objects)
             {
-                //_scriptsTicks = SDL_GetTicks();
-
                 for (auto script : *object->scripts())
                 {
                     script->call("map_update_p_proc");
@@ -369,8 +367,11 @@ void Location::think()
                     script->call("critter_p_proc");
                     //script->call("timed_event_p_proc");
                 }
-            }
+             }
+        }
 
+        for (auto object : _objects)
+        {
             if (Animation* animation = object->animationQueue()->animation())
             {
                 animation->think();

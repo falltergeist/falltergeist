@@ -41,6 +41,7 @@ class Location
 {
 protected:
     unsigned int _scrollTicks = 0;
+    unsigned int _scriptsTicks = 0;
     bool _scrollStatus = false;
     VM* _script = 0;
     GameDudeObject* _player = 0;
@@ -49,7 +50,6 @@ protected:
     std::vector<int> _MVARS;
     std::vector<int> _LVARS;
     std::map<std::string, VMStackValue*> _EVARS;
-    int _scriptsTicks = 0;
 
     void _checkObjectsToRender();
     void _generateBackground();
