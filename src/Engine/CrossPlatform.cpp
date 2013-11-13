@@ -48,7 +48,8 @@ void debug(std::string message, unsigned char level)
 
 // static members initialization
 std::string CrossPlatform::_version;
-std::string CrossPlatform::_dataPath;
+std::string CrossPlatform::_falloutDataPath;
+std::string CrossPlatform::_falltergeistDataPath;
 std::vector<std::string> * CrossPlatform::_dataFiles = 0;
 const std::vector<std::string> CrossPlatform::necessaryDatFiles = {"master.dat", "critter.dat"};
 
@@ -120,9 +121,9 @@ std::vector<std::string> CrossPlatform::getCdDrivePaths() {
 }
 
 // This method is trying to find out where are the DAT files located
-std::string CrossPlatform::findDataPath()
+std::string CrossPlatform::findFalloutDataPath()
 {
-    if (_dataPath.length() > 0) return _dataPath;
+    if (_falloutDataPath.length() > 0) return _falloutDataPath;
     debug("Looking for Fallout data files", DEBUG_INFO);
     std::vector<std::string> directories;
     directories.push_back(getCurrentDirectory());
@@ -156,24 +157,49 @@ std::string CrossPlatform::findDataPath()
                 })
            )
         {
-            _dataPath = directory;
-            return _dataPath;
+            _falloutDataPath = directory;
+            return _falloutDataPath;
         }
     }
 
     throw Exception("Fallout data files are not found!");
 }
 
+std::string CrossPlatform::findFalltergeistDataPath()
+{
+    if (_falltergeistDataPath.length() > 0) return _falltergeistDataPath;
+    debug("Looking for Falltergeist data files", DEBUG_INFO);
+    std::vector<std::string> directories;
+    directories.push_back(getCurrentDirectory());
+    directories.push_back(getHomeDirectory() + "/.falltergeist");
+
+    for (auto& directory : directories) {
+        std::ifstream stream(directory + "/data/dialogs.lst");
+        if (stream)
+        {
+            debug("Searching in directory: " + directory + " data/dialogs.lst [FOUND]", DEBUG_INFO);
+            _falltergeistDataPath = directory;
+            return _falltergeistDataPath;
+        }
+        else
+        {
+            debug("Searching in directory: " + directory + " data/dialogs.lst [NOT FOUND]", DEBUG_INFO);
+        }
+    }
+
+    throw Exception("Falltergeist data files are not found!");
+}
+
 // this method looks for available dat files
-std::vector<std::string> * CrossPlatform::findDataFiles()
+std::vector<std::string> * CrossPlatform::findFalloutDataFiles()
 {
     if (_dataFiles) return _dataFiles;
 
     // looking for all available dat files in directory
-    DIR * pxDir = opendir(CrossPlatform::findDataPath().c_str());
+    DIR * pxDir = opendir(CrossPlatform::findFalloutDataPath().c_str());
     if (!pxDir)
     {
-        throw Exception("Can't open data directory: " + CrossPlatform::findDataPath());
+        throw Exception("Can't open data directory: " + CrossPlatform::findFalloutDataPath());
     }
     _dataFiles = new std::vector<std::string>(necessaryDatFiles);
     struct dirent * pxItem = 0;

@@ -61,7 +61,6 @@ protected:
     int _getTime();
     void _setLightLevel(int level);
     void _playMovie(int movieNum);
-    std::string* _msgMessage(int msgList, int msgNum);
     void _displayString(std::string* str);
     void _debugMessage(std::string* str);
     int _tile_num_in_direction(int start_tile, int dir, int distance);

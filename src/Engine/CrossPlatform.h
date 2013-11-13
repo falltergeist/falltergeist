@@ -39,8 +39,9 @@ void debug(std::string message, unsigned char level = 0);
 class CrossPlatform
 {
 protected:
-    static std::string _dataPath;
-    static std::vector<std::string> * _dataFiles;
+    static std::string _falloutDataPath;
+    static std::string _falltergeistDataPath;
+    static std::vector<std::string>* _dataFiles;
     static std::string _version;
     const static std::vector<std::string> necessaryDatFiles;
 public:
@@ -51,8 +52,9 @@ public:
     static std::string getHomeDirectory();
     static std::string getCurrentDirectory(); 
     static std::vector<std::string> getCdDrivePaths();
-    static std::string findDataPath();
-    static std::vector<std::string> * findDataFiles();
+    static std::string findFalloutDataPath();
+    static std::string findFalltergeistDataPath();
+    static std::vector<std::string> * findFalloutDataFiles();
     static void debug(std::string message, unsigned char level = 0);
 };
 

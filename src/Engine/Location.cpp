@@ -357,9 +357,9 @@ void Location::think()
         for (auto object : _objects)
         {
 
-            if (_scriptsTicks + 500 < SDL_GetTicks())
+            //if (_scriptsTicks + 500 < SDL_GetTicks())
             {
-                _scriptsTicks = SDL_GetTicks();
+                //_scriptsTicks = SDL_GetTicks();
 
                 for (auto script : *object->scripts())
                 {

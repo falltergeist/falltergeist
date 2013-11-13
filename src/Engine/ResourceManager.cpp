@@ -36,10 +36,10 @@ std::map<std::string, Surface*> ResourceManager::_surfaces;
 
 ResourceManager::ResourceManager()
 {
-    std::vector<std::string> * files = CrossPlatform::findDataFiles();
+    std::vector<std::string> * files = CrossPlatform::findFalloutDataFiles();
     for (auto it = files->begin(); it != files->end(); ++it)
     {
-        std::string path = CrossPlatform::findDataPath() + "/" + (*it);
+        std::string path = CrossPlatform::findFalloutDataPath() + "/" + (*it);
         _datFiles.push_back(new libfalltergeist::DatFile(path));
     }
 }
@@ -95,15 +95,29 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
         return _datFilesItems.at(filename);
     }
 
-    // Searching file in Data directory
+    // Searching file in Fallout data directory
     {
-        std::string path = CrossPlatform::findDataPath() + "/" + filename;
+        std::string path = CrossPlatform::findFalloutDataPath() + "/" + filename;
         std::ifstream* stream = new std::ifstream();
         stream->open(path, std::ios_base::binary);
         if (stream->is_open())
         {
-            std::string extension = filename.substr(filename.length() - 3, 3);
+            debug("[RESOURCE MANAGER] - Loading file: " + filename + " [FROM FALLOUT DATA DIR]", DEBUG_INFO);
+        }
+        else
+        {
+            path = CrossPlatform::findFalltergeistDataPath() + "/" + filename;
+            stream->open(path, std::ios_base::binary);
+            if (stream->is_open())
+            {
+                debug("[RESOURCE MANAGER] - Loading file: " + filename + " [FROM FALLTERGEIST DATA DIR]", DEBUG_INFO);
+            }
+        }
 
+        if (stream->is_open())
+        {
+
+            std::string extension = filename.substr(filename.length() - 3, 3);
             libfalltergeist::DatFileItem* item;
                  if (extension == "aaf") item = new libfalltergeist::AafFileType(stream);
             else if (extension == "bio") item = new libfalltergeist::BioFileType(stream);
@@ -125,7 +139,6 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
 
             item->setFilename(filename);
             _datFilesItems.insert(std::make_pair(filename, item));
-            debug("[RESOURCE MANAGER] - Loading file: " + filename + " [FROM DATA DIR]", DEBUG_INFO);
             return item;
         }
         delete stream;

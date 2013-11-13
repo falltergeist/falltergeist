@@ -1268,10 +1268,12 @@ void VM::run()
             }
             case 0x8105:
             {
-                std::cout << "[*] string* msgMessage(int msg_list, int msg_num);" << std::endl;
+                std::cout << "[+] string* msgMessage(int msg_list, int msg_num);" << std::endl;
                 auto msgNum = _popDataInteger();
                 auto msgList = _popDataInteger();
-                _pushDataPointer(_msgMessage(msgList, msgNum));
+                auto lst = ResourceManager::lstFileType("data/dialogs.lst");
+                auto msg = ResourceManager::msgFileType("text/english/dialog/" + lst->strings()->at(msgList + 1));
+                _pushDataPointer(msg->message(msgNum)->textPointer());
                 break;
             }
             case 0x8106:
@@ -1815,29 +1817,6 @@ void VM::_playMovie(int movieNum)
 
 }
 
-std::string* VM::_msgMessage(int msgList, int msgNum)
-{
-    libfalltergeist::MsgFileType* msg = 0;
-    switch (msgList)
-    {
-        case 0xd:
-            msg = ResourceManager::msgFileType("text/english/dialog/door.msg");
-            break;
-        case 0x14:
-            msg = ResourceManager::msgFileType("text/english/dialog/zclscorp.msg");
-            break;
-        case 0x19:
-            msg = ResourceManager::msgFileType("text/english/dialog/arcaves.msg");
-            break;
-        default:
-            std::cout << std::hex << msgList << std::endl;
-            break;
-    }
-
-    if (!msg) return new std::string("Unknown MSG number");
-
-    return msg->message(msgNum)->textPointer();
-}
 
 void VM::_displayString(std::string* str)
 {
