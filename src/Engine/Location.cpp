@@ -98,11 +98,6 @@ void Location::init()
         }
     }
 
-    for (auto i = 0; i != 64; ++i)
-    {
-        _LVARS.push_back(0);
-    }
-
     _elevation = _mapFile->defaultElevation();
 
     std::vector<libfalltergeist::MapObject *> * mapObjects = _mapFile->elevations()->at(_elevation)->objects();
@@ -322,6 +317,7 @@ void Location::handleAction(GameObject* object, int action)
     switch (action)
     {
         case Mouse::ICON_ROTATE:
+        {
             auto dude = dynamic_cast<GameDudeObject*>(object);
             if (!dude) break; //throw Exception("LocationState::handleAction() - only Dude can be rotated");
 
@@ -330,6 +326,15 @@ void Location::handleAction(GameObject* object, int action)
             dude->setOrientation(orientation);
 
             break;
+        }
+        case Mouse::ICON_TALK:
+        {
+            for(auto script : *object->scripts())
+            {
+                script->call("talk_p_proc");
+            }
+        }
+
     }
 }
 
@@ -361,10 +366,10 @@ void Location::think()
             {
                 for (auto script : *object->scripts())
                 {
-                    script->call("map_update_p_proc");
-                    script->call("look_at_p_proc");
-                    script->call("description_p_proc");
-                    script->call("critter_p_proc");
+                    //script->call("map_update_p_proc");
+                    //script->call("look_at_p_proc");
+                    //script->call("description_p_proc");
+                    //script->call("critter_p_proc");
                     //script->call("timed_event_p_proc");
                 }
              }
@@ -601,24 +606,6 @@ int Location::MVAR(unsigned int number)
         throw Exception("Location::MVAR(num) - num out of range: " + std::to_string((int)number));
     }
     return _MVARS.at(number);
-}
-
-void Location::setLVAR(unsigned int number, int value)
-{
-    if (number >= _LVARS.size())
-    {
-        throw Exception("Location::setLVAR(num, value) - num out of range: " + std::to_string((int)number));
-    }
-    _LVARS.at(number) = value;
-}
-
-int Location::LVAR(unsigned int number)
-{
-    if (number >= _LVARS.size())
-    {
-        throw Exception("Location::LVAR(num) - num out of range: " + std::to_string((int)number));
-    }
-    return _LVARS.at(number);
 }
 
 std::map<std::string, VMStackValue*>* Location::EVARS()

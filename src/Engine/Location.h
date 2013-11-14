@@ -48,7 +48,6 @@ protected:
     std::vector<GameObject*> _objects;
     std::vector<GameObject*> _objectsToRender;
     std::vector<int> _MVARS;
-    std::vector<int> _LVARS;
     std::map<std::string, VMStackValue*> _EVARS;
 
     void _checkObjectsToRender();
@@ -94,8 +93,6 @@ public:
 
     void setMVAR(unsigned int number, int value);
     int MVAR(unsigned int number);
-    void setLVAR(unsigned int number, int value);
-    int LVAR(unsigned int number);
     std::map<std::string, VMStackValue*>* EVARS();
 
 };

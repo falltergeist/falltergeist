@@ -40,6 +40,7 @@ protected:
     bool _initialized = false;
     VMStack _dataStack;
     VMStack _returnStack;
+    std::vector<VMStackValue*> _LVARS;
     unsigned int _programCounter = 0;
     int _DVAR_base = 0;
     int _SVAR_base = 0;

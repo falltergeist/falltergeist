@@ -55,7 +55,7 @@ void StartState::init()
     srand(time(NULL)); // seed
     Surface * splash = ResourceManager::surface("art/splash/" + splashes.at(rand() % splashes.size()));
     add(splash);
-    _splashTicks = SDL_GetTicks(); 
+    _splashTicks = SDL_GetTicks();
 
     _game->mouse()->setType(Mouse::WAIT);
 }
