@@ -244,8 +244,8 @@ void VM::run()
             case 0x8027:
             {
                 std::cout << "[?] unknown pop_d pop_d" << std::endl;
-                _dataStack.pop();
-                _dataStack.pop();
+                delete _dataStack.pop();
+                delete _dataStack.pop();
                 break;
             }
             case 0x8028:
@@ -267,7 +267,7 @@ void VM::run()
                 std::cout << "[*] DVAR clear" << std::endl;
                 while (_dataStack.size() > _DVAR_base)
                 {
-                    _dataStack.pop();
+                    delete _dataStack.pop();
                 }
                 break;
             }
@@ -1304,7 +1304,7 @@ void VM::run()
             {
                 std::cout << "[=] void float_msg(void* who, string* msg, int type) " << std::endl;
                 _popDataInteger();
-                _dataStack.pop(); // pointer or 0(integer)
+                delete _dataStack.pop(); // pointer or 0(integer)
                 _popDataPointer();
                 break;
             }
@@ -1687,6 +1687,7 @@ int VM::_popDataInteger()
     {
         auto stackIntValue = dynamic_cast<VMStackIntValue*>(stackValue);
         auto value = stackIntValue->value();
+        delete stackIntValue;
         return value;
     }
     throw Exception("VM::_popDataInteger() - stack value is not integer");
@@ -1702,8 +1703,9 @@ float VM::_popDataFloat()
     auto stackValue = _dataStack.pop();
     if (stackValue->type() == VMStackValue::TYPE_FLOAT)
     {
-        auto stackIntValue = dynamic_cast<VMStackFloatValue*>(stackValue);
-        auto value = stackIntValue->value();
+        auto stackFloatValue = dynamic_cast<VMStackFloatValue*>(stackValue);
+        auto value = stackFloatValue->value();
+        delete stackFloatValue;
         return value;
     }
     throw Exception("VM::_popDataFloat() - stack value is not float");
@@ -1719,8 +1721,9 @@ void* VM::_popDataPointer()
     auto stackValue = _dataStack.pop();
     if (stackValue->type() == VMStackValue::TYPE_POINTER)
     {
-        auto stackIntValue = dynamic_cast<VMStackPointerValue*>(stackValue);
-        auto value = stackIntValue->value();
+        auto stackPointerValue = dynamic_cast<VMStackPointerValue*>(stackValue);
+        auto value = stackPointerValue->value();
+        delete stackPointerValue;
         return value;
     }
     throw Exception("VM::_popDataPointer() - stack value is not a pointer");
@@ -1737,7 +1740,9 @@ int VM::_popReturnInteger()
     if (stackValue->type() == VMStackValue::TYPE_INTEGER)
     {
         auto stackIntValue = dynamic_cast<VMStackIntValue*>(stackValue);
-        return stackIntValue->value();
+        auto value = stackIntValue->value();
+        delete stackIntValue;
+        return value;
     }
     throw Exception("VM::_popReturnInteger() - stack value is not integer");
 }

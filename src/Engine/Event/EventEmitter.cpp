@@ -38,6 +38,10 @@ void EventEmitter::removeEventHandlers(std::string eventName)
 {
     if (_eventHandlers.find(eventName) == _eventHandlers.end()) return;
 
+    for (auto handler : *_eventHandlers.at(eventName))
+    {
+        delete handler;
+    }
     delete _eventHandlers.at(eventName);
     _eventHandlers.erase(eventName);
 }

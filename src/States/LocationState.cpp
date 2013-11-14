@@ -192,12 +192,12 @@ void LocationState::think()
     _location->think();
 
     _background->loadFromSurface(_location->tilesBackground());
-
     for(GameObject* object : *_location->objectsToRender())
     {
 
         if (Animation* animation = object->animationQueue()->animation())
         {
+
             animation->removeEventHandlers("mouseleftdown");
             animation->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &LocationState::onMouseDown);
             animation->removeEventHandlers("mouseleftclick");
