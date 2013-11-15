@@ -26,6 +26,7 @@
 
 // Falltergeist includes
 #include "../Engine/State.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 
@@ -39,12 +40,13 @@ class CritterDialogState : public State
 protected:
     GameCritterObject* _critter = 0;
     VM* _script = 0;
-    std::string* _question = 0;
     unsigned int _oldCameraX;
     unsigned int _oldCameraY;
     std::vector<int> _functions;
     std::vector<int> _reactions;
-    std::vector<std::string*> _answers;
+    TextArea* _question = 0;
+    std::vector<TextArea*> _answers;
+
 
 public:
     CritterDialogState();
@@ -57,13 +59,20 @@ public:
     VM* script();
     void setScript(VM* value);
 
-    std::string* question();
     void setQuestion(std::string* value);
 
     std::vector<int>* functions();
     std::vector<int>* reactions();
-    std::vector<std::string*>* answers();
+    void deleteAnswers();
+    bool hasAnswers();
+    void addAnswer(std::string text);
 
+    virtual void blit();
+    virtual void handle(Event *event);
+
+    void onAnswerIn(Event* event);
+    void onAnswerOut(Event* event);
+    void onAnswerClick(Event* event);
 };
 
 }

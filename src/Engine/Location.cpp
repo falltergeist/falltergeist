@@ -146,7 +146,7 @@ void Location::init()
 
     // -----------------------
     generateBackground();
-    _checkObjectsToRender();
+    checkObjectsToRender();
 }
 
 GameDudeObject* Location::player()
@@ -387,7 +387,7 @@ void Location::think()
 }
 
 
-void Location::_checkObjectsToRender()
+void Location::checkObjectsToRender()
 {
     _objectsToRender.clear();
 
@@ -564,7 +564,7 @@ bool Location::scroll(bool up, bool down, bool left, bool right)
     if (_scrollStatus)
     {
         generateBackground();
-        _checkObjectsToRender();
+        checkObjectsToRender();
     }
     return _scrollStatus;
 }

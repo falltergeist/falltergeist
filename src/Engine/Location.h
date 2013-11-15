@@ -50,7 +50,6 @@ protected:
     std::vector<int> _MVARS;
     std::map<std::string, VMStackValue*> _EVARS;
 
-    void _checkObjectsToRender();
 
     unsigned int _cols;
     unsigned int _rows;
@@ -80,6 +79,7 @@ public:
     int height();
     void handleAction(GameObject* object, int action);
     void generateBackground();
+    void checkObjectsToRender();
 
     LocationCamera* camera();
 

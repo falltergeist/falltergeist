@@ -45,17 +45,6 @@ protected:
     int _DVAR_base = 0;
     int _SVAR_base = 0;
 
-    int _popReturnInteger();
-    void _pushReturnInteger(int value);
-    int _popDataInteger();
-    void _pushDataInteger(int value);
-    float _popDataFloat();
-    void _pushDataFloat(float value);
-    void* _popDataPointer();
-    void _pushDataPointer(void* value);
-    bool _popDataLogical();
-
-
     int _metarule(int type, VMStackValue* value);
     int _metarule3(int meta, VMStackValue* p1, int p2, int p3);
     int _getMonth();
@@ -75,6 +64,21 @@ public:
     void run();
     void initialize();
     void call(std::string name);
+    libfalltergeist::IntFileType* script();
+
+    unsigned int programCounter();
+    void setProgramCounter(unsigned int value);
+
+    int popReturnInteger();
+    void pushReturnInteger(int value);
+    int popDataInteger();
+    void pushDataInteger(int value);
+    float popDataFloat();
+    void pushDataFloat(float value);
+    void* popDataPointer();
+    void pushDataPointer(void* value);
+    bool popDataLogical();
+
 };
 
 }
