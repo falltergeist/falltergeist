@@ -67,6 +67,7 @@ protected:
     int _tile_num_in_direction(int start_tile, int dir, int distance);
     int _critter_add_trait(void* who, int trait_type, int trait, int amount);
     void _anim(void* who, int anim, int direction);
+    std::string* msgMessage(int msg_file_num, int msg_num);
 public:
     VM(libfalltergeist::IntFileType * script, void* owner);
     VM(std::string filename, void* owner);

@@ -294,7 +294,7 @@ void VM::run()
                 std::cout << "[*] ifthen(address, condition)" << std::endl;
                 auto condition = _popDataLogical();
                 auto address = _popDataInteger();
-                if (condition)
+                if (!condition)
                 {
                     _programCounter = address;
                 }
@@ -341,19 +341,19 @@ void VM::run()
                             case VMStackValue::TYPE_INTEGER:
                             {
                                 auto p1 = _popDataInteger();
-                                _pushDataInteger(p1 == p2 ? 0 : 1);
+                                _pushDataInteger(p1 == p2);
                                 break;
                             }
                             case VMStackValue::TYPE_FLOAT:
                             {
                                 auto p1 = _popDataFloat();
-                                _pushDataInteger(p1 == p2 ? 0 : 1);
+                                _pushDataInteger(p1 == p2);
                                 break;
                             }
                             case VMStackValue::TYPE_POINTER:
                             {
                                 auto p1 = (int)(bool)_popDataPointer();
-                                _pushDataInteger(p1 == p2 ? 0 : 1);
+                                _pushDataInteger(p1 == p2);
                                 break;
                             }
                         }
@@ -363,14 +363,14 @@ void VM::run()
                     {
                         auto p2 = _popDataPointer();
                         auto p1 = _popDataPointer();
-                        _pushDataInteger(p1 == p2 ? 0 : 1);
+                        _pushDataInteger(p1 == p2);
                         break;
                     }
                     case VMStackValue::TYPE_FLOAT:
                     {
                         auto p2 = _popDataFloat();
                         auto p1 = _popDataFloat();
-                        _pushDataInteger(p1 == p2 ? 0 : 1);
+                        _pushDataInteger(p1 == p2);
                         break;
                     }
                 }
@@ -387,12 +387,12 @@ void VM::run()
                         if (_dataStack.top()->type() == VMStackValue::TYPE_POINTER) // to check if the pointer is null
                         {
                             auto p1 = (int)(bool)_popDataPointer();
-                            _pushDataInteger(p1 != p2 ? 0 : 1);
+                            _pushDataInteger(p1 != p2);
                         }
                         else
                         {
                             auto p1 = _popDataInteger();
-                            _pushDataInteger(p1 != p2 ? 0 : 1);
+                            _pushDataInteger(p1 != p2);
                         }
                         break;
                     }
@@ -402,12 +402,12 @@ void VM::run()
                         if (_dataStack.top()->type() == VMStackValue::TYPE_POINTER) // to check if the pointer is null
                         {
                             auto p1 = (int)(bool)_popDataPointer();
-                            _pushDataInteger(p1 != p2 ? 0 : 1);
+                            _pushDataInteger(p1 != p2);
                         }
                         else
                         {
                             auto p1 = _popDataInteger();
-                            _pushDataInteger(p1 != p2 ? 0 : 1);
+                            _pushDataInteger(p1 != p2);
                         }
                         break;
                     }
@@ -415,7 +415,7 @@ void VM::run()
                     {
                         auto p2 = _popDataFloat();
                         auto p1 = _popDataFloat();
-                        _pushDataInteger(p1 != p2 ? 0 : 1);
+                        _pushDataInteger(p1 != p2);
                         break;
                     }
                 }
@@ -426,7 +426,7 @@ void VM::run()
                 std::cout << "[*] leq <=" << std::endl;
                 auto b = _popDataInteger();
                 auto a = _popDataInteger();
-                _pushDataInteger(a <= b ? 0 : 1);
+                _pushDataInteger(a <= b);
                 break;
             }
             case 0x8036:
@@ -434,7 +434,7 @@ void VM::run()
                 std::cout << "[*] geq >=" << std::endl;
                 auto b = _popDataInteger();
                 auto a = _popDataInteger();
-                _pushDataInteger(a >= b ? 0 : 1);
+                _pushDataInteger(a >= b);
                 break;
             }
             case 0x8037:
@@ -442,7 +442,7 @@ void VM::run()
                 std::cout << "[*] lt <" << std::endl;
                 auto b = _popDataInteger();
                 auto a = _popDataInteger();
-                _pushDataInteger(a < b ? 0 : 1);
+                _pushDataInteger(a < b);
                 break;
             }
             case 0x8038:
@@ -450,7 +450,7 @@ void VM::run()
                 std::cout << "[*] gt >" << std::endl;
                 auto b = _popDataInteger();
                 auto a = _popDataInteger();
-                _pushDataInteger(a > b ? 0 : 1);
+                _pushDataInteger(a > b);
                 break;
             }
             case 0x8039:
@@ -637,9 +637,9 @@ void VM::run()
             }
             case 0x80a4:
             {
-                std::cout << "[=] char* obj_name(void* what)" << std::endl;
-                _popDataPointer();
-                _pushDataPointer((void*)new std::string("object name"));
+                std::cout << "[+] std::string* obj_name(GameCritterObject* who)" << std::endl;
+                auto critter = dynamic_cast<GameCritterObject*>((GameCritterObject*)_popDataPointer());
+                _pushDataPointer(new std::string(critter->name()));
                 break;
             }
             case 0x80a6:
@@ -960,10 +960,23 @@ void VM::run()
             {
                 std::cout << "[+] int get_critter_stat(GameCritterObject* who, int number)" << std::endl;
                 int number = _popDataInteger();
-                if (number > 6) throw Exception("VM::opcode80CA - number out of range:" + std::to_string(number));
                 auto object = dynamic_cast<GameCritterObject*>((GameObject*)_popDataPointer());
                 if (!object) throw Exception("VM::opcode80CA pointer error");
-                _pushDataInteger(object->stat(number) + object->statBonus(number));
+
+                switch (number)
+                {
+                    case 34: // gender
+                    {
+                        _pushDataInteger(object->gender());
+                        break;
+                    }
+                    default:
+                    {
+                        if (number > 6) throw Exception("VM::opcode80CA - number out of range:" + std::to_string(number));
+                        _pushDataInteger(object->stat(number) + object->statBonus(number));
+                        break;
+                    }
+                }
                 break;
             }
             case 0x80cb:
@@ -1088,14 +1101,14 @@ void VM::run()
                 std::cout << "[*] void start_gdialog(int msgFileNum, GameCritterObject* who, int mood, int headNum, int backgroundIdx)" << std::endl;
                 auto dialog = new CritterDialogState();
                 Game::getInstance().setDialog(dialog);
-                _popDataInteger();
-                _popDataInteger();
-                _popDataInteger();
+                auto backgroundIdx = _popDataInteger();
+                auto headNum = _popDataInteger();
+                auto mood = _popDataInteger();
                 auto critter = dynamic_cast<GameCritterObject*>((GameCritterObject*)_popDataPointer());
                 if (!critter) throw Exception("VM::opcode80de - wrong critter pointers");
                 dialog->setCritter(critter);
-
-                _popDataInteger();
+                dialog->setScript(this);
+                auto msgFileNum = _popDataInteger();
                 break;
             }
             case 0x80df:
@@ -1281,9 +1294,7 @@ void VM::run()
                 std::cout << "[+] string* msgMessage(int msg_list, int msg_num);" << std::endl;
                 auto msgNum = _popDataInteger();
                 auto msgList = _popDataInteger();
-                auto lst = ResourceManager::lstFileType("data/dialogs.lst");
-                auto msg = ResourceManager::msgFileType("text/english/dialog/" + lst->strings()->at(msgList + 1));
-                _pushDataPointer(msg->message(msgNum)->textPointer());
+                _pushDataPointer(msgMessage(msgList, msgNum));
                 break;
             }
             case 0x8106:
@@ -1443,9 +1454,18 @@ void VM::run()
             }
             case 0x811e:
             {
-                std::cout << "[=] void gSay_Reply(int msg_list, int msg_num)" << std::endl;
-                _dataStack.pop(); // integer or string
-                _popDataInteger();
+                std::cout << "[=] void gSay_Reply(int msg_file_num, int msg_num)" << std::endl;
+                if (_dataStack.top()->type() == VMStackValue::TYPE_POINTER)
+                {
+                    auto question = (std::string*)_popDataPointer();
+                    Game::getInstance().dialog()->setQuestion(question);
+                }
+                else
+                {
+                    auto msg_num = _popDataInteger();
+                    auto msg_file_num = _popDataInteger();
+                    Game::getInstance().dialog()->setQuestion(msgMessage(msg_file_num, msg_num));
+                }
                 break;
             }
             case 0x8120:
@@ -1459,11 +1479,28 @@ void VM::run()
             case 0x8121:
             {
                 std::cout << "[=] void giQ_Option(int iq_test, int msg_list, int msg_num, procedure target, int reaction)" << std::endl;
-                _popDataInteger();
-                _popDataInteger();
-                _dataStack.pop(); // string or integer
-                _popDataInteger();
-                _popDataInteger();
+
+                auto reaction = _popDataInteger();
+                auto function = _popDataInteger();
+                std::string* text;
+                if (_dataStack.top()->type() == VMStackValue::TYPE_POINTER)
+                {
+                    text = (std::string*)_popDataPointer();
+                    _popDataInteger(); // msg_list
+                }
+                else
+                {
+                    auto msg_num = _popDataInteger();
+                    auto msg_file_num = _popDataInteger();
+                    text = msgMessage(msg_file_num, msg_num);
+                }
+                auto iq = _popDataInteger();
+
+                // @todo Test iq
+                auto dialog = Game::getInstance().dialog();
+                dialog->reactions()->push_back(reaction);
+                dialog->functions()->push_back(function);
+                dialog->answers()->push_back(text);
                 break;
             }
             case 0x8123:
@@ -1864,6 +1901,13 @@ int VM::_metarule3(int meta, VMStackValue* p1, int p2, int p3)
     }
     throw Exception("VM::_metarule3() - unknown meta: " + std::to_string(meta));
 
+}
+
+std::string* VM::msgMessage(int msg_file_num, int msg_num)
+{
+    auto lst = ResourceManager::lstFileType("data/dialogs.lst");
+    auto msg = ResourceManager::msgFileType("text/english/dialog/" + lst->strings()->at(msg_file_num - 1));
+    return msg->message(msg_num)->textPointer();
 }
 
 }

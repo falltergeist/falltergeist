@@ -19,6 +19,7 @@
  */
 
 // C++ standard includes
+#include <iostream>
 
 // Falltergeist includes
 #include "../States/CritterDialogState.h"
@@ -28,6 +29,7 @@
 #include "../Engine/Location.h"
 #include "../Engine/LocationCamera.h"
 #include "../Game/GameCritterObject.h"
+#include "../VM/VM.h"
 
 // Third party includes
 
@@ -61,6 +63,11 @@ void CritterDialogState::init()
     add(background);
     add(background2);
 
+    std::cout << *_question << std::endl;
+    for (auto answer : _answers)
+    {
+        std::cout << *answer << std::endl;
+    }
 }
 
 void CritterDialogState::setCritter(GameCritterObject* critter)
@@ -72,5 +79,41 @@ GameCritterObject* CritterDialogState::critter()
 {
     return _critter;
 }
+
+VM* CritterDialogState::script()
+{
+    return _script;
+}
+
+void CritterDialogState::setScript(VM* value)
+{
+    _script = value;
+}
+
+std::string* CritterDialogState::question()
+{
+    return _question;
+}
+
+void CritterDialogState::setQuestion(std::string* value)
+{
+    _question = value;
+}
+
+std::vector<int>* CritterDialogState::functions()
+{
+    return &_functions;
+}
+
+std::vector<int>* CritterDialogState::reactions()
+{
+    return &_reactions;
+}
+
+std::vector<std::string*>* CritterDialogState::answers()
+{
+    return &_answers;
+}
+
 
 }

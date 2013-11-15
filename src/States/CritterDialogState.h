@@ -22,6 +22,7 @@
 #define FALLTERGEIST_CRITTERDIALOGSTATE_H
 
 // C++ standard includes
+#include <vector>
 
 // Falltergeist includes
 #include "../Engine/State.h"
@@ -31,13 +32,20 @@
 namespace Falltergeist
 {
 class GameCritterObject;
+class VM;
 
 class CritterDialogState : public State
 {
 protected:
-    GameCritterObject* _critter;
+    GameCritterObject* _critter = 0;
+    VM* _script = 0;
+    std::string* _question = 0;
     unsigned int _oldCameraX;
     unsigned int _oldCameraY;
+    std::vector<int> _functions;
+    std::vector<int> _reactions;
+    std::vector<std::string*> _answers;
+
 public:
     CritterDialogState();
     virtual ~CritterDialogState();
@@ -45,6 +53,17 @@ public:
 
     GameCritterObject* critter();
     void setCritter(GameCritterObject* critter);
+
+    VM* script();
+    void setScript(VM* value);
+
+    std::string* question();
+    void setQuestion(std::string* value);
+
+    std::vector<int>* functions();
+    std::vector<int>* reactions();
+    std::vector<std::string*>* answers();
+
 };
 
 }

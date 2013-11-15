@@ -129,6 +129,7 @@ void Location::init()
     }
 
     _player = new GameDudeObject();
+    _player->setName("Choozen One");
     _player->setPID(0x01000001);
     _player->setFID(FID_HERO_MALE);
     _player->setOrientation(_mapFile->defaultOrientation());
