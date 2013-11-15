@@ -30,13 +30,21 @@
 
 namespace Falltergeist
 {
+class GameCritterObject;
 
 class CritterDialogState : public State
 {
+protected:
+    GameCritterObject* _critter;
+    unsigned int _oldCameraX;
+    unsigned int _oldCameraY;
 public:
     CritterDialogState();
     virtual ~CritterDialogState();
     virtual void init();
+
+    GameCritterObject* critter();
+    void setCritter(GameCritterObject* critter);
 };
 
 }

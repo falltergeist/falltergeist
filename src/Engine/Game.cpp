@@ -295,4 +295,14 @@ std::vector<State*>* Game::states()
     return &_states;
 }
 
+CritterDialogState* Game::dialog()
+{
+    return _dialog;
+}
+
+void Game::setDialog(CritterDialogState* value)
+{
+    _dialog = value;
+}
+
 }

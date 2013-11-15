@@ -24,6 +24,10 @@
 #include "../States/CritterDialogState.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
+#include "../Engine/Game.h"
+#include "../Engine/Location.h"
+#include "../Engine/LocationCamera.h"
+#include "../Game/GameCritterObject.h"
 
 // Third party includes
 
@@ -42,7 +46,13 @@ void CritterDialogState::init()
 {
     if (_initialized) return;
     State::init();
-    setFullscreen(true);
+    setFullscreen(false);
+
+    auto camera = Game::getInstance().location()->camera();
+    _oldCameraX = camera->xPosition();
+    _oldCameraY = camera->xPosition();
+    camera->setXPosition(Location::hexagonToX(critter()->position()));
+    camera->setYPosition(Location::hexagonToY(critter()->position()) + 100);
 
     auto background = new Surface(ResourceManager::surface("art/intrface/alltlk.frm"));
     auto background2 = new Surface(ResourceManager::surface("art/intrface/di_talk.frm"));
@@ -51,6 +61,16 @@ void CritterDialogState::init()
     add(background);
     add(background2);
 
+}
+
+void CritterDialogState::setCritter(GameCritterObject* critter)
+{
+    _critter = critter;
+}
+
+GameCritterObject* CritterDialogState::critter()
+{
+    return _critter;
 }
 
 }

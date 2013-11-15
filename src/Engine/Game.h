@@ -39,6 +39,7 @@ class Player;
 class FpsCounter;
 class Mouse;
 class Location;
+class CritterDialogState;
 
 class Game
 {
@@ -52,6 +53,7 @@ protected:
     Screen* _screen = 0;
     Mouse* _mouse = 0;
     Location* _location = 0;
+    CritterDialogState* _dialog = 0;
     FpsCounter * _fpsCounter = 0;
     bool _quit = false;
     SDL_Event _event;
@@ -82,6 +84,8 @@ public:
     Mouse* mouse();
     void setLocation(Location* location);
     Location* location();
+    void setDialog(CritterDialogState* value);
+    CritterDialogState* dialog();
     void setGVAR(unsigned int number, int value);
     int GVAR(unsigned int number);
 };

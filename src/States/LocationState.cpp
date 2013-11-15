@@ -138,6 +138,8 @@ void LocationState::onKeyUp(KeyboardEvent * event)
 void LocationState::blit()
 {
 
+    _location->generateBackground();
+    _background->loadFromSurface(_location->tilesBackground());
     State::blit();
 
     if (_location == 0) return;
@@ -191,7 +193,6 @@ void LocationState::think()
     if (!_location) return;
     _location->think();
 
-    _background->loadFromSurface(_location->tilesBackground());
     for(GameObject* object : *_location->objectsToRender())
     {
 

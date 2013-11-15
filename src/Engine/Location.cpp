@@ -144,7 +144,7 @@ void Location::init()
     }
 
     // -----------------------
-    _generateBackground();
+    generateBackground();
     _checkObjectsToRender();
 }
 
@@ -366,10 +366,10 @@ void Location::think()
             {
                 for (auto script : *object->scripts())
                 {
-                    //script->call("map_update_p_proc");
-                    //script->call("look_at_p_proc");
-                    //script->call("description_p_proc");
-                    //script->call("critter_p_proc");
+                    script->call("map_update_p_proc");
+                    script->call("look_at_p_proc");
+                    script->call("description_p_proc");
+                    script->call("critter_p_proc");
                     //script->call("timed_event_p_proc");
                 }
              }
@@ -383,8 +383,6 @@ void Location::think()
             }
         }
     }
-
-
 }
 
 
@@ -423,7 +421,7 @@ void Location::_checkObjectsToRender()
     }
 }
 
-void Location::_generateBackground()
+void Location::generateBackground()
 {
     _tilesBackground->fill(0xFF000000);
     // Инициализируем тайловый фон
@@ -564,7 +562,7 @@ bool Location::scroll(bool up, bool down, bool left, bool right)
 
     if (_scrollStatus)
     {
-        _generateBackground();
+        generateBackground();
         _checkObjectsToRender();
     }
     return _scrollStatus;

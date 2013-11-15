@@ -39,6 +39,7 @@
 #include "../Game/GameWeaponItemObject.h"
 #include "../Game/GameMiscItemObject.h"
 #include "../Game/GameDoorSceneryObject.h"
+#include "../States/CritterDialogState.h"
 #include "../VM/VM.h"
 #include "../VM/VMStackIntValue.h"
 #include "../VM/VMStackFloatValue.h"
@@ -882,7 +883,6 @@ void VM::run()
                 auto num = _popDataInteger();
                 while (num >= _LVARS.size()) _LVARS.push_back(new VMStackIntValue(0));
                 _LVARS.at(num) = value;
-
                 break;
             }
             case 0x80c3:
@@ -1085,17 +1085,25 @@ void VM::run()
             }
             case 0x80de:
             {
-                std::cout << "[*] void start_gdialog(int msgFileNum, ObjectPtr who, int mood, int headNum, int backgroundIdx)" << std::endl;
+                std::cout << "[*] void start_gdialog(int msgFileNum, GameCritterObject* who, int mood, int headNum, int backgroundIdx)" << std::endl;
+                auto dialog = new CritterDialogState();
+                Game::getInstance().setDialog(dialog);
                 _popDataInteger();
                 _popDataInteger();
                 _popDataInteger();
-                _popDataPointer();
+                auto critter = dynamic_cast<GameCritterObject*>((GameCritterObject*)_popDataPointer());
+                if (!critter) throw Exception("VM::opcode80de - wrong critter pointers");
+                dialog->setCritter(critter);
+
                 _popDataInteger();
                 break;
             }
             case 0x80df:
             {
                 std::cout << "[?] end_dialogue" << std::endl;
+                auto game = &Game::getInstance();
+                game->pushState(game->dialog());
+                return;
                 break;
             }
             case 0x80e1:
@@ -1429,7 +1437,7 @@ void VM::run()
                 break;
             }
             case 0x811d:
-            {
+            {            
                 std::cout << "[?] gsay_end" << std::endl;
                 break;
             }
