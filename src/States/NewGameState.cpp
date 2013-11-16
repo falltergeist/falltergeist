@@ -27,7 +27,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/SurfaceSet.h"
-#include "../Engine/Player.h"
+#include "../Game/GameDudeObject.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
 
@@ -52,9 +52,10 @@ NewGameState::~NewGameState()
 
 void NewGameState::init()
 {
+    if (_initialized) return;
     State::init();
     
-    // background
+    // Background
     add(new Surface(ResourceManager::surface("art/intrface/pickchar.frm")));
 
     // Begin game button
@@ -89,13 +90,21 @@ void NewGameState::init()
                                           "art/intrface/diplomat.frm"
                                       }, 27, 23);
 
-    _characters.push_back(new Player(ResourceManager::gcdFileType("premade/combat.gcd")));
-    _characters.back()->setBio(ResourceManager::bioFileType("premade/combat.bio")->text());
-    _characters.push_back(new Player(ResourceManager::gcdFileType("premade/stealth.gcd")));
-    _characters.back()->setBio(ResourceManager::bioFileType("premade/stealth.bio")->text());
-    _characters.push_back(new Player(ResourceManager::gcdFileType("premade/diplomat.gcd")));
-    _characters.back()->setBio(ResourceManager::bioFileType("premade/diplomat.bio")->text());
-    
+    auto combat = new GameDudeObject();
+    combat->loadFromGCDFile(ResourceManager::gcdFileType("premade/combat.gcd"));
+    combat->setBiography(ResourceManager::bioFileType("premade/combat.bio")->text());
+    _characters.push_back(combat);
+
+    auto stealth = new GameDudeObject();
+    stealth->loadFromGCDFile(ResourceManager::gcdFileType("premade/stealth.gcd"));
+    stealth->setBiography(ResourceManager::bioFileType("premade/stealth.bio")->text());
+    _characters.push_back(stealth);
+
+    auto diplomat = new GameDudeObject();
+    diplomat->loadFromGCDFile(ResourceManager::gcdFileType("premade/diplomat.gcd"));
+    diplomat->setBiography(ResourceManager::bioFileType("premade/diplomat.bio")->text());
+    _characters.push_back(diplomat);
+
     // Character data textareas
     _playerName = new TextArea(350, 50);
 
@@ -104,7 +113,6 @@ void NewGameState::init()
                  ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
     _playerStats2 = new TextArea(374, 80);
-
     _playerBio = new TextArea(430, 50);
 
 
@@ -126,6 +134,7 @@ void NewGameState::init()
 
 void NewGameState::think()
 {
+    State::think();
 }
 
 void NewGameState::onBackButtonClick(MouseEvent* event)
@@ -161,30 +170,30 @@ void NewGameState::onNextCharacterButtonClick(MouseEvent* event)
 
 void NewGameState::changeCharacter()
 {
-    Player * player = _characters.at(_selectedCharacter);
+    GameDudeObject* dude = _characters.at(_selectedCharacter);
     std::stringstream ss;
     auto msg = ResourceManager::msgFileType("text/english/game/stat.msg");
-    ss   << msg->message(100)->text() << " " << (player->stat(Player::STATS_STRENGTH)    < 10 ? "0" : "") << player->stat(Player::STATS_STRENGTH)     << "\n"
-         << msg->message(101)->text() << " " << (player->stat(Player::STATS_PERCEPTION)  < 10 ? "0" : "") << player->stat(Player::STATS_PERCEPTION)   << "\n"
-         << msg->message(102)->text() << " " << (player->stat(Player::STATS_ENDURANCE)   < 10 ? "0" : "") << player->stat(Player::STATS_ENDURANCE)    << "\n"
-         << msg->message(103)->text() << " " << (player->stat(Player::STATS_CHARISMA)    < 10 ? "0" : "") << player->stat(Player::STATS_CHARISMA)     << "\n"
-         << msg->message(104)->text() << " " << (player->stat(Player::STATS_INTELLIGENCE)< 10 ? "0" : "") << player->stat(Player::STATS_INTELLIGENCE) << "\n"
-         << msg->message(105)->text() << " " << (player->stat(Player::STATS_AGILITY)     < 10 ? "0" : "") << player->stat(Player::STATS_AGILITY)      << "\n"
-         << msg->message(106)->text() << " " << (player->stat(Player::STATS_LUCK)        < 10 ? "0" : "") << player->stat(Player::STATS_LUCK)         << "\n";
+    ss << msg->message(100)->text() << " " << (dude->stat(0) < 10 ? "0" : "") << dude->stat(0) << "\n"
+       << msg->message(101)->text() << " " << (dude->stat(1) < 10 ? "0" : "") << dude->stat(1) << "\n"
+       << msg->message(102)->text() << " " << (dude->stat(2) < 10 ? "0" : "") << dude->stat(2) << "\n"
+       << msg->message(103)->text() << " " << (dude->stat(3) < 10 ? "0" : "") << dude->stat(3) << "\n"
+       << msg->message(104)->text() << " " << (dude->stat(4) < 10 ? "0" : "") << dude->stat(4) << "\n"
+       << msg->message(105)->text() << " " << (dude->stat(5) < 10 ? "0" : "") << dude->stat(5) << "\n"
+       << msg->message(106)->text() << " " << (dude->stat(6) < 10 ? "0" : "") << dude->stat(6) << "\n";
     _playerStats1->setText(ss.str());
      
     ss.str("");
-    ss << statToString(player->stat(Player::STATS_STRENGTH))    << "\n"
-       << statToString(player->stat(Player::STATS_PERCEPTION))  << "\n"
-       << statToString(player->stat(Player::STATS_ENDURANCE))   << "\n"
-       << statToString(player->stat(Player::STATS_CHARISMA))    << "\n"
-       << statToString(player->stat(Player::STATS_INTELLIGENCE))<< "\n"
-       << statToString(player->stat(Player::STATS_AGILITY))     << "\n"
-       << statToString(player->stat(Player::STATS_LUCK))        << "\n";
+    ss << statToString(dude->stat(0)) << "\n"
+       << statToString(dude->stat(1)) << "\n"
+       << statToString(dude->stat(2)) << "\n"
+       << statToString(dude->stat(3)) << "\n"
+       << statToString(dude->stat(4)) << "\n"
+       << statToString(dude->stat(5)) << "\n"
+       << statToString(dude->stat(6)) << "\n";
     _playerStats2->setText(ss.str());
     
-    _playerBio->setText(player->bio());
-    _playerName->setText(player->name());
+    _playerBio->setText(dude->biography());
+    _playerName->setText(dude->name());
 
     _characterImages->setCurrentSurface(_selectedCharacter);    
 }
@@ -203,7 +212,9 @@ void NewGameState::onEditButtonClick(MouseEvent* event)
 
 void NewGameState::onCreateButtonClick(MouseEvent* event)
 {
-    _game->setPlayer(new Player(ResourceManager::gcdFileType("premade/blank.gcd")));
+    auto none = new GameDudeObject();
+    none->loadFromGCDFile(ResourceManager::gcdFileType("premade/blank.gcd"));
+    _game->setPlayer(none);
     _game->pushState(new PlayerEditState());
 }
 

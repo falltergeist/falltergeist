@@ -35,7 +35,7 @@ class State;
 class Exception;
 class Screen;
 class ResourceManager;
-class Player;
+class GameDudeObject;
 class FpsCounter;
 class Mouse;
 class Location;
@@ -49,7 +49,7 @@ protected:
     ResourceManager* _resourceManager = 0;
     std::vector<State*> _states;
     std::vector<State*> _deletedStates;
-    Player* _player = 0;
+    GameDudeObject* _player = 0;
     Screen* _screen = 0;
     Mouse* _mouse = 0;
     Location* _location = 0;
@@ -79,8 +79,8 @@ public:
     void run();
     void quit();
 
-    void setPlayer(Player * player);
-    Player* player();
+    void setPlayer(GameDudeObject* player);
+    GameDudeObject* player();
     Mouse* mouse();
     void setLocation(Location* location);
     Location* location();

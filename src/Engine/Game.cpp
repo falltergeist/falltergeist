@@ -235,12 +235,12 @@ void Game::quit()
     _quit = true;
 }
 
-void Game::setPlayer(Player* player)
+void Game::setPlayer(GameDudeObject* player)
 {
     _player = player;
 }
 
-Player* Game::player()
+GameDudeObject* Game::player()
 {
     return _player;
 }

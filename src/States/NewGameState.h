@@ -35,13 +35,13 @@ class GcdFileType;
 class Surface;
 class SurfaceSet;
 class TextArea;
-class Player;
+class GameDudeObject;
 
 class NewGameState : public State
 {
 protected:
     SurfaceSet* _characterImages = 0;
-    std::vector<Player*> _characters;
+    std::vector<GameDudeObject*> _characters;
     TextArea* _playerStats1 = 0;
     TextArea* _playerStats2 = 0;
     TextArea* _playerBio = 0;
@@ -50,10 +50,11 @@ protected:
 public:    
     NewGameState();
     virtual ~NewGameState();
+    virtual void init();
+    virtual void think();
+
     void changeCharacter();
-    void init();
     std::string statToString(unsigned int stat);
-    void think();
 
     void onBackButtonClick(MouseEvent* event);
     void onBeginGameButtonClick(MouseEvent* event);
