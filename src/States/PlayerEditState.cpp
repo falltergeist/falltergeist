@@ -447,7 +447,7 @@ void PlayerEditState::think()
 bool PlayerEditState::_statDecrease(unsigned int num)
 {
     GameDudeObject* player = _game->player();
-    if (player->stat(num) <= 1 + player->statBonus(num)) return false;
+    if (player->stat(num) <= 1) return false;
 
     player->setStat(num, player->stat(num) - 1);
     player->setStatsPoints(player->statsPoints() + 1);
@@ -511,7 +511,6 @@ bool PlayerEditState::_skillToggle(unsigned int num)
 void PlayerEditState::onButtonClick(MouseEvent* event)
 {    
     auto sender = dynamic_cast<ImageButton*>(event->emitter());
-    std::cout << sender << std::endl;
     std::map<std::string, ImageButton *>::iterator it;
     for(it = _buttons->begin(); it != _buttons->end(); ++it)
     {

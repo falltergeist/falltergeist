@@ -202,31 +202,15 @@ int GameCritterObject::statTotal(unsigned int num)
 int GameCritterObject::statBonus(unsigned int num)
 {
     if (num >= _statsBonus.size()) throw Exception("GameCritterObject::statBonus(num) - num out of range:" + std::to_string(num));
-    unsigned int bonus = 0;
+    int bonus = 0;
+    if (trait(TRAITS_GIFTED)) bonus += 1;
     switch (num)
     {
         case STATS_STRENGTH:
-            if (trait(TRAITS_GIFTED))  bonus += 1;
             if (trait(TRAITS_BRUISER)) bonus += 2;
-            break;
-        case STATS_PERCEPTION:
-            if (trait(TRAITS_GIFTED))  bonus += 1;
-            break;
-        case STATS_ENDURANCE:
-            if (trait(TRAITS_GIFTED))  bonus += 1;
-            break;
-        case STATS_CHARISMA:
-            if (trait(TRAITS_GIFTED)) bonus += 1;
-            break;
-        case STATS_INTELLIGENCE:
-            if (trait(TRAITS_GIFTED)) bonus += 1;
             break;
         case STATS_AGILITY:
             if (trait(TRAITS_SMALL_FRAME)) bonus += 1;
-            if (trait(TRAITS_GIFTED)) bonus += 1;
-            break;
-        case STATS_LUCK:
-            if (this->trait(TRAITS_GIFTED)) bonus += 1;
             break;
     }
     return _statsBonus.at(num) + bonus;

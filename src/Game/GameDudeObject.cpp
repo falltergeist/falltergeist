@@ -43,7 +43,7 @@ void GameDudeObject::loadFromGCDFile(libfalltergeist::GcdFileType* gcd)
     for (unsigned int i = 0; i <= 6; i++)
     {
         setStat(i, gcd->stat(i));
-        //setStatBonus(i, gcd->statBonus(i));
+        setStatBonus(i, gcd->statBonus(i));
     }
 
     _statsPoints = gcd->characterPoints();
