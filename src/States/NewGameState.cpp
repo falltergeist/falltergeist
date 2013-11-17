@@ -43,10 +43,10 @@ NewGameState::NewGameState() : State()
 
 NewGameState::~NewGameState()
 {
-    while (!_characters.empty())
+    for (unsigned int i = 0; i != _characters.size(); ++i)
     {
-        delete _characters.back();
-        _characters.pop_back();
+        if (i == _selectedCharacter) continue;
+        delete _characters.at(i);
     }
 }
 
@@ -214,6 +214,7 @@ void NewGameState::onCreateButtonClick(MouseEvent* event)
 {
     auto none = new GameDudeObject();
     none->loadFromGCDFile(ResourceManager::gcdFileType("premade/blank.gcd"));
+    _selectedCharacter = _characters.size() + 1; // to guarantee deletion of all created dudes in destructor
     _game->setPlayer(none);
     _game->pushState(new PlayerEditState());
 }

@@ -75,8 +75,6 @@ set(SOURCES main.cpp
             src/Engine/Map.h
             src/Engine/Mouse.cpp
             src/Engine/Mouse.h
-            src/Engine/Player.cpp
-            src/Engine/Player.h
             src/Engine/ResourceManager.cpp
             src/Engine/ResourceManager.h
             src/Engine/Renderer.cpp

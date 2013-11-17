@@ -30,6 +30,7 @@
 #include "../Engine/Surface.h"
 #include "../Engine/Animation.h"
 #include "../Engine/Mouse.h"
+#include "../Engine/Game.h"
 #include "../Game/GameDefines.h"
 #include "../Game/GameCritterObject.h"
 #include "../Game/GameAmmoItemObject.h"
@@ -128,8 +129,9 @@ void Location::init()
         _objects.push_back(object);
     }
 
-    _player = new GameDudeObject();
-    _player->setName("Choozen One");
+    //_player = new GameDudeObject();
+    //_player->setName("Choozen One");
+    _player = Game::getInstance().player();
     _player->setPID(0x01000001);
     _player->setFID(FID_HERO_MALE);
     _player->setOrientation(_mapFile->defaultOrientation());
@@ -229,6 +231,14 @@ GameObject* Location::createObject(int PID)
             {
                 ((GameCritterObject*)object)->setSkill(i, proto->critterSkills()->at(i));
             }
+            ((GameCritterObject*)object)->setActionPoints(proto->critterActionPoints());
+            ((GameCritterObject*)object)->setHitPointsMax(proto->critterHitPointsMax());
+            ((GameCritterObject*)object)->setArmorClass(proto->critterArmorClass());
+            ((GameCritterObject*)object)->setCarryWeight(proto->critterCarryWeight());
+            ((GameCritterObject*)object)->setMeleeDamage(proto->critterMeleeDamage());
+            ((GameCritterObject*)object)->setSequence(proto->critterSequence());
+            ((GameCritterObject*)object)->setCriticalChance(proto->critterCriticalChance());
+            ((GameCritterObject*)object)->setHealingRate(proto->critterHealingRate());
             break;
         }
         case libfalltergeist::ProFileType::TYPE_SCENERY:

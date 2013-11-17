@@ -27,7 +27,7 @@
 #include "../Engine/Game.h"
 #include "../UI/TextArea.h"
 #include "../UI/ImageButton.h"
-#include "../Engine/Player.h"
+#include "../Game/GameDudeObject.h"
 
 // Third party includes
 
@@ -48,14 +48,14 @@ void PlayerEditGenderState::init()
                                     "art/intrface/maleon.frm"
                                 }, 260, 2);
     _maleImage->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditGenderState::onMaleButtonPress);
-    if (_game->player()->gender() == Player::GENDER_MALE) _maleImage->setCurrentSurface(1);
+    if (_game->player()->gender() == 0) _maleImage->setCurrentSurface(1); // 0 - male
 
     _femaleImage = new SurfaceSet((std::vector<std::string>){
                                       "art/intrface/femoff.frm",
                                       "art/intrface/femon.frm"
                                   }, 310, 2);
     _femaleImage->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditGenderState::onFemaleButtonPress);
-    if (_game->player()->gender() == Player::GENDER_FEMALE) _femaleImage->setCurrentSurface(1);
+    if (_game->player()->gender() == 1) _femaleImage->setCurrentSurface(1); // 1 - female
 
     Surface * bg = new Surface(_game->resourceManager()->surface("art/intrface/charwin.frm"));
     bg->setX(236);
@@ -92,14 +92,14 @@ void PlayerEditGenderState::onDoneButtonClick(MouseEvent* event)
 
 void PlayerEditGenderState::onFemaleButtonPress(MouseEvent* event)
 {
-    _game->player()->setGender(Player::GENDER_FEMALE);
+    _game->player()->setGender(1); // 1 - female
     _maleImage->setCurrentSurface(0);
     _femaleImage->setCurrentSurface(1);
 }
 
 void PlayerEditGenderState::onMaleButtonPress(MouseEvent* event)
 {
-    _game->player()->setGender(Player::GENDER_MALE);
+    _game->player()->setGender(0); // 0 - male
     _maleImage->setCurrentSurface(1);
     _femaleImage->setCurrentSurface(0);
 }

@@ -29,7 +29,7 @@
 #include "../States/PlayerEditAlertState.h"
 #include "../States/LocationState.h"
 #include "../Engine/Game.h"
-#include "../Engine/Player.h"
+#include "../Game/GameDudeObject.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
 
@@ -178,7 +178,7 @@ PlayerEditState::PlayerEditState() : State()
         _addLabel("cancel",  new TextArea(msg->message(102), 571, 453))->setColor(0xffb89c28)->setFont("font3.aaf");
         _addLabel("name",    new TextArea(_game->player()->name(), 17, 7))->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setColor(0xffb89c28)->setFont("font3.aaf");
         _addLabel("age",     new TextArea("AGE", 163, 7))->setColor(0xffb89c28)->setFont("font3.aaf");
-        _addLabel("gender",  new TextArea(msg->message(_game->player()->gender() == Player::GENDER_MALE ? 107 : 108), 255, 7))->setColor(0xffb89c28)->setFont("font3.aaf");
+        _addLabel("gender",  new TextArea(msg->message(_game->player()->gender() == 0 ? 107 : 108), 255, 7))->setColor(0xffb89c28)->setFont("font3.aaf"); // 0 -male 1 - female
         _addLabel("label_1", new TextArea(msg->message(112), 18, 286))->setColor(0xffb89c28)->setFont("font3.aaf"); // ДОП. ОЧКИ
         _addLabel("label_2", new TextArea(msg->message(139), 50, 326))->setColor(0xffb89c28)->setFont("font3.aaf"); // ДОП. ОСОБЕННОСТИ
         _addLabel("label_3", new TextArea(msg->message(117), 383, 5))->setColor(0xffb89c28)->setFont("font3.aaf");  // НАВЫКИ
@@ -319,17 +319,17 @@ void PlayerEditState::_addImage(std::string name, Surface * image)
 
 void PlayerEditState::think()
 {
-    Player * player = _game->player();
+    GameDudeObject* player = _game->player();
     libfalltergeist::MsgFileType * msgEditor = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
 
     _labels->at("name")->setText(player->name());
     _labels->at("age")->setText(msgEditor->message(104))->appendText(" ")->appendText(player->age());
-    _labels->at("gender")->setText(msgEditor->message(player->gender() == Player::GENDER_MALE ? 107 : 108));
+    _labels->at("gender")->setText(msgEditor->message(player->gender() == 0 ? 107 : 108)); // 0 - male   1 - female
 
-    _counters->at("statsPoints")->setNumber(player->characterPoints());
-    _counters->at("skillsPoints")->setNumber(player->skillPoints());
+    _counters->at("statsPoints")->setNumber(player->statsPoints());
+    _counters->at("skillsPoints")->setNumber(player->skillsPoints());
 
-    _labels->at("health_1")->setText(msgEditor->message(300))->appendText("  ")->appendText(player->hitPointsMaximum())->appendText("/")->appendText(player->hitPointsMaximum());
+    _labels->at("health_1")->setText(msgEditor->message(300))->appendText("  ")->appendText(player->hitPointsMax())->appendText("/")->appendText(player->hitPointsMax());
     _labels->at("params_1_value")->setText(player->armorClass());
     _labels->at("params_2_value")->setText(player->actionPoints());
     _labels->at("params_3_value")->setText(player->carryWeight());
@@ -342,7 +342,7 @@ void PlayerEditState::think()
     _labels->at("params_10_value")->setText(player->criticalChance())->appendText("%");
 
     // Stats counters and labels
-    for (unsigned int i = Player::STATS_STRENGTH; i <= Player::STATS_LUCK; i++)
+    for (unsigned int i = 0; i < 7; i++)
     {
         std::stringstream ss;
         ss << "stats_" << (i+1);
@@ -444,6 +444,70 @@ void PlayerEditState::think()
 
 }
 
+bool PlayerEditState::_statDecrease(unsigned int num)
+{
+    GameDudeObject* player = _game->player();
+    if (player->stat(num) <= 1 + player->statBonus(num)) return false;
+
+    player->setStat(num, player->stat(num) - 1);
+    player->setStatsPoints(player->statsPoints() + 1);
+    return true;
+}
+
+bool PlayerEditState::_statIncrease(unsigned int num)
+{
+    GameDudeObject* player = _game->player();
+    if (player->statsPoints() <= 0) return false;
+
+    if (player->stat(num) + player->statBonus(num) >= 10) return false;
+
+    player->setStat(num, player->stat(num) + 1);
+    player->setStatsPoints(player->statsPoints() - 1);
+    return true;
+}
+
+bool PlayerEditState::_traitToggle(unsigned int num)
+{
+    GameDudeObject* player = _game->player();
+    if (player->trait(num))
+    {
+        player->setTrait(num, 0);
+        return true;
+    }
+    else
+    {
+        unsigned int selectedTraits = 0;
+        for (unsigned int i = 0; i != 16; ++i) if (player->trait(i)) selectedTraits++;
+        if (selectedTraits < 2)
+        {
+            player->setTrait(num, 1);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool PlayerEditState::_skillToggle(unsigned int num)
+{
+    GameDudeObject* player = _game->player();
+    if (player->skill(num))
+    {
+        player->setSkill(num, 0);
+        player->setSkillsPoints(player->skillsPoints() + 1);
+        return true;
+    }
+    else
+    {
+        if (player->skillsPoints() > 0)
+        {
+            player->setSkill(num, 1);
+            player->setSkillsPoints(player->skillsPoints() - 1);
+            return true;
+        }
+    }
+    return false;
+}
+
 void PlayerEditState::onButtonClick(MouseEvent* event)
 {    
     auto sender = dynamic_cast<ImageButton*>(event->emitter());
@@ -468,11 +532,11 @@ void PlayerEditState::onButtonClick(MouseEvent* event)
                 unsigned int number = atoi(name.substr(6,1).c_str());
                 if (name.find("_increase") == 7)
                 {
-                    _game->player()->statsIncrease(number - 1);
+                    _statIncrease(number - 1);
                 }
                 else
                 {
-                    _game->player()->statsDecrease(number - 1);
+                    _statDecrease(number - 1);
                 }
             }
 
@@ -481,7 +545,7 @@ void PlayerEditState::onButtonClick(MouseEvent* event)
                 unsigned int number = atoi(name.substr(7).c_str());
                 _selectedLabel = _labels->at(name);
                 _selectedImage = _images->at(name);
-                if (!_game->player()->traitToggle(number - 1))
+                if (!_traitToggle(number - 1))
                 {
                     PlayerEditAlertState * state = new PlayerEditAlertState();
                     libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
@@ -496,7 +560,7 @@ void PlayerEditState::onButtonClick(MouseEvent* event)
                 unsigned int number = atoi(name.substr(7).c_str());
                 _selectedLabel = _labels->at(name);
                 _selectedImage = _images->at(name);
-                if (!_game->player()->skillToggle(number - 1))
+                if (!_skillToggle(number - 1))
                 {
                     PlayerEditAlertState * state = new PlayerEditAlertState();
                     libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");

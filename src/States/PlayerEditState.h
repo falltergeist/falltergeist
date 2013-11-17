@@ -61,6 +61,11 @@ protected:
     void _addDescription(std::string name, std::string description);
     void _addImage(std::string name, Surface * image);
 
+    bool _statIncrease(unsigned int num);
+    bool _statDecrease(unsigned int num);
+    bool _traitToggle(unsigned int num);
+    bool _skillToggle(unsigned int num);
+
 public:
     PlayerEditState();
     void init();

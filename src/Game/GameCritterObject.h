@@ -38,13 +38,24 @@ class GameCritterObject : public GameObject
 {
 protected:
     int _gender;
+    int _hitPoints = 0;
+    int _hitPointsMax = 0;
+    int _healingRate = 0;
+    int _armorClass = 0;
+    int _actionPoints = 0;
+    int _carryWeight = 0;
+    int _meleeDamage = 0;
+    int _sequence = 0;
+    int _criticalChance = 0;
+
     std::vector<int> _stats = {0, 0, 0, 0, 0, 0, 0};
     std::vector<int> _statsBonus = {0, 0, 0, 0, 0, 0, 0};
     std::vector<int> _skills = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> _traits = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::vector<GameItemObject*> _inventory;
     GameArmorItemObject* _armorSlot = 0;
     GameItemObject* _leftHandSlot = 0;
-    GameItemObject* _rightHandSlot = 0;
+    GameItemObject* _rightHandSlot = 0;    
 public:
     enum {GENDER_MALE = 0, GENDER_FEMALE = 1};
     enum {STATS_STRENGTH = 0, STATS_PERCEPTION, STATS_ENDURANCE, STATS_CHARISMA, STATS_INTELLIGENCE, STATS_AGILITY, STATS_LUCK };
@@ -145,9 +156,42 @@ public:
     int statBonus(unsigned int num);
     void setStatBonus(unsigned int num, int value);
 
-    int skill(unsigned int num);
-    void setSkill(unsigned int num, int value);
+    int statTotal(unsigned int num);
 
+    int skill(unsigned int num);
+    void setSkill(unsigned int num, int value);   
+
+    int skillValue(unsigned int num);
+
+    int trait(unsigned int num);
+    void setTrait(unsigned int num, int value);
+
+    int hitPoints();
+    void setHitPoints(int value);
+
+    virtual int hitPointsMax();
+    void setHitPointsMax(int value);
+
+    virtual int armorClass();
+    void setArmorClass(int value);
+
+    virtual int actionPoints();
+    void setActionPoints(int value);
+
+    virtual int carryWeight();
+    void setCarryWeight(int value);
+
+    virtual int meleeDamage();
+    void setMeleeDamage(int value);
+
+    virtual int sequence();
+    void setSequence(int value);
+
+    virtual int criticalChance();
+    void setCriticalChance(int value);
+
+    virtual int healingRate();
+    void setHealingRate(int value);
 };
 
 }

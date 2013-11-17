@@ -28,7 +28,7 @@
 #include "../Engine/Surface.h"
 #include "../UI/TextArea.h"
 #include "../UI/ImageButton.h"
-#include "../Engine/Player.h"
+#include "../Game/GameDudeObject.h"
 
 // Third party includes
 

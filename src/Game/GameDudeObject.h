@@ -25,6 +25,7 @@
 
 // Falltergeist includes
 #include "../Game/GameCritterObject.h"
+#include "../../lib/libfalltergeist/libfalltergeist.h"
 
 // Third party includes
 
@@ -34,13 +35,49 @@ namespace Falltergeist
 class GameDudeObject : public GameCritterObject
 {
 protected:
+    int _level = 1;
     int _experience = 0;
+    int _statsPoints = 0;
+    int _skillsPoints = 3;
+    int _age = 0;
+    std::string _biography;
 public:
     GameDudeObject();
     virtual ~GameDudeObject();
 
+    void loadFromGCDFile(libfalltergeist::GcdFileType* gcd);
+    
     int experience();
     void setExperience(int value);
+
+    std::string biography();
+    void setBiography(std::string value);
+
+    int age();
+    void setAge(int value);
+
+    int statsPoints();
+    void setStatsPoints(int value);
+
+    int skillsPoints();
+    void setSkillsPoints(int value);
+
+    int level();
+    void setLevel(int value);
+
+    int damageResistance();
+    int poisonResistance();
+    int radiationResistance();
+    // Overloaded
+    int hitPointsMax();
+    int actionPoints();
+    int armorClass();
+    int carryWeight();
+    int meleeDamage();
+    int sequence();
+    int healingRate();
+    int criticalChance();
+
 };
 
 }

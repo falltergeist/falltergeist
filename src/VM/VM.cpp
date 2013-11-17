@@ -871,7 +871,7 @@ void VM::run()
             case 0x80c1:
             {
                 std::cout << "[*] LVAR[num]" << std::endl;
-                auto num = popDataInteger();
+                unsigned int num = popDataInteger();
                 while (num >= _LVARS.size()) _LVARS.push_back(new VMStackIntValue(0));
                 _dataStack.push(_LVARS.at(num));
                 break;
@@ -880,7 +880,7 @@ void VM::run()
             {
                 std::cout << "[*] LVAR[num] = value" << std::endl;
                 auto value = _dataStack.pop();
-                auto num = popDataInteger();
+                unsigned int num = popDataInteger();
                 while (num >= _LVARS.size()) _LVARS.push_back(new VMStackIntValue(0));
                 _LVARS.at(num) = value;
                 break;

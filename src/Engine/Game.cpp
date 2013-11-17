@@ -25,7 +25,7 @@
 #include "../Engine/Event/Event.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
-#include "../Engine/Player.h"
+#include "../Game/GameDudeObject.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Location.h"
 #include "../Engine/Screen.h"

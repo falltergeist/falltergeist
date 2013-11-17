@@ -193,10 +193,43 @@ void GameCritterObject::setStat(unsigned int num, int value)
     _stats.at(num) = value;
 }
 
+int GameCritterObject::statTotal(unsigned int num)
+{
+    if (num >= _stats.size()) throw Exception("GameCritterObject::statTotal(num) - num out of range:" + std::to_string(num));
+    return stat(num) + statBonus(num);
+}
+
 int GameCritterObject::statBonus(unsigned int num)
 {
     if (num >= _statsBonus.size()) throw Exception("GameCritterObject::statBonus(num) - num out of range:" + std::to_string(num));
-    return _statsBonus.at(num);
+    unsigned int bonus = 0;
+    switch (num)
+    {
+        case STATS_STRENGTH:
+            if (trait(TRAITS_GIFTED))  bonus += 1;
+            if (trait(TRAITS_BRUISER)) bonus += 2;
+            break;
+        case STATS_PERCEPTION:
+            if (trait(TRAITS_GIFTED))  bonus += 1;
+            break;
+        case STATS_ENDURANCE:
+            if (trait(TRAITS_GIFTED))  bonus += 1;
+            break;
+        case STATS_CHARISMA:
+            if (trait(TRAITS_GIFTED)) bonus += 1;
+            break;
+        case STATS_INTELLIGENCE:
+            if (trait(TRAITS_GIFTED)) bonus += 1;
+            break;
+        case STATS_AGILITY:
+            if (trait(TRAITS_SMALL_FRAME)) bonus += 1;
+            if (trait(TRAITS_GIFTED)) bonus += 1;
+            break;
+        case STATS_LUCK:
+            if (this->trait(TRAITS_GIFTED)) bonus += 1;
+            break;
+    }
+    return _statsBonus.at(num) + bonus;
 }
 
 void GameCritterObject::setStatBonus(unsigned int num, int value)
@@ -215,6 +248,193 @@ void GameCritterObject::setSkill(unsigned int num, int value)
 {
     if (num >= _skills.size()) throw Exception("GameCritterObject::setSkill(num, value) - num out of range:" + std::to_string(num));
     _skills.at(num) = value;
+}
+
+int GameCritterObject::skillValue(unsigned int num)
+{
+    if (num >= _skills.size()) throw Exception("GameCritterObject::skillValue(num) - num out of range:" + std::to_string(num));
+    int value = 0;
+    switch(num)
+    {
+        case SKILLS_SMALL_GUNS:
+            value += 5 + 4 * statTotal(STATS_AGILITY);
+            if (trait(TRAITS_GOOD_NATURED)) value -= 10;
+            break;
+        case SKILLS_BIG_GUNS:
+            value += 2*statTotal(STATS_AGILITY);
+            if (trait(TRAITS_GOOD_NATURED)) value -= 10;
+            break;
+        case SKILLS_ENERGY_WEAPONS:
+            value += 2*statTotal(STATS_AGILITY);
+            if (trait(TRAITS_GOOD_NATURED)) value -= 10;
+            break;
+        case SKILLS_UNARMED:
+            value += 30 + 2*(statTotal(STATS_AGILITY) + statTotal(STATS_STRENGTH));
+            if (trait(TRAITS_GOOD_NATURED)) value -= 10;
+            break;
+        case SKILLS_MELEE_WEAPONS:
+            value += 20 + 2*(statTotal(STATS_AGILITY) + statTotal(STATS_STRENGTH));
+            if (trait(TRAITS_GOOD_NATURED)) value -= 10;
+            break;
+        case SKILLS_THROWING:
+            value += 4*statTotal(STATS_AGILITY);
+            if (trait(TRAITS_GOOD_NATURED)) value -= 10;
+            break;
+        case SKILLS_FIRST_AID:
+            value += 2*(statTotal(STATS_PERCEPTION) + statTotal(STATS_INTELLIGENCE));
+            if (trait(TRAITS_GOOD_NATURED)) value += 15;
+            break;
+        case SKILLS_DOCTOR:
+            value += 5 + (statTotal(STATS_PERCEPTION) + statTotal(STATS_INTELLIGENCE));
+            if (trait(TRAITS_GOOD_NATURED)) value += 15;
+            break;
+        case SKILLS_SNEAK:
+            value += 5 + 3*statTotal(STATS_AGILITY);
+            break;
+        case SKILLS_LOCKPICK:
+            value += 10 + (statTotal(STATS_PERCEPTION) + statTotal(STATS_AGILITY));
+            break;
+        case SKILLS_STEAL:
+            value += 3*statTotal(STATS_AGILITY);
+            break;
+        case SKILLS_TRAPS:
+            value += 10 + (statTotal(STATS_PERCEPTION) + statTotal(STATS_AGILITY));
+            break;
+        case SKILLS_SCIENCE:
+            value += 4*statTotal(STATS_INTELLIGENCE);
+            break;
+        case SKILLS_REPAIR:
+            value += 3*statTotal(STATS_INTELLIGENCE);
+            break;
+        case SKILLS_SPEECH:
+            value += 5*statTotal(STATS_CHARISMA);
+            if (trait(TRAITS_GOOD_NATURED)) value += 15;
+            break;
+        case SKILLS_BARTER:
+            value += 4*statTotal(STATS_CHARISMA);
+            if (trait(TRAITS_GOOD_NATURED)) value += 15;
+            break;
+        case SKILLS_GAMBLING:
+            value += 5*statTotal(STATS_LUCK);
+            break;
+        case SKILLS_OUTDOORSMAN:
+            value += 2 * (statTotal(STATS_ENDURANCE) + statTotal(STATS_INTELLIGENCE));
+            break;
+    }
+
+    if (trait(TRAITS_GIFTED))
+    {
+        value -= 10;
+    }
+
+    if (skill(num))
+    {
+        value += 20;
+    }
+
+    return value;
+}
+
+int GameCritterObject::trait(unsigned int num)
+{
+    if (num >= _traits.size()) throw Exception("GameCritterObject::trait(num) - num out of range:" + std::to_string(num));
+    return _traits.at(num);
+}
+
+void GameCritterObject::setTrait(unsigned int num, int value)
+{
+    if (num >= _traits.size()) throw Exception("GameCritterObject::setTrait(num, value) - num out of range:" + std::to_string(num));
+    _traits.at(num) = value;
+}
+
+int GameCritterObject::hitPoints()
+{
+    return _hitPoints;
+}
+
+void GameCritterObject::setHitPoints(int value)
+{
+    _hitPoints = value;
+}
+
+int GameCritterObject::hitPointsMax()
+{
+    return _hitPointsMax;
+}
+
+void GameCritterObject::setHitPointsMax(int value)
+{
+    _hitPointsMax = value;
+}
+
+int GameCritterObject::armorClass()
+{
+    return _armorClass;
+}
+
+void GameCritterObject::setArmorClass(int value)
+{
+    _armorClass = value;
+}
+
+int GameCritterObject::actionPoints()
+{
+    return _actionPoints;
+}
+
+void GameCritterObject::setActionPoints(int value)
+{
+    _actionPoints = value;
+}
+
+int GameCritterObject::carryWeight()
+{
+    return _carryWeight;
+}
+
+void GameCritterObject::setCarryWeight(int value)
+{
+    _carryWeight = value;
+}
+
+int GameCritterObject::meleeDamage()
+{
+    return _meleeDamage;
+}
+
+void GameCritterObject::setMeleeDamage(int value)
+{
+    _meleeDamage = value;
+}
+
+int GameCritterObject::sequence()
+{
+    return _sequence;
+}
+
+void GameCritterObject::setSequence(int value)
+{
+    _sequence = value;
+}
+
+int GameCritterObject::criticalChance()
+{
+    return _criticalChance;
+}
+
+void GameCritterObject::setCriticalChance(int value)
+{
+    _criticalChance = value;
+}
+
+int GameCritterObject::healingRate()
+{
+    return _healingRate;
+}
+
+void GameCritterObject::setHealingRate(int value)
+{
+    _healingRate = value;
 }
 
 }

@@ -23,7 +23,7 @@
 // Falltergeist includes
 #include "../States/PlayerEditAgeState.h"
 #include "../Engine/Game.h"
-#include "../Engine/Player.h"
+#include "../Game/GameDudeObject.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
 #include "../UI/ImageButton.h"
