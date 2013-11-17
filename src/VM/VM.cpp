@@ -1486,7 +1486,7 @@ void VM::run()
             }
             case 0x8121:
             {
-                std::cout << "[=] void giQ_Option(int iq_test, int msg_list, int msg_num, procedure target, int reaction)" << std::endl;
+                std::cout << "[+] void giQ_Option(int iq_test, int msg_list, int msg_num, procedure target, int reaction)" << std::endl;
 
                 auto reaction = popDataInteger();
                 auto function = popDataInteger();
@@ -1503,12 +1503,28 @@ void VM::run()
                     text = msgMessage(msg_file_num, msg_num);
                 }
                 auto iq = popDataInteger();
+                auto game = &Game::getInstance();
+                if (iq >= 0)
+                {
+                    if (game->player()->stat(game->player()->STATS_INTELLIGENCE) >= iq)
+                    {
+                        auto dialog = game->dialog();
+                        dialog->reactions()->push_back(reaction);
+                        dialog->functions()->push_back(function);
+                        dialog->addAnswer(*text);
+                    }
+                }
+                if (iq < 0)
+                {
+                    if (game->player()->stat(game->player()->STATS_INTELLIGENCE) <= abs(iq))
+                    {
+                        auto dialog = game->dialog();
+                        dialog->reactions()->push_back(reaction);
+                        dialog->functions()->push_back(function);
+                        dialog->addAnswer(*text);
+                    }
+                }
 
-                // @todo Test iq
-                auto dialog = Game::getInstance().dialog();
-                dialog->reactions()->push_back(reaction);
-                dialog->functions()->push_back(function);
-                dialog->addAnswer(*text);
                 break;
             }
             case 0x8123:
