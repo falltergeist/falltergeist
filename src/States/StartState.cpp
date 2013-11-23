@@ -20,6 +20,7 @@
 // C++ standard includes
 #include <vector>
 #include <string>
+#include <ctime>
 
 // Falltergeist includes
 #include "../Engine/Game.h"
