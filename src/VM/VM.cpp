@@ -21,7 +21,6 @@
 #include <ctime>
 #include <sstream>
 
-
 // Falltergeist includes
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
@@ -70,6 +69,7 @@
 #include "../VM/Handlers/Opcode80CBHandler.h"
 #include "../VM/Handlers/Opcode80DEHandler.h"
 #include "../VM/Handlers/Opcode810AHandler.h"
+#include "../VM/Handlers/Opcode810DHandler.h"
 #include "../VM/Handlers/Opcode8119Handler.h"
 #include "../VM/Handlers/Opcode8127Handler.h"
 #include "../VM/Handlers/Opcode9001Handler.h"
@@ -203,6 +203,9 @@ void VM::run()
                 break;
             case 0x810A:
                 opcodeHandler = new Opcode810AHandler(this);
+                break;
+            case 0x810D:
+                opcodeHandler = new Opcode810DHandler(this);
                 break;
             case 0x8119:
                 opcodeHandler = new Opcode8119Handler(this);
@@ -1110,14 +1113,7 @@ void VM::run()
                 pushDataInteger(_metarule(p2, p1));
                 break;
             }
-            case 0x810d:
-            {
-                Logger::debug("SCRIPT") << "[810D] [=] void* obj_carrying_pid_obj(void* who, int pid)" << std::endl;
-                popDataInteger();
-                popDataPointer();
-                pushDataPointer(0);
-                break;
-            }
+            case 0x810d: break;
             case 0x810e:
             {
                 Logger::debug("SCRIPT") << "[810E] [=] void reg_anim_func(int p1, int p2)" << std::endl;
