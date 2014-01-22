@@ -41,6 +41,8 @@ set(SOURCES main.cpp
             src/Engine/Animation.h
             src/Engine/AnimationQueue.cpp
             src/Engine/AnimationQueue.h
+            src/Engine/AudioMixer.h
+            src/Engine/AudioMixer.cpp
             src/Engine/CrossPlatform.cpp
             src/Engine/CrossPlatform.h
             src/Engine/Event/Event.cpp

@@ -58,6 +58,7 @@ public:
     static libfalltergeist::LstFileType* lstFileType(std::string filename);
     static libfalltergeist::MapFileType* mapFileType(std::string filename);
     static libfalltergeist::MsgFileType* msgFileType(std::string filename);
+    static libfalltergeist::MveFileType* mveFileType(std::string filename);
     static libfalltergeist::ProFileType* proFileType(std::string filename);
     static libfalltergeist::ProFileType* proFileType(unsigned int PID);
     static libfalltergeist::RixFileType* rixFileType(std::string filename);

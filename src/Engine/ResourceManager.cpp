@@ -129,6 +129,7 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
             else if (extension == "lst") item = new libfalltergeist::LstFileType(stream);
             else if (extension == "map") item = new libfalltergeist::MapFileType(stream);
             else if (extension == "msg") item = new libfalltergeist::MsgFileType(stream);
+            else if (extension == "mve") item = new libfalltergeist::MveFileType(stream);
             else if (extension == "pal") item = new libfalltergeist::PalFileType(stream);
             else if (extension == "pro") item = new libfalltergeist::ProFileType(stream);
             else if (extension == "rix") item = new libfalltergeist::RixFileType(stream);
@@ -203,6 +204,11 @@ libfalltergeist::IntFileType* ResourceManager::intFileType(std::string filename)
 libfalltergeist::MsgFileType* ResourceManager::msgFileType(std::string filename)
 {
     return dynamic_cast<libfalltergeist::MsgFileType*>(datFileItem(filename));
+}
+
+libfalltergeist::MveFileType* ResourceManager::mveFileType(std::string filename)
+{
+    return dynamic_cast<libfalltergeist::MveFileType*>(datFileItem(filename));
 }
 
 libfalltergeist::BioFileType* ResourceManager::bioFileType(std::string filename)

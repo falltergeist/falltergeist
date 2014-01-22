@@ -29,6 +29,7 @@
 #include "src/VM/VM.h"
 #include "lib/libfalltergeist/libfalltergeist.h"
 
+#include "src/Engine/AudioMixer.h"
 // Third party includes
 
 using namespace Falltergeist;
@@ -39,6 +40,11 @@ int main(int argc, char *argv[])
     try
     {
         auto game = &Game::getInstance();
+        auto audio = new AudioMixer();
+        audio->init();
+        //libfalltergeist::MveFileType* mve = game->resourceManager()->mveFileType("art/cuts/intro.mve");
+        //mve->test();
+        //return 0;
 
         /*
         auto script = new VM("scripts/rnslvr.int");
