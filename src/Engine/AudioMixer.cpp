@@ -33,9 +33,10 @@ namespace Falltergeist
 
 AudioMixer::AudioMixer()
 {
+    _init();
 }
 
-void AudioMixer::init()
+void AudioMixer::_init()
 {
     std::string message = "[AUDIO] - SDL_Init - ";
     if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
@@ -54,13 +55,13 @@ void AudioMixer::init()
      desired->samples = 4096;
      desired->callback = &AudioMixer::callback;
      desired->userdata = this;
-     desired->channels = 1;
+     desired->channels = 0; // Mono
 
      if ( SDL_OpenAudio(desired, obtained) < 0 )
      {
          throw Exception("AudioMixer::init() - initialization error" + std::string(SDL_GetError()));
      }
-     SDL_PauseAudio(0) ;
+     //SDL_PauseAudio(0);
 }
 
 void AudioMixer::callback(void* userdata, Uint8* stream, int len)
@@ -71,6 +72,13 @@ void AudioMixer::callback(void* userdata, Uint8* stream, int len)
     int i = 0 ;
 
     unsigned int rnd = (rand() % 100) + 1;
+
+    if (rnd < 40)
+    {
+        for(i=0; i<len; i++) *stream++ = 0;
+        return;
+    }
+
 
     for(i=0; i<len; i++)
     {

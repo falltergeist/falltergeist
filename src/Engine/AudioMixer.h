@@ -32,8 +32,9 @@ namespace Falltergeist
 
 class AudioMixer
 {    
-public:    
-    void init();
+protected:
+    void _init();
+public:
     static void callback(void* userdata, Uint8* stream, int len);
     AudioMixer();
     ~AudioMixer();

@@ -120,6 +120,7 @@ libfalltergeist::DatFileItem * ResourceManager::datFileItem(std::string filename
             std::string extension = filename.substr(filename.length() - 3, 3);
             libfalltergeist::DatFileItem* item;
                  if (extension == "aaf") item = new libfalltergeist::AafFileType(stream);
+            else if (extension == "acm") item = new libfalltergeist::AcmFileType(stream);
             else if (extension == "bio") item = new libfalltergeist::BioFileType(stream);
             else if (extension == "fon") item = new libfalltergeist::FonFileType(stream);
             else if (extension == "frm") item = new libfalltergeist::FrmFileType(stream);
@@ -179,6 +180,11 @@ libfalltergeist::LstFileType* ResourceManager::lstFileType(std::string filename)
 libfalltergeist::AafFileType* ResourceManager::aafFileType(std::string filename)
 {
     return dynamic_cast<libfalltergeist::AafFileType*>(datFileItem(filename));
+}
+
+libfalltergeist::AcmFileType* ResourceManager::acmFileType(std::string filename)
+{
+    return dynamic_cast<libfalltergeist::AcmFileType*>(datFileItem(filename));
 }
 
 libfalltergeist::FonFileType* ResourceManager::fonFileType(std::string filename)

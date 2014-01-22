@@ -45,6 +45,7 @@ public:
     ResourceManager();
     ~ResourceManager();
     static libfalltergeist::AafFileType* aafFileType(std::string filename);
+    static libfalltergeist::AcmFileType* acmFileType(std::string filename);
     static libfalltergeist::BioFileType* bioFileType(std::string filename);
     static libfalltergeist::DatFileItem* datFileItem(std::string filename);
     static libfalltergeist::FrmFileType* frmFileType(std::string filename);

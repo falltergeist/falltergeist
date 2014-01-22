@@ -21,6 +21,7 @@
 #include <sstream>
 
 // Falltergeist includes
+#include "../Engine/AudioMixer.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Event/Event.h"
 #include "../Engine/Exception.h"
@@ -58,6 +59,7 @@ void Game::_initialize()
 
     _resourceManager = new ResourceManager();
     _screen = new Screen(640, 480, 32);
+    _mixer = new AudioMixer();
     _mouse = new Mouse();
     _fpsCounter = new FpsCounter();
 }

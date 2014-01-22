@@ -40,6 +40,7 @@ class FpsCounter;
 class Mouse;
 class Location;
 class CritterDialogState;
+class AudioMixer;
 
 class Game
 {
@@ -52,6 +53,7 @@ protected:
     GameDudeObject* _player = 0;
     Screen* _screen = 0;
     Mouse* _mouse = 0;
+    AudioMixer* _mixer = 0;
     Location* _location = 0;
     CritterDialogState* _dialog = 0;
     FpsCounter * _fpsCounter = 0;

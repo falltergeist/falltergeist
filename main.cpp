@@ -40,10 +40,13 @@ int main(int argc, char *argv[])
     try
     {
         auto game = &Game::getInstance();
-        auto audio = new AudioMixer();
-        audio->init();
+
         //libfalltergeist::MveFileType* mve = game->resourceManager()->mveFileType("art/cuts/intro.mve");
         //mve->test();
+        //return 0;
+
+        //libfalltergeist::AcmFileType* acm = game->resourceManager()->acmFileType("sound/sfx/dogbark.acm");
+        //acm->test();
         //return 0;
 
         /*
