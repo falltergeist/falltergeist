@@ -81,4 +81,9 @@ void Texture::setPixel(unsigned int x, unsigned int y, unsigned int color)
     _data[(y*_width) + x] = color;
 }
 
+void Texture::loadFromRGBA(unsigned int* data)
+{
+    for (unsigned int i = 0; i != _width*_height; ++i) _data[i] = data[i];
+}
+
 }

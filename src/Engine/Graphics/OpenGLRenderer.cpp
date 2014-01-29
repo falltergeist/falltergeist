@@ -24,6 +24,7 @@
 #include "../../Engine/Graphics/OpenGLRenderer.h"
 #include "../../Engine/CrossPlatform.h"
 #include "../../Engine/Exception.h"
+#include "../../Engine/ResourceManager.h"
 
 // Third party includes
 #include "SDL.h"
@@ -80,12 +81,10 @@ void OpenGLRenderer::init()
 
     glTranslatef(0.375, 0.375, 0);
 
-    _texture = new Texture(128, 128);
 
-    _texture->data()[0] = 0x0000FF77;
-    _texture->data()[1] = 0x00FF00FF;
-    _texture->setPixel(64, 0, 0x0000FFFF);
-    _texture->data()[65] = 0x0000FF33;
+    auto rix = ResourceManager::rixFileType("art/splash/splash0.rix");
+    _texture = new Texture(640, 480);
+    _texture->loadFromRGBA(rix->rgba());
 
     //_texture->setPixel(34, 32, 0xFF00FF77);
     //_texture->setPixel(32, 32, 0xFF00FF77);
@@ -106,11 +105,11 @@ void OpenGLRenderer::beginFrame()
          glTexCoord2d(0.0,0.0);
          glVertex2f(0, 0);
          glTexCoord2d(1.0,0.0);
-         glVertex2f(_width, 0);
+         glVertex2f(_texture->width(), 0);
          glTexCoord2d(1.0,1.0);
-         glVertex2f(_width, _height);
+         glVertex2f(_texture->width(), _texture->height());
          glTexCoord2d(0.0,1.0);
-         glVertex2f(0, _height);
+         glVertex2f(0, _texture->height());
     glEnd();
 }
 

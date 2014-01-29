@@ -51,6 +51,7 @@ public:
     unsigned int pixel(unsigned int x, unsigned int y);
     void setPixel(unsigned int x, unsigned int y, unsigned int color);
 
+    void loadFromRGBA(unsigned int* data);
 
 };
 
