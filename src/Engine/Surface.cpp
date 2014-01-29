@@ -34,7 +34,7 @@ AnimatedPalette* Surface::animatedPalette = new AnimatedPalette();
 Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y)
 {
     //                                                                   red         green       blue        alpha
-    _sdl_surface = SDL_CreateRGBSurface(SDL_SRCALPHA, width, height, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
+    _sdl_surface = SDL_CreateRGBSurface(SDL_SRCALPHA, width, height, 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000);
     if (sdl_surface() == 0) throw Exception(SDL_GetError());
     clear();
 }
@@ -46,7 +46,7 @@ Surface::Surface(libfalltergeist::FrmFileType* frm, unsigned int direction, unsi
     int width = frm->directions()->at(direction)->frames()->at(frame)->width();
     int height = frm->directions()->at(direction)->frames()->at(frame)->height();
     //                                                                   red         green       blue        alpha
-    _sdl_surface = SDL_CreateRGBSurface(SDL_SRCALPHA, width, height, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
+    _sdl_surface = SDL_CreateRGBSurface(SDL_SRCALPHA, width, height, 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
     if (sdl_surface() == 0) throw Exception(SDL_GetError());
     clear();
 
@@ -84,7 +84,7 @@ Surface::Surface(libfalltergeist::FrmFileType* frm, unsigned int direction, unsi
 Surface::Surface(libfalltergeist::RixFileType* rix)
 {
     //                                                                                 red         green       blue        alpha
-    _sdl_surface = SDL_CreateRGBSurface(SDL_SRCALPHA, rix->width(), rix->height(), 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
+    _sdl_surface = SDL_CreateRGBSurface(SDL_SRCALPHA, rix->width(), rix->height(), 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
     if (sdl_surface() == 0) throw Exception(SDL_GetError());
     clear();
     

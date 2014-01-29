@@ -41,6 +41,7 @@ class Mouse;
 class Location;
 class CritterDialogState;
 class AudioMixer;
+class Renderer;
 
 class Game
 {
@@ -51,6 +52,7 @@ protected:
     std::vector<State*> _states;
     std::vector<State*> _deletedStates;
     GameDudeObject* _player = 0;
+    Renderer* _renderer = 0;
     Screen* _screen = 0;
     Mouse* _mouse = 0;
     AudioMixer* _mixer = 0;

@@ -36,6 +36,7 @@
 #include "../UI/FpsCounter.h"
 #include "../UI/TextArea.h"
 #include "../Engine/AnimatedPalette.h"
+#include "../Engine/Graphics/OpenGLRenderer.h"
 
 // Third patry includes
 
@@ -57,9 +58,15 @@ void Game::_initialize()
     debug("[GAME] - " + CrossPlatform::getVersion(), DEBUG_INFO);
     debug("[GAME] - Opensource Fallout 2 game engine", DEBUG_INFO);
 
+    std::string caption = CrossPlatform::getVersion();
+    SDL_WM_SetCaption(caption.c_str(), 0);
+    putenv(strdup("SDL_VIDEO_CENTERED=1"));
+
     _resourceManager = new ResourceManager();
-    _screen = new Screen(640, 480, 32);
-    _mixer = new AudioMixer();
+    _renderer = new OpenGLRenderer(640, 480);
+    _renderer->init();
+    //_screen = new Screen(640, 480, 32);
+    //_mixer = new AudioMixer();
     _mouse = new Mouse();
     _fpsCounter = new FpsCounter();
 }
@@ -199,6 +206,7 @@ void Game::run()
         Surface::animatedPalette->think();
         
         // render all states that is over the last fullscreen state
+        /**
         _screen->clear();
         
         auto it = _states.end();
@@ -216,6 +224,10 @@ void Game::run()
         _fpsCounter->blit(_screen->surface());
         _mouse->blit(_screen->surface());
         _screen->flip();
+        */
+
+        _renderer->beginFrame();
+        _renderer->endFrame();
         SDL_Delay(1);
     }
 

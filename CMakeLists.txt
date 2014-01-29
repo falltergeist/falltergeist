@@ -34,6 +34,12 @@ if(NOT SDL_FOUND)
 endif(NOT SDL_FOUND)
 include_directories(${SDL_INCLUDE_DIR})
 
+find_package(OpenGL REQUIRED)
+if(NOT OPENGL_FOUND)
+          message(FATAL_ERROR "OpenGL library not found")
+endif(NOT OPENGL_FOUND)
+include_directories(${OPENGL_INCLUDE_DIR})
+
 set(SOURCES main.cpp
             src/Engine/AnimatedPalette.cpp
             src/Engine/AnimatedPalette.h
@@ -63,6 +69,12 @@ set(SOURCES main.cpp
             src/Engine/Font.h
             src/Engine/Game.cpp
             src/Engine/Game.h
+            src/Engine/Graphics/OpenGLRenderer.cpp
+            src/Engine/Graphics/OpenGLRenderer.h
+            src/Engine/Graphics/Renderer.cpp
+            src/Engine/Graphics/Renderer.h
+            src/Engine/Graphics/Texture.cpp
+            src/Engine/Graphics/Texture.h
             src/Engine/IniFile.cpp
             src/Engine/IniFile.h
             src/Engine/InteractiveSurface.cpp
@@ -79,12 +91,8 @@ set(SOURCES main.cpp
             src/Engine/Mouse.h
             src/Engine/ResourceManager.cpp
             src/Engine/ResourceManager.h
-            src/Engine/Renderer.cpp
-            src/Engine/Renderer.h
             src/Engine/Screen.cpp
             src/Engine/Screen.h
-            src/Engine/SdlRenderer.cpp
-            src/Engine/SdlRenderer.h
             src/Engine/State.cpp
             src/Engine/State.h
             src/Engine/Surface.cpp
@@ -187,5 +195,5 @@ set(SOURCES main.cpp
 add_definitions (-std=c++11 -Wall)
 set(CMAKE_BUILD_TYPE Debug)
 add_executable(falltergeist ${SOURCES})
-target_link_libraries(falltergeist ${SDL_LIBRARY} ${LIBFALLTERGEIST_LIBRARY})
+target_link_libraries(falltergeist ${SDL_LIBRARY} ${OPENGL_LIBRARIES} ${LIBFALLTERGEIST_LIBRARY})
 
