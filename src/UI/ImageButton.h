@@ -21,24 +21,29 @@
 #define FALLTERGEIST_IMAGEBUTTON_H
 
 // C++ standard includes
-#include <string>
+#include <vector>
 
 // Falltergeist includes
-#include "../Engine/InteractiveSurface.h"
+#include "../Engine/Event/Event.h"
+#include "../Engine/Event/MouseEvent.h"
+#include "../Engine/UI.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class ImageButton : public InteractiveSurface
+class ImageButton : public EventEmitter, public EventReciever, public UI
 {
 protected:
-    Surface* _releasedSurface = 0;
-    Surface* _pressedSurface = 0;
+    unsigned int _state = 1;
+    unsigned int _states = 2;
+    bool _checkboxMode = false; // remember new state after click
     bool _pressed = false;
-    bool _switchMode = false;
-    void _onLeftButtonClick(MouseEvent* event);
+
+    std::vector<Texture*> _textures;
+    void _onLeftButtonDown(MouseEvent* event);
+    void _onLeftButtonUp(MouseEvent* event);
 public:
     enum ButtonType {
         TYPE_SMALL_RED_CIRCLE = 1,
@@ -50,17 +55,11 @@ public:
         TYPE_RIGHT_ARROW,
         TYPE_CHECKBOX
     };
-    ImageButton(std::string releasedImage = 0, std::string pressedImage = 0, int x = 0, int y = 0);
     ImageButton(unsigned int type, int x = 0, int y = 0);
     ~ImageButton();
-    virtual SDL_Surface* sdl_surface();
-    bool pressed();
-    void setPressed(bool mode);
-    bool switchMode();
-    void setSwitchMode(bool mode);
-    void setPressedImage(std::string image);
-    void setReleasedImage(std::string image);
 
+    void setState(unsigned int value);
+    virtual Texture* texture();
 };
 
 }

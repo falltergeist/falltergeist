@@ -250,6 +250,7 @@ void SettingsMenuState::init()
     auto slider7 = new Slider(384, 196 + 51*4);
     auto slider8 = new Slider(384, 196 + 51*5);
 
+    /*
     add(background);
     add({ title1, title2, title3, title4, title5, title6,
           title7, title8, title9, title10, title11, title12, title13,
@@ -268,6 +269,7 @@ void SettingsMenuState::init()
          switch6, switch7, switch8, switch9, switch10, switch11
     });
     add({slider1, slider2, slider3, slider4, slider5, slider6, slider7, slider8});
+    */
 }
 
 void SettingsMenuState::think()

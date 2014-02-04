@@ -54,7 +54,6 @@ void MainMenuState::init()
     // Background image
     auto background = new Image("art/intrface/mainmenu.frm");
 
-    /*
     // "Into" button
     auto introButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19);
 
@@ -76,6 +75,7 @@ void MainMenuState::init()
     auto exitButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*5);
     exitButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MainMenuState::onExitButtonClick);
 
+    /*
     auto msg = _game->resourceManager()->msgFileType("text/english/game/misc.msg");
 
     // "Intro" label
@@ -106,14 +106,15 @@ void MainMenuState::init()
 
     add(background);
 
-    /*
     // buttons
     add(introButton);
+
     add(newGameButton);
     add(loadGameButton);
     add(settingsButton);
     add(creditsButton);
     add(exitButton);
+    /*
     // text areas
     add(introButtonLabel);
     add(newGameButtonLabel);

@@ -40,14 +40,14 @@ public:
     UI(int x = 0, int y = 0);
     virtual ~UI();
 
-    int x();
-    void setX(int value);
+    virtual int x();
+    virtual void setX(int value);
 
-    int y();
-    void setY(int value);
+    virtual int y();
+    virtual void setY(int value);
 
-    Texture* texture();
-    void setTexture(Texture* texture);
+    virtual Texture* texture();
+    virtual void setTexture(Texture* texture);
 };
 
 }

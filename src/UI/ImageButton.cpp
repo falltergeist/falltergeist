@@ -18,137 +18,80 @@
  */
 
 // C++ standard includes
+#include <string>
+#include <iostream>
 
 // Falltergeist includes
 #include "../UI/ImageButton.h"
 #include "../Engine/ResourceManager.h"
+#include "../Engine/Exception.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-ImageButton::ImageButton(std::string releasedImage, std::string pressedImage, int x, int y) : InteractiveSurface(0, 0, x, y)
+ImageButton::ImageButton(unsigned int type, int x, int y) : EventEmitter(), EventReciever(), UI(x, y)
 {
-    addEventHandler("leftmouseclick", this, (EventRecieverMethod) &ImageButton::_onLeftButtonClick);
-    setReleasedImage(releasedImage);
-    setPressedImage(pressedImage);
-}
-
-ImageButton::ImageButton(unsigned int type, int x, int y) : InteractiveSurface(0, 0, x, y)
-{
-    addEventHandler("leftmouseclick", this, (EventRecieverMethod) &ImageButton::_onLeftButtonClick);
-    std::string pressedImage, releasedImage;
     switch (type)
     {
         case TYPE_SMALL_RED_CIRCLE:
-            pressedImage  = "art/intrface/lilreddn.frm";
-            releasedImage = "art/intrface/lilredup.frm";
+            _textures.push_back(ResourceManager::texture("art/intrface/lilredup.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/lilreddn.frm"));
             break;
         case TYPE_BIG_RED_CIRCLE:
-            pressedImage  = "art/intrface/menudown.frm";
-            releasedImage = "art/intrface/menuup.frm";
+            _textures.push_back(ResourceManager::texture("art/intrface/menuup.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/menudown.frm"));
             break;
         case TYPE_SKILL_TOGGLE:
-            pressedImage  = "art/intrface/tgsklon.frm";
-            releasedImage = "art/intrface/tgskloff.frm";
+            _textures.push_back(ResourceManager::texture("art/intrface/tgskloff.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/tgsklon.frm"));
             break;
         case TYPE_PLUS:
-            pressedImage  = "art/intrface/splson.frm";
-            releasedImage = "art/intrface/splsoff.frm";
+            _textures.push_back(ResourceManager::texture("art/intrface/splsoff.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/splson.frm"));
             break;
         case TYPE_MINUS:
-            pressedImage  = "art/intrface/snegon.frm";
-            releasedImage = "art/intrface/snegoff.frm";
+            _textures.push_back(ResourceManager::texture("art/intrface/snegoff.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/snegon.frm"));
             break;
         case TYPE_LEFT_ARROW:
-            pressedImage  = "art/intrface/sld.frm";
-            releasedImage = "art/intrface/slu.frm";
+            _textures.push_back(ResourceManager::texture("art/intrface/slu.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/sld.frm"));
             break;
         case TYPE_RIGHT_ARROW:
-            pressedImage  = "art/intrface/srd.frm";
-            releasedImage = "art/intrface/sru.frm";
+            _textures.push_back(ResourceManager::texture("art/intrface/sru.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/srd.frm"));
             break;
         case TYPE_CHECKBOX:
-            pressedImage  = "art/intrface/prfxin.frm";
-            releasedImage = "art/intrface/prfxout.frm";
-            setSwitchMode(true);
+            _textures.push_back(ResourceManager::texture("art/intrface/prfxout.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/prfxin.frm"));
+            _checkboxMode = true;
             break;
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
-    }
-    setReleasedImage(releasedImage);
-    setPressedImage(pressedImage);
+    }    
+    addEventHandler("leftbuttondown", this, (EventRecieverMethod) &ImageButton::_onLeftButtonDown);
+    addEventHandler("leftbuttonup", this, (EventRecieverMethod) &ImageButton::_onLeftButtonUp);
 }
 
 ImageButton::~ImageButton()
 {
-    delete _releasedSurface;
-    delete _pressedSurface;
 }
 
-void ImageButton::setSwitchMode(bool mode)
+Texture* ImageButton::texture()
 {
-    _switchMode = true;
+    return _textures.at(_state - 1);
 }
 
-bool ImageButton::switchMode()
+void ImageButton::_onLeftButtonDown(MouseEvent* event)
 {
-    return _switchMode;
+
 }
 
-void ImageButton::setPressed(bool mode)
+void ImageButton::_onLeftButtonUp(MouseEvent* event)
 {
-    _pressed = mode;
+
 }
-
-bool ImageButton::pressed()
-{
-    if (_switchMode)
-    {
-        return _pressed;
-    }
-    if (_hovered && _leftButtonPressed) return true;        
-    return false;
-}
-
-void ImageButton::setPressedImage(std::string image)
-{
-    delete _pressedSurface;
-    _pressedSurface = new Surface(ResourceManager::surface(image));
-    _pressedSurface->setXOffset(0);
-    _pressedSurface->setYOffset(0);
-}
-
-void ImageButton::setReleasedImage(std::string image)
-{
-    delete _releasedSurface;
-    _releasedSurface = new Surface(ResourceManager::surface(image));
-    _releasedSurface->setXOffset(0);
-    _releasedSurface->setYOffset(0);
-}
-
-SDL_Surface* ImageButton::sdl_surface()
-{
-    if (pressed()) return _pressedSurface->sdl_surface();
-
-    return _releasedSurface->sdl_surface();
-}
-
-void ImageButton::_onLeftButtonClick(MouseEvent* event)
-{
-    if (switchMode())
-    {
-        if (pressed())
-        {
-            setPressed(false);
-        }
-        else
-        {
-            setPressed(true);
-        }
-    }
-}
-
 
 }

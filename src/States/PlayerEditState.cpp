@@ -198,13 +198,13 @@ PlayerEditState::PlayerEditState() : State()
 
     }
     // Name change button
-    _addButton("name",  new ImageButton("art/intrface/nameoff.frm", "art/intrface/nameon.frm", 13, 0));
+    //_addButton("name",  new ImageButton("art/intrface/nameoff.frm", "art/intrface/nameon.frm", 13, 0));
 
     // Age change button
-    _addButton("age",  new ImageButton("art/intrface/ageoff.frm", "art/intrface/ageon.frm", 156, 0));
+    //_addButton("age",  new ImageButton("art/intrface/ageoff.frm", "art/intrface/ageon.frm", 156, 0));
 
     //Gender change button
-    _addButton("gender",  new ImageButton("art/intrface/sexoff.frm", "art/intrface/sexon.frm", 236, 0));
+    //_addButton("gender",  new ImageButton("art/intrface/sexoff.frm", "art/intrface/sexon.frm", 236, 0));
 
     add(background);
 
