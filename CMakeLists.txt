@@ -41,6 +41,8 @@ endif(NOT OPENGL_FOUND)
 include_directories(${OPENGL_INCLUDE_DIR})
 
 set(SOURCES main.cpp
+            src/Engine/ActiveUI.cpp
+            src/Engine/ActiveUI.h
             src/Engine/AnimatedPalette.cpp
             src/Engine/AnimatedPalette.h
             src/Engine/Animation.cpp

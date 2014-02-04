@@ -36,6 +36,10 @@ protected:
     int _x = 0;
     int _y = 0;
     Texture* _texture = 0;
+    bool _leftButtonPressed = false;
+    bool _rightButtonPressed = false;
+    bool _drag = false;
+    bool _hovered = false;
 public:
     UI(int x = 0, int y = 0);
     virtual ~UI();

@@ -31,7 +31,7 @@
 namespace Falltergeist
 {
 
-ImageButton::ImageButton(unsigned int type, int x, int y) : EventEmitter(), EventReciever(), UI(x, y)
+ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
 {
     switch (type)
     {
@@ -71,8 +71,7 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : EventEmitter(), Even
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
     }    
-    addEventHandler("leftbuttondown", this, (EventRecieverMethod) &ImageButton::_onLeftButtonDown);
-    addEventHandler("leftbuttonup", this, (EventRecieverMethod) &ImageButton::_onLeftButtonUp);
+    addEventHandler("mouseleftclick", this, (EventRecieverMethod) &ImageButton::_onLeftButtonClick);
 }
 
 ImageButton::~ImageButton()
@@ -81,17 +80,19 @@ ImageButton::~ImageButton()
 
 Texture* ImageButton::texture()
 {
-    return _textures.at(_state - 1);
+    if (_checked) return _textures.at(1);
+
+    if (_hovered && _leftButtonPressed) return _textures.at(1);
+
+    return _textures.at(0);
 }
 
-void ImageButton::_onLeftButtonDown(MouseEvent* event)
+void ImageButton::_onLeftButtonClick(MouseEvent* event)
 {
-
-}
-
-void ImageButton::_onLeftButtonUp(MouseEvent* event)
-{
-
+    if (_checkboxMode)
+    {
+        _checked = _checked ? false : true;
+    }
 }
 
 }

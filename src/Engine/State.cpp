@@ -24,7 +24,7 @@
 #include "../Engine/Surface.h"
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
-#include "../Engine/InteractiveSurface.h"
+#include "../Engine/ActiveUI.h"
 #include "../Engine/UI.h"
 
 // Third party includes
@@ -102,6 +102,12 @@ void State::add(UI* ui)
     _ui.push_back(ui);
 }
 
+void State::add(ActiveUI* activeUi)
+{
+    _activeUi.push_back(activeUi);
+    add((UI*)activeUi);
+}
+
 void State::add(std::vector<Surface*> surfaces)
 {
     for (auto& surface : surfaces) _surfaces.push_back(surface);
@@ -109,13 +115,9 @@ void State::add(std::vector<Surface*> surfaces)
 
 void State::handle(Event* event)
 {
-    for (std::vector<Surface*>::reverse_iterator i = _surfaces.rbegin(); i < _surfaces.rend(); i++)
+    for (std::vector<ActiveUI*>::reverse_iterator i = _activeUi.rbegin(); i < _activeUi.rend(); i++)
     {
-        auto surface = dynamic_cast<InteractiveSurface *>(*i);
-        if (surface)
-        {
-            surface->handle(event);
-        }
+        (*i)->handle(event);
     }
 }
 

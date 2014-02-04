@@ -9,12 +9,14 @@
 
 namespace Falltergeist
 {
+class Event;
 
 class EventReciever
 {
 public:
-     EventReciever();
+    EventReciever();
     virtual ~EventReciever();
+    virtual void handle(Event* event);
 };
 
 }

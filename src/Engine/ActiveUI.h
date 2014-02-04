@@ -17,14 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_STATE_H
-#define FALLTERGEIST_STATE_H
+#ifndef FALLTERGEIST_ACTIVEUI_H
+#define FALLTERGEIST_ACTIVEUI_H
 
 // C++ standard includes
-#include <vector>
 
 // Falltergeist includes
-#include "../Engine/Event/EventReciever.h"
+#include "../Engine/Event/Event.h"
+#include "../Engine/UI.h"
 #include "../Engine/Event/MouseEvent.h"
 #include "../Engine/Event/KeyboardEvent.h"
 
@@ -32,42 +32,13 @@
 
 namespace Falltergeist
 {
-class Game;
-class Surface;
-class Event;
-class UI;
-class ActiveUI;
 
-class State : public EventReciever
+class ActiveUI : public EventEmitter, public EventReciever, public UI
 {
-protected:
-    Game* _game;
-    std::vector<Surface*> _surfaces;
-    std::vector<UI*> _ui;
-    std::vector<ActiveUI*> _activeUi;
-
-    bool _fullscreen = true;
-    bool _initialized = false;
-    bool _scrollable = false;
 public:
-    State();
-    virtual ~State();
-
-    void add(Surface* surface);
-    void add(UI* ui);
-    void add(ActiveUI* ui);
-    void add(std::vector<Surface*> surfaces);
-    virtual void blit();
-    bool fullscreen();
-    void setFullscreen(bool value);
-    bool initialized();
-    virtual void init();
-    virtual void think();
+    ActiveUI(int x = 0, int y = 0);
     virtual void handle(Event* event);
-    bool scrollable();
-    void setScrollable(bool value);
-    std::vector<UI*>* ui();
 };
 
 }
-#endif // FALLTERGEIST_STATE_H
+#endif // FALLTERGEIST_ACTIVEUI_H

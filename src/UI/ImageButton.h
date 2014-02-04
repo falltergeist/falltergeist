@@ -24,26 +24,21 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Engine/Event/Event.h"
-#include "../Engine/Event/MouseEvent.h"
-#include "../Engine/UI.h"
+#include "../Engine/ActiveUI.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class ImageButton : public EventEmitter, public EventReciever, public UI
+class ImageButton : public ActiveUI
 {
 protected:
-    unsigned int _state = 1;
-    unsigned int _states = 2;
     bool _checkboxMode = false; // remember new state after click
-    bool _pressed = false;
+    bool _checked = false;
 
     std::vector<Texture*> _textures;
-    void _onLeftButtonDown(MouseEvent* event);
-    void _onLeftButtonUp(MouseEvent* event);
+    void _onLeftButtonClick(MouseEvent* event);
 public:
     enum ButtonType {
         TYPE_SMALL_RED_CIRCLE = 1,

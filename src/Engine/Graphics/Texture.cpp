@@ -73,12 +73,16 @@ unsigned int* Texture::data()
 
 unsigned int Texture::pixel(unsigned int x, unsigned int y)
 {
-    return _data[y*_width + x];
+    unsigned int index = y*_width + x;
+    if (index < 0 || index >= _width*_height) return 0;
+    return _data[index];
 }
 
 void Texture::setPixel(unsigned int x, unsigned int y, unsigned int color)
 {
-    _data[(y*_width) + x] = color;
+    unsigned int index = y*_width + x;
+    if (index < 0 || index >= _width*_height) return;
+    _data[index] = color;
 }
 
 void Texture::loadFromRGBA(unsigned int* data)
