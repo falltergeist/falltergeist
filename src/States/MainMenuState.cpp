@@ -24,7 +24,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Animation.h"
-#include "../Engine/Mouse.h"
+#include "../Engine/Input/Mouse.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
 #include "../States/MainMenuState.h"

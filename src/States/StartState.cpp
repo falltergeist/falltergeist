@@ -24,7 +24,7 @@
 
 // Falltergeist includes
 #include "../Engine/Game.h"
-#include "../Engine/Mouse.h"
+#include "../Engine/Input/Mouse.h"
 #include "../Engine/ResourceManager.h"
 #include "../States/LocationState.h"
 #include "../States/MainMenuState.h"

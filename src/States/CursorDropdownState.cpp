@@ -25,7 +25,7 @@
 #include "../States/CursorDropdownState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Location.h"
-#include "../Engine/Mouse.h"
+#include "../Engine/Input/Mouse.h"
 #include "../Engine/Surface.h"
 #include "../UI/HiddenMask.h"
 

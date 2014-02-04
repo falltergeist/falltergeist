@@ -32,7 +32,7 @@
 #include "../Game/GameObject.h"
 #include "../States/LocationState.h"
 #include "../States/CursorDropdownState.h"
-#include "../Engine/Mouse.h"
+#include "../Engine/Input/Mouse.h"
 #include "../UI/TextArea.h"
 
 // Third party includes

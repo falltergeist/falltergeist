@@ -75,6 +75,8 @@ set(SOURCES main.cpp
             src/Engine/Graphics/Renderer.h
             src/Engine/Graphics/Texture.cpp
             src/Engine/Graphics/Texture.h
+            src/Engine/Input/Mouse.cpp
+            src/Engine/Input/Mouse.h
             src/Engine/IniFile.cpp
             src/Engine/IniFile.h
             src/Engine/InteractiveSurface.cpp
@@ -87,8 +89,6 @@ set(SOURCES main.cpp
             src/Engine/LocationObject.h
             src/Engine/Map.cpp
             src/Engine/Map.h
-            src/Engine/Mouse.cpp
-            src/Engine/Mouse.h
             src/Engine/ResourceManager.cpp
             src/Engine/ResourceManager.h
             src/Engine/Screen.cpp
