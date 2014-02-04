@@ -25,6 +25,7 @@
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Animation.h"
 #include "../Engine/Input/Mouse.h"
+#include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
 #include "../States/MainMenuState.h"
@@ -51,12 +52,9 @@ void MainMenuState::init()
     //_game->mouse()->setType(Mouse::BIG_ARROW);
 
     // Background image
-    auto background = new Surface(_game->resourceManager()->surface("art/intrface/mainmenu.frm"));
-    background->setX(0);
-    background->setY(0);
-    background->setXOffset(0);
-    background->setYOffset(0);
+    auto background = new Image("art/intrface/mainmenu.frm");
 
+    /*
     // "Into" button
     auto introButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19);
 
@@ -104,7 +102,11 @@ void MainMenuState::init()
     auto exitButtonLabel = new TextArea(msg->message(14), 50, 20 + 41*5);
     exitButtonLabel->setColor(0xffb89c28)->setFont("font4.aaf")->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
+    */
+
     add(background);
+
+    /*
     // buttons
     add(introButton);
     add(newGameButton);
@@ -119,6 +121,7 @@ void MainMenuState::init()
     add(optionsButtonLabel);
     add(creditsButtonLabel);
     add(exitButtonLabel);
+    */
 }
 
 void MainMenuState::think()

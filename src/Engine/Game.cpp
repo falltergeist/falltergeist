@@ -37,6 +37,7 @@
 #include "../UI/TextArea.h"
 #include "../Engine/AnimatedPalette.h"
 #include "../Engine/Graphics/OpenGLRenderer.h"
+#include "../Engine/UI.h"
 
 // Third patry includes
 
@@ -317,6 +318,27 @@ CritterDialogState* Game::dialog()
 void Game::setDialog(CritterDialogState* value)
 {
     _dialog = value;
+}
+
+std::vector<UI*>* Game::ui()
+{
+    _ui.clear();
+
+    auto it = _states.end();
+    do
+    {
+        --it;
+    }
+    while(it != _states.begin() && !(*it)->fullscreen());
+
+    for (; it != _states.end(); ++it)
+    {
+        for (auto j = (*it)->ui()->begin(); j != (*it)->ui()->end(); ++j)
+        {
+            _ui.push_back(*j);
+        }
+    }
+    return &_ui;
 }
 
 }

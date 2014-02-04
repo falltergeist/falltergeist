@@ -35,12 +35,14 @@ namespace Falltergeist
 class Game;
 class Surface;
 class Event;
+class UI;
 
 class State : public EventReciever
 {
 protected:
     Game* _game;
     std::vector<Surface*> _surfaces;
+    std::vector<UI*> _ui;
     bool _fullscreen = true;
     bool _initialized = false;
     bool _scrollable = false;
@@ -49,6 +51,7 @@ public:
     virtual ~State();
 
     void add(Surface* surface);
+    void add(UI* ui);
     void add(std::vector<Surface*> surfaces);
     virtual void blit();
     bool fullscreen();
@@ -59,7 +62,7 @@ public:
     virtual void handle(Event* event);
     bool scrollable();
     void setScrollable(bool value);
-
+    std::vector<UI*>* ui();
 };
 
 }

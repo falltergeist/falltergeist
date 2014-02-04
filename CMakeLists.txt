@@ -99,6 +99,8 @@ set(SOURCES main.cpp
             src/Engine/Surface.h
             src/Engine/SurfaceSet.cpp
             src/Engine/SurfaceSet.h
+            src/Engine/UI.cpp
+            src/Engine/UI.h
             src/Game/GameDefines.h
             src/Game/GameDudeObject.cpp
             src/Game/GameDudeObject.h
@@ -170,6 +172,8 @@ set(SOURCES main.cpp
             src/UI/FpsCounter.h
             src/UI/HiddenMask.cpp
             src/UI/HiddenMask.h
+            src/UI/Image.cpp
+            src/UI/Image.h
             src/UI/ImageButton.cpp
             src/UI/ImageButton.h
             src/UI/MultistateImageButton.cpp

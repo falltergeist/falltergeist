@@ -42,6 +42,7 @@ class Location;
 class CritterDialogState;
 class AudioMixer;
 class Renderer;
+class UI;
 
 class Game
 {
@@ -64,6 +65,7 @@ protected:
     bool _initialized = false;
     void _initialize();
     void _initGVARS();
+    std::vector<UI*> _ui;
 private:
     Game() {}
     Game(Game const&);
@@ -81,7 +83,7 @@ public:
     void setState(State * state);
     void popState();
     void run();
-    void quit();
+    void quit();    
 
     void setPlayer(GameDudeObject* player);
     GameDudeObject* player();
@@ -92,6 +94,8 @@ public:
     CritterDialogState* dialog();
     void setGVAR(unsigned int number, int value);
     int GVAR(unsigned int number);
+
+    std::vector<UI*>* ui();
 };
 
 }

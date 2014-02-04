@@ -32,6 +32,7 @@
 #include "../States/SettingsMenuState.h"
 #include "../States/CritterDialogState.h"
 #include "../States/StartState.h"
+#include "../UI/Image.h"
 
 // Third party includes
 
@@ -53,7 +54,7 @@ void StartState::init()
     std::vector<std::string> splashes = {"splash0.rix", "splash1.rix", "splash2.rix", "splash3.rix", "splash4.rix", "splash5.rix", "splash6.rix"};
     
     srand(time(NULL)); // seed
-    Surface * splash = ResourceManager::surface("art/splash/" + splashes.at(rand() % splashes.size()));
+    auto splash = new Image("art/splash/" + splashes.at(rand() % splashes.size()));
     add(splash);
     _splashTicks = SDL_GetTicks();
 

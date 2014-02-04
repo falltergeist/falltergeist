@@ -27,6 +27,7 @@
 #include "../../Engine/ResourceManager.h"
 #include "../../Engine/Game.h"
 #include "../../Engine/Input/Mouse.h"
+#include "../../Engine/UI.h"
 
 // Third party includes
 #include "SDL.h"
@@ -83,14 +84,6 @@ void OpenGLRenderer::init()
 
     glTranslatef(0.375, 0.375, 0);
 
-
-    auto rix = ResourceManager::rixFileType("art/splash/splash0.rix");
-    _texture = new Texture(640, 480);
-    _texture->loadFromRGBA(rix->rgba());
-
-    registerTexture(_texture);
-    std::cout << "TextureId: " << _texture->id() << std::endl;
-
 }
 
 void OpenGLRenderer::beginFrame()
@@ -98,20 +91,12 @@ void OpenGLRenderer::beginFrame()
     Renderer::beginFrame();
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glBindTexture( GL_TEXTURE_2D, _texture->id() );
-
-    glBegin(GL_POLYGON);
-         glTexCoord2d(0.0,0.0);
-         glVertex2f(0, 0);
-         glTexCoord2d(1.0,0.0);
-         glVertex2f(_texture->width(), 0);
-         glTexCoord2d(1.0,1.0);
-         glVertex2f(_texture->width(), _texture->height());
-         glTexCoord2d(0.0,1.0);
-         glVertex2f(0, _texture->height());
-    glEnd();
-
     auto game = &Game::getInstance();
+
+    for (auto i = game->ui()->begin(); i != game->ui()->end(); ++i)
+    {
+        drawTexture((*i)->x(), (*i)->y(), (*i)->texture());
+    }
 
     // Render mouse
     if (game->mouse()->visible())

@@ -33,6 +33,7 @@
 namespace Falltergeist
 {
 class Surface;
+class Texture;
 
 class ResourceManager
 {
@@ -40,6 +41,7 @@ protected:
     static std::vector<libfalltergeist::DatFile*> _datFiles;
     static std::map<std::string, libfalltergeist::DatFileItem*> _datFilesItems;
     static std::map<std::string, Surface*> _surfaces;
+    static std::map<std::string, Texture*> _textures;
 
 public:
     ResourceManager();
@@ -65,6 +67,7 @@ public:
     static libfalltergeist::RixFileType* rixFileType(std::string filename);
     static Surface* surface(std::string filename, int x = 0, int y = 0, unsigned int direction = 0, unsigned int frame = 0);
     static Surface* surface(unsigned int FID, unsigned int direction = 0, unsigned int frame = 0);
+    static Texture* texture(std::string filename);
     static void extract(std::string path);
     static void unloadResources();
 };

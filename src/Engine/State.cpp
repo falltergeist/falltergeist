@@ -25,6 +25,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
 #include "../Engine/InteractiveSurface.h"
+#include "../Engine/UI.h"
 
 // Third party includes
 
@@ -96,6 +97,11 @@ void State::add(Surface* surface)
     _surfaces.push_back(surface);
 }
 
+void State::add(UI* ui)
+{
+    _ui.push_back(ui);
+}
+
 void State::add(std::vector<Surface*> surfaces)
 {
     for (auto& surface : surfaces) _surfaces.push_back(surface);
@@ -112,5 +118,11 @@ void State::handle(Event* event)
         }
     }
 }
+
+std::vector<UI*>* State::ui()
+{
+    return &_ui;
+}
+
 
 }

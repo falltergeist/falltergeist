@@ -23,6 +23,7 @@
 // Falltergeist includes
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
+#include "../Engine/Graphics/Texture.h"
 #include "../Engine/CrossPlatform.h"
 
 // Third party includes
@@ -33,6 +34,7 @@ namespace Falltergeist
 std::vector<libfalltergeist::DatFile*> ResourceManager::_datFiles;
 std::map<std::string, libfalltergeist::DatFileItem*> ResourceManager::_datFilesItems;
 std::map<std::string, Surface*> ResourceManager::_surfaces;
+std::map<std::string, Texture*> ResourceManager::_textures;
 
 ResourceManager::ResourceManager()
 {
@@ -276,6 +278,42 @@ Surface * ResourceManager::surface(std::string filename, int posX, int posY, uns
     _surfaces.insert(std::pair<std::string, Surface*>(filename, surface));
     return surface;
 }
+
+Texture* ResourceManager::texture(std::string filename)
+{
+    if (_textures.find(filename) != _textures.end())
+    {
+        return _textures.at(filename);
+    }
+
+    std::string ext = filename.substr(filename.length() - 4);
+
+    Texture* texture = 0;
+
+    if (ext == ".rix")
+    {
+        auto rix = rixFileType(filename);
+        if (!rix) return 0;
+        texture = new Texture(rix->width(), rix->height());
+        texture->loadFromRGBA(rix->rgba());
+    }
+    else if (ext == ".frm")
+    {
+        auto frm = frmFileType(filename);
+        if (!frm) return 0;
+        texture = new Texture(frm->width(), frm->height());
+        texture->loadFromRGBA(frm->rgba(palFileType("color.pal")));
+    }
+    else
+    {
+        throw Exception("ResourceManager::surface() - unknow image type:" + filename);
+    }
+
+    _textures.insert(std::pair<std::string, Texture*>(filename, texture));
+    return texture;
+}
+
+
 
 libfalltergeist::ProFileType* ResourceManager::proFileType(unsigned int PID)
 {
