@@ -73,15 +73,15 @@ unsigned int* Texture::data()
 
 unsigned int Texture::pixel(unsigned int x, unsigned int y)
 {
-    unsigned int index = y*_width + x;
-    if (index < 0 || index >= _width*_height) return 0;
+    if (x < 0 || x >= _width || y < 0 || y >= _height) return 0;
+    unsigned int index = (y*_width) + x;
     return _data[index];
 }
 
 void Texture::setPixel(unsigned int x, unsigned int y, unsigned int color)
 {
-    unsigned int index = y*_width + x;
-    if (index < 0 || index >= _width*_height) return;
+    if (x < 0 || x >= _width || y < 0 || y >= _height) return;
+    unsigned int index = (y*_width) + x;
     _data[index] = color;
 }
 

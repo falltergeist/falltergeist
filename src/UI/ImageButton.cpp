@@ -80,7 +80,7 @@ ImageButton::~ImageButton()
 
 Texture* ImageButton::texture()
 {
-    if (_checked) return _textures.at(1);
+    if (_checkboxMode && _checked) return _textures.at(1);
 
     if (_hovered && _leftButtonPressed) return _textures.at(1);
 
