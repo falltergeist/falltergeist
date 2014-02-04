@@ -30,7 +30,7 @@
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Location.h"
 #include "../Engine/Screen.h"
-#include "../Engine/Mouse.h"
+#include "../Engine/Input/Mouse.h"
 #include "../Engine/State.h"
 #include "../States/LocationState.h"
 #include "../UI/FpsCounter.h"

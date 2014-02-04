@@ -26,7 +26,7 @@
 #include "../../Engine/Exception.h"
 #include "../../Engine/ResourceManager.h"
 #include "../../Engine/Game.h"
-#include "../../Engine/Mouse.h"
+#include "../../Engine/Input/Mouse.h"
 
 // Third party includes
 #include "SDL.h"
