@@ -19,269 +19,77 @@
  */
 
 // C++ standard includes
-#include <cmath>
-#include <iostream>
 
 // Falltergeist includes
-#include "../Engine/Animation.h"
-#include "../Engine/Game.h"
-#include "../Engine/Location.h"
-#include "../Engine/LocationCamera.h"
 #include "../Engine/Mouse.h"
+#include "../Engine/Graphics/Texture.h"
 #include "../Engine/ResourceManager.h"
-#include "../Engine/State.h"
 
 // Third party includes
+#include "SDL.h"
 
 namespace Falltergeist
 {
 
-Mouse::Mouse() : Surface()
+Mouse::Mouse()
 {
     // Hide cursor
     SDL_ShowCursor(0);
-    setType(BIG_ARROW);
+
+    auto frm = ResourceManager::frmFileType("art/intrface/stdarrow.frm");
+    auto pal = ResourceManager::palFileType("color.pal");
+
+    _texture = new Texture(frm->width(), frm->height());
+    _texture->loadFromRGBA(frm->rgba(pal));
 }
 
 Mouse::~Mouse()
 {
-    delete _animation;
     // Show cursor
     SDL_ShowCursor(1);
+    delete _texture;
 }
 
 void Mouse::think()
 {
-    if (_animation) _animation->think();
-    SDL_GetMouseState(&_cursorX, &_cursorY);
-
-    auto game = &Game::getInstance();
-    auto location = game->location();
-
-    if (location && game->states()->back()->scrollable())
-    {
-        //check if cursor in the scrolling area
-        if (cursorX() < 5) // LEFT
-        {
-            if (cursorY() < 5) //  LEFT-UP
-            {
-                auto moved = location->scroll(true, false, true, false);
-                setType( moved ? Mouse::SCROLL_NW : Mouse::SCROLL_NW_X);
-            }
-            else if (cursorY() > 475) //LEFT-DOWN
-            {
-                auto moved = location->scroll(false, true, true, false);
-                setType(moved ? Mouse::SCROLL_SW : Mouse::SCROLL_SW_X);
-            }
-            else
-            {
-                auto moved = location->scroll(false, false, true, false);
-                setType(moved ? Mouse::SCROLL_W : Mouse::SCROLL_W_X);
-            }
-        }
-        else if (cursorX() > 635) // RIGHT
-        {
-            if (cursorY() < 5) //  RIGHT-UP
-            {
-                auto moved = location->scroll(true, false, false, true);
-                setType(moved ? Mouse::SCROLL_NE : Mouse::SCROLL_NE_X);
-            }
-            else if (cursorY() > 475) //RIGHT-DOWN
-            {
-                auto moved = location->scroll(false, true, false, true);
-                setType(moved ? Mouse::SCROLL_SE : Mouse::SCROLL_SE_X);
-            }
-            else
-            {
-                auto moved = location->scroll(false, false, false, true);
-                setType(moved ? Mouse::SCROLL_E : Mouse::SCROLL_E_X);
-            }
-        }
-        else if (cursorY() < 5) // UP
-        {
-            auto moved = location->scroll(true, false, false, false);
-            setType(moved ? Mouse::SCROLL_N : Mouse::SCROLL_N_X);
-        }
-        else if (cursorY() > 475) // DOWN
-        {
-            auto moved = location->scroll(false, true, false, false);
-            setType(moved ? Mouse::SCROLL_S : Mouse::SCROLL_S_X);
-        }
-        else if (_type != _lastType)
-        {
-            setType(_lastType);
-        }
-
-        switch (type())
-        {
-            case HEXAGON_RED:
-                auto location = Game::getInstance().location();
-                int x = location->camera()->x() + this->cursorX();
-                int y = location->camera()->y() + this->cursorY();
-                unsigned int hexagon = location->positionToHexagon(x, y);
-                setCursorX(location->hexagonToX(hexagon) - location->camera()->x());
-                setCursorY(location->hexagonToY(hexagon) - location->camera()->y());
-                break;
-        }
-    }
-}
-
-int Mouse::cursorX()
-{
-    return _cursorX;
-}
-
-int Mouse::cursorY()
-{
-    return _cursorY;
-}
-
-void Mouse::setCursorX(int x)
-{
-    _cursorX = x;
-}
-
-void Mouse::setCursorY(int y)
-{
-    _cursorY = y;    
+    SDL_GetMouseState(&_x, &_y);
 }
 
 int Mouse::x()
 {
-    return _x + _cursorX;
+    return _x;
 }
 
 int Mouse::y()
 {
-    return _y + _cursorY;
+    return _y;
 }
 
-int Mouse::type()
+void Mouse::setX(int x)
 {
-    return _type;
+    _x = x;
+    SDL_WarpMouse(_x, _y);
 }
 
-void Mouse::setType(int type)
+void Mouse::setY(int y)
 {
-    delete _animation; _animation = 0;
-    _type = type;
-    switch(_type)
-    {
-        case BIG_ARROW:
-            loadFromSurface(ResourceManager::surface("art/intrface/stdarrow.frm"));
-            setXOffset(0);
-            setYOffset(0);
-            _lastType = _type;
-            break;
-        case SCROLL_W:
-            loadFromSurface(ResourceManager::surface("art/intrface/scrwest.frm"));
-            setYOffset( - ceil(height()/2));
-            setXOffset(0);
-            break;
-        case SCROLL_W_X:
-            loadFromSurface(ResourceManager::surface("art/intrface/scrwx.frm"));
-            setYOffset( - ceil(height()/2));
-            setXOffset(0);
-            break;
-        case SCROLL_N:
-            loadFromSurface(ResourceManager::surface("art/intrface/scrnorth.frm"));
-            setXOffset( - ceil(width()/2));
-            setYOffset(0);
-            break;
-        case SCROLL_N_X:
-            loadFromSurface(ResourceManager::surface("art/intrface/scrnx.frm"));
-            setXOffset( - ceil(width()/2));
-            setYOffset(0);
-            break;
-        case SCROLL_S:
-            loadFromSurface(ResourceManager::surface("art/intrface/scrsouth.frm"));
-            setXOffset( - ceil(width()/2));
-            setYOffset( - height());
-            break;
-        case SCROLL_S_X:
-            loadFromSurface(ResourceManager::surface("art/intrface/scrsx.frm"));
-            setXOffset(- ceil(width()/2));
-            setYOffset(- height());
-            break;
-        case SCROLL_E:
-            loadFromSurface(ResourceManager::surface("art/intrface/screast.frm"));
-            setXOffset( - width());
-            setYOffset( - ceil(height()/2));
-            break;
-        case SCROLL_E_X:
-            loadFromSurface(ResourceManager::surface("art/intrface/screx.frm"));
-            setXOffset(- width());
-            setYOffset(- ceil(height()/2));
-            break;
-        case SCROLL_NW:
-            loadFromSurface(ResourceManager::surface("art/intrface/scrnwest.frm"));
-            setXOffset(0);
-            setYOffset(0);
-            break;
-        case SCROLL_NW_X:
-            loadFromSurface(ResourceManager::surface("art/intrface/scrnwx.frm"));
-            setXOffset(0);
-            setYOffset(0);
-            break;
-        case SCROLL_SW:
-            loadFromSurface(ResourceManager::surface("art/intrface/scrswest.frm"));
-            setXOffset(0);
-            setYOffset(- height());
-            break;
-        case SCROLL_SW_X:
-            loadFromSurface(ResourceManager::surface("art/intrface/scrswx.frm"));
-            setXOffset(0);
-            setYOffset(- height());
-            break;
-        case SCROLL_NE:
-            loadFromSurface(ResourceManager::surface("art/intrface/scrneast.frm"));
-            setXOffset(- width());
-            setYOffset(0);
-            break;
-        case SCROLL_NE_X:
-            loadFromSurface(ResourceManager::surface("art/intrface/scrnex.frm"));
-            setXOffset(- width());
-            setYOffset(0);
-            break;
-        case SCROLL_SE:
-            loadFromSurface(ResourceManager::surface("art/intrface/scrseast.frm"));
-            setXOffset(- width());
-            setYOffset(- height());
-            break;
-        case SCROLL_SE_X:
-            loadFromSurface(ResourceManager::surface("art/intrface/scrsex.frm"));
-            setXOffset(- width());
-            setYOffset(- height());
-            break;
-        case HEXAGON_RED:
-            loadFromSurface(ResourceManager::surface("art/intrface/msef000.frm"));
-            setXOffset(- width()/2);
-            setYOffset(- height()/2);
-            _lastType = _type;
-            break;
-        case ACTION:
-            loadFromSurface(ResourceManager::surface("art/intrface/actarrow.frm"));
-            setXOffset(0);
-            setYOffset(0);
-            _lastType = _type;
-            break;
-        case WAIT:
-            _animation = new Animation("art/intrface/wait.frm");
-            _animation->setEnabled(true);
-            setXOffset(- width()/2);
-            setYOffset(- height()/2);
-            _lastType = _type;
-            break;
-        case NONE:
-            loadFromSurface(new Surface());
-            break;
-    }
+    _y = y;
+    SDL_WarpMouse(_x, _y);
 }
 
-SDL_Surface* Mouse::sdl_surface()
+bool Mouse::visible()
 {
-    if (_animation) return _animation->surface()->sdl_surface();
-    return Surface::sdl_surface();
+    return _visible;
+}
+
+void Mouse::setVisible(bool value)
+{
+    _visible = value;
+}
+
+Texture* Mouse::texture()
+{
+    return _texture;
 }
 
 }

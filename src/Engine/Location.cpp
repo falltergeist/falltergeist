@@ -325,8 +325,10 @@ GameObject* Location::createObject(int PID)
 
 void Location::handleAction(GameObject* object, int action)
 {
+    /*
     switch (action)
     {
+
         case Mouse::ICON_ROTATE:
         {
             auto dude = dynamic_cast<GameDudeObject*>(object);
@@ -346,7 +348,7 @@ void Location::handleAction(GameObject* object, int action)
             }
         }
 
-    }
+    }*/
 }
 
 void Location::think()

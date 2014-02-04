@@ -24,70 +24,36 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/InteractiveSurface.h"
-#include "../Engine/ResourceManager.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-class Animation;
+class Texture;
 
-class Mouse : public Surface
+class Mouse
 {
-protected:
-    Animation * _animation = 0;
-    int _cursorX = 320;
-    int _cursorY = 240;
-    int _type = BIG_ARROW;
-    int _lastType = BIG_ARROW;
+protected:    
+    int _x = 320;
+    int _y = 240;
+    bool _visible = true;
+    Texture* _texture = 0;
 public:
-    enum {
-          NONE = 0,
-          BIG_ARROW,
-          SCROLL_W,
-          SCROLL_W_X,
-          SCROLL_NW,
-          SCROLL_NW_X,
-          SCROLL_N,
-          SCROLL_N_X,
-          SCROLL_NE,
-          SCROLL_NE_X,
-          SCROLL_E,
-          SCROLL_E_X,
-          SCROLL_SE,
-          SCROLL_SE_X,
-          SCROLL_S,
-          SCROLL_S_X,
-          SCROLL_SW,
-          SCROLL_SW_X,
-          HEXAGON_RED,
-          WAIT,
-          ACTION,
-          ACTION_REVERSE
-         };
-    enum {ICON_ROTATE = 1,
-          ICON_SKILL,
-          ICON_INVENTORY,
-          ICON_CANCEL,
-          ICON_LOOK,
-          ICON_TALK,
-          ICON_PUSH,
-          ICON_UNLOAD,
-          ICON_USE
-         };
     Mouse();
     ~Mouse();
-    virtual void think();
-    int cursorX();
-    int cursorY();
-    void setCursorX(int x);
-    void setCursorY(int y);
-    int type();
-    void setType(int type);
-    virtual int x();
-    virtual int y();
-    virtual SDL_Surface* sdl_surface();
+
+    int x();
+    int y();
+
+    void setX(int x);
+    void setY(int y);
+
+    void think();
+
+    bool visible();
+    void setVisible(bool value);
+
+    Texture* texture();
 
 };
 

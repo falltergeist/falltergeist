@@ -201,9 +201,9 @@ void Game::run()
 
         // thinking
         _states.back()->think();
-        _fpsCounter->think();
+        //_fpsCounter->think();
         _mouse->think();
-        Surface::animatedPalette->think();
+        //Surface::animatedPalette->think();
         
         // render all states that is over the last fullscreen state
         /**

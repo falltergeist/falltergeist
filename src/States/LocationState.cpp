@@ -50,7 +50,7 @@ LocationState::~LocationState()
 }
 
 void LocationState::init()
-{
+{/*
     if (initialized()) return;
     State::init();
     setScrollable(true);
@@ -63,10 +63,12 @@ void LocationState::init()
     _background->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyUp);
 
     add(_background);
+    */
 }
 
 void LocationState::onMouseDown(MouseEvent* event)
 {
+    /*
     auto sender = dynamic_cast<InteractiveSurface*>(event->emitter());
     if (!sender) return;
     auto object = dynamic_cast<GameObject*>((GameObject*)sender->owner());
@@ -95,6 +97,7 @@ void LocationState::onMouseDown(MouseEvent* event)
     auto state = new CursorDropdownState(icons);
     state->setObject(object);
     _game->pushState(state);
+    */
 
 }
 

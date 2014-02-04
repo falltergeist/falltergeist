@@ -63,4 +63,8 @@ void Renderer::registerTexture(Texture* texture)
 {
 }
 
+void Renderer::drawTexture(unsigned int x, unsigned int y, Texture* texture)
+{
+}
+
 }

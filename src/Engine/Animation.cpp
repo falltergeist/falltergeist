@@ -110,7 +110,7 @@ void Animation::loadFromFrmFile(libfalltergeist::FrmFileType* frm)
     // for each direction
     for (unsigned int i = 0; i != 6; ++i)
     {
-        if (i > 0 && frm->directions()->at(i)->dataOffset() == frm->directions()->at(0)->dataOffset()) break;
+        //if (i > 0 && frm->directions()->at(i)->dataOffset() == frm->directions()->at(0)->dataOffset()) break;
         std::vector<Surface*>* frameset = new std::vector<Surface*>;
         // for each frame
         for (unsigned int j = 0; j != frm->framesPerDirection(); ++j)
@@ -118,13 +118,13 @@ void Animation::loadFromFrmFile(libfalltergeist::FrmFileType* frm)
             Surface * surface = new Surface(frm, i, j);
             if (j == 0)
             {
-                surface->setXOffset(frm->directions()->at(i)->shiftX());
-                surface->setYOffset(frm->directions()->at(i)->shiftY());
+                //surface->setXOffset(frm->directions()->at(i)->shiftX());
+                //surface->setYOffset(frm->directions()->at(i)->shiftY());
             }
             else
             {
-                surface->setXOffset(frm->directions()->at(i)->frames()->at(j)->offsetX());
-                surface->setYOffset(frm->directions()->at(i)->frames()->at(j)->offsetY());
+                //surface->setXOffset(frm->directions()->at(i)->frames()->at(j)->offsetX());
+                //surface->setYOffset(frm->directions()->at(i)->frames()->at(j)->offsetY());
             }
             frameset->push_back(surface);
         }

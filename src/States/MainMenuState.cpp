@@ -48,7 +48,7 @@ void MainMenuState::init()
 {
     State::init();
 
-    _game->mouse()->setType(Mouse::BIG_ARROW);
+    //_game->mouse()->setType(Mouse::BIG_ARROW);
 
     // Background image
     auto background = new Surface(_game->resourceManager()->surface("art/intrface/mainmenu.frm"));

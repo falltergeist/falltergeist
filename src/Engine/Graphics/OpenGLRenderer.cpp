@@ -25,6 +25,8 @@
 #include "../../Engine/CrossPlatform.h"
 #include "../../Engine/Exception.h"
 #include "../../Engine/ResourceManager.h"
+#include "../../Engine/Game.h"
+#include "../../Engine/Mouse.h"
 
 // Third party includes
 #include "SDL.h"
@@ -86,9 +88,6 @@ void OpenGLRenderer::init()
     _texture = new Texture(640, 480);
     _texture->loadFromRGBA(rix->rgba());
 
-    //_texture->setPixel(34, 32, 0xFF00FF77);
-    //_texture->setPixel(32, 32, 0xFF00FF77);
-    //_texture->setPixel(34, 34, 0xFF00FF77);
     registerTexture(_texture);
     std::cout << "TextureId: " << _texture->id() << std::endl;
 
@@ -111,6 +110,15 @@ void OpenGLRenderer::beginFrame()
          glTexCoord2d(0.0,1.0);
          glVertex2f(0, _texture->height());
     glEnd();
+
+    auto game = &Game::getInstance();
+
+    // Render mouse
+    if (game->mouse()->visible())
+    {
+        drawTexture(game->mouse()->x(), game->mouse()->y(), game->mouse()->texture());
+    }
+
 }
 
 void OpenGLRenderer::endFrame()
@@ -144,6 +152,27 @@ void OpenGLRenderer::registerTexture(Texture* texture)
     //glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
     glBindTexture( GL_TEXTURE_2D, 0);
+
+}
+
+void OpenGLRenderer::drawTexture(unsigned int x, unsigned int y, Texture* texture)
+{
+    if (!texture->id()) registerTexture(texture);
+
+    glBindTexture( GL_TEXTURE_2D, texture->id());
+    glBegin(GL_POLYGON);
+         glTexCoord2d(0.0, 0.0);
+         glVertex2f(x, y);
+
+         glTexCoord2d(1.0, 0.0);
+         glVertex2f(x + texture->width(), y);
+
+         glTexCoord2d(1.0, 1.0);
+         glVertex2f(x + texture->width(), y + texture->height());
+
+         glTexCoord2d(0.0, 1.0);
+         glVertex2f(x, y + texture->height());
+    glEnd();
 
 }
 

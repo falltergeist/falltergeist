@@ -43,8 +43,10 @@ Surface::Surface(libfalltergeist::FrmFileType* frm, unsigned int direction, unsi
 {
     auto palette = ResourceManager::palFileType("color.pal");
 
-    int width = frm->directions()->at(direction)->frames()->at(frame)->width();
-    int height = frm->directions()->at(direction)->frames()->at(frame)->height();
+    int width = 0;
+    int height = 0;
+    //int width = frm->directions()->at(direction)->frames()->at(frame)->width();
+    //int height = frm->directions()->at(direction)->frames()->at(frame)->height();
     //                                                                   red         green       blue        alpha
     _sdl_surface = SDL_CreateRGBSurface(SDL_SRCALPHA, width, height, 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
     if (sdl_surface() == 0) throw Exception(SDL_GetError());
@@ -55,7 +57,8 @@ Surface::Surface(libfalltergeist::FrmFileType* frm, unsigned int direction, unsi
     {
         for (int x = 0; x != width; ++x)
         {
-            unsigned int colorIndex = frm->directions()->at(direction)->frames()->at(frame)->colorIndexes()->at(i);
+            //unsigned int colorIndex = frm->directions()->at(direction)->frames()->at(frame)->colorIndexes()->at(i);
+            unsigned int colorIndex = 0;
 
             if (colorIndex >= 229 && colorIndex <= 254)
             {
@@ -70,15 +73,15 @@ Surface::Surface(libfalltergeist::FrmFileType* frm, unsigned int direction, unsi
         }
     }
 
-    int shiftX = frm->directions()->at(direction)->shiftX();
-    int offsetX = frm->directions()->at(direction)->frames()->at(frame)->offsetX();
-    int shiftY = frm->directions()->at(direction)->shiftY();
-    int offsetY = frm->directions()->at(direction)->frames()->at(frame)->offsetY();
+    //int shiftX = frm->directions()->at(direction)->shiftX();
+    //int offsetX = frm->directions()->at(direction)->frames()->at(frame)->offsetX();
+    //int shiftY = frm->directions()->at(direction)->shiftY();
+    //int offsetY = frm->directions()->at(direction)->frames()->at(frame)->offsetY();
 
-    setX(0);
-    setY(0);
-    setXOffset(shiftX + offsetX);
-    setYOffset(shiftY + offsetY);
+    //setX(0);
+    //setY(0);
+    //setXOffset(shiftX + offsetX);
+    //setYOffset(shiftY + offsetY);
 }
 
 Surface::Surface(libfalltergeist::RixFileType* rix)
@@ -92,9 +95,8 @@ Surface::Surface(libfalltergeist::RixFileType* rix)
     for (int y = 0; y != rix->height(); ++y)
     {
         for (int x = 0; x != rix->width(); ++x)
-        {
-            auto index = rix->data()->at(i);            
-            setPixel(x, y, rix->palette()->at(index));
+        {            
+            setPixel(x, y, rix->rgba()[i]);
             i++;
         }
     }    
