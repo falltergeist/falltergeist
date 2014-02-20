@@ -40,12 +40,14 @@ int main(int argc, char *argv[])
     try
     {
         auto game = &Game::getInstance();
+        auto aaf = game->resourceManager()->aafFileType("font1.aaf");
+
         //auto pal = game->resourceManager()->palFileType("color.pal");
         //auto frm = game->resourceManager()->frmFileType("art/intrface/stdarrow.frm");
 
-        //auto surface = SDL_CreateRGBSurfaceFrom(frm->rgba(pal), frm->width(), frm->height(), 32, frm->width()*4, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
-        //SDL_SaveBMP(surface, "test.bmp");
-        //return 0;
+        auto surface = SDL_CreateRGBSurfaceFrom(aaf->rgba(), aaf->maximumWidth()*16, aaf->maximumHeight()*16, 32, aaf->maximumWidth()*16*4, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
+        SDL_SaveBMP(surface, "test.bmp");
+        return 0;
         //libfalltergeist::MveFileType* mve = game->resourceManager()->mveFileType("art/cuts/intro.mve");
         //mve->test();
         //return 0;
