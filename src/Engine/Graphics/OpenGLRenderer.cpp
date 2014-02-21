@@ -168,20 +168,20 @@ void OpenGLRenderer::drawTexture(unsigned int x, unsigned int y, Texture* textur
     }
 
     glBegin(GL_POLYGON);
-         glTexCoord2d(0.0, 0.0);
-         glVertex2f(x, y);
+         glTexCoord2i(0, 0);
+         glVertex2i(x, y);
 
-         glTexCoord2d(1.0, 0.0);
-         glVertex2f(x + texture->width(), y);
+         glTexCoord2i(1, 0);
+         glVertex2i(x + texture->width(), y);
 
-         glTexCoord2d(1.0, 1.0);
-         glVertex2f(x + texture->width(), y + texture->height());
+         glTexCoord2i(1, 1);
+         glVertex2i(x + texture->width(), y + texture->height());
 
-         glTexCoord2d(0.0, 1.0);
-         glVertex2f(x, y + texture->height());
+         glTexCoord2i(0, 1);
+         glVertex2i(x, y + texture->height());
     glEnd();
 
-    glColor4f(1.0, 1.0, 1.0, 1.0);
+    if (color) glColor4f(1.0, 1.0, 1.0, 1.0);
 }
 
 }
