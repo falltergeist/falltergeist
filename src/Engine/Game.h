@@ -88,6 +88,8 @@ public:
     void setPlayer(GameDudeObject* player);
     GameDudeObject* player();
     Mouse* mouse();
+    Renderer* renderer();
+
     void setLocation(Location* location);
     Location* location();
     void setDialog(CritterDialogState* value);

@@ -341,4 +341,9 @@ std::vector<UI*>* Game::ui()
     return &_ui;
 }
 
+Renderer* Game::renderer()
+{
+    return _renderer;
+}
+
 }

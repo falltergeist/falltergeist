@@ -42,7 +42,7 @@ public:
     virtual void endFrame();
 
     virtual void registerTexture(Texture* texture);
-    virtual void drawTexture(unsigned int x, unsigned int y, Texture* texture);
+    virtual void drawTexture(unsigned int x, unsigned int y, Texture* texture, unsigned int color = 0);
 };
 
 }

@@ -84,6 +84,14 @@ void OpenGLRenderer::init()
 
     glTranslatef(0.375, 0.375, 0);
 
+    auto game = &Game::getInstance();
+    auto aaf = game->resourceManager()->aafFileType("font4.aaf");
+
+    _texture = new Texture(aaf->maximumWidth()*16, aaf->maximumHeight()*16);
+    _texture->loadFromRGBA(aaf->rgba());
+    registerTexture(_texture);
+
+
 }
 
 void OpenGLRenderer::beginFrame()
@@ -108,6 +116,7 @@ void OpenGLRenderer::beginFrame()
 
 void OpenGLRenderer::endFrame()
 {
+    drawTexture(10, 10, _texture, 0xb89c28ff);
     Renderer::endFrame();
     SDL_GL_SwapBuffers();
 }
@@ -140,11 +149,24 @@ void OpenGLRenderer::registerTexture(Texture* texture)
 
 }
 
-void OpenGLRenderer::drawTexture(unsigned int x, unsigned int y, Texture* texture)
+void OpenGLRenderer::drawTexture(unsigned int x, unsigned int y, Texture* texture, unsigned int color)
 {
     if (!texture->id()) registerTexture(texture);
 
+    //glColor3b((color && 0xFF000000) >> 24, (color && 0x00FF0000) >> 16, (color && 0x0000FF00) >> 8);
+
     glBindTexture( GL_TEXTURE_2D, texture->id());
+    if (color)
+    {
+        //glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        unsigned char r, g, b, a;
+        r = (color & 0xFF000000) >> 24;
+        g = (color & 0x00FF0000) >> 16;
+        b = (color & 0x0000FF00) >> 8;
+        a =  color & 0x000000FF;
+        glColor4ub(r, g, b, a);
+    }
+
     glBegin(GL_POLYGON);
          glTexCoord2d(0.0, 0.0);
          glVertex2f(x, y);
@@ -159,6 +181,7 @@ void OpenGLRenderer::drawTexture(unsigned int x, unsigned int y, Texture* textur
          glVertex2f(x, y + texture->height());
     glEnd();
 
+    glColor4f(1.0, 1.0, 1.0, 1.0);
 }
 
 }
