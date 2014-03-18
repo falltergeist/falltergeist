@@ -6,7 +6,7 @@ http://falltergeist.org/
 
 Current version: 0.1.1
 
-[![ScreenShot](http://alexeevdv.ru/falltergeist/falltergeist.png)](http://www.youtube.com/watch?v=C6pnobO9nJY)
+IRC chanel: [#falltergeist on FreeNode](irc://irc.freenode.net/falltergeist)
 
 
 ##Compilation under linux
