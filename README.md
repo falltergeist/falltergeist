@@ -6,7 +6,7 @@ http://falltergeist.org/
 
 Current version: 0.1.1
 
-IRC chanel: [#falltergeist on FreeNode](irc://irc.freenode.net/falltergeist)
+IRC chanel: #falltergeist on [freenode.net](http://webchat.freenode.net/?channels=falltergeist)
 
 
 ##Compilation under linux
