@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <fstream>
 #include <cstdlib>
+#include <mntent.h>
 
 // Falltergeist includes
 #include "../Engine/CrossPlatform.h"
@@ -82,7 +83,7 @@ std::string CrossPlatform::getVersion()
 }
 
 std::string CrossPlatform::getHomeDirectory() {
-#if defined(_WIN32) || defined(WIN32)        
+#if defined(_WIN32) || defined(WIN32)
     char cwd[256];
     LPITEMIDLIST pidl;
     SHGetSpecialFolderLocation(NULL, CSIDL_PROFILE  ,&pidl);
@@ -100,8 +101,8 @@ std::string CrossPlatform::getCurrentDirectory() {
 }
 
 std::vector<std::string> CrossPlatform::getCdDrivePaths() {
- #if defined(_WIN32) || defined(WIN32)
     std::vector<std::string> result;
+ #if defined(_WIN32) || defined(WIN32)
     // Looking for data files on CD-ROM drives
     char buf[256];
     GetLogicalDriveStringsA(sizeof(buf), buf);
@@ -114,10 +115,25 @@ std::vector<std::string> CrossPlatform::getCdDrivePaths() {
         }
     }
 
-    return result;
+#elif defined(__unix__)
+        FILE* mtab = setmntent("/etc/mtab", "r");
+        struct mntent* m;
+        struct mntent mnt;
+        char strings[4096];
+        while ((m = getmntent_r(mtab, &mnt, strings, sizeof(strings))))
+        {
+            std::string directory = mnt.mnt_dir;
+            std::string type = mnt.mnt_type;
+            if (type == "iso9660")
+            {
+                result.push_back(directory);
+            }
+        }
+        endmntent(mtab);
 #else
     throw Exception("CD-ROM detection not supported");
 #endif
+    return result;
 }
 
 // This method is trying to find out where are the DAT files located
@@ -141,7 +157,7 @@ std::string CrossPlatform::findFalloutDataPath()
         if (std::all_of(
                 necessaryDatFiles.begin(),
                 necessaryDatFiles.end(),
-                [directory](std::string file) 
+                [directory](std::string file)
                 {
                     std::ifstream stream(directory + "/" + file);
                     if (stream)
