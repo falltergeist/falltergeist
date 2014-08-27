@@ -21,6 +21,9 @@
 
 // Falltergeist includes
 #include "../../Engine/Graphics/Renderer.h"
+#include "../../Engine/Game.h"
+#include "../../Engine/UI.h"
+#include "../../Engine/Input/Mouse.h"
 
 // Third party includes
 
@@ -43,6 +46,18 @@ void Renderer::init()
 
 void Renderer::beginFrame()
 {
+    auto game = &Game::getInstance();
+
+    for (auto i = game->ui()->begin(); i != game->ui()->end(); ++i)
+    {
+        drawTexture((*i)->x(), (*i)->y(), (*i)->texture());
+    }
+
+    // Render mouse
+    if (game->mouse()->visible())
+    {
+        drawTexture(game->mouse()->x(), game->mouse()->y(), game->mouse()->texture());
+    }
 }
 
 void Renderer::endFrame()
@@ -63,7 +78,7 @@ void Renderer::registerTexture(Texture* texture)
 {
 }
 
-void Renderer::drawTexture(unsigned int x, unsigned int y, Texture* texture, unsigned int color)
+void Renderer::drawTexture(unsigned int x, unsigned int y, Texture* texture)
 {
 }
 

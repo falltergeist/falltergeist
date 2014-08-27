@@ -31,14 +31,7 @@ Texture::Texture(unsigned int width, unsigned int height)
 {
     _width = width;
     _height = height;
-    _data = new unsigned int[width*height]();
-    for (unsigned int y = 0; y != _height; ++y)
-    {
-        for (unsigned int x = 0; x != _width; ++x)
-        {
-            _data[y*width + x] = 0xFF0000FF;
-        }
-    }
+    _data = new unsigned int[width*height](); // RGBA data for each pixel
 }
 
 Texture::~Texture()
@@ -73,14 +66,14 @@ unsigned int* Texture::data()
 
 unsigned int Texture::pixel(unsigned int x, unsigned int y)
 {
-    if (x < 0 || x >= _width || y < 0 || y >= _height) return 0;
+    if (x >= _width || y >= _height) return 0;
     unsigned int index = (y*_width) + x;
     return _data[index];
 }
 
 void Texture::setPixel(unsigned int x, unsigned int y, unsigned int color)
 {
-    if (x < 0 || x >= _width || y < 0 || y >= _height) return;
+    if (x >= _width || y >= _height) return;
     unsigned int index = (y*_width) + x;
     _data[index] = color;
 }

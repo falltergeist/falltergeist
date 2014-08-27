@@ -26,8 +26,6 @@
 #include "../../Engine/Exception.h"
 #include "../../Engine/ResourceManager.h"
 #include "../../Engine/Game.h"
-#include "../../Engine/Input/Mouse.h"
-#include "../../Engine/UI.h"
 
 // Third party includes
 #include "SDL.h"
@@ -84,45 +82,40 @@ void OpenGLRenderer::init()
 
     glTranslatef(0.375, 0.375, 0);
 
-    auto game = &Game::getInstance();
-    auto aaf = game->resourceManager()->aafFileType("font4.aaf");
+    //temporary!!! just for testing
+    {
+        auto game = &Game::getInstance();
+        auto aaf = game->resourceManager()->aafFileType("font4.aaf");
 
-    _texture = new Texture(aaf->maximumWidth()*16, aaf->maximumHeight()*16);
-    _texture->loadFromRGBA(aaf->rgba());
-    registerTexture(_texture);
+        _texture = new Texture(aaf->maximumWidth()*16, aaf->maximumHeight()*16);
+        _texture->loadFromRGBA(aaf->rgba());
+        registerTexture(_texture);
+    }
 
 
 }
 
 void OpenGLRenderer::beginFrame()
 {
-    Renderer::beginFrame();
     glClear(GL_COLOR_BUFFER_BIT);
+    Renderer::beginFrame();
 
-    auto game = &Game::getInstance();
-
-    for (auto i = game->ui()->begin(); i != game->ui()->end(); ++i)
-    {
-        drawTexture((*i)->x(), (*i)->y(), (*i)->texture());
-    }
-
-    // Render mouse
-    if (game->mouse()->visible())
-    {
-        drawTexture(game->mouse()->x(), game->mouse()->y(), game->mouse()->texture());
-    }
 
 }
 
 void OpenGLRenderer::endFrame()
 {
-    drawTexture(10, 10, _texture, 0xb89c28ff);
     Renderer::endFrame();
+    // just for testing!!!
+    {
+        drawTexture(10, 10, _texture);
+    }
     SDL_GL_SwapBuffers();
 }
 
 void OpenGLRenderer::registerTexture(Texture* texture)
 {
+    Renderer::registerTexture(texture);
     if (texture->id()) return; // if registered
 
     unsigned int textureId;
@@ -149,13 +142,15 @@ void OpenGLRenderer::registerTexture(Texture* texture)
 
 }
 
-void OpenGLRenderer::drawTexture(unsigned int x, unsigned int y, Texture* texture, unsigned int color)
+void OpenGLRenderer::drawTexture(unsigned int x, unsigned int y, Texture* texture)
 {
+    Renderer::drawTexture(x, y, texture);
     if (!texture->id()) registerTexture(texture);
 
     //glColor3b((color && 0xFF000000) >> 24, (color && 0x00FF0000) >> 16, (color && 0x0000FF00) >> 8);
 
     glBindTexture( GL_TEXTURE_2D, texture->id());
+    /*
     if (color)
     {
         //glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -166,7 +161,7 @@ void OpenGLRenderer::drawTexture(unsigned int x, unsigned int y, Texture* textur
         a =  color & 0x000000FF;
         glColor4ub(r, g, b, a);
     }
-
+    */
     glBegin(GL_POLYGON);
          glTexCoord2i(0, 0);
          glVertex2i(x, y);
@@ -181,7 +176,7 @@ void OpenGLRenderer::drawTexture(unsigned int x, unsigned int y, Texture* textur
          glVertex2i(x, y + texture->height());
     glEnd();
 
-    if (color) glColor4f(1.0, 1.0, 1.0, 1.0);
+    //if (color) glColor4f(1.0, 1.0, 1.0, 1.0);
 }
 
 }

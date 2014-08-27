@@ -73,6 +73,8 @@ set(SOURCES main.cpp
             src/Engine/Game.h
             src/Engine/Graphics/OpenGLRenderer.cpp
             src/Engine/Graphics/OpenGLRenderer.h
+            src/Engine/Graphics/SDLRenderer.cpp
+            src/Engine/Graphics/SDLRenderer.h
             src/Engine/Graphics/Renderer.cpp
             src/Engine/Graphics/Renderer.h
             src/Engine/Graphics/Texture.cpp

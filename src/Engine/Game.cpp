@@ -37,6 +37,7 @@
 #include "../UI/TextArea.h"
 #include "../Engine/AnimatedPalette.h"
 #include "../Engine/Graphics/OpenGLRenderer.h"
+#include "../Engine/Graphics/SDLRenderer.h"
 #include "../Engine/UI.h"
 
 // Third patry includes
@@ -64,7 +65,8 @@ void Game::_initialize()
     putenv(strdup("SDL_VIDEO_CENTERED=1"));
 
     _resourceManager = new ResourceManager();
-    _renderer = new OpenGLRenderer(640, 480);
+    //_renderer = new OpenGLRenderer(640, 480);
+    _renderer = new SDLRenderer(640, 480);
     _renderer->init();
     //_screen = new Screen(640, 480, 32);
     //_mixer = new AudioMixer();
