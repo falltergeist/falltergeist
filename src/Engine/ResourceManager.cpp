@@ -25,6 +25,7 @@
 #include "../Engine/Surface.h"
 #include "../Engine/Graphics/Texture.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/Font.h"
 
 // Third party includes
 
@@ -35,6 +36,7 @@ std::vector<libfalltergeist::DatFile*> ResourceManager::_datFiles;
 std::map<std::string, libfalltergeist::DatFileItem*> ResourceManager::_datFilesItems;
 std::map<std::string, Surface*> ResourceManager::_surfaces;
 std::map<std::string, Texture*> ResourceManager::_textures;
+std::map<std::string, Font*> ResourceManager::_fonts;
 
 ResourceManager::ResourceManager()
 {
@@ -311,6 +313,20 @@ Texture* ResourceManager::texture(std::string filename)
 
     _textures.insert(std::pair<std::string, Texture*>(filename, texture));
     return texture;
+}
+
+Font* ResourceManager::font(std::string filename, unsigned int color)
+{
+    std::string fontname = filename + std::to_string(color);
+
+    if (_fonts.find(fontname) != _fonts.end())
+    {
+        return _fonts.at(fontname);
+    }
+
+    auto font = new Font(filename, color);
+    _fonts.insert(std::pair<std::string, Font*>(fontname, font));
+    return font;
 }
 
 

@@ -59,20 +59,17 @@ public:
     TextArea(TextArea* textArea, int x = 0, int y = 0);
     ~TextArea();
 
-    void init();
+    TextArea* setBackgroundColor(unsigned int color);
+    unsigned int getBackgroundColor();
 
-    void setBackgroundColor(unsigned int color);
+    TextArea* setColor(unsigned int color);
+    unsigned int color();
 
     TextArea* setText(libfalltergeist::MsgMessage* message);
     TextArea* setText(int number);
     TextArea* setText(std::string text);
     TextArea* appendText(std::string text);
-    TextArea* appendText(int number);
     std::string text();
-
-    std::vector<std::string>* textLines();
-    //std::vector<Surface*>* textSurfaces();
-
 
     TextArea* setHorizontalAlign(unsigned char align);
     unsigned char horizontalAlign();
@@ -86,13 +83,10 @@ public:
     TextArea* setWidth(int width);
     int width();
 
-    TextArea* setColor(unsigned int color);
-    unsigned int color();
-
     TextArea* setWordWrap(bool wordWrap);
     bool wordWrap();
 
-    TextArea* setFont(std::string filename);
+    TextArea* setFont(Font* font);
     Font* font();    
 
     virtual Texture* texture();

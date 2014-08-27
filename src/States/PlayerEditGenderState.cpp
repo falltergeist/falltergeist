@@ -72,7 +72,9 @@ void PlayerEditGenderState::init()
 
     libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
     TextArea * doneLabel = new TextArea(msg->message(100), 281, 45);
-    doneLabel->setColor(0xffb89c28)->setFont("font3.aaf");
+
+    auto font3_b89c28ff = _game->resourceManager()->font("font3.aaf", 0xb89c28ff);
+    doneLabel->setFont(font3_b89c28ff);
 
     ImageButton * doneButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 260, 45);
     doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditGenderState::onDoneButtonClick);

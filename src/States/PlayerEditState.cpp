@@ -32,6 +32,7 @@
 #include "../Game/GameDudeObject.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
+#include "../Engine/Font.h"
 #include "../UI/Image.h"
 
 // Third party includes
@@ -135,7 +136,7 @@ PlayerEditState::PlayerEditState() : State()
             ss << "health_" << (i+2);
             _addTitle(ss.str(), msg->message(312 + i)->text());
             _addDescription(ss.str(), msg->message(400 + i)->text());
-            _addLabel(ss.str(),  new TextArea(msg->message(312+i), 194, 46 + 13*(i+1)))->setColor(0xFF183018);
+            _addLabel(ss.str(),  new TextArea(msg->message(312+i), 194, 46 + 13*(i+1)))->setColor(0x183018FF);
             _addImage(ss.str(), _game->resourceManager()->surface("art/skilldex/" + images[i+1] + ".frm"));
         }
     }
@@ -169,17 +170,19 @@ PlayerEditState::PlayerEditState() : State()
         _addButton("done",    new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 455, 454));
         _addButton("cancel",  new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 554, 454));
 
+        auto font3_b89c28ff = _game->resourceManager()->font("font3aaf", 0xb89c28ff);
+
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
-        _addLabel("options", new TextArea(msg->message(101), 365, 453))->setColor(0xffb89c28)->setFont("font3.aaf");
-        _addLabel("next",    new TextArea(msg->message(100), 473, 453))->setColor(0xffb89c28)->setFont("font3.aaf");
-        _addLabel("cancel",  new TextArea(msg->message(102), 571, 453))->setColor(0xffb89c28)->setFont("font3.aaf");
-        _addLabel("name",    new TextArea(_game->player()->name(), 17, 7))->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setColor(0xffb89c28)->setFont("font3.aaf");
-        _addLabel("age",     new TextArea("AGE", 163, 7))->setColor(0xffb89c28)->setFont("font3.aaf");
-        _addLabel("gender",  new TextArea(msg->message(_game->player()->gender() == 0 ? 107 : 108), 255, 7))->setColor(0xffb89c28)->setFont("font3.aaf"); // 0 -male 1 - female
-        _addLabel("label_1", new TextArea(msg->message(112), 18, 286))->setColor(0xffb89c28)->setFont("font3.aaf"); // ДОП. ОЧКИ
-        _addLabel("label_2", new TextArea(msg->message(139), 50, 326))->setColor(0xffb89c28)->setFont("font3.aaf"); // ДОП. ОСОБЕННОСТИ
-        _addLabel("label_3", new TextArea(msg->message(117), 383, 5))->setColor(0xffb89c28)->setFont("font3.aaf");  // НАВЫКИ
-        _addLabel("label_4", new TextArea(msg->message(138), 428, 233))->setColor(0xffb89c28)->setFont("font3.aaf"); // ОСНОВН.
+        _addLabel("options", new TextArea(msg->message(101), 365, 453))->setFont(font3_b89c28ff);
+        _addLabel("next",    new TextArea(msg->message(100), 473, 453))->setFont(font3_b89c28ff);
+        _addLabel("cancel",  new TextArea(msg->message(102), 571, 453))->setFont(font3_b89c28ff);
+        _addLabel("name",    new TextArea(_game->player()->name(), 17, 7))->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setFont(font3_b89c28ff);
+        _addLabel("age",     new TextArea("AGE", 163, 7))->setFont(font3_b89c28ff);
+        _addLabel("gender",  new TextArea(msg->message(_game->player()->gender() == 0 ? 107 : 108), 255, 7))->setFont(font3_b89c28ff); // 0 -male 1 - female
+        _addLabel("label_1", new TextArea(msg->message(112), 18, 286))->setFont(font3_b89c28ff); // ДОП. ОЧКИ
+        _addLabel("label_2", new TextArea(msg->message(139), 50, 326))->setFont(font3_b89c28ff); // ДОП. ОСОБЕННОСТИ
+        _addLabel("label_3", new TextArea(msg->message(117), 383, 5))->setFont(font3_b89c28ff);  // НАВЫКИ
+        _addLabel("label_4", new TextArea(msg->message(138), 428, 233))->setFont(font3_b89c28ff); // ОСНОВН.
         _addTitle("label_1", msg->message(120)->text());
         _addTitle("label_2", msg->message(146)->text());
         _addTitle("label_3", msg->message(150)->text());
@@ -220,7 +223,7 @@ PlayerEditState::PlayerEditState() : State()
         std::map<std::string, TextArea *>::reverse_iterator it;
         for(it = _labels->rbegin(); it != _labels->rend(); ++it)
         {
-            it->second->setBackgroundColor(0x01000000);
+            it->second->setBackgroundColor(0x00000001);
             it->second->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditState::onLabelClick);
             add(it->second);
         }
@@ -235,7 +238,6 @@ PlayerEditState::PlayerEditState() : State()
         std::map<std::string, HiddenMask *>::iterator it;
         for(it = _masks->begin(); it != _masks->end(); ++it)
         {
-            //it->second->setBorderColor(0xFFFF0000);
             it->second->setVisible(true);
             it->second->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditState::onMaskClick);
             add(it->second);
@@ -247,12 +249,14 @@ PlayerEditState::PlayerEditState() : State()
     _image = new Surface(_selectedImage);
     add(_image);
 
+    auto font2_000000ff = _game->resourceManager()->font("font2.aaf", 0x000000FF);
+
     _title = new TextArea("", 350,275);
-    _title->setFont("font2.aaf")->setColor(0xFF000000);
+    _title->setFont(font2_000000ff);
     add(_title);
 
     _description = new TextArea("", 350, 315);
-    _description->setColor(0xFF000000)->setWidth(145)->setHeight(120)->setWordWrap(true);
+    _description->setFont(font2_000000ff)->setWidth(145)->setHeight(120)->setWordWrap(true);
     add(_description);
 
 }
@@ -320,13 +324,13 @@ void PlayerEditState::think()
     libfalltergeist::MsgFileType * msgEditor = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
 
     _labels->at("name")->setText(player->name());
-    _labels->at("age")->setText(msgEditor->message(104))->appendText(" ")->appendText(player->age());
+    _labels->at("age")->setText(msgEditor->message(104))->appendText(" ")->appendText(std::to_string(player->age()));
     _labels->at("gender")->setText(msgEditor->message(player->gender() == 0 ? 107 : 108)); // 0 - male   1 - female
 
     _counters->at("statsPoints")->setNumber(player->statsPoints());
     _counters->at("skillsPoints")->setNumber(player->skillsPoints());
 
-    _labels->at("health_1")->setText(msgEditor->message(300))->appendText("  ")->appendText(player->hitPointsMax())->appendText("/")->appendText(player->hitPointsMax());
+    _labels->at("health_1")->setText(msgEditor->message(300))->appendText("  ")->appendText(std::to_string(player->hitPointsMax()))->appendText("/")->appendText(std::to_string(player->hitPointsMax()));
     _labels->at("params_1_value")->setText(player->armorClass());
     _labels->at("params_2_value")->setText(player->actionPoints());
     _labels->at("params_3_value")->setText(player->carryWeight());

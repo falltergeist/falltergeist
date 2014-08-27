@@ -31,132 +31,54 @@ namespace Falltergeist
 
 Font::Font(std::string filename, unsigned int color)
 {
-    _glyphs = new std::vector<Surface*>;
-    setFilename(filename);
-    setColor(color);
-    for (int i = 0; i < 256; i++) _glyphs->push_back(0);
+    _aaf = ResourceManager::aafFileType(filename);
+    _color = color;
+
+    unsigned int width = _aaf->maximumWidth()*16;
+    unsigned int height = _aaf->maximumHeight()*16;
+
+
+    unsigned int* rgba = new unsigned int[width * height]();
+
+    for (unsigned int y = 0; y != height; y++)
+    {
+        for (unsigned int x = 0; x != width; x++)
+        {
+            unsigned int index = y * width + x;
+            unsigned char alpha = 0x000000FF * _aaf->rgba()[index];
+            rgba[index] = (color & 0xFFFFFF00) | alpha;
+        }
+    }
+
+    _texture = new Texture(width, height);
+    _texture->loadFromRGBA(rgba);
+    delete [] rgba;
+
 }
 
 Font::~Font()
 {
-    while (!_glyphs->empty())
-    {
-        delete _glyphs->back();
-        _glyphs->pop_back();
-    }
-    delete _glyphs;
-}
-
-void Font::setFilename(std::string filename)
-{
-    _filename = filename;
-    _aafFileType = ResourceManager::aafFileType(filename);
-}
-
-std::string Font::filename()
-{
-    return _filename;
-}
-
-void Font::setColor(unsigned int color)
-{
-    if (_color == color) return;
-    _color = color;
-    while (!_glyphs->empty())
-    {
-        delete _glyphs->back();
-        _glyphs->pop_back();
-    }
-    delete _glyphs;
-    _glyphs = new std::vector<Surface*>;
-    for (int i = 0; i < 256; i++) _glyphs->push_back(0);
-}
-
-unsigned int Font::color()
-{
-    return _color;
+    delete _texture;
 }
 
 unsigned short Font::height()
 {
-    return _aafFileType->maximumHeight();
+    return _aaf->maximumHeight();
 }
 
 unsigned short Font::horizontalGap()
 {
-    return _aafFileType->horizontalGap();
+    return _aaf->horizontalGap();
 }
 
 unsigned short Font::verticalGap()
 {
-    return _aafFileType->verticalGap();
+    return _aaf->verticalGap();
 }
 
 unsigned short Font::spaceWidth()
 {
-    return _aafFileType->spaceWidth();
-}
-
-Surface* Font::glyph(unsigned char chr)
-{
-    if (_glyphs->at(chr) != 0) return _glyphs->at(chr);
-
-    int charWidth = _aafFileType->glyphs()->at(chr)->width();
-    int charHeight = _aafFileType->glyphs()->at(chr)->height();
-    int height = this->height();
-    int delta = height - charHeight;
-
-    Surface* surface = new Surface(charWidth,height);
-    int i = 0;
-    for(int y = 0; y != charHeight; ++y)
-    {
-        for (int x = 0; x != charWidth; ++x)
-        {
-            unsigned char alpha = _aafFileType->glyphs()->at(chr)->data()->at(i); // binary data
-            if (alpha != 0)
-            {
-                float lightness;
-                switch (alpha)
-                {
-                    case 9:
-                        lightness = 1.2;
-                        break;
-                    case 8:
-                        lightness = 1.1;
-                        break;
-                    case 7:
-                        lightness = 1;
-                        break;
-                    case 6:
-                        lightness = 0.9;
-                        break;
-                    case 5:
-                        lightness = 0.8;
-                        break;
-                    case 4:
-                        lightness = 0.7;
-                        break;
-                    case 3:
-                        lightness = 0.6;
-                        break;
-                    case 2:
-                        lightness = 0.5;
-                        break;
-                    case 1:
-                        lightness = 0.4;
-                        break;
-                }
-
-                unsigned int color = this->color();
-                color = ((unsigned char)( 0xFF * lightness) << 24) | (0x00FFFFFF & color);
-                surface->setPixel(x,delta + y,color);
-            }
-            i++;
-        }
-    }
-    _glyphs->at(chr) = surface;
-    return _glyphs->at(chr);
-
+    return _aaf->spaceWidth();
 }
 
 }

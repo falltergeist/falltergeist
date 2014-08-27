@@ -17,43 +17,23 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_FONT_H
-#define FALLTERGEIST_FONT_H
+#ifndef FALLTERGEIST_FONTSTRING_H
+#define FALLTERGEIST_FONTSTRING_H
 
 // C++ standard includes
-#include <vector>
-#include <string>
 
 // Falltergeist includes
-#include "../Engine/Surface.h"
-#include "../Engine/Graphics/Texture.h"
 
 // Third party includes
-#include "../../lib/libfalltergeist/libfalltergeist.h"
 
 namespace Falltergeist
 {
 
-class Font
+class FontString
 {
-protected:
-    unsigned int _color = 0;
-    libfalltergeist::AafFileType* _aaf = 0;
-    Texture* _texture = 0;
 public:
-    Font(std::string filename, unsigned int color);
-    ~Font();
-
-    unsigned int color();
-
-    unsigned short horizontalGap();
-
-    unsigned short verticalGap();
-
-    unsigned short spaceWidth();
-
-    unsigned short height();
+    FontString();
 };
 
 }
-#endif // FALLTERGEIST_FONT_H
+#endif // FALLTERGEIST_FONTSTRING_H

@@ -69,6 +69,8 @@ set(SOURCES main.cpp
             src/Engine/Exception.h
             src/Engine/Font.cpp
             src/Engine/Font.h
+            src/Engine/FontString.cpp
+            src/Engine/FontString.h
             src/Engine/Game.cpp
             src/Engine/Game.h
             src/Engine/Graphics/OpenGLRenderer.cpp
