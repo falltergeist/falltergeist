@@ -119,13 +119,15 @@ void CritterDialogState::onAnswerClick(Event* event)
 void CritterDialogState::onAnswerIn(Event* event)
 {
     TextArea* sender = dynamic_cast<TextArea*>((TextArea*)event->emitter());
-    sender->setColor(0xFFA0A0A0);
+    auto font3_a0a0a0ff = _game->resourceManager()->font("font3.aaf", 0xa0a0a0ff);
+    sender->setFont(font3_a0a0a0ff);
 }
 
 void CritterDialogState::onAnswerOut(Event* event)
 {
     TextArea* sender = dynamic_cast<TextArea*>((TextArea*)event->emitter());
-    sender->setColor(0xFF3FF800);
+    auto font3_3ff800ff = _game->resourceManager()->font("font3.aaf", 0x3ff800ff);
+    sender->setFont(font3_3ff800ff);
 }
 
 void CritterDialogState::setCritter(GameCritterObject* critter)

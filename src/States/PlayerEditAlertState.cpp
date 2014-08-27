@@ -57,10 +57,12 @@ void PlayerEditAlertState::init()
     bg->setXOffset(0);
     bg->setYOffset(0);
 
+    auto font3_ff9f48ff = _game->resourceManager()->font("font3.aaf", 0xff9f48ff);
+
     TextArea * message = new TextArea(_message.c_str(), 194, 213);
     message->setWidth(250);
     message->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
-    message->setColor(0xFFFF9F48);
+    message->setFont(font3_ff9f48ff);
 
     Surface * doneBox = new Surface(_game->resourceManager()->surface("art/intrface/donebox.frm"));
     doneBox->setX(254);

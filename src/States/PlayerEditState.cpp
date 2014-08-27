@@ -130,13 +130,15 @@ PlayerEditState::PlayerEditState() : State()
         _addDescription("health_1", _game->resourceManager()->msgFileType("text/english/game/stat.msg")->message(207)->text());
         _addImage("health_1", _game->resourceManager()->surface("art/skilldex/" + images[0] + ".frm"));
 
+        auto font3_0x183018ff = _game->resourceManager()->font("font3.aaf", 0x183018ff);
+
         for (unsigned int i = 0; i != 7; ++i)
         {
             std::stringstream ss;
             ss << "health_" << (i+2);
             _addTitle(ss.str(), msg->message(312 + i)->text());
             _addDescription(ss.str(), msg->message(400 + i)->text());
-            _addLabel(ss.str(),  new TextArea(msg->message(312+i), 194, 46 + 13*(i+1)))->setColor(0x183018FF);
+            _addLabel(ss.str(),  new TextArea(msg->message(312+i), 194, 46 + 13*(i+1)))->setFont(font3_0x183018ff);
             _addImage(ss.str(), _game->resourceManager()->surface("art/skilldex/" + images[i+1] + ".frm"));
         }
     }
@@ -170,7 +172,7 @@ PlayerEditState::PlayerEditState() : State()
         _addButton("done",    new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 455, 454));
         _addButton("cancel",  new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 554, 454));
 
-        auto font3_b89c28ff = _game->resourceManager()->font("font3aaf", 0xb89c28ff);
+        auto font3_b89c28ff = _game->resourceManager()->font("font3.aaf", 0xb89c28ff);
 
         libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
         _addLabel("options", new TextArea(msg->message(101), 365, 453))->setFont(font3_b89c28ff);
@@ -373,27 +375,30 @@ void PlayerEditState::think()
     {
         std::string name = it->first;
 
+        auto font3_3ff800ff = _game->resourceManager()->font("font3.aaf", 0x3ff800ff);
+        auto font3_a0a0a0ff = _game->resourceManager()->font("font3.aaf", 0xa0a0a0ff);
+        auto font3_183018ff = _game->resourceManager()->font("font3.aaf", 0x183018ff);
 
         if (name.find("stats_") == 0 || name.find("params_") == 0)
         {
-            it->second->setColor(0xFF3FF800);
+            it->second->setFont(font3_3ff800ff);
         }
 
         if (name.find("traits_") == 0)
         {
             unsigned int number = atoi(name.substr(7).c_str());
-            it->second->setColor(player->trait(number - 1) ? 0xFFA0A0A0 : 0xFF3FF800);
+            it->second->setFont(player->trait(number - 1) ? font3_a0a0a0ff : font3_3ff800ff);
         }
 
         if (name.find("skills_") == 0)
         {
             unsigned int number = atoi(name.substr(7).c_str());
-            it->second->setColor(player->skill(number - 1) ? 0xFFA0A0A0 : 0xFF3FF800);
+            it->second->setFont(player->skill(number - 1) ? font3_a0a0a0ff : font3_3ff800ff);
         }
 
         if (name.find("health_") == 0)
         {
-            it->second->setColor(name.compare("health_1") == 0 ? 0xFF3FF800 : 0xFF183018);
+            it->second->setFont(name.compare("health_1") == 0 ? font3_3ff800ff : font3_183018ff);
         }
     }
 
@@ -413,33 +418,37 @@ void PlayerEditState::think()
         _image->setXOffset(0);
         _image->setYOffset(0);
 
+        auto font3_ffff7fff = _game->resourceManager()->font("font3.aaf", 0xffff7fff);
+        auto font3_ffffffff = _game->resourceManager()->font("font3.aaf", 0xffffffff);
+        auto font3_707820ff = _game->resourceManager()->font("font3.aaf", 0x707820ff);
+
         if (name.find("stats_") == 0)
         {
-            it->second->setColor(0xFFFFFF7F);
+            it->second->setFont(font3_ffff7fff);
         }
 
         if (name.find("params_") == 0)
         {
-            it->second->setColor(0xFFFFFF7F);
-            _labels->at(name+"_value")->setColor(0xFFFFFF7F);
+            it->second->setFont(font3_ffff7fff);
+            _labels->at(name+"_value")->setFont(font3_ffff7fff);
         }
 
         if (name.find("traits_") == 0)
         {
             unsigned int number = atoi(name.substr(7).c_str());
-            it->second->setColor(player->trait(number - 1) ? 0xFFFFFFFF : 0xFFFFFF7F);
+            it->second->setFont(player->trait(number - 1) ? font3_ffffffff : font3_ffff7fff);
         }
 
         if (name.find("skills_") == 0)
         {
             unsigned int number = atoi(name.substr(7).c_str());
-            it->second->setColor(player->skill(number - 1) ? 0xFFFFFFFF : 0xFFFFFF7F);
-            _labels->at(name+"_value")->setColor(player->skill(number - 1) ? 0xFFFFFFFF : 0xFFFFFF7F);
+            it->second->setFont(player->skill(number - 1) ? font3_ffffffff : font3_ffff7fff);
+            _labels->at(name+"_value")->setFont(player->skill(number - 1) ? font3_ffffffff : font3_ffff7fff);
         }
 
         if (name.find("health_") == 0)
         {
-            it->second->setColor(name.compare("health_1") == 0 ? 0xFFFFFF7F : 0xFF707820);
+            it->second->setFont(name.compare("health_1") == 0 ? font3_ffff7fff : font3_707820ff);
         }
     }
 

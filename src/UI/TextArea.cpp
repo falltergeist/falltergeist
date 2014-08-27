@@ -88,33 +88,9 @@ void TextArea::_calculateSize()
 {
 }
 
-TextArea * TextArea::appendText(std::string text)
+TextArea* TextArea::appendText(std::string text)
 {
     _text += text;
-    return this;
-}
-
-
-TextArea * TextArea::appendText(int number)
-{
-    std::stringstream ss;
-    ss << number;
-    return appendText(ss.str());
-}
-
-
-
-unsigned int TextArea::color()
-{
-    return _color;
-}
-
-TextArea * TextArea::setColor(unsigned int color)
-{
-    if (_color == color) return this;
-    _color = color;
-    if (!_font) return this;
-    _font->setColor(color);
     return this;
 }
 
@@ -204,10 +180,9 @@ TextArea * TextArea::setText(std::string text)
     return this;
 }
 
-TextArea * TextArea::setFont(std::string filename)
+TextArea * TextArea::setFont(Font* font)
 {
-    delete _font;
-    _font = new Font(filename, _color);
+    _font = font;
     return this;
 }
 
@@ -222,9 +197,9 @@ bool TextArea::wordWrap()
     return _wordWrap;
 }
 
-void TextArea::setBackgroundColor(unsigned int color)
+TextArea* TextArea::setBackgroundColor(unsigned int color)
 {
-
+    return this;
 }
 
 Texture* TextArea::texture()

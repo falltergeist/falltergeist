@@ -47,7 +47,6 @@ protected:
     int _height = 0;
     int _calculatedWidth = 0;
     int _calculatedHeight = 0;
-    unsigned int _color = 0x3FF800FF;
     Font* _font = 0;
     bool _wordWrap = false;
 public:
@@ -61,9 +60,6 @@ public:
 
     TextArea* setBackgroundColor(unsigned int color);
     unsigned int getBackgroundColor();
-
-    TextArea* setColor(unsigned int color);
-    unsigned int color();
 
     TextArea* setText(libfalltergeist::MsgMessage* message);
     TextArea* setText(int number);
