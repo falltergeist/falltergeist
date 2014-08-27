@@ -39,11 +39,13 @@ State::State() : EventReciever()
 
 State::~State()
 {
-    while (!_surfaces.empty())
+
+    while (!_ui.empty())
     {
-        delete _surfaces.back();
-        _surfaces.pop_back();
+        delete _ui.back();
+        _ui.pop_back();
     }
+
 }
 
 void State::init()

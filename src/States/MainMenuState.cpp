@@ -101,8 +101,8 @@ void MainMenuState::init()
     // "Exit" label
     auto exitButtonLabel = new TextArea(msg->message(14), 50, 20 + 41*5);
     exitButtonLabel->setColor(0xffb89c28)->setFont("font4.aaf")->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
-
     */
+
 
     add(background);
 
@@ -114,8 +114,9 @@ void MainMenuState::init()
     add(settingsButton);
     add(creditsButton);
     add(exitButton);
-    /*
+
     // text areas
+    /*
     add(introButtonLabel);
     add(newGameButtonLabel);
     add(loadGameButtonLabel);

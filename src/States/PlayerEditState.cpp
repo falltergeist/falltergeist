@@ -32,6 +32,7 @@
 #include "../Game/GameDudeObject.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
+#include "../UI/Image.h"
 
 // Third party includes
 #include "../../lib/libfalltergeist/libfalltergeist.h"
@@ -159,14 +160,10 @@ PlayerEditState::PlayerEditState() : State()
     }
 
 
-    Surface * background = new Surface(_game->resourceManager()->surface("art/intrface/edtrcrte.frm"));
-    background->setX(0);
-    background->setY(0);
-    background->setXOffset(0);
-    background->setYOffset(0);
+    auto background = new Image("art/intrface/edtrcrte.frm");
 
     // description horizontal line
-    for (unsigned int y = 300; y != 302; ++y) for (unsigned int x = 350; x != 620; ++x) background->setPixel(x,y, 0xFF000000);
+    //for (unsigned int y = 300; y != 302; ++y) for (unsigned int x = 350; x != 620; ++x) background->setPixel(x,y, 0xFF000000);
     {
         _addButton("options", new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 345, 454));
         _addButton("done",    new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 455, 454));

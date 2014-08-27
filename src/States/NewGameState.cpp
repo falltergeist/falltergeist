@@ -30,6 +30,7 @@
 #include "../Game/GameDudeObject.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
+#include "../UI/Image.h"
 
 // Third party includes
 
@@ -56,7 +57,7 @@ void NewGameState::init()
     State::init();
     
     // Background
-    add(new Surface(ResourceManager::surface("art/intrface/pickchar.frm")));
+    add(new Image("art/intrface/pickchar.frm"));
 
     // Begin game button
     auto beginGameButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 322);

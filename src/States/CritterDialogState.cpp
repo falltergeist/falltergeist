@@ -80,6 +80,7 @@ void CritterDialogState::blit()
 {
     State::blit();
 
+    /*
     int offset = 0;
     for (TextArea* answer : _answers)
     {
@@ -87,6 +88,7 @@ void CritterDialogState::blit()
         offset += answer->height() + 5;
         answer->blit(_game->screen()->surface());
     }
+    */
 
 }
 
@@ -185,7 +187,7 @@ void CritterDialogState::addAnswer(std::string text)
     answer->setBackgroundColor(0x01000000);
     answer->setWordWrap(true);
     answer->setWidth(370);
-    answer->draw();
+    //answer->draw();
     answer->addEventHandler("mousein", this, (EventRecieverMethod)&CritterDialogState::onAnswerIn);
     answer->addEventHandler("mouseout", this, (EventRecieverMethod)&CritterDialogState::onAnswerOut);
     answer->addEventHandler("mouseleftclick", this, (EventRecieverMethod)&CritterDialogState::onAnswerClick);
@@ -199,7 +201,7 @@ void CritterDialogState::handle(Event *event)
     {
         if (answer)
         {
-            answer->draw();
+            //answer->draw();
             answer->handle(event);
         }
     }

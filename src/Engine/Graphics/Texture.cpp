@@ -21,6 +21,8 @@
 
 // Falltergeist includes
 #include "../../Engine/Graphics/Texture.h"
+#include "../../Engine/Game.h"
+#include "../../Engine/Graphics/Renderer.h"
 
 // Third party includes
 
@@ -36,6 +38,8 @@ Texture::Texture(unsigned int width, unsigned int height)
 
 Texture::~Texture()
 {
+    auto game = &Game::getInstance();
+    //game->renderer()->unregisterTexture(this);
     delete [] _data;
 }
 

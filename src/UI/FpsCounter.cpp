@@ -25,6 +25,7 @@
 #include "../UI/FpsCounter.h"
 
 // Third party includes
+#include "SDL.h"
 
 namespace Falltergeist
 {

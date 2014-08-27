@@ -142,6 +142,15 @@ void OpenGLRenderer::registerTexture(Texture* texture)
 
 }
 
+void OpenGLRenderer::unregisterTexture(Texture* texture)
+{
+    if (!texture->id()) return;
+
+    GLuint textureId = texture->id();
+    glDeleteTextures(1, &textureId);
+    texture->setId(0);
+}
+
 void OpenGLRenderer::drawTexture(unsigned int x, unsigned int y, Texture* texture)
 {
     Renderer::drawTexture(x, y, texture);

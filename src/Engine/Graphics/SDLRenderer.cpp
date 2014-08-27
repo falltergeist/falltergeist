@@ -37,9 +37,8 @@ void SDLRenderer::init()
 
 void SDLRenderer::beginFrame()
 {
-    SDL_FillRect(SDL_GetVideoSurface(), NULL, 0x000000FF);
+    SDL_FillRect(SDL_GetVideoSurface(), NULL, 0xFF000000);
     Renderer::beginFrame();
-
 }
 
 void SDLRenderer::endFrame()
@@ -68,6 +67,15 @@ void SDLRenderer::registerTexture(Texture* texture)
 
     texture->setId(_texturesCounter);
     _texturesCounter++;
+}
+
+void SDLRenderer::unregisterTexture(Texture* texture)
+{
+    if (!texture->id()) return;
+
+    SDL_FreeSurface(_surfaces.at(texture->id() - 1));
+    _surfaces.at(texture->id() -1) = 0;
+    texture->setId(0);
 }
 
 void SDLRenderer::drawTexture(unsigned int x, unsigned int y, Texture* texture)

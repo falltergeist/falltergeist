@@ -65,8 +65,8 @@ void Game::_initialize()
     putenv(strdup("SDL_VIDEO_CENTERED=1"));
 
     _resourceManager = new ResourceManager();
-    //_renderer = new OpenGLRenderer(640, 480);
-    _renderer = new SDLRenderer(640, 480);
+    _renderer = new OpenGLRenderer(640, 480);
+    //_renderer = new SDLRenderer(640, 480);
     _renderer->init();
     //_screen = new Screen(640, 480, 32);
     //_mixer = new AudioMixer();
@@ -117,7 +117,7 @@ void Game::setState(State * state)
 void Game::run()
 {
     debug("[GAME] - Starting main loop", DEBUG_INFO);
-    TextArea* falltergeistVersion = new TextArea(CrossPlatform::getVersion(), 3, 470);
+    //TextArea* falltergeistVersion = new TextArea(CrossPlatform::getVersion(), 3, 470);
     while (!_quit)
     {
         // Clean up states
@@ -186,6 +186,7 @@ void Game::run()
                         event->setShiftPressed(_event.key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
                         _states.back()->handle(event);
 
+                        /*
                         if (event->keyCode() == SDLK_F12)
                         {
                             std::stringstream ss;
@@ -193,7 +194,7 @@ void Game::run()
                             SDL_SaveBMP(_screen->surface()->sdl_surface(), ss.str().c_str());
                             debug("[GAME] - Screenshot saved to " + ss.str(), DEBUG_INFO);
                         }
-
+                        */
                         delete event;
                         break;
                     }

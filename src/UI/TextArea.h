@@ -25,7 +25,7 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Engine/InteractiveSurface.h"
+#include "../Engine/ActiveUI.h"
 
 // Third party includes
 #include "../../lib/libfalltergeist/libfalltergeist.h"
@@ -34,23 +34,22 @@ namespace Falltergeist
 {
 class Font;
 
-class TextArea : public InteractiveSurface
+class TextArea : public ActiveUI
 {
 protected:
     void _init();
     void _calculateSize();
     std::string _text;
-    std::vector<std::string>* _textLines;
-    std::vector<Surface*>* _textSurfaces;
-    unsigned char _horizontalAlign;
-    unsigned char _verticalAlign;
-    int _width;
-    int _height;
-    int _calculatedWidth;
-    int _calculatedHeight;
-    unsigned int _color;
-    Font* _font;
-    bool _wordWrap;
+    std::vector<std::string>* _textLines = 0;
+    unsigned char _horizontalAlign = HORIZONTAL_ALIGN_LEFT;
+    unsigned char _verticalAlign = VERTICAL_ALIGN_TOP;
+    int _width = 0;
+    int _height = 0;
+    int _calculatedWidth = 0;
+    int _calculatedHeight = 0;
+    unsigned int _color = 0x3FF800FF;
+    Font* _font = 0;
+    bool _wordWrap = false;
 public:
     enum { HORIZONTAL_ALIGN_LEFT = 0, HORIZONTAL_ALIGN_CENTER, HORIZONTAL_ALIGN_RIGHT, HORIZONTAL_ALIGN_JUSTIFY };
     enum { VERTICAL_ALIGN_TOP = 0, VERTICAL_ALIGN_CENTER, VERTICAL_ALIGN_BOTTOM, VERTICAL_ALIGN_JUSTIFY };    
@@ -62,7 +61,7 @@ public:
 
     void init();
 
-    virtual void draw();
+    void setBackgroundColor(unsigned int color);
 
     TextArea* setText(libfalltergeist::MsgMessage* message);
     TextArea* setText(int number);
@@ -72,7 +71,7 @@ public:
     std::string text();
 
     std::vector<std::string>* textLines();
-    std::vector<Surface*>* textSurfaces();
+    //std::vector<Surface*>* textSurfaces();
 
 
     TextArea* setHorizontalAlign(unsigned char align);
@@ -94,7 +93,10 @@ public:
     bool wordWrap();
 
     TextArea* setFont(std::string filename);
-    Font* font();
+    Font* font();    
+
+    virtual Texture* texture();
+
 };
 
 }
