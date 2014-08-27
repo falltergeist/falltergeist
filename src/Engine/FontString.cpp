@@ -21,14 +21,46 @@
 
 // Falltergeist includes
 #include "../Engine/FontString.h"
+#include "../Engine/Font.h"
+#include "../Engine/Game.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-FontString::FontString()
+FontString::FontString(std::string text, Font* font)
 {
+    _text = text;
+
+    if (!font)
+    {
+        auto game = &Game::getInstance();
+        font = game->resourceManager()->font();
+    }
+    _font = font;
+}
+
+Font* FontString::font()
+{
+    return _font;
+}
+
+FontString* FontString::setFont(Font* font)
+{
+    _font = font;
+    return this;
+}
+
+std::string FontString::text()
+{
+    return _text;
+}
+
+FontString* FontString::setText(std::string text)
+{
+    _text = text;
+    return this;
 }
 
 }

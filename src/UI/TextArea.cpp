@@ -22,6 +22,7 @@
 
 // Falltergeist includes
 #include "../Engine/Font.h"
+#include "../Engine/FontString.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/CrossPlatform.h"
 #include "../UI/TextArea.h"
@@ -34,22 +35,24 @@ namespace Falltergeist
 
 TextArea::TextArea(libfalltergeist::MsgMessage* message, int x, int y) : ActiveUI(x, y)
 {
+    init();
     setText(message->text());
 }
 
 TextArea::TextArea(int x, int y) : ActiveUI(x, y)
 {
+    init();
 }
 
 TextArea::TextArea(std::string text, int x, int y) : ActiveUI(x, y)
 {
+    init();
     setText(text);
 }
 
 TextArea::TextArea(TextArea* textArea, int x, int y) : ActiveUI(x, y)
 {
     /*
-    setText(textArea->text());
     setColor(textArea->color());
     setHorizontalAlign(textArea->horizontalAlign());
     setVerticalAlign(textArea->verticalAlign());
@@ -79,54 +82,23 @@ TextArea::~TextArea()
 */
 }
 
-Font * TextArea::font()
+void TextArea::init()
 {
-    return _font;
+    _strings.push_back(new FontString(""));
 }
 
-void TextArea::_calculateSize()
-{
-}
 
 TextArea* TextArea::appendText(std::string text)
 {
-    _text += text;
-    return this;
-}
-
-int TextArea::height()
-{
-    if (_height == 0)
+    if (_texture)
     {
-        if (_calculatedHeight == 0) _calculateSize();
-        return _calculatedHeight;
+        delete _texture;
+        _texture = 0;
     }
-    return _height;
-}
-
-TextArea * TextArea::setHeight(int height)
-{
-    if (height == _height) return this;
-    _height = height;
+    _strings.back()->setText(_strings.back()->text() + text);
     return this;
 }
 
-int TextArea::width()
-{
-    if (_width == 0)
-    {
-        if (_calculatedWidth == 0) _calculateSize();
-        return _calculatedWidth;
-    }
-    return _width;
-}
-
-TextArea * TextArea::setWidth(int width)
-{
-    if (_width == width) return this;
-    _width = width;
-    return this;
-}
 
 unsigned char TextArea::horizontalAlign()
 {
@@ -135,7 +107,11 @@ unsigned char TextArea::horizontalAlign()
 
 TextArea * TextArea::setHorizontalAlign(unsigned char align)
 {
-    if (_horizontalAlign == align) return this;
+    if (_texture)
+    {
+        delete _texture;
+        _texture = 0;
+    }
     _horizontalAlign = align;
     return this;
 }
@@ -147,17 +123,16 @@ unsigned char TextArea::verticalAlign()
 
 TextArea * TextArea::setVerticalAlign(unsigned char align)
 {
-    if (_verticalAlign == align) return this;
+    if (_texture)
+    {
+        delete _texture;
+        _texture = 0;
+    }
     _verticalAlign = align;
     return this;
 }
 
-std::string TextArea::text()
-{
-    return _text;
-}
-
-TextArea * TextArea::setText(libfalltergeist::MsgMessage * message)
+TextArea* TextArea::setText(libfalltergeist::MsgMessage* message)
 {
     return setText(message->text());
 }
@@ -171,18 +146,32 @@ TextArea * TextArea::setText(int number)
 
 TextArea * TextArea::setText(std::string text)
 {
-    if (_text.compare(text) == 0) return this; // if text not changed
-
-    _calculatedWidth = 0;
-    _calculatedHeight = 0;
-    delete _textLines; _textLines = 0;
-    _text = text;
+    if (_texture)
+    {
+        delete _texture;
+        _texture = 0;
+    }
+    auto font = _strings.back()->font();
+    while (!_strings.empty())
+    {
+        delete _strings.back();
+        _strings.pop_back();
+    }
+    _strings.push_back(new FontString(text, font));
     return this;
 }
 
 TextArea * TextArea::setFont(Font* font)
 {
-    _font = font;
+    if (_texture)
+    {
+        delete _texture;
+        _texture = 0;
+    }
+    for (auto it = _strings.begin(); it != _strings.end(); it++)
+    {
+        (*it)->setFont(font);
+    }
     return this;
 }
 
@@ -202,10 +191,37 @@ TextArea* TextArea::setBackgroundColor(unsigned int color)
     return this;
 }
 
+TextArea* TextArea::setWidth(unsigned int width)
+{
+    _width = width;
+    return this;
+}
+
+unsigned int TextArea::width()
+{
+    return _width;
+}
+
+TextArea* TextArea::setHeight(unsigned int height)
+{
+    _height = height;
+    return this;
+}
+
+unsigned int TextArea::height()
+{
+    return _height;
+}
+
 Texture* TextArea::texture()
 {
     if (!_texture) _texture = new Texture(10, 10);
     return _texture;
+}
+
+std::string TextArea::text()
+{
+    return _strings.back()->text();
 }
 
 }

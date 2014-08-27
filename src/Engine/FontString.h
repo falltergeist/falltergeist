@@ -21,6 +21,7 @@
 #define FALLTERGEIST_FONTSTRING_H
 
 // C++ standard includes
+#include <string>
 
 // Falltergeist includes
 
@@ -28,11 +29,19 @@
 
 namespace Falltergeist
 {
+class Font;
 
 class FontString
 {
+protected:
+    std::string _text;
+    Font* _font = 0;
 public:
-    FontString();
+    FontString(std::string text, Font* font = 0);
+    Font* font();
+    FontString* setFont(Font* font);
+    std::string text();
+    FontString* setText(std::string text);
 };
 
 }

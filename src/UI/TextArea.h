@@ -33,21 +33,19 @@
 namespace Falltergeist
 {
 class Font;
+class FontString;
 
 class TextArea : public ActiveUI
 {
 protected:
-    void _init();
-    void _calculateSize();
-    std::string _text;
-    std::vector<std::string>* _textLines = 0;
+    std::vector<FontString*> _strings;
+    void init();
     unsigned char _horizontalAlign = HORIZONTAL_ALIGN_LEFT;
     unsigned char _verticalAlign = VERTICAL_ALIGN_TOP;
-    int _width = 0;
-    int _height = 0;
-    int _calculatedWidth = 0;
-    int _calculatedHeight = 0;
-    Font* _font = 0;
+    unsigned int _width = 0;
+    unsigned int _height = 0;
+    unsigned int _calculatedWidth = 0;
+    unsigned int _calculatedHeight = 0;
     bool _wordWrap = false;
 public:
     enum { HORIZONTAL_ALIGN_LEFT = 0, HORIZONTAL_ALIGN_CENTER, HORIZONTAL_ALIGN_RIGHT, HORIZONTAL_ALIGN_JUSTIFY };
@@ -73,11 +71,11 @@ public:
     TextArea* setVerticalAlign(unsigned char align);
     unsigned char verticalAlign();
 
-    TextArea* setHeight(int height);
-    int height();
+    TextArea* setHeight(unsigned int height);
+    unsigned int height();
 
-    TextArea* setWidth(int width);
-    int width();
+    TextArea* setWidth(unsigned int width);
+    unsigned int width();
 
     TextArea* setWordWrap(bool wordWrap);
     bool wordWrap();

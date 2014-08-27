@@ -37,7 +37,7 @@ class PlayerEditNameState : public State
 {
 protected:
     unsigned int _timer;
-    TextArea * _name;
+    TextArea* _name;
     Surface * _cursor;
     std::map<char,char> * _keyCodes;
 public:
