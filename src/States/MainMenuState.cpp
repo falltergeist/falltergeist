@@ -75,33 +75,35 @@ void MainMenuState::init()
     auto exitButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*5);
     exitButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MainMenuState::onExitButtonClick);
 
-    /*
+
     auto msg = _game->resourceManager()->msgFileType("text/english/game/misc.msg");
+
+    auto font4 = _game->resourceManager()->font("font4.aaf", 0xb89c28ff);
 
     // "Intro" label
     auto introButtonLabel = new TextArea(msg->message(9), 55, 20);
-    introButtonLabel->setColor(0xffb89c28)->setFont("font4.aaf")->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    introButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "New Game" label
     auto newGameButtonLabel = new TextArea(msg->message(10), 50, 20 + 41);
-    newGameButtonLabel->setColor(0xffb89c28)->setFont("font4.aaf")->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    newGameButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Load Game" label
     auto loadGameButtonLabel = new TextArea(msg->message(11), 50, 20 + 41*2);
-    loadGameButtonLabel->setColor(0xffb89c28)->setFont("font4.aaf")->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    loadGameButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Options" label
     auto optionsButtonLabel = new TextArea(msg->message(12), 50, 20 + 41*3);
-    optionsButtonLabel->setColor(0xffb89c28)->setFont("font4.aaf")->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    optionsButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Credits" label
     auto creditsButtonLabel = new TextArea(msg->message(13), 50, 20 + 41*4);
-    creditsButtonLabel->setColor(0xffb89c28)->setFont("font4.aaf")->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    creditsButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Exit" label
     auto exitButtonLabel = new TextArea(msg->message(14), 50, 20 + 41*5);
-    exitButtonLabel->setColor(0xffb89c28)->setFont("font4.aaf")->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
-    */
+    exitButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+
 
 
     add(background);
@@ -116,14 +118,13 @@ void MainMenuState::init()
     add(exitButton);
 
     // text areas
-    /*
     add(introButtonLabel);
     add(newGameButtonLabel);
     add(loadGameButtonLabel);
     add(optionsButtonLabel);
     add(creditsButtonLabel);
     add(exitButtonLabel);
-    */
+
 }
 
 void MainMenuState::think()

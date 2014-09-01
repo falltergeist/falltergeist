@@ -52,7 +52,12 @@ public:
 
     unsigned short spaceWidth();
 
+    unsigned short width();
     unsigned short height();
+
+    Texture* texture();
+
+    libfalltergeist::AafFileType* aaf();
 };
 
 }

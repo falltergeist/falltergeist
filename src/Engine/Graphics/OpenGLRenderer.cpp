@@ -26,6 +26,7 @@
 #include "../../Engine/Exception.h"
 #include "../../Engine/ResourceManager.h"
 #include "../../Engine/Game.h"
+#include "../../Engine/Font.h"
 
 // Third party includes
 #include "SDL.h"
@@ -81,35 +82,17 @@ void OpenGLRenderer::init()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glTranslatef(0.375, 0.375, 0);
-
-    //temporary!!! just for testing
-    {
-        auto game = &Game::getInstance();
-        auto aaf = game->resourceManager()->aafFileType("font4.aaf");
-
-        _texture = new Texture(aaf->maximumWidth()*16, aaf->maximumHeight()*16);
-        _texture->loadFromRGBA(aaf->rgba());
-        registerTexture(_texture);
-    }
-
-
 }
 
 void OpenGLRenderer::beginFrame()
 {
     glClear(GL_COLOR_BUFFER_BIT);
     Renderer::beginFrame();
-
-
 }
 
 void OpenGLRenderer::endFrame()
 {
     Renderer::endFrame();
-    // just for testing!!!
-    {
-        drawTexture(10, 10, _texture);
-    }
     SDL_GL_SwapBuffers();
 }
 
@@ -156,21 +139,7 @@ void OpenGLRenderer::drawTexture(unsigned int x, unsigned int y, Texture* textur
     Renderer::drawTexture(x, y, texture);
     if (!texture->id()) registerTexture(texture);
 
-    //glColor3b((color && 0xFF000000) >> 24, (color && 0x00FF0000) >> 16, (color && 0x0000FF00) >> 8);
-
     glBindTexture( GL_TEXTURE_2D, texture->id());
-    /*
-    if (color)
-    {
-        //glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        unsigned char r, g, b, a;
-        r = (color & 0xFF000000) >> 24;
-        g = (color & 0x00FF0000) >> 16;
-        b = (color & 0x0000FF00) >> 8;
-        a =  color & 0x000000FF;
-        glColor4ub(r, g, b, a);
-    }
-    */
     glBegin(GL_POLYGON);
          glTexCoord2i(0, 0);
          glVertex2i(x, y);
@@ -184,8 +153,6 @@ void OpenGLRenderer::drawTexture(unsigned int x, unsigned int y, Texture* textur
          glTexCoord2i(0, 1);
          glVertex2i(x, y + texture->height());
     glEnd();
-
-    //if (color) glColor4f(1.0, 1.0, 1.0, 1.0);
 }
 
 }

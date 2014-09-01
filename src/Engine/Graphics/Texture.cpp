@@ -87,4 +87,18 @@ void Texture::loadFromRGBA(unsigned int* data)
     for (unsigned int i = 0; i != _width*_height; ++i) _data[i] = data[i];
 }
 
+void Texture::copyTo(Texture* destination, unsigned int destinationX, unsigned int destinationY, unsigned int sourceX, unsigned int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
+{
+    if (sourceWidth == 0) sourceWidth = width();
+    if (sourceHeight == 0) sourceHeight = height();
+
+    for (unsigned int y = 0; y != sourceHeight; y++)
+    {
+        for(unsigned int x = 0; x != sourceWidth; x++)
+        {
+            destination->setPixel(destinationX + x, destinationY + y, pixel(sourceX + x, sourceY + y));
+        }
+    }
+}
+
 }

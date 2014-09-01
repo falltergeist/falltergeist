@@ -19,6 +19,7 @@
 
 // C++ standard includes
 #include <sstream>
+#include <iostream>
 
 // Falltergeist includes
 #include "../Engine/Font.h"
@@ -52,34 +53,10 @@ TextArea::TextArea(std::string text, int x, int y) : ActiveUI(x, y)
 
 TextArea::TextArea(TextArea* textArea, int x, int y) : ActiveUI(x, y)
 {
-    /*
-    setColor(textArea->color());
-    setHorizontalAlign(textArea->horizontalAlign());
-    setVerticalAlign(textArea->verticalAlign());
-    if (textArea->_width) setWidth(textArea->width());
-    if (textArea->_height) setWidth(textArea->height());
-    setFont(textArea->font()->filename());
-    setWordWrap(textArea->wordWrap());
-    */
 }
 
 TextArea::~TextArea()
 {
-/*
-    delete _textLines;
-
-    if (_textSurfaces != 0)
-    {
-        while (!_textSurfaces->empty())
-        {
-            delete _textSurfaces->back();
-            _textSurfaces->pop_back();
-        }
-        delete _textSurfaces;
-    }
-
-    delete _font;
-*/
 }
 
 void TextArea::init()
@@ -177,6 +154,11 @@ TextArea * TextArea::setFont(Font* font)
 
 TextArea * TextArea::setWordWrap(bool wordWrap)
 {
+    if (_texture)
+    {
+        delete _texture;
+        _texture = 0;
+    }
     _wordWrap = wordWrap;
     return this;
 }
@@ -188,11 +170,22 @@ bool TextArea::wordWrap()
 
 TextArea* TextArea::setBackgroundColor(unsigned int color)
 {
+    if (_texture)
+    {
+        delete _texture;
+        _texture = 0;
+    }
+    _backgroundColor = color;
     return this;
 }
 
 TextArea* TextArea::setWidth(unsigned int width)
 {
+    if (_texture)
+    {
+        delete _texture;
+        _texture = 0;
+    }
     _width = width;
     return this;
 }
@@ -204,6 +197,11 @@ unsigned int TextArea::width()
 
 TextArea* TextArea::setHeight(unsigned int height)
 {
+    if (_texture)
+    {
+        delete _texture;
+        _texture = 0;
+    }
     _height = height;
     return this;
 }
@@ -215,7 +213,47 @@ unsigned int TextArea::height()
 
 Texture* TextArea::texture()
 {
-    if (!_texture) _texture = new Texture(10, 10);
+    if (_texture) return _texture;
+
+    // Рассчитываем размеры текстуры
+
+    unsigned int width = 0;
+    unsigned int height = 0;
+
+    auto string = _strings.back();
+
+    std::string text = string->text();
+    Font* font = string->font();
+
+    width = 0;
+    height = font->height();
+
+    for (unsigned int i = 0; i != text.length(); i++)
+    {
+        unsigned char chr = text[i];
+        width += font->aaf()->glyphs()->at(chr)->width() + font->horizontalGap();
+    }
+
+    _texture = new Texture(width, height);
+    unsigned int x = 0;
+    unsigned int y = 0;
+
+    for (unsigned int i = 0; i != text.length(); i++)
+    {
+        unsigned char chr = text[i];
+        libfalltergeist::AafGlyph* glyph = font->aaf()->glyphs()->at(chr);
+
+        unsigned int xOffset = (unsigned char)(chr%16) * font->width();
+        unsigned int yOffset = (unsigned char)(chr/16) * font->height();
+
+        font->texture()->copyTo(_texture, x, y, xOffset, yOffset, glyph->width(), glyph->height());
+        x += glyph->width() + font->horizontalGap();
+
+    }
+
+
+
+
     return _texture;
 }
 

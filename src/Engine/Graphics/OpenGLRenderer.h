@@ -33,7 +33,6 @@ namespace Falltergeist
 class OpenGLRenderer : public Renderer
 {
 public:
-    Texture* _texture; // temporary!!! just for testing
     OpenGLRenderer(unsigned int width, unsigned int height);
 
     virtual void init();

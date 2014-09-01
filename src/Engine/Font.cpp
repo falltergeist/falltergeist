@@ -37,7 +37,6 @@ Font::Font(std::string filename, unsigned int color)
     unsigned int width = _aaf->maximumWidth()*16;
     unsigned int height = _aaf->maximumHeight()*16;
 
-
     unsigned int* rgba = new unsigned int[width * height]();
 
     for (unsigned int y = 0; y != height; y++)
@@ -45,7 +44,8 @@ Font::Font(std::string filename, unsigned int color)
         for (unsigned int x = 0; x != width; x++)
         {
             unsigned int index = y * width + x;
-            unsigned char alpha = 0x000000FF * _aaf->rgba()[index];
+            unsigned char alpha = _aaf->rgba()[index];
+            //if (alpha > 0) alpha = 0xff;
             rgba[index] = (color & 0xFFFFFF00) | alpha;
         }
     }
@@ -66,6 +66,11 @@ unsigned short Font::height()
     return _aaf->maximumHeight();
 }
 
+unsigned short Font::width()
+{
+    return _aaf->maximumWidth();
+}
+
 unsigned short Font::horizontalGap()
 {
     return _aaf->horizontalGap();
@@ -79,6 +84,16 @@ unsigned short Font::verticalGap()
 unsigned short Font::spaceWidth()
 {
     return _aaf->spaceWidth();
+}
+
+Texture* Font::texture()
+{
+    return _texture;
+}
+
+libfalltergeist::AafFileType* Font::aaf()
+{
+    return _aaf;
 }
 
 }

@@ -46,6 +46,7 @@ protected:
     unsigned int _height = 0;
     unsigned int _calculatedWidth = 0;
     unsigned int _calculatedHeight = 0;
+    unsigned int _backgroundColor = 0;
     bool _wordWrap = false;
 public:
     enum { HORIZONTAL_ALIGN_LEFT = 0, HORIZONTAL_ALIGN_CENTER, HORIZONTAL_ALIGN_RIGHT, HORIZONTAL_ALIGN_JUSTIFY };
