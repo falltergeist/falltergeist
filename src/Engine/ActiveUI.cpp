@@ -166,6 +166,11 @@ void ActiveUI::handle(Event* event)
         return;
     }
 
+    if(auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
+    {
+        emitEvent(keyboardEvent);
+    }
+
 }
 
 }

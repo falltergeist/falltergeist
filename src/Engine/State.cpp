@@ -109,9 +109,9 @@ void State::add(std::vector<UI*> uis)
 
 void State::handle(Event* event)
 {
-    for (std::vector<ActiveUI*>::reverse_iterator i = _activeUi.rbegin(); i < _activeUi.rend(); i++)
+    for (auto it = _activeUi.rbegin(); it != _activeUi.rend(); ++it)
     {
-        (*i)->handle(event);
+        (*it)->handle(event);
     }
 }
 

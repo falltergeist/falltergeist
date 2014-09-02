@@ -20,6 +20,7 @@
 
 // C++ standard includes
 #include <ctype.h>
+#include <iostream>
 
 // Falltergeist includes
 #include "../States/PlayerEditNameState.h"
@@ -132,14 +133,15 @@ void PlayerEditNameState::init()
 
 void PlayerEditNameState::onKeyboardPress(KeyboardEvent * event)
 {
-    std::string text(_name->text());
+    auto sender = (TextArea*) event->emitter();
+    std::string text = sender->text();
 
     if (event->keyCode() == SDLK_BACKSPACE) //backspace
     {
         if (text.length() > 0)
         {
             text = text.substr(0, text.length() - 1);
-            _name->setText(text.c_str());
+            sender->setText(text.c_str());
             return;
         }
         return;
@@ -168,7 +170,7 @@ void PlayerEditNameState::onKeyboardPress(KeyboardEvent * event)
         {
             text += chr;
         }
-        _name->setText(text.c_str());
+        sender->setText(text.c_str());
     }
 
 }

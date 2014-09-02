@@ -67,6 +67,17 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
             _textures.push_back(ResourceManager::texture("art/intrface/prfxout.frm"));
             _textures.push_back(ResourceManager::texture("art/intrface/prfxin.frm"));
             _checkboxMode = true;
+        case TYPE_PLAYER_NAME:
+            _textures.push_back(ResourceManager::texture("art/intrface/nameoff.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/nameon.frm"));
+            break;
+        case TYPE_PLAYER_AGE:
+            _textures.push_back(ResourceManager::texture("art/intrface/ageoff.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/ageon.frm"));
+            break;
+        case TYPE_PLAYER_GENDER:
+            _textures.push_back(ResourceManager::texture("art/intrface/sexoff.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/sexon.frm"));
             break;
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");

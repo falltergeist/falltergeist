@@ -48,7 +48,10 @@ public:
         TYPE_MINUS,
         TYPE_LEFT_ARROW,
         TYPE_RIGHT_ARROW,
-        TYPE_CHECKBOX
+        TYPE_CHECKBOX,
+        TYPE_PLAYER_NAME,
+        TYPE_PLAYER_AGE,
+        TYPE_PLAYER_GENDER
     };
     ImageButton(unsigned int type, int x = 0, int y = 0);
     ~ImageButton();
