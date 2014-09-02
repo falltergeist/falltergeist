@@ -53,6 +53,14 @@ TextArea::TextArea(std::string text, int x, int y) : ActiveUI(x, y)
 
 TextArea::TextArea(TextArea* textArea, int x, int y) : ActiveUI(x, y)
 {
+    init();
+    setFont(textArea->_strings.back()->font());
+    setBackgroundColor(textArea->_backgroundColor);
+    setHeight(textArea->_height);
+    setWidth(textArea->_width);
+    setHorizontalAlign(textArea->_horizontalAlign);
+    setVerticalAlign(textArea->_verticalAlign);
+    setWordWrap(textArea->_wordWrap);
 }
 
 TextArea::~TextArea()

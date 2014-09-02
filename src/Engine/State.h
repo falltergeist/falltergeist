@@ -52,8 +52,9 @@ public:
     State();
     virtual ~State();
 
-    void add(UI* ui);
     void add(ActiveUI* ui);
+    void add(UI* ui);
+    void add(std::vector<ActiveUI*> uis);
     void add(std::vector<UI*> uis);
     bool fullscreen();
     void setFullscreen(bool value);

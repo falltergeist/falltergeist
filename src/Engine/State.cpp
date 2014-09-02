@@ -86,20 +86,25 @@ void State::setScrollable(bool value)
     _scrollable = value;
 }
 
-void State::add(UI* ui)
-{
-    _ui.push_back(ui);
-}
-
 void State::add(ActiveUI* activeUi)
 {
     _activeUi.push_back(activeUi);
     add((UI*)activeUi);
 }
 
+void State::add(UI* ui)
+{
+    _ui.push_back(ui);
+}
+
+void State::add(std::vector<ActiveUI*> uis)
+{
+    for (auto& ui : uis) add(ui);
+}
+
 void State::add(std::vector<UI*> uis)
 {
-    for (auto& ui : uis) _ui.push_back(ui);
+    for (auto& ui : uis) add(ui);
 }
 
 void State::handle(Event* event)

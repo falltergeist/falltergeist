@@ -65,7 +65,7 @@ void StartState::think()
 {    
     //_game->setState(new LocationState()); return;
     //_game->setState(new CritterDialogState()); return;
-    if (_splashTicks + 3000 < SDL_GetTicks())
+    if (_splashTicks + 1000 < SDL_GetTicks())
     {
         //_game->setPlayer(new Player(ResourceManager::gcdFileType("premade/combat.gcd")));
         //_game->setState(new SettingsMenuState(_game));
