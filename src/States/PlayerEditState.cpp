@@ -235,7 +235,7 @@ PlayerEditState::PlayerEditState() : State()
         std::map<std::string, BigCounter *>::iterator it;
         for(it = _counters->begin(); it != _counters->end(); ++it)
         {
-            //add(it->second);
+            add(it->second);
         }
     }
     // add hidden masks
