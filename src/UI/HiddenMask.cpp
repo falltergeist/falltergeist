@@ -30,6 +30,8 @@ namespace Falltergeist
 
 HiddenMask::HiddenMask(unsigned int width, unsigned int height, int x, int y) : Image(width, height)
 {
+    setX(x);
+    setY(y);
     _texture->fill(0x00000001);
 }
 
