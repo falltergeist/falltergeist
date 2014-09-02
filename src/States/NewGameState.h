@@ -33,14 +33,14 @@ namespace Falltergeist
 {
 class GcdFileType;
 class Surface;
-class SurfaceSet;
+class ImageList;
 class TextArea;
 class GameDudeObject;
 
 class NewGameState : public State
 {
 protected:
-    SurfaceSet* _characterImages = 0;
+    ImageList* _characterImages = 0;
     std::vector<GameDudeObject*> _characters;
     TextArea* _playerStats1 = 0;
     TextArea* _playerStats2 = 0;

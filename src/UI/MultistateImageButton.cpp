@@ -22,51 +22,78 @@
 // Falltergeist includes
 #include "../UI/MultistateImageButton.h"
 #include "../Engine/Exception.h"
+#include "../Engine/ActiveUI.h"
+#include "../UI/Image.h"
+#include "../Engine/Graphics/Texture.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-MultistateImageButton::MultistateImageButton(int x, int y) : InteractiveSurface(0, 0, x, y)
+MultistateImageButton::MultistateImageButton(int x, int y) : ActiveUI(x, y)
 {
     addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MultistateImageButton::_onLeftButtonClick);
 }
 
-MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : InteractiveSurface(0, 0, x, y)
+MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
 {
     addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MultistateImageButton::_onLeftButtonClick);
-    Surface * surface;
+    Image* image;
     switch (type)
     {
         case TYPE_BIG_SWITCH:
-            surface = ResourceManager::surface("art/intrface/prfbknbs.frm");
-            addSurface(surface->crop(0, 47*0, 46, 47));
-            addSurface(surface->crop(0, 47*1, 46, 47));
-            addSurface(surface->crop(0, 47*2, 46, 47));
-            addSurface(surface->crop(0, 47*3, 46, 47));
+        {
+            auto image = new Image("art/intrface/prfbknbs.frm");
+
+            auto image1 = new Image(46, 47);
+            image->texture()->copyTo(image1->texture(), 0, 0, 0, 0*47, 46, 47);
+            auto image2 = new Image(46, 47);
+            image->texture()->copyTo(image2->texture(), 0, 0, 0, 1*47, 46, 47);
+            auto image3 = new Image(46, 47);
+            image->texture()->copyTo(image3->texture(), 0, 0, 0, 2*47, 46, 47);
+            auto image4 = new Image(46, 47);
+            image->texture()->copyTo(image4->texture(), 0, 0, 0, 3*47, 46, 47);
+
+            addImage(image1);
+            addImage(image2);
+            addImage(image3);
+            addImage(image4);
+            delete image1;
+            delete image2;
+            delete image3;
+            delete image4;
+            delete image;
             break;
+        }
         case TYPE_SMALL_SWITCH:
-            surface = ResourceManager::surface("art/intrface/prflknbs.frm");
-            addSurface(surface->crop(0, 0, 22, 25));
-            addSurface(surface->crop(0, 25, 22, 50));
+        {
+            auto image = new Image("art/intrface/prflknbs.frm");
+            auto image1 = new Image(22, 25);
+            auto image2 = new Image(22, 50);
+            image->texture()->copyTo(image1->texture(), 0, 0, 0, 0, 22, 25);
+            image->texture()->copyTo(image2->texture(), 0, 0, 0, 25, 22, 50);
+            delete image1;
+            delete image2;
+            delete image;
             break;
+        }
         default:
             throw Exception("MultistateImageButton::MultistateImageButton(unsigned int type, x, y) - unsupported type");
     }
 }
 
 
-MultistateImageButton::MultistateImageButton(SurfaceSet surfaceSet, int x, int y) : InteractiveSurface(0, 0, x, y)
+MultistateImageButton::MultistateImageButton(ImageList imageList, int x, int y) : ActiveUI(x, y)
 {
     addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MultistateImageButton::_onLeftButtonClick);
-    for (auto surface : *surfaceSet.surfaces()) _surfaceSet.addSurface(surface);
+    for (auto image: *imageList.images()) _imageList.addImage(new Image(image));
 }
 
-MultistateImageButton::MultistateImageButton(SurfaceSet* surfaceSet, int x, int y) : InteractiveSurface(0, 0, x, y)
+MultistateImageButton::MultistateImageButton(ImageList* imageList, int x, int y) : ActiveUI(x, y)
 {
     addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MultistateImageButton::_onLeftButtonClick);
-    for (auto surface : *surfaceSet->surfaces()) _surfaceSet.addSurface(surface);
+    for (auto image: *imageList->images()) _imageList.addImage(new Image(image));
 }
 
 
@@ -74,9 +101,9 @@ MultistateImageButton::~MultistateImageButton()
 {
 }
 
-void MultistateImageButton::addSurface(Surface* surface)
+void MultistateImageButton::addImage(Image* image)
 {
-    _surfaceSet.addSurface(surface);
+    _imageList.addImage(new Image(image));
     _maxState++;
 }
 
@@ -135,9 +162,9 @@ void MultistateImageButton::_onLeftButtonClick(MouseEvent* event)
     }
 }
 
-SDL_Surface* MultistateImageButton::sdl_surface()
+Texture* MultistateImageButton::texture()
 {
-    return _surfaceSet.surfaces()->at(_currentState)->sdl_surface();
+    return _imageList.images()->at(_currentState)->texture();
 }
 
 void MultistateImageButton::setModeFactor(int factor)

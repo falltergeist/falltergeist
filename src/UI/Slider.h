@@ -23,18 +23,18 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/InteractiveSurface.h"
-#include "../Engine/SurfaceSet.h"
+#include "../Engine/ActiveUI.h"
+#include "../UI/ImageList.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class Slider : public InteractiveSurface
+class Slider : public ActiveUI
 {
 protected:
-    SurfaceSet _surfaceSet;
+    ImageList _imageList;
     double _minValue = 0;
     double _maxValue = 1;
     double _value = 0;
@@ -42,7 +42,7 @@ protected:
 public:
     Slider(int x, int y);
     virtual ~Slider();
-    virtual SDL_Surface* sdl_surface();
+    virtual Texture* texture();
     double minValue();
     void setMinValue(double value);
     double maxValue();

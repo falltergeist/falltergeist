@@ -21,6 +21,7 @@
 
 // Falltergeist includes
 #include "../UI/Image.h"
+#include "../Engine/Graphics/Texture.h"
 #include "../Engine/ResourceManager.h"
 
 // Third party includes
@@ -28,13 +29,31 @@
 namespace Falltergeist
 {
 
-Image::Image(std::string filename) : EventReciever(), UI()
+Image::Image(std::string filename) : ActiveUI()
 {
     setTexture(ResourceManager::texture(filename));
 }
 
+Image::Image(Image* image) : ActiveUI()
+{
+    _imageTexture = new Texture(image->texture()->width(), image->texture()->height());
+    _imageTexture->loadFromRGBA(image->texture()->data());
+    setTexture(_imageTexture);
+}
+
+Image::Image(unsigned int width, unsigned int height) : ActiveUI()
+{
+    _imageTexture = new Texture(width, height);
+    setTexture(_imageTexture);
+}
+
 Image::~Image()
 {
+    if (_imageTexture != 0)
+    {
+        delete _imageTexture;
+        _imageTexture = 0;
+    }
 }
 
 

@@ -30,13 +30,13 @@
 
 namespace Falltergeist
 {
-class SurfaceSet;
+class ImageList;
 
 class PlayerEditGenderState : public State
 {
 protected:
-    SurfaceSet * _maleImage;
-    SurfaceSet * _femaleImage;
+    ImageList* _maleImage;
+    ImageList* _femaleImage;
 public:
     PlayerEditGenderState();
     void init();

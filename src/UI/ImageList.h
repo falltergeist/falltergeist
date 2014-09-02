@@ -17,39 +17,39 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_SURFACESET_H
-#define FALLTERGEIST_SURFACESET_H
+#ifndef FALLTERGEIST_IMAGELIST_H
+#define FALLTERGEIST_IMAGELIST_H
 
 // C++ standard includes
 #include <vector>
 
 // Falltergeist includes
-#include "../Engine/InteractiveSurface.h"
+#include "../Engine/ActiveUI.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+class Image;
 
-class SurfaceSet : public InteractiveSurface
+class ImageList : public ActiveUI
 {
 protected:
-    std::vector<Surface*>* _surfaces;
-    unsigned int _currentSurface = 0;
+    std::vector<Image*> _images;
+    unsigned int _currentImage = 0;
 public:
-    SurfaceSet(std::vector<std::string> surfacesList, int x = 0, int y = 0);
-    SurfaceSet(std::vector<Surface*> surfacesList, int x = 0, int y = 0);
-    SurfaceSet(int x = 0, int y = 0);
-    ~SurfaceSet();
+    ImageList(std::vector<std::string> imageList, int x = 0, int y = 0);
+    ImageList(std::vector<Image*> imageList, int x = 0, int y = 0);
+    ImageList(int x = 0, int y = 0);
+    ~ImageList();
 
-    void addSurface(Surface* surface);
-    void setCurrentSurface(unsigned int number);
-    unsigned int currentSurface();
-    virtual void draw();
-    Surface* surface();
-    std::vector<Surface*> * surfaces();
-    virtual SDL_Surface* sdl_surface();
+    void addImage(Image* image);
+    void addImage(std::string filename);
+    void setCurrentImage(unsigned int number);
+    unsigned int currentImage();
+    virtual Texture* texture();
+    std::vector<Image*> * images();
 };
 
 }
-#endif // FALLTERGEIST_SURFACESET_H
+#endif // FALLTERGEIST_IMAGELIST_H

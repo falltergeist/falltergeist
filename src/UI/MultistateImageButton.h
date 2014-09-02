@@ -24,17 +24,19 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Engine/InteractiveSurface.h"
-#include "../Engine/SurfaceSet.h"
+#include "../Engine/ActiveUI.h"
+#include "../UI/ImageList.h"
 // Third party includes
 
 namespace Falltergeist
 {
+class ImageList;
+class Image;
 
-class MultistateImageButton : public InteractiveSurface
+class MultistateImageButton : public ActiveUI
 {
 protected:
-    SurfaceSet _surfaceSet;
+    ImageList _imageList;
     unsigned int _currentState = 0;
     int _mode = MODE_CYCLIC;
     int _modeFactor = 1; // or -1
@@ -46,10 +48,10 @@ public:
     enum {TYPE_BIG_SWITCH = 1, TYPE_SMALL_SWITCH};
     MultistateImageButton(int x = 0, int y = 0);
     MultistateImageButton(unsigned int type, int x = 0, int y = 0);
-    MultistateImageButton(SurfaceSet* surfaceSet, int x = 0, int y = 0);
-    MultistateImageButton(SurfaceSet surfaceSet, int x = 0, int y = 0);
+    MultistateImageButton(ImageList* imageList, int x = 0, int y = 0);
+    MultistateImageButton(ImageList imageList, int x = 0, int y = 0);
     virtual ~MultistateImageButton();
-    void addSurface(Surface * surface);
+    void addImage(Image* image);
     unsigned int state();
     void setState(unsigned int state);
     unsigned int minState();
@@ -60,7 +62,7 @@ public:
     int mode();
     void setModeFactor(int factor);
     int modeFactor();
-    virtual SDL_Surface* sdl_surface();
+    virtual Texture* texture();
 };
 
 }

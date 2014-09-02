@@ -24,7 +24,7 @@
 #include <string>
 
 // Falltergeist includes
-#include "../Engine/Event/Event.h"
+#include "../Engine/ActiveUI.h"
 #include "../Engine/UI.h"
 
 // Third party includes
@@ -32,10 +32,14 @@
 namespace Falltergeist
 {
 
-class Image : public EventReciever, public UI
+class Image : public ActiveUI
 {
+protected:
+    Texture* _imageTexture = 0;
 public:
     Image(std::string filename);
+    Image(unsigned int width, unsigned int height);
+    Image(Image* image);
     ~Image();
 };
 

@@ -26,7 +26,7 @@
 #include "../States/LocationState.h"
 #include "../Engine/Game.h"
 #include "../Engine/ResourceManager.h"
-#include "../Engine/SurfaceSet.h"
+#include "../UI/ImageList.h"
 #include "../Game/GameDudeObject.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
@@ -85,7 +85,7 @@ void NewGameState::init()
 
     // Characters images
     _selectedCharacter = 0;
-    _characterImages = new SurfaceSet({
+    _characterImages = new ImageList({
                                           "art/intrface/combat.frm",
                                           "art/intrface/stealth.frm",
                                           "art/intrface/diplomat.frm"
@@ -196,7 +196,7 @@ void NewGameState::changeCharacter()
     _playerBio->setText(dude->biography());
     _playerName->setText(dude->name());
 
-    _characterImages->setCurrentSurface(_selectedCharacter);    
+    _characterImages->setCurrentImage(_selectedCharacter);
 }
 
 std::string NewGameState::statToString(unsigned int stat)

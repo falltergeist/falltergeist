@@ -103,8 +103,6 @@ set(SOURCES main.cpp
             src/Engine/State.h
             src/Engine/Surface.cpp
             src/Engine/Surface.h
-            src/Engine/SurfaceSet.cpp
-            src/Engine/SurfaceSet.h
             src/Engine/UI.cpp
             src/Engine/UI.h
             src/Game/GameDefines.h
@@ -182,6 +180,8 @@ set(SOURCES main.cpp
             src/UI/Image.h
             src/UI/ImageButton.cpp
             src/UI/ImageButton.h
+            src/UI/ImageList.cpp
+            src/UI/ImageList.h
             src/UI/MultistateImageButton.cpp
             src/UI/MultistateImageButton.h
             src/UI/Slider.cpp
