@@ -40,6 +40,7 @@ protected:
     bool _rightButtonPressed = false;
     bool _drag = false;
     bool _hovered = false;
+    bool _visible = true;
 public:
     UI(int x = 0, int y = 0);
     virtual ~UI();
@@ -52,6 +53,11 @@ public:
 
     virtual Texture* texture();
     virtual void setTexture(Texture* texture);
+
+    virtual void setVisible(bool value);
+    virtual bool visible();
+
+    virtual void think();
 };
 
 }

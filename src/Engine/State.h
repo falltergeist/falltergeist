@@ -42,7 +42,6 @@ class State : public EventReciever
 {
 protected:
     Game* _game;
-    std::vector<Surface*> _surfaces;
     std::vector<UI*> _ui;
     std::vector<ActiveUI*> _activeUi;
 
@@ -53,11 +52,9 @@ public:
     State();
     virtual ~State();
 
-    void add(Surface* surface);
     void add(UI* ui);
     void add(ActiveUI* ui);
-    void add(std::vector<Surface*> surfaces);
-    virtual void blit();
+    void add(std::vector<UI*> uis);
     bool fullscreen();
     void setFullscreen(bool value);
     bool initialized();

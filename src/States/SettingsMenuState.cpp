@@ -23,7 +23,7 @@
 // Falltergeist includes
 #include "../States/SettingsMenuState.h"
 #include "../Engine/ResourceManager.h"
-#include "../Engine/Surface.h"
+#include "../UI/Image.h"
 #include "../Engine/Game.h"
 #include "../UI/MultistateImageButton.h"
 #include "../UI/ImageButton.h"
@@ -48,14 +48,12 @@ void SettingsMenuState::init()
 {    
     State::init();
 
-    unsigned int color = 0xff907824;
+    unsigned int color = 0x907824ff;
     
-    auto background = new Surface(ResourceManager::surface("art/intrface/prefscrn.frm", 0, 0));
-    background->setXOffset(0);
-    background->setYOffset(0);
-    
+    auto background = new Image("art/intrface/prefscrn.frm");
+
     auto switch1 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 71);
-    switch1->setMaxState(3);
+    switch1->setMaxState(3);    
     auto switch2 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 149);
     switch2->setMaxState(3);
     auto switch3 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 227);
@@ -70,7 +68,7 @@ void SettingsMenuState::init()
     auto switch9 = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, 299, 74 + 66*3);
     auto switch10 = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, 299,74 + 66*4);
     auto switch11 = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, 299,74 + 66*5);
-
+    /*
     // LABELS
     auto msg = ResourceManager::msgFileType("text/english/game/options.msg");
     
@@ -150,7 +148,7 @@ void SettingsMenuState::init()
     auto label2 = new TextArea(msg->message(204), 68, 67); label2->setFont(font3_907824ff);
     auto label3 = new TextArea(msg->message(205), 122, 81); label3->setFont(font3_907824ff);
 
-    auto label4 = new TextArea(msg->message(206), 13, 159); label4->setFont(font3_907824ff);
+    auto label4 = new TextArea(msg->message(206Surface), 13, 159); label4->setFont(font3_907824ff);
     auto label5 = new TextArea(msg->message(207), 68, 145); label5->setFont(font3_907824ff);
     auto label6 = new TextArea(msg->message(208), 122, 159); label6->setFont(font3_907824ff);
 
@@ -252,9 +250,11 @@ void SettingsMenuState::init()
     auto slider6 = new Slider(384, 196 + 51*3);
     auto slider7 = new Slider(384, 196 + 51*4);
     auto slider8 = new Slider(384, 196 + 51*5);
+    */
 
-    /*
+
     add(background);
+    /*
     add({ title1, title2, title3, title4, title5, title6,
           title7, title8, title9, title10, title11, title12, title13,
           title14, title15, title16, title17, title18, title19, title20,
@@ -268,9 +268,11 @@ void SettingsMenuState::init()
           label40, label41, label42, label43, label44, label45, label46, label47,
           label48, label49, label50, label51, label52, label53
     });
+    */
     add({switch1, switch2, switch3, switch4, switch5,
          switch6, switch7, switch8, switch9, switch10, switch11
     });
+    /*
     add({slider1, slider2, slider3, slider4, slider5, slider6, slider7, slider8});
     */
 }

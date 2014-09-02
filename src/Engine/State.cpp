@@ -55,17 +55,9 @@ void State::init()
 
 void State::think()
 {
-    for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
+    for (std::vector<UI*>::iterator i = _ui.begin(); i < _ui.end(); i++)
     {
         (*i)->think();
-    }
-}
-
-void State::blit()
-{
-    for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); i++)
-    {
-        (*i)->blit(_game->screen()->surface());
     }
 }
 
@@ -94,11 +86,6 @@ void State::setScrollable(bool value)
     _scrollable = value;
 }
 
-void State::add(Surface* surface)
-{
-    _surfaces.push_back(surface);
-}
-
 void State::add(UI* ui)
 {
     _ui.push_back(ui);
@@ -110,9 +97,9 @@ void State::add(ActiveUI* activeUi)
     add((UI*)activeUi);
 }
 
-void State::add(std::vector<Surface*> surfaces)
+void State::add(std::vector<UI*> uis)
 {
-    for (auto& surface : surfaces) _surfaces.push_back(surface);
+    for (auto& ui : uis) _ui.push_back(ui);
 }
 
 void State::handle(Event* event)

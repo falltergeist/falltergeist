@@ -31,6 +31,7 @@
 #include "../Engine/LocationCamera.h"
 #include "../Game/GameCritterObject.h"
 #include "../VM/VM.h"
+#include "../UI/Image.h"
 
 // Third party includes
 
@@ -66,8 +67,8 @@ void CritterDialogState::init()
     camera->setXPosition(Location::hexagonToX(critter()->position()));
     camera->setYPosition(Location::hexagonToY(critter()->position()) + 100);
 
-    auto background = new Surface(ResourceManager::surface("art/intrface/alltlk.frm"));
-    auto background2 = new Surface(ResourceManager::surface("art/intrface/di_talk.frm"));
+    auto background = new Image("art/intrface/alltlk.frm");
+    auto background2 = new Image("art/intrface/di_talk.frm");
     background2->setY(291);
 
     add(background);
@@ -78,7 +79,6 @@ void CritterDialogState::init()
 
 void CritterDialogState::blit()
 {
-    State::blit();
 
     /*
     int offset = 0;

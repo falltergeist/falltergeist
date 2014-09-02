@@ -29,6 +29,8 @@
 #include "../UI/TextArea.h"
 #include "../UI/ImageButton.h"
 #include "../Game/GameDudeObject.h"
+#include "../UI/Image.h"
+#include "../Engine/Graphics/Texture.h"
 
 // Third party includes
 
@@ -84,23 +86,23 @@ void PlayerEditNameState::init()
 
     _timer = SDL_GetTicks();
 
-    Surface * bg = new Surface(_game->resourceManager()->surface("art/intrface/charwin.frm"));
+    Image* bg = new Image("art/intrface/charwin.frm");
     bg->setX(22);
     bg->setY(0);
-    bg->setXOffset(0);
-    bg->setYOffset(0);
+    //bg->setXOffset(0);
+    //bg->setYOffset(0);
 
-    Surface * nameBox = new Surface(_game->resourceManager()->surface("art/intrface/namebox.frm"));
+    Image* nameBox = new Image("art/intrface/namebox.frm");
     nameBox->setX(35);
     nameBox->setY(10);
-    nameBox->setXOffset(0);
-    nameBox->setYOffset(0);
+    //nameBox->setXOffset(0);
+    //nameBox->setYOffset(0);
 
-    Surface * doneBox = new Surface(_game->resourceManager()->surface("art/intrface/donebox.frm"));
+    Image* doneBox = new Image("art/intrface/donebox.frm");
     doneBox->setX(35);
     doneBox->setY(40);
-    doneBox->setXOffset(0);
-    doneBox->setYOffset(0);
+    //doneBox->setXOffset(0);
+    //doneBox->setYOffset(0);
 
     libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
     TextArea * doneLabel = new TextArea(msg->message(100), 65, 43);
@@ -114,8 +116,10 @@ void PlayerEditNameState::init()
     _name = new TextArea(_game->player()->name(), 43, 15);
     _name->addEventHandler("keyup", this, (EventRecieverMethod) &PlayerEditNameState::onKeyboardPress);
 
-    _cursor = new Surface(5, 8, 83, 15);
-    _cursor->fill(0xFF3FF800);
+    _cursor = new Image(5, 8);
+    _cursor->setX(83);
+    _cursor->setY(15);
+    _cursor->texture()->fill(0x3FF800FF);
 
     add(bg);
     add(nameBox);

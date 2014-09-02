@@ -49,7 +49,7 @@ PlayerEditState::PlayerEditState() : State()
     _masks        = new std::map<std::string, HiddenMask *>;
     _titles       = new std::map<std::string, std::string>;
     _descriptions = new std::map<std::string, std::string>;
-    _images       = new std::map<std::string, Surface *>;
+    _images       = new std::map<std::string, Image*>;
 
     // STATS
     {
@@ -62,7 +62,7 @@ PlayerEditState::PlayerEditState() : State()
 
             _addTitle(ss.str(), msg->message(100 + i)->text());       // stat title
             _addDescription(ss.str(), msg->message(200 + i)->text()); // stat description
-            _addImage(ss.str(), _game->resourceManager()->surface("art/skilldex/" + images[i] + ".frm")); // stat image
+            _addImage(ss.str(), new Image("art/skilldex/" + images[i] + ".frm")); // stat image
             _addLabel(ss.str(), new TextArea(102, 46 + 33*i));          // stat value label
             _addCounter(ss.str(), new BigCounter(59, 37 + 33*i));       // stat value counter
             _addMask(ss.str(), new HiddenMask(133, 29, 14, 36 + 33*i)); // stat click mask
@@ -85,7 +85,7 @@ PlayerEditState::PlayerEditState() : State()
             ss << "traits_" << (i+1);
             _addTitle(ss.str(), msg->message(100 + i)->text()); // trait title
             _addDescription(ss.str(), msg->message(200 + i)->text()); // trait description
-            _addImage(ss.str(), _game->resourceManager()->surface("art/skilldex/" + images[i] + ".frm")); // trait image
+            _addImage(ss.str(), new Image("art/skilldex/" + images[i] + ".frm")); // trait image
             // left column
             if (i <= 7)
             {
@@ -112,7 +112,7 @@ PlayerEditState::PlayerEditState() : State()
             ss << "skills_" << (i+1);
             _addTitle(ss.str(), msg->message(100 + i)->text());
             _addDescription(ss.str(), msg->message(200 + i)->text());
-            _addImage(ss.str(), _game->resourceManager()->surface("art/skilldex/" + images[i] + ".frm"));
+            _addImage(ss.str(), new Image("art/skilldex/" + images[i] + ".frm"));
             _addButton(ss.str(),  new ImageButton(ImageButton::TYPE_SKILL_TOGGLE, 347,  26 + 11*i));
             _addLabel(ss.str(),  new TextArea(msg->message(100 + i), 377, 27 + 11*i))->setWidth(240);
             _addLabel(ss.str() + "_value",  new TextArea("", 577, 27 + 11*i));
@@ -128,7 +128,7 @@ PlayerEditState::PlayerEditState() : State()
         _addTitle("health_1", msg->message(300)->text());
         _addLabel("health_1",  new TextArea(msg->message(300), 194, 46)); //health
         _addDescription("health_1", _game->resourceManager()->msgFileType("text/english/game/stat.msg")->message(207)->text());
-        _addImage("health_1", _game->resourceManager()->surface("art/skilldex/" + images[0] + ".frm"));
+        _addImage("health_1", new Image("art/skilldex/" + images[0] + ".frm"));
 
         auto font1_0x183018ff = _game->resourceManager()->font("font1.aaf", 0x183018ff);
 
@@ -139,7 +139,7 @@ PlayerEditState::PlayerEditState() : State()
             _addTitle(ss.str(), msg->message(312 + i)->text());
             _addDescription(ss.str(), msg->message(400 + i)->text());
             _addLabel(ss.str(),  new TextArea(msg->message(312+i), 194, 46 + 13*(i+1)))->setFont(font1_0x183018ff);
-            _addImage(ss.str(), _game->resourceManager()->surface("art/skilldex/" + images[i+1] + ".frm"));
+            _addImage(ss.str(), new Image("art/skilldex/" + images[i+1] + ".frm"));
         }
     }
 
@@ -156,7 +156,7 @@ PlayerEditState::PlayerEditState() : State()
             ss << "params_" << (i+1);
             _addTitle(ss.str(), msgStat->message(params[i])->text());
             _addDescription(ss.str(), msgStat->message(params[i] + 100)->text());
-            _addImage(ss.str(), _game->resourceManager()->surface("art/skilldex/" + images[i] + ".frm"));
+            _addImage(ss.str(), new Image("art/skilldex/" + images[i] + ".frm"));
             _addLabel(ss.str(),  new TextArea(msgEditor->message(labels[i]), 194, 182 + 13*i));
             _addLabel(ss.str() + "_value",  new TextArea("", 288, 182 + 13*i));
         }
@@ -193,10 +193,10 @@ PlayerEditState::PlayerEditState() : State()
         _addDescription("label_2", msg->message(147)->text());
         _addDescription("label_3", msg->message(151)->text());
         _addDescription("label_4", msg->message(145)->text());
-        _addImage("label_1", new Surface(_game->resourceManager()->surface("art/skilldex/generic.frm")));
-        _addImage("label_2", new Surface(_game->resourceManager()->surface("art/skilldex/traits.frm")));
-        _addImage("label_3", new Surface(_game->resourceManager()->surface("art/skilldex/skills.frm")));
-        _addImage("label_4", new Surface(_game->resourceManager()->surface("art/skilldex/skills.frm")));
+        _addImage("label_1", new Image("art/skilldex/generic.frm"));
+        _addImage("label_2", new Image("art/skilldex/traits.frm"));
+        _addImage("label_3", new Image("art/skilldex/skills.frm"));
+        _addImage("label_4", new Image("art/skilldex/skills.frm"));
 
     }
     // Name change button
@@ -233,14 +233,16 @@ PlayerEditState::PlayerEditState() : State()
     // add counters to the state
     {
         std::map<std::string, BigCounter *>::iterator it;
-        for(it = _counters->begin(); it != _counters->end(); ++it) add(it->second);
+        for(it = _counters->begin(); it != _counters->end(); ++it)
+        {
+            //add(it->second);
+        }
     }
     // add hidden masks
     {
         std::map<std::string, HiddenMask *>::iterator it;
         for(it = _masks->begin(); it != _masks->end(); ++it)
         {
-            it->second->setVisible(true);
             it->second->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditState::onMaskClick);
             add(it->second);
         }
@@ -248,7 +250,9 @@ PlayerEditState::PlayerEditState() : State()
 
     _selectedImage = _images->at("stats_1");
     _selectedLabel = _labels->at("stats_1");
-    _image = new Surface(_selectedImage);
+    _image = new Image(_selectedImage);
+    _image->setX(480);
+    _image->setY(310);
     add(_image);
 
     auto font1_000000ff = _game->resourceManager()->font("font1.aaf", 0x000000FF);
@@ -314,9 +318,9 @@ void PlayerEditState::_addDescription(std::string name, std::string description)
     _descriptions->insert(std::pair<std::string,std::string>(name, description));
 }
 
-void PlayerEditState::_addImage(std::string name, Surface * image)
+void PlayerEditState::_addImage(std::string name, Image* image)
 {
-    _images->insert(std::pair<std::string,Surface *>(name, image));
+    _images->insert(std::pair<std::string,Image*>(name, image));
 }
 
 
@@ -412,11 +416,11 @@ void PlayerEditState::think()
         _title->setText(_titles->at(name));
         _description->setText(_descriptions->at(name));
         _selectedImage = _images->at(name);
-        _image->loadFromSurface(_selectedImage);
-        _image->setX(480);
-        _image->setY(310);
-        _image->setXOffset(0);
-        _image->setYOffset(0);
+        _selectedImage->texture()->copyTo(_image->texture());
+        //_image->setX(480);
+        //_image->setY(310);
+        //_image->setXOffset(0);
+        //_image->setYOffset(0);
 
         auto font1_ffff7fff = _game->resourceManager()->font("font1.aaf", 0xffff7fff);
         auto font1_ffffffff = _game->resourceManager()->font("font1.aaf", 0xffffffff);

@@ -18,6 +18,7 @@
  */
 
 // C++ standard includes
+#include <iostream>
 
 // Falltergeist includes
 #include "../UI/MultistateImageButton.h"
@@ -73,6 +74,8 @@ MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : 
             auto image2 = new Image(22, 50);
             image->texture()->copyTo(image1->texture(), 0, 0, 0, 0, 22, 25);
             image->texture()->copyTo(image2->texture(), 0, 0, 0, 25, 22, 50);
+            addImage(image1);
+            addImage(image2);
             delete image1;
             delete image2;
             delete image;
@@ -137,29 +140,32 @@ int MultistateImageButton::mode()
 
 void MultistateImageButton::_onLeftButtonClick(MouseEvent* event)
 {
-    if (mode() == MODE_PROGRESSION)
+    auto sender = dynamic_cast<MultistateImageButton*>(event->emitter());
+
+    if (sender->mode() == MODE_PROGRESSION)
     {
-        if (modeFactor() > 0)
+        if (sender->modeFactor() > 0)
         {
-            _currentState = (_currentState < _maxState - 1) ? _currentState + modeFactor() : 0;
+            sender->_currentState = (sender->_currentState < sender->_maxState - 1) ? sender->_currentState + sender->modeFactor() : 0;
         }
         else
         {
-            _currentState = (_currentState > 0) ? _currentState + modeFactor() : _maxState - 1;
+            sender->_currentState = (sender->_currentState > 0) ? sender->_currentState + sender->modeFactor() : sender->_maxState - 1;
         }
     }        
     else // MODE_CYCLIC
     {
-        if (modeFactor() > 0)
+        if (sender->modeFactor() > 0)
         {
-            if (_currentState == _maxState - 1) setModeFactor(-modeFactor());
+            if (sender->_currentState == sender->_maxState - 1) sender->setModeFactor(-sender->modeFactor());
         }
         else
         {
-            if (_currentState == 0) setModeFactor(-modeFactor());
+            if (sender->_currentState == 0) sender->setModeFactor(-sender->modeFactor());
         }
-        _currentState += modeFactor();
+        sender->_currentState += sender->modeFactor();
     }
+
 }
 
 Texture* MultistateImageButton::texture()

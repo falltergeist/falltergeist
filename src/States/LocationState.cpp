@@ -143,7 +143,6 @@ void LocationState::blit()
 
     _location->generateBackground();
     _background->loadFromSurface(_location->tilesBackground());
-    State::blit();
 
     if (_location == 0) return;
 

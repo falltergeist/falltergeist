@@ -151,7 +151,6 @@ void CursorDropdownState::blit()
         surface->copyTo(_surface);
     }
     _activeSurfaces.at(_currentSurface)->copyTo(_surface);
-    State::blit();
 }
 
 void CursorDropdownState::setObject(void* object)

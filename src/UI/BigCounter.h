@@ -24,27 +24,26 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Engine/InteractiveSurface.h"
+#include "../Engine/ActiveUI.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+class Image;
 
-class BigCounter : public InteractiveSurface
+class BigCounter : public ActiveUI
 {
 protected:
     unsigned char _color = COLOR_WHITE;
     unsigned int _number = 0;
     unsigned int _length = 2;
-    std::vector<Surface *> * _numbersWhite;
-    std::vector<Surface *> * _numbersRed;
 public:
     enum {COLOR_WHITE = 1, COLOR_RED};
     BigCounter(int x = 0, int y = 0);
     ~BigCounter();
 
-    virtual void draw();
+    virtual Texture* texture();
 
     void setColor(unsigned char color);
     unsigned char color();

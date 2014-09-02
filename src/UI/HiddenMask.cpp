@@ -21,21 +21,20 @@
 
 // Falltergeist includes
 #include "../UI/HiddenMask.h"
+#include "../Engine/Graphics/Texture.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-HiddenMask::HiddenMask(unsigned int width, unsigned int height, int x, int y) : InteractiveSurface(width, height, x , y)
+HiddenMask::HiddenMask(unsigned int width, unsigned int height, int x, int y) : Image(width, height)
 {
-    setBackgroundColor(0x01000000);
-    setVisible(false);
+    _texture->fill(0x00000001);
 }
 
-HiddenMask::HiddenMask(Surface * other) : InteractiveSurface(other)
+HiddenMask::HiddenMask(HiddenMask* other) : Image(other)
 {
-    setVisible(false);
 }
 
 }

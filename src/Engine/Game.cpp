@@ -338,7 +338,10 @@ std::vector<UI*>* Game::ui()
     {
         for (auto j = (*it)->ui()->begin(); j != (*it)->ui()->end(); ++j)
         {
-            _ui.push_back(*j);
+            if ((*j)->visible())
+            {
+                _ui.push_back(*j);
+            }
         }
     }
     _ui.push_back(_fpsCounter);

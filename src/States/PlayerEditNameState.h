@@ -32,13 +32,14 @@
 namespace Falltergeist
 {
 class TextArea;
+class Image;
 
 class PlayerEditNameState : public State
 {
 protected:
     unsigned int _timer;
     TextArea* _name;
-    Surface * _cursor;
+    Image* _cursor;
     std::map<char,char> * _keyCodes;
 public:
     PlayerEditNameState();

@@ -68,4 +68,18 @@ void UI::setTexture(Texture* texture)
     _texture = texture;
 }
 
+void UI::think()
+{
+}
+
+void UI::setVisible(bool value)
+{
+    _visible = value;
+}
+
+bool UI::visible()
+{
+    return _visible;
+}
+
 }

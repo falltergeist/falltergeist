@@ -19,59 +19,41 @@
 
 // C++ standard includes
 #include <sstream>
+#include <string.h>
 
 // Falltergeist includes
 #include "../UI/BigCounter.h"
 #include "../Engine/ResourceManager.h"
+#include "../UI/Image.h"
+#include "../Engine/Graphics/Texture.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-BigCounter::BigCounter(int x, int y) : InteractiveSurface(0,0, x, y)
+BigCounter::BigCounter(int x, int y) : ActiveUI(x, y)
 {
-    _numbersWhite = new std::vector<Surface *>;
-    _numbersRed = new std::vector<Surface *>;
-    for (int i = 0; i != 10; i++)
-    {
-        _numbersWhite->push_back(ResourceManager::surface("art/intrface/bignum.frm")->crop(14*i, 0, 14, 24));
-    }
-    for (int i = 0; i != 10; i++)
-    {
-        _numbersRed->push_back(ResourceManager::surface("art/intrface/bignum.frm")->crop(168 + 14*i, 0, 14, 24));
-    }
-    setNeedRedraw(true);
 }
 
 BigCounter::~BigCounter()
 {
-    while (!_numbersRed->empty())
-    {
-        delete _numbersRed->back();
-        _numbersRed->pop_back();
-    }
-    delete _numbersRed;
-    while (!_numbersWhite->empty())
-    {
-        delete _numbersWhite->back();
-        _numbersWhite->pop_back();
-    }
-    delete _numbersWhite;
+    delete _texture;
 }
 
-void BigCounter::draw()
+Texture* BigCounter::texture()
 {
-    if (!needRedraw()) return;
+    if (_texture) return _texture;
 
-    InteractiveSurface::draw();
-    // new surface
-    Surface * surface = new Surface(14*_length, 24);
+    auto numbers = new Image("art/intrface/bignum.frm");
+
     // number as text
     std::stringstream ss;
     ss << _number;
 
-    char * textNumber = new char[_length + 1]();
+    _texture = new Texture(14*_length, 24);
+
+    char* textNumber = new char[_length + 1]();
 
     for (unsigned int i = 0; i < _length; ++i)
     {
@@ -85,39 +67,32 @@ void BigCounter::draw()
         textNumber[diff + i] = ss.str().c_str()[i];
     }
 
-
     for (unsigned int i = 0; i < _length; i++)
     {
         int key = 9 -  ('9' - textNumber[i]);
-        //std::cout << key << std::endl;
-        Surface * number;
+        unsigned int x = 14 * key;
         switch (_color)
         {
             case COLOR_WHITE:
-                number =  _numbersWhite->at(key);
                 break;
             case COLOR_RED:
-                number =  _numbersRed->at(key);
+                x += 168;
                 break;
         }
-        number->setX(14*i);
-        number->copyTo(surface);
+        numbers->texture()->copyTo(_texture, 14*i, 0, x, 0, 14, 24);
     }
     delete [] textNumber;
-
-    surface->setX(this->x());
-    surface->setY(this->y());
-    surface->setXOffset(0);
-    surface->setYOffset(0);
-
-    loadFromSurface(surface);
-    delete surface;
+    delete numbers;
+    return _texture;
 }
 
 void BigCounter::setNumber(unsigned int number)
 {
+    if (_number == number) return;
+
     _number = number;
-    setNeedRedraw(true);
+    delete _texture;
+    _texture = 0;
 }
 
 unsigned int BigCounter::number()
@@ -135,7 +110,8 @@ void BigCounter::setColor(unsigned char color)
             if (_color != color)
             {
                 _color = color;
-                setNeedRedraw(true);
+                delete _texture;
+                _texture = 0;
             }
             break;
     }

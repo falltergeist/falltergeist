@@ -29,6 +29,7 @@
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
 #include "../UI/BigCounter.h"
+#include "../UI/Image.h"
 
 // Third party includes
 
@@ -46,23 +47,23 @@ void PlayerEditAgeState::init()
     State::init();
     setFullscreen(false);
 
-    Surface * bg = new Surface(_game->resourceManager()->surface("art/intrface/charwin.frm"));
+    Image* bg = new Image("art/intrface/charwin.frm");
     bg->setX(160);
     bg->setY(0);
-    bg->setXOffset(0);
-    bg->setYOffset(0);
+    //bg->setXOffset(0);
+    //bg->setYOffset(0);
 
-    Surface * ageBox = new Surface(_game->resourceManager()->surface("art/intrface/agebox.frm"));
+    Image* ageBox = new Image("art/intrface/agebox.frm");
     ageBox->setX(168);
     ageBox->setY(10);
-    ageBox->setXOffset(0);
-    ageBox->setYOffset(0);
+    //ageBox->setXOffset(0);
+    //ageBox->setYOffset(0);
 
-    Surface * doneBox = new Surface(_game->resourceManager()->surface("art/intrface/donebox.frm"));
+    Image* doneBox = new Image("art/intrface/donebox.frm");
     doneBox->setX(175);
     doneBox->setY(40);
-    doneBox->setXOffset(0);
-    doneBox->setYOffset(0);
+    //doneBox->setXOffset(0);
+    //doneBox->setYOffset(0);
 
     ImageButton * decButton = new ImageButton(ImageButton::TYPE_LEFT_ARROW, 178, 14);
     decButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditAgeState::onDecButtonClick);
