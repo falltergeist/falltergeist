@@ -24,7 +24,7 @@
 #include "../States/PlayerEditAlertState.h"
 #include "../Engine/Game.h"
 #include "../Engine/ResourceManager.h"
-#include "../Engine/Surface.h"
+#include "../UI/Image.h"
 #include "../UI/TextArea.h"
 #include "../UI/ImageButton.h"
 
@@ -51,24 +51,20 @@ void PlayerEditAlertState::init()
     State::init();
     setFullscreen(false);
 
-    Surface * bg = new Surface(_game->resourceManager()->surface("art/intrface/lgdialog.frm"));
+    auto bg = new Image("art/intrface/lgdialog.frm");
     bg->setX(164);
     bg->setY(173);
-    bg->setXOffset(0);
-    bg->setYOffset(0);
 
-    auto font3_ff9f48ff = _game->resourceManager()->font("font3.aaf", 0xff9f48ff);
+    auto font1_ff9f48ff = _game->resourceManager()->font("font1.aaf", 0xff9f48ff);
 
     TextArea * message = new TextArea(_message.c_str(), 194, 213);
     message->setWidth(250);
     message->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
-    message->setFont(font3_ff9f48ff);
+    message->setFont(font1_ff9f48ff);
 
-    Surface * doneBox = new Surface(_game->resourceManager()->surface("art/intrface/donebox.frm"));
+    auto doneBox = new Image("art/intrface/donebox.frm");
     doneBox->setX(254);
     doneBox->setY(270);
-    doneBox->setXOffset(0);
-    doneBox->setYOffset(0);
 
     ImageButton * doneButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 264, 273);
     doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditAlertState::onDoneButtonClick);

@@ -237,14 +237,14 @@ Texture* TextArea::texture()
         for (auto itt = text.begin(); itt != text.end(); ++itt)
         {
             auto chr = *itt;
-            if (chr == '\n')
+            libfalltergeist::AafGlyph* glyph = font->aaf()->glyphs()->at(chr);
+            if (chr == '\n' || (_wordWrap == true && x + glyph->width() >= width()))
             {
                 x = 0;
                 y += font->height() + font->verticalGap();
-                continue;
-            }
 
-            libfalltergeist::AafGlyph* glyph = font->aaf()->glyphs()->at(chr);
+                if (chr == '\n') continue;
+            }
 
             unsigned int xOffset = (unsigned char)(chr%16) * font->width();
             unsigned int yOffset = (unsigned char)(chr/16) * font->height();
