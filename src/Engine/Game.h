@@ -43,6 +43,7 @@ class CritterDialogState;
 class AudioMixer;
 class Renderer;
 class UI;
+class TextArea;
 
 class Game
 {
@@ -60,6 +61,7 @@ protected:
     Location* _location = 0;
     CritterDialogState* _dialog = 0;
     FpsCounter * _fpsCounter = 0;
+    TextArea* _falltergeistVersion = 0;
     bool _quit = false;
     SDL_Event _event;
     bool _initialized = false;

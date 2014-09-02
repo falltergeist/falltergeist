@@ -39,7 +39,7 @@ Texture::Texture(unsigned int width, unsigned int height)
 Texture::~Texture()
 {
     auto game = &Game::getInstance();
-    //game->renderer()->unregisterTexture(this);
+    game->renderer()->unregisterTexture(this);
     delete [] _data;
 }
 
@@ -97,6 +97,17 @@ void Texture::copyTo(Texture* destination, unsigned int destinationX, unsigned i
         for(unsigned int x = 0; x != sourceWidth; x++)
         {
             destination->setPixel(destinationX + x, destinationY + y, pixel(sourceX + x, sourceY + y));
+        }
+    }
+}
+
+void Texture::fill(unsigned int color)
+{
+    for (unsigned int y = 0; y != _height; y++)
+    {
+        for(unsigned int x = 0; x != _width; x++)
+        {
+            setPixel(x, y, color);
         }
     }
 }

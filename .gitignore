@@ -4,5 +4,6 @@ CMakeFiles/*
 lib/libfalltergeist/*
 Makefile
 cmake_install.cmake
+falltergeist.layout
 falltergeist
 falltergeist.cbp

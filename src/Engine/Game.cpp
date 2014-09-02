@@ -65,13 +65,14 @@ void Game::_initialize()
     putenv(strdup("SDL_VIDEO_CENTERED=1"));
 
     _resourceManager = new ResourceManager();
-    _renderer = new OpenGLRenderer(640, 480);
-    //_renderer = new SDLRenderer(640, 480);
+    //_renderer = new OpenGLRenderer(640, 480);
+    _renderer = new SDLRenderer(640, 480);
     _renderer->init();
     //_screen = new Screen(640, 480, 32);
     //_mixer = new AudioMixer();
     _mouse = new Mouse();
     _fpsCounter = new FpsCounter();
+    _falltergeistVersion = new TextArea(CrossPlatform::getVersion(), 3, 470);
 }
 
 Game::~Game()
@@ -117,7 +118,6 @@ void Game::setState(State * state)
 void Game::run()
 {
     debug("[GAME] - Starting main loop", DEBUG_INFO);
-    //TextArea* falltergeistVersion = new TextArea(CrossPlatform::getVersion(), 3, 470);
     while (!_quit)
     {
         // Clean up states
@@ -205,7 +205,7 @@ void Game::run()
 
         // thinking
         _states.back()->think();
-        //_fpsCounter->think();
+        _fpsCounter->think();
         _mouse->think();
         //Surface::animatedPalette->think();
         
@@ -341,6 +341,8 @@ std::vector<UI*>* Game::ui()
             _ui.push_back(*j);
         }
     }
+    _ui.push_back(_fpsCounter);
+    _ui.push_back(_falltergeistVersion);
     return &_ui;
 }
 

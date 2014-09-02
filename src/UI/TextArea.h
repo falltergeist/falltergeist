@@ -44,10 +44,10 @@ protected:
     unsigned char _verticalAlign = VERTICAL_ALIGN_TOP;
     unsigned int _width = 0;
     unsigned int _height = 0;
-    unsigned int _calculatedWidth = 0;
-    unsigned int _calculatedHeight = 0;
     unsigned int _backgroundColor = 0;
     bool _wordWrap = false;
+    unsigned int _calculateHeight();
+    unsigned int _calculateWidth();
 public:
     enum { HORIZONTAL_ALIGN_LEFT = 0, HORIZONTAL_ALIGN_CENTER, HORIZONTAL_ALIGN_RIGHT, HORIZONTAL_ALIGN_JUSTIFY };
     enum { VERTICAL_ALIGN_TOP = 0, VERTICAL_ALIGN_CENTER, VERTICAL_ALIGN_BOTTOM, VERTICAL_ALIGN_JUSTIFY };    

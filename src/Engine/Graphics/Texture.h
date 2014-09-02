@@ -51,6 +51,8 @@ public:
     unsigned int pixel(unsigned int x, unsigned int y);
     void setPixel(unsigned int x, unsigned int y, unsigned int color);
 
+    void fill(unsigned int color);
+
     void copyTo(Texture* destination, unsigned int destinationX = 0, unsigned int destinationY = 0, unsigned int sourceX = 0, unsigned int sourceY = 0, unsigned int sourceWidth = 0, unsigned int sourceHeight = 0);
 
     void loadFromRGBA(unsigned int* data);

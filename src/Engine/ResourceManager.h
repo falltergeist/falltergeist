@@ -70,7 +70,7 @@ public:
     static Surface* surface(std::string filename, int x = 0, int y = 0, unsigned int direction = 0, unsigned int frame = 0);
     static Surface* surface(unsigned int FID, unsigned int direction = 0, unsigned int frame = 0);
     static Texture* texture(std::string filename);
-    static Font* font(std::string filename = "font3.aaf", unsigned int color = 0x3ff800ff);
+    static Font* font(std::string filename = "font1.aaf", unsigned int color = 0x3ff800ff);
     static void extract(std::string path);
     static void unloadResources();
 };

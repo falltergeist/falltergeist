@@ -123,6 +123,11 @@ TextArea * TextArea::setText(int number)
 
 TextArea * TextArea::setText(std::string text)
 {
+    if (_strings.size() == 1)
+    {
+        if (_strings.back()->text() == text) return this;
+    }
+
     if (_texture)
     {
         delete _texture;
@@ -134,6 +139,7 @@ TextArea * TextArea::setText(std::string text)
         delete _strings.back();
         _strings.pop_back();
     }
+    _strings.clear();
     _strings.push_back(new FontString(text, font));
     return this;
 }
@@ -192,6 +198,7 @@ TextArea* TextArea::setWidth(unsigned int width)
 
 unsigned int TextArea::width()
 {
+    if (_width == 0) return _calculateWidth();
     return _width;
 }
 
@@ -208,6 +215,7 @@ TextArea* TextArea::setHeight(unsigned int height)
 
 unsigned int TextArea::height()
 {
+    if (_height == 0) return _calculateHeight();
     return _height;
 }
 
@@ -215,44 +223,35 @@ Texture* TextArea::texture()
 {
     if (_texture) return _texture;
 
-    // Рассчитываем размеры текстуры
+    _texture = new Texture(width(), height());
+    _texture->fill(_backgroundColor);
 
-    unsigned int width = 0;
-    unsigned int height = 0;
-
-    auto string = _strings.back();
-
-    std::string text = string->text();
-    Font* font = string->font();
-
-    width = 0;
-    height = font->height();
-
-    for (unsigned int i = 0; i != text.length(); i++)
-    {
-        unsigned char chr = text[i];
-        width += font->aaf()->glyphs()->at(chr)->width() + font->horizontalGap();
-    }
-
-    _texture = new Texture(width, height);
     unsigned int x = 0;
     unsigned int y = 0;
 
-    for (unsigned int i = 0; i != text.length(); i++)
+    for (auto it = _strings.begin(); it != _strings.end(); ++it)
     {
-        unsigned char chr = text[i];
-        libfalltergeist::AafGlyph* glyph = font->aaf()->glyphs()->at(chr);
+        Font* font = (*it)->font();
+        std::string text = (*it)->text();
 
-        unsigned int xOffset = (unsigned char)(chr%16) * font->width();
-        unsigned int yOffset = (unsigned char)(chr/16) * font->height();
+        for (auto itt = text.begin(); itt != text.end(); ++itt)
+        {
+            auto chr = *itt;
+            if (chr == '\n')
+            {
+                x = 0;
+                y += font->height() + font->verticalGap();
+                continue;
+            }
 
-        font->texture()->copyTo(_texture, x, y, xOffset, yOffset, glyph->width(), glyph->height());
-        x += glyph->width() + font->horizontalGap();
+            libfalltergeist::AafGlyph* glyph = font->aaf()->glyphs()->at(chr);
 
+            unsigned int xOffset = (unsigned char)(chr%16) * font->width();
+            unsigned int yOffset = (unsigned char)(chr/16) * font->height();
+            font->texture()->copyTo(_texture, x, y, xOffset, yOffset, font->width(), font->height());
+            x += glyph->width() + font->horizontalGap();
+        }
     }
-
-
-
 
     return _texture;
 }
@@ -260,6 +259,83 @@ Texture* TextArea::texture()
 std::string TextArea::text()
 {
     return _strings.back()->text();
+}
+
+unsigned int TextArea::_calculateHeight()
+{
+    unsigned int totalHeight = 0;
+    unsigned int height = 0;
+    unsigned int maxHeight = 0;
+
+    for (auto it = _strings.begin(); it != _strings.end(); ++it)
+    {
+        Font* font = (*it)->font();
+        std::string text = (*it)->text();
+
+        for (auto itt = text.begin(); itt != text.end(); ++itt)
+        {
+            unsigned char chr = *itt;
+
+            if (chr == '\n')
+            {
+                totalHeight += maxHeight;
+                maxHeight = 0;
+                height = 0;
+            }
+            else
+            {
+                height = font->aaf()->glyphs()->at(chr)->height() + font->aaf()->verticalGap();
+                if (height > maxHeight)
+                {
+                    maxHeight = height;
+                }
+            }
+        }
+    }
+
+    totalHeight += maxHeight;
+
+    if (totalHeight > 0)
+    {
+        totalHeight -= _strings.back()->font()->aaf()->verticalGap();
+    }
+
+    return totalHeight;
+}
+
+unsigned int TextArea::_calculateWidth()
+{
+    unsigned int maxWidth = 0;
+    unsigned int width = 0;
+
+    for (auto it = _strings.begin(); it != _strings.end(); ++it)
+    {
+        Font* font = (*it)->font();
+        std::string text = (*it)->text();
+
+        for (auto itt = text.begin(); itt != text.end(); ++itt)
+        {
+            unsigned char chr = *itt;
+
+            if (chr == '\n')
+            {
+                if (width > maxWidth)
+                {
+                    maxWidth = width;
+                }
+                width = 0;
+            }
+            else
+            {
+                width += font->aaf()->glyphs()->at(chr)->width() + font->aaf()->horizontalGap();
+            }
+        }
+    }
+    if (width > maxWidth)
+    {
+        maxWidth = width;
+    }
+    return maxWidth;
 }
 
 }
