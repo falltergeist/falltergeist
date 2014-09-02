@@ -38,11 +38,13 @@ protected:
     double _minValue = 0;
     double _maxValue = 1;
     double _value = 0;
+    unsigned int _xOffset = 0;
     void _onDrag(MouseEvent* event);
 public:
     Slider(int x, int y);
     virtual ~Slider();
     virtual Texture* texture();
+    virtual int x();
     double minValue();
     void setMinValue(double value);
     double maxValue();

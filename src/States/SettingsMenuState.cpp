@@ -75,6 +75,7 @@ void SettingsMenuState::init()
     auto msg = ResourceManager::msgFileType("text/english/game/options.msg");
     
     auto font1_907824ff = _game->resourceManager()->font("font1.aaf", 0x907824ff);
+    auto font3_907824ff = _game->resourceManager()->font("font3.aaf", 0x907824ff);
     auto font4_907824ff = _game->resourceManager()->font("font4.aaf", 0x907824ff);
 
     auto title1 = new TextArea(msg->message(100), 74, 10);
@@ -138,13 +139,13 @@ void SettingsMenuState::init()
     title20->setText(msg->message(119));
 
     auto title21 = new TextArea(title13, 43, 449);
-    title21->setText(msg->message(120));
+    title21->setText(msg->message(120))->setFont(font3_907824ff);
 
     auto title22 = new TextArea(title13, 169, 449);
-    title22->setText(msg->message(300));
+    title22->setText(msg->message(300))->setFont(font3_907824ff);
 
     auto title23 = new TextArea(title13, 283, 449);
-    title23->setText(msg->message(121));
+    title23->setText(msg->message(121))->setFont(font3_907824ff);
 
     auto label1 = new TextArea(msg->message(203), 43, 81); label1->setFont(font1_907824ff);
     auto label2 = new TextArea(msg->message(204), 68, 67); label2->setFont(font1_907824ff);
@@ -242,7 +243,7 @@ void SettingsMenuState::init()
 
     auto button4 = new ImageButton(ImageButton::TYPE_CHECKBOX, 383, 68);
 
-    /*
+
     // SLIDERS
     auto slider1 = new Slider(384, 50);
     auto slider2 = new Slider(384, 125);
@@ -253,7 +254,7 @@ void SettingsMenuState::init()
     auto slider6 = new Slider(384, 196 + 51*3);
     auto slider7 = new Slider(384, 196 + 51*4);
     auto slider8 = new Slider(384, 196 + 51*5);
-    */
+
 
 
     add(background);
@@ -275,9 +276,9 @@ void SettingsMenuState::init()
     add((std::vector<ActiveUI*>){switch1, switch2, switch3, switch4, switch5,
          switch6, switch7, switch8, switch9, switch10, switch11
     });
-    /*
-    add({slider1, slider2, slider3, slider4, slider5, slider6, slider7, slider8});
-    */
+
+    add((std::vector<ActiveUI*>){slider1, slider2, slider3, slider4, slider5, slider6, slider7, slider8});
+
 }
 
 void SettingsMenuState::think()

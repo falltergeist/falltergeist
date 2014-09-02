@@ -41,11 +41,12 @@ Slider::~Slider()
 
 void Slider::_onDrag(MouseEvent* event)
 {
-    //auto newOffset = xOffset() + event->xOffset();
-    //if (newOffset <= 218 && newOffset >= 0)
+    auto sender = dynamic_cast<Slider*>(event->emitter());
+    auto newOffset = sender->_xOffset + event->xOffset();
+    if (newOffset <= 218 && newOffset >= 0)
     {
-        //setXOffset(newOffset);
-        //_value = ((maxValue() - minValue())/218)*xOffset();
+        sender->_xOffset = newOffset;
+        sender->_value = ((maxValue() - minValue())/218)*sender->_xOffset;
     }
 }
 
@@ -83,7 +84,12 @@ double Slider::value()
 void Slider::setValue(double value)
 {
     _value = value;
-    //_xOffset = (218/(maxValue() - minValue())) * _value;
+    _xOffset = (218/(maxValue() - minValue())) * _value;
+}
+
+int Slider::x()
+{
+    return _x + _xOffset;
 }
 
 }
