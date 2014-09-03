@@ -23,7 +23,7 @@
 #include <iostream>
 
 // Falltergeist includes
-#include "../Engine/Animation.h"
+#include "../Engine/Graphics/Animation.h"
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
 #include "../Engine/ResourceManager.h"

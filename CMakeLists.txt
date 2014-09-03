@@ -45,10 +45,6 @@ set(SOURCES main.cpp
             src/Engine/ActiveUI.h
             src/Engine/AnimatedPalette.cpp
             src/Engine/AnimatedPalette.h
-            src/Engine/Animation.cpp
-            src/Engine/Animation.h
-            src/Engine/AnimationQueue.cpp
-            src/Engine/AnimationQueue.h
             src/Engine/AudioMixer.h
             src/Engine/AudioMixer.cpp
             src/Engine/CrossPlatform.cpp
@@ -73,8 +69,12 @@ set(SOURCES main.cpp
             src/Engine/FontString.h
             src/Engine/Game.cpp
             src/Engine/Game.h
+            src/Engine/Graphics/Animation.cpp
+            src/Engine/Graphics/Animation.h
             src/Engine/Graphics/AnimationFrame.cpp
             src/Engine/Graphics/AnimationFrame.h
+            src/Engine/Graphics/AnimationQueue.cpp
+            src/Engine/Graphics/AnimationQueue.h
             src/Engine/Graphics/OpenGLRenderer.cpp
             src/Engine/Graphics/OpenGLRenderer.h
             src/Engine/Graphics/SDLRenderer.cpp

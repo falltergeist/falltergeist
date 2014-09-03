@@ -25,7 +25,7 @@
 // Falltergeist includes
 #include "../Engine/LocationObject.h"
 #include "../Game/GameObject.h"
-#include "../Engine/Animation.h"
+#include "../Engine/Graphics/Animation.h"
 #include "../Engine/Exception.h"
 #include "../VM/VM.h"
 
@@ -41,7 +41,7 @@ LocationObject::LocationObject(int x, int y) : InteractiveSurface(0, 0, x, y)
 
 LocationObject::~LocationObject()
 {
-    delete _animation;
+    //delete _animation;
 }
 
 std::string LocationObject::name()
@@ -120,10 +120,12 @@ std::string LocationObject::description()
 
 void LocationObject::think()
 {
+    /*
     if (_animation)
     {
         _animation->think();
     }
+    */
 }
 
 Animation * LocationObject::animation()
@@ -136,13 +138,6 @@ void LocationObject::setAnimation(Animation * animation)
     _animation = animation;
 }
 
-SDL_Surface * LocationObject::sdl_surface()
-{
-    if (_animation == 0) return InteractiveSurface::sdl_surface();
-
-    return _animation->sdl_surface();
-}
-
 int LocationObject::xOffset()
 {
     if (_animation == 0)
@@ -151,7 +146,7 @@ int LocationObject::xOffset()
     }
     else
     {
-        return InteractiveSurface::xOffset() - _animation->surfaces()->at(0)->width()/2 + _animation->xOffset();
+        //return InteractiveSurface::xOffset() - _animation->surfaces()->at(0)->width()/2 + _animation->xOffset();
     }
 }
 
@@ -163,7 +158,7 @@ int LocationObject::yOffset()
     }
     else
     {
-        return InteractiveSurface::yOffset() - _animation->surfaces()->at(0)->height() + _animation->yOffset();
+        //return InteractiveSurface::yOffset() - _animation->surfaces()->at(0)->height() + _animation->yOffset();
     }
 }
 
@@ -340,13 +335,13 @@ void LocationObject::setOrientation(unsigned int value)
     }
     else if (frm->framesPerDirection() > 1)
     {
-        delete _animation;
-        setAnimation(new Animation(frm));
+        //delete _animation;
+        //setAnimation(new Animation(frm));
         if (typeId == 1) // critters
         {
             if (ID3 == 0)
             {
-                animation()->setCurrentSurfaceSet(orientation());
+                //animation()->setCurrentSurfaceSet(orientation());
             }
         }
     }

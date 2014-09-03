@@ -22,7 +22,7 @@
 #define FALLTERGEIST_ANIMATIONQUEUE_H
 
 // C++ standard includes
-#include <map>
+#include <vector>
 
 // Falltergeist includes
 
@@ -31,36 +31,15 @@
 namespace Falltergeist
 {
 class Animation;
-class Surface;
 
 class AnimationQueue
 {
 protected:
-    int _currentAnimation = 0;
-    int _repeat = -1; // forever
-    bool _enabled = false;
-    std::map<Animation*, int> _queue; // Animation and delay before start
+    std::vector<Animation*> _animations;
 public:
     AnimationQueue();
-    virtual ~AnimationQueue();
+    ~AnimationQueue();
 
-    bool enabled();
-    void start();
-    void stop();
-
-    int repeat();
-    void setRepeat(int value);
-
-    int currentAnimation();
-    void setCurrentAnimation(int value);
-
-    std::map<Animation*, int>* queue();
-
-    void add(Animation* animation, int delay = -1);
-    void clear();
-
-    void think();
-    Animation* animation();
 };
 
 }

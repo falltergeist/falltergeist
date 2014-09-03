@@ -23,7 +23,7 @@
 // Falltergeist includes
 #include "../Engine/Game.h"
 #include "../Engine/ResourceManager.h"
-#include "../Engine/Animation.h"
+#include "../Engine/Graphics/Animation.h"
 #include "../Engine/Input/Mouse.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"

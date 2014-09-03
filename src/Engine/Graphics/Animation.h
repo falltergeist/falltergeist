@@ -15,6 +15,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 #ifndef FALLTERGEIST_ANIMATION_H
@@ -24,46 +25,20 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Engine/InteractiveSurface.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+class AnimationFrame;
 
-class Animation : public InteractiveSurface
-{   
+class Animation
+{
 protected:
-    std::vector<std::vector<Surface*>*> _surfaceSets;
-    bool _enabled = false;
-    unsigned int _frameRate = 200;
-    unsigned int _currentFrame = 0;
-    unsigned int _currentSurfaceSet = 0;
-    unsigned int _lastTicks = SDL_GetTicks();
+    std::vector<AnimationFrame*> _animationFrames;
 public:
-    Animation(libfalltergeist::FrmFileType* frm, int x = 0, int y = 0);
-    Animation(std::string filename, int x = 0, int y = 0);
+    Animation();
     ~Animation();
-
-    Surface* surface();
-    std::vector<Surface*>* surfaces();
-    void loadFromFrmFile(std::string filename);
-    void loadFromFrmFile(libfalltergeist::FrmFileType* frm);
-
-    void setCurrentSurfaceSet(unsigned int value);
-    virtual void think();
-
-    virtual int xOffset();
-    virtual int yOffset();
-    
-    bool enabled();
-    void setEnabled(bool value);
-
-
-    int frameXPosition(unsigned int frame);
-    int frameYPosition(unsigned int frame);
-
-    virtual SDL_Surface* sdl_surface();
 };
 
 }

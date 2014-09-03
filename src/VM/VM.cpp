@@ -26,7 +26,7 @@
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
-#include "../Engine/Animation.h"
+#include "../Engine/Graphics/Animation.h"
 #include "../Engine/Location.h"
 #include "../Engine/LocationObject.h"
 #include "../Game/GameDefines.h"

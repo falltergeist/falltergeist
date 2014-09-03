@@ -26,7 +26,7 @@
 #include "../Game/GameCritterObject.h"
 #include "../Engine/Exception.h"
 #include "../Engine/ResourceManager.h"
-#include "../Engine/Animation.h"
+#include "../Engine/Graphics/Animation.h"
 
 // Third party includes
 
@@ -131,11 +131,11 @@ void GameCritterObject::setOrientation(int value)
     auto frm = ResourceManager::frmFileType("art/critters/" + frmBase);
     //animationQueue()->clear();
 
-    auto animation = new Animation(frm);
+    //auto animation = new Animation(frm);
 
     if (ID3 == 0)
     {
-        animation->setCurrentSurfaceSet(this->orientation());
+        //animation->setCurrentSurfaceSet(this->orientation());
     }
     //animationQueue()->add(animation);
 }

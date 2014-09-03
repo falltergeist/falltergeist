@@ -28,7 +28,7 @@
 #include "../Engine/LocationCamera.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
-#include "../Engine/Animation.h"
+#include "../Engine/Graphics/Animation.h"
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/Game.h"
 #include "../Game/GameDefines.h"

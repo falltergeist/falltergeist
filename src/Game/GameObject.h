@@ -26,7 +26,6 @@
 #include <string>
 
 // Falltergeist includes
-#include "../Engine/AnimationQueue.h"
 
 // Third party includes
 

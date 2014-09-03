@@ -54,8 +54,6 @@ public:
     LocationObject(int x = 0, int y = 0);
     ~LocationObject();
 
-    virtual SDL_Surface * sdl_surface();
-
     std::string name();
     std::string description();
 
