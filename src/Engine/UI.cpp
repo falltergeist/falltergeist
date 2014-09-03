@@ -40,7 +40,7 @@ UI::~UI()
 
 int UI::x()
 {
-    return _x;
+    return _x + _xOffset;
 }
 
 void UI::setX(int value)
@@ -50,7 +50,7 @@ void UI::setX(int value)
 
 int UI::y()
 {
-    return _y;
+    return _y + _yOffset;
 }
 
 void UI::setY(int value)
@@ -82,4 +82,23 @@ bool UI::visible()
     return _visible;
 }
 
+int UI::xOffset()
+{
+    return _xOffset;
+}
+
+void UI::setXOffset(int xOffset)
+{
+    _xOffset = xOffset;
+}
+
+int UI::yOffset()
+{
+    return _yOffset;
+}
+
+void UI::setYOffset(int yOffset)
+{
+    _yOffset = yOffset;
+}
 }

@@ -1155,7 +1155,7 @@ void VM::run()
             {
                 std::cout << "[=] int anim_busy(void* obj)" << std::endl;
                 auto object = (GameObject*)popDataPointer();
-                pushDataInteger(object->animationQueue()->enabled());
+                //pushDataInteger(object->animationQueue()->enabled());
                 break;
             }
             case 0x80e9:
@@ -1372,7 +1372,7 @@ void VM::run()
                     case 0x2: // ANIM_CLEAR
                     {
                         auto object = (GameObject*)popDataPointer();
-                        object->animationQueue()->start();
+                        //object->animationQueue()->start();
                         break;
                     }
                     case 0x3: // ANIMATION_END
@@ -1546,11 +1546,11 @@ void VM::run()
                 std::cout << "[+] void reg_anim_animate_forever(GameObject* obj , int delay)" << std::endl;
                 popDataInteger(); // delay - must be -1
                 auto object = (GameObject*)popDataPointer();
-                if (object->animationQueue()->animation())
+                //if (object->animationQueue()->animation())
                 {
-                    object->animationQueue()->stop();
-                    object->animationQueue()->setRepeat(-1); // forever
-                    object->animationQueue()->start();
+                    //object->animationQueue()->stop();
+                    //object->animationQueue()->setRepeat(-1); // forever
+                    //object->animationQueue()->start();
                 }
                 break;
             }

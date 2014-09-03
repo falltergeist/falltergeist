@@ -47,6 +47,22 @@ Image::Image(unsigned int width, unsigned int height) : ActiveUI()
     setTexture(_imageTexture);
 }
 
+Image::Image(Texture* texture) : ActiveUI()
+{
+    _imageTexture = new Texture(texture->width(), texture->height());
+    _imageTexture->loadFromRGBA(texture->data());
+    setTexture(_imageTexture);
+}
+
+Image::Image(libfalltergeist::FrmFileType* frm, unsigned int direction)
+{
+    _imageTexture = new Texture(frm->width(), frm->height());
+    _imageTexture->loadFromRGBA(frm->rgba(ResourceManager::palFileType("color.pal")));
+    setTexture(_imageTexture);
+    setXOffset(frm->offsetX(direction) + frm->shiftX(direction) - width()/2);
+    setYOffset(frm->offsetY(direction) + frm->shiftY(direction) - height());
+}
+
 Image::~Image()
 {
     if (_imageTexture != 0)
@@ -56,5 +72,14 @@ Image::~Image()
     }
 }
 
+unsigned int Image::width()
+{
+    return texture()->width();
+}
+
+unsigned int Image::height()
+{
+    return texture()->height();
+}
 
 }

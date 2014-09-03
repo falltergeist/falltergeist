@@ -47,7 +47,6 @@ protected:
 
     bool _fullscreen = true;
     bool _initialized = false;
-    bool _scrollable = false;
 public:
     State();
     virtual ~State();
@@ -62,8 +61,6 @@ public:
     virtual void init();
     virtual void think();
     virtual void handle(Event* event);
-    bool scrollable();
-    void setScrollable(bool value);
     std::vector<UI*>* ui();
 };
 

@@ -34,6 +34,7 @@ class Location;
 class Animation;
 class InteractiveSurface;
 class GameObject;
+class Image;
 
 class LocationState : public State
 {
@@ -41,11 +42,16 @@ protected:
     bool _hexagonalGrid = false;
     Animation * _animation = 0;
     Location * _location = 0;
-    InteractiveSurface * _background;
+    Image* _floor = 0;
+    Image* _roof = 0;
     unsigned int _direction;
     unsigned int _cameraX;
-    unsigned int _cameraY;
+    unsigned int _cameraY;    
     unsigned int _scrollTicks = 0;
+    bool _scrollLeft = false;
+    bool _scrollRight = false;
+    bool _scrollTop = false;
+    bool _scrollBottom = false;
     void _drawHexagonalGrid();
 public:
     LocationState();

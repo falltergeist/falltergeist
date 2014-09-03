@@ -76,16 +76,6 @@ void State::setFullscreen(bool value)
     _fullscreen = value;
 }
 
-bool State::scrollable()
-{
-    return _scrollable;
-}
-
-void State::setScrollable(bool value)
-{
-    _scrollable = value;
-}
-
 void State::add(ActiveUI* activeUi)
 {
     _activeUi.push_back(activeUi);

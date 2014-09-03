@@ -35,6 +35,8 @@ class UI
 protected:
     int _x = 0;
     int _y = 0;
+    int _xOffset = 0;
+    int _yOffset = 0;
     Texture* _texture = 0;
     bool _leftButtonPressed = false;
     bool _rightButtonPressed = false;
@@ -48,8 +50,14 @@ public:
     virtual int x();
     virtual void setX(int value);
 
+    virtual int xOffset();
+    virtual void setXOffset(int xOffset);
+
     virtual int y();
     virtual void setY(int value);
+
+    virtual int yOffset();
+    virtual void setYOffset(int yOffset);
 
     virtual Texture* texture();
     virtual void setTexture(Texture* texture);

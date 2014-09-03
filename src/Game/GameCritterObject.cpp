@@ -129,7 +129,7 @@ void GameCritterObject::setOrientation(int value)
     frmBase += "." + extensions[ID3];
 
     auto frm = ResourceManager::frmFileType("art/critters/" + frmBase);
-    animationQueue()->clear();
+    //animationQueue()->clear();
 
     auto animation = new Animation(frm);
 
@@ -137,7 +137,7 @@ void GameCritterObject::setOrientation(int value)
     {
         animation->setCurrentSurfaceSet(this->orientation());
     }
-    animationQueue()->add(animation);
+    //animationQueue()->add(animation);
 }
 
 GameArmorItemObject* GameCritterObject::armorSlot()

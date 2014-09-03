@@ -34,7 +34,7 @@ namespace Falltergeist
 {
 class VM;
 class Location;
-class InteractiveSurface;
+class Image;
 class AnimationQueue;
 
 class GameObject
@@ -51,8 +51,8 @@ protected:
     std::string _description;
     std::vector<VM*> _scripts;
     Location* _location = 0;
-    InteractiveSurface* _surface = 0;
-    AnimationQueue _animationQueue;
+    Image* _image = 0;
+    //AnimationQueue _animationQueue;
 public:
     enum { TYPE_ITEM = 0, TYPE_CRITTER, TYPE_SCENERY, TYPE_WALL, TYPE_TILE, TYPE_MISC, TYPE_DUDE };
     enum { TYPE_ITEM_ARMOR = 0, TYPE_ITEM_CONTAINER, TYPE_ITEM_DRUG, TYPE_ITEM_WEAPON, TYPE_ITEM_AMMO, TYPE_ITEM_MISC, TYPE_ITEM_KEY };
@@ -90,9 +90,9 @@ public:
     Location* location();
     void setLocation(Location* value);
 
-    AnimationQueue* animationQueue();
-    InteractiveSurface* surface();
-    void setSurface(InteractiveSurface* surface);
+    //AnimationQueue* animationQueue();
+    Image* image();
+    void setImage(Image* image);
 
 };
 

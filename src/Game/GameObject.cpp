@@ -26,6 +26,7 @@
 #include "../Game/GameObject.h"
 #include "../Game/GameDefines.h"
 #include "../Engine/Exception.h"
+#include "../UI/Image.h"
 
 // Third party includes
 
@@ -38,6 +39,8 @@ GameObject::GameObject()
 
 GameObject::~GameObject()
 {
+    delete _image;
+    _image = 0;
 }
 
 int GameObject::type()
@@ -105,37 +108,11 @@ void GameObject::setOrientation(int value)
     {
         throw Exception("GameObject::setOrientation() - value out of range: " + std::to_string(value));
     }
+
+    if (_orientation == value) return;
+
     _orientation = value;
-    animationQueue()->clear();
-    delete _surface; _surface = 0;
-
-    auto frm = ResourceManager::frmFileType(FID());
-    if (frm)
-    {
-        auto id = PID() & 0x00000FFF;
-        auto type = (PID() & 0x0F000000) >> 24;
-        if (type == 5 && id == 12) // Map scroll blockers
-        {
-            return;
-            //frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
-        }
-        if (type == 5 && id >= 16 && id <= 23) // exit tiles
-        {
-            frm = ResourceManager::frmFileType("art/intrface/msef001.frm");
-        }
-
-        if (frm->framesPerDirection() > 1)
-        {
-            auto animation = new Animation(frm);
-            animation->setCurrentSurfaceSet(this->orientation());
-            this->animationQueue()->add(animation);
-        }
-        else
-        {
-            auto surface = new InteractiveSurface(frm, this->orientation());
-            this->setSurface(surface);
-        }
-    }
+    delete _image; _image = 0;
 }
 
 std::string GameObject::name()
@@ -173,26 +150,53 @@ void GameObject::setLocation(Location* value)
     _location = value;
 }
 
+/*
 AnimationQueue* GameObject::animationQueue()
 {
     return &_animationQueue;
 }
-
-InteractiveSurface* GameObject::surface()
+*/
+Image* GameObject::image()
 {
-    if (!_surface)
+    if (_image) return _image;
+
+    auto frm = ResourceManager::frmFileType(FID());
+    if (frm)
+    {
+        auto id = PID() & 0x00000FFF;
+        auto type = (PID() & 0x0F000000) >> 24;
+        if (type == 5 && id == 12) // Map scroll blockers
+        {
+            _image = new Image("art/intrface/msef001.frm");
+            return _image;
+        }
+        if (type == 5 && id >= 16 && id <= 23) // exit tiles
+        {
+            _image = new Image("art/intrface/msef001.frm");
+            return _image;
+        }
+
+        //if (frm->framesPerDirection() > 1)
+        //{
+        //    auto animation = new Animation(frm);
+        //    animation->setCurrentSurfaceSet(this->orientation());
+        //    this->animationQueue()->add(animation);
+        //}
+        //else
+        //{
+            _image = new Image(frm, orientation());
+        //}
+    }
+
+    /*
+    if (!_image)
     {
         if (_animationQueue.queue()->size() > 0)
         {
-            return (InteractiveSurface*)_animationQueue.animation();
+            return (Image*)_animationQueue.animation();
         }
-    }
-    return _surface;
-}
-
-void GameObject::setSurface(InteractiveSurface* surface)
-{
-    _surface = surface;
+    }*/
+    return _image;
 }
 
 }

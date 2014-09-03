@@ -66,7 +66,7 @@ void AudioMixer::_init()
 
 void AudioMixer::callback(void* userdata, Uint8* stream, int len)
 {
-    AudioMixer* mixer = static_cast<AudioMixer*>(userdata);
+    //AudioMixer* mixer = static_cast<AudioMixer*>(userdata);
 
     static double angle = 0.0 ;
     int i = 0 ;

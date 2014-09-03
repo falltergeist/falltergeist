@@ -36,6 +36,8 @@ class GameDudeObject;
 class LocationCamera;
 class VM;
 class VMStackValue;
+class Image;
+class Texture;
 
 class Location
 {
@@ -55,14 +57,16 @@ protected:
     unsigned int _rows;
 
     LocationCamera* _camera = 0;
-    unsigned int _elevation;
+    unsigned int _elevation = 0;
 
-    Surface* _tilesBackground;
+    Texture* _tilesFloor = 0;
+    Texture* _tilesRoof = 0;
 
     libfalltergeist::MapFileType* _mapFile = 0;
     libfalltergeist::LstFileType* _tilesLst = 0;
     bool _initialized = false;
-
+    void _generateFloor();
+    void _generateRoof();
 public:
     enum Tile { TILE_WIDTH = 80, TILE_HEIGHT = 36 };
     Location(libfalltergeist::MapFileType* mapFile);
@@ -81,6 +85,8 @@ public:
     void generateBackground();
     void checkObjectsToRender();
 
+    Texture* tilesFloor();
+    Texture* tilesRoof();
     LocationCamera* camera();
 
     GameDudeObject* player();

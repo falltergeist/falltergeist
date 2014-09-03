@@ -20,6 +20,7 @@
 
 // C++ standard includes
 #include <cmath>
+#include <iostream>
 
 // Falltergeist includes
 #include "../Engine/Animation.h"
@@ -34,6 +35,8 @@
 #include "../States/CursorDropdownState.h"
 #include "../Engine/Input/Mouse.h"
 #include "../UI/TextArea.h"
+#include "../UI/Image.h"
+#include "../Engine/Event/MouseEvent.h"
 
 // Third party includes
 
@@ -50,20 +53,20 @@ LocationState::~LocationState()
 }
 
 void LocationState::init()
-{/*
+{
     if (initialized()) return;
     State::init();
-    setScrollable(true);
-
-    _location = new Location(_game->resourceManager()->mapFileType("maps/artemple.map"));
+    //setScrollable(true);
+    //_location = new Location(_game->resourceManager()->mapFileType("maps/artemple.map"));
+    _location = new Location(_game->resourceManager()->mapFileType("maps/arvillag.map"));
     _game->setLocation(_location);
-    _game->mouse()->setType(Mouse::ACTION);
-    _background = new InteractiveSurface(_location->tilesBackground());
-    _background->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onBackgroundClick);
-    _background->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyUp);
+    //_game->mouse()->setType(Mouse::ACTION);
+    _floor = new Image(_location->tilesFloor());
+    _roof = new Image(_location->tilesRoof());
+    //_background->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onBackgroundClick);
+    //_background->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyUp);
 
-    add(_background);
-    */
+    //*/
 }
 
 void LocationState::onMouseDown(MouseEvent* event)
@@ -141,6 +144,7 @@ void LocationState::onKeyUp(KeyboardEvent * event)
 void LocationState::blit()
 {
 
+    /*
     _location->generateBackground();
     _background->loadFromSurface(_location->tilesBackground());
 
@@ -171,6 +175,7 @@ void LocationState::blit()
             surface->blit(_game->screen()->surface());
         }
    }
+   */
 }
 
 void LocationState::_drawHexagonalGrid()
@@ -191,10 +196,52 @@ void LocationState::_drawHexagonalGrid()
 
 void LocationState::think()
 {
-
     if (!_location) return;
-    _location->think();
 
+     _location->think();
+
+     // Скролим локацию
+     if (_scrollTicks + 10 < SDL_GetTicks())
+     {
+         _scrollTicks = SDL_GetTicks();
+         unsigned int scrollDelta = 5;
+         if (_scrollLeft) _location->camera()->setXPosition(_location->camera()->xPosition() - scrollDelta);
+         if (_scrollRight) _location->camera()->setXPosition(_location->camera()->xPosition() + scrollDelta);
+         if (_scrollTop) _location->camera()->setYPosition(_location->camera()->yPosition() - scrollDelta);
+         if (_scrollBottom) _location->camera()->setYPosition(_location->camera()->yPosition() + scrollDelta);
+     }
+
+
+    _ui.clear();
+    _activeUi.clear();
+    add(_floor);
+
+    for (auto it = _location->objectsToRender()->begin(); it != _location->objectsToRender()->end(); ++it)
+    {
+        GameObject* object = *it;
+
+        Image* image = object->image();
+        if (!image) continue; //   ?????????????????????
+
+
+        image->setX(Location::hexagonToX(object->position()) -_location->camera()->x());
+        image->setY(Location::hexagonToY(object->position())-_location->camera()->y());
+        add(image);
+    }
+
+     add(_roof);
+
+
+
+    _floor->setX(-_location->camera()->x());
+    _floor->setY(-_location->camera()->y());
+    _roof->setX(-_location->camera()->x());
+    _roof->setY(-_location->camera()->y() - 100);
+
+
+
+
+    /*
     for(GameObject* object : *_location->objectsToRender())
     {
 
@@ -216,12 +263,14 @@ void LocationState::think()
             object->surface()->setOwner(object);
         }
     }
+    */
 }
 
 void LocationState::handle(Event* event)
 {
-    if (auto mouseEvent = dynamic_cast<MouseEvent*>(event))
+    if (MouseEvent* mouseEvent = dynamic_cast<MouseEvent*>(event))
     {
+        /*
         // Handle objects
         for (auto object : *_location->objectsToRender())
         {            
@@ -234,12 +283,22 @@ void LocationState::handle(Event* event)
                 object->surface()->handle(mouseEvent);
             }
         }
-        State::handle(mouseEvent);
+        */
+
+        if (mouseEvent->name() == "mousemove")
+        {
+            _scrollLeft = mouseEvent->x() < 5 ? true : false;
+            _scrollRight = mouseEvent->x() > 635 ? true : false;
+            _scrollTop = mouseEvent->y() < 5 ? true : false;
+            _scrollBottom = mouseEvent->y() > 475 ? true : false;
+        }
     }
-    else
-    {
-        State::handle(event);
-    }
+
+
+
+
+
+    State::handle(event);
 }
 
 }

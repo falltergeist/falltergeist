@@ -101,6 +101,24 @@ void Texture::copyTo(Texture* destination, unsigned int destinationX, unsigned i
     }
 }
 
+void Texture::blitTo(Texture* destination, unsigned int destinationX, unsigned int destinationY, unsigned int sourceX, unsigned int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
+{
+    if (sourceWidth == 0) sourceWidth = width();
+    if (sourceHeight == 0) sourceHeight = height();
+
+    for (unsigned int y = 0; y != sourceHeight; y++)
+    {
+        for(unsigned int x = 0; x != sourceWidth; x++)
+        {
+            unsigned int color = pixel(sourceX + x, sourceY + y);
+            if (color)
+            {
+                destination->setPixel(destinationX + x, destinationY + y, color);
+            }
+        }
+    }
+}
+
 void Texture::fill(unsigned int color)
 {
     for (unsigned int y = 0; y != _height; y++)

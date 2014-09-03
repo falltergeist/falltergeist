@@ -49,6 +49,8 @@
 #include "../Game/GameMiscObject.h"
 #include "../Game/GameDudeObject.h"
 #include "../VM/VM.h"
+#include "../UI/Image.h"
+#include "../Engine/Graphics/Texture.h"
 
 // Third party includes
 
@@ -57,20 +59,13 @@ namespace Falltergeist
 
 Location::Location(libfalltergeist::MapFileType * mapFile)
 {
-    _cols = 100;
-    _rows = 100;
-
-    _camera = new LocationCamera(640, 480, 0, 0);
-
     _mapFile = mapFile;
-    _tilesLst = ResourceManager::lstFileType("art/tiles/tiles.lst");
-    _tilesBackground = new Surface(640, 480);
-    _tilesBackground->fill(0xFF000000);
     init();
 }
 
 Location::~Location()
 {
+    delete _tilesFloor;
     delete _tilesLst;
     delete _camera;
 
@@ -81,12 +76,36 @@ LocationCamera * Location::camera()
     return _camera;
 }
 
+Texture* Location::tilesFloor()
+{
+    return _tilesFloor;
+}
+
+Texture* Location::tilesRoof()
+{
+    return _tilesRoof;
+}
+
 void Location::init()
 {
+    _elevation = _mapFile->defaultElevation();
+
+    _cols = 100;
+    _rows = 100;
+
+    _tilesLst = ResourceManager::lstFileType("art/tiles/tiles.lst");
+
+    // Генерируем изображение пола
+    _generateFloor();
+    _generateRoof();
+
+    _camera = new LocationCamera(640, 480, 0, 0);
+
     // Инициализируем положение камеры
     unsigned int defaultPosition = _mapFile->defaultPosition();
     camera()->setXPosition(hexagonToX(defaultPosition));
     camera()->setYPosition(hexagonToY(defaultPosition));
+
 
     // Initialize MAP vars
     if (_mapFile->MVARsize() > 0)
@@ -107,6 +126,8 @@ void Location::init()
     {
         auto mapObject = *it;
         GameObject* object = createObject(mapObject->PID());
+        if (!object) continue;
+
 
         object->setLocation(this);
         object->setFID( mapObject->FID() );
@@ -129,9 +150,9 @@ void Location::init()
         _objects.push_back(object);
     }
 
-    //_player = new GameDudeObject();
-    //_player->setName("Choozen One");
-    _player = Game::getInstance().player();
+    _player = new GameDudeObject();
+    _player->setName("Choozen One");
+    //_player = Game::getInstance().player();
     _player->setPID(0x01000001);
     _player->setFID(FID_HERO_MALE);
     _player->setOrientation(_mapFile->defaultOrientation());
@@ -140,20 +161,54 @@ void Location::init()
     //_player->scripts()->push_back(script);
     _objects.push_back(_player);
 
+    /*
     // ON MAP LOADED
     if (_mapFile->scriptId() > 0)
     {
         _script = new VM(ResourceManager::intFileType(_mapFile->scriptId()-1), this);
     }
-
+    */
     // -----------------------
-    generateBackground();
+    //generateBackground();
     checkObjectsToRender();
+
 }
 
 GameDudeObject* Location::player()
 {
     return _player;
+}
+
+void Location::_generateFloor()
+{
+    unsigned int tilesWidth = 48*_cols + 32*_rows;
+    unsigned int tilesHeight = 12*_cols + 24*_rows;
+
+    _tilesFloor = new Texture(tilesWidth, tilesHeight);
+    _tilesFloor->fill(0x000000FF);
+
+    for (unsigned int i = 0; i != _cols*_rows; ++i)
+    {
+        std::string frmName = _tilesLst->strings()->at(_mapFile->elevations()->at(_elevation)->floorTiles()->at(i));
+        Image* tile = new Image("art/tiles/" + frmName);
+        tile->texture()->blitTo(_tilesFloor, tileToX(i), tileToY(i));
+        delete tile;
+    }
+}
+
+void Location::_generateRoof()
+{
+    unsigned int tilesWidth = 48*_cols + 32*_rows;
+    unsigned int tilesHeight = 12*_cols + 24*_rows;
+
+    _tilesRoof = new Texture(tilesWidth, tilesHeight);
+    for (unsigned int i = 0; i != _cols*_rows; ++i)
+    {
+        std::string frmName = _tilesLst->strings()->at(_mapFile->elevations()->at(_elevation)->roofTiles()->at(i));
+        Image* tile = new Image("art/tiles/" + frmName);
+        tile->texture()->blitTo(_tilesRoof, tileToX(i), tileToY(i));
+        delete tile;
+    }
 }
 
 GameObject* Location::createObject(int PID)
@@ -213,6 +268,7 @@ GameObject* Location::createObject(int PID)
         }
         case libfalltergeist::ProFileType::TYPE_CRITTER:
         {
+            return 0; // ???????????
             object = new GameCritterObject();
             auto msg = ResourceManager::msgFileType("text/english/game/pro_crit.msg");
             try
@@ -353,7 +409,8 @@ void Location::handleAction(GameObject* object, int action)
 
 void Location::think()
 {
-
+    checkObjectsToRender();
+    /*
     if (!_initialized)
     {
         _initialized = true;
@@ -396,6 +453,7 @@ void Location::think()
             }
         }
     }
+    */
 }
 
 
@@ -405,9 +463,11 @@ void Location::checkObjectsToRender()
 
     for (GameObject* object : _objects)
     {
-        if (!object->surface() && !object->animationQueue()->animation()) continue;
+        //if (!object->image() && !object->animationQueue()->animation()) continue;
+        if (!object->image()) continue;
 
         int x,y, width, height;
+        /*
         if (Animation* animation = object->animationQueue()->animation())
         {
             x = Location::hexagonToX(object->position()) + animation->xOffset() - animation->surfaces()->at(0)->width()/2;
@@ -417,12 +477,13 @@ void Location::checkObjectsToRender()
         }
         else
         {
-            Surface* surface = object->surface();
-            x = Location::hexagonToX(object->position()) + surface->xOffset() - surface->width()/2;
-            y = Location::hexagonToY(object->position()) + surface->yOffset() - surface->height();
-            width = surface->width();
-            height = surface->height();
-        }
+        */
+            Image* image = object->image();
+            x = Location::hexagonToX(object->position()) + image->xOffset() - image->width()/2;
+            y = Location::hexagonToY(object->position()) + image->yOffset() - image->height();
+            width = image->width();
+            height = image->height();
+        //}
 
         // check if object is out of camera borders
         if (x + width < camera()->x()) continue; // right
@@ -436,6 +497,7 @@ void Location::checkObjectsToRender()
 
 void Location::generateBackground()
 {
+    /*
     _tilesBackground->fill(0xFF000000);
     // Инициализируем тайловый фон
     for (unsigned int i = 0; i != _cols*_rows; ++i)
@@ -455,7 +517,7 @@ void Location::generateBackground()
         tile->setY(tileY - camera()->y());
         tile->blit(_tilesBackground);
     }
-
+    */
     /*
     int x1 = hexagonToX(_mapFile->defaultPosition()) - camera()->x();
     int y1 = hexagonToY(_mapFile->defaultPosition()) - camera()->y();
@@ -532,10 +594,12 @@ unsigned int Location::tileToY(unsigned int tile)
     return ceil(tile / _cols)*24 + (tile % _cols)*12;
 }
 
+/*
 Surface * Location::tilesBackground()
 {
     return _tilesBackground;
 }
+*/
 
 bool Location::scroll(bool up, bool down, bool left, bool right)
 {    

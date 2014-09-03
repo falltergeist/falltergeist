@@ -28,6 +28,8 @@
 #include "../Engine/UI.h"
 
 // Third party includes
+#include "../../lib/libfalltergeist/libfalltergeist.h"
+
 
 namespace Falltergeist
 {
@@ -40,6 +42,10 @@ public:
     Image(std::string filename);
     Image(unsigned int width, unsigned int height);
     Image(Image* image);
+    Image(Texture* texture);
+    Image(libfalltergeist::FrmFileType* frm, unsigned int direction);
+    unsigned int width();
+    unsigned int height();
     ~Image();
 };
 
