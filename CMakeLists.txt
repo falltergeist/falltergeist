@@ -73,6 +73,8 @@ set(SOURCES main.cpp
             src/Engine/FontString.h
             src/Engine/Game.cpp
             src/Engine/Game.h
+            src/Engine/Graphics/AnimationFrame.cpp
+            src/Engine/Graphics/AnimationFrame.h
             src/Engine/Graphics/OpenGLRenderer.cpp
             src/Engine/Graphics/OpenGLRenderer.h
             src/Engine/Graphics/SDLRenderer.cpp
