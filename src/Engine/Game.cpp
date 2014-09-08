@@ -66,7 +66,7 @@ void Game::_initialize()
 
     _resourceManager = new ResourceManager();
     //_renderer = new OpenGLRenderer(640, 480);
-    _renderer = new SDLRenderer(640, 480);
+    _renderer = new SDLRenderer(800, 600);
     _renderer->init();
     //_screen = new Screen(640, 480, 32);
     //_mixer = new AudioMixer();

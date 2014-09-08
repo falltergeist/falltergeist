@@ -31,6 +31,7 @@
 #include "../Engine/Graphics/Animation.h"
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/Game.h"
+#include "../Engine/Graphics/Renderer.h"
 #include "../Game/GameDefines.h"
 #include "../Game/GameCritterObject.h"
 #include "../Game/GameAmmoItemObject.h"
@@ -99,7 +100,9 @@ void Location::init()
     _generateFloor();
     _generateRoof();
 
-    _camera = new LocationCamera(640, 480, 0, 0);
+    auto game = &Game::getInstance();
+
+    _camera = new LocationCamera(game->renderer()->width(), game->renderer()->height(), 0, 0);
 
     // Инициализируем положение камеры
     unsigned int defaultPosition = _mapFile->defaultPosition();
