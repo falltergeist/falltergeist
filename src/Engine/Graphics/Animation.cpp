@@ -20,6 +20,7 @@
 
 // C++ standard includes
 #include <iostream>
+#include <cmath>
 
 // Falltergeist includes
 #include "../../Engine/Graphics/Animation.h"
@@ -48,24 +49,25 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
     int xOffset = frm->shiftX(direction);
     int yOffset = frm->shiftY(direction);
 
+
     // Смещение кадра в текстуре анимации
     unsigned int x = 0;
     unsigned int y = 0;
 
-    for (auto i = 0; i != direction; ++i)
+    for (auto d = 0; d != direction; ++d)
     {
-        y += frm->height(direction); //? может i - 1
+        y += frm->height(d); //? может i - 1
     }
 
 
-    for (auto i = 0; i != frm->framesPerDirection(); ++i)
+    for (auto f = 0; f != frm->framesPerDirection(); ++f)
     {
-        xOffset += frm->offsetX(direction, i);
-        yOffset += frm->offsetY(direction, i);
+        xOffset += frm->offsetX(direction, f);
+        yOffset += frm->offsetY(direction, f);
 
         auto frame = new AnimationFrame();
-        frame->setWidth(frm->width(direction));
-        frame->setHeight(frm->height(direction));
+        frame->setWidth(frm->width(direction, f));
+        frame->setHeight(frm->height(direction, f));
         frame->setXOffset(xOffset);
         frame->setYOffset(yOffset);
         frame->setY(y);
@@ -73,6 +75,8 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
         frame->setDuration(1000/frm->framesPerSecond());
         x += frm->width(direction);
         _animationFrames->push_back(frame);
+
+
     }
 }
 
@@ -103,7 +107,7 @@ Texture* Animation::texture()
     _texture = new Texture(frame->width(), frame->height());
     _animationTexture->copyTo(_texture, 0, 0, frame->x(), frame->y(), frame->width(), frame->height());
 
-    setXOffset(frame->xOffset() - frame->width()/2);
+    setXOffset(frame->xOffset() - (int)std::ceil(frame->width()*0.5));
     setYOffset(frame->yOffset() - frame->height());
 
     return _texture;

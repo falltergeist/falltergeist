@@ -182,8 +182,8 @@ void LocationState::_drawHexagonalGrid()
 {
     if (!_hexagonalGrid) return;
     Surface * hexagon = ResourceManager::surface("art/intrface/msef000.frm");
-    hexagon->setXOffset(0 - hexagon->width()/2);
-    hexagon->setYOffset(0 - hexagon->height()/2);
+    hexagon->setXOffset(0 - hexagon->width()*0.5);
+    hexagon->setYOffset(0 - hexagon->height()*0.5);
     for (unsigned int i = 0; i != 200*200; ++i)
     {
         int x = _location->hexagonToX(i) - _location->camera()->x();

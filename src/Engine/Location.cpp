@@ -409,7 +409,11 @@ void Location::handleAction(GameObject* object, int action)
 
 void Location::think()
 {
-    checkObjectsToRender();
+    if (SDL_GetTicks() - _lastObjectsCheck >= 10)
+    {
+        _lastObjectsCheck = SDL_GetTicks();
+        checkObjectsToRender();
+    }
     /*
     if (!_initialized)
     {
@@ -482,8 +486,8 @@ void Location::checkObjectsToRender()
 
         int x,y, width, height;
 
-        x = Location::hexagonToX(object->position()) + ui->xOffset() - ui->width()/2;
-        y = Location::hexagonToY(object->position()) + ui->yOffset() - ui->height();
+        x = Location::hexagonToX(object->position()) + ui->xOffset();
+        y = Location::hexagonToY(object->position()) + ui->yOffset();
         width = ui->width();
         height = ui->height();
 

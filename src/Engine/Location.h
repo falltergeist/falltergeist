@@ -51,6 +51,7 @@ protected:
     std::vector<GameObject*> _objectsToRender;
     std::vector<int> _MVARS;
     std::map<std::string, VMStackValue*> _EVARS;
+    unsigned int _lastObjectsCheck = 0;
 
 
     unsigned int _cols;

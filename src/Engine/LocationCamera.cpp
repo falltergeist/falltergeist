@@ -41,13 +41,13 @@ LocationCamera::~LocationCamera()
 
 int LocationCamera::x()
 {
-    return xPosition() - width()/2;
+    return xPosition() - (int)width()*0.5;
 }
 
 
 int LocationCamera::y()
 {
-    return yPosition() - height()/2;
+    return yPosition() - (int)height()*0.5;
 }
 
 int LocationCamera::xPosition()
@@ -57,9 +57,9 @@ int LocationCamera::xPosition()
 
 void LocationCamera::setXPosition(int value)
 {
-    if (value < width()/2)
+    if (value < (int)width()*0.5)
     {
-        _xPosition = width()/2;
+        _xPosition = (int)width()*0.5;
     }
     else
     {
@@ -74,9 +74,9 @@ int LocationCamera::yPosition()
 
 void LocationCamera::setYPosition(int value)
 {
-    if (value < height()/2)
+    if (value < (int)height()*0.5)
     {
-        _yPosition = height()/2;
+        _yPosition = (int)height()*0.5;
     }
     else
     {
