@@ -486,8 +486,18 @@ void Location::checkObjectsToRender()
 
         int x,y, width, height;
 
-        x = Location::hexagonToX(object->position()) + ui->xOffset();
-        y = Location::hexagonToY(object->position()) + ui->yOffset();
+        x = Location::hexagonToX(object->position());
+        y = Location::hexagonToY(object->position());
+
+        /*
+        Animation* animation = dynamic_cast<Animation*>(object->ui());
+        if (animation)
+        {
+            x = Location::hexagonToX(object->position()) + ui->xOffset();
+            y = Location::hexagonToY(object->position()) + ui->yOffset();
+        }
+        */
+
         width = ui->width();
         height = ui->height();
 

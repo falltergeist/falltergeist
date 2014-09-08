@@ -72,7 +72,17 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
         frame->setYOffset(yOffset);
         frame->setY(y);
         frame->setX(x);
-        frame->setDuration(1000/frm->framesPerSecond());
+
+        auto fps = frm->framesPerSecond();
+        if (fps == 0)
+        {
+            frame->setDuration(1000);
+        }
+        else
+        {
+            frame->setDuration(1000/frm->framesPerSecond());
+        }
+
         x += frm->width(direction);
         _animationFrames->push_back(frame);
 
