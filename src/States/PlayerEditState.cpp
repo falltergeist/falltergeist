@@ -255,10 +255,18 @@ PlayerEditState::PlayerEditState() : State()
     add(_selectedImage);
 
     auto font1_000000ff = _game->resourceManager()->font("font1.aaf", 0x000000FF);
+    auto font2_000000ff = _game->resourceManager()->font("font2.aaf", 0x000000FF);
 
     _title = new TextArea("", 350,275);
-    _title->setFont(font1_000000ff);
+    _title->setFont(font2_000000ff);
     add(_title);
+
+    auto line = new Image(270, 2);
+    line->setX(350);
+    line->setY(300);
+    line->texture()->fill(0x000000ff);
+    add(line);
+
 
     _description = new TextArea("", 350, 315);
     _description->setFont(font1_000000ff)->setWidth(145)->setHeight(120)->setWordWrap(true);
@@ -415,7 +423,7 @@ void PlayerEditState::think()
 
         _title->setText(_titles->at(name));
         _description->setText(_descriptions->at(name));
-         _selectedImage->setTexture(_images->at(name)->texture());
+        _selectedImage->setTexture(_images->at(name)->texture());
         //_selectedImage->setX(480);
         //_selectedImage->setY(310);
         //_image->setXOffset(0);
