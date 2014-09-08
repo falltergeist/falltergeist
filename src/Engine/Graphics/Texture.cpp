@@ -120,7 +120,7 @@ void Texture::blitTo(Texture* destination, unsigned int destinationX, unsigned i
         for(unsigned int x = 0; x != sourceWidth; x++)
         {
             unsigned int color = pixel(sourceX + x, sourceY + y);
-            if (color)
+            if (color & 0x000000ff)
             {
                 destination->setPixel(destinationX + x, destinationY + y, color);
             }

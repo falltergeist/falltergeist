@@ -248,6 +248,12 @@ PlayerEditState::PlayerEditState() : State()
         }
     }
 
+    // Fix to handle click on empty spaces
+    for(auto it = _labels->begin(); it != _labels->end(); ++it)
+    {
+        it->second->setBackgroundColor(0x00000001);
+    }
+
     _selectedImage = new Image(_images->at("stats_1"));
     _selectedLabel = _labels->at("stats_1");
     _selectedImage->setX(480);

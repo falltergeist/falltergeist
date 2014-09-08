@@ -396,7 +396,7 @@ Texture* TextArea::texture()
 
             unsigned int xOffset = (unsigned char)(chr%16) * font->width();
             unsigned int yOffset = (unsigned char)(chr/16) * font->height();
-            font->texture()->copyTo(_texture, x, y, xOffset, yOffset, font->width(), font->height());
+            font->texture()->blitTo(_texture, x, y, xOffset, yOffset, font->width(), font->height());
             if ((chr == ' ') && (_horizontalAlign == HORIZONTAL_ALIGN_JUSTIFY))
             {
                 x += horizontal_word_gap; 
