@@ -73,15 +73,18 @@ void SDLRenderer::registerTexture(Texture* texture)
     if (texture->id()) return; // if registered
 
     // Creating SDL surface                                                                            //red       //green     //blue      //alpha
-    SDL_Surface* surface = SDL_CreateRGBSurface(SDL_SRCALPHA, texture->width(), texture->height(), 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
-    if (surface == 0) throw Exception(SDL_GetError());
+    SDL_Surface* tmpSurface = SDL_CreateRGBSurface(SDL_SRCALPHA, texture->width(), texture->height(), 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+    if (tmpSurface == 0) throw Exception(SDL_GetError());
     // Copying data from texture to surface
-    unsigned int* pixels = (unsigned int*) surface->pixels;
+    unsigned int* pixels = (unsigned int*) tmpSurface->pixels;
     for (unsigned int i = 0; i != texture->width()*texture->height(); ++i)
     {
         pixels[i] = texture->data()[i];
     }
     // Saving pointer to surface
+    SDL_Surface* surface = SDL_DisplayFormatAlpha(tmpSurface);
+    if (surface == 0) throw Exception(SDL_GetError());
+    SDL_FreeSurface(tmpSurface);
     _surfaces.push_back(surface);
 
     texture->setId(_texturesCounter);
