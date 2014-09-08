@@ -44,7 +44,6 @@ protected:
     TextArea* _description = 0;
     //TextArea * _description;
     Image* _selectedImage = 0;
-    Image* _image = 0;
     std::map<std::string, TextArea *> * _labels;
     std::map<std::string, BigCounter *> * _counters;
     std::map<std::string, ImageButton *> * _buttons;

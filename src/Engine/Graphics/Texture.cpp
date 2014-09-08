@@ -38,9 +38,16 @@ Texture::Texture(unsigned int width, unsigned int height)
 
 Texture::~Texture()
 {
+    _unregister();
+    delete [] _data;
+}
+
+void Texture::_unregister()
+{
+    if (!id()) return;
     auto game = &Game::getInstance();
     game->renderer()->unregisterTexture(this);
-    delete [] _data;
+    _id = 0;
 }
 
 unsigned int Texture::id()
@@ -78,13 +85,15 @@ unsigned int Texture::pixel(unsigned int x, unsigned int y)
 void Texture::setPixel(unsigned int x, unsigned int y, unsigned int color)
 {
     if (x >= _width || y >= _height) return;
+    _unregister();
     unsigned int index = (y*_width) + x;
-    _data[index] = color;
+    _data[index] = color;    
 }
 
 void Texture::loadFromRGBA(unsigned int* data)
 {
-    for (unsigned int i = 0; i != _width*_height; ++i) _data[i] = data[i];
+    _unregister();
+    for (unsigned int i = 0; i != _width*_height; ++i) _data[i] = data[i];    
 }
 
 void Texture::copyTo(Texture* destination, unsigned int destinationX, unsigned int destinationY, unsigned int sourceX, unsigned int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)

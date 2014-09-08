@@ -248,12 +248,11 @@ PlayerEditState::PlayerEditState() : State()
         }
     }
 
-    _selectedImage = _images->at("stats_1");
+    _selectedImage = new Image(_images->at("stats_1"));
     _selectedLabel = _labels->at("stats_1");
-    _image = new Image(_selectedImage);
-    _image->setX(480);
-    _image->setY(310);
-    add(_image);
+    _selectedImage->setX(480);
+    _selectedImage->setY(310);
+    add(_selectedImage);
 
     auto font1_000000ff = _game->resourceManager()->font("font1.aaf", 0x000000FF);
 
@@ -416,10 +415,9 @@ void PlayerEditState::think()
 
         _title->setText(_titles->at(name));
         _description->setText(_descriptions->at(name));
-        _selectedImage = _images->at(name);
-        _selectedImage->texture()->copyTo(_image->texture());
-        //_image->setX(480);
-        //_image->setY(310);
+         _selectedImage->setTexture(_images->at(name)->texture());
+        //_selectedImage->setX(480);
+        //_selectedImage->setY(310);
         //_image->setXOffset(0);
         //_image->setYOffset(0);
 
@@ -542,7 +540,7 @@ void PlayerEditState::onButtonClick(MouseEvent* event)
             if (name.find("stats_") == 0)
             {
                 _selectedLabel = _labels->at(name.substr(0,7));
-                _selectedImage = _images->at(name.substr(0,7));
+                _selectedImage->setTexture(_images->at(name.substr(0,7))->texture());
                 unsigned int number = atoi(name.substr(6,1).c_str());
                 if (name.find("_increase") == 7)
                 {
@@ -558,7 +556,8 @@ void PlayerEditState::onButtonClick(MouseEvent* event)
             {
                 unsigned int number = atoi(name.substr(7).c_str());
                 _selectedLabel = _labels->at(name);
-                _selectedImage = _images->at(name);
+                _selectedImage->setTexture(_images->at(name)->texture());
+
                 if (!_traitToggle(number - 1))
                 {
                     PlayerEditAlertState * state = new PlayerEditAlertState();
@@ -572,8 +571,8 @@ void PlayerEditState::onButtonClick(MouseEvent* event)
             if (name.find("skills_") == 0)
             {
                 unsigned int number = atoi(name.substr(7).c_str());
-                _selectedLabel = _labels->at(name);
-                _selectedImage = _images->at(name);
+                _selectedLabel = _labels->at(name);                
+                _selectedImage->setTexture(_images->at(name)->texture());
                 if (!_skillToggle(number - 1))
                 {
                     PlayerEditAlertState * state = new PlayerEditAlertState();
@@ -603,7 +602,7 @@ void PlayerEditState::onLabelClick(MouseEvent * event)
                     label = name.substr(0, name.find("_value"));
                 }
                 _selectedLabel = _labels->at(label.c_str());
-                _selectedImage = _images->at(label.c_str());
+                _selectedImage->setTexture(_images->at(label.c_str())->texture());
             }
         }
     }
@@ -620,7 +619,8 @@ void PlayerEditState::onMaskClick(MouseEvent * event)
             if (name.find("stats_") == 0)
             {
                 _selectedLabel = _labels->at(name);
-                _selectedImage = _images->at(name);
+                _selectedImage->setTexture(_images->at(name)->texture());
+
             }
         }
     }

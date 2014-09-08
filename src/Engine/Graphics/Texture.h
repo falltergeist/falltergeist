@@ -36,6 +36,7 @@ protected:
     unsigned int _width = 0;
     unsigned int _height = 0;
     unsigned int* _data = 0; // array of RGBA pixels
+    void _unregister();
 
 public:
     Texture(unsigned int width, unsigned int height);
