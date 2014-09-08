@@ -326,6 +326,7 @@ void PlayerEditState::_addImage(std::string name, Image* image)
 
 void PlayerEditState::think()
 {
+    State::think();
     GameDudeObject* player = _game->player();
     libfalltergeist::MsgFileType * msgEditor = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
 

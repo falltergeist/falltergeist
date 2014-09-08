@@ -101,4 +101,17 @@ void UI::setYOffset(int yOffset)
 {
     _yOffset = yOffset;
 }
+
+unsigned int UI::width()
+{
+    if (!_texture) return 0;
+    return _texture->width();
+}
+
+unsigned int UI::height()
+{
+    if (!_texture) return 0;
+    return _texture->height();
+}
+
 }

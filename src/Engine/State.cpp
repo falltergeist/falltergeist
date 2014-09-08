@@ -18,6 +18,7 @@
  */
 
 // C++ standard includes
+#include <iostream>
 
 // Falltergeist includes
 #include "../Engine/State.h"

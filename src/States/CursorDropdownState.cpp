@@ -160,6 +160,7 @@ void CursorDropdownState::setObject(void* object)
 
 void CursorDropdownState::think()
 {
+    State::think();
     /*
     int currentSurface = (_game->mouse()->cursorY() - _surface->y())/40;
     if (currentSurface < 0)

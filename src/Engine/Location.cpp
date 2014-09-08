@@ -464,9 +464,8 @@ void Location::checkObjectsToRender()
     for (GameObject* object : _objects)
     {
         //if (!object->image() && !object->animationQueue()->animation()) continue;
-        if (!object->image()) continue;
+        if (!object->ui()) continue;
 
-        int x,y, width, height;
         /*
         if (Animation* animation = object->animationQueue()->animation())
         {
@@ -478,12 +477,15 @@ void Location::checkObjectsToRender()
         else
         {
         */
-            Image* image = object->image();
-            x = Location::hexagonToX(object->position()) + image->xOffset() - image->width()/2;
-            y = Location::hexagonToY(object->position()) + image->yOffset() - image->height();
-            width = image->width();
-            height = image->height();
-        //}
+        ActiveUI* ui = dynamic_cast<ActiveUI*>(object->ui());
+        if (!ui) continue;
+
+        int x,y, width, height;
+
+        x = Location::hexagonToX(object->position()) + ui->xOffset() - ui->width()/2;
+        y = Location::hexagonToY(object->position()) + ui->yOffset() - ui->height();
+        width = ui->width();
+        height = ui->height();
 
         // check if object is out of camera borders
         if (x + width < camera()->x()) continue; // right

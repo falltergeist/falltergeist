@@ -35,6 +35,7 @@ class VM;
 class Location;
 class Image;
 class AnimationQueue;
+class ActiveUI;
 
 class GameObject
 {
@@ -50,7 +51,7 @@ protected:
     std::string _description;
     std::vector<VM*> _scripts;
     Location* _location = 0;
-    Image* _image = 0;
+    ActiveUI* _ui = 0;
     //AnimationQueue _animationQueue;
 public:
     enum { TYPE_ITEM = 0, TYPE_CRITTER, TYPE_SCENERY, TYPE_WALL, TYPE_TILE, TYPE_MISC, TYPE_DUDE };
@@ -90,8 +91,8 @@ public:
     void setLocation(Location* value);
 
     //AnimationQueue* animationQueue();
-    Image* image();
-    void setImage(Image* image);
+    ActiveUI* ui();
+    void setUI(ActiveUI* ui);
 
 };
 

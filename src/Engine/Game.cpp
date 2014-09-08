@@ -208,7 +208,20 @@ void Game::run()
         _fpsCounter->think();
         _mouse->think();
         //Surface::animatedPalette->think();
-        
+
+        auto it = _states.end();
+        do
+        {
+            --it;
+        }
+        while(it != _states.begin() && !(*it)->fullscreen());
+
+        for (; it != _states.end(); ++it)
+        {
+            State* state = *it;
+            state->think();
+        }
+
         // render all states that is over the last fullscreen state
         /**
         _screen->clear();

@@ -31,6 +31,7 @@
 #include "../States/MainMenuState.h"
 #include "../States/SettingsMenuState.h"
 #include "../States/NewGameState.h"
+#include "../Engine/Graphics/Animation.h"
 
 // Third party includes
 
@@ -54,7 +55,7 @@ void MainMenuState::init()
     // Background image
     auto background = new Image("art/intrface/mainmenu.frm");
 
-    // "Into" button
+    // "Intro" button
     auto introButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19);
 
     // "New game" button
@@ -124,11 +125,11 @@ void MainMenuState::init()
     add(optionsButtonLabel);
     add(creditsButtonLabel);
     add(exitButtonLabel);
-
 }
 
 void MainMenuState::think()
 {
+    State::think();
 }
 
 void MainMenuState::onExitButtonClick(MouseEvent* event)

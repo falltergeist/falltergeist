@@ -192,6 +192,7 @@ PlayerEditNameState::~PlayerEditNameState()
 
 void PlayerEditNameState::think()
 {   
+    State::think();
     if (SDL_GetTicks() - _timer > 300)
     {
         if (_cursor->visible())

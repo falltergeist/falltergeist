@@ -408,106 +408,16 @@ void ResourceManager::unloadResources()
 
 libfalltergeist::FrmFileType * ResourceManager::frmFileType(unsigned int FID)
 {
-    std::string prefix;
-    std::string lstFile;
-    switch(FID >> 24)
-    {
-        case libfalltergeist::FrmFileType::TYPE_ITEM:
-            prefix = "art/items/";
-            lstFile = "items.lst";
-            break;
-        case libfalltergeist::FrmFileType::TYPE_CRITTER:
-            prefix = "art/critters/";
-            lstFile = "critters.lst";
-            break;
-        case libfalltergeist::FrmFileType::TYPE_SCENERY:
-            prefix = "art/scenery/";
-            lstFile = "scenery.lst";
-            break;
-        case libfalltergeist::FrmFileType::TYPE_WALL:
-            prefix = "art/walls/";
-            lstFile = "walls.lst";
-            break;
-        case libfalltergeist::FrmFileType::TYPE_TILE:
-            prefix = "art/tiles/";
-            lstFile = "tiles.lst";
-            break;
-        case libfalltergeist::FrmFileType::TYPE_BACKGROUND:
-            prefix = "art/backgrnd/";
-            lstFile = "backgrnd.lst";
-            break;
-        case libfalltergeist::FrmFileType::TYPE_INTERFACE:
-            prefix = "art/intrface/";
-            lstFile = "intrface.lst";
-            break;
-        case libfalltergeist::FrmFileType::TYPE_INVENTORY:
-            prefix = "art/inven/";
-            lstFile = "inven.lst";
-            break;
-    }
-    libfalltergeist::LstFileType * lst = lstFileType(prefix + lstFile);
-    unsigned int frmId = 0x0000FFFF & FID;
-
-    if (frmId >= lst->strings()->size())
-    {
-        return 0;
-    }
-
-    return frmFileType(prefix + lst->strings()->at(frmId));
+    if (FIDtoFrmName(FID) == "") return 0;
+    return frmFileType(FIDtoFrmName(FID));
 }
 
 
 
 Surface * ResourceManager::surface(unsigned int FID, unsigned int direction, unsigned int frame)
 {
-    std::string prefix;
-    std::string lstFile;
-    switch(FID >> 24)
-    {
-        case libfalltergeist::FrmFileType::TYPE_ITEM:
-            prefix = "art/items/";
-            lstFile = "items.lst";
-            break;
-        case libfalltergeist::FrmFileType::TYPE_CRITTER:
-            prefix = "art/critters/";
-            lstFile = "critters.lst";
-            break;
-        case libfalltergeist::FrmFileType::TYPE_SCENERY:
-            prefix = "art/scenery/";
-            lstFile = "scenery.lst";
-            break;
-        case libfalltergeist::FrmFileType::TYPE_WALL:
-            prefix = "art/walls/";
-            lstFile = "walls.lst";
-            break;
-        case libfalltergeist::FrmFileType::TYPE_TILE:
-            prefix = "art/tiles/";
-            lstFile = "tiles.lst";
-            break;
-        case libfalltergeist::FrmFileType::TYPE_BACKGROUND:
-            prefix = "art/backgrnd/";
-            lstFile = "backgrnd.lst";
-            break;
-        case libfalltergeist::FrmFileType::TYPE_INTERFACE:
-            prefix = "art/intrface/";
-            lstFile = "intrface.lst";
-            break;
-        case libfalltergeist::FrmFileType::TYPE_INVENTORY:
-            prefix = "art/inven/";
-            lstFile = "inven.lst";
-            break;
-    }
-    libfalltergeist::LstFileType * lst = lstFileType(prefix + lstFile);
-    unsigned int frmId = 0x0000FFFF & FID;
-
-    if (frmId >= lst->strings()->size())
-    {
-        debug("ResourceManager::surface(unsigned int, unsigned int, unsigned int) - LST size <= FID: " + std::to_string(FID), DEBUG_ERROR);
-        return 0;
-    }
-
-    //std::cout << std::hex << FID << std::endl;
-    return surface(prefix + lst->strings()->at(frmId), direction, frame);
+    if (FIDtoFrmName(FID) == "") return 0;
+    return surface(FIDtoFrmName(FID), direction, frame);
 }
 
 libfalltergeist::IntFileType * ResourceManager::intFileType(unsigned int SID)
@@ -521,5 +431,54 @@ libfalltergeist::IntFileType * ResourceManager::intFileType(unsigned int SID)
     return intFileType("scripts/" + lst->strings()->at(SID));
 }
 
+std::string ResourceManager::FIDtoFrmName(unsigned int FID)
+{
+    std::string prefix;
+    std::string lstFile;
+    switch(FID >> 24)
+    {
+        case libfalltergeist::FrmFileType::TYPE_ITEM:
+            prefix = "art/items/";
+            lstFile = "items.lst";
+            break;
+        case libfalltergeist::FrmFileType::TYPE_CRITTER:
+            prefix = "art/critters/";
+            lstFile = "critters.lst";
+            break;
+        case libfalltergeist::FrmFileType::TYPE_SCENERY:
+            prefix = "art/scenery/";
+            lstFile = "scenery.lst";
+            break;
+        case libfalltergeist::FrmFileType::TYPE_WALL:
+            prefix = "art/walls/";
+            lstFile = "walls.lst";
+            break;
+        case libfalltergeist::FrmFileType::TYPE_TILE:
+            prefix = "art/tiles/";
+            lstFile = "tiles.lst";
+            break;
+        case libfalltergeist::FrmFileType::TYPE_BACKGROUND:
+            prefix = "art/backgrnd/";
+            lstFile = "backgrnd.lst";
+            break;
+        case libfalltergeist::FrmFileType::TYPE_INTERFACE:
+            prefix = "art/intrface/";
+            lstFile = "intrface.lst";
+            break;
+        case libfalltergeist::FrmFileType::TYPE_INVENTORY:
+            prefix = "art/inven/";
+            lstFile = "inven.lst";
+            break;
+    }
+    libfalltergeist::LstFileType * lst = lstFileType(prefix + lstFile);
+    unsigned int frmId = 0x0000FFFF & FID;
+
+    if (frmId >= lst->strings()->size())
+    {
+        debug("ResourceManager::FIDtoFrmName(unsigned int) - LST size <= FID: " + std::to_string(FID), DEBUG_ERROR);
+        return "";
+    }
+    return prefix + lst->strings()->at(frmId);
+}
 
 }

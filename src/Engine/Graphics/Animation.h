@@ -23,22 +23,34 @@
 
 // C++ standard includes
 #include <vector>
+#include <string>
 
 // Falltergeist includes
+#include "../../Engine/ActiveUI.h"
 
 // Third party includes
+
 
 namespace Falltergeist
 {
 class AnimationFrame;
 
-class Animation
+class Animation : public ActiveUI
 {
 protected:
-    std::vector<AnimationFrame*> _animationFrames;
+    std::vector<AnimationFrame*>* _animationFrames = 0;
+    Texture* _animationTexture = 0;
+    unsigned int _currentFrame = 0;
+    unsigned int _frameTicks = 0;
 public:
     Animation();
+    Animation(std::string frmName, unsigned int direction = 0);
     ~Animation();
+    std::vector<AnimationFrame*>* frames();
+    virtual void think();
+    virtual Texture* texture();
+    virtual int xOffset();
+    virtual int yOffset();
 };
 
 }

@@ -57,8 +57,8 @@ void LocationState::init()
     if (initialized()) return;
     State::init();
     //setScrollable(true);
-    //_location = new Location(_game->resourceManager()->mapFileType("maps/artemple.map"));
-    _location = new Location(_game->resourceManager()->mapFileType("maps/arvillag.map"));
+    _location = new Location(_game->resourceManager()->mapFileType("maps/artemple.map"));
+    //_location = new Location(_game->resourceManager()->mapFileType("maps/broken1.map"));
     _game->setLocation(_location);
     //_game->mouse()->setType(Mouse::ACTION);
     _floor = new Image(_location->tilesFloor());
@@ -196,6 +196,7 @@ void LocationState::_drawHexagonalGrid()
 
 void LocationState::think()
 {
+    State::think();
     if (!_location) return;
 
      _location->think();
@@ -220,16 +221,16 @@ void LocationState::think()
     {
         GameObject* object = *it;
 
-        Image* image = object->image();
-        if (!image) continue; //   ?????????????????????
+        ActiveUI* ui = dynamic_cast<ActiveUI*>(object->ui());
+        if (!ui) continue; //   ?????????????????????
 
 
-        image->setX(Location::hexagonToX(object->position()) -_location->camera()->x());
-        image->setY(Location::hexagonToY(object->position())-_location->camera()->y());
-        add(image);
+        ui->setX(Location::hexagonToX(object->position()) -_location->camera()->x());
+        ui->setY(Location::hexagonToY(object->position())-_location->camera()->y());
+        add(ui);
     }
 
-     add(_roof);
+     //add(_roof);
 
 
 

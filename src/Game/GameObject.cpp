@@ -39,8 +39,8 @@ GameObject::GameObject()
 
 GameObject::~GameObject()
 {
-    delete _image;
-    _image = 0;
+    delete _ui;
+    _ui = 0;
 }
 
 int GameObject::type()
@@ -112,7 +112,7 @@ void GameObject::setOrientation(int value)
     if (_orientation == value) return;
 
     _orientation = value;
-    delete _image; _image = 0;
+    delete _ui; _ui = 0;
 }
 
 std::string GameObject::name()
@@ -156,9 +156,9 @@ AnimationQueue* GameObject::animationQueue()
     return &_animationQueue;
 }
 */
-Image* GameObject::image()
+ActiveUI* GameObject::ui()
 {
-    if (_image) return _image;
+    if (_ui) return _ui;
 
     auto frm = ResourceManager::frmFileType(FID());
     if (frm)
@@ -167,25 +167,23 @@ Image* GameObject::image()
         auto type = (PID() & 0x0F000000) >> 24;
         if (type == 5 && id == 12) // Map scroll blockers
         {
-            _image = new Image("art/intrface/msef001.frm");
-            return _image;
+            _ui = new Image("art/intrface/msef001.frm");
+            return _ui;
         }
         if (type == 5 && id >= 16 && id <= 23) // exit tiles
         {
-            _image = new Image("art/intrface/msef001.frm");
-            return _image;
+            _ui = new Image("art/intrface/msef001.frm");
+            return _ui;
         }
 
-        //if (frm->framesPerDirection() > 1)
-        //{
-        //    auto animation = new Animation(frm);
-        //    animation->setCurrentSurfaceSet(this->orientation());
-        //    this->animationQueue()->add(animation);
-        //}
-        //else
-        //{
-            _image = new Image(frm, orientation());
-        //}
+        if (frm->framesPerDirection() > 1)
+        {
+            _ui = new Animation(ResourceManager::FIDtoFrmName(FID()), this->orientation());
+        }
+        else
+        {
+            _ui = new Image(frm, orientation());
+        }
     }
 
     /*
@@ -196,7 +194,7 @@ Image* GameObject::image()
             return (Image*)_animationQueue.animation();
         }
     }*/
-    return _image;
+    return _ui;
 }
 
 }

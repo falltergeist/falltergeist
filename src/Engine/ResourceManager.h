@@ -73,6 +73,7 @@ public:
     static Font* font(std::string filename = "font1.aaf", unsigned int color = 0x3ff800ff);
     static void extract(std::string path);
     static void unloadResources();
+    static std::string FIDtoFrmName(unsigned int FID);
 };
 
 }

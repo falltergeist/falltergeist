@@ -19,17 +19,123 @@
  */
 
 // C++ standard includes
+#include <iostream>
 
 // Falltergeist includes
 #include "../../Engine/Graphics/Animation.h"
+#include "../../Engine/Graphics/AnimationFrame.h"
+#include "../../Engine/Graphics/Texture.h"
+#include "../../Engine/ResourceManager.h"
 
 // Third party includes
+#include "SDL.h"
 
 namespace Falltergeist
 {
 
-Animation::Animation()
+Animation::Animation() : ActiveUI()
 {
+    _animationFrames = new std::vector<AnimationFrame*>;
+}
+
+Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
+{
+    _animationFrames = new std::vector<AnimationFrame*>;
+    auto frm = ResourceManager::frmFileType(frmName);
+
+    _animationTexture = ResourceManager::texture(frmName);
+
+    int xOffset = frm->shiftX(direction);
+    int yOffset = frm->shiftY(direction);
+
+    // Смещение кадра в текстуре анимации
+    unsigned int x = 0;
+    unsigned int y = 0;
+
+    for (auto i = 0; i != direction; ++i)
+    {
+        y += frm->height(direction); //? может i - 1
+    }
+
+
+    for (auto i = 0; i != frm->framesPerDirection(); ++i)
+    {
+        xOffset += frm->offsetX(direction, i);
+        yOffset += frm->offsetY(direction, i);
+
+        auto frame = new AnimationFrame();
+        frame->setWidth(frm->width(direction));
+        frame->setHeight(frm->height(direction));
+        frame->setXOffset(xOffset);
+        frame->setYOffset(yOffset);
+        frame->setY(y);
+        frame->setX(x);
+        frame->setDuration(1000/frm->framesPerSecond());
+        x += frm->width(direction);
+        _animationFrames->push_back(frame);
+    }
+}
+
+
+Animation::~Animation()
+{
+    // Не удаляем текстуру, т.к. она загружена из ResourceManager
+    _animationTexture = 0;
+    while(!_animationFrames->empty())
+    {
+        delete _animationFrames->back();
+        _animationFrames->pop_back();
+    }
+    delete _animationFrames;
+}
+
+std::vector<AnimationFrame*>* Animation::frames()
+{
+    return _animationFrames;
+}
+
+Texture* Animation::texture()
+{
+    if (_texture) return _texture;
+
+    AnimationFrame* frame = _animationFrames->at(_currentFrame);
+
+    _texture = new Texture(frame->width(), frame->height());
+    _animationTexture->copyTo(_texture, 0, 0, frame->x(), frame->y(), frame->width(), frame->height());
+
+    setXOffset(frame->xOffset() - frame->width()/2);
+    setYOffset(frame->yOffset() - frame->height());
+
+    return _texture;
+}
+
+int Animation::xOffset()
+{
+    return _animationFrames->at(_currentFrame)->xOffset();
+}
+
+int Animation::yOffset()
+{
+    return _animationFrames->at(_currentFrame)->yOffset();
+}
+
+void Animation::think()
+{
+    if (SDL_GetTicks() - _frameTicks >= _animationFrames->at(_currentFrame)->duration())
+    {
+        _frameTicks = SDL_GetTicks();
+
+        if (_currentFrame < _animationFrames->size() - 1)
+        {
+            _currentFrame += 1;
+        }
+        else
+        {
+            _currentFrame = 0;
+        }
+        delete _texture;
+        _texture = 0;
+    }
 }
 
 }
