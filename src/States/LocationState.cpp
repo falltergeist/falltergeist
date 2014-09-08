@@ -188,7 +188,7 @@ void LocationState::_drawHexagonalGrid()
     {
         int x = _location->hexagonToX(i) - _location->camera()->x();
         int y = _location->hexagonToY(i) - _location->camera()->y();
-        hexagon->setX(x);width
+        hexagon->setX(x);
         hexagon->setY(y);
         hexagon->blit(_game->screen()->surface());
     }
