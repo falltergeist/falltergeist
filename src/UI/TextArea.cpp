@@ -236,29 +236,187 @@ Texture* TextArea::texture()
 
     unsigned int x = 0;
     unsigned int y = 0;
+    unsigned int str_width_max = 0;
+    unsigned int width_final = 0;
+    unsigned int wrd_width = 0;
+    unsigned int horizontal_word_gap;
+    unsigned int horizontal_error;
+    unsigned int space_width = 0; // width of space symbol with a gap
 
+    std::vector<FontString*> _strings_tmp;
+    std::string text_new;
+    std::string wrd;
+    _strings_tmp.push_back(new FontString(""));
+    _strings_tmp.clear();
+
+    // Building _strings_tmp -- lines of text
+    // It'll be exact as it seen on the screen
+    // Cutting lines when it needed (\n or when exceeding width)
     for (auto it = _strings.begin(); it != _strings.end(); ++it)
     {
         Font* font = (*it)->font();
         std::string text = (*it)->text();
+        text_new = "";
+        wrd = "";
+        wrd_width = 0;
+        libfalltergeist::AafGlyph* glyph = font->aaf()->glyphs()->at(' ');
+        space_width = glyph->width() + font->horizontalGap();
 
         for (auto itt = text.begin(); itt != text.end(); ++itt)
         {
             auto chr = *itt;
             libfalltergeist::AafGlyph* glyph = font->aaf()->glyphs()->at(chr);
-            if (chr == '\n' || (_wordWrap == true && x + glyph->width() >= width()))
-            {
-                x = 0;
-                y += font->height() + font->verticalGap();
 
-                if (chr == '\n') continue;
+            // adding word to string or char to word
+            if ((chr == ' ') || (chr == '\n'))
+            {
+                if (text_new != "")
+                    text_new += " ";
+                text_new += wrd;
+                wrd = "";
+                wrd_width = 0;
+                x += wrd_width;
+                x += space_width;
             }
+            else
+            {
+                wrd += chr;
+                wrd_width += glyph->width() + font->horizontalGap();
+                x += glyph->width() + font->horizontalGap();
+            }
+
+            // if wrap or new line
+            if ((chr == '\n')||(_wordWrap == true && x + glyph->width() >= width()))
+            {
+                if (chr == '\n')
+                    x = 0;
+                else
+                {
+                    x = wrd_width;
+                    wrd_width = 0;
+                }
+                _strings_tmp.push_back(new FontString(text_new, font));
+                text_new = "";
+                continue;
+            }
+        }
+
+        // adding last word to string
+        if (wrd != "")
+        {
+            if (text_new != "")
+                text_new += " ";
+            text_new += wrd;
+        }
+
+        // adding line of text if there is any
+        if (text_new != "")
+        {
+            _strings_tmp.push_back(new FontString(text_new, font));
+        }
+    }
+
+    // calculating max width of strings if needed
+    if ((width() == 0) && (_horizontalAlign != HORIZONTAL_ALIGN_LEFT))
+    {
+        unsigned int str_width;
+        str_width_max = 0;
+        for (auto it = _strings_tmp.begin(); it != _strings_tmp.end(); ++it)
+        {
+            Font* font = (*it)->font();
+            std::string text = (*it)->text();
+            // calculating width of current string
+            str_width = 0;
+            for (auto itt = text.begin(); itt != text.end(); ++itt)
+            {
+                // calculating width of current string
+                auto chr = *itt;
+                libfalltergeist::AafGlyph* glyph = font->aaf()->glyphs()->at(chr);
+                str_width += glyph->width() + font->horizontalGap();
+            }
+            if (str_width > str_width_max)
+                str_width_max = str_width;
+        }
+    }
+
+    // calculating text final width
+    width_final = width() ? width() : str_width_max;
+
+    x = 0;
+    y = 0;
+    // Building texture from _strings_tmp
+    for (auto it = _strings_tmp.begin(); it != _strings_tmp.end(); ++it)
+    {
+        unsigned int str_width;
+        Font* font = (*it)->font();
+        std::string text = (*it)->text();
+        libfalltergeist::AafGlyph* glyph = font->aaf()->glyphs()->at(' ');
+        space_width = glyph->width() + font->horizontalGap();
+
+        // calculating width of current string
+        str_width = 0;
+        for (auto itt = text.begin(); itt != text.end(); ++itt)
+        {
+            auto chr = *itt;
+            libfalltergeist::AafGlyph* glyph = font->aaf()->glyphs()->at(chr);
+            str_width += glyph->width() + font->horizontalGap();
+        }
+
+        // calculating horizontal word gaps if needed
+        if (_horizontalAlign == HORIZONTAL_ALIGN_JUSTIFY)
+        {
+            unsigned int spaces_number = 0;
+
+            for (auto itt = text.begin(); itt != text.end(); ++itt)
+            {
+                auto chr = *itt;
+                if (chr == ' ')
+                    spaces_number++;
+            }                                   
+            if (spaces_number > 0)
+            {
+                unsigned int words_width;
+                words_width = str_width - spaces_number*space_width;
+                horizontal_word_gap = (width_final - words_width) / spaces_number;
+                horizontal_error = width_final - words_width - spaces_number*horizontal_word_gap;
+            }
+        }
+
+        // calculating starting x
+        x = 0;
+        if (_horizontalAlign == HORIZONTAL_ALIGN_CENTER)
+            x = (width_final - str_width)/2;
+        if (_horizontalAlign == HORIZONTAL_ALIGN_RIGHT)
+            x = width_final - str_width;
+
+        for (auto itt = text.begin(); itt != text.end(); ++itt)
+        {
+            auto chr = *itt;
+            libfalltergeist::AafGlyph* glyph = font->aaf()->glyphs()->at(chr);
 
             unsigned int xOffset = (unsigned char)(chr%16) * font->width();
             unsigned int yOffset = (unsigned char)(chr/16) * font->height();
             font->texture()->copyTo(_texture, x, y, xOffset, yOffset, font->width(), font->height());
-            x += glyph->width() + font->horizontalGap();
+            if ((chr == ' ') && (_horizontalAlign == HORIZONTAL_ALIGN_JUSTIFY))
+            {
+                x += horizontal_word_gap; 
+                if (horizontal_error != 0)
+                {
+                    horizontal_error--;
+                    x++;
+                }
+            }
+            else
+                x += glyph->width() + font->horizontalGap();
         }
+        y += font->height() + font->verticalGap();
+    }
+
+    // deleting _string_tmp
+    while (!_strings_tmp.empty())
+    {
+        delete _strings_tmp.back();
+        _strings_tmp.pop_back();
     }
 
     return _texture;
@@ -347,3 +505,4 @@ unsigned int TextArea::_calculateWidth()
 }
 
 }
+
