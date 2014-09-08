@@ -19,6 +19,7 @@
 
 // C++ standard includes
 #include <fstream>
+#include <iostream>
 
 // Falltergeist includes
 #include "../Engine/ResourceManager.h"
@@ -435,16 +436,97 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
 {
     std::string prefix;
     std::string lstFile;
-    switch(FID >> 24)
+
+    auto id = FID & 0x00000FFF;
+    auto type = FID >> 24;
+
+    switch(type)
     {
         case libfalltergeist::FrmFileType::TYPE_ITEM:
             prefix = "art/items/";
             lstFile = "items.lst";
             break;
         case libfalltergeist::FrmFileType::TYPE_CRITTER:
-            prefix = "art/critters/";
-            lstFile = "critters.lst";
-            break;
+        {
+            unsigned int frmId = FID & 0x00000FFF;
+            unsigned int ID1 = (FID & 0x0000F000) >> 12;
+            unsigned int ID2 = (FID & 0x00FF0000) >> 16;
+            unsigned int ID3 = (FID & 0xF0000000) >> 28;
+            auto lst = ResourceManager::lstFileType("art/critters/critters.lst");
+            std::string frmName = lst->strings()->at(frmId);
+            std::string frmBase = frmName.substr(0, 6);
+
+            if (ID2 >= 0x26 && ID2 <= 0x2F)
+            {
+                if (ID1 >= 0x0B || ID1 == 0) throw Exception("Critter ID1 unsupported value");
+                frmBase += ID1 + 0x63;
+                frmBase += ID2 + 0x3D;
+            }
+            else if (ID2 == 0x24)
+            {
+                frmBase += "ch";
+            }
+            else if (ID2 == 0x25)
+            {
+                frmBase += "cj";
+            }
+            else if (ID2 == 0x40)
+            {
+                frmBase += "na";
+            }
+            else if (ID2 >= 0x30)
+            {
+                frmBase += "r";
+                frmBase += ID2 + 0x31;
+            }
+            else if (ID2 >= 0x14)
+            {
+                frmBase += "b";
+                frmBase += ID2 + 0x4d;
+            }
+            else if (ID2 == 0x12)
+            {
+                if (ID1 == 0x01)
+                {
+                    frmBase += "dm";
+                }
+                else if (ID1 == 0x04)
+                {
+                    frmBase += "gm";
+                }
+                else
+                {
+                    frmBase += "as";
+                }
+            }
+            else if (ID2 == 0x0D)
+            {
+                if (ID1 > 0)
+                {
+                    frmBase += ID1 + 0x63;
+                    frmBase += "e";
+                }
+                else
+                {
+                    frmBase += "an";
+                }
+            }
+            else if (ID2 <= 0x01 && ID1 > 0)
+            {
+                frmBase += ID1 + 0x63;
+                frmBase += ID2 + 0x61;
+            }
+            else
+            {
+                frmBase += "a";
+                frmBase += ID2 + 0x61;
+            }
+
+            std::string extensions[] = {"frm", "frm0", "frm1", "frm2", "fr3", "frm4", "frm5", "frm6"};
+            frmBase += "." + extensions[ID3];
+
+            return "art/critters/" + frmBase;
+        }
         case libfalltergeist::FrmFileType::TYPE_SCENERY:
             prefix = "art/scenery/";
             lstFile = "scenery.lst";
@@ -460,6 +542,16 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
         case libfalltergeist::FrmFileType::TYPE_BACKGROUND:
             prefix = "art/backgrnd/";
             lstFile = "backgrnd.lst";
+
+            // ???
+            if (id == 1) return "";
+            // Map scroll blockers
+            if (id == 12) return "art/intrface/msef001.frm";
+            // Exit tiles
+            if (id >= 16 && id <= 23) return "art/intrface/msef001.frm";
+            // ???
+            if (id == 24) return "art/intrface/msef001.frm";
+
             break;
         case libfalltergeist::FrmFileType::TYPE_INTERFACE:
             prefix = "art/intrface/";
@@ -470,15 +562,13 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
             lstFile = "inven.lst";
             break;
     }
-    libfalltergeist::LstFileType * lst = lstFileType(prefix + lstFile);
-    unsigned int frmId = 0x0000FFFF & FID;
-
-    if (frmId >= lst->strings()->size())
+    auto lst = lstFileType(prefix + lstFile);
+    if (id >= lst->strings()->size())
     {
-        debug("ResourceManager::FIDtoFrmName(unsigned int) - LST size <= FID: " + std::to_string(FID), DEBUG_ERROR);
+        debug("ResourceManager::FIDtoFrmName(unsigned int) - LST size " + std::to_string(lst->strings()->size()) + " <= frmID: " + std::to_string(id) + " frmType: " + std::to_string(type), DEBUG_ERROR);
         return "";
     }
-    return prefix + lst->strings()->at(frmId);
+    return prefix + lst->strings()->at(id);
 }
 
 }

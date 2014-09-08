@@ -163,19 +163,6 @@ ActiveUI* GameObject::ui()
     auto frm = ResourceManager::frmFileType(FID());
     if (frm)
     {
-        auto id = PID() & 0x00000FFF;
-        auto type = (PID() & 0x0F000000) >> 24;
-        if (type == 5 && id == 12) // Map scroll blockers
-        {
-            _ui = new Image("art/intrface/msef001.frm");
-            return _ui;
-        }
-        if (type == 5 && id >= 16 && id <= 23) // exit tiles
-        {
-            _ui = new Image("art/intrface/msef001.frm");
-            return _ui;
-        }
-
         if (frm->framesPerDirection() > 1)
         {
             _ui = new Animation(ResourceManager::FIDtoFrmName(FID()), this->orientation());
@@ -186,14 +173,6 @@ ActiveUI* GameObject::ui()
         }
     }
 
-    /*
-    if (!_image)
-    {
-        if (_animationQueue.queue()->size() > 0)
-        {
-            return (Image*)_animationQueue.animation();
-        }
-    }*/
     return _ui;
 }
 

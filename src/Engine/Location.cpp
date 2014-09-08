@@ -271,7 +271,6 @@ GameObject* Location::createObject(int PID)
         }
         case libfalltergeist::ProFileType::TYPE_CRITTER:
         {
-            return 0; // ???????????
             object = new GameCritterObject();
             auto msg = ResourceManager::msgFileType("text/english/game/pro_crit.msg");
             try
