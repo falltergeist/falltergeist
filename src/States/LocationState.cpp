@@ -37,6 +37,7 @@
 #include "../UI/TextArea.h"
 #include "../UI/Image.h"
 #include "../Engine/Event/MouseEvent.h"
+#include "../Engine/Graphics/Renderer.h"
 
 // Third party includes
 
@@ -153,7 +154,7 @@ void LocationState::blit()
     _drawHexagonalGrid();
 
 
-    for (GameObject* object : *_location->objectsToRender())
+    for (GameObject* object : *_location->object475sToRender())
     {        
         int x, y;
         if (Animation* animation = object->animationQueue()->animation())
@@ -286,12 +287,14 @@ void LocationState::handle(Event* event)
         }
         */
 
+        auto game = &Game::getInstance();
+        auto scrollArea = 5;
         if (mouseEvent->name() == "mousemove")
         {
-            _scrollLeft = mouseEvent->x() < 5 ? true : false;
-            _scrollRight = mouseEvent->x() > 635 ? true : false;
-            _scrollTop = mouseEvent->y() < 5 ? true : false;
-            _scrollBottom = mouseEvent->y() > 475 ? true : false;
+            _scrollLeft = mouseEvent->x() < scrollArea ? true : false;
+            _scrollRight = mouseEvent->x() > game->renderer()->width()- scrollArea ? true : false;
+            _scrollTop = mouseEvent->y() < scrollArea ? true : false;
+            _scrollBottom = mouseEvent->y() > game->renderer()->height() - scrollArea ? true : false;
         }
     }
 

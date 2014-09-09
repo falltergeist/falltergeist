@@ -71,8 +71,8 @@ void Game::_initialize()
     //_screen = new Screen(640, 480, 32);
     //_mixer = new AudioMixer();
     _mouse = new Mouse();
-    _fpsCounter = new FpsCounter();
-    _falltergeistVersion = new TextArea(CrossPlatform::getVersion(), 3, 470);
+    _fpsCounter = new FpsCounter(_renderer->width() - 42, 2);
+    _falltergeistVersion = new TextArea(CrossPlatform::getVersion(), 3, _renderer->height() - 10);
 }
 
 Game::~Game()
@@ -201,7 +201,6 @@ void Game::run()
                 }
             }
         }
-
 
         // thinking
         _states.back()->think();
