@@ -51,6 +51,8 @@ public:
     virtual Texture* texture();
     virtual int xOffset();
     virtual int yOffset();
+    virtual unsigned int width();
+    virtual unsigned int height();
 };
 
 }

@@ -152,4 +152,14 @@ void Animation::think()
     }
 }
 
+unsigned int Animation::height()
+{
+    return _animationFrames->at(_currentFrame)->height();
+}
+
+unsigned int Animation::width()
+{
+    return _animationFrames->at(_currentFrame)->width();
+}
+
 }

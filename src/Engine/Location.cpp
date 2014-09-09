@@ -469,39 +469,27 @@ void Location::checkObjectsToRender()
 
     for (GameObject* object : _objects)
     {
-        //if (!object->image() && !object->animationQueue()->animation()) continue;
         if (!object->ui()) continue;
 
-        /*
-        if (Animation* animation = object->animationQueue()->animation())
-        {
-            x = Location::hexagonToX(object->position()) + animation->xOffset() - animation->surfaces()->at(0)->width()/2;
-            y = Location::hexagonToY(object->position()) + animation->yOffset() - animation->surfaces()->at(0)->height();
-            width = animation->width();
-            height = animation->height();
-        }
-        else
-        {
-        */
         ActiveUI* ui = dynamic_cast<ActiveUI*>(object->ui());
         if (!ui) continue;
 
-        int x,y, width, height;
+        unsigned int x, y, width, height;
 
-        x = Location::hexagonToX(object->position());
-        y = Location::hexagonToY(object->position());
+        width = ui->width();
+        height = ui->height();
 
-        /*
         Animation* animation = dynamic_cast<Animation*>(object->ui());
         if (animation)
+        {
+            x = Location::hexagonToX(object->position()) + ui->xOffset() - width*0.5;
+            y = Location::hexagonToY(object->position()) + ui->yOffset() - height;
+        }
+        else
         {
             x = Location::hexagonToX(object->position()) + ui->xOffset();
             y = Location::hexagonToY(object->position()) + ui->yOffset();
         }
-        */
-
-        width = ui->width();
-        height = ui->height();
 
         // check if object is out of camera borders
         if (x + width < camera()->x()) continue; // right
