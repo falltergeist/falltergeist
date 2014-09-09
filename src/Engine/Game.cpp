@@ -19,6 +19,7 @@
 
 // C++ standard includes
 #include <sstream>
+#include <string>
 
 // Falltergeist includes
 #include "../Engine/AudioMixer.h"
@@ -72,7 +73,15 @@ void Game::_initialize()
     //_mixer = new AudioMixer();
     _mouse = new Mouse();
     _fpsCounter = new FpsCounter(_renderer->width() - 42, 2);
-    _falltergeistVersion = new TextArea(CrossPlatform::getVersion(), 3, _renderer->height() - 10);
+
+    std::string version = CrossPlatform::getVersion();
+    version += " " + std::to_string(_renderer->width()) + "x" + std::to_string(_renderer->height());
+
+    if (dynamic_cast<SDLRenderer*>(_renderer)) version += " SDL Renderer";
+    if (dynamic_cast<OpenGLRenderer*>(_renderer)) version += " OpenGL Renderer";
+
+
+    _falltergeistVersion = new TextArea(version, 3, _renderer->height() - 10);
 }
 
 Game::~Game()

@@ -49,7 +49,6 @@ class Game
 {
 protected:
     std::vector<int> _GVARS;
-    std::string _version;
     ResourceManager* _resourceManager = 0;
     std::vector<State*> _states;
     std::vector<State*> _deletedStates;
