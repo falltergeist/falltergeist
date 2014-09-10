@@ -259,13 +259,13 @@ Texture* TextArea::texture()
         text_new = "";
         wrd = "";
         wrd_width = 0;
-        auto glyph = font->aaf()->glyphs().at(' ');
+        auto glyph = font->aaf()->glyphs()->at(' ');
         space_width = glyph->width() + font->horizontalGap();
 
         for (auto itt = text.begin(); itt != text.end(); ++itt)
         {
             auto chr = *itt;
-            auto glyph = font->aaf()->glyphs().at(chr);
+            auto glyph = font->aaf()->glyphs()->at(chr);
 
             // adding word to string or char to word
             if ((chr == ' ') || (chr == '\n'))
@@ -331,7 +331,7 @@ Texture* TextArea::texture()
             {
                 // calculating width of current string
                 auto chr = *itt;
-                auto glyph = font->aaf()->glyphs().at(chr);
+                auto glyph = font->aaf()->glyphs()->at(chr);
                 str_width += glyph->width() + font->horizontalGap();
             }
             if (str_width > str_width_max)
@@ -350,7 +350,7 @@ Texture* TextArea::texture()
         unsigned int str_width;
         auto font = (*it)->font();
         std::string text = (*it)->text();
-        auto glyph = font->aaf()->glyphs().at(' ');
+        auto glyph = font->aaf()->glyphs()->at(' ');
         space_width = glyph->width() + font->horizontalGap();
 
         // calculating width of current string
@@ -358,7 +358,7 @@ Texture* TextArea::texture()
         for (auto itt = text.begin(); itt != text.end(); ++itt)
         {
             auto chr = *itt;
-            auto glyph = font->aaf()->glyphs().at(chr);
+            auto glyph = font->aaf()->glyphs()->at(chr);
             str_width += glyph->width() + font->horizontalGap();
         }
 
@@ -392,7 +392,7 @@ Texture* TextArea::texture()
         for (auto itt = text.begin(); itt != text.end(); ++itt)
         {
             auto chr = *itt;
-            auto glyph = font->aaf()->glyphs().at(chr);
+            auto glyph = font->aaf()->glyphs()->at(chr);
 
             unsigned int xOffset = (unsigned char)(chr%16) * font->width();
             unsigned int yOffset = (unsigned char)(chr/16) * font->height();
@@ -450,7 +450,7 @@ unsigned int TextArea::_calculateHeight()
             }
             else
             {
-                height = font->aaf()->glyphs().at(chr)->height() + font->aaf()->verticalGap();
+                height = font->aaf()->glyphs()->at(chr)->height() + font->aaf()->verticalGap();
                 if (height > maxHeight)
                 {
                     maxHeight = height;
@@ -493,7 +493,7 @@ unsigned int TextArea::_calculateWidth()
             }
             else
             {
-                width += font->aaf()->glyphs().at(chr)->width() + font->aaf()->horizontalGap();
+                width += font->aaf()->glyphs()->at(chr)->width() + font->aaf()->horizontalGap();
             }
         }
     }

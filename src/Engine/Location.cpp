@@ -119,11 +119,10 @@ void Location::init()
 
     _elevation = _mapFile->defaultElevation();
 
-    std::vector<libfalltergeist::MapObject *> * mapObjects = _mapFile->elevations()->at(_elevation)->objects();
+    auto mapObjects = _mapFile->elevations()->at(_elevation)->objects();
 
-    for (std::vector<libfalltergeist::MapObject *>::iterator it = mapObjects->begin(); it != mapObjects->end(); ++it)
+    for (auto mapObject : *mapObjects)
     {
-        auto mapObject = *it;
         auto object = createObject(mapObject->PID());
         if (!object) continue;
 

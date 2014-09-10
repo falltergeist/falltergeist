@@ -76,7 +76,7 @@ public:
 
     std::shared_ptr<ResourceManager> resourceManager();
 
-    std::vector<std::shared_ptr<State>> states();
+    std::vector<std::shared_ptr<State>>* states();
     std::vector<std::shared_ptr<State>> activeStates();
     void pushState(std::shared_ptr<State> state);
     void setState(std::shared_ptr<State> state);

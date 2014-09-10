@@ -291,9 +291,9 @@ void Game::_initGVARS()
     }
 }
 
-std::vector<std::shared_ptr<State>> Game::states()
+std::vector<std::shared_ptr<State>>* Game::states()
 {
-    return _states;
+    return &_states;
 }
 
 std::vector<std::shared_ptr<State>> Game::activeStates()
