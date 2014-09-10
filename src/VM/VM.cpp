@@ -657,15 +657,15 @@ void VM::run()
                 auto elevation = popDataInteger();
                 auto position = popDataInteger();
                 auto game = &Game::getInstance();
-                GameObject* found = 0;
-                for (auto object : *game->location()->objects())
+                std::shared_ptr<GameObject> found;
+                for (auto object : game->location()->objects())
                 {
                     if (object->PID() == PID && object->elevation() == elevation && object->position() == position)
                     {
                         found = object;
                     }
                 }
-                pushDataPointer(found);
+                pushDataPointer(found.get());
                 break;
             }
             case 0x80a8:
@@ -797,9 +797,9 @@ void VM::run()
                 if (SID > 0)
                 {
                     auto intFile = ResourceManager::intFileType(SID);
-                    if (intFile) object->scripts()->push_back(new VM(intFile, object));
+                    if (intFile) object->scripts()->push_back(new VM(intFile, object.get()));
                 }
-                pushDataPointer(object);
+                pushDataPointer(object.get());
                 break;
             }
             case 0x80b8:
@@ -840,7 +840,7 @@ void VM::run()
                 auto position = popDataInteger();
                 auto game = &Game::getInstance();
                 int found = 0;
-                for (auto object : *game->location()->objects())
+                for (auto object : game->location()->objects())
                 {
                     if (object->PID() == PID && object->elevation() == elevation && object->position() == position)
                     {
@@ -866,7 +866,7 @@ void VM::run()
             {
                 std::cout << "[+] GameDudeObject* dude_obj()" << std::endl;
                 auto game = &Game::getInstance();
-                pushDataPointer(game->location()->player());
+                pushDataPointer(game->location()->player().get());
                 break;
             }
             case 0x80c1:

@@ -22,6 +22,7 @@
 #define FALLTERGEIST_LOCATION_H
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
 #include "../../lib/libfalltergeist/libfalltergeist.h"
@@ -46,9 +47,9 @@ protected:
     unsigned int _scriptsTicks = 0;
     bool _scrollStatus = false;
     VM* _script = 0;
-    GameDudeObject* _player = 0;
-    std::vector<GameObject*> _objects;
-    std::vector<GameObject*> _objectsToRender;
+    std::shared_ptr<GameDudeObject> _player;
+    std::vector<std::shared_ptr<GameObject>> _objects;
+    std::vector<std::shared_ptr<GameObject>> _objectsToRender;
     std::vector<int> _MVARS;
     std::map<std::string, VMStackValue*> _EVARS;
     unsigned int _lastObjectsCheck = 0;
@@ -57,20 +58,20 @@ protected:
     unsigned int _cols;
     unsigned int _rows;
 
-    LocationCamera* _camera = 0;
+    std::shared_ptr<LocationCamera> _camera;
     unsigned int _elevation = 0;
 
     Texture* _tilesFloor = 0;
     Texture* _tilesRoof = 0;
 
-    libfalltergeist::MapFileType* _mapFile = 0;
-    libfalltergeist::LstFileType* _tilesLst = 0;
+    std::shared_ptr<libfalltergeist::MapFileType> _mapFile;
+    std::shared_ptr<libfalltergeist::LstFileType> _tilesLst;
     bool _initialized = false;
     void _generateFloor();
     void _generateRoof();
 public:
     enum Tile { TILE_WIDTH = 80, TILE_HEIGHT = 36 };
-    Location(libfalltergeist::MapFileType* mapFile);
+    Location(std::shared_ptr<libfalltergeist::MapFileType> mapFile);
     ~Location();
     void init();
     void think();
@@ -81,19 +82,19 @@ public:
     unsigned int tileToY(unsigned int tile);
     int width();
     int height();
-    void handleAction(GameObject* object, int action);
+    void handleAction(std::shared_ptr<GameObject> object, int action);
     void checkObjectsToRender();
 
     Texture* tilesFloor();
     Texture* tilesRoof();
-    LocationCamera* camera();
+    std::shared_ptr<LocationCamera> camera();
 
-    GameDudeObject* player();
-    static GameObject* createObject(int PID);
+    std::shared_ptr<GameDudeObject> player();
+    static std::shared_ptr<GameObject> createObject(int PID);
 
-    libfalltergeist::MapFileType* mapFile();
-    std::vector<GameObject*>* objects();
-    std::vector<GameObject*>* objectsToRender();
+    std::shared_ptr<libfalltergeist::MapFileType> mapFile();
+    std::vector<std::shared_ptr<GameObject>> objects();
+    std::vector<std::shared_ptr<GameObject>> objectsToRender();
 
     void setMVAR(unsigned int number, int value);
     int MVAR(unsigned int number);

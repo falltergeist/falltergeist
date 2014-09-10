@@ -58,7 +58,7 @@
 namespace Falltergeist
 {
 
-Location::Location(libfalltergeist::MapFileType * mapFile)
+Location::Location(std::shared_ptr<libfalltergeist::MapFileType> mapFile)
 {
     _mapFile = mapFile;
     init();
@@ -67,12 +67,9 @@ Location::Location(libfalltergeist::MapFileType * mapFile)
 Location::~Location()
 {
     delete _tilesFloor;
-    delete _tilesLst;
-    delete _camera;
-
 }
 
-LocationCamera * Location::camera()
+std::shared_ptr<LocationCamera> Location::camera()
 {
     return _camera;
 }
@@ -102,7 +99,7 @@ void Location::init()
 
     auto game = &Game::getInstance();
 
-    _camera = new LocationCamera(game->renderer()->width(), game->renderer()->height(), 0, 0);
+    _camera = std::shared_ptr<LocationCamera>(new LocationCamera(game->renderer()->width(), game->renderer()->height(), 0, 0));
 
     // Инициализируем положение камеры
     unsigned int defaultPosition = _mapFile->defaultPosition();
@@ -128,7 +125,7 @@ void Location::init()
     for (std::vector<libfalltergeist::MapObject *>::iterator it = mapObjects->begin(); it != mapObjects->end(); ++it)
     {
         auto mapObject = *it;
-        GameObject* object = createObject(mapObject->PID());
+        auto object = createObject(mapObject->PID());
         if (!object) continue;
 
 
@@ -142,18 +139,18 @@ void Location::init()
         if (mapObject->scriptId() > 0)
         {
             auto intFile = ResourceManager::intFileType(mapObject->scriptId());
-            if (intFile) object->scripts()->push_back(new VM(intFile, object));
+            if (intFile) object->scripts()->push_back(new VM(intFile,object.get()));
         }
         if (mapObject->mapScriptId() > 0 && mapObject->mapScriptId() != mapObject->scriptId())
         {
             auto intFile = ResourceManager::intFileType(mapObject->mapScriptId());
-            if (intFile) object->scripts()->push_back(new VM(intFile, object));
+            if (intFile) object->scripts()->push_back(new VM(intFile, object.get()));
         }
 
         _objects.push_back(object);
     }
 
-    _player = new GameDudeObject();
+    _player = std::shared_ptr<GameDudeObject>(new GameDudeObject());
     _player->setName("Choozen One");
     //_player = Game::getInstance().player();
     _player->setPID(0x01000001);
@@ -177,7 +174,7 @@ void Location::init()
 
 }
 
-GameDudeObject* Location::player()
+std::shared_ptr<GameDudeObject> Location::player()
 {
     return _player;
 }
@@ -214,10 +211,10 @@ void Location::_generateRoof()
     }
 }
 
-GameObject* Location::createObject(int PID)
+std::shared_ptr<GameObject> Location::createObject(int PID)
 {
     auto proto = ResourceManager::proFileType(PID);
-    GameObject* object = 0;
+    std::shared_ptr<GameObject> object;
     switch (proto->typeId())
     {
         case libfalltergeist::ProFileType::TYPE_ITEM:
@@ -226,37 +223,37 @@ GameObject* Location::createObject(int PID)
             {
                 case libfalltergeist::ProFileType::TYPE_ITEM_AMMO:
                 {
-                    object = new GameAmmoItemObject();
+                    object = std::shared_ptr<GameAmmoItemObject>(new GameAmmoItemObject());
                     break;
                 }
                 case libfalltergeist::ProFileType::TYPE_ITEM_ARMOR:
                 {
-                    object = new GameArmorItemObject();
+                    object = std::shared_ptr<GameArmorItemObject>(new GameArmorItemObject());
                     break;
                 }
                 case libfalltergeist::ProFileType::TYPE_ITEM_CONTAINER:
                 {
-                    object = new GameContainerItemObject();
+                    object = std::shared_ptr<GameContainerItemObject>(new GameContainerItemObject());
                     break;
                 }
                 case libfalltergeist::ProFileType::TYPE_ITEM_DRUG:
                 {
-                    object = new GameDrugItemObject();
+                    object = std::shared_ptr<GameDrugItemObject>(new GameDrugItemObject());
                     break;
                 }
                 case libfalltergeist::ProFileType::TYPE_ITEM_KEY:
                 {
-                    object = new GameKeyItemObject();
+                    object = std::shared_ptr<GameKeyItemObject>(new GameKeyItemObject());
                     break;
                 }
                 case libfalltergeist::ProFileType::TYPE_ITEM_MISC:
                 {
-                    object = new GameMiscItemObject();
+                    object = std::shared_ptr<GameMiscItemObject>(new GameMiscItemObject());
                     break;
                 }
                 case libfalltergeist::ProFileType::TYPE_ITEM_WEAPON:
                 {
-                    object = new GameWeaponItemObject();
+                    object = std::shared_ptr<GameWeaponItemObject>(new GameWeaponItemObject());
                     break;
                 }
             }
@@ -271,7 +268,7 @@ GameObject* Location::createObject(int PID)
         }
         case libfalltergeist::ProFileType::TYPE_CRITTER:
         {
-            object = new GameCritterObject();
+            object = std::shared_ptr<GameCritterObject>(new GameCritterObject());
             auto msg = ResourceManager::msgFileType("text/english/game/pro_crit.msg");
             try
             {
@@ -282,21 +279,21 @@ GameObject* Location::createObject(int PID)
 
             for (unsigned int i = 0; i != 7; ++i)
             {
-                ((GameCritterObject*)object)->setStat(i, proto->critterStats()->at(i));
-                ((GameCritterObject*)object)->setStatBonus(i, proto->critterStatsBonus()->at(i));
+                ((GameCritterObject*)object.get())->setStat(i, proto->critterStats()->at(i));
+                ((GameCritterObject*)object.get())->setStatBonus(i, proto->critterStatsBonus()->at(i));
             }
             for (unsigned int i = 0; i != 18; ++i)
             {
-                ((GameCritterObject*)object)->setSkill(i, proto->critterSkills()->at(i));
+                ((GameCritterObject*)object.get())->setSkill(i, proto->critterSkills()->at(i));
             }
-            ((GameCritterObject*)object)->setActionPoints(proto->critterActionPoints());
-            ((GameCritterObject*)object)->setHitPointsMax(proto->critterHitPointsMax());
-            ((GameCritterObject*)object)->setArmorClass(proto->critterArmorClass());
-            ((GameCritterObject*)object)->setCarryWeight(proto->critterCarryWeight());
-            ((GameCritterObject*)object)->setMeleeDamage(proto->critterMeleeDamage());
-            ((GameCritterObject*)object)->setSequence(proto->critterSequence());
-            ((GameCritterObject*)object)->setCriticalChance(proto->critterCriticalChance());
-            ((GameCritterObject*)object)->setHealingRate(proto->critterHealingRate());
+            ((GameCritterObject*)object.get())->setActionPoints(proto->critterActionPoints());
+            ((GameCritterObject*)object.get())->setHitPointsMax(proto->critterHitPointsMax());
+            ((GameCritterObject*)object.get())->setArmorClass(proto->critterArmorClass());
+            ((GameCritterObject*)object.get())->setCarryWeight(proto->critterCarryWeight());
+            ((GameCritterObject*)object.get())->setMeleeDamage(proto->critterMeleeDamage());
+            ((GameCritterObject*)object.get())->setSequence(proto->critterSequence());
+            ((GameCritterObject*)object.get())->setCriticalChance(proto->critterCriticalChance());
+            ((GameCritterObject*)object.get())->setHealingRate(proto->critterHealingRate());
             break;
         }
         case libfalltergeist::ProFileType::TYPE_SCENERY:
@@ -305,28 +302,28 @@ GameObject* Location::createObject(int PID)
             {
                 case libfalltergeist::ProFileType::TYPE_SCENERY_DOOR:
                 {
-                    object = new GameDoorSceneryObject();
+                    object = std::shared_ptr<GameDoorSceneryObject>(new GameDoorSceneryObject());
                     break;
                 }
                 case libfalltergeist::ProFileType::TYPE_SCENERY_ELEVATOR:
                 {
-                    object = new GameElevatorSceneryObject();
+                    object = std::shared_ptr<GameElevatorSceneryObject>(new GameElevatorSceneryObject());
                     break;
                 }
                 case libfalltergeist::ProFileType::TYPE_SCENERY_GENERIC:
                 {
-                    object = new GameGenericSceneryObject();
+                    object = std::shared_ptr<GameGenericSceneryObject>(new GameGenericSceneryObject());
                     break;
                 }
                 case libfalltergeist::ProFileType::TYPE_SCENERY_LADDER_TOP:
                 case libfalltergeist::ProFileType::TYPE_SCENERY_LADDER_BOTTOM:
                 {
-                    object = new GameLadderSceneryObject();
+                    object = std::shared_ptr<GameLadderSceneryObject>(new GameLadderSceneryObject());
                     break;
                 }
                 case libfalltergeist::ProFileType::TYPE_SCENERY_STAIRS:
                 {
-                    object = new GameStairsSceneryObject();
+                    object = std::shared_ptr<GameStairsSceneryObject>(new GameStairsSceneryObject());
                     break;
                 }
             }
@@ -341,7 +338,7 @@ GameObject* Location::createObject(int PID)
         }
         case libfalltergeist::ProFileType::TYPE_WALL:
         {
-            object = new GameWallObject();
+            object = std::shared_ptr<GameWallObject>(new GameWallObject());
             auto msg = ResourceManager::msgFileType("text/english/game/pro_wall.msg");
             try
             {
@@ -360,7 +357,7 @@ GameObject* Location::createObject(int PID)
         }
         case libfalltergeist::ProFileType::TYPE_MISC:
         {
-            object = new GameMiscObject();
+            object = std::shared_ptr<GameMiscObject>(new GameMiscObject());
             auto msg = ResourceManager::msgFileType("text/english/game/pro_misc.msg");
             try
             {
@@ -375,21 +372,20 @@ GameObject* Location::createObject(int PID)
     if (proto->scriptId() > 0)
     {
         auto intFile = ResourceManager::intFileType(proto->scriptId());
-        if (intFile) object->scripts()->push_back(new VM(intFile, object));
+        if (intFile) object->scripts()->push_back(new VM(intFile, object.get()));
     }
 
     return object;
 }
 
-void Location::handleAction(GameObject* object, int action)
+void Location::handleAction(std::shared_ptr<GameObject> object, int action)
 {
-
     switch (action)
     {
 
         case Mouse::ICON_ROTATE:
         {
-            auto dude = dynamic_cast<GameDudeObject*>(object);
+            auto dude = dynamic_cast<GameDudeObject*>(object.get());
             if (!dude) throw Exception("LocationState::handleAction() - only Dude can be rotated");
 
             int orientation = dude->orientation() + 1;
@@ -467,7 +463,7 @@ void Location::checkObjectsToRender()
 {
     _objectsToRender.clear();
 
-    for (GameObject* object : _objects)
+    for (auto object : _objects)
     {
         if (!object->ui()) continue;
 
@@ -551,7 +547,7 @@ unsigned int Location::positionToHexagon(int x, int y)
     return 0;
 }
 
-libfalltergeist::MapFileType * Location::mapFile()
+std::shared_ptr<libfalltergeist::MapFileType> Location::mapFile()
 {
     return _mapFile;
 }
@@ -566,14 +562,14 @@ unsigned int Location::tileToY(unsigned int tile)
     return ceil(tile / _cols)*24 + (tile % _cols)*12;
 }
 
-std::vector<GameObject*>* Location::objects()
+std::vector<std::shared_ptr<GameObject>> Location::objects()
 {
-    return &_objects;
+    return _objects;
 }
 
-std::vector<GameObject*>* Location::objectsToRender()
+std::vector<std::shared_ptr<GameObject>> Location::objectsToRender()
 {
-    return &_objectsToRender;
+    return _objectsToRender;
 }
 
 int Location::width()

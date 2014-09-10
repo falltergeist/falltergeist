@@ -23,6 +23,7 @@
 
 // C++ standard includes
 #include <vector>
+#include <memory>
 
 // Falltergeist includes
 #include "../Engine/State.h"
@@ -38,12 +39,12 @@ class GameObject;
 class CursorDropdownState : public State
 {
 protected:
-    GameObject* _object = 0;
+    std::shared_ptr<GameObject> _object;
     int _initialType;
     std::vector<int> _icons;
     int _initialX;
     int _initialY;
-    int _currentSurface = 0;
+    unsigned int _currentSurface = 0;
     std::vector<UI*> _activeIcons;
     std::vector<UI*> _inactiveIcons;
     UI* _surface = 0;
@@ -57,8 +58,8 @@ public:
 
     void onLeftButtonUp(MouseEvent* event);
 
-    GameObject* object();
-    void setObject(GameObject* object);
+    std::shared_ptr<GameObject> object();
+    void setObject(std::shared_ptr<GameObject> object);
 };
 
 }

@@ -140,26 +140,12 @@ void LocationObject::setAnimation(Animation * animation)
 
 int LocationObject::xOffset()
 {
-    if (_animation == 0)
-    {
         return InteractiveSurface::xOffset() - width()/2;
-    }
-    else
-    {
-        //return InteractiveSurface::xOffset() - _animation->surfaces()->at(0)->width()/2 + _animation->xOffset();
-    }
 }
 
 int LocationObject::yOffset()
 {
-    if (_animation == 0)
-    {
         return InteractiveSurface::yOffset() - height();
-    }
-    else
-    {
-        //return InteractiveSurface::yOffset() - _animation->surfaces()->at(0)->height() + _animation->yOffset();
-    }
 }
 
 

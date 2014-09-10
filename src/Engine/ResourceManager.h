@@ -24,6 +24,7 @@
 #include <list>
 #include <string>
 #include <map>
+#include <memory>
 
 // Falltergeist includes
 
@@ -39,8 +40,8 @@ class Font;
 class ResourceManager
 {
 protected:
-    static std::vector<libfalltergeist::DatFile*> _datFiles;
-    static std::map<std::string, libfalltergeist::DatFileItem*> _datFilesItems;
+    static std::vector<std::shared_ptr<libfalltergeist::DatFile>> _datFiles;
+    static std::map<std::string, std::shared_ptr<libfalltergeist::DatFileItem>> _datFilesItems;
     static std::map<std::string, Surface*> _surfaces;
     static std::map<std::string, Texture*> _textures;
     static std::map<std::string, Font*> _fonts;
@@ -51,7 +52,7 @@ public:
     static libfalltergeist::AafFileType* aafFileType(std::string filename);
     static libfalltergeist::AcmFileType* acmFileType(std::string filename);
     static libfalltergeist::BioFileType* bioFileType(std::string filename);
-    static libfalltergeist::DatFileItem* datFileItem(std::string filename);
+    static std::shared_ptr<libfalltergeist::DatFileItem> datFileItem(std::string filename);
     static libfalltergeist::FrmFileType* frmFileType(std::string filename);
     static libfalltergeist::FrmFileType* frmFileType(unsigned int FID);
     static libfalltergeist::FonFileType* fonFileType(std::string filename);
@@ -60,8 +61,8 @@ public:
     static libfalltergeist::PalFileType* palFileType(std::string filename);
     static libfalltergeist::IntFileType* intFileType(std::string filename);
     static libfalltergeist::IntFileType* intFileType(unsigned int SID);
-    static libfalltergeist::LstFileType* lstFileType(std::string filename);
-    static libfalltergeist::MapFileType* mapFileType(std::string filename);
+    static std::shared_ptr<libfalltergeist::LstFileType> lstFileType(std::string filename);
+    static std::shared_ptr<libfalltergeist::MapFileType> mapFileType(std::string filename);
     static libfalltergeist::MsgFileType* msgFileType(std::string filename);
     static libfalltergeist::MveFileType* mveFileType(std::string filename);
     static libfalltergeist::ProFileType* proFileType(std::string filename);

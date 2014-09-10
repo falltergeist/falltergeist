@@ -151,7 +151,7 @@ void CursorDropdownState::init()
 
 }
 
-void CursorDropdownState::setObject(GameObject* object)
+void CursorDropdownState::setObject(std::shared_ptr<GameObject> object)
 {
     _object = object;
 }
@@ -185,7 +185,7 @@ void CursorDropdownState::think()
 
 void CursorDropdownState::onLeftButtonUp(MouseEvent* event)
 {
-    CursorDropdownState* state = dynamic_cast<CursorDropdownState*>(event->reciever());
+    auto state = dynamic_cast<CursorDropdownState*>(event->reciever());
     SDL_WarpMouse(state->_initialX, state->_initialY);
     auto game = &Game::getInstance();
     game->mouse()->setType(state->_initialType);
