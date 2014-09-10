@@ -117,7 +117,7 @@ Texture* Animation::texture()
     _texture = new Texture(frame->width(), frame->height());
     _animationTexture->copyTo(_texture, 0, 0, frame->x(), frame->y(), frame->width(), frame->height());
 
-    setXOffset(frame->xOffset() - (int)std::ceil(frame->width()*0.5));
+    setXOffset(frame->xOffset() - (int)std::floor(frame->width()*0.5));
     setYOffset(frame->yOffset() - frame->height());
 
     return _texture;

@@ -59,7 +59,7 @@ void LocationState::init()
     State::init();
     //setScrollable(true);
     _location = new Location(_game->resourceManager()->mapFileType("maps/artemple.map"));
-    //_location = new Location(_game->resourceManager()->mapFileType("maps/redment.map"));
+    //_location = new Location(_game->resourceManager()->mapFileType("maps/sftanker.map"));
     _game->setLocation(_location);
     //_game->mouse()->setType(Mouse::ACTION);
     _floor = new Image(_location->tilesFloor());
