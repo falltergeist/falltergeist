@@ -43,7 +43,7 @@ protected:
     static std::vector<std::shared_ptr<libfalltergeist::DatFile>> _datFiles;
     static std::map<std::string, std::shared_ptr<libfalltergeist::DatFileItem>> _datFilesItems;
     static std::map<std::string, Texture*> _textures;
-    static std::map<std::string, Font*> _fonts;
+    static std::map<std::string, std::shared_ptr<Font>> _fonts;
 
 public:
     ResourceManager();
@@ -68,8 +68,7 @@ public:
     static std::shared_ptr<libfalltergeist::ProFileType> proFileType(unsigned int PID);
     static std::shared_ptr<libfalltergeist::RixFileType> rixFileType(std::string filename);
     static Texture* texture(std::string filename);
-    static Font* font(std::string filename = "font1.aaf", unsigned int color = 0x3ff800ff);
-    static void extract(std::string path);
+    static std::shared_ptr<Font> font(std::string filename = "font1.aaf", unsigned int color = 0x3ff800ff);
     static void unloadResources();
     static std::string FIDtoFrmName(unsigned int FID);
 };

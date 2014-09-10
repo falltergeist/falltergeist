@@ -152,7 +152,7 @@ TextArea * TextArea::setText(std::string text)
     return this;
 }
 
-TextArea * TextArea::setFont(Font* font)
+TextArea * TextArea::setFont(std::shared_ptr<Font> font)
 {
     if (_texture)
     {
@@ -254,7 +254,7 @@ Texture* TextArea::texture()
     // Cutting lines when it needed (\n or when exceeding width)
     for (auto it = _strings.begin(); it != _strings.end(); ++it)
     {
-        Font* font = (*it)->font();
+        auto font = (*it)->font();
         std::string text = (*it)->text();
         text_new = "";
         wrd = "";
@@ -323,7 +323,7 @@ Texture* TextArea::texture()
         str_width_max = 0;
         for (auto it = _strings_tmp.begin(); it != _strings_tmp.end(); ++it)
         {
-            Font* font = (*it)->font();
+            auto font = (*it)->font();
             std::string text = (*it)->text();
             // calculating width of current string
             str_width = 0;
@@ -348,7 +348,7 @@ Texture* TextArea::texture()
     for (auto it = _strings_tmp.begin(); it != _strings_tmp.end(); ++it)
     {
         unsigned int str_width;
-        Font* font = (*it)->font();
+        auto font = (*it)->font();
         std::string text = (*it)->text();
         libfalltergeist::AafGlyph* glyph = font->aaf()->glyphs()->at(' ');
         space_width = glyph->width() + font->horizontalGap();
@@ -435,7 +435,7 @@ unsigned int TextArea::_calculateHeight()
 
     for (auto it = _strings.begin(); it != _strings.end(); ++it)
     {
-        Font* font = (*it)->font();
+        auto font = (*it)->font();
         std::string text = (*it)->text();
 
         for (auto itt = text.begin(); itt != text.end(); ++itt)
@@ -476,7 +476,7 @@ unsigned int TextArea::_calculateWidth()
 
     for (auto it = _strings.begin(); it != _strings.end(); ++it)
     {
-        Font* font = (*it)->font();
+        auto font = (*it)->font();
         std::string text = (*it)->text();
 
         for (auto itt = text.begin(); itt != text.end(); ++itt)

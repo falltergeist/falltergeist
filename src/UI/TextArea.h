@@ -81,8 +81,8 @@ public:
     TextArea* setWordWrap(bool wordWrap);
     bool wordWrap();
 
-    TextArea* setFont(Font* font);
-    Font* font();    
+    TextArea* setFont(std::shared_ptr<Font> font);
+    std::shared_ptr<Font> font();
 
     virtual Texture* texture();
 

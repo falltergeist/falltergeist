@@ -36,7 +36,7 @@ namespace Falltergeist
 std::vector<std::shared_ptr<libfalltergeist::DatFile>> ResourceManager::_datFiles;
 std::map<std::string, std::shared_ptr<libfalltergeist::DatFileItem>> ResourceManager::_datFilesItems;
 std::map<std::string, Texture*> ResourceManager::_textures;
-std::map<std::string, Font*> ResourceManager::_fonts;
+std::map<std::string, std::shared_ptr<Font>> ResourceManager::_fonts;
 
 ResourceManager::ResourceManager()
 {
@@ -45,28 +45,6 @@ ResourceManager::ResourceManager()
     {
         std::string path = CrossPlatform::findFalloutDataPath() + "/" + (*it);
         _datFiles.push_back(std::shared_ptr<libfalltergeist::DatFile>(new libfalltergeist::DatFile(path)));
-    }
-}
-
-void ResourceManager::extract(std::string path)
-{
-    std::vector<libfalltergeist::DatFile *>::iterator it;
-    for (auto datfile : _datFiles)
-    {
-        for (auto item : datfile->items())
-        {
-            std::string file = path + item->filename();
-            std::fstream stream;
-            stream.open(file, std::ios_base::out);
-
-            if (stream.is_open())
-            {
-                stream.close();
-            }
-            else
-            {
-            }
-        }
     }
 }
 
@@ -263,7 +241,7 @@ Texture* ResourceManager::texture(std::string filename)
     return texture;
 }
 
-Font* ResourceManager::font(std::string filename, unsigned int color)
+std::shared_ptr<Font> ResourceManager::font(std::string filename, unsigned int color)
 {
     std::string fontname = filename + std::to_string(color);
 
@@ -272,8 +250,8 @@ Font* ResourceManager::font(std::string filename, unsigned int color)
         return _fonts.at(fontname);
     }
 
-    auto font = new Font(filename, color);
-    _fonts.insert(std::pair<std::string, Font*>(fontname, font));
+    auto font = std::shared_ptr<Font>(new Font(filename, color));
+    _fonts.insert(std::pair<std::string, std::shared_ptr<Font>>(fontname, font));
     return font;
 }
 

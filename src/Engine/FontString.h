@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <string>
+#include <memory>
 
 // Falltergeist includes
 
@@ -35,11 +36,11 @@ class FontString
 {
 protected:
     std::string _text;
-    Font* _font = 0;
+    std::shared_ptr<Font> _font;
 public:
-    FontString(std::string text, Font* font = 0);
-    Font* font();
-    FontString* setFont(Font* font);
+    FontString(std::string text, std::shared_ptr<Font> font = 0);
+    std::shared_ptr<Font> font();
+    FontString* setFont(std::shared_ptr<Font> font);
     std::string text();
     FontString* setText(std::string text);
 };

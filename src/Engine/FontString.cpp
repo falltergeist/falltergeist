@@ -29,7 +29,7 @@
 namespace Falltergeist
 {
 
-FontString::FontString(std::string text, Font* font)
+FontString::FontString(std::string text, std::shared_ptr<Font> font)
 {
     _text = text;
 
@@ -41,12 +41,12 @@ FontString::FontString(std::string text, Font* font)
     _font = font;
 }
 
-Font* FontString::font()
+std::shared_ptr<Font> FontString::font()
 {
     return _font;
 }
 
-FontString* FontString::setFont(Font* font)
+FontString* FontString::setFont(std::shared_ptr<Font> font)
 {
     _font = font;
     return this;
