@@ -54,7 +54,7 @@ Image::Image(Texture* texture) : ActiveUI()
     setTexture(_imageTexture);
 }
 
-Image::Image(libfalltergeist::FrmFileType* frm, unsigned int direction)
+Image::Image(std::shared_ptr<libfalltergeist::FrmFileType> frm, unsigned int direction)
 {
     _imageTexture = new Texture(frm->width(), frm->height());
     _imageTexture->loadFromRGBA(frm->rgba(ResourceManager::palFileType("color.pal")));

@@ -91,7 +91,7 @@ Texture* Font::texture()
     return _texture;
 }
 
-libfalltergeist::AafFileType* Font::aaf()
+std::shared_ptr<libfalltergeist::AafFileType> Font::aaf()
 {
     return _aaf;
 }

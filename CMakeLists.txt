@@ -93,8 +93,6 @@ set(SOURCES main.cpp
             src/Engine/Location.h
             src/Engine/LocationCamera.cpp
             src/Engine/LocationCamera.h
-            src/Engine/LocationObject.cpp
-            src/Engine/LocationObject.h
             src/Engine/Map.cpp
             src/Engine/Map.h
             src/Engine/ResourceManager.cpp

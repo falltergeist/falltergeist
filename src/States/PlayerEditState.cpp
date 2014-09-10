@@ -53,7 +53,7 @@ PlayerEditState::PlayerEditState() : State()
 
     // STATS
     {
-        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/stat.msg");
+        auto msg = _game->resourceManager()->msgFileType("text/english/game/stat.msg");
         std::string images[] = { "strength", "perceptn", "endur", "charisma", "intel", "agility", "luck"};
         for (unsigned int i = 0; i != 7; ++i)
         {
@@ -75,7 +75,7 @@ PlayerEditState::PlayerEditState() : State()
 
     // TRAITS
     {
-        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/trait.msg");
+        auto msg = _game->resourceManager()->msgFileType("text/english/game/trait.msg");
         std::string images[] = { "fastmeta", "bruiser", "smlframe", "onehand", "finesse", "kamikaze", "heavyhnd", "fastshot",
                                   "bldmess", "jinxed", "goodnatr", "addict", "drugrest", "empathy", "skilled", "gifted"};
 
@@ -103,7 +103,7 @@ PlayerEditState::PlayerEditState() : State()
 
     // SKILLS
     {
-        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/skill.msg");
+        auto msg = _game->resourceManager()->msgFileType("text/english/game/skill.msg");
         std::string images[] = { "gunsml", "gunbig", "energywp", "unarmed", "melee", "throwing", "firstaid", "doctor", "sneak",
                                  "lockpick", "steal", "traps", "science", "repair", "speech", "barter", "gambling", "outdoors"};
         for (unsigned int i = 0; i != 18; ++i)
@@ -124,7 +124,7 @@ PlayerEditState::PlayerEditState() : State()
     // HEALTH CONDITION
     {
         std::string images[] = { "hitpoint", "poisoned", "radiated", "eyedamag", "armright", "armleft", "legright", "legleft"};
-        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+        auto msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
         _addTitle("health_1", msg->message(300)->text());
         _addLabel("health_1",  new TextArea(msg->message(300), 194, 46)); //health
         _addDescription("health_1", _game->resourceManager()->msgFileType("text/english/game/stat.msg")->message(207)->text());
@@ -147,8 +147,8 @@ PlayerEditState::PlayerEditState() : State()
     {
         std::string images[] = {"armorcls", "actionpt", "carryamt", "meleedam", "damresis", "poisnres", "radresis", "sequence", "healrate", "critchnc"};
         unsigned int labels[] = {302, 301, 311, 304, 305, 306, 307, 308, 309, 310};
-        libfalltergeist::MsgFileType * msgStat = _game->resourceManager()->msgFileType("text/english/game/stat.msg");
-        libfalltergeist::MsgFileType * msgEditor = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+        auto msgStat = _game->resourceManager()->msgFileType("text/english/game/stat.msg");
+        auto msgEditor = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
         const int params[] = {109, 108, 112, 111, 124, 132, 131, 113, 114, 115};
         for (unsigned int i = 0; i != 10; ++i)
         {
@@ -174,7 +174,7 @@ PlayerEditState::PlayerEditState() : State()
 
         auto font3_b89c28ff = _game->resourceManager()->font("font3.aaf", 0xb89c28ff);
 
-        libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+        auto msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
         _addLabel("options", new TextArea(msg->message(101), 365, 453))->setFont(font3_b89c28ff);
         _addLabel("next",    new TextArea(msg->message(100), 473, 453))->setFont(font3_b89c28ff);
         _addLabel("cancel",  new TextArea(msg->message(102), 571, 453))->setFont(font3_b89c28ff);
@@ -341,7 +341,7 @@ void PlayerEditState::think()
 {
     State::think();
     auto player = _game->player();
-    libfalltergeist::MsgFileType * msgEditor = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+    auto msgEditor = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
 
     _labels->at("name")->setText(player->name());
     _labels->at("age")->setText(msgEditor->message(104))->appendText(" ")->appendText(std::to_string(player->age()));
@@ -575,7 +575,7 @@ void PlayerEditState::onButtonClick(MouseEvent* event)
                 if (!_traitToggle(number - 1))
                 {
                     auto state = std::shared_ptr<PlayerEditAlertState>(new PlayerEditAlertState());
-                    libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+                    auto msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
                     std::string text = msg->message(148)->text() + "\n" + msg->message(149)->text();
                     state->setMessage(text);
                     _game->pushState(state);
@@ -590,7 +590,7 @@ void PlayerEditState::onButtonClick(MouseEvent* event)
                 if (!_skillToggle(number - 1))
                 {
                     auto state = std::shared_ptr<PlayerEditAlertState>(new PlayerEditAlertState());
-                    libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+                    auto msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
                     std::string text = msg->message(140)->text() + "\n" + msg->message(141)->text();
                     state->setMessage(text);
                     _game->pushState(state);

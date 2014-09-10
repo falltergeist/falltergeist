@@ -24,7 +24,6 @@
 
 // Falltergeist includes
 #include "../Engine/Location.h"
-#include "../Engine/LocationObject.h"
 #include "../Engine/LocationCamera.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
@@ -139,12 +138,12 @@ void Location::init()
         if (mapObject->scriptId() > 0)
         {
             auto intFile = ResourceManager::intFileType(mapObject->scriptId());
-            if (intFile) object->scripts()->push_back(new VM(intFile,object.get()));
+            if (intFile) object->scripts()->push_back(new VM(intFile.get(),object.get()));
         }
         if (mapObject->mapScriptId() > 0 && mapObject->mapScriptId() != mapObject->scriptId())
         {
             auto intFile = ResourceManager::intFileType(mapObject->mapScriptId());
-            if (intFile) object->scripts()->push_back(new VM(intFile, object.get()));
+            if (intFile) object->scripts()->push_back(new VM(intFile.get(), object.get()));
         }
 
         _objects.push_back(object);
@@ -372,7 +371,7 @@ std::shared_ptr<GameObject> Location::createObject(int PID)
     if (proto->scriptId() > 0)
     {
         auto intFile = ResourceManager::intFileType(proto->scriptId());
-        if (intFile) object->scripts()->push_back(new VM(intFile, object.get()));
+        if (intFile) object->scripts()->push_back(new VM(intFile.get(), object.get()));
     }
 
     return object;

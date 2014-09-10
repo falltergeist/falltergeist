@@ -69,7 +69,7 @@ void PlayerEditAlertState::init()
     ImageButton * doneButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 264, 273);
     doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditAlertState::onDoneButtonClick);
 
-    libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+    auto msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
     TextArea * doneLabel = new TextArea(msg->message(100), 284, 273);
 
     auto font3_b89c28ff = _game->resourceManager()->font("font3.aaf", 0xb89c28ff);

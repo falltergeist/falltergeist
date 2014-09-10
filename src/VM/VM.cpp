@@ -28,7 +28,6 @@
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Animation.h"
 #include "../Engine/Location.h"
-#include "../Engine/LocationObject.h"
 #include "../Game/GameDefines.h"
 #include "../Game/GameObject.h"
 #include "../Game/GameDudeObject.h"
@@ -61,7 +60,7 @@ VM::VM(libfalltergeist::IntFileType* script, void* owner)
 VM::VM(std::string filename, void* owner)
 {
     _owner = owner;
-    _script = ResourceManager::intFileType(filename);
+    _script = ResourceManager::intFileType(filename).get();
     if (!_script) throw Exception("VM::VM() - script is null: " + filename);
 }
 
@@ -797,7 +796,7 @@ void VM::run()
                 if (SID > 0)
                 {
                     auto intFile = ResourceManager::intFileType(SID);
-                    if (intFile) object->scripts()->push_back(new VM(intFile, object.get()));
+                    if (intFile) object->scripts()->push_back(new VM(intFile.get(), object.get()));
                 }
                 pushDataPointer(object.get());
                 break;
