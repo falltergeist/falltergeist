@@ -54,7 +54,7 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
     unsigned int x = 0;
     unsigned int y = 0;
 
-    for (auto d = 0; d != direction; ++d)
+    for (unsigned int d = 0; d != direction; ++d)
     {
         y += frm->height(d); //? может i - 1
     }

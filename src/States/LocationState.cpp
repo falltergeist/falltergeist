@@ -60,7 +60,7 @@ void LocationState::init()
 
     _game->mouse()->setType(Mouse::ACTION);
 
-    _location = new Location(_game->resourceManager()->mapFileType("maps/artemple.map"));
+    _location = std::shared_ptr<Location>(new Location(_game->resourceManager()->mapFileType("maps/artemple.map")));
     //_location = new Location(_game->resourceManager()->mapFileType("maps/sftanker.map"));
     _game->setLocation(_location);
     _floor = new Image(_location->tilesFloor());
@@ -105,9 +105,9 @@ void LocationState::onMouseDown(MouseEvent* event)
 
 void LocationState::onBackgroundClick(MouseEvent* event)
 {
-    int x = _location->camera()->x() + event->x();
-    int y = _location->camera()->y() + event->y();
-    unsigned int hexagon = _location->positionToHexagon(x, y);
+    //int x = _location->camera()->x() + event->x();
+    //int y = _location->camera()->y() + event->y();
+    //unsigned int hexagon = _location->positionToHexagon(x, y);
 
     //std::cout << std::dec << x << " : " << y << " > " << hexagon << std::endl;
 }
@@ -190,7 +190,7 @@ void LocationState::handle(Event* event)
     if (MouseEvent* mouseEvent = dynamic_cast<MouseEvent*>(event))
     {
         auto game = &Game::getInstance();
-        auto scrollArea = 5;
+        unsigned int scrollArea = 5;
         if (mouseEvent->name() == "mousemove")
         {
             _scrollLeft = mouseEvent->x() < scrollArea ? true : false;

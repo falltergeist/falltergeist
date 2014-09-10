@@ -22,22 +22,22 @@ MouseEvent::~MouseEvent()
 {
 }
 
-void MouseEvent::setX(int value)
+void MouseEvent::setX(unsigned int value)
 {
     _x = value;
 }
 
-int MouseEvent::x()
+unsigned int MouseEvent::x()
 {
     return _x;
 }
 
-void MouseEvent::setY(int value)
+void MouseEvent::setY(unsigned int value)
 {
     _y = value;
 }
 
-int MouseEvent::y()
+unsigned int MouseEvent::y()
 {
     return _y;
 }

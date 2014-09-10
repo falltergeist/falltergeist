@@ -340,7 +340,7 @@ void PlayerEditState::_addImage(std::string name, Image* image)
 void PlayerEditState::think()
 {
     State::think();
-    GameDudeObject* player = _game->player();
+    auto player = _game->player();
     libfalltergeist::MsgFileType * msgEditor = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
 
     _labels->at("name")->setText(player->name());
@@ -473,7 +473,7 @@ void PlayerEditState::think()
 
 bool PlayerEditState::_statDecrease(unsigned int num)
 {
-    GameDudeObject* player = _game->player();
+    auto player = _game->player();
     if (player->stat(num) <= 1) return false;
 
     player->setStat(num, player->stat(num) - 1);
@@ -483,7 +483,7 @@ bool PlayerEditState::_statDecrease(unsigned int num)
 
 bool PlayerEditState::_statIncrease(unsigned int num)
 {
-    GameDudeObject* player = _game->player();
+    auto player = _game->player();
     if (player->statsPoints() <= 0) return false;
 
     if (player->stat(num) + player->statBonus(num) >= 10) return false;
@@ -495,7 +495,7 @@ bool PlayerEditState::_statIncrease(unsigned int num)
 
 bool PlayerEditState::_traitToggle(unsigned int num)
 {
-    GameDudeObject* player = _game->player();
+    auto player = _game->player();
     if (player->trait(num))
     {
         player->setTrait(num, 0);
@@ -516,7 +516,7 @@ bool PlayerEditState::_traitToggle(unsigned int num)
 
 bool PlayerEditState::_skillToggle(unsigned int num)
 {
-    GameDudeObject* player = _game->player();
+    auto player = _game->player();
     if (player->skill(num))
     {
         player->setSkill(num, 0);

@@ -1102,14 +1102,14 @@ void VM::run()
                 std::cout << "[*] void start_gdialog(int msgFileNum, GameCritterObject* who, int mood, int headNum, int backgroundIdx)" << std::endl;
                 auto dialog = std::shared_ptr<CritterDialogState>(new CritterDialogState());
                 Game::getInstance().setDialog(dialog);
-                auto backgroundIdx = popDataInteger();
-                auto headNum = popDataInteger();
-                auto mood = popDataInteger();
+                popDataInteger(); //auto backgroundIdx = popDataInteger();
+                popDataInteger(); //auto headNum = popDataInteger();
+                popDataInteger();//auto mood = popDataInteger();
                 auto critter = dynamic_cast<GameCritterObject*>((GameCritterObject*)popDataPointer());
                 if (!critter) throw Exception("VM::opcode80de - wrong critter pointers");
                 dialog->setCritter(critter);
                 dialog->setScript(this);
-                auto msgFileNum = popDataInteger();
+                popDataInteger();//auto msgFileNum = popDataInteger();
                 break;
             }
             case 0x80df:
@@ -1154,7 +1154,7 @@ void VM::run()
             case 0x80e7:
             {
                 std::cout << "[=] int anim_busy(void* obj)" << std::endl;
-                auto object = (GameObject*)popDataPointer();
+                popDataPointer();//auto object = (GameObject*)popDataPointer();
                 //pushDataInteger(object->animationQueue()->enabled());
                 break;
             }
@@ -1364,14 +1364,14 @@ void VM::run()
                 {
                     case 0x1: // ANIM_BEGIN
                     {
-                        auto p2 = popDataInteger();
+                        popDataInteger();//auto p2 = popDataInteger();
                         // RB_UNRESERVED (1) - незарезервированная последовательность, может не воспроизвестись, если отсутствуют свободные слоты
                         // RB_RESERVED (2) - зарезервированная последовательность, должна воспроизвестись в любом случае
                         break;
                     }
                     case 0x2: // ANIM_CLEAR
                     {
-                        auto object = (GameObject*)popDataPointer();
+                        popDataPointer();//auto object = (GameObject*)popDataPointer();
                         //object->animationQueue()->start();
                         break;
                     }
@@ -1545,7 +1545,7 @@ void VM::run()
             {
                 std::cout << "[+] void reg_anim_animate_forever(GameObject* obj , int delay)" << std::endl;
                 popDataInteger(); // delay - must be -1
-                auto object = (GameObject*)popDataPointer();
+                popDataPointer();//auto object = (GameObject*)popDataPointer();
                 //if (object->animationQueue()->animation())
                 {
                     //object->animationQueue()->stop();

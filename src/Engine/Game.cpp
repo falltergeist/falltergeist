@@ -65,9 +65,9 @@ void Game::_initialize()
     SDL_WM_SetCaption(caption.c_str(), 0);
     putenv(strdup("SDL_VIDEO_CENTERED=1"));
 
-    _resourceManager = new ResourceManager();
+    _resourceManager = std::shared_ptr<ResourceManager>(new ResourceManager());
     //_renderer = new OpenGLRenderer(640, 480);
-    _renderer = new SDLRenderer(640, 480);
+    _renderer = std::shared_ptr<SDLRenderer>(new SDLRenderer(640, 480));
     _renderer->init();
     //_screen = new Screen(640, 480, 32);
     //_mixer = new AudioMixer();
@@ -77,8 +77,8 @@ void Game::_initialize()
     std::string version = CrossPlatform::getVersion();
     version += " " + std::to_string(_renderer->width()) + "x" + std::to_string(_renderer->height());
 
-    if (dynamic_cast<SDLRenderer*>(_renderer)) version += " SDL Renderer";
-    if (dynamic_cast<OpenGLRenderer*>(_renderer)) version += " OpenGL Renderer";
+    if (dynamic_cast<SDLRenderer*>(_renderer.get())) version += " SDL Renderer";
+    if (dynamic_cast<OpenGLRenderer*>(_renderer.get())) version += " OpenGL Renderer";
 
 
     _falltergeistVersion = new TextArea(version, 3, _renderer->height() - 10);
@@ -86,7 +86,6 @@ void Game::_initialize()
 
 Game::~Game()
 {
-    delete _player;
 }
 
 void Game::pushState(std::shared_ptr<State> state)
@@ -227,7 +226,7 @@ void Game::run()
     debug("[GAME] - Stopping main loop", DEBUG_INFO);
 }
 
-ResourceManager* Game::resourceManager()
+std::shared_ptr<ResourceManager> Game::resourceManager()
 {
     return _resourceManager;
 }
@@ -237,12 +236,12 @@ void Game::quit()
     _quit = true;
 }
 
-void Game::setPlayer(GameDudeObject* player)
+void Game::setPlayer(std::shared_ptr<GameDudeObject> player)
 {
     _player = player;
 }
 
-GameDudeObject* Game::player()
+std::shared_ptr<GameDudeObject> Game::player()
 {
     return _player;
 }
@@ -252,12 +251,12 @@ std::shared_ptr<Mouse> Game::mouse()
     return _mouse;
 }
 
-void Game::setLocation(Location* location)
+void Game::setLocation(std::shared_ptr<Location> location)
 {
     _location = location;
 }
 
-Location* Game::location()
+std::shared_ptr<Location> Game::location()
 {
     return _location;
 }
@@ -351,7 +350,7 @@ std::vector<UI*>* Game::ui()
     return &_ui;
 }
 
-Renderer* Game::renderer()
+std::shared_ptr<Renderer> Game::renderer()
 {
     return _renderer;
 }

@@ -22,6 +22,7 @@
 #define FALLTERGEIST_LOCATIONSTATE_H
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
 #include "../Engine/State.h"
@@ -40,7 +41,7 @@ class LocationState : public State
 {
 protected:    
     Animation * _animation = 0;
-    Location * _location = 0;
+    std::shared_ptr<Location> _location;
     Image* _floor = 0;
     Image* _roof = 0;
     unsigned int _direction;

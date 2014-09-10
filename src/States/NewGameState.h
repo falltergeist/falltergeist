@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <vector>
+#include <memory>
 
 // Falltergeist includes
 #include "../Engine/State.h"
@@ -41,7 +42,7 @@ class NewGameState : public State
 {
 protected:
     ImageList* _characterImages = 0;
-    std::vector<GameDudeObject*> _characters;
+    std::vector<std::shared_ptr<GameDudeObject>> _characters;
     TextArea* _playerStats1 = 0;
     TextArea* _playerStats2 = 0;
     TextArea* _playerBio = 0;

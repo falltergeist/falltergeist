@@ -50,7 +50,7 @@ void SettingsMenuState::init()
     if (_initialized) return;
     State::init();
 
-    unsigned int color = 0x907824ff;
+    //unsigned int color = 0x907824ff;
     
     auto background = new Image("art/intrface/prefscrn.frm");
 

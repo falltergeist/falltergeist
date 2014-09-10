@@ -14,8 +14,8 @@ namespace Falltergeist
 class MouseEvent : public Event
 {
 protected:
-    int _x = 0;
-    int _y = 0;
+    unsigned int _x = 0;
+    unsigned int _y = 0;
     int _xOffset = 0;
     int _yOffset = 0;
     int _leftButton = false;
@@ -25,11 +25,11 @@ public:
     MouseEvent(const MouseEvent* event);
     virtual ~MouseEvent();
 
-    void setX(int value);
-    int x();
+    void setX(unsigned int value);
+    unsigned int x();
 
-    void setY(int value);
-    int y();
+    void setY(unsigned int value);
+    unsigned int y();
 
     void setXOffset(int value);
     int xOffset();

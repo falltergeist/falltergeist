@@ -40,7 +40,7 @@ MultistateImageButton::MultistateImageButton(int x, int y) : ActiveUI(x, y)
 MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
 {
     addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MultistateImageButton::_onLeftButtonClick);
-    Image* image;
+    //Image* image;
     switch (type)
     {
         case TYPE_BIG_SWITCH:

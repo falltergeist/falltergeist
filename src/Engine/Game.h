@@ -50,13 +50,13 @@ class Game
 {
 protected:
     std::vector<int> _GVARS;
-    ResourceManager* _resourceManager = 0;
+    std::shared_ptr<ResourceManager> _resourceManager;
     std::vector<std::shared_ptr<State>> _states;
-    GameDudeObject* _player = 0;
-    Renderer* _renderer = 0;
+    std::shared_ptr<GameDudeObject> _player;
+    std::shared_ptr<Renderer> _renderer;
     std::shared_ptr<Mouse> _mouse;
-    AudioMixer* _mixer = 0;
-    Location* _location = 0;
+    std::shared_ptr<AudioMixer> _mixer;
+    std::shared_ptr<Location> _location;
     std::shared_ptr<CritterDialogState> _dialog;
     FpsCounter * _fpsCounter = 0;
     TextArea* _falltergeistVersion = 0;
@@ -74,7 +74,7 @@ public:
     ~Game();
     static Game& getInstance();
 
-    ResourceManager * resourceManager();
+    std::shared_ptr<ResourceManager> resourceManager();
 
     std::vector<std::shared_ptr<State>> states();
     std::vector<std::shared_ptr<State>> activeStates();
@@ -84,13 +84,13 @@ public:
     void run();
     void quit();    
 
-    void setPlayer(GameDudeObject* player);
-    GameDudeObject* player();
+    void setPlayer(std::shared_ptr<GameDudeObject> player);
+    std::shared_ptr<GameDudeObject> player();
     std::shared_ptr<Mouse> mouse();
-    Renderer* renderer();
+    std::shared_ptr<Renderer> renderer();
 
-    void setLocation(Location* location);
-    Location* location();
+    void setLocation(std::shared_ptr<Location> location);
+    std::shared_ptr<Location> location();
     void setDialog(std::shared_ptr<CritterDialogState> value);
     std::shared_ptr<CritterDialogState> dialog();
     void setGVAR(unsigned int number, int value);

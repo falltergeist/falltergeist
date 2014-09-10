@@ -44,11 +44,6 @@ NewGameState::NewGameState() : State()
 
 NewGameState::~NewGameState()
 {
-    for (unsigned int i = 0; i != _characters.size(); ++i)
-    {
-        if (i == _selectedCharacter) continue;
-        delete _characters.at(i);
-    }
 }
 
 void NewGameState::init()
@@ -91,17 +86,17 @@ void NewGameState::init()
                                           "art/intrface/diplomat.frm"
                                       }, 27, 23);
 
-    auto combat = new GameDudeObject();
+    auto combat = std::shared_ptr<GameDudeObject>(new GameDudeObject());
     combat->loadFromGCDFile(ResourceManager::gcdFileType("premade/combat.gcd"));
     combat->setBiography(ResourceManager::bioFileType("premade/combat.bio")->text());
     _characters.push_back(combat);
 
-    auto stealth = new GameDudeObject();
+    auto stealth = std::shared_ptr<GameDudeObject>(new GameDudeObject());
     stealth->loadFromGCDFile(ResourceManager::gcdFileType("premade/stealth.gcd"));
     stealth->setBiography(ResourceManager::bioFileType("premade/stealth.bio")->text());
     _characters.push_back(stealth);
 
-    auto diplomat = new GameDudeObject();
+    auto diplomat = std::shared_ptr<GameDudeObject>(new GameDudeObject());
     diplomat->loadFromGCDFile(ResourceManager::gcdFileType("premade/diplomat.gcd"));
     diplomat->setBiography(ResourceManager::bioFileType("premade/diplomat.bio")->text());
     _characters.push_back(diplomat);
@@ -171,7 +166,7 @@ void NewGameState::onNextCharacterButtonClick(MouseEvent* event)
 
 void NewGameState::changeCharacter()
 {
-    GameDudeObject* dude = _characters.at(_selectedCharacter);
+    auto dude = _characters.at(_selectedCharacter);
     std::stringstream ss;
     auto msg = ResourceManager::msgFileType("text/english/game/stat.msg");
     ss << msg->message(100)->text() << " " << (dude->stat(0) < 10 ? "0" : "") << dude->stat(0) << "\n"
@@ -213,7 +208,7 @@ void NewGameState::onEditButtonClick(MouseEvent* event)
 
 void NewGameState::onCreateButtonClick(MouseEvent* event)
 {
-    auto none = new GameDudeObject();
+    auto none = std::shared_ptr<GameDudeObject>(new GameDudeObject());
     none->loadFromGCDFile(ResourceManager::gcdFileType("premade/blank.gcd"));
     _selectedCharacter = _characters.size() + 1; // to guarantee deletion of all created dudes in destructor
     _game->setPlayer(none);
