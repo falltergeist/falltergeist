@@ -139,12 +139,12 @@ void MainMenuState::onExitButtonClick(MouseEvent* event)
 
 void MainMenuState::onNewGameButtonClick(MouseEvent* event)
 {
-    _game->pushState(new NewGameState());
+    _game->pushState(std::shared_ptr<NewGameState>(new NewGameState()));
 }
 
 void MainMenuState::onSettingsButtonClick(MouseEvent* event)
 {
-    _game->pushState(new SettingsMenuState());
+    _game->pushState(std::shared_ptr<SettingsMenuState>(new SettingsMenuState()));
 }
 
 

@@ -1100,7 +1100,7 @@ void VM::run()
             case 0x80de:
             {
                 std::cout << "[*] void start_gdialog(int msgFileNum, GameCritterObject* who, int mood, int headNum, int backgroundIdx)" << std::endl;
-                auto dialog = new CritterDialogState();
+                auto dialog = std::shared_ptr<CritterDialogState>(new CritterDialogState());
                 Game::getInstance().setDialog(dialog);
                 auto backgroundIdx = popDataInteger();
                 auto headNum = popDataInteger();

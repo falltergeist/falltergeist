@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     try
     {
         auto game = &Game::getInstance();
-        game->setState(new StartState());
+        game->setState(std::shared_ptr<StartState>(new StartState()));
         game->run();
         return 0;
 

@@ -23,6 +23,7 @@
 // C++ standard includes
 #include <vector>
 #include <string>
+#include <memory>
 
 // Falltergeist includes
 
@@ -50,15 +51,13 @@ class Game
 protected:
     std::vector<int> _GVARS;
     ResourceManager* _resourceManager = 0;
-    std::vector<State*>* _states = 0;
-    std::vector<State*>* _deletedStates = 0;
+    std::vector<std::shared_ptr<State>> _states;
     GameDudeObject* _player = 0;
     Renderer* _renderer = 0;
-    Screen* _screen = 0;
-    Mouse* _mouse = 0;
+    std::shared_ptr<Mouse> _mouse;
     AudioMixer* _mixer = 0;
     Location* _location = 0;
-    CritterDialogState* _dialog = 0;
+    std::shared_ptr<CritterDialogState> _dialog;
     FpsCounter * _fpsCounter = 0;
     TextArea* _falltergeistVersion = 0;
     bool _quit = false;
@@ -75,30 +74,30 @@ public:
     ~Game();
     static Game& getInstance();
 
-    Screen * screen();
-
     ResourceManager * resourceManager();
 
-    std::vector<State*>* states();
-    void pushState(State * state);
-    void setState(State * state);
+    std::vector<std::shared_ptr<State>> states();
+    std::vector<std::shared_ptr<State>> activeStates();
+    void pushState(std::shared_ptr<State> state);
+    void setState(std::shared_ptr<State> state);
     void popState();
     void run();
     void quit();    
 
     void setPlayer(GameDudeObject* player);
     GameDudeObject* player();
-    Mouse* mouse();
+    std::shared_ptr<Mouse> mouse();
     Renderer* renderer();
 
     void setLocation(Location* location);
     Location* location();
-    void setDialog(CritterDialogState* value);
-    CritterDialogState* dialog();
+    void setDialog(std::shared_ptr<CritterDialogState> value);
+    std::shared_ptr<CritterDialogState> dialog();
     void setGVAR(unsigned int number, int value);
     int GVAR(unsigned int number);
 
     std::vector<UI*>* ui();
+
 };
 
 }

@@ -70,7 +70,7 @@ void StartState::think()
     {
         //_game->setPlayer(new Player(ResourceManager::gcdFileType("premade/combat.gcd")));
         //_game->setState(new SettingsMenuState(_game));
-        _game->setState(new MainMenuState());
+        _game->setState(std::shared_ptr<MainMenuState>(new MainMenuState()));
     }    
 }
 

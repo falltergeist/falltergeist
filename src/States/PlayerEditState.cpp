@@ -574,7 +574,7 @@ void PlayerEditState::onButtonClick(MouseEvent* event)
 
                 if (!_traitToggle(number - 1))
                 {
-                    PlayerEditAlertState * state = new PlayerEditAlertState();
+                    auto state = std::shared_ptr<PlayerEditAlertState>(new PlayerEditAlertState());
                     libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
                     std::string text = msg->message(148)->text() + "\n" + msg->message(149)->text();
                     state->setMessage(text);
@@ -589,7 +589,7 @@ void PlayerEditState::onButtonClick(MouseEvent* event)
                 _selectedImage->setTexture(_images->at(name)->texture());
                 if (!_skillToggle(number - 1))
                 {
-                    PlayerEditAlertState * state = new PlayerEditAlertState();
+                    auto state = std::shared_ptr<PlayerEditAlertState>(new PlayerEditAlertState());
                     libfalltergeist::MsgFileType * msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
                     std::string text = msg->message(140)->text() + "\n" + msg->message(141)->text();
                     state->setMessage(text);
@@ -643,17 +643,17 @@ void PlayerEditState::onMaskClick(MouseEvent * event)
 
 void PlayerEditState::onNameButtonClick(MouseEvent * event)
 {
-    _game->pushState(new PlayerEditNameState());
+    _game->pushState(std::shared_ptr<PlayerEditNameState>(new PlayerEditNameState()));
 }
 
 void PlayerEditState::onAgeButtonClick(MouseEvent * event)
 {
-    _game->pushState(new PlayerEditAgeState());
+    _game->pushState(std::shared_ptr<PlayerEditAgeState>(new PlayerEditAgeState()));
 }
 
 void PlayerEditState::onGenderButtonClick(MouseEvent * event)
 {
-    _game->pushState(new PlayerEditGenderState());
+    _game->pushState(std::shared_ptr<PlayerEditGenderState>(new PlayerEditGenderState()));
 }
 
 void PlayerEditState::onBackButtonClick(MouseEvent *event)
@@ -663,7 +663,7 @@ void PlayerEditState::onBackButtonClick(MouseEvent *event)
 
 void PlayerEditState::onDoneButtonClick(MouseEvent * event)
 {
-    _game->setState(new LocationState());
+    _game->setState(std::shared_ptr<LocationState>(new LocationState()));
 }
 
 }

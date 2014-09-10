@@ -58,9 +58,6 @@ void Game::_initialize()
     if (_initialized) return;
     _initialized = true;
 
-    _states = new std::vector<State*>;
-    _deletedStates = new std::vector<State*>;
-
     debug("[GAME] - " + CrossPlatform::getVersion(), DEBUG_INFO);
     debug("[GAME] - Opensource Fallout 2 game engine", DEBUG_INFO);
 
@@ -74,7 +71,7 @@ void Game::_initialize()
     _renderer->init();
     //_screen = new Screen(640, 480, 32);
     //_mixer = new AudioMixer();
-    _mouse = new Mouse();
+    _mouse = std::shared_ptr<Mouse>(new Mouse());
     _fpsCounter = new FpsCounter(_renderer->width() - 42, 2);
 
     std::string version = CrossPlatform::getVersion();
@@ -90,42 +87,22 @@ void Game::_initialize()
 Game::~Game()
 {
     delete _player;
-    delete _screen;
-    delete _mouse;
-    delete _states; // ? delete elements
-    delete _deletedStates; // ? delete elements
 }
 
-/**
- * Pushes a new state into the state stack
- * @param state
- */
-void Game::pushState(State* state)
+void Game::pushState(std::shared_ptr<State> state)
 {
     if (!state->initialized()) state->init();
-    _states->push_back(state);
+    _states.push_back(state);
 }
 
-/**
- * Pops the last state from the state stack
- */
 void Game::popState()
 {
-    _deletedStates->push_back(_states->back());
-    _states->pop_back();
+    _states.pop_back();
 }
 
-/**
- * Clears the state stack and adds new state
- * @param state
- */
-void Game::setState(State * state)
+void Game::setState(std::shared_ptr<State> state)
 {
-    while (_states->size() > 0)
-    {
-        popState();
-    }
-    if (!state->initialized()) state->init();
+    _states.clear();
     pushState(state);
 }
 
@@ -134,13 +111,6 @@ void Game::run()
     debug("[GAME] - Starting main loop", DEBUG_INFO);
     while (!_quit)
     {
-        // Clean up states
-        while (!_deletedStates->empty())
-        {
-            delete _deletedStates->back();
-            _deletedStates->pop_back();
-        }
-
         while(SDL_PollEvent(&_event))
         {
             if (_event.type == SDL_QUIT)
@@ -158,7 +128,8 @@ void Game::run()
                         event->setY(_event.button.y);
                         event->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
                         event->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
-                        _states->back()->handle(event);
+                        for (auto state : activeStates()) state->handle(event);
+
                         delete event;
                         break;
                     }
@@ -169,7 +140,7 @@ void Game::run()
                         event->setY(_event.button.y);
                         event->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
                         event->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
-                        _states->back()->handle(event);
+                        for (auto state : activeStates()) state->handle(event);
                         delete event;
                         break;
                     }
@@ -180,7 +151,7 @@ void Game::run()
                         event->setY(_event.motion.y);
                         event->setXOffset(_event.motion.xrel);
                         event->setYOffset(_event.motion.yrel);
-                        _states->back()->handle(event);
+                        for (auto state : activeStates()) state->handle(event);
                         delete event;
                         break;
                     }
@@ -189,7 +160,7 @@ void Game::run()
                         auto event = new KeyboardEvent("keydown");
                         event->setKeyCode(_event.key.keysym.sym);
                         event->setShiftPressed(_event.key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
-                        _states->back()->handle(event);
+                        for (auto state : activeStates()) state->handle(event);
                         delete event;
                         break;
                     }
@@ -198,7 +169,7 @@ void Game::run()
                         auto event = new KeyboardEvent("keyup");
                         event->setKeyCode(_event.key.keysym.sym);
                         event->setShiftPressed(_event.key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
-                        _states->back()->handle(event);
+                        for (auto state : activeStates()) state->handle(event);
 
                         /*
                         if (event->keyCode() == SDLK_F12)
@@ -217,21 +188,13 @@ void Game::run()
         }
 
         // thinking
-        _states->back()->think();
+        _states.back()->think();
         _fpsCounter->think();
         _mouse->think();
         //Surface::animatedPalette->think();
 
-        auto it = _states->end();
-        do
+        for (auto state : activeStates())
         {
-            --it;
-        }
-        while(it != _states->begin() && !(*it)->fullscreen());
-
-        for (; it != _states->end(); ++it)
-        {
-            State* state = *it;
             state->think();
         }
 
@@ -264,11 +227,6 @@ void Game::run()
     debug("[GAME] - Stopping main loop", DEBUG_INFO);
 }
 
-Screen* Game::screen()
-{
-    return _screen;
-}
-
 ResourceManager* Game::resourceManager()
 {
     return _resourceManager;
@@ -289,7 +247,7 @@ GameDudeObject* Game::player()
     return _player;
 }
 
-Mouse* Game::mouse()
+std::shared_ptr<Mouse> Game::mouse()
 {
     return _mouse;
 }
@@ -334,17 +292,35 @@ void Game::_initGVARS()
     }
 }
 
-std::vector<State*>* Game::states()
+std::vector<std::shared_ptr<State>> Game::states()
 {
     return _states;
 }
 
-CritterDialogState* Game::dialog()
+std::vector<std::shared_ptr<State>> Game::activeStates()
+{
+    std::vector<std::shared_ptr<State>> activeStates;
+    auto it = _states.end();
+    do
+    {
+        --it;
+    }
+    while(it != _states.begin() && !(*it)->fullscreen());
+
+    for (; it != _states.end(); ++it)
+    {
+        if (*it) activeStates.push_back(*it);
+    }
+    return activeStates;
+}
+
+
+std::shared_ptr<CritterDialogState> Game::dialog()
 {
     return _dialog;
 }
 
-void Game::setDialog(CritterDialogState* value)
+void Game::setDialog(std::shared_ptr<CritterDialogState> value)
 {
     _dialog = value;
 }
@@ -353,16 +329,9 @@ std::vector<UI*>* Game::ui()
 {
     _ui.clear();
 
-    auto it = _states->end();
-    do
+    for (auto state : activeStates())
     {
-        --it;
-    }
-    while(it != _states->begin() && !(*it)->fullscreen());
-
-    for (; it != _states->end(); ++it)
-    {
-        for (auto j = (*it)->ui()->begin(); j != (*it)->ui()->end(); ++j)
+        for (auto j = state->ui()->begin(); j != state->ui()->end(); ++j)
         {
             if ((*j)->visible())
             {

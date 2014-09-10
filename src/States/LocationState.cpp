@@ -96,7 +96,7 @@ void LocationState::onMouseDown(MouseEvent* event)
     icons.push_back(Mouse::ICON_SKILL);
     icons.push_back(Mouse::ICON_CANCEL);
 
-    auto state = new CursorDropdownState(icons);
+    auto state = std::shared_ptr<CursorDropdownState>(new CursorDropdownState(icons));
     state->setObject(object);
     auto game = &Game::getInstance();
     game->pushState(state);

@@ -208,7 +208,7 @@ std::string NewGameState::statToString(unsigned int stat)
 void NewGameState::onEditButtonClick(MouseEvent* event)
 {
     _game->setPlayer(_characters.at(_selectedCharacter));
-    _game->pushState(new PlayerEditState());
+    _game->pushState(std::shared_ptr<PlayerEditState>(new PlayerEditState()));
 }
 
 void NewGameState::onCreateButtonClick(MouseEvent* event)
@@ -217,13 +217,13 @@ void NewGameState::onCreateButtonClick(MouseEvent* event)
     none->loadFromGCDFile(ResourceManager::gcdFileType("premade/blank.gcd"));
     _selectedCharacter = _characters.size() + 1; // to guarantee deletion of all created dudes in destructor
     _game->setPlayer(none);
-    _game->pushState(new PlayerEditState());
+    _game->pushState(std::shared_ptr<PlayerEditState>(new PlayerEditState()));
 }
 
 void NewGameState::onBeginGameButtonClick(MouseEvent* event)
 {
     _game->setPlayer(_characters.at(_selectedCharacter));
-    _game->setState(new LocationState());
+    _game->setState(std::shared_ptr<LocationState>(new LocationState()));
 }
 
 }
