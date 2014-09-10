@@ -43,7 +43,7 @@ public:
     EventHandler(EventReciever* reciever, EventRecieverMethod method);
     virtual ~EventHandler();
     void operator()(Event* event);
-
+    EventReciever* reciever();
 };
 
 }

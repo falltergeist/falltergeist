@@ -52,12 +52,6 @@ void Renderer::beginFrame()
     {
         drawTexture((*i)->x(), (*i)->y(), (*i)->texture());
     }
-
-    // Render mouse
-    if (game->mouse()->visible())
-    {
-        drawTexture(game->mouse()->x(), game->mouse()->y(), game->mouse()->texture());
-    }
 }
 
 void Renderer::endFrame()

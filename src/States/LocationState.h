@@ -39,7 +39,6 @@ class Image;
 class LocationState : public State
 {
 protected:    
-    bool _hexagonalGrid = false;
     Animation * _animation = 0;
     Location * _location = 0;
     Image* _floor = 0;
@@ -52,13 +51,11 @@ protected:
     bool _scrollRight = false;
     bool _scrollTop = false;
     bool _scrollBottom = false;
-    void _drawHexagonalGrid();
 public:
     LocationState();
     ~LocationState();
     virtual void init();
     virtual void think();
-    virtual void blit();
     virtual void handle(Event* event);
 
     void onBackgroundClick(MouseEvent * event);

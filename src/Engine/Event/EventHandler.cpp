@@ -43,4 +43,9 @@ void EventHandler::operator()(Event* event)
     (_reciever->*_method)(event);
 }
 
+EventReciever* EventHandler::reciever()
+{
+    return _reciever;
+}
+
 }

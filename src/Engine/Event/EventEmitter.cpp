@@ -30,6 +30,7 @@ void EventEmitter::emitEvent(Event* event)
     event->setEmitter(this);
     for (EventHandler* eventHandler : *_eventHandlers.at(event->name()))
     {
+        event->setReciever(eventHandler->reciever());
         eventHandler->operator()(event);
     }
 }

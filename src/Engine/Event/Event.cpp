@@ -56,4 +56,14 @@ void Event::setEmitter(EventEmitter* value)
     _emitter = value;
 }
 
+EventReciever* Event::reciever()
+{
+    return _reciever;
+}
+
+void Event::setReciever(EventReciever* reciever)
+{
+    _reciever = reciever;
+}
+
 }

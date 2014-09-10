@@ -50,7 +50,7 @@ void MainMenuState::init()
 {
     State::init();
 
-    //_game->mouse()->setType(Mouse::BIG_ARROW);
+    _game->mouse()->setType(Mouse::BIG_ARROW);
 
     // Background image
     auto background = new Image("art/intrface/mainmenu.frm");

@@ -37,9 +37,9 @@ namespace Falltergeist
 CursorDropdownState::CursorDropdownState(std::vector<int> icons) : State()
 {
     _icons = icons;
-    //_initialX = _game->mouse()->cursorX();
-    //_initialY = _game->mouse()->cursorY();
-    //_initialType = _game->mouse()->type();
+    _initialX = _game->mouse()->x();
+    _initialY = _game->mouse()->y();
+    _initialType = _game->mouse()->type();
 }
 
 CursorDropdownState::~CursorDropdownState()
@@ -51,7 +51,7 @@ void CursorDropdownState::init()
     if (_initialized) return;
     State::init();
     setFullscreen(false);
-    /*
+/*
     int i = 0;
     for (auto icon : _icons)
     {
@@ -103,7 +103,7 @@ void CursorDropdownState::init()
         _inactiveSurfaces.push_back(new Surface(ResourceManager::surface("art/intrface/" + inactiveSurface, 0, 40*i)));
         i++;
     }
-
+game->mouse()
     _game->mouse()->setType(Mouse::NONE);
 
     _cursor = new Surface(ResourceManager::surface("art/intrface/actarrow.frm"));
@@ -141,7 +141,7 @@ void CursorDropdownState::init()
     add(_cursor);
     add(_surface);
     add(_mask);
-    */
+*/
 }
 
 void CursorDropdownState::blit()
@@ -179,12 +179,12 @@ void CursorDropdownState::think()
 
 void CursorDropdownState::onLeftButtonUp(MouseEvent* event)
 {
-    /*
+
     SDL_WarpMouse(_initialX, _initialY);
     _game->mouse()->setType(_initialType);
     _game->popState();
     _game->location()->handleAction((GameObject*)_object, _icons.at(_currentSurface));
-    */
+
 
 }
 

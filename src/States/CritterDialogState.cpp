@@ -51,8 +51,8 @@ CritterDialogState::~CritterDialogState()
     auto camera = Game::getInstance().location()->camera();
     camera->setXPosition(_oldCameraX);
     camera->setYPosition(_oldCameraY);
-    Game::getInstance().location()->generateBackground();
-    Game::getInstance().location()->checkObjectsToRender();
+    //Game::getInstance().location()->generateBackground();
+    //Game::getInstance().location()->checkObjectsToRender();
 }
 
 void CritterDialogState::init()

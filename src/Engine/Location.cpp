@@ -482,7 +482,7 @@ void Location::checkObjectsToRender()
         Animation* animation = dynamic_cast<Animation*>(object->ui());
         if (animation)
         {
-            x = Location::hexagonToX(object->position()) + ui->xOffset() - width*0.5;
+            x = Location::hexagonToX(object->position()) + ui->xOffset() - std::floor(width*0.5);
             y = Location::hexagonToY(object->position()) + ui->yOffset() - height;
         }
         else
@@ -499,40 +499,6 @@ void Location::checkObjectsToRender()
 
         _objectsToRender.push_back(object);
     }
-}
-
-void Location::generateBackground()
-{
-    /*
-    _tilesBackground->fill(0xFF000000);
-    // Инициализируем тайловый фон
-    for (unsigned int i = 0; i != _cols*_rows; ++i)
-    {
-        int tileX = tileToX(i);
-        int tileY = tileToY(i);
-
-        // Проверяем не выходят ли тайлы за пределы зоны видимости
-        if (tileX + TILE_WIDTH < camera()->x()) continue;
-        if (tileX > camera()->x() + camera()->width()) continue;
-        if (tileY + TILE_HEIGHT < camera()->y()) continue;
-        if (tileY > camera()->y() + camera()->height()) continue;
-
-        std::string frmName = _tilesLst->strings()->at(_mapFile->elevations()->at(_elevation)->floorTiles()->at(i));
-        Surface * tile = ResourceManager::surface("art/tiles/" + frmName);
-        tile->setX(tileX - camera()->x());
-        tile->setY(tileY - camera()->y());
-        tile->blit(_tilesBackground);
-    }
-    */
-    /*
-    int x1 = hexagonToX(_mapFile->defaultPosition()) - camera()->x();
-    int y1 = hexagonToY(_mapFile->defaultPosition()) - camera()->y();
-    int x2 = hexagonToX(_mapFile->defaultPosition() + 2) - camera()->x();
-    int y2 = hexagonToY(_mapFile->defaultPosition() + 2) - camera()->y();
-    _tilesBackground->drawLine(x1, y1, x2, y2, 0xFFFF0000);
-    _tilesBackground->drawLine(319, 0, 319, 479, 0xFF00FF00);
-    _tilesBackground->drawLine(0, 239, 639, 239, 0xFF00FF00);
-    */
 }
 
 int Location::hexagonToX(unsigned int hexagon)
@@ -598,57 +564,6 @@ unsigned int Location::tileToX(unsigned int tile)
 unsigned int Location::tileToY(unsigned int tile)
 {
     return ceil(tile / _cols)*24 + (tile % _cols)*12;
-}
-
-/*
-Surface * Location::tilesBackground()
-{
-    return _tilesBackground;
-}
-*/
-
-bool Location::scroll(bool up, bool down, bool left, bool right)
-{    
-    if (SDL_GetTicks() < _scrollTicks + 10) return _scrollStatus;
-    _scrollTicks = SDL_GetTicks();
-
-    _scrollStatus = false;
-    int scrollDelta = 5;
-
-    if (up && camera()->y() >= scrollDelta)
-    {
-        camera()->setYPosition(camera()->yPosition() - scrollDelta);
-        _scrollStatus = true;
-    }
-    if (left && camera()->x() >= scrollDelta)
-    {
-        camera()->setXPosition(camera()->xPosition() - scrollDelta);
-        _scrollStatus = true;
-    }
-    if (down)
-    {
-
-        if (camera()->yPosition() < height() - scrollDelta - camera()->height())
-        {
-            camera()->setYPosition(camera()->yPosition() + scrollDelta);
-            _scrollStatus = true;
-        }
-    }
-    if (right)
-    {
-        if (camera()->x() < width() - scrollDelta - camera()->width())
-        {
-            camera()->setXPosition(camera()->xPosition() + scrollDelta);
-            _scrollStatus = true;
-        }
-    }
-
-    if (_scrollStatus)
-    {
-        generateBackground();
-        checkObjectsToRender();
-    }
-    return _scrollStatus;
 }
 
 std::vector<GameObject*>* Location::objects()

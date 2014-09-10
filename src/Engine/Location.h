@@ -74,7 +74,6 @@ public:
     ~Location();
     void init();
     void think();
-    bool scroll(bool up = false, bool down = false, bool left = false, bool right = false);
     static int hexagonToX(unsigned int hexagon);
     static int hexagonToY(unsigned int hexagon);
     static unsigned int positionToHexagon(int x, int y);
@@ -83,7 +82,6 @@ public:
     int width();
     int height();
     void handleAction(GameObject* object, int action);
-    void generateBackground();
     void checkObjectsToRender();
 
     Texture* tilesFloor();
@@ -94,7 +92,6 @@ public:
     static GameObject* createObject(int PID);
 
     libfalltergeist::MapFileType* mapFile();
-    Surface* tilesBackground();
     std::vector<GameObject*>* objects();
     std::vector<GameObject*>* objectsToRender();
 

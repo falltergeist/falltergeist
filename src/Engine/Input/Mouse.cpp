@@ -19,11 +19,14 @@
  */
 
 // C++ standard includes
+#include <iostream>
 
 // Falltergeist includes
 #include "../../Engine/Input/Mouse.h"
 #include "../../Engine/Graphics/Texture.h"
 #include "../../Engine/ResourceManager.h"
+#include "../../UI/Image.h"
+#include "../../Engine/Graphics/Animation.h"
 
 // Third party includes
 #include "SDL.h"
@@ -35,24 +38,20 @@ Mouse::Mouse()
 {
     // Hide cursor
     SDL_ShowCursor(0);
-
-    auto frm = ResourceManager::frmFileType("art/intrface/stdarrow.frm");
-    auto pal = ResourceManager::palFileType("color.pal");
-
-    _texture = new Texture(frm->width(), frm->height());
-    _texture->loadFromRGBA(frm->rgba(pal));
+    setType(BIG_ARROW);
 }
 
 Mouse::~Mouse()
 {
     // Show cursor
     SDL_ShowCursor(1);
-    delete _texture;
+    delete _ui; _ui = 0;
 }
 
 void Mouse::think()
 {
     SDL_GetMouseState(&_x, &_y);
+    if (_ui) _ui->think();
 }
 
 int Mouse::x()
@@ -87,9 +86,133 @@ void Mouse::setVisible(bool value)
     _visible = value;
 }
 
-Texture* Mouse::texture()
+ActiveUI* Mouse::ui()
 {
-    return _texture;
+    _ui->setX(_x);
+    _ui->setY(_y);
+    return _ui;
+}
+
+unsigned int Mouse::type()
+{
+    return _type;
+}
+
+void Mouse::setType(unsigned int type)
+{
+    if (_type == type) return;
+    delete _ui; _ui = 0;
+    switch(type)
+    {
+        case BIG_ARROW:
+            _ui = new Image("art/intrface/stdarrow.frm");
+            // 0 0
+            break;
+        case SCROLL_W:
+            _ui = new Image("art/intrface/scrwest.frm");
+            //setYOffset( - ceil(height()/2));
+            //setXOffset(0);
+            break;
+        case SCROLL_W_X:
+            _ui = new Image("art/intrface/scrwx.frm");
+            //setYOffset( - ceil(height()/2));
+            //setXOffset(0);
+            break;
+        case SCROLL_N:
+            _ui = new Image("art/intrface/scrnorth.frm");
+            //setXOffset( - ceil(width()/2));
+            //setYOffset(0);
+            break;
+        case SCROLL_N_X:
+            _ui = new Image("art/intrface/scrnx.frm");
+            //setXOffset( - ceil(width()/2));
+            //setYOffset(0);
+            break;
+        case SCROLL_S:
+            _ui = new Image("art/intrface/scrsouth.frm");
+            //setXOffset( - ceil(width()/2));
+            //setYOffset( - height());
+            break;
+        case SCROLL_S_X:
+            _ui = new Image("art/intrface/scrsx.frm");
+            //setXOffset(- ceil(width()/2));
+            //setYOffset(- height());
+            break;
+        case SCROLL_E:
+            _ui = new Image("art/intrface/screast.frm");
+            //setXOffset( - width());
+            //setYOffset( - ceil(height()/2));
+            break;
+        case SCROLL_E_X:
+            _ui = new Image("art/intrface/screx.frm");
+            //setXOffset(- width());
+            //setYOffset(- ceil(height()/2));
+            break;
+        case SCROLL_NW:
+            _ui = new Image("art/intrface/scrnwest.frm");
+            //setXOffset(0);
+            //setYOffset(0);
+            break;
+        case SCROLL_NW_X:
+            _ui = new Image("art/intrface/scrnwx.frm");
+            //setXOffset(0);
+            //setYOffset(0);
+            break;
+        case SCROLL_SW:
+            _ui = new Image("art/intrface/scrswest.frm");
+            //setXOffset(0);
+            //setYOffset(- height());
+            break;
+        case SCROLL_SW_X:
+            _ui = new Image("art/intrface/scrswx.frm");
+            //setXOffset(0);
+            //setYOffset(- height());
+            break;
+        case SCROLL_NE:
+            _ui = new Image("art/intrface/scrneast.frm");
+            //setXOffset(- width());"art/intrface/msef000.frm"
+            //setYOffset(0);
+            break;
+        case SCROLL_NE_X:
+            _ui = new Image("art/intrface/scrnex.frm");
+            //setXOffset(- width());
+            //setYOffset(0);
+            break;
+        case SCROLL_SE:
+            _ui = new Image("art/intrface/scrseast.frm");
+            //setXOffset(- width());
+            //setYOffset(- height());
+            break;
+        case SCROLL_SE_X:
+            _ui = new Image("art/intrface/scrsex.frm");
+            //setXOffset(- width());
+            //setYOffset(- height());
+            break;
+        case HEXAGON_RED:
+            _ui = new Image("art/intrface/msef000.frm");
+            //setXOffset(- width()/2);
+            //setYOffset(- height()/2);
+            //_lastType = _type;
+            break;
+        case ACTION:
+            _ui = new Image("art/intrface/actarrow.frm");
+            //setXOffset(0);
+            //setYOffset(0);
+            //_lastType = _type;
+            break;
+        case WAIT:
+            _ui = new Animation("art/intrface/wait.frm");
+            //_animation->setEnabled(true);
+            //setXOffset(- width()/2);
+            //setYOffset(- height()/2);
+            //_lastType = _type;
+            break;
+        case NONE:
+            //loadFromSurface(new Surface());
+            break;
+    }
+
+    _type = type;
 }
 
 }

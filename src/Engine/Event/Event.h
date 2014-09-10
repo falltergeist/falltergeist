@@ -40,6 +40,7 @@ class Event
 protected:
     std::string _name;
     EventEmitter* _emitter = 0;
+    EventReciever* _reciever = 0;
 public:
     Event(std::string name);
     virtual ~Event();
@@ -48,6 +49,9 @@ public:
 
     EventEmitter* emitter();
     void setEmitter(EventEmitter* value);
+
+    EventReciever* reciever();
+    void setReciever(EventReciever* reciever);
 };
 
 }

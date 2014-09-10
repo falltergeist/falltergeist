@@ -367,6 +367,13 @@ std::vector<UI*>* Game::ui()
     }
     _ui.push_back(_fpsCounter);
     _ui.push_back(_falltergeistVersion);
+
+    // Render mouse
+    if (mouse()->visible() && mouse()->ui())
+    {
+        _ui.push_back(mouse()->ui());
+    }
+
     return &_ui;
 }
 

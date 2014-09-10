@@ -57,11 +57,12 @@ void LocationState::init()
 {
     if (initialized()) return;
     State::init();
-    //setScrollable(true);
+
+    _game->mouse()->setType(Mouse::ACTION);
+
     _location = new Location(_game->resourceManager()->mapFileType("maps/artemple.map"));
     //_location = new Location(_game->resourceManager()->mapFileType("maps/sftanker.map"));
     _game->setLocation(_location);
-    //_game->mouse()->setType(Mouse::ACTION);
     _floor = new Image(_location->tilesFloor());
     _roof = new Image(_location->tilesRoof());
     //_background->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onBackgroundClick);
@@ -72,10 +73,7 @@ void LocationState::init()
 
 void LocationState::onMouseDown(MouseEvent* event)
 {
-    /*
-    auto sender = dynamic_cast<InteractiveSurface*>(event->emitter());
-    if (!sender) return;
-    auto object = dynamic_cast<GameObject*>((GameObject*)sender->owner());
+    auto object = dynamic_cast<GameObject*>(event->reciever());
     if (!object) return;
 
     std::vector<int> icons;
@@ -100,8 +98,7 @@ void LocationState::onMouseDown(MouseEvent* event)
 
     auto state = new CursorDropdownState(icons);
     state->setObject(object);
-    _game->pushState(state);
-    */
+    _game->pushState(state);    
 
 }
 
@@ -116,6 +113,9 @@ void LocationState::onBackgroundClick(MouseEvent* event)
 
 void LocationState::onObjectClick(MouseEvent* event)
 {
+    auto obj = dynamic_cast<GameObject*>(event->reciever());
+    std::cout << obj << std::endl;
+    return;
     auto surface = dynamic_cast<InteractiveSurface*>(event->emitter());
     if (!surface) return;
     auto object = dynamic_cast<GameObject*>((GameObject*)surface->owner());
@@ -127,72 +127,6 @@ void LocationState::onObjectClick(MouseEvent* event)
 
 void LocationState::onKeyUp(KeyboardEvent * event)
 {
-
-    if (event->keyCode() == SDLK_g) // "g" button - enable\disable hex grid
-    {
-        if (_hexagonalGrid)
-        {
-            _hexagonalGrid = false;
-        }
-        else
-        {
-            _hexagonalGrid = true;
-        }
-    }
-
-}
-
-void LocationState::blit()
-{
-
-    /*
-    _location->generateBackground();
-    _background->loadFromSurface(_location->tilesBackground());
-
-    if (_location == 0) return;
-
-    _drawHexagonalGrid();
-
-
-    for (GameObject* object : *_location->object475sToRender())
-    {        
-        int x, y;
-        if (Animation* animation = object->animationQueue()->animation())
-        {
-            x = Location::hexagonToX(object->position()) - animation->surfaces()->at(0)->width()/2 - _location->camera()->x();
-            y = Location::hexagonToY(object->position()) - animation->surfaces()->at(0)->height() - _location->camera()->y();
-            animation->setX(x);
-            animation->setY(y);
-            animation->blit(_game->screen()->surface());
-
-        }
-        else
-        {
-            auto surface = object->surface();
-            x = Location::hexagonToX(object->position()) - surface->width()/2 - _location->camera()->x();
-            y = Location::hexagonToY(object->position()) - surface->height() - _location->camera()->y();
-            surface->setX(x);
-            surface->setY(y);
-            surface->blit(_game->screen()->surface());
-        }
-   }
-   */
-}
-
-void LocationState::_drawHexagonalGrid()
-{
-    if (!_hexagonalGrid) return;
-    Surface * hexagon = ResourceManager::surface("art/intrface/msef000.frm");
-    hexagon->setXOffset(0 - hexagon->width()*0.5);
-    hexagon->setYOffset(0 - hexagon->height()*0.5);
-    for (unsigned int i = 0; i != 200*200; ++i)
-    {
-        int x = _location->hexagonToX(i) - _location->camera()->x();
-        int y = _location->hexagonToY(i) - _location->camera()->y();
-        hexagon->setX(x);
-        hexagon->setY(y);
-        hexagon->blit(_game->screen()->surface());
-    }
 }
 
 void LocationState::think()
@@ -223,9 +157,6 @@ void LocationState::think()
         GameObject* object = *it;
 
         ActiveUI* ui = dynamic_cast<ActiveUI*>(object->ui());
-        if (!ui) continue; //   ?????????????????????
-
-
         ui->setX(Location::hexagonToX(object->position()) -_location->camera()->x());
         ui->setY(Location::hexagonToY(object->position())-_location->camera()->y());
         add(ui);
@@ -243,50 +174,20 @@ void LocationState::think()
 
 
 
-    /*
     for(GameObject* object : *_location->objectsToRender())
     {
-
-        if (Animation* animation = object->animationQueue()->animation())
-        {
-
-            animation->removeEventHandlers("mouseleftdown");
-            animation->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &LocationState::onMouseDown);
-            animation->removeEventHandlers("mouseleftclick");
-            animation->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onObjectClick);
-            animation->setOwner(object);
-        }
-        else
-        {
-            object->surface()->removeEventHandlers("mouseleftdown");
-            object->surface()->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &LocationState::onMouseDown);
-            object->surface()->removeEventHandlers("mouseleftclick");
-            object->surface()->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onObjectClick);
-            object->surface()->setOwner(object);
-        }
+        //object->ui()->removeEventHandlers("mouseleftdown");
+        //object->ui()->addEventHandler("mouseleftdown", object, (EventRecieverMethod) &LocationState::onMouseDown);
+        //object->ui()->removeEventHandlers("mouseleftclick");
+        //object->ui()->addEventHandler("mouseleftclick", object, (EventRecieverMethod) &LocationState::onObjectClick);
+        //object->surface()->setOwner(object);
     }
-    */
 }
 
 void LocationState::handle(Event* event)
 {
     if (MouseEvent* mouseEvent = dynamic_cast<MouseEvent*>(event))
     {
-        /*
-        // Handle objects
-        for (auto object : *_location->objectsToRender())
-        {            
-            if (Animation* animation = object->animationQueue()->animation())
-            {
-                animation->handle(mouseEvent);
-            }
-            else
-            {
-                object->surface()->handle(mouseEvent);
-            }
-        }
-        */
-
         auto game = &Game::getInstance();
         auto scrollArea = 5;
         if (mouseEvent->name() == "mousemove")
@@ -297,11 +198,6 @@ void LocationState::handle(Event* event)
             _scrollBottom = mouseEvent->y() > game->renderer()->height() - scrollArea ? true : false;
         }
     }
-
-
-
-
-
     State::handle(event);
 }
 

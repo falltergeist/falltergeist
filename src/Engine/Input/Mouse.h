@@ -30,6 +30,7 @@
 namespace Falltergeist
 {
 class Texture;
+class ActiveUI;
 
 class Mouse
 {
@@ -37,8 +38,44 @@ protected:
     int _x = 320;
     int _y = 240;
     bool _visible = true;
-    Texture* _texture = 0;
+    unsigned int _type = NONE;
+    ActiveUI* _ui = 0;
 public:
+    enum {
+        NONE = 0,
+        BIG_ARROW,
+        SCROLL_W,
+        SCROLL_W_X,
+        SCROLL_NW,
+        SCROLL_NW_X,
+        SCROLL_N,
+        SCROLL_N_X,
+        SCROLL_NE,
+        SCROLL_NE_X,
+        SCROLL_E,
+        SCROLL_E_X,
+        SCROLL_SE,
+        SCROLL_SE_X,
+        SCROLL_S,
+        SCROLL_S_X,
+        SCROLL_SW,
+        SCROLL_SW_X,
+        HEXAGON_RED,
+        WAIT,
+        ACTION,
+        ACTION_REVERSE
+    };
+    enum {
+        ICON_ROTATE = 1,
+        ICON_SKILL,
+        ICON_INVENTORY,
+        ICON_CANCEL,
+        ICON_LOOK,
+        ICON_TALK,
+        ICON_PUSH,
+        ICON_UNLOAD,
+        ICON_USE
+    };
     Mouse();
     ~Mouse();
 
@@ -53,7 +90,10 @@ public:
     bool visible();
     void setVisible(bool value);
 
-    Texture* texture();
+    unsigned int type();
+    void setType(unsigned int type);
+
+    ActiveUI* ui();
 
 };
 

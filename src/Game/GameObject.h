@@ -26,6 +26,7 @@
 #include <string>
 
 // Falltergeist includes
+#include "../Engine/Event/Event.h"
 
 // Third party includes
 
@@ -37,7 +38,7 @@ class Image;
 class AnimationQueue;
 class ActiveUI;
 
-class GameObject
+class GameObject : public EventReciever
 {
 protected:
     int _type = -1;

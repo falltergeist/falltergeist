@@ -58,7 +58,7 @@ void StartState::init()
     add(splash);
     _splashTicks = SDL_GetTicks();
 
-    //_game->mouse()->setType(Mouse::WAIT);
+    _game->mouse()->setType(Mouse::WAIT);
 }
 
 void StartState::think()
@@ -66,7 +66,7 @@ void StartState::think()
     State::think();
     //_game->setState(new LocationState()); return;
     //_game->setState(new CritterDialogState()); return;
-    if (_splashTicks + 1000 < SDL_GetTicks())
+    if (_splashTicks + 3000 < SDL_GetTicks())
     {
         //_game->setPlayer(new Player(ResourceManager::gcdFileType("premade/combat.gcd")));
         //_game->setState(new SettingsMenuState(_game));
