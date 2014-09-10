@@ -33,33 +33,32 @@ namespace Falltergeist
 {
 class Surface;
 class HiddenMask;
+class GameObject;
 
 class CursorDropdownState : public State
 {
 protected:
-    void* _object = 0;
+    GameObject* _object = 0;
     int _initialType;
     std::vector<int> _icons;
     int _initialX;
     int _initialY;
     int _currentSurface = 0;
-    std::vector<Surface*> _activeSurfaces;
-    std::vector<Surface*> _inactiveSurfaces;
-    Surface* _surface = 0;
+    std::vector<UI*> _activeIcons;
+    std::vector<UI*> _inactiveIcons;
+    UI* _surface = 0;
     HiddenMask* _mask = 0;
-    Surface* _cursor = 0;
+    UI* _cursor = 0;
 public:
     CursorDropdownState(std::vector<int> icons);
     virtual ~CursorDropdownState();
     virtual void init();
-
-    virtual void blit();
     virtual void think();
 
     void onLeftButtonUp(MouseEvent* event);
 
-    void* object();
-    void setObject(void* object);
+    GameObject* object();
+    void setObject(GameObject* object);
 };
 
 }

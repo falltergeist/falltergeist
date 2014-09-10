@@ -98,7 +98,8 @@ void LocationState::onMouseDown(MouseEvent* event)
 
     auto state = new CursorDropdownState(icons);
     state->setObject(object);
-    _game->pushState(state);    
+    auto game = &Game::getInstance();
+    game->pushState(state);
 
 }
 
@@ -176,8 +177,8 @@ void LocationState::think()
 
     for(GameObject* object : *_location->objectsToRender())
     {
-        //object->ui()->removeEventHandlers("mouseleftdown");
-        //object->ui()->addEventHandler("mouseleftdown", object, (EventRecieverMethod) &LocationState::onMouseDown);
+        object->ui()->removeEventHandlers("mouseleftdown");
+        object->ui()->addEventHandler("mouseleftdown", object, (EventRecieverMethod) &LocationState::onMouseDown);
         //object->ui()->removeEventHandlers("mouseleftclick");
         //object->ui()->addEventHandler("mouseleftclick", object, (EventRecieverMethod) &LocationState::onObjectClick);
         //object->surface()->setOwner(object);

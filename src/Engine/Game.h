@@ -50,8 +50,8 @@ class Game
 protected:
     std::vector<int> _GVARS;
     ResourceManager* _resourceManager = 0;
-    std::vector<State*> _states;
-    std::vector<State*> _deletedStates;
+    std::vector<State*>* _states = 0;
+    std::vector<State*>* _deletedStates = 0;
     GameDudeObject* _player = 0;
     Renderer* _renderer = 0;
     Screen* _screen = 0;

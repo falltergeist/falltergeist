@@ -383,14 +383,14 @@ GameObject* Location::createObject(int PID)
 
 void Location::handleAction(GameObject* object, int action)
 {
-    /*
+
     switch (action)
     {
 
         case Mouse::ICON_ROTATE:
         {
             auto dude = dynamic_cast<GameDudeObject*>(object);
-            if (!dude) break; //throw Exception("LocationState::handleAction() - only Dude can be rotated");
+            if (!dude) throw Exception("LocationState::handleAction() - only Dude can be rotated");
 
             int orientation = dude->orientation() + 1;
             if (orientation > 5) orientation = 0;
@@ -406,7 +406,7 @@ void Location::handleAction(GameObject* object, int action)
             }
         }
 
-    }*/
+    }
 }
 
 void Location::think()

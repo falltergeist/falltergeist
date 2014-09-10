@@ -88,8 +88,11 @@ void Mouse::setVisible(bool value)
 
 ActiveUI* Mouse::ui()
 {
-    _ui->setX(_x);
-    _ui->setY(_y);
+    if (_ui)
+    {
+        _ui->setX(_x);
+        _ui->setY(_y);
+    }
     return _ui;
 }
 

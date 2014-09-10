@@ -28,6 +28,9 @@
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/Surface.h"
 #include "../UI/HiddenMask.h"
+#include "../Engine/Graphics/Texture.h"
+#include "../Game/GameCritterObject.h"
+#include "../Game/GameDudeObject.h"
 
 // Third party includes
 
@@ -51,7 +54,8 @@ void CursorDropdownState::init()
     if (_initialized) return;
     State::init();
     setFullscreen(false);
-/*
+
+
     int i = 0;
     for (auto icon : _icons)
     {
@@ -99,20 +103,24 @@ void CursorDropdownState::init()
                 throw Exception("CursorDropdownState::init() - unknown icon type");
 
         }
-        _activeSurfaces.push_back(new Surface(ResourceManager::surface("art/intrface/" + activeSurface, 0, 40*i)));
-        _inactiveSurfaces.push_back(new Surface(ResourceManager::surface("art/intrface/" + inactiveSurface, 0, 40*i)));
+        _activeIcons.push_back(new Image("art/intrface/" + activeSurface));
+        _activeIcons.back()->setY(40*i);
+        _inactiveIcons.push_back(new Image("art/intrface/" + inactiveSurface));
+        _inactiveIcons.back()->setY(40*i);
         i++;
     }
-game->mouse()
+
     _game->mouse()->setType(Mouse::NONE);
 
-    _cursor = new Surface(ResourceManager::surface("art/intrface/actarrow.frm"));
+    _cursor = new Image("art/intrface/actarrow.frm");
     _cursor->setXOffset(0);
     _cursor->setYOffset(0);
     _cursor->setX(_initialX);
     _cursor->setY(_initialY);
 
-    _surface = new Surface(40, 40*_icons.size(), _initialX + 29, _initialY);
+    _surface = new Image(40, 40*_icons.size());
+    _surface->setX(_initialX + 29);
+    _surface->setY(_initialY);
 
     int deltaY = _surface->y() + _surface->height() - 480;
     int deltaX = _surface->x() + _surface->width() - 640;
@@ -127,13 +135,12 @@ game->mouse()
     {
         _surface->setX(_surface->x() - 40 - 29 - 29);
         delete _cursor;
-        _cursor = new Surface(ResourceManager::surface("art/intrface/actarrom.frm"));
+        _cursor = new Image("art/intrface/actarrom.frm");
         _cursor->setXOffset(-29);
         _cursor->setYOffset(0);
         _cursor->setX(_initialX);
         _cursor->setY(_initialY);
     }
-
 
     _mask = new HiddenMask(640, 480);
     _mask->addEventHandler("mouseleftup", this, (EventRecieverMethod) &CursorDropdownState::onLeftButtonUp);
@@ -141,19 +148,10 @@ game->mouse()
     add(_cursor);
     add(_surface);
     add(_mask);
-*/
+
 }
 
-void CursorDropdownState::blit()
-{
-    for (auto surface : _inactiveSurfaces)
-    {
-        surface->copyTo(_surface);
-    }
-    _activeSurfaces.at(_currentSurface)->copyTo(_surface);
-}
-
-void CursorDropdownState::setObject(void* object)
+void CursorDropdownState::setObject(GameObject* object)
 {
     _object = object;
 }
@@ -161,31 +159,38 @@ void CursorDropdownState::setObject(void* object)
 void CursorDropdownState::think()
 {
     State::think();
-    /*
-    int currentSurface = (_game->mouse()->cursorY() - _surface->y())/40;
-    if (currentSurface < 0)
+
+
+    for (UI* ui : _inactiveIcons)
+    {
+        ui->texture()->copyTo(_surface->texture(), ui->x(), ui->y());
+    }
+
+    _currentSurface= (_game->mouse()->y() - _surface->y())/40;
+    if (_currentSurface < 0)
     {
         SDL_WarpMouse(_initialX, _surface->y());
-        currentSurface = 0;
+        _currentSurface = 0;
     }
-    if (currentSurface >= _icons.size())
+    if (_currentSurface >= _icons.size())
     {
         SDL_WarpMouse(_initialX, _surface->y() + _surface->height());
-        currentSurface = _icons.size() - 1;
+        _currentSurface = _icons.size() - 1;
     }
-    _currentSurface = currentSurface;
-    */
+    auto activeIcon = _activeIcons.at(_currentSurface);
+
+    activeIcon->texture()->copyTo(_surface->texture(), activeIcon->x(), activeIcon->y());
+
 }
 
 void CursorDropdownState::onLeftButtonUp(MouseEvent* event)
 {
-
-    SDL_WarpMouse(_initialX, _initialY);
-    _game->mouse()->setType(_initialType);
-    _game->popState();
-    _game->location()->handleAction((GameObject*)_object, _icons.at(_currentSurface));
-
-
+    CursorDropdownState* state = dynamic_cast<CursorDropdownState*>(event->reciever());
+    SDL_WarpMouse(state->_initialX, state->_initialY);
+    auto game = &Game::getInstance();
+    game->mouse()->setType(state->_initialType);
+    game->popState();
+    game->location()->handleAction(state->_object, state->_icons.at(state->_currentSurface));
 }
 
 

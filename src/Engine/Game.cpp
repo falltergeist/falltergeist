@@ -58,6 +58,9 @@ void Game::_initialize()
     if (_initialized) return;
     _initialized = true;
 
+    _states = new std::vector<State*>;
+    _deletedStates = new std::vector<State*>;
+
     debug("[GAME] - " + CrossPlatform::getVersion(), DEBUG_INFO);
     debug("[GAME] - Opensource Fallout 2 game engine", DEBUG_INFO);
 
@@ -89,6 +92,8 @@ Game::~Game()
     delete _player;
     delete _screen;
     delete _mouse;
+    delete _states; // ? delete elements
+    delete _deletedStates; // ? delete elements
 }
 
 /**
@@ -98,7 +103,7 @@ Game::~Game()
 void Game::pushState(State* state)
 {
     if (!state->initialized()) state->init();
-    _states.push_back(state);
+    _states->push_back(state);
 }
 
 /**
@@ -106,8 +111,8 @@ void Game::pushState(State* state)
  */
 void Game::popState()
 {
-    _deletedStates.push_back(_states.back());
-    _states.pop_back();
+    _deletedStates->push_back(_states->back());
+    _states->pop_back();
 }
 
 /**
@@ -116,7 +121,7 @@ void Game::popState()
  */
 void Game::setState(State * state)
 {
-    while (_states.size() > 0)
+    while (_states->size() > 0)
     {
         popState();
     }
@@ -130,10 +135,10 @@ void Game::run()
     while (!_quit)
     {
         // Clean up states
-        while (!_deletedStates.empty())
+        while (!_deletedStates->empty())
         {
-            delete _deletedStates.back();
-            _deletedStates.pop_back();
+            delete _deletedStates->back();
+            _deletedStates->pop_back();
         }
 
         while(SDL_PollEvent(&_event))
@@ -153,7 +158,7 @@ void Game::run()
                         event->setY(_event.button.y);
                         event->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
                         event->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
-                        _states.back()->handle(event);
+                        _states->back()->handle(event);
                         delete event;
                         break;
                     }
@@ -164,7 +169,7 @@ void Game::run()
                         event->setY(_event.button.y);
                         event->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
                         event->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
-                        _states.back()->handle(event);
+                        _states->back()->handle(event);
                         delete event;
                         break;
                     }
@@ -175,7 +180,7 @@ void Game::run()
                         event->setY(_event.motion.y);
                         event->setXOffset(_event.motion.xrel);
                         event->setYOffset(_event.motion.yrel);
-                        _states.back()->handle(event);
+                        _states->back()->handle(event);
                         delete event;
                         break;
                     }
@@ -184,7 +189,7 @@ void Game::run()
                         auto event = new KeyboardEvent("keydown");
                         event->setKeyCode(_event.key.keysym.sym);
                         event->setShiftPressed(_event.key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
-                        _states.back()->handle(event);
+                        _states->back()->handle(event);
                         delete event;
                         break;
                     }
@@ -193,7 +198,7 @@ void Game::run()
                         auto event = new KeyboardEvent("keyup");
                         event->setKeyCode(_event.key.keysym.sym);
                         event->setShiftPressed(_event.key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
-                        _states.back()->handle(event);
+                        _states->back()->handle(event);
 
                         /*
                         if (event->keyCode() == SDLK_F12)
@@ -212,19 +217,19 @@ void Game::run()
         }
 
         // thinking
-        _states.back()->think();
+        _states->back()->think();
         _fpsCounter->think();
         _mouse->think();
         //Surface::animatedPalette->think();
 
-        auto it = _states.end();
+        auto it = _states->end();
         do
         {
             --it;
         }
-        while(it != _states.begin() && !(*it)->fullscreen());
+        while(it != _states->begin() && !(*it)->fullscreen());
 
-        for (; it != _states.end(); ++it)
+        for (; it != _states->end(); ++it)
         {
             State* state = *it;
             state->think();
@@ -331,7 +336,7 @@ void Game::_initGVARS()
 
 std::vector<State*>* Game::states()
 {
-    return &_states;
+    return _states;
 }
 
 CritterDialogState* Game::dialog()
@@ -348,14 +353,14 @@ std::vector<UI*>* Game::ui()
 {
     _ui.clear();
 
-    auto it = _states.end();
+    auto it = _states->end();
     do
     {
         --it;
     }
-    while(it != _states.begin() && !(*it)->fullscreen());
+    while(it != _states->begin() && !(*it)->fullscreen());
 
-    for (; it != _states.end(); ++it)
+    for (; it != _states->end(); ++it)
     {
         for (auto j = (*it)->ui()->begin(); j != (*it)->ui()->end(); ++j)
         {
