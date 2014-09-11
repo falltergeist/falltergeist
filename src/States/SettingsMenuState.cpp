@@ -51,11 +51,11 @@ void SettingsMenuState::init()
     State::init();
 
     unsigned int color = 0x907824ff;
-    
+
     auto background = new Image("art/intrface/prefscrn.frm");
 
     auto switch1 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 71);
-    switch1->setMaxState(3);    
+    switch1->setMaxState(3);
     auto switch2 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 149);
     switch2->setMaxState(3);
     auto switch3 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 227);
@@ -73,77 +73,100 @@ void SettingsMenuState::init()
 
     // LABELS
     auto msg = ResourceManager::msgFileType("text/english/game/options.msg");
-    
+
     auto font1_907824ff = _game->resourceManager()->font("font1.aaf", 0x907824ff);
     auto font3_907824ff = _game->resourceManager()->font("font3.aaf", 0x907824ff);
     auto font4_907824ff = _game->resourceManager()->font("font4.aaf", 0x907824ff);
 
+    // label: GAME PREFERENCES
     auto title1 = new TextArea(msg->message(100), 74, 10);
     title1->setFont(font4_907824ff);
-    
+
+    // label: Combat difficulty
     auto title2 = new TextArea(msg->message(102), 21, 48);
     title2->setWidth(158)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setFont(font1_907824ff);
 
+    // label: Game difficulty
     auto title3 = new TextArea(title2, 21, 48 + 77);
-    title2->setText(msg->message(101));
+    title3->setText(msg->message(101));
 
+    // label: Violence level
     auto title4 = new TextArea(title2, 21, 48 + 156);
     title4->setText(msg->message(103));
-    
+
+    // label: Target highlight
     auto title5 = new TextArea(title2, 21, 128+ 158);
     title5->setText(msg->message(104));
-    
+
+    // label: Combat looks
     auto title6 = new TextArea(title2, 21, 128 + 235);
     title6->setText(msg->message(105));
-    
+
+    // label: Combat messages
     auto title7 = new TextArea(msg->message(106), 206, 49);
     title7->setFont(font1_907824ff);
-    
+
+    // label: Combat taunts
     auto title8 = new TextArea(title7, 206, 49 + 66);
     title8->setText(msg->message(107));
-    
+
+    // label: Language filter
     auto title9 = new TextArea(title7, 206, 49 + 66*2);
     title9->setText(msg->message(108));
-    
+
+    // label: Running
     auto title10 = new TextArea(title7, 206, 49 + 66*3);
     title10->setText(msg->message(109));
-    
+
+    // label: Subtitles
     auto title11 = new TextArea(title7, 206, 49 + 66*4);
     title11->setText(msg->message(110));
-    
+
+    // label: Item highlight
     auto title12 = new TextArea(title7, 206, 49 + 66*5);
     title12->setText(msg->message(111));
-    
+
+    // label: Combat speed
     auto title13 = new TextArea(msg->message(112), 384, 19);
     title13->setFont(font1_907824ff);
 
-    auto title14 = new TextArea(title13, 384, 94);
+    // label: Text delay
+    auto title14 = new TextArea(title13, 384, 94); //384
     title14->setText(msg->message(113));
-    
+
+    // label: Master audio volume
     auto title15 = new TextArea(title13, 384, 165);
     title15->setText(msg->message(114));
-    
+
+    // label: Music/Movie volume
     auto title16 = new TextArea(title13, 384, 165 + 51);
     title16->setText(msg->message(115));
-    
+
+    // label: Sound effects volume
     auto title17 = new TextArea(title13, 384, 165 + 51*2);
     title17->setText(msg->message(116));
-    
+
+    // label: Speech volume
     auto title18 = new TextArea(title13, 384, 165 + 51*3);
     title18->setText(msg->message(117));
-    
+
+    // label: Brightness level
     auto title19 = new TextArea(title13, 384, 165 + 51*4);
     title19->setText(msg->message(118));
-    
+
+    // label: Mouse sensivity
     auto title20 = new TextArea(title13, 384, 165 + 51*5);
     title20->setText(msg->message(119));
 
+    // label: Default
     auto title21 = new TextArea(title13, 43, 449);
     title21->setText(msg->message(120))->setFont(font3_907824ff);
 
+    // label: Done
     auto title22 = new TextArea(title13, 169, 449);
     title22->setText(msg->message(300))->setFont(font3_907824ff);
 
+    // label: Cancel
     auto title23 = new TextArea(title13, 283, 449);
     title23->setText(msg->message(121))->setFont(font3_907824ff);
 
@@ -232,15 +255,19 @@ void SettingsMenuState::init()
 
     // BUTTONS
 
+    // button: Default
     auto button1 = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 23, 450);
     button1->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SettingsMenuState::onDefaultButtonClick);
 
+    // button: Done
     auto button2 = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 148, 450);
     button2->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SettingsMenuState::onSaveButtonClick);
 
+    // button: Cancel
     auto button3 = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 263, 450);
     button3->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SettingsMenuState::onCancelButtonClick);
 
+    // button: Affect player speed
     auto button4 = new ImageButton(ImageButton::TYPE_CHECKBOX, 383, 68);
 
 
@@ -254,7 +281,6 @@ void SettingsMenuState::init()
     auto slider6 = new Slider(384, 196 + 51*3);
     auto slider7 = new Slider(384, 196 + 51*4);
     auto slider8 = new Slider(384, 196 + 51*5);
-
 
 
     add(background);
@@ -282,16 +308,16 @@ void SettingsMenuState::init()
 }
 
 void SettingsMenuState::think()
-{    
+{
     State::think();
 }
 
 IniFileSection SettingsMenuState::_getSettings()
 {
     // @todo Load options from FALLTERGEIST_DATA/config.ini if exists
-    
+
     // or return default values
-    return _getDefaultSettings();    
+    return _getDefaultSettings();
 }
 
 IniFileSection SettingsMenuState::_getDefaultSettings()
