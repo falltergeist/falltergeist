@@ -223,7 +223,6 @@ TextArea* TextArea::setHeight(unsigned int height)
 
 unsigned int TextArea::height()
 {
-    if (_height == 0) return _calculateHeight();
     return _height;
 }
 
@@ -231,13 +230,11 @@ Texture* TextArea::texture()
 {
     if (_texture) return _texture;
 
-    _texture = new Texture(width(), height());
-    _texture->fill(_backgroundColor);
-
     unsigned int x = 0;
     unsigned int y = 0;
     unsigned int str_width_max = 0;
     unsigned int width_final = 0;
+    unsigned int texture_height = 0;
     unsigned int wrd_width = 0;
     unsigned int horizontal_word_gap;
     unsigned int horizontal_error;
@@ -342,6 +339,23 @@ Texture* TextArea::texture()
     // calculating text final width
     width_final = width() ? width() : str_width_max;
 
+    // calculating vertical size if needed
+    if (height() != 0)
+        texture_height = height();
+    else
+    {
+        unsigned int number_of_strings = 0;
+        auto it = _strings_tmp.begin();
+        Font* font = (*it)->font();
+        for (it = _strings_tmp.begin(); it != _strings_tmp.end(); ++it)
+            number_of_strings++;
+        texture_height = number_of_strings * (font->height() + font->verticalGap());
+    }
+
+    // creating texture with correct size
+    _texture = new Texture(width(), texture_height);
+    _texture->fill(_backgroundColor);
+
     x = 0;
     y = 0;
     // Building texture from _strings_tmp
@@ -353,13 +367,16 @@ Texture* TextArea::texture()
         libfalltergeist::AafGlyph* glyph = font->aaf()->glyphs()->at(' ');
         space_width = glyph->width() + font->horizontalGap();
 
-        // calculating width of current string
-        str_width = 0;
-        for (auto itt = text.begin(); itt != text.end(); ++itt)
+        // calculating width of current string if needed
+        if (_horizontalAlign != HORIZONTAL_ALIGN_LEFT)
         {
-            auto chr = *itt;
-            libfalltergeist::AafGlyph* glyph = font->aaf()->glyphs()->at(chr);
-            str_width += glyph->width() + font->horizontalGap();
+            str_width = 0;
+            for (auto itt = text.begin(); itt != text.end(); ++itt)
+            {
+                auto chr = *itt;
+                libfalltergeist::AafGlyph* glyph = font->aaf()->glyphs()->at(chr);
+                str_width += glyph->width() + font->horizontalGap();
+            }
         }
 
         // calculating horizontal word gaps if needed
@@ -372,7 +389,7 @@ Texture* TextArea::texture()
                 auto chr = *itt;
                 if (chr == ' ')
                     spaces_number++;
-            }                                   
+            }
             if (spaces_number > 0)
             {
                 unsigned int words_width;
@@ -396,10 +413,11 @@ Texture* TextArea::texture()
 
             unsigned int xOffset = (unsigned char)(chr%16) * font->width();
             unsigned int yOffset = (unsigned char)(chr/16) * font->height();
+
             font->texture()->blitTo(_texture, x, y, xOffset, yOffset, font->width(), font->height());
             if ((chr == ' ') && (_horizontalAlign == HORIZONTAL_ALIGN_JUSTIFY))
             {
-                x += horizontal_word_gap; 
+                x += horizontal_word_gap;
                 if (horizontal_error != 0)
                 {
                     horizontal_error--;
@@ -425,48 +443,6 @@ Texture* TextArea::texture()
 std::string TextArea::text()
 {
     return _strings.back()->text();
-}
-
-unsigned int TextArea::_calculateHeight()
-{
-    unsigned int totalHeight = 0;
-    unsigned int height = 0;
-    unsigned int maxHeight = 0;
-
-    for (auto it = _strings.begin(); it != _strings.end(); ++it)
-    {
-        Font* font = (*it)->font();
-        std::string text = (*it)->text();
-
-        for (auto itt = text.begin(); itt != text.end(); ++itt)
-        {
-            unsigned char chr = *itt;
-
-            if (chr == '\n')
-            {
-                totalHeight += maxHeight;
-                maxHeight = 0;
-                height = 0;
-            }
-            else
-            {
-                height = font->aaf()->glyphs()->at(chr)->height() + font->aaf()->verticalGap();
-                if (height > maxHeight)
-                {
-                    maxHeight = height;
-                }
-            }
-        }
-    }
-
-    totalHeight += maxHeight;
-
-    if (totalHeight > 0)
-    {
-        totalHeight -= _strings.back()->font()->aaf()->verticalGap();
-    }
-
-    return totalHeight;
 }
 
 unsigned int TextArea::_calculateWidth()

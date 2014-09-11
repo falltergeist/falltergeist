@@ -46,7 +46,6 @@ protected:
     unsigned int _height = 0;
     unsigned int _backgroundColor = 0;
     bool _wordWrap = false;
-    unsigned int _calculateHeight();
     unsigned int _calculateWidth();
 public:
     enum { HORIZONTAL_ALIGN_LEFT = 0, HORIZONTAL_ALIGN_CENTER, HORIZONTAL_ALIGN_RIGHT, HORIZONTAL_ALIGN_JUSTIFY };
@@ -82,7 +81,7 @@ public:
     bool wordWrap();
 
     TextArea* setFont(Font* font);
-    Font* font();    
+    Font* font();
 
     virtual Texture* texture();
 
