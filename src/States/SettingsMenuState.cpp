@@ -76,6 +76,9 @@ void SettingsMenuState::init()
     auto font3_907824ff = ResourceManager::font("font3.aaf", 0x907824ff);
     auto font4_907824ff = ResourceManager::font("font4.aaf", 0x907824ff);
 
+    add(background);
+
+
     //GAME PREFERENCES
     _addTextArea(msg->message(100), 74, 10)->setFont(font4_907824ff);
     
@@ -264,7 +267,6 @@ void SettingsMenuState::init()
     auto slider8 = std::shared_ptr<Slider>(new Slider(384, 196 + 51*5));
 
 
-    add(background);
 
     add({ title5, title6,
           title7, title8, title9, title10, title11, title12, title13,
