@@ -237,17 +237,20 @@ void SettingsMenuState::init()
 
     // BUTTONS
 
+    // button: Default
     auto button1 = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 23, 450));
     button1->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SettingsMenuState::onDefaultButtonClick);
 
+    // button: Done
     auto button2 = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 148, 450));
     button2->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SettingsMenuState::onSaveButtonClick);
 
+    // button: Cancel
     auto button3 = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 263, 450));
     button3->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SettingsMenuState::onCancelButtonClick);
 
+    // button: Affect player speed
     auto button4 = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_CHECKBOX, 383, 68));
-
 
     // SLIDERS
     auto slider1 = std::shared_ptr<Slider>(new Slider(384, 50));
@@ -259,7 +262,6 @@ void SettingsMenuState::init()
     auto slider6 = std::shared_ptr<Slider>(new Slider(384, 196 + 51*3));
     auto slider7 = std::shared_ptr<Slider>(new Slider(384, 196 + 51*4));
     auto slider8 = std::shared_ptr<Slider>(new Slider(384, 196 + 51*5));
-
 
 
     add(background);
@@ -287,16 +289,16 @@ void SettingsMenuState::init()
 }
 
 void SettingsMenuState::think()
-{    
+{
     State::think();
 }
 
 IniFileSection SettingsMenuState::_getSettings()
 {
     // @todo Load options from FALLTERGEIST_DATA/config.ini if exists
-    
+
     // or return default values
-    return _getDefaultSettings();    
+    return _getDefaultSettings();
 }
 
 IniFileSection SettingsMenuState::_getDefaultSettings()
