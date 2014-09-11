@@ -79,16 +79,6 @@ void CritterDialogState::init()
 
 void CritterDialogState::think()
 {
-
-
-    int offset = 0;
-    for (auto answer : _answers)
-    {
-        answer->setY(345 + offset);
-        offset += answer->height() + 5;
-    }
-
-
 }
 
 void CritterDialogState::onAnswerClick(std::shared_ptr<Event> event)
@@ -186,7 +176,13 @@ void CritterDialogState::addAnswer(std::string text)
     line += " ";
     line += text;
 
-    auto answer = std::shared_ptr<TextArea>(new TextArea(line, 140, 0));
+    int y = 345;
+    for (auto answer : _answers)
+    {
+        y += answer->height() + 15;
+    }
+
+    auto answer = std::shared_ptr<TextArea>(new TextArea(line, 140, y));
     answer->setBackgroundColor(0x00000001);
     answer->setWordWrap(true);
     answer->setWidth(370);
@@ -196,6 +192,8 @@ void CritterDialogState::addAnswer(std::string text)
     answer->addEventHandler("mouseleftclick", this, (EventRecieverMethod)&CritterDialogState::onAnswerClick);
     _answers.push_back(answer);
     add(answer);
+
+
 }
 
 void CritterDialogState::handle(std::shared_ptr<Event> event)
