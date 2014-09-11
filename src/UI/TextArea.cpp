@@ -34,7 +34,7 @@
 namespace Falltergeist
 {
 
-TextArea::TextArea(libfalltergeist::MsgMessage* message, int x, int y) : ActiveUI(x, y)
+TextArea::TextArea(std::shared_ptr<libfalltergeist::MsgMessage> message, int x, int y) : ActiveUI(x, y)
 {
     init();
     setText(message->text());
@@ -117,7 +117,7 @@ TextArea * TextArea::setVerticalAlign(unsigned char align)
     return this;
 }
 
-TextArea* TextArea::setText(libfalltergeist::MsgMessage* message)
+TextArea* TextArea::setText(std::shared_ptr<libfalltergeist::MsgMessage> message)
 {
     return setText(message->text());
 }

@@ -165,6 +165,11 @@ void Game::run()
                         event->setShiftPressed(_event.key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
                         for (auto state : activeStates()) state->handle(event);
 
+                        if (event->keyCode() == SDLK_F10)
+                        {
+                            _quit = true;
+                        }
+
                         /*
                         if (event->keyCode() == SDLK_F12)
                         {

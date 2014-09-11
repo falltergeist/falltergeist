@@ -77,27 +77,24 @@ void SettingsMenuState::init()
     auto font4_907824ff = ResourceManager::font("font4.aaf", 0x907824ff);
 
     //GAME PREFERENCES
-    auto title1 = std::shared_ptr<TextArea>(new TextArea(msg->message(100), 74, 10));
-    title1->setFont(font4_907824ff);
+    _addTextArea(msg->message(100), 74, 10)->setFont(font4_907824ff);
     
     //COMBAT DIFFICULTY
-    auto title2 = std::shared_ptr<TextArea>(new TextArea(msg->message(102), 21, 48));
-    title2->setWidth(158)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setFont(font1_907824ff);
+    auto difficulty = _addTextArea(msg->message(102), 21, 48);
+    difficulty->setWidth(158)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setFont(font1_907824ff);
 
     //GAME DIFFICULTY
-    auto title3 = std::shared_ptr<TextArea>(new TextArea(title2, 21, 48 + 77));
-    title2->setText(msg->message(101));
+    _addTextArea(difficulty, 21, 48 + 77)->setText(msg->message(101));
 
     //VIOLENCE LEVEL
-    auto title4 = std::shared_ptr<TextArea>(new TextArea(title2, 21, 48 + 156));
-    title4->setText(msg->message(103));
+    _addTextArea(difficulty, 21, 48 + 156)->setText(msg->message(103));
     
     //TARGET HIGHLIGHT
-    auto title5 = std::shared_ptr<TextArea>(new TextArea(title2, 21, 128+ 158));
+    auto title5 = std::shared_ptr<TextArea>(new TextArea(difficulty, 21, 128+ 158));
     title5->setText(msg->message(104));
     
     //COMBAT LOOKS
-    auto title6 = std::shared_ptr<TextArea>(new TextArea(title2, 21, 128 + 235));
+    auto title6 = std::shared_ptr<TextArea>(new TextArea(difficulty, 21, 128 + 235));
     title6->setText(msg->message(105));
     
     //COMBAT MESSAGES
@@ -267,7 +264,7 @@ void SettingsMenuState::init()
 
     add(background);
 
-    add({ title1, title2, title3, title4, title5, title6,
+    add({ title5, title6,
           title7, title8, title9, title10, title11, title12, title13,
           title14, title15, title16, title17, title18, title19, title20,
           title21, title22, title23,
@@ -329,6 +326,20 @@ std::shared_ptr<TextArea> SettingsMenuState::_addLabel(std::string name, std::sh
 {
     _labels.insert(std::make_pair(name, label));
     return label;
+}
+
+std::shared_ptr<TextArea> SettingsMenuState::_addTextArea(std::shared_ptr<libfalltergeist::MsgMessage> message, unsigned int x, unsigned int y)
+{
+    auto textArea = std::shared_ptr<TextArea>(new TextArea(message, x, y));
+    add(textArea);
+    return textArea;
+}
+
+std::shared_ptr<TextArea> SettingsMenuState::_addTextArea(std::shared_ptr<TextArea> parent, unsigned int x, unsigned int y)
+{
+    auto textArea = std::shared_ptr<TextArea>(new TextArea(parent, x, y));
+    add(textArea);
+    return textArea;
 }
 
 void SettingsMenuState::onCancelButtonClick(std::shared_ptr<MouseEvent> event)

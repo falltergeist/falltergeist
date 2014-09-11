@@ -29,6 +29,7 @@
 #include "../Engine/IniFile.h"
 
 // Third party includes
+#include "../../lib/libfalltergeist/libfalltergeist.h"
 
 namespace Falltergeist
 {
@@ -42,6 +43,8 @@ protected:
     IniFileSection _getDefaultSettings();
     IniFileSection _getSettings();
     std::shared_ptr<TextArea> _addLabel(std::string name, std::shared_ptr<TextArea> label);
+    std::shared_ptr<TextArea> _addTextArea(std::shared_ptr<libfalltergeist::MsgMessage> message, unsigned int x, unsigned int y);
+    std::shared_ptr<TextArea> _addTextArea(std::shared_ptr<TextArea> parent, unsigned int x, unsigned int y);
 public:
     SettingsMenuState();
     virtual ~SettingsMenuState();
