@@ -106,7 +106,7 @@ void SDLRenderer::drawTexture(unsigned int x, unsigned int y, Texture* texture)
 
     if (!texture->id()) registerTexture(texture);
 
-    SDL_Rect dest = {x, y, texture->width(), texture->height()};
+    SDL_Rect dest = {(short)x, (short)y, (unsigned short)texture->width(), (unsigned short)texture->height()};
     SDL_BlitSurface(_surfaces.at(texture->id() - 1), NULL, SDL_GetVideoSurface(), &dest);
 }
 
