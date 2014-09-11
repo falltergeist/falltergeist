@@ -65,7 +65,7 @@ CrossPlatform::~CrossPlatform()
 
 void CrossPlatform::debug(std::string message, unsigned char level)
 {
-    //std::cout << message << std::endl;
+    std::cout << message << std::endl;
 }
 
 std::string CrossPlatform::getVersion()
