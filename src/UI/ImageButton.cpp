@@ -67,6 +67,7 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
             _textures.push_back(ResourceManager::texture("art/intrface/prfxout.frm"));
             _textures.push_back(ResourceManager::texture("art/intrface/prfxin.frm"));
             _checkboxMode = true;
+            break;
         case TYPE_PLAYER_NAME:
             _textures.push_back(ResourceManager::texture("art/intrface/nameoff.frm"));
             _textures.push_back(ResourceManager::texture("art/intrface/nameon.frm"));
@@ -81,7 +82,7 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
             break;
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
-    }    
+    }
     addEventHandler("mouseleftclick", this, (EventRecieverMethod) &ImageButton::_onLeftButtonClick);
 }
 
@@ -100,9 +101,10 @@ Texture* ImageButton::texture()
 
 void ImageButton::_onLeftButtonClick(MouseEvent* event)
 {
-    if (_checkboxMode)
+    auto sender = dynamic_cast<ImageButton*>(event->emitter());
+    if (sender->_checkboxMode)
     {
-        _checked = _checked ? false : true;
+        sender->_checked = sender->_checked ? false : true;
     }
 }
 
