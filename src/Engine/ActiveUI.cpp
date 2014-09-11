@@ -41,7 +41,7 @@ void ActiveUI::handle(std::shared_ptr<Event> event)
         int x = mouseEvent->x() - this->x();
         int y = mouseEvent->y() - this->y();
 
-        std::shared_ptr<MouseEvent>event = std::shared_ptr<MouseEvent>(new MouseEvent(mouseEvent));
+        std::shared_ptr<MouseEvent> event = std::shared_ptr<MouseEvent>(new MouseEvent(mouseEvent));
         //auto emitter = std::shared_ptr<ActiveUI>(this);
         //event->setEmitter(emitter);
 

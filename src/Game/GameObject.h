@@ -51,8 +51,9 @@ protected:
     std::string _name;
     std::string _description;
     std::vector<VM*> _scripts;
-    std::shared_ptr<Location> _location;
-    std::shared_ptr<ActiveUI> _ui;
+    Location* _location = 0;
+    std::shared_ptr<ActiveUI> _ui = nullptr;
+    void _generateUi();
 public:
     enum { TYPE_ITEM = 0, TYPE_CRITTER, TYPE_SCENERY, TYPE_WALL, TYPE_TILE, TYPE_MISC, TYPE_DUDE };
     enum { TYPE_ITEM_ARMOR = 0, TYPE_ITEM_CONTAINER, TYPE_ITEM_DRUG, TYPE_ITEM_WEAPON, TYPE_ITEM_AMMO, TYPE_ITEM_MISC, TYPE_ITEM_KEY };
@@ -87,8 +88,8 @@ public:
 
     std::vector<VM*>* scripts();
 
-    std::shared_ptr<Location> location();
-    void setLocation(std::shared_ptr<Location> value);
+    Location* location();
+    void setLocation(Location* value);
 
     std::shared_ptr<ActiveUI> ui();
     void setUI(std::shared_ptr<ActiveUI> ui);

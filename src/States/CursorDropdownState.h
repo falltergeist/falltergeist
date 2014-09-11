@@ -39,7 +39,7 @@ class GameObject;
 class CursorDropdownState : public State
 {
 protected:
-    std::shared_ptr<GameObject> _object;
+    GameObject* _object;
     int _initialType;
     std::vector<int> _icons;
     int _initialX;
@@ -58,8 +58,8 @@ public:
 
     void onLeftButtonUp(std::shared_ptr<MouseEvent> event);
 
-    std::shared_ptr<GameObject> object();
-    void setObject(std::shared_ptr<GameObject> object);
+    GameObject* object();
+    void setObject(GameObject* object);
 };
 
 }

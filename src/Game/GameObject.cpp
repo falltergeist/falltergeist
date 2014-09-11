@@ -68,7 +68,9 @@ int GameObject::FID()
 
 void GameObject::setFID(int value)
 {
+    if (_FID == value) return;
     _FID = value;
+    _generateUi();
 }
 
 int GameObject::position()
@@ -110,6 +112,7 @@ void GameObject::setOrientation(int value)
     if (_orientation == value) return;
 
     _orientation = value;
+    _generateUi();
 }
 
 std::string GameObject::name()
@@ -137,20 +140,28 @@ std::vector<VM*>* GameObject::scripts()
     return &_scripts;
 }
 
-std::shared_ptr<Location> GameObject::location()
+Location* GameObject::location()
 {
     return _location;
 }
 
-void GameObject::setLocation(std::shared_ptr<Location> value)
+void GameObject::setLocation(Location* value)
 {
     _location = value;
 }
 
 std::shared_ptr<ActiveUI> GameObject::ui()
 {
-    if (_ui) return _ui;
+    return _ui;
+}
 
+void GameObject::setUI(std::shared_ptr<ActiveUI> ui)
+{
+    _ui = ui;
+}
+
+void GameObject::_generateUi()
+{
     auto frm = ResourceManager::frmFileType(FID());
     if (frm)
     {
@@ -163,8 +174,6 @@ std::shared_ptr<ActiveUI> GameObject::ui()
             _ui = std::shared_ptr<Image>(new Image(frm, orientation()));
         }
     }
-
-    return _ui;
 }
 
 }

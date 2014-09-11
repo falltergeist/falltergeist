@@ -657,7 +657,7 @@ void VM::run()
                 auto position = popDataInteger();
                 auto game = Game::getInstance();
                 std::shared_ptr<GameObject> found;
-                for (auto object : game->location()->objects())
+                for (auto object : *game->location()->objects())
                 {
                     if (object->PID() == PID && object->elevation() == elevation && object->position() == position)
                     {
@@ -839,7 +839,7 @@ void VM::run()
                 auto position = popDataInteger();
                 auto game = Game::getInstance();
                 int found = 0;
-                for (auto object : game->location()->objects())
+                for (auto object : *game->location()->objects())
                 {
                     if (object->PID() == PID && object->elevation() == elevation && object->position() == position)
                     {

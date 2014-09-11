@@ -31,8 +31,9 @@ void EventEmitter::emitEvent(std::shared_ptr<Event> event)
     event->setEmitter(this);
     for (auto eventHandler : _eventHandlers.at(event->name()))
     {
-        event->setReciever(eventHandler->reciever());
-        eventHandler->operator()(event);
+        auto e = event;
+        e->setReciever(eventHandler->reciever());
+        eventHandler->operator()(e);
     }
 }
 

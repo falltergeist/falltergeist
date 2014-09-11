@@ -96,7 +96,7 @@ void LocationState::onMouseDown(std::shared_ptr<MouseEvent> event)
     icons.push_back(Mouse::ICON_CANCEL);
 
     auto state = std::shared_ptr<CursorDropdownState>(new CursorDropdownState(icons));
-    state->setObject(std::shared_ptr<GameObject>(object));
+    state->setObject(object);
     auto game = Game::getInstance();
     game->pushState(state);
 
@@ -136,7 +136,7 @@ void LocationState::think()
     _ui.clear();
     add(_floor);
 
-    for (auto object : _location->objectsToRender())
+    for (auto object : *_location->objectsToRender())
     {
         auto ui = std::dynamic_pointer_cast<ActiveUI>(object->ui());
         ui->setX(Location::hexagonToX(object->position()) -_location->camera()->x());
@@ -156,7 +156,7 @@ void LocationState::think()
 
 
 
-    for(auto object : _location->objectsToRender())
+    for(auto object : *_location->objectsToRender())
     {
         object->ui()->removeEventHandlers("mouseleftdown");
         object->ui()->addEventHandler("mouseleftdown", object.get(), (EventRecieverMethod) &LocationState::onMouseDown);

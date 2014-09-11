@@ -64,7 +64,7 @@ void StartState::init()
 void StartState::think()
 {
     State::think();
-    //_game->setState(new LocationState()); return;
+    Game::getInstance()->setState(std::shared_ptr<LocationState>(new LocationState())); return;
     //_game->setState(new CritterDialogState()); return;
     if (_splashTicks + 3000 < SDL_GetTicks())
     {

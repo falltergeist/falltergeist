@@ -40,6 +40,7 @@ EventHandler::~EventHandler()
 
 void EventHandler::operator()(std::shared_ptr<Event> event)
 {
+    auto e = event;
     (_reciever->*_method)(event);
 }
 

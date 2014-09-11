@@ -127,7 +127,7 @@ void Location::init()
         if (!object) continue;
 
 
-        object->setLocation(std::shared_ptr<Location>(this));
+        object->setLocation(this);
         object->setFID( mapObject->FID() );
         object->setPID( mapObject->PID() );
         object->setElevation( mapObject->elevation() );
@@ -376,14 +376,14 @@ std::shared_ptr<GameObject> Location::createObject(int PID)
     return object;
 }
 
-void Location::handleAction(std::shared_ptr<GameObject> object, int action)
+void Location::handleAction(GameObject* object, int action)
 {
     switch (action)
     {
 
         case Mouse::ICON_ROTATE:
         {
-            auto dude = dynamic_cast<GameDudeObject*>(object.get());
+            auto dude = dynamic_cast<GameDudeObject*>(object);
             if (!dude) throw Exception("LocationState::handleAction() - only Dude can be rotated");
 
             int orientation = dude->orientation() + 1;
@@ -463,8 +463,6 @@ void Location::checkObjectsToRender()
 
     for (auto object : _objects)
     {
-        if (!object->ui()) continue;
-
         auto ui = std::dynamic_pointer_cast<ActiveUI>(object->ui());
         if (!ui) continue;
 
@@ -560,14 +558,14 @@ unsigned int Location::tileToY(unsigned int tile)
     return ceil(tile / _cols)*24 + (tile % _cols)*12;
 }
 
-std::vector<std::shared_ptr<GameObject>> Location::objects()
+std::vector<std::shared_ptr<GameObject>>* Location::objects()
 {
-    return _objects;
+    return &_objects;
 }
 
-std::vector<std::shared_ptr<GameObject>> Location::objectsToRender()
+std::vector<std::shared_ptr<GameObject>>* Location::objectsToRender()
 {
-    return _objectsToRender;
+    return &_objectsToRender;
 }
 
 int Location::width()

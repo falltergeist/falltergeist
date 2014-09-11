@@ -152,7 +152,7 @@ void CursorDropdownState::init()
 
 }
 
-void CursorDropdownState::setObject(std::shared_ptr<GameObject> object)
+void CursorDropdownState::setObject(GameObject* object)
 {
     _object = object;
 }

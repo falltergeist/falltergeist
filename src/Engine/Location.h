@@ -82,7 +82,7 @@ public:
     unsigned int tileToY(unsigned int tile);
     int width();
     int height();
-    void handleAction(std::shared_ptr<GameObject> object, int action);
+    void handleAction(GameObject* object, int action);
     void checkObjectsToRender();
 
     Texture* tilesFloor();
@@ -93,8 +93,8 @@ public:
     static std::shared_ptr<GameObject> createObject(int PID);
 
     std::shared_ptr<libfalltergeist::MapFileType> mapFile();
-    std::vector<std::shared_ptr<GameObject>> objects();
-    std::vector<std::shared_ptr<GameObject>> objectsToRender();
+    std::vector<std::shared_ptr<GameObject>>* objects();
+    std::vector<std::shared_ptr<GameObject>>* objectsToRender();
 
     void setMVAR(unsigned int number, int value);
     int MVAR(unsigned int number);
