@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <string>
+#include <memory>
 
 // Falltergeist includes
 #include "../Event/EventEmitter.h"

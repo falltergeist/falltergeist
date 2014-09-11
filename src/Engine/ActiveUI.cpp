@@ -32,17 +32,18 @@ ActiveUI::ActiveUI(int x, int y) : EventEmitter(), EventReciever(), UI(x, y)
 {
 }
 
-void ActiveUI::handle(Event* event)
+void ActiveUI::handle(std::shared_ptr<Event> event)
 {
-    if(auto mouseEvent = dynamic_cast<MouseEvent*>(event))
+    if(auto mouseEvent = std::dynamic_pointer_cast<MouseEvent>(event))
     {
         if (!texture()) return;
 
         int x = mouseEvent->x() - this->x();
         int y = mouseEvent->y() - this->y();
 
-        auto event = new MouseEvent(mouseEvent);
-        event->setEmitter(this);
+        auto event = std::shared_ptr<MouseEvent>(new MouseEvent(mouseEvent));
+        //auto emitter = std::shared_ptr<ActiveUI>(this);
+        //event->setEmitter(emitter);
 
         unsigned int alpha = texture()->pixel(x, y) & 0xFF;
         if (alpha > 0)
@@ -166,7 +167,7 @@ void ActiveUI::handle(Event* event)
         return;
     }
 
-    if(auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
+    if(auto keyboardEvent = std::dynamic_pointer_cast<KeyboardEvent>(event))
     {
         emitEvent(keyboardEvent);
     }

@@ -38,7 +38,7 @@ EventHandler::~EventHandler()
 {
 }
 
-void EventHandler::operator()(Event* event)
+void EventHandler::operator()(std::shared_ptr<Event> event)
 {
     (_reciever->*_method)(event);
 }

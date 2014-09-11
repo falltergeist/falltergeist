@@ -17,18 +17,19 @@ void EventEmitter::addEventHandler(std::string eventName, EventReciever* recieve
 {
     if (_eventHandlers.find(eventName) == _eventHandlers.end())
     {
-        _eventHandlers.insert(std::make_pair(eventName, new std::vector<EventHandler*>()));
+        std::vector<EventHandler*> vector;
+        _eventHandlers.insert(std::make_pair(eventName, vector));
     }
 
-    _eventHandlers.at(eventName)->push_back(new EventHandler(reciever, handler));
+    _eventHandlers.at(eventName).push_back(new EventHandler(reciever, handler));
 }
 
-void EventEmitter::emitEvent(Event* event)
+void EventEmitter::emitEvent(std::shared_ptr<Event> event)
 {
     if (_eventHandlers.find(event->name()) == _eventHandlers.end()) return;
 
     event->setEmitter(this);
-    for (EventHandler* eventHandler : *_eventHandlers.at(event->name()))
+    for (auto eventHandler : _eventHandlers.at(event->name()))
     {
         event->setReciever(eventHandler->reciever());
         eventHandler->operator()(event);
@@ -39,11 +40,11 @@ void EventEmitter::removeEventHandlers(std::string eventName)
 {
     if (_eventHandlers.find(eventName) == _eventHandlers.end()) return;
 
-    for (auto handler : *_eventHandlers.at(eventName))
+    while (!_eventHandlers.at(eventName).empty())
     {
-        delete handler;
+        delete _eventHandlers.at(eventName).back();
+        _eventHandlers.at(eventName).pop_back();
     }
-    delete _eventHandlers.at(eventName);
     _eventHandlers.erase(eventName);
 }
 

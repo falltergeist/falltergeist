@@ -96,7 +96,7 @@ void Location::init()
     _generateFloor();
     _generateRoof();
 
-    auto game = &Game::getInstance();
+    auto game = Game::getInstance();
 
     _camera = std::shared_ptr<LocationCamera>(new LocationCamera(game->renderer()->width(), game->renderer()->height(), 0, 0));
 
@@ -127,7 +127,7 @@ void Location::init()
         if (!object) continue;
 
 
-        object->setLocation(this);
+        object->setLocation(std::shared_ptr<Location>(this));
         object->setFID( mapObject->FID() );
         object->setPID( mapObject->PID() );
         object->setElevation( mapObject->elevation() );
@@ -465,7 +465,7 @@ void Location::checkObjectsToRender()
     {
         if (!object->ui()) continue;
 
-        ActiveUI* ui = dynamic_cast<ActiveUI*>(object->ui());
+        auto ui = std::dynamic_pointer_cast<ActiveUI>(object->ui());
         if (!ui) continue;
 
         unsigned int x, y, width, height;
@@ -473,7 +473,7 @@ void Location::checkObjectsToRender()
         width = ui->width();
         height = ui->height();
 
-        Animation* animation = dynamic_cast<Animation*>(object->ui());
+        auto animation = std::dynamic_pointer_cast<Animation>(object->ui());
         if (animation)
         {
             x = Location::hexagonToX(object->position()) + ui->xOffset() - std::floor(width*0.5);

@@ -87,8 +87,6 @@ set(SOURCES main.cpp
             src/Engine/Input/Mouse.h
             src/Engine/IniFile.cpp
             src/Engine/IniFile.h
-            src/Engine/InteractiveSurface.cpp
-            src/Engine/InteractiveSurface.h
             src/Engine/Location.cpp
             src/Engine/Location.h
             src/Engine/LocationCamera.cpp

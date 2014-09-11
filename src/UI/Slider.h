@@ -38,7 +38,7 @@ protected:
     double _minValue = 0;
     double _maxValue = 1;
     double _value = 0;
-    void _onDrag(MouseEvent* event);
+    void _onDrag(std::shared_ptr<MouseEvent> event);
 public:
     Slider(int x, int y);
     virtual ~Slider();

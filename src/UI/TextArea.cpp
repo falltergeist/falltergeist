@@ -51,7 +51,7 @@ TextArea::TextArea(std::string text, int x, int y) : ActiveUI(x, y)
     setText(text);
 }
 
-TextArea::TextArea(TextArea* textArea, int x, int y) : ActiveUI(x, y)
+TextArea::TextArea(std::shared_ptr<TextArea> textArea, int x, int y) : ActiveUI(x, y)
 {
     init();
     setFont(textArea->_strings.back()->font());

@@ -46,10 +46,10 @@
 namespace Falltergeist
 {
 
-Game& Game::getInstance()
+std::shared_ptr<Game> Game::getInstance()
 {
-    static Game instance;
-    instance._initialize();
+    static std::shared_ptr<Game> instance = std::shared_ptr<Game>(new Game());
+    instance->_initialize();
     return instance;
 }
 
@@ -72,7 +72,7 @@ void Game::_initialize()
     //_screen = new Screen(640, 480, 32);
     //_mixer = new AudioMixer();
     _mouse = std::shared_ptr<Mouse>(new Mouse());
-    _fpsCounter = new FpsCounter(_renderer->width() - 42, 2);
+    _fpsCounter = std::shared_ptr<FpsCounter>(new FpsCounter(_renderer->width() - 42, 2));
 
     std::string version = CrossPlatform::getVersion();
     version += " " + std::to_string(_renderer->width()) + "x" + std::to_string(_renderer->height());
@@ -81,7 +81,7 @@ void Game::_initialize()
     if (dynamic_cast<OpenGLRenderer*>(_renderer.get())) version += " OpenGL Renderer";
 
 
-    _falltergeistVersion = new TextArea(version, 3, _renderer->height() - 10);
+    _falltergeistVersion = std::shared_ptr<TextArea>(new TextArea(version, 3, _renderer->height() - 10));
 }
 
 Game::~Game()
@@ -122,50 +122,45 @@ void Game::run()
                 {
                     case SDL_MOUSEBUTTONDOWN:
                     {
-                        auto event = new MouseEvent("mousedown");
+                        auto event = std::shared_ptr<MouseEvent>(new MouseEvent("mousedown"));
                         event->setX(_event.button.x);
                         event->setY(_event.button.y);
                         event->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
                         event->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
                         for (auto state : activeStates()) state->handle(event);
-
-                        delete event;
                         break;
                     }
                     case SDL_MOUSEBUTTONUP:
                     {
-                        auto event = new MouseEvent("mouseup");
+                        auto event = std::shared_ptr<MouseEvent>(new MouseEvent("mouseup"));
                         event->setX(_event.button.x);
                         event->setY(_event.button.y);
                         event->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
                         event->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
                         for (auto state : activeStates()) state->handle(event);
-                        delete event;
                         break;
                     }
                     case SDL_MOUSEMOTION:
                     {
-                        auto event = new MouseEvent("mousemove");
+                        auto event = std::shared_ptr<MouseEvent>(new MouseEvent("mousemove"));
                         event->setX(_event.motion.x);
                         event->setY(_event.motion.y);
                         event->setXOffset(_event.motion.xrel);
                         event->setYOffset(_event.motion.yrel);
                         for (auto state : activeStates()) state->handle(event);
-                        delete event;
                         break;
                     }
                     case SDL_KEYDOWN:
                     {
-                        auto event = new KeyboardEvent("keydown");
+                        auto event = std::shared_ptr<KeyboardEvent>(new KeyboardEvent("keydown"));
                         event->setKeyCode(_event.key.keysym.sym);
                         event->setShiftPressed(_event.key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
                         for (auto state : activeStates()) state->handle(event);
-                        delete event;
                         break;
                     }
                     case SDL_KEYUP:
                     {
-                        auto event = new KeyboardEvent("keyup");
+                        auto event = std::shared_ptr<KeyboardEvent>(new KeyboardEvent("keyup"));
                         event->setKeyCode(_event.key.keysym.sym);
                         event->setShiftPressed(_event.key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
                         for (auto state : activeStates()) state->handle(event);
@@ -179,7 +174,6 @@ void Game::run()
                             debug("[GAME] - Screenshot saved to " + ss.str(), DEBUG_INFO);
                         }
                         */
-                        delete event;
                         break;
                     }
                 }
@@ -324,17 +318,17 @@ void Game::setDialog(std::shared_ptr<CritterDialogState> value)
     _dialog = value;
 }
 
-std::vector<UI*>* Game::ui()
+std::vector<std::shared_ptr<UI>>* Game::ui()
 {
     _ui.clear();
 
     for (auto state : activeStates())
     {
-        for (auto j = state->ui()->begin(); j != state->ui()->end(); ++j)
+        for (auto ui : *state->ui())
         {
-            if ((*j)->visible())
+            if (ui->visible())
             {
-                _ui.push_back(*j);
+                _ui.push_back(ui);
             }
         }
     }

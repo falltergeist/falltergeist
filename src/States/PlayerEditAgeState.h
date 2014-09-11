@@ -35,14 +35,14 @@ class BigCounter;
 class PlayerEditAgeState : public State
 {
 protected:
-    BigCounter* _counter;
+    std::shared_ptr<BigCounter> _counter;
 public:
     PlayerEditAgeState();
     void init();
     ~PlayerEditAgeState();
-    void onIncButtonClick(MouseEvent * event);
-    void onDecButtonClick(MouseEvent * event);
-    void onDoneButtonClick(MouseEvent * event);
+    void onIncButtonClick(std::shared_ptr<MouseEvent> event);
+    void onDecButtonClick(std::shared_ptr<MouseEvent> event);
+    void onDoneButtonClick(std::shared_ptr<MouseEvent> event);
 };
 }
 

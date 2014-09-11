@@ -40,10 +40,9 @@ class Image;
 class LocationState : public State
 {
 protected:    
-    Animation * _animation = 0;
     std::shared_ptr<Location> _location;
-    Image* _floor = 0;
-    Image* _roof = 0;
+    std::shared_ptr<Image> _floor;
+    std::shared_ptr<Image> _roof;
     unsigned int _direction;
     unsigned int _cameraX;
     unsigned int _cameraY;    
@@ -57,12 +56,12 @@ public:
     ~LocationState();
     virtual void init();
     virtual void think();
-    virtual void handle(Event* event);
+    virtual void handle(std::shared_ptr<Event> event);
 
-    void onBackgroundClick(MouseEvent * event);
-    void onKeyUp(KeyboardEvent * event);
-    void onObjectClick(MouseEvent * event);
-    void onMouseDown(MouseEvent* event);
+    void onBackgroundClick(std::shared_ptr<MouseEvent> event);
+    void onKeyUp(std::shared_ptr<KeyboardEvent> event);
+    void onObjectClick(std::shared_ptr<MouseEvent> event);
+    void onMouseDown(std::shared_ptr<MouseEvent> event);
 };
 
 }

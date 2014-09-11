@@ -35,20 +35,20 @@ class Image;
 class ImageList : public ActiveUI
 {
 protected:
-    std::vector<Image*> _images;
+    std::vector<std::shared_ptr<Image>> _images;
     unsigned int _currentImage = 0;
 public:
     ImageList(std::vector<std::string> imageList, int x = 0, int y = 0);
-    ImageList(std::vector<Image*> imageList, int x = 0, int y = 0);
+    ImageList(std::vector<std::shared_ptr<Image>> imageList, int x = 0, int y = 0);
     ImageList(int x = 0, int y = 0);
     ~ImageList();
 
-    void addImage(Image* image);
+    void addImage(std::shared_ptr<Image> image);
     void addImage(std::string filename);
     void setCurrentImage(unsigned int number);
     unsigned int currentImage();
     virtual Texture* texture();
-    std::vector<Image*> * images();
+    std::vector<std::shared_ptr<Image>>* images();
 };
 
 }

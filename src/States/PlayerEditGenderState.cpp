@@ -44,36 +44,35 @@ void PlayerEditGenderState::init()
     State::init();
     setFullscreen(false);
 
-    _maleImage = new ImageList((std::vector<std::string>){
+    _maleImage = std::shared_ptr<ImageList>(new ImageList((std::vector<std::string>){
                                     "art/intrface/maleoff.frm",
                                     "art/intrface/maleon.frm"
-                                }, 260, 2);
+                                }, 260, 2));
     _maleImage->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditGenderState::onMaleButtonPress);
     if (_game->player()->gender() == 0) _maleImage->setCurrentImage(1); // 0 - male
 
-    _femaleImage = new ImageList((std::vector<std::string>){
+    _femaleImage = std::shared_ptr<ImageList>(new ImageList((std::vector<std::string>){
                                       "art/intrface/femoff.frm",
                                       "art/intrface/femon.frm"
-                                  }, 310, 2);
+                                  }, 310, 2));
     _femaleImage->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditGenderState::onFemaleButtonPress);
     if (_game->player()->gender() == 1) _femaleImage->setCurrentImage(1); // 1 - female
 
-    Image* bg = new Image("art/intrface/charwin.frm");
+    auto bg = std::shared_ptr<Image>(new Image("art/intrface/charwin.frm"));
     bg->setX(236);
     bg->setY(0);
 
 
-    Image* doneBox = new Image("art/intrface/donebox.frm");
+    auto doneBox = std::shared_ptr<Image>(new Image("art/intrface/donebox.frm"));
     doneBox->setX(250);
     doneBox->setY(42);
 
-    auto msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
-    TextArea * doneLabel = new TextArea(msg->message(100), 281, 45);
-
-    auto font3_b89c28ff = _game->resourceManager()->font("font3.aaf", 0xb89c28ff);
+    auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
+    auto doneLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(100), 281, 45));
+    auto font3_b89c28ff = ResourceManager::font("font3.aaf", 0xb89c28ff);
     doneLabel->setFont(font3_b89c28ff);
 
-    ImageButton * doneButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 260, 45);
+    auto doneButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 260, 45));
     doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditGenderState::onDoneButtonClick);
 
     add(bg);
@@ -84,23 +83,25 @@ void PlayerEditGenderState::init()
     add(_femaleImage);
 }
 
-void PlayerEditGenderState::onDoneButtonClick(MouseEvent* event)
+void PlayerEditGenderState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    _game->popState();
+    Game::getInstance()->popState();
 }
 
-void PlayerEditGenderState::onFemaleButtonPress(MouseEvent* event)
+void PlayerEditGenderState::onFemaleButtonPress(std::shared_ptr<MouseEvent> event)
 {
-    _game->player()->setGender(1); // 1 - female
-    _maleImage->setCurrentImage(0);
-    _femaleImage->setCurrentImage(1);
+    auto state = dynamic_cast<PlayerEditGenderState*>(event->reciever());
+    Game::getInstance()->player()->setGender(1); // 1 - female
+    state->_maleImage->setCurrentImage(0);
+    state->_femaleImage->setCurrentImage(1);
 }
 
-void PlayerEditGenderState::onMaleButtonPress(MouseEvent* event)
+void PlayerEditGenderState::onMaleButtonPress(std::shared_ptr<MouseEvent> event)
 {
-    _game->player()->setGender(0); // 0 - male
-    _maleImage->setCurrentImage(1);
-    _femaleImage->setCurrentImage(0);
+    auto state = dynamic_cast<PlayerEditGenderState*>(event->reciever());
+    Game::getInstance()->player()->setGender(0); // 0 - male
+    state->_maleImage->setCurrentImage(1);
+    state->_femaleImage->setCurrentImage(0);
 }
 
 }

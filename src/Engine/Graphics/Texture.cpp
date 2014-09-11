@@ -45,7 +45,7 @@ Texture::~Texture()
 void Texture::_unregister()
 {
     if (!id()) return;
-    auto game = &Game::getInstance();
+    auto game = Game::getInstance();
     game->renderer()->unregisterTexture(this);
     _id = 0;
 }

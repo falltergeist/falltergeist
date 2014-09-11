@@ -23,6 +23,7 @@
 
 // C++ standard includes
 #include <vector>
+#include <memory>
 
 // Falltergeist includes
 
@@ -32,7 +33,7 @@ namespace Falltergeist
 {
 class Event;
 class EventReciever;
-typedef void (EventReciever::*EventRecieverMethod)(Event*);
+typedef void (EventReciever::*EventRecieverMethod)(std::shared_ptr<Event>);
 
 class EventHandler
 {
@@ -42,7 +43,7 @@ protected:
 public:
     EventHandler(EventReciever* reciever, EventRecieverMethod method);
     virtual ~EventHandler();
-    void operator()(Event* event);
+    void operator()(std::shared_ptr<Event> event);
     EventReciever* reciever();
 };
 

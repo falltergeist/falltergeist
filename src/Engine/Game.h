@@ -58,21 +58,21 @@ protected:
     std::shared_ptr<AudioMixer> _mixer;
     std::shared_ptr<Location> _location;
     std::shared_ptr<CritterDialogState> _dialog;
-    FpsCounter * _fpsCounter = 0;
-    TextArea* _falltergeistVersion = 0;
+    std::shared_ptr<FpsCounter> _fpsCounter;
+    std::shared_ptr<TextArea> _falltergeistVersion;
     bool _quit = false;
     SDL_Event _event;
     bool _initialized = false;
     void _initialize();
     void _initGVARS();
-    std::vector<UI*> _ui;
+    std::vector<std::shared_ptr<UI>> _ui;
 private:
     Game() {}
     Game(Game const&);
     void operator=(Game const&);
 public:
     ~Game();
-    static Game& getInstance();
+    static std::shared_ptr<Game> getInstance();
 
     std::shared_ptr<ResourceManager> resourceManager();
 
@@ -96,7 +96,7 @@ public:
     void setGVAR(unsigned int number, int value);
     int GVAR(unsigned int number);
 
-    std::vector<UI*>* ui();
+    std::vector<std::shared_ptr<UI>>* ui();
 
 };
 

@@ -99,7 +99,7 @@ Texture* ImageButton::texture()
     return _textures.at(0);
 }
 
-void ImageButton::_onLeftButtonClick(MouseEvent* event)
+void ImageButton::_onLeftButtonClick(std::shared_ptr<MouseEvent> event)
 {
     auto sender = dynamic_cast<ImageButton*>(event->emitter());
     if (sender->_checkboxMode)

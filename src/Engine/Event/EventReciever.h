@@ -2,6 +2,7 @@
 #define FALLTERGEIST_EVENTRECIEVER_H
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
 
@@ -16,7 +17,7 @@ class EventReciever
 public:
     EventReciever();
     virtual ~EventReciever();
-    virtual void handle(Event* event);
+    virtual void handle(std::shared_ptr<Event> event);
 };
 
 }

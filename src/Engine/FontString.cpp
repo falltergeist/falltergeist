@@ -35,7 +35,7 @@ FontString::FontString(std::string text, std::shared_ptr<Font> font)
 
     if (!font)
     {
-        auto game = &Game::getInstance();
+        auto game = Game::getInstance();
         font = game->resourceManager()->font();
     }
     _font = font;

@@ -21,8 +21,8 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/InteractiveSurface.h"
 #include "../Engine/Graphics/Animation.h"
+#include "../Engine/ResourceManager.h"
 #include "../Game/GameObject.h"
 #include "../Game/GameDefines.h"
 #include "../Engine/Exception.h"
@@ -39,8 +39,6 @@ GameObject::GameObject() : EventReciever()
 
 GameObject::~GameObject()
 {
-    delete _ui;
-    _ui = 0;
 }
 
 int GameObject::type()
@@ -112,7 +110,6 @@ void GameObject::setOrientation(int value)
     if (_orientation == value) return;
 
     _orientation = value;
-    delete _ui; _ui = 0;
 }
 
 std::string GameObject::name()
@@ -140,23 +137,17 @@ std::vector<VM*>* GameObject::scripts()
     return &_scripts;
 }
 
-Location* GameObject::location()
+std::shared_ptr<Location> GameObject::location()
 {
     return _location;
 }
 
-void GameObject::setLocation(Location* value)
+void GameObject::setLocation(std::shared_ptr<Location> value)
 {
     _location = value;
 }
 
-/*
-AnimationQueue* GameObject::animationQueue()
-{
-    return &_animationQueue;
-}
-*/
-ActiveUI* GameObject::ui()
+std::shared_ptr<ActiveUI> GameObject::ui()
 {
     if (_ui) return _ui;
 
@@ -165,11 +156,11 @@ ActiveUI* GameObject::ui()
     {
         if (frm->framesPerDirection() > 1)
         {
-            _ui = new Animation(ResourceManager::FIDtoFrmName(FID()), this->orientation());
+            _ui = std::shared_ptr<Animation>(new Animation(ResourceManager::FIDtoFrmName(FID()), this->orientation()));
         }
         else
         {
-            _ui = new Image(frm, orientation());
+            _ui = std::shared_ptr<Image>(new Image(frm, orientation()));
         }
     }
 

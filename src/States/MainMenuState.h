@@ -21,6 +21,7 @@
 #define FALLTERGEIST_MAINMENUSTATE_H
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
 #include "../Engine/State.h"
@@ -38,9 +39,9 @@ public:
     virtual void init();
     virtual void think();
 
-    void onExitButtonClick(MouseEvent* event);
-    void onNewGameButtonClick(MouseEvent* event);
-    void onSettingsButtonClick(MouseEvent* event);
+    void onExitButtonClick(std::shared_ptr<MouseEvent> event);
+    void onNewGameButtonClick(std::shared_ptr<MouseEvent> event);
+    void onSettingsButtonClick(std::shared_ptr<MouseEvent> event);
 };
 
 }

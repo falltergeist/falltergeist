@@ -42,16 +42,15 @@ protected:
     int _modeFactor = 1; // or -1
     unsigned int _maxState = 0;
     unsigned int _minState = 0;
-    void _onLeftButtonClick(MouseEvent* event);
+    void _onLeftButtonClick(std::shared_ptr<MouseEvent> event);
 public:
     enum {MODE_PROGRESSION = 1, MODE_CYCLIC};
     enum {TYPE_BIG_SWITCH = 1, TYPE_SMALL_SWITCH};
     MultistateImageButton(int x = 0, int y = 0);
     MultistateImageButton(unsigned int type, int x = 0, int y = 0);
-    MultistateImageButton(ImageList* imageList, int x = 0, int y = 0);
-    MultistateImageButton(ImageList imageList, int x = 0, int y = 0);
+    MultistateImageButton(std::shared_ptr<ImageList> imageList, int x = 0, int y = 0);
     virtual ~MultistateImageButton();
-    void addImage(Image* image);
+    void addImage(std::shared_ptr<Image> image);
     unsigned int state();
     void setState(unsigned int state);
     unsigned int minState();

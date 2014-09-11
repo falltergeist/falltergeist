@@ -45,18 +45,18 @@ protected:
     int _initialX;
     int _initialY;
     unsigned int _currentSurface = 0;
-    std::vector<UI*> _activeIcons;
-    std::vector<UI*> _inactiveIcons;
-    UI* _surface = 0;
-    HiddenMask* _mask = 0;
-    UI* _cursor = 0;
+    std::vector<std::shared_ptr<UI>> _activeIcons;
+    std::vector<std::shared_ptr<UI>> _inactiveIcons;
+    std::shared_ptr<UI> _surface;
+    std::shared_ptr<HiddenMask> _mask;
+    std::shared_ptr<UI> _cursor;
 public:
     CursorDropdownState(std::vector<int> icons);
     virtual ~CursorDropdownState();
     virtual void init();
     virtual void think();
 
-    void onLeftButtonUp(MouseEvent* event);
+    void onLeftButtonUp(std::shared_ptr<MouseEvent> event);
 
     std::shared_ptr<GameObject> object();
     void setObject(std::shared_ptr<GameObject> object);

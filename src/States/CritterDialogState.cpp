@@ -40,7 +40,7 @@ namespace Falltergeist
 
 CritterDialogState::CritterDialogState() : State()
 {
-    _question = new TextArea("", 140, 235);
+    _question = std::shared_ptr<TextArea>(new TextArea("", 140, 235));
     _question->setWidth(370);
     _question->setWordWrap(true);
 }
@@ -48,7 +48,7 @@ CritterDialogState::CritterDialogState() : State()
 CritterDialogState::~CritterDialogState()
 {
     //delete _question;
-    auto camera = Game::getInstance().location()->camera();
+    auto camera = Game::getInstance()->location()->camera();
     camera->setXPosition(_oldCameraX);
     camera->setYPosition(_oldCameraY);
     //Game::getInstance().location()->generateBackground();
@@ -61,14 +61,14 @@ void CritterDialogState::init()
     State::init();
     setFullscreen(false);
 
-    auto camera = Game::getInstance().location()->camera();
+    auto camera = Game::getInstance()->location()->camera();
     _oldCameraX = camera->xPosition();
     _oldCameraY = camera->yPosition();
     camera->setXPosition(Location::hexagonToX(critter()->position()));
     camera->setYPosition(Location::hexagonToY(critter()->position()) + 100);
 
-    auto background = new Image("art/intrface/alltlk.frm");
-    auto background2 = new Image("art/intrface/di_talk.frm");
+    auto background = std::shared_ptr<Image>(new Image("art/intrface/alltlk.frm"));
+    auto background2 = std::shared_ptr<Image>(new Image("art/intrface/di_talk.frm"));
     background2->setY(291);
 
     add(background);
@@ -92,14 +92,14 @@ void CritterDialogState::blit()
 
 }
 
-void CritterDialogState::onAnswerClick(Event* event)
+void CritterDialogState::onAnswerClick(std::shared_ptr<Event> event)
 {
-    TextArea* sender = dynamic_cast<TextArea*>((TextArea*)event->emitter());
+    auto sender = dynamic_cast<TextArea*>(event->emitter());
 
     int i = 0;
     for (auto answer : _answers)
     {
-        if (answer == sender)
+        if (answer.get() == sender)
         {
             auto newOffset =  script()->script()->function(_functions.at(i));
             auto oldOffset = _script->programCounter() - 2;
@@ -116,26 +116,26 @@ void CritterDialogState::onAnswerClick(Event* event)
     }
 }
 
-void CritterDialogState::onAnswerIn(Event* event)
+void CritterDialogState::onAnswerIn(std::shared_ptr<Event> event)
 {
-    TextArea* sender = dynamic_cast<TextArea*>((TextArea*)event->emitter());
+    auto sender = dynamic_cast<TextArea*>(event->emitter());
     auto font3_a0a0a0ff = _game->resourceManager()->font("font3.aaf", 0xa0a0a0ff);
     sender->setFont(font3_a0a0a0ff);
 }
 
-void CritterDialogState::onAnswerOut(Event* event)
+void CritterDialogState::onAnswerOut(std::shared_ptr<Event> event)
 {
-    TextArea* sender = dynamic_cast<TextArea*>((TextArea*)event->emitter());
+    auto sender = dynamic_cast<TextArea*>(event->emitter());
     auto font3_3ff800ff = _game->resourceManager()->font("font3.aaf", 0x3ff800ff);
     sender->setFont(font3_3ff800ff);
 }
 
-void CritterDialogState::setCritter(GameCritterObject* critter)
+void CritterDialogState::setCritter(std::shared_ptr<GameCritterObject> critter)
 {
     _critter = critter;
 }
 
-GameCritterObject* CritterDialogState::critter()
+std::shared_ptr<GameCritterObject> CritterDialogState::critter()
 {
     return _critter;
 }
@@ -167,12 +167,6 @@ std::vector<int>* CritterDialogState::reactions()
 
 void CritterDialogState::deleteAnswers()
 {
-    while (!_answers.empty())
-    {
-        delete _answers.back();
-        _answers.back() = 0;
-        _answers.pop_back();
-    }
     _answers.clear();
     _functions.clear();
     _reactions.clear();
@@ -185,7 +179,7 @@ void CritterDialogState::addAnswer(std::string text)
     line += " ";
     line += text;
 
-    auto answer = new TextArea(line, 140, 0);
+    auto answer = std::shared_ptr<TextArea>(new TextArea(line, 140, 0));
     answer->setBackgroundColor(0x01000000);
     answer->setWordWrap(true);
     answer->setWidth(370);
@@ -196,7 +190,7 @@ void CritterDialogState::addAnswer(std::string text)
     _answers.push_back(answer);
 }
 
-void CritterDialogState::handle(Event *event)
+void CritterDialogState::handle(std::shared_ptr<Event> event)
 {
     State::handle(event);
     for (auto answer : _answers)

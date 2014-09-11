@@ -50,26 +50,24 @@ void SettingsMenuState::init()
     if (_initialized) return;
     State::init();
 
-    //unsigned int color = 0x907824ff;
-    
-    auto background = new Image("art/intrface/prefscrn.frm");
+    auto background = std::shared_ptr<Image>(new Image("art/intrface/prefscrn.frm"));
 
-    auto switch1 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 71);
+    auto switch1 = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 71));
     switch1->setMaxState(3);    
-    auto switch2 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 149);
+    auto switch2 = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 149));
     switch2->setMaxState(3);
-    auto switch3 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 227);
-    auto switch4 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 309);
+    auto switch3 = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 227));
+    auto switch4 = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 309));
     switch4->setMaxState(3);
-    auto switch5 = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 387);
+    auto switch5 = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, 76, 387));
     switch5->setMaxState(2);
 
-    auto switch6 = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, 299, 74);
-    auto switch7 = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, 299, 74 + 66);
-    auto switch8 = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, 299, 74 + 66*2);
-    auto switch9 = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, 299, 74 + 66*3);
-    auto switch10 = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, 299,74 + 66*4);
-    auto switch11 = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, 299,74 + 66*5);
+    auto switch6 = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, 299, 74));
+    auto switch7 = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, 299, 74 + 66));
+    auto switch8 = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, 299, 74 + 66*2));
+    auto switch9 = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, 299, 74 + 66*3));
+    auto switch10 = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, 299,74 + 66*4));
+    auto switch11 = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, 299,74 + 66*5));
 
     // LABELS
     auto msg = ResourceManager::msgFileType("text/english/game/options.msg");
@@ -78,188 +76,198 @@ void SettingsMenuState::init()
     auto font3_907824ff = _game->resourceManager()->font("font3.aaf", 0x907824ff);
     auto font4_907824ff = _game->resourceManager()->font("font4.aaf", 0x907824ff);
 
-    auto title1 = new TextArea(msg->message(100), 74, 10);
+    //GAME PREFERENCES
+    auto title1 = std::shared_ptr<TextArea>(new TextArea(msg->message(100), 74, 10));
     title1->setFont(font4_907824ff);
     
-    auto title2 = new TextArea(msg->message(102), 21, 48);
+    //COMBAT DIFFICULTY
+    auto title2 = std::shared_ptr<TextArea>(new TextArea(msg->message(102), 21, 48));
     title2->setWidth(158)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setFont(font1_907824ff);
 
-    auto title3 = new TextArea(title2, 21, 48 + 77);
+    //GAME DIFFICULTY
+    auto title3 = std::shared_ptr<TextArea>(new TextArea(title2, 21, 48 + 77));
     title2->setText(msg->message(101));
 
-    auto title4 = new TextArea(title2, 21, 48 + 156);
+    //VIOLENCE LEVEL
+    auto title4 = std::shared_ptr<TextArea>(new TextArea(title2, 21, 48 + 156));
     title4->setText(msg->message(103));
     
-    auto title5 = new TextArea(title2, 21, 128+ 158);
+    //TARGET HIGHLIGHT
+    auto title5 = std::shared_ptr<TextArea>(new TextArea(title2, 21, 128+ 158));
     title5->setText(msg->message(104));
     
-    auto title6 = new TextArea(title2, 21, 128 + 235);
+    //COMBAT LOOKS
+    auto title6 = std::shared_ptr<TextArea>(new TextArea(title2, 21, 128 + 235));
     title6->setText(msg->message(105));
     
-    auto title7 = new TextArea(msg->message(106), 206, 49);
+    //COMBAT MESSAGES
+    auto title7 = std::shared_ptr<TextArea>(new TextArea(msg->message(106), 206, 49));
     title7->setFont(font1_907824ff);
     
-    auto title8 = new TextArea(title7, 206, 49 + 66);
+    //COMBAT TAUNTS
+    auto title8 = std::shared_ptr<TextArea>(new TextArea(title7, 206, 49 + 66));
     title8->setText(msg->message(107));
     
-    auto title9 = new TextArea(title7, 206, 49 + 66*2);
+    //LANGUAGE FILTER
+    auto title9 = std::shared_ptr<TextArea>(new TextArea(title7, 206, 49 + 66*2));
     title9->setText(msg->message(108));
     
-    auto title10 = new TextArea(title7, 206, 49 + 66*3);
+    //RUNNING
+    auto title10 = std::shared_ptr<TextArea>(new TextArea(title7, 206, 49 + 66*3));
     title10->setText(msg->message(109));
     
-    auto title11 = new TextArea(title7, 206, 49 + 66*4);
+    auto title11 = std::shared_ptr<TextArea>(new TextArea(title7, 206, 49 + 66*4));
     title11->setText(msg->message(110));
     
-    auto title12 = new TextArea(title7, 206, 49 + 66*5);
+    auto title12 = std::shared_ptr<TextArea>(new TextArea(title7, 206, 49 + 66*5));
     title12->setText(msg->message(111));
     
-    auto title13 = new TextArea(msg->message(112), 384, 19);
+    auto title13 = std::shared_ptr<TextArea>(new TextArea(msg->message(112), 384, 19));
     title13->setFont(font1_907824ff);
 
-    auto title14 = new TextArea(title13, 384, 94);
+    auto title14 = std::shared_ptr<TextArea>(new TextArea(title13, 384, 94));
     title14->setText(msg->message(113));
     
-    auto title15 = new TextArea(title13, 384, 165);
+    auto title15 = std::shared_ptr<TextArea>(new TextArea(title13, 384, 165));
     title15->setText(msg->message(114));
     
-    auto title16 = new TextArea(title13, 384, 165 + 51);
+    auto title16 = std::shared_ptr<TextArea>(new TextArea(title13, 384, 165 + 51));
     title16->setText(msg->message(115));
     
-    auto title17 = new TextArea(title13, 384, 165 + 51*2);
+    auto title17 = std::shared_ptr<TextArea>(new TextArea(title13, 384, 165 + 51*2));
     title17->setText(msg->message(116));
     
-    auto title18 = new TextArea(title13, 384, 165 + 51*3);
+    auto title18 = std::shared_ptr<TextArea>(new TextArea(title13, 384, 165 + 51*3));
     title18->setText(msg->message(117));
     
-    auto title19 = new TextArea(title13, 384, 165 + 51*4);
+    auto title19 = std::shared_ptr<TextArea>(new TextArea(title13, 384, 165 + 51*4));
     title19->setText(msg->message(118));
     
-    auto title20 = new TextArea(title13, 384, 165 + 51*5);
+    auto title20 = std::shared_ptr<TextArea>(new TextArea(title13, 384, 165 + 51*5));
     title20->setText(msg->message(119));
 
-    auto title21 = new TextArea(title13, 43, 449);
+    auto title21 = std::shared_ptr<TextArea>(new TextArea(title13, 43, 449));
     title21->setText(msg->message(120))->setFont(font3_907824ff);
 
-    auto title22 = new TextArea(title13, 169, 449);
+    auto title22 = std::shared_ptr<TextArea>(new TextArea(title13, 169, 449));
     title22->setText(msg->message(300))->setFont(font3_907824ff);
 
-    auto title23 = new TextArea(title13, 283, 449);
+    auto title23 = std::shared_ptr<TextArea>(new TextArea(title13, 283, 449));
     title23->setText(msg->message(121))->setFont(font3_907824ff);
 
-    auto label1 = new TextArea(msg->message(203), 43, 81); label1->setFont(font1_907824ff);
-    auto label2 = new TextArea(msg->message(204), 68, 67); label2->setFont(font1_907824ff);
-    auto label3 = new TextArea(msg->message(205), 122, 81); label3->setFont(font1_907824ff);
+    auto label1 = std::shared_ptr<TextArea>(new TextArea(msg->message(203), 43, 81)); label1->setFont(font1_907824ff);
+    auto label2 = std::shared_ptr<TextArea>(new TextArea(msg->message(204), 68, 67)); label2->setFont(font1_907824ff);
+    auto label3 = std::shared_ptr<TextArea>(new TextArea(msg->message(205), 122, 81)); label3->setFont(font1_907824ff);
 
-    auto label4 = new TextArea(msg->message(206), 13, 159); label4->setFont(font1_907824ff);
-    auto label5 = new TextArea(msg->message(207), 68, 145); label5->setFont(font1_907824ff);
-    auto label6 = new TextArea(msg->message(208), 122, 159); label6->setFont(font1_907824ff);
+    auto label4 = std::shared_ptr<TextArea>(new TextArea(msg->message(206), 13, 159)); label4->setFont(font1_907824ff);
+    auto label5 = std::shared_ptr<TextArea>(new TextArea(msg->message(207), 68, 145)); label5->setFont(font1_907824ff);
+    auto label6 = std::shared_ptr<TextArea>(new TextArea(msg->message(208), 122, 159)); label6->setFont(font1_907824ff);
 
-    auto label7 = new TextArea(msg->message(214), 56, 236); label7->setFont(font1_907824ff);
-    auto label8 = new TextArea(msg->message(215), 65, 222); label8->setFont(font1_907824ff);
-    auto label9 = new TextArea(msg->message(207), 122, 236); label9->setFont(font1_907824ff);
-    auto label10 = new TextArea(msg->message(216), 122, 257); label10->setFont(font1_907824ff)->setWidth(60);
+    auto label7 = std::shared_ptr<TextArea>(new TextArea(msg->message(214), 56, 236)); label7->setFont(font1_907824ff);
+    auto label8 = std::shared_ptr<TextArea>(new TextArea(msg->message(215), 65, 222)); label8->setFont(font1_907824ff);
+    auto label9 = std::shared_ptr<TextArea>(new TextArea(msg->message(207), 122, 236)); label9->setFont(font1_907824ff);
+    auto label10 = std::shared_ptr<TextArea>(new TextArea(msg->message(216), 122, 257)); label10->setFont(font1_907824ff)->setWidth(60);
 
-    auto label11 = new TextArea(msg->message(202), 42, 319); label11->setFont(font1_907824ff);
-    auto label12 = new TextArea(msg->message(201), 88, 305); label12->setFont(font1_907824ff);
-    auto label13 = new TextArea(msg->message(213), 122, 319); label13->setFont(font1_907824ff)->setWidth(70)->setWordWrap(true);
+    auto label11 = std::shared_ptr<TextArea>(new TextArea(msg->message(202), 42, 319)); label11->setFont(font1_907824ff);
+    auto label12 = std::shared_ptr<TextArea>(new TextArea(msg->message(201), 88, 305)); label12->setFont(font1_907824ff);
+    auto label13 = std::shared_ptr<TextArea>(new TextArea(msg->message(213), 122, 319)); label13->setFont(font1_907824ff)->setWidth(70)->setWordWrap(true);
 
-    auto label14 = new TextArea(msg->message(202), 42, 397); label14->setFont(font1_907824ff);
-    auto label15 = new TextArea(msg->message(201), 88, 383); label15->setFont(font1_907824ff);
+    auto label14 = std::shared_ptr<TextArea>(new TextArea(msg->message(202), 42, 397)); label14->setFont(font1_907824ff);
+    auto label15 = std::shared_ptr<TextArea>(new TextArea(msg->message(201), 88, 383)); label15->setFont(font1_907824ff);
 
-    auto label16 = new TextArea(msg->message(211), 203, 69); label16->setFont(font1_907824ff);
+    auto label16 = std::shared_ptr<TextArea>(new TextArea(msg->message(211), 203, 69)); label16->setFont(font1_907824ff);
          label16->setFont(font1_907824ff)
                  ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT)
                  ->setWidth(100);
-    auto label17 = new TextArea(msg->message(212), 320, 69); label17->setFont(font1_907824ff);
+    auto label17 = std::shared_ptr<TextArea>(new TextArea(msg->message(212), 320, 69)); label17->setFont(font1_907824ff);
 
-    auto label18 = new TextArea(label16, 203, 69 + 67);
+    auto label18 = std::shared_ptr<TextArea>(new TextArea(label16, 203, 69 + 67));
     label18->setText(msg->message(202));
-    auto label19 = new TextArea(msg->message(201), 320, 69 + 67); label19->setFont(font1_907824ff);
+    auto label19 = std::shared_ptr<TextArea>(new TextArea(msg->message(201), 320, 69 + 67)); label19->setFont(font1_907824ff);
 
-    auto label20 = new TextArea(label16, 203, 69 + 67 + 66);
+    auto label20 = std::shared_ptr<TextArea>(new TextArea(label16, 203, 69 + 67 + 66));
     label20->setText(msg->message(202));
-    auto label21 = new TextArea(msg->message(201), 320, 69 + 67 + 66); label21->setFont(font1_907824ff);
+    auto label21 = std::shared_ptr<TextArea>(new TextArea(msg->message(201), 320, 69 + 67 + 66)); label21->setFont(font1_907824ff);
 
-    auto label22 = new TextArea(label16, 203, 69 + 67 + 66 + 64);
+    auto label22 = std::shared_ptr<TextArea>(new TextArea(label16, 203, 69 + 67 + 66 + 64));
     label22->setText(msg->message(209));
-    auto label23 = new TextArea(msg->message(219), 320, 69 + 67 + 66 + 64); label23->setFont(font1_907824ff);
+    auto label23 = std::shared_ptr<TextArea>(new TextArea(msg->message(219), 320, 69 + 67 + 66 + 64)); label23->setFont(font1_907824ff);
 
-    auto label24 = new TextArea(label16, 203, 69 + 67 + 66 + 66 + 65);
+    auto label24 = std::shared_ptr<TextArea>(new TextArea(label16, 203, 69 + 67 + 66 + 66 + 65));
     label24->setText(msg->message(202));
-    auto label25 = new TextArea(msg->message(201), 320, 69 + 66 + 67 + 66 + 65); label25->setFont(font1_907824ff);
+    auto label25 = std::shared_ptr<TextArea>(new TextArea(msg->message(201), 320, 69 + 66 + 67 + 66 + 65)); label25->setFont(font1_907824ff);
 
-    auto label26 = new TextArea(label16, 203, 69 + 67 + 66 + 64 + 65 + 68);
+    auto label26 = std::shared_ptr<TextArea>(new TextArea(label16, 203, 69 + 67 + 66 + 64 + 65 + 68));
     label26->setText(msg->message(202));
-    auto label27 = new TextArea(msg->message(201), 320, 69 + 64 + 67 + 66 + 65 + 68); label27->setFont(font1_907824ff);
+    auto label27 = std::shared_ptr<TextArea>(new TextArea(msg->message(201), 320, 69 + 64 + 67 + 66 + 65 + 68)); label27->setFont(font1_907824ff);
 
-    auto label28 = new TextArea(msg->message(122), 405, 72); label28->setFont(font1_907824ff);
+    auto label28 = std::shared_ptr<TextArea>(new TextArea(msg->message(122), 405, 72)); label28->setFont(font1_907824ff);
 
-    auto label29 = new TextArea(msg->message(209), 384, 38); label29->setFont(font1_907824ff);
-    auto label30 = new TextArea(msg->message(210), 524, 38);
+    auto label29 = std::shared_ptr<TextArea>(new TextArea(msg->message(209), 384, 38)); label29->setFont(font1_907824ff);
+    auto label30 = std::shared_ptr<TextArea>(new TextArea(msg->message(210), 524, 38));
          label30->setFont(font1_907824ff)
                 ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT)
                 ->setWidth(100);
 
-    auto label31 = new TextArea(msg->message(217), 384, 113); label31->setFont(font1_907824ff);
-    auto label32 = new TextArea(msg->message(209), 469, 113); label32->setFont(font1_907824ff);
-    auto label33 = new TextArea(label30, 524, 113); label33->setText(msg->message(218));
+    auto label31 = std::shared_ptr<TextArea>(new TextArea(msg->message(217), 384, 113)); label31->setFont(font1_907824ff);
+    auto label32 = std::shared_ptr<TextArea>(new TextArea(msg->message(209), 469, 113)); label32->setFont(font1_907824ff);
+    auto label33 = std::shared_ptr<TextArea>(new TextArea(label30, 524, 113)); label33->setText(msg->message(218));
 
-    auto label34 = new TextArea(msg->message(202), 384, 184); label34->setFont(font1_907824ff);
-    auto label35 = new TextArea(msg->message(221), 450, 184); label35->setFont(font1_907824ff);
-    auto label36 = new TextArea(msg->message(209), 494, 184); label36->setFont(font1_907824ff);
-    auto label37 = new TextArea(label30, 524, 184); label37->setText(msg->message(222));
+    auto label34 = std::shared_ptr<TextArea>(new TextArea(msg->message(202), 384, 184)); label34->setFont(font1_907824ff);
+    auto label35 = std::shared_ptr<TextArea>(new TextArea(msg->message(221), 450, 184)); label35->setFont(font1_907824ff);
+    auto label36 = std::shared_ptr<TextArea>(new TextArea(msg->message(209), 494, 184)); label36->setFont(font1_907824ff);
+    auto label37 = std::shared_ptr<TextArea>(new TextArea(label30, 524, 184)); label37->setText(msg->message(222));
 
-    auto label38 = new TextArea(msg->message(202), 384, 184+51); label38->setFont(font1_907824ff);
-    auto label39 = new TextArea(msg->message(221), 450, 184+51); label39->setFont(font1_907824ff);
-    auto label40 = new TextArea(msg->message(209), 494, 184+51); label40->setFont(font1_907824ff);
-    auto label41 = new TextArea(label30, 524, 184+51); label41->setText(msg->message(222));
+    auto label38 = std::shared_ptr<TextArea>(new TextArea(msg->message(202), 384, 184+51)); label38->setFont(font1_907824ff);
+    auto label39 = std::shared_ptr<TextArea>(new TextArea(msg->message(221), 450, 184+51)); label39->setFont(font1_907824ff);
+    auto label40 = std::shared_ptr<TextArea>(new TextArea(msg->message(209), 494, 184+51)); label40->setFont(font1_907824ff);
+    auto label41 = std::shared_ptr<TextArea>(new TextArea(label30, 524, 184+51)); label41->setText(msg->message(222));
 
-    auto label42 = new TextArea(msg->message(202), 384, 184+51*2); label42->setFont(font1_907824ff);
-    auto label43 = new TextArea(msg->message(221), 450, 184+51*2); label43->setFont(font1_907824ff);
-    auto label44 = new TextArea(msg->message(209), 494, 184+51*2); label44->setFont(font1_907824ff);
-    auto label45 = new TextArea(label30, 524, 184+51*2); label45->setText(msg->message(222));
+    auto label42 = std::shared_ptr<TextArea>(new TextArea(msg->message(202), 384, 184+51*2)); label42->setFont(font1_907824ff);
+    auto label43 = std::shared_ptr<TextArea>(new TextArea(msg->message(221), 450, 184+51*2)); label43->setFont(font1_907824ff);
+    auto label44 = std::shared_ptr<TextArea>(new TextArea(msg->message(209), 494, 184+51*2)); label44->setFont(font1_907824ff);
+    auto label45 = std::shared_ptr<TextArea>(new TextArea(label30, 524, 184+51*2)); label45->setText(msg->message(222));
 
-    auto label46 = new TextArea(msg->message(202), 384, 184+51*3); label46->setFont(font1_907824ff);
-    auto label47 = new TextArea(msg->message(221), 450, 184+51*3); label47->setFont(font1_907824ff);
-    auto label48 = new TextArea(msg->message(209), 494, 184+51*3); label48->setFont(font1_907824ff);
-    auto label49 = new TextArea(label30, 524, 184+51*3); label49->setText(msg->message(222));
+    auto label46 = std::shared_ptr<TextArea>(new TextArea(msg->message(202), 384, 184+51*3)); label46->setFont(font1_907824ff);
+    auto label47 = std::shared_ptr<TextArea>(new TextArea(msg->message(221), 450, 184+51*3)); label47->setFont(font1_907824ff);
+    auto label48 = std::shared_ptr<TextArea>(new TextArea(msg->message(209), 494, 184+51*3)); label48->setFont(font1_907824ff);
+    auto label49 = std::shared_ptr<TextArea>(new TextArea(label30, 524, 184+51*3)); label49->setText(msg->message(222));
 
-    auto label50 = new TextArea(msg->message(209), 384, 184+51*4); label50->setFont(font1_907824ff);
-    auto label51 = new TextArea(msg->message(209), 384, 184+51*5); label51->setFont(font1_907824ff);
-    auto label52 = new TextArea(label30, 524, 184+51*4); label52->setText(msg->message(223));
-    auto label53 = new TextArea(label30, 524, 184+51*5); label53->setText(msg->message(218));
+    auto label50 = std::shared_ptr<TextArea>(new TextArea(msg->message(209), 384, 184+51*4)); label50->setFont(font1_907824ff);
+    auto label51 = std::shared_ptr<TextArea>(new TextArea(msg->message(209), 384, 184+51*5)); label51->setFont(font1_907824ff);
+    auto label52 = std::shared_ptr<TextArea>(new TextArea(label30, 524, 184+51*4)); label52->setText(msg->message(223));
+    auto label53 = std::shared_ptr<TextArea>(new TextArea(label30, 524, 184+51*5)); label53->setText(msg->message(218));
 
     // BUTTONS
 
-    auto button1 = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 23, 450);
+    auto button1 = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 23, 450));
     button1->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SettingsMenuState::onDefaultButtonClick);
 
-    auto button2 = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 148, 450);
+    auto button2 = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 148, 450));
     button2->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SettingsMenuState::onSaveButtonClick);
 
-    auto button3 = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 263, 450);
+    auto button3 = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 263, 450));
     button3->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SettingsMenuState::onCancelButtonClick);
 
-    auto button4 = new ImageButton(ImageButton::TYPE_CHECKBOX, 383, 68);
+    auto button4 = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_CHECKBOX, 383, 68));
 
 
     // SLIDERS
-    auto slider1 = new Slider(384, 50);
-    auto slider2 = new Slider(384, 125);
+    auto slider1 = std::shared_ptr<Slider>(new Slider(384, 50));
+    auto slider2 = std::shared_ptr<Slider>(new Slider(384, 125));
     slider2->setValue(0.5);
-    auto slider3 = new Slider(384, 196);
-    auto slider4 = new Slider(384, 196 + 51);
-    auto slider5 = new Slider(384, 196 + 51*2);
-    auto slider6 = new Slider(384, 196 + 51*3);
-    auto slider7 = new Slider(384, 196 + 51*4);
-    auto slider8 = new Slider(384, 196 + 51*5);
+    auto slider3 = std::shared_ptr<Slider>(new Slider(384, 196));
+    auto slider4 = std::shared_ptr<Slider>(new Slider(384, 196 + 51));
+    auto slider5 = std::shared_ptr<Slider>(new Slider(384, 196 + 51*2));
+    auto slider6 = std::shared_ptr<Slider>(new Slider(384, 196 + 51*3));
+    auto slider7 = std::shared_ptr<Slider>(new Slider(384, 196 + 51*4));
+    auto slider8 = std::shared_ptr<Slider>(new Slider(384, 196 + 51*5));
 
 
 
     add(background);
 
-    add((std::vector<ActiveUI*>){ title1, title2, title3, title4, title5, title6,
+    add({ title1, title2, title3, title4, title5, title6,
           title7, title8, title9, title10, title11, title12, title13,
           title14, title15, title16, title17, title18, title19, title20,
           title21, title22, title23,
@@ -273,11 +281,11 @@ void SettingsMenuState::init()
           label48, label49, label50, label51, label52, label53
     });
 
-    add((std::vector<ActiveUI*>){switch1, switch2, switch3, switch4, switch5,
+    add({switch1, switch2, switch3, switch4, switch5,
          switch6, switch7, switch8, switch9, switch10, switch11
     });
 
-    add((std::vector<ActiveUI*>){slider1, slider2, slider3, slider4, slider5, slider6, slider7, slider8});
+    add({slider1, slider2, slider3, slider4, slider5, slider6, slider7, slider8});
 
 }
 
@@ -317,24 +325,23 @@ IniFileSection SettingsMenuState::_getDefaultSettings()
     });
 }
 
-TextArea* SettingsMenuState::_addLabel(std::string name, TextArea* label)
+std::shared_ptr<TextArea> SettingsMenuState::_addLabel(std::string name, std::shared_ptr<TextArea> label)
 {
     _labels.insert(std::make_pair(name, label));
     return label;
 }
 
-void SettingsMenuState::onCancelButtonClick(MouseEvent* event)
+void SettingsMenuState::onCancelButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    _game->popState();
-    std::cout << "Click" << std::endl;
+    Game::getInstance()->popState();
 }
 
-void SettingsMenuState::onSaveButtonClick(MouseEvent* event)
+void SettingsMenuState::onSaveButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    _game->popState();
+    Game::getInstance()->popState();
 }
 
-void SettingsMenuState::onDefaultButtonClick(MouseEvent* event)
+void SettingsMenuState::onDefaultButtonClick(std::shared_ptr<MouseEvent> event)
 {
 }
 

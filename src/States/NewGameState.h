@@ -41,12 +41,12 @@ class GameDudeObject;
 class NewGameState : public State
 {
 protected:
-    ImageList* _characterImages = 0;
+    std::shared_ptr<ImageList> _characterImages;
     std::vector<std::shared_ptr<GameDudeObject>> _characters;
-    TextArea* _playerStats1 = 0;
-    TextArea* _playerStats2 = 0;
-    TextArea* _playerBio = 0;
-    TextArea* _playerName = 0;
+    std::shared_ptr<TextArea> _playerStats1;
+    std::shared_ptr<TextArea> _playerStats2;
+    std::shared_ptr<TextArea> _playerBio;
+    std::shared_ptr<TextArea> _playerName;
     unsigned char _selectedCharacter = 0;
 public:    
     NewGameState();
@@ -57,12 +57,12 @@ public:
     void changeCharacter();
     std::string statToString(unsigned int stat);
 
-    void onBackButtonClick(MouseEvent* event);
-    void onBeginGameButtonClick(MouseEvent* event);
-    void onEditButtonClick(MouseEvent* event);
-    void onCreateButtonClick(MouseEvent* event);
-    void onPrevCharacterButtonClick(MouseEvent* event);
-    void onNextCharacterButtonClick(MouseEvent * event);
+    void onBackButtonClick(std::shared_ptr<MouseEvent> event);
+    void onBeginGameButtonClick(std::shared_ptr<MouseEvent> event);
+    void onEditButtonClick(std::shared_ptr<MouseEvent> event);
+    void onCreateButtonClick(std::shared_ptr<MouseEvent> event);
+    void onPrevCharacterButtonClick(std::shared_ptr<MouseEvent> event);
+    void onNextCharacterButtonClick(std::shared_ptr<MouseEvent> event);
 };
 
 }

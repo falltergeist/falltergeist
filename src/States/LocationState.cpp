@@ -27,7 +27,6 @@
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
 #include "../Engine/ResourceManager.h"
-#include "../Engine/InteractiveSurface.h"
 #include "../Engine/Location.h"
 #include "../Engine/LocationCamera.h"
 #include "../Game/GameObject.h"
@@ -63,15 +62,15 @@ void LocationState::init()
     _location = std::shared_ptr<Location>(new Location(_game->resourceManager()->mapFileType("maps/artemple.map")));
     //_location = new Location(_game->resourceManager()->mapFileType("maps/sftanker.map"));
     _game->setLocation(_location);
-    _floor = new Image(_location->tilesFloor());
-    _roof = new Image(_location->tilesRoof());
+    _floor = std::shared_ptr<Image>(new Image(_location->tilesFloor()));
+    _roof = std::shared_ptr<Image>(new Image(_location->tilesRoof()));
     //_background->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onBackgroundClick);
     //_background->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyUp);
 
     //*/
 }
 
-void LocationState::onMouseDown(MouseEvent* event)
+void LocationState::onMouseDown(std::shared_ptr<MouseEvent> event)
 {
     auto object = dynamic_cast<GameObject*>(event->reciever());
     if (!object) return;
@@ -98,35 +97,20 @@ void LocationState::onMouseDown(MouseEvent* event)
 
     auto state = std::shared_ptr<CursorDropdownState>(new CursorDropdownState(icons));
     state->setObject(std::shared_ptr<GameObject>(object));
-    auto game = &Game::getInstance();
+    auto game = Game::getInstance();
     game->pushState(state);
 
 }
 
-void LocationState::onBackgroundClick(MouseEvent* event)
+void LocationState::onBackgroundClick(std::shared_ptr<MouseEvent> event)
 {
-    //int x = _location->camera()->x() + event->x();
-    //int y = _location->camera()->y() + event->y();
-    //unsigned int hexagon = _location->positionToHexagon(x, y);
-
-    //std::cout << std::dec << x << " : " << y << " > " << hexagon << std::endl;
 }
 
-void LocationState::onObjectClick(MouseEvent* event)
+void LocationState::onObjectClick(std::shared_ptr<MouseEvent> event)
 {
-    auto obj = dynamic_cast<GameObject*>(event->reciever());
-    std::cout << obj << std::endl;
-    return;
-    auto surface = dynamic_cast<InteractiveSurface*>(event->emitter());
-    if (!surface) return;
-    auto object = dynamic_cast<GameObject*>((GameObject*)surface->owner());
-    if (!object) return;
-        std::cout << "object: " << object->PID()
-                  << "name: " << object->name()
-                  << "description: " << object->description() << std::endl;
 }
 
-void LocationState::onKeyUp(KeyboardEvent * event)
+void LocationState::onKeyUp(std::shared_ptr<KeyboardEvent> event)
 {
 }
 
@@ -150,12 +134,11 @@ void LocationState::think()
 
 
     _ui.clear();
-    _activeUi.clear();
     add(_floor);
 
     for (auto object : _location->objectsToRender())
     {
-        ActiveUI* ui = dynamic_cast<ActiveUI*>(object->ui());
+        auto ui = std::dynamic_pointer_cast<ActiveUI>(object->ui());
         ui->setX(Location::hexagonToX(object->position()) -_location->camera()->x());
         ui->setY(Location::hexagonToY(object->position())-_location->camera()->y());
         add(ui);
@@ -183,11 +166,11 @@ void LocationState::think()
     }
 }
 
-void LocationState::handle(Event* event)
+void LocationState::handle(std::shared_ptr<Event> event)
 {
-    if (MouseEvent* mouseEvent = dynamic_cast<MouseEvent*>(event))
+    if (auto mouseEvent = std::dynamic_pointer_cast<MouseEvent>(event))
     {
-        auto game = &Game::getInstance();
+        auto game = Game::getInstance();
         unsigned int scrollArea = 5;
         if (mouseEvent->name() == "mousemove")
         {

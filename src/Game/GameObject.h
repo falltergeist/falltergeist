@@ -51,9 +51,8 @@ protected:
     std::string _name;
     std::string _description;
     std::vector<VM*> _scripts;
-    Location* _location = 0;
-    ActiveUI* _ui = 0;
-    //AnimationQueue _animationQueue;
+    std::shared_ptr<Location> _location;
+    std::shared_ptr<ActiveUI> _ui;
 public:
     enum { TYPE_ITEM = 0, TYPE_CRITTER, TYPE_SCENERY, TYPE_WALL, TYPE_TILE, TYPE_MISC, TYPE_DUDE };
     enum { TYPE_ITEM_ARMOR = 0, TYPE_ITEM_CONTAINER, TYPE_ITEM_DRUG, TYPE_ITEM_WEAPON, TYPE_ITEM_AMMO, TYPE_ITEM_MISC, TYPE_ITEM_KEY };
@@ -88,12 +87,11 @@ public:
 
     std::vector<VM*>* scripts();
 
-    Location* location();
-    void setLocation(Location* value);
+    std::shared_ptr<Location> location();
+    void setLocation(std::shared_ptr<Location> value);
 
-    //AnimationQueue* animationQueue();
-    ActiveUI* ui();
-    void setUI(ActiveUI* ui);
+    std::shared_ptr<ActiveUI> ui();
+    void setUI(std::shared_ptr<ActiveUI> ui);
 
 };
 

@@ -22,6 +22,7 @@
 #define FALLTERGEIST_MOUSE_H
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
 
@@ -39,7 +40,7 @@ protected:
     int _y = 240;
     bool _visible = true;
     unsigned int _type = NONE;
-    ActiveUI* _ui = 0;
+    std::shared_ptr<ActiveUI> _ui;
 public:
     enum {
         NONE = 0,
@@ -93,7 +94,7 @@ public:
     unsigned int type();
     void setType(unsigned int type);
 
-    ActiveUI* ui();
+    std::shared_ptr<ActiveUI> ui();
 
 };
 

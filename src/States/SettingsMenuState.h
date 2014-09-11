@@ -38,19 +38,19 @@ class InteractiveSurface;
 class SettingsMenuState : public State
 {
 protected:
-    std::map<std::string, TextArea*> _labels;
+    std::map<std::string, std::shared_ptr<TextArea>> _labels;
     IniFileSection _getDefaultSettings();
     IniFileSection _getSettings();
-    TextArea* _addLabel(std::string name, TextArea* label);
+    std::shared_ptr<TextArea> _addLabel(std::string name, std::shared_ptr<TextArea> label);
 public:
     SettingsMenuState();
     virtual ~SettingsMenuState();
     virtual void init();
     virtual void think();
 
-    void onDefaultButtonClick(MouseEvent* event);
-    void onCancelButtonClick(MouseEvent* event);
-    void onSaveButtonClick(MouseEvent* event);
+    void onDefaultButtonClick(std::shared_ptr<MouseEvent> event);
+    void onCancelButtonClick(std::shared_ptr<MouseEvent> event);
+    void onSaveButtonClick(std::shared_ptr<MouseEvent> event);
 
 };
 

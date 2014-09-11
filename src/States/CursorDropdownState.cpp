@@ -103,22 +103,22 @@ void CursorDropdownState::init()
                 throw Exception("CursorDropdownState::init() - unknown icon type");
 
         }
-        _activeIcons.push_back(new Image("art/intrface/" + activeSurface));
+        _activeIcons.push_back(std::shared_ptr<Image>(new Image("art/intrface/" + activeSurface)));
         _activeIcons.back()->setY(40*i);
-        _inactiveIcons.push_back(new Image("art/intrface/" + inactiveSurface));
+        _inactiveIcons.push_back(std::shared_ptr<Image>(new Image("art/intrface/" + inactiveSurface)));
         _inactiveIcons.back()->setY(40*i);
         i++;
     }
 
     _game->mouse()->setType(Mouse::NONE);
 
-    _cursor = new Image("art/intrface/actarrow.frm");
+    _cursor = std::shared_ptr<Image>(new Image("art/intrface/actarrow.frm"));
     _cursor->setXOffset(0);
     _cursor->setYOffset(0);
     _cursor->setX(_initialX);
     _cursor->setY(_initialY);
 
-    _surface = new Image(40, 40*_icons.size());
+    _surface = std::shared_ptr<Image>(new Image(40, 40*_icons.size()));
     _surface->setX(_initialX + 29);
     _surface->setY(_initialY);
 
@@ -134,15 +134,15 @@ void CursorDropdownState::init()
     if (deltaX > 0)
     {
         _surface->setX(_surface->x() - 40 - 29 - 29);
-        delete _cursor;
-        _cursor = new Image("art/intrface/actarrom.frm");
+        _cursor.reset();
+        _cursor = std::shared_ptr<Image>(new Image("art/intrface/actarrom.frm"));
         _cursor->setXOffset(-29);
         _cursor->setYOffset(0);
         _cursor->setX(_initialX);
         _cursor->setY(_initialY);
     }
 
-    _mask = new HiddenMask(640, 480);
+    _mask = std::shared_ptr<HiddenMask>(new HiddenMask(640, 480));
     _mask->addEventHandler("mouseleftup", this, (EventRecieverMethod) &CursorDropdownState::onLeftButtonUp);
     _mask->setVisible(true);
     add(_cursor);
@@ -161,7 +161,7 @@ void CursorDropdownState::think()
     State::think();
 
 
-    for (UI* ui : _inactiveIcons)
+    for (auto ui : _inactiveIcons)
     {
         ui->texture()->copyTo(_surface->texture(), ui->x(), ui->y());
     }
@@ -183,11 +183,11 @@ void CursorDropdownState::think()
 
 }
 
-void CursorDropdownState::onLeftButtonUp(MouseEvent* event)
+void CursorDropdownState::onLeftButtonUp(std::shared_ptr<MouseEvent> event)
 {
     auto state = dynamic_cast<CursorDropdownState*>(event->reciever());
     SDL_WarpMouse(state->_initialX, state->_initialY);
-    auto game = &Game::getInstance();
+    auto game = Game::getInstance();
     game->mouse()->setType(state->_initialType);
     game->popState();
     game->location()->handleAction(state->_object, state->_icons.at(state->_currentSurface));

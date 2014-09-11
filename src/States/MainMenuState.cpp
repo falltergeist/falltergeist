@@ -53,27 +53,27 @@ void MainMenuState::init()
     _game->mouse()->setType(Mouse::BIG_ARROW);
 
     // Background image
-    auto background = new Image("art/intrface/mainmenu.frm");
+    auto background = std::shared_ptr<Image>(new Image("art/intrface/mainmenu.frm"));
 
     // "Intro" button
-    auto introButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19);
+    auto introButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19));
 
     // "New game" button
-    auto newGameButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41);
+    auto newGameButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41));
     newGameButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod)&MainMenuState::onNewGameButtonClick);
 
     // "Load game" button
-    auto loadGameButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*2);
+    auto loadGameButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*2));
 
     // "Settings" button
-    auto settingsButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*3);
+    auto settingsButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*3));
     settingsButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MainMenuState::onSettingsButtonClick);
 
     // "Credits" button
-    auto creditsButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*4);
+    auto creditsButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*4));
     
     // "Exit" button
-    auto exitButton = new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*5);
+    auto exitButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*5));
     exitButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MainMenuState::onExitButtonClick);
 
 
@@ -82,27 +82,27 @@ void MainMenuState::init()
     auto font4 = _game->resourceManager()->font("font4.aaf", 0xb89c28ff);
 
     // "Intro" label
-    auto introButtonLabel = new TextArea(msg->message(9), 55, 20);
+    auto introButtonLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(9), 55, 20));
     introButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "New Game" label
-    auto newGameButtonLabel = new TextArea(msg->message(10), 50, 20 + 41);
+    auto newGameButtonLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(10), 50, 20 + 41));
     newGameButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Load Game" label
-    auto loadGameButtonLabel = new TextArea(msg->message(11), 50, 20 + 41*2);
+    auto loadGameButtonLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(11), 50, 20 + 41*2));
     loadGameButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Options" label
-    auto optionsButtonLabel = new TextArea(msg->message(12), 50, 20 + 41*3);
+    auto optionsButtonLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(12), 50, 20 + 41*3));
     optionsButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Credits" label
-    auto creditsButtonLabel = new TextArea(msg->message(13), 50, 20 + 41*4);
+    auto creditsButtonLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(13), 50, 20 + 41*4));
     creditsButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Exit" label
-    auto exitButtonLabel = new TextArea(msg->message(14), 50, 20 + 41*5);
+    auto exitButtonLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(14), 50, 20 + 41*5));
     exitButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
 
@@ -132,19 +132,19 @@ void MainMenuState::think()
     State::think();
 }
 
-void MainMenuState::onExitButtonClick(MouseEvent* event)
+void MainMenuState::onExitButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    _game->quit();
+    Game::getInstance()->quit();
 }
 
-void MainMenuState::onNewGameButtonClick(MouseEvent* event)
+void MainMenuState::onNewGameButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    _game->pushState(std::shared_ptr<NewGameState>(new NewGameState()));
+    Game::getInstance()->pushState(std::shared_ptr<NewGameState>(new NewGameState()));
 }
 
-void MainMenuState::onSettingsButtonClick(MouseEvent* event)
+void MainMenuState::onSettingsButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    _game->pushState(std::shared_ptr<SettingsMenuState>(new SettingsMenuState()));
+    Game::getInstance()->pushState(std::shared_ptr<SettingsMenuState>(new SettingsMenuState()));
 }
 
 

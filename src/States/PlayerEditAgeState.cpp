@@ -47,41 +47,35 @@ void PlayerEditAgeState::init()
     State::init();
     setFullscreen(false);
 
-    Image* bg = new Image("art/intrface/charwin.frm");
+    auto bg = std::shared_ptr<Image>(new Image("art/intrface/charwin.frm"));
     bg->setX(160);
     bg->setY(0);
-    //bg->setXOffset(0);
-    //bg->setYOffset(0);
 
-    Image* ageBox = new Image("art/intrface/agebox.frm");
+    auto ageBox = std::shared_ptr<Image>(new Image("art/intrface/agebox.frm"));
     ageBox->setX(168);
     ageBox->setY(10);
-    //ageBox->setXOffset(0);
-    //ageBox->setYOffset(0);
 
-    Image* doneBox = new Image("art/intrface/donebox.frm");
+    auto doneBox = std::shared_ptr<Image>(new Image("art/intrface/donebox.frm"));
     doneBox->setX(175);
     doneBox->setY(40);
-    //doneBox->setXOffset(0);
-    //doneBox->setYOffset(0);
 
-    ImageButton * decButton = new ImageButton(ImageButton::TYPE_LEFT_ARROW, 178, 14);
+    auto decButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_LEFT_ARROW, 178, 14));
     decButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditAgeState::onDecButtonClick);
 
-    ImageButton * incButton = new ImageButton(ImageButton::TYPE_RIGHT_ARROW, 262, 14);
+    auto incButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_RIGHT_ARROW, 262, 14));
     incButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditAgeState::onIncButtonClick);
 
-    ImageButton * doneButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 188, 43);
+    auto doneButton= std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 188, 43));
     doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditAgeState::onDoneButtonClick);
 
     auto msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
-    TextArea * doneLabel = new TextArea(msg->message(100), 210, 43);
+    auto doneLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(100), 210, 43));
 
     auto font3_b89c28ff = _game->resourceManager()->font("font3.aaf", 0xb89c28ff);
 
     doneLabel->setFont(font3_b89c28ff);
 
-    _counter = new BigCounter(215, 13);
+    _counter = std::shared_ptr<BigCounter>(new BigCounter(215, 13));
     _counter->setNumber(_game->player()->age());
 
     add(bg);
@@ -97,34 +91,35 @@ void PlayerEditAgeState::init()
 
 PlayerEditAgeState::~PlayerEditAgeState()
 {
-    //delete _counter;
 }
 
-void PlayerEditAgeState::onDecButtonClick(MouseEvent* event)
+void PlayerEditAgeState::onDecButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    unsigned char age = _game->player()->age();
+    auto state = dynamic_cast<PlayerEditAgeState*>(event->reciever());
+    unsigned char age = Game::getInstance()->player()->age();
     if (age > 16)
     {
         age--;
-        _game->player()->setAge(age);
-        _counter->setNumber(age);
+        Game::getInstance()->player()->setAge(age);
+        state->_counter->setNumber(age);
     }
 }
 
-void PlayerEditAgeState::onIncButtonClick(MouseEvent* event)
+void PlayerEditAgeState::onIncButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    unsigned char age = _game->player()->age();
+    auto state = dynamic_cast<PlayerEditAgeState*>(event->reciever());
+    unsigned char age = Game::getInstance()->player()->age();
     if (age < 35)
     {
         age++;
-        _game->player()->setAge(age);
-        _counter->setNumber(age);
+        Game::getInstance()->player()->setAge(age);
+        state->_counter->setNumber(age);
     }
 }
 
-void PlayerEditAgeState::onDoneButtonClick(MouseEvent* event)
+void PlayerEditAgeState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    _game->popState();
+    Game::getInstance()->popState();
 }
 
 

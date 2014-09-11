@@ -52,39 +52,39 @@ void NewGameState::init()
     State::init();
     
     // Background
-    add(new Image("art/intrface/pickchar.frm"));
+    auto background = std::shared_ptr<Image>(new Image("art/intrface/pickchar.frm"));
 
     // Begin game button
-    auto beginGameButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 322);
+    auto beginGameButton= std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 322));
     beginGameButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onBeginGameButtonClick);
 
     // Edit character button
-    auto editButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 436, 319);
+    auto editButton= std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 436, 319));
     editButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onEditButtonClick);
     
     // Create character button
-    auto createButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 424);
+    auto createButton= std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 424));
     createButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onCreateButtonClick);
 
     // Back to mainmenu button
-    auto backButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 461, 424);
+    auto backButton= std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 461, 424));
     backButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onBackButtonClick);
 
     // Previous character button
-    auto prevCharacterButton = new ImageButton(ImageButton::TYPE_LEFT_ARROW, 292, 320);
+    auto prevCharacterButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_LEFT_ARROW, 292, 320));
     prevCharacterButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onPrevCharacterButtonClick);
 
     // Next character button
-    auto nextCharacterButton = new ImageButton(ImageButton::TYPE_RIGHT_ARROW, 318, 320);
+    auto nextCharacterButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_RIGHT_ARROW, 318, 320));
     nextCharacterButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onNextCharacterButtonClick);
 
     // Characters images
     _selectedCharacter = 0;
-    _characterImages = new ImageList({
+    _characterImages = std::shared_ptr<ImageList>(new ImageList({
                                           "art/intrface/combat.frm",
                                           "art/intrface/stealth.frm",
                                           "art/intrface/diplomat.frm"
-                                      }, 27, 23);
+                                      }, 27, 23));
 
     auto combat = std::shared_ptr<GameDudeObject>(new GameDudeObject());
     combat->loadFromGCDFile(ResourceManager::gcdFileType("premade/combat.gcd"));
@@ -102,16 +102,17 @@ void NewGameState::init()
     _characters.push_back(diplomat);
 
     // Character data textareas
-    _playerName = new TextArea(350, 50);
+    _playerName = std::shared_ptr<TextArea>(new TextArea(350, 50));
 
-    _playerStats1 = new TextArea(0, 80);
+    _playerStats1 = std::shared_ptr<TextArea>(new TextArea(0, 80));
     _playerStats1->setWidth(370)
                  ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
-    _playerStats2 = new TextArea(374, 80);
-    _playerBio = new TextArea(430, 50);
+    _playerStats2 = std::shared_ptr<TextArea>(new TextArea(374, 80));
+    _playerBio = std::shared_ptr<TextArea>(new TextArea(430, 50));
 
 
+    add(background);
     add(beginGameButton);
     add(editButton);
     add(createButton);
@@ -133,12 +134,12 @@ void NewGameState::think()
     State::think();
 }
 
-void NewGameState::onBackButtonClick(MouseEvent* event)
+void NewGameState::onBackButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    _game->popState();
+    Game::getInstance()->popState();
 }
 
-void NewGameState::onPrevCharacterButtonClick(MouseEvent* event)
+void NewGameState::onPrevCharacterButtonClick(std::shared_ptr<MouseEvent> event)
 {
     if (_selectedCharacter > 0)
     {
@@ -151,7 +152,7 @@ void NewGameState::onPrevCharacterButtonClick(MouseEvent* event)
     changeCharacter();
 }
 
-void NewGameState::onNextCharacterButtonClick(MouseEvent* event)
+void NewGameState::onNextCharacterButtonClick(std::shared_ptr<MouseEvent> event)
 {
     if (_selectedCharacter < 2)
     {
@@ -200,25 +201,25 @@ std::string NewGameState::statToString(unsigned int stat)
     return msg->message(stat+300)->text();
 }
 
-void NewGameState::onEditButtonClick(MouseEvent* event)
-{
-    _game->setPlayer(_characters.at(_selectedCharacter));
-    _game->pushState(std::shared_ptr<PlayerEditState>(new PlayerEditState()));
+void NewGameState::onEditButtonClick(std::shared_ptr<MouseEvent> event)
+{    
+    Game::getInstance()->setPlayer(_characters.at(_selectedCharacter));
+    Game::getInstance()->pushState(std::shared_ptr<PlayerEditState>(new PlayerEditState()));
 }
 
-void NewGameState::onCreateButtonClick(MouseEvent* event)
+void NewGameState::onCreateButtonClick(std::shared_ptr<MouseEvent> event)
 {
     auto none = std::shared_ptr<GameDudeObject>(new GameDudeObject());
     none->loadFromGCDFile(ResourceManager::gcdFileType("premade/blank.gcd"));
     _selectedCharacter = _characters.size() + 1; // to guarantee deletion of all created dudes in destructor
-    _game->setPlayer(none);
-    _game->pushState(std::shared_ptr<PlayerEditState>(new PlayerEditState()));
+    Game::getInstance()->setPlayer(none);
+    Game::getInstance()->pushState(std::shared_ptr<PlayerEditState>(new PlayerEditState()));
 }
 
-void NewGameState::onBeginGameButtonClick(MouseEvent* event)
+void NewGameState::onBeginGameButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    _game->setPlayer(_characters.at(_selectedCharacter));
-    _game->setState(std::shared_ptr<LocationState>(new LocationState()));
+    Game::getInstance()->setPlayer(_characters.at(_selectedCharacter));
+    Game::getInstance()->setState(std::shared_ptr<LocationState>(new LocationState()));
 }
 
 }

@@ -37,7 +37,7 @@ class ActiveUI : public EventEmitter, public EventReciever, public UI
 {
 public:
     ActiveUI(int x = 0, int y = 0);
-    virtual void handle(Event* event);
+    virtual void handle(std::shared_ptr<Event> event);
 };
 
 }

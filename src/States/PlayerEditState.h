@@ -39,26 +39,25 @@ namespace Falltergeist
 class PlayerEditState : public State
 {
 protected:
-    TextArea* _selectedLabel = 0;
-    TextArea* _title = 0;
-    TextArea* _description = 0;
-    //TextArea * _description;
-    Image* _selectedImage = 0;
-    std::map<std::string, TextArea *> * _labels;
-    std::map<std::string, BigCounter *> * _counters;
-    std::map<std::string, ImageButton *> * _buttons;
-    std::map<std::string, HiddenMask *> * _masks;
-    std::map<std::string, std::string> * _titles;
-    std::map<std::string, std::string> * _descriptions;
-    std::map<std::string, Image*>* _images;
+    std::shared_ptr<TextArea> _selectedLabel;
+    std::shared_ptr<TextArea> _title;
+    std::shared_ptr<TextArea> _description;
+    std::shared_ptr<Image> _selectedImage;
+    std::map<std::string, std::shared_ptr<TextArea>> _labels;
+    std::map<std::string, std::shared_ptr<BigCounter>> _counters;
+    std::map<std::string, std::shared_ptr<ImageButton>> _buttons;
+    std::map<std::string, std::shared_ptr<HiddenMask>> _masks;
+    std::map<std::string, std::string> _titles;
+    std::map<std::string, std::string> _descriptions;
+    std::map<std::string, std::shared_ptr<Image>> _images;
 
-    TextArea * _addLabel(std::string name, TextArea * label);
-    ImageButton * _addButton(std::string name, ImageButton * button);
-    BigCounter * _addCounter(std::string name, BigCounter * counter);
-    HiddenMask * _addMask(std::string name, HiddenMask * mask);
+    std::shared_ptr<TextArea> _addLabel(std::string name, std::shared_ptr<TextArea> label);
+    std::shared_ptr<ImageButton> _addButton(std::string name, std::shared_ptr<ImageButton> button);
+    std::shared_ptr<BigCounter> _addCounter(std::string name, std::shared_ptr<BigCounter> counter);
+    std::shared_ptr<HiddenMask> _addMask(std::string name, std::shared_ptr<HiddenMask> mask);
     void _addTitle(std::string name, std::string title);
     void _addDescription(std::string name, std::string description);
-    void _addImage(std::string name, Image* image);
+    void _addImage(std::string name, std::shared_ptr<Image> image);
 
     bool _statIncrease(unsigned int num);
     bool _statDecrease(unsigned int num);
@@ -71,14 +70,14 @@ public:
     void think();
     virtual ~PlayerEditState();
 
-    void onMaskClick(MouseEvent * event);
-    void onButtonClick(MouseEvent * event);
-    void onAgeButtonClick(MouseEvent * event);
-    void onNameButtonClick(MouseEvent * event);
-    void onGenderButtonClick(MouseEvent * event);
-    void onLabelClick(MouseEvent * event);
-    void onBackButtonClick(MouseEvent * event);
-    void onDoneButtonClick(MouseEvent * event);
+    void onMaskClick(std::shared_ptr<MouseEvent> event);
+    void onButtonClick(std::shared_ptr<MouseEvent> event);
+    void onAgeButtonClick(std::shared_ptr<MouseEvent> event);
+    void onNameButtonClick(std::shared_ptr<MouseEvent> event);
+    void onGenderButtonClick(std::shared_ptr<MouseEvent> event);
+    void onLabelClick(std::shared_ptr<MouseEvent> event);
+    void onBackButtonClick(std::shared_ptr<MouseEvent> event);
+    void onDoneButtonClick(std::shared_ptr<MouseEvent> event);
 };
 
 }

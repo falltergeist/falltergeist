@@ -2,6 +2,7 @@
 #define FALLTERGEIST_MOUSEEVENT_H
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
 #include "../Event/Event.h"
@@ -22,7 +23,7 @@ protected:
     int _rightButton = false;
 public:
     MouseEvent(std::string eventName = "mouse");
-    MouseEvent(const MouseEvent* event);
+    MouseEvent(const std::shared_ptr<MouseEvent> event);
     virtual ~MouseEvent();
 
     void setX(unsigned int value);

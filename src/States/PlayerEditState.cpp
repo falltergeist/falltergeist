@@ -43,14 +43,6 @@ namespace Falltergeist
 
 PlayerEditState::PlayerEditState() : State()
 {
-    _labels       = new std::map<std::string, TextArea *>;
-    _counters     = new std::map<std::string, BigCounter *>;
-    _buttons      = new std::map<std::string, ImageButton *>;
-    _masks        = new std::map<std::string, HiddenMask *>;
-    _titles       = new std::map<std::string, std::string>;
-    _descriptions = new std::map<std::string, std::string>;
-    _images       = new std::map<std::string, Image*>;
-
     // STATS
     {
         auto msg = _game->resourceManager()->msgFileType("text/english/game/stat.msg");
@@ -62,15 +54,15 @@ PlayerEditState::PlayerEditState() : State()
 
             _addTitle(ss.str(), msg->message(100 + i)->text());       // stat title
             _addDescription(ss.str(), msg->message(200 + i)->text()); // stat description
-            _addImage(ss.str(), new Image("art/skilldex/" + images[i] + ".frm")); // stat image
-            _addLabel(ss.str(), new TextArea(102, 46 + 33*i));          // stat value label
-            _addCounter(ss.str(), new BigCounter(59, 37 + 33*i));       // stat value counter
-            _addMask(ss.str(), new HiddenMask(133, 29, 14, 36 + 33*i)); // stat click mask
-            _addButton(ss.str() + "_increase", new ImageButton(ImageButton::TYPE_PLUS,  149, 38 + 33*i)); // stat increase button
-            _addButton(ss.str() + "_decrease", new ImageButton(ImageButton::TYPE_MINUS, 149, 49 + 33*i)); // stat decrease button
+            _addImage(ss.str(), std::shared_ptr<Image>(new Image("art/skilldex/" + images[i] + ".frm"))); // stat image
+            _addLabel(ss.str(), std::shared_ptr<TextArea>(new TextArea(102, 46 + 33*i)));          // stat value label
+            _addCounter(ss.str(), std::shared_ptr<BigCounter>(new BigCounter(59, 37 + 33*i)));       // stat value counter
+            _addMask(ss.str(), std::shared_ptr<HiddenMask>(new HiddenMask(133, 29, 14, 36 + 33*i))); // stat click mask
+            _addButton(ss.str() + "_increase", std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PLUS,  149, 38 + 33*i))); // stat increase button
+            _addButton(ss.str() + "_decrease", std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_MINUS, 149, 49 + 33*i))); // stat decrease button
         }
 
-        _addCounter("statsPoints", new BigCounter(126, 282)); // Free stats points counter
+        _addCounter("statsPoints", std::shared_ptr<BigCounter>(new BigCounter(126, 282))); // Free stats points counter
     }
 
     // TRAITS
@@ -85,18 +77,18 @@ PlayerEditState::PlayerEditState() : State()
             ss << "traits_" << (i+1);
             _addTitle(ss.str(), msg->message(100 + i)->text()); // trait title
             _addDescription(ss.str(), msg->message(200 + i)->text()); // trait description
-            _addImage(ss.str(), new Image("art/skilldex/" + images[i] + ".frm")); // trait image
+            _addImage(ss.str(), std::shared_ptr<Image>(new Image("art/skilldex/" + images[i] + ".frm"))); // trait image
             // left column
             if (i <= 7)
             {
-                _addLabel(ss.str(),  new TextArea(msg->message(100 + i), 48, 353 + 13*i)); // trate label
-                _addButton(ss.str(),  new ImageButton(ImageButton::TYPE_SKILL_TOGGLE, 23,  352 + 13*i)); // trate toggle button
+                _addLabel(ss.str(),  std::shared_ptr<TextArea>(new TextArea(msg->message(100 + i), 48, 353 + 13*i))); // trate label
+                _addButton(ss.str(),  std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SKILL_TOGGLE, 23,  352 + 13*i))); // trate toggle button
             }
             //right column
             else
             {
-                _addLabel(ss.str(),  new TextArea(msg->message(100 + i), 169, 353 + 13*(i-8)))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT); // trate label
-                _addButton(ss.str(),  new ImageButton(ImageButton::TYPE_SKILL_TOGGLE, 299, 352 + 13*(i-8))); // trate toggle button
+                _addLabel(ss.str(),  std::shared_ptr<TextArea>(new TextArea(msg->message(100 + i), 169, 353 + 13*(i-8))))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT); // trate label
+                _addButton(ss.str(),  std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SKILL_TOGGLE, 299, 352 + 13*(i-8)))); // trate toggle button
             }
         }
     }
@@ -112,13 +104,13 @@ PlayerEditState::PlayerEditState() : State()
             ss << "skills_" << (i+1);
             _addTitle(ss.str(), msg->message(100 + i)->text());
             _addDescription(ss.str(), msg->message(200 + i)->text());
-            _addImage(ss.str(), new Image("art/skilldex/" + images[i] + ".frm"));
-            _addButton(ss.str(),  new ImageButton(ImageButton::TYPE_SKILL_TOGGLE, 347,  26 + 11*i));
-            _addLabel(ss.str(),  new TextArea(msg->message(100 + i), 377, 27 + 11*i))->setWidth(240);
-            _addLabel(ss.str() + "_value",  new TextArea("", 577, 27 + 11*i));
+            _addImage(ss.str(), std::shared_ptr<Image>(new Image("art/skilldex/" + images[i] + ".frm")));
+            _addButton(ss.str(),  std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SKILL_TOGGLE, 347,  26 + 11*i)));
+            _addLabel(ss.str(),  std::shared_ptr<TextArea>(new TextArea(msg->message(100 + i), 377, 27 + 11*i)))->setWidth(240);
+            _addLabel(ss.str() + "_value",  std::shared_ptr<TextArea>(new TextArea("", 577, 27 + 11*i)));
         }
         // Free skill points counts
-        _addCounter("skillsPoints", new BigCounter(522, 228));
+        _addCounter("skillsPoints", std::shared_ptr<BigCounter>(new BigCounter(522, 228)));
     }
 
     // HEALTH CONDITION
@@ -126,9 +118,9 @@ PlayerEditState::PlayerEditState() : State()
         std::string images[] = { "hitpoint", "poisoned", "radiated", "eyedamag", "armright", "armleft", "legright", "legleft"};
         auto msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
         _addTitle("health_1", msg->message(300)->text());
-        _addLabel("health_1",  new TextArea(msg->message(300), 194, 46)); //health
+        _addLabel("health_1",  std::shared_ptr<TextArea>(new TextArea(msg->message(300), 194, 46))); //health
         _addDescription("health_1", _game->resourceManager()->msgFileType("text/english/game/stat.msg")->message(207)->text());
-        _addImage("health_1", new Image("art/skilldex/" + images[0] + ".frm"));
+        _addImage("health_1", std::shared_ptr<Image>(new Image("art/skilldex/" + images[0] + ".frm")));
 
         auto font1_0x183018ff = _game->resourceManager()->font("font1.aaf", 0x183018ff);
 
@@ -138,8 +130,8 @@ PlayerEditState::PlayerEditState() : State()
             ss << "health_" << (i+2);
             _addTitle(ss.str(), msg->message(312 + i)->text());
             _addDescription(ss.str(), msg->message(400 + i)->text());
-            _addLabel(ss.str(),  new TextArea(msg->message(312+i), 194, 46 + 13*(i+1)))->setFont(font1_0x183018ff);
-            _addImage(ss.str(), new Image("art/skilldex/" + images[i+1] + ".frm"));
+            _addLabel(ss.str(),  std::shared_ptr<TextArea>(new TextArea(msg->message(312+i), 194, 46 + 13*(i+1))))->setFont(font1_0x183018ff);
+            _addImage(ss.str(), std::shared_ptr<Image>(new Image("art/skilldex/" + images[i+1] + ".frm")));
         }
     }
 
@@ -156,35 +148,32 @@ PlayerEditState::PlayerEditState() : State()
             ss << "params_" << (i+1);
             _addTitle(ss.str(), msgStat->message(params[i])->text());
             _addDescription(ss.str(), msgStat->message(params[i] + 100)->text());
-            _addImage(ss.str(), new Image("art/skilldex/" + images[i] + ".frm"));
-            _addLabel(ss.str(),  new TextArea(msgEditor->message(labels[i]), 194, 182 + 13*i));
-            _addLabel(ss.str() + "_value",  new TextArea("", 288, 182 + 13*i));
+            _addImage(ss.str(), std::shared_ptr<Image>(new Image("art/skilldex/" + images[i] + ".frm")));
+            _addLabel(ss.str(),  std::shared_ptr<TextArea>(new TextArea(msgEditor->message(labels[i]), 194, 182 + 13*i)));
+            _addLabel(ss.str() + "_value",  std::shared_ptr<TextArea>(new TextArea("", 288, 182 + 13*i)));
         }
     }
 
 
-    auto background = new Image("art/intrface/edtrcrte.frm");
-
-    // description horizontal line
-    //for (unsigned int y = 300; y != 302; ++y) for (unsigned int x = 350; x != 620; ++x) background->setPixel(x,y, 0xFF000000);
+    auto background = std::shared_ptr<Image>(new Image("art/intrface/edtrcrte.frm"));
     {
-        _addButton("options", new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 345, 454));
-        _addButton("done",    new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 455, 454));
-        _addButton("cancel",  new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 554, 454));
+        _addButton("options", std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 345, 454)));
+        _addButton("done",    std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 455, 454)));
+        _addButton("cancel",  std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 554, 454)));
 
         auto font3_b89c28ff = _game->resourceManager()->font("font3.aaf", 0xb89c28ff);
 
         auto msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
-        _addLabel("options", new TextArea(msg->message(101), 365, 453))->setFont(font3_b89c28ff);
-        _addLabel("next",    new TextArea(msg->message(100), 473, 453))->setFont(font3_b89c28ff);
-        _addLabel("cancel",  new TextArea(msg->message(102), 571, 453))->setFont(font3_b89c28ff);
-        _addLabel("name",    new TextArea(_game->player()->name(), 17, 7))->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setFont(font3_b89c28ff);
-        _addLabel("age",     new TextArea("AGE", 163, 7))->setFont(font3_b89c28ff);
-        _addLabel("gender",  new TextArea(msg->message(_game->player()->gender() == 0 ? 107 : 108), 255, 7))->setFont(font3_b89c28ff); // 0 -male 1 - female
-        _addLabel("label_1", new TextArea(msg->message(112), 18, 286))->setFont(font3_b89c28ff); // ДОП. ОЧКИ
-        _addLabel("label_2", new TextArea(msg->message(139), 50, 326))->setFont(font3_b89c28ff); // ДОП. ОСОБЕННОСТИ
-        _addLabel("label_3", new TextArea(msg->message(117), 383, 5))->setFont(font3_b89c28ff);  // НАВЫКИ
-        _addLabel("label_4", new TextArea(msg->message(138), 428, 233))->setFont(font3_b89c28ff); // ОСНОВН.
+        _addLabel("options", std::shared_ptr<TextArea>(new TextArea(msg->message(101), 365, 453)))->setFont(font3_b89c28ff);
+        _addLabel("next",    std::shared_ptr<TextArea>(new TextArea(msg->message(100), 473, 453)))->setFont(font3_b89c28ff);
+        _addLabel("cancel",  std::shared_ptr<TextArea>(new TextArea(msg->message(102), 571, 453)))->setFont(font3_b89c28ff);
+        _addLabel("name",    std::shared_ptr<TextArea>(new TextArea(_game->player()->name(), 17, 7)))->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setFont(font3_b89c28ff);
+        _addLabel("age",     std::shared_ptr<TextArea>(new TextArea("AGE", 163, 7)))->setFont(font3_b89c28ff);
+        _addLabel("gender",  std::shared_ptr<TextArea>(new TextArea(msg->message(_game->player()->gender() == 0 ? 107 : 108), 255, 7)))->setFont(font3_b89c28ff); // 0 -male 1 - female
+        _addLabel("label_1", std::shared_ptr<TextArea>(new TextArea(msg->message(112), 18, 286)))->setFont(font3_b89c28ff); // ДОП. ОЧКИ
+        _addLabel("label_2", std::shared_ptr<TextArea>(new TextArea(msg->message(139), 50, 326)))->setFont(font3_b89c28ff); // ДОП. ОСОБЕННОСТИ
+        _addLabel("label_3", std::shared_ptr<TextArea>(new TextArea(msg->message(117), 383, 5)))->setFont(font3_b89c28ff);  // НАВЫКИ
+        _addLabel("label_4", std::shared_ptr<TextArea>(new TextArea(msg->message(138), 428, 233)))->setFont(font3_b89c28ff); // ОСНОВН.
         _addTitle("label_1", msg->message(120)->text());
         _addTitle("label_2", msg->message(146)->text());
         _addTitle("label_3", msg->message(150)->text());
@@ -193,27 +182,26 @@ PlayerEditState::PlayerEditState() : State()
         _addDescription("label_2", msg->message(147)->text());
         _addDescription("label_3", msg->message(151)->text());
         _addDescription("label_4", msg->message(145)->text());
-        _addImage("label_1", new Image("art/skilldex/generic.frm"));
-        _addImage("label_2", new Image("art/skilldex/traits.frm"));
-        _addImage("label_3", new Image("art/skilldex/skills.frm"));
-        _addImage("label_4", new Image("art/skilldex/skills.frm"));
+        _addImage("label_1", std::shared_ptr<Image>(new Image("art/skilldex/generic.frm")));
+        _addImage("label_2", std::shared_ptr<Image>(new Image("art/skilldex/traits.frm")));
+        _addImage("label_3", std::shared_ptr<Image>(new Image("art/skilldex/skills.frm")));
+        _addImage("label_4", std::shared_ptr<Image>(new Image("art/skilldex/skills.frm")));
 
     }
     // Name change button
-    _addButton("name",  new ImageButton(ImageButton::TYPE_PLAYER_NAME, 13, 0));
+    _addButton("name",  std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PLAYER_NAME, 13, 0)));
 
     // Age change button
-    _addButton("age",  new ImageButton(ImageButton::TYPE_PLAYER_AGE, 156, 0));
+    _addButton("age",  std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PLAYER_AGE, 156, 0)));
 
     //Gender change button
-    _addButton("gender",  new ImageButton(ImageButton::TYPE_PLAYER_GENDER, 236, 0));
+    _addButton("gender",  std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PLAYER_GENDER, 236, 0)));
 
     add(background);
 
     // add buttons to the state
     {
-        std::map<std::string, ImageButton *>::iterator it;
-        for(it = _buttons->begin(); it != _buttons->end(); ++it)
+        for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
         {
             it->second->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditState::onButtonClick);
             add(it->second);
@@ -222,8 +210,7 @@ PlayerEditState::PlayerEditState() : State()
     // add labels to the state
     {
         // reverse iterator to change drawing order
-        std::map<std::string, TextArea *>::reverse_iterator it;
-        for(it = _labels->rbegin(); it != _labels->rend(); ++it)
+        for(auto it = _labels.rbegin(); it != _labels.rend(); ++it)
         {
             it->second->setBackgroundColor(0x00000001);
             it->second->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditState::onLabelClick);
@@ -232,16 +219,14 @@ PlayerEditState::PlayerEditState() : State()
     }
     // add counters to the state
     {
-        std::map<std::string, BigCounter *>::iterator it;
-        for(it = _counters->begin(); it != _counters->end(); ++it)
+        for(auto it = _counters.begin(); it != _counters.end(); ++it)
         {
             add(it->second);
         }
     }
     // add hidden masks
     {
-        std::map<std::string, HiddenMask *>::iterator it;
-        for(it = _masks->begin(); it != _masks->end(); ++it)
+        for(auto it = _masks.begin(); it != _masks.end(); ++it)
         {
             it->second->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditState::onMaskClick);
             add(it->second);
@@ -249,13 +234,13 @@ PlayerEditState::PlayerEditState() : State()
     }
 
     // Fix to handle click on empty spaces
-    for(auto it = _labels->begin(); it != _labels->end(); ++it)
+    for(auto it = _labels.begin(); it != _labels.end(); ++it)
     {
         it->second->setBackgroundColor(0x00000001);
     }
 
-    _selectedImage = new Image(_images->at("stats_1"));
-    _selectedLabel = _labels->at("stats_1");
+    _selectedImage = _images.at("stats_1");
+    _selectedLabel = _labels.at("stats_1");
     _selectedImage->setX(480);
     _selectedImage->setY(310);
     add(_selectedImage);
@@ -263,18 +248,18 @@ PlayerEditState::PlayerEditState() : State()
     auto font1_000000ff = _game->resourceManager()->font("font1.aaf", 0x000000FF);
     auto font2_000000ff = _game->resourceManager()->font("font2.aaf", 0x000000FF);
 
-    _title = new TextArea("", 350,275);
+    _title = std::shared_ptr<TextArea>(new TextArea("", 350,275));
     _title->setFont(font2_000000ff);
     add(_title);
 
-    auto line = new Image(270, 2);
+    auto line = std::shared_ptr<Image>(new Image(270, 2));
     line->setX(350);
     line->setY(300);
     line->texture()->fill(0x000000ff);
     add(line);
 
 
-    _description = new TextArea("", 350, 315);
+    _description = std::shared_ptr<TextArea>(new TextArea("", 350, 315));
     _description->setFont(font1_000000ff)->setWidth(145)->setHeight(120)->setWordWrap(true);
     add(_description);
 
@@ -282,58 +267,49 @@ PlayerEditState::PlayerEditState() : State()
 
 PlayerEditState::~PlayerEditState()
 {
-    delete _labels;
-    delete _buttons;
-    delete _counters;
-    delete _masks;
-
-    delete _titles;
-    delete _descriptions;
-
-    delete _images;
 }
 
 void PlayerEditState::init()
 {
 }
 
-TextArea * PlayerEditState::_addLabel(std::string name, TextArea * label)
+std::shared_ptr<TextArea> PlayerEditState::_addLabel(std::string name, std::shared_ptr<TextArea> label)
 {
-    _labels->insert(std::pair<std::string,TextArea *>(name, label));
+    _labels.insert(std::pair<std::string,std::shared_ptr<TextArea>>(name, label));
     return label;
 }
 
-ImageButton * PlayerEditState::_addButton(std::string name, ImageButton * button)
+std::shared_ptr<ImageButton> PlayerEditState::_addButton(std::string name, std::shared_ptr<ImageButton> button)
 {
-    _buttons->insert(std::pair<std::string,ImageButton *>(name, button));
+    _buttons.insert(std::pair<std::string,std::shared_ptr<ImageButton>>(name, button));
     return button;
 }
 
-BigCounter * PlayerEditState::_addCounter(std::string name, BigCounter * counter)
+std::shared_ptr<BigCounter> PlayerEditState::_addCounter(std::string name, std::shared_ptr<BigCounter> counter)
 {
-    _counters->insert(std::pair<std::string,BigCounter *>(name, counter));
+    _counters.insert(std::pair<std::string,std::shared_ptr<BigCounter>>(name, counter));
     return counter;
 }
 
-HiddenMask * PlayerEditState::_addMask(std::string name, HiddenMask * mask)
+std::shared_ptr<HiddenMask> PlayerEditState::_addMask(std::string name, std::shared_ptr<HiddenMask> mask)
 {
-    _masks->insert(std::pair<std::string,HiddenMask *>(name, mask));
+    _masks.insert(std::pair<std::string,std::shared_ptr<HiddenMask>>(name, mask));
     return mask;
 }
 
 void PlayerEditState::_addTitle(std::string name, std::string title)
 {
-    _titles->insert(std::pair<std::string,std::string>(name, title));
+    _titles.insert(std::pair<std::string,std::string>(name, title));
 }
 
 void PlayerEditState::_addDescription(std::string name, std::string description)
 {
-    _descriptions->insert(std::pair<std::string,std::string>(name, description));
+    _descriptions.insert(std::pair<std::string,std::string>(name, description));
 }
 
-void PlayerEditState::_addImage(std::string name, Image* image)
+void PlayerEditState::_addImage(std::string name, std::shared_ptr<Image> image)
 {
-    _images->insert(std::pair<std::string,Image*>(name, image));
+    _images.insert(std::pair<std::string, std::shared_ptr<Image>>(name, image));
 }
 
 
@@ -343,24 +319,24 @@ void PlayerEditState::think()
     auto player = _game->player();
     auto msgEditor = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
 
-    _labels->at("name")->setText(player->name());
-    _labels->at("age")->setText(msgEditor->message(104))->appendText(" ")->appendText(std::to_string(player->age()));
-    _labels->at("gender")->setText(msgEditor->message(player->gender() == 0 ? 107 : 108)); // 0 - male   1 - female
+    _labels.at("name")->setText(player->name());
+    _labels.at("age")->setText(msgEditor->message(104))->appendText(" ")->appendText(std::to_string(player->age()));
+    _labels.at("gender")->setText(msgEditor->message(player->gender() == 0 ? 107 : 108)); // 0 - male   1 - female
 
-    _counters->at("statsPoints")->setNumber(player->statsPoints());
-    _counters->at("skillsPoints")->setNumber(player->skillsPoints());
+    _counters.at("statsPoints")->setNumber(player->statsPoints());
+    _counters.at("skillsPoints")->setNumber(player->skillsPoints());
 
-    _labels->at("health_1")->setText(msgEditor->message(300))->appendText("  ")->appendText(std::to_string(player->hitPointsMax()))->appendText("/")->appendText(std::to_string(player->hitPointsMax()));
-    _labels->at("params_1_value")->setText(player->armorClass());
-    _labels->at("params_2_value")->setText(player->actionPoints());
-    _labels->at("params_3_value")->setText(player->carryWeight());
-    _labels->at("params_4_value")->setText(player->meleeDamage());
-    _labels->at("params_5_value")->setText(player->damageResistance())->appendText("%");
-    _labels->at("params_6_value")->setText(player->poisonResistance())->appendText("%");
-    _labels->at("params_7_value")->setText(player->radiationResistance())->appendText("%");
-    _labels->at("params_8_value")->setText(player->sequence());
-    _labels->at("params_9_value")->setText(player->healingRate());
-    _labels->at("params_10_value")->setText(player->criticalChance())->appendText("%");
+    _labels.at("health_1")->setText(msgEditor->message(300))->appendText("  ")->appendText(std::to_string(player->hitPointsMax()))->appendText("/")->appendText(std::to_string(player->hitPointsMax()));
+    _labels.at("params_1_value")->setText(player->armorClass());
+    _labels.at("params_2_value")->setText(player->actionPoints());
+    _labels.at("params_3_value")->setText(player->carryWeight());
+    _labels.at("params_4_value")->setText(player->meleeDamage());
+    _labels.at("params_5_value")->setText(player->damageResistance())->appendText("%");
+    _labels.at("params_6_value")->setText(player->poisonResistance())->appendText("%");
+    _labels.at("params_7_value")->setText(player->radiationResistance())->appendText("%");
+    _labels.at("params_8_value")->setText(player->sequence());
+    _labels.at("params_9_value")->setText(player->healingRate());
+    _labels.at("params_10_value")->setText(player->criticalChance())->appendText("%");
 
     // Stats counters and labels
     for (unsigned int i = 0; i < 7; i++)
@@ -368,14 +344,14 @@ void PlayerEditState::think()
         std::stringstream ss;
         ss << "stats_" << (i+1);
         unsigned int val = player->statTotal(i);
-        _counters->at(ss.str())->setNumber(val);
-        _counters->at(ss.str())->setColor(BigCounter::COLOR_WHITE);
+        _counters.at(ss.str())->setNumber(val);
+        _counters.at(ss.str())->setColor(BigCounter::COLOR_WHITE);
         if (val > 10)
         {
             val = 10;
-            _counters->at(ss.str())->setColor(BigCounter::COLOR_RED);
+            _counters.at(ss.str())->setColor(BigCounter::COLOR_RED);
         }
-        _labels->at(ss.str())->setText(msgEditor->message(199 + (val < 1 ? 1 : val)));
+        _labels.at(ss.str())->setText(msgEditor->message(199 + (val < 1 ? 1 : val)));
     }
 
     // Skills values
@@ -383,13 +359,11 @@ void PlayerEditState::think()
     {
         std::stringstream ss;
         ss << "skills_" << (i + 1) << "_value";
-        _labels->at(ss.str())->setText(player->skillValue(i))->appendText("%");
+        _labels.at(ss.str())->setText(player->skillValue(i))->appendText("%");
     }
 
-
-    std::map<std::string, TextArea *>::iterator it;
     // Default labels colors
-    for(it = _labels->begin(); it != _labels->end(); ++it)
+    for(auto it = _labels.begin(); it != _labels.end(); ++it)
     {
         std::string name = it->first;
 
@@ -421,15 +395,15 @@ void PlayerEditState::think()
     }
 
     // Selected labels colors
-    for(it = _labels->begin(); it != _labels->end(); ++it)
+    for(auto it = _labels.begin(); it != _labels.end(); ++it)
     {
         if (_selectedLabel != it->second) continue;
 
         std::string name = it->first;
 
-        _title->setText(_titles->at(name));
-        _description->setText(_descriptions->at(name));
-        _selectedImage->setTexture(_images->at(name)->texture());
+        _title->setText(_titles.at(name));
+        _description->setText(_descriptions.at(name));
+        _selectedImage->setTexture(_images.at(name)->texture());
         //_selectedImage->setX(480);
         //_selectedImage->setY(310);
         //_image->setXOffset(0);
@@ -447,7 +421,7 @@ void PlayerEditState::think()
         if (name.find("params_") == 0)
         {
             it->second->setFont(font1_ffff7fff);
-            _labels->at(name+"_value")->setFont(font1_ffff7fff);
+            _labels.at(name+"_value")->setFont(font1_ffff7fff);
         }
 
         if (name.find("traits_") == 0)
@@ -460,7 +434,7 @@ void PlayerEditState::think()
         {
             unsigned int number = atoi(name.substr(7).c_str());
             it->second->setFont(player->skill(number - 1) ? font1_ffffffff : font1_ffff7fff);
-            _labels->at(name+"_value")->setFont(player->skill(number - 1) ? font1_ffffffff : font1_ffff7fff);
+            _labels.at(name+"_value")->setFont(player->skill(number - 1) ? font1_ffffffff : font1_ffff7fff);
         }
 
         if (name.find("health_") == 0)
@@ -535,13 +509,14 @@ bool PlayerEditState::_skillToggle(unsigned int num)
     return false;
 }
 
-void PlayerEditState::onButtonClick(MouseEvent* event)
+void PlayerEditState::onButtonClick(std::shared_ptr<MouseEvent> event)
 {    
     auto sender = dynamic_cast<ImageButton*>(event->emitter());
-    std::map<std::string, ImageButton *>::iterator it;
-    for(it = _buttons->begin(); it != _buttons->end(); ++it)
+    auto state = dynamic_cast<PlayerEditState*>(event->reciever());
+
+    for(auto it = state->_buttons.begin(); it != state->_buttons.end(); ++it)
     {
-        if (it->second == sender)
+        if (it->second.get() == sender)
         {
             std::string name = it->first;
 
@@ -553,8 +528,8 @@ void PlayerEditState::onButtonClick(MouseEvent* event)
 
             if (name.find("stats_") == 0)
             {
-                _selectedLabel = _labels->at(name.substr(0,7));
-                _selectedImage->setTexture(_images->at(name.substr(0,7))->texture());
+                state->_selectedLabel = state->_labels.at(name.substr(0,7));
+                state->_selectedImage->setTexture(state->_images.at(name.substr(0,7))->texture());
                 unsigned int number = atoi(name.substr(6,1).c_str());
                 if (name.find("_increase") == 7)
                 {
@@ -569,44 +544,45 @@ void PlayerEditState::onButtonClick(MouseEvent* event)
             if (name.find("traits_") == 0)
             {
                 unsigned int number = atoi(name.substr(7).c_str());
-                _selectedLabel = _labels->at(name);
-                _selectedImage->setTexture(_images->at(name)->texture());
+                state->_selectedLabel = state->_labels.at(name);
+                state->_selectedImage->setTexture(state->_images.at(name)->texture());
 
                 if (!_traitToggle(number - 1))
                 {
                     auto state = std::shared_ptr<PlayerEditAlertState>(new PlayerEditAlertState());
-                    auto msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+                    auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
                     std::string text = msg->message(148)->text() + "\n" + msg->message(149)->text();
                     state->setMessage(text);
-                    _game->pushState(state);
+                    Game::getInstance()->pushState(state);
                 }
             }
 
             if (name.find("skills_") == 0)
             {
                 unsigned int number = atoi(name.substr(7).c_str());
-                _selectedLabel = _labels->at(name);                
-                _selectedImage->setTexture(_images->at(name)->texture());
+                state->_selectedLabel = state->_labels.at(name);
+                state->_selectedImage->setTexture(state->_images.at(name)->texture());
                 if (!_skillToggle(number - 1))
                 {
                     auto state = std::shared_ptr<PlayerEditAlertState>(new PlayerEditAlertState());
-                    auto msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+                    auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
                     std::string text = msg->message(140)->text() + "\n" + msg->message(141)->text();
                     state->setMessage(text);
-                    _game->pushState(state);
+                    Game::getInstance()->pushState(state);
                 }
             }
         }
     }
 }
 
-void PlayerEditState::onLabelClick(MouseEvent * event)
+void PlayerEditState::onLabelClick(std::shared_ptr<MouseEvent> event)
 {
-    std::map<std::string, TextArea *>::iterator it;
-    for(it = _labels->begin(); it != _labels->end(); ++it)
+    auto state = dynamic_cast<PlayerEditState*>(event->reciever());
+
+    for(auto it = state->_labels.begin(); it != state->_labels.end(); ++it)
     {
         std::string name = it->first;
-        if (it->second == event->emitter())
+        if (it->second.get() == event->emitter())
         {
             if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0 || name.find("label_") == 0)
             {
@@ -615,55 +591,55 @@ void PlayerEditState::onLabelClick(MouseEvent * event)
                 {
                     label = name.substr(0, name.find("_value"));
                 }
-                _selectedLabel = _labels->at(label.c_str());
-                _selectedImage->setTexture(_images->at(label.c_str())->texture());
+                state->_selectedLabel = state->_labels.at(label.c_str());
+                state->_selectedImage->setTexture(state->_images.at(label.c_str())->texture());
             }
         }
     }
 }
 
-void PlayerEditState::onMaskClick(MouseEvent * event)
+void PlayerEditState::onMaskClick(std::shared_ptr<MouseEvent> event)
 {
-    std::map<std::string, HiddenMask *>::iterator it;
-    for(it = _masks->begin(); it != _masks->end(); ++it)
+    auto state = dynamic_cast<PlayerEditState*>(event->reciever());
+
+    for(auto it = state->_masks.begin(); it != state->_masks.end(); ++it)
     {
-        if (it->second == event->emitter())
+        if (it->second.get() == event->emitter())
         {
             std::string name = it->first;
             if (name.find("stats_") == 0)
             {
-                _selectedLabel = _labels->at(name);
-                _selectedImage->setTexture(_images->at(name)->texture());
-
+                state->_selectedLabel = state->_labels.at(name);
+                state->_selectedImage->setTexture(state->_images.at(name)->texture());
             }
         }
     }
 }
 
 
-void PlayerEditState::onNameButtonClick(MouseEvent * event)
+void PlayerEditState::onNameButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    _game->pushState(std::shared_ptr<PlayerEditNameState>(new PlayerEditNameState()));
+    Game::getInstance()->pushState(std::shared_ptr<PlayerEditNameState>(new PlayerEditNameState()));
 }
 
-void PlayerEditState::onAgeButtonClick(MouseEvent * event)
+void PlayerEditState::onAgeButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    _game->pushState(std::shared_ptr<PlayerEditAgeState>(new PlayerEditAgeState()));
+    Game::getInstance()->pushState(std::shared_ptr<PlayerEditAgeState>(new PlayerEditAgeState()));
 }
 
-void PlayerEditState::onGenderButtonClick(MouseEvent * event)
+void PlayerEditState::onGenderButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    _game->pushState(std::shared_ptr<PlayerEditGenderState>(new PlayerEditGenderState()));
+    Game::getInstance()->pushState(std::shared_ptr<PlayerEditGenderState>(new PlayerEditGenderState()));
 }
 
-void PlayerEditState::onBackButtonClick(MouseEvent *event)
+void PlayerEditState::onBackButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    _game->popState();
+    Game::getInstance()->popState();
 }
 
-void PlayerEditState::onDoneButtonClick(MouseEvent * event)
+void PlayerEditState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    _game->setState(std::shared_ptr<LocationState>(new LocationState()));
+    Game::getInstance()->setState(std::shared_ptr<LocationState>(new LocationState()));
 }
 
 }

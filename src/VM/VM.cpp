@@ -175,7 +175,7 @@ void VM::run()
             case 0x8014:
             {
                 std::cout << "[*] getExported(name)" << std::endl;
-                auto game = &Game::getInstance();
+                auto game = Game::getInstance();
                 auto EVARS = game->location()->EVARS();
                 switch (_dataStack.top()->type())
                 {
@@ -195,7 +195,7 @@ void VM::run()
                 std::cout << "[*] export(value, name)" << std::endl;
                 auto name = (std::string*)popDataPointer();
                 auto value = _dataStack.pop();
-                auto game = &Game::getInstance();
+                auto game = Game::getInstance();
                 auto EVARS = game->location()->EVARS();
                 EVARS->at(*name) = value;
                 break;
@@ -204,7 +204,7 @@ void VM::run()
             {
                 std::cout << "[*] export(name)" << std::endl;
                 auto name = (std::string*)popDataPointer();
-                auto game = &Game::getInstance();
+                auto game = Game::getInstance();
                 auto EVARS = game->location()->EVARS();
                 if (EVARS->find(*name) == EVARS->end())
                 {
@@ -625,7 +625,7 @@ void VM::run()
             {
                 std::cout << "[+] void giveExpPoints(int points)" << std::endl;
                 auto points = popDataInteger();
-                auto game = &Game::getInstance();
+                auto game = Game::getInstance();
                 game->location()->player()->setExperience(game->location()->player()->experience() + points);
                 break;
             }
@@ -655,7 +655,7 @@ void VM::run()
                 auto PID = popDataInteger();
                 auto elevation = popDataInteger();
                 auto position = popDataInteger();
-                auto game = &Game::getInstance();
+                auto game = Game::getInstance();
                 std::shared_ptr<GameObject> found;
                 for (auto object : game->location()->objects())
                 {
@@ -684,7 +684,7 @@ void VM::run()
                 auto y = popDataInteger();
                 auto x = popDataInteger();
                 auto position = y*200 + x;
-                auto game = &Game::getInstance();
+                auto game = Game::getInstance();
                 auto player = game->location()->player();
                 player->setPosition(position);
                 player->setOrientation(orientation);
@@ -837,7 +837,7 @@ void VM::run()
                 auto PID = popDataInteger();
                 auto elevation = popDataInteger();
                 auto position = popDataInteger();
-                auto game = &Game::getInstance();
+                auto game = Game::getInstance();
                 int found = 0;
                 for (auto object : game->location()->objects())
                 {
@@ -864,7 +864,7 @@ void VM::run()
             case 0x80bf:
             {
                 std::cout << "[+] GameDudeObject* dude_obj()" << std::endl;
-                auto game = &Game::getInstance();
+                auto game = Game::getInstance();
                 pushDataPointer(game->location()->player().get());
                 break;
             }
@@ -894,7 +894,7 @@ void VM::run()
                     pushDataInteger(0);
                     break;
                 }
-                auto game = &Game::getInstance();
+                auto game = Game::getInstance();
                 pushDataInteger(game->location()->MVAR(num));
                 break;
             }
@@ -903,7 +903,7 @@ void VM::run()
                 std::cout << "[+] MVAR[num] = value" << std::endl;
                 auto value = popDataInteger();
                 auto num = popDataInteger();
-                auto game = &Game::getInstance();
+                auto game = Game::getInstance();
                 game->location()->setMVAR(num, value);
                 break;
             }
@@ -916,7 +916,7 @@ void VM::run()
                     pushDataInteger(0);
                     break;
                 }
-                auto game = &Game::getInstance();
+                auto game = Game::getInstance();
                 pushDataInteger(game->GVAR(num));
                 break;
             }
@@ -925,7 +925,7 @@ void VM::run()
                 std::cout << "[+] GVAR[num] = value" << std::endl;
                 auto value = popDataInteger();
                 auto num = popDataInteger();
-                auto game = &Game::getInstance();
+                auto game = Game::getInstance();
                 game->setGVAR(num, value);
                 break;
             }
@@ -1100,13 +1100,13 @@ void VM::run()
             {
                 std::cout << "[*] void start_gdialog(int msgFileNum, GameCritterObject* who, int mood, int headNum, int backgroundIdx)" << std::endl;
                 auto dialog = std::shared_ptr<CritterDialogState>(new CritterDialogState());
-                Game::getInstance().setDialog(dialog);
+                Game::getInstance()->setDialog(dialog);
                 popDataInteger(); //auto backgroundIdx = popDataInteger();
                 popDataInteger(); //auto headNum = popDataInteger();
                 popDataInteger();//auto mood = popDataInteger();
                 auto critter = dynamic_cast<GameCritterObject*>((GameCritterObject*)popDataPointer());
                 if (!critter) throw Exception("VM::opcode80de - wrong critter pointers");
-                dialog->setCritter(critter);
+                dialog->setCritter(std::shared_ptr<GameCritterObject>(critter));
                 dialog->setScript(this);
                 popDataInteger();//auto msgFileNum = popDataInteger();
                 break;
@@ -1114,7 +1114,7 @@ void VM::run()
             case 0x80df:
             {
                 std::cout << "[?] end_dialogue" << std::endl;
-                auto game = &Game::getInstance();
+                auto game = Game::getInstance();
                 game->popState();
                 break;
             }
@@ -1444,14 +1444,14 @@ void VM::run()
             case 0x811c:
             {
                 std::cout << "[?] gsay_start" << std::endl;
-                auto game = &Game::getInstance();
+                auto game = Game::getInstance();
                 game->pushState(game->dialog());
                 break;
             }
             case 0x811d:
             {            
                 std::cout << "[?] gsay_end" << std::endl;
-                auto dialog = Game::getInstance().dialog();
+                auto dialog = Game::getInstance()->dialog();
                 if (dialog->hasAnswers())
                 {
                     pushDataInteger(0);
@@ -1466,13 +1466,13 @@ void VM::run()
                 if (_dataStack.top()->type() == VMStackValue::TYPE_POINTER)
                 {
                     auto question = (std::string*)popDataPointer();
-                    Game::getInstance().dialog()->setQuestion(question);
+                    Game::getInstance()->dialog()->setQuestion(question);
                 }
                 else
                 {
                     auto msg_num = popDataInteger();
                     auto msg_file_num = popDataInteger();
-                    Game::getInstance().dialog()->setQuestion(msgMessage(msg_file_num, msg_num));
+                    Game::getInstance()->dialog()->setQuestion(msgMessage(msg_file_num, msg_num));
                 }
                 break;
             }
@@ -1503,7 +1503,7 @@ void VM::run()
                     text = msgMessage(msg_file_num, msg_num);
                 }
                 auto iq = popDataInteger();
-                auto game = &Game::getInstance();
+                auto game = Game::getInstance();
                 if (iq >= 0)
                 {
                     if (game->player()->stat(game->player()->STATS_INTELLIGENCE) >= iq)

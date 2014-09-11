@@ -51,29 +51,27 @@ void PlayerEditAlertState::init()
     State::init();
     setFullscreen(false);
 
-    auto bg = new Image("art/intrface/lgdialog.frm");
+    auto bg = std::shared_ptr<Image>(new Image("art/intrface/lgdialog.frm"));
     bg->setX(164);
     bg->setY(173);
 
-    auto font1_ff9f48ff = _game->resourceManager()->font("font1.aaf", 0xff9f48ff);
+    auto font1_ff9f48ff = ResourceManager::font("font1.aaf", 0xff9f48ff);
 
-    TextArea * message = new TextArea(_message.c_str(), 194, 213);
+    auto message = std::shared_ptr<TextArea>(new TextArea(_message.c_str(), 194, 213));
     message->setWidth(250);
     message->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     message->setFont(font1_ff9f48ff);
 
-    auto doneBox = new Image("art/intrface/donebox.frm");
+    auto doneBox = std::shared_ptr<Image>(new Image("art/intrface/donebox.frm"));
     doneBox->setX(254);
     doneBox->setY(270);
 
-    ImageButton * doneButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 264, 273);
+    auto doneButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 264, 273));
     doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditAlertState::onDoneButtonClick);
 
-    auto msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
-    TextArea * doneLabel = new TextArea(msg->message(100), 284, 273);
-
-    auto font3_b89c28ff = _game->resourceManager()->font("font3.aaf", 0xb89c28ff);
-
+    auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
+    auto doneLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(100), 284, 273));
+    auto font3_b89c28ff = ResourceManager::font("font3.aaf", 0xb89c28ff);
     doneLabel->setFont(font3_b89c28ff);
 
     add(bg);
@@ -83,9 +81,9 @@ void PlayerEditAlertState::init()
     add(doneLabel);
 }
 
-void PlayerEditAlertState::onDoneButtonClick(MouseEvent* event)
+void PlayerEditAlertState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    _game->popState();
+    Game::getInstance()->popState();
 }
 
 }

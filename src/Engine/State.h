@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <vector>
+#include <memory>
 
 // Falltergeist includes
 #include "../Engine/Event/EventReciever.h"
@@ -41,9 +42,8 @@ class ActiveUI;
 class State : public EventReciever
 {
 protected:
-    Game* _game;
-    std::vector<UI*> _ui;
-    std::vector<ActiveUI*> _activeUi;
+    std::shared_ptr<Game> _game;
+    std::vector<std::shared_ptr<UI>> _ui;
 
     bool _fullscreen = true;
     bool _initialized = false;
@@ -51,17 +51,15 @@ public:
     State();
     virtual ~State();
 
-    void add(ActiveUI* ui);
-    void add(UI* ui);
-    void add(std::vector<ActiveUI*> uis);
-    void add(std::vector<UI*> uis);
+    void add(std::shared_ptr<UI> ui);
+    void add(std::vector<std::shared_ptr<UI>> uis);
     bool fullscreen();
     void setFullscreen(bool value);
     bool initialized();
     virtual void init();
     virtual void think();
-    virtual void handle(Event* event);
-    std::vector<UI*>* ui();
+    virtual void handle(std::shared_ptr<Event> event);
+    std::vector<std::shared_ptr<UI>>* ui();
 };
 
 }

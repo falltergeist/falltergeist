@@ -38,16 +38,16 @@ class PlayerEditNameState : public State
 {
 protected:
     unsigned int _timer;
-    TextArea* _name;
-    Image* _cursor;
-    std::map<char,char> * _keyCodes;
+    std::shared_ptr<TextArea> _name;
+    std::shared_ptr<Image> _cursor;
+    std::map<char,char> _keyCodes;
 public:
     PlayerEditNameState();
     ~PlayerEditNameState();
     void init();
     void think();
-    void onDoneButtonClick();
-    void onKeyboardPress(KeyboardEvent * event);
+    void onDoneButtonClick(std::shared_ptr<MouseEvent> event);
+    void onKeyboardPress(std::shared_ptr<KeyboardEvent> event);
 };
 
 

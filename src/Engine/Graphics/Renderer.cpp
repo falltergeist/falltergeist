@@ -46,7 +46,7 @@ void Renderer::init()
 
 void Renderer::beginFrame()
 {
-    auto game = &Game::getInstance();
+    auto game = Game::getInstance();
 
     for (auto i = game->ui()->begin(); i != game->ui()->end(); ++i)
     {

@@ -35,18 +35,11 @@ namespace Falltergeist
 
 State::State() : EventReciever()
 {
-    _game = &Game::getInstance();
+    _game = Game::getInstance();
 }
 
 State::~State()
 {
-
-    while (!_ui.empty())
-    {
-        delete _ui.back();
-        _ui.pop_back();
-    }
-
 }
 
 void State::init()
@@ -56,9 +49,9 @@ void State::init()
 
 void State::think()
 {
-    for (std::vector<UI*>::iterator i = _ui.begin(); i < _ui.end(); i++)
+    for (auto ui : _ui)
     {
-        (*i)->think();
+        ui->think();
     }
 }
 
@@ -77,36 +70,28 @@ void State::setFullscreen(bool value)
     _fullscreen = value;
 }
 
-void State::add(ActiveUI* activeUi)
-{
-    _activeUi.push_back(activeUi);
-    add((UI*)activeUi);
-}
-
-void State::add(UI* ui)
+void State::add(std::shared_ptr<UI> ui)
 {
     _ui.push_back(ui);
 }
 
-void State::add(std::vector<ActiveUI*> uis)
+void State::add(std::vector<std::shared_ptr<UI>> uis)
 {
-    for (auto& ui : uis) add(ui);
+    for (auto ui : uis) add(ui);
 }
 
-void State::add(std::vector<UI*> uis)
+void State::handle(std::shared_ptr<Event> event)
 {
-    for (auto& ui : uis) add(ui);
-}
-
-void State::handle(Event* event)
-{
-    for (auto activeUI : _activeUi)
+    for (auto ui : _ui)
     {
-        activeUI->handle(event);
+        if (auto activeUI = std::dynamic_pointer_cast<ActiveUI>(ui))
+        {
+            activeUI->handle(event);
+        }
     }
 }
 
-std::vector<UI*>* State::ui()
+std::vector<std::shared_ptr<UI>>* State::ui()
 {
     return &_ui;
 }

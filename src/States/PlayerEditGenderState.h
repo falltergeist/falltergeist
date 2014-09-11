@@ -35,14 +35,14 @@ class ImageList;
 class PlayerEditGenderState : public State
 {
 protected:
-    ImageList* _maleImage;
-    ImageList* _femaleImage;
+    std::shared_ptr<ImageList> _maleImage;
+    std::shared_ptr<ImageList> _femaleImage;
 public:
     PlayerEditGenderState();
     void init();
-    void onFemaleButtonPress(MouseEvent * event);
-    void onMaleButtonPress(MouseEvent * event);
-    void onDoneButtonClick(MouseEvent * event);
+    void onFemaleButtonPress(std::shared_ptr<MouseEvent> event);
+    void onMaleButtonPress(std::shared_ptr<MouseEvent> event);
+    void onDoneButtonClick(std::shared_ptr<MouseEvent> event);
 };
 
 }
