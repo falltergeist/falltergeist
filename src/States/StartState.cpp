@@ -33,6 +33,7 @@
 #include "../States/CritterDialogState.h"
 #include "../States/StartState.h"
 #include "../UI/Image.h"
+#include "../Game/GameDudeObject.h"
 
 // Third party includes
 
@@ -64,12 +65,16 @@ void StartState::init()
 void StartState::think()
 {
     State::think();
-    Game::getInstance()->setState(std::shared_ptr<LocationState>(new LocationState())); return;
-    //_game->setState(new CritterDialogState()); return;
+    if (false)
+    {
+        std::shared_ptr<GameDudeObject>player = std::shared_ptr<GameDudeObject>(new GameDudeObject());
+        player->loadFromGCDFile(ResourceManager::gcdFileType("premade/combat.gcd"));
+        Game::getInstance()->setPlayer(player);
+        Game::getInstance()->setState(std::shared_ptr<LocationState>(new LocationState()));
+        return;
+    }
     if (_splashTicks + 3000 < SDL_GetTicks())
     {
-        //_game->setPlayer(new Player(ResourceManager::gcdFileType("premade/combat.gcd")));
-        //_game->setState(new SettingsMenuState(_game));
         Game::getInstance()->setState(std::shared_ptr<MainMenuState>(new MainMenuState()));
     }    
 }

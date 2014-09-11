@@ -137,12 +137,12 @@ void Location::init()
         if (mapObject->scriptId() > 0)
         {
             auto intFile = ResourceManager::intFileType(mapObject->scriptId());
-            if (intFile) object->scripts()->push_back(new VM(intFile.get(),object.get()));
+            if (intFile) object->scripts()->push_back(new VM(intFile,object.get()));
         }
         if (mapObject->mapScriptId() > 0 && mapObject->mapScriptId() != mapObject->scriptId())
         {
             auto intFile = ResourceManager::intFileType(mapObject->mapScriptId());
-            if (intFile) object->scripts()->push_back(new VM(intFile.get(), object.get()));
+            if (intFile) object->scripts()->push_back(new VM(intFile, object.get()));
         }
 
         _objects.push_back(object);
@@ -155,21 +155,22 @@ void Location::init()
     _player->setFID(FID_HERO_MALE);
     _player->setOrientation(_mapFile->defaultOrientation());
     _player->setPosition(_mapFile->defaultPosition());
-    //auto script = new VM(ResourceManager::intFileType(0), _player);
-    //_player->scripts()->push_back(script);
+
+    // ??????
+    auto script = new VM(ResourceManager::intFileType(0), _player.get());
+    _player->scripts()->push_back(script);
+
+
     _objects.push_back(_player);
 
-    /*
+
     // ON MAP LOADED
     if (_mapFile->scriptId() > 0)
     {
         _script = new VM(ResourceManager::intFileType(_mapFile->scriptId()-1), this);
     }
-    */
-    // -----------------------
-    //generateBackground();
-    checkObjectsToRender();
 
+    checkObjectsToRender();
 }
 
 std::shared_ptr<GameDudeObject> Location::player()
@@ -370,7 +371,7 @@ std::shared_ptr<GameObject> Location::createObject(int PID)
     if (proto->scriptId() > 0)
     {
         auto intFile = ResourceManager::intFileType(proto->scriptId());
-        if (intFile) object->scripts()->push_back(new VM(intFile.get(), object.get()));
+        if (intFile) object->scripts()->push_back(new VM(intFile, object.get()));
     }
 
     return object;
@@ -410,9 +411,10 @@ void Location::think()
         _lastObjectsCheck = SDL_GetTicks();
         checkObjectsToRender();
     }
-    /*
+
     if (!_initialized)
     {
+
         _initialized = true;
         if (_script) _script->initialize();
         if (_script) _script->call("map_enter_p_proc");
@@ -428,7 +430,7 @@ void Location::think()
 
     }
     else
-    {
+    {        
         if (_scriptsTicks + 500 < SDL_GetTicks())
         {
             _scriptsTicks = SDL_GetTicks();
@@ -445,15 +447,8 @@ void Location::think()
              }
         }
 
-        for (auto object : _objects)
-        {
-            if (Animation* animation = object->animationQueue()->animation())
-            {
-                animation->think();
-            }
-        }
     }
-    */
+
 }
 
 

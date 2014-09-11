@@ -36,7 +36,7 @@ class VM
 {
 protected:
     void* _owner;
-    libfalltergeist::IntFileType * _script = 0;    
+    std::shared_ptr<libfalltergeist::IntFileType> _script;
     bool _initialized = false;
     VMStack _dataStack;
     VMStack _returnStack;
@@ -58,13 +58,13 @@ protected:
     void _anim(void* who, int anim, int direction);
     std::string* msgMessage(int msg_file_num, int msg_num);
 public:
-    VM(libfalltergeist::IntFileType * script, void* owner);
+    VM(std::shared_ptr<libfalltergeist::IntFileType> script, void* owner);
     VM(std::string filename, void* owner);
     virtual ~VM();
     void run();
     void initialize();
     void call(std::string name);
-    libfalltergeist::IntFileType* script();
+    std::shared_ptr<libfalltergeist::IntFileType> script();
 
     unsigned int programCounter();
     void setProgramCounter(unsigned int value);

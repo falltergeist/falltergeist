@@ -50,7 +50,7 @@
 namespace Falltergeist
 {
 
-VM::VM(libfalltergeist::IntFileType* script, void* owner)
+VM::VM(std::shared_ptr<libfalltergeist::IntFileType> script, void* owner)
 {
     _owner = owner;
     _script = script;
@@ -60,7 +60,7 @@ VM::VM(libfalltergeist::IntFileType* script, void* owner)
 VM::VM(std::string filename, void* owner)
 {
     _owner = owner;
-    _script = ResourceManager::intFileType(filename).get();
+    _script = ResourceManager::intFileType(filename);
     if (!_script) throw Exception("VM::VM() - script is null: " + filename);
 }
 
@@ -796,7 +796,7 @@ void VM::run()
                 if (SID > 0)
                 {
                     auto intFile = ResourceManager::intFileType(SID);
-                    if (intFile) object->scripts()->push_back(new VM(intFile.get(), object.get()));
+                    if (intFile) object->scripts()->push_back(new VM(intFile, object.get()));
                 }
                 pushDataPointer(object.get());
                 break;
@@ -1106,7 +1106,7 @@ void VM::run()
                 popDataInteger();//auto mood = popDataInteger();
                 auto critter = dynamic_cast<GameCritterObject*>((GameCritterObject*)popDataPointer());
                 if (!critter) throw Exception("VM::opcode80de - wrong critter pointers");
-                dialog->setCritter(std::shared_ptr<GameCritterObject>(critter));
+                dialog->setCritter(critter);
                 dialog->setScript(this);
                 popDataInteger();//auto msgFileNum = popDataInteger();
                 break;
@@ -1934,7 +1934,7 @@ std::string* VM::msgMessage(int msg_file_num, int msg_num)
     return msg->message(msg_num)->textPointer();
 }
 
-libfalltergeist::IntFileType* VM::script()
+std::shared_ptr<libfalltergeist::IntFileType> VM::script()
 {
     return _script;
 }

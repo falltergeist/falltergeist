@@ -59,7 +59,7 @@ void CritterDialogState::init()
 {
     if (_initialized) return;
     State::init();
-    setFullscreen(false);
+    setFullscreen(true);
 
     auto camera = Game::getInstance()->location()->camera();
     _oldCameraX = camera->xPosition();
@@ -77,37 +77,39 @@ void CritterDialogState::init()
 
 }
 
-void CritterDialogState::blit()
+void CritterDialogState::think()
 {
 
-    /*
+
     int offset = 0;
-    for (TextArea* answer : _answers)
+    for (auto answer : _answers)
     {
         answer->setY(345 + offset);
         offset += answer->height() + 5;
-        answer->blit(_game->screen()->surface());
     }
-    */
+
 
 }
 
 void CritterDialogState::onAnswerClick(std::shared_ptr<Event> event)
 {
     auto sender = dynamic_cast<TextArea*>(event->emitter());
+    auto state = dynamic_cast<CritterDialogState*>(event->reciever());
 
     int i = 0;
-    for (auto answer : _answers)
+    for (auto answer : state->_answers)
     {
         if (answer.get() == sender)
         {
-            auto newOffset =  script()->script()->function(_functions.at(i));
-            auto oldOffset = _script->programCounter() - 2;
+            auto newOffset =  state->_script->script()->function(state->_functions.at(i));
+            std::cout << "NewOffset: " << newOffset << std::endl;
+            auto oldOffset = state->_script->programCounter() - 2;
+            std::cout << "OldOffset: " << oldOffset << std::endl;
             deleteAnswers();
-            script()->pushDataInteger(0); // arguments counter;
-            script()->pushReturnInteger(oldOffset); // return adrress
-            script()->setProgramCounter(newOffset);
-            script()->run();
+            state->_script->pushDataInteger(0); // arguments counter;
+            state->_script->pushReturnInteger(oldOffset); // return adrress
+            state->_script->setProgramCounter(newOffset);
+            state->_script->run();
             //script()->popDataInteger(); // remove function result
             //script()->setProgramCounter(oldOffset);
             return;
@@ -119,23 +121,23 @@ void CritterDialogState::onAnswerClick(std::shared_ptr<Event> event)
 void CritterDialogState::onAnswerIn(std::shared_ptr<Event> event)
 {
     auto sender = dynamic_cast<TextArea*>(event->emitter());
-    auto font3_a0a0a0ff = ResourceManager::font("font3.aaf", 0xa0a0a0ff);
+    auto font3_a0a0a0ff = ResourceManager::font("font1.aaf", 0xa0a0a0ff);
     sender->setFont(font3_a0a0a0ff);
 }
 
 void CritterDialogState::onAnswerOut(std::shared_ptr<Event> event)
 {
     auto sender = dynamic_cast<TextArea*>(event->emitter());
-    auto font3_3ff800ff = ResourceManager::font("font3.aaf", 0x3ff800ff);
+    auto font3_3ff800ff = ResourceManager::font("font1.aaf", 0x3ff800ff);
     sender->setFont(font3_3ff800ff);
 }
 
-void CritterDialogState::setCritter(std::shared_ptr<GameCritterObject> critter)
+void CritterDialogState::setCritter(GameCritterObject* critter)
 {
     _critter = critter;
 }
 
-std::shared_ptr<GameCritterObject> CritterDialogState::critter()
+GameCritterObject* CritterDialogState::critter()
 {
     return _critter;
 }
@@ -167,7 +169,11 @@ std::vector<int>* CritterDialogState::reactions()
 
 void CritterDialogState::deleteAnswers()
 {
-    _answers.clear();
+    while(!_answers.empty())
+    {
+        _ui.pop_back();
+        _answers.pop_back();
+    }
     _functions.clear();
     _reactions.clear();
 }
@@ -175,12 +181,13 @@ void CritterDialogState::deleteAnswers()
 void CritterDialogState::addAnswer(std::string text)
 {
     std::string line = "";
-    line += 0x95;
+    //line += 0x95;
+    line += "-";
     line += " ";
     line += text;
 
     auto answer = std::shared_ptr<TextArea>(new TextArea(line, 140, 0));
-    answer->setBackgroundColor(0x01000000);
+    answer->setBackgroundColor(0x00000001);
     answer->setWordWrap(true);
     answer->setWidth(370);
     //answer->draw();
@@ -188,6 +195,7 @@ void CritterDialogState::addAnswer(std::string text)
     answer->addEventHandler("mouseout", this, (EventRecieverMethod)&CritterDialogState::onAnswerOut);
     answer->addEventHandler("mouseleftclick", this, (EventRecieverMethod)&CritterDialogState::onAnswerClick);
     _answers.push_back(answer);
+    add(answer);
 }
 
 void CritterDialogState::handle(std::shared_ptr<Event> event)
@@ -198,7 +206,7 @@ void CritterDialogState::handle(std::shared_ptr<Event> event)
         if (answer)
         {
             //answer->draw();
-            answer->handle(event);
+            //answer->handle(event);
         }
     }
 }

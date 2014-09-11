@@ -38,7 +38,7 @@ class VM;
 class CritterDialogState : public State
 {
 protected:
-    std::shared_ptr<GameCritterObject> _critter;
+    GameCritterObject* _critter;
     VM* _script = 0;
     unsigned int _oldCameraX;
     unsigned int _oldCameraY;
@@ -53,8 +53,8 @@ public:
     virtual ~CritterDialogState();
     virtual void init();
 
-    std::shared_ptr<GameCritterObject> critter();
-    void setCritter(std::shared_ptr<GameCritterObject> critter);
+    GameCritterObject* critter();
+    void setCritter(GameCritterObject* critter);
 
     VM* script();
     void setScript(VM* value);
@@ -67,7 +67,7 @@ public:
     bool hasAnswers();
     void addAnswer(std::string text);
 
-    virtual void blit();
+    virtual void think();
     virtual void handle(std::shared_ptr<Event> event);
 
     void onAnswerIn(std::shared_ptr<Event> event);
