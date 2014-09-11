@@ -40,9 +40,10 @@ namespace Falltergeist
 CursorDropdownState::CursorDropdownState(std::vector<int> icons) : State()
 {
     _icons = icons;
-    _initialX = _game->mouse()->x();
-    _initialY = _game->mouse()->y();
-    _initialType = _game->mouse()->type();
+    auto mouse = Game::getInstance()->mouse();
+    _initialX = mouse->x();
+    _initialY = mouse->y();
+    _initialType = mouse->type();
 }
 
 CursorDropdownState::~CursorDropdownState()
@@ -110,7 +111,7 @@ void CursorDropdownState::init()
         i++;
     }
 
-    _game->mouse()->setType(Mouse::NONE);
+    Game::getInstance()->mouse()->setType(Mouse::NONE);
 
     _cursor = std::shared_ptr<Image>(new Image("art/intrface/actarrow.frm"));
     _cursor->setXOffset(0);
@@ -166,7 +167,7 @@ void CursorDropdownState::think()
         ui->texture()->copyTo(_surface->texture(), ui->x(), ui->y());
     }
 
-    _currentSurface= (_game->mouse()->y() - _surface->y())/40;
+    _currentSurface= (Game::getInstance()->mouse()->y() - _surface->y())/40;
     if (_currentSurface < 0)
     {
         SDL_WarpMouse(_initialX, _surface->y());

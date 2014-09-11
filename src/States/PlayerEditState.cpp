@@ -45,7 +45,7 @@ PlayerEditState::PlayerEditState() : State()
 {
     // STATS
     {
-        auto msg = _game->resourceManager()->msgFileType("text/english/game/stat.msg");
+        auto msg = ResourceManager::msgFileType("text/english/game/stat.msg");
         std::string images[] = { "strength", "perceptn", "endur", "charisma", "intel", "agility", "luck"};
         for (unsigned int i = 0; i != 7; ++i)
         {
@@ -67,7 +67,7 @@ PlayerEditState::PlayerEditState() : State()
 
     // TRAITS
     {
-        auto msg = _game->resourceManager()->msgFileType("text/english/game/trait.msg");
+        auto msg = ResourceManager::msgFileType("text/english/game/trait.msg");
         std::string images[] = { "fastmeta", "bruiser", "smlframe", "onehand", "finesse", "kamikaze", "heavyhnd", "fastshot",
                                   "bldmess", "jinxed", "goodnatr", "addict", "drugrest", "empathy", "skilled", "gifted"};
 
@@ -95,7 +95,7 @@ PlayerEditState::PlayerEditState() : State()
 
     // SKILLS
     {
-        auto msg = _game->resourceManager()->msgFileType("text/english/game/skill.msg");
+        auto msg = ResourceManager::msgFileType("text/english/game/skill.msg");
         std::string images[] = { "gunsml", "gunbig", "energywp", "unarmed", "melee", "throwing", "firstaid", "doctor", "sneak",
                                  "lockpick", "steal", "traps", "science", "repair", "speech", "barter", "gambling", "outdoors"};
         for (unsigned int i = 0; i != 18; ++i)
@@ -116,13 +116,13 @@ PlayerEditState::PlayerEditState() : State()
     // HEALTH CONDITION
     {
         std::string images[] = { "hitpoint", "poisoned", "radiated", "eyedamag", "armright", "armleft", "legright", "legleft"};
-        auto msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+        auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
         _addTitle("health_1", msg->message(300)->text());
         _addLabel("health_1",  std::shared_ptr<TextArea>(new TextArea(msg->message(300), 194, 46))); //health
-        _addDescription("health_1", _game->resourceManager()->msgFileType("text/english/game/stat.msg")->message(207)->text());
+        _addDescription("health_1", ResourceManager::msgFileType("text/english/game/stat.msg")->message(207)->text());
         _addImage("health_1", std::shared_ptr<Image>(new Image("art/skilldex/" + images[0] + ".frm")));
 
-        auto font1_0x183018ff = _game->resourceManager()->font("font1.aaf", 0x183018ff);
+        auto font1_0x183018ff = ResourceManager::font("font1.aaf", 0x183018ff);
 
         for (unsigned int i = 0; i != 7; ++i)
         {
@@ -139,8 +139,8 @@ PlayerEditState::PlayerEditState() : State()
     {
         std::string images[] = {"armorcls", "actionpt", "carryamt", "meleedam", "damresis", "poisnres", "radresis", "sequence", "healrate", "critchnc"};
         unsigned int labels[] = {302, 301, 311, 304, 305, 306, 307, 308, 309, 310};
-        auto msgStat = _game->resourceManager()->msgFileType("text/english/game/stat.msg");
-        auto msgEditor = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+        auto msgStat = ResourceManager::msgFileType("text/english/game/stat.msg");
+        auto msgEditor = ResourceManager::msgFileType("text/english/game/editor.msg");
         const int params[] = {109, 108, 112, 111, 124, 132, 131, 113, 114, 115};
         for (unsigned int i = 0; i != 10; ++i)
         {
@@ -161,15 +161,15 @@ PlayerEditState::PlayerEditState() : State()
         _addButton("done",    std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 455, 454)));
         _addButton("cancel",  std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 554, 454)));
 
-        auto font3_b89c28ff = _game->resourceManager()->font("font3.aaf", 0xb89c28ff);
+        auto font3_b89c28ff = ResourceManager::font("font3.aaf", 0xb89c28ff);
 
-        auto msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+        auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
         _addLabel("options", std::shared_ptr<TextArea>(new TextArea(msg->message(101), 365, 453)))->setFont(font3_b89c28ff);
         _addLabel("next",    std::shared_ptr<TextArea>(new TextArea(msg->message(100), 473, 453)))->setFont(font3_b89c28ff);
         _addLabel("cancel",  std::shared_ptr<TextArea>(new TextArea(msg->message(102), 571, 453)))->setFont(font3_b89c28ff);
-        _addLabel("name",    std::shared_ptr<TextArea>(new TextArea(_game->player()->name(), 17, 7)))->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setFont(font3_b89c28ff);
+        _addLabel("name",    std::shared_ptr<TextArea>(new TextArea(Game::getInstance()->player()->name(), 17, 7)))->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setFont(font3_b89c28ff);
         _addLabel("age",     std::shared_ptr<TextArea>(new TextArea("AGE", 163, 7)))->setFont(font3_b89c28ff);
-        _addLabel("gender",  std::shared_ptr<TextArea>(new TextArea(msg->message(_game->player()->gender() == 0 ? 107 : 108), 255, 7)))->setFont(font3_b89c28ff); // 0 -male 1 - female
+        _addLabel("gender",  std::shared_ptr<TextArea>(new TextArea(msg->message(Game::getInstance()->player()->gender() == 0 ? 107 : 108), 255, 7)))->setFont(font3_b89c28ff); // 0 -male 1 - female
         _addLabel("label_1", std::shared_ptr<TextArea>(new TextArea(msg->message(112), 18, 286)))->setFont(font3_b89c28ff); // ДОП. ОЧКИ
         _addLabel("label_2", std::shared_ptr<TextArea>(new TextArea(msg->message(139), 50, 326)))->setFont(font3_b89c28ff); // ДОП. ОСОБЕННОСТИ
         _addLabel("label_3", std::shared_ptr<TextArea>(new TextArea(msg->message(117), 383, 5)))->setFont(font3_b89c28ff);  // НАВЫКИ
@@ -245,8 +245,8 @@ PlayerEditState::PlayerEditState() : State()
     _selectedImage->setY(310);
     add(_selectedImage);
 
-    auto font1_000000ff = _game->resourceManager()->font("font1.aaf", 0x000000FF);
-    auto font2_000000ff = _game->resourceManager()->font("font2.aaf", 0x000000FF);
+    auto font1_000000ff = ResourceManager::font("font1.aaf", 0x000000FF);
+    auto font2_000000ff = ResourceManager::font("font2.aaf", 0x000000FF);
 
     _title = std::shared_ptr<TextArea>(new TextArea("", 350,275));
     _title->setFont(font2_000000ff);
@@ -316,8 +316,8 @@ void PlayerEditState::_addImage(std::string name, std::shared_ptr<Image> image)
 void PlayerEditState::think()
 {
     State::think();
-    auto player = _game->player();
-    auto msgEditor = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+    auto player = Game::getInstance()->player();
+    auto msgEditor = ResourceManager::msgFileType("text/english/game/editor.msg");
 
     _labels.at("name")->setText(player->name());
     _labels.at("age")->setText(msgEditor->message(104))->appendText(" ")->appendText(std::to_string(player->age()));
@@ -367,9 +367,9 @@ void PlayerEditState::think()
     {
         std::string name = it->first;
 
-        auto font1_3ff800ff = _game->resourceManager()->font("font1.aaf", 0x3ff800ff);
-        auto font1_a0a0a0ff = _game->resourceManager()->font("font1.aaf", 0xa0a0a0ff);
-        auto font1_183018ff = _game->resourceManager()->font("font1.aaf", 0x183018ff);
+        auto font1_3ff800ff = ResourceManager::font("font1.aaf", 0x3ff800ff);
+        auto font1_a0a0a0ff = ResourceManager::font("font1.aaf", 0xa0a0a0ff);
+        auto font1_183018ff = ResourceManager::font("font1.aaf", 0x183018ff);
 
         if (name.find("stats_") == 0 || name.find("params_") == 0)
         {
@@ -409,9 +409,9 @@ void PlayerEditState::think()
         //_image->setXOffset(0);
         //_image->setYOffset(0);
 
-        auto font1_ffff7fff = _game->resourceManager()->font("font1.aaf", 0xffff7fff);
-        auto font1_ffffffff = _game->resourceManager()->font("font1.aaf", 0xffffffff);
-        auto font1_707820ff = _game->resourceManager()->font("font1.aaf", 0x707820ff);
+        auto font1_ffff7fff = ResourceManager::font("font1.aaf", 0xffff7fff);
+        auto font1_ffffffff = ResourceManager::font("font1.aaf", 0xffffffff);
+        auto font1_707820ff = ResourceManager::font("font1.aaf", 0x707820ff);
 
         if (name.find("stats_") == 0)
         {
@@ -447,7 +447,7 @@ void PlayerEditState::think()
 
 bool PlayerEditState::_statDecrease(unsigned int num)
 {
-    auto player = _game->player();
+    auto player = Game::getInstance()->player();
     if (player->stat(num) <= 1) return false;
 
     player->setStat(num, player->stat(num) - 1);
@@ -457,7 +457,7 @@ bool PlayerEditState::_statDecrease(unsigned int num)
 
 bool PlayerEditState::_statIncrease(unsigned int num)
 {
-    auto player = _game->player();
+    auto player = Game::getInstance()->player();
     if (player->statsPoints() <= 0) return false;
 
     if (player->stat(num) + player->statBonus(num) >= 10) return false;
@@ -469,7 +469,7 @@ bool PlayerEditState::_statIncrease(unsigned int num)
 
 bool PlayerEditState::_traitToggle(unsigned int num)
 {
-    auto player = _game->player();
+    auto player = Game::getInstance()->player();
     if (player->trait(num))
     {
         player->setTrait(num, 0);
@@ -490,7 +490,7 @@ bool PlayerEditState::_traitToggle(unsigned int num)
 
 bool PlayerEditState::_skillToggle(unsigned int num)
 {
-    auto player = _game->player();
+    auto player = Game::getInstance()->player();
     if (player->skill(num))
     {
         player->setSkill(num, 0);

@@ -72,9 +72,9 @@ void SettingsMenuState::init()
     // LABELS
     auto msg = ResourceManager::msgFileType("text/english/game/options.msg");
     
-    auto font1_907824ff = _game->resourceManager()->font("font1.aaf", 0x907824ff);
-    auto font3_907824ff = _game->resourceManager()->font("font3.aaf", 0x907824ff);
-    auto font4_907824ff = _game->resourceManager()->font("font4.aaf", 0x907824ff);
+    auto font1_907824ff = ResourceManager::font("font1.aaf", 0x907824ff);
+    auto font3_907824ff = ResourceManager::font("font3.aaf", 0x907824ff);
+    auto font4_907824ff = ResourceManager::font("font4.aaf", 0x907824ff);
 
     //GAME PREFERENCES
     auto title1 = std::shared_ptr<TextArea>(new TextArea(msg->message(100), 74, 10));

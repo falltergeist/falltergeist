@@ -49,7 +49,7 @@ LocationState::LocationState() : State()
 
 LocationState::~LocationState()
 {
-    _game->setLocation(0);
+    Game::getInstance()->setLocation(0);
 }
 
 void LocationState::init()
@@ -57,11 +57,11 @@ void LocationState::init()
     if (initialized()) return;
     State::init();
 
-    _game->mouse()->setType(Mouse::ACTION);
+    Game::getInstance()->mouse()->setType(Mouse::ACTION);
 
-    _location = std::shared_ptr<Location>(new Location(_game->resourceManager()->mapFileType("maps/artemple.map")));
+    _location = std::shared_ptr<Location>(new Location(ResourceManager::mapFileType("maps/artemple.map")));
     //_location = new Location(_game->resourceManager()->mapFileType("maps/sftanker.map"));
-    _game->setLocation(_location);
+    Game::getInstance()->setLocation(_location);
     _floor = std::shared_ptr<Image>(new Image(_location->tilesFloor()));
     _roof = std::shared_ptr<Image>(new Image(_location->tilesRoof()));
     //_background->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onBackgroundClick);

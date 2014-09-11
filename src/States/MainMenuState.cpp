@@ -50,7 +50,7 @@ void MainMenuState::init()
 {
     State::init();
 
-    _game->mouse()->setType(Mouse::BIG_ARROW);
+    Game::getInstance()->mouse()->setType(Mouse::BIG_ARROW);
 
     // Background image
     auto background = std::shared_ptr<Image>(new Image("art/intrface/mainmenu.frm"));
@@ -77,9 +77,9 @@ void MainMenuState::init()
     exitButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MainMenuState::onExitButtonClick);
 
 
-    auto msg = _game->resourceManager()->msgFileType("text/english/game/misc.msg");
+    auto msg = ResourceManager::msgFileType("text/english/game/misc.msg");
 
-    auto font4 = _game->resourceManager()->font("font4.aaf", 0xb89c28ff);
+    auto font4 = ResourceManager::font("font4.aaf", 0xb89c28ff);
 
     // "Intro" label
     auto introButtonLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(9), 55, 20));

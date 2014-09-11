@@ -119,14 +119,14 @@ void CritterDialogState::onAnswerClick(std::shared_ptr<Event> event)
 void CritterDialogState::onAnswerIn(std::shared_ptr<Event> event)
 {
     auto sender = dynamic_cast<TextArea*>(event->emitter());
-    auto font3_a0a0a0ff = _game->resourceManager()->font("font3.aaf", 0xa0a0a0ff);
+    auto font3_a0a0a0ff = ResourceManager::font("font3.aaf", 0xa0a0a0ff);
     sender->setFont(font3_a0a0a0ff);
 }
 
 void CritterDialogState::onAnswerOut(std::shared_ptr<Event> event)
 {
     auto sender = dynamic_cast<TextArea*>(event->emitter());
-    auto font3_3ff800ff = _game->resourceManager()->font("font3.aaf", 0x3ff800ff);
+    auto font3_3ff800ff = ResourceManager::font("font3.aaf", 0x3ff800ff);
     sender->setFont(font3_3ff800ff);
 }
 

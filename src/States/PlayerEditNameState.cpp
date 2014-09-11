@@ -106,7 +106,7 @@ void PlayerEditNameState::init()
     auto doneButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 45, 43));
     doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditNameState::onDoneButtonClick);
 
-    _name = std::shared_ptr<TextArea>(new TextArea(_game->player()->name(), 43, 15));
+    _name = std::shared_ptr<TextArea>(new TextArea(Game::getInstance()->player()->name(), 43, 15));
     _name->addEventHandler("keyup", this, (EventRecieverMethod) &PlayerEditNameState::onKeyboardPress);
 
     _cursor = std::shared_ptr<Image>(new Image(5, 8));

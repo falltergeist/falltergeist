@@ -58,7 +58,7 @@ void StartState::init()
     add(splash);
     _splashTicks = SDL_GetTicks();
 
-    _game->mouse()->setType(Mouse::WAIT);
+    Game::getInstance()->mouse()->setType(Mouse::WAIT);
 }
 
 void StartState::think()
@@ -70,7 +70,7 @@ void StartState::think()
     {
         //_game->setPlayer(new Player(ResourceManager::gcdFileType("premade/combat.gcd")));
         //_game->setState(new SettingsMenuState(_game));
-        _game->setState(std::shared_ptr<MainMenuState>(new MainMenuState()));
+        Game::getInstance()->setState(std::shared_ptr<MainMenuState>(new MainMenuState()));
     }    
 }
 

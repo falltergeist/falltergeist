@@ -42,7 +42,6 @@ class ActiveUI;
 class State : public EventReciever
 {
 protected:
-    std::shared_ptr<Game> _game;
     std::vector<std::shared_ptr<UI>> _ui;
 
     bool _fullscreen = true;

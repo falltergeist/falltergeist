@@ -35,7 +35,6 @@ namespace Falltergeist
 
 State::State() : EventReciever()
 {
-    _game = Game::getInstance();
 }
 
 State::~State()

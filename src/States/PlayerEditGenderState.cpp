@@ -49,14 +49,14 @@ void PlayerEditGenderState::init()
                                     "art/intrface/maleon.frm"
                                 }, 260, 2));
     _maleImage->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditGenderState::onMaleButtonPress);
-    if (_game->player()->gender() == 0) _maleImage->setCurrentImage(1); // 0 - male
+    if (Game::getInstance()->player()->gender() == 0) _maleImage->setCurrentImage(1); // 0 - male
 
     _femaleImage = std::shared_ptr<ImageList>(new ImageList((std::vector<std::string>){
                                       "art/intrface/femoff.frm",
                                       "art/intrface/femon.frm"
                                   }, 310, 2));
     _femaleImage->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditGenderState::onFemaleButtonPress);
-    if (_game->player()->gender() == 1) _femaleImage->setCurrentImage(1); // 1 - female
+    if (Game::getInstance()->player()->gender() == 1) _femaleImage->setCurrentImage(1); // 1 - female
 
     auto bg = std::shared_ptr<Image>(new Image("art/intrface/charwin.frm"));
     bg->setX(236);

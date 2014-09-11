@@ -68,15 +68,15 @@ void PlayerEditAgeState::init()
     auto doneButton= std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 188, 43));
     doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditAgeState::onDoneButtonClick);
 
-    auto msg = _game->resourceManager()->msgFileType("text/english/game/editor.msg");
+    auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
     auto doneLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(100), 210, 43));
 
-    auto font3_b89c28ff = _game->resourceManager()->font("font3.aaf", 0xb89c28ff);
+    auto font3_b89c28ff = ResourceManager::font("font3.aaf", 0xb89c28ff);
 
     doneLabel->setFont(font3_b89c28ff);
 
     _counter = std::shared_ptr<BigCounter>(new BigCounter(215, 13));
-    _counter->setNumber(_game->player()->age());
+    _counter->setNumber(Game::getInstance()->player()->age());
 
     add(bg);
     add(ageBox);
