@@ -1115,6 +1115,7 @@ void VM::run()
             {
                 std::cout << "[?] end_dialogue" << std::endl;
                 auto game = Game::getInstance();
+                game->dialog()->close();
                 game->popState();
                 break;
             }

@@ -41,6 +41,7 @@ class FpsCounter;
 class Mouse;
 class Location;
 class CritterDialogState;
+class LocationState;
 class AudioMixer;
 class Renderer;
 class UI;
@@ -89,8 +90,9 @@ public:
     std::shared_ptr<Mouse> mouse();
     std::shared_ptr<Renderer> renderer();
 
-    void setLocation(std::shared_ptr<Location> location);
+    std::shared_ptr<LocationState> locationState();
     std::shared_ptr<Location> location();
+
     void setDialog(std::shared_ptr<CritterDialogState> value);
     std::shared_ptr<CritterDialogState> dialog();
     void setGVAR(unsigned int number, int value);

@@ -23,6 +23,7 @@
 
 // Falltergeist includes
 #include "../States/CritterDialogState.h"
+#include "../States/LocationState.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Screen.h"
@@ -47,10 +48,6 @@ CritterDialogState::CritterDialogState() : State()
 
 CritterDialogState::~CritterDialogState()
 {
-    //delete _question;
-    auto camera = Game::getInstance()->location()->camera();
-    camera->setXPosition(_oldCameraX);
-    camera->setYPosition(_oldCameraY);
 }
 
 void CritterDialogState::init()
@@ -60,11 +57,14 @@ void CritterDialogState::init()
     setFullscreen(false);
     setModal(true);
 
-    auto camera = Game::getInstance()->location()->camera();
-    _oldCameraX = camera->xPosition();
-    _oldCameraY = camera->yPosition();
-    camera->setXPosition(Location::hexagonToX(critter()->position()));
-    camera->setYPosition(Location::hexagonToY(critter()->position()) + 100);
+    auto locationState = Game::getInstance()->locationState();
+    _oldCameraX = locationState->location()->camera()->xPosition();
+    _oldCameraY = locationState->location()->camera()->yPosition();
+
+    locationState->location()->camera()->setXPosition(Location::hexagonToX(critter()->position()));
+    locationState->location()->camera()->setYPosition(Location::hexagonToY(critter()->position()) + 100);
+    locationState->location()->checkObjectsToRender();
+    locationState->think();
 
     auto background = std::shared_ptr<Image>(new Image("art/intrface/alltlk.frm"));
     auto background2 = std::shared_ptr<Image>(new Image("art/intrface/di_talk.frm"));
@@ -78,6 +78,13 @@ void CritterDialogState::init()
 
 void CritterDialogState::think()
 {
+}
+
+void CritterDialogState::close()
+{
+    auto camera = Game::getInstance()->location()->camera();
+    camera->setXPosition(_oldCameraX);
+    camera->setYPosition(_oldCameraY);
 }
 
 void CritterDialogState::onAnswerClick(std::shared_ptr<Event> event)
@@ -185,27 +192,12 @@ void CritterDialogState::addAnswer(std::string text)
     answer->setBackgroundColor(0x00000001);
     answer->setWordWrap(true);
     answer->setWidth(370);
-    //answer->draw();
+
     answer->addEventHandler("mousein", this, (EventRecieverMethod)&CritterDialogState::onAnswerIn);
     answer->addEventHandler("mouseout", this, (EventRecieverMethod)&CritterDialogState::onAnswerOut);
     answer->addEventHandler("mouseleftclick", this, (EventRecieverMethod)&CritterDialogState::onAnswerClick);
     _answers.push_back(answer);
     add(answer);
-
-
-}
-
-void CritterDialogState::handle(std::shared_ptr<Event> event)
-{
-    State::handle(event);
-    for (auto answer : _answers)
-    {
-        if (answer)
-        {
-            //answer->draw();
-            //answer->handle(event);
-        }
-    }
 }
 
 bool CritterDialogState::hasAnswers()

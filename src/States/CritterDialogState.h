@@ -68,7 +68,8 @@ public:
     void addAnswer(std::string text);
 
     virtual void think();
-    virtual void handle(std::shared_ptr<Event> event);
+
+    void close();
 
     void onAnswerIn(std::shared_ptr<Event> event);
     void onAnswerOut(std::shared_ptr<Event> event);

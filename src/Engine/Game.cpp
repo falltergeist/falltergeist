@@ -229,15 +229,24 @@ std::shared_ptr<Mouse> Game::mouse()
     return _mouse;
 }
 
-std::shared_ptr<Location> Game::location()
+std::shared_ptr<LocationState> Game::locationState()
 {
     for (auto state : _states)
     {
         auto locationState = std::dynamic_pointer_cast<LocationState>(state);
         if (locationState)
         {
-            return locationState->location();
+            return locationState;
         }
+    }
+    return 0;
+}
+
+std::shared_ptr<Location> Game::location()
+{
+    if (auto state = locationState())
+    {
+        return state->location();
     }
     return 0;
 }
