@@ -19,6 +19,7 @@
 
 // C++ standard includes
 #include <sstream>
+#include <iostream>
 
 // Falltergeist includes
 #include "../States/NewGameState.h"
@@ -50,7 +51,7 @@ void NewGameState::init()
 {
     if (_initialized) return;
     State::init();
-    
+
     // Background
     auto background = std::shared_ptr<Image>(new Image("art/intrface/pickchar.frm"));
 
@@ -61,7 +62,7 @@ void NewGameState::init()
     // Edit character button
     auto editButton= std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 436, 319));
     editButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onEditButtonClick);
-    
+
     // Create character button
     auto createButton= std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 424));
     createButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onCreateButtonClick);
@@ -102,15 +103,33 @@ void NewGameState::init()
     _characters.push_back(diplomat);
 
     // Character data textareas
-    _playerName = std::shared_ptr<TextArea>(new TextArea(350, 50));
+    _playerName = std::shared_ptr<TextArea>(new TextArea(300, 40));
 
-    _playerStats1 = std::shared_ptr<TextArea>(new TextArea(0, 80));
-    _playerStats1->setWidth(370)
+    _playerStats1 = std::shared_ptr<TextArea>(new TextArea(0, 70));
+    _playerStats1->setWidth(362)
                  ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
-    _playerStats2 = std::shared_ptr<TextArea>(new TextArea(374, 80));
-    _playerBio = std::shared_ptr<TextArea>(new TextArea(430, 50));
+    _playerStats2 = std::shared_ptr<TextArea>(new TextArea(374, 70));
+    _playerBio = std::shared_ptr<TextArea>(new TextArea(437, 40));
 
+    _playerStats3 = std::shared_ptr<TextArea>(new TextArea(294, 150));
+    _playerStats3->setWidth(85)
+                 ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+
+    _playerHitPointsMax = std::shared_ptr<TextArea>(new TextArea(383, 150));
+    _playerArmorClass = std::shared_ptr<TextArea>(new TextArea(383, 150 + 10));
+    _playerActionPoints = std::shared_ptr<TextArea>(new TextArea(383, 150 + 10*2));
+    _playerMeleeDamage = std::shared_ptr<TextArea>(new TextArea(383, 150 + 10*3));
+
+    _playerSkills = std::shared_ptr<TextArea>(new TextArea(289, 200));
+    _playerSkills->setWidth(90)
+                 ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+
+    _playerSkillsValues = std::shared_ptr<TextArea>(new TextArea(383, 200));
+
+    _playerTraits = std::shared_ptr<TextArea>(new TextArea(294, 230));
+    _playerTraits->setWidth(85)
+                 ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
     add(background);
     add(beginGameButton);
@@ -124,8 +143,16 @@ void NewGameState::init()
     add(_playerName);
     add(_playerStats1);
     add(_playerStats2);
+    add(_playerStats3);
     add(_playerBio);
-    
+    add(_playerHitPointsMax);
+    add(_playerArmorClass);
+    add(_playerActionPoints);
+    add(_playerMeleeDamage);
+    add(_playerSkills);
+    add(_playerSkillsValues);
+    add(_playerTraits);
+
     changeCharacter();
 }
 
@@ -178,7 +205,7 @@ void NewGameState::changeCharacter()
        << msg->message(105)->text() << " " << (dude->stat(5) < 10 ? "0" : "") << dude->stat(5) << "\n"
        << msg->message(106)->text() << " " << (dude->stat(6) < 10 ? "0" : "") << dude->stat(6) << "\n";
     _playerStats1->setText(ss.str());
-     
+
     ss.str("");
     ss << statToString(dude->stat(0)) << "\n"
        << statToString(dude->stat(1)) << "\n"
@@ -188,11 +215,64 @@ void NewGameState::changeCharacter()
        << statToString(dude->stat(5)) << "\n"
        << statToString(dude->stat(6)) << "\n";
     _playerStats2->setText(ss.str());
-    
+
+    auto msgMisc = ResourceManager::msgFileType("text/english/game/misc.msg");
+    ss.str("");
+    ss << msgMisc->message(16)->text() << "\n" // Hit Points
+       << msg->message(109)->text() << "\n"    // Armor Class
+       << msgMisc->message(15)->text() << "\n" // Action Points
+       << msg->message(111)->text();           // Melee Damage
+    _playerStats3->setText(ss.str());
+
     _playerBio->setText(dude->biography());
     _playerName->setText(dude->name());
 
     _characterImages->setCurrentImage(_selectedCharacter);
+
+    // Hit Points
+    ss.str("");
+    ss << dude->hitPointsMax() << "/" << dude->hitPointsMax();
+    _playerHitPointsMax->setText(ss.str());
+
+    _playerArmorClass->setText(dude->armorClass());
+    _playerActionPoints->setText(dude->actionPoints());
+    _playerMeleeDamage->setText(dude->meleeDamage());
+
+    // Tagged skills
+    std::string txt = "";
+    std::string values = "";
+    for (unsigned int i=0; i<17; i++)
+    {
+        if (dude->skill(i))
+        {
+            if (txt != "")
+            {
+                txt += "\n";
+                values += "%\n";
+            }
+            txt += ResourceManager::msgFileType("text/english/game/skill.msg")->message(100 + i)->text();
+            values += std::to_string(dude->skillValue(i));
+        }
+    }
+    values += "%"; // final % char to string
+    _playerSkills->setText(txt);
+    _playerSkillsValues->setText(values);
+
+    // traits
+    txt = "";
+    for (unsigned int i=0; i<16; i++)
+    {
+        if (dude->trait(i))
+        {
+            if (txt != "")
+            {
+                txt += "\n";
+            }
+            txt += ResourceManager::msgFileType("text/english/game/trait.msg")->message(100 + i)->text();
+        }
+    }
+    _playerTraits->setText(txt);
+
 }
 
 std::string NewGameState::statToString(unsigned int stat)
@@ -202,7 +282,7 @@ std::string NewGameState::statToString(unsigned int stat)
 }
 
 void NewGameState::onEditButtonClick(std::shared_ptr<MouseEvent> event)
-{    
+{
     Game::getInstance()->setPlayer(_characters.at(_selectedCharacter));
     Game::getInstance()->pushState(std::shared_ptr<PlayerEditState>(new PlayerEditState()));
 }
