@@ -80,4 +80,9 @@ void Renderer::drawTexture(unsigned int x, unsigned int y, Texture* texture)
 {
 }
 
+std::shared_ptr<Texture> Renderer::screenshot()
+{
+    return 0;
+}
+
 }

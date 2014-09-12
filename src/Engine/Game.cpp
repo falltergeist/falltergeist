@@ -66,7 +66,7 @@ void Game::_initialize()
     putenv(strdup("SDL_VIDEO_CENTERED=1"));
 
     _resourceManager = std::shared_ptr<ResourceManager>(new ResourceManager());
-    //_renderer = new OpenGLRenderer(640, 480);
+    //_renderer = std::shared_ptr<OpenGLRenderer>(new OpenGLRenderer(640, 480));
     _renderer = std::shared_ptr<SDLRenderer>(new SDLRenderer(640, 480));
     _renderer->init();
     //_mixer = new AudioMixer();
@@ -169,15 +169,16 @@ void Game::run()
                             _quit = true;
                         }
 
-                        /*
-                        if (event->keyCode() == SDLK_F12)
+                        if (event->keyCode() == SDLK_F11)
                         {
-                            std::stringstream ss;
-                            ss << SDL_GetTicks() << ".bmp";
-                            SDL_SaveBMP(_screen->surface()->sdl_surface(), ss.str().c_str());
-                            debug("[GAME] - Screenshot saved to " + ss.str(), DEBUG_INFO);
+                            std::shared_ptr<Texture> texture = renderer()->screenshot();
+                            SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(texture->data(), texture->width(), texture->height(), 32, texture->width()*4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+                            std::string name = std::to_string(SDL_GetTicks()) +  ".bmp";
+                            SDL_SaveBMP(surface, name.c_str());
+                            SDL_FreeSurface(surface);
+                            debug("[GAME] - Screenshot saved to " + name, DEBUG_INFO);
+
                         }
-                        */
                         break;
                     }
                 }

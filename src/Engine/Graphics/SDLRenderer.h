@@ -48,6 +48,8 @@ public:
     virtual void registerTexture(Texture* texture);
     virtual void unregisterTexture(Texture* texture);
     virtual void drawTexture(unsigned int x, unsigned int y, Texture* texture);
+
+    virtual std::shared_ptr<Texture> screenshot();
 };
 
 }

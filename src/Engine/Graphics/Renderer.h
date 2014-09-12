@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <vector>
+#include <memory>
 
 // Falltergeist includes
 #include "../../Engine/Graphics/Texture.h"
@@ -52,6 +53,7 @@ public:
     virtual void unregisterTexture(Texture* texture);
     virtual void drawTexture(unsigned int x, unsigned int y, Texture* texture);
 
+    virtual std::shared_ptr<Texture> screenshot();
 
 };
 

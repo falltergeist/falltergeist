@@ -156,4 +156,36 @@ void OpenGLRenderer::drawTexture(unsigned int x, unsigned int y, Texture* textur
     glEnd();
 }
 
+std::shared_ptr<Texture> OpenGLRenderer::screenshot()
+{
+    unsigned int width = Game::getInstance()->renderer()->width();
+    unsigned int height = Game::getInstance()->renderer()->height();
+
+    // Read data from screen
+    SDL_Surface* flipped = SDL_CreateRGBSurface(SDL_HWSURFACE, width, height, 32, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
+    glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, flipped->pixels);
+
+    // Flip image verticaly
+    SDL_Surface* surface = SDL_CreateRGBSurface(flipped->flags, flipped->w, flipped->h, 32, flipped->format->Rmask, flipped->format->Gmask,flipped->format->Bmask, flipped->format->Amask);
+    if(SDL_MUSTLOCK(surface)) SDL_LockSurface(surface);
+
+    for(int x = 0; x < surface->w; x++)
+    {
+        for(int y = 0, ry = surface->h - 1; y < surface->h; y++, ry--)
+        {
+            ((unsigned int*)surface->pixels)[(ry*surface->w) + x ] = ((unsigned int*)flipped->pixels)[(y*flipped->w) + x];
+        }
+    }
+    if(SDL_MUSTLOCK(surface)) SDL_UnlockSurface(surface);
+
+    auto texture = std::shared_ptr<Texture>(new Texture(width, height));
+    texture->loadFromRGBA((unsigned int*)surface->pixels);
+
+    SDL_FreeSurface(flipped);
+    SDL_FreeSurface(surface);
+
+    return texture;
+}
+
+
 }

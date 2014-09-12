@@ -24,6 +24,7 @@
 #include "../../Engine/CrossPlatform.h"
 #include "../../Engine/Exception.h"
 #include "../../Engine/Graphics/SDLRenderer.h"
+#include "../../Engine/Game.h"
 
 //Third party includes
 #include "SDL.h"
@@ -109,5 +110,22 @@ void SDLRenderer::drawTexture(unsigned int x, unsigned int y, Texture* texture)
     SDL_Rect dest = {(short)x, (short)y, (unsigned short)texture->width(), (unsigned short)texture->height()};
     SDL_BlitSurface(_surfaces.at(texture->id() - 1), NULL, SDL_GetVideoSurface(), &dest);
 }
+
+std::shared_ptr<Texture> SDLRenderer::screenshot()
+{
+    unsigned int width = Game::getInstance()->renderer()->width();
+    unsigned int height = Game::getInstance()->renderer()->height();
+
+    SDL_Surface* surface = SDL_CreateRGBSurface(SDL_HWSURFACE, width, height, 32, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
+    SDL_BlitSurface(SDL_GetVideoSurface(), 0, surface, 0);
+
+    auto texture = std::shared_ptr<Texture>(new Texture(width, height));
+    texture->loadFromRGBA((unsigned int*)surface->pixels);
+
+    SDL_FreeSurface(surface);
+
+    return texture;
+}
+
 
 }
