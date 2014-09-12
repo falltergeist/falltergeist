@@ -127,5 +127,9 @@ std::shared_ptr<Texture> SDLRenderer::screenshot()
     return texture;
 }
 
+std::string SDLRenderer::name()
+{
+    return _name;
+}
 
 }

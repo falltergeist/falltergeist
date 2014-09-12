@@ -34,9 +34,10 @@ namespace Falltergeist
 
 class SDLRenderer : public Renderer
 {
-protected:
+protected:    
     unsigned int _texturesCounter = 1;
     std::vector<SDL_Surface*> _surfaces;
+    std::string _name = "SDL Renderer";
 public:
     SDLRenderer(unsigned int width, unsigned int height);
 
@@ -48,6 +49,8 @@ public:
     virtual void registerTexture(Texture* texture);
     virtual void unregisterTexture(Texture* texture);
     virtual void drawTexture(unsigned int x, unsigned int y, Texture* texture);
+
+    virtual std::string name();
 
     virtual std::shared_ptr<Texture> screenshot();
 };

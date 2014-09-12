@@ -23,6 +23,7 @@
 // C++ standard includes
 #include <vector>
 #include <memory>
+#include <string>
 
 // Falltergeist includes
 #include "../../Engine/Graphics/Texture.h"
@@ -37,6 +38,7 @@ class Renderer
 protected:
     unsigned int _width;
     unsigned int _height;
+    std::string _name;
 public:
     Renderer(unsigned int width, unsigned int height);
     ~Renderer();
@@ -48,6 +50,8 @@ public:
 
     unsigned int width();
     unsigned int height();
+
+    virtual std::string name();
 
     virtual void registerTexture(Texture* texture);
     virtual void unregisterTexture(Texture* texture);

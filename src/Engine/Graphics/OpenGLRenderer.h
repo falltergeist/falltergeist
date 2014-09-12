@@ -32,6 +32,8 @@ namespace Falltergeist
 
 class OpenGLRenderer : public Renderer
 {
+protected:
+    std::string _name = "OpenGL Renderer";
 public:
     OpenGLRenderer(unsigned int width, unsigned int height);
 
@@ -39,6 +41,8 @@ public:
 
     virtual void beginFrame();
     virtual void endFrame();
+
+    virtual std::string name();
 
     virtual void registerTexture(Texture* texture);
     virtual void unregisterTexture(Texture* texture);

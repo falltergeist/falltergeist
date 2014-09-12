@@ -187,5 +187,10 @@ std::shared_ptr<Texture> OpenGLRenderer::screenshot()
     return texture;
 }
 
+std::string OpenGLRenderer::name()
+{
+    return _name;
+}
+
 
 }

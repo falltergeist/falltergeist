@@ -68,19 +68,16 @@ void Game::_initialize()
     _resourceManager = std::shared_ptr<ResourceManager>(new ResourceManager());
     //_renderer = std::shared_ptr<OpenGLRenderer>(new OpenGLRenderer(640, 480));
     _renderer = std::shared_ptr<SDLRenderer>(new SDLRenderer(640, 480));
-    _renderer->init();
+    renderer()->init();
     //_mixer = new AudioMixer();
     _mouse = std::shared_ptr<Mouse>(new Mouse());
-    _fpsCounter = std::shared_ptr<FpsCounter>(new FpsCounter(_renderer->width() - 42, 2));
+    _fpsCounter = std::shared_ptr<FpsCounter>(new FpsCounter(renderer()->width() - 42, 2));
 
     std::string version = CrossPlatform::getVersion();
-    version += " " + std::to_string(_renderer->width()) + "x" + std::to_string(_renderer->height());
+    version += " " + std::to_string(renderer()->width()) + "x" + std::to_string(renderer()->height());
+    version += " " + renderer()->name();
 
-    if (dynamic_cast<SDLRenderer*>(_renderer.get())) version += " SDL Renderer";
-    if (dynamic_cast<OpenGLRenderer*>(_renderer.get())) version += " OpenGL Renderer";
-
-
-    _falltergeistVersion = std::shared_ptr<TextArea>(new TextArea(version, 3, _renderer->height() - 10));
+    _falltergeistVersion = std::shared_ptr<TextArea>(new TextArea(version, 3, renderer()->height() - 10));
 }
 
 Game::~Game()

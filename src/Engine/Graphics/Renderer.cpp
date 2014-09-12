@@ -85,4 +85,9 @@ std::shared_ptr<Texture> Renderer::screenshot()
     return 0;
 }
 
+std::string Renderer::name()
+{
+    return _name;
+}
+
 }
