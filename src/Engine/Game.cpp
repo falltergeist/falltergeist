@@ -61,6 +61,8 @@ void Game::_initialize()
     debug("[GAME] - " + CrossPlatform::getVersion(), DEBUG_INFO);
     debug("[GAME] - Opensource Fallout 2 game engine", DEBUG_INFO);
 
+    putenv(strdup("SDL_VIDEO_CENTERED=1"));
+
     _resourceManager = std::shared_ptr<ResourceManager>(new ResourceManager());
     //_renderer = std::shared_ptr<OpenGLRenderer>(new OpenGLRenderer(640, 480));
     _renderer = std::shared_ptr<SDLRenderer>(new SDLRenderer(640, 480));
@@ -68,7 +70,6 @@ void Game::_initialize()
 
     std::string version = CrossPlatform::getVersion();
     SDL_WM_SetCaption(version.c_str(), 0);
-    putenv(strdup("SDL_VIDEO_CENTERED=1"));
 
     //_mixer = new AudioMixer();
     _mouse = std::shared_ptr<Mouse>(new Mouse());
