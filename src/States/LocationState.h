@@ -54,6 +54,9 @@ protected:
 public:
     LocationState();
     ~LocationState();
+
+    std::shared_ptr<Location> location();
+
     virtual void init();
     virtual void think();
     virtual void handle(std::shared_ptr<Event> event);

@@ -56,7 +56,6 @@ protected:
     std::shared_ptr<Renderer> _renderer;
     std::shared_ptr<Mouse> _mouse;
     std::shared_ptr<AudioMixer> _mixer;
-    std::shared_ptr<Location> _location;
     std::shared_ptr<CritterDialogState> _dialog;
     std::shared_ptr<FpsCounter> _fpsCounter;
     std::shared_ptr<TextArea> _falltergeistVersion;

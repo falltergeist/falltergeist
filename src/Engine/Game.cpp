@@ -69,7 +69,6 @@ void Game::_initialize()
     //_renderer = new OpenGLRenderer(640, 480);
     _renderer = std::shared_ptr<SDLRenderer>(new SDLRenderer(640, 480));
     _renderer->init();
-    //_screen = new Screen(640, 480, 32);
     //_mixer = new AudioMixer();
     _mouse = std::shared_ptr<Mouse>(new Mouse());
     _fpsCounter = std::shared_ptr<FpsCounter>(new FpsCounter(_renderer->width() - 42, 2));
@@ -186,9 +185,9 @@ void Game::run()
         }
 
         // thinking
-        _states.back()->think();
         _fpsCounter->think();
         _mouse->think();
+
         //Surface::animatedPalette->think();
 
         for (auto state : activeStates())
@@ -196,29 +195,8 @@ void Game::run()
             state->think();
         }
 
-        // render all states that is over the last fullscreen state
-        /**
-        _screen->clear();
-        
-        auto it = _states.end();
-        do
-        {
-            --it;
-        }
-        while(it != _states.begin() && !(*it)->fullscreen());
-        
-        for (; it != _states.end(); ++it)
-        {
-            (*it)->blit();
-        }
-        falltergeistVersion->blit(_screen->surface());
-        _fpsCounter->blit(_screen->surface());
-        _mouse->blit(_screen->surface());
-        _screen->flip();
-        */
-
-        _renderer->beginFrame();
-        _renderer->endFrame();
+        renderer()->beginFrame();
+        renderer()->endFrame();
         SDL_Delay(1);
     }
 
@@ -250,14 +228,17 @@ std::shared_ptr<Mouse> Game::mouse()
     return _mouse;
 }
 
-void Game::setLocation(std::shared_ptr<Location> location)
-{
-    _location = location;
-}
-
 std::shared_ptr<Location> Game::location()
 {
-    return _location;
+    for (auto state : _states)
+    {
+        auto locationState = std::dynamic_pointer_cast<LocationState>(state);
+        if (locationState)
+        {
+            return locationState->location();
+        }
+    }
+    return 0;
 }
 
 void Game::setGVAR(unsigned int number, int value)
