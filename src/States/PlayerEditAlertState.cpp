@@ -50,6 +50,7 @@ void PlayerEditAlertState::init()
 {
     State::init();
     setFullscreen(false);
+    setModal(true);
 
     auto bg = std::shared_ptr<Image>(new Image("art/intrface/lgdialog.frm"));
     bg->setX(164);

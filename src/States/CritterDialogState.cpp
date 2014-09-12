@@ -51,15 +51,14 @@ CritterDialogState::~CritterDialogState()
     auto camera = Game::getInstance()->location()->camera();
     camera->setXPosition(_oldCameraX);
     camera->setYPosition(_oldCameraY);
-    //Game::getInstance().location()->generateBackground();
-    //Game::getInstance().location()->checkObjectsToRender();
 }
 
 void CritterDialogState::init()
 {
     if (_initialized) return;
     State::init();
-    setFullscreen(true);
+    setFullscreen(false);
+    setModal(true);
 
     auto camera = Game::getInstance()->location()->camera();
     _oldCameraX = camera->xPosition();

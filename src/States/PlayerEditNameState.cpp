@@ -46,7 +46,8 @@ void PlayerEditNameState::init()
 {
     State::init();
     setFullscreen(false);
-    
+    setModal(true);
+
     _keyCodes.insert(std::make_pair(SDLK_a, 'a'));
     _keyCodes.insert(std::make_pair(SDLK_b, 'b'));
     _keyCodes.insert(std::make_pair(SDLK_c, 'c'));

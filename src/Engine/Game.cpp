@@ -126,7 +126,7 @@ void Game::run()
                         event->setY(_event.button.y);
                         event->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
                         event->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
-                        for (auto state : activeStates()) state->handle(event);
+                        for (auto state : statesForThinkAndHandle()) state->handle(event);
                         break;
                     }
                     case SDL_MOUSEBUTTONUP:
@@ -136,7 +136,7 @@ void Game::run()
                         event->setY(_event.button.y);
                         event->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
                         event->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
-                        for (auto state : activeStates()) state->handle(event);
+                        for (auto state : statesForThinkAndHandle()) state->handle(event);
                         break;
                     }
                     case SDL_MOUSEMOTION:
@@ -146,7 +146,7 @@ void Game::run()
                         event->setY(_event.motion.y);
                         event->setXOffset(_event.motion.xrel);
                         event->setYOffset(_event.motion.yrel);
-                        for (auto state : activeStates()) state->handle(event);
+                        for (auto state : statesForThinkAndHandle()) state->handle(event);
                         break;
                     }
                     case SDL_KEYDOWN:
@@ -154,7 +154,7 @@ void Game::run()
                         auto event = std::shared_ptr<KeyboardEvent>(new KeyboardEvent("keydown"));
                         event->setKeyCode(_event.key.keysym.sym);
                         event->setShiftPressed(_event.key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
-                        for (auto state : activeStates()) state->handle(event);
+                        for (auto state : statesForThinkAndHandle()) state->handle(event);
                         break;
                     }
                     case SDL_KEYUP:
@@ -162,7 +162,7 @@ void Game::run()
                         auto event = std::shared_ptr<KeyboardEvent>(new KeyboardEvent("keyup"));
                         event->setKeyCode(_event.key.keysym.sym);
                         event->setShiftPressed(_event.key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
-                        for (auto state : activeStates()) state->handle(event);
+                        for (auto state : statesForThinkAndHandle()) state->handle(event);
 
                         if (event->keyCode() == SDLK_F10)
                         {
@@ -191,7 +191,7 @@ void Game::run()
 
         //Surface::animatedPalette->think();
 
-        for (auto state : activeStates())
+        for (auto state : statesForThinkAndHandle())
         {
             state->think();
         }
@@ -277,9 +277,9 @@ std::vector<std::shared_ptr<State>>* Game::states()
     return &_states;
 }
 
-std::vector<std::shared_ptr<State>> Game::activeStates()
+std::vector<std::shared_ptr<State>> Game::statesForRender()
 {
-    std::vector<std::shared_ptr<State>> activeStates;
+    std::vector<std::shared_ptr<State>> states;
     auto it = _states.end();
     do
     {
@@ -289,10 +289,28 @@ std::vector<std::shared_ptr<State>> Game::activeStates()
 
     for (; it != _states.end(); ++it)
     {
-        if (*it) activeStates.push_back(*it);
+        if (*it) states.push_back(*it);
     }
-    return activeStates;
+    return states;
 }
+
+std::vector<std::shared_ptr<State>> Game::statesForThinkAndHandle()
+{
+    std::vector<std::shared_ptr<State>> states;
+    auto it = _states.end();
+    do
+    {
+        --it;
+    }
+    while(it != _states.begin() && !(*it)->modal() && !(*it)->fullscreen());
+
+    for (; it != _states.end(); ++it)
+    {
+        if (*it) states.push_back(*it);
+    }
+    return states;
+}
+
 
 
 std::shared_ptr<CritterDialogState> Game::dialog()
@@ -309,7 +327,7 @@ std::vector<std::shared_ptr<UI>>* Game::ui()
 {
     _ui.clear();
 
-    for (auto state : activeStates())
+    for (auto state : statesForRender())
     {
         for (auto ui : *state->ui())
         {

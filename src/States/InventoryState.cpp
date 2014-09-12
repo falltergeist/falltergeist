@@ -42,6 +42,7 @@ void InventoryState::init()
     if (_initialized) return;
     State::init();
     setFullscreen(true);
+    setModal(true);
 }
 
 }

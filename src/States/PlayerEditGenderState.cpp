@@ -43,6 +43,7 @@ void PlayerEditGenderState::init()
 {
     State::init();
     setFullscreen(false);
+    setModal(true);
 
     _maleImage = std::shared_ptr<ImageList>(new ImageList((std::vector<std::string>){
                                     "art/intrface/maleoff.frm",

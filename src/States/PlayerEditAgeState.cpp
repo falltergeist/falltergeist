@@ -46,6 +46,7 @@ void PlayerEditAgeState::init()
 {
     State::init();
     setFullscreen(false);
+    setModal(true);
 
     auto bg = std::shared_ptr<Image>(new Image("art/intrface/charwin.frm"));
     bg->setX(160);

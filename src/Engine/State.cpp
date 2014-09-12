@@ -69,6 +69,16 @@ void State::setFullscreen(bool value)
     _fullscreen = value;
 }
 
+bool State::modal()
+{
+    return _modal;
+}
+
+void State::setModal(bool value)
+{
+    _modal = value;
+}
+
 void State::add(std::shared_ptr<UI> ui)
 {
     _ui.push_back(ui);

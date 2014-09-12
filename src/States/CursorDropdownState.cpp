@@ -55,6 +55,7 @@ void CursorDropdownState::init()
     if (_initialized) return;
     State::init();
     setFullscreen(false);
+    setModal(true);
 
 
     int i = 0;

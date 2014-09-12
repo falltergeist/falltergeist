@@ -44,6 +44,9 @@ class State : public EventReciever
 protected:
     std::vector<std::shared_ptr<UI>> _ui;
 
+    // prevents all states before this one to call think() method
+    bool _modal = false;
+    // prevents render all states before this one
     bool _fullscreen = true;
     bool _initialized = false;
 public:
@@ -52,8 +55,13 @@ public:
 
     void add(std::shared_ptr<UI> ui);
     void add(std::vector<std::shared_ptr<UI>> uis);
+
     bool fullscreen();
     void setFullscreen(bool value);
+
+    bool modal();
+    void setModal(bool value);
+
     bool initialized();
     virtual void init();
     virtual void think();
