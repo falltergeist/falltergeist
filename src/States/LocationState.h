@@ -61,6 +61,8 @@ public:
     virtual void think();
     virtual void handle(std::shared_ptr<Event> event);
 
+    void generateUi();
+
     void onBackgroundClick(std::shared_ptr<MouseEvent> event);
     void onKeyUp(std::shared_ptr<KeyboardEvent> event);
     void onObjectClick(std::shared_ptr<MouseEvent> event);

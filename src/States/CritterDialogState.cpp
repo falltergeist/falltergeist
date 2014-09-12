@@ -64,7 +64,7 @@ void CritterDialogState::init()
     locationState->location()->camera()->setXPosition(Location::hexagonToX(critter()->position()));
     locationState->location()->camera()->setYPosition(Location::hexagonToY(critter()->position()) + 100);
     locationState->location()->checkObjectsToRender();
-    locationState->think();
+    locationState->generateUi();
 
     auto background = std::shared_ptr<Image>(new Image("art/intrface/alltlk.frm"));
     auto background2 = std::shared_ptr<Image>(new Image("art/intrface/di_talk.frm"));

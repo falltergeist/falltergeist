@@ -113,6 +113,36 @@ void LocationState::onKeyUp(std::shared_ptr<KeyboardEvent> event)
 {
 }
 
+void LocationState::generateUi()
+{
+    _ui.clear();
+    add(_floor);
+
+    for (auto object : *_location->objectsToRender())
+    {
+        add(object->ui());
+    }
+
+     //add(_roof);
+
+
+
+    _floor->setX(-_location->camera()->x());
+    _floor->setY(-_location->camera()->y());
+    //_roof->setX(-_location->camera()->x());
+    //_roof->setY(-_location->camera()->y() - 100);
+
+    for(auto object : *_location->objectsToRender())
+    {
+        object->ui()->removeEventHandlers("mouseleftdown");
+        object->ui()->addEventHandler("mouseleftdown", object.get(), (EventRecieverMethod) &LocationState::onMouseDown);
+        //object->ui()->removeEventHandlers("mouseleftclick");
+        //object->ui()->addEventHandler("mouseleftclick", object, (EventRecieverMethod) &LocationState::onObjectClick);
+        //object->surface()->setOwner(object);
+    }
+
+}
+
 void LocationState::think()
 {
     State::think();
@@ -131,38 +161,7 @@ void LocationState::think()
          if (_scrollBottom) _location->camera()->setYPosition(_location->camera()->yPosition() + scrollDelta);
      }
 
-
-    _ui.clear();
-    add(_floor);
-
-    for (auto object : *_location->objectsToRender())
-    {
-        auto ui = std::dynamic_pointer_cast<ActiveUI>(object->ui());
-        ui->setX(Location::hexagonToX(object->position()) -_location->camera()->x());
-        ui->setY(Location::hexagonToY(object->position())-_location->camera()->y());
-        add(ui);
-    }
-
-     //add(_roof);
-
-
-
-    _floor->setX(-_location->camera()->x());
-    _floor->setY(-_location->camera()->y());
-    _roof->setX(-_location->camera()->x());
-    _roof->setY(-_location->camera()->y() - 100);
-
-
-
-
-    for(auto object : *_location->objectsToRender())
-    {
-        object->ui()->removeEventHandlers("mouseleftdown");
-        object->ui()->addEventHandler("mouseleftdown", object.get(), (EventRecieverMethod) &LocationState::onMouseDown);
-        //object->ui()->removeEventHandlers("mouseleftclick");
-        //object->ui()->addEventHandler("mouseleftclick", object, (EventRecieverMethod) &LocationState::onObjectClick);
-        //object->surface()->setOwner(object);
-    }
+     generateUi();
 }
 
 void LocationState::handle(std::shared_ptr<Event> event)

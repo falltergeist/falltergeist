@@ -484,6 +484,10 @@ void Location::checkObjectsToRender()
         if (x > camera()->x() + camera()->width()) continue; // left
         if (y > camera()->y() + camera()->height()) continue; // top
 
+        ui->setX(Location::hexagonToX(object->position()) - camera()->x());
+        ui->setY(Location::hexagonToY(object->position())- camera()->y());
+
+
         _objectsToRender.push_back(object);
     }
 }
