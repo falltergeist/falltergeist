@@ -45,10 +45,18 @@ protected:
     std::vector<std::shared_ptr<GameDudeObject>> _characters;
     std::shared_ptr<TextArea> _playerStats1;
     std::shared_ptr<TextArea> _playerStats2;
+    std::shared_ptr<TextArea> _playerStats3;
     std::shared_ptr<TextArea> _playerBio;
     std::shared_ptr<TextArea> _playerName;
+    std::shared_ptr<TextArea> _playerHitPointsMax;
+    std::shared_ptr<TextArea> _playerArmorClass;
+    std::shared_ptr<TextArea> _playerActionPoints;
+    std::shared_ptr<TextArea> _playerMeleeDamage;
+    std::shared_ptr<TextArea> _playerSkills;
+    std::shared_ptr<TextArea> _playerSkillsValues;
+    std::shared_ptr<TextArea> _playerTraits;
     unsigned char _selectedCharacter = 0;
-public:    
+public:
     NewGameState();
     virtual ~NewGameState();
     virtual void init();
