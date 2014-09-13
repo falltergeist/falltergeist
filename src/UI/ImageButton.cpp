@@ -84,6 +84,30 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
             _textures.push_back(ResourceManager::texture("art/intrface/sexoff.frm"));
             _textures.push_back(ResourceManager::texture("art/intrface/sexon.frm"));
             break;
+        case TYPE_PANEL_INVENTORY:
+            _textures.push_back(ResourceManager::texture("art/intrface/invbutup.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/invbutdn.frm"));
+            break;
+        case TYPE_PANEL_OPTIONS:
+            _textures.push_back(ResourceManager::texture("art/intrface/optiup.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/optidn.frm"));
+            break;
+        case TYPE_PANEL_ATTACK:
+            _textures.push_back(ResourceManager::texture("art/intrface/sattkbup.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/sattkbdn.frm"));
+            break;
+        case TYPE_PANEL_MAP:
+            _textures.push_back(ResourceManager::texture("art/intrface/mapup.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/mapdn.frm"));
+            break;
+        case TYPE_PANEL_CHA:
+            _textures.push_back(ResourceManager::texture("art/intrface/chaup.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/chadn.frm"));
+            break;
+        case TYPE_PANEL_PIP:
+            _textures.push_back(ResourceManager::texture("art/intrface/pipup.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/pipdn.frm"));
+            break;
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
     }

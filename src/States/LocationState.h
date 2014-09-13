@@ -46,7 +46,13 @@ protected:
     std::shared_ptr<Image> _roof;
     std::shared_ptr<Image> _panel;
     std::shared_ptr<ImageButton> _changeHandButton;
+    std::shared_ptr<ImageButton> _inventoryButton;
+    std::shared_ptr<ImageButton> _optionsButton;
+    std::shared_ptr<ImageButton> _attackButton;
     std::shared_ptr<ImageButton> _skilldexButton;
+    std::shared_ptr<ImageButton> _mapButton;
+    std::shared_ptr<ImageButton> _chaButton;
+    std::shared_ptr<ImageButton> _pipButton;
     unsigned int _direction;
     unsigned int _cameraX;
     unsigned int _cameraY;
