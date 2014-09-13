@@ -39,14 +39,17 @@ class Image;
 
 class LocationState : public State
 {
-protected:    
+protected:
     std::shared_ptr<Location> _location;
     std::shared_ptr<Image> _floor;
     std::shared_ptr<Image> _roof;
+    std::shared_ptr<Image> _panel;
     unsigned int _direction;
     unsigned int _cameraX;
-    unsigned int _cameraY;    
+    unsigned int _cameraY;
     unsigned int _scrollTicks = 0;
+    unsigned int _panelX;
+    unsigned int _panelY;
     bool _scrollLeft = false;
     bool _scrollRight = false;
     bool _scrollTop = false;

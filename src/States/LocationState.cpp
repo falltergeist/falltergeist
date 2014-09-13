@@ -56,6 +56,8 @@ void LocationState::init()
     if (initialized()) return;
     State::init();
 
+    auto game = Game::getInstance();
+
     Game::getInstance()->mouse()->setType(Mouse::ACTION);
 
     _location = std::shared_ptr<Location>(new Location(ResourceManager::mapFileType("maps/artemple.map")));
@@ -67,6 +69,12 @@ void LocationState::init()
     //_background->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyUp);
 
     //*/
+    // player panel
+    _panel = std::shared_ptr<Image>(new Image("art/intrface/iface.frm"));
+    _panelX = (game->renderer()->width() - 640)/2; // 640 -- X size of panel
+    _panelY = game->renderer()->height() - 99;     //  99 -- Y size of panel
+    _panel->setX(_panelX);
+    _panel->setY(_panelY);
 }
 
 void LocationState::onMouseDown(std::shared_ptr<MouseEvent> event)
@@ -140,7 +148,8 @@ void LocationState::generateUi()
         //object->ui()->addEventHandler("mouseleftclick", object, (EventRecieverMethod) &LocationState::onObjectClick);
         //object->surface()->setOwner(object);
     }
-
+    // player panel is always on top
+    add(_panel);
 }
 
 void LocationState::think()
@@ -150,7 +159,7 @@ void LocationState::think()
 
      _location->think();
 
-     // Скролим локацию
+     // location scrolling
      if (_scrollTicks + 10 < SDL_GetTicks())
      {
          _scrollTicks = SDL_GetTicks();
