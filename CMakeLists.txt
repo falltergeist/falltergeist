@@ -83,6 +83,8 @@ set(SOURCES main.cpp
             src/Engine/Graphics/Renderer.h
             src/Engine/Graphics/Texture.cpp
             src/Engine/Graphics/Texture.h
+            src/Engine/Hexagon.cpp
+            src/Engine/Hexagon.h
             src/Engine/Input/Mouse.cpp
             src/Engine/Input/Mouse.h
             src/Engine/IniFile.cpp
@@ -146,6 +148,8 @@ set(SOURCES main.cpp
             src/States/CritterDialogState.h
             src/States/CursorDropdownState.cpp
             src/States/CursorDropdownState.h
+            src/States/GameMenuState.cpp
+            src/States/GameMenuState.h
             src/States/InventoryState.cpp
             src/States/InventoryState.h
             src/States/LocationState.cpp
