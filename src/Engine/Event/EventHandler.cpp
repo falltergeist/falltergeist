@@ -22,6 +22,7 @@
 
 // Falltergeist includes
 #include "../Event/EventHandler.h"
+#include "../Event/Event.h"
 
 // Third party includes
 
@@ -40,7 +41,7 @@ EventHandler::~EventHandler()
 
 void EventHandler::operator()(std::shared_ptr<Event> event)
 {
-    auto e = event;
+    if (event->handled()) return;
     (_reciever->*_method)(event);
 }
 

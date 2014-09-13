@@ -95,6 +95,7 @@ void State::handle(std::shared_ptr<Event> event)
     {
         if (auto activeUI = std::dynamic_pointer_cast<ActiveUI>(ui))
         {
+            if (event->handled()) continue;
             activeUI->handle(event);
         }
     }

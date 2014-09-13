@@ -66,4 +66,14 @@ void Event::setReciever(EventReciever* reciever)
     _reciever = reciever;
 }
 
+bool Event::handled()
+{
+    return _handled;
+}
+
+void Event::setHandled(bool value)
+{
+    _handled = value;
+}
+
 }

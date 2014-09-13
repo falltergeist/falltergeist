@@ -41,7 +41,7 @@ void ActiveUI::handle(std::shared_ptr<Event> event)
         int x = mouseEvent->x() - this->x();
         int y = mouseEvent->y() - this->y();
 
-        std::shared_ptr<MouseEvent> event = std::shared_ptr<MouseEvent>(new MouseEvent(mouseEvent));
+        std::shared_ptr<MouseEvent> newEvent = std::shared_ptr<MouseEvent>(new MouseEvent(mouseEvent));
         //auto emitter = std::shared_ptr<ActiveUI>(this);
         //event->setEmitter(emitter);
 
@@ -52,20 +52,20 @@ void ActiveUI::handle(std::shared_ptr<Event> event)
             {
                     if (_leftButtonPressed)
                     {
-                        event->setName( _drag ? "mousedrag" : "mousedragstart");
+                        newEvent->setName( _drag ? "mousedrag" : "mousedragstart");
                         if (!_drag) _drag = true;
-                        emitEvent(event);
+                        emitEvent(newEvent);
                     }
                     if (!_hovered)
                     {
                         _hovered = true;
-                        event->setName("mousein");
-                        emitEvent(event);
+                        newEvent->setName("mousein");
+                        emitEvent(newEvent);
                     }
                     else
                     {
-                        event->setName("mousemove");
-                        emitEvent(event);
+                        newEvent->setName("mousemove");
+                        emitEvent(newEvent);
                     }
             }
             else if (mouseEvent->name() == "mousedown")
@@ -73,43 +73,43 @@ void ActiveUI::handle(std::shared_ptr<Event> event)
                     if (mouseEvent->leftButton())
                     {
                         _leftButtonPressed = true;
-                        event->setName("mouseleftdown");
-                        emitEvent(event);
+                        newEvent->setName("mouseleftdown");
+                        emitEvent(newEvent);
                     }
                     else if (mouseEvent->rightButton())
                     {
                         _rightButtonPressed = true;
-                        event->setName("mouserightdown");
-                        emitEvent(event);
+                        newEvent->setName("mouserightdown");
+                        emitEvent(newEvent);
                     }
             }
             else if (mouseEvent->name() == "mouseup")
             {
                 if (mouseEvent->leftButton())
                     {
-                        event->setName("mouseleftup");
-                        emitEvent(event);
+                        newEvent->setName("mouseleftup");
+                        emitEvent(newEvent);
                         if (_leftButtonPressed)
                         {
                             if (_drag)
                             {
                                 _drag = false;
-                                event->setName("mousedragstop");
-                                emitEvent(event);
+                                newEvent->setName("mousedragstop");
+                                emitEvent(newEvent);
                             }
-                            event->setName("mouseleftclick");
-                            emitEvent(event);
+                            newEvent->setName("mouseleftclick");
+                            emitEvent(newEvent);
                         }
                         _leftButtonPressed = false;
                     }
                     else if(mouseEvent->rightButton())
                     {
-                        event->setName("mouserightup");
-                        emitEvent(event);
+                        newEvent->setName("mouserightup");
+                        emitEvent(newEvent);
                         if (_rightButtonPressed)
                         {
-                            event->setName("mouserightclick");
-                            emitEvent(event);
+                            newEvent->setName("mouserightclick");
+                            emitEvent(newEvent);
                         }
                         _rightButtonPressed = false;
                     }
@@ -121,19 +121,19 @@ void ActiveUI::handle(std::shared_ptr<Event> event)
             {
                 if (_drag)
                 {
-                    event->setName("mousedrag");
-                    emitEvent(event);
+                    newEvent->setName("mousedrag");
+                    emitEvent(newEvent);
                 }
                 _hovered = false;
-                event->setName("mouseout");
-                emitEvent(event);
+                newEvent->setName("mouseout");
+                emitEvent(newEvent);
             }
             else if (mouseEvent->name() == "mousemove" && !_hovered)
             {
                 if (_drag)
                 {
-                    event->setName("mousedrag");
-                    emitEvent(event);
+                    newEvent->setName("mousedrag");
+                    emitEvent(newEvent);
                 }
             }
             else if(mouseEvent->name() == "mouseup")
@@ -145,11 +145,11 @@ void ActiveUI::handle(std::shared_ptr<Event> event)
                         if (_drag)
                         {
                             _drag = false;
-                            event->setName("mousedragstop");
-                            emitEvent(event);
+                            newEvent->setName("mousedragstop");
+                            emitEvent(newEvent);
                         }
-                        event->setName("mouseleftup");
-                        emitEvent(event);
+                        newEvent->setName("mouseleftup");
+                        emitEvent(newEvent);
                         _leftButtonPressed = false;
                     }
                 }
@@ -157,13 +157,14 @@ void ActiveUI::handle(std::shared_ptr<Event> event)
                 {
                     if (_rightButtonPressed)
                     {
-                        event->setName("mouserightup");
-                        emitEvent(event);
+                        newEvent->setName("mouserightup");
+                        emitEvent(newEvent);
                         _rightButtonPressed = false;
                     }
                 }
             }
         }
+        event->setHandled(newEvent->handled());
         return;
     }
 

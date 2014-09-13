@@ -42,6 +42,7 @@ protected:
     std::string _name;
     EventEmitter* _emitter = 0;
     EventReciever* _reciever = 0;
+    bool _handled = false;
 public:
     Event(std::string name);
     virtual ~Event();
@@ -53,6 +54,9 @@ public:
 
     EventReciever* reciever();
     void setReciever(EventReciever* reciever);
+
+    bool handled();
+    void setHandled(bool value);
 };
 
 }
