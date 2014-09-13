@@ -34,6 +34,7 @@
 #include "../Engine/Screen.h"
 #include "../Game/GameObject.h"
 #include "../States/LocationState.h"
+#include "../States/MainMenuState.h"
 #include "../States/CursorDropdownState.h"
 #include "../States/GameMenuState.h"
 #include "../UI/Image.h"
@@ -239,7 +240,8 @@ void LocationState::onPanelMouseDown(std::shared_ptr<MouseEvent> event)
 
 void LocationState::onOptionsButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    Game::getInstance()->pushState(std::shared_ptr<GameMenuState>(new GameMenuState()));
+    Game::getInstance()->setState(std::shared_ptr<MainMenuState>(new MainMenuState()));
+    //Game::getInstance()->pushState(std::shared_ptr<GameMenuState>(new GameMenuState()));
 }
 
 }

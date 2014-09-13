@@ -70,9 +70,11 @@ private:
     Game() {}
     Game(Game const&);
     void operator=(Game const&);
+    static Game* _instance;
+    static bool _instanceFlag;
 public:
     ~Game();
-    static std::shared_ptr<Game> getInstance();
+    static Game* getInstance();
 
     std::shared_ptr<ResourceManager> resourceManager();
 

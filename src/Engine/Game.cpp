@@ -46,11 +46,22 @@
 namespace Falltergeist
 {
 
-std::shared_ptr<Game> Game::getInstance()
+bool Game::_instanceFlag = false;
+Game* Game::_instance = NULL;
+
+Game* Game::getInstance()
 {
-    static std::shared_ptr<Game> instance = std::shared_ptr<Game>(new Game());
-    instance->_initialize();
-    return instance;
+    if(!_instanceFlag)
+     {
+         _instance = new Game();
+         _instanceFlag = true;
+         _instance->_initialize();
+         return _instance;
+     }
+     else
+     {
+         return _instance;
+     }
 }
 
 void Game::_initialize()
@@ -83,6 +94,7 @@ void Game::_initialize()
 
 Game::~Game()
 {
+    _instanceFlag = false;
 }
 
 void Game::pushState(std::shared_ptr<State> state)

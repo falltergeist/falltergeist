@@ -162,6 +162,7 @@ void GameObject::setUI(std::shared_ptr<ActiveUI> ui)
 
 void GameObject::_generateUi()
 {
+
     auto frm = ResourceManager::frmFileType(FID());
     if (frm)
     {
