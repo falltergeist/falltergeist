@@ -69,32 +69,41 @@ void LocationState::init()
     //_background->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onBackgroundClick);
     //_background->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyUp);
 
-    //*/
     // PLAYER PANEL
     // player panel background
-    _panel = std::shared_ptr<Image>(new Image("art/intrface/iface.frm"));
-    _panelX = (game->renderer()->width() - 640)/2; // 640 -- X size of panel
-    _panelY = game->renderer()->height() - 99;     //  99 -- Y size of panel
-    _panel->setX(_panelX);
-    _panel->setY(_panelY);
+    _panelUIs.push_back(std::shared_ptr<Image>(new Image("art/intrface/iface.frm")));
+
+    auto panelX = (game->renderer()->width() - 640)*0.5;   // 640 -- X size of panel
+    auto panelY = game->renderer()->height() - 99;         //  99 -- Y size of panel
+
+    _panelUIs.back()->setX(panelX);
+    _panelUIs.back()->setY(panelY);
+    _panelUIs.back()->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &LocationState::onPanelMouseDown);
+
     // change hand button
-    _changeHandButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, _panelX+218, _panelY+5));
-    _changeHandButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onChangeHandButtonClick);
-    // inventory button
-    _inventoryButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_INVENTORY, _panelX+211, _panelY+40));
+    _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, panelX+218, panelY+5)));
+    _panelUIs.back()->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onChangeHandButtonClick);
+
+    // inventory button    
+    _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_INVENTORY, panelX+211, panelY+40)));
+
     // options button
-    _optionsButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_OPTIONS, _panelX+210, _panelY+61));
+    _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_OPTIONS, panelX+210, panelY+61)));
+
     // attack button
-    _attackButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_ATTACK, _panelX+267, _panelY+25));
+    _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_ATTACK, panelX+267, panelY+25)));
 
     // skilldex button
-    _skilldexButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, _panelX+523, _panelY+5));
+    _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, panelX+523, panelY+5)));
+
     // map button
-    _mapButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_MAP, _panelX+526, _panelY+39));
+    _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_MAP, panelX+526, panelY+39)));
+
     // cha button
-    _chaButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_CHA, _panelX+526, _panelY+58));
+    _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_CHA, panelX+526, panelY+58)));
+
     // pip button
-    _pipButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_PIP, _panelX+526, _panelY+77));
+    _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_PIP, panelX+526, panelY+77)));
 }
 
 void LocationState::onMouseDown(std::shared_ptr<MouseEvent> event)
@@ -153,8 +162,6 @@ void LocationState::generateUi()
 
      //add(_roof);
 
-
-
     _floor->setX(-_location->camera()->x());
     _floor->setY(-_location->camera()->y());
     //_roof->setX(-_location->camera()->x());
@@ -168,16 +175,11 @@ void LocationState::generateUi()
         //object->ui()->addEventHandler("mouseleftclick", object, (EventRecieverMethod) &LocationState::onObjectClick);
         //object->surface()->setOwner(object);
     }
-    // player panel is always on top
-    add(_panel);
-    add(_changeHandButton);
-    add(_inventoryButton);
-    add(_optionsButton);
-    add(_attackButton);
-    add(_skilldexButton);
-    add(_mapButton);
-    add(_chaButton);
-    add(_pipButton);
+
+    for (auto ui : _panelUIs)
+    {
+        add(ui);
+    }
 }
 
 void LocationState::think()
@@ -226,6 +228,15 @@ std::shared_ptr<Location> LocationState::location()
 void LocationState::onChangeHandButtonClick(std::shared_ptr<MouseEvent> event)
 {
     std::cout << "Change Hand!\n";
+}
+
+void LocationState::onPanelMouseDown(std::shared_ptr<MouseEvent> event)
+{
+    event->setHandled(true);
+}
+
+void LocationState::onOptionsButtonClick(std::shared_ptr<MouseEvent> event)
+{
 }
 
 }

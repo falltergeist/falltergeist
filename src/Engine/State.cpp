@@ -91,9 +91,9 @@ void State::add(std::vector<std::shared_ptr<UI>> uis)
 
 void State::handle(std::shared_ptr<Event> event)
 {
-    for (auto ui : _ui)
+    for (auto it = _ui.rbegin(); it != _ui.rend(); ++it)
     {
-        if (auto activeUI = std::dynamic_pointer_cast<ActiveUI>(ui))
+        if (auto activeUI = std::dynamic_pointer_cast<ActiveUI>(*it))
         {
             if (event->handled()) continue;
             activeUI->handle(event);
