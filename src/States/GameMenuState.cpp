@@ -21,6 +21,9 @@
 
 // Falltergeist includes
 #include "../States/GameMenuState.h"
+#include "../Engine/Game.h"
+#include "../Engine/Graphics/Renderer.h"
+#include "../UI/Image.h"
 
 // Third party includes
 
@@ -29,6 +32,25 @@ namespace Falltergeist
 
 GameMenuState::GameMenuState()
 {
+}
+
+void GameMenuState::init()
+{
+    if (_initialized) return;
+    State::init();
+
+    setModal(true);
+    setFullscreen(false);
+
+    auto background = std::shared_ptr<Image>(new Image("art/intrface/opbase.frm"));
+
+    auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
+    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
+
+    background->setX(backgroundX);
+    background->setY(backgroundY);
+
+    add(background);
 }
 
 }

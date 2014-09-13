@@ -35,6 +35,7 @@
 #include "../Game/GameObject.h"
 #include "../States/LocationState.h"
 #include "../States/CursorDropdownState.h"
+#include "../States/GameMenuState.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
@@ -89,6 +90,7 @@ void LocationState::init()
 
     // options button
     _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_OPTIONS, panelX+210, panelY+61)));
+    _panelUIs.back()->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onOptionsButtonClick);
 
     // attack button
     _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_ATTACK, panelX+267, panelY+25)));
@@ -237,6 +239,7 @@ void LocationState::onPanelMouseDown(std::shared_ptr<MouseEvent> event)
 
 void LocationState::onOptionsButtonClick(std::shared_ptr<MouseEvent> event)
 {
+    Game::getInstance()->pushState(std::shared_ptr<GameMenuState>(new GameMenuState()));
 }
 
 }

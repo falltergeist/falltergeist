@@ -34,6 +34,8 @@ class GameMenuState : public State
 {
 public:
     GameMenuState();
+
+    virtual void init();
 };
 
 }
