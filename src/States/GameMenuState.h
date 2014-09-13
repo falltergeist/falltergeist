@@ -39,6 +39,7 @@ public:
 
     virtual void init();
 
+    void onPreferencesButtonClick(std::shared_ptr<MouseEvent> event);
     void onExitButtonClick(std::shared_ptr<MouseEvent> event);
     void onDoneButtonClick(std::shared_ptr<MouseEvent> event);
 };
