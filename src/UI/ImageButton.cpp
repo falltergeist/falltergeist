@@ -118,7 +118,7 @@ ImageButton::~ImageButton()
 {
 }
 
-Texture* ImageButton::texture()
+std::shared_ptr<Texture> ImageButton::texture()
 {
     if (_checkboxMode && _checked) return _textures.at(1);
 

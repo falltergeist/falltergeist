@@ -37,12 +37,12 @@ namespace Falltergeist
 class Image : public ActiveUI
 {
 protected:
-    Texture* _imageTexture = 0;
+    std::shared_ptr<Texture> _imageTexture;
 public:
     Image(std::string filename);
     Image(unsigned int width, unsigned int height);
-    Image(Image* image);
-    Image(Texture* texture);
+    Image(std::shared_ptr<Image> image);
+    Image(std::shared_ptr<Texture> texture);
     Image(std::shared_ptr<libfalltergeist::FrmFileType> frm, unsigned int direction);
     unsigned int width();
     unsigned int height();

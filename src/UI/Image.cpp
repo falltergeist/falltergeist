@@ -34,29 +34,29 @@ Image::Image(std::string filename) : ActiveUI()
     setTexture(ResourceManager::texture(filename));
 }
 
-Image::Image(Image* image) : ActiveUI()
+Image::Image(std::shared_ptr<Image> image) : ActiveUI()
 {
-    _imageTexture = new Texture(image->texture()->width(), image->texture()->height());
+    _imageTexture = std::shared_ptr<Texture>(new Texture(image->texture()->width(), image->texture()->height()));
     _imageTexture->loadFromRGBA(image->texture()->data());
     setTexture(_imageTexture);
 }
 
 Image::Image(unsigned int width, unsigned int height) : ActiveUI()
 {
-    _imageTexture = new Texture(width, height);
+    _imageTexture = std::shared_ptr<Texture>(new Texture(width, height));
     setTexture(_imageTexture);
 }
 
-Image::Image(Texture* texture) : ActiveUI()
+Image::Image(std::shared_ptr<Texture> texture) : ActiveUI()
 {
-    _imageTexture = new Texture(texture->width(), texture->height());
+    _imageTexture = std::shared_ptr<Texture>(new Texture(texture->width(), texture->height()));
     _imageTexture->loadFromRGBA(texture->data());
     setTexture(_imageTexture);
 }
 
 Image::Image(std::shared_ptr<libfalltergeist::FrmFileType> frm, unsigned int direction)
 {
-    _imageTexture = new Texture(frm->width(), frm->height());
+    _imageTexture = std::shared_ptr<Texture>(new Texture(frm->width(), frm->height()));
     _imageTexture->loadFromRGBA(frm->rgba(ResourceManager::palFileType("color.pal")));
     setTexture(_imageTexture);
     setXOffset(frm->offsetX(direction) + frm->shiftX(direction) - width()/2);
@@ -65,11 +65,6 @@ Image::Image(std::shared_ptr<libfalltergeist::FrmFileType> frm, unsigned int dir
 
 Image::~Image()
 {
-    if (_imageTexture != 0)
-    {
-        delete _imageTexture;
-        _imageTexture = 0;
-    }
 }
 
 unsigned int Image::width()

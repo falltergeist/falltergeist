@@ -96,7 +96,7 @@ void Texture::loadFromRGBA(unsigned int* data)
     for (unsigned int i = 0; i != _width*_height; ++i) _data[i] = data[i];    
 }
 
-void Texture::copyTo(Texture* destination, unsigned int destinationX, unsigned int destinationY, unsigned int sourceX, unsigned int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
+void Texture::copyTo(std::shared_ptr<Texture> destination, unsigned int destinationX, unsigned int destinationY, unsigned int sourceX, unsigned int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
 {
     if (sourceWidth == 0) sourceWidth = width();
     if (sourceHeight == 0) sourceHeight = height();
@@ -110,7 +110,7 @@ void Texture::copyTo(Texture* destination, unsigned int destinationX, unsigned i
     }
 }
 
-void Texture::blitTo(Texture* destination, unsigned int destinationX, unsigned int destinationY, unsigned int sourceX, unsigned int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
+void Texture::blitTo(std::shared_ptr<Texture> destination, unsigned int destinationX, unsigned int destinationY, unsigned int sourceX, unsigned int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
 {
     if (sourceWidth == 0) sourceWidth = width();
     if (sourceHeight == 0) sourceHeight = height();

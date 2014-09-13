@@ -68,7 +68,7 @@ void SDLRenderer::endFrame()
 
 }
 
-void SDLRenderer::registerTexture(Texture* texture)
+void SDLRenderer::registerTexture(std::shared_ptr<Texture> texture)
 {
     Renderer::registerTexture(texture);
     if (texture->id()) return; // if registered
@@ -101,7 +101,7 @@ void SDLRenderer::unregisterTexture(Texture* texture)
     texture->setId(0);
 }
 
-void SDLRenderer::drawTexture(unsigned int x, unsigned int y, Texture* texture)
+void SDLRenderer::drawTexture(unsigned int x, unsigned int y, std::shared_ptr<Texture> texture)
 {
     Renderer::drawTexture(x, y, texture);
 

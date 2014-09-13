@@ -34,7 +34,7 @@ class HiddenMask : public Image
 {
 public:
     HiddenMask(unsigned int width = 0, unsigned int height = 0, int x = 0, int y = 0);
-    HiddenMask(HiddenMask* other);
+    HiddenMask(std::shared_ptr<HiddenMask> other);
 };
 
 }

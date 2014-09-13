@@ -21,6 +21,7 @@
 #define FALLTERGEIST_UI_H
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
 
@@ -37,7 +38,7 @@ protected:
     int _y = 0;
     int _xOffset = 0;
     int _yOffset = 0;
-    Texture* _texture = 0;
+    std::shared_ptr<Texture> _texture;
     bool _leftButtonPressed = false;
     bool _rightButtonPressed = false;
     bool _drag = false;
@@ -59,8 +60,8 @@ public:
     virtual int yOffset();
     virtual void setYOffset(int yOffset);
 
-    virtual Texture* texture();
-    virtual void setTexture(Texture* texture);
+    virtual std::shared_ptr<Texture> texture();
+    virtual void setTexture(std::shared_ptr<Texture> texture);
 
     virtual void setVisible(bool value);
     virtual bool visible();

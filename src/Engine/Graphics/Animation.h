@@ -39,7 +39,7 @@ class Animation : public ActiveUI
 {
 protected:
     std::vector<AnimationFrame*>* _animationFrames = 0;
-    Texture* _animationTexture = 0;
+    std::shared_ptr<Texture> _animationTexture;
     unsigned int _currentFrame = 0;
     unsigned int _frameTicks = 0;
 public:
@@ -48,7 +48,7 @@ public:
     ~Animation();
     std::vector<AnimationFrame*>* frames();
     virtual void think();
-    virtual Texture* texture();
+    virtual std::shared_ptr<Texture> texture();
     virtual int xOffset();
     virtual int yOffset();
     virtual unsigned int width();

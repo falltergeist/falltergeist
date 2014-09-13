@@ -43,7 +43,7 @@ public:
     BigCounter(int x = 0, int y = 0);
     ~BigCounter();
 
-    virtual Texture* texture();
+    virtual std::shared_ptr<Texture> texture();
 
     void setColor(unsigned char color);
     unsigned char color();

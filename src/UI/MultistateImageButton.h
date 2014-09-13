@@ -61,7 +61,7 @@ public:
     int mode();
     void setModeFactor(int factor);
     int modeFactor();
-    virtual Texture* texture();
+    virtual std::shared_ptr<Texture> texture();
 };
 
 }

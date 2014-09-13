@@ -108,13 +108,13 @@ std::vector<AnimationFrame*>* Animation::frames()
     return _animationFrames;
 }
 
-Texture* Animation::texture()
+std::shared_ptr<Texture> Animation::texture()
 {
     if (_texture) return _texture;
 
     AnimationFrame* frame = _animationFrames->at(_currentFrame);
 
-    _texture = new Texture(frame->width(), frame->height());
+    _texture = std::shared_ptr<Texture>(new Texture(frame->width(), frame->height()));
     _animationTexture->copyTo(_texture, 0, 0, frame->x(), frame->y(), frame->width(), frame->height());
 
     setXOffset(frame->xOffset() - (int)std::floor(frame->width()*0.5));
@@ -147,8 +147,7 @@ void Animation::think()
         {
             _currentFrame = 0;
         }
-        delete _texture;
-        _texture = 0;
+        _texture.reset();
     }
 }
 

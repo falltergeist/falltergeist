@@ -46,9 +46,9 @@ public:
     virtual void beginFrame();
     virtual void endFrame();
 
-    virtual void registerTexture(Texture* texture);
+    virtual void registerTexture(std::shared_ptr<Texture> texture);
     virtual void unregisterTexture(Texture* texture);
-    virtual void drawTexture(unsigned int x, unsigned int y, Texture* texture);
+    virtual void drawTexture(unsigned int x, unsigned int y, std::shared_ptr<Texture> texture);
 
     virtual std::string name();
 

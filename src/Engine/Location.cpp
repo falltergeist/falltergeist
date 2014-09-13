@@ -65,7 +65,6 @@ Location::Location(std::shared_ptr<libfalltergeist::MapFileType> mapFile)
 
 Location::~Location()
 {
-    delete _tilesFloor;
 }
 
 std::shared_ptr<LocationCamera> Location::camera()
@@ -73,12 +72,12 @@ std::shared_ptr<LocationCamera> Location::camera()
     return _camera;
 }
 
-Texture* Location::tilesFloor()
+std::shared_ptr<Texture> Location::tilesFloor()
 {
     return _tilesFloor;
 }
 
-Texture* Location::tilesRoof()
+std::shared_ptr<Texture> Location::tilesRoof()
 {
     return _tilesRoof;
 }
@@ -183,15 +182,14 @@ void Location::_generateFloor()
     unsigned int tilesWidth = 48*_cols + 32*_rows;
     unsigned int tilesHeight = 12*_cols + 24*_rows;
 
-    _tilesFloor = new Texture(tilesWidth, tilesHeight);
+    _tilesFloor = std::shared_ptr<Texture>(new Texture(tilesWidth, tilesHeight));
     _tilesFloor->fill(0x000000FF);
 
     for (unsigned int i = 0; i != _cols*_rows; ++i)
     {
         std::string frmName = _tilesLst->strings()->at(_mapFile->elevations()->at(_elevation)->floorTiles()->at(i));
-        Image* tile = new Image("art/tiles/" + frmName);
+        auto tile = std::shared_ptr<Image>(new Image("art/tiles/" + frmName));
         tile->texture()->blitTo(_tilesFloor, tileToX(i), tileToY(i));
-        delete tile;
     }
 }
 
@@ -200,13 +198,12 @@ void Location::_generateRoof()
     unsigned int tilesWidth = 48*_cols + 32*_rows;
     unsigned int tilesHeight = 12*_cols + 24*_rows;
 
-    _tilesRoof = new Texture(tilesWidth, tilesHeight);
+    _tilesRoof = std::shared_ptr<Texture>(new Texture(tilesWidth, tilesHeight));
     for (unsigned int i = 0; i != _cols*_rows; ++i)
     {
         std::string frmName = _tilesLst->strings()->at(_mapFile->elevations()->at(_elevation)->roofTiles()->at(i));
-        Image* tile = new Image("art/tiles/" + frmName);
+        auto tile = std::shared_ptr<Image>(new Image("art/tiles/" + frmName));
         tile->texture()->blitTo(_tilesRoof, tileToX(i), tileToY(i));
-        delete tile;
     }
 }
 

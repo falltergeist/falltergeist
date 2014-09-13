@@ -96,7 +96,7 @@ void OpenGLRenderer::endFrame()
     SDL_GL_SwapBuffers();
 }
 
-void OpenGLRenderer::registerTexture(Texture* texture)
+void OpenGLRenderer::registerTexture(std::shared_ptr<Texture> texture)
 {
     Renderer::registerTexture(texture);
     if (texture->id()) return; // if registered
@@ -135,7 +135,7 @@ void OpenGLRenderer::unregisterTexture(Texture* texture)
     texture->setId(0);
 }
 
-void OpenGLRenderer::drawTexture(unsigned int x, unsigned int y, Texture* texture)
+void OpenGLRenderer::drawTexture(unsigned int x, unsigned int y, std::shared_ptr<Texture> texture)
 {
     Renderer::drawTexture(x, y, texture);
     if (!texture->id()) registerTexture(texture);

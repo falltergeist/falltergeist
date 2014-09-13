@@ -39,20 +39,19 @@ BigCounter::BigCounter(int x, int y) : ActiveUI(x, y)
 
 BigCounter::~BigCounter()
 {
-    delete _texture;
 }
 
-Texture* BigCounter::texture()
+std::shared_ptr<Texture> BigCounter::texture()
 {
     if (_texture) return _texture;
 
-    auto numbers = new Image("art/intrface/bignum.frm");
+    auto numbers = std::shared_ptr<Image>(new Image("art/intrface/bignum.frm"));
 
     // number as text
     std::stringstream ss;
     ss << _number;
 
-    _texture = new Texture(14*_length, 24);
+    _texture = std::shared_ptr<Texture>(new Texture(14*_length, 24));
 
     char* textNumber = new char[_length + 1]();
 
@@ -83,17 +82,14 @@ Texture* BigCounter::texture()
         numbers->texture()->copyTo(_texture, 14*i, 0, x, 0, 14, 24);
     }
     delete [] textNumber;
-    delete numbers;
     return _texture;
 }
 
 void BigCounter::setNumber(unsigned int number)
 {
     if (_number == number) return;
-
+    _texture.reset();
     _number = number;
-    delete _texture;
-    _texture = 0;
 }
 
 unsigned int BigCounter::number()
@@ -111,8 +107,7 @@ void BigCounter::setColor(unsigned char color)
             if (_color != color)
             {
                 _color = color;
-                delete _texture;
-                _texture = 0;
+                _texture.reset();
             }
             break;
     }

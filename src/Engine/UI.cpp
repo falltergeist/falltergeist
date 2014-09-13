@@ -58,12 +58,12 @@ void UI::setY(int value)
     _y = value;
 }
 
-Texture* UI::texture()
+std::shared_ptr<Texture> UI::texture()
 {
     return _texture;
 }
 
-void UI::setTexture(Texture* texture)
+void UI::setTexture(std::shared_ptr<Texture> texture)
 {
     _texture = texture;
 }

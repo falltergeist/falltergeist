@@ -82,7 +82,7 @@ public:
     TextArea* setFont(std::shared_ptr<Font> font);
     std::shared_ptr<Font> font();
 
-    virtual Texture* texture();
+    virtual std::shared_ptr<Texture> texture();
 
 };
 

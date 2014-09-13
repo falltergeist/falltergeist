@@ -35,7 +35,7 @@ namespace Falltergeist
 
 std::vector<std::shared_ptr<libfalltergeist::DatFile>> ResourceManager::_datFiles;
 std::map<std::string, std::shared_ptr<libfalltergeist::DatFileItem>> ResourceManager::_datFilesItems;
-std::map<std::string, Texture*> ResourceManager::_textures;
+std::map<std::string, std::shared_ptr<Texture>> ResourceManager::_textures;
 std::map<std::string, std::shared_ptr<Font>> ResourceManager::_fonts;
 
 ResourceManager::ResourceManager()
@@ -207,7 +207,7 @@ std::shared_ptr<libfalltergeist::RixFileType> ResourceManager::rixFileType(std::
     return std::dynamic_pointer_cast<libfalltergeist::RixFileType>(datFileItem(filename));
 }
 
-Texture* ResourceManager::texture(std::string filename)
+std::shared_ptr<Texture> ResourceManager::texture(std::string filename)
 {
     if (_textures.find(filename) != _textures.end())
     {
@@ -216,20 +216,20 @@ Texture* ResourceManager::texture(std::string filename)
 
     std::string ext = filename.substr(filename.length() - 4);
 
-    Texture* texture = 0;
+    std::shared_ptr<Texture> texture;
 
     if (ext == ".rix")
     {
         auto rix = rixFileType(filename);
         if (!rix) return 0;
-        texture = new Texture(rix->width(), rix->height());
+        texture = std::shared_ptr<Texture>(new Texture(rix->width(), rix->height()));
         texture->loadFromRGBA(rix->rgba());
     }
     else if (ext == ".frm")
     {
         auto frm = frmFileType(filename);
         if (!frm) return 0;
-        texture = new Texture(frm->width(), frm->height());
+        texture = std::shared_ptr<Texture>(new Texture(frm->width(), frm->height()));
         texture->loadFromRGBA(frm->rgba(palFileType("color.pal")));
     }
     else
@@ -237,7 +237,7 @@ Texture* ResourceManager::texture(std::string filename)
         throw Exception("ResourceManager::surface() - unknow image type:" + filename);
     }
 
-    _textures.insert(std::pair<std::string, Texture*>(filename, texture));
+    _textures.insert(std::pair<std::string, std::shared_ptr<Texture>>(filename, texture));
     return texture;
 }
 

@@ -52,7 +52,7 @@ protected:
     std::string _description;
     std::vector<VM*> _scripts;
     Location* _location = 0;
-    std::shared_ptr<ActiveUI> _ui = nullptr;
+    std::shared_ptr<ActiveUI> _ui;
     void _generateUi();
 public:
     enum { TYPE_ITEM = 0, TYPE_CRITTER, TYPE_SCENERY, TYPE_WALL, TYPE_TILE, TYPE_MISC, TYPE_DUDE };

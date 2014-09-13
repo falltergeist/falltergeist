@@ -61,8 +61,8 @@ protected:
     std::shared_ptr<LocationCamera> _camera;
     unsigned int _elevation = 0;
 
-    Texture* _tilesFloor = 0;
-    Texture* _tilesRoof = 0;
+    std::shared_ptr<Texture> _tilesFloor;
+    std::shared_ptr<Texture> _tilesRoof;
 
     std::shared_ptr<libfalltergeist::MapFileType> _mapFile;
     std::shared_ptr<libfalltergeist::LstFileType> _tilesLst;
@@ -85,8 +85,8 @@ public:
     void handleAction(GameObject* object, int action);
     void checkObjectsToRender();
 
-    Texture* tilesFloor();
-    Texture* tilesRoof();
+    std::shared_ptr<Texture> tilesFloor();
+    std::shared_ptr<Texture> tilesRoof();
     std::shared_ptr<LocationCamera> camera();
 
     std::shared_ptr<GameDudeObject> player();

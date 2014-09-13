@@ -68,7 +68,7 @@ unsigned int Renderer::height()
     return _height;
 }
 
-void Renderer::registerTexture(Texture* texture)
+void Renderer::registerTexture(std::shared_ptr<Texture> texture)
 {
 }
 
@@ -76,7 +76,7 @@ void Renderer::unregisterTexture(Texture* texture)
 {
 }
 
-void Renderer::drawTexture(unsigned int x, unsigned int y, Texture* texture)
+void Renderer::drawTexture(unsigned int x, unsigned int y, std::shared_ptr<Texture> texture)
 {
 }
 
