@@ -20,10 +20,14 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../States/GameMenuState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
+#include "../Engine/ResourceManager.h"
+#include "../States/GameMenuState.h"
+#include "../States/LocationState.h"
 #include "../UI/Image.h"
+#include "../UI/ImageButton.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 
@@ -47,10 +51,56 @@ void GameMenuState::init()
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
 
+    auto saveGameButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18));
+    auto loadGameButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37));
+    auto preferencesButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*2));
+    auto exitGameButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3));
+    auto doneButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4));
+    doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &GameMenuState::onDoneButtonClick);
+
+
+    auto msg = ResourceManager::msgFileType("text/english/game/options.msg");
+    auto font = ResourceManager::font("font3.aaf", 0xb89c28ff);
+
+    // label: save game
+    auto saveGameButtonLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(0), backgroundX+8, backgroundY+26));
+    saveGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+
+    // label: load game
+    auto loadGameButtonLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(1), backgroundX+8, backgroundY+26+37));
+    loadGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+
+    // label: preferences
+    auto preferencesButtonLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(2), backgroundX+8, backgroundY+26+37*2));
+    preferencesButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+
+    // label: exit game
+    auto exitGameButtonLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(3), backgroundX+8, backgroundY+26+37*3));
+    exitGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+
+    // label: done
+    auto doneButtonLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(4), backgroundX+8, backgroundY+26+37*4));
+    doneButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+
     background->setX(backgroundX);
     background->setY(backgroundY);
 
     add(background);
+    add(saveGameButton);
+    add(loadGameButton);
+    add(preferencesButton);
+    add(exitGameButton);
+    add(doneButton);
+    add(saveGameButtonLabel);
+    add(loadGameButtonLabel);
+    add(preferencesButtonLabel);
+    add(exitGameButtonLabel);
+    add(doneButtonLabel);
+}
+
+void GameMenuState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
+{
+    Game::getInstance()->popState();
 }
 
 }

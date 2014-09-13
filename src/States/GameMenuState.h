@@ -24,6 +24,7 @@
 
 // Falltergeist includes
 #include "../Engine/State.h"
+#include "../States/LocationState.h"
 
 // Third party includes
 
@@ -36,6 +37,8 @@ public:
     GameMenuState();
 
     virtual void init();
+
+    void onDoneButtonClick(std::shared_ptr<MouseEvent> event);
 };
 
 }
