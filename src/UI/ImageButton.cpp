@@ -108,6 +108,10 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
             _textures.push_back(ResourceManager::texture("art/intrface/pipup.frm"));
             _textures.push_back(ResourceManager::texture("art/intrface/pipdn.frm"));
             break;
+        case TYPE_OPTIONS_BUTTON:
+            _textures.push_back(ResourceManager::texture("art/intrface/opbtnoff.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/opbtnon.frm"));
+            break;
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
     }
