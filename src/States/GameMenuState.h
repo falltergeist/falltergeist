@@ -24,6 +24,7 @@
 
 // Falltergeist includes
 #include "../Engine/State.h"
+//#include "../States/ExitConfirmState.h"
 #include "../States/LocationState.h"
 
 // Third party includes
@@ -38,6 +39,7 @@ public:
 
     virtual void init();
 
+    void onExitButtonClick(std::shared_ptr<MouseEvent> event);
     void onDoneButtonClick(std::shared_ptr<MouseEvent> event);
 };
 

@@ -148,6 +148,8 @@ set(SOURCES main.cpp
             src/States/CritterDialogState.h
             src/States/CursorDropdownState.cpp
             src/States/CursorDropdownState.h
+            src/States/ExitConfirmState.cpp
+            src/States/ExitConfirmState.h
             src/States/GameMenuState.cpp
             src/States/GameMenuState.h
             src/States/InventoryState.cpp
