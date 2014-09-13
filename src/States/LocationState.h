@@ -72,6 +72,7 @@ public:
     void onChangeHandButtonClick(std::shared_ptr<MouseEvent> event);
     void onPanelMouseDown(std::shared_ptr<MouseEvent> event);
     void onOptionsButtonClick(std::shared_ptr<MouseEvent> event);
+    void onSkilldexButtonClick(std::shared_ptr<MouseEvent> event);
 };
 
 }

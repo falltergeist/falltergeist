@@ -59,7 +59,8 @@ public:
         TYPE_PANEL_MAP,
         TYPE_PANEL_CHA,
         TYPE_PANEL_PIP,
-        TYPE_OPTIONS_BUTTON
+        TYPE_OPTIONS_BUTTON,
+        TYPE_SKILLDEX_BUTTON
     };
     ImageButton(unsigned int type, int x = 0, int y = 0);
     ~ImageButton();

@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMEMENUSTATE_H
-#define FALLTERGEIST_GAMEMENUSTATE_H
+#ifndef FALLTERGEIST_SKILLDEXSTATE_H
+#define FALLTERGEIST_SKILLDEXSTATE_H
 
 // C++ standard includes
 
@@ -30,17 +30,15 @@
 namespace Falltergeist
 {
 
-class GameMenuState : public State
+class SkilldexState : public State
 {
 public:
-    GameMenuState();
+    SkilldexState();
 
     virtual void init();
 
-    void onPreferencesButtonClick(std::shared_ptr<MouseEvent> event);
-    void onExitButtonClick(std::shared_ptr<MouseEvent> event);
-    void onDoneButtonClick(std::shared_ptr<MouseEvent> event);
+    void onCancelButtonClick(std::shared_ptr<MouseEvent> event);
 };
 
 }
-#endif // FALLTERGEIST_GAMEMENUSTATE_H
+#endif // FALLTERGEIST_SKILLDEXSTATE_H

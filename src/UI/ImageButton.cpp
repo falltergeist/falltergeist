@@ -112,6 +112,10 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
             _textures.push_back(ResourceManager::texture("art/intrface/opbtnoff.frm"));
             _textures.push_back(ResourceManager::texture("art/intrface/opbtnon.frm"));
             break;
+        case TYPE_SKILLDEX_BUTTON:
+            _textures.push_back(ResourceManager::texture("art/intrface/skldxoff.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/skldxon.frm"));
+            break;
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
     }

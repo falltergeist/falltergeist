@@ -172,6 +172,8 @@ set(SOURCES main.cpp
             src/States/PlayerEditNameState.h
             src/States/SettingsMenuState.cpp
             src/States/SettingsMenuState.h
+            src/States/SkilldexState.cpp
+            src/States/SkilldexState.h
             src/States/StartState.cpp
             src/States/StartState.h
             src/UI/BigCounter.cpp
