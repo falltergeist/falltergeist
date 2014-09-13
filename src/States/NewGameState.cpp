@@ -22,16 +22,16 @@
 #include <iostream>
 
 // Falltergeist includes
+#include "../Engine/Game.h"
+#include "../Engine/ResourceManager.h"
+#include "../Game/GameDudeObject.h"
 #include "../States/NewGameState.h"
 #include "../States/PlayerEditState.h"
 #include "../States/LocationState.h"
-#include "../Engine/Game.h"
-#include "../Engine/ResourceManager.h"
-#include "../UI/ImageList.h"
-#include "../Game/GameDudeObject.h"
-#include "../UI/ImageButton.h"
-#include "../UI/TextArea.h"
 #include "../UI/Image.h"
+#include "../UI/ImageButton.h"
+#include "../UI/ImageList.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 

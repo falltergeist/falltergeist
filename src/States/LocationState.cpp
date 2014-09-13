@@ -23,20 +23,21 @@
 #include <iostream>
 
 // Falltergeist includes
-#include "../Engine/Graphics/Animation.h"
+#include "../Engine/Event/MouseEvent.h"
 #include "../Engine/Game.h"
-#include "../Engine/Screen.h"
-#include "../Engine/ResourceManager.h"
+#include "../Engine/Graphics/Animation.h"
+#include "../Engine/Graphics/Renderer.h"
+#include "../Engine/Input/Mouse.h"
 #include "../Engine/Location.h"
 #include "../Engine/LocationCamera.h"
+#include "../Engine/ResourceManager.h"
+#include "../Engine/Screen.h"
 #include "../Game/GameObject.h"
 #include "../States/LocationState.h"
 #include "../States/CursorDropdownState.h"
-#include "../Engine/Input/Mouse.h"
-#include "../UI/TextArea.h"
 #include "../UI/Image.h"
-#include "../Engine/Event/MouseEvent.h"
-#include "../Engine/Graphics/Renderer.h"
+#include "../UI/ImageButton.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 
@@ -56,7 +57,9 @@ void LocationState::init()
     if (initialized()) return;
     State::init();
 
-    Game::getInstance()->mouse()->setType(Mouse::ACTION);
+    auto game = Game::getInstance();
+
+    game->mouse()->setType(Mouse::ACTION);
 
     _location = std::shared_ptr<Location>(new Location(ResourceManager::mapFileType("maps/artemple.map")));
     //_location = new Location(_game->resourceManager()->mapFileType("maps/sftanker.map"));
@@ -67,6 +70,31 @@ void LocationState::init()
     //_background->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyUp);
 
     //*/
+    // PLAYER PANEL
+    // player panel background
+    _panel = std::shared_ptr<Image>(new Image("art/intrface/iface.frm"));
+    _panelX = (game->renderer()->width() - 640)/2; // 640 -- X size of panel
+    _panelY = game->renderer()->height() - 99;     //  99 -- Y size of panel
+    _panel->setX(_panelX);
+    _panel->setY(_panelY);
+    // change hand button
+    _changeHandButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, _panelX+218, _panelY+5));
+    _changeHandButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onChangeHandButtonClick);
+    // inventory button
+    _inventoryButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_INVENTORY, _panelX+211, _panelY+40));
+    // options button
+    _optionsButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_OPTIONS, _panelX+210, _panelY+61));
+    // attack button
+    _attackButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_ATTACK, _panelX+267, _panelY+25));
+
+    // skilldex button
+    _skilldexButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, _panelX+523, _panelY+5));
+    // map button
+    _mapButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_MAP, _panelX+526, _panelY+39));
+    // cha button
+    _chaButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_CHA, _panelX+526, _panelY+58));
+    // pip button
+    _pipButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_PIP, _panelX+526, _panelY+77));
 }
 
 void LocationState::onMouseDown(std::shared_ptr<MouseEvent> event)
@@ -140,7 +168,16 @@ void LocationState::generateUi()
         //object->ui()->addEventHandler("mouseleftclick", object, (EventRecieverMethod) &LocationState::onObjectClick);
         //object->surface()->setOwner(object);
     }
-
+    // player panel is always on top
+    add(_panel);
+    add(_changeHandButton);
+    add(_inventoryButton);
+    add(_optionsButton);
+    add(_attackButton);
+    add(_skilldexButton);
+    add(_mapButton);
+    add(_chaButton);
+    add(_pipButton);
 }
 
 void LocationState::think()
@@ -150,7 +187,7 @@ void LocationState::think()
 
      _location->think();
 
-     // Скролим локацию
+     // location scrolling
      if (_scrollTicks + 10 < SDL_GetTicks())
      {
          _scrollTicks = SDL_GetTicks();
@@ -184,6 +221,11 @@ void LocationState::handle(std::shared_ptr<Event> event)
 std::shared_ptr<Location> LocationState::location()
 {
     return _location;
+}
+
+void LocationState::onChangeHandButtonClick(std::shared_ptr<MouseEvent> event)
+{
+    std::cout << "Change Hand!\n";
 }
 
 }

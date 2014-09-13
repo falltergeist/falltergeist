@@ -26,6 +26,7 @@
 
 // Falltergeist includes
 #include "../Engine/State.h"
+#include "../UI/ImageButton.h"
 
 // Third party includes
 
@@ -39,14 +40,25 @@ class Image;
 
 class LocationState : public State
 {
-protected:    
+protected:
     std::shared_ptr<Location> _location;
     std::shared_ptr<Image> _floor;
     std::shared_ptr<Image> _roof;
+    std::shared_ptr<Image> _panel;
+    std::shared_ptr<ImageButton> _changeHandButton;
+    std::shared_ptr<ImageButton> _inventoryButton;
+    std::shared_ptr<ImageButton> _optionsButton;
+    std::shared_ptr<ImageButton> _attackButton;
+    std::shared_ptr<ImageButton> _skilldexButton;
+    std::shared_ptr<ImageButton> _mapButton;
+    std::shared_ptr<ImageButton> _chaButton;
+    std::shared_ptr<ImageButton> _pipButton;
     unsigned int _direction;
     unsigned int _cameraX;
-    unsigned int _cameraY;    
+    unsigned int _cameraY;
     unsigned int _scrollTicks = 0;
+    unsigned int _panelX;
+    unsigned int _panelY;
     bool _scrollLeft = false;
     bool _scrollRight = false;
     bool _scrollTop = false;
@@ -67,6 +79,7 @@ public:
     void onKeyUp(std::shared_ptr<KeyboardEvent> event);
     void onObjectClick(std::shared_ptr<MouseEvent> event);
     void onMouseDown(std::shared_ptr<MouseEvent> event);
+    void onChangeHandButtonClick(std::shared_ptr<MouseEvent> event);
 };
 
 }

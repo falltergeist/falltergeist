@@ -43,6 +43,7 @@ public:
     enum ButtonType {
         TYPE_SMALL_RED_CIRCLE = 1,
         TYPE_BIG_RED_CIRCLE,
+        TYPE_MENU_RED_CIRCLE,
         TYPE_SKILL_TOGGLE,
         TYPE_PLUS,
         TYPE_MINUS,
@@ -51,7 +52,13 @@ public:
         TYPE_CHECKBOX,
         TYPE_PLAYER_NAME,
         TYPE_PLAYER_AGE,
-        TYPE_PLAYER_GENDER
+        TYPE_PLAYER_GENDER,
+        TYPE_PANEL_INVENTORY,
+        TYPE_PANEL_OPTIONS,
+        TYPE_PANEL_ATTACK,
+        TYPE_PANEL_MAP,
+        TYPE_PANEL_CHA,
+        TYPE_PANEL_PIP
     };
     ImageButton(unsigned int type, int x = 0, int y = 0);
     ~ImageButton();
