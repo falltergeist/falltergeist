@@ -26,6 +26,7 @@
 
 // Falltergeist includes
 #include "../Engine/State.h"
+#include "../UI/ImageButton.h"
 
 // Third party includes
 
@@ -44,6 +45,8 @@ protected:
     std::shared_ptr<Image> _floor;
     std::shared_ptr<Image> _roof;
     std::shared_ptr<Image> _panel;
+    std::shared_ptr<ImageButton> _changeHandButton;
+    std::shared_ptr<ImageButton> _skilldexButton;
     unsigned int _direction;
     unsigned int _cameraX;
     unsigned int _cameraY;
@@ -70,6 +73,7 @@ public:
     void onKeyUp(std::shared_ptr<KeyboardEvent> event);
     void onObjectClick(std::shared_ptr<MouseEvent> event);
     void onMouseDown(std::shared_ptr<MouseEvent> event);
+    void onChangeHandButtonClick(std::shared_ptr<MouseEvent> event);
 };
 
 }

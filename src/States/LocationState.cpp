@@ -23,20 +23,21 @@
 #include <iostream>
 
 // Falltergeist includes
-#include "../Engine/Graphics/Animation.h"
+#include "../Engine/Event/MouseEvent.h"
 #include "../Engine/Game.h"
-#include "../Engine/Screen.h"
-#include "../Engine/ResourceManager.h"
+#include "../Engine/Graphics/Animation.h"
+#include "../Engine/Graphics/Renderer.h"
+#include "../Engine/Input/Mouse.h"
 #include "../Engine/Location.h"
 #include "../Engine/LocationCamera.h"
+#include "../Engine/ResourceManager.h"
+#include "../Engine/Screen.h"
 #include "../Game/GameObject.h"
 #include "../States/LocationState.h"
 #include "../States/CursorDropdownState.h"
-#include "../Engine/Input/Mouse.h"
-#include "../UI/TextArea.h"
 #include "../UI/Image.h"
-#include "../Engine/Event/MouseEvent.h"
-#include "../Engine/Graphics/Renderer.h"
+#include "../UI/ImageButton.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 
@@ -69,12 +70,19 @@ void LocationState::init()
     //_background->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyUp);
 
     //*/
-    // player panel
+    // PLAYER PANEL
+    // player panel background
     _panel = std::shared_ptr<Image>(new Image("art/intrface/iface.frm"));
     _panelX = (game->renderer()->width() - 640)/2; // 640 -- X size of panel
     _panelY = game->renderer()->height() - 99;     //  99 -- Y size of panel
     _panel->setX(_panelX);
     _panel->setY(_panelY);
+    // change hand button
+    _changeHandButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, _panelX+218, _panelY+5));
+    _changeHandButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onChangeHandButtonClick);
+    // skilldex button
+    _skilldexButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, _panelX+523, _panelY+5));
+    // player panel is always on top
 }
 
 void LocationState::onMouseDown(std::shared_ptr<MouseEvent> event)
@@ -148,8 +156,9 @@ void LocationState::generateUi()
         //object->ui()->addEventHandler("mouseleftclick", object, (EventRecieverMethod) &LocationState::onObjectClick);
         //object->surface()->setOwner(object);
     }
-    // player panel is always on top
     add(_panel);
+    add(_changeHandButton);
+    add(_skilldexButton);
 }
 
 void LocationState::think()
@@ -193,6 +202,11 @@ void LocationState::handle(std::shared_ptr<Event> event)
 std::shared_ptr<Location> LocationState::location()
 {
     return _location;
+}
+
+void LocationState::onChangeHandButtonClick(std::shared_ptr<MouseEvent> event)
+{
+    std::cout << "Change Hand!\n";
 }
 
 }
