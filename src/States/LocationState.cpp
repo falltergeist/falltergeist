@@ -58,7 +58,7 @@ void LocationState::init()
 
     auto game = Game::getInstance();
 
-    Game::getInstance()->mouse()->setType(Mouse::ACTION);
+    game->mouse()->setType(Mouse::ACTION);
 
     _location = std::shared_ptr<Location>(new Location(ResourceManager::mapFileType("maps/artemple.map")));
     //_location = new Location(_game->resourceManager()->mapFileType("maps/sftanker.map"));

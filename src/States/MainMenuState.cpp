@@ -56,24 +56,24 @@ void MainMenuState::init()
     auto background = std::shared_ptr<Image>(new Image("art/intrface/mainmenu.frm"));
 
     // "Intro" button
-    auto introButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19));
+    auto introButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 29, 19));
 
     // "New game" button
-    auto newGameButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41));
+    auto newGameButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 29, 19 + 41));
     newGameButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod)&MainMenuState::onNewGameButtonClick);
 
     // "Load game" button
-    auto loadGameButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*2));
+    auto loadGameButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 29, 19 + 41*2));
 
     // "Settings" button
-    auto settingsButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*3));
+    auto settingsButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 29, 19 + 41*3));
     settingsButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MainMenuState::onSettingsButtonClick);
 
     // "Credits" button
-    auto creditsButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*4));
-    
+    auto creditsButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 29, 19 + 41*4));
+
     // "Exit" button
-    auto exitButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 29, 19 + 41*5));
+    auto exitButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 29, 19 + 41*5));
     exitButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MainMenuState::onExitButtonClick);
 
 
@@ -104,7 +104,6 @@ void MainMenuState::init()
     // "Exit" label
     auto exitButtonLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(14), 50, 20 + 41*5));
     exitButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
-
 
 
     add(background);

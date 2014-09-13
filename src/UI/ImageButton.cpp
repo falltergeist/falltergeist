@@ -39,7 +39,7 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
             _textures.push_back(ResourceManager::texture("art/intrface/lilredup.frm"));
             _textures.push_back(ResourceManager::texture("art/intrface/lilreddn.frm"));
             break;
-        case TYPE_BIG_RED_CIRCLE:
+        case TYPE_MENU_RED_CIRCLE:
             _textures.push_back(ResourceManager::texture("art/intrface/menuup.frm"));
             _textures.push_back(ResourceManager::texture("art/intrface/menudown.frm"));
             break;

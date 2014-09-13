@@ -42,7 +42,7 @@ protected:
 public:
     enum ButtonType {
         TYPE_SMALL_RED_CIRCLE = 1,
-        TYPE_BIG_RED_CIRCLE,
+        TYPE_MENU_RED_CIRCLE,
         TYPE_SKILL_TOGGLE,
         TYPE_PLUS,
         TYPE_MINUS,
