@@ -20,8 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../UI/HiddenMask.h"
 #include "../Engine/Graphics/Texture.h"
+#include "../UI/HiddenMask.h"
 
 // Third party includes
 

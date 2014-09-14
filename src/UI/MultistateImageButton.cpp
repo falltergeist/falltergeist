@@ -21,11 +21,11 @@
 #include <iostream>
 
 // Falltergeist includes
-#include "../UI/MultistateImageButton.h"
-#include "../Engine/Exception.h"
 #include "../Engine/ActiveUI.h"
-#include "../UI/Image.h"
+#include "../Engine/Exception.h"
 #include "../Engine/Graphics/Texture.h"
+#include "../UI/Image.h"
+#include "../UI/MultistateImageButton.h"
 
 // Third party includes
 

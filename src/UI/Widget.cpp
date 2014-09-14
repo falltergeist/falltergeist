@@ -17,7 +17,7 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../../src/Engine/InteractiveSurface.h"
+#include "../Engine/InteractiveSurface.h"
 #include "../UI/Widget.h"
 
 namespace Falltergeist

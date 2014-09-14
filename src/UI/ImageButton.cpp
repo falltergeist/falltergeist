@@ -22,9 +22,9 @@
 #include <iostream>
 
 // Falltergeist includes
-#include "../UI/ImageButton.h"
-#include "../Engine/ResourceManager.h"
 #include "../Engine/Exception.h"
+#include "../Engine/ResourceManager.h"
+#include "../UI/ImageButton.h"
 
 // Third party includes
 
