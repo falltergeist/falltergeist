@@ -32,6 +32,7 @@
 #include "../Engine/LocationCamera.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Screen.h"
+#include "../Game/GameDudeObject.h"
 #include "../Game/GameObject.h"
 #include "../States/InventoryState.h"
 #include "../States/LocationState.h"
@@ -41,6 +42,7 @@
 #include "../States/SkilldexState.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
+#include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
 
 // Third party includes
@@ -98,6 +100,17 @@ void LocationState::init()
 
     // attack button
     _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_ATTACK, panelX+267, panelY+25)));
+
+    // hit points
+    auto hitPoints = std::shared_ptr<SmallCounter>(new SmallCounter(panelX+471, panelY+40));
+    hitPoints->setNumber(Game::getInstance()->player()->hitPoints());
+    _panelUIs.push_back(hitPoints);
+
+    // armor class
+    auto armorClass = std::shared_ptr<SmallCounter>(new SmallCounter(panelX+472, panelY+76));
+    armorClass->setNumber(Game::getInstance()->player()->armorClass());
+    _panelUIs.push_back(armorClass);
+
 
     // skilldex button
     _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, panelX+523, panelY+5)));
