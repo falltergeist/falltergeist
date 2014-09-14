@@ -22,9 +22,9 @@
 
 // Falltergeist includes
 #include "../Engine/CrossPlatform.h"
-#include "../UI/FpsCounter.h"
 #include "../Engine/Game.h"
 #include "../Engine/ResourceManager.h"
+#include "../UI/FpsCounter.h"
 
 // Third party includes
 #include "SDL.h"

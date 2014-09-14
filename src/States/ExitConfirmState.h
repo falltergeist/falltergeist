@@ -17,17 +17,29 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../Engine/InteractiveSurface.h"
-#include "../UI/Widget.h"
+#ifndef FALLTERGEIST_EXITCONFIRMSTATE_H
+#define FALLTERGEIST_EXITCONFIRMSTATE_H
+
+// C++ standard includes
+
+// Falltergeist includes
+#include "../Engine/State.h"
+
+// Third party includes
 
 namespace Falltergeist
 {
-namespace UI
-{
 
-Widget::Widget(int x, int y) : InteractiveSurface(0, 0, x, y)
+class ExitConfirmState : public State
 {
-}
+public:
+    ExitConfirmState();
+
+    virtual void init();
+
+    void onYesButtonClick(std::shared_ptr<MouseEvent> event);
+    void onNoButtonClick(std::shared_ptr<MouseEvent> event);
+};
 
 }
-}
+#endif // FALLTERGEIST_EXITCONFIRMSTATE_H

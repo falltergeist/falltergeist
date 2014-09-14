@@ -22,12 +22,12 @@
 #include <iostream>
 
 // Falltergeist includes
+#include "../Engine/CrossPlatform.h"
 #include "../Engine/Font.h"
 #include "../Engine/FontString.h"
-#include "../Engine/ResourceManager.h"
-#include "../Engine/CrossPlatform.h"
-#include "../UI/TextArea.h"
 #include "../Engine/Graphics/Texture.h"
+#include "../Engine/ResourceManager.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 

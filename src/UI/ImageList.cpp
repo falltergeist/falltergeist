@@ -20,8 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../UI/ImageList.h"
 #include "../UI/Image.h"
+#include "../UI/ImageList.h"
 
 // Third party includes
 

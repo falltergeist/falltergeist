@@ -148,6 +148,8 @@ set(SOURCES main.cpp
             src/States/CritterDialogState.h
             src/States/CursorDropdownState.cpp
             src/States/CursorDropdownState.h
+            src/States/ExitConfirmState.cpp
+            src/States/ExitConfirmState.h
             src/States/GameMenuState.cpp
             src/States/GameMenuState.h
             src/States/InventoryState.cpp
@@ -170,6 +172,8 @@ set(SOURCES main.cpp
             src/States/PlayerEditNameState.h
             src/States/SettingsMenuState.cpp
             src/States/SettingsMenuState.h
+            src/States/SkilldexState.cpp
+            src/States/SkilldexState.h
             src/States/StartState.cpp
             src/States/StartState.h
             src/UI/BigCounter.cpp

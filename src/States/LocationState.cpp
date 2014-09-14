@@ -33,10 +33,12 @@
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Screen.h"
 #include "../Game/GameObject.h"
+#include "../States/InventoryState.h"
 #include "../States/LocationState.h"
 #include "../States/MainMenuState.h"
 #include "../States/CursorDropdownState.h"
 #include "../States/GameMenuState.h"
+#include "../States/SkilldexState.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
@@ -86,8 +88,9 @@ void LocationState::init()
     _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, panelX+218, panelY+5)));
     _panelUIs.back()->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onChangeHandButtonClick);
 
-    // inventory button    
+    // inventory button
     _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_INVENTORY, panelX+211, panelY+40)));
+    _panelUIs.back()->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onInventoryButtonClick);
 
     // options button
     _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_OPTIONS, panelX+210, panelY+61)));
@@ -98,6 +101,7 @@ void LocationState::init()
 
     // skilldex button
     _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, panelX+523, panelY+5)));
+    _panelUIs.back()->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onSkilldexButtonClick);
 
     // map button
     _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_MAP, panelX+526, panelY+39)));
@@ -238,10 +242,19 @@ void LocationState::onPanelMouseDown(std::shared_ptr<MouseEvent> event)
     event->setHandled(true);
 }
 
+void LocationState::onInventoryButtonClick(std::shared_ptr<MouseEvent> event)
+{
+    Game::getInstance()->pushState(std::shared_ptr<InventoryState>(new InventoryState()));
+}
+
 void LocationState::onOptionsButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    //Game::getInstance()->setState(std::shared_ptr<MainMenuState>(new MainMenuState()));
     Game::getInstance()->pushState(std::shared_ptr<GameMenuState>(new GameMenuState()));
+}
+
+void LocationState::onSkilldexButtonClick(std::shared_ptr<MouseEvent> event)
+{
+    Game::getInstance()->pushState(std::shared_ptr<SkilldexState>(new SkilldexState()));
 }
 
 }

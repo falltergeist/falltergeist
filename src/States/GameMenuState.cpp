@@ -23,8 +23,10 @@
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
 #include "../Engine/ResourceManager.h"
+#include "../States/ExitConfirmState.h"
 #include "../States/GameMenuState.h"
 #include "../States/LocationState.h"
+#include "../States/SettingsMenuState.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
@@ -56,6 +58,9 @@ void GameMenuState::init()
     auto preferencesButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*2));
     auto exitGameButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3));
     auto doneButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4));
+
+    preferencesButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &GameMenuState::onPreferencesButtonClick);
+    exitGameButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &GameMenuState::onExitButtonClick);
     doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &GameMenuState::onDoneButtonClick);
 
 
@@ -96,6 +101,16 @@ void GameMenuState::init()
     add(preferencesButtonLabel);
     add(exitGameButtonLabel);
     add(doneButtonLabel);
+}
+
+void GameMenuState::onPreferencesButtonClick(std::shared_ptr<MouseEvent> event)
+{
+    Game::getInstance()->pushState(std::shared_ptr<SettingsMenuState>(new SettingsMenuState()));
+}
+
+void GameMenuState::onExitButtonClick(std::shared_ptr<MouseEvent> event)
+{
+    Game::getInstance()->pushState(std::shared_ptr<ExitConfirmState>(new ExitConfirmState()));
 }
 
 void GameMenuState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)

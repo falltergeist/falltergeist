@@ -19,10 +19,19 @@
  */
 
 // C++ standard includes
+#include <sstream>
 
 // Falltergeist includes
-#include "../States/InventoryState.h"
+#include "../Engine/Game.h"
+#include "../Engine/Graphics/Renderer.h"
 #include "../Engine/ResourceManager.h"
+#include "../Game/GameCritterObject.h"
+#include "../Game/GameDudeObject.h"
+#include "../States/GameMenuState.h"
+#include "../States/InventoryState.h"
+#include "../UI/Image.h"
+#include "../UI/ImageButton.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 
@@ -41,8 +50,97 @@ void InventoryState::init()
 {
     if (_initialized) return;
     State::init();
-    setFullscreen(true);
+
     setModal(true);
+    setFullscreen(false);
+
+    // background
+    auto background = std::shared_ptr<Image>(new Image("art/intrface/invbox.frm"));
+    auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
+    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5-50;
+    background->setX(backgroundX);
+    background->setY(backgroundY);
+
+    // buttons
+    auto upButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_INVENTORY_UP_ARROW, backgroundX+128, backgroundY+40));
+    auto downButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_INVENTORY_DOWN_ARROW, backgroundX+128, backgroundY+65));
+    auto doneButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+438, backgroundY+328));
+
+    // events
+    doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &GameMenuState::onDoneButtonClick);
+
+    // screen
+    auto screenX = backgroundX + background->width() - 202;
+    auto screenY = backgroundY + background->height() - 332; //330
+    auto font = ResourceManager::font("font1.aaf", 0xb89c28ff);
+
+    auto playerNameLabel = std::shared_ptr<TextArea>(new TextArea(Game::getInstance()->player()->name(), screenX, screenY));
+//    skilldexLabel->setFont(font)->setWidth(76)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+
+    auto msg = ResourceManager::msgFileType("text/english/game/inventry.msg");
+    // label: ST (0)
+    auto stLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(0), screenX, screenY+20));
+    // label: PE (1)
+    auto peLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(1), screenX, screenY+20+10));
+    // label: EN (2)
+    auto enLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(2), screenX, screenY+20+10*2));
+    // label: CH (3)
+    auto chLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(3), screenX, screenY+20+10*3));
+    // label: IN (4)
+    auto inLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(4), screenX, screenY+20+10*4));
+    // label: AG (5)
+    auto agLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(5), screenX, screenY+20+10*5));
+    // label: LK (6)
+    auto lkLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(6), screenX, screenY+20+10*6));
+
+    std::stringstream ss;
+    for (unsigned int i=0; i<7; i++)
+    {
+        ss << Game::getInstance()->player()->stat(i) << "\n";
+    }
+    auto statsLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+22, screenY+20));
+
+    ss.str("");
+    for (unsigned int i=7; i<14; i++)
+    {
+        ss << msg->message(i)->text() << "\n";
+    }
+    auto textLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+40, screenY+20));
+
+    // label: hit points
+    ss.str("");
+    ss << Game::getInstance()->player()->hitPoints();
+    ss << "/";
+    ss << Game::getInstance()->player()->hitPointsMax();
+    auto hitPointsLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+100, screenY+20));
+    hitPointsLabel->setFont(font)->setWidth(46)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    // label: armor class
+    ss.str("");
+    ss << Game::getInstance()->player()->armorClass();
+    auto armorClassLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+100, screenY+30));
+    armorClassLabel->setFont(font)->setWidth(46)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+
+    add(background);
+    add(playerNameLabel);
+    add(stLabel);
+    add(peLabel);
+    add(enLabel);
+    add(chLabel);
+    add(inLabel);
+    add(agLabel);
+    add(lkLabel);
+    add(statsLabel);
+    add(textLabel);
+    add(hitPointsLabel);
+    add(armorClassLabel);
+    add(upButton);
+    add(downButton);
+    add(doneButton);
+}
+
+void InventoryState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
+{
+    Game::getInstance()->popState();
 }
 
 }

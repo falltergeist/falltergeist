@@ -23,10 +23,10 @@
 #include <string.h>
 
 // Falltergeist includes
-#include "../UI/BigCounter.h"
-#include "../Engine/ResourceManager.h"
-#include "../UI/Image.h"
 #include "../Engine/Graphics/Texture.h"
+#include "../Engine/ResourceManager.h"
+#include "../UI/BigCounter.h"
+#include "../UI/Image.h"
 
 // Third party includes
 

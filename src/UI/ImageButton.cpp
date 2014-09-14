@@ -22,9 +22,9 @@
 #include <iostream>
 
 // Falltergeist includes
-#include "../UI/ImageButton.h"
-#include "../Engine/ResourceManager.h"
 #include "../Engine/Exception.h"
+#include "../Engine/ResourceManager.h"
+#include "../UI/ImageButton.h"
 
 // Third party includes
 
@@ -111,6 +111,18 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
         case TYPE_OPTIONS_BUTTON:
             _textures.push_back(ResourceManager::texture("art/intrface/opbtnoff.frm"));
             _textures.push_back(ResourceManager::texture("art/intrface/opbtnon.frm"));
+            break;
+        case TYPE_SKILLDEX_BUTTON:
+            _textures.push_back(ResourceManager::texture("art/intrface/skldxoff.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/skldxon.frm"));
+            break;
+        case TYPE_INVENTORY_UP_ARROW:
+            _textures.push_back(ResourceManager::texture("art/intrface/invupout.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/invupin.frm"));
+            break;
+        case TYPE_INVENTORY_DOWN_ARROW:
+            _textures.push_back(ResourceManager::texture("art/intrface/invdnout.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/invdnin.frm"));
             break;
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
