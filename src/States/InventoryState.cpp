@@ -98,7 +98,27 @@ void InventoryState::init()
     {
         ss << Game::getInstance()->player()->stat(i) << "\n";
     }
-    auto statsLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+26, screenY+20));
+    auto statsLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+22, screenY+20));
+
+    ss.str("");
+    for (unsigned int i=7; i<14; i++)
+    {
+        ss << msg->message(i)->text() << "\n";
+    }
+    auto textLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+40, screenY+20));
+
+    // label: hit points
+    ss.str("");
+    ss << Game::getInstance()->player()->hitPoints();
+    ss << "/";
+    ss << Game::getInstance()->player()->hitPointsMax();
+    auto hitPointsLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+100, screenY+20));
+    hitPointsLabel->setFont(font)->setWidth(46)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    // label: armor class
+    ss.str("");
+    ss << Game::getInstance()->player()->armorClass();
+    auto armorClassLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+100, screenY+30));
+    armorClassLabel->setFont(font)->setWidth(46)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
     add(background);
     add(playerNameLabel);
@@ -110,6 +130,9 @@ void InventoryState::init()
     add(agLabel);
     add(lkLabel);
     add(statsLabel);
+    add(textLabel);
+    add(hitPointsLabel);
+    add(armorClassLabel);
     add(upButton);
     add(downButton);
     add(doneButton);
