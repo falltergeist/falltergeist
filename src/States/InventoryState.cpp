@@ -19,11 +19,14 @@
  */
 
 // C++ standard includes
+#include <sstream>
 
 // Falltergeist includes
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
 #include "../Engine/ResourceManager.h"
+#include "../Game/GameCritterObject.h"
+#include "../Game/GameDudeObject.h"
 #include "../States/GameMenuState.h"
 #include "../States/InventoryState.h"
 #include "../UI/Image.h"
@@ -66,7 +69,47 @@ void InventoryState::init()
     // events
     doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &GameMenuState::onDoneButtonClick);
 
+    // screen
+    auto screenX = backgroundX + background->width() - 202;
+    auto screenY = backgroundY + background->height() - 332; //330
+    auto font = ResourceManager::font("font1.aaf", 0xb89c28ff);
+
+    auto playerNameLabel = std::shared_ptr<TextArea>(new TextArea(Game::getInstance()->player()->name(), screenX, screenY));
+//    skilldexLabel->setFont(font)->setWidth(76)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+
+    auto msg = ResourceManager::msgFileType("text/english/game/inventry.msg");
+    // label: ST (0)
+    auto stLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(0), screenX, screenY+20));
+    // label: PE (1)
+    auto peLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(1), screenX, screenY+20+10));
+    // label: EN (2)
+    auto enLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(2), screenX, screenY+20+10*2));
+    // label: CH (3)
+    auto chLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(3), screenX, screenY+20+10*3));
+    // label: IN (4)
+    auto inLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(4), screenX, screenY+20+10*4));
+    // label: AG (5)
+    auto agLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(5), screenX, screenY+20+10*5));
+    // label: LK (6)
+    auto lkLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(6), screenX, screenY+20+10*6));
+
+    std::stringstream ss;
+    for (unsigned int i=0; i<7; i++)
+    {
+        ss << Game::getInstance()->player()->stat(i) << "\n";
+    }
+    auto statsLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+26, screenY+20));
+
     add(background);
+    add(playerNameLabel);
+    add(stLabel);
+    add(peLabel);
+    add(enLabel);
+    add(chLabel);
+    add(inLabel);
+    add(agLabel);
+    add(lkLabel);
+    add(statsLabel);
     add(upButton);
     add(downButton);
     add(doneButton);
