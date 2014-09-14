@@ -37,6 +37,8 @@ public:
     InventoryState();
     virtual ~InventoryState();
     virtual void init();
+
+    void onDoneButtonClick(std::shared_ptr<MouseEvent> event);
 };
 
 }

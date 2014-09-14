@@ -33,6 +33,7 @@
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Screen.h"
 #include "../Game/GameObject.h"
+#include "../States/InventoryState.h"
 #include "../States/LocationState.h"
 #include "../States/MainMenuState.h"
 #include "../States/CursorDropdownState.h"
@@ -89,6 +90,7 @@ void LocationState::init()
 
     // inventory button
     _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_INVENTORY, panelX+211, panelY+40)));
+    _panelUIs.back()->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onInventoryButtonClick);
 
     // options button
     _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_OPTIONS, panelX+210, panelY+61)));
@@ -238,6 +240,11 @@ void LocationState::onChangeHandButtonClick(std::shared_ptr<MouseEvent> event)
 void LocationState::onPanelMouseDown(std::shared_ptr<MouseEvent> event)
 {
     event->setHandled(true);
+}
+
+void LocationState::onInventoryButtonClick(std::shared_ptr<MouseEvent> event)
+{
+    Game::getInstance()->pushState(std::shared_ptr<InventoryState>(new InventoryState()));
 }
 
 void LocationState::onOptionsButtonClick(std::shared_ptr<MouseEvent> event)

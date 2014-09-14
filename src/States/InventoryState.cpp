@@ -21,8 +21,14 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../States/InventoryState.h"
+#include "../Engine/Game.h"
+#include "../Engine/Graphics/Renderer.h"
 #include "../Engine/ResourceManager.h"
+#include "../States/GameMenuState.h"
+#include "../States/InventoryState.h"
+#include "../UI/Image.h"
+#include "../UI/ImageButton.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 
@@ -41,8 +47,34 @@ void InventoryState::init()
 {
     if (_initialized) return;
     State::init();
-    setFullscreen(true);
+
     setModal(true);
+    setFullscreen(false);
+
+    // background
+    auto background = std::shared_ptr<Image>(new Image("art/intrface/invbox.frm"));
+    auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
+    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5-50;
+    background->setX(backgroundX);
+    background->setY(backgroundY);
+
+    // buttons
+    auto upButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_INVENTORY_UP_ARROW, backgroundX+128, backgroundY+40));
+    auto downButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_INVENTORY_DOWN_ARROW, backgroundX+128, backgroundY+65));
+    auto doneButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+438, backgroundY+328));
+
+    // events
+    doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &GameMenuState::onDoneButtonClick);
+
+    add(background);
+    add(upButton);
+    add(downButton);
+    add(doneButton);
+}
+
+void InventoryState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
+{
+    Game::getInstance()->popState();
 }
 
 }

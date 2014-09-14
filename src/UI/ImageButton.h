@@ -60,7 +60,9 @@ public:
         TYPE_PANEL_CHA,
         TYPE_PANEL_PIP,
         TYPE_OPTIONS_BUTTON,
-        TYPE_SKILLDEX_BUTTON
+        TYPE_SKILLDEX_BUTTON,
+        TYPE_INVENTORY_UP_ARROW,
+        TYPE_INVENTORY_DOWN_ARROW
     };
     ImageButton(unsigned int type, int x = 0, int y = 0);
     ~ImageButton();
