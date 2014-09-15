@@ -10,10 +10,18 @@ IRC chanel: #falltergeist on [freenode.net](http://webchat.freenode.net/?channel
 
 
 ##Compilation under linux
+
+First of all you need to compile libfalltergeist library:
+
 ```
-./compile.sh
+git submodule init
+git submodule update
+cd lib/libfalltergeist && cmake . && make && cd -
+
 ```
-OR
+
+Now you can compile Falltergeist:
+
 ```
 cmake . && make
 ```
@@ -22,6 +30,7 @@ cmake . && make
 
 Put master.dat and critter.dat files into ~/.falltergeist/ folder or mount CD-ROM with original game
 then run 
+
 ```
-bin/falltergeist
+./falltergeist
 ```
