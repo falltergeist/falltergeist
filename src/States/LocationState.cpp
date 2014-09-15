@@ -34,11 +34,12 @@
 #include "../Engine/Screen.h"
 #include "../Game/GameDudeObject.h"
 #include "../Game/GameObject.h"
+#include "../States/CursorDropdownState.h"
+#include "../States/ExitConfirmState.h"
+#include "../States/GameMenuState.h"
 #include "../States/InventoryState.h"
 #include "../States/LocationState.h"
 #include "../States/MainMenuState.h"
-#include "../States/CursorDropdownState.h"
-#include "../States/GameMenuState.h"
 #include "../States/SkilldexState.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
@@ -71,9 +72,9 @@ void LocationState::init()
     //_location = new Location(_game->resourceManager()->mapFileType("maps/sftanker.map"));
 
     _floor = std::shared_ptr<Image>(new Image(_location->tilesFloor()));
+    _floor->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyboardUp);
     _roof = std::shared_ptr<Image>(new Image(_location->tilesRoof()));
     //_background->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onBackgroundClick);
-    //_background->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyUp);
 
     // PLAYER PANEL
     // player panel background
@@ -286,5 +287,15 @@ void LocationState::onSkilldexButtonClick(std::shared_ptr<MouseEvent> event)
 {
     Game::getInstance()->pushState(std::shared_ptr<SkilldexState>(new SkilldexState()));
 }
+
+void LocationState::onKeyboardUp(std::shared_ptr<KeyboardEvent> event)
+{
+    if (event->keyCode() == SDLK_F10)
+    {
+        Game::getInstance()->pushState(std::shared_ptr<ExitConfirmState>(new ExitConfirmState()));
+        event->setHandled(true);
+    }
+}
+
 
 }

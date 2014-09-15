@@ -74,6 +74,7 @@ public:
     void onInventoryButtonClick(std::shared_ptr<MouseEvent> event);
     void onOptionsButtonClick(std::shared_ptr<MouseEvent> event);
     void onSkilldexButtonClick(std::shared_ptr<MouseEvent> event);
+    void onKeyboardUp(std::shared_ptr<KeyboardEvent> event);
 };
 
 }

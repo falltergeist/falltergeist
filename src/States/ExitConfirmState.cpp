@@ -25,6 +25,7 @@
 #include "../Engine/ResourceManager.h"
 #include "../States/ExitConfirmState.h"
 #include "../States/LocationState.h"
+#include "../States/MainMenuState.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
@@ -94,7 +95,7 @@ void ExitConfirmState::init()
 
 void ExitConfirmState::onYesButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    Game::getInstance()->quit();
+    Game::getInstance()->setState(std::shared_ptr<MainMenuState>(new MainMenuState()));
 }
 
 void ExitConfirmState::onNoButtonClick(std::shared_ptr<MouseEvent> event)

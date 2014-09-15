@@ -174,20 +174,23 @@ void Game::run()
                         event->setShiftPressed(_event.key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
                         for (auto state : statesForThinkAndHandle()) state->handle(event);
 
-                        if (event->keyCode() == SDLK_F10)
+                        if (!event->handled())
                         {
-                            _quit = true;
-                        }
+                            if (event->keyCode() == SDLK_F10)
+                            {
+                                _quit = true;
+                            }
 
-                        if (event->keyCode() == SDLK_F11)
-                        {
-                            std::shared_ptr<Texture> texture = renderer()->screenshot();
-                            SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(texture->data(), texture->width(), texture->height(), 32, texture->width()*4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
-                            std::string name = std::to_string(SDL_GetTicks()) +  ".bmp";
-                            SDL_SaveBMP(surface, name.c_str());
-                            SDL_FreeSurface(surface);
-                            debug("[GAME] - Screenshot saved to " + name, DEBUG_INFO);
+                            if (event->keyCode() == SDLK_F11)
+                            {
+                                std::shared_ptr<Texture> texture = renderer()->screenshot();
+                                SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(texture->data(), texture->width(), texture->height(), 32, texture->width()*4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+                                std::string name = std::to_string(SDL_GetTicks()) +  ".bmp";
+                                SDL_SaveBMP(surface, name.c_str());
+                                SDL_FreeSurface(surface);
+                                debug("[GAME] - Screenshot saved to " + name, DEBUG_INFO);
 
+                            }
                         }
                         break;
                     }
