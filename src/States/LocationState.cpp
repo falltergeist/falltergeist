@@ -236,6 +236,24 @@ void LocationState::think()
              _location->camera()->setYPosition(_location->camera()->yPosition() + scrollDelta);
              Game::getInstance()->mouse()->setType(Mouse::SCROLL_S);
          }
+
+         if (_scrollLeft && _scrollTop)
+         {
+             Game::getInstance()->mouse()->setType(Mouse::SCROLL_NW);
+         }
+         if (_scrollLeft && _scrollBottom)
+         {
+             Game::getInstance()->mouse()->setType(Mouse::SCROLL_SW);
+         }
+         if (_scrollRight && _scrollTop)
+         {
+             Game::getInstance()->mouse()->setType(Mouse::SCROLL_NE);
+         }
+         if (_scrollRight && _scrollBottom)
+         {
+             Game::getInstance()->mouse()->setType(Mouse::SCROLL_SE);
+         }
+
      }
 
      generateUi();
@@ -246,7 +264,7 @@ void LocationState::handle(std::shared_ptr<Event> event)
     if (auto mouseEvent = std::dynamic_pointer_cast<MouseEvent>(event))
     {
         auto game = Game::getInstance();
-        unsigned int scrollArea = 5;
+        unsigned int scrollArea = 8;
         if (mouseEvent->name() == "mousemove")
         {
             _scrollLeft = mouseEvent->x() < scrollArea ? true : false;
