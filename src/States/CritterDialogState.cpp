@@ -81,8 +81,16 @@ void CritterDialogState::init()
     background2->setX(backgroundX);
     background2->setY(backgroundY+291);
 
+    // review button
+    auto reviewButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_REVIEW_BUTTON, backgroundX+13, backgroundY+445));
+
+    // barter button
+    auto barterButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, backgroundX+593, backgroundY+331));
+
     add(background);
     add(background2);
+    add(reviewButton);
+    add(barterButton);
     add(_question);
 
 }
