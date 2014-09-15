@@ -165,7 +165,7 @@ TextArea* TextArea::setBackgroundColor(unsigned int color)
 {
     if (_backgroundColor == color) return this;
     _texture.reset();
-    _backgroundColor = color;    
+    _backgroundColor = color;
     return this;
 }
 
@@ -173,7 +173,7 @@ TextArea* TextArea::setWidth(unsigned int width)
 {
     if (_width == width) return this;
     _texture.reset();
-    _width = width;    
+    _width = width;
     return this;
 }
 
@@ -244,7 +244,7 @@ std::shared_ptr<Texture> TextArea::texture()
             auto glyph = font->aaf()->glyphs()->at(chr);
 
             // adding word to string or char to word
-            if ((chr == ' ') || (chr == '\n'))
+            if ( (chr == '\n') || ((chr == ' ')&&(wrd!="")) )
             {
                 if (text_new != "")
                 {
