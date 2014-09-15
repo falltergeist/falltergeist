@@ -31,4 +31,29 @@ Hexagon::Hexagon()
 {
 }
 
+bool Hexagon::ckecked()
+{
+    return _checked;
+}
+
+void Hexagon::setChecked(bool value)
+{
+    _checked = value;
+}
+
+std::shared_ptr<Hexagon> Hexagon::cameFrom()
+{
+    return _cameFrom;
+}
+
+void Hexagon::setCameFrom(std::shared_ptr<Hexagon> cameFrom)
+{
+    _cameFrom = cameFrom;
+}
+
+std::vector<std::shared_ptr<Hexagon>>* Hexagon::neighbours()
+{
+    return &_neighbours;
+}
+
 }
