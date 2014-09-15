@@ -72,9 +72,12 @@ void CrossPlatform::debug(bool newline, std::string message, unsigned char level
 {
     std::cout << message;
 
-    if (newline) {
+    if (newline)
+    {
         std::cout << std::endl;
-    } else {
+    }
+    else
+    {
         std::cout << std::flush;
     }
 }
