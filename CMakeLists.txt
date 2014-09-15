@@ -192,6 +192,8 @@ set(SOURCES main.cpp
             src/UI/MultistateImageButton.h
             src/UI/Slider.cpp
             src/UI/Slider.h
+            src/UI/SmallCounter.cpp
+            src/UI/SmallCounter.h
             src/UI/TextArea.cpp
             src/UI/TextArea.h
             src/VM/VM.cpp
