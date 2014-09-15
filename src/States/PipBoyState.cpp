@@ -56,6 +56,7 @@ void PipBoyState::init()
     background->setY(backgroundY);
 
     // Buttons
+    auto alarmButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PIPBOY_ALARM_BUTTON, backgroundX+124, backgroundY+13));
     auto statusButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+340));
     auto automapsButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+394));
     auto archivesButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+423));
@@ -63,6 +64,7 @@ void PipBoyState::init()
     closeButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PipBoyState::onCloseButtonClick);
 
     add(background);
+    add(alarmButton);
     add(statusButton);
     add(automapsButton);
     add(archivesButton);
