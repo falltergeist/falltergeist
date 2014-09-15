@@ -370,6 +370,8 @@ std::shared_ptr<GameObject> Location::createObject(int PID)
         }
     }
     object->setPID(PID);
+    object->setCanWalkThru(proto->flags()&0x00000010);
+
     if (proto->scriptId() > 0)
     {
         auto intFile = ResourceManager::intFileType(proto->scriptId());

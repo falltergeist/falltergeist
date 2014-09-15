@@ -41,6 +41,7 @@ class ActiveUI;
 class GameObject : public EventReciever
 {
 protected:
+    bool _canWalkThru = true;
     int _type = -1;
     int _subtype = -1;
     int _PID = -1;
@@ -61,6 +62,9 @@ public:
 
     GameObject();
     virtual ~GameObject();
+
+    bool canWalkThru();
+    void setCanWalkThru(bool value);
 
     int type();
     int subtype();
