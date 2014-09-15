@@ -333,4 +333,28 @@ void GameCritterObject::setHealingRate(int value)
     _healingRate = value;
 }
 
+int GameCritterObject::damageResist(unsigned int type)
+{
+    if (type > DAMAGE_POISON) throw Exception("GameCritterObject::damageResist(type) - type out of range:" + std::to_string(type));
+    return _damageResist.at(type);
+}
+
+void GameCritterObject::setDamageResist(unsigned int type, int value)
+{
+    if (type > DAMAGE_POISON) throw Exception("GameCritterObject::setDamageResist(type, value) - type out of range:" + std::to_string(type));
+    _damageResist.at(type) = value;
+}
+
+int GameCritterObject::damageThreshold(unsigned int type)
+{
+    if ( type > DAMAGE_POISON) throw Exception("GameCritterObject::damageThreshold(type) - type out of range:" + std::to_string(type));
+    return _damageThreshold.at(type);
+}
+
+void GameCritterObject::setDamageThreshold(unsigned int type, int value)
+{
+    if ( type > DAMAGE_POISON) throw Exception("GameCritterObject::setDamageThreshold(type, value) - type out of range:" + std::to_string(type));
+    _damageThreshold.at(type) = value;
+}
+
 }

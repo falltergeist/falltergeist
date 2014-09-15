@@ -290,6 +290,11 @@ std::shared_ptr<GameObject> Location::createObject(int PID)
             ((GameCritterObject*)object.get())->setSequence(proto->critterSequence());
             ((GameCritterObject*)object.get())->setCriticalChance(proto->critterCriticalChance());
             ((GameCritterObject*)object.get())->setHealingRate(proto->critterHealingRate());
+            for (unsigned int i = 0; i != 9; ++i)
+            {
+                ((GameCritterObject*)object.get())->setDamageResist(i, proto->damageResist()->at(i));
+                ((GameCritterObject*)object.get())->setDamageThreshold(i, proto->damageThreshold()->at(i));
+            }
             break;
         }
         case libfalltergeist::ProFileType::TYPE_SCENERY:
