@@ -56,6 +56,7 @@ public:
     static std::string findFalltergeistDataPath();
     static std::vector<std::string> * findFalloutDataFiles();
     static void debug(std::string message, unsigned char level = 0);
+    static void debug(bool newline, std::string message, unsigned char level = 0);
 };
 
 }
