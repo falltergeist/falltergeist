@@ -24,8 +24,9 @@
 // Falltergeist includes
 #include "../States/CursorDropdownState.h"
 #include "../Engine/Game.h"
-#include "../Engine/Location.h"
+#include "../Engine/Graphics/Renderer.h"
 #include "../Engine/Input/Mouse.h"
+#include "../Engine/Location.h"
 #include "../Engine/Surface.h"
 #include "../UI/HiddenMask.h"
 #include "../Engine/Graphics/Texture.h"
@@ -112,7 +113,9 @@ void CursorDropdownState::init()
         i++;
     }
 
-    Game::getInstance()->mouse()->setType(Mouse::NONE);
+    auto game = Game::getInstance();
+
+    game->mouse()->setType(Mouse::NONE);
 
     _cursor = std::shared_ptr<Image>(new Image("art/intrface/actarrow.frm"));
     _cursor->setXOffset(0);
@@ -124,8 +127,8 @@ void CursorDropdownState::init()
     _surface->setX(_initialX + 29);
     _surface->setY(_initialY);
 
-    int deltaY = _surface->y() + _surface->height() - 480;
-    int deltaX = _surface->x() + _surface->width() - 640;
+    int deltaX = _surface->x() + _surface->width() - game->renderer()->width();
+    int deltaY = _surface->y() + _surface->height() - game->renderer()->height();
 
     if (deltaY > 0)
     {
@@ -144,7 +147,7 @@ void CursorDropdownState::init()
         _cursor->setY(_initialY);
     }
 
-    _mask = std::shared_ptr<HiddenMask>(new HiddenMask(640, 480));
+    _mask = std::shared_ptr<HiddenMask>(new HiddenMask(game->renderer()->width(), game->renderer()->height()));
     _mask->addEventHandler("mouseleftup", this, (EventRecieverMethod) &CursorDropdownState::onLeftButtonUp);
     _mask->setVisible(true);
     add(_cursor);

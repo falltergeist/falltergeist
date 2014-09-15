@@ -76,7 +76,7 @@ void Game::_initialize()
 
     _resourceManager = std::shared_ptr<ResourceManager>(new ResourceManager());
     //_renderer = std::shared_ptr<OpenGLRenderer>(new OpenGLRenderer(640, 480));
-    _renderer = std::shared_ptr<SDLRenderer>(new SDLRenderer(640, 480));
+    _renderer = std::shared_ptr<SDLRenderer>(new SDLRenderer(800, 600));
     renderer()->init();
 
     std::string version = CrossPlatform::getVersion();
