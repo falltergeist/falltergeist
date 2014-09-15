@@ -214,10 +214,27 @@ void LocationState::think()
      {
          _scrollTicks = SDL_GetTicks();
          unsigned int scrollDelta = 5;
-         if (_scrollLeft) _location->camera()->setXPosition(_location->camera()->xPosition() - scrollDelta);
-         if (_scrollRight) _location->camera()->setXPosition(_location->camera()->xPosition() + scrollDelta);
-         if (_scrollTop) _location->camera()->setYPosition(_location->camera()->yPosition() - scrollDelta);
-         if (_scrollBottom) _location->camera()->setYPosition(_location->camera()->yPosition() + scrollDelta);
+         Game::getInstance()->mouse()->setType(Mouse::ACTION);
+         if (_scrollLeft)
+         {
+             _location->camera()->setXPosition(_location->camera()->xPosition() - scrollDelta);
+             Game::getInstance()->mouse()->setType(Mouse::SCROLL_W);
+         }
+         if (_scrollRight)
+         {
+             _location->camera()->setXPosition(_location->camera()->xPosition() + scrollDelta);
+             Game::getInstance()->mouse()->setType(Mouse::SCROLL_E);
+         }
+         if (_scrollTop)
+         {
+             _location->camera()->setYPosition(_location->camera()->yPosition() - scrollDelta);
+             Game::getInstance()->mouse()->setType(Mouse::SCROLL_N);
+         }
+         if (_scrollBottom)
+         {
+             _location->camera()->setYPosition(_location->camera()->yPosition() + scrollDelta);
+             Game::getInstance()->mouse()->setType(Mouse::SCROLL_S);
+         }
      }
 
      generateUi();
