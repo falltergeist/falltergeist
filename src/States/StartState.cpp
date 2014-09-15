@@ -24,16 +24,17 @@
 
 // Falltergeist includes
 #include "../Engine/Game.h"
+#include "../Engine/Graphics/Renderer.h"
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/ResourceManager.h"
+#include "../Game/GameDudeObject.h"
+#include "../States/CritterDialogState.h"
 #include "../States/LocationState.h"
 #include "../States/MainMenuState.h"
 #include "../States/PlayerEditState.h"
 #include "../States/SettingsMenuState.h"
-#include "../States/CritterDialogState.h"
 #include "../States/StartState.h"
 #include "../UI/Image.h"
-#include "../Game/GameDudeObject.h"
 
 // Third party includes
 
@@ -51,11 +52,15 @@ StartState::~StartState()
 void StartState::init()
 {
     State::init();
-    
+
     std::vector<std::string> splashes = {"splash0.rix", "splash1.rix", "splash2.rix", "splash3.rix", "splash4.rix", "splash5.rix", "splash6.rix"};
-    
+
     srand(time(NULL)); // seed
     auto splash = std::shared_ptr<Image>(new Image("art/splash/" + splashes.at(rand() % splashes.size())));
+    auto splashX = (Game::getInstance()->renderer()->width() - splash->width())*0.5;
+    auto splashY = (Game::getInstance()->renderer()->height() - splash->height())*0.5;
+    splash->setX(splashX);
+    splash->setY(splashY);
     add(splash);
     _splashTicks = SDL_GetTicks();
 
@@ -76,7 +81,7 @@ void StartState::think()
     if (_splashTicks + 3000 < SDL_GetTicks())
     {
         Game::getInstance()->setState(std::shared_ptr<MainMenuState>(new MainMenuState()));
-    }    
+    }
 }
 
 }
