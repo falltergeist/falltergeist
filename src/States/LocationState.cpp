@@ -208,55 +208,53 @@ void LocationState::think()
     State::think();
     if (!_location) return;
 
-     _location->think();
+    // location scrolling
+    if (_scrollTicks + 10 < SDL_GetTicks())
+    {
+        _scrollTicks = SDL_GetTicks();
+        unsigned int scrollDelta = 5;
+        Game::getInstance()->mouse()->setType(Mouse::ACTION);
+        if (_scrollLeft)
+        {
+            _location->camera()->setXPosition(_location->camera()->xPosition() - scrollDelta);
+            Game::getInstance()->mouse()->setType(Mouse::SCROLL_W);
+        }
+        if (_scrollRight)
+        {
+            _location->camera()->setXPosition(_location->camera()->xPosition() + scrollDelta);
+            Game::getInstance()->mouse()->setType(Mouse::SCROLL_E);
+        }
+        if (_scrollTop)
+        {
+            _location->camera()->setYPosition(_location->camera()->yPosition() - scrollDelta);
+            Game::getInstance()->mouse()->setType(Mouse::SCROLL_N);
+        }
+        if (_scrollBottom)
+        {
+            _location->camera()->setYPosition(_location->camera()->yPosition() + scrollDelta);
+            Game::getInstance()->mouse()->setType(Mouse::SCROLL_S);
+        }
 
-     // location scrolling
-     if (_scrollTicks + 10 < SDL_GetTicks())
-     {
-         _scrollTicks = SDL_GetTicks();
-         unsigned int scrollDelta = 5;
-         Game::getInstance()->mouse()->setType(Mouse::ACTION);
-         if (_scrollLeft)
-         {
-             _location->camera()->setXPosition(_location->camera()->xPosition() - scrollDelta);
-             Game::getInstance()->mouse()->setType(Mouse::SCROLL_W);
-         }
-         if (_scrollRight)
-         {
-             _location->camera()->setXPosition(_location->camera()->xPosition() + scrollDelta);
-             Game::getInstance()->mouse()->setType(Mouse::SCROLL_E);
-         }
-         if (_scrollTop)
-         {
-             _location->camera()->setYPosition(_location->camera()->yPosition() - scrollDelta);
-             Game::getInstance()->mouse()->setType(Mouse::SCROLL_N);
-         }
-         if (_scrollBottom)
-         {
-             _location->camera()->setYPosition(_location->camera()->yPosition() + scrollDelta);
-             Game::getInstance()->mouse()->setType(Mouse::SCROLL_S);
-         }
+        if (_scrollLeft && _scrollTop)
+        {
+            Game::getInstance()->mouse()->setType(Mouse::SCROLL_NW);
+        }
+        if (_scrollLeft && _scrollBottom)
+        {
+            Game::getInstance()->mouse()->setType(Mouse::SCROLL_SW);
+        }
+        if (_scrollRight && _scrollTop)
+        {
+            Game::getInstance()->mouse()->setType(Mouse::SCROLL_NE);
+        }
+        if (_scrollRight && _scrollBottom)
+        {
+            Game::getInstance()->mouse()->setType(Mouse::SCROLL_SE);
+        }
+    }
 
-         if (_scrollLeft && _scrollTop)
-         {
-             Game::getInstance()->mouse()->setType(Mouse::SCROLL_NW);
-         }
-         if (_scrollLeft && _scrollBottom)
-         {
-             Game::getInstance()->mouse()->setType(Mouse::SCROLL_SW);
-         }
-         if (_scrollRight && _scrollTop)
-         {
-             Game::getInstance()->mouse()->setType(Mouse::SCROLL_NE);
-         }
-         if (_scrollRight && _scrollBottom)
-         {
-             Game::getInstance()->mouse()->setType(Mouse::SCROLL_SE);
-         }
-
-     }
-
-     generateUi();
+    _location->think();
+    generateUi();
 }
 
 void LocationState::handle(std::shared_ptr<Event> event)
