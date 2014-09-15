@@ -23,6 +23,7 @@
 #include <iostream>
 
 // Falltergeist includes
+#include "../Engine/Hexagon.h"
 #include "../Engine/Location.h"
 #include "../Engine/LocationCamera.h"
 #include "../Engine/ResourceManager.h"
@@ -86,10 +87,19 @@ void Location::init()
 {
     _elevation = _mapFile->defaultElevation();
 
-    _cols = 100;
-    _rows = 100;
-
     _tilesLst = ResourceManager::lstFileType("art/tiles/tiles.lst");
+
+    unsigned int i = 0;
+    for (unsigned int y = 0; y != _rows; ++y)
+    {
+        for (unsigned int x = 0; x != _cols; ++x, ++i)
+        {
+            _hexagons.push_back(std::shared_ptr<Hexagon>(new Hexagon(i)));
+            _hexagons.back()->setX(x);
+            _hexagons.back()->setY(y);
+        }
+    }
+
 
     // Генерируем изображение пола
     _generateFloor();
@@ -602,6 +612,11 @@ int Location::MVAR(unsigned int number)
 std::map<std::string, VMStackValue*>* Location::EVARS()
 {
     return &_EVARS;
+}
+
+std::vector<std::shared_ptr<Hexagon>>* Location::hexagons()
+{
+    return &_hexagons;
 }
 
 }

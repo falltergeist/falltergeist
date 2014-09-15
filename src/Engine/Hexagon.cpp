@@ -31,6 +31,21 @@ Hexagon::Hexagon()
 {
 }
 
+Hexagon::Hexagon(unsigned int number)
+{
+    setNumber(number);
+}
+
+unsigned int Hexagon::number()
+{
+    return _number;
+}
+
+void Hexagon::setNumber(unsigned int number)
+{
+    _number = number;
+}
+
 bool Hexagon::ckecked()
 {
     return _checked;
@@ -54,6 +69,26 @@ void Hexagon::setCameFrom(std::shared_ptr<Hexagon> cameFrom)
 std::vector<std::shared_ptr<Hexagon>>* Hexagon::neighbours()
 {
     return &_neighbours;
+}
+
+unsigned int Hexagon::x()
+{
+    return _x;
+}
+
+void Hexagon::setX(unsigned int value)
+{
+    _x = value;
+}
+
+unsigned int Hexagon::y()
+{
+    return _y;
+}
+
+void Hexagon::setY(unsigned int value)
+{
+    _y = value;
 }
 
 }
