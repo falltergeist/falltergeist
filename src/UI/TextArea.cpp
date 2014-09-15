@@ -238,9 +238,8 @@ std::shared_ptr<Texture> TextArea::texture()
         auto glyph = font->aaf()->glyphs()->at(' ');
         space_width = glyph->width() + font->horizontalGap();
 
-        for (auto itt = text.begin(); itt != text.end(); ++itt)
+        for (unsigned char chr : text)
         {
-            auto chr = *itt;
             auto glyph = font->aaf()->glyphs()->at(chr);
 
             // adding word to string or char to word
@@ -309,10 +308,9 @@ std::shared_ptr<Texture> TextArea::texture()
             std::string text = (*it)->text();
             // calculating width of current string
             str_width = 0;
-            for (auto itt = text.begin(); itt != text.end(); ++itt)
+            for (auto chr : text)
             {
                 // calculating width of current string
-                auto chr = *itt;
                 auto glyph = font->aaf()->glyphs()->at(chr);
                 str_width += glyph->width() + font->horizontalGap();
             }
@@ -362,9 +360,8 @@ std::shared_ptr<Texture> TextArea::texture()
         if (_horizontalAlign != HORIZONTAL_ALIGN_LEFT)
         {
             str_width = 0;
-            for (auto itt = text.begin(); itt != text.end(); ++itt)
+            for (unsigned char chr : text)
             {
-                auto chr = *itt;
                 auto glyph = font->aaf()->glyphs()->at(chr);
                 str_width += glyph->width() + font->horizontalGap();
             }
@@ -375,9 +372,8 @@ std::shared_ptr<Texture> TextArea::texture()
         {
             unsigned int spaces_number = 0;
 
-            for (auto itt = text.begin(); itt != text.end(); ++itt)
+            for (unsigned char chr : text)
             {
-                auto chr = *itt;
                 if (chr == ' ')
                 {
                     spaces_number++;
@@ -403,9 +399,8 @@ std::shared_ptr<Texture> TextArea::texture()
             x = textureWidth - str_width;
         }
 
-        for (auto itt = text.begin(); itt != text.end(); ++itt)
+        for (unsigned char chr : text)
         {
-            auto chr = *itt;
             auto glyph = font->aaf()->glyphs()->at(chr);
 
             unsigned int xOffset = (unsigned char)(chr%16) * font->width();

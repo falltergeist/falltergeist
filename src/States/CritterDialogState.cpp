@@ -177,8 +177,7 @@ void CritterDialogState::deleteAnswers()
 void CritterDialogState::addAnswer(std::string text)
 {
     std::string line = "";
-    //line += 0x95;
-    line += "-";
+    line += 0x95;
     line += " ";
     line += text;
 
