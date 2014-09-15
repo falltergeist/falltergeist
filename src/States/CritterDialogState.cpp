@@ -22,17 +22,19 @@
 #include <iostream>
 
 // Falltergeist includes
-#include "../States/CritterDialogState.h"
-#include "../States/LocationState.h"
-#include "../Engine/ResourceManager.h"
-#include "../Engine/Surface.h"
-#include "../Engine/Screen.h"
+
 #include "../Engine/Game.h"
+#include "../Engine/Graphics/Renderer.h"
 #include "../Engine/Location.h"
 #include "../Engine/LocationCamera.h"
+#include "../Engine/ResourceManager.h"
+#include "../Engine/Screen.h"
+#include "../Engine/Surface.h"
 #include "../Game/GameCritterObject.h"
-#include "../VM/VM.h"
+#include "../States/CritterDialogState.h"
+#include "../States/LocationState.h"
 #include "../UI/Image.h"
+#include "../VM/VM.h"
 
 // Third party includes
 
@@ -41,7 +43,9 @@ namespace Falltergeist
 
 CritterDialogState::CritterDialogState() : State()
 {
-    _question = std::shared_ptr<TextArea>(new TextArea("", 140, 235));
+    auto backgroundX = (Game::getInstance()->renderer()->width() - 640)*0.5;
+    auto backgroundY = (Game::getInstance()->renderer()->height() - 480)*0.5;
+    _question = std::shared_ptr<TextArea>(new TextArea("", backgroundX+140, backgroundY+235));
     _question->setWidth(370);
     _question->setWordWrap(true);
 }
@@ -68,7 +72,14 @@ void CritterDialogState::init()
 
     auto background = std::shared_ptr<Image>(new Image("art/intrface/alltlk.frm"));
     auto background2 = std::shared_ptr<Image>(new Image("art/intrface/di_talk.frm"));
-    background2->setY(291);
+
+    auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
+    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
+    background->setX(backgroundX);
+    background->setY(backgroundY);
+
+    background2->setX(backgroundX);
+    background2->setY(backgroundY+291);
 
     add(background);
     add(background2);
@@ -181,13 +192,16 @@ void CritterDialogState::addAnswer(std::string text)
     line += " ";
     line += text;
 
-    int y = 345;
+    auto backgroundX = (Game::getInstance()->renderer()->width() - 640)*0.5;
+    auto backgroundY = (Game::getInstance()->renderer()->height() - 480)*0.5;
+
+    int y = 345 + backgroundY;
     for (auto answer : _answers)
     {
-        y += answer->height() + 15;
+        y += answer->height() + 12;
     }
 
-    auto answer = std::shared_ptr<TextArea>(new TextArea(line, 140, y));
+    auto answer = std::shared_ptr<TextArea>(new TextArea(line, backgroundX+140, y));
     answer->setBackgroundColor(0x00000001);
     answer->setWordWrap(true);
     answer->setWidth(370);
