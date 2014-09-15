@@ -177,4 +177,14 @@ void GameObject::_generateUi()
     }
 }
 
+bool GameObject::canWalkThru()
+{
+    return _canWalkThru;
+}
+
+void GameObject::setCanWalkThru(bool value)
+{
+    _canWalkThru = value;
+}
+
 }
