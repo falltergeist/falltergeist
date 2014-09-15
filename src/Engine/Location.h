@@ -39,6 +39,7 @@ class VM;
 class VMStackValue;
 class Image;
 class Texture;
+class Hexagon;
 
 class Location
 {
@@ -51,12 +52,13 @@ protected:
     std::vector<std::shared_ptr<GameObject>> _objects;
     std::vector<std::shared_ptr<GameObject>> _objectsToRender;
     std::vector<int> _MVARS;
+    std::vector<std::shared_ptr<Hexagon>> _hexagons;
     std::map<std::string, VMStackValue*> _EVARS;
     unsigned int _lastObjectsCheck = 0;
 
 
-    unsigned int _cols;
-    unsigned int _rows;
+    unsigned int _cols = 100;
+    unsigned int _rows = 100;
 
     std::shared_ptr<LocationCamera> _camera;
     unsigned int _elevation = 0;
@@ -88,6 +90,8 @@ public:
     std::shared_ptr<Texture> tilesFloor();
     std::shared_ptr<Texture> tilesRoof();
     std::shared_ptr<LocationCamera> camera();
+
+    std::vector<std::shared_ptr<Hexagon>>* hexagons();
 
     std::shared_ptr<GameDudeObject> player();
     static std::shared_ptr<GameObject> createObject(int PID);

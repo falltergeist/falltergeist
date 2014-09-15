@@ -37,8 +37,21 @@ protected:
     bool _checked = false; // pathfinding flag
     std::shared_ptr<Hexagon> _cameFrom;
     std::vector<std::shared_ptr<Hexagon>> _neighbours;
+    unsigned int _number = 0; // position in hexagonal grid
+    unsigned int _x = 0;
+    unsigned int _y = 0;
 public:
     Hexagon();
+    Hexagon(unsigned int number);
+
+    unsigned int x();
+    void setX(unsigned int value);
+
+    unsigned int y();
+    void setY(unsigned int value);
+
+    unsigned int number();
+    void setNumber(unsigned int number);
 
     bool ckecked();
     void setChecked(bool value);
