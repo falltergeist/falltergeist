@@ -21,6 +21,8 @@
 #define FALLTERGEIST_HEXAGON_H
 
 // C++ standard includes
+#include <vector>
+#include <memory>
 
 // Falltergeist includes
 
@@ -31,8 +33,20 @@ namespace Falltergeist
 
 class Hexagon
 {
+protected:
+    bool _checked = false; // pathfinding flag
+    std::shared_ptr<Hexagon> _cameFrom;
+    std::vector<std::shared_ptr<Hexagon>> _neighbours;
 public:
     Hexagon();
+
+    bool ckecked();
+    void setChecked(bool value);
+
+    std::shared_ptr<Hexagon> cameFrom();
+    void setCameFrom(std::shared_ptr<Hexagon> cameFrom);
+
+    std::vector<std::shared_ptr<Hexagon>>* neighbours();
 };
 
 }
