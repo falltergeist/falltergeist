@@ -160,6 +160,8 @@ set(SOURCES main.cpp
             src/States/MainMenuState.h
             src/States/NewGameState.cpp
             src/States/NewGameState.h
+            src/States/PipBoyState.cpp
+            src/States/PipBoyState.h
             src/States/PlayerEditState.cpp
             src/States/PlayerEditState.h
             src/States/PlayerEditAgeState.cpp

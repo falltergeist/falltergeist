@@ -75,6 +75,7 @@ public:
     void onOptionsButtonClick(std::shared_ptr<MouseEvent> event);
     void onSkilldexButtonClick(std::shared_ptr<MouseEvent> event);
     void onKeyboardUp(std::shared_ptr<KeyboardEvent> event);
+    void onPipBoyButtonClick(std::shared_ptr<MouseEvent> event);
 };
 
 }

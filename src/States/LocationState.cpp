@@ -39,6 +39,7 @@
 #include "../States/GameMenuState.h"
 #include "../States/InventoryState.h"
 #include "../States/LocationState.h"
+#include "../States/PipBoyState.h"
 #include "../States/MainMenuState.h"
 #include "../States/SkilldexState.h"
 #include "../UI/Image.h"
@@ -125,6 +126,8 @@ void LocationState::init()
 
     // pip button
     _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_PIP, panelX+526, panelY+77)));
+    _panelUIs.back()->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onPipBoyButtonClick);
+
 }
 
 void LocationState::onMouseDown(std::shared_ptr<MouseEvent> event)
@@ -304,6 +307,11 @@ void LocationState::onSkilldexButtonClick(std::shared_ptr<MouseEvent> event)
     Game::getInstance()->pushState(std::shared_ptr<SkilldexState>(new SkilldexState()));
 }
 
+void LocationState::onPipBoyButtonClick(std::shared_ptr<MouseEvent> event)
+{
+    Game::getInstance()->pushState(std::shared_ptr<PipBoyState>(new PipBoyState()));
+}
+
 void LocationState::onKeyboardUp(std::shared_ptr<KeyboardEvent> event)
 {
     if (event->keyCode() == SDLK_F10)
@@ -312,6 +320,5 @@ void LocationState::onKeyboardUp(std::shared_ptr<KeyboardEvent> event)
         //event->setHandled(true);
     }
 }
-
 
 }
