@@ -72,7 +72,7 @@ void InventoryState::init()
     // screen
     auto screenX = backgroundX + background->width() - 202;
     auto screenY = backgroundY + background->height() - 332; //330
-    auto font = ResourceManager::font("font1.aaf", 0xb89c28ff);
+    auto font = ResourceManager::font("font1.aaf");
 
     auto playerNameLabel = std::shared_ptr<TextArea>(new TextArea(Game::getInstance()->player()->name(), screenX, screenY));
 //    skilldexLabel->setFont(font)->setWidth(76)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
@@ -112,13 +112,24 @@ void InventoryState::init()
     ss << Game::getInstance()->player()->hitPoints();
     ss << "/";
     ss << Game::getInstance()->player()->hitPointsMax();
-    auto hitPointsLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+100, screenY+20));
+    auto hitPointsLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+94, screenY+20));
     hitPointsLabel->setFont(font)->setWidth(46)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
     // label: armor class
     ss.str("");
     ss << Game::getInstance()->player()->armorClass();
-    auto armorClassLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+100, screenY+30));
+    auto armorClassLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+94, screenY+30));
     armorClassLabel->setFont(font)->setWidth(46)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+
+    // player->damageResist(DAMAGE_PLASMA);
+    // label: damage levels
+    ss.str("");
+    ss << Game::getInstance()->player()->damageResist(GameCritterObject::DAMAGE_NORMAL) <<"/\n";
+    ss << Game::getInstance()->player()->damageResist(GameCritterObject::DAMAGE_LASER) << "/\n";
+    ss << Game::getInstance()->player()->damageResist(GameCritterObject::DAMAGE_FIRE) << "/\n";
+    ss << Game::getInstance()->player()->damageResist(GameCritterObject::DAMAGE_PLASMA) << "/\n";
+    ss << Game::getInstance()->player()->damageResist(GameCritterObject::DAMAGE_EXPLOSION) << "/";
+    auto damageLevelsLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+94, screenY+40));
+    damageLevelsLabel->setFont(font)->setWidth(26)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
     add(background);
     add(playerNameLabel);
@@ -133,6 +144,7 @@ void InventoryState::init()
     add(textLabel);
     add(hitPointsLabel);
     add(armorClassLabel);
+    add(damageLevelsLabel);
     add(upButton);
     add(downButton);
     add(doneButton);
