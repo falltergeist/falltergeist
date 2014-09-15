@@ -293,7 +293,7 @@ void LocationState::onKeyboardUp(std::shared_ptr<KeyboardEvent> event)
     if (event->keyCode() == SDLK_F10)
     {
         Game::getInstance()->pushState(std::shared_ptr<ExitConfirmState>(new ExitConfirmState()));
-        event->setHandled(true);
+        //event->setHandled(true);
     }
 }
 
