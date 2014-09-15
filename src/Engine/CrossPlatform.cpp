@@ -65,7 +65,18 @@ CrossPlatform::~CrossPlatform()
 
 void CrossPlatform::debug(std::string message, unsigned char level)
 {
-    std::cout << message << std::endl;
+    CrossPlatform::debug(true, message, level);
+}
+
+void CrossPlatform::debug(bool newline, std::string message, unsigned char level)
+{
+    std::cout << message;
+
+    if (newline) {
+        std::cout << std::endl;
+    } else {
+        std::cout << std::flush;
+    }
 }
 
 std::string CrossPlatform::getVersion()
@@ -235,5 +246,4 @@ std::vector<std::string> * CrossPlatform::findFalloutDataFiles()
 
     return _dataFiles;
 }
-
 }
