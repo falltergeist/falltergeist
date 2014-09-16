@@ -50,6 +50,7 @@
 #include "../VM/Handlers/Opcode8033Handler.h"
 #include "../VM/Handlers/Opcode8034Handler.h"
 #include "../VM/Handlers/Opcode8039Handler.h"
+#include "../VM/Handlers/Opcode80BAHandler.h"
 #include "../VM/Handlers/Opcode80DEHandler.h"
 #include "../VM/Handlers/OpcodeC001Handler.h"
 #include "../Engine/CrossPlatform.h"
@@ -138,6 +139,9 @@ void VM::run()
                 break;
             case 0x8039:
                 opcodeHandler = std::shared_ptr<Opcode8039Handler>(new Opcode8039Handler(this));
+                break;
+            case 0x80BA:
+                opcodeHandler = std::shared_ptr<Opcode80BAHandler>(new Opcode80BAHandler(this));
                 break;
             case 0x80DE:
                 opcodeHandler = std::shared_ptr<Opcode80DEHandler>(new Opcode80DEHandler(this));
@@ -663,27 +667,7 @@ void VM::run()
             case 0x80b9:
                 CrossPlatform::debug("script_overrides", DEBUG_SCRIPT);
                 break;
-            case 0x80ba:
-            {
-                CrossPlatform::debug("[+] int obj_is_carrying_obj_pid(GameObject* object, int PID)", DEBUG_SCRIPT);
-                auto PID = popDataInteger();
-                auto pointer = popDataPointer();
-                int amount = 0;
-                if (auto critter = std::static_pointer_cast<GameCritterObject>(pointer))
-                {
-                    for (auto object : *critter->inventory()) if (object->PID() == PID) amount += object->amount();
-                }
-                else if (auto container = std::static_pointer_cast<GameContainerItemObject>(pointer))
-                {
-                    for (auto object : *container->inventory()) if (object->PID() == PID) amount += object->amount();
-                }
-                else
-                {
-                    throw Exception("VM::opcode80ba - unknown object type");
-                }
-                pushDataInteger(amount);
-                break;
-            }
+            case 0x80ba: break;
             case 0x80bb:
             {
                 CrossPlatform::debug("[+] int tile_contains_obj_pid(int position, int elevation, int PID)", DEBUG_SCRIPT);
