@@ -34,13 +34,17 @@ namespace Falltergeist
 class GameItemObject : public GameObject
 {
 protected:
-    int _amount = 1;
+    unsigned int _amount = 1;
+    unsigned int _weight = 0;
 public:
     GameItemObject();
     virtual ~GameItemObject();
 
-    int amount();
-    void setAmount(int value);
+    unsigned int amount();
+    void setAmount(unsigned int value);
+
+    unsigned int weight();
+    void setWeight(unsigned int value);
 };
 
 }
