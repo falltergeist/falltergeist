@@ -106,13 +106,14 @@ void LocationState::init()
     // hit points
     auto hitPoints = std::shared_ptr<SmallCounter>(new SmallCounter(panelX+471, panelY+40));
     hitPoints->setNumber(Game::getInstance()->player()->hitPoints());
+    hitPoints->setType(SmallCounter::SIGNED);
     _panelUIs.push_back(hitPoints);
 
     // armor class
     auto armorClass = std::shared_ptr<SmallCounter>(new SmallCounter(panelX+472, panelY+76));
     armorClass->setNumber(Game::getInstance()->player()->armorClass());
+    armorClass->setType(SmallCounter::SIGNED);
     _panelUIs.push_back(armorClass);
-
 
     // skilldex button
     _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, panelX+523, panelY+5)));

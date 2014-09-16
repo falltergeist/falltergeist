@@ -38,8 +38,10 @@ protected:
     unsigned char _color = COLOR_WHITE;
     signed int _number = 0;
     unsigned int _length = 3;
+    unsigned int _type = UNSIGNED; // unsigned by default
 public:
     enum {COLOR_WHITE = 1, COLOR_YELLOW, COLOR_RED};
+    enum {UNSIGNED = 0, SIGNED}; 
     SmallCounter(int x = 0, int y = 0);
     ~SmallCounter();
 
@@ -48,8 +50,14 @@ public:
     void setColor(unsigned char color);
     unsigned char color();
 
+    void setLength(unsigned int length);
+    unsigned int length();
+
     void setNumber(signed int number);
     signed int number();
+
+    void setType(unsigned int type);
+    unsigned int type();
 };
 
 }
