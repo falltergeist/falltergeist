@@ -111,7 +111,7 @@ void VM::run()
         ss << "0x" << std::hex << _programCounter << " [" << opcode << "] ";
         CrossPlatform::debug(false, ss.str(), DEBUG_SCRIPT);
 
-        OpcodeHandler* opcodeHandler = 0;
+        //OpcodeHandler* opcodeHandler = 0;
 
         switch (opcode)
         {
@@ -1315,13 +1315,13 @@ void VM::run()
                 switch (where)
                 {
                     case 0: // ARMOR SLOT
-                        pushDataPointer(critter->armorSlot());
+                        pushDataPointer(critter->armorSlot().get());
                         break;
                     case 1: // RIGHT HAND SLOT
-                        pushDataPointer(critter->rightHandSlot());
+                        pushDataPointer(critter->rightHandSlot().get());
                         break;
                     case 2: // LEFT HAND SLOT
-                        pushDataPointer(critter->leftHandSlot());
+                        pushDataPointer(critter->leftHandSlot().get());
                         break;
                     case -2: // INVENTORY COUNT
                         pushDataInteger(critter->inventory()->size());
@@ -1427,7 +1427,7 @@ void VM::run()
                 auto pointer = popDataPointer();
                 if (auto critter = dynamic_cast<GameCritterObject*>((GameObject*)pointer))
                 {
-                    critter->inventory()->push_back(item);
+                    critter->inventory()->push_back(std::shared_ptr<GameItemObject>(item));
                 }
                 else if (auto container = dynamic_cast<GameContainerItemObject*>((GameObject*)pointer))
                 {
@@ -1764,7 +1764,7 @@ void VM::run()
                 break;
             }
         }        
-        delete opcodeHandler;
+        //delete opcodeHandler;
     }
 }
 

@@ -42,7 +42,7 @@ GameCritterObject::~GameCritterObject()
 {
 }
 
-std::vector<GameItemObject*>* GameCritterObject::inventory()
+std::vector<std::shared_ptr<GameItemObject>>* GameCritterObject::inventory()
 {
     return &_inventory;
 }
@@ -52,32 +52,32 @@ void GameCritterObject::setOrientation(int value)
     GameObject::setOrientation(value);
 }
 
-GameArmorItemObject* GameCritterObject::armorSlot()
+std::shared_ptr<GameArmorItemObject> GameCritterObject::armorSlot()
 {
     return _armorSlot;
 }
 
-void GameCritterObject::setArmorSlot(GameArmorItemObject* object)
+void GameCritterObject::setArmorSlot(std::shared_ptr<GameArmorItemObject> object)
 {
     _armorSlot = object;
 }
 
-GameItemObject* GameCritterObject::leftHandSlot()
+std::shared_ptr<GameItemObject> GameCritterObject::leftHandSlot()
 {
     return _leftHandSlot;
 }
 
-void GameCritterObject::setLeftHandSlot(GameItemObject* object)
+void GameCritterObject::setLeftHandSlot(std::shared_ptr<GameItemObject> object)
 {
     _leftHandSlot = object;
 }
 
-GameItemObject* GameCritterObject::rightHandSlot()
+std::shared_ptr<GameItemObject> GameCritterObject::rightHandSlot()
 {
     return _rightHandSlot;
 }
 
-void GameCritterObject::setRightHandSlot(GameItemObject* object)
+void GameCritterObject::setRightHandSlot(std::shared_ptr<GameItemObject> object)
 {
     _rightHandSlot = object;
 }

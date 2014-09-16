@@ -54,10 +54,10 @@ protected:
     std::vector<int> _traits = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::vector<int> _damageResist = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::vector<int> _damageThreshold = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-    std::vector<GameItemObject*> _inventory;
-    GameArmorItemObject* _armorSlot = 0;
-    GameItemObject* _leftHandSlot = 0;
-    GameItemObject* _rightHandSlot = 0;    
+    std::vector<std::shared_ptr<GameItemObject>> _inventory;
+    std::shared_ptr<GameArmorItemObject> _armorSlot;
+    std::shared_ptr<GameItemObject> _leftHandSlot;
+    std::shared_ptr<GameItemObject> _rightHandSlot;
 public:
     enum { GENDER_MALE = 0, GENDER_FEMALE = 1 };
     enum { STATS_STRENGTH = 0, STATS_PERCEPTION, STATS_ENDURANCE, STATS_CHARISMA, STATS_INTELLIGENCE, STATS_AGILITY, STATS_LUCK };
@@ -138,17 +138,17 @@ public:
     GameCritterObject();
     virtual ~GameCritterObject();
 
-    std::vector<GameItemObject*>* inventory();
+    std::vector<std::shared_ptr<GameItemObject>>* inventory();
     virtual void setOrientation(int value);
 
-    GameArmorItemObject* armorSlot();
-    void setArmorSlot(GameArmorItemObject* object);
+    std::shared_ptr<GameArmorItemObject> armorSlot();
+    void setArmorSlot(std::shared_ptr<GameArmorItemObject> object);
 
-    GameItemObject* leftHandSlot();
-    void setLeftHandSlot(GameItemObject* object);
+    std::shared_ptr<GameItemObject> leftHandSlot();
+    void setLeftHandSlot(std::shared_ptr<GameItemObject> object);
 
-    GameItemObject* rightHandSlot();
-    void setRightHandSlot(GameItemObject* object);
+    std::shared_ptr<GameItemObject> rightHandSlot();
+    void setRightHandSlot(std::shared_ptr<GameItemObject> object);
 
     int gender();
     void setGender(unsigned int value);
