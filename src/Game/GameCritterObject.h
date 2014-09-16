@@ -43,7 +43,7 @@ protected:
     int _healingRate = 0;
     int _armorClass = 0;
     int _actionPoints = 0;
-    int _carryWeightMax = 0;
+    unsigned int _carryWeightMax = 0;
     int _meleeDamage = 0;
     int _sequence = 0;
     int _criticalChance = 0;

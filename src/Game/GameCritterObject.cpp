@@ -285,9 +285,12 @@ void GameCritterObject::setActionPoints(int value)
 
 unsigned int GameCritterObject::carryWeight()
 {
-// @TODO
-//    return _carryWeight;
-return 999;
+    unsigned int weight = 0;
+    for (auto inv = _inventory.begin(); inv != _inventory.end(); ++inv)
+    {
+        weight += (*inv)->weight();
+    }
+    return weight;
 }
 
 void GameCritterObject::setCarryWeightMax(unsigned int value)
