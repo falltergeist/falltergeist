@@ -36,12 +36,10 @@ namespace Falltergeist
 
 Animation::Animation() : ActiveUI()
 {
-    _animationFrames = new std::vector<AnimationFrame*>;
 }
 
 Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
 {
-    _animationFrames = new std::vector<AnimationFrame*>;
     auto frm = ResourceManager::frmFileType(frmName);
 
     _animationTexture = ResourceManager::texture(frmName);
@@ -65,7 +63,7 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
         xOffset += frm->offsetX(direction, f);
         yOffset += frm->offsetY(direction, f);
 
-        auto frame = new AnimationFrame();
+        auto frame = std::shared_ptr<AnimationFrame>(new AnimationFrame());
         frame->setWidth(frm->width(direction, f));
         frame->setHeight(frm->height(direction, f));
         frame->setXOffset(xOffset);
@@ -84,7 +82,7 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
         }
 
         x += frm->width(direction);
-        _animationFrames->push_back(frame);
+        frames()->push_back(frame);
 
 
     }
@@ -93,26 +91,18 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
 
 Animation::~Animation()
 {
-    // Не удаляем текстуру, т.к. она загружена из ResourceManager
-    _animationTexture = 0;
-    while(!_animationFrames->empty())
-    {
-        delete _animationFrames->back();
-        _animationFrames->pop_back();
-    }
-    delete _animationFrames;
 }
 
-std::vector<AnimationFrame*>* Animation::frames()
+std::vector<std::shared_ptr<AnimationFrame>>* Animation::frames()
 {
-    return _animationFrames;
+    return &_animationFrames;
 }
 
 std::shared_ptr<Texture> Animation::texture()
 {
     if (_texture) return _texture;
 
-    AnimationFrame* frame = _animationFrames->at(_currentFrame);
+    auto frame = frames()->at(_currentFrame);
 
     _texture = std::shared_ptr<Texture>(new Texture(frame->width(), frame->height()));
     _animationTexture->copyTo(_texture, 0, 0, frame->x(), frame->y(), frame->width(), frame->height());
@@ -125,21 +115,21 @@ std::shared_ptr<Texture> Animation::texture()
 
 int Animation::xOffset()
 {
-    return _animationFrames->at(_currentFrame)->xOffset();
+    return frames()->at(_currentFrame)->xOffset();
 }
 
 int Animation::yOffset()
 {
-    return _animationFrames->at(_currentFrame)->yOffset();
+    return frames()->at(_currentFrame)->yOffset();
 }
 
 void Animation::think()
 {
-    if (SDL_GetTicks() - _frameTicks >= _animationFrames->at(_currentFrame)->duration())
+    if (SDL_GetTicks() - _frameTicks >= frames()->at(_currentFrame)->duration())
     {
         _frameTicks = SDL_GetTicks();
 
-        if (_currentFrame < _animationFrames->size() - 1)
+        if (_currentFrame < frames()->size() - 1)
         {
             _currentFrame += 1;
         }
@@ -153,12 +143,12 @@ void Animation::think()
 
 unsigned int Animation::height()
 {
-    return _animationFrames->at(_currentFrame)->height();
+    return frames()->at(_currentFrame)->height();
 }
 
 unsigned int Animation::width()
 {
-    return _animationFrames->at(_currentFrame)->width();
+    return frames()->at(_currentFrame)->width();
 }
 
 }

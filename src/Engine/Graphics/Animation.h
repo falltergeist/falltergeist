@@ -38,7 +38,7 @@ class AnimationFrame;
 class Animation : public ActiveUI
 {
 protected:
-    std::vector<AnimationFrame*>* _animationFrames = 0;
+    std::vector<std::shared_ptr<AnimationFrame>> _animationFrames;
     std::shared_ptr<Texture> _animationTexture;
     unsigned int _currentFrame = 0;
     unsigned int _frameTicks = 0;
@@ -46,7 +46,7 @@ public:
     Animation();
     Animation(std::string frmName, unsigned int direction = 0);
     ~Animation();
-    std::vector<AnimationFrame*>* frames();
+    std::vector<std::shared_ptr<AnimationFrame>>* frames();
     virtual void think();
     virtual std::shared_ptr<Texture> texture();
     virtual int xOffset();
