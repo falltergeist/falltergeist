@@ -299,6 +299,7 @@ std::shared_ptr<GameObject> Location::createObject(int PID)
                     break;
                 }
             }
+            ((GameItemObject*)object.get())->setWeight(proto->weight());
             auto msg = ResourceManager::msgFileType("text/english/game/pro_item.msg");
             try
             {
