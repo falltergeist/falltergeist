@@ -90,6 +90,7 @@ void Game::_initialize()
     version += " " + renderer()->name();
 
     _falltergeistVersion = std::shared_ptr<TextArea>(new TextArea(version, 3, renderer()->height() - 10));
+    _mousePosition = std::shared_ptr<TextArea>(new TextArea("", renderer()->width() - 55, 14));
 }
 
 Game::~Game()
@@ -203,6 +204,8 @@ void Game::run()
         _mouse->think();
 
         //Surface::animatedPalette->think();
+
+        _mousePosition->setText(std::to_string(mouse()->x()) + " : " + std::to_string(mouse()->y()));
 
         for (auto state : statesForThinkAndHandle())
         {
@@ -361,6 +364,7 @@ std::vector<std::shared_ptr<UI>>* Game::ui()
     }
     _ui.push_back(_fpsCounter);
     _ui.push_back(_falltergeistVersion);
+    _ui.push_back(_mousePosition);
 
     // Render mouse
     if (mouse()->visible() && mouse()->ui())

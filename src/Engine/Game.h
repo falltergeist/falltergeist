@@ -59,6 +59,7 @@ protected:
     std::shared_ptr<AudioMixer> _mixer;
     std::shared_ptr<CritterDialogState> _dialog;
     std::shared_ptr<FpsCounter> _fpsCounter;
+    std::shared_ptr<TextArea> _mousePosition;
     std::shared_ptr<TextArea> _falltergeistVersion;
     bool _quit = false;
     SDL_Event _event;
