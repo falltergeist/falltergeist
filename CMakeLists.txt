@@ -192,6 +192,8 @@ set(SOURCES main.cpp
             src/UI/ImageList.h
             src/UI/MultistateImageButton.cpp
             src/UI/MultistateImageButton.h
+            src/UI/MonthCounter.cpp
+            src/UI/MonthCounter.h
             src/UI/Slider.cpp
             src/UI/Slider.h
             src/UI/SmallCounter.cpp
