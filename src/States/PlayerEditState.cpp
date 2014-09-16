@@ -639,6 +639,8 @@ void PlayerEditState::onBackButtonClick(std::shared_ptr<MouseEvent> event)
 
 void PlayerEditState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
 {
+    auto player = Game::getInstance()->player();
+    player->setHitPoints(player->hitPointsMax());
     Game::getInstance()->setState(std::shared_ptr<LocationState>(new LocationState()));
 }
 

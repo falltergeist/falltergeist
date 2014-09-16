@@ -298,8 +298,11 @@ void NewGameState::onCreateButtonClick(std::shared_ptr<MouseEvent> event)
 
 void NewGameState::onBeginGameButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    Game::getInstance()->setPlayer(_characters.at(_selectedCharacter));
+    auto player = _characters.at(_selectedCharacter);
+    player->setHitPoints(player->hitPointsMax());
+    Game::getInstance()->setPlayer(player);
     Game::getInstance()->setState(std::shared_ptr<LocationState>(new LocationState()));
+
 }
 
 }
