@@ -160,6 +160,8 @@ set(SOURCES main.cpp
             src/States/MainMenuState.h
             src/States/NewGameState.cpp
             src/States/NewGameState.h
+            src/States/PipBoyState.cpp
+            src/States/PipBoyState.h
             src/States/PlayerEditState.cpp
             src/States/PlayerEditState.h
             src/States/PlayerEditAgeState.cpp
@@ -190,6 +192,8 @@ set(SOURCES main.cpp
             src/UI/ImageList.h
             src/UI/MultistateImageButton.cpp
             src/UI/MultistateImageButton.h
+            src/UI/MonthCounter.cpp
+            src/UI/MonthCounter.h
             src/UI/Slider.cpp
             src/UI/Slider.h
             src/UI/SmallCounter.cpp
