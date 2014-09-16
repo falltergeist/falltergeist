@@ -72,14 +72,26 @@ void PipBoyState::init()
     // Date and time
     // FIXME: use current in-game datetime
     // Date
-    //auto day = std::shared_ptr<SmallCounter>(new SmallCounter(backgroundX+15, backgroundY+18));
-    //day->setNumber(9);
-    //day->setColor(SmallCounter::COLOR_WHITE);
+    auto day = std::shared_ptr<SmallCounter>(new SmallCounter(backgroundX+21, backgroundY+17));
+    day->setNumber(9);
+    day->setColor(SmallCounter::COLOR_WHITE);
+    day->setType(SmallCounter::UNSIGNED);
+    day->setLength(2);
 
     auto month = std::shared_ptr<MonthCounter>(new MonthCounter(MonthCounter::JUNE, backgroundX+46, backgroundY+18));
-    //auto year = std::shared_ptr<SmallCounter>(new SmallCounter(backgroundX+90, backgroundY+20));
-    //year->setNumber(2224);
-    //year->setColor(SmallCounter::COLOR_WHITE);
+
+    auto year = std::shared_ptr<SmallCounter>(new SmallCounter(backgroundX+84, backgroundY+17));
+    year->setNumber(2242);
+    year->setColor(SmallCounter::COLOR_WHITE);
+    year->setType(SmallCounter::UNSIGNED);
+    year->setLength(4);
+
+    // Time
+    auto time = std::shared_ptr<SmallCounter>(new SmallCounter(backgroundX+160, backgroundY+17));
+    time->setNumber(800);
+    time->setColor(SmallCounter::COLOR_WHITE);
+    time->setType(SmallCounter::UNSIGNED);
+    time->setLength(4);
 
     add(background);
 
@@ -88,7 +100,10 @@ void PipBoyState::init()
     add(automapsButton);
     add(archivesButton);
 
+    add(day);
     add(month);
+    add(year);
+    add(time);
 
     add(closeButton);
 }
