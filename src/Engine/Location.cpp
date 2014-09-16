@@ -183,7 +183,7 @@ void Location::init()
     }
 
     _player = Game::getInstance()->player();
-    _player->setName("Choozen One");
+    //_player->setName("Choozen One");
     //_player = Game::getInstance().player();
     _player->setPID(0x01000001);
     _player->setFID(FID_HERO_MALE);
