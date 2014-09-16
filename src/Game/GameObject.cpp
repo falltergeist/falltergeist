@@ -168,7 +168,7 @@ void GameObject::_generateUi()
     {
         if (frm->framesPerDirection() > 1)
         {
-            _ui = std::shared_ptr<Animation>(new Animation(ResourceManager::FIDtoFrmName(FID()), this->orientation()));
+            _ui = std::shared_ptr<Animation>(new Animation(ResourceManager::FIDtoFrmName(FID()), orientation()));
         }
         else
         {

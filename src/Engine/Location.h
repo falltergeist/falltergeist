@@ -93,7 +93,6 @@ public:
 
     std::vector<std::shared_ptr<Hexagon>>* hexagons();
 
-    std::shared_ptr<GameDudeObject> player();
     static std::shared_ptr<GameObject> createObject(int PID);
 
     std::shared_ptr<libfalltergeist::MapFileType> mapFile();

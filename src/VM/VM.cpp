@@ -639,7 +639,7 @@ void VM::run()
                 CrossPlatform::debug("[+] void giveExpPoints(int points)", DEBUG_SCRIPT);
                 auto points = popDataInteger();
                 auto game = Game::getInstance();
-                game->location()->player()->setExperience(game->location()->player()->experience() + points);
+                game->player()->setExperience(game->player()->experience() + points);
                 break;
             }
             case 0x80a3:
@@ -698,7 +698,7 @@ void VM::run()
                 auto x = popDataInteger();
                 auto position = y*200 + x;
                 auto game = Game::getInstance();
-                auto player = game->location()->player();
+                auto player = game->player();
                 player->setPosition(position);
                 player->setOrientation(orientation);
                 player->setElevation(elevation);
@@ -879,7 +879,7 @@ void VM::run()
             {
                 CrossPlatform::debug("[+] GameDudeObject* dude_obj()", DEBUG_SCRIPT);
                 auto game = Game::getInstance();            
-                pushDataPointer(game->location()->player());
+                pushDataPointer(game->player());
                 break;
             }
             case 0x80c1:
@@ -1430,7 +1430,6 @@ void VM::run()
                 auto item = std::static_pointer_cast<GameItemObject>(popDataPointer());
                 if (!item) throw Exception("VM::opcode8116 - item not instanceof GameItemObject");
                 item->setAmount(amount);
-
                 // who can be critter or container
                 auto pointer = popDataPointer();
                 if (auto critter = std::static_pointer_cast<GameCritterObject>(pointer))
@@ -1864,7 +1863,7 @@ int VM::_metarule(int type, std::shared_ptr<VMStackValue> value)
     {
         case 14: // METARULE_TEST_FIRSTRUN
             // Если карта открывается в первый раз, то возвращает TRUE;
-            return 0;
+            return 1;
         case 16: // METARULE_PARTY_COUNT
             return 0;
         case 17: //  METARULE_AREA_KNOWN

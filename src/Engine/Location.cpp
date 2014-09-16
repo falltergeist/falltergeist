@@ -182,7 +182,7 @@ void Location::init()
         _objects.push_back(object);
     }
 
-    _player = std::shared_ptr<GameDudeObject>(new GameDudeObject());
+    _player = Game::getInstance()->player();
     _player->setName("Choozen One");
     //_player = Game::getInstance().player();
     _player->setPID(0x01000001);
@@ -221,11 +221,6 @@ void Location::init()
     }
 
     checkObjectsToRender();
-}
-
-std::shared_ptr<GameDudeObject> Location::player()
-{
-    return _player;
 }
 
 void Location::_generateFloor()

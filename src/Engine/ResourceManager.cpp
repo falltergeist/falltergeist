@@ -467,6 +467,9 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
             prefix = "art/inven/";
             lstFile = "inven.lst";
             break;
+        default:
+            throw Exception("ResourceManager::FIDtoFrmName - wrong type");
+            break;
     }
     auto lst = lstFileType(prefix + lstFile);
     if (id >= lst->strings()->size())
