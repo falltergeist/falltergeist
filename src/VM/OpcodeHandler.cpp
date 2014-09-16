@@ -27,11 +27,11 @@
 namespace Falltergeist
 {
 
-OpcodeHandler::OpcodeHandler(std::shared_ptr<VM> vm) : _vm(vm)
+OpcodeHandler::OpcodeHandler(VM* vm) : _vm(vm)
 {    
 }
 
-void OpcodeHandler::operator()()
+void OpcodeHandler::run()
 {
 }
 

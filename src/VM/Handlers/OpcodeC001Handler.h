@@ -17,28 +17,25 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_OPCODEHANDLER_H
-#define FALLTERGEIST_OPCODEHANDLER_H
+#ifndef FALLTERGEIST_OPCODEC001HANDLER_H
+#define FALLTERGEIST_OPCODEC001HANDLER_H
 
 // C++ standard includes
-#include <memory>
 
 // Falltergeist includes
+#include "../../VM/OpcodeHandler.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-class VM;
 
-class OpcodeHandler
+class OpcodeC001Handler : public OpcodeHandler
 {
-protected:
-    VM* _vm;
 public:
-    OpcodeHandler(VM* vm);
+    OpcodeC001Handler(VM* vm);
     virtual void run();
 };
 
 }
-#endif // FALLTERGEIST_OPCODEHANDLER_H
+#endif // FALLTERGEIST_OPCODEC001HANDLER_H

@@ -45,6 +45,7 @@
 #include "../VM/VMStackIntValue.h"
 #include "../VM/VMStackFloatValue.h"
 #include "../VM/VMStackPointerValue.h"
+#include "../VM/Handlers/OpcodeC001Handler.h"
 #include "../Engine/CrossPlatform.h"
 
 // Third party includes
@@ -110,9 +111,13 @@ void VM::run()
         ss << "0x" << std::hex << _programCounter << " [" << opcode << "] ";
         CrossPlatform::debug(false, ss.str(), DEBUG_SCRIPT);
 
+        OpcodeHandler* opcodeHandler = 0;
+
         switch (opcode)
         {
             case 0xC001:
+                //opcodeHandler = new OpcodeC001Handler(this);
+                //break;
             case 0x9001:
                 _programCounter += 6;
                 break;
@@ -1758,8 +1763,8 @@ void VM::run()
                 throw 0;
                 break;
             }
-        }
-
+        }        
+        delete opcodeHandler;
     }
 }
 

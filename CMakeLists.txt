@@ -196,6 +196,8 @@ set(SOURCES main.cpp
             src/UI/SmallCounter.h
             src/UI/TextArea.cpp
             src/UI/TextArea.h
+            src/VM/Handlers/OpcodeC001Handler.h
+            src/VM/Handlers/OpcodeC001Handler.cpp
             src/VM/OpcodeHandler.h
             src/VM/OpcodeHandler.cpp
             src/VM/VM.cpp
