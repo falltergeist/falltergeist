@@ -147,12 +147,12 @@ void CritterDialogState::onAnswerOut(std::shared_ptr<Event> event)
     sender->setFont(font3_3ff800ff);
 }
 
-void CritterDialogState::setCritter(GameCritterObject* critter)
+void CritterDialogState::setCritter(std::shared_ptr<GameCritterObject> critter)
 {
     _critter = critter;
 }
 
-GameCritterObject* CritterDialogState::critter()
+std::shared_ptr<GameCritterObject> CritterDialogState::critter()
 {
     return _critter;
 }
@@ -167,9 +167,9 @@ void CritterDialogState::setScript(VM* value)
     _script = value;
 }
 
-void CritterDialogState::setQuestion(std::string* value)
+void CritterDialogState::setQuestion(std::string value)
 {
-    _question->setText(*value);
+    _question->setText(value);
 }
 
 std::vector<int>* CritterDialogState::functions()

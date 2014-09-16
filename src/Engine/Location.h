@@ -53,7 +53,7 @@ protected:
     std::vector<std::shared_ptr<GameObject>> _objectsToRender;
     std::vector<int> _MVARS;
     std::vector<std::shared_ptr<Hexagon>> _hexagons;
-    std::map<std::string, VMStackValue*> _EVARS;
+    std::map<std::string, std::shared_ptr<VMStackValue>> _EVARS;
     unsigned int _lastObjectsCheck = 0;
 
 
@@ -102,7 +102,7 @@ public:
 
     void setMVAR(unsigned int number, int value);
     int MVAR(unsigned int number);
-    std::map<std::string, VMStackValue*>* EVARS();
+    std::map<std::string, std::shared_ptr<VMStackValue>>* EVARS();
 
 };
 

@@ -21,6 +21,7 @@
 #define FALLTERGEIST_VMSTACKPOINTERVALUE_H
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
 #include "../VM/VMStackValue.h"
@@ -33,12 +34,12 @@ namespace Falltergeist
 class VMStackPointerValue  : public VMStackValue
 {
 protected:
-    void* _value;
+    std::shared_ptr<void> _value;
 public:
-    VMStackPointerValue(void* value);
+    VMStackPointerValue(std::shared_ptr<void> value);
     virtual ~VMStackPointerValue();
-    void setValue(void* value);
-    void* value();
+    void setValue(std::shared_ptr<void> value);
+    std::shared_ptr<void> value();
 };
 
 }

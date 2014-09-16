@@ -171,12 +171,12 @@ void Location::init()
         if (mapObject->scriptId() > 0)
         {
             auto intFile = ResourceManager::intFileType(mapObject->scriptId());
-            if (intFile) object->scripts()->push_back(new VM(intFile,object.get()));
+            if (intFile) object->scripts()->push_back(new VM(intFile,object));
         }
         if (mapObject->mapScriptId() > 0 && mapObject->mapScriptId() != mapObject->scriptId())
         {
             auto intFile = ResourceManager::intFileType(mapObject->mapScriptId());
-            if (intFile) object->scripts()->push_back(new VM(intFile, object.get()));
+            if (intFile) object->scripts()->push_back(new VM(intFile, object));
         }
 
         _objects.push_back(object);
@@ -191,7 +191,7 @@ void Location::init()
     _player->setPosition(_mapFile->defaultPosition());
 
     // ??????
-    auto script = new VM(ResourceManager::intFileType(0), _player.get());
+    auto script = new VM(ResourceManager::intFileType(0), _player);
     _player->scripts()->push_back(script);
 
 
@@ -217,7 +217,7 @@ void Location::init()
     // ON MAP LOADED
     if (_mapFile->scriptId() > 0)
     {
-        _script = new VM(ResourceManager::intFileType(_mapFile->scriptId()-1), this);
+        _script = new VM(ResourceManager::intFileType(_mapFile->scriptId()-1), Game::getInstance()->location());
     }
 
     checkObjectsToRender();
@@ -426,7 +426,7 @@ std::shared_ptr<GameObject> Location::createObject(int PID)
     if (proto->scriptId() > 0)
     {
         auto intFile = ResourceManager::intFileType(proto->scriptId());
-        if (intFile) object->scripts()->push_back(new VM(intFile, object.get()));
+        if (intFile) object->scripts()->push_back(new VM(intFile, object));
     }
 
     return object;
@@ -650,7 +650,7 @@ int Location::MVAR(unsigned int number)
     return _MVARS.at(number);
 }
 
-std::map<std::string, VMStackValue*>* Location::EVARS()
+std::map<std::string, std::shared_ptr<VMStackValue>>* Location::EVARS()
 {
     return &_EVARS;
 }
