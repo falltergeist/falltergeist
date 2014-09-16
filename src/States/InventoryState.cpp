@@ -74,8 +74,14 @@ void InventoryState::init()
     auto screenY = backgroundY + background->height() - 332; //330
     auto font = ResourceManager::font("font1.aaf");
 
+    // name
     auto playerNameLabel = std::shared_ptr<TextArea>(new TextArea(Game::getInstance()->player()->name(), screenX, screenY));
 //    skilldexLabel->setFont(font)->setWidth(76)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+
+    auto line1 = std::shared_ptr<Image>(new Image(142, 1));
+    line1->setX(screenX);
+    line1->setY(screenY+16);
+    line1->texture()->fill(0x3ff800ff); // default green color
 
     auto msg = ResourceManager::msgFileType("text/english/game/inventry.msg");
     // label: ST (0)
@@ -131,8 +137,26 @@ void InventoryState::init()
     auto damageLevelsLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+94, screenY+40));
     damageLevelsLabel->setFont(font)->setWidth(26)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
+    auto line2 = std::shared_ptr<Image>(new Image(142, 1));
+    line2->setX(screenX);
+    line2->setY(screenY+94);
+    line2->texture()->fill(0x3ff800ff); // default green color
+
+    // item1
+
+    auto line3 = std::shared_ptr<Image>(new Image(142, 1));
+    line3->setX(screenX);
+    line3->setY(screenY+134);
+    line3->texture()->fill(0x3ff800ff); // default green color
+
+    // item2
+
+    // label: Total Wt: (20)
+    auto totalWtLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(20), screenX+14, screenY+180));
+
     add(background);
     add(playerNameLabel);
+    add(line1);
     add(stLabel);
     add(peLabel);
     add(enLabel);
@@ -145,6 +169,9 @@ void InventoryState::init()
     add(hitPointsLabel);
     add(armorClassLabel);
     add(damageLevelsLabel);
+    add(line2);
+    add(line3);
+    add(totalWtLabel);
     add(upButton);
     add(downButton);
     add(doneButton);
