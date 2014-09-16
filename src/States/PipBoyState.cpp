@@ -23,9 +23,12 @@
 // Falltergeist includes
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
+#include "../Engine/ResourceManager.h"
 #include "../States/PipBoyState.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
+#include "../UI/MonthCounter.h"
+#include "../UI/SmallCounter.h"
 
 // Third party includes
 
@@ -46,14 +49,17 @@ void PipBoyState::init()
     State::init();
 
     setModal(true);
-    setFullscreen(false);
+    setFullscreen(true);
 
-    // background
+    // Background
     auto background = std::shared_ptr<Image>(new Image("art/intrface/pip.frm"));
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
     background->setX(backgroundX);
     background->setY(backgroundY);
+
+    // Close PipBoy when ESC is hit
+    background->addEventHandler("keyup", this, (EventRecieverMethod) &PipBoyState::onKeyboardUp);
 
     // Buttons
     auto alarmButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PIPBOY_ALARM_BUTTON, backgroundX+124, backgroundY+13));
@@ -63,11 +69,27 @@ void PipBoyState::init()
     auto closeButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+448));
     closeButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PipBoyState::onCloseButtonClick);
 
+    // Date and time
+    // FIXME: use current in-game datetime
+    // Date
+    //auto day = std::shared_ptr<SmallCounter>(new SmallCounter(backgroundX+15, backgroundY+18));
+    //day->setNumber(9);
+    //day->setColor(SmallCounter::COLOR_WHITE);
+
+    auto month = std::shared_ptr<MonthCounter>(new MonthCounter(MonthCounter::JUNE, backgroundX+46, backgroundY+18));
+    //auto year = std::shared_ptr<SmallCounter>(new SmallCounter(backgroundX+90, backgroundY+20));
+    //year->setNumber(2224);
+    //year->setColor(SmallCounter::COLOR_WHITE);
+
     add(background);
+
     add(alarmButton);
     add(statusButton);
     add(automapsButton);
     add(archivesButton);
+
+    add(month);
+
     add(closeButton);
 }
 
