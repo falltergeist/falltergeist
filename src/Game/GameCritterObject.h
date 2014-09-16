@@ -43,7 +43,7 @@ protected:
     int _healingRate = 0;
     int _armorClass = 0;
     int _actionPoints = 0;
-    int _carryWeight = 0;
+    int _carryWeightMax = 0;
     int _meleeDamage = 0;
     int _sequence = 0;
     int _criticalChance = 0;
@@ -181,8 +181,9 @@ public:
     virtual int actionPoints();
     void setActionPoints(int value);
 
-    virtual int carryWeight();
-    void setCarryWeight(int value);
+    virtual unsigned int carryWeight();
+    virtual unsigned int carryWeightMax();
+    void setCarryWeightMax(unsigned int value);
 
     virtual int meleeDamage();
     void setMeleeDamage(int value);

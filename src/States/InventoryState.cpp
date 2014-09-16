@@ -152,7 +152,21 @@ void InventoryState::init()
     // item2
 
     // label: Total Wt: (20)
+    auto weight = Game::getInstance()->player()->carryWeight();
+    auto weightMax = Game::getInstance()->player()->carryWeightMax();
+
+    ss.str("");
+    ss << weight;
     auto totalWtLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(20), screenX+14, screenY+180));
+    auto weightLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+70, screenY+180));
+    weightLabel->setFont(font)->setWidth(24)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    ss.str("");
+    ss << "/" << weightMax;
+    auto weightMaxLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+94, screenY+180));
+    if (weight>weightMax)
+    {
+        weightLabel->setFont(ResourceManager::font("font1.aaf", 0xff0000ff));
+    }
 
     add(background);
     add(playerNameLabel);
@@ -172,6 +186,8 @@ void InventoryState::init()
     add(line2);
     add(line3);
     add(totalWtLabel);
+    add(weightLabel);
+    add(weightMaxLabel);
     add(upButton);
     add(downButton);
     add(doneButton);
