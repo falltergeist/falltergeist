@@ -46,7 +46,7 @@ public:
     virtual ~GameDudeObject();
 
     void loadFromGCDFile(std::shared_ptr<libfalltergeist::GcdFileType> gcd);
-    
+
     int experience();
     void setExperience(int value);
 
@@ -72,11 +72,11 @@ public:
     int hitPointsMax();
     int actionPoints();
     int armorClass();
-    unsigned int carryWeightMax();
     int meleeDamage();
     int sequence();
     int healingRate();
     int criticalChance();
+    unsigned int carryWeightMax();
 
 };
 

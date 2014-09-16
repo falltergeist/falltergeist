@@ -283,14 +283,24 @@ void GameCritterObject::setActionPoints(int value)
     _actionPoints = value;
 }
 
-unsigned int GameCritterObject::carryWeightMax()
+unsigned int GameCritterObject::carryWeight()
 {
-    return _carryWeightMax;
+    unsigned int weight = 0;
+    for (auto inv = _inventory.begin(); inv != _inventory.end(); ++inv)
+    {
+        weight += (*inv)->weight();
+    }
+    return weight;
 }
 
 void GameCritterObject::setCarryWeightMax(unsigned int value)
 {
     _carryWeightMax = value;
+}
+
+unsigned int GameCritterObject::carryWeightMax()
+{
+    return _carryWeightMax;
 }
 
 int GameCritterObject::meleeDamage()

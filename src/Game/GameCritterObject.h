@@ -181,6 +181,7 @@ public:
     virtual int actionPoints();
     void setActionPoints(int value);
 
+    virtual unsigned int carryWeight();
     virtual unsigned int carryWeightMax();
     void setCarryWeightMax(unsigned int value);
 
