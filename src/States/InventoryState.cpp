@@ -72,10 +72,16 @@ void InventoryState::init()
     // screen
     auto screenX = backgroundX + background->width() - 202;
     auto screenY = backgroundY + background->height() - 332; //330
-    auto font = ResourceManager::font("font1.aaf", 0xb89c28ff);
+    auto font = ResourceManager::font("font1.aaf");
 
+    // name
     auto playerNameLabel = std::shared_ptr<TextArea>(new TextArea(Game::getInstance()->player()->name(), screenX, screenY));
 //    skilldexLabel->setFont(font)->setWidth(76)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+
+    auto line1 = std::shared_ptr<Image>(new Image(142, 1));
+    line1->setX(screenX);
+    line1->setY(screenY+16);
+    line1->texture()->fill(0x3ff800ff); // default green color
 
     auto msg = ResourceManager::msgFileType("text/english/game/inventry.msg");
     // label: ST (0)
@@ -112,16 +118,45 @@ void InventoryState::init()
     ss << Game::getInstance()->player()->hitPoints();
     ss << "/";
     ss << Game::getInstance()->player()->hitPointsMax();
-    auto hitPointsLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+100, screenY+20));
+    auto hitPointsLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+94, screenY+20));
     hitPointsLabel->setFont(font)->setWidth(46)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
     // label: armor class
     ss.str("");
     ss << Game::getInstance()->player()->armorClass();
-    auto armorClassLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+100, screenY+30));
+    auto armorClassLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+94, screenY+30));
     armorClassLabel->setFont(font)->setWidth(46)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+
+    // player->damageResist(DAMAGE_PLASMA);
+    // label: damage levels
+    ss.str("");
+    ss << Game::getInstance()->player()->damageResist(GameCritterObject::DAMAGE_NORMAL) <<"/\n";
+    ss << Game::getInstance()->player()->damageResist(GameCritterObject::DAMAGE_LASER) << "/\n";
+    ss << Game::getInstance()->player()->damageResist(GameCritterObject::DAMAGE_FIRE) << "/\n";
+    ss << Game::getInstance()->player()->damageResist(GameCritterObject::DAMAGE_PLASMA) << "/\n";
+    ss << Game::getInstance()->player()->damageResist(GameCritterObject::DAMAGE_EXPLOSION) << "/";
+    auto damageLevelsLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+94, screenY+40));
+    damageLevelsLabel->setFont(font)->setWidth(26)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+
+    auto line2 = std::shared_ptr<Image>(new Image(142, 1));
+    line2->setX(screenX);
+    line2->setY(screenY+94);
+    line2->texture()->fill(0x3ff800ff); // default green color
+
+    // item1
+
+    auto line3 = std::shared_ptr<Image>(new Image(142, 1));
+    line3->setX(screenX);
+    line3->setY(screenY+134);
+    line3->texture()->fill(0x3ff800ff); // default green color
+
+    // item2
+
+    // label: Total Wt: (20)
+    auto totalWtLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(20), screenX+14, screenY+180));
 
     add(background);
     add(playerNameLabel);
+    add(line1);
     add(stLabel);
     add(peLabel);
     add(enLabel);
@@ -133,6 +168,10 @@ void InventoryState::init()
     add(textLabel);
     add(hitPointsLabel);
     add(armorClassLabel);
+    add(damageLevelsLabel);
+    add(line2);
+    add(line3);
+    add(totalWtLabel);
     add(upButton);
     add(downButton);
     add(doneButton);

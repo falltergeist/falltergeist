@@ -128,6 +128,14 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
             _textures.push_back(ResourceManager::texture("art/intrface/alarmout.frm"));
             _textures.push_back(ResourceManager::texture("art/intrface/alarmin.frm"));
             break;
+        case TYPE_DIALOG_RED_BUTTON:
+            _textures.push_back(ResourceManager::texture("art/intrface/di_rdbt1.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/di_rdbt2.frm"));
+            break;
+        case TYPE_DIALOG_REVIEW_BUTTON:
+            _textures.push_back(ResourceManager::texture("art/intrface/di_rest1.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/di_rest2.frm"));
+            break;
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
     }

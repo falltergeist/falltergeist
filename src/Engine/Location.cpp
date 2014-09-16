@@ -90,16 +90,41 @@ void Location::init()
     _tilesLst = ResourceManager::lstFileType("art/tiles/tiles.lst");
 
     unsigned int i = 0;
-    for (unsigned int y = 0; y != _rows; ++y)
+    for (unsigned int x = 0; x != 200; ++x)
     {
-        for (unsigned int x = 0; x != _cols; ++x, ++i)
+        for (unsigned int y = 0; y != 200; ++y, ++i)
         {
-            _hexagons.push_back(std::shared_ptr<Hexagon>(new Hexagon(i)));
+            auto hexagon = std::shared_ptr<Hexagon>(new Hexagon(i));
+            _hexagons.push_back(hexagon);
             _hexagons.back()->setX(x);
-            _hexagons.back()->setY(y);
+            _hexagons.back()->setY(y);                                        
         }
     }
 
+    for (auto i = 0; i != 200*200; ++i)
+    {
+        auto hexagon = hexagons()->at(i);
+        auto size = hexagons()->size();
+        auto cols = 200;
+        unsigned int index1 = (hexagon->y() * cols) + hexagon->x() + 1;
+        if (index1 < size) hexagon->neighbours()->push_back(hexagons()->at(index1));
+
+        unsigned int index2 = ((hexagon->y() + 1) * cols) + hexagon->x() + 1;
+        if (index2 < size) hexagon->neighbours()->push_back(hexagons()->at(index2));
+
+        unsigned int index3 = ((hexagon->y() - 1) * cols) + hexagon->x();
+        if (index3 < size) hexagon->neighbours()->push_back(hexagons()->at(index3));
+
+        unsigned int index4 = (hexagon->y() * cols) + hexagon->x() - 1;
+        if (index4 < size) hexagon->neighbours()->push_back(hexagons()->at(index4));
+
+        unsigned int index5 = ((hexagon->y() + 1) * cols) + hexagon->x() - 1;
+        if (index5 < size) hexagon->neighbours()->push_back(hexagons()->at(index5));
+
+        unsigned int index6 = ((hexagon->y() + 1) * cols) + hexagon->x();
+        if (index6 < size) hexagon->neighbours()->push_back(hexagons()->at(index6));
+
+    }
 
     // Генерируем изображение пола
     _generateFloor();
@@ -146,18 +171,18 @@ void Location::init()
         if (mapObject->scriptId() > 0)
         {
             auto intFile = ResourceManager::intFileType(mapObject->scriptId());
-            if (intFile) object->scripts()->push_back(new VM(intFile,object.get()));
+            if (intFile) object->scripts()->push_back(new VM(intFile,object));
         }
         if (mapObject->mapScriptId() > 0 && mapObject->mapScriptId() != mapObject->scriptId())
         {
             auto intFile = ResourceManager::intFileType(mapObject->mapScriptId());
-            if (intFile) object->scripts()->push_back(new VM(intFile, object.get()));
+            if (intFile) object->scripts()->push_back(new VM(intFile, object));
         }
 
         _objects.push_back(object);
     }
 
-    _player = std::shared_ptr<GameDudeObject>(new GameDudeObject());
+    _player = Game::getInstance()->player();
     _player->setName("Choozen One");
     //_player = Game::getInstance().player();
     _player->setPID(0x01000001);
@@ -166,25 +191,36 @@ void Location::init()
     _player->setPosition(_mapFile->defaultPosition());
 
     // ??????
-    auto script = new VM(ResourceManager::intFileType(0), _player.get());
+    auto script = new VM(ResourceManager::intFileType(0), _player);
     _player->scripts()->push_back(script);
 
 
     _objects.push_back(_player);
 
+    std::cout << _player->position() << std::endl;
+    std::shared_ptr<Hexagon> hexagon = hexagons()->at(_player->position());
+
+    for (auto neighbor : *hexagon->neighbours())
+    {
+        //auto object = std::shared_ptr<GameDudeObject>(new GameDudeObject());
+        //object->setPID(0x01000001);
+        //object->setFID(FID_HERO_MALE);
+        //object->setOrientation(_mapFile->defaultOrientation());
+        //object->setPosition(neighbor->number());
+        //_objects.push_back(object);
+        std::cout << neighbor->number() << std::endl;
+    }
+
+    //throw 1;
+
 
     // ON MAP LOADED
     if (_mapFile->scriptId() > 0)
     {
-        _script = new VM(ResourceManager::intFileType(_mapFile->scriptId()-1), this);
+        _script = new VM(ResourceManager::intFileType(_mapFile->scriptId()-1), Game::getInstance()->location());
     }
 
     checkObjectsToRender();
-}
-
-std::shared_ptr<GameDudeObject> Location::player()
-{
-    return _player;
 }
 
 void Location::_generateFloor()
@@ -385,7 +421,7 @@ std::shared_ptr<GameObject> Location::createObject(int PID)
     if (proto->scriptId() > 0)
     {
         auto intFile = ResourceManager::intFileType(proto->scriptId());
-        if (intFile) object->scripts()->push_back(new VM(intFile, object.get()));
+        if (intFile) object->scripts()->push_back(new VM(intFile, object));
     }
 
     return object;
@@ -609,7 +645,7 @@ int Location::MVAR(unsigned int number)
     return _MVARS.at(number);
 }
 
-std::map<std::string, VMStackValue*>* Location::EVARS()
+std::map<std::string, std::shared_ptr<VMStackValue>>* Location::EVARS()
 {
     return &_EVARS;
 }

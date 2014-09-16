@@ -17,30 +17,23 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_VMSTACKPOINTERVALUE_H
-#define FALLTERGEIST_VMSTACKPOINTERVALUE_H
-
 // C++ standard includes
-#include <memory>
 
 // Falltergeist includes
-#include "../VM/VMStackValue.h"
+#include "../../VM/Handlers/OpcodeC001Handler.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class VMStackPointerValue  : public VMStackValue
+OpcodeC001Handler::OpcodeC001Handler(VM* vm) : OpcodeHandler(vm)
 {
-protected:
-    std::shared_ptr<void> _value;
-public:
-    VMStackPointerValue(std::shared_ptr<void> value);
-    virtual ~VMStackPointerValue();
-    void setValue(std::shared_ptr<void> value);
-    std::shared_ptr<void> value();
-};
+}
+
+void OpcodeC001Handler::run()
+{
+    throw 123;
+}
 
 }
-#endif // FALLTERGEIST_VMSTACKPOINTERVALUE_H

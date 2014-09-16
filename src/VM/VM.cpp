@@ -45,6 +45,7 @@
 #include "../VM/VMStackIntValue.h"
 #include "../VM/VMStackFloatValue.h"
 #include "../VM/VMStackPointerValue.h"
+#include "../VM/Handlers/OpcodeC001Handler.h"
 #include "../Engine/CrossPlatform.h"
 
 // Third party includes
@@ -52,14 +53,14 @@
 namespace Falltergeist
 {
 
-VM::VM(std::shared_ptr<libfalltergeist::IntFileType> script, void* owner)
+VM::VM(std::shared_ptr<libfalltergeist::IntFileType> script, std::shared_ptr<void> owner)
 {
     _owner = owner;
     _script = script;
     if (!_script) throw Exception("VM::VM() - script is null");
 }
 
-VM::VM(std::string filename, void* owner)
+VM::VM(std::string filename, std::shared_ptr<void> owner)
 {
     _owner = owner;
     _script = ResourceManager::intFileType(filename);
@@ -110,9 +111,13 @@ void VM::run()
         ss << "0x" << std::hex << _programCounter << " [" << opcode << "] ";
         CrossPlatform::debug(false, ss.str(), DEBUG_SCRIPT);
 
+        //OpcodeHandler* opcodeHandler = 0;
+
         switch (opcode)
         {
             case 0xC001:
+                //opcodeHandler = new OpcodeC001Handler(this);
+                //break;
             case 0x9001:
                 _programCounter += 6;
                 break;
@@ -188,8 +193,11 @@ void VM::run()
                         _dataStack.push(EVARS->at(_script->identificators()->at(popDataInteger())));
                         break;
                     case VMStackValue::TYPE_POINTER:
-                        _dataStack.push(EVARS->at(*(std::string*)popDataPointer()));
+                    {
+                        auto string = std::static_pointer_cast<std::string>(popDataPointer());
+                        _dataStack.push(EVARS->at(*string.get()));
                         break;
+                    }
                     default:
                         throw Exception("VM::opcode8014 error");
                 }
@@ -198,22 +206,22 @@ void VM::run()
             case 0x8015:
             {
                 CrossPlatform::debug("[*] export(value, name)", DEBUG_SCRIPT);
-                auto name = (std::string*)popDataPointer();
+                auto name = std::static_pointer_cast<std::string>(popDataPointer());
                 auto value = _dataStack.pop();
                 auto game = Game::getInstance();
                 auto EVARS = game->location()->EVARS();
-                EVARS->at(*name) = value;
+                EVARS->at(*(name.get())) = value;
                 break;
             }
             case 0x8016:
             {
                 CrossPlatform::debug("[*] export(name)", DEBUG_SCRIPT);
-                auto name = (std::string*)popDataPointer();
+                auto name = std::static_pointer_cast<std::string>(popDataPointer());
                 auto game = Game::getInstance();
                 auto EVARS = game->location()->EVARS();
-                if (EVARS->find(*name) == EVARS->end())
+                if (EVARS->find(*(name.get())) == EVARS->end())
                 {
-                    EVARS->insert(std::make_pair(*name, (VMStackValue*)0));
+                    EVARS->insert(std::make_pair(*(name.get()), std::shared_ptr<VMStackValue>(nullptr)));
                 }
                 break;
             }
@@ -252,8 +260,8 @@ void VM::run()
             case 0x8027:
             {
                 CrossPlatform::debug("[?] unknown pop_d pop_d", DEBUG_SCRIPT);
-                delete _dataStack.pop();
-                delete _dataStack.pop();
+                _dataStack.pop();
+                _dataStack.pop();
                 break;
             }
             case 0x8028:
@@ -274,7 +282,7 @@ void VM::run()
                 CrossPlatform::debug("[*] DVAR clear", DEBUG_SCRIPT);
                 while (_dataStack.size() > _DVAR_base)
                 {
-                    delete _dataStack.pop();
+                    _dataStack.pop();
                 }
                 break;
             }
@@ -466,14 +474,14 @@ void VM::run()
                 {                    
                     case VMStackValue::TYPE_POINTER: // STRING
                     {
-                        auto p2 = (std::string*)popDataPointer();
+                        auto p2 = std::static_pointer_cast<std::string>(popDataPointer());
                         auto a = _dataStack.top();
                         switch(a->type())
                         {
                             case VMStackValue::TYPE_POINTER: // STRING + STRING
                             {
-                                auto p1 = (std::string*)popDataPointer();
-                                pushDataPointer(new std::string((p1 == 0 ? "" : *p1) + (p2 == 0 ? "" : *p2)));
+                                auto p1 = std::static_pointer_cast<std::string>(popDataPointer());
+                                pushDataPointer(std::shared_ptr<std::string>(new std::string((p1 == 0 ? "" : *(p1.get())) + (p2 == 0 ? "" : *(p2.get())))));
                                 break;
                             }
                             case VMStackValue::TYPE_FLOAT: // FLOAT + STRING
@@ -508,8 +516,8 @@ void VM::run()
                             }
                             case VMStackValue::TYPE_POINTER: // STRING + INTEGER
                             {
-                                auto p1 = (std::string*)popDataPointer();
-                                pushDataPointer(new std::string((p1 == 0 ? "" : *p1) + std::to_string(p2)));
+                                auto p1 = std::static_pointer_cast<std::string>(popDataPointer());
+                                pushDataPointer(std::shared_ptr<std::string>(new std::string((p1 == 0 ? "" : *(p1.get())) + std::to_string(p2))));
                                 break;
                             }
                         }
@@ -536,8 +544,8 @@ void VM::run()
                             }
                             case VMStackValue::TYPE_POINTER: // STRING + FLOAT
                             {
-                                auto p1 = (std::string*)popDataPointer();
-                                pushDataPointer(new std::string((p1 == 0 ? "" : *p1) + std::to_string(p2)));
+                                auto p1 = std::static_pointer_cast<std::string>(popDataPointer());
+                                pushDataPointer(std::shared_ptr<std::string>(new std::string((p1 == 0 ? "" : *(p1.get())) + std::to_string(p2))));
                                 break;
                             }
                         }
@@ -575,8 +583,8 @@ void VM::run()
                 CrossPlatform::debug("[*] mod %", DEBUG_SCRIPT);
                 auto b = _dataStack.pop();
                 auto a = _dataStack.pop();
-                auto p1 = dynamic_cast<VMStackIntValue*>(a);
-                auto p2 = dynamic_cast<VMStackIntValue*>(b);
+                auto p1 = std::dynamic_pointer_cast<VMStackIntValue>(a);
+                auto p2 = std::dynamic_pointer_cast<VMStackIntValue>(b);
                 pushDataInteger(p1->value()%p2->value());
                 break;
             }
@@ -631,7 +639,7 @@ void VM::run()
                 CrossPlatform::debug("[+] void giveExpPoints(int points)", DEBUG_SCRIPT);
                 auto points = popDataInteger();
                 auto game = Game::getInstance();
-                game->location()->player()->setExperience(game->location()->player()->experience() + points);
+                game->player()->setExperience(game->player()->experience() + points);
                 break;
             }
             case 0x80a3:
@@ -643,8 +651,8 @@ void VM::run()
             case 0x80a4:
             {
                 CrossPlatform::debug("[+] std::string* obj_name(GameCritterObject* who)", DEBUG_SCRIPT);
-                auto critter = dynamic_cast<GameCritterObject*>((GameCritterObject*)popDataPointer());
-                pushDataPointer(new std::string(critter->name()));
+                auto critter = std::static_pointer_cast<GameCritterObject>(popDataPointer());
+                pushDataPointer(std::shared_ptr<std::string>(new std::string(critter->name())));
                 break;
             }
             case 0x80a6:
@@ -669,7 +677,7 @@ void VM::run()
                         found = object;
                     }
                 }
-                pushDataPointer(found.get());
+                pushDataPointer(found);
                 break;
             }
             case 0x80a8:
@@ -690,7 +698,7 @@ void VM::run()
                 auto x = popDataInteger();
                 auto position = y*200 + x;
                 auto game = Game::getInstance();
-                auto player = game->location()->player();
+                auto player = game->player();
                 player->setPosition(position);
                 player->setOrientation(orientation);
                 player->setElevation(elevation);
@@ -701,7 +709,7 @@ void VM::run()
                 CrossPlatform::debug("[+] int get_skill(GameCritterObject* who, int number) ", DEBUG_SCRIPT);
                 int number = popDataInteger();
                 if (number > 17) throw Exception("VM::opcode80AA - number out of range: " + std::to_string(number));
-                auto object = dynamic_cast<GameCritterObject*>((GameObject*)popDataPointer());
+                auto object = std::static_pointer_cast<GameCritterObject>(popDataPointer());
                 if (!object) throw Exception("VM::opcode80AA pointer error");
                 pushDataInteger(object->skill(number));
                 break;
@@ -782,7 +790,8 @@ void VM::run()
                 CrossPlatform::debug("[+] int move_to(GameObject* object, int position, int elevation)", DEBUG_SCRIPT);
                 auto elevation = popDataInteger();
                 auto position = popDataInteger();
-                auto object = (GameObject*)popDataPointer();
+                auto object = std::static_pointer_cast<GameObject>(popDataPointer());
+                if (!object) throw new Exception("Opcode 80b6 error");
                 object->setPosition(position);
                 object->setElevation(elevation);
                 pushDataInteger(1);
@@ -801,15 +810,15 @@ void VM::run()
                 if (SID > 0)
                 {
                     auto intFile = ResourceManager::intFileType(SID);
-                    if (intFile) object->scripts()->push_back(new VM(intFile, object.get()));
+                    if (intFile) object->scripts()->push_back(new VM(intFile, object));
                 }
-                pushDataPointer(object.get());
+                pushDataPointer(object);
                 break;
             }
             case 0x80b8:
             {
                 CrossPlatform::debug("[*] void display_msg(string*)", DEBUG_SCRIPT);
-                _displayString((std::string*)popDataPointer());
+                _displayString(std::static_pointer_cast<std::string>(popDataPointer()));
                 break;
             }
             case 0x80b9:
@@ -821,11 +830,11 @@ void VM::run()
                 auto PID = popDataInteger();
                 auto pointer = popDataPointer();
                 int amount = 0;
-                if (auto critter = dynamic_cast<GameCritterObject*>((GameObject*)pointer))
+                if (auto critter = std::static_pointer_cast<GameCritterObject>(pointer))
                 {
                     for (auto object : *critter->inventory()) if (object->PID() == PID) amount += object->amount();
                 }
-                else if (auto container = dynamic_cast<GameContainerItemObject*>((GameObject*)pointer))
+                else if (auto container = std::static_pointer_cast<GameContainerItemObject>(pointer))
                 {
                     for (auto object : *container->inventory()) if (object->PID() == PID) amount += object->amount();
                 }
@@ -869,15 +878,15 @@ void VM::run()
             case 0x80bf:
             {
                 CrossPlatform::debug("[+] GameDudeObject* dude_obj()", DEBUG_SCRIPT);
-                auto game = Game::getInstance();
-                pushDataPointer(game->location()->player().get());
+                auto game = Game::getInstance();            
+                pushDataPointer(game->player());
                 break;
             }
             case 0x80c1:
             {
                 CrossPlatform::debug("[*] LVAR[num]", DEBUG_SCRIPT);
                 unsigned int num = popDataInteger();
-                while (num >= _LVARS.size()) _LVARS.push_back(new VMStackIntValue(0));
+                while (num >= _LVARS.size()) _LVARS.push_back(std::shared_ptr<VMStackIntValue>(new VMStackIntValue(0)));
                 _dataStack.push(_LVARS.at(num));
                 break;
             }
@@ -886,7 +895,7 @@ void VM::run()
                 CrossPlatform::debug("[*] LVAR[num] = value", DEBUG_SCRIPT);
                 auto value = _dataStack.pop();
                 unsigned int num = popDataInteger();
-                while (num >= _LVARS.size()) _LVARS.push_back(new VMStackIntValue(0));
+                while (num >= _LVARS.size()) _LVARS.push_back(std::shared_ptr<VMStackIntValue>(new VMStackIntValue(0)));
                 _LVARS.at(num) = value;
                 break;
             }
@@ -951,13 +960,13 @@ void VM::run()
             {
                 CrossPlatform::debug("[+] int obj_item_subtype(GameItemObject* object)", DEBUG_SCRIPT);
                 auto pointer = popDataPointer();
-                     if (dynamic_cast<GameArmorItemObject*>((GameObject*)pointer))     pushDataInteger(0);
-                else if (dynamic_cast<GameContainerItemObject*>((GameObject*)pointer)) pushDataInteger(1);
-                else if (dynamic_cast<GameDrugItemObject*>((GameObject*)pointer))      pushDataInteger(2);
-                else if (dynamic_cast<GameWeaponItemObject*>((GameObject*)pointer))    pushDataInteger(3);
-                else if (dynamic_cast<GameAmmoItemObject*>((GameObject*)pointer))      pushDataInteger(4);
-                else if (dynamic_cast<GameMiscItemObject*>((GameObject*)pointer))      pushDataInteger(5);
-                else if (dynamic_cast<GameKeyItemObject*>((GameObject*)pointer))       pushDataInteger(6);
+                     if (std::static_pointer_cast<GameArmorItemObject>(pointer))     pushDataInteger(0);
+                else if (std::static_pointer_cast<GameContainerItemObject>(pointer)) pushDataInteger(1);
+                else if (std::static_pointer_cast<GameDrugItemObject>(pointer))      pushDataInteger(2);
+                else if (std::static_pointer_cast<GameWeaponItemObject>(pointer))    pushDataInteger(3);
+                else if (std::static_pointer_cast<GameAmmoItemObject>(pointer))      pushDataInteger(4);
+                else if (std::static_pointer_cast<GameMiscItemObject>(pointer))      pushDataInteger(5);
+                else if (std::static_pointer_cast<GameKeyItemObject>(pointer))       pushDataInteger(6);
                 else pushDataInteger(-1);
                 break;
             }
@@ -965,7 +974,7 @@ void VM::run()
             {
                 CrossPlatform::debug("[+] int get_critter_stat(GameCritterObject* who, int number)", DEBUG_SCRIPT);
                 int number = popDataInteger();
-                auto object = dynamic_cast<GameCritterObject*>((GameObject*)popDataPointer());
+                auto object = std::static_pointer_cast<GameCritterObject>(popDataPointer());
                 if (!object) throw Exception("VM::opcode80CA pointer error");
 
                 switch (number)
@@ -990,10 +999,10 @@ void VM::run()
                 int value = popDataInteger();
                 int number = popDataInteger();
                 if (number > 6) throw Exception("VM::opcode80CB - number out of range:" + std::to_string(number));
-                auto object = dynamic_cast<GameCritterObject*>((GameObject*)popDataPointer());
+                auto object = std::static_pointer_cast<GameCritterObject>(popDataPointer());
                 if (!object) throw Exception("VM::opcode80CB pointer error");
                 object->setStat(number, value);
-                if (dynamic_cast<GameDudeObject*>(object))
+                if (std::dynamic_pointer_cast<GameDudeObject>(object))
                 {
                     pushDataInteger(3); // for dude
                 }
@@ -1060,7 +1069,8 @@ void VM::run()
             case 0x80d4:
             {
                 CrossPlatform::debug("[+] int objectPosition(GameObject* object)", DEBUG_SCRIPT);
-                auto object = (GameObject*)popDataPointer();
+                auto object = std::static_pointer_cast<GameObject>(popDataPointer());
+                if (!object) throw new Exception("Opcode 80d4 error");
                 pushDataInteger(object->position());
                 break;
             }
@@ -1110,7 +1120,7 @@ void VM::run()
                 popDataInteger(); //auto backgroundIdx = popDataInteger();
                 popDataInteger(); //auto headNum = popDataInteger();
                 popDataInteger();//auto mood = popDataInteger();
-                auto critter = dynamic_cast<GameCritterObject*>((GameCritterObject*)popDataPointer());
+                auto critter = std::static_pointer_cast<GameCritterObject>(popDataPointer());
                 if (!critter) throw Exception("VM::opcode80de - wrong critter pointers");
                 dialog->setCritter(critter);
                 dialog->setScript(this);
@@ -1180,7 +1190,8 @@ void VM::run()
             case 0x80ec:
             {
                 CrossPlatform::debug("[=] int elevation(void* obj)", DEBUG_SCRIPT);
-                auto object = (GameObject*)popDataPointer();
+                auto object = std::static_pointer_cast<GameObject>(popDataPointer());
+                if (!object) throw new Exception("Opcode 80ec error");
                 pushDataInteger(object->elevation());
                 break;
             }
@@ -1265,7 +1276,8 @@ void VM::run()
                 CrossPlatform::debug("[*] int critter_attempt_placement(GameCritterObject* critter, int position, int elevation)", DEBUG_SCRIPT);
                 auto elevation = popDataInteger();
                 auto position = popDataInteger();
-                auto critter = (GameCritterObject*)popDataPointer();
+                auto critter = std::static_pointer_cast<GameCritterObject>(popDataPointer());
+                if (!critter) throw new Exception("Opcode 80ff error");
                 critter->setElevation(elevation);
                 critter->setPosition(position);
                 pushDataInteger(1);
@@ -1274,7 +1286,8 @@ void VM::run()
             case 0x8100:
             {
                 CrossPlatform::debug("[+] int obj_pid(void* obj)", DEBUG_SCRIPT);
-                auto object = (GameObject*)popDataPointer();
+                auto object = std::static_pointer_cast<GameObject>(popDataPointer());
+                if (!object) throw new Exception("Opcode 8100 error");
                 pushDataInteger(object->PID());
                 break;
             }
@@ -1299,14 +1312,14 @@ void VM::run()
                 CrossPlatform::debug("[+] string* msgMessage(int msg_list, int msg_num);", DEBUG_SCRIPT);
                 auto msgNum = popDataInteger();
                 auto msgList = popDataInteger();
-                pushDataPointer(msgMessage(msgList, msgNum));
+                pushDataPointer(std::shared_ptr<std::string>(new std::string(msgMessage(msgList, msgNum))));
                 break;
             }
             case 0x8106:
             {
                 CrossPlatform::debug("[=] void* (int) critter_inven_obj(GameCritterObject* critter, int where)", DEBUG_SCRIPT);
                 auto where = popDataInteger();
-                auto critter = dynamic_cast<GameCritterObject*>((GameObject*)popDataPointer());
+                auto critter = std::static_pointer_cast<GameCritterObject>(popDataPointer());
                 switch (where)
                 {
                     case 0: // ARMOR SLOT
@@ -1330,7 +1343,7 @@ void VM::run()
             {
                 CrossPlatform::debug("[=] void float_msg(void* who, string* msg, int type) ", DEBUG_SCRIPT);
                 popDataInteger();
-                delete _dataStack.pop(); // pointer or 0(integer)
+                _dataStack.pop(); // pointer or 0(integer)
                 popDataPointer();
                 break;
             }
@@ -1414,17 +1427,16 @@ void VM::run()
             {
                 CrossPlatform::debug("[+] void add_mult_objs_to_inven(GameObject* who, GameItemObject* item, int amount)", DEBUG_SCRIPT);
                 auto amount = popDataInteger();
-                auto item =(GameItemObject*)popDataPointer();
+                auto item = std::static_pointer_cast<GameItemObject>(popDataPointer());
                 if (!item) throw Exception("VM::opcode8116 - item not instanceof GameItemObject");
                 item->setAmount(amount);
-
                 // who can be critter or container
                 auto pointer = popDataPointer();
-                if (auto critter = dynamic_cast<GameCritterObject*>((GameObject*)pointer))
+                if (auto critter = std::static_pointer_cast<GameCritterObject>(pointer))
                 {
                     critter->inventory()->push_back(item);
                 }
-                else if (auto container = dynamic_cast<GameContainerItemObject*>((GameObject*)pointer))
+                else if (auto container = std::static_pointer_cast<GameContainerItemObject>(pointer))
                 {
                     container->inventory()->push_back(item);
                 }
@@ -1471,8 +1483,8 @@ void VM::run()
                 //Game::getInstance().dialog()->deleteAnswers();
                 if (_dataStack.top()->type() == VMStackValue::TYPE_POINTER)
                 {
-                    auto question = (std::string*)popDataPointer();
-                    Game::getInstance()->dialog()->setQuestion(question);
+                    auto question = std::static_pointer_cast<std::string>(popDataPointer());
+                    Game::getInstance()->dialog()->setQuestion(*(question.get()));
                 }
                 else
                 {
@@ -1496,17 +1508,17 @@ void VM::run()
 
                 auto reaction = popDataInteger();
                 auto function = popDataInteger();
-                std::string* text;
+                std::shared_ptr<std::string> text;
                 if (_dataStack.top()->type() == VMStackValue::TYPE_POINTER)
                 {
-                    text = (std::string*)popDataPointer();
+                    text = std::static_pointer_cast<std::string>(popDataPointer());
                     popDataInteger(); // msg_list
                 }
                 else
                 {
                     auto msg_num = popDataInteger();
                     auto msg_file_num = popDataInteger();
-                    text = msgMessage(msg_file_num, msg_num);
+                    text = std::shared_ptr<std::string>(new std::string(msgMessage(msg_file_num, msg_num)));
                 }
                 auto iq = popDataInteger();
                 auto game = Game::getInstance();
@@ -1574,42 +1586,42 @@ void VM::run()
             case 0x812d:
             {
                 CrossPlatform::debug("[+] int is_locked(GameDoorSceneryObject* object)", DEBUG_SCRIPT);
-                auto object = (GameDoorSceneryObject*)popDataPointer();
+                auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
                 pushDataInteger(object->locked());
                 break;
             }
             case 0x812e:
             {
                 CrossPlatform::debug("[+] void lock(GameDoorSceneryObject* object)", DEBUG_SCRIPT);
-                auto object = (GameDoorSceneryObject*)popDataPointer();
+                auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
                 object->setLocked(true);
                 break;
             }
             case 0x812f:
             {
                 CrossPlatform::debug("[+] void unlock(GameDoorSceneryObject* object)", DEBUG_SCRIPT);
-                auto object = (GameDoorSceneryObject*)popDataPointer();
+                auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
                 object->setLocked(false);
                 break;
             }
             case 0x8130:
             {
                 CrossPlatform::debug("[+] int is_opened(GameDoorSceneryObject* object) ", DEBUG_SCRIPT);
-                auto object = (GameDoorSceneryObject*)popDataPointer();
+                auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
                 pushDataInteger(object->opened());
                 break;
             }
             case 0x8131:
             {
                 CrossPlatform::debug("[+] void open(GameDoorSceneryObject* object) ", DEBUG_SCRIPT);
-                auto object = (GameDoorSceneryObject*)popDataPointer();
+                auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
                 object->setOpened(true);
                 break;
             }
             case 0x8132:
             {
                 CrossPlatform::debug("[+] void close(GameDoorSceneryObject* object) ", DEBUG_SCRIPT);
-                auto object = (GameDoorSceneryObject*)popDataPointer();
+                auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
                 object->setOpened(false);
                 break;
             }
@@ -1662,7 +1674,7 @@ void VM::run()
             case 0x8149:
             {
                 CrossPlatform::debug("[+] int obj_art_fid(void* obj)", DEBUG_SCRIPT);
-                auto object = (GameObject*)popDataPointer();
+                auto object = std::static_pointer_cast<GameObject>(popDataPointer());
                 if (!object) throw Exception("VM::opcode8149() - can't convert pointer to object");
                 pushDataInteger(object->FID());
                 break;
@@ -1710,7 +1722,7 @@ void VM::run()
             case 0x8154:
             {
                 CrossPlatform::debug("[*] void debug(string*)", DEBUG_SCRIPT);
-                _debugMessage((std::string*)popDataPointer());
+                _debugMessage(std::static_pointer_cast<std::string>(popDataPointer()));
                 break;
             }
             case 0x9001:
@@ -1725,16 +1737,16 @@ void VM::run()
                     case 0x8015: // set exported var value
                     case 0x8016: // export var
                     {
-                        void* pointer = &_script->identificators()->at(value);
+                        auto pointer = std::shared_ptr<std::string>(new std::string(_script->identificators()->at(value)));
                         pushDataPointer(pointer);
-                        CrossPlatform::debug("[*] push_d *" + std::to_string((unsigned long long) pointer), DEBUG_SCRIPT);
+                        CrossPlatform::debug("[*] push_d *" + std::to_string((unsigned long long) pointer.get()), DEBUG_SCRIPT);
                         break;
                     }
                     default:
                     {
-                        void* pointer = &_script->strings()->at(value);
+                        auto pointer = std::shared_ptr<std::string>(new std::string(_script->strings()->at(value)));
                         pushDataPointer(pointer);
-                        CrossPlatform::debug("[*] push_d *" + std::to_string((unsigned long long) pointer), DEBUG_SCRIPT);
+                        CrossPlatform::debug("[*] push_d *" + std::to_string((unsigned long long) pointer.get()), DEBUG_SCRIPT);
                         break;
                      }
                 }
@@ -1744,7 +1756,7 @@ void VM::run()
             {
                 unsigned int value;
                 *_script >> value;
-                _dataStack.push(new VMStackIntValue(value));
+                _dataStack.push(std::shared_ptr<VMStackIntValue>(new VMStackIntValue(value)));
                 std::ostringstream os;
                 os << "[*] push_d 0x" << std::hex << value;
                 CrossPlatform::debug(os.str(), DEBUG_SCRIPT);
@@ -1758,8 +1770,8 @@ void VM::run()
                 throw 0;
                 break;
             }
-        }
-
+        }        
+        //delete opcodeHandler;
     }
 }
 
@@ -1768,7 +1780,7 @@ int VM::popDataInteger()
     auto stackValue = _dataStack.pop();
     if (stackValue->type() == VMStackValue::TYPE_INTEGER)
     {
-        auto stackIntValue = dynamic_cast<VMStackIntValue*>((VMStackValue*)stackValue);
+        auto stackIntValue = std::dynamic_pointer_cast<VMStackIntValue>(stackValue);
         auto value = stackIntValue->value();
         return value;
     }
@@ -1777,7 +1789,7 @@ int VM::popDataInteger()
 
 void VM::pushDataInteger(int value)
 {
-    _dataStack.push(new VMStackIntValue(value));
+    _dataStack.push(std::shared_ptr<VMStackIntValue>(new VMStackIntValue(value)));
 }
 
 float VM::popDataFloat()
@@ -1785,7 +1797,7 @@ float VM::popDataFloat()
     auto stackValue = _dataStack.pop();
     if (stackValue->type() == VMStackValue::TYPE_FLOAT)
     {
-        auto stackFloatValue = dynamic_cast<VMStackFloatValue*>(stackValue);
+        auto stackFloatValue = std::dynamic_pointer_cast<VMStackFloatValue>(stackValue);
         auto value = stackFloatValue->value();
         return value;
     }
@@ -1794,24 +1806,24 @@ float VM::popDataFloat()
 
 void VM::pushDataFloat(float value)
 {
-    _dataStack.push(new VMStackFloatValue(value));
+    _dataStack.push(std::shared_ptr<VMStackFloatValue>(new VMStackFloatValue(value)));
 }
 
-void* VM::popDataPointer()
+std::shared_ptr<void> VM::popDataPointer()
 {
     auto stackValue = _dataStack.pop();
     if (stackValue->type() == VMStackValue::TYPE_POINTER)
     {
-        auto stackPointerValue = dynamic_cast<VMStackPointerValue*>(stackValue);
+        auto stackPointerValue = std::dynamic_pointer_cast<VMStackPointerValue>(stackValue);
         auto value = stackPointerValue->value();
         return value;
     }
     throw Exception("VM::popDataPointer() - stack value is not a pointer");
 }
 
-void VM::pushDataPointer(void* value)
+void VM::pushDataPointer(std::shared_ptr<void> value)
 {
-    _dataStack.push(new VMStackPointerValue(value));
+    _dataStack.push(std::shared_ptr<VMStackPointerValue>(new VMStackPointerValue(value)));
 }
 
 int VM::popReturnInteger()
@@ -1819,7 +1831,7 @@ int VM::popReturnInteger()
     auto stackValue = _returnStack.pop();
     if (stackValue->type() == VMStackValue::TYPE_INTEGER)
     {
-        auto stackIntValue = dynamic_cast<VMStackIntValue*>(stackValue);
+        auto stackIntValue = std::dynamic_pointer_cast<VMStackIntValue>(stackValue);
         auto value = stackIntValue->value();
         return value;
     }
@@ -1828,7 +1840,7 @@ int VM::popReturnInteger()
 
 void VM::pushReturnInteger(int value)
 {
-    _returnStack.push(new VMStackIntValue(value));
+    _returnStack.push(std::shared_ptr<VMStackIntValue>(new VMStackIntValue(value)));
 }
 
 bool VM::popDataLogical()
@@ -1845,13 +1857,13 @@ bool VM::popDataLogical()
     throw Exception("VM::popDataLogical() - something strange happened");
 }
 
-int VM::_metarule(int type, VMStackValue* value)
+int VM::_metarule(int type, std::shared_ptr<VMStackValue> value)
 {
     switch(type)
     {
         case 14: // METARULE_TEST_FIRSTRUN
             // Если карта открывается в первый раз, то возвращает TRUE;
-            return 0;
+            return 1;
         case 16: // METARULE_PARTY_COUNT
             return 0;
         case 17: //  METARULE_AREA_KNOWN
@@ -1902,14 +1914,14 @@ void VM::_playMovie(int movieNum)
 }
 
 
-void VM::_displayString(std::string* str)
+void VM::_displayString(std::shared_ptr<std::string> str)
 {
-    CrossPlatform::debug(*str, DEBUG_SCRIPT);
+    CrossPlatform::debug(*(str.get()), DEBUG_SCRIPT);
 }
 
-void VM::_debugMessage(std::string* str)
+void VM::_debugMessage(std::shared_ptr<std::string> str)
 {
-    CrossPlatform::debug(*str, DEBUG_SCRIPT);
+    CrossPlatform::debug(*(str.get()), DEBUG_SCRIPT);
 }
 
 int VM::_tile_num_in_direction(int start_tile, int dir, int distance)
@@ -1917,16 +1929,16 @@ int VM::_tile_num_in_direction(int start_tile, int dir, int distance)
     return start_tile + 20;
 }
 
-int VM::_critter_add_trait(void* who, int trait_type, int trait, int amount)
+int VM::_critter_add_trait(std::shared_ptr<void> who, int trait_type, int trait, int amount)
 {
     return 0;
 }
 
-void VM::_anim(void* who, int anim, int direction)
+void VM::_anim(std::shared_ptr<void> who, int anim, int direction)
 {
 }
 
-int VM::_metarule3(int meta, VMStackValue* p1, int p2, int p3)
+int VM::_metarule3(int meta, std::shared_ptr<VMStackValue> p1, int p2, int p3)
 {
     switch(meta)
     {
@@ -1939,11 +1951,11 @@ int VM::_metarule3(int meta, VMStackValue* p1, int p2, int p3)
 
 }
 
-std::string* VM::msgMessage(int msg_file_num, int msg_num)
+std::string VM::msgMessage(int msg_file_num, int msg_num)
 {
     auto lst = ResourceManager::lstFileType("data/dialogs.lst");
     auto msg = ResourceManager::msgFileType("text/english/dialog/" + lst->strings()->at(msg_file_num - 1));
-    return msg->message(msg_num)->textPointer();
+    return msg->message(msg_num)->text();
 }
 
 std::shared_ptr<libfalltergeist::IntFileType> VM::script()

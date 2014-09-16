@@ -53,7 +53,7 @@ protected:
     std::vector<std::shared_ptr<GameObject>> _objectsToRender;
     std::vector<int> _MVARS;
     std::vector<std::shared_ptr<Hexagon>> _hexagons;
-    std::map<std::string, VMStackValue*> _EVARS;
+    std::map<std::string, std::shared_ptr<VMStackValue>> _EVARS;
     unsigned int _lastObjectsCheck = 0;
 
 
@@ -93,7 +93,6 @@ public:
 
     std::vector<std::shared_ptr<Hexagon>>* hexagons();
 
-    std::shared_ptr<GameDudeObject> player();
     static std::shared_ptr<GameObject> createObject(int PID);
 
     std::shared_ptr<libfalltergeist::MapFileType> mapFile();
@@ -102,7 +101,7 @@ public:
 
     void setMVAR(unsigned int number, int value);
     int MVAR(unsigned int number);
-    std::map<std::string, VMStackValue*>* EVARS();
+    std::map<std::string, std::shared_ptr<VMStackValue>>* EVARS();
 
 };
 

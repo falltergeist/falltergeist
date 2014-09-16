@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <vector>
+#include <memory>
 
 // libfalltergeist includes
 
@@ -34,14 +35,14 @@ class VMStackValue;
 class VMStack
 {
 protected:
-    std::vector<VMStackValue*> _values;
+    std::vector<std::shared_ptr<VMStackValue>> _values;
 public:
     VMStack();
     ~VMStack();
-    void push(VMStackValue* value);
-    VMStackValue* pop();
-    VMStackValue* top();
-    std::vector<VMStackValue*> * values();
+    void push(std::shared_ptr<VMStackValue> value);
+    std::shared_ptr<VMStackValue> pop();
+    std::shared_ptr<VMStackValue> top();
+    std::vector<std::shared_ptr<VMStackValue>>* values();
     int size();
     void swap();
 };

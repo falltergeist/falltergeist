@@ -21,6 +21,8 @@
 
 // Falltergeist includes
 #include "../Engine/Hexagon.h"
+#include "../Engine/Game.h"
+#include "../Engine/Location.h"
 
 // Third party includes
 
