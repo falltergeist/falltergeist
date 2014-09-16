@@ -200,6 +200,10 @@ set(SOURCES main.cpp
             src/UI/SmallCounter.h
             src/UI/TextArea.cpp
             src/UI/TextArea.h
+            src/VM/Handlers/Opcode8002Handler.h
+            src/VM/Handlers/Opcode8002Handler.cpp
+            src/VM/Handlers/Opcode8005Handler.h
+            src/VM/Handlers/Opcode8005Handler.cpp
             src/VM/Handlers/OpcodeC001Handler.h
             src/VM/Handlers/OpcodeC001Handler.cpp
             src/VM/OpcodeHandler.h

@@ -78,7 +78,7 @@ void IniFile::removeSection(std::string name)
     }    
 }
 
-IniFileSection * IniFile::getSection(std::string name)
+std::shared_ptr<IniFileSection> IniFile::getSection(std::string name)
 {
     for (auto it = _sections.begin(); it != _sections.end(); ++it)        
     {
@@ -87,9 +87,9 @@ IniFileSection * IniFile::getSection(std::string name)
     return 0;    
 }
 
-IniFileSection * IniFile::addSection(std::string name)
+std::shared_ptr<IniFileSection> IniFile::addSection(std::string name)
 {
-    auto section = new IniFileSection;
+    auto section = std::shared_ptr<IniFileSection>(new IniFileSection);
     _sections.insert(std::make_pair(name, section));
     return section;
 }

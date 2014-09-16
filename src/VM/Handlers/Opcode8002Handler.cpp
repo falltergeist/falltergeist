@@ -15,45 +15,28 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
-#ifndef FALLTERGEIST_INIFILE_H
-#define	FALLTERGEIST_INIFILE_H
-
 // C++ standard includes
-#include <fstream>
-#include <string>
-#include <map>
-#include <memory>
 
 // Falltergeist includes
+#include "../../VM/Handlers/Opcode8002Handler.h"
+#include "../../Engine/CrossPlatform.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-typedef std::map<std::string, std::string> IniFileSection;    
-
-class IniFile 
+Opcode8002Handler::Opcode8002Handler(VM* vm) : OpcodeHandler(vm)
 {
-protected:
-    std::string _filename;
-    std::map<std::string, std::shared_ptr<IniFileSection>> _sections;
-public:
-    IniFile(std::string filename);
-    virtual ~IniFile();
-    void removeSection(std::string name);
-    std::shared_ptr<IniFileSection> addSection(std::string name);
-    std::shared_ptr<IniFileSection> getSection(std::string name);
-    bool hasSection(std::string name);
-    void save();
-    void parse();
-    
-    void setFilename(std::string filename);
-    std::string filename();
-};
+}
+
+void Opcode8002Handler::run()
+{
+    OpcodeHandler::run();
+
+    CrossPlatform::debug("lock", DEBUG_SCRIPT);
+}
 
 }
-#endif	// FALLTERGEIST_INIFILE_H 

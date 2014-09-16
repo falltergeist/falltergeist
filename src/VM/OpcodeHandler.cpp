@@ -21,6 +21,7 @@
 
 // Falltergeist includes
 #include "../VM/OpcodeHandler.h"
+#include "../VM/VM.h"
 
 // Third party icnludes
 
@@ -33,6 +34,7 @@ OpcodeHandler::OpcodeHandler(VM* vm) : _vm(vm)
 
 void OpcodeHandler::run()
 {
+    _vm->setProgramCounter(_vm->programCounter() + 2);
 }
 
 }

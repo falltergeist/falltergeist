@@ -79,6 +79,9 @@ public:
     void pushDataPointer(std::shared_ptr<void> value);
     bool popDataLogical();
 
+    VMStack* dataStack();
+    VMStack* returnStack();
+
 };
 
 }

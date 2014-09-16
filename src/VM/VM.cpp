@@ -45,6 +45,8 @@
 #include "../VM/VMStackIntValue.h"
 #include "../VM/VMStackFloatValue.h"
 #include "../VM/VMStackPointerValue.h"
+#include "../VM/Handlers/Opcode8002Handler.h"
+#include "../VM/Handlers/Opcode8005Handler.h"
 #include "../VM/Handlers/OpcodeC001Handler.h"
 #include "../Engine/CrossPlatform.h"
 
@@ -111,13 +113,22 @@ void VM::run()
         ss << "0x" << std::hex << _programCounter << " [" << opcode << "] ";
         CrossPlatform::debug(false, ss.str(), DEBUG_SCRIPT);
 
-        //OpcodeHandler* opcodeHandler = 0;
+        std::shared_ptr<OpcodeHandler> opcodeHandler;
 
         switch (opcode)
         {
+            // В этот switch нужно перенести те опкоды, которые теперь в виде класса
+            // Это нужно из-за того что эти классы сами меняют программный счетчик
+            // И нужно предотвратить его смену здесь в default
+            case 0x8002:
+                opcodeHandler = std::shared_ptr<Opcode8002Handler>(new Opcode8002Handler(this));
+                break;
+            case 0x8005:
+                opcodeHandler = std::shared_ptr<Opcode8005Handler>(new Opcode8005Handler(this));
+                break;
             case 0xC001:
-                //opcodeHandler = new OpcodeC001Handler(this);
-                //break;
+                opcodeHandler = std::shared_ptr<OpcodeC001Handler>(new OpcodeC001Handler(this));
+                break;
             case 0x9001:
                 _programCounter += 6;
                 break;
@@ -127,9 +138,7 @@ void VM::run()
         }
         switch (opcode)
         {
-            case 0x8002:
-                CrossPlatform::debug("lock", DEBUG_SCRIPT);
-                break;
+            case 0x8002: break;
             case 0x8003:
                 CrossPlatform::debug("unlock", DEBUG_SCRIPT);
                 break;
@@ -139,15 +148,7 @@ void VM::run()
                 _programCounter = popDataInteger();
                 break;
             }
-            case 0x8005:
-            {
-                auto functionIndex = popDataInteger();
-                _programCounter = _script->function(functionIndex);
-                std::ostringstream ss;
-                ss << "[*] call(0x" << std::hex << functionIndex << ") = 0x" << _programCounter;
-                CrossPlatform::debug(ss.str(), DEBUG_SCRIPT);
-                break;
-            }
+            case 0x8005: break;
             case 0x800c:
             {
                 CrossPlatform::debug("[*] pop_r => push_d", DEBUG_SCRIPT);
@@ -1752,16 +1753,7 @@ void VM::run()
                 }
                 break;
             }
-            case 0xC001:
-            {
-                unsigned int value;
-                *_script >> value;
-                _dataStack.push(std::shared_ptr<VMStackIntValue>(new VMStackIntValue(value)));
-                std::ostringstream os;
-                os << "[*] push_d 0x" << std::hex << value;
-                CrossPlatform::debug(os.str(), DEBUG_SCRIPT);
-                break;
-            }
+            case 0xC001: break;
             default:
             {
                 std::ostringstream os;
@@ -1771,7 +1763,7 @@ void VM::run()
                 break;
             }
         }        
-        //delete opcodeHandler;
+        if (opcodeHandler) opcodeHandler->run();
     }
 }
 
@@ -1971,6 +1963,16 @@ unsigned int VM::programCounter()
 void VM::setProgramCounter(unsigned int value)
 {
     _programCounter = value;
+}
+
+VMStack* VM::dataStack()
+{
+    return &_dataStack;
+}
+
+VMStack* VM::returnStack()
+{
+    return &_returnStack;
 }
 
 }
