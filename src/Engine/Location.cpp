@@ -23,35 +23,35 @@
 #include <iostream>
 
 // Falltergeist includes
+#include "../Engine/Game.h"
+#include "../Engine/Graphics/Animation.h"
+#include "../Engine/Graphics/Renderer.h"
+#include "../Engine/Graphics/Texture.h"
 #include "../Engine/Hexagon.h"
+#include "../Engine/Input/Mouse.h"
 #include "../Engine/Location.h"
 #include "../Engine/LocationCamera.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
-#include "../Engine/Graphics/Animation.h"
-#include "../Engine/Input/Mouse.h"
-#include "../Engine/Game.h"
-#include "../Engine/Graphics/Renderer.h"
-#include "../Game/GameDefines.h"
-#include "../Game/GameCritterObject.h"
 #include "../Game/GameAmmoItemObject.h"
 #include "../Game/GameArmorItemObject.h"
 #include "../Game/GameContainerItemObject.h"
-#include "../Game/GameDrugItemObject.h"
-#include "../Game/GameKeyItemObject.h"
-#include "../Game/GameMiscItemObject.h"
-#include "../Game/GameWeaponItemObject.h"
+#include "../Game/GameCritterObject.h"
+#include "../Game/GameDefines.h"
 #include "../Game/GameDoorSceneryObject.h"
+#include "../Game/GameDrugItemObject.h"
+#include "../Game/GameDudeObject.h"
 #include "../Game/GameElevatorSceneryObject.h"
 #include "../Game/GameGenericSceneryObject.h"
-#include "../Game/GameStairsSceneryObject.h"
+#include "../Game/GameKeyItemObject.h"
 #include "../Game/GameLadderSceneryObject.h"
-#include "../Game/GameWallObject.h"
+#include "../Game/GameMiscItemObject.h"
 #include "../Game/GameMiscObject.h"
-#include "../Game/GameDudeObject.h"
-#include "../VM/VM.h"
+#include "../Game/GameStairsSceneryObject.h"
+#include "../Game/GameWallObject.h"
+#include "../Game/GameWeaponItemObject.h"
 #include "../UI/Image.h"
-#include "../Engine/Graphics/Texture.h"
+#include "../VM/VM.h"
 
 // Third party includes
 
@@ -97,7 +97,7 @@ void Location::init()
             auto hexagon = std::shared_ptr<Hexagon>(new Hexagon(i));
             _hexagons.push_back(hexagon);
             _hexagons.back()->setX(x);
-            _hexagons.back()->setY(y);                                        
+            _hexagons.back()->setY(y);
         }
     }
 
@@ -481,7 +481,7 @@ void Location::think()
 
     }
     else
-    {        
+    {
         if (_scriptsTicks + 500 < SDL_GetTicks())
         {
             _scriptsTicks = SDL_GetTicks();
