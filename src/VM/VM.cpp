@@ -47,6 +47,7 @@
 #include "../VM/VMStackPointerValue.h"
 #include "../VM/Handlers/Opcode8002Handler.h"
 #include "../VM/Handlers/Opcode8005Handler.h"
+#include "../VM/Handlers/Opcode80DEHandler.h"
 #include "../VM/Handlers/OpcodeC001Handler.h"
 #include "../Engine/CrossPlatform.h"
 
@@ -125,6 +126,9 @@ void VM::run()
                 break;
             case 0x8005:
                 opcodeHandler = std::shared_ptr<Opcode8005Handler>(new Opcode8005Handler(this));
+                break;
+            case 0x80DE:
+                opcodeHandler = std::shared_ptr<Opcode80DEHandler>(new Opcode80DEHandler(this));
                 break;
             case 0xC001:
                 opcodeHandler = std::shared_ptr<OpcodeC001Handler>(new OpcodeC001Handler(this));
@@ -1113,21 +1117,7 @@ void VM::run()
                 pushDataInteger(1);
                 break;
             }
-            case 0x80de:
-            {
-                CrossPlatform::debug("[*] void start_gdialog(int msgFileNum, GameCritterObject* who, int mood, int headNum, int backgroundIdx)", DEBUG_SCRIPT);
-                auto dialog = std::shared_ptr<CritterDialogState>(new CritterDialogState());
-                Game::getInstance()->setDialog(dialog);
-                popDataInteger(); //auto backgroundIdx = popDataInteger();
-                popDataInteger(); //auto headNum = popDataInteger();
-                popDataInteger();//auto mood = popDataInteger();
-                auto critter = std::static_pointer_cast<GameCritterObject>(popDataPointer());
-                if (!critter) throw Exception("VM::opcode80de - wrong critter pointers");
-                dialog->setCritter(critter);
-                dialog->setScript(this);
-                popDataInteger();//auto msgFileNum = popDataInteger();
-                break;
-            }
+            case 0x80de: break;
             case 0x80df:
             {
                 CrossPlatform::debug("[?] end_dialogue", DEBUG_SCRIPT);
