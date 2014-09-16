@@ -48,6 +48,7 @@
 #include "../VM/Handlers/Opcode8002Handler.h"
 #include "../VM/Handlers/Opcode8005Handler.h"
 #include "../VM/Handlers/Opcode8033Handler.h"
+#include "../VM/Handlers/Opcode8034Handler.h"
 #include "../VM/Handlers/Opcode8039Handler.h"
 #include "../VM/Handlers/Opcode80DEHandler.h"
 #include "../VM/Handlers/OpcodeC001Handler.h"
@@ -131,6 +132,9 @@ void VM::run()
                 break;
             case 0x8033:
                 opcodeHandler = std::shared_ptr<Opcode8033Handler>(new Opcode8033Handler(this));
+                break;
+            case 0x8034:
+                opcodeHandler = std::shared_ptr<Opcode8034Handler>(new Opcode8034Handler(this));
                 break;
             case 0x8039:
                 opcodeHandler = std::shared_ptr<Opcode8039Handler>(new Opcode8039Handler(this));
@@ -355,51 +359,7 @@ void VM::run()
                 break;
             }
             case 0x8033: break;
-            case 0x8034:
-            {
-                CrossPlatform::debug("[*] neq !=", DEBUG_SCRIPT);
-                switch (_dataStack.top()->type())
-                {
-                    case VMStackValue::TYPE_INTEGER:
-                    {
-                        auto p2 = popDataInteger();
-                        if (_dataStack.top()->type() == VMStackValue::TYPE_POINTER) // to check if the pointer is null
-                        {
-                            auto p1 = (int)(bool)popDataPointer();
-                            pushDataInteger(p1 != p2);
-                        }
-                        else
-                        {
-                            auto p1 = popDataInteger();
-                            pushDataInteger(p1 != p2);
-                        }
-                        break;
-                    }
-                    case VMStackValue::TYPE_POINTER:
-                    {
-                        auto p2 = (int)(bool)popDataPointer();
-                        if (_dataStack.top()->type() == VMStackValue::TYPE_POINTER) // to check if the pointer is null
-                        {
-                            auto p1 = (int)(bool)popDataPointer();
-                            pushDataInteger(p1 != p2);
-                        }
-                        else
-                        {
-                            auto p1 = popDataInteger();
-                            pushDataInteger(p1 != p2);
-                        }
-                        break;
-                    }
-                    case VMStackValue::TYPE_FLOAT:
-                    {
-                        auto p2 = popDataFloat();
-                        auto p1 = popDataFloat();
-                        pushDataInteger(p1 != p2);
-                        break;
-                    }
-                }
-                break;
-            }
+            case 0x8034: break;
             case 0x8035:
             {
                 CrossPlatform::debug("[*] leq <=", DEBUG_SCRIPT);
