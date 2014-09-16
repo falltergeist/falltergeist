@@ -329,7 +329,7 @@ void PlayerEditState::think()
     _labels.at("health_1")->setText(msgEditor->message(300))->appendText("  ")->appendText(std::to_string(player->hitPointsMax()))->appendText("/")->appendText(std::to_string(player->hitPointsMax()));
     _labels.at("params_1_value")->setText(player->armorClass());
     _labels.at("params_2_value")->setText(player->actionPoints());
-    _labels.at("params_3_value")->setText(player->carryWeight());
+    _labels.at("params_3_value")->setText(player->carryWeightMax());
     _labels.at("params_4_value")->setText(player->meleeDamage());
     _labels.at("params_5_value")->setText(player->damageResistance())->appendText("%");
     _labels.at("params_6_value")->setText(player->poisonResistance())->appendText("%");

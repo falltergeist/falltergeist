@@ -37,14 +37,24 @@ GameItemObject::~GameItemObject()
 {
 }
 
-int GameItemObject::amount()
+unsigned int GameItemObject::amount()
 {
     return _amount;
 }
 
-void GameItemObject::setAmount(int value)
+void GameItemObject::setAmount(unsigned int value)
 {
     _amount = value;
+}
+
+unsigned int GameItemObject::weight()
+{
+    return _weight;
+}
+
+void GameItemObject::setWeight(unsigned int value)
+{
+    _weight = value;
 }
 
 }

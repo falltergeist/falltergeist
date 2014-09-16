@@ -331,7 +331,7 @@ std::shared_ptr<GameObject> Location::createObject(int PID)
             ((GameCritterObject*)object.get())->setActionPoints(proto->critterActionPoints());
             ((GameCritterObject*)object.get())->setHitPointsMax(proto->critterHitPointsMax());
             ((GameCritterObject*)object.get())->setArmorClass(proto->critterArmorClass());
-            ((GameCritterObject*)object.get())->setCarryWeight(proto->critterCarryWeight());
+            ((GameCritterObject*)object.get())->setCarryWeightMax(proto->critterCarryWeightMax());
             ((GameCritterObject*)object.get())->setMeleeDamage(proto->critterMeleeDamage());
             ((GameCritterObject*)object.get())->setSequence(proto->critterSequence());
             ((GameCritterObject*)object.get())->setCriticalChance(proto->critterCriticalChance());

@@ -166,7 +166,7 @@ int GameDudeObject::actionPoints()
     return value;
 }
 
-int GameDudeObject::carryWeight()
+unsigned int GameDudeObject::carryWeightMax()
 {
     unsigned int value = 0;
     unsigned int st = statTotal(STATS_STRENGTH);

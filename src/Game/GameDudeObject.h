@@ -72,7 +72,7 @@ public:
     int hitPointsMax();
     int actionPoints();
     int armorClass();
-    int carryWeight();
+    unsigned int carryWeightMax();
     int meleeDamage();
     int sequence();
     int healingRate();
