@@ -52,6 +52,7 @@
 #include "../VM/Handlers/Opcode8039Handler.h"
 #include "../VM/Handlers/Opcode80BAHandler.h"
 #include "../VM/Handlers/Opcode80DEHandler.h"
+#include "../VM/Handlers/Opcode9001Handler.h"
 #include "../VM/Handlers/OpcodeC001Handler.h"
 #include "../Engine/CrossPlatform.h"
 
@@ -146,11 +147,11 @@ void VM::run()
             case 0x80DE:
                 opcodeHandler = std::shared_ptr<Opcode80DEHandler>(new Opcode80DEHandler(this));
                 break;
+            case 0x9001:
+                opcodeHandler = std::shared_ptr<Opcode9001Handler>(new Opcode9001Handler(this));
+                break;
             case 0xC001:
                 opcodeHandler = std::shared_ptr<OpcodeC001Handler>(new OpcodeC001Handler(this));
-                break;
-            case 0x9001:
-                _programCounter += 6;
                 break;
             default:
                 _programCounter += 2;
@@ -1534,33 +1535,7 @@ void VM::run()
                 _debugMessage(std::static_pointer_cast<std::string>(popDataPointer()));
                 break;
             }
-            case 0x9001:
-            {
-                unsigned int value;
-                unsigned short nextOpcode;
-                *_script >> value >> nextOpcode;
-
-                switch(nextOpcode)
-                {
-                    case 0x8014: // get exported var value
-                    case 0x8015: // set exported var value
-                    case 0x8016: // export var
-                    {
-                        auto pointer = std::shared_ptr<std::string>(new std::string(_script->identificators()->at(value)));
-                        pushDataPointer(pointer);
-                        CrossPlatform::debug("[*] push_d *" + std::to_string((unsigned long long) pointer.get()), DEBUG_SCRIPT);
-                        break;
-                    }
-                    default:
-                    {
-                        auto pointer = std::shared_ptr<std::string>(new std::string(_script->strings()->at(value)));
-                        pushDataPointer(pointer);
-                        CrossPlatform::debug("[*] push_d *" + std::to_string((unsigned long long) pointer.get()), DEBUG_SCRIPT);
-                        break;
-                     }
-                }
-                break;
-            }
+            case 0x9001: break;
             case 0xC001: break;
             default:
             {
