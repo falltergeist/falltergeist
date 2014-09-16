@@ -48,6 +48,7 @@
 #include "../VM/Handlers/Opcode8002Handler.h"
 #include "../VM/Handlers/Opcode8005Handler.h"
 #include "../VM/Handlers/Opcode8033Handler.h"
+#include "../VM/Handlers/Opcode8039Handler.h"
 #include "../VM/Handlers/Opcode80DEHandler.h"
 #include "../VM/Handlers/OpcodeC001Handler.h"
 #include "../Engine/CrossPlatform.h"
@@ -130,6 +131,9 @@ void VM::run()
                 break;
             case 0x8033:
                 opcodeHandler = std::shared_ptr<Opcode8033Handler>(new Opcode8033Handler(this));
+                break;
+            case 0x8039:
+                opcodeHandler = std::shared_ptr<Opcode8039Handler>(new Opcode8039Handler(this));
                 break;
             case 0x80DE:
                 opcodeHandler = std::shared_ptr<Opcode80DEHandler>(new Opcode80DEHandler(this));
@@ -428,94 +432,7 @@ void VM::run()
                 pushDataInteger(a > b);
                 break;
             }
-            case 0x8039:
-            {
-                CrossPlatform::debug("[*] plus +", DEBUG_SCRIPT);
-                auto b = _dataStack.top();
-                switch (b->type())
-                {                    
-                    case VMStackValue::TYPE_POINTER: // STRING
-                    {
-                        auto p2 = std::static_pointer_cast<std::string>(popDataPointer());
-                        auto a = _dataStack.top();
-                        switch(a->type())
-                        {
-                            case VMStackValue::TYPE_POINTER: // STRING + STRING
-                            {
-                                auto p1 = std::static_pointer_cast<std::string>(popDataPointer());
-                                pushDataPointer(std::shared_ptr<std::string>(new std::string((p1 == 0 ? "" : *(p1.get())) + (p2 == 0 ? "" : *(p2.get())))));
-                                break;
-                            }
-                            case VMStackValue::TYPE_FLOAT: // FLOAT + STRING
-                            {
-                                throw Exception("VM::opcode PLUS - FLOAT+POINTER not allowed");
-                            }
-                            case VMStackValue::TYPE_INTEGER: // INTEGER + STRING
-                            {
-                                throw Exception("VM::opcode PLUS - INTEGER+POINTER not allowed");
-                            }
-                        }
-
-                        break;
-                    }
-                    case VMStackValue::TYPE_INTEGER: // INTEGER
-                    {
-                        auto p2 = popDataInteger();
-                        auto a = _dataStack.top();
-                        switch(a->type())
-                        {
-                            case VMStackValue::TYPE_INTEGER: // INTEGER + INTEGER
-                            {
-                                auto p1 = popDataInteger();
-                                pushDataInteger(p1 + p2);
-                                break;
-                            }
-                            case VMStackValue::TYPE_FLOAT: // FLOAT + INTEGER
-                            {
-                                auto p1 = popDataFloat();
-                                pushDataFloat(p1 + p2);
-                                break;
-                            }
-                            case VMStackValue::TYPE_POINTER: // STRING + INTEGER
-                            {
-                                auto p1 = std::static_pointer_cast<std::string>(popDataPointer());
-                                pushDataPointer(std::shared_ptr<std::string>(new std::string((p1 == 0 ? "" : *(p1.get())) + std::to_string(p2))));
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                    case VMStackValue::TYPE_FLOAT: // FLOAT
-                    {
-                        auto p2 = popDataFloat();
-                        auto a = _dataStack.top();
-                        switch(a->type())
-                        {
-                            case VMStackValue::TYPE_INTEGER: // INTEGER + FLOAT
-                            {
-                                auto p1 = popDataInteger();
-                                pushDataFloat(p1 + p2);
-
-                                break;
-                            }
-                            case VMStackValue::TYPE_FLOAT: // FLOAT + FLOAT
-                            {
-                                auto p1 = popDataFloat();
-                                pushDataFloat(p1 + p2);
-                                break;
-                            }
-                            case VMStackValue::TYPE_POINTER: // STRING + FLOAT
-                            {
-                                auto p1 = std::static_pointer_cast<std::string>(popDataPointer());
-                                pushDataPointer(std::shared_ptr<std::string>(new std::string((p1 == 0 ? "" : *(p1.get())) + std::to_string(p2))));
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                }
-                break;
-            }
+            case 0x8039: break;
             case 0x803a:
             {
                 CrossPlatform::debug("[*] minus -", DEBUG_SCRIPT);
