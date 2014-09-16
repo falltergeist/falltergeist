@@ -65,9 +65,9 @@ std::shared_ptr<Texture> SmallCounter::texture()
         textNumber[i] = '0';
     }
 
-    unsigned int length = strlen(ss.str().c_str());
-    unsigned int diff = _length - length;
-    for (unsigned int i = 0; i < length; i++)
+    unsigned int len = strlen(ss.str().c_str());
+    unsigned int diff = _length - len;
+    for (unsigned int i = 0; i < len; i++)
     {
         textNumber[diff + i] = ss.str().c_str()[i];
     }
@@ -87,19 +87,34 @@ std::shared_ptr<Texture> SmallCounter::texture()
                 x += 240;
                 break;
         }
-        numbers->texture()->copyTo(_texture, 9+9*i, 0, x+1, 0, 9, 16);
+        numbers->texture()->copyTo(_texture, 9*_type+9*i, 0, x+1, 0, 9, 16);
     }
-    // sign of _number
-    if (_number<0)
+    if (_type == SIGNED)
     {
-        numbers->texture()->copyTo(_texture, 0, 0, 9*12+1, 0, 9, 16);
-    }
-    else
-    {
-        numbers->texture()->copyTo(_texture, 0, 0, 113, 0, 9, 16); // must be 9*13+1, but it is 113
+        // sign of _number
+        if (_number<0)
+        {
+            numbers->texture()->copyTo(_texture, 0, 0, 9*12+1, 0, 9, 16);
+        }
+        else
+        {
+            numbers->texture()->copyTo(_texture, 0, 0, 113, 0, 9, 16); // must be 9*13+1, but it is 113
+        }
     }
     delete [] textNumber;
     return _texture;
+}
+
+void SmallCounter::setLength(unsigned int length)
+{
+    if (_length == length) return;
+    _texture.reset();
+    _length = length;
+}
+
+unsigned int SmallCounter::length()
+{
+    return _length;
 }
 
 void SmallCounter::setNumber(signed int number)
@@ -113,7 +128,6 @@ signed int SmallCounter::number()
 {
     return _number;
 }
-
 
 void SmallCounter::setColor(unsigned char color)
 {
@@ -134,6 +148,23 @@ void SmallCounter::setColor(unsigned char color)
 unsigned char SmallCounter::color()
 {
     return _color;
+}
+
+void SmallCounter::setType(unsigned int type)
+{
+    _type = 0; // unsigned by default
+    switch(type)
+    {
+        case UNSIGNED:
+        case SIGNED:
+            _type = type;
+            break;
+    }
+}
+
+unsigned int SmallCounter::type()
+{
+    return _type;
 }
 
 }
