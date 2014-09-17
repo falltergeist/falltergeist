@@ -291,7 +291,6 @@ void NewGameState::onCreateButtonClick(std::shared_ptr<MouseEvent> event)
 {
     auto none = std::shared_ptr<GameDudeObject>(new GameDudeObject());
     none->loadFromGCDFile(ResourceManager::gcdFileType("premade/blank.gcd"));
-    _selectedCharacter = _characters.size() + 1; // to guarantee deletion of all created dudes in destructor
     Game::getInstance()->setPlayer(none);
     Game::getInstance()->pushState(std::shared_ptr<PlayerEditState>(new PlayerEditState()));
 }
