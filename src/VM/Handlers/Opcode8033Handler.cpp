@@ -34,10 +34,8 @@ Opcode8033Handler::Opcode8033Handler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode8033Handler::run()
+void Opcode8033Handler::_run()
 {
-    OpcodeHandler::run();
-
     CrossPlatform::debug("[*] eq ==", DEBUG_SCRIPT);
     switch (_vm->dataStack()->top()->type())
     {

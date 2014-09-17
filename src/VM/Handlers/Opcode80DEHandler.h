@@ -35,7 +35,8 @@ class Opcode80DEHandler : public OpcodeHandler
 {
 public:
     Opcode80DEHandler(VM* vm);
-    virtual void run();
+private:
+    void _run();
 };
 
 }

@@ -35,10 +35,8 @@ OpcodeC001Handler::OpcodeC001Handler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void OpcodeC001Handler::run()
+void OpcodeC001Handler::_run()
 {
-    OpcodeHandler::run();
-
     int value;
     *(_vm->script()) >> value;
 

@@ -36,10 +36,8 @@ Opcode80BAHandler::Opcode80BAHandler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode80BAHandler::run()
+void Opcode80BAHandler::_run()
 {
-    OpcodeHandler::run();
-
     auto PID = _vm->popDataInteger();
     auto pointer = _vm->popDataPointer();
     int amount = 0;

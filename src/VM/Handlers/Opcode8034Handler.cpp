@@ -34,10 +34,8 @@ Opcode8034Handler::Opcode8034Handler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode8034Handler::run()
+void Opcode8034Handler::_run()
 {
-    OpcodeHandler::run();
-
     switch (_vm->dataStack()->top()->type())
     {
         case VMStackValue::TYPE_INTEGER:

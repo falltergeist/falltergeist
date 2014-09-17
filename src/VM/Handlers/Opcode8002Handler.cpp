@@ -32,10 +32,8 @@ Opcode8002Handler::Opcode8002Handler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode8002Handler::run()
+void Opcode8002Handler::_run()
 {
-    OpcodeHandler::run();
-
     CrossPlatform::debug("lock", DEBUG_SCRIPT);
 }
 
