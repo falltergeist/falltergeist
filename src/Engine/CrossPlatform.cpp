@@ -85,7 +85,7 @@ void CrossPlatform::debug(bool newline, std::string message, unsigned char level
 std::string CrossPlatform::getVersion()
 {
     if (_version.length() > 0) return _version;
-    _version = "Falltergeist 0.1.3";
+    _version = "Falltergeist 0.1.4";
 #if defined(_WIN32) || defined(WIN32)
     _version += " (Windows)";
 #elif defined(__unix__)
