@@ -286,10 +286,26 @@ void GameCritterObject::setActionPoints(int value)
 unsigned int GameCritterObject::carryWeight()
 {
     unsigned int weight = 0;
-    for (auto inv = _inventory.begin(); inv != _inventory.end(); ++inv)
+    for (auto item : _inventory)
     {
-        weight += (*inv)->weight();
+        weight += item->weight();
     }
+
+    if (auto armor = std::dynamic_pointer_cast<GameItemObject>(armorSlot()))
+    {
+        weight += armor->weight();
+    }
+
+    if (auto leftHand = std::dynamic_pointer_cast<GameItemObject>(leftHandSlot()))
+    {
+        weight += leftHand->weight();
+    }
+
+    if (auto rightHand = std::dynamic_pointer_cast<GameItemObject>(rightHandSlot()))
+    {
+        weight += rightHand->weight();
+    }
+
     return weight;
 }
 
