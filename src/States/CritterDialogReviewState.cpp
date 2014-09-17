@@ -46,7 +46,7 @@ void CritterDialogReviewState::init()
     if (_initialized) return;
     State::init();
 
-    setFullscreen(true);
+    setFullscreen(false);
     setModal(true);
 
     auto background = std::shared_ptr<Image>(new Image("art/intrface/review.frm"));
