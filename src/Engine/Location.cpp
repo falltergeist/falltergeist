@@ -453,6 +453,7 @@ std::shared_ptr<GameObject> Location::createObject(int PID)
         }
     }
     object->setPID(PID);
+    object->setFID(proto->FID());
     object->setCanWalkThru(proto->flags()&0x00000010);
 
     if (proto->scriptId() > 0)
