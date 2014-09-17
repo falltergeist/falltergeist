@@ -55,12 +55,21 @@ void CritterDialogReviewState::init()
     background->setX(backgroundX);
     background->setY(backgroundY);
 
+    // Interface buttons
     auto doneButton = std::shared_ptr<ImageButton>(
             new ImageButton(ImageButton::TYPE_DIALOG_DONE_BUTTON, backgroundX + 500, backgroundY + 398));
     doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &CritterDialogReviewState::onDoneButtonClick);
 
+    auto upButton = std::shared_ptr<ImageButton>(
+            new ImageButton(ImageButton::TYPE_DIALOG_BIG_UP_BUTTON, backgroundX + 476, backgroundY + 154));
+
+    auto downButton = std::shared_ptr<ImageButton>(
+            new ImageButton(ImageButton::TYPE_DIALOG_BIG_DOWN_BUTTON, backgroundX + 476, backgroundY + 192));
+
     add(background);
     add(doneButton);
+    add(upButton);
+    add(downButton);
 }
 
 void CritterDialogReviewState::onDoneButtonClick(std::shared_ptr<Event> event)
