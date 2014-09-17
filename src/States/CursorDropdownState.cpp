@@ -177,7 +177,7 @@ void CursorDropdownState::think()
         SDL_WarpMouse(_initialX, _surface->y());
         _currentSurface = 0;
     }
-    if (_currentSurface >= _icons.size())
+    if ((unsigned int)_currentSurface >= _icons.size())
     {
         SDL_WarpMouse(_initialX, _surface->y() + _surface->height());
         _currentSurface = _icons.size() - 1;

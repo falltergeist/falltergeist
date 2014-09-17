@@ -276,7 +276,7 @@ std::shared_ptr<GameObject> Location::createObject(int PID)
                         ((GameArmorItemObject*)object.get())->setDamageResist(i, proto->damageResist()->at(i));
                         ((GameArmorItemObject*)object.get())->setDamageThreshold(i, proto->damageThreshold()->at(i));
                     }
-                    ((GameArmorItemObject*)object.get())->setPerk(proto->armorPerk());
+                    ((GameArmorItemObject*)object.get())->setPerk(proto->perk());
                     ((GameArmorItemObject*)object.get())->setMaleFID(proto->armorMaleFID());
                     ((GameArmorItemObject*)object.get())->setFemaleFID(proto->armorFemaleFID());
                     break;

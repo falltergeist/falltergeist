@@ -34,9 +34,66 @@ namespace Falltergeist
 class GameWeaponItemObject : public GameItemObject
 {
 protected:
+    unsigned int _animationCode = 0;
+    unsigned int _damageMin = 0;
+    unsigned int _damageMax = 0;
+    unsigned int _damageType = 0;
+    unsigned int _rangePrimary = 0;
+    unsigned int _rangeSecondary = 0;
+    unsigned int _minimumStrenght = 0;
+    unsigned int _actionCostPrimary = 0;
+    unsigned int _actionCostSecondary = 0;
+    unsigned int _burstRounds = 0;
+    unsigned int _ammoType = 0;
+    unsigned int _ammoPID = 0;
+    unsigned int _ammoCapacity = 0;
+    int _perk = -1;
 public:
     GameWeaponItemObject();
     virtual ~GameWeaponItemObject();
+
+    unsigned int animationCode();
+    void setAnimationCode(unsigned int value);
+
+    unsigned int damageMin();
+    void setDamageMin(unsigned int value);
+
+    unsigned int damageMax();
+    void setDamageMax(unsigned int value);
+
+    unsigned int damageType();
+    void setDamageType(unsigned int value);
+
+    unsigned int rangePrimary();
+    void setRangePrimary(unsigned int value);
+
+    unsigned int rangeSecondary();
+    void setRangeSecondary(unsigned int value);
+    \
+    unsigned int minimumStrenght();
+    void setMinimumStrenght(unsigned int value);
+
+    unsigned int actionCostPrimary();
+    void setActionCostPrimary(unsigned int value);
+
+    unsigned int actionCostSecondary();
+    void setActionCostSecondary(unsigned int value);
+
+    unsigned int burstRounds();
+    void setBurstRounds(unsigned int value);
+
+    unsigned int ammoType();
+    void setAmmoType(unsigned int value);
+
+    unsigned int ammoPID();
+    void setAmmoPID(unsigned int value);
+
+    unsigned int ammoCapacity();
+    void setAmmoCapacity(unsigned int value);
+
+    int perk();
+    void setPerk(int value);
+
 };
 
 }
