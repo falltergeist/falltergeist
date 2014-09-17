@@ -65,7 +65,10 @@ public:
         TYPE_INVENTORY_DOWN_ARROW,
         TYPE_PIPBOY_ALARM_BUTTON,
         TYPE_DIALOG_RED_BUTTON,
-        TYPE_DIALOG_REVIEW_BUTTON
+        TYPE_DIALOG_REVIEW_BUTTON,
+        TYPE_DIALOG_DONE_BUTTON,
+        TYPE_DIALOG_BIG_UP_BUTTON,
+        TYPE_DIALOG_BIG_DOWN_BUTTON
     };
     ImageButton(unsigned int type, int x = 0, int y = 0);
     ~ImageButton();
