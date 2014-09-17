@@ -22,24 +22,24 @@
 #include <string>
 
 // Falltergeist includes
+#include "../Engine/AnimatedPalette.h"
 #include "../Engine/AudioMixer.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Event/Event.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
-#include "../Game/GameDudeObject.h"
-#include "../Engine/ResourceManager.h"
-#include "../Engine/Location.h"
-#include "../Engine/Screen.h"
+#include "../Engine/Graphics/OpenGLRenderer.h"
+#include "../Engine/Graphics/SDLRenderer.h"
 #include "../Engine/Input/Mouse.h"
+#include "../Engine/Location.h"
+#include "../Engine/ResourceManager.h"
+#include "../Engine/Screen.h"
 #include "../Engine/State.h"
+#include "../Engine/UI.h"
+#include "../Game/GameDudeObject.h"
 #include "../States/LocationState.h"
 #include "../UI/FpsCounter.h"
 #include "../UI/TextArea.h"
-#include "../Engine/AnimatedPalette.h"
-#include "../Engine/Graphics/OpenGLRenderer.h"
-#include "../Engine/Graphics/SDLRenderer.h"
-#include "../Engine/UI.h"
 
 // Third patry includes
 
