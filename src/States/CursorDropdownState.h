@@ -44,7 +44,7 @@ protected:
     std::vector<int> _icons;
     int _initialX;
     int _initialY;
-    unsigned int _currentSurface = 0;
+    int _currentSurface = 0;
     std::vector<std::shared_ptr<UI>> _activeIcons;
     std::vector<std::shared_ptr<UI>> _inactiveIcons;
     std::shared_ptr<UI> _surface;

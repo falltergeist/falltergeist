@@ -18,7 +18,7 @@
  */
 
 #ifndef FALLTERGEIST_NEWGAMESTATE_H
-#define FALLTERGIEST_NEWGAMESTATE_H
+#define FALLTERGEIST_NEWGAMESTATE_H
 
 // C++ standard includes
 #include <vector>

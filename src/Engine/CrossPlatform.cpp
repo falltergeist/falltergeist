@@ -23,8 +23,11 @@
 #include <algorithm>
 #include <fstream>
 #include <cstdlib>
-#include <mntent.h>
 
+#ifndef __APPLE__
+#include <mntent.h>
+#endif
+ 
 // Falltergeist includes
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
