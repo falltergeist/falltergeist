@@ -69,7 +69,7 @@ public:
 
     unsigned int rangeSecondary();
     void setRangeSecondary(unsigned int value);
-    \
+
     unsigned int minimumStrenght();
     void setMinimumStrenght(unsigned int value);
 
