@@ -25,6 +25,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
 #include "../Engine/ResourceManager.h"
+#include "../States/CritterDialogReviewState.h"
 #include "../States/CritterDialogState.h"
 #include "../States/CritterTalkState.h"
 #include "../UI/Image.h"
@@ -66,6 +67,8 @@ void CritterTalkState::init()
 
     // Interface buttons
     auto reviewButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_REVIEW_BUTTON, _offsetX+13, _offsetY+445));
+    reviewButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &CritterTalkState::onReviewButtonClick);
+
     auto barterButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, _offsetX+593, _offsetY+331));
 
     add(background);
@@ -174,6 +177,13 @@ void CritterTalkState::addAnswer(std::string text)
 bool CritterTalkState::hasAnswers()
 {
     return _answers.size() > 0;
+}
+
+void CritterTalkState::onReviewButtonClick(std::shared_ptr<Event> event)
+{
+    // FIXME : don't create new state each time the button is clicked
+    auto critterReviewDialogState = std::shared_ptr<CritterDialogReviewState>(new CritterDialogReviewState());
+    Game::getInstance()->pushState(critterReviewDialogState);
 }
 
 }

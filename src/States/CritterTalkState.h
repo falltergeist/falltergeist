@@ -63,6 +63,8 @@ public:
     void deleteAnswers();
     bool hasAnswers();
     void addAnswer(std::string text);
+
+    void onReviewButtonClick(std::shared_ptr<Event> event);
 };
 
 }
