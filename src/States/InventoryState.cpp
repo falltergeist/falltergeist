@@ -20,13 +20,17 @@
 
 // C++ standard includes
 #include <sstream>
+#include <iostream>
 
 // Falltergeist includes
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
+#include "../Engine/Location.h"
 #include "../Engine/ResourceManager.h"
 #include "../Game/GameCritterObject.h"
 #include "../Game/GameDudeObject.h"
+#include "../Game/GameObject.h"
+#include "../Game/GameWeaponItemObject.h"
 #include "../States/GameMenuState.h"
 #include "../States/InventoryState.h"
 #include "../UI/Image.h"
@@ -54,6 +58,8 @@ void InventoryState::init()
     setModal(true);
     setFullscreen(false);
 
+    auto player = Game::getInstance()->player();
+
     // background
     auto background = std::shared_ptr<Image>(new Image("art/intrface/invbox.frm"));
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
@@ -75,8 +81,7 @@ void InventoryState::init()
     auto font = ResourceManager::font("font1.aaf");
 
     // name
-    auto playerNameLabel = std::shared_ptr<TextArea>(new TextArea(Game::getInstance()->player()->name(), screenX, screenY));
-//    skilldexLabel->setFont(font)->setWidth(76)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    auto playerNameLabel = std::shared_ptr<TextArea>(new TextArea(player->name(), screenX, screenY));
 
     auto line1 = std::shared_ptr<Image>(new Image(142, 1));
     line1->setX(screenX);
@@ -102,7 +107,7 @@ void InventoryState::init()
     std::stringstream ss;
     for (unsigned int i=0; i<7; i++)
     {
-        ss << Game::getInstance()->player()->stat(i) << "\n";
+        ss << player->stat(i) << "\n";
     }
     auto statsLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+22, screenY+20));
 
@@ -115,25 +120,24 @@ void InventoryState::init()
 
     // label: hit points
     ss.str("");
-    ss << Game::getInstance()->player()->hitPoints();
+    ss << player->hitPoints();
     ss << "/";
-    ss << Game::getInstance()->player()->hitPointsMax();
+    ss << player->hitPointsMax();
     auto hitPointsLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+94, screenY+20));
     hitPointsLabel->setFont(font)->setWidth(46)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
     // label: armor class
     ss.str("");
-    ss << Game::getInstance()->player()->armorClass();
+    ss << player->armorClass();
     auto armorClassLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+94, screenY+30));
     armorClassLabel->setFont(font)->setWidth(46)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
-    // player->damageResist(DAMAGE_PLASMA);
     // label: damage levels
     ss.str("");
-    ss << Game::getInstance()->player()->damageResist(GameCritterObject::DAMAGE_NORMAL) <<"/\n";
-    ss << Game::getInstance()->player()->damageResist(GameCritterObject::DAMAGE_LASER) << "/\n";
-    ss << Game::getInstance()->player()->damageResist(GameCritterObject::DAMAGE_FIRE) << "/\n";
-    ss << Game::getInstance()->player()->damageResist(GameCritterObject::DAMAGE_PLASMA) << "/\n";
-    ss << Game::getInstance()->player()->damageResist(GameCritterObject::DAMAGE_EXPLOSION) << "/";
+    ss << player->damageResist(GameCritterObject::DAMAGE_NORMAL) <<"/\n";
+    ss << player->damageResist(GameCritterObject::DAMAGE_LASER) << "/\n";
+    ss << player->damageResist(GameCritterObject::DAMAGE_FIRE) << "/\n";
+    ss << player->damageResist(GameCritterObject::DAMAGE_PLASMA) << "/\n";
+    ss << player->damageResist(GameCritterObject::DAMAGE_EXPLOSION) << "/";
     auto damageLevelsLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+94, screenY+40));
     damageLevelsLabel->setFont(font)->setWidth(26)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
@@ -152,8 +156,8 @@ void InventoryState::init()
     // item2
 
     // label: Total Wt: (20)
-    auto weight = Game::getInstance()->player()->carryWeight();
-    auto weightMax = Game::getInstance()->player()->carryWeightMax();
+    auto weight = player->carryWeight();
+    auto weightMax = player->carryWeightMax();
 
     ss.str("");
     ss << weight;
@@ -167,6 +171,78 @@ void InventoryState::init()
     {
         weightLabel->setFont(ResourceManager::font("font1.aaf", 0xff0000ff));
     }
+
+    // PID for testing
+    // 17 Combat Armor
+    // 74 Leather Jacket
+    // 4 knife
+    // 7 spear
+    // 8 10mm pistol
+    // 20 crawbar
+
+    auto object = std::dynamic_pointer_cast<GameArmorItemObject>(Location::createObject(74));
+    auto weapon1 = std::dynamic_pointer_cast<GameItemObject>(Location::createObject(7));
+    auto weapon2 = std::dynamic_pointer_cast<GameItemObject>(Location::createObject(8));
+    player->setArmorSlot(object);
+    player->setLeftHandSlot(weapon1);
+    player->setRightHandSlot(weapon2);
+
+    // armor slot
+    std::shared_ptr<GameArmorItemObject> armorSlot = player->armorSlot();
+
+    // left hand
+    std::shared_ptr<GameItemObject> leftHand = player->leftHandSlot();
+    ss.str("");
+    if (leftHand)
+    {
+        ss << leftHand->name() << "\n";
+        // is it weapon
+        if (leftHand->subtype() == GameObject::TYPE_ITEM_WEAPON)
+        {
+            auto weapon = std::dynamic_pointer_cast<GameWeaponItemObject>(leftHand);
+            ss << "Dmg: " << weapon->damageMin() << "-" << weapon->damageMax() << "  ";
+            ss << "Rng: " << weapon->rangePrimary();
+            // has it ammo?
+            if (weapon->ammoType() != 0)
+            {
+                ss << "\nAmmo: /" << weapon->ammoCapacity() << " ";
+                auto ammo = Location::createObject(weapon->ammoPID());
+                ss << ammo->name();
+            }
+        }
+    }
+    else
+    {
+        ss << "No item\nUnarmed dmg:";
+    }
+    auto leftHandLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX, screenY+100));
+
+    // right hand
+    std::shared_ptr<GameItemObject> rightHand = player->rightHandSlot();
+    ss.str("");
+    if (rightHand)
+    {
+        ss << rightHand->name() << "\n";
+        // is it weapon
+        if (rightHand->subtype() == GameObject::TYPE_ITEM_WEAPON)
+        {
+            auto weapon = std::dynamic_pointer_cast<GameWeaponItemObject>(rightHand);
+            ss << "Dmg: " << weapon->damageMin() << "-" << weapon->damageMax() << "  ";
+            ss << "Rng: " << weapon->rangePrimary();
+            // has it ammo?
+            if (weapon->ammoType() != 0)
+            {
+                ss << "\nAmmo: /" << weapon->ammoCapacity() << " ";
+                auto ammo = Location::createObject(weapon->ammoPID());
+                ss << ammo->name();
+            }
+        }
+    }
+    else
+    {
+        ss << "No item\nUnarmed dmg:";
+    }
+    auto rightHandLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX, screenY+140));
 
     add(background);
     add(playerNameLabel);
@@ -188,6 +264,8 @@ void InventoryState::init()
     add(totalWtLabel);
     add(weightLabel);
     add(weightMaxLabel);
+    add(leftHandLabel);
+    add(rightHandLabel);
     add(upButton);
     add(downButton);
     add(doneButton);
