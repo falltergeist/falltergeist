@@ -304,6 +304,21 @@ std::shared_ptr<GameObject> Location::createObject(int PID)
                 case libfalltergeist::ProFileType::TYPE_ITEM_WEAPON:
                 {
                     object = std::shared_ptr<GameWeaponItemObject>(new GameWeaponItemObject());
+
+                    ((GameWeaponItemObject*)object.get())->setPerk(proto->perk());
+                    ((GameWeaponItemObject*)object.get())->setAnimationCode(proto->weaponAnimationCode());
+                    ((GameWeaponItemObject*)object.get())->setDamageMin(proto->weaponDamageMin());
+                    ((GameWeaponItemObject*)object.get())->setDamageMax(proto->weaponDamageMax());
+                    ((GameWeaponItemObject*)object.get())->setDamageType(proto->weaponDamageType());
+                    ((GameWeaponItemObject*)object.get())->setRangePrimary(proto->weaponRangePrimary());
+                    ((GameWeaponItemObject*)object.get())->setRangeSecondary(proto->weaponRangeSecondary());
+                    ((GameWeaponItemObject*)object.get())->setMinimumStrenght(proto->weaponMinimumStrenght());
+                    ((GameWeaponItemObject*)object.get())->setActionCostPrimary(proto->weaponActionCostPrimary());
+                    ((GameWeaponItemObject*)object.get())->setActionCostSecondary(proto->weaponActionCostSecondary());
+                    ((GameWeaponItemObject*)object.get())->setBurstRounds(proto->weaponBurstRounds());
+                    ((GameWeaponItemObject*)object.get())->setAmmoType(proto->weaponAmmoType());
+                    ((GameWeaponItemObject*)object.get())->setAmmoPID(proto->weaponAmmoPID());
+                    ((GameWeaponItemObject*)object.get())->setAmmoCapacity(proto->weaponAmmoCapacity());
                     break;
                 }
             }
