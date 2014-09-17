@@ -65,6 +65,8 @@ public:
 
     std::shared_ptr<Location> location();
 
+    void setLocation(std::string name);
+
     virtual void init();
     virtual void think();
     virtual void handle(std::shared_ptr<Event> event);

@@ -94,15 +94,8 @@ void LocationState::init()
     auto game = Game::getInstance();
     game->mouse()->setType(Mouse::ACTION);
 
-    _location = std::shared_ptr<Location>(new Location(ResourceManager::mapFileType("maps/artemple.map")));
-    //_location = new Location(_game->resourceManager()->mapFileType("maps/sftanker.map"));
-
-    _floor = std::shared_ptr<Image>(new Image(_location->tilesFloor()));
-    _floor->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyboardUp);
-    _roof = std::shared_ptr<Image>(new Image(_location->tilesRoof()));
-    //_background->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onBackgroundClick);
-
     _initPanel();
+    setLocation("maps/artemple.map");
 }
 
 // PLAYER PANEL
@@ -159,6 +152,16 @@ void LocationState::_initPanel()
     // pip button
     _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_PIP, panelX+526, panelY+77)));
     _panelUIs.back()->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onPipBoyButtonClick);
+}
+
+void LocationState::setLocation(std::string name)
+{
+    _location = std::shared_ptr<Location>(new Location(ResourceManager::mapFileType(name)));
+
+    _floor = std::shared_ptr<Image>(new Image(_location->tilesFloor()));
+    _floor->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyboardUp);
+    _roof = std::shared_ptr<Image>(new Image(_location->tilesRoof()));
+
 }
 
 void LocationState::onMouseDown(std::shared_ptr<MouseEvent> event)
