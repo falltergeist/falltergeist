@@ -34,9 +34,32 @@ namespace Falltergeist
 class GameArmorItemObject : public GameItemObject
 {
 protected:
+    std::vector<int> _damageResist = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> _damageThreshold = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+    int _perk = -1;
+    unsigned int _maleFID = 0;
+    unsigned int _femaleFID = 0;
 public:
+    enum { DAMAGE_NORMAL = 0, DAMAGE_LASER, DAMAGE_FIRE, DAMAGE_PLASMA, DAMAGE_ELECTRICAL, DAMAGE_EMP, DAMAGE_EXPLOSION, DAMAGE_RADIATION, DAMAGE_POISON };
+
     GameArmorItemObject();
     virtual ~GameArmorItemObject();
+
+    virtual int damageResist(unsigned int type);
+    void setDamageResist(unsigned int type, int value);
+
+    virtual int damageThreshold(unsigned int type);
+    void setDamageThreshold(unsigned int type, int value);
+
+    int perk();
+    void setPerk(int value);
+
+    unsigned int maleFID();
+    void setMaleFID(unsigned int value);
+
+    unsigned int femaleFID();
+    void setFemaleFID(unsigned int value);
+
 };
 
 }

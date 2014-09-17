@@ -22,6 +22,7 @@
 
 // Falltergeist includes
 #include "../Game/GameArmorItemObject.h"
+#include "../Engine/Exception.h"
 
 // Third party includes
 
@@ -35,6 +36,60 @@ GameArmorItemObject::GameArmorItemObject() : GameItemObject()
 
 GameArmorItemObject::~GameArmorItemObject()
 {
+}
+
+int GameArmorItemObject::damageResist(unsigned int type)
+{
+    if (type > DAMAGE_POISON) throw Exception("GameArmorItemObject::damageResist(type) - type out of range:" + std::to_string(type));
+    return _damageResist.at(type);
+}
+
+void GameArmorItemObject::setDamageResist(unsigned int type, int value)
+{
+    if (type > DAMAGE_POISON) throw Exception("GameArmorItemObject::setDamageResist(type, value) - type out of range:" + std::to_string(type));
+    _damageResist.at(type) = value;
+}
+
+int GameArmorItemObject::damageThreshold(unsigned int type)
+{
+    if ( type > DAMAGE_POISON) throw Exception("GameArmorItemObject::damageThreshold(type) - type out of range:" + std::to_string(type));
+    return _damageThreshold.at(type);
+}
+
+void GameArmorItemObject::setDamageThreshold(unsigned int type, int value)
+{
+    if ( type > DAMAGE_POISON) throw Exception("GameArmorItemObject::setDamageThreshold(type, value) - type out of range:" + std::to_string(type));
+    _damageThreshold.at(type) = value;
+}
+
+int GameArmorItemObject::perk()
+{
+    return _perk;
+}
+
+void GameArmorItemObject::setPerk(int value)
+{
+    _perk = value;
+}
+
+unsigned int GameArmorItemObject::maleFID()
+{
+    return _maleFID;
+}
+
+void GameArmorItemObject::setMaleFID(unsigned int value)
+{
+    _maleFID = value;
+}
+
+unsigned int GameArmorItemObject::femaleFID()
+{
+    return _femaleFID;
+}
+
+void GameArmorItemObject::setFemaleFID(unsigned int value)
+{
+    _femaleFID = value;
 }
 
 }
