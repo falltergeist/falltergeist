@@ -28,10 +28,9 @@
 #include "../Engine/Location.h"
 #include "../Engine/LocationCamera.h"
 #include "../Engine/ResourceManager.h"
-#include "../Engine/Screen.h"
-#include "../Engine/Surface.h"
 #include "../Game/GameCritterObject.h"
 #include "../States/CritterDialogState.h"
+#include "../States/CritterTalkState.h"
 #include "../States/LocationState.h"
 #include "../UI/Image.h"
 #include "../VM/VM.h"
@@ -71,28 +70,29 @@ void CritterDialogState::init()
     locationState->generateUi();
 
     auto background = std::shared_ptr<Image>(new Image("art/intrface/alltlk.frm"));
-    auto background2 = std::shared_ptr<Image>(new Image("art/intrface/di_talk.frm"));
+//    auto background2 = std::shared_ptr<Image>(new Image("art/intrface/di_talk.frm"));
 
-    auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
-    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
+    auto backgroundX = static_cast<int>((Game::getInstance()->renderer()->width() - background->width())*0.5);
+    auto backgroundY = static_cast<int>((Game::getInstance()->renderer()->height() - background->height())*0.5);
     background->setX(backgroundX);
     background->setY(backgroundY);
 
-    background2->setX(backgroundX);
-    background2->setY(backgroundY+291);
-
-    // review button
-    auto reviewButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_REVIEW_BUTTON, backgroundX+13, backgroundY+445));
-
-    // barter button
-    auto barterButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, backgroundX+593, backgroundY+331));
+//    background2->setX(backgroundX);
+//    background2->setY(backgroundY+291);
+//
+//    // review button
+//    auto reviewButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_REVIEW_BUTTON, backgroundX+13, backgroundY+445));
+//
+//    // barter button
+//    auto barterButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, backgroundX+593, backgroundY+331));
 
     add(background);
-    add(background2);
-    add(reviewButton);
-    add(barterButton);
-    add(_question);
+//    add(background2);
+//    add(reviewButton);
+//    add(barterButton);
+//    add(_question);
 
+    Game::getInstance()->pushState(std::shared_ptr<CritterTalkState>(new CritterTalkState(backgroundX, backgroundY)));
 }
 
 void CritterDialogState::think()
@@ -101,6 +101,7 @@ void CritterDialogState::think()
 
 void CritterDialogState::close()
 {
+    Game::getInstance()->popState();
     auto camera = Game::getInstance()->location()->camera();
     camera->setXPosition(_oldCameraX);
     camera->setYPosition(_oldCameraY);
