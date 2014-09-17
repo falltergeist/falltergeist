@@ -18,8 +18,9 @@
  *
  */
 
-#ifndef FALLTERGEIST_CRITTERDIALOGSTATE_H
-#define FALLTERGEIST_CRITTERDIALOGSTATE_H
+#ifndef FALLTERGEIST_CRITTER_TALK_STATE_H
+#define FALLTERGEIST_CRITTER_TALK_STATE_H
+
 
 // C++ standard includes
 #include <vector>
@@ -32,40 +33,38 @@
 namespace Falltergeist
 {
 
-class GameCritterObject;
-class CritterTalkState;
 class TextArea;
-class VM;
 
-class CritterDialogState : public State
+class CritterTalkState : public State
 {
-protected:
-    std::shared_ptr<GameCritterObject> _critter;
-    VM* _script = 0;
-    unsigned int _oldCameraX;
-    unsigned int _oldCameraY;
-    std::shared_ptr<TextArea> _question;
-    std::shared_ptr<CritterTalkState> _talk;
+private:
+    int _offsetX;
+    int _offsetY;
+
+    std::vector<int> _functions;
+    std::vector<int> _reactions;
+    std::vector<std::shared_ptr<TextArea>> _answers;
 
 public:
-    CritterDialogState();
-    virtual ~CritterDialogState();
-    virtual void init();
+    CritterTalkState();
+    CritterTalkState(int offsetX, int offsetY);
+    ~CritterTalkState();
+    void init();
 
-    std::shared_ptr<GameCritterObject> critter();
-    void setCritter(std::shared_ptr<GameCritterObject> critter);
+    void setOffsetX(int offsetX);
+    void setOffsetY(int offsetY);
 
-    VM* script();
-    void setScript(VM* value);
+    void onAnswerIn(std::shared_ptr<Event> event);
+    void onAnswerOut(std::shared_ptr<Event> event);
+    void onAnswerClick(std::shared_ptr<Event> event);
 
-    void setQuestion(std::string value);
-
-    virtual void think();
-
-    void close();
-
-    std::shared_ptr<CritterTalkState> talk();
+    std::vector<int>* functions();
+    std::vector<int>* reactions();
+    void deleteAnswers();
+    bool hasAnswers();
+    void addAnswer(std::string text);
 };
 
 }
-#endif // FALLTERGEIST_CRITTERDIALOGSTATE_H
+
+#endif // FALLTERGEIST_CRITTER_TALK_STATE_H

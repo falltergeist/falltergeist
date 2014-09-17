@@ -100,8 +100,8 @@ Game::~Game()
 
 void Game::pushState(std::shared_ptr<State> state)
 {
-    if (!state->initialized()) state->init();
     _states.push_back(state);
+    if (!state->initialized()) state->init();
 }
 
 void Game::popState()

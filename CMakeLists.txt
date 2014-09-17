@@ -146,6 +146,8 @@ set(SOURCES main.cpp
             src/Game/GameMiscObject.h
             src/States/CritterDialogState.cpp
             src/States/CritterDialogState.h
+            src/States/CritterTalkState.cpp
+            src/States/CritterTalkState.h
             src/States/CursorDropdownState.cpp
             src/States/CursorDropdownState.h
             src/States/ExitConfirmState.cpp
