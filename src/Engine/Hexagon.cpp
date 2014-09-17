@@ -73,6 +73,11 @@ std::vector<std::shared_ptr<Hexagon>>* Hexagon::neighbours()
     return &_neighbours;
 }
 
+std::list<std::shared_ptr<GameObject>>* Hexagon::objects()
+{
+    return &_objects;
+}
+
 unsigned int Hexagon::x()
 {
     return _x;

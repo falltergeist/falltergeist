@@ -37,10 +37,15 @@ class Animation;
 class InteractiveSurface;
 class GameObject;
 class Image;
+class Hexagon;
 
 class LocationState : public State
 {
 protected:
+    std::vector<std::shared_ptr<Hexagon>> _hexagons;
+    unsigned int _currentElevation = 0;
+
+
     std::shared_ptr<Location> _location;
     std::shared_ptr<Image> _floor;
     std::shared_ptr<Image> _roof;
@@ -53,6 +58,7 @@ protected:
     bool _scrollRight = false;
     bool _scrollTop = false;
     bool _scrollBottom = false;
+    void _initPanel();
 public:
     LocationState();
     ~LocationState();

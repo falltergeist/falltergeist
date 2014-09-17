@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <vector>
+#include <list>
 #include <memory>
 
 // Falltergeist includes
@@ -30,13 +31,15 @@
 
 namespace Falltergeist
 {
+class GameObject;
 
 class Hexagon
 {
 protected:
     bool _checked = false; // pathfinding flag
-    std::shared_ptr<Hexagon> _cameFrom;
+    std::shared_ptr<Hexagon> _cameFrom; // pathfinding flag
     std::vector<std::shared_ptr<Hexagon>> _neighbours;
+    std::list<std::shared_ptr<GameObject>> _objects;
     unsigned int _number = 0; // position in hexagonal grid
     unsigned int _x = 0;
     unsigned int _y = 0;
@@ -60,6 +63,8 @@ public:
     void setCameFrom(std::shared_ptr<Hexagon> cameFrom);
 
     std::vector<std::shared_ptr<Hexagon>>* neighbours();
+
+    std::list<std::shared_ptr<GameObject>>* objects();
 };
 
 }

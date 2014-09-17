@@ -46,6 +46,7 @@
 #include "../UI/ImageButton.h"
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
+#include "../Engine/Hexagon.h"
 
 // Third party includes
 
@@ -65,8 +66,32 @@ void LocationState::init()
     if (initialized()) return;
     State::init();
 
-    auto game = Game::getInstance();
+    /*
+    // Creating 200x200 hexagonal map
+    unsigned int index = 0;
+    for (unsigned int y = 0; y != 200; ++y)
+    {
+        for (unsigned int x = 0; x != 200; ++x, ++index)
+        {
+            auto hexagon = std::shared_ptr<Hexagon>(new Hexagon(index));
+            hexagon->setX(x);
+            hexagon->setY(y);
+            _hexagons.push_back(hexagon);
+        }
+    }
+    // Creating links between hexagons
+    for (index = 0; index != 200*200; ++index)
+    {
+        //
+    }
 
+    // Current elevation on the map
+    auto mapFileType = ResourceManager::mapFileType("maps/artemple.map");
+    _currentElevation = mapFileType->defaultElevation();
+
+    */
+
+    auto game = Game::getInstance();
     game->mouse()->setType(Mouse::ACTION);
 
     _location = std::shared_ptr<Location>(new Location(ResourceManager::mapFileType("maps/artemple.map")));
@@ -77,7 +102,13 @@ void LocationState::init()
     _roof = std::shared_ptr<Image>(new Image(_location->tilesRoof()));
     //_background->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onBackgroundClick);
 
-    // PLAYER PANEL
+    _initPanel();
+}
+
+// PLAYER PANEL
+void LocationState::_initPanel()
+{
+    auto game = Game::getInstance();
     // player panel background
     _panelUIs.push_back(std::shared_ptr<Image>(new Image("art/intrface/iface.frm")));
 
@@ -128,7 +159,6 @@ void LocationState::init()
     // pip button
     _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_PIP, panelX+526, panelY+77)));
     _panelUIs.back()->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onPipBoyButtonClick);
-
 }
 
 void LocationState::onMouseDown(std::shared_ptr<MouseEvent> event)
