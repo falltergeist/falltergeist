@@ -206,7 +206,7 @@ void Location::init()
         _player->setLeftHandSlot(std::dynamic_pointer_cast<GameWeaponItemObject>(leftHand));
 
         auto rightHand = createObject(0x00000004); // knife
-        _player->setLeftHandSlot(std::dynamic_pointer_cast<GameWeaponItemObject>(rightHand));
+        _player->setRightHandSlot(std::dynamic_pointer_cast<GameWeaponItemObject>(rightHand));
     }
 
     std::cout << _player->position() << std::endl;
