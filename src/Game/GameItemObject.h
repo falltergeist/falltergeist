@@ -36,6 +36,7 @@ class GameItemObject : public GameObject
 protected:
     unsigned int _amount = 1;
     unsigned int _weight = 0;
+    unsigned int _inventoryFID = 0;
 public:
     GameItemObject();
     virtual ~GameItemObject();
@@ -45,6 +46,9 @@ public:
 
     unsigned int weight();
     void setWeight(unsigned int value);
+
+    unsigned int inventoryFID();
+    void setInventoryFID(unsigned int value);
 };
 
 }

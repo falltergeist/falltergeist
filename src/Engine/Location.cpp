@@ -335,6 +335,7 @@ std::shared_ptr<GameObject> Location::createObject(int PID)
                 }
             }
             ((GameItemObject*)object.get())->setWeight(proto->weight());
+            ((GameItemObject*)object.get())->setInventoryFID(proto->inventoryFID());
             auto msg = ResourceManager::msgFileType("text/english/game/pro_item.msg");
             try
             {

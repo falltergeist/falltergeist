@@ -57,5 +57,15 @@ void GameItemObject::setWeight(unsigned int value)
     _weight = value;
 }
 
+unsigned int GameItemObject::inventoryFID()
+{
+    return _inventoryFID;
+}
+
+void GameItemObject::setInventoryFID(unsigned int value)
+{
+    _inventoryFID = value;
+}
+
 }
 
