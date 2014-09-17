@@ -31,11 +31,11 @@
 // Third party includes
 #include "SDL.h"
 #ifndef __APPLE__
-#include "GL/gl.h"
-#include "GL/glu.h"
+    #include "GL/gl.h"
+    #include "GL/glu.h"
 #else
-#include "OpenGL/gl.h"
-#include "OpenGL/glu.h"
+    #include "OpenGL/gl.h"
+    #include "OpenGL/glu.h"
 #endif
 
 namespace Falltergeist
