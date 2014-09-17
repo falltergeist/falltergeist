@@ -34,7 +34,8 @@ class Opcode8002Handler : public OpcodeHandler
 {
 public:
     Opcode8002Handler(VM* vm);
-    virtual void run();
+private:
+    void _run();
 };
 
 }

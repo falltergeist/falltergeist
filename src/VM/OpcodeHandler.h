@@ -35,9 +35,10 @@ class OpcodeHandler
 {
 protected:
     VM* _vm;
+    virtual void _run() = 0;
 public:
     OpcodeHandler(VM* vm);
-    virtual void run();
+    void run();
 };
 
 }

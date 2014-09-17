@@ -34,7 +34,8 @@ class Opcode8034Handler : public OpcodeHandler
 {
 public:
     Opcode8034Handler(VM* vm);
-    virtual void run();
+private:
+    void _run();
 };
 
 }

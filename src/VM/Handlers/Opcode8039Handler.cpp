@@ -35,10 +35,8 @@ Opcode8039Handler::Opcode8039Handler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode8039Handler::run()
+void Opcode8039Handler::_run()
 {
-    OpcodeHandler::run();
-
     CrossPlatform::debug("[*] plus +", DEBUG_SCRIPT);
     auto b = _vm->dataStack()->top();
     switch (b->type())

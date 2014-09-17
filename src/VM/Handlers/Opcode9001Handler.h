@@ -34,7 +34,8 @@ class Opcode9001Handler : public OpcodeHandler
 {
 public:
     Opcode9001Handler(VM* vm);
-    virtual void run();
+private:
+    void _run();
 };
 
 }

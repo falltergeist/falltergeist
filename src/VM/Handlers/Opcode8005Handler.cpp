@@ -34,10 +34,8 @@ Opcode8005Handler::Opcode8005Handler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode8005Handler::run()
+void Opcode8005Handler::_run()
 {
-    OpcodeHandler::run();
-
     auto functionIndex = _vm->popDataInteger();
     _vm->setProgramCounter(_vm->script()->function(functionIndex));
 

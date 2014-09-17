@@ -33,10 +33,8 @@ Opcode9001Handler::Opcode9001Handler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode9001Handler::run()
+void Opcode9001Handler::_run()
 {
-    OpcodeHandler::run();
-
     unsigned int value;
     unsigned short nextOpcode;
     *(_vm->script()) >> value >> nextOpcode;

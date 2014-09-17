@@ -37,10 +37,8 @@ Opcode80DEHandler::Opcode80DEHandler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode80DEHandler::run()
+void Opcode80DEHandler::_run()
 {
-    OpcodeHandler::run();
-
     auto dialog = std::shared_ptr<CritterDialogState>(new CritterDialogState());
     Game::getInstance()->setDialog(dialog);
     // @todo Implement!
