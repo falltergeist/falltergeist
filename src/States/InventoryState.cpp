@@ -59,9 +59,6 @@ void InventoryState::init()
     setFullscreen(false);
 
     auto player = Game::getInstance()->player();
-    std::shared_ptr<GameArmorItemObject> armorSlot = player->armorSlot();
-    std::shared_ptr<GameItemObject> leftHand = player->leftHandSlot();
-    std::shared_ptr<GameItemObject> rightHand = player->rightHandSlot();
 
     // --- temporary adding items START ---
 
@@ -81,6 +78,10 @@ void InventoryState::init()
     player->setRightHandSlot(weap2);
 
     // --- temporary adding items END ---
+
+    std::shared_ptr<GameArmorItemObject> armorSlot = player->armorSlot();
+    std::shared_ptr<GameItemObject> leftHand = player->leftHandSlot();
+    std::shared_ptr<GameItemObject> rightHand = player->rightHandSlot();
 
     // background
     auto background = std::shared_ptr<Image>(new Image("art/intrface/invbox.frm"));
@@ -271,21 +272,21 @@ void InventoryState::init()
     // BIG ICONS
     // icon: armor
     std::shared_ptr<GameItemObject> armor = std::dynamic_pointer_cast<GameArmorItemObject>(armorSlot);
-//    add(armor->inventoryUi());
-//    _ui.back()->setX(backgroundX+200);
-//    _ui.back()->setY(backgroundY+246);
+    add(armor->inventoryUi());
+    _ui.back()->setX(backgroundX+200);
+    _ui.back()->setY(backgroundY+246);
 
     // icon: left hand
     std::shared_ptr<GameItemObject> weapon1 = std::dynamic_pointer_cast<GameWeaponItemObject>(leftHand);
-//    add(weapon1->inventoryUi());
-//    _ui.back()->setX(backgroundX+190);
-//    _ui.back()->setY(backgroundY+348);
+    add(weapon1->inventoryUi());
+    _ui.back()->setX(backgroundX+190);
+    _ui.back()->setY(backgroundY+348);
 
     // icon: right hand
     std::shared_ptr<GameItemObject> weapon2 = std::dynamic_pointer_cast<GameWeaponItemObject>(rightHand);
-//    add(weapon2->inventoryUi());
-//    _ui.back()->setX(backgroundX+289);
-//    _ui.back()->setY(backgroundY+348);
+    add(weapon2->inventoryUi());
+    _ui.back()->setX(backgroundX+289);
+    _ui.back()->setY(backgroundY+348);
 
 }
 
