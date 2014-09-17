@@ -26,13 +26,15 @@
 
 // Falltergeist includes
 #include "../Engine/State.h"
-#include "../UI/TextArea.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+
 class GameCritterObject;
+class CritterTalkState;
+class TextArea;
 class VM;
 
 class CritterDialogState : public State
@@ -42,11 +44,8 @@ protected:
     VM* _script = 0;
     unsigned int _oldCameraX;
     unsigned int _oldCameraY;
-    std::vector<int> _functions;
-    std::vector<int> _reactions;
     std::shared_ptr<TextArea> _question;
-    std::vector<std::shared_ptr<TextArea>> _answers;
-
+    std::shared_ptr<CritterTalkState> _talk;
 
 public:
     CritterDialogState();
@@ -61,19 +60,11 @@ public:
 
     void setQuestion(std::string value);
 
-    std::vector<int>* functions();
-    std::vector<int>* reactions();
-    void deleteAnswers();
-    bool hasAnswers();
-    void addAnswer(std::string text);
-
     virtual void think();
 
     void close();
 
-    void onAnswerIn(std::shared_ptr<Event> event);
-    void onAnswerOut(std::shared_ptr<Event> event);
-    void onAnswerClick(std::shared_ptr<Event> event);
+    std::shared_ptr<CritterTalkState> talk();
 };
 
 }

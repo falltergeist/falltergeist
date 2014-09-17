@@ -41,6 +41,7 @@
 #include "../Game/GameMiscItemObject.h"
 #include "../Game/GameDoorSceneryObject.h"
 #include "../States/CritterDialogState.h"
+#include "../States/CritterTalkState.h"
 #include "../VM/VM.h"
 #include "../VM/VMStackIntValue.h"
 #include "../VM/VMStackFloatValue.h"
@@ -1280,7 +1281,7 @@ void VM::run()
             {
                 CrossPlatform::debug("[?] gsay_end", DEBUG_SCRIPT);
                 auto dialog = Game::getInstance()->dialog();
-                if (dialog->hasAnswers())
+                if (dialog->talk()->hasAnswers())
                 {
                     pushDataInteger(0);
                     return;
@@ -1336,20 +1337,20 @@ void VM::run()
                 {
                     if (game->player()->stat(game->player()->STATS_INTELLIGENCE) >= iq)
                     {
-                        auto dialog = game->dialog();
-                        dialog->reactions()->push_back(reaction);
-                        dialog->functions()->push_back(function);
-                        dialog->addAnswer(*text);
+                        auto talk = game->dialog()->talk();
+                        talk->reactions()->push_back(reaction);
+                        talk->functions()->push_back(function);
+                        talk->addAnswer(*text);
                     }
                 }
                 if (iq < 0)
                 {
                     if (game->player()->stat(game->player()->STATS_INTELLIGENCE) <= abs(iq))
                     {
-                        auto dialog = game->dialog();
-                        dialog->reactions()->push_back(reaction);
-                        dialog->functions()->push_back(function);
-                        dialog->addAnswer(*text);
+                        auto talk = game->dialog()->talk();
+                        talk->reactions()->push_back(reaction);
+                        talk->functions()->push_back(function);
+                        talk->addAnswer(*text);
                     }
                 }
 

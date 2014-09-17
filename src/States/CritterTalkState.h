@@ -23,6 +23,7 @@
 
 
 // C++ standard includes
+#include <vector>
 
 // Falltergeist includes
 #include "../Engine/State.h"
@@ -32,17 +33,36 @@
 namespace Falltergeist
 {
 
+class TextArea;
+
 class CritterTalkState : public State
 {
 private:
     int _offsetX;
     int _offsetY;
 
+    std::vector<int> _functions;
+    std::vector<int> _reactions;
+    std::vector<std::shared_ptr<TextArea>> _answers;
+
 public:
     CritterTalkState();
     CritterTalkState(int offsetX, int offsetY);
     ~CritterTalkState();
     void init();
+
+    void setOffsetX(int offsetX);
+    void setOffsetY(int offsetY);
+
+    void onAnswerIn(std::shared_ptr<Event> event);
+    void onAnswerOut(std::shared_ptr<Event> event);
+    void onAnswerClick(std::shared_ptr<Event> event);
+
+    std::vector<int>* functions();
+    std::vector<int>* reactions();
+    void deleteAnswers();
+    bool hasAnswers();
+    void addAnswer(std::string text);
 };
 
 }

@@ -20,13 +20,17 @@
 
 
 // C++ standard includes
-#include <iostream>
 
 // Falltergeist includes
 #include "../Engine/Game.h"
+#include "../Engine/Graphics/Renderer.h"
+#include "../Engine/ResourceManager.h"
+#include "../States/CritterDialogState.h"
 #include "../States/CritterTalkState.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
+#include "../UI/TextArea.h"
+#include "../VM/VM.h"
 
 // Third party includes
 
@@ -37,7 +41,8 @@ CritterTalkState::CritterTalkState() : CritterTalkState(0, 0)
 {
 }
 
-CritterTalkState::CritterTalkState(int offsetX, int offsetY) : State(), _offsetX(offsetX), _offsetY(offsetY)
+CritterTalkState::CritterTalkState(int offsetX, int offsetY)
+        : State(), _offsetX(offsetX), _offsetY(offsetY)
 {
 }
 
@@ -66,6 +71,109 @@ void CritterTalkState::init()
     add(background);
     add(reviewButton);
     add(barterButton);
+}
+
+void CritterTalkState::setOffsetX(int offsetX)
+{
+    _offsetX = offsetX;
+}
+
+void CritterTalkState::setOffsetY(int offsetY)
+{
+    _offsetY = offsetY;
+}
+
+void CritterTalkState::onAnswerClick(std::shared_ptr<Event> event)
+{
+    auto sender = dynamic_cast<TextArea*>(event->emitter());
+    auto dialog = Game::getInstance()->dialog();
+
+    int i = 0;
+    for (auto answer : _answers)
+    {
+        if (answer.get() == sender)
+        {
+            auto newOffset =  dialog->script()->script()->function(_functions.at(i));
+            auto oldOffset = dialog->script()->programCounter() - 2;
+            deleteAnswers();
+            dialog->script()->pushDataInteger(0); // arguments counter;
+            dialog->script()->pushReturnInteger(oldOffset); // return adrress
+            dialog->script()->setProgramCounter(newOffset);
+            dialog->script()->run();
+            //script()->popDataInteger(); // remove function result
+            //script()->setProgramCounter(oldOffset);
+            return;
+        }
+        ++i;
+    }
+}
+
+void CritterTalkState::onAnswerIn(std::shared_ptr<Event> event)
+{
+    auto sender = dynamic_cast<TextArea*>(event->emitter());
+    auto font3_a0a0a0ff = ResourceManager::font("font1.aaf", 0xa0a0a0ff);
+    sender->setFont(font3_a0a0a0ff);
+}
+
+void CritterTalkState::onAnswerOut(std::shared_ptr<Event> event)
+{
+    auto sender = dynamic_cast<TextArea*>(event->emitter());
+    auto font3_3ff800ff = ResourceManager::font("font1.aaf", 0x3ff800ff);
+    sender->setFont(font3_3ff800ff);
+}
+
+std::vector<int>* CritterTalkState::functions()
+{
+    return &_functions;
+}
+
+std::vector<int>* CritterTalkState::reactions()
+{
+    return &_reactions;
+}
+
+void CritterTalkState::deleteAnswers()
+{
+    while(!_answers.empty())
+    {
+        _ui.pop_back();
+        _answers.pop_back();
+    }
+    _functions.clear();
+    _reactions.clear();
+}
+
+void CritterTalkState::addAnswer(std::string text)
+{
+    std::string line = "";
+    line += 0x95;
+    line += " ";
+    line += text;
+
+    auto backgroundX = (Game::getInstance()->renderer()->width() - 640)*0.5;
+    auto backgroundY = (Game::getInstance()->renderer()->height() - 480)*0.5;
+
+    int y = 345 + backgroundY;
+    for (auto answer : _answers)
+    {
+        y += answer->height() + 12;
+    }
+
+    auto answer = std::shared_ptr<TextArea>(new TextArea(line, backgroundX+140, y));
+    answer->setBackgroundColor(0x00000001);
+    answer->setWordWrap(true);
+    answer->setWidth(370);
+
+    answer->addEventHandler("mousein", this, (EventRecieverMethod)&CritterTalkState::onAnswerIn);
+    answer->addEventHandler("mouseout", this, (EventRecieverMethod)&CritterTalkState::onAnswerOut);
+    answer->addEventHandler("mouseleftclick", this, (EventRecieverMethod)&CritterTalkState::onAnswerClick);
+    _answers.push_back(answer);
+    add(answer);
+}
+
+bool CritterTalkState::hasAnswers()
+{
+    return _answers.size() > 0;
 }
 
 }
