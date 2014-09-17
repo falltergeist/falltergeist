@@ -21,7 +21,10 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Engine/Graphics/Animation.h"
+#include "../Engine/ResourceManager.h"
 #include "../Game/GameItemObject.h"
+#include "../UI/Image.h"
 
 // Third party includes
 
@@ -65,6 +68,26 @@ unsigned int GameItemObject::inventoryFID()
 void GameItemObject::setInventoryFID(unsigned int value)
 {
     _inventoryFID = value;
+}
+
+std::shared_ptr<ActiveUI> GameItemObject::inventoryUi()
+{
+    // return image of object as it looks in inventory
+    std::shared_ptr<ActiveUI> ui;
+
+    auto frm = ResourceManager::frmFileType(this->inventoryFID());
+    if (frm)
+    {
+        if (frm->framesPerDirection() > 1)
+        {
+            ui = std::shared_ptr<Animation>(new Animation(ResourceManager::FIDtoFrmName(this->inventoryFID()), orientation()));
+        }
+        else
+        {
+            ui = std::shared_ptr<Image>(new Image(frm, orientation()));
+        }
+    }
+    return ui;
 }
 
 }

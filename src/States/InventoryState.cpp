@@ -59,6 +59,28 @@ void InventoryState::init()
     setFullscreen(false);
 
     auto player = Game::getInstance()->player();
+    std::shared_ptr<GameArmorItemObject> armorSlot = player->armorSlot();
+    std::shared_ptr<GameItemObject> leftHand = player->leftHandSlot();
+    std::shared_ptr<GameItemObject> rightHand = player->rightHandSlot();
+
+    // --- temporary adding items START ---
+
+    // PID for testing
+    // 17 Combat Armor
+    // 74 Leather Jacket
+    // 4 knife
+    // 7 spear
+    // 8 10mm pistol
+    // 20 crawbar
+
+    auto object = std::dynamic_pointer_cast<GameArmorItemObject>(Location::createObject(74));
+    auto weap1 = std::dynamic_pointer_cast<GameItemObject>(Location::createObject(7));
+    auto weap2 = std::dynamic_pointer_cast<GameItemObject>(Location::createObject(8));
+    player->setArmorSlot(object);
+    player->setLeftHandSlot(weap1);
+    player->setRightHandSlot(weap2);
+
+    // --- temporary adding items END ---
 
     // background
     auto background = std::shared_ptr<Image>(new Image("art/intrface/invbox.frm"));
@@ -146,14 +168,10 @@ void InventoryState::init()
     line2->setY(screenY+94);
     line2->texture()->fill(0x3ff800ff); // default green color
 
-    // item1
-
     auto line3 = std::shared_ptr<Image>(new Image(142, 1));
     line3->setX(screenX);
     line3->setY(screenY+134);
     line3->texture()->fill(0x3ff800ff); // default green color
-
-    // item2
 
     // label: Total Wt: (20)
     auto weight = player->carryWeight();
@@ -172,26 +190,7 @@ void InventoryState::init()
         weightLabel->setFont(ResourceManager::font("font1.aaf", 0xff0000ff));
     }
 
-    // PID for testing
-    // 17 Combat Armor
-    // 74 Leather Jacket
-    // 4 knife
-    // 7 spear
-    // 8 10mm pistol
-    // 20 crawbar
-
-    auto object = std::dynamic_pointer_cast<GameArmorItemObject>(Location::createObject(74));
-    auto weapon1 = std::dynamic_pointer_cast<GameItemObject>(Location::createObject(7));
-    auto weapon2 = std::dynamic_pointer_cast<GameItemObject>(Location::createObject(8));
-    player->setArmorSlot(object);
-    player->setLeftHandSlot(weapon1);
-    player->setRightHandSlot(weapon2);
-
-    // armor slot
-    std::shared_ptr<GameArmorItemObject> armorSlot = player->armorSlot();
-
-    // left hand
-    std::shared_ptr<GameItemObject> leftHand = player->leftHandSlot();
+    // label: left hand
     ss.str("");
     if (leftHand)
     {
@@ -217,8 +216,7 @@ void InventoryState::init()
     }
     auto leftHandLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX, screenY+100));
 
-    // right hand
-    std::shared_ptr<GameItemObject> rightHand = player->rightHandSlot();
+    // label: right hand
     ss.str("");
     if (rightHand)
     {
@@ -269,6 +267,26 @@ void InventoryState::init()
     add(upButton);
     add(downButton);
     add(doneButton);
+
+    // BIG ICONS
+    // icon: armor
+    std::shared_ptr<GameItemObject> armor = std::dynamic_pointer_cast<GameArmorItemObject>(armorSlot);
+//    add(armor->inventoryUi());
+//    _ui.back()->setX(backgroundX+200);
+//    _ui.back()->setY(backgroundY+246);
+
+    // icon: left hand
+    std::shared_ptr<GameItemObject> weapon1 = std::dynamic_pointer_cast<GameWeaponItemObject>(leftHand);
+//    add(weapon1->inventoryUi());
+//    _ui.back()->setX(backgroundX+190);
+//    _ui.back()->setY(backgroundY+348);
+
+    // icon: right hand
+    std::shared_ptr<GameItemObject> weapon2 = std::dynamic_pointer_cast<GameWeaponItemObject>(rightHand);
+//    add(weapon2->inventoryUi());
+//    _ui.back()->setX(backgroundX+289);
+//    _ui.back()->setY(backgroundY+348);
+
 }
 
 void InventoryState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)

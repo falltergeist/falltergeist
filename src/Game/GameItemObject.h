@@ -49,6 +49,8 @@ public:
 
     unsigned int inventoryFID();
     void setInventoryFID(unsigned int value);
+
+    std::shared_ptr<ActiveUI> inventoryUi();
 };
 
 }
