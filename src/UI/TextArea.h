@@ -28,7 +28,7 @@
 #include "../Engine/ActiveUI.h"
 
 // Third party includes
-#include "../../lib/libfalltergeist/libfalltergeist.h"
+#include <libfalltergeist.h>
 
 namespace Falltergeist
 {
