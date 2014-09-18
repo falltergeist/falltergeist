@@ -18,6 +18,7 @@
  */
 
 // C++ standard includes
+#include <iostream>
 
 // Falltergeist includes
 #include "../../VM/Handlers/Opcode80BAHandler.h"
@@ -39,13 +40,16 @@ Opcode80BAHandler::Opcode80BAHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80BAHandler::_run()
 {
     auto PID = _vm->popDataInteger();
-    auto pointer = _vm->popDataPointer();
+    auto pointer = std::static_pointer_cast<GameObject>(_vm->popDataPointer());
+
     int amount = 0;
-    if (auto critter = std::static_pointer_cast<GameCritterObject>(pointer))
+    auto critter = std::dynamic_pointer_cast<GameCritterObject>(pointer);
+    auto container = std::dynamic_pointer_cast<GameContainerItemObject>(pointer);
+    if (critter)
     {
         for (auto object : *critter->inventory()) if (object->PID() == PID) amount += object->amount();
     }
-    else if (auto container = std::static_pointer_cast<GameContainerItemObject>(pointer))
+    else if (container)
     {
         for (auto object : *container->inventory()) if (object->PID() == PID) amount += object->amount();
     }

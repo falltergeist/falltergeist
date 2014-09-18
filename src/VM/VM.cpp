@@ -52,6 +52,7 @@
 #include "../VM/Handlers/Opcode8034Handler.h"
 #include "../VM/Handlers/Opcode8039Handler.h"
 #include "../VM/Handlers/Opcode80BAHandler.h"
+#include "../VM/Handlers/Opcode80BCHandler.h"
 #include "../VM/Handlers/Opcode80CBHandler.h"
 #include "../VM/Handlers/Opcode80DEHandler.h"
 #include "../VM/Handlers/Opcode9001Handler.h"
@@ -145,6 +146,9 @@ void VM::run()
                 break;
             case 0x80BA:
                 opcodeHandler = std::shared_ptr<Opcode80BAHandler>(new Opcode80BAHandler(this));
+                break;
+            case 0x80BC:
+                opcodeHandler = std::shared_ptr<Opcode80BCHandler>(new Opcode80BCHandler(this));
                 break;
             case 0x80CB:
                 opcodeHandler = std::shared_ptr<Opcode80CBHandler>(new Opcode80CBHandler(this));
@@ -692,12 +696,7 @@ void VM::run()
                 pushDataInteger(found);
                 break;
             }
-            case 0x80bc:
-            {
-                CrossPlatform::debug("[+] GameObject* self_obj()", DEBUG_SCRIPT);
-                pushDataPointer(_owner);
-                break;
-            }
+            case 0x80bc: break;
             case 0x80bd:
             {
                 CrossPlatform::debug("[=] void* source_obj()", DEBUG_SCRIPT);
@@ -1228,12 +1227,12 @@ void VM::run()
                 if (!item) throw Exception("VM::opcode8116 - item not instanceof GameItemObject");
                 item->setAmount(amount);
                 // who can be critter or container
-                auto pointer = popDataPointer();
-                if (auto critter = std::static_pointer_cast<GameCritterObject>(pointer))
+                auto pointer = std::static_pointer_cast<GameObject>(popDataPointer());
+                if (auto critter = std::dynamic_pointer_cast<GameCritterObject>(pointer))
                 {
                     critter->inventory()->push_back(item);
                 }
-                else if (auto container = std::static_pointer_cast<GameContainerItemObject>(pointer))
+                else if (auto container = std::dynamic_pointer_cast<GameContainerItemObject>(pointer))
                 {
                     container->inventory()->push_back(item);
                 }
@@ -1585,7 +1584,8 @@ std::shared_ptr<void> VM::popDataPointer()
 
 void VM::pushDataPointer(std::shared_ptr<void> value)
 {
-    _dataStack.push(std::shared_ptr<VMStackPointerValue>(new VMStackPointerValue(value)));
+    auto pointer = std::shared_ptr<VMStackPointerValue>(new VMStackPointerValue(value));
+    _dataStack.push(pointer);
 }
 
 int VM::popReturnInteger()
@@ -1743,6 +1743,11 @@ VMStack* VM::dataStack()
 VMStack* VM::returnStack()
 {
     return &_returnStack;
+}
+
+std::shared_ptr<void> VM::owner()
+{
+    return _owner;
 }
 
 }

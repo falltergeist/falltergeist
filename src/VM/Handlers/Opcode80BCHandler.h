@@ -15,49 +15,27 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
-#ifndef FALLTERGEIST_GAMEITEMOBJECT_H
-#define FALLTERGEIST_GAMEITEMOBJECT_H
+#ifndef FALLTERGEIST_OPCODE80BCHANDLER_H
+#define FALLTERGEIST_OPCODE80BCHANDLER_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Game/GameObject.h"
+#include "../../VM/OpcodeHandler.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class GameItemObject : public GameObject
+class Opcode80BCHandler : public OpcodeHandler
 {
-protected:
-    unsigned int _amount = 1;
-    unsigned int _weight = 0;
-    int _inventoryFID = -1;
-    std::shared_ptr<ActiveUI> _inventoryUi;
-    std::shared_ptr<ActiveUI> _inventorySlotUi;
-    std::shared_ptr<ActiveUI> _inventoryDragUi;
-    virtual void _generateUi();
 public:
-    GameItemObject();
-    virtual ~GameItemObject();
-
-    unsigned int amount();
-    void setAmount(unsigned int value);
-
-    unsigned int weight();
-    void setWeight(unsigned int value);
-
-    int inventoryFID();
-    void setInventoryFID(int value);
-
-    std::shared_ptr<ActiveUI> inventoryUi();
-    std::shared_ptr<ActiveUI> inventorySlotUi();
-    std::shared_ptr<ActiveUI> inventoryDragUi();
+    Opcode80BCHandler(VM* vm);
+    virtual void _run();
 };
 
 }
-#endif // FALLTERGEIST_GAMEITEMOBJECT_H
+#endif // FALLTERGEIST_OPCODE80BCHANDLER_H

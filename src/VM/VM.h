@@ -66,6 +66,8 @@ public:
     void call(std::string name);
     std::shared_ptr<libfalltergeist::IntFileType> script();
 
+    std::shared_ptr<void> owner();
+
     unsigned int programCounter();
     void setProgramCounter(unsigned int value);
 

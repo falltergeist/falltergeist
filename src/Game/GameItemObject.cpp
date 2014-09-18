@@ -61,12 +61,12 @@ void GameItemObject::setWeight(unsigned int value)
     _weight = value;
 }
 
-unsigned int GameItemObject::inventoryFID()
+int GameItemObject::inventoryFID()
 {
     return _inventoryFID;
 }
 
-void GameItemObject::setInventoryFID(unsigned int value)
+void GameItemObject::setInventoryFID(int value)
 {
     _inventoryFID = value;
 }
@@ -89,6 +89,8 @@ std::shared_ptr<ActiveUI> GameItemObject::inventorySlotUi()
 void GameItemObject::_generateUi()
 {
     GameObject::_generateUi();
+
+    if (inventoryFID() == -1) return;
 
     // Big unscaled image of item
     _inventoryDragUi = std::shared_ptr<Image>(new Image(ResourceManager::FIDtoFrmName(inventoryFID())));
