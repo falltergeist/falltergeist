@@ -25,8 +25,8 @@
 #include <map>
 
 // Falltergeist includes
-#include "../Engine/State.h"
 #include "../Engine/IniFile.h"
+#include "../Engine/State.h"
 
 // Third party includes
 #include "../../lib/libfalltergeist/libfalltergeist.h"
@@ -35,7 +35,7 @@ namespace Falltergeist
 {
 class TextArea;
 class InteractiveSurface;
-    
+
 class SettingsMenuState : public State
 {
 protected:
