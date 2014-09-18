@@ -218,6 +218,8 @@ set(SOURCES main.cpp
             src/VM/Handlers/Opcode8039Handler.cpp
             src/VM/Handlers/Opcode80BAHandler.h
             src/VM/Handlers/Opcode80BAHandler.cpp
+            src/VM/Handlers/Opcode80CBHandler.h
+            src/VM/Handlers/Opcode80CBHandler.cpp
             src/VM/Handlers/Opcode80DEHandler.h
             src/VM/Handlers/Opcode80DEHandler.cpp
             src/VM/Handlers/Opcode9001Handler.h

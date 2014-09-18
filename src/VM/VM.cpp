@@ -52,6 +52,7 @@
 #include "../VM/Handlers/Opcode8034Handler.h"
 #include "../VM/Handlers/Opcode8039Handler.h"
 #include "../VM/Handlers/Opcode80BAHandler.h"
+#include "../VM/Handlers/Opcode80CBHandler.h"
 #include "../VM/Handlers/Opcode80DEHandler.h"
 #include "../VM/Handlers/Opcode9001Handler.h"
 #include "../VM/Handlers/OpcodeC001Handler.h"
@@ -144,6 +145,9 @@ void VM::run()
                 break;
             case 0x80BA:
                 opcodeHandler = std::shared_ptr<Opcode80BAHandler>(new Opcode80BAHandler(this));
+                break;
+            case 0x80CB:
+                opcodeHandler = std::shared_ptr<Opcode80CBHandler>(new Opcode80CBHandler(this));
                 break;
             case 0x80DE:
                 opcodeHandler = std::shared_ptr<Opcode80DEHandler>(new Opcode80DEHandler(this));
@@ -818,25 +822,7 @@ void VM::run()
                 }
                 break;
             }
-            case 0x80cb:
-            {
-                CrossPlatform::debug("[+] int set_critter_stat(GameCritterObject* who, int number, int value)", DEBUG_SCRIPT);
-                int value = popDataInteger();
-                int number = popDataInteger();
-                if (number > 6) throw Exception("VM::opcode80CB - number out of range:" + std::to_string(number));
-                auto object = std::static_pointer_cast<GameCritterObject>(popDataPointer());
-                if (!object) throw Exception("VM::opcode80CB pointer error");
-                object->setStat(number, value);
-                if (std::dynamic_pointer_cast<GameDudeObject>(object))
-                {
-                    pushDataInteger(3); // for dude
-                }
-                else
-                {
-                    pushDataInteger(-1); // for critter
-                }
-                break;
-            }
+            case 0x80cb: break;
             case 0x80cc:
             {
                 CrossPlatform::debug("[=] void animate_stand_obj(void* obj)", DEBUG_SCRIPT);
