@@ -21,12 +21,13 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../States/PlayerEditAlertState.h"
 #include "../Engine/Game.h"
+#include "../Engine/Graphics/Renderer.h"
 #include "../Engine/ResourceManager.h"
+#include "../States/PlayerEditAlertState.h"
 #include "../UI/Image.h"
-#include "../UI/TextArea.h"
 #include "../UI/ImageButton.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 
@@ -53,25 +54,29 @@ void PlayerEditAlertState::init()
     setModal(true);
 
     auto bg = std::shared_ptr<Image>(new Image("art/intrface/lgdialog.frm"));
-    bg->setX(164);
-    bg->setY(173);
+
+    auto bgX = (Game::getInstance()->renderer()->width() - 640)*0.5;
+    auto bgY = (Game::getInstance()->renderer()->height() - 480)*0.5;
+
+    bg->setX(bgX+164);
+    bg->setY(bgY+173);
 
     auto font1_ff9f48ff = ResourceManager::font("font1.aaf", 0xff9f48ff);
 
-    auto message = std::shared_ptr<TextArea>(new TextArea(_message.c_str(), 194, 213));
+    auto message = std::shared_ptr<TextArea>(new TextArea(_message.c_str(), bgX+194, bgY+213));
     message->setWidth(250);
     message->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     message->setFont(font1_ff9f48ff);
 
     auto doneBox = std::shared_ptr<Image>(new Image("art/intrface/donebox.frm"));
-    doneBox->setX(254);
-    doneBox->setY(270);
+    doneBox->setX(bgX+254);
+    doneBox->setY(bgY+270);
 
-    auto doneButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 264, 273));
+    auto doneButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+264, bgY+273));
     doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditAlertState::onDoneButtonClick);
 
     auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
-    auto doneLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(100), 284, 273));
+    auto doneLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(100), bgX+284, bgY+273));
     auto font3_b89c28ff = ResourceManager::font("font3.aaf", 0xb89c28ff);
     doneLabel->setFont(font3_b89c28ff);
 

@@ -21,14 +21,15 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Engine/Game.h"
+#include "../Engine/Graphics/Renderer.h"
+#include "../Engine/ResourceManager.h"
+#include "../Game/GameDudeObject.h"
 #include "../States/PlayerEditGenderState.h"
 #include "../UI/ImageList.h"
 #include "../UI/Image.h"
-#include "../Engine/ResourceManager.h"
-#include "../Engine/Game.h"
 #include "../UI/TextArea.h"
 #include "../UI/ImageButton.h"
-#include "../Game/GameDudeObject.h"
 
 // Third party includes
 
@@ -45,35 +46,37 @@ void PlayerEditGenderState::init()
     setFullscreen(false);
     setModal(true);
 
+    auto bgX = (Game::getInstance()->renderer()->width() - 640)*0.5;
+    auto bgY = (Game::getInstance()->renderer()->height() - 480)*0.5;
+
+    auto bg = std::shared_ptr<Image>(new Image("art/intrface/charwin.frm"));
+    bg->setX(bgX+236);
+    bg->setY(bgY+0);
+
     _maleImage = std::shared_ptr<ImageList>(new ImageList((std::vector<std::string>){
                                     "art/intrface/maleoff.frm",
                                     "art/intrface/maleon.frm"
-                                }, 260, 2));
+                                }, bgX+260, bgY+2));
     _maleImage->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditGenderState::onMaleButtonPress);
     if (Game::getInstance()->player()->gender() == 0) _maleImage->setCurrentImage(1); // 0 - male
 
     _femaleImage = std::shared_ptr<ImageList>(new ImageList((std::vector<std::string>){
                                       "art/intrface/femoff.frm",
                                       "art/intrface/femon.frm"
-                                  }, 310, 2));
+                                  }, bgX+310, bgY+2));
     _femaleImage->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditGenderState::onFemaleButtonPress);
     if (Game::getInstance()->player()->gender() == 1) _femaleImage->setCurrentImage(1); // 1 - female
 
-    auto bg = std::shared_ptr<Image>(new Image("art/intrface/charwin.frm"));
-    bg->setX(236);
-    bg->setY(0);
-
-
     auto doneBox = std::shared_ptr<Image>(new Image("art/intrface/donebox.frm"));
-    doneBox->setX(250);
-    doneBox->setY(42);
+    doneBox->setX(bgX+250);
+    doneBox->setY(bgY+42);
 
     auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
-    auto doneLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(100), 281, 45));
+    auto doneLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(100), bgX+281, bgY+45));
     auto font3_b89c28ff = ResourceManager::font("font3.aaf", 0xb89c28ff);
     doneLabel->setFont(font3_b89c28ff);
 
-    auto doneButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 260, 45));
+    auto doneButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+260, bgY+45));
     doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditGenderState::onDoneButtonClick);
 
     add(bg);

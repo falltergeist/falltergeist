@@ -23,15 +23,16 @@
 #include <iostream>
 
 // Falltergeist includes
-#include "../States/PlayerEditNameState.h"
 #include "../Engine/Game.h"
+#include "../Engine/Graphics/Renderer.h"
+#include "../Engine/Graphics/Texture.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Surface.h"
+#include "../Game/GameDudeObject.h"
+#include "../States/PlayerEditNameState.h"
 #include "../UI/TextArea.h"
 #include "../UI/ImageButton.h"
-#include "../Game/GameDudeObject.h"
 #include "../UI/Image.h"
-#include "../Engine/Graphics/Texture.h"
 
 // Third party includes
 
@@ -47,6 +48,9 @@ void PlayerEditNameState::init()
     State::init();
     setFullscreen(false);
     setModal(true);
+
+    auto bgX = (Game::getInstance()->renderer()->width() - 640)*0.5;
+    auto bgY = (Game::getInstance()->renderer()->height() - 480)*0.5;
 
     _keyCodes.insert(std::make_pair(SDLK_a, 'a'));
     _keyCodes.insert(std::make_pair(SDLK_b, 'b'));
@@ -88,31 +92,31 @@ void PlayerEditNameState::init()
     _timer = SDL_GetTicks();
 
     auto bg = std::shared_ptr<Image>(new Image("art/intrface/charwin.frm"));
-    bg->setX(22);
-    bg->setY(0);
+    bg->setX(bgX+22);
+    bg->setY(bgY+0);
 
     auto nameBox = std::shared_ptr<Image>(new Image("art/intrface/namebox.frm"));
-    nameBox->setX(35);
-    nameBox->setY(10);
+    nameBox->setX(bgX+35);
+    nameBox->setY(bgY+10);
 
     auto doneBox = std::shared_ptr<Image>(new Image("art/intrface/donebox.frm"));
-    doneBox->setX(35);
-    doneBox->setY(40);
+    doneBox->setX(bgX+35);
+    doneBox->setY(bgY+40);
 
     auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
-    auto doneLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(100), 65, 43));
+    auto doneLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(100), bgX+65, bgY+43));
     auto font3_b89c28ff = ResourceManager::font("font3.aaf", 0xb89c28ff);
     doneLabel->setFont(font3_b89c28ff);
 
-    auto doneButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 45, 43));
+    auto doneButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+45, bgY+43));
     doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditNameState::onDoneButtonClick);
 
-    _name = std::shared_ptr<TextArea>(new TextArea(Game::getInstance()->player()->name(), 43, 15));
+    _name = std::shared_ptr<TextArea>(new TextArea(Game::getInstance()->player()->name(), bgX+43, bgY+15));
     _name->addEventHandler("keyup", this, (EventRecieverMethod) &PlayerEditNameState::onKeyboardPress);
 
     _cursor = std::shared_ptr<Image>(new Image(5, 8));
-    _cursor->setX(83);
-    _cursor->setY(15);
+    _cursor->setX(bgX+83);
+    _cursor->setY(bgY+15);
     _cursor->texture()->fill(0x3FF800FF);
 
     add(bg);
@@ -173,7 +177,7 @@ void PlayerEditNameState::onKeyboardPress(std::shared_ptr<KeyboardEvent> event)
 }
 
 void PlayerEditNameState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
-{    
+{
     auto state = dynamic_cast<PlayerEditNameState*>(event->reciever());
     std::string text(state->_name->text());
     if (text.length() > 0)
@@ -188,7 +192,8 @@ PlayerEditNameState::~PlayerEditNameState()
 }
 
 void PlayerEditNameState::think()
-{   
+{
+    auto bgX = (Game::getInstance()->renderer()->width() - 640)*0.5;
     State::think();
     if (SDL_GetTicks() - _timer > 300)
     {
@@ -203,7 +208,7 @@ void PlayerEditNameState::think()
         _timer = SDL_GetTicks();
     }
 
-    _cursor->setX(_name->width() + 45);
+    _cursor->setX(bgX+_name->width() + 45);
 }
 
 }
