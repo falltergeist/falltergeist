@@ -25,7 +25,7 @@
 #include <memory>
 
 // Falltergeist includes
-#include "../../lib/libfalltergeist/libfalltergeist.h"
+#include <libfalltergeist.h>
 
 // Third party includes
 

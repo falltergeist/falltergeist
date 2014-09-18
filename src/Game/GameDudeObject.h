@@ -25,7 +25,7 @@
 
 // Falltergeist includes
 #include "../Game/GameCritterObject.h"
-#include "../../lib/libfalltergeist/libfalltergeist.h"
+#include <libfalltergeist.h>
 
 // Third party includes
 
