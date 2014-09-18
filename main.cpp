@@ -30,7 +30,7 @@
 #include "src/Engine/AudioMixer.h"
 #include "src/Engine/Graphics/Texture.h"
 #include "src/Engine/Graphics/OpenGLRenderer.h"
-#include "lib/libfalltergeist/libfalltergeist.h"
+#include <libfalltergeist.h>
 
 // Third party includes
 

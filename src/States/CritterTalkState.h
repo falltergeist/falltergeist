@@ -65,6 +65,7 @@ public:
     void addAnswer(std::string text);
 
     void onReviewButtonClick(std::shared_ptr<Event> event);
+    void onBarterButtonClick(std::shared_ptr<Event> event);
 };
 
 }

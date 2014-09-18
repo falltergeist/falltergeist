@@ -25,6 +25,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
 #include "../Engine/ResourceManager.h"
+#include "../States/CritterBarterState.h"
 #include "../States/CritterDialogReviewState.h"
 #include "../States/CritterDialogState.h"
 #include "../States/CritterTalkState.h"
@@ -60,16 +61,15 @@ void CritterTalkState::init()
     setModal(false);
 
     auto background = std::shared_ptr<Image>(new Image("art/intrface/di_talk.frm"));
-    auto backgroundOffsetX = _offsetX;
-    auto backgroundOffsetY = _offsetY + 291;
-    background->setX(backgroundOffsetX);
-    background->setY(backgroundOffsetY);
+    background->setX(_offsetX);
+    background->setY(_offsetY);
 
     // Interface buttons
-    auto reviewButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_REVIEW_BUTTON, _offsetX+13, _offsetY+445));
+    auto reviewButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_REVIEW_BUTTON, _offsetX+13, _offsetY+154));
     reviewButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &CritterTalkState::onReviewButtonClick);
 
-    auto barterButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, _offsetX+593, _offsetY+331));
+    auto barterButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, _offsetX+593, _offsetY+40));
+    barterButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &CritterTalkState::onBarterButtonClick);
 
     add(background);
     add(reviewButton);
@@ -184,6 +184,14 @@ void CritterTalkState::onReviewButtonClick(std::shared_ptr<Event> event)
     // FIXME : don't create new state each time the button is clicked
     auto critterReviewDialogState = std::shared_ptr<CritterDialogReviewState>(new CritterDialogReviewState());
     Game::getInstance()->pushState(critterReviewDialogState);
+}
+
+void CritterTalkState::onBarterButtonClick(std::shared_ptr<Event> event)
+{
+    // FIXME : don't create new state each time the button is clicked
+    auto critterBarterState = std::shared_ptr<CritterBarterState>(new CritterBarterState(_offsetX, _offsetY));
+    Game::getInstance()->popState();
+    Game::getInstance()->pushState(critterBarterState);
 }
 
 }

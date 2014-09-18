@@ -26,7 +26,7 @@ find_package(LIBFALLTERGEIST REQUIRED)
 if(NOT LIBFALLTERGEIST_FOUND)
           message(FATAL_ERROR "libfalltergeist library not found")
 endif(NOT LIBFALLTERGEIST_FOUND)
-include_directories(LIBFALLTERGEIST_INCLUDE_DIR)
+include_directories(${LIBFALLTERGEIST_INCLUDE_DIR})
 
 find_package(SDL REQUIRED)
 if(NOT SDL_FOUND)
@@ -144,6 +144,8 @@ set(SOURCES main.cpp
             src/Game/GameWallObject.h
             src/Game/GameMiscObject.cpp
             src/Game/GameMiscObject.h
+            src/States/CritterBarterState.cpp
+            src/States/CritterBarterState.h
             src/States/CritterDialogReviewState.cpp
             src/States/CritterDialogReviewState.h
             src/States/CritterDialogState.cpp
@@ -242,4 +244,3 @@ add_definitions (-std=c++11 -Wall)
 set(CMAKE_BUILD_TYPE Debug)
 add_executable(falltergeist ${SOURCES})
 target_link_libraries(falltergeist ${SDL_LIBRARY} ${OPENGL_LIBRARIES} ${LIBFALLTERGEIST_LIBRARY})
-

@@ -15,39 +15,42 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-#ifndef FALLTERGEIST_IMAGE_H
-#define FALLTERGEIST_IMAGE_H
+#ifndef FALLTERGEIST_CRITTER_BARTER_STATE_H
+#define FALLTERGEIST_CRITTER_BARTER_STATE_H
 
 // C++ standard includes
-#include <string>
 
 // Falltergeist includes
-#include "../Engine/ActiveUI.h"
-#include "../Engine/UI.h"
+#include "../Engine/State.h"
 
 // Third party includes
-#include <libfalltergeist.h>
-
 
 namespace Falltergeist
 {
 
-class Image : public ActiveUI
+class CritterBarterState : public State
 {
-protected:
-    std::shared_ptr<Texture> _imageTexture;
+private:
+    int _offsetX;
+    int _offsetY;
 public:
-    Image(std::string filename);
-    Image(unsigned int width, unsigned int height);
-    Image(std::shared_ptr<Image> image);
-    Image(std::shared_ptr<Texture> texture);
-    Image(std::shared_ptr<libfalltergeist::FrmFileType> frm, unsigned int direction);
-    unsigned int width();
-    unsigned int height();
-    ~Image();
+    CritterBarterState(int offsetX, int offsetY);
+    CritterBarterState();
+    ~CritterBarterState();
+
+    void init();
+
+    int offsetX();
+    void setOffsetX(int offsetX);
+    int offsetY();
+    void setOffsetY(int offsetY);
+
+    void onTalkButtonClick(std::shared_ptr<Event> event);
 };
 
 }
-#endif // FALLTERGEIST_IMAGE_H
+
+#endif // FALLTERGEIST_CRITTER_BARTER_STATE_H

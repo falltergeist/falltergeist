@@ -61,10 +61,10 @@ void CritterDialogReviewState::init()
     doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &CritterDialogReviewState::onDoneButtonClick);
 
     auto upButton = std::shared_ptr<ImageButton>(
-            new ImageButton(ImageButton::TYPE_DIALOG_BIG_UP_BUTTON, backgroundX + 476, backgroundY + 154));
+            new ImageButton(ImageButton::TYPE_DIALOG_BIG_UP_ARROW, backgroundX + 476, backgroundY + 154));
 
     auto downButton = std::shared_ptr<ImageButton>(
-            new ImageButton(ImageButton::TYPE_DIALOG_BIG_DOWN_BUTTON, backgroundX + 476, backgroundY + 192));
+            new ImageButton(ImageButton::TYPE_DIALOG_BIG_DOWN_ARROW, backgroundX + 476, backgroundY + 192));
 
     add(background);
     add(doneButton);
