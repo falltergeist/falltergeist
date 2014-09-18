@@ -58,7 +58,7 @@ void ImageList::setCurrentImage(unsigned int number)
 
 void ImageList::addImage(std::shared_ptr<Image> image)
 {
-    _images.push_back(image);
+    images()->push_back(image);
 }
 
 void ImageList::addImage(std::string filename)
@@ -68,7 +68,7 @@ void ImageList::addImage(std::string filename)
 
 std::shared_ptr<Texture> ImageList::texture()
 {
-    return _images.at(currentImage())->texture();
+    return images()->at(currentImage())->texture();
 }
 
 std::vector<std::shared_ptr<Image>>* ImageList::images()

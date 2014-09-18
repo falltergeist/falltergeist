@@ -38,8 +38,8 @@ void ActiveUI::handle(std::shared_ptr<Event> event)
     {
         if (!texture()) return;
 
-        int x = mouseEvent->x() - this->x();
-        int y = mouseEvent->y() - this->y();
+        int x = mouseEvent->x() - this->x() + this->xOffset();
+        int y = mouseEvent->y() - this->y() + this->yOffset();
 
         std::shared_ptr<MouseEvent> newEvent = std::shared_ptr<MouseEvent>(new MouseEvent(mouseEvent));
         //auto emitter = std::shared_ptr<ActiveUI>(this);

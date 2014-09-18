@@ -199,12 +199,12 @@ void Location::init()
 
     // Just for testing
     {
-        auto armor = createObject(0x00000001); // leather armor
+        auto armor = createObject(0x00000003); // powered armor
         _player->setArmorSlot(std::dynamic_pointer_cast<GameArmorItemObject>(armor));
-        auto leftHand = createObject(0x00000008); // 10mm pistol
+        auto leftHand = createObject(0x0000000C); // minigun
         _player->setLeftHandSlot(std::dynamic_pointer_cast<GameWeaponItemObject>(leftHand));
 
-        auto rightHand = createObject(0x00000004); // knife
+        auto rightHand = createObject(0x00000007); // spear
         _player->setRightHandSlot(std::dynamic_pointer_cast<GameWeaponItemObject>(rightHand));
     }
 

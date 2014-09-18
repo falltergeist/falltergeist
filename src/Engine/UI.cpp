@@ -104,14 +104,14 @@ void UI::setYOffset(int yOffset)
 
 unsigned int UI::width()
 {
-    if (!_texture) return 0;
-    return _texture->width();
+    if (!texture()) return 0;
+    return texture()->width();
 }
 
 unsigned int UI::height()
 {
-    if (!_texture) return 0;
-    return _texture->height();
+    if (!texture()) return 0;
+    return texture()->height();
 }
 
 }

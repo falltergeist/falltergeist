@@ -39,6 +39,9 @@ public:
     virtual void init();
 
     void onDoneButtonClick(std::shared_ptr<MouseEvent> event);
+    void onSlotMouseDown(std::shared_ptr<MouseEvent> event);
+    void onSlotMouseUp(std::shared_ptr<MouseEvent> event);
+    void onSlotDrag(std::shared_ptr<MouseEvent> event);
 };
 
 }

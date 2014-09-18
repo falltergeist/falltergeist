@@ -27,6 +27,7 @@
 #include "../Engine/Graphics/Renderer.h"
 #include "../Engine/Location.h"
 #include "../Engine/ResourceManager.h"
+#include "../Engine/State.h"
 #include "../Game/GameCritterObject.h"
 #include "../Game/GameDudeObject.h"
 #include "../Game/GameObject.h"
@@ -36,6 +37,7 @@
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
+#include "../UI/ImageList.h"
 
 // Third party includes
 
@@ -77,7 +79,7 @@ void InventoryState::init()
     auto doneButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+438, backgroundY+328));
 
     // events
-    doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &GameMenuState::onDoneButtonClick);
+    doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &InventoryState::onDoneButtonClick);
 
     // screen
     auto screenX = backgroundX + background->width() - 202;
@@ -252,28 +254,73 @@ void InventoryState::init()
 
     // BIG ICONS
     // icon: armor
-    auto armorUi = armorSlot->inventorySlotUi();
+    std::shared_ptr<ImageList> armorUi = std::shared_ptr<ImageList>(new ImageList());
+    armorUi->addImage(std::shared_ptr<Image>(new Image(armorSlot->inventorySlotUi()->texture())));
+    armorUi->addImage(std::shared_ptr<Image>(new Image(armorSlot->inventoryDragUi()->texture())));
     armorUi->setX(backgroundX + 200 - armorUi->width()*0.5);
     armorUi->setY(backgroundY + 215 - armorUi->height()*0.5);
     add(armorUi);
 
+    armorUi->addEventHandler("mousedrag", armorSlot.get(), (EventRecieverMethod) &InventoryState::onSlotDrag);
+    armorUi->addEventHandler("mouseleftdown", armorSlot.get(), (EventRecieverMethod) &InventoryState::onSlotMouseDown);
+    armorUi->addEventHandler("mouseleftup", armorSlot.get(), (EventRecieverMethod) &InventoryState::onSlotMouseUp);
+
     // icon: left hand
-    auto leftHandUi = leftHand->inventorySlotUi();
+    std::shared_ptr<ImageList> leftHandUi = std::shared_ptr<ImageList>(new ImageList());
+    leftHandUi->addImage(std::shared_ptr<Image>(new Image(leftHand->inventorySlotUi()->texture())));
+    leftHandUi->addImage(std::shared_ptr<Image>(new Image(leftHand->inventoryDragUi()->texture())));
     leftHandUi->setX(backgroundX + 200 - leftHandUi->width()*0.5);
     leftHandUi->setY(backgroundY + 317 - leftHandUi->height()*0.5);
     add(leftHandUi);
 
+    leftHandUi->addEventHandler("mousedrag", leftHand.get(), (EventRecieverMethod) &InventoryState::onSlotDrag);
+    leftHandUi->addEventHandler("mouseleftdown", leftHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseDown);
+    leftHandUi->addEventHandler("mouseleftup", leftHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseUp);
+
     // icon: right hand
-    auto rightHandUi = rightHand->inventorySlotUi();
+    std::shared_ptr<ImageList> rightHandUi = std::shared_ptr<ImageList>(new ImageList());
+    rightHandUi->addImage(std::shared_ptr<Image>(new Image(rightHand->inventorySlotUi()->texture())));
+    rightHandUi->addImage(std::shared_ptr<Image>(new Image(rightHand->inventoryDragUi()->texture())));
     rightHandUi->setX(backgroundX + 290 - rightHandUi->width()*0.5);
     rightHandUi->setY(backgroundY + 317 - rightHandUi->height()*0.5);
     add(rightHandUi);
+
+    rightHandUi->addEventHandler("mousedrag", rightHand.get(), (EventRecieverMethod) &InventoryState::onSlotDrag);
+    rightHandUi->addEventHandler("mouseleftdown", rightHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseDown);
+    rightHandUi->addEventHandler("mouseleftup", rightHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseUp);
 
 }
 
 void InventoryState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
 {
     Game::getInstance()->popState();
+
+}
+
+void InventoryState::onSlotMouseDown(std::shared_ptr<MouseEvent> event)
+{
+    auto itemUi = dynamic_cast<ImageList*>(event->emitter());
+    itemUi->setCurrentImage(1);
+    itemUi->setX(event->x() - itemUi->width()*0.5);
+    itemUi->setY(event->y() - itemUi->height()*0.5);
+}
+
+void InventoryState::onSlotMouseUp(std::shared_ptr<MouseEvent> event)
+{
+    auto itemUi = dynamic_cast<ImageList*>(event->emitter());
+    itemUi->setCurrentImage(0);
+    itemUi->setX(event->x() - itemUi->width()*0.5);
+    itemUi->setY(event->y() - itemUi->height()*0.5);
+}
+
+void InventoryState::onSlotDrag(std::shared_ptr<MouseEvent> event)
+{
+    //auto item = dynamic_cast<GameItemObject*>(event->reciever());
+    auto itemUi = dynamic_cast<ImageList*>(event->emitter());
+    //auto dragUi = item->inventoryDragUi();
+    itemUi->setX(itemUi->x() + event->xOffset());
+    itemUi->setY(itemUi->y() + event->yOffset());
+    //Game::getInstance()->states()->back()->ui()->push_back(dragUi);
 }
 
 }
