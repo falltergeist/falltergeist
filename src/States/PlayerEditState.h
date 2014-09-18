@@ -26,16 +26,16 @@
 
 // Falltergeist includes
 #include "../Engine/State.h"
-#include "../UI/ImageButton.h"
-#include "../UI/TextArea.h"
 #include "../UI/BigCounter.h"
 #include "../UI/HiddenMask.h"
+#include "../UI/ImageButton.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-    
+
 class PlayerEditState : public State
 {
 protected:
@@ -81,5 +81,5 @@ public:
 };
 
 }
-#endif	/* FALLTERGEIST_PLAYEREDITSTATE_H */
+#endif /* FALLTERGEIST_PLAYEREDITSTATE_H */
 
