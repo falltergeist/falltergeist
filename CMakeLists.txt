@@ -144,6 +144,8 @@ set(SOURCES main.cpp
             src/Game/GameWallObject.h
             src/Game/GameMiscObject.cpp
             src/Game/GameMiscObject.h
+            src/States/CritterBarterState.cpp
+            src/States/CritterBarterState.h
             src/States/CritterDialogReviewState.cpp
             src/States/CritterDialogReviewState.h
             src/States/CritterDialogState.cpp

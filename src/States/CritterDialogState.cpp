@@ -83,7 +83,7 @@ void CritterDialogState::init()
     add(_question);
 
     _talk->setOffsetX(backgroundX);
-    _talk->setOffsetY(backgroundY);
+    _talk->setOffsetY(backgroundY + 291);
 
     Game::getInstance()->pushState(_talk);
 }

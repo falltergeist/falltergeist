@@ -18,12 +18,10 @@
  *
  */
 
-#ifndef FALLTERGEIST_CRITTER_TALK_STATE_H
-#define FALLTERGEIST_CRITTER_TALK_STATE_H
-
+#ifndef FALLTERGEIST_CRITTER_BARTER_STATE_H
+#define FALLTERGEIST_CRITTER_BARTER_STATE_H
 
 // C++ standard includes
-#include <vector>
 
 // Falltergeist includes
 #include "../Engine/State.h"
@@ -33,41 +31,26 @@
 namespace Falltergeist
 {
 
-class TextArea;
-
-class CritterTalkState : public State
+class CritterBarterState : public State
 {
 private:
     int _offsetX;
     int _offsetY;
-
-    std::vector<int> _functions;
-    std::vector<int> _reactions;
-    std::vector<std::shared_ptr<TextArea>> _answers;
-
 public:
-    CritterTalkState();
-    CritterTalkState(int offsetX, int offsetY);
-    ~CritterTalkState();
+    CritterBarterState(int offsetX, int offsetY);
+    CritterBarterState();
+    ~CritterBarterState();
+
     void init();
 
+    int offsetX();
     void setOffsetX(int offsetX);
+    int offsetY();
     void setOffsetY(int offsetY);
 
-    void onAnswerIn(std::shared_ptr<Event> event);
-    void onAnswerOut(std::shared_ptr<Event> event);
-    void onAnswerClick(std::shared_ptr<Event> event);
-
-    std::vector<int>* functions();
-    std::vector<int>* reactions();
-    void deleteAnswers();
-    bool hasAnswers();
-    void addAnswer(std::string text);
-
-    void onReviewButtonClick(std::shared_ptr<Event> event);
-    void onBarterButtonClick(std::shared_ptr<Event> event);
+    void onTalkButtonClick(std::shared_ptr<Event> event);
 };
 
 }
 
-#endif // FALLTERGEIST_CRITTER_TALK_STATE_H
+#endif // FALLTERGEIST_CRITTER_BARTER_STATE_H
