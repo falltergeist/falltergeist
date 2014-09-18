@@ -177,44 +177,44 @@ int GameCritterObject::skillValue(unsigned int num)
             if (trait(TRAITS_GOOD_NATURED)) value -= 10;
             break;
         case SKILLS_FIRST_AID:
-            value += 2*(statTotal(STATS_PERCEPTION) + statTotal(STATS_INTELLIGENCE));
+            value += 20 + 2*(statTotal(STATS_PERCEPTION) + statTotal(STATS_INTELLIGENCE));
             if (trait(TRAITS_GOOD_NATURED)) value += 15;
             break;
         case SKILLS_DOCTOR:
-            value += 5 + (statTotal(STATS_PERCEPTION) + statTotal(STATS_INTELLIGENCE));
+            value += 20 + 5 + (statTotal(STATS_PERCEPTION) + statTotal(STATS_INTELLIGENCE));
             if (trait(TRAITS_GOOD_NATURED)) value += 15;
             break;
         case SKILLS_SNEAK:
-            value += 5 + 3*statTotal(STATS_AGILITY);
+            value += 20 + 5 + 3*statTotal(STATS_AGILITY);
             break;
         case SKILLS_LOCKPICK:
-            value += 10 + (statTotal(STATS_PERCEPTION) + statTotal(STATS_AGILITY));
+            value += 20 + 10 + (statTotal(STATS_PERCEPTION) + statTotal(STATS_AGILITY));
             break;
         case SKILLS_STEAL:
-            value += 3*statTotal(STATS_AGILITY);
+            value += 20 + 3*statTotal(STATS_AGILITY);
             break;
         case SKILLS_TRAPS:
-            value += 10 + (statTotal(STATS_PERCEPTION) + statTotal(STATS_AGILITY));
+            value += 20 + 10 + (statTotal(STATS_PERCEPTION) + statTotal(STATS_AGILITY));
             break;
         case SKILLS_SCIENCE:
-            value += 4*statTotal(STATS_INTELLIGENCE);
+            value += 20 + 4*statTotal(STATS_INTELLIGENCE);
             break;
         case SKILLS_REPAIR:
-            value += 3*statTotal(STATS_INTELLIGENCE);
+            value += 20 + 3*statTotal(STATS_INTELLIGENCE);
             break;
         case SKILLS_SPEECH:
-            value += 5*statTotal(STATS_CHARISMA);
+            value += 20 + 5*statTotal(STATS_CHARISMA);
             if (trait(TRAITS_GOOD_NATURED)) value += 15;
             break;
         case SKILLS_BARTER:
-            value += 4*statTotal(STATS_CHARISMA);
+            value += 20 + 4*statTotal(STATS_CHARISMA);
             if (trait(TRAITS_GOOD_NATURED)) value += 15;
             break;
         case SKILLS_GAMBLING:
-            value += 5*statTotal(STATS_LUCK);
+            value += 20 + 5*statTotal(STATS_LUCK);
             break;
         case SKILLS_OUTDOORSMAN:
-            value += 2 * (statTotal(STATS_ENDURANCE) + statTotal(STATS_INTELLIGENCE));
+            value += 20 + 2*(statTotal(STATS_ENDURANCE) + statTotal(STATS_INTELLIGENCE));
             break;
     }
 
