@@ -252,22 +252,22 @@ void InventoryState::init()
 
     // BIG ICONS
     // icon: armor
-    auto armor = std::dynamic_pointer_cast<GameArmorItemObject>(armorSlot);
-    add(armor->inventorySlotUi());
-    _ui.back()->setX(backgroundX + 200 - _ui.back()->width()*0.5);
-    _ui.back()->setY(backgroundY + 215 - _ui.back()->height()*0.5);
+    auto armorUi = armorSlot->inventorySlotUi();
+    armorUi->setX(backgroundX + 200 - armorUi->width()*0.5);
+    armorUi->setY(backgroundY + 215 - armorUi->height()*0.5);
+    add(armorUi);
 
     // icon: left hand
-    auto weapon1 = std::dynamic_pointer_cast<GameWeaponItemObject>(leftHand);
-    add(weapon1->inventorySlotUi());
-    _ui.back()->setX(backgroundX + 200 - _ui.back()->width()*0.5);
-    _ui.back()->setY(backgroundY + 317 - _ui.back()->height()*0.5);
+    auto leftHandUi = leftHand->inventorySlotUi();
+    leftHandUi->setX(backgroundX + 200 - leftHandUi->width()*0.5);
+    leftHandUi->setY(backgroundY + 317 - leftHandUi->height()*0.5);
+    add(leftHandUi);
 
     // icon: right hand
-    auto weapon2 = std::dynamic_pointer_cast<GameWeaponItemObject>(rightHand);
-    add(weapon2->inventorySlotUi());
-    _ui.back()->setX(backgroundX + 290 - _ui.back()->width()*0.5);
-    _ui.back()->setY(backgroundY + 317 - _ui.back()->height()*0.5);
+    auto rightHandUi = rightHand->inventorySlotUi();
+    rightHandUi->setX(backgroundX + 290 - rightHandUi->width()*0.5);
+    rightHandUi->setY(backgroundY + 317 - rightHandUi->height()*0.5);
+    add(rightHandUi);
 
 }
 
