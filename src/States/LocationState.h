@@ -32,19 +32,20 @@
 
 namespace Falltergeist
 {
-class Location;
 class Animation;
-class InteractiveSurface;
 class GameObject;
-class Image;
 class Hexagon;
+class Image;
+class InteractiveSurface;
+class Location;
+class LocationCamera;
 
 class LocationState : public State
 {
 protected:
     std::vector<std::shared_ptr<Hexagon>> _hexagons;
     unsigned int _currentElevation = 0;
-
+    std::shared_ptr<LocationCamera> _camera;
 
     std::shared_ptr<Location> _location;
     std::shared_ptr<Image> _floor;

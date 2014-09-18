@@ -272,21 +272,21 @@ void InventoryState::init()
     // BIG ICONS
     // icon: armor
     std::shared_ptr<GameItemObject> armor = std::dynamic_pointer_cast<GameArmorItemObject>(armorSlot);
-    add(armor->inventoryUi());
-    _ui.back()->setX(backgroundX+200);
-    _ui.back()->setY(backgroundY+246);
+    add(armor->inventorySlotUi());
+    _ui.back()->setX(backgroundX + 200 - _ui.back()->width()*0.5);
+    _ui.back()->setY(backgroundY + 215 - _ui.back()->height()*0.5);
 
     // icon: left hand
     std::shared_ptr<GameItemObject> weapon1 = std::dynamic_pointer_cast<GameWeaponItemObject>(leftHand);
-    add(weapon1->inventoryUi());
-    _ui.back()->setX(backgroundX+190);
-    _ui.back()->setY(backgroundY+348);
+    add(weapon1->inventorySlotUi());
+    _ui.back()->setX(backgroundX + 200 - _ui.back()->width()*0.5);
+    _ui.back()->setY(backgroundY + 317 - _ui.back()->height()*0.5);
 
     // icon: right hand
     std::shared_ptr<GameItemObject> weapon2 = std::dynamic_pointer_cast<GameWeaponItemObject>(rightHand);
-    add(weapon2->inventoryUi());
-    _ui.back()->setX(backgroundX+289);
-    _ui.back()->setY(backgroundY+348);
+    add(weapon2->inventorySlotUi());
+    _ui.back()->setX(backgroundX + 290 - _ui.back()->width()*0.5);
+    _ui.back()->setY(backgroundY + 317 - _ui.back()->height()*0.5);
 
 }
 

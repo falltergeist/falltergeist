@@ -66,6 +66,7 @@ void LocationState::init()
     if (initialized()) return;
     State::init();
 
+    auto game = Game::getInstance();
     /*
     // Creating 200x200 hexagonal map
     unsigned int index = 0;
@@ -82,16 +83,17 @@ void LocationState::init()
     // Creating links between hexagons
     for (index = 0; index != 200*200; ++index)
     {
-        //
+        // @todo
     }
 
     // Current elevation on the map
     auto mapFileType = ResourceManager::mapFileType("maps/artemple.map");
     _currentElevation = mapFileType->defaultElevation();
 
+    _camera = std::shared_ptr<LocationCamera>(new LocationCamera(game->renderer()->width(), game->renderer()->height(), 0, 0));
+
     */
 
-    auto game = Game::getInstance();
     game->mouse()->setType(Mouse::ACTION);
 
     _initPanel();

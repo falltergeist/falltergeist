@@ -48,7 +48,7 @@ void SDLRenderer::init()
     Renderer::init();
 
     std::string message =  "[VIDEO] - SDL_SetVideoMode " + std::to_string(_width) + "x" + std::to_string(_height) + "x" +std::to_string(32)+ " - ";
-    if (!SDL_SetVideoMode(_width, _height, 32, SDL_SWSURFACE|SDL_DOUBLEBUF))
+    if (!SDL_SetVideoMode(_width, _height, 32, SDL_HWSURFACE|SDL_DOUBLEBUF))
     {
         throw Exception(message + "[FAIL]");
     }
@@ -74,7 +74,7 @@ void SDLRenderer::registerTexture(std::shared_ptr<Texture> texture)
     if (texture->id()) return; // if registered
 
     // Creating SDL surface                                                                            //red       //green     //blue      //alpha
-    SDL_Surface* tmpSurface = SDL_CreateRGBSurface(SDL_SRCALPHA, texture->width(), texture->height(), 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+    SDL_Surface* tmpSurface = SDL_CreateRGBSurface(SDL_SRCALPHA|SDL_HWSURFACE, texture->width(), texture->height(), 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
     if (tmpSurface == 0) throw Exception(SDL_GetError());
     // Copying data from texture to surface
     unsigned int* pixels = (unsigned int*) tmpSurface->pixels;

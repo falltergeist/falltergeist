@@ -54,7 +54,7 @@ protected:
     std::vector<VM*> _scripts;
     Location* _location = 0;
     std::shared_ptr<ActiveUI> _ui;
-    void _generateUi();
+    virtual void _generateUi();
 public:
     enum { TYPE_ITEM = 0, TYPE_CRITTER, TYPE_SCENERY, TYPE_WALL, TYPE_TILE, TYPE_MISC, TYPE_DUDE };
     enum { TYPE_ITEM_ARMOR = 0, TYPE_ITEM_CONTAINER, TYPE_ITEM_DRUG, TYPE_ITEM_WEAPON, TYPE_ITEM_AMMO, TYPE_ITEM_MISC, TYPE_ITEM_KEY };

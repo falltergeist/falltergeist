@@ -139,4 +139,47 @@ void Texture::fill(unsigned int color)
     }
 }
 
+std::shared_ptr<Texture> Texture::resize(unsigned int width, unsigned int height)
+{
+    auto resized = std::shared_ptr<Texture>(new Texture(width, height));
+
+    double _stretch_factor_x = static_cast<double>(width)  / static_cast<double>(this->width());
+    double _stretch_factor_y = static_cast<double>(height) / static_cast<double>(this->height());
+
+    //Run across all Y pixels.
+    for(unsigned int y = 0; y < this->height(); y++)
+    {
+        //Run across all X pixels.
+        for(unsigned int x = 0; x < this->width(); x++)
+        {
+            //Draw _stretch_factor_y pixels for each Y pixel.
+            for(unsigned int o_y = 0; o_y < _stretch_factor_y; ++o_y)
+            {
+                //Draw _stretch_factor_x pixels for each X pixel.
+                for(unsigned int o_x = 0; o_x < _stretch_factor_x; ++o_x)
+                {
+                    resized->setPixel(static_cast<unsigned int>(_stretch_factor_x * x) + o_x, static_cast<unsigned int>(_stretch_factor_y * y) + o_y, this->pixel(x, y));
+                }
+            }
+        }
+    }
+    return resized;
+}
+
+std::shared_ptr<Texture> Texture::fitTo(unsigned int width, unsigned int height)
+{
+    double widthRatio = static_cast<double>(width) / static_cast<double>(this->width());
+    double heightRatio = static_cast<double>(height) / static_cast<double>(this->height());
+
+    unsigned int newWidth = static_cast<unsigned int>(static_cast<double>(this->width()) * static_cast<double>(heightRatio));
+
+    if ( newWidth <= width)
+    {
+        return this->resize(newWidth, height);
+    }
+    unsigned int newHeight = static_cast<unsigned int>(static_cast<double>(this->height()) * static_cast<double>(widthRatio));
+
+    return this->resize(width, newHeight);
+}
+
 }

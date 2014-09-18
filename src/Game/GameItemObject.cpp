@@ -22,6 +22,7 @@
 
 // Falltergeist includes
 #include "../Engine/Graphics/Animation.h"
+#include "../Engine/Graphics/Texture.h"
 #include "../Engine/ResourceManager.h"
 #include "../Game/GameItemObject.h"
 #include "../UI/Image.h"
@@ -70,25 +71,39 @@ void GameItemObject::setInventoryFID(unsigned int value)
     _inventoryFID = value;
 }
 
+std::shared_ptr<ActiveUI> GameItemObject::inventoryDragUi()
+{
+    return _inventoryDragUi;
+}
+
 std::shared_ptr<ActiveUI> GameItemObject::inventoryUi()
 {
-    // return image of object as it looks in inventory
-    std::shared_ptr<ActiveUI> ui;
-
-    auto frm = ResourceManager::frmFileType(this->inventoryFID());
-    if (frm)
-    {
-        if (frm->framesPerDirection() > 1)
-        {
-            ui = std::shared_ptr<Animation>(new Animation(ResourceManager::FIDtoFrmName(this->inventoryFID()), orientation()));
-        }
-        else
-        {
-            ui = std::shared_ptr<Image>(new Image(frm, orientation()));
-        }
-    }
-    return ui;
+    return _inventoryUi;
 }
+
+std::shared_ptr<ActiveUI> GameItemObject::inventorySlotUi()
+{
+    return _inventorySlotUi;
+}
+
+void GameItemObject::_generateUi()
+{
+    GameObject::_generateUi();
+
+    // Big unscaled image of item
+    _inventoryDragUi = std::shared_ptr<Image>(new Image(ResourceManager::FIDtoFrmName(inventoryFID())));
+
+    // Small scaled image
+    auto inventoryUiTexture = _inventoryDragUi->texture()->fitTo(57, 40);
+    _inventoryUi = std::shared_ptr<Image>(new Image(inventoryUiTexture->width(),inventoryUiTexture->height()));
+    _inventoryUi->setTexture(inventoryUiTexture);
+
+    // Medium scaled image
+    auto inventorySlotUiTexture = _inventoryDragUi->texture()->fitTo(88, 58);
+    _inventorySlotUi = std::shared_ptr<Image>(new Image(inventorySlotUiTexture->width(),inventorySlotUiTexture->height()));
+    _inventorySlotUi->setTexture(inventorySlotUiTexture);
+}
+
 
 }
 
