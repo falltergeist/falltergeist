@@ -240,6 +240,15 @@ void LocationState::generateUi()
     {
         add(ui);
     }
+
+    auto item = Game::getInstance()->player()->currentHandSlot();
+    if (item)
+    {
+        auto itemUi = item->inventoryDragUi();
+        itemUi->setX(_panelUIs.at(0)->x() + 360 - itemUi->width()*0.5);
+        itemUi->setY(_panelUIs.at(0)->y() + 60 - itemUi->height()*0.5);
+        add(itemUi);
+    }
 }
 
 void LocationState::think()
@@ -320,7 +329,8 @@ std::shared_ptr<Location> LocationState::location()
 
 void LocationState::onChangeHandButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    std::cout << "Change Hand!\n";
+    auto player = Game::getInstance()->player();
+    player->setCurrentHand(player->currentHand() == GameCritterObject::HAND_LEFT ? GameCritterObject::HAND_RIGHT : GameCritterObject::HAND_LEFT);
 }
 
 void LocationState::onPanelMouseDown(std::shared_ptr<MouseEvent> event)

@@ -361,26 +361,43 @@ void GameCritterObject::setHealingRate(int value)
 
 int GameCritterObject::damageResist(unsigned int type)
 {
-    if (type > DAMAGE_POISON) throw Exception("GameCritterObject::damageResist(type) - type out of range:" + std::to_string(type));
+    if (type > DAMAGE_POISON) throw Exception("GameCritterObject::damageResist(type) - type out of range: " + std::to_string(type));
     return _damageResist.at(type);
 }
 
 void GameCritterObject::setDamageResist(unsigned int type, int value)
 {
-    if (type > DAMAGE_POISON) throw Exception("GameCritterObject::setDamageResist(type, value) - type out of range:" + std::to_string(type));
+    if (type > DAMAGE_POISON) throw Exception("GameCritterObject::setDamageResist(type, value) - type out of range: " + std::to_string(type));
     _damageResist.at(type) = value;
 }
 
 int GameCritterObject::damageThreshold(unsigned int type)
 {
-    if ( type > DAMAGE_POISON) throw Exception("GameCritterObject::damageThreshold(type) - type out of range:" + std::to_string(type));
+    if ( type > DAMAGE_POISON) throw Exception("GameCritterObject::damageThreshold(type) - type out of range: " + std::to_string(type));
     return _damageThreshold.at(type);
 }
 
 void GameCritterObject::setDamageThreshold(unsigned int type, int value)
 {
-    if ( type > DAMAGE_POISON) throw Exception("GameCritterObject::setDamageThreshold(type, value) - type out of range:" + std::to_string(type));
+    if ( type > DAMAGE_POISON) throw Exception("GameCritterObject::setDamageThreshold(type, value) - type out of range: " + std::to_string(type));
     _damageThreshold.at(type) = value;
 }
+
+unsigned int GameCritterObject::currentHand()
+{
+    return _currentHand;
+}
+
+void GameCritterObject::setCurrentHand(unsigned int value)
+{
+    if (value > HAND_LEFT) throw Exception("GameCritterObject::setCurrentHand(value) - value out of range: " + std::to_string(value));
+    _currentHand = value;
+}
+
+std::shared_ptr<GameItemObject> GameCritterObject::currentHandSlot()
+{
+    return currentHand() == HAND_RIGHT ? rightHandSlot() : leftHandSlot();
+}
+
 
 }

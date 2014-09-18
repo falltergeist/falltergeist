@@ -48,6 +48,8 @@ protected:
     int _sequence = 0;
     int _criticalChance = 0;
 
+    unsigned int _currentHand = HAND_RIGHT;
+
     std::vector<int> _stats = {0, 0, 0, 0, 0, 0, 0};
     std::vector<int> _statsBonus = {0, 0, 0, 0, 0, 0, 0};
     std::vector<int> _skills = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -59,7 +61,8 @@ protected:
     std::shared_ptr<GameItemObject> _leftHandSlot;
     std::shared_ptr<GameItemObject> _rightHandSlot;
 public:
-    enum { GENDER_MALE = 0, GENDER_FEMALE = 1 };
+    enum { HAND_RIGHT = 0, HAND_LEFT };
+    enum { GENDER_MALE = 0, GENDER_FEMALE };
     enum { STATS_STRENGTH = 0, STATS_PERCEPTION, STATS_ENDURANCE, STATS_CHARISMA, STATS_INTELLIGENCE, STATS_AGILITY, STATS_LUCK };
     enum { DAMAGE_NORMAL = 0, DAMAGE_LASER, DAMAGE_FIRE, DAMAGE_PLASMA, DAMAGE_ELECTRICAL, DAMAGE_EMP, DAMAGE_EXPLOSION, DAMAGE_RADIATION, DAMAGE_POISON };
     enum { TRAITS_1 = 0, // Fast Metabolism
@@ -202,6 +205,11 @@ public:
 
     virtual int damageThreshold(unsigned int type);
     void setDamageThreshold(unsigned int type, int value);
+
+    unsigned int currentHand();
+    void setCurrentHand(unsigned int value);
+
+    std::shared_ptr<GameItemObject> currentHandSlot();
 
 };
 

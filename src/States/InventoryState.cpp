@@ -60,25 +60,6 @@ void InventoryState::init()
 
     auto player = Game::getInstance()->player();
 
-    // --- temporary adding items START ---
-
-    // PID for testing
-    // 17 Combat Armor
-    // 74 Leather Jacket
-    // 4 knife
-    // 7 spear
-    // 8 10mm pistol
-    // 20 crawbar
-
-    auto object = std::dynamic_pointer_cast<GameArmorItemObject>(Location::createObject(74));
-    auto weap1 = std::dynamic_pointer_cast<GameItemObject>(Location::createObject(7));
-    auto weap2 = std::dynamic_pointer_cast<GameItemObject>(Location::createObject(8));
-    player->setArmorSlot(object);
-    player->setLeftHandSlot(weap1);
-    player->setRightHandSlot(weap2);
-
-    // --- temporary adding items END ---
-
     std::shared_ptr<GameArmorItemObject> armorSlot = player->armorSlot();
     std::shared_ptr<GameItemObject> leftHand = player->leftHandSlot();
     std::shared_ptr<GameItemObject> rightHand = player->rightHandSlot();
@@ -271,19 +252,19 @@ void InventoryState::init()
 
     // BIG ICONS
     // icon: armor
-    std::shared_ptr<GameItemObject> armor = std::dynamic_pointer_cast<GameArmorItemObject>(armorSlot);
+    auto armor = std::dynamic_pointer_cast<GameArmorItemObject>(armorSlot);
     add(armor->inventorySlotUi());
     _ui.back()->setX(backgroundX + 200 - _ui.back()->width()*0.5);
     _ui.back()->setY(backgroundY + 215 - _ui.back()->height()*0.5);
 
     // icon: left hand
-    std::shared_ptr<GameItemObject> weapon1 = std::dynamic_pointer_cast<GameWeaponItemObject>(leftHand);
+    auto weapon1 = std::dynamic_pointer_cast<GameWeaponItemObject>(leftHand);
     add(weapon1->inventorySlotUi());
     _ui.back()->setX(backgroundX + 200 - _ui.back()->width()*0.5);
     _ui.back()->setY(backgroundY + 317 - _ui.back()->height()*0.5);
 
     // icon: right hand
-    std::shared_ptr<GameItemObject> weapon2 = std::dynamic_pointer_cast<GameWeaponItemObject>(rightHand);
+    auto weapon2 = std::dynamic_pointer_cast<GameWeaponItemObject>(rightHand);
     add(weapon2->inventorySlotUi());
     _ui.back()->setX(backgroundX + 290 - _ui.back()->width()*0.5);
     _ui.back()->setY(backgroundY + 317 - _ui.back()->height()*0.5);
