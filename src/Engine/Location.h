@@ -60,14 +60,8 @@ protected:
 
     unsigned int _elevation = 0;
 
-    std::shared_ptr<Texture> _tilesFloor;
-    std::shared_ptr<Texture> _tilesRoof;
-
     std::shared_ptr<libfalltergeist::MapFileType> _mapFile;
-    std::shared_ptr<libfalltergeist::LstFileType> _tilesLst;
     bool _initialized = false;
-    void _generateFloor();
-    void _generateRoof();
 public:
     enum Tile { TILE_WIDTH = 80, TILE_HEIGHT = 36 };
     Location(std::shared_ptr<libfalltergeist::MapFileType> mapFile);
@@ -77,8 +71,6 @@ public:
     static int hexagonToX(unsigned int hexagon);
     static int hexagonToY(unsigned int hexagon);
     static unsigned int positionToHexagon(int x, int y);
-    unsigned int tileToX(unsigned int tile);
-    unsigned int tileToY(unsigned int tile);
     int width();
     int height();
     void handleAction(GameObject* object, int action);

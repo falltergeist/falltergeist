@@ -56,26 +56,9 @@ Location::~Location()
 }
 
 
-std::shared_ptr<Texture> Location::tilesFloor()
-{
-    return _tilesFloor;
-}
-
-std::shared_ptr<Texture> Location::tilesRoof()
-{
-    return _tilesRoof;
-}
-
 void Location::init()
 {
     _elevation = _mapFile->defaultElevation();
-
-    _tilesLst = ResourceManager::lstFileType("art/tiles/tiles.lst");
-
-    // Генерируем изображение пола
-    _generateFloor();
-    _generateRoof();
-
 
     // Initialize MAP vars
     if (_mapFile->MVARsize() > 0)
@@ -148,36 +131,6 @@ void Location::init()
     }
 
     //Game::getInstance()->locationState()->checkObjectsToRender();
-}
-
-void Location::_generateFloor()
-{
-    unsigned int tilesWidth = 48*_cols + 32*_rows;
-    unsigned int tilesHeight = 12*_cols + 24*_rows;
-
-    _tilesFloor = std::shared_ptr<Texture>(new Texture(tilesWidth, tilesHeight));
-    _tilesFloor->fill(0x000000FF);
-
-    for (unsigned int i = 0; i != _cols*_rows; ++i)
-    {
-        std::string frmName = _tilesLst->strings()->at(_mapFile->elevations()->at(_elevation)->floorTiles()->at(i));
-        auto tile = std::shared_ptr<Image>(new Image("art/tiles/" + frmName));
-        tile->texture()->blitTo(_tilesFloor, tileToX(i), tileToY(i));
-    }
-}
-
-void Location::_generateRoof()
-{
-    unsigned int tilesWidth = 48*_cols + 32*_rows;
-    unsigned int tilesHeight = 12*_cols + 24*_rows;
-
-    _tilesRoof = std::shared_ptr<Texture>(new Texture(tilesWidth, tilesHeight));
-    for (unsigned int i = 0; i != _cols*_rows; ++i)
-    {
-        std::string frmName = _tilesLst->strings()->at(_mapFile->elevations()->at(_elevation)->roofTiles()->at(i));
-        auto tile = std::shared_ptr<Image>(new Image("art/tiles/" + frmName));
-        tile->texture()->blitTo(_tilesRoof, tileToX(i), tileToY(i));
-    }
 }
 
 void Location::handleAction(GameObject* object, int action)
@@ -298,16 +251,6 @@ unsigned int Location::positionToHexagon(int x, int y)
 std::shared_ptr<libfalltergeist::MapFileType> Location::mapFile()
 {
     return _mapFile;
-}
-
-unsigned int Location::tileToX(unsigned int tile)
-{
-    return (_cols - tile%_cols - 1)*48 + 32*ceil(tile/_cols);
-}
-
-unsigned int Location::tileToY(unsigned int tile)
-{
-    return ceil(tile/_cols)*24 +(tile % _cols)*12;
 }
 
 std::vector<std::shared_ptr<GameObject>>* Location::objects()

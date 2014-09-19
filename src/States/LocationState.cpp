@@ -166,6 +166,7 @@ void LocationState::setLocation(std::string name)
     auto mapFile = ResourceManager::mapFileType(name);
     _currentElevation = mapFile->defaultElevation();
 
+    // Set camera position on default
     camera()->setXPosition(hexagons()->at(mapFile->defaultPosition())->x());
     camera()->setYPosition(hexagons()->at(mapFile->defaultPosition())->y());
 
@@ -203,10 +204,30 @@ void LocationState::setLocation(std::string name)
     */
     _location = std::shared_ptr<Location>(new Location(mapFile));
 
-    _floor = std::shared_ptr<Image>(new Image(_location->tilesFloor()));
-    _floor->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyboardUp);
-    _roof = std::shared_ptr<Image>(new Image(_location->tilesRoof()));
+    // Generates floor and roof images
+    {
+        auto tilesLst = ResourceManager::lstFileType("art/tiles/tiles.lst");
 
+        unsigned int tilesWidth = 80*100;
+        unsigned int tilesHeight = 36*100;
+
+        _floor = std::shared_ptr<Image>(new Image(tilesWidth, tilesHeight));
+        _roof  = std::shared_ptr<Image>(new Image(tilesWidth, tilesHeight));
+        _floor->texture()->fill(0x000000FF);
+        _roof->texture()->fill(0x000000FF);
+
+        for (unsigned int i = 0; i != 100*100; ++i)
+        {
+            unsigned int x = (100 - i%100 - 1)*48 + 32*ceil(i/100);
+            unsigned int y = ceil(i/100)*24 +(i%100)*12;
+
+            auto floorTile = ResourceManager::texture("art/tiles/" + tilesLst->strings()->at(mapFile->elevations()->at(_currentElevation)->floorTiles()->at(i)));
+            auto roofTile = ResourceManager::texture("art/tiles/" + tilesLst->strings()->at(mapFile->elevations()->at(_currentElevation)->roofTiles()->at(i)));
+            floorTile->blitTo(_floor->texture(), x, y);
+            roofTile->blitTo(_roof->texture(), x, y);
+        }
+        _floor->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyboardUp);
+    }
 }
 
 void LocationState::onMouseDown(std::shared_ptr<MouseEvent> event)
