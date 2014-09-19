@@ -67,19 +67,29 @@ void LocationState::init()
     State::init();
 
     auto game = Game::getInstance();
+
     /*
+
     // Creating 200x200 hexagonal map
     unsigned int index = 0;
-    for (unsigned int y = 0; y != 200; ++y)
+    for (unsigned int p = 0; p != 200; ++p)
     {
-        for (unsigned int x = 0; x != 200; ++x, ++index)
+        for (unsigned int q = 0; q != 200; ++q, ++index)
         {
             auto hexagon = std::shared_ptr<Hexagon>(new Hexagon(index));
+            int x = 48*100 + 16*(q+1) - 24*p;
+            int y = (q+1)*12 + 6*p + 12;
+            if (p&1)
+            {
+                x -= 8;
+                y -= 6;
+            }
             hexagon->setX(x);
             hexagon->setY(y);
             _hexagons.push_back(hexagon);
         }
     }
+
     // Creating links between hexagons
     for (index = 0; index != 200*200; ++index)
     {
@@ -157,7 +167,41 @@ void LocationState::_initPanel()
 }
 
 void LocationState::setLocation(std::string name)
-{
+{    
+    /*
+    auto mapFile = ResourceManager::mapFileType(name);
+    _currentElevation = mapFile->defaultElevation();
+
+    auto mapObjects = mapFile->elevations()->at(_currentElevation)->objects();
+
+    for (auto mapObject : *mapObjects)
+    {
+        auto object = createObject(mapObject->PID());
+        if (!object) continue;
+
+
+        object->setLocation(this);
+        object->setFID( mapObject->FID() );
+        object->setPID( mapObject->PID() );
+        object->setElevation( mapObject->elevation() );
+        object->setOrientation( mapObject->orientation() );
+        object->setPosition( mapObject->hexPosition() );
+
+        if (mapObject->scriptId() > 0)
+        {
+            auto intFile = ResourceManager::intFileType(mapObject->scriptId());
+            if (intFile) object->scripts()->push_back(new VM(intFile,object));
+        }
+        if (mapObject->mapScriptId() > 0 && mapObject->mapScriptId() != mapObject->scriptId())
+        {
+            auto intFile = ResourceManager::intFileType(mapObject->mapScriptId());
+            if (intFile) object->scripts()->push_back(new VM(intFile, object));
+        }
+
+        _objects.push_back(object);
+    }
+
+    */
     _location = std::shared_ptr<Location>(new Location(ResourceManager::mapFileType(name)));
 
     _floor = std::shared_ptr<Image>(new Image(_location->tilesFloor()));

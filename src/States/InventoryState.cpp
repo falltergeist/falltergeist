@@ -32,6 +32,7 @@
 #include "../Game/GameCritterObject.h"
 #include "../Game/GameDudeObject.h"
 #include "../Game/GameObject.h"
+#include "../Game/GameObjectFactory.h"
 #include "../Game/GameWeaponItemObject.h"
 #include "../States/GameMenuState.h"
 #include "../States/InventoryState.h"

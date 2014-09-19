@@ -29,17 +29,18 @@
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Animation.h"
 #include "../Engine/Location.h"
-#include "../Game/GameDefines.h"
-#include "../Game/GameObject.h"
-#include "../Game/GameDudeObject.h"
-#include "../Game/GameContainerItemObject.h"
-#include "../Game/GameArmorItemObject.h"
 #include "../Game/GameAmmoItemObject.h"
-#include "../Game/GameDrugItemObject.h"
-#include "../Game/GameKeyItemObject.h"
-#include "../Game/GameWeaponItemObject.h"
-#include "../Game/GameMiscItemObject.h"
+#include "../Game/GameArmorItemObject.h"
+#include "../Game/GameContainerItemObject.h"
+#include "../Game/GameDefines.h"
 #include "../Game/GameDoorSceneryObject.h"
+#include "../Game/GameDrugItemObject.h"
+#include "../Game/GameDudeObject.h"
+#include "../Game/GameKeyItemObject.h"
+#include "../Game/GameMiscItemObject.h"
+#include "../Game/GameObject.h"
+#include "../Game/GameObjectFactory.h"
+#include "../Game/GameWeaponItemObject.h"
 #include "../States/CritterDialogState.h"
 #include "../States/CritterTalkState.h"
 #include "../VM/VM.h"
@@ -636,7 +637,7 @@ void VM::run()
                 auto elevation = popDataInteger();
                 auto position = popDataInteger();
                 auto PID = popDataInteger();
-                auto object = Location::createObject(PID);
+                auto object = GameObjectFactory::createObject(PID);
                 object->setPosition(position);
                 object->setElevation(elevation);
                 if (SID > 0)

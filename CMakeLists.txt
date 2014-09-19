@@ -110,6 +110,8 @@ set(SOURCES main.cpp
             src/Game/GameDudeObject.h
             src/Game/GameObject.cpp
             src/Game/GameObject.h
+            src/Game/GameObjectFactory.cpp
+            src/Game/GameObjectFactory.h
             src/Game/GameCritterObject.cpp
             src/Game/GameCritterObject.h
             src/Game/GameItemObject.cpp

@@ -52,7 +52,6 @@ protected:
     std::vector<std::shared_ptr<GameObject>> _objects;
     std::vector<std::shared_ptr<GameObject>> _objectsToRender;
     std::vector<int> _MVARS;
-    std::vector<std::shared_ptr<Hexagon>> _hexagons;
     std::map<std::string, std::shared_ptr<VMStackValue>> _EVARS;
     unsigned int _lastObjectsCheck = 0;
 
@@ -90,10 +89,6 @@ public:
     std::shared_ptr<Texture> tilesFloor();
     std::shared_ptr<Texture> tilesRoof();
     std::shared_ptr<LocationCamera> camera();
-
-    std::vector<std::shared_ptr<Hexagon>>* hexagons();
-
-    static std::shared_ptr<GameObject> createObject(int PID);
 
     std::shared_ptr<libfalltergeist::MapFileType> mapFile();
     std::vector<std::shared_ptr<GameObject>>* objects();
