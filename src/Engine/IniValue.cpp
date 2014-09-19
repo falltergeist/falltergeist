@@ -19,6 +19,7 @@
  */
 
 // C++ standard includes
+#include <iostream>
 
 // Falltergeist includes
 #include "../Engine/IniValue.h"
@@ -99,6 +100,26 @@ IniValue::IniValue(const IniValue &rhs) : _tag(rhs._tag)
             new(&_stringVal) std::string(rhs._stringVal);
             break;
     }
+}
+
+std::ostream &operator<<(std::ostream &os, IniValue const &iv)
+{
+    switch (iv._tag)
+    {
+        case IniValue::Tag::INTEGER:
+            os << iv._integerVal;
+            break;
+        case IniValue::Tag::DOUBLE:
+            os << iv._doubleVal;
+            break;
+        case IniValue::Tag::BOOLEAN:
+            os << (iv._booleanVal ? "true" : "false");
+            break;
+        case IniValue::Tag::STRING:
+            os << iv._stringVal;
+            break;
+    }
+    return os;
 }
 
 }

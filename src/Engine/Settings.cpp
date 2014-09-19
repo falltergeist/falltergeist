@@ -25,6 +25,7 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
 #include "../Engine/IniFile.h"
+#include "../Engine/IniWriter.h"
 #include "../Engine/Settings.h"
 
 // Third party includes
@@ -32,37 +33,56 @@
 namespace Falltergeist
 {
 
+unsigned int EngineSettings::_defaultScreenWidth = 640;
+unsigned int EngineSettings::_defaultScreenHeight = 480;
+std::string EngineSettings::_defaultRenderer = "sdl";
+bool EngineSettings::_defaultAudioEnabled = false;
+
 EngineSettings::EngineSettings()
 {
     std::string configFile = CrossPlatform::getHomeDirectory() + "/.falltergeist/config.ini";
     std::ifstream stream(configFile);
 
-    if (!stream) throw Exception("Failed to locate config file " + configFile);
-
-    IniParser iniParser(stream);
-    auto ini = iniParser.parse();
-
-    auto video = ini->section("video");
-    _screenWidth  = video->propertyInt("width", 640);
-    _screenHeight = video->propertyInt("height", 480);
-
-    auto renderer = video->propertyString("renderer", "sdl");
-
-    if (renderer == "sdl")
+    if (stream)
     {
-        _renderer = Renderer::SDL;
-    }
-    else if (renderer == "opengl")
-    {
-        _renderer = Renderer::OPENGL;
+        IniParser iniParser(stream);
+        auto ini = iniParser.parse();
+
+        auto video = ini->section("video");
+        _screenWidth = video->propertyInt("width", _defaultScreenWidth);
+        _screenHeight = video->propertyInt("height", _defaultScreenHeight);
+
+        auto renderer = video->propertyString("renderer", _defaultRenderer);
+        _setRenderer(renderer);
+
+        auto audio = ini->section("audio");
+        _audioEnabled = audio->propertyBool("enabled", _defaultAudioEnabled);
     }
     else
     {
-        std::cerr << "Unkown rendered: " << renderer << std::endl;
-    }
+        std::cerr << "Cannot open config file at `" << configFile << "`; creating default configuraton file" << std::endl;
+        stream.close();
 
-    auto audio = ini->section("audio");
-    _audioEnabled = audio->propertyBool("enabled", false);
+        _screenWidth = _defaultScreenWidth;
+        _screenHeight = _defaultScreenHeight;
+        _setRenderer(_defaultRenderer);
+        _audioEnabled = _defaultAudioEnabled;
+
+        IniFile ini;
+
+        auto video = ini.section("video");
+        video->setPropertyInt("width", _defaultScreenWidth);
+        video->setPropertyInt("height", _defaultScreenHeight);
+        video->setPropertyString("renderer", _defaultRenderer);
+
+        auto audio = ini.section("audio");
+        audio->setPropertyBool("enabled", _defaultAudioEnabled);
+
+        // Write default configuraton
+        IniWriter writer(ini);
+        std::ofstream os(configFile);
+        writer.write(os);
+    }
 }
 
 EngineSettings::~EngineSettings()
@@ -88,4 +108,25 @@ bool EngineSettings::audioEnabled() const
 {
     return _audioEnabled;
 }
+
+void EngineSettings::_setRenderer(std::string renderer)
+{
+    if (!(renderer == "sdl" || renderer == "opengl"))
+    {
+        std::cerr << "Unkown renderer: "
+                << renderer << ", using " << _defaultRenderer
+                << std::endl;
+        renderer = _defaultRenderer;
+    }
+
+    if (renderer == "sdl")
+    {
+        _renderer = Renderer::SDL;
+    }
+    else
+    {
+        _renderer = Renderer::OPENGL;
+    }
+}
+
 }

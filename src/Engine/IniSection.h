@@ -42,6 +42,7 @@ private:
     using PropertyMapConstIterator = PropertyMap::const_iterator;
 
     PropertyMap _properties;
+    std::string _name;
 
     static void _property(PropertyMapConstIterator iter, double &ret, double def);
 
@@ -49,7 +50,7 @@ private:
 
     static void _property(PropertyMapConstIterator iter, bool &ret, bool def);
 
-    static void _property(PropertyMapConstIterator iter, std::string &ret, std::string def);
+    static void _property(PropertyMapConstIterator iter, std::string &ret, const std::string &def);
 
     static bool _hasType(PropertyMapConstIterator iter, IniValue::Tag tag);
 
@@ -58,6 +59,18 @@ private:
     static std::string _valueToString(const IniValue &value);
 
 public:
+    IniSection(const std::string &name);
+    ~IniSection();
+
+
+    using iterator = PropertyMap::iterator;
+    using const_iterator = PropertyMap::const_iterator;
+
+    iterator begin();
+    const_iterator begin() const;
+    iterator end();
+    const_iterator end() const;
+
     // Trying to invoke this method causes compilation error on gcc 4.7.3:
     // video->template property<int>("width", 640) ==>
     // error: ‘template’ (as a disambiguator) is only allowed within templates
@@ -77,23 +90,23 @@ public:
 //        return ret;
 //    }
 
-    int propertyInt(std::string name, int def);
+    int propertyInt(const std::string &name, int def);
 
-    double propertyDouble(std::string name, double def);
+    double propertyDouble(const std::string &name, double def);
 
-    bool propertyBool(std::string name, bool def);
+    bool propertyBool(const std::string &name, bool def);
 
-    std::string propertyString(std::string name, const std::string &def);
+    std::string propertyString(const std::string &name, const std::string &def);
 
-    void setProperty(std::string name, int value);
+    void setPropertyInt(const std::string &name, int value);
 
-    void setProperty(std::string name, double value);
+    void setPropertyDouble(const std::string &name, double value);
 
-    void setProperty(std::string name, bool value);
+    void setPropertyBool(const std::string &name, bool value);
 
-    void setProperty(std::string name, const std::string &value);
+    void setPropertyString(const std::string &name, const std::string &value);
 
-    bool hasProperty(std::string name) const;
+    bool hasProperty(const std::string &name) const;
 };
 
 }
