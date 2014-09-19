@@ -221,6 +221,8 @@ void VM::run()
                 _dataStack.values()->at(_SVAR_base + number) = value;
                 break;
             }
+            case 0x8014:  break;
+            case 0x8015:  break;
             case 0x8016:
             {
                 CrossPlatform::debug("[*] export(name)", DEBUG_SCRIPT);
