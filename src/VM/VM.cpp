@@ -48,6 +48,8 @@
 #include "../VM/VMStackPointerValue.h"
 #include "../VM/Handlers/Opcode8002Handler.h"
 #include "../VM/Handlers/Opcode8005Handler.h"
+#include "../VM/Handlers/Opcode8014Handler.h"
+#include "../VM/Handlers/Opcode8015Handler.h"
 #include "../VM/Handlers/Opcode8033Handler.h"
 #include "../VM/Handlers/Opcode8034Handler.h"
 #include "../VM/Handlers/Opcode8039Handler.h"
@@ -135,6 +137,12 @@ void VM::run()
             case 0x8005:
                 opcodeHandler = std::shared_ptr<Opcode8005Handler>(new Opcode8005Handler(this));
                 break;
+            case 0x8014:
+                opcodeHandler = std::shared_ptr<Opcode8014Handler>(new Opcode8014Handler(this));
+                break;
+            case 0x8015:
+                opcodeHandler = std::shared_ptr<Opcode8015Handler>(new Opcode8015Handler(this));
+                break;
             case 0x8033:
                 opcodeHandler = std::shared_ptr<Opcode8033Handler>(new Opcode8033Handler(this));
                 break;
@@ -211,37 +219,6 @@ void VM::run()
                 auto number = popDataInteger();
                 auto value = _dataStack.pop();
                 _dataStack.values()->at(_SVAR_base + number) = value;
-                break;
-            }
-            case 0x8014:
-            {
-                CrossPlatform::debug("[*] getExported(name)", DEBUG_SCRIPT);
-                auto game = Game::getInstance();
-                auto EVARS = game->location()->EVARS();
-                switch (_dataStack.top()->type())
-                {
-                    case VMStackValue::TYPE_INTEGER:
-                        _dataStack.push(EVARS->at(_script->identificators()->at(popDataInteger())));
-                        break;
-                    case VMStackValue::TYPE_POINTER:
-                    {
-                        auto string = std::static_pointer_cast<std::string>(popDataPointer());
-                        _dataStack.push(EVARS->at(*string.get()));
-                        break;
-                    }
-                    default:
-                        throw Exception("VM::opcode8014 error");
-                }
-                break;
-            }
-            case 0x8015:
-            {
-                CrossPlatform::debug("[*] export(value, name)", DEBUG_SCRIPT);
-                auto name = std::static_pointer_cast<std::string>(popDataPointer());
-                auto value = _dataStack.pop();
-                auto game = Game::getInstance();
-                auto EVARS = game->location()->EVARS();
-                EVARS->at(*(name.get())) = value;
                 break;
             }
             case 0x8016:
