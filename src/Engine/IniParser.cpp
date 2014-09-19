@@ -72,7 +72,7 @@ bool IniParser::_parseBool(std::string &name, std::string &line, std::shared_ptr
     if (isBool)
     {
         std::cerr << "boolean value found for property `" << name << "`: " << value << std::endl;
-        ini->section(_section)->setProperty(name, value);
+        ini->section(_section)->setPropertyInt(name, value);
     }
 
     return isBool;
@@ -202,7 +202,7 @@ bool IniParser::_parseDecimal(std::string &name, std::string &line, std::shared_
         int value;
         ss >> value;
         std::cerr << "integer value found for property `" << name << "`: " << value << std::endl;
-        ini->section(_section)->setProperty(name, value);
+        ini->section(_section)->setPropertyInt(name, value);
         return  true;
     }
 
@@ -211,7 +211,7 @@ bool IniParser::_parseDecimal(std::string &name, std::string &line, std::shared_
         double value;
         ss >> value;
         std::cerr << "double value found for property `" << name << "`: " << value << std::endl;
-        ini->section(_section)->setProperty(name, value);
+        ini->section(_section)->setPropertyDouble(name, value);
         return true;
     }
 
@@ -270,7 +270,7 @@ std::shared_ptr<IniFile> IniParser::parse()
 
         // Interpret value as string
         std::cerr << "string value found for property `" << name << "`: " << value << std::endl;
-        ini->section(_section)->setProperty(name, value);
+        ini->section(_section)->setPropertyString(name, value);
     }
 
     return ini;

@@ -15,55 +15,34 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-#ifndef FALLTERGEIST_ENGINE_SETTINGS_H
-#define FALLTERGEIST_ENGINE_SETTINGS_H
+#ifndef FALLTERGEIST_INI_WRITER_H
+#define FALLTERGEIST_INI_WRITER_H
 
 // C++ standard includes
+#include <iostream>
 
 // Falltergeist includes
 
-// Third patry includes
+// Third party includes
 
 namespace Falltergeist
 {
+class IniFile;
 
-class EngineSettings
+class IniWriter
 {
-public:
-    enum class Renderer
-    {
-        OPENGL,
-        SDL
-    };
-
-    EngineSettings();
-    ~EngineSettings();
-
-    unsigned int screenWidth() const;
-
-    unsigned int screenHeight() const;
-
-    Renderer renderer() const;
-
-    bool audioEnabled() const;
-
 private:
-    unsigned int _screenWidth;
-    unsigned int _screenHeight;
-    Renderer _renderer;
-    bool _audioEnabled;
+    const IniFile &_ini;
 
-    void _setRenderer(std::string renderer);
-
-    // DEFAULTS
-    static unsigned int _defaultScreenWidth;
-    static unsigned int _defaultScreenHeight;
-    static std::string _defaultRenderer;
-    static bool _defaultAudioEnabled;
+public:
+    IniWriter(const IniFile &ini);
+    ~IniWriter();
+    void write(std::ostream &stream);
 };
 
 }
 
-#endif // FALLTERGEIST_ENGINE_SETTINGS_H
+#endif // FALLTERGEIST_INI_WRITER_H

@@ -37,7 +37,7 @@ std::shared_ptr<IniSection> IniFile::section(const std::string &name)
     auto it = _sections.find(name);
     if (it == _sections.end())
     {
-        auto result = std::shared_ptr<IniSection>(new IniSection());
+        auto result = std::shared_ptr<IniSection>(new IniSection(name));
         _sections[name] = result;
         return result;
     }
@@ -47,6 +47,32 @@ std::shared_ptr<IniSection> IniFile::section(const std::string &name)
 bool IniFile::hasSection(const std::string &name) const
 {
     return _sections.find(name) != _sections.end();
+}
+
+IniFile::IniFile()
+{}
+
+IniFile::~IniFile()
+{}
+
+IniFile::iterator IniFile::begin()
+{
+    return _sections.begin();
+}
+
+IniFile::const_iterator IniFile::begin() const
+{
+    return _sections.begin();
+}
+
+IniFile::iterator IniFile::end()
+{
+    return _sections.end();
+}
+
+IniFile::const_iterator IniFile::end() const
+{
+    return _sections.end();
 }
 
 }

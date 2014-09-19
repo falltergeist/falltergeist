@@ -93,6 +93,8 @@ set(SOURCES main.cpp
             src/Engine/IniParser.h
             src/Engine/IniSection.cpp
             src/Engine/IniSection.h
+            src/Engine/IniWriter.cpp
+            src/Engine/IniWriter.h
             src/Engine/IniValue.cpp
             src/Engine/IniValue.h
             src/Engine/LocationCamera.cpp
