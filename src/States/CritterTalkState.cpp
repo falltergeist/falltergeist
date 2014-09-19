@@ -159,7 +159,7 @@ void CritterTalkState::addAnswer(std::string text)
     int y = 345 + backgroundY;
     for (auto answer : _answers)
     {
-        y += answer->height() + 12;
+        y += answer->height() + 5;
     }
 
     auto answer = std::shared_ptr<TextArea>(new TextArea(line, backgroundX+140, y));

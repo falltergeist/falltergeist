@@ -179,12 +179,11 @@ TextArea* TextArea::setWidth(unsigned int width)
 
 unsigned int TextArea::width()
 {
-    unsigned int result = _width;
-    if ((_texture) && (_width == 0))
+    if (_width == 0)
     {
-        result = texture()->width();
+        return texture()->width();
     }
-    return result;
+    return _width;
 }
 
 TextArea* TextArea::setHeight(unsigned int height)
@@ -197,12 +196,11 @@ TextArea* TextArea::setHeight(unsigned int height)
 
 unsigned int TextArea::height()
 {
-   unsigned int result = _height;
-   if ((_texture) && (_height == 0))
+   if (_height == 0)
    {
-       result = texture()->height();
+       return texture()->height();
    }
-   return result;
+   return _height;
 }
 
 std::shared_ptr<Texture> TextArea::texture()
