@@ -67,19 +67,29 @@ void LocationState::init()
     State::init();
 
     auto game = Game::getInstance();
+
     /*
+
     // Creating 200x200 hexagonal map
     unsigned int index = 0;
-    for (unsigned int y = 0; y != 200; ++y)
+    for (unsigned int p = 0; p != 200; ++p)
     {
-        for (unsigned int x = 0; x != 200; ++x, ++index)
+        for (unsigned int q = 0; q != 200; ++q, ++index)
         {
             auto hexagon = std::shared_ptr<Hexagon>(new Hexagon(index));
+            int x = 48*100 + 16*q - 24*p + 16;
+            int y = q*12 + 6*p + 12;
+            if (p&1)
+            {
+                x -= 8;
+                y -= 6;
+            }
             hexagon->setX(x);
             hexagon->setY(y);
             _hexagons.push_back(hexagon);
         }
     }
+
     // Creating links between hexagons
     for (index = 0; index != 200*200; ++index)
     {

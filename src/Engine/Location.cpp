@@ -582,35 +582,24 @@ void Location::checkObjectsToRender()
 
 int Location::hexagonToX(unsigned int hexagon)
 {
-    unsigned int cols = 100;
-    unsigned int a = hexagon % 200;
-    unsigned int b = ceil(hexagon/200);
-    hexagon = a*200 + b;
+    unsigned int p = hexagon % 200;
+    unsigned int q = ceil(hexagon/200);
 
-    unsigned int y = ceil(hexagon/200);
-    int centerX = 48*(cols-1) + 48 + 16*(hexagon%200) - 24*y;
+    int centerX = 48*100 + 16*q - 24*p + 16;
+    if (p&1) centerX -= 8;
 
-        if ((hexagon/200)%2 == 1)
-        {
-            centerX -= 8;
-        }
-    return centerX + 17;
+    return centerX;
 }
 
 int Location::hexagonToY(unsigned int hexagon)
 {
-    unsigned int a = hexagon % 200;
-    unsigned int b = ceil(hexagon/200);
-    hexagon = a*200 + b;
+    unsigned int p = hexagon % 200;
+    unsigned int q = ceil(hexagon/200);
 
-    unsigned int y = ceil(hexagon/200);
-    int centerY = (hexagon%200)*12 + 6*y ;
+    int centerY = q*12 + 6*p + 12;
+    if (p&1) centerY -= 6;
 
-        if ((hexagon/200)%2 == 1)
-        {
-            centerY -= 6;
-        }
-    return centerY + 12;
+    return centerY;
 
 }
 
