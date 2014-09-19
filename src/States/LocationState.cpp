@@ -306,6 +306,7 @@ void LocationState::onMouseDown(std::shared_ptr<MouseEvent> event)
     state->setObject(object);
     auto game = Game::getInstance();
     game->pushState(state);
+    event->setHandled(true);
 
 }
 
@@ -410,9 +411,6 @@ void LocationState::think()
         _lastObjectsToRenderCheck = SDL_GetTicks();
         checkObjectsToRender();
     }
-
-
-
 
     if (_locationEnter)
     {
@@ -533,8 +531,9 @@ void LocationState::checkObjectsToRender()
 
     for (auto hexagon : _hexagonsWithObjects)
     {
-        for (auto object : *hexagon->objects())
+        for (auto it = hexagon->objects()->rbegin(); it != hexagon->objects()->rend(); ++it)
         {
+            auto object = *it;
             auto ui = std::dynamic_pointer_cast<ActiveUI>(object->ui());
             if (!ui) continue;
 
@@ -647,8 +646,9 @@ void LocationState::handleAction(GameObject* object, int action)
 void LocationState::checkHexagonsWidthObjects()
 {
     _hexagonsWithObjects.clear();
-    for (auto hexagon : *hexagons())
+    for (auto it = hexagons()->rbegin(); it != hexagons()->rend(); ++it)
     {
+        auto hexagon = *it;
         if (hexagon->objects()->size() > 0)
         {
             _hexagonsWithObjects.push_back(hexagon);

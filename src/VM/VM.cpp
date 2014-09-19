@@ -58,8 +58,10 @@
 #include "../VM/Handlers/Opcode8039Handler.h"
 #include "../VM/Handlers/Opcode80BAHandler.h"
 #include "../VM/Handlers/Opcode80BCHandler.h"
+#include "../VM/Handlers/Opcode80CAHandler.h"
 #include "../VM/Handlers/Opcode80CBHandler.h"
 #include "../VM/Handlers/Opcode80DEHandler.h"
+#include "../VM/Handlers/Opcode8119Handler.h"
 #include "../VM/Handlers/Opcode9001Handler.h"
 #include "../VM/Handlers/OpcodeC001Handler.h"
 
@@ -160,11 +162,17 @@ void VM::run()
             case 0x80BC:
                 opcodeHandler = std::shared_ptr<Opcode80BCHandler>(new Opcode80BCHandler(this));
                 break;
+            case 0x80CA:
+                opcodeHandler = std::shared_ptr<Opcode80CAHandler>(new Opcode80CAHandler(this));
+                break;
             case 0x80CB:
                 opcodeHandler = std::shared_ptr<Opcode80CBHandler>(new Opcode80CBHandler(this));
                 break;
             case 0x80DE:
                 opcodeHandler = std::shared_ptr<Opcode80DEHandler>(new Opcode80DEHandler(this));
+                break;
+            case 0x8119:
+                opcodeHandler = std::shared_ptr<Opcode8119Handler>(new Opcode8119Handler(this));
                 break;
             case 0x9001:
                 opcodeHandler = std::shared_ptr<Opcode9001Handler>(new Opcode9001Handler(this));
@@ -783,29 +791,7 @@ void VM::run()
                 else pushDataInteger(-1);
                 break;
             }
-            case 0x80ca:
-            {
-                CrossPlatform::debug("[+] int get_critter_stat(GameCritterObject* who, int number)", DEBUG_SCRIPT);
-                int number = popDataInteger();
-                auto object = std::static_pointer_cast<GameCritterObject>(popDataPointer());
-                if (!object) throw Exception("VM::opcode80CA pointer error");
-
-                switch (number)
-                {
-                    case 34: // gender
-                    {
-                        pushDataInteger(object->gender());
-                        break;
-                    }
-                    default:
-                    {
-                        if (number > 6) throw Exception("VM::opcode80CA - number out of range:" + std::to_string(number));
-                        pushDataInteger(object->stat(number) + object->statBonus(number));
-                        break;
-                    }
-                }
-                break;
-            }
+            case 0x80ca: break;
             case 0x80cb: break;
             case 0x80cc:
             {
@@ -953,6 +939,7 @@ void VM::run()
                 CrossPlatform::debug("[=] int anim_busy(void* obj)", DEBUG_SCRIPT);
                 popDataPointer();//auto object = (GameObject*)popDataPointer();
                 //pushDataInteger(object->animationQueue()->enabled());
+                pushDataInteger(1);
                 break;
             }
             case 0x80e9:
@@ -1094,6 +1081,8 @@ void VM::run()
                 CrossPlatform::debug("[+] string* msgMessage(int msg_list, int msg_num);", DEBUG_SCRIPT);
                 auto msgNum = popDataInteger();
                 auto msgList = popDataInteger();
+                std::cout << msgNum << std::endl;
+                std::cout << msgList << std::endl;
                 pushDataPointer(std::shared_ptr<std::string>(new std::string(msgMessage(msgList, msgNum))));
                 break;
             }
@@ -1241,6 +1230,7 @@ void VM::run()
                 CrossPlatform::debug("[*] int get_month", DEBUG_SCRIPT);
                 pushDataInteger(_getMonth());
                 break;
+            case 0x8119: break;
             case 0x811c:
             {
                 CrossPlatform::debug("[?] gsay_start", DEBUG_SCRIPT);
@@ -1703,6 +1693,11 @@ std::string VM::msgMessage(int msg_file_num, int msg_num)
 {
     auto lst = ResourceManager::lstFileType("data/dialogs.lst");
     auto msg = ResourceManager::msgFileType("text/english/dialog/" + lst->strings()->at(msg_file_num - 1));
+    if (!msg)
+    {
+        CrossPlatform::debug("VM::msgMessage(file, num) not found. file: " + std::to_string(msg_file_num) + " num: " + std::to_string(msg_num), DEBUG_SCRIPT);
+        return "";
+    }
     return msg->message(msg_num)->text();
 }
 

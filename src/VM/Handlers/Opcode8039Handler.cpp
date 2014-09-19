@@ -18,6 +18,7 @@
  */
 
 // C++ standard includes
+#include <iostream>
 
 // Falltergeist includes
 #include "../../VM/Handlers/Opcode8039Handler.h"
@@ -50,7 +51,9 @@ void Opcode8039Handler::_run()
                 case VMStackValue::TYPE_POINTER: // STRING + STRING
                 {
                     auto p1 = std::static_pointer_cast<std::string>(_vm->popDataPointer());
-                    _vm->pushDataPointer(std::shared_ptr<std::string>(new std::string((p1 == 0 ? "" : *(p1.get())) + (p2 == 0 ? "" : *(p2.get())))));
+                    std::string string1 = (p1 ? *(p1.get()) : "");
+                    std::string string2 = (p2 ? *(p1.get()) : "");
+                    _vm->pushDataPointer(std::shared_ptr<std::string>(new std::string(string1 + string2)));
                     break;
                 }
                 case VMStackValue::TYPE_FLOAT: // FLOAT + STRING
@@ -62,7 +65,6 @@ void Opcode8039Handler::_run()
                     throw Exception("VM::opcode PLUS - INTEGER+POINTER not allowed");
                 }
             }
-
             break;
         }
         case VMStackValue::TYPE_INTEGER: // INTEGER
@@ -86,7 +88,8 @@ void Opcode8039Handler::_run()
                 case VMStackValue::TYPE_POINTER: // STRING + INTEGER
                 {
                     auto p1 = std::static_pointer_cast<std::string>(_vm->popDataPointer());
-                    _vm->pushDataPointer(std::shared_ptr<std::string>(new std::string((p1 == 0 ? "" : *(p1.get())) + std::to_string(p2))));
+                    std::string string1 = (p1 ? *(p1.get()) : "");
+                    _vm->pushDataPointer(std::shared_ptr<std::string>(new std::string(string1 + std::to_string(p2))));
                     break;
                 }
             }
@@ -114,7 +117,9 @@ void Opcode8039Handler::_run()
                 case VMStackValue::TYPE_POINTER: // STRING + FLOAT
                 {
                     auto p1 = std::static_pointer_cast<std::string>(_vm->popDataPointer());
-                    _vm->pushDataPointer(std::shared_ptr<std::string>(new std::string((p1 == 0 ? "" : *(p1.get())) + std::to_string(p2))));
+                    std::string string1 = (p1 ? *(p1.get()) : "");
+
+                    _vm->pushDataPointer(std::shared_ptr<std::string>(new std::string(string1 + std::to_string(p2))));
                     break;
                 }
             }

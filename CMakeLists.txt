@@ -232,10 +232,14 @@ set(SOURCES main.cpp
             src/VM/Handlers/Opcode80BAHandler.cpp
             src/VM/Handlers/Opcode80BCHandler.h
             src/VM/Handlers/Opcode80BCHandler.cpp
+            src/VM/Handlers/Opcode80CAHandler.h
+            src/VM/Handlers/Opcode80CAHandler.cpp
             src/VM/Handlers/Opcode80CBHandler.h
             src/VM/Handlers/Opcode80CBHandler.cpp
             src/VM/Handlers/Opcode80DEHandler.h
             src/VM/Handlers/Opcode80DEHandler.cpp
+            src/VM/Handlers/Opcode8119Handler.h
+            src/VM/Handlers/Opcode8119Handler.cpp
             src/VM/Handlers/Opcode9001Handler.h
             src/VM/Handlers/Opcode9001Handler.cpp
             src/VM/Handlers/OpcodeC001Handler.h
