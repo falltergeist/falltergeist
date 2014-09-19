@@ -24,11 +24,12 @@
 
 
 // Falltergeist includes
-#include "../Engine/ResourceManager.h"
+#include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Animation.h"
 #include "../Engine/Hexagon.h"
+#include "../Engine/ResourceManager.h"
 #include "../Game/GameAmmoItemObject.h"
 #include "../Game/GameArmorItemObject.h"
 #include "../Game/GameContainerItemObject.h"
@@ -61,7 +62,6 @@
 #include "../VM/Handlers/Opcode80DEHandler.h"
 #include "../VM/Handlers/Opcode9001Handler.h"
 #include "../VM/Handlers/OpcodeC001Handler.h"
-#include "../Engine/CrossPlatform.h"
 
 // Third party includes
 

@@ -37,6 +37,7 @@
 #include "../Game/GameDudeObject.h"
 #include "../Game/GameObject.h"
 #include "../Game/GameObjectFactory.h"
+#include "../Game/GameWeaponItemObject.h"
 #include "../States/CursorDropdownState.h"
 #include "../States/ExitConfirmState.h"
 #include "../States/GameMenuState.h"
@@ -231,6 +232,16 @@ void LocationState::setLocation(std::string name)
 
         auto hexagon = hexagons()->at(mapFile->defaultPosition());
         LocationState::moveObjectToHexagon(player, hexagon);
+
+        // Just for testing
+        {
+            auto armor = GameObjectFactory::createObject(0x00000003); // powered armor
+            player->setArmorSlot(std::dynamic_pointer_cast<GameArmorItemObject>(armor));
+            auto leftHand = GameObjectFactory::createObject(0x0000000C); // minigun
+            player->setLeftHandSlot(std::dynamic_pointer_cast<GameWeaponItemObject>(leftHand));
+            auto rightHand = GameObjectFactory::createObject(0x00000007); // spear
+            player->setRightHandSlot(std::dynamic_pointer_cast<GameWeaponItemObject>(rightHand));
+        }
     }
 
     // Location script
@@ -393,12 +404,21 @@ void LocationState::think()
         }
     }
 
+    // Checking hexagons width objects
+    if (SDL_GetTicks() - _lastHexagonsWidthObjectsCheck >= 30)
+    {
+        _lastHexagonsWidthObjectsCheck = SDL_GetTicks();
+        checkHexagonsWidthObjects();
+    }
+
     // Checking objects to render
     if (SDL_GetTicks() - _lastObjectsToRenderCheck >= 10)
     {
         _lastObjectsToRenderCheck = SDL_GetTicks();
         checkObjectsToRender();
     }
+
+
 
 
     if (_locationEnter)
@@ -518,7 +538,7 @@ void LocationState::checkObjectsToRender()
 {
     _objectsToRender.clear();
 
-    for (auto hexagon : *hexagons())
+    for (auto hexagon : _hexagonsWithObjects)
     {
         for (auto object : *hexagon->objects())
         {
@@ -626,6 +646,17 @@ void LocationState::handleAction(GameObject* object, int action)
     }
 }
 
+void LocationState::checkHexagonsWidthObjects()
+{
+    _hexagonsWithObjects.clear();
+    for (auto hexagon : *hexagons())
+    {
+        if (hexagon->objects()->size() > 0)
+        {
+            _hexagonsWithObjects.push_back(hexagon);
+        }
+    }
+}
 
 
 }

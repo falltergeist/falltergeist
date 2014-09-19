@@ -48,6 +48,7 @@ protected:
 
     // Timers
     unsigned int _lastObjectsToRenderCheck = 0;
+    unsigned int _lastHexagonsWidthObjectsCheck = 0;
     unsigned int _scrollTicks = 0;
     unsigned int _scriptsTicks = 0;
 
@@ -56,6 +57,8 @@ protected:
     bool _locationEnter = true;
 
     std::vector<std::shared_ptr<Hexagon>> _hexagons;
+    std::vector<std::shared_ptr<Hexagon>> _hexagonsWithObjects;
+
     unsigned int _currentElevation = 0;
     std::shared_ptr<LocationCamera> _camera;
 
@@ -92,6 +95,7 @@ public:
     std::shared_ptr<LocationCamera> camera();
 
     void checkObjectsToRender();
+    void checkHexagonsWidthObjects();
 
     void setMVAR(unsigned int number, int value);
     int MVAR(unsigned int number);
