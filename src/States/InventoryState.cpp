@@ -32,6 +32,7 @@
 #include "../Game/GameCritterObject.h"
 #include "../Game/GameDudeObject.h"
 #include "../Game/GameObject.h"
+#include "../Game/GameObjectFactory.h"
 #include "../Game/GameWeaponItemObject.h"
 #include "../States/GameMenuState.h"
 #include "../States/InventoryState.h"
@@ -199,7 +200,7 @@ void InventoryState::init()
             if (weapon->ammoType() != 0)
             {
                 ss << "\nAmmo: /" << weapon->ammoCapacity() << " ";
-                auto ammo = Location::createObject(weapon->ammoPID());
+                auto ammo = GameObjectFactory::createObject(weapon->ammoPID());
                 ss << ammo->name();
             }
         }
@@ -225,7 +226,7 @@ void InventoryState::init()
             if (weapon->ammoType() != 0)
             {
                 ss << "\nAmmo: /" << weapon->ammoCapacity() << " ";
-                auto ammo = Location::createObject(weapon->ammoPID());
+                auto ammo = GameObjectFactory::createObject(weapon->ammoPID());
                 ss << ammo->name();
             }
         }

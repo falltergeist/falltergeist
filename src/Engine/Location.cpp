@@ -24,32 +24,17 @@
 
 // Falltergeist includes
 #include "../Engine/Game.h"
+#include "../Engine/Exception.h"
 #include "../Engine/Graphics/Animation.h"
 #include "../Engine/Graphics/Renderer.h"
-#include "../Engine/Graphics/Texture.h"
-#include "../Engine/Hexagon.h"
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/Location.h"
 #include "../Engine/LocationCamera.h"
 #include "../Engine/ResourceManager.h"
-#include "../Engine/Surface.h"
-#include "../Game/GameAmmoItemObject.h"
-#include "../Game/GameArmorItemObject.h"
-#include "../Game/GameContainerItemObject.h"
-#include "../Game/GameCritterObject.h"
 #include "../Game/GameDefines.h"
-#include "../Game/GameDoorSceneryObject.h"
-#include "../Game/GameDrugItemObject.h"
 #include "../Game/GameDudeObject.h"
-#include "../Game/GameElevatorSceneryObject.h"
-#include "../Game/GameGenericSceneryObject.h"
-#include "../Game/GameKeyItemObject.h"
-#include "../Game/GameLadderSceneryObject.h"
-#include "../Game/GameMiscItemObject.h"
-#include "../Game/GameMiscObject.h"
-#include "../Game/GameStairsSceneryObject.h"
-#include "../Game/GameWallObject.h"
 #include "../Game/GameWeaponItemObject.h"
+#include "../Game/GameObject.h"
 #include "../Game/GameObjectFactory.h"
 #include "../UI/Image.h"
 #include "../VM/VM.h"
@@ -121,7 +106,7 @@ void Location::init()
 
     for (auto mapObject : *mapObjects)
     {
-        auto object = createObject(mapObject->PID());
+        auto object = GameObjectFactory::createObject(mapObject->PID());
         if (!object) continue;
 
 
@@ -161,12 +146,12 @@ void Location::init()
 
     // Just for testing
     {
-        auto armor = createObject(0x00000003); // powered armor
+        auto armor = GameObjectFactory::createObject(0x00000003); // powered armor
         _player->setArmorSlot(std::dynamic_pointer_cast<GameArmorItemObject>(armor));
-        auto leftHand = createObject(0x0000000C); // minigun
+        auto leftHand = GameObjectFactory::createObject(0x0000000C); // minigun
         _player->setLeftHandSlot(std::dynamic_pointer_cast<GameWeaponItemObject>(leftHand));
 
-        auto rightHand = createObject(0x00000007); // spear
+        auto rightHand = GameObjectFactory::createObject(0x00000007); // spear
         _player->setRightHandSlot(std::dynamic_pointer_cast<GameWeaponItemObject>(rightHand));
     }
 
@@ -207,11 +192,6 @@ void Location::_generateRoof()
         auto tile = std::shared_ptr<Image>(new Image("art/tiles/" + frmName));
         tile->texture()->blitTo(_tilesRoof, tileToX(i), tileToY(i));
     }
-}
-
-std::shared_ptr<GameObject> Location::createObject(unsigned int PID)
-{
-    return GameObjectFactory::createObject(PID);
 }
 
 void Location::handleAction(GameObject* object, int action)

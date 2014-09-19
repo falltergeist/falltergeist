@@ -90,8 +90,6 @@ public:
     std::shared_ptr<Texture> tilesRoof();
     std::shared_ptr<LocationCamera> camera();
 
-    static std::shared_ptr<GameObject> createObject(unsigned int PID);
-
     std::shared_ptr<libfalltergeist::MapFileType> mapFile();
     std::vector<std::shared_ptr<GameObject>>* objects();
     std::vector<std::shared_ptr<GameObject>>* objectsToRender();
