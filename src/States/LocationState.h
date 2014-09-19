@@ -47,6 +47,8 @@ protected:
     unsigned int _currentElevation = 0;
     std::shared_ptr<LocationCamera> _camera;
 
+    std::vector<std::shared_ptr<GameObject>> _objectsToRender;
+
     std::shared_ptr<Location> _location;
     std::shared_ptr<Image> _floor;
     std::shared_ptr<Image> _roof;
@@ -76,6 +78,8 @@ public:
 
     std::vector<std::shared_ptr<Hexagon>>* hexagons();
     std::shared_ptr<LocationCamera> camera();
+
+    void checkObjectsToRender();
 
     void onBackgroundClick(std::shared_ptr<MouseEvent> event);
     void onKeyUp(std::shared_ptr<KeyboardEvent> event);

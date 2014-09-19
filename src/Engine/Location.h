@@ -50,7 +50,6 @@ protected:
     VM* _script = 0;
     std::shared_ptr<GameDudeObject> _player;
     std::vector<std::shared_ptr<GameObject>> _objects;
-    std::vector<std::shared_ptr<GameObject>> _objectsToRender;
     std::vector<int> _MVARS;
     std::map<std::string, std::shared_ptr<VMStackValue>> _EVARS;
     unsigned int _lastObjectsCheck = 0;
@@ -83,14 +82,12 @@ public:
     int width();
     int height();
     void handleAction(GameObject* object, int action);
-    void checkObjectsToRender();
 
     std::shared_ptr<Texture> tilesFloor();
     std::shared_ptr<Texture> tilesRoof();
 
     std::shared_ptr<libfalltergeist::MapFileType> mapFile();
     std::vector<std::shared_ptr<GameObject>>* objects();
-    std::vector<std::shared_ptr<GameObject>>* objectsToRender();
 
     void setMVAR(unsigned int number, int value);
     int MVAR(unsigned int number);

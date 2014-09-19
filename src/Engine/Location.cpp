@@ -147,7 +147,7 @@ void Location::init()
         _script = new VM(ResourceManager::intFileType(_mapFile->scriptId()-1), Game::getInstance()->location());
     }
 
-    checkObjectsToRender();
+    //Game::getInstance()->locationState()->checkObjectsToRender();
 }
 
 void Location::_generateFloor()
@@ -212,7 +212,7 @@ void Location::think()
     if (SDL_GetTicks() - _lastObjectsCheck >= 10)
     {
         _lastObjectsCheck = SDL_GetTicks();
-        checkObjectsToRender();
+        Game::getInstance()->locationState()->checkObjectsToRender();
     }
 
     if (!_initialized)
@@ -255,47 +255,6 @@ void Location::think()
 }
 
 
-void Location::checkObjectsToRender()
-{
-    _objectsToRender.clear();
-
-    auto camera = Game::getInstance()->locationState()->camera();
-
-    for (auto object : _objects)
-    {
-        auto ui = std::dynamic_pointer_cast<ActiveUI>(object->ui());
-        if (!ui) continue;
-
-        unsigned int x, y, width, height;
-
-        width = ui->width();
-        height = ui->height();
-
-        auto animation = std::dynamic_pointer_cast<Animation>(object->ui());
-        if (animation)
-        {
-            x = Location::hexagonToX(object->position()) + ui->xOffset() - std::floor(width*0.5);
-            y = Location::hexagonToY(object->position()) + ui->yOffset() - height;
-        }
-        else
-        {
-            x = Location::hexagonToX(object->position()) + ui->xOffset();
-            y = Location::hexagonToY(object->position()) + ui->yOffset();
-        }
-
-        // check if object is out of camera borders
-        if (x + width < camera->x()) continue; // right
-        if (y + height < camera->y()) continue; // bottom
-        if (x > camera->x() + camera->width()) continue; // left
-        if (y > camera->y() + camera->height()) continue; // top
-
-        ui->setX(Location::hexagonToX(object->position()) - camera->x());
-        ui->setY(Location::hexagonToY(object->position())- camera->y());
-
-
-        _objectsToRender.push_back(object);
-    }
-}
 
 int Location::hexagonToX(unsigned int hexagon)
 {
@@ -354,11 +313,6 @@ unsigned int Location::tileToY(unsigned int tile)
 std::vector<std::shared_ptr<GameObject>>* Location::objects()
 {
     return &_objects;
-}
-
-std::vector<std::shared_ptr<GameObject>>* Location::objectsToRender()
-{
-    return &_objectsToRender;
 }
 
 int Location::width()

@@ -70,9 +70,9 @@ void LocationState::init()
 
     // Creating 200x200 hexagonal map
     unsigned int index = 0;
-    for (unsigned int p = 0; p != 200; ++p)
+    for (unsigned int q = 0; q != 200; ++q)
     {
-        for (unsigned int q = 0; q != 200; ++q, ++index)
+        for (unsigned int p = 0; p != 200; ++p, ++index)
         {
             auto hexagon = std::shared_ptr<Hexagon>(new Hexagon(index));
             int x = 48*100 + 16*(q+1) - 24*p;
@@ -258,8 +258,10 @@ void LocationState::generateUi()
     _ui.clear();
     add(_floor);
 
-    for (auto object : *_location->objectsToRender())
+    for (auto object : _objectsToRender)
     {
+        object->ui()->removeEventHandlers("mouseleftdown");
+        object->ui()->addEventHandler("mouseleftdown", object.get(), (EventRecieverMethod) &LocationState::onMouseDown);
         add(object->ui());
     }
 
@@ -269,15 +271,6 @@ void LocationState::generateUi()
     _floor->setY(-camera()->y());
     //_roof->setX(-_location->camera()->x());
     //_roof->setY(-_location->camera()->y() - 100);
-
-    for(auto object : *_location->objectsToRender())
-    {
-        object->ui()->removeEventHandlers("mouseleftdown");
-        object->ui()->addEventHandler("mouseleftdown", object.get(), (EventRecieverMethod) &LocationState::onMouseDown);
-        //object->ui()->removeEventHandlers("mouseleftclick");
-        //object->ui()->addEventHandler("mouseleftclick", object, (EventRecieverMethod) &LocationState::onObjectClick);
-        //object->surface()->setOwner(object);
-    }
 
     for (auto ui : _panelUIs)
     {
@@ -419,5 +412,48 @@ std::shared_ptr<LocationCamera> LocationState::camera()
 {
     return _camera;
 }
+
+void LocationState::checkObjectsToRender()
+{
+    _objectsToRender.clear();
+
+    for (auto object : *_location->objects())
+    {
+        auto ui = std::dynamic_pointer_cast<ActiveUI>(object->ui());
+        if (!ui) continue;
+
+        auto hexagon = hexagons()->at(object->position());
+
+        unsigned int x, y, width, height;
+
+        width = ui->width();
+        height = ui->height();
+
+        auto animation = std::dynamic_pointer_cast<Animation>(object->ui());
+        if (animation)
+        {
+            x = hexagon->x() + ui->xOffset() - std::floor(width*0.5);
+            y = hexagon->y() + ui->yOffset() - height;
+        }
+        else
+        {
+            x = hexagon->x() + ui->xOffset();
+            y = hexagon->y() + ui->yOffset();
+        }
+
+        // check if object is out of camera borders
+        if (x + width < camera()->x()) continue; // right
+        if (y + height < camera()->y()) continue; // bottom
+        if (x > camera()->x() + camera()->width()) continue; // left
+        if (y > camera()->y() + camera()->height()) continue; // top
+
+        ui->setX(hexagon->x() - camera()->x());
+        ui->setY(hexagon->y() - camera()->y());
+
+
+        _objectsToRender.push_back(object);
+    }
+}
+
 
 }
