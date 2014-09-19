@@ -70,7 +70,7 @@ void StartState::init()
 void StartState::think()
 {
     State::think();
-    if (true)
+    if (false)
     {
         std::shared_ptr<GameDudeObject>player = std::shared_ptr<GameDudeObject>(new GameDudeObject());
         player->loadFromGCDFile(ResourceManager::gcdFileType("premade/combat.gcd"));
