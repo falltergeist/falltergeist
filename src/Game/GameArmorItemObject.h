@@ -39,6 +39,7 @@ protected:
     int _perk = -1;
     unsigned int _maleFID = 0;
     unsigned int _femaleFID = 0;
+    unsigned int _armorClass = 0;
 public:
     enum { DAMAGE_NORMAL = 0, DAMAGE_LASER, DAMAGE_FIRE, DAMAGE_PLASMA, DAMAGE_ELECTRICAL, DAMAGE_EMP, DAMAGE_EXPLOSION, DAMAGE_RADIATION, DAMAGE_POISON };
 
@@ -59,6 +60,9 @@ public:
 
     unsigned int femaleFID();
     void setFemaleFID(unsigned int value);
+
+    unsigned int armorClass();
+    void setArmorClass(unsigned int value);
 
 };
 

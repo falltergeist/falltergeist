@@ -290,6 +290,7 @@ std::shared_ptr<GameObject> Location::createObject(int PID)
                     ((GameArmorItemObject*)object.get())->setPerk(proto->perk());
                     ((GameArmorItemObject*)object.get())->setMaleFID(proto->armorMaleFID());
                     ((GameArmorItemObject*)object.get())->setFemaleFID(proto->armorFemaleFID());
+                    ((GameArmorItemObject*)object.get())->setArmorClass(proto->armorClass());
                     break;
                 }
                 case libfalltergeist::ProFileType::TYPE_ITEM_CONTAINER:
