@@ -26,33 +26,26 @@
 #include <string>
 #include <map>
 #include <memory>
+#include <iostream>
+#include <sstream>
+#include <algorithm>
 
 // Falltergeist includes
+#include "../Engine/IniParser.h"
+#include "../Engine/IniSection.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-typedef std::map<std::string, std::string> IniFileSection;    
-
-class IniFile 
+class IniFile
 {
-protected:
-    std::string _filename;
-    std::map<std::string, std::shared_ptr<IniFileSection>> _sections;
+    std::map<std::string, std::shared_ptr<IniSection>> _sections;
 public:
-    IniFile(std::string filename);
-    virtual ~IniFile();
-    void removeSection(std::string name);
-    std::shared_ptr<IniFileSection> addSection(std::string name);
-    std::shared_ptr<IniFileSection> getSection(std::string name);
-    bool hasSection(std::string name);
-    void save();
-    void parse();
-    
-    void setFilename(std::string filename);
-    std::string filename();
+    std::shared_ptr<IniSection> section(const std::string &name);
+
+    bool hasSection(const std::string &name) const;
 };
 
 }

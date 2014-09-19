@@ -18,35 +18,57 @@
  *
  */
 
+#ifndef FALLTERGEIST_INI_VALUE_H
+#define FALLTERGEIST_INI_VALUE_H
+
 // C++ standard includes
+#include <string>
 
 // Falltergeist includes
-#include <algorithm> 
-
-#include "../Engine/IniFile.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Exception.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-std::shared_ptr<IniSection> IniFile::section(const std::string &name)
+class IniValue
 {
-    auto it = _sections.find(name);
-    if (it == _sections.end())
+public:
+    enum class Tag
     {
-        auto result = std::shared_ptr<IniSection>(new IniSection());
-        _sections[name] = result;
-        return result;
-    }
-    return it->second;
+        DOUBLE,
+        INTEGER,
+        BOOLEAN,
+        STRING
+    };
+
+    IniValue();
+
+    ~IniValue();
+
+    IniValue & operator=(const IniValue &rhs);
+
+    IniValue(double doubleVal);
+
+    IniValue(int integerVal);
+
+    IniValue(bool booleanVal);
+    IniValue(std::string stringVal);
+
+    friend class IniSection;
+
+private:
+    Tag _tag;
+
+    union
+    {
+        double _doubleVal;
+        int _integerVal;
+        bool _booleanVal;
+        std::string _stringVal;
+    };
+};
+
 }
 
-bool IniFile::hasSection(const std::string &name) const
-{
-    return _sections.find(name) != _sections.end();
-}
-
-}
+#endif // FALLTERGEIST_INI_VALUE_H

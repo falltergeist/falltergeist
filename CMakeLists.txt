@@ -89,6 +89,12 @@ set(SOURCES main.cpp
             src/Engine/Input/Mouse.h
             src/Engine/IniFile.cpp
             src/Engine/IniFile.h
+            src/Engine/IniParser.cpp
+            src/Engine/IniParser.h
+            src/Engine/IniSection.cpp
+            src/Engine/IniSection.h
+            src/Engine/IniValue.cpp
+            src/Engine/IniValue.h
             src/Engine/Location.cpp
             src/Engine/Location.h
             src/Engine/LocationCamera.cpp
@@ -97,6 +103,8 @@ set(SOURCES main.cpp
             src/Engine/Map.h
             src/Engine/ResourceManager.cpp
             src/Engine/ResourceManager.h
+            src/Engine/Settings.cpp
+            src/Engine/Settings.h
             src/Engine/Screen.cpp
             src/Engine/Screen.h
             src/Engine/State.cpp

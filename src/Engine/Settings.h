@@ -15,38 +15,47 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
+
+#ifndef FALLTERGEIST_ENGINE_SETTINGS_H
+#define FALLTERGEIST_ENGINE_SETTINGS_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include <algorithm> 
 
-#include "../Engine/IniFile.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Exception.h"
-
-// Third party includes
+// Third patry includes
 
 namespace Falltergeist
 {
 
-std::shared_ptr<IniSection> IniFile::section(const std::string &name)
+class EngineSettings
 {
-    auto it = _sections.find(name);
-    if (it == _sections.end())
+public:
+    enum class Renderer
     {
-        auto result = std::shared_ptr<IniSection>(new IniSection());
-        _sections[name] = result;
-        return result;
-    }
-    return it->second;
+        OPENGL,
+        SDL
+    };
+
+    EngineSettings();
+    ~EngineSettings();
+
+    unsigned int screenWidth() const;
+
+    unsigned int screenHeight() const;
+
+    Renderer renderer() const;
+
+    bool audioEnabled() const;
+
+private:
+    unsigned int _screenWidth;
+    unsigned int _screenHeight;
+    Renderer _renderer;
+    bool _audioEnabled;
+};
+
 }
 
-bool IniFile::hasSection(const std::string &name) const
-{
-    return _sections.find(name) != _sections.end();
-}
-
-}
+#endif // FALLTERGEIST_ENGINE_SETTINGS_H

@@ -18,35 +18,47 @@
  *
  */
 
+#ifndef FALLTERGEIST_INI_PARSER_H
+#define FALLTERGEIST_INI_PARSER_H
+
 // C++ standard includes
+#include <iostream>
+#include <memory>
 
 // Falltergeist includes
-#include <algorithm> 
-
-#include "../Engine/IniFile.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Exception.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-std::shared_ptr<IniSection> IniFile::section(const std::string &name)
+class IniFile;
+
+class IniParser
 {
-    auto it = _sections.find(name);
-    if (it == _sections.end())
-    {
-        auto result = std::shared_ptr<IniSection>(new IniSection());
-        _sections[name] = result;
-        return result;
-    }
-    return it->second;
+private:
+    std::istream &_stream; // stream to parse
+    std::string  _section; // current section
+
+protected:
+    void _trim(std::string &line);
+
+    void _rtrim(std::string &line);
+
+    void _ltrim(std::string &line);
+
+    void _tolower(std::string &line);
+
+    bool _parseBool(std::string &name, std::string &line, std::shared_ptr<IniFile> ini);
+
+    bool _parseDecimal(std::string &name, std::string &line, std::shared_ptr<IniFile> ini);
+
+
+public:
+    IniParser(std::istream &stream);
+    std::shared_ptr<IniFile> parse();
+};
+
 }
 
-bool IniFile::hasSection(const std::string &name) const
-{
-    return _sections.find(name) != _sections.end();
-}
-
-}
+#endif // FALLTERGEIST_INI_PARSER_H
