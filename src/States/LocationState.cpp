@@ -645,9 +645,8 @@ void LocationState::handleAction(GameObject* object, int action)
 void LocationState::checkHexagonsWidthObjects()
 {
     _hexagonsWithObjects.clear();
-    for (auto it = hexagons()->rbegin(); it != hexagons()->rend(); ++it)
+    for (auto hexagon : *hexagons())
     {
-        auto hexagon = *it;
         if (hexagon->objects()->size() > 0)
         {
             _hexagonsWithObjects.push_back(hexagon);

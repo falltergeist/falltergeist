@@ -88,13 +88,12 @@ public:
     virtual void think();
     virtual void handle(std::shared_ptr<Event> event);
 
-    void generateUi();
-
     std::vector<std::shared_ptr<Hexagon>>* hexagons();
     std::shared_ptr<LocationCamera> camera();
 
     void checkObjectsToRender();
     void checkHexagonsWidthObjects();
+    void generateUi();
 
     void setMVAR(unsigned int number, int value);
     int MVAR(unsigned int number);
