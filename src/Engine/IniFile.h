@@ -43,7 +43,17 @@ class IniFile
 {
     std::map<std::string, std::shared_ptr<IniSection>> _sections;
 public:
+    using iterator = std::map<std::string, std::shared_ptr<IniSection>>::iterator;
+    using const_iterator = std::map<std::string, std::shared_ptr<IniSection>>::const_iterator;
+
+    IniFile();
+    ~IniFile();
     std::shared_ptr<IniSection> section(const std::string &name);
+
+    iterator begin();
+    const_iterator begin() const;
+    iterator end();
+    const_iterator end() const;
 
     bool hasSection(const std::string &name) const;
 };

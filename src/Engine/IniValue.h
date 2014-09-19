@@ -23,6 +23,7 @@
 
 // C++ standard includes
 #include <string>
+#include <iosfwd>
 
 // Falltergeist includes
 
@@ -56,8 +57,9 @@ public:
     IniValue(bool booleanVal);
     IniValue(std::string stringVal);
     IniValue(const IniValue &rhs);
-    friend class IniSection;
 
+    friend class IniSection;
+    friend std::ostream &operator << (std::ostream &os, const IniValue &iv);
 private:
     Tag _tag;
 

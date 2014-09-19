@@ -42,6 +42,7 @@ private:
     using PropertyMapConstIterator = PropertyMap::const_iterator;
 
     PropertyMap _properties;
+    std::string _name;
 
     static void _property(PropertyMapConstIterator iter, double &ret, double def);
 
@@ -49,7 +50,7 @@ private:
 
     static void _property(PropertyMapConstIterator iter, bool &ret, bool def);
 
-    static void _property(PropertyMapConstIterator iter, std::string &ret, std::string def);
+    static void _property(PropertyMapConstIterator iter, std::string &ret, const std::string &def);
 
     static bool _hasType(PropertyMapConstIterator iter, IniValue::Tag tag);
 
@@ -58,30 +59,54 @@ private:
     static std::string _valueToString(const IniValue &value);
 
 public:
-    template <class T>
-    T property(std::string name, const T& def)
-    {
-        PropertyMapConstIterator iter = _properties.find(name);
-        if (iter == _properties.end())
-        {
-            std::cerr << "Property `" << name << "` not found, use default value: " << def << std::endl;
-            return def;
-        };
+    IniSection(const std::string &name);
+    ~IniSection();
 
-        T ret;
-        IniSection::_property(iter, ret, def);
-        return ret;
-    }
 
-    void setProperty(std::string name, int value);
+    using iterator = PropertyMap::iterator;
+    using const_iterator = PropertyMap::const_iterator;
 
-    void setProperty(std::string name, double value);
+    iterator begin();
+    const_iterator begin() const;
+    iterator end();
+    const_iterator end() const;
 
-    void setProperty(std::string name, bool value);
+    // Trying to invoke this method causes compilation error on gcc 4.7.3:
+    // video->template property<int>("width", 640) ==>
+    // error: ‘template’ (as a disambiguator) is only allowed within templates
+    // Looks like a gcc bug, so, until better days come...
+//    template <class T>
+//    T property(std::string name, const T& def)
+//    {
+//        PropertyMapConstIterator iter = _properties.find(name);
+//        if (iter == _properties.end())
+//        {
+//            std::cerr << "Property `" << name << "` not found, use default value: " << def << std::endl;
+//            return def;
+//        };
+//
+//        T ret;
+//        IniSection::_property(iter, ret, def);
+//        return ret;
+//    }
 
-    void setProperty(std::string name, const std::string &value);
+    int propertyInt(const std::string &name, int def);
 
-    bool hasProperty(std::string name) const;
+    double propertyDouble(const std::string &name, double def);
+
+    bool propertyBool(const std::string &name, bool def);
+
+    std::string propertyString(const std::string &name, const std::string &def);
+
+    void setPropertyInt(const std::string &name, int value);
+
+    void setPropertyDouble(const std::string &name, double value);
+
+    void setPropertyBool(const std::string &name, bool value);
+
+    void setPropertyString(const std::string &name, const std::string &value);
+
+    bool hasProperty(const std::string &name) const;
 };
 
 }
