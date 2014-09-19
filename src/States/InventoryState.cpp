@@ -317,7 +317,7 @@ void InventoryState::onSlotDrag(std::shared_ptr<MouseEvent> event)
     //Game::getInstance()->states()->back()->ui()->push_back(dragUi);
 }
 
-std::string InventoryState::handItemSummary (std::shared_ptr<GameItemObject> hand)
+std::string InventoryState::_handItemSummary (std::shared_ptr<GameItemObject> hand)
 {
     std::stringstream ss;
     if (hand)
