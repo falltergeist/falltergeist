@@ -94,6 +94,9 @@ void Opcode810AHandler::_run()
     auto object = std::static_pointer_cast<GameObject>(_vm->popDataPointer());
 
     auto floatMessage = std::shared_ptr<TextArea>(new TextArea(*string.get()));
+    floatMessage->setWidth(200);
+    floatMessage->setWordWrap(true);
+    floatMessage->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     floatMessage->setFont(ResourceManager::font("font1.aaf", color));
     object->setFloatMessage(floatMessage);
 

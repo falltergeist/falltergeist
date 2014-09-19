@@ -336,7 +336,7 @@ void LocationState::generateUi()
         if (auto message = object->floatMessage())
         {
             message->setX(object->hexagon()->x() - camera()->x() - message->width()*0.5);
-            message->setY(object->hexagon()->y() - camera()->y() - 80);
+            message->setY(object->hexagon()->y() - camera()->y() - 70 - message->height());
             _floatMessages.push_back(message);
         }
     }
