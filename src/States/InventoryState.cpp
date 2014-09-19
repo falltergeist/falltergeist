@@ -28,6 +28,7 @@
 #include "../Engine/Location.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/State.h"
+#include "../Game/GameArmorItemObject.h"
 #include "../Game/GameCritterObject.h"
 #include "../Game/GameDudeObject.h"
 #include "../Game/GameObject.h"
@@ -137,15 +138,24 @@ void InventoryState::init()
     auto armorClassLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+94, screenY+30));
     armorClassLabel->setFont(font)->setWidth(46)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
-    // label: damage levels
+    // label: damage treshold levels
     ss.str("");
-    ss << player->damageResist(GameCritterObject::DAMAGE_NORMAL) <<"/\n";
-    ss << player->damageResist(GameCritterObject::DAMAGE_LASER) << "/\n";
-    ss << player->damageResist(GameCritterObject::DAMAGE_FIRE) << "/\n";
-    ss << player->damageResist(GameCritterObject::DAMAGE_PLASMA) << "/\n";
-    ss << player->damageResist(GameCritterObject::DAMAGE_EXPLOSION) << "/";
-    auto damageLevelsLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+94, screenY+40));
-    damageLevelsLabel->setFont(font)->setWidth(26)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    ss << player->damageThreshold(GameCritterObject::DAMAGE_NORMAL) + armorSlot->damageThreshold(GameArmorItemObject::DAMAGE_NORMAL) <<"/\n";
+    ss << player->damageThreshold(GameCritterObject::DAMAGE_LASER) + armorSlot->damageThreshold(GameArmorItemObject::DAMAGE_LASER) <<"/\n";
+    ss << player->damageThreshold(GameCritterObject::DAMAGE_FIRE) + armorSlot->damageThreshold(GameArmorItemObject::DAMAGE_FIRE) <<"/\n";
+    ss << player->damageThreshold(GameCritterObject::DAMAGE_PLASMA) + armorSlot->damageThreshold(GameArmorItemObject::DAMAGE_PLASMA) <<"/\n";
+    ss << player->damageThreshold(GameCritterObject::DAMAGE_EXPLOSION) + armorSlot->damageThreshold(GameArmorItemObject::DAMAGE_NORMAL) <<"/";
+    auto damageThresholdLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+94, screenY+40));
+    damageThresholdLabel->setFont(font)->setWidth(26)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+
+    // label: damage resistance levels
+    ss.str("");
+    ss << player->damageResist(GameCritterObject::DAMAGE_NORMAL) + armorSlot->damageResist(GameArmorItemObject::DAMAGE_NORMAL) <<"%\n";
+    ss << player->damageResist(GameCritterObject::DAMAGE_LASER) + armorSlot->damageResist(GameArmorItemObject::DAMAGE_LASER) <<"%\n";
+    ss << player->damageResist(GameCritterObject::DAMAGE_FIRE) + armorSlot->damageResist(GameArmorItemObject::DAMAGE_FIRE) <<"%\n";
+    ss << player->damageResist(GameCritterObject::DAMAGE_PLASMA) + armorSlot->damageResist(GameArmorItemObject::DAMAGE_PLASMA) <<"%\n";
+    ss << player->damageResist(GameCritterObject::DAMAGE_EXPLOSION) + armorSlot->damageResist(GameArmorItemObject::DAMAGE_NORMAL) <<"%";
+    auto damageResistanceLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+120, screenY+40));
 
     auto line2 = std::shared_ptr<Image>(new Image(142, 1));
     line2->setX(screenX);
@@ -176,54 +186,12 @@ void InventoryState::init()
 
     // label: left hand
     ss.str("");
-    if (leftHand)
-    {
-        ss << leftHand->name() << "\n";
-        // is it weapon
-        if (leftHand->subtype() == GameObject::TYPE_ITEM_WEAPON)
-        {
-            auto weapon = std::dynamic_pointer_cast<GameWeaponItemObject>(leftHand);
-            ss << "Dmg: " << weapon->damageMin() << "-" << weapon->damageMax() << "  ";
-            ss << "Rng: " << weapon->rangePrimary();
-            // has it ammo?
-            if (weapon->ammoType() != 0)
-            {
-                ss << "\nAmmo: /" << weapon->ammoCapacity() << " ";
-                auto ammo = Location::createObject(weapon->ammoPID());
-                ss << ammo->name();
-            }
-        }
-    }
-    else
-    {
-        ss << "No item\nUnarmed dmg:";
-    }
+    ss << handItemSummary (leftHand);
     auto leftHandLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX, screenY+100));
 
     // label: right hand
     ss.str("");
-    if (rightHand)
-    {
-        ss << rightHand->name() << "\n";
-        // is it weapon
-        if (rightHand->subtype() == GameObject::TYPE_ITEM_WEAPON)
-        {
-            auto weapon = std::dynamic_pointer_cast<GameWeaponItemObject>(rightHand);
-            ss << "Dmg: " << weapon->damageMin() << "-" << weapon->damageMax() << "  ";
-            ss << "Rng: " << weapon->rangePrimary();
-            // has it ammo?
-            if (weapon->ammoType() != 0)
-            {
-                ss << "\nAmmo: /" << weapon->ammoCapacity() << " ";
-                auto ammo = Location::createObject(weapon->ammoPID());
-                ss << ammo->name();
-            }
-        }
-    }
-    else
-    {
-        ss << "No item\nUnarmed dmg:";
-    }
+    ss << handItemSummary (rightHand);
     auto rightHandLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX, screenY+140));
 
     add(background);
@@ -240,7 +208,8 @@ void InventoryState::init()
     add(textLabel);
     add(hitPointsLabel);
     add(armorClassLabel);
-    add(damageLevelsLabel);
+    add(damageThresholdLabel);
+    add(damageResistanceLabel);
     add(line2);
     add(line3);
     add(totalWtLabel);
@@ -323,4 +292,32 @@ void InventoryState::onSlotDrag(std::shared_ptr<MouseEvent> event)
     //Game::getInstance()->states()->back()->ui()->push_back(dragUi);
 }
 
+std::string InventoryState::handItemSummary (std::shared_ptr<GameItemObject> hand)
+{
+    std::stringstream ss;
+    if (hand)
+    {
+        ss << hand->name() << "\n";
+        // is it weapon
+        if (hand->subtype() == GameObject::TYPE_ITEM_WEAPON)
+        {
+            auto weapon = std::dynamic_pointer_cast<GameWeaponItemObject>(hand);
+            ss << "Dmg: " << weapon->damageMin() << "-" << weapon->damageMax() << " ";
+            ss << "Rng: " << weapon->rangePrimary();
+            // has it ammo?
+            if (weapon->ammoType() != 0)
+            {
+                ss << "\nAmmo: /" << weapon->ammoCapacity() << " ";
+                auto ammo = Location::createObject(weapon->ammoPID());
+                ss << ammo->name();
+            }
+        }
+    }
+    else
+    {
+        ss << "No item\nUnarmed dmg:";
+    }
+    return ss.str();
 }
+}
+
