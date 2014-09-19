@@ -23,17 +23,20 @@
 #include <iostream>
 
 // Falltergeist includes
+#include "../Engine/CrossPlatform.h"
 #include "../Engine/Event/MouseEvent.h"
+#include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Animation.h"
 #include "../Engine/Graphics/Renderer.h"
 #include "../Engine/Input/Mouse.h"
-#include "../Engine/Location.h"
 #include "../Engine/LocationCamera.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Screen.h"
+#include "../Game/GameDefines.h"
 #include "../Game/GameDudeObject.h"
 #include "../Game/GameObject.h"
+#include "../Game/GameObjectFactory.h"
 #include "../States/CursorDropdownState.h"
 #include "../States/ExitConfirmState.h"
 #include "../States/GameMenuState.h"
@@ -47,6 +50,7 @@
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
 #include "../Engine/Hexagon.h"
+#include "../VM/VM.h"
 
 // Third party includes
 
@@ -170,22 +174,34 @@ void LocationState::setLocation(std::string name)
     camera()->setXPosition(hexagons()->at(mapFile->defaultPosition())->x());
     camera()->setYPosition(hexagons()->at(mapFile->defaultPosition())->y());
 
+    // Initialize MAP vars
+    if (mapFile->MVARsize() > 0)
+    {
+        auto name = mapFile->name();
+        auto gam = ResourceManager::gamFileType("maps/" + name.substr(0, name.find(".")) + ".gam");
+        for (auto mvar : *gam->MVARS())
+        {
+            _MVARS.push_back(mvar.second);
+        }
+    }
 
-    /*
+    // @todo remove objects from hexagons
+
     auto mapObjects = mapFile->elevations()->at(_currentElevation)->objects();
 
     for (auto mapObject : *mapObjects)
     {
-        auto object = createObject(mapObject->PID());
-        if (!object) continue;
+        auto object = GameObjectFactory::createObject(mapObject->PID());
+        if (!object)
+        {
+            CrossPlatform::debug("LocationState::setLocation() - cant create object with PID: " + std::to_string(mapObject->PID()), DEBUG_ERROR);
+            continue;
+        }
 
 
-        object->setLocation(this);
-        object->setFID( mapObject->FID() );
-        object->setPID( mapObject->PID() );
-        object->setElevation( mapObject->elevation() );
-        object->setOrientation( mapObject->orientation() );
-        object->setPosition( mapObject->hexPosition() );
+        object->setFID(mapObject->FID());
+        object->setElevation(_currentElevation);
+        object->setOrientation(mapObject->orientation());
 
         if (mapObject->scriptId() > 0)
         {
@@ -198,11 +214,31 @@ void LocationState::setLocation(std::string name)
             if (intFile) object->scripts()->push_back(new VM(intFile, object));
         }
 
-        _objects.push_back(object);
+        auto hexagon = hexagons()->at(mapObject->hexPosition());
+        LocationState::moveObjectToHexagon(object, hexagon);
     }
 
-    */
-    _location = std::shared_ptr<Location>(new Location(mapFile));
+    // Adding dude
+    {
+        auto player = Game::getInstance()->player();
+        player->setPID(0x01000001);
+        player->setFID(FID_HERO_MALE);
+        player->setOrientation(mapFile->defaultOrientation());
+
+        // Player script
+        auto script = new VM(ResourceManager::intFileType(0), player);
+        player->scripts()->push_back(script);
+
+        auto hexagon = hexagons()->at(mapFile->defaultPosition());
+        LocationState::moveObjectToHexagon(player, hexagon);
+    }
+
+    // Location script
+    if (mapFile->scriptId() > 0)
+    {
+        _locationScript = std::shared_ptr<VM>(new VM(ResourceManager::intFileType(mapFile->scriptId()-1), Game::getInstance()->locationState()));
+    }
+
 
     // Generates floor and roof images
     {
@@ -311,7 +347,6 @@ void LocationState::generateUi()
 void LocationState::think()
 {
     State::think();
-    if (!_location) return;
 
     // location scrolling
     if (_scrollTicks + 10 < SDL_GetTicks())
@@ -358,7 +393,57 @@ void LocationState::think()
         }
     }
 
-    _location->think();
+    // Checking objects to render
+    if (SDL_GetTicks() - _lastObjectsToRenderCheck >= 10)
+    {
+        _lastObjectsToRenderCheck = SDL_GetTicks();
+        checkObjectsToRender();
+    }
+
+
+    if (_locationEnter)
+    {
+        _locationEnter = false;
+
+        if (_locationScript) _locationScript->initialize();
+        if (_locationScript) _locationScript->call("map_enter_p_proc");
+
+        for (auto hexagon : *hexagons())
+        {
+            for (auto object : *hexagon->objects())
+            {
+                // initialize scripts
+                for (auto script : *object->scripts()) script->initialize();
+
+                // map_enter_p_proc
+                for (auto script : *object->scripts()) script->call("map_enter_p_proc");
+            }
+        }
+
+    }
+    else
+    {
+        if (_scriptsTicks + 500 < SDL_GetTicks())
+        {
+            _scriptsTicks = SDL_GetTicks();
+            //_locationScript->call("map_update_p_proc");
+            for (auto hexagon : *hexagons())
+            {
+                for (auto object : *hexagon->objects())
+                {
+                    for (auto script : *object->scripts())
+                    {
+                        script->call("map_update_p_proc");
+                        script->call("look_at_p_proc");
+                        script->call("description_p_proc");
+                        script->call("critter_p_proc");
+                        //script->call("timed_event_p_proc");
+                    }
+                 }
+            }
+        }
+    }
+
     generateUi();
 }
 
@@ -377,11 +462,6 @@ void LocationState::handle(std::shared_ptr<Event> event)
         }
     }
     State::handle(event);
-}
-
-std::shared_ptr<Location> LocationState::location()
-{
-    return _location;
 }
 
 void LocationState::onChangeHandButtonClick(std::shared_ptr<MouseEvent> event)
@@ -438,43 +518,114 @@ void LocationState::checkObjectsToRender()
 {
     _objectsToRender.clear();
 
-    for (auto object : *_location->objects())
+    for (auto hexagon : *hexagons())
     {
-        auto ui = std::dynamic_pointer_cast<ActiveUI>(object->ui());
-        if (!ui) continue;
-
-        auto hexagon = hexagons()->at(object->position());
-
-        unsigned int x, y, width, height;
-
-        width = ui->width();
-        height = ui->height();
-
-        auto animation = std::dynamic_pointer_cast<Animation>(object->ui());
-        if (animation)
+        for (auto object : *hexagon->objects())
         {
-            x = hexagon->x() + ui->xOffset() - std::floor(width*0.5);
-            y = hexagon->y() + ui->yOffset() - height;
+            auto ui = std::dynamic_pointer_cast<ActiveUI>(object->ui());
+            if (!ui) continue;
+
+            unsigned int x, y, width, height;
+
+            width = ui->width();
+            height = ui->height();
+
+            auto animation = std::dynamic_pointer_cast<Animation>(object->ui());
+            if (animation)
+            {
+                x = hexagon->x() + ui->xOffset() - std::floor(width*0.5);
+                y = hexagon->y() + ui->yOffset() - height;
+            }
+            else
+            {
+                x = hexagon->x() + ui->xOffset();
+                y = hexagon->y() + ui->yOffset();
+            }
+
+            // check if object is out of camera borders
+            if (x + width < camera()->x()) continue; // right
+            if (y + height < camera()->y()) continue; // bottom
+            if (x > camera()->x() + camera()->width()) continue; // left
+            if (y > camera()->y() + camera()->height()) continue; // top
+
+            ui->setX(hexagon->x() - camera()->x());
+            ui->setY(hexagon->y() - camera()->y());
+
+
+            _objectsToRender.push_back(object);
         }
-        else
-        {
-            x = hexagon->x() + ui->xOffset();
-            y = hexagon->y() + ui->yOffset();
-        }
-
-        // check if object is out of camera borders
-        if (x + width < camera()->x()) continue; // right
-        if (y + height < camera()->y()) continue; // bottom
-        if (x > camera()->x() + camera()->width()) continue; // left
-        if (y > camera()->y() + camera()->height()) continue; // top
-
-        ui->setX(hexagon->x() - camera()->x());
-        ui->setY(hexagon->y() - camera()->y());
-
-
-        _objectsToRender.push_back(object);
     }
 }
+
+void LocationState::setMVAR(unsigned int number, int value)
+{
+    if (number >= _MVARS.size())
+    {
+        throw Exception("LocationState::setMVAR(num, value) - num out of range: " + std::to_string((int)number));
+    }
+    _MVARS.at(number) = value;
+}
+
+int LocationState::MVAR(unsigned int number)
+{
+    if (number >= _MVARS.size())
+    {
+        throw Exception("LocationState::MVAR(num) - num out of range: " + std::to_string((int)number));
+    }
+    return _MVARS.at(number);
+}
+
+std::map<std::string, std::shared_ptr<VMStackValue>>* LocationState::EVARS()
+{
+    return &_EVARS;
+}
+
+void LocationState::moveObjectToHexagon(std::shared_ptr<GameObject> object, std::shared_ptr<Hexagon> hexagon)
+{
+    auto oldHexagon = object->hexagon();
+    if (oldHexagon)
+    {
+        for (auto it = oldHexagon->objects()->begin(); it != oldHexagon->objects()->end(); ++it)
+        {
+            if (*it == object)
+            {
+                oldHexagon->objects()->erase(it);
+                break;
+            }
+        }
+    }
+
+    object->setHexagon(hexagon);
+    hexagon->objects()->push_back(object);
+}
+
+void LocationState::handleAction(GameObject* object, int action)
+{
+    switch (action)
+    {
+
+        case Mouse::ICON_ROTATE:
+        {
+            auto dude = dynamic_cast<GameDudeObject*>(object);
+            if (!dude) throw Exception("LocationState::handleAction() - only Dude can be rotated");
+
+            int orientation = dude->orientation() + 1;
+            if (orientation > 5) orientation = 0;
+            dude->setOrientation(orientation);
+
+            break;
+        }
+        case Mouse::ICON_TALK:
+        {
+            for(auto script : *object->scripts())
+            {
+                script->call("talk_p_proc");
+            }
+        }
+
+    }
+}
+
 
 
 }

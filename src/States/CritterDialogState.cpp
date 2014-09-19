@@ -25,7 +25,7 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
-#include "../Engine/Location.h"
+#include "../Engine/Hexagon.h"
 #include "../Engine/LocationCamera.h"
 #include "../Engine/ResourceManager.h"
 #include "../Game/GameCritterObject.h"
@@ -67,8 +67,8 @@ void CritterDialogState::init()
     _oldCameraX = locationState->camera()->xPosition();
     _oldCameraY = locationState->camera()->yPosition();
 
-    locationState->camera()->setXPosition(Location::hexagonToX(critter()->position()));
-    locationState->camera()->setYPosition(Location::hexagonToY(critter()->position()) + 100);
+    locationState->camera()->setXPosition(critter()->hexagon()->x());
+    locationState->camera()->setYPosition(critter()->hexagon()->y() + 100);
     locationState->checkObjectsToRender();
     locationState->generateUi();
 

@@ -21,11 +21,14 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Engine/Exception.h"
 #include "../Engine/Graphics/Animation.h"
+#include "../Engine/Hexagon.h"
 #include "../Engine/ResourceManager.h"
+#include "../Engine/Game.h"
 #include "../Game/GameObject.h"
 #include "../Game/GameDefines.h"
-#include "../Engine/Exception.h"
+#include "../States/LocationState.h"
 #include "../UI/Image.h"
 
 // Third party includes
@@ -71,16 +74,6 @@ void GameObject::setFID(int value)
     if (_FID == value) return;
     _FID = value;
     _generateUi();
-}
-
-int GameObject::position()
-{
-    return _position;
-}
-
-void GameObject::setPosition(int value)
-{
-    _position = value;
 }
 
 int GameObject::elevation()
@@ -140,16 +133,6 @@ std::vector<VM*>* GameObject::scripts()
     return &_scripts;
 }
 
-Location* GameObject::location()
-{
-    return _location;
-}
-
-void GameObject::setLocation(Location* value)
-{
-    _location = value;
-}
-
 std::shared_ptr<ActiveUI> GameObject::ui()
 {
     return _ui;
@@ -185,6 +168,16 @@ bool GameObject::canWalkThru()
 void GameObject::setCanWalkThru(bool value)
 {
     _canWalkThru = value;
+}
+
+std::shared_ptr<Hexagon> GameObject::hexagon()
+{
+    return _hexagon.lock();
+}
+
+void GameObject::setHexagon(std::shared_ptr<Hexagon> hexagon)
+{
+    _hexagon = hexagon;
 }
 
 }

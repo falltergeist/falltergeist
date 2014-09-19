@@ -31,7 +31,6 @@
 #include "../Engine/Graphics/OpenGLRenderer.h"
 #include "../Engine/Graphics/SDLRenderer.h"
 #include "../Engine/Input/Mouse.h"
-#include "../Engine/Location.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Screen.h"
 #include "../Engine/State.h"
@@ -254,15 +253,6 @@ std::shared_ptr<LocationState> Game::locationState()
         {
             return locationState;
         }
-    }
-    return 0;
-}
-
-std::shared_ptr<Location> Game::location()
-{
-    if (auto state = locationState())
-    {
-        return state->location();
     }
     return 0;
 }

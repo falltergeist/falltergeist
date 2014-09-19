@@ -25,7 +25,6 @@
 // Falltergeist includes
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
-#include "../Engine/Location.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/State.h"
 #include "../Game/GameArmorItemObject.h"
