@@ -62,6 +62,7 @@
 #include "../VM/Handlers/Opcode80CBHandler.h"
 #include "../VM/Handlers/Opcode80DEHandler.h"
 #include "../VM/Handlers/Opcode8119Handler.h"
+#include "../VM/Handlers/Opcode8127Handler.h"
 #include "../VM/Handlers/Opcode9001Handler.h"
 #include "../VM/Handlers/OpcodeC001Handler.h"
 
@@ -173,6 +174,9 @@ void VM::run()
                 break;
             case 0x8119:
                 opcodeHandler = std::shared_ptr<Opcode8119Handler>(new Opcode8119Handler(this));
+                break;
+            case 0x8127:
+                opcodeHandler = std::shared_ptr<Opcode8127Handler>(new Opcode8127Handler(this));
                 break;
             case 0x9001:
                 opcodeHandler = std::shared_ptr<Opcode9001Handler>(new Opcode9001Handler(this));
@@ -1343,6 +1347,7 @@ void VM::run()
                 }
                 break;
             }
+            case 0x8127: break;
             case 0x8128:
             {
                 CrossPlatform::debug("[=] int combat_is_initialized()", DEBUG_SCRIPT);

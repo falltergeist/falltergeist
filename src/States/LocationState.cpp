@@ -106,7 +106,7 @@ void LocationState::init()
     game->mouse()->setType(Mouse::ACTION);
 
     _initPanel();
-    setLocation("maps/artemple.map");
+    setLocation("maps/klacanyn.map");
 }
 
 // PLAYER PANEL
@@ -307,7 +307,6 @@ void LocationState::onMouseDown(std::shared_ptr<MouseEvent> event)
     auto game = Game::getInstance();
     game->pushState(state);
     event->setHandled(true);
-
 }
 
 void LocationState::onBackgroundClick(std::shared_ptr<MouseEvent> event)
