@@ -48,7 +48,6 @@ protected:
 
     // Timers
     unsigned int _lastObjectsToRenderCheck = 0;
-    unsigned int _lastHexagonsWidthObjectsCheck = 0;
     unsigned int _scrollTicks = 0;
     unsigned int _scriptsTicks = 0;
 
@@ -102,7 +101,7 @@ public:
 
     std::map<std::string, std::shared_ptr<VMStackValue>>* EVARS();
 
-    static void moveObjectToHexagon(std::shared_ptr<GameObject> object, std::shared_ptr<Hexagon> hexagon);
+    static void moveObjectToHexagon(std::shared_ptr<GameObject> object, std::shared_ptr<Hexagon> hexagon, bool calculateHexagons = true);
     void handleAction(GameObject* object, int action);
 
     void onBackgroundClick(std::shared_ptr<MouseEvent> event);

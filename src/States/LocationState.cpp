@@ -216,7 +216,7 @@ void LocationState::setLocation(std::string name)
         }
 
         auto hexagon = hexagons()->at(mapObject->hexPosition());
-        LocationState::moveObjectToHexagon(object, hexagon);
+        LocationState::moveObjectToHexagon(object, hexagon, false);
     }
 
     // Adding dude
@@ -231,7 +231,7 @@ void LocationState::setLocation(std::string name)
         player->scripts()->push_back(script);
 
         auto hexagon = hexagons()->at(mapFile->defaultPosition());
-        LocationState::moveObjectToHexagon(player, hexagon);
+        LocationState::moveObjectToHexagon(player, hexagon, true);
 
         // Just for testing
         {
@@ -402,13 +402,6 @@ void LocationState::think()
         {
             Game::getInstance()->mouse()->setType(Mouse::SCROLL_SE);
         }
-    }
-
-    // Checking hexagons width objects
-    if (SDL_GetTicks() - _lastHexagonsWidthObjectsCheck >= 30)
-    {
-        _lastHexagonsWidthObjectsCheck = SDL_GetTicks();
-        checkHexagonsWidthObjects();
     }
 
     // Checking objects to render
@@ -600,7 +593,7 @@ std::map<std::string, std::shared_ptr<VMStackValue>>* LocationState::EVARS()
     return &_EVARS;
 }
 
-void LocationState::moveObjectToHexagon(std::shared_ptr<GameObject> object, std::shared_ptr<Hexagon> hexagon)
+void LocationState::moveObjectToHexagon(std::shared_ptr<GameObject> object, std::shared_ptr<Hexagon> hexagon, bool calculateHexagons)
 {
     auto oldHexagon = object->hexagon();
     if (oldHexagon)
@@ -617,6 +610,11 @@ void LocationState::moveObjectToHexagon(std::shared_ptr<GameObject> object, std:
 
     object->setHexagon(hexagon);
     hexagon->objects()->push_back(object);
+
+    if (calculateHexagons)
+    {
+        Game::getInstance()->locationState()->checkHexagonsWidthObjects();
+    }
 }
 
 void LocationState::handleAction(GameObject* object, int action)
