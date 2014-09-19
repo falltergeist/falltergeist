@@ -431,12 +431,48 @@ std::shared_ptr<Texture> TextArea::texture()
         _strings_tmp.pop_back();
     }
 
+    if (_outlineColor)
+    {
+        auto outlineTexture = std::shared_ptr<Texture>(new Texture(_texture->width(), _texture->height()));
+        for (unsigned int y = 0; y != _texture->height(); ++y)
+        {
+            for (unsigned int x = 0; x != _texture->width(); ++x)
+            {
+                if (_texture->pixel(x, y))
+                {
+                    if (!_texture->pixel(x - 1, y - 1)) outlineTexture->setPixel(x - 1, y - 1, _outlineColor);
+                    if (!_texture->pixel(x, y - 1)) outlineTexture->setPixel(x, y - 1, _outlineColor);
+                    if (!_texture->pixel(x + 1, y - 1)) outlineTexture->setPixel(x + 1, y - 1, _outlineColor);
+                    if (!_texture->pixel(x - 1, y)) outlineTexture->setPixel(x - 1, y, _outlineColor);
+                    if (!_texture->pixel(x + 1, y)) outlineTexture->setPixel(x + 1, y, _outlineColor);
+                    if (!_texture->pixel(x - 1, y + 1)) outlineTexture->setPixel(x - 1, y + 1, _outlineColor);
+                    if (!_texture->pixel(x, y + 1)) outlineTexture->setPixel(x, y + 1, _outlineColor);
+                    if (!_texture->pixel(x + 1, y + 1)) outlineTexture->setPixel(x + 1, y + 1, _outlineColor);
+                }
+            }
+        }
+        outlineTexture->blitTo(_texture);
+    }
+
     return _texture;
 }
 
 std::string TextArea::text()
 {
     return _strings.back()->text();
+}
+
+TextArea* TextArea::setOutlineColor(unsigned int color)
+{
+    if (_outlineColor == color) return this;
+    _outlineColor = color;
+    _texture.reset();
+    return this;
+}
+
+unsigned int TextArea::getOutlineColor()
+{
+    return _outlineColor;
 }
 
 }

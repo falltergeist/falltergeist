@@ -46,6 +46,7 @@ protected:
     unsigned int _height = 0;
     unsigned int _backgroundColor = 0;
     bool _wordWrap = false;
+    unsigned int _outlineColor = 0;
 public:
     enum { HORIZONTAL_ALIGN_LEFT = 0, HORIZONTAL_ALIGN_CENTER, HORIZONTAL_ALIGN_RIGHT, HORIZONTAL_ALIGN_JUSTIFY };
     enum { VERTICAL_ALIGN_TOP = 0, VERTICAL_ALIGN_CENTER, VERTICAL_ALIGN_BOTTOM, VERTICAL_ALIGN_JUSTIFY };    
@@ -57,6 +58,9 @@ public:
 
     TextArea* setBackgroundColor(unsigned int color);
     unsigned int getBackgroundColor();
+
+    TextArea* setOutlineColor(unsigned int color);
+    unsigned int getOutlineColor();
 
     TextArea* setText(std::shared_ptr<libfalltergeist::MsgMessage> message);
     TextArea* setText(int number);
