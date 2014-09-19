@@ -58,20 +58,32 @@ private:
     static std::string _valueToString(const IniValue &value);
 
 public:
-    template <class T>
-    T property(std::string name, const T& def)
-    {
-        PropertyMapConstIterator iter = _properties.find(name);
-        if (iter == _properties.end())
-        {
-            std::cerr << "Property `" << name << "` not found, use default value: " << def << std::endl;
-            return def;
-        };
+    // Trying to invoke this method causes compilation error on gcc 4.7.3:
+    // video->template property<int>("width", 640) ==>
+    // error: ‘template’ (as a disambiguator) is only allowed within templates
+    // Looks like a gcc bug, so, until better days come...
+//    template <class T>
+//    T property(std::string name, const T& def)
+//    {
+//        PropertyMapConstIterator iter = _properties.find(name);
+//        if (iter == _properties.end())
+//        {
+//            std::cerr << "Property `" << name << "` not found, use default value: " << def << std::endl;
+//            return def;
+//        };
+//
+//        T ret;
+//        IniSection::_property(iter, ret, def);
+//        return ret;
+//    }
 
-        T ret;
-        IniSection::_property(iter, ret, def);
-        return ret;
-    }
+    int propertyInt(std::string name, int def);
+
+    double propertyDouble(std::string name, double def);
+
+    bool propertyBool(std::string name, bool def);
+
+    std::string propertyString(std::string name, const std::string &def);
 
     void setProperty(std::string name, int value);
 

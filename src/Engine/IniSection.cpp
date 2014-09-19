@@ -144,4 +144,56 @@ std::string IniSection::_valueToString(const IniValue &value)
 
     return "unreachable";
 }
+
+int IniSection::propertyInt(std::string name, int def)
+{
+    PropertyMapConstIterator iter = _properties.find(name);
+    if (iter == _properties.end())
+    {
+        std::cerr << "Property `" << name << "` not found, use default value: " << def << std::endl;
+        return def;
+    };
+    int ret;
+    IniSection::_property(iter, ret, def);
+    return ret;
+}
+
+double IniSection::propertyDouble(std::string name, double def)
+{
+    PropertyMapConstIterator iter = _properties.find(name);
+    if (iter == _properties.end())
+    {
+        std::cerr << "Property `" << name << "` not found, use default value: " << def << std::endl;
+        return def;
+    };
+    double ret;
+    IniSection::_property(iter, ret, def);
+    return ret;
+}
+
+bool IniSection::propertyBool(std::string name, bool def)
+{
+    PropertyMapConstIterator iter = _properties.find(name);
+    if (iter == _properties.end())
+    {
+        std::cerr << "Property `" << name << "` not found, use default value: " << def << std::endl;
+        return def;
+    };
+    bool ret;
+    IniSection::_property(iter, ret, def);
+    return ret;
+}
+
+std::string IniSection::propertyString(std::string name, const std::string &def)
+{
+    PropertyMapConstIterator iter = _properties.find(name);
+    if (iter == _properties.end())
+    {
+        std::cerr << "Property `" << name << "` not found, use default value: " << def << std::endl;
+        return def;
+    };
+    std::string ret;
+    IniSection::_property(iter, ret, def);
+    return ret;
+}
 }

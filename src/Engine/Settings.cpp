@@ -43,10 +43,10 @@ EngineSettings::EngineSettings()
     auto ini = iniParser.parse();
 
     auto video = ini->section("video");
-    _screenWidth  = video->template property<int>("width", 640);
-    _screenHeight = video->template property<int>("height", 480);
+    _screenWidth  = video->propertyInt("width", 640);
+    _screenHeight = video->propertyInt("height", 480);
 
-    auto renderer = video->template property<std::string>("renderer", "sdl");
+    auto renderer = video->propertyString("renderer", "sdl");
 
     if (renderer == "sdl")
     {
@@ -62,7 +62,7 @@ EngineSettings::EngineSettings()
     }
 
     auto audio = ini->section("audio");
-    _audioEnabled = audio->template property<bool>("enabled", false);
+    _audioEnabled = audio->propertyBool("enabled", false);
 }
 
 EngineSettings::~EngineSettings()
