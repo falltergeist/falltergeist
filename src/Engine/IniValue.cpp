@@ -80,4 +80,25 @@ IniValue::IniValue(std::string stringVal) : _tag(IniValue::Tag::STRING)
     new(&_stringVal) std::string(stringVal);
 }
 
+IniValue::IniValue(const IniValue &rhs) : _tag(rhs._tag)
+{
+    using std::string;
+
+    switch (_tag)
+    {
+        case IniValue::Tag::INTEGER:
+            _integerVal = rhs._integerVal;
+            break;
+        case IniValue::Tag::DOUBLE:
+            _doubleVal = rhs._doubleVal;
+            break;
+        case IniValue::Tag::BOOLEAN:
+            _booleanVal = rhs._booleanVal;
+            break;
+        case IniValue::Tag::STRING:
+            new(&_stringVal) std::string(rhs._stringVal);
+            break;
+    }
+}
+
 }

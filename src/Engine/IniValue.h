@@ -48,13 +48,14 @@ public:
 
     IniValue & operator=(const IniValue &rhs);
 
+
     IniValue(double doubleVal);
 
     IniValue(int integerVal);
 
     IniValue(bool booleanVal);
     IniValue(std::string stringVal);
-
+    IniValue(const IniValue &rhs);
     friend class IniSection;
 
 private:
