@@ -433,25 +433,27 @@ std::shared_ptr<Texture> TextArea::texture()
 
     if (_outlineColor)
     {
-        auto outlineTexture = std::shared_ptr<Texture>(new Texture(_texture->width(), _texture->height()));
+        auto outlineTexture = std::shared_ptr<Texture>(new Texture(_texture->width() + 2, _texture->height() + 2));
         for (unsigned int y = 0; y != _texture->height(); ++y)
         {
             for (unsigned int x = 0; x != _texture->width(); ++x)
             {
                 if (_texture->pixel(x, y))
                 {
-                    if (!_texture->pixel(x - 1, y - 1)) outlineTexture->setPixel(x - 1, y - 1, _outlineColor);
-                    if (!_texture->pixel(x, y - 1)) outlineTexture->setPixel(x, y - 1, _outlineColor);
-                    if (!_texture->pixel(x + 1, y - 1)) outlineTexture->setPixel(x + 1, y - 1, _outlineColor);
-                    if (!_texture->pixel(x - 1, y)) outlineTexture->setPixel(x - 1, y, _outlineColor);
-                    if (!_texture->pixel(x + 1, y)) outlineTexture->setPixel(x + 1, y, _outlineColor);
-                    if (!_texture->pixel(x - 1, y + 1)) outlineTexture->setPixel(x - 1, y + 1, _outlineColor);
-                    if (!_texture->pixel(x, y + 1)) outlineTexture->setPixel(x, y + 1, _outlineColor);
-                    if (!_texture->pixel(x + 1, y + 1)) outlineTexture->setPixel(x + 1, y + 1, _outlineColor);
+                    if (!_texture->pixel(x - 1, y - 1)) outlineTexture->setPixel(x, y, _outlineColor);
+                    if (!_texture->pixel(x, y - 1)) outlineTexture->setPixel(x + 1, y, _outlineColor);
+                    if (!_texture->pixel(x + 1, y - 1)) outlineTexture->setPixel(x + 2, y, _outlineColor);
+                    if (!_texture->pixel(x - 1, y)) outlineTexture->setPixel(x, y + 1, _outlineColor);
+                    if (!_texture->pixel(x + 1, y)) outlineTexture->setPixel(x + 2, y + 1, _outlineColor);
+                    if (!_texture->pixel(x - 1, y + 1)) outlineTexture->setPixel(x, y + 2, _outlineColor);
+                    if (!_texture->pixel(x, y + 1)) outlineTexture->setPixel(x + 1, y + 2, _outlineColor);
+                    if (!_texture->pixel(x + 1, y + 1)) outlineTexture->setPixel(x + 2, y + 2, _outlineColor);
                 }
             }
         }
-        outlineTexture->blitTo(_texture);
+        _texture->blitTo(outlineTexture, 1, 1);
+        _texture.reset();
+        _texture = outlineTexture;
     }
 
     return _texture;
