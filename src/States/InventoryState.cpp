@@ -208,12 +208,18 @@ void InventoryState::init()
 
     // label: left hand
     ss.str("");
-    ss << _handItemSummary (leftHand);
+    if (leftHand)
+    {
+        ss << _handItemSummary (leftHand);
+    }
     auto leftHandLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX, screenY+100));
 
     // label: right hand
     ss.str("");
-    ss << _handItemSummary (rightHand);
+    if (rightHand)
+    {
+        ss << _handItemSummary (rightHand);
+    }
     auto rightHandLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX, screenY+140));
 
     add(background);
@@ -260,28 +266,34 @@ void InventoryState::init()
     }
 
     // icon: left hand
-    std::shared_ptr<ImageList> leftHandUi = std::shared_ptr<ImageList>(new ImageList());
-    leftHandUi->addImage(std::shared_ptr<Image>(new Image(leftHand->inventorySlotUi()->texture())));
-    leftHandUi->addImage(std::shared_ptr<Image>(new Image(leftHand->inventoryDragUi()->texture())));
-    leftHandUi->setX(backgroundX + 200 - leftHandUi->width()*0.5);
-    leftHandUi->setY(backgroundY + 317 - leftHandUi->height()*0.5);
-    add(leftHandUi);
+    if (leftHand)
+    {
+        std::shared_ptr<ImageList> leftHandUi = std::shared_ptr<ImageList>(new ImageList());
+        leftHandUi->addImage(std::shared_ptr<Image>(new Image(leftHand->inventorySlotUi()->texture())));
+        leftHandUi->addImage(std::shared_ptr<Image>(new Image(leftHand->inventoryDragUi()->texture())));
+        leftHandUi->setX(backgroundX + 200 - leftHandUi->width()*0.5);
+        leftHandUi->setY(backgroundY + 317 - leftHandUi->height()*0.5);
+        add(leftHandUi);
 
-    leftHandUi->addEventHandler("mousedrag", leftHand.get(), (EventRecieverMethod) &InventoryState::onSlotDrag);
-    leftHandUi->addEventHandler("mouseleftdown", leftHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseDown);
-    leftHandUi->addEventHandler("mouseleftup", leftHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseUp);
+        leftHandUi->addEventHandler("mousedrag", leftHand.get(), (EventRecieverMethod) &InventoryState::onSlotDrag);
+        leftHandUi->addEventHandler("mouseleftdown", leftHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseDown);
+        leftHandUi->addEventHandler("mouseleftup", leftHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseUp);
+    }
 
     // icon: right hand
-    std::shared_ptr<ImageList> rightHandUi = std::shared_ptr<ImageList>(new ImageList());
-    rightHandUi->addImage(std::shared_ptr<Image>(new Image(rightHand->inventorySlotUi()->texture())));
-    rightHandUi->addImage(std::shared_ptr<Image>(new Image(rightHand->inventoryDragUi()->texture())));
-    rightHandUi->setX(backgroundX + 290 - rightHandUi->width()*0.5);
-    rightHandUi->setY(backgroundY + 317 - rightHandUi->height()*0.5);
-    add(rightHandUi);
+    if (rightHand)
+    {
+        std::shared_ptr<ImageList> rightHandUi = std::shared_ptr<ImageList>(new ImageList());
+        rightHandUi->addImage(std::shared_ptr<Image>(new Image(rightHand->inventorySlotUi()->texture())));
+        rightHandUi->addImage(std::shared_ptr<Image>(new Image(rightHand->inventoryDragUi()->texture())));
+        rightHandUi->setX(backgroundX + 290 - rightHandUi->width()*0.5);
+        rightHandUi->setY(backgroundY + 317 - rightHandUi->height()*0.5);
+        add(rightHandUi);
 
-    rightHandUi->addEventHandler("mousedrag", rightHand.get(), (EventRecieverMethod) &InventoryState::onSlotDrag);
-    rightHandUi->addEventHandler("mouseleftdown", rightHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseDown);
-    rightHandUi->addEventHandler("mouseleftup", rightHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseUp);
+        rightHandUi->addEventHandler("mousedrag", rightHand.get(), (EventRecieverMethod) &InventoryState::onSlotDrag);
+        rightHandUi->addEventHandler("mouseleftdown", rightHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseDown);
+        rightHandUi->addEventHandler("mouseleftup", rightHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseUp);
+    }
 
 }
 
