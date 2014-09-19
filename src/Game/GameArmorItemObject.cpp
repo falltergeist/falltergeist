@@ -92,4 +92,14 @@ void GameArmorItemObject::setFemaleFID(unsigned int value)
     _femaleFID = value;
 }
 
+unsigned int GameArmorItemObject::armorClass()
+{
+    return _armorClass;
+}
+
+void GameArmorItemObject::setArmorClass(unsigned int value)
+{
+    _armorClass = value;
+}
+
 }
