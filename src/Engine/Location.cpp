@@ -50,6 +50,7 @@
 #include "../Game/GameStairsSceneryObject.h"
 #include "../Game/GameWallObject.h"
 #include "../Game/GameWeaponItemObject.h"
+#include "../Game/GameObjectFactory.h"
 #include "../UI/Image.h"
 #include "../VM/VM.h"
 
@@ -88,43 +89,6 @@ void Location::init()
     _elevation = _mapFile->defaultElevation();
 
     _tilesLst = ResourceManager::lstFileType("art/tiles/tiles.lst");
-
-    unsigned int i = 0;
-    for (unsigned int x = 0; x != 200; ++x)
-    {
-        for (unsigned int y = 0; y != 200; ++y, ++i)
-        {
-            auto hexagon = std::shared_ptr<Hexagon>(new Hexagon(i));
-            _hexagons.push_back(hexagon);
-            _hexagons.back()->setX(x);
-            _hexagons.back()->setY(y);
-        }
-    }
-
-    for (auto i = 0; i != 200*200; ++i)
-    {
-        auto hexagon = hexagons()->at(i);
-        auto size = hexagons()->size();
-        auto cols = 200;
-        unsigned int index1 = (hexagon->y() * cols) + hexagon->x() + 1;
-        if (index1 < size) hexagon->neighbours()->push_back(hexagons()->at(index1));
-
-        unsigned int index2 = ((hexagon->y() + 1) * cols) + hexagon->x() + 1;
-        if (index2 < size) hexagon->neighbours()->push_back(hexagons()->at(index2));
-
-        unsigned int index3 = ((hexagon->y() - 1) * cols) + hexagon->x();
-        if (index3 < size) hexagon->neighbours()->push_back(hexagons()->at(index3));
-
-        unsigned int index4 = (hexagon->y() * cols) + hexagon->x() - 1;
-        if (index4 < size) hexagon->neighbours()->push_back(hexagons()->at(index4));
-
-        unsigned int index5 = ((hexagon->y() + 1) * cols) + hexagon->x() - 1;
-        if (index5 < size) hexagon->neighbours()->push_back(hexagons()->at(index5));
-
-        unsigned int index6 = ((hexagon->y() + 1) * cols) + hexagon->x();
-        if (index6 < size) hexagon->neighbours()->push_back(hexagons()->at(index6));
-
-    }
 
     // Генерируем изображение пола
     _generateFloor();
@@ -183,8 +147,6 @@ void Location::init()
     }
 
     _player = Game::getInstance()->player();
-    //_player->setName("Choozen One");
-    //_player = Game::getInstance().player();
     _player->setPID(0x01000001);
     _player->setFID(FID_HERO_MALE);
     _player->setOrientation(_mapFile->defaultOrientation());
@@ -207,23 +169,6 @@ void Location::init()
         auto rightHand = createObject(0x00000007); // spear
         _player->setRightHandSlot(std::dynamic_pointer_cast<GameWeaponItemObject>(rightHand));
     }
-
-    std::cout << _player->position() << std::endl;
-    std::shared_ptr<Hexagon> hexagon = hexagons()->at(_player->position());
-
-    for (auto neighbor : *hexagon->neighbours())
-    {
-        //auto object = std::shared_ptr<GameDudeObject>(new GameDudeObject());
-        //object->setPID(0x01000001);
-        //object->setFID(FID_HERO_MALE);
-        //object->setOrientation(_mapFile->defaultOrientation());
-        //object->setPosition(neighbor->number());
-        //_objects.push_back(object);
-        std::cout << neighbor->number() << std::endl;
-    }
-
-    //throw 1;
-
 
     // ON MAP LOADED
     if (_mapFile->scriptId() > 0)
@@ -264,205 +209,9 @@ void Location::_generateRoof()
     }
 }
 
-std::shared_ptr<GameObject> Location::createObject(int PID)
+std::shared_ptr<GameObject> Location::createObject(unsigned int PID)
 {
-    auto proto = ResourceManager::proFileType(PID);
-    std::shared_ptr<GameObject> object;
-    switch (proto->typeId())
-    {
-        case libfalltergeist::ProFileType::TYPE_ITEM:
-        {
-            switch(proto->subtypeId())
-            {
-                case libfalltergeist::ProFileType::TYPE_ITEM_AMMO:
-                {
-                    object = std::shared_ptr<GameAmmoItemObject>(new GameAmmoItemObject());
-                    break;
-                }
-                case libfalltergeist::ProFileType::TYPE_ITEM_ARMOR:
-                {
-                    object = std::shared_ptr<GameArmorItemObject>(new GameArmorItemObject());
-                    for (unsigned int i = 0; i != 9; ++i)
-                    {
-                        ((GameArmorItemObject*)object.get())->setDamageResist(i, proto->damageResist()->at(i));
-                        ((GameArmorItemObject*)object.get())->setDamageThreshold(i, proto->damageThreshold()->at(i));
-                    }
-                    ((GameArmorItemObject*)object.get())->setPerk(proto->perk());
-                    ((GameArmorItemObject*)object.get())->setMaleFID(proto->armorMaleFID());
-                    ((GameArmorItemObject*)object.get())->setFemaleFID(proto->armorFemaleFID());
-                    ((GameArmorItemObject*)object.get())->setArmorClass(proto->armorClass());
-                    break;
-                }
-                case libfalltergeist::ProFileType::TYPE_ITEM_CONTAINER:
-                {
-                    object = std::shared_ptr<GameContainerItemObject>(new GameContainerItemObject());
-                    break;
-                }
-                case libfalltergeist::ProFileType::TYPE_ITEM_DRUG:
-                {
-                    object = std::shared_ptr<GameDrugItemObject>(new GameDrugItemObject());
-                    break;
-                }
-                case libfalltergeist::ProFileType::TYPE_ITEM_KEY:
-                {
-                    object = std::shared_ptr<GameKeyItemObject>(new GameKeyItemObject());
-                    break;
-                }
-                case libfalltergeist::ProFileType::TYPE_ITEM_MISC:
-                {
-                    object = std::shared_ptr<GameMiscItemObject>(new GameMiscItemObject());
-                    break;
-                }
-                case libfalltergeist::ProFileType::TYPE_ITEM_WEAPON:
-                {
-                    object = std::shared_ptr<GameWeaponItemObject>(new GameWeaponItemObject());
-
-                    ((GameWeaponItemObject*)object.get())->setPerk(proto->perk());
-                    ((GameWeaponItemObject*)object.get())->setAnimationCode(proto->weaponAnimationCode());
-                    ((GameWeaponItemObject*)object.get())->setDamageMin(proto->weaponDamageMin());
-                    ((GameWeaponItemObject*)object.get())->setDamageMax(proto->weaponDamageMax());
-                    ((GameWeaponItemObject*)object.get())->setDamageType(proto->weaponDamageType());
-                    ((GameWeaponItemObject*)object.get())->setRangePrimary(proto->weaponRangePrimary());
-                    ((GameWeaponItemObject*)object.get())->setRangeSecondary(proto->weaponRangeSecondary());
-                    ((GameWeaponItemObject*)object.get())->setMinimumStrenght(proto->weaponMinimumStrenght());
-                    ((GameWeaponItemObject*)object.get())->setActionCostPrimary(proto->weaponActionCostPrimary());
-                    ((GameWeaponItemObject*)object.get())->setActionCostSecondary(proto->weaponActionCostSecondary());
-                    ((GameWeaponItemObject*)object.get())->setBurstRounds(proto->weaponBurstRounds());
-                    ((GameWeaponItemObject*)object.get())->setAmmoType(proto->weaponAmmoType());
-                    ((GameWeaponItemObject*)object.get())->setAmmoPID(proto->weaponAmmoPID());
-                    ((GameWeaponItemObject*)object.get())->setAmmoCapacity(proto->weaponAmmoCapacity());
-                    break;
-                }
-            }
-            ((GameItemObject*)object.get())->setWeight(proto->weight());
-            ((GameItemObject*)object.get())->setInventoryFID(proto->inventoryFID());
-            auto msg = ResourceManager::msgFileType("text/english/game/pro_item.msg");
-            try
-            {
-                object->setName(msg->message(proto->messageId())->text());
-                object->setDescription(msg->message(proto->messageId() + 1)->text());
-            }
-            catch (libfalltergeist::Exception) {}
-            break;
-        }
-        case libfalltergeist::ProFileType::TYPE_CRITTER:
-        {
-            object = std::shared_ptr<GameCritterObject>(new GameCritterObject());
-            auto msg = ResourceManager::msgFileType("text/english/game/pro_crit.msg");
-            try
-            {
-                object->setName(msg->message(proto->messageId())->text());
-                object->setDescription(msg->message(proto->messageId() + 1)->text());
-            }
-            catch (libfalltergeist::Exception) {}
-
-            for (unsigned int i = 0; i != 7; ++i)
-            {
-                ((GameCritterObject*)object.get())->setStat(i, proto->critterStats()->at(i));
-                ((GameCritterObject*)object.get())->setStatBonus(i, proto->critterStatsBonus()->at(i));
-            }
-            for (unsigned int i = 0; i != 18; ++i)
-            {
-                ((GameCritterObject*)object.get())->setSkill(i, proto->critterSkills()->at(i));
-            }
-            ((GameCritterObject*)object.get())->setActionPoints(proto->critterActionPoints());
-            ((GameCritterObject*)object.get())->setHitPointsMax(proto->critterHitPointsMax());
-            ((GameCritterObject*)object.get())->setArmorClass(proto->critterArmorClass());
-            ((GameCritterObject*)object.get())->setCarryWeightMax(proto->critterCarryWeightMax());
-            ((GameCritterObject*)object.get())->setMeleeDamage(proto->critterMeleeDamage());
-            ((GameCritterObject*)object.get())->setSequence(proto->critterSequence());
-            ((GameCritterObject*)object.get())->setCriticalChance(proto->critterCriticalChance());
-            ((GameCritterObject*)object.get())->setHealingRate(proto->critterHealingRate());
-            for (unsigned int i = 0; i != 9; ++i)
-            {
-                ((GameCritterObject*)object.get())->setDamageResist(i, proto->damageResist()->at(i));
-                ((GameCritterObject*)object.get())->setDamageThreshold(i, proto->damageThreshold()->at(i));
-            }
-            break;
-        }
-        case libfalltergeist::ProFileType::TYPE_SCENERY:
-        {
-            switch (proto->subtypeId())
-            {
-                case libfalltergeist::ProFileType::TYPE_SCENERY_DOOR:
-                {
-                    object = std::shared_ptr<GameDoorSceneryObject>(new GameDoorSceneryObject());
-                    break;
-                }
-                case libfalltergeist::ProFileType::TYPE_SCENERY_ELEVATOR:
-                {
-                    object = std::shared_ptr<GameElevatorSceneryObject>(new GameElevatorSceneryObject());
-                    break;
-                }
-                case libfalltergeist::ProFileType::TYPE_SCENERY_GENERIC:
-                {
-                    object = std::shared_ptr<GameGenericSceneryObject>(new GameGenericSceneryObject());
-                    break;
-                }
-                case libfalltergeist::ProFileType::TYPE_SCENERY_LADDER_TOP:
-                case libfalltergeist::ProFileType::TYPE_SCENERY_LADDER_BOTTOM:
-                {
-                    object = std::shared_ptr<GameLadderSceneryObject>(new GameLadderSceneryObject());
-                    break;
-                }
-                case libfalltergeist::ProFileType::TYPE_SCENERY_STAIRS:
-                {
-                    object = std::shared_ptr<GameStairsSceneryObject>(new GameStairsSceneryObject());
-                    break;
-                }
-            }
-            auto msg = ResourceManager::msgFileType("text/english/game/pro_scen.msg");
-            try
-            {
-                object->setName(msg->message(proto->messageId())->text());
-                object->setDescription(msg->message(proto->messageId() + 1)->text());
-            }
-            catch (libfalltergeist::Exception) {}
-            break;
-        }
-        case libfalltergeist::ProFileType::TYPE_WALL:
-        {
-            object = std::shared_ptr<GameWallObject>(new GameWallObject());
-            auto msg = ResourceManager::msgFileType("text/english/game/pro_wall.msg");
-            try
-            {
-                object->setName(msg->message(proto->messageId())->text());
-                object->setDescription(msg->message(proto->messageId() + 1)->text());
-            }
-            catch (libfalltergeist::Exception) {}
-            break;
-        }
-        case libfalltergeist::ProFileType::TYPE_TILE:
-        {
-            //auto msg = ResourceManager::msgFileType("text/english/game/pro_tile.msg");
-            throw 1;
-            //object->setName(msg->message(proto->messageId())->text());
-            break;
-        }
-        case libfalltergeist::ProFileType::TYPE_MISC:
-        {
-            object = std::shared_ptr<GameMiscObject>(new GameMiscObject());
-            auto msg = ResourceManager::msgFileType("text/english/game/pro_misc.msg");
-            try
-            {
-                object->setName(msg->message(proto->messageId())->text());
-                object->setDescription(msg->message(proto->messageId() + 1)->text());
-            }
-            catch (libfalltergeist::Exception) {}
-            break;
-        }
-    }
-    object->setPID(PID);
-    object->setFID(proto->FID());
-    object->setCanWalkThru(proto->flags()&0x00000010);
-
-    if (proto->scriptId() > 0)
-    {
-        auto intFile = ResourceManager::intFileType(proto->scriptId());
-        if (intFile) object->scripts()->push_back(new VM(intFile, object));
-    }
-
-    return object;
+    return GameObjectFactory::createObject(PID);
 }
 
 void Location::handleAction(GameObject* object, int action)
@@ -585,7 +334,7 @@ int Location::hexagonToX(unsigned int hexagon)
     unsigned int p = hexagon % 200;
     unsigned int q = ceil(hexagon/200);
 
-    int centerX = 48*100 + 16*q - 24*p + 16;
+    int centerX = 48*100 + 16*(q + 1) - 24*p;
     if (p&1) centerX -= 8;
 
     return centerX;
@@ -596,7 +345,7 @@ int Location::hexagonToY(unsigned int hexagon)
     unsigned int p = hexagon % 200;
     unsigned int q = ceil(hexagon/200);
 
-    int centerY = q*12 + 6*p + 12;
+    int centerY = (q + 1)*12 + 6*p;
     if (p&1) centerY -= 6;
 
     return centerY;
@@ -626,12 +375,12 @@ std::shared_ptr<libfalltergeist::MapFileType> Location::mapFile()
 
 unsigned int Location::tileToX(unsigned int tile)
 {
-    return (_cols - tile % _cols - 1)*48 + 32*ceil(tile / _cols);
+    return (_cols - tile%_cols - 1)*48 + 32*ceil(tile/_cols);
 }
 
 unsigned int Location::tileToY(unsigned int tile)
 {
-    return ceil(tile / _cols)*24 + (tile % _cols)*12;
+    return ceil(tile/_cols)*24 +(tile % _cols)*12;
 }
 
 std::vector<std::shared_ptr<GameObject>>* Location::objects()
@@ -675,11 +424,6 @@ int Location::MVAR(unsigned int number)
 std::map<std::string, std::shared_ptr<VMStackValue>>* Location::EVARS()
 {
     return &_EVARS;
-}
-
-std::vector<std::shared_ptr<Hexagon>>* Location::hexagons()
-{
-    return &_hexagons;
 }
 
 }
