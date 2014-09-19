@@ -69,7 +69,8 @@ protected:
 
     std::shared_ptr<Image> _floor;
     std::shared_ptr<Image> _roof;
-    std::vector<std::shared_ptr<ActiveUI>> _panelUIs;
+    std::vector<std::shared_ptr<ActiveUI>> _panelUIs;    
+    std::vector<std::shared_ptr<ActiveUI>> _floatMessages;
 
     bool _scrollLeft = false;
     bool _scrollRight = false;

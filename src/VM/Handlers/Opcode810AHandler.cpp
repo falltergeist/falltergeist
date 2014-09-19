@@ -22,7 +22,9 @@
 // Falltergeist includes
 #include "../../Engine/CrossPlatform.h"
 #include "../../Engine/Exception.h"
+#include "../../Engine/ResourceManager.h"
 #include "../../Game/GameObject.h"
+#include "../../UI/TextArea.h"
 #include "../../VM/Handlers/Opcode810AHandler.h"
 #include "../../VM/VM.h"
 
@@ -90,6 +92,11 @@ void Opcode810AHandler::_run()
 
     auto string = std::static_pointer_cast<std::string>(_vm->popDataPointer());
     auto object = std::static_pointer_cast<GameObject>(_vm->popDataPointer());
+
+    auto floatMessage = std::shared_ptr<TextArea>(new TextArea(*string.get()));
+    floatMessage->setFont(ResourceManager::font("font1.aaf", color));
+    object->setFloatMessage(floatMessage);
+
 }
 
 }

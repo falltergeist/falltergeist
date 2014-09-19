@@ -39,6 +39,7 @@ class Image;
 class AnimationQueue;
 class ActiveUI;
 class Hexagon;
+class TextArea;
 
 class GameObject : public EventReciever
 {
@@ -56,6 +57,7 @@ protected:
     std::shared_ptr<ActiveUI> _ui;
     std::weak_ptr<Hexagon> _hexagon;
     virtual void _generateUi();
+    std::shared_ptr<TextArea> _floatMessage;
 public:
     enum { TYPE_ITEM = 0, TYPE_CRITTER, TYPE_SCENERY, TYPE_WALL, TYPE_TILE, TYPE_MISC, TYPE_DUDE };
     enum { TYPE_ITEM_ARMOR = 0, TYPE_ITEM_CONTAINER, TYPE_ITEM_DRUG, TYPE_ITEM_WEAPON, TYPE_ITEM_AMMO, TYPE_ITEM_MISC, TYPE_ITEM_KEY };
@@ -95,6 +97,9 @@ public:
 
     std::shared_ptr<Hexagon> hexagon();
     void setHexagon(std::shared_ptr<Hexagon> hexagon);
+
+    std::shared_ptr<TextArea> floatMessage();
+    void setFloatMessage(std::shared_ptr<TextArea> floatMessage);
 
 };
 

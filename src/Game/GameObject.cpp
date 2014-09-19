@@ -30,6 +30,7 @@
 #include "../Game/GameDefines.h"
 #include "../States/LocationState.h"
 #include "../UI/Image.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 
@@ -178,6 +179,16 @@ std::shared_ptr<Hexagon> GameObject::hexagon()
 void GameObject::setHexagon(std::shared_ptr<Hexagon> hexagon)
 {
     _hexagon = hexagon;
+}
+
+std::shared_ptr<TextArea> GameObject::floatMessage()
+{
+    return _floatMessage;
+}
+
+void GameObject::setFloatMessage(std::shared_ptr<TextArea> floatMessage)
+{
+    _floatMessage = floatMessage;
 }
 
 }

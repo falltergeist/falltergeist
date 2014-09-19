@@ -324,6 +324,7 @@ void LocationState::onKeyUp(std::shared_ptr<KeyboardEvent> event)
 void LocationState::generateUi()
 {
     _ui.clear();
+    _floatMessages.clear();
     add(_floor);
 
     for (auto object : _objectsToRender)
@@ -331,6 +332,13 @@ void LocationState::generateUi()
         object->ui()->removeEventHandlers("mouseleftdown");
         object->ui()->addEventHandler("mouseleftdown", object.get(), (EventRecieverMethod) &LocationState::onMouseDown);
         add(object->ui());
+
+        if (auto message = object->floatMessage())
+        {
+            message->setX(object->hexagon()->x() - camera()->x() - message->width()*0.5);
+            message->setY(object->hexagon()->y() - camera()->y() - 80);
+            _floatMessages.push_back(message);
+        }
     }
 
      //add(_roof);
@@ -339,6 +347,11 @@ void LocationState::generateUi()
     _floor->setY(-camera()->y());
     //_roof->setX(-_location->camera()->x());
     //_roof->setY(-_location->camera()->y() - 100);
+
+    for (auto message : _floatMessages)
+    {
+        add(message);
+    }
 
     for (auto ui : _panelUIs)
     {

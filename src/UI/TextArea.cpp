@@ -308,7 +308,7 @@ std::shared_ptr<Texture> TextArea::texture()
             std::string text = (*it)->text();
             // calculating width of current string
             str_width = 0;
-            for (auto chr : text)
+            for (unsigned char chr : text)
             {
                 // calculating width of current string
                 auto glyph = font->aaf()->glyphs()->at(chr);

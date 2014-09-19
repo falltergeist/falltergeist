@@ -1118,7 +1118,7 @@ void VM::run()
                 }
                 break;
             }
-            case 0x810a: return;
+            case 0x810a: break;
             case 0x810c:
             {
                 CrossPlatform::debug("[*] void anim(void* who, int anim, int direction)", DEBUG_SCRIPT);
