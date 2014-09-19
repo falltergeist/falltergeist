@@ -24,11 +24,12 @@
 
 
 // Falltergeist includes
-#include "../Engine/ResourceManager.h"
+#include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Animation.h"
-#include "../Engine/Location.h"
+#include "../Engine/Hexagon.h"
+#include "../Engine/ResourceManager.h"
 #include "../Game/GameAmmoItemObject.h"
 #include "../Game/GameArmorItemObject.h"
 #include "../Game/GameContainerItemObject.h"
@@ -43,6 +44,7 @@
 #include "../Game/GameWeaponItemObject.h"
 #include "../States/CritterDialogState.h"
 #include "../States/CritterTalkState.h"
+#include "../States/LocationState.h"
 #include "../VM/VM.h"
 #include "../VM/VMStackIntValue.h"
 #include "../VM/VMStackFloatValue.h"
@@ -60,7 +62,6 @@
 #include "../VM/Handlers/Opcode80DEHandler.h"
 #include "../VM/Handlers/Opcode9001Handler.h"
 #include "../VM/Handlers/OpcodeC001Handler.h"
-#include "../Engine/CrossPlatform.h"
 
 // Third party includes
 
@@ -229,7 +230,7 @@ void VM::run()
                 CrossPlatform::debug("[*] export(name)", DEBUG_SCRIPT);
                 auto name = std::static_pointer_cast<std::string>(popDataPointer());
                 auto game = Game::getInstance();
-                auto EVARS = game->location()->EVARS();
+                auto EVARS = game->locationState()->EVARS();
                 if (EVARS->find(*(name.get())) == EVARS->end())
                 {
                     EVARS->insert(std::make_pair(*(name.get()), std::shared_ptr<VMStackValue>(nullptr)));
@@ -503,9 +504,9 @@ void VM::run()
                 auto position = popDataInteger();
                 auto game = Game::getInstance();
                 std::shared_ptr<GameObject> found;
-                for (auto object : *game->location()->objects())
+                for (auto object : *game->locationState()->hexagons()->at(position)->objects())
                 {
-                    if (object->PID() == PID && object->elevation() == elevation && object->position() == position)
+                    if (object->PID() == PID && object->elevation() == elevation)
                     {
                         found = object;
                     }
@@ -532,7 +533,9 @@ void VM::run()
                 auto position = y*200 + x;
                 auto game = Game::getInstance();
                 auto player = game->player();
-                player->setPosition(position);
+                auto hexagon = game->locationState()->hexagons()->at(position);
+                LocationState::moveObjectToHexagon(player, hexagon);
+                //player->setPosition(position);
                 player->setOrientation(orientation);
                 player->setElevation(elevation);
                 break;
@@ -625,7 +628,8 @@ void VM::run()
                 auto position = popDataInteger();
                 auto object = std::static_pointer_cast<GameObject>(popDataPointer());
                 if (!object) throw new Exception("Opcode 80b6 error");
-                object->setPosition(position);
+                auto hexagon = Game::getInstance()->locationState()->hexagons()->at(position);
+                LocationState::moveObjectToHexagon(object, hexagon);
                 object->setElevation(elevation);
                 pushDataInteger(1);
                 break;
@@ -638,7 +642,8 @@ void VM::run()
                 auto position = popDataInteger();
                 auto PID = popDataInteger();
                 auto object = GameObjectFactory::createObject(PID);
-                object->setPosition(position);
+                auto hexagon = Game::getInstance()->locationState()->hexagons()->at(position);
+                LocationState::moveObjectToHexagon(object, hexagon);
                 object->setElevation(elevation);
                 if (SID > 0)
                 {
@@ -666,9 +671,9 @@ void VM::run()
                 auto position = popDataInteger();
                 auto game = Game::getInstance();
                 int found = 0;
-                for (auto object : *game->location()->objects())
+                for (auto object : *game->locationState()->hexagons()->at(position)->objects())
                 {
-                    if (object->PID() == PID && object->elevation() == elevation && object->position() == position)
+                    if (object->PID() == PID && object->elevation() == elevation)
                     {
                         found = 1;
                     }
@@ -717,7 +722,7 @@ void VM::run()
                     break;
                 }
                 auto game = Game::getInstance();
-                pushDataInteger(game->location()->MVAR(num));
+                pushDataInteger(game->locationState()->MVAR(num));
                 break;
             }
             case 0x80c4:
@@ -726,7 +731,7 @@ void VM::run()
                 auto value = popDataInteger();
                 auto num = popDataInteger();
                 auto game = Game::getInstance();
-                game->location()->setMVAR(num, value);
+                game->locationState()->setMVAR(num, value);
                 break;
             }
             case 0x80c5:
@@ -861,7 +866,7 @@ void VM::run()
                 CrossPlatform::debug("[+] int objectPosition(GameObject* object)", DEBUG_SCRIPT);
                 auto object = std::static_pointer_cast<GameObject>(popDataPointer());
                 if (!object) throw new Exception("Opcode 80d4 error");
-                pushDataInteger(object->position());
+                pushDataInteger(object->hexagon()->number());
                 break;
             }
             case 0x80d5:
@@ -1054,8 +1059,9 @@ void VM::run()
                 auto position = popDataInteger();
                 auto critter = std::static_pointer_cast<GameCritterObject>(popDataPointer());
                 if (!critter) throw new Exception("Opcode 80ff error");
+                auto hexagon = Game::getInstance()->locationState()->hexagons()->at(position);
+                LocationState::moveObjectToHexagon(critter, hexagon);
                 critter->setElevation(elevation);
-                critter->setPosition(position);
                 pushDataInteger(1);
                 break;
             }
@@ -1728,6 +1734,11 @@ VMStack* VM::returnStack()
 std::shared_ptr<void> VM::owner()
 {
     return _owner;
+}
+
+bool VM::initialized()
+{
+    return _initialized;
 }
 
 }

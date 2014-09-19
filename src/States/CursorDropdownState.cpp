@@ -22,16 +22,16 @@
 #include <iostream>
 
 // Falltergeist includes
-#include "../States/CursorDropdownState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
-#include "../Engine/Input/Mouse.h"
-#include "../Engine/Location.h"
-#include "../Engine/Surface.h"
-#include "../UI/HiddenMask.h"
 #include "../Engine/Graphics/Texture.h"
+#include "../Engine/Input/Mouse.h"
+#include "../Engine/Surface.h"
 #include "../Game/GameCritterObject.h"
 #include "../Game/GameDudeObject.h"
+#include "../States/CursorDropdownState.h"
+#include "../States/LocationState.h"
+#include "../UI/HiddenMask.h"
 
 // Third party includes
 
@@ -195,7 +195,7 @@ void CursorDropdownState::onLeftButtonUp(std::shared_ptr<MouseEvent> event)
     auto game = Game::getInstance();
     game->mouse()->setType(state->_initialType);
     game->popState();
-    game->location()->handleAction(state->_object, state->_icons.at(state->_currentSurface));
+    game->locationState()->handleAction(state->_object, state->_icons.at(state->_currentSurface));
 }
 
 

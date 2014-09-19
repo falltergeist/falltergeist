@@ -63,6 +63,7 @@ public:
     virtual ~VM();
     void run();
     void initialize();
+    bool initialized();
     void call(std::string name);
     std::shared_ptr<libfalltergeist::IntFileType> script();
 

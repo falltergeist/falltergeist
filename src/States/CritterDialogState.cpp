@@ -25,7 +25,7 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
-#include "../Engine/Location.h"
+#include "../Engine/Hexagon.h"
 #include "../Engine/LocationCamera.h"
 #include "../Engine/ResourceManager.h"
 #include "../Game/GameCritterObject.h"
@@ -64,12 +64,12 @@ void CritterDialogState::init()
     setModal(true);
 
     auto locationState = Game::getInstance()->locationState();
-    _oldCameraX = locationState->location()->camera()->xPosition();
-    _oldCameraY = locationState->location()->camera()->yPosition();
+    _oldCameraX = locationState->camera()->xPosition();
+    _oldCameraY = locationState->camera()->yPosition();
 
-    locationState->location()->camera()->setXPosition(Location::hexagonToX(critter()->position()));
-    locationState->location()->camera()->setYPosition(Location::hexagonToY(critter()->position()) + 100);
-    locationState->location()->checkObjectsToRender();
+    locationState->camera()->setXPosition(critter()->hexagon()->x());
+    locationState->camera()->setYPosition(critter()->hexagon()->y() + 100);
+    locationState->checkObjectsToRender();
     locationState->generateUi();
 
     auto background = std::shared_ptr<Image>(new Image("art/intrface/alltlk.frm"));
@@ -97,7 +97,7 @@ void CritterDialogState::close()
     // Pop CritterTalkState
     Game::getInstance()->popState();
     // Restore original camera position
-    auto camera = Game::getInstance()->location()->camera();
+    auto camera = Game::getInstance()->locationState()->camera();
     camera->setXPosition(_oldCameraX);
     camera->setYPosition(_oldCameraY);
 }

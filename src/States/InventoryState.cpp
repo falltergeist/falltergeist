@@ -25,7 +25,6 @@
 // Falltergeist includes
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
-#include "../Engine/Location.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/State.h"
 #include "../Game/GameArmorItemObject.h"
@@ -209,12 +208,12 @@ void InventoryState::init()
 
     // label: left hand
     ss.str("");
-    ss << handItemSummary (leftHand);
+    ss << _handItemSummary (leftHand);
     auto leftHandLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX, screenY+100));
 
     // label: right hand
     ss.str("");
-    ss << handItemSummary (rightHand);
+    ss << _handItemSummary (rightHand);
     auto rightHandLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX, screenY+140));
 
     add(background);
@@ -318,7 +317,7 @@ void InventoryState::onSlotDrag(std::shared_ptr<MouseEvent> event)
     //Game::getInstance()->states()->back()->ui()->push_back(dragUi);
 }
 
-std::string InventoryState::handItemSummary (std::shared_ptr<GameItemObject> hand)
+std::string InventoryState::_handItemSummary (std::shared_ptr<GameItemObject> hand)
 {
     std::stringstream ss;
     if (hand)
@@ -334,7 +333,7 @@ std::string InventoryState::handItemSummary (std::shared_ptr<GameItemObject> han
             if (weapon->ammoType() != 0)
             {
                 ss << "\nAmmo: /" << weapon->ammoCapacity() << " ";
-                auto ammo = Location::createObject(weapon->ammoPID());
+                auto ammo = GameObjectFactory::createObject(weapon->ammoPID());
                 ss << ammo->name();
             }
         }

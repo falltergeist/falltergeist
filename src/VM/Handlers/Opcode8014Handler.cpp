@@ -23,7 +23,7 @@
 #include "../../Engine/CrossPlatform.h"
 #include "../../Engine/Exception.h"
 #include "../../Engine/Game.h"
-#include "../../Engine/Location.h"
+#include "../../States/LocationState.h"
 #include "../../VM/Handlers/Opcode8014Handler.h"
 #include "../../VM/VM.h"
 #include "../../VM/VMStackValue.h"
@@ -41,7 +41,7 @@ void Opcode8014Handler::_run()
 {
     CrossPlatform::debug("[*] getExported(name)", DEBUG_SCRIPT);
     auto game = Game::getInstance();
-    auto EVARS = game->location()->EVARS();
+    auto EVARS = game->locationState()->EVARS();
     switch (_vm->dataStack()->top()->type())
     {
         case VMStackValue::TYPE_INTEGER:

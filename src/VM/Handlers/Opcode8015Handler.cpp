@@ -23,7 +23,7 @@
 #include "../../Engine/CrossPlatform.h"
 #include "../../Engine/Exception.h"
 #include "../../Engine/Game.h"
-#include "../../Engine/Location.h"
+#include "../../States/LocationState.h"
 #include "../../VM/Handlers/Opcode8015Handler.h"
 #include "../../VM/VM.h"
 #include "../../VM/VMStackValue.h"
@@ -43,7 +43,7 @@ void Opcode8015Handler::_run()
     auto name = std::static_pointer_cast<std::string>(_vm->popDataPointer());
     auto value = _vm->dataStack()->pop();
     auto game = Game::getInstance();
-    auto EVARS = game->location()->EVARS();
+    auto EVARS = game->locationState()->EVARS();
     EVARS->at(*(name.get())) = value;
 }
 

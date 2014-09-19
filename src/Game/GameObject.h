@@ -24,6 +24,7 @@
 // C++ standard includes
 #include <vector>
 #include <string>
+#include <memory>
 
 // Falltergeist includes
 #include "../Engine/Event/Event.h"
@@ -37,6 +38,7 @@ class Location;
 class Image;
 class AnimationQueue;
 class ActiveUI;
+class Hexagon;
 
 class GameObject : public EventReciever
 {
@@ -46,14 +48,13 @@ protected:
     int _subtype = -1;
     int _PID = -1;
     int _FID = -1;
-    int _position = -1;
     int _elevation = 0;
     int _orientation = 0;
     std::string _name;
     std::string _description;
     std::vector<VM*> _scripts;
-    Location* _location = 0;
     std::shared_ptr<ActiveUI> _ui;
+    std::weak_ptr<Hexagon> _hexagon;
     virtual void _generateUi();
 public:
     enum { TYPE_ITEM = 0, TYPE_CRITTER, TYPE_SCENERY, TYPE_WALL, TYPE_TILE, TYPE_MISC, TYPE_DUDE };
@@ -61,7 +62,7 @@ public:
     enum { TYPE_SCENERY_DOOR = 0, TYPE_SCENERY_STAIRS, TYPE_SCENERY_ELEVATOR, TYPE_SCENERY_LADDER, TYPE_SCENERY_GENERIC };
 
     GameObject();
-    virtual ~GameObject();
+    virtual ~GameObject();    
 
     bool canWalkThru();
     void setCanWalkThru(bool value);
@@ -74,9 +75,6 @@ public:
 
     int FID();
     void setFID(int value);
-
-    int position();
-    void setPosition(int value);
 
     int elevation();
     void setElevation(int value);
@@ -92,11 +90,11 @@ public:
 
     std::vector<VM*>* scripts();
 
-    Location* location();
-    void setLocation(Location* value);
-
     std::shared_ptr<ActiveUI> ui();
     void setUI(std::shared_ptr<ActiveUI> ui);
+
+    std::shared_ptr<Hexagon> hexagon();
+    void setHexagon(std::shared_ptr<Hexagon> hexagon);
 
 };
 
