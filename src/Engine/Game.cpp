@@ -30,9 +30,11 @@
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/OpenGLRenderer.h"
 #include "../Engine/Graphics/SDLRenderer.h"
+#include "../Engine/IniFile.h"
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Screen.h"
+#include "../Engine/Settings.h"
 #include "../Engine/State.h"
 #include "../Engine/UI.h"
 #include "../Game/GameDudeObject.h"
@@ -68,14 +70,27 @@ void Game::_initialize()
     if (_initialized) return;
     _initialized = true;
 
+    _engineSettings = std::shared_ptr<EngineSettings>(new EngineSettings());
+    auto width = _engineSettings->screenWidth();
+    auto height = _engineSettings->screenHeight();
+
+    switch (_engineSettings->renderer())
+    {
+        case EngineSettings::Renderer::SDL:
+            _renderer = std::shared_ptr<SDLRenderer>(new SDLRenderer(width, height));
+            break;
+        case EngineSettings::Renderer::OPENGL:
+            _renderer = std::shared_ptr<OpenGLRenderer>(new OpenGLRenderer(width, height));
+            break;
+    }
+
     debug("[GAME] - " + CrossPlatform::getVersion(), DEBUG_INFO);
     debug("[GAME] - Opensource Fallout 2 game engine", DEBUG_INFO);
 
     putenv(strdup("SDL_VIDEO_CENTERED=1"));
 
     _resourceManager = std::shared_ptr<ResourceManager>(new ResourceManager());
-    //_renderer = std::shared_ptr<OpenGLRenderer>(new OpenGLRenderer(640, 480));
-    _renderer = std::shared_ptr<SDLRenderer>(new SDLRenderer(640, 480));
+
     renderer()->init();
 
     std::string version = CrossPlatform::getVersion();
@@ -370,4 +385,8 @@ std::shared_ptr<Renderer> Game::renderer()
     return _renderer;
 }
 
+std::shared_ptr<EngineSettings> Game::engineSettings()
+{
+    return _engineSettings;
+}
 }

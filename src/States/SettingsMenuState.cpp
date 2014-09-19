@@ -336,36 +336,36 @@ void SettingsMenuState::think()
     State::think();
 }
 
-IniFileSection SettingsMenuState::_getSettings()
-{
-    // @todo Load options from FALLTERGEIST_DATA/config.ini if exists
-
-    // or return default values
-    return _getDefaultSettings();
-}
-
-IniFileSection SettingsMenuState::_getDefaultSettings()
-{
-    return IniFileSection({
-        {       "brightness", "1.000000"}, // max 1.179993
-        {"combat_difficulty", "1"},
-        {     "combat_looks", "0"},
-        {  "combat_messages", "1"},
-        {     "combat_speed", "0"},
-        {    "combat_taunts", "1"},
-        {  "game_difficulty", "1"},
-        {   "item_highlight", "1"},
-        {  "language_filter", "0"},
-        {"mouse_sensitivity", "1.000000"},  // max 2.500000
-        {   "player_speedup", "0"},
-        {          "running", "0"},
-        {        "subtitles", "0"},
-        { "target_highlight", "2"},
-        {  "text_base_delay", "3.500000"},  // max 1.000000
-        {  "text_line_delay", "1.000000"},  // max 0.000000
-        {   "violence_level", "3"}
-    });
-}
+//IniFileSection SettingsMenuState::_getSettings()
+//{
+//    // @todo Load options from FALLTERGEIST_DATA/config.ini if exists
+//
+//    // or return default values
+//    return _getDefaultSettings();
+//}
+//
+//IniFileSection SettingsMenuState::_getDefaultSettings()
+//{
+//    return IniFileSection({
+//        {       "brightness", "1.000000"}, // max 1.179993
+//        {"combat_difficulty", "1"},
+//        {     "combat_looks", "0"},
+//        {  "combat_messages", "1"},
+//        {     "combat_speed", "0"},
+//        {    "combat_taunts", "1"},
+//        {  "game_difficulty", "1"},
+//        {   "item_highlight", "1"},
+//        {  "language_filter", "0"},
+//        {"mouse_sensitivity", "1.000000"},  // max 2.500000
+//        {   "player_speedup", "0"},
+//        {          "running", "0"},
+//        {        "subtitles", "0"},
+//        { "target_highlight", "2"},
+//        {  "text_base_delay", "3.500000"},  // max 1.000000
+//        {  "text_line_delay", "1.000000"},  // max 0.000000
+//        {   "violence_level", "3"}
+//    });
+//}
 
 std::shared_ptr<TextArea> SettingsMenuState::_addLabel(std::string name, std::shared_ptr<TextArea> label)
 {

@@ -46,6 +46,7 @@ class AudioMixer;
 class Renderer;
 class UI;
 class TextArea;
+class EngineSettings;
 
 class Game
 {
@@ -61,6 +62,7 @@ protected:
     std::shared_ptr<FpsCounter> _fpsCounter;
     std::shared_ptr<TextArea> _mousePosition;
     std::shared_ptr<TextArea> _falltergeistVersion;
+    std::shared_ptr<EngineSettings> _engineSettings;
     bool _quit = false;
     SDL_Event _event;
     bool _initialized = false;
@@ -102,6 +104,8 @@ public:
     int GVAR(unsigned int number);
 
     std::vector<std::shared_ptr<UI>>* ui();
+
+    std::shared_ptr<EngineSettings> engineSettings();
 
 };
 
