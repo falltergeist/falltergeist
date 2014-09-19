@@ -106,7 +106,7 @@ void LocationState::init()
     game->mouse()->setType(Mouse::ACTION);
 
     _initPanel();
-    setLocation("maps/klacanyn.map");
+    setLocation("maps/klamall.map");
 }
 
 // PLAYER PANEL
@@ -436,7 +436,7 @@ void LocationState::think()
         if (_scriptsTicks + 500 < SDL_GetTicks())
         {
             _scriptsTicks = SDL_GetTicks();
-            //_locationScript->call("map_update_p_proc");
+            if (_locationScript) _locationScript->call("map_update_p_proc");
             for (auto hexagon : *hexagons())
             {
                 for (auto object : *hexagon->objects())
@@ -444,9 +444,9 @@ void LocationState::think()
                     for (auto script : *object->scripts())
                     {
                         script->call("map_update_p_proc");
-                        script->call("look_at_p_proc");
-                        script->call("description_p_proc");
-                        script->call("critter_p_proc");
+                        //script->call("look_at_p_proc");
+                        //script->call("description_p_proc");
+                        //script->call("critter_p_proc");
                         //script->call("timed_event_p_proc");
                     }
                  }

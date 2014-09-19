@@ -61,6 +61,7 @@
 #include "../VM/Handlers/Opcode80CAHandler.h"
 #include "../VM/Handlers/Opcode80CBHandler.h"
 #include "../VM/Handlers/Opcode80DEHandler.h"
+#include "../VM/Handlers/Opcode810AHandler.h"
 #include "../VM/Handlers/Opcode8119Handler.h"
 #include "../VM/Handlers/Opcode8127Handler.h"
 #include "../VM/Handlers/Opcode9001Handler.h"
@@ -171,6 +172,9 @@ void VM::run()
                 break;
             case 0x80DE:
                 opcodeHandler = std::shared_ptr<Opcode80DEHandler>(new Opcode80DEHandler(this));
+                break;
+            case 0x810A:
+                opcodeHandler = std::shared_ptr<Opcode810AHandler>(new Opcode810AHandler(this));
                 break;
             case 0x8119:
                 opcodeHandler = std::shared_ptr<Opcode8119Handler>(new Opcode8119Handler(this));
@@ -1114,14 +1118,7 @@ void VM::run()
                 }
                 break;
             }
-            case 0x810a:
-            {
-                CrossPlatform::debug("[=] void float_msg(void* who, string* msg, int type) ", DEBUG_SCRIPT);
-                popDataInteger();
-                _dataStack.pop(); // pointer or 0(integer)
-                popDataPointer();
-                break;
-            }
+            case 0x810a: return;
             case 0x810c:
             {
                 CrossPlatform::debug("[*] void anim(void* who, int anim, int direction)", DEBUG_SCRIPT);
