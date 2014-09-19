@@ -59,7 +59,6 @@ protected:
     unsigned int _cols = 100;
     unsigned int _rows = 100;
 
-    std::shared_ptr<LocationCamera> _camera;
     unsigned int _elevation = 0;
 
     std::shared_ptr<Texture> _tilesFloor;
@@ -88,7 +87,6 @@ public:
 
     std::shared_ptr<Texture> tilesFloor();
     std::shared_ptr<Texture> tilesRoof();
-    std::shared_ptr<LocationCamera> camera();
 
     std::shared_ptr<libfalltergeist::MapFileType> mapFile();
     std::vector<std::shared_ptr<GameObject>>* objects();

@@ -68,8 +68,6 @@ void LocationState::init()
 
     auto game = Game::getInstance();
 
-    /*
-
     // Creating 200x200 hexagonal map
     unsigned int index = 0;
     for (unsigned int p = 0; p != 200; ++p)
@@ -96,13 +94,9 @@ void LocationState::init()
         // @todo
     }
 
-    // Current elevation on the map
-    auto mapFileType = ResourceManager::mapFileType("maps/artemple.map");
-    _currentElevation = mapFileType->defaultElevation();
-
     _camera = std::shared_ptr<LocationCamera>(new LocationCamera(game->renderer()->width(), game->renderer()->height(), 0, 0));
 
-    */
+
 
     game->mouse()->setType(Mouse::ACTION);
 
@@ -168,10 +162,15 @@ void LocationState::_initPanel()
 
 void LocationState::setLocation(std::string name)
 {    
-    /*
+
     auto mapFile = ResourceManager::mapFileType(name);
     _currentElevation = mapFile->defaultElevation();
 
+    camera()->setXPosition(hexagons()->at(mapFile->defaultPosition())->x());
+    camera()->setYPosition(hexagons()->at(mapFile->defaultPosition())->y());
+
+
+    /*
     auto mapObjects = mapFile->elevations()->at(_currentElevation)->objects();
 
     for (auto mapObject : *mapObjects)
@@ -202,7 +201,7 @@ void LocationState::setLocation(std::string name)
     }
 
     */
-    _location = std::shared_ptr<Location>(new Location(ResourceManager::mapFileType(name)));
+    _location = std::shared_ptr<Location>(new Location(mapFile));
 
     _floor = std::shared_ptr<Image>(new Image(_location->tilesFloor()));
     _floor->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyboardUp);
@@ -266,8 +265,8 @@ void LocationState::generateUi()
 
      //add(_roof);
 
-    _floor->setX(-_location->camera()->x());
-    _floor->setY(-_location->camera()->y());
+    _floor->setX(-camera()->x());
+    _floor->setY(-camera()->y());
     //_roof->setX(-_location->camera()->x());
     //_roof->setY(-_location->camera()->y() - 100);
 
@@ -308,22 +307,22 @@ void LocationState::think()
         Game::getInstance()->mouse()->setType(Mouse::ACTION);
         if (_scrollLeft)
         {
-            _location->camera()->setXPosition(_location->camera()->xPosition() - scrollDelta);
+            camera()->setXPosition(camera()->xPosition() - scrollDelta);
             Game::getInstance()->mouse()->setType(Mouse::SCROLL_W);
         }
         if (_scrollRight)
         {
-            _location->camera()->setXPosition(_location->camera()->xPosition() + scrollDelta);
+            camera()->setXPosition(camera()->xPosition() + scrollDelta);
             Game::getInstance()->mouse()->setType(Mouse::SCROLL_E);
         }
         if (_scrollTop)
         {
-            _location->camera()->setYPosition(_location->camera()->yPosition() - scrollDelta);
+            camera()->setYPosition(camera()->yPosition() - scrollDelta);
             Game::getInstance()->mouse()->setType(Mouse::SCROLL_N);
         }
         if (_scrollBottom)
         {
-            _location->camera()->setYPosition(_location->camera()->yPosition() + scrollDelta);
+            camera()->setYPosition(camera()->yPosition() + scrollDelta);
             Game::getInstance()->mouse()->setType(Mouse::SCROLL_S);
         }
 
@@ -409,6 +408,16 @@ void LocationState::onKeyboardUp(std::shared_ptr<KeyboardEvent> event)
         Game::getInstance()->pushState(std::shared_ptr<ExitConfirmState>(new ExitConfirmState()));
         //event->setHandled(true);
     }
+}
+
+std::vector<std::shared_ptr<Hexagon>>* LocationState::hexagons()
+{
+    return &_hexagons;
+}
+
+std::shared_ptr<LocationCamera> LocationState::camera()
+{
+    return _camera;
 }
 
 }

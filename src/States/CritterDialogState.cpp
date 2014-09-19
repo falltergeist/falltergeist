@@ -64,11 +64,11 @@ void CritterDialogState::init()
     setModal(true);
 
     auto locationState = Game::getInstance()->locationState();
-    _oldCameraX = locationState->location()->camera()->xPosition();
-    _oldCameraY = locationState->location()->camera()->yPosition();
+    _oldCameraX = locationState->camera()->xPosition();
+    _oldCameraY = locationState->camera()->yPosition();
 
-    locationState->location()->camera()->setXPosition(Location::hexagonToX(critter()->position()));
-    locationState->location()->camera()->setYPosition(Location::hexagonToY(critter()->position()) + 100);
+    locationState->camera()->setXPosition(Location::hexagonToX(critter()->position()));
+    locationState->camera()->setYPosition(Location::hexagonToY(critter()->position()) + 100);
     locationState->location()->checkObjectsToRender();
     locationState->generateUi();
 
@@ -97,7 +97,7 @@ void CritterDialogState::close()
     // Pop CritterTalkState
     Game::getInstance()->popState();
     // Restore original camera position
-    auto camera = Game::getInstance()->location()->camera();
+    auto camera = Game::getInstance()->locationState()->camera();
     camera->setXPosition(_oldCameraX);
     camera->setYPosition(_oldCameraY);
 }

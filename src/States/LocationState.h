@@ -74,6 +74,9 @@ public:
 
     void generateUi();
 
+    std::vector<std::shared_ptr<Hexagon>>* hexagons();
+    std::shared_ptr<LocationCamera> camera();
+
     void onBackgroundClick(std::shared_ptr<MouseEvent> event);
     void onKeyUp(std::shared_ptr<KeyboardEvent> event);
     void onObjectClick(std::shared_ptr<MouseEvent> event);

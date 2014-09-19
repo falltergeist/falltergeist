@@ -23,6 +23,11 @@
 #include <iostream>
 
 // Falltergeist includes
+#include "../Game/GameDefines.h"
+#include "../Game/GameDudeObject.h"
+#include "../Game/GameWeaponItemObject.h"
+#include "../Game/GameObject.h"
+#include "../Game/GameObjectFactory.h"
 #include "../Engine/Game.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Graphics/Animation.h"
@@ -31,11 +36,7 @@
 #include "../Engine/Location.h"
 #include "../Engine/LocationCamera.h"
 #include "../Engine/ResourceManager.h"
-#include "../Game/GameDefines.h"
-#include "../Game/GameDudeObject.h"
-#include "../Game/GameWeaponItemObject.h"
-#include "../Game/GameObject.h"
-#include "../Game/GameObjectFactory.h"
+#include "../States/LocationState.h"
 #include "../UI/Image.h"
 #include "../VM/VM.h"
 
@@ -54,10 +55,6 @@ Location::~Location()
 {
 }
 
-std::shared_ptr<LocationCamera> Location::camera()
-{
-    return _camera;
-}
 
 std::shared_ptr<Texture> Location::tilesFloor()
 {
@@ -79,15 +76,6 @@ void Location::init()
     _generateFloor();
     _generateRoof();
 
-    auto game = Game::getInstance();
-
-    _camera = std::shared_ptr<LocationCamera>(new LocationCamera(game->renderer()->width(), game->renderer()->height(), 0, 0));
-
-    // Инициализируем положение камеры
-    unsigned int defaultPosition = _mapFile->defaultPosition();
-    camera()->setXPosition(hexagonToX(defaultPosition));
-    camera()->setYPosition(hexagonToY(defaultPosition));
-
 
     // Initialize MAP vars
     if (_mapFile->MVARsize() > 0)
@@ -99,8 +87,6 @@ void Location::init()
             _MVARS.push_back(mvar.second);
         }
     }
-
-    _elevation = _mapFile->defaultElevation();
 
     auto mapObjects = _mapFile->elevations()->at(_elevation)->objects();
 
@@ -273,6 +259,8 @@ void Location::checkObjectsToRender()
 {
     _objectsToRender.clear();
 
+    auto camera = Game::getInstance()->locationState()->camera();
+
     for (auto object : _objects)
     {
         auto ui = std::dynamic_pointer_cast<ActiveUI>(object->ui());
@@ -296,13 +284,13 @@ void Location::checkObjectsToRender()
         }
 
         // check if object is out of camera borders
-        if (x + width < camera()->x()) continue; // right
-        if (y + height < camera()->y()) continue; // bottom
-        if (x > camera()->x() + camera()->width()) continue; // left
-        if (y > camera()->y() + camera()->height()) continue; // top
+        if (x + width < camera->x()) continue; // right
+        if (y + height < camera->y()) continue; // bottom
+        if (x > camera->x() + camera->width()) continue; // left
+        if (y > camera->y() + camera->height()) continue; // top
 
-        ui->setX(Location::hexagonToX(object->position()) - camera()->x());
-        ui->setY(Location::hexagonToY(object->position())- camera()->y());
+        ui->setX(Location::hexagonToX(object->position()) - camera->x());
+        ui->setY(Location::hexagonToY(object->position())- camera->y());
 
 
         _objectsToRender.push_back(object);
