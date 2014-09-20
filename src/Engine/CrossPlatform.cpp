@@ -42,6 +42,12 @@
     #include <unistd.h>
 #endif
 
+#if defined (__APPLE__)
+    #include <sys/param.h>
+    #include <sys/ucred.h>
+    #include <sys/mount.h>
+#endif
+
 namespace Falltergeist
 {
 
@@ -147,6 +153,18 @@ std::vector<std::string> CrossPlatform::getCdDrivePaths() {
             }
         }
         endmntent(mtab);
+#elif defined (__APPLE__)
+    struct statfs *mntbuf;
+    int mntsize = getmntinfo(&mntbuf, MNT_NOWAIT);
+    for ( int i = 0; i < mntsize; i++ )
+    {
+        std::string directory = ((struct statfs *)&mntbuf[i])->f_mntonname;
+        std::string type = ((struct statfs *)&mntbuf[i])->f_fstypename;
+        if (type == "cd9660")
+        {
+            result.push_back(directory);
+        }
+    }
 #else
     throw Exception("CD-ROM detection not supported");
 #endif
