@@ -252,4 +252,20 @@ std::vector<std::string> * CrossPlatform::findFalloutDataFiles()
 
     return _dataFiles;
 }
+
+std::ostream &CrossPlatform::debug(unsigned char level)
+{
+    // /dev/null-like stream
+    static std::ostream nullstream(nullptr);
+    // Check debug level
+    // TODO: perform real check
+    if (false)
+    {
+        return nullstream << std::dec;
+    }
+    else
+    {
+        return std::cout << std::dec;
+    }
+}
 }
