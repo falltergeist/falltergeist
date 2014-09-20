@@ -69,6 +69,7 @@ TextArea::~TextArea()
 
 void TextArea::init()
 {
+    _timestampCreated = SDL_GetTicks();
     _strings.push_back(new FontString(""));
 }
 
@@ -473,6 +474,11 @@ TextArea* TextArea::setOutlineColor(unsigned int color)
 unsigned int TextArea::getOutlineColor()
 {
     return _outlineColor;
+}
+
+unsigned int TextArea::timestampCreated()
+{
+    return _timestampCreated;
 }
 
 }
