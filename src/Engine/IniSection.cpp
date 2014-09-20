@@ -21,6 +21,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
 #include "../Engine/IniSection.h"
 
@@ -28,6 +29,8 @@
 
 namespace Falltergeist
 {
+
+using crp = CrossPlatform;
 
 void IniSection::_property(PropertyMapConstIterator iter, double &ret, double def)
 {
@@ -77,7 +80,8 @@ bool IniSection::_hasType(PropertyMapConstIterator iter, IniValue::Tag tag)
 {
     if (iter->second._tag == tag) return true;
 
-    std::cerr << "Property `" << iter->first
+    crp::debug(DEBUG_INFO)
+            << "[INI] Property `" << iter->first
             << " `expected to be " << _tagToString(tag)
             << " but " << _tagToString(iter->second._tag)
             << " value encountered: " << _valueToString(iter->second)
@@ -150,7 +154,7 @@ int IniSection::propertyInt(const std::string &name, int def)
     PropertyMapConstIterator iter = _properties.find(name);
     if (iter == _properties.end())
     {
-        std::cerr << "Property `" << name << "` not found, use default value: " << def << std::endl;
+        crp::debug(DEBUG_INFO) << "[INI] Property `" << name << "` not found, use default value: " << def << std::endl;
         return def;
     };
     int ret;
@@ -163,7 +167,7 @@ double IniSection::propertyDouble(const std::string &name, double def)
     PropertyMapConstIterator iter = _properties.find(name);
     if (iter == _properties.end())
     {
-        std::cerr << "Property `" << name << "` not found, use default value: " << def << std::endl;
+        crp::debug(DEBUG_INFO) << "[INI] Property `" << name << "` not found, use default value: " << def << std::endl;
         return def;
     };
     double ret;
@@ -176,7 +180,7 @@ bool IniSection::propertyBool(const std::string &name, bool def)
     PropertyMapConstIterator iter = _properties.find(name);
     if (iter == _properties.end())
     {
-        std::cerr << "Property `" << name << "` not found, use default value: " << def << std::endl;
+        crp::debug(DEBUG_INFO) << "[INI] Property `" << name << "` not found, use default value: " << def << std::endl;
         return def;
     };
     bool ret;
@@ -189,7 +193,7 @@ std::string IniSection::propertyString(const std::string &name, const std::strin
     PropertyMapConstIterator iter = _properties.find(name);
     if (iter == _properties.end())
     {
-        std::cerr << "Property `" << name << "` not found, use default value: " << def << std::endl;
+        crp::debug(DEBUG_INFO) << "Property `" << name << "` not found, use default value: " << def << std::endl;
         return def;
     };
     std::string ret;
