@@ -53,6 +53,18 @@ const char *Logger::levelString(Logger::Level level)
 {
     switch (level)
     {
+#if defined(__unix__) || defined(__APPLE__)
+        case Logger::Level::DEBUG:
+            return "[DEBUG]";
+        case Logger::Level::INFO:
+            return "\x1b[32m[INFO]\x1b[0m";
+        case Logger::Level::WARNING:
+            return "\x1b[33m[WARNING]\x1b[0m";
+        case Logger::Level::ERROR:
+            return "\x1b[31m[ERROR]\x1b[0m";
+        case Logger::Level::CRITICAL:
+            return "\x1b[31;1m[CRITICAL]\x1b[0m";
+#else // Assume Windows
         case Logger::Level::DEBUG:
             return "[DEBUG]";
         case Logger::Level::INFO:
@@ -63,6 +75,7 @@ const char *Logger::levelString(Logger::Level level)
             return "[ERROR]";
         case Logger::Level::CRITICAL:
             return "[CRITICAL]";
+#endif
     };
 
     return "[UNKOWN]";
@@ -90,7 +103,7 @@ std::ostream &Logger::error(const std::string &subsystem)
 
 std::ostream &Logger::critical(const std::string &subsystem)
 {
-    return log(Logger::Level::ERROR, subsystem);
+    return log(Logger::Level::CRITICAL, subsystem);
 }
 
 }
