@@ -23,12 +23,15 @@
 #include <sstream>
 
 // Falltergeist includes
+#include "../Engine/CrossPlatform.h"
 #include "../Engine/IniFile.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+
+using crp = CrossPlatform;
 
 void IniParser::_trim(std::string &line)
 {
@@ -71,7 +74,7 @@ bool IniParser::_parseBool(std::string &name, std::string &line, std::shared_ptr
 
     if (isBool)
     {
-        std::cerr << "boolean value found for property `" << name << "`: " << value << std::endl;
+        crp::debug(DEBUG_INFO) << "[INI] boolean value found for property `" << name << "`: " << value << std::endl;
         ini->section(_section)->setPropertyInt(name, value);
     }
 
@@ -89,24 +92,21 @@ bool IniParser::_parseDecimal(std::string &name, std::string &line, std::shared_
         switch (state)
         {
             case BEGIN:
-            {
                 if (sym == '+' || sym == '-')
                 {
                     state = SIGN;
                 }
                 else if (isdigit(sym))
-                    {
-                        state = INTEGRAL;
-                    }
-                    else
-                    {
-                        state = ERROR;
-                    }
-            }
+                {
+                    state = INTEGRAL;
+                }
+                else
+                {
+                    state = ERROR;
+                }
                 break;
 
             case SIGN:
-            {
                 if (isdigit(sym))
                 {
                     state = INTEGRAL;
@@ -115,24 +115,20 @@ bool IniParser::_parseDecimal(std::string &name, std::string &line, std::shared_
                 {
                     state = ERROR;
                 }
-            }
                 break;
 
             case INTEGRAL:
-            {
                 if (sym == '.')
                 {
                     state = DOT;
                 }
                 else if (!isdigit(sym))
-                    {
-                        state = ERROR;
-                    }
-            }
+                {
+                    state = ERROR;
+                }
                 break;
 
             case DOT:
-            {
                 if (isdigit(sym))
                 {
                     state = FRACTIONAL;
@@ -141,24 +137,20 @@ bool IniParser::_parseDecimal(std::string &name, std::string &line, std::shared_
                 {
                     state = ERROR;
                 }
-            }
                 break;
 
             case FRACTIONAL:
-            {
                 if (sym == 'e' || sym == 'E')
                 {
                     state = EXP;
                 }
                 else if(!isdigit(sym))
-                    {
-                        state = ERROR;
-                    }
-            }
+                {
+                    state = ERROR;
+                }
                 break;
 
             case EXP:
-            {
                 if (sym == '+' || sym == '-')
                 {
                     state = EXP_SIGN;
@@ -167,11 +159,9 @@ bool IniParser::_parseDecimal(std::string &name, std::string &line, std::shared_
                 {
                     state = ERROR;
                 }
-            }
                 break;
 
             case EXP_SIGN:
-            {
                 if (isdigit(sym))
                 {
                     state = EXP_DIGITS;
@@ -180,16 +170,14 @@ bool IniParser::_parseDecimal(std::string &name, std::string &line, std::shared_
                 {
                     state = ERROR;
                 }
-            }
                 break;
 
             case EXP_DIGITS:
-            {
                 if (!isdigit(sym))
                 {
                     state = ERROR;
                 }
-            }
+                break;
 
             case ERROR:
                 // do nothing, just suppress warning
@@ -201,7 +189,7 @@ bool IniParser::_parseDecimal(std::string &name, std::string &line, std::shared_
     {
         int value;
         ss >> value;
-        std::cerr << "integer value found for property `" << name << "`: " << value << std::endl;
+        crp::debug(DEBUG_INFO) << "[INI] integer value found for property `" << name << "`: " << value << std::endl;
         ini->section(_section)->setPropertyInt(name, value);
         return  true;
     }
@@ -210,7 +198,7 @@ bool IniParser::_parseDecimal(std::string &name, std::string &line, std::shared_
     {
         double value;
         ss >> value;
-        std::cerr << "double value found for property `" << name << "`: " << value << std::endl;
+        crp::debug(DEBUG_INFO) << "[INI] double value found for property `" << name << "`: " << value << std::endl;
         ini->section(_section)->setPropertyDouble(name, value);
         return true;
     }
@@ -228,6 +216,8 @@ std::shared_ptr<IniFile> IniParser::parse()
     auto ini = std::shared_ptr<IniFile>(new IniFile());
     std::string line;
 
+    crp::debug(DEBUG_INFO) << "[INI] start parsing config file." << std::endl;
+
     while (std::getline(_stream, line))
     {
         // Lines starting with "#" or ";" are treated as comments and ignored
@@ -244,14 +234,14 @@ std::shared_ptr<IniFile> IniParser::parse()
         {
             _section = line.substr(1, line.length() - 2);
             _tolower(_section);
-            std::cerr << "start section: `" << _section << "`" << std::endl;
+            crp::debug(DEBUG_INFO) << "[INI] start section: `" << _section << "`" << std::endl;
             continue;
         }
 
         auto eqPos = line.find('=');
         if (eqPos == std::string::npos)
         {
-            std::cerr << "malformed line: " << line << std::endl;
+            crp::debug(DEBUG_INFO) << "[INI] malformed line: " << line << std::endl;
             continue;
         }
 
@@ -268,8 +258,8 @@ std::shared_ptr<IniFile> IniParser::parse()
         // Try to parse decimal (double or integer)
         if (_parseDecimal(name, value, ini)) continue;
 
-        // Interpret value as string
-        std::cerr << "string value found for property `" << name << "`: " << value << std::endl;
+        // Interpret value as string if none of other parsers succeeded
+        crp::debug(DEBUG_INFO) << "[INI] string value found for property `" << name << "`: " << value << std::endl;
         ini->section(_section)->setPropertyString(name, value);
     }
 
