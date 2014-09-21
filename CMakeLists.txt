@@ -99,6 +99,8 @@ set(SOURCES main.cpp
             src/Engine/IniValue.h
             src/Engine/LocationCamera.cpp
             src/Engine/LocationCamera.h
+            src/Engine/Logger.cpp
+            src/Engine/Logger.h
             src/Engine/Map.cpp
             src/Engine/Map.h
             src/Engine/ResourceManager.cpp
