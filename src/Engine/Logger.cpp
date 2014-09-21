@@ -46,37 +46,49 @@ std::ostream &Logger::log(Logger::Level level, const std::string &subsystem)
     return std::cout << levelString(level) << subsystem << " " << std::dec;
 }
 
-// Used as default value when reading from config
-Logger::Level Logger::_level = Logger::Level::DEBUG;
+Logger::Level Logger::_level = Logger::Level::INFO;
+bool Logger::_useColors = true;
+
+#if defined(__unix__) || defined(__APPLE__)
+const bool Logger::colorsSupported = true;
+#else // Assume Windows
+const bool Logger::colorsSupported = false;
+#endif
 
 const char *Logger::levelString(Logger::Level level)
 {
-    switch (level)
+    if (_useColors && colorsSupported)
     {
-#if defined(__unix__) || defined(__APPLE__)
-        case Logger::Level::DEBUG:
-            return "[DEBUG]";
-        case Logger::Level::INFO:
-            return "\x1b[32m[INFO]\x1b[0m";
-        case Logger::Level::WARNING:
-            return "\x1b[33m[WARNING]\x1b[0m";
-        case Logger::Level::ERROR:
-            return "\x1b[31m[ERROR]\x1b[0m";
-        case Logger::Level::CRITICAL:
-            return "\x1b[31;1m[CRITICAL]\x1b[0m";
-#else // Assume Windows
-        case Logger::Level::DEBUG:
-            return "[DEBUG]";
-        case Logger::Level::INFO:
-            return "[INFO]";
-        case Logger::Level::WARNING:
-            return "[WARNING]";
-        case Logger::Level::ERROR:
-            return "[ERROR]";
-        case Logger::Level::CRITICAL:
-            return "[CRITICAL]";
-#endif
-    };
+        switch (level)
+        {
+            case Logger::Level::DEBUG:
+                return "[DEBUG]";
+            case Logger::Level::INFO:
+                return "\x1b[32m[INFO]\x1b[0m";
+            case Logger::Level::WARNING:
+                return "\x1b[33m[WARNING]\x1b[0m";
+            case Logger::Level::ERROR:
+                return "\x1b[31m[ERROR]\x1b[0m";
+            case Logger::Level::CRITICAL:
+                return "\x1b[31;1m[CRITICAL]\x1b[0m";
+        }
+    }
+    else
+    {
+        switch (level)
+        {
+            case Logger::Level::DEBUG:
+                return "[DEBUG]";
+            case Logger::Level::INFO:
+                return "[INFO]";
+            case Logger::Level::WARNING:
+                return "[WARNING]";
+            case Logger::Level::ERROR:
+                return "[ERROR]";
+            case Logger::Level::CRITICAL:
+                return "[CRITICAL]";
+        };
+    }
 
     return "[UNKOWN]";
 }
@@ -106,4 +118,42 @@ std::ostream &Logger::critical(const std::string &subsystem)
     return log(Logger::Level::CRITICAL, subsystem);
 }
 
+void Logger::useColors(bool useColors)
+{
+    _useColors = useColors;
+}
+
+void Logger::setLevel(const std::string &level)
+{
+    Logger::Level lvl;
+
+    if (level == "debug")
+    {
+        lvl = Level::DEBUG;
+    }
+    else if (level == "info")
+    {
+        lvl = Level::INFO;
+    }
+    else if (level == "warning")
+    {
+        lvl = Level::WARNING;
+    }
+    else if (level == "error")
+    {
+        lvl = Level::ERROR;
+    }
+    else if (level == "critical")
+    {
+        lvl = Level::CRITICAL;
+    }
+    else
+    {
+        warning() << "Unkown level " << level << " ignored";
+        return;
+    }
+
+    setLevel(lvl);
+
+}
 }

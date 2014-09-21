@@ -61,7 +61,9 @@ EngineSettings::EngineSettings()
         auto audio = ini->section("audio");
         _audioEnabled = audio->propertyBool("enabled", _defaultAudioEnabled);
 
-        // TODO: read logger level
+        auto logger = ini->section("logger");
+        Logger::setLevel(logger->propertyString("level", "info"));
+        Logger::useColors(logger->propertyBool("colors", true));
     }
     else
     {

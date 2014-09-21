@@ -44,7 +44,11 @@ public:
 
     static Level level();
     static void setLevel(Level level);
+    static void setLevel(const std::string &level);
     static const char *levelString(Level level);
+
+    static const bool colorsSupported;
+    static void useColors(bool useColors);
 
     static std::ostream &log(Level level, const std::string &subsystem = "");
     static std::ostream &debug(const std::string &subsystem = "");
@@ -55,6 +59,7 @@ public:
 
 private:
     static Level _level;
+    static bool _useColors;
 };
 
 }
