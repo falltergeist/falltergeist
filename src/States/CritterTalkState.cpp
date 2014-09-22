@@ -76,9 +76,9 @@ void CritterTalkState::init()
 
     background->addEventHandler("keyup", this, (EventRecieverMethod) &CritterTalkState::onKeyboardUp);
 
-    add(background);
-    add(reviewButton);
-    add(barterButton);
+    addUI(background);
+    addUI(reviewButton);
+    addUI(barterButton);
 }
 
 void CritterTalkState::setOffsetX(int offsetX)
@@ -183,7 +183,7 @@ void CritterTalkState::addAnswer(std::string text)
     answer->addEventHandler("mouseout", this, (EventRecieverMethod)&CritterTalkState::onAnswerOut);
     answer->addEventHandler("mouseleftclick", this, (EventRecieverMethod)&CritterTalkState::onAnswerClick);
     _answers.push_back(answer);
-    add(answer);
+    addUI(answer);
 }
 
 bool CritterTalkState::hasAnswers()

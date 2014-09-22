@@ -332,13 +332,13 @@ void LocationState::generateUi()
 {
     _ui.clear();
     _floatMessages.clear();
-    add(_floor);
+    addUI(_floor);
 
     for (auto object : _objectsToRender)
     {
         object->ui()->removeEventHandlers("mouseleftdown");
         object->ui()->addEventHandler("mouseleftdown", object.get(), (EventRecieverMethod) &LocationState::onMouseDown);
-        add(object->ui());
+        addUI(object->ui());
 
         if (auto message = object->floatMessage())
         {
@@ -355,7 +355,7 @@ void LocationState::generateUi()
         }
     }
 
-     //add(_roof);
+     //addUI(_roof);
 
     _floor->setX(-camera()->x());
     _floor->setY(-camera()->y());
@@ -364,12 +364,12 @@ void LocationState::generateUi()
 
     for (auto message : _floatMessages)
     {
-        add(message);
+        addUI(message);
     }
 
     for (auto ui : _panelUIs)
     {
-        add(ui);
+        addUI(ui);
     }
 
     auto item = Game::getInstance()->player()->currentHandSlot();
@@ -378,7 +378,7 @@ void LocationState::generateUi()
         auto itemUi = item->inventoryDragUi();
         itemUi->setX(_panelUIs.at(0)->x() + 360 - itemUi->width()*0.5);
         itemUi->setY(_panelUIs.at(0)->y() + 60 - itemUi->height()*0.5);
-        add(itemUi);
+        addUI(itemUi);
     }
 }
 

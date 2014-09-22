@@ -76,14 +76,34 @@ void State::setModal(bool value)
     _modal = value;
 }
 
-void State::add(std::shared_ptr<UI> ui)
+std::shared_ptr<UI> State::addUI(std::shared_ptr<UI> ui)
 {
     _ui.push_back(ui);
+    return _ui.back();
 }
 
-void State::add(std::vector<std::shared_ptr<UI>> uis)
+std::shared_ptr<UI> State::addUI(std::string name, std::shared_ptr<UI> ui)
 {
-    for (auto ui : uis) add(ui);
+    _labeledUI.insert(std::pair<std::string, std::shared_ptr<UI>>(name, ui));
+    _ui.push_back(ui);
+    return _ui.back();
+}
+
+void State::addUI(std::vector<std::shared_ptr<UI>> uis)
+{
+    for (auto ui : uis)
+    {
+        _ui.push_back(ui);
+    }
+}
+
+std::shared_ptr<UI> State::getUI(std::string name)
+{
+    if (_labeledUI.find(name) != _labeledUI.end())
+    {
+        return _labeledUI.at(name);
+    }
+    return nullptr;
 }
 
 void State::handle(std::shared_ptr<Event> event)

@@ -49,7 +49,7 @@ PlayerEditState::PlayerEditState() : State()
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
     background->setX(backgroundX);
     background->setY(backgroundY);
-    add(background);
+    addUI(background);
 
     // STATS
     auto msgStats = ResourceManager::msgFileType("text/english/game/stat.msg");
@@ -193,7 +193,7 @@ PlayerEditState::PlayerEditState() : State()
     for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
     {
         it->second->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditState::onButtonClick);
-        add(it->second);
+        addUI(it->second);
     }
 
     // add labels to the state
@@ -202,20 +202,20 @@ PlayerEditState::PlayerEditState() : State()
     {
         it->second->setBackgroundColor(0x00000001);
         it->second->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditState::onLabelClick);
-        add(it->second);
+        addUI(it->second);
     }
 
     // add counters to the state
     for(auto it = _counters.begin(); it != _counters.end(); ++it)
     {
-        add(it->second);
+        addUI(it->second);
     }
 
     // add hidden masks
     for(auto it = _masks.begin(); it != _masks.end(); ++it)
     {
         it->second->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditState::onMaskClick);
-        add(it->second);
+        addUI(it->second);
     }
 
     // Fix to handle click on empty spaces
@@ -228,24 +228,24 @@ PlayerEditState::PlayerEditState() : State()
     _selectedLabel = _labels.at("stats_1");
     _selectedImage->setX(backgroundX+480);
     _selectedImage->setY(backgroundY+310);
-    add(_selectedImage);
+    addUI(_selectedImage);
 
     auto font1_000000ff = ResourceManager::font("font1.aaf", 0x000000FF);
     auto font2_000000ff = ResourceManager::font("font2.aaf", 0x000000FF);
 
     _title = std::shared_ptr<TextArea>(new TextArea("", backgroundX+350, backgroundY+275));
     _title->setFont(font2_000000ff);
-    add(_title);
+    addUI(_title);
 
     auto line = std::shared_ptr<Image>(new Image(270, 2));
     line->setX(backgroundX+350);
     line->setY(backgroundY+300);
     line->texture()->fill(0x000000ff);
-    add(line);
+    addUI(line);
 
     _description = std::shared_ptr<TextArea>(new TextArea("", backgroundX+350, backgroundY+315));
     _description->setFont(font1_000000ff)->setWidth(145)->setHeight(120)->setWordWrap(true);
-    add(_description);
+    addUI(_description);
 
 }
 

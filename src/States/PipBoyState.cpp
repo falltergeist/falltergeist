@@ -93,19 +93,19 @@ void PipBoyState::init()
     time->setType(SmallCounter::UNSIGNED);
     time->setLength(4);
 
-    add(background);
+    addUI(background);
 
-    add(alarmButton);
-    add(statusButton);
-    add(automapsButton);
-    add(archivesButton);
+    addUI(alarmButton);
+    addUI(statusButton);
+    addUI(automapsButton);
+    addUI(archivesButton);
 
-    add(day);
-    add(month);
-    add(year);
-    add(time);
+    addUI(day);
+    addUI(month);
+    addUI(year);
+    addUI(time);
 
-    add(closeButton);
+    addUI(closeButton);
 }
 
 void PipBoyState::onCloseButtonClick(std::shared_ptr<MouseEvent> event)

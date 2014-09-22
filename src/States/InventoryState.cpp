@@ -222,32 +222,32 @@ void InventoryState::init()
     }
     auto rightHandLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX, screenY+140));
 
-    add(background);
-    add(playerNameLabel);
-    add(line1);
-    add(stLabel);
-    add(peLabel);
-    add(enLabel);
-    add(chLabel);
-    add(inLabel);
-    add(agLabel);
-    add(lkLabel);
-    add(statsLabel);
-    add(textLabel);
-    add(hitPointsLabel);
-    add(armorClassLabel);
-    add(damageThresholdLabel);
-    add(damageResistanceLabel);
-    add(line2);
-    add(line3);
-    add(totalWtLabel);
-    add(weightLabel);
-    add(weightMaxLabel);
-    add(leftHandLabel);
-    add(rightHandLabel);
-    add(upButton);
-    add(downButton);
-    add(doneButton);
+    addUI(background);
+    addUI(playerNameLabel);
+    addUI(line1);
+    addUI(stLabel);
+    addUI(peLabel);
+    addUI(enLabel);
+    addUI(chLabel);
+    addUI(inLabel);
+    addUI(agLabel);
+    addUI(lkLabel);
+    addUI(statsLabel);
+    addUI(textLabel);
+    addUI(hitPointsLabel);
+    addUI(armorClassLabel);
+    addUI(damageThresholdLabel);
+    addUI(damageResistanceLabel);
+    addUI(line2);
+    addUI(line3);
+    addUI(totalWtLabel);
+    addUI(weightLabel);
+    addUI(weightMaxLabel);
+    addUI(leftHandLabel);
+    addUI(rightHandLabel);
+    addUI(upButton);
+    addUI(downButton);
+    addUI(doneButton);
 
     // BIG ICONS
     // icon: armor
@@ -258,7 +258,7 @@ void InventoryState::init()
         armorUi->addImage(std::shared_ptr<Image>(new Image(armorSlot->inventoryDragUi()->texture())));
         armorUi->setX(backgroundX + 200 - armorUi->width()*0.5);
         armorUi->setY(backgroundY + 215 - armorUi->height()*0.5);
-        add(armorUi);
+        addUI(armorUi);
 
         armorUi->addEventHandler("mousedrag", armorSlot.get(), (EventRecieverMethod) &InventoryState::onSlotDrag);
         armorUi->addEventHandler("mouseleftdown", armorSlot.get(), (EventRecieverMethod) &InventoryState::onSlotMouseDown);
@@ -273,7 +273,7 @@ void InventoryState::init()
         leftHandUi->addImage(std::shared_ptr<Image>(new Image(leftHand->inventoryDragUi()->texture())));
         leftHandUi->setX(backgroundX + 200 - leftHandUi->width()*0.5);
         leftHandUi->setY(backgroundY + 317 - leftHandUi->height()*0.5);
-        add(leftHandUi);
+        addUI(leftHandUi);
 
         leftHandUi->addEventHandler("mousedrag", leftHand.get(), (EventRecieverMethod) &InventoryState::onSlotDrag);
         leftHandUi->addEventHandler("mouseleftdown", leftHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseDown);
@@ -288,7 +288,7 @@ void InventoryState::init()
         rightHandUi->addImage(std::shared_ptr<Image>(new Image(rightHand->inventoryDragUi()->texture())));
         rightHandUi->setX(backgroundX + 290 - rightHandUi->width()*0.5);
         rightHandUi->setY(backgroundY + 317 - rightHandUi->height()*0.5);
-        add(rightHandUi);
+        addUI(rightHandUi);
 
         rightHandUi->addEventHandler("mousedrag", rightHand.get(), (EventRecieverMethod) &InventoryState::onSlotDrag);
         rightHandUi->addEventHandler("mouseleftdown", rightHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseDown);

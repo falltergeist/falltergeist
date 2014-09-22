@@ -83,14 +83,14 @@ void ExitConfirmState::init()
     background->setX(backgroundX);
     background->setY(backgroundY);
 
-    add(background);
-    add(box1);
-    add(box2);
-    add(yesButton);
-    add(noButton);
-    add(quitLabel);
-    add(yesButtonLabel);
-    add(noButtonLabel);
+    addUI(background);
+    addUI(box1);
+    addUI(box2);
+    addUI(yesButton);
+    addUI(noButton);
+    addUI(quitLabel);
+    addUI(yesButtonLabel);
+    addUI(noButtonLabel);
 }
 
 void ExitConfirmState::onYesButtonClick(std::shared_ptr<MouseEvent> event)

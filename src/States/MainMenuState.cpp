@@ -110,24 +110,24 @@ void MainMenuState::init()
     exitButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // background
-    add(background);
+    addUI(background);
 
     // buttons
-    add(introButton);
+    addUI(introButton);
 
-    add(newGameButton);
-    add(loadGameButton);
-    add(settingsButton);
-    add(creditsButton);
-    add(exitButton);
+    addUI(newGameButton);
+    addUI(loadGameButton);
+    addUI(settingsButton);
+    addUI(creditsButton);
+    addUI(exitButton);
 
     // text areas
-    add(introButtonLabel);
-    add(newGameButtonLabel);
-    add(loadGameButtonLabel);
-    add(optionsButtonLabel);
-    add(creditsButtonLabel);
-    add(exitButtonLabel);
+    addUI(introButtonLabel);
+    addUI(newGameButtonLabel);
+    addUI(loadGameButtonLabel);
+    addUI(optionsButtonLabel);
+    addUI(creditsButtonLabel);
+    addUI(exitButtonLabel);
 }
 
 void MainMenuState::think()

@@ -61,7 +61,7 @@ void StartState::init()
     auto splashY = (Game::getInstance()->renderer()->height() - splash->height())*0.5;
     splash->setX(splashX);
     splash->setY(splashY);
-    add(splash);
+    addUI(splash);
     _splashTicks = SDL_GetTicks();
 
     Game::getInstance()->mouse()->setType(Mouse::WAIT);

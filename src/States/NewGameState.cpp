@@ -136,27 +136,27 @@ void NewGameState::init()
     _playerTraits->setWidth(85)
                  ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
-    add(background);
-    add(beginGameButton);
-    add(editButton);
-    add(createButton);
-    add(backButton);
-    add(prevCharacterButton);
-    add(nextCharacterButton);
+    addUI(background);
+    addUI(beginGameButton);
+    addUI(editButton);
+    addUI(createButton);
+    addUI(backButton);
+    addUI(prevCharacterButton);
+    addUI(nextCharacterButton);
 
-    add(_characterImages);
-    add(_playerName);
-    add(_playerStats1);
-    add(_playerStats2);
-    add(_playerStats3);
-    add(_playerBio);
-    add(_playerHitPointsMax);
-    add(_playerArmorClass);
-    add(_playerActionPoints);
-    add(_playerMeleeDamage);
-    add(_playerSkills);
-    add(_playerSkillsValues);
-    add(_playerTraits);
+    addUI(_characterImages);
+    addUI(_playerName);
+    addUI(_playerStats1);
+    addUI(_playerStats2);
+    addUI(_playerStats3);
+    addUI(_playerBio);
+    addUI(_playerHitPointsMax);
+    addUI(_playerArmorClass);
+    addUI(_playerActionPoints);
+    addUI(_playerMeleeDamage);
+    addUI(_playerSkills);
+    addUI(_playerSkillsValues);
+    addUI(_playerTraits);
 
     changeCharacter();
 }

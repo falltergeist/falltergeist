@@ -108,26 +108,26 @@ void SkilldexState::init()
     cancelButtonLabel->setFont(font);
 
     // add all buttons and labels
-    add(background);
-    add(sneakButton);
-    add(lockpickButton);
-    add(stealButton);
-    add(trapsButton);
-    add(firstAidButton);
-    add(doctorButton);
-    add(scienceButton);
-    add(repairButton);
-    add(cancelButton);
-    add(skilldexLabel);
-    add(sneakLabel);
-    add(lockpickLabel);
-    add(stealLabel);
-    add(trapsLabel);
-    add(firstAidLabel);
-    add(doctorLabel);
-    add(scienceLabel);
-    add(repairLabel);
-    add(cancelButtonLabel);
+    addUI(background);
+    addUI(sneakButton);
+    addUI(lockpickButton);
+    addUI(stealButton);
+    addUI(trapsButton);
+    addUI(firstAidButton);
+    addUI(doctorButton);
+    addUI(scienceButton);
+    addUI(repairButton);
+    addUI(cancelButton);
+    addUI(skilldexLabel);
+    addUI(sneakLabel);
+    addUI(lockpickLabel);
+    addUI(stealLabel);
+    addUI(trapsLabel);
+    addUI(firstAidLabel);
+    addUI(doctorLabel);
+    addUI(scienceLabel);
+    addUI(repairLabel);
+    addUI(cancelButtonLabel);
 }
 
 void SkilldexState::onCancelButtonClick(std::shared_ptr<MouseEvent> event)

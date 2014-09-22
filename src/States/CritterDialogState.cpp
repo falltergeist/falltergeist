@@ -79,8 +79,8 @@ void CritterDialogState::init()
     background->setX(backgroundX);
     background->setY(backgroundY);
 
-    add(background);
-    add(_question);
+    addUI(background);
+    addUI(_question);
 
     _talk->setOffsetX(backgroundX);
     _talk->setOffsetY(backgroundY + 291);

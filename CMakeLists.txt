@@ -158,6 +158,8 @@ set(SOURCES main.cpp
             src/States/CritterDialogReviewState.h
             src/States/CritterDialogState.cpp
             src/States/CritterDialogState.h
+            src/States/CritterInteractState.cpp
+            src/States/CritterInteractState.h
             src/States/CritterTalkState.cpp
             src/States/CritterTalkState.h
             src/States/CursorDropdownState.cpp

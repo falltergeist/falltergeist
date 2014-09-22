@@ -149,9 +149,9 @@ void CursorDropdownState::init()
     _mask = std::shared_ptr<HiddenMask>(new HiddenMask(game->renderer()->width(), game->renderer()->height()));
     _mask->addEventHandler("mouseleftup", this, (EventRecieverMethod) &CursorDropdownState::onLeftButtonUp);
     _mask->setVisible(true);
-    add(_cursor);
-    add(_surface);
-    add(_mask);
+    addUI(_cursor);
+    addUI(_surface);
+    addUI(_mask);
 
 }
 

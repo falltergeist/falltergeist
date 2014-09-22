@@ -68,13 +68,13 @@ void CritterBarterState::init()
     auto theirsInventoryScrollUpButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_UP_ARROW, _offsetX + 421, _offsetY + 56));
     auto theirsInventoryScrollDownButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_DOWN_ARROW, _offsetX + 421, _offsetY + 82));
 
-    add(background);
-    add(offerButton);
-    add(talkButton);
-    add(mineInventoryScrollUpButton);
-    add(mineInventoryScrollDownButton);
-    add(theirsInventoryScrollUpButton);
-    add(theirsInventoryScrollDownButton);
+    addUI(background);
+    addUI(offerButton);
+    addUI(talkButton);
+    addUI(mineInventoryScrollUpButton);
+    addUI(mineInventoryScrollDownButton);
+    addUI(theirsInventoryScrollUpButton);
+    addUI(theirsInventoryScrollDownButton);
 }
 
 int CritterBarterState::offsetX()

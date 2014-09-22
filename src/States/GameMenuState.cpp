@@ -90,17 +90,17 @@ void GameMenuState::init()
     background->setX(backgroundX);
     background->setY(backgroundY);
 
-    add(background);
-    add(saveGameButton);
-    add(loadGameButton);
-    add(preferencesButton);
-    add(exitGameButton);
-    add(doneButton);
-    add(saveGameButtonLabel);
-    add(loadGameButtonLabel);
-    add(preferencesButtonLabel);
-    add(exitGameButtonLabel);
-    add(doneButtonLabel);
+    addUI(background);
+    addUI(saveGameButton);
+    addUI(loadGameButton);
+    addUI(preferencesButton);
+    addUI(exitGameButton);
+    addUI(doneButton);
+    addUI(saveGameButtonLabel);
+    addUI(loadGameButtonLabel);
+    addUI(preferencesButtonLabel);
+    addUI(exitGameButtonLabel);
+    addUI(doneButtonLabel);
 }
 
 void GameMenuState::onPreferencesButtonClick(std::shared_ptr<MouseEvent> event)

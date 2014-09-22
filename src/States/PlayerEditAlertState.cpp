@@ -80,11 +80,11 @@ void PlayerEditAlertState::init()
     auto font3_b89c28ff = ResourceManager::font("font3.aaf", 0xb89c28ff);
     doneLabel->setFont(font3_b89c28ff);
 
-    add(bg);
-    add(message);
-    add(doneBox);
-    add(doneButton);
-    add(doneLabel);
+    addUI(bg);
+    addUI(message);
+    addUI(doneBox);
+    addUI(doneButton);
+    addUI(doneLabel);
 }
 
 void PlayerEditAlertState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)

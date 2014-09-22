@@ -21,8 +21,9 @@
 #define FALLTERGEIST_STATE_H
 
 // C++ standard includes
-#include <vector>
+#include <map>
 #include <memory>
+#include <vector>
 
 // Falltergeist includes
 #include "../Engine/Event/EventReciever.h"
@@ -43,6 +44,7 @@ class State : public EventReciever
 {
 protected:
     std::vector<std::shared_ptr<UI>> _ui;
+    std::map<std::string, std::shared_ptr<UI>> _labeledUI;
 
     // prevents all states before this one to call think() method
     bool _modal = false;
@@ -53,8 +55,11 @@ public:
     State();
     virtual ~State();
 
-    void add(std::shared_ptr<UI> ui);
-    void add(std::vector<std::shared_ptr<UI>> uis);
+    std::shared_ptr<UI> addUI(std::shared_ptr<UI> ui);
+    std::shared_ptr<UI> addUI(std::string name, std::shared_ptr<UI> ui);
+    void addUI(std::vector<std::shared_ptr<UI>> uis);
+
+    std::shared_ptr<UI> getUI(std::string name);
 
     bool fullscreen();
     void setFullscreen(bool value);

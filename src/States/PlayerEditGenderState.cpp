@@ -79,12 +79,12 @@ void PlayerEditGenderState::init()
     auto doneButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+260, bgY+45));
     doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditGenderState::onDoneButtonClick);
 
-    add(bg);
-    add(doneBox);
-    add(doneButton);
-    add(doneLabel);
-    add(_maleImage);
-    add(_femaleImage);
+    addUI(bg);
+    addUI(doneBox);
+    addUI(doneButton);
+    addUI(doneLabel);
+    addUI(_maleImage);
+    addUI(_femaleImage);
 }
 
 void PlayerEditGenderState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)

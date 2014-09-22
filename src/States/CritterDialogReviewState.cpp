@@ -66,10 +66,10 @@ void CritterDialogReviewState::init()
     auto downButton = std::shared_ptr<ImageButton>(
             new ImageButton(ImageButton::TYPE_DIALOG_BIG_DOWN_ARROW, backgroundX + 476, backgroundY + 192));
 
-    add(background);
-    add(doneButton);
-    add(upButton);
-    add(downButton);
+    addUI(background);
+    addUI(doneButton);
+    addUI(upButton);
+    addUI(downButton);
 }
 
 void CritterDialogReviewState::onDoneButtonClick(std::shared_ptr<Event> event)

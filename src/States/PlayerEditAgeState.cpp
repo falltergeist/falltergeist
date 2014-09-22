@@ -82,14 +82,14 @@ void PlayerEditAgeState::init()
     _counter = std::shared_ptr<BigCounter>(new BigCounter(backgroundX+215, backgroundY+13));
     _counter->setNumber(Game::getInstance()->player()->age());
 
-    add(bg);
-    add(ageBox);
-    add(doneBox);
-    add(incButton);
-    add(decButton);
-    add(doneLabel);
-    add(doneButton);
-    add(_counter);
+    addUI(bg);
+    addUI(ageBox);
+    addUI(doneBox);
+    addUI(incButton);
+    addUI(decButton);
+    addUI(doneLabel);
+    addUI(doneButton);
+    addUI(_counter);
 
 }
 

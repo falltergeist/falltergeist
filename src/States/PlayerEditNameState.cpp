@@ -117,13 +117,13 @@ void PlayerEditNameState::init()
     _cursor->setY(bgY+15);
     _cursor->texture()->fill(0x3FF800FF);
 
-    add(bg);
-    add(nameBox);
-    add(doneBox);
-    add(doneLabel);
-    add(doneButton);
-    add(_name);
-    add(_cursor);
+    addUI(bg);
+    addUI(nameBox);
+    addUI(doneBox);
+    addUI(doneLabel);
+    addUI(doneButton);
+    addUI(_name);
+    addUI(_cursor);
 }
 
 void PlayerEditNameState::onKeyboardPress(std::shared_ptr<KeyboardEvent> event)
