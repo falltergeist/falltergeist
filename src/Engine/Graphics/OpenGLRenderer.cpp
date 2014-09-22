@@ -41,6 +41,15 @@
 namespace Falltergeist
 {
 
+int NearestPowerOf2(int n) {
+    if (!n) return n; //(0 == 2^0)
+    int x = 1;
+    while (x < n) {
+        x <<= 1;
+    }
+    return x;
+}
+
 OpenGLRenderer::OpenGLRenderer(unsigned int width, unsigned int height) : Renderer(width, height)
 {
     std::string message = "OpenGL Renderer initialization - ";
@@ -120,6 +129,43 @@ void OpenGLRenderer::registerTexture(std::shared_ptr<Texture> texture)
     glGenTextures(1, &textureId);
     texture->setId(textureId);
 
+    int bpp;
+    Uint32 Rmask, Gmask, Bmask, Amask;
+    SDL_PixelFormatEnumToMasks(
+        SDL_PIXELFORMAT_RGBA8888, &bpp,
+        &Rmask, &Gmask, &Bmask, &Amask
+    );
+
+    SDL_Surface* resizedSurf = NULL;
+    SDL_Rect area;
+
+    //SDL_Surface* tmpSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, texture->width(), texture->height(), 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+    SDL_Surface* tmpSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, texture->width(), texture->height(), 32, Rmask, Gmask, Bmask, Amask);
+    if (tmpSurface == 0) throw Exception(SDL_GetError());
+    // Copying data from texture to surface
+    unsigned int* pixels = (unsigned int*) tmpSurface->pixels;
+    for (unsigned int i = 0; i != texture->width()*texture->height(); ++i)
+    {
+        pixels[i] = texture->data()[i];
+    }
+
+    int newH = NearestPowerOf2(texture->height());
+    int newW = NearestPowerOf2(texture->width());
+
+    SDL_PixelFormatEnumToMasks(
+        SDL_PIXELFORMAT_ABGR8888, &bpp,
+        &Rmask, &Gmask, &Bmask, &Amask
+    );
+
+    resizedSurf = SDL_CreateRGBSurface(0, newW, newH, bpp, Rmask, Gmask, Bmask, Amask);
+    area.x = 0;
+    area.y = 0;
+    area.w = tmpSurface->w;
+    area.h = tmpSurface->h;
+    SDL_SetSurfaceAlphaMod( tmpSurface, 0xFF );
+    SDL_SetSurfaceBlendMode( tmpSurface, SDL_BLENDMODE_NONE );
+    SDL_BlitSurface(tmpSurface, &area, resizedSurf, &area);
+
     glBindTexture(GL_TEXTURE_2D, textureId);
 
     //glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, texture->width(), texture->height(), 0);
@@ -132,13 +178,15 @@ void OpenGLRenderer::registerTexture(std::shared_ptr<Texture> texture)
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA, texture->width(), texture->height(), GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, texture->data());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, resizedSurf->w, resizedSurf->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, resizedSurf->pixels);
+    //gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA, texture->width(), texture->height(), GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, texture->data());
 
-    //glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    //glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
     glBindTexture( GL_TEXTURE_2D, 0);
-
+    texture->texWidth(newW);
+    texture->texHeight(newH);
 }
 
 void OpenGLRenderer::unregisterTexture(Texture* texture)
@@ -161,13 +209,13 @@ void OpenGLRenderer::drawTexture(unsigned int x, unsigned int y, std::shared_ptr
          glVertex2i(x, y);
 
          glTexCoord2i(1, 0);
-         glVertex2i(x + texture->width(), y);
+         glVertex2i(x + texture->texWidth(), y);
 
          glTexCoord2i(1, 1);
-         glVertex2i(x + texture->width(), y + texture->height());
+         glVertex2i(x + texture->texWidth(), y + texture->texHeight());
 
          glTexCoord2i(0, 1);
-         glVertex2i(x, y + texture->height());
+         glVertex2i(x, y + texture->texHeight());
     glEnd();
 }
 
@@ -180,7 +228,7 @@ std::shared_ptr<Texture> OpenGLRenderer::screenshot()
     int bpp;
     uint32_t Rmask, Gmask, Bmask, Amask;
     SDL_PixelFormatEnumToMasks(
-        SDL_PIXELFORMAT_ABGR8888, &bpp,
+        SDL_PIXELFORMAT_RGBA8888, &bpp,
         &Rmask, &Gmask, &Bmask, &Amask
     );
 
