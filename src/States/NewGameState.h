@@ -26,7 +26,6 @@
 
 // Falltergeist includes
 #include "../Engine/State.h"
-#include "../Engine/Surface.h"
 
 // Third party includes
 

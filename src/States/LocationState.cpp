@@ -23,14 +23,15 @@
 #include <iostream>
 
 // Falltergeist includes
-#include "../Engine/CrossPlatform.h"
 #include "../Engine/Event/MouseEvent.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Animation.h"
 #include "../Engine/Graphics/Renderer.h"
+#include "../Engine/Hexagon.h"
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/LocationCamera.h"
+#include "../Engine/Logger.h"
 #include "../Engine/ResourceManager.h"
 #include "../Game/GameDefines.h"
 #include "../Game/GameDudeObject.h"
@@ -49,7 +50,6 @@
 #include "../UI/ImageButton.h"
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
-#include "../Engine/Hexagon.h"
 #include "../VM/VM.h"
 
 // Third party includes
@@ -194,7 +194,7 @@ void LocationState::setLocation(std::string name)
         auto object = GameObjectFactory::createObject(mapObject->PID());
         if (!object)
         {
-            CrossPlatform::debug("LocationState::setLocation() - cant create object with PID: " + std::to_string(mapObject->PID()), DEBUG_ERROR);
+            Logger::error() << "LocationState::setLocation() - cant create object with PID: " << mapObject->PID() << std::endl;
             continue;
         }
 

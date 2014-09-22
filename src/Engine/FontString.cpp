@@ -22,7 +22,7 @@
 // Falltergeist includes
 #include "../Engine/FontString.h"
 #include "../Engine/Font.h"
-#include "../Engine/Game.h"
+#include "../Engine/ResourceManager.h"
 
 // Third party includes
 
@@ -35,8 +35,7 @@ FontString::FontString(std::string text, std::shared_ptr<Font> font)
 
     if (!font)
     {
-        auto game = Game::getInstance();
-        font = game->resourceManager()->font();
+        font = ResourceManager::font();
     }
     _font = font;
 }

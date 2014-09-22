@@ -19,15 +19,14 @@
 
 // C++ standard includes
 #include <fstream>
-#include <iostream>
 
 // Falltergeist includes
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/Exception.h"
 #include "../Engine/Font.h"
 #include "../Engine/Graphics/Texture.h"
 #include "../Engine/Logger.h"
 #include "../Engine/ResourceManager.h"
-#include "../Engine/Surface.h"
 
 // Third party includes
 

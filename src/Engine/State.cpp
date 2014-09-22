@@ -18,11 +18,9 @@
  */
 
 // C++ standard includes
-#include <iostream>
 
 // Falltergeist includes
 #include "../Engine/State.h"
-#include "../Engine/Surface.h"
 #include "../Engine/Game.h"
 #include "../Engine/ActiveUI.h"
 #include "../Engine/UI.h"
