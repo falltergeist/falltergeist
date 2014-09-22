@@ -63,6 +63,7 @@ public:
         SCROLL_SW_X,
         HEXAGON_RED,
         ACTION,
+        ACTION_REVERSE,
         WAIT,
         HAND
     };
