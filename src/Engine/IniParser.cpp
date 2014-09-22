@@ -23,15 +23,13 @@
 #include <sstream>
 
 // Falltergeist includes
-#include "../Engine/CrossPlatform.h"
 #include "../Engine/IniFile.h"
+#include "../Engine/Logger.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-
-using crp = CrossPlatform;
 
 void IniParser::_trim(std::string &line)
 {
@@ -74,7 +72,7 @@ bool IniParser::_parseBool(std::string &name, std::string &line, std::shared_ptr
 
     if (isBool)
     {
-        crp::debug(DEBUG_INFO) << "[INI] boolean value found for property `" << name << "`: " << value << std::endl;
+        Logger::debug("[INI]") << "boolean value found for property `" << name << "`: " << value << std::endl;
         ini->section(_section)->setPropertyBool(name, value);
     }
 
@@ -189,7 +187,7 @@ bool IniParser::_parseDecimal(std::string &name, std::string &line, std::shared_
     {
         int value;
         ss >> value;
-        crp::debug(DEBUG_INFO) << "[INI] integer value found for property `" << name << "`: " << value << std::endl;
+        Logger::debug("[INI]") << "integer value found for property `" << name << "`: " << value << std::endl;
         ini->section(_section)->setPropertyInt(name, value);
         return  true;
     }
@@ -198,7 +196,7 @@ bool IniParser::_parseDecimal(std::string &name, std::string &line, std::shared_
     {
         double value;
         ss >> value;
-        crp::debug(DEBUG_INFO) << "[INI] double value found for property `" << name << "`: " << value << std::endl;
+        Logger::debug("[INI]") << "double value found for property `" << name << "`: " << value << std::endl;
         ini->section(_section)->setPropertyDouble(name, value);
         return true;
     }
@@ -216,7 +214,7 @@ std::shared_ptr<IniFile> IniParser::parse()
     auto ini = std::shared_ptr<IniFile>(new IniFile());
     std::string line;
 
-    crp::debug(DEBUG_INFO) << "[INI] start parsing config file." << std::endl;
+    Logger::info("[INI]") << "start parsing config file." << std::endl;
 
     while (std::getline(_stream, line))
     {
@@ -234,14 +232,14 @@ std::shared_ptr<IniFile> IniParser::parse()
         {
             _section = line.substr(1, line.length() - 2);
             _tolower(_section);
-            crp::debug(DEBUG_INFO) << "[INI] start section: `" << _section << "`" << std::endl;
+            Logger::debug("[INI]") << "start section: `" << _section << "`" << std::endl;
             continue;
         }
 
         auto eqPos = line.find('=');
         if (eqPos == std::string::npos)
         {
-            crp::debug(DEBUG_INFO) << "[INI] malformed line: " << line << std::endl;
+            Logger::warning("[INI]") << "malformed line: " << line << std::endl;
             continue;
         }
 
@@ -259,7 +257,7 @@ std::shared_ptr<IniFile> IniParser::parse()
         if (_parseDecimal(name, value, ini)) continue;
 
         // Interpret value as string if none of other parsers succeeded
-        crp::debug(DEBUG_INFO) << "[INI] string value found for property `" << name << "`: " << value << std::endl;
+        Logger::debug("[INI]") << "string value found for property `" << name << "`: " << value << std::endl;
         ini->section(_section)->setPropertyString(name, value);
     }
 
