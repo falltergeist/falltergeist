@@ -85,7 +85,7 @@ void SDLRenderer::registerTexture(std::shared_ptr<Texture> texture)
     int bpp;
     uint32_t Rmask, Gmask, Bmask, Amask;
     SDL_PixelFormatEnumToMasks(
-        SDL_PIXELFORMAT_ABGR8888, &bpp,
+        SDL_PIXELFORMAT_RGBA8888, &bpp,
         &Rmask, &Gmask, &Bmask, &Amask
     );
 
@@ -136,7 +136,7 @@ std::shared_ptr<Texture> SDLRenderer::screenshot()
     int bpp;
     uint32_t Rmask, Gmask, Bmask, Amask;
     SDL_PixelFormatEnumToMasks(
-        SDL_PIXELFORMAT_ABGR8888, &bpp,
+        SDL_PIXELFORMAT_RGBA8888, &bpp,
         &Rmask, &Gmask, &Bmask, &Amask
     );
 
