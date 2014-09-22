@@ -19,12 +19,11 @@
 
 // C++ standard includes
 #include <cmath>
-#include <iostream>
 
 // Falltergeist includes
 #include "../Engine/AudioMixer.h"
 #include "../Engine/Exception.h"
-#include "../Engine/CrossPlatform.h"
+#include "../Engine/Logger.h"
 
 // Third party includes
 
@@ -41,27 +40,27 @@ void AudioMixer::_init()
     std::string message = "[AUDIO] - SDL_Init - ";
     if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
     {
-        debug(message + "[FAIL]", DEBUG_CRITICAL);
+        Logger::critical() << message + "[FAIL]" << std::endl;
         throw Exception(SDL_GetError());
     }
-    debug(message + "[OK]", DEBUG_INFO);
+    Logger::info() << message + "[OK]" << std::endl;
 
-     SDL_AudioSpec *desired, *obtained;
-     desired  = (SDL_AudioSpec *) malloc(sizeof(SDL_AudioSpec));
-     obtained = (SDL_AudioSpec *) malloc(sizeof(SDL_AudioSpec));
+    SDL_AudioSpec *desired, *obtained;
+    desired  = (SDL_AudioSpec *) malloc(sizeof(SDL_AudioSpec));
+    obtained = (SDL_AudioSpec *) malloc(sizeof(SDL_AudioSpec));
 
-     desired->freq = 22050;
-     desired->format = AUDIO_S8;
-     desired->samples = 4096;
-     desired->callback = &AudioMixer::callback;
-     desired->userdata = this;
-     desired->channels = 0; // Mono
+    desired->freq = 22050;
+    desired->format = AUDIO_S8;
+    desired->samples = 4096;
+    desired->callback = &AudioMixer::callback;
+    desired->userdata = this;
+    desired->channels = 0; // Mono
 
-     if ( SDL_OpenAudio(desired, obtained) < 0 )
-     {
-         throw Exception("AudioMixer::init() - initialization error" + std::string(SDL_GetError()));
-     }
-     //SDL_PauseAudio(0);
+    if ( SDL_OpenAudio(desired, obtained) < 0 )
+    {
+        throw Exception("AudioMixer::init() - initialization error" + std::string(SDL_GetError()));
+    }
+    //SDL_PauseAudio(0);
 }
 
 void AudioMixer::callback(void* userdata, Uint8* stream, int len)
@@ -89,7 +88,7 @@ void AudioMixer::callback(void* userdata, Uint8* stream, int len)
             angle -= 2.0*3.14159 ;
         }
     }
-    std::cout << "Callback: " << len <<  std::endl;
+    Logger::info() << "Callback: " << len <<  std::endl;
 }
 
 };

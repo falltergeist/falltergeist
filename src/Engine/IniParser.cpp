@@ -232,6 +232,7 @@ std::shared_ptr<IniFile> IniParser::parse()
         {
             _section = line.substr(1, line.length() - 2);
             _tolower(_section);
+
             Logger::debug("[INI]") << "start section: `" << _section << "`" << std::endl;
             continue;
         }

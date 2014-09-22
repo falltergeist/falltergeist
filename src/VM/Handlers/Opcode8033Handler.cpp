@@ -20,8 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Engine/Logger.h"
 #include "../../VM/Handlers/Opcode8033Handler.h"
-#include "../../Engine/CrossPlatform.h"
 #include "../../VM/VM.h"
 #include "../../VM/VMStackValue.h"
 
@@ -36,7 +36,7 @@ Opcode8033Handler::Opcode8033Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8033Handler::_run()
 {
-    CrossPlatform::debug("[*] eq ==", DEBUG_SCRIPT);
+    Logger::info("SCRIPT") << "[8033] [*] eq ==" << std::endl;
     switch (_vm->dataStack()->top()->type())
     {
         case VMStackValue::TYPE_INTEGER:

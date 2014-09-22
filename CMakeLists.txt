@@ -107,12 +107,8 @@ set(SOURCES main.cpp
             src/Engine/ResourceManager.h
             src/Engine/Settings.cpp
             src/Engine/Settings.h
-            src/Engine/Screen.cpp
-            src/Engine/Screen.h
             src/Engine/State.cpp
             src/Engine/State.h
-            src/Engine/Surface.cpp
-            src/Engine/Surface.h
             src/Engine/UI.cpp
             src/Engine/UI.h
             src/Game/GameDefines.h

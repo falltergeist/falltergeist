@@ -34,7 +34,6 @@
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/Logger.h"
 #include "../Engine/ResourceManager.h"
-#include "../Engine/Screen.h"
 #include "../Engine/Settings.h"
 #include "../Engine/State.h"
 #include "../Engine/UI.h"

@@ -22,7 +22,6 @@
 // Falltergeist includes
 #include "../Engine/Font.h"
 #include "../Engine/ResourceManager.h"
-#include "../Engine/Surface.h"
 
 // Third party includes
 

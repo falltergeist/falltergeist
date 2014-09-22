@@ -20,9 +20,9 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Engine/Logger.h"
 #include "../../VM/Handlers/Opcode9001Handler.h"
 #include "../../VM/VM.h"
-#include "../../Engine/CrossPlatform.h"
 
 // Third party includes
 
@@ -42,25 +42,25 @@ void Opcode9001Handler::_run()
     // Skip 4 readed bytes
     _vm->setProgramCounter(_vm->programCounter() + 4);
 
+    std::shared_ptr<std::string> pointer;
     switch(nextOpcode)
     {
         case 0x8014: // get exported var value
         case 0x8015: // set exported var value
         case 0x8016: // export var
         {
-            auto pointer = std::shared_ptr<std::string>(new std::string(_vm->script()->identificators()->at(value)));
+            pointer = std::shared_ptr<std::string>(new std::string(_vm->script()->identificators()->at(value)));
             _vm->pushDataPointer(pointer);
-            CrossPlatform::debug("[*] push_d *" + std::to_string((unsigned long long) pointer.get()), DEBUG_SCRIPT);
             break;
         }
         default:
         {
-            auto pointer = std::shared_ptr<std::string>(new std::string(_vm->script()->strings()->at(value)));
+            pointer = std::shared_ptr<std::string>(new std::string(_vm->script()->strings()->at(value)));
             _vm->pushDataPointer(pointer);
-            CrossPlatform::debug("[*] push_d *" + std::to_string((unsigned long long) pointer.get()), DEBUG_SCRIPT);
             break;
-         }
+        }
     }
+    Logger::info("SCRIPT") << "[9001] [*] push_d *" << pointer.get() << std::endl;
 }
 
 }

@@ -44,6 +44,7 @@
 // Falltergeist includes
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
+#include "../Engine/Logger.h"
 
 // Third party includes
 
@@ -174,20 +175,23 @@ std::vector<std::string> CrossPlatform::getCdDrivePaths() {
 std::string CrossPlatform::findFalloutDataPath()
 {
     if (_falloutDataPath.length() > 0) return _falloutDataPath;
-    debug("Looking for Fallout data files", DEBUG_INFO);
+    Logger::info() << "Looking for Fallout data files" << std::endl;
     std::vector<std::string> directories;
     directories.push_back(getCurrentDirectory());
     directories.push_back(getHomeDirectory() + "/.falltergeist");
 
-    try {
+    try
+    {
         std::vector<std::string> cdDrives = getCdDrivePaths();
         directories.insert(directories.end(), cdDrives.begin(), cdDrives.end());
     }
-    catch(Exception e) {
-        debug(e.message());
+    catch(Exception e)
+    {
+        Logger::error() << e.message() << std::endl;
     }
 
-    for (auto& directory : directories) {
+    for (auto& directory : directories)
+    {
         if (std::all_of(
                 necessaryDatFiles.begin(),
                 necessaryDatFiles.end(),
@@ -196,12 +200,12 @@ std::string CrossPlatform::findFalloutDataPath()
                     std::ifstream stream(directory + "/" + file);
                     if (stream)
                     {
-                        debug("Searching in directory: " + directory + " " + file + " [FOUND]", DEBUG_INFO);
+                        Logger::info() << "Searching in directory: " << directory << " " << file << " [FOUND]" << std::endl;
                         return true;
                     }
                     else
                     {
-                        debug("Searching in directory: " + directory + " " + file + " [NOT FOUND]", DEBUG_INFO);
+                        Logger::info() << "Searching in directory: " << directory << " " << file << " [NOT FOUND]" << std::endl;
                         return false;
                     }
                 })
@@ -218,22 +222,23 @@ std::string CrossPlatform::findFalloutDataPath()
 std::string CrossPlatform::findFalltergeistDataPath()
 {
     if (_falltergeistDataPath.length() > 0) return _falltergeistDataPath;
-    debug("Looking for Falltergeist data files", DEBUG_INFO);
+    Logger::info() << "Looking for Falltergeist data files" << std::endl;
     std::vector<std::string> directories;
     directories.push_back(getCurrentDirectory());
     directories.push_back(getHomeDirectory() + "/.falltergeist");
 
-    for (auto& directory : directories) {
+    for (auto& directory : directories)
+    {
         std::ifstream stream(directory + "/data/dialogs.lst");
         if (stream)
         {
-            debug("Searching in directory: " + directory + " data/dialogs.lst [FOUND]", DEBUG_INFO);
+            Logger::info() << "Searching in directory: " << directory << " data/dialogs.lst [FOUND]" << std::endl;
             _falltergeistDataPath = directory;
             return _falltergeistDataPath;
         }
         else
         {
-            debug("Searching in directory: " + directory + " data/dialogs.lst [NOT FOUND]", DEBUG_INFO);
+            Logger::info() << "Searching in directory: " << directory << " data/dialogs.lst [NOT FOUND]" << std::endl;
         }
     }
 

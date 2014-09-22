@@ -26,7 +26,6 @@
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
 #include "../Engine/ResourceManager.h"
-#include "../Engine/Surface.h"
 #include "../Game/GameDudeObject.h"
 #include "../States/LocationState.h"
 #include "../States/PlayerEditAgeState.h"

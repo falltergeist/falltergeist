@@ -77,7 +77,6 @@ void IniSection::_property(PropertyMapConstIterator iter, std::string &ret, cons
 bool IniSection::_hasType(PropertyMapConstIterator iter, IniValue::Tag tag)
 {
     if (iter->second._tag == tag) return true;
-
     Logger::warning("[INI]")
             << "Property `" << iter->first
             << " `expected to be " << _tagToString(tag)

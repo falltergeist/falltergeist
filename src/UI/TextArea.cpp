@@ -19,7 +19,6 @@
 
 // C++ standard includes
 #include <sstream>
-#include <iostream>
 
 // Falltergeist includes
 #include "../Engine/CrossPlatform.h"
@@ -30,6 +29,7 @@
 #include "../UI/TextArea.h"
 
 // Third party includes
+#include "SDL.h"
 
 namespace Falltergeist
 {

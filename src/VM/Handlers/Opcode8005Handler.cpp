@@ -18,12 +18,11 @@
  */
 
 // C++ standard includes
-#include <sstream>
 
 // Falltergeist includes
+#include "../../Engine/Logger.h"
 #include "../../VM/Handlers/Opcode8005Handler.h"
 #include "../../VM/VM.h"
-#include "../../Engine/CrossPlatform.h"
 
 // Third party includes
 
@@ -39,10 +38,7 @@ void Opcode8005Handler::_run()
     auto functionIndex = _vm->popDataInteger();
     _vm->setProgramCounter(_vm->script()->function(functionIndex));
 
-    // Loging
-    std::ostringstream ss;
-    ss << "[*] call(0x" << std::hex << functionIndex << ") = 0x" << _vm->programCounter();
-    CrossPlatform::debug(ss.str(), DEBUG_SCRIPT);
+    Logger::info("SCRIPT") << "[8005] [*] call(0x" << std::hex << functionIndex << ") = 0x" << _vm->programCounter() << std::endl;
 }
 
 }

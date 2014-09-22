@@ -20,10 +20,10 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Engine/Logger.h"
 #include "../../VM/Handlers/Opcode8034Handler.h"
 #include "../../VM/VMStackValue.h"
 #include "../../VM/VM.h"
-#include "../../Engine/CrossPlatform.h"
 
 // Third party includes
 
@@ -76,7 +76,7 @@ void Opcode8034Handler::_run()
             break;
         }
     }
-    CrossPlatform::debug("[*] neq !=", DEBUG_SCRIPT);
+    Logger::info("SCRIPT") << "[8034] [*] neq !=" << std::endl;
 
 }
 

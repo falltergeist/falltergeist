@@ -21,12 +21,12 @@
 #include <iostream>
 
 // Falltergeist includes
-#include "../../Engine/Graphics/OpenGLRenderer.h"
-#include "../../Engine/CrossPlatform.h"
 #include "../../Engine/Exception.h"
-#include "../../Engine/ResourceManager.h"
-#include "../../Engine/Game.h"
 #include "../../Engine/Font.h"
+#include "../../Engine/Game.h"
+#include "../../Engine/Graphics/OpenGLRenderer.h"
+#include "../../Engine/Logger.h"
+#include "../../Engine/ResourceManager.h"
 
 // Third party includes
 #include "SDL.h"
@@ -46,10 +46,10 @@ OpenGLRenderer::OpenGLRenderer(unsigned int width, unsigned int height) : Render
     std::string message = "[VIDEO] - OpenGL Renderer initialization - ";
     if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
     {
-        debug(message + "[FAIL]", DEBUG_CRITICAL);
+        Logger::critical() << message + "[FAIL]" << std::endl;
         throw Exception(SDL_GetError());
     }
-    debug(message + "[OK]", DEBUG_INFO);
+    Logger::info() << message + "[OK]" << std::endl;
 
 }
 
@@ -62,7 +62,7 @@ void OpenGLRenderer::init()
     {
         throw Exception(message + "[FAIL]");
     }
-    debug(message + "[OK]", DEBUG_INFO);
+    Logger::info() << message + "[OK]" << std::endl;
 
     SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
     SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 8 );

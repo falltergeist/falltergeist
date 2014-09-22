@@ -20,9 +20,9 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Engine/Logger.h"
 #include "../../VM/Handlers/Opcode8119Handler.h"
 #include "../../VM/VM.h"
-#include "../../Engine/CrossPlatform.h"
 
 // Third party includes
 
@@ -36,7 +36,7 @@ Opcode8119Handler::Opcode8119Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8119Handler::_run()
 {
     _vm->pushDataInteger(11);
-    CrossPlatform::debug("[*] int get_day()", DEBUG_SCRIPT);
+    Logger::info("SCRIPT") << "[8119] [*] int get_day()" << std::endl;
 }
 
 }

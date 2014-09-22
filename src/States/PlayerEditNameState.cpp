@@ -20,14 +20,12 @@
 
 // C++ standard includes
 #include <ctype.h>
-#include <iostream>
 
 // Falltergeist includes
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
 #include "../Engine/Graphics/Texture.h"
 #include "../Engine/ResourceManager.h"
-#include "../Engine/Surface.h"
 #include "../Game/GameDudeObject.h"
 #include "../States/PlayerEditNameState.h"
 #include "../UI/TextArea.h"

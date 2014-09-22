@@ -18,13 +18,12 @@
  */
 
 // C++ standard includes
-#include <iostream>
 
 // Falltergeist includes
-#include "../../VM/Handlers/Opcode80BCHandler.h"
-#include "../../Engine/CrossPlatform.h"
-#include "../../VM/VM.h"
+#include "../../Engine/Logger.h"
 #include "../../Game/GameCritterObject.h"
+#include "../../VM/Handlers/Opcode80BCHandler.h"
+#include "../../VM/VM.h"
 
 // Third party includes
 
@@ -39,8 +38,7 @@ void Opcode80BCHandler::_run()
 {
     _vm->pushDataPointer(_vm->owner());
 
-    CrossPlatform::debug("[+] GameObject* self_obj()", DEBUG_SCRIPT);
-
+    Logger::info("SCRIPT") << "[80BC] [+] GameObject* self_obj()" << std::endl;
 }
 
 }

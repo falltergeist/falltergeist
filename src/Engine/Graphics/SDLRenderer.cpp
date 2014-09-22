@@ -21,10 +21,10 @@
 #include <string>
 
 // Falltergeist includes
-#include "../../Engine/CrossPlatform.h"
 #include "../../Engine/Exception.h"
-#include "../../Engine/Graphics/SDLRenderer.h"
 #include "../../Engine/Game.h"
+#include "../../Engine/Graphics/SDLRenderer.h"
+#include "../../Engine/Logger.h"
 
 //Third party includes
 #include "SDL.h"
@@ -37,10 +37,10 @@ SDLRenderer::SDLRenderer(unsigned int width, unsigned int height) : Renderer(wid
     std::string message = "[VIDEO] - SDL Renderer initialization - ";
     if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
     {
-        debug(message + "[FAIL]", DEBUG_CRITICAL);
+        Logger::critical() << message + "[FAIL]" << std::endl;
         throw Exception(SDL_GetError());
     }
-    debug(message + "[OK]", DEBUG_INFO);
+    Logger::info() << message + "[OK]" << std::endl;
 }
 
 void SDLRenderer::init()
@@ -52,7 +52,7 @@ void SDLRenderer::init()
     {
         throw Exception(message + "[FAIL]");
     }
-    debug(message + "[OK]", DEBUG_INFO);
+    Logger::info() << message + "[OK]" << std::endl;
 }
 
 void SDLRenderer::beginFrame()

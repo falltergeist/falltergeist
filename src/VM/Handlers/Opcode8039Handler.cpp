@@ -21,11 +21,11 @@
 #include <iostream>
 
 // Falltergeist includes
+#include "../../Engine/Exception.h"
+#include "../../Engine/Logger.h"
 #include "../../VM/Handlers/Opcode8039Handler.h"
 #include "../../VM/VM.h"
-#include "../../Engine/CrossPlatform.h"
 #include "../../VM/VMStackValue.h"
-#include "../../Engine/Exception.h"
 
 // Third party includes
 
@@ -38,7 +38,7 @@ Opcode8039Handler::Opcode8039Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8039Handler::_run()
 {
-    CrossPlatform::debug("[*] plus +", DEBUG_SCRIPT);
+    Logger::info() << "[8039] [*] plus +" << std::endl;
     auto b = _vm->dataStack()->top();
     switch (b->type())
     {
