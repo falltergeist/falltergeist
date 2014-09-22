@@ -20,8 +20,11 @@
 
 
 // C++ standard includes
+#include <algorithm>
+#include <vector>
 
 // Falltergeist includes
+#include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
 #include "../Engine/ResourceManager.h"
@@ -71,6 +74,8 @@ void CritterTalkState::init()
     auto barterButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, _offsetX+593, _offsetY+40));
     barterButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &CritterTalkState::onBarterButtonClick);
 
+    background->addEventHandler("keyup", this, (EventRecieverMethod) &CritterTalkState::onKeyboardUp);
+
     add(background);
     add(reviewButton);
     add(barterButton);
@@ -89,26 +94,33 @@ void CritterTalkState::setOffsetY(int offsetY)
 void CritterTalkState::onAnswerClick(std::shared_ptr<Event> event)
 {
     auto sender = dynamic_cast<TextArea*>(event->emitter());
-    auto dialog = Game::getInstance()->dialog();
 
-    int i = 0;
+    size_t i = 0;
     for (auto answer : _answers)
     {
         if (answer.get() == sender)
         {
-            auto newOffset =  dialog->script()->script()->function(_functions.at(i));
-            auto oldOffset = dialog->script()->programCounter() - 2;
-            deleteAnswers();
-            dialog->script()->pushDataInteger(0); // arguments counter;
-            dialog->script()->pushReturnInteger(oldOffset); // return adrress
-            dialog->script()->setProgramCounter(newOffset);
-            dialog->script()->run();
-            //script()->popDataInteger(); // remove function result
-            //script()->setProgramCounter(oldOffset);
+            _selectAnswer(i);
             return;
         }
         ++i;
     }
+}
+
+void CritterTalkState::_selectAnswer(size_t i)
+{
+    if (i >= _answers.size()) throw Exception("No answer with number " + std::to_string(i));
+
+    auto dialog = Game::getInstance()->dialog();
+    auto newOffset =  dialog->script()->script()->function(_functions.at(i));
+    auto oldOffset = dialog->script()->programCounter() - 2;
+    deleteAnswers();
+    dialog->script()->pushDataInteger(0); // arguments counter;
+    dialog->script()->pushReturnInteger(oldOffset); // return adrress
+    dialog->script()->setProgramCounter(newOffset);
+    dialog->script()->run();
+    //script()->popDataInteger(); // remove function result
+    //script()->setProgramCounter(oldOffset);
 }
 
 void CritterTalkState::onAnswerIn(std::shared_ptr<Event> event)
@@ -194,4 +206,32 @@ void CritterTalkState::onBarterButtonClick(std::shared_ptr<Event> event)
     Game::getInstance()->pushState(critterBarterState);
 }
 
+void CritterTalkState::onKeyboardUp(std::shared_ptr<KeyboardEvent> event)
+{
+    static std::vector<uint> numkeys = {
+            SDLK_1, SDLK_2, SDLK_3, SDLK_4, SDLK_5, SDLK_6, SDLK_7, SDLK_8, SDLK_9,
+            SDLK_KP1, SDLK_KP2, SDLK_KP3, SDLK_KP4, SDLK_KP5, SDLK_KP6, SDLK_KP7, SDLK_KP8, SDLK_KP9,
+    };
+
+    auto key = event->keyCode();
+
+    if (key == SDLK_0 || key == SDLK_KP0)
+    {
+        // Todo: end dialog
+        return;
+    }
+
+    auto keyIt = std::find(numkeys.begin(), numkeys.end(), key);
+    // Number key pressed
+    if (keyIt != numkeys.end())
+    {
+        size_t keyOffset = keyIt - numkeys.begin();
+
+        // If numpad key
+        if (keyOffset > 8) keyOffset -= 9;
+
+        if (keyOffset < _answers.size()) _selectAnswer(keyOffset);
+        return;
+    }
+}
 }
