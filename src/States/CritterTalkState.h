@@ -45,6 +45,8 @@ private:
     std::vector<int> _reactions;
     std::vector<std::shared_ptr<TextArea>> _answers;
 
+    void _selectAnswer(size_t i);
+
 public:
     CritterTalkState();
     CritterTalkState(int offsetX, int offsetY);
@@ -66,6 +68,8 @@ public:
 
     void onReviewButtonClick(std::shared_ptr<Event> event);
     void onBarterButtonClick(std::shared_ptr<Event> event);
+
+    void onKeyboardUp(std::shared_ptr<KeyboardEvent> event);
 };
 
 }
