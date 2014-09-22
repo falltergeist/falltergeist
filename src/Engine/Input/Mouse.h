@@ -62,9 +62,10 @@ public:
         SCROLL_SW,
         SCROLL_SW_X,
         HEXAGON_RED,
-        WAIT,
         ACTION,
-        ACTION_REVERSE
+        ACTION_REVERSE,
+        WAIT,
+        HAND
     };
     enum {
         ICON_ROTATE = 1,
