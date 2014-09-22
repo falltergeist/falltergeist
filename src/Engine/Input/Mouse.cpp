@@ -186,6 +186,9 @@ void Mouse::setType(unsigned int type)
         case ACTION:
             _ui = std::shared_ptr<Image>(new Image("art/intrface/actarrow.frm"));
             break;
+        case HAND:
+            _ui = std::shared_ptr<Image>(new Image("art/intrface/hand.frm"));
+            break;
         case WAIT:
             _ui = std::shared_ptr<Animation>(new Animation("art/intrface/wait.frm"));
             _ui->setXOffset(-_ui->width()*0.5);

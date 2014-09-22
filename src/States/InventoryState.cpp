@@ -25,6 +25,7 @@
 // Falltergeist includes
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
+#include "../Engine/Input/Mouse.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/State.h"
 #include "../Game/GameArmorItemObject.h"
@@ -73,6 +74,7 @@ void InventoryState::init()
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5-50;
     background->setX(backgroundX);
     background->setY(backgroundY);
+    background->addEventHandler("mouserightclick", this, (EventRecieverMethod) &InventoryState::backgroundRightClick);
 
     // buttons
     auto upButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_INVENTORY_UP_ARROW, backgroundX+128, backgroundY+40));
@@ -300,7 +302,6 @@ void InventoryState::init()
 void InventoryState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
 {
     Game::getInstance()->popState();
-
 }
 
 void InventoryState::onSlotMouseDown(std::shared_ptr<MouseEvent> event)
@@ -356,5 +357,19 @@ std::string InventoryState::_handItemSummary (std::shared_ptr<GameItemObject> ha
     }
     return ss.str();
 }
+
+void InventoryState::backgroundRightClick(std::shared_ptr<MouseEvent> event)
+{
+    auto mouse = Game::getInstance()->mouse();
+    if (mouse->type() == Mouse::ACTION)
+    {
+        mouse->setType(Mouse::HAND);
+    }
+    else
+    {
+        mouse->setType(Mouse::ACTION);
+    }
+}
+
 }
 
