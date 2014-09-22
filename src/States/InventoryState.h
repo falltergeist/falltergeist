@@ -39,12 +39,16 @@ public:
     virtual void init();
 
     void onDoneButtonClick(std::shared_ptr<MouseEvent> event);
-    void onSlotMouseDown(std::shared_ptr<MouseEvent> event);
-    void onSlotMouseUp(std::shared_ptr<MouseEvent> event);
-    void onSlotDrag(std::shared_ptr<MouseEvent> event);
+    void onArmorSlotMouseDown(std::shared_ptr<MouseEvent> event);
+    void onLeftHandSlotMouseDown(std::shared_ptr<MouseEvent> event);
+    void onRightHandSlotMouseDown(std::shared_ptr<MouseEvent> event);
+    //void onSlotMouseDown(std::shared_ptr<MouseEvent> event);
+    //void onSlotMouseUp(std::shared_ptr<MouseEvent> event);
+    //void onSlotDrag(std::shared_ptr<MouseEvent> event);
     void backgroundRightClick(std::shared_ptr<MouseEvent> event);
 private:
     std::string _handItemSummary (std::shared_ptr<GameItemObject> hand);
+    void _screenShow (unsigned int PID);
 };
 
 }
