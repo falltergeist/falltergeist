@@ -43,13 +43,13 @@ namespace Falltergeist
 
 OpenGLRenderer::OpenGLRenderer(unsigned int width, unsigned int height) : Renderer(width, height)
 {
-    std::string message = "[VIDEO] - OpenGL Renderer initialization - ";
+    std::string message = "OpenGL Renderer initialization - ";
     if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
     {
-        Logger::critical() << message + "[FAIL]" << std::endl;
+        Logger::critical("VIDEO") << message + "[FAIL]" << std::endl;
         throw Exception(SDL_GetError());
     }
-    Logger::info() << message + "[OK]" << std::endl;
+    Logger::info("VIDEO") << message + "[OK]" << std::endl;
 
 }
 
@@ -57,12 +57,12 @@ void OpenGLRenderer::init()
 {
     Renderer::init();
 
-    std::string message =  "[VIDEO] - SDL_SetVideoMode " + std::to_string(_width) + "x" + std::to_string(_height) + "x" +std::to_string(32)+ " - ";
+    std::string message =  "SDL_SetVideoMode " + std::to_string(_width) + "x" + std::to_string(_height) + "x" +std::to_string(32)+ " - ";
     if (!SDL_SetVideoMode(_width, _height, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL))
     {
         throw Exception(message + "[FAIL]");
     }
-    Logger::info() << message + "[OK]" << std::endl;
+    Logger::info("VIDEO") << message + "[OK]" << std::endl;
 
     SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
     SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 8 );
