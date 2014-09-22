@@ -46,6 +46,9 @@ protected:
     std::vector<std::shared_ptr<UI>> _ui;
     std::map<std::string, std::shared_ptr<UI>> _labeledUI;
 
+    int _x = 0;
+    int _y = 0;
+
     // prevents all states before this one to call think() method
     bool _modal = false;
     // prevents render all states before this one
@@ -61,13 +64,19 @@ public:
 
     std::shared_ptr<UI> getUI(std::string name);
 
-    bool fullscreen();
-    void setFullscreen(bool value);
+    int x();
+    void setX(int x);
 
-    bool modal();
-    void setModal(bool value);
+    int y();
+    void setY(int y);
 
-    bool initialized();
+    virtual bool fullscreen();
+    virtual void setFullscreen(bool value);
+
+    virtual bool modal();
+    virtual void setModal(bool value);
+
+    virtual bool initialized();
     virtual void init();
     virtual void think();
     virtual void handle(std::shared_ptr<Event> event);

@@ -39,8 +39,6 @@ class ResourceManager;
 class GameDudeObject;
 class FpsCounter;
 class Mouse;
-class Location;
-class CritterDialogState;
 class LocationState;
 class AudioMixer;
 class Renderer;
@@ -58,7 +56,6 @@ protected:
     std::shared_ptr<Renderer> _renderer;
     std::shared_ptr<Mouse> _mouse;
     std::shared_ptr<AudioMixer> _mixer;
-    std::shared_ptr<CritterDialogState> _dialog;
     std::shared_ptr<FpsCounter> _fpsCounter;
     std::shared_ptr<TextArea> _mousePosition;
     std::shared_ptr<TextArea> _falltergeistVersion;
@@ -96,10 +93,7 @@ public:
     std::shared_ptr<Renderer> renderer();
 
     std::shared_ptr<LocationState> locationState();
-    std::shared_ptr<Location> location();
 
-    void setDialog(std::shared_ptr<CritterDialogState> value);
-    std::shared_ptr<CritterDialogState> dialog();
     void setGVAR(unsigned int number, int value);
     int GVAR(unsigned int number);
 

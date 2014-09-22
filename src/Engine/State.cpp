@@ -51,6 +51,26 @@ void State::think()
     }
 }
 
+int State::x()
+{
+    return _x;
+}
+
+void State::setX(int x)
+{
+    _x = x;
+}
+
+int State::y()
+{
+    return _y;
+}
+
+void State::setY(int y)
+{
+    _y = y;
+}
+
 bool State::initialized()
 {
     return _initialized;
@@ -78,22 +98,26 @@ void State::setModal(bool value)
 
 std::shared_ptr<UI> State::addUI(std::shared_ptr<UI> ui)
 {
+    // Add to UI state position
+    if (x()) ui->setX(ui->x() + x());
+    if (y()) ui->setY(ui->y() + y());
+
     _ui.push_back(ui);
-    return _ui.back();
+    return ui;
 }
 
 std::shared_ptr<UI> State::addUI(std::string name, std::shared_ptr<UI> ui)
 {
+    addUI(ui);
     _labeledUI.insert(std::pair<std::string, std::shared_ptr<UI>>(name, ui));
-    _ui.push_back(ui);
-    return _ui.back();
+    return ui;
 }
 
 void State::addUI(std::vector<std::shared_ptr<UI>> uis)
 {
     for (auto ui : uis)
     {
-        _ui.push_back(ui);
+        addUI(ui);
     }
 }
 

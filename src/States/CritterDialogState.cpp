@@ -19,10 +19,11 @@
  */
 
 // C++ standard includes
-#include <iostream>
+#include <vector>
+#include <algorithm>
 
 // Falltergeist includes
-
+#include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
 #include "../Engine/Hexagon.h"
@@ -30,7 +31,9 @@
 #include "../Engine/ResourceManager.h"
 #include "../Game/GameCritterObject.h"
 #include "../States/CritterDialogState.h"
-#include "../States/CritterTalkState.h"
+#include "../States/CritterDialogReviewState.h"
+#include "../States/CritterInteractState.h"
+#include "../States/CritterBarterState.h"
 #include "../States/LocationState.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
@@ -43,13 +46,6 @@ namespace Falltergeist
 
 CritterDialogState::CritterDialogState() : State()
 {
-    auto backgroundX = (Game::getInstance()->renderer()->width() - 640)*0.5;
-    auto backgroundY = (Game::getInstance()->renderer()->height() - 480)*0.5;
-    _question = std::shared_ptr<TextArea>(new TextArea("", backgroundX+140, backgroundY+235));
-    _question->setWidth(370);
-    _question->setWordWrap(true);
-
-    _talk = std::shared_ptr<CritterTalkState>(new CritterTalkState());
 }
 
 CritterDialogState::~CritterDialogState()
@@ -60,76 +56,186 @@ void CritterDialogState::init()
 {
     if (_initialized) return;
     State::init();
+
     setFullscreen(false);
-    setModal(true);
+    setModal(false);
 
-    auto locationState = Game::getInstance()->locationState();
-    _oldCameraX = locationState->camera()->xPosition();
-    _oldCameraY = locationState->camera()->yPosition();
+    setX((Game::getInstance()->renderer()->width() - 640)*0.5);
+    setY((Game::getInstance()->renderer()->height() - 480)*0.5 + 291);
 
-    locationState->camera()->setXPosition(critter()->hexagon()->x());
-    locationState->camera()->setYPosition(critter()->hexagon()->y() + 100);
-    locationState->checkObjectsToRender();
-    locationState->generateUi();
+    auto background = std::shared_ptr<Image>(new Image("art/intrface/di_talk.frm"));
+    addUI("background", background);
+    background->addEventHandler("keyup", this, (EventRecieverMethod) &CritterDialogState::onKeyboardUp);
 
-    auto background = std::shared_ptr<Image>(new Image("art/intrface/alltlk.frm"));
+    auto question = std::shared_ptr<TextArea>(new TextArea("question", 140, -55));
+    question->setWidth(370);
+    question->setWordWrap(true);
+    addUI("question", question);
 
-    auto backgroundX = static_cast<int>((Game::getInstance()->renderer()->width() - background->width())*0.5);
-    auto backgroundY = static_cast<int>((Game::getInstance()->renderer()->height() - background->height())*0.5);
-    background->setX(backgroundX);
-    background->setY(backgroundY);
+    // Interface buttons
+    auto reviewButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_REVIEW_BUTTON, 13, 154));
+    reviewButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &CritterDialogState::onReviewButtonClick);
+    addUI(reviewButton);
 
-    addUI(background);
-    addUI(_question);
-
-    _talk->setOffsetX(backgroundX);
-    _talk->setOffsetY(backgroundY + 291);
-
-    Game::getInstance()->pushState(_talk);
+    auto barterButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, 593, 40));
+    barterButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &CritterDialogState::onBarterButtonClick);
+    addUI(barterButton);
 }
 
 void CritterDialogState::think()
 {
-}
-
-void CritterDialogState::close()
-{
-    // Pop CritterTalkState
-    Game::getInstance()->popState();
-    // Restore original camera position
-    auto camera = Game::getInstance()->locationState()->camera();
-    camera->setXPosition(_oldCameraX);
-    camera->setYPosition(_oldCameraY);
-}
-
-void CritterDialogState::setCritter(std::shared_ptr<GameCritterObject> critter)
-{
-    _critter = critter;
-}
-
-std::shared_ptr<GameCritterObject> CritterDialogState::critter()
-{
-    return _critter;
-}
-
-VM* CritterDialogState::script()
-{
-    return _script;
-}
-
-void CritterDialogState::setScript(VM* value)
-{
-    _script = value;
+    State::think();
 }
 
 void CritterDialogState::setQuestion(std::string value)
 {
-    _question->setText(value);
+    auto question = std::dynamic_pointer_cast<TextArea>(getUI("question"));
+    question->setText(value);
 }
 
-std::shared_ptr<CritterTalkState> CritterDialogState::talk()
+void CritterDialogState::onAnswerIn(std::shared_ptr<Event> event)
 {
-    return _talk;
+    auto sender = dynamic_cast<TextArea*>(event->emitter());
+    auto font3_a0a0a0ff = ResourceManager::font("font1.aaf", 0xa0a0a0ff);
+    sender->setFont(font3_a0a0a0ff);
 }
+
+void CritterDialogState::onAnswerOut(std::shared_ptr<Event> event)
+{
+    auto sender = dynamic_cast<TextArea*>(event->emitter());
+    auto font3_3ff800ff = ResourceManager::font("font1.aaf", 0x3ff800ff);
+    sender->setFont(font3_3ff800ff);
+}
+
+std::vector<int>* CritterDialogState::functions()
+{
+    return &_functions;
+}
+
+std::vector<int>* CritterDialogState::reactions()
+{
+    return &_reactions;
+}
+
+void CritterDialogState::deleteAnswers()
+{
+    while(!_answers.empty())
+    {
+        _ui.pop_back();
+        _answers.pop_back();
+    }
+    _functions.clear();
+    _reactions.clear();
+}
+
+void CritterDialogState::onReviewButtonClick(std::shared_ptr<Event> event)
+{
+    // FIXME : don't create new state each time the button is clicked
+    auto critterReviewDialogState = std::shared_ptr<CritterDialogReviewState>(new CritterDialogReviewState());
+    Game::getInstance()->pushState(critterReviewDialogState);
+}
+
+void CritterDialogState::onBarterButtonClick(std::shared_ptr<Event> event)
+{
+    // FIXME : don't create new state each time the button is clicked
+    auto critterBarterState = std::shared_ptr<CritterBarterState>(new CritterBarterState());
+    //Game::getInstance()->popState();
+    Game::getInstance()->pushState(critterBarterState);
+}
+
+void CritterDialogState::onKeyboardUp(std::shared_ptr<KeyboardEvent> event)
+{
+    static std::vector<uint> numkeys = {
+            SDLK_1, SDLK_2, SDLK_3, SDLK_4, SDLK_5, SDLK_6, SDLK_7, SDLK_8, SDLK_9,
+            SDLK_KP1, SDLK_KP2, SDLK_KP3, SDLK_KP4, SDLK_KP5, SDLK_KP6, SDLK_KP7, SDLK_KP8, SDLK_KP9,
+    };
+
+    auto key = event->keyCode();
+
+    if (key == SDLK_0 || key == SDLK_KP0)
+    {
+        // Todo: end dialog
+        return;
+    }
+
+    auto keyIt = std::find(numkeys.begin(), numkeys.end(), key);
+    // Number key pressed
+    if (keyIt != numkeys.end())
+    {
+        size_t keyOffset = keyIt - numkeys.begin();
+
+        // If numpad key
+        if (keyOffset > 8) keyOffset -= 9;
+
+        if (keyOffset < _answers.size()) _selectAnswer(keyOffset);
+        return;
+    }
+}
+
+void CritterDialogState::_selectAnswer(size_t i)
+{
+    if (i >= _answers.size()) throw Exception("No answer with number " + std::to_string(i));
+
+    auto game = Game::getInstance();
+    auto dialog = std::dynamic_pointer_cast<CritterInteractState>(game->states()->at(game->states()->size() - 2));
+
+    auto newOffset = dialog->script()->script()->function(_functions.at(i));
+    auto oldOffset = dialog->script()->programCounter() - 2;
+    deleteAnswers();
+    dialog->script()->pushDataInteger(0); // arguments counter;
+    dialog->script()->pushReturnInteger(oldOffset); // return adrress
+    dialog->script()->setProgramCounter(newOffset);
+    dialog->script()->run();
+}
+
+
+void CritterDialogState::addAnswer(std::string text)
+{
+    std::string line = "";
+    line += 0x95;
+    line += " ";
+    line += text;
+
+    int y = 50;
+    for (auto answer : _answers)
+    {
+        y += answer->height() + 5;
+    }
+
+    auto answer = std::shared_ptr<TextArea>(new TextArea(line, 140, y));
+    answer->setBackgroundColor(0x00000001);
+    answer->setWordWrap(true);
+    answer->setWidth(370);
+
+    answer->addEventHandler("mousein", this, (EventRecieverMethod)&CritterDialogState::onAnswerIn);
+    answer->addEventHandler("mouseout", this, (EventRecieverMethod)&CritterDialogState::onAnswerOut);
+    answer->addEventHandler("mouseleftclick", this, (EventRecieverMethod)&CritterDialogState::onAnswerClick);
+    _answers.push_back(answer);
+    addUI(answer);
+}
+
+bool CritterDialogState::hasAnswers()
+{
+    return _answers.size() > 0;
+}
+
+
+
+void CritterDialogState::onAnswerClick(std::shared_ptr<Event> event)
+{
+    auto sender = dynamic_cast<TextArea*>(event->emitter());
+
+    size_t i = 0;
+    for (auto answer : _answers)
+    {
+        if (answer.get() == sender)
+        {
+            _selectAnswer(i);
+            return;
+        }
+        ++i;
+    }
+}
+
 
 }

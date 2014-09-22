@@ -26,45 +26,45 @@
 
 // Falltergeist includes
 #include "../Engine/State.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class GameCritterObject;
-class CritterTalkState;
-class TextArea;
-class VM;
-
 class CritterDialogState : public State
 {
 protected:
-    std::shared_ptr<GameCritterObject> _critter;
-    VM* _script = 0;
-    unsigned int _oldCameraX;
-    unsigned int _oldCameraY;
-    std::shared_ptr<TextArea> _question;
-    std::shared_ptr<CritterTalkState> _talk;
+
+    std::vector<int> _functions;
+    std::vector<int> _reactions;
+    std::vector<std::shared_ptr<TextArea>> _answers;
+
+    void _selectAnswer(size_t i);
 
 public:
     CritterDialogState();
     virtual ~CritterDialogState();
     virtual void init();
-
-    std::shared_ptr<GameCritterObject> critter();
-    void setCritter(std::shared_ptr<GameCritterObject> critter);
-
-    VM* script();
-    void setScript(VM* value);
+    virtual void think();
 
     void setQuestion(std::string value);
 
-    virtual void think();
+    std::vector<int>* functions();
+    std::vector<int>* reactions();
 
-    void close();
+    void deleteAnswers();
+    bool hasAnswers();
+    void addAnswer(std::string text);
 
-    std::shared_ptr<CritterTalkState> talk();
+    void onReviewButtonClick(std::shared_ptr<Event> event);
+    void onBarterButtonClick(std::shared_ptr<Event> event);
+    void onAnswerIn(std::shared_ptr<Event> event);
+    void onAnswerOut(std::shared_ptr<Event> event);
+    void onAnswerClick(std::shared_ptr<Event> event);
+    void onKeyboardUp(std::shared_ptr<KeyboardEvent> event);
+
 };
 
 }

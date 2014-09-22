@@ -20,11 +20,12 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../States/CritterDialogState.h"
 #include "../../Engine/Exception.h"
 #include "../../Engine/Game.h"
 #include "../../Engine/Logger.h"
 #include "../../Game/GameCritterObject.h"
+#include "../../States/CritterDialogState.h"
+#include "../../States/CritterInteractState.h"
 #include "../../VM/Handlers/Opcode80DEHandler.h"
 #include "../../VM/VM.h"
 
@@ -39,22 +40,25 @@ Opcode80DEHandler::Opcode80DEHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80DEHandler::_run()
 {
-    auto dialog = std::shared_ptr<CritterDialogState>(new CritterDialogState());
-    Game::getInstance()->setDialog(dialog);
-    // @todo Implement!
-    _vm->popDataInteger(); //auto backgroundIdx = popDataInteger();
-    _vm->popDataInteger(); //auto headNum = popDataInteger();
-    _vm->popDataInteger(); //auto mood = popDataInteger();
+    int backgroundID = _vm->popDataInteger();
+    int headID = _vm->popDataInteger();
+    int mood = _vm->popDataInteger();
+
     auto critter = std::static_pointer_cast<GameCritterObject>(_vm->popDataPointer());
     if (!critter) throw Exception("VM::opcode80de - wrong critter pointers");
 
-    dialog->setCritter(critter);
-    dialog->setScript(_vm);
+    int msgFileID = _vm->popDataInteger();
 
-    _vm->popDataInteger(); //auto msgFileNum = popDataInteger();
+    auto interact = std::shared_ptr<CritterInteractState>(new CritterInteractState());
+    interact->setBackgroundID(backgroundID);
+    interact->setHeadID(headID);
+    interact->setMood(mood);
+    interact->setCritter(critter);
+    interact->setMsgFileID(msgFileID);
+    interact->setScript(_vm);
+    Game::getInstance()->pushState(interact);
 
-    // logging
-    Logger::info("SCRIPT") << "[80DE] [*] void start_gdialog(int msgFileNum, GameCritterObject* who, int mood, int headNum, int backgroundIdx)" << std::endl;
+    Logger::info("SCRIPT") << "[80DE] [*] void start_gdialog(int msgFileID, GameCritterObject* critter, int mood, int headID, int backgroundID)" << std::endl;
 }
 
 }

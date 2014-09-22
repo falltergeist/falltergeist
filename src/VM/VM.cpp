@@ -43,7 +43,6 @@
 #include "../Game/GameObjectFactory.h"
 #include "../Game/GameWeaponItemObject.h"
 #include "../States/CritterDialogState.h"
-#include "../States/CritterTalkState.h"
 #include "../States/LocationState.h"
 #include "../VM/VM.h"
 #include "../VM/VMStackIntValue.h"
@@ -896,8 +895,7 @@ void VM::run()
             {
                 Logger::info("SCRIPT") << "[80DF] [?] end_dialogue" << std::endl;
                 auto game = Game::getInstance();
-                game->dialog()->close();
-                game->popState();
+                game->popState(); // interact state
                 break;
             }
             case 0x80e1:
@@ -1225,35 +1223,37 @@ void VM::run()
             case 0x811c:
             {
                 Logger::info("SCRIPT") << "[811C] [?] gsay_start" << std::endl;
-                auto game = Game::getInstance();
-                game->pushState(game->dialog());
+                auto dialog = std::shared_ptr<CritterDialogState>(new CritterDialogState());
+                Game::getInstance()->pushState(dialog);
                 break;
             }
             case 0x811d:
             {
                 Logger::info("SCRIPT") << "[811D] [?] gsay_end" << std::endl;
-                auto dialog = Game::getInstance()->dialog();
-                if (dialog->talk()->hasAnswers())
+                auto dialog = std::dynamic_pointer_cast<CritterDialogState>(Game::getInstance()->states()->back());
+                if (dialog->hasAnswers())
                 {
                     pushDataInteger(0);
                     return;
                 }
+                Game::getInstance()->popState(); // dialog state
                 break;
             }
             case 0x811e:
             {
                 Logger::info("SCRIPT") << "[811E] [=] void gSay_Reply(int msg_file_num, int msg_num)" << std::endl;
-                //Game::getInstance().dialog()->deleteAnswers();
+                auto dialog = std::dynamic_pointer_cast<CritterDialogState>(Game::getInstance()->states()->back());
+                dialog->deleteAnswers();
                 if (_dataStack.top()->type() == VMStackValue::TYPE_POINTER)
                 {
                     auto question = std::static_pointer_cast<std::string>(popDataPointer());
-                    Game::getInstance()->dialog()->setQuestion(*(question.get()));
+                    dialog->setQuestion(*(question.get()));
                 }
                 else
                 {
                     auto msg_num = popDataInteger();
                     auto msg_file_num = popDataInteger();
-                    Game::getInstance()->dialog()->setQuestion(msgMessage(msg_file_num, msg_num));
+                    dialog->setQuestion(msgMessage(msg_file_num, msg_num));
                 }
                 break;
             }
@@ -1285,24 +1285,23 @@ void VM::run()
                 }
                 auto iq = popDataInteger();
                 auto game = Game::getInstance();
+                auto dialog = std::dynamic_pointer_cast<CritterDialogState>(game->states()->back());
                 if (iq >= 0)
                 {
                     if (game->player()->stat(game->player()->STATS_INTELLIGENCE) >= iq)
                     {
-                        auto talk = game->dialog()->talk();
-                        talk->reactions()->push_back(reaction);
-                        talk->functions()->push_back(function);
-                        talk->addAnswer(*text);
+                        dialog->reactions()->push_back(reaction);
+                        dialog->functions()->push_back(function);
+                        dialog->addAnswer(*text);
                     }
                 }
                 if (iq < 0)
                 {
                     if (game->player()->stat(game->player()->STATS_INTELLIGENCE) <= abs(iq))
                     {
-                        auto talk = game->dialog()->talk();
-                        talk->reactions()->push_back(reaction);
-                        talk->functions()->push_back(function);
-                        talk->addAnswer(*text);
+                        dialog->reactions()->push_back(reaction);
+                        dialog->functions()->push_back(function);
+                        dialog->addAnswer(*text);
                     }
                 }
 

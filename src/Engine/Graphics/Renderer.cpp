@@ -22,6 +22,7 @@
 // Falltergeist includes
 #include "../../Engine/Graphics/Renderer.h"
 #include "../../Engine/Game.h"
+#include "../../Engine/State.h"
 #include "../../Engine/UI.h"
 #include "../../Engine/Input/Mouse.h"
 
@@ -47,10 +48,12 @@ void Renderer::init()
 void Renderer::beginFrame()
 {
     auto game = Game::getInstance();
-
-    for (auto i = game->ui()->begin(); i != game->ui()->end(); ++i)
+    for (auto ui : *game->ui())
     {
-        drawTexture((*i)->x(), (*i)->y(), (*i)->texture());
+        if (ui->visible())
+        {
+            drawTexture(ui->x(), ui->y(), ui->texture());
+        }
     }
 }
 

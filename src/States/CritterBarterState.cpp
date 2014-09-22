@@ -22,9 +22,9 @@
 
 // Falltergeist includes
 #include "../Engine/Game.h"
+#include "../Engine/Graphics/Renderer.h"
 #include "../States/CritterBarterState.h"
 #include "../States/CritterDialogState.h"
-#include "../States/CritterTalkState.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 
@@ -33,11 +33,7 @@
 namespace Falltergeist
 {
 
-CritterBarterState::CritterBarterState(int offsetX, int offsetY) : State(), _offsetX(offsetX), _offsetY(offsetY)
-{
-}
-
-CritterBarterState::CritterBarterState() : CritterBarterState(0, 0)
+CritterBarterState::CritterBarterState() : State()
 {
 }
 
@@ -53,55 +49,42 @@ void CritterBarterState::init()
     setFullscreen(false);
     setModal(true);
 
+    setX((Game::getInstance()->renderer()->width() - 640)*0.5);
+    setY((Game::getInstance()->renderer()->height() - 480)*0.5 + 291);
+
+
     auto background = std::shared_ptr<Image>(new Image("art/intrface/barter.frm"));
-    background->setX(_offsetX);
-    background->setY(_offsetY);
+    background->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &CritterBarterState::onBackgroundClick);
+    addUI(background);
 
     // Interface buttons
-    auto offerButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, _offsetX+40, _offsetY+162));
-    auto talkButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, _offsetX+583, _offsetY+162));
-    talkButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &CritterBarterState::onTalkButtonClick);
-
-    auto mineInventoryScrollUpButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_UP_ARROW, _offsetX + 190, _offsetY + 56));
-    auto mineInventoryScrollDownButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_DOWN_ARROW, _offsetX + 190, _offsetY + 82));
-
-    auto theirsInventoryScrollUpButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_UP_ARROW, _offsetX + 421, _offsetY + 56));
-    auto theirsInventoryScrollDownButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_DOWN_ARROW, _offsetX + 421, _offsetY + 82));
-
-    addUI(background);
+    auto offerButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, 40, 162));
     addUI(offerButton);
+
+    auto talkButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, 583, 162));
+    talkButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &CritterBarterState::onTalkButtonClick);
     addUI(talkButton);
+
+    auto mineInventoryScrollUpButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_UP_ARROW, 190, 56));
     addUI(mineInventoryScrollUpButton);
+    auto mineInventoryScrollDownButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_DOWN_ARROW, 190, 82));
     addUI(mineInventoryScrollDownButton);
+
+    auto theirsInventoryScrollUpButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_UP_ARROW, 421, 56));
     addUI(theirsInventoryScrollUpButton);
+    auto theirsInventoryScrollDownButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_DOWN_ARROW, 421, 82));
     addUI(theirsInventoryScrollDownButton);
-}
-
-int CritterBarterState::offsetX()
-{
-    return _offsetX;
-}
-
-void CritterBarterState::setOffsetX(int offsetX)
-{
-    _offsetX = offsetX;
-}
-
-int CritterBarterState::offsetY()
-{
-    return _offsetY;
-}
-
-void CritterBarterState::setOffsetY(int offsetY)
-{
-    _offsetY = offsetY;
 }
 
 void CritterBarterState::onTalkButtonClick(std::shared_ptr<Event> event)
 {
-    auto critterTalkState = Game::getInstance()->dialog()->talk();
     Game::getInstance()->popState();
-    Game::getInstance()->pushState(critterTalkState);
+}
+
+void CritterBarterState::onBackgroundClick(std::shared_ptr<Event> event)
+{
+    // to prevent event propagation to dialog state
+    event->setHandled(true);
 }
 
 }

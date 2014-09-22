@@ -30,11 +30,42 @@
 
 namespace Falltergeist
 {
+class GameCritterObject;
+class VM;
 
 class CritterInteractState : public State
 {
+protected:
+    unsigned int _oldCameraX;
+    unsigned int _oldCameraY;
+    int _backgroundID = -1;
+    int _headID = -1;
+    int _mood = 0;
+    int _msgFileID = -1;
+    VM* _script;
+    std::shared_ptr<GameCritterObject> _critter;
 public:
     CritterInteractState();
+    virtual ~CritterInteractState();
+    virtual void init();
+
+    int backgroundID();
+    void setBackgroundID(int backgroundID);
+
+    int headID();
+    void setHeadID(int headID);
+
+    int mood();
+    void setMood(int mood);
+
+    std::shared_ptr<GameCritterObject> critter();
+    void setCritter(std::shared_ptr<GameCritterObject> critter);
+
+    int msgFileID();
+    void setMsgFileID(int value);
+
+    VM* script();
+    void setScript(VM* script);
 };
 
 }

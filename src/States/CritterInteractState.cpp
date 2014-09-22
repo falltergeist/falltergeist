@@ -21,7 +21,14 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Engine/Game.h"
+#include "../Engine/Graphics/Renderer.h"
+#include "../Engine/Hexagon.h"
+#include "../Engine/LocationCamera.h"
+#include "../Game/GameCritterObject.h"
 #include "../States/CritterInteractState.h"
+#include "../States/LocationState.h"
+#include "../UI/Image.h"
 
 // Third party includes
 
@@ -30,6 +37,97 @@ namespace Falltergeist
 
 CritterInteractState::CritterInteractState() : State()
 {
+}
+
+CritterInteractState::~CritterInteractState()
+{
+    auto camera = Game::getInstance()->locationState()->camera();
+    camera->setXPosition(_oldCameraX);
+    camera->setYPosition(_oldCameraY);
+}
+
+void CritterInteractState::init()
+{
+    if (_initialized) return;
+    State::init();
+
+    setFullscreen(false);
+    setModal(true);
+
+    setX((Game::getInstance()->renderer()->width() - 640)*0.5);
+    setY((Game::getInstance()->renderer()->height() - 480)*0.5);
+
+    addUI("background", std::shared_ptr<Image>(new Image("art/intrface/alltlk.frm")));
+
+    // Centering camera on critter position
+    auto locationState = Game::getInstance()->locationState();
+    _oldCameraX = locationState->camera()->xPosition();
+    _oldCameraY = locationState->camera()->yPosition();
+
+    locationState->camera()->setXPosition(critter()->hexagon()->x());
+    locationState->camera()->setYPosition(critter()->hexagon()->y() + 100);
+    locationState->checkObjectsToRender();
+    locationState->generateUi();
+}
+
+int CritterInteractState::backgroundID()
+{
+    return _backgroundID;
+}
+
+void CritterInteractState::setBackgroundID(int backgroundID)
+{
+    _backgroundID = backgroundID;
+}
+
+int CritterInteractState::headID()
+{
+    return _headID;
+}
+
+void CritterInteractState::setHeadID(int headID)
+{
+    _headID = headID;
+}
+
+int CritterInteractState::mood()
+{
+    return _mood;
+}
+
+void CritterInteractState::setMood(int mood)
+{
+    _mood = mood;
+}
+
+std::shared_ptr<GameCritterObject> CritterInteractState::critter()
+{
+    return _critter;
+}
+
+void CritterInteractState::setCritter(std::shared_ptr<GameCritterObject> critter)
+{
+    _critter = critter;
+}
+
+int CritterInteractState::msgFileID()
+{
+    return _msgFileID;
+}
+
+void CritterInteractState::setMsgFileID(int value)
+{
+    _msgFileID = value;
+}
+
+VM* CritterInteractState::script()
+{
+    return _script;
+}
+
+void CritterInteractState::setScript(VM* script)
+{
+    _script = script;
 }
 
 }

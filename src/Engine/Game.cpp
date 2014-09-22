@@ -341,18 +341,6 @@ std::vector<std::shared_ptr<State>> Game::statesForThinkAndHandle()
     return states;
 }
 
-
-
-std::shared_ptr<CritterDialogState> Game::dialog()
-{
-    return _dialog;
-}
-
-void Game::setDialog(std::shared_ptr<CritterDialogState> value)
-{
-    _dialog = value;
-}
-
 std::vector<std::shared_ptr<UI>>* Game::ui()
 {
     _ui.clear();
@@ -367,6 +355,7 @@ std::vector<std::shared_ptr<UI>>* Game::ui()
             }
         }
     }
+
     _ui.push_back(_fpsCounter);
     _ui.push_back(_falltergeistVersion);
     _ui.push_back(_mousePosition);

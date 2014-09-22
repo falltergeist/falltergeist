@@ -34,20 +34,13 @@ namespace Falltergeist
 class CritterBarterState : public State
 {
 private:
-    int _offsetX;
-    int _offsetY;
 public:
-    CritterBarterState(int offsetX, int offsetY);
     CritterBarterState();
     ~CritterBarterState();
 
     void init();
 
-    int offsetX();
-    void setOffsetX(int offsetX);
-    int offsetY();
-    void setOffsetY(int offsetY);
-
+    void onBackgroundClick(std::shared_ptr<Event> event);
     void onTalkButtonClick(std::shared_ptr<Event> event);
 };
 
