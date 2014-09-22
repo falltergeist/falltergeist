@@ -42,6 +42,7 @@ public:
     void onSlotMouseDown(std::shared_ptr<MouseEvent> event);
     void onSlotMouseUp(std::shared_ptr<MouseEvent> event);
     void onSlotDrag(std::shared_ptr<MouseEvent> event);
+    void backgroundRightClick(std::shared_ptr<MouseEvent> event);
 private:
     std::string _handItemSummary (std::shared_ptr<GameItemObject> hand);
 };
