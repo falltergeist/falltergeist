@@ -49,19 +49,25 @@ public:
 
     bool audioEnabled() const;
 
+    const std::string &initialLocation() const;
+
+    static const std::string &defaultInitLocation();
+
 private:
     unsigned int _screenWidth;
     unsigned int _screenHeight;
     Renderer _renderer;
     bool _audioEnabled;
+    std::string _initLocation;
 
     void _setRenderer(std::string renderer);
 
     // DEFAULTS
-    static unsigned int _defaultScreenWidth;
-    static unsigned int _defaultScreenHeight;
-    static std::string _defaultRenderer;
-    static bool _defaultAudioEnabled;
+    static const unsigned int _defaultScreenWidth;
+    static const unsigned int _defaultScreenHeight;
+    static const std::string _defaultRenderer;
+    static const bool _defaultAudioEnabled;
+    static const std::string _defaultInitLocation;
 };
 
 }

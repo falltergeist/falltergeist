@@ -34,10 +34,11 @@
 namespace Falltergeist
 {
 
-unsigned int EngineSettings::_defaultScreenWidth = 640;
-unsigned int EngineSettings::_defaultScreenHeight = 480;
-std::string EngineSettings::_defaultRenderer = "sdl";
-bool EngineSettings::_defaultAudioEnabled = false;
+const unsigned int EngineSettings::_defaultScreenWidth = 640;
+const unsigned int EngineSettings::_defaultScreenHeight = 480;
+const std::string EngineSettings::_defaultRenderer = "sdl";
+const bool EngineSettings::_defaultAudioEnabled = false;
+const std::string EngineSettings::_defaultInitLocation = "klamall";
 
 EngineSettings::EngineSettings()
 {
@@ -64,6 +65,9 @@ EngineSettings::EngineSettings()
         auto logger = ini->section("logger");
         Logger::setLevel(logger->propertyString("level", "info"));
         Logger::useColors(logger->propertyBool("colors", true));
+
+        auto game = ini->section("game");
+        _initLocation = game->propertyString("init_location", _defaultInitLocation);
     }
     else
     {
@@ -134,6 +138,16 @@ void EngineSettings::_setRenderer(std::string renderer)
     {
         _renderer = Renderer::OPENGL;
     }
+}
+
+const std::string &EngineSettings::defaultInitLocation()
+{
+    return _defaultInitLocation;
+}
+
+const std::string &EngineSettings::initialLocation() const
+{
+    return _initLocation;
 }
 
 }
