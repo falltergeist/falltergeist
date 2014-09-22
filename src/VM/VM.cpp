@@ -696,14 +696,14 @@ void VM::run()
             }
             case 0x80bf:
             {
-                Logger::info("SCRIPT") << "[+] GameDudeObject* dude_obj()" << std::endl;
+                Logger::info("SCRIPT") << "[80BF] [+] GameDudeObject* dude_obj()" << std::endl;
                 auto game = Game::getInstance();            
                 pushDataPointer(game->player());
                 break;
             }
             case 0x80c1:
             {
-                Logger::info("SCRIPT") << "[*] LVAR[num]" << std::endl;
+                Logger::info("SCRIPT") << "[80C1] [*] LVAR[num]" << std::endl;
                 unsigned int num = popDataInteger();
                 while (num >= _LVARS.size()) _LVARS.push_back(std::shared_ptr<VMStackIntValue>(new VMStackIntValue(0)));
                 _dataStack.push(_LVARS.at(num));
@@ -711,7 +711,7 @@ void VM::run()
             }
             case 0x80c2:
             {
-                Logger::info("SCRIPT") << "[*] LVAR[num] = value" << std::endl;
+                Logger::info("SCRIPT") << "[80C2] [*] LVAR[num] = value" << std::endl;
                 auto value = _dataStack.pop();
                 unsigned int num = popDataInteger();
                 while (num >= _LVARS.size()) _LVARS.push_back(std::shared_ptr<VMStackIntValue>(new VMStackIntValue(0)));
@@ -720,7 +720,7 @@ void VM::run()
             }
             case 0x80c3:
             {
-                Logger::info("SCRIPT") << "[?] MVAR[num]" << std::endl;
+                Logger::info("SCRIPT") << "[80C3] [?] MVAR[num]" << std::endl;
                 auto num = popDataInteger();
                 if (num < 0)
                 {
@@ -733,7 +733,7 @@ void VM::run()
             }
             case 0x80c4:
             {
-                Logger::info("SCRIPT") << "[+] MVAR[num] = value" << std::endl;
+                Logger::info("SCRIPT") << "[80C4] [+] MVAR[num] = value" << std::endl;
                 auto value = popDataInteger();
                 auto num = popDataInteger();
                 auto game = Game::getInstance();
@@ -742,7 +742,7 @@ void VM::run()
             }
             case 0x80c5:
             {
-                Logger::info("SCRIPT") << "[?] GVAR[num]" << std::endl;
+                Logger::info("SCRIPT") << "[80C5] [?] GVAR[num]" << std::endl;
                 auto num = popDataInteger();
                 if (num < 0)
                 {
@@ -755,7 +755,7 @@ void VM::run()
             }
             case 0x80c6:
             {
-                Logger::info("SCRIPT") << "[+] GVAR[num] = value" << std::endl;
+                Logger::info("SCRIPT") << "[80C6] [+] GVAR[num] = value" << std::endl;
                 auto value = popDataInteger();
                 auto num = popDataInteger();
                 auto game = Game::getInstance();
@@ -764,20 +764,20 @@ void VM::run()
             }
             case 0x80c7:
             {
-                Logger::info("SCRIPT") << "[*] int script_action()" << std::endl;
+                Logger::info("SCRIPT") << "[80C7] [*] int script_action()" << std::endl;
                 pushDataInteger(21);
                 break;
             }
             case 0x80c8:
             {
-                Logger::info("SCRIPT") << "[=] int obj_type(void* obj)" << std::endl;
+                Logger::info("SCRIPT") << "[80C8] [=] int obj_type(void* obj)" << std::endl;
                 popDataPointer();
                 pushDataInteger(0);
                 break;
             }
             case 0x80c9:
             {
-                Logger::info("SCRIPT") << "[+] int obj_item_subtype(GameItemObject* object)" << std::endl;
+                Logger::info("SCRIPT") << "[80C9] [+] int obj_item_subtype(GameItemObject* object)" << std::endl;
                 auto pointer = popDataPointer();
                      if (std::static_pointer_cast<GameArmorItemObject>(pointer))     pushDataInteger(0);
                 else if (std::static_pointer_cast<GameContainerItemObject>(pointer)) pushDataInteger(1);
@@ -793,13 +793,13 @@ void VM::run()
             case 0x80cb: break;
             case 0x80cc:
             {
-                Logger::info("SCRIPT") << "[=] void animate_stand_obj(void* obj)" << std::endl;
+                Logger::info("SCRIPT") << "[80CC] [=] void animate_stand_obj(void* obj)" << std::endl;
                 popDataPointer();
                 break;
             }
             case 0x80ce:
             {
-                Logger::info("SCRIPT") << "[=] void animate_move_obj_to_tile(void* who, int tile, int speed)" << std::endl;
+                Logger::info("SCRIPT") << "[80CE] [=] void animate_move_obj_to_tile(void* who, int tile, int speed)" << std::endl;
                 popDataInteger();
                 popDataInteger();
                 popDataPointer();
@@ -807,7 +807,7 @@ void VM::run()
             }
             case 0x80cf:
             {
-                Logger::info("SCRIPT") << "[=] int tile_in_tile_rect(int tile1, int tile2, int tile3, int tile4, int tile)" << std::endl;
+                Logger::info("SCRIPT") << "[80CF] [=] int tile_in_tile_rect(int tile1, int tile2, int tile3, int tile4, int tile)" << std::endl;
                 popDataInteger();
                 popDataInteger();
                 popDataInteger();
@@ -817,7 +817,7 @@ void VM::run()
             }
             case 0x80d0:
             {
-                Logger::info("SCRIPT") << "[=] void attack_complex(ObjectPtr who, int called_shot, int num_attacks, int bonus"
+                Logger::info("SCRIPT") << "[80D0] [=] void attack_complex(ObjectPtr who, int called_shot, int num_attacks, int bonus"
                         ", int min_damage, int max_damage, int attacker_results, int target_results)" << std::endl;
                 popDataInteger();
                 popDataInteger();
@@ -831,7 +831,7 @@ void VM::run()
             }
             case 0x80d2:
             {
-                Logger::info("SCRIPT") << "[=] int tile_distance(int tile1, int tile2)" << std::endl;
+                Logger::info("SCRIPT") << "[80D2] [=] int tile_distance(int tile1, int tile2)" << std::endl;
                 popDataInteger();
                 popDataInteger();
                 pushDataInteger(4);
@@ -839,7 +839,7 @@ void VM::run()
             }
             case 0x80d3:
             {
-                Logger::info("SCRIPT") << "int tile_distance_objs(void* p2, void* p1)" << std::endl;
+                Logger::info("SCRIPT") << "[80D3] int tile_distance_objs(void* p2, void* p1)" << std::endl;
                 popDataPointer();
                 popDataPointer();
                 pushDataInteger(10);
@@ -847,7 +847,7 @@ void VM::run()
             }
             case 0x80d4:
             {
-                Logger::info("SCRIPT") << "[+] int objectPosition(GameObject* object)" << std::endl;
+                Logger::info("SCRIPT") << "[80D4] [+] int objectPosition(GameObject* object)" << std::endl;
                 auto object = std::static_pointer_cast<GameObject>(popDataPointer());
                 if (!object) throw new Exception("Opcode 80d4 error");
                 pushDataInteger(object->hexagon()->number());
@@ -855,7 +855,7 @@ void VM::run()
             }
             case 0x80d5:
             {
-                Logger::info("SCRIPT") << "[*] int tile_num_in_direction(int start_tile, int dir, int distance)" << std::endl;
+                Logger::info("SCRIPT") << "[80D5] [*] int tile_num_in_direction(int start_tile, int dir, int distance)" << std::endl;
                 auto distance = popDataInteger();
                 auto dir = popDataInteger();
                 auto start_tile = popDataInteger();
@@ -864,28 +864,28 @@ void VM::run()
             }
             case 0x80d8:
             {
-                Logger::info("SCRIPT") << "[=] void add_obj_to_inven(void* who, void* item)" << std::endl;
+                Logger::info("SCRIPT") << "[80D8] [=] void add_obj_to_inven(void* who, void* item)" << std::endl;
                 popDataPointer();
                 popDataPointer();
                 break;
             }
             case 0x80d9:
             {
-                Logger::info("SCRIPT") << "[=] void rm_obj_from_inven(void* who, void* obj)" << std::endl;
+                Logger::info("SCRIPT") << "[80D9] [=] void rm_obj_from_inven(void* who, void* obj)" << std::endl;
                 popDataPointer();
                 popDataPointer();
                 break;
             }
             case 0x80da:
             {
-                Logger::info("SCRIPT") << "[=] void wield_obj_critter(void* who, void* obj)" << std::endl;
+                Logger::info("SCRIPT") << "[80DA] [=] void wield_obj_critter(void* who, void* obj)" << std::endl;
                 popDataPointer();
                 popDataPointer();
                 break;
             }
             case 0x80dc:
             {
-                Logger::info("SCRIPT") << "[=] int obj_can_see_obj(GameObject* src_obj, GameObject* dst_obj)" << std::endl;
+                Logger::info("SCRIPT") << "[80DC] [=] int obj_can_see_obj(GameObject* src_obj, GameObject* dst_obj)" << std::endl;
                 popDataPointer();
                 popDataPointer();
                 pushDataInteger(1);
@@ -894,7 +894,7 @@ void VM::run()
             case 0x80de: break;
             case 0x80df:
             {
-                Logger::info("SCRIPT") << "[?] end_dialogue" << std::endl;
+                Logger::info("SCRIPT") << "[80DF] [?] end_dialogue" << std::endl;
                 auto game = Game::getInstance();
                 game->dialog()->close();
                 game->popState();
@@ -902,7 +902,7 @@ void VM::run()
             }
             case 0x80e1:
             {
-                Logger::info("SCRIPT") << "[*] int metarule3(int meta, int p1, int p2, int p3)" << std::endl;
+                Logger::info("SCRIPT") << "[80E1] [*] int metarule3(int meta, int p1, int p2, int p3)" << std::endl;
                 auto p3 = popDataInteger();
                 auto p2 = popDataInteger();
                 auto p1 = _dataStack.pop();
@@ -912,21 +912,21 @@ void VM::run()
             }
             case 0x80e3:
             {
-                Logger::info("SCRIPT") << "[=] void set_obj_visibility(void* obj, int visibility)" << std::endl;
+                Logger::info("SCRIPT") << "[80E3] [=] void set_obj_visibility(void* obj, int visibility)" << std::endl;
                 popDataInteger();
                 popDataPointer();
                 break;
             }
             case 0x80e4:
             {
-                Logger::info("SCRIPT") << "[=] void load_map(string* map, int param)" << std::endl;
+                Logger::info("SCRIPT") << "[80E4] [=] void load_map(string* map, int param)" << std::endl;
                 popDataInteger();
                 popDataPointer();
                 break;
             }
             case 0x80e5:
             {
-                Logger::info("SCRIPT") << "[=] void wm_area_set_pos(int areaIdx, int xPos, int yPos)" << std::endl;
+                Logger::info("SCRIPT") << "[80E5] [=] void wm_area_set_pos(int areaIdx, int xPos, int yPos)" << std::endl;
                 popDataInteger();
                 popDataInteger();
                 popDataInteger();
@@ -934,7 +934,7 @@ void VM::run()
             }
             case 0x80e7:
             {
-                Logger::info("SCRIPT") << "[=] int anim_busy(void* obj)" << std::endl;
+                Logger::info("SCRIPT") << "[80E7] [=] int anim_busy(void* obj)" << std::endl;
                 popDataPointer();//auto object = (GameObject*)popDataPointer();
                 //pushDataInteger(object->animationQueue()->enabled());
                 pushDataInteger(1);
@@ -942,31 +942,31 @@ void VM::run()
             }
             case 0x80e9:
             {
-                Logger::info("SCRIPT") << "[*] void set_light_level(int level)" << std::endl;
+                Logger::info("SCRIPT") << "[80E9] [*] void set_light_level(int level)" << std::endl;
                 auto level = popDataInteger();
                 _setLightLevel(level);
                 break;
             }
             case 0x80ea:
             {
-                Logger::info("SCRIPT") << "[*] int gameTime()" << std::endl;
+                Logger::info("SCRIPT") << "[80EA] [*] int gameTime()" << std::endl;
                 pushDataInteger(SDL_GetTicks() / 10);
                 break;
             }
             case 0x80ec:
             {
-                Logger::info("SCRIPT") << "[=] int elevation(void* obj)" << std::endl;
+                Logger::info("SCRIPT") << "[80EC] [=] int elevation(void* obj)" << std::endl;
                 auto object = std::static_pointer_cast<GameObject>(popDataPointer());
                 if (!object) throw new Exception("Opcode 80ec error");
                 pushDataInteger(object->elevation());
                 break;
             }
             case 0x80ef:
-                Logger::info("SCRIPT") << "void critter_dmg(ObjectPtr who, int dmg_amount, int dmg_type)" << std::endl;
+                Logger::info("SCRIPT") << "[80EF] void critter_dmg(ObjectPtr who, int dmg_amount, int dmg_type)" << std::endl;
                 break;
             case 0x80f0:
             {
-                Logger::info("SCRIPT") << "[=] void add_timer_event(void* obj, int time, int info)" << std::endl;
+                Logger::info("SCRIPT") << "[80F0] [=] void add_timer_event(void* obj, int time, int info)" << std::endl;
                 popDataInteger();
                 popDataInteger();
                 popDataPointer();
@@ -974,20 +974,20 @@ void VM::run()
             }
             case 0x80f1:
             {
-                Logger::info("SCRIPT") << "[=] void rm_timer_event (void* obj)" << std::endl;
+                Logger::info("SCRIPT") << "[80F1] [=] void rm_timer_event (void* obj)" << std::endl;
                 popDataPointer();
                 break;
             }
             case 0x80f2:
             {
-                Logger::info("SCRIPT") << "[=] int game_ticks(int seconds)" << std::endl;
+                Logger::info("SCRIPT") << "[80F2] [=] int game_ticks(int seconds)" << std::endl;
                 auto seconds = popDataInteger();
                 pushDataInteger(seconds*1000);
                 break;
             }
             case 0x80f3:
             {
-                Logger::info("SCRIPT") << "[=] int has_trait(int type,void* who, int trait)" << std::endl;
+                Logger::info("SCRIPT") << "[80F3] [=] int has_trait(int type,void* who, int trait)" << std::endl;
                 popDataInteger();
                 popDataPointer();
                 popDataInteger();
@@ -996,50 +996,50 @@ void VM::run()
             }
             case 0x80f4:
             {
-                Logger::info("SCRIPT") << "[=] int destroy_object(void* obj)" << std::endl;
+                Logger::info("SCRIPT") << "[80F4] [=] int destroy_object(void* obj)" << std::endl;
                 popDataPointer();
                 pushDataInteger(0);
                 break;
             }
             case 0x80f6:
             {
-                Logger::info("SCRIPT") << "[*] int game_time_hour" << std::endl;
+                Logger::info("SCRIPT") << "[80F6] [*] int game_time_hour" << std::endl;
                 pushDataInteger(_getTime());
                 break;
             }
             case 0x80f7:
             {
-                Logger::info("SCRIPT") << "[=] int fixed_param()" << std::endl;
+                Logger::info("SCRIPT") << "[80F7] [=] int fixed_param()" << std::endl;
                 pushDataInteger(1);
                 break;
             }
             case 0x80f9:
             {
-                Logger::info("SCRIPT") << "[=] void dialogue_system_enter()" << std::endl;
+                Logger::info("SCRIPT") << "[80F9] [=] void dialogue_system_enter()" << std::endl;
                 break;
             }
             case 0x80fa:
             {
-                Logger::info("SCRIPT") << "[=] int action_being_used()" << std::endl;
+                Logger::info("SCRIPT") << "[80FA] [=] int action_being_used()" << std::endl;
                 pushDataInteger(1);
                 break;
             }
             case 0x80fb:
             {
-                Logger::info("SCRIPT") << "[=] int critter_state(void* who)" << std::endl;
+                Logger::info("SCRIPT") << "[80FB] [=] int critter_state(void* who)" << std::endl;
                 popDataPointer();
                 pushDataInteger(0);
                 break;
             }
             case 0x80fc:
             {
-                Logger::info("SCRIPT") << "[=] void game_time_advance(int amount)" << std::endl;
+                Logger::info("SCRIPT") << "[80FC] [=] void game_time_advance(int amount)" << std::endl;
                 popDataInteger();
                 break;
             }
             case 0x80ff:
             {
-                Logger::info("SCRIPT") << "[*] int critter_attempt_placement(GameCritterObject* critter, int position, int elevation)" << std::endl;
+                Logger::info("SCRIPT") << "[80FF] [*] int critter_attempt_placement(GameCritterObject* critter, int position, int elevation)" << std::endl;
                 auto elevation = popDataInteger();
                 auto position = popDataInteger();
                 auto critter = std::static_pointer_cast<GameCritterObject>(popDataPointer());
@@ -1052,7 +1052,7 @@ void VM::run()
             }
             case 0x8100:
             {
-                Logger::info("SCRIPT") << "[+] int obj_pid(void* obj)" << std::endl;
+                Logger::info("SCRIPT") << "[8100] [+] int obj_pid(void* obj)" << std::endl;
                 auto object = std::static_pointer_cast<GameObject>(popDataPointer());
                 if (!object) throw new Exception("Opcode 8100 error");
                 pushDataInteger(object->PID());
@@ -1060,13 +1060,13 @@ void VM::run()
             }
             case 0x8101:
             {
-                Logger::info("SCRIPT") << "[=] int cur_map_index()" << std::endl;
+                Logger::info("SCRIPT") << "[8101] [=] int cur_map_index()" << std::endl;
                 pushDataInteger(3);
                 break;
             }
             case 0x8102:
             {
-                Logger::info("SCRIPT") << "[*] int critter_add_trait(void* who, int trait_type, int trait, int amount) " << std::endl;
+                Logger::info("SCRIPT") << "[8102] [*] int critter_add_trait(void* who, int trait_type, int trait, int amount) " << std::endl;
                 auto amount = popDataInteger();
                 auto trait = popDataInteger();
                 auto trait_type = popDataInteger();
@@ -1076,7 +1076,7 @@ void VM::run()
             }
             case 0x8105:
             {
-                Logger::info("SCRIPT") << "[+] string* msgMessage(int msg_list, int msg_num);" << std::endl;
+                Logger::info("SCRIPT") << "[8105] [+] string* msgMessage(int msg_list, int msg_num);" << std::endl;
                 auto msgNum = popDataInteger();
                 auto msgList = popDataInteger();
                 std::cout << msgNum << std::endl;
@@ -1086,7 +1086,7 @@ void VM::run()
             }
             case 0x8106:
             {
-                Logger::info("SCRIPT") << "[=] void* (int) critter_inven_obj(GameCritterObject* critter, int where)" << std::endl;
+                Logger::info("SCRIPT") << "[8106] [=] void* (int) critter_inven_obj(GameCritterObject* critter, int where)" << std::endl;
                 auto where = popDataInteger();
                 auto critter = std::static_pointer_cast<GameCritterObject>(popDataPointer());
                 switch (where)
@@ -1111,7 +1111,7 @@ void VM::run()
             case 0x810a: break;
             case 0x810c:
             {
-                Logger::info("SCRIPT") << "[*] void anim(void* who, int anim, int direction)" << std::endl;
+                Logger::info("SCRIPT") << "[810C] [*] void anim(void* who, int anim, int direction)" << std::endl;
                 auto direction = popDataInteger();
                 auto anim = popDataInteger();
                 auto who = popDataPointer();
@@ -1120,7 +1120,7 @@ void VM::run()
             }
             case 0x810b:
             {
-                Logger::info("SCRIPT") << "[*] int metarule(p2, p1)" << std::endl;
+                Logger::info("SCRIPT") << "[810B] [*] int metarule(p2, p1)" << std::endl;
                 auto p1 = _dataStack.pop();
                 auto p2 = popDataInteger();
                 pushDataInteger(_metarule(p2, p1));
@@ -1128,7 +1128,7 @@ void VM::run()
             }
             case 0x810d:
             {
-                Logger::info("SCRIPT") << "[=] void* obj_carrying_pid_obj(void* who, int pid)" << std::endl;
+                Logger::info("SCRIPT") << "[810D] [=] void* obj_carrying_pid_obj(void* who, int pid)" << std::endl;
                 popDataInteger();
                 popDataPointer();
                 pushDataPointer(0);
@@ -1136,7 +1136,7 @@ void VM::run()
             }
             case 0x810e:
             {
-                Logger::info("SCRIPT") << "[=] void reg_anim_func(int p1, int p2)" << std::endl;
+                Logger::info("SCRIPT") << "[810E] [=] void reg_anim_func(int p1, int p2)" << std::endl;
                 auto p2 = _dataStack.pop(); // pointer or integer
                 auto p1 = popDataInteger();
                 _dataStack.push(p2);
@@ -1165,7 +1165,7 @@ void VM::run()
             }
             case 0x810f:
             {
-                Logger::info("SCRIPT") << "[=] void reg_anim_animate(void* what, int anim, int delay) " << std::endl;
+                Logger::info("SCRIPT") << "[810F] [=] void reg_anim_animate(void* what, int anim, int delay) " << std::endl;
                 popDataInteger();
                 popDataInteger();
                 popDataPointer();
@@ -1173,7 +1173,7 @@ void VM::run()
             }
             case 0x8113:
             {
-                Logger::info("SCRIPT") << "[=] void reg_anim_obj_move_to_tile(void* who, int dest_tile, int delay)" << std::endl;
+                Logger::info("SCRIPT") << "[8113] [=] void reg_anim_obj_move_to_tile(void* who, int dest_tile, int delay)" << std::endl;
                 popDataInteger(); // -1
                 popDataInteger();
                 popDataPointer();
@@ -1181,13 +1181,13 @@ void VM::run()
             }
             case 0x8115:
             {
-                Logger::info("SCRIPT") << "[*] void playMovie(movieNum)" << std::endl;
+                Logger::info("SCRIPT") << "[8115] [*] void playMovie(movieNum)" << std::endl;
                 _playMovie(popDataInteger());
                 break;
             }
             case 0x8116:
             {
-                Logger::info("SCRIPT") << "[+] void add_mult_objs_to_inven(GameObject* who, GameItemObject* item, int amount)" << std::endl;
+                Logger::info("SCRIPT") << "[8116] [+] void add_mult_objs_to_inven(GameObject* who, GameItemObject* item, int amount)" << std::endl;
                 auto amount = popDataInteger();
                 auto item = std::static_pointer_cast<GameItemObject>(popDataPointer());
                 if (!item) throw Exception("VM::opcode8116 - item not instanceof GameItemObject");
@@ -1210,7 +1210,7 @@ void VM::run()
             }
             case 0x8117:
             {
-                Logger::info("SCRIPT") << "[=] int rm_mult_objs_from_inven(void* who, void* obj, int count)" << std::endl;
+                Logger::info("SCRIPT") << "[8117] [=] int rm_mult_objs_from_inven(void* who, void* obj, int count)" << std::endl;
                 popDataInteger();
                 popDataPointer();
                 popDataPointer();
@@ -1218,20 +1218,20 @@ void VM::run()
                 break;
             }
             case 0x8118:
-                Logger::info("SCRIPT") << "[*] int get_month" << std::endl;
+                Logger::info("SCRIPT") << "[8118] [*] int get_month" << std::endl;
                 pushDataInteger(_getMonth());
                 break;
             case 0x8119: break;
             case 0x811c:
             {
-                Logger::info("SCRIPT") << "[?] gsay_start" << std::endl;
+                Logger::info("SCRIPT") << "[811C] [?] gsay_start" << std::endl;
                 auto game = Game::getInstance();
                 game->pushState(game->dialog());
                 break;
             }
             case 0x811d:
             {
-                Logger::info("SCRIPT") << "[?] gsay_end" << std::endl;
+                Logger::info("SCRIPT") << "[811D] [?] gsay_end" << std::endl;
                 auto dialog = Game::getInstance()->dialog();
                 if (dialog->talk()->hasAnswers())
                 {
@@ -1242,7 +1242,7 @@ void VM::run()
             }
             case 0x811e:
             {
-                Logger::info("SCRIPT") << "[=] void gSay_Reply(int msg_file_num, int msg_num)" << std::endl;
+                Logger::info("SCRIPT") << "[811E] [=] void gSay_Reply(int msg_file_num, int msg_num)" << std::endl;
                 //Game::getInstance().dialog()->deleteAnswers();
                 if (_dataStack.top()->type() == VMStackValue::TYPE_POINTER)
                 {
@@ -1259,7 +1259,7 @@ void VM::run()
             }
             case 0x8120:
             {
-                Logger::info("SCRIPT") << "[=] void gSay_Message(int msg_list, int msg_num, int reaction)" << std::endl;
+                Logger::info("SCRIPT") << "[8120] [=] void gSay_Message(int msg_list, int msg_num, int reaction)" << std::endl;
                 popDataInteger();
                 _dataStack.pop(); // string or integer
                 popDataInteger();
@@ -1267,7 +1267,7 @@ void VM::run()
             }
             case 0x8121:
             {
-                Logger::info("SCRIPT") << "[+] void giQ_Option(int iq_test, int msg_list, int msg_num, procedure target, int reaction)" << std::endl;
+                Logger::info("SCRIPT") << "[8121] [+] void giQ_Option(int iq_test, int msg_list, int msg_num, procedure target, int reaction)" << std::endl;
 
                 auto reaction = popDataInteger();
                 auto function = popDataInteger();
@@ -1310,20 +1310,20 @@ void VM::run()
             }
             case 0x8123:
             {
-                Logger::info("SCRIPT") << "[=] int GetPoison(void* obj)" << std::endl;
+                Logger::info("SCRIPT") << "[8123] [=] int GetPoison(void* obj)" << std::endl;
                 popDataPointer();
                 pushDataInteger(0);
                 break;
             }
             case 0x8125:
             {
-                Logger::info("SCRIPT") << "[=] void party_remove(void* who)" << std::endl;
+                Logger::info("SCRIPT") << "[8125] [=] void party_remove(void* who)" << std::endl;
                 popDataPointer();
                 break;
             }
             case 0x8126:
             {
-                Logger::info("SCRIPT") << "[+] void reg_anim_animate_forever(GameObject* obj , int delay)" << std::endl;
+                Logger::info("SCRIPT") << "[8126] [-] void reg_anim_animate_forever(GameObject* obj , int delay)" << std::endl;
                 popDataInteger(); // delay - must be -1
                 popDataPointer();//auto object = (GameObject*)popDataPointer();
                 //if (object->animationQueue()->animation())
@@ -1337,85 +1337,85 @@ void VM::run()
             case 0x8127: break;
             case 0x8128:
             {
-                Logger::info("SCRIPT") << "[=] int combat_is_initialized()" << std::endl;
+                Logger::info("SCRIPT") << "[8128] [=] int combat_is_initialized()" << std::endl;
                 pushDataInteger(0);
                 break;
             }
             case 0x8129:
             {
-                Logger::info("SCRIPT") << "[=] void gdialog_mod_barter(int modifier)" << std::endl;
+                Logger::info("SCRIPT") << "[8129] [=] void gdialog_mod_barter(int modifier)" << std::endl;
                 popDataInteger();
                 break;
             }
             case 0x812d:
             {
-                Logger::info("SCRIPT") << "[+] int is_locked(GameDoorSceneryObject* object)" << std::endl;
+                Logger::info("SCRIPT") << "[812D] [+] int is_locked(GameDoorSceneryObject* object)" << std::endl;
                 auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
                 pushDataInteger(object->locked());
                 break;
             }
             case 0x812e:
             {
-                Logger::info("SCRIPT") << "[+] void lock(GameDoorSceneryObject* object)" << std::endl;
+                Logger::info("SCRIPT") << "[812E] [+] void lock(GameDoorSceneryObject* object)" << std::endl;
                 auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
                 object->setLocked(true);
                 break;
             }
             case 0x812f:
             {
-                Logger::info("SCRIPT") << "[+] void unlock(GameDoorSceneryObject* object)" << std::endl;
+                Logger::info("SCRIPT") << "[812F] [+] void unlock(GameDoorSceneryObject* object)" << std::endl;
                 auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
                 object->setLocked(false);
                 break;
             }
             case 0x8130:
             {
-                Logger::info("SCRIPT") << "[+] int is_opened(GameDoorSceneryObject* object) " << std::endl;
+                Logger::info("SCRIPT") << "[8130] [+] int is_opened(GameDoorSceneryObject* object) " << std::endl;
                 auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
                 pushDataInteger(object->opened());
                 break;
             }
             case 0x8131:
             {
-                Logger::info("SCRIPT") << "[+] void open(GameDoorSceneryObject* object) " << std::endl;
+                Logger::info("SCRIPT") << "[8131] [+] void open(GameDoorSceneryObject* object) " << std::endl;
                 auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
                 object->setOpened(true);
                 break;
             }
             case 0x8132:
             {
-                Logger::info("SCRIPT") << "[+] void close(GameDoorSceneryObject* object) " << std::endl;
+                Logger::info("SCRIPT") << "[8132] [+] void close(GameDoorSceneryObject* object) " << std::endl;
                 auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
                 object->setOpened(false);
                 break;
             }
             case 0x8134:
             {
-                Logger::info("SCRIPT") << "[=] void game_ui_enable()" << std::endl;
+                Logger::info("SCRIPT") << "[8134] [=] void game_ui_enable()" << std::endl;
                 break;
             }
             case 0x8136:
             {
-                Logger::info("SCRIPT") << "[=] void gfade_out(int time)" << std::endl;
+                Logger::info("SCRIPT") << "[8136] [=] void gfade_out(int time)" << std::endl;
                 popDataInteger();
                 break;
             }
             case 0x8137:
             {
-                Logger::info("SCRIPT") << "[=] void gfade_in(int time)" << std::endl;
+                Logger::info("SCRIPT") << "[8137] [=] void gfade_in(int time)" << std::endl;
                 popDataInteger();
                 break;
             }
             case 0x8138:
             {
-                Logger::info("SCRIPT") << "[=] int item_caps_total(void* obj)" << std::endl;
+                Logger::info("SCRIPT") << "[8138] [=] int item_caps_total(void* obj)" << std::endl;
                 popDataPointer();
                 pushDataInteger(0);
                 break;
             }
             case 0x8139:
             {
-                Logger::info("SCRIPT") << "[=] int item_caps_adjust(void* obj, int amount)" << std::endl;
+                Logger::info("SCRIPT") << "[8139] [=] int item_caps_adjust(void* obj, int amount)" << std::endl;
                 popDataInteger();
                 popDataPointer();
                 pushDataInteger(0);
@@ -1423,21 +1423,21 @@ void VM::run()
             }
             case 0x8143:
             {
-                Logger::info("SCRIPT") << "[=] void attack_setup(ObjectPtr who, ObjectPtr victim)" << std::endl;
+                Logger::info("SCRIPT") << "[8143] [=] void attack_setup(ObjectPtr who, ObjectPtr victim)" << std::endl;
                 popDataPointer();
                 popDataPointer();
                 break;
             }
             case 0x8147:
             {
-                Logger::info("SCRIPT") << "[=] void move_obj_inven_to_obj(void* srcObj, void* destObj)" << std::endl;
+                Logger::info("SCRIPT") << "[8147] [=] void move_obj_inven_to_obj(void* srcObj, void* destObj)" << std::endl;
                 popDataPointer();
                 popDataPointer();
                 break;
             }
             case 0x8149:
             {
-                Logger::info("SCRIPT") << "[+] int obj_art_fid(void* obj)" << std::endl;
+                Logger::info("SCRIPT") << "[8149] [+] int obj_art_fid(void* obj)" << std::endl;
                 auto object = std::static_pointer_cast<GameObject>(popDataPointer());
                 if (!object) throw Exception("VM::opcode8149() - can't convert pointer to object");
                 pushDataInteger(object->FID());
@@ -1445,14 +1445,14 @@ void VM::run()
             }
             case 0x814b:
            {
-                Logger::info("SCRIPT") << "[*] void* party_member_obj(int pid)" << std::endl;
+                Logger::info("SCRIPT") << "[814B] [*] void* party_member_obj(int pid)" << std::endl;
                 popDataInteger();
                 pushDataPointer(0);
                 break;
             }
             case 0x814c:
             {
-                Logger::info("SCRIPT") << "[=] int rotation_to_tile(int srcTile, int destTile)" << std::endl;
+                Logger::info("SCRIPT") << "[814C] [=] int rotation_to_tile(int srcTile, int destTile)" << std::endl;
                 popDataInteger();
                 popDataInteger();
                 pushDataInteger(0);
@@ -1460,32 +1460,32 @@ void VM::run()
             }
             case 0x814e:
             {
-                Logger::info("SCRIPT") << "[=] void gdialog_set_barter_mod(int mod)" << std::endl;
+                Logger::info("SCRIPT") << "[814E] [=] void gdialog_set_barter_mod(int mod)" << std::endl;
                 popDataInteger();
                 break;
             }
             case 0x8150:
             {
-                Logger::info("SCRIPT") << "[=] int obj_on_screen(void* obj)" << std::endl;
+                Logger::info("SCRIPT") << "[8150] [=] int obj_on_screen(void* obj)" << std::endl;
                 popDataPointer();
                 pushDataInteger(1);
                 break;
             }
             case 0x8151:
             {
-                Logger::info("SCRIPT") << "[=] int critter_is_fleeing(void* who)" << std::endl;
+                Logger::info("SCRIPT") << "[8151] [=] int critter_is_fleeing(void* who)" << std::endl;
                 popDataPointer();
                 pushDataInteger(0);
                 break;
             }
             case 0x8153:
             {
-                Logger::info("SCRIPT") << "[=] void terminate_combat()" << std::endl;
+                Logger::info("SCRIPT") << "[8153] [=] void terminate_combat()" << std::endl;
                 break;
             }
             case 0x8154:
             {
-                Logger::info("SCRIPT") << "[*] void debug(string*)" << std::endl;
+                Logger::info("SCRIPT") << "[8154] [*] void debug(string*)" << std::endl;
                 std::cout << *(std::static_pointer_cast<std::string>(popDataPointer())).get() << std::endl;
                 break;
             }
@@ -1495,9 +1495,7 @@ void VM::run()
             {
                 std::ostringstream os;
                 os << "0x" << std::hex << opcode;
-                Logger::info("SCRIPT") << os.str() << std::endl;
-                throw 0;
-                break;
+                throw Exception("["+os.str()+"] - unimplemented opcode");
             }
         }        
         if (opcodeHandler) opcodeHandler->run();
