@@ -24,7 +24,6 @@
 #include "../Engine/State.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Game.h"
-#include "../Engine/Screen.h"
 #include "../Engine/ActiveUI.h"
 #include "../Engine/UI.h"
 

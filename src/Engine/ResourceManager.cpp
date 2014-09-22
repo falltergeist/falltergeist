@@ -22,11 +22,12 @@
 #include <iostream>
 
 // Falltergeist includes
-#include "../Engine/ResourceManager.h"
-#include "../Engine/Surface.h"
-#include "../Engine/Graphics/Texture.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Font.h"
+#include "../Engine/Graphics/Texture.h"
+#include "../Engine/Logger.h"
+#include "../Engine/ResourceManager.h"
+#include "../Engine/Surface.h"
 
 // Third party includes
 
@@ -57,7 +58,6 @@ std::shared_ptr<libfalltergeist::DatFileItem> ResourceManager::datFileItem(std::
     // Return item from cache
     if (_datFilesItems.find(filename) != _datFilesItems.end())
     {
-        //debug("[RESOURCE MANAGER] - Loading file: " + filename + " [FROM CACHE]", DEBUG_INFO);
         return _datFilesItems.at(filename);
     }
 
@@ -68,7 +68,7 @@ std::shared_ptr<libfalltergeist::DatFileItem> ResourceManager::datFileItem(std::
         stream->open(path, std::ios_base::binary);
         if (stream->is_open())
         {
-            debug("[RESOURCE MANAGER] - Loading file: " + filename + " [FROM FALLOUT DATA DIR]", DEBUG_INFO);
+            Logger::info() << "[RESOURCE MANAGER] - Loading file: " << filename << " [FROM FALLOUT DATA DIR]" << std::endl;
         }
         else
         {
@@ -76,7 +76,7 @@ std::shared_ptr<libfalltergeist::DatFileItem> ResourceManager::datFileItem(std::
             stream->open(path, std::ios_base::binary);
             if (stream->is_open())
             {
-                debug("[RESOURCE MANAGER] - Loading file: " + filename + " [FROM FALLTERGEIST DATA DIR]", DEBUG_INFO);
+                Logger::info() << "[RESOURCE MANAGER] - Loading file: " << filename << " [FROM FALLTERGEIST DATA DIR]" << std::endl;
             }
         }
 
@@ -119,11 +119,11 @@ std::shared_ptr<libfalltergeist::DatFileItem> ResourceManager::datFileItem(std::
         if (item)
         {
             _datFilesItems.insert(std::make_pair(filename, item));
-            debug("[RESOURCE MANAGER] - Loading file: " + filename + " [FROM "+ datfile->filename() + "]", DEBUG_INFO);
+            Logger::info() << "[RESOURCE MANAGER] - Loading file: " << filename << " [FROM " << datfile->filename() << "]" << std::endl;
             return item;
         }
     }
-    debug("[RESOURCE MANAGER] - Loading file: " + filename + " [ NOT FOUND]", DEBUG_ERROR);
+    Logger::error() << "[RESOURCE MANAGER] - Loading file: " << filename << " [ NOT FOUND]" << std::endl;
     return 0;
 }
 
@@ -282,7 +282,7 @@ std::shared_ptr<libfalltergeist::ProFileType> ResourceManager::proFileType(unsig
             listFile += "proto/misc/misc.lst";
             break;
         default:
-            debug("ResourceManager::proFileType(unsigned int) - wrong PID: " + std::to_string(PID), DEBUG_ERROR);
+            Logger::error() << "ResourceManager::proFileType(unsigned int) - wrong PID: " << PID << std::endl;
             return 0;
     }
 
@@ -292,7 +292,7 @@ std::shared_ptr<libfalltergeist::ProFileType> ResourceManager::proFileType(unsig
 
     if (index > lst->strings()->size())
     {
-        debug("ResourceManager::proFileType(unsigned int) - LST size < PID: " + std::to_string(PID), DEBUG_ERROR);
+        Logger::error() << "ResourceManager::proFileType(unsigned int) - LST size < PID: " << PID << std::endl;
         return 0;
     }
 
@@ -474,7 +474,7 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
     auto lst = lstFileType(prefix + lstFile);
     if (id >= lst->strings()->size())
     {
-        debug("ResourceManager::FIDtoFrmName(unsigned int) - LST size " + std::to_string(lst->strings()->size()) + " <= frmID: " + std::to_string(id) + " frmType: " + std::to_string(type), DEBUG_ERROR);
+        Logger::error() << "ResourceManager::FIDtoFrmName(unsigned int) - LST size " << lst->strings()->size() << " <= frmID: " << id << " frmType: " << type << std::endl;
         return "";
     }
     return prefix + lst->strings()->at(id);

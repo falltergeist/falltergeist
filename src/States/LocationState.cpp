@@ -32,7 +32,6 @@
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/LocationCamera.h"
 #include "../Engine/ResourceManager.h"
-#include "../Engine/Screen.h"
 #include "../Game/GameDefines.h"
 #include "../Game/GameDudeObject.h"
 #include "../Game/GameObject.h"

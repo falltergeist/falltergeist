@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <iosfwd>
+#include <iostream>
 
 // Falltergeist includes
 
