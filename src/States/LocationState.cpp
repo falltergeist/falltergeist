@@ -51,6 +51,7 @@
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
 #include "../VM/VM.h"
+#include "../Engine/Settings.h"
 
 // Third party includes
 
@@ -105,7 +106,7 @@ void LocationState::init()
     game->mouse()->setType(Mouse::ACTION);
 
     _initPanel();
-    setLocation("maps/klamall.map");
+    setLocation("maps/" + Game::getInstance()->engineSettings()->initialLocation() + ".map");
 }
 
 // PLAYER PANEL
@@ -168,6 +169,13 @@ void LocationState::setLocation(std::string name)
 {    
 
     auto mapFile = ResourceManager::mapFileType(name);
+
+    if (mapFile == nullptr)
+    {
+        Logger::warning() << "No such map: `" << name << "`; using default map" << std::endl;
+        mapFile = ResourceManager::mapFileType("maps/" + EngineSettings::defaultInitLocation() + ".map");
+    }
+
     _currentElevation = mapFile->defaultElevation();
 
     // Set camera position on default
