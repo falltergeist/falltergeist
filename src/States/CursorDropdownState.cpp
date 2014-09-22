@@ -132,7 +132,7 @@ void CursorDropdownState::init()
     if (deltaY > 0)
     {
         _surface->setY(_surface->y() - deltaY);
-        SDL_WarpMouse(_initialX, _surface->y());
+        Game::getInstance()->mouse()->setXY(_initialX, _surface->y());
     }
 
     if (deltaX > 0)
@@ -173,12 +173,12 @@ void CursorDropdownState::think()
     _currentSurface= (Game::getInstance()->mouse()->y() - _surface->y())/40;
     if (_currentSurface < 0)
     {
-        SDL_WarpMouse(_initialX, _surface->y());
+        Game::getInstance()->mouse()->setXY(_initialX, _surface->y());
         _currentSurface = 0;
     }
     if ((unsigned int)_currentSurface >= _icons.size())
     {
-        SDL_WarpMouse(_initialX, _surface->y() + _surface->height());
+        Game::getInstance()->mouse()->setXY(_initialX, _surface->y() + _surface->height());
         _currentSurface = _icons.size() - 1;
     }
     auto activeIcon = _activeIcons.at(_currentSurface);
@@ -190,7 +190,7 @@ void CursorDropdownState::think()
 void CursorDropdownState::onLeftButtonUp(std::shared_ptr<MouseEvent> event)
 {
     auto state = dynamic_cast<CursorDropdownState*>(event->reciever());
-    SDL_WarpMouse(state->_initialX, state->_initialY);
+    Game::getInstance()->mouse()->setXY(state->_initialX, state->_initialY);
     auto game = Game::getInstance();
     game->mouse()->setType(state->_initialType);
     game->popState();

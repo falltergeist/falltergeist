@@ -94,7 +94,7 @@ void Game::_initialize()
     renderer()->init();
 
     std::string version = CrossPlatform::getVersion();
-    SDL_WM_SetCaption(version.c_str(), 0);
+    renderer()->setCaption(version.c_str());
 
     //_mixer = new AudioMixer();
     _mouse = std::shared_ptr<Mouse>(new Mouse());

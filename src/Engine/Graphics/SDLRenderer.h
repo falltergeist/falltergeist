@@ -36,8 +36,9 @@ class SDLRenderer : public Renderer
 {
 protected:    
     unsigned int _texturesCounter = 1;
-    std::vector<SDL_Surface*> _surfaces;
+    std::vector<SDL_Texture*> _surfaces;
     std::string _name = "SDL Renderer";
+    SDL_Renderer* _renderer;
 public:
     SDLRenderer(unsigned int width, unsigned int height);
 

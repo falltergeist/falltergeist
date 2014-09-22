@@ -47,8 +47,17 @@ void SDLRenderer::init()
 {
     Renderer::init();
 
-    std::string message =  "SDL_SetVideoMode " + std::to_string(_width) + "x" + std::to_string(_height) + "x" +std::to_string(32)+ " - ";
-    if (!SDL_SetVideoMode(_width, _height, 32, SDL_HWSURFACE|SDL_DOUBLEBUF))
+    std::string message =  "SDL_CreateWindow " + std::to_string(_width) + "x" + std::to_string(_height) + "x" +std::to_string(32)+ " - ";
+    _window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _width, _height, SDL_WINDOW_SHOWN);
+    if (!_window)
+    {
+        throw Exception(message + "[FAIL]");
+    }
+    Logger::info("VIDEO") << message + "[OK]" << std::endl;
+
+    message =  "SDL_CreateRenderer - ";
+    _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
+    if (!_renderer)
     {
         throw Exception(message + "[FAIL]");
     }
@@ -57,15 +66,14 @@ void SDLRenderer::init()
 
 void SDLRenderer::beginFrame()
 {
-    SDL_FillRect(SDL_GetVideoSurface(), NULL, 0xFF000000);
+    SDL_RenderClear(_renderer);
     Renderer::beginFrame();
 }
 
 void SDLRenderer::endFrame()
 {
     Renderer::endFrame();
-    SDL_Flip(SDL_GetVideoSurface());
-
+    SDL_RenderPresent(_renderer);
 }
 
 void SDLRenderer::registerTexture(std::shared_ptr<Texture> texture)
@@ -73,8 +81,16 @@ void SDLRenderer::registerTexture(std::shared_ptr<Texture> texture)
     Renderer::registerTexture(texture);
     if (texture->id()) return; // if registered
 
-    // Creating SDL surface                                                                            //red       //green     //blue      //alpha
-    SDL_Surface* tmpSurface = SDL_CreateRGBSurface(SDL_SRCALPHA|SDL_HWSURFACE, texture->width(), texture->height(), 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+    // get current masks (they are different for LE and BE)
+    int bpp;
+    uint32_t Rmask, Gmask, Bmask, Amask;
+    SDL_PixelFormatEnumToMasks(
+        SDL_PIXELFORMAT_ABGR8888, &bpp,
+        &Rmask, &Gmask, &Bmask, &Amask
+    );
+
+    // Creating SDL surface
+    SDL_Surface* tmpSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, texture->width(), texture->height(), 32, Rmask, Gmask, Bmask, Amask);
     if (tmpSurface == 0) throw Exception(SDL_GetError());
     // Copying data from texture to surface
     unsigned int* pixels = (unsigned int*) tmpSurface->pixels;
@@ -83,7 +99,7 @@ void SDLRenderer::registerTexture(std::shared_ptr<Texture> texture)
         pixels[i] = texture->data()[i];
     }
     // Saving pointer to surface
-    SDL_Surface* surface = SDL_DisplayFormatAlpha(tmpSurface);
+    SDL_Texture* surface = SDL_CreateTextureFromSurface(_renderer, tmpSurface);
     if (surface == 0) throw Exception(SDL_GetError());
     SDL_FreeSurface(tmpSurface);
     _surfaces.push_back(surface);
@@ -96,7 +112,7 @@ void SDLRenderer::unregisterTexture(Texture* texture)
 {
     if (!texture->id()) return;
 
-    SDL_FreeSurface(_surfaces.at(texture->id() - 1));
+    SDL_DestroyTexture(_surfaces.at(texture->id() - 1));
     _surfaces.at(texture->id() -1) = 0;
     texture->setId(0);
 }
@@ -108,7 +124,7 @@ void SDLRenderer::drawTexture(unsigned int x, unsigned int y, std::shared_ptr<Te
     if (!texture->id()) registerTexture(texture);
 
     SDL_Rect dest = {(short)x, (short)y, (unsigned short)texture->width(), (unsigned short)texture->height()};
-    SDL_BlitSurface(_surfaces.at(texture->id() - 1), NULL, SDL_GetVideoSurface(), &dest);
+    SDL_RenderCopy(_renderer, _surfaces.at(texture->id() - 1), NULL, &dest);
 }
 
 std::shared_ptr<Texture> SDLRenderer::screenshot()
@@ -116,8 +132,16 @@ std::shared_ptr<Texture> SDLRenderer::screenshot()
     unsigned int width = Game::getInstance()->renderer()->width();
     unsigned int height = Game::getInstance()->renderer()->height();
 
-    SDL_Surface* surface = SDL_CreateRGBSurface(SDL_HWSURFACE, width, height, 32, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
-    SDL_BlitSurface(SDL_GetVideoSurface(), 0, surface, 0);
+    // get current masks (they are different for LE and BE)
+    int bpp;
+    uint32_t Rmask, Gmask, Bmask, Amask;
+    SDL_PixelFormatEnumToMasks(
+        SDL_PIXELFORMAT_ABGR8888, &bpp,
+        &Rmask, &Gmask, &Bmask, &Amask
+    );
+
+    SDL_Surface* surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32, Rmask, Gmask, Bmask, Amask);
+    SDL_RenderReadPixels(_renderer, NULL, surface->format->format, surface->pixels, surface->pitch);
 
     auto texture = std::shared_ptr<Texture>(new Texture(width, height));
     texture->loadFromRGBA((unsigned int*)surface->pixels);

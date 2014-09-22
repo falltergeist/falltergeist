@@ -27,6 +27,8 @@
 #include "../../Engine/ResourceManager.h"
 #include "../../UI/Image.h"
 #include "../../Engine/Graphics/Animation.h"
+#include "../../Engine/Graphics/Renderer.h"
+#include "../../Engine/Game.h"
 
 // Third party includes
 #include "SDL.h"
@@ -66,13 +68,20 @@ int Mouse::y()
 void Mouse::setX(int x)
 {
     _x = x;
-    SDL_WarpMouse(_x, _y);
+    SDL_WarpMouseInWindow(Game::getInstance()->renderer()->window(),_x, _y);
 }
 
 void Mouse::setY(int y)
 {
     _y = y;
-    SDL_WarpMouse(_x, _y);
+    SDL_WarpMouseInWindow(Game::getInstance()->renderer()->window(),_x, _y);
+}
+
+void Mouse::setXY(int x, int y)
+{
+    _x = x;
+    _y = y;
+    SDL_WarpMouseInWindow(Game::getInstance()->renderer()->window(),_x, _y);
 }
 
 bool Mouse::visible()

@@ -57,13 +57,23 @@ void OpenGLRenderer::init()
 {
     Renderer::init();
 
-    std::string message =  "SDL_SetVideoMode " + std::to_string(_width) + "x" + std::to_string(_height) + "x" +std::to_string(32)+ " - ";
-    if (!SDL_SetVideoMode(_width, _height, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL))
+    std::string message =  "SDL_CreateWindow " + std::to_string(_width) + "x" + std::to_string(_height) + "x" +std::to_string(32)+ " - ";
+    _window = SDL_CreateWindow("",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _width, _height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+    if (!_window)
     {
         throw Exception(message + "[FAIL]");
     }
     Logger::info("VIDEO") << message + "[OK]" << std::endl;
 
+    message =  "SDL_GL_CreateContext - ";
+    _context = SDL_GL_CreateContext(_window);
+    if (!_context)
+    {
+        throw Exception(message + "[FAIL]");
+    }
+    Logger::info("VIDEO") << message + "[OK]" << std::endl;
+
+    SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
     SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
     SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 8 );
     SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 8 );
@@ -98,7 +108,7 @@ void OpenGLRenderer::beginFrame()
 void OpenGLRenderer::endFrame()
 {
     Renderer::endFrame();
-    SDL_GL_SwapBuffers();
+    SDL_GL_SwapWindow(_window);
 }
 
 void OpenGLRenderer::registerTexture(std::shared_ptr<Texture> texture)
@@ -166,8 +176,16 @@ std::shared_ptr<Texture> OpenGLRenderer::screenshot()
     unsigned int width = Game::getInstance()->renderer()->width();
     unsigned int height = Game::getInstance()->renderer()->height();
 
+    // get current masks (they are different for LE and BE)
+    int bpp;
+    uint32_t Rmask, Gmask, Bmask, Amask;
+    SDL_PixelFormatEnumToMasks(
+        SDL_PIXELFORMAT_ABGR8888, &bpp,
+        &Rmask, &Gmask, &Bmask, &Amask
+    );
+
     // Read data from screen
-    SDL_Surface* flipped = SDL_CreateRGBSurface(SDL_HWSURFACE, width, height, 32, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
+    SDL_Surface* flipped = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32, Rmask, Gmask, Bmask, Amask);
     glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, flipped->pixels);
 
     // Flip image verticaly
