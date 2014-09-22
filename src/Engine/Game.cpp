@@ -84,8 +84,8 @@ void Game::_initialize()
             break;
     }
 
-    Logger::info() << "[GAME] - " << CrossPlatform::getVersion() << std::endl;
-    Logger::info() << "[GAME] - Opensource Fallout 2 game engine" << std::endl;
+    Logger::info("GAME") << CrossPlatform::getVersion() << std::endl;
+    Logger::info("GAME") << "Opensource Fallout 2 game engine" << std::endl;
 
     putenv(strdup("SDL_VIDEO_CENTERED=1"));
 
@@ -131,7 +131,7 @@ void Game::setState(std::shared_ptr<State> state)
 
 void Game::run()
 {
-    Logger::info() << "[GAME] - Starting main loop" << std::endl;
+    Logger::info("GAME") << "Starting main loop" << std::endl;
     while (!_quit)
     {
         while(SDL_PollEvent(&_event))
@@ -203,7 +203,7 @@ void Game::run()
                                 std::string name = std::to_string(SDL_GetTicks()) +  ".bmp";
                                 SDL_SaveBMP(surface, name.c_str());
                                 SDL_FreeSurface(surface);
-                                Logger::info() << "[GAME] - Screenshot saved to " + name << std::endl;
+                                Logger::info("GAME") << "Screenshot saved to " + name << std::endl;
 
                             }
                         }
@@ -231,7 +231,7 @@ void Game::run()
         SDL_Delay(1);
     }
 
-    Logger::info() << "[GAME] - Stopping main loop" << std::endl;
+    Logger::info("GAME") << "Stopping main loop" << std::endl;
 }
 
 std::shared_ptr<ResourceManager> Game::resourceManager()
