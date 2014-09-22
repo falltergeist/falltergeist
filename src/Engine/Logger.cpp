@@ -45,7 +45,8 @@ std::ostream &Logger::log(Logger::Level level, const std::string &subsystem)
     return std::cout << levelString(level) << subsystem << " " << std::dec;
 }
 
-Logger::Level Logger::_level = Logger::Level::INFO;
+// Initial level; overriden with config option with default level INFO
+Logger::Level Logger::_level = Logger::Level::DEBUG;
 bool Logger::_useColors = true;
 
 #if defined(__unix__) || defined(__APPLE__)

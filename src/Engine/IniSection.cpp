@@ -77,9 +77,8 @@ void IniSection::_property(PropertyMapConstIterator iter, std::string &ret, cons
 bool IniSection::_hasType(PropertyMapConstIterator iter, IniValue::Tag tag)
 {
     if (iter->second._tag == tag) return true;
-
-    Logger::info()
-            << "[INI] Property `" << iter->first
+    Logger::warning("[INI]")
+            << "Property `" << iter->first
             << " `expected to be " << _tagToString(tag)
             << " but " << _tagToString(iter->second._tag)
             << " value encountered: " << _valueToString(iter->second)
@@ -152,7 +151,7 @@ int IniSection::propertyInt(const std::string &name, int def)
     PropertyMapConstIterator iter = _properties.find(name);
     if (iter == _properties.end())
     {
-        Logger::info() << "[INI] Property `" << name << "` not found, use default value: " << def << std::endl;
+        Logger::warning("[INI]") << "Property `" << name << "` not found, use default value: " << def << std::endl;
         return def;
     };
     int ret;
@@ -165,7 +164,7 @@ double IniSection::propertyDouble(const std::string &name, double def)
     PropertyMapConstIterator iter = _properties.find(name);
     if (iter == _properties.end())
     {
-        Logger::info() << "[INI] Property `" << name << "` not found, use default value: " << def << std::endl;
+        Logger::warning("[INI]") << "Property `" << name << "` not found, use default value: " << def << std::endl;
         return def;
     };
     double ret;
@@ -178,7 +177,7 @@ bool IniSection::propertyBool(const std::string &name, bool def)
     PropertyMapConstIterator iter = _properties.find(name);
     if (iter == _properties.end())
     {
-        Logger::info() << "[INI] Property `" << name << "` not found, use default value: " << def << std::endl;
+        Logger::warning("[INI]") << "Property `" << name << "` not found, use default value: " << def << std::endl;
         return def;
     };
     bool ret;
@@ -191,7 +190,7 @@ std::string IniSection::propertyString(const std::string &name, const std::strin
     PropertyMapConstIterator iter = _properties.find(name);
     if (iter == _properties.end())
     {
-        Logger::info() << "Property `" << name << "` not found, use default value: " << def << std::endl;
+        Logger::warning("[INI]") << "Property `" << name << "` not found, use default value: " << def << std::endl;
         return def;
     };
     std::string ret;
