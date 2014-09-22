@@ -27,14 +27,13 @@
 #ifndef __APPLE__
     #include <mntent.h>
 #endif
- 
-// Falltergeist includes
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Exception.h"
 
-// Third party includes
+#if defined (__APPLE__)
+    #include <sys/param.h>
+    #include <sys/ucred.h>
+    #include <sys/mount.h>
+#endif
 
-// Platform specific includes
 #if defined(_WIN32) || defined(WIN32)
     #include <windows.h>
     #include <shlobj.h>
@@ -42,11 +41,11 @@
     #include <unistd.h>
 #endif
 
-#if defined (__APPLE__)
-    #include <sys/param.h>
-    #include <sys/ucred.h>
-    #include <sys/mount.h>
-#endif
+// Falltergeist includes
+#include "../Engine/CrossPlatform.h"
+#include "../Engine/Exception.h"
+
+// Third party includes
 
 namespace Falltergeist
 {

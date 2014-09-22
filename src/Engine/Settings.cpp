@@ -26,6 +26,7 @@
 #include "../Engine/Exception.h"
 #include "../Engine/IniFile.h"
 #include "../Engine/IniWriter.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Settings.h"
 
 // Third party includes
@@ -43,6 +44,8 @@ EngineSettings::EngineSettings()
     std::string configFile = CrossPlatform::getHomeDirectory() + "/.falltergeist/config.ini";
     std::ifstream stream(configFile);
 
+    Logger::info() << "Read config from " << configFile << std::endl;
+
     if (stream)
     {
         IniParser iniParser(stream);
@@ -57,10 +60,14 @@ EngineSettings::EngineSettings()
 
         auto audio = ini->section("audio");
         _audioEnabled = audio->propertyBool("enabled", _defaultAudioEnabled);
+
+        auto logger = ini->section("logger");
+        Logger::setLevel(logger->propertyString("level", "info"));
+        Logger::useColors(logger->propertyBool("colors", true));
     }
     else
     {
-        std::cerr << "Cannot open config file at `" << configFile << "`; creating default configuraton file" << std::endl;
+        Logger::warning() << "Cannot open config file at `" << configFile << "`; creating default configuraton file" << std::endl;
         stream.close();
 
         _screenWidth = _defaultScreenWidth;
