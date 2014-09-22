@@ -20,7 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/CrossPlatform.h"
+#include "../../Engine/Logger.h"
 #include "../../VM/Handlers/Opcode8127Handler.h"
 #include "../../VM/VM.h"
 
@@ -35,7 +35,7 @@ Opcode8127Handler::Opcode8127Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8127Handler::_run()
 {
-    CrossPlatform::debug("[*] void critter_injure(ObjectPtr who, int how)");
+    Logger::info("SCRIPT") << "[8127] [*] void critter_injure(ObjectPtr who, int how)" << std::endl;
     _vm->popDataInteger();
     _vm->popDataPointer();
 }

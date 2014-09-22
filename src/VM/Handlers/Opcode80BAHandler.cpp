@@ -18,15 +18,14 @@
  */
 
 // C++ standard includes
-#include <iostream>
 
 // Falltergeist includes
-#include "../../VM/Handlers/Opcode80BAHandler.h"
-#include "../../VM/VM.h"
+#include "../../Engine/Exception.h"
+#include "../../Engine/Logger.h"
 #include "../../Game/GameCritterObject.h"
 #include "../../Game/GameContainerItemObject.h"
-#include "../../Engine/CrossPlatform.h"
-#include "../../Engine/Exception.h"
+#include "../../VM/Handlers/Opcode80BAHandler.h"
+#include "../../VM/VM.h"
 
 // Third party includes
 
@@ -59,7 +58,7 @@ void Opcode80BAHandler::_run()
     }
     _vm->pushDataInteger(amount);
 
-    CrossPlatform::debug("[+] int obj_is_carrying_obj_pid(GameObject* object, int PID)", DEBUG_SCRIPT);
+    Logger::info("SCRIPT") << "[80BA] [+] int obj_is_carrying_obj_pid(GameObject* object, int PID)" << std::endl;
 
 }
 

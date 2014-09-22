@@ -20,8 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Engine/Logger.h"
 #include "../../VM/Handlers/Opcode8002Handler.h"
-#include "../../Engine/CrossPlatform.h"
 
 // Third party includes
 
@@ -34,7 +34,7 @@ Opcode8002Handler::Opcode8002Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8002Handler::_run()
 {
-    CrossPlatform::debug("lock", DEBUG_SCRIPT);
+    Logger::info("SCRIPT") << "[8002] lock" << std::endl;
 }
 
 }

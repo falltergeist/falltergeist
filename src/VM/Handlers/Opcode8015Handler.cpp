@@ -20,10 +20,10 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/CrossPlatform.h"
 #include "../../Engine/Exception.h"
 #include "../../Engine/Game.h"
 #include "../../States/LocationState.h"
+#include "../../Engine/Logger.h"
 #include "../../VM/Handlers/Opcode8015Handler.h"
 #include "../../VM/VM.h"
 #include "../../VM/VMStackValue.h"
@@ -39,7 +39,7 @@ Opcode8015Handler::Opcode8015Handler(Falltergeist::VM *vm) : OpcodeHandler(vm)
 
 void Opcode8015Handler::_run()
 {
-    CrossPlatform::debug("[*] export(value, name)", DEBUG_SCRIPT);
+    Logger::info("SCRIPT") << "[8015] [*] export(value, name)" << std::endl;
     auto name = std::static_pointer_cast<std::string>(_vm->popDataPointer());
     auto value = _vm->dataStack()->pop();
     auto game = Game::getInstance();

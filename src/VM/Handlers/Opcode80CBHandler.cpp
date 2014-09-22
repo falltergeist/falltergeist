@@ -20,12 +20,12 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../VM/Handlers/Opcode80CBHandler.h"
-#include "../../VM/VM.h"
-#include "../../Engine/CrossPlatform.h"
 #include "../../Engine/Exception.h"
+#include "../../Engine/Logger.h"
 #include "../../Game/GameCritterObject.h"
 #include "../../Game/GameDudeObject.h"
+#include "../../VM/Handlers/Opcode80CBHandler.h"
+#include "../../VM/VM.h"
 
 // Third party includes
 
@@ -40,9 +40,15 @@ void Opcode80CBHandler::_run()
 {
     int value = _vm->popDataInteger();
     int number = _vm->popDataInteger();
-    if (number > 6) throw Exception("VM::opcode80CB - number out of range:" + std::to_string(number));
+    if (number > 6)
+    {
+        throw Exception("VM::opcode80CB - number out of range:" + std::to_string(number));
+    }
     auto object = std::static_pointer_cast<GameCritterObject>(_vm->popDataPointer());
-    if (!object) throw Exception("VM::opcode80CB pointer error");
+    if (!object)
+    {
+        throw Exception("VM::opcode80CB pointer error");
+    }
     object->setStat(number, value);
     if (std::dynamic_pointer_cast<GameDudeObject>(object))
     {
@@ -52,7 +58,7 @@ void Opcode80CBHandler::_run()
     {
         _vm->pushDataInteger(-1); // for critter
     }
-    CrossPlatform::debug("[+] int set_critter_stat(GameCritterObject* who, int number, int value)", DEBUG_SCRIPT);
+    Logger::info("SCRIPT") << "[80CB] [+] int set_critter_stat(GameCritterObject* who, int number, int value)" << std::endl;
 }
 
 }

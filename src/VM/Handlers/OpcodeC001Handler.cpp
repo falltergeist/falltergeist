@@ -18,13 +18,12 @@
  */
 
 // C++ standard includes
-#include <sstream>
 
 // Falltergeist includes
+#include "../../Engine/Logger.h"
 #include "../../VM/Handlers/OpcodeC001Handler.h"
 #include "../../VM/VM.h"
 #include "../../VM/VMStackIntValue.h"
-#include "../../Engine/CrossPlatform.h"
 
 // Third party includes
 
@@ -44,10 +43,7 @@ void OpcodeC001Handler::_run()
     _vm->setProgramCounter(_vm->programCounter() + 4);
     _vm->dataStack()->push(std::shared_ptr<VMStackIntValue>(new VMStackIntValue(value)));
 
-    // logging
-    std::ostringstream os;
-    os << "[*] push_d 0x" << std::hex << value;
-    CrossPlatform::debug(os.str(), DEBUG_SCRIPT);
+    Logger::info("SCRIPT") << "[C001] [*] push_d 0x" << std::hex << value << std::endl;
 }
 
 }

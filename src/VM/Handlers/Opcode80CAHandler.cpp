@@ -20,8 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/CrossPlatform.h"
 #include "../../Engine/Exception.h"
+#include "../../Engine/Logger.h"
 #include "../../Game/GameCritterObject.h"
 #include "../../VM/Handlers/Opcode80CAHandler.h"
 #include "../../VM/VM.h"
@@ -37,10 +37,13 @@ Opcode80CAHandler::Opcode80CAHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80CAHandler::_run()
 {
-    CrossPlatform::debug("[+] int get_critter_stat(GameCritterObject* who, int number)", DEBUG_SCRIPT);
+    Logger::info("SCRIPT") << "[80CA] [+] int get_critter_stat(GameCritterObject* who, int number)" << std::endl;
     int number = _vm->popDataInteger();
     auto object = std::static_pointer_cast<GameCritterObject>(_vm->popDataPointer());
-    if (!object) throw Exception("VM::opcode80CA pointer error");
+    if (!object)
+    {
+        throw Exception("VM::opcode80CA pointer error");
+    }
 
     switch (number)
     {
@@ -51,7 +54,10 @@ void Opcode80CAHandler::_run()
         }
         default:
         {
-            if (number > 6) throw Exception("VM::opcode80CA - number out of range:" + std::to_string(number));
+            if (number > 6)
+            {
+                throw Exception("VM::opcode80CA - number out of range:" + std::to_string(number));
+            }
             _vm->pushDataInteger(object->stat(number) + object->statBonus(number));
             break;
         }

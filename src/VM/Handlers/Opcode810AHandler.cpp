@@ -20,8 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/CrossPlatform.h"
 #include "../../Engine/Exception.h"
+#include "../../Engine/Logger.h"
 #include "../../Engine/ResourceManager.h"
 #include "../../Game/GameObject.h"
 #include "../../UI/TextArea.h"
@@ -39,7 +39,7 @@ Opcode810AHandler::Opcode810AHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode810AHandler::_run()
 {
-    CrossPlatform::debug("[=] void float_msg(void* who, string* msg, int type) ", DEBUG_SCRIPT);
+    Logger::info("SCRIPT") << "[810A] [=] void float_msg(void* who, string* msg, int type) " << std::endl;
     int type = _vm->popDataInteger();
     unsigned int color;
     switch (type)
