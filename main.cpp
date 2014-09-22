@@ -18,21 +18,20 @@
  */
 
 // C++ standard includes
-#include <iostream>
 
 // Falltergeist includes
-#include "src/Engine/CrossPlatform.h"
-#include "src/Engine/Game.h"
-#include "src/Engine/Exception.h"
-#include "src/States/StartState.h"
-#include "src/Engine/ResourceManager.h"
-#include "src/VM/VM.h"
 #include "src/Engine/AudioMixer.h"
-#include "src/Engine/Graphics/Texture.h"
+#include "src/Engine/Exception.h"
+#include "src/Engine/Game.h"
 #include "src/Engine/Graphics/OpenGLRenderer.h"
-#include <libfalltergeist.h>
+#include "src/Engine/Graphics/Texture.h"
+#include "src/Engine/Logger.h"
+#include "src/Engine/ResourceManager.h"
+#include "src/States/StartState.h"
+#include "src/VM/VM.h"
 
 // Third party includes
+#include <libfalltergeist.h>
 
 using namespace Falltergeist;
 
@@ -49,12 +48,12 @@ int main(int argc, char *argv[])
     }
     catch(libfalltergeist::Exception &e)
     {
-        debug(e.message(), DEBUG_CRITICAL);
+        Logger::critical() << e.message() << std::endl;
         return 1;
     }
     catch(Exception &e)
     {
-        debug(e.message(), DEBUG_CRITICAL);
+        Logger::critical() << e.message() << std::endl;
         return 1;
     }
 

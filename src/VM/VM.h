@@ -52,7 +52,6 @@ protected:
     void _setLightLevel(int level);
     void _playMovie(int movieNum);
     void _displayString(std::shared_ptr<std::string> str);
-    void _debugMessage(std::shared_ptr<std::string> str);
     int _tile_num_in_direction(int start_tile, int dir, int distance);
     int _critter_add_trait(std::shared_ptr<void> who, int trait_type, int trait, int amount);
     void _anim(std::shared_ptr<void> who, int anim, int direction);

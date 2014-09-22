@@ -32,10 +32,6 @@
 namespace Falltergeist
 {
 
-enum DebugLevel { DEBUG_INFO = 0, DEBUG_ERROR, DEBUG_CRITICAL, DEBUG_SCRIPT };
-
-void debug(std::string message, unsigned char level = 0);
-
 class CrossPlatform
 {
 protected:
@@ -55,9 +51,6 @@ public:
     static std::string findFalloutDataPath();
     static std::string findFalltergeistDataPath();
     static std::vector<std::string> * findFalloutDataFiles();
-    static void debug(std::string message, unsigned char level = 0);
-    static void debug(bool newline, std::string message, unsigned char level = 0);
-    static std::ostream &debug(unsigned char level = 0);
 };
 
 }

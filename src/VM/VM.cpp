@@ -24,11 +24,11 @@
 
 
 // Falltergeist includes
-#include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Animation.h"
 #include "../Engine/Hexagon.h"
+#include "../Engine/Logger.h"
 #include "../Engine/ResourceManager.h"
 #include "../Game/GameAmmoItemObject.h"
 #include "../Game/GameArmorItemObject.h"
@@ -98,14 +98,14 @@ void VM::call(std::string name)
         _programCounter = _script->function(name);
         pushDataInteger(0); // arguments counter;
         pushReturnInteger(0); // return adrress
-        CrossPlatform::debug("\nCALLED: " + name + " [" + _script->filename() +  "]", DEBUG_SCRIPT);
+        Logger::info("SCRIPT") << "CALLED: " << name << " [" << _script->filename() << "]" << std::endl;
         run();
         popDataInteger(); // remove function result
-        CrossPlatform::debug("Function ended", DEBUG_SCRIPT);
+        Logger::info("SCRIPT") << "Function ended" << std::endl;
     }
     catch (libfalltergeist::Exception &e)
     {
-        CrossPlatform::debug("Function not exist: " + name, DEBUG_SCRIPT);
+        Logger::info("SCRIPT") << "Function not exist: " << name << std::endl;
     }
 }
 
@@ -126,12 +126,8 @@ void VM::run()
         _script->setPosition(_programCounter);
         unsigned short opcode;
         *_script >> opcode;
-        std::ostringstream ss;
-        ss << "0x" << std::hex << _programCounter << " [" << opcode << "] ";
-        CrossPlatform::debug(false, ss.str(), DEBUG_SCRIPT);
 
         std::shared_ptr<OpcodeHandler> opcodeHandler;
-
         switch (opcode)
         {
             // В этот switch нужно перенести те опкоды, которые теперь в виде класса
@@ -196,36 +192,36 @@ void VM::run()
         {
             case 0x8002: break;
             case 0x8003:
-                CrossPlatform::debug("unlock", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8003] unlock" << std::endl;
                 break;
             case 0x8004:
             {
-                CrossPlatform::debug("[*] goto(addr)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8004] [*] goto(addr)" << std::endl;
                 _programCounter = popDataInteger();
                 break;
             }
             case 0x8005: break;
             case 0x800c:
             {
-                CrossPlatform::debug("[*] pop_r => push_d", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[800C] [*] pop_r => push_d" << std::endl;
                 _dataStack.push(_returnStack.pop());
                 break;
             }
             case 0x800d:
             {
-                CrossPlatform::debug("[*] pop_d => push_r", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[800D] [*] pop_d => push_r" << std::endl;
                 _returnStack.push(_dataStack.pop());
                 break;
             }
             case 0x8010:
             {
-                CrossPlatform::debug("[*] startdone", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8010] [*] startdone" << std::endl;
                 _initialized = true;
                 return;
             }
             case 0x8012:
             {
-                CrossPlatform::debug("[*] SVAR[number];", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8012] [*] SVAR[number];" << std::endl;
                 auto number = popDataInteger();
                 auto value = _dataStack.values()->at(_SVAR_base + number);
                 _dataStack.push(value);
@@ -233,7 +229,7 @@ void VM::run()
             }
             case 0x8013:
             {
-                CrossPlatform::debug("[*] SVAR[num] = value", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8013] [*] SVAR[num] = value" << std::endl;
                 auto number = popDataInteger();
                 auto value = _dataStack.pop();
                 _dataStack.values()->at(_SVAR_base + number) = value;
@@ -243,7 +239,7 @@ void VM::run()
             case 0x8015:  break;
             case 0x8016:
             {
-                CrossPlatform::debug("[*] export(name)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8016] [*] export(name)" << std::endl;
                 auto name = std::static_pointer_cast<std::string>(popDataPointer());
                 auto game = Game::getInstance();
                 auto EVARS = game->locationState()->EVARS();
@@ -255,46 +251,44 @@ void VM::run()
             }
             case 0x8018:
             {
-                CrossPlatform::debug("[*] dswap", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8018] [*] dswap" << std::endl;
                 _dataStack.swap();
                 break;
             }
             case 0x8019:
             {
-                CrossPlatform::debug("[*] rswap", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8019] [*] rswap" << std::endl;
                 _returnStack.swap();
                 break;
             }
             case 0x801a:
             {
-                CrossPlatform::debug("[*] pop_d", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[801A] [*] pop_d" << std::endl;
                 _dataStack.pop();
                 break;
             }
             case 0x801b:
             {
-                CrossPlatform::debug("[?] dup_r", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[801B] [?] dup_r" << std::endl;
                 _returnStack.push(_returnStack.top());
                 break;
             }
             case 0x801c:
             {
                 _programCounter = popReturnInteger();
-                std::ostringstream ss;
-                ss << "[*] ret = 0x" << std::hex << _programCounter;
-                CrossPlatform::debug(ss.str(), DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[801C] [*] ret = 0x" << std::hex << _programCounter << std::endl;
                 break;
             }
             case 0x8027:
             {
-                CrossPlatform::debug("[?] unknown pop_d pop_d", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8027] [?] unknown pop_d pop_d" << std::endl;
                 _dataStack.pop();
                 _dataStack.pop();
                 break;
             }
             case 0x8028:
             {
-                CrossPlatform::debug("[?] ? lookup_string_proc(? p1)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8028] [?] ? lookup_string_proc(? p1)" << std::endl;
                 popDataInteger();
                 pushDataPointer(0);
                 break;
@@ -302,12 +296,12 @@ void VM::run()
             case 0x8029:
             {
                 _DVAR_base = popReturnInteger();
-                CrossPlatform::debug("[*] DVAR restore = " + std::to_string(_DVAR_base), DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8029] [*] DVAR restore = " << _DVAR_base << std::endl;
                 break;
             }
             case 0x802a:
             {
-                CrossPlatform::debug("[*] DVAR clear", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[802A] [*] DVAR clear" << std::endl;
                 while (_dataStack.size() > _DVAR_base)
                 {
                     _dataStack.pop();
@@ -319,18 +313,18 @@ void VM::run()
                 auto argumentsCounter = popDataInteger();
                 pushReturnInteger(_DVAR_base);
                 _DVAR_base = _dataStack.size() - argumentsCounter;
-                CrossPlatform::debug("[*] set DVAR base = " + std::to_string(_DVAR_base), DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[802B] [*] set DVAR base = " << _DVAR_base << std::endl;
                 break;
             }
             case 0x802c:
             {
                 _SVAR_base = _dataStack.size();
-                CrossPlatform::debug("[*] set SVAR_base = " + std::to_string(_SVAR_base), DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[802C] [*] set SVAR_base = " << _SVAR_base << std::endl;
                 break;
             }
             case 0x802f:
             {
-                CrossPlatform::debug("[*] ifthen(address, condition)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[802F] [*] ifthen(address, condition)" << std::endl;
                 auto condition = popDataLogical();
                 auto address = popDataInteger();
                 if (!condition)
@@ -341,7 +335,7 @@ void VM::run()
             }
             case 0x8030:
             {
-                CrossPlatform::debug("[*] while(address, condition)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8030] [*] while(address, condition)" << std::endl;
                 auto condition = popDataLogical();
                 if (condition)
                 {
@@ -353,9 +347,7 @@ void VM::run()
             {
                 auto num = popDataInteger();
                 auto value = _dataStack.pop();
-                std::ostringstream ss;
-                ss << "[*] DVAR[num] = value " << "num = " << std::hex << num << " type = " << value->type();
-                CrossPlatform::debug(ss.str(), DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8031] [*] DVAR[num] = value " << "num = " << std::hex << num << " type = " << value->type() << std::endl;
                 _dataStack.values()->at(_DVAR_base + num) = value;
                 break;
             }
@@ -364,16 +356,14 @@ void VM::run()
                 auto num = popDataInteger();
                 auto value = _dataStack.values()->at(_DVAR_base + num);
                 _dataStack.push(value);
-                std::ostringstream ss;
-                ss << "[*] DVAR[num] " << "num = " << std::hex << num << " type = " << value->type();
-                CrossPlatform::debug(ss.str(), DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8032] [*] DVAR[num] " << "num = " << std::hex << num << " type = " << value->type() << std::endl;
                 break;
             }
             case 0x8033: break;
             case 0x8034: break;
             case 0x8035:
             {
-                CrossPlatform::debug("[*] leq <=", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8035] [*] leq <=" << std::endl;
                 auto b = popDataInteger();
                 auto a = popDataInteger();
                 pushDataInteger(a <= b);
@@ -381,7 +371,7 @@ void VM::run()
             }
             case 0x8036:
             {
-                CrossPlatform::debug("[*] geq >=", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8036] [*] geq >=" << std::endl;
                 auto b = popDataInteger();
                 auto a = popDataInteger();
                 pushDataInteger(a >= b);
@@ -389,7 +379,7 @@ void VM::run()
             }
             case 0x8037:
             {
-                CrossPlatform::debug("[*] lt <", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8037] [*] lt <" << std::endl;
                 auto b = popDataInteger();
                 auto a = popDataInteger();
                 pushDataInteger(a < b);
@@ -397,7 +387,7 @@ void VM::run()
             }
             case 0x8038:
             {
-                CrossPlatform::debug("[*] gt >", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8038] [*] gt >" << std::endl;
                 auto b = popDataInteger();
                 auto a = popDataInteger();
                 pushDataInteger(a > b);
@@ -406,7 +396,7 @@ void VM::run()
             case 0x8039: break;
             case 0x803a:
             {
-                CrossPlatform::debug("[*] minus -", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[803A] [*] minus -" << std::endl;
                 auto b = popDataInteger();
                 auto a = popDataInteger();
                 pushDataInteger(a-b);
@@ -414,7 +404,7 @@ void VM::run()
             }
             case 0x803b:
             {
-                CrossPlatform::debug("[*] mult *", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[803B] [*] mult *" << std::endl;
                 auto b = popDataInteger();
                 auto a = popDataInteger();
                 pushDataInteger(a*b);
@@ -422,7 +412,7 @@ void VM::run()
             }
             case 0x803c:
             {
-                CrossPlatform::debug("[*] div /", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[803C] [*] div /" << std::endl;
                 auto b = popDataInteger();
                 auto a = popDataInteger();
                 pushDataInteger(a/b);
@@ -430,7 +420,7 @@ void VM::run()
             }
             case 0x803d:
             {
-                CrossPlatform::debug("[*] mod %", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[803D] [*] mod %" << std::endl;
                 auto b = _dataStack.pop();
                 auto a = _dataStack.pop();
                 auto p1 = std::dynamic_pointer_cast<VMStackIntValue>(a);
@@ -440,7 +430,7 @@ void VM::run()
             }
             case 0x803e:
             {
-                CrossPlatform::debug("[*] &&", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[803E] [*] &&" << std::endl;
                 auto b = popDataLogical();
                 auto a = popDataLogical();
                 pushDataInteger(a && b);
@@ -448,7 +438,7 @@ void VM::run()
             }
             case 0x803f:
             {
-                CrossPlatform::debug("[+] ||", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[803F] [+] ||" << std::endl;
                 auto b = popDataLogical();
                 auto a = popDataLogical();
                 pushDataInteger(a || b);
@@ -456,7 +446,7 @@ void VM::run()
             }
             case 0x8040:
             {
-                CrossPlatform::debug("[*] &", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8040] [*] &" << std::endl;
                 auto b = popDataInteger();
                 auto a = popDataInteger();
                 pushDataInteger(a & b);
@@ -464,7 +454,7 @@ void VM::run()
             }
             case 0x8041:
             {
-                CrossPlatform::debug("[*] |", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8041] [*] |" << std::endl;
                 auto b = popDataInteger();
                 auto a = popDataInteger();
                 pushDataInteger(a | b);
@@ -472,21 +462,21 @@ void VM::run()
             }
             case 0x8045:
             {
-                CrossPlatform::debug("[*] !", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8045] [*] !" << std::endl;
                 auto a = popDataLogical();
                 pushDataInteger(!a);
                 break;
             }
             case 0x8046:
             {
-                CrossPlatform::debug("[*] - value (change sign)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[8046] [*] - value (change sign)" << std::endl;
                 auto value = popDataInteger();
                 pushDataInteger(-value);
                 break;
             }
             case 0x80a1:
             {
-                CrossPlatform::debug("[+] void giveExpPoints(int points)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[80A1] [+] void giveExpPoints(int points)" << std::endl;
                 auto points = popDataInteger();
                 auto game = Game::getInstance();
                 game->player()->setExperience(game->player()->experience() + points);
@@ -494,27 +484,27 @@ void VM::run()
             }
             case 0x80a3:
             {
-                CrossPlatform::debug("[=] void play_sfx(string* p1)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[80A3] [=] void play_sfx(string* p1)" << std::endl;
                 popDataPointer();
                 break;
             }
             case 0x80a4:
             {
-                CrossPlatform::debug("[+] std::string* obj_name(GameCritterObject* who)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[80A4] [+] std::string* obj_name(GameCritterObject* who)" << std::endl;
                 auto critter = std::static_pointer_cast<GameCritterObject>(popDataPointer());
                 pushDataPointer(std::shared_ptr<std::string>(new std::string(critter->name())));
                 break;
             }
             case 0x80a6:
             {
-                CrossPlatform::debug("[=] int SkillPoints(int PCStatNum)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[80A6] [=] int SkillPoints(int PCStatNum)" << std::endl;
                 popDataInteger();
                 pushDataInteger(0);
                 break;
             }
             case 0x80a7:
             {
-                CrossPlatform::debug("[+] GameObject* tile_contains_pid_obj(int position, int elevation, int PID)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[80A7] [+] GameObject* tile_contains_pid_obj(int position, int elevation, int PID)" << std::endl;
                 auto PID = popDataInteger();
                 auto elevation = popDataInteger();
                 auto position = popDataInteger();
@@ -532,7 +522,7 @@ void VM::run()
             }
             case 0x80a8:
             {
-                CrossPlatform::debug("[=] void set_map_start(int x, int y, int elev, int rot)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[80A8] [=] void set_map_start(int x, int y, int elev, int rot)" << std::endl;
                 popDataInteger();
                 popDataInteger();
                 popDataInteger();
@@ -541,7 +531,7 @@ void VM::run()
             }
             case 0x80a9:
             {
-                CrossPlatform::debug("[+] void override_map_start(int x, int y, int elevation, int orientation)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[80A9] [+] void override_map_start(int x, int y, int elevation, int orientation)" << std::endl;
                 auto orientation = popDataInteger();
                 auto elevation = popDataInteger();
                 auto y = popDataInteger();
@@ -558,7 +548,7 @@ void VM::run()
             }
             case 0x80aa:
             {
-                CrossPlatform::debug("[+] int get_skill(GameCritterObject* who, int number) ", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[80AA] [+] int get_skill(GameCritterObject* who, int number) " << std::endl;
                 int number = popDataInteger();
                 if (number > 17) throw Exception("VM::opcode80AA - number out of range: " + std::to_string(number));
                 auto object = std::static_pointer_cast<GameCritterObject>(popDataPointer());
@@ -568,7 +558,7 @@ void VM::run()
             }
             case 0x80ab:
             {
-                CrossPlatform::debug("[=] int using_skill(GameCritterObject* who, int skill)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[80AB] [=] int using_skill(GameCritterObject* who, int skill)" << std::endl;
                 popDataInteger();
                 popDataPointer();
                 pushDataInteger(0);
@@ -576,7 +566,7 @@ void VM::run()
             }
             case 0x80ac:
             {
-                CrossPlatform::debug("[=] int roll_vs_skill(ObjectPtr who, int skill, int modifier)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[80AC] [=] int roll_vs_skill(ObjectPtr who, int skill, int modifier)" << std::endl;
                 popDataInteger();
                 popDataInteger();
                 popDataPointer();
@@ -585,7 +575,7 @@ void VM::run()
             }
             case 0x80ae:
             {
-                CrossPlatform::debug("[=] int do_check(ObjectPtr who, int check, int modifier)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[80AE] [=] int do_check(ObjectPtr who, int check, int modifier)" << std::endl;
                 popDataInteger();
                 popDataInteger();
                 popDataPointer();
@@ -594,7 +584,7 @@ void VM::run()
             }
             case 0x80af:
             {
-                CrossPlatform::debug("[*] int is_success(int val)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[80AF] [*] int is_success(int val)" << std::endl;
                 auto value = popDataInteger();
                 if (value == 2 || value == 3)
                 {
@@ -608,7 +598,7 @@ void VM::run()
             }
             case 0x80b0:
             {
-                CrossPlatform::debug("[*] int is_critical(int val)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[80B0] [*] int is_critical(int val)" << std::endl;
                 auto value = popDataInteger();
                 if (value == 0 || value == 3)
                 {
@@ -622,7 +612,7 @@ void VM::run()
             }
             case 0x80b2:
             {
-                CrossPlatform::debug("[=] void mark_area_known(int AREA_MARK_TYPE, int AreaNum, int MARK_STATE);", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[80B2] [=] void mark_area_known(int AREA_MARK_TYPE, int AreaNum, int MARK_STATE);" << std::endl;
                 popDataInteger();
                 popDataInteger();
                 popDataInteger();
@@ -630,7 +620,7 @@ void VM::run()
             }
             case 0x80b4:
             {
-                CrossPlatform::debug("[+] int rand(int min, int max)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[80B4] [+] int rand(int min, int max)" << std::endl;
                 auto max = popDataInteger();
                 auto min = popDataInteger();
                 srand(time(0));
@@ -639,7 +629,7 @@ void VM::run()
             }
             case 0x80b6:
             {
-                CrossPlatform::debug("[+] int move_to(GameObject* object, int position, int elevation)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[80B6] [+] int move_to(GameObject* object, int position, int elevation)" << std::endl;
                 auto elevation = popDataInteger();
                 auto position = popDataInteger();
                 auto object = std::static_pointer_cast<GameObject>(popDataPointer());
@@ -652,7 +642,7 @@ void VM::run()
             }
             case 0x80b7:
             {
-                CrossPlatform::debug("[+] GameObject* create_object_sid(int PID, int position, int elevation, int SID)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[80B7] [+] GameObject* create_object_sid(int PID, int position, int elevation, int SID)" << std::endl;
                 auto SID = popDataInteger();
                 auto elevation = popDataInteger();
                 auto position = popDataInteger();
@@ -671,17 +661,17 @@ void VM::run()
             }
             case 0x80b8:
             {
-                CrossPlatform::debug("[*] void display_msg(string*)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[80B8] [*] void display_msg(string*)" << std::endl;
                 _displayString(std::static_pointer_cast<std::string>(popDataPointer()));
                 break;
             }
             case 0x80b9:
-                CrossPlatform::debug("script_overrides", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[80B9] script_overrides" << std::endl;
                 break;
             case 0x80ba: break;
             case 0x80bb:
             {
-                CrossPlatform::debug("[+] int tile_contains_obj_pid(int position, int elevation, int PID)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[80BB] [+] int tile_contains_obj_pid(int position, int elevation, int PID)" << std::endl;
                 auto PID = popDataInteger();
                 auto elevation = popDataInteger();
                 auto position = popDataInteger();
@@ -700,20 +690,20 @@ void VM::run()
             case 0x80bc: break;
             case 0x80bd:
             {
-                CrossPlatform::debug("[=] void* source_obj()", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[80BD] [=] void* source_obj()" << std::endl;
                 pushDataPointer(0);
                 break;
             }
             case 0x80bf:
             {
-                CrossPlatform::debug("[+] GameDudeObject* dude_obj()", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[+] GameDudeObject* dude_obj()" << std::endl;
                 auto game = Game::getInstance();            
                 pushDataPointer(game->player());
                 break;
             }
             case 0x80c1:
             {
-                CrossPlatform::debug("[*] LVAR[num]", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[*] LVAR[num]" << std::endl;
                 unsigned int num = popDataInteger();
                 while (num >= _LVARS.size()) _LVARS.push_back(std::shared_ptr<VMStackIntValue>(new VMStackIntValue(0)));
                 _dataStack.push(_LVARS.at(num));
@@ -721,7 +711,7 @@ void VM::run()
             }
             case 0x80c2:
             {
-                CrossPlatform::debug("[*] LVAR[num] = value", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[*] LVAR[num] = value" << std::endl;
                 auto value = _dataStack.pop();
                 unsigned int num = popDataInteger();
                 while (num >= _LVARS.size()) _LVARS.push_back(std::shared_ptr<VMStackIntValue>(new VMStackIntValue(0)));
@@ -730,7 +720,7 @@ void VM::run()
             }
             case 0x80c3:
             {
-                CrossPlatform::debug("[?] MVAR[num]", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[?] MVAR[num]" << std::endl;
                 auto num = popDataInteger();
                 if (num < 0)
                 {
@@ -743,7 +733,7 @@ void VM::run()
             }
             case 0x80c4:
             {
-                CrossPlatform::debug("[+] MVAR[num] = value", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[+] MVAR[num] = value" << std::endl;
                 auto value = popDataInteger();
                 auto num = popDataInteger();
                 auto game = Game::getInstance();
@@ -752,7 +742,7 @@ void VM::run()
             }
             case 0x80c5:
             {
-                CrossPlatform::debug("[?] GVAR[num]", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[?] GVAR[num]" << std::endl;
                 auto num = popDataInteger();
                 if (num < 0)
                 {
@@ -765,7 +755,7 @@ void VM::run()
             }
             case 0x80c6:
             {
-                CrossPlatform::debug("[+] GVAR[num] = value", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[+] GVAR[num] = value" << std::endl;
                 auto value = popDataInteger();
                 auto num = popDataInteger();
                 auto game = Game::getInstance();
@@ -774,20 +764,20 @@ void VM::run()
             }
             case 0x80c7:
             {
-                CrossPlatform::debug("[*] int script_action()", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[*] int script_action()" << std::endl;
                 pushDataInteger(21);
                 break;
             }
             case 0x80c8:
             {
-                CrossPlatform::debug("[=] int obj_type(void* obj)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] int obj_type(void* obj)" << std::endl;
                 popDataPointer();
                 pushDataInteger(0);
                 break;
             }
             case 0x80c9:
             {
-                CrossPlatform::debug("[+] int obj_item_subtype(GameItemObject* object)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[+] int obj_item_subtype(GameItemObject* object)" << std::endl;
                 auto pointer = popDataPointer();
                      if (std::static_pointer_cast<GameArmorItemObject>(pointer))     pushDataInteger(0);
                 else if (std::static_pointer_cast<GameContainerItemObject>(pointer)) pushDataInteger(1);
@@ -803,13 +793,13 @@ void VM::run()
             case 0x80cb: break;
             case 0x80cc:
             {
-                CrossPlatform::debug("[=] void animate_stand_obj(void* obj)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void animate_stand_obj(void* obj)" << std::endl;
                 popDataPointer();
                 break;
             }
             case 0x80ce:
             {
-                CrossPlatform::debug("[=] void animate_move_obj_to_tile(void* who, int tile, int speed)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void animate_move_obj_to_tile(void* who, int tile, int speed)" << std::endl;
                 popDataInteger();
                 popDataInteger();
                 popDataPointer();
@@ -817,7 +807,7 @@ void VM::run()
             }
             case 0x80cf:
             {
-                CrossPlatform::debug("[=] int tile_in_tile_rect(int tile1, int tile2, int tile3, int tile4, int tile)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] int tile_in_tile_rect(int tile1, int tile2, int tile3, int tile4, int tile)" << std::endl;
                 popDataInteger();
                 popDataInteger();
                 popDataInteger();
@@ -827,8 +817,8 @@ void VM::run()
             }
             case 0x80d0:
             {
-                CrossPlatform::debug("[=] void attack_complex(ObjectPtr who, int called_shot, int num_attacks, int bonus"
-                        ", int min_damage, int max_damage, int attacker_results, int target_results)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void attack_complex(ObjectPtr who, int called_shot, int num_attacks, int bonus"
+                        ", int min_damage, int max_damage, int attacker_results, int target_results)" << std::endl;
                 popDataInteger();
                 popDataInteger();
                 popDataInteger();
@@ -841,7 +831,7 @@ void VM::run()
             }
             case 0x80d2:
             {
-                CrossPlatform::debug("[=] int tile_distance(int tile1, int tile2)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] int tile_distance(int tile1, int tile2)" << std::endl;
                 popDataInteger();
                 popDataInteger();
                 pushDataInteger(4);
@@ -849,7 +839,7 @@ void VM::run()
             }
             case 0x80d3:
             {
-                CrossPlatform::debug("int tile_distance_objs(void* p2, void* p1)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "int tile_distance_objs(void* p2, void* p1)" << std::endl;
                 popDataPointer();
                 popDataPointer();
                 pushDataInteger(10);
@@ -857,7 +847,7 @@ void VM::run()
             }
             case 0x80d4:
             {
-                CrossPlatform::debug("[+] int objectPosition(GameObject* object)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[+] int objectPosition(GameObject* object)" << std::endl;
                 auto object = std::static_pointer_cast<GameObject>(popDataPointer());
                 if (!object) throw new Exception("Opcode 80d4 error");
                 pushDataInteger(object->hexagon()->number());
@@ -865,7 +855,7 @@ void VM::run()
             }
             case 0x80d5:
             {
-                CrossPlatform::debug("[*] int tile_num_in_direction(int start_tile, int dir, int distance)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[*] int tile_num_in_direction(int start_tile, int dir, int distance)" << std::endl;
                 auto distance = popDataInteger();
                 auto dir = popDataInteger();
                 auto start_tile = popDataInteger();
@@ -874,28 +864,28 @@ void VM::run()
             }
             case 0x80d8:
             {
-                CrossPlatform::debug("[=] void add_obj_to_inven(void* who, void* item)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void add_obj_to_inven(void* who, void* item)" << std::endl;
                 popDataPointer();
                 popDataPointer();
                 break;
             }
             case 0x80d9:
             {
-                CrossPlatform::debug("[=] void rm_obj_from_inven(void* who, void* obj)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void rm_obj_from_inven(void* who, void* obj)" << std::endl;
                 popDataPointer();
                 popDataPointer();
                 break;
             }
             case 0x80da:
             {
-                CrossPlatform::debug("[=] void wield_obj_critter(void* who, void* obj)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void wield_obj_critter(void* who, void* obj)" << std::endl;
                 popDataPointer();
                 popDataPointer();
                 break;
             }
             case 0x80dc:
             {
-                CrossPlatform::debug("[=] int obj_can_see_obj(GameObject* src_obj, GameObject* dst_obj)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] int obj_can_see_obj(GameObject* src_obj, GameObject* dst_obj)" << std::endl;
                 popDataPointer();
                 popDataPointer();
                 pushDataInteger(1);
@@ -904,7 +894,7 @@ void VM::run()
             case 0x80de: break;
             case 0x80df:
             {
-                CrossPlatform::debug("[?] end_dialogue", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[?] end_dialogue" << std::endl;
                 auto game = Game::getInstance();
                 game->dialog()->close();
                 game->popState();
@@ -912,7 +902,7 @@ void VM::run()
             }
             case 0x80e1:
             {
-                CrossPlatform::debug("[*] int metarule3(int meta, int p1, int p2, int p3)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[*] int metarule3(int meta, int p1, int p2, int p3)" << std::endl;
                 auto p3 = popDataInteger();
                 auto p2 = popDataInteger();
                 auto p1 = _dataStack.pop();
@@ -922,21 +912,21 @@ void VM::run()
             }
             case 0x80e3:
             {
-                CrossPlatform::debug("[=] void set_obj_visibility(void* obj, int visibility)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void set_obj_visibility(void* obj, int visibility)" << std::endl;
                 popDataInteger();
                 popDataPointer();
                 break;
             }
             case 0x80e4:
             {
-                CrossPlatform::debug("[=] void load_map(string* map, int param)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void load_map(string* map, int param)" << std::endl;
                 popDataInteger();
                 popDataPointer();
                 break;
             }
             case 0x80e5:
             {
-                CrossPlatform::debug("[=] void wm_area_set_pos(int areaIdx, int xPos, int yPos)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void wm_area_set_pos(int areaIdx, int xPos, int yPos)" << std::endl;
                 popDataInteger();
                 popDataInteger();
                 popDataInteger();
@@ -944,7 +934,7 @@ void VM::run()
             }
             case 0x80e7:
             {
-                CrossPlatform::debug("[=] int anim_busy(void* obj)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] int anim_busy(void* obj)" << std::endl;
                 popDataPointer();//auto object = (GameObject*)popDataPointer();
                 //pushDataInteger(object->animationQueue()->enabled());
                 pushDataInteger(1);
@@ -952,31 +942,31 @@ void VM::run()
             }
             case 0x80e9:
             {
-                CrossPlatform::debug("[*] void set_light_level(int level)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[*] void set_light_level(int level)" << std::endl;
                 auto level = popDataInteger();
                 _setLightLevel(level);
                 break;
             }
             case 0x80ea:
             {
-                CrossPlatform::debug("[*] int gameTime()", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[*] int gameTime()" << std::endl;
                 pushDataInteger(SDL_GetTicks() / 10);
                 break;
             }
             case 0x80ec:
             {
-                CrossPlatform::debug("[=] int elevation(void* obj)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] int elevation(void* obj)" << std::endl;
                 auto object = std::static_pointer_cast<GameObject>(popDataPointer());
                 if (!object) throw new Exception("Opcode 80ec error");
                 pushDataInteger(object->elevation());
                 break;
             }
             case 0x80ef:
-                CrossPlatform::debug("void critter_dmg(ObjectPtr who, int dmg_amount, int dmg_type)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "void critter_dmg(ObjectPtr who, int dmg_amount, int dmg_type)" << std::endl;
                 break;
             case 0x80f0:
             {
-                CrossPlatform::debug("[=] void add_timer_event(void* obj, int time, int info)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void add_timer_event(void* obj, int time, int info)" << std::endl;
                 popDataInteger();
                 popDataInteger();
                 popDataPointer();
@@ -984,20 +974,20 @@ void VM::run()
             }
             case 0x80f1:
             {
-                CrossPlatform::debug("[=] void rm_timer_event (void* obj)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void rm_timer_event (void* obj)" << std::endl;
                 popDataPointer();
                 break;
             }
             case 0x80f2:
             {
-                CrossPlatform::debug("[=] int game_ticks(int seconds)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] int game_ticks(int seconds)" << std::endl;
                 auto seconds = popDataInteger();
                 pushDataInteger(seconds*1000);
                 break;
             }
             case 0x80f3:
             {
-                CrossPlatform::debug("[=] int has_trait(int type,void* who, int trait)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] int has_trait(int type,void* who, int trait)" << std::endl;
                 popDataInteger();
                 popDataPointer();
                 popDataInteger();
@@ -1006,50 +996,50 @@ void VM::run()
             }
             case 0x80f4:
             {
-                CrossPlatform::debug("[=] int destroy_object(void* obj)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] int destroy_object(void* obj)" << std::endl;
                 popDataPointer();
                 pushDataInteger(0);
                 break;
             }
             case 0x80f6:
             {
-                CrossPlatform::debug("[*] int game_time_hour", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[*] int game_time_hour" << std::endl;
                 pushDataInteger(_getTime());
                 break;
             }
             case 0x80f7:
             {
-                CrossPlatform::debug("[=] int fixed_param()", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] int fixed_param()" << std::endl;
                 pushDataInteger(1);
                 break;
             }
             case 0x80f9:
             {
-                CrossPlatform::debug("[=] void dialogue_system_enter()", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void dialogue_system_enter()" << std::endl;
                 break;
             }
             case 0x80fa:
             {
-                CrossPlatform::debug("[=] int action_being_used()", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] int action_being_used()" << std::endl;
                 pushDataInteger(1);
                 break;
             }
             case 0x80fb:
             {
-                CrossPlatform::debug("[=] int critter_state(void* who)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] int critter_state(void* who)" << std::endl;
                 popDataPointer();
                 pushDataInteger(0);
                 break;
             }
             case 0x80fc:
             {
-                CrossPlatform::debug("[=] void game_time_advance(int amount)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void game_time_advance(int amount)" << std::endl;
                 popDataInteger();
                 break;
             }
             case 0x80ff:
             {
-                CrossPlatform::debug("[*] int critter_attempt_placement(GameCritterObject* critter, int position, int elevation)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[*] int critter_attempt_placement(GameCritterObject* critter, int position, int elevation)" << std::endl;
                 auto elevation = popDataInteger();
                 auto position = popDataInteger();
                 auto critter = std::static_pointer_cast<GameCritterObject>(popDataPointer());
@@ -1062,7 +1052,7 @@ void VM::run()
             }
             case 0x8100:
             {
-                CrossPlatform::debug("[+] int obj_pid(void* obj)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[+] int obj_pid(void* obj)" << std::endl;
                 auto object = std::static_pointer_cast<GameObject>(popDataPointer());
                 if (!object) throw new Exception("Opcode 8100 error");
                 pushDataInteger(object->PID());
@@ -1070,13 +1060,13 @@ void VM::run()
             }
             case 0x8101:
             {
-                CrossPlatform::debug("[=] int cur_map_index()", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] int cur_map_index()" << std::endl;
                 pushDataInteger(3);
                 break;
             }
             case 0x8102:
             {
-                CrossPlatform::debug("[*] int critter_add_trait(void* who, int trait_type, int trait, int amount) ", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[*] int critter_add_trait(void* who, int trait_type, int trait, int amount) " << std::endl;
                 auto amount = popDataInteger();
                 auto trait = popDataInteger();
                 auto trait_type = popDataInteger();
@@ -1086,7 +1076,7 @@ void VM::run()
             }
             case 0x8105:
             {
-                CrossPlatform::debug("[+] string* msgMessage(int msg_list, int msg_num);", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[+] string* msgMessage(int msg_list, int msg_num);" << std::endl;
                 auto msgNum = popDataInteger();
                 auto msgList = popDataInteger();
                 std::cout << msgNum << std::endl;
@@ -1096,7 +1086,7 @@ void VM::run()
             }
             case 0x8106:
             {
-                CrossPlatform::debug("[=] void* (int) critter_inven_obj(GameCritterObject* critter, int where)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void* (int) critter_inven_obj(GameCritterObject* critter, int where)" << std::endl;
                 auto where = popDataInteger();
                 auto critter = std::static_pointer_cast<GameCritterObject>(popDataPointer());
                 switch (where)
@@ -1121,7 +1111,7 @@ void VM::run()
             case 0x810a: break;
             case 0x810c:
             {
-                CrossPlatform::debug("[*] void anim(void* who, int anim, int direction)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[*] void anim(void* who, int anim, int direction)" << std::endl;
                 auto direction = popDataInteger();
                 auto anim = popDataInteger();
                 auto who = popDataPointer();
@@ -1130,7 +1120,7 @@ void VM::run()
             }
             case 0x810b:
             {
-                CrossPlatform::debug("[*] int metarule(p2, p1)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[*] int metarule(p2, p1)" << std::endl;
                 auto p1 = _dataStack.pop();
                 auto p2 = popDataInteger();
                 pushDataInteger(_metarule(p2, p1));
@@ -1138,7 +1128,7 @@ void VM::run()
             }
             case 0x810d:
             {
-                CrossPlatform::debug("[=] void* obj_carrying_pid_obj(void* who, int pid)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void* obj_carrying_pid_obj(void* who, int pid)" << std::endl;
                 popDataInteger();
                 popDataPointer();
                 pushDataPointer(0);
@@ -1146,7 +1136,7 @@ void VM::run()
             }
             case 0x810e:
             {
-                CrossPlatform::debug("[=] void reg_anim_func(int p1, int p2)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void reg_anim_func(int p1, int p2)" << std::endl;
                 auto p2 = _dataStack.pop(); // pointer or integer
                 auto p1 = popDataInteger();
                 _dataStack.push(p2);
@@ -1175,7 +1165,7 @@ void VM::run()
             }
             case 0x810f:
             {
-                CrossPlatform::debug("[=] void reg_anim_animate(void* what, int anim, int delay) ", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void reg_anim_animate(void* what, int anim, int delay) " << std::endl;
                 popDataInteger();
                 popDataInteger();
                 popDataPointer();
@@ -1183,7 +1173,7 @@ void VM::run()
             }
             case 0x8113:
             {
-                CrossPlatform::debug("[=] void reg_anim_obj_move_to_tile(void* who, int dest_tile, int delay)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void reg_anim_obj_move_to_tile(void* who, int dest_tile, int delay)" << std::endl;
                 popDataInteger(); // -1
                 popDataInteger();
                 popDataPointer();
@@ -1191,13 +1181,13 @@ void VM::run()
             }
             case 0x8115:
             {
-                CrossPlatform::debug("[*] void playMovie(movieNum)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[*] void playMovie(movieNum)" << std::endl;
                 _playMovie(popDataInteger());
                 break;
             }
             case 0x8116:
             {
-                CrossPlatform::debug("[+] void add_mult_objs_to_inven(GameObject* who, GameItemObject* item, int amount)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[+] void add_mult_objs_to_inven(GameObject* who, GameItemObject* item, int amount)" << std::endl;
                 auto amount = popDataInteger();
                 auto item = std::static_pointer_cast<GameItemObject>(popDataPointer());
                 if (!item) throw Exception("VM::opcode8116 - item not instanceof GameItemObject");
@@ -1220,7 +1210,7 @@ void VM::run()
             }
             case 0x8117:
             {
-                CrossPlatform::debug("[=] int rm_mult_objs_from_inven(void* who, void* obj, int count)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] int rm_mult_objs_from_inven(void* who, void* obj, int count)" << std::endl;
                 popDataInteger();
                 popDataPointer();
                 popDataPointer();
@@ -1228,20 +1218,20 @@ void VM::run()
                 break;
             }
             case 0x8118:
-                CrossPlatform::debug("[*] int get_month", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[*] int get_month" << std::endl;
                 pushDataInteger(_getMonth());
                 break;
             case 0x8119: break;
             case 0x811c:
             {
-                CrossPlatform::debug("[?] gsay_start", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[?] gsay_start" << std::endl;
                 auto game = Game::getInstance();
                 game->pushState(game->dialog());
                 break;
             }
             case 0x811d:
             {
-                CrossPlatform::debug("[?] gsay_end", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[?] gsay_end" << std::endl;
                 auto dialog = Game::getInstance()->dialog();
                 if (dialog->talk()->hasAnswers())
                 {
@@ -1252,7 +1242,7 @@ void VM::run()
             }
             case 0x811e:
             {
-                CrossPlatform::debug("[=] void gSay_Reply(int msg_file_num, int msg_num)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void gSay_Reply(int msg_file_num, int msg_num)" << std::endl;
                 //Game::getInstance().dialog()->deleteAnswers();
                 if (_dataStack.top()->type() == VMStackValue::TYPE_POINTER)
                 {
@@ -1269,7 +1259,7 @@ void VM::run()
             }
             case 0x8120:
             {
-                CrossPlatform::debug("[=] void gSay_Message(int msg_list, int msg_num, int reaction)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void gSay_Message(int msg_list, int msg_num, int reaction)" << std::endl;
                 popDataInteger();
                 _dataStack.pop(); // string or integer
                 popDataInteger();
@@ -1277,7 +1267,7 @@ void VM::run()
             }
             case 0x8121:
             {
-                CrossPlatform::debug("[+] void giQ_Option(int iq_test, int msg_list, int msg_num, procedure target, int reaction)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[+] void giQ_Option(int iq_test, int msg_list, int msg_num, procedure target, int reaction)" << std::endl;
 
                 auto reaction = popDataInteger();
                 auto function = popDataInteger();
@@ -1320,20 +1310,20 @@ void VM::run()
             }
             case 0x8123:
             {
-                CrossPlatform::debug("[=] int GetPoison(void* obj)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] int GetPoison(void* obj)" << std::endl;
                 popDataPointer();
                 pushDataInteger(0);
                 break;
             }
             case 0x8125:
             {
-                CrossPlatform::debug("[=] void party_remove(void* who)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void party_remove(void* who)" << std::endl;
                 popDataPointer();
                 break;
             }
             case 0x8126:
             {
-                CrossPlatform::debug("[+] void reg_anim_animate_forever(GameObject* obj , int delay)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[+] void reg_anim_animate_forever(GameObject* obj , int delay)" << std::endl;
                 popDataInteger(); // delay - must be -1
                 popDataPointer();//auto object = (GameObject*)popDataPointer();
                 //if (object->animationQueue()->animation())
@@ -1347,85 +1337,85 @@ void VM::run()
             case 0x8127: break;
             case 0x8128:
             {
-                CrossPlatform::debug("[=] int combat_is_initialized()", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] int combat_is_initialized()" << std::endl;
                 pushDataInteger(0);
                 break;
             }
             case 0x8129:
             {
-                CrossPlatform::debug("[=] void gdialog_mod_barter(int modifier)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void gdialog_mod_barter(int modifier)" << std::endl;
                 popDataInteger();
                 break;
             }
             case 0x812d:
             {
-                CrossPlatform::debug("[+] int is_locked(GameDoorSceneryObject* object)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[+] int is_locked(GameDoorSceneryObject* object)" << std::endl;
                 auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
                 pushDataInteger(object->locked());
                 break;
             }
             case 0x812e:
             {
-                CrossPlatform::debug("[+] void lock(GameDoorSceneryObject* object)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[+] void lock(GameDoorSceneryObject* object)" << std::endl;
                 auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
                 object->setLocked(true);
                 break;
             }
             case 0x812f:
             {
-                CrossPlatform::debug("[+] void unlock(GameDoorSceneryObject* object)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[+] void unlock(GameDoorSceneryObject* object)" << std::endl;
                 auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
                 object->setLocked(false);
                 break;
             }
             case 0x8130:
             {
-                CrossPlatform::debug("[+] int is_opened(GameDoorSceneryObject* object) ", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[+] int is_opened(GameDoorSceneryObject* object) " << std::endl;
                 auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
                 pushDataInteger(object->opened());
                 break;
             }
             case 0x8131:
             {
-                CrossPlatform::debug("[+] void open(GameDoorSceneryObject* object) ", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[+] void open(GameDoorSceneryObject* object) " << std::endl;
                 auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
                 object->setOpened(true);
                 break;
             }
             case 0x8132:
             {
-                CrossPlatform::debug("[+] void close(GameDoorSceneryObject* object) ", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[+] void close(GameDoorSceneryObject* object) " << std::endl;
                 auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
                 object->setOpened(false);
                 break;
             }
             case 0x8134:
             {
-                CrossPlatform::debug("[=] void game_ui_enable()", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void game_ui_enable()" << std::endl;
                 break;
             }
             case 0x8136:
             {
-                CrossPlatform::debug("[=] void gfade_out(int time)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void gfade_out(int time)" << std::endl;
                 popDataInteger();
                 break;
             }
             case 0x8137:
             {
-                CrossPlatform::debug("[=] void gfade_in(int time)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void gfade_in(int time)" << std::endl;
                 popDataInteger();
                 break;
             }
             case 0x8138:
             {
-                CrossPlatform::debug("[=] int item_caps_total(void* obj)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] int item_caps_total(void* obj)" << std::endl;
                 popDataPointer();
                 pushDataInteger(0);
                 break;
             }
             case 0x8139:
             {
-                CrossPlatform::debug("[=] int item_caps_adjust(void* obj, int amount)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] int item_caps_adjust(void* obj, int amount)" << std::endl;
                 popDataInteger();
                 popDataPointer();
                 pushDataInteger(0);
@@ -1433,21 +1423,21 @@ void VM::run()
             }
             case 0x8143:
             {
-                CrossPlatform::debug("[=] void attack_setup(ObjectPtr who, ObjectPtr victim)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void attack_setup(ObjectPtr who, ObjectPtr victim)" << std::endl;
                 popDataPointer();
                 popDataPointer();
                 break;
             }
             case 0x8147:
             {
-                CrossPlatform::debug("[=] void move_obj_inven_to_obj(void* srcObj, void* destObj)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void move_obj_inven_to_obj(void* srcObj, void* destObj)" << std::endl;
                 popDataPointer();
                 popDataPointer();
                 break;
             }
             case 0x8149:
             {
-                CrossPlatform::debug("[+] int obj_art_fid(void* obj)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[+] int obj_art_fid(void* obj)" << std::endl;
                 auto object = std::static_pointer_cast<GameObject>(popDataPointer());
                 if (!object) throw Exception("VM::opcode8149() - can't convert pointer to object");
                 pushDataInteger(object->FID());
@@ -1455,14 +1445,14 @@ void VM::run()
             }
             case 0x814b:
            {
-                CrossPlatform::debug("[*] void* party_member_obj(int pid)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[*] void* party_member_obj(int pid)" << std::endl;
                 popDataInteger();
                 pushDataPointer(0);
                 break;
             }
             case 0x814c:
             {
-                CrossPlatform::debug("[=] int rotation_to_tile(int srcTile, int destTile)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] int rotation_to_tile(int srcTile, int destTile)" << std::endl;
                 popDataInteger();
                 popDataInteger();
                 pushDataInteger(0);
@@ -1470,33 +1460,33 @@ void VM::run()
             }
             case 0x814e:
             {
-                CrossPlatform::debug("[=] void gdialog_set_barter_mod(int mod)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void gdialog_set_barter_mod(int mod)" << std::endl;
                 popDataInteger();
                 break;
             }
             case 0x8150:
             {
-                CrossPlatform::debug("[=] int obj_on_screen(void* obj)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] int obj_on_screen(void* obj)" << std::endl;
                 popDataPointer();
                 pushDataInteger(1);
                 break;
             }
             case 0x8151:
             {
-                CrossPlatform::debug("[=] int critter_is_fleeing(void* who)", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] int critter_is_fleeing(void* who)" << std::endl;
                 popDataPointer();
                 pushDataInteger(0);
                 break;
             }
             case 0x8153:
             {
-                CrossPlatform::debug("[=] void terminate_combat()", DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << "[=] void terminate_combat()" << std::endl;
                 break;
             }
             case 0x8154:
             {
-                CrossPlatform::debug("[*] void debug(string*)", DEBUG_SCRIPT);
-                _debugMessage(std::static_pointer_cast<std::string>(popDataPointer()));
+                Logger::info("SCRIPT") << "[*] void debug(string*)" << std::endl;
+                std::cout << *(std::static_pointer_cast<std::string>(popDataPointer())).get() << std::endl;
                 break;
             }
             case 0x9001: break;
@@ -1505,7 +1495,7 @@ void VM::run()
             {
                 std::ostringstream os;
                 os << "0x" << std::hex << opcode;
-                CrossPlatform::debug(os.str(), DEBUG_SCRIPT);
+                Logger::info("SCRIPT") << os.str() << std::endl;
                 throw 0;
                 break;
             }
@@ -1645,7 +1635,7 @@ int VM::_getTime()
 
 void VM::_setLightLevel(int level)
 {
-    CrossPlatform::debug("     Setting light level to: " + std::to_string(level), DEBUG_SCRIPT);
+    Logger::info("SCRIPT") << "     Setting light level to: " + std::to_string(level) << std::endl;
 }
 
 void VM::_playMovie(int movieNum)
@@ -1656,12 +1646,7 @@ void VM::_playMovie(int movieNum)
 
 void VM::_displayString(std::shared_ptr<std::string> str)
 {
-    CrossPlatform::debug(*(str.get()), DEBUG_SCRIPT);
-}
-
-void VM::_debugMessage(std::shared_ptr<std::string> str)
-{
-    CrossPlatform::debug(*(str.get()), DEBUG_SCRIPT);
+    Logger::info("SCRIPT") << *(str.get()) << std::endl;
 }
 
 int VM::_tile_num_in_direction(int start_tile, int dir, int distance)
@@ -1697,7 +1682,7 @@ std::string VM::msgMessage(int msg_file_num, int msg_num)
     auto msg = ResourceManager::msgFileType("text/english/dialog/" + lst->strings()->at(msg_file_num - 1));
     if (!msg)
     {
-        CrossPlatform::debug("VM::msgMessage(file, num) not found. file: " + std::to_string(msg_file_num) + " num: " + std::to_string(msg_num), DEBUG_SCRIPT);
+        Logger::info("SCRIPT") << "VM::msgMessage(file, num) not found. file: " + std::to_string(msg_file_num) + " num: " + std::to_string(msg_num) << std::endl;
         return "";
     }
     return msg->message(msg_num)->text();

@@ -51,11 +51,6 @@
 namespace Falltergeist
 {
 
-void debug(std::string message, unsigned char level)
-{
-    CrossPlatform::debug(message, level);
-}
-
 // static members initialization
 std::string CrossPlatform::_version;
 std::string CrossPlatform::_falloutDataPath;
@@ -70,25 +65,6 @@ CrossPlatform::CrossPlatform()
 
 CrossPlatform::~CrossPlatform()
 {
-}
-
-void CrossPlatform::debug(std::string message, unsigned char level)
-{
-    CrossPlatform::debug(true, message, level);
-}
-
-void CrossPlatform::debug(bool newline, std::string message, unsigned char level)
-{
-    std::cout << message;
-
-    if (newline)
-    {
-        std::cout << std::endl;
-    }
-    else
-    {
-        std::cout << std::flush;
-    }
 }
 
 std::string CrossPlatform::getVersion()
@@ -275,19 +251,4 @@ std::vector<std::string> * CrossPlatform::findFalloutDataFiles()
     return _dataFiles;
 }
 
-std::ostream &CrossPlatform::debug(unsigned char level)
-{
-    // /dev/null-like stream
-    static std::ostream nullstream(nullptr);
-    // Check debug level
-    // TODO: perform real check
-    if (false)
-    {
-        return nullstream << std::dec;
-    }
-    else
-    {
-        return std::cout << std::dec;
-    }
-}
 }
