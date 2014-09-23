@@ -42,7 +42,8 @@ const std::string EngineSettings::_defaultInitLocation = "klamall";
 
 EngineSettings::EngineSettings()
 {
-    std::string configFile = CrossPlatform::getHomeDirectory() + "/.falltergeist/config.ini";
+    std::string configPath = CrossPlatform::getConfigPath();
+    std::string configFile = configPath + "/config.ini";
     std::ifstream stream(configFile);
 
     Logger::info() << "Read config from " << configFile << std::endl;
@@ -88,6 +89,9 @@ EngineSettings::EngineSettings()
 
         auto audio = ini.section("audio");
         audio->setPropertyBool("enabled", _defaultAudioEnabled);
+
+        // Create config path if not exists
+        CrossPlatform::createDirectory(configPath);
 
         // Write default configuraton
         IniWriter writer(ini);
