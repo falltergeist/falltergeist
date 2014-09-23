@@ -63,7 +63,7 @@ void InventoryState::init()
     setFullscreen(false);
 
     auto player = Game::getInstance()->player();
-
+    // armorSlot, leftHand, rightHand
     std::shared_ptr<GameArmorItemObject> armorSlot = player->armorSlot();
     std::shared_ptr<GameItemObject> leftHand = player->leftHandSlot();
     std::shared_ptr<GameItemObject> rightHand = player->rightHandSlot();
@@ -75,13 +75,14 @@ void InventoryState::init()
     background->setX(backgroundX);
     background->setY(backgroundY);
     background->addEventHandler("mouserightclick", this, (EventRecieverMethod) &InventoryState::backgroundRightClick);
+    addUI(background);
 
-    // buttons
+    // button up
     auto upButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_INVENTORY_UP_ARROW, backgroundX+128, backgroundY+40));
+
+    //button down
     auto downButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_INVENTORY_DOWN_ARROW, backgroundX+128, backgroundY+65));
     auto doneButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+438, backgroundY+328));
-
-    // events
     doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &InventoryState::onDoneButtonClick);
 
     // screen
@@ -224,32 +225,40 @@ void InventoryState::init()
     }
     auto rightHandLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX, screenY+140));
 
-    addUI(background);
-    addUI(playerNameLabel);
+    // screen info
+    auto screenLabel = std::shared_ptr<TextArea>(new TextArea("", screenX, screenY+20));
+    screenLabel->setWidth(140); //screen size
+    screenLabel->setHeight(168);
+    screenLabel->setVisible(false);
+    screenLabel->setWordWrap(true);
+
+    addUI("playerName", playerNameLabel);
     addUI(line1);
-    addUI(stLabel);
-    addUI(peLabel);
-    addUI(enLabel);
-    addUI(chLabel);
-    addUI(inLabel);
-    addUI(agLabel);
-    addUI(lkLabel);
-    addUI(statsLabel);
-    addUI(textLabel);
-    addUI(hitPointsLabel);
-    addUI(armorClassLabel);
-    addUI(damageThresholdLabel);
-    addUI(damageResistanceLabel);
-    addUI(line2);
-    addUI(line3);
-    addUI(totalWtLabel);
-    addUI(weightLabel);
-    addUI(weightMaxLabel);
-    addUI(leftHandLabel);
-    addUI(rightHandLabel);
+    addUI("stLabel", stLabel);
+    addUI("peLabel", peLabel);
+    addUI("enLabel", enLabel);
+    addUI("chLabel", chLabel);
+    addUI("inLabel", inLabel);
+    addUI("agLabel", agLabel);
+    addUI("lkLabel", lkLabel);
+    addUI("statLabel", statsLabel);
+    addUI("textLabel", textLabel);
+    addUI("hitPointsLabel", hitPointsLabel);
+    addUI("armorClassLabel", armorClassLabel);
+    addUI("damageThresholdLabel", damageThresholdLabel);
+    addUI("damageResistanceLabel", damageResistanceLabel);
+    addUI("line2", line2);
+    addUI("line3", line3);
+    addUI("totalWtLabel", totalWtLabel);
+    addUI("weightLabel", weightLabel);
+    addUI("weightMaxLabel", weightMaxLabel);
+    addUI("leftHandLabel", leftHandLabel);
+    addUI("rightHandLabel", rightHandLabel);
+    addUI("screenLabel", screenLabel);
     addUI(upButton);
     addUI(downButton);
     addUI(doneButton);
+
 
     // BIG ICONS
     // icon: armor
@@ -262,9 +271,11 @@ void InventoryState::init()
         armorUi->setY(backgroundY + 215 - armorUi->height()*0.5);
         addUI(armorUi);
 
-        armorUi->addEventHandler("mousedrag", armorSlot.get(), (EventRecieverMethod) &InventoryState::onSlotDrag);
-        armorUi->addEventHandler("mouseleftdown", armorSlot.get(), (EventRecieverMethod) &InventoryState::onSlotMouseDown);
-        armorUi->addEventHandler("mouseleftup", armorSlot.get(), (EventRecieverMethod) &InventoryState::onSlotMouseUp);
+        armorUi->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &InventoryState::onArmorSlotMouseDown);
+        //armorUi->addEventHandler("mouseleftup", this, (EventRecieverMethod) &InventoryState::onArmorSlotMouseUp);
+        //armorUi->addEventHandler("mousedrag", armorSlot.get(), (EventRecieverMethod) &InventoryState::onSlotDrag);
+        //armorUi->addEventHandler("mouseleftdown", armorSlot.get(), (EventRecieverMethod) &InventoryState::onSlotMouseDown);
+        //armorUi->addEventHandler("mouseleftup", armorSlot.get(), (EventRecieverMethod) &InventoryState::onSlotMouseUp);
     }
 
     // icon: left hand
@@ -277,9 +288,10 @@ void InventoryState::init()
         leftHandUi->setY(backgroundY + 317 - leftHandUi->height()*0.5);
         addUI(leftHandUi);
 
-        leftHandUi->addEventHandler("mousedrag", leftHand.get(), (EventRecieverMethod) &InventoryState::onSlotDrag);
-        leftHandUi->addEventHandler("mouseleftdown", leftHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseDown);
-        leftHandUi->addEventHandler("mouseleftup", leftHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseUp);
+        leftHandUi->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &InventoryState::onLeftHandSlotMouseDown);
+        //leftHandUi->addEventHandler("mousedrag", leftHand.get(), (EventRecieverMethod) &InventoryState::onSlotDrag);
+        //leftHandUi->addEventHandler("mouseleftdown", leftHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseDown);
+        //leftHandUi->addEventHandler("mouseleftup", leftHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseUp);
     }
 
     // icon: right hand
@@ -292,9 +304,10 @@ void InventoryState::init()
         rightHandUi->setY(backgroundY + 317 - rightHandUi->height()*0.5);
         addUI(rightHandUi);
 
-        rightHandUi->addEventHandler("mousedrag", rightHand.get(), (EventRecieverMethod) &InventoryState::onSlotDrag);
-        rightHandUi->addEventHandler("mouseleftdown", rightHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseDown);
-        rightHandUi->addEventHandler("mouseleftup", rightHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseUp);
+        rightHandUi->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &InventoryState::onRightHandSlotMouseDown);
+        //rightHandUi->addEventHandler("mousedrag", rightHand.get(), (EventRecieverMethod) &InventoryState::onSlotDrag);
+        //rightHandUi->addEventHandler("mouseleftdown", rightHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseDown);
+        //rightHandUi->addEventHandler("mouseleftup", rightHand.get(), (EventRecieverMethod) &InventoryState::onSlotMouseUp);
     }
 
 }
@@ -304,31 +317,84 @@ void InventoryState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
     Game::getInstance()->popState();
 }
 
-void InventoryState::onSlotMouseDown(std::shared_ptr<MouseEvent> event)
+void InventoryState::onArmorSlotMouseDown(std::shared_ptr<MouseEvent> event)
 {
-    auto itemUi = dynamic_cast<ImageList*>(event->emitter());
-    itemUi->setCurrentImage(1);
-    itemUi->setX(event->x() - itemUi->width()*0.5);
-    itemUi->setY(event->y() - itemUi->height()*0.5);
+    auto state = dynamic_cast<InventoryState*>(event->reciever());
+    if (Game::getInstance()->mouse()->type() == Mouse::HAND)
+    {
+        //auto itemUi = dynamic_cast<ImageList*>(event->emitter());
+        //itemUi->setCurrentImage(1);
+        //itemUi->setX(event->x() - itemUi->width()*0.5);
+        //itemUi->setY(event->y() - itemUi->height()*0.5);
+    }
+    else
+    {
+        auto itemPID = Game::getInstance()->player()->armorSlot()->PID();
+        state->_screenShow(itemPID);
+    }
 }
 
-void InventoryState::onSlotMouseUp(std::shared_ptr<MouseEvent> event)
+void InventoryState::onLeftHandSlotMouseDown(std::shared_ptr<MouseEvent> event)
 {
-    auto itemUi = dynamic_cast<ImageList*>(event->emitter());
-    itemUi->setCurrentImage(0);
-    itemUi->setX(event->x() - itemUi->width()*0.5);
-    itemUi->setY(event->y() - itemUi->height()*0.5);
+    auto state = dynamic_cast<InventoryState*>(event->reciever());
+    if (Game::getInstance()->mouse()->type() == Mouse::HAND)
+    {
+        //auto itemUi = dynamic_cast<ImageList*>(event->emitter());
+        //itemUi->setCurrentImage(1);
+        //itemUi->setX(event->x() - itemUi->width()*0.5);
+        //itemUi->setY(event->y() - itemUi->height()*0.5);
+    }
+    else
+    {
+        auto itemPID = Game::getInstance()->player()->leftHandSlot()->PID();
+        state->_screenShow(itemPID);
+    }
 }
 
-void InventoryState::onSlotDrag(std::shared_ptr<MouseEvent> event)
+void InventoryState::onRightHandSlotMouseDown(std::shared_ptr<MouseEvent> event)
 {
-    //auto item = dynamic_cast<GameItemObject*>(event->reciever());
-    auto itemUi = dynamic_cast<ImageList*>(event->emitter());
-    //auto dragUi = item->inventoryDragUi();
-    itemUi->setX(itemUi->x() + event->xOffset());
-    itemUi->setY(itemUi->y() + event->yOffset());
-    //Game::getInstance()->states()->back()->ui()->push_back(dragUi);
+    auto state = dynamic_cast<InventoryState*>(event->reciever());
+    if (Game::getInstance()->mouse()->type() == Mouse::HAND)
+    {
+        //auto itemUi = dynamic_cast<ImageList*>(event->emitter());
+        //itemUi->setCurrentImage(1);
+        //itemUi->setX(event->x() - itemUi->width()*0.5);
+        //itemUi->setY(event->y() - itemUi->height()*0.5);
+    }
+    else
+    {
+        auto itemPID = Game::getInstance()->player()->rightHandSlot()->PID();
+        state->_screenShow(itemPID);
+    }
 }
+
+
+//void InventoryState::onSlotMouseDown(std::shared_ptr<MouseEvent> event)
+//{
+//    auto state = dynamic_cast<InventoryState*>(event->reciever());
+//    auto itemUi = dynamic_cast<ImageList*>(event->emitter());
+//    itemUi->setCurrentImage(1);
+//    itemUi->setX(event->x() - itemUi->width()*0.5);
+//    itemUi->setY(event->y() - itemUi->height()*0.5);
+//}
+
+//void InventoryState::onSlotMouseUp(std::shared_ptr<MouseEvent> event)
+//{
+//    auto itemUi = dynamic_cast<ImageList*>(event->emitter());
+//    itemUi->setCurrentImage(0);
+//    itemUi->setX(event->x() - itemUi->width()*0.5);
+//    itemUi->setY(event->y() - itemUi->height()*0.5);
+//}
+
+//void InventoryState::onSlotDrag(std::shared_ptr<MouseEvent> event)
+//{
+//    //auto item = dynamic_cast<GameItemObject*>(event->reciever());
+//    auto itemUi = dynamic_cast<ImageList*>(event->emitter());
+//    //auto dragUi = item->inventoryDragUi();
+//    itemUi->setX(itemUi->x() + event->xOffset());
+//    itemUi->setY(itemUi->y() + event->yOffset());
+//    //Game::getInstance()->states()->back()->ui()->push_back(dragUi);
+//}
 
 std::string InventoryState::_handItemSummary (std::shared_ptr<GameItemObject> hand)
 {
@@ -360,6 +426,7 @@ std::string InventoryState::_handItemSummary (std::shared_ptr<GameItemObject> ha
 
 void InventoryState::backgroundRightClick(std::shared_ptr<MouseEvent> event)
 {
+    auto state = dynamic_cast<InventoryState*>(event->reciever());
     auto mouse = Game::getInstance()->mouse();
     if (mouse->type() == Mouse::ACTION)
     {
@@ -368,6 +435,88 @@ void InventoryState::backgroundRightClick(std::shared_ptr<MouseEvent> event)
     else
     {
         mouse->setType(Mouse::ACTION);
+        //state->_screenShow(1);
+    }
+    state->_screenShow(0);
+}
+
+void InventoryState::_screenShow (unsigned int PID)
+{
+    auto player = Game::getInstance()->player();
+    auto playerNameLabel = std::dynamic_pointer_cast<TextArea>(getUI("playerName"));
+    auto stLabel = std::dynamic_pointer_cast<TextArea>(getUI("stLabel"));
+    auto peLabel = std::dynamic_pointer_cast<TextArea>(getUI("peLabel"));
+    auto enLabel = std::dynamic_pointer_cast<TextArea>(getUI("enLabel"));
+    auto chLabel = std::dynamic_pointer_cast<TextArea>(getUI("chLabel"));
+    auto inLabel = std::dynamic_pointer_cast<TextArea>(getUI("inLabel"));
+    auto agLabel = std::dynamic_pointer_cast<TextArea>(getUI("agLabel"));
+    auto lkLabel = std::dynamic_pointer_cast<TextArea>(getUI("lkLabel"));
+    auto statLabel = std::dynamic_pointer_cast<TextArea>(getUI("statLabel"));
+    auto textLabel = std::dynamic_pointer_cast<TextArea>(getUI("textLabel"));
+    auto hitPointsLabel = std::dynamic_pointer_cast<TextArea>(getUI("hitPointsLabel"));
+    auto armorClassLabel = std::dynamic_pointer_cast<TextArea>(getUI("armorClassLabel"));
+    auto damageThresholdLabel = std::dynamic_pointer_cast<TextArea>(getUI("damageThresholdLabel"));
+    auto damageResistanceLabel = std::dynamic_pointer_cast<TextArea>(getUI("damageResistanceLabel"));
+    auto line2 = std::dynamic_pointer_cast<Image>(getUI("line2"));
+    auto line3 = std::dynamic_pointer_cast<Image>(getUI("line3"));
+    auto totalWtLabel = std::dynamic_pointer_cast<TextArea>(getUI("totalWtLabel"));
+    auto weightLabel = std::dynamic_pointer_cast<TextArea>(getUI("weightLabel"));
+    auto weightMaxLabel = std::dynamic_pointer_cast<TextArea>(getUI("weightMaxLabel"));
+    auto leftHandLabel = std::dynamic_pointer_cast<TextArea>(getUI("leftHandLabel"));
+    auto rightHandLabel = std::dynamic_pointer_cast<TextArea>(getUI("rightHandLabel"));
+    auto screenLabel = std::dynamic_pointer_cast<TextArea>(getUI("screenLabel"));
+
+    if (PID == 0)
+    {
+        playerNameLabel->setText(player->name());
+        screenLabel->setVisible(false);
+        stLabel->setVisible(true);
+        peLabel->setVisible(true);
+        enLabel->setVisible(true);
+        chLabel->setVisible(true);
+        inLabel->setVisible(true);
+        agLabel->setVisible(true);
+        lkLabel->setVisible(true);
+        statLabel->setVisible(true);
+        textLabel->setVisible(true);
+        hitPointsLabel->setVisible(true);
+        armorClassLabel->setVisible(true);
+        damageThresholdLabel->setVisible(true);
+        damageResistanceLabel->setVisible(true);
+        line2->setVisible(true);
+        line3->setVisible(true);
+        totalWtLabel->setVisible(true);
+        weightLabel->setVisible(true);
+        weightMaxLabel->setVisible(true);
+        leftHandLabel->setVisible(true);
+        rightHandLabel->setVisible(true);
+    }
+    else
+    {
+        auto msg = ResourceManager::msgFileType("text/english/game/pro_item.msg");
+        playerNameLabel->setText(msg->message(PID*100)->text()); // item name
+        screenLabel->setText(msg->message(PID*100+1)->text()); // item dedcription
+        screenLabel->setVisible(true);
+        stLabel->setVisible(false);
+        peLabel->setVisible(false);
+        enLabel->setVisible(false);
+        chLabel->setVisible(false);
+        inLabel->setVisible(false);
+        agLabel->setVisible(false);
+        lkLabel->setVisible(false);
+        statLabel->setVisible(false);
+        textLabel->setVisible(false);
+        hitPointsLabel->setVisible(false);
+        armorClassLabel->setVisible(false);
+        damageThresholdLabel->setVisible(false);
+        damageResistanceLabel->setVisible(false);
+        line2->setVisible(false);
+        line3->setVisible(false);
+        totalWtLabel->setVisible(false);
+        weightLabel->setVisible(false);
+        weightMaxLabel->setVisible(false);
+        leftHandLabel->setVisible(false);
+        rightHandLabel->setVisible(false);
     }
 }
 
