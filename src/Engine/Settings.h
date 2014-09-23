@@ -53,12 +53,15 @@ public:
 
     static const std::string &defaultInitLocation();
 
+    bool forceLocation() const;
+
 private:
     unsigned int _screenWidth;
     unsigned int _screenHeight;
     Renderer _renderer;
     bool _audioEnabled;
     std::string _initLocation;
+    bool _forceLocation;
 
     void _setRenderer(std::string renderer);
 
@@ -68,6 +71,7 @@ private:
     static const std::string _defaultRenderer;
     static const bool _defaultAudioEnabled;
     static const std::string _defaultInitLocation;
+    static const bool _defaultForceLocation;
 };
 
 }

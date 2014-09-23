@@ -39,6 +39,7 @@ const unsigned int EngineSettings::_defaultScreenHeight = 480;
 const std::string EngineSettings::_defaultRenderer = "sdl";
 const bool EngineSettings::_defaultAudioEnabled = false;
 const std::string EngineSettings::_defaultInitLocation = "klamall";
+const bool EngineSettings::_defaultForceLocation = false;
 
 EngineSettings::EngineSettings()
 {
@@ -69,6 +70,7 @@ EngineSettings::EngineSettings()
 
         auto game = ini->section("game");
         _initLocation = game->propertyString("init_location", _defaultInitLocation);
+        _forceLocation = game->propertyBool("force_location", _defaultForceLocation);
     }
     else
     {
@@ -152,6 +154,11 @@ const std::string &EngineSettings::defaultInitLocation()
 const std::string &EngineSettings::initialLocation() const
 {
     return _initLocation;
+}
+
+bool EngineSettings::forceLocation() const
+{
+    return _forceLocation;
 }
 
 }
