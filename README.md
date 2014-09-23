@@ -28,8 +28,13 @@ cmake . && make
 
 ## Running under linux
 
-Put master.dat and critter.dat files into ~/.falltergeist/ folder or mount CD-ROM with original game
-then run 
+Put master.dat and critter.dat files into the falltergeist data directory:
+
+* Linux: `~/.local/share/falltergeist/`,
+* OS X: `~/Library/Application Support/falltergeist`,
+* Windows: `%APPDATA%/falltergeist`,
+
+or mount CD-ROM with original game, then run
 
 ```
 ./falltergeist
