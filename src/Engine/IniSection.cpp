@@ -138,7 +138,7 @@ std::string IniSection::_valueToString(const IniValue &value)
         case IniValue::Tag::DOUBLE:
             return std::to_string(value._doubleVal);
         case IniValue::Tag::BOOLEAN:
-            return std::to_string(value._booleanVal);
+            return value._booleanVal ? "true" : "false";
         case IniValue::Tag::STRING:
             return value._stringVal;
     }
@@ -177,7 +177,8 @@ bool IniSection::propertyBool(const std::string &name, bool def)
     PropertyMapConstIterator iter = _properties.find(name);
     if (iter == _properties.end())
     {
-        Logger::warning("INI") << "Property `" << name << "` not found, use default value: " << def << std::endl;
+        Logger::warning("INI") << "Property `" << name << "` not found, use default value: " <<
+                std::boolalpha << def << std::noboolalpha << std::endl;
         return def;
     };
     bool ret;

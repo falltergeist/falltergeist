@@ -72,7 +72,8 @@ bool IniParser::_parseBool(std::string &name, std::string &line, std::shared_ptr
 
     if (isBool)
     {
-        Logger::debug("INI") << "boolean value found for property `" << name << "`: " << value << std::endl;
+        Logger::debug("INI") << "boolean value found for property `" << name << "`: " <<
+                std::boolalpha << value << std::noboolalpha << std::endl;
         ini->section(_section)->setPropertyBool(name, value);
     }
 
