@@ -58,7 +58,7 @@ void Opcode80DEHandler::_run()
     interact->setScript(_vm);
     Game::getInstance()->pushState(interact);
 
-    Logger::info("SCRIPT") << "[80DE] [*] void start_gdialog(int msgFileID, GameCritterObject* critter, int mood, int headID, int backgroundID)" << std::endl;
+    Logger::debug("SCRIPT") << "[80DE] [*] void start_gdialog(int msgFileID, GameCritterObject* critter, int mood, int headID, int backgroundID)" << std::endl;
 }
 
 }

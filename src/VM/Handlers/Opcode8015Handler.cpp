@@ -39,7 +39,7 @@ Opcode8015Handler::Opcode8015Handler(Falltergeist::VM *vm) : OpcodeHandler(vm)
 
 void Opcode8015Handler::_run()
 {
-    Logger::info("SCRIPT") << "[8015] [*] export(value, name)" << std::endl;
+    Logger::debug("SCRIPT") << "[8015] [*] export(value, name)" << std::endl;
     auto name = std::static_pointer_cast<std::string>(_vm->popDataPointer());
     auto value = _vm->dataStack()->pop();
     auto game = Game::getInstance();

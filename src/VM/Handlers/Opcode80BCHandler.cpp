@@ -38,7 +38,7 @@ void Opcode80BCHandler::_run()
 {
     _vm->pushDataPointer(_vm->owner());
 
-    Logger::info("SCRIPT") << "[80BC] [+] GameObject* self_obj()" << std::endl;
+    Logger::debug("SCRIPT") << "[80BC] [+] GameObject* self_obj()" << std::endl;
 }
 
 }

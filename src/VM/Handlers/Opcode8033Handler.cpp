@@ -36,7 +36,7 @@ Opcode8033Handler::Opcode8033Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8033Handler::_run()
 {
-    Logger::info("SCRIPT") << "[8033] [*] eq ==" << std::endl;
+    Logger::debug("SCRIPT") << "[8033] [*] eq ==" << std::endl;
     switch (_vm->dataStack()->top()->type())
     {
         case VMStackValue::TYPE_INTEGER:

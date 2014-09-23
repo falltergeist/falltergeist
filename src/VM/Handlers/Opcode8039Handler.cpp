@@ -38,7 +38,7 @@ Opcode8039Handler::Opcode8039Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8039Handler::_run()
 {
-    Logger::info("SCRIPT") << "[8039] [*] plus +" << std::endl;
+    Logger::debug("SCRIPT") << "[8039] [*] plus +" << std::endl;
     auto b = _vm->dataStack()->top();
     switch (b->type())
     {

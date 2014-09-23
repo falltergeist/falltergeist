@@ -39,7 +39,7 @@ Opcode810AHandler::Opcode810AHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode810AHandler::_run()
 {
-    Logger::info("SCRIPT") << "[810A] [=] void float_msg(void* who, string* msg, int type) " << std::endl;
+    Logger::debug("SCRIPT") << "[810A] [=] void float_msg(void* who, string* msg, int type) " << std::endl;
     int type = _vm->popDataInteger();
     unsigned int color;
     switch (type)
