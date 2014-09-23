@@ -330,9 +330,11 @@ void CrossPlatform::createDirectory(const std::string &path)
         for (char *dirDelim = strchr(dir, '/'); dirDelim != nullptr; dirDelim = strchr(dirDelim + 1, '/'))
         {
             *dirDelim = '\0';
-            _createDirectory(dir);
+            // Skip root directory
+            if (dir != dirDelim) _createDirectory(dir);
             *dirDelim = '/';
         }
+        _createDirectory(dir);
     }
     catch (const std::runtime_error &)
     {
