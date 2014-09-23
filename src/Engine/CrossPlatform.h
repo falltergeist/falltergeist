@@ -40,6 +40,15 @@ protected:
     static std::vector<std::string>* _dataFiles;
     static std::string _version;
     const static std::vector<std::string> necessaryDatFiles;
+
+
+    // Create directory at given path, if not already exists.
+    // If directory did exist, then return false, otherwise return true.
+    // Throw runtime_error on failure.
+    static bool _createDirectory(const char *dir);
+
+    // Return a pointer to a malloc-allocated buffer containing a copy of str
+    static char *_copyString(const char *str);
 public:
     CrossPlatform();
     ~CrossPlatform();
@@ -51,6 +60,12 @@ public:
     static std::string findFalloutDataPath();
     static std::string findFalltergeistDataPath();
     static std::vector<std::string> * findFalloutDataFiles();
+    static std::string getConfigPath();
+    static std::string getDataPath();
+
+    // Create directory at given path with parent directories as needed.
+    // Throw runtime_error on failure.
+    static void createDirectory(const std::string &path);
 };
 
 }
