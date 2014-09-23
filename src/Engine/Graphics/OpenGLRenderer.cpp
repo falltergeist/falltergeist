@@ -41,6 +41,15 @@
 namespace Falltergeist
 {
 
+int NearestPowerOf2(int n) {
+    if (!n) return n; //(0 == 2^0)
+    int x = 1;
+    while (x < n) {
+        x <<= 1;
+    }
+    return x;
+}
+
 OpenGLRenderer::OpenGLRenderer(unsigned int width, unsigned int height) : Renderer(width, height)
 {
     std::string message = "OpenGL Renderer initialization - ";
@@ -57,13 +66,23 @@ void OpenGLRenderer::init()
 {
     Renderer::init();
 
-    std::string message =  "SDL_SetVideoMode " + std::to_string(_width) + "x" + std::to_string(_height) + "x" +std::to_string(32)+ " - ";
-    if (!SDL_SetVideoMode(_width, _height, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL))
+    std::string message =  "SDL_CreateWindow " + std::to_string(_width) + "x" + std::to_string(_height) + "x" +std::to_string(32)+ " - ";
+    _window = SDL_CreateWindow("",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _width, _height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+    if (!_window)
     {
         throw Exception(message + "[FAIL]");
     }
     Logger::info("VIDEO") << message + "[OK]" << std::endl;
 
+    message =  "SDL_GL_CreateContext - ";
+    _context = SDL_GL_CreateContext(_window);
+    if (!_context)
+    {
+        throw Exception(message + "[FAIL]");
+    }
+    Logger::info("VIDEO") << message + "[OK]" << std::endl;
+
+    SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
     SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
     SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 8 );
     SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 8 );
@@ -98,7 +117,7 @@ void OpenGLRenderer::beginFrame()
 void OpenGLRenderer::endFrame()
 {
     Renderer::endFrame();
-    SDL_GL_SwapBuffers();
+    SDL_GL_SwapWindow(_window);
 }
 
 void OpenGLRenderer::registerTexture(std::shared_ptr<Texture> texture)
@@ -109,6 +128,43 @@ void OpenGLRenderer::registerTexture(std::shared_ptr<Texture> texture)
     unsigned int textureId;
     glGenTextures(1, &textureId);
     texture->setId(textureId);
+
+    int bpp;
+    Uint32 Rmask, Gmask, Bmask, Amask;
+    SDL_PixelFormatEnumToMasks(
+        SDL_PIXELFORMAT_RGBA8888, &bpp,
+        &Rmask, &Gmask, &Bmask, &Amask
+    );
+
+    SDL_Surface* resizedSurf = NULL;
+    SDL_Rect area;
+
+    //SDL_Surface* tmpSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, texture->width(), texture->height(), 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+    SDL_Surface* tmpSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, texture->width(), texture->height(), 32, Rmask, Gmask, Bmask, Amask);
+    if (tmpSurface == 0) throw Exception(SDL_GetError());
+    // Copying data from texture to surface
+    unsigned int* pixels = (unsigned int*) tmpSurface->pixels;
+    for (unsigned int i = 0; i != texture->width()*texture->height(); ++i)
+    {
+        pixels[i] = texture->data()[i];
+    }
+
+    int newH = NearestPowerOf2(texture->height());
+    int newW = NearestPowerOf2(texture->width());
+
+    SDL_PixelFormatEnumToMasks(
+        SDL_PIXELFORMAT_ABGR8888, &bpp,
+        &Rmask, &Gmask, &Bmask, &Amask
+    );
+
+    resizedSurf = SDL_CreateRGBSurface(0, newW, newH, bpp, Rmask, Gmask, Bmask, Amask);
+    area.x = 0;
+    area.y = 0;
+    area.w = tmpSurface->w;
+    area.h = tmpSurface->h;
+    SDL_SetSurfaceAlphaMod( tmpSurface, 0xFF );
+    SDL_SetSurfaceBlendMode( tmpSurface, SDL_BLENDMODE_NONE );
+    SDL_BlitSurface(tmpSurface, &area, resizedSurf, &area);
 
     glBindTexture(GL_TEXTURE_2D, textureId);
 
@@ -122,13 +178,15 @@ void OpenGLRenderer::registerTexture(std::shared_ptr<Texture> texture)
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA, texture->width(), texture->height(), GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, texture->data());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, resizedSurf->w, resizedSurf->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, resizedSurf->pixels);
+    //gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA, texture->width(), texture->height(), GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, texture->data());
 
-    //glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    //glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
     glBindTexture( GL_TEXTURE_2D, 0);
-
+    texture->texWidth(newW);
+    texture->texHeight(newH);
 }
 
 void OpenGLRenderer::unregisterTexture(Texture* texture)
@@ -151,13 +209,13 @@ void OpenGLRenderer::drawTexture(unsigned int x, unsigned int y, std::shared_ptr
          glVertex2i(x, y);
 
          glTexCoord2i(1, 0);
-         glVertex2i(x + texture->width(), y);
+         glVertex2i(x + texture->texWidth(), y);
 
          glTexCoord2i(1, 1);
-         glVertex2i(x + texture->width(), y + texture->height());
+         glVertex2i(x + texture->texWidth(), y + texture->texHeight());
 
          glTexCoord2i(0, 1);
-         glVertex2i(x, y + texture->height());
+         glVertex2i(x, y + texture->texHeight());
     glEnd();
 }
 
@@ -166,8 +224,16 @@ std::shared_ptr<Texture> OpenGLRenderer::screenshot()
     unsigned int width = Game::getInstance()->renderer()->width();
     unsigned int height = Game::getInstance()->renderer()->height();
 
+    // get current masks (they are different for LE and BE)
+    int bpp;
+    uint32_t Rmask, Gmask, Bmask, Amask;
+    SDL_PixelFormatEnumToMasks(
+        SDL_PIXELFORMAT_RGBA8888, &bpp,
+        &Rmask, &Gmask, &Bmask, &Amask
+    );
+
     // Read data from screen
-    SDL_Surface* flipped = SDL_CreateRGBSurface(SDL_HWSURFACE, width, height, 32, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
+    SDL_Surface* flipped = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32, Rmask, Gmask, Bmask, Amask);
     glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, flipped->pixels);
 
     // Flip image verticaly

@@ -26,6 +26,7 @@
 #include "../../Engine/Graphics/Renderer.h"
 
 // Third party includes
+#include <SDL_opengl.h>
 
 namespace Falltergeist
 {
@@ -34,6 +35,8 @@ class OpenGLRenderer : public Renderer
 {
 protected:
     std::string _name = "OpenGL Renderer";
+private:
+    SDL_GLContext _context;
 public:
     OpenGLRenderer(unsigned int width, unsigned int height);
 

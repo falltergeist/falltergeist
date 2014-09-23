@@ -93,4 +93,14 @@ std::string Renderer::name()
     return _name;
 }
 
+void Renderer::setCaption(std::string caption)
+{
+    SDL_SetWindowTitle(_window, caption.c_str());
+}
+
+SDL_Window* Renderer::window()
+{
+    return _window;
+}
+
 }

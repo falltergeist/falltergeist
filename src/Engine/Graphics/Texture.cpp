@@ -70,6 +70,26 @@ unsigned int Texture::height()
     return _height;
 }
 
+unsigned int Texture::texWidth()
+{
+    return _texwidth;
+}
+
+unsigned int Texture::texHeight()
+{
+    return _texheight;
+}
+
+void Texture::texWidth(unsigned int _w)
+{
+    _texwidth = _w;
+}
+
+void Texture::texHeight(unsigned int _h)
+{
+    _texheight = _h;
+}
+
 unsigned int* Texture::data()
 {
     return _data;

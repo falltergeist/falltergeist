@@ -18,7 +18,7 @@
 #
 
 cmake_minimum_required(VERSION 2.8)
-set (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 project(falltergeist)
 
@@ -28,11 +28,11 @@ if(NOT LIBFALLTERGEIST_FOUND)
 endif(NOT LIBFALLTERGEIST_FOUND)
 include_directories(${LIBFALLTERGEIST_INCLUDE_DIR})
 
-find_package(SDL REQUIRED)
-if(NOT SDL_FOUND)
-	  message(FATAL_ERROR "SDL library not found")
-endif(NOT SDL_FOUND)
-include_directories(${SDL_INCLUDE_DIR})
+find_package(SDL2 REQUIRED)
+if(NOT SDL2_FOUND)
+          message(FATAL_ERROR "SDL2 library not found")
+endif(NOT SDL2_FOUND)
+include_directories(${SDL2_INCLUDE_DIR})
 
 find_package(OpenGL REQUIRED)
 if(NOT OPENGL_FOUND)
@@ -267,4 +267,4 @@ set(SOURCES main.cpp
 add_definitions (-std=c++11 -Wall)
 set(CMAKE_BUILD_TYPE Debug)
 add_executable(falltergeist ${SOURCES})
-target_link_libraries(falltergeist ${SDL_LIBRARY} ${OPENGL_LIBRARIES} ${LIBFALLTERGEIST_LIBRARY})
+target_link_libraries(falltergeist ${SDL2_LIBRARY} ${OPENGL_LIBRARIES} ${LIBFALLTERGEIST_LIBRARY})

@@ -147,12 +147,12 @@ void CritterDialogState::onKeyboardUp(std::shared_ptr<KeyboardEvent> event)
 {
     static std::vector<uint> numkeys = {
             SDLK_1, SDLK_2, SDLK_3, SDLK_4, SDLK_5, SDLK_6, SDLK_7, SDLK_8, SDLK_9,
-            SDLK_KP1, SDLK_KP2, SDLK_KP3, SDLK_KP4, SDLK_KP5, SDLK_KP6, SDLK_KP7, SDLK_KP8, SDLK_KP9,
+            SDLK_KP_1, SDLK_KP_2, SDLK_KP_3, SDLK_KP_4, SDLK_KP_5, SDLK_KP_6, SDLK_KP_7, SDLK_KP_8, SDLK_KP_9,
     };
 
     auto key = event->keyCode();
 
-    if (key == SDLK_0 || key == SDLK_KP0)
+    if (key == SDLK_0 || key == SDLK_KP_0)
     {
         // Todo: end dialog
         return;

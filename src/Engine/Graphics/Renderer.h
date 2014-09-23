@@ -29,6 +29,7 @@
 #include "../../Engine/Graphics/Texture.h"
 
 // Third party includes
+#include <SDL.h>
 
 namespace Falltergeist
 {
@@ -39,6 +40,7 @@ protected:
     unsigned int _width;
     unsigned int _height;
     std::string _name;
+    SDL_Window* _window;
 public:
     Renderer(unsigned int width, unsigned int height);
     ~Renderer();
@@ -50,6 +52,8 @@ public:
 
     unsigned int width();
     unsigned int height();
+    void setCaption(std::string caption);
+    SDL_Window* window();
 
     virtual std::string name();
 
