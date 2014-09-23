@@ -265,10 +265,10 @@ void LocationState::setLocation(std::string name)
         unsigned int tilesWidth = 80*100;
         unsigned int tilesHeight = 36*100;
 
-        _floor = std::shared_ptr<Image>(new Image(tilesWidth, tilesHeight));
-        _roof  = std::shared_ptr<Image>(new Image(tilesWidth, tilesHeight));
-        _floor->texture()->fill(0x000000FF);
-        _roof->texture()->fill(0x000000FF);
+        _floorFull = std::shared_ptr<Image>(new Image(tilesWidth, tilesHeight));
+        _roofFull  = std::shared_ptr<Image>(new Image(tilesWidth, tilesHeight));
+        _floorFull->texture()->fill(0x000000FF);
+        _roofFull->texture()->fill(0x000000FF);
 
         for (unsigned int i = 0; i != 100*100; ++i)
         {
@@ -277,10 +277,10 @@ void LocationState::setLocation(std::string name)
 
             auto floorTile = ResourceManager::texture("art/tiles/" + tilesLst->strings()->at(mapFile->elevations()->at(_currentElevation)->floorTiles()->at(i)));
             auto roofTile = ResourceManager::texture("art/tiles/" + tilesLst->strings()->at(mapFile->elevations()->at(_currentElevation)->roofTiles()->at(i)));
-            floorTile->blitTo(_floor->texture(), x, y);
-            roofTile->blitTo(_roof->texture(), x, y);
+            floorTile->blitTo(_floorFull->texture(), x, y);
+            roofTile->blitTo(_roofFull->texture(), x, y);
         }
-        _floor->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyboardUp);
+        //_floor->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyboardUp);
     }
 }
 
@@ -332,6 +332,13 @@ void LocationState::generateUi()
 {
     _ui.clear();
     _floatMessages.clear();
+
+    if (!_floor)
+    {
+        auto renderer = Game::getInstance()->renderer();
+        _floor = std::shared_ptr<Image>(new Image(renderer->width(), renderer->height()));
+        _floorFull->texture()->copyTo(_floor->texture(), 0, 0, camera()->x(), camera()->y(), _floor->width(), _floor->height());
+    }
     addUI(_floor);
 
     for (auto object : _objectsToRender)
@@ -357,8 +364,8 @@ void LocationState::generateUi()
 
      //addUI(_roof);
 
-    _floor->setX(-camera()->x());
-    _floor->setY(-camera()->y());
+    //_floor->setX(-camera()->x());
+    //_floor->setY(-camera()->y());
     //_roof->setX(-_location->camera()->x());
     //_roof->setY(-_location->camera()->y() - 100);
 
@@ -428,6 +435,10 @@ void LocationState::think()
         if (_scrollRight && _scrollBottom)
         {
             Game::getInstance()->mouse()->setType(Mouse::SCROLL_SE);
+        }
+        if (_scrollLeft||_scrollRight||_scrollTop||_scrollBottom)
+        {
+            _floor.reset();
         }
     }
 
