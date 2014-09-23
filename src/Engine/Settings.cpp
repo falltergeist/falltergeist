@@ -20,6 +20,7 @@
 // C++ standard includes
 #include <fstream>
 #include <string>
+#include <stdexcept>
 
 // Falltergeist includes
 #include "../Engine/CrossPlatform.h"
