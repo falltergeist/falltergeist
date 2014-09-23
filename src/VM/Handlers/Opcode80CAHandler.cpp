@@ -37,7 +37,7 @@ Opcode80CAHandler::Opcode80CAHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80CAHandler::_run()
 {
-    Logger::info("SCRIPT") << "[80CA] [+] int get_critter_stat(GameCritterObject* who, int number)" << std::endl;
+    Logger::debug("SCRIPT") << "[80CA] [+] int get_critter_stat(GameCritterObject* who, int number)" << std::endl;
     int number = _vm->popDataInteger();
     auto object = std::static_pointer_cast<GameCritterObject>(_vm->popDataPointer());
     if (!object)

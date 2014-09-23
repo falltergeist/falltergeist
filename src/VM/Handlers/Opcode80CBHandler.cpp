@@ -58,7 +58,7 @@ void Opcode80CBHandler::_run()
     {
         _vm->pushDataInteger(-1); // for critter
     }
-    Logger::info("SCRIPT") << "[80CB] [+] int set_critter_stat(GameCritterObject* who, int number, int value)" << std::endl;
+    Logger::debug("SCRIPT") << "[80CB] [+] int set_critter_stat(GameCritterObject* who, int number, int value)" << std::endl;
 }
 
 }

@@ -67,7 +67,7 @@ std::shared_ptr<libfalltergeist::DatFileItem> ResourceManager::datFileItem(std::
         stream->open(path, std::ios_base::binary);
         if (stream->is_open())
         {
-            Logger::info("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM FALLOUT DATA DIR]" << std::endl;
+            Logger::debug("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM FALLOUT DATA DIR]" << std::endl;
         }
         else
         {
@@ -75,7 +75,7 @@ std::shared_ptr<libfalltergeist::DatFileItem> ResourceManager::datFileItem(std::
             stream->open(path, std::ios_base::binary);
             if (stream->is_open())
             {
-                Logger::info("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM FALLTERGEIST DATA DIR]" << std::endl;
+                Logger::debug("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM FALLTERGEIST DATA DIR]" << std::endl;
             }
         }
 
@@ -118,7 +118,7 @@ std::shared_ptr<libfalltergeist::DatFileItem> ResourceManager::datFileItem(std::
         if (item)
         {
             _datFilesItems.insert(std::make_pair(filename, item));
-            Logger::info("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM " << datfile->filename() << "]" << std::endl;
+            Logger::debug("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM " << datfile->filename() << "]" << std::endl;
             return item;
         }
     }

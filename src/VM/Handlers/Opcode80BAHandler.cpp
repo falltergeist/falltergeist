@@ -58,7 +58,7 @@ void Opcode80BAHandler::_run()
     }
     _vm->pushDataInteger(amount);
 
-    Logger::info("SCRIPT") << "[80BA] [+] int obj_is_carrying_obj_pid(GameObject* object, int PID)" << std::endl;
+    Logger::debug("SCRIPT") << "[80BA] [+] int obj_is_carrying_obj_pid(GameObject* object, int PID)" << std::endl;
 
 }
 

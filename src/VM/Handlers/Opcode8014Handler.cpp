@@ -39,7 +39,7 @@ Opcode8014Handler::Opcode8014Handler(Falltergeist::VM *vm) : OpcodeHandler(vm)
 
 void Opcode8014Handler::_run()
 {
-    Logger::info("SCRIPT") << "[8014] [*] getExported(name)" << std::endl;
+    Logger::debug("SCRIPT") << "[8014] [*] getExported(name)" << std::endl;
     auto game = Game::getInstance();
     auto EVARS = game->locationState()->EVARS();
     switch (_vm->dataStack()->top()->type())

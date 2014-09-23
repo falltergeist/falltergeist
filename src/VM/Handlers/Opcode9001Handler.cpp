@@ -60,7 +60,7 @@ void Opcode9001Handler::_run()
             break;
         }
     }
-    Logger::info("SCRIPT") << "[9001] [*] push_d *" << pointer.get() << std::endl;
+    Logger::debug("SCRIPT") << "[9001] [*] push_d *" << pointer.get() << std::endl;
 }
 
 }

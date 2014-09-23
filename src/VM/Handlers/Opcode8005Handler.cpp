@@ -38,7 +38,7 @@ void Opcode8005Handler::_run()
     auto functionIndex = _vm->popDataInteger();
     _vm->setProgramCounter(_vm->script()->function(functionIndex));
 
-    Logger::info("SCRIPT") << "[8005] [*] call(0x" << std::hex << functionIndex << ") = 0x" << _vm->programCounter() << std::endl;
+    Logger::debug("SCRIPT") << "[8005] [*] call(0x" << std::hex << functionIndex << ") = 0x" << _vm->programCounter() << std::endl;
 }
 
 }

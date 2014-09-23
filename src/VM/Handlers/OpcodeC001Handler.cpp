@@ -43,7 +43,7 @@ void OpcodeC001Handler::_run()
     _vm->setProgramCounter(_vm->programCounter() + 4);
     _vm->dataStack()->push(std::shared_ptr<VMStackIntValue>(new VMStackIntValue(value)));
 
-    Logger::info("SCRIPT") << "[C001] [*] push_d 0x" << std::hex << value << std::endl;
+    Logger::debug("SCRIPT") << "[C001] [*] push_d 0x" << std::hex << value << std::endl;
 }
 
 }

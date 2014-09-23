@@ -36,7 +36,7 @@ Opcode8119Handler::Opcode8119Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8119Handler::_run()
 {
     _vm->pushDataInteger(11);
-    Logger::info("SCRIPT") << "[8119] [*] int get_day()" << std::endl;
+    Logger::debug("SCRIPT") << "[8119] [*] int get_day()" << std::endl;
 }
 
 }

@@ -76,7 +76,7 @@ void Opcode8034Handler::_run()
             break;
         }
     }
-    Logger::info("SCRIPT") << "[8034] [*] neq !=" << std::endl;
+    Logger::debug("SCRIPT") << "[8034] [*] neq !=" << std::endl;
 
 }
 
