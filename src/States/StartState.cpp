@@ -31,7 +31,6 @@
 #include "../States/CritterDialogState.h"
 #include "../States/LocationState.h"
 #include "../States/MainMenuState.h"
-#include "../States/PlayerEditState.h"
 #include "../States/SettingsMenuState.h"
 #include "../States/StartState.h"
 #include "../UI/Image.h"

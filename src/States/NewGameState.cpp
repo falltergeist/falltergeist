@@ -28,7 +28,7 @@
 #include "../Game/GameDudeObject.h"
 #include "../States/NewGameState.h"
 #include "../States/LocationState.h"
-#include "../States/PlayerEditState.h"
+#include "../States/PlayerCreateState.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/ImageList.h"
@@ -289,7 +289,7 @@ std::string NewGameState::statToString(unsigned int stat)
 void NewGameState::onEditButtonClick(std::shared_ptr<MouseEvent> event)
 {
     Game::getInstance()->setPlayer(_characters.at(_selectedCharacter));
-    Game::getInstance()->pushState(std::shared_ptr<PlayerEditState>(new PlayerEditState()));
+    Game::getInstance()->pushState(std::shared_ptr<PlayerCreateState>(new PlayerCreateState()));
 }
 
 void NewGameState::onCreateButtonClick(std::shared_ptr<MouseEvent> event)
@@ -297,7 +297,7 @@ void NewGameState::onCreateButtonClick(std::shared_ptr<MouseEvent> event)
     auto none = std::shared_ptr<GameDudeObject>(new GameDudeObject());
     none->loadFromGCDFile(ResourceManager::gcdFileType("premade/blank.gcd"));
     Game::getInstance()->setPlayer(none);
-    Game::getInstance()->pushState(std::shared_ptr<PlayerEditState>(new PlayerEditState()));
+    Game::getInstance()->pushState(std::shared_ptr<PlayerCreateState>(new PlayerCreateState()));
 }
 
 void NewGameState::onBeginGameButtonClick(std::shared_ptr<MouseEvent> event)
