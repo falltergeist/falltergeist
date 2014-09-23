@@ -39,6 +39,9 @@ const unsigned int EngineSettings::_defaultScreenHeight = 480;
 const std::string EngineSettings::_defaultRenderer = "sdl";
 const bool EngineSettings::_defaultAudioEnabled = false;
 const std::string EngineSettings::_defaultInitLocation = "klamall";
+const bool EngineSettings::_defaultForceLocation = false;
+const std::string EngineSettings::_defaultLoggerLevel = "info";
+const bool EngineSettings::_defaultLoggerColors = true;
 
 EngineSettings::EngineSettings()
 {
@@ -53,51 +56,54 @@ EngineSettings::EngineSettings()
         IniParser iniParser(stream);
         auto ini = iniParser.parse();
 
-        auto video = ini->section("video");
-        _screenWidth = video->propertyInt("width", _defaultScreenWidth);
-        _screenHeight = video->propertyInt("height", _defaultScreenHeight);
-
-        auto renderer = video->propertyString("renderer", _defaultRenderer);
-        _setRenderer(renderer);
-
-        auto audio = ini->section("audio");
-        _audioEnabled = audio->propertyBool("enabled", _defaultAudioEnabled);
-
-        auto logger = ini->section("logger");
-        Logger::setLevel(logger->propertyString("level", "info"));
-        Logger::useColors(logger->propertyBool("colors", true));
-
-        auto game = ini->section("game");
-        _initLocation = game->propertyString("init_location", _defaultInitLocation);
+        _readConfig(*ini);
     }
     else
     {
         Logger::warning() << "Cannot open config file at `" << configFile << "`; creating default configuraton file" << std::endl;
         stream.close();
 
-        _screenWidth = _defaultScreenWidth;
-        _screenHeight = _defaultScreenHeight;
-        _setRenderer(_defaultRenderer);
-        _audioEnabled = _defaultAudioEnabled;
-
         IniFile ini;
 
-        auto video = ini.section("video");
-        video->setPropertyInt("width", _defaultScreenWidth);
-        video->setPropertyInt("height", _defaultScreenHeight);
-        video->setPropertyString("renderer", _defaultRenderer);
-
-        auto audio = ini.section("audio");
-        audio->setPropertyBool("enabled", _defaultAudioEnabled);
+        _createDefaultConfig(ini);
+        _readConfig(ini);
 
         // Create config path if not exists
-        CrossPlatform::createDirectory(configPath);
+        try
+        {
+            CrossPlatform::createDirectory(configPath);
+        }
+        catch (const std::runtime_error &e)
+        {
+            Logger::error("[INI]") << "Cannot create directory `" <<
+                    configPath << "` to write config file: " <<
+                    e.what() << std::endl;
+        }
 
         // Write default configuraton
         IniWriter writer(ini);
         std::ofstream os(configFile);
         writer.write(os);
     }
+}
+
+void EngineSettings::_createDefaultConfig(IniFile &ini)
+{
+    auto video = ini.section("video");
+    video->setPropertyInt("width", _defaultScreenWidth);
+    video->setPropertyInt("height", _defaultScreenHeight);
+    video->setPropertyString("renderer", _defaultRenderer);
+
+    auto audio = ini.section("audio");
+    audio->setPropertyBool("enabled", _defaultAudioEnabled);
+
+    auto logger = ini.section("logger");
+    logger->setPropertyString("level", _defaultLoggerLevel);
+    logger->setPropertyBool("colors", _defaultLoggerColors);
+
+    auto game = ini.section("game");
+    game->setPropertyString("init_location", _defaultInitLocation);
+    game->setPropertyBool("force_location", _defaultForceLocation);
 }
 
 EngineSettings::~EngineSettings()
@@ -154,4 +160,29 @@ const std::string &EngineSettings::initialLocation() const
     return _initLocation;
 }
 
+bool EngineSettings::forceLocation() const
+{
+    return _forceLocation;
+}
+
+void EngineSettings::_readConfig(IniFile &ini)
+{
+    auto video = ini.section("video");
+    _screenWidth = video->propertyInt("width", _defaultScreenWidth);
+    _screenHeight = video->propertyInt("height", _defaultScreenHeight);
+
+    auto renderer = video->propertyString("renderer", _defaultRenderer);
+    _setRenderer(renderer);
+
+    auto audio = ini.section("audio");
+    _audioEnabled = audio->propertyBool("enabled", _defaultAudioEnabled);
+
+    auto logger = ini.section("logger");
+    Logger::setLevel(logger->propertyString("level", "info"));
+    Logger::useColors(logger->propertyBool("colors", true));
+
+    auto game = ini.section("game");
+    _initLocation = game->propertyString("init_location", _defaultInitLocation);
+    _forceLocation = game->propertyBool("force_location", _defaultForceLocation);
+}
 }

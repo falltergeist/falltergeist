@@ -29,6 +29,8 @@
 namespace Falltergeist
 {
 
+class IniFile;
+
 class EngineSettings
 {
 public:
@@ -53,14 +55,19 @@ public:
 
     static const std::string &defaultInitLocation();
 
+    bool forceLocation() const;
+
 private:
     unsigned int _screenWidth;
     unsigned int _screenHeight;
     Renderer _renderer;
     bool _audioEnabled;
     std::string _initLocation;
+    bool _forceLocation;
 
     void _setRenderer(std::string renderer);
+    void _createDefaultConfig(IniFile &ini);
+    void _readConfig(IniFile &ini);
 
     // DEFAULTS
     static const unsigned int _defaultScreenWidth;
@@ -68,6 +75,9 @@ private:
     static const std::string _defaultRenderer;
     static const bool _defaultAudioEnabled;
     static const std::string _defaultInitLocation;
+    static const bool _defaultForceLocation;
+    static const std::string _defaultLoggerLevel;
+    static const bool _defaultLoggerColors;
 };
 
 }

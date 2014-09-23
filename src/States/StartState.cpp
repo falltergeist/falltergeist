@@ -35,6 +35,7 @@
 #include "../States/SettingsMenuState.h"
 #include "../States/StartState.h"
 #include "../UI/Image.h"
+#include "../Engine/Settings.h"
 
 // Third party includes
 
@@ -70,7 +71,7 @@ void StartState::init()
 void StartState::think()
 {
     State::think();
-    if (false)
+    if (Game::getInstance()->engineSettings()->forceLocation())
     {
         std::shared_ptr<GameDudeObject>player = std::shared_ptr<GameDudeObject>(new GameDudeObject());
         player->loadFromGCDFile(ResourceManager::gcdFileType("premade/combat.gcd"));
