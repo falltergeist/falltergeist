@@ -20,6 +20,8 @@
 
 // C++ standard includes
 #include <cmath>
+#include <list>
+#include <algorithm>
 
 // Falltergeist includes
 #include "../Engine/Event/MouseEvent.h"
@@ -418,6 +420,12 @@ void LocationState::think()
 {
     State::think();
 
+    /*
+    auto game = Game::getInstance();
+    auto hexagon = hexagons()->at(game->player()->hexagon()->number() + 6);
+    findPath(game->player()->hexagon(), hexagon);
+    */
+
     // location scrolling
     if (_scrollTicks + 10 < SDL_GetTicks())
     {
@@ -532,6 +540,7 @@ void LocationState::handle(std::shared_ptr<Event> event)
             _scrollRight = mouseEvent->x() > game->renderer()->width()- scrollArea ? true : false;
             _scrollTop = mouseEvent->y() < scrollArea ? true : false;
             _scrollBottom = mouseEvent->y() > game->renderer()->height() - scrollArea ? true : false;
+
 
             /*
             auto hexagon = hexagonAt(camera()->x() + mouseEvent->x(), camera()->y() + mouseEvent->y());
@@ -742,6 +751,37 @@ Hexagon* LocationState::hexagonAt(unsigned int x, unsigned int y)
        }
     }
     return 0;
+}
+
+std::vector<Hexagon*> LocationState::findPath(Hexagon* from, Hexagon* to)
+{
+    std::list<Hexagon*> unvisited;
+    Hexagon* last = 0;
+    Hexagon* current = 0;
+    unvisited.push_back(from);
+
+    while (unvisited.size() != 0)
+    {
+        current = unvisited.front();
+        unvisited.pop_front();
+        current->setChecked(true);
+
+
+        Logger::critical() << "Current: " << current->number() << " From: " << (last ? last->number() : 0) << std::endl;
+        if (current == to) throw 1;
+
+        for (Hexagon* neighbor : *current->neighbors())
+        {
+            if (!neighbor->checked() && !neighbor->cameFrom())
+            {
+                neighbor->setCameFrom(current);
+                unvisited.push_back(neighbor);
+            }
+        }
+        last = current;
+    }
+    std::vector<Hexagon*> result;
+    return result;
 }
 
 }

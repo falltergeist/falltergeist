@@ -47,7 +47,7 @@ void Hexagon::setNumber(unsigned int number)
     _number = number;
 }
 
-bool Hexagon::ckecked()
+bool Hexagon::checked()
 {
     return _checked;
 }

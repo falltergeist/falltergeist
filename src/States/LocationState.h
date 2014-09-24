@@ -117,6 +117,8 @@ public:
     void onSkilldexButtonClick(std::shared_ptr<MouseEvent> event);
     void onKeyboardUp(std::shared_ptr<KeyboardEvent> event);
     void onPipBoyButtonClick(std::shared_ptr<MouseEvent> event);
+
+    std::vector<Hexagon*> findPath(Hexagon* from, Hexagon* to);
 };
 
 }
