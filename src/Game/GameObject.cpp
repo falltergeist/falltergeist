@@ -171,12 +171,12 @@ void GameObject::setCanWalkThru(bool value)
     _canWalkThru = value;
 }
 
-std::shared_ptr<Hexagon> GameObject::hexagon()
+Hexagon* GameObject::hexagon()
 {
-    return _hexagon.lock();
+    return _hexagon;
 }
 
-void GameObject::setHexagon(std::shared_ptr<Hexagon> hexagon)
+void GameObject::setHexagon(Hexagon* hexagon)
 {
     _hexagon = hexagon;
 }

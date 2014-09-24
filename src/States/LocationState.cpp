@@ -67,6 +67,11 @@ LocationState::LocationState() : State()
 LocationState::~LocationState()
 {
     delete _camera;
+    while (!_hexagons.empty())
+    {
+        delete _hexagons.back();
+        _hexagons.pop_back();
+    }
 }
 
 void LocationState::init()
@@ -80,7 +85,7 @@ void LocationState::init()
     {
         for (unsigned int p = 0; p != 200; ++p, ++index)
         {
-            auto hexagon = std::shared_ptr<Hexagon>(new Hexagon(index));
+            auto hexagon = new Hexagon(index);
             int x = 48*100 + 16*(q+1) - 24*p;
             int y = (q+1)*12 + 6*p + 12;
             if (p&1)
@@ -334,6 +339,7 @@ void LocationState::generateUi()
     _ui.clear();
     _floatMessages.clear();
 
+
     if (!_floor)
     {
         auto renderer = Game::getInstance()->renderer();
@@ -553,7 +559,7 @@ void LocationState::onKeyboardUp(std::shared_ptr<KeyboardEvent> event)
     }
 }
 
-std::vector<std::shared_ptr<Hexagon>>* LocationState::hexagons()
+std::vector<Hexagon*>* LocationState::hexagons()
 {
     return &_hexagons;
 }
@@ -630,7 +636,7 @@ std::map<std::string, std::shared_ptr<VMStackValue>>* LocationState::EVARS()
     return &_EVARS;
 }
 
-void LocationState::moveObjectToHexagon(std::shared_ptr<GameObject> object, std::shared_ptr<Hexagon> hexagon, bool calculateHexagons)
+void LocationState::moveObjectToHexagon(std::shared_ptr<GameObject> object, Hexagon* hexagon, bool calculateHexagons)
 {
     auto oldHexagon = object->hexagon();
     if (oldHexagon)

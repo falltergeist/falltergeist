@@ -55,7 +55,7 @@ protected:
     std::string _description;
     std::vector<VM*> _scripts;
     std::shared_ptr<ActiveUI> _ui;
-    std::weak_ptr<Hexagon> _hexagon;
+    Hexagon* _hexagon = 0;
     virtual void _generateUi();
     std::shared_ptr<TextArea> _floatMessage;
 public:
@@ -95,8 +95,8 @@ public:
     std::shared_ptr<ActiveUI> ui();
     void setUI(std::shared_ptr<ActiveUI> ui);
 
-    std::shared_ptr<Hexagon> hexagon();
-    void setHexagon(std::shared_ptr<Hexagon> hexagon);
+    Hexagon* hexagon();
+    void setHexagon(Hexagon* hexagon);
 
     std::shared_ptr<TextArea> floatMessage();
     void setFloatMessage(std::shared_ptr<TextArea> floatMessage);

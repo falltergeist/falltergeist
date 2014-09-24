@@ -55,8 +55,8 @@ protected:
 
     bool _locationEnter = true;
 
-    std::vector<std::shared_ptr<Hexagon>> _hexagons;
-    std::vector<std::shared_ptr<Hexagon>> _hexagonsWithObjects;
+    std::vector<Hexagon*> _hexagons;
+    std::vector<Hexagon*> _hexagonsWithObjects;
 
     unsigned int _currentElevation = 0;
     LocationCamera* _camera = 0;
@@ -90,7 +90,7 @@ public:
     virtual void think();
     virtual void handle(std::shared_ptr<Event> event);
 
-    std::vector<std::shared_ptr<Hexagon>>* hexagons();
+    std::vector<Hexagon*>* hexagons();
     LocationCamera* camera();
 
     void checkObjectsToRender();
@@ -102,7 +102,7 @@ public:
 
     std::map<std::string, std::shared_ptr<VMStackValue>>* EVARS();
 
-    static void moveObjectToHexagon(std::shared_ptr<GameObject> object, std::shared_ptr<Hexagon> hexagon, bool calculateHexagons = true);
+    static void moveObjectToHexagon(std::shared_ptr<GameObject> object, Hexagon* hexagon, bool calculateHexagons = true);
     void handleAction(GameObject* object, int action);
 
     void onBackgroundClick(std::shared_ptr<MouseEvent> event);
