@@ -22,6 +22,8 @@
 // Falltergeist includes
 #include "../Engine/UI.h"
 #include "../Engine/Graphics/Texture.h"
+#include "../Engine/Game.h"
+#include "../Engine/Graphics/Renderer.h"
 
 // Third party includes
 
@@ -70,6 +72,11 @@ void UI::setTexture(std::shared_ptr<Texture> texture)
 
 void UI::think()
 {
+}
+
+void UI::render()
+{
+    Game::getInstance()->renderer()->drawTexture(x(), y(), texture());
 }
 
 void UI::setVisible(bool value)

@@ -67,10 +67,9 @@ protected:
     std::map<std::string, std::shared_ptr<VMStackValue>> _EVARS;
 
 
-    std::shared_ptr<Image> _floorFull;
-    std::shared_ptr<Image> _floor;
-    std::shared_ptr<Image> _roofFull;
-    std::vector<std::shared_ptr<ActiveUI>> _panelUIs;    
+    std::shared_ptr<Image> _floorTiles[100*100];
+    std::shared_ptr<Image> _roofTiles[100*100];
+    std::vector<std::shared_ptr<ActiveUI>> _panelUIs;
     std::vector<std::shared_ptr<ActiveUI>> _floatMessages;
 
     bool _scrollLeft = false;
