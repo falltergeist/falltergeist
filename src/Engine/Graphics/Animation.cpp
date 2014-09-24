@@ -26,6 +26,8 @@
 #include "../../Engine/Graphics/AnimationFrame.h"
 #include "../../Engine/Graphics/Texture.h"
 #include "../../Engine/ResourceManager.h"
+#include "../../Engine/Game.h"
+#include "../../Engine/Graphics/Renderer.h"
 
 // Third party includes
 #include "SDL.h"
@@ -82,8 +84,9 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
 
         x += frm->width(direction);
         frames()->push_back(frame);
-
-
+        auto _tmptexture = std::shared_ptr<Texture>(new Texture(frame->width(), frame->height()));
+        _animationTexture->copyTo(_tmptexture, 0, 0, frame->x(), frame->y(), frame->width(), frame->height());
+        textures()->push_back(_tmptexture);
     }
 }
 
@@ -97,19 +100,9 @@ std::vector<std::shared_ptr<AnimationFrame>>* Animation::frames()
     return &_animationFrames;
 }
 
-std::shared_ptr<Texture> Animation::texture()
+std::vector<std::shared_ptr<Texture>>* Animation::textures()
 {
-    if (_texture) return _texture;
-
-    auto frame = frames()->at(_currentFrame);
-
-    _texture = std::shared_ptr<Texture>(new Texture(frame->width(), frame->height()));
-    _animationTexture->copyTo(_texture, 0, 0, frame->x(), frame->y(), frame->width(), frame->height());
-
-    setXOffset(frame->xOffset() - (int)std::floor(frame->width()*0.5));
-    setYOffset(frame->yOffset() - frame->height());
-
-    return _texture;
+    return &_animationTextures;
 }
 
 int Animation::xOffset()
@@ -136,8 +129,16 @@ void Animation::think()
         {
             _currentFrame = 0;
         }
-        _texture.reset();
+       auto frame = frames()->at(_currentFrame);
+       setXOffset(frame->xOffset() - (int)std::floor(frame->width()*0.5));
+       setYOffset(frame->yOffset() - frame->height());
+
     }
+}
+
+void Animation::render()
+{
+    Game::getInstance()->renderer()->drawTexture(x(),y(), textures()->at(_currentFrame));
 }
 
 unsigned int Animation::height()
