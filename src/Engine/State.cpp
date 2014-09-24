@@ -24,6 +24,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/ActiveUI.h"
 #include "../Engine/UI.h"
+#include "../Engine/Graphics/Renderer.h"
 
 // Third party includes
 
@@ -142,10 +143,15 @@ void State::handle(std::shared_ptr<Event> event)
     }
 }
 
-std::vector<std::shared_ptr<UI>>* State::ui()
+void State::render()
 {
-    return &_ui;
+    for (auto it = _ui.begin(); it != _ui.end(); ++it)
+    {
+        if ((*it)->visible())
+        {
+            (*it)->render();
+        }
+    }
 }
-
 
 }

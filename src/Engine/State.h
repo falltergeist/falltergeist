@@ -78,9 +78,11 @@ public:
 
     virtual bool initialized();
     virtual void init();
+
     virtual void think();
     virtual void handle(std::shared_ptr<Event> event);
-    std::vector<std::shared_ptr<UI>>* ui();
+    virtual void render();
+
 };
 
 }

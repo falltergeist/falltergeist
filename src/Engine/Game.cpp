@@ -136,7 +136,7 @@ void Game::run()
     {
         handle();
         think();
-        draw();
+        render();
         SDL_Delay(1);
     }
     Logger::info("GAME") << "Stopping main loop" << std::endl;
@@ -249,34 +249,6 @@ std::vector<std::shared_ptr<State>> Game::statesForThinkAndHandle()
     return states;
 }
 
-std::vector<std::shared_ptr<UI>>* Game::ui()
-{
-    _ui.clear();
-
-    for (auto state : statesForRender())
-    {
-        for (auto ui : *state->ui())
-        {
-            if (ui->visible())
-            {
-                _ui.push_back(ui);
-            }
-        }
-    }
-
-    _ui.push_back(_fpsCounter);
-    _ui.push_back(_falltergeistVersion);
-    _ui.push_back(_mousePosition);
-
-    // Render mouse
-    if (mouse()->visible() && mouse()->ui())
-    {
-        _ui.push_back(mouse()->ui());
-    }
-
-    return &_ui;
-}
-
 std::shared_ptr<Renderer> Game::renderer()
 {
     return _renderer;
@@ -384,9 +356,20 @@ void Game::think()
     }
 }
 
-void Game::draw()
+void Game::render()
 {
     renderer()->beginFrame();
+    for (auto state : statesForRender())
+    {
+        state->render();
+    }
+    _fpsCounter->render();
+    _falltergeistVersion->render();
+    _mousePosition->render();
+    if (mouse()->visible() && mouse()->ui())
+    {
+        _mouse->ui()->render();
+    }
     renderer()->endFrame();
 }
 

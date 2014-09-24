@@ -89,7 +89,7 @@ public:
 
     void handle();
     void think();
-    void draw();
+    void render();
 
     void setPlayer(std::shared_ptr<GameDudeObject> player);
     std::shared_ptr<GameDudeObject> player();
@@ -100,8 +100,6 @@ public:
 
     void setGVAR(unsigned int number, int value);
     int GVAR(unsigned int number);
-
-    std::vector<std::shared_ptr<UI>>* ui();
 
     std::shared_ptr<EngineSettings> engineSettings();
 

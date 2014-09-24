@@ -47,14 +47,6 @@ void Renderer::init()
 
 void Renderer::beginFrame()
 {
-    auto game = Game::getInstance();
-    for (auto ui : *game->ui())
-    {
-        if (ui->visible())
-        {
-            ui->render();
-        }
-    }
 }
 
 void Renderer::endFrame()
