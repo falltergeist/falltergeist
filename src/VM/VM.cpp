@@ -18,7 +18,6 @@
  */
 
 // C++ standard includes
-#include <iostream>
 #include <ctime>
 #include <sstream>
 
@@ -1077,8 +1076,6 @@ void VM::run()
                 Logger::debug("SCRIPT") << "[8105] [+] string* msgMessage(int msg_list, int msg_num);" << std::endl;
                 auto msgNum = popDataInteger();
                 auto msgList = popDataInteger();
-                std::cout << msgNum << std::endl;
-                std::cout << msgList << std::endl;
                 pushDataPointer(std::shared_ptr<std::string>(new std::string(msgMessage(msgList, msgNum))));
                 break;
             }
@@ -1485,7 +1482,7 @@ void VM::run()
             case 0x8154:
             {
                 Logger::debug("SCRIPT") << "[8154] [*] void debug(string*)" << std::endl;
-                std::cout << *(std::static_pointer_cast<std::string>(popDataPointer())).get() << std::endl;
+                Logger::debug("SCRIPT") << *(std::static_pointer_cast<std::string>(popDataPointer())).get() << std::endl;
                 break;
             }
             case 0x9001: break;

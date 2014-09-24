@@ -19,7 +19,6 @@
  */
 
 // C++ standard includes
-#include <iostream>
 
 // Falltergeist includes
 #include "../../Engine/Input/Mouse.h"

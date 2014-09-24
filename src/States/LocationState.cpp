@@ -20,7 +20,6 @@
 
 // C++ standard includes
 #include <cmath>
-#include <iostream>
 
 // Falltergeist includes
 #include "../Engine/Event/MouseEvent.h"
@@ -102,11 +101,36 @@ void LocationState::init()
     // Creating links between hexagons
     for (index = 0; index != 200*200; ++index)
     {
-        // @todo
+        auto hexagon = _hexagons.at(index);
+
+        unsigned int q = index/200; // hexagonal y
+        unsigned int p = index%200; // hexagonal x
+
+        unsigned index1 = (q + 1)*200 + p;
+        unsigned index4 = (q-1)*200 + p;
+        unsigned int index2, index3, index5, index6;
+        if (index&1)
+        {
+            index2 = q*200 + p-1;
+            index3 = (q-1)*200 + p-1;
+            index5 = (q-1)*200 + p+1;
+            index6 = q*200 + p+1;
+        }
+        else
+        {
+            index2 = (q+1)*200 + p-1;
+            index3 = q*200 + p-1;
+            index5 = q*200 + p+1;
+            index6 = (q+1)*200 + p+1;
+        }
+
+        if (index1 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index1));
+        if (index2 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index2));
+        if (index3 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index3));
+        if (index4 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index4));
+        if (index5 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index5));
+        if (index6 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index6));
     }
-
-
-
 
     auto game = Game::getInstance();
     game->mouse()->setType(Mouse::ACTION);
@@ -245,6 +269,7 @@ void LocationState::setLocation(std::string name)
 
         auto hexagon = hexagons()->at(mapFile->defaultPosition());
         LocationState::moveObjectToHexagon(player, hexagon, true);
+        Logger::critical() << "Player hexagon: " << hexagon->number() << std::endl;
 
         // Just for testing
         {
@@ -368,13 +393,6 @@ void LocationState::generateUi()
             }
         }
     }
-
-     //addUI(_roof);
-
-    //_floor->setX(-camera()->x());
-    //_floor->setY(-camera()->y());
-    //_roof->setX(-_location->camera()->x());
-    //_roof->setY(-_location->camera()->y() - 100);
 
     for (auto message : _floatMessages)
     {
@@ -514,6 +532,20 @@ void LocationState::handle(std::shared_ptr<Event> event)
             _scrollRight = mouseEvent->x() > game->renderer()->width()- scrollArea ? true : false;
             _scrollTop = mouseEvent->y() < scrollArea ? true : false;
             _scrollBottom = mouseEvent->y() > game->renderer()->height() - scrollArea ? true : false;
+
+            /*
+            auto hexagon = hexagonAt(camera()->x() + mouseEvent->x(), camera()->y() + mouseEvent->y());
+            _cursorNeigbors.clear();
+            for (auto neighbor : *hexagon->neighbors())
+            {
+                auto ui = std::shared_ptr<Image>(new Image("art/intrface/msef001.frm"));
+                ui->setX(neighbor->x() - camera()->x() - ui->width()*0.5);
+                ui->setY(neighbor->y() - camera()->y() - ui->height());
+                _cursorNeigbors.push_back(ui);
+            }
+            moveObjectToHexagon(game->player(), hexagon);
+            Logger::critical() << "Pos: " << hexagon->number() << std::endl;
+            */
         }
     }
     State::handle(event);
@@ -699,5 +731,17 @@ void LocationState::checkHexagonsWidthObjects()
     }
 }
 
+Hexagon* LocationState::hexagonAt(unsigned int x, unsigned int y)
+{
+    for (auto hexagon : *hexagons())
+    {
+       if (y >= hexagon->y() - 8 && y < hexagon->y() + 4)
+       if (x >= hexagon->x() - 16 && x < hexagon->x() + 16)
+       {
+           return hexagon;
+       }
+    }
+    return 0;
+}
 
 }

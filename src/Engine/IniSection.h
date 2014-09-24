@@ -22,7 +22,6 @@
 #define FALLTERGEIST_INI_SECTION_H
 
 // C++ standard includes
-#include <iostream>
 #include <map>
 #include <string>
 

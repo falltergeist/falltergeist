@@ -22,7 +22,6 @@
 #define FALLTERGEIST_INI_WRITER_H
 
 // C++ standard includes
-#include <iostream>
 
 // Falltergeist includes
 

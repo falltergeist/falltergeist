@@ -20,7 +20,6 @@
 
 // C++ standard includes
 #include <string>
-#include <iostream>
 
 // Falltergeist includes
 #include "../Game/GameCritterObject.h"

@@ -37,8 +37,8 @@ class Hexagon
 {
 protected:
     bool _checked = false; // pathfinding flag
-    std::shared_ptr<Hexagon> _cameFrom; // pathfinding flag
-    std::vector<std::shared_ptr<Hexagon>> _neighbours;
+    Hexagon* _cameFrom; // pathfinding flag
+    std::vector<Hexagon*> _neighbors;
     std::list<std::shared_ptr<GameObject>> _objects;
     unsigned int _number = 0; // position in hexagonal grid
     unsigned int _x = 0;
@@ -59,10 +59,10 @@ public:
     bool ckecked();
     void setChecked(bool value);
 
-    std::shared_ptr<Hexagon> cameFrom();
-    void setCameFrom(std::shared_ptr<Hexagon> cameFrom);
+    Hexagon* cameFrom();
+    void setCameFrom(Hexagon* cameFrom);
 
-    std::vector<std::shared_ptr<Hexagon>>* neighbours();
+    std::vector<Hexagon*>* neighbors();
 
     std::list<std::shared_ptr<GameObject>>* objects();
 };

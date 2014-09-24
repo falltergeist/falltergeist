@@ -18,7 +18,6 @@
  */
 
 // C++ standard includes
-#include <iostream>
 #include <sstream>
 #include <string.h>
 

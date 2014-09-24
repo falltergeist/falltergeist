@@ -22,7 +22,6 @@
 #define FALLTERGEIST_INI_PARSER_H
 
 // C++ standard includes
-#include <iostream>
 #include <memory>
 
 // Falltergeist includes

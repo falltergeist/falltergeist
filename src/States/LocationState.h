@@ -91,6 +91,7 @@ public:
     virtual void handle(std::shared_ptr<Event> event);
 
     std::vector<Hexagon*>* hexagons();
+    Hexagon* hexagonAt(unsigned int x, unsigned int y);
     LocationCamera* camera();
 
     void checkObjectsToRender();

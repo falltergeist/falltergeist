@@ -25,7 +25,6 @@
 #include <cstring>
 #include <dirent.h>
 #include <fstream>
-#include <iostream>
 #include <stdexcept>
 
 #ifndef __APPLE__

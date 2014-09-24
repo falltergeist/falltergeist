@@ -19,7 +19,6 @@
 
 // C++ standard includes
 #include <sstream>
-#include <iostream>
 
 // Falltergeist includes
 #include "../Engine/Game.h"

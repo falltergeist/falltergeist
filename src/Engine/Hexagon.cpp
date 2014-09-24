@@ -57,19 +57,19 @@ void Hexagon::setChecked(bool value)
     _checked = value;
 }
 
-std::shared_ptr<Hexagon> Hexagon::cameFrom()
+Hexagon* Hexagon::cameFrom()
 {
     return _cameFrom;
 }
 
-void Hexagon::setCameFrom(std::shared_ptr<Hexagon> cameFrom)
+void Hexagon::setCameFrom(Hexagon* cameFrom)
 {
     _cameFrom = cameFrom;
 }
 
-std::vector<std::shared_ptr<Hexagon>>* Hexagon::neighbours()
+std::vector<Hexagon*>* Hexagon::neighbors()
 {
-    return &_neighbours;
+    return &_neighbors;
 }
 
 std::list<std::shared_ptr<GameObject>>* Hexagon::objects()
