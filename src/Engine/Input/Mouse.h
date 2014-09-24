@@ -96,7 +96,7 @@ public:
     unsigned int type();
     void setType(unsigned int type);
 
-    std::shared_ptr<ActiveUI> ui();
+    void render();
 
 };
 

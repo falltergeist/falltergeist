@@ -366,10 +366,7 @@ void Game::render()
     _fpsCounter->render();
     _falltergeistVersion->render();
     _mousePosition->render();
-    if (mouse()->visible() && mouse()->ui())
-    {
-        _mouse->ui()->render();
-    }
+    _mouse->render();
     renderer()->endFrame();
 }
 

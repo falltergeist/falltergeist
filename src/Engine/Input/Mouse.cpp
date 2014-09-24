@@ -93,16 +93,6 @@ void Mouse::setVisible(bool value)
     _visible = value;
 }
 
-std::shared_ptr<ActiveUI> Mouse::ui()
-{
-    if (_ui)
-    {
-        _ui->setX(_x);
-        _ui->setY(_y);
-    }
-    return _ui;
-}
-
 unsigned int Mouse::type()
 {
     return _type;
@@ -207,6 +197,18 @@ void Mouse::setType(unsigned int type)
     }
 
     _type = type;
+}
+
+void Mouse::render()
+{
+    if (!visible()) return;
+
+    if (!_ui) return;
+
+    _ui->setX(_x);
+    _ui->setY(_y);
+    _ui->render();
+
 }
 
 }
