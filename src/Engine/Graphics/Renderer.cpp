@@ -71,7 +71,7 @@ void Renderer::unregisterTexture(Texture* texture)
 {
 }
 
-void Renderer::drawTexture(unsigned int x, unsigned int y, std::shared_ptr<Texture> texture)
+void Renderer::drawTexture(std::shared_ptr<Texture> texture, int x, int y, int sourceX, int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
 {
 }
 

@@ -42,8 +42,8 @@ Animation::Animation() : ActiveUI()
 Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
 {
     auto frm = ResourceManager::frmFileType(frmName);
+    setTexture(ResourceManager::texture(frmName));
 
-    _animationTexture = ResourceManager::texture(frmName);
 
     int xOffset = frm->shiftX(direction);
     int yOffset = frm->shiftY(direction);
@@ -84,9 +84,6 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
 
         x += frm->width(direction);
         frames()->push_back(frame);
-        auto _tmptexture = std::shared_ptr<Texture>(new Texture(frame->width(), frame->height()));
-        _animationTexture->copyTo(_tmptexture, 0, 0, frame->x(), frame->y(), frame->width(), frame->height());
-        textures()->push_back(_tmptexture);
     }
 }
 
@@ -98,11 +95,6 @@ Animation::~Animation()
 std::vector<std::shared_ptr<AnimationFrame>>* Animation::frames()
 {
     return &_animationFrames;
-}
-
-std::vector<std::shared_ptr<Texture>>* Animation::textures()
-{
-    return &_animationTextures;
 }
 
 int Animation::xOffset()
@@ -138,7 +130,8 @@ void Animation::think()
 
 void Animation::render()
 {
-    Game::getInstance()->renderer()->drawTexture(x(),y(), textures()->at(_currentFrame));
+    auto frame = frames()->at(_currentFrame);
+    Game::getInstance()->renderer()->drawTexture(_texture, x(),y(), frame->x(), frame->y(), frame->width(), frame->height());
 }
 
 unsigned int Animation::height()

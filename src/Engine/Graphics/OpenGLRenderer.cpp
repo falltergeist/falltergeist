@@ -197,9 +197,9 @@ void OpenGLRenderer::unregisterTexture(Texture* texture)
     texture->setId(0);
 }
 
-void OpenGLRenderer::drawTexture(unsigned int x, unsigned int y, std::shared_ptr<Texture> texture)
+void OpenGLRenderer::drawTexture(std::shared_ptr<Texture> texture, int x, int y, int sourceX, int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
 {
-    Renderer::drawTexture(x, y, texture);
+    Renderer::drawTexture(texture, x, y);
     if (!texture->id()) registerTexture(texture);
 
     glBindTexture( GL_TEXTURE_2D, texture->id());

@@ -49,7 +49,7 @@ public:
 
     virtual void registerTexture(std::shared_ptr<Texture> texture);
     virtual void unregisterTexture(Texture* texture);
-    virtual void drawTexture(unsigned int x, unsigned int y, std::shared_ptr<Texture> texture);
+    virtual void drawTexture( std::shared_ptr<Texture> texture, int x, int y, int sourceX = 0, int sourceY = 0, int unsigned sourceWidth = 0, unsigned int sourceHeight = 0);
 
     virtual std::shared_ptr<Texture> screenshot();
 };

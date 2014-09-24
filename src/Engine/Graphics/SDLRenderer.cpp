@@ -117,14 +117,23 @@ void SDLRenderer::unregisterTexture(Texture* texture)
     texture->setId(0);
 }
 
-void SDLRenderer::drawTexture(unsigned int x, unsigned int y, std::shared_ptr<Texture> texture)
+void SDLRenderer::drawTexture(std::shared_ptr<Texture> texture, int x, int y, int sourceX, int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
 {
-    Renderer::drawTexture(x, y, texture);
+    Renderer::drawTexture(texture, x, y);
 
     if (!texture->id()) registerTexture(texture);
 
-    SDL_Rect dest = {(short)x, (short)y, (unsigned short)texture->width(), (unsigned short)texture->height()};
-    SDL_RenderCopy(_renderer, _surfaces.at(texture->id() - 1), NULL, &dest);
+    if (!sourceX && !sourceY && !sourceWidth && !sourceHeight)
+    {
+        SDL_Rect dest = {(short)x, (short)y, (unsigned short)texture->width(), (unsigned short)texture->height()};
+        SDL_RenderCopy(_renderer, _surfaces.at(texture->id() - 1), NULL, &dest);
+    }
+    else
+    {
+        SDL_Rect dest = {(short)x, (short)y, (unsigned short)sourceWidth, (unsigned short)sourceHeight};
+        SDL_Rect src = {(short)sourceX, (short)sourceY, (unsigned short)sourceWidth, (unsigned short)sourceHeight};
+        SDL_RenderCopy(_renderer, _surfaces.at(texture->id() - 1), &src, &dest);
+    }
 }
 
 std::shared_ptr<Texture> SDLRenderer::screenshot()

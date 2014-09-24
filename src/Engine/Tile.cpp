@@ -89,7 +89,7 @@ void Tile::setTexture(std::shared_ptr<Texture> texture)
 
 void Tile::render()
 {
-    Game::getInstance()->renderer()->drawTexture(_x + _offsetX, _y + _offsetY, _texture);
+    Game::getInstance()->renderer()->drawTexture(_texture, _x + _offsetX, _y + _offsetY);
 }
 
 }

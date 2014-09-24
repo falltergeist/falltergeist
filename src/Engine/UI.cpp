@@ -76,7 +76,7 @@ void UI::think()
 
 void UI::render()
 {
-    Game::getInstance()->renderer()->drawTexture(x(), y(), texture());
+    Game::getInstance()->renderer()->drawTexture(texture(), x(), y());
 }
 
 void UI::setVisible(bool value)
