@@ -39,6 +39,7 @@ class Image;
 class InteractiveSurface;
 class Location;
 class LocationCamera;
+class Tile;
 class VMStackValue;
 class VM;
 
@@ -62,13 +63,14 @@ protected:
     LocationCamera* _camera = 0;
 
     std::vector<std::shared_ptr<GameObject>> _objectsToRender;
+    std::vector<std::shared_ptr<UI>> _uiToRender;
 
     std::vector<int> _MVARS;
     std::map<std::string, std::shared_ptr<VMStackValue>> _EVARS;
 
 
-    std::vector<std::shared_ptr<Image>> _floorTiles;
-    std::vector<std::shared_ptr<Image>> _roofTiles;
+    std::vector<Tile*> _floorTiles;
+    std::vector<Tile*> _roofTiles;
     std::vector<std::shared_ptr<ActiveUI>> _panelUIs;
     std::vector<std::shared_ptr<ActiveUI>> _floatMessages;
 
@@ -88,14 +90,16 @@ public:
     virtual void init();
     virtual void think();
     virtual void handle(std::shared_ptr<Event> event);
+    virtual void render();
 
     std::vector<Hexagon*>* hexagons();
     Hexagon* hexagonAt(unsigned int x, unsigned int y);
     LocationCamera* camera();
 
+    std::vector<std::shared_ptr<UI>>* uiToRender();
+
     void checkObjectsToRender();
     void checkHexagonsWidthObjects();
-    void generateUi();
 
     void setMVAR(unsigned int number, int value);
     int MVAR(unsigned int number);

@@ -34,6 +34,7 @@
 #include "../Engine/LocationCamera.h"
 #include "../Engine/Logger.h"
 #include "../Engine/ResourceManager.h"
+#include "../Engine/Tile.h"
 #include "../Game/GameDefines.h"
 #include "../Game/GameDudeObject.h"
 #include "../Game/GameObject.h"
@@ -72,6 +73,16 @@ LocationState::~LocationState()
     {
         delete _hexagons.back();
         _hexagons.pop_back();
+    }
+    while (!_floorTiles.empty())
+    {
+        delete _floorTiles.back();
+        _floorTiles.pop_back();
+    }
+    while (!_roofTiles.empty())
+    {
+        delete _roofTiles.back();
+        _roofTiles.pop_back();
     }
 }
 
@@ -303,19 +314,17 @@ void LocationState::setLocation(std::string name)
             unsigned int tileNum = mapFile->elevations()->at(_currentElevation)->floorTiles()->at(i);
             if (tileNum > 1)
             {
-                auto floorTile = std::shared_ptr<Image>(new Image(ResourceManager::texture("art/tiles/" + tilesLst->strings()->at(tileNum))));
-                floorTile->setX(x);
-                floorTile->setY(y);
-                _floorTiles.push_back(floorTile);
+                auto tile = new Tile(x, y);
+                tile->setTexture(ResourceManager::texture("art/tiles/" + tilesLst->strings()->at(tileNum)));
+                _floorTiles.push_back(tile);
             }
 
             tileNum = mapFile->elevations()->at(_currentElevation)->roofTiles()->at(i);
             if (tileNum > 1)
             {
-                auto roofTile = std::shared_ptr<Image>(new Image(ResourceManager::texture("art/tiles/" + tilesLst->strings()->at(tileNum))));
-                roofTile->setX(x);
-                roofTile->setY(y);
-                _roofTiles.push_back(roofTile);
+                auto tile = new Tile(x, y);
+                tile->setTexture(ResourceManager::texture("art/tiles/" + tilesLst->strings()->at(tileNum)));
+                _roofTiles.push_back(tile);
             }
         }
         //_floor->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyboardUp);
@@ -366,25 +375,22 @@ void LocationState::onKeyUp(std::shared_ptr<KeyboardEvent> event)
 {
 }
 
-void LocationState::generateUi()
+void LocationState::render()
 {
-    _ui.clear();
-    _floatMessages.clear();
 
-    for (auto it = _floorTiles.begin(); it != _floorTiles.end(); ++it)
+    for (auto tile : _floorTiles)
     {
-        (*it)->setXOffset(0);
-        (*it)->setYOffset(0);
-        if ((*it)->x() < (_camera->x() - 120)) continue;
-        if ((*it)->x() > (_camera->x() + _camera->width() + 80*2)) continue;
-        if ((*it)->y() < (_camera->y() - 36)) continue;
-        if ((*it)->y() > (_camera->y() + _camera->height() + 24*2)) continue;
+        if (tile->x() < (_camera->x() - 120)) continue;
+        if (tile->x() > (_camera->x() + _camera->width() + 80*2)) continue;
+        if (tile->y() < (_camera->y() - 36)) continue;
+        if (tile->y() > (_camera->y() + _camera->height() + 24*2)) continue;
 
-        (*it)->setXOffset(-_camera->x());
-        (*it)->setYOffset(-_camera->y());
-        addUI((*it));
+        tile->setOffsetX(-_camera->x());
+        tile->setOffsetY(-_camera->y());
+        tile->render();
     }
 
+    /*
     for (auto it = _roofTiles.begin(); it != _roofTiles.end(); ++it)
     {
         (*it)->setXOffset(0);
@@ -398,46 +404,13 @@ void LocationState::generateUi()
         (*it)->setYOffset(-_camera->y());
         addUI((*it));
     }
+    */
 
-    for (auto object : _objectsToRender)
+    for (auto ui : *uiToRender())
     {
-        object->ui()->removeEventHandlers("mouseleftdown");
-        object->ui()->addEventHandler("mouseleftdown", object.get(), (EventRecieverMethod) &LocationState::onMouseDown);
-        addUI(object->ui());
-
-        if (auto message = object->floatMessage())
-        {
-            if (SDL_GetTicks() - message->timestampCreated() >= 7000)
-            {
-                object->floatMessage().reset();
-            }
-            else
-            {
-                message->setX(object->hexagon()->x() - camera()->x() - message->width()*0.5);
-                message->setY(object->hexagon()->y() - camera()->y() - 70 - message->height());
-                _floatMessages.push_back(message);
-            }
-        }
+        ui->render();
     }
-
-    for (auto message : _floatMessages)
-    {
-        addUI(message);
-    }
-
-    for (auto ui : _panelUIs)
-    {
-        addUI(ui);
-    }
-
-    auto item = Game::getInstance()->player()->currentHandSlot();
-    if (item)
-    {
-        auto itemUi = item->inventoryDragUi();
-        itemUi->setX(_panelUIs.at(0)->x() + 360 - itemUi->width()*0.5);
-        itemUi->setY(_panelUIs.at(0)->y() + 60 - itemUi->height()*0.5);
-        addUI(itemUi);
-    }
+    _uiToRender.clear();
 }
 
 void LocationState::think()
@@ -450,6 +423,14 @@ void LocationState::think()
     findPath(game->player()->hexagon(), hexagon);
     */
 
+    // UI thinking
+    for (auto hexagon : _hexagonsWithObjects)
+    {
+        for (auto it = hexagon->objects()->rbegin(); it != hexagon->objects()->rend(); ++it)
+        {
+            if ((*it)->ui()) (*it)->ui()->think();
+        }
+    }
     // location scrolling
     if (_scrollTicks + 10 < SDL_GetTicks())
     {
@@ -544,8 +525,6 @@ void LocationState::think()
             }
         }
     }
-
-    generateUi();
 }
 
 void LocationState::handle(std::shared_ptr<Event> event)
@@ -577,7 +556,11 @@ void LocationState::handle(std::shared_ptr<Event> event)
             */
         }
     }
-    State::handle(event);
+    //State::handle(event);
+    for (auto ui : *uiToRender())
+    {
+        if (auto activeUI = std::dynamic_pointer_cast<ActiveUI>(ui)) activeUI->handle(event);
+    }
 }
 
 void LocationState::onChangeHandButtonClick(std::shared_ptr<MouseEvent> event)
@@ -638,8 +621,7 @@ void LocationState::checkObjectsToRender()
     {
         for (auto it = hexagon->objects()->rbegin(); it != hexagon->objects()->rend(); ++it)
         {
-            auto object = *it;
-            auto ui = std::dynamic_pointer_cast<ActiveUI>(object->ui());
+            auto ui = std::dynamic_pointer_cast<ActiveUI>((*it)->ui());
             if (!ui) continue;
 
             unsigned int x, y, width, height;
@@ -647,7 +629,7 @@ void LocationState::checkObjectsToRender()
             width = ui->width();
             height = ui->height();
 
-            auto animation = std::dynamic_pointer_cast<Animation>(object->ui());
+            auto animation = std::dynamic_pointer_cast<Animation>((*it)->ui());
             if (animation)
             {
                 x = hexagon->x() + ui->xOffset() - std::floor(width*0.5);
@@ -669,7 +651,7 @@ void LocationState::checkObjectsToRender()
             ui->setY(hexagon->y() - camera()->y());
 
 
-            _objectsToRender.push_back(object);
+            _objectsToRender.push_back((*it));
         }
     }
 }
@@ -804,4 +786,54 @@ std::vector<Hexagon*> LocationState::findPath(Hexagon* from, Hexagon* to)
     return result;
 }
 
+std::vector<std::shared_ptr<UI>>* LocationState::uiToRender()
+{
+    if (_uiToRender.size()) return &_uiToRender;
+
+    _floatMessages.clear();
+    for (auto it = _objectsToRender.begin(); it != _objectsToRender.end(); ++it)
+    {
+
+        (*it)->ui()->removeEventHandlers("mouseleftdown");
+        (*it)->ui()->addEventHandler("mouseleftdown", (*it).get(), (EventRecieverMethod) &LocationState::onMouseDown);
+        _uiToRender.push_back((*it)->ui());
+
+        if (auto message = (*it)->floatMessage())
+        {
+            if (SDL_GetTicks() - message->timestampCreated() >= 7000)
+            {
+                (*it)->floatMessage().reset();
+            }
+            else
+            {
+                message->setX((*it)->hexagon()->x() - camera()->x() - message->width()*0.5);
+                message->setY((*it)->hexagon()->y() - camera()->y() - 70 - message->height());
+                _floatMessages.push_back(message);
+            }
+        }
+    }
+
+    for (auto message : _floatMessages)
+    {
+        _uiToRender.push_back(message);
+    }
+
+    for (auto ui : _panelUIs)
+    {
+        _uiToRender.push_back(ui);
+    }
+
+    auto item = Game::getInstance()->player()->currentHandSlot();
+    if (item)
+    {
+        auto itemUi = item->inventoryDragUi();
+        itemUi->setX(_panelUIs.at(0)->x() + 360 - itemUi->width()*0.5);
+        itemUi->setY(_panelUIs.at(0)->y() + 60 - itemUi->height()*0.5);
+        _uiToRender.push_back(itemUi);
+    }
+
+    return &_uiToRender;
 }
+
+}
+

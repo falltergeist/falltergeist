@@ -109,6 +109,8 @@ set(SOURCES main.cpp
             src/Engine/Settings.h
             src/Engine/State.cpp
             src/Engine/State.h
+            src/Engine/Tile.cpp
+            src/Engine/Tile.h
             src/Engine/UI.cpp
             src/Engine/UI.h
             src/Game/GameDefines.h

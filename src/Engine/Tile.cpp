@@ -18,52 +18,78 @@
  *
  */
 
-#ifndef FALLTERGEIST_MOUSEEVENT_H
-#define FALLTERGEIST_MOUSEEVENT_H
-
 // C++ standard includes
-#include <memory>
 
 // Falltergeist includes
-#include "../Event/Event.h"
+#include "../Engine/Game.h"
+#include "../Engine/Graphics/Renderer.h"
+#include "../Engine/Graphics/Texture.h"
+#include "../Engine/Tile.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class MouseEvent : public Event
+Tile::Tile(int x, int y)
 {
-protected:
-    unsigned int _x = 0;
-    unsigned int _y = 0;
-    int _xOffset = 0;
-    int _yOffset = 0;
-    int _leftButton = false;
-    int _rightButton = false;
-public:
-    MouseEvent(std::string eventName = "mouse");
-    MouseEvent(const std::shared_ptr<MouseEvent> event);
-    virtual ~MouseEvent();
+    _x = x;
+    _y = y;
+}
 
-    void setX(unsigned int value);
-    unsigned int x();
+int Tile::x()
+{
+    return _x;
+}
 
-    void setY(unsigned int value);
-    unsigned int y();
+void Tile::setX(int value)
+{
+    _x = value;
+}
 
-    void setXOffset(int value);
-    int xOffset();
+int Tile::offsetX()
+{
+    return _offsetX;
+}
 
-    void setYOffset(int value);
-    int yOffset();
+void Tile::setOffsetX(int value)
+{
+    _offsetX = value;
+}
 
-    bool leftButton();
-    void setLeftButton(bool value);
+int Tile::y()
+{
+    return _y;
+}
 
-    bool rightButton();
-    void setRightButton(bool value);
-};
+void Tile::setY(int value)
+{
+    _y = value;
+}
+
+int Tile::offsetY()
+{
+    return _offsetY;
+}
+
+void Tile::setOffsetY(int value)
+{
+    _offsetY = value;
+}
+
+std::shared_ptr<Texture> Tile::texture()
+{
+    return _texture;
+}
+
+void Tile::setTexture(std::shared_ptr<Texture> texture)
+{
+    _texture = texture;
+}
+
+void Tile::render()
+{
+    Game::getInstance()->renderer()->drawTexture(_x + _offsetX, _y + _offsetY, _texture);
+}
 
 }
-#endif // FALLTERGEIST_MOUSEEVENT_H

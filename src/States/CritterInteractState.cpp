@@ -67,7 +67,7 @@ void CritterInteractState::init()
     locationState->camera()->setXPosition(critter()->hexagon()->x());
     locationState->camera()->setYPosition(critter()->hexagon()->y() + 100);
     locationState->checkObjectsToRender();
-    locationState->generateUi();
+    //locationState->generateUi();
 }
 
 int CritterInteractState::backgroundID()

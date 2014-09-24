@@ -18,52 +18,49 @@
  *
  */
 
-#ifndef FALLTERGEIST_MOUSEEVENT_H
-#define FALLTERGEIST_MOUSEEVENT_H
+#ifndef FALLTERGEIST_TILE_H
+#define FALLTERGEIST_TILE_H
 
 // C++ standard includes
 #include <memory>
 
 // Falltergeist includes
-#include "../Event/Event.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+class Texture;
 
-class MouseEvent : public Event
+class Tile
 {
 protected:
-    unsigned int _x = 0;
-    unsigned int _y = 0;
-    int _xOffset = 0;
-    int _yOffset = 0;
-    int _leftButton = false;
-    int _rightButton = false;
+    int _x = 0;
+    int _y = 0;
+    int _offsetX = 0;
+    int _offsetY = 0;
+
+    std::shared_ptr<Texture> _texture;
 public:
-    MouseEvent(std::string eventName = "mouse");
-    MouseEvent(const std::shared_ptr<MouseEvent> event);
-    virtual ~MouseEvent();
+    Tile(int x = 0, int y = 0);
 
-    void setX(unsigned int value);
-    unsigned int x();
+    int x();
+    void setX(int value);
 
-    void setY(unsigned int value);
-    unsigned int y();
+    int offsetX();
+    void setOffsetX(int value);
 
-    void setXOffset(int value);
-    int xOffset();
+    int y();
+    void setY(int value);
 
-    void setYOffset(int value);
-    int yOffset();
+    int offsetY();
+    void setOffsetY(int value);
 
-    bool leftButton();
-    void setLeftButton(bool value);
+    std::shared_ptr<Texture> texture();
+    void setTexture(std::shared_ptr<Texture> texture);
 
-    bool rightButton();
-    void setRightButton(bool value);
+    void render();
 };
 
 }
-#endif // FALLTERGEIST_MOUSEEVENT_H
+#endif // FALLTERGEIST_TILE_H
