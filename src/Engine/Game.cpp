@@ -135,25 +135,10 @@ void Game::run()
     while (!_quit)
     {
         handle();
-
-        // thinking
-        _fpsCounter->think();
-        _mouse->think();
-
-        //Surface::animatedPalette->think();
-
-        _mousePosition->setText(std::to_string(mouse()->x()) + " : " + std::to_string(mouse()->y()));
-
-        for (auto state : statesForThinkAndHandle())
-        {
-            state->think();
-        }
-
-        renderer()->beginFrame();
-        renderer()->endFrame();
+        think();
+        draw();
         SDL_Delay(1);
     }
-
     Logger::info("GAME") << "Stopping main loop" << std::endl;
 }
 
@@ -382,7 +367,27 @@ void Game::handle()
             }
         }
     }
+}
 
+void Game::think()
+{
+    _fpsCounter->think();
+    _mouse->think();
+
+    //Surface::animatedPalette->think();
+
+    _mousePosition->setText(std::to_string(mouse()->x()) + " : " + std::to_string(mouse()->y()));
+
+    for (auto state : statesForThinkAndHandle())
+    {
+        state->think();
+    }
+}
+
+void Game::draw()
+{
+    renderer()->beginFrame();
+    renderer()->endFrame();
 }
 
 }
