@@ -295,23 +295,20 @@ void LocationState::setLocation(std::string name)
     {
         auto tilesLst = ResourceManager::lstFileType("art/tiles/tiles.lst");
 
-        unsigned int tilesWidth = 80*100;
-        unsigned int tilesHeight = 36*100;
-
-        _floorFull = std::shared_ptr<Image>(new Image(tilesWidth, tilesHeight));
-        _roofFull  = std::shared_ptr<Image>(new Image(tilesWidth, tilesHeight));
-        _floorFull->texture()->fill(0x000000FF);
-        _roofFull->texture()->fill(0x000000FF);
-
         for (unsigned int i = 0; i != 100*100; ++i)
         {
             unsigned int x = (100 - i%100 - 1)*48 + 32*ceil(i/100);
             unsigned int y = ceil(i/100)*24 +(i%100)*12;
 
-            auto floorTile = ResourceManager::texture("art/tiles/" + tilesLst->strings()->at(mapFile->elevations()->at(_currentElevation)->floorTiles()->at(i)));
-            auto roofTile = ResourceManager::texture("art/tiles/" + tilesLst->strings()->at(mapFile->elevations()->at(_currentElevation)->roofTiles()->at(i)));
-            floorTile->blitTo(_floorFull->texture(), x, y);
-            roofTile->blitTo(_roofFull->texture(), x, y);
+            auto floorTile = std::shared_ptr<Image>(new Image(ResourceManager::texture("art/tiles/" + tilesLst->strings()->at(mapFile->elevations()->at(_currentElevation)->floorTiles()->at(i)))));
+            floorTile->setX(x);
+            floorTile->setY(y);
+            _floorTiles[i] = floorTile;
+
+            auto roofTile = std::shared_ptr<Image>(new Image(ResourceManager::texture("art/tiles/" + tilesLst->strings()->at(mapFile->elevations()->at(_currentElevation)->roofTiles()->at(i)))));
+            roofTile->setX(x);
+            roofTile->setY(y);
+            _roofTiles[i]=roofTile;
         }
         //_floor->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyboardUp);
     }
@@ -366,14 +363,34 @@ void LocationState::generateUi()
     _ui.clear();
     _floatMessages.clear();
 
-
-    if (!_floor)
+    for (unsigned int i=0; i < 100*100; i++)
     {
-        auto renderer = Game::getInstance()->renderer();
-        _floor = std::shared_ptr<Image>(new Image(renderer->width(), renderer->height()));
-        _floorFull->texture()->copyTo(_floor->texture(), 0, 0, camera()->x(), camera()->y(), _floor->width(), _floor->height());
+        _floorTiles[i]->setXOffset(0);
+        _floorTiles[i]->setYOffset(0);
+        if (_floorTiles[i]->x() < (_camera->x() - 120)) continue;
+        if (_floorTiles[i]->x() > (_camera->x() + _camera->width() + 80*2)) continue;
+        if (_floorTiles[i]->y() < (_camera->y() - 36)) continue;
+        if (_floorTiles[i]->y() > (_camera->y() + _camera->height() + 24*2)) continue;
+
+        _floorTiles[i]->setXOffset(-_camera->x());
+        _floorTiles[i]->setYOffset(-_camera->y());
+        addUI(_floorTiles[i]);
     }
-    addUI(_floor);
+
+    for (unsigned int i=0; i < 100*100; i++)
+    {
+        _roofTiles[i]->setXOffset(0);
+        _roofTiles[i]->setYOffset(0);
+        if (_roofTiles[i]->x() < (_camera->x() - 120)) continue;
+        if (_roofTiles[i]->x() > (_camera->x() + _camera->width() + 80*2)) continue;
+        if (_roofTiles[i]->y() < (_camera->y() - 36)) continue;
+        if (_roofTiles[i]->y() > (_camera->y() + _camera->height() + 24*2)) continue;
+
+        _roofTiles[i]->setXOffset(-_camera->x());
+        _roofTiles[i]->setYOffset(-_camera->y());
+        addUI(_roofTiles[i]);
+    }
+
 
     for (auto object : _objectsToRender)
     {
@@ -468,10 +485,6 @@ void LocationState::think()
         if (_scrollRight && _scrollBottom)
         {
             Game::getInstance()->mouse()->setType(Mouse::SCROLL_SE);
-        }
-        if (_scrollLeft||_scrollRight||_scrollTop||_scrollBottom)
-        {
-            _floor.reset();
         }
     }
 

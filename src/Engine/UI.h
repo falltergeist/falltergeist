@@ -67,6 +67,7 @@ public:
     virtual bool visible();
 
     virtual void think();
+    virtual void render();
 
     virtual unsigned int width();
     virtual unsigned int height();

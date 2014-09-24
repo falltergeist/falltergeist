@@ -52,7 +52,7 @@ void Renderer::beginFrame()
     {
         if (ui->visible())
         {
-            drawTexture(ui->x(), ui->y(), ui->texture());
+            ui->render();
         }
     }
 }
