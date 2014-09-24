@@ -67,8 +67,8 @@ protected:
     std::map<std::string, std::shared_ptr<VMStackValue>> _EVARS;
 
 
-    std::shared_ptr<Image> _floorTiles[100*100];
-    std::shared_ptr<Image> _roofTiles[100*100];
+    std::vector<std::shared_ptr<Image>> _floorTiles;
+    std::vector<std::shared_ptr<Image>> _roofTiles;
     std::vector<std::shared_ptr<ActiveUI>> _panelUIs;
     std::vector<std::shared_ptr<ActiveUI>> _floatMessages;
 

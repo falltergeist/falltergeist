@@ -300,15 +300,23 @@ void LocationState::setLocation(std::string name)
             unsigned int x = (100 - i%100 - 1)*48 + 32*ceil(i/100);
             unsigned int y = ceil(i/100)*24 +(i%100)*12;
 
-            auto floorTile = std::shared_ptr<Image>(new Image(ResourceManager::texture("art/tiles/" + tilesLst->strings()->at(mapFile->elevations()->at(_currentElevation)->floorTiles()->at(i)))));
-            floorTile->setX(x);
-            floorTile->setY(y);
-            _floorTiles[i] = floorTile;
+            unsigned int tileNum = mapFile->elevations()->at(_currentElevation)->floorTiles()->at(i);
+            if (tileNum > 1)
+            {
+                auto floorTile = std::shared_ptr<Image>(new Image(ResourceManager::texture("art/tiles/" + tilesLst->strings()->at(tileNum))));
+                floorTile->setX(x);
+                floorTile->setY(y);
+                _floorTiles.push_back(floorTile);
+            }
 
-            auto roofTile = std::shared_ptr<Image>(new Image(ResourceManager::texture("art/tiles/" + tilesLst->strings()->at(mapFile->elevations()->at(_currentElevation)->roofTiles()->at(i)))));
-            roofTile->setX(x);
-            roofTile->setY(y);
-            _roofTiles[i]=roofTile;
+            tileNum = mapFile->elevations()->at(_currentElevation)->roofTiles()->at(i);
+            if (tileNum > 1)
+            {
+                auto roofTile = std::shared_ptr<Image>(new Image(ResourceManager::texture("art/tiles/" + tilesLst->strings()->at(tileNum))));
+                roofTile->setX(x);
+                roofTile->setY(y);
+                _roofTiles.push_back(roofTile);
+            }
         }
         //_floor->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyboardUp);
     }
@@ -363,34 +371,33 @@ void LocationState::generateUi()
     _ui.clear();
     _floatMessages.clear();
 
-    for (unsigned int i=0; i < 100*100; i++)
+    for (auto it = _floorTiles.begin(); it != _floorTiles.end(); ++it)
     {
-        _floorTiles[i]->setXOffset(0);
-        _floorTiles[i]->setYOffset(0);
-        if (_floorTiles[i]->x() < (_camera->x() - 120)) continue;
-        if (_floorTiles[i]->x() > (_camera->x() + _camera->width() + 80*2)) continue;
-        if (_floorTiles[i]->y() < (_camera->y() - 36)) continue;
-        if (_floorTiles[i]->y() > (_camera->y() + _camera->height() + 24*2)) continue;
+        (*it)->setXOffset(0);
+        (*it)->setYOffset(0);
+        if ((*it)->x() < (_camera->x() - 120)) continue;
+        if ((*it)->x() > (_camera->x() + _camera->width() + 80*2)) continue;
+        if ((*it)->y() < (_camera->y() - 36)) continue;
+        if ((*it)->y() > (_camera->y() + _camera->height() + 24*2)) continue;
 
-        _floorTiles[i]->setXOffset(-_camera->x());
-        _floorTiles[i]->setYOffset(-_camera->y());
-        addUI(_floorTiles[i]);
+        (*it)->setXOffset(-_camera->x());
+        (*it)->setYOffset(-_camera->y());
+        addUI((*it));
     }
 
-    for (unsigned int i=0; i < 100*100; i++)
+    for (auto it = _roofTiles.begin(); it != _roofTiles.end(); ++it)
     {
-        _roofTiles[i]->setXOffset(0);
-        _roofTiles[i]->setYOffset(0);
-        if (_roofTiles[i]->x() < (_camera->x() - 120)) continue;
-        if (_roofTiles[i]->x() > (_camera->x() + _camera->width() + 80*2)) continue;
-        if (_roofTiles[i]->y() < (_camera->y() - 36)) continue;
-        if (_roofTiles[i]->y() > (_camera->y() + _camera->height() + 24*2)) continue;
+        (*it)->setXOffset(0);
+        (*it)->setYOffset(0);
+        if ((*it)->x() < (_camera->x() - 120)) continue;
+        if ((*it)->x() > (_camera->x() + _camera->width() + 80*2)) continue;
+        if ((*it)->y() < (_camera->y() - 36)) continue;
+        if ((*it)->y() > (_camera->y() + _camera->height() + 24*2)) continue;
 
-        _roofTiles[i]->setXOffset(-_camera->x());
-        _roofTiles[i]->setYOffset(-_camera->y());
-        addUI(_roofTiles[i]);
+        (*it)->setXOffset(-_camera->x());
+        (*it)->setYOffset(-_camera->y());
+        addUI((*it));
     }
-
 
     for (auto object : _objectsToRender)
     {
