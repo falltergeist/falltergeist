@@ -59,7 +59,7 @@ protected:
     std::vector<std::shared_ptr<Hexagon>> _hexagonsWithObjects;
 
     unsigned int _currentElevation = 0;
-    std::shared_ptr<LocationCamera> _camera;
+    LocationCamera* _camera = 0;
 
     std::vector<std::shared_ptr<GameObject>> _objectsToRender;
 
@@ -91,7 +91,7 @@ public:
     virtual void handle(std::shared_ptr<Event> event);
 
     std::vector<std::shared_ptr<Hexagon>>* hexagons();
-    std::shared_ptr<LocationCamera> camera();
+    LocationCamera* camera();
 
     void checkObjectsToRender();
     void checkHexagonsWidthObjects();

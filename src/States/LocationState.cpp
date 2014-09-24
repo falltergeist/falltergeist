@@ -60,18 +60,19 @@ namespace Falltergeist
 
 LocationState::LocationState() : State()
 {
+    auto renderer = Game::getInstance()->renderer();
+    _camera = new LocationCamera(renderer->width(), renderer->height(), 0, 0);
 }
 
 LocationState::~LocationState()
 {
+    delete _camera;
 }
 
 void LocationState::init()
 {
     if (initialized()) return;
     State::init();
-
-    auto game = Game::getInstance();
 
     // Creating 200x200 hexagonal map
     unsigned int index = 0;
@@ -99,10 +100,10 @@ void LocationState::init()
         // @todo
     }
 
-    _camera = std::shared_ptr<LocationCamera>(new LocationCamera(game->renderer()->width(), game->renderer()->height(), 0, 0));
 
 
 
+    auto game = Game::getInstance();
     game->mouse()->setType(Mouse::ACTION);
 
     _initPanel();
@@ -557,7 +558,7 @@ std::vector<std::shared_ptr<Hexagon>>* LocationState::hexagons()
     return &_hexagons;
 }
 
-std::shared_ptr<LocationCamera> LocationState::camera()
+LocationCamera* LocationState::camera()
 {
     return _camera;
 }
