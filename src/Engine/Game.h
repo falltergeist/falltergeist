@@ -87,6 +87,10 @@ public:
     void run();
     void quit();    
 
+    void handle();
+    void think();
+    void draw();
+
     void setPlayer(std::shared_ptr<GameDudeObject> player);
     std::shared_ptr<GameDudeObject> player();
     std::shared_ptr<Mouse> mouse();
