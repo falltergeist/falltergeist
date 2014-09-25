@@ -336,11 +336,12 @@ void Game::handle()
 
                         if (event->keyCode() == SDLK_F11)
                         {
-                            std::shared_ptr<Texture> texture = renderer()->screenshot();
-                            SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(texture->data(), texture->width(), texture->height(), 32, texture->width()*4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+                            Texture* texture = renderer()->screenshot();
+                            SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(texture->data(), texture->width(), texture->height(), 32, texture->width()*4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);                            
                             std::string name = std::to_string(SDL_GetTicks()) +  ".bmp";
                             SDL_SaveBMP(surface, name.c_str());
-                            SDL_FreeSurface(surface);
+                            SDL_FreeSurface(surface);                            
+                            delete texture;
                             Logger::info("GAME") << "Screenshot saved to " + name << std::endl;
 
                         }

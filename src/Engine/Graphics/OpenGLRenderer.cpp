@@ -122,7 +122,7 @@ void OpenGLRenderer::endFrame()
     SDL_GL_SwapWindow(_window);
 }
 
-void OpenGLRenderer::registerTexture(std::shared_ptr<Texture> texture)
+void OpenGLRenderer::registerTexture(Texture* texture)
 {
     Renderer::registerTexture(texture);
     if (texture->id()) return; // if registered
@@ -200,7 +200,7 @@ void OpenGLRenderer::unregisterTexture(Texture* texture)
     texture->setId(0);
 }
 
-void OpenGLRenderer::drawTexture(std::shared_ptr<Texture> texture, int x, int y, int sourceX, int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
+void OpenGLRenderer::drawTexture(Texture* texture, int x, int y, int sourceX, int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
 {
     Renderer::drawTexture(texture, x, y);
     if (!texture->id()) registerTexture(texture);
@@ -221,7 +221,7 @@ void OpenGLRenderer::drawTexture(std::shared_ptr<Texture> texture, int x, int y,
     glEnd();
 }
 
-std::shared_ptr<Texture> OpenGLRenderer::screenshot()
+Texture* OpenGLRenderer::screenshot()
 {
     unsigned int width = Game::getInstance()->renderer()->width();
     unsigned int height = Game::getInstance()->renderer()->height();
@@ -251,7 +251,7 @@ std::shared_ptr<Texture> OpenGLRenderer::screenshot()
     }
     if(SDL_MUSTLOCK(surface)) SDL_UnlockSurface(surface);
 
-    auto texture = std::shared_ptr<Texture>(new Texture(width, height));
+    auto texture = new Texture(width, height);
     texture->loadFromRGBA((unsigned int*)surface->pixels);
 
     SDL_FreeSurface(flipped);

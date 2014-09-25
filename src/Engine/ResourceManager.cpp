@@ -35,7 +35,7 @@ namespace Falltergeist
 
 std::vector<std::shared_ptr<libfalltergeist::DatFile>> ResourceManager::_datFiles;
 std::map<std::string, std::shared_ptr<libfalltergeist::DatFileItem>> ResourceManager::_datFilesItems;
-std::map<std::string, std::shared_ptr<Texture>> ResourceManager::_textures;
+std::map<std::string, Texture*> ResourceManager::_textures;
 std::map<std::string, std::shared_ptr<Font>> ResourceManager::_fonts;
 
 ResourceManager::ResourceManager()
@@ -50,6 +50,10 @@ ResourceManager::ResourceManager()
 
 ResourceManager::~ResourceManager()
 {       
+    for (auto it = _textures.begin(); it != _textures.end(); ++it)
+    {
+        delete it->second;
+    }
 }
 
 std::shared_ptr<libfalltergeist::DatFileItem> ResourceManager::datFileItem(std::string filename)
@@ -206,7 +210,7 @@ std::shared_ptr<libfalltergeist::RixFileType> ResourceManager::rixFileType(std::
     return std::dynamic_pointer_cast<libfalltergeist::RixFileType>(datFileItem(filename));
 }
 
-std::shared_ptr<Texture> ResourceManager::texture(std::string filename)
+Texture* ResourceManager::texture(std::string filename)
 {
     if (_textures.find(filename) != _textures.end())
     {
@@ -215,20 +219,20 @@ std::shared_ptr<Texture> ResourceManager::texture(std::string filename)
 
     std::string ext = filename.substr(filename.length() - 4);
 
-    std::shared_ptr<Texture> texture;
+    Texture* texture = 0;
 
     if (ext == ".rix")
     {
         auto rix = rixFileType(filename);
         if (!rix) return 0;
-        texture = std::shared_ptr<Texture>(new Texture(rix->width(), rix->height()));
+        texture = new Texture(rix->width(), rix->height());
         texture->loadFromRGBA(rix->rgba());
     }
     else if (ext == ".frm")
     {
         auto frm = frmFileType(filename);
         if (!frm) return 0;
-        texture = std::shared_ptr<Texture>(new Texture(frm->width(), frm->height()));
+        texture = new Texture(frm->width(), frm->height());
         texture->loadFromRGBA(frm->rgba(palFileType("color.pal")));
     }
     else
@@ -236,7 +240,7 @@ std::shared_ptr<Texture> ResourceManager::texture(std::string filename)
         throw Exception("ResourceManager::surface() - unknow image type:" + filename);
     }
 
-    _textures.insert(std::pair<std::string, std::shared_ptr<Texture>>(filename, texture));
+    _textures.insert(std::pair<std::string, Texture*>(filename, texture));
     return texture;
 }
 
@@ -477,6 +481,11 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
         return "";
     }
     return prefix + lst->strings()->at(id);
+}
+
+std::map<std::string, Texture*>* ResourceManager::textures()
+{
+    return &_textures;
 }
 
 }

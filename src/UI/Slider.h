@@ -42,7 +42,7 @@ protected:
 public:
     Slider(int x, int y);
     virtual ~Slider();
-    virtual std::shared_ptr<Texture> texture();
+    virtual Texture* texture();
     virtual int x();
     double minValue();
     void setMinValue(double value);

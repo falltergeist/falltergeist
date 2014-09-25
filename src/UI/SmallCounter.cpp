@@ -40,7 +40,7 @@ SmallCounter::~SmallCounter()
 {
 }
 
-std::shared_ptr<Texture> SmallCounter::texture()
+Texture* SmallCounter::texture()
 {
     if (_texture) return _texture;
 
@@ -55,7 +55,7 @@ std::shared_ptr<Texture> SmallCounter::texture()
     }
     ss << result;
 
-    _texture = std::shared_ptr<Texture>(new Texture(9*(_length+1), 16));
+    _texture = new Texture(9*(_length+1), 16);
 
     char* textNumber = new char[_length + 1]();
 
@@ -107,7 +107,7 @@ std::shared_ptr<Texture> SmallCounter::texture()
 void SmallCounter::setLength(unsigned int length)
 {
     if (_length == length) return;
-    _texture.reset();
+    delete _texture; _texture = 0;
     _length = length;
 }
 
@@ -119,7 +119,7 @@ unsigned int SmallCounter::length()
 void SmallCounter::setNumber(signed int number)
 {
     if (_number == number) return;
-    _texture.reset();
+    delete _texture; _texture = 0;
     _number = number;
 }
 
@@ -138,7 +138,7 @@ void SmallCounter::setColor(unsigned char color)
             if (_color != color)
             {
                 _color = color;
-                _texture.reset();
+                delete _texture; _texture = 0;
             }
             break;
     }

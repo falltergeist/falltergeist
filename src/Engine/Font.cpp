@@ -49,7 +49,7 @@ Font::Font(std::string filename, unsigned int color)
         }
     }
 
-    _texture = std::shared_ptr<Texture>(new Texture(width, height));
+    _texture = new Texture(width, height);
     _texture->loadFromRGBA(rgba);
     delete [] rgba;
 
@@ -57,6 +57,7 @@ Font::Font(std::string filename, unsigned int color)
 
 Font::~Font()
 {
+    delete _texture;
 }
 
 unsigned short Font::height()
@@ -84,7 +85,7 @@ unsigned short Font::spaceWidth()
     return _aaf->spaceWidth();
 }
 
-std::shared_ptr<Texture> Font::texture()
+Texture* Font::texture()
 {
     return _texture;
 }

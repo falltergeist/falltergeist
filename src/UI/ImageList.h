@@ -47,7 +47,7 @@ public:
     void addImage(std::string filename);
     void setCurrentImage(unsigned int number);
     unsigned int currentImage();
-    virtual std::shared_ptr<Texture> texture();
+    virtual Texture* texture();
     std::vector<std::shared_ptr<Image>>* images();
 };
 

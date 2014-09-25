@@ -41,11 +41,12 @@ protected:
     unsigned int _type = UNSIGNED; // unsigned by default
 public:
     enum {COLOR_WHITE = 1, COLOR_YELLOW, COLOR_RED};
-    enum {UNSIGNED = 0, SIGNED}; 
+    enum {UNSIGNED = 0, SIGNED};
+
     SmallCounter(int x = 0, int y = 0);
     ~SmallCounter();
 
-    virtual std::shared_ptr<Texture> texture();
+    virtual Texture* texture();
 
     void setColor(unsigned char color);
     unsigned char color();

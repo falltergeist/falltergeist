@@ -54,7 +54,7 @@ public:
 
     virtual std::string name();
 
-    virtual std::shared_ptr<Texture> screenshot();
+    virtual Texture* screenshot();
 };
 
 }

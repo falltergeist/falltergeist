@@ -37,7 +37,7 @@ protected:
     bool _checkboxMode = false; // remember new state after click
     bool _checked = false;
 
-    std::vector<std::shared_ptr<Texture>> _textures;
+    std::vector<Texture*> _textures;
     void _onLeftButtonClick(std::shared_ptr<MouseEvent> event);
 public:
     enum ButtonType {
@@ -76,7 +76,7 @@ public:
     ~ImageButton();
 
     void setState(unsigned int value);
-    virtual std::shared_ptr<Texture> texture();
+    virtual Texture* texture();
 };
 
 }

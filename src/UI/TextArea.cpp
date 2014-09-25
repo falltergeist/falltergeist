@@ -76,7 +76,7 @@ void TextArea::init()
 
 TextArea* TextArea::appendText(std::string text)
 {
-    _texture.reset();
+    delete _texture; _texture = 0;
     _strings.back()->setText(_strings.back()->text() + text);
     return this;
 }
@@ -90,7 +90,7 @@ unsigned char TextArea::horizontalAlign()
 TextArea * TextArea::setHorizontalAlign(unsigned char align)
 {
     if (_horizontalAlign == align) return this;
-    _texture.reset();
+    delete _texture; _texture = 0;
     _horizontalAlign = align;
     return this;
 }
@@ -103,7 +103,7 @@ unsigned char TextArea::verticalAlign()
 TextArea * TextArea::setVerticalAlign(unsigned char align)
 {
     if (_verticalAlign == align) return this;
-    _texture.reset();
+    delete _texture; _texture = 0;
     _verticalAlign = align;
     return this;
 }
@@ -127,7 +127,7 @@ TextArea * TextArea::setText(std::string text)
         if (_strings.back()->text() == text) return this;
     }
 
-    _texture.reset();
+    delete _texture; _texture = 0;
     auto font = _strings.back()->font();
     while (!_strings.empty())
     {
@@ -141,7 +141,7 @@ TextArea * TextArea::setText(std::string text)
 
 TextArea * TextArea::setFont(std::shared_ptr<Font> font)
 {
-    _texture.reset();
+    delete _texture; _texture = 0;
     for (auto it = _strings.begin(); it != _strings.end(); it++)
     {
         (*it)->setFont(font);
@@ -152,7 +152,7 @@ TextArea * TextArea::setFont(std::shared_ptr<Font> font)
 TextArea * TextArea::setWordWrap(bool wordWrap)
 {
     if (_wordWrap == wordWrap) return this;
-    _texture.reset();
+    delete _texture; _texture = 0;
     _wordWrap = wordWrap;
     return this;
 }
@@ -165,7 +165,7 @@ bool TextArea::wordWrap()
 TextArea* TextArea::setBackgroundColor(unsigned int color)
 {
     if (_backgroundColor == color) return this;
-    _texture.reset();
+    delete _texture; _texture = 0;
     _backgroundColor = color;
     return this;
 }
@@ -173,7 +173,7 @@ TextArea* TextArea::setBackgroundColor(unsigned int color)
 TextArea* TextArea::setWidth(unsigned int width)
 {
     if (_width == width) return this;
-    _texture.reset();
+    delete _texture; _texture = 0;
     _width = width;
     return this;
 }
@@ -190,7 +190,7 @@ unsigned int TextArea::width()
 TextArea* TextArea::setHeight(unsigned int height)
 {
     if (_height == height) return this;
-    _texture.reset();
+    delete _texture; _texture = 0;
     _height = height;
     return this;
 }
@@ -204,7 +204,7 @@ unsigned int TextArea::height()
    return _height;
 }
 
-std::shared_ptr<Texture> TextArea::texture()
+Texture* TextArea::texture()
 {
     if (_texture) return _texture;
 
@@ -341,7 +341,7 @@ std::shared_ptr<Texture> TextArea::texture()
     }
 
     // creating texture with correct size
-    _texture = std::shared_ptr<Texture>(new Texture(textureWidth, textureHeight));
+    _texture = new Texture(textureWidth, textureHeight);
     _texture->fill(_backgroundColor);
 
     x = 0;
@@ -432,7 +432,7 @@ std::shared_ptr<Texture> TextArea::texture()
 
     if (_outlineColor)
     {
-        auto outlineTexture = std::shared_ptr<Texture>(new Texture(_texture->width() + 2, _texture->height() + 2));
+        auto outlineTexture = new Texture(_texture->width() + 2, _texture->height() + 2);
         for (unsigned int y = 0; y != _texture->height(); ++y)
         {
             for (unsigned int x = 0; x != _texture->width(); ++x)
@@ -451,7 +451,7 @@ std::shared_ptr<Texture> TextArea::texture()
             }
         }
         _texture->blitTo(outlineTexture, 1, 1);
-        _texture.reset();
+        delete _texture;
         _texture = outlineTexture;
     }
 
@@ -467,7 +467,7 @@ TextArea* TextArea::setOutlineColor(unsigned int color)
 {
     if (_outlineColor == color) return this;
     _outlineColor = color;
-    _texture.reset();
+    delete _texture; _texture = 0;
     return this;
 }
 

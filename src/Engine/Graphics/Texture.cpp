@@ -116,11 +116,6 @@ void Texture::loadFromRGBA(unsigned int* data)
     for (unsigned int i = 0; i != _width*_height; ++i) _data[i] = data[i];    
 }
 
-void Texture::copyTo(std::shared_ptr<Texture> destination, unsigned int destinationX, unsigned int destinationY, unsigned int sourceX, unsigned int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
-{
-    copyTo(destination.get(), destinationX, destinationY, sourceX, sourceY, sourceWidth, sourceHeight);
-}
-
 void Texture::copyTo(Texture* destination, unsigned int destinationX, unsigned int destinationY, unsigned int sourceX, unsigned int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
 {
     if (sourceWidth == 0) sourceWidth = width();
@@ -135,7 +130,7 @@ void Texture::copyTo(Texture* destination, unsigned int destinationX, unsigned i
     }
 }
 
-void Texture::blitTo(std::shared_ptr<Texture> destination, unsigned int destinationX, unsigned int destinationY, unsigned int sourceX, unsigned int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
+void Texture::blitTo(Texture* destination, unsigned int destinationX, unsigned int destinationY, unsigned int sourceX, unsigned int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
 {
     if (sourceWidth == 0) sourceWidth = width();
     if (sourceHeight == 0) sourceHeight = height();
@@ -164,9 +159,9 @@ void Texture::fill(unsigned int color)
     }
 }
 
-std::shared_ptr<Texture> Texture::resize(unsigned int width, unsigned int height)
+Texture* Texture::resize(unsigned int width, unsigned int height)
 {
-    auto resized = std::shared_ptr<Texture>(new Texture(width, height));
+    auto resized = new Texture(width, height);
 
     double _stretch_factor_x = static_cast<double>(width)  / static_cast<double>(this->width());
     double _stretch_factor_y = static_cast<double>(height) / static_cast<double>(this->height());
@@ -191,7 +186,7 @@ std::shared_ptr<Texture> Texture::resize(unsigned int width, unsigned int height
     return resized;
 }
 
-std::shared_ptr<Texture> Texture::fitTo(unsigned int width, unsigned int height)
+Texture* Texture::fitTo(unsigned int width, unsigned int height)
 {
     double widthRatio = static_cast<double>(width) / static_cast<double>(this->width());
     double heightRatio = static_cast<double>(height) / static_cast<double>(this->height());

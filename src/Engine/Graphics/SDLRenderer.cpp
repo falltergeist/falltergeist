@@ -140,7 +140,7 @@ void SDLRenderer::drawTexture(Texture* texture, int x, int y, int sourceX, int s
     }
 }
 
-std::shared_ptr<Texture> SDLRenderer::screenshot()
+Texture* SDLRenderer::screenshot()
 {
     unsigned int width = Game::getInstance()->renderer()->width();
     unsigned int height = Game::getInstance()->renderer()->height();
@@ -156,7 +156,7 @@ std::shared_ptr<Texture> SDLRenderer::screenshot()
     SDL_Surface* surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32, Rmask, Gmask, Bmask, Amask);
     SDL_RenderReadPixels(_renderer, NULL, surface->format->format, surface->pixels, surface->pitch);
 
-    auto texture = std::shared_ptr<Texture>(new Texture(width, height));
+    auto texture = new Texture(width, height);
     texture->loadFromRGBA((unsigned int*)surface->pixels);
 
     SDL_FreeSurface(surface);

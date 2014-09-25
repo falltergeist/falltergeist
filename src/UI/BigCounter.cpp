@@ -40,7 +40,7 @@ BigCounter::~BigCounter()
 {
 }
 
-std::shared_ptr<Texture> BigCounter::texture()
+Texture* BigCounter::texture()
 {
     if (_texture) return _texture;
 
@@ -50,7 +50,7 @@ std::shared_ptr<Texture> BigCounter::texture()
     std::stringstream ss;
     ss << _number;
 
-    _texture = std::shared_ptr<Texture>(new Texture(14*_length, 24));
+    _texture = new Texture(14*_length, 24);
 
     char* textNumber = new char[_length + 1]();
 
@@ -87,7 +87,7 @@ std::shared_ptr<Texture> BigCounter::texture()
 void BigCounter::setNumber(unsigned int number)
 {
     if (_number == number) return;
-    _texture.reset();
+    delete _texture; _texture = 0;
     _number = number;
 }
 
@@ -106,7 +106,7 @@ void BigCounter::setColor(unsigned char color)
             if (_color != color)
             {
                 _color = color;
-                _texture.reset();
+                delete _texture; _texture = 0;
             }
             break;
     }

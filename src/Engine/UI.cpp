@@ -18,12 +18,14 @@
  */
 
 // C++ standard includes
+#include <algorithm>
 
 // Falltergeist includes
-#include "../Engine/UI.h"
-#include "../Engine/Graphics/Texture.h"
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
+#include "../Engine/Graphics/Texture.h"
+#include "../Engine/ResourceManager.h"
+#include "../Engine/UI.h"
 
 // Third party includes
 
@@ -38,6 +40,20 @@ UI::UI(int x, int y)
 
 UI::~UI()
 {
+    // Delete texture only if it wasn't allocated by Resource Manager
+    if (_texture)
+    {
+        bool found = false;
+        for (auto it = ResourceManager::textures()->begin(); it != ResourceManager::textures()->end(); ++it)
+        {
+            if (it->second == _texture)
+            {
+                found = true;
+                break;
+            }
+        }
+        if (!found) delete _texture;
+    }
 }
 
 int UI::x()
@@ -60,12 +76,12 @@ void UI::setY(int value)
     _y = value;
 }
 
-std::shared_ptr<Texture> UI::texture()
+Texture* UI::texture()
 {
     return _texture;
 }
 
-void UI::setTexture(std::shared_ptr<Texture> texture)
+void UI::setTexture(Texture* texture)
 {
     _texture = texture;
 }

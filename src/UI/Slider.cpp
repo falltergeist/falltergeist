@@ -50,7 +50,7 @@ void Slider::_onDrag(std::shared_ptr<MouseEvent> event)
     }
 }
 
-std::shared_ptr<Texture> Slider::texture()
+Texture* Slider::texture()
 {
     if (_drag) return _imageList.images()->at(0)->texture();
     return _imageList.images()->at(1)->texture();

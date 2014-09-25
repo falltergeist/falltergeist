@@ -63,11 +63,6 @@ unsigned int Renderer::height()
     return _height;
 }
 
-void Renderer::registerTexture(std::shared_ptr<Texture> texture)
-{
-    registerTexture(texture.get());
-}
-
 void Renderer::registerTexture(Texture* texture)
 {
 }
@@ -80,12 +75,7 @@ void Renderer::drawTexture(Texture* texture, int x, int y, int sourceX, int sour
 {
 }
 
-void Renderer::drawTexture(std::shared_ptr<Texture> texture, int x, int y, int sourceX, int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
-{
-    drawTexture(texture.get(), x, y, sourceX, sourceY, sourceWidth, sourceHeight);
-}
-
-std::shared_ptr<Texture> Renderer::screenshot()
+Texture* Renderer::screenshot()
 {
     return 0;
 }

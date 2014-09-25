@@ -66,7 +66,7 @@ void ImageList::addImage(std::string filename)
     addImage(std::shared_ptr<Image>(new Image(filename)));
 }
 
-std::shared_ptr<Texture> ImageList::texture()
+Texture* ImageList::texture()
 {
     return images()->at(currentImage())->texture();
 }

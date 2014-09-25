@@ -87,7 +87,7 @@ public:
     TextArea* setFont(std::shared_ptr<Font> font);
     std::shared_ptr<Font> font();
 
-    virtual std::shared_ptr<Texture> texture();
+    virtual Texture* texture();
 
     unsigned int timestampCreated();
 };

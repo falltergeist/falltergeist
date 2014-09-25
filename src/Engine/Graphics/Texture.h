@@ -61,12 +61,11 @@ public:
 
     void fill(unsigned int color);
 
-    void copyTo(std::shared_ptr<Texture> destination, unsigned int destinationX = 0, unsigned int destinationY = 0, unsigned int sourceX = 0, unsigned int sourceY = 0, unsigned int sourceWidth = 0, unsigned int sourceHeight = 0);
     void copyTo(Texture* destination, unsigned int destinationX = 0, unsigned int destinationY = 0, unsigned int sourceX = 0, unsigned int sourceY = 0, unsigned int sourceWidth = 0, unsigned int sourceHeight = 0);
-    void blitTo(std::shared_ptr<Texture> destination, unsigned int destinationX = 0, unsigned int destinationY = 0, unsigned int sourceX = 0, unsigned int sourceY = 0, unsigned int sourceWidth = 0, unsigned int sourceHeight = 0);
+    void blitTo(Texture* destination, unsigned int destinationX = 0, unsigned int destinationY = 0, unsigned int sourceX = 0, unsigned int sourceY = 0, unsigned int sourceWidth = 0, unsigned int sourceHeight = 0);
 
-    std::shared_ptr<Texture> resize(unsigned int width, unsigned int height);
-    std::shared_ptr<Texture> fitTo(unsigned int width, unsigned int height);
+    Texture* resize(unsigned int width, unsigned int height);
+    Texture* fitTo(unsigned int width, unsigned int height);
 
     void loadFromRGBA(unsigned int* data);
 

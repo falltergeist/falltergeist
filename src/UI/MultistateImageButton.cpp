@@ -152,7 +152,7 @@ void MultistateImageButton::_onLeftButtonClick(std::shared_ptr<MouseEvent> event
     }
 }
 
-std::shared_ptr<Texture> MultistateImageButton::texture()
+Texture* MultistateImageButton::texture()
 {
     return _imageList.images()->at(_currentState)->texture();
 }
