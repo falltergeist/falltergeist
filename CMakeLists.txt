@@ -111,6 +111,8 @@ set(SOURCES main.cpp
             src/Engine/State.h
             src/Engine/Tile.cpp
             src/Engine/Tile.h
+            src/Engine/TileMap.cpp
+            src/Engine/TileMap.h
             src/Engine/UI.cpp
             src/Engine/UI.h
             src/Game/GameDefines.h

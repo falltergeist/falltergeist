@@ -31,10 +31,16 @@
 namespace Falltergeist
 {
 
-Tile::Tile(int x, int y)
+Tile::Tile(unsigned int number, int x, int y)
 {
+    _number = number;
     _x = x;
     _y = y;
+}
+
+unsigned int Tile::number()
+{
+    return _number;
 }
 
 int Tile::x()
@@ -42,54 +48,19 @@ int Tile::x()
     return _x;
 }
 
-void Tile::setX(int value)
-{
-    _x = value;
-}
-
-int Tile::offsetX()
-{
-    return _offsetX;
-}
-
-void Tile::setOffsetX(int value)
-{
-    _offsetX = value;
-}
-
 int Tile::y()
 {
     return _y;
 }
 
-void Tile::setY(int value)
+unsigned int Tile::index()
 {
-    _y = value;
+    return _index;
 }
 
-int Tile::offsetY()
+void Tile::setIndex(unsigned int value)
 {
-    return _offsetY;
-}
-
-void Tile::setOffsetY(int value)
-{
-    _offsetY = value;
-}
-
-std::shared_ptr<Texture> Tile::texture()
-{
-    return _texture;
-}
-
-void Tile::setTexture(std::shared_ptr<Texture> texture)
-{
-    _texture = texture;
-}
-
-void Tile::render()
-{
-    Game::getInstance()->renderer()->drawTexture(_texture, _x + _offsetX, _y + _offsetY);
+    _index = value;
 }
 
 }

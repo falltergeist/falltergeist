@@ -118,6 +118,11 @@ void Texture::loadFromRGBA(unsigned int* data)
 
 void Texture::copyTo(std::shared_ptr<Texture> destination, unsigned int destinationX, unsigned int destinationY, unsigned int sourceX, unsigned int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
 {
+    copyTo(destination.get(), destinationX, destinationY, sourceX, sourceY, sourceWidth, sourceHeight);
+}
+
+void Texture::copyTo(Texture* destination, unsigned int destinationX, unsigned int destinationY, unsigned int sourceX, unsigned int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
+{
     if (sourceWidth == 0) sourceWidth = width();
     if (sourceHeight == 0) sourceHeight = height();
 

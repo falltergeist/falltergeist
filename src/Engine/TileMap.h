@@ -15,13 +15,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
-#ifndef FALLTERGEIST_TILE_H
-#define FALLTERGEIST_TILE_H
+#ifndef FALLTERGEIST_TILEMAP_H
+#define FALLTERGEIST_TILEMAP_H
 
 // C++ standard includes
+#include <vector>
 #include <memory>
 
 // Falltergeist includes
@@ -30,25 +30,23 @@
 
 namespace Falltergeist
 {
-class Texture;
 
-class Tile
+class Texture;
+class Tile;
+
+class TileMap
 {
 protected:
-    unsigned int _index = 0;
-    unsigned int _number = 0;
-    int _x = 0;
-    int _y = 0;
+    unsigned int _square = 0;
+    Texture* _texture = 0;
+    std::vector<Tile*> _tiles;
+    void _generateTexture();
 public:
-    Tile(unsigned int number, int x = 0, int y = 0);
-
-    unsigned int number();
-    int x();
-    int y();
-
-    unsigned int index();
-    void setIndex(unsigned int value);
+    TileMap();
+    ~TileMap();
+    std::vector<Tile*>* tiles();
+    void render();
 };
 
 }
-#endif // FALLTERGEIST_TILE_H
+#endif // FALLTERGEIST_TILEMAP_H

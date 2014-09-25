@@ -35,6 +35,7 @@
 #include "../Engine/Logger.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Tile.h"
+#include "../Engine/TileMap.h"
 #include "../Game/GameDefines.h"
 #include "../Game/GameDudeObject.h"
 #include "../Game/GameObject.h"
@@ -64,32 +65,8 @@ LocationState::LocationState() : State()
 {
     auto renderer = Game::getInstance()->renderer();
     _camera = new LocationCamera(renderer->width(), renderer->height(), 0, 0);
-}
-
-LocationState::~LocationState()
-{
-    delete _camera;
-    while (!_hexagons.empty())
-    {
-        delete _hexagons.back();
-        _hexagons.pop_back();
-    }
-    while (!_floorTiles.empty())
-    {
-        delete _floorTiles.back();
-        _floorTiles.pop_back();
-    }
-    while (!_roofTiles.empty())
-    {
-        delete _roofTiles.back();
-        _roofTiles.pop_back();
-    }
-}
-
-void LocationState::init()
-{
-    if (initialized()) return;
-    State::init();
+    _floor = new TileMap();
+    _roof = new TileMap();
 
     // Creating 200x200 hexagonal map
     unsigned int index = 0;
@@ -144,6 +121,26 @@ void LocationState::init()
         if (index5 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index5));
         if (index6 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index6));
     }
+
+}
+
+LocationState::~LocationState()
+{
+    delete _camera;
+    while (!_hexagons.empty())
+    {
+        delete _hexagons.back();
+        _hexagons.pop_back();
+    }
+    delete _floor;
+    delete _roof;
+}
+
+void LocationState::init()
+{
+    if (initialized()) return;
+    State::init();
+
 
     auto game = Game::getInstance();
     game->mouse()->setType(Mouse::ACTION);
@@ -304,7 +301,6 @@ void LocationState::setLocation(std::string name)
 
     // Generates floor and roof images
     {
-        auto tilesLst = ResourceManager::lstFileType("art/tiles/tiles.lst");
 
         for (unsigned int i = 0; i != 100*100; ++i)
         {
@@ -314,17 +310,15 @@ void LocationState::setLocation(std::string name)
             unsigned int tileNum = mapFile->elevations()->at(_currentElevation)->floorTiles()->at(i);
             if (tileNum > 1)
             {
-                auto tile = new Tile(x, y);
-                tile->setTexture(ResourceManager::texture("art/tiles/" + tilesLst->strings()->at(tileNum)));
-                _floorTiles.push_back(tile);
+                auto tile = new Tile(tileNum, x, y);
+                _floor->tiles()->push_back(tile);
             }
 
             tileNum = mapFile->elevations()->at(_currentElevation)->roofTiles()->at(i);
             if (tileNum > 1)
             {
-                auto tile = new Tile(x, y);
-                tile->setTexture(ResourceManager::texture("art/tiles/" + tilesLst->strings()->at(tileNum)));
-                _roofTiles.push_back(tile);
+                auto tile = new Tile(tileNum, x, y);
+                _roof->tiles()->push_back(tile);
             }
         }
         //_floor->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyboardUp);
@@ -377,19 +371,7 @@ void LocationState::onKeyUp(std::shared_ptr<KeyboardEvent> event)
 
 void LocationState::render()
 {
-
-    for (auto tile : _floorTiles)
-    {
-        if (tile->x() < (_camera->x() - 120)) continue;
-        if (tile->x() > (_camera->x() + _camera->width() + 80*2)) continue;
-        if (tile->y() < (_camera->y() - 36)) continue;
-        if (tile->y() > (_camera->y() + _camera->height() + 24*2)) continue;
-
-        tile->setOffsetX(-_camera->x());
-        tile->setOffsetY(-_camera->y());
-        tile->render();
-    }
-
+    _floor->render();
     /*
     for (auto it = _roofTiles.begin(); it != _roofTiles.end(); ++it)
     {
@@ -436,44 +418,20 @@ void LocationState::think()
     {
         _scrollTicks = SDL_GetTicks();
         unsigned int scrollDelta = 5;
-        Game::getInstance()->mouse()->setType(Mouse::ACTION);
-        if (_scrollLeft)
-        {
-            camera()->setXPosition(camera()->xPosition() - scrollDelta);
-            Game::getInstance()->mouse()->setType(Mouse::SCROLL_W);
-        }
-        if (_scrollRight)
-        {
-            camera()->setXPosition(camera()->xPosition() + scrollDelta);
-            Game::getInstance()->mouse()->setType(Mouse::SCROLL_E);
-        }
-        if (_scrollTop)
-        {
-            camera()->setYPosition(camera()->yPosition() - scrollDelta);
-            Game::getInstance()->mouse()->setType(Mouse::SCROLL_N);
-        }
-        if (_scrollBottom)
-        {
-            camera()->setYPosition(camera()->yPosition() + scrollDelta);
-            Game::getInstance()->mouse()->setType(Mouse::SCROLL_S);
-        }
 
-        if (_scrollLeft && _scrollTop)
-        {
-            Game::getInstance()->mouse()->setType(Mouse::SCROLL_NW);
-        }
-        if (_scrollLeft && _scrollBottom)
-        {
-            Game::getInstance()->mouse()->setType(Mouse::SCROLL_SW);
-        }
-        if (_scrollRight && _scrollTop)
-        {
-            Game::getInstance()->mouse()->setType(Mouse::SCROLL_NE);
-        }
-        if (_scrollRight && _scrollBottom)
-        {
-            Game::getInstance()->mouse()->setType(Mouse::SCROLL_SE);
-        }
+        Game::getInstance()->mouse()->setType(Mouse::ACTION);        
+
+        camera()->setXPosition(camera()->xPosition() + (_scrollLeft ? -scrollDelta : (_scrollRight ? scrollDelta : 0)));
+        camera()->setYPosition(camera()->yPosition() + (_scrollTop ? -scrollDelta : (_scrollBottom ? scrollDelta : 0)));
+
+        if (_scrollLeft)   Game::getInstance()->mouse()->setType(Mouse::SCROLL_W);
+        if (_scrollRight)  Game::getInstance()->mouse()->setType(Mouse::SCROLL_E);
+        if (_scrollTop)    Game::getInstance()->mouse()->setType(Mouse::SCROLL_N);
+        if (_scrollBottom) Game::getInstance()->mouse()->setType(Mouse::SCROLL_S);
+        if (_scrollLeft && _scrollTop)     Game::getInstance()->mouse()->setType(Mouse::SCROLL_NW);
+        if (_scrollLeft && _scrollBottom)  Game::getInstance()->mouse()->setType(Mouse::SCROLL_SW);
+        if (_scrollRight && _scrollTop)    Game::getInstance()->mouse()->setType(Mouse::SCROLL_NE);
+        if (_scrollRight && _scrollBottom) Game::getInstance()->mouse()->setType(Mouse::SCROLL_SE);
     }
 
     // Checking objects to render
@@ -794,8 +752,8 @@ std::vector<std::shared_ptr<UI>>* LocationState::uiToRender()
     for (auto it = _objectsToRender.begin(); it != _objectsToRender.end(); ++it)
     {
 
-        (*it)->ui()->removeEventHandlers("mouseleftdown");
-        (*it)->ui()->addEventHandler("mouseleftdown", (*it).get(), (EventRecieverMethod) &LocationState::onMouseDown);
+        //(*it)->ui()->removeEventHandlers("mouseleftdown");
+        //(*it)->ui()->addEventHandler("mouseleftdown", (*it).get(), (EventRecieverMethod) &LocationState::onMouseDown);
         _uiToRender.push_back((*it)->ui());
 
         if (auto message = (*it)->floatMessage())

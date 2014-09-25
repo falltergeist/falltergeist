@@ -40,6 +40,7 @@ class InteractiveSurface;
 class Location;
 class LocationCamera;
 class Tile;
+class TileMap;
 class VMStackValue;
 class VM;
 
@@ -68,9 +69,9 @@ protected:
     std::vector<int> _MVARS;
     std::map<std::string, std::shared_ptr<VMStackValue>> _EVARS;
 
+    TileMap* _floor = 0;
+    TileMap* _roof = 0;
 
-    std::vector<Tile*> _floorTiles;
-    std::vector<Tile*> _roofTiles;
     std::vector<std::shared_ptr<ActiveUI>> _panelUIs;
     std::vector<std::shared_ptr<ActiveUI>> _floatMessages;
 
