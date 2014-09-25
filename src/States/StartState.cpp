@@ -55,13 +55,14 @@ void StartState::init()
 
     std::vector<std::string> splashes = {"splash0.rix", "splash1.rix", "splash2.rix", "splash3.rix", "splash4.rix", "splash5.rix", "splash6.rix"};
 
+    auto renderer = Game::getInstance()->renderer();
+
+    setX((renderer->width()  - 640)*0.5);
+    setY((renderer->height() - 480)*0.5);
+
     srand(time(NULL)); // seed
-    auto splash = new Image("art/splash/" + splashes.at(rand() % splashes.size()));
-    auto splashX = (Game::getInstance()->renderer()->width() - splash->width())*0.5;
-    auto splashY = (Game::getInstance()->renderer()->height() - splash->height())*0.5;
-    splash->setX(splashX);
-    splash->setY(splashY);
-    addUI(splash);
+    addUI("splash", new Image("art/splash/" + splashes.at(rand() % splashes.size())));
+
     _splashTicks = SDL_GetTicks();
 
     Game::getInstance()->mouse()->setType(Mouse::WAIT);
@@ -69,18 +70,19 @@ void StartState::init()
 
 void StartState::think()
 {
+    auto game = Game::getInstance();
     State::think();
-    if (Game::getInstance()->engineSettings()->forceLocation())
+    if (game->engineSettings()->forceLocation())
     {
         auto player = new GameDudeObject();
         player->loadFromGCDFile(ResourceManager::gcdFileType("premade/combat.gcd"));
-        Game::getInstance()->setPlayer(player);
-        Game::getInstance()->setState(new LocationState());
+        game->setPlayer(player);
+        game->setState(new LocationState());
         return;
     }
     if (_splashTicks + 3000 < SDL_GetTicks())
     {
-        Game::getInstance()->setState(new MainMenuState());
+        game->setState(new MainMenuState());
     }
 }
 

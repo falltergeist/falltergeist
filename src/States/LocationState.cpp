@@ -379,22 +379,7 @@ void LocationState::onKeyUp(std::shared_ptr<KeyboardEvent> event)
 void LocationState::render()
 {
     _floor->render();
-    /*
-    for (auto it = _roofTiles.begin(); it != _roofTiles.end(); ++it)
-    {
-        (*it)->setXOffset(0);
-        (*it)->setYOffset(0);
-        if ((*it)->x() < (_camera->x() - 120)) continue;
-        if ((*it)->x() > (_camera->x() + _camera->width() + 80*2)) continue;
-        if ((*it)->y() < (_camera->y() - 36)) continue;
-        if ((*it)->y() > (_camera->y() + _camera->height() + 24*2)) continue;
-
-        (*it)->setXOffset(-_camera->x());
-        (*it)->setYOffset(-_camera->y());
-        addUI((*it));
-    }
-    */
-
+    //_roof->render();
     for (auto ui : *uiToRender())
     {
         ui->render();

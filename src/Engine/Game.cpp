@@ -149,7 +149,7 @@ void Game::run()
         think();
         render();
         SDL_Delay(1);
-        while (_statesForDelete.empty())
+        while (!_statesForDelete.empty())
         {
             delete _statesForDelete.back();
             _statesForDelete.pop_back();
