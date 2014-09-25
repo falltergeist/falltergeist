@@ -662,7 +662,7 @@ void VM::run()
                 Logger::debug("SCRIPT") << "[80B8] [*] void display_msg(string*)" << std::endl;
                 std::string* pointer = static_cast<std::string*>(popDataPointer());
                 _displayString(*pointer);
-                delete pointer;
+                //delete pointer;
                 break;
             }
             case 0x80b9:
@@ -1247,7 +1247,7 @@ void VM::run()
                 {
                     auto question = static_cast<std::string*>(popDataPointer());
                     dialog->setQuestion(*question);
-                    delete question;
+                    //delete question;
                 }
                 else
                 {
@@ -1304,7 +1304,7 @@ void VM::run()
                         dialog->addAnswer(*text);
                     }
                 }
-                delete text;
+                //delete text;
                 break;
             }
             case 0x8123:
@@ -1487,7 +1487,7 @@ void VM::run()
                 Logger::debug("SCRIPT") << "[8154] [*] void debug(string*)" << std::endl;
                 auto string = static_cast<std::string*>(popDataPointer());
                 Logger::debug("SCRIPT") << *string << std::endl;
-                delete string;
+                //delete string;
                 break;
             }
             case 0x9001: break;

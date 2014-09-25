@@ -121,10 +121,9 @@ void CritterDialogState::deleteAnswers()
 {
     while(!_answers.empty())
     {
-        delete _ui.back();
-        _ui.pop_back();
         delete _answers.back();
         _answers.pop_back();
+        _ui.pop_back();
     }
     _functions.clear();
     _reactions.clear();
