@@ -70,17 +70,17 @@ void Game::_initialize()
     if (_initialized) return;
     _initialized = true;
 
-    _engineSettings = std::shared_ptr<EngineSettings>(new EngineSettings());
+    _engineSettings = new EngineSettings();
     auto width = _engineSettings->screenWidth();
     auto height = _engineSettings->screenHeight();
 
     switch (_engineSettings->renderer())
     {
         case EngineSettings::Renderer::SDL:
-            _renderer = std::shared_ptr<SDLRenderer>(new SDLRenderer(width, height));
+            _renderer = new SDLRenderer(width, height);
             break;
         case EngineSettings::Renderer::OPENGL:
-            _renderer = std::shared_ptr<OpenGLRenderer>(new OpenGLRenderer(width, height));
+            _renderer = new OpenGLRenderer(width, height);
             break;
     }
 
@@ -117,6 +117,8 @@ Game::~Game()
     delete _mixer;
     delete _resourceManager;
     while (!_states.empty()) popState();
+    delete _renderer;
+    delete _engineSettings;
 }
 
 void Game::pushState(State* state)
@@ -258,12 +260,12 @@ std::vector<State*>* Game::statesForThinkAndHandle()
     return &_statesForThinkAndHandle;
 }
 
-std::shared_ptr<Renderer> Game::renderer()
+Renderer* Game::renderer()
 {
     return _renderer;
 }
 
-std::shared_ptr<EngineSettings> Game::engineSettings()
+EngineSettings* Game::engineSettings()
 {
     return _engineSettings;
 }

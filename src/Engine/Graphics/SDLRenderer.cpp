@@ -43,6 +43,10 @@ SDLRenderer::SDLRenderer(unsigned int width, unsigned int height) : Renderer(wid
     Logger::info("VIDEO") << message + "[OK]" << std::endl;
 }
 
+SDLRenderer::~SDLRenderer()
+{
+}
+
 void SDLRenderer::init()
 {
     Renderer::init();

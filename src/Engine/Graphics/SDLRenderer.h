@@ -41,6 +41,7 @@ protected:
     SDL_Renderer* _renderer;
 public:
     SDLRenderer(unsigned int width, unsigned int height);
+    virtual ~SDLRenderer();
 
     virtual void init();
 

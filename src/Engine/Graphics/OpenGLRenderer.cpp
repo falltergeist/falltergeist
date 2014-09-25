@@ -58,7 +58,10 @@ OpenGLRenderer::OpenGLRenderer(unsigned int width, unsigned int height) : Render
         throw Exception(SDL_GetError());
     }
     Logger::info("VIDEO") << message + "[OK]" << std::endl;
+}
 
+OpenGLRenderer::~OpenGLRenderer()
+{
 }
 
 void OpenGLRenderer::init()

@@ -39,6 +39,7 @@ private:
     SDL_GLContext _context;
 public:
     OpenGLRenderer(unsigned int width, unsigned int height);
+    virtual ~OpenGLRenderer();
 
     virtual void init();
 

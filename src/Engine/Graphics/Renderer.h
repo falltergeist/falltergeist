@@ -43,7 +43,7 @@ protected:
     SDL_Window* _window;
 public:
     Renderer(unsigned int width, unsigned int height);
-    ~Renderer();
+    virtual ~Renderer();
 
     virtual void init();
 
