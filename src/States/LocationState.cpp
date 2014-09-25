@@ -517,6 +517,7 @@ void LocationState::handle(std::shared_ptr<Event> event)
     //State::handle(event);
     for (auto ui : *uiToRender())
     {
+        if (event->handled()) break;
         if (auto activeUI = std::dynamic_pointer_cast<ActiveUI>(ui)) activeUI->handle(event);
     }
 }
@@ -752,8 +753,8 @@ std::vector<std::shared_ptr<UI>>* LocationState::uiToRender()
     for (auto it = _objectsToRender.begin(); it != _objectsToRender.end(); ++it)
     {
 
-        //(*it)->ui()->removeEventHandlers("mouseleftdown");
-        //(*it)->ui()->addEventHandler("mouseleftdown", (*it).get(), (EventRecieverMethod) &LocationState::onMouseDown);
+        (*it)->ui()->removeEventHandlers("mouseleftdown");
+        (*it)->ui()->addEventHandler("mouseleftdown", (*it).get(), (EventRecieverMethod) &LocationState::onMouseDown);
         _uiToRender.push_back((*it)->ui());
 
         if (auto message = (*it)->floatMessage())

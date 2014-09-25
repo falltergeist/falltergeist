@@ -121,4 +121,9 @@ unsigned int UI::height()
     return texture()->height();
 }
 
+unsigned int UI::pixel(unsigned int x, unsigned int y)
+{
+    return texture() ? texture()->pixel(x, y) : 0;
+}
+
 }

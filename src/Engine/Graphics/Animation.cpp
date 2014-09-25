@@ -25,9 +25,9 @@
 #include "../../Engine/Graphics/Animation.h"
 #include "../../Engine/Graphics/AnimationFrame.h"
 #include "../../Engine/Graphics/Texture.h"
-#include "../../Engine/ResourceManager.h"
 #include "../../Engine/Game.h"
 #include "../../Engine/Graphics/Renderer.h"
+#include "../../Engine/ResourceManager.h"
 
 // Third party includes
 #include "SDL.h"
@@ -79,7 +79,7 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
         }
         else
         {
-            frame->setDuration(1000/frm->framesPerSecond());
+            frame->setDuration(std::round(1000.0/static_cast<double>(frm->framesPerSecond())));
         }
 
         x += frm->width(direction);
@@ -142,6 +142,16 @@ unsigned int Animation::height()
 unsigned int Animation::width()
 {
     return frames()->at(_currentFrame)->width();
+}
+
+unsigned int Animation::pixel(unsigned int x, unsigned int y)
+{
+    auto frame = frames()->at(_currentFrame);
+
+    if (x < 0 || x > frame->width()) return 0;
+    if (y < 0 || y > frame->height()) return 0;
+
+    return ActiveUI::pixel(x + frame->x(), y + frame->y());
 }
 
 }

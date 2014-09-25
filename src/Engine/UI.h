@@ -71,6 +71,8 @@ public:
 
     virtual unsigned int width();
     virtual unsigned int height();
+
+    virtual unsigned int pixel(unsigned int x, int unsigned y);
 };
 
 }
