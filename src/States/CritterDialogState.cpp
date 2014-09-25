@@ -131,15 +131,14 @@ void CritterDialogState::deleteAnswers()
 void CritterDialogState::onReviewButtonClick(std::shared_ptr<Event> event)
 {
     // FIXME : don't create new state each time the button is clicked
-    auto critterReviewDialogState = std::shared_ptr<CritterDialogReviewState>(new CritterDialogReviewState());
+    auto critterReviewDialogState = new CritterDialogReviewState();
     Game::getInstance()->pushState(critterReviewDialogState);
 }
 
 void CritterDialogState::onBarterButtonClick(std::shared_ptr<Event> event)
 {
     // FIXME : don't create new state each time the button is clicked
-    auto critterBarterState = std::shared_ptr<CritterBarterState>(new CritterBarterState());
-    //Game::getInstance()->popState();
+    auto critterBarterState = new CritterBarterState();
     Game::getInstance()->pushState(critterBarterState);
 }
 
@@ -177,7 +176,7 @@ void CritterDialogState::_selectAnswer(size_t i)
     if (i >= _answers.size()) throw Exception("No answer with number " + std::to_string(i));
 
     auto game = Game::getInstance();
-    auto dialog = std::dynamic_pointer_cast<CritterInteractState>(game->states()->at(game->states()->size() - 2));
+    auto dialog = dynamic_cast<CritterInteractState*>(game->states()->at(game->states()->size() - 2));
 
     auto newOffset = dialog->script()->script()->function(_functions.at(i));
     auto oldOffset = dialog->script()->programCounter() - 2;

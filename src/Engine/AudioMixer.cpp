@@ -35,6 +35,10 @@ AudioMixer::AudioMixer()
     _init();
 }
 
+AudioMixer::~AudioMixer()
+{
+}
+
 void AudioMixer::_init()
 {
     std::string message = "[AUDIO] - SDL_Init - ";

@@ -75,12 +75,12 @@ void StartState::think()
         std::shared_ptr<GameDudeObject>player = std::shared_ptr<GameDudeObject>(new GameDudeObject());
         player->loadFromGCDFile(ResourceManager::gcdFileType("premade/combat.gcd"));
         Game::getInstance()->setPlayer(player);
-        Game::getInstance()->setState(std::shared_ptr<LocationState>(new LocationState()));
+        Game::getInstance()->setState(new LocationState());
         return;
     }
     if (_splashTicks + 3000 < SDL_GetTicks())
     {
-        Game::getInstance()->setState(std::shared_ptr<MainMenuState>(new MainMenuState()));
+        Game::getInstance()->setState(new MainMenuState());
     }
 }
 

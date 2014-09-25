@@ -89,7 +89,7 @@ void Game::_initialize()
 
     putenv(strdup("SDL_VIDEO_CENTERED=1"));
 
-    _resourceManager = std::shared_ptr<ResourceManager>(new ResourceManager());
+    _resourceManager = new ResourceManager();
 
     renderer()->init();
 
@@ -97,22 +97,29 @@ void Game::_initialize()
     renderer()->setCaption(version.c_str());
 
     //_mixer = new AudioMixer();
-    _mouse = std::shared_ptr<Mouse>(new Mouse());
-    _fpsCounter = std::shared_ptr<FpsCounter>(new FpsCounter(renderer()->width() - 42, 2));
+    _mouse = new Mouse();
+    _fpsCounter = new FpsCounter(renderer()->width() - 42, 2);
 
     version += " " + std::to_string(renderer()->width()) + "x" + std::to_string(renderer()->height());
     version += " " + renderer()->name();
 
-    _falltergeistVersion = std::shared_ptr<TextArea>(new TextArea(version, 3, renderer()->height() - 10));
-    _mousePosition = std::shared_ptr<TextArea>(new TextArea("", renderer()->width() - 55, 14));
+    _falltergeistVersion = new TextArea(version, 3, renderer()->height() - 10);
+    _mousePosition = new TextArea("", renderer()->width() - 55, 14);
 }
 
 Game::~Game()
 {
     _instanceFlag = false;
+    delete _mouse;
+    delete _fpsCounter;
+    delete _mousePosition;
+    delete _falltergeistVersion;
+    delete _mixer;
+    delete _resourceManager;
+    while (!_states.empty()) popState();
 }
 
-void Game::pushState(std::shared_ptr<State> state)
+void Game::pushState(State* state)
 {
     _states.push_back(state);
     if (!state->initialized()) state->init();
@@ -120,12 +127,14 @@ void Game::pushState(std::shared_ptr<State> state)
 
 void Game::popState()
 {
+    if (_states.size() == 0) return;
+    _statesForDelete.push_back(_states.back());
     _states.pop_back();
 }
 
-void Game::setState(std::shared_ptr<State> state)
+void Game::setState(State* state)
 {
-    _states.clear();
+    while (!_states.empty()) popState();
     pushState(state);
 }
 
@@ -138,13 +147,13 @@ void Game::run()
         think();
         render();
         SDL_Delay(1);
+        while (_statesForDelete.empty())
+        {
+            delete _statesForDelete.back();
+            _statesForDelete.pop_back();
+        }
     }
     Logger::info("GAME") << "Stopping main loop" << std::endl;
-}
-
-std::shared_ptr<ResourceManager> Game::resourceManager()
-{
-    return _resourceManager;
 }
 
 void Game::quit()
@@ -162,16 +171,16 @@ std::shared_ptr<GameDudeObject> Game::player()
     return _player;
 }
 
-std::shared_ptr<Mouse> Game::mouse()
+Mouse* Game::mouse()
 {
     return _mouse;
 }
 
-std::shared_ptr<LocationState> Game::locationState()
+LocationState* Game::locationState()
 {
     for (auto state : _states)
     {
-        auto locationState = std::dynamic_pointer_cast<LocationState>(state);
+        auto locationState = dynamic_cast<LocationState*>(state);
         if (locationState)
         {
             return locationState;
@@ -210,14 +219,14 @@ void Game::_initGVARS()
     }
 }
 
-std::vector<std::shared_ptr<State>>* Game::states()
+std::vector<State*>* Game::states()
 {
     return &_states;
 }
 
-std::vector<std::shared_ptr<State>> Game::statesForRender()
+std::vector<State*>* Game::statesForRender()
 {
-    std::vector<std::shared_ptr<State>> states;
+    _statesForRender.clear();
     auto it = _states.end();
     do
     {
@@ -227,14 +236,14 @@ std::vector<std::shared_ptr<State>> Game::statesForRender()
 
     for (; it != _states.end(); ++it)
     {
-        if (*it) states.push_back(*it);
+        if (*it) _statesForRender.push_back(*it);
     }
-    return states;
+    return &_statesForRender;
 }
 
-std::vector<std::shared_ptr<State>> Game::statesForThinkAndHandle()
+std::vector<State*>* Game::statesForThinkAndHandle()
 {
-    std::vector<std::shared_ptr<State>> states;
+    _statesForThinkAndHandle.clear();
     auto it = _states.end();
     do
     {
@@ -244,9 +253,9 @@ std::vector<std::shared_ptr<State>> Game::statesForThinkAndHandle()
 
     for (; it != _states.end(); ++it)
     {
-        if (*it) states.push_back(*it);
+        if (*it) _statesForThinkAndHandle.push_back(*it);
     }
-    return states;
+    return &_statesForThinkAndHandle;
 }
 
 std::shared_ptr<Renderer> Game::renderer()
@@ -278,7 +287,7 @@ void Game::handle()
                     event->setY(_event.button.y);
                     event->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
                     event->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
-                    for (auto state : statesForThinkAndHandle()) state->handle(event);
+                    for (auto state : *statesForThinkAndHandle()) state->handle(event);
                     break;
                 }
                 case SDL_MOUSEBUTTONUP:
@@ -288,7 +297,7 @@ void Game::handle()
                     event->setY(_event.button.y);
                     event->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
                     event->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
-                    for (auto state : statesForThinkAndHandle()) state->handle(event);
+                    for (auto state : *statesForThinkAndHandle()) state->handle(event);
                     break;
                 }
                 case SDL_MOUSEMOTION:
@@ -298,7 +307,7 @@ void Game::handle()
                     event->setY(_event.motion.y);
                     event->setXOffset(_event.motion.xrel);
                     event->setYOffset(_event.motion.yrel);
-                    for (auto state : statesForThinkAndHandle()) state->handle(event);
+                    for (auto state : *statesForThinkAndHandle()) state->handle(event);
                     break;
                 }
                 case SDL_KEYDOWN:
@@ -306,7 +315,7 @@ void Game::handle()
                     auto event = std::shared_ptr<KeyboardEvent>(new KeyboardEvent("keydown"));
                     event->setKeyCode(_event.key.keysym.sym);
                     event->setShiftPressed(_event.key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
-                    for (auto state : statesForThinkAndHandle()) state->handle(event);
+                    for (auto state : *statesForThinkAndHandle()) state->handle(event);
                     break;
                 }
                 case SDL_KEYUP:
@@ -314,7 +323,7 @@ void Game::handle()
                     auto event = std::shared_ptr<KeyboardEvent>(new KeyboardEvent("keyup"));
                     event->setKeyCode(_event.key.keysym.sym);
                     event->setShiftPressed(_event.key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
-                    for (auto state : statesForThinkAndHandle()) state->handle(event);
+                    for (auto state : *statesForThinkAndHandle()) state->handle(event);
 
                     if (!event->handled())
                     {
@@ -350,7 +359,7 @@ void Game::think()
 
     _mousePosition->setText(std::to_string(mouse()->x()) + " : " + std::to_string(mouse()->y()));
 
-    for (auto state : statesForThinkAndHandle())
+    for (auto state : *statesForThinkAndHandle())
     {
         state->think();
     }
@@ -359,7 +368,7 @@ void Game::think()
 void Game::render()
 {
     renderer()->beginFrame();
-    for (auto state : statesForRender())
+    for (auto state : *statesForRender())
     {
         state->render();
     }

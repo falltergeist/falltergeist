@@ -1220,14 +1220,14 @@ void VM::run()
             case 0x811c:
             {
                 Logger::debug("SCRIPT") << "[811C] [?] gsay_start" << std::endl;
-                auto dialog = std::shared_ptr<CritterDialogState>(new CritterDialogState());
+                auto dialog = new CritterDialogState();
                 Game::getInstance()->pushState(dialog);
                 break;
             }
             case 0x811d:
             {
                 Logger::debug("SCRIPT") << "[811D] [?] gsay_end" << std::endl;
-                auto dialog = std::dynamic_pointer_cast<CritterDialogState>(Game::getInstance()->states()->back());
+                auto dialog = dynamic_cast<CritterDialogState*>(Game::getInstance()->states()->back());
                 if (dialog->hasAnswers())
                 {
                     pushDataInteger(0);
@@ -1239,7 +1239,7 @@ void VM::run()
             case 0x811e:
             {
                 Logger::debug("SCRIPT") << "[811E] [=] void gSay_Reply(int msg_file_num, int msg_num)" << std::endl;
-                auto dialog = std::dynamic_pointer_cast<CritterDialogState>(Game::getInstance()->states()->back());
+                auto dialog = dynamic_cast<CritterDialogState*>(Game::getInstance()->states()->back());
                 dialog->deleteAnswers();
                 if (_dataStack.top()->type() == VMStackValue::TYPE_POINTER)
                 {
@@ -1282,7 +1282,7 @@ void VM::run()
                 }
                 auto iq = popDataInteger();
                 auto game = Game::getInstance();
-                auto dialog = std::dynamic_pointer_cast<CritterDialogState>(game->states()->back());
+                auto dialog = dynamic_cast<CritterDialogState*>(game->states()->back());
                 if (iq >= 0)
                 {
                     if (game->player()->stat(game->player()->STATS_INTELLIGENCE) >= iq)

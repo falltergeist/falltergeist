@@ -528,7 +528,7 @@ void PlayerEditState::onButtonClick(std::shared_ptr<MouseEvent> event)
 
                 if (!_traitToggle(number - 1))
                 {
-                    auto state = std::shared_ptr<PlayerEditAlertState>(new PlayerEditAlertState());
+                    auto state = new PlayerEditAlertState();
                     auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
                     std::string text = msg->message(148)->text() + "\n" + msg->message(149)->text();
                     state->setMessage(text);
@@ -543,7 +543,7 @@ void PlayerEditState::onButtonClick(std::shared_ptr<MouseEvent> event)
                 state->_selectedImage->setTexture(state->_images.at(name)->texture());
                 if (!_skillToggle(number - 1))
                 {
-                    auto state = std::shared_ptr<PlayerEditAlertState>(new PlayerEditAlertState());
+                    auto state = new PlayerEditAlertState();
                     auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
                     std::string text = msg->message(140)->text() + "\n" + msg->message(141)->text();
                     state->setMessage(text);
@@ -598,17 +598,17 @@ void PlayerEditState::onMaskClick(std::shared_ptr<MouseEvent> event)
 
 void PlayerEditState::onNameButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    Game::getInstance()->pushState(std::shared_ptr<PlayerEditNameState>(new PlayerEditNameState()));
+    Game::getInstance()->pushState(new PlayerEditNameState());
 }
 
 void PlayerEditState::onAgeButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    Game::getInstance()->pushState(std::shared_ptr<PlayerEditAgeState>(new PlayerEditAgeState()));
+    Game::getInstance()->pushState(new PlayerEditAgeState());
 }
 
 void PlayerEditState::onGenderButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    Game::getInstance()->pushState(std::shared_ptr<PlayerEditGenderState>(new PlayerEditGenderState()));
+    Game::getInstance()->pushState(new PlayerEditGenderState());
 }
 
 void PlayerEditState::onBackButtonClick(std::shared_ptr<MouseEvent> event)
@@ -620,7 +620,7 @@ void PlayerEditState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
 {
     auto player = Game::getInstance()->player();
     player->setHitPoints(player->hitPointsMax());
-    Game::getInstance()->setState(std::shared_ptr<LocationState>(new LocationState()));
+    Game::getInstance()->setState(new LocationState());
 }
 
 }

@@ -295,7 +295,7 @@ void LocationState::setLocation(std::string name)
     // Location script
     if (mapFile->scriptId() > 0)
     {
-        _locationScript = std::shared_ptr<VM>(new VM(ResourceManager::intFileType(mapFile->scriptId()-1), Game::getInstance()->locationState()));
+        _locationScript = std::shared_ptr<VM>(new VM(ResourceManager::intFileType(mapFile->scriptId()-1), std::shared_ptr<LocationState>(Game::getInstance()->locationState())));
     }
 
 
@@ -350,7 +350,7 @@ void LocationState::onMouseDown(std::shared_ptr<MouseEvent> event)
     icons.push_back(Mouse::ICON_SKILL);
     icons.push_back(Mouse::ICON_CANCEL);
 
-    auto state = std::shared_ptr<CursorDropdownState>(new CursorDropdownState(icons));
+    auto state = new CursorDropdownState(icons);
     state->setObject(object);
     auto game = Game::getInstance();
     game->pushState(state);
@@ -564,29 +564,29 @@ void LocationState::onPanelMouseDown(std::shared_ptr<MouseEvent> event)
 
 void LocationState::onInventoryButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    Game::getInstance()->pushState(std::shared_ptr<InventoryState>(new InventoryState()));
+    Game::getInstance()->pushState(new InventoryState());
 }
 
 void LocationState::onOptionsButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    Game::getInstance()->pushState(std::shared_ptr<GameMenuState>(new GameMenuState()));
+    Game::getInstance()->pushState(new GameMenuState());
 }
 
 void LocationState::onSkilldexButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    Game::getInstance()->pushState(std::shared_ptr<SkilldexState>(new SkilldexState()));
+    Game::getInstance()->pushState(new SkilldexState());
 }
 
 void LocationState::onPipBoyButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    Game::getInstance()->pushState(std::shared_ptr<PipBoyState>(new PipBoyState()));
+    Game::getInstance()->pushState(new PipBoyState());
 }
 
 void LocationState::onKeyboardUp(std::shared_ptr<KeyboardEvent> event)
 {
     if (event->keyCode() == SDLK_F10)
     {
-        Game::getInstance()->pushState(std::shared_ptr<ExitConfirmState>(new ExitConfirmState()));
+        Game::getInstance()->pushState(new ExitConfirmState());
         //event->setHandled(true);
     }
 }

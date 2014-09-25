@@ -35,9 +35,9 @@ class AudioMixer
 protected:
     void _init();
 public:
-    static void callback(void* userdata, Uint8* stream, int len);
     AudioMixer();
     ~AudioMixer();
+    static void callback(void* userdata, Uint8* stream, int len);
 };
 
 }

@@ -50,15 +50,19 @@ class Game
 {
 protected:
     std::vector<int> _GVARS;
-    std::shared_ptr<ResourceManager> _resourceManager;
-    std::vector<std::shared_ptr<State>> _states;
+    std::vector<State*> _states;
+    std::vector<State*> _statesForRender;
+    std::vector<State*> _statesForThinkAndHandle;
+    std::vector<State*> _statesForDelete;
+
     std::shared_ptr<GameDudeObject> _player;
     std::shared_ptr<Renderer> _renderer;
-    std::shared_ptr<Mouse> _mouse;
-    std::shared_ptr<AudioMixer> _mixer;
-    std::shared_ptr<FpsCounter> _fpsCounter;
-    std::shared_ptr<TextArea> _mousePosition;
-    std::shared_ptr<TextArea> _falltergeistVersion;
+    ResourceManager* _resourceManager = 0;
+    Mouse* _mouse = 0;
+    AudioMixer* _mixer = 0;
+    FpsCounter* _fpsCounter = 0;
+    TextArea* _mousePosition = 0;
+    TextArea* _falltergeistVersion = 0;
     std::shared_ptr<EngineSettings> _engineSettings;
     bool _quit = false;
     SDL_Event _event;
@@ -76,13 +80,11 @@ public:
     ~Game();
     static Game* getInstance();
 
-    std::shared_ptr<ResourceManager> resourceManager();
-
-    std::vector<std::shared_ptr<State>>* states();
-    std::vector<std::shared_ptr<State>> statesForRender();
-    std::vector<std::shared_ptr<State>> statesForThinkAndHandle();
-    void pushState(std::shared_ptr<State> state);
-    void setState(std::shared_ptr<State> state);
+    std::vector<State*>* states();
+    std::vector<State*>* statesForRender();
+    std::vector<State*>* statesForThinkAndHandle();
+    void pushState(State* state);
+    void setState(State* state);
     void popState();
     void run();
     void quit();    
@@ -93,10 +95,10 @@ public:
 
     void setPlayer(std::shared_ptr<GameDudeObject> player);
     std::shared_ptr<GameDudeObject> player();
-    std::shared_ptr<Mouse> mouse();
+    Mouse* mouse();
     std::shared_ptr<Renderer> renderer();
 
-    std::shared_ptr<LocationState> locationState();
+    LocationState* locationState();
 
     void setGVAR(unsigned int number, int value);
     int GVAR(unsigned int number);

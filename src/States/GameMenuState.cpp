@@ -105,12 +105,12 @@ void GameMenuState::init()
 
 void GameMenuState::onPreferencesButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    Game::getInstance()->pushState(std::shared_ptr<SettingsMenuState>(new SettingsMenuState()));
+    Game::getInstance()->pushState(new SettingsMenuState());
 }
 
 void GameMenuState::onExitButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    Game::getInstance()->pushState(std::shared_ptr<ExitConfirmState>(new ExitConfirmState()));
+    Game::getInstance()->pushState(new ExitConfirmState());
 }
 
 void GameMenuState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)

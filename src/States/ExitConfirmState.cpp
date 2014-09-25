@@ -95,7 +95,7 @@ void ExitConfirmState::init()
 
 void ExitConfirmState::onYesButtonClick(std::shared_ptr<MouseEvent> event)
 {
-    Game::getInstance()->setState(std::shared_ptr<MainMenuState>(new MainMenuState()));
+    Game::getInstance()->setState(new MainMenuState());
 }
 
 void ExitConfirmState::onNoButtonClick(std::shared_ptr<MouseEvent> event)
