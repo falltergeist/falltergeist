@@ -45,11 +45,11 @@ protected:
     int _initialX;
     int _initialY;
     int _currentSurface = 0;
-    std::vector<std::shared_ptr<UI>> _activeIcons;
-    std::vector<std::shared_ptr<UI>> _inactiveIcons;
-    std::shared_ptr<UI> _surface;
-    std::shared_ptr<HiddenMask> _mask;
-    std::shared_ptr<UI> _cursor;
+    std::vector<UI*> _activeIcons;
+    std::vector<UI*> _inactiveIcons;
+    UI* _surface = 0;
+    HiddenMask* _mask = 0;
+    UI* _cursor = 0;
 public:
     CursorDropdownState(std::vector<int> icons);
     virtual ~CursorDropdownState();

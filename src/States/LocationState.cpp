@@ -134,6 +134,13 @@ LocationState::~LocationState()
     }
     delete _floor;
     delete _roof;
+    delete _locationScript;
+
+    while (!_panelUIs.empty())
+    {
+        delete _panelUIs.back();
+        _panelUIs.pop_back();
+    }
 }
 
 void LocationState::init()
@@ -154,7 +161,7 @@ void LocationState::_initPanel()
 {
     auto game = Game::getInstance();
     // player panel background
-    _panelUIs.push_back(std::shared_ptr<Image>(new Image("art/intrface/iface.frm")));
+    _panelUIs.push_back(new Image("art/intrface/iface.frm"));
 
     auto panelX = (game->renderer()->width() - 640)*0.5;   // 640 -- X size of panel
     auto panelY = game->renderer()->height() - 99;         //  99 -- Y size of panel
@@ -164,44 +171,44 @@ void LocationState::_initPanel()
     _panelUIs.back()->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &LocationState::onPanelMouseDown);
 
     // change hand button
-    _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, panelX+218, panelY+5)));
+    _panelUIs.push_back(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, panelX+218, panelY+5));
     _panelUIs.back()->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onChangeHandButtonClick);
 
     // inventory button
-    _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_INVENTORY, panelX+211, panelY+40)));
+    _panelUIs.push_back(new ImageButton(ImageButton::TYPE_PANEL_INVENTORY, panelX+211, panelY+40));
     _panelUIs.back()->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onInventoryButtonClick);
 
     // options button
-    _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_OPTIONS, panelX+210, panelY+61)));
+    _panelUIs.push_back(new ImageButton(ImageButton::TYPE_PANEL_OPTIONS, panelX+210, panelY+61));
     _panelUIs.back()->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onOptionsButtonClick);
 
     // attack button
-    _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_ATTACK, panelX+267, panelY+25)));
+    _panelUIs.push_back(new ImageButton(ImageButton::TYPE_PANEL_ATTACK, panelX+267, panelY+25));
 
     // hit points
-    auto hitPoints = std::shared_ptr<SmallCounter>(new SmallCounter(panelX+471, panelY+40));
+    auto hitPoints = new SmallCounter(panelX+471, panelY+40);
     hitPoints->setNumber(Game::getInstance()->player()->hitPoints());
     hitPoints->setType(SmallCounter::SIGNED);
     _panelUIs.push_back(hitPoints);
 
     // armor class
-    auto armorClass = std::shared_ptr<SmallCounter>(new SmallCounter(panelX+472, panelY+76));
+    auto armorClass = new SmallCounter(panelX+472, panelY+76);
     armorClass->setNumber(Game::getInstance()->player()->armorClass());
     armorClass->setType(SmallCounter::SIGNED);
     _panelUIs.push_back(armorClass);
 
     // skilldex button
-    _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, panelX+523, panelY+5)));
+    _panelUIs.push_back(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, panelX+523, panelY+5));
     _panelUIs.back()->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onSkilldexButtonClick);
 
     // map button
-    _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_MAP, panelX+526, panelY+39)));
+    _panelUIs.push_back(new ImageButton(ImageButton::TYPE_PANEL_MAP, panelX+526, panelY+39));
 
     // cha button
-    _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_CHA, panelX+526, panelY+58)));
+    _panelUIs.push_back(new ImageButton(ImageButton::TYPE_PANEL_CHA, panelX+526, panelY+58));
 
     // pip button
-    _panelUIs.push_back(std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PANEL_PIP, panelX+526, panelY+77)));
+    _panelUIs.push_back(new ImageButton(ImageButton::TYPE_PANEL_PIP, panelX+526, panelY+77));
     _panelUIs.back()->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onPipBoyButtonClick);
 }
 
@@ -284,18 +291,18 @@ void LocationState::setLocation(std::string name)
         // Just for testing
         {
             auto armor = GameObjectFactory::createObject(0x00000003); // powered armor
-            player->setArmorSlot(std::dynamic_pointer_cast<GameArmorItemObject>(armor));
+            player->setArmorSlot(dynamic_cast<GameArmorItemObject*>(armor));
             auto leftHand = GameObjectFactory::createObject(0x0000000C); // minigun
-            player->setLeftHandSlot(std::dynamic_pointer_cast<GameWeaponItemObject>(leftHand));
+            player->setLeftHandSlot(dynamic_cast<GameWeaponItemObject*>(leftHand));
             auto rightHand = GameObjectFactory::createObject(0x00000007); // spear
-            player->setRightHandSlot(std::dynamic_pointer_cast<GameWeaponItemObject>(rightHand));
+            player->setRightHandSlot(dynamic_cast<GameWeaponItemObject*>(rightHand));
         }
     }
 
     // Location script
     if (mapFile->scriptId() > 0)
     {
-        _locationScript = std::shared_ptr<VM>(new VM(ResourceManager::intFileType(mapFile->scriptId()-1), std::shared_ptr<LocationState>(Game::getInstance()->locationState())));
+        _locationScript = new VM(ResourceManager::intFileType(mapFile->scriptId()-1), Game::getInstance()->locationState());
     }
 
 
@@ -547,7 +554,7 @@ void LocationState::handle(std::shared_ptr<Event> event)
     for (auto ui : *uiToRender())
     {
         if (event->handled()) break;
-        if (auto activeUI = std::dynamic_pointer_cast<ActiveUI>(ui)) activeUI->handle(event);
+        if (auto activeUI = dynamic_cast<ActiveUI*>(ui)) activeUI->handle(event);
     }
 }
 
@@ -609,7 +616,7 @@ void LocationState::checkObjectsToRender()
     {
         for (auto it = hexagon->objects()->rbegin(); it != hexagon->objects()->rend(); ++it)
         {
-            auto ui = std::dynamic_pointer_cast<ActiveUI>((*it)->ui());
+            auto ui = dynamic_cast<ActiveUI*>((*it)->ui());
             if (!ui) continue;
 
             unsigned int x, y, width, height;
@@ -617,7 +624,7 @@ void LocationState::checkObjectsToRender()
             width = ui->width();
             height = ui->height();
 
-            auto animation = std::dynamic_pointer_cast<Animation>((*it)->ui());
+            auto animation = dynamic_cast<Animation*>((*it)->ui());
             if (animation)
             {
                 x = hexagon->x() + ui->xOffset() - std::floor(width*0.5);
@@ -662,12 +669,12 @@ int LocationState::MVAR(unsigned int number)
     return _MVARS.at(number);
 }
 
-std::map<std::string, std::shared_ptr<VMStackValue>>* LocationState::EVARS()
+std::map<std::string, VMStackValue*>* LocationState::EVARS()
 {
     return &_EVARS;
 }
 
-void LocationState::moveObjectToHexagon(std::shared_ptr<GameObject> object, Hexagon* hexagon, bool calculateHexagons)
+void LocationState::moveObjectToHexagon(GameObject* object, Hexagon* hexagon, bool calculateHexagons)
 {
     auto oldHexagon = object->hexagon();
     if (oldHexagon)
@@ -774,28 +781,29 @@ std::vector<Hexagon*> LocationState::findPath(Hexagon* from, Hexagon* to)
     return result;
 }
 
-std::vector<std::shared_ptr<UI>>* LocationState::uiToRender()
+std::vector<UI*>* LocationState::uiToRender()
 {
     if (_uiToRender.size()) return &_uiToRender;
 
     _floatMessages.clear();
-    for (auto it = _objectsToRender.begin(); it != _objectsToRender.end(); ++it)
+    for (auto object : _objectsToRender)
     {
 
-        (*it)->ui()->removeEventHandlers("mouseleftdown");
-        (*it)->ui()->addEventHandler("mouseleftdown", (*it).get(), (EventRecieverMethod) &LocationState::onMouseDown);
-        _uiToRender.push_back((*it)->ui());
+        object->ui()->removeEventHandlers("mouseleftdown");
+        object->ui()->addEventHandler("mouseleftdown", object, (EventRecieverMethod) &LocationState::onMouseDown);
+        _uiToRender.push_back(object->ui());
 
-        if (auto message = (*it)->floatMessage())
+        if (auto message = object->floatMessage())
         {
             if (SDL_GetTicks() - message->timestampCreated() >= 7000)
             {
-                (*it)->floatMessage().reset();
+                delete object->floatMessage();
+                object->setFloatMessage(nullptr);
             }
             else
             {
-                message->setX((*it)->hexagon()->x() - camera()->x() - message->width()*0.5);
-                message->setY((*it)->hexagon()->y() - camera()->y() - 70 - message->height());
+                message->setX(object->hexagon()->x() - camera()->x() - message->width()*0.5);
+                message->setY(object->hexagon()->y() - camera()->y() - 70 - message->height());
                 _floatMessages.push_back(message);
             }
         }

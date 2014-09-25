@@ -48,9 +48,9 @@ public:
     enum {TYPE_BIG_SWITCH = 1, TYPE_SMALL_SWITCH};
     MultistateImageButton(int x = 0, int y = 0);
     MultistateImageButton(unsigned int type, int x = 0, int y = 0);
-    MultistateImageButton(std::shared_ptr<ImageList> imageList, int x = 0, int y = 0);
+    MultistateImageButton(ImageList* imageList, int x = 0, int y = 0);
     virtual ~MultistateImageButton();
-    void addImage(std::shared_ptr<Image> image);
+    void addImage(Image* image);
     unsigned int state();
     void setState(unsigned int state);
     unsigned int minState();

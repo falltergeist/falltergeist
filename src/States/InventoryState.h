@@ -47,7 +47,7 @@ public:
     //void onSlotDrag(std::shared_ptr<MouseEvent> event);
     void backgroundRightClick(std::shared_ptr<MouseEvent> event);
 private:
-    std::string _handItemSummary (std::shared_ptr<GameItemObject> hand);
+    std::string _handItemSummary (GameItemObject* hand);
     void _screenShow (unsigned int PID);
 };
 

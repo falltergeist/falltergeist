@@ -70,14 +70,14 @@
 namespace Falltergeist
 {
 
-VM::VM(std::shared_ptr<libfalltergeist::IntFileType> script, std::shared_ptr<void> owner)
+VM::VM(libfalltergeist::IntFileType* script, void* owner)
 {
     _owner = owner;
     _script = script;
     if (!_script) throw Exception("VM::VM() - script is null");
 }
 
-VM::VM(std::string filename, std::shared_ptr<void> owner)
+VM::VM(std::string filename, void* owner)
 {
     _owner = owner;
     _script = ResourceManager::intFileType(filename);
@@ -238,12 +238,12 @@ void VM::run()
             case 0x8016:
             {
                 Logger::debug("SCRIPT") << "[8016] [*] export(name)" << std::endl;
-                auto name = std::static_pointer_cast<std::string>(popDataPointer());
+                auto name = static_cast<std::string*>(popDataPointer());
                 auto game = Game::getInstance();
                 auto EVARS = game->locationState()->EVARS();
-                if (EVARS->find(*(name.get())) == EVARS->end())
+                if (EVARS->find(*name) == EVARS->end())
                 {
-                    EVARS->insert(std::make_pair(*(name.get()), std::shared_ptr<VMStackValue>(nullptr)));
+                    EVARS->insert(std::make_pair(*name, nullptr));
                 }
                 break;
             }
@@ -421,8 +421,8 @@ void VM::run()
                 Logger::debug("SCRIPT") << "[803D] [*] mod %" << std::endl;
                 auto b = _dataStack.pop();
                 auto a = _dataStack.pop();
-                auto p1 = std::dynamic_pointer_cast<VMStackIntValue>(a);
-                auto p2 = std::dynamic_pointer_cast<VMStackIntValue>(b);
+                auto p1 = dynamic_cast<VMStackIntValue*>(a);
+                auto p2 = dynamic_cast<VMStackIntValue*>(b);
                 pushDataInteger(p1->value()%p2->value());
                 break;
             }
@@ -489,8 +489,8 @@ void VM::run()
             case 0x80a4:
             {
                 Logger::debug("SCRIPT") << "[80A4] [+] std::string* obj_name(GameCritterObject* who)" << std::endl;
-                auto critter = std::static_pointer_cast<GameCritterObject>(popDataPointer());
-                pushDataPointer(std::shared_ptr<std::string>(new std::string(critter->name())));
+                auto critter = static_cast<GameCritterObject*>(popDataPointer());
+                pushDataPointer(new std::string(critter->name()));
                 break;
             }
             case 0x80a6:
@@ -507,7 +507,7 @@ void VM::run()
                 auto elevation = popDataInteger();
                 auto position = popDataInteger();
                 auto game = Game::getInstance();
-                std::shared_ptr<GameObject> found;
+                GameObject* found = 0;
                 for (auto object : *game->locationState()->hexagons()->at(position)->objects())
                 {
                     if (object->PID() == PID && object->elevation() == elevation)
@@ -549,7 +549,7 @@ void VM::run()
                 Logger::debug("SCRIPT") << "[80AA] [+] int get_skill(GameCritterObject* who, int number) " << std::endl;
                 int number = popDataInteger();
                 if (number > 17) throw Exception("VM::opcode80AA - number out of range: " + std::to_string(number));
-                auto object = std::static_pointer_cast<GameCritterObject>(popDataPointer());
+                auto object = static_cast<GameCritterObject*>(popDataPointer());
                 if (!object) throw Exception("VM::opcode80AA pointer error");
                 pushDataInteger(object->skill(number));
                 break;
@@ -630,7 +630,7 @@ void VM::run()
                 Logger::debug("SCRIPT") << "[80B6] [+] int move_to(GameObject* object, int position, int elevation)" << std::endl;
                 auto elevation = popDataInteger();
                 auto position = popDataInteger();
-                auto object = std::static_pointer_cast<GameObject>(popDataPointer());
+                auto object = static_cast<GameObject*>(popDataPointer());
                 if (!object) throw new Exception("Opcode 80b6 error");
                 auto hexagon = Game::getInstance()->locationState()->hexagons()->at(position);
                 LocationState::moveObjectToHexagon(object, hexagon);
@@ -660,7 +660,9 @@ void VM::run()
             case 0x80b8:
             {
                 Logger::debug("SCRIPT") << "[80B8] [*] void display_msg(string*)" << std::endl;
-                _displayString(std::static_pointer_cast<std::string>(popDataPointer()));
+                std::string* pointer = static_cast<std::string*>(popDataPointer());
+                _displayString(*pointer);
+                delete pointer;
                 break;
             }
             case 0x80b9:
@@ -703,7 +705,7 @@ void VM::run()
             {
                 Logger::debug("SCRIPT") << "[80C1] [*] LVAR[num]" << std::endl;
                 unsigned int num = popDataInteger();
-                while (num >= _LVARS.size()) _LVARS.push_back(std::shared_ptr<VMStackIntValue>(new VMStackIntValue(0)));
+                while (num >= _LVARS.size()) _LVARS.push_back(new VMStackIntValue(0));
                 _dataStack.push(_LVARS.at(num));
                 break;
             }
@@ -712,7 +714,7 @@ void VM::run()
                 Logger::debug("SCRIPT") << "[80C2] [*] LVAR[num] = value" << std::endl;
                 auto value = _dataStack.pop();
                 unsigned int num = popDataInteger();
-                while (num >= _LVARS.size()) _LVARS.push_back(std::shared_ptr<VMStackIntValue>(new VMStackIntValue(0)));
+                while (num >= _LVARS.size()) _LVARS.push_back(new VMStackIntValue(0));
                 _LVARS.at(num) = value;
                 break;
             }
@@ -777,13 +779,13 @@ void VM::run()
             {
                 Logger::debug("SCRIPT") << "[80C9] [+] int obj_item_subtype(GameItemObject* object)" << std::endl;
                 auto pointer = popDataPointer();
-                     if (std::static_pointer_cast<GameArmorItemObject>(pointer))     pushDataInteger(0);
-                else if (std::static_pointer_cast<GameContainerItemObject>(pointer)) pushDataInteger(1);
-                else if (std::static_pointer_cast<GameDrugItemObject>(pointer))      pushDataInteger(2);
-                else if (std::static_pointer_cast<GameWeaponItemObject>(pointer))    pushDataInteger(3);
-                else if (std::static_pointer_cast<GameAmmoItemObject>(pointer))      pushDataInteger(4);
-                else if (std::static_pointer_cast<GameMiscItemObject>(pointer))      pushDataInteger(5);
-                else if (std::static_pointer_cast<GameKeyItemObject>(pointer))       pushDataInteger(6);
+                     if (static_cast<GameArmorItemObject*>(pointer))     pushDataInteger(0);
+                else if (static_cast<GameContainerItemObject*>(pointer)) pushDataInteger(1);
+                else if (static_cast<GameDrugItemObject*>(pointer))      pushDataInteger(2);
+                else if (static_cast<GameWeaponItemObject*>(pointer))    pushDataInteger(3);
+                else if (static_cast<GameAmmoItemObject*>(pointer))      pushDataInteger(4);
+                else if (static_cast<GameMiscItemObject*>(pointer))      pushDataInteger(5);
+                else if (static_cast<GameKeyItemObject*>(pointer))       pushDataInteger(6);
                 else pushDataInteger(-1);
                 break;
             }
@@ -846,7 +848,7 @@ void VM::run()
             case 0x80d4:
             {
                 Logger::debug("SCRIPT") << "[80D4] [+] int objectPosition(GameObject* object)" << std::endl;
-                auto object = std::static_pointer_cast<GameObject>(popDataPointer());
+                auto object = static_cast<GameObject*>(popDataPointer());
                 if (!object) throw new Exception("Opcode 80d4 error");
                 pushDataInteger(object->hexagon()->number());
                 break;
@@ -953,7 +955,7 @@ void VM::run()
             case 0x80ec:
             {
                 Logger::debug("SCRIPT") << "[80EC] [=] int elevation(void* obj)" << std::endl;
-                auto object = std::static_pointer_cast<GameObject>(popDataPointer());
+                auto object = static_cast<GameObject*>(popDataPointer());
                 if (!object) throw new Exception("Opcode 80ec error");
                 pushDataInteger(object->elevation());
                 break;
@@ -1039,7 +1041,7 @@ void VM::run()
                 Logger::debug("SCRIPT") << "[80FF] [*] int critter_attempt_placement(GameCritterObject* critter, int position, int elevation)" << std::endl;
                 auto elevation = popDataInteger();
                 auto position = popDataInteger();
-                auto critter = std::static_pointer_cast<GameCritterObject>(popDataPointer());
+                auto critter = static_cast<GameCritterObject*>(popDataPointer());
                 if (!critter) throw new Exception("Opcode 80ff error");
                 auto hexagon = Game::getInstance()->locationState()->hexagons()->at(position);
                 LocationState::moveObjectToHexagon(critter, hexagon);
@@ -1050,7 +1052,7 @@ void VM::run()
             case 0x8100:
             {
                 Logger::debug("SCRIPT") << "[8100] [+] int obj_pid(void* obj)" << std::endl;
-                auto object = std::static_pointer_cast<GameObject>(popDataPointer());
+                auto object = static_cast<GameObject*>(popDataPointer());
                 if (!object) throw new Exception("Opcode 8100 error");
                 pushDataInteger(object->PID());
                 break;
@@ -1076,14 +1078,14 @@ void VM::run()
                 Logger::debug("SCRIPT") << "[8105] [+] string* msgMessage(int msg_list, int msg_num);" << std::endl;
                 auto msgNum = popDataInteger();
                 auto msgList = popDataInteger();
-                pushDataPointer(std::shared_ptr<std::string>(new std::string(msgMessage(msgList, msgNum))));
+                pushDataPointer(new std::string(msgMessage(msgList, msgNum)));
                 break;
             }
             case 0x8106:
             {
                 Logger::debug("SCRIPT") << "[8106] [=] void* (int) critter_inven_obj(GameCritterObject* critter, int where)" << std::endl;
                 auto where = popDataInteger();
-                auto critter = std::static_pointer_cast<GameCritterObject>(popDataPointer());
+                auto critter = static_cast<GameCritterObject*>(popDataPointer());
                 switch (where)
                 {
                     case 0: // ARMOR SLOT
@@ -1184,16 +1186,16 @@ void VM::run()
             {
                 Logger::debug("SCRIPT") << "[8116] [+] void add_mult_objs_to_inven(GameObject* who, GameItemObject* item, int amount)" << std::endl;
                 auto amount = popDataInteger();
-                auto item = std::static_pointer_cast<GameItemObject>(popDataPointer());
+                auto item = static_cast<GameItemObject*>(popDataPointer());
                 if (!item) throw Exception("VM::opcode8116 - item not instanceof GameItemObject");
                 item->setAmount(amount);
                 // who can be critter or container
-                auto pointer = std::static_pointer_cast<GameObject>(popDataPointer());
-                if (auto critter = std::dynamic_pointer_cast<GameCritterObject>(pointer))
+                auto pointer = static_cast<GameObject*>(popDataPointer());
+                if (auto critter = dynamic_cast<GameCritterObject*>(pointer))
                 {
                     critter->inventory()->push_back(item);
                 }
-                else if (auto container = std::dynamic_pointer_cast<GameContainerItemObject>(pointer))
+                else if (auto container = dynamic_cast<GameContainerItemObject*>(pointer))
                 {
                     container->inventory()->push_back(item);
                 }
@@ -1243,8 +1245,9 @@ void VM::run()
                 dialog->deleteAnswers();
                 if (_dataStack.top()->type() == VMStackValue::TYPE_POINTER)
                 {
-                    auto question = std::static_pointer_cast<std::string>(popDataPointer());
-                    dialog->setQuestion(*(question.get()));
+                    auto question = static_cast<std::string*>(popDataPointer());
+                    dialog->setQuestion(*question);
+                    delete question;
                 }
                 else
                 {
@@ -1268,17 +1271,17 @@ void VM::run()
 
                 auto reaction = popDataInteger();
                 auto function = popDataInteger();
-                std::shared_ptr<std::string> text;
+                std::string* text = 0;
                 if (_dataStack.top()->type() == VMStackValue::TYPE_POINTER)
                 {
-                    text = std::static_pointer_cast<std::string>(popDataPointer());
+                    text = static_cast<std::string*>(popDataPointer());
                     popDataInteger(); // msg_list
                 }
                 else
                 {
                     auto msg_num = popDataInteger();
                     auto msg_file_num = popDataInteger();
-                    text = std::shared_ptr<std::string>(new std::string(msgMessage(msg_file_num, msg_num)));
+                    text = new std::string(msgMessage(msg_file_num, msg_num));
                 }
                 auto iq = popDataInteger();
                 auto game = Game::getInstance();
@@ -1301,7 +1304,7 @@ void VM::run()
                         dialog->addAnswer(*text);
                     }
                 }
-
+                delete text;
                 break;
             }
             case 0x8123:
@@ -1346,42 +1349,42 @@ void VM::run()
             case 0x812d:
             {
                 Logger::debug("SCRIPT") << "[812D] [+] int is_locked(GameDoorSceneryObject* object)" << std::endl;
-                auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
+                auto object = static_cast<GameDoorSceneryObject*>(popDataPointer());
                 pushDataInteger(object->locked());
                 break;
             }
             case 0x812e:
             {
                 Logger::debug("SCRIPT") << "[812E] [+] void lock(GameDoorSceneryObject* object)" << std::endl;
-                auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
+                auto object = static_cast<GameDoorSceneryObject*>(popDataPointer());
                 object->setLocked(true);
                 break;
             }
             case 0x812f:
             {
                 Logger::debug("SCRIPT") << "[812F] [+] void unlock(GameDoorSceneryObject* object)" << std::endl;
-                auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
+                auto object = static_cast<GameDoorSceneryObject*>(popDataPointer());
                 object->setLocked(false);
                 break;
             }
             case 0x8130:
             {
                 Logger::debug("SCRIPT") << "[8130] [+] int is_opened(GameDoorSceneryObject* object) " << std::endl;
-                auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
+                auto object = static_cast<GameDoorSceneryObject*>(popDataPointer());
                 pushDataInteger(object->opened());
                 break;
             }
             case 0x8131:
             {
                 Logger::debug("SCRIPT") << "[8131] [+] void open(GameDoorSceneryObject* object) " << std::endl;
-                auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
+                auto object = static_cast<GameDoorSceneryObject*>(popDataPointer());
                 object->setOpened(true);
                 break;
             }
             case 0x8132:
             {
                 Logger::debug("SCRIPT") << "[8132] [+] void close(GameDoorSceneryObject* object) " << std::endl;
-                auto object = std::static_pointer_cast<GameDoorSceneryObject>(popDataPointer());
+                auto object = static_cast<GameDoorSceneryObject*>(popDataPointer());
                 object->setOpened(false);
                 break;
             }
@@ -1434,7 +1437,7 @@ void VM::run()
             case 0x8149:
             {
                 Logger::debug("SCRIPT") << "[8149] [+] int obj_art_fid(void* obj)" << std::endl;
-                auto object = std::static_pointer_cast<GameObject>(popDataPointer());
+                auto object = static_cast<GameObject*>(popDataPointer());
                 if (!object) throw Exception("VM::opcode8149() - can't convert pointer to object");
                 pushDataInteger(object->FID());
                 break;
@@ -1482,7 +1485,9 @@ void VM::run()
             case 0x8154:
             {
                 Logger::debug("SCRIPT") << "[8154] [*] void debug(string*)" << std::endl;
-                Logger::debug("SCRIPT") << *(std::static_pointer_cast<std::string>(popDataPointer())).get() << std::endl;
+                auto string = static_cast<std::string*>(popDataPointer());
+                Logger::debug("SCRIPT") << *string << std::endl;
+                delete string;
                 break;
             }
             case 0x9001: break;
@@ -1503,7 +1508,7 @@ int VM::popDataInteger()
     auto stackValue = _dataStack.pop();
     if (stackValue->type() == VMStackValue::TYPE_INTEGER)
     {
-        auto stackIntValue = std::dynamic_pointer_cast<VMStackIntValue>(stackValue);
+        auto stackIntValue = dynamic_cast<VMStackIntValue*>(stackValue);
         auto value = stackIntValue->value();
         return value;
     }
@@ -1512,7 +1517,7 @@ int VM::popDataInteger()
 
 void VM::pushDataInteger(int value)
 {
-    _dataStack.push(std::shared_ptr<VMStackIntValue>(new VMStackIntValue(value)));
+    _dataStack.push(new VMStackIntValue(value));
 }
 
 float VM::popDataFloat()
@@ -1520,7 +1525,7 @@ float VM::popDataFloat()
     auto stackValue = _dataStack.pop();
     if (stackValue->type() == VMStackValue::TYPE_FLOAT)
     {
-        auto stackFloatValue = std::dynamic_pointer_cast<VMStackFloatValue>(stackValue);
+        auto stackFloatValue = dynamic_cast<VMStackFloatValue*>(stackValue);
         auto value = stackFloatValue->value();
         return value;
     }
@@ -1529,24 +1534,24 @@ float VM::popDataFloat()
 
 void VM::pushDataFloat(float value)
 {
-    _dataStack.push(std::shared_ptr<VMStackFloatValue>(new VMStackFloatValue(value)));
+    _dataStack.push(new VMStackFloatValue(value));
 }
 
-std::shared_ptr<void> VM::popDataPointer()
+void* VM::popDataPointer()
 {
     auto stackValue = _dataStack.pop();
     if (stackValue->type() == VMStackValue::TYPE_POINTER)
     {
-        auto stackPointerValue = std::dynamic_pointer_cast<VMStackPointerValue>(stackValue);
+        auto stackPointerValue = dynamic_cast<VMStackPointerValue*>(stackValue);
         auto value = stackPointerValue->value();
         return value;
     }
     throw Exception("VM::popDataPointer() - stack value is not a pointer");
 }
 
-void VM::pushDataPointer(std::shared_ptr<void> value)
+void VM::pushDataPointer(void* value)
 {
-    auto pointer = std::shared_ptr<VMStackPointerValue>(new VMStackPointerValue(value));
+    auto pointer = new VMStackPointerValue(value);
     _dataStack.push(pointer);
 }
 
@@ -1555,7 +1560,7 @@ int VM::popReturnInteger()
     auto stackValue = _returnStack.pop();
     if (stackValue->type() == VMStackValue::TYPE_INTEGER)
     {
-        auto stackIntValue = std::dynamic_pointer_cast<VMStackIntValue>(stackValue);
+        auto stackIntValue = dynamic_cast<VMStackIntValue*>(stackValue);
         auto value = stackIntValue->value();
         return value;
     }
@@ -1564,7 +1569,7 @@ int VM::popReturnInteger()
 
 void VM::pushReturnInteger(int value)
 {
-    _returnStack.push(std::shared_ptr<VMStackIntValue>(new VMStackIntValue(value)));
+    _returnStack.push(new VMStackIntValue(value));
 }
 
 bool VM::popDataLogical()
@@ -1581,7 +1586,7 @@ bool VM::popDataLogical()
     throw Exception("VM::popDataLogical() - something strange happened");
 }
 
-int VM::_metarule(int type, std::shared_ptr<VMStackValue> value)
+int VM::_metarule(int type, VMStackValue* value)
 {
     switch(type)
     {
@@ -1638,9 +1643,9 @@ void VM::_playMovie(int movieNum)
 }
 
 
-void VM::_displayString(std::shared_ptr<std::string> str)
+void VM::_displayString(std::string str)
 {
-    Logger::debug("SCRIPT") << *(str.get()) << std::endl;
+    Logger::debug("SCRIPT") << str << std::endl;
 }
 
 int VM::_tile_num_in_direction(int start_tile, int dir, int distance)
@@ -1648,16 +1653,16 @@ int VM::_tile_num_in_direction(int start_tile, int dir, int distance)
     return start_tile + 20;
 }
 
-int VM::_critter_add_trait(std::shared_ptr<void> who, int trait_type, int trait, int amount)
+int VM::_critter_add_trait(void* who, int trait_type, int trait, int amount)
 {
     return 0;
 }
 
-void VM::_anim(std::shared_ptr<void> who, int anim, int direction)
+void VM::_anim(void* who, int anim, int direction)
 {
 }
 
-int VM::_metarule3(int meta, std::shared_ptr<VMStackValue> p1, int p2, int p3)
+int VM::_metarule3(int meta, VMStackValue* p1, int p2, int p3)
 {
     switch(meta)
     {
@@ -1682,7 +1687,7 @@ std::string VM::msgMessage(int msg_file_num, int msg_num)
     return msg->message(msg_num)->text();
 }
 
-std::shared_ptr<libfalltergeist::IntFileType> VM::script()
+libfalltergeist::IntFileType* VM::script()
 {
     return _script;
 }
@@ -1707,7 +1712,7 @@ VMStack* VM::returnStack()
     return &_returnStack;
 }
 
-std::shared_ptr<void> VM::owner()
+void* VM::owner()
 {
     return _owner;
 }

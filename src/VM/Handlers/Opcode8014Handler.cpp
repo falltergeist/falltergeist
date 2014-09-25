@@ -49,8 +49,8 @@ void Opcode8014Handler::_run()
             break;
         case VMStackValue::TYPE_POINTER:
         {
-            auto string = std::static_pointer_cast<std::string>(_vm->popDataPointer());
-            _vm->dataStack()->push(EVARS->at(*string.get()));
+            auto string = static_cast<std::string*>(_vm->popDataPointer());
+            _vm->dataStack()->push(EVARS->at(*string));
             break;
         }
         default:

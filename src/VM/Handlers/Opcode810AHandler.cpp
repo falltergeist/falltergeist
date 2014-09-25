@@ -90,10 +90,10 @@ void Opcode810AHandler::_run()
             throw Exception("Opcode810AHandler - wrong type: " + std::to_string(type));
     }
 
-    auto string = std::static_pointer_cast<std::string>(_vm->popDataPointer());
-    auto object = std::static_pointer_cast<GameObject>(_vm->popDataPointer());
+    auto string = static_cast<std::string*>(_vm->popDataPointer());
+    auto object = static_cast<GameObject*>(_vm->popDataPointer());
 
-    auto floatMessage = std::shared_ptr<TextArea>(new TextArea(*string.get()));
+    auto floatMessage = new TextArea(*string);
     floatMessage->setWidth(200);
     floatMessage->setWordWrap(true);
     floatMessage->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);

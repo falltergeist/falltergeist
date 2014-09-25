@@ -38,8 +38,8 @@ class PlayerEditNameState : public State
 {
 protected:
     unsigned int _timer;
-    std::shared_ptr<TextArea> _name;
-    std::shared_ptr<Image> _cursor;
+    TextArea* _name = 0;
+    Image* _cursor = 0;
     std::map<char,char> _keyCodes;
 public:
     PlayerEditNameState();

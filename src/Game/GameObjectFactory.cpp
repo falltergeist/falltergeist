@@ -49,10 +49,10 @@ GameObjectFactory::GameObjectFactory()
 {
 }
 
-std::shared_ptr<GameObject> GameObjectFactory::createObject(unsigned int PID)
+GameObject* GameObjectFactory::createObject(unsigned int PID)
 {
     auto proto = ResourceManager::proFileType(PID);
-    std::shared_ptr<GameObject> object;
+    GameObject* object = 0;
     switch (proto->typeId())
     {
         case libfalltergeist::ProFileType::TYPE_ITEM:
@@ -61,66 +61,66 @@ std::shared_ptr<GameObject> GameObjectFactory::createObject(unsigned int PID)
             {
                 case libfalltergeist::ProFileType::TYPE_ITEM_AMMO:
                 {
-                    object = std::shared_ptr<GameAmmoItemObject>(new GameAmmoItemObject());
+                    object = new GameAmmoItemObject();
                     break;
                 }
                 case libfalltergeist::ProFileType::TYPE_ITEM_ARMOR:
                 {
-                    object = std::shared_ptr<GameArmorItemObject>(new GameArmorItemObject());
+                    object = new GameArmorItemObject();
                     for (unsigned int i = 0; i != 9; ++i)
                     {
-                        ((GameArmorItemObject*)object.get())->setDamageResist(i, proto->damageResist()->at(i));
-                        ((GameArmorItemObject*)object.get())->setDamageThreshold(i, proto->damageThreshold()->at(i));
+                        ((GameArmorItemObject*)object)->setDamageResist(i, proto->damageResist()->at(i));
+                        ((GameArmorItemObject*)object)->setDamageThreshold(i, proto->damageThreshold()->at(i));
                     }
-                    ((GameArmorItemObject*)object.get())->setPerk(proto->perk());
-                    ((GameArmorItemObject*)object.get())->setMaleFID(proto->armorMaleFID());
-                    ((GameArmorItemObject*)object.get())->setFemaleFID(proto->armorFemaleFID());
-                    ((GameArmorItemObject*)object.get())->setArmorClass(proto->armorClass());
+                    ((GameArmorItemObject*)object)->setPerk(proto->perk());
+                    ((GameArmorItemObject*)object)->setMaleFID(proto->armorMaleFID());
+                    ((GameArmorItemObject*)object)->setFemaleFID(proto->armorFemaleFID());
+                    ((GameArmorItemObject*)object)->setArmorClass(proto->armorClass());
                     break;
                 }
                 case libfalltergeist::ProFileType::TYPE_ITEM_CONTAINER:
                 {
-                    object = std::shared_ptr<GameContainerItemObject>(new GameContainerItemObject());
+                    object = new GameContainerItemObject();
                     break;
                 }
                 case libfalltergeist::ProFileType::TYPE_ITEM_DRUG:
                 {
-                    object = std::shared_ptr<GameDrugItemObject>(new GameDrugItemObject());
+                    object = new GameDrugItemObject();
                     break;
                 }
                 case libfalltergeist::ProFileType::TYPE_ITEM_KEY:
                 {
-                    object = std::shared_ptr<GameKeyItemObject>(new GameKeyItemObject());
+                    object = new GameKeyItemObject();
                     break;
                 }
                 case libfalltergeist::ProFileType::TYPE_ITEM_MISC:
                 {
-                    object = std::shared_ptr<GameMiscItemObject>(new GameMiscItemObject());
+                    object = new GameMiscItemObject();
                     break;
                 }
                 case libfalltergeist::ProFileType::TYPE_ITEM_WEAPON:
                 {
-                    object = std::shared_ptr<GameWeaponItemObject>(new GameWeaponItemObject());
+                    object = new GameWeaponItemObject();
 
-                    ((GameWeaponItemObject*)object.get())->setPerk(proto->perk());
-                    ((GameWeaponItemObject*)object.get())->setAnimationCode(proto->weaponAnimationCode());
-                    ((GameWeaponItemObject*)object.get())->setDamageMin(proto->weaponDamageMin());
-                    ((GameWeaponItemObject*)object.get())->setDamageMax(proto->weaponDamageMax());
-                    ((GameWeaponItemObject*)object.get())->setDamageType(proto->weaponDamageType());
-                    ((GameWeaponItemObject*)object.get())->setRangePrimary(proto->weaponRangePrimary());
-                    ((GameWeaponItemObject*)object.get())->setRangeSecondary(proto->weaponRangeSecondary());
-                    ((GameWeaponItemObject*)object.get())->setMinimumStrenght(proto->weaponMinimumStrenght());
-                    ((GameWeaponItemObject*)object.get())->setActionCostPrimary(proto->weaponActionCostPrimary());
-                    ((GameWeaponItemObject*)object.get())->setActionCostSecondary(proto->weaponActionCostSecondary());
-                    ((GameWeaponItemObject*)object.get())->setBurstRounds(proto->weaponBurstRounds());
-                    ((GameWeaponItemObject*)object.get())->setAmmoType(proto->weaponAmmoType());
-                    ((GameWeaponItemObject*)object.get())->setAmmoPID(proto->weaponAmmoPID());
-                    ((GameWeaponItemObject*)object.get())->setAmmoCapacity(proto->weaponAmmoCapacity());
+                    ((GameWeaponItemObject*)object)->setPerk(proto->perk());
+                    ((GameWeaponItemObject*)object)->setAnimationCode(proto->weaponAnimationCode());
+                    ((GameWeaponItemObject*)object)->setDamageMin(proto->weaponDamageMin());
+                    ((GameWeaponItemObject*)object)->setDamageMax(proto->weaponDamageMax());
+                    ((GameWeaponItemObject*)object)->setDamageType(proto->weaponDamageType());
+                    ((GameWeaponItemObject*)object)->setRangePrimary(proto->weaponRangePrimary());
+                    ((GameWeaponItemObject*)object)->setRangeSecondary(proto->weaponRangeSecondary());
+                    ((GameWeaponItemObject*)object)->setMinimumStrenght(proto->weaponMinimumStrenght());
+                    ((GameWeaponItemObject*)object)->setActionCostPrimary(proto->weaponActionCostPrimary());
+                    ((GameWeaponItemObject*)object)->setActionCostSecondary(proto->weaponActionCostSecondary());
+                    ((GameWeaponItemObject*)object)->setBurstRounds(proto->weaponBurstRounds());
+                    ((GameWeaponItemObject*)object)->setAmmoType(proto->weaponAmmoType());
+                    ((GameWeaponItemObject*)object)->setAmmoPID(proto->weaponAmmoPID());
+                    ((GameWeaponItemObject*)object)->setAmmoCapacity(proto->weaponAmmoCapacity());
                     break;
                 }
             }
-            ((GameItemObject*)object.get())->setWeight(proto->weight());
-            ((GameItemObject*)object.get())->setInventoryFID(proto->inventoryFID());
+            ((GameItemObject*)object)->setWeight(proto->weight());
+            ((GameItemObject*)object)->setInventoryFID(proto->inventoryFID());
             auto msg = ResourceManager::msgFileType("text/english/game/pro_item.msg");
             try
             {
@@ -132,7 +132,7 @@ std::shared_ptr<GameObject> GameObjectFactory::createObject(unsigned int PID)
         }
         case libfalltergeist::ProFileType::TYPE_CRITTER:
         {
-            object = std::shared_ptr<GameCritterObject>(new GameCritterObject());
+            object = new GameCritterObject();
             auto msg = ResourceManager::msgFileType("text/english/game/pro_crit.msg");
             try
             {
@@ -143,25 +143,25 @@ std::shared_ptr<GameObject> GameObjectFactory::createObject(unsigned int PID)
 
             for (unsigned int i = 0; i != 7; ++i)
             {
-                ((GameCritterObject*)object.get())->setStat(i, proto->critterStats()->at(i));
-                ((GameCritterObject*)object.get())->setStatBonus(i, proto->critterStatsBonus()->at(i));
+                ((GameCritterObject*)object)->setStat(i, proto->critterStats()->at(i));
+                ((GameCritterObject*)object)->setStatBonus(i, proto->critterStatsBonus()->at(i));
             }
             for (unsigned int i = 0; i != 18; ++i)
             {
-                ((GameCritterObject*)object.get())->setSkill(i, proto->critterSkills()->at(i));
+                ((GameCritterObject*)object)->setSkill(i, proto->critterSkills()->at(i));
             }
-            ((GameCritterObject*)object.get())->setActionPoints(proto->critterActionPoints());
-            ((GameCritterObject*)object.get())->setHitPointsMax(proto->critterHitPointsMax());
-            ((GameCritterObject*)object.get())->setArmorClass(proto->critterArmorClass());
-            ((GameCritterObject*)object.get())->setCarryWeightMax(proto->critterCarryWeightMax());
-            ((GameCritterObject*)object.get())->setMeleeDamage(proto->critterMeleeDamage());
-            ((GameCritterObject*)object.get())->setSequence(proto->critterSequence());
-            ((GameCritterObject*)object.get())->setCriticalChance(proto->critterCriticalChance());
-            ((GameCritterObject*)object.get())->setHealingRate(proto->critterHealingRate());
+            ((GameCritterObject*)object)->setActionPoints(proto->critterActionPoints());
+            ((GameCritterObject*)object)->setHitPointsMax(proto->critterHitPointsMax());
+            ((GameCritterObject*)object)->setArmorClass(proto->critterArmorClass());
+            ((GameCritterObject*)object)->setCarryWeightMax(proto->critterCarryWeightMax());
+            ((GameCritterObject*)object)->setMeleeDamage(proto->critterMeleeDamage());
+            ((GameCritterObject*)object)->setSequence(proto->critterSequence());
+            ((GameCritterObject*)object)->setCriticalChance(proto->critterCriticalChance());
+            ((GameCritterObject*)object)->setHealingRate(proto->critterHealingRate());
             for (unsigned int i = 0; i != 9; ++i)
             {
-                ((GameCritterObject*)object.get())->setDamageResist(i, proto->damageResist()->at(i));
-                ((GameCritterObject*)object.get())->setDamageThreshold(i, proto->damageThreshold()->at(i));
+                ((GameCritterObject*)object)->setDamageResist(i, proto->damageResist()->at(i));
+                ((GameCritterObject*)object)->setDamageThreshold(i, proto->damageThreshold()->at(i));
             }
             break;
         }
@@ -171,28 +171,28 @@ std::shared_ptr<GameObject> GameObjectFactory::createObject(unsigned int PID)
             {
                 case libfalltergeist::ProFileType::TYPE_SCENERY_DOOR:
                 {
-                    object = std::shared_ptr<GameDoorSceneryObject>(new GameDoorSceneryObject());
+                    object = new GameDoorSceneryObject();
                     break;
                 }
                 case libfalltergeist::ProFileType::TYPE_SCENERY_ELEVATOR:
                 {
-                    object = std::shared_ptr<GameElevatorSceneryObject>(new GameElevatorSceneryObject());
+                    object = new GameElevatorSceneryObject();
                     break;
                 }
                 case libfalltergeist::ProFileType::TYPE_SCENERY_GENERIC:
                 {
-                    object = std::shared_ptr<GameGenericSceneryObject>(new GameGenericSceneryObject());
+                    object = new GameGenericSceneryObject();
                     break;
                 }
                 case libfalltergeist::ProFileType::TYPE_SCENERY_LADDER_TOP:
                 case libfalltergeist::ProFileType::TYPE_SCENERY_LADDER_BOTTOM:
                 {
-                    object = std::shared_ptr<GameLadderSceneryObject>(new GameLadderSceneryObject());
+                    object = new GameLadderSceneryObject();
                     break;
                 }
                 case libfalltergeist::ProFileType::TYPE_SCENERY_STAIRS:
                 {
-                    object = std::shared_ptr<GameStairsSceneryObject>(new GameStairsSceneryObject());
+                    object = new GameStairsSceneryObject();
                     break;
                 }
             }
@@ -207,7 +207,7 @@ std::shared_ptr<GameObject> GameObjectFactory::createObject(unsigned int PID)
         }
         case libfalltergeist::ProFileType::TYPE_WALL:
         {
-            object = std::shared_ptr<GameWallObject>(new GameWallObject());
+            object = new GameWallObject();
             auto msg = ResourceManager::msgFileType("text/english/game/pro_wall.msg");
             try
             {
@@ -226,7 +226,7 @@ std::shared_ptr<GameObject> GameObjectFactory::createObject(unsigned int PID)
         }
         case libfalltergeist::ProFileType::TYPE_MISC:
         {
-            object = std::shared_ptr<GameMiscObject>(new GameMiscObject());
+            object = new GameMiscObject();
             auto msg = ResourceManager::msgFileType("text/english/game/pro_misc.msg");
             try
             {

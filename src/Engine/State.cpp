@@ -37,6 +37,11 @@ State::State() : EventReciever()
 
 State::~State()
 {
+    while (!_ui.empty())
+    {
+        delete _ui.back();
+        _ui.pop_back();
+    }
 }
 
 void State::init()
@@ -97,7 +102,7 @@ void State::setModal(bool value)
     _modal = value;
 }
 
-std::shared_ptr<UI> State::addUI(std::shared_ptr<UI> ui)
+UI* State::addUI(UI* ui)
 {
     // Add to UI state position
     if (x()) ui->setX(ui->x() + x());
@@ -107,14 +112,14 @@ std::shared_ptr<UI> State::addUI(std::shared_ptr<UI> ui)
     return ui;
 }
 
-std::shared_ptr<UI> State::addUI(std::string name, std::shared_ptr<UI> ui)
+UI* State::addUI(std::string name, UI* ui)
 {
     addUI(ui);
-    _labeledUI.insert(std::pair<std::string, std::shared_ptr<UI>>(name, ui));
+    _labeledUI.insert(std::pair<std::string, UI*>(name, ui));
     return ui;
 }
 
-void State::addUI(std::vector<std::shared_ptr<UI>> uis)
+void State::addUI(std::vector<UI*> uis)
 {
     for (auto ui : uis)
     {
@@ -122,7 +127,7 @@ void State::addUI(std::vector<std::shared_ptr<UI>> uis)
     }
 }
 
-std::shared_ptr<UI> State::getUI(std::string name)
+UI* State::getUI(std::string name)
 {
     if (_labeledUI.find(name) != _labeledUI.end())
     {
@@ -135,9 +140,9 @@ void State::handle(std::shared_ptr<Event> event)
 {
     for (auto it = _ui.rbegin(); it != _ui.rend(); ++it)
     {
-        if (auto activeUI = std::dynamic_pointer_cast<ActiveUI>(*it))
+        if (auto activeUI = dynamic_cast<ActiveUI*>(*it))
         {
-            if (event->handled()) continue;
+            if (event->handled()) return;
             activeUI->handle(event);
         }
     }

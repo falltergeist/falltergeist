@@ -39,11 +39,11 @@ Opcode80BAHandler::Opcode80BAHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80BAHandler::_run()
 {
     auto PID = _vm->popDataInteger();
-    auto pointer = std::static_pointer_cast<GameObject>(_vm->popDataPointer());
+    auto pointer = static_cast<GameObject*>(_vm->popDataPointer());
 
     int amount = 0;
-    auto critter = std::dynamic_pointer_cast<GameCritterObject>(pointer);
-    auto container = std::dynamic_pointer_cast<GameContainerItemObject>(pointer);
+    auto critter = dynamic_cast<GameCritterObject*>(pointer);
+    auto container = dynamic_cast<GameContainerItemObject*>(pointer);
     if (critter)
     {
         for (auto object : *critter->inventory()) if (object->PID() == PID) amount += object->amount();

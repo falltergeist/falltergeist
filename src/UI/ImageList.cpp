@@ -30,12 +30,12 @@ namespace Falltergeist
 
 ImageList::ImageList(std::vector<std::string> imageList, int x, int y) : ActiveUI(x,y)
 {
-    for (auto& frmName : imageList) addImage(std::shared_ptr<Image>(new Image(frmName)));
+    for (auto& frmName : imageList) addImage(new Image(frmName));
 }
 
-ImageList::ImageList(std::vector<std::shared_ptr<Image>> imageList, int x, int y) : ActiveUI(x,y)
+ImageList::ImageList(std::vector<Image*> imageList, int x, int y) : ActiveUI(x,y)
 {
-    for (auto& image : imageList) addImage(image);
+    for (auto& image : imageList) addImage(new Image(image));
 }
 
 ImageList::ImageList(int x, int y) : ActiveUI(x,y)
@@ -44,6 +44,11 @@ ImageList::ImageList(int x, int y) : ActiveUI(x,y)
 
 ImageList::~ImageList()
 {
+    while (!_images.empty())
+    {
+        delete _images.back();
+        _images.pop_back();
+    }
 }
 
 unsigned int ImageList::currentImage()
@@ -56,14 +61,14 @@ void ImageList::setCurrentImage(unsigned int number)
     _currentImage = number;
 }
 
-void ImageList::addImage(std::shared_ptr<Image> image)
+void ImageList::addImage(Image* image)
 {
     images()->push_back(image);
 }
 
 void ImageList::addImage(std::string filename)
 {
-    addImage(std::shared_ptr<Image>(new Image(filename)));
+    addImage(new Image(filename));
 }
 
 Texture* ImageList::texture()
@@ -71,7 +76,7 @@ Texture* ImageList::texture()
     return images()->at(currentImage())->texture();
 }
 
-std::vector<std::shared_ptr<Image>>* ImageList::images()
+std::vector<Image*>* ImageList::images()
 {
     return &_images;
 }

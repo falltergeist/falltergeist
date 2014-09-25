@@ -43,6 +43,8 @@ GameObject::GameObject() : EventReciever()
 
 GameObject::~GameObject()
 {
+    delete _ui;
+    delete _floatMessage;
 }
 
 int GameObject::type()
@@ -134,12 +136,12 @@ std::vector<VM*>* GameObject::scripts()
     return &_scripts;
 }
 
-std::shared_ptr<ActiveUI> GameObject::ui()
+ActiveUI* GameObject::ui()
 {
     return _ui;
 }
 
-void GameObject::setUI(std::shared_ptr<ActiveUI> ui)
+void GameObject::setUI(ActiveUI* ui)
 {
     _ui = ui;
 }
@@ -152,11 +154,11 @@ void GameObject::_generateUi()
     {
         if (frm->framesPerDirection() > 1)
         {
-            _ui = std::shared_ptr<Animation>(new Animation(ResourceManager::FIDtoFrmName(FID()), orientation()));
+            _ui = new Animation(ResourceManager::FIDtoFrmName(FID()), orientation());
         }
         else
         {
-            _ui = std::shared_ptr<Image>(new Image(frm, orientation()));
+            _ui = new Image(frm, orientation());
         }
     }
 }
@@ -181,12 +183,12 @@ void GameObject::setHexagon(Hexagon* hexagon)
     _hexagon = hexagon;
 }
 
-std::shared_ptr<TextArea> GameObject::floatMessage()
+TextArea* GameObject::floatMessage()
 {
     return _floatMessage;
 }
 
-void GameObject::setFloatMessage(std::shared_ptr<TextArea> floatMessage)
+void GameObject::setFloatMessage(TextArea* floatMessage)
 {
     _floatMessage = floatMessage;
 }

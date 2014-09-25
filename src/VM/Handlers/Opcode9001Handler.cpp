@@ -42,25 +42,25 @@ void Opcode9001Handler::_run()
     // Skip 4 readed bytes
     _vm->setProgramCounter(_vm->programCounter() + 4);
 
-    std::shared_ptr<std::string> pointer;
+    std::string* pointer;
     switch(nextOpcode)
     {
         case 0x8014: // get exported var value
         case 0x8015: // set exported var value
         case 0x8016: // export var
         {
-            pointer = std::shared_ptr<std::string>(new std::string(_vm->script()->identificators()->at(value)));
+            pointer = new std::string(_vm->script()->identificators()->at(value));
             _vm->pushDataPointer(pointer);
             break;
         }
         default:
         {
-            pointer = std::shared_ptr<std::string>(new std::string(_vm->script()->strings()->at(value)));
+            pointer = new std::string(_vm->script()->strings()->at(value));
             _vm->pushDataPointer(pointer);
             break;
         }
     }
-    Logger::debug("SCRIPT") << "[9001] [*] push_d *" << pointer.get() << std::endl;
+    Logger::debug("SCRIPT") << "[9001] [*] push_d *" << pointer << std::endl;
 }
 
 }

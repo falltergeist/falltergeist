@@ -43,16 +43,16 @@ void Opcode8039Handler::_run()
     {
         case VMStackValue::TYPE_POINTER: // STRING
         {
-            auto p2 = std::static_pointer_cast<std::string>(_vm->popDataPointer());
+            auto p2 = static_cast<std::string*>(_vm->popDataPointer());
             auto a = _vm->dataStack()->top();
             switch(a->type())
             {
                 case VMStackValue::TYPE_POINTER: // STRING + STRING
                 {
-                    auto p1 = std::static_pointer_cast<std::string>(_vm->popDataPointer());
-                    std::string string1 = (p1 ? *(p1.get()) : "");
-                    std::string string2 = (p2 ? *(p1.get()) : "");
-                    _vm->pushDataPointer(std::shared_ptr<std::string>(new std::string(string1 + string2)));
+                    auto p1 = static_cast<std::string*>(_vm->popDataPointer());
+                    std::string string1 = (p1 ? *p1 : "");
+                    std::string string2 = (p2 ? *p1 : "");
+                    _vm->pushDataPointer(new std::string(string1 + string2));
                     break;
                 }
                 case VMStackValue::TYPE_FLOAT: // FLOAT + STRING
@@ -86,9 +86,9 @@ void Opcode8039Handler::_run()
                 }
                 case VMStackValue::TYPE_POINTER: // STRING + INTEGER
                 {
-                    auto p1 = std::static_pointer_cast<std::string>(_vm->popDataPointer());
-                    std::string string1 = (p1 ? *(p1.get()) : "");
-                    _vm->pushDataPointer(std::shared_ptr<std::string>(new std::string(string1 + std::to_string(p2))));
+                    auto p1 = static_cast<std::string*>(_vm->popDataPointer());
+                    std::string string1 = (p1 ? *p1 : "");
+                    _vm->pushDataPointer(new std::string(string1 + std::to_string(p2)));
                     break;
                 }
             }
@@ -115,10 +115,10 @@ void Opcode8039Handler::_run()
                 }
                 case VMStackValue::TYPE_POINTER: // STRING + FLOAT
                 {
-                    auto p1 = std::static_pointer_cast<std::string>(_vm->popDataPointer());
-                    std::string string1 = (p1 ? *(p1.get()) : "");
+                    auto p1 = static_cast<std::string*>(_vm->popDataPointer());
+                    std::string string1 = (p1 ? *p1 : "");
 
-                    _vm->pushDataPointer(std::shared_ptr<std::string>(new std::string(string1 + std::to_string(p2))));
+                    _vm->pushDataPointer(new std::string(string1 + std::to_string(p2)));
                     break;
                 }
             }

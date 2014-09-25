@@ -39,7 +39,7 @@ protected:
     bool _checked = false; // pathfinding flag
     Hexagon* _cameFrom = 0; // pathfinding flag
     std::vector<Hexagon*> _neighbors;
-    std::list<std::shared_ptr<GameObject>> _objects;
+    std::list<GameObject*> _objects;
     unsigned int _number = 0; // position in hexagonal grid
     unsigned int _x = 0;
     unsigned int _y = 0;
@@ -64,7 +64,7 @@ public:
 
     std::vector<Hexagon*>* neighbors();
 
-    std::list<std::shared_ptr<GameObject>>* objects();
+    std::list<GameObject*>* objects();
 };
 
 }

@@ -50,7 +50,7 @@ void SettingsMenuState::init()
     State::init();
 
     // background
-    auto background = std::shared_ptr<Image>(new Image("art/intrface/prefscrn.frm"));
+    auto background = new Image("art/intrface/prefscrn.frm");
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
     background->setX(backgroundX);
@@ -58,42 +58,42 @@ void SettingsMenuState::init()
     addUI(background);
 
     // Switches (big)
-    auto combatDifficultySwitch = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, backgroundX+76, backgroundY+71));
+    auto combatDifficultySwitch = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, backgroundX+76, backgroundY+71);
     combatDifficultySwitch->setMaxState(3);
     addUI(combatDifficultySwitch);
 
-    auto gameDifficultySwitch = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, backgroundX+76, backgroundY+149));
+    auto gameDifficultySwitch = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, backgroundX+76, backgroundY+149);
     gameDifficultySwitch->setMaxState(3);
     addUI(gameDifficultySwitch);
 
-    auto violenceLevelSwitch = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, backgroundX+76, backgroundY+227));
+    auto violenceLevelSwitch = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, backgroundX+76, backgroundY+227);
     addUI(violenceLevelSwitch);
 
-    auto targetHighlightSwitch = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, backgroundX+76, backgroundY+309));
+    auto targetHighlightSwitch = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, backgroundX+76, backgroundY+309);
     targetHighlightSwitch->setMaxState(3);
     addUI(targetHighlightSwitch);
 
-    auto combatLooksSwitch = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, backgroundX+76, backgroundY+387));
+    auto combatLooksSwitch = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, backgroundX+76, backgroundY+387);
     combatLooksSwitch->setMaxState(2);
     addUI(combatLooksSwitch);
 
     // Switches (small)
-    auto combatMessagesSwitch = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74));
+    auto combatMessagesSwitch = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74);
     addUI(combatMessagesSwitch);
 
-    auto combatTauntsSwitch = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74+66));
+    auto combatTauntsSwitch = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74+66);
     addUI(combatTauntsSwitch);
 
-    auto languageFilterSwitch = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74+66*2));
+    auto languageFilterSwitch = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74+66*2);
     addUI(languageFilterSwitch);
 
-    auto runningSwitch = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74+66*3));
+    auto runningSwitch = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74+66*3);
     addUI(runningSwitch);
 
-    auto subtitlesSwitch = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74+66*4));
+    auto subtitlesSwitch = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74+66*4);
     addUI(subtitlesSwitch);
 
-    auto itemHightlightSwitch = std::shared_ptr<MultistateImageButton>(new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74+66*5));
+    auto itemHightlightSwitch = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74+66*5);
     addUI(itemHightlightSwitch);
 
     // LABELS
@@ -277,56 +277,56 @@ void SettingsMenuState::init()
     // BUTTONS
 
     // button: Default
-    auto defaultButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+23, backgroundY+450));
+    auto defaultButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+23, backgroundY+450);
     defaultButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SettingsMenuState::onDefaultButtonClick);
     addUI(defaultButton);
 
     // button: Done
-    auto doneButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+148, backgroundY+450));
+    auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+148, backgroundY+450);
     doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SettingsMenuState::onSaveButtonClick);
     addUI(doneButton);
 
     // button: Cancel
-    auto cancelButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+263, backgroundY+450));
+    auto cancelButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+263, backgroundY+450);
     cancelButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SettingsMenuState::onCancelButtonClick);
     addUI(cancelButton);
 
     // button: Affect player speed
-    auto affectPlayerSpeedCheckBox = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_CHECKBOX, backgroundX+383, backgroundY+68));
+    auto affectPlayerSpeedCheckBox = new ImageButton(ImageButton::TYPE_CHECKBOX, backgroundX+383, backgroundY+68);
     addUI(affectPlayerSpeedCheckBox);
 
     // SLIDERS
     // COMBAT SPEED SLIDER
-    auto combatSpeedSlider = std::shared_ptr<Slider>(new Slider(backgroundX+384, backgroundY+50));
+    auto combatSpeedSlider = new Slider(backgroundX+384, backgroundY+50);
     addUI(combatSpeedSlider);
 
     // TEXT DELAY SLIDER
-    auto textDelaySlider = std::shared_ptr<Slider>(new Slider(backgroundX+384, backgroundY+125));
+    auto textDelaySlider = new Slider(backgroundX+384, backgroundY+125);
     textDelaySlider->setValue(0.5);
     addUI(textDelaySlider);
 
     // MASTER AUDIO VOLUME SLIDER
-    auto masterAudioVolumeSlider = std::shared_ptr<Slider>(new Slider(backgroundX+384, backgroundY+196));
+    auto masterAudioVolumeSlider = new Slider(backgroundX+384, backgroundY+196);
     addUI(masterAudioVolumeSlider);
 
     // MUSIC VOLUME SLIDER
-    auto musicVolumeSlider = std::shared_ptr<Slider>(new Slider(backgroundX+384, backgroundY+196+51));
+    auto musicVolumeSlider = new Slider(backgroundX+384, backgroundY+196+51);
     addUI(musicVolumeSlider);
 
     // SOUND EFFECTS VOLUME SLIDER
-    auto soundEffectsVolumeSlider = std::shared_ptr<Slider>(new Slider(backgroundX+384, backgroundY+196+51*2));
+    auto soundEffectsVolumeSlider = new Slider(backgroundX+384, backgroundY+196+51*2);
     addUI(soundEffectsVolumeSlider);
 
     // SPEECH VOLUME SLIDER
-    auto speechVolumeSlider = std::shared_ptr<Slider>(new Slider(backgroundX+384, backgroundY+196+51*3));
+    auto speechVolumeSlider = new Slider(backgroundX+384, backgroundY+196+51*3);
     addUI(speechVolumeSlider);
 
     // BRIGHTNESS LEVEL SLIDER
-    auto brightnessLevelSlider = std::shared_ptr<Slider>(new Slider(backgroundX+384, backgroundY+196+51*4));
+    auto brightnessLevelSlider = new Slider(backgroundX+384, backgroundY+196+51*4);
     addUI(brightnessLevelSlider);
 
     // MOUSE SENSITIVITY SLIDER
-    auto mouseSensitivitySlider = std::shared_ptr<Slider>(new Slider(backgroundX+384, backgroundY+196+51*5));
+    auto mouseSensitivitySlider = new Slider(backgroundX+384, backgroundY+196+51*5);
     addUI(mouseSensitivitySlider);
 }
 
@@ -366,22 +366,22 @@ void SettingsMenuState::think()
 //    });
 //}
 
-std::shared_ptr<TextArea> SettingsMenuState::_addLabel(std::string name, std::shared_ptr<TextArea> label)
+TextArea* SettingsMenuState::_addLabel(std::string name, TextArea* label)
 {
     _labels.insert(std::make_pair(name, label));
     return label;
 }
 
-std::shared_ptr<TextArea> SettingsMenuState::_addTextArea(std::shared_ptr<libfalltergeist::MsgMessage> message, unsigned int x, unsigned int y)
+TextArea* SettingsMenuState::_addTextArea(std::shared_ptr<libfalltergeist::MsgMessage> message, unsigned int x, unsigned int y)
 {
-    auto textArea = std::shared_ptr<TextArea>(new TextArea(message, x, y));
+    auto textArea = new TextArea(message, x, y);
     addUI(textArea);
     return textArea;
 }
 
-std::shared_ptr<TextArea> SettingsMenuState::_addTextArea(std::shared_ptr<TextArea> parent, unsigned int x, unsigned int y)
+TextArea* SettingsMenuState::_addTextArea(TextArea* parent, unsigned int x, unsigned int y)
 {
-    auto textArea = std::shared_ptr<TextArea>(new TextArea(parent, x, y));
+    auto textArea = new TextArea(parent, x, y);
     addUI(textArea);
     return textArea;
 }

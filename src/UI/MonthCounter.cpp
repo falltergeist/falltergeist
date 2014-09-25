@@ -42,7 +42,7 @@ MonthCounter::MonthCounter(Month month, int x, int y) : ImageList(x, y), _month(
 
     for (auto i = 0, hOffset = 0; i < 12; ++i, hOffset += MONTH_TEXTURE_HORIZONTAL_OFFSET)
     {
-        auto monthImage = std::shared_ptr<Image>(new Image(MONTH_TEXTURE_WIDTH, MONTH_TEXTURE_HEIGHT));
+        auto monthImage = new Image(MONTH_TEXTURE_WIDTH, MONTH_TEXTURE_HEIGHT);
         months->texture()->copyTo(monthImage->texture(), 0, 0, 0, hOffset, MONTH_TEXTURE_WIDTH, MONTH_TEXTURE_HEIGHT);
         addImage(monthImage);
     }

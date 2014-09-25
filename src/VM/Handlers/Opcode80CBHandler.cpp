@@ -44,13 +44,13 @@ void Opcode80CBHandler::_run()
     {
         throw Exception("VM::opcode80CB - number out of range:" + std::to_string(number));
     }
-    auto object = std::static_pointer_cast<GameCritterObject>(_vm->popDataPointer());
+    auto object = static_cast<GameCritterObject*>(_vm->popDataPointer());
     if (!object)
     {
         throw Exception("VM::opcode80CB pointer error");
     }
     object->setStat(number, value);
-    if (std::dynamic_pointer_cast<GameDudeObject>(object))
+    if (dynamic_cast<GameDudeObject*>(object))
     {
         _vm->pushDataInteger(3); // for dude
     }

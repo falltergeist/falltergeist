@@ -41,7 +41,7 @@ void OpcodeC001Handler::_run()
 
     // Skip 4 bytes for readed integer value
     _vm->setProgramCounter(_vm->programCounter() + 4);
-    _vm->dataStack()->push(std::shared_ptr<VMStackIntValue>(new VMStackIntValue(value)));
+    _vm->dataStack()->push(new VMStackIntValue(value));
 
     Logger::debug("SCRIPT") << "[C001] [*] push_d 0x" << std::hex << value << std::endl;
 }

@@ -35,38 +35,38 @@ namespace Falltergeist
 class VM
 {
 protected:
-    std::shared_ptr<void> _owner;
-    std::shared_ptr<libfalltergeist::IntFileType> _script;
+    void* _owner = 0;
+    libfalltergeist::IntFileType* _script = 0;
     bool _initialized = false;
     VMStack _dataStack;
     VMStack _returnStack;
-    std::vector<std::shared_ptr<VMStackValue>> _LVARS;
+    std::vector<VMStackValue*> _LVARS;
     unsigned int _programCounter = 0;
     int _DVAR_base = 0;
     int _SVAR_base = 0;
 
-    int _metarule(int type, std::shared_ptr<VMStackValue> value);
-    int _metarule3(int meta, std::shared_ptr<VMStackValue> p1, int p2, int p3);
+    int _metarule(int type, VMStackValue* value);
+    int _metarule3(int meta, VMStackValue* p1, int p2, int p3);
     int _getMonth();
     int _getTime();
     void _setLightLevel(int level);
     void _playMovie(int movieNum);
-    void _displayString(std::shared_ptr<std::string> str);
+    void _displayString(std::string str);
     int _tile_num_in_direction(int start_tile, int dir, int distance);
-    int _critter_add_trait(std::shared_ptr<void> who, int trait_type, int trait, int amount);
-    void _anim(std::shared_ptr<void> who, int anim, int direction);
+    int _critter_add_trait(void* who, int trait_type, int trait, int amount);
+    void _anim(void* who, int anim, int direction);
     std::string msgMessage(int msg_file_num, int msg_num);
 public:
-    VM(std::shared_ptr<libfalltergeist::IntFileType> script, std::shared_ptr<void> owner);
-    VM(std::string filename, std::shared_ptr<void> owner);
+    VM(libfalltergeist::IntFileType* script, void* owner);
+    VM(std::string filename, void* owner);
     virtual ~VM();
     void run();
     void initialize();
     bool initialized();
     void call(std::string name);
-    std::shared_ptr<libfalltergeist::IntFileType> script();
+    libfalltergeist::IntFileType* script();
 
-    std::shared_ptr<void> owner();
+    void* owner();
 
     unsigned int programCounter();
     void setProgramCounter(unsigned int value);
@@ -77,8 +77,8 @@ public:
     void pushDataInteger(int value);
     float popDataFloat();
     void pushDataFloat(float value);
-    std::shared_ptr<void> popDataPointer();
-    void pushDataPointer(std::shared_ptr<void> value);
+    void* popDataPointer();
+    void pushDataPointer(void* value);
     bool popDataLogical();
 
     VMStack* dataStack();

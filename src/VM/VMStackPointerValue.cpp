@@ -27,7 +27,7 @@
 namespace Falltergeist
 {
 
-VMStackPointerValue::VMStackPointerValue(std::shared_ptr<void> value) : VMStackValue(TYPE_POINTER)
+VMStackPointerValue::VMStackPointerValue(void* value) : VMStackValue(TYPE_POINTER)
 {
     _value = value;
 }
@@ -36,12 +36,12 @@ VMStackPointerValue::~VMStackPointerValue()
 {
 }
 
-void VMStackPointerValue::setValue(std::shared_ptr<void> value)
+void VMStackPointerValue::setValue(void* value)
 {
     _value = value;
 }
 
-std::shared_ptr<void> VMStackPointerValue::value()
+void* VMStackPointerValue::value()
 {
     return _value;
 }

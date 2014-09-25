@@ -44,32 +44,34 @@ MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : 
     {
         case TYPE_BIG_SWITCH:
         {
-            auto image = std::shared_ptr<Image>(new Image("art/intrface/prfbknbs.frm"));
+            auto image = new Image("art/intrface/prfbknbs.frm");
 
-            auto image1 = std::shared_ptr<Image>(new Image(46, 47));
+            auto image1 = new Image(46, 47);
             image->texture()->copyTo(image1->texture(), 0, 0, 0, 0*47, 46, 47);
-            auto image2 = std::shared_ptr<Image>(new Image(46, 47));
+            auto image2 = new Image(46, 47);
             image->texture()->copyTo(image2->texture(), 0, 0, 0, 1*47, 46, 47);
-            auto image3 = std::shared_ptr<Image>(new Image(46, 47));
+            auto image3 = new Image(46, 47);
             image->texture()->copyTo(image3->texture(), 0, 0, 0, 2*47, 46, 47);
-            auto image4 = std::shared_ptr<Image>(new Image(46, 47));
+            auto image4 = new Image(46, 47);
             image->texture()->copyTo(image4->texture(), 0, 0, 0, 3*47, 46, 47);
 
             addImage(image1);
             addImage(image2);
             addImage(image3);
             addImage(image4);
+            delete image;
             break;
         }
         case TYPE_SMALL_SWITCH:
         {
-            auto image = std::shared_ptr<Image>(new Image("art/intrface/prflknbs.frm"));
-            auto image1 = std::shared_ptr<Image>(new Image(22, 25));
-            auto image2 = std::shared_ptr<Image>(new Image(22, 50));
+            auto image = new Image("art/intrface/prflknbs.frm");
+            auto image1 = new Image(22, 25);
+            auto image2 = new Image(22, 50);
             image->texture()->copyTo(image1->texture(), 0, 0, 0, 0, 22, 25);
             image->texture()->copyTo(image2->texture(), 0, 0, 0, 25, 22, 50);
             addImage(image1);
             addImage(image2);
+            delete image;
             break;
         }
         default:
@@ -78,10 +80,10 @@ MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : 
 }
 
 
-MultistateImageButton::MultistateImageButton(std::shared_ptr<ImageList> imageList, int x, int y) : ActiveUI(x, y)
+MultistateImageButton::MultistateImageButton(ImageList* imageList, int x, int y) : ActiveUI(x, y)
 {
     addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MultistateImageButton::_onLeftButtonClick);
-    for (auto image: *imageList->images()) _imageList.addImage(image);
+    for (auto image: *imageList->images()) _imageList.addImage(new Image(image));
 }
 
 
@@ -89,7 +91,7 @@ MultistateImageButton::~MultistateImageButton()
 {
 }
 
-void MultistateImageButton::addImage(std::shared_ptr<Image> image)
+void MultistateImageButton::addImage(Image* image)
 {
     _imageList.addImage(image);
     _maxState++;

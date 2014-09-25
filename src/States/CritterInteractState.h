@@ -43,7 +43,7 @@ protected:
     int _mood = 0;
     int _msgFileID = -1;
     VM* _script;
-    std::shared_ptr<GameCritterObject> _critter;
+    GameCritterObject* _critter = 0;
 public:
     CritterInteractState();
     virtual ~CritterInteractState();
@@ -58,8 +58,8 @@ public:
     int mood();
     void setMood(int mood);
 
-    std::shared_ptr<GameCritterObject> critter();
-    void setCritter(std::shared_ptr<GameCritterObject> critter);
+    GameCritterObject* critter();
+    void setCritter(GameCritterObject* critter);
 
     int msgFileID();
     void setMsgFileID(int value);

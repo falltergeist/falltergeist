@@ -53,7 +53,7 @@ protected:
     unsigned int _scrollTicks = 0;
     unsigned int _scriptsTicks = 0;
 
-    std::shared_ptr<VM> _locationScript;
+    VM* _locationScript = 0;
 
     bool _locationEnter = true;
 
@@ -63,17 +63,17 @@ protected:
     unsigned int _currentElevation = 0;
     LocationCamera* _camera = 0;
 
-    std::vector<std::shared_ptr<GameObject>> _objectsToRender;
-    std::vector<std::shared_ptr<UI>> _uiToRender;
+    std::vector<GameObject*> _objectsToRender;
+    std::vector<UI*> _uiToRender;
 
     std::vector<int> _MVARS;
-    std::map<std::string, std::shared_ptr<VMStackValue>> _EVARS;
+    std::map<std::string, VMStackValue*> _EVARS;
 
     TileMap* _floor = 0;
     TileMap* _roof = 0;
 
-    std::vector<std::shared_ptr<ActiveUI>> _panelUIs;
-    std::vector<std::shared_ptr<ActiveUI>> _floatMessages;
+    std::vector<ActiveUI*> _panelUIs;
+    std::vector<ActiveUI*> _floatMessages;
 
     bool _scrollLeft = false;
     bool _scrollRight = false;
@@ -97,7 +97,7 @@ public:
     Hexagon* hexagonAt(unsigned int x, unsigned int y);
     LocationCamera* camera();
 
-    std::vector<std::shared_ptr<UI>>* uiToRender();
+    std::vector<UI*>* uiToRender();
 
     void checkObjectsToRender();
     void checkHexagonsWidthObjects();
@@ -105,9 +105,9 @@ public:
     void setMVAR(unsigned int number, int value);
     int MVAR(unsigned int number);
 
-    std::map<std::string, std::shared_ptr<VMStackValue>>* EVARS();
+    std::map<std::string, VMStackValue*>* EVARS();
 
-    static void moveObjectToHexagon(std::shared_ptr<GameObject> object, Hexagon* hexagon, bool calculateHexagons = true);
+    static void moveObjectToHexagon(GameObject* object, Hexagon* hexagon, bool calculateHexagons = true);
     void handleAction(GameObject* object, int action);
 
     void onBackgroundClick(std::shared_ptr<MouseEvent> event);

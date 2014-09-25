@@ -55,15 +55,15 @@ protected:
     std::vector<State*> _statesForThinkAndHandle;
     std::vector<State*> _statesForDelete;
 
-    std::shared_ptr<GameDudeObject> _player;
-    Renderer* _renderer = 0;
+     GameDudeObject* _player = 0;
+           Renderer* _renderer = 0;
     ResourceManager* _resourceManager = 0;
-    Mouse* _mouse = 0;
-    AudioMixer* _mixer = 0;
-    FpsCounter* _fpsCounter = 0;
-    TextArea* _mousePosition = 0;
-    TextArea* _falltergeistVersion = 0;
-    EngineSettings* _engineSettings = 0;
+              Mouse* _mouse = 0;
+         AudioMixer* _mixer = 0;
+         FpsCounter* _fpsCounter = 0;
+           TextArea* _mousePosition = 0;
+           TextArea* _falltergeistVersion = 0;
+     EngineSettings* _engineSettings = 0;
     bool _quit = false;
     SDL_Event _event;
     bool _initialized = false;
@@ -92,8 +92,8 @@ public:
     void think();
     void render();
 
-    void setPlayer(std::shared_ptr<GameDudeObject> player);
-    std::shared_ptr<GameDudeObject> player();
+    void setPlayer(GameDudeObject* player);
+    GameDudeObject* player();
     Mouse* mouse();
     Renderer* renderer();
 

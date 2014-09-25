@@ -39,7 +39,7 @@ void Opcode80CAHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80CA] [+] int get_critter_stat(GameCritterObject* who, int number)" << std::endl;
     int number = _vm->popDataInteger();
-    auto object = std::static_pointer_cast<GameCritterObject>(_vm->popDataPointer());
+    auto object = static_cast<GameCritterObject*>(_vm->popDataPointer());
     if (!object)
     {
         throw Exception("VM::opcode80CA pointer error");

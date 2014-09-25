@@ -37,12 +37,12 @@ VMStack::~VMStack()
 {
 }
 
-void VMStack::push(std::shared_ptr<VMStackValue> value)
+void VMStack::push(VMStackValue* value)
 {
     _values.push_back(value);
 }
 
-std::shared_ptr<VMStackValue> VMStack::pop()
+VMStackValue* VMStack::pop()
 {
     if (_values.size() == 0) throw Exception("VMStack::pop() - stack is empty");
     auto value = _values.back();
@@ -65,12 +65,12 @@ void VMStack::swap()
     _values.push_back(value2);
 }
 
-std::vector<std::shared_ptr<VMStackValue>>* VMStack::values()
+std::vector<VMStackValue*>* VMStack::values()
 {
     return &_values;
 }
 
-std::shared_ptr<VMStackValue> VMStack::top()
+VMStackValue* VMStack::top()
 {
     return _values.back();
 }

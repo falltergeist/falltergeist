@@ -53,26 +53,26 @@ void CritterBarterState::init()
     setY((Game::getInstance()->renderer()->height() - 480)*0.5 + 291);
 
 
-    auto background = std::shared_ptr<Image>(new Image("art/intrface/barter.frm"));
+    auto background = new Image("art/intrface/barter.frm");
     background->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &CritterBarterState::onBackgroundClick);
     addUI(background);
 
     // Interface buttons
-    auto offerButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, 40, 162));
+    auto offerButton = new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, 40, 162);
     addUI(offerButton);
 
-    auto talkButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, 583, 162));
+    auto talkButton = new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, 583, 162);
     talkButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &CritterBarterState::onTalkButtonClick);
     addUI(talkButton);
 
-    auto mineInventoryScrollUpButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_UP_ARROW, 190, 56));
+    auto mineInventoryScrollUpButton = new ImageButton(ImageButton::TYPE_DIALOG_UP_ARROW, 190, 56);
     addUI(mineInventoryScrollUpButton);
-    auto mineInventoryScrollDownButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_DOWN_ARROW, 190, 82));
+    auto mineInventoryScrollDownButton = new ImageButton(ImageButton::TYPE_DIALOG_DOWN_ARROW, 190, 82);
     addUI(mineInventoryScrollDownButton);
 
-    auto theirsInventoryScrollUpButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_UP_ARROW, 421, 56));
+    auto theirsInventoryScrollUpButton = new ImageButton(ImageButton::TYPE_DIALOG_UP_ARROW, 421, 56);
     addUI(theirsInventoryScrollUpButton);
-    auto theirsInventoryScrollDownButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_DOWN_ARROW, 421, 82));
+    auto theirsInventoryScrollDownButton = new ImageButton(ImageButton::TYPE_DIALOG_DOWN_ARROW, 421, 82);
     addUI(theirsInventoryScrollDownButton);
 }
 

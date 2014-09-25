@@ -48,6 +48,13 @@ CursorDropdownState::CursorDropdownState(std::vector<int> icons) : State()
 
 CursorDropdownState::~CursorDropdownState()
 {
+    while (!_activeIcons.empty())
+    {
+        delete _activeIcons.back();
+        delete _inactiveIcons.back();
+        _activeIcons.pop_back();
+        _inactiveIcons.pop_back();
+    }
 }
 
 void CursorDropdownState::init()
@@ -105,9 +112,9 @@ void CursorDropdownState::init()
                 throw Exception("CursorDropdownState::init() - unknown icon type");
 
         }
-        _activeIcons.push_back(std::shared_ptr<Image>(new Image("art/intrface/" + activeSurface)));
+        _activeIcons.push_back(new Image("art/intrface/" + activeSurface));
         _activeIcons.back()->setY(40*i);
-        _inactiveIcons.push_back(std::shared_ptr<Image>(new Image("art/intrface/" + inactiveSurface)));
+        _inactiveIcons.push_back(new Image("art/intrface/" + inactiveSurface));
         _inactiveIcons.back()->setY(40*i);
         i++;
     }
@@ -116,13 +123,13 @@ void CursorDropdownState::init()
 
     game->mouse()->setType(Mouse::NONE);
 
-    _cursor = std::shared_ptr<Image>(new Image("art/intrface/actarrow.frm"));
+    _cursor = new Image("art/intrface/actarrow.frm");
     _cursor->setXOffset(0);
     _cursor->setYOffset(0);
     _cursor->setX(_initialX);
     _cursor->setY(_initialY);
 
-    _surface = std::shared_ptr<Image>(new Image(40, 40*_icons.size()));
+    _surface = new Image(40, 40*_icons.size());
     _surface->setX(_initialX + 29);
     _surface->setY(_initialY);
 
@@ -138,15 +145,15 @@ void CursorDropdownState::init()
     if (deltaX > 0)
     {
         _surface->setX(_surface->x() - 40 - 29 - 29);
-        _cursor.reset();
-        _cursor = std::shared_ptr<Image>(new Image("art/intrface/actarrom.frm"));
+        delete _cursor;
+        _cursor = new Image("art/intrface/actarrom.frm");
         _cursor->setXOffset(-29);
         _cursor->setYOffset(0);
         _cursor->setX(_initialX);
         _cursor->setY(_initialY);
     }
 
-    _mask = std::shared_ptr<HiddenMask>(new HiddenMask(game->renderer()->width(), game->renderer()->height()));
+    _mask = new HiddenMask(game->renderer()->width(), game->renderer()->height());
     _mask->addEventHandler("mouseleftup", this, (EventRecieverMethod) &CursorDropdownState::onLeftButtonUp);
     _mask->setVisible(true);
     addUI(_cursor);

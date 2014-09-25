@@ -35,7 +35,7 @@ class BigCounter;
 class PlayerEditAgeState : public State
 {
 protected:
-    std::shared_ptr<BigCounter> _counter;
+    BigCounter* _counter = 0;
 public:
     PlayerEditAgeState();
     void init();

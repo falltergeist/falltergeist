@@ -58,8 +58,8 @@ public:
     static std::shared_ptr<libfalltergeist::GamFileType> gamFileType(std::string filename);
     static std::shared_ptr<libfalltergeist::GcdFileType> gcdFileType(std::string filename);
     static std::shared_ptr<libfalltergeist::PalFileType> palFileType(std::string filename);
-    static std::shared_ptr<libfalltergeist::IntFileType> intFileType(std::string filename);
-    static std::shared_ptr<libfalltergeist::IntFileType> intFileType(unsigned int SID);
+    static libfalltergeist::IntFileType* intFileType(std::string filename);
+    static libfalltergeist::IntFileType* intFileType(unsigned int SID);
     static std::shared_ptr<libfalltergeist::LstFileType> lstFileType(std::string filename);
     static std::shared_ptr<libfalltergeist::MapFileType> mapFileType(std::string filename);
     static std::shared_ptr<libfalltergeist::MsgFileType> msgFileType(std::string filename);

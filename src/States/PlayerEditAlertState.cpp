@@ -53,7 +53,7 @@ void PlayerEditAlertState::init()
     setFullscreen(false);
     setModal(true);
 
-    auto bg = std::shared_ptr<Image>(new Image("art/intrface/lgdialog.frm"));
+    auto bg = new Image("art/intrface/lgdialog.frm");
 
     auto bgX = (Game::getInstance()->renderer()->width() - 640)*0.5;
     auto bgY = (Game::getInstance()->renderer()->height() - 480)*0.5;
@@ -63,20 +63,20 @@ void PlayerEditAlertState::init()
 
     auto font1_ff9f48ff = ResourceManager::font("font1.aaf", 0xff9f48ff);
 
-    auto message = std::shared_ptr<TextArea>(new TextArea(_message.c_str(), bgX+194, bgY+213));
+    auto message = new TextArea(_message.c_str(), bgX+194, bgY+213);
     message->setWidth(250);
     message->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     message->setFont(font1_ff9f48ff);
 
-    auto doneBox = std::shared_ptr<Image>(new Image("art/intrface/donebox.frm"));
+    auto doneBox = new Image("art/intrface/donebox.frm");
     doneBox->setX(bgX+254);
     doneBox->setY(bgY+270);
 
-    auto doneButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+264, bgY+273));
+    auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+264, bgY+273);
     doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditAlertState::onDoneButtonClick);
 
     auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
-    auto doneLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(100), bgX+284, bgY+273));
+    auto doneLabel = new TextArea(msg->message(100), bgX+284, bgY+273);
     auto font3_b89c28ff = ResourceManager::font("font3.aaf", 0xb89c28ff);
     doneLabel->setFont(font3_b89c28ff);
 

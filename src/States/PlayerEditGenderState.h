@@ -35,8 +35,8 @@ class ImageList;
 class PlayerEditGenderState : public State
 {
 protected:
-    std::shared_ptr<ImageList> _maleImage;
-    std::shared_ptr<ImageList> _femaleImage;
+    ImageList* _maleImage = 0;
+    ImageList* _femaleImage = 0;
 public:
     PlayerEditGenderState();
     void init();

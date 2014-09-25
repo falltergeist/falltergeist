@@ -50,22 +50,22 @@ void SkilldexState::init()
 
     // original coordinates = 455x6
     // background size = 185x368
-    auto background = std::shared_ptr<Image>(new Image("art/intrface/skldxbox.frm"));
+    auto background = new Image("art/intrface/skldxbox.frm");
     auto backgroundX = (Game::getInstance()->renderer()->width() + 640 - 2*background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - 480 + 6);
     background->setX(backgroundX);
     background->setY(backgroundY);
 
     // buttons
-    auto sneakButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44));
-    auto lockpickButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36));
-    auto stealButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*2));
-    auto trapsButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*3));
-    auto firstAidButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*4));
-    auto doctorButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*5));
-    auto scienceButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*6));
-    auto repairButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*7));
-    auto cancelButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+48, backgroundY+338));
+    auto sneakButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44);
+    auto lockpickButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36);
+    auto stealButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*2);
+    auto trapsButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*3);
+    auto firstAidButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*4);
+    auto doctorButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*5);
+    auto scienceButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*6);
+    auto repairButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*7);
+    auto cancelButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+48, backgroundY+338);
 
     // events
     cancelButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SkilldexState::onCancelButtonClick);
@@ -75,36 +75,36 @@ void SkilldexState::init()
     auto font = ResourceManager::font("font3.aaf", 0xb89c28ff);
 
     // label: skilldex (100)
-    auto skilldexLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(100), backgroundX+56, backgroundY+14));
+    auto skilldexLabel = new TextArea(msg->message(100), backgroundX+56, backgroundY+14);
     skilldexLabel->setFont(font)->setWidth(76)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // label: sneak (102)
-    auto sneakLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(102), backgroundX+17, backgroundY+52));
+    auto sneakLabel = new TextArea(msg->message(102), backgroundX+17, backgroundY+52);
     sneakLabel->setFont(font)->setWidth(84)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     // label: lockpick (103)
-    auto lockpickLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(103), backgroundX+17, backgroundY+52+36));
+    auto lockpickLabel = new TextArea(msg->message(103), backgroundX+17, backgroundY+52+36);
     lockpickLabel->setFont(font)->setWidth(84)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     // label: steal (104)
-    auto stealLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(104), backgroundX+17, backgroundY+52+36*2));
+    auto stealLabel = new TextArea(msg->message(104), backgroundX+17, backgroundY+52+36*2);
     stealLabel->setFont(font)->setWidth(84)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     // label: traps (105)
-    auto trapsLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(105), backgroundX+17, backgroundY+52+36*3));
+    auto trapsLabel = new TextArea(msg->message(105), backgroundX+17, backgroundY+52+36*3);
     trapsLabel->setFont(font)->setWidth(84)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     // label: first aid (106)
-    auto firstAidLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(106), backgroundX+17, backgroundY+52+36*4));
+    auto firstAidLabel = new TextArea(msg->message(106), backgroundX+17, backgroundY+52+36*4);
     firstAidLabel->setFont(font)->setWidth(84)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     // label: doctor (107)
-    auto doctorLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(107), backgroundX+17, backgroundY+52+36*5));
+    auto doctorLabel = new TextArea(msg->message(107), backgroundX+17, backgroundY+52+36*5);
     doctorLabel->setFont(font)->setWidth(84)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     // label: science (108)
-    auto scienceLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(108), backgroundX+17, backgroundY+52+36*6));
+    auto scienceLabel = new TextArea(msg->message(108), backgroundX+17, backgroundY+52+36*6);
     scienceLabel->setFont(font)->setWidth(84)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     // label: repair (109)
-    auto repairLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(109), backgroundX+17, backgroundY+52+36*7));
+    auto repairLabel = new TextArea(msg->message(109), backgroundX+17, backgroundY+52+36*7);
     repairLabel->setFont(font)->setWidth(84)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // label: cancel (101)
-    auto cancelButtonLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(101), backgroundX+70, backgroundY+337));
+    auto cancelButtonLabel = new TextArea(msg->message(101), backgroundX+70, backgroundY+337);
     cancelButtonLabel->setFont(font);
 
     // add all buttons and labels

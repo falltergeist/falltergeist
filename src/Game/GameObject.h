@@ -54,10 +54,10 @@ protected:
     std::string _name;
     std::string _description;
     std::vector<VM*> _scripts;
-    std::shared_ptr<ActiveUI> _ui;
+    ActiveUI* _ui = 0;
     Hexagon* _hexagon = 0;
     virtual void _generateUi();
-    std::shared_ptr<TextArea> _floatMessage;
+    TextArea* _floatMessage = 0;
 public:
     enum { TYPE_ITEM = 0, TYPE_CRITTER, TYPE_SCENERY, TYPE_WALL, TYPE_TILE, TYPE_MISC, TYPE_DUDE };
     enum { TYPE_ITEM_ARMOR = 0, TYPE_ITEM_CONTAINER, TYPE_ITEM_DRUG, TYPE_ITEM_WEAPON, TYPE_ITEM_AMMO, TYPE_ITEM_MISC, TYPE_ITEM_KEY };
@@ -92,14 +92,14 @@ public:
 
     std::vector<VM*>* scripts();
 
-    std::shared_ptr<ActiveUI> ui();
-    void setUI(std::shared_ptr<ActiveUI> ui);
+    ActiveUI* ui();
+    void setUI(ActiveUI* ui);
 
     Hexagon* hexagon();
     void setHexagon(Hexagon* hexagon);
 
-    std::shared_ptr<TextArea> floatMessage();
-    void setFloatMessage(std::shared_ptr<TextArea> floatMessage);
+    TextArea* floatMessage();
+    void setFloatMessage(TextArea* floatMessage);
 
 };
 

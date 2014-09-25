@@ -34,7 +34,7 @@ Image::Image(std::string filename) : ActiveUI()
     setTexture(ResourceManager::texture(filename));
 }
 
-Image::Image(std::shared_ptr<Image> image) : ActiveUI()
+Image::Image(Image* image) : ActiveUI()
 {
     setTexture(new Texture(image->texture()->width(), image->texture()->height()));
     _texture->loadFromRGBA(image->texture()->data());

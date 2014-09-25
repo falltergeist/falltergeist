@@ -40,20 +40,20 @@ class GameDudeObject;
 class NewGameState : public State
 {
 protected:
-    std::shared_ptr<ImageList> _characterImages;
-    std::vector<std::shared_ptr<GameDudeObject>> _characters;
-    std::shared_ptr<TextArea> _playerStats1;
-    std::shared_ptr<TextArea> _playerStats2;
-    std::shared_ptr<TextArea> _playerStats3;
-    std::shared_ptr<TextArea> _playerBio;
-    std::shared_ptr<TextArea> _playerName;
-    std::shared_ptr<TextArea> _playerHitPointsMax;
-    std::shared_ptr<TextArea> _playerArmorClass;
-    std::shared_ptr<TextArea> _playerActionPoints;
-    std::shared_ptr<TextArea> _playerMeleeDamage;
-    std::shared_ptr<TextArea> _playerSkills;
-    std::shared_ptr<TextArea> _playerSkillsValues;
-    std::shared_ptr<TextArea> _playerTraits;
+    ImageList* _characterImages = 0;
+    std::vector<GameDudeObject*> _characters;
+    TextArea* _playerStats1 = 0;
+    TextArea* _playerStats2 = 0;
+    TextArea* _playerStats3 = 0;
+    TextArea* _playerBio = 0;
+    TextArea* _playerName = 0;
+    TextArea* _playerHitPointsMax = 0;
+    TextArea* _playerArmorClass = 0;
+    TextArea* _playerActionPoints = 0;
+    TextArea* _playerMeleeDamage = 0;
+    TextArea* _playerSkills = 0;
+    TextArea* _playerSkillsValues = 0;
+    TextArea* _playerTraits = 0;
     unsigned char _selectedCharacter = 0;
 public:
     NewGameState();

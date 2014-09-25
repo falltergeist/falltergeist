@@ -47,37 +47,37 @@ void ExitConfirmState::init()
     setModal(true);
     setFullscreen(false);
 
-    auto background = std::shared_ptr<Image>(new Image("art/intrface/lgdialog.frm"));
+    auto background = new Image("art/intrface/lgdialog.frm");
 
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
 
-    auto box1 = std::shared_ptr<Image>(new Image("art/intrface/donebox.frm"));
-    auto box2 = std::shared_ptr<Image>(new Image("art/intrface/donebox.frm"));
+    auto box1 = new Image("art/intrface/donebox.frm");
+    auto box2 = new Image("art/intrface/donebox.frm");
     box1->setX(backgroundX+38);
     box1->setY(backgroundY+98);
     box2->setX(backgroundX+170);
     box2->setY(backgroundY+98);
 
-    auto yesButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+50, backgroundY+102));
-    auto noButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+183, backgroundY+102));
+    auto yesButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+50, backgroundY+102);
+    auto noButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+183, backgroundY+102);
     yesButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &ExitConfirmState::onYesButtonClick);
     noButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &ExitConfirmState::onNoButtonClick);
 
     // label: Are you sure you want to quit?
     auto msg = ResourceManager::msgFileType("text/english/game/misc.msg");
     auto font = ResourceManager::font("font1.aaf", 0xb89c28ff);
-    auto quitLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(0), backgroundX+30, backgroundY+52));
+    auto quitLabel = new TextArea(msg->message(0), backgroundX+30, backgroundY+52);
     quitLabel->setFont(font)->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // label: yes & no
     auto msg2 = ResourceManager::msgFileType("text/english/game/dbox.msg");
     auto fontBig = ResourceManager::font("font3.aaf", 0xb89c28ff);
     // label: yes 101
-    auto yesButtonLabel = std::shared_ptr<TextArea>(new TextArea(msg2->message(101), backgroundX+74, backgroundY+101));
+    auto yesButtonLabel = new TextArea(msg2->message(101), backgroundX+74, backgroundY+101);
     yesButtonLabel->setFont(fontBig);
     // label: no 102
-    auto noButtonLabel = std::shared_ptr<TextArea>(new TextArea(msg2->message(102), backgroundX+204, backgroundY+101));
+    auto noButtonLabel = new TextArea(msg2->message(102), backgroundX+204, backgroundY+101);
     noButtonLabel->setFont(fontBig);
 
     background->setX(backgroundX);

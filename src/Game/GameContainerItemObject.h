@@ -35,11 +35,11 @@ namespace Falltergeist
 class GameContainerItemObject : public GameItemObject
 {
 protected:
-    std::vector<std::shared_ptr<GameItemObject>> _inventory;
+    std::vector<GameItemObject*> _inventory;
 public:
     GameContainerItemObject();
     virtual ~GameContainerItemObject();
-    std::vector<std::shared_ptr<GameItemObject>>* inventory();
+    std::vector<GameItemObject*>* inventory();
 };
 
 }

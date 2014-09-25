@@ -163,12 +163,12 @@ void Game::quit()
     _quit = true;
 }
 
-void Game::setPlayer(std::shared_ptr<GameDudeObject> player)
+void Game::setPlayer(GameDudeObject* player)
 {
     _player = player;
 }
 
-std::shared_ptr<GameDudeObject> Game::player()
+GameDudeObject* Game::player()
 {
     return _player;
 }

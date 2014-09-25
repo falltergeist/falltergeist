@@ -34,12 +34,12 @@ namespace Falltergeist
 class VMStackPointerValue  : public VMStackValue
 {
 protected:
-    std::shared_ptr<void> _value;
+    void* _value;
 public:
-    VMStackPointerValue(std::shared_ptr<void> value);
+    VMStackPointerValue(void* value);
     virtual ~VMStackPointerValue();
-    void setValue(std::shared_ptr<void> value);
-    std::shared_ptr<void> value();
+    void setValue(void* value);
+    void* value();
 };
 
 }

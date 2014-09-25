@@ -170,9 +170,9 @@ std::shared_ptr<libfalltergeist::GcdFileType> ResourceManager::gcdFileType(std::
     return std::dynamic_pointer_cast<libfalltergeist::GcdFileType>(datFileItem(filename));
 }
 
-std::shared_ptr<libfalltergeist::IntFileType> ResourceManager::intFileType(std::string filename)
+libfalltergeist::IntFileType* ResourceManager::intFileType(std::string filename)
 {
-    return std::dynamic_pointer_cast<libfalltergeist::IntFileType>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::IntFileType*>(datFileItem(filename).get());
 }
 
 std::shared_ptr<libfalltergeist::MsgFileType> ResourceManager::msgFileType(std::string filename)
@@ -330,7 +330,7 @@ std::shared_ptr<libfalltergeist::FrmFileType> ResourceManager::frmFileType(unsig
     return frmFileType(FIDtoFrmName(FID));
 }
 
-std::shared_ptr<libfalltergeist::IntFileType> ResourceManager::intFileType(unsigned int SID)
+libfalltergeist::IntFileType* ResourceManager::intFileType(unsigned int SID)
 {
     auto lst = lstFileType("scripts/scripts.lst");
     if (SID >= lst->strings()->size())

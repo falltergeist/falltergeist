@@ -44,7 +44,7 @@ void Opcode80DEHandler::_run()
     int headID = _vm->popDataInteger();
     int mood = _vm->popDataInteger();
 
-    auto critter = std::static_pointer_cast<GameCritterObject>(_vm->popDataPointer());
+    auto critter = static_cast<GameCritterObject*>(_vm->popDataPointer());
     if (!critter) throw Exception("VM::opcode80de - wrong critter pointers");
 
     int msgFileID = _vm->popDataInteger();

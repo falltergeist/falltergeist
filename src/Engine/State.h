@@ -43,8 +43,8 @@ class ActiveUI;
 class State : public EventReciever
 {
 protected:
-    std::vector<std::shared_ptr<UI>> _ui;
-    std::map<std::string, std::shared_ptr<UI>> _labeledUI;
+    std::vector<UI*> _ui;
+    std::map<std::string, UI*> _labeledUI;
 
     int _x = 0;
     int _y = 0;
@@ -58,11 +58,11 @@ public:
     State();
     virtual ~State();
 
-    std::shared_ptr<UI> addUI(std::shared_ptr<UI> ui);
-    std::shared_ptr<UI> addUI(std::string name, std::shared_ptr<UI> ui);
-    void addUI(std::vector<std::shared_ptr<UI>> uis);
+    UI* addUI(UI* ui);
+    UI* addUI(std::string name, UI* ui);
+    void addUI(std::vector<UI*> uis);
 
-    std::shared_ptr<UI> getUI(std::string name);
+    UI* getUI(std::string name);
 
     int x();
     void setX(int x);

@@ -89,30 +89,30 @@ void PlayerEditNameState::init()
 
     _timer = SDL_GetTicks();
 
-    auto bg = std::shared_ptr<Image>(new Image("art/intrface/charwin.frm"));
+    auto bg = new Image("art/intrface/charwin.frm");
     bg->setX(bgX+22);
     bg->setY(bgY+0);
 
-    auto nameBox = std::shared_ptr<Image>(new Image("art/intrface/namebox.frm"));
+    auto nameBox = new Image("art/intrface/namebox.frm");
     nameBox->setX(bgX+35);
     nameBox->setY(bgY+10);
 
-    auto doneBox = std::shared_ptr<Image>(new Image("art/intrface/donebox.frm"));
+    auto doneBox = new Image("art/intrface/donebox.frm");
     doneBox->setX(bgX+35);
     doneBox->setY(bgY+40);
 
     auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
-    auto doneLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(100), bgX+65, bgY+43));
+    auto doneLabel = new TextArea(msg->message(100), bgX+65, bgY+43);
     auto font3_b89c28ff = ResourceManager::font("font3.aaf", 0xb89c28ff);
     doneLabel->setFont(font3_b89c28ff);
 
-    auto doneButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+45, bgY+43));
+    auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+45, bgY+43);
     doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditNameState::onDoneButtonClick);
 
-    _name = std::shared_ptr<TextArea>(new TextArea(Game::getInstance()->player()->name(), bgX+43, bgY+15));
+    _name = new TextArea(Game::getInstance()->player()->name(), bgX+43, bgY+15);
     _name->addEventHandler("keyup", this, (EventRecieverMethod) &PlayerEditNameState::onKeyboardPress);
 
-    _cursor = std::shared_ptr<Image>(new Image(5, 8));
+    _cursor = new Image(5, 8);
     _cursor->setX(bgX+83);
     _cursor->setY(bgY+15);
     _cursor->texture()->fill(0x3FF800FF);

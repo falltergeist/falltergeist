@@ -40,7 +40,7 @@ protected:
 public:
     Image(std::string filename);
     Image(unsigned int width, unsigned int height);
-    Image(std::shared_ptr<Image> image);
+    Image(Image* image);
     Image(Texture* texture);
     Image(std::shared_ptr<libfalltergeist::FrmFileType> frm, unsigned int direction);
     unsigned int width();

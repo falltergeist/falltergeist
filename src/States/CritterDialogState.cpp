@@ -63,21 +63,21 @@ void CritterDialogState::init()
     setX((Game::getInstance()->renderer()->width() - 640)*0.5);
     setY((Game::getInstance()->renderer()->height() - 480)*0.5 + 291);
 
-    auto background = std::shared_ptr<Image>(new Image("art/intrface/di_talk.frm"));
+    auto background = new Image("art/intrface/di_talk.frm");
     addUI("background", background);
     background->addEventHandler("keyup", this, (EventRecieverMethod) &CritterDialogState::onKeyboardUp);
 
-    auto question = std::shared_ptr<TextArea>(new TextArea("question", 140, -55));
+    auto question = new TextArea("question", 140, -55);
     question->setWidth(370);
     question->setWordWrap(true);
     addUI("question", question);
 
     // Interface buttons
-    auto reviewButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_REVIEW_BUTTON, 13, 154));
+    auto reviewButton = new ImageButton(ImageButton::TYPE_DIALOG_REVIEW_BUTTON, 13, 154);
     reviewButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &CritterDialogState::onReviewButtonClick);
     addUI(reviewButton);
 
-    auto barterButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, 593, 40));
+    auto barterButton = new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, 593, 40);
     barterButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &CritterDialogState::onBarterButtonClick);
     addUI(barterButton);
 }
@@ -89,7 +89,7 @@ void CritterDialogState::think()
 
 void CritterDialogState::setQuestion(std::string value)
 {
-    auto question = std::dynamic_pointer_cast<TextArea>(getUI("question"));
+    auto question = dynamic_cast<TextArea*>(getUI("question"));
     question->setText(value);
 }
 
@@ -121,7 +121,9 @@ void CritterDialogState::deleteAnswers()
 {
     while(!_answers.empty())
     {
+        delete _ui.back();
         _ui.pop_back();
+        delete _answers.back();
         _answers.pop_back();
     }
     _functions.clear();
@@ -201,7 +203,7 @@ void CritterDialogState::addAnswer(std::string text)
         y += answer->height() + 5;
     }
 
-    auto answer = std::shared_ptr<TextArea>(new TextArea(line, 140, y));
+    auto answer = new TextArea(line, 140, y);
     answer->setBackgroundColor(0x00000001);
     answer->setWordWrap(true);
     answer->setWidth(370);
@@ -227,7 +229,7 @@ void CritterDialogState::onAnswerClick(std::shared_ptr<Event> event)
     size_t i = 0;
     for (auto answer : _answers)
     {
-        if (answer.get() == sender)
+        if (answer == sender)
         {
             _selectAnswer(i);
             return;

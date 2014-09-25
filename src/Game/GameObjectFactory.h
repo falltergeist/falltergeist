@@ -22,7 +22,6 @@
 #define FALLTERGEIST_GAMEOBJECTFACTORY_H
 
 // C++ standard includes
-#include <memory>
 
 // Falltergeist includes
 
@@ -37,7 +36,7 @@ class GameObjectFactory
 protected:
     GameObjectFactory();
 public:
-    static std::shared_ptr<GameObject> createObject(unsigned int PID);
+    static GameObject* createObject(unsigned int PID);
 };
 
 }

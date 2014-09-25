@@ -35,8 +35,4 @@ HiddenMask::HiddenMask(unsigned int width, unsigned int height, int x, int y) : 
     _texture->fill(0x00000001);
 }
 
-HiddenMask::HiddenMask(std::shared_ptr<HiddenMask> other) : Image(other)
-{
-}
-
 }

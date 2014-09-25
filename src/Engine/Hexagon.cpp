@@ -72,7 +72,7 @@ std::vector<Hexagon*>* Hexagon::neighbors()
     return &_neighbors;
 }
 
-std::list<std::shared_ptr<GameObject>>* Hexagon::objects()
+std::list<GameObject*>* Hexagon::objects()
 {
     return &_objects;
 }

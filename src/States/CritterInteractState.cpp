@@ -57,7 +57,7 @@ void CritterInteractState::init()
     setX((Game::getInstance()->renderer()->width() - 640)*0.5);
     setY((Game::getInstance()->renderer()->height() - 480)*0.5);
 
-    addUI("background", std::shared_ptr<Image>(new Image("art/intrface/alltlk.frm")));
+    addUI("background", new Image("art/intrface/alltlk.frm"));
 
     // Centering camera on critter position
     auto locationState = Game::getInstance()->locationState();
@@ -100,12 +100,12 @@ void CritterInteractState::setMood(int mood)
     _mood = mood;
 }
 
-std::shared_ptr<GameCritterObject> CritterInteractState::critter()
+GameCritterObject* CritterInteractState::critter()
 {
     return _critter;
 }
 
-void CritterInteractState::setCritter(std::shared_ptr<GameCritterObject> critter)
+void CritterInteractState::setCritter(GameCritterObject* critter)
 {
     _critter = critter;
 }

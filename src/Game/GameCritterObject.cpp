@@ -41,7 +41,7 @@ GameCritterObject::~GameCritterObject()
 {
 }
 
-std::vector<std::shared_ptr<GameItemObject>>* GameCritterObject::inventory()
+std::vector<GameItemObject*>* GameCritterObject::inventory()
 {
     return &_inventory;
 }
@@ -51,32 +51,32 @@ void GameCritterObject::setOrientation(int value)
     GameObject::setOrientation(value);
 }
 
-std::shared_ptr<GameArmorItemObject> GameCritterObject::armorSlot()
+GameArmorItemObject* GameCritterObject::armorSlot()
 {
     return _armorSlot;
 }
 
-void GameCritterObject::setArmorSlot(std::shared_ptr<GameArmorItemObject> object)
+void GameCritterObject::setArmorSlot(GameArmorItemObject* object)
 {
     _armorSlot = object;
 }
 
-std::shared_ptr<GameItemObject> GameCritterObject::leftHandSlot()
+GameItemObject* GameCritterObject::leftHandSlot()
 {
     return _leftHandSlot;
 }
 
-void GameCritterObject::setLeftHandSlot(std::shared_ptr<GameItemObject> object)
+void GameCritterObject::setLeftHandSlot(GameItemObject* object)
 {
     _leftHandSlot = object;
 }
 
-std::shared_ptr<GameItemObject> GameCritterObject::rightHandSlot()
+GameItemObject* GameCritterObject::rightHandSlot()
 {
     return _rightHandSlot;
 }
 
-void GameCritterObject::setRightHandSlot(std::shared_ptr<GameItemObject> object)
+void GameCritterObject::setRightHandSlot(GameItemObject* object)
 {
     _rightHandSlot = object;
 }
@@ -290,17 +290,17 @@ unsigned int GameCritterObject::carryWeight()
         weight += item->weight();
     }
 
-    if (auto armor = std::dynamic_pointer_cast<GameItemObject>(armorSlot()))
+    if (auto armor = dynamic_cast<GameItemObject*>(armorSlot()))
     {
         weight += armor->weight();
     }
 
-    if (auto leftHand = std::dynamic_pointer_cast<GameItemObject>(leftHandSlot()))
+    if (auto leftHand = dynamic_cast<GameItemObject*>(leftHandSlot()))
     {
         weight += leftHand->weight();
     }
 
-    if (auto rightHand = std::dynamic_pointer_cast<GameItemObject>(rightHandSlot()))
+    if (auto rightHand = dynamic_cast<GameItemObject*>(rightHandSlot()))
     {
         weight += rightHand->weight();
     }
@@ -393,7 +393,7 @@ void GameCritterObject::setCurrentHand(unsigned int value)
     _currentHand = value;
 }
 
-std::shared_ptr<GameItemObject> GameCritterObject::currentHandSlot()
+GameItemObject* GameCritterObject::currentHandSlot()
 {
     return currentHand() == HAND_RIGHT ? rightHandSlot() : leftHandSlot();
 }

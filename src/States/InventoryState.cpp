@@ -63,12 +63,12 @@ void InventoryState::init()
 
     auto player = Game::getInstance()->player();
     // armorSlot, leftHand, rightHand
-    std::shared_ptr<GameArmorItemObject> armorSlot = player->armorSlot();
-    std::shared_ptr<GameItemObject> leftHand = player->leftHandSlot();
-    std::shared_ptr<GameItemObject> rightHand = player->rightHandSlot();
+    GameArmorItemObject* armorSlot = player->armorSlot();
+    GameItemObject* leftHand = player->leftHandSlot();
+    GameItemObject* rightHand = player->rightHandSlot();
 
     // background
-    auto background = std::shared_ptr<Image>(new Image("art/intrface/invbox.frm"));
+    auto background = new Image("art/intrface/invbox.frm");
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5-50;
     background->setX(backgroundX);
@@ -77,11 +77,11 @@ void InventoryState::init()
     addUI(background);
 
     // button up
-    auto upButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_INVENTORY_UP_ARROW, backgroundX+128, backgroundY+40));
+    auto upButton = new ImageButton(ImageButton::TYPE_INVENTORY_UP_ARROW, backgroundX+128, backgroundY+40);
 
     //button down
-    auto downButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_INVENTORY_DOWN_ARROW, backgroundX+128, backgroundY+65));
-    auto doneButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+438, backgroundY+328));
+    auto downButton = new ImageButton(ImageButton::TYPE_INVENTORY_DOWN_ARROW, backgroundX+128, backgroundY+65);
+    auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+438, backgroundY+328);
     doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &InventoryState::onDoneButtonClick);
 
     // screen
@@ -90,54 +90,54 @@ void InventoryState::init()
     auto font = ResourceManager::font("font1.aaf");
 
     // name
-    auto playerNameLabel = std::shared_ptr<TextArea>(new TextArea(player->name(), screenX, screenY));
+    auto playerNameLabel = new TextArea(player->name(), screenX, screenY);
 
-    auto line1 = std::shared_ptr<Image>(new Image(142, 1));
+    auto line1 = new Image(142, 1);
     line1->setX(screenX);
     line1->setY(screenY+16);
     line1->texture()->fill(0x3ff800ff); // default green color
 
     auto msg = ResourceManager::msgFileType("text/english/game/inventry.msg");
     // label: ST (0)
-    auto stLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(0), screenX, screenY+20));
+    auto stLabel = new TextArea(msg->message(0), screenX, screenY+20);
     // label: PE (1)
-    auto peLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(1), screenX, screenY+20+10));
+    auto peLabel = new TextArea(msg->message(1), screenX, screenY+20+10);
     // label: EN (2)
-    auto enLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(2), screenX, screenY+20+10*2));
+    auto enLabel = new TextArea(msg->message(2), screenX, screenY+20+10*2);
     // label: CH (3)
-    auto chLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(3), screenX, screenY+20+10*3));
+    auto chLabel = new TextArea(msg->message(3), screenX, screenY+20+10*3);
     // label: IN (4)
-    auto inLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(4), screenX, screenY+20+10*4));
+    auto inLabel = new TextArea(msg->message(4), screenX, screenY+20+10*4);
     // label: AG (5)
-    auto agLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(5), screenX, screenY+20+10*5));
+    auto agLabel = new TextArea(msg->message(5), screenX, screenY+20+10*5);
     // label: LK (6)
-    auto lkLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(6), screenX, screenY+20+10*6));
+    auto lkLabel = new TextArea(msg->message(6), screenX, screenY+20+10*6);
 
     std::stringstream ss;
     for (unsigned int i=0; i<7; i++)
     {
         ss << player->stat(i) << "\n";
     }
-    auto statsLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+22, screenY+20));
+    auto statsLabel = new TextArea(ss.str(), screenX+22, screenY+20);
 
     ss.str("");
     for (unsigned int i=7; i<14; i++)
     {
         ss << msg->message(i)->text() << "\n";
     }
-    auto textLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+40, screenY+20));
+    auto textLabel = new TextArea(ss.str(), screenX+40, screenY+20);
 
     // label: hit points
     ss.str("");
     ss << player->hitPoints();
     ss << "/";
     ss << player->hitPointsMax();
-    auto hitPointsLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+94, screenY+20));
+    auto hitPointsLabel = new TextArea(ss.str(), screenX+94, screenY+20);
     hitPointsLabel->setFont(font)->setWidth(46)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
     // label: armor class
     ss.str("");
     ss << player->armorClass();
-    auto armorClassLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+94, screenY+30));
+    auto armorClassLabel = new TextArea(ss.str(), screenX+94, screenY+30);
     armorClassLabel->setFont(font)->setWidth(46)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
     // label: damage treshold levels
@@ -158,7 +158,7 @@ void InventoryState::init()
         ss << player->damageThreshold(GameCritterObject::DAMAGE_PLASMA) <<"/\n";
         ss << player->damageThreshold(GameCritterObject::DAMAGE_EXPLOSION) <<"/";
     }
-    auto damageThresholdLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+94, screenY+40));
+    auto damageThresholdLabel = new TextArea(ss.str(), screenX+94, screenY+40);
     damageThresholdLabel->setFont(font)->setWidth(26)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
     // label: damage resistance levels
@@ -179,14 +179,14 @@ void InventoryState::init()
         ss << player->damageResist(GameCritterObject::DAMAGE_PLASMA) <<"%\n";
         ss << player->damageResist(GameCritterObject::DAMAGE_EXPLOSION) <<"%";
     }
-    auto damageResistanceLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+120, screenY+40));
+    auto damageResistanceLabel = new TextArea(ss.str(), screenX+120, screenY+40);
 
-    auto line2 = std::shared_ptr<Image>(new Image(142, 1));
+    auto line2 = new Image(142, 1);
     line2->setX(screenX);
     line2->setY(screenY+94);
     line2->texture()->fill(0x3ff800ff); // default green color
 
-    auto line3 = std::shared_ptr<Image>(new Image(142, 1));
+    auto line3 = new Image(142, 1);
     line3->setX(screenX);
     line3->setY(screenY+134);
     line3->texture()->fill(0x3ff800ff); // default green color
@@ -197,12 +197,12 @@ void InventoryState::init()
 
     ss.str("");
     ss << weight;
-    auto totalWtLabel = std::shared_ptr<TextArea>(new TextArea(msg->message(20), screenX+14, screenY+180));
-    auto weightLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+70, screenY+180));
+    auto totalWtLabel = new TextArea(msg->message(20), screenX+14, screenY+180);
+    auto weightLabel = new TextArea(ss.str(), screenX+70, screenY+180);
     weightLabel->setFont(font)->setWidth(24)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
     ss.str("");
     ss << "/" << weightMax;
-    auto weightMaxLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX+94, screenY+180));
+    auto weightMaxLabel = new TextArea(ss.str(), screenX+94, screenY+180);
     if (weight>weightMax)
     {
         weightLabel->setFont(ResourceManager::font("font1.aaf", 0xff0000ff));
@@ -212,20 +212,20 @@ void InventoryState::init()
     ss.str("");
     if (leftHand)
     {
-        ss << _handItemSummary (leftHand);
+        ss << _handItemSummary(leftHand);
     }
-    auto leftHandLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX, screenY+100));
+    auto leftHandLabel = new TextArea(ss.str(), screenX, screenY+100);
 
     // label: right hand
     ss.str("");
     if (rightHand)
     {
-        ss << _handItemSummary (rightHand);
+        ss << _handItemSummary(rightHand);
     }
-    auto rightHandLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), screenX, screenY+140));
+    auto rightHandLabel = new TextArea(ss.str(), screenX, screenY+140);
 
     // screen info
-    auto screenLabel = std::shared_ptr<TextArea>(new TextArea("", screenX, screenY+20));
+    auto screenLabel = new TextArea("", screenX, screenY+20);
     screenLabel->setWidth(140); //screen size
     screenLabel->setHeight(168);
     screenLabel->setVisible(false);
@@ -263,9 +263,9 @@ void InventoryState::init()
     // icon: armor
     if (armorSlot)
     {
-        std::shared_ptr<ImageList> armorUi = std::shared_ptr<ImageList>(new ImageList());
-        armorUi->addImage(std::shared_ptr<Image>(new Image(armorSlot->inventorySlotUi()->texture())));
-        armorUi->addImage(std::shared_ptr<Image>(new Image(armorSlot->inventoryDragUi()->texture())));
+        auto armorUi = new ImageList();
+        armorUi->addImage(new Image(armorSlot->inventorySlotUi()->texture()));
+        armorUi->addImage(new Image(armorSlot->inventoryDragUi()->texture()));
         armorUi->setX(backgroundX + 200 - armorUi->width()*0.5);
         armorUi->setY(backgroundY + 215 - armorUi->height()*0.5);
         addUI(armorUi);
@@ -280,9 +280,9 @@ void InventoryState::init()
     // icon: left hand
     if (leftHand)
     {
-        std::shared_ptr<ImageList> leftHandUi = std::shared_ptr<ImageList>(new ImageList());
-        leftHandUi->addImage(std::shared_ptr<Image>(new Image(leftHand->inventorySlotUi()->texture())));
-        leftHandUi->addImage(std::shared_ptr<Image>(new Image(leftHand->inventoryDragUi()->texture())));
+        auto leftHandUi = new ImageList();
+        leftHandUi->addImage(new Image(leftHand->inventorySlotUi()->texture()));
+        leftHandUi->addImage(new Image(leftHand->inventoryDragUi()->texture()));
         leftHandUi->setX(backgroundX + 200 - leftHandUi->width()*0.5);
         leftHandUi->setY(backgroundY + 317 - leftHandUi->height()*0.5);
         addUI(leftHandUi);
@@ -296,9 +296,9 @@ void InventoryState::init()
     // icon: right hand
     if (rightHand)
     {
-        std::shared_ptr<ImageList> rightHandUi = std::shared_ptr<ImageList>(new ImageList());
-        rightHandUi->addImage(std::shared_ptr<Image>(new Image(rightHand->inventorySlotUi()->texture())));
-        rightHandUi->addImage(std::shared_ptr<Image>(new Image(rightHand->inventoryDragUi()->texture())));
+        auto rightHandUi = new ImageList();
+        rightHandUi->addImage(new Image(rightHand->inventorySlotUi()->texture()));
+        rightHandUi->addImage(new Image(rightHand->inventoryDragUi()->texture()));
         rightHandUi->setX(backgroundX + 290 - rightHandUi->width()*0.5);
         rightHandUi->setY(backgroundY + 317 - rightHandUi->height()*0.5);
         addUI(rightHandUi);
@@ -395,7 +395,7 @@ void InventoryState::onRightHandSlotMouseDown(std::shared_ptr<MouseEvent> event)
 //    //Game::getInstance()->states()->back()->ui()->push_back(dragUi);
 //}
 
-std::string InventoryState::_handItemSummary (std::shared_ptr<GameItemObject> hand)
+std::string InventoryState::_handItemSummary (GameItemObject* hand)
 {
     std::stringstream ss;
     if (hand)
@@ -404,7 +404,7 @@ std::string InventoryState::_handItemSummary (std::shared_ptr<GameItemObject> ha
         // is it weapon
         if (hand->subtype() == GameObject::TYPE_ITEM_WEAPON)
         {
-            auto weapon = std::dynamic_pointer_cast<GameWeaponItemObject>(hand);
+            auto weapon = dynamic_cast<GameWeaponItemObject*>(hand);
             ss << "Dmg: " << weapon->damageMin() << "-" << weapon->damageMax() << " ";
             ss << "Rng: " << weapon->rangePrimary();
             // has it ammo?
@@ -442,28 +442,28 @@ void InventoryState::backgroundRightClick(std::shared_ptr<MouseEvent> event)
 void InventoryState::_screenShow (unsigned int PID)
 {
     auto player = Game::getInstance()->player();
-    auto playerNameLabel = std::dynamic_pointer_cast<TextArea>(getUI("playerName"));
-    auto stLabel = std::dynamic_pointer_cast<TextArea>(getUI("stLabel"));
-    auto peLabel = std::dynamic_pointer_cast<TextArea>(getUI("peLabel"));
-    auto enLabel = std::dynamic_pointer_cast<TextArea>(getUI("enLabel"));
-    auto chLabel = std::dynamic_pointer_cast<TextArea>(getUI("chLabel"));
-    auto inLabel = std::dynamic_pointer_cast<TextArea>(getUI("inLabel"));
-    auto agLabel = std::dynamic_pointer_cast<TextArea>(getUI("agLabel"));
-    auto lkLabel = std::dynamic_pointer_cast<TextArea>(getUI("lkLabel"));
-    auto statLabel = std::dynamic_pointer_cast<TextArea>(getUI("statLabel"));
-    auto textLabel = std::dynamic_pointer_cast<TextArea>(getUI("textLabel"));
-    auto hitPointsLabel = std::dynamic_pointer_cast<TextArea>(getUI("hitPointsLabel"));
-    auto armorClassLabel = std::dynamic_pointer_cast<TextArea>(getUI("armorClassLabel"));
-    auto damageThresholdLabel = std::dynamic_pointer_cast<TextArea>(getUI("damageThresholdLabel"));
-    auto damageResistanceLabel = std::dynamic_pointer_cast<TextArea>(getUI("damageResistanceLabel"));
-    auto line2 = std::dynamic_pointer_cast<Image>(getUI("line2"));
-    auto line3 = std::dynamic_pointer_cast<Image>(getUI("line3"));
-    auto totalWtLabel = std::dynamic_pointer_cast<TextArea>(getUI("totalWtLabel"));
-    auto weightLabel = std::dynamic_pointer_cast<TextArea>(getUI("weightLabel"));
-    auto weightMaxLabel = std::dynamic_pointer_cast<TextArea>(getUI("weightMaxLabel"));
-    auto leftHandLabel = std::dynamic_pointer_cast<TextArea>(getUI("leftHandLabel"));
-    auto rightHandLabel = std::dynamic_pointer_cast<TextArea>(getUI("rightHandLabel"));
-    auto screenLabel = std::dynamic_pointer_cast<TextArea>(getUI("screenLabel"));
+    auto playerNameLabel = dynamic_cast<TextArea*>(getUI("playerName"));
+    auto stLabel = dynamic_cast<TextArea*>(getUI("stLabel"));
+    auto peLabel = dynamic_cast<TextArea*>(getUI("peLabel"));
+    auto enLabel = dynamic_cast<TextArea*>(getUI("enLabel"));
+    auto chLabel = dynamic_cast<TextArea*>(getUI("chLabel"));
+    auto inLabel = dynamic_cast<TextArea*>(getUI("inLabel"));
+    auto agLabel = dynamic_cast<TextArea*>(getUI("agLabel"));
+    auto lkLabel = dynamic_cast<TextArea*>(getUI("lkLabel"));
+    auto statLabel = dynamic_cast<TextArea*>(getUI("statLabel"));
+    auto textLabel = dynamic_cast<TextArea*>(getUI("textLabel"));
+    auto hitPointsLabel = dynamic_cast<TextArea*>(getUI("hitPointsLabel"));
+    auto armorClassLabel = dynamic_cast<TextArea*>(getUI("armorClassLabel"));
+    auto damageThresholdLabel = dynamic_cast<TextArea*>(getUI("damageThresholdLabel"));
+    auto damageResistanceLabel = dynamic_cast<TextArea*>(getUI("damageResistanceLabel"));
+    auto line2 = dynamic_cast<Image*>(getUI("line2"));
+    auto line3 = dynamic_cast<Image*>(getUI("line3"));
+    auto totalWtLabel = dynamic_cast<TextArea*>(getUI("totalWtLabel"));
+    auto weightLabel = dynamic_cast<TextArea*>(getUI("weightLabel"));
+    auto weightMaxLabel = dynamic_cast<TextArea*>(getUI("weightMaxLabel"));
+    auto leftHandLabel = dynamic_cast<TextArea*>(getUI("leftHandLabel"));
+    auto rightHandLabel = dynamic_cast<TextArea*>(getUI("rightHandLabel"));
+    auto screenLabel = dynamic_cast<TextArea*>(getUI("screenLabel"));
 
     if (PID == 0)
     {

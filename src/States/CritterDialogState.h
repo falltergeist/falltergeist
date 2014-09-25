@@ -39,7 +39,7 @@ protected:
 
     std::vector<int> _functions;
     std::vector<int> _reactions;
-    std::vector<std::shared_ptr<TextArea>> _answers;
+    std::vector<TextArea*> _answers;
 
     void _selectAnswer(size_t i);
 

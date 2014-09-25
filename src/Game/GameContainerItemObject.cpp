@@ -37,7 +37,7 @@ GameContainerItemObject::~GameContainerItemObject()
 {
 }
 
-std::vector<std::shared_ptr<GameItemObject>>* GameContainerItemObject::inventory()
+std::vector<GameItemObject*>* GameContainerItemObject::inventory()
 {
     return &_inventory;
 }

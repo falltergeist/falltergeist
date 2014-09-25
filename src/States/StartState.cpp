@@ -56,7 +56,7 @@ void StartState::init()
     std::vector<std::string> splashes = {"splash0.rix", "splash1.rix", "splash2.rix", "splash3.rix", "splash4.rix", "splash5.rix", "splash6.rix"};
 
     srand(time(NULL)); // seed
-    auto splash = std::shared_ptr<Image>(new Image("art/splash/" + splashes.at(rand() % splashes.size())));
+    auto splash = new Image("art/splash/" + splashes.at(rand() % splashes.size()));
     auto splashX = (Game::getInstance()->renderer()->width() - splash->width())*0.5;
     auto splashY = (Game::getInstance()->renderer()->height() - splash->height())*0.5;
     splash->setX(splashX);
@@ -72,7 +72,7 @@ void StartState::think()
     State::think();
     if (Game::getInstance()->engineSettings()->forceLocation())
     {
-        std::shared_ptr<GameDudeObject>player = std::shared_ptr<GameDudeObject>(new GameDudeObject());
+        auto player = new GameDudeObject();
         player->loadFromGCDFile(ResourceManager::gcdFileType("premade/combat.gcd"));
         Game::getInstance()->setPlayer(player);
         Game::getInstance()->setState(new LocationState());

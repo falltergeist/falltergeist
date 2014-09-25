@@ -54,7 +54,7 @@ public:
     TextArea(std::shared_ptr<libfalltergeist::MsgMessage> message, int x = 0, int y = 0);
     TextArea(std::string text, int x = 0, int y = 0);
     TextArea(int x = 0, int y = 0);
-    TextArea(std::shared_ptr<TextArea> textArea, int x = 0, int y = 0);
+    TextArea(TextArea* textArea, int x = 0, int y = 0);
     ~TextArea();
 
     TextArea* setBackgroundColor(unsigned int color);

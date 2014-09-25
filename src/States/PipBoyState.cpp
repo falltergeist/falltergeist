@@ -52,7 +52,7 @@ void PipBoyState::init()
     setFullscreen(true);
 
     // Background
-    auto background = std::shared_ptr<Image>(new Image("art/intrface/pip.frm"));
+    auto background = new Image("art/intrface/pip.frm");
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
     background->setX(backgroundX);
@@ -62,32 +62,32 @@ void PipBoyState::init()
     background->addEventHandler("keyup", this, (EventRecieverMethod) &PipBoyState::onKeyboardUp);
 
     // Buttons
-    auto alarmButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PIPBOY_ALARM_BUTTON, backgroundX+124, backgroundY+13));
-    auto statusButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+340));
-    auto automapsButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+394));
-    auto archivesButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+423));
-    auto closeButton = std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+448));
+    auto alarmButton = new ImageButton(ImageButton::TYPE_PIPBOY_ALARM_BUTTON, backgroundX+124, backgroundY+13);
+    auto statusButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+340);
+    auto automapsButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+394);
+    auto archivesButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+423);
+    auto closeButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+448);
     closeButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PipBoyState::onCloseButtonClick);
 
     // Date and time
     // FIXME: use current in-game datetime
     // Date
-    auto day = std::shared_ptr<SmallCounter>(new SmallCounter(backgroundX+21, backgroundY+17));
+    auto day = new SmallCounter(backgroundX+21, backgroundY+17);
     day->setNumber(9);
     day->setColor(SmallCounter::COLOR_WHITE);
     day->setType(SmallCounter::UNSIGNED);
     day->setLength(2);
 
-    auto month = std::shared_ptr<MonthCounter>(new MonthCounter(MonthCounter::JUNE, backgroundX+46, backgroundY+18));
+    auto month = new MonthCounter(MonthCounter::JUNE, backgroundX+46, backgroundY+18);
 
-    auto year = std::shared_ptr<SmallCounter>(new SmallCounter(backgroundX+84, backgroundY+17));
+    auto year = new SmallCounter(backgroundX+84, backgroundY+17);
     year->setNumber(2242);
     year->setColor(SmallCounter::COLOR_WHITE);
     year->setType(SmallCounter::UNSIGNED);
     year->setLength(4);
 
     // Time
-    auto time = std::shared_ptr<SmallCounter>(new SmallCounter(backgroundX+160, backgroundY+17));
+    auto time = new SmallCounter(backgroundX+160, backgroundY+17);
     time->setNumber(800);
     time->setColor(SmallCounter::COLOR_WHITE);
     time->setType(SmallCounter::UNSIGNED);
