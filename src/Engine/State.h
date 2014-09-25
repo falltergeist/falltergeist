@@ -58,7 +58,9 @@ public:
     State();
     virtual ~State();
 
+    ActiveUI* addUI(ActiveUI* ui);
     UI* addUI(UI* ui);
+    ActiveUI* addUI(std::string name, ActiveUI* ui);
     UI* addUI(std::string name, UI* ui);
     void addUI(std::vector<UI*> uis);
 

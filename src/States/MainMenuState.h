@@ -37,7 +37,6 @@ public:
     MainMenuState();
     virtual ~MainMenuState();
     virtual void init();
-    virtual void think();
 
     void onExitButtonClick(std::shared_ptr<MouseEvent> event);
     void onNewGameButtonClick(std::shared_ptr<MouseEvent> event);

@@ -102,6 +102,12 @@ void State::setModal(bool value)
     _modal = value;
 }
 
+ActiveUI* State::addUI(ActiveUI* ui)
+{
+    addUI((UI*)ui);
+    return ui;
+}
+
 UI* State::addUI(UI* ui)
 {
     // Add to UI state position
@@ -118,6 +124,13 @@ UI* State::addUI(std::string name, UI* ui)
     _labeledUI.insert(std::pair<std::string, UI*>(name, ui));
     return ui;
 }
+
+ActiveUI* State::addUI(std::string name, ActiveUI* ui)
+{
+    addUI(name, (UI*)ui);
+    return ui;
+}
+
 
 void State::addUI(std::vector<UI*> uis)
 {
