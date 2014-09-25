@@ -64,7 +64,7 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
         xOffset += frm->offsetX(direction, f);
         yOffset += frm->offsetY(direction, f);
 
-        auto frame = std::shared_ptr<AnimationFrame>(new AnimationFrame());
+        auto frame = new AnimationFrame();
         frame->setWidth(frm->width(direction, f));
         frame->setHeight(frm->height(direction, f));
         frame->setXOffset(xOffset);
@@ -90,9 +90,14 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
 
 Animation::~Animation()
 {
+    while (!_animationFrames.empty())
+    {
+        delete _animationFrames.back();
+        _animationFrames.pop_back();
+    }
 }
 
-std::vector<std::shared_ptr<AnimationFrame>>* Animation::frames()
+std::vector<AnimationFrame*>* Animation::frames()
 {
     return &_animationFrames;
 }
