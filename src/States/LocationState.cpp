@@ -392,12 +392,28 @@ void LocationState::render()
     {
         ui->render();
     }
+
+    for (auto ui : _panelUIs)
+    {
+        ui->render();
+    }
+
+    auto item = Game::getInstance()->player()->currentHandSlot();
+    if (item)
+    {
+        auto itemUi = item->inventoryDragUi();
+        itemUi->setX(_panelUIs.at(0)->x() + 360 - itemUi->width()*0.5);
+        itemUi->setY(_panelUIs.at(0)->y() + 60 - itemUi->height()*0.5);
+        itemUi->render();
+    }
+
+
     _uiToRender.clear();
 }
 
 void LocationState::think()
 {
-    State::think();
+    //State::think();
 
     /*
     auto game = Game::getInstance();
@@ -413,6 +429,12 @@ void LocationState::think()
             if ((*it)->ui()) (*it)->ui()->think();
         }
     }
+
+    for (auto ui : _panelUIs)
+    {
+        ui->think();
+    }
+
     // location scrolling
     if (_scrollTicks + 10 < SDL_GetTicks())
     {
@@ -514,6 +536,13 @@ void LocationState::handle(std::shared_ptr<Event> event)
             */
         }
     }
+
+    for (auto it = _panelUIs.rbegin(); it != _panelUIs.rend(); ++it)
+    {
+        if (event->handled()) break;
+        (*it)->handle(event);
+    }
+
     //State::handle(event);
     for (auto ui : *uiToRender())
     {
@@ -777,19 +806,6 @@ std::vector<std::shared_ptr<UI>>* LocationState::uiToRender()
         _uiToRender.push_back(message);
     }
 
-    for (auto ui : _panelUIs)
-    {
-        _uiToRender.push_back(ui);
-    }
-
-    auto item = Game::getInstance()->player()->currentHandSlot();
-    if (item)
-    {
-        auto itemUi = item->inventoryDragUi();
-        itemUi->setX(_panelUIs.at(0)->x() + 360 - itemUi->width()*0.5);
-        itemUi->setY(_panelUIs.at(0)->y() + 60 - itemUi->height()*0.5);
-        _uiToRender.push_back(itemUi);
-    }
 
     return &_uiToRender;
 }
