@@ -190,6 +190,8 @@ set(SOURCES main.cpp
             src/States/PlayerEditGenderState.h
             src/States/PlayerEditNameState.cpp
             src/States/PlayerEditNameState.h
+            src/States/PlayerPanelState.cpp
+            src/States/PlayerPanelState.h
             src/States/SettingsMenuState.cpp
             src/States/SettingsMenuState.h
             src/States/SkilldexState.cpp

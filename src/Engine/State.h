@@ -38,6 +38,7 @@ class ActiveUI;
 class Event;
 class Game;
 class ImageList;
+class SmallCounter;
 class Surface;
 class TextArea;
 class UI;
@@ -70,6 +71,7 @@ public:
     ActiveUI* getActiveUI(std::string name);
     TextArea* getTextArea(std::string name);
     ImageList* getImageList(std::string name);
+    SmallCounter* getSmallCounter(std::string name);
 
     int x();
     void setX(int x);

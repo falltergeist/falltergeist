@@ -178,21 +178,16 @@ void NewGameState::_changeCharacter()
        << _statToString(dude->stat(6)) << "\n";
     getTextArea("stats_2")->setText(ss.str());
 
-
     getTextArea("bio")->setText(dude->biography());
     getTextArea("name")->setText(dude->name());
-
     getImageList("images")->setCurrentImage(_selectedCharacter);
 
     auto msgMisc = ResourceManager::msgFileType("text/english/game/misc.msg");
-                         // Hit Points
-    std::string stats3 = msgMisc->message(16)->text() +  "\n"
-                         // Armor Class
-                       + msg->message(109)->text() + "\n"
-                         // Action Points
-                       + msgMisc->message(15)->text() + "\n"
-                         // Melee Damage
-                       + msg->message(111)->text() + "\n";
+
+    std::string stats3 = msgMisc->message(16)->text() +  "\n"    // Hit Points
+                       + msg->message(109)->text()    + "\n"     // Armor Class
+                       + msgMisc->message(15)->text() + "\n"     // Action Points
+                       + msg->message(111)->text()    + "\n";    // Melee Damage
 
     std::string stats3_values = std::to_string(dude->hitPointsMax()) + "/" + std::to_string(dude->hitPointsMax()) + "\n"
                               + std::to_string(dude->armorClass())   + "\n"

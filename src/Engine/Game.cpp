@@ -228,6 +228,7 @@ std::vector<State*>* Game::states()
 
 std::vector<State*>* Game::statesForRender()
 {
+    // we must render all states from last fullscreen state to the top of stack
     _statesForRender.clear();
     auto it = _states.end();
     do
@@ -245,18 +246,15 @@ std::vector<State*>* Game::statesForRender()
 
 std::vector<State*>* Game::statesForThinkAndHandle()
 {
+    // we must handle all states from top to bottom of stack
     _statesForThinkAndHandle.clear();
-    auto it = _states.end();
-    do
-    {
-        --it;
-    }
-    while(it != _states.begin() && !(*it)->modal() && !(*it)->fullscreen());
 
-    for (; it != _states.end(); ++it)
+    for (auto it = _states.rbegin(); it != _states.rend(); ++it)
     {
-        if (*it) _statesForThinkAndHandle.push_back(*it);
+        _statesForThinkAndHandle.push_back(*it);
+        if ((*it)->modal() || (*it)->fullscreen()) break;
     }
+
     return &_statesForThinkAndHandle;
 }
 

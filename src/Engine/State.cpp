@@ -26,6 +26,7 @@
 #include "../Engine/Graphics/UI.h"
 #include "../Engine/State.h"
 #include "../UI/ImageList.h"
+#include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
 
 // Third party includes
@@ -155,6 +156,11 @@ TextArea* State::getTextArea(std::string name)
 ImageList* State::getImageList(std::string name)
 {
     return dynamic_cast<ImageList*>(getUI(name));
+}
+
+SmallCounter* State::getSmallCounter(std::string name)
+{
+    return dynamic_cast<SmallCounter*>(getUI(name));
 }
 
 UI* State::getUI(std::string name)

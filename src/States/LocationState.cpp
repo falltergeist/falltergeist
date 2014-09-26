@@ -44,12 +44,9 @@
 #include "../Game/GameWeaponItemObject.h"
 #include "../States/CursorDropdownState.h"
 #include "../States/ExitConfirmState.h"
-#include "../States/GameMenuState.h"
-#include "../States/InventoryState.h"
 #include "../States/LocationState.h"
 #include "../States/MainMenuState.h"
-#include "../States/PipBoyState.h"
-#include "../States/SkilldexState.h"
+#include "../States/PlayerPanelState.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/SmallCounter.h"
@@ -135,12 +132,6 @@ LocationState::~LocationState()
     delete _floor;
     delete _roof;
     delete _locationScript;
-
-    while (!_panelUIs.empty())
-    {
-        delete _panelUIs.back();
-        _panelUIs.pop_back();
-    }
 }
 
 void LocationState::init()
@@ -152,64 +143,9 @@ void LocationState::init()
     auto game = Game::getInstance();
     game->mouse()->setType(Mouse::ACTION);
 
-    _initPanel();
     setLocation("maps/" + Game::getInstance()->engineSettings()->initialLocation() + ".map");
-}
 
-// PLAYER PANEL
-void LocationState::_initPanel()
-{
-    auto game = Game::getInstance();
-    // player panel background
-    _panelUIs.push_back(new Image("art/intrface/iface.frm"));
-
-    auto panelX = (game->renderer()->width() - 640)*0.5;   // 640 -- X size of panel
-    auto panelY = game->renderer()->height() - 99;         //  99 -- Y size of panel
-
-    _panelUIs.back()->setX(panelX);
-    _panelUIs.back()->setY(panelY);
-    _panelUIs.back()->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &LocationState::onPanelMouseDown);
-
-    // change hand button
-    _panelUIs.push_back(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, panelX+218, panelY+5));
-    _panelUIs.back()->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onChangeHandButtonClick);
-
-    // inventory button
-    _panelUIs.push_back(new ImageButton(ImageButton::TYPE_PANEL_INVENTORY, panelX+211, panelY+40));
-    _panelUIs.back()->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onInventoryButtonClick);
-
-    // options button
-    _panelUIs.push_back(new ImageButton(ImageButton::TYPE_PANEL_OPTIONS, panelX+210, panelY+61));
-    _panelUIs.back()->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onOptionsButtonClick);
-
-    // attack button
-    _panelUIs.push_back(new ImageButton(ImageButton::TYPE_PANEL_ATTACK, panelX+267, panelY+25));
-
-    // hit points
-    auto hitPoints = new SmallCounter(panelX+471, panelY+40);
-    hitPoints->setNumber(Game::getInstance()->player()->hitPoints());
-    hitPoints->setType(SmallCounter::SIGNED);
-    _panelUIs.push_back(hitPoints);
-
-    // armor class
-    auto armorClass = new SmallCounter(panelX+472, panelY+76);
-    armorClass->setNumber(Game::getInstance()->player()->armorClass());
-    armorClass->setType(SmallCounter::SIGNED);
-    _panelUIs.push_back(armorClass);
-
-    // skilldex button
-    _panelUIs.push_back(new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, panelX+523, panelY+5));
-    _panelUIs.back()->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onSkilldexButtonClick);
-
-    // map button
-    _panelUIs.push_back(new ImageButton(ImageButton::TYPE_PANEL_MAP, panelX+526, panelY+39));
-
-    // cha button
-    _panelUIs.push_back(new ImageButton(ImageButton::TYPE_PANEL_CHA, panelX+526, panelY+58));
-
-    // pip button
-    _panelUIs.push_back(new ImageButton(ImageButton::TYPE_PANEL_PIP, panelX+526, panelY+77));
-    _panelUIs.back()->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &LocationState::onPipBoyButtonClick);
+    game->pushState(new PlayerPanelState());
 }
 
 void LocationState::setLocation(std::string name)
@@ -384,22 +320,6 @@ void LocationState::render()
     {
         ui->render();
     }
-
-    for (auto ui : _panelUIs)
-    {
-        ui->render();
-    }
-
-    auto item = Game::getInstance()->player()->currentHandSlot();
-    if (item)
-    {
-        auto itemUi = item->inventoryDragUi();
-        itemUi->setX(_panelUIs.at(0)->x() + 360 - itemUi->width()*0.5);
-        itemUi->setY(_panelUIs.at(0)->y() + 60 - itemUi->height()*0.5);
-        itemUi->render();
-    }
-
-
     _uiToRender.clear();
 }
 
@@ -420,11 +340,6 @@ void LocationState::think()
         {
             if ((*it)->ui()) (*it)->ui()->think();
         }
-    }
-
-    for (auto ui : _panelUIs)
-    {
-        ui->think();
     }
 
     // location scrolling
@@ -529,49 +444,11 @@ void LocationState::handle(std::shared_ptr<Event> event)
         }
     }
 
-    for (auto it = _panelUIs.rbegin(); it != _panelUIs.rend(); ++it)
-    {
-        if (event->handled()) break;
-        (*it)->handle(event);
-    }
-
-    //State::handle(event);
     for (auto ui : *uiToRender())
     {
-        if (event->handled()) break;
+        if (event->handled()) return;
         if (auto activeUI = dynamic_cast<ActiveUI*>(ui)) activeUI->handle(event);
     }
-}
-
-void LocationState::onChangeHandButtonClick(std::shared_ptr<MouseEvent> event)
-{
-    auto player = Game::getInstance()->player();
-    player->setCurrentHand(player->currentHand() == GameCritterObject::HAND_LEFT ? GameCritterObject::HAND_RIGHT : GameCritterObject::HAND_LEFT);
-}
-
-void LocationState::onPanelMouseDown(std::shared_ptr<MouseEvent> event)
-{
-    event->setHandled(true);
-}
-
-void LocationState::onInventoryButtonClick(std::shared_ptr<MouseEvent> event)
-{
-    Game::getInstance()->pushState(new InventoryState());
-}
-
-void LocationState::onOptionsButtonClick(std::shared_ptr<MouseEvent> event)
-{
-    Game::getInstance()->pushState(new GameMenuState());
-}
-
-void LocationState::onSkilldexButtonClick(std::shared_ptr<MouseEvent> event)
-{
-    Game::getInstance()->pushState(new SkilldexState());
-}
-
-void LocationState::onPipBoyButtonClick(std::shared_ptr<MouseEvent> event)
-{
-    Game::getInstance()->pushState(new PipBoyState());
 }
 
 void LocationState::onKeyboardUp(std::shared_ptr<KeyboardEvent> event)

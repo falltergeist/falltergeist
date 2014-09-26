@@ -72,15 +72,12 @@ protected:
     TileMap* _floor = 0;
     TileMap* _roof = 0;
 
-    std::vector<ActiveUI*> _panelUIs;
     std::vector<ActiveUI*> _floatMessages;
 
     bool _scrollLeft = false;
     bool _scrollRight = false;
     bool _scrollTop = false;
     bool _scrollBottom = false;
-
-    void _initPanel();
 
 public:
     LocationState();
@@ -114,13 +111,7 @@ public:
     void onKeyUp(std::shared_ptr<KeyboardEvent> event);
     void onObjectClick(std::shared_ptr<MouseEvent> event);
     void onMouseDown(std::shared_ptr<MouseEvent> event);
-    void onChangeHandButtonClick(std::shared_ptr<MouseEvent> event);
-    void onPanelMouseDown(std::shared_ptr<MouseEvent> event);
-    void onInventoryButtonClick(std::shared_ptr<MouseEvent> event);
-    void onOptionsButtonClick(std::shared_ptr<MouseEvent> event);
-    void onSkilldexButtonClick(std::shared_ptr<MouseEvent> event);
     void onKeyboardUp(std::shared_ptr<KeyboardEvent> event);
-    void onPipBoyButtonClick(std::shared_ptr<MouseEvent> event);
 
     std::vector<Hexagon*> findPath(Hexagon* from, Hexagon* to);
 };
