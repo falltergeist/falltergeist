@@ -98,15 +98,7 @@ void NewGameState::init()
     addUI("stats_3", new TextArea(294, 150));
     getTextArea("stats_3")->setWidth(85)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
-    addUI("hit_points_max", new TextArea(383, 150));
-    addUI("armor_class",    new TextArea(383, 150 + 10));
-    addUI("action_points",  new TextArea(383, 150 + 10*2));
-    addUI("melee_damage",   new TextArea(383, 150 + 10*3));
-
-    addUI("skills", new TextArea(289, 200));
-    getTextArea("skills")->setWidth(90)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-
-    addUI("skills_values", new TextArea(383, 200));
+    addUI("stats3_values", new TextArea(383, 150));
 
     auto combat = new GameDudeObject();
     combat->loadFromGCDFile(ResourceManager::gcdFileType("premade/combat.gcd"));
@@ -186,56 +178,39 @@ void NewGameState::_changeCharacter()
        << _statToString(dude->stat(6)) << "\n";
     getTextArea("stats_2")->setText(ss.str());
 
-    auto msgMisc = ResourceManager::msgFileType("text/english/game/misc.msg");
-    ss.str("");
-    ss << msgMisc->message(16)->text() << "\n" // Hit Points
-       << msg->message(109)->text() << "\n"    // Armor Class
-       << msgMisc->message(15)->text() << "\n" // Action Points
-       << msg->message(111)->text();           // Melee Damage
-    getTextArea("stats_3")->setText(ss.str());
 
     getTextArea("bio")->setText(dude->biography());
     getTextArea("name")->setText(dude->name());
 
     getImageList("images")->setCurrentImage(_selectedCharacter);
 
-    // Hit Points
-    ss.str("");
-    ss << dude->hitPointsMax() << "/" << dude->hitPointsMax();
-    getTextArea("hit_points_max")->setText(ss.str());
+    auto msgMisc = ResourceManager::msgFileType("text/english/game/misc.msg");
+                         // Hit Points
+    std::string stats3 = msgMisc->message(16)->text() +  "\n"
+                         // Armor Class
+                       + msg->message(109)->text() + "\n"
+                         // Action Points
+                       + msgMisc->message(15)->text() + "\n"
+                         // Melee Damage
+                       + msg->message(111)->text() + "\n";
 
-    getTextArea("armor_class")->setText(dude->armorClass());
-    getTextArea("action_points")->setText(dude->actionPoints());
-    getTextArea("melee_damage")->setText(dude->meleeDamage());
+    std::string stats3_values = std::to_string(dude->hitPointsMax()) + "/" + std::to_string(dude->hitPointsMax()) + "\n"
+                              + std::to_string(dude->armorClass())   + "\n"
+                              + std::to_string(dude->actionPoints()) + "\n"
+                              + std::to_string(dude->meleeDamage())  + "\n";
 
-    // Tagged skills
-    std::string txt = "";
-    std::string values = "";
-    for (unsigned int i=0; i<17; i++)
+    for (unsigned int i=0; i != 17; ++i) if (dude->skill(i))
     {
-        if (dude->skill(i))
-        {
-            if (txt != "")
-            {
-                txt += "\n";
-                values += "%\n";
-            }
-            txt += ResourceManager::msgFileType("text/english/game/skill.msg")->message(100 + i)->text();
-            values += std::to_string(dude->skillValue(i));
-        }
+        stats3 += "\n" + ResourceManager::msgFileType("text/english/game/skill.msg")->message(100 + i)->text();
+        stats3_values += "\n" + std::to_string(dude->skillValue(i)) + "%";
     }
-    values += "%"; // final % char to string
-
-    // traits
-    for (unsigned int i=0; i != 16; ++i)
+    stats3 += "\n";
+    for (unsigned int i=0; i != 16; ++i) if (dude->trait(i))
     {
-        if (dude->trait(i))
-        {
-            txt += "\n" + ResourceManager::msgFileType("text/english/game/trait.msg")->message(100 + i)->text();
-        }
+        stats3 += "\n" + ResourceManager::msgFileType("text/english/game/trait.msg")->message(100 + i)->text();
     }
-    getTextArea("skills")->setText(txt);
-    getTextArea("skills_values")->setText(values);
+    getTextArea("stats_3")->setText(stats3);
+    getTextArea("stats3_values")->setText(stats3_values);
 }
 
 std::string NewGameState::_statToString(unsigned int stat)
