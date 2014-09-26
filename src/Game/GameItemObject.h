@@ -37,9 +37,9 @@ protected:
     unsigned int _amount = 1;
     unsigned int _weight = 0;
     int _inventoryFID = -1;
-    std::shared_ptr<ActiveUI> _inventoryUi;
-    std::shared_ptr<ActiveUI> _inventorySlotUi;
-    std::shared_ptr<ActiveUI> _inventoryDragUi;
+    Image* _inventoryUi = 0;
+    Image* _inventorySlotUi = 0;
+    Image* _inventoryDragUi = 0;
     virtual void _generateUi();
 public:
     GameItemObject();
@@ -54,9 +54,9 @@ public:
     int inventoryFID();
     void setInventoryFID(int value);
 
-    std::shared_ptr<ActiveUI> inventoryUi();
-    std::shared_ptr<ActiveUI> inventorySlotUi();
-    std::shared_ptr<ActiveUI> inventoryDragUi();
+    Image* inventoryUi();
+    Image* inventorySlotUi();
+    Image* inventoryDragUi();
 };
 
 }

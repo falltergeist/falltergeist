@@ -39,6 +39,9 @@ GameItemObject::GameItemObject() : GameObject()
 
 GameItemObject::~GameItemObject()
 {
+    delete _inventoryDragUi;
+    delete _inventorySlotUi;
+    delete _inventoryUi;
 }
 
 unsigned int GameItemObject::amount()
@@ -71,17 +74,17 @@ void GameItemObject::setInventoryFID(int value)
     _inventoryFID = value;
 }
 
-std::shared_ptr<ActiveUI> GameItemObject::inventoryDragUi()
+Image* GameItemObject::inventoryDragUi()
 {
     return _inventoryDragUi;
 }
 
-std::shared_ptr<ActiveUI> GameItemObject::inventoryUi()
+Image* GameItemObject::inventoryUi()
 {
     return _inventoryUi;
 }
 
-std::shared_ptr<ActiveUI> GameItemObject::inventorySlotUi()
+Image* GameItemObject::inventorySlotUi()
 {
     return _inventorySlotUi;
 }
@@ -93,16 +96,16 @@ void GameItemObject::_generateUi()
     if (inventoryFID() == -1) return;
 
     // Big unscaled image of item
-    _inventoryDragUi = std::shared_ptr<Image>(new Image(ResourceManager::FIDtoFrmName(inventoryFID())));
+    _inventoryDragUi = new Image(ResourceManager::FIDtoFrmName(inventoryFID()));
 
     // Small scaled image
     auto inventoryUiTexture = _inventoryDragUi->texture()->fitTo(57, 40);
-    _inventoryUi = std::shared_ptr<Image>(new Image(inventoryUiTexture->width(),inventoryUiTexture->height()));
+    _inventoryUi = new Image(inventoryUiTexture->width(),inventoryUiTexture->height());
     _inventoryUi->setTexture(inventoryUiTexture);
 
     // Medium scaled image
     auto inventorySlotUiTexture = _inventoryDragUi->texture()->fitTo(88, 58);
-    _inventorySlotUi = std::shared_ptr<Image>(new Image(inventorySlotUiTexture->width(),inventorySlotUiTexture->height()));
+    _inventorySlotUi = new Image(inventorySlotUiTexture->width(),inventorySlotUiTexture->height());
     _inventorySlotUi->setTexture(inventorySlotUiTexture);
 }
 

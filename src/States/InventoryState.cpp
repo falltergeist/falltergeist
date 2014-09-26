@@ -264,8 +264,8 @@ void InventoryState::init()
     if (armorSlot)
     {
         auto armorUi = new ImageList();
-        armorUi->addImage(new Image(armorSlot->inventorySlotUi()->texture()));
-        armorUi->addImage(new Image(armorSlot->inventoryDragUi()->texture()));
+        armorUi->addImage(new Image(armorSlot->inventorySlotUi()));
+        armorUi->addImage(new Image(armorSlot->inventoryDragUi()));
         armorUi->setX(backgroundX + 200 - armorUi->width()*0.5);
         armorUi->setY(backgroundY + 215 - armorUi->height()*0.5);
         addUI(armorUi);
@@ -281,8 +281,8 @@ void InventoryState::init()
     if (leftHand)
     {
         auto leftHandUi = new ImageList();
-        leftHandUi->addImage(new Image(leftHand->inventorySlotUi()->texture()));
-        leftHandUi->addImage(new Image(leftHand->inventoryDragUi()->texture()));
+        leftHandUi->addImage(new Image(leftHand->inventorySlotUi()));
+        leftHandUi->addImage(new Image(leftHand->inventoryDragUi()));
         leftHandUi->setX(backgroundX + 200 - leftHandUi->width()*0.5);
         leftHandUi->setY(backgroundY + 317 - leftHandUi->height()*0.5);
         addUI(leftHandUi);
@@ -297,8 +297,8 @@ void InventoryState::init()
     if (rightHand)
     {
         auto rightHandUi = new ImageList();
-        rightHandUi->addImage(new Image(rightHand->inventorySlotUi()->texture()));
-        rightHandUi->addImage(new Image(rightHand->inventoryDragUi()->texture()));
+        rightHandUi->addImage(new Image(rightHand->inventorySlotUi()));
+        rightHandUi->addImage(new Image(rightHand->inventoryDragUi()));
         rightHandUi->setX(backgroundX + 290 - rightHandUi->width()*0.5);
         rightHandUi->setY(backgroundY + 317 - rightHandUi->height()*0.5);
         addUI(rightHandUi);
