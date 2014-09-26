@@ -30,8 +30,8 @@
 #include <algorithm>
 
 // Falltergeist includes
-#include "../Engine/IniParser.h"
-#include "../Engine/IniSection.h"
+#include "../../Engine/Settings/IniParser.h"
+#include "../../Engine/Settings/IniSection.h"
 
 // Third party includes
 

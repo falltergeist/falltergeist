@@ -21,9 +21,9 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/Exception.h"
-#include "../Engine/IniSection.h"
-#include "../Engine/Logger.h"
+#include "../../Engine/Exception.h"
+#include "../../Engine/Logger.h"
+#include "../../Engine/Settings/IniSection.h"
 
 // Third party includes
 

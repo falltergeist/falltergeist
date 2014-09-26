@@ -27,6 +27,7 @@
 #include "../Engine/Graphics/Renderer.h"
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/ResourceManager.h"
+#include "../Engine/Settings/Settings.h"
 #include "../Game/GameDudeObject.h"
 #include "../States/CritterDialogState.h"
 #include "../States/LocationState.h"
@@ -34,7 +35,6 @@
 #include "../States/SettingsMenuState.h"
 #include "../States/StartState.h"
 #include "../UI/Image.h"
-#include "../Engine/Settings.h"
 
 // Third party includes
 

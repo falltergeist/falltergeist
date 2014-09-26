@@ -36,6 +36,7 @@
 #include "../Engine/LocationCamera.h"
 #include "../Engine/Logger.h"
 #include "../Engine/ResourceManager.h"
+#include "../Engine/Settings/Settings.h"
 #include "../Game/GameDefines.h"
 #include "../Game/GameDudeObject.h"
 #include "../Game/GameObject.h"
@@ -46,15 +47,14 @@
 #include "../States/GameMenuState.h"
 #include "../States/InventoryState.h"
 #include "../States/LocationState.h"
-#include "../States/PipBoyState.h"
 #include "../States/MainMenuState.h"
+#include "../States/PipBoyState.h"
 #include "../States/SkilldexState.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
 #include "../VM/VM.h"
-#include "../Engine/Settings.h"
 
 // Third party includes
 

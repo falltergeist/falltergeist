@@ -23,12 +23,12 @@
 #include <stdexcept>
 
 // Falltergeist includes
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Exception.h"
-#include "../Engine/IniFile.h"
-#include "../Engine/IniWriter.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Settings.h"
+#include "../../Engine/CrossPlatform.h"
+#include "../../Engine/Exception.h"
+#include "../../Engine/Logger.h"
+#include "../../Engine/Settings/IniFile.h"
+#include "../../Engine/Settings/IniWriter.h"
+#include "../../Engine/Settings/Settings.h"
 
 // Third party includes
 

@@ -93,26 +93,24 @@ set(SOURCES main.cpp
             src/Engine/Hexagon.h
             src/Engine/Input/Mouse.cpp
             src/Engine/Input/Mouse.h
-            src/Engine/IniFile.cpp
-            src/Engine/IniFile.h
-            src/Engine/IniParser.cpp
-            src/Engine/IniParser.h
-            src/Engine/IniSection.cpp
-            src/Engine/IniSection.h
-            src/Engine/IniWriter.cpp
-            src/Engine/IniWriter.h
-            src/Engine/IniValue.cpp
-            src/Engine/IniValue.h
             src/Engine/LocationCamera.cpp
             src/Engine/LocationCamera.h
             src/Engine/Logger.cpp
             src/Engine/Logger.h
-            src/Engine/Map.cpp
-            src/Engine/Map.h
             src/Engine/ResourceManager.cpp
             src/Engine/ResourceManager.h
-            src/Engine/Settings.cpp
-            src/Engine/Settings.h
+            src/Engine/Settings/IniFile.cpp
+            src/Engine/Settings/IniFile.h
+            src/Engine/Settings/IniParser.cpp
+            src/Engine/Settings/IniParser.h
+            src/Engine/Settings/IniSection.cpp
+            src/Engine/Settings/IniSection.h
+            src/Engine/Settings/IniWriter.cpp
+            src/Engine/Settings/IniWriter.h
+            src/Engine/Settings/IniValue.cpp
+            src/Engine/Settings/IniValue.h
+            src/Engine/Settings/Settings.cpp
+            src/Engine/Settings/Settings.h
             src/Engine/State.cpp
             src/Engine/State.h
             src/Game/GameDefines.h

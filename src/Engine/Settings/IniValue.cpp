@@ -21,7 +21,7 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/IniValue.h"
+#include "../../Engine/Settings/IniValue.h"
 
 // Third party includes
 

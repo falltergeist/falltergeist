@@ -23,9 +23,9 @@
 // Falltergeist includes
 #include <algorithm> 
 
-#include "../Engine/IniFile.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Exception.h"
+#include "../../Engine/CrossPlatform.h"
+#include "../../Engine/Exception.h"
+#include "../../Engine/Settings/IniFile.h"
 
 // Third party includes
 

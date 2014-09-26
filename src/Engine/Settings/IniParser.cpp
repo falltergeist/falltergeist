@@ -23,8 +23,8 @@
 #include <sstream>
 
 // Falltergeist includes
-#include "../Engine/IniFile.h"
-#include "../Engine/Logger.h"
+#include "../../Engine/Logger.h"
+#include "../../Engine/Settings/IniFile.h"
 
 // Third party includes
 

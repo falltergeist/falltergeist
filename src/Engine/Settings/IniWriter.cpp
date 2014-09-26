@@ -22,8 +22,8 @@
 
 // Falltergeist includes
 
-#include "../Engine/IniFile.h"
-#include "../Engine/IniWriter.h"
+#include "../../Engine/Settings/IniFile.h"
+#include "../../Engine/Settings/IniWriter.h"
 
 // Third party includes
 
