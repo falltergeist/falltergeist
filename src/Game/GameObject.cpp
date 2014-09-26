@@ -29,6 +29,7 @@
 #include "../Game/GameObject.h"
 #include "../Game/GameDefines.h"
 #include "../States/LocationState.h"
+#include "../UI/AnimatedImage.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
 
@@ -152,9 +153,14 @@ void GameObject::_generateUi()
     auto frm = ResourceManager::frmFileType(FID());
     if (frm)
     {
+        frm->rgba(ResourceManager::palFileType("color.pal")); // TODO: figure out, why not calling this brokes animated overlays
         if (frm->framesPerDirection() > 1)
         {
             _ui = new Animation(ResourceManager::FIDtoFrmName(FID()), orientation());
+        }
+        else if (frm->animatedPalette())
+        {
+            _ui = new AnimatedImage(frm, orientation());
         }
         else
         {
