@@ -204,7 +204,6 @@ void NewGameState::_changeCharacter()
         stats3 += "\n" + ResourceManager::msgFileType("text/english/game/skill.msg")->message(100 + i)->text();
         stats3_values += "\n" + std::to_string(dude->skillValue(i)) + "%";
     }
-    stats3 += "\n";
     for (unsigned int i=0; i != 16; ++i) if (dude->trait(i))
     {
         stats3 += "\n" + ResourceManager::msgFileType("text/english/game/trait.msg")->message(100 + i)->text();
