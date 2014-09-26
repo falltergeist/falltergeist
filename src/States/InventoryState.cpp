@@ -61,36 +61,27 @@ void InventoryState::init()
     setModal(true);
     setFullscreen(false);
 
-    auto player = Game::getInstance()->player();
-    // armorSlot, leftHand, rightHand
-    GameArmorItemObject* armorSlot = player->armorSlot();
-    GameItemObject* leftHand = player->leftHandSlot();
-    GameItemObject* rightHand = player->rightHandSlot();
+    auto game = Game::getInstance();
 
-    // background
-    auto background = new Image("art/intrface/invbox.frm");
-    auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
-    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5-50;
-    background->setX(backgroundX);
-    background->setY(backgroundY);
-    background->addEventHandler("mouserightclick", this, (EventRecieverMethod) &InventoryState::backgroundRightClick);
-    addUI(background);
+    setX((game->renderer()->width()  - 499)*0.5);
+    setY((game->renderer()->height() - 427)*0.5);
 
-    // button up
-    auto upButton = new ImageButton(ImageButton::TYPE_INVENTORY_UP_ARROW, backgroundX+128, backgroundY+40);
+    addUI("background", new Image("art/intrface/invbox.frm"));
+    getActiveUI("background")->addEventHandler("mouserightclick", this, (EventRecieverMethod) &InventoryState::backgroundRightClick);
 
-    //button down
-    auto downButton = new ImageButton(ImageButton::TYPE_INVENTORY_DOWN_ARROW, backgroundX+128, backgroundY+65);
-    auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+438, backgroundY+328);
-    doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &InventoryState::onDoneButtonClick);
+    addUI("button_up",   new ImageButton(ImageButton::TYPE_INVENTORY_UP_ARROW,   128, 40));
+    addUI("button_down", new ImageButton(ImageButton::TYPE_INVENTORY_DOWN_ARROW, 128, 65));
+
+    addUI("button_done", new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 438, 328));
+    getActiveUI("button_done")->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &InventoryState::onDoneButtonClick);
 
     // screen
-    auto screenX = backgroundX + background->width() - 202;
-    auto screenY = backgroundY + background->height() - 332; //330
-    auto font = ResourceManager::font("font1.aaf");
+    auto screenX = 300;
+    auto screenY = 47;
 
-    // name
-    auto playerNameLabel = new TextArea(player->name(), screenX, screenY);
+    auto player = Game::getInstance()->player();
+
+    addUI("player_name", new TextArea(player->name(), screenX, screenY));
 
     auto line1 = new Image(142, 1);
     line1->setX(screenX);
@@ -98,29 +89,16 @@ void InventoryState::init()
     line1->texture()->fill(0x3ff800ff); // default green color
 
     auto msg = ResourceManager::msgFileType("text/english/game/inventry.msg");
-    // label: ST (0)
-    auto stLabel = new TextArea(msg->message(0), screenX, screenY+20);
-    // label: PE (1)
-    auto peLabel = new TextArea(msg->message(1), screenX, screenY+20+10);
-    // label: EN (2)
-    auto enLabel = new TextArea(msg->message(2), screenX, screenY+20+10*2);
-    // label: CH (3)
-    auto chLabel = new TextArea(msg->message(3), screenX, screenY+20+10*3);
-    // label: IN (4)
-    auto inLabel = new TextArea(msg->message(4), screenX, screenY+20+10*4);
-    // label: AG (5)
-    auto agLabel = new TextArea(msg->message(5), screenX, screenY+20+10*5);
-    // label: LK (6)
-    auto lkLabel = new TextArea(msg->message(6), screenX, screenY+20+10*6);
+
+    std::string statsLabels;
+    for (unsigned int i = 0; i != 7; ++i) statsLabels += msg->message(i)->text() + "\n";
+    addUI("label_stats", new TextArea(statsLabels, screenX, screenY + 10*2));
+
+    std::string statsValues;
+    for (unsigned int i = 0; i != 7; ++i) statsValues += std::to_string(player->stat(i)) + "\n";
+    addUI("label_stats_values", new TextArea(statsValues, screenX + 22, screenY + 20));
 
     std::stringstream ss;
-    for (unsigned int i=0; i<7; i++)
-    {
-        ss << player->stat(i) << "\n";
-    }
-    auto statsLabel = new TextArea(ss.str(), screenX+22, screenY+20);
-
-    ss.str("");
     for (unsigned int i=7; i<14; i++)
     {
         ss << msg->message(i)->text() << "\n";
@@ -133,12 +111,18 @@ void InventoryState::init()
     ss << "/";
     ss << player->hitPointsMax();
     auto hitPointsLabel = new TextArea(ss.str(), screenX+94, screenY+20);
-    hitPointsLabel->setFont(font)->setWidth(46)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    hitPointsLabel->setWidth(46)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
     // label: armor class
     ss.str("");
     ss << player->armorClass();
     auto armorClassLabel = new TextArea(ss.str(), screenX+94, screenY+30);
-    armorClassLabel->setFont(font)->setWidth(46)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    armorClassLabel->setWidth(46)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+
+    // armorSlot, leftHand, rightHand
+    GameArmorItemObject* armorSlot = player->armorSlot();
+    GameItemObject* leftHand = player->leftHandSlot();
+    GameItemObject* rightHand = player->rightHandSlot();
+
 
     // label: damage treshold levels
     ss.str("");
@@ -159,7 +143,7 @@ void InventoryState::init()
         ss << player->damageThreshold(GameCritterObject::DAMAGE_EXPLOSION) <<"/";
     }
     auto damageThresholdLabel = new TextArea(ss.str(), screenX+94, screenY+40);
-    damageThresholdLabel->setFont(font)->setWidth(26)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    damageThresholdLabel->setWidth(26)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
     // label: damage resistance levels
     ss.str("");
@@ -199,7 +183,7 @@ void InventoryState::init()
     ss << weight;
     auto totalWtLabel = new TextArea(msg->message(20), screenX+14, screenY+180);
     auto weightLabel = new TextArea(ss.str(), screenX+70, screenY+180);
-    weightLabel->setFont(font)->setWidth(24)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    weightLabel->setWidth(24)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
     ss.str("");
     ss << "/" << weightMax;
     auto weightMaxLabel = new TextArea(ss.str(), screenX+94, screenY+180);
@@ -231,16 +215,8 @@ void InventoryState::init()
     screenLabel->setVisible(false);
     screenLabel->setWordWrap(true);
 
-    addUI("playerName", playerNameLabel);
+
     addUI(line1);
-    addUI("stLabel", stLabel);
-    addUI("peLabel", peLabel);
-    addUI("enLabel", enLabel);
-    addUI("chLabel", chLabel);
-    addUI("inLabel", inLabel);
-    addUI("agLabel", agLabel);
-    addUI("lkLabel", lkLabel);
-    addUI("statLabel", statsLabel);
     addUI("textLabel", textLabel);
     addUI("hitPointsLabel", hitPointsLabel);
     addUI("armorClassLabel", armorClassLabel);
@@ -254,9 +230,6 @@ void InventoryState::init()
     addUI("leftHandLabel", leftHandLabel);
     addUI("rightHandLabel", rightHandLabel);
     addUI("screenLabel", screenLabel);
-    addUI(upButton);
-    addUI(downButton);
-    addUI(doneButton);
 
 
     // BIG ICONS
@@ -266,8 +239,8 @@ void InventoryState::init()
         auto armorUi = new ImageList();
         armorUi->addImage(new Image(armorSlot->inventorySlotUi()));
         armorUi->addImage(new Image(armorSlot->inventoryDragUi()));
-        armorUi->setX(backgroundX + 200 - armorUi->width()*0.5);
-        armorUi->setY(backgroundY + 215 - armorUi->height()*0.5);
+        armorUi->setX(200 - armorUi->width()*0.5);
+        armorUi->setY(215 - armorUi->height()*0.5);
         addUI(armorUi);
 
         armorUi->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &InventoryState::onArmorSlotMouseDown);
@@ -283,8 +256,8 @@ void InventoryState::init()
         auto leftHandUi = new ImageList();
         leftHandUi->addImage(new Image(leftHand->inventorySlotUi()));
         leftHandUi->addImage(new Image(leftHand->inventoryDragUi()));
-        leftHandUi->setX(backgroundX + 200 - leftHandUi->width()*0.5);
-        leftHandUi->setY(backgroundY + 317 - leftHandUi->height()*0.5);
+        leftHandUi->setX(200 - leftHandUi->width()*0.5);
+        leftHandUi->setY(317 - leftHandUi->height()*0.5);
         addUI(leftHandUi);
 
         leftHandUi->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &InventoryState::onLeftHandSlotMouseDown);
@@ -299,8 +272,8 @@ void InventoryState::init()
         auto rightHandUi = new ImageList();
         rightHandUi->addImage(new Image(rightHand->inventorySlotUi()));
         rightHandUi->addImage(new Image(rightHand->inventoryDragUi()));
-        rightHandUi->setX(backgroundX + 290 - rightHandUi->width()*0.5);
-        rightHandUi->setY(backgroundY + 317 - rightHandUi->height()*0.5);
+        rightHandUi->setX(290 - rightHandUi->width()*0.5);
+        rightHandUi->setY(317 - rightHandUi->height()*0.5);
         addUI(rightHandUi);
 
         rightHandUi->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &InventoryState::onRightHandSlotMouseDown);
@@ -442,41 +415,29 @@ void InventoryState::backgroundRightClick(std::shared_ptr<MouseEvent> event)
 void InventoryState::_screenShow (unsigned int PID)
 {
     auto player = Game::getInstance()->player();
-    auto playerNameLabel = dynamic_cast<TextArea*>(getUI("playerName"));
-    auto stLabel = dynamic_cast<TextArea*>(getUI("stLabel"));
-    auto peLabel = dynamic_cast<TextArea*>(getUI("peLabel"));
-    auto enLabel = dynamic_cast<TextArea*>(getUI("enLabel"));
-    auto chLabel = dynamic_cast<TextArea*>(getUI("chLabel"));
-    auto inLabel = dynamic_cast<TextArea*>(getUI("inLabel"));
-    auto agLabel = dynamic_cast<TextArea*>(getUI("agLabel"));
-    auto lkLabel = dynamic_cast<TextArea*>(getUI("lkLabel"));
-    auto statLabel = dynamic_cast<TextArea*>(getUI("statLabel"));
-    auto textLabel = dynamic_cast<TextArea*>(getUI("textLabel"));
-    auto hitPointsLabel = dynamic_cast<TextArea*>(getUI("hitPointsLabel"));
-    auto armorClassLabel = dynamic_cast<TextArea*>(getUI("armorClassLabel"));
-    auto damageThresholdLabel = dynamic_cast<TextArea*>(getUI("damageThresholdLabel"));
-    auto damageResistanceLabel = dynamic_cast<TextArea*>(getUI("damageResistanceLabel"));
+    auto playerNameLabel = getTextArea("player_name");
+    auto statsLabel = getTextArea("label_stats");
+    auto statsValuesLabel = getTextArea("label_stats_values");
+    auto textLabel = getTextArea("textLabel");
+    auto hitPointsLabel = getTextArea("hitPointsLabel");
+    auto armorClassLabel = getTextArea("armorClassLabel");
+    auto damageThresholdLabel = getTextArea("damageThresholdLabel");
+    auto damageResistanceLabel = getTextArea("damageResistanceLabel");
     auto line2 = dynamic_cast<Image*>(getUI("line2"));
     auto line3 = dynamic_cast<Image*>(getUI("line3"));
-    auto totalWtLabel = dynamic_cast<TextArea*>(getUI("totalWtLabel"));
-    auto weightLabel = dynamic_cast<TextArea*>(getUI("weightLabel"));
-    auto weightMaxLabel = dynamic_cast<TextArea*>(getUI("weightMaxLabel"));
-    auto leftHandLabel = dynamic_cast<TextArea*>(getUI("leftHandLabel"));
-    auto rightHandLabel = dynamic_cast<TextArea*>(getUI("rightHandLabel"));
-    auto screenLabel = dynamic_cast<TextArea*>(getUI("screenLabel"));
+    auto totalWtLabel = getTextArea("totalWtLabel");
+    auto weightLabel = getTextArea("weightLabel");
+    auto weightMaxLabel = getTextArea("weightMaxLabel");
+    auto leftHandLabel = getTextArea("leftHandLabel");
+    auto rightHandLabel = getTextArea("rightHandLabel");
+    auto screenLabel = getTextArea("screenLabel");
 
     if (PID == 0)
     {
         playerNameLabel->setText(player->name());
         screenLabel->setVisible(false);
-        stLabel->setVisible(true);
-        peLabel->setVisible(true);
-        enLabel->setVisible(true);
-        chLabel->setVisible(true);
-        inLabel->setVisible(true);
-        agLabel->setVisible(true);
-        lkLabel->setVisible(true);
-        statLabel->setVisible(true);
+        statsLabel->setVisible(true);
+        statsValuesLabel->setVisible(true);
         textLabel->setVisible(true);
         hitPointsLabel->setVisible(true);
         armorClassLabel->setVisible(true);
@@ -496,14 +457,8 @@ void InventoryState::_screenShow (unsigned int PID)
         playerNameLabel->setText(msg->message(PID*100)->text()); // item name
         screenLabel->setText(msg->message(PID*100+1)->text()); // item dedcription
         screenLabel->setVisible(true);
-        stLabel->setVisible(false);
-        peLabel->setVisible(false);
-        enLabel->setVisible(false);
-        chLabel->setVisible(false);
-        inLabel->setVisible(false);
-        agLabel->setVisible(false);
-        lkLabel->setVisible(false);
-        statLabel->setVisible(false);
+        statsLabel->setVisible(false);
+        statsValuesLabel->setVisible(false);
         textLabel->setVisible(false);
         hitPointsLabel->setVisible(false);
         armorClassLabel->setVisible(false);
