@@ -42,18 +42,13 @@ NewGameState::NewGameState() : State()
 {
 }
 
-
 NewGameState::~NewGameState()
 {
-    delete _characterImages;
-
-    auto game = Game::getInstance();
     while(!_characters.empty())
     {
-        if (_characters.back() != game->player()) delete _characters.back();
+        if (_characters.back() != Game::getInstance()->player()) delete _characters.back();
         _characters.pop_back();
     }
-
 }
 
 void NewGameState::init()
@@ -61,44 +56,57 @@ void NewGameState::init()
     if (_initialized) return;
     State::init();
 
-    // Background
-    auto background = new Image("art/intrface/pickchar.frm");
-    auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
-    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
-    background->setX(backgroundX);
-    background->setY(backgroundY);
+    auto renderer = Game::getInstance()->renderer();
 
-    // Begin game button
-    auto beginGameButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+81, backgroundY+322);
+    setX((renderer->width()  - 640)*0.5);
+    setY((renderer->height() - 480)*0.5);
+
+    addUI("background", new Image("art/intrface/pickchar.frm"));
+
+    auto beginGameButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 322));
     beginGameButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onBeginGameButtonClick);
 
-    // Edit character button
-    auto editButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+436, backgroundY+319);
+    auto editButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 436, 319));
     editButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onEditButtonClick);
 
-    // Create character button
-    auto createButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+81, backgroundY+424);
+    auto createButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 424));
     createButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onCreateButtonClick);
 
-    // Back to mainmenu button
-    auto backButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+461, backgroundY+424);
+    auto backButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 461, 424));
     backButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onBackButtonClick);
 
-    // Previous character button
-    auto prevCharacterButton = new ImageButton(ImageButton::TYPE_LEFT_ARROW, backgroundX+292, backgroundY+320);
+    auto prevCharacterButton = addUI(new ImageButton(ImageButton::TYPE_LEFT_ARROW, 292, 320));
     prevCharacterButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onPrevCharacterButtonClick);
 
-    // Next character button
-    auto nextCharacterButton = new ImageButton(ImageButton::TYPE_RIGHT_ARROW, backgroundX+318, backgroundY+320);
+    auto nextCharacterButton = addUI(new ImageButton(ImageButton::TYPE_RIGHT_ARROW, 318, 320));
     nextCharacterButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onNextCharacterButtonClick);
 
-    // Characters images
-    _selectedCharacter = 0;
-    _characterImages = new ImageList({
-                                          "art/intrface/combat.frm",
-                                          "art/intrface/stealth.frm",
-                                          "art/intrface/diplomat.frm"
-                                      }, backgroundX+27, backgroundY+23);
+    addUI("images", new ImageList({
+                                      "art/intrface/combat.frm",
+                                      "art/intrface/stealth.frm",
+                                      "art/intrface/diplomat.frm"
+                                  }, 27, 23));
+
+    addUI("name", new TextArea(300, 40));
+
+    addUI("stats_1", new TextArea(0, 70));
+    getTextArea("stats_1")->setWidth(362)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+
+    addUI("stats_2", new TextArea(374, 70));
+    addUI("bio",     new TextArea(437, 40));
+
+    addUI("stats_3", new TextArea(294, 150));
+    getTextArea("stats_3")->setWidth(85)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+
+    addUI("hit_points_max", new TextArea(383, 150));
+    addUI("armor_class",    new TextArea(383, 150 + 10));
+    addUI("action_points",  new TextArea(383, 150 + 10*2));
+    addUI("melee_damage",   new TextArea(383, 150 + 10*3));
+
+    addUI("skills", new TextArea(289, 200));
+    getTextArea("skills")->setWidth(90)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+
+    addUI("skills_values", new TextArea(383, 200));
 
     auto combat = new GameDudeObject();
     combat->loadFromGCDFile(ResourceManager::gcdFileType("premade/combat.gcd"));
@@ -115,58 +123,7 @@ void NewGameState::init()
     diplomat->setBiography(ResourceManager::bioFileType("premade/diplomat.bio")->text());
     _characters.push_back(diplomat);
 
-    // Character data textareas
-    _playerName = new TextArea(backgroundX+300, backgroundY+40);
-
-    _playerStats1 = new TextArea(backgroundX+0, backgroundY+70);
-    _playerStats1->setWidth(362)
-                 ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-
-    _playerStats2 = new TextArea(backgroundX+374, backgroundY+70);
-    _playerBio = new TextArea(backgroundX+437, backgroundY+40);
-
-    _playerStats3 = new TextArea(backgroundX+294, backgroundY+150);
-    _playerStats3->setWidth(85)
-                 ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-
-    _playerHitPointsMax = new TextArea(backgroundX+383, backgroundY+150);
-    _playerArmorClass = new TextArea(backgroundX+383, backgroundY+150+10);
-    _playerActionPoints = new TextArea(backgroundX+383, backgroundY+150+10*2);
-    _playerMeleeDamage = new TextArea(backgroundX+383, backgroundY+150+10*3);
-
-    _playerSkills = new TextArea(backgroundX+289, backgroundY+200);
-    _playerSkills->setWidth(90)
-                 ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-
-    _playerSkillsValues = new TextArea(backgroundX+383, backgroundY+200);
-
-    _playerTraits = new TextArea(backgroundX+294, backgroundY+230);
-    _playerTraits->setWidth(85)
-                 ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
-
-    addUI(background);
-    addUI(beginGameButton);
-    addUI(editButton);
-    addUI(createButton);
-    addUI(backButton);
-    addUI(prevCharacterButton);
-    addUI(nextCharacterButton);
-
-    addUI(_characterImages);
-    addUI(_playerName);
-    addUI(_playerStats1);
-    addUI(_playerStats2);
-    addUI(_playerStats3);
-    addUI(_playerBio);
-    addUI(_playerHitPointsMax);
-    addUI(_playerArmorClass);
-    addUI(_playerActionPoints);
-    addUI(_playerMeleeDamage);
-    addUI(_playerSkills);
-    addUI(_playerSkillsValues);
-    addUI(_playerTraits);
-
-    changeCharacter();
+    _changeCharacter();
 }
 
 void NewGameState::think()
@@ -189,7 +146,7 @@ void NewGameState::onPrevCharacterButtonClick(std::shared_ptr<MouseEvent> event)
     {
         _selectedCharacter = 2;
     }
-    changeCharacter();
+    _changeCharacter();
 }
 
 void NewGameState::onNextCharacterButtonClick(std::shared_ptr<MouseEvent> event)
@@ -202,10 +159,10 @@ void NewGameState::onNextCharacterButtonClick(std::shared_ptr<MouseEvent> event)
     {
         _selectedCharacter = 0;
     }
-    changeCharacter();
+    _changeCharacter();
 }
 
-void NewGameState::changeCharacter()
+void NewGameState::_changeCharacter()
 {
     auto dude = _characters.at(_selectedCharacter);
     std::stringstream ss;
@@ -217,17 +174,17 @@ void NewGameState::changeCharacter()
        << msg->message(104)->text() << " " << (dude->stat(4) < 10 ? "0" : "") << dude->stat(4) << "\n"
        << msg->message(105)->text() << " " << (dude->stat(5) < 10 ? "0" : "") << dude->stat(5) << "\n"
        << msg->message(106)->text() << " " << (dude->stat(6) < 10 ? "0" : "") << dude->stat(6) << "\n";
-    _playerStats1->setText(ss.str());
+    getTextArea("stats_1")->setText(ss.str());
 
     ss.str("");
-    ss << statToString(dude->stat(0)) << "\n"
-       << statToString(dude->stat(1)) << "\n"
-       << statToString(dude->stat(2)) << "\n"
-       << statToString(dude->stat(3)) << "\n"
-       << statToString(dude->stat(4)) << "\n"
-       << statToString(dude->stat(5)) << "\n"
-       << statToString(dude->stat(6)) << "\n";
-    _playerStats2->setText(ss.str());
+    ss << _statToString(dude->stat(0)) << "\n"
+       << _statToString(dude->stat(1)) << "\n"
+       << _statToString(dude->stat(2)) << "\n"
+       << _statToString(dude->stat(3)) << "\n"
+       << _statToString(dude->stat(4)) << "\n"
+       << _statToString(dude->stat(5)) << "\n"
+       << _statToString(dude->stat(6)) << "\n";
+    getTextArea("stats_2")->setText(ss.str());
 
     auto msgMisc = ResourceManager::msgFileType("text/english/game/misc.msg");
     ss.str("");
@@ -235,21 +192,21 @@ void NewGameState::changeCharacter()
        << msg->message(109)->text() << "\n"    // Armor Class
        << msgMisc->message(15)->text() << "\n" // Action Points
        << msg->message(111)->text();           // Melee Damage
-    _playerStats3->setText(ss.str());
+    getTextArea("stats_3")->setText(ss.str());
 
-    _playerBio->setText(dude->biography());
-    _playerName->setText(dude->name());
+    getTextArea("bio")->setText(dude->biography());
+    getTextArea("name")->setText(dude->name());
 
-    _characterImages->setCurrentImage(_selectedCharacter);
+    getImageList("images")->setCurrentImage(_selectedCharacter);
 
     // Hit Points
     ss.str("");
     ss << dude->hitPointsMax() << "/" << dude->hitPointsMax();
-    _playerHitPointsMax->setText(ss.str());
+    getTextArea("hit_points_max")->setText(ss.str());
 
-    _playerArmorClass->setText(dude->armorClass());
-    _playerActionPoints->setText(dude->actionPoints());
-    _playerMeleeDamage->setText(dude->meleeDamage());
+    getTextArea("armor_class")->setText(dude->armorClass());
+    getTextArea("action_points")->setText(dude->actionPoints());
+    getTextArea("melee_damage")->setText(dude->meleeDamage());
 
     // Tagged skills
     std::string txt = "";
@@ -268,27 +225,20 @@ void NewGameState::changeCharacter()
         }
     }
     values += "%"; // final % char to string
-    _playerSkills->setText(txt);
-    _playerSkillsValues->setText(values);
 
     // traits
-    txt = "";
-    for (unsigned int i=0; i<16; i++)
+    for (unsigned int i=0; i != 16; ++i)
     {
         if (dude->trait(i))
         {
-            if (txt != "")
-            {
-                txt += "\n";
-            }
-            txt += ResourceManager::msgFileType("text/english/game/trait.msg")->message(100 + i)->text();
+            txt += "\n" + ResourceManager::msgFileType("text/english/game/trait.msg")->message(100 + i)->text();
         }
     }
-    _playerTraits->setText(txt);
-
+    getTextArea("skills")->setText(txt);
+    getTextArea("skills_values")->setText(values);
 }
 
-std::string NewGameState::statToString(unsigned int stat)
+std::string NewGameState::_statToString(unsigned int stat)
 {
     auto msg = ResourceManager::msgFileType("text/english/game/stat.msg");
     return msg->message(stat+300)->text();
@@ -314,7 +264,6 @@ void NewGameState::onBeginGameButtonClick(std::shared_ptr<MouseEvent> event)
     player->setHitPoints(player->hitPointsMax());
     Game::getInstance()->setPlayer(player);
     Game::getInstance()->setState(new LocationState());
-
 }
 
 }

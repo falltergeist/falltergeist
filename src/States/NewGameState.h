@@ -22,7 +22,6 @@
 
 // C++ standard includes
 #include <vector>
-#include <memory>
 
 // Falltergeist includes
 #include "../Engine/State.h"
@@ -40,29 +39,18 @@ class GameDudeObject;
 class NewGameState : public State
 {
 protected:
-    ImageList* _characterImages = 0;
-    std::vector<GameDudeObject*> _characters;
-    TextArea* _playerStats1 = 0;
-    TextArea* _playerStats2 = 0;
-    TextArea* _playerStats3 = 0;
-    TextArea* _playerBio = 0;
-    TextArea* _playerName = 0;
-    TextArea* _playerHitPointsMax = 0;
-    TextArea* _playerArmorClass = 0;
-    TextArea* _playerActionPoints = 0;
-    TextArea* _playerMeleeDamage = 0;
-    TextArea* _playerSkills = 0;
-    TextArea* _playerSkillsValues = 0;
-    TextArea* _playerTraits = 0;
     unsigned char _selectedCharacter = 0;
+    std::vector<GameDudeObject*> _characters;
+
+    void _changeCharacter();
+    std::string _statToString(unsigned int stat);
+
 public:
     NewGameState();
     virtual ~NewGameState();
+
     virtual void init();
     virtual void think();
-
-    void changeCharacter();
-    std::string statToString(unsigned int stat);
 
     void onBackButtonClick(std::shared_ptr<MouseEvent> event);
     void onBeginGameButtonClick(std::shared_ptr<MouseEvent> event);

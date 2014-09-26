@@ -25,6 +25,8 @@
 #include "../Engine/Graphics/Renderer.h"
 #include "../Engine/Graphics/UI.h"
 #include "../Engine/State.h"
+#include "../UI/ImageList.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 
@@ -138,6 +140,21 @@ void State::addUI(std::vector<UI*> uis)
     {
         addUI(ui);
     }
+}
+
+ActiveUI* State::getActiveUI(std::string name)
+{
+    return dynamic_cast<ActiveUI*>(getUI(name));
+}
+
+TextArea* State::getTextArea(std::string name)
+{
+    return dynamic_cast<TextArea*>(getUI(name));
+}
+
+ImageList* State::getImageList(std::string name)
+{
+    return dynamic_cast<ImageList*>(getUI(name));
 }
 
 UI* State::getUI(std::string name)

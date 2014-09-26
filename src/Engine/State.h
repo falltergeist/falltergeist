@@ -34,11 +34,13 @@
 
 namespace Falltergeist
 {
-class Game;
-class Surface;
-class Event;
-class UI;
 class ActiveUI;
+class Event;
+class Game;
+class ImageList;
+class Surface;
+class TextArea;
+class UI;
 
 class State : public EventReciever
 {
@@ -65,6 +67,9 @@ public:
     void addUI(std::vector<UI*> uis);
 
     UI* getUI(std::string name);
+    ActiveUI* getActiveUI(std::string name);
+    TextArea* getTextArea(std::string name);
+    ImageList* getImageList(std::string name);
 
     int x();
     void setX(int x);
