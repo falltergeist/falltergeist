@@ -21,9 +21,9 @@
 #include <cmath>
 
 // Falltergeist includes
-#include "../Engine/AudioMixer.h"
-#include "../Engine/Exception.h"
-#include "../Engine/Logger.h"
+#include "../../Engine/Audio/AudioMixer.h"
+#include "../../Engine/Exception.h"
+#include "../../Engine/Logger.h"
 
 // Third party includes
 

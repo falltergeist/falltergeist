@@ -20,8 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/ActiveUI.h"
 #include "../Engine/Exception.h"
+#include "../Engine/Graphics/ActiveUI.h"
 #include "../Engine/Graphics/Texture.h"
 #include "../UI/Image.h"
 #include "../UI/MultistateImageButton.h"

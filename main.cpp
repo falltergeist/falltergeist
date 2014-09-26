@@ -20,15 +20,10 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "src/Engine/AudioMixer.h"
 #include "src/Engine/Exception.h"
 #include "src/Engine/Game.h"
-#include "src/Engine/Graphics/OpenGLRenderer.h"
-#include "src/Engine/Graphics/Texture.h"
 #include "src/Engine/Logger.h"
-#include "src/Engine/ResourceManager.h"
 #include "src/States/StartState.h"
-#include "src/VM/VM.h"
 
 // Third party includes
 #include <libfalltergeist.h>

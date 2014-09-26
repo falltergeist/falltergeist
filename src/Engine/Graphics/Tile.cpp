@@ -15,30 +15,52 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
-
-#ifndef FALLTERGEIST_ACTIVEUI_H
-#define FALLTERGEIST_ACTIVEUI_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/Event/Event.h"
-#include "../Engine/UI.h"
-#include "../Engine/Event/MouseEvent.h"
-#include "../Engine/Event/KeyboardEvent.h"
+#include "../../Engine/Game.h"
+#include "../../Engine/Graphics/Renderer.h"
+#include "../../Engine/Graphics/Texture.h"
+#include "../../Engine/Graphics/Tile.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class ActiveUI : public EventEmitter, public EventReciever, public UI
+Tile::Tile(unsigned int number, int x, int y)
 {
-public:
-    ActiveUI(int x = 0, int y = 0);
-    virtual void handle(std::shared_ptr<Event> event);
-};
+    _number = number;
+    _x = x;
+    _y = y;
+}
+
+unsigned int Tile::number()
+{
+    return _number;
+}
+
+int Tile::x()
+{
+    return _x;
+}
+
+int Tile::y()
+{
+    return _y;
+}
+
+unsigned int Tile::index()
+{
+    return _index;
+}
+
+void Tile::setIndex(unsigned int value)
+{
+    _index = value;
+}
 
 }
-#endif // FALLTERGEIST_ACTIVEUI_H

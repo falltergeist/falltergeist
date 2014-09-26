@@ -20,7 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/AnimatedPalette.h"
+#include "../../Engine/Graphics/AnimatedPalette.h"
 
 // Third party includes
 #include "SDL.h"

@@ -24,7 +24,7 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Engine/ActiveUI.h"
+#include "../Engine/Graphics/ActiveUI.h"
 #include "../UI/ImageList.h"
 // Third party includes
 

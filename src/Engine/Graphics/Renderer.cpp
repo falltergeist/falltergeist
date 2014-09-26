@@ -21,9 +21,9 @@
 
 // Falltergeist includes
 #include "../../Engine/Graphics/Renderer.h"
+#include "../../Engine/Graphics/UI.h"
 #include "../../Engine/Game.h"
 #include "../../Engine/State.h"
-#include "../../Engine/UI.h"
 #include "../../Engine/Input/Mouse.h"
 
 // Third party includes

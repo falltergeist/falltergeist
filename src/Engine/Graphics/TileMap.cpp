@@ -22,14 +22,14 @@
 #include <cmath>
 
 // Falltergeist includes
-#include "../Engine/Game.h"
-#include "../Engine/Graphics/Renderer.h"
-#include "../Engine/Graphics/Texture.h"
-#include "../Engine/LocationCamera.h"
-#include "../Engine/ResourceManager.h"
-#include "../Engine/Tile.h"
-#include "../Engine/TileMap.h"
-#include "../States/LocationState.h"
+#include "../../Engine/Game.h"
+#include "../../Engine/Graphics/Renderer.h"
+#include "../../Engine/Graphics/Texture.h"
+#include "../../Engine/Graphics/Tile.h"
+#include "../../Engine/Graphics/TileMap.h"
+#include "../../Engine/LocationCamera.h"
+#include "../../Engine/ResourceManager.h"
+#include "../../States/LocationState.h"
 
 // Thrird party includes
 

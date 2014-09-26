@@ -41,12 +41,8 @@ endif(NOT OPENGL_FOUND)
 include_directories(${OPENGL_INCLUDE_DIR})
 
 set(SOURCES main.cpp
-            src/Engine/ActiveUI.cpp
-            src/Engine/ActiveUI.h
-            src/Engine/AnimatedPalette.cpp
-            src/Engine/AnimatedPalette.h
-            src/Engine/AudioMixer.h
-            src/Engine/AudioMixer.cpp
+            src/Engine/Audio/AudioMixer.h
+            src/Engine/Audio/AudioMixer.cpp
             src/Engine/CrossPlatform.cpp
             src/Engine/CrossPlatform.h
             src/Engine/Event/Event.cpp
@@ -69,6 +65,10 @@ set(SOURCES main.cpp
             src/Engine/FontString.h
             src/Engine/Game.cpp
             src/Engine/Game.h
+            src/Engine/Graphics/ActiveUI.cpp
+            src/Engine/Graphics/ActiveUI.h
+            src/Engine/Graphics/AnimatedPalette.cpp
+            src/Engine/Graphics/AnimatedPalette.h
             src/Engine/Graphics/Animation.cpp
             src/Engine/Graphics/Animation.h
             src/Engine/Graphics/AnimationFrame.cpp
@@ -83,6 +83,12 @@ set(SOURCES main.cpp
             src/Engine/Graphics/Renderer.h
             src/Engine/Graphics/Texture.cpp
             src/Engine/Graphics/Texture.h
+            src/Engine/Graphics/Tile.cpp
+            src/Engine/Graphics/Tile.h
+            src/Engine/Graphics/TileMap.cpp
+            src/Engine/Graphics/TileMap.h
+            src/Engine/Graphics/UI.cpp
+            src/Engine/Graphics/UI.h
             src/Engine/Hexagon.cpp
             src/Engine/Hexagon.h
             src/Engine/Input/Mouse.cpp
@@ -109,12 +115,6 @@ set(SOURCES main.cpp
             src/Engine/Settings.h
             src/Engine/State.cpp
             src/Engine/State.h
-            src/Engine/Tile.cpp
-            src/Engine/Tile.h
-            src/Engine/TileMap.cpp
-            src/Engine/TileMap.h
-            src/Engine/UI.cpp
-            src/Engine/UI.h
             src/Game/GameDefines.h
             src/Game/GameDudeObject.cpp
             src/Game/GameDudeObject.h

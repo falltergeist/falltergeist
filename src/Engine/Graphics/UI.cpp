@@ -21,11 +21,11 @@
 #include <algorithm>
 
 // Falltergeist includes
-#include "../Engine/Game.h"
-#include "../Engine/Graphics/Renderer.h"
-#include "../Engine/Graphics/Texture.h"
-#include "../Engine/ResourceManager.h"
-#include "../Engine/UI.h"
+#include "../../Engine/Game.h"
+#include "../../Engine/Graphics/Renderer.h"
+#include "../../Engine/Graphics/Texture.h"
+#include "../../Engine/Graphics/UI.h"
+#include "../../Engine/ResourceManager.h"
 
 // Third party includes
 
