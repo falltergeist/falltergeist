@@ -198,6 +198,8 @@ set(SOURCES main.cpp
             src/States/SkilldexState.h
             src/States/StartState.cpp
             src/States/StartState.h
+            src/UI/AnimatedImage.cpp
+            src/UI/AnimatedImage.h
             src/UI/BigCounter.cpp
             src/UI/BigCounter.h
             src/UI/FpsCounter.cpp
