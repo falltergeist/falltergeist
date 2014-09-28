@@ -243,7 +243,7 @@ PlayerCreateState::PlayerCreateState() : State()
     addUI(line);
 
     _description = new TextArea("", backgroundX+350, backgroundY+315);
-    _description->setFont(font1_000000ff)->setWidth(145)->setHeight(120)->setWordWrap(true);
+    _description->setFont(font1_000000ff)->setWidth(140)->setHeight(120)->setWordWrap(true);
     addUI(_description);
 
 }
