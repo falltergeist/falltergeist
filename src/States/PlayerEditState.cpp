@@ -82,8 +82,6 @@ PlayerEditState::PlayerEditState() : State()
         std::stringstream ss;
         std::stringstream tmp;
         ss << "level_" << (i+1);
-        tmp.str() = "";
-//        tmp << msgEditor->message(113 + i)->text();
         _addTitle(ss.str(), msgEditor->message(113 + i)->text());      // title (113) Level:, (114) Exp:, (115) Next Level:
         // description: level: 510 stat, exp: 502 stat, levelnxt: editor 123
         //_addDescription(ss.str(), msgStats->message(120 + i)->text()); // level description
@@ -106,20 +104,6 @@ PlayerEditState::PlayerEditState() : State()
 //        _addCounter(ss.str(), std::shared_ptr<BigCounter>(new BigCounter(backgroundX+59, backgroundY+37+33*i)));       // stat value counter
 //        _addMask(ss.str(), std::shared_ptr<HiddenMask>(new HiddenMask(133, 29, backgroundX+14, backgroundY+36+33*i))); // stat click mask
     }
-
-//    auto level = player->level();
-//    int expNext = level*(level+1)*500; // experience needed for next level
-//    ss << msgEditor->message(113)->text() << " " << level; // (113) = "Level:"
-
-//    _addLabel("level", std::shared_ptr<TextArea>(new TextArea(ss.str(), backgroundX+30, backgroundY+280)));
-//    _addImage("level", std::shared_ptr<Image>(new Image("art/skilldex/level.frm")));
-//    _addTitle("level", msgEditor->message(144)->text());
-//    _addDescription("level", msgEditor->message(121)->text());
-
-//    ss << "Exp: " << player->experience() << "\n";
-//    ss << "Next Level: " << expNext;
-//    auto levelLabel = std::shared_ptr<TextArea>(new TextArea(ss.str(), backgroundX+30, backgroundY+290));
-//    addUI(levelLabel);
 
     // SKILLS
     std::string imagesSkills[] = { "gunsml", "gunbig", "energywp", "unarmed", "melee", "throwing", "firstaid", "doctor", "sneak",
