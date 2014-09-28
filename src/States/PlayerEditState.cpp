@@ -175,15 +175,15 @@ PlayerEditState::PlayerEditState() : State()
     _addLabel("label_3", new TextArea(msgEditor->message(117), backgroundX+383, backgroundY+5))->setFont(font3_b89c28ff);  // skills
     //_addLabel("label_4", new TextArea(msgEditor->message(138), backgroundX+428, backgroundY+233))->setFont(font3_b89c28ff); // tag skills
 
-    _addTitle("label_1", msgEditor->message(120)->text());
+    _addTitle("label_1", msgEditor->message(112)->text());
     _addTitle("label_2", msgEditor->message(146)->text());
     _addTitle("label_3", msgEditor->message(150)->text());
     _addTitle("label_4", msgEditor->message(144)->text());
-    _addDescription("label_1", msgEditor->message(121)->text());
+    _addDescription("label_1", msgEditor->message(131)->text());
     _addDescription("label_2", msgEditor->message(147)->text());
     _addDescription("label_3", msgEditor->message(151)->text());
     _addDescription("label_4", msgEditor->message(145)->text());
-    _addImage("label_1", new Image("art/skilldex/generic.frm"));
+    _addImage("label_1", new Image("art/skilldex/skills.frm"));
     _addImage("label_2", new Image("art/skilldex/traits.frm"));
     _addImage("label_3", new Image("art/skilldex/skills.frm"));
     _addImage("label_4", new Image("art/skilldex/skills.frm"));
