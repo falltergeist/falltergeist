@@ -26,6 +26,7 @@
 #include "../States/ExitConfirmState.h"
 #include "../States/GameMenuState.h"
 #include "../States/LocationState.h"
+#include "../States/SaveGameState.h"
 #include "../States/SettingsMenuState.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
@@ -70,6 +71,7 @@ void GameMenuState::init()
     // label: save game
     auto saveGameButtonLabel = new TextArea(msg->message(0), backgroundX+8, backgroundY+26);
     saveGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    saveGameButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &GameMenuState::onSaveGameButtonClick);
 
     // label: load game
     auto loadGameButtonLabel = new TextArea(msg->message(1), backgroundX+8, backgroundY+26+37);
@@ -101,6 +103,11 @@ void GameMenuState::init()
     addUI(preferencesButtonLabel);
     addUI(exitGameButtonLabel);
     addUI(doneButtonLabel);
+}
+
+void GameMenuState::onSaveGameButtonClick(std::shared_ptr<MouseEvent> event)
+{
+    Game::getInstance()->pushState(new SaveGameState());
 }
 
 void GameMenuState::onPreferencesButtonClick(std::shared_ptr<MouseEvent> event)

@@ -155,6 +155,14 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
             _textures.push_back(ResourceManager::texture("art/intrface/di_down1.frm"));
             _textures.push_back(ResourceManager::texture("art/intrface/di_down2.frm"));
             break;
+        case TYPE_SMALL_UP_ARROW:
+            _textures.push_back(ResourceManager::texture("art/intrface/uparwoff.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/uparwon.frm"));
+            break;
+        case TYPE_SMALL_DOWN_ARROW:
+            _textures.push_back(ResourceManager::texture("art/intrface/dnarwoff.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/dnarwon.frm"));
+            break;
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
     }
