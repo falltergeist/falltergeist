@@ -24,6 +24,8 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Font.h"
 #include "../Engine/FontString.h"
+#include "../Engine/Game.h"
+#include "../Engine/Graphics/Renderer.h"
 #include "../Engine/Graphics/Texture.h"
 #include "../Engine/ResourceManager.h"
 #include "../UI/TextArea.h"
@@ -479,6 +481,14 @@ unsigned int TextArea::getOutlineColor()
 unsigned int TextArea::timestampCreated()
 {
     return _timestampCreated;
+}
+
+void TextArea::render()
+{
+    if (text().length() > 0)
+    {
+        Game::getInstance()->renderer()->drawTexture(texture(), x(), y());
+    }
 }
 
 }
