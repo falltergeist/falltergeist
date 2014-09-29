@@ -487,7 +487,7 @@ void TextArea::render()
 {
     if (text().length() > 0)
     {
-        Game::getInstance()->renderer()->drawTexture(texture(), x(), y());
+        ActiveUI::render();
     }
 }
 
