@@ -89,7 +89,7 @@ void CritterDialogState::think()
 
 void CritterDialogState::setQuestion(std::string value)
 {
-    auto question = dynamic_cast<TextArea*>(getUI("question"));
+    auto question = getTextArea("question");
     question->setText(value);
 }
 
@@ -219,8 +219,6 @@ bool CritterDialogState::hasAnswers()
     return _answers.size() > 0;
 }
 
-
-
 void CritterDialogState::onAnswerClick(std::shared_ptr<Event> event)
 {
     auto sender = dynamic_cast<TextArea*>(event->emitter());
@@ -230,6 +228,7 @@ void CritterDialogState::onAnswerClick(std::shared_ptr<Event> event)
     {
         if (answer == sender)
         {
+            event->setHandled(true);
             _selectAnswer(i);
             return;
         }

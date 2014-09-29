@@ -176,9 +176,9 @@ void State::handle(std::shared_ptr<Event> event)
 {
     for (auto it = _ui.rbegin(); it != _ui.rend(); ++it)
     {
+        if (event->handled()) return;
         if (auto activeUI = dynamic_cast<ActiveUI*>(*it))
         {
-            if (event->handled()) return;
             activeUI->handle(event);
         }
     }
