@@ -41,6 +41,12 @@ protected:
     std::vector<AnimationFrame*> _animationFrames;
     unsigned int _currentFrame = 0;
     unsigned int _frameTicks = 0;
+    std::vector<Texture*> _slimeTextures;
+    std::vector<Texture*> _fireSlowTextures;
+    std::vector<Texture*> _fireFastTextures;
+    std::vector<Texture*> _shoreTextures;
+    std::vector<Texture*> _monitorTextures;
+    std::vector<Texture*> _reddotTextures;
 public:
     Animation();
     Animation(std::string frmName, unsigned int direction = 0);

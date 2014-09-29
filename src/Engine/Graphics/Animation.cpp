@@ -27,6 +27,7 @@
 #include "../../Engine/Graphics/Texture.h"
 #include "../../Engine/Game.h"
 #include "../../Engine/Graphics/Renderer.h"
+#include "../../Engine/Graphics/AnimatedPalette.h"
 #include "../../Engine/ResourceManager.h"
 
 // Third party includes
@@ -85,6 +86,120 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
         x += frm->width(direction);
         frames()->push_back(frame);
     }
+
+    if (frm->animatedPalette())
+    {
+        AnimatedPalette*  palette=Game::getInstance()->animatedPalette();
+        auto masks = frm->animatedMasks();
+
+        if ((*masks)[libfalltergeist::FrmFileType::MASK_MONITOR] != NULL)
+        {
+            for (auto i=0; i<5; i++)
+            {
+                unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
+
+                //modify
+                for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
+                {
+                    mask[j] = palette->color((*masks)[libfalltergeist::FrmFileType::MASK_MONITOR][j],i);
+                }
+                //set
+                auto texture = new Texture(frm->width(), frm->height());
+                texture->loadFromRGBA(mask);
+                _monitorTextures.push_back(texture);
+            }
+        }
+
+        if ((*masks)[libfalltergeist::FrmFileType::MASK_SLIME] != NULL)
+        {
+            for (auto i=0; i<4; i++)
+            {
+                unsigned int* mask = new unsigned int[frm->width() * frm->height()]();	
+
+                //modify
+                for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
+                {
+                    mask[j] = palette->color(((*masks)[libfalltergeist::FrmFileType::MASK_SLIME][j]),i);
+                }
+                //set
+                auto texture = new Texture(frm->width(), frm->height());
+                texture->loadFromRGBA(mask);
+                _slimeTextures.push_back(texture);
+            }
+        }
+
+        if ((*masks)[libfalltergeist::FrmFileType::MASK_SHORE] != NULL)
+        {
+            for (auto i=0; i<6; i++)
+            {
+                unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
+
+                //modify
+                for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
+                {
+                    mask[j] = palette->color(((*masks)[libfalltergeist::FrmFileType::MASK_SHORE][j]),i);
+                }
+                //set
+                auto texture = new Texture(frm->width(), frm->height());
+                texture->loadFromRGBA(mask);
+                _shoreTextures.push_back(texture);
+            }
+        }
+
+
+        if ((*masks)[libfalltergeist::FrmFileType::MASK_FIRE_SLOW] != NULL)
+        {
+            for (auto i=0; i<5; i++)
+            {
+                unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
+
+                //modify
+                for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
+                {
+                    mask[j] = palette->color(((*masks)[libfalltergeist::FrmFileType::MASK_FIRE_SLOW][j]),i);
+                }
+                //set
+                auto texture = new Texture(frm->width(), frm->height());
+                texture->loadFromRGBA(mask);
+                _fireSlowTextures.push_back(texture);
+            }
+        }
+
+
+        if ((*masks)[libfalltergeist::FrmFileType::MASK_FIRE_FAST] != NULL)
+        {
+            for (auto i=0; i<5; i++)
+            {
+                unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
+                //modify
+                for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
+                {
+                    mask[j] = palette->color(((*masks)[libfalltergeist::FrmFileType::MASK_FIRE_FAST][j]),i);
+                }
+                //set
+                auto texture = new Texture(frm->width(), frm->height());
+                texture->loadFromRGBA(mask);
+                _fireFastTextures.push_back(texture);
+            }
+        }
+
+        if ((*masks)[libfalltergeist::FrmFileType::MASK_REDDOT] != NULL)
+        {
+            for (auto i=0; i<16; i++)
+            {
+                unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
+                //modify
+                for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
+                {
+                    mask[j] = palette->color(((*masks)[libfalltergeist::FrmFileType::MASK_REDDOT][j]),i);
+                }
+                //set
+                auto texture = new Texture(frm->width(), frm->height());
+                texture->loadFromRGBA(mask);
+                _reddotTextures.push_back(texture);
+            }
+        }
+    }
 }
 
 
@@ -137,6 +252,26 @@ void Animation::render()
 {
     auto frame = frames()->at(_currentFrame);
     Game::getInstance()->renderer()->drawTexture(_texture, x(),y(), frame->x(), frame->y(), frame->width(), frame->height());
+
+    AnimatedPalette* pal = Game::getInstance()->animatedPalette();
+
+    if (pal->getCounter(libfalltergeist::FrmFileType::MASK_FIRE_FAST) < _fireFastTextures.size())
+        Game::getInstance()->renderer()->drawTexture(_fireFastTextures.at(pal->getCounter(libfalltergeist::FrmFileType::MASK_FIRE_FAST)), x(), y(), frame->x(), frame->y(), frame->width(), frame->height());
+
+    if (pal->getCounter(libfalltergeist::FrmFileType::MASK_FIRE_SLOW) < _fireSlowTextures.size())
+        Game::getInstance()->renderer()->drawTexture(_fireSlowTextures.at(pal->getCounter(libfalltergeist::FrmFileType::MASK_FIRE_SLOW)), x(), y(), frame->x(), frame->y(), frame->width(), frame->height());
+
+    if (pal->getCounter(libfalltergeist::FrmFileType::MASK_SLIME) < _slimeTextures.size())
+        Game::getInstance()->renderer()->drawTexture(_slimeTextures.at(pal->getCounter(libfalltergeist::FrmFileType::MASK_SLIME)), x(), y(), frame->x(), frame->y(), frame->width(), frame->height());
+
+    if (pal->getCounter(libfalltergeist::FrmFileType::MASK_SHORE) < _shoreTextures.size())
+        Game::getInstance()->renderer()->drawTexture(_shoreTextures.at(pal->getCounter(libfalltergeist::FrmFileType::MASK_SHORE)), x(), y(), frame->x(), frame->y(), frame->width(), frame->height());
+
+    if (pal->getCounter(libfalltergeist::FrmFileType::MASK_MONITOR) < _monitorTextures.size())
+        Game::getInstance()->renderer()->drawTexture(_monitorTextures.at(pal->getCounter(libfalltergeist::FrmFileType::MASK_MONITOR)), x(), y(), frame->x(), frame->y(), frame->width(), frame->height());
+
+    if (pal->getCounter(libfalltergeist::FrmFileType::MASK_REDDOT) < _reddotTextures.size())
+        Game::getInstance()->renderer()->drawTexture(_reddotTextures.at(pal->getCounter(libfalltergeist::FrmFileType::MASK_REDDOT)), x(), y(), frame->x(), frame->y(), frame->width(), frame->height());
 }
 
 unsigned int Animation::height()
