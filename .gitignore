@@ -8,5 +8,6 @@ falltergeist.layout
 falltergeist
 falltergeist.cbp
 *.bmp
+*.png
 .idea/
 *.autosave
