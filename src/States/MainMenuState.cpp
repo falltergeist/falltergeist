@@ -26,6 +26,7 @@
 #include "../Engine/Graphics/Renderer.h"
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/ResourceManager.h"
+#include "../States/LoadGameState.h"
 #include "../States/MainMenuState.h"
 #include "../States/NewGameState.h"
 #include "../States/SettingsMenuState.h"
@@ -59,19 +60,25 @@ void MainMenuState::init()
 
     addUI("background", new Image("art/intrface/mainmenu.frm"));
 
-    addUI("intro_button", new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 29, 19));
+    addUI("intro_button", new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19));
 
-    auto newGameButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 29, 19 + 41));
+    // new game button
+    auto newGameButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41));
     newGameButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod)&MainMenuState::onNewGameButtonClick);
 
-    addUI("loadgame_button", new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 29, 19 + 41*2));
+    // load game button
+    auto loadGameButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*2));
+    loadGameButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod)&MainMenuState::onLoadGameButtonClick);
 
-    auto settingsButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 29, 19 + 41*3));
+    // settings button
+    auto settingsButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*3));
     settingsButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MainMenuState::onSettingsButtonClick);
 
-    addUI("credits_button", new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 29, 19 + 41*4));
+    // credits button
+    addUI("credits_button", new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*4));
 
-    auto exitButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 29, 19 + 41*5));
+    // exit button
+    auto exitButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*5));
     exitButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MainMenuState::onExitButtonClick);
 
     auto msg = ResourceManager::msgFileType("text/english/game/misc.msg");
@@ -118,6 +125,11 @@ void MainMenuState::onExitButtonClick(std::shared_ptr<MouseEvent> event)
 void MainMenuState::onNewGameButtonClick(std::shared_ptr<MouseEvent> event)
 {
     Game::getInstance()->pushState(new NewGameState());
+}
+
+void MainMenuState::onLoadGameButtonClick(std::shared_ptr<MouseEvent> event)
+{
+    Game::getInstance()->pushState(new LoadGameState());
 }
 
 void MainMenuState::onSettingsButtonClick(std::shared_ptr<MouseEvent> event)
