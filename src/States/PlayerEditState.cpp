@@ -83,7 +83,20 @@ PlayerEditState::PlayerEditState() : State()
         std::stringstream tmp;
         std::string line = "";
         ss << "level_" << (i+1);
-        _addTitle(ss.str(), msgEditor->message(113 + i)->text());      // title (113) Level:, (114) Exp:, (115) Next Level:
+        // Level 401 stat, Experience 402 stat, Next level 122 editor
+        switch (i)
+        {
+            case 0:
+                line = msgStats->message(401)->text();
+                break;
+            case 1:
+                line = msgStats->message(402)->text();
+                break;
+            case 2:
+                line = msgEditor->message(122)->text();
+                break;
+        }
+        _addTitle(ss.str(), line);
         // description: level: 501 stat, exp: 502 stat, levelnxt: editor 123
         switch (i)
         {
