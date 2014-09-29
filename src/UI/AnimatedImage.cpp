@@ -40,7 +40,7 @@ AnimatedImage::AnimatedImage(std::shared_ptr<libfalltergeist::FrmFileType> frm, 
     setXOffset(frm->offsetX(direction) + frm->shiftX(direction) - width()/2);
     setYOffset(frm->offsetY(direction) + frm->shiftY(direction) - height());
 
-    AnimatedPalette*  palette=new AnimatedPalette();
+    AnimatedPalette*  palette=Game::getInstance()->animatedPalette();
     auto masks = frm->animatedMasks();
 
     if ((*masks)[libfalltergeist::FrmFileType::MASK_MONITOR] != NULL)
