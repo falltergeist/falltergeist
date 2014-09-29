@@ -88,6 +88,7 @@ public:
     std::shared_ptr<Font> font();
 
     virtual Texture* texture();
+    virtual void render();
 
     unsigned int timestampCreated();
 };
