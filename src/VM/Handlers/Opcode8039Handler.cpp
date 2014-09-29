@@ -51,7 +51,7 @@ void Opcode8039Handler::_run()
                 {
                     auto p1 = static_cast<std::string*>(_vm->popDataPointer());
                     std::string string1 = (p1 ? *p1 : "");
-                    std::string string2 = (p2 ? *p1 : "");
+                    std::string string2 = (p2 ? *p2 : "");
                     _vm->pushDataPointer(new std::string(string1 + string2));
                     break;
                 }
