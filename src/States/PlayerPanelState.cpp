@@ -27,6 +27,7 @@
 #include "../States/GameMenuState.h"
 #include "../States/InventoryState.h"
 #include "../States/PipBoyState.h"
+#include "../States/PlayerEditState.h"
 #include "../States/PlayerPanelState.h"
 #include "../States/SkilldexState.h"
 #include "../UI/Image.h"
@@ -87,6 +88,7 @@ void PlayerPanelState::init()
     addUI("map_button", new ImageButton(ImageButton::TYPE_PANEL_MAP, 526, 39));
 
     addUI("cha_button", new ImageButton(ImageButton::TYPE_PANEL_CHA, 526, 58));
+    getActiveUI("cha_button")->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerPanelState::onChaButtonClick);
 
     addUI("pip_button", new ImageButton(ImageButton::TYPE_PANEL_PIP, 526, 77));
     getActiveUI("pip_button")->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerPanelState::onPipBoyButtonClick);
@@ -147,6 +149,11 @@ void PlayerPanelState::onOptionsButtonClick(std::shared_ptr<MouseEvent> event)
 void PlayerPanelState::onSkilldexButtonClick(std::shared_ptr<MouseEvent> event)
 {
     Game::getInstance()->pushState(new SkilldexState());
+}
+
+void PlayerPanelState::onChaButtonClick(std::shared_ptr<MouseEvent> event)
+{
+    Game::getInstance()->pushState(new PlayerEditState());
 }
 
 void PlayerPanelState::onPipBoyButtonClick(std::shared_ptr<MouseEvent> event)

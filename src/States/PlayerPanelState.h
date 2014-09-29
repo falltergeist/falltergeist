@@ -46,6 +46,7 @@ public:
     void onInventoryButtonClick(std::shared_ptr<MouseEvent> event);
     void onOptionsButtonClick(std::shared_ptr<MouseEvent> event);
     void onSkilldexButtonClick(std::shared_ptr<MouseEvent> event);
+    void onChaButtonClick(std::shared_ptr<MouseEvent> event);
     void onPipBoyButtonClick(std::shared_ptr<MouseEvent> event);
 
 };
