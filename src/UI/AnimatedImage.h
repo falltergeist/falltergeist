@@ -43,26 +43,12 @@ protected:
     std::vector<Texture*> _shoreTextures;
     std::vector<Texture*> _monitorTextures;
     std::vector<Texture*> _reddotTextures;
-    unsigned int _slimeTicks;
-    unsigned int _slimeCounter;
-    unsigned int _fireSlowTicks;
-    unsigned int _fireSlowCounter;
-    unsigned int _fireFastTicks;
-    unsigned int _fireFastCounter;
-    unsigned int _monitorsTicks;
-    unsigned int _monitorsCounter;
-    unsigned int _shoreTicks;
-    unsigned int _shoreCounter;
-    unsigned int _blinkingRedTicks;
-    unsigned char _blinkingRedCounter;
-    short _blinkingRed;
 public:
     AnimatedImage(std::shared_ptr<libfalltergeist::FrmFileType> frm, unsigned int direction);
     unsigned int width();
     unsigned int height();
     ~AnimatedImage();
     void render();
-    void think();
 };
 
 }

@@ -21,8 +21,10 @@
 
 // Falltergeist includes
 #include "../../Engine/Graphics/AnimatedPalette.h"
+#include <libfalltergeist.h>
 
 // Third party includes
+#include <SDL.h>
 
 namespace Falltergeist
 {
@@ -43,8 +45,6 @@ AnimatedPalette::AnimatedPalette()
 
     _fireFastPalette = new unsigned int[5];
     _fireFastPalette[0] = 0x470000FF; _fireFastPalette[1] = 0x7B0000FF; _fireFastPalette[2] = 0xB30000FF; _fireFastPalette[3] = 0x7B0000FF; _fireFastPalette[4] = 0x470000FF;
-
-    _blinkingRed = 252;
 }
 
 AnimatedPalette::~AnimatedPalette()
@@ -99,6 +99,80 @@ unsigned int AnimatedPalette::color(unsigned char index, unsigned char counter)
     return 0x00000000;
 }
 
+void AnimatedPalette::think()
+{
+    if (_monitorsTicks + 100 < SDL_GetTicks())
+    {
+        _monitorsTicks = SDL_GetTicks();
+
+        _monitorsCounter++;
+        if (_monitorsCounter >= 5) _monitorsCounter = 0;
+    }
+
+    if (_slimeTicks + 200 < SDL_GetTicks())
+    {
+        _slimeTicks = SDL_GetTicks();
+
+        _slimeCounter++;
+        if (_slimeCounter >= 4) _slimeCounter = 0;
+    }
+
+    if (_shoreTicks + 200 < SDL_GetTicks())
+    {
+        _shoreTicks = SDL_GetTicks();
+
+        _shoreCounter++;
+        if (_shoreCounter >= 6) _slimeCounter = 0;
+    }
+
+    if (_fireSlowTicks + 200 < SDL_GetTicks())
+    {
+        _fireSlowTicks = SDL_GetTicks();
+
+        _fireSlowCounter++;
+        if (_fireSlowCounter >= 5) _fireSlowCounter = 0;
+    }
+
+    if (_fireFastTicks + 142 < SDL_GetTicks())
+    {
+        _fireFastTicks = SDL_GetTicks();
+
+        _fireFastCounter++;
+        if (_fireFastCounter >= 5) _fireFastCounter = 0;
+    }
+
+    if (_blinkingRedTicks + 33 < SDL_GetTicks())
+    {
+        _blinkingRedTicks = SDL_GetTicks();
+
+        if ((_blinkingRedCounter == 0) || (_blinkingRedCounter == 15))
+        {
+            _blinkingRed = -_blinkingRed;
+        }
+
+        _blinkingRedCounter = _blinkingRed + _blinkingRedCounter;
+    }
+}
+
+unsigned int AnimatedPalette::getCounter(unsigned char type)
+{
+    switch (type)
+    {
+        case libfalltergeist::FrmFileType::MASK_SLIME:
+            return _slimeCounter;
+        case libfalltergeist::FrmFileType::MASK_MONITOR:
+            return _monitorsCounter;
+        case libfalltergeist::FrmFileType::MASK_SHORE:
+            return _shoreCounter;
+        case libfalltergeist::FrmFileType::MASK_FIRE_FAST:
+            return _fireFastCounter;
+        case libfalltergeist::FrmFileType::MASK_FIRE_SLOW:
+            return _fireSlowCounter;
+        case libfalltergeist::FrmFileType::MASK_REDDOT:
+            return _blinkingRedCounter;
+    }
+    return 0;
+}
 
 
 }

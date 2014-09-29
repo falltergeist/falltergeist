@@ -38,12 +38,25 @@ protected:
     unsigned int * _fireFastPalette;
     unsigned int * _monitorsPalette;
     unsigned int * _shorePalette;
-    unsigned char _blinkingRed;
-
+    unsigned int _slimeTicks = 0;
+    unsigned int _slimeCounter = 0;
+    unsigned int _fireSlowTicks = 0;
+    unsigned int _fireSlowCounter = 0;
+    unsigned int _fireFastTicks = 0;
+    unsigned int _fireFastCounter = 0;
+    unsigned int _monitorsTicks = 0;
+    unsigned int _monitorsCounter = 0;
+    unsigned int _shoreTicks = 0;
+    unsigned int _shoreCounter = 0;
+    unsigned int _blinkingRedTicks = 0;
+    unsigned char _blinkingRedCounter = 0;
+    short _blinkingRed = -1;
 public:
     AnimatedPalette();
     ~AnimatedPalette();
     unsigned int color(unsigned char index, unsigned char counter);
+    void think();
+    unsigned int getCounter(unsigned char type);
 };
 
 }

@@ -45,6 +45,7 @@ class Renderer;
 class UI;
 class TextArea;
 class EngineSettings;
+class AnimatedPalette;
 
 class Game
 {
@@ -64,6 +65,7 @@ protected:
            TextArea* _mousePosition = 0;
            TextArea* _falltergeistVersion = 0;
      EngineSettings* _engineSettings = 0;
+    AnimatedPalette* _animatedPalette = 0;
     bool _quit = false;
     SDL_Event _event;
     bool _initialized = false;
@@ -103,6 +105,7 @@ public:
     int GVAR(unsigned int number);
 
     EngineSettings* engineSettings();
+    AnimatedPalette* animatedPalette();
 
 };
 

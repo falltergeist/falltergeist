@@ -105,6 +105,7 @@ void Game::_initialize()
 
     _falltergeistVersion = new TextArea(version, 3, renderer()->height() - 10);
     _mousePosition = new TextArea("", renderer()->width() - 55, 14);
+    _animatedPalette = new AnimatedPalette();
 }
 
 Game::~Game()
@@ -356,7 +357,7 @@ void Game::think()
     _fpsCounter->think();
     _mouse->think();
 
-    //Surface::animatedPalette->think();
+    _animatedPalette->think();
 
     _mousePosition->setText(std::to_string(mouse()->x()) + " : " + std::to_string(mouse()->y()));
 
@@ -378,6 +379,11 @@ void Game::render()
     _mousePosition->render();
     _mouse->render();
     renderer()->endFrame();
+}
+
+AnimatedPalette* Game::animatedPalette()
+{
+    return _animatedPalette;
 }
 
 }

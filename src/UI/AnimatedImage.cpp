@@ -40,7 +40,7 @@ AnimatedImage::AnimatedImage(std::shared_ptr<libfalltergeist::FrmFileType> frm, 
     setXOffset(frm->offsetX(direction) + frm->shiftX(direction) - width()/2);
     setYOffset(frm->offsetY(direction) + frm->shiftY(direction) - height());
 
-    AnimatedPalette*  palette=new AnimatedPalette();
+    AnimatedPalette*  palette=Game::getInstance()->animatedPalette();
     auto masks = frm->animatedMasks();
 
     if ((*masks)[libfalltergeist::FrmFileType::MASK_MONITOR] != NULL)
@@ -152,7 +152,6 @@ AnimatedImage::AnimatedImage(std::shared_ptr<libfalltergeist::FrmFileType> frm, 
             _reddotTextures.push_back(texture);
         }
     }
-    _blinkingRed = -1;
 }
 
 AnimatedImage::~AnimatedImage()
@@ -172,68 +171,25 @@ unsigned int AnimatedImage::height()
 void AnimatedImage::render()
 {
     Game::getInstance()->renderer()->drawTexture(texture(), x(), y());
+    AnimatedPalette* pal = Game::getInstance()->animatedPalette();
 
-    if (_fireFastCounter < _fireFastTextures.size()) Game::getInstance()->renderer()->drawTexture(_fireFastTextures.at(_fireFastCounter), x(), y());
-    if (_fireSlowCounter < _fireSlowTextures.size()) Game::getInstance()->renderer()->drawTexture(_fireSlowTextures.at(_fireSlowCounter), x(), y());
-    if (_monitorsCounter < _monitorTextures.size()) Game::getInstance()->renderer()->drawTexture(_monitorTextures.at(_monitorsCounter), x(), y());
-    if (_slimeCounter < _slimeTextures.size()) Game::getInstance()->renderer()->drawTexture(_slimeTextures.at(_slimeCounter), x(), y());
-    if (_shoreCounter < _shoreTextures.size()) Game::getInstance()->renderer()->drawTexture(_shoreTextures.at(_shoreCounter), x(), y());
-    if (_blinkingRedCounter < _reddotTextures.size()) Game::getInstance()->renderer()->drawTexture(_reddotTextures.at(_blinkingRedCounter), x(), y());
-}
+    if (pal->getCounter(libfalltergeist::FrmFileType::MASK_FIRE_FAST) < _fireFastTextures.size())
+        Game::getInstance()->renderer()->drawTexture(_fireFastTextures.at(pal->getCounter(libfalltergeist::FrmFileType::MASK_FIRE_FAST)), x(), y());
 
-void AnimatedImage::think()
-{
-    if (_monitorsTicks + 100 < SDL_GetTicks())
-    {
-        _monitorsTicks = SDL_GetTicks();
+    if (pal->getCounter(libfalltergeist::FrmFileType::MASK_FIRE_SLOW) < _fireSlowTextures.size())
+        Game::getInstance()->renderer()->drawTexture(_fireSlowTextures.at(pal->getCounter(libfalltergeist::FrmFileType::MASK_FIRE_SLOW)), x(), y());
 
-        _monitorsCounter++;
-        if (_monitorsCounter >= 4) _monitorsCounter = 0;
-    }
+    if (pal->getCounter(libfalltergeist::FrmFileType::MASK_SLIME) < _slimeTextures.size())
+        Game::getInstance()->renderer()->drawTexture(_slimeTextures.at(pal->getCounter(libfalltergeist::FrmFileType::MASK_SLIME)), x(), y());
 
-    if (_slimeTicks + 200 < SDL_GetTicks())
-    {
-        _slimeTicks = SDL_GetTicks();
+    if (pal->getCounter(libfalltergeist::FrmFileType::MASK_SHORE) < _shoreTextures.size())
+        Game::getInstance()->renderer()->drawTexture(_shoreTextures.at(pal->getCounter(libfalltergeist::FrmFileType::MASK_SHORE)), x(), y());
 
-        _slimeCounter++;
-        if (_slimeCounter >= 3) _slimeCounter = 0;
-    }
+    if (pal->getCounter(libfalltergeist::FrmFileType::MASK_MONITOR) < _monitorTextures.size())
+        Game::getInstance()->renderer()->drawTexture(_monitorTextures.at(pal->getCounter(libfalltergeist::FrmFileType::MASK_MONITOR)), x(), y());
 
-    if (_shoreTicks + 200 < SDL_GetTicks())
-    {
-        _shoreTicks = SDL_GetTicks();
-
-        _shoreCounter++;
-        if (_shoreCounter >= 5) _slimeCounter = 0;
-    }
-
-    if (_fireSlowTicks + 200 < SDL_GetTicks())
-    {
-        _fireSlowTicks = SDL_GetTicks();
-
-        _fireSlowCounter++;
-        if (_fireSlowCounter >= 4) _fireSlowCounter = 0;
-    }
-
-    if (_fireFastTicks + 142 < SDL_GetTicks())
-    {
-        _fireFastTicks = SDL_GetTicks();
-
-        _fireFastCounter++;
-        if (_fireFastCounter >= 4) _fireFastCounter = 0;
-    }
-
-    if (_blinkingRedTicks + 33 < SDL_GetTicks())
-    {
-        _blinkingRedTicks = SDL_GetTicks();
-
-        if ((_blinkingRedCounter == 0) || (_blinkingRedCounter == 15))
-        {
-            _blinkingRed = -_blinkingRed;
-        }
-
-        _blinkingRedCounter = _blinkingRed + _blinkingRedCounter;
-    }
+    if (pal->getCounter(libfalltergeist::FrmFileType::MASK_REDDOT) < _reddotTextures.size())
+        Game::getInstance()->renderer()->drawTexture(_reddotTextures.at(pal->getCounter(libfalltergeist::FrmFileType::MASK_REDDOT)), x(), y());
 }
 
 }
