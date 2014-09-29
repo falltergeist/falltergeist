@@ -162,10 +162,10 @@ PlayerCreateState::PlayerCreateState() : State()
     _addLabel("name",    new TextArea(Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7))->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setFont(font3_b89c28ff);
     _addLabel("age",     new TextArea("AGE", backgroundX+163, backgroundY+7))->setFont(font3_b89c28ff);
     _addLabel("gender",  new TextArea(msgEditor->message(Game::getInstance()->player()->gender() == 0 ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff); // 0 -male 1 - female
-    _addLabel("label_1", new TextArea(msgEditor->message(112), backgroundX+18, backgroundY+286))->setFont(font3_b89c28ff); // ДОП. ОЧКИ
-    _addLabel("label_2", new TextArea(msgEditor->message(139), backgroundX+50, backgroundY+326))->setFont(font3_b89c28ff); // ДОП. ОСОБЕННОСТИ
-    _addLabel("label_3", new TextArea(msgEditor->message(117), backgroundX+383, backgroundY+5))->setFont(font3_b89c28ff);  // НАВЫКИ
-    _addLabel("label_4", new TextArea(msgEditor->message(138), backgroundX+428, backgroundY+233))->setFont(font3_b89c28ff); // ОСНОВН.
+    _addLabel("label_1", new TextArea(msgEditor->message(116), backgroundX+14, backgroundY+286))->setFont(font3_b89c28ff);  // char points
+    _addLabel("label_2", new TextArea(msgEditor->message(139), backgroundX+50, backgroundY+326))->setFont(font3_b89c28ff);  // optinal traits
+    _addLabel("label_3", new TextArea(msgEditor->message(117), backgroundX+383, backgroundY+5))->setFont(font3_b89c28ff);   // skills
+    _addLabel("label_4", new TextArea(msgEditor->message(138), backgroundX+428, backgroundY+233))->setFont(font3_b89c28ff); // tag skills
     _addTitle("label_1", msgEditor->message(120)->text());
     _addTitle("label_2", msgEditor->message(146)->text());
     _addTitle("label_3", msgEditor->message(150)->text());
