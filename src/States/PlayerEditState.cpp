@@ -81,11 +81,24 @@ PlayerEditState::PlayerEditState() : State()
     {
         std::stringstream ss;
         std::stringstream tmp;
+        std::string line = "";
         ss << "level_" << (i+1);
         _addTitle(ss.str(), msgEditor->message(113 + i)->text());      // title (113) Level:, (114) Exp:, (115) Next Level:
-        // description: level: 510 stat, exp: 502 stat, levelnxt: editor 123
-        //_addDescription(ss.str(), msgStats->message(120 + i)->text()); // level description
-        _addImage(ss.str(), new Image("art/skilldex/" + imagesStats[i] + ".frm")); // stat image
+        // description: level: 501 stat, exp: 502 stat, levelnxt: editor 123
+        switch (i)
+        {
+            case 0:
+                line = msgStats->message(501)->text();
+                break;
+            case 1:
+                line = msgStats->message(502)->text();
+                break;
+            case 2:
+                line = msgEditor->message(123)->text();
+                break;
+        }
+        _addDescription(ss.str(), line); // level description
+        _addImage(ss.str(), new Image("art/skilldex/" + imagesLevel[i] + ".frm")); // stat image
         tmp.str() = "";
         tmp << msgEditor->message(113 + i)->text() << " ";
         switch (i)
@@ -518,8 +531,8 @@ void PlayerEditState::onLabelClick(std::shared_ptr<MouseEvent> event)
         if (it->second == event->emitter())
         {
 //            if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0 || name.find("label_") == 0 || name.find("level_") == 0 )
-//            if (name.find("stats_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0 || name.find("label_") == 0 || name.find("level_") == 0 )
-            if (name.find("stats_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0 || name.find("label_") == 0 )
+            if (name.find("stats_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0 || name.find("label_") == 0 || name.find("level_") == 0 )
+//            if (name.find("stats_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0 || name.find("label_") == 0 )
             {
                 std::string label = name;
                 if (name.find("_value") > 0)
