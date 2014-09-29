@@ -192,6 +192,8 @@ set(SOURCES main.cpp
             src/States/PlayerEditNameState.h
             src/States/PlayerPanelState.cpp
             src/States/PlayerPanelState.h
+            src/States/SaveGameState.cpp
+            src/States/SaveGameState.h
             src/States/SettingsMenuState.cpp
             src/States/SettingsMenuState.h
             src/States/SkilldexState.cpp
