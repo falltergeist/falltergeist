@@ -170,6 +170,8 @@ set(SOURCES main.cpp
             src/States/GameMenuState.h
             src/States/InventoryState.cpp
             src/States/InventoryState.h
+            src/States/LoadGameState.cpp
+            src/States/LoadGameState.h
             src/States/LocationState.cpp
             src/States/LocationState.h
             src/States/MainMenuState.cpp

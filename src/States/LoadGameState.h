@@ -15,10 +15,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-#ifndef FALLTERGEIST_GAMEMENUSTATE_H
-#define FALLTERGEIST_GAMEMENUSTATE_H
+#ifndef FALLTERGEIST_LOADGAMESTATE_H
+#define FALLTERGEIST_LOADGAMESTATE_H
 
 // C++ standard includes
 
@@ -30,19 +31,17 @@
 namespace Falltergeist
 {
 
-class GameMenuState : public State
+class LoadGameState : public State
 {
 public:
-    GameMenuState();
-
+    LoadGameState();
+    virtual ~LoadGameState();
     virtual void init();
 
-    void onSaveGameButtonClick(std::shared_ptr<MouseEvent> event);
-    void onLoadGameButtonClick(std::shared_ptr<MouseEvent> event);
-    void onPreferencesButtonClick(std::shared_ptr<MouseEvent> event);
-    void onExitButtonClick(std::shared_ptr<MouseEvent> event);
     void onDoneButtonClick(std::shared_ptr<MouseEvent> event);
+    void onCancelButtonClick(std::shared_ptr<MouseEvent> event);
+private:
 };
 
 }
-#endif // FALLTERGEIST_GAMEMENUSTATE_H
+#endif // FALLTERGEIST_LOADGAMESTATE_H
