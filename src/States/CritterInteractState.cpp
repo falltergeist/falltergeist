@@ -23,8 +23,8 @@
 // Falltergeist includes
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
-#include "../Engine/PathFinding/Hexagon.h"
 #include "../Engine/LocationCamera.h"
+#include "../Engine/PathFinding/Hexagon.h"
 #include "../Game/GameCritterObject.h"
 #include "../States/CritterInteractState.h"
 #include "../States/LocationState.h"

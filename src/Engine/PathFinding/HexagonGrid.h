@@ -21,6 +21,7 @@
 #define FALLTERGEIST_HEXAGONGRID_H
 
 // C++ standard includes
+#include <vector>
 
 // Falltergeist includes
 
@@ -28,11 +29,16 @@
 
 namespace Falltergeist
 {
+class Hexagon;
 
 class HexagonGrid
 {
+protected:
+    std::vector<Hexagon*> _hexagons;
 public:
     HexagonGrid();
+    std::vector<Hexagon*>* hexagons();
+    unsigned int distance(Hexagon* from, Hexagon* to);
 };
 
 }
