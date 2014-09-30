@@ -173,7 +173,7 @@ std::string CrossPlatform::findFalloutDataPath()
     }
     catch (Exception e)
     {
-        Logger::error() << e.message() << std::endl;
+        Logger::error() << e.what() << std::endl;
     }
 
     for (auto &directory : directories)

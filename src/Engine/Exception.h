@@ -36,10 +36,10 @@ class Exception : std::exception
 private:
     std::string _message;
 public:
-    Exception(std::string message) throw();
-    ~Exception() throw();
-
-    std::string message() throw();
+    explicit Exception(const char* message);
+    explicit Exception(const std::string& message);
+    virtual ~Exception() throw();
+    virtual const char* what() const throw();
 };
 
 }

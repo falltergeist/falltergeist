@@ -37,16 +37,16 @@ int main(int argc, char* argv[])
     {
         auto game = Game::getInstance();
         game->setState(new StartState());
-        game->run();        
+        game->run();
         return 0;
     }
-    catch(libfalltergeist::Exception &e)
+    catch(const libfalltergeist::Exception &e)
     {
         Logger::critical() << e.what() << std::endl;
     }
-    catch(Exception &e)
+    catch(const Exception &e)
     {
-        Logger::critical() << e.message() << std::endl;
+        Logger::critical() << e.what() << std::endl;
     }
     catch (const std::exception &e)
     {
