@@ -62,8 +62,8 @@ void TileMap::render()
 
         if (tile->x() + 80 < (int)camera->x()) continue;
         if (tile->y() + 36 < (int)camera->y()) continue;
-        if (tile->x() - camera->width()  > (int)camera->x()) continue;
-        if (tile->y() - camera->height() > (int)camera->y()) continue;
+        if (tile->x() - (int)camera->width()  > (int)camera->x()) continue;
+        if (tile->y() - (int)camera->height() > (int)camera->y()) continue;
 
         auto x = tile->x() - camera->x();
         auto y = tile->y() - camera->y();
@@ -72,8 +72,6 @@ void TileMap::render()
 
         renderer->drawTexture(_texture, x, y, sx, sy, 80, 36);
     }
-
-
 }
 
 void TileMap::_generateTexture()
