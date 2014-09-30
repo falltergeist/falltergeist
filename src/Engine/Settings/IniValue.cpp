@@ -101,24 +101,42 @@ IniValue::IniValue(const IniValue &rhs) : _tag(rhs._tag)
     }
 }
 
-std::ostream &operator<<(std::ostream &os, IniValue const &iv)
+std::string IniValue::tagString(IniValue::Tag tag)
 {
-    switch (iv._tag)
+    switch (tag)
     {
         case IniValue::Tag::INTEGER:
-            os << iv._integerVal;
-            break;
+            return "integer";
         case IniValue::Tag::DOUBLE:
-            os << iv._doubleVal;
-            break;
+            return "double";
         case IniValue::Tag::BOOLEAN:
-            os << (iv._booleanVal ? "true" : "false");
-            break;
+            return "bool";
         case IniValue::Tag::STRING:
-            os << iv._stringVal;
-            break;
+            return "string";
     }
-    return os;
+
+    return "unreachable";
 }
 
+std::string IniValue::value() const
+{
+    switch (_tag)
+    {
+        case IniValue::Tag::INTEGER:
+            return std::to_string(_integerVal);
+        case IniValue::Tag::DOUBLE:
+            return std::to_string(_doubleVal);
+        case IniValue::Tag::BOOLEAN:
+            return _booleanVal ? "true" : "false";
+        case IniValue::Tag::STRING:
+            return _stringVal;
+    }
+
+    return "unreachable";
+}
+
+IniValue::Tag IniValue::tag() const
+{
+    return _tag;
+}
 }

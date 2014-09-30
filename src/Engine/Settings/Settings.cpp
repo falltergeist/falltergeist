@@ -79,7 +79,15 @@ EngineSettings::EngineSettings()
             // Write default configuration
             IniWriter writer(ini);
             std::ofstream os(configFile);
-            writer.write(os);
+
+            if (os)
+            {
+                writer.write(os);
+            }
+            else
+            {
+                Logger::error("[INI]") << "Cannot write to file `" << configFile << "`" << std::endl;
+            }
         }
         catch (const std::runtime_error &e)
         {

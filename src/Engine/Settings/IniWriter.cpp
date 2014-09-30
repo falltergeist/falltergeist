@@ -49,7 +49,7 @@ void IniWriter::write(std::ostream &stream)
 
         for (auto &properties : *section.second)
         {
-            stream << properties.first <<  "=" << properties.second << std::endl;
+            stream << properties.first <<  "=" << properties.second.value() << std::endl;
         }
 
         stream << std::endl;

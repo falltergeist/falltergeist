@@ -79,29 +79,12 @@ bool IniSection::_hasType(PropertyMapConstIterator iter, IniValue::Tag tag)
     if (iter->second._tag == tag) return true;
     Logger::warning("INI")
             << "Property `" << iter->first
-            << " `expected to be " << _tagToString(tag)
-            << " but " << _tagToString(iter->second._tag)
-            << " value encountered: " << _valueToString(iter->second)
+            << " `expected to be " << IniValue::tagString(tag)
+            << " but " << IniValue::tagString(iter->second.tag())
+            << " value encountered: " << iter->second.value()
             << std::endl;
 
     return false;
-}
-
-const char *IniSection::_tagToString(IniValue::Tag tag)
-{
-    switch (tag)
-    {
-        case IniValue::Tag::INTEGER:
-            return "integer";
-        case IniValue::Tag::DOUBLE:
-            return "double";
-        case IniValue::Tag::BOOLEAN:
-            return "bool";
-        case IniValue::Tag::STRING:
-            return "string";
-    }
-
-    return "unreachable";
 }
 
 void IniSection::setPropertyInt(const std::string &name, int value)
@@ -127,23 +110,6 @@ void IniSection::setPropertyString(const std::string &name, const std::string &v
 bool IniSection::hasProperty(const std::string &name) const
 {
     return _properties.find(name) != _properties.end();
-}
-
-std::string IniSection::_valueToString(const IniValue &value)
-{
-    switch (value._tag)
-    {
-        case IniValue::Tag::INTEGER:
-            return std::to_string(value._integerVal);
-        case IniValue::Tag::DOUBLE:
-            return std::to_string(value._doubleVal);
-        case IniValue::Tag::BOOLEAN:
-            return value._booleanVal ? "true" : "false";
-        case IniValue::Tag::STRING:
-            return value._stringVal;
-    }
-
-    return "unreachable";
 }
 
 int IniSection::propertyInt(const std::string &name, int def)
