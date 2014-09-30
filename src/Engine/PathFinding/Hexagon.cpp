@@ -20,8 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/Hexagon.h"
-#include "../Engine/Game.h"
+#include "../../Engine/Game.h"
+#include "../../Engine/PathFinding/Hexagon.h"
 
 // Third party includes
 

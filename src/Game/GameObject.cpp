@@ -23,7 +23,7 @@
 // Falltergeist includes
 #include "../Engine/Exception.h"
 #include "../Engine/Graphics/Animation.h"
-#include "../Engine/Hexagon.h"
+#include "../Engine/PathFinding/Hexagon.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Game.h"
 #include "../Game/GameObject.h"

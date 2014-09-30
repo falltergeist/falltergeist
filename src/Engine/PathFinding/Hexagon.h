@@ -23,7 +23,6 @@
 // C++ standard includes
 #include <vector>
 #include <list>
-#include <memory>
 
 // Falltergeist includes
 

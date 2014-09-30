@@ -89,14 +89,16 @@ set(SOURCES main.cpp
             src/Engine/Graphics/TileMap.h
             src/Engine/Graphics/UI.cpp
             src/Engine/Graphics/UI.h
-            src/Engine/Hexagon.cpp
-            src/Engine/Hexagon.h
             src/Engine/Input/Mouse.cpp
             src/Engine/Input/Mouse.h
             src/Engine/LocationCamera.cpp
             src/Engine/LocationCamera.h
             src/Engine/Logger.cpp
             src/Engine/Logger.h
+            src/Engine/PathFinding/Hexagon.cpp
+            src/Engine/PathFinding/Hexagon.h
+            src/Engine/PathFinding/HexagonGrid.cpp
+            src/Engine/PathFinding/HexagonGrid.h
             src/Engine/ResourceManager.cpp
             src/Engine/ResourceManager.h
             src/Engine/Settings/IniFile.cpp

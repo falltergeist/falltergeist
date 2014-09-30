@@ -26,7 +26,7 @@
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Animation.h"
-#include "../Engine/Hexagon.h"
+#include "../Engine/PathFinding/Hexagon.h"
 #include "../Engine/Logger.h"
 #include "../Engine/ResourceManager.h"
 #include "../Game/GameAmmoItemObject.h"

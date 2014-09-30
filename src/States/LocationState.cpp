@@ -31,7 +31,7 @@
 #include "../Engine/Graphics/Renderer.h"
 #include "../Engine/Graphics/Tile.h"
 #include "../Engine/Graphics/TileMap.h"
-#include "../Engine/Hexagon.h"
+#include "../Engine/PathFinding/Hexagon.h"
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/LocationCamera.h"
 #include "../Engine/Logger.h"
