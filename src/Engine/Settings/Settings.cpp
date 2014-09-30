@@ -43,6 +43,8 @@ const std::string EngineSettings::_defaultInitLocation = "klamall";
 const bool EngineSettings::_defaultForceLocation = false;
 const std::string EngineSettings::_defaultLoggerLevel = "info";
 const bool EngineSettings::_defaultLoggerColors = true;
+const bool EngineSettings::_defaultDisplayFps = true;
+const bool EngineSettings::_defaultDisplayMousePosition = true;
 
 EngineSettings::EngineSettings()
 {
@@ -73,6 +75,19 @@ EngineSettings::EngineSettings()
         try
         {
             CrossPlatform::createDirectory(configPath);
+
+            // Write default configuration
+            IniWriter writer(ini);
+            std::ofstream os(configFile);
+
+            if (os)
+            {
+                writer.write(os);
+            }
+            else
+            {
+                Logger::error("[INI]") << "Cannot write to file `" << configFile << "`" << std::endl;
+            }
         }
         catch (const std::runtime_error &e)
         {
@@ -80,11 +95,6 @@ EngineSettings::EngineSettings()
                     configPath << "` to write config file: " <<
                     e.what() << std::endl;
         }
-
-        // Write default configuraton
-        IniWriter writer(ini);
-        std::ofstream os(configFile);
-        writer.write(os);
     }
 }
 
@@ -105,6 +115,8 @@ void EngineSettings::_createDefaultConfig(IniFile &ini)
     auto game = ini.section("game");
     game->setPropertyString("init_location", _defaultInitLocation);
     game->setPropertyBool("force_location", _defaultForceLocation);
+    game->setPropertyBool("display_fps", _defaultDisplayFps);
+    game->setPropertyBool("display_mouse_position", _defaultDisplayMousePosition);
 }
 
 EngineSettings::~EngineSettings()
@@ -185,5 +197,19 @@ void EngineSettings::_readConfig(IniFile &ini)
     auto game = ini.section("game");
     _initLocation = game->propertyString("init_location", _defaultInitLocation);
     _forceLocation = game->propertyBool("force_location", _defaultForceLocation);
+
+
+    _displayFps = game->propertyBool("display_fps", _defaultDisplayFps);
+    _displayMousePosition = game->propertyBool("display_mouse_position", _defaultDisplayMousePosition);
+}
+
+bool EngineSettings::displayFps() const
+{
+    return _displayFps;
+}
+
+bool EngineSettings::displayMousePosition() const
+{
+    return _displayMousePosition;
 }
 }

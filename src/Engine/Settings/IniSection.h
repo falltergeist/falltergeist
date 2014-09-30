@@ -53,10 +53,6 @@ private:
 
     static bool _hasType(PropertyMapConstIterator iter, IniValue::Tag tag);
 
-    static const char * _tagToString(IniValue::Tag tag);
-
-    static std::string _valueToString(const IniValue &value);
-
 public:
     IniSection(const std::string &name);
     ~IniSection();

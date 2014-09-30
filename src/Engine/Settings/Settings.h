@@ -57,6 +57,10 @@ public:
 
     bool forceLocation() const;
 
+    bool displayFps() const;
+
+    bool displayMousePosition() const;
+
 private:
     unsigned int _screenWidth;
     unsigned int _screenHeight;
@@ -64,6 +68,8 @@ private:
     bool _audioEnabled;
     std::string _initLocation;
     bool _forceLocation;
+    bool _displayFps;
+    bool _displayMousePosition;
 
     void _setRenderer(std::string renderer);
     void _createDefaultConfig(IniFile &ini);
@@ -78,6 +84,8 @@ private:
     static const bool _defaultForceLocation;
     static const std::string _defaultLoggerLevel;
     static const bool _defaultLoggerColors;
+    static const bool _defaultDisplayFps;
+    static const bool _defaultDisplayMousePosition;
 };
 
 }

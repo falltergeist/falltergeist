@@ -58,8 +58,11 @@ public:
     IniValue(std::string stringVal);
     IniValue(const IniValue &rhs);
 
+    IniValue::Tag tag() const;
+    static std::string tagString(IniValue::Tag tag);
+    std::string value() const;
+
     friend class IniSection;
-    friend std::ostream &operator << (std::ostream &os, const IniValue &iv);
 private:
     Tag _tag;
 
