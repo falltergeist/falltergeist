@@ -375,7 +375,6 @@ void LocationState::think()
         _locationEnter = false;
 
         if (_locationScript) _locationScript->initialize();
-        if (_locationScript) _locationScript->call("map_enter_p_proc");
 
         for (auto hexagon : *hexagons())
         {
@@ -383,12 +382,19 @@ void LocationState::think()
             {
                 // initialize scripts
                 for (auto script : *object->scripts()) script->initialize();
+            }
+        }
 
+        if (_locationScript) _locationScript->call("map_enter_p_proc");
+
+        for (auto hexagon : *hexagons())
+        {
+            for (auto object : *hexagon->objects())
+            {
                 // map_enter_p_proc
                 for (auto script : *object->scripts()) script->call("map_enter_p_proc");
             }
         }
-
     }
     else
     {

@@ -35,11 +35,16 @@ class VMStackPointerValue  : public VMStackValue
 {
 protected:
     void* _value;
+    unsigned int _pointerType = POINTER_TYPE_UNKNOWN;
 public:
+    enum { POINTER_TYPE_UNKNOWN = 0, POINTER_TYPE_STRING };
     VMStackPointerValue(void* value);
     virtual ~VMStackPointerValue();
     void setValue(void* value);
     void* value();
+    void setPointerType(unsigned int type);
+    unsigned int pointerType();
+
 };
 
 }

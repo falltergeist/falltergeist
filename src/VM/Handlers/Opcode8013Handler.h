@@ -17,50 +17,25 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef FALLTERGEIST_OPCODE8013HANDLER_H
+#define FALLTERGEIST_OPCODE8013HANDLER_H
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "src/Engine/Exception.h"
-#include "src/Engine/Game.h"
-#include "src/Engine/Logger.h"
-#include "src/States/StartState.h"
+#include "../../VM/OpcodeHandler.h"
 
 // Third party includes
-#include <libfalltergeist.h>
 
-using namespace Falltergeist;
-
-
-int main(int argc, char *argv[])
+namespace Falltergeist
 {
 
-    auto game = Game::getInstance();
-    game->setState(new StartState());
-    game->run();
-    return 0;
-/*
-    try
-    {
-        auto game = Game::getInstance();
-        game->setState(new StartState());
-        game->run();
-        return 0;
+class Opcode8013Handler : public OpcodeHandler
+{
+public:
+    Opcode8013Handler(VM* vm);
+    virtual void _run();
+};
 
-    }
-    catch(libfalltergeist::Exception &e)
-    {
-        Logger::critical() << e.message() << std::endl;
-        return 1;
-    }
-    catch(Exception &e)
-    {
-        Logger::critical() << e.message() << std::endl;
-        return 1;
-    }
-    catch (const std::exception &e)
-    {
-        Logger::critical() << e.what() << std::endl;
-    }
-*/
 }
-
+#endif // FALLTERGEIST_OPCODE8013HANDLER_H

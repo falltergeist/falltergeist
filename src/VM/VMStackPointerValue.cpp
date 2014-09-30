@@ -46,4 +46,14 @@ void* VMStackPointerValue::value()
     return _value;
 }
 
+void VMStackPointerValue::setPointerType(unsigned int type)
+{
+    _pointerType = type;
+}
+
+unsigned int VMStackPointerValue::pointerType()
+{
+    return _pointerType;
+}
+
 }

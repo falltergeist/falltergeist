@@ -20,41 +20,49 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Exception.h"
-#include "../../Engine/Game.h"
-#include "../../States/LocationState.h"
 #include "../../Engine/Logger.h"
-#include "../../VM/Handlers/Opcode8014Handler.h"
-#include "../../VM/VM.h"
+#include "../../VM/Handlers/Opcode8013Handler.h"
 #include "../../VM/VMStackValue.h"
+#include "../../VM/VMStackFloatValue.h"
+#include "../../VM/VMStackIntValue.h"
+#include "../../VM/VMStackPointerValue.h"
+#include "../../VM/VM.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Opcode8014Handler::Opcode8014Handler(Falltergeist::VM *vm) : OpcodeHandler(vm)
+Opcode8013Handler::Opcode8013Handler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode8014Handler::_run()
+void Opcode8013Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8014] [+] getExported(name)" << std::endl;
-    auto game = Game::getInstance();
-    auto EVARS = game->locationState()->EVARS();
-    switch (_vm->dataStack()->top()->type())
+    auto number = _vm->popDataInteger();
+    auto value = _vm->dataStack()->pop();
+    _vm->dataStack()->values()->at(_vm->SVARbase() + number) = value;
+
+    auto& debug = Logger::debug("SCRIPT");
+
+    debug << "[8013] [*] SVAR[num] = value" << std::endl
+          << "      num: "  << number << std::endl
+          << "     type: " << value->type() << std::endl
+          << "    value: ";
+
+    switch (value->type())
     {
         case VMStackValue::TYPE_INTEGER:
-            _vm->dataStack()->push(EVARS->at(_vm->script()->identificators()->at(_vm->popDataInteger())));
+            debug << ((VMStackIntValue*)value)->value();
+            break;
+        case VMStackValue::TYPE_FLOAT:
+            debug << ((VMStackFloatValue*)value)->value();
             break;
         case VMStackValue::TYPE_POINTER:
-        {
-            auto string = static_cast<std::string*>(_vm->popDataPointer());
-            _vm->dataStack()->push(EVARS->at(*string));
+            debug << ((VMStackPointerValue*)value)->value();
             break;
-        }
-        default:
-            throw Exception("VM::opcode8014 error");
     }
+    debug << std::endl;
 }
+
 }

@@ -49,6 +49,8 @@
 #include "../VM/VMStackPointerValue.h"
 #include "../VM/Handlers/Opcode8002Handler.h"
 #include "../VM/Handlers/Opcode8005Handler.h"
+#include "../VM/Handlers/Opcode8012Handler.h"
+#include "../VM/Handlers/Opcode8013Handler.h"
 #include "../VM/Handlers/Opcode8014Handler.h"
 #include "../VM/Handlers/Opcode8015Handler.h"
 #include "../VM/Handlers/Opcode8033Handler.h"
@@ -137,6 +139,12 @@ void VM::run()
             case 0x8005:
                 opcodeHandler = std::shared_ptr<Opcode8005Handler>(new Opcode8005Handler(this));
                 break;
+            case 0x8012:
+                opcodeHandler = std::shared_ptr<Opcode8012Handler>(new Opcode8012Handler(this));
+                break;
+            case 0x8013:
+                opcodeHandler = std::shared_ptr<Opcode8013Handler>(new Opcode8013Handler(this));
+                break;
             case 0x8014:
                 opcodeHandler = std::shared_ptr<Opcode8014Handler>(new Opcode8014Handler(this));
                 break;
@@ -217,24 +225,10 @@ void VM::run()
                 _initialized = true;
                 return;
             }
-            case 0x8012:
-            {
-                Logger::debug("SCRIPT") << "[8012] [*] SVAR[number];" << std::endl;
-                auto number = popDataInteger();
-                auto value = _dataStack.values()->at(_SVAR_base + number);
-                _dataStack.push(value);
-                break;
-            }
-            case 0x8013:
-            {
-                Logger::debug("SCRIPT") << "[8013] [*] SVAR[num] = value" << std::endl;
-                auto number = popDataInteger();
-                auto value = _dataStack.pop();
-                _dataStack.values()->at(_SVAR_base + number) = value;
-                break;
-            }
-            case 0x8014:  break;
-            case 0x8015:  break;
+            case 0x8012: break;
+            case 0x8013: break;
+            case 0x8014: break;
+            case 0x8015: break;
             case 0x8016:
             {
                 Logger::debug("SCRIPT") << "[8016] [*] export(name)" << std::endl;
@@ -490,7 +484,7 @@ void VM::run()
             {
                 Logger::debug("SCRIPT") << "[80A4] [+] std::string* obj_name(GameCritterObject* who)" << std::endl;
                 auto critter = static_cast<GameCritterObject*>(popDataPointer());
-                pushDataPointer(new std::string(critter->name()));
+                pushDataPointer(new std::string(critter->name()), VMStackPointerValue::POINTER_TYPE_STRING);
                 break;
             }
             case 0x80a6:
@@ -1078,7 +1072,7 @@ void VM::run()
                 Logger::debug("SCRIPT") << "[8105] [+] string* msgMessage(int msg_list, int msg_num);" << std::endl;
                 auto msgNum = popDataInteger();
                 auto msgList = popDataInteger();
-                pushDataPointer(new std::string(msgMessage(msgList, msgNum)));
+                pushDataPointer(new std::string(msgMessage(msgList, msgNum)), VMStackPointerValue::POINTER_TYPE_STRING);
                 break;
             }
             case 0x8106:
@@ -1549,9 +1543,10 @@ void* VM::popDataPointer()
     throw Exception("VM::popDataPointer() - stack value is not a pointer");
 }
 
-void VM::pushDataPointer(void* value)
+void VM::pushDataPointer(void* value, unsigned int type)
 {
     auto pointer = new VMStackPointerValue(value);
+    pointer->setPointerType(type);
     _dataStack.push(pointer);
 }
 
@@ -1720,6 +1715,16 @@ void* VM::owner()
 bool VM::initialized()
 {
     return _initialized;
+}
+
+int VM::SVARbase()
+{
+    return _SVAR_base;
+}
+
+int VM::DVARbase()
+{
+    return _DVAR_base;
 }
 
 }

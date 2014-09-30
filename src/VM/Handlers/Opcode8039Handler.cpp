@@ -37,13 +37,24 @@ Opcode8039Handler::Opcode8039Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8039Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8039] [*] plus +" << std::endl;
+    auto& debug = Logger::debug("SCRIPT");
+    debug << "[8039] [*] value = value1 + value2" << std::endl;
     auto b = _vm->dataStack()->top();
     switch (b->type())
     {
         case VMStackValue::TYPE_POINTER: // STRING
         {
-            auto p2 = static_cast<std::string*>(_vm->popDataPointer());
+            std::string string2;
+            switch(((VMStackPointerValue*)b)->pointerType())
+            {
+                case VMStackPointerValue::POINTER_TYPE_STRING:
+                    string2 = *static_cast<std::string*>(_vm->popDataPointer());
+                    break;
+                default:
+                    _vm->popDataPointer();
+                    string2 = "UNSUPPORTED";
+                    break;
+            }
             auto a = _vm->dataStack()->top();
             switch(a->type())
             {
@@ -51,8 +62,7 @@ void Opcode8039Handler::_run()
                 {
                     auto p1 = static_cast<std::string*>(_vm->popDataPointer());
                     std::string string1 = (p1 ? *p1 : "");
-                    std::string string2 = (p2 ? *p2 : "");
-                    _vm->pushDataPointer(new std::string(string1 + string2));
+                    _vm->pushDataPointer(new std::string(string1 + string2), VMStackPointerValue::POINTER_TYPE_STRING);
                     break;
                 }
                 case VMStackValue::TYPE_FLOAT: // FLOAT + STRING
@@ -70,6 +80,7 @@ void Opcode8039Handler::_run()
         {
             auto p2 = _vm->popDataInteger();
             auto a = _vm->dataStack()->top();
+            debug << "    value2 type: " << a->type() << std::endl;
             switch(a->type())
             {
                 case VMStackValue::TYPE_INTEGER: // INTEGER + INTEGER
@@ -88,7 +99,7 @@ void Opcode8039Handler::_run()
                 {
                     auto p1 = static_cast<std::string*>(_vm->popDataPointer());
                     std::string string1 = (p1 ? *p1 : "");
-                    _vm->pushDataPointer(new std::string(string1 + std::to_string(p2)));
+                    _vm->pushDataPointer(new std::string(string1 + std::to_string(p2)), VMStackPointerValue::POINTER_TYPE_STRING);
                     break;
                 }
             }
@@ -98,6 +109,7 @@ void Opcode8039Handler::_run()
         {
             auto p2 = _vm->popDataFloat();
             auto a = _vm->dataStack()->top();
+            debug << "    value2 type: " << a->type() << std::endl;
             switch(a->type())
             {
                 case VMStackValue::TYPE_INTEGER: // INTEGER + FLOAT
@@ -118,7 +130,7 @@ void Opcode8039Handler::_run()
                     auto p1 = static_cast<std::string*>(_vm->popDataPointer());
                     std::string string1 = (p1 ? *p1 : "");
 
-                    _vm->pushDataPointer(new std::string(string1 + std::to_string(p2)));
+                    _vm->pushDataPointer(new std::string(string1 + std::to_string(p2)), VMStackPointerValue::POINTER_TYPE_STRING);
                     break;
                 }
             }

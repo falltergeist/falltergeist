@@ -25,9 +25,10 @@
 
 // Falltergeist includes
 #include "../VM/VMStack.h"
-#include <libfalltergeist.h>
+#include "../VM/VMStackPointerValue.h"
 
 // Third party includes
+#include <libfalltergeist.h>
 
 namespace Falltergeist
 {
@@ -78,11 +79,15 @@ public:
     float popDataFloat();
     void pushDataFloat(float value);
     void* popDataPointer();
-    void pushDataPointer(void* value);
+    void pushDataPointer(void* value, unsigned int type = VMStackPointerValue::POINTER_TYPE_UNKNOWN);
     bool popDataLogical();
 
     VMStack* dataStack();
     VMStack* returnStack();
+
+    int DVARbase();
+    int SVARbase();
+
 
 };
 
