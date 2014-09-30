@@ -168,6 +168,8 @@ set(SOURCES main.cpp
             src/States/ExitConfirmState.h
             src/States/GameMenuState.cpp
             src/States/GameMenuState.h
+            src/States/InventoryDragItemState.cpp
+            src/States/InventoryDragItemState.h
             src/States/InventoryState.cpp
             src/States/InventoryState.h
             src/States/LoadGameState.cpp
