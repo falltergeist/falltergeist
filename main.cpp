@@ -31,36 +31,27 @@
 using namespace Falltergeist;
 
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-
-    auto game = Game::getInstance();
-    game->setState(new StartState());
-    game->run();
-    return 0;
-/*
     try
     {
         auto game = Game::getInstance();
         game->setState(new StartState());
-        game->run();
+        game->run();        
         return 0;
-
     }
     catch(libfalltergeist::Exception &e)
     {
-        Logger::critical() << e.message() << std::endl;
-        return 1;
+        Logger::critical() << e.what() << std::endl;
     }
     catch(Exception &e)
     {
         Logger::critical() << e.message() << std::endl;
-        return 1;
     }
     catch (const std::exception &e)
     {
         Logger::critical() << e.what() << std::endl;
     }
-*/
+    return 1;
 }
 
