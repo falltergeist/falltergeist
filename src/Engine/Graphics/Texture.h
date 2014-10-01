@@ -43,7 +43,7 @@ protected:
 
 public:
     Texture(unsigned int width, unsigned int height);
-    ~Texture();
+    virtual ~Texture();
 
     unsigned int id();
     void setId(unsigned int value);

@@ -139,8 +139,8 @@ std::vector<Hexagon*> HexagonGrid::findPath(Hexagon* from, Hexagon* to)
     Hexagon* current = 0;
     std::vector<Hexagon*> result;
     std::priority_queue<Hexagon*, std::vector<Hexagon*>, HeuristicComparsion> unvisited;
-    int cameFrom[200*200] = {};
-    int costSoFar[200*200] = {};
+    unsigned int cameFrom[200*200] = {};
+    unsigned int costSoFar[200*200] = {};
 
     // if we can't go to the location
     // @todo remove when path will have lenght restriction
