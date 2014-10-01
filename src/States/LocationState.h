@@ -54,14 +54,18 @@ protected:
     unsigned int _scrollTicks = 0;
     unsigned int _scriptsTicks = 0;
 
+    HexagonGrid* _hexagonGrid = 0;
+    LocationCamera* _camera = 0;
+    TileMap* _floor = 0;
+    TileMap* _roof = 0;
+
+
+
     VM* _locationScript = 0;
 
     bool _locationEnter = true;
 
-    HexagonGrid* _hexagonGrid = 0;
-
     unsigned int _currentElevation = 0;
-    LocationCamera* _camera = 0;
 
     std::vector<GameObject*> _objectsToRender;
     std::vector<UI*> _uiToRender;
@@ -69,10 +73,9 @@ protected:
     std::vector<int> _MVARS;
     std::map<std::string, VMStackValue*> _EVARS;
 
-    TileMap* _floor = 0;
-    TileMap* _roof = 0;
 
     std::vector<ActiveUI*> _floatMessages;
+
 
     bool _scrollLeft = false;
     bool _scrollRight = false;

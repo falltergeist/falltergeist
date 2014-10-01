@@ -98,6 +98,7 @@ public:
     void render();
     void think();
 
+    UI* ui();
 };
 
 }

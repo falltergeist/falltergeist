@@ -181,9 +181,8 @@ void Mouse::_setType(unsigned int state)
             break;
         case HEXAGON_RED:
             _ui = new Image("art/intrface/msef000.frm");
-            //setXOffset(- width()/2);
-            //setYOffset(- height()/2);
-            //_lastType = _type;
+            _ui->setXOffset(- _ui->width()/2);
+            _ui->setYOffset(- _ui->height()/2);
             break;
         case ACTION:
             _ui = new Image("art/intrface/actarrow.frm");
@@ -207,8 +206,11 @@ void Mouse::render()
 
     if (!_ui) return;
 
-    _ui->setX(_x);
-    _ui->setY(_y);
+    if (state() != HEXAGON_RED)
+    {
+        _ui->setX(_x);
+        _ui->setY(_y);
+    }
     _ui->render();
 }
 
@@ -242,6 +244,11 @@ bool Mouse::scrollState()
             break;
     }
     return false;
+}
+
+UI* Mouse::ui()
+{
+    return _ui;
 }
 
 }

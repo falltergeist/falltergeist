@@ -386,12 +386,70 @@ void LocationState::think()
 
 void LocationState::handle(std::shared_ptr<Event> event)
 {
+    auto game = Game::getInstance();
+
     if (auto mouseEvent = std::dynamic_pointer_cast<MouseEvent>(event))
     {
-        auto game = Game::getInstance();
-        unsigned int scrollArea = 8;
+        auto mouse = Game::getInstance()->mouse();
+
+        // Right button pressed
+        if (mouseEvent->name() == "mouseup" && mouseEvent->rightButton())
+        {
+            switch (mouse->state())
+            {
+                case Mouse::ACTION:
+                {
+                    auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
+                    mouse->pushState(Mouse::HEXAGON_RED);
+                    mouse->ui()->setX(hexagon->x() - camera()->x());
+                    mouse->ui()->setY(hexagon->y() - camera()->y());
+                    break;
+                }
+                case Mouse::HEXAGON_RED:
+                {
+                    mouse->popState();
+                    break;
+                }
+            }
+            event->setHandled(true);
+        }
+
+        // Left button down
+        if (mouseEvent->name() == "mousedown" && mouseEvent->leftButton())
+        {
+            switch (mouse->state())
+            {
+                case Mouse::HEXAGON_RED:
+                    // Preventing dropdown state
+                    event->setHandled(true);
+                    break;
+            }
+        }
+        if (mouseEvent->name() == "mouseup" && mouseEvent->leftButton())
+        {
+            switch (mouse->state())
+            {
+                case Mouse::HEXAGON_RED:
+                    // Here goes the movement
+                    event->setHandled(true);
+                    break;
+            }
+        }
+
         if (mouseEvent->name() == "mousemove")
         {
+            switch (mouse->state())
+            {
+                case Mouse::HEXAGON_RED:
+                {
+                    auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
+                    mouse->ui()->setX(hexagon->x() - camera()->x());
+                    mouse->ui()->setY(hexagon->y() - camera()->y());
+                    break;
+                }
+            }
+
+            unsigned int scrollArea = 8;
             _scrollLeft = mouseEvent->x() < scrollArea ? true : false;
             _scrollRight = mouseEvent->x() > game->renderer()->width()- scrollArea ? true : false;
             _scrollTop = mouseEvent->y() < scrollArea ? true : false;
