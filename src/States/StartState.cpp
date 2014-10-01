@@ -65,7 +65,7 @@ void StartState::init()
 
     _splashTicks = SDL_GetTicks();
 
-    Game::getInstance()->mouse()->setType(Mouse::WAIT);
+    Game::getInstance()->mouse()->setState(Mouse::WAIT);
 }
 
 void StartState::think()

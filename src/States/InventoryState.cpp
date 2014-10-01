@@ -48,10 +48,17 @@ namespace Falltergeist
 
 InventoryState::InventoryState() : State()
 {
+    Game::getInstance()->mouse()->pushState(Mouse::ACTION);
 }
 
 InventoryState::~InventoryState()
 {
+    // If hand cursor now
+    if (Game::getInstance()->mouse()->state() != Mouse::ACTION)
+    {
+        Game::getInstance()->mouse()->popState();
+    }
+    Game::getInstance()->mouse()->popState();
 }
 
 void InventoryState::init()
@@ -293,7 +300,7 @@ void InventoryState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
 void InventoryState::onArmorSlotMouseDown(std::shared_ptr<MouseEvent> event)
 {
     auto state = dynamic_cast<InventoryState*>(event->reciever());
-    if (Game::getInstance()->mouse()->type() == Mouse::HAND)
+    if (Game::getInstance()->mouse()->state() == Mouse::HAND)
     {
         auto itemUi = dynamic_cast<ImageList*>(event->emitter());
         Game::getInstance()->pushState(new InventoryDragItemState(itemUi));
@@ -308,7 +315,7 @@ void InventoryState::onArmorSlotMouseDown(std::shared_ptr<MouseEvent> event)
 void InventoryState::onLeftHandSlotMouseDown(std::shared_ptr<MouseEvent> event)
 {
     auto state = dynamic_cast<InventoryState*>(event->reciever());
-    if (Game::getInstance()->mouse()->type() == Mouse::HAND)
+    if (Game::getInstance()->mouse()->state() == Mouse::HAND)
     {
         auto itemUi = dynamic_cast<ImageList*>(event->emitter());
         Game::getInstance()->pushState(new InventoryDragItemState(itemUi));
@@ -323,7 +330,7 @@ void InventoryState::onLeftHandSlotMouseDown(std::shared_ptr<MouseEvent> event)
 void InventoryState::onRightHandSlotMouseDown(std::shared_ptr<MouseEvent> event)
 {
     auto state = dynamic_cast<InventoryState*>(event->reciever());
-    if (Game::getInstance()->mouse()->type() == Mouse::HAND)
+    if (Game::getInstance()->mouse()->state() == Mouse::HAND)
     {
         auto itemUi = dynamic_cast<ImageList*>(event->emitter());
         Game::getInstance()->pushState(new InventoryDragItemState(itemUi));
@@ -394,13 +401,13 @@ void InventoryState::backgroundRightClick(std::shared_ptr<MouseEvent> event)
 {
     auto state = dynamic_cast<InventoryState*>(event->reciever());
     auto mouse = Game::getInstance()->mouse();
-    if (mouse->type() == Mouse::ACTION)
+    if (mouse->state() == Mouse::ACTION)
     {
-        mouse->setType(Mouse::HAND);
+        mouse->pushState(Mouse::HAND);
     }
     else
     {
-        mouse->setType(Mouse::ACTION);
+        mouse->popState();
         //state->_screenShow(1);
     }
     state->_screenShow(0);

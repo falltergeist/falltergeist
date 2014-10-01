@@ -43,7 +43,7 @@ CursorDropdownState::CursorDropdownState(std::vector<int> icons) : State()
     auto mouse = Game::getInstance()->mouse();
     _initialX = mouse->x();
     _initialY = mouse->y();
-    _initialType = mouse->type();
+    mouse->pushState(Mouse::NONE);
 }
 
 CursorDropdownState::~CursorDropdownState()
@@ -121,7 +121,6 @@ void CursorDropdownState::init()
 
     auto game = Game::getInstance();
 
-    game->mouse()->setType(Mouse::NONE);
 
     _cursor = new Image("art/intrface/actarrow.frm");
     _cursor->setXOffset(0);
@@ -139,7 +138,8 @@ void CursorDropdownState::init()
     if (deltaY > 0)
     {
         _surface->setY(_surface->y() - deltaY);
-        Game::getInstance()->mouse()->setXY(_initialX, _surface->y());
+        game->mouse()->setX(_initialX);
+        game->mouse()->setY(_surface->y());
     }
 
     if (deltaX > 0)
@@ -171,21 +171,25 @@ void CursorDropdownState::think()
 {
     State::think();
 
+    auto game = Game::getInstance();
+
 
     for (auto ui : _inactiveIcons)
     {
         ui->texture()->copyTo(_surface->texture(), ui->x(), ui->y());
     }
 
-    _currentSurface= (Game::getInstance()->mouse()->y() - _surface->y())/40;
+    _currentSurface= (game->mouse()->y() - _surface->y())/40;
     if (_currentSurface < 0)
     {
-        Game::getInstance()->mouse()->setXY(_initialX, _surface->y());
+        game->mouse()->setX(_initialX);
+        game->mouse()->setY(_surface->y());
         _currentSurface = 0;
     }
     if ((unsigned int)_currentSurface >= _icons.size())
     {
-        Game::getInstance()->mouse()->setXY(_initialX, _surface->y() + _surface->height());
+        game->mouse()->setX(_initialX);
+        game->mouse()->setY(_surface->y() + _surface->height());
         _currentSurface = _icons.size() - 1;
     }
     auto activeIcon = _activeIcons.at(_currentSurface);
@@ -197,9 +201,10 @@ void CursorDropdownState::think()
 void CursorDropdownState::onLeftButtonUp(std::shared_ptr<MouseEvent> event)
 {
     auto state = dynamic_cast<CursorDropdownState*>(event->reciever());
-    Game::getInstance()->mouse()->setXY(state->_initialX, state->_initialY);
     auto game = Game::getInstance();
-    game->mouse()->setType(state->_initialType);
+    game->mouse()->setX(state->_initialX);
+    game->mouse()->setY(state->_initialY);
+    game->mouse()->popState();
     game->popState();
     game->locationState()->handleAction(state->_object, state->_icons.at(state->_currentSurface));
 }

@@ -119,6 +119,8 @@ LocationState::LocationState() : State()
         if (index6 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index6));
     }
 
+    auto game = Game::getInstance();
+    game->mouse()->setState(Mouse::ACTION);
 }
 
 LocationState::~LocationState()
@@ -141,7 +143,6 @@ void LocationState::init()
 
 
     auto game = Game::getInstance();
-    game->mouse()->setType(Mouse::ACTION);
 
     setLocation("maps/" + Game::getInstance()->engineSettings()->initialLocation() + ".map");
 
@@ -348,19 +349,38 @@ void LocationState::think()
         _scrollTicks = SDL_GetTicks();
         unsigned int scrollDelta = 5;
 
-        Game::getInstance()->mouse()->setType(Mouse::ACTION);        
+        //Game::getInstance()->mouse()->setType(Mouse::ACTION);
 
         camera()->setXPosition(camera()->xPosition() + (_scrollLeft ? -scrollDelta : (_scrollRight ? scrollDelta : 0)));
         camera()->setYPosition(camera()->yPosition() + (_scrollTop ? -scrollDelta : (_scrollBottom ? scrollDelta : 0)));
 
-        if (_scrollLeft)   Game::getInstance()->mouse()->setType(Mouse::SCROLL_W);
-        if (_scrollRight)  Game::getInstance()->mouse()->setType(Mouse::SCROLL_E);
-        if (_scrollTop)    Game::getInstance()->mouse()->setType(Mouse::SCROLL_N);
-        if (_scrollBottom) Game::getInstance()->mouse()->setType(Mouse::SCROLL_S);
-        if (_scrollLeft && _scrollTop)     Game::getInstance()->mouse()->setType(Mouse::SCROLL_NW);
-        if (_scrollLeft && _scrollBottom)  Game::getInstance()->mouse()->setType(Mouse::SCROLL_SW);
-        if (_scrollRight && _scrollTop)    Game::getInstance()->mouse()->setType(Mouse::SCROLL_NE);
-        if (_scrollRight && _scrollBottom) Game::getInstance()->mouse()->setType(Mouse::SCROLL_SE);
+        auto mouse = Game::getInstance()->mouse();
+
+        // if scrolling is active
+        if (_scrollLeft || _scrollRight || _scrollTop || _scrollBottom)
+        {
+            if (mouse->scrollState()) mouse->popState();
+
+            unsigned int state;
+            if (_scrollLeft)   state = Mouse::SCROLL_W;
+            if (_scrollRight)  state = Mouse::SCROLL_E;
+            if (_scrollTop)    state = Mouse::SCROLL_N;
+            if (_scrollBottom) state = Mouse::SCROLL_S;
+            if (_scrollLeft && _scrollTop)     state = Mouse::SCROLL_NW;
+            if (_scrollLeft && _scrollBottom)  state = Mouse::SCROLL_SW;
+            if (_scrollRight && _scrollTop)    state = Mouse::SCROLL_NE;
+            if (_scrollRight && _scrollBottom) state = Mouse::SCROLL_SE;
+            mouse->pushState(state);
+        }
+        // scrolling is not active
+        else
+        {
+            if (mouse->scrollState())
+            {
+                mouse->popState();
+            }
+        }
+
     }
 
     // Checking objects to render

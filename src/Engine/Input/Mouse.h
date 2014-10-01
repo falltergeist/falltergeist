@@ -22,7 +22,7 @@
 #define FALLTERGEIST_MOUSE_H
 
 // C++ standard includes
-#include <memory>
+#include <vector>
 
 // Falltergeist includes
 
@@ -30,8 +30,7 @@
 
 namespace Falltergeist
 {
-class Texture;
-class ActiveUI;
+class UI;
 
 class Mouse
 {
@@ -40,7 +39,9 @@ protected:
     int _y = 240;
     bool _visible = true;
     unsigned int _type = NONE;
-    std::shared_ptr<ActiveUI> _ui;
+    std::vector<unsigned int> _states;
+    UI* _ui = 0;
+    void _setType(unsigned int type);
 public:
     enum {
         NONE = 0,
@@ -82,21 +83,20 @@ public:
     ~Mouse();
 
     int x();
-    int y();
-
     void setX(int x);
+
+    int y();
     void setY(int y);
-    void setXY(int x, int y);
 
-    void think();
+    void setState(unsigned int state);
+    void pushState(unsigned int state);
+    void popState();
+    unsigned int state();
 
-    bool visible();
-    void setVisible(bool value);
-
-    unsigned int type();
-    void setType(unsigned int type);
+    bool scrollState();
 
     void render();
+    void think();
 
 };
 

@@ -39,19 +39,13 @@ Mouse::Mouse()
 {
     // Hide cursor
     SDL_ShowCursor(0);
-    setType(BIG_ARROW);
 }
 
 Mouse::~Mouse()
 {
+    delete _ui;
     // Show cursor
     SDL_ShowCursor(1);
-}
-
-void Mouse::think()
-{
-    SDL_GetMouseState(&_x, &_y);
-    if (_ui) _ui->think();
 }
 
 int Mouse::x()
@@ -76,139 +70,178 @@ void Mouse::setY(int y)
     SDL_WarpMouseInWindow(Game::getInstance()->renderer()->window(),_x, _y);
 }
 
-void Mouse::setXY(int x, int y)
+void Mouse::setState(unsigned int state)
 {
-    _x = x;
-    _y = y;
-    SDL_WarpMouseInWindow(Game::getInstance()->renderer()->window(),_x, _y);
+    _states.clear();
+    pushState(state);
 }
 
-bool Mouse::visible()
+void Mouse::popState()
 {
-    return _visible;
+    if (_states.size() == 0) return;
+    if (_states.size() == 1)
+    {
+        _setType(NONE);
+    }
+    else
+    {
+        _setType(_states.at(_states.size() - 2));
+    }
+    _states.pop_back();
 }
 
-void Mouse::setVisible(bool value)
+void Mouse::pushState(unsigned int state)
 {
-    _visible = value;
+    _setType(state);
+    _states.push_back(state);
 }
 
-unsigned int Mouse::type()
+unsigned int Mouse::state()
 {
-    return _type;
+    if (_states.empty()) return NONE;
+    return _states.back();
 }
 
-void Mouse::setType(unsigned int type)
+void Mouse::_setType(unsigned int state)
 {
-    if (_type == type) return;
-    _ui.reset();
-    switch(type)
+    if (this->state() == state) return;
+    delete _ui; _ui = 0;
+    switch(state)
     {
         case BIG_ARROW:
-            _ui = std::shared_ptr<Image>(new Image("art/intrface/stdarrow.frm"));
+            _ui = new Image("art/intrface/stdarrow.frm");
             break;
         case SCROLL_W:
-            _ui = std::shared_ptr<Image>(new Image("art/intrface/scrwest.frm"));
+            _ui = new Image("art/intrface/scrwest.frm");
             _ui->setYOffset( -_ui->height()*0.5);
             break;
         case SCROLL_W_X:
-            _ui = std::shared_ptr<Image>(new Image("art/intrface/scrwx.frm"));
+            _ui = new Image("art/intrface/scrwx.frm");
             _ui->setYOffset( -_ui->height()*0.5);
             break;
         case SCROLL_N:
-            _ui = std::shared_ptr<Image>(new Image("art/intrface/scrnorth.frm"));
+            _ui = new Image("art/intrface/scrnorth.frm");
             _ui->setXOffset( -_ui->width()*0.5);
             break;
         case SCROLL_N_X:
-            _ui = std::shared_ptr<Image>(new Image("art/intrface/scrnx.frm"));
+            _ui = new Image("art/intrface/scrnx.frm");
             _ui->setXOffset( -_ui->width()*0.5);
             break;
         case SCROLL_S:
-            _ui = std::shared_ptr<Image>(new Image("art/intrface/scrsouth.frm"));
+            _ui = new Image("art/intrface/scrsouth.frm");
             _ui->setXOffset( -_ui->width()*0.5);
             _ui->setYOffset( -_ui->height());
             break;
         case SCROLL_S_X:
-            _ui = std::shared_ptr<Image>(new Image("art/intrface/scrsx.frm"));
+            _ui = new Image("art/intrface/scrsx.frm");
             _ui->setXOffset(-_ui->width()*0.5);
             _ui->setYOffset(-_ui->height());
             break;
         case SCROLL_E:
-            _ui = std::shared_ptr<Image>(new Image("art/intrface/screast.frm"));
+            _ui = new Image("art/intrface/screast.frm");
             _ui->setXOffset( -_ui->width());
             _ui->setYOffset( -_ui->height()*0.5);
             break;
         case SCROLL_E_X:
-            _ui = std::shared_ptr<Image>(new Image("art/intrface/screx.frm"));
+            _ui = new Image("art/intrface/screx.frm");
             _ui->setXOffset(-_ui->width());
             _ui->setYOffset(-_ui->height()*0.5);
             break;
         case SCROLL_NW:
-            _ui = std::shared_ptr<Image>(new Image("art/intrface/scrnwest.frm"));
+            _ui = new Image("art/intrface/scrnwest.frm");
             break;
         case SCROLL_NW_X:
-            _ui = std::shared_ptr<Image>(new Image("art/intrface/scrnwx.frm"));
+            _ui = new Image("art/intrface/scrnwx.frm");
             break;
         case SCROLL_SW:
-            _ui = std::shared_ptr<Image>(new Image("art/intrface/scrswest.frm"));
+            _ui = new Image("art/intrface/scrswest.frm");
             _ui->setYOffset(-_ui->height());
             break;
         case SCROLL_SW_X:
-            _ui = std::shared_ptr<Image>(new Image("art/intrface/scrswx.frm"));
+            _ui = new Image("art/intrface/scrswx.frm");
             _ui->setYOffset(-_ui->height());
             break;
         case SCROLL_NE:
-            _ui = std::shared_ptr<Image>(new Image("art/intrface/scrneast.frm"));
+            _ui = new Image("art/intrface/scrneast.frm");
             _ui->setXOffset(-_ui->width());
             break;
         case SCROLL_NE_X:
-            _ui = std::shared_ptr<Image>(new Image("art/intrface/scrnex.frm"));
+            _ui = new Image("art/intrface/scrnex.frm");
             _ui->setXOffset(-_ui->width());
             break;
         case SCROLL_SE:
-            _ui = std::shared_ptr<Image>(new Image("art/intrface/scrseast.frm"));
+            _ui = new Image("art/intrface/scrseast.frm");
             _ui->setXOffset(-_ui->width());
             _ui->setYOffset(-_ui->height());
             break;
         case SCROLL_SE_X:
-            _ui = std::shared_ptr<Image>(new Image("art/intrface/scrsex.frm"));
+            _ui = new Image("art/intrface/scrsex.frm");
             _ui->setXOffset(-_ui->width());
             _ui->setYOffset(-_ui->height());
             break;
         case HEXAGON_RED:
-            _ui = std::shared_ptr<Image>(new Image("art/intrface/msef000.frm"));
+            _ui = new Image("art/intrface/msef000.frm");
             //setXOffset(- width()/2);
             //setYOffset(- height()/2);
             //_lastType = _type;
             break;
         case ACTION:
-            _ui = std::shared_ptr<Image>(new Image("art/intrface/actarrow.frm"));
+            _ui = new Image("art/intrface/actarrow.frm");
             break;
         case HAND:
-            _ui = std::shared_ptr<Image>(new Image("art/intrface/hand.frm"));
+            _ui = new Image("art/intrface/hand.frm");
             break;
         case WAIT:
-            _ui = std::shared_ptr<Animation>(new Animation("art/intrface/wait.frm"));
+            _ui = new Animation("art/intrface/wait.frm");
             _ui->setXOffset(-_ui->width()*0.5);
             _ui->setYOffset(-_ui->height()*0.5);
             break;
         case NONE:
             break;
     }
-
-    _type = type;
 }
 
 void Mouse::render()
 {
-    if (!visible()) return;
+    if (state() == NONE) return;
 
     if (!_ui) return;
 
     _ui->setX(_x);
     _ui->setY(_y);
     _ui->render();
+}
 
+void Mouse::think()
+{
+    SDL_GetMouseState(&_x, &_y);
+    if (_ui) _ui->think();
+}
+
+bool Mouse::scrollState()
+{
+    switch(this->state())
+    {
+        case SCROLL_W:
+        case SCROLL_N:
+        case SCROLL_E:
+        case SCROLL_S:
+        case SCROLL_W_X:
+        case SCROLL_NW:
+        case SCROLL_NW_X:
+        case SCROLL_N_X:
+        case SCROLL_NE:
+        case SCROLL_NE_X:
+        case SCROLL_E_X:
+        case SCROLL_SE:
+        case SCROLL_SE_X:
+        case SCROLL_S_X:
+        case SCROLL_SW:
+        case SCROLL_SW_X:
+            return true;
+            break;
+    }
+    return false;
 }
 
 }

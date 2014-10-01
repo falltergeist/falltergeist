@@ -52,7 +52,7 @@ void MainMenuState::init()
     if (_initialized) return;
     State::init();
 
-    Game::getInstance()->mouse()->setType(Mouse::BIG_ARROW);
+    Game::getInstance()->mouse()->setState(Mouse::BIG_ARROW);
 
     auto renderer = Game::getInstance()->renderer();
     setX((renderer->width()  - 640)*0.5);
