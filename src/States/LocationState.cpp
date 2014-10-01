@@ -425,6 +425,7 @@ void LocationState::handle(std::shared_ptr<Event> event)
                     break;
             }
         }
+        // Left button up
         if (mouseEvent->name() == "mouseup" && mouseEvent->leftButton())
         {
             switch (mouse->state())
