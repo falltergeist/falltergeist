@@ -24,21 +24,17 @@
 // Falltergeist includes
 #include "../Engine/Audio/AudioMixer.h"
 #include "../Engine/CrossPlatform.h"
-#include "../Engine/Event/Event.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/GameTime.h"
 #include "../Engine/Graphics/AnimatedPalette.h"
 #include "../Engine/Graphics/OpenGLRenderer.h"
 #include "../Engine/Graphics/SDLRenderer.h"
-#include "../Engine/Graphics/UI.h"
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/Logger.h"
 #include "../Engine/ResourceManager.h"
-#include "../Engine/Settings/IniFile.h"
 #include "../Engine/Settings/Settings.h"
 #include "../Engine/State.h"
-#include "../Game/GameDudeObject.h"
 #include "../States/LocationState.h"
 #include "../UI/FpsCounter.h"
 #include "../UI/TextArea.h"
@@ -48,6 +44,7 @@
 namespace Falltergeist
 {
 
+class GameDudeObject;
 bool Game::_instanceFlag = false;
 Game* Game::_instance = NULL;
 
