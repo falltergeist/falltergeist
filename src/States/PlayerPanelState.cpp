@@ -23,6 +23,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/ActiveUI.h"
 #include "../Engine/Graphics/Renderer.h"
+#include "../Engine/Input/Mouse.h"
 #include "../Game/GameDudeObject.h"
 #include "../States/GameMenuState.h"
 #include "../States/InventoryState.h"
@@ -62,6 +63,8 @@ void PlayerPanelState::init()
 
     addUI("background", new Image("art/intrface/iface.frm"));
     getActiveUI("background")->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &PlayerPanelState::onPanelMouseDown);
+    getActiveUI("background")->addEventHandler("mousein", this, (EventRecieverMethod) &PlayerPanelState::onPanelMouseIn);
+    getActiveUI("background")->addEventHandler("mouseout", this, (EventRecieverMethod) &PlayerPanelState::onPanelMouseOut);
 
     addUI("change_hand_button", new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 218, 5));
     getActiveUI("change_hand_button")->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerPanelState::onChangeHandButtonClick);
@@ -166,5 +169,21 @@ void PlayerPanelState::onChangeHandButtonClick(std::shared_ptr<MouseEvent> event
     auto player = Game::getInstance()->player();
     player->setCurrentHand(player->currentHand() == GameCritterObject::HAND_LEFT ? GameCritterObject::HAND_RIGHT : GameCritterObject::HAND_LEFT);
 }
+
+void PlayerPanelState::onPanelMouseIn(std::shared_ptr<MouseEvent> event)
+{
+    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+}
+
+void PlayerPanelState::onPanelMouseOut(std::shared_ptr<MouseEvent> event)
+{
+    Game::getInstance()->mouse()->popState();
+}
+
+void PlayerPanelState::onPanelMouseUp(std::shared_ptr<MouseEvent> event)
+{
+}
+
+
 
 }

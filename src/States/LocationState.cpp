@@ -362,7 +362,7 @@ void LocationState::think()
     }
     else
     {
-        if (_scriptsTicks + 500 < SDL_GetTicks())
+        if (_scriptsTicks + 30000 < SDL_GetTicks())
         {
             _scriptsTicks = SDL_GetTicks();
             if (_locationScript) _locationScript->call("map_update_p_proc");

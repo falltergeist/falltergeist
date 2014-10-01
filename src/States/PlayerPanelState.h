@@ -48,6 +48,9 @@ public:
     void onSkilldexButtonClick(std::shared_ptr<MouseEvent> event);
     void onChaButtonClick(std::shared_ptr<MouseEvent> event);
     void onPipBoyButtonClick(std::shared_ptr<MouseEvent> event);
+    void onPanelMouseIn(std::shared_ptr<MouseEvent> event);
+    void onPanelMouseOut(std::shared_ptr<MouseEvent> event);
+    void onPanelMouseUp(std::shared_ptr<MouseEvent> event);
 
 };
 
