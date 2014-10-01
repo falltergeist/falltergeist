@@ -37,6 +37,7 @@ class Exception;
 class Screen;
 class ResourceManager;
 class GameDudeObject;
+class GameTime;
 class FpsCounter;
 class Mouse;
 class LocationState;
@@ -57,12 +58,14 @@ protected:
     std::vector<State*> _statesForDelete;
 
      GameDudeObject* _player = 0;
+           GameTime* _gameTime = 0;
            Renderer* _renderer = 0;
     ResourceManager* _resourceManager = 0;
               Mouse* _mouse = 0;
          AudioMixer* _mixer = 0;
          FpsCounter* _fpsCounter = 0;
            TextArea* _mousePosition = 0;
+           TextArea* _currentTime = 0;
            TextArea* _falltergeistVersion = 0;
      EngineSettings* _engineSettings = 0;
     AnimatedPalette* _animatedPalette = 0;
@@ -98,7 +101,7 @@ public:
     GameDudeObject* player();
     Mouse* mouse();
     Renderer* renderer();
-
+    GameTime* gameTime();
     LocationState* locationState();
 
     void setGVAR(unsigned int number, int value);

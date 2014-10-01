@@ -27,6 +27,7 @@
 #include "../Engine/Event/Event.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
+#include "../Engine/GameTime.h"
 #include "../Engine/Graphics/AnimatedPalette.h"
 #include "../Engine/Graphics/OpenGLRenderer.h"
 #include "../Engine/Graphics/SDLRenderer.h"
@@ -106,6 +107,8 @@ void Game::_initialize()
     _falltergeistVersion = new TextArea(version, 3, renderer()->height() - 10);
     _mousePosition = new TextArea("", renderer()->width() - 55, 14);
     _animatedPalette = new AnimatedPalette();
+    _gameTime = new GameTime();
+    _currentTime = new TextArea(renderer()->width() - 150, renderer()->height() - 10);
 }
 
 Game::~Game()
@@ -120,6 +123,8 @@ Game::~Game()
     while (!_states.empty()) popState();
     delete _renderer;
     delete _engineSettings;
+    delete _gameTime;
+    delete _currentTime;
 }
 
 void Game::pushState(State* state)
@@ -361,6 +366,11 @@ void Game::think()
 
     _mousePosition->setText(std::to_string(mouse()->x()) + " : " + std::to_string(mouse()->y()));
 
+    std::string time = std::to_string(_gameTime->year()) + "-" + std::to_string(_gameTime->month()) + "-" + std::to_string(_gameTime->day()) + " ";
+    time += std::to_string(_gameTime->hours()) + ":" + std::to_string(_gameTime->minutes()) + ":" + std::to_string(_gameTime->seconds()) + " ";
+    time += std::to_string(_gameTime->ticks());
+    _currentTime->setText(time);
+
     for (auto state : *statesForThinkAndHandle())
     {
         state->think();
@@ -377,6 +387,7 @@ void Game::render()
     if (engineSettings()->displayFps()) _fpsCounter->render();
     _falltergeistVersion->render();
     if (engineSettings()->displayMousePosition()) _mousePosition->render();
+    _currentTime->render();
     _mouse->render();
     renderer()->endFrame();
 }
@@ -384,6 +395,11 @@ void Game::render()
 AnimatedPalette* Game::animatedPalette()
 {
     return _animatedPalette;
+}
+
+GameTime* Game::gameTime()
+{
+    return _gameTime;
 }
 
 }

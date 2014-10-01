@@ -27,6 +27,7 @@
 #include "../Engine/Event/MouseEvent.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
+#include "../Engine/GameTime.h"
 #include "../Engine/Graphics/Animation.h"
 #include "../Engine/Graphics/Renderer.h"
 #include "../Engine/Graphics/Tile.h"
@@ -167,7 +168,6 @@ void LocationState::setLocation(std::string name)
 
         auto hexagon = hexagonGrid()->at(mapFile->defaultPosition());
         LocationState::moveObjectToHexagon(player, hexagon, true);
-        Logger::critical() << "Player hexagon: " << hexagon->number() << std::endl;
 
         // Just for testing
         {
@@ -270,13 +270,7 @@ void LocationState::render()
 
 void LocationState::think()
 {
-    //State::think();
-
-    /*
-    auto game = Game::getInstance();
-    auto hexagon = hexagons()->at(game->player()->hexagon()->number() + 6);
-    findPath(game->player()->hexagon(), hexagon);
-    */
+    Game::getInstance()->gameTime()->think();
 
     // UI thinking
     for (auto hexagon : *hexagonGrid()->hexagons())
@@ -463,21 +457,6 @@ void LocationState::handle(std::shared_ptr<Event> event)
             _scrollRight = mouseEvent->x() > game->renderer()->width()- scrollArea ? true : false;
             _scrollTop = mouseEvent->y() < scrollArea ? true : false;
             _scrollBottom = mouseEvent->y() > game->renderer()->height() - scrollArea ? true : false;
-
-
-            /*
-            auto hexagon = hexagonAt(camera()->x() + mouseEvent->x(), camera()->y() + mouseEvent->y());
-            _cursorNeigbors.clear();
-            for (auto neighbor : *hexagon->neighbors())
-            {
-                auto ui = std::shared_ptr<Image>(new Image("art/intrface/msef001.frm"));
-                ui->setX(neighbor->x() - camera()->x() - ui->width()*0.5);
-                ui->setY(neighbor->y() - camera()->y() - ui->height());
-                _cursorNeigbors.push_back(ui);
-            }
-            moveObjectToHexagon(game->player(), hexagon);
-            Logger::critical() << "Pos: " << hexagon->number() << std::endl;
-            */
         }
     }
 

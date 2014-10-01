@@ -65,6 +65,8 @@ set(SOURCES main.cpp
             src/Engine/FontString.h
             src/Engine/Game.cpp
             src/Engine/Game.h
+            src/Engine/GameTime.cpp
+            src/Engine/GameTime.h
             src/Engine/Graphics/ActiveUI.cpp
             src/Engine/Graphics/ActiveUI.h
             src/Engine/Graphics/AnimatedPalette.cpp
