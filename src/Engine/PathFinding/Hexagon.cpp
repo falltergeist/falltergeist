@@ -22,6 +22,7 @@
 // Falltergeist includes
 #include "../../Engine/Game.h"
 #include "../../Engine/PathFinding/Hexagon.h"
+#include "../../Game/GameObject.h"
 
 // Third party includes
 
@@ -45,26 +46,6 @@ unsigned int Hexagon::number()
 void Hexagon::setNumber(unsigned int number)
 {
     _number = number;
-}
-
-bool Hexagon::checked()
-{
-    return _checked;
-}
-
-void Hexagon::setChecked(bool value)
-{
-    _checked = value;
-}
-
-Hexagon* Hexagon::cameFrom()
-{
-    return _cameFrom;
-}
-
-void Hexagon::setCameFrom(Hexagon* cameFrom)
-{
-    _cameFrom = cameFrom;
 }
 
 std::vector<Hexagon*>* Hexagon::neighbors()
@@ -95,6 +76,55 @@ unsigned int Hexagon::y()
 void Hexagon::setY(unsigned int value)
 {
     _y = value;
+}
+
+int Hexagon::cubeX()
+{
+    return _cubeX;
+}
+
+void Hexagon::setCubeX(int value)
+{
+    _cubeX = value;
+}
+
+int Hexagon::cubeY()
+{
+    return _cubeY;
+}
+
+void Hexagon::setCubeY(int value)
+{
+    _cubeY = value;
+}
+
+int Hexagon::cubeZ()
+{
+    return _cubeZ;
+}
+
+void Hexagon::setCubeZ(int value)
+{
+    _cubeZ = value;
+}
+
+unsigned int Hexagon::heuristic()
+{
+    return _heuristic;
+}
+
+void Hexagon::setHeuristic(unsigned int value)
+{
+    _heuristic = value;
+}
+
+bool Hexagon::canWalkThru()
+{
+    for (auto object : _objects)
+    {
+        if (!object->canWalkThru()) return false;
+    }
+    return true;
 }
 
 }

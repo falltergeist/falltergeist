@@ -430,9 +430,17 @@ void LocationState::handle(std::shared_ptr<Event> event)
             switch (mouse->state())
             {
                 case Mouse::HEXAGON_RED:
+                {
                     // Here goes the movement
+                    auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
+                    auto path = hexagonGrid()->findPath(game->player()->hexagon(), hexagon);
+                    if (path.size())
+                    {
+                        moveObjectToHexagon(game->player(), hexagon);
+                    }
                     event->setHandled(true);
                     break;
+                }
             }
         }
 
@@ -610,37 +618,6 @@ void LocationState::handleAction(GameObject* object, int action)
     }
 }
 
-std::vector<Hexagon*> LocationState::findPath(Hexagon* from, Hexagon* to)
-{
-    std::list<Hexagon*> unvisited;
-    Hexagon* last = 0;
-    Hexagon* current = 0;
-    unvisited.push_back(from);
-
-    while (unvisited.size() != 0)
-    {
-        current = unvisited.front();
-        unvisited.pop_front();
-        current->setChecked(true);
-
-
-        Logger::critical() << "Current: " << current->number() << " From: " << (last ? last->number() : 0) << std::endl;
-        if (current == to) throw 1;
-
-        for (Hexagon* neighbor : *current->neighbors())
-        {
-            if (!neighbor->checked() && !neighbor->cameFrom())
-            {
-                neighbor->setCameFrom(current);
-                unvisited.push_back(neighbor);
-            }
-        }
-        last = current;
-    }
-    std::vector<Hexagon*> result;
-    return result;
-}
-
 std::vector<UI*>* LocationState::uiToRender()
 {
     if (_uiToRender.size()) return &_uiToRender;
@@ -673,7 +650,6 @@ std::vector<UI*>* LocationState::uiToRender()
     {
         _uiToRender.push_back(message);
     }
-
 
     return &_uiToRender;
 }

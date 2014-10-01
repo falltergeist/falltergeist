@@ -18,6 +18,8 @@
  */
 
 // C++ standard includes
+#include <functional>
+#include <queue>
 
 // Falltergeist includes
 #include "../PathFinding/Hexagon.h"
@@ -27,6 +29,15 @@
 
 namespace Falltergeist
 {
+
+struct HeuristicComparsion : public std::binary_function<Hexagon*, Hexagon*, bool>
+{
+    bool operator()(Hexagon* lh, Hexagon* rh) const
+    {
+        return lh->heuristic() > rh->heuristic();
+    }
+};
+
 
 HexagonGrid::HexagonGrid()
 {
@@ -44,6 +55,11 @@ HexagonGrid::HexagonGrid()
                 x -= 8;
                 y -= 6;
             }
+
+            hexagon->setCubeX(q - (p + (p&1))/2);
+            hexagon->setCubeZ(p);
+            hexagon->setCubeY(-hexagon->cubeX() - hexagon->cubeZ());
+
             hexagon->setX(x);
             hexagon->setY(y);
             _hexagons.push_back(hexagon);
@@ -115,6 +131,64 @@ Hexagon* HexagonGrid::hexagonAt(unsigned int x, unsigned int y)
 std::vector<Hexagon*>* HexagonGrid::hexagons()
 {
     return &_hexagons;
+}
+
+std::vector<Hexagon*> HexagonGrid::findPath(Hexagon* from, Hexagon* to)
+{
+    Hexagon* current = 0;
+    std::vector<Hexagon*> result;
+    std::priority_queue<Hexagon*, std::vector<Hexagon*>, HeuristicComparsion> unvisited;
+    int cameFrom[200*200] = {};
+    int costSoFar[200*200] = {};
+
+    // if we can't go to the location
+    // @todo remove when path will have lenght restriction
+    if (!to->canWalkThru()) return result;
+
+    unvisited.push(from);
+
+    cameFrom[from->number()] = 0;
+    costSoFar[from->number()] = 0;
+
+
+    while (!unvisited.empty())
+    {
+        current = unvisited.top(); unvisited.pop();
+        if (current == to) break;
+        // search limit
+        if (costSoFar[current->number()] >= 100) break;
+
+        for (Hexagon* neighbor : *current->neighbors())
+        {
+            if (!neighbor->canWalkThru()) continue;
+
+            unsigned int newCost = costSoFar[current->number()] + 1;
+            if (!costSoFar[neighbor->number()] || newCost < costSoFar[neighbor->number()])
+            {
+                costSoFar[neighbor->number()] = newCost;
+                neighbor->setHeuristic(distance(neighbor, to) + newCost);
+                unvisited.push(neighbor);
+                cameFrom[neighbor->number()] = current->number();
+            }
+        }
+    }
+
+    // found nothing
+    if (current != to) return result;
+
+
+    while (current->number() != from->number())
+    {
+        result.push_back(current);
+        current = _hexagons.at(cameFrom[current->number()]);
+    }
+
+    return result;
+}
+
+unsigned int HexagonGrid::distance(Hexagon* from, Hexagon* to)
+{
+    return (std::abs(from->cubeX() - to->cubeX()) + std::abs(from->cubeY() - to->cubeY()) + std::abs(from->cubeZ() - to->cubeZ())) / 2;
 }
 
 }

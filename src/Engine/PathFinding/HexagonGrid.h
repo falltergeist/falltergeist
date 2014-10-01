@@ -42,6 +42,7 @@ public:
     unsigned int distance(Hexagon* from, Hexagon* to);
     Hexagon* hexagonAt(unsigned int x, unsigned int y);
     Hexagon* at(unsigned int index);
+    std::vector<Hexagon*> findPath(Hexagon* from, Hexagon* to);
 };
 
 }

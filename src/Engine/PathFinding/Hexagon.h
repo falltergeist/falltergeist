@@ -35,13 +35,18 @@ class GameObject;
 class Hexagon
 {
 protected:
-    bool _checked = false; // pathfinding flag
-    Hexagon* _cameFrom = 0; // pathfinding flag
     std::vector<Hexagon*> _neighbors;
     std::list<GameObject*> _objects;
     unsigned int _number = 0; // position in hexagonal grid
     unsigned int _x = 0;
     unsigned int _y = 0;
+
+    int _cubeX = 0;
+    int _cubeY = 0;
+    int _cubeZ = 0;
+
+    unsigned int _heuristic = 0;
+
 public:
     Hexagon();
     Hexagon(unsigned int number);
@@ -55,15 +60,23 @@ public:
     unsigned int number();
     void setNumber(unsigned int number);
 
-    bool checked();
-    void setChecked(bool value);
-
-    Hexagon* cameFrom();
-    void setCameFrom(Hexagon* cameFrom);
-
     std::vector<Hexagon*>* neighbors();
 
     std::list<GameObject*>* objects();
+
+    int cubeX();
+    void setCubeX(int value);
+
+    int cubeY();
+    void setCubeY(int value);
+
+    int cubeZ();
+    void setCubeZ(int value);
+
+    unsigned int heuristic();
+    void setHeuristic(unsigned int value);
+
+    bool canWalkThru();
 };
 
 }

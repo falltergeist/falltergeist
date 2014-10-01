@@ -113,8 +113,6 @@ public:
     void onObjectClick(std::shared_ptr<MouseEvent> event);
     void onMouseDown(std::shared_ptr<MouseEvent> event);
     void onKeyboardUp(std::shared_ptr<KeyboardEvent> event);
-
-    std::vector<Hexagon*> findPath(Hexagon* from, Hexagon* to);
 };
 
 }
