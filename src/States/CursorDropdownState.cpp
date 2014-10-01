@@ -182,16 +182,23 @@ void CursorDropdownState::think()
     _currentSurface= (game->mouse()->y() - _surface->y())/40;
     if (_currentSurface < 0)
     {
-        game->mouse()->setX(_initialX);
+        //game->mouse()->setX(_initialX);
         game->mouse()->setY(_surface->y());
         _currentSurface = 0;
     }
     if ((unsigned int)_currentSurface >= _icons.size())
     {
-        game->mouse()->setX(_initialX);
+        //game->mouse()->setX(_initialX);
         game->mouse()->setY(_surface->y() + _surface->height());
         _currentSurface = _icons.size() - 1;
     }
+
+    int xDelta = game->mouse()->x() - _surface->x();
+    if ( xDelta > 40 || xDelta < 0)
+    {
+        game->mouse()->setX(_initialX);
+    }
+
     auto activeIcon = _activeIcons.at(_currentSurface);
 
     activeIcon->texture()->copyTo(_surface->texture(), activeIcon->x(), activeIcon->y());
