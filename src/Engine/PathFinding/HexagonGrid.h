@@ -37,8 +37,11 @@ protected:
     std::vector<Hexagon*> _hexagons;
 public:
     HexagonGrid();
+    ~HexagonGrid();
     std::vector<Hexagon*>* hexagons();
     unsigned int distance(Hexagon* from, Hexagon* to);
+    Hexagon* hexagonAt(unsigned int x, unsigned int y);
+    Hexagon* at(unsigned int index);
 };
 
 }

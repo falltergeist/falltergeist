@@ -28,6 +28,7 @@
 #include "../Engine/Graphics/Animation.h"
 #include "../Engine/Logger.h"
 #include "../Engine/PathFinding/Hexagon.h"
+#include "../Engine/PathFinding/HexagonGrid.h"
 #include "../Engine/ResourceManager.h"
 #include "../Game/GameAmmoItemObject.h"
 #include "../Game/GameArmorItemObject.h"
@@ -502,7 +503,7 @@ void VM::run()
                 auto position = popDataInteger();
                 auto game = Game::getInstance();
                 GameObject* found = 0;
-                for (auto object : *game->locationState()->hexagons()->at(position)->objects())
+                for (auto object : *game->locationState()->hexagonGrid()->at(position)->objects())
                 {
                     if (object->PID() == PID && object->elevation() == elevation)
                     {
@@ -531,7 +532,7 @@ void VM::run()
                 auto position = y*200 + x;
                 auto game = Game::getInstance();
                 auto player = game->player();
-                auto hexagon = game->locationState()->hexagons()->at(position);
+                auto hexagon = game->locationState()->hexagonGrid()->at(position);
                 LocationState::moveObjectToHexagon(player, hexagon);
                 //player->setPosition(position);
                 player->setOrientation(orientation);
@@ -626,7 +627,7 @@ void VM::run()
                 auto position = popDataInteger();
                 auto object = static_cast<GameObject*>(popDataPointer());
                 if (!object) throw new Exception("Opcode 80b6 error");
-                auto hexagon = Game::getInstance()->locationState()->hexagons()->at(position);
+                auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
                 LocationState::moveObjectToHexagon(object, hexagon);
                 object->setElevation(elevation);
                 pushDataInteger(1);
@@ -640,7 +641,7 @@ void VM::run()
                 auto position = popDataInteger();
                 auto PID = popDataInteger();
                 auto object = GameObjectFactory::createObject(PID);
-                auto hexagon = Game::getInstance()->locationState()->hexagons()->at(position);
+                auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
                 LocationState::moveObjectToHexagon(object, hexagon);
                 object->setElevation(elevation);
                 if (SID > 0)
@@ -671,7 +672,7 @@ void VM::run()
                 auto position = popDataInteger();
                 auto game = Game::getInstance();
                 int found = 0;
-                for (auto object : *game->locationState()->hexagons()->at(position)->objects())
+                for (auto object : *game->locationState()->hexagonGrid()->at(position)->objects())
                 {
                     if (object->PID() == PID && object->elevation() == elevation)
                     {
@@ -1037,7 +1038,7 @@ void VM::run()
                 auto position = popDataInteger();
                 auto critter = static_cast<GameCritterObject*>(popDataPointer());
                 if (!critter) throw new Exception("Opcode 80ff error");
-                auto hexagon = Game::getInstance()->locationState()->hexagons()->at(position);
+                auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
                 LocationState::moveObjectToHexagon(critter, hexagon);
                 critter->setElevation(elevation);
                 pushDataInteger(1);

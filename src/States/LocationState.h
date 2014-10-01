@@ -35,6 +35,7 @@ namespace Falltergeist
 class Animation;
 class GameObject;
 class Hexagon;
+class HexagonGrid;
 class Image;
 class InteractiveSurface;
 class Location;
@@ -57,8 +58,7 @@ protected:
 
     bool _locationEnter = true;
 
-    std::vector<Hexagon*> _hexagons;
-    std::vector<Hexagon*> _hexagonsWithObjects;
+    HexagonGrid* _hexagonGrid = 0;
 
     unsigned int _currentElevation = 0;
     LocationCamera* _camera = 0;
@@ -90,14 +90,12 @@ public:
     virtual void handle(std::shared_ptr<Event> event);
     virtual void render();
 
-    std::vector<Hexagon*>* hexagons();
-    Hexagon* hexagonAt(unsigned int x, unsigned int y);
+    HexagonGrid* hexagonGrid();
     LocationCamera* camera();
 
     std::vector<UI*>* uiToRender();
 
     void checkObjectsToRender();
-    void checkHexagonsWidthObjects();
 
     void setMVAR(unsigned int number, int value);
     int MVAR(unsigned int number);

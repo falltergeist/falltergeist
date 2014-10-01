@@ -173,7 +173,6 @@ void CursorDropdownState::think()
 
     auto game = Game::getInstance();
 
-
     for (auto ui : _inactiveIcons)
     {
         ui->texture()->copyTo(_surface->texture(), ui->x(), ui->y());
@@ -182,13 +181,11 @@ void CursorDropdownState::think()
     _currentSurface= (game->mouse()->y() - _surface->y())/40;
     if (_currentSurface < 0)
     {
-        //game->mouse()->setX(_initialX);
         game->mouse()->setY(_surface->y());
         _currentSurface = 0;
     }
     if ((unsigned int)_currentSurface >= _icons.size())
     {
-        //game->mouse()->setX(_initialX);
         game->mouse()->setY(_surface->y() + _surface->height());
         _currentSurface = _icons.size() - 1;
     }

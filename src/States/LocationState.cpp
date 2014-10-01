@@ -32,6 +32,7 @@
 #include "../Engine/Graphics/Tile.h"
 #include "../Engine/Graphics/TileMap.h"
 #include "../Engine/PathFinding/Hexagon.h"
+#include "../Engine/PathFinding/HexagonGrid.h"
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/LocationCamera.h"
 #include "../Engine/Logger.h"
@@ -64,60 +65,7 @@ LocationState::LocationState() : State()
     _camera = new LocationCamera(renderer->width(), renderer->height(), 0, 0);
     _floor = new TileMap();
     _roof = new TileMap();
-
-    // Creating 200x200 hexagonal map
-    unsigned int index = 0;
-    for (unsigned int q = 0; q != 200; ++q)
-    {
-        for (unsigned int p = 0; p != 200; ++p, ++index)
-        {
-            auto hexagon = new Hexagon(index);
-            int x = 48*100 + 16*(q+1) - 24*p;
-            int y = (q+1)*12 + 6*p + 12;
-            if (p&1)
-            {
-                x -= 8;
-                y -= 6;
-            }
-            hexagon->setX(x);
-            hexagon->setY(y);
-            _hexagons.push_back(hexagon);
-        }
-    }
-
-    // Creating links between hexagons
-    for (index = 0; index != 200*200; ++index)
-    {
-        auto hexagon = _hexagons.at(index);
-
-        unsigned int q = index/200; // hexagonal y
-        unsigned int p = index%200; // hexagonal x
-
-        unsigned index1 = (q + 1)*200 + p;
-        unsigned index4 = (q-1)*200 + p;
-        unsigned int index2, index3, index5, index6;
-        if (index&1)
-        {
-            index2 = q*200 + p-1;
-            index3 = (q-1)*200 + p-1;
-            index5 = (q-1)*200 + p+1;
-            index6 = q*200 + p+1;
-        }
-        else
-        {
-            index2 = (q+1)*200 + p-1;
-            index3 = q*200 + p-1;
-            index5 = q*200 + p+1;
-            index6 = (q+1)*200 + p+1;
-        }
-
-        if (index1 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index1));
-        if (index2 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index2));
-        if (index3 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index3));
-        if (index4 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index4));
-        if (index5 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index5));
-        if (index6 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index6));
-    }
+    _hexagonGrid = new HexagonGrid();
 
     auto game = Game::getInstance();
     game->mouse()->setState(Mouse::ACTION);
@@ -125,12 +73,8 @@ LocationState::LocationState() : State()
 
 LocationState::~LocationState()
 {
+    delete _hexagonGrid;
     delete _camera;
-    while (!_hexagons.empty())
-    {
-        delete _hexagons.back();
-        _hexagons.pop_back();
-    }
     delete _floor;
     delete _roof;
     delete _locationScript;
@@ -163,8 +107,8 @@ void LocationState::setLocation(std::string name)
     _currentElevation = mapFile->defaultElevation();
 
     // Set camera position on default
-    camera()->setXPosition(hexagons()->at(mapFile->defaultPosition())->x());
-    camera()->setYPosition(hexagons()->at(mapFile->defaultPosition())->y());
+    camera()->setXPosition(hexagonGrid()->at(mapFile->defaultPosition())->x());
+    camera()->setYPosition(hexagonGrid()->at(mapFile->defaultPosition())->y());
 
     // Initialize MAP vars
     if (mapFile->MVARsize() > 0)
@@ -206,7 +150,7 @@ void LocationState::setLocation(std::string name)
             if (intFile) object->scripts()->push_back(new VM(intFile, object));
         }
 
-        auto hexagon = hexagons()->at(mapObject->hexPosition());
+        auto hexagon = hexagonGrid()->at(mapObject->hexPosition());
         LocationState::moveObjectToHexagon(object, hexagon, false);
     }
 
@@ -221,7 +165,7 @@ void LocationState::setLocation(std::string name)
         auto script = new VM(ResourceManager::intFileType(0), player);
         player->scripts()->push_back(script);
 
-        auto hexagon = hexagons()->at(mapFile->defaultPosition());
+        auto hexagon = hexagonGrid()->at(mapFile->defaultPosition());
         LocationState::moveObjectToHexagon(player, hexagon, true);
         Logger::critical() << "Player hexagon: " << hexagon->number() << std::endl;
 
@@ -335,7 +279,7 @@ void LocationState::think()
     */
 
     // UI thinking
-    for (auto hexagon : _hexagonsWithObjects)
+    for (auto hexagon : *hexagonGrid()->hexagons())
     {
         for (auto it = hexagon->objects()->rbegin(); it != hexagon->objects()->rend(); ++it)
         {
@@ -396,7 +340,7 @@ void LocationState::think()
 
         if (_locationScript) _locationScript->initialize();
 
-        for (auto hexagon : *hexagons())
+        for (auto hexagon : *hexagonGrid()->hexagons())
         {
             for (auto object : *hexagon->objects())
             {
@@ -407,7 +351,7 @@ void LocationState::think()
 
         if (_locationScript) _locationScript->call("map_enter_p_proc");
 
-        for (auto hexagon : *hexagons())
+        for (auto hexagon : *hexagonGrid()->hexagons())
         {
             for (auto object : *hexagon->objects())
             {
@@ -422,7 +366,7 @@ void LocationState::think()
         {
             _scriptsTicks = SDL_GetTicks();
             if (_locationScript) _locationScript->call("map_update_p_proc");
-            for (auto hexagon : *hexagons())
+            for (auto hexagon : *hexagonGrid()->hexagons())
             {
                 for (auto object : *hexagon->objects())
                 {
@@ -486,11 +430,6 @@ void LocationState::onKeyboardUp(std::shared_ptr<KeyboardEvent> event)
     }
 }
 
-std::vector<Hexagon*>* LocationState::hexagons()
-{
-    return &_hexagons;
-}
-
 LocationCamera* LocationState::camera()
 {
     return _camera;
@@ -500,7 +439,7 @@ void LocationState::checkObjectsToRender()
 {
     _objectsToRender.clear();
 
-    for (auto hexagon : _hexagonsWithObjects)
+    for (auto hexagon : *hexagonGrid()->hexagons())
     {
         for (auto it = hexagon->objects()->rbegin(); it != hexagon->objects()->rend(); ++it)
         {
@@ -582,7 +521,7 @@ void LocationState::moveObjectToHexagon(GameObject* object, Hexagon* hexagon, bo
 
     if (calculateHexagons)
     {
-        Game::getInstance()->locationState()->checkHexagonsWidthObjects();
+        //Game::getInstance()->locationState()->checkHexagonsWidthObjects();
     }
 }
 
@@ -611,31 +550,6 @@ void LocationState::handleAction(GameObject* object, int action)
         }
 
     }
-}
-
-void LocationState::checkHexagonsWidthObjects()
-{
-    _hexagonsWithObjects.clear();
-    for (auto hexagon : *hexagons())
-    {
-        if (hexagon->objects()->size() > 0)
-        {
-            _hexagonsWithObjects.push_back(hexagon);
-        }
-    }
-}
-
-Hexagon* LocationState::hexagonAt(unsigned int x, unsigned int y)
-{
-    for (auto hexagon : *hexagons())
-    {
-       if (y >= hexagon->y() - 8 && y < hexagon->y() + 4)
-       if (x >= hexagon->x() - 16 && x < hexagon->x() + 16)
-       {
-           return hexagon;
-       }
-    }
-    return 0;
 }
 
 std::vector<Hexagon*> LocationState::findPath(Hexagon* from, Hexagon* to)
@@ -704,6 +618,11 @@ std::vector<UI*>* LocationState::uiToRender()
 
 
     return &_uiToRender;
+}
+
+HexagonGrid* LocationState::hexagonGrid()
+{
+    return _hexagonGrid;
 }
 
 }
