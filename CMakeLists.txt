@@ -236,6 +236,8 @@ set(SOURCES main.cpp
             src/VM/Handlers/Opcode8002Handler.cpp
             src/VM/Handlers/Opcode8003Handler.h
             src/VM/Handlers/Opcode8003Handler.cpp
+            src/VM/Handlers/Opcode8004Handler.h
+            src/VM/Handlers/Opcode8004Handler.cpp
             src/VM/Handlers/Opcode8005Handler.h
             src/VM/Handlers/Opcode8005Handler.cpp
             src/VM/Handlers/Opcode8012Handler.h

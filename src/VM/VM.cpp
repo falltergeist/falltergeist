@@ -50,6 +50,7 @@
 #include "../VM/VMStackPointerValue.h"
 #include "../VM/Handlers/Opcode8002Handler.h"
 #include "../VM/Handlers/Opcode8003Handler.h"
+#include "../VM/Handlers/Opcode8004Handler.h"
 #include "../VM/Handlers/Opcode8005Handler.h"
 #include "../VM/Handlers/Opcode8012Handler.h"
 #include "../VM/Handlers/Opcode8013Handler.h"
@@ -129,71 +130,74 @@ void VM::run()
         unsigned short opcode;
         *_script >> opcode;
 
-        std::shared_ptr<OpcodeHandler> opcodeHandler;
+        OpcodeHandler* opcodeHandler = 0;
         switch (opcode)
         {
             // В этот switch нужно перенести те опкоды, которые теперь в виде класса
             // Это нужно из-за того что эти классы сами меняют программный счетчик
             // И нужно предотвратить его смену здесь в default
             case 0x8002:
-                opcodeHandler = std::shared_ptr<Opcode8002Handler>(new Opcode8002Handler(this));
+                opcodeHandler = new Opcode8002Handler(this);
                 break;
             case 0x8003:
-                opcodeHandler = std::shared_ptr<Opcode8003Handler>(new Opcode8003Handler(this));
+                opcodeHandler = new Opcode8003Handler(this);
+                break;
+            case 0x8004:
+                opcodeHandler = new Opcode8004Handler(this);
                 break;
             case 0x8005:
-                opcodeHandler = std::shared_ptr<Opcode8005Handler>(new Opcode8005Handler(this));
+                opcodeHandler = new Opcode8005Handler(this);
                 break;
             case 0x8012:
-                opcodeHandler = std::shared_ptr<Opcode8012Handler>(new Opcode8012Handler(this));
+                opcodeHandler = new Opcode8012Handler(this);
                 break;
             case 0x8013:
-                opcodeHandler = std::shared_ptr<Opcode8013Handler>(new Opcode8013Handler(this));
+                opcodeHandler = new Opcode8013Handler(this);
                 break;
             case 0x8014:
-                opcodeHandler = std::shared_ptr<Opcode8014Handler>(new Opcode8014Handler(this));
+                opcodeHandler = new Opcode8014Handler(this);
                 break;
             case 0x8015:
-                opcodeHandler = std::shared_ptr<Opcode8015Handler>(new Opcode8015Handler(this));
+                opcodeHandler = new Opcode8015Handler(this);
                 break;
             case 0x8033:
-                opcodeHandler = std::shared_ptr<Opcode8033Handler>(new Opcode8033Handler(this));
+                opcodeHandler = new Opcode8033Handler(this);
                 break;
             case 0x8034:
-                opcodeHandler = std::shared_ptr<Opcode8034Handler>(new Opcode8034Handler(this));
+                opcodeHandler = new Opcode8034Handler(this);
                 break;
             case 0x8039:
-                opcodeHandler = std::shared_ptr<Opcode8039Handler>(new Opcode8039Handler(this));
+                opcodeHandler = new Opcode8039Handler(this);
                 break;
             case 0x80BA:
-                opcodeHandler = std::shared_ptr<Opcode80BAHandler>(new Opcode80BAHandler(this));
+                opcodeHandler = new Opcode80BAHandler(this);
                 break;
             case 0x80BC:
-                opcodeHandler = std::shared_ptr<Opcode80BCHandler>(new Opcode80BCHandler(this));
+                opcodeHandler = new Opcode80BCHandler(this);
                 break;
             case 0x80CA:
-                opcodeHandler = std::shared_ptr<Opcode80CAHandler>(new Opcode80CAHandler(this));
+                opcodeHandler = new Opcode80CAHandler(this);
                 break;
             case 0x80CB:
-                opcodeHandler = std::shared_ptr<Opcode80CBHandler>(new Opcode80CBHandler(this));
+                opcodeHandler = new Opcode80CBHandler(this);
                 break;
             case 0x80DE:
-                opcodeHandler = std::shared_ptr<Opcode80DEHandler>(new Opcode80DEHandler(this));
+                opcodeHandler = new Opcode80DEHandler(this);
                 break;
             case 0x810A:
-                opcodeHandler = std::shared_ptr<Opcode810AHandler>(new Opcode810AHandler(this));
+                opcodeHandler = new Opcode810AHandler(this);
                 break;
             case 0x8119:
-                opcodeHandler = std::shared_ptr<Opcode8119Handler>(new Opcode8119Handler(this));
+                opcodeHandler = new Opcode8119Handler(this);
                 break;
             case 0x8127:
-                opcodeHandler = std::shared_ptr<Opcode8127Handler>(new Opcode8127Handler(this));
+                opcodeHandler = new Opcode8127Handler(this);
                 break;
             case 0x9001:
-                opcodeHandler = std::shared_ptr<Opcode9001Handler>(new Opcode9001Handler(this));
+                opcodeHandler = new Opcode9001Handler(this);
                 break;
             case 0xC001:
-                opcodeHandler = std::shared_ptr<OpcodeC001Handler>(new OpcodeC001Handler(this));
+                opcodeHandler = new OpcodeC001Handler(this);
                 break;
             default:
                 _programCounter += 2;
@@ -203,12 +207,7 @@ void VM::run()
         {
             case 0x8002: break;
             case 0x8003: break;
-            case 0x8004:
-            {
-                Logger::debug("SCRIPT") << "[8004] [*] goto(addr)" << std::endl;
-                _programCounter = popDataInteger();
-                break;
-            }
+            case 0x8004: break;
             case 0x8005: break;
             case 0x800c:
             {
