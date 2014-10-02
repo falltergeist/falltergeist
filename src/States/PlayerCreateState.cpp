@@ -199,7 +199,7 @@ PlayerCreateState::PlayerCreateState() : State()
     // reverse iterator to change drawing order
     for(auto it = _labels.rbegin(); it != _labels.rend(); ++it)
     {
-        it->second->setBackgroundColor(0x00000001);
+        it->second->setBackgroundColor(0xffffff00); // hidden mask for event handling
         it->second->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerCreateState::onLabelClick);
         addUI(it->second);
     }
@@ -215,12 +215,6 @@ PlayerCreateState::PlayerCreateState() : State()
     {
         it->second->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerCreateState::onMaskClick);
         addUI(it->second);
-    }
-
-    // Fix to handle click on empty spaces
-    for(auto it = _labels.begin(); it != _labels.end(); ++it)
-    {
-        it->second->setBackgroundColor(0x00000001);
     }
 
     _selectedImage = _images.at("stats_1");

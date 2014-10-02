@@ -45,8 +45,7 @@ void ActiveUI::handle(std::shared_ptr<Event> event)
         //auto emitter = std::shared_ptr<ActiveUI>(this);
         //event->setEmitter(emitter);
 
-        unsigned int alpha = this->pixel(x, y) & 0xFF;
-        if (alpha > 0)
+        if (this->pixel(x, y))
         {
             if (mouseEvent->name() == "mousemove")
             {
