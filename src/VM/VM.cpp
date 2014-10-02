@@ -53,6 +53,7 @@
 #include "../VM/Handlers/Opcode8004Handler.h"
 #include "../VM/Handlers/Opcode8005Handler.h"
 #include "../VM/Handlers/Opcode800CHandler.h"
+#include "../VM/Handlers/Opcode800DHandler.h"
 #include "../VM/Handlers/Opcode8012Handler.h"
 #include "../VM/Handlers/Opcode8013Handler.h"
 #include "../VM/Handlers/Opcode8014Handler.h"
@@ -150,7 +151,10 @@ void VM::run()
                 opcodeHandler = new Opcode8005Handler(this);
                 break;
             case 0x800C:
-                opcodeHandler = new Opcode8005Handler(this);
+                opcodeHandler = new Opcode800CHandler(this);
+                break;
+            case 0x800D:
+                opcodeHandler = new Opcode800DHandler(this);
                 break;
             case 0x8012:
                 opcodeHandler = new Opcode8012Handler(this);
@@ -214,12 +218,7 @@ void VM::run()
             case 0x8004: break;
             case 0x8005: break;
             case 0x800c: break;
-            case 0x800d:
-            {
-                Logger::debug("SCRIPT") << "[800D] [*] pop_d => push_r" << std::endl;
-                _returnStack.push(_dataStack.pop());
-                break;
-            }
+            case 0x800d: break;
             case 0x8010:
             {
                 Logger::debug("SCRIPT") << "[8010] [*] startdone" << std::endl;
