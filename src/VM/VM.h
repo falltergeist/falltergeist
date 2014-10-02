@@ -63,7 +63,10 @@ public:
     virtual ~VM();
     void run();
     void initialize();
+
     bool initialized();
+    void setInitialized(bool value);
+
     void call(std::string name);
     libfalltergeist::IntFileType* script();
 

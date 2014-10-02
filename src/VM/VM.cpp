@@ -45,6 +45,7 @@
 #include "../States/CritterDialogState.h"
 #include "../States/LocationState.h"
 #include "../VM/VM.h"
+#include "../VM/VMHaltException.h"
 #include "../VM/VMStackIntValue.h"
 #include "../VM/VMStackFloatValue.h"
 #include "../VM/VMStackPointerValue.h"
@@ -54,6 +55,7 @@
 #include "../VM/Handlers/Opcode8005Handler.h"
 #include "../VM/Handlers/Opcode800CHandler.h"
 #include "../VM/Handlers/Opcode800DHandler.h"
+#include "../VM/Handlers/Opcode8010Handler.h"
 #include "../VM/Handlers/Opcode8012Handler.h"
 #include "../VM/Handlers/Opcode8013Handler.h"
 #include "../VM/Handlers/Opcode8014Handler.h"
@@ -156,6 +158,9 @@ void VM::run()
             case 0x800D:
                 opcodeHandler = new Opcode800DHandler(this);
                 break;
+            case 0x8010:
+                opcodeHandler = new Opcode8010Handler(this);
+                break;
             case 0x8012:
                 opcodeHandler = new Opcode8012Handler(this);
                 break;
@@ -219,12 +224,7 @@ void VM::run()
             case 0x8005: break;
             case 0x800c: break;
             case 0x800d: break;
-            case 0x8010:
-            {
-                Logger::debug("SCRIPT") << "[8010] [*] startdone" << std::endl;
-                _initialized = true;
-                return;
-            }
+            case 0x8010: break;
             case 0x8012: break;
             case 0x8013: break;
             case 0x8014: break;
@@ -1493,7 +1493,17 @@ void VM::run()
                 throw Exception("["+os.str()+"] - unimplemented opcode");
             }
         }        
-        if (opcodeHandler) opcodeHandler->run();
+        if (opcodeHandler)
+        {
+            try
+            {
+                opcodeHandler->run();
+            }
+            catch(VMHaltException& e)
+            {
+                return;
+            }
+        }
     }
 }
 
@@ -1715,6 +1725,11 @@ void* VM::owner()
 bool VM::initialized()
 {
     return _initialized;
+}
+
+void VM::setInitialized(bool value)
+{
+    _initialized = value;
 }
 
 int VM::SVARbase()

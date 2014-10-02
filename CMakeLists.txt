@@ -244,6 +244,8 @@ set(SOURCES main.cpp
             src/VM/Handlers/Opcode800CHandler.cpp
             src/VM/Handlers/Opcode800DHandler.h
             src/VM/Handlers/Opcode800DHandler.cpp
+            src/VM/Handlers/Opcode8010Handler.h
+            src/VM/Handlers/Opcode8010Handler.cpp
             src/VM/Handlers/Opcode8012Handler.h
             src/VM/Handlers/Opcode8012Handler.cpp
             src/VM/Handlers/Opcode8013Handler.h
@@ -282,6 +284,8 @@ set(SOURCES main.cpp
             src/VM/OpcodeHandler.cpp
             src/VM/VM.cpp
             src/VM/VM.h
+            src/VM/VMHaltException.cpp
+            src/VM/VMHaltException.h
             src/VM/VMStack.cpp
             src/VM/VMStack.h
             src/VM/VMStackValue.cpp
