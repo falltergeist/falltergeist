@@ -234,6 +234,8 @@ set(SOURCES main.cpp
             src/UI/TextArea.h
             src/VM/Handlers/Opcode8002Handler.h
             src/VM/Handlers/Opcode8002Handler.cpp
+            src/VM/Handlers/Opcode8003Handler.h
+            src/VM/Handlers/Opcode8003Handler.cpp
             src/VM/Handlers/Opcode8005Handler.h
             src/VM/Handlers/Opcode8005Handler.cpp
             src/VM/Handlers/Opcode8012Handler.h

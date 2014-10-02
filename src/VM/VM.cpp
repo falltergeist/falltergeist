@@ -49,6 +49,7 @@
 #include "../VM/VMStackFloatValue.h"
 #include "../VM/VMStackPointerValue.h"
 #include "../VM/Handlers/Opcode8002Handler.h"
+#include "../VM/Handlers/Opcode8003Handler.h"
 #include "../VM/Handlers/Opcode8005Handler.h"
 #include "../VM/Handlers/Opcode8012Handler.h"
 #include "../VM/Handlers/Opcode8013Handler.h"
@@ -137,6 +138,9 @@ void VM::run()
             case 0x8002:
                 opcodeHandler = std::shared_ptr<Opcode8002Handler>(new Opcode8002Handler(this));
                 break;
+            case 0x8003:
+                opcodeHandler = std::shared_ptr<Opcode8003Handler>(new Opcode8003Handler(this));
+                break;
             case 0x8005:
                 opcodeHandler = std::shared_ptr<Opcode8005Handler>(new Opcode8005Handler(this));
                 break;
@@ -198,9 +202,7 @@ void VM::run()
         switch (opcode)
         {
             case 0x8002: break;
-            case 0x8003:
-                Logger::debug("SCRIPT") << "[8003] unlock" << std::endl;
-                break;
+            case 0x8003: break;
             case 0x8004:
             {
                 Logger::debug("SCRIPT") << "[8004] [*] goto(addr)" << std::endl;
