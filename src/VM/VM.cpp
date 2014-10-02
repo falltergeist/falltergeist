@@ -60,6 +60,7 @@
 #include "../VM/Handlers/Opcode8013Handler.h"
 #include "../VM/Handlers/Opcode8014Handler.h"
 #include "../VM/Handlers/Opcode8015Handler.h"
+#include "../VM/Handlers/Opcode8016Handler.h"
 #include "../VM/Handlers/Opcode8033Handler.h"
 #include "../VM/Handlers/Opcode8034Handler.h"
 #include "../VM/Handlers/Opcode8039Handler.h"
@@ -173,6 +174,9 @@ void VM::run()
             case 0x8015:
                 opcodeHandler = new Opcode8015Handler(this);
                 break;
+            case 0x8016:
+                opcodeHandler = new Opcode8016Handler(this);
+                break;
             case 0x8033:
                 opcodeHandler = new Opcode8033Handler(this);
                 break;
@@ -229,18 +233,7 @@ void VM::run()
             case 0x8013: break;
             case 0x8014: break;
             case 0x8015: break;
-            case 0x8016:
-            {
-                Logger::debug("SCRIPT") << "[8016] [*] export(name)" << std::endl;
-                auto name = static_cast<std::string*>(popDataPointer());
-                auto game = Game::getInstance();
-                auto EVARS = game->locationState()->EVARS();
-                if (EVARS->find(*name) == EVARS->end())
-                {
-                    EVARS->insert(std::make_pair(*name, nullptr));
-                }
-                break;
-            }
+            case 0x8016: break;
             case 0x8018:
             {
                 Logger::debug("SCRIPT") << "[8018] [*] dswap" << std::endl;
