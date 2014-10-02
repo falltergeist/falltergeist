@@ -242,8 +242,8 @@ void Animation::think()
             _currentFrame = 0;
         }
        auto frame = frames()->at(_currentFrame);
-       setXOffset(frame->xOffset() - (int)std::floor(frame->width()*0.5));
-       setYOffset(frame->yOffset() - frame->height());
+       setXOffset(frame->xOffset());
+       setYOffset(frame->yOffset());
 
     }
 }

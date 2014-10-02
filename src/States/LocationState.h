@@ -50,7 +50,6 @@ class LocationState : public State
 protected:
 
     // Timers
-    unsigned int _lastObjectsToRenderCheck = 0;
     unsigned int _scrollTicks = 0;
     unsigned int _scriptsTicks = 0;
 
@@ -58,24 +57,13 @@ protected:
     LocationCamera* _camera = 0;
     TileMap* _floor = 0;
     TileMap* _roof = 0;
-
-
-
     VM* _locationScript = 0;
-
-    bool _locationEnter = true;
-
-    unsigned int _currentElevation = 0;
-
-    std::vector<GameObject*> _objectsToRender;
-    std::vector<UI*> _uiToRender;
-
     std::vector<int> _MVARS;
     std::map<std::string, VMStackValue*> _EVARS;
-
-
     std::vector<ActiveUI*> _floatMessages;
 
+    bool _locationEnter = true;
+    unsigned int _currentElevation = 0;
 
     bool _scrollLeft = false;
     bool _scrollRight = false;
@@ -96,16 +84,12 @@ public:
     HexagonGrid* hexagonGrid();
     LocationCamera* camera();
 
-    std::vector<UI*>* uiToRender();
-
-    void checkObjectsToRender();
-
     void setMVAR(unsigned int number, int value);
     int MVAR(unsigned int number);
 
     std::map<std::string, VMStackValue*>* EVARS();
 
-    static void moveObjectToHexagon(GameObject* object, Hexagon* hexagon, bool calculateHexagons = true);
+    static void moveObjectToHexagon(GameObject* object, Hexagon* hexagon);
     void handleAction(GameObject* object, int action);
 
     void onBackgroundClick(std::shared_ptr<MouseEvent> event);

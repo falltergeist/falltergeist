@@ -58,22 +58,22 @@ std::list<GameObject*>* Hexagon::objects()
     return &_objects;
 }
 
-unsigned int Hexagon::x()
+int Hexagon::x()
 {
     return _x;
 }
 
-void Hexagon::setX(unsigned int value)
+void Hexagon::setX(int value)
 {
     _x = value;
 }
 
-unsigned int Hexagon::y()
+int Hexagon::y()
 {
     return _y;
 }
 
-void Hexagon::setY(unsigned int value)
+void Hexagon::setY(int value)
 {
     _y = value;
 }
@@ -125,6 +125,16 @@ bool Hexagon::canWalkThru()
         if (!object->canWalkThru()) return false;
     }
     return true;
+}
+
+bool Hexagon::inRender()
+{
+    return _inRender;
+}
+
+void Hexagon::setInRender(bool value)
+{
+    _inRender = value;
 }
 
 }

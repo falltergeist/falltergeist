@@ -62,14 +62,14 @@ namespace Falltergeist
 
 LocationState::LocationState() : State()
 {
-    auto renderer = Game::getInstance()->renderer();
-    _camera = new LocationCamera(renderer->width(), renderer->height(), 0, 0);
+    auto game = Game::getInstance();
+    game->mouse()->setState(Mouse::ACTION);
+
+    _camera = new LocationCamera(game->renderer()->width(), game->renderer()->height(), 0, 0);
     _floor = new TileMap();
     _roof = new TileMap();
     _hexagonGrid = new HexagonGrid();
 
-    auto game = Game::getInstance();
-    game->mouse()->setState(Mouse::ACTION);
 }
 
 LocationState::~LocationState()
@@ -86,17 +86,13 @@ void LocationState::init()
     if (initialized()) return;
     State::init();
 
-
     auto game = Game::getInstance();
-
-    setLocation("maps/" + Game::getInstance()->engineSettings()->initialLocation() + ".map");
-
+    setLocation("maps/" + game->engineSettings()->initialLocation() + ".map");
     game->pushState(new PlayerPanelState());
 }
 
 void LocationState::setLocation(std::string name)
 {    
-
     auto mapFile = ResourceManager::mapFileType(name);
 
     if (mapFile == nullptr)
@@ -122,10 +118,9 @@ void LocationState::setLocation(std::string name)
         }
     }
 
-    // @todo remove objects from hexagons
-
     auto mapObjects = mapFile->elevations()->at(_currentElevation)->objects();
 
+    // @todo remove old objects from hexagonal grid
     for (auto mapObject : *mapObjects)
     {
         auto object = GameObjectFactory::createObject(mapObject->PID());
@@ -134,7 +129,6 @@ void LocationState::setLocation(std::string name)
             Logger::error() << "LocationState::setLocation() - cant create object with PID: " << mapObject->PID() << std::endl;
             continue;
         }
-
 
         object->setFID(mapObject->FID());
         object->setElevation(_currentElevation);
@@ -152,7 +146,7 @@ void LocationState::setLocation(std::string name)
         }
 
         auto hexagon = hexagonGrid()->at(mapObject->hexPosition());
-        LocationState::moveObjectToHexagon(object, hexagon, false);
+        LocationState::moveObjectToHexagon(object, hexagon);
     }
 
     // Adding dude
@@ -167,7 +161,7 @@ void LocationState::setLocation(std::string name)
         player->scripts()->push_back(script);
 
         auto hexagon = hexagonGrid()->at(mapFile->defaultPosition());
-        LocationState::moveObjectToHexagon(player, hexagon, true);
+        LocationState::moveObjectToHexagon(player, hexagon);
 
         // Just for testing
         {
@@ -185,7 +179,6 @@ void LocationState::setLocation(std::string name)
     {
         _locationScript = new VM(ResourceManager::intFileType(mapFile->scriptId()-1), Game::getInstance()->locationState());
     }
-
 
     // Generates floor and roof images
     {
@@ -209,7 +202,6 @@ void LocationState::setLocation(std::string name)
                 _roof->tiles()->push_back(tile);
             }
         }
-        //_floor->addEventHandler("keyup", this, (EventRecieverMethod) &LocationState::onKeyboardUp);
     }
 }
 
@@ -261,23 +253,29 @@ void LocationState::render()
 {
     _floor->render();
     //_roof->render();
-    for (auto ui : *uiToRender())
+    for (auto hexagon : *hexagonGrid()->hexagons())
     {
-        ui->render();
+        hexagon->setInRender(false);
+        for (auto object : *hexagon->objects())
+        {
+            object->render();
+            if (object->inRender())
+            {
+                hexagon->setInRender(true);
+            }
+        }
     }
-    _uiToRender.clear();
 }
 
 void LocationState::think()
 {
     Game::getInstance()->gameTime()->think();
 
-    // UI thinking
     for (auto hexagon : *hexagonGrid()->hexagons())
     {
-        for (auto it = hexagon->objects()->rbegin(); it != hexagon->objects()->rend(); ++it)
+        for (auto object : *hexagon->objects())
         {
-            if ((*it)->ui()) (*it)->ui()->think();
+            object->think();
         }
     }
 
@@ -319,13 +317,6 @@ void LocationState::think()
             }
         }
 
-    }
-
-    // Checking objects to render
-    if (SDL_GetTicks() - _lastObjectsToRenderCheck >= 10)
-    {
-        _lastObjectsToRenderCheck = SDL_GetTicks();
-        checkObjectsToRender();
     }
 
     if (_locationEnter)
@@ -460,10 +451,15 @@ void LocationState::handle(std::shared_ptr<Event> event)
         }
     }
 
-    for (auto ui : *uiToRender())
+    for (auto hexagon : *hexagonGrid()->hexagons())
     {
-        if (event->handled()) return;
-        if (auto activeUI = dynamic_cast<ActiveUI*>(ui)) activeUI->handle(event);
+        if (!hexagon->inRender()) continue;
+        for (auto it = hexagon->objects()->rbegin(); it != hexagon->objects()->rend(); ++it)
+        {
+            if (event->handled()) return;
+            if (!(*it)->inRender()) continue;
+            (*it)->handle(event);
+        }
     }
 }
 
@@ -479,49 +475,6 @@ void LocationState::onKeyboardUp(std::shared_ptr<KeyboardEvent> event)
 LocationCamera* LocationState::camera()
 {
     return _camera;
-}
-
-void LocationState::checkObjectsToRender()
-{
-    _objectsToRender.clear();
-
-    for (auto hexagon : *hexagonGrid()->hexagons())
-    {
-        for (auto it = hexagon->objects()->rbegin(); it != hexagon->objects()->rend(); ++it)
-        {
-            auto ui = dynamic_cast<ActiveUI*>((*it)->ui());
-            if (!ui) continue;
-
-            unsigned int x, y, width, height;
-
-            width = ui->width();
-            height = ui->height();
-
-            auto animation = dynamic_cast<Animation*>((*it)->ui());
-            if (animation)
-            {
-                x = hexagon->x() + ui->xOffset() - std::floor(width*0.5);
-                y = hexagon->y() + ui->yOffset() - height;
-            }
-            else
-            {
-                x = hexagon->x() + ui->xOffset();
-                y = hexagon->y() + ui->yOffset();
-            }
-
-            // check if object is out of camera borders
-            if (x + width < camera()->x()) continue; // right
-            if (y + height < camera()->y()) continue; // bottom
-            if (x > camera()->x() + camera()->width()) continue; // left
-            if (y > camera()->y() + camera()->height()) continue; // top
-
-            ui->setX(hexagon->x() - camera()->x());
-            ui->setY(hexagon->y() - camera()->y());
-
-
-            _objectsToRender.push_back((*it));
-        }
-    }
 }
 
 void LocationState::setMVAR(unsigned int number, int value)
@@ -547,7 +500,7 @@ std::map<std::string, VMStackValue*>* LocationState::EVARS()
     return &_EVARS;
 }
 
-void LocationState::moveObjectToHexagon(GameObject* object, Hexagon* hexagon, bool calculateHexagons)
+void LocationState::moveObjectToHexagon(GameObject* object, Hexagon* hexagon)
 {
     auto oldHexagon = object->hexagon();
     if (oldHexagon)
@@ -564,11 +517,6 @@ void LocationState::moveObjectToHexagon(GameObject* object, Hexagon* hexagon, bo
 
     object->setHexagon(hexagon);
     hexagon->objects()->push_back(object);
-
-    if (calculateHexagons)
-    {
-        //Game::getInstance()->locationState()->checkHexagonsWidthObjects();
-    }
 }
 
 void LocationState::handleAction(GameObject* object, int action)
@@ -596,42 +544,6 @@ void LocationState::handleAction(GameObject* object, int action)
         }
 
     }
-}
-
-std::vector<UI*>* LocationState::uiToRender()
-{
-    if (_uiToRender.size()) return &_uiToRender;
-
-    _floatMessages.clear();
-    for (auto object : _objectsToRender)
-    {
-
-        object->ui()->removeEventHandlers("mouseleftdown");
-        object->ui()->addEventHandler("mouseleftdown", object, (EventRecieverMethod) &LocationState::onMouseDown);
-        _uiToRender.push_back(object->ui());
-
-        if (auto message = object->floatMessage())
-        {
-            if (SDL_GetTicks() - message->timestampCreated() >= 7000)
-            {
-                delete object->floatMessage();
-                object->setFloatMessage(nullptr);
-            }
-            else
-            {
-                message->setX(object->hexagon()->x() - camera()->x() - message->width()*0.5);
-                message->setY(object->hexagon()->y() - camera()->y() - 70 - message->height());
-                _floatMessages.push_back(message);
-            }
-        }
-    }
-
-    for (auto message : _floatMessages)
-    {
-        _uiToRender.push_back(message);
-    }
-
-    return &_uiToRender;
 }
 
 HexagonGrid* LocationState::hexagonGrid()

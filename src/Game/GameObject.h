@@ -33,13 +33,14 @@
 
 namespace Falltergeist
 {
-class VM;
-class Location;
-class Image;
-class AnimationQueue;
 class ActiveUI;
+class AnimationQueue;
+class Event;
 class Hexagon;
+class Image;
+class Location;
 class TextArea;
+class VM;
 
 class GameObject : public EventReciever
 {
@@ -58,6 +59,7 @@ protected:
     Hexagon* _hexagon = 0;
     virtual void _generateUi();
     TextArea* _floatMessage = 0;
+    bool _inRender = false;
 public:
     enum { TYPE_ITEM = 0, TYPE_CRITTER, TYPE_SCENERY, TYPE_WALL, TYPE_TILE, TYPE_MISC, TYPE_DUDE };
     enum { TYPE_ITEM_ARMOR = 0, TYPE_ITEM_CONTAINER, TYPE_ITEM_DRUG, TYPE_ITEM_WEAPON, TYPE_ITEM_AMMO, TYPE_ITEM_MISC, TYPE_ITEM_KEY };
@@ -92,6 +94,10 @@ public:
 
     std::vector<VM*>* scripts();
 
+    void render();
+    void think();
+    void handle(std::shared_ptr<Event> event);
+    
     ActiveUI* ui();
     void setUI(ActiveUI* ui);
 
@@ -101,6 +107,8 @@ public:
     TextArea* floatMessage();
     void setFloatMessage(TextArea* floatMessage);
 
+    void setInRender(bool value);
+    bool inRender();
 };
 
 }

@@ -54,8 +54,8 @@ Image::Image(std::shared_ptr<libfalltergeist::FrmFileType> frm, unsigned int dir
 {
     setTexture(new Texture(frm->width(), frm->height()));
     _texture->loadFromRGBA(frm->rgba(ResourceManager::palFileType("color.pal")));
-    setXOffset(frm->offsetX(direction) + frm->shiftX(direction) - width()/2);
-    setYOffset(frm->offsetY(direction) + frm->shiftY(direction) - height());
+    setXOffset(frm->offsetX(direction) + frm->shiftX(direction));
+    setYOffset(frm->offsetY(direction) + frm->shiftY(direction));
 }
 
 Image::~Image()

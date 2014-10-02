@@ -38,8 +38,9 @@ protected:
     std::vector<Hexagon*> _neighbors;
     std::list<GameObject*> _objects;
     unsigned int _number = 0; // position in hexagonal grid
-    unsigned int _x = 0;
-    unsigned int _y = 0;
+
+    int _x = 0;
+    int _y = 0;
 
     int _cubeX = 0;
     int _cubeY = 0;
@@ -47,15 +48,17 @@ protected:
 
     unsigned int _heuristic = 0;
 
+    bool _inRender = false;
+
 public:
     Hexagon();
     Hexagon(unsigned int number);
 
-    unsigned int x();
-    void setX(unsigned int value);
+    int x();
+    void setX(int value);
 
-    unsigned int y();
-    void setY(unsigned int value);
+    int y();
+    void setY(int value);
 
     unsigned int number();
     void setNumber(unsigned int number);
@@ -77,6 +80,9 @@ public:
     void setHeuristic(unsigned int value);
 
     bool canWalkThru();
+
+    void setInRender(bool value);
+    bool inRender();
 };
 
 }

@@ -19,13 +19,15 @@
  */
 
 // C++ standard includes
+#include <cmath>
 
 // Falltergeist includes
 #include "../Engine/Exception.h"
 #include "../Engine/Graphics/Animation.h"
+#include "../Engine/Game.h"
+#include "../Engine/LocationCamera.h"
 #include "../Engine/PathFinding/Hexagon.h"
 #include "../Engine/ResourceManager.h"
-#include "../Engine/Game.h"
 #include "../Game/GameObject.h"
 #include "../Game/GameDefines.h"
 #include "../States/LocationState.h"
@@ -167,6 +169,12 @@ void GameObject::_generateUi()
             _ui = new Image(frm, orientation());
         }
     }
+
+    if (_ui)
+    {
+        _ui->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &LocationState::onMouseDown);
+    }
+
 }
 
 bool GameObject::canWalkThru()
@@ -198,5 +206,62 @@ void GameObject::setFloatMessage(TextArea* floatMessage)
 {
     _floatMessage = floatMessage;
 }
+
+void GameObject::render()
+{
+    if (!_ui) return;
+
+    auto camera = Game::getInstance()->locationState()->camera();
+    _ui->setX(hexagon()->x() - camera->x() - std::floor(static_cast<double>(_ui->width())/2));
+    _ui->setY(hexagon()->y() - camera->y() - _ui->height());
+
+    setInRender(false);
+
+    if (_ui->x() + (int)_ui->width() < 0) return;
+    if (_ui->x() > (int)camera->width()) return;
+    if (_ui->y() + (int)_ui->height() < 0) return;
+    if (_ui->y() > (int)camera->height()) return;
+
+    setInRender(true);
+
+
+    if (auto message = floatMessage())
+    {
+        if (SDL_GetTicks() - message->timestampCreated() >= 7000)
+        {
+            delete floatMessage();
+            setFloatMessage(nullptr);
+        }
+        else
+        {
+            message->setX(_ui->x() + _ui->width()*0.5 - message->width()*0.5);
+            message->setY(_ui->y() - 4 - message->height());
+            message->render();
+        }
+    }
+
+    _ui->render();
+}
+
+void GameObject::think()
+{
+    if (_ui) _ui->think();
+}
+
+void GameObject::handle(std::shared_ptr<Event> event)
+{
+    if (_ui) _ui->handle(event);
+}
+
+bool GameObject::inRender()
+{
+    return _inRender;
+}
+
+void GameObject::setInRender(bool value)
+{
+    _inRender = value;
+}
+
 
 }
