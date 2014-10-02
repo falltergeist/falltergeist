@@ -451,14 +451,16 @@ void LocationState::handle(std::shared_ptr<Event> event)
         }
     }
 
-    for (auto hexagon : *hexagonGrid()->hexagons())
+    for (auto it = hexagonGrid()->hexagons()->rbegin(); it != hexagonGrid()->hexagons()->rend(); ++it)
     {
+        auto hexagon = *it;
         if (!hexagon->inRender()) continue;
-        for (auto it = hexagon->objects()->rbegin(); it != hexagon->objects()->rend(); ++it)
+        for (auto itt = hexagon->objects()->rbegin(); itt != hexagon->objects()->rend(); ++itt)
         {
+            auto object = *itt;
             if (event->handled()) return;
-            if (!(*it)->inRender()) continue;
-            (*it)->handle(event);
+            if (!object->inRender()) continue;
+            object->handle(event);
         }
     }
 }
