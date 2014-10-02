@@ -32,7 +32,22 @@ HiddenMask::HiddenMask(unsigned int width, unsigned int height, int x, int y) : 
 {
     setX(x);
     setY(y);
-    _texture->fill(0x00000001);
+}
+
+unsigned int HiddenMask::pixel(unsigned int x, unsigned int y)
+{
+    if (x > width())  return 0;
+    if (y > height()) return 0;
+
+    return 0xffffffff;
+}
+
+void HiddenMask::render()
+{
+}
+
+void HiddenMask::think()
+{
 }
 
 }
