@@ -251,4 +251,9 @@ UI* Mouse::ui()
     return _ui;
 }
 
+std::vector<unsigned int>* Mouse::states()
+{
+    return &_states;
+}
+
 }

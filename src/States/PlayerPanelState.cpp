@@ -177,7 +177,19 @@ void PlayerPanelState::onPanelMouseIn(std::shared_ptr<MouseEvent> event)
 
 void PlayerPanelState::onPanelMouseOut(std::shared_ptr<MouseEvent> event)
 {
-    Game::getInstance()->mouse()->popState();
+    auto mouse = Game::getInstance()->mouse();
+    if (mouse->scrollState())
+    {
+        // this trick is needed for correct cursor type returning on scrolling
+        auto state = mouse->state();
+        mouse->popState();
+        mouse->popState();
+        mouse->pushState(state);
+    }
+    else
+    {
+        mouse->popState();
+    }
 }
 
 void PlayerPanelState::onPanelMouseUp(std::shared_ptr<MouseEvent> event)

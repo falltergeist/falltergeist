@@ -92,6 +92,7 @@ public:
     void pushState(unsigned int state);
     void popState();
     unsigned int state();
+    std::vector<unsigned int>* states();
 
     bool scrollState();
 
