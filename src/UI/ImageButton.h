@@ -38,7 +38,7 @@ protected:
     bool _checked = false;
 
     std::vector<Texture*> _textures;
-    void _onLeftButtonClick(std::shared_ptr<MouseEvent> event);
+    void _onLeftButtonClick(MouseEvent* event);
 public:
     enum ButtonType {
         TYPE_SMALL_RED_CIRCLE = 1,

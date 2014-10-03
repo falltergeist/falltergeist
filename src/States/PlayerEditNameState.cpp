@@ -146,10 +146,12 @@ void PlayerEditNameState::onKeyboardPress(std::shared_ptr<KeyboardEvent> event)
 
     if (event->keyCode() == SDLK_RETURN) //enter
     {
-        auto mouseEvent = std::shared_ptr<MouseEvent>(new MouseEvent());
+        auto mouseEvent = new MouseEvent();
         mouseEvent->setEmitter(event->emitter());
         mouseEvent->setReciever(event->reciever());
-        return onDoneButtonClick(mouseEvent);
+        onDoneButtonClick(mouseEvent);
+        delete mouseEvent;
+        return;
     }
 
     if (event->keyCode() == SDLK_LSHIFT || event->keyCode() == SDLK_RSHIFT) return;
@@ -174,7 +176,7 @@ void PlayerEditNameState::onKeyboardPress(std::shared_ptr<KeyboardEvent> event)
     }
 }
 
-void PlayerEditNameState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
+void PlayerEditNameState::onDoneButtonClick(MouseEvent* event)
 {
     auto state = dynamic_cast<PlayerEditNameState*>(event->reciever());
     std::string text(state->_name->text());

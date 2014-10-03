@@ -33,7 +33,7 @@ namespace Falltergeist
 {
 class Event;
 class EventReciever;
-typedef void (EventReciever::*EventRecieverMethod)(std::shared_ptr<Event>);
+typedef void (EventReciever::*EventRecieverMethod)(Event*);
 
 class EventHandler
 {
@@ -43,7 +43,7 @@ protected:
 public:
     EventHandler(EventReciever* reciever, EventRecieverMethod method);
     virtual ~EventHandler();
-    void operator()(std::shared_ptr<Event> event);
+    void operator()(Event* event);
     EventReciever* reciever();
 };
 

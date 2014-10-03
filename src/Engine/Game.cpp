@@ -284,61 +284,63 @@ void Game::handle()
         }
         else
         {
+            MouseEvent* mouseEvent = 0;
+            KeyboardEvent* keyboardEvent = 0;
             switch (_event.type)
             {
                 case SDL_MOUSEBUTTONDOWN:
                 {
-                    auto event = std::shared_ptr<MouseEvent>(new MouseEvent("mousedown"));
-                    event->setX(_event.button.x);
-                    event->setY(_event.button.y);
-                    event->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
-                    event->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
-                    for (auto state : *statesForThinkAndHandle()) state->handle(event);
+                    mouseEvent = new MouseEvent("mousedown");
+                    mouseEvent->setX(_event.button.x);
+                    mouseEvent->setY(_event.button.y);
+                    mouseEvent->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
+                    mouseEvent->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
+                    for (auto state : *statesForThinkAndHandle()) state->handle(mouseEvent);
                     break;
                 }
                 case SDL_MOUSEBUTTONUP:
                 {
-                    auto event = std::shared_ptr<MouseEvent>(new MouseEvent("mouseup"));
-                    event->setX(_event.button.x);
-                    event->setY(_event.button.y);
-                    event->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
-                    event->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
-                    for (auto state : *statesForThinkAndHandle()) state->handle(event);
+                    mouseEvent = new MouseEvent("mouseup");
+                    mouseEvent->setX(_event.button.x);
+                    mouseEvent->setY(_event.button.y);
+                    mouseEvent->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
+                    mouseEvent->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
+                    for (auto state : *statesForThinkAndHandle()) state->handle(mouseEvent);
                     break;
                 }
                 case SDL_MOUSEMOTION:
                 {
-                    auto event = std::shared_ptr<MouseEvent>(new MouseEvent("mousemove"));
-                    event->setX(_event.motion.x);
-                    event->setY(_event.motion.y);
-                    event->setXOffset(_event.motion.xrel);
-                    event->setYOffset(_event.motion.yrel);
-                    for (auto state : *statesForThinkAndHandle()) state->handle(event);
+                    mouseEvent = new MouseEvent("mousemove");
+                    mouseEvent->setX(_event.motion.x);
+                    mouseEvent->setY(_event.motion.y);
+                    mouseEvent->setXOffset(_event.motion.xrel);
+                    mouseEvent->setYOffset(_event.motion.yrel);
+                    for (auto state : *statesForThinkAndHandle()) state->handle(mouseEvent);
                     break;
                 }
                 case SDL_KEYDOWN:
                 {
-                    auto event = std::shared_ptr<KeyboardEvent>(new KeyboardEvent("keydown"));
-                    event->setKeyCode(_event.key.keysym.sym);
-                    event->setShiftPressed(_event.key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
-                    for (auto state : *statesForThinkAndHandle()) state->handle(event);
+                    keyboardEvent = new KeyboardEvent("keydown");
+                    keyboardEvent->setKeyCode(_event.key.keysym.sym);
+                    keyboardEvent->setShiftPressed(_event.key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
+                    for (auto state : *statesForThinkAndHandle()) state->handle(keyboardEvent);
                     break;
                 }
                 case SDL_KEYUP:
                 {
-                    auto event = std::shared_ptr<KeyboardEvent>(new KeyboardEvent("keyup"));
-                    event->setKeyCode(_event.key.keysym.sym);
-                    event->setShiftPressed(_event.key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
-                    for (auto state : *statesForThinkAndHandle()) state->handle(event);
+                    keyboardEvent = new KeyboardEvent("keyup");
+                    keyboardEvent->setKeyCode(_event.key.keysym.sym);
+                    keyboardEvent->setShiftPressed(_event.key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
+                    for (auto state : *statesForThinkAndHandle()) state->handle(keyboardEvent);
 
-                    if (!event->handled())
+                    if (!keyboardEvent->handled())
                     {
-                        if (event->keyCode() == SDLK_F10)
+                        if (keyboardEvent->keyCode() == SDLK_F10)
                         {
                             _quit = true;
                         }
 
-                        if (event->keyCode() == SDLK_F11)
+                        if (keyboardEvent->keyCode() == SDLK_F11)
                         {
                             Texture* texture = renderer()->screenshot();
                             SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(texture->data(), texture->width(), texture->height(), 32, texture->width()*4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);                            
@@ -353,6 +355,8 @@ void Game::handle()
                     break;
                 }
             }
+            delete keyboardEvent;
+            delete mouseEvent;
         }
     }
 }

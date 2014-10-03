@@ -248,7 +248,7 @@ void GameObject::think()
     if (_ui) _ui->think();
 }
 
-void GameObject::handle(std::shared_ptr<Event> event)
+void GameObject::handle(Event* event)
 {
     if (_ui) _ui->handle(event);
 }

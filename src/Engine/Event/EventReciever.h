@@ -37,7 +37,7 @@ class EventReciever
 public:
     EventReciever();
     virtual ~EventReciever();
-    virtual void handle(std::shared_ptr<Event> event);
+    virtual void handle(Event* event);
 };
 
 }

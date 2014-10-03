@@ -39,7 +39,7 @@ Slider::~Slider()
 {
 }
 
-void Slider::_onDrag(std::shared_ptr<MouseEvent> event)
+void Slider::_onDrag(MouseEvent* event)
 {
     auto sender = dynamic_cast<Slider*>(event->emitter());
     auto newOffset = sender->_xOffset + event->xOffset();

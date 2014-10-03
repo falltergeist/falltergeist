@@ -37,11 +37,11 @@ public:
 
     virtual void init();
 
-    void onSaveGameButtonClick(std::shared_ptr<MouseEvent> event);
-    void onLoadGameButtonClick(std::shared_ptr<MouseEvent> event);
-    void onPreferencesButtonClick(std::shared_ptr<MouseEvent> event);
-    void onExitButtonClick(std::shared_ptr<MouseEvent> event);
-    void onDoneButtonClick(std::shared_ptr<MouseEvent> event);
+    void onSaveGameButtonClick(MouseEvent* event);
+    void onLoadGameButtonClick(MouseEvent* event);
+    void onPreferencesButtonClick(MouseEvent* event);
+    void onExitButtonClick(MouseEvent* event);
+    void onDoneButtonClick(MouseEvent* event);
 };
 
 }

@@ -32,7 +32,7 @@ MouseEvent::MouseEvent(std::string name) : Event(name)
 {
 }
 
-MouseEvent::MouseEvent(const std::shared_ptr<MouseEvent> event) : Event("mouse")
+MouseEvent::MouseEvent(MouseEvent* event) : Event("mouse")
 {
     _x = event->_x;
     _y = event->_y;

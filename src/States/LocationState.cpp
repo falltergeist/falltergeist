@@ -205,7 +205,7 @@ void LocationState::setLocation(std::string name)
     }
 }
 
-void LocationState::onMouseDown(std::shared_ptr<MouseEvent> event)
+void LocationState::onMouseDown(MouseEvent* event)
 {
     auto object = dynamic_cast<GameObject*>(event->reciever());
     if (!object) return;
@@ -237,11 +237,11 @@ void LocationState::onMouseDown(std::shared_ptr<MouseEvent> event)
     event->setHandled(true);
 }
 
-void LocationState::onBackgroundClick(std::shared_ptr<MouseEvent> event)
+void LocationState::onBackgroundClick(MouseEvent* event)
 {
 }
 
-void LocationState::onObjectClick(std::shared_ptr<MouseEvent> event)
+void LocationState::onObjectClick(MouseEvent* event)
 {
 }
 
@@ -369,11 +369,11 @@ void LocationState::think()
     }
 }
 
-void LocationState::handle(std::shared_ptr<Event> event)
+void LocationState::handle(Event* event)
 {
     auto game = Game::getInstance();
 
-    if (auto mouseEvent = std::dynamic_pointer_cast<MouseEvent>(event))
+    if (auto mouseEvent = dynamic_cast<MouseEvent*>(event))
     {
         auto mouse = Game::getInstance()->mouse();
 

@@ -47,6 +47,7 @@ class State : public EventReciever
 {
 protected:
     std::vector<UI*> _ui;
+    std::vector<UI*> _uiToDelete;
     std::map<std::string, UI*> _labeledUI;
 
     int _x = 0;
@@ -66,6 +67,7 @@ public:
     ActiveUI* addUI(std::string name, ActiveUI* ui);
     UI* addUI(std::string name, UI* ui);
     void addUI(std::vector<UI*> uis);
+    void popUI();
 
     UI* getUI(std::string name);
     ActiveUI* getActiveUI(std::string name);
@@ -89,7 +91,7 @@ public:
     virtual void init();
 
     virtual void think();
-    virtual void handle(std::shared_ptr<Event> event);
+    virtual void handle(Event* event);
     virtual void render();
 
 };

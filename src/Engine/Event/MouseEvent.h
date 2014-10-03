@@ -43,7 +43,7 @@ protected:
     int _rightButton = false;
 public:
     MouseEvent(std::string eventName = "mouse");
-    MouseEvent(const std::shared_ptr<MouseEvent> event);
+    MouseEvent(MouseEvent* event);
     virtual ~MouseEvent();
 
     void setX(unsigned int value);

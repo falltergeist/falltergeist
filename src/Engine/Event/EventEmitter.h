@@ -37,7 +37,7 @@ class Event;
 class EventReciever;
 class EventHandler;
 
-typedef void (EventReciever::*EventRecieverMethod)(std::shared_ptr<Event>);
+typedef void (EventReciever::*EventRecieverMethod)(Event*);
 
 class EventEmitter
 {
@@ -48,7 +48,7 @@ public:
     virtual ~EventEmitter();
 
     void addEventHandler(std::string eventName, EventReciever* reciever, EventRecieverMethod handler);
-    void emitEvent(std::shared_ptr<Event> event);
+    void emitEvent(Event* event);
     void removeEventHandlers(std::string eventName);
 };
 

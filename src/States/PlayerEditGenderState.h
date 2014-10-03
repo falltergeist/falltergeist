@@ -40,9 +40,9 @@ protected:
 public:
     PlayerEditGenderState();
     void init();
-    void onFemaleButtonPress(std::shared_ptr<MouseEvent> event);
-    void onMaleButtonPress(std::shared_ptr<MouseEvent> event);
-    void onDoneButtonClick(std::shared_ptr<MouseEvent> event);
+    void onFemaleButtonPress(MouseEvent* event);
+    void onMaleButtonPress(MouseEvent* event);
+    void onDoneButtonClick(MouseEvent* event);
 };
 
 }

@@ -130,7 +130,7 @@ void SkilldexState::init()
     addUI(cancelButtonLabel);
 }
 
-void SkilldexState::onCancelButtonClick(std::shared_ptr<MouseEvent> event)
+void SkilldexState::onCancelButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
 }

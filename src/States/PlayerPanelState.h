@@ -39,18 +39,18 @@ public:
     virtual void init();
     virtual void render();
     virtual void think();
-    virtual void handle(std::shared_ptr<Event> event);
+    virtual void handle(Event* event);
 
-    void onChangeHandButtonClick(std::shared_ptr<MouseEvent> event);
-    void onPanelMouseDown(std::shared_ptr<MouseEvent> event);
-    void onInventoryButtonClick(std::shared_ptr<MouseEvent> event);
-    void onOptionsButtonClick(std::shared_ptr<MouseEvent> event);
-    void onSkilldexButtonClick(std::shared_ptr<MouseEvent> event);
-    void onChaButtonClick(std::shared_ptr<MouseEvent> event);
-    void onPipBoyButtonClick(std::shared_ptr<MouseEvent> event);
-    void onPanelMouseIn(std::shared_ptr<MouseEvent> event);
-    void onPanelMouseOut(std::shared_ptr<MouseEvent> event);
-    void onPanelMouseUp(std::shared_ptr<MouseEvent> event);
+    void onChangeHandButtonClick(MouseEvent* event);
+    void onPanelMouseDown(MouseEvent* event);
+    void onInventoryButtonClick(MouseEvent* event);
+    void onOptionsButtonClick(MouseEvent* event);
+    void onSkilldexButtonClick(MouseEvent* event);
+    void onChaButtonClick(MouseEvent* event);
+    void onPipBoyButtonClick(MouseEvent* event);
+    void onPanelMouseIn(MouseEvent* event);
+    void onPanelMouseOut(MouseEvent* event);
+    void onPanelMouseUp(MouseEvent* event);
 
 };
 

@@ -104,12 +104,12 @@ void LoadGameState::init()
     addUI(cancelButtonLabel);
 }
 
-void LoadGameState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
+void LoadGameState::onDoneButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
 }
 
-void LoadGameState::onCancelButtonClick(std::shared_ptr<MouseEvent> event)
+void LoadGameState::onCancelButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
 }

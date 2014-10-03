@@ -37,7 +37,7 @@ EventReciever::~EventReciever()
 {
 }
 
-void EventReciever::handle(std::shared_ptr<Event> event)
+void EventReciever::handle(Event* event)
 {
 }
 

@@ -65,9 +65,9 @@ void InventoryDragItemState::init()
 
 }
 
-void InventoryDragItemState::handle(std::shared_ptr<Event> event)
+void InventoryDragItemState::handle(Event* event)
 {
-    if (auto mouseEvent = std::dynamic_pointer_cast<MouseEvent>(event))
+    if (auto mouseEvent = dynamic_cast<MouseEvent*>(event))
     {
         _itemUi->setCurrentImage(1);
         _itemUi->setX(mouseEvent->x() - _itemUi->width()*0.5);

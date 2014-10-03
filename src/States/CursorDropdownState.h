@@ -56,7 +56,7 @@ public:
     virtual void init();
     virtual void think();
 
-    void onLeftButtonUp(std::shared_ptr<MouseEvent> event);
+    void onLeftButtonUp(MouseEvent* event);
 
     GameObject* object();
     void setObject(GameObject* object);

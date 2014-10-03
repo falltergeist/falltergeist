@@ -93,12 +93,12 @@ void ExitConfirmState::init()
     addUI(noButtonLabel);
 }
 
-void ExitConfirmState::onYesButtonClick(std::shared_ptr<MouseEvent> event)
+void ExitConfirmState::onYesButtonClick(MouseEvent* event)
 {
     Game::getInstance()->setState(new MainMenuState());
 }
 
-void ExitConfirmState::onNoButtonClick(std::shared_ptr<MouseEvent> event)
+void ExitConfirmState::onNoButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
 }

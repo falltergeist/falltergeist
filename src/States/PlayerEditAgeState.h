@@ -40,9 +40,9 @@ public:
     PlayerEditAgeState();
     void init();
     ~PlayerEditAgeState();
-    void onIncButtonClick(std::shared_ptr<MouseEvent> event);
-    void onDecButtonClick(std::shared_ptr<MouseEvent> event);
-    void onDoneButtonClick(std::shared_ptr<MouseEvent> event);
+    void onIncButtonClick(MouseEvent* event);
+    void onDecButtonClick(MouseEvent* event);
+    void onDoneButtonClick(MouseEvent* event);
 };
 }
 

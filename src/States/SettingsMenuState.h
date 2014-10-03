@@ -49,9 +49,9 @@ public:
     virtual void init();
     virtual void think();
 
-    void onDefaultButtonClick(std::shared_ptr<MouseEvent> event);
-    void onCancelButtonClick(std::shared_ptr<MouseEvent> event);
-    void onSaveButtonClick(std::shared_ptr<MouseEvent> event);
+    void onDefaultButtonClick(MouseEvent* event);
+    void onCancelButtonClick(MouseEvent* event);
+    void onSaveButtonClick(MouseEvent* event);
 
 };
 

@@ -123,12 +123,12 @@ void NewGameState::think()
     State::think();
 }
 
-void NewGameState::onBackButtonClick(std::shared_ptr<MouseEvent> event)
+void NewGameState::onBackButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
 }
 
-void NewGameState::onPrevCharacterButtonClick(std::shared_ptr<MouseEvent> event)
+void NewGameState::onPrevCharacterButtonClick(MouseEvent* event)
 {
     if (_selectedCharacter > 0)
     {
@@ -141,7 +141,7 @@ void NewGameState::onPrevCharacterButtonClick(std::shared_ptr<MouseEvent> event)
     _changeCharacter();
 }
 
-void NewGameState::onNextCharacterButtonClick(std::shared_ptr<MouseEvent> event)
+void NewGameState::onNextCharacterButtonClick(MouseEvent* event)
 {
     if (_selectedCharacter < 2)
     {
@@ -213,13 +213,13 @@ std::string NewGameState::_statToString(unsigned int stat)
     return msg->message(stat+300)->text();
 }
 
-void NewGameState::onEditButtonClick(std::shared_ptr<MouseEvent> event)
+void NewGameState::onEditButtonClick(MouseEvent* event)
 {
     Game::getInstance()->setPlayer(_characters.at(_selectedCharacter));
     Game::getInstance()->pushState(new PlayerCreateState());
 }
 
-void NewGameState::onCreateButtonClick(std::shared_ptr<MouseEvent> event)
+void NewGameState::onCreateButtonClick(MouseEvent* event)
 {
     auto none = new GameDudeObject();
     none->loadFromGCDFile(ResourceManager::gcdFileType("premade/blank.gcd"));
@@ -227,7 +227,7 @@ void NewGameState::onCreateButtonClick(std::shared_ptr<MouseEvent> event)
     Game::getInstance()->pushState(new PlayerCreateState());
 }
 
-void NewGameState::onBeginGameButtonClick(std::shared_ptr<MouseEvent> event)
+void NewGameState::onBeginGameButtonClick(MouseEvent* event)
 {
     auto player = _characters.at(_selectedCharacter);
     player->setHitPoints(player->hitPointsMax());

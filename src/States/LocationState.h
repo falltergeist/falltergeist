@@ -78,7 +78,7 @@ public:
 
     virtual void init();
     virtual void think();
-    virtual void handle(std::shared_ptr<Event> event);
+    virtual void handle(Event* event);
     virtual void render();
 
     HexagonGrid* hexagonGrid();
@@ -92,10 +92,10 @@ public:
     static void moveObjectToHexagon(GameObject* object, Hexagon* hexagon);
     void handleAction(GameObject* object, int action);
 
-    void onBackgroundClick(std::shared_ptr<MouseEvent> event);
+    void onBackgroundClick(MouseEvent* event);
     void onKeyUp(std::shared_ptr<KeyboardEvent> event);
-    void onObjectClick(std::shared_ptr<MouseEvent> event);
-    void onMouseDown(std::shared_ptr<MouseEvent> event);
+    void onObjectClick(MouseEvent* event);
+    void onMouseDown(MouseEvent* event);
     void onKeyboardUp(std::shared_ptr<KeyboardEvent> event);
 };
 

@@ -292,12 +292,12 @@ void InventoryState::init()
 
 }
 
-void InventoryState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
+void InventoryState::onDoneButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
 }
 
-void InventoryState::onArmorSlotMouseDown(std::shared_ptr<MouseEvent> event)
+void InventoryState::onArmorSlotMouseDown(MouseEvent* event)
 {
     auto state = dynamic_cast<InventoryState*>(event->reciever());
     if (Game::getInstance()->mouse()->state() == Mouse::HAND)
@@ -312,7 +312,7 @@ void InventoryState::onArmorSlotMouseDown(std::shared_ptr<MouseEvent> event)
     }
 }
 
-void InventoryState::onLeftHandSlotMouseDown(std::shared_ptr<MouseEvent> event)
+void InventoryState::onLeftHandSlotMouseDown(MouseEvent* event)
 {
     auto state = dynamic_cast<InventoryState*>(event->reciever());
     if (Game::getInstance()->mouse()->state() == Mouse::HAND)
@@ -327,7 +327,7 @@ void InventoryState::onLeftHandSlotMouseDown(std::shared_ptr<MouseEvent> event)
     }
 }
 
-void InventoryState::onRightHandSlotMouseDown(std::shared_ptr<MouseEvent> event)
+void InventoryState::onRightHandSlotMouseDown(MouseEvent* event)
 {
     auto state = dynamic_cast<InventoryState*>(event->reciever());
     if (Game::getInstance()->mouse()->state() == Mouse::HAND)
@@ -342,7 +342,7 @@ void InventoryState::onRightHandSlotMouseDown(std::shared_ptr<MouseEvent> event)
     }
 }
 
-//void InventoryState::onSlotMouseDown(std::shared_ptr<MouseEvent> event)
+//void InventoryState::onSlotMouseDown(MouseEvent* event)
 //{
 //    auto state = dynamic_cast<InventoryState*>(event->reciever());
 //    auto itemUi = dynamic_cast<ImageList*>(event->emitter());
@@ -351,7 +351,7 @@ void InventoryState::onRightHandSlotMouseDown(std::shared_ptr<MouseEvent> event)
 //    itemUi->setY(event->y() - itemUi->height()*0.5);
 //}
 
-//void InventoryState::onSlotMouseUp(std::shared_ptr<MouseEvent> event)
+//void InventoryState::onSlotMouseUp(MouseEvent* event)
 //{
 //    auto itemUi = dynamic_cast<ImageList*>(event->emitter());
 //    itemUi->setCurrentImage(0);
@@ -359,7 +359,7 @@ void InventoryState::onRightHandSlotMouseDown(std::shared_ptr<MouseEvent> event)
 //    itemUi->setY(event->y() - itemUi->height()*0.5);
 //}
 
-//void InventoryState::onSlotDrag(std::shared_ptr<MouseEvent> event)
+//void InventoryState::onSlotDrag(MouseEvent* event)
 //{
 //    //auto item = dynamic_cast<GameItemObject*>(event->reciever());
 //    auto itemUi = dynamic_cast<ImageList*>(event->emitter());
@@ -397,7 +397,7 @@ std::string InventoryState::_handItemSummary (GameItemObject* hand)
     return ss.str();
 }
 
-void InventoryState::backgroundRightClick(std::shared_ptr<MouseEvent> event)
+void InventoryState::backgroundRightClick(MouseEvent* event)
 {
     auto state = dynamic_cast<InventoryState*>(event->reciever());
     auto mouse = Game::getInstance()->mouse();

@@ -38,8 +38,8 @@ public:
     virtual ~LoadGameState();
     virtual void init();
 
-    void onDoneButtonClick(std::shared_ptr<MouseEvent> event);
-    void onCancelButtonClick(std::shared_ptr<MouseEvent> event);
+    void onDoneButtonClick(MouseEvent* event);
+    void onCancelButtonClick(MouseEvent* event);
 private:
 };
 

@@ -32,18 +32,20 @@ ActiveUI::ActiveUI(int x, int y) : EventEmitter(), EventReciever(), UI(x, y)
 {
 }
 
-void ActiveUI::handle(std::shared_ptr<Event> event)
+ActiveUI::~ActiveUI()
 {
-    if(auto mouseEvent = std::dynamic_pointer_cast<MouseEvent>(event))
+}
+
+void ActiveUI::handle(Event* event)
+{
+    if(auto mouseEvent = dynamic_cast<MouseEvent*>(event))
     {
         if (!texture()) return;
 
         int x = mouseEvent->x() - this->x();
         int y = mouseEvent->y() - this->y();
 
-        std::shared_ptr<MouseEvent> newEvent = std::shared_ptr<MouseEvent>(new MouseEvent(mouseEvent));
-        //auto emitter = std::shared_ptr<ActiveUI>(this);
-        //event->setEmitter(emitter);
+        auto newEvent = new MouseEvent(mouseEvent);
 
         if (this->pixel(x, y))
         {
@@ -112,7 +114,7 @@ void ActiveUI::handle(std::shared_ptr<Event> event)
                         }
                         _rightButtonPressed = false;
                     }
-             }
+            }
         }
         else
         {
@@ -164,10 +166,11 @@ void ActiveUI::handle(std::shared_ptr<Event> event)
             }
         }
         event->setHandled(newEvent->handled());
+        delete newEvent;
         return;
     }
 
-    if(auto keyboardEvent = std::dynamic_pointer_cast<KeyboardEvent>(event))
+    if(auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
     {
         emitEvent(keyboardEvent);
     }

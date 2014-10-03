@@ -49,13 +49,13 @@ void EventEmitter::addEventHandler(std::string eventName, EventReciever* recieve
     _eventHandlers.at(eventName).push_back(new EventHandler(reciever, handler));
 }
 
-void EventEmitter::emitEvent(std::shared_ptr<Event> event)
+void EventEmitter::emitEvent(Event* event)
 {
     if (_eventHandlers.find(event->name()) == _eventHandlers.end()) return;
-
     event->setEmitter(this);
     for (auto eventHandler : _eventHandlers.at(event->name()))
     {
+        if (event->handled()) return;
         event->setReciever(eventHandler->reciever());
         eventHandler->operator()(event);
     }

@@ -42,7 +42,7 @@ protected:
     int _modeFactor = 1; // or -1
     unsigned int _maxState = 0;
     unsigned int _minState = 0;
-    void _onLeftButtonClick(std::shared_ptr<MouseEvent> event);
+    void _onLeftButtonClick(MouseEvent* event);
 public:
     enum {MODE_PROGRESSION = 1, MODE_CYCLIC};
     enum {TYPE_BIG_SWITCH = 1, TYPE_SMALL_SWITCH};

@@ -38,10 +38,10 @@ public:
     virtual ~MainMenuState();
     virtual void init();
 
-    void onExitButtonClick(std::shared_ptr<MouseEvent> event);
-    void onNewGameButtonClick(std::shared_ptr<MouseEvent> event);
-    void onLoadGameButtonClick(std::shared_ptr<MouseEvent> event);
-    void onSettingsButtonClick(std::shared_ptr<MouseEvent> event);
+    void onExitButtonClick(MouseEvent* event);
+    void onNewGameButtonClick(MouseEvent* event);
+    void onLoadGameButtonClick(MouseEvent* event);
+    void onSettingsButtonClick(MouseEvent* event);
 };
 
 }

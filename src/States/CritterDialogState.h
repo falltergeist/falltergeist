@@ -58,11 +58,11 @@ public:
     bool hasAnswers();
     void addAnswer(std::string text);
 
-    void onReviewButtonClick(std::shared_ptr<Event> event);
-    void onBarterButtonClick(std::shared_ptr<Event> event);
-    void onAnswerIn(std::shared_ptr<Event> event);
-    void onAnswerOut(std::shared_ptr<Event> event);
-    void onAnswerClick(std::shared_ptr<Event> event);
+    void onReviewButtonClick(Event* event);
+    void onBarterButtonClick(Event* event);
+    void onAnswerIn(Event* event);
+    void onAnswerOut(Event* event);
+    void onAnswerClick(Event* event);
     void onKeyboardUp(std::shared_ptr<KeyboardEvent> event);
 
 };

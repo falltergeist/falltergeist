@@ -87,7 +87,7 @@ void PlayerEditAlertState::init()
     addUI(doneLabel);
 }
 
-void PlayerEditAlertState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
+void PlayerEditAlertState::onDoneButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
 }

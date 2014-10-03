@@ -37,7 +37,7 @@ public:
 
     virtual void init();
 
-    void onCancelButtonClick(std::shared_ptr<MouseEvent> event);
+    void onCancelButtonClick(MouseEvent* event);
 };
 
 }

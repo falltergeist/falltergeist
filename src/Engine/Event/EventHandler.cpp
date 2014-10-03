@@ -39,7 +39,7 @@ EventHandler::~EventHandler()
 {
 }
 
-void EventHandler::operator()(std::shared_ptr<Event> event)
+void EventHandler::operator()(Event* event)
 {
     if (event->handled()) return;
     (_reciever->*_method)(event);

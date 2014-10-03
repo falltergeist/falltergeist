@@ -122,7 +122,7 @@ void PlayerPanelState::think()
     }
 }
 
-void PlayerPanelState::handle(std::shared_ptr<Event> event)
+void PlayerPanelState::handle(Event* event)
 {
     // object in hand
     if (auto item = Game::getInstance()->player()->currentHandSlot())
@@ -134,48 +134,48 @@ void PlayerPanelState::handle(std::shared_ptr<Event> event)
     State::handle(event);
 }
 
-void PlayerPanelState::onPanelMouseDown(std::shared_ptr<MouseEvent> event)
+void PlayerPanelState::onPanelMouseDown(MouseEvent* event)
 {
     event->setHandled(true);
 }
 
-void PlayerPanelState::onInventoryButtonClick(std::shared_ptr<MouseEvent> event)
+void PlayerPanelState::onInventoryButtonClick(MouseEvent* event)
 {
     Game::getInstance()->pushState(new InventoryState());
 }
 
-void PlayerPanelState::onOptionsButtonClick(std::shared_ptr<MouseEvent> event)
+void PlayerPanelState::onOptionsButtonClick(MouseEvent* event)
 {
     Game::getInstance()->pushState(new GameMenuState());
 }
 
-void PlayerPanelState::onSkilldexButtonClick(std::shared_ptr<MouseEvent> event)
+void PlayerPanelState::onSkilldexButtonClick(MouseEvent* event)
 {
     Game::getInstance()->pushState(new SkilldexState());
 }
 
-void PlayerPanelState::onChaButtonClick(std::shared_ptr<MouseEvent> event)
+void PlayerPanelState::onChaButtonClick(MouseEvent* event)
 {
     Game::getInstance()->pushState(new PlayerEditState());
 }
 
-void PlayerPanelState::onPipBoyButtonClick(std::shared_ptr<MouseEvent> event)
+void PlayerPanelState::onPipBoyButtonClick(MouseEvent* event)
 {
     Game::getInstance()->pushState(new PipBoyState());
 }
 
-void PlayerPanelState::onChangeHandButtonClick(std::shared_ptr<MouseEvent> event)
+void PlayerPanelState::onChangeHandButtonClick(MouseEvent* event)
 {
     auto player = Game::getInstance()->player();
     player->setCurrentHand(player->currentHand() == GameCritterObject::HAND_LEFT ? GameCritterObject::HAND_RIGHT : GameCritterObject::HAND_LEFT);
 }
 
-void PlayerPanelState::onPanelMouseIn(std::shared_ptr<MouseEvent> event)
+void PlayerPanelState::onPanelMouseIn(MouseEvent* event)
 {
     Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
 }
 
-void PlayerPanelState::onPanelMouseOut(std::shared_ptr<MouseEvent> event)
+void PlayerPanelState::onPanelMouseOut(MouseEvent* event)
 {
     auto mouse = Game::getInstance()->mouse();
     if (mouse->scrollState())
@@ -192,7 +192,7 @@ void PlayerPanelState::onPanelMouseOut(std::shared_ptr<MouseEvent> event)
     }
 }
 
-void PlayerPanelState::onPanelMouseUp(std::shared_ptr<MouseEvent> event)
+void PlayerPanelState::onPanelMouseUp(MouseEvent* event)
 {
 }
 

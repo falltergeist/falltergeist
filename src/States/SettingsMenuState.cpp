@@ -386,17 +386,17 @@ TextArea* SettingsMenuState::_addTextArea(TextArea* parent, unsigned int x, unsi
     return textArea;
 }
 
-void SettingsMenuState::onCancelButtonClick(std::shared_ptr<MouseEvent> event)
+void SettingsMenuState::onCancelButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
 }
 
-void SettingsMenuState::onSaveButtonClick(std::shared_ptr<MouseEvent> event)
+void SettingsMenuState::onSaveButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
 }
 
-void SettingsMenuState::onDefaultButtonClick(std::shared_ptr<MouseEvent> event)
+void SettingsMenuState::onDefaultButtonClick(MouseEvent* event)
 {
 }
 

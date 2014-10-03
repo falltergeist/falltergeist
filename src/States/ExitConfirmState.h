@@ -37,8 +37,8 @@ public:
 
     virtual void init();
 
-    void onYesButtonClick(std::shared_ptr<MouseEvent> event);
-    void onNoButtonClick(std::shared_ptr<MouseEvent> event);
+    void onYesButtonClick(MouseEvent* event);
+    void onNoButtonClick(MouseEvent* event);
 };
 
 }

@@ -125,7 +125,7 @@ int MultistateImageButton::mode()
     return _mode;
 }
 
-void MultistateImageButton::_onLeftButtonClick(std::shared_ptr<MouseEvent> event)
+void MultistateImageButton::_onLeftButtonClick(MouseEvent* event)
 {
     auto sender = dynamic_cast<MultistateImageButton*>(event->emitter());
 

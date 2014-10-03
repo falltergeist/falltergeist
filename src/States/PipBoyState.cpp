@@ -108,7 +108,7 @@ void PipBoyState::init()
     addUI(closeButton);
 }
 
-void PipBoyState::onCloseButtonClick(std::shared_ptr<MouseEvent> event)
+void PipBoyState::onCloseButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
 }

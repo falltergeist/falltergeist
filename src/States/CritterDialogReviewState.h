@@ -40,7 +40,7 @@ public:
 
     void init();
 
-    void onDoneButtonClick(std::shared_ptr<Event> event);
+    void onDoneButtonClick(Event* event);
 };
 
 }

@@ -117,22 +117,22 @@ void MainMenuState::init()
     addUI(exitButtonLabel);
 }
 
-void MainMenuState::onExitButtonClick(std::shared_ptr<MouseEvent> event)
+void MainMenuState::onExitButtonClick(MouseEvent* event)
 {
     Game::getInstance()->quit();
 }
 
-void MainMenuState::onNewGameButtonClick(std::shared_ptr<MouseEvent> event)
+void MainMenuState::onNewGameButtonClick(MouseEvent* event)
 {
     Game::getInstance()->pushState(new NewGameState());
 }
 
-void MainMenuState::onLoadGameButtonClick(std::shared_ptr<MouseEvent> event)
+void MainMenuState::onLoadGameButtonClick(MouseEvent* event)
 {
     Game::getInstance()->pushState(new LoadGameState());
 }
 
-void MainMenuState::onSettingsButtonClick(std::shared_ptr<MouseEvent> event)
+void MainMenuState::onSettingsButtonClick(MouseEvent* event)
 {
     Game::getInstance()->pushState(new SettingsMenuState());
 }

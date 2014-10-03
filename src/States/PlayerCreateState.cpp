@@ -482,7 +482,7 @@ bool PlayerCreateState::_skillToggle(unsigned int num)
     return false;
 }
 
-void PlayerCreateState::onButtonClick(std::shared_ptr<MouseEvent> event)
+void PlayerCreateState::onButtonClick(MouseEvent* event)
 {
     auto sender = dynamic_cast<ImageButton*>(event->emitter());
     auto state = dynamic_cast<PlayerCreateState*>(event->reciever());
@@ -548,7 +548,7 @@ void PlayerCreateState::onButtonClick(std::shared_ptr<MouseEvent> event)
     }
 }
 
-void PlayerCreateState::onLabelClick(std::shared_ptr<MouseEvent> event)
+void PlayerCreateState::onLabelClick(MouseEvent* event)
 {
     auto state = dynamic_cast<PlayerCreateState*>(event->reciever());
 
@@ -571,7 +571,7 @@ void PlayerCreateState::onLabelClick(std::shared_ptr<MouseEvent> event)
     }
 }
 
-void PlayerCreateState::onMaskClick(std::shared_ptr<MouseEvent> event)
+void PlayerCreateState::onMaskClick(MouseEvent* event)
 {
     auto state = dynamic_cast<PlayerCreateState*>(event->reciever());
 
@@ -590,27 +590,27 @@ void PlayerCreateState::onMaskClick(std::shared_ptr<MouseEvent> event)
 }
 
 
-void PlayerCreateState::onNameButtonClick(std::shared_ptr<MouseEvent> event)
+void PlayerCreateState::onNameButtonClick(MouseEvent* event)
 {
     Game::getInstance()->pushState(new PlayerEditNameState());
 }
 
-void PlayerCreateState::onAgeButtonClick(std::shared_ptr<MouseEvent> event)
+void PlayerCreateState::onAgeButtonClick(MouseEvent* event)
 {
     Game::getInstance()->pushState(new PlayerEditAgeState());
 }
 
-void PlayerCreateState::onGenderButtonClick(std::shared_ptr<MouseEvent> event)
+void PlayerCreateState::onGenderButtonClick(MouseEvent* event)
 {
     Game::getInstance()->pushState(new PlayerEditGenderState());
 }
 
-void PlayerCreateState::onBackButtonClick(std::shared_ptr<MouseEvent> event)
+void PlayerCreateState::onBackButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
 }
 
-void PlayerCreateState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
+void PlayerCreateState::onDoneButtonClick(MouseEvent* event)
 {
     auto player = Game::getInstance()->player();
     player->setHitPoints(player->hitPointsMax());

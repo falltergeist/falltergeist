@@ -36,7 +36,7 @@ public:
     ~PipBoyState();
     void init();
 
-    void onCloseButtonClick(std::shared_ptr<MouseEvent> event);
+    void onCloseButtonClick(MouseEvent* event);
     void onKeyboardUp(std::shared_ptr<KeyboardEvent> event);
 };
 

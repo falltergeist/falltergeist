@@ -172,7 +172,7 @@ UI* State::getUI(std::string name)
     return nullptr;
 }
 
-void State::handle(std::shared_ptr<Event> event)
+void State::handle(Event* event)
 {
     for (auto it = _ui.rbegin(); it != _ui.rend(); ++it)
     {
@@ -193,6 +193,18 @@ void State::render()
             (*it)->render();
         }
     }
+    while (!_uiToDelete.empty())
+    {
+        delete _uiToDelete.back();
+        _uiToDelete.pop_back();
+    }
+}
+
+void State::popUI()
+{
+    if (_ui.size() == 0) return;
+    _uiToDelete.push_back(_ui.back());
+    _ui.pop_back();
 }
 
 }

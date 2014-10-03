@@ -93,14 +93,14 @@ void CritterDialogState::setQuestion(std::string value)
     question->setText(value);
 }
 
-void CritterDialogState::onAnswerIn(std::shared_ptr<Event> event)
+void CritterDialogState::onAnswerIn(Event* event)
 {
     auto sender = dynamic_cast<TextArea*>(event->emitter());
     auto font3_a0a0a0ff = ResourceManager::font("font1.aaf", 0xa0a0a0ff);
     sender->setFont(font3_a0a0a0ff);
 }
 
-void CritterDialogState::onAnswerOut(std::shared_ptr<Event> event)
+void CritterDialogState::onAnswerOut(Event* event)
 {
     auto sender = dynamic_cast<TextArea*>(event->emitter());
     auto font3_3ff800ff = ResourceManager::font("font1.aaf", 0x3ff800ff);
@@ -121,22 +121,21 @@ void CritterDialogState::deleteAnswers()
 {
     while(!_answers.empty())
     {
-        delete _answers.back();
         _answers.pop_back();
-        _ui.pop_back();
+        popUI();
     }
     _functions.clear();
     _reactions.clear();
 }
 
-void CritterDialogState::onReviewButtonClick(std::shared_ptr<Event> event)
+void CritterDialogState::onReviewButtonClick(Event* event)
 {
     // FIXME : don't create new state each time the button is clicked
     auto critterReviewDialogState = new CritterDialogReviewState();
     Game::getInstance()->pushState(critterReviewDialogState);
 }
 
-void CritterDialogState::onBarterButtonClick(std::shared_ptr<Event> event)
+void CritterDialogState::onBarterButtonClick(Event* event)
 {
     // FIXME : don't create new state each time the button is clicked
     auto critterBarterState = new CritterBarterState();
@@ -219,7 +218,7 @@ bool CritterDialogState::hasAnswers()
     return _answers.size() > 0;
 }
 
-void CritterDialogState::onAnswerClick(std::shared_ptr<Event> event)
+void CritterDialogState::onAnswerClick(Event* event)
 {
     auto sender = dynamic_cast<TextArea*>(event->emitter());
 

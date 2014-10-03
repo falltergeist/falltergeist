@@ -40,8 +40,8 @@ public:
 
     void init();
 
-    void onBackgroundClick(std::shared_ptr<Event> event);
-    void onTalkButtonClick(std::shared_ptr<Event> event);
+    void onBackgroundClick(Event* event);
+    void onTalkButtonClick(Event* event);
 };
 
 }

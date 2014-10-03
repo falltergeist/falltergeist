@@ -52,12 +52,12 @@ public:
     virtual void init();
     virtual void think();
 
-    void onBackButtonClick(std::shared_ptr<MouseEvent> event);
-    void onBeginGameButtonClick(std::shared_ptr<MouseEvent> event);
-    void onEditButtonClick(std::shared_ptr<MouseEvent> event);
-    void onCreateButtonClick(std::shared_ptr<MouseEvent> event);
-    void onPrevCharacterButtonClick(std::shared_ptr<MouseEvent> event);
-    void onNextCharacterButtonClick(std::shared_ptr<MouseEvent> event);
+    void onBackButtonClick(MouseEvent* event);
+    void onBeginGameButtonClick(MouseEvent* event);
+    void onEditButtonClick(MouseEvent* event);
+    void onCreateButtonClick(MouseEvent* event);
+    void onPrevCharacterButtonClick(MouseEvent* event);
+    void onNextCharacterButtonClick(MouseEvent* event);
 };
 
 }

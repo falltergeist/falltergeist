@@ -70,14 +70,14 @@ public:
     void think();
     virtual ~PlayerEditState();
 
-    void onMaskClick(std::shared_ptr<MouseEvent> event);
-    void onButtonClick(std::shared_ptr<MouseEvent> event);
-    void onAgeButtonClick(std::shared_ptr<MouseEvent> event);
-    void onNameButtonClick(std::shared_ptr<MouseEvent> event);
-    void onGenderButtonClick(std::shared_ptr<MouseEvent> event);
-    void onLabelClick(std::shared_ptr<MouseEvent> event);
-    void onBackButtonClick(std::shared_ptr<MouseEvent> event);
-    void onDoneButtonClick(std::shared_ptr<MouseEvent> event);
+    void onMaskClick(MouseEvent* event);
+    void onButtonClick(MouseEvent* event);
+    void onAgeButtonClick(MouseEvent* event);
+    void onNameButtonClick(MouseEvent* event);
+    void onGenderButtonClick(MouseEvent* event);
+    void onLabelClick(MouseEvent* event);
+    void onBackButtonClick(MouseEvent* event);
+    void onDoneButtonClick(MouseEvent* event);
 };
 
 }

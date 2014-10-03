@@ -202,7 +202,7 @@ void CursorDropdownState::think()
 
 }
 
-void CursorDropdownState::onLeftButtonUp(std::shared_ptr<MouseEvent> event)
+void CursorDropdownState::onLeftButtonUp(MouseEvent* event)
 {
     auto state = dynamic_cast<CursorDropdownState*>(event->reciever());
     auto game = Game::getInstance();

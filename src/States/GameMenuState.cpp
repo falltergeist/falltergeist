@@ -107,27 +107,27 @@ void GameMenuState::init()
     addUI(doneButtonLabel);
 }
 
-void GameMenuState::onSaveGameButtonClick(std::shared_ptr<MouseEvent> event)
+void GameMenuState::onSaveGameButtonClick(MouseEvent* event)
 {
     Game::getInstance()->pushState(new SaveGameState());
 }
 
-void GameMenuState::onLoadGameButtonClick(std::shared_ptr<MouseEvent> event)
+void GameMenuState::onLoadGameButtonClick(MouseEvent* event)
 {
     Game::getInstance()->pushState(new LoadGameState());
 }
 
-void GameMenuState::onPreferencesButtonClick(std::shared_ptr<MouseEvent> event)
+void GameMenuState::onPreferencesButtonClick(MouseEvent* event)
 {
     Game::getInstance()->pushState(new SettingsMenuState());
 }
 
-void GameMenuState::onExitButtonClick(std::shared_ptr<MouseEvent> event)
+void GameMenuState::onExitButtonClick(MouseEvent* event)
 {
     Game::getInstance()->pushState(new ExitConfirmState());
 }
 
-void GameMenuState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
+void GameMenuState::onDoneButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
 }

@@ -46,7 +46,7 @@ public:
     ~PlayerEditNameState();
     void init();
     void think();
-    void onDoneButtonClick(std::shared_ptr<MouseEvent> event);
+    void onDoneButtonClick(MouseEvent* event);
     void onKeyboardPress(std::shared_ptr<KeyboardEvent> event);
 };
 

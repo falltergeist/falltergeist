@@ -464,7 +464,7 @@ void PlayerEditState::think()
 
 }
 
-void PlayerEditState::onButtonClick(std::shared_ptr<MouseEvent> event)
+void PlayerEditState::onButtonClick(MouseEvent* event)
 {
     auto sender = dynamic_cast<ImageButton*>(event->emitter());
     auto state = dynamic_cast<PlayerEditState*>(event->reciever());
@@ -527,7 +527,7 @@ void PlayerEditState::onButtonClick(std::shared_ptr<MouseEvent> event)
     }
 }
 
-void PlayerEditState::onLabelClick(std::shared_ptr<MouseEvent> event)
+void PlayerEditState::onLabelClick(MouseEvent* event)
 {
     auto state = dynamic_cast<PlayerEditState*>(event->reciever());
 
@@ -553,7 +553,7 @@ void PlayerEditState::onLabelClick(std::shared_ptr<MouseEvent> event)
     }
 }
 
-void PlayerEditState::onMaskClick(std::shared_ptr<MouseEvent> event)
+void PlayerEditState::onMaskClick(MouseEvent* event)
 {
     auto state = dynamic_cast<PlayerEditState*>(event->reciever());
 
@@ -572,12 +572,12 @@ void PlayerEditState::onMaskClick(std::shared_ptr<MouseEvent> event)
     }
 }
 
-void PlayerEditState::onBackButtonClick(std::shared_ptr<MouseEvent> event)
+void PlayerEditState::onBackButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
 }
 
-void PlayerEditState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
+void PlayerEditState::onDoneButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
 }

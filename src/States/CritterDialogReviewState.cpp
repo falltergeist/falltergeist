@@ -69,7 +69,7 @@ void CritterDialogReviewState::init()
     addUI(downButton);
 }
 
-void CritterDialogReviewState::onDoneButtonClick(std::shared_ptr<Event> event)
+void CritterDialogReviewState::onDoneButtonClick(Event* event)
 {
     Game::getInstance()->popState();
 }

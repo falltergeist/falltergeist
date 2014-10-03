@@ -40,17 +40,17 @@ public:
     virtual ~InventoryDragItemState();
     virtual void init();
 
-    //void onDoneButtonClick(std::shared_ptr<MouseEvent> event);
-    //void onArmorSlotMouseDown(std::shared_ptr<MouseEvent> event);
-    //void onLeftHandSlotMouseDown(std::shared_ptr<MouseEvent> event);
-    //void onRightHandSlotMouseDown(std::shared_ptr<MouseEvent> event);
-    //void onSlotMouseDown(std::shared_ptr<MouseEvent> event);
-    //void onSlotMouseUp(std::shared_ptr<MouseEvent> event);
-    //void onSlotDrag(std::shared_ptr<MouseEvent> event);
-    //void backgroundRightClick(std::shared_ptr<MouseEvent> event);
-    //void onMouseButtonUp(std::shared_ptr<MouseEvent> event);
-    void handle(std::shared_ptr<Event> event);
-    //virtual void handle(std::shared_ptr<Event> event);
+    //void onDoneButtonClick(MouseEvent* event);
+    //void onArmorSlotMouseDown(MouseEvent* event);
+    //void onLeftHandSlotMouseDown(MouseEvent* event);
+    //void onRightHandSlotMouseDown(MouseEvent* event);
+    //void onSlotMouseDown(MouseEvent* event);
+    //void onSlotMouseUp(MouseEvent* event);
+    //void onSlotDrag(MouseEvent* event);
+    //void backgroundRightClick(MouseEvent* event);
+    //void onMouseButtonUp(MouseEvent* event);
+    void handle(Event* event);
+    //virtual void handle(Event* event);
 //private:
     //std::string _handItemSummary (GameItemObject* hand);
     //void _screenShow (unsigned int PID);

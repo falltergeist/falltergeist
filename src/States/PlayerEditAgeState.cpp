@@ -97,7 +97,7 @@ PlayerEditAgeState::~PlayerEditAgeState()
 {
 }
 
-void PlayerEditAgeState::onDecButtonClick(std::shared_ptr<MouseEvent> event)
+void PlayerEditAgeState::onDecButtonClick(MouseEvent* event)
 {
     auto state = dynamic_cast<PlayerEditAgeState*>(event->reciever());
     unsigned char age = Game::getInstance()->player()->age();
@@ -109,7 +109,7 @@ void PlayerEditAgeState::onDecButtonClick(std::shared_ptr<MouseEvent> event)
     }
 }
 
-void PlayerEditAgeState::onIncButtonClick(std::shared_ptr<MouseEvent> event)
+void PlayerEditAgeState::onIncButtonClick(MouseEvent* event)
 {
     auto state = dynamic_cast<PlayerEditAgeState*>(event->reciever());
     unsigned char age = Game::getInstance()->player()->age();
@@ -121,7 +121,7 @@ void PlayerEditAgeState::onIncButtonClick(std::shared_ptr<MouseEvent> event)
     }
 }
 
-void PlayerEditAgeState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
+void PlayerEditAgeState::onDoneButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
 }

@@ -96,7 +96,7 @@ public:
 
     void render();
     void think();
-    void handle(std::shared_ptr<Event> event);
+    void handle(Event* event);
     
     ActiveUI* ui();
     void setUI(ActiveUI* ui);

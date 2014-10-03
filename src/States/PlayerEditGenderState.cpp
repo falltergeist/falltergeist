@@ -87,12 +87,12 @@ void PlayerEditGenderState::init()
     addUI(_femaleImage);
 }
 
-void PlayerEditGenderState::onDoneButtonClick(std::shared_ptr<MouseEvent> event)
+void PlayerEditGenderState::onDoneButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
 }
 
-void PlayerEditGenderState::onFemaleButtonPress(std::shared_ptr<MouseEvent> event)
+void PlayerEditGenderState::onFemaleButtonPress(MouseEvent* event)
 {
     auto state = dynamic_cast<PlayerEditGenderState*>(event->reciever());
     Game::getInstance()->player()->setGender(1); // 1 - female
@@ -100,7 +100,7 @@ void PlayerEditGenderState::onFemaleButtonPress(std::shared_ptr<MouseEvent> even
     state->_femaleImage->setCurrentImage(1);
 }
 
-void PlayerEditGenderState::onMaleButtonPress(std::shared_ptr<MouseEvent> event)
+void PlayerEditGenderState::onMaleButtonPress(MouseEvent* event)
 {
     auto state = dynamic_cast<PlayerEditGenderState*>(event->reciever());
     Game::getInstance()->player()->setGender(0); // 0 - male
