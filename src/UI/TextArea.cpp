@@ -462,6 +462,7 @@ Texture* TextArea::texture()
 
 std::string TextArea::text()
 {
+    if (_strings.size() == 0) return "";
     return _strings.back()->text();
 }
 
