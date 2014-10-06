@@ -46,7 +46,9 @@ void Opcode810DHandler::_run()
                                      [&] (GameItemObject * &item) { return item->PID() == pid; });
         const bool found = iterator != critter->inventory()->end();
         _vm->pushDataPointer(found ? *iterator : nullptr);
-    } else {
+    }
+    else
+    {
         Logger::warning("SCRIPT") << "[810D] - 'who' is not valid GameCritterObject. It is " << std::string(typeid(who).name());
         _vm->pushDataPointer(nullptr);
     }
