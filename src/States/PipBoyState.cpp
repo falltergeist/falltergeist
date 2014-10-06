@@ -23,6 +23,7 @@
 // Falltergeist includes
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
+#include "../Engine/Input/Mouse.h"
 #include "../Engine/ResourceManager.h"
 #include "../States/PipBoyState.h"
 #include "../UI/Image.h"
@@ -41,6 +42,7 @@ PipBoyState::PipBoyState() : State()
 
 PipBoyState::~PipBoyState()
 {
+    Game::getInstance()->mouse()->popState();
 }
 
 void PipBoyState::init()
@@ -50,6 +52,8 @@ void PipBoyState::init()
 
     setModal(true);
     setFullscreen(true);
+
+    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
 
     // Background
     auto background = new Image("art/intrface/pip.frm");
