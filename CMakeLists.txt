@@ -274,6 +274,7 @@ set(SOURCES main.cpp
             src/VM/Handlers/Opcode80DEHandler.cpp
             src/VM/Handlers/Opcode810AHandler.h
             src/VM/Handlers/Opcode810AHandler.cpp
+            src/VM/Handlers/Opcode810DHandler.cpp
             src/VM/Handlers/Opcode8119Handler.h
             src/VM/Handlers/Opcode8119Handler.cpp
             src/VM/Handlers/Opcode8127Handler.h
