@@ -60,6 +60,8 @@
 #include "../VM/Handlers/Opcode8014Handler.h"
 #include "../VM/Handlers/Opcode8015Handler.h"
 #include "../VM/Handlers/Opcode8016Handler.h"
+#include "../VM/Handlers/Opcode8018Handler.h"
+#include "../VM/Handlers/Opcode8019Handler.h"
 #include "../VM/Handlers/Opcode8033Handler.h"
 #include "../VM/Handlers/Opcode8034Handler.h"
 #include "../VM/Handlers/Opcode8039Handler.h"
@@ -177,6 +179,12 @@ void VM::run()
             case 0x8016:
                 opcodeHandler = new Opcode8016Handler(this);
                 break;
+            case 0x8018:
+                opcodeHandler = new Opcode8018Handler(this);
+                break;
+            case 0x8019:
+                opcodeHandler = new Opcode8019Handler(this);
+                break;
             case 0x8033:
                 opcodeHandler = new Opcode8033Handler(this);
                 break;
@@ -237,18 +245,8 @@ void VM::run()
             case 0x8014: break;
             case 0x8015: break;
             case 0x8016: break;
-            case 0x8018:
-            {
-                Logger::debug("SCRIPT") << "[8018] [*] dswap" << std::endl;
-                _dataStack.swap();
-                break;
-            }
-            case 0x8019:
-            {
-                Logger::debug("SCRIPT") << "[8019] [*] rswap" << std::endl;
-                _returnStack.swap();
-                break;
-            }
+            case 0x8018: break;
+            case 0x8019: break;
             case 0x801a:
             {
                 Logger::debug("SCRIPT") << "[801A] [*] pop_d" << std::endl;
