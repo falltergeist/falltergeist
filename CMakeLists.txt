@@ -208,6 +208,8 @@ set(SOURCES main.cpp
             src/States/SkilldexState.h
             src/States/StartState.cpp
             src/States/StartState.h
+            src/States/WorldMapState.cpp
+            src/States/WorldMapState.h
             src/UI/AnimatedImage.cpp
             src/UI/AnimatedImage.h
             src/UI/BigCounter.cpp

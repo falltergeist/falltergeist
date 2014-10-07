@@ -17,10 +17,10 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_PLAYERPANELSTATE_H
-#define FALLTERGEIST_PLAYERPANELSTATE_H
+#ifndef FALLTERGEIST_WORLDMAPSTATE_H
+#define FALLTERGEIST_WORLDMAPSTATE_H
 
-// C++ standard inludes
+// C++ standard includes
 
 // Falltergeist includes
 #include "../Engine/State.h"
@@ -30,30 +30,15 @@
 namespace Falltergeist
 {
 
-class PlayerPanelState : public State
+class WorldMapState : public State
 {
 public:
-    PlayerPanelState();
-    virtual ~PlayerPanelState();
+    WorldMapState();
 
     virtual void init();
-    virtual void render();
-    virtual void think();
-    virtual void handle(Event* event);
 
-    void onChangeHandButtonClick(MouseEvent* event);
-    void onPanelMouseDown(MouseEvent* event);
-    void onInventoryButtonClick(MouseEvent* event);
-    void onOptionsButtonClick(MouseEvent* event);
-    void onSkilldexButtonClick(MouseEvent* event);
-    void onMapButtonClick(MouseEvent* event);
-    void onChaButtonClick(MouseEvent* event);
-    void onPipBoyButtonClick(MouseEvent* event);
-    void onPanelMouseIn(MouseEvent* event);
-    void onPanelMouseOut(MouseEvent* event);
-    void onPanelMouseUp(MouseEvent* event);
-
+    void onKeyboardUp(std::shared_ptr<KeyboardEvent> event);
 };
 
 }
-#endif // FALLTERGEIST_PLAYERPANELSTATE_H
+#endif // FALLTERGEIST_WORLDMAPSTATE_H

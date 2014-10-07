@@ -31,6 +31,7 @@
 #include "../States/PlayerEditState.h"
 #include "../States/PlayerPanelState.h"
 #include "../States/SkilldexState.h"
+#include "../States/WorldMapState.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/SmallCounter.h"
@@ -89,6 +90,7 @@ void PlayerPanelState::init()
     getActiveUI("skilldex_button")->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerPanelState::onSkilldexButtonClick);
 
     addUI("map_button", new ImageButton(ImageButton::TYPE_PANEL_MAP, 526, 39));
+    getActiveUI("map_button")->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerPanelState::onMapButtonClick);
 
     addUI("cha_button", new ImageButton(ImageButton::TYPE_PANEL_CHA, 526, 58));
     getActiveUI("cha_button")->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerPanelState::onChaButtonClick);
@@ -152,6 +154,11 @@ void PlayerPanelState::onOptionsButtonClick(MouseEvent* event)
 void PlayerPanelState::onSkilldexButtonClick(MouseEvent* event)
 {
     Game::getInstance()->pushState(new SkilldexState());
+}
+
+void PlayerPanelState::onMapButtonClick(MouseEvent* event)
+{
+    Game::getInstance()->pushState(new WorldMapState());
 }
 
 void PlayerPanelState::onChaButtonClick(MouseEvent* event)
