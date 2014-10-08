@@ -24,6 +24,7 @@
 
 // Falltergeist includes
 #include "../Engine/State.h"
+#include "../UI/Image.h"
 
 // Third party includes
 
@@ -37,8 +38,12 @@ public:
 
     virtual void init();
 
-//    void render();
-    void onKeyboardUp(KeyboardEvent* event);
+    void render();
+    virtual void handle(Event* event);
+    //void onKeyboardUp(KeyboardEvent* event);
+private:
+    Image* _background;
+    ImageList* _tiles = 0;
 };
 
 }

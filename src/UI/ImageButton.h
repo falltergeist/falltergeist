@@ -72,7 +72,8 @@ public:
         TYPE_DIALOG_UP_ARROW,
         TYPE_DIALOG_DOWN_ARROW,
         TYPE_SMALL_UP_ARROW,
-        TYPE_SMALL_DOWN_ARROW
+        TYPE_SMALL_DOWN_ARROW,
+        TYPE_MAP_HOTSPOT
     };
     ImageButton(unsigned int type, int x = 0, int y = 0);
     ~ImageButton();
