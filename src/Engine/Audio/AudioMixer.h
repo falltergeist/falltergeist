@@ -21,23 +21,32 @@
 #define FALLTERGEIST_AUDIOMIXER_H
 
 // C++ standard includes
+#include <cstdint>
 
 // Falltergeist includes
+#include <libfalltergeist.h>
 
 // Third party includes
-#include "SDL.h"
+#include <SDL_mixer.h>
 
 namespace Falltergeist
 {
-
+class MvePlayer;
 class AudioMixer
-{    
+{
 protected:
     void _init();
 public:
     AudioMixer();
     ~AudioMixer();
-    static void callback(void* userdata, Uint8* stream, int len);
+    void stopMusic();
+    void playACMMusic(std::shared_ptr<libfalltergeist::AcmFileType> acm);
+    void playACMSound(std::shared_ptr<libfalltergeist::AcmFileType> acm);
+    void playMovieMusic(MvePlayer* mve);
+private:
+    void _musicCallback(void *udata, uint8_t *stream, uint32_t len);
+    void _movieCallback(void *udata, uint8_t *stream, uint32_t len);
+    std::map<std::string,Mix_Chunk*> _sfx;
 };
 
 }

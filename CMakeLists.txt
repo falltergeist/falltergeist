@@ -34,6 +34,12 @@ if(NOT SDL2_FOUND)
 endif(NOT SDL2_FOUND)
 include_directories(${SDL2_INCLUDE_DIR})
 
+find_package(SDL2_mixer REQUIRED)
+if(NOT SDLMIXER_FOUND)
+  message(FATAL_ERROR "SDL2_mixer library not found")
+endif(NOT SDLMIXER_FOUND)
+include_directories(${SDLMIXER_INCLUDE_DIR})
+
 find_package(OpenGL REQUIRED)
 if(NOT OPENGL_FOUND)
           message(FATAL_ERROR "OpenGL library not found")
@@ -77,6 +83,8 @@ set(SOURCES main.cpp
             src/Engine/Graphics/AnimationFrame.h
             src/Engine/Graphics/AnimationQueue.cpp
             src/Engine/Graphics/AnimationQueue.h
+            src/Engine/Graphics/MvePlayer.cpp
+            src/Engine/Graphics/MvePlayer.h
             src/Engine/Graphics/OpenGLRenderer.cpp
             src/Engine/Graphics/OpenGLRenderer.h
             src/Engine/Graphics/SDLRenderer.cpp
@@ -321,4 +329,4 @@ set(SOURCES main.cpp
 add_definitions (-std=c++11 -Wall)
 set(CMAKE_BUILD_TYPE Debug)
 add_executable(falltergeist ${SOURCES})
-target_link_libraries(falltergeist ${SDL2_LIBRARY} ${OPENGL_LIBRARIES} ${LIBFALLTERGEIST_LIBRARY})
+target_link_libraries(falltergeist ${SDL2_LIBRARY} ${SDLMIXER_LIBRARY} ${OPENGL_LIBRARIES} ${LIBFALLTERGEIST_LIBRARY})
