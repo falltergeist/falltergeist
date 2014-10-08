@@ -29,6 +29,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/GameTime.h"
 #include "../Engine/Graphics/Animation.h"
+#include "../Engine/Graphics/AnimationQueue.h"
 #include "../Engine/Graphics/Renderer.h"
 #include "../Engine/Graphics/Tile.h"
 #include "../Engine/Graphics/TileMap.h"
@@ -467,6 +468,24 @@ void LocationState::handle(Event* event)
         }
     }
 
+    if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
+    {
+        switch (keyboardEvent->keyCode())
+        {
+            // JUST FOR ANIMATION TESTING
+            case SDLK_a:
+            {
+                auto queue = new AnimationQueue();
+                game->player()->setUI(queue);
+
+                //queue->setRepeat(true);
+                queue->animations()->push_back(new Animation("art/critters/hmwarraq.frm", game->player()->orientation()));
+                queue->start();
+
+                break;
+            }
+        }
+    }
     for (auto it = hexagonGrid()->hexagons()->rbegin(); it != hexagonGrid()->hexagons()->rend(); ++it)
     {
         auto hexagon = *it;

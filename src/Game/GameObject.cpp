@@ -147,7 +147,9 @@ ActiveUI* GameObject::ui()
 
 void GameObject::setUI(ActiveUI* ui)
 {
+    delete _ui;
     _ui = ui;
+    _ui->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &LocationState::onMouseDown);
 }
 
 void GameObject::_generateUi()

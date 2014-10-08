@@ -49,7 +49,6 @@ public:
 
     void clear();
     void stop();
-    void pause();
     void start();
     void setRepeat(bool value);
 

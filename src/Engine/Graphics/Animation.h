@@ -38,6 +38,8 @@ class AnimationFrame;
 class Animation : public ActiveUI
 {
 protected:
+    bool _playing = false;
+    bool _ended = false;
     std::vector<AnimationFrame*> _animationFrames;
     unsigned int _currentFrame = 0;
     unsigned int _frameTicks = 0;
@@ -59,6 +61,11 @@ public:
     virtual unsigned int width();
     virtual unsigned int height();
     virtual unsigned int pixel(unsigned int x, unsigned int y);
+
+    void play();
+    void stop();
+
+    bool ended();
 };
 
 }

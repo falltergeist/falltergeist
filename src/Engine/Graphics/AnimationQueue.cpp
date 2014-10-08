@@ -46,6 +46,9 @@ std::vector<Animation*>* AnimationQueue::animations()
 
 void AnimationQueue::clear()
 {
+    _currentAnimation = 0;
+    _playing = false;
+    _repeat = false;
     while (!_animations.empty())
     {
         delete _animations.back();
@@ -57,11 +60,6 @@ void AnimationQueue::stop()
 {
     _playing = false;
     _currentAnimation = 0;
-}
-
-void AnimationQueue::pause()
-{
-    _playing = false;
 }
 
 void AnimationQueue::start()
@@ -85,6 +83,35 @@ void AnimationQueue::think()
 {
     if (_playing)
     {
+        if (currentAnimation()->ended())
+        {
+            // not last animation in queue
+            if (_currentAnimation < _animations.size() - 1)
+            {
+                _currentAnimation++;
+                currentAnimation()->stop(); // rewind
+                currentAnimation()->play();
+            }
+            else
+            {
+                if (!_repeat)
+                {
+                    _playing = false;
+                    return;
+                }
+                else
+                {
+                    _currentAnimation = 0;
+                    currentAnimation()->stop();
+                    currentAnimation()->play();
+                }
+            }
+        }
+        else
+        {
+            currentAnimation()->play();
+        }
+
         currentAnimation()->think();
     }
 }
