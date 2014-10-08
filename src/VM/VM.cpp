@@ -62,6 +62,7 @@
 #include "../VM/Handlers/Opcode8016Handler.h"
 #include "../VM/Handlers/Opcode8018Handler.h"
 #include "../VM/Handlers/Opcode8019Handler.h"
+#include "../VM/Handlers/Opcode801AHandler.h"
 #include "../VM/Handlers/Opcode8033Handler.h"
 #include "../VM/Handlers/Opcode8034Handler.h"
 #include "../VM/Handlers/Opcode8039Handler.h"
@@ -185,6 +186,9 @@ void VM::run()
             case 0x8019:
                 opcodeHandler = new Opcode8019Handler(this);
                 break;
+            case 0x801A:
+                opcodeHandler = new Opcode801AHandler(this);
+                break;
             case 0x8033:
                 opcodeHandler = new Opcode8033Handler(this);
                 break;
@@ -247,12 +251,7 @@ void VM::run()
             case 0x8016: break;
             case 0x8018: break;
             case 0x8019: break;
-            case 0x801a:
-            {
-                Logger::debug("SCRIPT") << "[801A] [*] pop_d" << std::endl;
-                _dataStack.pop();
-                break;
-            }
+            case 0x801a: break;
             case 0x801b:
             {
                 Logger::debug("SCRIPT") << "[801B] [?] dup_r" << std::endl;
