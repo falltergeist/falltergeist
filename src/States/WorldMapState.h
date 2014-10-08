@@ -37,6 +37,7 @@ public:
 
     virtual void init();
 
+//    void render();
     void onKeyboardUp(KeyboardEvent* event);
 };
 
