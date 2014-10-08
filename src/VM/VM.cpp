@@ -63,6 +63,7 @@
 #include "../VM/Handlers/Opcode8018Handler.h"
 #include "../VM/Handlers/Opcode8019Handler.h"
 #include "../VM/Handlers/Opcode801AHandler.h"
+#include "../VM/Handlers/Opcode801BHandler.h"
 #include "../VM/Handlers/Opcode8033Handler.h"
 #include "../VM/Handlers/Opcode8034Handler.h"
 #include "../VM/Handlers/Opcode8039Handler.h"
@@ -189,6 +190,9 @@ void VM::run()
             case 0x801A:
                 opcodeHandler = new Opcode801AHandler(this);
                 break;
+            case 0x801B:
+                opcodeHandler = new Opcode801BHandler(this);
+                break;
             case 0x8033:
                 opcodeHandler = new Opcode8033Handler(this);
                 break;
@@ -252,12 +256,7 @@ void VM::run()
             case 0x8018: break;
             case 0x8019: break;
             case 0x801a: break;
-            case 0x801b:
-            {
-                Logger::debug("SCRIPT") << "[801B] [?] dup_r" << std::endl;
-                _returnStack.push(_returnStack.top());
-                break;
-            }
+            case 0x801b: break;
             case 0x801c:
             {
                 _programCounter = popReturnInteger();
