@@ -37,7 +37,7 @@ public:
 
     virtual void init();
 
-    void onKeyboardUp(std::shared_ptr<KeyboardEvent> event);
+    void onKeyboardUp(KeyboardEvent* event);
 };
 
 }

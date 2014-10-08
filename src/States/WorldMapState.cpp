@@ -58,7 +58,7 @@ void WorldMapState::init()
 
 }
 
-void WorldMapState::onKeyboardUp(std::shared_ptr<KeyboardEvent> event)
+void WorldMapState::onKeyboardUp(KeyboardEvent* event)
 {
     if (event->keyCode() == SDLK_ESCAPE)
     {
