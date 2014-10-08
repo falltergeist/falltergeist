@@ -24,6 +24,7 @@
 // Falltergeist includes
 #include "../Engine/Exception.h"
 #include "../Engine/Graphics/Animation.h"
+#include "../Engine/Graphics/AnimationQueue.h"
 #include "../Engine/Game.h"
 #include "../Engine/LocationCamera.h"
 #include "../Engine/PathFinding/Hexagon.h"
@@ -151,14 +152,16 @@ void GameObject::setUI(ActiveUI* ui)
 
 void GameObject::_generateUi()
 {
-
+    delete _ui; _ui = 0;
     auto frm = ResourceManager::frmFileType(FID());
     if (frm)
     {
         frm->rgba(ResourceManager::palFileType("color.pal")); // TODO: figure out, why not calling this brokes animated overlays
         if (frm->framesPerDirection() > 1)
         {
-            _ui = new Animation(ResourceManager::FIDtoFrmName(FID()), orientation());
+            auto queue = new AnimationQueue();
+            queue->animations()->push_back(new Animation(ResourceManager::FIDtoFrmName(FID()), orientation()));
+            _ui = queue;
         }
         else if (frm->animatedPalette())
         {
@@ -174,7 +177,6 @@ void GameObject::_generateUi()
     {
         _ui->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &LocationState::onMouseDown);
     }
-
 }
 
 bool GameObject::canWalkThru()
@@ -261,11 +263,6 @@ bool GameObject::inRender()
 void GameObject::setInRender(bool value)
 {
     _inRender = value;
-}
-
-AnimationQueue* GameObject::animationQueue()
-{
-    return _animationQueue;
 }
 
 }

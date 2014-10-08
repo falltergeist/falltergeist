@@ -54,7 +54,11 @@ void Opcode810EHandler::_run()
         case 0x2: // ANIM_CLEAR
         {
             auto object = static_cast<GameObject*>(_vm->popDataPointer());
-            if (object->animationQueue()) object->animationQueue()->clear();
+            auto queue = dynamic_cast<AnimationQueue*>(object->ui());
+            if (queue)
+            {
+                queue->clear();
+            }
             break;
         }
         case 0x3: // ANIMATION_END

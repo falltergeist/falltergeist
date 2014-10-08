@@ -19,6 +19,7 @@
  */
 
 // C++ standard includes
+#include <iostream>
 
 // Falltergeist includes
 #include "../../Engine/Graphics/AnimationQueue.h"
@@ -29,13 +30,18 @@
 namespace Falltergeist
 {
 
-AnimationQueue::AnimationQueue()
+AnimationQueue::AnimationQueue() : ActiveUI()
 {
 }
 
 AnimationQueue::~AnimationQueue()
 {
     clear();
+}
+
+std::vector<Animation*>* AnimationQueue::animations()
+{
+    return &_animations;
 }
 
 void AnimationQueue::clear()
@@ -45,6 +51,79 @@ void AnimationQueue::clear()
         delete _animations.back();
         _animations.pop_back();
     }
+}
+
+void AnimationQueue::stop()
+{
+    _playing = false;
+    _currentAnimation = 0;
+}
+
+void AnimationQueue::pause()
+{
+    _playing = false;
+}
+
+void AnimationQueue::start()
+{
+    _playing = true;
+}
+
+void AnimationQueue::setRepeat(bool value)
+{
+    _repeat = value;
+}
+
+void AnimationQueue::render()
+{
+    currentAnimation()->setX(this->x());
+    currentAnimation()->setY(this->y());
+    currentAnimation()->render();
+}
+
+void AnimationQueue::think()
+{
+    if (_playing)
+    {
+        currentAnimation()->think();
+    }
+}
+
+Texture* AnimationQueue::texture()
+{
+    return currentAnimation()->texture();
+}
+
+unsigned int AnimationQueue::pixel(unsigned int x, unsigned int y)
+{
+    currentAnimation()->setX(this->x());
+    currentAnimation()->setY(this->y());
+    return currentAnimation()->pixel(x, y);
+}
+
+Animation* AnimationQueue::currentAnimation()
+{
+    return _animations.at(_currentAnimation);
+}
+
+unsigned int AnimationQueue::width()
+{
+    return currentAnimation()->width();
+}
+
+unsigned int AnimationQueue::height()
+{
+    return currentAnimation()->height();
+}
+
+int AnimationQueue::xOffset()
+{
+    return currentAnimation()->xOffset();
+}
+
+int AnimationQueue::yOffset()
+{
+    return currentAnimation()->yOffset();
 }
 
 }

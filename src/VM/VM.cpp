@@ -78,6 +78,7 @@
 #include "../VM/Handlers/Opcode810DHandler.h"
 #include "../VM/Handlers/Opcode810EHandler.h"
 #include "../VM/Handlers/Opcode8119Handler.h"
+#include "../VM/Handlers/Opcode8126Handler.h"
 #include "../VM/Handlers/Opcode8127Handler.h"
 #include "../VM/Handlers/Opcode9001Handler.h"
 #include "../VM/Handlers/OpcodeC001Handler.h"
@@ -237,6 +238,9 @@ void VM::run()
                 break;
             case 0x8119:
                 opcodeHandler = new Opcode8119Handler(this);
+                break;
+            case 0x8126:
+                opcodeHandler = new Opcode8126Handler(this);
                 break;
             case 0x8127:
                 opcodeHandler = new Opcode8127Handler(this);
@@ -1279,19 +1283,7 @@ void VM::run()
                 popDataPointer();
                 break;
             }
-            case 0x8126:
-            {
-                Logger::debug("SCRIPT") << "[8126] [-] void reg_anim_animate_forever(GameObject* obj , int delay)" << std::endl;
-                popDataInteger(); // delay - must be -1
-                popDataPointer();//auto object = (GameObject*)popDataPointer();
-                //if (object->animationQueue()->animation())
-                {
-                    //object->animationQueue()->stop();
-                    //object->animationQueue()->setRepeat(-1); // forever
-                    //object->animationQueue()->start();
-                }
-                break;
-            }
+            case 0x8126: break;
             case 0x8127: break;
             case 0x8128:
             {

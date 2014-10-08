@@ -25,6 +25,7 @@
 #include <vector>
 
 // Falltergeist includes
+#include "../../Engine/Graphics/ActiveUI.h"
 
 // Third party includes
 
@@ -32,15 +33,37 @@ namespace Falltergeist
 {
 class Animation;
 
-class AnimationQueue
+class AnimationQueue : public ActiveUI
 {
 protected:
+    bool _playing = false;
+    bool _repeat = false;
+    unsigned int _currentAnimation = 0;
     std::vector<Animation*> _animations;
 public:
     AnimationQueue();
-    ~AnimationQueue();
+    virtual ~AnimationQueue();
+
+    std::vector<Animation*>* animations();
+    Animation* currentAnimation();
 
     void clear();
+    void stop();
+    void pause();
+    void start();
+    void setRepeat(bool value);
+
+
+    virtual Texture* texture();
+    virtual void render();
+    virtual void think();
+    virtual unsigned int pixel(unsigned int x, unsigned int y);
+
+
+    virtual unsigned int width();
+    virtual unsigned int height();
+    virtual int xOffset();
+    virtual int yOffset();
 
 };
 

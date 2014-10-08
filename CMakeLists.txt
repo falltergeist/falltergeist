@@ -292,6 +292,8 @@ set(SOURCES main.cpp
             src/VM/Handlers/Opcode810EHandler.cpp
             src/VM/Handlers/Opcode8119Handler.h
             src/VM/Handlers/Opcode8119Handler.cpp
+            src/VM/Handlers/Opcode8126Handler.h
+            src/VM/Handlers/Opcode8126Handler.cpp
             src/VM/Handlers/Opcode8127Handler.h
             src/VM/Handlers/Opcode8127Handler.cpp
             src/VM/Handlers/Opcode9001Handler.h
