@@ -64,6 +64,7 @@
 #include "../VM/Handlers/Opcode8019Handler.h"
 #include "../VM/Handlers/Opcode801AHandler.h"
 #include "../VM/Handlers/Opcode801BHandler.h"
+#include "../VM/Handlers/Opcode801CHandler.h"
 #include "../VM/Handlers/Opcode8033Handler.h"
 #include "../VM/Handlers/Opcode8034Handler.h"
 #include "../VM/Handlers/Opcode8039Handler.h"
@@ -193,6 +194,9 @@ void VM::run()
             case 0x801B:
                 opcodeHandler = new Opcode801BHandler(this);
                 break;
+            case 0x801C:
+                opcodeHandler = new Opcode801CHandler(this);
+                break;
             case 0x8033:
                 opcodeHandler = new Opcode8033Handler(this);
                 break;
@@ -257,12 +261,7 @@ void VM::run()
             case 0x8019: break;
             case 0x801a: break;
             case 0x801b: break;
-            case 0x801c:
-            {
-                _programCounter = popReturnInteger();
-                Logger::debug("SCRIPT") << "[801C] [*] ret = 0x" << std::hex << _programCounter << std::endl;
-                break;
-            }
+            case 0x801c: break;
             case 0x8027:
             {
                 Logger::debug("SCRIPT") << "[8027] [?] unknown pop_d pop_d" << std::endl;
