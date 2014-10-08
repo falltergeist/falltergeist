@@ -229,6 +229,8 @@ int Animation::yOffset()
 
 void Animation::think()
 {
+    if (!_playing) return;
+
     if (SDL_GetTicks() - _frameTicks >= frames()->at(_currentFrame)->duration())
     {
         _frameTicks = SDL_GetTicks();
@@ -239,12 +241,12 @@ void Animation::think()
         }
         else
         {
-            _currentFrame = 0;
+            _ended = true;
+            _playing = false;
         }
        auto frame = frames()->at(_currentFrame);
        setXOffset(frame->xOffset());
        setYOffset(frame->yOffset());
-
     }
 }
 
@@ -292,6 +294,23 @@ unsigned int Animation::pixel(unsigned int x, unsigned int y)
     if (y < 0 || y > frame->height()) return 0;
 
     return ActiveUI::pixel(x + frame->x(), y + frame->y());
+}
+
+void Animation::play()
+{
+    _playing = true;
+}
+
+void Animation::stop()
+{
+    _playing = false;
+    _ended = false;
+    _currentFrame = 0;
+}
+
+bool Animation::ended()
+{
+    return _ended;
 }
 
 }

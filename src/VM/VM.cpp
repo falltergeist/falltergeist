@@ -76,7 +76,9 @@
 #include "../VM/Handlers/Opcode810AHandler.h"
 #include "../VM/Handlers/Opcode810CHandler.h"
 #include "../VM/Handlers/Opcode810DHandler.h"
+#include "../VM/Handlers/Opcode810EHandler.h"
 #include "../VM/Handlers/Opcode8119Handler.h"
+#include "../VM/Handlers/Opcode8126Handler.h"
 #include "../VM/Handlers/Opcode8127Handler.h"
 #include "../VM/Handlers/Opcode9001Handler.h"
 #include "../VM/Handlers/OpcodeC001Handler.h"
@@ -231,8 +233,14 @@ void VM::run()
             case 0x810D:
                 opcodeHandler = new Opcode810DHandler(this);
                 break;
+            case 0x810E:
+                opcodeHandler = new Opcode810EHandler(this);
+                break;
             case 0x8119:
                 opcodeHandler = new Opcode8119Handler(this);
+                break;
+            case 0x8126:
+                opcodeHandler = new Opcode8126Handler(this);
                 break;
             case 0x8127:
                 opcodeHandler = new Opcode8127Handler(this);
@@ -731,15 +739,24 @@ void VM::run()
             }
             case 0x80c5:
             {
-                Logger::debug("SCRIPT") << "[80C5] [?] GVAR[num]" << std::endl;
-                auto num = popDataInteger();
+                auto& debug = Logger::debug("SCRIPT");
+                debug << "[80C5] [?] GVAR[num]" << std::endl;
+                int num = popDataInteger();
+                int value;
                 if (num < 0)
                 {
-                    pushDataInteger(0);
-                    break;
+                    value = 0;
                 }
-                auto game = Game::getInstance();
-                pushDataInteger(game->GVAR(num));
+                else
+                {
+                    auto game = Game::getInstance();
+                    value = game->GVAR(num);
+                }
+                pushDataInteger(value);
+
+                debug << "    num = 0x" << std::hex << num << std::endl;
+                debug << "    value = 0x" << std::hex << value << std::endl;
+
                 break;
             }
             case 0x80c6:
@@ -1105,35 +1122,7 @@ void VM::run()
                 break;
             }
             case 0x810d: break;
-            case 0x810e:
-            {
-                Logger::debug("SCRIPT") << "[810E] [=] void reg_anim_func(int p1, int p2)" << std::endl;
-                auto p2 = _dataStack.pop(); // pointer or integer
-                auto p1 = popDataInteger();
-                _dataStack.push(p2);
-                switch (p1)
-                {
-                    case 0x1: // ANIM_BEGIN
-                    {
-                        popDataInteger();//auto p2 = popDataInteger();
-                        // RB_UNRESERVED (1) - незарезервированная последовательность, может не воспроизвестись, если отсутствуют свободные слоты
-                        // RB_RESERVED (2) - зарезервированная последовательность, должна воспроизвестись в любом случае
-                        break;
-                    }
-                    case 0x2: // ANIM_CLEAR
-                    {
-                        popDataPointer();//auto object = (GameObject*)popDataPointer();
-                        //object->animationQueue()->start();
-                        break;
-                    }
-                    case 0x3: // ANIMATION_END
-                    {
-                        popDataInteger(); // always 0
-                        break;
-                    }
-                }
-                break;
-            }
+            case 0x810e: break;
             case 0x810f:
             {
                 Logger::debug("SCRIPT") << "[810F] [=] void reg_anim_animate(void* what, int anim, int delay) " << std::endl;
@@ -1294,19 +1283,7 @@ void VM::run()
                 popDataPointer();
                 break;
             }
-            case 0x8126:
-            {
-                Logger::debug("SCRIPT") << "[8126] [-] void reg_anim_animate_forever(GameObject* obj , int delay)" << std::endl;
-                popDataInteger(); // delay - must be -1
-                popDataPointer();//auto object = (GameObject*)popDataPointer();
-                //if (object->animationQueue()->animation())
-                {
-                    //object->animationQueue()->stop();
-                    //object->animationQueue()->setRepeat(-1); // forever
-                    //object->animationQueue()->start();
-                }
-                break;
-            }
+            case 0x8126: break;
             case 0x8127: break;
             case 0x8128:
             {
@@ -1643,8 +1620,9 @@ int VM::_critter_add_trait(void* who, int trait_type, int trait, int amount)
     return 0;
 }
 
-void VM::_anim(void* who, int anim, int direction)
+void VM::anim(GameCritterObject* who, int anim, int direction)
 {
+    throw 1;
 }
 
 int VM::_metarule3(int meta, VMStackValue* p1, int p2, int p3)
