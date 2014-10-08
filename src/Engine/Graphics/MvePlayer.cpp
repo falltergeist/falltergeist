@@ -23,6 +23,8 @@
 
 // Falltergeist includes
 #include "../../Engine/Graphics/MvePlayer.h"
+#include "../../Engine/Game.h"
+#include "../../Engine/Graphics/Renderer.h"
 #include "../../Engine/Exception.h"
 #include "../../Engine/Logger.h"
 
@@ -82,29 +84,11 @@ MvePlayer::~MvePlayer()
 {
 }
 
-void MvePlayer::render(SDL_Renderer* renderer)
+void MvePlayer::render()
 {
     //we dont have data yet
     if (!_timerStarted) return;
-    // TODO: move this to the end of _decodeVideo {
-    if (_texture) { SDL_DestroyTexture(_texture); _texture = NULL; }
-    _texture = SDL_CreateTextureFromSurface(renderer, _currentBuf);
-    if (!_texture)
-    {
-      Logger::critical("VIDEO") << "Cannot create videotexture: " << SDL_GetError() << std::endl;
-      throw new Exception(SDL_GetError());
-    }
-    // }
-    SDL_Rect tgt;
-    tgt.w=640;
-    tgt.h=320;
-    tgt.x=0;
-    tgt.y=80;
-    if (SDL_RenderCopy(renderer, _texture, NULL, &tgt) < 0)
-    {
-       Logger::critical("VIDEO") << "Cannot render videotexture: " << SDL_GetError() << std::endl;
-       throw new Exception(SDL_GetError());
-    }
+    Game::getInstance()->renderer()->drawTexture(_texture, 0, 80, 0, 0, 640, 320);
 }
 
 SDL_Rect relClose(uint32_t b, int8_t sign, uint32_t _x, uint32_t _y)
@@ -622,6 +606,13 @@ void MvePlayer::_decodeVideo(uint8_t* data, uint32_t len)
         _backBuf = temp;
     }
     _decodeFrame(data+14, len-14);
+
+
+    SDL_PixelFormat* format = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
+    SDL_Surface *temp = SDL_ConvertSurface(_currentBuf, format, 0);
+    _texture->loadFromRGBA((unsigned int*)temp->pixels);
+    SDL_FreeSurface(temp);
+    SDL_FreeFormat(format);
 }
 
 void MvePlayer::_setDecodingMap(uint8_t* data)
@@ -657,11 +648,11 @@ void MvePlayer::_setPalette(uint8_t* data)
   }
   int ret = 1;
   if (_currentBuf) ret=SDL_SetPaletteColors(_currentBuf->format->palette, palette, 0, 256);
-
   if (_backBuf) ret= SDL_SetPaletteColors(_backBuf->format->palette, palette, 0, 256);
-  if (ret<0) std::cout << "palset fail"  << SDL_GetError() << std::endl;
-  if (ret>0) std::cout << "palset none. no surf" << std::endl;
-
+  if (ret!=0)
+  {
+    throw new Exception(SDL_GetError());
+  }
 }
 
 void MvePlayer::_sendVideoBuffer(uint8_t* data)
@@ -677,18 +668,27 @@ void MvePlayer::_initVideoBuffer(uint8_t* data)
   width = get_short(data) * 8;
   height = get_short(data+2) * 8;
 
-  if (_currentBuf!=NULL) { SDL_FreeSurface(_currentBuf); _currentBuf = NULL;}
-  if (_backBuf!=NULL) { SDL_FreeSurface(_backBuf); _backBuf = NULL; }
+  if (_currentBuf!=NULL) return;
+  if (_backBuf!=NULL) return;
 
   _currentBuf = SDL_CreateRGBSurface(0, width, height, 8,0,0,0,0);
-  if (!_currentBuf) std::cout << SDL_GetError() << std::endl;
+  if (!_currentBuf)
+  {
+    throw new Exception(SDL_GetError());
+  }
 
   _backBuf = SDL_CreateRGBSurface(0, width, height, 8,0,0,0,0);
-  if (!_backBuf) std::cout << SDL_GetError() << std::endl;
+  if (!_backBuf)
+  {
+     throw new Exception(SDL_GetError());
+  }
 
-  if (_decodingMap!=NULL) delete[] _decodingMap;
+  if (_decodingMap!=NULL) return;
   // decoding map is 4 bits per 8x8 block
   _decodingMap = new uint8_t [ (width*height / (8*8)) ];
+
+  if (_texture != NULL) return;
+  _texture = new Texture(width, height);
 }
 
 

@@ -25,10 +25,10 @@
 
 // Falltergeist includes
 #include <libfalltergeist.h>
+#include "../../Engine/Graphics/Texture.h"
 
 // Third party includes
 #include <SDL.h>
-#include <SDL_mixer.h>
 
 namespace Falltergeist
 {
@@ -40,7 +40,7 @@ public:
     MvePlayer(libfalltergeist::MveFileType* mve);
     ~MvePlayer();
 private:
-    SDL_Texture* _texture=NULL;
+    Texture* _texture=NULL;
     libfalltergeist::MveFileType* _mve;
     bool _timerStarted = false;
     bool _finished = false;
@@ -85,7 +85,7 @@ private:
     void _drawQuadrant4colors(uint32_t x, uint32_t y, uint8_t c1, uint8_t c2, uint8_t c3, uint8_t c4, uint8_t mask1, uint8_t mask2, uint8_t mask3, uint8_t mask4);
 public:
     void think();
-    void render(SDL_Renderer* renderer);
+    void render();
     void play();
     void stop();
     bool finished();
