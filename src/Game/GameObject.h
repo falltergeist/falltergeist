@@ -56,6 +56,7 @@ protected:
     std::string _description;
     std::vector<VM*> _scripts;
     ActiveUI* _ui = 0;
+    AnimationQueue* _animationQueue = 0;
     Hexagon* _hexagon = 0;
     virtual void _generateUi();
     TextArea* _floatMessage = 0;
@@ -109,6 +110,8 @@ public:
 
     void setInRender(bool value);
     bool inRender();
+
+    AnimationQueue* animationQueue();
 };
 
 }

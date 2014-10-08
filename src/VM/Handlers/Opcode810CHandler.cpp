@@ -22,6 +22,7 @@
 // Falltergeist includes
 #include "../../Engine/Exception.h"
 #include "../../Engine/Logger.h"
+#include "../../Game/GameCritterObject.h"
 #include "../../Game/GameObject.h"
 #include "../../VM/Handlers/Opcode810CHandler.h"
 #include "../../VM/VM.h"
@@ -39,7 +40,7 @@ Opcode810CHandler::Opcode810CHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode810CHandler::_run()
 {
     auto& debug = Logger::debug("SCRIPT");
-    debug << "[810C] [*] void anim(void* who, int anim, int direction)" << std::endl;
+    debug << "[810C] [*] void anim(void* who, int animation, int direction)" << std::endl;
 
     int direction;
     switch (_vm->dataStack()->top()->type())
@@ -60,12 +61,18 @@ void Opcode810CHandler::_run()
             throw Exception("Opcode810CHandler - wrong direction type");
         }
     }
-    auto anim = _vm->popDataInteger();
-    auto who = _vm->popDataPointer();
-    //_anim(who, anim, direction);
+    auto animation = _vm->popDataInteger();
+    auto who = static_cast<GameObject*>(_vm->popDataPointer());
+    auto critter = dynamic_cast<GameCritterObject*>(who);
+    if (!critter)
+    {
+        throw Exception("Opcode810CHandler - who is not a critter");
+    }
 
-    debug << "    direction = " << std::hex << direction << std::endl;
-    debug << "    anim = " << std::hex << anim << std::endl;
+    _vm->anim(critter, animation, direction);
+
+    debug << "    direction = 0x" << std::hex << direction << std::endl;
+    debug << "    animation = 0x" << std::hex << animation << std::endl;
     debug << "    who = " << who << std::endl;
 }
 

@@ -40,6 +40,8 @@ public:
     AnimationQueue();
     ~AnimationQueue();
 
+    void clear();
+
 };
 
 }

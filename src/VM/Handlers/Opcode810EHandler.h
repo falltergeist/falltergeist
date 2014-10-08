@@ -15,36 +15,28 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
+
+#ifndef FALLTERGEIST_OPCODE810EHANDLER_H
+#define FALLTERGEIST_OPCODE810EHANDLER_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Graphics/AnimationQueue.h"
-#include "../../Engine/Graphics/Animation.h"
+#include "../../VM/OpcodeHandler.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-AnimationQueue::AnimationQueue()
+class Opcode810EHandler : public OpcodeHandler
 {
-}
-
-AnimationQueue::~AnimationQueue()
-{
-    clear();
-}
-
-void AnimationQueue::clear()
-{
-    while (!_animations.empty())
-    {
-        delete _animations.back();
-        _animations.pop_back();
-    }
-}
+public:
+    Opcode810EHandler(VM* vm);
+private:
+    void _run();
+};
 
 }
+#endif // FALLTERGEIST_OPCODE810EHANDLER_H

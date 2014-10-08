@@ -263,5 +263,9 @@ void GameObject::setInRender(bool value)
     _inRender = value;
 }
 
+AnimationQueue* GameObject::animationQueue()
+{
+    return _animationQueue;
+}
 
 }

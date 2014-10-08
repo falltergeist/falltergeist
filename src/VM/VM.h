@@ -32,6 +32,7 @@
 
 namespace Falltergeist
 {
+class GameCritterObject;
 
 class VM
 {
@@ -54,8 +55,7 @@ protected:
     void _playMovie(int movieNum);
     void _displayString(std::string str);
     int _tile_num_in_direction(int start_tile, int dir, int distance);
-    int _critter_add_trait(void* who, int trait_type, int trait, int amount);
-    void _anim(void* who, int anim, int direction);
+    int _critter_add_trait(void* who, int trait_type, int trait, int amount);    
     std::string msgMessage(int msg_file_num, int msg_num);
 public:
     VM(libfalltergeist::IntFileType* script, void* owner);
@@ -91,6 +91,7 @@ public:
     int DVARbase();
     int SVARbase();
 
+    void anim(GameCritterObject* who, int anim, int direction);
 
 };
 
