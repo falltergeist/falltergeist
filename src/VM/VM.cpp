@@ -74,6 +74,7 @@
 #include "../VM/Handlers/Opcode80CBHandler.h"
 #include "../VM/Handlers/Opcode80DEHandler.h"
 #include "../VM/Handlers/Opcode810AHandler.h"
+#include "../VM/Handlers/Opcode810CHandler.h"
 #include "../VM/Handlers/Opcode810DHandler.h"
 #include "../VM/Handlers/Opcode8119Handler.h"
 #include "../VM/Handlers/Opcode8127Handler.h"
@@ -223,6 +224,9 @@ void VM::run()
                 break;
             case 0x810A:
                 opcodeHandler = new Opcode810AHandler(this);
+                break;
+            case 0x810C:
+                opcodeHandler = new Opcode810CHandler(this);
                 break;
             case 0x810D:
                 opcodeHandler = new Opcode810DHandler(this);
@@ -1091,15 +1095,7 @@ void VM::run()
                 break;
             }
             case 0x810a: break;
-            case 0x810c:
-            {
-                Logger::debug("SCRIPT") << "[810C] [*] void anim(void* who, int anim, int direction)" << std::endl;
-                auto direction = popDataInteger();
-                auto anim = popDataInteger();
-                auto who = popDataPointer();
-                _anim(who, anim, direction);
-                break;
-            }
+            case 0x810c: break;
             case 0x810b:
             {
                 Logger::debug("SCRIPT") << "[810B] [*] int metarule(p2, p1)" << std::endl;

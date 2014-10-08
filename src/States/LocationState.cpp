@@ -327,18 +327,31 @@ void LocationState::think()
 
         for (auto hexagon : *hexagonGrid()->hexagons())
         {
-            for (auto object : *hexagon->objects())
+            // this is needed to prevent iterator breaking when moveObjectToHexagon() method is called
+            std::vector<GameObject*> objects;
+            for (auto object : *hexagon->objects()) objects.push_back(object);
+            // initialize scripts
+            for (auto object : objects)
             {
-                // initialize scripts
-                for (auto script : *object->scripts()) script->initialize();
+                for (auto script : *object->scripts())
+                {
+                    script->initialize();
+                }
             }
         }
 
         if (_locationScript) _locationScript->call("map_enter_p_proc");
 
-        for (auto hexagon : *hexagonGrid()->hexagons())
+        // By some reason we need to use reverse iterator to prevent scripts problems
+        // If we use normal iterators, some exported variables are not initialized on the moment
+        // when script is called
+        for (auto it = hexagonGrid()->hexagons()->rbegin(); it != hexagonGrid()->hexagons()->rend(); ++it)
         {
-            for (auto object : *hexagon->objects())
+            auto hexagon = *it;
+            // this is needed to prevent iterator breaking when moveObjectToHexagon() method is called
+            std::vector<GameObject*> objects;
+            for (auto object : *hexagon->objects()) objects.push_back(object);
+            for (auto object : objects)
             {
                 // map_enter_p_proc
                 for (auto script : *object->scripts()) script->call("map_enter_p_proc");
@@ -353,7 +366,10 @@ void LocationState::think()
             if (_locationScript) _locationScript->call("map_update_p_proc");
             for (auto hexagon : *hexagonGrid()->hexagons())
             {
-                for (auto object : *hexagon->objects())
+                // this is needed to prevent iterator breaking when moveObjectToHexagon() method is called
+                std::vector<GameObject*> objects;
+                for (auto object : *hexagon->objects()) objects.push_back(object);
+                for (auto object : objects)
                 {
                     for (auto script : *object->scripts())
                     {

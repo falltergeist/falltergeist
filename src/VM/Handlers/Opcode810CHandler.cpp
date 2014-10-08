@@ -21,54 +21,52 @@
 
 // Falltergeist includes
 #include "../../Engine/Exception.h"
-#include "../../Engine/Game.h"
-#include "../../States/LocationState.h"
 #include "../../Engine/Logger.h"
-#include "../../VM/Handlers/Opcode8014Handler.h"
+#include "../../Game/GameObject.h"
+#include "../../VM/Handlers/Opcode810CHandler.h"
 #include "../../VM/VM.h"
-#include "../../VM/VMStackIntValue.h"
-#include "../../VM/VMStackValue.h"
+
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Opcode8014Handler::Opcode8014Handler(Falltergeist::VM *vm) : OpcodeHandler(vm)
+Opcode810CHandler::Opcode810CHandler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode8014Handler::_run()
+void Opcode810CHandler::_run()
 {
     auto& debug = Logger::debug("SCRIPT");
-    auto game = Game::getInstance();
-    auto EVARS = game->locationState()->EVARS();
-    std::string name;
+    debug << "[810C] [*] void anim(void* who, int anim, int direction)" << std::endl;
+
+    int direction;
     switch (_vm->dataStack()->top()->type())
     {
         case VMStackValue::TYPE_INTEGER:
-            name = _vm->script()->identificators()->at(_vm->popDataInteger());
+        {
+            direction = _vm->popDataInteger();
             break;
+        }
         case VMStackValue::TYPE_POINTER:
         {
-            name = *static_cast<std::string*>(_vm->popDataPointer());
+            auto object = static_cast<GameObject*>(_vm->popDataPointer());
+            direction = object->orientation();
             break;
         }
         default:
-            throw Exception("VM::opcode8014 error");
+        {
+            throw Exception("Opcode810CHandler - wrong direction type");
+        }
     }
+    auto anim = _vm->popDataInteger();
+    auto who = _vm->popDataPointer();
+    //_anim(who, anim, direction);
 
-    auto value = EVARS->at(name);
-    _vm->dataStack()->push(value);
-
-    debug << "[8014] [+] value = getExported(name)" << std::endl;
-    debug << "    name = " << name << std::endl;
-    debug << "    type = " << value->type() << std::endl;
-    switch (value->type())
-    {
-        case VMStackValue::TYPE_INTEGER:
-            debug << "    value = " << std::hex << ((VMStackIntValue*)value)->value() << std::endl;
-            break;
-    }
+    debug << "    direction = " << std::hex << direction << std::endl;
+    debug << "    anim = " << std::hex << anim << std::endl;
+    debug << "    who = " << who << std::endl;
 }
+
 }
