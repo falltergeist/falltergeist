@@ -83,20 +83,21 @@ void WorldMapState::init()
 
 void WorldMapState::render()
 {
-    bool FULLSCREEN = false; // fullscreen or classic
+    bool WorldMapFullscreen = false; // fullscreen or classic
     unsigned int tileWidth = 0;
     unsigned int tileHeight = 0;
     unsigned int screenWidth = 640; // default screen size X
     unsigned int screenHeight = 480; // default screen size Y
-    unsigned int worldMapX = 140;
-    unsigned int worldMapY = 160;
+    unsigned int worldMapX = 440;
+    unsigned int worldMapY = 460;
 
-    if (FULLSCREEN)
+    if (WorldMapFullscreen)
     {
         screenWidth = Game::getInstance()->renderer()->width();
         screenHeight = Game::getInstance()->renderer()->height();
     }
 
+    // calculating tile size
     tileWidth = _tiles->width();
     tileHeight = _tiles->height();
 
@@ -121,18 +122,16 @@ void WorldMapState::render()
 //std::cout << "origin=" <<originX << "," << originY << "\n";
 
     // tiles show
-
-    unsigned int i = 0;
     for (unsigned int y=0; y<5; y++)
     {
         for (unsigned int x=0; x<4; x++)
         {
-            _tiles->setCurrentImage(i);
-            _tiles->setX(originX+x*tileWidth);
-            _tiles->setY(originY+y*tileHeight);
-            //void Renderer::drawTexture(Texture* texture, int x, int y, int sourceX, int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
-            _tiles->render();
-            i++;
+            //tile = new Image("art/intrface/wrldmp00.frm");
+            _tiles->setCurrentImage(y*4+x);
+            //_tiles->setX(originX+x*tileWidth);
+            //_tiles->setY(originY+y*tileHeight);
+            //_tiles->render();
+            Game::getInstance()->renderer()->drawTexture(_tiles->texture(), originX+x*tileWidth, originY+y*tileHeight, 0, 0, tileWidth, tileHeight);
         }
     }
 
