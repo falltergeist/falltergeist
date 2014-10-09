@@ -30,8 +30,8 @@
 #include "../Engine/Settings/Settings.h"
 #include "../Game/GameDudeObject.h"
 #include "../States/CritterDialogState.h"
+#include "../States/IntroMovieState.h"
 #include "../States/LocationState.h"
-#include "../States/MainMenuState.h"
 #include "../States/SettingsMenuState.h"
 #include "../States/StartState.h"
 #include "../UI/Image.h"
@@ -82,7 +82,7 @@ void StartState::think()
     }
     if (_splashTicks + 3000 < SDL_GetTicks())
     {
-        game->setState(new MainMenuState());
+        game->setState(new IntroMovieState());
     }
 }
 

@@ -182,6 +182,8 @@ set(SOURCES main.cpp
             src/States/GameMenuState.h
             src/States/InventoryDragItemState.cpp
             src/States/InventoryDragItemState.h
+            src/States/IntroMovieState.cpp
+            src/States/IntroMovieState.h
             src/States/InventoryState.cpp
             src/States/InventoryState.h
             src/States/LoadGameState.cpp
