@@ -25,6 +25,7 @@
 // Falltergeist includes
 #include "../Engine/State.h"
 #include "../UI/Image.h"
+#include "../UI/ImageButton.h"
 
 // Third party includes
 
@@ -44,6 +45,7 @@ public:
 private:
     Image* _background;
     ImageList* _tiles = 0;
+    ImageButton* _hotspot;
 };
 
 }
