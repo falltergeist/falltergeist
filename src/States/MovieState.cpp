@@ -60,11 +60,8 @@ void MovieState::init()
     setX((renderer->width()  - 640)*0.5);
     setY((renderer->height() - 320)*0.5);
 
-    std::string configFile = CrossPlatform::findFalltergeistDataPath() + "/data/movies.ini";
-    std::ifstream stream(configFile);
-    IniParser iniparser(stream);
-    auto ini = iniparser.parse();
-    std::string movie="art/cuts/"+(*ini).section("movies")->propertyString(std::to_string(_id),"");
+    auto lst = ResourceManager::lstFileType("data/movies.lst");
+    std::string movie="art/cuts/" + lst->strings()->at(_id);
 
     addUI("movie", new MvePlayer(ResourceManager::mveFileType(movie).get()));
 }
