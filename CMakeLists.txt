@@ -83,8 +83,6 @@ set(SOURCES main.cpp
             src/Engine/Graphics/AnimationFrame.h
             src/Engine/Graphics/AnimationQueue.cpp
             src/Engine/Graphics/AnimationQueue.h
-            src/Engine/Graphics/MvePlayer.cpp
-            src/Engine/Graphics/MvePlayer.h
             src/Engine/Graphics/OpenGLRenderer.cpp
             src/Engine/Graphics/OpenGLRenderer.h
             src/Engine/Graphics/SDLRenderer.cpp
@@ -182,8 +180,6 @@ set(SOURCES main.cpp
             src/States/GameMenuState.h
             src/States/InventoryDragItemState.cpp
             src/States/InventoryDragItemState.h
-            src/States/IntroMovieState.cpp
-            src/States/IntroMovieState.h
             src/States/InventoryState.cpp
             src/States/InventoryState.h
             src/States/LoadGameState.cpp
@@ -192,6 +188,8 @@ set(SOURCES main.cpp
             src/States/LocationState.h
             src/States/MainMenuState.cpp
             src/States/MainMenuState.h
+            src/States/MovieState.cpp
+            src/States/MovieState.h
             src/States/NewGameState.cpp
             src/States/NewGameState.h
             src/States/PipBoyState.cpp
@@ -238,6 +236,8 @@ set(SOURCES main.cpp
             src/UI/MultistateImageButton.h
             src/UI/MonthCounter.cpp
             src/UI/MonthCounter.h
+            src/UI/MvePlayer.cpp
+            src/UI/MvePlayer.h
             src/UI/Slider.cpp
             src/UI/Slider.h
             src/UI/SmallCounter.cpp
