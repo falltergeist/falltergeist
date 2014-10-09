@@ -22,11 +22,11 @@
 #include <bitset>
 
 // Falltergeist includes
-#include "../../Engine/Graphics/MvePlayer.h"
-#include "../../Engine/Game.h"
-#include "../../Engine/Graphics/Renderer.h"
-#include "../../Engine/Exception.h"
-#include "../../Engine/Logger.h"
+#include "../UI/MvePlayer.h"
+#include "../Engine/Game.h"
+#include "../Engine/Graphics/Renderer.h"
+#include "../Engine/Exception.h"
+#include "../Engine/Logger.h"
 
 // Third party includes
 
@@ -91,10 +91,15 @@ int32_t get_int(uint8_t *data)
 }
 
 
-MvePlayer::MvePlayer(libfalltergeist::MveFileType* mve)
+MvePlayer::MvePlayer(libfalltergeist::MveFileType* mve) : ActiveUI()
 {
+    _texture = NULL;
     _mve = mve;
     _chunk = _mve->getNextChunk();
+    while(!_finished && !_timerStarted )
+    {
+      _processChunk();
+    }
 }
 
 MvePlayer::~MvePlayer()
@@ -105,7 +110,7 @@ void MvePlayer::render()
 {
     //we dont have data yet
     if (!_timerStarted) return;
-    Game::getInstance()->renderer()->drawTexture(_texture, 0, 80, 0, 0, 640, 320);
+    Game::getInstance()->renderer()->drawTexture(_texture, _x, _y, 0, 0, 640, 320);
 }
 
 SDL_Rect relClose(uint32_t b, int8_t sign, uint32_t _x, uint32_t _y)
@@ -853,14 +858,6 @@ void MvePlayer::_processChunk()
           break;
     }
   }
-}
-
-void MvePlayer::play()
-{
-    while(!_finished && !_timerStarted )
-    {
-      _processChunk();
-    }
 }
 
 void MvePlayer::think()
