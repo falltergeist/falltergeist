@@ -24,10 +24,10 @@
 #include <ctime>
 
 // Falltergeist includes
-#include <libfalltergeist.h>
-#include "../Engine/Graphics/ACtiveUI.h"
+#include "../Engine/Graphics/ActiveUI.h"
 
 // Third party includes
+#include <libfalltergeist.h>
 #include <SDL.h>
 
 namespace Falltergeist
