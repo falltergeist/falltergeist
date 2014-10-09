@@ -46,6 +46,7 @@ public:
     void onVideoFinished();
 private:
     int _id;
+    bool _started;
 };
 
 }
