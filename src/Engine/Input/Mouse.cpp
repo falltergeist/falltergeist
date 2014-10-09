@@ -22,6 +22,7 @@
 
 // Falltergeist includes
 #include "../../Engine/Input/Mouse.h"
+#include "../../Engine/Graphics/AnimationQueue.h"
 #include "../../Engine/Graphics/Texture.h"
 #include "../../Engine/ResourceManager.h"
 #include "../../UI/Image.h"
@@ -191,10 +192,16 @@ void Mouse::_setType(unsigned int state)
             _ui = new Image("art/intrface/hand.frm");
             break;
         case WAIT:
-            _ui = new Animation("art/intrface/wait.frm");
+        {
+            auto queue = new AnimationQueue();
+            queue->animations()->push_back(new Animation("art/intrface/wait.frm"));
+            queue->setRepeat(true);
+            queue->start();
+            _ui = queue;
             _ui->setXOffset(-_ui->width()*0.5);
             _ui->setYOffset(-_ui->height()*0.5);
             break;
+        }
         case NONE:
             break;
     }

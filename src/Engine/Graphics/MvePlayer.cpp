@@ -608,9 +608,9 @@ void MvePlayer::_decodeVideo(uint8_t* data, uint32_t len)
     _decodeFrame(data+14, len-14);
 
 
-    SDL_PixelFormat* format = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
+    SDL_PixelFormat* format = SDL_AllocFormat(SDL_PIXELFORMAT_RGB888);
     SDL_Surface *temp = SDL_ConvertSurface(_currentBuf, format, 0);
-    _texture->loadFromRGBA((unsigned int*)temp->pixels);
+    _texture->loadFromRGB((unsigned int*)temp->pixels);
     SDL_FreeSurface(temp);
     SDL_FreeFormat(format);
 }

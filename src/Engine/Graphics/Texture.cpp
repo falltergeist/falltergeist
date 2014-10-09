@@ -110,6 +110,12 @@ void Texture::setPixel(unsigned int x, unsigned int y, unsigned int color)
     _data[index] = color;    
 }
 
+void Texture::loadFromRGB(unsigned int* data)
+{
+    _unregister();
+    for (unsigned int i = 0; i != _width*_height; ++i) _data[i] = (data[i] << 8)|0xFF;
+}
+
 void Texture::loadFromRGBA(unsigned int* data)
 {
     _unregister();
