@@ -67,6 +67,7 @@ public:
     Texture* resize(unsigned int width, unsigned int height);
     Texture* fitTo(unsigned int width, unsigned int height);
 
+    void loadFromRGB(unsigned int* data);
     void loadFromRGBA(unsigned int* data);
 
 };

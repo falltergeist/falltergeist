@@ -15,39 +15,38 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-#ifndef FALLTERGEIST_AUDIOMIXER_H
-#define FALLTERGEIST_AUDIOMIXER_H
+#ifndef FALLTERGEIST_INTROMOVIESTATE_H
+#define FALLTERGEIST_INTROMOVIESTATE_H
 
 // C++ standard includes
-#include <cstdint>
 
 // Falltergeist includes
-#include <libfalltergeist.h>
+#include "../Engine/State.h"
 
 // Third party includes
-#include <SDL_mixer.h>
 
 namespace Falltergeist
 {
 class MvePlayer;
-class AudioMixer
+
+class IntroMovieState : public State
 {
 protected:
-    void _init();
+    MvePlayer* _player = 0;
 public:
-    AudioMixer();
-    ~AudioMixer();
-    void stopMusic();
-    void playACMMusic(std::shared_ptr<libfalltergeist::AcmFileType> acm);
-    void playACMSound(std::shared_ptr<libfalltergeist::AcmFileType> acm);
-    void playMovieMusic(MvePlayer* mve);
-private:
-    void _musicCallback(void *udata, uint8_t *stream, uint32_t len);
-    void _movieCallback(void *udata, uint8_t *stream, uint32_t len);
-    std::map<std::string,Mix_Chunk*> _sfx;
+    IntroMovieState();
+    virtual ~IntroMovieState();
+
+    virtual void init();
+    virtual void think();
+    virtual void render();
+    virtual void handle(Event* event);
+
+    void onVideoFinished();
 };
 
 }
-#endif // FALLTERGEIST_AUDIOMIXER_H
+#endif // FALLTERGEIST_INTROMOVIESTATE_H
