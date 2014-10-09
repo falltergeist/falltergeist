@@ -48,20 +48,18 @@ void AudioMixer::_init()
     std::string message = "[AUDIO] - SDL_Init - ";
     if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
     {
-        //Logger::critical() << message + "[FAIL]" << std::endl;
-        //throw Exception(SDL_GetError());
+        Logger::critical() << message + "[FAIL]" << std::endl;
+        throw Exception(SDL_GetError());
     }
-    //Logger::info() << message + "[OK]" << std::endl;
-    std::cout << message + "[OK]" << std::endl;
+    Logger::info() << message + "[OK]" << std::endl;
 
     message = "[AUDIO] - Mix_OpenAudio - ";
     if (Mix_OpenAudio(22050, AUDIO_S16LSB, 2, 4096) < 0)
     {
-        //Logger::critical() << message + "[FAIL]" << std::endl;
-        //throw Exception(Mix_GetError());
+        Logger::critical() << message + "[FAIL]" << std::endl;
+        throw Exception(Mix_GetError());
     }
-    //Logger::info() << message + "[OK]" << std::endl;
-    std::cout << message + "[OK]" << std::endl;
+    Logger::info() << message + "[OK]" << std::endl;
 }
 
 void AudioMixer::stopMusic()
@@ -121,7 +119,7 @@ void AudioMixer::_movieCallback(void *udata, uint8_t *stream, uint32_t len)
   auto pmve = (MvePlayer*)(udata);
   if (pmve->samplesLeft()<=0)
   {
-    std::cout << "buffer underrun?" << std::endl;
+    Logger::debug("AUDIO") << "buffer underrun?" << std::endl;
     Mix_HookMusic(NULL,NULL);
     return;
   }
@@ -137,7 +135,7 @@ void AudioMixer::playMovieMusic(MvePlayer* mve)
 
 void AudioMixer::playACMSound(std::shared_ptr<libfalltergeist::AcmFileType> acm)
 {
-    std::cout << "playing " << acm->filename() << std::endl;
+    //std::cout << "playing " << acm->filename() << std::endl;
     Mix_Chunk *chunk=NULL;
     for (auto& x: _sfx)
     {
