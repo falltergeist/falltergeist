@@ -84,9 +84,9 @@ void StartState::think()
     if (_splashTicks + 3000 < SDL_GetTicks())
     {
         game->setState(new MainMenuState());
+        game->pushState(new MovieState(17));
         game->pushState(new MovieState(1));
         game->pushState(new MovieState(0));
-        
     }
 }
 
