@@ -30,6 +30,9 @@
 #include "../States/MovieState.h"
 #include "../States/MainMenuState.h"
 #include "../Engine/Graphics/Renderer.h"
+#include "../Engine/Settings/IniParser.h"
+#include "../Engine/Settings/IniFile.h"
+#include "../Engine/CrossPlatform.h"
 
 // Third party includes
 
@@ -57,7 +60,13 @@ void MovieState::init()
     setX((renderer->width()  - 640)*0.5);
     setY((renderer->height() - 320)*0.5);
 
-    addUI("movie", new MvePlayer(ResourceManager::mveFileType("art/cuts/intro.mve").get()));
+    std::string configFile = CrossPlatform::findFalltergeistDataPath() + "/data/movies.ini";
+    std::ifstream stream(configFile);
+    IniParser iniparser(stream);
+    auto ini = iniparser.parse();
+    std::string movie="art/cuts/"+(*ini).section("movies")->propertyString(std::to_string(_id),"");
+
+    addUI("movie", new MvePlayer(ResourceManager::mveFileType(movie).get()));
 }
 
 void MovieState::think()
@@ -90,7 +99,8 @@ void MovieState::handle(Event* event)
 void MovieState::onVideoFinished()
 {
     Game::getInstance()->mouse()->popState();
-    Game::getInstance()->setState(new MainMenuState());
+//    Game::getInstance()->setState(new MainMenuState());
+    Game::getInstance()->popState();
 }
 
 }
