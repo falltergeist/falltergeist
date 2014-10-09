@@ -73,7 +73,7 @@ void MovieState::think()
 {
     State::think();
 
-    if ((dynamic_cast<MvePlayer*>(getActiveUI("movie")))->finished())
+    if ((dynamic_cast<MvePlayer*>(getUI("movie")))->finished())
     {
         this->onVideoFinished();
     }
@@ -92,7 +92,10 @@ void MovieState::handle(Event* event)
 
     if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
     {
-        this->onVideoFinished();
+        if (keyboardEvent->name() == "keyup")
+        {
+            this->onVideoFinished();
+        }
     }
 }
 

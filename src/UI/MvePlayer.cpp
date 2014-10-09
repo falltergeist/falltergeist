@@ -91,7 +91,7 @@ int32_t get_int(uint8_t *data)
 }
 
 
-MvePlayer::MvePlayer(libfalltergeist::MveFileType* mve) : ActiveUI()
+MvePlayer::MvePlayer(libfalltergeist::MveFileType* mve) : UI()
 {
     _texture = NULL;
     _mve = mve;

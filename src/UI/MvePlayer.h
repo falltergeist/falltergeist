@@ -24,7 +24,7 @@
 #include <ctime>
 
 // Falltergeist includes
-#include "../Engine/Graphics/ActiveUI.h"
+#include "../Engine/Graphics/UI.h"
 
 // Third party includes
 #include <libfalltergeist.h>
@@ -33,8 +33,7 @@
 namespace Falltergeist
 {
 
-
-class MvePlayer : public ActiveUI
+class MvePlayer : public UI
 {
 public:
     MvePlayer(libfalltergeist::MveFileType* mve);
