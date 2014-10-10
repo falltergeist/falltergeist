@@ -28,6 +28,7 @@
 #include "../Engine/ResourceManager.h"
 #include "../States/LoadGameState.h"
 #include "../States/MainMenuState.h"
+#include "../States/MovieState.h"
 #include "../States/NewGameState.h"
 #include "../States/SettingsMenuState.h"
 #include "../UI/Image.h"
@@ -60,7 +61,9 @@ void MainMenuState::init()
 
     addUI("background", new Image("art/intrface/mainmenu.frm"));
 
-    addUI("intro_button", new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19));
+    // intro button
+    auto introButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19));
+    introButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod)&MainMenuState::onIntroButtonClick);
 
     // new game button
     auto newGameButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41));
@@ -135,6 +138,12 @@ void MainMenuState::onLoadGameButtonClick(MouseEvent* event)
 void MainMenuState::onSettingsButtonClick(MouseEvent* event)
 {
     Game::getInstance()->pushState(new SettingsMenuState());
+}
+
+void MainMenuState::onIntroButtonClick(MouseEvent* event)
+{
+    Game::getInstance()->pushState(new MovieState(17));
+    Game::getInstance()->pushState(new MovieState(1));
 }
 
 }
