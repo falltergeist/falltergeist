@@ -22,13 +22,30 @@
 #include <bitset>
 
 // Falltergeist includes
-#include "../../Engine/Graphics/MvePlayer.h"
-#include "../../Engine/Game.h"
-#include "../../Engine/Graphics/Renderer.h"
-#include "../../Engine/Exception.h"
-#include "../../Engine/Logger.h"
+#include "../UI/MvePlayer.h"
+#include "../Engine/Game.h"
+#include "../Engine/Graphics/Renderer.h"
+#include "../Engine/Exception.h"
+#include "../Engine/Logger.h"
 
 // Third party includes
+
+#ifdef __MACH__
+#include <mach/mach_time.h>
+#define CLOCK_REALTIME 0
+#define CLOCK_MONOTONIC 0
+int clock_gettime(int clk_id, struct timespec *t){
+    static mach_timebase_info_data_t timebase;
+    mach_timebase_info(&timebase);
+    uint64_t time;
+    time = mach_absolute_time();
+    double nseconds = ((double)time * (double)timebase.numer)/((double)timebase.denom);
+    double seconds = ((double)time * (double)timebase.numer)/((double)timebase.denom * 1e9);
+    t->tv_sec = seconds;
+    t->tv_nsec = nseconds;
+    return 0;
+}
+#endif
 
 namespace Falltergeist
 {
@@ -74,10 +91,15 @@ int32_t get_int(uint8_t *data)
 }
 
 
-MvePlayer::MvePlayer(libfalltergeist::MveFileType* mve)
+MvePlayer::MvePlayer(libfalltergeist::MveFileType* mve) : UI()
 {
+    _texture = NULL;
     _mve = mve;
     _chunk = _mve->getNextChunk();
+    while(!_finished && !_timerStarted )
+    {
+      _processChunk();
+    }
 }
 
 MvePlayer::~MvePlayer()
@@ -88,7 +110,7 @@ void MvePlayer::render()
 {
     //we dont have data yet
     if (!_timerStarted) return;
-    Game::getInstance()->renderer()->drawTexture(_texture, 0, 80, 0, 0, 640, 320);
+    Game::getInstance()->renderer()->drawTexture(_texture, _x, _y, 0, 0, 640, 320);
 }
 
 SDL_Rect relClose(uint32_t b, int8_t sign, uint32_t _x, uint32_t _y)
@@ -836,14 +858,6 @@ void MvePlayer::_processChunk()
           break;
     }
   }
-}
-
-void MvePlayer::play()
-{
-    while(!_finished && !_timerStarted )
-    {
-      _processChunk();
-    }
 }
 
 void MvePlayer::think()

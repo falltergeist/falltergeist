@@ -24,7 +24,7 @@
 #include "../../Engine/Audio/AudioMixer.h"
 #include "../../Engine/Exception.h"
 #include "../../Engine/Logger.h"
-#include "../../Engine/Graphics/MvePlayer.h"
+#include "../../UI/MvePlayer.h"
 
 // Third party includes
 #include <SDL.h>
@@ -78,7 +78,8 @@ void myMusicPlayer(void *udata, uint8_t *stream, int len)
 
 void AudioMixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len)
 {
-//  std::cout << "playing " << len << std::endl;
+  if (_paused) return;
+  
   auto pacm = *reinterpret_cast<std::shared_ptr<libfalltergeist::AcmFileType>*>(udata);
   if (pacm->samplesLeft()<=0)
   {
@@ -166,6 +167,21 @@ void AudioMixer::playACMSound(std::shared_ptr<libfalltergeist::AcmFileType> acm)
       _sfx.insert(std::pair<std::string,Mix_Chunk*>(acm->filename(),chunk));
    }
    Mix_PlayChannel(-1,chunk,0);
+}
+
+void AudioMixer::stopSounds()
+{
+    Mix_HaltChannel(-1);
+}
+
+void AudioMixer::pauseMusic()
+{
+    _paused = true;
+}
+
+void AudioMixer::resumeMusic()
+{
+    _paused = false;
 }
 
 }
