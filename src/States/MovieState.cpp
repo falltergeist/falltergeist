@@ -24,27 +24,30 @@
 #include "../Engine/Event/KeyboardEvent.h"
 #include "../Engine/Event/MouseEvent.h"
 #include "../Engine/Game.h"
-#include "../Engine/Graphics/MvePlayer.h"
+#include "../UI/MvePlayer.h"
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/ResourceManager.h"
-#include "../States/IntroMovieState.h"
+#include "../States/MovieState.h"
 #include "../States/MainMenuState.h"
+#include "../Engine/Graphics/Renderer.h"
+#include "../Engine/Settings/IniParser.h"
+#include "../Engine/Settings/IniFile.h"
+#include "../Engine/CrossPlatform.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-IntroMovieState::IntroMovieState()
+MovieState::MovieState(int id) : _id(id)
 {
 }
 
-IntroMovieState::~IntroMovieState()
+MovieState::~MovieState()
 {
-    delete _player;
 }
 
-void IntroMovieState::init()
+void MovieState::init()
 {
     if (_initialized) return;
     State::init();
@@ -53,29 +56,28 @@ void IntroMovieState::init()
     setModal(true);
 
     Game::getInstance()->mouse()->pushState(Mouse::NONE);
+    auto renderer = Game::getInstance()->renderer();
+    setX((renderer->width()  - 640)*0.5);
+    setY((renderer->height() - 320)*0.5);
 
-    _player = new MvePlayer(ResourceManager::mveFileType("art/cuts/intro.mve").get());
-    _player->play();
+    auto lst = ResourceManager::lstFileType("data/movies.lst");
+    std::string movie="art/cuts/" + lst->strings()->at(_id);
+
+    addUI("movie", new MvePlayer(ResourceManager::mveFileType(movie).get()));
 }
 
-void IntroMovieState::think()
+void MovieState::think()
 {
     State::think();
-    _player->think();
 
-    if (_player->finished())
+    if ((dynamic_cast<MvePlayer*>(getUI("movie")))->finished())
     {
         this->onVideoFinished();
     }
 }
 
-void IntroMovieState::render()
-{
-    State::render();
-    _player->render();
-}
 
-void IntroMovieState::handle(Event* event)
+void MovieState::handle(Event* event)
 {
     if (auto mouseEvent = dynamic_cast<MouseEvent*>(event))
     {
@@ -87,14 +89,18 @@ void IntroMovieState::handle(Event* event)
 
     if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
     {
-        this->onVideoFinished();
+        if (keyboardEvent->name() == "keyup")
+        {
+            this->onVideoFinished();
+        }
     }
 }
 
-void IntroMovieState::onVideoFinished()
+void MovieState::onVideoFinished()
 {
     Game::getInstance()->mouse()->popState();
-    Game::getInstance()->setState(new MainMenuState());
+//    Game::getInstance()->setState(new MainMenuState());
+    Game::getInstance()->popState();
 }
 
 }

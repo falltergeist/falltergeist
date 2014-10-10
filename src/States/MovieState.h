@@ -18,8 +18,8 @@
  *
  */
 
-#ifndef FALLTERGEIST_INTROMOVIESTATE_H
-#define FALLTERGEIST_INTROMOVIESTATE_H
+#ifndef FALLTERGEIST_MOVIESTATE_H
+#define FALLTERGEIST_MOVIESTATE_H
 
 // C++ standard includes
 
@@ -32,21 +32,21 @@ namespace Falltergeist
 {
 class MvePlayer;
 
-class IntroMovieState : public State
+class MovieState : public State
 {
 protected:
-    MvePlayer* _player = 0;
 public:
-    IntroMovieState();
-    virtual ~IntroMovieState();
+    MovieState(int id);
+    virtual ~MovieState();
 
     virtual void init();
     virtual void think();
-    virtual void render();
     virtual void handle(Event* event);
 
     void onVideoFinished();
+private:
+    int _id;
 };
 
 }
-#endif // FALLTERGEIST_INTROMOVIESTATE_H
+#endif // FALLTERGEIST_MOVIESTATE_H

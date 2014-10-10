@@ -40,13 +40,17 @@ public:
     AudioMixer();
     ~AudioMixer();
     void stopMusic();
+    void stopSounds();
     void playACMMusic(std::shared_ptr<libfalltergeist::AcmFileType> acm);
     void playACMSound(std::shared_ptr<libfalltergeist::AcmFileType> acm);
     void playMovieMusic(MvePlayer* mve);
+    void pauseMusic();
+    void resumeMusic();
 private:
     void _musicCallback(void *udata, uint8_t *stream, uint32_t len);
     void _movieCallback(void *udata, uint8_t *stream, uint32_t len);
     std::map<std::string,Mix_Chunk*> _sfx;
+    bool _paused = false;
 };
 
 }

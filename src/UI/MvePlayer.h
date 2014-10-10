@@ -24,28 +24,25 @@
 #include <ctime>
 
 // Falltergeist includes
-#include <libfalltergeist.h>
-#include "../../Engine/Graphics/Texture.h"
+#include "../Engine/Graphics/UI.h"
 
 // Third party includes
+#include <libfalltergeist.h>
 #include <SDL.h>
 
 namespace Falltergeist
 {
 
-
-class MvePlayer
+class MvePlayer : public UI
 {
 public:
     MvePlayer(libfalltergeist::MveFileType* mve);
     ~MvePlayer();
 private:
-    Texture* _texture=NULL;
     libfalltergeist::MveFileType* _mve;
     bool _timerStarted = false;
     bool _finished = false;
     uint32_t  _frame = 0;
-    bool playing = false;
     uint32_t _delay;
     struct timespec _lastts;
     uint8_t* _decodingMap=NULL;
@@ -57,7 +54,6 @@ private:
     std::shared_ptr<libfalltergeist::MveChunk> _chunk;
     SDL_Surface* _currentBuf=NULL;
     SDL_Surface* _backBuf=NULL;
-    SDL_Palette* _palette=NULL;
     void _processChunk();
     void _decodeVideo(uint8_t* data, uint32_t len);
     void _decodeFrame(uint8_t* data, uint32_t len);
@@ -86,8 +82,6 @@ private:
 public:
     void think();
     void render();
-    void play();
-    void stop();
     bool finished();
     uint32_t getAudio(uint8_t* data, uint32_t len);
     uint32_t samplesLeft();

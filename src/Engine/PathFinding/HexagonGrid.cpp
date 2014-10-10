@@ -20,7 +20,7 @@
 // C++ standard includes
 #include <functional>
 #include <queue>
-#include <cmath>
+#include <cstdlib>
 
 // Falltergeist includes
 #include "../PathFinding/Hexagon.h"
