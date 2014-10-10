@@ -95,6 +95,7 @@ MvePlayer::MvePlayer(libfalltergeist::MveFileType* mve) : UI()
 {
     _texture = NULL;
     _mve = mve;
+    _mve->setPosition(26);
     _chunk = _mve->getNextChunk();
     while(!_finished && !_timerStarted )
     {

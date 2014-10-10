@@ -103,6 +103,7 @@ public:
     Renderer* renderer();
     GameTime* gameTime();
     LocationState* locationState();
+    AudioMixer* mixer();
 
     void setGVAR(unsigned int number, int value);
     int GVAR(unsigned int number);

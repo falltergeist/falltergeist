@@ -42,6 +42,7 @@ public:
     void onNewGameButtonClick(MouseEvent* event);
     void onLoadGameButtonClick(MouseEvent* event);
     void onSettingsButtonClick(MouseEvent* event);
+    void onIntroButtonClick(MouseEvent* event);
 };
 
 }
