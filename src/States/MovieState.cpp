@@ -33,6 +33,7 @@
 #include "../Engine/Settings/IniParser.h"
 #include "../Engine/Settings/IniFile.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/Audio/AudioMixer.h"
 
 // Third party includes
 
@@ -70,6 +71,11 @@ void MovieState::think()
 {
     State::think();
 
+    if (!_started)
+    {
+        Game::getInstance()->mixer()->playMovieMusic(dynamic_cast<MvePlayer*>(getUI("movie")));
+        _started=true;
+    }
     if ((dynamic_cast<MvePlayer*>(getUI("movie")))->finished())
     {
         this->onVideoFinished();
@@ -98,8 +104,8 @@ void MovieState::handle(Event* event)
 
 void MovieState::onVideoFinished()
 {
+    Game::getInstance()->mixer()->stopMusic();
     Game::getInstance()->mouse()->popState();
-//    Game::getInstance()->setState(new MainMenuState());
     Game::getInstance()->popState();
 }
 
