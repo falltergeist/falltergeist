@@ -62,7 +62,7 @@ void MovieState::init()
     setY((renderer->height() - 320)*0.5);
 
     auto lst = ResourceManager::lstFileType("data/movies.lst");
-    std::string movie="art/cuts/" + lst->strings()->at(_id);
+    std::string movie = "art/cuts/" + lst->strings()->at(_id);
 
     addUI("movie", new MvePlayer(ResourceManager::mveFileType(movie).get()));
 }
@@ -74,7 +74,7 @@ void MovieState::think()
     if (!_started)
     {
         Game::getInstance()->mixer()->playMovieMusic(dynamic_cast<MvePlayer*>(getUI("movie")));
-        _started=true;
+        _started = true;
     }
     if ((dynamic_cast<MvePlayer*>(getUI("movie")))->finished())
     {
