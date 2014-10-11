@@ -765,7 +765,17 @@ void MvePlayer::_decodeAudio(uint8_t* data, uint32_t len)
     int16_t left=get_short(data);
     int16_t right=get_short(data+2);
     data+=4;
-    for (uint32_t i=0; i< strlen/2; i++)
+
+    _audioBuf[_audioBufTail]=left;
+    _audioBufTail++;
+    _samplesReady++;
+    if (_audioBufTail>=_audioBufSize) _audioBufTail=0;
+    _audioBuf[_audioBufTail]=right;
+    _audioBufTail++;
+    _samplesReady++;
+    if (_audioBufTail>=_audioBufSize) _audioBufTail=0;
+
+    for (uint32_t i=0; i < strlen/2-2; i++)
     {
         if (i%2==0)
         {
