@@ -210,6 +210,11 @@ std::shared_ptr<libfalltergeist::RixFileType> ResourceManager::rixFileType(std::
     return std::dynamic_pointer_cast<libfalltergeist::RixFileType>(datFileItem(filename));
 }
 
+std::shared_ptr<libfalltergeist::SveFileType> ResourceManager::sveFileType(std::string filename)
+{
+    return std::dynamic_pointer_cast<libfalltergeist::SveFileType>(datFileItem(filename));
+}
+
 Texture* ResourceManager::texture(std::string filename)
 {
     if (_textures.find(filename) != _textures.end())

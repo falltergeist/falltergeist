@@ -85,6 +85,7 @@ public:
     bool finished();
     uint32_t getAudio(uint8_t* data, uint32_t len);
     uint32_t samplesLeft();
+    uint32_t frame();
 };
 
 }
