@@ -891,4 +891,9 @@ bool MvePlayer::finished()
     return _finished;
 }
 
+uint32_t MvePlayer::frame()
+{
+    return _frame;
+}
+
 };
