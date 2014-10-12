@@ -306,6 +306,10 @@ void Animation::stop()
     _playing = false;
     _ended = false;
     _currentFrame = 0;
+    auto frame = frames()->at(_currentFrame);
+    setXOffset(frame->xOffset());
+    setYOffset(frame->yOffset());
+
 }
 
 bool Animation::ended()
