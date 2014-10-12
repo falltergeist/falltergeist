@@ -49,6 +49,9 @@ public:
     virtual bool canWalkThru();
 
     virtual void use_p_proc();
+
+    void onOpeningAnimationEnded(Event* event);
+    void onClosingAnimationEnded(Event* event);
 };
 
 }

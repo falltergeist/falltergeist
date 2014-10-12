@@ -21,6 +21,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Engine/Graphics/AnimationQueue.h"
 #include "../Engine/Logger.h"
 #include "../Game/GameDoorSceneryObject.h"
 #include "../VM/VM.h"
@@ -68,13 +69,50 @@ void GameDoorSceneryObject::use_p_proc()
         if (script->overrides()) return;
     }
 
-    setOpened(!opened());
-    Logger::info() << "Door opened: " << opened() << std::endl;
+    if (!opened())
+    {
+        if (AnimationQueue* queue = dynamic_cast<AnimationQueue*>(this->ui()))
+        {
+            queue->start();
+            queue->addEventHandler("animationEnded", this, (EventRecieverMethod) &GameDoorSceneryObject::onOpeningAnimationEnded);
+        }
+    }
+    else
+    {
+        if (AnimationQueue* queue = dynamic_cast<AnimationQueue*>(this->ui()))
+        {
+            queue->start();
+            //queue->startBackward();
+            queue->addEventHandler("animationEnded", this, (EventRecieverMethod) &GameDoorSceneryObject::onClosingAnimationEnded);
+        }
+    }
 }
 
 bool GameDoorSceneryObject::canWalkThru()
 {
     return opened();
 }
+
+void GameDoorSceneryObject::onOpeningAnimationEnded(Event* event)
+{
+    auto queue = (AnimationQueue*)event->emitter();
+    auto door = (GameDoorSceneryObject*)event->reciever();
+
+    door->setOpened(true);
+    queue->removeEventHandlers("animationEnded");
+    Logger::info() << "Door opened: " << opened() << std::endl;
+}
+
+void GameDoorSceneryObject::onClosingAnimationEnded(Event* event)
+{
+    auto queue = (AnimationQueue*)event->emitter();
+    auto door = (GameDoorSceneryObject*)event->reciever();
+
+    door->setOpened(false);
+    queue->removeEventHandlers("animationEnded");
+    queue->stop();
+    Logger::info() << "Door opened: " << opened() << std::endl;
+}
+
 
 }

@@ -19,7 +19,6 @@
  */
 
 // C++ standard includes
-#include <iostream>
 
 // Falltergeist includes
 #include "../../Engine/Graphics/AnimationQueue.h"
@@ -60,6 +59,7 @@ void AnimationQueue::stop()
 {
     _playing = false;
     _currentAnimation = 0;
+    currentAnimation()->stop();
 }
 
 void AnimationQueue::start()
@@ -96,6 +96,9 @@ void AnimationQueue::think()
             {
                 if (!_repeat)
                 {
+                    auto event = new Event("animationEnded");
+                    emitEvent(event);
+                    delete event;
                     _playing = false;
                     return;
                 }

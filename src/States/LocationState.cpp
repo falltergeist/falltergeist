@@ -148,6 +148,8 @@ void LocationState::setLocation(std::string name)
 
         auto hexagon = hexagonGrid()->at(mapObject->hexPosition());
         LocationState::moveObjectToHexagon(object, hexagon);
+
+        _objects.push_back(object);
     }
 
     // Adding dude
@@ -173,6 +175,8 @@ void LocationState::setLocation(std::string name)
             auto rightHand = GameObjectFactory::createObject(0x00000007); // spear
             player->setRightHandSlot(dynamic_cast<GameWeaponItemObject*>(rightHand));
         }
+
+        _objects.push_back(player);
     }
 
     // Location script
@@ -281,12 +285,9 @@ void LocationState::think()
 {
     Game::getInstance()->gameTime()->think();
 
-    for (auto hexagon : *hexagonGrid()->hexagons())
+    for (auto object : _objects)
     {
-        for (auto object : *hexagon->objects())
-        {
-            object->think();
-        }
+        object->think();
     }
 
     // location scrolling
@@ -335,18 +336,11 @@ void LocationState::think()
 
         if (_locationScript) _locationScript->initialize();
 
-        for (auto hexagon : *hexagonGrid()->hexagons())
+        for (auto object : _objects)
         {
-            // this is needed to prevent iterator breaking when moveObjectToHexagon() method is called
-            std::vector<GameObject*> objects;
-            for (auto object : *hexagon->objects()) objects.push_back(object);
-            // initialize scripts
-            for (auto object : objects)
+            for (auto script : *object->scripts())
             {
-                for (auto script : *object->scripts())
-                {
-                    script->initialize();
-                }
+                script->initialize();
             }
         }
 
@@ -355,16 +349,13 @@ void LocationState::think()
         // By some reason we need to use reverse iterator to prevent scripts problems
         // If we use normal iterators, some exported variables are not initialized on the moment
         // when script is called
-        for (auto it = hexagonGrid()->hexagons()->rbegin(); it != hexagonGrid()->hexagons()->rend(); ++it)
+        for (auto it = _objects.rbegin(); it != _objects.rend(); ++it)
         {
-            auto hexagon = *it;
-            // this is needed to prevent iterator breaking when moveObjectToHexagon() method is called
-            std::vector<GameObject*> objects;
-            for (auto object : *hexagon->objects()) objects.push_back(object);
-            for (auto object : objects)
+            auto object = *it;
+
+            for (auto script : *object->scripts())
             {
-                // map_enter_p_proc
-                for (auto script : *object->scripts()) script->call("map_enter_p_proc");
+                script->call("map_enter_p_proc");
             }
         }
     }
@@ -373,23 +364,16 @@ void LocationState::think()
         if (_scriptsTicks + 30000 < SDL_GetTicks())
         {
             _scriptsTicks = SDL_GetTicks();
-            if (_locationScript) _locationScript->call("map_update_p_proc");
-            for (auto hexagon : *hexagonGrid()->hexagons())
+            if (_locationScript)
             {
-                // this is needed to prevent iterator breaking when moveObjectToHexagon() method is called
-                std::vector<GameObject*> objects;
-                for (auto object : *hexagon->objects()) objects.push_back(object);
-                for (auto object : objects)
+                _locationScript->call("map_update_p_proc");
+            }
+            for (auto object : _objects)
+            {
+                for (auto script : *object->scripts())
                 {
-                    for (auto script : *object->scripts())
-                    {
-                        script->call("map_update_p_proc");
-                        //script->call("look_at_p_proc");
-                        //script->call("description_p_proc");
-                        //script->call("critter_p_proc");
-                        //script->call("timed_event_p_proc");
-                    }
-                 }
+                    script->call("map_update_p_proc");
+                }
             }
         }
     }
