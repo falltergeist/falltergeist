@@ -40,6 +40,7 @@ protected:
     void* _owner = 0;
     libfalltergeist::IntFileType* _script = 0;
     bool _initialized = false;
+    bool _overrides = false;
     VMStack _dataStack;
     VMStack _returnStack;
     std::vector<VMStackValue*> _LVARS;
@@ -65,6 +66,7 @@ public:
     void initialize();
 
     bool initialized();
+    bool overrides();
     void setInitialized(bool value);
 
     bool hasFunction(std::string name);

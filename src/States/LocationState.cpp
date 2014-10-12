@@ -569,12 +569,14 @@ void LocationState::handleAction(GameObject* object, int action)
 {
     switch (action)
     {
+        case Mouse::ICON_LOOK:
+        {
+            object->description_p_proc();
+            break;
+        }
         case Mouse::ICON_USE:
         {
-            for (auto script : *object->scripts())
-            {
-                script->call("use_p_proc");
-            }
+            object->use_p_proc();
             break;
         }
         case Mouse::ICON_ROTATE:
@@ -590,9 +592,13 @@ void LocationState::handleAction(GameObject* object, int action)
         }
         case Mouse::ICON_TALK:
         {
-            for(auto script : *object->scripts())
+            if (auto critter = dynamic_cast<GameCritterObject*>(object))
             {
-                script->call("talk_p_proc");
+                critter->talk_p_proc();
+            }
+            else
+            {
+                throw Exception("LocationState::handleAction() - can talk only with critters!");
             }
         }
 

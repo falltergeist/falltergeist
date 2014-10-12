@@ -35,6 +35,7 @@
 #include "../UI/AnimatedImage.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
+#include "../VM/VM.h"
 
 // Third party includes
 
@@ -265,6 +266,50 @@ bool GameObject::inRender()
 void GameObject::setInRender(bool value)
 {
     _inRender = value;
+}
+
+void GameObject::description_p_proc()
+{
+}
+
+void GameObject::use_p_proc()
+{
+    for (auto script : *scripts())
+    {
+        script->call("use_p_proc");
+    }
+}
+
+void GameObject::destroy_p_proc()
+{
+}
+
+void GameObject::look_at_p_proc()
+{
+}
+
+void GameObject::map_enter_p_proc()
+{
+}
+
+void GameObject::map_exit_p_proc()
+{
+}
+
+void GameObject::map_update_p_proc()
+{
+}
+
+void GameObject::pickup_p_proc()
+{
+}
+
+void GameObject::spatial_p_proc()
+{
+}
+
+void GameObject::use_obj_on_p_proc()
+{
 }
 
 }

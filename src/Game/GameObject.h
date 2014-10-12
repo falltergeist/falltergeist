@@ -69,7 +69,7 @@ public:
     virtual ~GameObject();    
 
     bool canWalkThru();
-    void setCanWalkThru(bool value);
+    virtual void setCanWalkThru(bool value);
 
     int type();
     int subtype();
@@ -109,6 +109,17 @@ public:
 
     void setInRender(bool value);
     bool inRender();
+
+    virtual void description_p_proc();
+    virtual void destroy_p_proc();
+    virtual void look_at_p_proc();
+    virtual void map_enter_p_proc();
+    virtual void map_exit_p_proc();
+    virtual void map_update_p_proc();
+    virtual void pickup_p_proc();
+    virtual void spatial_p_proc();
+    virtual void use_p_proc();
+    virtual void use_obj_on_p_proc();
 };
 
 }

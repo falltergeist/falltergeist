@@ -21,7 +21,9 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Engine/Logger.h"
 #include "../Game/GameDoorSceneryObject.h"
+#include "../VM/VM.h"
 
 // Third party includes
 
@@ -55,6 +57,24 @@ bool GameDoorSceneryObject::locked()
 void GameDoorSceneryObject::setLocked(bool value)
 {
     _locked = value;
+}
+
+void GameDoorSceneryObject::use_p_proc()
+{
+    GameObject::use_p_proc();
+
+    for (auto script : *scripts())
+    {
+        if (script->overrides()) return;
+    }
+
+    setOpened(!opened());
+    Logger::info() << "Door opened: " << opened() << std::endl;
+}
+
+bool GameDoorSceneryObject::canWalkThru()
+{
+    return opened();
 }
 
 }
