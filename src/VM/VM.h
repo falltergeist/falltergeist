@@ -67,6 +67,8 @@ public:
     bool initialized();
     void setInitialized(bool value);
 
+    bool hasFunction(std::string name);
+
     void call(std::string name);
     libfalltergeist::IntFileType* script();
 

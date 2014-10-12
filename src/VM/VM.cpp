@@ -106,6 +106,18 @@ VM::~VM()
 {
 }
 
+bool VM::hasFunction(std::string name)
+{
+    try
+    {
+        _script->function(name);
+    }
+    catch (libfalltergeist::Exception &e)
+    {
+        return false;
+    }
+    return true;
+}
 
 void VM::call(std::string name)
 {

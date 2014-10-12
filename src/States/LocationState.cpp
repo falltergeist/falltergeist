@@ -213,6 +213,15 @@ void LocationState::onMouseDown(MouseEvent* event)
 
     std::vector<int> icons;
 
+    for (auto script : *object->scripts())
+    {
+        if (script->hasFunction("use_p_proc"))
+        {
+            icons.push_back(Mouse::ICON_USE);
+            break;
+        }
+    }
+
     switch(object->type())
     {
         case GameObject::TYPE_DUDE:
@@ -560,7 +569,14 @@ void LocationState::handleAction(GameObject* object, int action)
 {
     switch (action)
     {
-
+        case Mouse::ICON_USE:
+        {
+            for (auto script : *object->scripts())
+            {
+                script->call("use_p_proc");
+            }
+            break;
+        }
         case Mouse::ICON_ROTATE:
         {
             auto dude = dynamic_cast<GameDudeObject*>(object);
