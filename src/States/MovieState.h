@@ -47,6 +47,9 @@ public:
 private:
     int _id;
     bool _started;
+    std::pair<int,std::string> _nextSubLine;
+    libfalltergeist::SveFileType* _subs;
+    bool _hasSubs = false;
 };
 
 }
