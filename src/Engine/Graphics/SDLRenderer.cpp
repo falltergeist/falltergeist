@@ -122,7 +122,6 @@ void SDLRenderer::init()
     }
     Logger::info("RENDERER") << "max_texture_width: " << rendererInfo.max_texture_width << std::endl;
     Logger::info("RENDERER") << "max_texture_height: " << rendererInfo.max_texture_height << std::endl;
-    SDL_PIXELFORMAT_UNKNOWN;
 }
 
 void SDLRenderer::beginFrame()
