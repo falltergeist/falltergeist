@@ -106,9 +106,22 @@ VM::~VM()
 {
 }
 
+bool VM::hasFunction(std::string name)
+{
+    try
+    {
+        _script->function(name);
+    }
+    catch (libfalltergeist::Exception &e)
+    {
+        return false;
+    }
+    return true;
+}
 
 void VM::call(std::string name)
 {
+    _overrides = false;
     try
     {
         _programCounter = _script->function(name);
@@ -664,6 +677,7 @@ void VM::run()
             }
             case 0x80b9:
                 Logger::debug("SCRIPT") << "[80B9] script_overrides" << std::endl;
+                _overrides = true;
                 break;
             case 0x80ba: break;
             case 0x80bb:
@@ -1698,6 +1712,11 @@ int VM::SVARbase()
 int VM::DVARbase()
 {
     return _DVAR_base;
+}
+
+bool VM::overrides()
+{
+    return _overrides;
 }
 
 }

@@ -57,7 +57,8 @@ void SDLRenderer::init()
     {
         throw Exception(message + "[FAIL]");
     }
-    Logger::info("VIDEO") << message + "[OK]" << std::endl;
+
+    Logger::info("RENDERER") << message + "[OK]" << std::endl;
 
     message =  "SDL_CreateRenderer - ";
     _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
@@ -65,7 +66,62 @@ void SDLRenderer::init()
     {
         throw Exception(message + "[FAIL]");
     }
-    Logger::info("VIDEO") << message + "[OK]" << std::endl;
+
+    Logger::info("RENDERER") << message + "[OK]" << std::endl;
+
+    SDL_RendererInfo rendererInfo;
+    SDL_GetRendererInfo(_renderer, &rendererInfo);
+
+    Logger::info("RENDERER") << "name: " << rendererInfo.name << std::endl;
+    if (rendererInfo.flags & SDL_RENDERER_SOFTWARE)
+    {
+        Logger::info("RENDERER") << "flags: SDL_RENDERER_SOFTWARE" << std::endl;
+    }
+    if (rendererInfo.flags & SDL_RENDERER_ACCELERATED)
+    {
+        Logger::info("RENDERER") << "flags: SDL_RENDERER_ACCELERATED" << std::endl;
+    }
+    Logger::info("RENDERER") << "num_texture_formats: " << rendererInfo.num_texture_formats << std::endl;
+    for (unsigned int i = 0; i != 16; i++)
+    {
+        auto& info = Logger::info("RENDERER");
+        info << "texture_formats[" << i << "]: ";
+        auto format = rendererInfo.texture_formats[i];
+
+        switch (format)
+        {
+            case SDL_PIXELFORMAT_INDEX1LSB:
+                info << "SDL_PIXELFORMAT_INDEX1LSB";
+                break;
+            case SDL_PIXELFORMAT_INDEX1MSB:
+                info << "SDL_PIXELFORMAT_INDEX1MSB";
+                break;
+            case SDL_PIXELFORMAT_INDEX4LSB:
+                info << "SDL_PIXELFORMAT_INDEX4LSB";
+                break;
+            case SDL_PIXELFORMAT_INDEX4MSB:
+                info << "SDL_PIXELFORMAT_INDEX4MSB";
+                break;
+            case SDL_PIXELFORMAT_INDEX8:
+                info << "SDL_PIXELFORMAT_INDEX8";
+                break;
+            case SDL_PIXELFORMAT_RGBA8888:
+                info << "SDL_PIXELFORMAT_RGBA8888";
+                break;
+            case SDL_PIXELFORMAT_ARGB8888:
+                info << "SDL_PIXELFORMAT_ARGB8888";
+                break;
+            case SDL_PIXELFORMAT_RGB888:
+                info << "SDL_PIXELFORMAT_RGB888";
+                break;
+            default:
+                info << format;
+                break;
+        }
+        info << std::endl;
+    }
+    Logger::info("RENDERER") << "max_texture_width: " << rendererInfo.max_texture_width << std::endl;
+    Logger::info("RENDERER") << "max_texture_height: " << rendererInfo.max_texture_height << std::endl;
 }
 
 void SDLRenderer::beginFrame()
@@ -85,28 +141,13 @@ void SDLRenderer::registerTexture(Texture* texture)
     Renderer::registerTexture(texture);
     if (texture->id()) return; // if registered
 
-    // get current masks (they are different for LE and BE)
-    int bpp;
-    uint32_t Rmask, Gmask, Bmask, Amask;
-    SDL_PixelFormatEnumToMasks(
-        SDL_PIXELFORMAT_RGBA8888, &bpp,
-        &Rmask, &Gmask, &Bmask, &Amask
-    );
+    SDL_Texture* sdlTexture = SDL_CreateTexture(_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, texture->width(), texture->height());
+    if (sdlTexture == 0) throw Exception(SDL_GetError());
 
-    // Creating SDL surface
-    SDL_Surface* tmpSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, texture->width(), texture->height(), 32, Rmask, Gmask, Bmask, Amask);
-    if (tmpSurface == 0) throw Exception(SDL_GetError());
-    // Copying data from texture to surface
-    unsigned int* pixels = (unsigned int*) tmpSurface->pixels;
-    for (unsigned int i = 0; i != texture->width()*texture->height(); ++i)
-    {
-        pixels[i] = texture->data()[i];
-    }
-    // Saving pointer to surface
-    SDL_Texture* surface = SDL_CreateTextureFromSurface(_renderer, tmpSurface);
-    if (surface == 0) throw Exception(SDL_GetError());
-    SDL_FreeSurface(tmpSurface);
-    _surfaces.push_back(surface);
+    SDL_UpdateTexture(sdlTexture, NULL, texture->data(), texture->width() * 4);
+    _surfaces.push_back(sdlTexture);
+
+    SDL_SetTextureBlendMode(sdlTexture, SDL_BLENDMODE_BLEND);
 
     texture->setId(_texturesCounter);
     _texturesCounter++;

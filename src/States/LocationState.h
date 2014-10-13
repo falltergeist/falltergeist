@@ -70,6 +70,8 @@ protected:
     bool _scrollTop = false;
     bool _scrollBottom = false;
 
+    std::vector<GameObject*> _objects;
+
 public:
     LocationState();
     ~LocationState();

@@ -94,7 +94,7 @@ void Game::_initialize()
     std::string version = CrossPlatform::getVersion();
     renderer()->setCaption(version.c_str());
 
-    //_mixer = new AudioMixer();
+    _mixer = new AudioMixer();
     _mouse = new Mouse();
     _fpsCounter = new FpsCounter(renderer()->width() - 42, 2);
 
@@ -402,5 +402,11 @@ GameTime* Game::gameTime()
 {
     return _gameTime;
 }
+
+AudioMixer* Game::mixer()
+{
+    return _mixer;
+}
+
 
 }

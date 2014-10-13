@@ -22,12 +22,14 @@ FIND_PATH(LIBFALLTERGEIST_INCLUDE_DIR libfalltergeist.h
     PATHS
     ${CMAKE_SOURCE_DIR}/lib/libfalltergeist
     ~/libfalltergeist
+    NO_CMAKE_FIND_ROOT_PATH
 )
 
 FIND_LIBRARY(LIBFALLTERGEIST_LIBRARY falltergeist 
   PATHS
   ${CMAKE_SOURCE_DIR}/lib/libfalltergeist
   ~/libfalltergeist
+  NO_CMAKE_FIND_ROOT_PATH
 )
 
 IF(NOT LIBFALLTERGEIST_LIBRARY)

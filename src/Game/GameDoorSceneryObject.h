@@ -46,6 +46,12 @@ public:
     bool locked();
     void setLocked(bool value);
 
+    virtual bool canWalkThru();
+
+    virtual void use_p_proc();
+
+    void onOpeningAnimationEnded(Event* event);
+    void onClosingAnimationEnded(Event* event);
 };
 
 }

@@ -25,6 +25,7 @@
 #include <vector>
 
 // Falltergeist includes
+#include "../../Engine/Event/EventEmitter.h"
 #include "../../Engine/Graphics/ActiveUI.h"
 
 // Third party includes

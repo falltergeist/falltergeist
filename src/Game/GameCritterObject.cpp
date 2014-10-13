@@ -26,6 +26,7 @@
 #include "../Engine/Exception.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Graphics/Animation.h"
+#include "../VM/VM.h"
 
 // Third party includes
 
@@ -398,5 +399,32 @@ GameItemObject* GameCritterObject::currentHandSlot()
     return currentHand() == HAND_RIGHT ? rightHandSlot() : leftHandSlot();
 }
 
+void GameCritterObject::talk_p_proc()
+{
+    for(auto script : *scripts())
+    {
+        script->call("talk_p_proc");
+    }
+}
+
+void GameCritterObject::damage_p_proc()
+{
+}
+
+void GameCritterObject::combat_p_proc()
+{
+}
+
+void GameCritterObject::critter_p_proc()
+{
+}
+
+void GameCritterObject::is_dropping_p_proc()
+{
+}
+
+void GameCritterObject::use_skill_on_p_proc()
+{
+}
 
 }

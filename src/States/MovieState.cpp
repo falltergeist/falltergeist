@@ -25,6 +25,7 @@
 #include "../Engine/Event/MouseEvent.h"
 #include "../Engine/Game.h"
 #include "../UI/MvePlayer.h"
+#include "../UI/TextArea.h"
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/ResourceManager.h"
 #include "../States/MovieState.h"
@@ -33,6 +34,7 @@
 #include "../Engine/Settings/IniParser.h"
 #include "../Engine/Settings/IniFile.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/Audio/AudioMixer.h"
 
 // Third party includes
 
@@ -61,15 +63,45 @@ void MovieState::init()
     setY((renderer->height() - 320)*0.5);
 
     auto lst = ResourceManager::lstFileType("data/movies.lst");
-    std::string movie="art/cuts/" + lst->strings()->at(_id);
+    std::string movie = "art/cuts/" + lst->strings()->at(_id);
 
+    auto sublst = ResourceManager::lstFileType("data/subtitles.lst");
+    std::string subfile = "text/english/cuts/" + sublst->strings()->at(_id);
+
+    if (sublst->strings()->at(_id)!="reserved.sve")
+    {
+      _subs = ResourceManager::sveFileType(subfile).get();
+      if (_subs) _hasSubs = true;
+    }
     addUI("movie", new MvePlayer(ResourceManager::mveFileType(movie).get()));
+
+    auto font0_ffffffff = ResourceManager::font("font1.aaf", 0xffffffff);
+    auto subLabel = new TextArea("", 0, 320+35);
+
+    subLabel->setFont(font0_ffffffff)->setWidth(640)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    addUI("subs",subLabel);
+
+    if (_hasSubs)
+        _nextSubLine = _subs->getSubLine(0);
+    else
+        _nextSubLine = std::pair<int,std::string>(999999,"");
 }
 
 void MovieState::think()
 {
     State::think();
 
+    if (dynamic_cast<MvePlayer*>(getUI("movie"))->frame() >= _nextSubLine.first)
+    {
+      dynamic_cast<TextArea*>(getUI("subs"))->setText(_nextSubLine.second);
+      if (_hasSubs) _nextSubLine = _subs->getSubLine(dynamic_cast<MvePlayer*>(getUI("movie"))->frame());
+    }
+
+    if (!_started)
+    {
+        Game::getInstance()->mixer()->playMovieMusic(dynamic_cast<MvePlayer*>(getUI("movie")));
+        _started = true;
+    }
     if ((dynamic_cast<MvePlayer*>(getUI("movie")))->finished())
     {
         this->onVideoFinished();
@@ -98,8 +130,8 @@ void MovieState::handle(Event* event)
 
 void MovieState::onVideoFinished()
 {
+    Game::getInstance()->mixer()->stopMusic();
     Game::getInstance()->mouse()->popState();
-//    Game::getInstance()->setState(new MainMenuState());
     Game::getInstance()->popState();
 }
 

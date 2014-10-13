@@ -23,6 +23,7 @@
 #include "../../Engine/Game.h"
 #include "../../Engine/PathFinding/Hexagon.h"
 #include "../../Game/GameObject.h"
+#include "../../Game/GameDoorSceneryObject.h"
 
 // Third party includes
 
@@ -120,11 +121,16 @@ void Hexagon::setHeuristic(unsigned int value)
 
 bool Hexagon::canWalkThru()
 {
+    bool canWalkThru = true;
     for (auto object : _objects)
     {
-        if (!object->canWalkThru()) return false;
+        if (auto door = dynamic_cast<GameDoorSceneryObject*>(object))
+        {
+            return door->canWalkThru();
+        }
+        if (!object->canWalkThru()) canWalkThru = false;
     }
-    return true;
+    return canWalkThru;
 }
 
 bool Hexagon::inRender()

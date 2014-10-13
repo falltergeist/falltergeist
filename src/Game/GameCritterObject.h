@@ -210,6 +210,13 @@ public:
 
     unsigned int currentHand();
     void setCurrentHand(unsigned int value);
+
+    virtual void damage_p_proc();
+    virtual void combat_p_proc();
+    virtual void critter_p_proc();
+    virtual void talk_p_proc();
+    virtual void use_skill_on_p_proc();
+    virtual void is_dropping_p_proc();
 };
 
 }
