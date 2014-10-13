@@ -296,7 +296,7 @@ bool CrossPlatform::_createDirectory(const char *dir)
     }
     else
     {
-        if (CreateDirectory(dir) != 0) return true;
+        if (CreateDirectory(dir,NULL) != 0) return true;
 
         DWORD errorId = GetLastError();
 
@@ -314,7 +314,7 @@ char *CrossPlatform::_copyString(const char *str)
 #if defined(__unix__) || defined(__MACH__)
     return strdup(str);
 #else
-    char *ret = malloc((strlen(str) + 1) * sizeof(*str));
+    char *ret = (char*)malloc((strlen(str) + 1) * sizeof(*str));
     if (ret != nullptr) strcpy(ret, str);
     return ret;
 #endif
@@ -355,10 +355,10 @@ std::string CrossPlatform::getConfigPath()
     return getHomeDirectory() + "/Library/Application Support/falltergeist";
 #elif defined(_WIN32) || defined(WIN32)
     char path[256];
-    SHGetFolderPath(nullptr, CSIDL_APPDATA | CSIDL_FLAGS_CREATE, NULL, 0, path);
+    SHGetFolderPath(nullptr, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, 0, path);
     return std::string(path) + "/falltergeist";
-#error Platform not supported: CrossPlatform::getConfigPath not implemented
 #else
+#error Platform not supported: CrossPlatform::getConfigPath not implemented
 #endif
 }
 
