@@ -46,7 +46,7 @@ protected:
 
     void _ltrim(std::string &line);
 
-    void _tolower(std::string &line);
+    void _toLower(std::string &line);
 
     bool _parseBool(std::string &name, std::string &line, std::shared_ptr<IniFile> ini);
 
