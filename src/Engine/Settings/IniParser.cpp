@@ -47,7 +47,7 @@ void IniParser::_ltrim(std::string &line)
     line.erase(line.begin(), find_if(line.begin(), line.end(), std::not1(std::ptr_fun<int, int>(isspace))));
 }
 
-void IniParser::_tolower(std::string &line)
+void IniParser::_toLower(std::string &line)
 {
     std::transform(line.begin(), line.end(), line.begin(), ::tolower);
 }
@@ -55,7 +55,7 @@ void IniParser::_tolower(std::string &line)
 bool IniParser::_parseBool(std::string &name, std::string &line, std::shared_ptr<IniFile> ini)
 {
     auto maybeBool = line;
-    _tolower(maybeBool);
+    _toLower(maybeBool);
     bool value;
     bool isBool = false;
 
@@ -232,7 +232,7 @@ std::shared_ptr<IniFile> IniParser::parse()
         if (*line.begin() == '[' && *line.rbegin() == ']')
         {
             _section = line.substr(1, line.length() - 2);
-            _tolower(_section);
+            _toLower(_section);
 
             Logger::debug("INI") << "start section: `" << _section << "`" << std::endl;
             continue;
@@ -251,7 +251,7 @@ std::shared_ptr<IniFile> IniParser::parse()
         _ltrim(value);
 
         // Property names are case-insensitive
-        _tolower(name);
+        _toLower(name);
 
         // Try to parse boolean
         if (_parseBool(name, value, ini)) continue;
