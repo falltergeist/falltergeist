@@ -187,10 +187,9 @@ std::cout << "delta=" <<deltaX << "," << deltaY << "\n";
     {
         deltaY = 0;
     }
-    //if (worldMapSizeX-deltaX < screenWidth)
-    if (deltaX < worldMapSizeX - (screenMaxX-screenMinX)*0.5)
+    if (worldMapSizeX-deltaX < screenWidth)
     {
-        deltaX = worldMapSizeX - (screenMaxX-screenMinX)*0.5;
+        deltaX = worldMapSizeX - screenWidth;
     }
     //if (worldMapSizeY-deltaY < screenHeight)
     //{
