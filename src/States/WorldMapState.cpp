@@ -152,18 +152,29 @@ void WorldMapState::render()
 
     // map show
     // calculating upper left corner
-    signed int smx = (signed int)worldMapX - (signed int)screenMinX; // screen left X in map coordinates
-    signed int smy = (signed int)worldMapY - (signed int)screenMinY;
-    //correcting upper left corner
-    if (smx<0)
+    signed int sx1 = (signed int)worldMapX - (signed int)screenWidth*0.5; // screen left X in map coordinates
+    signed int sy1 = (signed int)worldMapY - (signed int)screenHeight*0.5;
+    //correcting upper left corner coordinates
+    if (sx1<0)
     {
-        smx=0;
+        sx1=0;
     }
-    if (smy<0)
+    if (sy1<0)
     {
-        smy=0;
+        sy1=0;
     }
     // calculate lower right corner
+    unsigned int sx2 = (signed int)worldMapX + (signed int)screenWidth*0.5; // screen left X in map coordinates
+    unsigned int sy2 = (signed int)worldMapY + (signed int)screenHeight*0.5;
+    //correcting lower right corner coordinates
+    if (sx2>300)
+    {
+        sx2=300;
+    }
+    if (sy2>300)
+    {
+        sy2=300;
+    }
 
 
 //std::cout << "\n";
@@ -179,8 +190,8 @@ void WorldMapState::render()
     //unsigned int destinationX, unsigned int destinationY, 
     //unsigned int sourceX, unsigned int sourceY, 
     //unsigned int sourceWidth, unsigned int sourceHeight)
-    //_map->texture()->copyTo(_screen->texture(), 0, 0, 0, 0, screenWidth, screenHeight);
-    _map->texture()->copyTo(_screen->texture(), 0, 0, smx, smy, screenWidth, screenHeight);
+    _map->texture()->copyTo(_screen->texture(), 0, 0, 0, 0, screenWidth-190, screenHeight-160);
+    //_map->texture()->copyTo(_screen->texture(), 0, 0, sx1, sy1, sx2-sx1, sy2-sy1);
     _screen->render();
 
     // panel
