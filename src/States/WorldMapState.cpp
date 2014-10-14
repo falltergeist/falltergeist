@@ -102,23 +102,29 @@ void WorldMapState::init()
         }
     }
     // creating screen
+    unsigned int renderWidth = Game::getInstance()->renderer()->width();
+    unsigned int renderHeight = Game::getInstance()->renderer()->height();
     // @todo: correct coordinates!
     if (WorldMapFullscreen)
     {
-        _screen = new Image (Game::getInstance()->renderer()->width(), Game::getInstance()->renderer()->height());
+        _screen = new Image (renderWidth, renderHeight);
         _screen->setX(0);
         _screen->setY(0);
     }
     else
     {
         _screen = new Image (430, 420);
-        _screen->setX((Game::getInstance()->renderer()->width() - 640)*0.5 + 25);
-        _screen->setY((Game::getInstance()->renderer()->height() - 480)*0.5 + 25);
+        unsigned int screenMinX = (renderWidth - 640)*0.5 + 25;
+        unsigned int screenMinY = (renderHeight - 480)*0.5 + 25;
+        _screen->setX(screenMinX);
+        _screen->setY(screenMinY);
     }
 }
 
 void WorldMapState::render()
 {
+    unsigned int worldMapSizeX = 1400;
+    unsigned int worldMapSizeY = 1500;
     unsigned int renderWidth = 640; // default current render size X
     unsigned int renderHeight = 480; // default current render size Y
     unsigned int screenWidth = 640; // default screen size X
@@ -128,8 +134,10 @@ void WorldMapState::render()
     unsigned int screenMinY = 0;
     unsigned int screenMaxY = 480;
 
-    unsigned int worldMapX = 5;
-    unsigned int worldMapY = 10;
+    unsigned int worldMapX = 1300;
+    unsigned int worldMapY = 60;
+    //unsigned int worldMapX = 0;
+    //unsigned int worldMapY = 0;
 
     // calculating render size, screen size, etc
     renderWidth = Game::getInstance()->renderer()->width();
@@ -137,6 +145,8 @@ void WorldMapState::render()
     screenMaxX = renderWidth;
     screenMaxY = renderHeight;
 
+    // @ todo!
+    // check in init formula!
     if (WorldMapFullscreen)
     {
     }
@@ -144,54 +154,56 @@ void WorldMapState::render()
     {
         screenWidth = renderWidth;
         screenHeight = renderHeight;
-        screenMinX = (renderWidth - 640)*0.5;
-        screenMaxX = (renderWidth + 640)*0.5;
-        screenMinY = (renderHeight - 480)*0.5;
-        screenMaxY = (renderHeight + 480)*0.5;
+        screenMinX = (renderWidth - 640)*0.5 + 25;
+        screenMinY = (renderHeight - 480)*0.5 + 25;
+        screenMaxX = (renderWidth + 640)*0.5 - 170 -25;
+        screenMaxY = (renderHeight + 480)*0.5 - 50;
     }
 
-    // map show
-    // calculating upper left corner
-    signed int sx1 = (signed int)worldMapX - (signed int)screenWidth*0.5; // screen left X in map coordinates
-    signed int sy1 = (signed int)worldMapY - (signed int)screenHeight*0.5;
-    //correcting upper left corner coordinates
-    if (sx1<0)
+    // MAP SHOW
+    signed int deltaX;
+    signed int deltaY;
+    // calculating delta (shift of map to fit to screen)
+    if (WorldMapFullscreen)
     {
-        sx1=0;
+        //deltaX = worldMapX - screenWidth*0.5;
+        //deltaY = worldMapY - screenHeight*0.5;
     }
-    if (sy1<0)
+    else
     {
-        sy1=0;
-    }
-    // calculate lower right corner
-    unsigned int sx2 = (signed int)worldMapX + (signed int)screenWidth*0.5; // screen left X in map coordinates
-    unsigned int sy2 = (signed int)worldMapY + (signed int)screenHeight*0.5;
-    //correcting lower right corner coordinates
-    if (sx2>300)
-    {
-        sx2=300;
-    }
-    if (sy2>300)
-    {
-        sy2=300;
+        deltaX = worldMapX - (screenMaxX-screenMinX)*0.5;
+        deltaY = worldMapY - (screenMaxY-screenMinY)*0.5;
     }
 
-
-//std::cout << "\n";
-//std::cout << "sm=" << smx << "x" << smy << "\n";
-//std::cout << "screenSize=" <<screenWidth << "x" << screenHeight << "\n";
-//std::cout << "screenX=" <<screenMinX << "x" << screenMaxX << "\n";
-//std::cout << "screenY=" <<screenMinY << "x" << screenMaxY << "\n";
-//std::cout << "tileSize=" <<tileWidth << "x" << tileHeight << "\n";
-//std::cout << "tile=" <<tileX << "," << tileY << "\n";
-//std::cout << "origin=" <<originX << "," << originY << "\n";
+    // correcting delta
+    // @todo!
+std::cout << "\n";
+std::cout << "delta=" <<deltaX << "," << deltaY << "\n";
+    if (deltaX<0)
+    {
+        deltaX = 0;
+    }
+    if (deltaY<0)
+    {
+        deltaY = 0;
+    }
+    //if (worldMapSizeX-deltaX < screenWidth)
+    if (deltaX < worldMapSizeX - (screenMaxX-screenMinX)*0.5)
+    {
+        deltaX = worldMapSizeX - (screenMaxX-screenMinX)*0.5;
+    }
+    //if (worldMapSizeY-deltaY < screenHeight)
+    //{
+    //    deltaY = worldMapSizeY-screenHeight;
+    //}
+std::cout << "delta=" <<deltaX << "," << deltaY << "\n";
 
     //void Texture::copyTo(Texture* destination, 
     //unsigned int destinationX, unsigned int destinationY, 
     //unsigned int sourceX, unsigned int sourceY, 
     //unsigned int sourceWidth, unsigned int sourceHeight)
-    _map->texture()->copyTo(_screen->texture(), 0, 0, 0, 0, screenWidth-190, screenHeight-160);
-    //_map->texture()->copyTo(_screen->texture(), 0, 0, sx1, sy1, sx2-sx1, sy2-sy1);
+    //_map->texture()->copyTo(_screen->texture(), 0, 0, 0, 0, screenWidth-190, screenHeight-160);
+    _map->texture()->copyTo(_screen->texture(), 0, 0, deltaX, deltaY, deltaX + screenWidth, deltaY + screenHeight);
     _screen->render();
 
     // panel
@@ -203,10 +215,29 @@ void WorldMapState::render()
     _panel->render();
 
     // hostpot show
-    _hotspot->setX(screenWidth*0.5);
-    _hotspot->setY(screenHeight*0.5);
+    //_hotspot->setX(screenWidth*0.5);
+
+    if (WorldMapFullscreen)
+    {
+        _hotspot->setX(worldMapX);
+        _hotspot->setY(worldMapY);
+    }
+    else
+    {
+        _hotspot->setX(screenMinX + worldMapX - deltaX);
+        _hotspot->setY(screenMinY + worldMapY - deltaY);
+    }
+    //_hotspot->setX((renderWidth - 640)*0.5 + 25 + worldMapX);
+    //_hotspot->setY(screenHeight*0.5);
     _hotspot->render();
-    //addUI(_hotspot);
+
+//std::cout << "\n";
+//std::cout << "screenSize=" <<screenWidth << "x" << screenHeight << "\n";
+//std::cout << "screenStart=" <<screenMinX << "x" << screenMinY << "\n";
+//std::cout << "screenEnd=" <<screenMaxX << "x" << screenMaxY << "\n";
+//std::cout << "tileSize=" <<tileWidth << "x" << tileHeight << "\n";
+//std::cout << "delta=" <<deltaX << "," << deltaY << "\n";
+
 }
 
 void WorldMapState::handle(Event* event)
