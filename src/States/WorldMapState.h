@@ -35,6 +35,9 @@ namespace Falltergeist
 class WorldMapState : public State
 {
 public:
+
+    bool WorldMapFullscreen = false; // true = fullscreen, false = classic 640x480
+
     WorldMapState();
 
     virtual void init();
@@ -43,7 +46,9 @@ public:
     virtual void handle(Event* event);
     //void onKeyboardUp(KeyboardEvent* event);
 private:
-    Image* _background;
+    Image* _panel;
+    Image* _map;
+    Image* _screen;
     ImageList* _tiles = 0;
     ImageButton* _hotspot;
 };
