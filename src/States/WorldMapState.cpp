@@ -43,14 +43,22 @@ WorldMapState::WorldMapState()
 
 void WorldMapState::init()
 {
+    // fallout2
+    // tileSize: 350x300
+    // map size: 4x5 tiles
+    // texture size: 1400x1500
+
+    unsigned int tileWidth = 0;
+    unsigned int tileHeight = 0;
+
     if (_initialized) return;
     State::init();
 
     setModal(true);
     setFullscreen(true);
 
-    // background
-    _background = new Image("art/intrface/wmapbox.frm");
+    // panel
+    _panel = new Image("art/intrface/wmapbox.frm");
     // loading map tiles
     _tiles = new ImageList((std::vector<std::string>){
                             "art/intrface/wrldmp00.frm",
@@ -79,76 +87,126 @@ void WorldMapState::init()
     _hotspot = new ImageButton(ImageButton::TYPE_MAP_HOTSPOT, 0, 0);
     //addUI(_hotspot);
 
-}
-
-void WorldMapState::render()
-{
-    bool WorldMapFullscreen = false; // fullscreen or classic
-    unsigned int tileWidth = 0;
-    unsigned int tileHeight = 0;
-    unsigned int screenWidth = 640; // default screen size X
-    unsigned int screenHeight = 480; // default screen size Y
-    unsigned int worldMapX = 440;
-    unsigned int worldMapY = 460;
-
-    if (WorldMapFullscreen)
-    {
-        screenWidth = Game::getInstance()->renderer()->width();
-        screenHeight = Game::getInstance()->renderer()->height();
-    }
-
     // calculating tile size
     tileWidth = _tiles->width();
     tileHeight = _tiles->height();
 
-    unsigned int tileX = worldMapX/tileWidth;
-    unsigned int tileY = worldMapY/tileHeight;
-    signed int originX = - (signed int)worldMapX + (signed int)screenWidth*0.5;
-    signed int originY = - (signed int)worldMapY + (signed int)screenHeight*0.5;
-
-    //correcting origin
-    //if (originX>0)
-    //{
-    //    originX=0;
-    //}
-    //if (originY>0)
-    //{
-    //    originY=0;
-    //}
-
-//std::cout << "screenSize=" <<screenWidth << "x" << screenHeight << "\n";
-//std::cout << "tileSize=" <<tileWidth << "x" << tileHeight << "\n";
-//std::cout << "tile=" <<tileX << "," << tileY << "\n";
-//std::cout << "origin=" <<originX << "," << originY << "\n";
-
-    // tiles show
+    // creating map texture
+    _map = new Image(1400, 1500);
     for (unsigned int y=0; y<5; y++)
     {
         for (unsigned int x=0; x<4; x++)
         {
-            //tile = new Image("art/intrface/wrldmp00.frm");
             _tiles->setCurrentImage(y*4+x);
-            //_tiles->setX(originX+x*tileWidth);
-            //_tiles->setY(originY+y*tileHeight);
-            //_tiles->render();
-            Game::getInstance()->renderer()->drawTexture(_tiles->texture(), originX+x*tileWidth, originY+y*tileHeight, 0, 0, tileWidth, tileHeight);
+            _tiles->texture()->copyTo(_map->texture(), x*tileWidth, y*tileHeight);
         }
     }
+    // creating screen
+    // @todo: correct coordinates!
+    if (WorldMapFullscreen)
+    {
+        _screen = new Image (Game::getInstance()->renderer()->width(), Game::getInstance()->renderer()->height());
+        _screen->setX(0);
+        _screen->setY(0);
+    }
+    else
+    {
+        _screen = new Image (430, 420);
+        _screen->setX((Game::getInstance()->renderer()->width() - 640)*0.5 + 25);
+        _screen->setY((Game::getInstance()->renderer()->height() - 480)*0.5 + 25);
+    }
+}
 
+void WorldMapState::render()
+{
+    unsigned int renderWidth = 640; // default current render size X
+    unsigned int renderHeight = 480; // default current render size Y
+    unsigned int screenWidth = 640; // default screen size X
+    unsigned int screenHeight = 480; // default screen size Y
+    unsigned int screenMinX = 0;
+    unsigned int screenMaxX = 640;
+    unsigned int screenMinY = 0;
+    unsigned int screenMaxY = 480;
+
+    unsigned int worldMapX = 5;
+    unsigned int worldMapY = 10;
+
+    // calculating render size, screen size, etc
+    renderWidth = Game::getInstance()->renderer()->width();
+    renderHeight = Game::getInstance()->renderer()->height();
+    screenMaxX = renderWidth;
+    screenMaxY = renderHeight;
+
+    if (WorldMapFullscreen)
+    {
+    }
+    else
+    {
+        screenWidth = renderWidth;
+        screenHeight = renderHeight;
+        screenMinX = (renderWidth - 640)*0.5;
+        screenMaxX = (renderWidth + 640)*0.5;
+        screenMinY = (renderHeight - 480)*0.5;
+        screenMaxY = (renderHeight + 480)*0.5;
+    }
+
+    // map show
+    // calculating upper left corner
+    signed int sx1 = (signed int)worldMapX - (signed int)screenWidth*0.5; // screen left X in map coordinates
+    signed int sy1 = (signed int)worldMapY - (signed int)screenHeight*0.5;
+    //correcting upper left corner coordinates
+    if (sx1<0)
+    {
+        sx1=0;
+    }
+    if (sy1<0)
+    {
+        sy1=0;
+    }
+    // calculate lower right corner
+    unsigned int sx2 = (signed int)worldMapX + (signed int)screenWidth*0.5; // screen left X in map coordinates
+    unsigned int sy2 = (signed int)worldMapY + (signed int)screenHeight*0.5;
+    //correcting lower right corner coordinates
+    if (sx2>300)
+    {
+        sx2=300;
+    }
+    if (sy2>300)
+    {
+        sy2=300;
+    }
+
+
+//std::cout << "\n";
+//std::cout << "sm=" << smx << "x" << smy << "\n";
+//std::cout << "screenSize=" <<screenWidth << "x" << screenHeight << "\n";
+//std::cout << "screenX=" <<screenMinX << "x" << screenMaxX << "\n";
+//std::cout << "screenY=" <<screenMinY << "x" << screenMaxY << "\n";
+//std::cout << "tileSize=" <<tileWidth << "x" << tileHeight << "\n";
+//std::cout << "tile=" <<tileX << "," << tileY << "\n";
+//std::cout << "origin=" <<originX << "," << originY << "\n";
+
+    //void Texture::copyTo(Texture* destination, 
+    //unsigned int destinationX, unsigned int destinationY, 
+    //unsigned int sourceX, unsigned int sourceY, 
+    //unsigned int sourceWidth, unsigned int sourceHeight)
+    _map->texture()->copyTo(_screen->texture(), 0, 0, 0, 0, screenWidth-190, screenHeight-160);
+    //_map->texture()->copyTo(_screen->texture(), 0, 0, sx1, sy1, sx2-sx1, sy2-sy1);
+    _screen->render();
+
+    // panel
+    // @todo: if FULLSCREEN, show only right panel
+    auto panelX = (renderWidth - _panel->width())*0.5;
+    auto panelY = (renderHeight - _panel->height())*0.5;
+    _panel->setX(panelX);
+    _panel->setY(panelY);
+    _panel->render();
+
+    // hostpot show
     _hotspot->setX(screenWidth*0.5);
     _hotspot->setY(screenHeight*0.5);
     _hotspot->render();
     //addUI(_hotspot);
-
-
-    // background
-    // @todo: if FULLSCREEN, show only right panel
-    auto backgroundX = (Game::getInstance()->renderer()->width() - _background->width())*0.5;
-    auto backgroundY = (Game::getInstance()->renderer()->height() - _background->height())*0.5;
-    _background->setX(backgroundX);
-    _background->setY(backgroundY);
-    _background->render();
-
 }
 
 void WorldMapState::handle(Event* event)
