@@ -47,8 +47,8 @@ public:
     //void onKeyboardUp(KeyboardEvent* event);
 private:
     Image* _panel;
-    Image* _map;
-    Image* _screen;
+    Image* _mapTexture;
+    Image* _screenMap;
     ImageList* _tiles = 0;
     ImageButton* _hotspot;
 };
