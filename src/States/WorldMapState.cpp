@@ -23,6 +23,7 @@
 // Falltergeist includes
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
+#include "../Engine/Input/Mouse.h"
 #include "../Engine/ResourceManager.h"
 #include "../States/WorldMapState.h"
 #include "../States/LocationState.h"
@@ -43,17 +44,6 @@ WorldMapState::WorldMapState()
 
 void WorldMapState::init()
 {
-    // fallout2
-    // tileSize: 350x300
-    // map size: 4x5 tiles
-    // texture size: 1400x1500
-
-    unsigned int screenMapWidth = 430;
-    unsigned int screenMapHeight = 420;
-
-    unsigned int tileWidth = 0;
-    unsigned int tileHeight = 0;
-
     if (_initialized) return;
     State::init();
 
@@ -90,17 +80,13 @@ void WorldMapState::init()
     _hotspot = new ImageButton(ImageButton::TYPE_MAP_HOTSPOT, 0, 0);
     //addUI(_hotspot);
 
-    // calculating tile size
-    tileWidth = _tiles->width();
-    tileHeight = _tiles->height();
-
     // creating map texture
-    _mapTexture = new Image(1400, 1500);
-    for (unsigned int y=0; y<5; y++)
+    _mapTexture = new Image(tilesNumberX*tileWidth, tilesNumberY*tileHeight);
+    for (unsigned int y=0; y<tilesNumberY; y++)
     {
-        for (unsigned int x=0; x<4; x++)
+        for (unsigned int x=0; x<tilesNumberX; x++)
         {
-            _tiles->setCurrentImage(y*4+x);
+            _tiles->setCurrentImage(y*tilesNumberX+x);
             _tiles->texture()->copyTo(_mapTexture->texture(), x*tileWidth, y*tileHeight);
         }
     }
@@ -110,15 +96,15 @@ void WorldMapState::init()
     // @todo: correct coordinates!
     if (WorldMapFullscreen)
     {
-        _screenMap = new Image (renderWidth, renderHeight);
-        _screenMap->setX(0);
-        _screenMap->setY(0);
+        //_screenMap = new Image (renderWidth, renderHeight);
+        //_screenMap->setX(0);
+        //_screenMap->setY(0);
     }
     else
     {
-        _screenMap = new Image (screenMapWidth, screenMapHeight);
-        unsigned int mapMinX = (renderWidth - 640)*0.5 + 25;
-        unsigned int mapMinY = (renderHeight - 480)*0.5 + 25;
+        _screenMap = new Image (mapWidth, mapHeight);
+        mapMinX = (renderWidth - 640)*0.5 + 22;
+        mapMinY = (renderHeight - 480)*0.5 + 21;
         _screenMap->setX(mapMinX);
         _screenMap->setY(mapMinY);
     }
@@ -126,62 +112,28 @@ void WorldMapState::init()
 
 void WorldMapState::render()
 {
-    unsigned int worldMapSizeX = 1400;
-    unsigned int worldMapSizeY = 1500;
-    unsigned int renderWidth = 640; // default current render size X
-    unsigned int renderHeight = 480; // default current render size Y
-    unsigned int screenMapWidth = 430; // default screen size X
-    unsigned int screenMapHeight = 420; // default screen size Y
-    unsigned int mapMinX = 0;
-    unsigned int mapMaxX = 640;
-    unsigned int mapMinY = 0;
-    unsigned int mapMaxY = 480;
-
-    unsigned int worldMapX = 1390;
-    unsigned int worldMapY = 1490;
-    //unsigned int worldMapX = 0;
-    //unsigned int worldMapY = 0;
-
     // calculating render size, screen size, etc
-    renderWidth = Game::getInstance()->renderer()->width();
-    renderHeight = Game::getInstance()->renderer()->height();
-    mapMaxX = renderWidth;
-    mapMaxY = renderHeight;
-
-    // @ todo!
-    // check in init formula!
-    if (WorldMapFullscreen)
-    {
-    }
-    else
-    {
-        //screenWidth = 640;
-        //screenHeight = 480;
-        mapMinX = (renderWidth - 640)*0.5 + 25;
-        mapMinY = (renderHeight - 480)*0.5 + 25;
-        mapMaxX = (renderWidth + 640)*0.5 - 170 -25;
-        mapMaxY = (renderHeight + 480)*0.5 - 50;
-    }
+    unsigned int renderWidth = Game::getInstance()->renderer()->width();
+    unsigned int renderHeight = Game::getInstance()->renderer()->height();
 
     // MAP SHOW
-    signed int deltaX;
-    signed int deltaY;
+    //signed int deltaX;
+    //signed int deltaY;
     // calculating delta (shift of map to fit to screen)
     if (WorldMapFullscreen)
     {
-        //deltaX = worldMapX - screenWidth*0.5;
-        //deltaY = worldMapY - screenHeight*0.5;
     }
     else
     {
-        deltaX = worldMapX - (mapMaxX-mapMinX)*0.5;
-        deltaY = worldMapY - (mapMaxY-mapMinY)*0.5;
+        deltaX = worldMapX - mapWidth*0.5;
+        deltaY = worldMapY - mapHeight*0.5;
     }
+
+    unsigned int worldMapSizeX = tilesNumberX*tileWidth;
+    unsigned int worldMapSizeY = tilesNumberY*tileHeight;
 
     // correcting delta
     // @todo!
-//std::cout << "\n";
-//std::cout << "delta=" <<deltaX << "," << deltaY << "\n";
     if (deltaX<0)
     {
         deltaX = 0;
@@ -190,23 +142,33 @@ void WorldMapState::render()
     {
         deltaY = 0;
     }
-    if (worldMapSizeX-deltaX < screenMapWidth)
+    if (worldMapSizeX-deltaX < mapWidth)
     {
-        deltaX = worldMapSizeX - screenMapWidth;
+        deltaX = worldMapSizeX - mapWidth;
     }
-    if (worldMapSizeY-deltaY < screenMapHeight)
+    if (worldMapSizeY-deltaY < mapHeight)
     {
-        deltaY = worldMapSizeY - screenMapHeight;
+        deltaY = worldMapSizeY - mapHeight;
     }
-//std::cout << "delta=" <<deltaX << "," << deltaY << "\n";
 
     //void Texture::copyTo(Texture* destination, 
     //unsigned int destinationX, unsigned int destinationY, 
     //unsigned int sourceX, unsigned int sourceY, 
     //unsigned int sourceWidth, unsigned int sourceHeight)
     //_mapTexture->texture()->copyTo(_screenMap->texture(), 0, 0, 0, 0, screenWidth-190, screenHeight-160);
-    _mapTexture->texture()->copyTo(_screenMap->texture(), 0, 0, deltaX, deltaY, deltaX + screenMapWidth, deltaY + screenMapHeight);
+    _mapTexture->texture()->copyTo(_screenMap->texture(), 0, 0, deltaX, deltaY, deltaX + mapWidth, deltaY + mapHeight);
     _screenMap->render();
+
+    // hostpot show
+    if (WorldMapFullscreen)
+    {
+    }
+    else
+    {
+        _hotspot->setX(mapMinX + worldMapX - deltaX);
+        _hotspot->setY(mapMinY + worldMapY - deltaY);
+    }
+    _hotspot->render();
 
     // panel
     // @todo: if FULLSCREEN, show only right panel
@@ -216,55 +178,41 @@ void WorldMapState::render()
     _panel->setY(panelY);
     _panel->render();
 
-    // hostpot show
-    //_hotspot->setX(screenWidth*0.5);
-
-    if (WorldMapFullscreen)
-    {
-        _hotspot->setX(worldMapX);
-        _hotspot->setY(worldMapY);
-    }
-    else
-    {
-        _hotspot->setX(mapMinX + worldMapX - deltaX);
-        _hotspot->setY(mapMinY + worldMapY - deltaY);
-    }
-    //_hotspot->setX((renderWidth - 640)*0.5 + 25 + worldMapX);
-    //_hotspot->setY(screenHeight*0.5);
-    _hotspot->render();
-
-//std::cout << "\n";
-//std::cout << "screenSize=" <<screenMapWidth << "x" << screenMapHeight << "\n";
-//std::cout << "screenStart=" <<mapMinX << "x" << mapMinY << "\n";
-//std::cout << "screenEnd=" <<mapMaxX << "x" << mapMaxY << "\n";
-//std::cout << "tileSize=" <<tileWidth << "x" << tileHeight << "\n";
-//std::cout << "delta=" <<deltaX << "," << deltaY << "\n";
-
 }
 
 void WorldMapState::handle(Event* event)
 {
     auto game = Game::getInstance();
+
+    if (auto mouseEvent = dynamic_cast<MouseEvent*>(event))
+    {
+        auto mouse = game->mouse();
+
+        // Left button down
+        if (mouseEvent->name() == "mousedown" && mouseEvent->leftButton())
+        {
+            // check if point clicked belongs to the screen
+            if ((mapMinX<=(unsigned int)mouse->x()) && ((unsigned int)mouse->x()<=(mapMinX+mapWidth)) &&
+                (mapMinY<=(unsigned int)mouse->y()) && ((unsigned int)mouse->y()<=(mapMinY+mapHeight)))
+            {
+                // change destination point
+                worldMapX = mouse->x()+deltaX-mapMinX;
+                worldMapY = mouse->y()+deltaY-mapMinY;
+            }
+        }
+    }
+
     if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
     {
         switch (keyboardEvent->keyCode())
         {
             case SDLK_ESCAPE:
             {
-                Game::getInstance()->popState();
+                game->popState();
             }
         }
     }
 }
-
-//void WorldMapState::onKeyboardUp(KeyboardEvent* event)
-//{
-//    if (event->keyCode() == SDLK_ESCAPE)
-//    {
-//        Game::getInstance()->popState();
-//    }
-//}
-
 
 }
 
