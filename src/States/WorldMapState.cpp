@@ -80,16 +80,6 @@ void WorldMapState::init()
     _hotspot = new ImageButton(ImageButton::TYPE_MAP_HOTSPOT, 0, 0);
     //addUI(_hotspot);
 
-    // creating map texture
-    _mapTexture = new Image(tilesNumberX*tileWidth, tilesNumberY*tileHeight);
-    for (unsigned int y=0; y<tilesNumberY; y++)
-    {
-        for (unsigned int x=0; x<tilesNumberX; x++)
-        {
-            _tiles->setCurrentImage(y*tilesNumberX+x);
-            _tiles->texture()->copyTo(_mapTexture->texture(), x*tileWidth, y*tileHeight);
-        }
-    }
     // creating screen
     unsigned int renderWidth = Game::getInstance()->renderer()->width();
     unsigned int renderHeight = Game::getInstance()->renderer()->height();
@@ -117,8 +107,6 @@ void WorldMapState::render()
     unsigned int renderHeight = Game::getInstance()->renderer()->height();
 
     // MAP SHOW
-    //signed int deltaX;
-    //signed int deltaY;
     // calculating delta (shift of map to fit to screen)
     if (WorldMapFullscreen)
     {
@@ -151,12 +139,30 @@ void WorldMapState::render()
         deltaY = worldMapSizeY - mapHeight;
     }
 
-    //void Texture::copyTo(Texture* destination, 
-    //unsigned int destinationX, unsigned int destinationY, 
-    //unsigned int sourceX, unsigned int sourceY, 
-    //unsigned int sourceWidth, unsigned int sourceHeight)
-    //_mapTexture->texture()->copyTo(_screenMap->texture(), 0, 0, 0, 0, screenWidth-190, screenHeight-160);
-    _mapTexture->texture()->copyTo(_screenMap->texture(), 0, 0, deltaX, deltaY, deltaX + mapWidth, deltaY + mapHeight);
+    unsigned int worldTileMinX; // start X coordinate of current tile on world map
+    unsigned int worldTileMinY; // start Y coordinate of current tile on world map
+
+    // copy tiles to screen if needed
+    for (unsigned int y=0; y<tilesNumberY; y++)
+    {
+        for (unsigned int x=0; x<tilesNumberX; x++)
+        {
+            _tiles->setCurrentImage(y*tilesNumberX+x);
+            worldTileMinX = x*tileWidth;
+            worldTileMinY = y*tileHeight;
+            // checking if tile is visible on screenMap
+            // checking current tile borders
+            // either xmin or xmax SHOULD belongs to map area AND
+            // either ymin or ymax SHOULD belongs to map area
+            if ( ((deltaX<=worldTileMinX) && (worldTileMinX<=deltaX+mapWidth) ||
+                  (deltaX<=worldTileMinX+tileWidth) && (worldTileMinX+tileWidth<=deltaX+mapWidth)) &&
+                 ((deltaY<=worldTileMinY) && (worldTileMinY<=deltaY+mapHeight) ||
+                  (deltaY<=worldTileMinY+tileHeight) && (worldTileMinY+tileHeight<=deltaY+mapHeight)) )
+            {
+                _tiles->texture()->copyTo(_screenMap->texture(), x*tileWidth-deltaX, y*tileHeight-deltaY, 0, 0, tileWidth, tileHeight);
+            }
+        }
+    }
     _screenMap->render();
 
     // hostpot show
@@ -171,7 +177,7 @@ void WorldMapState::render()
     _hotspot->render();
 
     // panel
-    // @todo: if FULLSCREEN, show only right panel
+    // @todo: if FULLSCREEN, show only right panel AND black stripe?
     auto panelX = (renderWidth - _panel->width())*0.5;
     auto panelY = (renderHeight - _panel->height())*0.5;
     _panel->setX(panelX);
