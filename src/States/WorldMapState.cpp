@@ -50,8 +50,9 @@ void WorldMapState::init()
     setModal(true);
     setFullscreen(true);
 
-    // panel
-    _panel = new Image("art/intrface/wmapbox.frm");
+    unsigned int renderWidth = Game::getInstance()->renderer()->width();
+    unsigned int renderHeight = Game::getInstance()->renderer()->height();
+
     // loading map tiles
     _tiles = new ImageList((std::vector<std::string>){
                             "art/intrface/wrldmp00.frm",
@@ -81,23 +82,25 @@ void WorldMapState::init()
     //addUI(_hotspot);
 
     // creating screen
-    unsigned int renderWidth = Game::getInstance()->renderer()->width();
-    unsigned int renderHeight = Game::getInstance()->renderer()->height();
-    // @todo: correct coordinates!
     if (WorldMapFullscreen)
     {
-        //_screenMap = new Image (renderWidth, renderHeight);
-        //_screenMap->setX(0);
-        //_screenMap->setY(0);
+        _panel = new Image("art/intrface/wminfce2.frm"); // panel small
+        mapWidth = renderWidth - 168;
+        mapHeight = renderHeight;
+        mapMinX = 0;
+        mapMinY = 0;
     }
     else
     {
-        _screenMap = new Image (mapWidth, mapHeight);
+        _panel = new Image("art/intrface/wmapbox.frm"); // panel full
+        mapWidth = 450;   // fallout 2 map screen width
+        mapHeight = 442;  // fallout 2 map screen height
         mapMinX = (renderWidth - 640)*0.5 + 22;
         mapMinY = (renderHeight - 480)*0.5 + 21;
-        _screenMap->setX(mapMinX);
-        _screenMap->setY(mapMinY);
     }
+    _screenMap = new Image (mapWidth, mapHeight);
+    _screenMap->setX(mapMinX);
+    _screenMap->setY(mapMinY);
 }
 
 void WorldMapState::render()
@@ -108,20 +111,13 @@ void WorldMapState::render()
 
     // MAP SHOW
     // calculating delta (shift of map to fit to screen)
-    if (WorldMapFullscreen)
-    {
-    }
-    else
-    {
-        deltaX = worldMapX - mapWidth*0.5;
-        deltaY = worldMapY - mapHeight*0.5;
-    }
+    deltaX = worldMapX - mapWidth*0.5;
+    deltaY = worldMapY - mapHeight*0.5;
 
     unsigned int worldMapSizeX = tilesNumberX*tileWidth;
     unsigned int worldMapSizeY = tilesNumberY*tileHeight;
 
     // correcting delta
-    // @todo!
     if (deltaX<0)
     {
         deltaX = 0;
@@ -166,20 +162,24 @@ void WorldMapState::render()
     _screenMap->render();
 
     // hostpot show
-    if (WorldMapFullscreen)
-    {
-    }
-    else
-    {
-        _hotspot->setX(mapMinX + worldMapX - deltaX);
-        _hotspot->setY(mapMinY + worldMapY - deltaY);
-    }
+    _hotspot->setX(mapMinX + worldMapX - deltaX);
+    _hotspot->setY(mapMinY + worldMapY - deltaY);
     _hotspot->render();
 
     // panel
-    // @todo: if FULLSCREEN, show only right panel AND black stripe?
-    auto panelX = (renderWidth - _panel->width())*0.5;
-    auto panelY = (renderHeight - _panel->height())*0.5;
+    unsigned int panelX;
+    unsigned int panelY;
+
+    if (WorldMapFullscreen)
+    {
+        panelX = renderWidth - 168; // only panel right
+    }
+    else
+    {
+        panelX = (renderWidth - _panel->width())*0.5;
+    }
+    panelY = (renderHeight - _panel->height())*0.5;
+
     _panel->setX(panelX);
     _panel->setY(panelY);
     _panel->render();

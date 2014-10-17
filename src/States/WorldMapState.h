@@ -36,7 +36,7 @@ class WorldMapState : public State
 {
 public:
 
-    bool WorldMapFullscreen = false; // true = fullscreen, false = classic 640x480
+    bool WorldMapFullscreen = true; // true = fullscreen, false = classic 640x480
 
     WorldMapState();
 
