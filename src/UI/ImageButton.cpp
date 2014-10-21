@@ -163,6 +163,10 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
             _textures.push_back(ResourceManager::texture("art/intrface/dnarwoff.frm"));
             _textures.push_back(ResourceManager::texture("art/intrface/dnarwon.frm"));
             break;
+        case TYPE_MAP_HOTSPOT:
+            _textures.push_back(ResourceManager::texture("art/intrface/hotspot1.frm"));
+            _textures.push_back(ResourceManager::texture("art/intrface/hotspot2.frm"));
+            break;
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
     }
