@@ -39,6 +39,10 @@ AudioMixer::AudioMixer()
 
 AudioMixer::~AudioMixer()
 {
+    for (auto& x: _sfx)
+    {
+        Mix_FreeChunk(x.second);
+    }
     Mix_HookMusic(NULL,NULL);
     Mix_CloseAudio();
 }
@@ -77,12 +81,19 @@ void myMusicPlayer(void *udata, uint8_t *stream, int len)
 void AudioMixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len)
 {
     if (_paused) return;
-  
+
     auto pacm = *reinterpret_cast<std::shared_ptr<libfalltergeist::AcmFileType>*>(udata);
     if (pacm->samplesLeft() <= 0)
     {
-        Mix_HookMusic(NULL,NULL);
-        return;
+        if (_loop)
+        {
+            pacm->rewind();
+        }
+        else
+        {
+            Mix_HookMusic(NULL,NULL);
+            return;
+        }
     }
 
     if (pacm->filename().find("music") != std::string::npos)
@@ -105,8 +116,9 @@ void AudioMixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len)
     }
 }
 
-void AudioMixer::playACMMusic(std::shared_ptr<libfalltergeist::AcmFileType> acm)
+void AudioMixer::playACMMusic(std::shared_ptr<libfalltergeist::AcmFileType> acm, bool loop)
 {
+    _loop = loop;
     musicCallback = std::bind(&AudioMixer::_musicCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
     acm->init();
     Mix_HookMusic(myMusicPlayer, reinterpret_cast<void *>(&acm));
@@ -136,13 +148,13 @@ void AudioMixer::playACMSound(std::shared_ptr<libfalltergeist::AcmFileType> acm)
 {
     Logger::debug("AudioMixer") << "playing: " << acm->filename() << std::endl;
     Mix_Chunk *chunk = NULL;
-    for (auto& x: _sfx)
+
+    auto it = _sfx.find(acm->filename());
+    if (it != _sfx.end())
     {
-        if (x.first == acm->filename())
-        {
-            chunk=x.second;
-        }
+        chunk=it->second;
     }
+
     if (!chunk)
     {
         acm->init();
@@ -163,6 +175,11 @@ void AudioMixer::playACMSound(std::shared_ptr<libfalltergeist::AcmFileType> acm)
 
         // make SDL_mixer chunk
         chunk = Mix_QuickLoad_RAW(cvt.buf, cvt.len*cvt.len_ratio);
+        if (_sfx.size() > 100) // TODO: make this configurable
+        {
+            Mix_FreeChunk(_sfx.begin()->second);
+            _sfx.erase(_sfx.begin());
+        }
         _sfx.insert(std::pair<std::string, Mix_Chunk*>(acm->filename(), chunk));
     }
     Mix_PlayChannel(-1, chunk, 0);
