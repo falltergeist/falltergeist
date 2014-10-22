@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <cstdint>
+#include <unordered_map>
 
 // Falltergeist includes
 #include <libfalltergeist.h>
@@ -49,7 +50,7 @@ public:
 private:
     void _musicCallback(void *udata, uint8_t *stream, uint32_t len);
     void _movieCallback(void *udata, uint8_t *stream, uint32_t len);
-    std::map<std::string,Mix_Chunk*> _sfx;
+    std::unordered_map<std::string,Mix_Chunk*> _sfx;
     bool _paused = false;
     bool _loop = false;
 };
