@@ -32,6 +32,7 @@ namespace Falltergeist
 {
 
 class IniFile;
+class IniValue;
 
 class IniParser
 {
@@ -48,10 +49,18 @@ protected:
 
     void _toLower(std::string &line);
 
+    bool _tryBool(std::string &line, bool* val);
+
+    int _tryDecimal(std::string &line, int* intval, double* doubleval);
+
     bool _parseBool(std::string &name, std::string &line, std::shared_ptr<IniFile> ini);
 
     bool _parseDecimal(std::string &name, std::string &line, std::shared_ptr<IniFile> ini);
 
+    bool _parseArray(std::string &name, std::string &line, std::shared_ptr<IniFile> ini);
+
+    bool _parseArrayDecimal(std::vector<IniValue> &vec, std::string val);
+    bool _parseArrayBool(std::vector<IniValue> &vec, std::string val);
 
 public:
     IniParser(std::istream &stream);

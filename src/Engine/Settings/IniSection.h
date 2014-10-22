@@ -24,6 +24,7 @@
 // C++ standard includes
 #include <map>
 #include <string>
+#include <vector>
 
 // Falltergeist includes
 
@@ -33,7 +34,6 @@
 
 namespace Falltergeist
 {
-
 class IniSection
 {
 private:
@@ -50,6 +50,8 @@ private:
     static void _property(PropertyMapConstIterator iter, bool &ret, bool def);
 
     static void _property(PropertyMapConstIterator iter, std::string &ret, const std::string &def);
+
+    static void _property(PropertyMapConstIterator iter, std::vector<IniValue> &ret);
 
     static bool _hasType(PropertyMapConstIterator iter, IniValue::Tag tag);
 
@@ -74,6 +76,8 @@ public:
 
     std::string propertyString(const std::string &name, const std::string &def);
 
+    std::vector<IniValue> propertyArray(const std::string &name);
+
     void setPropertyInt(const std::string &name, int value);
 
     void setPropertyDouble(const std::string &name, double value);
@@ -81,6 +85,8 @@ public:
     void setPropertyBool(const std::string &name, bool value);
 
     void setPropertyString(const std::string &name, const std::string &value);
+
+    void setPropertyArray(const std::string &name, const std::vector<IniValue> &value);
 
     bool hasProperty(const std::string &name) const;
 };

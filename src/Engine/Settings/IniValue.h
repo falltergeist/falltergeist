@@ -24,6 +24,7 @@
 // C++ standard includes
 #include <string>
 #include <iosfwd>
+#include <vector>
 
 // Falltergeist includes
 
@@ -31,7 +32,6 @@
 
 namespace Falltergeist
 {
-
 class IniValue
 {
 public:
@@ -40,7 +40,8 @@ public:
         DOUBLE,
         INTEGER,
         BOOLEAN,
-        STRING
+        STRING,
+        ARRAY
     };
 
     IniValue();
@@ -57,6 +58,7 @@ public:
     IniValue(bool booleanVal);
     IniValue(std::string stringVal);
     IniValue(const IniValue &rhs);
+    IniValue(std::vector<IniValue> iniVal);
 
     IniValue::Tag tag() const;
     static std::string tagString(IniValue::Tag tag);
@@ -72,6 +74,7 @@ private:
         int _integerVal;
         bool _booleanVal;
         std::string _stringVal;
+        std::vector<IniValue> _iniVal;
     };
 };
 

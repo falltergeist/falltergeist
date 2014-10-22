@@ -74,6 +74,18 @@ void IniSection::_property(PropertyMapConstIterator iter, std::string &ret, cons
     ret = iter->second._stringVal;
 }
 
+void IniSection::_property(PropertyMapConstIterator iter, std::vector<IniValue> &ret)
+{
+    std::vector<IniValue> def;
+    if (!_hasType(iter, IniValue::Tag::ARRAY))
+    {
+        ret = def;
+        return;
+    }
+
+    ret = iter->second._iniVal;
+}
+
 bool IniSection::_hasType(PropertyMapConstIterator iter, IniValue::Tag tag)
 {
     if (iter->second._tag == tag) return true;
@@ -103,6 +115,11 @@ void IniSection::setPropertyBool(const std::string &name, bool value)
 }
 
 void IniSection::setPropertyString(const std::string &name, const std::string &value)
+{
+    _properties[name] = IniValue(value);
+}
+
+void IniSection::setPropertyArray(const std::string &name, const std::vector<IniValue> &value)
 {
     _properties[name] = IniValue(value);
 }
@@ -162,6 +179,20 @@ std::string IniSection::propertyString(const std::string &name, const std::strin
     };
     std::string ret;
     IniSection::_property(iter, ret, def);
+    return ret;
+}
+
+std::vector<IniValue> IniSection::propertyArray(const std::string &name)
+{
+    PropertyMapConstIterator iter = _properties.find(name);
+    std::vector<IniValue> def;
+    if (iter == _properties.end())
+    {
+        Logger::warning("INI") << "Property `" << name << "` not found, use default value: " << def.size() << std::endl;
+        return def;
+    };
+    std::vector<IniValue> ret;
+    IniSection::_property(iter, ret);
     return ret;
 }
 

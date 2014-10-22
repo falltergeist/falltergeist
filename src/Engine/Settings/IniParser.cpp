@@ -39,6 +39,9 @@ void IniParser::_trim(std::string &line)
 
 void IniParser::_rtrim(std::string &line)
 {
+    if (line.find(";")!=std::string::npos)
+      line.erase(line.find(";")-1);
+
     line.erase(find_if(line.rbegin(), line.rend(), std::not1(std::ptr_fun<int, int>(isspace))).base(), line.end());
 }
 
@@ -52,35 +55,39 @@ void IniParser::_toLower(std::string &line)
     std::transform(line.begin(), line.end(), line.begin(), ::tolower);
 }
 
-bool IniParser::_parseBool(std::string &name, std::string &line, std::shared_ptr<IniFile> ini)
+bool IniParser::_tryBool(std::string &line, bool *val)
 {
     auto maybeBool = line;
     _toLower(maybeBool);
-    bool value;
-    bool isBool = false;
 
     if (maybeBool == "yes" || maybeBool == "true" || maybeBool == "on")
     {
-        value = true;
-        isBool = true;
+        *val = true;
+        return true;
     }
     else if (maybeBool == "no" || maybeBool == "false" || maybeBool == "off")
     {
-        value = false;
-        isBool = true;
+        *val = false;
+        return true;
     }
+    return false;
+}
 
-    if (isBool)
+bool IniParser::_parseBool(std::string &name, std::string &line, std::shared_ptr<IniFile> ini)
+{
+    bool value;
+    if (_tryBool(line, &value))
     {
         Logger::debug("INI") << "boolean value found for property `" << name << "`: " <<
                 std::boolalpha << value << std::noboolalpha << std::endl;
         ini->section(_section)->setPropertyBool(name, value);
+        return true;
     }
 
-    return isBool;
+    return false;
 }
 
-bool IniParser::_parseDecimal(std::string &name, std::string &line, std::shared_ptr<IniFile> ini)
+int IniParser::_tryDecimal(std::string &line, int* intval,double* doubleval)
 {
     std::istringstream ss(line);
     enum { BEGIN, SIGN, INTEGRAL, DOT, FRACTIONAL, EXP, EXP_SIGN, EXP_DIGITS, ERROR } state = BEGIN;
@@ -186,22 +193,109 @@ bool IniParser::_parseDecimal(std::string &name, std::string &line, std::shared_
 
     if (state == INTEGRAL)
     {
-        int value;
-        ss >> value;
-        Logger::debug("INI") << "integer value found for property `" << name << "`: " << value << std::endl;
-        ini->section(_section)->setPropertyInt(name, value);
-        return  true;
+        ss >> *intval;
+        return 1;
     }
 
     if (state == FRACTIONAL || state == EXP || state == EXP_DIGITS)
     {
-        double value;
-        ss >> value;
-        Logger::debug("INI") << "double value found for property `" << name << "`: " << value << std::endl;
-        ini->section(_section)->setPropertyDouble(name, value);
+        ss >> *doubleval;
+        return -1;
+    }
+
+    return 0;
+}
+
+
+bool IniParser::_parseDecimal(std::string &name, std::string &line, std::shared_ptr<IniFile> ini)
+{
+    int intval;
+    double doubleval;
+    int ret = _tryDecimal(line, &intval, &doubleval);
+    if (ret!=0)
+    {
+        if (ret > 0)
+        {
+            Logger::debug("INI") << "integer value found for property `" << name << "`: " << intval << std::endl;
+            ini->section(_section)->setPropertyInt(name, intval);
+            return  true;
+        }
+
+        else if (ret < 0)
+        {
+            Logger::debug("INI") << "double value found for property `" << name << "`: " << doubleval << std::endl;
+            ini->section(_section)->setPropertyDouble(name, doubleval);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+bool IniParser::_parseArrayBool(std::vector<IniValue> &vec, std::string val)
+{
+    bool value;
+    if (_tryBool(val,&value))
+    {
+        Logger::debug("INI") << "boolean value found for property `" << "`: " <<
+                std::boolalpha << value << std::noboolalpha << std::endl;
+        vec.push_back(IniValue(value));
         return true;
     }
 
+    return false;
+}
+
+
+bool IniParser::_parseArrayDecimal(std::vector<IniValue> &vec, std::string val)
+{
+    int intval;
+    double doubleval;
+    int ret = _tryDecimal(val, &intval, &doubleval);
+    if (ret!=0)
+    {
+        if (ret > 0)
+        {
+            Logger::debug("INI") << "integer value found for property `" << "`: " << intval << std::endl;
+            vec.push_back(IniValue(intval));
+            return true;
+        }
+
+        if (ret < 0)
+        {
+            Logger::debug("INI") << "double value found for property `" << "`: " << doubleval << std::endl;
+            vec.push_back(IniValue(doubleval));
+            return true;
+        }
+    }
+    return false;
+}
+
+bool IniParser::_parseArray(std::string &name, std::string &line, std::shared_ptr<IniFile> ini)
+{
+    auto ss = line;
+    std::vector<IniValue> _vec;
+    while (ss.find(",")!=std::string::npos)
+    {
+        std::string val=ss.substr(0,ss.find(","));
+        ss.erase(0,ss.find(",")+1);
+        if (_parseArrayDecimal(_vec,val)) continue;
+        if (_parseArrayBool(_vec,val)) continue;
+        Logger::debug("INI") << "string value found for property `" << "`: " << val << std::endl;
+        _vec.push_back(IniValue(val));
+    }
+    if (_vec.size()>0)
+    {
+        if (!_parseArrayDecimal(_vec,ss) && !_parseArrayBool(_vec,ss))
+        {
+            Logger::debug("INI") << "string value found for property `" << "`: " << ss << std::endl;
+            _vec.push_back(IniValue(ss));
+        }
+        ini->section(_section)->setPropertyArray(name, _vec);
+        Logger::debug("INI") << "array value found for property `" << name << "`: " << line << std::endl;
+        return true;
+    }
     return false;
 }
 
@@ -257,6 +351,8 @@ std::shared_ptr<IniFile> IniParser::parse()
         if (_parseBool(name, value, ini)) continue;
         // Try to parse decimal (double or integer)
         if (_parseDecimal(name, value, ini)) continue;
+        // Try to parse array
+        if (_parseArray(name, value, ini)) continue;
 
         // Interpret value as string if none of other parsers succeeded
         Logger::debug("INI") << "string value found for property `" << name << "`: " << value << std::endl;
