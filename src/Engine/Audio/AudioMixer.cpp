@@ -77,12 +77,19 @@ void myMusicPlayer(void *udata, uint8_t *stream, int len)
 void AudioMixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len)
 {
     if (_paused) return;
-  
+
     auto pacm = *reinterpret_cast<std::shared_ptr<libfalltergeist::AcmFileType>*>(udata);
     if (pacm->samplesLeft() <= 0)
     {
-        Mix_HookMusic(NULL,NULL);
-        return;
+        if (_loop)
+        {
+            pacm->rewind();
+        }
+        else
+        {
+            Mix_HookMusic(NULL,NULL);
+            return;
+        }
     }
 
     if (pacm->filename().find("music") != std::string::npos)
@@ -105,8 +112,9 @@ void AudioMixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len)
     }
 }
 
-void AudioMixer::playACMMusic(std::shared_ptr<libfalltergeist::AcmFileType> acm)
+void AudioMixer::playACMMusic(std::shared_ptr<libfalltergeist::AcmFileType> acm, bool loop)
 {
+    _loop = loop;
     musicCallback = std::bind(&AudioMixer::_musicCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
     acm->init();
     Mix_HookMusic(myMusicPlayer, reinterpret_cast<void *>(&acm));
