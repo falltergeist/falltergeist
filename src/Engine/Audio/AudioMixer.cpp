@@ -39,6 +39,10 @@ AudioMixer::AudioMixer()
 
 AudioMixer::~AudioMixer()
 {
+    for (auto& x: _sfx)
+    {
+        Mix_FreeChunk(x.second);
+    }
     Mix_HookMusic(NULL,NULL);
     Mix_CloseAudio();
 }
@@ -144,13 +148,13 @@ void AudioMixer::playACMSound(std::shared_ptr<libfalltergeist::AcmFileType> acm)
 {
     Logger::debug("AudioMixer") << "playing: " << acm->filename() << std::endl;
     Mix_Chunk *chunk = NULL;
-    for (auto& x: _sfx)
+
+    auto it = _sfx.find(acm->filename());
+    if (it != _sfx.end())
     {
-        if (x.first == acm->filename())
-        {
-            chunk=x.second;
-        }
+        chunk=it->second;
     }
+
     if (!chunk)
     {
         acm->init();
@@ -171,6 +175,11 @@ void AudioMixer::playACMSound(std::shared_ptr<libfalltergeist::AcmFileType> acm)
 
         // make SDL_mixer chunk
         chunk = Mix_QuickLoad_RAW(cvt.buf, cvt.len*cvt.len_ratio);
+        if (_sfx.size() > 100) // TODO: make this configurable
+        {
+            Mix_FreeChunk(_sfx.begin()->second);
+            _sfx.erase(_sfx.begin());
+        }
         _sfx.insert(std::pair<std::string, Mix_Chunk*>(acm->filename(), chunk));
     }
     Mix_PlayChannel(-1, chunk, 0);
