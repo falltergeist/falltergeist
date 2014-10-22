@@ -19,11 +19,9 @@
  */
 
 // C++ standard includes
+#include <algorithm>
 
 // Falltergeist includes
-#include <algorithm> 
-
-#include "../../Engine/CrossPlatform.h"
 #include "../../Engine/Exception.h"
 #include "../../Engine/Settings/IniFile.h"
 

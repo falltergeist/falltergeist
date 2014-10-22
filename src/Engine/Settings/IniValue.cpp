@@ -19,6 +19,7 @@
  */
 
 // C++ standard includes
+#include <sstream>
 
 // Falltergeist includes
 #include "../../Engine/Settings/IniValue.h"
@@ -37,6 +38,10 @@ IniValue::~IniValue()
     if (_tag == IniValue::Tag::STRING)
     {
         _stringVal.~string();
+    }
+    if (_tag == IniValue::Tag::ARRAY)
+    {
+        _iniVal.~vector();
     }
 }
 
@@ -61,6 +66,9 @@ IniValue &IniValue::operator=(const IniValue &rhs)
         case IniValue::Tag::STRING:
             new(&_stringVal) std::string(rhs._stringVal);
             break;
+        case IniValue::Tag::ARRAY:
+            new(&_iniVal) std::vector<IniValue>(rhs._iniVal);
+            break;
     }
 
     return *this;
@@ -78,6 +86,11 @@ IniValue::IniValue(bool booleanVal) : _tag(IniValue::Tag::BOOLEAN), _booleanVal(
 IniValue::IniValue(std::string stringVal) : _tag(IniValue::Tag::STRING)
 {
     new(&_stringVal) std::string(stringVal);
+}
+
+IniValue::IniValue(std::vector<IniValue> iniVal) : _tag(IniValue::Tag::ARRAY)
+{
+    new(&_iniVal) std::vector<IniValue>(iniVal);
 }
 
 IniValue::IniValue(const IniValue &rhs) : _tag(rhs._tag)
@@ -98,6 +111,9 @@ IniValue::IniValue(const IniValue &rhs) : _tag(rhs._tag)
         case IniValue::Tag::STRING:
             new(&_stringVal) std::string(rhs._stringVal);
             break;
+        case IniValue::Tag::ARRAY:
+            new(&_iniVal) std::vector<IniValue>(rhs._iniVal);
+            break;
     }
 }
 
@@ -113,6 +129,8 @@ std::string IniValue::tagString(IniValue::Tag tag)
             return "bool";
         case IniValue::Tag::STRING:
             return "string";
+        case IniValue::Tag::ARRAY:
+            return "array";
     }
 
     return "unreachable";
@@ -130,6 +148,16 @@ std::string IniValue::value() const
             return _booleanVal ? "true" : "false";
         case IniValue::Tag::STRING:
             return _stringVal;
+        case IniValue::Tag::ARRAY:
+            std::stringstream ss;
+            for(size_t i = 0; i < _iniVal.size(); ++i)
+            {
+                if(i != 0)
+                    ss << ",";
+                ss << _iniVal[i].value();
+            }
+            std::string _s = ss.str();
+            return _s;
     }
 
     return "unreachable";
