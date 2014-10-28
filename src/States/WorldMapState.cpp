@@ -135,8 +135,9 @@ void WorldMapState::render()
         deltaY = worldMapSizeY - mapHeight;
     }
 
-    unsigned int worldTileMinX; // start X coordinate of current tile on world map
-    unsigned int worldTileMinY; // start Y coordinate of current tile on world map
+    signed int worldTileMinX; // start X coordinate of current tile on world map
+    signed int worldTileMinY; // start Y coordinate of current tile on world map
+    // NB: can be unsigned, but it compared with signed deltaX and deltaY, so...
 
     // copy tiles to screen if needed
     for (unsigned int y=0; y<tilesNumberY; y++)
@@ -150,10 +151,10 @@ void WorldMapState::render()
             // checking current tile borders
             // either xmin or xmax SHOULD belongs to map area AND
             // either ymin or ymax SHOULD belongs to map area
-            if ( ((deltaX<=worldTileMinX) && (worldTileMinX<=deltaX+mapWidth) ||
-                  (deltaX<=worldTileMinX+tileWidth) && (worldTileMinX+tileWidth<=deltaX+mapWidth)) &&
-                 ((deltaY<=worldTileMinY) && (worldTileMinY<=deltaY+mapHeight) ||
-                  (deltaY<=worldTileMinY+tileHeight) && (worldTileMinY+tileHeight<=deltaY+mapHeight)) )
+            if ( (((deltaX<=worldTileMinX) && (worldTileMinX<=deltaX+(signed int)mapWidth)) ||
+                  ((deltaX<=worldTileMinX+(signed int)tileWidth) && (worldTileMinX+(signed int)tileWidth<=deltaX+(signed int)mapWidth))) &&
+                 (((deltaY<=worldTileMinY) && (worldTileMinY<=deltaY+(signed int)mapHeight)) ||
+                  ((deltaY<=worldTileMinY+(signed int)tileHeight) && (worldTileMinY+(signed int)tileHeight<=deltaY+(signed int)mapHeight))) )
             {
                 _tiles->texture()->copyTo(_screenMap->texture(), x*tileWidth-deltaX, y*tileHeight-deltaY, 0, 0, tileWidth, tileHeight);
             }
