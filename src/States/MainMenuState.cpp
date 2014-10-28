@@ -26,6 +26,7 @@
 #include "../Engine/Graphics/Renderer.h"
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/ResourceManager.h"
+#include "../States/CreditsState.h"
 #include "../States/LoadGameState.h"
 #include "../States/MainMenuState.h"
 #include "../States/MovieState.h"
@@ -78,7 +79,8 @@ void MainMenuState::init()
     settingsButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MainMenuState::onSettingsButtonClick);
 
     // credits button
-    addUI("credits_button", new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*4));
+    auto creditsButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*4));
+    creditsButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MainMenuState::onCreditsButtonClick);
 
     // exit button
     auto exitButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*5));
@@ -144,6 +146,11 @@ void MainMenuState::onIntroButtonClick(MouseEvent* event)
 {
     Game::getInstance()->pushState(new MovieState(17));
     Game::getInstance()->pushState(new MovieState(1));
+}
+
+void MainMenuState::onCreditsButtonClick(MouseEvent* event)
+{
+    Game::getInstance()->pushState(new CreditsState());
 }
 
 }

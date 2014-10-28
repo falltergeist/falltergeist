@@ -15,13 +15,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-#ifndef FALLTERGEIST_MAINMENUSTATE_H
-#define FALLTERGEIST_MAINMENUSTATE_H
+#ifndef FALLTERGEIST_CREDITSSTATE_H
+#define FALLTERGEIST_CREDITSSTATE_H
 
 // C++ standard includes
-#include <memory>
 
 // Falltergeist includes
 #include "../Engine/State.h"
@@ -30,21 +30,23 @@
 
 namespace Falltergeist
 {
-    
-class MainMenuState : public State
-{
-public:
-    MainMenuState();
-    virtual ~MainMenuState();
-    virtual void init();
 
-    void onExitButtonClick(MouseEvent* event);
-    void onNewGameButtonClick(MouseEvent* event);
-    void onLoadGameButtonClick(MouseEvent* event);
-    void onSettingsButtonClick(MouseEvent* event);
-    void onIntroButtonClick(MouseEvent* event);
-    void onCreditsButtonClick(MouseEvent* event);
+class CreditsState : public State
+{
+protected:
+public:
+    CreditsState();
+    virtual ~CreditsState();
+
+    virtual void init();
+    virtual void think();
+    virtual void handle(Event* event);
+
+    void onCreditsFinished();
+private:
+    std::vector<TextArea*> _lines;
+    unsigned long int _lastTicks;
 };
 
 }
-#endif // FALLTERGEIST_MAINMENUSTATE_H
+#endif // FALLTERGEIST_CREDITSSTATE_H
