@@ -45,8 +45,63 @@ void Renderer::init()
 {
 }
 
+void Renderer::think()
+{
+    if (_fadeDone) return;
+    unsigned int _nt = SDL_GetTicks();
+    if (_nt-_lt>_delay)
+    {
+        _alpha+=_step;
+        if (_alpha<=0 || _alpha>255)
+        {
+            _alpha=0;
+            _fadeDone=true;
+            return;
+        }
+        _lt=_nt;
+    }
+    _fadeColor.a=_alpha;
+}
+
+bool Renderer::fadeDone()
+{
+    return _fadeDone;
+}
+
+void Renderer::_fade(unsigned int r, unsigned int g, unsigned int b, unsigned int time, short dir)
+{
+    _fadeColor.r=r;
+    _fadeColor.g=g;
+    _fadeColor.b=b;
+    if (dir<0)
+    {
+      _fadeColor.a=255;
+      _alpha=255;
+    }
+    else
+    {
+      _fadeColor.a=0;
+      _alpha=0;
+    }
+    _step=dir;
+    _fadeDone=false;
+    _delay=round(time/256);
+}
+
+void Renderer::fadeIn(unsigned int r, unsigned int g, unsigned int b, unsigned int time)
+{
+    _fade(r,g,b,time, -1);
+}
+
+void Renderer::fadeOut(unsigned int r, unsigned int g, unsigned int b, unsigned int time)
+{
+    _fade(r,g,b,time, 1);
+}
+
+
 void Renderer::beginFrame()
 {
+    think();
 }
 
 void Renderer::endFrame()

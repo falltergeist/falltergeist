@@ -133,6 +133,12 @@ void SDLRenderer::beginFrame()
 void SDLRenderer::endFrame()
 {
     Renderer::endFrame();
+    if (!_fadeDone)
+    {
+        SDL_SetRenderDrawBlendMode(_renderer,SDL_BLENDMODE_BLEND);
+        SDL_SetRenderDrawColor(_renderer, _fadeColor.r,_fadeColor.g, _fadeColor.b,_fadeColor.a);
+        SDL_RenderFillRect(_renderer, NULL);
+    }
     SDL_RenderPresent(_renderer);
 }
 

@@ -41,6 +41,13 @@ protected:
     unsigned int _height;
     std::string _name;
     SDL_Window* _window;
+    unsigned int _lt=0;
+    unsigned int _delay=0;
+    unsigned int _alpha=0;
+    unsigned int _fadeDone=true;
+    SDL_Color _fadeColor;
+    short _step;
+    virtual void _fade(unsigned int r, unsigned int g, unsigned int b, unsigned int time, short dir);
 public:
     Renderer(unsigned int width, unsigned int height);
     virtual ~Renderer();
@@ -49,9 +56,13 @@ public:
 
     virtual void beginFrame();
     virtual void endFrame();
+    virtual void think();
 
     unsigned int width();
     unsigned int height();
+    bool fadeDone();
+    virtual void fadeIn(unsigned int r, unsigned int g, unsigned int b, unsigned int time);
+    virtual void fadeOut(unsigned int r, unsigned int g, unsigned int b, unsigned int time);
     void setCaption(std::string caption);
     SDL_Window* window();
 
