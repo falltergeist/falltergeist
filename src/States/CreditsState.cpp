@@ -64,9 +64,9 @@ void CreditsState::init()
     ss << credits.get();
     std::string line;
 
-    auto font_default = ResourceManager::font("font4.aaf", 0xb89c28FF);
-    auto font_at = ResourceManager::font("font3.aaf", 0x907824FF);
-    auto font_hash = ResourceManager::font("font4.aaf", 0xccccccFF);
+    auto font_default = ResourceManager::font("font4.aaf", 0x907824ff);
+    auto font_at = ResourceManager::font("font3.aaf", 0x706050ff);
+    auto font_hash = ResourceManager::font("font4.aaf", 0x8c8c84ff);
 
     int y = 0;
     while (std::getline(ss, line))
