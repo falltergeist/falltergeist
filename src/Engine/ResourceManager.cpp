@@ -242,7 +242,7 @@ Texture* ResourceManager::texture(std::string filename)
     }
     else
     {
-        throw Exception("ResourceManager::surface() - unknow image type:" + filename);
+        throw Exception("ResourceManager::surface() - unknown image type:" + filename);
     }
 
     _textures.insert(std::pair<std::string, Texture*>(filename, texture));

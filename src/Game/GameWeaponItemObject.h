@@ -40,7 +40,7 @@ protected:
     unsigned int _damageType = 0;
     unsigned int _rangePrimary = 0;
     unsigned int _rangeSecondary = 0;
-    unsigned int _minimumStrenght = 0;
+    unsigned int _minimumStrength = 0;
     unsigned int _actionCostPrimary = 0;
     unsigned int _actionCostSecondary = 0;
     unsigned int _burstRounds = 0;
@@ -70,8 +70,8 @@ public:
     unsigned int rangeSecondary();
     void setRangeSecondary(unsigned int value);
 
-    unsigned int minimumStrenght();
-    void setMinimumStrenght(unsigned int value);
+    unsigned int minimumStrength();
+    void setMinimumStrength(unsigned int value);
 
     unsigned int actionCostPrimary();
     void setActionCostPrimary(unsigned int value);

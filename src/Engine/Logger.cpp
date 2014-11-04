@@ -47,7 +47,7 @@ std::ostream &Logger::log(Logger::Level level, const std::string &subsystem)
     return std::cout << levelString(level) << subsystemMsg << std::dec;
 }
 
-// Initial level; overriden with config option with default level INFO
+// Initial level; overridden with config option with default level INFO
 Logger::Level Logger::_level = Logger::Level::LEVEL_DEBUG;
 bool Logger::_useColors = true;
 
@@ -151,7 +151,7 @@ void Logger::setLevel(const std::string &level)
     }
     else
     {
-        warning() << "Unkown level " << level << " ignored";
+        warning() << "Unknown level " << level << " ignored";
         return;
     }
 

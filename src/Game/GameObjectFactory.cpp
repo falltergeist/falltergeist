@@ -109,7 +109,7 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
                     ((GameWeaponItemObject*)object)->setDamageType(proto->weaponDamageType());
                     ((GameWeaponItemObject*)object)->setRangePrimary(proto->weaponRangePrimary());
                     ((GameWeaponItemObject*)object)->setRangeSecondary(proto->weaponRangeSecondary());
-                    ((GameWeaponItemObject*)object)->setMinimumStrenght(proto->weaponMinimumStrenght());
+                    ((GameWeaponItemObject*)object)->setMinimumStrength(proto->weaponMinimumStrenght());
                     ((GameWeaponItemObject*)object)->setActionCostPrimary(proto->weaponActionCostPrimary());
                     ((GameWeaponItemObject*)object)->setActionCostSecondary(proto->weaponActionCostSecondary());
                     ((GameWeaponItemObject*)object)->setBurstRounds(proto->weaponBurstRounds());
