@@ -27,12 +27,15 @@
 #include <fstream>
 #include <stdexcept>
 
-#if !defined(__APPLE__) && !defined(_WIN32) && !defined(WIN32)
+#if defined(__unix__) || defined(__APPLE__)
+  #include <sys/param.h>
+#endif
+
+#if defined(__linux__)
     #include <mntent.h>
 #endif
 
-#if defined (__APPLE__)
-    #include <sys/param.h>
+#if defined (__APPLE__) || defined(BSD)
     #include <sys/ucred.h>
     #include <sys/mount.h>
 #endif
@@ -40,7 +43,7 @@
 #if defined(_WIN32) || defined(WIN32)
     #include <windows.h>
     #include <shlobj.h>
-#elif defined(__unix__) || defined(__MACH__)
+#elif defined(__unix__) || defined(__APPLE__)
     #include <sys/stat.h>
     #include <sys/types.h>
     #include <unistd.h>
@@ -79,10 +82,12 @@ std::string CrossPlatform::getVersion()
     _version = "Falltergeist 0.1.6";
 #if defined(_WIN32) || defined(WIN32)
     _version += " (Windows)";
-#elif defined(__unix__)
+#elif defined(__linux__)
     _version += " (Linux)";
-#elif defined(__MACH__)
+#elif defined(__APPLE__)
     _version += " (Apple)";
+#elif defined(BSD)
+    _version += " (BSD)";
 #endif
     return _version;
 }
@@ -123,7 +128,7 @@ std::vector<std::string> CrossPlatform::getCdDrivePaths()
         }
     }
 
-#elif defined(__unix__)
+#elif defined(__linux__)
     FILE *mtab = setmntent("/etc/mtab", "r");
     struct mntent *m;
     struct mntent mnt;
@@ -138,7 +143,7 @@ std::vector<std::string> CrossPlatform::getCdDrivePaths()
         }
     }
     endmntent(mtab);
-#elif defined (__APPLE__)
+#elif defined (BSD)
     struct statfs *mntbuf;
     int mntsize = getmntinfo(&mntbuf, MNT_NOWAIT);
     for ( int i = 0; i < mntsize; i++ )
@@ -265,7 +270,7 @@ std::vector<std::string> *CrossPlatform::findFalloutDataFiles()
 
 bool CrossPlatform::_createDirectory(const char *dir)
 {
-#if defined(__unix__) || defined(__MACH__) // Linux, OS X, BSD
+#if defined(__unix__) || defined(__APPLE__) // Linux, OS X, BSD
     struct stat st;
 
     if (stat(dir, &st) == 0)
@@ -311,7 +316,7 @@ bool CrossPlatform::_createDirectory(const char *dir)
 
 char *CrossPlatform::_copyString(const char *str)
 {
-#if defined(__unix__) || defined(__MACH__)
+#if defined(__unix__) || defined(__APPLE__)
     return strdup(str);
 #else
     char *ret = (char*)malloc((strlen(str) + 1) * sizeof(*str));
@@ -351,7 +356,7 @@ std::string CrossPlatform::getConfigPath()
     if (maybeConfigHome == nullptr || *maybeConfigHome == '\0')
         return getHomeDirectory() + "/.config/falltergeist";
     return std::string(maybeConfigHome) + "/falltergeist";
-#elif defined(__MACH__)
+#elif defined(__APPLE__)
     return getHomeDirectory() + "/Library/Application Support/falltergeist";
 #elif defined(_WIN32) || defined(WIN32)
     char path[256];
