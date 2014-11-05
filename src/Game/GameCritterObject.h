@@ -50,12 +50,12 @@ protected:
 
     unsigned int _currentHand = HAND_RIGHT;
 
-    std::vector<int> _stats = {0, 0, 0, 0, 0, 0, 0};
-    std::vector<int> _statsBonus = {0, 0, 0, 0, 0, 0, 0};
-    std::vector<int> _skills = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    std::vector<int> _traits = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    std::vector<int> _damageResist = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-    std::vector<int> _damageThreshold = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> _stats = std::vector<int>{0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> _statsBonus = std::vector<int>{0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> _skills = std::vector<int>{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> _traits = std::vector<int>{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> _damageResist = std::vector<int>{0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> _damageThreshold = std::vector<int>{0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::vector<GameItemObject*> _inventory;
     GameArmorItemObject* _armorSlot = 0;
     GameItemObject* _leftHandSlot = 0;

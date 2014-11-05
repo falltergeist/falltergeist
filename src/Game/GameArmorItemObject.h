@@ -34,8 +34,8 @@ namespace Falltergeist
 class GameArmorItemObject : public GameItemObject
 {
 protected:
-    std::vector<int> _damageResist = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-    std::vector<int> _damageThreshold = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> _damageResist = std::vector<int>{0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> _damageThreshold = std::vector<int>{0, 0, 0, 0, 0, 0, 0, 0, 0};
     int _perk = -1;
     unsigned int _maleFID = 0;
     unsigned int _femaleFID = 0;

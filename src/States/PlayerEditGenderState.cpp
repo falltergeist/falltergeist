@@ -53,17 +53,17 @@ void PlayerEditGenderState::init()
     bg->setX(bgX+236);
     bg->setY(bgY+0);
 
-    _maleImage = new ImageList((std::vector<std::string>){
-                                    "art/intrface/maleoff.frm",
-                                    "art/intrface/maleon.frm"
-                                }, bgX+260, bgY+2);
+    std::vector<std::string> maleImage = std::vector<std::string>{
+        "art/intrface/maleoff.frm",
+        "art/intrface/maleon.frm" };
+    _maleImage = new ImageList(maleImage, bgX+260, bgY+2);
     _maleImage->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditGenderState::onMaleButtonPress);
     if (Game::getInstance()->player()->gender() == 0) _maleImage->setCurrentImage(1); // 0 - male
 
-    _femaleImage = new ImageList((std::vector<std::string>){
-                                      "art/intrface/femoff.frm",
-                                      "art/intrface/femon.frm"
-                                  }, bgX+310, bgY+2);
+    std::vector<std::string> femaleImage = std::vector<std::string>{
+        "art/intrface/femoff.frm",
+        "art/intrface/femon.frm" };
+    _femaleImage = new ImageList(femaleImage, bgX + 310, bgY + 2);
     _femaleImage->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditGenderState::onFemaleButtonPress);
     if (Game::getInstance()->player()->gender() == 1) _femaleImage->setCurrentImage(1); // 1 - female
 
