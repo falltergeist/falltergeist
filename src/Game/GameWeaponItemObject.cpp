@@ -98,14 +98,14 @@ void GameWeaponItemObject::setRangeSecondary(unsigned int value)
 }
 
 \
-unsigned int GameWeaponItemObject::minimumStrenght()
+unsigned int GameWeaponItemObject::minimumStrength()
 {
-    return _minimumStrenght;
+    return _minimumStrength;
 }
 
-void GameWeaponItemObject::setMinimumStrenght(unsigned int value)
+void GameWeaponItemObject::setMinimumStrength(unsigned int value)
 {
-    _minimumStrenght = value;
+    _minimumStrength = value;
 }
 
 unsigned int GameWeaponItemObject::actionCostPrimary()

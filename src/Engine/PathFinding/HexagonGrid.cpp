@@ -31,7 +31,7 @@
 namespace Falltergeist
 {
 
-struct HeuristicComparsion : public std::binary_function<Hexagon*, Hexagon*, bool>
+struct HeuristicComparison : public std::binary_function<Hexagon*, Hexagon*, bool>
 {
     bool operator()(Hexagon* lh, Hexagon* rh) const
     {
@@ -138,7 +138,7 @@ std::vector<Hexagon*> HexagonGrid::findPath(Hexagon* from, Hexagon* to)
 {
     Hexagon* current = 0;
     std::vector<Hexagon*> result;
-    std::priority_queue<Hexagon*, std::vector<Hexagon*>, HeuristicComparsion> unvisited;
+    std::priority_queue<Hexagon*, std::vector<Hexagon*>, HeuristicComparison> unvisited;
     unsigned int cameFrom[200*200] = {};
     unsigned int costSoFar[200*200] = {};
 
