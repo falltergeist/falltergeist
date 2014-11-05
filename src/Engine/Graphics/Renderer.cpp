@@ -18,6 +18,7 @@
  */
 
 // C++ standard includes
+#include <cmath>
 
 // Falltergeist includes
 #include "../../Engine/Graphics/Renderer.h"

@@ -18,6 +18,7 @@
  */
 
 // C++ standard includes
+#include <functional>
 #include <string>
 
 // Falltergeist includes

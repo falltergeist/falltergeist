@@ -43,6 +43,9 @@
 #if defined(_WIN32) || defined(WIN32)
     #include <windows.h>
     #include <shlobj.h>
+    #ifdef _MSC_VER
+        #include <direct.h>
+    #endif
 #elif defined(__unix__) || defined(__APPLE__)
     #include <sys/stat.h>
     #include <sys/types.h>
