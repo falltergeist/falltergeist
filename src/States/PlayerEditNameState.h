@@ -47,7 +47,7 @@ public:
     void init();
     void think();
     void onDoneButtonClick(MouseEvent* event);
-    void onKeyboardPress(std::shared_ptr<KeyboardEvent> event);
+    void onKeyboardPress(KeyboardEvent* event);
 };
 
 
