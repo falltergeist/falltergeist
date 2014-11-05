@@ -335,8 +335,12 @@ set(SOURCES main.cpp
             src/VM/VMStackPointerValue.h
             )
 
-add_definitions (-std=c++11 -Wall)
 set(CMAKE_BUILD_TYPE Debug)
+
+if(MSVC)
+    include_directories(${CMAKE_SOURCE_DIR}/src/MSVC)
+else()
+    add_definitions (-std=c++11 -Wall)
 endif()
 
 if(NOT LIBFALLTERGEIST_USE_EXTERNAL)
