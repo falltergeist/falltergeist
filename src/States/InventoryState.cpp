@@ -436,43 +436,29 @@ void InventoryState::_screenShow (unsigned int PID)
     if (PID == 0)
     {
         playerNameLabel->setText(player->name());
-        screenLabel->setVisible(false);
-        statsLabel->setVisible(true);
-        statsValuesLabel->setVisible(true);
-        textLabel->setVisible(true);
-        hitPointsLabel->setVisible(true);
-        armorClassLabel->setVisible(true);
-        damageThresholdLabel->setVisible(true);
-        damageResistanceLabel->setVisible(true);
-        line2->setVisible(true);
-        line3->setVisible(true);
-        totalWtLabel->setVisible(true);
-        weightLabel->setVisible(true);
-        weightMaxLabel->setVisible(true);
-        leftHandLabel->setVisible(true);
-        rightHandLabel->setVisible(true);
     }
     else
     {
         auto msg = ResourceManager::msgFileType("text/english/game/pro_item.msg");
         playerNameLabel->setText(msg->message(PID*100)->text()); // item name
         screenLabel->setText(msg->message(PID*100+1)->text()); // item dedcription
-        screenLabel->setVisible(true);
-        statsLabel->setVisible(false);
-        statsValuesLabel->setVisible(false);
-        textLabel->setVisible(false);
-        hitPointsLabel->setVisible(false);
-        armorClassLabel->setVisible(false);
-        damageThresholdLabel->setVisible(false);
-        damageResistanceLabel->setVisible(false);
-        line2->setVisible(false);
-        line3->setVisible(false);
-        totalWtLabel->setVisible(false);
-        weightLabel->setVisible(false);
-        weightMaxLabel->setVisible(false);
-        leftHandLabel->setVisible(false);
-        rightHandLabel->setVisible(false);
     }
+    
+    screenLabel->setVisible(PID != 0);
+    statsLabel->setVisible(PID == 0);
+    statsValuesLabel->setVisible(PID == 0);
+    textLabel->setVisible(PID == 0);
+    hitPointsLabel->setVisible(PID == 0);
+    armorClassLabel->setVisible(PID == 0);
+    damageThresholdLabel->setVisible(PID == 0);
+    damageResistanceLabel->setVisible(PID == 0);
+    line2->setVisible(PID == 0);
+    line3->setVisible(PID == 0);
+    totalWtLabel->setVisible(PID == 0);
+    weightLabel->setVisible(PID == 0);
+    weightMaxLabel->setVisible(PID == 0);
+    leftHandLabel->setVisible(PID == 0);
+    rightHandLabel->setVisible(PID == 0);
 }
 
 }
