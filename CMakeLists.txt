@@ -22,11 +22,16 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 project(falltergeist)
 
-find_package(LIBFALLTERGEIST REQUIRED)
-if(NOT LIBFALLTERGEIST_FOUND)
-          message(FATAL_ERROR "libfalltergeist library not found")
-endif(NOT LIBFALLTERGEIST_FOUND)
-include_directories(${LIBFALLTERGEIST_INCLUDE_DIR})
+option(LIBFALLTERGEIST_USE_EXTERNAL "Use external libfalltergeist" OFF)
+
+if(LIBFALLTERGEIST_USE_EXTERNAL)
+    find_package(LIBFALLTERGEIST REQUIRED)
+    include_directories(${LIBFALLTERGEIST_INCLUDE_DIRS})
+else()
+    set(LIBFALLTERGEIST_LIBRARY falltergeist)
+    include_directories(${CMAKE_SOURCE_DIR}/lib/libfalltergeist)
+    set(LIBFALLTERGEIST_STANDALONE OFF CACHE BOOL "")
+endif()
 
 find_package(SDL2 REQUIRED)
 if(NOT SDL2_FOUND)
@@ -332,5 +337,12 @@ set(SOURCES main.cpp
 
 add_definitions (-std=c++11 -Wall)
 set(CMAKE_BUILD_TYPE Debug)
-add_executable(falltergeist ${SOURCES})
-target_link_libraries(falltergeist ${SDL2_LIBRARY} ${SDLMIXER_LIBRARY} ${OPENGL_LIBRARIES} ${LIBFALLTERGEIST_LIBRARY})
+endif()
+
+if(NOT LIBFALLTERGEIST_USE_EXTERNAL)
+    add_subdirectory(lib/libfalltergeist)
+endif()
+
+add_executable(falltergeist-bin ${SOURCES})
+set_target_properties(falltergeist-bin PROPERTIES OUTPUT_NAME falltergeist)
+target_link_libraries(falltergeist-bin ${SDL2_LIBRARY} ${SDLMIXER_LIBRARY} ${OPENGL_LIBRARIES} ${LIBFALLTERGEIST_LIBRARY})
