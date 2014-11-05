@@ -48,12 +48,22 @@ if(NOT SDL_MIXER_LIBRARY AND SDLMIXER_LIBRARY)
   set(SDL_MIXER_LIBRARY ${SDLMIXER_LIBRARY} CACHE FILEPATH "file cache entry
 initialized from old variable name")
 endif()
+
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+  set(VC_LIB_PATH_SUFFIX lib/x64)
+else()
+  set(VC_LIB_PATH_SUFFIX lib/x86)
+endif()
+
 find_library(SDL_MIXER_LIBRARY
-  NAMES SDL2_mixer
+  NAMES 
+    SDL2_mixer
   HINTS
     ENV SDLMIXERDIR
     ENV SDLDIR
-  PATH_SUFFIXES lib
+  PATH_SUFFIXES
+    lib
+    ${VC_LIB_PATH_SUFFIX}
 )
 
 MESSAGE(${SDL_MIXER_LIBRARY})

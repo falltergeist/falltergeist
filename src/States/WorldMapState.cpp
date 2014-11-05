@@ -54,28 +54,28 @@ void WorldMapState::init()
     unsigned int renderHeight = Game::getInstance()->renderer()->height();
 
     // loading map tiles
-    _tiles = new ImageList((std::vector<std::string>){
-                            "art/intrface/wrldmp00.frm",
-                            "art/intrface/wrldmp01.frm",
-                            "art/intrface/wrldmp02.frm",
-                            "art/intrface/wrldmp03.frm",
-                            "art/intrface/wrldmp04.frm",
-                            "art/intrface/wrldmp05.frm",
-                            "art/intrface/wrldmp06.frm",
-                            "art/intrface/wrldmp07.frm",
-                            "art/intrface/wrldmp08.frm",
-                            "art/intrface/wrldmp09.frm",
-                            "art/intrface/wrldmp10.frm",
-                            "art/intrface/wrldmp11.frm",
-                            "art/intrface/wrldmp12.frm",
-                            "art/intrface/wrldmp13.frm",
-                            "art/intrface/wrldmp14.frm",
-                            "art/intrface/wrldmp15.frm",
-                            "art/intrface/wrldmp16.frm",
-                            "art/intrface/wrldmp17.frm",
-                            "art/intrface/wrldmp18.frm",
-                            "art/intrface/wrldmp19.frm"
-                            }, 0, 0);
+    std::vector<std::string> imagelist = std::vector<std::string>{
+        "art/intrface/wrldmp00.frm",
+        "art/intrface/wrldmp01.frm",
+        "art/intrface/wrldmp02.frm",
+        "art/intrface/wrldmp03.frm",
+        "art/intrface/wrldmp04.frm",
+        "art/intrface/wrldmp05.frm",
+        "art/intrface/wrldmp06.frm",
+        "art/intrface/wrldmp07.frm",
+        "art/intrface/wrldmp08.frm",
+        "art/intrface/wrldmp09.frm",
+        "art/intrface/wrldmp10.frm",
+        "art/intrface/wrldmp11.frm",
+        "art/intrface/wrldmp12.frm",
+        "art/intrface/wrldmp13.frm",
+        "art/intrface/wrldmp14.frm",
+        "art/intrface/wrldmp15.frm",
+        "art/intrface/wrldmp16.frm",
+        "art/intrface/wrldmp17.frm",
+        "art/intrface/wrldmp18.frm",
+        "art/intrface/wrldmp19.frm"};
+    _tiles = new ImageList(imagelist, 0, 0);
 
     //auto cross = new Image("art/intrface/wmaploc.frm");
     _hotspot = new ImageButton(ImageButton::TYPE_MAP_HOTSPOT, 0, 0);

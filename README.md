@@ -11,17 +11,6 @@ IRC channel: #falltergeist on [freenode.net](http://webchat.freenode.net/?channe
 
 ##Compilation under linux
 
-First of all you need to compile libfalltergeist library:
-
-```
-git submodule init
-git submodule update
-cd lib/libfalltergeist && cmake . && make && cd -
-
-```
-
-Now you can compile Falltergeist:
-
 ```
 cmake . && make
 ```

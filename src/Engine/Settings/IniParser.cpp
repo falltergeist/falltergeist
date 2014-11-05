@@ -20,6 +20,7 @@
 
 // C++ standard includes
 #include <algorithm>
+#include <functional>
 #include <sstream>
 
 // Falltergeist includes

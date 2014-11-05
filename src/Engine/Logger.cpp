@@ -18,6 +18,7 @@
  */
 
 // C++ standard includes
+#include <string>
 
 // Falltergeist includes
 #include "../Engine/Logger.h"
