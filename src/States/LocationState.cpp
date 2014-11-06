@@ -87,6 +87,9 @@ void LocationState::init()
     if (initialized()) return;
     State::init();
 
+    setFullscreen(true);
+    setModal(true);
+
     auto game = Game::getInstance();
     setLocation("maps/" + game->engineSettings()->initialLocation() + ".map");
     game->pushState(new PlayerPanelState());

@@ -49,7 +49,9 @@ void PlayerEditAlertState::setMessage(std::string message)
 
 void PlayerEditAlertState::init()
 {
+    if (_initialized) return;
     State::init();
+
     setFullscreen(false);
     setModal(true);
 

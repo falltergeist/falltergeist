@@ -59,10 +59,12 @@ set(SOURCES main.cpp
             src/Engine/Event/EventHandler.h
             src/Engine/Event/EventEmitter.cpp
             src/Engine/Event/EventEmitter.h
-            src/Engine/Event/MouseEvent.cpp
-            src/Engine/Event/MouseEvent.h
             src/Engine/Event/KeyboardEvent.cpp
             src/Engine/Event/KeyboardEvent.h
+            src/Engine/Event/MouseEvent.cpp
+            src/Engine/Event/MouseEvent.h
+            src/Engine/Event/StateEvent.cpp
+            src/Engine/Event/StateEvent.h
             src/Engine/Exception.cpp
             src/Engine/Exception.h
             src/Engine/Font.cpp

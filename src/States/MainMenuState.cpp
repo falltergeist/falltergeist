@@ -21,6 +21,7 @@
 #include <sstream>
 
 // Falltergeist includes
+#include "../Engine/Event/StateEvent.h"
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Animation.h"
 #include "../Engine/Graphics/Renderer.h"
@@ -53,6 +54,9 @@ void MainMenuState::init()
 {
     if (_initialized) return;
     State::init();
+
+    setModal(true);
+    setFullscreen(true);
 
     Game::getInstance()->mouse()->setState(Mouse::BIG_ARROW);
 
@@ -151,6 +155,14 @@ void MainMenuState::onIntroButtonClick(MouseEvent* event)
 void MainMenuState::onCreditsButtonClick(MouseEvent* event)
 {
     Game::getInstance()->pushState(new CreditsState());
+}
+
+void MainMenuState::onStateActivate(StateEvent* event)
+{
+/*
+    MainMenuState* state = event->emitter();
+    state->playSoundOrSomething();
+*/
 }
 
 }

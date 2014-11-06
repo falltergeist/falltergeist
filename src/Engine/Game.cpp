@@ -24,6 +24,7 @@
 // Falltergeist includes
 #include "../Engine/Audio/AudioMixer.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/Event/StateEvent.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/GameTime.h"
@@ -126,15 +127,42 @@ Game::~Game()
 
 void Game::pushState(State* state)
 {
-    _states.push_back(state);
     if (!state->initialized()) state->init();
+
+    // if new state is "modal", we need to deactivate previous state
+    if (_states.size() > 0 && state->modal())
+    {
+        auto event = new StateEvent("deactivate");
+        _states.back()->emitEvent(event);
+        delete event;
+    }
+
+    auto event = new StateEvent("activate");
+    state->emitEvent(event);
+    delete event;
+
+    _states.push_back(state);
 }
 
 void Game::popState()
 {
     if (_states.size() == 0) return;
-    _statesForDelete.push_back(_states.back());
+
+    auto state = _states.back();
     _states.pop_back();
+    _statesForDelete.push_back(state);
+
+    auto event = new StateEvent("deactivate");
+    state->emitEvent(event);
+    delete event;
+
+    // if poped state was "modal" we need to "activate" previous state
+    if (_states.size() > 0 && state->modal())
+    {
+        auto event = new StateEvent("activate");
+        _states.back()->emitEvent(event);
+        delete event;
+    }
 }
 
 void Game::setState(State* state)

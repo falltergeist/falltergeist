@@ -39,7 +39,21 @@ namespace Falltergeist
 {
 
 PlayerEditState::PlayerEditState() : State()
+{ 
+}
+
+PlayerEditState::~PlayerEditState()
 {
+}
+
+void PlayerEditState::init()
+{
+    if (_initialized) return;
+    State::init();
+
+    setModal(true);
+    setFullscreen(true);
+
     auto player = Game::getInstance()->player();
     auto msgStats = ResourceManager::msgFileType("text/english/game/stat.msg");
     auto msgEditor = ResourceManager::msgFileType("text/english/game/editor.msg");
@@ -286,15 +300,6 @@ PlayerEditState::PlayerEditState() : State()
     _description = new TextArea("", backgroundX+350, backgroundY+315);
     _description->setFont(font1_000000ff)->setWidth(140)->setHeight(120)->setWordWrap(true);
     addUI(_description);
-
-}
-
-PlayerEditState::~PlayerEditState()
-{
-}
-
-void PlayerEditState::init()
-{
 }
 
 TextArea* PlayerEditState::_addLabel(std::string name, TextArea* label)

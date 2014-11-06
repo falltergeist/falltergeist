@@ -42,7 +42,9 @@ PlayerEditGenderState::PlayerEditGenderState() : State()
 
 void PlayerEditGenderState::init()
 {
+    if (_initialized) return;
     State::init();
+
     setFullscreen(false);
     setModal(true);
 

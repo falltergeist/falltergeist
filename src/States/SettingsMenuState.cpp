@@ -49,6 +49,9 @@ void SettingsMenuState::init()
     if (_initialized) return;
     State::init();
 
+    setModal(true);
+    setFullscreen(true);
+
     // background
     auto background = new Image("art/intrface/prefscrn.frm");
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;

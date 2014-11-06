@@ -34,16 +34,17 @@
 namespace Falltergeist
 {
 
-State::State() : EventReciever()
+State::State() : EventReciever(), EventEmitter()
 {
+    addEventHandler("activate", this, (EventRecieverMethod) &State::onStateActivate);
+    addEventHandler("deactivate", this, (EventRecieverMethod) &State::onStateDeactivate);
 }
 
 State::~State()
 {
-    while (!_ui.empty())
+    for (auto ui : _ui)
     {
-        delete _ui.back();
-        _ui.pop_back();
+        delete ui;
     }
 }
 
@@ -205,6 +206,14 @@ void State::popUI()
     if (_ui.size() == 0) return;
     _uiToDelete.push_back(_ui.back());
     _ui.pop_back();
+}
+
+void State::onStateActivate(StateEvent* event)
+{
+}
+
+void State::onStateDeactivate(StateEvent* event)
+{
 }
 
 }

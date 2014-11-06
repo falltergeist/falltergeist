@@ -43,7 +43,9 @@ PlayerEditNameState::PlayerEditNameState() : State()
 
 void PlayerEditNameState::init()
 {
+    if (_initialized) return;
     State::init();
+
     setFullscreen(false);
     setModal(true);
 

@@ -56,6 +56,9 @@ void NewGameState::init()
     if (_initialized) return;
     State::init();
 
+    setFullscreen(true);
+    setModal(true);
+
     auto renderer = Game::getInstance()->renderer();
 
     setX((renderer->width()  - 640)*0.5);

@@ -39,11 +39,12 @@ class Event;
 class Game;
 class ImageList;
 class SmallCounter;
+class StateEvent;
 class Surface;
 class TextArea;
 class UI;
 
-class State : public EventReciever
+class State : public EventReciever, public EventEmitter
 {
 protected:
     std::vector<UI*> _ui;
@@ -94,6 +95,8 @@ public:
     virtual void handle(Event* event);
     virtual void render();
 
+    virtual void onStateActivate(StateEvent* event);
+    virtual void onStateDeactivate(StateEvent* event);
 };
 
 }

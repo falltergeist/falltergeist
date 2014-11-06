@@ -42,6 +42,20 @@ namespace Falltergeist
 
 PlayerCreateState::PlayerCreateState() : State()
 {
+}
+
+PlayerCreateState::~PlayerCreateState()
+{
+}
+
+void PlayerCreateState::init()
+{
+    if (_initialized) return;
+    State::init();
+
+    setFullscreen(true);
+    setModal(true);
+
     // background
     auto background = new Image("art/intrface/edtrcrte.frm");
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
@@ -239,15 +253,6 @@ PlayerCreateState::PlayerCreateState() : State()
     _description = new TextArea("", backgroundX+350, backgroundY+315);
     _description->setFont(font1_000000ff)->setWidth(140)->setHeight(120)->setWordWrap(true);
     addUI(_description);
-
-}
-
-PlayerCreateState::~PlayerCreateState()
-{
-}
-
-void PlayerCreateState::init()
-{
 }
 
 TextArea* PlayerCreateState::_addLabel(std::string name, TextArea* label)

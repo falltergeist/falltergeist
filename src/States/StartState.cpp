@@ -52,7 +52,11 @@ StartState::~StartState()
 
 void StartState::init()
 {
+    if (_initialized) return;
     State::init();
+
+    setModal(true);
+    setFullscreen(true);
 
     std::vector<std::string> splashes = {"splash0.rix", "splash1.rix", "splash2.rix", "splash3.rix", "splash4.rix", "splash5.rix", "splash6.rix"};
 

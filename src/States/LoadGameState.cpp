@@ -52,7 +52,7 @@ void LoadGameState::init()
     State::init();
 
     setModal(true);
-    setFullscreen(false);
+    setFullscreen(true);
 
     auto game = Game::getInstance();
     //auto player = Game::getInstance()->player();

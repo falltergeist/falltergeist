@@ -17,36 +17,22 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_MAINMENUSTATE_H
-#define FALLTERGEIST_MAINMENUSTATE_H
-
 // C++ standard includes
-#include <memory>
 
 // Falltergeist includes
-#include "../Engine/State.h"
+#include "../../Engine/Event/StateEvent.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-    
-class MainMenuState : public State
+
+StateEvent::StateEvent(std::string name) : Event(name)
 {
-public:
-    MainMenuState();
-    virtual ~MainMenuState();
-    virtual void init();
+}
 
-    void onExitButtonClick(MouseEvent* event);
-    void onNewGameButtonClick(MouseEvent* event);
-    void onLoadGameButtonClick(MouseEvent* event);
-    void onSettingsButtonClick(MouseEvent* event);
-    void onIntroButtonClick(MouseEvent* event);
-    void onCreditsButtonClick(MouseEvent* event);
-
-    void onStateActivate(StateEvent* event);
-};
+StateEvent::~StateEvent()
+{
+}
 
 }
-#endif // FALLTERGEIST_MAINMENUSTATE_H
