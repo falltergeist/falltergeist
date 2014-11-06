@@ -8,7 +8,7 @@ Current version: 0.1.6
 
 IRC channel: #falltergeist on [freenode.net](http://webchat.freenode.net/?channels=falltergeist)
 
-Jabber chanel: falltergeist on [jabber.ru](xmpp:falltergeist@conference.jabber.ru?join)
+Jabber chanel: falltergeist on conference.jabber.ru
 
 ##Compilation under linux
 
