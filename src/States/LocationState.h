@@ -37,7 +37,6 @@ class GameObject;
 class Hexagon;
 class HexagonGrid;
 class Image;
-class InteractiveSurface;
 class Location;
 class LocationCamera;
 class Tile;

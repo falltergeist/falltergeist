@@ -34,8 +34,6 @@
 namespace Falltergeist
 {
 
-class InteractiveSurface;
-
 class Event
 {
 protected:

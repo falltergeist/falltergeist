@@ -34,7 +34,6 @@
 namespace Falltergeist
 {
 class TextArea;
-class InteractiveSurface;
 
 class SettingsMenuState : public State
 {
