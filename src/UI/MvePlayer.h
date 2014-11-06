@@ -22,6 +22,9 @@
 
 // C++ standard includes
 #include <ctime>
+#ifdef _WIN32
+#include <Windows.h>
+#endif
 
 // Falltergeist includes
 #include "../Engine/Graphics/UI.h"
@@ -36,15 +39,20 @@ namespace Falltergeist
 class MvePlayer : public UI
 {
 public:
-    MvePlayer(libfalltergeist::MveFileType* mve);
-    ~MvePlayer();
+  MvePlayer(libfalltergeist::MveFileType* mve);
+ ~MvePlayer();
 private:
     libfalltergeist::MveFileType* _mve;
+
     bool _timerStarted = false;
     bool _finished = false;
     uint32_t  _frame = 0;
     uint32_t _delay;
+    #ifdef _WIN32
+    LARGE_INTEGER _lastts;
+    #else
     struct timespec _lastts;
+    #endif // _WIN32
     uint8_t* _decodingMap=NULL;
     int16_t* _audioBuf=NULL;
     uint32_t _audioBufHead=0;
