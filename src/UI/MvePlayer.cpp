@@ -20,7 +20,7 @@
 
 // C++ standard includes
 #include <bitset>
-
+#include <ctime>
 // Falltergeist includes
 #include "../UI/MvePlayer.h"
 #include "../Engine/Game.h"
@@ -97,6 +97,7 @@ MvePlayer::MvePlayer(libfalltergeist::MveFileType* mve) : UI()
     _mve = mve;
     _mve->setPosition(26);
     _chunk = _mve->getNextChunk();
+
     while(!_finished && !_timerStarted )
     {
       _processChunk();
@@ -814,7 +815,11 @@ void MvePlayer::_processChunk()
         case OPCODE_CREATE_TIMER:
           _delay = get_int(opcode->data) * get_short(opcode->data+4);
           _timerStarted = true;
+          #ifdef _WIN32
+          QueryPerformanceCounter(&_lastts);
+          #else
           clock_gettime(CLOCK_MONOTONIC, &_lastts);
+          #endif // _WIN32
           break;
         case OPCODE_END_STREAM:
             _finished = true;
@@ -874,16 +879,26 @@ void MvePlayer::_processChunk()
 void MvePlayer::think()
 {
     if (!_timerStarted) return;
-
+   #ifndef _WIN32
     struct timespec ts;
     clock_gettime(CLOCK_MONOTONIC,&ts);
-    uint32_t nsec = (ts.tv_nsec-_lastts.tv_nsec);
-
+    uint32_t nsec = (ts->tv_nsec-_lastts->tv_nsec);
     if (nsec >= _delay*1000) // 66728
     {
         _lastts=ts;
         _processChunk();
     }
+    #else
+     LARGE_INTEGER ts;
+     QueryPerformanceCounter(&ts);
+
+     double dTime = (ts.QuadPart - _lastts.QuadPart);
+     if (dTime >= _delay / 0.4) // 66728
+      {
+        _lastts=ts;
+        _processChunk();
+      }
+    #endif // _WIN32
 }
 
 bool MvePlayer::finished()
