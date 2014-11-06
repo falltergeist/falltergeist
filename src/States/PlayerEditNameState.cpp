@@ -126,7 +126,7 @@ void PlayerEditNameState::init()
     addUI(_cursor);
 }
 
-void PlayerEditNameState::onKeyboardPress(std::shared_ptr<KeyboardEvent> event)
+void PlayerEditNameState::onKeyboardPress(KeyboardEvent* event)
 {
     auto sender = dynamic_cast<TextArea*>(event->emitter());
     auto state = dynamic_cast<PlayerEditNameState*>(event->reciever());
