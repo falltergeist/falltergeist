@@ -882,7 +882,7 @@ void MvePlayer::think()
    #ifndef _WIN32
     struct timespec ts;
     clock_gettime(CLOCK_MONOTONIC,&ts);
-    uint32_t nsec = (ts->tv_nsec-_lastts->tv_nsec);
+    uint32_t nsec = (ts.tv_nsec-_lastts.tv_nsec);
     if (nsec >= _delay*1000) // 66728
     {
         _lastts=ts;
