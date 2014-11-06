@@ -127,8 +127,6 @@ Game::~Game()
 
 void Game::pushState(State* state)
 {
-    if (!state->initialized()) state->init();
-
     // if new state is "modal", we need to deactivate previous state
     if (_states.size() > 0 && state->modal())
     {
@@ -142,6 +140,8 @@ void Game::pushState(State* state)
     delete event;
 
     _states.push_back(state);
+    
+    if (!state->initialized()) state->init();
 }
 
 void Game::popState()
