@@ -5,12 +5,6 @@ os:
 language: cpp
 
 script:
-  # libfalltergeist
-  - cd lib/libfalltergeist
-  - cmake .
-  - make
-  - cd ../..
-  # falltergeist
   - cmake .
   - make
 
