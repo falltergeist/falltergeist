@@ -127,21 +127,8 @@ Game::~Game()
 
 void Game::pushState(State* state)
 {
-    if (!state->initialized()) state->init();
-
-    // if new state is "modal", we need to deactivate previous state
-    if (_states.size() > 0 && state->modal())
-    {
-        auto event = new StateEvent("deactivate");
-        _states.back()->emitEvent(event);
-        delete event;
-    }
-
-    auto event = new StateEvent("activate");
-    state->emitEvent(event);
-    delete event;
-
     _states.push_back(state);
+    if (!state->initialized()) state->init();
 }
 
 void Game::popState()
@@ -155,14 +142,6 @@ void Game::popState()
     auto event = new StateEvent("deactivate");
     state->emitEvent(event);
     delete event;
-
-    // if poped state was "modal" we need to "activate" previous state
-    if (_states.size() > 0 && state->modal())
-    {
-        auto event = new StateEvent("activate");
-        _states.back()->emitEvent(event);
-        delete event;
-    }
 }
 
 void Game::setState(State* state)
@@ -280,10 +259,36 @@ std::vector<State*>* Game::statesForThinkAndHandle()
     // we must handle all states from top to bottom of stack
     _statesForThinkAndHandle.clear();
 
-    for (auto it = _states.rbegin(); it != _states.rend(); ++it)
+    auto it = _states.rbegin();
+    // active states
+    for (; it != _states.rend(); ++it)
     {
-        _statesForThinkAndHandle.push_back(*it);
-        if ((*it)->modal() || (*it)->fullscreen()) break;
+        auto state = *it;
+        if (!state->active())
+        {
+            auto event = new StateEvent("activate");
+            state->emitEvent(event);
+            state->setActive(true);
+            delete event;
+        }
+        _statesForThinkAndHandle.push_back(state);
+        if (state->modal() || state->fullscreen())
+        {
+            ++it;
+            break;
+        }
+    }
+    // not active states
+    for (; it != _states.rend(); ++it)
+    {
+        auto state = *it;
+        if (state->active())
+        {
+            auto event = new StateEvent("deactivate");
+            state->emitEvent(event);
+            state->setActive(false);
+            delete event;
+        }
     }
 
     return &_statesForThinkAndHandle;

@@ -56,6 +56,7 @@ protected:
 
     // prevents all states before this one to call think() method
     bool _modal = false;
+    bool _active = false;
     // prevents render all states before this one
     bool _fullscreen = true;
     bool _initialized = false;
@@ -87,6 +88,9 @@ public:
 
     virtual bool modal();
     virtual void setModal(bool value);
+
+    virtual bool active();
+    virtual void setActive(bool value);
 
     virtual bool initialized();
     virtual void init();

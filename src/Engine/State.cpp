@@ -216,4 +216,14 @@ void State::onStateDeactivate(StateEvent* event)
 {
 }
 
+bool State::active()
+{
+    return _active;
+}
+
+void State::setActive(bool value)
+{
+    _active = value;
+}
+
 }
