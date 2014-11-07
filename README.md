@@ -13,6 +13,7 @@ Jabber chanel: falltergeist on conference.jabber.ru
 ##Compilation under linux
 
 ```
+git submodule update --init
 cmake . && make
 ```
 
