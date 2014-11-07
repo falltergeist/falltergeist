@@ -398,6 +398,10 @@ void LocationState::handle(Event* event)
                 case Mouse::ACTION:
                 {
                     auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
+                    if (!hexagon)
+                    {
+                        break;
+                    }
                     mouse->pushState(Mouse::HEXAGON_RED);
                     mouse->ui()->setX(hexagon->x() - camera()->x());
                     mouse->ui()->setY(hexagon->y() - camera()->y());
@@ -432,6 +436,10 @@ void LocationState::handle(Event* event)
                 {
                     // Here goes the movement
                     auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
+                    if (!hexagon)
+                    {
+                        break;
+                    }
                     auto path = hexagonGrid()->findPath(game->player()->hexagon(), hexagon);
                     if (path.size())
                     {
@@ -450,6 +458,10 @@ void LocationState::handle(Event* event)
                 case Mouse::HEXAGON_RED:
                 {
                     auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
+                    if (!hexagon)
+                    {
+                        break;
+                    }
                     mouse->ui()->setX(hexagon->x() - camera()->x());
                     mouse->ui()->setY(hexagon->y() - camera()->y());
                     break;
