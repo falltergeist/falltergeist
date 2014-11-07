@@ -65,9 +65,30 @@
 #include "../VM/Handlers/Opcode801AHandler.h"
 #include "../VM/Handlers/Opcode801BHandler.h"
 #include "../VM/Handlers/Opcode801CHandler.h"
+#include "../VM/Handlers/Opcode8027Handler.h"
+#include "../VM/Handlers/Opcode8028Handler.h"
+#include "../VM/Handlers/Opcode8029Handler.h"
+#include "../VM/Handlers/Opcode802aHandler.h"
+#include "../VM/Handlers/Opcode802bHandler.h"
+#include "../VM/Handlers/Opcode802cHandler.h"
+#include "../VM/Handlers/Opcode802fHandler.h"
+#include "../VM/Handlers/Opcode8030Handler.h"
+#include "../VM/Handlers/Opcode8031Handler.h"
+#include "../VM/Handlers/Opcode8032Handler.h"
 #include "../VM/Handlers/Opcode8033Handler.h"
 #include "../VM/Handlers/Opcode8034Handler.h"
+#include "../VM/Handlers/Opcode8035Handler.h"
+#include "../VM/Handlers/Opcode8036Handler.h"
+#include "../VM/Handlers/Opcode8037Handler.h"
+#include "../VM/Handlers/Opcode8038Handler.h"
 #include "../VM/Handlers/Opcode8039Handler.h"
+#include "../VM/Handlers/Opcode803AHandler.h"
+#include "../VM/Handlers/Opcode803BHandler.h"
+#include "../VM/Handlers/Opcode803CHandler.h"
+#include "../VM/Handlers/Opcode803DHandler.h"
+#include "../VM/Handlers/Opcode803EHandler.h"
+#include "../VM/Handlers/Opcode803FHandler.h"
+#include "../VM/Handlers/Opcode8040Handler.h"
 #include "../VM/Handlers/Opcode80BAHandler.h"
 #include "../VM/Handlers/Opcode80BCHandler.h"
 #include "../VM/Handlers/Opcode80CAHandler.h"
@@ -141,7 +162,7 @@ void VM::call(std::string name)
 void VM::initialize()
 {
     if (_initialized) return;
-    _programCounter = 0;   
+    _programCounter = 0;
     run();
     popDataInteger(); // remove @start function result
 }
@@ -213,14 +234,77 @@ void VM::run()
             case 0x801C:
                 opcodeHandler = new Opcode801CHandler(this);
                 break;
+            case 0x8027:
+                opcodeHandler = new Opcode8027Handler(this);
+                break;
+            case 0x8028:
+                opcodeHandler = new Opcode8028Handler(this);
+                break;
+            case 0x8029:
+                opcodeHandler = new Opcode8029Handler(this);
+                break;
+            case 0x802A:
+                opcodeHandler = new Opcode802aHandler(this);
+                break;
+            case 0x802B:
+                opcodeHandler = new Opcode802bHandler(this);
+                break;
+            case 0x802C:
+                opcodeHandler = new Opcode802cHandler(this);
+                break;
+            case 0x802F:
+                opcodeHandler = new Opcode802fHandler(this);
+                break;
+            case 0x8030:
+                opcodeHandler = new Opcode8030Handler(this);
+                break;
+            case 0x8031:
+                opcodeHandler = new Opcode8031Handler(this);
+                break;
+            case 0x8032:
+                opcodeHandler = new Opcode8032Handler(this);
+                break;
             case 0x8033:
                 opcodeHandler = new Opcode8033Handler(this);
                 break;
             case 0x8034:
                 opcodeHandler = new Opcode8034Handler(this);
                 break;
+            case 0x8035:
+                opcodeHandler = new Opcode8035Handler(this);
+                break;
+            case 0x8036:
+                opcodeHandler = new Opcode8036Handler(this);
+                break;
+            case 0x8037:
+                opcodeHandler = new Opcode8037Handler(this);
+                break;
+            case 0x8038:
+                opcodeHandler = new Opcode8038Handler(this);
+                break;
             case 0x8039:
                 opcodeHandler = new Opcode8039Handler(this);
+                break;
+            case 0x803A:
+                opcodeHandler = new Opcode803AHandler(this);
+                break;
+            case 0x803B:
+                opcodeHandler = new Opcode803BHandler(this);
+                break;
+            case 0x803C:
+                opcodeHandler = new Opcode803CHandler(this);
+                break;
+            case 0x803D:
+                opcodeHandler = new Opcode803DHandler(this);
+                break;
+            case 0x803E:
+                opcodeHandler = new Opcode803EHandler(this);
+                break;
+            case 0x803F:
+                opcodeHandler = new Opcode803FHandler(this);
+                break;
+            case 0x8040:
+                opcodeHandler = new Opcode8040Handler(this);
                 break;
             case 0x80BA:
                 opcodeHandler = new Opcode80BAHandler(this);
@@ -287,179 +371,30 @@ void VM::run()
             case 0x801a: break;
             case 0x801b: break;
             case 0x801c: break;
-            case 0x8027:
-            {
-                Logger::debug("SCRIPT") << "[8027] [?] unknown pop_d pop_d" << std::endl;
-                _dataStack.pop();
-                _dataStack.pop();
-                break;
-            }
-            case 0x8028:
-            {
-                Logger::debug("SCRIPT") << "[8028] [?] ? lookup_string_proc(? p1)" << std::endl;
-                popDataInteger();
-                pushDataPointer(0);
-                break;
-            }
-            case 0x8029:
-            {
-                _DVAR_base = popReturnInteger();
-                Logger::debug("SCRIPT") << "[8029] [*] DVAR restore = " << _DVAR_base << std::endl;
-                break;
-            }
-            case 0x802a:
-            {
-                Logger::debug("SCRIPT") << "[802A] [*] DVAR clear" << std::endl;
-                while (_dataStack.size() > _DVAR_base)
-                {
-                    _dataStack.pop();
-                }
-                break;
-            }
-            case 0x802b:
-            {
-                auto argumentsCounter = popDataInteger();
-                pushReturnInteger(_DVAR_base);
-                _DVAR_base = _dataStack.size() - argumentsCounter;
-                Logger::debug("SCRIPT") << "[802B] [*] set DVAR base = " << _DVAR_base << std::endl;
-                break;
-            }
-            case 0x802c:
-            {
-                _SVAR_base = _dataStack.size();
-                Logger::debug("SCRIPT") << "[802C] [*] set SVAR_base = " << _SVAR_base << std::endl;
-                break;
-            }
-            case 0x802f:
-            {
-                Logger::debug("SCRIPT") << "[802F] [*] ifthen(address, condition)" << std::endl;
-                auto condition = popDataLogical();
-                auto address = popDataInteger();
-                if (!condition)
-                {
-                    _programCounter = address;
-                }
-                break;
-            }
-            case 0x8030:
-            {
-                Logger::debug("SCRIPT") << "[8030] [*] while(address, condition)" << std::endl;
-                auto condition = popDataLogical();
-                if (condition)
-                {
-                    _programCounter = popDataInteger();
-                }
-                break;
-            }
-            case 0x8031:
-            {
-                auto num = popDataInteger();
-                auto value = _dataStack.pop();
-                Logger::debug("SCRIPT") << "[8031] [*] DVAR[num] = value " << "num = " << std::hex << num << " type = " << value->type() << std::endl;
-                _dataStack.values()->at(_DVAR_base + num) = value;
-                break;
-            }
-            case 0x8032:
-            {
-                auto num = popDataInteger();
-                auto value = _dataStack.values()->at(_DVAR_base + num);
-                _dataStack.push(value);
-                Logger::debug("SCRIPT") << "[8032] [*] DVAR[num] " << "num = " << std::hex << num << " type = " << value->type() << std::endl;
-                break;
-            }
+            case 0x8027: break;
+            case 0x8028: break;
+            case 0x8029: break;
+            case 0x802a: break;
+            case 0x802b: break;
+            case 0x802c: break;
+            case 0x802f: break;
+            case 0x8030: break;
+            case 0x8031: break;
+            case 0x8032: break;
             case 0x8033: break;
             case 0x8034: break;
-            case 0x8035:
-            {
-                Logger::debug("SCRIPT") << "[8035] [*] leq <=" << std::endl;
-                auto b = popDataInteger();
-                auto a = popDataInteger();
-                pushDataInteger(a <= b);
-                break;
-            }
-            case 0x8036:
-            {
-                Logger::debug("SCRIPT") << "[8036] [*] geq >=" << std::endl;
-                auto b = popDataInteger();
-                auto a = popDataInteger();
-                pushDataInteger(a >= b);
-                break;
-            }
-            case 0x8037:
-            {
-                Logger::debug("SCRIPT") << "[8037] [*] lt <" << std::endl;
-                auto b = popDataInteger();
-                auto a = popDataInteger();
-                pushDataInteger(a < b);
-                break;
-            }
-            case 0x8038:
-            {
-                Logger::debug("SCRIPT") << "[8038] [*] gt >" << std::endl;
-                auto b = popDataInteger();
-                auto a = popDataInteger();
-                pushDataInteger(a > b);
-                break;
-            }
+            case 0x8035: break;
+            case 0x8036: break;
+            case 0x8037: break;
+            case 0x8038: break;
             case 0x8039: break;
-            case 0x803a:
-            {
-                Logger::debug("SCRIPT") << "[803A] [*] minus -" << std::endl;
-                auto b = popDataInteger();
-                auto a = popDataInteger();
-                pushDataInteger(a-b);
-                break;
-            }
-            case 0x803b:
-            {
-                Logger::debug("SCRIPT") << "[803B] [*] mult *" << std::endl;
-                auto b = popDataInteger();
-                auto a = popDataInteger();
-                pushDataInteger(a*b);
-                break;
-            }
-            case 0x803c:
-            {
-                Logger::debug("SCRIPT") << "[803C] [*] div /" << std::endl;
-                auto b = popDataInteger();
-                auto a = popDataInteger();
-                pushDataInteger(a/b);
-                break;
-            }
-            case 0x803d:
-            {
-                Logger::debug("SCRIPT") << "[803D] [*] mod %" << std::endl;
-                auto b = _dataStack.pop();
-                auto a = _dataStack.pop();
-                auto p1 = dynamic_cast<VMStackIntValue*>(a);
-                auto p2 = dynamic_cast<VMStackIntValue*>(b);
-                pushDataInteger(p1->value()%p2->value());
-                break;
-            }
-            case 0x803e:
-            {
-                Logger::debug("SCRIPT") << "[803E] [*] &&" << std::endl;
-                auto b = popDataLogical();
-                auto a = popDataLogical();
-                pushDataInteger(a && b);
-                break;
-            }
-            case 0x803f:
-            {
-                Logger::debug("SCRIPT") << "[803F] [+] ||" << std::endl;
-                auto b = popDataLogical();
-                auto a = popDataLogical();
-                pushDataInteger(a || b);
-                break;
-            }
-            case 0x8040:
-            {
-                Logger::debug("SCRIPT") << "[8040] [*] &" << std::endl;
-                auto b = popDataInteger();
-                auto a = popDataInteger();
-                pushDataInteger(a & b);
-                break;
-            }
+            case 0x803a: break;
+            case 0x803b: break;
+            case 0x803c: break;
+            case 0x803d: break;
+            case 0x803e: break;
+            case 0x803f: break;
+            case 0x8040: break;
             case 0x8041:
             {
                 Logger::debug("SCRIPT") << "[8041] [*] |" << std::endl;
@@ -708,7 +643,7 @@ void VM::run()
             case 0x80bf:
             {
                 Logger::debug("SCRIPT") << "[80BF] [+] GameDudeObject* dude_obj()" << std::endl;
-                auto game = Game::getInstance();            
+                auto game = Game::getInstance();
                 pushDataPointer(game->player());
                 break;
             }
@@ -1463,7 +1398,7 @@ void VM::run()
                 os << "0x" << std::hex << opcode;
                 throw Exception("["+os.str()+"] - unimplemented opcode");
             }
-        }        
+        }
         if (opcodeHandler)
         {
             try
@@ -1709,9 +1644,19 @@ int VM::SVARbase()
     return _SVAR_base;
 }
 
+void VM::setSVARbase(int Value)
+{
+    _SVAR_base = Value;
+}
+
 int VM::DVARbase()
 {
     return _DVAR_base;
+}
+
+void VM::setDVARBase(int Value)
+{
+    _DVAR_base = Value;
 }
 
 bool VM::overrides()

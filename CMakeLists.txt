@@ -287,12 +287,54 @@ set(SOURCES main.cpp
             src/VM/Handlers/Opcode801BHandler.cpp
             src/VM/Handlers/Opcode801CHandler.h
             src/VM/Handlers/Opcode801CHandler.cpp
+            src/VM/Handlers/Opcode8027Handler.h
+            src/VM/Handlers/Opcode8027Handler.cpp
+            src/VM/Handlers/Opcode8028Handler.h
+            src/VM/Handlers/Opcode8028Handler.cpp
+            src/VM/Handlers/Opcode8029Handler.h
+            src/VM/Handlers/Opcode8029Handler.cpp
+            src/VM/Handlers/Opcode802aHandler.h
+            src/VM/Handlers/Opcode802aHandler.cpp
+            src/VM/Handlers/Opcode802bHandler.h
+            src/VM/Handlers/Opcode802bHandler.cpp
+            src/VM/Handlers/Opcode802cHandler.h
+            src/VM/Handlers/Opcode802cHandler.cpp
+            src/VM/Handlers/Opcode802fHandler.h
+            src/VM/Handlers/Opcode802fHandler.cpp
+            src/VM/Handlers/Opcode8030Handler.h
+            src/VM/Handlers/Opcode8030Handler.cpp
+            src/VM/Handlers/Opcode8031Handler.h
+            src/VM/Handlers/Opcode8031Handler.cpp
+            src/VM/Handlers/Opcode8032Handler.h
+            src/VM/Handlers/Opcode8032Handler.cpp
             src/VM/Handlers/Opcode8033Handler.h
             src/VM/Handlers/Opcode8033Handler.cpp
             src/VM/Handlers/Opcode8034Handler.h
             src/VM/Handlers/Opcode8034Handler.cpp
+            src/VM/Handlers/Opcode8035Handler.h
+            src/VM/Handlers/Opcode8035Handler.cpp
+            src/VM/Handlers/Opcode8036Handler.h
+            src/VM/Handlers/Opcode8036Handler.cpp
+            src/VM/Handlers/Opcode8037Handler.h
+            src/VM/Handlers/Opcode8037Handler.cpp
+            src/VM/Handlers/Opcode8038Handler.h
+            src/VM/Handlers/Opcode8038Handler.cpp
             src/VM/Handlers/Opcode8039Handler.h
             src/VM/Handlers/Opcode8039Handler.cpp
+            src/VM/Handlers/Opcode803AHandler.h
+            src/VM/Handlers/Opcode803AHandler.cpp
+            src/VM/Handlers/Opcode803BHandler.h
+            src/VM/Handlers/Opcode803BHandler.cpp
+            src/VM/Handlers/Opcode803CHandler.h
+            src/VM/Handlers/Opcode803CHandler.cpp
+            src/VM/Handlers/Opcode803DHandler.h
+            src/VM/Handlers/Opcode803DHandler.cpp
+            src/VM/Handlers/Opcode803EHandler.h
+            src/VM/Handlers/Opcode803EHandler.cpp
+            src/VM/Handlers/Opcode803FHandler.h
+            src/VM/Handlers/Opcode803FHandler.cpp
+            src/VM/Handlers/Opcode8040Handler.h
+            src/VM/Handlers/Opcode8040Handler.cpp
             src/VM/Handlers/Opcode80BAHandler.h
             src/VM/Handlers/Opcode80BAHandler.cpp
             src/VM/Handlers/Opcode80BCHandler.h
