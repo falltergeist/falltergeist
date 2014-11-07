@@ -142,16 +142,41 @@ void MainMenuState::init()
 
 void MainMenuState::onExitButtonClick(MouseEvent* event)
 {
+    removeEventHandlers("fadedone");
+    addEventHandler("fadedone", this, (EventRecieverMethod) &MainMenuState::onExitStart);
+    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+}
+
+void MainMenuState::onExitStart(StateEvent* event)
+{
+    removeEventHandlers("fadedone");
+    Game::getInstance()->mixer()->stopMusic();
     Game::getInstance()->quit();
 }
 
 void MainMenuState::onNewGameButtonClick(MouseEvent* event)
 {
+    removeEventHandlers("fadedone");
+    addEventHandler("fadedone", this, (EventRecieverMethod) &MainMenuState::onNewGameStart);
+    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+}
+
+void MainMenuState::onNewGameStart(StateEvent* event)
+{
+    removeEventHandlers("fadedone");
     Game::getInstance()->pushState(new NewGameState());
 }
 
 void MainMenuState::onLoadGameButtonClick(MouseEvent* event)
 {
+    removeEventHandlers("fadedone");
+    addEventHandler("fadedone", this, (EventRecieverMethod) &MainMenuState::onLoadGameStart);
+    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+}
+
+void MainMenuState::onLoadGameStart(StateEvent* event)
+{
+    removeEventHandlers("fadedone");
     Game::getInstance()->pushState(new LoadGameState());
 }
 
@@ -162,18 +187,35 @@ void MainMenuState::onSettingsButtonClick(MouseEvent* event)
 
 void MainMenuState::onIntroButtonClick(MouseEvent* event)
 {
+    removeEventHandlers("fadedone");
+    addEventHandler("fadedone", this, (EventRecieverMethod) &MainMenuState::onIntroStart);
+    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+}
+
+void MainMenuState::onIntroStart(StateEvent* event)
+{
+    removeEventHandlers("fadedone");
     Game::getInstance()->pushState(new MovieState(17));
     Game::getInstance()->pushState(new MovieState(1));
 }
 
 void MainMenuState::onCreditsButtonClick(MouseEvent* event)
 {
+    removeEventHandlers("fadedone");
+    addEventHandler("fadedone", this, (EventRecieverMethod) &MainMenuState::onCreditsStart);
+    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+}
+
+void MainMenuState::onCreditsStart(StateEvent* event)
+{
+    removeEventHandlers("fadedone");
     Game::getInstance()->pushState(new CreditsState());
 }
 
 void MainMenuState::onStateActivate(StateEvent* event)
 {
-    Game::getInstance()->mixer()->playACMMusic(ResourceManager::acmFileType("sound/music/07desert.acm"),true);
+    Game::getInstance()->mixer()->playACMMusic(ResourceManager::acmFileType("data/sound/music/07desert.acm"),true);
+    Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
 }
 
 void MainMenuState::onMouseDown(MouseEvent* event)
