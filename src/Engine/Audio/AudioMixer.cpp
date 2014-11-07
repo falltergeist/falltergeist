@@ -120,6 +120,7 @@ void AudioMixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len)
 void AudioMixer::playACMMusic(std::shared_ptr<libfalltergeist::AcmFileType> acm, bool loop)
 {
     Mix_HookMusic(NULL, NULL);
+    if (!acm) return;
     _loop = loop;
     musicCallback = std::bind(&AudioMixer::_musicCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
     acm->init();
@@ -148,6 +149,7 @@ void AudioMixer::playMovieMusic(MvePlayer* mve)
 
 void AudioMixer::playACMSound(std::shared_ptr<libfalltergeist::AcmFileType> acm)
 {
+    if (!acm) return;
     Logger::debug("AudioMixer") << "playing: " << acm->filename() << std::endl;
     Mix_Chunk *chunk = NULL;
 

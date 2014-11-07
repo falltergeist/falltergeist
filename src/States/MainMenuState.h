@@ -44,6 +44,8 @@ public:
     void onSettingsButtonClick(MouseEvent* event);
     void onIntroButtonClick(MouseEvent* event);
     void onCreditsButtonClick(MouseEvent* event);
+    void onMouseDown(MouseEvent* event);
+    void onMouseUp(MouseEvent* event);
 
     void onStateActivate(StateEvent* event);
 };
