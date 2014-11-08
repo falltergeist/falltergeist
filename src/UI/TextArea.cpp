@@ -418,7 +418,10 @@ Texture* TextArea::texture()
             }
             else
             {
-                x += glyph->width() + font->horizontalGap();
+                if (chr == ' ')
+                    x += space_width + font->horizontalGap();
+                else
+                    x += glyph->width() + font->horizontalGap();
             }
         }
         y += font->height() + font->verticalGap();
