@@ -26,6 +26,7 @@
 #include "../../Engine/Game.h"
 #include "../../Engine/State.h"
 #include "../../Engine/Input/Mouse.h"
+#include "../../Engine/Event/StateEvent.h"
 
 // Third party includes
 
@@ -57,6 +58,9 @@ void Renderer::think()
         {
             _alpha=0;
             _fadeDone=true;
+            auto event = new StateEvent("fadedone");
+            Game::getInstance()->states()->back()->emitEvent(event);
+            delete event;
             return;
         }
         _lt=_nt;

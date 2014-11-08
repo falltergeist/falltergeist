@@ -45,7 +45,16 @@ public:
     void onIntroButtonClick(MouseEvent* event);
     void onCreditsButtonClick(MouseEvent* event);
 
+    void onMouseDown(MouseEvent* event);
+    void onMouseUp(MouseEvent* event);
+
     void onStateActivate(StateEvent* event);
+
+    void onExitStart(StateEvent* event);
+    void onNewGameStart(StateEvent* event);
+    void onLoadGameStart(StateEvent* event);
+    void onIntroStart(StateEvent* event);
+    void onCreditsStart(StateEvent* event);
 };
 
 }

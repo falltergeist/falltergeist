@@ -25,6 +25,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Animation.h"
 #include "../Engine/Graphics/Renderer.h"
+#include "../Engine/Audio/AudioMixer.h"
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/ResourceManager.h"
 #include "../States/CreditsState.h"
@@ -48,6 +49,7 @@ MainMenuState::MainMenuState() : State()
 
 MainMenuState::~MainMenuState()
 {
+    Game::getInstance()->mixer()->stopMusic();
 }
 
 void MainMenuState::init()
@@ -69,26 +71,38 @@ void MainMenuState::init()
     // intro button
     auto introButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19));
     introButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod)&MainMenuState::onIntroButtonClick);
+    introButton->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &MainMenuState::onMouseDown);
+    introButton->addEventHandler("mouseleftup", this, (EventRecieverMethod) &MainMenuState::onMouseUp);
 
     // new game button
     auto newGameButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41));
     newGameButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod)&MainMenuState::onNewGameButtonClick);
+    newGameButton->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &MainMenuState::onMouseDown);
+    newGameButton->addEventHandler("mouseleftup", this, (EventRecieverMethod) &MainMenuState::onMouseUp);
 
     // load game button
     auto loadGameButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*2));
     loadGameButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod)&MainMenuState::onLoadGameButtonClick);
+    loadGameButton->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &MainMenuState::onMouseDown);
+    loadGameButton->addEventHandler("mouseleftup", this, (EventRecieverMethod) &MainMenuState::onMouseUp);
 
     // settings button
     auto settingsButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*3));
     settingsButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MainMenuState::onSettingsButtonClick);
+    settingsButton->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &MainMenuState::onMouseDown);
+    settingsButton->addEventHandler("mouseleftup", this, (EventRecieverMethod) &MainMenuState::onMouseUp);
 
     // credits button
     auto creditsButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*4));
     creditsButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MainMenuState::onCreditsButtonClick);
+    creditsButton->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &MainMenuState::onMouseDown);
+    creditsButton->addEventHandler("mouseleftup", this, (EventRecieverMethod) &MainMenuState::onMouseUp);
 
     // exit button
     auto exitButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*5));
     exitButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &MainMenuState::onExitButtonClick);
+    exitButton->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &MainMenuState::onMouseDown);
+    exitButton->addEventHandler("mouseleftup", this, (EventRecieverMethod) &MainMenuState::onMouseUp);
 
     auto msg = ResourceManager::msgFileType("text/english/game/misc.msg");
     auto font4 = ResourceManager::font("font4.aaf", 0xb89c28ff);
@@ -128,16 +142,41 @@ void MainMenuState::init()
 
 void MainMenuState::onExitButtonClick(MouseEvent* event)
 {
+    removeEventHandlers("fadedone");
+    addEventHandler("fadedone", this, (EventRecieverMethod) &MainMenuState::onExitStart);
+    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+}
+
+void MainMenuState::onExitStart(StateEvent* event)
+{
+    removeEventHandlers("fadedone");
+    Game::getInstance()->mixer()->stopMusic();
     Game::getInstance()->quit();
 }
 
 void MainMenuState::onNewGameButtonClick(MouseEvent* event)
 {
+    removeEventHandlers("fadedone");
+    addEventHandler("fadedone", this, (EventRecieverMethod) &MainMenuState::onNewGameStart);
+    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+}
+
+void MainMenuState::onNewGameStart(StateEvent* event)
+{
+    removeEventHandlers("fadedone");
     Game::getInstance()->pushState(new NewGameState());
 }
 
 void MainMenuState::onLoadGameButtonClick(MouseEvent* event)
 {
+    removeEventHandlers("fadedone");
+    addEventHandler("fadedone", this, (EventRecieverMethod) &MainMenuState::onLoadGameStart);
+    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+}
+
+void MainMenuState::onLoadGameStart(StateEvent* event)
+{
+    removeEventHandlers("fadedone");
     Game::getInstance()->pushState(new LoadGameState());
 }
 
@@ -148,21 +187,47 @@ void MainMenuState::onSettingsButtonClick(MouseEvent* event)
 
 void MainMenuState::onIntroButtonClick(MouseEvent* event)
 {
+    removeEventHandlers("fadedone");
+    addEventHandler("fadedone", this, (EventRecieverMethod) &MainMenuState::onIntroStart);
+    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+}
+
+void MainMenuState::onIntroStart(StateEvent* event)
+{
+    removeEventHandlers("fadedone");
     Game::getInstance()->pushState(new MovieState(17));
     Game::getInstance()->pushState(new MovieState(1));
 }
 
 void MainMenuState::onCreditsButtonClick(MouseEvent* event)
 {
+    removeEventHandlers("fadedone");
+    addEventHandler("fadedone", this, (EventRecieverMethod) &MainMenuState::onCreditsStart);
+    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+}
+
+void MainMenuState::onCreditsStart(StateEvent* event)
+{
+    removeEventHandlers("fadedone");
     Game::getInstance()->pushState(new CreditsState());
 }
 
 void MainMenuState::onStateActivate(StateEvent* event)
 {
-/*
-    MainMenuState* state = event->emitter();
-    state->playSoundOrSomething();
-*/
+    Game::getInstance()->mixer()->playACMMusic(ResourceManager::acmFileType("data/sound/music/07desert.acm"),true);
+    Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
 }
+
+void MainMenuState::onMouseDown(MouseEvent* event)
+{
+    Game::getInstance()->mixer()->playACMSound(ResourceManager::acmFileType("sound/sfx/nmselec0.acm"));
+}
+
+void MainMenuState::onMouseUp(MouseEvent* event)
+{
+    Game::getInstance()->mixer()->playACMSound(ResourceManager::acmFileType("sound/sfx/nmselec1.acm"));
+}
+
+
 
 }
