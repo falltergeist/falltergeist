@@ -125,6 +125,21 @@ Game::~Game()
     delete _currentTime;
 }
 
+void Game::shutdown()
+{
+    delete _mouse;
+    delete _fpsCounter;
+    delete _mousePosition;
+    delete _falltergeistVersion;
+    delete _mixer;
+    delete _resourceManager;
+    while (!_states.empty()) popState();
+    delete _engineSettings;
+    delete _gameTime;
+    delete _currentTime;
+    delete _renderer;
+}
+
 void Game::pushState(State* state)
 {
     _states.push_back(state);
