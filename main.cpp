@@ -38,6 +38,7 @@ int main(int argc, char* argv[])
         auto game = Game::getInstance();
         game->setState(new StartState());
         game->run();
+        game->shutdown();
         return 0;
     }
     catch(const libfalltergeist::Exception &e)

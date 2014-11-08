@@ -84,6 +84,7 @@ public:
     ~Game();
     static Game* getInstance();
 
+    void shutdown();
     std::vector<State*>* states();
     std::vector<State*>* statesForRender();
     std::vector<State*>* statesForThinkAndHandle();
