@@ -354,8 +354,7 @@ Texture* TextArea::texture()
         unsigned int str_width;
         auto font = (*it)->font();
         std::string text = (*it)->text();
-        auto glyph = font->aaf()->glyphs()->at(' ');
-        space_width = glyph->width() + font->horizontalGap();
+        space_width = font->aaf()->spaceWidth();
 
         // calculating width of current string if needed
         if (_horizontalAlign != HORIZONTAL_ALIGN_LEFT)
