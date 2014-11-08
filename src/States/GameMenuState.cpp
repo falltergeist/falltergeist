@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Engine/Audio/AudioMixer.h"
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
 #include "../Engine/ResourceManager.h"
@@ -73,23 +74,33 @@ void GameMenuState::init()
     auto saveGameButtonLabel = new TextArea(msg->message(0), backgroundX+8, backgroundY+26);
     saveGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     saveGameButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &GameMenuState::onSaveGameButtonClick);
+    saveGameButton->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &GameMenuState::onMouseDown);
+    saveGameButton->addEventHandler("mouseleftup", this, (EventRecieverMethod) &GameMenuState::onMouseUp);
 
     // label: load game
     auto loadGameButtonLabel = new TextArea(msg->message(1), backgroundX+8, backgroundY+26+37);
     loadGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     loadGameButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &GameMenuState::onLoadGameButtonClick);
+    loadGameButton->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &GameMenuState::onMouseDown);
+    loadGameButton->addEventHandler("mouseleftup", this, (EventRecieverMethod) &GameMenuState::onMouseUp);
 
     // label: preferences
     auto preferencesButtonLabel = new TextArea(msg->message(2), backgroundX+8, backgroundY+26+37*2);
     preferencesButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    preferencesButton->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &GameMenuState::onMouseDown);
+    preferencesButton->addEventHandler("mouseleftup", this, (EventRecieverMethod) &GameMenuState::onMouseUp);
 
     // label: exit game
     auto exitGameButtonLabel = new TextArea(msg->message(3), backgroundX+8, backgroundY+26+37*3);
     exitGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    exitGameButton->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &GameMenuState::onMouseDown);
+    exitGameButton->addEventHandler("mouseleftup", this, (EventRecieverMethod) &GameMenuState::onMouseUp);
 
     // label: done
     auto doneButtonLabel = new TextArea(msg->message(4), backgroundX+8, backgroundY+26+37*4);
     doneButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    doneButton->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &GameMenuState::onMouseDown);
+    doneButton->addEventHandler("mouseleftup", this, (EventRecieverMethod) &GameMenuState::onMouseUp);
 
     background->setX(backgroundX);
     background->setY(backgroundY);
@@ -130,6 +141,16 @@ void GameMenuState::onExitButtonClick(MouseEvent* event)
 void GameMenuState::onDoneButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
+}
+
+void GameMenuState::onMouseDown(MouseEvent* event)
+{
+    Game::getInstance()->mixer()->playACMSound(ResourceManager::acmFileType("sound/sfx/butin3.acm"));
+}
+
+void GameMenuState::onMouseUp(MouseEvent* event)
+{
+    Game::getInstance()->mixer()->playACMSound(ResourceManager::acmFileType("sound/sfx/butout3.acm"));
 }
 
 }
