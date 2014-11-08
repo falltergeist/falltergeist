@@ -259,7 +259,7 @@ std::vector<std::string> *CrossPlatform::findFalloutDataFiles()
             if (ext == ".dat")
             {
                 if (filename.length() == 12 && filename.substr(0, 5) == "patch")
-                    _dataFiles->push_back(filename);
+                    _dataFiles->insert(_dataFiles->begin(),filename);
             }
         }
     }
