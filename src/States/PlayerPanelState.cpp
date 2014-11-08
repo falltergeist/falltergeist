@@ -20,9 +20,11 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Engine/Audio/AudioMixer.h"
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/ActiveUI.h"
 #include "../Engine/Graphics/Renderer.h"
+#include "../Engine/ResourceManager.h"
 #include "../Engine/Input/Mouse.h"
 #include "../Game/GameDudeObject.h"
 #include "../States/GameMenuState.h"
@@ -69,14 +71,22 @@ void PlayerPanelState::init()
 
     addUI("change_hand_button", new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 218, 5));
     getActiveUI("change_hand_button")->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerPanelState::onChangeHandButtonClick);
+    getActiveUI("change_hand_button")->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &PlayerPanelState::onMouseDown);
+    getActiveUI("change_hand_button")->addEventHandler("mouseleftup", this, (EventRecieverMethod) &PlayerPanelState::onMouseUp);
 
     addUI("inventory_button", new ImageButton(ImageButton::TYPE_PANEL_INVENTORY, 211, 40));
     getActiveUI("inventory_button")->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerPanelState::onInventoryButtonClick);
+    getActiveUI("inventory_button")->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &PlayerPanelState::onMouseDown);
+    getActiveUI("inventory_button")->addEventHandler("mouseleftup", this, (EventRecieverMethod) &PlayerPanelState::onMouseUp);
 
     addUI("options_button", new ImageButton(ImageButton::TYPE_PANEL_OPTIONS, 210, 61));
     getActiveUI("options_button")->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerPanelState::onOptionsButtonClick);
+    getActiveUI("options_button")->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &PlayerPanelState::onMouseDown);
+    getActiveUI("options_button")->addEventHandler("mouseleftup", this, (EventRecieverMethod) &PlayerPanelState::onMouseUp);
 
     addUI("attack_button", new ImageButton(ImageButton::TYPE_PANEL_ATTACK, 267, 25));
+    getActiveUI("attack_button")->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &PlayerPanelState::onMouseDownAttack);
+    getActiveUI("attack_button")->addEventHandler("mouseleftup", this, (EventRecieverMethod) &PlayerPanelState::onMouseUpAttack);
 
     addUI("hit_points", new SmallCounter(471, 40));
     getSmallCounter("hit_points")->setNumber(game->player()->hitPoints());
@@ -88,15 +98,23 @@ void PlayerPanelState::init()
 
     addUI("skilldex_button", new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 523, 5));
     getActiveUI("skilldex_button")->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerPanelState::onSkilldexButtonClick);
+    getActiveUI("skilldex_button")->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &PlayerPanelState::onMouseDown);
+    getActiveUI("skilldex_button")->addEventHandler("mouseleftup", this, (EventRecieverMethod) &PlayerPanelState::onMouseUp);
 
     addUI("map_button", new ImageButton(ImageButton::TYPE_PANEL_MAP, 526, 39));
     getActiveUI("map_button")->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerPanelState::onMapButtonClick);
+    getActiveUI("map_button")->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &PlayerPanelState::onMouseDown);
+    getActiveUI("map_button")->addEventHandler("mouseleftup", this, (EventRecieverMethod) &PlayerPanelState::onMouseUp);
 
     addUI("cha_button", new ImageButton(ImageButton::TYPE_PANEL_CHA, 526, 58));
     getActiveUI("cha_button")->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerPanelState::onChaButtonClick);
+    getActiveUI("cha_button")->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &PlayerPanelState::onMouseDown);
+    getActiveUI("cha_button")->addEventHandler("mouseleftup", this, (EventRecieverMethod) &PlayerPanelState::onMouseUp);
 
     addUI("pip_button", new ImageButton(ImageButton::TYPE_PANEL_PIP, 526, 77));
     getActiveUI("pip_button")->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerPanelState::onPipBoyButtonClick);
+    getActiveUI("pip_button")->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &PlayerPanelState::onMouseDown);
+    getActiveUI("pip_button")->addEventHandler("mouseleftup", this, (EventRecieverMethod) &PlayerPanelState::onMouseUp);
 }
 
 void PlayerPanelState::render()
@@ -203,6 +221,24 @@ void PlayerPanelState::onPanelMouseUp(MouseEvent* event)
 {
 }
 
+void PlayerPanelState::onMouseDown(MouseEvent* event)
+{
+    Game::getInstance()->mixer()->playACMSound(ResourceManager::acmFileType("sound/sfx/butin2.acm"));
+}
 
+void PlayerPanelState::onMouseUp(MouseEvent* event)
+{
+    Game::getInstance()->mixer()->playACMSound(ResourceManager::acmFileType("sound/sfx/butin1.acm"));
+}
+
+void PlayerPanelState::onMouseDownAttack(MouseEvent* event)
+{
+    Game::getInstance()->mixer()->playACMSound(ResourceManager::acmFileType("sound/sfx/butin3.acm"));
+}
+
+void PlayerPanelState::onMouseUpAttack(MouseEvent* event)
+{
+    Game::getInstance()->mixer()->playACMSound(ResourceManager::acmFileType("sound/sfx/butout3.acm"));
+}
 
 }

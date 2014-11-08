@@ -52,6 +52,11 @@ public:
     void onPanelMouseIn(MouseEvent* event);
     void onPanelMouseOut(MouseEvent* event);
     void onPanelMouseUp(MouseEvent* event);
+    void onMouseDown(MouseEvent* event);
+    void onMouseUp(MouseEvent* event);
+    //attack button has different sounds.
+    void onMouseDownAttack(MouseEvent* event);
+    void onMouseUpAttack(MouseEvent* event);
 
 };
 
