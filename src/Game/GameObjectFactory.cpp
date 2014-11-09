@@ -151,6 +151,7 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
                 ((GameCritterObject*)object)->setSkill(i, proto->critterSkills()->at(i));
             }
             ((GameCritterObject*)object)->setActionPoints(proto->critterActionPoints());
+            ((GameCritterObject*)object)->setActionPointsMax(proto->critterActionPoints());
             ((GameCritterObject*)object)->setHitPointsMax(proto->critterHitPointsMax());
             ((GameCritterObject*)object)->setArmorClass(proto->critterArmorClass());
             ((GameCritterObject*)object)->setCarryWeightMax(proto->critterCarryWeightMax());

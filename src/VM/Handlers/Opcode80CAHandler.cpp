@@ -45,32 +45,80 @@ void Opcode80CAHandler::_run()
         throw Exception("VM::opcode80CA pointer error");
     }
 
+    int result;
     switch (number)
     {
+        case 0: // ST
+        case 1: // PE
+        case 2: // EN
+        case 3: // CH
+        case 4: // IN
+        case 5: // AG
+        case 6: // LU
+        {
+            result = critter->statTotal(number);
+            break;
+        }
         case 7: // max hit points
         {
-            _vm->pushDataInteger(critter->hitPointsMax());
+            result = critter->hitPointsMax();
+            break;
+        }
+        case 8: // max action points
+        {
+            result = critter->actionPointsMax();
+            break;
+        }
+        case 9: // armor class
+        {
+            result = critter->armorClass();
+            break;
+        }
+        case 11: // melee damage
+        {
+            result = critter->meleeDamage();
+            break;
+        }
+        case 12: // carry weight max
+        {
+            result = critter->carryWeightMax();
+            break;
+        }
+        case 13: // sequence
+        {
+            result = critter->sequence();
+            break;
+        }
+        case 14: // heal rate
+        {
+            result = critter->healingRate();
+            break;
+        }
+        case 15: // crit chance
+        {
+            result = critter->criticalChance();
+            break;
+        }
+        case 33: // age
+        {
+            result = critter->gender();
             break;
         }
         case 34: // gender
         {
-            _vm->pushDataInteger(critter->gender());
+            result = critter->gender();
             break;
         }
         case 35: // hit points
         {
-            _vm->pushDataInteger(critter->hitPoints());
+            result = critter->hitPoints();
             break;
         }
         default:
         {
-            if (number > 6)
-            {
-                throw Exception("VM::opcode80CA - number out of range:" + std::to_string(number));
-            }
-            _vm->pushDataInteger(critter->stat(number) + critter->statBonus(number));
-            break;
+            throw Exception("VM::opcode80CA - unimplemented number:" + std::to_string(number));
         }
+        _vm->pushDataInteger(result);
     }
 }
 

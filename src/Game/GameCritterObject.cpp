@@ -283,6 +283,16 @@ void GameCritterObject::setActionPoints(int value)
     _actionPoints = value;
 }
 
+int GameCritterObject::actionPointsMax()
+{
+    return _actionPointsMax;
+}
+
+void GameCritterObject::setActionPointsMax(int value)
+{
+    _actionPointsMax = value;
+}
+
 unsigned int GameCritterObject::carryWeight()
 {
     unsigned int weight = 0;
