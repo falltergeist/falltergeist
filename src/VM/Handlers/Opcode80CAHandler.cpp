@@ -39,17 +39,27 @@ void Opcode80CAHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80CA] [+] int get_critter_stat(GameCritterObject* who, int number)" << std::endl;
     int number = _vm->popDataInteger();
-    auto object = static_cast<GameCritterObject*>(_vm->popDataPointer());
-    if (!object)
+    auto critter = static_cast<GameCritterObject*>(_vm->popDataPointer());
+    if (!critter)
     {
         throw Exception("VM::opcode80CA pointer error");
     }
 
     switch (number)
     {
+        case 7: // max hit points
+        {
+            _vm->pushDataInteger(critter->hitPointsMax());
+            break;
+        }
         case 34: // gender
         {
-            _vm->pushDataInteger(object->gender());
+            _vm->pushDataInteger(critter->gender());
+            break;
+        }
+        case 35: // hit points
+        {
+            _vm->pushDataInteger(critter->hitPoints());
             break;
         }
         default:
@@ -58,7 +68,7 @@ void Opcode80CAHandler::_run()
             {
                 throw Exception("VM::opcode80CA - number out of range:" + std::to_string(number));
             }
-            _vm->pushDataInteger(object->stat(number) + object->statBonus(number));
+            _vm->pushDataInteger(critter->stat(number) + critter->statBonus(number));
             break;
         }
     }
