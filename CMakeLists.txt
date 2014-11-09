@@ -293,14 +293,14 @@ set(SOURCES main.cpp
             src/VM/Handlers/Opcode8028Handler.cpp
             src/VM/Handlers/Opcode8029Handler.h
             src/VM/Handlers/Opcode8029Handler.cpp
-            src/VM/Handlers/Opcode802aHandler.h
-            src/VM/Handlers/Opcode802aHandler.cpp
-            src/VM/Handlers/Opcode802bHandler.h
-            src/VM/Handlers/Opcode802bHandler.cpp
-            src/VM/Handlers/Opcode802cHandler.h
-            src/VM/Handlers/Opcode802cHandler.cpp
-            src/VM/Handlers/Opcode802fHandler.h
-            src/VM/Handlers/Opcode802fHandler.cpp
+            src/VM/Handlers/Opcode802AHandler.h
+            src/VM/Handlers/Opcode802AHandler.cpp
+            src/VM/Handlers/Opcode802BHandler.h
+            src/VM/Handlers/Opcode802BHandler.cpp
+            src/VM/Handlers/Opcode802CHandler.h
+            src/VM/Handlers/Opcode802CHandler.cpp
+            src/VM/Handlers/Opcode802FHandler.h
+            src/VM/Handlers/Opcode802FHandler.cpp
             src/VM/Handlers/Opcode8030Handler.h
             src/VM/Handlers/Opcode8030Handler.cpp
             src/VM/Handlers/Opcode8031Handler.h

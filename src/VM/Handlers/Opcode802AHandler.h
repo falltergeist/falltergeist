@@ -17,26 +17,25 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef FALLTERGEIST_OPCODE802AHANDLER_H
+#define FALLTERGEIST_OPCODE802AHANDLER_H
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Logger.h"
-#include "../../VM/Handlers/Opcode802cHandler.h"
-#include "../../VM/VM.h"
+#include "../../VM/OpcodeHandler.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Opcode802cHandler::Opcode802cHandler(VM* vm) : OpcodeHandler(vm)
+class Opcode802AHandler : public OpcodeHandler
 {
-}
-
-void Opcode802cHandler::_run()
-{
-   _vm->setSVARbase(_vm->dataStack()->size());
-   Logger::debug("SCRIPT") << "[802C] [*] set SVAR_base = " << _vm->SVARbase() << std::endl;
-}
+public:
+    Opcode802AHandler(VM* vm);
+    virtual void _run();
+};
 
 }
+#endif // FALLTERGEIST_OPCODE802AHANDLER_H

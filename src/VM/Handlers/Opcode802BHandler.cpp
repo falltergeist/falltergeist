@@ -21,7 +21,7 @@
 
 // Falltergeist includes
 #include "../../Engine/Logger.h"
-#include "../../VM/Handlers/Opcode802fHandler.h"
+#include "../../VM/Handlers/Opcode802BHandler.h"
 #include "../../VM/VM.h"
 
 // Third party includes
@@ -29,19 +29,16 @@
 namespace Falltergeist
 {
 
-Opcode802fHandler::Opcode802fHandler(VM* vm) : OpcodeHandler(vm)
+Opcode802BHandler::Opcode802BHandler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode802fHandler::_run()
+void Opcode802BHandler::_run()
 {
-   Logger::debug("SCRIPT") << "[802F] [*] ifthen(address, condition)" << std::endl;
-   auto condition = _vm->popDataLogical();
-   auto address = _vm->popDataInteger();
-   if (!condition)
-    {
-       _vm->setProgramCounter(address);
-    }
+   auto argumentsCounter = _vm->popDataInteger();
+   _vm->pushReturnInteger(_vm->DVARbase());
+   _vm->setDVARBase(_vm->dataStack()->size() - argumentsCounter);
+   Logger::debug("SCRIPT") << "[802B] [*] set DVAR base = " << _vm->DVARbase() << std::endl;
 }
 
 }

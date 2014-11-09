@@ -68,10 +68,10 @@
 #include "../VM/Handlers/Opcode8027Handler.h"
 #include "../VM/Handlers/Opcode8028Handler.h"
 #include "../VM/Handlers/Opcode8029Handler.h"
-#include "../VM/Handlers/Opcode802aHandler.h"
-#include "../VM/Handlers/Opcode802bHandler.h"
-#include "../VM/Handlers/Opcode802cHandler.h"
-#include "../VM/Handlers/Opcode802fHandler.h"
+#include "../VM/Handlers/Opcode802AHandler.h"
+#include "../VM/Handlers/Opcode802BHandler.h"
+#include "../VM/Handlers/Opcode802CHandler.h"
+#include "../VM/Handlers/Opcode802FHandler.h"
 #include "../VM/Handlers/Opcode8030Handler.h"
 #include "../VM/Handlers/Opcode8031Handler.h"
 #include "../VM/Handlers/Opcode8032Handler.h"
@@ -244,16 +244,16 @@ void VM::run()
                 opcodeHandler = new Opcode8029Handler(this);
                 break;
             case 0x802A:
-                opcodeHandler = new Opcode802aHandler(this);
+                opcodeHandler = new Opcode802AHandler(this);
                 break;
             case 0x802B:
-                opcodeHandler = new Opcode802bHandler(this);
+                opcodeHandler = new Opcode802BHandler(this);
                 break;
             case 0x802C:
-                opcodeHandler = new Opcode802cHandler(this);
+                opcodeHandler = new Opcode802CHandler(this);
                 break;
             case 0x802F:
-                opcodeHandler = new Opcode802fHandler(this);
+                opcodeHandler = new Opcode802FHandler(this);
                 break;
             case 0x8030:
                 opcodeHandler = new Opcode8030Handler(this);

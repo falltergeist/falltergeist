@@ -17,25 +17,29 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_OPCODE802AHANDLER_H
-#define FALLTERGEIST_OPCODE802AHANDLER_H
-
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../VM/OpcodeHandler.h"
+#include "../../Engine/Logger.h"
+#include "../../VM/Handlers/Opcode802AHandler.h"
+#include "../../VM/VM.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class Opcode802aHandler : public OpcodeHandler
+Opcode802AHandler::Opcode802AHandler(VM* vm) : OpcodeHandler(vm)
 {
-public:
-    Opcode802aHandler(VM* vm);
-    virtual void _run();
-};
+}
+
+void Opcode802AHandler::_run()
+{
+    Logger::debug("SCRIPT") << "[802A] [*] DVAR clear" << std::endl;
+    while (_vm->dataStack()->size() > _vm->DVARbase())
+    {
+      _vm->dataStack()->pop();
+    }
+}
 
 }
-#endif // FALLTERGEIST_OPCODE802AHANDLER_H

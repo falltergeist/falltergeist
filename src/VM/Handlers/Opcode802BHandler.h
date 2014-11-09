@@ -30,12 +30,12 @@
 namespace Falltergeist
 {
 
-class Opcode802bHandler : public OpcodeHandler
+class Opcode802BHandler : public OpcodeHandler
 {
 public:
-    Opcode802bHandler(VM* vm);
+    Opcode802BHandler(VM* vm);
     virtual void _run();
 };
 
 }
-#endif // FALLTERGEIST_OPCODE802bHANDLER_H
+#endif // FALLTERGEIST_OPCODE802BHANDLER_H
