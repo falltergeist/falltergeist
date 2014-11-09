@@ -237,7 +237,7 @@ Texture* TextArea::texture()
         wrd = "";
         wordWidth = 0;
         auto glyph = font->aaf()->glyphs()->at(' ');
-        space_width = glyph->width() + font->horizontalGap();
+        space_width = font->aaf()->spaceWidth() + font->horizontalGap();
 
         for (unsigned char chr : text)
         {
@@ -313,7 +313,10 @@ Texture* TextArea::texture()
             {
                 // calculating width of current string
                 auto glyph = font->aaf()->glyphs()->at(chr);
-                str_width += glyph->width() + font->horizontalGap();
+                if (chr == ' ')
+                  str_width += space_width;
+                else
+                  str_width += glyph->width() + font->horizontalGap();
             }
             if (str_width > stringMaxWidth)
             {
@@ -363,7 +366,10 @@ Texture* TextArea::texture()
             for (unsigned char chr : text)
             {
                 auto glyph = font->aaf()->glyphs()->at(chr);
-                str_width += glyph->width() + font->horizontalGap();
+                if (chr == ' ')
+                    str_width += space_width;
+                else
+                    str_width += glyph->width() + font->horizontalGap();
             }
         }
 
@@ -418,7 +424,10 @@ Texture* TextArea::texture()
             }
             else
             {
-                x += glyph->width() + font->horizontalGap();
+                if (chr == ' ')
+                    x += space_width;
+                else
+                    x += glyph->width() + font->horizontalGap();
             }
         }
         y += font->height() + font->verticalGap();
