@@ -46,7 +46,7 @@ void Slider::_onDrag(MouseEvent* event)
     if (newOffset <= 218 && newOffset >= 0)
     {
         sender->_xOffset = newOffset;
-        sender->_value = ((maxValue() - minValue())/218)*sender->_xOffset;
+        sender->_value = ((sender->maxValue() - sender->minValue())/218)*sender->_xOffset;
     }
 }
 
