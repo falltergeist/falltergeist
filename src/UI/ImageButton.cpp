@@ -191,8 +191,18 @@ void ImageButton::_onLeftButtonClick(MouseEvent* event)
     auto sender = dynamic_cast<ImageButton*>(event->emitter());
     if (sender->_checkboxMode)
     {
-        sender->_checked = sender->_checked ? false : true;
+        sender->_checked = !sender->_checked;
     }
+}
+
+bool ImageButton::checked()
+{
+    return _checked;
+}
+
+void ImageButton::setChecked(bool _checked)
+{
+    this->_checked = _checked;
 }
 
 }
