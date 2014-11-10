@@ -40,8 +40,10 @@ class Animation : public ActiveUI
 protected:
     bool _playing = false;
     bool _ended = false;
+    bool _reverse = false;
     std::vector<AnimationFrame*> _animationFrames;
     unsigned int _currentFrame = 0;
+    unsigned int _progress = 0;
     unsigned int _frameTicks = 0;
     std::vector<Texture*> _slimeTextures;
     std::vector<Texture*> _fireSlowTextures;
@@ -64,6 +66,7 @@ public:
 
     void play();
     void stop();
+    void setReverse(bool value);
 
     bool ended();
 };
