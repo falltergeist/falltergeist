@@ -44,6 +44,7 @@ public:
     virtual ~Slider();
     virtual Texture* texture();
     virtual int x();
+    virtual void handle(Event* event);
     double minValue();
     void setMinValue(double value);
     double maxValue();

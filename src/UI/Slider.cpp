@@ -39,6 +39,34 @@ Slider::~Slider()
 {
 }
 
+void Slider::handle(Event* event)
+{
+    if(auto mouseEvent = dynamic_cast<MouseEvent*>(event))
+    {
+        if (!texture()) return;
+
+        int x = mouseEvent->x() - _x;
+        int y = mouseEvent->y() - _y;
+
+        //if we are in slider coordinates and not on thumb (slider size = 218 + thumb size, thumb size = 21)
+        if (x > 0 && x < 239 && y > 0 && y < this->height() && !this->pixel(mouseEvent->x() - _xOffset, mouseEvent->y() - _yOffset))
+        {
+            //on left button up only when not dragging thumb
+            if (mouseEvent->name() == "mouseup" && mouseEvent->leftButton() && !_drag)
+            {
+                x -= 10; //~middle of thumb
+                if (x < 0) x = 0;
+                if (x > 218) x = 218;
+                _xOffset = x;
+                _value = ((maxValue() - minValue())/218)*_xOffset;
+                return;
+            }
+        }
+    }
+    //pass it to default handler
+    ActiveUI::handle(event);
+}
+
 void Slider::_onDrag(MouseEvent* event)
 {
     auto sender = dynamic_cast<Slider*>(event->emitter());
