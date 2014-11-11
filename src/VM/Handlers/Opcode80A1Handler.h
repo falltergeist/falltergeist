@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_OPCODE8036HANDLER_H
-#define FALLTERGEIST_OPCODE8036HANDLER_H
+#ifndef FALLTERGEIST_OPCODE80A1HANDLER_H
+#define FALLTERGEIST_OPCODE80A1HANDLER_H
 
 // C++ standard includes
 
@@ -30,12 +30,12 @@
 namespace Falltergeist
 {
 
-class Opcode8036Handler : public OpcodeHandler
+class Opcode80A1Handler : public OpcodeHandler
 {
 public:
-    Opcode8036Handler(VM* vm);
+    Opcode80A1Handler(VM* vm);
     virtual void _run();
 };
 
 }
-#endif // FALLTERGEIST_OPCODE8036HANDLER_H
+#endif // FALLTERGEIST_OPCODE8045HANDLER_H

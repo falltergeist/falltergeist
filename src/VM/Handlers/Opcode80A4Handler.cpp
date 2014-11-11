@@ -17,25 +17,34 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_OPCODE8036HANDLER_H
-#define FALLTERGEIST_OPCODE8036HANDLER_H
-
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../VM/OpcodeHandler.h"
+#include "../../Engine/Logger.h"
+#include "../../VM/Handlers/Opcode80A4Handler.h"
+#include "../../Engine/Game.h"
+#include "../../Game/GameCritterObject.h"
+#include "../../VM/VM.h"
+#include "../../VM/VMStackPointerValue.h"
+
+
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class Opcode8036Handler : public OpcodeHandler
+Opcode80A4Handler::Opcode80A4Handler(VM* vm) : OpcodeHandler(vm)
 {
-public:
-    Opcode8036Handler(VM* vm);
-    virtual void _run();
-};
+}
+
+void Opcode80A4Handler::_run()
+{
+    Logger::debug("SCRIPT") << "[80A4] [+] std::string* obj_name(GameCritterObject* who)" << std::endl;
+    auto critter = static_cast<GameCritterObject*>(_vm->popDataPointer());
+    _vm->pushDataPointer(new std::string(critter->name()), VMStackPointerValue::POINTER_TYPE_STRING);
+}
 
 }
-#endif // FALLTERGEIST_OPCODE8036HANDLER_H
+
+
