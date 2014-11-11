@@ -17,25 +17,35 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_OPCODE8036HANDLER_H
-#define FALLTERGEIST_OPCODE8036HANDLER_H
-
 // C++ standard includes
-
+#include <cstdlib>
+#include <ctime>
 // Falltergeist includes
-#include "../../VM/OpcodeHandler.h"
+#include "../../Engine/Logger.h"
+#include "../../VM/Handlers/Opcode80B4Handler.h"
+#include "../../VM/VM.h"
+
+
+
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class Opcode8036Handler : public OpcodeHandler
+Opcode80B4Handler::Opcode80B4Handler(VM* vm) : OpcodeHandler(vm)
 {
-public:
-    Opcode8036Handler(VM* vm);
-    virtual void _run();
-};
+}
+
+void Opcode80B4Handler::_run()
+{
+   Logger::debug("SCRIPT") << "[80B4] [+] int rand(int min, int max)" << std::endl;
+   auto max = _vm->popDataInteger();
+   auto min = _vm->popDataInteger();
+   srand(time(0));
+   _vm->pushDataInteger(rand()%(max - min + 1) + min);
+}
 
 }
-#endif // FALLTERGEIST_OPCODE8036HANDLER_H
+
+

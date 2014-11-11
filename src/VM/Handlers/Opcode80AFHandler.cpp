@@ -20,48 +20,36 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Exception.h"
 #include "../../Engine/Logger.h"
-#include "../../Game/GameCritterObject.h"
-#include "../../VM/Handlers/Opcode80CAHandler.h"
+#include "../../VM/Handlers/Opcode80AFHandler.h"
 #include "../../VM/VM.h"
+
+
+
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Opcode80CAHandler::Opcode80CAHandler(VM* vm) : OpcodeHandler(vm)
+Opcode80AFHandler::Opcode80AFHandler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode80CAHandler::_run()
+void Opcode80AFHandler::_run()
 {
-    Logger::debug("SCRIPT") << "[80CA] [+] int get_critter_stat(GameCritterObject* who, int number)" << std::endl;
-    int number = _vm->popDataInteger();
-    auto object = static_cast<GameCritterObject*>(_vm->popDataPointer());
-    if (!object)
-    {
-        throw Exception("VM::opcode80CA pointer error");
-    }
-
-    switch (number)
-    {
-        case 34: // gender
+     Logger::debug("SCRIPT") << "[80AF] [*] int is_success(int val)" << std::endl;
+     auto value = _vm->popDataInteger();
+     if (value == 2 || value == 3)
         {
-            _vm->pushDataInteger(object->gender());
-            break;
+          _vm->pushDataInteger(1); // true;
         }
-        default:
+         else
         {
-            if (number > 6)
-            {
-                throw Exception("VM::opcode80CA - number out of range:" + std::to_string(number));
-            }
-            _vm->pushDataInteger(object->stat(number) + object->statBonus(number));
-            break;
+         _vm->pushDataInteger(0);
         }
-    }
 }
 
 }
+
+

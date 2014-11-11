@@ -20,48 +20,45 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Exception.h"
 #include "../../Engine/Logger.h"
-#include "../../Game/GameCritterObject.h"
-#include "../../VM/Handlers/Opcode80CAHandler.h"
+#include "../../VM/Handlers/Opcode80A7Handler.h"
+#include "../../Engine/Game.h"
+#include "../../Game/GameObject.h"
+#include "../../States/LocationState.h"
+#include "../../Engine/PathFinding/Hexagon.h"
+#include "../../Engine/PathFinding/HexagonGrid.h"
 #include "../../VM/VM.h"
+
+
+
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Opcode80CAHandler::Opcode80CAHandler(VM* vm) : OpcodeHandler(vm)
+Opcode80A7Handler::Opcode80A7Handler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode80CAHandler::_run()
+void Opcode80A7Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[80CA] [+] int get_critter_stat(GameCritterObject* who, int number)" << std::endl;
-    int number = _vm->popDataInteger();
-    auto object = static_cast<GameCritterObject*>(_vm->popDataPointer());
-    if (!object)
+   Logger::debug("SCRIPT") << "[80A7] [+] GameObject* tile_contains_pid_obj(int position, int elevation, int PID)" << std::endl;
+   auto PID = _vm->popDataInteger();
+   auto elevation = _vm->popDataInteger();
+   auto position = _vm->popDataInteger();
+   auto game = Game::getInstance();
+   GameObject* found = 0;
+   for (auto object : *game->locationState()->hexagonGrid()->at(position)->objects())
     {
-        throw Exception("VM::opcode80CA pointer error");
-    }
-
-    switch (number)
-    {
-        case 34: // gender
-        {
-            _vm->pushDataInteger(object->gender());
-            break;
-        }
-        default:
-        {
-            if (number > 6)
+        if (object->PID() == PID && object->elevation() == elevation)
             {
-                throw Exception("VM::opcode80CA - number out of range:" + std::to_string(number));
+                found = object;
             }
-            _vm->pushDataInteger(object->stat(number) + object->statBonus(number));
-            break;
-        }
     }
+    _vm->pushDataPointer(found);
 }
 
 }
+
+

@@ -67,6 +67,7 @@ public:
 
     bool initialized();
     bool overrides();
+    void setOverrides(bool Value);
     void setInitialized(bool value);
 
     bool hasFunction(std::string name);

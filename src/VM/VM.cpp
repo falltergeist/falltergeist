@@ -89,6 +89,28 @@
 #include "../VM/Handlers/Opcode803EHandler.h"
 #include "../VM/Handlers/Opcode803FHandler.h"
 #include "../VM/Handlers/Opcode8040Handler.h"
+#include "../VM/Handlers/Opcode8041Handler.h"
+#include "../VM/Handlers/Opcode8045Handler.h"
+#include "../VM/Handlers/Opcode8046Handler.h"
+#include "../VM/Handlers/Opcode80A1Handler.h"
+#include "../VM/Handlers/Opcode80A3Handler.h"
+#include "../VM/Handlers/Opcode80A4Handler.h"
+#include "../VM/Handlers/Opcode80A6Handler.h"
+#include "../VM/Handlers/Opcode80A7Handler.h"
+#include "../VM/Handlers/Opcode80A8Handler.h"
+#include "../VM/Handlers/Opcode80A9Handler.h"
+#include "../VM/Handlers/Opcode80AAHandler.h"
+#include "../VM/Handlers/Opcode80ABHandler.h"
+#include "../VM/Handlers/Opcode80ACHandler.h"
+#include "../VM/Handlers/Opcode80AEHandler.h"
+#include "../VM/Handlers/Opcode80AFHandler.h"
+#include "../VM/Handlers/Opcode80B0Handler.h"
+#include "../VM/Handlers/Opcode80B2Handler.h"
+#include "../VM/Handlers/Opcode80B4Handler.h"
+#include "../VM/Handlers/Opcode80B6Handler.h"
+#include "../VM/Handlers/Opcode80B7Handler.h"
+#include "../VM/Handlers/Opcode80B8Handler.h"
+#include "../VM/Handlers/Opcode80B9Handler.h"
 #include "../VM/Handlers/Opcode80BAHandler.h"
 #include "../VM/Handlers/Opcode80BCHandler.h"
 #include "../VM/Handlers/Opcode80CAHandler.h"
@@ -306,6 +328,72 @@ void VM::run()
             case 0x8040:
                 opcodeHandler = new Opcode8040Handler(this);
                 break;
+            case 0x8041:
+                opcodeHandler = new Opcode8041Handler(this);
+                break;
+            case 0x8045:
+                opcodeHandler = new Opcode8045Handler(this);
+                break;
+            case 0x8046:
+                opcodeHandler = new Opcode8046Handler(this);
+                break;
+            case 0x80A1:
+                opcodeHandler = new Opcode80A1Handler(this);
+                break;
+            case 0x80A3:
+                opcodeHandler = new Opcode80A3Handler(this);
+                break;
+            case 0x80A4:
+                opcodeHandler = new Opcode80A4Handler(this);
+                break;
+            case 0x80A6:
+                opcodeHandler = new Opcode80A6Handler(this);
+                break;
+            case 0x80A7:
+                opcodeHandler = new Opcode80A7Handler(this);
+                break;
+            case 0x80A8:
+                opcodeHandler = new Opcode80A8Handler(this);
+                break;
+            case 0x80A9:
+                opcodeHandler = new Opcode80A9Handler(this);
+                break;
+            case 0x80AA:
+                opcodeHandler = new Opcode80AAHandler(this);
+                break;
+            case 0x80AB:
+                opcodeHandler = new Opcode80ABHandler(this);
+                break;
+            case 0x80AC:
+                opcodeHandler = new Opcode80ACHandler(this);
+                break;
+            case 0x80AE:
+                opcodeHandler = new Opcode80AEHandler(this);
+                break;
+            case 0x80AF:
+                opcodeHandler = new Opcode80AFHandler(this);
+                break;
+            case 0x80B0:
+                opcodeHandler = new Opcode80B0Handler(this);
+                break;
+            case 0x80B2:
+                opcodeHandler = new Opcode80B2Handler(this);
+                break;
+            case 0x80B4:
+                opcodeHandler = new Opcode80B4Handler(this);
+                break;
+            case 0x80B6:
+                opcodeHandler = new Opcode80B6Handler(this);
+                break;
+            case 0x80B7:
+                opcodeHandler = new Opcode80B7Handler(this);
+                break;
+            case 0x80B8:
+                opcodeHandler = new Opcode80B8Handler(this);
+                break;
+            case 0x80B9:
+                opcodeHandler = new Opcode80B9Handler(this);
+                break;
             case 0x80BA:
                 opcodeHandler = new Opcode80BAHandler(this);
                 break;
@@ -395,225 +483,28 @@ void VM::run()
             case 0x803e: break;
             case 0x803f: break;
             case 0x8040: break;
-            case 0x8041:
-            {
-                Logger::debug("SCRIPT") << "[8041] [*] |" << std::endl;
-                auto b = popDataInteger();
-                auto a = popDataInteger();
-                pushDataInteger(a | b);
-                break;
-            }
-            case 0x8045:
-            {
-                Logger::debug("SCRIPT") << "[8045] [*] !" << std::endl;
-                auto a = popDataLogical();
-                pushDataInteger(!a);
-                break;
-            }
-            case 0x8046:
-            {
-                Logger::debug("SCRIPT") << "[8046] [*] - value (change sign)" << std::endl;
-                auto value = popDataInteger();
-                pushDataInteger(-value);
-                break;
-            }
-            case 0x80a1:
-            {
-                Logger::debug("SCRIPT") << "[80A1] [+] void giveExpPoints(int points)" << std::endl;
-                auto points = popDataInteger();
-                auto game = Game::getInstance();
-                game->player()->setExperience(game->player()->experience() + points);
-                break;
-            }
-            case 0x80a3:
-            {
-                Logger::debug("SCRIPT") << "[80A3] [=] void play_sfx(string* p1)" << std::endl;
-                popDataPointer();
-                break;
-            }
-            case 0x80a4:
-            {
-                Logger::debug("SCRIPT") << "[80A4] [+] std::string* obj_name(GameCritterObject* who)" << std::endl;
-                auto critter = static_cast<GameCritterObject*>(popDataPointer());
-                pushDataPointer(new std::string(critter->name()), VMStackPointerValue::POINTER_TYPE_STRING);
-                break;
-            }
-            case 0x80a6:
-            {
-                Logger::debug("SCRIPT") << "[80A6] [=] int SkillPoints(int PCStatNum)" << std::endl;
-                popDataInteger();
-                pushDataInteger(0);
-                break;
-            }
-            case 0x80a7:
-            {
-                Logger::debug("SCRIPT") << "[80A7] [+] GameObject* tile_contains_pid_obj(int position, int elevation, int PID)" << std::endl;
-                auto PID = popDataInteger();
-                auto elevation = popDataInteger();
-                auto position = popDataInteger();
-                auto game = Game::getInstance();
-                GameObject* found = 0;
-                for (auto object : *game->locationState()->hexagonGrid()->at(position)->objects())
-                {
-                    if (object->PID() == PID && object->elevation() == elevation)
-                    {
-                        found = object;
-                    }
-                }
-                pushDataPointer(found);
-                break;
-            }
-            case 0x80a8:
-            {
-                Logger::debug("SCRIPT") << "[80A8] [=] void set_map_start(int x, int y, int elev, int rot)" << std::endl;
-                popDataInteger();
-                popDataInteger();
-                popDataInteger();
-                popDataInteger();
-                break;
-            }
-            case 0x80a9:
-            {
-                Logger::debug("SCRIPT") << "[80A9] [+] void override_map_start(int x, int y, int elevation, int orientation)" << std::endl;
-                auto orientation = popDataInteger();
-                auto elevation = popDataInteger();
-                auto y = popDataInteger();
-                auto x = popDataInteger();
-                auto position = y*200 + x;
-                auto game = Game::getInstance();
-                auto player = game->player();
-                auto hexagon = game->locationState()->hexagonGrid()->at(position);
-                LocationState::moveObjectToHexagon(player, hexagon);
-                //player->setPosition(position);
-                player->setOrientation(orientation);
-                player->setElevation(elevation);
-                break;
-            }
-            case 0x80aa:
-            {
-                Logger::debug("SCRIPT") << "[80AA] [+] int get_skill(GameCritterObject* who, int number) " << std::endl;
-                int number = popDataInteger();
-                if (number > 17) throw Exception("VM::opcode80AA - number out of range: " + std::to_string(number));
-                auto object = static_cast<GameCritterObject*>(popDataPointer());
-                if (!object) throw Exception("VM::opcode80AA pointer error");
-                pushDataInteger(object->skill(number));
-                break;
-            }
-            case 0x80ab:
-            {
-                Logger::debug("SCRIPT") << "[80AB] [=] int using_skill(GameCritterObject* who, int skill)" << std::endl;
-                popDataInteger();
-                popDataPointer();
-                pushDataInteger(0);
-                break;
-            }
-            case 0x80ac:
-            {
-                Logger::debug("SCRIPT") << "[80AC] [=] int roll_vs_skill(ObjectPtr who, int skill, int modifier)" << std::endl;
-                popDataInteger();
-                popDataInteger();
-                popDataPointer();
-                pushDataInteger(2);
-                break;
-            }
-            case 0x80ae:
-            {
-                Logger::debug("SCRIPT") << "[80AE] [=] int do_check(ObjectPtr who, int check, int modifier)" << std::endl;
-                popDataInteger();
-                popDataInteger();
-                popDataPointer();
-                pushDataInteger(2);
-                break;
-            }
-            case 0x80af:
-            {
-                Logger::debug("SCRIPT") << "[80AF] [*] int is_success(int val)" << std::endl;
-                auto value = popDataInteger();
-                if (value == 2 || value == 3)
-                {
-                    pushDataInteger(1); // true;
-                }
-                else
-                {
-                    pushDataInteger(0);
-                }
-                break;
-            }
-            case 0x80b0:
-            {
-                Logger::debug("SCRIPT") << "[80B0] [*] int is_critical(int val)" << std::endl;
-                auto value = popDataInteger();
-                if (value == 0 || value == 3)
-                {
-                    pushDataInteger(1);
-                }
-                else
-                {
-                    pushDataInteger(0);
-                }
-                break;
-            }
-            case 0x80b2:
-            {
-                Logger::debug("SCRIPT") << "[80B2] [=] void mark_area_known(int AREA_MARK_TYPE, int AreaNum, int MARK_STATE);" << std::endl;
-                popDataInteger();
-                popDataInteger();
-                popDataInteger();
-                break;
-            }
-            case 0x80b4:
-            {
-                Logger::debug("SCRIPT") << "[80B4] [+] int rand(int min, int max)" << std::endl;
-                auto max = popDataInteger();
-                auto min = popDataInteger();
-                srand(time(0));
-                pushDataInteger(rand()%(max - min + 1) + min);
-                break;
-            }
-            case 0x80b6:
-            {
-                Logger::debug("SCRIPT") << "[80B6] [+] int move_to(GameObject* object, int position, int elevation)" << std::endl;
-                auto elevation = popDataInteger();
-                auto position = popDataInteger();
-                auto object = static_cast<GameObject*>(popDataPointer());
-                if (!object) throw new Exception("Opcode 80b6 error");
-                auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
-                LocationState::moveObjectToHexagon(object, hexagon);
-                object->setElevation(elevation);
-                pushDataInteger(1);
-                break;
-            }
-            case 0x80b7:
-            {
-                Logger::debug("SCRIPT") << "[80B7] [+] GameObject* create_object_sid(int PID, int position, int elevation, int SID)" << std::endl;
-                auto SID = popDataInteger();
-                auto elevation = popDataInteger();
-                auto position = popDataInteger();
-                auto PID = popDataInteger();
-                auto object = GameObjectFactory::createObject(PID);
-                auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
-                LocationState::moveObjectToHexagon(object, hexagon);
-                object->setElevation(elevation);
-                if (SID > 0)
-                {
-                    auto intFile = ResourceManager::intFileType(SID);
-                    if (intFile) object->scripts()->push_back(new VM(intFile, object));
-                }
-                pushDataPointer(object);
-                break;
-            }
-            case 0x80b8:
-            {
-                Logger::debug("SCRIPT") << "[80B8] [*] void display_msg(string*)" << std::endl;
-                std::string* pointer = static_cast<std::string*>(popDataPointer());
-                _displayString(*pointer);
-                //delete pointer;
-                break;
-            }
-            case 0x80b9:
-                Logger::debug("SCRIPT") << "[80B9] script_overrides" << std::endl;
-                _overrides = true;
-                break;
+            case 0x8041: break;
+            case 0x8045: break;
+            case 0x8046: break;
+            case 0x80a1: break;
+            case 0x80a3: break;
+            case 0x80a4: break;
+            case 0x80a6: break;
+            case 0x80a7: break;
+            case 0x80a8: break;
+            case 0x80a9: break;
+            case 0x80aa: break;
+            case 0x80ab: break;
+            case 0x80ac: break;
+            case 0x80ae: break;
+            case 0x80af: break;
+            case 0x80b0: break;
+            case 0x80b2: break;
+            case 0x80b4: break;
+            case 0x80b6: break;
+            case 0x80b7: break;
+            case 0x80b8: break;
+            case 0x80b9: break;
             case 0x80ba: break;
             case 0x80bb:
             {
@@ -1662,6 +1553,11 @@ void VM::setDVARBase(int Value)
 bool VM::overrides()
 {
     return _overrides;
+}
+
+void VM::setOverrides(bool Value)
+{
+    _overrides = Value;
 }
 
 }

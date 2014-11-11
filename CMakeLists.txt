@@ -335,6 +335,48 @@ set(SOURCES main.cpp
             src/VM/Handlers/Opcode803FHandler.cpp
             src/VM/Handlers/Opcode8040Handler.h
             src/VM/Handlers/Opcode8040Handler.cpp
+            src/VM/Handlers/Opcode8041Handler.h
+            src/VM/Handlers/Opcode8041Handler.cpp
+	    src/VM/Handlers/Opcode8045Handler.h
+            src/VM/Handlers/Opcode8045Handler.cpp
+	    src/VM/Handlers/Opcode8046Handler.h
+            src/VM/Handlers/Opcode8046Handler.cpp
+	    src/VM/Handlers/Opcode80A1Handler.h
+            src/VM/Handlers/Opcode80A1Handler.cpp
+	    src/VM/Handlers/Opcode80A3Handler.h
+            src/VM/Handlers/Opcode80A3Handler.cpp
+	    src/VM/Handlers/Opcode80A4Handler.h
+            src/VM/Handlers/Opcode80A4Handler.cpp
+	    src/VM/Handlers/Opcode80A6Handler.h
+            src/VM/Handlers/Opcode80A6Handler.cpp
+	    src/VM/Handlers/Opcode80A7Handler.h
+            src/VM/Handlers/Opcode80A7Handler.cpp
+	    src/VM/Handlers/Opcode80A8Handler.h
+            src/VM/Handlers/Opcode80A8Handler.cpp
+	    src/VM/Handlers/Opcode80A9Handler.h
+            src/VM/Handlers/Opcode80A9Handler.cpp
+            src/VM/Handlers/Opcode80ABHandler.h
+            src/VM/Handlers/Opcode80ABHandler.cpp
+	    src/VM/Handlers/Opcode80ACHandler.h
+            src/VM/Handlers/Opcode80ACHandler.cpp
+	    src/VM/Handlers/Opcode80AEHandler.h
+            src/VM/Handlers/Opcode80AEHandler.cpp
+	    src/VM/Handlers/Opcode80AFHandler.h
+            src/VM/Handlers/Opcode80AFHandler.cpp
+	    src/VM/Handlers/Opcode80B0Handler.h
+            src/VM/Handlers/Opcode80B0Handler.cpp
+	    src/VM/Handlers/Opcode80B2Handler.h
+            src/VM/Handlers/Opcode80B2Handler.cpp
+	    src/VM/Handlers/Opcode80B4Handler.h
+            src/VM/Handlers/Opcode80B4Handler.cpp
+	    src/VM/Handlers/Opcode80B6Handler.h
+            src/VM/Handlers/Opcode80B6Handler.cpp
+	    src/VM/Handlers/Opcode80B7Handler.h
+            src/VM/Handlers/Opcode80B7Handler.cpp
+	    src/VM/Handlers/Opcode80B8Handler.h
+            src/VM/Handlers/Opcode80B8Handler.cpp
+	    src/VM/Handlers/Opcode80B9Handler.h
+            src/VM/Handlers/Opcode80B9Handler.cpp 
             src/VM/Handlers/Opcode80BAHandler.h
             src/VM/Handlers/Opcode80BAHandler.cpp
             src/VM/Handlers/Opcode80BCHandler.h
