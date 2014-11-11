@@ -145,7 +145,7 @@ void EngineSettings::_createDefaultConfig(IniFile &ini)
     game->setPropertyBool("force_location", _defaultForceLocation);
     game->setPropertyBool("display_fps", _defaultDisplayFps);
     game->setPropertyBool("display_mouse_position", _defaultDisplayMousePosition);
-    
+
     auto preferences = ini.section("preferences");
     preferences->setPropertyDouble("brightness", _defaultBrightness);
     preferences->setPropertyInt("game_difficulty", _defaultGameDifficulty);
@@ -163,7 +163,6 @@ void EngineSettings::_createDefaultConfig(IniFile &ini)
     preferences->setPropertyBool("target_highlight", _defaultTargetHighlight);
     preferences->setPropertyDouble("text_delay", _defaultTextDelay);
     preferences->setPropertyInt("violence_level", _defaultViolenceLevel);
-    
 }
 
 EngineSettings::~EngineSettings()
@@ -173,7 +172,7 @@ EngineSettings::~EngineSettings()
 void EngineSettings::saveConfig()
 {
     IniFile ini;
-    
+
     auto video = ini.section("video");
     video->setPropertyInt("width", _screenWidth);
     video->setPropertyInt("height", _screenHeight);
@@ -196,7 +195,7 @@ void EngineSettings::saveConfig()
     game->setPropertyBool("force_location", _forceLocation);
     game->setPropertyBool("display_fps", _displayFps);
     game->setPropertyBool("display_mouse_position", _displayMousePosition);
-    
+
     auto preferences = ini.section("preferences");
     preferences->setPropertyDouble("brightness", _brightness);
     preferences->setPropertyInt("game_difficulty", _gameDifficulty);
@@ -214,7 +213,7 @@ void EngineSettings::saveConfig()
     preferences->setPropertyBool("target_highlight", _targetHighlight);
     preferences->setPropertyDouble("text_delay", _textDelay);
     preferences->setPropertyInt("violence_level", _violenceLevel);
-    
+
     // Create config path if not exists
     std::string configPath = CrossPlatform::getConfigPath();
     std::string configFile = configPath + "/config.ini";
@@ -328,7 +327,7 @@ void EngineSettings::_readConfig(IniFile &ini)
 
     _displayFps = game->propertyBool("display_fps", _defaultDisplayFps);
     _displayMousePosition = game->propertyBool("display_mouse_position", _defaultDisplayMousePosition);
-    
+
     auto preferences = ini.section("preferences");
     _brightness = preferences->propertyDouble("brightness", _defaultBrightness);
     _gameDifficulty = preferences->propertyInt("game_difficulty", _defaultGameDifficulty);

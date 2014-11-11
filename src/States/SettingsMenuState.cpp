@@ -429,17 +429,17 @@ void SettingsMenuState::onSaveButtonClick(MouseEvent* event)
     Game::getInstance()->engineSettings()->setRunning(((MultistateImageButton*)getUI("running"))->state());
     Game::getInstance()->engineSettings()->setSubtitles(((MultistateImageButton*)getUI("subtitles"))->state());
     Game::getInstance()->engineSettings()->setItemHighlight(((MultistateImageButton*)getUI("item_highlight"))->state());
-    
+
     Game::getInstance()->engineSettings()->setMasterVolume(((Slider*)getUI("master_volume"))->value());
     Game::getInstance()->engineSettings()->setMusicVolume(((Slider*)getUI("music_volume"))->value());
     Game::getInstance()->engineSettings()->setVoiceVolume(((Slider*)getUI("voice_volume"))->value());
     Game::getInstance()->engineSettings()->setSfxVolume(((Slider*)getUI("sfx_volume"))->value());
-    
+
     Game::getInstance()->engineSettings()->setTextDelay(((Slider*)getUI("text_delay"))->value());
     Game::getInstance()->engineSettings()->setCombatSpeed(((Slider*)getUI("combat_speed"))->value());
     Game::getInstance()->engineSettings()->setBrightness(((Slider*)getUI("brightness"))->value());
     Game::getInstance()->engineSettings()->setMouseSensitivity(((Slider*)getUI("mouse_sensitivity"))->value());
-    
+
     Game::getInstance()->engineSettings()->setPlayerSpeedup(((ImageButton*)getUI("player_speedup"))->checked());
 
     Game::getInstance()->engineSettings()->saveConfig();

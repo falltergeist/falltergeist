@@ -45,13 +45,13 @@ public:
     ~EngineSettings();
 
     void saveConfig();
-    
+
     unsigned int screenWidth() const;
 
     unsigned int screenHeight() const;
 
     Renderer renderer() const;
-    
+
     const std::string &initialLocation() const;
 
     static const std::string &defaultInitLocation();
@@ -115,7 +115,7 @@ private:
     bool _displayMousePosition;
     std::string _loggerLevel;
     bool _loggerColors;
-    
+
     double _brightness;
     unsigned int _gameDifficulty;
     unsigned int _combatDifficulty;
