@@ -35,15 +35,16 @@ class Slider : public ActiveUI
 {
 protected:
     ImageList _imageList;
-    double _minValue = 0;
-    double _maxValue = 1;
-    double _value = 0;
+    double _minValue = 0.0;
+    double _maxValue = 1.0;
+    double _value = 0.0;
     void _onDrag(MouseEvent* event);
 public:
     Slider(int x, int y);
     virtual ~Slider();
     virtual Texture* texture();
     virtual int x();
+    virtual void handle(Event* event);
     double minValue();
     void setMinValue(double value);
     double maxValue();

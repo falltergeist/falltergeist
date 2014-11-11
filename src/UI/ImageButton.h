@@ -80,6 +80,8 @@ public:
 
     void setState(unsigned int value);
     virtual Texture* texture();
+    bool checked();
+    void setChecked(bool _checked);
 };
 
 }
