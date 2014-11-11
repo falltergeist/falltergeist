@@ -42,6 +42,7 @@ protected:
     bool _reverse = false;
     std::vector<AnimationFrame*> _animationFrames;
     unsigned int _currentFrame = 0;
+    unsigned int _actionFrame = 0;
     unsigned int _progress = 0;
     unsigned int _frameTicks = 0;
     std::vector<Texture*> _slimeTextures;
@@ -66,6 +67,10 @@ public:
     void play();
     void stop();
     void setReverse(bool value);
+
+    unsigned int currentFrame();
+    unsigned int actionFrame();
+    void setActionFrame(unsigned int value);
 
     bool ended();
 };

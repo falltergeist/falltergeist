@@ -41,7 +41,7 @@
 namespace Falltergeist
 {
 
-GameObject::GameObject() : EventReciever()
+GameObject::GameObject() : EventReciever(), EventEmitter()
 {
 }
 

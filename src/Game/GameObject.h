@@ -41,7 +41,7 @@ class Location;
 class TextArea;
 class VM;
 
-class GameObject : public EventReciever
+class GameObject : public EventReciever, public EventEmitter
 {
 protected:
     bool _canWalkThru = true;

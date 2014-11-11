@@ -78,6 +78,7 @@ public:
     int criticalChance();
     unsigned int carryWeightMax();
 
+    void handleActionFrame(Event* event);
 };
 
 }

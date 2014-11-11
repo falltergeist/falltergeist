@@ -44,9 +44,10 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
     auto frm = ResourceManager::frmFileType(frmName);
     setTexture(ResourceManager::texture(frmName));
 
+    _actionFrame = frm->actionFrame();
+
     int xOffset = frm->shiftX(direction);
     int yOffset = frm->shiftY(direction);
-
 
     // Смещение кадра в текстуре анимации
     unsigned int x = 0;
@@ -237,11 +238,20 @@ void Animation::think()
         {
             _progress += 1;
             _currentFrame = _reverse ? frames()->size() - _progress - 1 : _progress;
+            if (_actionFrame == _currentFrame)
+            {
+                auto event = new Event("actionFrame");
+                emitEvent(event);
+                delete event;
+            }
         }
         else
         {
             _ended = true;
             _playing = false;
+            auto event = new Event("animationEnded");
+            emitEvent(event);
+            delete event;
         }
         auto frame = frames()->at(_currentFrame);
         setXOffset(frame->xOffset());
@@ -319,6 +329,21 @@ void Animation::setReverse(bool value)
 bool Animation::ended()
 {
     return _ended;
+}
+
+unsigned int Animation::currentFrame()
+{
+    return _currentFrame;
+}
+
+unsigned int Animation::actionFrame()
+{
+    return _actionFrame;
+}
+
+void Animation::setActionFrame(unsigned int value)
+{
+    _actionFrame = value;
 }
 
 }

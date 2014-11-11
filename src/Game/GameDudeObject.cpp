@@ -337,8 +337,8 @@ void GameDudeObject::_generateUi()
         }
     }
 
-    // action = stand
-    frmString += "a";
+    // action = walk
+    frmString += "b";
 
     auto frm = ResourceManager::frmFileType("art/critters/" + frmString + ".frm");
     if (frm)
@@ -347,7 +347,9 @@ void GameDudeObject::_generateUi()
         if (frm->framesPerDirection() > 1)
         {
             auto queue = new AnimationQueue();
-            queue->animations()->push_back(new Animation("art/critters/" + frmString + ".frm", orientation()));
+            auto animation = new Animation("art/critters/" + frmString + ".frm", orientation());
+            animation->addEventHandler("animationEnded", this, (EventRecieverMethod)&GameDudeObject::handleActionFrame);
+            queue->animations()->push_back(animation);
             queue->setRepeat(true);
             queue->start();
             _ui = queue;
@@ -366,6 +368,11 @@ void GameDudeObject::_generateUi()
     {
         _ui->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &LocationState::onMouseDown);
     }
+}
+
+void GameDudeObject::handleActionFrame(Event* event)
+{
+    //throw 1;
 }
 
 }
