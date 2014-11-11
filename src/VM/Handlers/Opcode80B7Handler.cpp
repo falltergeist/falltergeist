@@ -45,20 +45,23 @@ Opcode80B7Handler::Opcode80B7Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80B7Handler::_run()
 {
-   Logger::debug("SCRIPT") << "[80B7] [+] GameObject* create_object_sid(int PID, int position, int elevation, int SID)" << std::endl;
-   auto SID = _vm->popDataInteger();
-   auto elevation = _vm->popDataInteger();
-   auto position = _vm->popDataInteger();
-   auto PID = _vm->popDataInteger();
-   auto object = GameObjectFactory::createObject(PID);
-   auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
-   LocationState::moveObjectToHexagon(object, hexagon);
-   object->setElevation(elevation);
-   if (SID > 0)
-       {
-           auto intFile = ResourceManager::intFileType(SID);
-            if (intFile) object->scripts()->push_back(new VM(intFile, object));
-       }
+    Logger::debug("SCRIPT") << "[80B7] [+] GameObject* create_object_sid(int PID, int position, int elevation, int SID)" << std::endl;
+    auto SID = _vm->popDataInteger();
+    auto elevation = _vm->popDataInteger();
+    auto position = _vm->popDataInteger();
+    auto PID = _vm->popDataInteger();
+    auto object = GameObjectFactory::createObject(PID);
+    auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
+    LocationState::moveObjectToHexagon(object, hexagon);
+    object->setElevation(elevation);
+    if (SID > 0)
+    {
+        auto intFile = ResourceManager::intFileType(SID);
+        if (intFile)
+        {
+            object->scripts()->push_back(new VM(intFile, object));
+        }
+    }
     _vm->pushDataPointer(object);
 }
 

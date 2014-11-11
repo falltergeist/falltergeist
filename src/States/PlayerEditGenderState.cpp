@@ -15,7 +15,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 // C++ standard includes
@@ -63,9 +62,9 @@ void PlayerEditGenderState::init()
     if (Game::getInstance()->player()->gender() == 0) _maleImage->setCurrentImage(1); // 0 - male
 
     _femaleImage = new ImageList((std::vector<std::string>){
-                                      "art/intrface/femoff.frm",
-                                      "art/intrface/femon.frm"
-                                  }, bgX+310, bgY+2);
+                                                            "art/intrface/femoff.frm",
+                                                            "art/intrface/femon.frm"
+                                                            }, bgX+310, bgY+2);
     _femaleImage->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditGenderState::onFemaleButtonPress);
     if (Game::getInstance()->player()->gender() == 1) _femaleImage->setCurrentImage(1); // 1 - female
 

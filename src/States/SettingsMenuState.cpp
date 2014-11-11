@@ -15,7 +15,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 // C++ standard includes
@@ -206,8 +205,8 @@ void SettingsMenuState::init()
     // COMBAT MESSAGES SWITCH LABELS
     auto verboseLabel = _addTextArea(msg->message(211), backgroundX+203, backgroundY+69);         // VERBOSE
     verboseLabel->setFont(font1_907824ff)
-           ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT)
-           ->setWidth(100);
+                ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT)
+                ->setWidth(100);
     _addTextArea(msg->message(212), backgroundX+320, backgroundY+69)->setFont(font1_907824ff);    // BRIEF
 
     // COMBAT TAUNTS SWITCH LABELS

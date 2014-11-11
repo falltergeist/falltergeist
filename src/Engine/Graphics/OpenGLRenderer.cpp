@@ -207,17 +207,17 @@ void OpenGLRenderer::drawTexture(Texture* texture, int x, int y, int sourceX, in
 
     glBindTexture( GL_TEXTURE_2D, texture->id());
     glBegin(GL_POLYGON);
-         glTexCoord2i(0, 0);
-         glVertex2i(x, y);
+        glTexCoord2i(0, 0);
+        glVertex2i(x, y);
 
-         glTexCoord2i(1, 0);
-         glVertex2i(x + texture->texWidth(), y);
+        glTexCoord2i(1, 0);
+        glVertex2i(x + texture->texWidth(), y);
 
-         glTexCoord2i(1, 1);
-         glVertex2i(x + texture->texWidth(), y + texture->texHeight());
+        glTexCoord2i(1, 1);
+        glVertex2i(x + texture->texWidth(), y + texture->texHeight());
 
-         glTexCoord2i(0, 1);
-         glVertex2i(x, y + texture->texHeight());
+        glTexCoord2i(0, 1);
+        glVertex2i(x, y + texture->texHeight());
     glEnd();
 }
 

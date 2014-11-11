@@ -38,8 +38,8 @@ Opcode80B9Handler::Opcode80B9Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80B9Handler::_run()
 {
-   Logger::debug("SCRIPT") << "[80B9] script_overrides" << std::endl;
-   _vm->setOverrides(true);
+    Logger::debug("SCRIPT") << "[80B9] script_overrides" << std::endl;
+    _vm->setOverrides(true);
 }
 
 }

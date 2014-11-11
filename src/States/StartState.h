@@ -15,7 +15,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 #ifndef FALLTERGEIST_STARTSTATE_H
@@ -44,4 +43,3 @@ public:
 
 }
 #endif // FALLTERGEIST_STARTSTATE_H
-

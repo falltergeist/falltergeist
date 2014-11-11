@@ -35,10 +35,10 @@ Opcode8040Handler::Opcode8040Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8040Handler::_run()
 {
-      Logger::debug("SCRIPT") << "[8040] [*] &" << std::endl;
-      auto b = _vm->popDataInteger();
-      auto a = _vm->popDataInteger();
-      _vm->pushDataInteger(a & b);
+    Logger::debug("SCRIPT") << "[8040] [*] &" << std::endl;
+    auto b = _vm->popDataInteger();
+    auto a = _vm->popDataInteger();
+    _vm->pushDataInteger(a & b);
 }
 
 }

@@ -15,7 +15,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 // C++ standard includes
@@ -70,8 +69,8 @@ void MovieState::init()
 
     if (sublst->strings()->at(_id)!="reserved.sve")
     {
-      _subs = ResourceManager::sveFileType(subfile).get();
-      if (_subs) _hasSubs = true;
+        _subs = ResourceManager::sveFileType(subfile).get();
+        if (_subs) _hasSubs = true;
     }
     addUI("movie", new MvePlayer(ResourceManager::mveFileType(movie).get()));
 
@@ -93,8 +92,8 @@ void MovieState::think()
 
     if (dynamic_cast<MvePlayer*>(getUI("movie"))->frame() >= _nextSubLine.first)
     {
-      dynamic_cast<TextArea*>(getUI("subs"))->setText(_nextSubLine.second);
-      if (_hasSubs) _nextSubLine = _subs->getSubLine(dynamic_cast<MvePlayer*>(getUI("movie"))->frame());
+        dynamic_cast<TextArea*>(getUI("subs"))->setText(_nextSubLine.second);
+        if (_hasSubs) _nextSubLine = _subs->getSubLine(dynamic_cast<MvePlayer*>(getUI("movie"))->frame());
     }
 
     if (!_started)

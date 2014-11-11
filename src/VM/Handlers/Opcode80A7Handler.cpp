@@ -43,18 +43,18 @@ Opcode80A7Handler::Opcode80A7Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80A7Handler::_run()
 {
-   Logger::debug("SCRIPT") << "[80A7] [+] GameObject* tile_contains_pid_obj(int position, int elevation, int PID)" << std::endl;
-   auto PID = _vm->popDataInteger();
-   auto elevation = _vm->popDataInteger();
-   auto position = _vm->popDataInteger();
-   auto game = Game::getInstance();
-   GameObject* found = 0;
-   for (auto object : *game->locationState()->hexagonGrid()->at(position)->objects())
+    Logger::debug("SCRIPT") << "[80A7] [+] GameObject* tile_contains_pid_obj(int position, int elevation, int PID)" << std::endl;
+    auto PID = _vm->popDataInteger();
+    auto elevation = _vm->popDataInteger();
+    auto position = _vm->popDataInteger();
+    auto game = Game::getInstance();
+    GameObject* found = 0;
+    for (auto object : *game->locationState()->hexagonGrid()->at(position)->objects())
     {
         if (object->PID() == PID && object->elevation() == elevation)
-            {
-                found = object;
-            }
+        {
+            found = object;
+        }
     }
     _vm->pushDataPointer(found);
 }

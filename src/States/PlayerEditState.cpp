@@ -39,7 +39,7 @@ namespace Falltergeist
 {
 
 PlayerEditState::PlayerEditState() : State()
-{ 
+{
 }
 
 PlayerEditState::~PlayerEditState()
@@ -146,8 +146,8 @@ void PlayerEditState::init()
     }
 
     // SKILLS
-    std::string imagesSkills[] = { "gunsml", "gunbig", "energywp", "unarmed", "melee", "throwing", "firstaid", "doctor", "sneak",
-                                 "lockpick", "steal", "traps", "science", "repair", "speech", "barter", "gambling", "outdoors"};
+    std::string imagesSkills[]  = { "gunsml", "gunbig", "energywp", "unarmed", "melee", "throwing", "firstaid", "doctor", "sneak",
+                                    "lockpick", "steal", "traps", "science", "repair", "speech", "barter", "gambling", "outdoors"};
     for (unsigned int i = 0; i != 18; ++i)
     {
         std::stringstream ss;

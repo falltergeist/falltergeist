@@ -625,7 +625,7 @@ void VM::run()
             {
                 Logger::debug("SCRIPT") << "[80C9] [+] int obj_item_subtype(GameItemObject* object)" << std::endl;
                 auto pointer = popDataPointer();
-                     if (static_cast<GameArmorItemObject*>(pointer))     pushDataInteger(0);
+                if      (static_cast<GameArmorItemObject*>(pointer))     pushDataInteger(0);
                 else if (static_cast<GameContainerItemObject*>(pointer)) pushDataInteger(1);
                 else if (static_cast<GameDrugItemObject*>(pointer))      pushDataInteger(2);
                 else if (static_cast<GameWeaponItemObject*>(pointer))    pushDataInteger(3);
@@ -1234,7 +1234,7 @@ void VM::run()
                 break;
             }
             case 0x814b:
-           {
+            {
                 Logger::debug("SCRIPT") << "[814B] [*] void* party_member_obj(int pid)" << std::endl;
                 popDataInteger();
                 pushDataPointer(0);

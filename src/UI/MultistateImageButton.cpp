@@ -117,7 +117,7 @@ void MultistateImageButton::setMode(int mode)
         default:
             throw Exception("MultistateImageButton::setMode(int) - wrong mode number: " + std::to_string(mode));
     }
-    _mode = mode;    
+    _mode = mode;
 }
 
 int MultistateImageButton::mode()
@@ -139,7 +139,7 @@ void MultistateImageButton::_onLeftButtonClick(MouseEvent* event)
         {
             sender->_currentState = (sender->_currentState > 0) ? sender->_currentState + sender->modeFactor() : sender->_maxState - 1;
         }
-    }        
+    }
     else // MODE_CYCLIC
     {
         if (sender->modeFactor() > 0)

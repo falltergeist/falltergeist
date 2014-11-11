@@ -57,7 +57,7 @@ public:
     void setMinState(unsigned int value);
     unsigned int maxState();
     void setMaxState(unsigned int value);
-    void setMode(int mode);    
+    void setMode(int mode);
     int mode();
     void setModeFactor(int factor);
     int modeFactor();

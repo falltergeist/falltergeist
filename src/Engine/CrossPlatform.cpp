@@ -28,7 +28,7 @@
 #include <stdexcept>
 
 #if defined(__unix__) || defined(__APPLE__)
-  #include <sys/param.h>
+    #include <sys/param.h>
 #endif
 
 #if defined(__linux__)

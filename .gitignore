@@ -12,3 +12,4 @@ falltergeist.cbp
 *.png
 .idea/
 *.autosave
+/src/nbproject/private/

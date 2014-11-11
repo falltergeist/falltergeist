@@ -15,7 +15,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 #ifndef FALLTERGEIST_CRITTER_DIALOG_REVIEW_STATE_H

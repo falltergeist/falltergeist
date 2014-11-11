@@ -120,11 +120,11 @@ Hexagon* HexagonGrid::hexagonAt(unsigned int x, unsigned int y)
 {
     for (auto hexagon : _hexagons)
     {
-       if (y >= hexagon->y() - 8 && y < hexagon->y() + 4)
-       if (x >= hexagon->x() - 16 && x < hexagon->x() + 16)
-       {
-           return hexagon;
-       }
+        if (y >= hexagon->y() - 8 && y < hexagon->y() + 4)
+        if (x >= hexagon->x() - 16 && x < hexagon->x() + 16)
+        {
+            return hexagon;
+        }
     }
     return 0;
 }

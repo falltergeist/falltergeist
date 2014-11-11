@@ -29,7 +29,7 @@ namespace Falltergeist
 {
 
 OpcodeHandler::OpcodeHandler(VM* vm) : _vm(vm)
-{    
+{
 }
 
 void OpcodeHandler::run()

@@ -38,7 +38,7 @@ void Opcode802AHandler::_run()
     Logger::debug("SCRIPT") << "[802A] [*] DVAR clear" << std::endl;
     while (_vm->dataStack()->size() > _vm->DVARbase())
     {
-      _vm->dataStack()->pop();
+        _vm->dataStack()->pop();
     }
 }
 

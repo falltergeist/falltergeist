@@ -43,7 +43,7 @@ void Opcode810DHandler::_run()
     if (auto critter = dynamic_cast<GameCritterObject*>((GameObject*)who))
     {
         auto iterator = std::find_if(critter->inventory()->begin(), critter->inventory()->end(),
-                                     [&] (GameItemObject * &item) { return item->PID() == pid; });
+                                    [&] (GameItemObject * &item) { return item->PID() == pid; });
         const bool found = iterator != critter->inventory()->end();
         _vm->pushDataPointer(found ? *iterator : nullptr);
     }

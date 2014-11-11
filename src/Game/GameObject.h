@@ -15,7 +15,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 #ifndef FALLTERGEIST_GAMEOBJECT_H
@@ -66,7 +65,7 @@ public:
     enum { TYPE_SCENERY_DOOR = 0, TYPE_SCENERY_STAIRS, TYPE_SCENERY_ELEVATOR, TYPE_SCENERY_LADDER, TYPE_SCENERY_GENERIC };
 
     GameObject();
-    virtual ~GameObject();    
+    virtual ~GameObject();
 
     bool canWalkThru();
     virtual void setCanWalkThru(bool value);
@@ -97,7 +96,7 @@ public:
     void render();
     void think();
     void handle(Event* event);
-    
+
     ActiveUI* ui();
     void setUI(ActiveUI* ui);
 

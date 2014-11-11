@@ -45,10 +45,10 @@ void Opcode8013Handler::_run()
 
     auto& debug = Logger::debug("SCRIPT");
 
-    debug << "[8013] [*] SVAR[num] = value" << std::endl
-          << "      num: "  << number << std::endl
-          << "     type: " << value->type() << std::endl
-          << "    value: ";
+    debug   << "[8013] [*] SVAR[num] = value" << std::endl
+            << "      num: "  << number << std::endl
+            << "     type: " << value->type() << std::endl
+            << "    value: ";
 
     switch (value->type())
     {

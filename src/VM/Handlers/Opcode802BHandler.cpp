@@ -35,10 +35,10 @@ Opcode802BHandler::Opcode802BHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode802BHandler::_run()
 {
-   auto argumentsCounter = _vm->popDataInteger();
-   _vm->pushReturnInteger(_vm->DVARbase());
-   _vm->setDVARBase(_vm->dataStack()->size() - argumentsCounter);
-   Logger::debug("SCRIPT") << "[802B] [*] set DVAR base = " << _vm->DVARbase() << std::endl;
+    auto argumentsCounter = _vm->popDataInteger();
+    _vm->pushReturnInteger(_vm->DVARbase());
+    _vm->setDVARBase(_vm->dataStack()->size() - argumentsCounter);
+    Logger::debug("SCRIPT") << "[802B] [*] set DVAR base = " << _vm->DVARbase() << std::endl;
 }
 
 }

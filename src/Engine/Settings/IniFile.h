@@ -15,7 +15,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 #ifndef FALLTERGEIST_INIFILE_H
@@ -58,4 +57,4 @@ public:
 };
 
 }
-#endif	// FALLTERGEIST_INIFILE_H 
+#endif	// FALLTERGEIST_INIFILE_H

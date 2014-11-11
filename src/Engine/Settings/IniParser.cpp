@@ -15,7 +15,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 // C++ standard includes
@@ -39,8 +38,10 @@ void IniParser::_trim(std::string &line)
 
 void IniParser::_rtrim(std::string &line)
 {
-    if (line.find(";")!=std::string::npos)
-      line.erase(line.find(";")-1);
+    if (line.find(";") != std::string::npos)
+    {
+        line.erase(line.find(";")-1);
+    }
 
     line.erase(find_if(line.rbegin(), line.rend(), std::not1(std::ptr_fun<int, int>(isspace))).base(), line.end());
 }

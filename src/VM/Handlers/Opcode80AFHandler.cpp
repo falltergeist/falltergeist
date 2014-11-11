@@ -38,16 +38,16 @@ Opcode80AFHandler::Opcode80AFHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80AFHandler::_run()
 {
-     Logger::debug("SCRIPT") << "[80AF] [*] int is_success(int val)" << std::endl;
-     auto value = _vm->popDataInteger();
-     if (value == 2 || value == 3)
-        {
-          _vm->pushDataInteger(1); // true;
-        }
-         else
-        {
-         _vm->pushDataInteger(0);
-        }
+    Logger::debug("SCRIPT") << "[80AF] [*] int is_success(int val)" << std::endl;
+    auto value = _vm->popDataInteger();
+    if (value == 2 || value == 3)
+    {
+        _vm->pushDataInteger(1); // true;
+    }
+    else
+    {
+        _vm->pushDataInteger(0);
+    }
 }
 
 }

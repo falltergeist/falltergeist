@@ -35,11 +35,11 @@ Opcode8030Handler::Opcode8030Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8030Handler::_run()
 {
-   Logger::debug("SCRIPT") << "[8030] [*] while(address, condition)" << std::endl;
-   auto condition = _vm->popDataLogical();
-   if (condition)
+    Logger::debug("SCRIPT") << "[8030] [*] while(address, condition)" << std::endl;
+    auto condition = _vm->popDataLogical();
+    if (condition)
     {
-     _vm->setProgramCounter(_vm->popDataInteger());
+        _vm->setProgramCounter(_vm->popDataInteger());
     }
 }
 

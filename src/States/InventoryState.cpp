@@ -15,7 +15,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 // C++ standard includes
@@ -443,7 +442,7 @@ void InventoryState::_screenShow (unsigned int PID)
         playerNameLabel->setText(msg->message(PID*100)->text()); // item name
         screenLabel->setText(msg->message(PID*100+1)->text()); // item dedcription
     }
-    
+
     screenLabel->setVisible(PID != 0);
     statsLabel->setVisible(PID == 0);
     statsValuesLabel->setVisible(PID == 0);

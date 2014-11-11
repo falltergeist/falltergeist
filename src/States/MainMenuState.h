@@ -30,7 +30,7 @@
 
 namespace Falltergeist
 {
-    
+
 class MainMenuState : public State
 {
 public:

@@ -68,10 +68,10 @@ void Opcode9001Handler::_run()
     auto string = static_cast<std::string*>(((VMStackPointerValue*)value)->value());
 
     auto& debug = Logger::debug("SCRIPT");
-        debug << "[9001] [*] push_d value" << std::endl
-              << "     type: " << value->type() << std::endl
-              << "    value: " << ((VMStackPointerValue*)value)->value() << std::endl
-              << "   string: " << *string << std::endl;
+    debug   << "[9001] [*] push_d value" << std::endl
+            << "     type: " << value->type() << std::endl
+            << "    value: " << ((VMStackPointerValue*)value)->value() << std::endl
+            << "   string: " << *string << std::endl;
 }
 
 }

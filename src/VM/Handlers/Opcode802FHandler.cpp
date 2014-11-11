@@ -35,12 +35,12 @@ Opcode802FHandler::Opcode802FHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode802FHandler::_run()
 {
-   Logger::debug("SCRIPT") << "[802F] [*] ifthen(address, condition)" << std::endl;
-   auto condition = _vm->popDataLogical();
-   auto address = _vm->popDataInteger();
-   if (!condition)
+    Logger::debug("SCRIPT") << "[802F] [*] ifthen(address, condition)" << std::endl;
+    auto condition = _vm->popDataLogical();
+    auto address = _vm->popDataInteger();
+    if (!condition)
     {
-       _vm->setProgramCounter(address);
+        _vm->setProgramCounter(address);
     }
 }
 

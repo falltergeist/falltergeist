@@ -52,16 +52,16 @@ Game* Game::_instance = NULL;
 Game* Game::getInstance()
 {
     if(!_instanceFlag)
-     {
-         _instance = new Game();
-         _instanceFlag = true;
-         _instance->_initialize();
-         return _instance;
-     }
-     else
-     {
-         return _instance;
-     }
+    {
+        _instance = new Game();
+        _instanceFlag = true;
+        _instance->_initialize();
+        return _instance;
+    }
+    else
+    {
+        return _instance;
+    }
 }
 
 void Game::_initialize()
@@ -388,10 +388,10 @@ void Game::handle()
                         if (keyboardEvent->keyCode() == SDLK_F11)
                         {
                             Texture* texture = renderer()->screenshot();
-                            SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(texture->data(), texture->width(), texture->height(), 32, texture->width()*4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);                            
+                            SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(texture->data(), texture->width(), texture->height(), 32, texture->width()*4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
                             std::string name = std::to_string(SDL_GetTicks()) +  ".bmp";
                             SDL_SaveBMP(surface, name.c_str());
-                            SDL_FreeSurface(surface);                            
+                            SDL_FreeSurface(surface);
                             delete texture;
                             Logger::info("GAME") << "Screenshot saved to " + name << std::endl;
 

@@ -40,12 +40,12 @@ Opcode80AAHandler::Opcode80AAHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80AAHandler::_run()
 {
-  Logger::debug("SCRIPT") << "[80AA] [+] int get_skill(GameCritterObject* who, int number) " << std::endl;
-  int number = _vm->popDataInteger();
-  if (number > 17) throw Exception("VM::opcode80AA - number out of range: " + std::to_string(number));
-  auto object = static_cast<GameCritterObject*>(_vm->popDataPointer());
-  if (!object) throw Exception("VM::opcode80AA pointer error");
-  _vm->pushDataInteger(object->skill(number));
+    Logger::debug("SCRIPT") << "[80AA] [+] int get_skill(GameCritterObject* who, int number) " << std::endl;
+    int number = _vm->popDataInteger();
+    if (number > 17) throw Exception("VM::opcode80AA - number out of range: " + std::to_string(number));
+    auto object = static_cast<GameCritterObject*>(_vm->popDataPointer());
+    if (!object) throw Exception("VM::opcode80AA pointer error");
+    _vm->pushDataInteger(object->skill(number));
 }
 
 }

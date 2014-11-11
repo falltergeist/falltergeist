@@ -44,15 +44,15 @@ Opcode80B6Handler::Opcode80B6Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80B6Handler::_run()
 {
-   Logger::debug("SCRIPT") << "[80B6] [+] int move_to(GameObject* object, int position, int elevation)" << std::endl;
-   auto elevation = _vm->popDataInteger();
-   auto position = _vm->popDataInteger();
-   auto object = static_cast<GameObject*>(_vm->popDataPointer());
-   if (!object) throw new Exception("Opcode 80b6 error");
-   auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
-   LocationState::moveObjectToHexagon(object, hexagon);
-   object->setElevation(elevation);
-   _vm->pushDataInteger(1);
+    Logger::debug("SCRIPT") << "[80B6] [+] int move_to(GameObject* object, int position, int elevation)" << std::endl;
+    auto elevation = _vm->popDataInteger();
+    auto position = _vm->popDataInteger();
+    auto object = static_cast<GameObject*>(_vm->popDataPointer());
+    if (!object) throw new Exception("Opcode 80b6 error");
+    auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
+    LocationState::moveObjectToHexagon(object, hexagon);
+    object->setElevation(elevation);
+    _vm->pushDataInteger(1);
 }
 
 }

@@ -86,8 +86,8 @@ void PlayerCreateState::init()
 
     // TRAITS
     auto msgTraits = ResourceManager::msgFileType("text/english/game/trait.msg");
-    std::string imagesTraits[] = { "fastmeta", "bruiser", "smlframe", "onehand", "finesse", "kamikaze", "heavyhnd", "fastshot",
-                              "bldmess", "jinxed", "goodnatr", "addict", "drugrest", "empathy", "skilled", "gifted"};
+    std::string imagesTraits[] =  { "fastmeta", "bruiser", "smlframe", "onehand", "finesse",  "kamikaze", "heavyhnd", "fastshot",
+                                    "bldmess",  "jinxed",  "goodnatr", "addict",  "drugrest", "empathy", "skilled",   "gifted" };
     for (unsigned int i = 0; i != 16; ++i)
     {
         std::stringstream ss;
@@ -111,8 +111,8 @@ void PlayerCreateState::init()
 
     // SKILLS
     auto msgSkills = ResourceManager::msgFileType("text/english/game/skill.msg");
-    std::string imagesSkills[] = { "gunsml", "gunbig", "energywp", "unarmed", "melee", "throwing", "firstaid", "doctor", "sneak",
-                                 "lockpick", "steal", "traps", "science", "repair", "speech", "barter", "gambling", "outdoors"};
+    std::string imagesSkills[]  = { "gunsml",   "gunbig", "energywp", "unarmed", "melee",  "throwing", "firstaid", "doctor",   "sneak",
+                                    "lockpick", "steal",  "traps",    "science", "repair", "speech",   "barter",   "gambling", "outdoors"};
     for (unsigned int i = 0; i != 18; ++i)
     {
         std::stringstream ss;

@@ -35,9 +35,9 @@ Opcode8046Handler::Opcode8046Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8046Handler::_run()
 {
-     Logger::debug("SCRIPT") << "[8046] [*] - value (change sign)" << std::endl;
-     auto value = _vm->popDataInteger();
-     _vm-> pushDataInteger(-value);
+    Logger::debug("SCRIPT") << "[8046] [*] - value (change sign)" << std::endl;
+    auto value = _vm->popDataInteger();
+    _vm-> pushDataInteger(-value);
 }
 
 }

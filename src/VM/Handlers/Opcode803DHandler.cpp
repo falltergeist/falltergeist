@@ -36,12 +36,12 @@ Opcode803DHandler::Opcode803DHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode803DHandler::_run()
 {
-     Logger::debug("SCRIPT") << "[803D] [*] mod %" << std::endl;
-     auto b = _vm->dataStack()->pop();
-     auto a = _vm->dataStack()->pop();
-     auto p1 = dynamic_cast<VMStackIntValue*>(a);
-     auto p2 = dynamic_cast<VMStackIntValue*>(b);
-     _vm->pushDataInteger(p1->value()%p2->value());
+    Logger::debug("SCRIPT") << "[803D] [*] mod %" << std::endl;
+    auto b = _vm->dataStack()->pop();
+    auto a = _vm->dataStack()->pop();
+    auto p1 = dynamic_cast<VMStackIntValue*>(a);
+    auto p2 = dynamic_cast<VMStackIntValue*>(b);
+    _vm->pushDataInteger(p1->value()%p2->value());
 }
 
 }

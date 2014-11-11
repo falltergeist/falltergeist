@@ -43,19 +43,19 @@ Opcode80A9Handler::Opcode80A9Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80A9Handler::_run()
 {
-  Logger::debug("SCRIPT") << "[80A9] [+] void override_map_start(int x, int y, int elevation, int orientation)" << std::endl;
-  auto orientation = _vm->popDataInteger();
-  auto elevation = _vm->popDataInteger();
-  auto y = _vm->popDataInteger();
-  auto x = _vm->popDataInteger();
-  auto position = y*200 + x;
-  auto game = Game::getInstance();
-  auto player = game->player();
-  auto hexagon = game->locationState()->hexagonGrid()->at(position);
-  LocationState::moveObjectToHexagon(player, hexagon);
+    Logger::debug("SCRIPT") << "[80A9] [+] void override_map_start(int x, int y, int elevation, int orientation)" << std::endl;
+    auto orientation = _vm->popDataInteger();
+    auto elevation = _vm->popDataInteger();
+    auto y = _vm->popDataInteger();
+    auto x = _vm->popDataInteger();
+    auto position = y*200 + x;
+    auto game = Game::getInstance();
+    auto player = game->player();
+    auto hexagon = game->locationState()->hexagonGrid()->at(position);
+    LocationState::moveObjectToHexagon(player, hexagon);
                 //player->setPosition(position);
-  player->setOrientation(orientation);
-  player->setElevation(elevation);
+    player->setOrientation(orientation);
+    player->setElevation(elevation);
 }
 
 }

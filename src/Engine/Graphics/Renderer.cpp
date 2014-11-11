@@ -80,13 +80,13 @@ void Renderer::_fade(unsigned int r, unsigned int g, unsigned int b, unsigned in
     _fadeColor.b=b;
     if (dir<0)
     {
-      _fadeColor.a=255;
-      _alpha=255;
+        _fadeColor.a=255;
+        _alpha=255;
     }
     else
     {
-      _fadeColor.a=0;
-      _alpha=0;
+        _fadeColor.a=0;
+        _alpha=0;
     }
     _step=dir;
     _fadeDone=false;

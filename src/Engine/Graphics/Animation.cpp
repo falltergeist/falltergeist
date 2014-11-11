@@ -15,7 +15,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 // C++ standard includes
@@ -113,7 +112,7 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
         {
             for (auto i=0; i<4; i++)
             {
-                unsigned int* mask = new unsigned int[frm->width() * frm->height()]();	
+                unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
 
                 //modify
                 for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
@@ -244,9 +243,9 @@ void Animation::think()
             _ended = true;
             _playing = false;
         }
-       auto frame = frames()->at(_currentFrame);
-       setXOffset(frame->xOffset());
-       setYOffset(frame->yOffset());
+        auto frame = frames()->at(_currentFrame);
+        setXOffset(frame->xOffset());
+        setYOffset(frame->yOffset());
     }
 }
 
@@ -314,7 +313,7 @@ void Animation::stop()
 
 void Animation::setReverse(bool value)
 {
-	_reverse = value;
+    _reverse = value;
 }
 
 bool Animation::ended()

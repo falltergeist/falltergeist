@@ -15,7 +15,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 #ifndef FALLTERGEIST_MOUSE_H
@@ -34,7 +33,7 @@ class UI;
 
 class Mouse
 {
-protected:    
+protected:
     int _x = 320;
     int _y = 240;
     bool _visible = true;

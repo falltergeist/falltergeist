@@ -49,7 +49,7 @@ ResourceManager::ResourceManager()
 }
 
 ResourceManager::~ResourceManager()
-{       
+{
     for (auto it = _textures.begin(); it != _textures.end(); ++it)
     {
         delete it->second;
@@ -57,7 +57,7 @@ ResourceManager::~ResourceManager()
 }
 
 std::shared_ptr<libfalltergeist::DatFileItem> ResourceManager::datFileItem(std::string filename)
-{    
+{
     // Return item from cache
     if (_datFilesItems.find(filename) != _datFilesItems.end())
     {
@@ -88,7 +88,7 @@ std::shared_ptr<libfalltergeist::DatFileItem> ResourceManager::datFileItem(std::
 
             std::string extension = filename.substr(filename.length() - 3, 3);
             std::shared_ptr<libfalltergeist::DatFileItem> item;
-                 if (extension == "aaf") item = std::shared_ptr<libfalltergeist::AafFileType>(new libfalltergeist::AafFileType(stream));
+            if      (extension == "aaf") item = std::shared_ptr<libfalltergeist::AafFileType>(new libfalltergeist::AafFileType(stream));
             else if (extension == "acm") item = std::shared_ptr<libfalltergeist::AcmFileType>(new libfalltergeist::AcmFileType(stream));
             else if (extension == "bio") item = std::shared_ptr<libfalltergeist::BioFileType>(new libfalltergeist::BioFileType(stream));
             else if (extension == "fon") item = std::shared_ptr<libfalltergeist::FonFileType>(new libfalltergeist::FonFileType(stream));
@@ -326,7 +326,7 @@ std::shared_ptr<libfalltergeist::ProFileType> ResourceManager::proFileType(unsig
 
 void ResourceManager::unloadResources()
 {
-    _datFilesItems.clear();    
+    _datFilesItems.clear();
 }
 
 std::shared_ptr<libfalltergeist::FrmFileType> ResourceManager::frmFileType(unsigned int FID)

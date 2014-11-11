@@ -199,11 +199,11 @@ TextArea* TextArea::setHeight(unsigned int height)
 
 unsigned int TextArea::height()
 {
-   if (_height == 0)
-   {
-       return texture()->height();
-   }
-   return _height;
+    if (_height == 0)
+    {
+        return texture()->height();
+    }
+    return _height;
 }
 
 Texture* TextArea::texture()
@@ -314,9 +314,13 @@ Texture* TextArea::texture()
                 // calculating width of current string
                 auto glyph = font->aaf()->glyphs()->at(chr);
                 if (chr == ' ')
-                  str_width += space_width;
+                {
+                    str_width += space_width;
+                }
                 else
-                  str_width += glyph->width() + font->horizontalGap();
+                {
+                    str_width += glyph->width() + font->horizontalGap();
+                }
             }
             if (str_width > stringMaxWidth)
             {

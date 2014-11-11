@@ -38,11 +38,11 @@ Opcode80AEHandler::Opcode80AEHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80AEHandler::_run()
 {
-   Logger::debug("SCRIPT") << "[80AE] [=] int do_check(ObjectPtr who, int check, int modifier)" << std::endl;
-   _vm->popDataInteger();
-   _vm->popDataInteger();
-   _vm->popDataPointer();
-   _vm->pushDataInteger(2);
+    Logger::debug("SCRIPT") << "[80AE] [=] int do_check(ObjectPtr who, int check, int modifier)" << std::endl;
+    _vm->popDataInteger();
+    _vm->popDataInteger();
+    _vm->popDataPointer();
+    _vm->pushDataInteger(2);
 }
 
 }

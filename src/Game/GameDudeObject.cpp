@@ -15,7 +15,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 // C++ standard includes
@@ -72,7 +71,6 @@ void GameDudeObject::loadFromGCDFile(std::shared_ptr<libfalltergeist::GcdFileTyp
     }
 
     this->setGender(gcd->gender());
-    
 }
 
 int GameDudeObject::experience()

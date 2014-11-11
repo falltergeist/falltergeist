@@ -15,7 +15,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 // C++ standard includes
@@ -96,7 +95,7 @@ void LocationState::init()
 }
 
 void LocationState::setLocation(std::string name)
-{    
+{
     auto mapFile = ResourceManager::mapFileType(name);
 
     if (mapFile == nullptr)

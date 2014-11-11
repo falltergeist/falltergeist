@@ -107,7 +107,7 @@ void Texture::setPixel(unsigned int x, unsigned int y, unsigned int color)
     if (x >= _width || y >= _height) return;
     _unregister();
     unsigned int index = (y*_width) + x;
-    _data[index] = color;    
+    _data[index] = color;
 }
 
 void Texture::loadFromRGB(unsigned int* data)
@@ -119,7 +119,7 @@ void Texture::loadFromRGB(unsigned int* data)
 void Texture::loadFromRGBA(unsigned int* data)
 {
     _unregister();
-    for (unsigned int i = 0; i != _width*_height; ++i) _data[i] = data[i];    
+    for (unsigned int i = 0; i != _width*_height; ++i) _data[i] = data[i];
 }
 
 void Texture::copyTo(Texture* destination, unsigned int destinationX, unsigned int destinationY, unsigned int sourceX, unsigned int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)

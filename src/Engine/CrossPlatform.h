@@ -55,7 +55,7 @@ public:
 
     static std::string getVersion();
     static std::string getHomeDirectory();
-    static std::string getCurrentDirectory(); 
+    static std::string getCurrentDirectory();
     static std::vector<std::string> getCdDrivePaths();
     static std::string findFalloutDataPath();
     static std::string findFalltergeistDataPath();

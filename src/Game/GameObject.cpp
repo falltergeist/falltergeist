@@ -15,7 +15,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 // C++ standard includes
@@ -99,7 +98,7 @@ void GameObject::setElevation(int value)
 }
 
 int GameObject::orientation()
-{    
+{
     return _orientation;
 }
 
