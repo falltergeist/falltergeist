@@ -45,7 +45,6 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
     auto frm = ResourceManager::frmFileType(frmName);
     setTexture(ResourceManager::texture(frmName));
 
-
     int xOffset = frm->shiftX(direction);
     int yOffset = frm->shiftY(direction);
 
@@ -235,9 +234,10 @@ void Animation::think()
     {
         _frameTicks = SDL_GetTicks();
 
-        if (_currentFrame < frames()->size() - 1)
+        if (_progress < frames()->size() - 1)
         {
-            _currentFrame += 1;
+            _progress += 1;
+            _currentFrame = _reverse ? frames()->size() - _progress - 1 : _progress;
         }
         else
         {
@@ -305,11 +305,16 @@ void Animation::stop()
 {
     _playing = false;
     _ended = false;
-    _currentFrame = 0;
+    _progress = 0;
     auto frame = frames()->at(_currentFrame);
     setXOffset(frame->xOffset());
     setYOffset(frame->yOffset());
 
+}
+
+void Animation::setReverse(bool value)
+{
+	_reverse = value;
 }
 
 bool Animation::ended()

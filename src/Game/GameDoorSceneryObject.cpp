@@ -21,6 +21,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Engine/Graphics/Animation.h"
 #include "../Engine/Graphics/AnimationQueue.h"
 #include "../Engine/Logger.h"
 #include "../Game/GameDoorSceneryObject.h"
@@ -74,6 +75,7 @@ void GameDoorSceneryObject::use_p_proc()
         if (AnimationQueue* queue = dynamic_cast<AnimationQueue*>(this->ui()))
         {
             queue->start();
+            queue->currentAnimation()->setReverse(false);
             queue->addEventHandler("animationEnded", this, (EventRecieverMethod) &GameDoorSceneryObject::onOpeningAnimationEnded);
         }
     }
@@ -82,7 +84,7 @@ void GameDoorSceneryObject::use_p_proc()
         if (AnimationQueue* queue = dynamic_cast<AnimationQueue*>(this->ui()))
         {
             queue->start();
-            //queue->startBackward();
+            queue->currentAnimation()->setReverse(true);
             queue->addEventHandler("animationEnded", this, (EventRecieverMethod) &GameDoorSceneryObject::onClosingAnimationEnded);
         }
     }
@@ -100,6 +102,7 @@ void GameDoorSceneryObject::onOpeningAnimationEnded(Event* event)
 
     door->setOpened(true);
     queue->removeEventHandlers("animationEnded");
+    queue->stop();
     Logger::info() << "Door opened: " << opened() << std::endl;
 }
 
