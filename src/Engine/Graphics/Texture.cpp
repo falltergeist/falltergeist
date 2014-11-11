@@ -208,4 +208,9 @@ Texture* Texture::fitTo(unsigned int width, unsigned int height)
     return this->resize(width, newHeight);
 }
 
+SDL_Texture* Texture::sdlTexture()
+{
+    return _sdlTexture;
+}
+
 }

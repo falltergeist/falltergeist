@@ -40,6 +40,7 @@ protected:
     int _skillsPoints = 3;
     int _age = 0;
     std::string _biography;
+    virtual void _generateUi();
 public:
     GameDudeObject();
     virtual ~GameDudeObject();

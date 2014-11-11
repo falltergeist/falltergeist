@@ -26,6 +26,7 @@
 // Falltergeist includes
 
 // Third party includes
+#include "SDL.h"
 
 namespace Falltergeist
 {
@@ -40,10 +41,12 @@ protected:
     unsigned int _texheight = 0;
     unsigned int* _data = 0; // array of RGBA pixels
     void _unregister();
-
+    SDL_Texture* _sdlTexture = 0;
 public:
     Texture(unsigned int width, unsigned int height);
     virtual ~Texture();
+
+    SDL_Texture* sdlTexture();
 
     unsigned int id();
     void setId(unsigned int value);

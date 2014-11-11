@@ -157,6 +157,15 @@ void LocationState::setLocation(std::string name)
     // Adding dude
     {
         auto player = Game::getInstance()->player();
+        // Just for testing
+        {
+            auto armor = GameObjectFactory::createObject(0x00000003); // powered armor
+            player->setArmorSlot(dynamic_cast<GameArmorItemObject*>(armor));
+            auto leftHand = GameObjectFactory::createObject(0x0000000C); // minigun
+            player->setLeftHandSlot(dynamic_cast<GameWeaponItemObject*>(leftHand));
+            auto rightHand = GameObjectFactory::createObject(0x00000007); // spear
+            player->setRightHandSlot(dynamic_cast<GameWeaponItemObject*>(rightHand));
+        }
         player->setPID(0x01000001);
         player->setFID(FID_HERO_MALE);
         player->setOrientation(mapFile->defaultOrientation());
@@ -167,16 +176,6 @@ void LocationState::setLocation(std::string name)
 
         auto hexagon = hexagonGrid()->at(mapFile->defaultPosition());
         LocationState::moveObjectToHexagon(player, hexagon);
-
-        // Just for testing
-        {
-            auto armor = GameObjectFactory::createObject(0x00000003); // powered armor
-            player->setArmorSlot(dynamic_cast<GameArmorItemObject*>(armor));
-            auto leftHand = GameObjectFactory::createObject(0x0000000C); // minigun
-            player->setLeftHandSlot(dynamic_cast<GameWeaponItemObject*>(leftHand));
-            auto rightHand = GameObjectFactory::createObject(0x00000007); // spear
-            player->setRightHandSlot(dynamic_cast<GameWeaponItemObject*>(rightHand));
-        }
 
         _objects.push_back(player);
     }

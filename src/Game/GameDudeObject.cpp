@@ -22,6 +22,14 @@
 
 // Falltergeist includes
 #include "../Game/GameDudeObject.h"
+#include "../Game/GameWeaponItemObject.h"
+#include "../Engine/Graphics/Animation.h"
+#include "../Engine/Graphics/AnimationQueue.h"
+#include "../Engine/Logger.h"
+#include "../Engine/ResourceManager.h"
+#include "../States/LocationState.h"
+#include "../UI/AnimatedImage.h"
+#include "../UI/Image.h"
 
 // Third party includes
 
@@ -253,6 +261,111 @@ int GameDudeObject::criticalChance()
         value += 10;
     }
     return value;
+}
+
+void GameDudeObject::_generateUi()
+{
+    delete _ui; _ui = 0;
+
+    std::string frmString;
+
+    switch(gender())
+    {
+        case GENDER_FEMALE:
+        {
+            if (!armorSlot())
+            {
+                frmString = "hfjmps"; // jumpsuit
+            }
+            else
+            {
+                frmString = ResourceManager::FIDtoFrmName(armorSlot()->femaleFID()).substr(13, 6);
+            }
+            break;
+        }
+        default: // MALE
+        {
+            if (!armorSlot())
+            {
+                frmString = "hmjmps"; // jumpsuit
+            }
+            else
+            {
+                frmString = ResourceManager::FIDtoFrmName(armorSlot()->maleFID()).substr(13, 6);
+            }
+            break;
+        }
+    }
+
+    if (auto weapon = dynamic_cast<GameWeaponItemObject*>(currentHandSlot()))
+    {
+        switch (weapon->animationCode())
+        {
+            case 1: // knife
+                frmString += "d";
+                break;
+            case 2: // club
+                frmString += "e";
+                break;
+            case 3: // hammer
+                frmString += "f";
+                break;
+            case 4: // spear
+                frmString += "g";
+                break;
+            case 5: // pistol
+                frmString += "h";
+                break;
+            case 6: // smg
+                frmString += "i";
+                break;
+            case 7: // rifle
+                frmString += "j";
+                break;
+            case 8: // big gun
+                frmString += "k";
+                break;
+            case 9: // minigun
+                frmString += "l";
+                break;
+            case 10: // rocket launcher
+                frmString += "m";
+                break;
+            default: // none
+                frmString += "a";
+                break;
+        }
+    }
+
+    // action = stand
+    frmString += "a";
+
+    auto frm = ResourceManager::frmFileType("art/critters/" + frmString + ".frm");
+    if (frm)
+    {
+        frm->rgba(ResourceManager::palFileType("color.pal")); // TODO: figure out, why not calling this brokes animated overlays
+        if (frm->framesPerDirection() > 1)
+        {
+            auto queue = new AnimationQueue();
+            queue->animations()->push_back(new Animation("art/critters/" + frmString + ".frm", orientation()));
+            queue->setRepeat(true);
+            queue->start();
+            _ui = queue;
+        }
+        else if (frm->animatedPalette())
+        {
+            _ui = new AnimatedImage(frm, orientation());
+        }
+        else
+        {
+            _ui = new Image(frm, orientation());
+        }
+    }
+
+    if (_ui)
+    {
+        _ui->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &LocationState::onMouseDown);
+    }
 }
 
 }
