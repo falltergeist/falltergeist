@@ -77,8 +77,6 @@ public:
     int healingRate();
     int criticalChance();
     unsigned int carryWeightMax();
-
-    void handleActionFrame(Event* event);
 };
 
 }

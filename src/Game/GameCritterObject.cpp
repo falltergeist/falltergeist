@@ -22,6 +22,7 @@
 
 // Falltergeist includes
 #include "../Game/GameCritterObject.h"
+#include "../Game/GameWeaponItemObject.h"
 #include "../Engine/Exception.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Graphics/Animation.h"
@@ -434,6 +435,111 @@ void GameCritterObject::is_dropping_p_proc()
 
 void GameCritterObject::use_skill_on_p_proc()
 {
+}
+
+std::vector<Hexagon*>* GameCritterObject::movementQueue()
+{
+    return &_movementQueue;
+}
+
+void GameCritterObject::think()
+{
+    GameObject::think();
+
+    if (movementQueue()->size() > 0)
+    {
+        if (!_isMoving)
+        {
+            _isMoving = true;
+            // create animation
+            // add onMovementAnimationHandler
+        }
+    }
+}
+
+void GameCritterObject::onMovementAnimationEnded(Event* event)
+{
+    // move critter to new hexagon
+    // create animaion
+    // add onMovementAnimationEnded handler
+}
+
+Animation* GameCritterObject::_generateMovementAnimation()
+{
+    std::string frmString = _generateArmorFrmString();
+
+    if (_isRunning)
+    {
+        frmString += "at";
+    }
+    else
+    {
+        frmString += _generateWeaponFrmString() + "b";
+    }
+
+    return new Animation("art/critters/" + frmString + ".frm", orientation());
+}
+
+std::string GameCritterObject::_generateArmorFrmString()
+{
+    switch(gender())
+    {
+        case GENDER_FEMALE:
+        {
+            if (!armorSlot())
+            {
+                return "hfjmps"; // jumpsuit
+            }
+            else
+            {
+                return ResourceManager::FIDtoFrmName(armorSlot()->femaleFID()).substr(13, 6);
+            }
+            break;
+        }
+        default: // MALE
+        {
+            if (!armorSlot())
+            {
+                return "hmjmps"; // jumpsuit
+            }
+            else
+            {
+                return ResourceManager::FIDtoFrmName(armorSlot()->maleFID()).substr(13, 6);
+            }
+            break;
+        }
+    }
+}
+
+std::string GameCritterObject::_generateWeaponFrmString()
+{
+    if (auto weapon = dynamic_cast<GameWeaponItemObject*>(currentHandSlot()))
+    {
+        switch (weapon->animationCode())
+        {
+            case 1: // knife
+                return "d";
+            case 2: // club
+                return "e";
+            case 3: // hammer
+                return "f";
+            case 4: // spear
+                return "g";
+            case 5: // pistol
+                return "h";
+            case 6: // smg
+                return "i";
+            case 7: // rifle
+                return "j";
+            case 8: // big gun
+                return "k";
+            case 9: // minigun
+                return "l";
+            case 10: // rocket launcher
+                return "m";
+        }
+    }
+    return "a";
 }
 
 }

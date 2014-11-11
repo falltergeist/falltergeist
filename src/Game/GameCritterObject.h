@@ -26,29 +26,34 @@
 // Falltergeist includes
 #include "../Game/GameObject.h"
 #include "../Game/GameArmorItemObject.h"
+#include "../Engine/PathFinding/Hexagon.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+class Animation;
 class GameItemObject;
 
 class GameCritterObject : public GameObject
 {
 protected:
-    int _gender;
+    bool _isMoving  = false;
+    bool _isRunning = false;
+
+    int _gender = GENDER_MALE;
     int _hitPoints = 0;
     int _hitPointsMax = 0;
     int _healingRate = 0;
     int _armorClass = 0;
     int _actionPoints = 0;
     int _actionPointsMax = 0;
-    unsigned int _carryWeightMax = 0;
     int _meleeDamage = 0;
     int _sequence = 0;
     int _criticalChance = 0;
 
     unsigned int _currentHand = HAND_RIGHT;
+    unsigned int _carryWeightMax = 0;
 
     std::vector<int> _stats = {0, 0, 0, 0, 0, 0, 0};
     std::vector<int> _statsBonus = {0, 0, 0, 0, 0, 0, 0};
@@ -57,9 +62,14 @@ protected:
     std::vector<int> _damageResist = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::vector<int> _damageThreshold = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::vector<GameItemObject*> _inventory;
+    std::vector<Hexagon*> _movementQueue;
     GameArmorItemObject* _armorSlot = 0;
     GameItemObject* _leftHandSlot = 0;
     GameItemObject* _rightHandSlot = 0;
+
+    virtual Animation* _generateMovementAnimation();
+    virtual std::string _generateArmorFrmString();
+    virtual std::string _generateWeaponFrmString();
 public:
     enum { HAND_RIGHT = 0, HAND_LEFT };
     enum { GENDER_MALE = 0, GENDER_FEMALE };
@@ -150,6 +160,8 @@ public:
     std::vector<GameItemObject*>* inventory();
     virtual void setOrientation(int value);
 
+    std::vector<Hexagon*>* movementQueue();
+
     GameArmorItemObject* armorSlot();
     void setArmorSlot(GameArmorItemObject* object);
 
@@ -226,6 +238,9 @@ public:
     virtual void talk_p_proc();
     virtual void use_skill_on_p_proc();
     virtual void is_dropping_p_proc();
+
+    virtual void think();
+    virtual void onMovementAnimationEnded(Event* event);
 };
 
 }
