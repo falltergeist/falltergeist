@@ -83,6 +83,8 @@ public:
 
     void setInRender(bool value);
     bool inRender();
+
+    unsigned int orientationTo(Hexagon* hexagon);
 };
 
 }

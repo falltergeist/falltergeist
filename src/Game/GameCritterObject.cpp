@@ -24,8 +24,10 @@
 #include "../Game/GameCritterObject.h"
 #include "../Game/GameWeaponItemObject.h"
 #include "../Engine/Exception.h"
-#include "../Engine/ResourceManager.h"
+#include "../Engine/Game.h"
 #include "../Engine/Graphics/Animation.h"
+#include "../Engine/ResourceManager.h"
+#include "../States/LocationState.h"
 #include "../VM/VM.h"
 
 // Third party includes
@@ -444,24 +446,43 @@ std::vector<Hexagon*>* GameCritterObject::movementQueue()
 
 void GameCritterObject::think()
 {
-    GameObject::think();
-
     if (movementQueue()->size() > 0)
     {
         if (!_isMoving)
         {
             _isMoving = true;
-            // create animation
-            // add onMovementAnimationHandler
+
+            delete _ui;
+            _orientation = hexagon()->orientationTo(movementQueue()->back());
+            auto animation = _generateMovementAnimation();
+            animation->addEventHandler("animationEnded", this, (EventRecieverMethod)&GameCritterObject::onMovementAnimationEnded);
+            animation->play();
+            _ui = animation;
         }
     }
+    GameObject::think();
 }
 
 void GameCritterObject::onMovementAnimationEnded(Event* event)
 {
-    // move critter to new hexagon
-    // create animaion
-    // add onMovementAnimationEnded handler
+    auto critter = (GameCritterObject*)event->reciever();
+    auto hexagon = critter->movementQueue()->back();
+    critter->movementQueue()->pop_back();
+    Game::getInstance()->locationState()->moveObjectToHexagon(critter, hexagon);
+
+    if (critter->movementQueue()->size() == 0)
+    {
+        critter->_isMoving = false;
+        dynamic_cast<Animation*>(critter->_ui)->stop();
+        return;
+    }
+
+    delete critter->_ui;
+    critter->_orientation = critter->hexagon()->orientationTo(critter->movementQueue()->back());
+    auto animation = critter->_generateMovementAnimation();
+    animation->addEventHandler("animationEnded", critter, (EventRecieverMethod)&GameCritterObject::onMovementAnimationEnded);
+    animation->play();
+    critter->_ui = animation;
 }
 
 Animation* GameCritterObject::_generateMovementAnimation()

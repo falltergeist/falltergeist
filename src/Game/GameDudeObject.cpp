@@ -265,6 +265,8 @@ int GameDudeObject::criticalChance()
 
 void GameDudeObject::_generateUi()
 {
+    GameCritterObject::_generateUi();
+    return;
     delete _ui; _ui = 0;
 
     auto queue = new AnimationQueue();

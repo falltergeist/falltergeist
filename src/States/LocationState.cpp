@@ -438,10 +438,15 @@ void LocationState::handle(Event* event)
                     {
                         break;
                     }
+
                     auto path = hexagonGrid()->findPath(game->player()->hexagon(), hexagon);
                     if (path.size())
                     {
-                        moveObjectToHexagon(game->player(), hexagon);
+                        for (auto hexagon : path)
+                        {
+                            game->player()->movementQueue()->push_back(hexagon);
+                        }
+                        //moveObjectToHexagon(game->player(), hexagon);
                     }
                     event->setHandled(true);
                     break;

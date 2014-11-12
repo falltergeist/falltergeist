@@ -93,9 +93,9 @@ public:
 
     std::vector<VM*>* scripts();
 
-    void render();
-    void think();
-    void handle(Event* event);
+    virtual void render();
+    virtual void think();
+    virtual void handle(Event* event);
 
     ActiveUI* ui();
     void setUI(ActiveUI* ui);
