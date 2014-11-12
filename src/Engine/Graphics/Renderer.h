@@ -39,6 +39,8 @@ class Renderer
 protected:
     unsigned int _width;
     unsigned int _height;
+    float _scaleX=1.0;
+    float _scaleY=1.0;
     std::string _name;
     SDL_Window* _window;
     unsigned int _lt=0;
@@ -60,6 +62,8 @@ public:
 
     unsigned int width();
     unsigned int height();
+    float scaleX();
+    float scaleY();
     bool fadeDone();
     virtual void fadeIn(unsigned int r, unsigned int g, unsigned int b, unsigned int time);
     virtual void fadeOut(unsigned int r, unsigned int g, unsigned int b, unsigned int time);

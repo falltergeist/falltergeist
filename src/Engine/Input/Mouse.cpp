@@ -61,13 +61,17 @@ int Mouse::y()
 void Mouse::setX(int x)
 {
     _x = x;
-    SDL_WarpMouseInWindow(Game::getInstance()->renderer()->window(),_x, _y);
+    float scaleX = Game::getInstance()->renderer()->scaleX();
+    float scaleY = Game::getInstance()->renderer()->scaleY();
+    SDL_WarpMouseInWindow(Game::getInstance()->renderer()->window(),_x*scaleX, _y*scaleY);
 }
 
 void Mouse::setY(int y)
 {
     _y = y;
-    SDL_WarpMouseInWindow(Game::getInstance()->renderer()->window(),_x, _y);
+    float scaleX = Game::getInstance()->renderer()->scaleX();
+    float scaleY = Game::getInstance()->renderer()->scaleY();
+    SDL_WarpMouseInWindow(Game::getInstance()->renderer()->window(),_x*scaleX, _y*scaleY);
 }
 
 void Mouse::setState(unsigned int state)
@@ -223,6 +227,8 @@ void Mouse::render()
 void Mouse::think()
 {
     SDL_GetMouseState(&_x, &_y);
+    _x=_x/Game::getInstance()->renderer()->scaleX();
+    _y=_y/Game::getInstance()->renderer()->scaleY();
     if (_ui) _ui->think();
 }
 

@@ -44,6 +44,8 @@ const std::string EngineSettings::_defaultLoggerLevel = "info";
 const bool EngineSettings::_defaultLoggerColors = true;
 const bool EngineSettings::_defaultDisplayFps = true;
 const bool EngineSettings::_defaultDisplayMousePosition = true;
+const unsigned int  EngineSettings::_defaultScale = 0;
+const bool EngineSettings::_defaultFullscreen = false;
 
 const double EngineSettings::_defaultBrightness=1.0;
 const unsigned int EngineSettings::_defaultGameDifficulty=1;
@@ -127,6 +129,8 @@ void EngineSettings::_createDefaultConfig(IniFile &ini)
     video->setPropertyInt("width", _defaultScreenWidth);
     video->setPropertyInt("height", _defaultScreenHeight);
     video->setPropertyString("renderer", _defaultRenderer);
+    video->setPropertyInt("scale", _defaultScale);
+    video->setPropertyBool("fullscreen", _defaultFullscreen);
 
     auto audio = ini.section("audio");
     audio->setPropertyBool("enabled", _defaultAudioEnabled);
@@ -177,6 +181,8 @@ void EngineSettings::saveConfig()
     video->setPropertyInt("width", _screenWidth);
     video->setPropertyInt("height", _screenHeight);
     video->setPropertyString("renderer", (_renderer == Renderer::SDL) ? "sdl" : "opengl");
+    video->setPropertyInt("scale", _scale);
+    video->setPropertyBool("fullscreen", _fullscreen);
 
     auto audio = ini.section("audio");
     audio->setPropertyBool("enabled", _audioEnabled);
@@ -302,6 +308,9 @@ void EngineSettings::_readConfig(IniFile &ini)
     auto video = ini.section("video");
     _screenWidth = video->propertyInt("width", _defaultScreenWidth);
     _screenHeight = video->propertyInt("height", _defaultScreenHeight);
+    _scale = video->propertyInt("scale", _defaultScale);
+    if (_scale > 2) _scale = 2;
+    _fullscreen = video->propertyBool("fullscreen", _defaultFullscreen);
 
     auto renderer = video->propertyString("renderer", _defaultRenderer);
     _setRenderer(renderer);
@@ -560,6 +569,26 @@ void EngineSettings::setBrightness(double _brightness)
 double EngineSettings::brightness() const
 {
     return _brightness;
+}
+
+void EngineSettings::setScale(unsigned int _scale)
+{
+    this->_scale = _scale;
+}
+
+unsigned int EngineSettings::scale() const
+{
+    return _scale;
+}
+
+void EngineSettings::setFullscreen(bool _fullscreen)
+{
+    this->_fullscreen = _fullscreen;
+}
+
+bool EngineSettings::fullscreen() const
+{
+    return _fullscreen;
 }
 
 }
