@@ -155,4 +155,14 @@ SDL_Window* Renderer::window()
     return _window;
 }
 
+float Renderer::scaleX()
+{
+    return _scaleX;
+}
+
+float Renderer::scaleY()
+{
+    return _scaleY;
+}
+
 }

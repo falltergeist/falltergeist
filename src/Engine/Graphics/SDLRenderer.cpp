@@ -25,6 +25,7 @@
 #include "../../Engine/Game.h"
 #include "../../Engine/Graphics/SDLRenderer.h"
 #include "../../Engine/Logger.h"
+#include "../../Engine/Settings/Settings.h"
 
 //Third party includes
 #include "SDL.h"
@@ -51,8 +52,18 @@ void SDLRenderer::init()
 {
     Renderer::init();
 
+    /* TODO: android/ios
+     * _width = deviceWidth;
+     * _height = deviceHeight;
+     * Game::getInstance()->engineSettings()->setFullscreen(true);
+     * Game::getInstance()->engineSettings()->setScale(1); //or 2, if fullhd device
+     */
+
     std::string message =  "SDL_CreateWindow " + std::to_string(_width) + "x" + std::to_string(_height) + "x" +std::to_string(32)+ " - ";
-    _window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _width, _height, SDL_WINDOW_SHOWN);
+    if (Game::getInstance()->engineSettings()->fullscreen())
+        _window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _width, _height, SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
+    else
+        _window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _width, _height, SDL_WINDOW_SHOWN);
     if (!_window)
     {
         throw Exception(message + "[FAIL]");
@@ -68,6 +79,24 @@ void SDLRenderer::init()
     }
 
     Logger::info("RENDERER") << message + "[OK]" << std::endl;
+
+    if (Game::getInstance()->engineSettings()->scale() != 0)
+    {
+        switch (Game::getInstance()->engineSettings()->scale())
+        {
+            default:
+            case 1:
+                _width = _width / (_height / 480.0);
+                _height= 480;
+                break;
+            case 2:
+                _width = _width / (_height / 960.0);
+                _height= 960;
+                break;
+        }
+        SDL_RenderSetLogicalSize(_renderer, _width, _height);
+        SDL_RenderGetScale(_renderer, &_scaleX, &_scaleY);
+    }
 
     SDL_RendererInfo rendererInfo;
     SDL_GetRendererInfo(_renderer, &rendererInfo);
