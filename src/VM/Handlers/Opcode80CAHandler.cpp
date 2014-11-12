@@ -118,8 +118,8 @@ void Opcode80CAHandler::_run()
         {
             throw Exception("VM::opcode80CA - unimplemented number:" + std::to_string(number));
         }
-        _vm->pushDataInteger(result);
     }
+    _vm->pushDataInteger(result);
 }
 
 }
