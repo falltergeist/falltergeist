@@ -71,6 +71,10 @@ public:
     void setInitialized(bool value);
 
     bool hasFunction(std::string name);
+    int getTime();
+    int metarule3(int meta, VMStackValue* p1, int p2, int p3);
+    int tile_num_in_direction(int start_tile, int dir, int distance);
+    void setLightLevel(int level);
 
     void call(std::string name);
     libfalltergeist::IntFileType* script();
@@ -92,6 +96,7 @@ public:
 
     VMStack* dataStack();
     VMStack* returnStack();
+    std::vector<VMStackValue*> LVARS();
 
     int DVARbase();
     void setDVARBase(int Value);

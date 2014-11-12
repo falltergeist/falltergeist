@@ -112,10 +112,56 @@
 #include "../VM/Handlers/Opcode80B8Handler.h"
 #include "../VM/Handlers/Opcode80B9Handler.h"
 #include "../VM/Handlers/Opcode80BAHandler.h"
+#include "../VM/Handlers/Opcode80BBHandler.h"
 #include "../VM/Handlers/Opcode80BCHandler.h"
+#include "../VM/Handlers/Opcode80BDHandler.h"
+#include "../VM/Handlers/Opcode80BFHandler.h"
+#include "../VM/Handlers/Opcode80C1Handler.h"
+#include "../VM/Handlers/Opcode80C2Handler.h"
+#include "../VM/Handlers/Opcode80C3Handler.h"
+#include "../VM/Handlers/Opcode80C4Handler.h"
+#include "../VM/Handlers/Opcode80C5Handler.h"
+#include "../VM/Handlers/Opcode80C6Handler.h"
+#include "../VM/Handlers/Opcode80C7Handler.h"
+#include "../VM/Handlers/Opcode80C8Handler.h"
+#include "../VM/Handlers/Opcode80C9Handler.h"
 #include "../VM/Handlers/Opcode80CAHandler.h"
 #include "../VM/Handlers/Opcode80CBHandler.h"
+#include "../VM/Handlers/Opcode80CCHandler.h"
+#include "../VM/Handlers/Opcode80CEHandler.h"
+#include "../VM/Handlers/Opcode80CFHandler.h"
+#include "../VM/Handlers/Opcode80D0Handler.h"
+#include "../VM/Handlers/Opcode80D2Handler.h"
+#include "../VM/Handlers/Opcode80D3Handler.h"
+#include "../VM/Handlers/Opcode80D4Handler.h"
+#include "../VM/Handlers/Opcode80D5Handler.h"
+#include "../VM/Handlers/Opcode80D8Handler.h"
+#include "../VM/Handlers/Opcode80D9Handler.h"
+#include "../VM/Handlers/Opcode80DAHandler.h"
+#include "../VM/Handlers/Opcode80DCHandler.h"
 #include "../VM/Handlers/Opcode80DEHandler.h"
+#include "../VM/Handlers/Opcode80DFHandler.h"
+#include "../VM/Handlers/Opcode80E1Handler.h"
+#include "../VM/Handlers/Opcode80E3Handler.h"
+#include "../VM/Handlers/Opcode80E4Handler.h"
+#include "../VM/Handlers/Opcode80E5Handler.h"
+#include "../VM/Handlers/Opcode80E7Handler.h"
+#include "../VM/Handlers/Opcode80E9Handler.h"
+#include "../VM/Handlers/Opcode80EAHandler.h"
+#include "../VM/Handlers/Opcode80ECHandler.h"
+#include "../VM/Handlers/Opcode80EFHandler.h"
+#include "../VM/Handlers/Opcode80F0Handler.h"
+#include "../VM/Handlers/Opcode80F1Handler.h"
+#include "../VM/Handlers/Opcode80F2Handler.h"
+#include "../VM/Handlers/Opcode80F3Handler.h"
+#include "../VM/Handlers/Opcode80F4Handler.h"
+#include "../VM/Handlers/Opcode80F6Handler.h"
+#include "../VM/Handlers/Opcode80F7Handler.h"
+#include "../VM/Handlers/Opcode80F9Handler.h"
+#include "../VM/Handlers/Opcode80FAHandler.h"
+#include "../VM/Handlers/Opcode80FBHandler.h"
+#include "../VM/Handlers/Opcode80FCHandler.h"
+#include "../VM/Handlers/Opcode80FFHandler.h"
 #include "../VM/Handlers/Opcode810AHandler.h"
 #include "../VM/Handlers/Opcode810CHandler.h"
 #include "../VM/Handlers/Opcode810DHandler.h"
@@ -397,8 +443,44 @@ void VM::run()
             case 0x80BA:
                 opcodeHandler = new Opcode80BAHandler(this);
                 break;
+            case 0x80BB:
+                opcodeHandler = new Opcode80BBHandler(this);
+                break;
             case 0x80BC:
                 opcodeHandler = new Opcode80BCHandler(this);
+                break;
+            case 0x80BD:
+                opcodeHandler = new Opcode80BDHandler(this);
+                break;
+            case 0x80BF:
+                opcodeHandler = new Opcode80BFHandler(this);
+                break;
+            case 0x80C1:
+                opcodeHandler = new Opcode80C1Handler(this);
+                break;
+            case 0x80C2:
+                opcodeHandler = new Opcode80C2Handler(this);
+                break;
+            case 0x80C3:
+                opcodeHandler = new Opcode80C3Handler(this);
+                break;
+            case 0x80C4:
+                opcodeHandler = new Opcode80C4Handler(this);
+                break;
+            case 0x80C5:
+                opcodeHandler = new Opcode80C5Handler(this);
+                break;
+            case 0x80C6:
+                opcodeHandler = new Opcode80C6Handler(this);
+                break;
+            case 0x80C7:
+                opcodeHandler = new Opcode80C7Handler(this);
+                break;
+            case 0x80C8:
+                opcodeHandler = new Opcode80C8Handler(this);
+                break;
+            case 0x80C9:
+                opcodeHandler = new Opcode80C9Handler(this);
                 break;
             case 0x80CA:
                 opcodeHandler = new Opcode80CAHandler(this);
@@ -406,8 +488,110 @@ void VM::run()
             case 0x80CB:
                 opcodeHandler = new Opcode80CBHandler(this);
                 break;
+            case 0x80CC:
+                opcodeHandler = new Opcode80CCHandler(this);
+                break;
+            case 0x80CE:
+                opcodeHandler = new Opcode80CEHandler(this);
+                break;
+            case 0x80CF:
+                opcodeHandler = new Opcode80CFHandler(this);
+                break;
+            case 0x80D0:
+                opcodeHandler = new Opcode80D0Handler(this);
+                break;
+            case 0x80D2:
+                opcodeHandler = new Opcode80D2Handler(this);
+                break;
+            case 0x80D3:
+                opcodeHandler = new Opcode80D3Handler(this);
+                break;
+            case 0x80D4:
+                opcodeHandler = new Opcode80D4Handler(this);
+                break;
+            case 0x80D5:
+                opcodeHandler = new Opcode80D5Handler(this);
+                break;
+            case 0x80D8:
+                opcodeHandler = new Opcode80D8Handler(this);
+                break;
+            case 0x80D9:
+                opcodeHandler = new Opcode80D9Handler(this);
+                break;
+            case 0x80DA:
+                opcodeHandler = new Opcode80DAHandler(this);
+                break;
+            case 0x80DC:
+                opcodeHandler = new Opcode80DCHandler(this);
+                break;
             case 0x80DE:
                 opcodeHandler = new Opcode80DEHandler(this);
+                break;
+            case 0x80DF:
+                opcodeHandler = new Opcode80DFHandler(this);
+                break;
+            case 0x80E1:
+                opcodeHandler = new Opcode80E1Handler(this);
+                break;
+            case 0x80E3:
+                opcodeHandler = new Opcode80E3Handler(this);
+                break;
+            case 0x80E4:
+                opcodeHandler = new Opcode80E4Handler(this);
+                break;
+            case 0x80E5:
+                opcodeHandler = new Opcode80E5Handler(this);
+                break;
+            case 0x80E7:
+                opcodeHandler = new Opcode80E7Handler(this);
+                break;
+            case 0x80E9:
+                opcodeHandler = new Opcode80E9Handler(this);
+                break;
+            case 0x80EA:
+                opcodeHandler = new Opcode80EAHandler(this);
+                break;
+            case 0x80EC:
+                opcodeHandler = new Opcode80ECHandler(this);
+                break;
+            case 0x80EF:
+                opcodeHandler = new Opcode80EFHandler(this);
+                break;
+            case 0x80F0:
+                opcodeHandler = new Opcode80F0Handler(this);
+                break;
+            case 0x80F1:
+                opcodeHandler = new Opcode80F1Handler(this);
+                break;
+            case 0x80F2:
+                opcodeHandler = new Opcode80F2Handler(this);
+                break;
+            case 0x80F3:
+                opcodeHandler = new Opcode80F3Handler(this);
+                break;
+            case 0x80F4:
+                opcodeHandler = new Opcode80F4Handler(this);
+                break;
+            case 0x80F6:
+                opcodeHandler = new Opcode80F6Handler(this);
+                break;
+            case 0x80F7:
+                opcodeHandler = new Opcode80F7Handler(this);
+                break;
+            case 0x80F9:
+                opcodeHandler = new Opcode80F9Handler(this);
+                break;
+            case 0x80FA:
+                opcodeHandler = new Opcode80FAHandler(this);
+                break;
+            case 0x80FB:
+                opcodeHandler = new Opcode80FBHandler(this);
+                break;
+            case 0x80FC:
+                opcodeHandler = new Opcode80FCHandler(this);
+                break;
+            case 0x80FF:
+                opcodeHandler = new Opcode80FFHandler(this);
                 break;
             case 0x810A:
                 opcodeHandler = new Opcode810AHandler(this);
@@ -506,395 +690,56 @@ void VM::run()
             case 0x80b8: break;
             case 0x80b9: break;
             case 0x80ba: break;
-            case 0x80bb:
-            {
-                Logger::debug("SCRIPT") << "[80BB] [+] int tile_contains_obj_pid(int position, int elevation, int PID)" << std::endl;
-                auto PID = popDataInteger();
-                auto elevation = popDataInteger();
-                auto position = popDataInteger();
-                auto game = Game::getInstance();
-                int found = 0;
-                for (auto object : *game->locationState()->hexagonGrid()->at(position)->objects())
-                {
-                    if (object->PID() == PID && object->elevation() == elevation)
-                    {
-                        found = 1;
-                    }
-                }
-                pushDataInteger(found);
-                break;
-            }
+            case 0x80bb: break;
             case 0x80bc: break;
-            case 0x80bd:
-            {
-                Logger::debug("SCRIPT") << "[80BD] [=] void* source_obj()" << std::endl;
-                pushDataPointer(0);
-                break;
-            }
-            case 0x80bf:
-            {
-                Logger::debug("SCRIPT") << "[80BF] [+] GameDudeObject* dude_obj()" << std::endl;
-                auto game = Game::getInstance();
-                pushDataPointer(game->player());
-                break;
-            }
-            case 0x80c1:
-            {
-                Logger::debug("SCRIPT") << "[80C1] [*] LVAR[num]" << std::endl;
-                unsigned int num = popDataInteger();
-                while (num >= _LVARS.size()) _LVARS.push_back(new VMStackIntValue(0));
-                _dataStack.push(_LVARS.at(num));
-                break;
-            }
-            case 0x80c2:
-            {
-                Logger::debug("SCRIPT") << "[80C2] [*] LVAR[num] = value" << std::endl;
-                auto value = _dataStack.pop();
-                unsigned int num = popDataInteger();
-                while (num >= _LVARS.size()) _LVARS.push_back(new VMStackIntValue(0));
-                _LVARS.at(num) = value;
-                break;
-            }
-            case 0x80c3:
-            {
-                Logger::debug("SCRIPT") << "[80C3] [?] MVAR[num]" << std::endl;
-                auto num = popDataInteger();
-                if (num < 0)
-                {
-                    pushDataInteger(0);
-                    break;
-                }
-                auto game = Game::getInstance();
-                pushDataInteger(game->locationState()->MVAR(num));
-                break;
-            }
-            case 0x80c4:
-            {
-                Logger::debug("SCRIPT") << "[80C4] [+] MVAR[num] = value" << std::endl;
-                auto value = popDataInteger();
-                auto num = popDataInteger();
-                auto game = Game::getInstance();
-                game->locationState()->setMVAR(num, value);
-                break;
-            }
-            case 0x80c5:
-            {
-                auto& debug = Logger::debug("SCRIPT");
-                debug << "[80C5] [?] GVAR[num]" << std::endl;
-                int num = popDataInteger();
-                int value;
-                if (num < 0)
-                {
-                    value = 0;
-                }
-                else
-                {
-                    auto game = Game::getInstance();
-                    value = game->GVAR(num);
-                }
-                pushDataInteger(value);
-
-                debug << "    num = 0x" << std::hex << num << std::endl;
-                debug << "    value = 0x" << std::hex << value << std::endl;
-
-                break;
-            }
-            case 0x80c6:
-            {
-                Logger::debug("SCRIPT") << "[80C6] [+] GVAR[num] = value" << std::endl;
-                auto value = popDataInteger();
-                auto num = popDataInteger();
-                auto game = Game::getInstance();
-                game->setGVAR(num, value);
-                break;
-            }
-            case 0x80c7:
-            {
-                Logger::debug("SCRIPT") << "[80C7] [*] int script_action()" << std::endl;
-                pushDataInteger(21);
-                break;
-            }
-            case 0x80c8:
-            {
-                Logger::debug("SCRIPT") << "[80C8] [=] int obj_type(void* obj)" << std::endl;
-                popDataPointer();
-                pushDataInteger(0);
-                break;
-            }
-            case 0x80c9:
-            {
-                Logger::debug("SCRIPT") << "[80C9] [+] int obj_item_subtype(GameItemObject* object)" << std::endl;
-                auto pointer = popDataPointer();
-                if      (static_cast<GameArmorItemObject*>(pointer))     pushDataInteger(0);
-                else if (static_cast<GameContainerItemObject*>(pointer)) pushDataInteger(1);
-                else if (static_cast<GameDrugItemObject*>(pointer))      pushDataInteger(2);
-                else if (static_cast<GameWeaponItemObject*>(pointer))    pushDataInteger(3);
-                else if (static_cast<GameAmmoItemObject*>(pointer))      pushDataInteger(4);
-                else if (static_cast<GameMiscItemObject*>(pointer))      pushDataInteger(5);
-                else if (static_cast<GameKeyItemObject*>(pointer))       pushDataInteger(6);
-                else pushDataInteger(-1);
-                break;
-            }
+            case 0x80bd: break;
+            case 0x80bf: break;
+            case 0x80c1: break;
+            case 0x80c2: break;
+            case 0x80c3: break;
+            case 0x80c4: break;
+            case 0x80c5: break;
+            case 0x80c6: break;
+            case 0x80c7: break;
+            case 0x80c8: break;
+            case 0x80c9: break;
             case 0x80ca: break;
             case 0x80cb: break;
-            case 0x80cc:
-            {
-                Logger::debug("SCRIPT") << "[80CC] [=] void animate_stand_obj(void* obj)" << std::endl;
-                popDataPointer();
-                break;
-            }
-            case 0x80ce:
-            {
-                Logger::debug("SCRIPT") << "[80CE] [=] void animate_move_obj_to_tile(void* who, int tile, int speed)" << std::endl;
-                popDataInteger();
-                popDataInteger();
-                popDataPointer();
-                break;
-            }
-            case 0x80cf:
-            {
-                Logger::debug("SCRIPT") << "[80CF] [=] int tile_in_tile_rect(int tile1, int tile2, int tile3, int tile4, int tile)" << std::endl;
-                popDataInteger();
-                popDataInteger();
-                popDataInteger();
-                popDataInteger();
-                pushDataInteger(0);
-                break;
-            }
-            case 0x80d0:
-            {
-                Logger::debug("SCRIPT") << "[80D0] [=] void attack_complex(ObjectPtr who, int called_shot, int num_attacks, int bonus"
-                        ", int min_damage, int max_damage, int attacker_results, int target_results)" << std::endl;
-                popDataInteger();
-                popDataInteger();
-                popDataInteger();
-                popDataInteger();
-                popDataInteger();
-                popDataInteger();
-                popDataInteger();
-                popDataPointer();
-                break;
-            }
-            case 0x80d2:
-            {
-                Logger::debug("SCRIPT") << "[80D2] [=] int tile_distance(int tile1, int tile2)" << std::endl;
-                popDataInteger();
-                popDataInteger();
-                pushDataInteger(4);
-                break;
-            }
-            case 0x80d3:
-            {
-                Logger::debug("SCRIPT") << "[80D3] int tile_distance_objs(void* p2, void* p1)" << std::endl;
-                popDataPointer();
-                popDataPointer();
-                pushDataInteger(10);
-                break;
-            }
-            case 0x80d4:
-            {
-                Logger::debug("SCRIPT") << "[80D4] [+] int objectPosition(GameObject* object)" << std::endl;
-                auto object = static_cast<GameObject*>(popDataPointer());
-                if (!object) throw new Exception("Opcode 80d4 error");
-                pushDataInteger(object->hexagon()->number());
-                break;
-            }
-            case 0x80d5:
-            {
-                Logger::debug("SCRIPT") << "[80D5] [*] int tile_num_in_direction(int start_tile, int dir, int distance)" << std::endl;
-                auto distance = popDataInteger();
-                auto dir = popDataInteger();
-                auto start_tile = popDataInteger();
-                pushDataInteger(_tile_num_in_direction(start_tile, dir, distance));
-                break;
-            }
-            case 0x80d8:
-            {
-                Logger::debug("SCRIPT") << "[80D8] [=] void add_obj_to_inven(void* who, void* item)" << std::endl;
-                popDataPointer();
-                popDataPointer();
-                break;
-            }
-            case 0x80d9:
-            {
-                Logger::debug("SCRIPT") << "[80D9] [=] void rm_obj_from_inven(void* who, void* obj)" << std::endl;
-                popDataPointer();
-                popDataPointer();
-                break;
-            }
-            case 0x80da:
-            {
-                Logger::debug("SCRIPT") << "[80DA] [=] void wield_obj_critter(void* who, void* obj)" << std::endl;
-                popDataPointer();
-                popDataPointer();
-                break;
-            }
-            case 0x80dc:
-            {
-                Logger::debug("SCRIPT") << "[80DC] [=] int obj_can_see_obj(GameObject* src_obj, GameObject* dst_obj)" << std::endl;
-                popDataPointer();
-                popDataPointer();
-                pushDataInteger(1);
-                break;
-            }
+            case 0x80cc: break;
+            case 0x80ce: break;
+            case 0x80cf: break;
+            case 0x80d0: break;
+            case 0x80d2: break;
+            case 0x80d3: break;
+            case 0x80d4: break;
+            case 0x80d5: break;
+            case 0x80d8: break;
+            case 0x80d9: break;
+            case 0x80da: break;
+            case 0x80dc: break;
             case 0x80de: break;
-            case 0x80df:
-            {
-                Logger::debug("SCRIPT") << "[80DF] [?] end_dialogue" << std::endl;
-                auto game = Game::getInstance();
-                game->popState(); // interact state
-                break;
-            }
-            case 0x80e1:
-            {
-                Logger::debug("SCRIPT") << "[80E1] [*] int metarule3(int meta, int p1, int p2, int p3)" << std::endl;
-                auto p3 = popDataInteger();
-                auto p2 = popDataInteger();
-                auto p1 = _dataStack.pop();
-                auto meta = popDataInteger();
-                pushDataInteger(_metarule3(meta, p1, p2, p3));
-                break;
-            }
-            case 0x80e3:
-            {
-                Logger::debug("SCRIPT") << "[80E3] [=] void set_obj_visibility(void* obj, int visibility)" << std::endl;
-                popDataInteger();
-                popDataPointer();
-                break;
-            }
-            case 0x80e4:
-            {
-                Logger::debug("SCRIPT") << "[80E4] [=] void load_map(string* map, int param)" << std::endl;
-                popDataInteger();
-                popDataPointer();
-                break;
-            }
-            case 0x80e5:
-            {
-                Logger::debug("SCRIPT") << "[80E5] [=] void wm_area_set_pos(int areaIdx, int xPos, int yPos)" << std::endl;
-                popDataInteger();
-                popDataInteger();
-                popDataInteger();
-                break;
-            }
-            case 0x80e7:
-            {
-                Logger::debug("SCRIPT") << "[80E7] [=] int anim_busy(void* obj)" << std::endl;
-                popDataPointer();//auto object = (GameObject*)popDataPointer();
-                //pushDataInteger(object->animationQueue()->enabled());
-                pushDataInteger(1);
-                break;
-            }
-            case 0x80e9:
-            {
-                Logger::debug("SCRIPT") << "[80E9] [*] void set_light_level(int level)" << std::endl;
-                auto level = popDataInteger();
-                _setLightLevel(level);
-                break;
-            }
-            case 0x80ea:
-            {
-                Logger::debug("SCRIPT") << "[80EA] [*] int gameTime()" << std::endl;
-                pushDataInteger(SDL_GetTicks() / 10);
-                break;
-            }
-            case 0x80ec:
-            {
-                Logger::debug("SCRIPT") << "[80EC] [=] int elevation(void* obj)" << std::endl;
-                auto object = static_cast<GameObject*>(popDataPointer());
-                if (!object) throw new Exception("Opcode 80ec error");
-                pushDataInteger(object->elevation());
-                break;
-            }
-            case 0x80ef:
-                Logger::debug("SCRIPT") << "[80EF] void critter_dmg(ObjectPtr who, int dmg_amount, int dmg_type)" << std::endl;
-                break;
-            case 0x80f0:
-            {
-                Logger::debug("SCRIPT") << "[80F0] [=] void add_timer_event(void* obj, int time, int info)" << std::endl;
-                popDataInteger();
-                popDataInteger();
-                popDataPointer();
-                break;
-            }
-            case 0x80f1:
-            {
-                Logger::debug("SCRIPT") << "[80F1] [=] void rm_timer_event (void* obj)" << std::endl;
-                popDataPointer();
-                break;
-            }
-            case 0x80f2:
-            {
-                Logger::debug("SCRIPT") << "[80F2] [=] int game_ticks(int seconds)" << std::endl;
-                auto seconds = popDataInteger();
-                pushDataInteger(seconds*1000);
-                break;
-            }
-            case 0x80f3:
-            {
-                Logger::debug("SCRIPT") << "[80F3] [=] int has_trait(int type,void* who, int trait)" << std::endl;
-                popDataInteger();
-                popDataPointer();
-                popDataInteger();
-                pushDataInteger(1);
-                break;
-            }
-            case 0x80f4:
-            {
-                Logger::debug("SCRIPT") << "[80F4] [=] int destroy_object(void* obj)" << std::endl;
-                popDataPointer();
-                pushDataInteger(0);
-                break;
-            }
-            case 0x80f6:
-            {
-                Logger::debug("SCRIPT") << "[80F6] [*] int game_time_hour" << std::endl;
-                pushDataInteger(_getTime());
-                break;
-            }
-            case 0x80f7:
-            {
-                Logger::debug("SCRIPT") << "[80F7] [=] int fixed_param()" << std::endl;
-                pushDataInteger(1);
-                break;
-            }
-            case 0x80f9:
-            {
-                Logger::debug("SCRIPT") << "[80F9] [=] void dialogue_system_enter()" << std::endl;
-                break;
-            }
-            case 0x80fa:
-            {
-                Logger::debug("SCRIPT") << "[80FA] [=] int action_being_used()" << std::endl;
-                pushDataInteger(1);
-                break;
-            }
-            case 0x80fb:
-            {
-                Logger::debug("SCRIPT") << "[80FB] [=] int critter_state(void* who)" << std::endl;
-                popDataPointer();
-                pushDataInteger(0);
-                break;
-            }
-            case 0x80fc:
-            {
-                Logger::debug("SCRIPT") << "[80FC] [=] void game_time_advance(int amount)" << std::endl;
-                popDataInteger();
-                break;
-            }
-            case 0x80ff:
-            {
-                Logger::debug("SCRIPT") << "[80FF] [*] int critter_attempt_placement(GameCritterObject* critter, int position, int elevation)" << std::endl;
-                auto elevation = popDataInteger();
-                auto position = popDataInteger();
-                auto critter = static_cast<GameCritterObject*>(popDataPointer());
-                if (!critter) throw new Exception("Opcode 80ff error");
-                auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
-                LocationState::moveObjectToHexagon(critter, hexagon);
-                critter->setElevation(elevation);
-                pushDataInteger(1);
-                break;
-            }
+            case 0x80df: break;
+            case 0x80e1: break;
+            case 0x80e3: break;
+            case 0x80e4: break;
+            case 0x80e5: break;
+            case 0x80e7: break;
+            case 0x80e9: break;
+            case 0x80ea: break;
+            case 0x80ec: break;
+            case 0x80ef: break;
+            case 0x80f0: break;
+            case 0x80f1: break;
+            case 0x80f2: break;
+            case 0x80f3: break;
+            case 0x80f4: break;
+            case 0x80f6: break;
+            case 0x80f7: break;
+            case 0x80f9: break;
+            case 0x80fa: break;
+            case 0x80fb: break;
+            case 0x80fc: break;
+            case 0x80ff: break;
             case 0x8100:
             {
                 Logger::debug("SCRIPT") << "[8100] [+] int obj_pid(void* obj)" << std::endl;
@@ -1439,9 +1284,19 @@ void VM::_setLightLevel(int level)
     Logger::debug("SCRIPT") << "     Setting light level to: " + std::to_string(level) << std::endl;
 }
 
+void VM::setLightLevel(int level)
+{
+  _setLightLevel(level);
+}
+
 void VM::_playMovie(int movieNum)
 {
 
+}
+
+int VM::tile_num_in_direction(int start_tile, int dir, int distance)
+{
+    return _tile_num_in_direction(start_tile,dir,distance);
 }
 
 
@@ -1476,6 +1331,16 @@ int VM::_metarule3(int meta, VMStackValue* p1, int p2, int p3)
     }
     throw Exception("VM::_metarule3() - unknown meta: " + std::to_string(meta));
 
+}
+
+int VM::metarule3(int meta, VMStackValue* p1, int p2, int p3)
+{
+    return _metarule3(meta,p1,p2,p3);
+}
+
+int VM::getTime()
+{
+    return _getTime();
 }
 
 std::string VM::msgMessage(int msg_file_num, int msg_num)
@@ -1513,6 +1378,11 @@ VMStack* VM::dataStack()
 VMStack* VM::returnStack()
 {
     return &_returnStack;
+}
+
+std::vector<VMStackValue*> VM::LVARS()
+{
+    return _LVARS;
 }
 
 void* VM::owner()
