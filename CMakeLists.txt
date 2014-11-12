@@ -413,6 +413,8 @@ set(SOURCES main.cpp
     src/VM/Handlers/Opcode80CBHandler.cpp
 	src/VM/Handlers/Opcode80CCHandler.h
     src/VM/Handlers/Opcode80CCHandler.cpp
+	src/VM/Handlers/Opcode80CEHandler.h
+    src/VM/Handlers/Opcode80CEHandler.cpp
 	src/VM/Handlers/Opcode80CFHandler.h
     src/VM/Handlers/Opcode80CFHandler.cpp
 	src/VM/Handlers/Opcode80D0Handler.h
@@ -433,6 +435,8 @@ set(SOURCES main.cpp
     src/VM/Handlers/Opcode80DAHandler.cpp
     src/VM/Handlers/Opcode80DEHandler.h
     src/VM/Handlers/Opcode80DEHandler.cpp
+	src/VM/Handlers/Opcode80DCHandler.h
+    src/VM/Handlers/Opcode80DCHandler.cpp
 	src/VM/Handlers/Opcode80DFHandler.h
     src/VM/Handlers/Opcode80DFHandler.cpp
 	src/VM/Handlers/Opcode80E1Handler.h
