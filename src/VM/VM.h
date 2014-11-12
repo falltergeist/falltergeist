@@ -96,7 +96,7 @@ public:
 
     VMStack* dataStack();
     VMStack* returnStack();
-    std::vector<VMStackValue*> LVARS();
+    std::vector<VMStackValue*>* LVARS();
 
     int DVARbase();
     void setDVARBase(int Value);

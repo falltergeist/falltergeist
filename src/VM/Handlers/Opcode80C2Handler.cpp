@@ -42,9 +42,8 @@ void Opcode80C2Handler::_run()
     Logger::debug("SCRIPT") << "[80C2] [*] LVAR[num] = value" << std::endl;
     auto value = _vm->dataStack()->pop();
     unsigned int num = _vm->popDataInteger();
-    while (num >= _vm->LVARS().size()) _vm->LVARS().push_back(new VMStackIntValue(0));
-    _vm->LVARS().at(num) = value;
-
+    while (num >= _vm->LVARS()->size()) _vm->LVARS()->push_back(new VMStackIntValue(0));
+    _vm->LVARS()->at(num) = value;
 }
 
 }

@@ -1380,9 +1380,9 @@ VMStack* VM::returnStack()
     return &_returnStack;
 }
 
-std::vector<VMStackValue*> VM::LVARS()
+std::vector<VMStackValue*>* VM::LVARS()
 {
-    return _LVARS;
+    return &_LVARS;
 }
 
 void* VM::owner()
