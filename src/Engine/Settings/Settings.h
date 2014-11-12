@@ -104,6 +104,10 @@ public:
     unsigned int gameDifficulty() const;
     void setBrightness(double _brightness);
     double brightness() const;
+    void setScale(unsigned int _scale);
+    unsigned int scale() const;
+    void setFullscreen(bool _fullscreen);
+    bool fullscreen() const;
 
 private:
     unsigned int _screenWidth;
@@ -115,6 +119,8 @@ private:
     bool _displayMousePosition;
     std::string _loggerLevel;
     bool _loggerColors;
+    unsigned int _scale;
+    bool _fullscreen;
 
     double _brightness;
     unsigned int _gameDifficulty;
@@ -154,6 +160,8 @@ private:
     static const bool _defaultLoggerColors;
     static const bool _defaultDisplayFps;
     static const bool _defaultDisplayMousePosition;
+    static const unsigned int _defaultScale;
+    static const bool _defaultFullscreen;
 
     // [preferences]
     static const double _defaultBrightness;
