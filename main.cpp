@@ -49,10 +49,12 @@ int main(int argc, char* argv[])
     {
         Logger::critical() << e.what() << std::endl;
     }
+    /*
     catch (const std::exception &e)
     {
         Logger::critical() << e.what() << std::endl;
     }
+    */
     return 1;
 }
 

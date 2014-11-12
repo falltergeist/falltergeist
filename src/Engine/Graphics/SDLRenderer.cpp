@@ -61,9 +61,13 @@ void SDLRenderer::init()
 
     std::string message =  "SDL_CreateWindow " + std::to_string(_width) + "x" + std::to_string(_height) + "x" +std::to_string(32)+ " - ";
     if (Game::getInstance()->engineSettings()->fullscreen())
+    {
         _window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _width, _height, SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
+    }
     else
+    {
         _window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _width, _height, SDL_WINDOW_SHOWN);
+    }
     if (!_window)
     {
         throw Exception(message + "[FAIL]");
