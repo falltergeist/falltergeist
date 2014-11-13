@@ -223,22 +223,22 @@ void PlayerPanelState::onPanelMouseUp(MouseEvent* event)
 
 void PlayerPanelState::onMouseDown(MouseEvent* event)
 {
-    Game::getInstance()->mixer()->playACMSound(ResourceManager::acmFileType("sound/sfx/butin2.acm"));
+    Game::getInstance()->mixer()->playACMSound("sound/sfx/butin2.acm");
 }
 
 void PlayerPanelState::onMouseUp(MouseEvent* event)
 {
-    Game::getInstance()->mixer()->playACMSound(ResourceManager::acmFileType("sound/sfx/butin1.acm"));
+    Game::getInstance()->mixer()->playACMSound("sound/sfx/butin1.acm");
 }
 
 void PlayerPanelState::onMouseDownAttack(MouseEvent* event)
 {
-    Game::getInstance()->mixer()->playACMSound(ResourceManager::acmFileType("sound/sfx/butin3.acm"));
+    Game::getInstance()->mixer()->playACMSound("sound/sfx/butin3.acm");
 }
 
 void PlayerPanelState::onMouseUpAttack(MouseEvent* event)
 {
-    Game::getInstance()->mixer()->playACMSound(ResourceManager::acmFileType("sound/sfx/butout3.acm"));
+    Game::getInstance()->mixer()->playACMSound("sound/sfx/butout3.acm");
 }
 
 }

@@ -42,8 +42,8 @@ public:
     ~AudioMixer();
     void stopMusic();
     void stopSounds();
-    void playACMMusic(std::shared_ptr<libfalltergeist::AcmFileType> acm, bool loop = false);
-    void playACMSound(std::shared_ptr<libfalltergeist::AcmFileType> acm);
+    void playACMMusic(std::string filename, bool loop = false);
+    void playACMSound(std::string filename);
     void playMovieMusic(MvePlayer* mve);
     void pauseMusic();
     void resumeMusic();
