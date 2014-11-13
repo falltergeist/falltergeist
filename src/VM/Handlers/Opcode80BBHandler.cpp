@@ -52,12 +52,12 @@ void Opcode80BBHandler::_run()
     auto game = Game::getInstance();
     int found = 0;
     for (auto object : *game->locationState()->hexagonGrid()->at(position)->objects())
+    {
+        if (object->PID() == PID && object->elevation() == elevation)
         {
-            if (object->PID() == PID && object->elevation() == elevation)
-               {
-                        found = 1;
-               }
+            found = 1;
         }
+    }
     _vm->pushDataInteger(found);
 }
 

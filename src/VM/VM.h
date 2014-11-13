@@ -52,7 +52,6 @@ protected:
     int _metarule3(int meta, VMStackValue* p1, int p2, int p3);
     int _getMonth();
     int _getTime();
-    void _setLightLevel(int level);
     void _playMovie(int movieNum);
     void _displayString(std::string str);
     int _tile_num_in_direction(int start_tile, int dir, int distance);

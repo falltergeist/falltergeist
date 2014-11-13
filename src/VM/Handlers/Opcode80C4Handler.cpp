@@ -40,12 +40,11 @@ Opcode80C4Handler::Opcode80C4Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80C4Handler::_run()
 {
-   Logger::debug("SCRIPT") << "[80C4] [+] MVAR[num] = value" << std::endl;
-   auto value = _vm->popDataInteger();
-   auto num = _vm->popDataInteger();
-   auto game = Game::getInstance();
-   game->locationState()->setMVAR(num, value);
-
+    Logger::debug("SCRIPT") << "[80C4] [+] MVAR[num] = value" << std::endl;
+    auto value = _vm->popDataInteger();
+    auto num = _vm->popDataInteger();
+    auto game = Game::getInstance();
+    game->locationState()->setMVAR(num, value);
 }
 
 }

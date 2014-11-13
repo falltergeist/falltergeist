@@ -1279,14 +1279,9 @@ int VM::_getTime()
     return 1212; //12 hours 12 minutes
 }
 
-void VM::_setLightLevel(int level)
-{
-    Logger::debug("SCRIPT") << "     Setting light level to: " + std::to_string(level) << std::endl;
-}
-
 void VM::setLightLevel(int level)
 {
-  _setLightLevel(level);
+    Logger::debug("SCRIPT") << "     Setting light level to: " + std::to_string(level) << std::endl;
 }
 
 void VM::_playMovie(int movieNum)

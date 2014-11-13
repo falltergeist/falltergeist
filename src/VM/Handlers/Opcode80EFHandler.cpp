@@ -37,7 +37,7 @@ Opcode80EFHandler::Opcode80EFHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80EFHandler::_run()
 {
-   Logger::debug("SCRIPT") << "[80EF] void critter_dmg(ObjectPtr who, int dmg_amount, int dmg_type)" << std::endl;
+    Logger::debug("SCRIPT") << "[80EF] void critter_dmg(ObjectPtr who, int dmg_amount, int dmg_type)" << std::endl;
 }
 
 }

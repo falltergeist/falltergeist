@@ -52,12 +52,11 @@ void SDLRenderer::init()
 {
     Renderer::init();
 
-    /* TODO: android/ios
-     * _width = deviceWidth;
-     * _height = deviceHeight;
-     * Game::getInstance()->engineSettings()->setFullscreen(true);
-     * Game::getInstance()->engineSettings()->setScale(1); //or 2, if fullhd device
-     */
+    // TODO: android/ios
+    // _width = deviceWidth;
+    // _height = deviceHeight;
+    // Game::getInstance()->engineSettings()->setFullscreen(true);
+    // Game::getInstance()->engineSettings()->setScale(1); //or 2, if fullhd device
 
     std::string message =  "SDL_CreateWindow " + std::to_string(_width) + "x" + std::to_string(_height) + "x" +std::to_string(32)+ " - ";
     if (Game::getInstance()->engineSettings()->fullscreen())

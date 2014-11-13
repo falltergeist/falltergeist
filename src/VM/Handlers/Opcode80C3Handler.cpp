@@ -42,12 +42,11 @@ void Opcode80C3Handler::_run()
     Logger::debug("SCRIPT") << "[80C3] [?] MVAR[num]" << std::endl;
     auto num = _vm->popDataInteger();
     if (num < 0)
-       {
-         _vm->pushDataInteger(0);
-        }
+    {
+        _vm->pushDataInteger(0);
+    }
     auto game = Game::getInstance();
     _vm->pushDataInteger(game->locationState()->MVAR(num));
-
 }
 
 }
