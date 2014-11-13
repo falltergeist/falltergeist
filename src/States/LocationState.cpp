@@ -442,6 +442,7 @@ void LocationState::handle(Event* event)
                     auto path = hexagonGrid()->findPath(game->player()->hexagon(), hexagon);
                     if (path.size())
                     {
+                        game->player()->movementQueue()->clear();
                         for (auto hexagon : path)
                         {
                             game->player()->movementQueue()->push_back(hexagon);
