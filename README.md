@@ -1,4 +1,4 @@
-Falltergeist
+Falltergeist [![build status](https://secure.travis-ci.org/alexeevdv/falltergeist.png)](http://travis-ci.org/alexeevdv/falltergeist)
 ============
 
 Opensource crossplatform Fallout 2™ engine writen in C++ and SDL.
