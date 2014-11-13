@@ -252,6 +252,7 @@ void Animation::think()
             auto event = new Event("animationEnded");
             emitEvent(event);
             delete event;
+            return;
         }
         auto frame = frames()->at(_currentFrame);
         setXOffset(frame->xOffset());
