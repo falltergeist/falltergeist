@@ -214,18 +214,18 @@ void MainMenuState::onCreditsStart(StateEvent* event)
 
 void MainMenuState::onStateActivate(StateEvent* event)
 {
-    Game::getInstance()->mixer()->playACMMusic(ResourceManager::acmFileType("data/sound/music/07desert.acm"),true);
+    Game::getInstance()->mixer()->playACMMusic("07desert.acm",true);
     Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
 }
 
 void MainMenuState::onMouseDown(MouseEvent* event)
 {
-    Game::getInstance()->mixer()->playACMSound(ResourceManager::acmFileType("sound/sfx/nmselec0.acm"));
+    Game::getInstance()->mixer()->playACMSound("sound/sfx/nmselec0.acm");
 }
 
 void MainMenuState::onMouseUp(MouseEvent* event)
 {
-    Game::getInstance()->mixer()->playACMSound(ResourceManager::acmFileType("sound/sfx/nmselec1.acm"));
+    Game::getInstance()->mixer()->playACMSound("sound/sfx/nmselec1.acm");
 }
 
 

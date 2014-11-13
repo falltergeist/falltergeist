@@ -25,6 +25,10 @@
 #include "../../Engine/Exception.h"
 #include "../../Engine/Logger.h"
 #include "../../UI/MvePlayer.h"
+#include "../../Engine/Game.h"
+#include "../../Engine/ResourceManager.h"
+#include "../../Engine/Settings/Settings.h"
+
 
 // Third party includes
 #include <SDL.h>
@@ -117,9 +121,10 @@ void AudioMixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len)
     }
 }
 
-void AudioMixer::playACMMusic(std::shared_ptr<libfalltergeist::AcmFileType> acm, bool loop)
+void AudioMixer::playACMMusic(std::string filename, bool loop)
 {
     Mix_HookMusic(NULL, NULL);
+    auto acm = ResourceManager::acmFileType(Game::getInstance()->engineSettings()->musicPath()+filename);
     if (!acm) return;
     _loop = loop;
     musicCallback = std::bind(&AudioMixer::_musicCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
@@ -147,8 +152,9 @@ void AudioMixer::playMovieMusic(MvePlayer* mve)
     Mix_HookMusic(myMusicPlayer, reinterpret_cast<void *>(mve));
 }
 
-void AudioMixer::playACMSound(std::shared_ptr<libfalltergeist::AcmFileType> acm)
+void AudioMixer::playACMSound(std::string filename)
 {
+    auto acm = ResourceManager::acmFileType(filename);
     if (!acm) return;
     Logger::debug("AudioMixer") << "playing: " << acm->filename() << std::endl;
     Mix_Chunk *chunk = NULL;

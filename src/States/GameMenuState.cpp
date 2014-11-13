@@ -145,12 +145,12 @@ void GameMenuState::onDoneButtonClick(MouseEvent* event)
 
 void GameMenuState::onMouseDown(MouseEvent* event)
 {
-    Game::getInstance()->mixer()->playACMSound(ResourceManager::acmFileType("sound/sfx/butin3.acm"));
+    Game::getInstance()->mixer()->playACMSound("sound/sfx/butin3.acm");
 }
 
 void GameMenuState::onMouseUp(MouseEvent* event)
 {
-    Game::getInstance()->mixer()->playACMSound(ResourceManager::acmFileType("sound/sfx/butout3.acm"));
+    Game::getInstance()->mixer()->playACMSound("sound/sfx/butout3.acm");
 }
 
 }
