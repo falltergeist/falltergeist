@@ -33,7 +33,7 @@ class GameTime
 {
 protected:
     unsigned int _timer = 0;
-    unsigned int _ticks = 0;
+    unsigned int _ticks = 300000;
     unsigned int _seconds = 0;
     unsigned int _minutes = 30;
     unsigned int _hours = 8;

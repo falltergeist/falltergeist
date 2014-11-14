@@ -20,14 +20,14 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Engine/Game.h"
+#include "../../Engine/GameTime.h"
 #include "../../Engine/Logger.h"
 #include "../../VM/Handlers/Opcode80EAHandler.h"
 #include "../../VM/VM.h"
 
-
-
 // Third party includes
-#include <SDL_timer.h>
+
 namespace Falltergeist
 {
 
@@ -38,7 +38,7 @@ Opcode80EAHandler::Opcode80EAHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80EAHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80EA] [*] int gameTime()" << std::endl;
-    _vm->pushDataInteger(SDL_GetTicks() / 10);
+    _vm->pushDataInteger(Game::getInstance()->gameTime()->ticks());
 }
 
 }
