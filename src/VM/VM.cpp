@@ -166,6 +166,7 @@
 #include "../VM/Handlers/Opcode810CHandler.h"
 #include "../VM/Handlers/Opcode810DHandler.h"
 #include "../VM/Handlers/Opcode810EHandler.h"
+#include "../VM/Handlers/Opcode8118Handler.h"
 #include "../VM/Handlers/Opcode8119Handler.h"
 #include "../VM/Handlers/Opcode8126Handler.h"
 #include "../VM/Handlers/Opcode8127Handler.h"
@@ -605,6 +606,9 @@ void VM::run()
             case 0x810E:
                 opcodeHandler = new Opcode810EHandler(this);
                 break;
+            case 0x8118:
+                opcodeHandler = new Opcode8118Handler(this);
+                break;
             case 0x8119:
                 opcodeHandler = new Opcode8119Handler(this);
                 break;
@@ -862,10 +866,7 @@ void VM::run()
                 pushDataInteger(0);
                 break;
             }
-            case 0x8118:
-                Logger::debug("SCRIPT") << "[8118] [*] int get_month" << std::endl;
-                pushDataInteger(_getMonth());
-                break;
+            case 0x8118: break;
             case 0x8119: break;
             case 0x811c:
             {
@@ -1267,11 +1268,6 @@ int VM::_metarule(int type, VMStackValue* value)
 
     }
     throw Exception("VM::_metarule() - unknown type: " + std::to_string(type));
-}
-
-int VM::_getMonth()
-{
-    return 1; // January
 }
 
 int VM::_getTime()

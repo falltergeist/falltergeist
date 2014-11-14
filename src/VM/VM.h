@@ -50,7 +50,6 @@ protected:
 
     int _metarule(int type, VMStackValue* value);
     int _metarule3(int meta, VMStackValue* p1, int p2, int p3);
-    int _getMonth();
     int _getTime();
     void _playMovie(int movieNum);
     void _displayString(std::string str);
