@@ -20,11 +20,11 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Engine/Game.h"
+#include "../../Engine/GameTime.h"
 #include "../../Engine/Logger.h"
 #include "../../VM/Handlers/Opcode80F6Handler.h"
 #include "../../VM/VM.h"
-
-
 
 // Third party includes
 
@@ -37,9 +37,11 @@ Opcode80F6Handler::Opcode80F6Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80F6Handler::_run()
 {
-                Logger::debug("SCRIPT") << "[80F6] [*] int game_time_hour" << std::endl;
-                _vm->pushDataInteger(_vm->getTime());
+    Logger::debug("SCRIPT") << "[80F6] [*] int game_time_hour" << std::endl;
+    unsigned int hours = Game::getInstance()->gameTime()->hours();
+    unsigned int minutes = Game::getInstance()->gameTime()->minutes();
 
+    _vm->pushDataInteger(hours*100 + minutes);
 }
 
 }

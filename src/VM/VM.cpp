@@ -1270,11 +1270,6 @@ int VM::_metarule(int type, VMStackValue* value)
     throw Exception("VM::_metarule() - unknown type: " + std::to_string(type));
 }
 
-int VM::_getTime()
-{
-    return 1212; //12 hours 12 minutes
-}
-
 void VM::setLightLevel(int level)
 {
     Logger::debug("SCRIPT") << "     Setting light level to: " + std::to_string(level) << std::endl;
@@ -1327,11 +1322,6 @@ int VM::_metarule3(int meta, VMStackValue* p1, int p2, int p3)
 int VM::metarule3(int meta, VMStackValue* p1, int p2, int p3)
 {
     return _metarule3(meta,p1,p2,p3);
-}
-
-int VM::getTime()
-{
-    return _getTime();
 }
 
 std::string VM::msgMessage(int msg_file_num, int msg_num)
