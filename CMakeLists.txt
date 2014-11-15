@@ -552,3 +552,11 @@ if(WIN32)
     install(FILES ${dep_files} DESTINATION .)
 endif()
 
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+    install(TARGETS falltergeist-bin RUNTIME DESTINATION bin)
+    install(DIRECTORY data DESTINATION share/falltergeist)
+
+    if(LIBFALLTERGEIST_EMBEDDED)
+        install(FILES ${CMAKE_BINARY_DIR}/lib/libfalltergeist/libfalltergeist.so DESTINATION lib)
+    endif()
+endif()
