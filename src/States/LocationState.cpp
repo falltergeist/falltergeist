@@ -111,7 +111,7 @@ void LocationState::setLocation(std::string name)
     camera()->setYPosition(hexagonGrid()->at(mapFile->defaultPosition())->y());
 
     // Initialize MAP vars
-    if (mapFile->MVARsize() > 0)
+    if (mapFile->MVARS()->size() > 0)
     {
         auto name = mapFile->name();
         auto gam = ResourceManager::gamFileType("maps/" + name.substr(0, name.find(".")) + ".gam");
