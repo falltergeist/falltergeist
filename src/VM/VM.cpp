@@ -146,6 +146,7 @@
 #include "../VM/Handlers/Opcode80E4Handler.h"
 #include "../VM/Handlers/Opcode80E5Handler.h"
 #include "../VM/Handlers/Opcode80E7Handler.h"
+#include "../VM/Handlers/Opcode80E8Handler.h"
 #include "../VM/Handlers/Opcode80E9Handler.h"
 #include "../VM/Handlers/Opcode80EAHandler.h"
 #include "../VM/Handlers/Opcode80ECHandler.h"
@@ -546,6 +547,9 @@ void VM::run()
             case 0x80E7:
                 opcodeHandler = new Opcode80E7Handler(this);
                 break;
+            case 0x80E8:
+                opcodeHandler = new Opcode80E8Handler(this);
+                break;
             case 0x80E9:
                 opcodeHandler = new Opcode80E9Handler(this);
                 break;
@@ -728,6 +732,7 @@ void VM::run()
             case 0x80e4: break;
             case 0x80e5: break;
             case 0x80e7: break;
+            case 0x80e8: break;
             case 0x80e9: break;
             case 0x80ea: break;
             case 0x80ec: break;

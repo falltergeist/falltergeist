@@ -449,6 +449,8 @@ set(SOURCES main.cpp
     src/VM/Handlers/Opcode80E5Handler.cpp
     src/VM/Handlers/Opcode80E7Handler.h
     src/VM/Handlers/Opcode80E7Handler.cpp
+    src/VM/Handlers/Opcode80E8Handler.h
+    src/VM/Handlers/Opcode80E8Handler.cpp
     src/VM/Handlers/Opcode80E9Handler.h
     src/VM/Handlers/Opcode80E9Handler.cpp
     src/VM/Handlers/Opcode80EAHandler.h
