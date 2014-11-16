@@ -112,7 +112,7 @@ std::string CrossPlatform::getHomeDirectory()
 std::string CrossPlatform::getExecutableDirectory()
 {
     char buffer[512];
-#if defined (Linux)
+#if defined (__linux__)
     readlink("/proc/self/exe", buffer, sizeof(buffer));
 #elif defined (BSD)
     readlink("/proc/curproc/file", buffer, sizeof(buffer));
