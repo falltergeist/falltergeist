@@ -20,12 +20,10 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Engine/Exception.h"
 #include "../../Engine/Logger.h"
 #include "../../VM/Handlers/Opcode80AFHandler.h"
 #include "../../VM/VM.h"
-
-
-
 
 // Third party includes
 
@@ -40,13 +38,20 @@ void Opcode80AFHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80AF] [*] int is_success(int val)" << std::endl;
     auto value = _vm->popDataInteger();
-    if (value == 2 || value == 3)
+    switch(value)
     {
-        _vm->pushDataInteger(1); // true;
-    }
-    else
-    {
-        _vm->pushDataInteger(0);
+        case 0:
+        case 1:
+            _vm->pushDataInteger(0);
+            break;
+        case 2:
+        case 3:
+            _vm->pushDataInteger(1);
+            break;
+        default:
+            throw Exception("Opcode80AFHandler - wrong value: " + std::to_string(value));
+            _vm->pushDataInteger(-1);
+            break;
     }
 }
 
