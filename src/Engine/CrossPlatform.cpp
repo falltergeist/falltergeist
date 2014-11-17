@@ -26,6 +26,7 @@
 #include <dirent.h>
 #include <fstream>
 #include <stdexcept>
+#include <SDL.h>
 
 #if defined(__unix__) || defined(__APPLE__)
     #include <sys/param.h>
@@ -47,10 +48,6 @@
     #include <sys/stat.h>
     #include <sys/types.h>
     #include <unistd.h>
-#endif
-
-#if defined(__APPLE__)
-    #include <mach-o/dyld.h>
 #endif
 
 // Falltergeist includes
@@ -111,26 +108,10 @@ std::string CrossPlatform::getHomeDirectory()
 
 std::string CrossPlatform::getExecutableDirectory()
 {
-    char buffer[512];
-#if defined (__linux__)
-    readlink("/proc/self/exe", buffer, sizeof(buffer));
-#elif defined (__APPLE__)
-    _NSGetExecutablePath(buffer, sizeof(buffer));
-#elif defined (BSD)
-    readlink("/proc/curproc/file", buffer, sizeof(buffer));
-#elif defined (_WIN32) || defined (WIN32)
-    GetModuleFileName(NULL, buffer, sizeof(buffer));
-#endif 
-
-    std::string path(buffer);  
-
-#if defined(_WIN32) || defined(WIN32)
-    int pos = path.rfind('\\');
-#else
-    int pos = path.rfind('/');
-#endif
-
-    return std::string(path.substr(0,pos));
+    char* buffer=SDL_GetBasePath();
+    std::string path(buffer);
+    SDL_free(buffer);
+    return path;
 }
 
 std::vector<std::string> CrossPlatform::getCdDrivePaths()
