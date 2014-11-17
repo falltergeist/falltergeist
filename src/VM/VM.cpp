@@ -169,6 +169,7 @@
 #include "../VM/Handlers/Opcode810EHandler.h"
 #include "../VM/Handlers/Opcode8118Handler.h"
 #include "../VM/Handlers/Opcode8119Handler.h"
+#include "../VM/Handlers/Opcode8123Handler.h"
 #include "../VM/Handlers/Opcode8126Handler.h"
 #include "../VM/Handlers/Opcode8127Handler.h"
 #include "../VM/Handlers/Opcode8136Handler.h"
@@ -618,6 +619,9 @@ void VM::run()
             case 0x8119:
                 opcodeHandler = new Opcode8119Handler(this);
                 break;
+            case 0x8123:
+                opcodeHandler = new Opcode8123Handler(this);
+                break;
             case 0x8126:
                 opcodeHandler = new Opcode8126Handler(this);
                 break;
@@ -969,13 +973,7 @@ void VM::run()
                 //delete text;
                 break;
             }
-            case 0x8123:
-            {
-                Logger::debug("SCRIPT") << "[8123] [=] int GetPoison(void* obj)" << std::endl;
-                popDataPointer();
-                pushDataInteger(0);
-                break;
-            }
+            case 0x8123: break;
             case 0x8125:
             {
                 Logger::debug("SCRIPT") << "[8125] [=] void party_remove(void* who)" << std::endl;

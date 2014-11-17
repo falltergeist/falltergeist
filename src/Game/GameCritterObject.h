@@ -42,6 +42,7 @@ protected:
     bool _isRunning = false;
 
     int _gender = GENDER_MALE;
+    int _poisonLevel = 0;
     int _hitPoints = 0;
     int _hitPointsMax = 0;
     int _healingRate = 0;
@@ -222,6 +223,9 @@ public:
 
     virtual int healingRate();
     void setHealingRate(int value);
+
+    int poisonLevel();
+    void setPoisonLevel(int value);
 
     virtual int damageResist(unsigned int type);
     void setDamageResist(unsigned int type, int value);
