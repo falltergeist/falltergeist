@@ -52,7 +52,7 @@ if(NOT OPENGL_FOUND)
 endif(NOT OPENGL_FOUND)
 include_directories(${OPENGL_INCLUDE_DIR})
 
-configure_file(src/Engine/Crossplatform.cpp.in src/Engine/Crossplatform.cpp)
+configure_file(src/Engine/CrossPlatform.cpp.in src/Engine/CrossPlatform.cpp)
 
 set(SOURCES main.cpp
     src/Engine/Audio/AudioMixer.h
