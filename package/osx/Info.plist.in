@@ -13,6 +13,6 @@
 		<key>CFBundleSignature</key>
 		<string>????</string>
 		<key>CFBundleVersion</key>
-		<string>0.1.6</string>
+		<string>@falltergeist_VERSION@</string>
 	</dict>
 	</plist>
