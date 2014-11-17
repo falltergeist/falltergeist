@@ -40,10 +40,10 @@ void GameTime::think()
 {
     if (SDL_GetTicks() - _timer < 100) return;
     _timer = SDL_GetTicks();
-    _increaseTicks();
+    increaseTicks();
 }
 
-void GameTime::_increaseTicks()
+void GameTime::increaseTicks()
 {
     _ticks++;
 

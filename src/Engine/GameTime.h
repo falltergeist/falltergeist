@@ -41,7 +41,6 @@ protected:
     unsigned int _month = 7;
     unsigned int _year = 2241;
 
-    void _increaseTicks();
     void _increaseSeconds();
     void _increaseMinutes();
     void _increaseHours();
@@ -55,6 +54,7 @@ public:
 
     void think();
 
+    void increaseTicks();
     unsigned int ticks();
     unsigned int seconds();
     unsigned int minutes();

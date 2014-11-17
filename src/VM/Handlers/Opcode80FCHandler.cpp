@@ -21,10 +21,10 @@
 
 // Falltergeist includes
 #include "../../Engine/Logger.h"
+#include "../../Engine/Game.h"
+#include "../../Engine/GameTime.h"
 #include "../../VM/Handlers/Opcode80FCHandler.h"
 #include "../../VM/VM.h"
-
-
 
 // Third party includes
 
@@ -38,8 +38,14 @@ Opcode80FCHandler::Opcode80FCHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80FCHandler::_run()
 {
 
-    Logger::debug("SCRIPT") << "[80FC] [=] void game_time_advance(int amount)" << std::endl;
-    _vm->popDataInteger();
+    int amount = _vm->popDataInteger();
+    Logger::debug("SCRIPT") << "[80FC] [=] void game_time_advance(int amount)" << std::endl
+                            << "    amount = " << amount << std::endl;
+    auto time = Game::getInstance()->gameTime();
+    for (auto i = 0; i != amount; ++i)
+    {
+        time->increaseTicks();
+    }
 }
 
 }
