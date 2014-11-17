@@ -40,11 +40,14 @@ Opcode80C6Handler::Opcode80C6Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80C6Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[80C6] [+] GVAR[num] = value" << std::endl;
     auto value = _vm->popDataInteger();
     auto num = _vm->popDataInteger();
     auto game = Game::getInstance();
     game->setGVAR(num, value);
+
+    Logger::debug("SCRIPT") << "[80C6] [+] GVAR[num] = value" << std::endl
+                            << "    num = " << num << std::endl
+                            << "    value = " << value << std::endl;
 }
 
 }

@@ -37,7 +37,6 @@ Opcode80E8Handler::Opcode80E8Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80E8Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[80E8] [+] void critter_heal(ObjectPtr who, int amount)" << std::endl;
     int amount = _vm->popDataInteger();
     auto critter = static_cast<GameCritterObject*>(_vm->popDataPointer());
     if (!critter)
@@ -45,6 +44,10 @@ void Opcode80E8Handler::_run()
         throw Exception("VM::opcode80E8 pointer error");
     }
     critter->setHitPoints(critter->hitPoints() + amount);
+
+    auto &debug = Logger::debug("SCRIPT");
+    debug << "[80E8] [+] void critter_heal(ObjectPtr who, int amount)" << std::endl;
+    debug << "    amount = " << amount << std::endl;
 }
 
 }

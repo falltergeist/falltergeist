@@ -17,33 +17,25 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef FALLTERGEIST_OPCODE8136HANDLER_H
+#define FALLTERGEIST_OPCODE8136HANDLER_H
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Logger.h"
-#include "../../VM/Handlers/Opcode802FHandler.h"
-#include "../../VM/VM.h"
+#include "../../VM/OpcodeHandler.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Opcode802FHandler::Opcode802FHandler(VM* vm) : OpcodeHandler(vm)
+class Opcode8136Handler : public OpcodeHandler
 {
-}
-
-void Opcode802FHandler::_run()
-{
-    auto condition = _vm->popDataLogical();
-    auto address = _vm->popDataInteger();
-    Logger::debug("SCRIPT") << "[802F] [*] ifthen(address, condition)" << std::endl
-                            << "    address = " << std::hex << address << std::endl
-                            << "    condition = " << std::dec << condition << std::endl;
-    if (!condition)
-    {
-        _vm->setProgramCounter(address);
-    }
-}
+public:
+    Opcode8136Handler(VM* vm);
+    virtual void _run();
+};
 
 }
+#endif // FALLTERGEIST_OPCODE8136HANDLER_H

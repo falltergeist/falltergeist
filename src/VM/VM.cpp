@@ -171,6 +171,8 @@
 #include "../VM/Handlers/Opcode8119Handler.h"
 #include "../VM/Handlers/Opcode8126Handler.h"
 #include "../VM/Handlers/Opcode8127Handler.h"
+#include "../VM/Handlers/Opcode8136Handler.h"
+#include "../VM/Handlers/Opcode8137Handler.h"
 #include "../VM/Handlers/Opcode9001Handler.h"
 #include "../VM/Handlers/OpcodeC001Handler.h"
 
@@ -622,6 +624,12 @@ void VM::run()
             case 0x8127:
                 opcodeHandler = new Opcode8127Handler(this);
                 break;
+            case 0x8136:
+                opcodeHandler = new Opcode8136Handler(this);
+                break;
+            case 0x8137:
+                opcodeHandler = new Opcode8137Handler(this);
+                break;
             case 0x9001:
                 opcodeHandler = new Opcode9001Handler(this);
                 break;
@@ -1035,18 +1043,8 @@ void VM::run()
                 Logger::debug("SCRIPT") << "[8134] [=] void game_ui_enable()" << std::endl;
                 break;
             }
-            case 0x8136:
-            {
-                Logger::debug("SCRIPT") << "[8136] [=] void gfade_out(int time)" << std::endl;
-                popDataInteger();
-                break;
-            }
-            case 0x8137:
-            {
-                Logger::debug("SCRIPT") << "[8137] [=] void gfade_in(int time)" << std::endl;
-                popDataInteger();
-                break;
-            }
+            case 0x8136: break;
+            case 0x8137: break;
             case 0x8138:
             {
                 Logger::debug("SCRIPT") << "[8138] [=] int item_caps_total(void* obj)" << std::endl;

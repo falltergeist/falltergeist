@@ -58,6 +58,7 @@ void GameDudeObject::loadFromGCDFile(std::shared_ptr<libfalltergeist::GcdFileTyp
     _age = gcd->age();
 
     _hitPointsMax = gcd->hitPoints() + gcd->hitPointsBonus();
+    _hitPoints = _hitPointsMax;
 
     if (gcd->firstTrait() >= 0) setTrait(gcd->firstTrait(), 1);
     if (gcd->secondTrait() >= 0) setTrait(gcd->secondTrait(), 1);

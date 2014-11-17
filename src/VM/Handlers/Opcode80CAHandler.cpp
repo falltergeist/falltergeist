@@ -37,7 +37,6 @@ Opcode80CAHandler::Opcode80CAHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80CAHandler::_run()
 {
-    Logger::debug("SCRIPT") << "[80CA] [+] int get_critter_stat(GameCritterObject* who, int number)" << std::endl;
     int number = _vm->popDataInteger();
     auto critter = static_cast<GameCritterObject*>(_vm->popDataPointer());
     if (!critter)
@@ -120,6 +119,9 @@ void Opcode80CAHandler::_run()
         }
     }
     _vm->pushDataInteger(result);
+    Logger::debug("SCRIPT") << "[80CA] [+] int value = get_critter_stat(GameCritterObject* who, int number)" << std::endl
+                            << "    number = " << number << std::endl
+                            << "    value  = " << result << std::endl;
 }
 
 }

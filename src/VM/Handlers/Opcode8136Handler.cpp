@@ -21,7 +21,7 @@
 
 // Falltergeist includes
 #include "../../Engine/Logger.h"
-#include "../../VM/Handlers/Opcode802FHandler.h"
+#include "../../VM/Handlers/Opcode8136Handler.h"
 #include "../../VM/VM.h"
 
 // Third party includes
@@ -29,21 +29,15 @@
 namespace Falltergeist
 {
 
-Opcode802FHandler::Opcode802FHandler(VM* vm) : OpcodeHandler(vm)
+Opcode8136Handler::Opcode8136Handler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode802FHandler::_run()
+void Opcode8136Handler::_run()
 {
-    auto condition = _vm->popDataLogical();
-    auto address = _vm->popDataInteger();
-    Logger::debug("SCRIPT") << "[802F] [*] ifthen(address, condition)" << std::endl
-                            << "    address = " << std::hex << address << std::endl
-                            << "    condition = " << std::dec << condition << std::endl;
-    if (!condition)
-    {
-        _vm->setProgramCounter(address);
-    }
+    int time = _vm->popDataInteger();
+    Logger::debug("SCRIPT") << "[8136] [=] void gfade_out(int time)" << std::endl
+                            << "    time = " << time << std::endl;
 }
 
 }

@@ -233,7 +233,6 @@ void NewGameState::onCreateButtonClick(MouseEvent* event)
 void NewGameState::onBeginGameButtonClick(MouseEvent* event)
 {
     auto player = _characters.at(_selectedCharacter);
-    player->setHitPoints(player->hitPointsMax());
     Game::getInstance()->setPlayer(player);
     Game::getInstance()->setState(new LocationState());
 }
