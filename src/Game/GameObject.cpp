@@ -135,9 +135,15 @@ void GameObject::setDescription(std::string value)
     _description = value;
 }
 
-std::vector<VM*>* GameObject::scripts()
+VM* GameObject::script()
 {
-    return &_scripts;
+    return _script;
+}
+
+void GameObject::setScript(VM* script)
+{
+    delete _script;
+    _script = script;
 }
 
 ActiveUI* GameObject::ui()
@@ -273,10 +279,7 @@ void GameObject::description_p_proc()
 
 void GameObject::use_p_proc()
 {
-    for (auto script : *scripts())
-    {
-        script->call("use_p_proc");
-    }
+    script()->call("use_p_proc");
 }
 
 void GameObject::destroy_p_proc()
@@ -309,6 +312,12 @@ void GameObject::spatial_p_proc()
 
 void GameObject::use_obj_on_p_proc()
 {
+}
+
+void GameObject::onUseAnimationActionFrame(Event* event)
+{
+    auto object = (GameObject*)event->reciever();
+    object->use_p_proc();
 }
 
 }

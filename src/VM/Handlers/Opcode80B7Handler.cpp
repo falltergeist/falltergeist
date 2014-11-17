@@ -59,7 +59,7 @@ void Opcode80B7Handler::_run()
         auto intFile = ResourceManager::intFileType(SID);
         if (intFile)
         {
-            object->scripts()->push_back(new VM(intFile, object));
+            object->setScript(new VM(intFile, object));
         }
     }
     _vm->pushDataPointer(object);

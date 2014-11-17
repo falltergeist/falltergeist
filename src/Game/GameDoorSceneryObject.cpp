@@ -63,11 +63,7 @@ void GameDoorSceneryObject::setLocked(bool value)
 void GameDoorSceneryObject::use_p_proc()
 {
     GameObject::use_p_proc();
-
-    for (auto script : *scripts())
-    {
-        if (script->overrides()) return;
-    }
+    if (script()->overrides()) return;
 
     if (!opened())
     {

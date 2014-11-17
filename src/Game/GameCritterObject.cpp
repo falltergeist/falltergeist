@@ -416,10 +416,7 @@ GameItemObject* GameCritterObject::currentHandSlot()
 
 void GameCritterObject::talk_p_proc()
 {
-    for(auto script : *scripts())
-    {
-        script->call("talk_p_proc");
-    }
+    script()->call("talk_p_proc");
 }
 
 void GameCritterObject::damage_p_proc()
@@ -432,10 +429,7 @@ void GameCritterObject::combat_p_proc()
 
 void GameCritterObject::critter_p_proc()
 {
-    for(auto script : *scripts())
-    {
-        script->call("critter_p_proc");
-    }
+    script()->call("critter_p_proc");
 }
 
 void GameCritterObject::is_dropping_p_proc()
@@ -550,7 +544,7 @@ Animation* GameCritterObject::_generateMovementAnimation()
 
 Animation* GameCritterObject::setActionAnimation(std::string action)
 {
-    auto animation = new Animation("art/critters/" + _generateArmorFrmString() + action + ".frm", orientation());
+    Animation* animation = new Animation("art/critters/" + _generateArmorFrmString() + action + ".frm", orientation());
     animation->play();
     auto queue = new AnimationQueue();
     queue->setRepeat(true);

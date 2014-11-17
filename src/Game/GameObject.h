@@ -53,7 +53,7 @@ protected:
     int _orientation = 0;
     std::string _name;
     std::string _description;
-    std::vector<VM*> _scripts;
+    VM* _script = 0;
     ActiveUI* _ui = 0;
     Hexagon* _hexagon = 0;
     virtual void _generateUi();
@@ -91,7 +91,8 @@ public:
     std::string description();
     void setDescription(std::string value);
 
-    std::vector<VM*>* scripts();
+    VM* script();
+    void setScript(VM* script);
 
     virtual void render();
     virtual void think();
@@ -119,6 +120,8 @@ public:
     virtual void spatial_p_proc();
     virtual void use_p_proc();
     virtual void use_obj_on_p_proc();
+
+    virtual void onUseAnimationActionFrame(Event* event);
 };
 
 }

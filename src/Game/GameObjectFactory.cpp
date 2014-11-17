@@ -244,7 +244,7 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
     if (proto->scriptId() > 0)
     {
         auto intFile = ResourceManager::intFileType(proto->scriptId());
-        if (intFile) object->scripts()->push_back(new VM(intFile, object));
+        if (intFile) object->setScript(new VM(intFile, object));
     }
 
     return object;

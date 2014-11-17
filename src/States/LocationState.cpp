@@ -40,6 +40,7 @@
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Settings/Settings.h"
 #include "../Game/GameDefines.h"
+#include "../Game/GameDoorSceneryObject.h"
 #include "../Game/GameDudeObject.h"
 #include "../Game/GameObject.h"
 #include "../Game/GameObjectFactory.h"
@@ -140,12 +141,12 @@ void LocationState::setLocation(std::string name)
         if (mapObject->scriptId() > 0)
         {
             auto intFile = ResourceManager::intFileType(mapObject->scriptId());
-            if (intFile) object->scripts()->push_back(new VM(intFile,object));
+            if (intFile) object->setScript(new VM(intFile,object));
         }
         if (mapObject->mapScriptId() > 0 && mapObject->mapScriptId() != mapObject->scriptId())
         {
             auto intFile = ResourceManager::intFileType(mapObject->mapScriptId());
-            if (intFile) object->scripts()->push_back(new VM(intFile, object));
+            if (intFile) object->setScript(new VM(intFile, object));
         }
 
         auto hexagon = hexagonGrid()->at(mapObject->hexPosition());
@@ -171,8 +172,7 @@ void LocationState::setLocation(std::string name)
         player->setOrientation(mapFile->defaultOrientation());
 
         // Player script
-        auto script = new VM(ResourceManager::intFileType(0), player);
-        player->scripts()->push_back(script);
+        player->setScript(new VM(ResourceManager::intFileType(0), player));
 
         auto hexagon = hexagonGrid()->at(mapFile->defaultPosition());
         LocationState::moveObjectToHexagon(player, hexagon);
@@ -218,13 +218,9 @@ void LocationState::onMouseDown(MouseEvent* event)
 
     std::vector<int> icons;
 
-    for (auto script : *object->scripts())
+    if (object->script()->hasFunction("use_p_proc"))
     {
-        if (script->hasFunction("use_p_proc"))
-        {
-            icons.push_back(Mouse::ICON_USE);
-            break;
-        }
+        icons.push_back(Mouse::ICON_USE);
     }
 
     switch(object->type())
@@ -339,9 +335,9 @@ void LocationState::think()
 
         for (auto object : _objects)
         {
-            for (auto script : *object->scripts())
+            if (object->script())
             {
-                script->initialize();
+                object->script()->initialize();
             }
         }
 
@@ -353,10 +349,9 @@ void LocationState::think()
         for (auto it = _objects.rbegin(); it != _objects.rend(); ++it)
         {
             auto object = *it;
-
-            for (auto script : *object->scripts())
+            if (object->script())
             {
-                script->call("map_enter_p_proc");
+                object->script()->call("map_enter_p_proc");
             }
         }
     }
@@ -371,13 +366,9 @@ void LocationState::think()
             }
             for (auto object : _objects)
             {
-                for (auto script : *object->scripts())
+                if (object->script())
                 {
-                    script->call("map_update_p_proc");
-                    if (auto critter = dynamic_cast<GameCritterObject*>(object))
-                    {
-                        critter->critter_p_proc();
-                    }
+                    object->script()->call("map_update_p_proc");
                 }
             }
         }
@@ -580,7 +571,9 @@ void LocationState::handleAction(GameObject* object, int action)
         }
         case Mouse::ICON_USE:
         {
-            object->use_p_proc();
+            auto player = Game::getInstance()->player();
+            auto animation = player->setActionAnimation("al");
+            animation->addEventHandler("actionFrame", object, (EventRecieverMethod) &GameObject::onUseAnimationActionFrame);
             break;
         }
         case Mouse::ICON_ROTATE:
