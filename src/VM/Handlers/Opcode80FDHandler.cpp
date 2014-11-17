@@ -46,7 +46,7 @@ void Opcode80FDHandler::_run()
     critter->setRadiationLevel(critter->radiationLevel() + amount);
 
     auto &debug = Logger::debug("SCRIPT");
-    debug << "[80FD] [+] void radiation_inc(GameDude* who, int amount)" << std::endl;
+    debug << "[80FD] [+] void increaseRadiationLevel(GameDude* who, int amount)" << std::endl;
     debug << "    amount = " << amount << std::endl;
 }
 
