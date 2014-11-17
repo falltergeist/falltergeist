@@ -563,4 +563,14 @@ std::string GameCritterObject::_generateWeaponFrmString()
     return "a";
 }
 
+int GameCritterObject::poisonLevel()
+{
+    return _poisonLevel;
+}
+
+void GameCritterObject::setPoisonLevel(int value)
+{
+    _poisonLevel = value;
+}
+
 }
