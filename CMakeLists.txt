@@ -483,6 +483,8 @@ set(SOURCES main.cpp
     src/VM/Handlers/Opcode80FCHandler.cpp
     src/VM/Handlers/Opcode80FDHandler.h
     src/VM/Handlers/Opcode80FDHandler.cpp
+    src/VM/Handlers/Opcode80FEHandler.h
+    src/VM/Handlers/Opcode80FEHandler.cpp
     src/VM/Handlers/Opcode80FFHandler.h
     src/VM/Handlers/Opcode80FFHandler.cpp
     src/VM/Handlers/Opcode8100Handler.h

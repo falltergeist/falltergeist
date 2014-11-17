@@ -163,6 +163,7 @@
 #include "../VM/Handlers/Opcode80FBHandler.h"
 #include "../VM/Handlers/Opcode80FCHandler.h"
 #include "../VM/Handlers/Opcode80FDHandler.h"
+#include "../VM/Handlers/Opcode80FEHandler.h"
 #include "../VM/Handlers/Opcode80FFHandler.h"
 #include "../VM/Handlers/Opcode8100Handler.h"
 #include "../VM/Handlers/Opcode8101Handler.h"
@@ -625,6 +626,9 @@ void VM::run()
             case 0x80FD:
                 opcodeHandler = new Opcode80FDHandler(this);
                 break;
+            case 0x80FE:
+                opcodeHandler = new Opcode80FEHandler(this);
+                break;
             case 0x80FF:
                 opcodeHandler = new Opcode80FFHandler(this);
                 break;
@@ -857,6 +861,7 @@ void VM::run()
             case 0x80fb: break;
             case 0x80fc: break;
             case 0x80fd: break;
+            case 0x80fe: break;
             case 0x80ff: break;
             case 0x8100: break;
             case 0x8101: break;
