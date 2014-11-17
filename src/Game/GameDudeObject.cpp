@@ -284,4 +284,14 @@ void GameDudeObject::_generateUi()
     }
 }
 
+unsigned int GameDudeObject::radiationLevel()
+{
+    return _radiationLevel;
+}
+
+void GameDudeObject::setRadiationLevel(unsigned int value)
+{
+    _radiationLevel = value;
+}
+
 }

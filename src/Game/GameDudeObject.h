@@ -39,6 +39,7 @@ protected:
     int _statsPoints = 0;
     int _skillsPoints = 3;
     int _age = 0;
+    unsigned int _radiationLevel = 0;
     std::string _biography;
     virtual void _generateUi();
 public:
@@ -77,6 +78,9 @@ public:
     int healingRate();
     int criticalChance();
     unsigned int carryWeightMax();
+
+    unsigned int radiationLevel();
+    void setRadiationLevel(unsigned int value);
 };
 
 }
