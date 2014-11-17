@@ -169,6 +169,7 @@
 #include "../VM/Handlers/Opcode810EHandler.h"
 #include "../VM/Handlers/Opcode8118Handler.h"
 #include "../VM/Handlers/Opcode8119Handler.h"
+#include "../VM/Handlers/Opcode8122Handler.h"
 #include "../VM/Handlers/Opcode8123Handler.h"
 #include "../VM/Handlers/Opcode8126Handler.h"
 #include "../VM/Handlers/Opcode8127Handler.h"
@@ -620,6 +621,9 @@ void VM::run()
             case 0x8119:
                 opcodeHandler = new Opcode8119Handler(this);
                 break;
+            case 0x8122:
+                opcodeHandler = new Opcode8122Handler(this);
+                break;
             case 0x8123:
                 opcodeHandler = new Opcode8123Handler(this);
                 break;
@@ -977,6 +981,7 @@ void VM::run()
                 //delete text;
                 break;
             }
+            case 0x8122: break;
             case 0x8123: break;
             case 0x8125:
             {
