@@ -37,7 +37,7 @@ Opcode80E8Handler::Opcode80E8Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80E8Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[80E8A] [+] void critter_heal(ObjectPtr who, int amount)" << std::endl;
+    Logger::debug("SCRIPT") << "[80E8] [+] void critter_heal(ObjectPtr who, int amount)" << std::endl;
     int amount = _vm->popDataInteger();
     auto critter = static_cast<GameCritterObject*>(_vm->popDataPointer());
     if (!critter)
