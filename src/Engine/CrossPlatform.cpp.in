@@ -80,7 +80,7 @@ std::string CrossPlatform::getVersion()
 {
     if (_version.length() > 0)
         return _version;
-    _version = "Falltergeist 0.1.6";
+    _version = "Falltergeist @falltergeist_VERSION@";
 #if defined(_WIN32) || defined(WIN32)
     _version += " (Windows)";
 #elif defined(__linux__)
@@ -252,32 +252,29 @@ std::vector<std::string> *CrossPlatform::findFalloutDataFiles()
     if (_dataFiles)
         return _dataFiles;
 
-    for (auto &directory : getDataPaths())
+    // looking for all available dat files in directory
+    DIR *pxDir = opendir(CrossPlatform::findFalloutDataPath().c_str());
+    if (!pxDir)
     {
-        // looking for all available dat files in directory
-        DIR *pxDir = opendir(directory.c_str());
-        if (!pxDir)
-        {
-            Logger::info() << "Can't open data directory: " << directory << std::endl;
-            continue;
-        }
-        _dataFiles = new std::vector<std::string>(necessaryDatFiles);
-        struct dirent *pxItem = 0;
-        while ((pxItem = readdir(pxDir)))
-        {
-            std::string filename(pxItem->d_name);
-            if (filename.length() > 4) // exclude . and ..
-            {
-                std::string ext = filename.substr(filename.size() - 4, 4);
-                if (ext == ".dat")
-                {
-                    if (filename.length() == 12 && filename.substr(0, 5) == "patch")
-                        _dataFiles->insert(_dataFiles->begin(),filename);
-                }
-            }
-        }
-        closedir(pxDir);
+        throw Exception("Can't open data directory: " + CrossPlatform::findFalloutDataPath());
     }
+    _dataFiles = new std::vector<std::string>(necessaryDatFiles);
+    struct dirent *pxItem = 0;
+    while ((pxItem = readdir(pxDir)))
+    {
+        std::string filename(pxItem->d_name);
+        if (filename.length() > 4) // exclude . and ..
+        {
+            std::string ext = filename.substr(filename.size() - 4, 4);
+            if (ext == ".dat")
+            {
+                if (filename.length() == 12 && filename.substr(0, 5) == "patch")
+                    _dataFiles->insert(_dataFiles->begin(),filename);
+            }
+         }
+    }
+    closedir(pxDir);
+
 
     return _dataFiles;
 }

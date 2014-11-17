@@ -21,6 +21,7 @@ cmake_minimum_required(VERSION 2.8)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 project(falltergeist)
+set(falltergeist_VERSION  0.1.6)
 
 option(LIBFALLTERGEIST_EMBEDDED "Use embedded libfalltergeist" ON)
 
@@ -50,6 +51,8 @@ if(NOT OPENGL_FOUND)
     message(FATAL_ERROR "OpenGL library not found")
 endif(NOT OPENGL_FOUND)
 include_directories(${OPENGL_INCLUDE_DIR})
+
+configure_file(src/Engine/CrossPlatform.cpp.in src/Engine/CrossPlatform.cpp)
 
 set(SOURCES main.cpp
     src/Engine/Audio/AudioMixer.h
@@ -615,4 +618,14 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
     if(LIBFALLTERGEIST_EMBEDDED)
         install(FILES ${CMAKE_BINARY_DIR}/lib/libfalltergeist/libfalltergeist.so DESTINATION lib)
     endif()
+endif()
+
+if(APPLE)
+  configure_file(package/osx/Info.plist.in package/osx/Info.plist)
+  configure_file(package/osx.sh.in package/osx.sh)
+  add_custom_command(
+    OUTPUT Falltergeist.dmg
+    COMMAND sh ./package/osx.sh
+  )
+  add_custom_target(dmg DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Falltergeist.dmg)
 endif()
