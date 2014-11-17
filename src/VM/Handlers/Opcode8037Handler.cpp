@@ -35,10 +35,16 @@ Opcode8037Handler::Opcode8037Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8037Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8037] [*] lt <" << std::endl;
     auto b = _vm->popDataInteger();
     auto a = _vm->popDataInteger();
-    _vm->pushDataInteger(a < b);
+    auto result = a < b;
+
+    Logger::debug("SCRIPT") << "[8037] [*] lt (a < b)" << std::endl
+                            << "    a = " << a << std::endl
+                            << "    b = " << b << std::endl
+                            << "    result = " << result << std::endl;
+
+    _vm->pushDataInteger(result);
 }
 
 }

@@ -413,7 +413,7 @@ void PlayerEditState::think()
         if (name.find("skills_") == 0)
         {
             unsigned int number = atoi(name.substr(7).c_str());
-            it->second->setFont(player->skill(number - 1) ? font1_a0a0a0ff : font1_3ff800ff);
+            it->second->setFont(player->skillTagged(number - 1) ? font1_a0a0a0ff : font1_3ff800ff);
         }
 
         if (name.find("health_") == 0)
@@ -457,8 +457,8 @@ void PlayerEditState::think()
         if (name.find("skills_") == 0)
         {
             unsigned int number = atoi(name.substr(7).c_str());
-            it->second->setFont(player->skill(number - 1) ? font1_ffffffff : font1_ffff7fff);
-            _labels.at(name+"_value")->setFont(player->skill(number - 1) ? font1_ffffffff : font1_ffff7fff);
+            it->second->setFont(player->skillTagged(number - 1) ? font1_ffffffff : font1_ffff7fff);
+            _labels.at(name+"_value")->setFont(player->skillTagged(number - 1) ? font1_ffffffff : font1_ffff7fff);
         }
 
         if (name.find("health_") == 0)

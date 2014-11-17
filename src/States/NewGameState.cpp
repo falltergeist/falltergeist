@@ -197,12 +197,12 @@ void NewGameState::_changeCharacter()
                                 + std::to_string(dude->actionPoints()) + "\n"
                                 + std::to_string(dude->meleeDamage())  + "\n";
 
-    for (unsigned int i=0; i != 17; ++i) if (dude->skill(i))
+    for (unsigned int i=0; i != 17; ++i) if (dude->skillTagged(i))
     {
         stats3 += "\n" + ResourceManager::msgFileType("text/english/game/skill.msg")->message(100 + i)->text();
         stats3_values += "\n" + std::to_string(dude->skillValue(i)) + "%";
     }
-    for (unsigned int i=0; i != 16; ++i) if (dude->trait(i))
+    for (unsigned int i=0; i != 16; ++i) if (dude->traitTagged(i))
     {
         stats3 += "\n" + ResourceManager::msgFileType("text/english/game/trait.msg")->message(100 + i)->text();
     }

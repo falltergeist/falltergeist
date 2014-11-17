@@ -70,7 +70,7 @@ public:
     int radiationResistance();
     // Overloaded
     int hitPointsMax();
-    int actionPoints();
+    int actionPointsMax();
     int armorClass();
     int meleeDamage();
     int sequence();

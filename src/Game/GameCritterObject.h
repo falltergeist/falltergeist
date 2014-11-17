@@ -58,8 +58,9 @@ protected:
 
     std::vector<int> _stats = {0, 0, 0, 0, 0, 0, 0};
     std::vector<int> _statsBonus = {0, 0, 0, 0, 0, 0, 0};
-    std::vector<int> _skills = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    std::vector<int> _traits = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> _skillsTagged = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> _skillsGainedValue = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> _traitsTagged = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::vector<int> _damageResist = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::vector<int> _damageThreshold = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::vector<GameItemObject*> _inventory;
@@ -177,21 +178,24 @@ public:
     int gender();
     void setGender(unsigned int value);
 
-    int stat(unsigned int num);
-    void setStat(unsigned int num, int value);
+    int stat(unsigned int stat);
+    void setStat(unsigned int stat, int value);
 
-    int statBonus(unsigned int num);
-    void setStatBonus(unsigned int num, int value);
+    int statBonus(unsigned int stat);
+    void setStatBonus(unsigned int stat, int value);
 
     int statTotal(unsigned int num);
 
-    int skill(unsigned int num);
-    void setSkill(unsigned int num, int value);
+    int skillTagged(unsigned int skill);
+    void setSkillTagged(unsigned int skill, int value);
 
-    int skillValue(unsigned int num);
+    int skillBaseValue(unsigned int skill);
+    int skillGainedValue(unsigned int skill);
+    void setSkillGainedValue(unsigned int skill, int value);
+    int skillValue(unsigned int skill);
 
-    int trait(unsigned int num);
-    void setTrait(unsigned int num, int value);
+    int traitTagged(unsigned int num);
+    void setTraitTagged(unsigned int num, int value);
 
     int hitPoints();
     void setHitPoints(int value);

@@ -21,40 +21,30 @@
 
 // Falltergeist includes
 #include "../../Engine/Logger.h"
-#include "../../VM/Handlers/Opcode80AAHandler.h"
 #include "../../Game/GameCritterObject.h"
-#include "../../Engine/Exception.h"
+#include "../../VM/Handlers/Opcode813CHandler.h"
 #include "../../VM/VM.h"
-
-
-
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Opcode80AAHandler::Opcode80AAHandler(VM* vm) : OpcodeHandler(vm)
+Opcode813CHandler::Opcode813CHandler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode80AAHandler::_run()
+void Opcode813CHandler::_run()
 {
+    int amount = _vm->popDataInteger();
     int skill = _vm->popDataInteger();
-    if (skill > 17 || skill < 0)
-    {
-        throw Exception("VM::opcode80AA - number out of range: " + std::to_string(skill));
-    }
-    auto object = static_cast<GameCritterObject*>(_vm->popDataPointer());
-    int value = object->skillValue(skill);
-    _vm->pushDataInteger(value);
+    auto critter = static_cast<GameCritterObject*>(_vm->popDataPointer());
 
-    Logger::debug("SCRIPT") << "[80AA] [+] int get_skill_value(GameCritterObject* who, int skill) " << std::endl
+    critter->setSkillGainedValue(skill, critter->skillGainedValue(skill) + amount);
+
+    Logger::debug("SCRIPT") << "[813C] void critter_mod_skill(GameCritterObject* who, int skill, int amount)" << std::endl
                             << "    skill = " << skill << std::endl
-                            << "    value = " << value << std::endl;
-
+                            << "    amount = " << amount << std::endl;
 }
 
 }
-
-

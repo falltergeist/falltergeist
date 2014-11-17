@@ -174,6 +174,7 @@
 #include "../VM/Handlers/Opcode8127Handler.h"
 #include "../VM/Handlers/Opcode8136Handler.h"
 #include "../VM/Handlers/Opcode8137Handler.h"
+#include "../VM/Handlers/Opcode813CHandler.h"
 #include "../VM/Handlers/Opcode9001Handler.h"
 #include "../VM/Handlers/OpcodeC001Handler.h"
 
@@ -634,6 +635,9 @@ void VM::run()
             case 0x8137:
                 opcodeHandler = new Opcode8137Handler(this);
                 break;
+            case 0x813C:
+                opcodeHandler = new Opcode813CHandler(this);
+                break;
             case 0x9001:
                 opcodeHandler = new Opcode9001Handler(this);
                 break;
@@ -1058,6 +1062,7 @@ void VM::run()
                 pushDataInteger(0);
                 break;
             }
+            case 0x813c: break;
             case 0x8143:
             {
                 Logger::debug("SCRIPT") << "[8143] [=] void attack_setup(ObjectPtr who, ObjectPtr victim)" << std::endl;

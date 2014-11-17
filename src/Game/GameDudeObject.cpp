@@ -60,26 +60,27 @@ void GameDudeObject::loadFromGCDFile(std::shared_ptr<libfalltergeist::GcdFileTyp
     _hitPointsMax = gcd->hitPoints() + gcd->hitPointsBonus();
     _hitPoints = _hitPointsMax;
 
-    if (gcd->firstTrait() >= 0) setTrait(gcd->firstTrait(), 1);
-    if (gcd->secondTrait() >= 0) setTrait(gcd->secondTrait(), 1);
+    if (gcd->firstTrait() >= 0) setTraitTagged(gcd->firstTrait(), 1);
+    if (gcd->secondTrait() >= 0) setTraitTagged(gcd->secondTrait(), 1);
 
     if (gcd->firstTaggedSkill() >= 0)
     {
-        setSkill(gcd->firstTaggedSkill(), 1);
+        setSkillTagged(gcd->firstTaggedSkill(), 1);
         _skillsPoints--;
     }
     if (gcd->secondTaggedSkill() >= 0)
     {
-        setSkill(gcd->secondTaggedSkill(), 1);
+        setSkillTagged(gcd->secondTaggedSkill(), 1);
         _skillsPoints--;
     }
     if (gcd->thirdTaggedSkill() >= 0)
     {
-        setSkill(gcd->thirdTaggedSkill(), 1);
+        setSkillTagged(gcd->thirdTaggedSkill(), 1);
         _skillsPoints--;
     }
 
-    this->setGender(gcd->gender());
+    setGender(gcd->gender());
+    setActionPoints(actionPointsMax());
 }
 
 int GameDudeObject::experience()
@@ -154,7 +155,7 @@ void GameDudeObject::setLevel(int value)
 int GameDudeObject::armorClass()
 {
     unsigned int value = 0;
-    if (!trait(TRAITS_KAMIKAZE))
+    if (!traitTagged(TRAITS_KAMIKAZE))
     {
         value += statTotal(STATS_AGILITY) > 10 ? 10 : statTotal(STATS_AGILITY);
     }
@@ -162,11 +163,11 @@ int GameDudeObject::armorClass()
 
 }
 
-int GameDudeObject::actionPoints()
+int GameDudeObject::actionPointsMax()
 {
     unsigned int value = 0;
     value += 5 + ceil(statTotal(STATS_AGILITY)/2);
-    if (trait(TRAITS_BRUISER))
+    if (traitTagged(TRAITS_BRUISER))
     {
         value -= 2;
     }
@@ -178,10 +179,10 @@ unsigned int GameDudeObject::carryWeightMax()
     unsigned int value = 0;
     unsigned int st = statTotal(STATS_STRENGTH);
 
-    if (trait(TRAITS_SMALL_FRAME))
+    if (traitTagged(TRAITS_SMALL_FRAME))
     {
         value += 25 + 15*(st > 10 ? 10 : st);
-        if (trait(TRAITS_GIFTED) && st <= 10)
+        if (traitTagged(TRAITS_GIFTED) && st <= 10)
         {
             value += 10;
         }
@@ -199,7 +200,7 @@ int GameDudeObject::meleeDamage()
     unsigned int st = statTotal(STATS_STRENGTH);
     if (st > 10) st = 10;
     value += st > 5 ? st - 5 : 1;
-    if (trait(TRAITS_HEAVY_HANDED))
+    if (traitTagged(TRAITS_HEAVY_HANDED))
     {
         value += 4;
     }
@@ -219,7 +220,7 @@ int GameDudeObject::radiationResistance()
 int GameDudeObject::poisonResistance()
 {
     int value = 0;
-    if (!trait(TRAITS_FAST_METABOLISM))
+    if (!traitTagged(TRAITS_FAST_METABOLISM))
     {
         value += 5*statTotal(STATS_ENDURANCE);
     }
@@ -231,7 +232,7 @@ int GameDudeObject::sequence()
     unsigned int value = 0;
     unsigned int pe = statTotal(STATS_PERCEPTION);
     value += 2*(pe > 10 ? 10 : pe);
-    if (trait(TRAITS_KAMIKAZE))
+    if (traitTagged(TRAITS_KAMIKAZE))
     {
         value += 5;
     }
@@ -245,7 +246,7 @@ int GameDudeObject::healingRate()
     value += ceil((en > 10 ? 10 : en) / 3);
     if (value == 0) value = 1;
 
-    if (trait(TRAITS_FAST_METABOLISM))
+    if (traitTagged(TRAITS_FAST_METABOLISM))
     {
         value += 2;
     }
@@ -257,7 +258,7 @@ int GameDudeObject::criticalChance()
     unsigned int value = 0;
     unsigned int lk = statTotal(STATS_LUCK);
     value += lk > 10 ? 10 : lk;
-    if (trait(TRAITS_FINESSE))
+    if (traitTagged(TRAITS_FINESSE))
     {
         value += 10;
     }

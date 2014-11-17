@@ -147,7 +147,7 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
             }
             for (unsigned int i = 0; i != 18; ++i)
             {
-                ((GameCritterObject*)object)->setSkill(i, proto->critterSkills()->at(i));
+                ((GameCritterObject*)object)->setSkillTagged(i, proto->critterSkills()->at(i));
             }
             ((GameCritterObject*)object)->setActionPoints(proto->critterActionPoints());
             ((GameCritterObject*)object)->setActionPointsMax(proto->critterActionPoints());

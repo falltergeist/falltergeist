@@ -503,6 +503,8 @@ set(SOURCES main.cpp
     src/VM/Handlers/Opcode8136Handler.cpp
     src/VM/Handlers/Opcode8137Handler.h
     src/VM/Handlers/Opcode8137Handler.cpp
+    src/VM/Handlers/Opcode813CHandler.h
+    src/VM/Handlers/Opcode813CHandler.cpp
     src/VM/Handlers/Opcode9001Handler.h
     src/VM/Handlers/Opcode9001Handler.cpp
     src/VM/Handlers/OpcodeC001Handler.h

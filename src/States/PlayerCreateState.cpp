@@ -361,13 +361,13 @@ void PlayerCreateState::think()
         if (name.find("traits_") == 0)
         {
             unsigned int number = atoi(name.substr(7).c_str());
-            it->second->setFont(player->trait(number - 1) ? font1_a0a0a0ff : font1_3ff800ff);
+            it->second->setFont(player->traitTagged(number - 1) ? font1_a0a0a0ff : font1_3ff800ff);
         }
 
         if (name.find("skills_") == 0)
         {
             unsigned int number = atoi(name.substr(7).c_str());
-            it->second->setFont(player->skill(number - 1) ? font1_a0a0a0ff : font1_3ff800ff);
+            it->second->setFont(player->skillTagged(number - 1) ? font1_a0a0a0ff : font1_3ff800ff);
         }
 
         if (name.find("health_") == 0)
@@ -405,14 +405,14 @@ void PlayerCreateState::think()
         if (name.find("traits_") == 0)
         {
             unsigned int number = atoi(name.substr(7).c_str());
-            it->second->setFont(player->trait(number - 1) ? font1_ffffffff : font1_ffff7fff);
+            it->second->setFont(player->traitTagged(number - 1) ? font1_ffffffff : font1_ffff7fff);
         }
 
         if (name.find("skills_") == 0)
         {
             unsigned int number = atoi(name.substr(7).c_str());
-            it->second->setFont(player->skill(number - 1) ? font1_ffffffff : font1_ffff7fff);
-            _labels.at(name+"_value")->setFont(player->skill(number - 1) ? font1_ffffffff : font1_ffff7fff);
+            it->second->setFont(player->skillTagged(number - 1) ? font1_ffffffff : font1_ffff7fff);
+            _labels.at(name+"_value")->setFont(player->skillTagged(number - 1) ? font1_ffffffff : font1_ffff7fff);
         }
 
         if (name.find("health_") == 0)
@@ -448,18 +448,18 @@ bool PlayerCreateState::_statIncrease(unsigned int num)
 bool PlayerCreateState::_traitToggle(unsigned int num)
 {
     auto player = Game::getInstance()->player();
-    if (player->trait(num))
+    if (player->traitTagged(num))
     {
-        player->setTrait(num, 0);
+        player->setTraitTagged(num, 0);
         return true;
     }
     else
     {
         unsigned int selectedTraits = 0;
-        for (unsigned int i = 0; i != 16; ++i) if (player->trait(i)) selectedTraits++;
+        for (unsigned int i = 0; i != 16; ++i) if (player->traitTagged(i)) selectedTraits++;
         if (selectedTraits < 2)
         {
-            player->setTrait(num, 1);
+            player->setTraitTagged(num, 1);
             return true;
         }
     }
@@ -469,9 +469,9 @@ bool PlayerCreateState::_traitToggle(unsigned int num)
 bool PlayerCreateState::_skillToggle(unsigned int num)
 {
     auto player = Game::getInstance()->player();
-    if (player->skill(num))
+    if (player->skillTagged(num))
     {
-        player->setSkill(num, 0);
+        player->setSkillTagged(num, 0);
         player->setSkillsPoints(player->skillsPoints() + 1);
         return true;
     }
@@ -479,7 +479,7 @@ bool PlayerCreateState::_skillToggle(unsigned int num)
     {
         if (player->skillsPoints() > 0)
         {
-            player->setSkill(num, 1);
+            player->setSkillTagged(num, 1);
             player->setSkillsPoints(player->skillsPoints() - 1);
             return true;
         }
