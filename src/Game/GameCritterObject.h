@@ -249,6 +249,8 @@ public:
 
     virtual void think();
     virtual void onMovementAnimationEnded(Event* event);
+
+    virtual Animation* setActionAnimation(std::string action);
 };
 
 }

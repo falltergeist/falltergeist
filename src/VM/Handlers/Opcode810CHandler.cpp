@@ -39,41 +39,24 @@ Opcode810CHandler::Opcode810CHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode810CHandler::_run()
 {
-    auto& debug = Logger::debug("SCRIPT");
-    debug << "[810C] [*] void anim(void* who, int animation, int direction)" << std::endl;
+    int direction = _vm->popDataInteger();
+    int animation = _vm->popDataInteger();
+    auto critter = static_cast<GameCritterObject*>(_vm->popDataPointer());
 
-    int direction;
-    switch (_vm->dataStack()->top()->type())
+    Logger::debug("SCRIPT") << "[810C] [*] void anim(GameCritterObject* who, int animation, int direction)" << std::endl
+                            << "    direction = 0x" << std::hex << direction << std::endl
+                            << "    animation = 0x" << std::hex << animation << std::endl;
+    switch (animation)
     {
-        case VMStackValue::TYPE_INTEGER:
+        case 1000: // ANIMATE_ROTATION
         {
-            direction = _vm->popDataInteger();
-            break;
-        }
-        case VMStackValue::TYPE_POINTER:
-        {
-            auto object = static_cast<GameObject*>(_vm->popDataPointer());
-            direction = object->orientation();
+            critter->setActionAnimation("aa");
             break;
         }
         default:
-        {
-            throw Exception("Opcode810CHandler - wrong direction type");
-        }
+            throw Exception("Opcode810C - unimplemented animation: " + std::to_string(animation));
+            break;
     }
-    auto animation = _vm->popDataInteger();
-    auto who = static_cast<GameObject*>(_vm->popDataPointer());
-    auto critter = dynamic_cast<GameCritterObject*>(who);
-    if (!critter)
-    {
-        throw Exception("Opcode810CHandler - who is not a critter");
-    }
-
-    _vm->anim(critter, animation, direction);
-
-    debug << "    direction = 0x" << std::hex << direction << std::endl;
-    debug << "    animation = 0x" << std::hex << animation << std::endl;
-    debug << "    who = " << who << std::endl;
 }
 
 }

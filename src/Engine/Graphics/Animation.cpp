@@ -254,16 +254,16 @@ void Animation::think()
             delete event;
             return;
         }
-        auto frame = frames()->at(_currentFrame);
-        setXOffset(frame->xOffset());
-        setYOffset(frame->yOffset());
+        //auto frame = frames()->at(_currentFrame);
+        //setXOffset(frame->xOffset());
+        //setYOffset(frame->yOffset());
     }
 }
 
 void Animation::render()
 {
     auto frame = frames()->at(_currentFrame);
-    Game::getInstance()->renderer()->drawTexture(_texture, x(),y(), frame->x(), frame->y(), frame->width(), frame->height());
+    Game::getInstance()->renderer()->drawTexture(_texture, x() + frame->xOffset(), y() + frame->yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
 
     AnimatedPalette* pal = Game::getInstance()->animatedPalette();
 
@@ -300,6 +300,9 @@ unsigned int Animation::pixel(unsigned int x, unsigned int y)
 {
     auto frame = frames()->at(_currentFrame);
 
+    x -= frame->xOffset();
+    y -= frame->yOffset();
+
     if (x < 0 || x > frame->width()) return 0;
     if (y < 0 || y > frame->height()) return 0;
 
@@ -316,9 +319,9 @@ void Animation::stop()
     _playing = false;
     _ended = false;
     _progress = 0;
-    auto frame = frames()->at(_currentFrame);
-    setXOffset(frame->xOffset());
-    setYOffset(frame->yOffset());
+    //auto frame = frames()->at(_currentFrame);
+    //setXOffset(frame->xOffset());
+    //setYOffset(frame->yOffset());
 
 }
 

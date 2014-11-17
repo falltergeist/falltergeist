@@ -26,6 +26,8 @@
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Animation.h"
+#include "../Engine/Graphics/AnimationQueue.h"
+#include "../Engine/Logger.h"
 #include "../Engine/ResourceManager.h"
 #include "../States/LocationState.h"
 #include "../VM/VM.h"
@@ -429,6 +431,10 @@ void GameCritterObject::combat_p_proc()
 
 void GameCritterObject::critter_p_proc()
 {
+    for(auto script : *scripts())
+    {
+        script->call("critter_p_proc");
+    }
 }
 
 void GameCritterObject::is_dropping_p_proc()
@@ -501,33 +507,35 @@ Animation* GameCritterObject::_generateMovementAnimation()
     return new Animation("art/critters/" + frmString + ".frm", orientation());
 }
 
+Animation* GameCritterObject::setActionAnimation(std::string action)
+{
+    auto animation = new Animation("art/critters/" + _generateArmorFrmString() + action + ".frm", orientation());
+    animation->play();
+    auto queue = new AnimationQueue();
+    queue->setRepeat(true);
+    queue->animations()->push_back(animation);
+    queue->start();
+    setUI(queue);
+    return animation;
+}
+
+
 std::string GameCritterObject::_generateArmorFrmString()
 {
+    if (!armorSlot())
+    {
+        return ResourceManager::FIDtoFrmName(FID()).substr(13,6);
+    }
+
     switch(gender())
     {
         case GENDER_FEMALE:
         {
-            if (!armorSlot())
-            {
-                return "hfjmps"; // jumpsuit
-            }
-            else
-            {
-                return ResourceManager::FIDtoFrmName(armorSlot()->femaleFID()).substr(13, 6);
-            }
-            break;
+            return ResourceManager::FIDtoFrmName(armorSlot()->femaleFID()).substr(13, 6);
         }
         default: // MALE
         {
-            if (!armorSlot())
-            {
-                return "hmjmps"; // jumpsuit
-            }
-            else
-            {
-                return ResourceManager::FIDtoFrmName(armorSlot()->maleFID()).substr(13, 6);
-            }
-            break;
+            return ResourceManager::FIDtoFrmName(armorSlot()->maleFID()).substr(13, 6);
         }
     }
 }

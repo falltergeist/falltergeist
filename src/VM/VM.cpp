@@ -1307,11 +1307,6 @@ int VM::_critter_add_trait(void* who, int trait_type, int trait, int amount)
     return 0;
 }
 
-void VM::anim(GameCritterObject* who, int anim, int direction)
-{
-    throw 1;
-}
-
 int VM::_metarule3(int meta, VMStackValue* p1, int p2, int p3)
 {
     switch(meta)

@@ -362,7 +362,7 @@ void LocationState::think()
     }
     else
     {
-        if (_scriptsTicks + 30000 < SDL_GetTicks())
+        if (_scriptsTicks + 10000 < SDL_GetTicks())
         {
             _scriptsTicks = SDL_GetTicks();
             if (_locationScript)
@@ -374,6 +374,10 @@ void LocationState::think()
                 for (auto script : *object->scripts())
                 {
                     script->call("map_update_p_proc");
+                    if (auto critter = dynamic_cast<GameCritterObject*>(object))
+                    {
+                        critter->critter_p_proc();
+                    }
                 }
             }
         }

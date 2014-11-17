@@ -99,8 +99,6 @@ public:
     int SVARbase();
     void setSVARbase(int Value);
 
-    void anim(GameCritterObject* who, int anim, int direction);
-
 };
 
 }
