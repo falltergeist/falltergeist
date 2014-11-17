@@ -46,8 +46,8 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
 
     _actionFrame = frm->actionFrame();
 
-    int xOffset = frm->shiftX(direction);
-    int yOffset = frm->shiftY(direction);
+    _xShift = frm->shiftX(direction);
+    _yShift = frm->shiftY(direction);
 
     // Смещение кадра в текстуре анимации
     unsigned int x = 0;
@@ -58,7 +58,8 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
         y += frm->height(d); //? может i - 1
     }
 
-
+    int xOffset = 0;
+    int yOffset = 0;
     for (auto f = 0; f != frm->framesPerDirection(); ++f)
     {
         xOffset += frm->offsetX(direction, f);
@@ -252,18 +253,14 @@ void Animation::think()
             auto event = new Event("animationEnded");
             emitEvent(event);
             delete event;
-            return;
         }
-        //auto frame = frames()->at(_currentFrame);
-        //setXOffset(frame->xOffset());
-        //setYOffset(frame->yOffset());
     }
 }
 
 void Animation::render()
 {
     auto frame = frames()->at(_currentFrame);
-    Game::getInstance()->renderer()->drawTexture(_texture, x() + frame->xOffset(), y() + frame->yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+    Game::getInstance()->renderer()->drawTexture(_texture, x() + frame->xOffset() + xShift(), y() + frame->yOffset() + yShift(), frame->x(), frame->y(), frame->width(), frame->height());
 
     AnimatedPalette* pal = Game::getInstance()->animatedPalette();
 
@@ -300,8 +297,8 @@ unsigned int Animation::pixel(unsigned int x, unsigned int y)
 {
     auto frame = frames()->at(_currentFrame);
 
-    x -= frame->xOffset();
-    y -= frame->yOffset();
+    x -= frame->xOffset() - xShift();
+    y -= frame->yOffset() - yShift();
 
     if (x < 0 || x > frame->width()) return 0;
     if (y < 0 || y > frame->height()) return 0;
@@ -319,10 +316,6 @@ void Animation::stop()
     _playing = false;
     _ended = false;
     _progress = 0;
-    //auto frame = frames()->at(_currentFrame);
-    //setXOffset(frame->xOffset());
-    //setYOffset(frame->yOffset());
-
 }
 
 void Animation::setReverse(bool value)
@@ -348,6 +341,26 @@ unsigned int Animation::actionFrame()
 void Animation::setActionFrame(unsigned int value)
 {
     _actionFrame = value;
+}
+
+int Animation::xShift()
+{
+    return _xShift;
+}
+
+void Animation::setXShift(int value)
+{
+    _xShift = value;
+}
+
+int Animation::yShift()
+{
+    return _yShift;
+}
+
+void Animation::setYShift(int value)
+{
+    _yShift = value;
 }
 
 }

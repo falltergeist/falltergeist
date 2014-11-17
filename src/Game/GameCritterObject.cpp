@@ -26,6 +26,7 @@
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Animation.h"
+#include "../Engine/Graphics/AnimationFrame.h"
 #include "../Engine/Graphics/AnimationQueue.h"
 #include "../Engine/Logger.h"
 #include "../Engine/ResourceManager.h"
@@ -461,6 +462,8 @@ void GameCritterObject::think()
             delete _ui;
             _orientation = hexagon()->orientationTo(movementQueue()->back());
             auto animation = _generateMovementAnimation();
+            animation->setActionFrame(4);
+            animation->addEventHandler("actionFrame", this, (EventRecieverMethod)&GameCritterObject::onMovementAnimationEnded);
             animation->addEventHandler("animationEnded", this, (EventRecieverMethod)&GameCritterObject::onMovementAnimationEnded);
             animation->play();
             _ui = animation;
@@ -480,15 +483,32 @@ void GameCritterObject::onMovementAnimationEnded(Event* event)
     {
         critter->_isMoving = false;
         dynamic_cast<Animation*>(critter->_ui)->stop();
+        setActionAnimation("aa");
         return;
     }
 
-    delete critter->_ui;
-    critter->_orientation = critter->hexagon()->orientationTo(critter->movementQueue()->back());
-    auto animation = critter->_generateMovementAnimation();
-    animation->addEventHandler("animationEnded", critter, (EventRecieverMethod)&GameCritterObject::onMovementAnimationEnded);
-    animation->play();
-    critter->_ui = animation;
+    auto newHexagon = critter->movementQueue()->back();
+    auto newOrientation = critter->hexagon()->orientationTo(newHexagon);
+
+    if (event->name() == "actionFrame")
+    {
+        // fixing animation offsets
+        auto animation = dynamic_cast<Animation*>(critter->ui());
+        auto actionFrame = animation->frames()->at(animation->actionFrame());
+        animation->setXShift(animation->xShift() - actionFrame->xOffset());
+        animation->setYShift(animation->yShift() - actionFrame->yOffset());
+    }
+    else if (event->name() == "animationEnded")
+    {
+        delete critter->_ui;
+        critter->_orientation = newOrientation;
+        auto animation = critter->_generateMovementAnimation();
+        animation->setActionFrame(4);
+        animation->addEventHandler("actionFrame", critter, (EventRecieverMethod)&GameCritterObject::onMovementAnimationEnded);
+        animation->addEventHandler("animationEnded", critter, (EventRecieverMethod)&GameCritterObject::onMovementAnimationEnded);
+        animation->play();
+        critter->_ui = animation;
+    }
 }
 
 Animation* GameCritterObject::_generateMovementAnimation()

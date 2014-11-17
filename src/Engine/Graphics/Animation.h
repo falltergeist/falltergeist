@@ -41,6 +41,8 @@ protected:
     bool _ended = false;
     bool _reverse = false;
     std::vector<AnimationFrame*> _animationFrames;
+    int _xShift = 0;
+    int _yShift = 0;
     unsigned int _currentFrame = 0;
     unsigned int _actionFrame = 0;
     unsigned int _progress = 0;
@@ -60,6 +62,10 @@ public:
     virtual void render();
     virtual int xOffset();
     virtual int yOffset();
+    virtual int xShift();
+    virtual void setXShift(int value);
+    virtual int yShift();
+    virtual void setYShift(int value);
     virtual unsigned int width();
     virtual unsigned int height();
     virtual unsigned int pixel(unsigned int x, unsigned int y);
