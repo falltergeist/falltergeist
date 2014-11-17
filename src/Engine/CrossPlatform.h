@@ -55,13 +55,13 @@ public:
 
     static std::string getVersion();
     static std::string getHomeDirectory();
-    static std::string getCurrentDirectory();
+    static std::string getExecutableDirectory();
     static std::vector<std::string> getCdDrivePaths();
     static std::string findFalloutDataPath();
     static std::string findFalltergeistDataPath();
     static std::vector<std::string> * findFalloutDataFiles();
     static std::string getConfigPath();
-    static std::string getDataPath();
+    static std::vector<std::string> getDataPaths();
 
     // Create directory at given path with parent directories as needed.
     // Throw runtime_error on failure.

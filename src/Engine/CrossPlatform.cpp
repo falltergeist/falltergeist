@@ -49,6 +49,10 @@
     #include <unistd.h>
 #endif
 
+#if defined(__APPLE__)
+    #include <mach-o/dyld.h>
+#endif
+
 // Falltergeist includes
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
@@ -105,11 +109,28 @@ std::string CrossPlatform::getHomeDirectory()
     return std::string(cwd);
 }
 
-std::string CrossPlatform::getCurrentDirectory()
+std::string CrossPlatform::getExecutableDirectory()
 {
     char buffer[512];
-    char *cwd = getcwd(buffer, sizeof(buffer));
-    return std::string(cwd);
+#if defined (__linux__)
+    readlink("/proc/self/exe", buffer, sizeof(buffer));
+#elif defined (__APPLE__)
+    _NSGetExecutablePath(buffer, sizeof(buffer));
+#elif defined (BSD)
+    readlink("/proc/curproc/file", buffer, sizeof(buffer));
+#elif defined (_WIN32) || defined (WIN32)
+    GetModuleFileName(NULL, buffer, sizeof(buffer));
+#endif 
+
+    std::string path(buffer);  
+
+#if defined(_WIN32) || defined(WIN32)
+    int pos = path.rfind('\\');
+#else
+    int pos = path.rfind('/');
+#endif
+
+    return std::string(path.substr(0,pos));
 }
 
 std::vector<std::string> CrossPlatform::getCdDrivePaths()
@@ -168,8 +189,12 @@ std::string CrossPlatform::findFalloutDataPath()
         return _falloutDataPath;
     Logger::info() << "Looking for Fallout data files" << std::endl;
     std::vector<std::string> directories;
-    directories.push_back(getCurrentDirectory());
-    directories.push_back(getDataPath());
+    directories.push_back(getExecutableDirectory());
+
+    for (auto &directory : getDataPaths())
+    {
+        directories.push_back(directory);
+    }
 
     try
     {
@@ -215,8 +240,12 @@ std::string CrossPlatform::findFalltergeistDataPath()
         return _falltergeistDataPath;
     Logger::info() << "Looking for Falltergeist data files" << std::endl;
     std::vector<std::string> directories;
-    directories.push_back(getCurrentDirectory());
-    directories.push_back(getDataPath());
+    directories.push_back(getExecutableDirectory());
+
+    for (auto &directory : getDataPaths())
+    {
+        directories.push_back(directory);
+    }
 
     for (auto &directory : directories)
     {
@@ -242,28 +271,32 @@ std::vector<std::string> *CrossPlatform::findFalloutDataFiles()
     if (_dataFiles)
         return _dataFiles;
 
-    // looking for all available dat files in directory
-    DIR *pxDir = opendir(CrossPlatform::findFalloutDataPath().c_str());
-    if (!pxDir)
+    for (auto &directory : getDataPaths())
     {
-        throw Exception("Can't open data directory: " + CrossPlatform::findFalloutDataPath());
-    }
-    _dataFiles = new std::vector<std::string>(necessaryDatFiles);
-    struct dirent *pxItem = 0;
-    while ((pxItem = readdir(pxDir)))
-    {
-        std::string filename(pxItem->d_name);
-        if (filename.length() > 4) // exclude . and ..
+        // looking for all available dat files in directory
+        DIR *pxDir = opendir(directory.c_str());
+        if (!pxDir)
         {
-            std::string ext = filename.substr(filename.size() - 4, 4);
-            if (ext == ".dat")
+            Logger::info() << "Can't open data directory: " << directory << std::endl;
+            continue;
+        }
+        _dataFiles = new std::vector<std::string>(necessaryDatFiles);
+        struct dirent *pxItem = 0;
+        while ((pxItem = readdir(pxDir)))
+        {
+            std::string filename(pxItem->d_name);
+            if (filename.length() > 4) // exclude . and ..
             {
-                if (filename.length() == 12 && filename.substr(0, 5) == "patch")
-                    _dataFiles->insert(_dataFiles->begin(),filename);
+                std::string ext = filename.substr(filename.size() - 4, 4);
+                if (ext == ".dat")
+                {
+                    if (filename.length() == 12 && filename.substr(0, 5) == "patch")
+                        _dataFiles->insert(_dataFiles->begin(),filename);
+                }
             }
         }
+        closedir(pxDir);
     }
-    closedir(pxDir);
 
     return _dataFiles;
 }
@@ -367,16 +400,28 @@ std::string CrossPlatform::getConfigPath()
 #endif
 }
 
-std::string CrossPlatform::getDataPath()
+std::vector<std::string> CrossPlatform::getDataPaths()
 {
+    std::vector<std::string> _dataPaths;
 #if defined(__unix__)
     char *maybeDataHome = getenv("XDG_DATA_HOME");
     if (maybeDataHome == nullptr || *maybeDataHome == '\0')
-        return getHomeDirectory() + "/.local/share/falltergeist";
-    return std::string(maybeDataHome) + "/falltergiest";
+        _dataPaths.push_back(getHomeDirectory() + "/.local/share/falltergeist");
+    else
+        _dataPaths.push_back(std::string(maybeDataHome) + "/falltergiest");
+
+    std::string sharedir = getExecutableDirectory()+"/../share/falltergeist";
+
+    DIR *pxDir = opendir(sharedir.c_str());
+    if(pxDir)
+    {
+        _dataPaths.push_back(sharedir.c_str());
+    }
+    closedir(pxDir);
 #else
-    return getConfigPath();
+    _dataPaths.push_back(getConfigPath());
 #endif
+    return _dataPaths;
 }
 
 }

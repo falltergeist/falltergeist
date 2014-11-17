@@ -534,3 +534,37 @@ endif()
 add_executable(falltergeist-bin ${SOURCES})
 set_target_properties(falltergeist-bin PROPERTIES OUTPUT_NAME falltergeist)
 target_link_libraries(falltergeist-bin ${SDL2_LIBRARY} ${SDLMIXER_LIBRARY} ${OPENGL_LIBRARIES} ${LIBFALLTERGEIST_LIBRARY})
+
+#
+# Install section
+#
+if(WIN32)
+    install(TARGETS falltergeist-bin RUNTIME DESTINATION .) 
+    install(DIRECTORY data DESTINATION .)                   
+
+    if(LIBFALLTERGEIST_EMBEDDED)
+        install(FILES ${CMAKE_BINARY_DIR}/lib/libfalltergeist/libfalltergeist.dll DESTINATION .)
+    endif()
+
+    #MinGW runtime
+    if(MINGW)
+        get_filename_component(MINGW_BIN_PATH ${CMAKE_CXX_COMPILER} PATH )
+        set(dep_files ${dep_files} "${MINGW_BIN_PATH}/libwinpthread-*.dll")
+        set(dep_files ${dep_files} "${MINGW_BIN_PATH}/libgcc_s_*.dll")
+        set(dep_files ${dep_files} "${MINGW_BIN_PATH}/libstdc++-*.dll")
+    endif()
+    
+    #dependencies
+    file(GLOB dep_files ${dep_files} "${CMAKE_FIND_ROOT_PATH}/bin/*.dll")
+
+    install(FILES ${dep_files} DESTINATION .)
+endif()
+
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+    install(TARGETS falltergeist-bin RUNTIME DESTINATION bin)
+    install(DIRECTORY data DESTINATION share/falltergeist)
+
+    if(LIBFALLTERGEIST_EMBEDDED)
+        install(FILES ${CMAKE_BINARY_DIR}/lib/libfalltergeist/libfalltergeist.so DESTINATION lib)
+    endif()
+endif()
