@@ -490,7 +490,7 @@ void GameCritterObject::onMovementAnimationEnded(Event* event)
     auto newHexagon = critter->movementQueue()->back();
     auto newOrientation = critter->hexagon()->orientationTo(newHexagon);
 
-    if (event->name() == "actionFrame")
+    if (event->name() == "actionFrame" && newOrientation == critter->orientation())
     {
         // fixing animation offsets
         auto animation = dynamic_cast<Animation*>(critter->ui());
@@ -498,7 +498,7 @@ void GameCritterObject::onMovementAnimationEnded(Event* event)
         animation->setXShift(animation->xShift() - actionFrame->xOffset());
         animation->setYShift(animation->yShift() - actionFrame->yOffset());
     }
-    else if (event->name() == "animationEnded")
+    else // animationEnded || new orientation
     {
         delete critter->_ui;
         critter->_orientation = newOrientation;

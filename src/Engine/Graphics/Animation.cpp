@@ -219,12 +219,12 @@ std::vector<AnimationFrame*>* Animation::frames()
 
 int Animation::xOffset()
 {
-    return frames()->at(_currentFrame)->xOffset();
+    return frames()->at(_currentFrame)->xOffset() + xShift();
 }
 
 int Animation::yOffset()
 {
-    return frames()->at(_currentFrame)->yOffset();
+    return frames()->at(_currentFrame)->yOffset() + yShift();
 }
 
 void Animation::think()
@@ -260,7 +260,7 @@ void Animation::think()
 void Animation::render()
 {
     auto frame = frames()->at(_currentFrame);
-    Game::getInstance()->renderer()->drawTexture(_texture, x() + frame->xOffset() + xShift(), y() + frame->yOffset() + yShift(), frame->x(), frame->y(), frame->width(), frame->height());
+    Game::getInstance()->renderer()->drawTexture(_texture, x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
 
     AnimatedPalette* pal = Game::getInstance()->animatedPalette();
 
@@ -297,8 +297,8 @@ unsigned int Animation::pixel(unsigned int x, unsigned int y)
 {
     auto frame = frames()->at(_currentFrame);
 
-    x -= frame->xOffset() - xShift();
-    y -= frame->yOffset() - yShift();
+    x -= xOffset();
+    y -= yOffset();
 
     if (x < 0 || x > frame->width()) return 0;
     if (y < 0 || y > frame->height()) return 0;
