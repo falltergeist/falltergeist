@@ -185,6 +185,7 @@
 #include "../VM/Handlers/Opcode811EHandler.h"
 #include "../VM/Handlers/Opcode8120Handler.h"
 #include "../VM/Handlers/Opcode8121Handler.h"
+#include "../VM/Handlers/Opcode8122Handler.h"
 #include "../VM/Handlers/Opcode8123Handler.h"
 #include "../VM/Handlers/Opcode8126Handler.h"
 #include "../VM/Handlers/Opcode8127Handler.h"
@@ -689,6 +690,9 @@ void VM::run()
             case 0x8121:
                 opcodeHandler = new Opcode8121Handler(this);
                 break;
+            case 0x8122:
+                opcodeHandler = new Opcode8122Handler(this);
+                break;
             case 0x8123:
                 opcodeHandler = new Opcode8123Handler(this);
                 break;
@@ -871,6 +875,7 @@ void VM::run()
             case 0x811e: break;
             case 0x8120: break;
             case 0x8121: break;
+            case 0x8122: break;
             case 0x8123: break;
             case 0x8125: break;
             case 0x8126: break;
@@ -1289,8 +1294,3 @@ void VM::setOverrides(bool Value)
 }
 
 }
-
-
-
-
-
