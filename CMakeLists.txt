@@ -484,21 +484,25 @@ set(SOURCES main.cpp
     src/VM/Handlers/Opcode80FBHandler.cpp
     src/VM/Handlers/Opcode80FCHandler.h
     src/VM/Handlers/Opcode80FCHandler.cpp
+    src/VM/Handlers/Opcode80FDHandler.h
+    src/VM/Handlers/Opcode80FDHandler.cpp
+    src/VM/Handlers/Opcode80FEHandler.h
+    src/VM/Handlers/Opcode80FEHandler.cpp
     src/VM/Handlers/Opcode80FFHandler.h
     src/VM/Handlers/Opcode80FFHandler.cpp
-	src/VM/Handlers/Opcode8100Handler.h
+    src/VM/Handlers/Opcode8100Handler.h
     src/VM/Handlers/Opcode8100Handler.cpp
-	src/VM/Handlers/Opcode8101Handler.h
+    src/VM/Handlers/Opcode8101Handler.h
     src/VM/Handlers/Opcode8101Handler.cpp
-	src/VM/Handlers/Opcode8102Handler.h
+    src/VM/Handlers/Opcode8102Handler.h
     src/VM/Handlers/Opcode8102Handler.cpp
-	src/VM/Handlers/Opcode8105Handler.h
+    src/VM/Handlers/Opcode8105Handler.h
     src/VM/Handlers/Opcode8105Handler.cpp
-	src/VM/Handlers/Opcode8106Handler.h
+    src/VM/Handlers/Opcode8106Handler.h
     src/VM/Handlers/Opcode8106Handler.cpp
     src/VM/Handlers/Opcode810AHandler.h
     src/VM/Handlers/Opcode810AHandler.cpp
-	src/VM/Handlers/Opcode810BHandler.h
+    src/VM/Handlers/Opcode810BHandler.h
     src/VM/Handlers/Opcode810BHandler.cpp
     src/VM/Handlers/Opcode810CHandler.h
     src/VM/Handlers/Opcode810CHandler.cpp
@@ -590,8 +594,8 @@ target_link_libraries(falltergeist-bin ${SDL2_LIBRARY} ${SDLMIXER_LIBRARY} ${OPE
 # Install section
 #
 if(WIN32)
-    install(TARGETS falltergeist-bin RUNTIME DESTINATION .) 
-    install(DIRECTORY data DESTINATION .)                   
+    install(TARGETS falltergeist-bin RUNTIME DESTINATION .)
+    install(DIRECTORY data DESTINATION .)
 
     if(LIBFALLTERGEIST_EMBEDDED)
         install(FILES ${CMAKE_BINARY_DIR}/lib/libfalltergeist/libfalltergeist.dll DESTINATION .)
@@ -604,7 +608,7 @@ if(WIN32)
         set(dep_files ${dep_files} "${MINGW_BIN_PATH}/libgcc_s_*.dll")
         set(dep_files ${dep_files} "${MINGW_BIN_PATH}/libstdc++-*.dll")
     endif()
-    
+
     #dependencies
     file(GLOB dep_files ${dep_files} "${CMAKE_FIND_ROOT_PATH}/bin/*.dll")
 
