@@ -163,15 +163,36 @@
 #include "../VM/Handlers/Opcode80FBHandler.h"
 #include "../VM/Handlers/Opcode80FCHandler.h"
 #include "../VM/Handlers/Opcode80FFHandler.h"
+#include "../VM/Handlers/Opcode8100Handler.h"
+#include "../VM/Handlers/Opcode8101Handler.h"
+#include "../VM/Handlers/Opcode8102Handler.h"
+#include "../VM/Handlers/Opcode8105Handler.h"
+#include "../VM/Handlers/Opcode8106Handler.h"
 #include "../VM/Handlers/Opcode810AHandler.h"
+#include "../VM/Handlers/Opcode810BHandler.h"
 #include "../VM/Handlers/Opcode810CHandler.h"
 #include "../VM/Handlers/Opcode810DHandler.h"
 #include "../VM/Handlers/Opcode810EHandler.h"
+#include "../VM/Handlers/Opcode810FHandler.h"
+#include "../VM/Handlers/Opcode8113Handler.h"
+#include "../VM/Handlers/Opcode8115Handler.h"
+#include "../VM/Handlers/Opcode8116Handler.h"
+#include "../VM/Handlers/Opcode8117Handler.h"
 #include "../VM/Handlers/Opcode8118Handler.h"
 #include "../VM/Handlers/Opcode8119Handler.h"
+#include "../VM/Handlers/Opcode811CHandler.h"
+#include "../VM/Handlers/Opcode811DHandler.h"
+#include "../VM/Handlers/Opcode811EHandler.h"
+#include "../VM/Handlers/Opcode8120Handler.h"
+#include "../VM/Handlers/Opcode8121Handler.h"
 #include "../VM/Handlers/Opcode8123Handler.h"
 #include "../VM/Handlers/Opcode8126Handler.h"
 #include "../VM/Handlers/Opcode8127Handler.h"
+#include "../VM/Handlers/Opcode8128Handler.h"
+#include "../VM/Handlers/Opcode8129Handler.h"
+#include "../VM/Handlers/Opcode812DHandler.h"
+#include "../VM/Handlers/Opcode812EHandler.h"
+#include "../VM/Handlers/Opcode812FHandler.h"
 #include "../VM/Handlers/Opcode8136Handler.h"
 #include "../VM/Handlers/Opcode8137Handler.h"
 #include "../VM/Handlers/Opcode813CHandler.h"
@@ -602,8 +623,26 @@ void VM::run()
             case 0x80FF:
                 opcodeHandler = new Opcode80FFHandler(this);
                 break;
+            case 0x8100:
+                opcodeHandler = new Opcode8100Handler(this);
+                break;
+            case 0x8101:
+                opcodeHandler = new Opcode8101Handler(this);
+                break;
+            case 0x8102:
+                opcodeHandler = new Opcode8102Handler(this);
+                break;
+            case 0x8105:
+                opcodeHandler = new Opcode8105Handler(this);
+                break;
+            case 0x8106:
+                opcodeHandler = new Opcode8106Handler(this);
+                break;
             case 0x810A:
                 opcodeHandler = new Opcode810AHandler(this);
+                break;
+            case 0x810B:
+                opcodeHandler = new Opcode810BHandler(this);
                 break;
             case 0x810C:
                 opcodeHandler = new Opcode810CHandler(this);
@@ -614,11 +653,41 @@ void VM::run()
             case 0x810E:
                 opcodeHandler = new Opcode810EHandler(this);
                 break;
+            case 0x810F:
+                opcodeHandler = new Opcode810FHandler(this);
+                break;
+            case 0x8113:
+                opcodeHandler = new Opcode8113Handler(this);
+                break;
+            case 0x8115:
+                opcodeHandler = new Opcode8115Handler(this);
+                break;
+            case 0x8116:
+                opcodeHandler = new Opcode8115Handler(this);
+                break;
+            case 0x8117:
+                opcodeHandler = new Opcode8117Handler(this);
+                break;
             case 0x8118:
                 opcodeHandler = new Opcode8118Handler(this);
                 break;
             case 0x8119:
                 opcodeHandler = new Opcode8119Handler(this);
+                break;
+            case 0x811C:
+                opcodeHandler = new Opcode811CHandler(this);
+                break;
+            case 0x811D:
+                opcodeHandler = new Opcode811DHandler(this);
+                break;
+            case 0x811E:
+                opcodeHandler = new Opcode811EHandler(this);
+                break;
+            case 0x8120:
+                opcodeHandler = new Opcode8120Handler(this);
+                break;
+            case 0x8121:
+                opcodeHandler = new Opcode8121Handler(this);
                 break;
             case 0x8123:
                 opcodeHandler = new Opcode8123Handler(this);
@@ -628,6 +697,21 @@ void VM::run()
                 break;
             case 0x8127:
                 opcodeHandler = new Opcode8127Handler(this);
+                break;
+            case 0x8128:
+                opcodeHandler = new Opcode8128Handler(this);
+                break;
+            case 0x8129:
+                opcodeHandler = new Opcode8129Handler(this);
+                break;
+            case 0x812D:
+                opcodeHandler = new Opcode812DHandler(this);
+                break;
+            case 0x812E:
+                opcodeHandler = new Opcode812EHandler(this);
+                break;
+            case 0x812F:
+                opcodeHandler = new Opcode812FHandler(this);
                 break;
             case 0x8136:
                 opcodeHandler = new Opcode8136Handler(this);
@@ -765,260 +849,37 @@ void VM::run()
             case 0x80fb: break;
             case 0x80fc: break;
             case 0x80ff: break;
-            case 0x8100:
-            {
-                Logger::debug("SCRIPT") << "[8100] [+] int obj_pid(void* obj)" << std::endl;
-                auto object = static_cast<GameObject*>(popDataPointer());
-                if (!object) throw new Exception("Opcode 8100 error");
-                pushDataInteger(object->PID());
-                break;
-            }
-            case 0x8101:
-            {
-                Logger::debug("SCRIPT") << "[8101] [=] int cur_map_index()" << std::endl;
-                pushDataInteger(3);
-                break;
-            }
-            case 0x8102:
-            {
-                Logger::debug("SCRIPT") << "[8102] [*] int critter_add_trait(void* who, int trait_type, int trait, int amount) " << std::endl;
-                auto amount = popDataInteger();
-                auto trait = popDataInteger();
-                auto trait_type = popDataInteger();
-                auto who = popDataPointer();
-                pushDataInteger(_critter_add_trait(who, trait_type, trait, amount));
-                break;
-            }
-            case 0x8105:
-            {
-                Logger::debug("SCRIPT") << "[8105] [+] string* msgMessage(int msg_list, int msg_num);" << std::endl;
-                auto msgNum = popDataInteger();
-                auto msgList = popDataInteger();
-                pushDataPointer(new std::string(msgMessage(msgList, msgNum)), VMStackPointerValue::POINTER_TYPE_STRING);
-                break;
-            }
-            case 0x8106:
-            {
-                Logger::debug("SCRIPT") << "[8106] [=] void* (int) critter_inven_obj(GameCritterObject* critter, int where)" << std::endl;
-                auto where = popDataInteger();
-                auto critter = static_cast<GameCritterObject*>(popDataPointer());
-                switch (where)
-                {
-                    case 0: // ARMOR SLOT
-                        pushDataPointer(critter->armorSlot());
-                        break;
-                    case 1: // RIGHT HAND SLOT
-                        pushDataPointer(critter->rightHandSlot());
-                        break;
-                    case 2: // LEFT HAND SLOT
-                        pushDataPointer(critter->leftHandSlot());
-                        break;
-                    case -2: // INVENTORY COUNT
-                        pushDataInteger(critter->inventory()->size());
-                        break;
-                    default:
-                        throw Exception("VM::opcode8106 error");
-                }
-                break;
-            }
+            case 0x8100: break;
+            case 0x8101: break;
+            case 0x8102: break;
+            case 0x8105: break;
+            case 0x8106: break;
             case 0x810a: break;
             case 0x810c: break;
-            case 0x810b:
-            {
-                Logger::debug("SCRIPT") << "[810B] [*] int metarule(p2, p1)" << std::endl;
-                auto p1 = _dataStack.pop();
-                auto p2 = popDataInteger();
-                pushDataInteger(_metarule(p2, p1));
-                break;
-            }
+            case 0x810b: break;
             case 0x810d: break;
             case 0x810e: break;
-            case 0x810f:
-            {
-                Logger::debug("SCRIPT") << "[810F] [=] void reg_anim_animate(void* what, int anim, int delay) " << std::endl;
-                popDataInteger();
-                popDataInteger();
-                popDataPointer();
-                break;
-            }
-            case 0x8113:
-            {
-                Logger::debug("SCRIPT") << "[8113] [=] void reg_anim_obj_move_to_tile(void* who, int dest_tile, int delay)" << std::endl;
-                popDataInteger(); // -1
-                popDataInteger();
-                popDataPointer();
-                break;
-            }
-            case 0x8115:
-            {
-                Logger::debug("SCRIPT") << "[8115] [*] void playMovie(movieNum)" << std::endl;
-                _playMovie(popDataInteger());
-                break;
-            }
-            case 0x8116:
-            {
-                Logger::debug("SCRIPT") << "[8116] [+] void add_mult_objs_to_inven(GameObject* who, GameItemObject* item, int amount)" << std::endl;
-                auto amount = popDataInteger();
-                auto item = static_cast<GameItemObject*>(popDataPointer());
-                if (!item) throw Exception("VM::opcode8116 - item not instanceof GameItemObject");
-                item->setAmount(amount);
-                // who can be critter or container
-                auto pointer = static_cast<GameObject*>(popDataPointer());
-                if (auto critter = dynamic_cast<GameCritterObject*>(pointer))
-                {
-                    critter->inventory()->push_back(item);
-                }
-                else if (auto container = dynamic_cast<GameContainerItemObject*>(pointer))
-                {
-                    container->inventory()->push_back(item);
-                }
-                else
-                {
-                    throw Exception("VM::opcode8116 - wrong WHO parameter");
-                }
-                break;
-            }
-            case 0x8117:
-            {
-                Logger::debug("SCRIPT") << "[8117] [=] int rm_mult_objs_from_inven(void* who, void* obj, int count)" << std::endl;
-                popDataInteger();
-                popDataPointer();
-                popDataPointer();
-                pushDataInteger(0);
-                break;
-            }
+            case 0x810f: break;
+            case 0x8113: break;
+            case 0x8115: break;
+            case 0x8116: break;
+            case 0x8117: break;
             case 0x8118: break;
             case 0x8119: break;
-            case 0x811c:
-            {
-                Logger::debug("SCRIPT") << "[811C] [?] gsay_start" << std::endl;
-                auto dialog = new CritterDialogState();
-                Game::getInstance()->pushState(dialog);
-                break;
-            }
-            case 0x811d:
-            {
-                Logger::debug("SCRIPT") << "[811D] [?] gsay_end" << std::endl;
-                auto dialog = dynamic_cast<CritterDialogState*>(Game::getInstance()->states()->back());
-                if (dialog->hasAnswers())
-                {
-                    pushDataInteger(0);
-                    return;
-                }
-                Game::getInstance()->popState(); // dialog state
-                break;
-            }
-            case 0x811e:
-            {
-                Logger::debug("SCRIPT") << "[811E] [=] void gSay_Reply(int msg_file_num, int msg_num)" << std::endl;
-                auto dialog = dynamic_cast<CritterDialogState*>(Game::getInstance()->states()->back());
-                dialog->deleteAnswers();
-                if (_dataStack.top()->type() == VMStackValue::TYPE_POINTER)
-                {
-                    auto question = static_cast<std::string*>(popDataPointer());
-                    dialog->setQuestion(*question);
-                    //delete question;
-                }
-                else
-                {
-                    auto msg_num = popDataInteger();
-                    auto msg_file_num = popDataInteger();
-                    dialog->setQuestion(msgMessage(msg_file_num, msg_num));
-                }
-                break;
-            }
-            case 0x8120:
-            {
-                Logger::debug("SCRIPT") << "[8120] [=] void gSay_Message(int msg_list, int msg_num, int reaction)" << std::endl;
-                popDataInteger();
-                _dataStack.pop(); // string or integer
-                popDataInteger();
-                break;
-            }
-            case 0x8121:
-            {
-                Logger::debug("SCRIPT") << "[8121] [+] void giQ_Option(int iq_test, int msg_list, int msg_num, procedure target, int reaction)" << std::endl;
-
-                auto reaction = popDataInteger();
-                auto function = popDataInteger();
-                std::string* text = 0;
-                if (_dataStack.top()->type() == VMStackValue::TYPE_POINTER)
-                {
-                    text = static_cast<std::string*>(popDataPointer());
-                    popDataInteger(); // msg_list
-                }
-                else
-                {
-                    auto msg_num = popDataInteger();
-                    auto msg_file_num = popDataInteger();
-                    text = new std::string(msgMessage(msg_file_num, msg_num));
-                }
-                auto iq = popDataInteger();
-                auto game = Game::getInstance();
-                auto dialog = dynamic_cast<CritterDialogState*>(game->states()->back());
-                if (iq >= 0)
-                {
-                    if (game->player()->stat(game->player()->STATS_INTELLIGENCE) >= iq)
-                    {
-                        dialog->reactions()->push_back(reaction);
-                        dialog->functions()->push_back(function);
-                        dialog->addAnswer(*text);
-                    }
-                }
-                if (iq < 0)
-                {
-                    if (game->player()->stat(game->player()->STATS_INTELLIGENCE) <= abs(iq))
-                    {
-                        dialog->reactions()->push_back(reaction);
-                        dialog->functions()->push_back(function);
-                        dialog->addAnswer(*text);
-                    }
-                }
-                //delete text;
-                break;
-            }
+            case 0x811c: break;
+            case 0x811d: break;
+            case 0x811e: break;
+            case 0x8120: break;
+            case 0x8121: break;
             case 0x8123: break;
-            case 0x8125:
-            {
-                Logger::debug("SCRIPT") << "[8125] [=] void party_remove(void* who)" << std::endl;
-                popDataPointer();
-                break;
-            }
+            case 0x8125: break;
             case 0x8126: break;
             case 0x8127: break;
-            case 0x8128:
-            {
-                Logger::debug("SCRIPT") << "[8128] [=] int combat_is_initialized()" << std::endl;
-                pushDataInteger(0);
-                break;
-            }
-            case 0x8129:
-            {
-                Logger::debug("SCRIPT") << "[8129] [=] void gdialog_mod_barter(int modifier)" << std::endl;
-                popDataInteger();
-                break;
-            }
-            case 0x812d:
-            {
-                Logger::debug("SCRIPT") << "[812D] [+] int is_locked(GameDoorSceneryObject* object)" << std::endl;
-                auto object = static_cast<GameDoorSceneryObject*>(popDataPointer());
-                pushDataInteger(object->locked());
-                break;
-            }
-            case 0x812e:
-            {
-                Logger::debug("SCRIPT") << "[812E] [+] void lock(GameDoorSceneryObject* object)" << std::endl;
-                auto object = static_cast<GameDoorSceneryObject*>(popDataPointer());
-                object->setLocked(true);
-                break;
-            }
-            case 0x812f:
-            {
-                Logger::debug("SCRIPT") << "[812F] [+] void unlock(GameDoorSceneryObject* object)" << std::endl;
-                auto object = static_cast<GameDoorSceneryObject*>(popDataPointer());
-                object->setLocked(false);
-                break;
-            }
+            case 0x8128: break;
+            case 0x8129: break;
+            case 0x812d: break;
+            case 0x812e: break;
+            case 0x812f: break;
             case 0x8130:
             {
                 Logger::debug("SCRIPT") << "[8130] [+] int is_opened(GameDoorSceneryObject* object) " << std::endl;
@@ -1276,6 +1137,11 @@ int VM::_metarule(int type, VMStackValue* value)
     throw Exception("VM::_metarule() - unknown type: " + std::to_string(type));
 }
 
+int VM::metarule(int type, VMStackValue* value)
+{
+  return _metarule(type,value);
+}
+
 void VM::setLightLevel(int level)
 {
     Logger::debug("SCRIPT") << "     Setting light level to: " + std::to_string(level) << std::endl;
@@ -1284,6 +1150,11 @@ void VM::setLightLevel(int level)
 void VM::_playMovie(int movieNum)
 {
 
+}
+
+void VM::playMovie(int movieNum)
+{
+  _playMovie(movieNum);
 }
 
 int VM::tile_num_in_direction(int start_tile, int dir, int distance)
@@ -1305,6 +1176,11 @@ int VM::_tile_num_in_direction(int start_tile, int dir, int distance)
 int VM::_critter_add_trait(void* who, int trait_type, int trait, int amount)
 {
     return 0;
+}
+
+int VM::critter_add_trait(void* who, int trait_type, int trait, int amount)
+{
+    return _critter_add_trait(who,trait_type,trait,amount);
 }
 
 int VM::_metarule3(int meta, VMStackValue* p1, int p2, int p3)
