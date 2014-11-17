@@ -38,8 +38,8 @@ class GameItemObject;
 class GameCritterObject : public GameObject
 {
 protected:
-    bool _isMoving  = false;
-    bool _isRunning = false;
+    bool _moving  = false;
+    bool _running = false;
 
     int _gender = GENDER_MALE;
     int _poisonLevel = 0;
@@ -249,6 +249,9 @@ public:
 
     virtual void think();
     virtual void onMovementAnimationEnded(Event* event);
+
+    virtual bool running();
+    virtual void setRunning(bool value);
 
     virtual Animation* setActionAnimation(std::string action);
 };

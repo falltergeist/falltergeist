@@ -486,19 +486,16 @@ void LocationState::handle(Event* event)
 
     if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
     {
-        switch (keyboardEvent->keyCode())
+        if (event->name() == "keyup")
         {
-            // JUST FOR ANIMATION TESTING
-            case SDLK_a:
+            switch (keyboardEvent->keyCode())
             {
-                auto queue = new AnimationQueue();
-                game->player()->setUI(queue);
-
-                //queue->setRepeat(true);
-                queue->animations()->push_back(new Animation("art/critters/hmwarraq.frm", game->player()->orientation()));
-                queue->start();
-
-                break;
+                // JUST FOR ANIMATION TESTING
+                case SDLK_r:
+                {
+                    game->player()->setRunning(!game->player()->running());
+                    break;
+                }
             }
         }
     }

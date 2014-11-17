@@ -455,14 +455,14 @@ void GameCritterObject::think()
 {
     if (movementQueue()->size() > 0)
     {
-        if (!_isMoving)
+        if (!_moving)
         {
-            _isMoving = true;
+            _moving = true;
 
             delete _ui;
             _orientation = hexagon()->orientationTo(movementQueue()->back());
             auto animation = _generateMovementAnimation();
-            animation->setActionFrame(4);
+            animation->setActionFrame(_running ? 3 : 4);
             animation->addEventHandler("actionFrame", this, (EventRecieverMethod)&GameCritterObject::onMovementAnimationEnded);
             animation->addEventHandler("animationEnded", this, (EventRecieverMethod)&GameCritterObject::onMovementAnimationEnded);
             animation->play();
@@ -481,7 +481,7 @@ void GameCritterObject::onMovementAnimationEnded(Event* event)
 
     if (critter->movementQueue()->size() == 0)
     {
-        critter->_isMoving = false;
+        critter->_moving = false;
         dynamic_cast<Animation*>(critter->_ui)->stop();
         setActionAnimation("aa");
         return;
@@ -494,16 +494,37 @@ void GameCritterObject::onMovementAnimationEnded(Event* event)
     {
         // fixing animation offsets
         auto animation = dynamic_cast<Animation*>(critter->ui());
-        auto actionFrame = animation->frames()->at(animation->actionFrame());
-        animation->setXShift(animation->xShift() - actionFrame->xOffset());
-        animation->setYShift(animation->yShift() - actionFrame->yOffset());
+        auto actionFrame = animation->frames()->at(animation->actionFrame() - 1);
+
+        for (auto it = animation->frames()->rbegin(); it != animation->frames()->rend(); ++it)
+        {
+            auto frame = (*it);
+            if (frame == actionFrame) break;
+
+            frame->setXOffset(frame->xOffset() - actionFrame->xOffset());
+            frame->setYOffset(frame->yOffset() - actionFrame->yOffset());
+        }
+
+        if (_running)
+        {
+            switch (animation->actionFrame())
+            {
+                case 3:
+                    animation->setActionFrame(5);
+                    break;
+                case 5:
+                    animation->setActionFrame(8);
+                    break;
+            }
+        }
+
     }
     else // animationEnded || new orientation
     {
         delete critter->_ui;
         critter->_orientation = newOrientation;
         auto animation = critter->_generateMovementAnimation();
-        animation->setActionFrame(4);
+        animation->setActionFrame(_running ? 3 : 4);
         animation->addEventHandler("actionFrame", critter, (EventRecieverMethod)&GameCritterObject::onMovementAnimationEnded);
         animation->addEventHandler("animationEnded", critter, (EventRecieverMethod)&GameCritterObject::onMovementAnimationEnded);
         animation->play();
@@ -515,7 +536,7 @@ Animation* GameCritterObject::_generateMovementAnimation()
 {
     std::string frmString = _generateArmorFrmString();
 
-    if (_isRunning)
+    if (_running)
     {
         frmString += "at";
     }
@@ -617,6 +638,16 @@ void GameCritterObject::setSkillGainedValue(unsigned int skill, int value)
 {
     if (skill >= _skillsTagged.size()) throw Exception("GameCritterObject::setSkillGainedCalue(skill) - skill out of range:" + std::to_string(skill));
     _skillsGainedValue.at(skill) = value;
+}
+
+bool GameCritterObject::running()
+{
+    return _running;
+}
+
+void GameCritterObject::setRunning(bool value)
+{
+    _running = value;
 }
 
 }
