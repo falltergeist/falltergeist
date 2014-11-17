@@ -570,3 +570,11 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
         install(FILES ${CMAKE_BINARY_DIR}/lib/libfalltergeist/libfalltergeist.so DESTINATION lib)
     endif()
 endif()
+
+if(APPLE)
+  add_custom_command(
+    OUTPUT Falltergeist.dmg
+    COMMAND sh ./package/osx.sh
+  )
+  add_custom_target(dmg DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Falltergeist.dmg)
+endif()

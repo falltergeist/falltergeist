@@ -1,0 +1,45 @@
+#!/bin/sh
+
+hdiutil create -fs HFS+ -volname "Falltergeist" -ov -type SPARSE -attach "/Volumes/falltergeist"
+
+#create dirs
+ln -s /Applications /Volumes/Falltergeist/Applications
+mkdir /Volumes/Falltergeist/Falltergeist.app
+mkdir /Volumes/Falltergeist/Falltergeist.app/Contents
+mkdir /Volumes/Falltergeist/Falltergeist.app/Contents/Resources
+mkdir /Volumes/Falltergeist/Falltergeist.app/Contents/MacOS
+
+#copy plist
+cp package/osx/Info.plist /Volumes/Falltergeist/Falltergeist.app/Content
+
+#create iconset
+mkdir MyIcon.iconset
+sips -z 16 16     package/icon.png --out MyIcon.iconset/icon_16x16.png
+sips -z 32 32     package/icon.png --out MyIcon.iconset/icon_16x16@2x.png
+sips -z 32 32     package/icon.png --out MyIcon.iconset/icon_32x32.png
+sips -z 64 64     package/icon.png --out MyIcon.iconset/icon_32x32@2x.png
+sips -z 128 128   package/icon.png --out MyIcon.iconset/icon_128x128.png
+sips -z 256 256   package/icon.png --out MyIcon.iconset/icon_128x128@2x.png
+sips -z 256 256   package/icon.png --out MyIcon.iconset/icon_256x256.png
+sips -z 512 512   package/icon.png --out MyIcon.iconset/icon_256x256@2x.png
+sips -z 512 512   package/icon.png --out MyIcon.iconset/icon_512x512.png
+cp package/icon.png MyIcon.iconset/icon_512x512@2x.png
+iconutil -c icns MyIcon.iconset -o /Volumes/Falltergeist/Falltergeist.app/Contents/Resources/icons.icns
+rm -R MyIcon.iconset
+
+#copy binary
+cp falltergeist /Volumes/Falltergeist/Falltergeist.app/Contents/MacOS/Falltergeist
+
+#fix binary deps
+dylibbundler -b -x /Volumes/Falltergeist/Falltergeist.app/Contents/MacOS/Falltergeist -d /Volumes/Falltergeist/Falltergeist.app/Contents/libs-intel -od -p @executable_path/../libs-intel
+
+#copy custom data
+cp -r data /Volumes/Falltergeist/Falltergeist.app/Contents/Resources
+
+#create final dmg
+diskutil eject /Volumes/falltergeist
+hdiutil convert /Volumes/falltergeist.sparseimage -format UDZO -o "Falltergeist"
+rm /Volumes/falltergeist.sparseimage 
+
+echo "Done!"
+
