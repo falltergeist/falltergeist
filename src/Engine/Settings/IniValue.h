@@ -62,6 +62,9 @@ public:
     IniValue::Tag tag() const;
     static std::string tagString(IniValue::Tag tag);
     std::string value() const;
+    int intValue() const;
+    bool boolValue() const;
+    double doubleValue() const;
 
     friend class IniSection;
 private:

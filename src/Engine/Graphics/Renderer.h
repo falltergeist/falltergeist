@@ -49,6 +49,7 @@ protected:
     unsigned int _fadeDone=true;
     SDL_Color _fadeColor;
     short _step;
+    bool _inmovie = false;
 public:
     Renderer(unsigned int width, unsigned int height);
     virtual ~Renderer();
@@ -65,8 +66,8 @@ public:
     float scaleY();
     bool fadeDone();
     bool fading();
-    virtual void fadeIn(unsigned int r, unsigned int g, unsigned int b, unsigned int time);
-    virtual void fadeOut(unsigned int r, unsigned int g, unsigned int b, unsigned int time);
+    virtual void fadeIn(unsigned int r, unsigned int g, unsigned int b, unsigned int time, bool inmovie = false);
+    virtual void fadeOut(unsigned int r, unsigned int g, unsigned int b, unsigned int time, bool inmovie = false);
     void setCaption(std::string caption);
     SDL_Window* window();
 
