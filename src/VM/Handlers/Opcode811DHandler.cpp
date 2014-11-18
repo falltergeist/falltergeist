@@ -20,10 +20,11 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Logger.h"
-#include "../../VM/Handlers/Opcode811DHandler.h"
 #include "../../Engine/Game.h"
+#include "../../Engine/Logger.h"
 #include "../../States/CritterDialogState.h"
+#include "../../VM/Handlers/Opcode811DHandler.h"
+#include "../../VM/VMHaltException.h"
 #include "../../VM/VM.h"
 
 
@@ -44,7 +45,7 @@ void Opcode811DHandler::_run()
     if (dialog->hasAnswers())
     {
         _vm->pushDataInteger(0);
-        return;
+        throw VMHaltException();
     }
     Game::getInstance()->popState(); // dialog state
 }
