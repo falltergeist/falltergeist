@@ -86,11 +86,12 @@ bool Renderer::fadeDone()
 
 bool Renderer::fading()
 {
-    return !_fadeDone;
+    return !_fadeDone && !_inmovie;
 }
 
-void Renderer::fadeIn(unsigned int r, unsigned int g, unsigned int b, unsigned int time)
+void Renderer::fadeIn(unsigned int r, unsigned int g, unsigned int b, unsigned int time, bool inmovie)
 {
+    _inmovie = inmovie;
     _fadeColor.a=255;
     _alpha=255;
     _step=-1;
@@ -98,8 +99,9 @@ void Renderer::fadeIn(unsigned int r, unsigned int g, unsigned int b, unsigned i
     _delay=round(time/256);
 }
 
-void Renderer::fadeOut(unsigned int r, unsigned int g, unsigned int b, unsigned int time)
+void Renderer::fadeOut(unsigned int r, unsigned int g, unsigned int b, unsigned int time, bool inmovie)
 {
+    _inmovie = inmovie;
     _fadeColor.r=r;
     _fadeColor.g=g;
     _fadeColor.b=b;
