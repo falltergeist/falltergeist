@@ -31,6 +31,15 @@ namespace Falltergeist
 {
 class MvePlayer;
 
+typedef struct {
+    unsigned int frame;
+    int direction;
+    int r;
+    int g;
+    int b;
+    int frames;
+} effect_t;
+
 class MovieState : public State
 {
 protected:
@@ -46,9 +55,11 @@ public:
 private:
     int _id;
     bool _started;
-    std::pair<int,std::string> _nextSubLine;
+    std::pair<unsigned int,std::string> _nextSubLine;
     libfalltergeist::SveFileType* _subs;
     bool _hasSubs = false;
+    std::vector<effect_t> _effects;
+    unsigned int _effect_index=0;
 };
 
 }
