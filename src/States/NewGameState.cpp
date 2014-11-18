@@ -24,6 +24,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
 #include "../Engine/ResourceManager.h"
+#include "../Engine/Event/StateEvent.h"
 #include "../Game/GameDudeObject.h"
 #include "../States/NewGameState.h"
 #include "../States/LocationState.h"
@@ -128,6 +129,14 @@ void NewGameState::think()
 
 void NewGameState::onBackButtonClick(MouseEvent* event)
 {
+    removeEventHandlers("fadedone");
+    addEventHandler("fadedone", [this](Event* event){ this->onBackFadeDone(dynamic_cast<StateEvent*>(event)); });
+    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+}
+
+void NewGameState::onBackFadeDone(StateEvent* event)
+{
+    removeEventHandlers("fadedone");
     Game::getInstance()->popState();
 }
 

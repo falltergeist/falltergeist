@@ -39,6 +39,7 @@ public:
 
     void onDoneButtonClick(MouseEvent* event);
     void onCancelButtonClick(MouseEvent* event);
+    void onCancelFadeDone(StateEvent* event);
     void onStateActivate(StateEvent* event);
 private:
 };
