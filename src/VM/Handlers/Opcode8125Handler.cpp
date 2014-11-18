@@ -24,8 +24,6 @@
 #include "../../VM/Handlers/Opcode8125Handler.h"
 #include "../../VM/VM.h"
 
-
-
 // Third party includes
 
 namespace Falltergeist

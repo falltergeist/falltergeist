@@ -21,11 +21,9 @@
 
 // Falltergeist includes
 #include "../../Engine/Logger.h"
+#include "../../Game/GameDoorSceneryObject.h"
 #include "../../VM/Handlers/Opcode8132Handler.h"
 #include "../../VM/VM.h"
-#include "../../Game/GameDoorSceneryObject.h"
-
-
 
 // Third party includes
 

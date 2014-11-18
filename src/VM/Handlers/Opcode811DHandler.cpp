@@ -27,8 +27,6 @@
 #include "../../VM/VMHaltException.h"
 #include "../../VM/VM.h"
 
-
-
 // Third party includes
 
 namespace Falltergeist
@@ -44,7 +42,7 @@ void Opcode811DHandler::_run()
     auto dialog = dynamic_cast<CritterDialogState*>(Game::getInstance()->states()->back());
     if (dialog->hasAnswers())
     {
-        _vm->pushDataInteger(0);
+        _vm->pushDataInteger(0); // function return value
         throw VMHaltException();
     }
     Game::getInstance()->popState(); // dialog state

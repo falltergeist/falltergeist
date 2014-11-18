@@ -25,8 +25,6 @@
 #include "../../VM/VM.h"
 #include "../../Game/GameDoorSceneryObject.h"
 
-
-
 // Third party includes
 
 namespace Falltergeist

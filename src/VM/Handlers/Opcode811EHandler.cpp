@@ -27,8 +27,6 @@
 #include "../../States/CritterDialogState.h"
 #include "../../VM/VMStackValue.h"
 
-
-
 // Third party includes
 
 namespace Falltergeist
