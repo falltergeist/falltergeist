@@ -217,7 +217,7 @@ void LocationState::onMouseDown(Event* event, GameObject* object)
 
     std::vector<int> icons;
 
-    if (object->script()->hasFunction("use_p_proc"))
+    if (object->script() && object->script()->hasFunction("use_p_proc"))
     {
         icons.push_back(Mouse::ICON_USE);
     }
@@ -572,7 +572,7 @@ void LocationState::handleAction(GameObject* object, int action)
         {
             auto player = Game::getInstance()->player();
             auto animation = player->setActionAnimation("al");
-            animation->addEventHandler("actionFrame", [object](Event* event){ object->onUseAnimationActionFrame(event); });
+            animation->addEventHandler("actionFrame", [object, player](Event* event){ object->onUseAnimationActionFrame(event, player); });
             break;
         }
         case Mouse::ICON_ROTATE:

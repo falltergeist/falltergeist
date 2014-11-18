@@ -28,8 +28,9 @@
 #include "../Engine/LocationCamera.h"
 #include "../Engine/PathFinding/Hexagon.h"
 #include "../Engine/ResourceManager.h"
-#include "../Game/GameObject.h"
+#include "../Game/GameCritterObject.h"
 #include "../Game/GameDefines.h"
+#include "../Game/GameObject.h"
 #include "../States/LocationState.h"
 #include "../UI/AnimatedImage.h"
 #include "../UI/Image.h"
@@ -314,9 +315,20 @@ void GameObject::use_obj_on_p_proc()
 {
 }
 
-void GameObject::onUseAnimationActionFrame(Event* event)
+void GameObject::onUseAnimationActionFrame(Event* event, GameCritterObject* critter)
 {    
     use_p_proc();
+    Animation* animation = dynamic_cast<AnimationQueue*>(critter->ui())->animations()->back();
+    animation->removeEventHandlers("actionFrame");
+    animation->addEventHandler("animationEnded", [this, critter](Event* event){
+        this->onUseAnimationEnd(event, critter);
+    });
 }
+
+void GameObject::onUseAnimationEnd(Event* event, GameCritterObject* critter)
+{
+    critter->setActionAnimation("aa");
+}
+
 
 }

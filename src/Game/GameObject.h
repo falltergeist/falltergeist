@@ -35,6 +35,7 @@ namespace Falltergeist
 class ActiveUI;
 class AnimationQueue;
 class Event;
+class GameCritterObject;
 class Hexagon;
 class Image;
 class Location;
@@ -121,7 +122,8 @@ public:
     virtual void use_p_proc();
     virtual void use_obj_on_p_proc();
 
-    virtual void onUseAnimationActionFrame(Event* event);
+    virtual void onUseAnimationActionFrame(Event* event, GameCritterObject* critter);
+    virtual void onUseAnimationEnd(Event* event, GameCritterObject* critter);
 };
 
 }
