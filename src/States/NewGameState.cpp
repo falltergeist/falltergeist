@@ -237,4 +237,10 @@ void NewGameState::onBeginGameButtonClick(MouseEvent* event)
     Game::getInstance()->setState(new LocationState());
 }
 
+void NewGameState::onStateActivate(StateEvent* event)
+{
+    Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
+}
+
+
 }

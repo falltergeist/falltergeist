@@ -58,6 +58,7 @@ public:
     void onCreateButtonClick(MouseEvent* event);
     void onPrevCharacterButtonClick(MouseEvent* event);
     void onNextCharacterButtonClick(MouseEvent* event);
+    void onStateActivate(StateEvent* event);
 };
 
 }

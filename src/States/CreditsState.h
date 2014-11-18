@@ -42,6 +42,8 @@ public:
     virtual void handle(Event* event);
 
     void onCreditsFinished();
+    void onCreditsFadeDone(StateEvent* event);
+    void onStateActivate(StateEvent* event);
 private:
     std::vector<TextArea*> _lines;
     unsigned long int _lastTicks;

@@ -113,5 +113,11 @@ void LoadGameState::onCancelButtonClick(MouseEvent* event)
     Game::getInstance()->popState();
 }
 
+void LoadGameState::onStateActivate(StateEvent* event)
+{
+    Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
+}
+
+
 }
 

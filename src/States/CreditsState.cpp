@@ -24,6 +24,7 @@
 #include "../States/CreditsState.h"
 #include "../Engine/Event/KeyboardEvent.h"
 #include "../Engine/Event/MouseEvent.h"
+#include "../Engine/Event/StateEvent.h"
 #include "../Engine/Game.h"
 #include "../UI/TextArea.h"
 #include "../Engine/Input/Mouse.h"
@@ -152,8 +153,23 @@ void CreditsState::handle(Event* event)
 
 void CreditsState::onCreditsFinished()
 {
+    removeEventHandlers("fadedone");
+    addEventHandler("fadedone", [this](Event* event){ this->onCreditsFadeDone(dynamic_cast<StateEvent*>(event)); });
+    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+}
+
+void CreditsState::onCreditsFadeDone(StateEvent* event)
+{
+    removeEventHandlers("fadedone");
     Game::getInstance()->mouse()->popState();
     Game::getInstance()->popState();
 }
+
+void CreditsState::onStateActivate(StateEvent* event)
+{
+    Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
+}
+
+
 
 }
