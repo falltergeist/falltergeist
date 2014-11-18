@@ -196,9 +196,25 @@
 #include "../VM/Handlers/Opcode812DHandler.h"
 #include "../VM/Handlers/Opcode812EHandler.h"
 #include "../VM/Handlers/Opcode812FHandler.h"
+#include "../VM/Handlers/Opcode8130Handler.h"
+#include "../VM/Handlers/Opcode8131Handler.h"
+#include "../VM/Handlers/Opcode8132Handler.h"
+#include "../VM/Handlers/Opcode8134Handler.h"
 #include "../VM/Handlers/Opcode8136Handler.h"
 #include "../VM/Handlers/Opcode8137Handler.h"
+#include "../VM/Handlers/Opcode8138Handler.h"
+#include "../VM/Handlers/Opcode8139Handler.h"
 #include "../VM/Handlers/Opcode813CHandler.h"
+#include "../VM/Handlers/Opcode8143Handler.h"
+#include "../VM/Handlers/Opcode8147Handler.h"
+#include "../VM/Handlers/Opcode8149Handler.h"
+#include "../VM/Handlers/Opcode814BHandler.h"
+#include "../VM/Handlers/Opcode814CHandler.h"
+#include "../VM/Handlers/Opcode814EHandler.h"
+#include "../VM/Handlers/Opcode8150Handler.h"
+#include "../VM/Handlers/Opcode8151Handler.h"
+#include "../VM/Handlers/Opcode8153Handler.h"
+#include "../VM/Handlers/Opcode8154Handler.h"
 #include "../VM/Handlers/Opcode9001Handler.h"
 #include "../VM/Handlers/OpcodeC001Handler.h"
 
@@ -725,14 +741,62 @@ void VM::run()
             case 0x812F:
                 opcodeHandler = new Opcode812FHandler(this);
                 break;
+            case 0x8130:
+                opcodeHandler = new Opcode8130Handler(this);
+                break;
+            case 0x8131:
+                opcodeHandler = new Opcode8131Handler(this);
+                break;
+            case 0x8132:
+                opcodeHandler = new Opcode8132Handler(this);
+                break;
+            case 0x8134:
+                opcodeHandler = new Opcode8134Handler(this);
+                break;
             case 0x8136:
                 opcodeHandler = new Opcode8136Handler(this);
                 break;
             case 0x8137:
                 opcodeHandler = new Opcode8137Handler(this);
                 break;
+            case 0x8138:
+                opcodeHandler = new Opcode8138Handler(this);
+                break;
+            case 0x8139:
+                opcodeHandler = new Opcode8139Handler(this);
+                break;
             case 0x813C:
                 opcodeHandler = new Opcode813CHandler(this);
+                break;
+            case 0x8143:
+                opcodeHandler = new Opcode8143Handler(this);
+                break;
+            case 0x8147:
+                opcodeHandler = new Opcode8147Handler(this);
+                break;
+            case 0x8149:
+                opcodeHandler = new Opcode8149Handler(this);
+                break;
+            case 0x814B:
+                opcodeHandler = new Opcode814BHandler(this);
+                break;
+            case 0x814C:
+                opcodeHandler = new Opcode814CHandler(this);
+                break;
+            case 0x814E:
+                opcodeHandler = new Opcode814EHandler(this);
+                break;
+            case 0x8150:
+                opcodeHandler = new Opcode8150Handler(this);
+                break;
+            case 0x8151:
+                opcodeHandler = new Opcode8151Handler(this);
+                break;
+            case 0x8153:
+                opcodeHandler = new Opcode8153Handler(this);
+                break;
+            case 0x8154:
+                opcodeHandler = new Opcode8154Handler(this);
                 break;
             case 0x9001:
                 opcodeHandler = new Opcode9001Handler(this);
@@ -895,120 +959,25 @@ void VM::run()
             case 0x812d: break;
             case 0x812e: break;
             case 0x812f: break;
-            case 0x8130:
-            {
-                Logger::debug("SCRIPT") << "[8130] [+] int is_opened(GameDoorSceneryObject* object) " << std::endl;
-                auto object = static_cast<GameDoorSceneryObject*>(popDataPointer());
-                pushDataInteger(object->opened());
-                break;
-            }
-            case 0x8131:
-            {
-                Logger::debug("SCRIPT") << "[8131] [+] void open(GameDoorSceneryObject* object) " << std::endl;
-                auto object = static_cast<GameDoorSceneryObject*>(popDataPointer());
-                object->setOpened(true);
-                break;
-            }
-            case 0x8132:
-            {
-                Logger::debug("SCRIPT") << "[8132] [+] void close(GameDoorSceneryObject* object) " << std::endl;
-                auto object = static_cast<GameDoorSceneryObject*>(popDataPointer());
-                object->setOpened(false);
-                break;
-            }
-            case 0x8134:
-            {
-                Logger::debug("SCRIPT") << "[8134] [=] void game_ui_enable()" << std::endl;
-                break;
-            }
+            case 0x8130: break;
+            case 0x8131: break;
+            case 0x8132: break;
+            case 0x8134: break;
             case 0x8136: break;
             case 0x8137: break;
-            case 0x8138:
-            {
-                Logger::debug("SCRIPT") << "[8138] [=] int item_caps_total(void* obj)" << std::endl;
-                popDataPointer();
-                pushDataInteger(0);
-                break;
-            }
-            case 0x8139:
-            {
-                Logger::debug("SCRIPT") << "[8139] [=] int item_caps_adjust(void* obj, int amount)" << std::endl;
-                popDataInteger();
-                popDataPointer();
-                pushDataInteger(0);
-                break;
-            }
+            case 0x8138: break;
+            case 0x8139: break;
             case 0x813c: break;
-            case 0x8143:
-            {
-                Logger::debug("SCRIPT") << "[8143] [=] void attack_setup(ObjectPtr who, ObjectPtr victim)" << std::endl;
-                popDataPointer();
-                popDataPointer();
-                break;
-            }
-            case 0x8147:
-            {
-                Logger::debug("SCRIPT") << "[8147] [=] void move_obj_inven_to_obj(void* srcObj, void* destObj)" << std::endl;
-                popDataPointer();
-                popDataPointer();
-                break;
-            }
-            case 0x8149:
-            {
-                Logger::debug("SCRIPT") << "[8149] [+] int obj_art_fid(void* obj)" << std::endl;
-                auto object = static_cast<GameObject*>(popDataPointer());
-                if (!object) throw Exception("VM::opcode8149() - can't convert pointer to object");
-                pushDataInteger(object->FID());
-                break;
-            }
-            case 0x814b:
-            {
-                Logger::debug("SCRIPT") << "[814B] [*] void* party_member_obj(int pid)" << std::endl;
-                popDataInteger();
-                pushDataPointer(0);
-                break;
-            }
-            case 0x814c:
-            {
-                Logger::debug("SCRIPT") << "[814C] [=] int rotation_to_tile(int srcTile, int destTile)" << std::endl;
-                popDataInteger();
-                popDataInteger();
-                pushDataInteger(0);
-                break;
-            }
-            case 0x814e:
-            {
-                Logger::debug("SCRIPT") << "[814E] [=] void gdialog_set_barter_mod(int mod)" << std::endl;
-                popDataInteger();
-                break;
-            }
-            case 0x8150:
-            {
-                Logger::debug("SCRIPT") << "[8150] [=] int obj_on_screen(void* obj)" << std::endl;
-                popDataPointer();
-                pushDataInteger(1);
-                break;
-            }
-            case 0x8151:
-            {
-                Logger::debug("SCRIPT") << "[8151] [=] int critter_is_fleeing(void* who)" << std::endl;
-                popDataPointer();
-                pushDataInteger(0);
-                break;
-            }
-            case 0x8153:
-            {
-                Logger::debug("SCRIPT") << "[8153] [=] void terminate_combat()" << std::endl;
-                break;
-            }
-            case 0x8154:
-            {
-                Logger::debug("SCRIPT") << "[8154] [*] void debug(string*)" << std::endl;
-                auto string = static_cast<std::string*>(popDataPointer());
-                Logger::debug("SCRIPT") << *string << std::endl;
-                //delete string;
-                break;
-            }
+            case 0x8143: break;
+            case 0x8147: break;
+            case 0x8149: break;
+            case 0x814b: break;
+            case 0x814c: break;
+            case 0x814e: break;
+            case 0x8150: break;
+            case 0x8151: break;
+            case 0x8153: break;
+            case 0x8154: break;
             case 0x9001: break;
             case 0xC001: break;
             default:

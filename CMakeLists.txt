@@ -548,12 +548,44 @@ set(SOURCES main.cpp
     src/VM/Handlers/Opcode812EHandler.cpp
     src/VM/Handlers/Opcode812FHandler.h
     src/VM/Handlers/Opcode812FHandler.cpp
+    src/VM/Handlers/Opcode8130Handler.h
+    src/VM/Handlers/Opcode8130Handler.cpp
+    src/VM/Handlers/Opcode8131Handler.h
+    src/VM/Handlers/Opcode8131Handler.cpp
+    src/VM/Handlers/Opcode8132Handler.h
+    src/VM/Handlers/Opcode8132Handler.cpp
+    src/VM/Handlers/Opcode8134Handler.h
+    src/VM/Handlers/Opcode8134Handler.cpp	
     src/VM/Handlers/Opcode8136Handler.h
     src/VM/Handlers/Opcode8136Handler.cpp
     src/VM/Handlers/Opcode8137Handler.h
     src/VM/Handlers/Opcode8137Handler.cpp
+    src/VM/Handlers/Opcode8138Handler.h
+    src/VM/Handlers/Opcode8138Handler.cpp
+    src/VM/Handlers/Opcode8139Handler.h
+    src/VM/Handlers/Opcode8139Handler.cpp	
     src/VM/Handlers/Opcode813CHandler.h
     src/VM/Handlers/Opcode813CHandler.cpp
+    src/VM/Handlers/Opcode8143Handler.h
+    src/VM/Handlers/Opcode8143Handler.cpp
+    src/VM/Handlers/Opcode8147Handler.h
+    src/VM/Handlers/Opcode8147Handler.cpp
+    src/VM/Handlers/Opcode8149Handler.h
+    src/VM/Handlers/Opcode8149Handler.cpp
+    src/VM/Handlers/Opcode814BHandler.h
+    src/VM/Handlers/Opcode814BHandler.cpp
+    src/VM/Handlers/Opcode814CHandler.h
+    src/VM/Handlers/Opcode814CHandler.cpp
+    src/VM/Handlers/Opcode814EHandler.h
+    src/VM/Handlers/Opcode814EHandler.cpp
+    src/VM/Handlers/Opcode8150Handler.h
+    src/VM/Handlers/Opcode8150Handler.cpp
+    src/VM/Handlers/Opcode8151Handler.h
+    src/VM/Handlers/Opcode8151Handler.cpp
+    src/VM/Handlers/Opcode8153Handler.h
+    src/VM/Handlers/Opcode8153Handler.cpp
+    src/VM/Handlers/Opcode8154Handler.h
+    src/VM/Handlers/Opcode8154Handler.cpp	
     src/VM/Handlers/Opcode9001Handler.h
     src/VM/Handlers/Opcode9001Handler.cpp
     src/VM/Handlers/OpcodeC001Handler.h
