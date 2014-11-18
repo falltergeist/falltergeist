@@ -30,7 +30,7 @@ namespace Falltergeist
 
 Slider::Slider(int x, int y) : ActiveUI(x, y)
 {
-    addEventHandler("mousedrag", this, (EventRecieverMethod) &Slider::_onDrag);
+    addEventHandler("mousedrag", [this](Event* event){ this->_onDrag(dynamic_cast<MouseEvent*>(event)); });
     _imageList.addImage("art/intrface/prfsldon.frm");
     _imageList.addImage("art/intrface/prfsldof.frm");
 }

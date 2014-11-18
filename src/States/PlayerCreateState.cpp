@@ -205,7 +205,7 @@ void PlayerCreateState::init()
     // add buttons to the state
     for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
     {
-        it->second->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerCreateState::onButtonClick);
+        it->second->addEventHandler("mouseleftclick", [this](Event* event){ this->onButtonClick(dynamic_cast<MouseEvent*>(event)); });
         addUI(it->second);
     }
 
@@ -214,7 +214,7 @@ void PlayerCreateState::init()
     for(auto it = _labels.rbegin(); it != _labels.rend(); ++it)
     {
         it->second->setBackgroundColor(0xffffff00); // hidden mask for event handling
-        it->second->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerCreateState::onLabelClick);
+        it->second->addEventHandler("mouseleftclick", [this](Event* event){ this->onLabelClick(dynamic_cast<MouseEvent*>(event)); });
         addUI(it->second);
     }
 
@@ -227,7 +227,7 @@ void PlayerCreateState::init()
     // add hidden masks
     for(auto it = _masks.begin(); it != _masks.end(); ++it)
     {
-        it->second->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerCreateState::onMaskClick);
+        it->second->addEventHandler("mouseleftclick", [this](Event* event){ this->onMaskClick(dynamic_cast<MouseEvent*>(event)); });
         addUI(it->second);
     }
 
@@ -490,9 +490,8 @@ bool PlayerCreateState::_skillToggle(unsigned int num)
 void PlayerCreateState::onButtonClick(MouseEvent* event)
 {
     auto sender = dynamic_cast<ImageButton*>(event->emitter());
-    auto state = dynamic_cast<PlayerCreateState*>(event->reciever());
 
-    for(auto it = state->_buttons.begin(); it != state->_buttons.end(); ++it)
+    for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
     {
         if (it->second == sender)
         {
@@ -506,8 +505,8 @@ void PlayerCreateState::onButtonClick(MouseEvent* event)
 
             if (name.find("stats_") == 0)
             {
-                state->_selectedLabel = state->_labels.at(name.substr(0,7));
-                state->_selectedImage->setTexture(state->_images.at(name.substr(0,7))->texture());
+                _selectedLabel = _labels.at(name.substr(0,7));
+                _selectedImage->setTexture(_images.at(name.substr(0,7))->texture());
                 unsigned int number = atoi(name.substr(6,1).c_str());
                 if (name.find("_increase") == 7)
                 {
@@ -522,8 +521,8 @@ void PlayerCreateState::onButtonClick(MouseEvent* event)
             if (name.find("traits_") == 0)
             {
                 unsigned int number = atoi(name.substr(7).c_str());
-                state->_selectedLabel = state->_labels.at(name);
-                state->_selectedImage->setTexture(state->_images.at(name)->texture());
+                _selectedLabel = _labels.at(name);
+                _selectedImage->setTexture(_images.at(name)->texture());
 
                 if (!_traitToggle(number - 1))
                 {
@@ -538,8 +537,8 @@ void PlayerCreateState::onButtonClick(MouseEvent* event)
             if (name.find("skills_") == 0)
             {
                 unsigned int number = atoi(name.substr(7).c_str());
-                state->_selectedLabel = state->_labels.at(name);
-                state->_selectedImage->setTexture(state->_images.at(name)->texture());
+                _selectedLabel = _labels.at(name);
+                _selectedImage->setTexture(_images.at(name)->texture());
                 if (!_skillToggle(number - 1))
                 {
                     auto state = new PlayerEditAlertState();
@@ -555,9 +554,7 @@ void PlayerCreateState::onButtonClick(MouseEvent* event)
 
 void PlayerCreateState::onLabelClick(MouseEvent* event)
 {
-    auto state = dynamic_cast<PlayerCreateState*>(event->reciever());
-
-    for(auto it = state->_labels.begin(); it != state->_labels.end(); ++it)
+    for(auto it = _labels.begin(); it != _labels.end(); ++it)
     {
         std::string name = it->first;
         if (it->second == event->emitter())
@@ -569,8 +566,8 @@ void PlayerCreateState::onLabelClick(MouseEvent* event)
                 {
                     label = name.substr(0, name.find("_value"));
                 }
-                state->_selectedLabel = state->_labels.at(label.c_str());
-                state->_selectedImage->setTexture(state->_images.at(label.c_str())->texture());
+                _selectedLabel = _labels.at(label.c_str());
+                _selectedImage->setTexture(_images.at(label.c_str())->texture());
             }
         }
     }
@@ -578,17 +575,15 @@ void PlayerCreateState::onLabelClick(MouseEvent* event)
 
 void PlayerCreateState::onMaskClick(MouseEvent* event)
 {
-    auto state = dynamic_cast<PlayerCreateState*>(event->reciever());
-
-    for(auto it = state->_masks.begin(); it != state->_masks.end(); ++it)
+    for(auto it = _masks.begin(); it != _masks.end(); ++it)
     {
         if (it->second == event->emitter())
         {
             std::string name = it->first;
             if (name.find("stats_") == 0)
             {
-                state->_selectedLabel = state->_labels.at(name);
-                state->_selectedImage->setTexture(state->_images.at(name)->texture());
+                _selectedLabel = _labels.at(name);
+                _selectedImage->setTexture(_images.at(name)->texture());
             }
         }
     }

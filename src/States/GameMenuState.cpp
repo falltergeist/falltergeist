@@ -62,9 +62,9 @@ void GameMenuState::init()
     auto exitGameButton = new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3);
     auto doneButton = new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4);
 
-    preferencesButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &GameMenuState::onPreferencesButtonClick);
-    exitGameButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &GameMenuState::onExitButtonClick);
-    doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &GameMenuState::onDoneButtonClick);
+    preferencesButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onPreferencesButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    exitGameButton->addEventHandler("mouseleftclick",    [this](Event* event){ this->onExitButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    doneButton->addEventHandler("mouseleftclick",        [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
 
     auto msg = ResourceManager::msgFileType("text/english/game/options.msg");
@@ -73,34 +73,34 @@ void GameMenuState::init()
     // label: save game
     auto saveGameButtonLabel = new TextArea(msg->message(0), backgroundX+8, backgroundY+26);
     saveGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
-    saveGameButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &GameMenuState::onSaveGameButtonClick);
-    saveGameButton->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &GameMenuState::onMouseDown);
-    saveGameButton->addEventHandler("mouseleftup", this, (EventRecieverMethod) &GameMenuState::onMouseUp);
+    saveGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onSaveGameButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    saveGameButton->addEventHandler("mouseleftdown",  [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
+    saveGameButton->addEventHandler("mouseleftup",    [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     // label: load game
     auto loadGameButtonLabel = new TextArea(msg->message(1), backgroundX+8, backgroundY+26+37);
     loadGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
-    loadGameButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &GameMenuState::onLoadGameButtonClick);
-    loadGameButton->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &GameMenuState::onMouseDown);
-    loadGameButton->addEventHandler("mouseleftup", this, (EventRecieverMethod) &GameMenuState::onMouseUp);
+    loadGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onLoadGameButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    loadGameButton->addEventHandler("mouseleftdown",  [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
+    loadGameButton->addEventHandler("mouseleftup",    [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     // label: preferences
     auto preferencesButtonLabel = new TextArea(msg->message(2), backgroundX+8, backgroundY+26+37*2);
     preferencesButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
-    preferencesButton->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &GameMenuState::onMouseDown);
-    preferencesButton->addEventHandler("mouseleftup", this, (EventRecieverMethod) &GameMenuState::onMouseUp);
+    preferencesButton->addEventHandler("mouseleftdown", [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
+    preferencesButton->addEventHandler("mouseleftup",   [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     // label: exit game
     auto exitGameButtonLabel = new TextArea(msg->message(3), backgroundX+8, backgroundY+26+37*3);
     exitGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
-    exitGameButton->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &GameMenuState::onMouseDown);
-    exitGameButton->addEventHandler("mouseleftup", this, (EventRecieverMethod) &GameMenuState::onMouseUp);
+    exitGameButton->addEventHandler("mouseleftdown", [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
+    exitGameButton->addEventHandler("mouseleftup",   [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     // label: done
     auto doneButtonLabel = new TextArea(msg->message(4), backgroundX+8, backgroundY+26+37*4);
     doneButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
-    doneButton->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &GameMenuState::onMouseDown);
-    doneButton->addEventHandler("mouseleftup", this, (EventRecieverMethod) &GameMenuState::onMouseUp);
+    doneButton->addEventHandler("mouseleftdown", [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
+    doneButton->addEventHandler("mouseleftup",   [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     background->setX(backgroundX);
     background->setY(backgroundY);

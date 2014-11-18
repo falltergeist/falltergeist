@@ -67,22 +67,22 @@ void NewGameState::init()
     addUI("background", new Image("art/intrface/pickchar.frm"));
 
     auto beginGameButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 322));
-    beginGameButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onBeginGameButtonClick);
+    beginGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onBeginGameButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     auto editButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 436, 319));
-    editButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onEditButtonClick);
+    editButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onEditButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     auto createButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 424));
-    createButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onCreateButtonClick);
+    createButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCreateButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     auto backButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 461, 424));
-    backButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onBackButtonClick);
+    backButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onBackButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     auto prevCharacterButton = addUI(new ImageButton(ImageButton::TYPE_LEFT_ARROW, 292, 320));
-    prevCharacterButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onPrevCharacterButtonClick);
+    prevCharacterButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onPrevCharacterButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     auto nextCharacterButton = addUI(new ImageButton(ImageButton::TYPE_RIGHT_ARROW, 318, 320));
-    nextCharacterButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &NewGameState::onNextCharacterButtonClick);
+    nextCharacterButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onNextCharacterButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     addUI("images", new ImageList({
                                     "art/intrface/combat.frm",

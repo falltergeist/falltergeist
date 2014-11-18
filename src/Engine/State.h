@@ -26,7 +26,6 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Engine/Event/EventReciever.h"
 #include "../Engine/Event/MouseEvent.h"
 #include "../Engine/Event/KeyboardEvent.h"
 
@@ -44,7 +43,7 @@ class Surface;
 class TextArea;
 class UI;
 
-class State : public EventReciever, public EventEmitter
+class State : public EventEmitter
 {
 protected:
     std::vector<UI*> _ui;

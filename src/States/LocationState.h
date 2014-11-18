@@ -95,7 +95,7 @@ public:
     void onBackgroundClick(MouseEvent* event);
     void onKeyUp(std::shared_ptr<KeyboardEvent> event);
     void onObjectClick(MouseEvent* event);
-    void onMouseDown(MouseEvent* event);
+    void onMouseDown(Event* event, GameObject* object);
     void onKeyboardUp(std::shared_ptr<KeyboardEvent> event);
 };
 

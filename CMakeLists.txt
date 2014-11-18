@@ -61,10 +61,6 @@ set(SOURCES main.cpp
     src/Engine/CrossPlatform.h
     src/Engine/Event/Event.cpp
     src/Engine/Event/Event.h
-    src/Engine/Event/EventReciever.cpp
-    src/Engine/Event/EventReciever.h
-    src/Engine/Event/EventHandler.cpp
-    src/Engine/Event/EventHandler.h
     src/Engine/Event/EventEmitter.cpp
     src/Engine/Event/EventEmitter.h
     src/Engine/Event/KeyboardEvent.cpp

@@ -52,12 +52,12 @@ void CritterBarterState::init()
     setY((Game::getInstance()->renderer()->height() - 480)*0.5 + 291);
 
     addUI("background",new Image("art/intrface/barter.frm"));
-    getActiveUI("background")->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &CritterBarterState::onBackgroundClick);
+    getActiveUI("background")->addEventHandler("mouseleftclick", std::bind(&CritterBarterState::onBackgroundClick, this, std::placeholders::_1));
 
     addUI("offerButton", new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, 40, 162));
 
     addUI("talkButton", new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, 583, 162));
-    getActiveUI("talkButton")->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &CritterBarterState::onTalkButtonClick);
+    getActiveUI("talkButton")->addEventHandler("mouseleftclick", std::bind(&CritterBarterState::onTalkButtonClick, this, std::placeholders::_1));
 
     addUI("mineInventoryScrollUpButton",   new ImageButton(ImageButton::TYPE_DIALOG_UP_ARROW,   190, 56));
     addUI("mineInventoryScrollDownButton", new ImageButton(ImageButton::TYPE_DIALOG_DOWN_ARROW, 190, 82));

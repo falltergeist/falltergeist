@@ -211,9 +211,8 @@ void LocationState::setLocation(std::string name)
     }
 }
 
-void LocationState::onMouseDown(MouseEvent* event)
+void LocationState::onMouseDown(Event* event, GameObject* object)
 {
-    auto object = dynamic_cast<GameObject*>(event->reciever());
     if (!object) return;
 
     std::vector<int> icons;
@@ -573,7 +572,7 @@ void LocationState::handleAction(GameObject* object, int action)
         {
             auto player = Game::getInstance()->player();
             auto animation = player->setActionAnimation("al");
-            animation->addEventHandler("actionFrame", object, (EventRecieverMethod) &GameObject::onUseAnimationActionFrame);
+            animation->addEventHandler("actionFrame", [object](Event* event){ object->onUseAnimationActionFrame(event); });
             break;
         }
         case Mouse::ICON_ROTATE:

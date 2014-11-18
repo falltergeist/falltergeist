@@ -25,6 +25,7 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <functional>
 
 // Falltergeist includes
 
@@ -41,12 +42,12 @@ typedef void (EventReciever::*EventRecieverMethod)(Event*);
 class EventEmitter
 {
 protected:
-    std::map<std::string, std::vector<EventHandler*>> _eventHandlers;
+    std::map<std::string, std::vector<std::function<void(Event*)>>> _eventHandlers;
 public:
     EventEmitter();
     virtual ~EventEmitter();
 
-    void addEventHandler(std::string eventName, EventReciever* reciever, EventRecieverMethod handler);
+    void addEventHandler(std::string eventName, std::function<void(Event*)> handler);
     void emitEvent(Event* event);
     void removeEventHandlers(std::string eventName);
 };

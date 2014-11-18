@@ -33,7 +33,7 @@
 namespace Falltergeist
 {
 
-class ActiveUI : public EventEmitter, public EventReciever, public UI
+class ActiveUI : public EventEmitter, public UI
 {
 public:
     ActiveUI(int x = 0, int y = 0);

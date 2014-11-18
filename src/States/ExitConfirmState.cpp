@@ -61,8 +61,8 @@ void ExitConfirmState::init()
 
     auto yesButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+50, backgroundY+102);
     auto noButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+183, backgroundY+102);
-    yesButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &ExitConfirmState::onYesButtonClick);
-    noButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &ExitConfirmState::onNoButtonClick);
+    yesButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onYesButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    noButton->addEventHandler("mouseleftclick",  [this](Event* event){ this->onNoButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     // label: Are you sure you want to quit?
     auto msg = ResourceManager::msgFileType("text/english/game/misc.msg");

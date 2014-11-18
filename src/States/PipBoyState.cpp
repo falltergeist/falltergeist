@@ -22,6 +22,7 @@
 // Falltergeist includes
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/Renderer.h"
+#include "../Engine/Event/KeyboardEvent.h"
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/ResourceManager.h"
 #include "../States/PipBoyState.h"
@@ -62,7 +63,7 @@ void PipBoyState::init()
     background->setY(backgroundY);
 
     // Close PipBoy when ESC is hit
-    background->addEventHandler("keyup", this, (EventRecieverMethod) &PipBoyState::onKeyboardUp);
+    background->addEventHandler("keyup", [this](Event* event){ this->onKeyboardUp(dynamic_cast<KeyboardEvent*>(event)); });
 
     // Buttons
     auto alarmButton = new ImageButton(ImageButton::TYPE_PIPBOY_ALARM_BUTTON, backgroundX+124, backgroundY+13);
@@ -70,8 +71,7 @@ void PipBoyState::init()
     auto automapsButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+394);
     auto archivesButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+423);
     auto closeButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+448);
-    closeButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PipBoyState::onCloseButtonClick);
-
+    closeButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCloseButtonClick(dynamic_cast<MouseEvent*>(event)); });
     // Date and time
     // FIXME: use current in-game datetime
     // Date
@@ -116,7 +116,7 @@ void PipBoyState::onCloseButtonClick(MouseEvent* event)
     Game::getInstance()->popState();
 }
 
-void PipBoyState::onKeyboardUp(std::shared_ptr<KeyboardEvent> event)
+void PipBoyState::onKeyboardUp(KeyboardEvent* event)
 {
     if (event->keyCode() == SDLK_ESCAPE)
     {

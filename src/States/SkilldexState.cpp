@@ -68,7 +68,7 @@ void SkilldexState::init()
     auto cancelButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+48, backgroundY+338);
 
     // events
-    cancelButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SkilldexState::onCancelButtonClick);
+    cancelButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCancelButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     // LABELS
     auto msg = ResourceManager::msgFileType("text/english/game/skilldex.msg");

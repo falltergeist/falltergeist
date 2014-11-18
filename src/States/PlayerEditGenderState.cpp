@@ -58,14 +58,14 @@ void PlayerEditGenderState::init()
                                     "art/intrface/maleoff.frm",
                                     "art/intrface/maleon.frm"
                                 }, bgX+260, bgY+2);
-    _maleImage->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditGenderState::onMaleButtonPress);
+    _maleImage->addEventHandler("mouseleftclick", [this](Event* event){ this->onMaleButtonPress(dynamic_cast<MouseEvent*>(event)); });
     if (Game::getInstance()->player()->gender() == 0) _maleImage->setCurrentImage(1); // 0 - male
 
     _femaleImage = new ImageList((std::vector<std::string>){
                                                             "art/intrface/femoff.frm",
                                                             "art/intrface/femon.frm"
                                                             }, bgX+310, bgY+2);
-    _femaleImage->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditGenderState::onFemaleButtonPress);
+    _femaleImage->addEventHandler("mouseleftclick", [this](Event* event){ this->onFemaleButtonPress(dynamic_cast<MouseEvent*>(event)); });
     if (Game::getInstance()->player()->gender() == 1) _femaleImage->setCurrentImage(1); // 1 - female
 
     auto doneBox = new Image("art/intrface/donebox.frm");
@@ -78,7 +78,7 @@ void PlayerEditGenderState::init()
     doneLabel->setFont(font3_b89c28ff);
 
     auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+260, bgY+45);
-    doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditGenderState::onDoneButtonClick);
+    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     addUI(bg);
     addUI(doneBox);
@@ -95,18 +95,16 @@ void PlayerEditGenderState::onDoneButtonClick(MouseEvent* event)
 
 void PlayerEditGenderState::onFemaleButtonPress(MouseEvent* event)
 {
-    auto state = dynamic_cast<PlayerEditGenderState*>(event->reciever());
     Game::getInstance()->player()->setGender(1); // 1 - female
-    state->_maleImage->setCurrentImage(0);
-    state->_femaleImage->setCurrentImage(1);
+    _maleImage->setCurrentImage(0);
+    _femaleImage->setCurrentImage(1);
 }
 
 void PlayerEditGenderState::onMaleButtonPress(MouseEvent* event)
 {
-    auto state = dynamic_cast<PlayerEditGenderState*>(event->reciever());
     Game::getInstance()->player()->setGender(0); // 0 - male
-    state->_maleImage->setCurrentImage(1);
-    state->_femaleImage->setCurrentImage(0);
+    _maleImage->setCurrentImage(1);
+    _femaleImage->setCurrentImage(0);
 }
 
 }

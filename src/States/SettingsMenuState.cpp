@@ -292,17 +292,17 @@ void SettingsMenuState::init()
 
     // button: Default
     auto defaultButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+23, backgroundY+450);
-    defaultButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SettingsMenuState::onDefaultButtonClick);
+    defaultButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDefaultButtonClick(dynamic_cast<MouseEvent*>(event)); });
     addUI(defaultButton);
 
     // button: Done
     auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+148, backgroundY+450);
-    doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SettingsMenuState::onSaveButtonClick);
+    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onSaveButtonClick(dynamic_cast<MouseEvent*>(event)); });
     addUI(doneButton);
 
     // button: Cancel
     auto cancelButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+263, backgroundY+450);
-    cancelButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SettingsMenuState::onCancelButtonClick);
+    cancelButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCancelButtonClick(dynamic_cast<MouseEvent*>(event)); });
     addUI(cancelButton);
 
     // button: Affect player speed

@@ -73,12 +73,12 @@ void SaveGameState::init()
 
     // button: Done
     auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+391, bgY+349);
-    doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SaveGameState::onDoneButtonClick);
+    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
     addUI(doneButton);
 
     // button: Cancel
     auto cancelButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+495, bgY+349);
-    cancelButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &SaveGameState::onCancelButtonClick);
+    cancelButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCancelButtonClick(dynamic_cast<MouseEvent*>(event)); });
     addUI(cancelButton);
 
     // LABELS

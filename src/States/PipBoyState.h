@@ -36,7 +36,7 @@ public:
     void init();
 
     void onCloseButtonClick(MouseEvent* event);
-    void onKeyboardUp(std::shared_ptr<KeyboardEvent> event);
+    void onKeyboardUp(KeyboardEvent* event);
 };
 
 }

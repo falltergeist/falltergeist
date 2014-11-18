@@ -154,7 +154,7 @@ void CursorDropdownState::init()
     }
 
     _mask = new HiddenMask(game->renderer()->width(), game->renderer()->height());
-    _mask->addEventHandler("mouseleftup", this, (EventRecieverMethod) &CursorDropdownState::onLeftButtonUp);
+    _mask->addEventHandler("mouseleftup", [this](Event* event){ this->onLeftButtonUp(dynamic_cast<MouseEvent*>(event)); });
     _mask->setVisible(true);
     addUI(_cursor);
     addUI(_surface);
@@ -204,13 +204,12 @@ void CursorDropdownState::think()
 
 void CursorDropdownState::onLeftButtonUp(MouseEvent* event)
 {
-    auto state = dynamic_cast<CursorDropdownState*>(event->reciever());
     auto game = Game::getInstance();
-    game->mouse()->setX(state->_initialX);
-    game->mouse()->setY(state->_initialY);
+    game->mouse()->setX(_initialX);
+    game->mouse()->setY(_initialY);
     game->mouse()->popState();
     game->popState();
-    game->locationState()->handleAction(state->_object, state->_icons.at(state->_currentSurface));
+    game->locationState()->handleAction(_object, _icons.at(_currentSurface));
 }
 
 

@@ -19,10 +19,12 @@
 
 // C++ standard includes
 #include <cmath>
+#include <functional>
 
 // Falltergeist includes
 #include "../Game/GameDudeObject.h"
 #include "../Game/GameWeaponItemObject.h"
+#include "../Engine/Game.h"
 #include "../Engine/Graphics/Animation.h"
 #include "../Engine/Graphics/AnimationQueue.h"
 #include "../Engine/Logger.h"
@@ -280,7 +282,7 @@ void GameDudeObject::_generateUi()
 
     if (_ui)
     {
-        _ui->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &LocationState::onMouseDown);
+        _ui->addEventHandler("mouseleftdown", std::bind(&LocationState::onMouseDown, Game::getInstance()->locationState(), std::placeholders::_1, static_cast<GameObject*>(this)));
     }
 }
 

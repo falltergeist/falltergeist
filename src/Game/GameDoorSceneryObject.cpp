@@ -71,7 +71,7 @@ void GameDoorSceneryObject::use_p_proc()
         {
             queue->start();
             queue->currentAnimation()->setReverse(false);
-            queue->addEventHandler("animationEnded", this, (EventRecieverMethod) &GameDoorSceneryObject::onOpeningAnimationEnded);
+            queue->addEventHandler("animationEnded", std::bind(&GameDoorSceneryObject::onOpeningAnimationEnded, this, std::placeholders::_1));
         }
     }
     else
@@ -80,7 +80,7 @@ void GameDoorSceneryObject::use_p_proc()
         {
             queue->start();
             queue->currentAnimation()->setReverse(true);
-            queue->addEventHandler("animationEnded", this, (EventRecieverMethod) &GameDoorSceneryObject::onClosingAnimationEnded);
+            queue->addEventHandler("animationEnded", std::bind(&GameDoorSceneryObject::onClosingAnimationEnded, this, std::placeholders::_1));
         }
     }
 }
@@ -93,9 +93,7 @@ bool GameDoorSceneryObject::canWalkThru()
 void GameDoorSceneryObject::onOpeningAnimationEnded(Event* event)
 {
     auto queue = (AnimationQueue*)event->emitter();
-    auto door = (GameDoorSceneryObject*)event->reciever();
-
-    door->setOpened(true);
+    setOpened(true);
     queue->removeEventHandlers("animationEnded");
     queue->stop();
     Logger::info() << "Door opened: " << opened() << std::endl;
@@ -104,9 +102,7 @@ void GameDoorSceneryObject::onOpeningAnimationEnded(Event* event)
 void GameDoorSceneryObject::onClosingAnimationEnded(Event* event)
 {
     auto queue = (AnimationQueue*)event->emitter();
-    auto door = (GameDoorSceneryObject*)event->reciever();
-
-    door->setOpened(false);
+    setOpened(false);
     queue->removeEventHandlers("animationEnded");
     queue->stop();
     Logger::info() << "Door opened: " << opened() << std::endl;

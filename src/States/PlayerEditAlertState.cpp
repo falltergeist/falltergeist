@@ -74,7 +74,7 @@ void PlayerEditAlertState::init()
     doneBox->setY(bgY+270);
 
     auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+264, bgY+273);
-    doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditAlertState::onDoneButtonClick);
+    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
     auto doneLabel = new TextArea(msg->message(100), bgX+284, bgY+273);

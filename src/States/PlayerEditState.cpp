@@ -252,7 +252,7 @@ void PlayerEditState::init()
     // add buttons to the state
     for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
     {
-        it->second->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditState::onButtonClick);
+        it->second->addEventHandler("mouseleftclick", [this](Event* event){ this->onButtonClick(dynamic_cast<MouseEvent*>(event)); });
         addUI(it->second);
     }
 
@@ -261,7 +261,7 @@ void PlayerEditState::init()
     for(auto it = _labels.rbegin(); it != _labels.rend(); ++it)
     {
         it->second->setBackgroundColor(0xffffff00); // hidden mask for event handling
-        it->second->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditState::onLabelClick);
+        it->second->addEventHandler("mouseleftclick", [this](Event* event){ this->onLabelClick(dynamic_cast<MouseEvent*>(event)); });
         addUI(it->second);
     }
 
@@ -274,7 +274,7 @@ void PlayerEditState::init()
     // add hidden masks
     for(auto it = _masks.begin(); it != _masks.end(); ++it)
     {
-        it->second->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditState::onMaskClick);
+        it->second->addEventHandler("mouseleftclick", [this](Event* event){ this->onMaskClick(dynamic_cast<MouseEvent*>(event)); });
         addUI(it->second);
     }
 
@@ -472,71 +472,23 @@ void PlayerEditState::think()
 void PlayerEditState::onButtonClick(MouseEvent* event)
 {
     auto sender = dynamic_cast<ImageButton*>(event->emitter());
-    auto state = dynamic_cast<PlayerEditState*>(event->reciever());
 
-    for(auto it = state->_buttons.begin(); it != state->_buttons.end(); ++it)
+    for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
     {
-//        if (it->second.get() == sender)
         if (it->second == sender)
         {
             std::string name = it->first;
 
             if (name == "cancel") return onBackButtonClick(event);
             if (name == "done") return onDoneButtonClick(event);
-//            if (name.find("stats_") == 0)
-//            {
-//                state->_selectedLabel = state->_labels.at(name.substr(0,7));
-//                state->_selectedImage->setTexture(state->_images.at(name.substr(0,7))->texture());
-//                unsigned int number = atoi(name.substr(6,1).c_str());
-//                if (name.find("_increase") == 7)
-//                {
-//                    _statIncrease(number - 1);
-//                }
-//                else
-//                {
-//                    _statDecrease(number - 1);
-//                }
-//            }
-//
-//            if (name.find("traits_") == 0)
-//            {
-//                unsigned int number = atoi(name.substr(7).c_str());
-//                state->_selectedLabel = state->_labels.at(name);
-//                state->_selectedImage->setTexture(state->_images.at(name)->texture());
-//
-//                if (!_traitToggle(number - 1))
-//                {
-//                    auto state = new PlayerEditAlertState();
-//                    auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
-//                    std::string text = msg->message(148)->text() + "\n" + msg->message(149)->text();
-//                    state->setMessage(text);
-//                    Game::getInstance()->pushState(state);
-//                }
-//            }
-//
-//            if (name.find("skills_") == 0)
-//            {
-//                unsigned int number = atoi(name.substr(7).c_str());
-//                state->_selectedLabel = state->_labels.at(name);
-//                state->_selectedImage->setTexture(state->_images.at(name)->texture());
-//                if (!_skillToggle(number - 1))
-//                {
-//                    auto state = new PlayerEditAlertState();
-//                    auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
-//                    std::string text = msg->message(140)->text() + "\n" + msg->message(141)->text();
-//                    state->setMessage(text);
-//                    Game::getInstance()->pushState(state);
-//                }
-//            }
+
         }
     }
 }
 
 void PlayerEditState::onLabelClick(MouseEvent* event)
 {
-    auto state = dynamic_cast<PlayerEditState*>(event->reciever());
-
-    for(auto it = state->_labels.begin(); it != state->_labels.end(); ++it)
+    for(auto it = _labels.begin(); it != _labels.end(); ++it)
     {
         std::string name = it->first;
 //        if (it->second.get() == event->emitter())
@@ -551,8 +503,8 @@ void PlayerEditState::onLabelClick(MouseEvent* event)
                 {
                     label = name.substr(0, name.find("_value"));
                 }
-                state->_selectedLabel = state->_labels.at(label.c_str());
-                state->_selectedImage->setTexture(state->_images.at(label.c_str())->texture());
+                _selectedLabel = _labels.at(label.c_str());
+                _selectedImage->setTexture(_images.at(label.c_str())->texture());
             }
         }
     }
@@ -560,18 +512,15 @@ void PlayerEditState::onLabelClick(MouseEvent* event)
 
 void PlayerEditState::onMaskClick(MouseEvent* event)
 {
-    auto state = dynamic_cast<PlayerEditState*>(event->reciever());
-
-    for(auto it = state->_masks.begin(); it != state->_masks.end(); ++it)
+    for(auto it = _masks.begin(); it != _masks.end(); ++it)
     {
-//        if (it->second.get() == event->emitter())
         if (it->second == event->emitter())
         {
             std::string name = it->first;
             if (name.find("stats_") == 0)
             {
-                state->_selectedLabel = state->_labels.at(name);
-                state->_selectedImage->setTexture(state->_images.at(name)->texture());
+                _selectedLabel = _labels.at(name);
+                _selectedImage->setTexture(_images.at(name)->texture());
             }
         }
     }

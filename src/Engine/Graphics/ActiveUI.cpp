@@ -28,7 +28,7 @@
 namespace Falltergeist
 {
 
-ActiveUI::ActiveUI(int x, int y) : EventEmitter(), EventReciever(), UI(x, y)
+ActiveUI::ActiveUI(int x, int y) : EventEmitter(), UI(x, y)
 {
 }
 

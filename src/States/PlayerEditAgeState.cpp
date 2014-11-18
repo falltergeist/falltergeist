@@ -65,13 +65,13 @@ void PlayerEditAgeState::init()
     doneBox->setY(backgroundY+40);
 
     auto decButton = new ImageButton(ImageButton::TYPE_LEFT_ARROW, backgroundX+178, backgroundY+14);
-    decButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditAgeState::onDecButtonClick);
+    decButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDecButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     auto incButton = new ImageButton(ImageButton::TYPE_RIGHT_ARROW, backgroundX+262, backgroundY+14);
-    incButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditAgeState::onIncButtonClick);
+    incButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onIncButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     auto doneButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+188, backgroundY+43);
-    doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &PlayerEditAgeState::onDoneButtonClick);
+    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
     auto doneLabel = new TextArea(msg->message(100), backgroundX+210, backgroundY+43);
@@ -100,25 +100,23 @@ PlayerEditAgeState::~PlayerEditAgeState()
 
 void PlayerEditAgeState::onDecButtonClick(MouseEvent* event)
 {
-    auto state = dynamic_cast<PlayerEditAgeState*>(event->reciever());
     unsigned char age = Game::getInstance()->player()->age();
     if (age > 16)
     {
         age--;
         Game::getInstance()->player()->setAge(age);
-        state->_counter->setNumber(age);
+        _counter->setNumber(age);
     }
 }
 
 void PlayerEditAgeState::onIncButtonClick(MouseEvent* event)
 {
-    auto state = dynamic_cast<PlayerEditAgeState*>(event->reciever());
     unsigned char age = Game::getInstance()->player()->age();
     if (age < 35)
     {
         age++;
         Game::getInstance()->player()->setAge(age);
-        state->_counter->setNumber(age);
+        _counter->setNumber(age);
     }
 }
 

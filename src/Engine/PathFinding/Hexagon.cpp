@@ -164,6 +164,7 @@ unsigned int Hexagon::orientationTo(Hexagon* hexagon)
             return dy == 0 ? 4 : 5;
         }
     }
+    return 0;
 }
 
 }

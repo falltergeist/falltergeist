@@ -41,7 +41,7 @@
 namespace Falltergeist
 {
 
-GameObject::GameObject() : EventReciever(), EventEmitter()
+GameObject::GameObject() : EventEmitter()
 {
 }
 
@@ -155,7 +155,7 @@ void GameObject::setUI(ActiveUI* ui)
 {
     delete _ui;
     _ui = ui;
-    _ui->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &LocationState::onMouseDown);
+    _ui->addEventHandler("mouseleftdown", std::bind(&LocationState::onMouseDown, Game::getInstance()->locationState(), std::placeholders::_1, this));
 }
 
 void GameObject::_generateUi()
@@ -183,7 +183,7 @@ void GameObject::_generateUi()
 
     if (_ui)
     {
-        _ui->addEventHandler("mouseleftdown", this, (EventRecieverMethod) &LocationState::onMouseDown);
+        _ui->addEventHandler("mouseleftdown", std::bind(&LocationState::onMouseDown, Game::getInstance()->locationState(), std::placeholders::_1, this));
     }
 }
 
@@ -315,9 +315,8 @@ void GameObject::use_obj_on_p_proc()
 }
 
 void GameObject::onUseAnimationActionFrame(Event* event)
-{
-    auto object = (GameObject*)event->reciever();
-    object->use_p_proc();
+{    
+    use_p_proc();
 }
 
 }

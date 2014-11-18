@@ -56,7 +56,7 @@ void CritterDialogReviewState::init()
 
     // Interface buttons
     auto doneButton = new ImageButton(ImageButton::TYPE_DIALOG_DONE_BUTTON, backgroundX + 500, backgroundY + 398);
-    doneButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &CritterDialogReviewState::onDoneButtonClick);
+    doneButton->addEventHandler("mouseleftclick", std::bind(&CritterDialogReviewState::onDoneButtonClick, this, std::placeholders::_1));
 
     auto upButton = new ImageButton(ImageButton::TYPE_DIALOG_BIG_UP_ARROW, backgroundX + 476, backgroundY + 154);
 

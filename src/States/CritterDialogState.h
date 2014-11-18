@@ -62,7 +62,7 @@ public:
     void onAnswerIn(Event* event);
     void onAnswerOut(Event* event);
     void onAnswerClick(Event* event);
-    void onKeyboardUp(std::shared_ptr<KeyboardEvent> event);
+    void onKeyboardUp(KeyboardEvent* event);
 
 };
 

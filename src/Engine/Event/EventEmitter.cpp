@@ -21,7 +21,6 @@
 
 // Falltergeist includes
 #include "../Event/EventEmitter.h"
-#include "../Event/EventHandler.h"
 #include "../Event/Event.h"
 
 // Third party includes
@@ -37,15 +36,15 @@ EventEmitter::~EventEmitter()
 {
 }
 
-void EventEmitter::addEventHandler(std::string eventName, EventReciever* reciever, EventRecieverMethod handler)
+void EventEmitter::addEventHandler(std::string eventName, std::function<void(Event*)> handler)
 {
     if (_eventHandlers.find(eventName) == _eventHandlers.end())
     {
-        std::vector<EventHandler*> vector;
+        std::vector<std::function<void(Event*)>> vector;
         _eventHandlers.insert(std::make_pair(eventName, vector));
     }
 
-    _eventHandlers.at(eventName).push_back(new EventHandler(reciever, handler));
+    _eventHandlers.at(eventName).push_back(handler);
 }
 
 void EventEmitter::emitEvent(Event* event)
@@ -55,8 +54,7 @@ void EventEmitter::emitEvent(Event* event)
     for (auto eventHandler : _eventHandlers.at(event->name()))
     {
         if (event->handled()) return;
-        event->setReciever(eventHandler->reciever());
-        eventHandler->operator()(event);
+        eventHandler(event);
     }
 }
 
@@ -64,11 +62,7 @@ void EventEmitter::removeEventHandlers(std::string eventName)
 {
     if (_eventHandlers.find(eventName) == _eventHandlers.end()) return;
 
-    while (!_eventHandlers.at(eventName).empty())
-    {
-        delete _eventHandlers.at(eventName).back();
-        _eventHandlers.at(eventName).pop_back();
-    }
+    _eventHandlers.at(eventName).clear();
     _eventHandlers.erase(eventName);
 }
 

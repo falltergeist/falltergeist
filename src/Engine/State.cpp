@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Engine/Event/StateEvent.h"
 #include "../Engine/Game.h"
 #include "../Engine/Graphics/ActiveUI.h"
 #include "../Engine/Graphics/Renderer.h"
@@ -34,10 +35,10 @@
 namespace Falltergeist
 {
 
-State::State() : EventReciever(), EventEmitter()
+State::State() : EventEmitter()
 {
-    addEventHandler("activate", this, (EventRecieverMethod) &State::onStateActivate);
-    addEventHandler("deactivate", this, (EventRecieverMethod) &State::onStateDeactivate);
+    addEventHandler("activate",   [this](Event* event){ this->onStateActivate(dynamic_cast<StateEvent*>(event)); });
+    addEventHandler("deactivate", [this](Event* event){ this->onStateDeactivate(dynamic_cast<StateEvent*>(event)); });
 }
 
 State::~State()

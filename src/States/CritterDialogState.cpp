@@ -64,7 +64,7 @@ void CritterDialogState::init()
 
     auto background = new Image("art/intrface/di_talk.frm");
     addUI("background", background);
-    background->addEventHandler("keyup", this, (EventRecieverMethod) &CritterDialogState::onKeyboardUp);
+    background->addEventHandler("keyup", [this](Event* event){ this->onKeyboardUp(dynamic_cast<KeyboardEvent*>(event)); });
 
     auto question = new TextArea("question", 140, -55);
     question->setWidth(370);
@@ -73,11 +73,11 @@ void CritterDialogState::init()
 
     // Interface buttons
     auto reviewButton = new ImageButton(ImageButton::TYPE_DIALOG_REVIEW_BUTTON, 13, 154);
-    reviewButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &CritterDialogState::onReviewButtonClick);
+    reviewButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onReviewButtonClick(dynamic_cast<MouseEvent*>(event)); });
     addUI(reviewButton);
 
     auto barterButton = new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, 593, 40);
-    barterButton->addEventHandler("mouseleftclick", this, (EventRecieverMethod) &CritterDialogState::onBarterButtonClick);
+    barterButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onBarterButtonClick(dynamic_cast<MouseEvent*>(event)); });
     addUI(barterButton);
 }
 
@@ -141,7 +141,7 @@ void CritterDialogState::onBarterButtonClick(Event* event)
     Game::getInstance()->pushState(critterBarterState);
 }
 
-void CritterDialogState::onKeyboardUp(std::shared_ptr<KeyboardEvent> event)
+void CritterDialogState::onKeyboardUp(KeyboardEvent* event)
 {
     static std::vector<uint32_t> numkeys = {
             SDLK_1, SDLK_2, SDLK_3, SDLK_4, SDLK_5, SDLK_6, SDLK_7, SDLK_8, SDLK_9,
@@ -205,9 +205,9 @@ void CritterDialogState::addAnswer(std::string text)
     answer->setWordWrap(true);
     answer->setWidth(370);
 
-    answer->addEventHandler("mousein", this, (EventRecieverMethod)&CritterDialogState::onAnswerIn);
-    answer->addEventHandler("mouseout", this, (EventRecieverMethod)&CritterDialogState::onAnswerOut);
-    answer->addEventHandler("mouseleftclick", this, (EventRecieverMethod)&CritterDialogState::onAnswerClick);
+    answer->addEventHandler("mousein", std::bind(&CritterDialogState::onAnswerIn, this, std::placeholders::_1));
+    answer->addEventHandler("mouseout", std::bind(&CritterDialogState::onAnswerOut, this, std::placeholders::_1));
+    answer->addEventHandler("mouseleftclick", std::bind(&CritterDialogState::onAnswerClick, this, std::placeholders::_1));
     _answers.push_back(answer);
     addUI(answer);
 }

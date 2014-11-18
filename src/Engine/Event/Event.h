@@ -26,8 +26,6 @@
 
 // Falltergeist includes
 #include "../Event/EventEmitter.h"
-#include "../Event/EventHandler.h"
-#include "../Event/EventReciever.h"
 
 // Third party includes
 
@@ -39,7 +37,6 @@ class Event
 protected:
     std::string _name;
     EventEmitter* _emitter = 0;
-    EventReciever* _reciever = 0;
     bool _handled = false;
 public:
     Event(std::string name);
@@ -49,9 +46,6 @@ public:
 
     EventEmitter* emitter();
     void setEmitter(EventEmitter* value);
-
-    EventReciever* reciever();
-    void setReciever(EventReciever* reciever);
 
     bool handled();
     void setHandled(bool value);
