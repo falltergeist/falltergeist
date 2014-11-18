@@ -42,7 +42,7 @@ void Opcode8102Handler::_run()
     auto trait = _vm->popDataInteger();
     auto trait_type = _vm->popDataInteger();
     auto who = _vm->popDataPointer();
-    _vm->pushDataInteger(_vm->critter_add_trait(who, trait_type, trait, amount));
+    _vm->pushDataInteger(0);
 }
 
 }

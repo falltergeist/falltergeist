@@ -24,8 +24,6 @@
 #include "../../VM/Handlers/Opcode80E9Handler.h"
 #include "../../VM/VM.h"
 
-
-
 // Third party includes
 
 namespace Falltergeist
@@ -39,9 +37,6 @@ void Opcode80E9Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80E9] [*] void set_light_level(int level)" << std::endl;
     auto level = _vm->popDataInteger();
-    _vm->setLightLevel(level);
 }
 
 }
-
-

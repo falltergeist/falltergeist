@@ -24,8 +24,6 @@
 #include "../../VM/Handlers/Opcode8115Handler.h"
 #include "../../VM/VM.h"
 
-
-
 // Third party includes
 
 namespace Falltergeist
@@ -37,8 +35,8 @@ Opcode8115Handler::Opcode8115Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8115Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8115] [*] void playMovie(movieNum)" << std::endl;
-    _vm->playMovie(_vm->popDataInteger());
+    Logger::debug("SCRIPT") << "[8115] [*] void playMovie(int movie)" << std::endl;
+    int movie = _vm->popDataInteger();
 }
 
 }

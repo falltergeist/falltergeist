@@ -48,12 +48,6 @@ protected:
     int _DVAR_base = 0;
     int _SVAR_base = 0;
 
-    int _metarule(int type, VMStackValue* value);
-    int _metarule3(int meta, VMStackValue* p1, int p2, int p3);
-    void _playMovie(int movieNum);
-    void _displayString(std::string str);
-    int _tile_num_in_direction(int start_tile, int dir, int distance);
-    int _critter_add_trait(void* who, int trait_type, int trait, int amount);
 public:
     VM(libfalltergeist::IntFileType* script, void* owner);
     VM(std::string filename, void* owner);
@@ -68,13 +62,6 @@ public:
     std::string msgMessage(int msg_file_num, int msg_num);
 
     bool hasFunction(std::string name);
-    int metarule(int type, VMStackValue* value);
-    int metarule3(int meta, VMStackValue* p1, int p2, int p3);
-    void playMovie(int movieNum);
-
-    int tile_num_in_direction(int start_tile, int dir, int distance);
-    int critter_add_trait(void* who, int trait_type, int trait, int amount);
-    void setLightLevel(int level);
 
     void call(std::string name);
     libfalltergeist::IntFileType* script();

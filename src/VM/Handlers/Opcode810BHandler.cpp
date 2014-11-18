@@ -20,11 +20,10 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Engine/Exception.h"
 #include "../../Engine/Logger.h"
 #include "../../VM/Handlers/Opcode810BHandler.h"
 #include "../../VM/VM.h"
-
-
 
 // Third party includes
 
@@ -37,10 +36,51 @@ Opcode810BHandler::Opcode810BHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode810BHandler::_run()
 {
-    Logger::debug("SCRIPT") << "[810B] [*] int metarule(p2, p1)" << std::endl;
-    auto p1 = _vm->dataStack()->pop();
-    auto p2 = _vm->popDataInteger();
-    _vm->pushDataInteger(_vm->metarule(p2, p1));
+    Logger::debug("SCRIPT") << "[810B] [*] int metarule(int type, value)" << std::endl;
+    auto value = _vm->dataStack()->pop();
+    auto type = _vm->popDataInteger();
+    int result;
+
+    switch(type)
+    {
+        case 14: // METARULE_TEST_FIRSTRUN
+            result = 1;
+            break;
+        case 16: // METARULE_PARTY_COUNT
+            result = 0;
+            break;
+        case 17: //  METARULE_AREA_KNOWN
+            result = 1;
+            break;
+        case 18: // METARULE_WHO_ON_DRUGS
+            result = 0;
+            break;
+        case 19: // METARULE_MAP_KNOWN
+            result = 1;
+            break;
+        case 22: // METARULE_IS_LOADGAME
+            result = 0;
+            break;
+        case 30: // METARULE_CAR_CURRENT_TOWN
+            result = 0;
+            break;
+        case 40: // METARULE_SKILL_CHECK_TAG
+            result = 0;
+            break;
+        case 44: // METARULE_GET_WORLDMAP_XPOS
+            result = 300;
+            break;
+        case 45: // METARULE_GET_WORLDMAP_YPOS
+            result = 300;
+            break;
+        case 46: // METARULE_CURRENT_TOWN
+            result = 0;
+            break;
+        default:
+            throw Exception("Opcode810BHandler - unimplemented type: " + std::to_string(type));
+    }
+
+    _vm->pushDataInteger(result);
 }
 
 }

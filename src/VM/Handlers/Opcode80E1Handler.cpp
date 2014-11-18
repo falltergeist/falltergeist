@@ -20,11 +20,10 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Engine/Exception.h"
 #include "../../Engine/Logger.h"
 #include "../../VM/Handlers/Opcode80E1Handler.h"
 #include "../../VM/VM.h"
-
-
 
 // Third party includes
 
@@ -42,9 +41,20 @@ void Opcode80E1Handler::_run()
     auto p2 = _vm->popDataInteger();
     auto p1 = _vm->dataStack()->pop();
     auto meta = _vm->popDataInteger();
-    _vm->pushDataInteger(_vm->metarule3(meta, p1, p2, p3));
+    int result;
+    switch(meta)
+    {
+        case 100: // rm_fixed_timer_event
+            result = 0;
+            break;
+        case 110:   // unknown
+            result = 0;
+            break;
+        default:
+            throw Exception("Opcode80E11Handler - unknown meta: " + std::to_string(meta));
+            break;
+    }
+    _vm->pushDataInteger(result);
 }
 
 }
-
-

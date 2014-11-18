@@ -24,8 +24,6 @@
 #include "../../VM/Handlers/Opcode80D5Handler.h"
 #include "../../VM/VM.h"
 
-
-
 // Third party includes
 
 namespace Falltergeist
@@ -41,9 +39,8 @@ void Opcode80D5Handler::_run()
     auto distance = _vm->popDataInteger();
     auto dir = _vm->popDataInteger();
     auto start_tile = _vm->popDataInteger();
-    _vm->pushDataInteger(_vm->tile_num_in_direction(start_tile, dir, distance));
+    // dirty hack... should be fixed in future
+    _vm->pushDataInteger(start_tile);
 }
 
 }
-
-
