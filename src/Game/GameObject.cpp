@@ -316,7 +316,7 @@ void GameObject::use_obj_on_p_proc()
 }
 
 void GameObject::onUseAnimationActionFrame(Event* event, GameCritterObject* critter)
-{    
+{
     use_p_proc();
     Animation* animation = dynamic_cast<AnimationQueue*>(critter->ui())->animations()->back();
     animation->removeEventHandlers("actionFrame");

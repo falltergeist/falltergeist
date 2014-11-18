@@ -257,7 +257,7 @@ int VM::_metarule(int type, VMStackValue* value)
 
 int VM::metarule(int type, VMStackValue* value)
 {
-  return _metarule(type,value);
+    return _metarule(type,value);
 }
 
 void VM::setLightLevel(int level)
@@ -272,7 +272,7 @@ void VM::_playMovie(int movieNum)
 
 void VM::playMovie(int movieNum)
 {
-  _playMovie(movieNum);
+    _playMovie(movieNum);
 }
 
 int VM::tile_num_in_direction(int start_tile, int dir, int distance)

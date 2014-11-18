@@ -1,7 +1,7 @@
 /*
  * Copyright 2012-2014 Falltergeist Developers.
  *
- * vm file is part of Falltergeist.
+ * This file is part of Falltergeist.
  *
  * Falltergeist is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

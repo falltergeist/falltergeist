@@ -271,10 +271,9 @@ std::vector<std::string> *CrossPlatform::findFalloutDataFiles()
                 if (filename.length() == 12 && filename.substr(0, 5) == "patch")
                     _dataFiles->insert(_dataFiles->begin(),filename);
             }
-         }
+        }
     }
     closedir(pxDir);
-
 
     return _dataFiles;
 }
