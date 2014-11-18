@@ -437,6 +437,7 @@ void LocationState::handle(Event* event)
                     if (path.size())
                     {
                         game->player()->movementQueue()->clear();
+                        game->player()->setRunning(game->engineSettings()->running());
                         for (auto hexagon : path)
                         {
                             game->player()->movementQueue()->push_back(hexagon);
