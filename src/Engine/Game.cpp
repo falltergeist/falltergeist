@@ -321,6 +321,8 @@ EngineSettings* Game::engineSettings()
 
 void Game::handle()
 {
+    if (_renderer->fading()) return;
+
     while(SDL_PollEvent(&_event))
     {
         if (_event.type == SDL_QUIT)
@@ -420,6 +422,7 @@ void Game::think()
     time += std::to_string(_gameTime->ticks());
     _currentTime->setText(time);
 
+    if (_renderer->fading()) return;
     for (auto state : *statesForThinkAndHandle())
     {
         state->think();
