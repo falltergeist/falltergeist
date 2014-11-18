@@ -774,7 +774,7 @@ void MvePlayer::_decodeAudio(uint8_t* data, uint32_t len)
     _samplesReady++;
     if (_audioBufTail>=_audioBufSize) _audioBufTail=0;
 
-    for (uint32_t i=0; i < strlen/2-2; i++)
+    for (int32_t i=0; i < strlen/2-2; i++)
     {
         if (i%2==0)
         {
