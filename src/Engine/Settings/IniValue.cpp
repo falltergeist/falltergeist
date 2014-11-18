@@ -162,6 +162,35 @@ std::string IniValue::value() const
     return "unreachable";
 }
 
+int IniValue::intValue() const
+{
+    if (_tag == IniValue::Tag::INTEGER)
+    {
+        return _integerVal;
+    }
+    return 0;
+}
+
+bool IniValue::boolValue() const
+{
+    if (_tag == IniValue::Tag::BOOLEAN)
+    {
+        return _booleanVal;
+    }
+    return false;
+}
+
+double IniValue::doubleValue() const
+{
+    if (_tag == IniValue::Tag::DOUBLE)
+    {
+        return _doubleVal;
+    }
+    return 0.0;
+}
+
+
+
 IniValue::Tag IniValue::tag() const
 {
     return _tag;
