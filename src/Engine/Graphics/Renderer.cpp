@@ -37,6 +37,10 @@ Renderer::Renderer(unsigned int width, unsigned int height)
 {
     _width = width;
     _height = height;
+    _fadeColor.r=0;
+    _fadeColor.g=0;
+    _fadeColor.b=0;
+    _fadeColor.a=0;
 }
 
 Renderer::~Renderer()
@@ -56,7 +60,14 @@ void Renderer::think()
         _alpha+=_step;
         if (_alpha<=0 || _alpha>255)
         {
-            _alpha=0;
+            if (_alpha<0)
+            {
+                _alpha=0;
+            }
+            if (_alpha>255)
+            {
+                _alpha=255;
+            }
             _fadeDone=true;
             auto event = new StateEvent("fadedone");
             Game::getInstance()->states()->back()->emitEvent(event);
@@ -70,37 +81,33 @@ void Renderer::think()
 
 bool Renderer::fadeDone()
 {
-    return _fadeDone;
+    return _fadeDone && _alpha==0;
 }
 
-void Renderer::_fade(unsigned int r, unsigned int g, unsigned int b, unsigned int time, short dir)
+bool Renderer::fading()
 {
-    _fadeColor.r=r;
-    _fadeColor.g=g;
-    _fadeColor.b=b;
-    if (dir<0)
-    {
-        _fadeColor.a=255;
-        _alpha=255;
-    }
-    else
-    {
-        _fadeColor.a=0;
-        _alpha=0;
-    }
-    _step=dir;
-    _fadeDone=false;
-    _delay=round(time/256);
+    return !_fadeDone;
 }
 
 void Renderer::fadeIn(unsigned int r, unsigned int g, unsigned int b, unsigned int time)
 {
-    _fade(r,g,b,time, -1);
+    _fadeColor.a=255;
+    _alpha=255;
+    _step=-1;
+    _fadeDone=false;
+    _delay=round(time/256);
 }
 
 void Renderer::fadeOut(unsigned int r, unsigned int g, unsigned int b, unsigned int time)
 {
-    _fade(r,g,b,time, 1);
+    _fadeColor.r=r;
+    _fadeColor.g=g;
+    _fadeColor.b=b;
+    _fadeColor.a=0;
+    _alpha=0;
+    _step=1;
+    _fadeDone=false;
+    _delay=round(time/256);
 }
 
 

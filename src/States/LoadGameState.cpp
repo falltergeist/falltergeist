@@ -26,6 +26,7 @@
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/State.h"
+#include "../Engine/Event/StateEvent.h"
 #include "../States/LoadGameState.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
@@ -110,8 +111,22 @@ void LoadGameState::onDoneButtonClick(MouseEvent* event)
 
 void LoadGameState::onCancelButtonClick(MouseEvent* event)
 {
+    removeEventHandlers("fadedone");
+    addEventHandler("fadedone", [this](Event* event){ this->onCancelFadeDone(dynamic_cast<StateEvent*>(event)); });
+    Game::getInstance()->renderer()->fadeOut(255,255,255,1000);
+}
+
+void LoadGameState::onCancelFadeDone(StateEvent* event)
+{
+    removeEventHandlers("fadedone");
     Game::getInstance()->popState();
 }
+
+void LoadGameState::onStateActivate(StateEvent* event)
+{
+    Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
+}
+
 
 }
 

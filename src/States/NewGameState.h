@@ -53,11 +53,13 @@ public:
     virtual void think();
 
     void onBackButtonClick(MouseEvent* event);
+    void onBackFadeDone(StateEvent* event);
     void onBeginGameButtonClick(MouseEvent* event);
     void onEditButtonClick(MouseEvent* event);
     void onCreateButtonClick(MouseEvent* event);
     void onPrevCharacterButtonClick(MouseEvent* event);
     void onNextCharacterButtonClick(MouseEvent* event);
+    void onStateActivate(StateEvent* event);
 };
 
 }

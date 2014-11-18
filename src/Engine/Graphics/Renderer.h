@@ -49,7 +49,6 @@ protected:
     unsigned int _fadeDone=true;
     SDL_Color _fadeColor;
     short _step;
-    virtual void _fade(unsigned int r, unsigned int g, unsigned int b, unsigned int time, short dir);
 public:
     Renderer(unsigned int width, unsigned int height);
     virtual ~Renderer();
@@ -65,6 +64,7 @@ public:
     float scaleX();
     float scaleY();
     bool fadeDone();
+    bool fading();
     virtual void fadeIn(unsigned int r, unsigned int g, unsigned int b, unsigned int time);
     virtual void fadeOut(unsigned int r, unsigned int g, unsigned int b, unsigned int time);
     void setCaption(std::string caption);
