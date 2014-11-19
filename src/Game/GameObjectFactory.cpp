@@ -27,6 +27,7 @@
 #include "../Game/GameDoorSceneryObject.h"
 #include "../Game/GameDrugItemObject.h"
 #include "../Game/GameElevatorSceneryObject.h"
+#include "../Game/GameExitMiscObject.h"
 #include "../Game/GameGenericSceneryObject.h"
 #include "../Game/GameKeyItemObject.h"
 #include "../Game/GameLadderSceneryObject.h"
@@ -36,6 +37,7 @@
 #include "../Game/GameStairsSceneryObject.h"
 #include "../Game/GameWallObject.h"
 #include "../Game/GameWeaponItemObject.h"
+#include "../Engine/Exception.h"
 #include "../Engine/ResourceManager.h"
 #include "../VM/VM.h"
 
@@ -219,14 +221,28 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
         }
         case libfalltergeist::ProFileType::TYPE_TILE:
         {
-            //auto msg = ResourceManager::msgFileType("text/english/game/pro_tile.msg");
-            throw 1;
-            //object->setName(msg->message(proto->messageId())->text());
-            break;
+            throw Exception("GameObjectFactory - unexpected tile object");
         }
         case libfalltergeist::ProFileType::TYPE_MISC:
         {
-            object = new GameMiscObject();
+            switch(PID& 0x00FFFFFF)
+            {
+                // Exit Grids
+                case 16:
+                case 17:
+                case 18:
+                case 19:
+                case 20:
+                case 21:
+                case 22:
+                case 23:
+                    object = new GameExitMiscObject();
+                    break;
+                default:
+                    object = new GameMiscObject();
+                    break;
+            }
+
             auto msg = ResourceManager::msgFileType("text/english/game/pro_misc.msg");
             try
             {

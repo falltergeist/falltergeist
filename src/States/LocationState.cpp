@@ -42,6 +42,7 @@
 #include "../Game/GameDefines.h"
 #include "../Game/GameDoorSceneryObject.h"
 #include "../Game/GameDudeObject.h"
+#include "../Game/GameExitMiscObject.h"
 #include "../Game/GameObject.h"
 #include "../Game/GameObjectFactory.h"
 #include "../Game/GameWeaponItemObject.h"
@@ -137,6 +138,14 @@ void LocationState::setLocation(std::string name)
         object->setFID(mapObject->FID());
         object->setElevation(_currentElevation);
         object->setOrientation(mapObject->orientation());
+
+        if (auto exitGrid = dynamic_cast<GameExitMiscObject*>(object))
+        {
+            exitGrid->setExitMapNumber(mapObject->exitMap());
+            exitGrid->setExitElevationNumber(mapObject->exitElevation());
+            exitGrid->setExitHexagonNumber(mapObject->exitPosition());
+            exitGrid->setExitDirection(mapObject->exitOrientation());
+        }
 
         if (mapObject->scriptId() > 0)
         {
@@ -554,7 +563,23 @@ void LocationState::moveObjectToHexagon(GameObject* object, Hexagon* hexagon)
                 break;
             }
         }
-    }
+
+        /* JUST FOR EXIT GRIDS TESTING
+        for (auto obj : *hexagon->objects())
+        {
+            if (auto exitGrid = dynamic_cast<GameExitMiscObject*>(obj))
+            {
+                auto &debug = Logger::critical("LOCATION");
+                debug << " PID: 0x" << std::hex << exitGrid->PID() << std::dec << std::endl;
+                debug << " name: " << exitGrid->name() << std::endl;
+                debug << " exitMapNumber: " << exitGrid->exitMapNumber() << std::endl;
+                debug << " exitElevationNumber: " << exitGrid->exitElevationNumber() << std::endl;
+                debug << " exitHexagonNumber: " << exitGrid->exitHexagonNumber() << std::endl;
+                debug << " exitDirection: " << exitGrid->exitDirection() << std::endl << std::endl;
+            }
+        }
+        */
+    }    
 
     object->setHexagon(hexagon);
     hexagon->objects()->push_back(object);

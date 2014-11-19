@@ -78,7 +78,7 @@ public:
     void setPID(int value);
 
     int FID();
-    void setFID(int value);
+    virtual void setFID(int value);
 
     int elevation();
     void setElevation(int value);

@@ -168,6 +168,8 @@ set(SOURCES main.cpp
     src/Game/GameElevatorSceneryObject.h
     src/Game/GameWallObject.cpp
     src/Game/GameWallObject.h
+    src/Game/GameExitMiscObject.cpp
+    src/Game/GameExitMiscObject.h
     src/Game/GameMiscObject.cpp
     src/Game/GameMiscObject.h
     src/States/CreditsState.cpp
