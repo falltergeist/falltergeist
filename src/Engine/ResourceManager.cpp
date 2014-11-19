@@ -19,6 +19,8 @@
 
 // C++ standard includes
 #include <fstream>
+#include <sstream>
+#include <iomanip>
 
 // Falltergeist includes
 #include "../Engine/CrossPlatform.h"
@@ -27,6 +29,9 @@
 #include "../Engine/Graphics/Texture.h"
 #include "../Engine/Logger.h"
 #include "../Engine/ResourceManager.h"
+#include "../Engine/Settings/IniFile.h"
+#include "../Engine/Settings/IniParser.h"
+#include "../Game/GameLocation.h"
 
 // Third party includes
 
@@ -37,6 +42,7 @@ std::vector<std::shared_ptr<libfalltergeist::DatFile>> ResourceManager::_datFile
 std::map<std::string, std::shared_ptr<libfalltergeist::DatFileItem>> ResourceManager::_datFilesItems;
 std::map<std::string, Texture*> ResourceManager::_textures;
 std::map<std::string, std::shared_ptr<Font>> ResourceManager::_fonts;
+std::map<unsigned int, GameLocation*> ResourceManager::_gameLocations;
 
 ResourceManager::ResourceManager()
 {
@@ -55,6 +61,8 @@ ResourceManager::~ResourceManager()
         delete it->second;
     }
 }
+
+
 
 std::shared_ptr<libfalltergeist::DatFileItem> ResourceManager::datFileItem(std::string filename)
 {
@@ -491,6 +499,56 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
 std::map<std::string, Texture*>* ResourceManager::textures()
 {
     return &_textures;
+}
+
+GameLocation* ResourceManager::gameLocation(unsigned int number)
+{
+    if (_gameLocations.find(number) != _gameLocations.end())
+    {
+        return _gameLocations.at(number);
+    }
+
+    std::istream stream(datFileItem("data/maps.txt").get());
+    IniParser iniParser(stream);
+    auto ini = iniParser.parse();
+
+    std::stringstream ss;
+    ss << "map " << std::setw(3) << std::setfill('0') << number;
+
+    auto section = ini->section(ss.str());
+    if (!section) return 0;
+
+    GameLocation* location = new GameLocation();
+
+    for (auto property : *section.get())
+    {
+        std::string name = property.first;
+        Logger::critical() << name << std::endl;
+        if (name == "lookup_name")
+        {
+            location->setName(property.second.value());
+        }
+        else if (name == "map_name")
+        {
+            location->setFilename("maps/" + property.second.value()+ ".map");
+        }
+        else if (name == "music")
+        {
+            location->setMusic(property.second.value());
+        }
+        else if (name == "pipboy_active")
+        {
+            location->setPipboy(property.second.boolValue());
+        }
+        else if (name == "saved")
+        {
+            location->setSaveable(property.second.boolValue());
+        }
+    }
+
+    _gameLocations.insert(std::make_pair(number, location));
+
+    return _gameLocations.at(number);
 }
 
 }

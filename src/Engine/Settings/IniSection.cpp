@@ -29,6 +29,11 @@
 namespace Falltergeist
 {
 
+std::string IniSection::name()
+{
+    return _name;
+}
+
 void IniSection::_property(PropertyMapConstIterator iter, double &ret, double def)
 {
     if (!_hasType(iter, IniValue::Tag::DOUBLE))

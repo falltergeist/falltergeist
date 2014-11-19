@@ -67,6 +67,8 @@ public:
     iterator end();
     const_iterator end() const;
 
+    std::string name();
+
     int propertyInt(const std::string &name, int def);
 
     double propertyDouble(const std::string &name, double def);

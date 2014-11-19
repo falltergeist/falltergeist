@@ -47,6 +47,7 @@ public:
     IniFile();
     ~IniFile();
     std::shared_ptr<IniSection> section(const std::string &name);
+    std::map<std::string, std::shared_ptr<IniSection>>* sections();
 
     iterator begin();
     const_iterator begin() const;

@@ -40,7 +40,7 @@ void IniParser::_rtrim(std::string &line)
 {
     if (line.find(";") != std::string::npos)
     {
-        line.erase(line.find(";")-1);
+        line.erase(line.find(";"));
     }
 
     line.erase(find_if(line.rbegin(), line.rend(), std::not1(std::ptr_fun<int, int>(isspace))).base(), line.end());

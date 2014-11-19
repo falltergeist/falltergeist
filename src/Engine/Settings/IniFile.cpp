@@ -46,6 +46,11 @@ bool IniFile::hasSection(const std::string &name) const
     return _sections.find(name) != _sections.end();
 }
 
+std::map<std::string, std::shared_ptr<IniSection>>* IniFile::sections()
+{
+    return &_sections;
+}
+
 IniFile::IniFile()
 {}
 
