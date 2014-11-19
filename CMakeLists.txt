@@ -172,6 +172,10 @@ set(SOURCES main.cpp
     src/Game/GameExitMiscObject.h
     src/Game/GameMiscObject.cpp
     src/Game/GameMiscObject.h
+    src/Game/GameLocation.cpp
+    src/Game/GameLocation.h
+    src/Game/GameLocationElevation.cpp
+    src/Game/GameLocationElevation.h
     src/States/CreditsState.cpp
     src/States/CreditsState.h
     src/States/CritterBarterState.cpp
