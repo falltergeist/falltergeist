@@ -60,6 +60,11 @@ ResourceManager::~ResourceManager()
     {
         delete it->second;
     }
+
+    for (auto it = _gameLocations.begin(); it != _gameLocations.end(); ++it)
+    {
+        delete it->second;
+    }
 }
 
 
