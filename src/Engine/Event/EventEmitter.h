@@ -37,8 +37,6 @@ class Event;
 class EventReciever;
 class EventHandler;
 
-typedef void (EventReciever::*EventRecieverMethod)(Event*);
-
 class EventEmitter
 {
 protected:
