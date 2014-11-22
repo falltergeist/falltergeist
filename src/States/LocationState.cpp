@@ -230,6 +230,10 @@ void LocationState::onMouseDown(Event* event, GameObject* object)
     {
         icons.push_back(Mouse::ICON_USE);
     }
+    else if (dynamic_cast<GameDoorSceneryObject*>(object))
+    {
+        icons.push_back(Mouse::ICON_USE);
+    }
 
     switch(object->type())
     {
@@ -237,7 +241,6 @@ void LocationState::onMouseDown(Event* event, GameObject* object)
             icons.push_back(Mouse::ICON_ROTATE);
             break;
         case GameObject::TYPE_SCENERY:
-            icons.push_back(Mouse::ICON_LOOK);
             break;
         case GameObject::TYPE_CRITTER:
             icons.push_back(Mouse::ICON_TALK);
@@ -245,6 +248,7 @@ void LocationState::onMouseDown(Event* event, GameObject* object)
         default:
             return;
     }
+    icons.push_back(Mouse::ICON_LOOK);
     icons.push_back(Mouse::ICON_INVENTORY);
     icons.push_back(Mouse::ICON_SKILL);
     icons.push_back(Mouse::ICON_CANCEL);

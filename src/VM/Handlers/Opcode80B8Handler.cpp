@@ -40,7 +40,7 @@ void Opcode80B8Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80B8] [*] void display_msg(string*)" << std::endl;
     std::string* pointer = static_cast<std::string*>(_vm->popDataPointer());
-    Logger::debug("SCRIPT") << pointer << std::endl;
+    Logger::debug("SCRIPT") << *pointer << std::endl;
 }
 
 }

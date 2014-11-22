@@ -26,6 +26,7 @@
 #include "../Engine/Graphics/AnimationQueue.h"
 #include "../Engine/Game.h"
 #include "../Engine/LocationCamera.h"
+#include "../Engine/Logger.h"
 #include "../Engine/PathFinding/Hexagon.h"
 #include "../Engine/ResourceManager.h"
 #include "../Game/GameCritterObject.h"
@@ -276,11 +277,15 @@ void GameObject::setInRender(bool value)
 
 void GameObject::description_p_proc()
 {
+    Logger::info("SCRIPT") << "description_p_proc() - 0x" << std::hex << PID() << " " << name() << " " << script() << std::endl;
 }
 
 void GameObject::use_p_proc()
 {
-    script()->call("use_p_proc");
+    if (script())
+    {
+        script()->call("use_p_proc");
+    }
 }
 
 void GameObject::destroy_p_proc()
