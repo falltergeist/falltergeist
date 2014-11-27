@@ -42,8 +42,6 @@ public:
     void onPreferencesButtonClick(MouseEvent* event);
     void onExitButtonClick(MouseEvent* event);
     void onDoneButtonClick(MouseEvent* event);
-    void onMouseDown(MouseEvent* event);
-    void onMouseUp(MouseEvent* event);
 };
 
 }

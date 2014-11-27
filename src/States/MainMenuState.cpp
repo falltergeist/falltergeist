@@ -71,38 +71,26 @@ void MainMenuState::init()
     // intro button
     auto introButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19));
     introButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onIntroButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    introButton->addEventHandler("mouseleftdown",  [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
-    introButton->addEventHandler("mouseleftup",    [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     // new game button
     auto newGameButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41));
     newGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onNewGameButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    newGameButton->addEventHandler("mouseleftdown",  [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
-    newGameButton->addEventHandler("mouseleftup",    [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     // load game button
     auto loadGameButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*2));
     loadGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onLoadGameButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    loadGameButton->addEventHandler("mouseleftdown",  [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
-    loadGameButton->addEventHandler("mouseleftup",    [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     // settings button
     auto settingsButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*3));
     settingsButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onSettingsButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    settingsButton->addEventHandler("mouseleftdown",  [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
-    settingsButton->addEventHandler("mouseleftup",    [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     // credits button
     auto creditsButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*4));
     creditsButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCreditsButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    creditsButton->addEventHandler("mouseleftdown",  [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
-    creditsButton->addEventHandler("mouseleftup",    [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     // exit button
     auto exitButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*5));
     exitButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onExitButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    exitButton->addEventHandler("mouseleftdown",  [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
-    exitButton->addEventHandler("mouseleftup",    [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     auto msg = ResourceManager::msgFileType("text/english/game/misc.msg");
     auto font4 = ResourceManager::font("font4.aaf", 0xb89c28ff);
@@ -217,17 +205,5 @@ void MainMenuState::onStateActivate(StateEvent* event)
     Game::getInstance()->mixer()->playACMMusic("07desert.acm",true);
     Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
 }
-
-void MainMenuState::onMouseDown(MouseEvent* event)
-{
-    Game::getInstance()->mixer()->playACMSound("sound/sfx/nmselec0.acm");
-}
-
-void MainMenuState::onMouseUp(MouseEvent* event)
-{
-    Game::getInstance()->mixer()->playACMSound("sound/sfx/nmselec1.acm");
-}
-
-
 
 }

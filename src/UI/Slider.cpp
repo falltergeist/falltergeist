@@ -22,6 +22,8 @@
 // Falltergeist includes
 #include "../UI/Image.h"
 #include "../UI/Slider.h"
+#include "../Engine/Game.h"
+#include "../Engine/Audio/AudioMixer.h"
 
 // Third party includes
 
@@ -31,8 +33,12 @@ namespace Falltergeist
 Slider::Slider(int x, int y) : ActiveUI(x, y)
 {
     addEventHandler("mousedrag", [this](Event* event){ this->_onDrag(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseleftdown", [this](Event* event){ this->_onLeftButtonDown(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseleftup", [this](Event* event){ this->_onLeftButtonUp(dynamic_cast<MouseEvent*>(event)); });
     _imageList.addImage("art/intrface/prfsldon.frm");
     _imageList.addImage("art/intrface/prfsldof.frm");
+    _downSnd = "sound/sfx/ib1p1xx1.acm";
+    _upSnd = "sound/sfx/ib1lu1x1.acm";
 }
 
 Slider::~Slider()
@@ -59,6 +65,8 @@ void Slider::handle(Event* event)
                 if (x > 218) x = 218;
                 _xOffset = x;
                 _value = ((maxValue() - minValue())/218)*_xOffset;
+                Game::getInstance()->mixer()->playACMSound(_downSnd);
+                Game::getInstance()->mixer()->playACMSound(_upSnd);
                 return;
             }
         }
@@ -75,6 +83,24 @@ void Slider::_onDrag(MouseEvent* event)
     {
         sender->_xOffset = newOffset;
         sender->_value = ((sender->maxValue() - sender->minValue())/218)*sender->_xOffset;
+    }
+}
+
+void Slider::_onLeftButtonDown(MouseEvent* event)
+{
+    auto sender = dynamic_cast<Slider*>(event->emitter());
+    if (!sender->_downSnd.empty())
+    {
+        Game::getInstance()->mixer()->playACMSound(sender->_downSnd);
+    }
+}
+
+void Slider::_onLeftButtonUp(MouseEvent* event)
+{
+    auto sender = dynamic_cast<Slider*>(event->emitter());
+    if (!sender->_upSnd.empty())
+    {
+        Game::getInstance()->mixer()->playACMSound(sender->_upSnd);
     }
 }
 

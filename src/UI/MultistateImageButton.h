@@ -43,6 +43,8 @@ protected:
     unsigned int _maxState = 0;
     unsigned int _minState = 0;
     void _onLeftButtonClick(MouseEvent* event);
+    void _onLeftButtonDown(MouseEvent* event);
+    void _onLeftButtonUp(MouseEvent* event);
 public:
     enum {MODE_PROGRESSION = 1, MODE_CYCLIC};
     enum {TYPE_BIG_SWITCH = 1, TYPE_SMALL_SWITCH};
