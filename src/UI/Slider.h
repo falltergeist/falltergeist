@@ -39,6 +39,8 @@ protected:
     double _maxValue = 1.0;
     double _value = 0.0;
     void _onDrag(MouseEvent* event);
+    void _onLeftButtonDown(MouseEvent* event);
+    void _onLeftButtonUp(MouseEvent* event);
 public:
     Slider(int x, int y);
     virtual ~Slider();

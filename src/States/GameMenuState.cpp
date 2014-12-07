@@ -74,33 +74,23 @@ void GameMenuState::init()
     auto saveGameButtonLabel = new TextArea(msg->message(0), backgroundX+8, backgroundY+26);
     saveGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     saveGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onSaveGameButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    saveGameButton->addEventHandler("mouseleftdown",  [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
-    saveGameButton->addEventHandler("mouseleftup",    [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     // label: load game
     auto loadGameButtonLabel = new TextArea(msg->message(1), backgroundX+8, backgroundY+26+37);
     loadGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     loadGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onLoadGameButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    loadGameButton->addEventHandler("mouseleftdown",  [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
-    loadGameButton->addEventHandler("mouseleftup",    [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     // label: preferences
     auto preferencesButtonLabel = new TextArea(msg->message(2), backgroundX+8, backgroundY+26+37*2);
     preferencesButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
-    preferencesButton->addEventHandler("mouseleftdown", [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
-    preferencesButton->addEventHandler("mouseleftup",   [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     // label: exit game
     auto exitGameButtonLabel = new TextArea(msg->message(3), backgroundX+8, backgroundY+26+37*3);
     exitGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
-    exitGameButton->addEventHandler("mouseleftdown", [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
-    exitGameButton->addEventHandler("mouseleftup",   [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     // label: done
     auto doneButtonLabel = new TextArea(msg->message(4), backgroundX+8, backgroundY+26+37*4);
     doneButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
-    doneButton->addEventHandler("mouseleftdown", [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
-    doneButton->addEventHandler("mouseleftup",   [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     background->setX(backgroundX);
     background->setY(backgroundY);
@@ -141,16 +131,6 @@ void GameMenuState::onExitButtonClick(MouseEvent* event)
 void GameMenuState::onDoneButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
-}
-
-void GameMenuState::onMouseDown(MouseEvent* event)
-{
-    Game::getInstance()->mixer()->playACMSound("sound/sfx/butin3.acm");
-}
-
-void GameMenuState::onMouseUp(MouseEvent* event)
-{
-    Game::getInstance()->mixer()->playACMSound("sound/sfx/butout3.acm");
 }
 
 }

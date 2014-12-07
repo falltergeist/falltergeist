@@ -21,6 +21,7 @@
 #define FALLTERGEIST_ACTIVEUI_H
 
 // C++ standard includes
+#include <string>
 
 // Falltergeist includes
 #include "../../Engine/Event/Event.h"
@@ -35,6 +36,9 @@ namespace Falltergeist
 
 class ActiveUI : public EventEmitter, public UI
 {
+protected:
+    std::string _downSnd = "";
+    std::string _upSnd = "";
 public:
     ActiveUI(int x = 0, int y = 0);
     virtual ~ActiveUI();

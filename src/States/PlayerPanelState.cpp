@@ -71,22 +71,14 @@ void PlayerPanelState::init()
 
     addUI("change_hand_button", new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 218, 5));
     getActiveUI("change_hand_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onChangeHandButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    getActiveUI("change_hand_button")->addEventHandler("mouseleftdown",  [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
-    getActiveUI("change_hand_button")->addEventHandler("mouseleftup",    [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     addUI("inventory_button", new ImageButton(ImageButton::TYPE_PANEL_INVENTORY, 211, 40));
     getActiveUI("inventory_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onInventoryButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    getActiveUI("inventory_button")->addEventHandler("mouseleftdown",  [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
-    getActiveUI("inventory_button")->addEventHandler("mouseleftup",    [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     addUI("options_button", new ImageButton(ImageButton::TYPE_PANEL_OPTIONS, 210, 61));
     getActiveUI("options_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onOptionsButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    getActiveUI("options_button")->addEventHandler("mouseleftdown",  [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
-    getActiveUI("options_button")->addEventHandler("mouseleftup",    [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     addUI("attack_button", new ImageButton(ImageButton::TYPE_PANEL_ATTACK, 267, 25));
-    getActiveUI("attack_button")->addEventHandler("mouseleftdown", [this](Event* event){ this->onMouseDownAttack(dynamic_cast<MouseEvent*>(event)); });
-    getActiveUI("attack_button")->addEventHandler("mouseleftup",   [this](Event* event){ this->onMouseUpAttack(dynamic_cast<MouseEvent*>(event)); });
 
     addUI("hit_points", new SmallCounter(471, 40));
     getSmallCounter("hit_points")->setNumber(game->player()->hitPoints());
@@ -98,23 +90,15 @@ void PlayerPanelState::init()
 
     addUI("skilldex_button", new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 523, 5));
     getActiveUI("skilldex_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onSkilldexButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    getActiveUI("skilldex_button")->addEventHandler("mouseleftdown",  [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
-    getActiveUI("skilldex_button")->addEventHandler("mouseleftup",    [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     addUI("map_button", new ImageButton(ImageButton::TYPE_PANEL_MAP, 526, 39));
     getActiveUI("map_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onMapButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    getActiveUI("map_button")->addEventHandler("mouseleftdown",  [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
-    getActiveUI("map_button")->addEventHandler("mouseleftup",    [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     addUI("cha_button", new ImageButton(ImageButton::TYPE_PANEL_CHA, 526, 58));
     getActiveUI("cha_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onChaButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    getActiveUI("cha_button")->addEventHandler("mouseleftdown",  [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
-    getActiveUI("cha_button")->addEventHandler("mouseleftup",    [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 
     addUI("pip_button", new ImageButton(ImageButton::TYPE_PANEL_PIP, 526, 77));
     getActiveUI("pip_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onPipBoyButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    getActiveUI("pip_button")->addEventHandler("mouseleftdown",  [this](Event* event){ this->onMouseDown(dynamic_cast<MouseEvent*>(event)); });
-    getActiveUI("pip_button")->addEventHandler("mouseleftup",    [this](Event* event){ this->onMouseUp(dynamic_cast<MouseEvent*>(event)); });
 }
 
 void PlayerPanelState::render()
@@ -219,26 +203,6 @@ void PlayerPanelState::onPanelMouseOut(MouseEvent* event)
 
 void PlayerPanelState::onPanelMouseUp(MouseEvent* event)
 {
-}
-
-void PlayerPanelState::onMouseDown(MouseEvent* event)
-{
-    Game::getInstance()->mixer()->playACMSound("sound/sfx/butin2.acm");
-}
-
-void PlayerPanelState::onMouseUp(MouseEvent* event)
-{
-    Game::getInstance()->mixer()->playACMSound("sound/sfx/butin1.acm");
-}
-
-void PlayerPanelState::onMouseDownAttack(MouseEvent* event)
-{
-    Game::getInstance()->mixer()->playACMSound("sound/sfx/butin3.acm");
-}
-
-void PlayerPanelState::onMouseUpAttack(MouseEvent* event)
-{
-    Game::getInstance()->mixer()->playACMSound("sound/sfx/butout3.acm");
 }
 
 }

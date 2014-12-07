@@ -25,6 +25,8 @@
 #include "../Engine/Graphics/Texture.h"
 #include "../UI/Image.h"
 #include "../UI/MultistateImageButton.h"
+#include "../Engine/Game.h"
+#include "../Engine/Audio/AudioMixer.h"
 
 // Third party includes
 
@@ -39,6 +41,7 @@ MultistateImageButton::MultistateImageButton(int x, int y) : ActiveUI(x, y)
 MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
 {
     addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseleftup", [this](Event* event){ this->_onLeftButtonUp(dynamic_cast<MouseEvent*>(event)); });
     //Image* image;
     switch (type)
     {
@@ -60,6 +63,8 @@ MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : 
             addImage(image3);
             addImage(image4);
             delete image;
+            _downSnd = "sound/sfx/ib3p1xx1.acm";
+            _upSnd = "sound/sfx/ib3lu1x1.acm";
             break;
         }
         case TYPE_SMALL_SWITCH:
@@ -72,6 +77,8 @@ MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : 
             addImage(image1);
             addImage(image2);
             delete image;
+            _downSnd = "sound/sfx/ib2p1xx1.acm";
+            _upSnd = "sound/sfx/ib2lu1x1.acm";
             break;
         }
         default:
@@ -151,6 +158,20 @@ void MultistateImageButton::_onLeftButtonClick(MouseEvent* event)
             if (sender->_currentState == 0) sender->setModeFactor(-sender->modeFactor());
         }
         sender->_currentState += sender->modeFactor();
+    }
+}
+
+void MultistateImageButton::_onLeftButtonUp(MouseEvent* event)
+{
+    auto sender = dynamic_cast<MultistateImageButton*>(event->emitter());
+
+    if (!sender->_downSnd.empty())
+    {
+        Game::getInstance()->mixer()->playACMSound(sender->_downSnd);
+    }
+    if (!sender->_upSnd.empty())
+    {
+        Game::getInstance()->mixer()->playACMSound(sender->_upSnd);
     }
 }
 

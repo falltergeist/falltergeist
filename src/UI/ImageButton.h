@@ -39,6 +39,8 @@ protected:
 
     std::vector<Texture*> _textures;
     void _onLeftButtonClick(MouseEvent* event);
+    void _onLeftButtonDown(MouseEvent* event);
+    void _onLeftButtonUp(MouseEvent* event);
 public:
     enum ButtonType {
         TYPE_SMALL_RED_CIRCLE = 1,
