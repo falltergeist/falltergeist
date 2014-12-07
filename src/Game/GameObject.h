@@ -60,10 +60,12 @@ protected:
     virtual void _generateUi();
     TextArea* _floatMessage = 0;
     bool _inRender = false;
+    unsigned int _trans = 0;
 public:
     enum { TYPE_ITEM = 0, TYPE_CRITTER, TYPE_SCENERY, TYPE_WALL, TYPE_TILE, TYPE_MISC, TYPE_DUDE };
     enum { TYPE_ITEM_ARMOR = 0, TYPE_ITEM_CONTAINER, TYPE_ITEM_DRUG, TYPE_ITEM_WEAPON, TYPE_ITEM_AMMO, TYPE_ITEM_MISC, TYPE_ITEM_KEY };
     enum { TYPE_SCENERY_DOOR = 0, TYPE_SCENERY_STAIRS, TYPE_SCENERY_ELEVATOR, TYPE_SCENERY_LADDER, TYPE_SCENERY_GENERIC };
+    enum { TRANS_NONE = 0, TRANS_WALL, TRANS_GLASS, TRANS_STEAM, TRANS_ENERGY, TRANS_RED };
 
     GameObject();
     virtual ~GameObject();
@@ -110,6 +112,9 @@ public:
 
     void setInRender(bool value);
     bool inRender();
+
+    void setTrans(unsigned int value);
+    unsigned int trans();
 
     virtual void description_p_proc();
     virtual void destroy_p_proc();

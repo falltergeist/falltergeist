@@ -24,6 +24,7 @@
 #include "../Engine/Exception.h"
 #include "../Engine/Graphics/Animation.h"
 #include "../Engine/Graphics/AnimationQueue.h"
+#include "../Engine/Graphics/Texture.h"
 #include "../Engine/Game.h"
 #include "../Engine/LocationCamera.h"
 #include "../Engine/Logger.h"
@@ -335,5 +336,36 @@ void GameObject::onUseAnimationEnd(Event* event, GameCritterObject* critter)
     critter->setActionAnimation("aa");
 }
 
+void GameObject::setTrans(unsigned int value)
+{
+    _trans = value;
+    if (_ui)
+    {
+        switch (_trans)
+        {
+            case TRANS_GLASS:
+                _ui->texture()->setAlpha(128);
+                break;
+            case TRANS_ENERGY:
+                _ui->texture()->setAlpha(128);
+                _ui->texture()->setColor(200,200,0);
+                break;
+            case TRANS_RED:
+                _ui->texture()->setAlpha(128);
+                _ui->texture()->setColor(255,0,0);
+                break;
+            case TRANS_NONE:
+            default:
+                _ui->texture()->setAlpha(255);
+                _ui->texture()->setColor(255,255,255);
+                break;
+        }
+    }
+}
+
+unsigned int GameObject::trans()
+{
+    return _trans;
+}
 
 }
