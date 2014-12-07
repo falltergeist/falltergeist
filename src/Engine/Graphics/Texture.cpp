@@ -213,4 +213,36 @@ SDL_Texture* Texture::sdlTexture()
     return _sdlTexture;
 }
 
+void Texture::setAlpha(unsigned char alpha)
+{
+    _modifier.a = alpha;
+}
+
+void Texture::setColor(unsigned char r, unsigned char g, unsigned char b)
+{
+    _modifier.r = r;
+    _modifier.g = g;
+    _modifier.b = b;
+}
+
+unsigned char Texture::r()
+{
+    return _modifier.r;
+}
+
+unsigned char Texture::g()
+{
+    return _modifier.g;
+}
+
+unsigned char Texture::b()
+{
+    return _modifier.b;
+}
+
+unsigned char Texture::a()
+{
+    return _modifier.a;
+}
+
 }
