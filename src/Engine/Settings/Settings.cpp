@@ -37,7 +37,6 @@ namespace Falltergeist
 
 const unsigned int EngineSettings::_defaultScreenWidth = 640;
 const unsigned int EngineSettings::_defaultScreenHeight = 480;
-const std::string EngineSettings::_defaultRenderer = "sdl";
 const std::string EngineSettings::_defaultInitLocation = "klamall";
 const bool EngineSettings::_defaultForceLocation = false;
 const std::string EngineSettings::_defaultLoggerLevel = "info";
@@ -128,7 +127,6 @@ void EngineSettings::_createDefaultConfig(IniFile &ini)
     auto video = ini.section("video");
     video->setPropertyInt("width", _defaultScreenWidth);
     video->setPropertyInt("height", _defaultScreenHeight);
-    video->setPropertyString("renderer", _defaultRenderer);
     video->setPropertyInt("scale", _defaultScale);
     video->setPropertyBool("fullscreen", _defaultFullscreen);
 
@@ -180,7 +178,6 @@ void EngineSettings::saveConfig()
     auto video = ini.section("video");
     video->setPropertyInt("width", _screenWidth);
     video->setPropertyInt("height", _screenHeight);
-    video->setPropertyString("renderer", (_renderer == Renderer::SDL) ? "sdl" : "opengl");
     video->setPropertyInt("scale", _scale);
     video->setPropertyBool("fullscreen", _fullscreen);
 
@@ -258,34 +255,9 @@ unsigned int EngineSettings::screenHeight() const
     return _screenHeight;
 }
 
-EngineSettings::Renderer EngineSettings::renderer() const
-{
-    return _renderer;
-}
-
 bool EngineSettings::audioEnabled() const
 {
     return _audioEnabled;
-}
-
-void EngineSettings::_setRenderer(std::string renderer)
-{
-    if (!(renderer == "sdl" || renderer == "opengl"))
-    {
-        std::cerr << "Unkown renderer: "
-                << renderer << ", using " << _defaultRenderer
-                << std::endl;
-        renderer = _defaultRenderer;
-    }
-
-    if (renderer == "sdl")
-    {
-        _renderer = Renderer::SDL;
-    }
-    else
-    {
-        _renderer = Renderer::OPENGL;
-    }
 }
 
 const std::string &EngineSettings::defaultInitLocation()
@@ -311,9 +283,6 @@ void EngineSettings::_readConfig(IniFile &ini)
     _scale = video->propertyInt("scale", _defaultScale);
     if (_scale > 2) _scale = 2;
     _fullscreen = video->propertyBool("fullscreen", _defaultFullscreen);
-
-    auto renderer = video->propertyString("renderer", _defaultRenderer);
-    _setRenderer(renderer);
 
     auto audio = ini.section("audio");
     _audioEnabled = audio->propertyBool("enabled", _defaultAudioEnabled);

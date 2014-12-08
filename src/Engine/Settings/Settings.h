@@ -35,11 +35,6 @@ class IniFile;
 class EngineSettings
 {
 public:
-    enum class Renderer
-    {
-        OPENGL,
-        SDL
-    };
 
     EngineSettings();
     ~EngineSettings();
@@ -49,8 +44,6 @@ public:
     unsigned int screenWidth() const;
 
     unsigned int screenHeight() const;
-
-    Renderer renderer() const;
 
     const std::string &initialLocation() const;
 
@@ -112,7 +105,6 @@ public:
 private:
     unsigned int _screenWidth;
     unsigned int _screenHeight;
-    Renderer _renderer;
     std::string _initLocation;
     bool _forceLocation;
     bool _displayFps;
@@ -146,14 +138,12 @@ private:
     double _sfxVolume;
     double _voiceVolume;
 
-    void _setRenderer(std::string renderer);
     void _createDefaultConfig(IniFile &ini);
     void _readConfig(IniFile &ini);
 
     // DEFAULTS
     static const unsigned int _defaultScreenWidth;
     static const unsigned int _defaultScreenHeight;
-    static const std::string _defaultRenderer;
     static const std::string _defaultInitLocation;
     static const bool _defaultForceLocation;
     static const std::string _defaultLoggerLevel;

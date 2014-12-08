@@ -37,19 +37,23 @@ namespace Falltergeist
 class Renderer
 {
 protected:
+    bool _inmovie = false;
+    short _step;
     unsigned int _width;
     unsigned int _height;
-    float _scaleX=1.0;
-    float _scaleY=1.0;
-    std::string _name;
-    SDL_Window* _window;
     unsigned int _lt=0;
     unsigned int _delay=0;
     unsigned int _alpha=0;
     unsigned int _fadeDone=true;
+    unsigned int _texturesCounter = 1;
+    float _scaleX=1.0;
+    float _scaleY=1.0;
+    std::string _name;
+    std::vector<SDL_Texture*> _surfaces;
+    SDL_Window* _window;
     SDL_Color _fadeColor;
-    short _step;
-    bool _inmovie = false;
+    SDL_Renderer* _renderer;
+
 public:
     Renderer(unsigned int width, unsigned int height);
     virtual ~Renderer();
