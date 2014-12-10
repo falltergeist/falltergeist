@@ -42,6 +42,7 @@ const bool EngineSettings::_defaultForceLocation = false;
 const std::string EngineSettings::_defaultLoggerLevel = "info";
 const bool EngineSettings::_defaultLoggerColors = true;
 const bool EngineSettings::_defaultDisplayFps = true;
+const bool EngineSettings::_defaultWorldMapFullscreen = false;
 const bool EngineSettings::_defaultDisplayMousePosition = true;
 const unsigned int  EngineSettings::_defaultScale = 0;
 const bool EngineSettings::_defaultFullscreen = false;
@@ -146,6 +147,7 @@ void EngineSettings::_createDefaultConfig(IniFile &ini)
     game->setPropertyString("init_location", _defaultInitLocation);
     game->setPropertyBool("force_location", _defaultForceLocation);
     game->setPropertyBool("display_fps", _defaultDisplayFps);
+    game->setPropertyBool("worldmap_fullscreen", _defaultWorldMapFullscreen);
     game->setPropertyBool("display_mouse_position", _defaultDisplayMousePosition);
 
     auto preferences = ini.section("preferences");
@@ -197,6 +199,7 @@ void EngineSettings::saveConfig()
     game->setPropertyString("init_location", _initLocation);
     game->setPropertyBool("force_location", _forceLocation);
     game->setPropertyBool("display_fps", _displayFps);
+    game->setPropertyBool("worldmap_fullscreen", _worldMapFullscreen);
     game->setPropertyBool("display_mouse_position", _displayMousePosition);
 
     auto preferences = ini.section("preferences");
@@ -304,6 +307,7 @@ void EngineSettings::_readConfig(IniFile &ini)
 
 
     _displayFps = game->propertyBool("display_fps", _defaultDisplayFps);
+    _worldMapFullscreen = game->propertyBool("worldmap_fullscreen", _defaultWorldMapFullscreen);
     _displayMousePosition = game->propertyBool("display_mouse_position", _defaultDisplayMousePosition);
 
     auto preferences = ini.section("preferences");
@@ -328,6 +332,11 @@ void EngineSettings::_readConfig(IniFile &ini)
 bool EngineSettings::displayFps() const
 {
     return _displayFps;
+}
+
+bool EngineSettings::worldMapFullscreen() const
+{
+    return _worldMapFullscreen;
 }
 
 bool EngineSettings::displayMousePosition() const

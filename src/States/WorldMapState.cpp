@@ -25,6 +25,7 @@
 #include "../Engine/Graphics/Renderer.h"
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/ResourceManager.h"
+#include "../Engine/Settings/Settings.h"
 #include "../States/WorldMapState.h"
 #include "../States/LocationState.h"
 #include "../States/MainMenuState.h"
@@ -82,7 +83,7 @@ void WorldMapState::init()
     //addUI(_hotspot);
 
     // creating screen
-    if (WorldMapFullscreen)
+    if (Game::getInstance()->engineSettings()->worldMapFullscreen())
     {
         _panel = new Image("art/intrface/wminfce2.frm"); // panel small
         mapWidth = renderWidth - 168;
@@ -171,7 +172,7 @@ void WorldMapState::render()
     unsigned int panelX;
     unsigned int panelY;
 
-    if (WorldMapFullscreen)
+    if (Game::getInstance()->engineSettings()->worldMapFullscreen())
     {
         panelX = renderWidth - 168; // only panel right
     }
