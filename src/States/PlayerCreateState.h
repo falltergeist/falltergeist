@@ -78,6 +78,7 @@ public:
     void onLabelClick(MouseEvent* event);
     void onBackButtonClick(MouseEvent* event);
     void onDoneButtonClick(MouseEvent* event);
+    void onOptionsButtonClick(MouseEvent* event);
 };
 
 }

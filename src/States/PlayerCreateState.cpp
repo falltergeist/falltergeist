@@ -31,6 +31,7 @@
 #include "../States/PlayerEditAlertState.h"
 #include "../States/PlayerEditGenderState.h"
 #include "../States/PlayerEditNameState.h"
+#include "../States/PlayerCreateOptionsState.h"
 #include "../States/PlayerCreateState.h"
 #include "../UI/Image.h"
 
@@ -502,6 +503,7 @@ void PlayerCreateState::onButtonClick(MouseEvent* event)
             if (name == "gender") return onGenderButtonClick(event);
             if (name == "cancel") return onBackButtonClick(event);
             if (name == "done") return onDoneButtonClick(event);
+            if (name == "options") return onOptionsButtonClick(event);
 
             if (name.find("stats_") == 0)
             {
@@ -615,6 +617,11 @@ void PlayerCreateState::onDoneButtonClick(MouseEvent* event)
     auto player = Game::getInstance()->player();
     player->setHitPoints(player->hitPointsMax());
     Game::getInstance()->setState(new LocationState());
+}
+
+void PlayerCreateState::onOptionsButtonClick(MouseEvent* event)
+{
+    Game::getInstance()->pushState(new PlayerCreateOptionsState());
 }
 
 }
