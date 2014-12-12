@@ -30,8 +30,8 @@
 #include "../States/MovieState.h"
 #include "../States/MainMenuState.h"
 #include "../Engine/Graphics/Renderer.h"
-#include "../Engine/Settings/IniParser.h"
-#include "../Engine/Settings/IniFile.h"
+#include "../Engine/Ini/Parser.h"
+#include "../Engine/Ini/File.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Audio/AudioMixer.h"
 
@@ -74,7 +74,7 @@ void MovieState::init()
         //parse ini
         moviecfg->setPosition(0);
         std::istream str(moviecfg.get());
-        auto inifile = new IniParser(str);
+        auto inifile = new Engine::Ini::Parser(str);
         auto ini = inifile->parse();
         int total_effects = ini->section("info")->propertyInt("total_effects",0);
         auto effect_frames = ini->section("info")->propertyArray("effect_frames");

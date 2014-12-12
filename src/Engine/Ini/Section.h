@@ -26,17 +26,21 @@
 #include <vector>
 
 // Falltergeist includes
-
-#include "../../Engine/Settings/IniValue.h"
+#include "../../Engine/Ini/Value.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-class IniSection
+namespace Engine
+{
+namespace Ini
+{
+
+class Section
 {
 private:
-    using PropertyMap = std::map<std::string, IniValue>;
+    using PropertyMap = std::map<std::string, Value>;
     using PropertyMapConstIterator = PropertyMap::const_iterator;
 
     PropertyMap _properties;
@@ -50,13 +54,13 @@ private:
 
     static void _property(PropertyMapConstIterator iter, std::string &ret, const std::string &def);
 
-    static void _property(PropertyMapConstIterator iter, std::vector<IniValue> &ret);
+    static void _property(PropertyMapConstIterator iter, std::vector<Value> &ret);
 
-    static bool _hasType(PropertyMapConstIterator iter, IniValue::Tag tag);
+    static bool _hasType(PropertyMapConstIterator iter, Value::Tag tag);
 
 public:
-    IniSection(const std::string &name);
-    ~IniSection();
+    Section(const std::string &name);
+    ~Section();
 
 
     using iterator = PropertyMap::iterator;
@@ -77,7 +81,7 @@ public:
 
     std::string propertyString(const std::string &name, const std::string &def);
 
-    std::vector<IniValue> propertyArray(const std::string &name);
+    std::vector<Value> propertyArray(const std::string &name);
 
     void setPropertyInt(const std::string &name, int value);
 
@@ -87,11 +91,13 @@ public:
 
     void setPropertyString(const std::string &name, const std::string &value);
 
-    void setPropertyArray(const std::string &name, const std::vector<IniValue> &value);
+    void setPropertyArray(const std::string &name, const std::vector<Value> &value);
 
     bool hasProperty(const std::string &name) const;
 };
 
+}
+}
 }
 
 #endif // FALLTERGEIST_INI_SECTION_H

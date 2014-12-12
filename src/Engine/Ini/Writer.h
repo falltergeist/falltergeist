@@ -28,19 +28,26 @@
 
 namespace Falltergeist
 {
-class IniFile;
+namespace Engine
+{
+namespace Ini
+{
 
-class IniWriter
+class File;
+
+class Writer
 {
 private:
-    const IniFile &_ini;
+    const File &_ini;
 
 public:
-    IniWriter(const IniFile &ini);
-    ~IniWriter();
+    Writer(const File &ini);
+    ~Writer();
     void write(std::ostream &stream);
 };
 
+}
+}
 }
 
 #endif // FALLTERGEIST_INI_WRITER_H

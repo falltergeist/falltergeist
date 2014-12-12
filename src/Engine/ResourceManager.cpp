@@ -29,8 +29,8 @@
 #include "../Engine/Graphics/Texture.h"
 #include "../Engine/Logger.h"
 #include "../Engine/ResourceManager.h"
-#include "../Engine/Settings/IniFile.h"
-#include "../Engine/Settings/IniParser.h"
+#include "../Engine/Ini/File.h"
+#include "../Engine/Ini/Parser.h"
 #include "../Game/GameLocation.h"
 
 // Third party includes
@@ -514,7 +514,7 @@ GameLocation* ResourceManager::gameLocation(unsigned int number)
     }
 
     std::istream stream(datFileItem("data/maps.txt").get());
-    IniParser iniParser(stream);
+    Engine::Ini::Parser iniParser(stream);
     auto ini = iniParser.parse();
 
     std::stringstream ss;

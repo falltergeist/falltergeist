@@ -29,15 +29,20 @@
 
 namespace Falltergeist
 {
+namespace Engine
+{
+namespace Ini
+{
+    class File;
+} // Ini
 
-class IniFile;
 
-class EngineSettings
+class Settings
 {
 public:
 
-    EngineSettings();
-    ~EngineSettings();
+    Settings();
+    ~Settings();
 
     void saveConfig();
 
@@ -141,8 +146,8 @@ private:
     double _sfxVolume;
     double _voiceVolume;
 
-    void _createDefaultConfig(IniFile &ini);
-    void _readConfig(IniFile &ini);
+    void _createDefaultConfig(Engine::Ini::File &ini);
+    void _readConfig(Engine::Ini::File &ini);
 
     // DEFAULTS
     static const unsigned int _defaultScreenWidth;
@@ -184,6 +189,7 @@ private:
 
 };
 
-}
+} // Engine
+} // Falltergeist
 
 #endif // FALLTERGEIST_ENGINE_SETTINGS_H

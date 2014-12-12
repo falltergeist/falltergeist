@@ -45,8 +45,12 @@ class AudioMixer;
 class Renderer;
 class UI;
 class TextArea;
-class EngineSettings;
 class AnimatedPalette;
+
+namespace Engine
+{
+    class Settings;
+}
 
 class Game
 {
@@ -67,7 +71,7 @@ protected:
     TextArea* _mousePosition = 0;
     TextArea* _currentTime = 0;
     TextArea* _falltergeistVersion = 0;
-    EngineSettings* _engineSettings = 0;
+    Engine::Settings* _engineSettings = 0;
     AnimatedPalette* _animatedPalette = 0;
     bool _quit = false;
     SDL_Event _event;
@@ -109,7 +113,7 @@ public:
     void setGVAR(unsigned int number, int value);
     int GVAR(unsigned int number);
 
-    EngineSettings* engineSettings();
+    Engine::Settings* engineSettings();
     AnimatedPalette* animatedPalette();
 
 };

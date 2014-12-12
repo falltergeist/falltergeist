@@ -29,25 +29,29 @@
 #include <algorithm>
 
 // Falltergeist includes
-#include "../../Engine/Settings/IniParser.h"
-#include "../../Engine/Settings/IniSection.h"
+#include "../../Engine/Ini/Parser.h"
+#include "../../Engine/Ini/Section.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-
-class IniFile
+namespace Engine
 {
-    std::map<std::string, std::shared_ptr<IniSection>> _sections;
-public:
-    using iterator = std::map<std::string, std::shared_ptr<IniSection>>::iterator;
-    using const_iterator = std::map<std::string, std::shared_ptr<IniSection>>::const_iterator;
+namespace Ini
+{
 
-    IniFile();
-    ~IniFile();
-    std::shared_ptr<IniSection> section(const std::string &name);
-    std::map<std::string, std::shared_ptr<IniSection>>* sections();
+class File
+{
+    std::map<std::string, std::shared_ptr<Section>> _sections;
+public:
+    using iterator = std::map<std::string, std::shared_ptr<Section>>::iterator;
+    using const_iterator = std::map<std::string, std::shared_ptr<Section>>::const_iterator;
+
+    File();
+    ~File();
+    std::shared_ptr<Section> section(const std::string &name);
+    std::map<std::string, std::shared_ptr<Section>>* sections();
 
     iterator begin();
     const_iterator begin() const;
@@ -57,5 +61,7 @@ public:
     bool hasSection(const std::string &name) const;
 };
 
+}
+}
 }
 #endif	// FALLTERGEIST_INIFILE_H

@@ -22,59 +22,65 @@
 
 // Falltergeist includes
 #include "../../Engine/Exception.h"
-#include "../../Engine/Settings/IniFile.h"
+#include "../../Engine/Ini/File.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace Engine
+{
+namespace Ini
+{
 
-std::shared_ptr<IniSection> IniFile::section(const std::string &name)
+std::shared_ptr<Section> File::section(const std::string &name)
 {
     auto it = _sections.find(name);
     if (it == _sections.end())
     {
-        auto result = std::shared_ptr<IniSection>(new IniSection(name));
+        auto result = std::shared_ptr<Section>(new Section(name));
         _sections[name] = result;
         return result;
     }
     return it->second;
 }
 
-bool IniFile::hasSection(const std::string &name) const
+bool File::hasSection(const std::string &name) const
 {
     return _sections.find(name) != _sections.end();
 }
 
-std::map<std::string, std::shared_ptr<IniSection>>* IniFile::sections()
+std::map<std::string, std::shared_ptr<Section>>* File::sections()
 {
     return &_sections;
 }
 
-IniFile::IniFile()
+File::File()
 {}
 
-IniFile::~IniFile()
+File::~File()
 {}
 
-IniFile::iterator IniFile::begin()
+File::iterator File::begin()
 {
     return _sections.begin();
 }
 
-IniFile::const_iterator IniFile::begin() const
+File::const_iterator File::begin() const
 {
     return _sections.begin();
 }
 
-IniFile::iterator IniFile::end()
+File::iterator File::end()
 {
     return _sections.end();
 }
 
-IniFile::const_iterator IniFile::end() const
+File::const_iterator File::end() const
 {
     return _sections.end();
 }
 
+}
+}
 }

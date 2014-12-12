@@ -25,7 +25,7 @@
 #include "../Engine/Graphics/Renderer.h"
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/ResourceManager.h"
-#include "../Engine/Settings/Settings.h"
+#include "../Engine/Settings.h"
 #include "../States/WorldMapState.h"
 #include "../States/LocationState.h"
 #include "../States/MainMenuState.h"

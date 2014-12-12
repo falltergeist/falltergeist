@@ -33,7 +33,7 @@
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/Logger.h"
 #include "../Engine/ResourceManager.h"
-#include "../Engine/Settings/Settings.h"
+#include "../Engine/Settings.h"
 #include "../Engine/State.h"
 #include "../States/LocationState.h"
 #include "../UI/FpsCounter.h"
@@ -69,7 +69,7 @@ void Game::_initialize()
     if (_initialized) return;
     _initialized = true;
 
-    _engineSettings = new EngineSettings();
+    _engineSettings = new Engine::Settings();
     auto width = _engineSettings->screenWidth();
     auto height = _engineSettings->screenHeight();
 
@@ -306,7 +306,7 @@ Renderer* Game::renderer()
     return _renderer;
 }
 
-EngineSettings* Game::engineSettings()
+Engine::Settings* Game::engineSettings()
 {
     return _engineSettings;
 }

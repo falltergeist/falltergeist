@@ -29,7 +29,7 @@
 #include "../UI/MultistateImageButton.h"
 #include "../UI/Slider.h"
 #include "../UI/TextArea.h"
-#include "../Engine/Settings/Settings.h"
+#include "../Engine/Settings.h"
 
 // Third party includes
 

@@ -23,20 +23,24 @@
 
 // Falltergeist includes
 #include "../../Engine/Logger.h"
-#include "../../Engine/Settings/IniFile.h"
+#include "../../Engine/Ini/File.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace Engine
+{
+namespace Ini
+{
 
-void IniParser::_trim(std::string &line)
+void Parser::_trim(std::string &line)
 {
     _ltrim(line);
     _rtrim(line);
 }
 
-void IniParser::_rtrim(std::string &line)
+void Parser::_rtrim(std::string &line)
 {
     if (line.find(";") != std::string::npos)
     {
@@ -46,17 +50,17 @@ void IniParser::_rtrim(std::string &line)
     line.erase(find_if(line.rbegin(), line.rend(), std::not1(std::ptr_fun<int, int>(isspace))).base(), line.end());
 }
 
-void IniParser::_ltrim(std::string &line)
+void Parser::_ltrim(std::string &line)
 {
     line.erase(line.begin(), find_if(line.begin(), line.end(), std::not1(std::ptr_fun<int, int>(isspace))));
 }
 
-void IniParser::_toLower(std::string &line)
+void Parser::_toLower(std::string &line)
 {
     std::transform(line.begin(), line.end(), line.begin(), ::tolower);
 }
 
-bool IniParser::_tryBool(std::string &line, bool *val)
+bool Parser::_tryBool(std::string &line, bool *val)
 {
     auto maybeBool = line;
     _toLower(maybeBool);
@@ -74,7 +78,7 @@ bool IniParser::_tryBool(std::string &line, bool *val)
     return false;
 }
 
-bool IniParser::_parseBool(std::string &name, std::string &line, std::shared_ptr<IniFile> ini)
+bool Parser::_parseBool(std::string &name, std::string &line, std::shared_ptr<File> ini)
 {
     bool value;
     if (_tryBool(line, &value))
@@ -88,7 +92,7 @@ bool IniParser::_parseBool(std::string &name, std::string &line, std::shared_ptr
     return false;
 }
 
-int IniParser::_tryDecimal(std::string &line, int* intval,double* doubleval)
+int Parser::_tryDecimal(std::string &line, int* intval,double* doubleval)
 {
     std::istringstream ss(line);
     enum { BEGIN, SIGN, INTEGRAL, DOT, FRACTIONAL, EXP, EXP_SIGN, EXP_DIGITS, ERROR } state = BEGIN;
@@ -208,7 +212,7 @@ int IniParser::_tryDecimal(std::string &line, int* intval,double* doubleval)
 }
 
 
-bool IniParser::_parseDecimal(std::string &name, std::string &line, std::shared_ptr<IniFile> ini)
+bool Parser::_parseDecimal(std::string &name, std::string &line, std::shared_ptr<File> ini)
 {
     int intval;
     double doubleval;
@@ -234,14 +238,14 @@ bool IniParser::_parseDecimal(std::string &name, std::string &line, std::shared_
 }
 
 
-bool IniParser::_parseArrayBool(std::vector<IniValue> &vec, std::string val)
+bool Parser::_parseArrayBool(std::vector<Value> &vec, std::string val)
 {
     bool value;
     if (_tryBool(val,&value))
     {
         Logger::debug("INI") << "boolean value found for property `" << "`: " <<
                 std::boolalpha << value << std::noboolalpha << std::endl;
-        vec.push_back(IniValue(value));
+        vec.push_back(Value(value));
         return true;
     }
 
@@ -249,7 +253,7 @@ bool IniParser::_parseArrayBool(std::vector<IniValue> &vec, std::string val)
 }
 
 
-bool IniParser::_parseArrayDecimal(std::vector<IniValue> &vec, std::string val)
+bool Parser::_parseArrayDecimal(std::vector<Value> &vec, std::string val)
 {
     int intval;
     double doubleval;
@@ -259,24 +263,24 @@ bool IniParser::_parseArrayDecimal(std::vector<IniValue> &vec, std::string val)
         if (ret > 0)
         {
             Logger::debug("INI") << "integer value found for property `" << "`: " << intval << std::endl;
-            vec.push_back(IniValue(intval));
+            vec.push_back(Value(intval));
             return true;
         }
 
         if (ret < 0)
         {
             Logger::debug("INI") << "double value found for property `" << "`: " << doubleval << std::endl;
-            vec.push_back(IniValue(doubleval));
+            vec.push_back(Value(doubleval));
             return true;
         }
     }
     return false;
 }
 
-bool IniParser::_parseArray(std::string &name, std::string &line, std::shared_ptr<IniFile> ini)
+bool Parser::_parseArray(std::string &name, std::string &line, std::shared_ptr<File> ini)
 {
     auto ss = line;
-    std::vector<IniValue> _vec;
+    std::vector<Value> _vec;
     while (ss.find(",")!=std::string::npos)
     {
         std::string val=ss.substr(0,ss.find(","));
@@ -284,14 +288,14 @@ bool IniParser::_parseArray(std::string &name, std::string &line, std::shared_pt
         if (_parseArrayDecimal(_vec,val)) continue;
         if (_parseArrayBool(_vec,val)) continue;
         Logger::debug("INI") << "string value found for property `" << "`: " << val << std::endl;
-        _vec.push_back(IniValue(val));
+        _vec.push_back(Value(val));
     }
     if (_vec.size()>0)
     {
         if (!_parseArrayDecimal(_vec,ss) && !_parseArrayBool(_vec,ss))
         {
             Logger::debug("INI") << "string value found for property `" << "`: " << ss << std::endl;
-            _vec.push_back(IniValue(ss));
+            _vec.push_back(Value(ss));
         }
         ini->section(_section)->setPropertyArray(name, _vec);
         Logger::debug("INI") << "array value found for property `" << name << "`: " << line << std::endl;
@@ -300,14 +304,14 @@ bool IniParser::_parseArray(std::string &name, std::string &line, std::shared_pt
     return false;
 }
 
-IniParser::IniParser(std::istream &stream) : _stream(stream), _section("")
+Parser::Parser(std::istream &stream) : _stream(stream), _section("")
 {
 
 }
 
-std::shared_ptr<IniFile> IniParser::parse()
+std::shared_ptr<File> Parser::parse()
 {
-    auto ini = std::shared_ptr<IniFile>(new IniFile());
+    auto ini = std::shared_ptr<File>(new File());
     std::string line;
 
     Logger::info("INI") << "start parsing config file." << std::endl;
@@ -361,5 +365,8 @@ std::shared_ptr<IniFile> IniParser::parse()
     }
 
     return ini;
+}
+
+}
 }
 }

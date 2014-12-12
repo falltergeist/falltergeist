@@ -99,6 +99,16 @@ set(SOURCES main.cpp
     src/Engine/Graphics/TileMap.h
     src/Engine/Graphics/UI.cpp
     src/Engine/Graphics/UI.h
+    src/Engine/Ini/File.cpp
+    src/Engine/Ini/File.h
+    src/Engine/Ini/Parser.cpp
+    src/Engine/Ini/Parser.h
+    src/Engine/Ini/Section.cpp
+    src/Engine/Ini/Section.h
+    src/Engine/Ini/Writer.cpp
+    src/Engine/Ini/Writer.h
+    src/Engine/Ini/Value.cpp
+    src/Engine/Ini/Value.h
     src/Engine/Input/Mouse.cpp
     src/Engine/Input/Mouse.h
     src/Engine/LocationCamera.cpp
@@ -111,18 +121,8 @@ set(SOURCES main.cpp
     src/Engine/PathFinding/HexagonGrid.h
     src/Engine/ResourceManager.cpp
     src/Engine/ResourceManager.h
-    src/Engine/Settings/IniFile.cpp
-    src/Engine/Settings/IniFile.h
-    src/Engine/Settings/IniParser.cpp
-    src/Engine/Settings/IniParser.h
-    src/Engine/Settings/IniSection.cpp
-    src/Engine/Settings/IniSection.h
-    src/Engine/Settings/IniWriter.cpp
-    src/Engine/Settings/IniWriter.h
-    src/Engine/Settings/IniValue.cpp
-    src/Engine/Settings/IniValue.h
-    src/Engine/Settings/Settings.cpp
-    src/Engine/Settings/Settings.h
+    src/Engine/Settings.cpp
+    src/Engine/Settings.h
     src/Engine/State.cpp
     src/Engine/State.h
     src/Game/GameDefines.h

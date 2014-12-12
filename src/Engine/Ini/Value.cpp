@@ -21,30 +21,34 @@
 #include <sstream>
 
 // Falltergeist includes
-#include "../../Engine/Settings/IniValue.h"
+#include "../../Engine/Ini/Value.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace Engine
+{
+namespace Ini
+{
 
-IniValue::IniValue()
+Value::Value()
 {}
 
-IniValue::~IniValue()
+Value::~Value()
 {
     using std::string;
-    if (_tag == IniValue::Tag::STRING)
+    if (_tag == Value::Tag::STRING)
     {
         _stringVal.~string();
     }
-    if (_tag == IniValue::Tag::ARRAY)
+    if (_tag == Value::Tag::ARRAY)
     {
         _iniVal.~vector();
     }
 }
 
-IniValue &IniValue::operator=(const IniValue &rhs)
+Value &Value::operator=(const Value &rhs)
 {
     using std::string;
 
@@ -53,101 +57,101 @@ IniValue &IniValue::operator=(const IniValue &rhs)
     _tag = rhs._tag;
     switch (_tag)
     {
-        case IniValue::Tag::INTEGER:
+        case Value::Tag::INTEGER:
             _integerVal = rhs._integerVal;
             break;
-        case IniValue::Tag::DOUBLE:
+        case Value::Tag::DOUBLE:
             _doubleVal = rhs._doubleVal;
             break;
-        case IniValue::Tag::BOOLEAN:
+        case Value::Tag::BOOLEAN:
             _booleanVal = rhs._booleanVal;
             break;
-        case IniValue::Tag::STRING:
+        case Value::Tag::STRING:
             new(&_stringVal) std::string(rhs._stringVal);
             break;
-        case IniValue::Tag::ARRAY:
-            new(&_iniVal) std::vector<IniValue>(rhs._iniVal);
+        case Value::Tag::ARRAY:
+            new(&_iniVal) std::vector<Value>(rhs._iniVal);
             break;
     }
 
     return *this;
 }
 
-IniValue::IniValue(double doubleVal) : _tag(IniValue::Tag::DOUBLE), _doubleVal(doubleVal)
+Value::Value(double doubleVal) : _tag(Value::Tag::DOUBLE), _doubleVal(doubleVal)
 {}
 
-IniValue::IniValue(int integerVal) : _tag(IniValue::Tag::INTEGER), _integerVal(integerVal)
+Value::Value(int integerVal) : _tag(Value::Tag::INTEGER), _integerVal(integerVal)
 {}
 
-IniValue::IniValue(bool booleanVal) : _tag(IniValue::Tag::BOOLEAN), _booleanVal(booleanVal)
+Value::Value(bool booleanVal) : _tag(Value::Tag::BOOLEAN), _booleanVal(booleanVal)
 {}
 
-IniValue::IniValue(std::string stringVal) : _tag(IniValue::Tag::STRING)
+Value::Value(std::string stringVal) : _tag(Value::Tag::STRING)
 {
     new(&_stringVal) std::string(stringVal);
 }
 
-IniValue::IniValue(std::vector<IniValue> iniVal) : _tag(IniValue::Tag::ARRAY)
+Value::Value(std::vector<Value> iniVal) : _tag(Value::Tag::ARRAY)
 {
-    new(&_iniVal) std::vector<IniValue>(iniVal);
+    new(&_iniVal) std::vector<Value>(iniVal);
 }
 
-IniValue::IniValue(const IniValue &rhs) : _tag(rhs._tag)
+Value::Value(const Value &rhs) : _tag(rhs._tag)
 {
     using std::string;
 
     switch (_tag)
     {
-        case IniValue::Tag::INTEGER:
+        case Value::Tag::INTEGER:
             _integerVal = rhs._integerVal;
             break;
-        case IniValue::Tag::DOUBLE:
+        case Value::Tag::DOUBLE:
             _doubleVal = rhs._doubleVal;
             break;
-        case IniValue::Tag::BOOLEAN:
+        case Value::Tag::BOOLEAN:
             _booleanVal = rhs._booleanVal;
             break;
-        case IniValue::Tag::STRING:
+        case Value::Tag::STRING:
             new(&_stringVal) std::string(rhs._stringVal);
             break;
-        case IniValue::Tag::ARRAY:
-            new(&_iniVal) std::vector<IniValue>(rhs._iniVal);
+        case Value::Tag::ARRAY:
+            new(&_iniVal) std::vector<Value>(rhs._iniVal);
             break;
     }
 }
 
-std::string IniValue::tagString(IniValue::Tag tag)
+std::string Value::tagString(Value::Tag tag)
 {
     switch (tag)
     {
-        case IniValue::Tag::INTEGER:
+        case Value::Tag::INTEGER:
             return "integer";
-        case IniValue::Tag::DOUBLE:
+        case Value::Tag::DOUBLE:
             return "double";
-        case IniValue::Tag::BOOLEAN:
+        case Value::Tag::BOOLEAN:
             return "bool";
-        case IniValue::Tag::STRING:
+        case Value::Tag::STRING:
             return "string";
-        case IniValue::Tag::ARRAY:
+        case Value::Tag::ARRAY:
             return "array";
     }
 
     return "unreachable";
 }
 
-std::string IniValue::value() const
+std::string Value::value() const
 {
     switch (_tag)
     {
-        case IniValue::Tag::INTEGER:
+        case Value::Tag::INTEGER:
             return std::to_string(_integerVal);
-        case IniValue::Tag::DOUBLE:
+        case Value::Tag::DOUBLE:
             return std::to_string(_doubleVal);
-        case IniValue::Tag::BOOLEAN:
+        case Value::Tag::BOOLEAN:
             return _booleanVal ? "true" : "false";
-        case IniValue::Tag::STRING:
+        case Value::Tag::STRING:
             return _stringVal;
-        case IniValue::Tag::ARRAY:
+        case Value::Tag::ARRAY:
             std::stringstream ss;
             for(size_t i = 0; i < _iniVal.size(); ++i)
             {
@@ -162,27 +166,27 @@ std::string IniValue::value() const
     return "unreachable";
 }
 
-int IniValue::intValue() const
+int Value::intValue() const
 {
-    if (_tag == IniValue::Tag::INTEGER)
+    if (_tag == Value::Tag::INTEGER)
     {
         return _integerVal;
     }
     return 0;
 }
 
-bool IniValue::boolValue() const
+bool Value::boolValue() const
 {
-    if (_tag == IniValue::Tag::BOOLEAN)
+    if (_tag == Value::Tag::BOOLEAN)
     {
         return _booleanVal;
     }
     return false;
 }
 
-double IniValue::doubleValue() const
+double Value::doubleValue() const
 {
-    if (_tag == IniValue::Tag::DOUBLE)
+    if (_tag == Value::Tag::DOUBLE)
     {
         return _doubleVal;
     }
@@ -191,8 +195,11 @@ double IniValue::doubleValue() const
 
 
 
-IniValue::Tag IniValue::tag() const
+Value::Tag Value::tag() const
 {
     return _tag;
+}
+
+}
 }
 }

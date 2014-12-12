@@ -23,55 +23,56 @@
 #include <stdexcept>
 
 // Falltergeist includes
-#include "../../Engine/CrossPlatform.h"
-#include "../../Engine/Exception.h"
-#include "../../Engine/Logger.h"
-#include "../../Engine/Settings/IniFile.h"
-#include "../../Engine/Settings/IniWriter.h"
-#include "../../Engine/Settings/Settings.h"
+#include "../Engine/CrossPlatform.h"
+#include "../Engine/Exception.h"
+#include "../Engine/Logger.h"
+#include "../Engine/Ini/File.h"
+#include "../Engine/Ini/Writer.h"
+#include "../Engine/Settings.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace Engine
+{
+const unsigned int Settings::_defaultScreenWidth = 640;
+const unsigned int Settings::_defaultScreenHeight = 480;
+const std::string Settings::_defaultInitLocation = "klamall";
+const bool Settings::_defaultForceLocation = false;
+const std::string Settings::_defaultLoggerLevel = "info";
+const bool Settings::_defaultLoggerColors = true;
+const bool Settings::_defaultDisplayFps = true;
+const bool Settings::_defaultWorldMapFullscreen = false;
+const bool Settings::_defaultDisplayMousePosition = true;
+const unsigned int  Settings::_defaultScale = 0;
+const bool Settings::_defaultFullscreen = false;
 
-const unsigned int EngineSettings::_defaultScreenWidth = 640;
-const unsigned int EngineSettings::_defaultScreenHeight = 480;
-const std::string EngineSettings::_defaultInitLocation = "klamall";
-const bool EngineSettings::_defaultForceLocation = false;
-const std::string EngineSettings::_defaultLoggerLevel = "info";
-const bool EngineSettings::_defaultLoggerColors = true;
-const bool EngineSettings::_defaultDisplayFps = true;
-const bool EngineSettings::_defaultWorldMapFullscreen = false;
-const bool EngineSettings::_defaultDisplayMousePosition = true;
-const unsigned int  EngineSettings::_defaultScale = 0;
-const bool EngineSettings::_defaultFullscreen = false;
-
-const double EngineSettings::_defaultBrightness=1.0;
-const unsigned int EngineSettings::_defaultGameDifficulty=1;
-const unsigned int EngineSettings::_defaultCombatDifficulty=1;
-const bool EngineSettings::_defaultCombatLooks=false;
-const bool EngineSettings::_defaultCombatMessages=true;
-const bool EngineSettings::_defaultCombatTaunts=false;
-const unsigned int EngineSettings::_defaultCombatSpeed=0;
-const bool EngineSettings::_defaultItemHighlight=false;
-const bool EngineSettings::_defaultLanguageFilter=false;
-const double EngineSettings::_defaultMouseSensitivity=1.0;
-const bool EngineSettings::_defaultPlayerSpeedup=false;
-const bool EngineSettings::_defaultRunning=false;
-const bool EngineSettings::_defaultSubtitles=false;
-const bool EngineSettings::_defaultTargetHighlight=false;
-const double EngineSettings::_defaultTextDelay=0.0;
-const unsigned int EngineSettings::_defaultViolenceLevel=2;
+const double Settings::_defaultBrightness=1.0;
+const unsigned int Settings::_defaultGameDifficulty=1;
+const unsigned int Settings::_defaultCombatDifficulty=1;
+const bool Settings::_defaultCombatLooks=false;
+const bool Settings::_defaultCombatMessages=true;
+const bool Settings::_defaultCombatTaunts=false;
+const unsigned int Settings::_defaultCombatSpeed=0;
+const bool Settings::_defaultItemHighlight=false;
+const bool Settings::_defaultLanguageFilter=false;
+const double Settings::_defaultMouseSensitivity=1.0;
+const bool Settings::_defaultPlayerSpeedup=false;
+const bool Settings::_defaultRunning=false;
+const bool Settings::_defaultSubtitles=false;
+const bool Settings::_defaultTargetHighlight=false;
+const double Settings::_defaultTextDelay=0.0;
+const unsigned int Settings::_defaultViolenceLevel=2;
 // [sound]
-const std::string EngineSettings::_defaultMusicPath = "data/sound/music/";
-const bool EngineSettings::_defaultAudioEnabled=true;
-const double EngineSettings::_defaultMasterVolume=1.0;
-const double EngineSettings::_defaultMusicVolume=1.0;
-const double EngineSettings::_defaultSFXVolume=1.0;
-const double EngineSettings::_defaultVoiceVolume=1.0;
+const std::string Settings::_defaultMusicPath = "data/sound/music/";
+const bool Settings::_defaultAudioEnabled=true;
+const double Settings::_defaultMasterVolume=1.0;
+const double Settings::_defaultMusicVolume=1.0;
+const double Settings::_defaultSFXVolume=1.0;
+const double Settings::_defaultVoiceVolume=1.0;
 
-EngineSettings::EngineSettings()
+Settings::Settings()
 {
     std::string configPath = CrossPlatform::getConfigPath();
     std::string configFile = configPath + "/config.ini";
@@ -81,7 +82,7 @@ EngineSettings::EngineSettings()
 
     if (stream)
     {
-        IniParser iniParser(stream);
+        Engine::Ini::Parser iniParser(stream);
         auto ini = iniParser.parse();
 
         _readConfig(*ini);
@@ -91,7 +92,7 @@ EngineSettings::EngineSettings()
         Logger::warning() << "Cannot open config file at `" << configFile << "`; creating default configuraton file" << std::endl;
         stream.close();
 
-        IniFile ini;
+        Ini::File ini;
 
         _createDefaultConfig(ini);
         _readConfig(ini);
@@ -102,7 +103,7 @@ EngineSettings::EngineSettings()
             CrossPlatform::createDirectory(configPath);
 
             // Write default configuration
-            IniWriter writer(ini);
+            Ini::Writer writer(ini);
             std::ofstream os(configFile);
 
             if (os)
@@ -123,7 +124,7 @@ EngineSettings::EngineSettings()
     }
 }
 
-void EngineSettings::_createDefaultConfig(IniFile &ini)
+void Settings::_createDefaultConfig(Engine::Ini::File &ini)
 {
     auto video = ini.section("video");
     video->setPropertyInt("width", _defaultScreenWidth);
@@ -169,13 +170,13 @@ void EngineSettings::_createDefaultConfig(IniFile &ini)
     preferences->setPropertyInt("violence_level", _defaultViolenceLevel);
 }
 
-EngineSettings::~EngineSettings()
+Settings::~Settings()
 {
 }
 
-void EngineSettings::saveConfig()
+void Settings::saveConfig()
 {
-    IniFile ini;
+    Ini::File ini;
 
     auto video = ini.section("video");
     video->setPropertyInt("width", _screenWidth);
@@ -228,7 +229,7 @@ void EngineSettings::saveConfig()
         CrossPlatform::createDirectory(configPath);
 
         // Write default configuration
-        IniWriter writer(ini);
+        Ini::Writer writer(ini);
         std::ofstream os(configFile);
 
         if (os)
@@ -248,37 +249,37 @@ void EngineSettings::saveConfig()
     }
 }
 
-unsigned int EngineSettings::screenWidth() const
+unsigned int Settings::screenWidth() const
 {
     return _screenWidth;
 }
 
-unsigned int EngineSettings::screenHeight() const
+unsigned int Settings::screenHeight() const
 {
     return _screenHeight;
 }
 
-bool EngineSettings::audioEnabled() const
+bool Settings::audioEnabled() const
 {
     return _audioEnabled;
 }
 
-const std::string &EngineSettings::defaultInitLocation()
+const std::string &Settings::defaultInitLocation()
 {
     return _defaultInitLocation;
 }
 
-const std::string &EngineSettings::initialLocation() const
+const std::string &Settings::initialLocation() const
 {
     return _initLocation;
 }
 
-bool EngineSettings::forceLocation() const
+bool Settings::forceLocation() const
 {
     return _forceLocation;
 }
 
-void EngineSettings::_readConfig(IniFile &ini)
+void Settings::_readConfig(Engine::Ini::File &ini)
 {
     auto video = ini.section("video");
     _screenWidth = video->propertyInt("width", _defaultScreenWidth);
@@ -329,244 +330,245 @@ void EngineSettings::_readConfig(IniFile &ini)
     _violenceLevel = preferences->propertyInt("violence_level", _defaultViolenceLevel);
 }
 
-bool EngineSettings::displayFps() const
+bool Settings::displayFps() const
 {
     return _displayFps;
 }
 
-bool EngineSettings::worldMapFullscreen() const
+bool Settings::worldMapFullscreen() const
 {
     return _worldMapFullscreen;
 }
 
-bool EngineSettings::displayMousePosition() const
+bool Settings::displayMousePosition() const
 {
     return _displayMousePosition;
 }
 
-void EngineSettings::setVoiceVolume(double _voiceVolume)
+void Settings::setVoiceVolume(double _voiceVolume)
 {
     this->_voiceVolume = _voiceVolume;
 }
 
-double EngineSettings::voiceVolume() const
+double Settings::voiceVolume() const
 {
     return _voiceVolume;
 }
 
-void EngineSettings::setSfxVolume(double _sfxVolume)
+void Settings::setSfxVolume(double _sfxVolume)
 {
     this->_sfxVolume = _sfxVolume;
 }
 
-double EngineSettings::sfxVolume() const
+double Settings::sfxVolume() const
 {
     return _sfxVolume;
 }
 
-void EngineSettings::setMusicVolume(double _musicVolume)
+void Settings::setMusicVolume(double _musicVolume)
 {
     this->_musicVolume = _musicVolume;
 }
 
-double EngineSettings::musicVolume() const
+double Settings::musicVolume() const
 {
     return _musicVolume;
 }
 
-void EngineSettings::setMasterVolume(double _masterVolume)
+void Settings::setMasterVolume(double _masterVolume)
 {
     this->_masterVolume = _masterVolume;
 }
 
-double EngineSettings::masterVolume() const
+double Settings::masterVolume() const
 {
     return _masterVolume;
 }
 
-std::string EngineSettings::musicPath() const
+std::string Settings::musicPath() const
 {
     return _musicPath;
 }
 
-void EngineSettings::setViolenceLevel(unsigned int _violenceLevel)
+void Settings::setViolenceLevel(unsigned int _violenceLevel)
 {
     this->_violenceLevel = _violenceLevel;
 }
 
-unsigned int EngineSettings::violenceLevel() const
+unsigned int Settings::violenceLevel() const
 {
     return _violenceLevel;
 }
 
-void EngineSettings::setTextDelay(double _textDelay)
+void Settings::setTextDelay(double _textDelay)
 {
     this->_textDelay = _textDelay;
 }
 
-double EngineSettings::textDelay() const
+double Settings::textDelay() const
 {
     return _textDelay;
 }
 
-void EngineSettings::setTargetHighlight(bool _targetHighlight)
+void Settings::setTargetHighlight(bool _targetHighlight)
 {
     this->_targetHighlight = _targetHighlight;
 }
 
-bool EngineSettings::targetHighlight() const
+bool Settings::targetHighlight() const
 {
     return _targetHighlight;
 }
 
-void EngineSettings::setSubtitles(bool _subtitles)
+void Settings::setSubtitles(bool _subtitles)
 {
     this->_subtitles = _subtitles;
 }
 
-bool EngineSettings::subtitles() const
+bool Settings::subtitles() const
 {
     return _subtitles;
 }
 
-void EngineSettings::setRunning(bool _running)
+void Settings::setRunning(bool _running)
 {
     this->_running = _running;
 }
 
-bool EngineSettings::running() const
+bool Settings::running() const
 {
     return _running;
 }
 
-void EngineSettings::setPlayerSpeedup(bool _playerSpeedup)
+void Settings::setPlayerSpeedup(bool _playerSpeedup)
 {
     this->_playerSpeedup = _playerSpeedup;
 }
 
-bool EngineSettings::playerSpeedup() const
+bool Settings::playerSpeedup() const
 {
     return _playerSpeedup;
 }
 
-void EngineSettings::setMouseSensitivity(double _mouseSensitivity)
+void Settings::setMouseSensitivity(double _mouseSensitivity)
 {
     this->_mouseSensitivity = _mouseSensitivity;
 }
 
-double EngineSettings::mouseSensitivity() const
+double Settings::mouseSensitivity() const
 {
     return _mouseSensitivity;
 }
 
-void EngineSettings::setLanguageFilter(bool _languageFilter)
+void Settings::setLanguageFilter(bool _languageFilter)
 {
     this->_languageFilter = _languageFilter;
 }
 
-bool EngineSettings::languageFilter() const
+bool Settings::languageFilter() const
 {
     return _languageFilter;
 }
 
-void EngineSettings::setItemHighlight(bool _itemHighlight)
+void Settings::setItemHighlight(bool _itemHighlight)
 {
     this->_itemHighlight = _itemHighlight;
 }
 
-bool EngineSettings::itemHighlight() const
+bool Settings::itemHighlight() const
 {
     return _itemHighlight;
 }
 
-void EngineSettings::setCombatSpeed(unsigned int _combatSpeed)
+void Settings::setCombatSpeed(unsigned int _combatSpeed)
 {
     this->_combatSpeed = _combatSpeed;
 }
 
-unsigned int EngineSettings::combatSpeed() const
+unsigned int Settings::combatSpeed() const
 {
     return _combatSpeed;
 }
 
-void EngineSettings::setCombatTaunts(bool _combatTaunts)
+void Settings::setCombatTaunts(bool _combatTaunts)
 {
     this->_combatTaunts = _combatTaunts;
 }
 
-bool EngineSettings::combatTaunts() const
+bool Settings::combatTaunts() const
 {
     return _combatTaunts;
 }
 
-void EngineSettings::setCombatMessages(bool _combatMessages)
+void Settings::setCombatMessages(bool _combatMessages)
 {
     this->_combatMessages = _combatMessages;
 }
 
-bool EngineSettings::combatMessages() const
+bool Settings::combatMessages() const
 {
     return _combatMessages;
 }
 
-void EngineSettings::setCombatLooks(bool _combatLooks)
+void Settings::setCombatLooks(bool _combatLooks)
 {
     this->_combatLooks = _combatLooks;
 }
 
-bool EngineSettings::combatLooks() const
+bool Settings::combatLooks() const
 {
     return _combatLooks;
 }
 
-void EngineSettings::setCombatDifficulty(unsigned int _combatDifficulty)
+void Settings::setCombatDifficulty(unsigned int _combatDifficulty)
 {
     this->_combatDifficulty = _combatDifficulty;
 }
 
-unsigned int EngineSettings::combatDifficulty() const
+unsigned int Settings::combatDifficulty() const
 {
     return _combatDifficulty;
 }
 
-void EngineSettings::setGameDifficulty(unsigned int _gameDifficulty)
+void Settings::setGameDifficulty(unsigned int _gameDifficulty)
 {
     this->_gameDifficulty = _gameDifficulty;
 }
 
-unsigned int EngineSettings::gameDifficulty() const
+unsigned int Settings::gameDifficulty() const
 {
     return _gameDifficulty;
 }
 
-void EngineSettings::setBrightness(double _brightness)
+void Settings::setBrightness(double _brightness)
 {
     this->_brightness = _brightness;
 }
 
-double EngineSettings::brightness() const
+double Settings::brightness() const
 {
     return _brightness;
 }
 
-void EngineSettings::setScale(unsigned int _scale)
+void Settings::setScale(unsigned int _scale)
 {
     this->_scale = _scale;
 }
 
-unsigned int EngineSettings::scale() const
+unsigned int Settings::scale() const
 {
     return _scale;
 }
 
-void EngineSettings::setFullscreen(bool _fullscreen)
+void Settings::setFullscreen(bool _fullscreen)
 {
     this->_fullscreen = _fullscreen;
 }
 
-bool EngineSettings::fullscreen() const
+bool Settings::fullscreen() const
 {
     return _fullscreen;
 }
 
+}
 }

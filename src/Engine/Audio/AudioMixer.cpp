@@ -27,7 +27,7 @@
 #include "../../UI/MvePlayer.h"
 #include "../../Engine/Game.h"
 #include "../../Engine/ResourceManager.h"
-#include "../../Engine/Settings/Settings.h"
+#include "../../Engine/Settings.h"
 
 
 // Third party includes

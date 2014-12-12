@@ -28,7 +28,7 @@
 #include "../../Engine/Game.h"
 #include "../../Engine/Input/Mouse.h"
 #include "../../Engine/Logger.h"
-#include "../../Engine/Settings/Settings.h"
+#include "../../Engine/Settings.h"
 #include "../../Engine/State.h"
 
 // Third party includes

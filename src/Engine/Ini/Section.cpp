@@ -22,21 +22,25 @@
 // Falltergeist includes
 #include "../../Engine/Exception.h"
 #include "../../Engine/Logger.h"
-#include "../../Engine/Settings/IniSection.h"
+#include "../../Engine/Ini/Section.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace Engine
+{
+namespace Ini
+{
 
-std::string IniSection::name()
+std::string Section::name()
 {
     return _name;
 }
 
-void IniSection::_property(PropertyMapConstIterator iter, double &ret, double def)
+void Section::_property(PropertyMapConstIterator iter, double &ret, double def)
 {
-    if (!_hasType(iter, IniValue::Tag::DOUBLE))
+    if (!_hasType(iter, Value::Tag::DOUBLE))
     {
         ret = def;
         return;
@@ -45,9 +49,9 @@ void IniSection::_property(PropertyMapConstIterator iter, double &ret, double de
     ret = iter->second._doubleVal;
 }
 
-void IniSection::_property(PropertyMapConstIterator iter, int &ret, int def)
+void Section::_property(PropertyMapConstIterator iter, int &ret, int def)
 {
-    if (!_hasType(iter, IniValue::Tag::INTEGER))
+    if (!_hasType(iter, Value::Tag::INTEGER))
     {
         ret = def;
         return;
@@ -56,9 +60,9 @@ void IniSection::_property(PropertyMapConstIterator iter, int &ret, int def)
     ret = iter->second._integerVal;
 }
 
-void IniSection::_property(PropertyMapConstIterator iter, bool &ret, bool def)
+void Section::_property(PropertyMapConstIterator iter, bool &ret, bool def)
 {
-    if (!_hasType(iter, IniValue::Tag::BOOLEAN))
+    if (!_hasType(iter, Value::Tag::BOOLEAN))
     {
         ret = def;
         return;
@@ -67,9 +71,9 @@ void IniSection::_property(PropertyMapConstIterator iter, bool &ret, bool def)
     ret = iter->second._booleanVal;
 }
 
-void IniSection::_property(PropertyMapConstIterator iter, std::string &ret, const std::string &def)
+void Section::_property(PropertyMapConstIterator iter, std::string &ret, const std::string &def)
 {
-    if (!_hasType(iter, IniValue::Tag::STRING))
+    if (!_hasType(iter, Value::Tag::STRING))
     {
         ret = def;
         return;
@@ -78,10 +82,10 @@ void IniSection::_property(PropertyMapConstIterator iter, std::string &ret, cons
     ret = iter->second._stringVal;
 }
 
-void IniSection::_property(PropertyMapConstIterator iter, std::vector<IniValue> &ret)
+void Section::_property(PropertyMapConstIterator iter, std::vector<Value> &ret)
 {
-    std::vector<IniValue> def;
-    if (!_hasType(iter, IniValue::Tag::ARRAY))
+    std::vector<Value> def;
+    if (!_hasType(iter, Value::Tag::ARRAY))
     {
         ret = def;
         return;
@@ -90,50 +94,50 @@ void IniSection::_property(PropertyMapConstIterator iter, std::vector<IniValue> 
     ret = iter->second._iniVal;
 }
 
-bool IniSection::_hasType(PropertyMapConstIterator iter, IniValue::Tag tag)
+bool Section::_hasType(PropertyMapConstIterator iter, Value::Tag tag)
 {
     if (iter->second._tag == tag) return true;
     Logger::warning("INI")
             << "Property `" << iter->first
-            << " `expected to be " << IniValue::tagString(tag)
-            << " but " << IniValue::tagString(iter->second.tag())
+            << " `expected to be " << Value::tagString(tag)
+            << " but " << Value::tagString(iter->second.tag())
             << " value encountered: " << iter->second.value()
             << std::endl;
 
     return false;
 }
 
-void IniSection::setPropertyInt(const std::string &name, int value)
+void Section::setPropertyInt(const std::string &name, int value)
 {
-    _properties[name] = IniValue(value);
+    _properties[name] = Value(value);
 }
 
-void IniSection::setPropertyDouble(const std::string &name, double value)
+void Section::setPropertyDouble(const std::string &name, double value)
 {
-    _properties[name] = IniValue(value);
+    _properties[name] = Value(value);
 }
 
-void IniSection::setPropertyBool(const std::string &name, bool value)
+void Section::setPropertyBool(const std::string &name, bool value)
 {
-    _properties[name] = IniValue(value);
+    _properties[name] = Value(value);
 }
 
-void IniSection::setPropertyString(const std::string &name, const std::string &value)
+void Section::setPropertyString(const std::string &name, const std::string &value)
 {
-    _properties[name] = IniValue(value);
+    _properties[name] = Value(value);
 }
 
-void IniSection::setPropertyArray(const std::string &name, const std::vector<IniValue> &value)
+void Section::setPropertyArray(const std::string &name, const std::vector<Value> &value)
 {
-    _properties[name] = IniValue(value);
+    _properties[name] = Value(value);
 }
 
-bool IniSection::hasProperty(const std::string &name) const
+bool Section::hasProperty(const std::string &name) const
 {
     return _properties.find(name) != _properties.end();
 }
 
-int IniSection::propertyInt(const std::string &name, int def)
+int Section::propertyInt(const std::string &name, int def)
 {
     PropertyMapConstIterator iter = _properties.find(name);
     if (iter == _properties.end())
@@ -142,11 +146,11 @@ int IniSection::propertyInt(const std::string &name, int def)
         return def;
     };
     int ret;
-    IniSection::_property(iter, ret, def);
+    Section::_property(iter, ret, def);
     return ret;
 }
 
-double IniSection::propertyDouble(const std::string &name, double def)
+double Section::propertyDouble(const std::string &name, double def)
 {
     PropertyMapConstIterator iter = _properties.find(name);
     if (iter == _properties.end())
@@ -155,11 +159,11 @@ double IniSection::propertyDouble(const std::string &name, double def)
         return def;
     };
     double ret;
-    IniSection::_property(iter, ret, def);
+    Section::_property(iter, ret, def);
     return ret;
 }
 
-bool IniSection::propertyBool(const std::string &name, bool def)
+bool Section::propertyBool(const std::string &name, bool def)
 {
     PropertyMapConstIterator iter = _properties.find(name);
     if (iter == _properties.end())
@@ -169,11 +173,11 @@ bool IniSection::propertyBool(const std::string &name, bool def)
         return def;
     };
     bool ret;
-    IniSection::_property(iter, ret, def);
+    Section::_property(iter, ret, def);
     return ret;
 }
 
-std::string IniSection::propertyString(const std::string &name, const std::string &def)
+std::string Section::propertyString(const std::string &name, const std::string &def)
 {
     PropertyMapConstIterator iter = _properties.find(name);
     if (iter == _properties.end())
@@ -182,51 +186,53 @@ std::string IniSection::propertyString(const std::string &name, const std::strin
         return def;
     };
     std::string ret;
-    IniSection::_property(iter, ret, def);
+    Section::_property(iter, ret, def);
     return ret;
 }
 
-std::vector<IniValue> IniSection::propertyArray(const std::string &name)
+std::vector<Value> Section::propertyArray(const std::string &name)
 {
     PropertyMapConstIterator iter = _properties.find(name);
-    std::vector<IniValue> def;
+    std::vector<Value> def;
     if (iter == _properties.end())
     {
         Logger::warning("INI") << "Property `" << name << "` not found, use default value: " << def.size() << std::endl;
         return def;
     };
-    std::vector<IniValue> ret;
-    IniSection::_property(iter, ret);
+    std::vector<Value> ret;
+    Section::_property(iter, ret);
     return ret;
 }
 
-IniSection::IniSection(const std::string &name) : _name(name)
+Section::Section(const std::string &name) : _name(name)
 {
 }
 
-IniSection::~IniSection()
+Section::~Section()
 {
 
 }
 
-IniSection::iterator IniSection::begin()
-{
-    return _properties.begin();
-}
-
-IniSection::const_iterator IniSection::begin() const
+Section::iterator Section::begin()
 {
     return _properties.begin();
 }
 
-IniSection::iterator IniSection::end()
+Section::const_iterator Section::begin() const
+{
+    return _properties.begin();
+}
+
+Section::iterator Section::end()
 {
     return _properties.end();
 }
 
-IniSection::const_iterator IniSection::end() const
+Section::const_iterator Section::end() const
 {
     return _properties.end();
 }
 
+}
+}
 }

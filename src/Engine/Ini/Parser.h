@@ -30,11 +30,15 @@
 
 namespace Falltergeist
 {
+namespace Engine
+{
+namespace Ini
+{
 
-class IniFile;
-class IniValue;
+class File;
+class Value;
 
-class IniParser
+class Parser
 {
 private:
     std::istream &_stream; // stream to parse
@@ -53,20 +57,22 @@ protected:
 
     int _tryDecimal(std::string &line, int* intval, double* doubleval);
 
-    bool _parseBool(std::string &name, std::string &line, std::shared_ptr<IniFile> ini);
+    bool _parseBool(std::string &name, std::string &line, std::shared_ptr<File> ini);
 
-    bool _parseDecimal(std::string &name, std::string &line, std::shared_ptr<IniFile> ini);
+    bool _parseDecimal(std::string &name, std::string &line, std::shared_ptr<File> ini);
 
-    bool _parseArray(std::string &name, std::string &line, std::shared_ptr<IniFile> ini);
+    bool _parseArray(std::string &name, std::string &line, std::shared_ptr<File> ini);
 
-    bool _parseArrayDecimal(std::vector<IniValue> &vec, std::string val);
-    bool _parseArrayBool(std::vector<IniValue> &vec, std::string val);
+    bool _parseArrayDecimal(std::vector<Value> &vec, std::string val);
+    bool _parseArrayBool(std::vector<Value> &vec, std::string val);
 
 public:
-    IniParser(std::istream &stream);
-    std::shared_ptr<IniFile> parse();
+    Parser(std::istream &stream);
+    std::shared_ptr<File> parse();
 };
 
+}
+}
 }
 
 #endif // FALLTERGEIST_INI_PARSER_H

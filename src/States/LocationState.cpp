@@ -38,7 +38,7 @@
 #include "../Engine/LocationCamera.h"
 #include "../Engine/Logger.h"
 #include "../Engine/ResourceManager.h"
-#include "../Engine/Settings/Settings.h"
+#include "../Engine/Settings.h"
 #include "../Game/GameDefines.h"
 #include "../Game/GameDoorSceneryObject.h"
 #include "../Game/GameDudeObject.h"
@@ -103,7 +103,7 @@ void LocationState::setLocation(std::string name)
     if (mapFile == nullptr)
     {
         Logger::warning() << "No such map: `" << name << "`; using default map" << std::endl;
-        mapFile = ResourceManager::mapFileType("maps/" + EngineSettings::defaultInitLocation() + ".map");
+        mapFile = ResourceManager::mapFileType("maps/" + Engine::Settings::defaultInitLocation() + ".map");
     }
 
     _currentElevation = mapFile->defaultElevation();

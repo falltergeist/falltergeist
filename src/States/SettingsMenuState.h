@@ -24,7 +24,6 @@
 #include <map>
 
 // Falltergeist includes
-#include "../Engine/Settings/IniFile.h"
 #include "../Engine/State.h"
 
 // Third party includes

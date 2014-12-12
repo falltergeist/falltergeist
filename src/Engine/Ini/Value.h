@@ -31,7 +31,13 @@
 
 namespace Falltergeist
 {
-class IniValue
+namespace Engine
+{
+namespace Ini
+{
+
+
+class Value
 {
 public:
     enum class Tag
@@ -43,30 +49,30 @@ public:
         ARRAY
     };
 
-    IniValue();
+    Value();
 
-    ~IniValue();
+    ~Value();
 
-    IniValue & operator=(const IniValue &rhs);
+    Value & operator=(const Value &rhs);
 
 
-    IniValue(double doubleVal);
+    Value(double doubleVal);
 
-    IniValue(int integerVal);
+    Value(int integerVal);
 
-    IniValue(bool booleanVal);
-    IniValue(std::string stringVal);
-    IniValue(const IniValue &rhs);
-    IniValue(std::vector<IniValue> iniVal);
+    Value(bool booleanVal);
+    Value(std::string stringVal);
+    Value(const Value &rhs);
+    Value(std::vector<Value> iniVal);
 
-    IniValue::Tag tag() const;
-    static std::string tagString(IniValue::Tag tag);
+    Value::Tag tag() const;
+    static std::string tagString(Value::Tag tag);
     std::string value() const;
     int intValue() const;
     bool boolValue() const;
     double doubleValue() const;
 
-    friend class IniSection;
+    friend class Section;
 private:
     Tag _tag;
 
@@ -76,10 +82,12 @@ private:
         int _integerVal;
         bool _booleanVal;
         std::string _stringVal;
-        std::vector<IniValue> _iniVal;
+        std::vector<Value> _iniVal;
     };
 };
 
+}
+}
 }
 
 #endif // FALLTERGEIST_INI_VALUE_H
