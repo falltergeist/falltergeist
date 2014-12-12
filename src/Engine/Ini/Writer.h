@@ -46,8 +46,8 @@ public:
     void write(std::ostream &stream);
 };
 
-}
-}
-}
+} // Ini
+} // Engine
+} // Falltergeist
 
 #endif // FALLTERGEIST_INI_WRITER_H

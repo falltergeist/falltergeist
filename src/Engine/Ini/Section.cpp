@@ -233,6 +233,6 @@ Section::const_iterator Section::end() const
     return _properties.end();
 }
 
-}
-}
-}
+} // Ini
+} // Engine
+} // Falltergeist

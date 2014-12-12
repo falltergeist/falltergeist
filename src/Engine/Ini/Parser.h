@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_INI_PARSER_H
-#define FALLTERGEIST_INI_PARSER_H
+#ifndef FALLTERGEIST_ENGINE_INI_PARSER_H
+#define FALLTERGEIST_ENGINE_INI_PARSER_H
 
 // C++ standard includes
 #include <memory>
@@ -71,8 +71,8 @@ public:
     std::shared_ptr<File> parse();
 };
 
-}
-}
-}
+} // Ini
+} // Engine
+} // Falltergeist
 
-#endif // FALLTERGEIST_INI_PARSER_H
+#endif // FALLTERGEIST_ENGINE_INI_PARSER_H

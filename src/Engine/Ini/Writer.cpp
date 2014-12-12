@@ -33,7 +33,6 @@ namespace Engine
 namespace Ini
 {
 
-
 Writer::Writer(const File &ini) : _ini(ini)
 {
 }
@@ -60,6 +59,6 @@ void Writer::write(std::ostream &stream)
     }
 }
 
-}
-}
-}
+} // Ini
+} // Engine
+} // Falltergeist

@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_INI_SECTION_H
-#define FALLTERGEIST_INI_SECTION_H
+#ifndef FALLTERGEIST_ENGINE_INI_SECTION_H
+#define FALLTERGEIST_ENGINE_INI_SECTION_H
 
 // C++ standard includes
 #include <map>
@@ -96,8 +96,8 @@ public:
     bool hasProperty(const std::string &name) const;
 };
 
-}
-}
-}
+} // Ini
+} // Engine
+} // Falltergeist
 
-#endif // FALLTERGEIST_INI_SECTION_H
+#endif // FALLTERGEIST_ENGINE_INI_SECTION_H

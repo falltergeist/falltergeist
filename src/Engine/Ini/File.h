@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_INIFILE_H
-#define	FALLTERGEIST_INIFILE_H
+#ifndef FALLTERGEIST_ENGINE_INI_FILE_H
+#define	FALLTERGEIST_ENGINE_INI_FILE_H
 
 // C++ standard includes
 #include <fstream>
@@ -61,7 +61,8 @@ public:
     bool hasSection(const std::string &name) const;
 };
 
-}
-}
-}
-#endif	// FALLTERGEIST_INIFILE_H
+} // Ini
+} // Engine
+} // Falltergeist
+
+#endif	// FALLTERGEIST_ENGINE_INI_FILE_H

@@ -36,6 +36,7 @@ namespace Falltergeist
 {
 namespace Engine
 {
+
 const unsigned int Settings::_defaultScreenWidth = 640;
 const unsigned int Settings::_defaultScreenHeight = 480;
 const std::string Settings::_defaultInitLocation = "klamall";
@@ -570,5 +571,5 @@ bool Settings::fullscreen() const
     return _fullscreen;
 }
 
-}
-}
+} // Engine
+} // Falltergeist

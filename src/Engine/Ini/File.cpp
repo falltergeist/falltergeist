@@ -81,6 +81,6 @@ File::const_iterator File::end() const
     return _sections.end();
 }
 
-}
-}
-}
+} // Ini
+} // Engine
+} // Falltergeist

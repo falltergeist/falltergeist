@@ -367,6 +367,6 @@ std::shared_ptr<File> Parser::parse()
     return ini;
 }
 
-}
-}
-}
+} // Ini
+} // Engine
+} // Falltergeist

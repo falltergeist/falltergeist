@@ -33,7 +33,8 @@ namespace Ini
 {
 
 Value::Value()
-{}
+{
+}
 
 Value::~Value()
 {
@@ -200,6 +201,6 @@ Value::Tag Value::tag() const
     return _tag;
 }
 
-}
-}
-}
+} // Ini
+} // Engine
+} // Falltergeist
