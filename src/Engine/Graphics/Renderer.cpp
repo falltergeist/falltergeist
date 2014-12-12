@@ -286,6 +286,9 @@ void Renderer::drawTexture(Texture* texture, int x, int y, int sourceX, int sour
 {
     if (!texture->id()) registerTexture(texture);
 
+    SDL_SetTextureColorMod(_surfaces.at(texture->id() - 1), texture->r(), texture->g(), texture->b());
+    SDL_SetTextureAlphaMod(_surfaces.at(texture->id() - 1), texture->a());
+
     if (!sourceX && !sourceY && !sourceWidth && !sourceHeight)
     {
         SDL_Rect dest = {(short)x, (short)y, (unsigned short)texture->width(), (unsigned short)texture->height()};

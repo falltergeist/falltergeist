@@ -42,6 +42,7 @@ protected:
     unsigned int* _data = 0; // array of RGBA pixels
     void _unregister();
     SDL_Texture* _sdlTexture = 0;
+    SDL_Color _modifier = {255, 255, 255, 255};
 public:
     Texture(unsigned int width, unsigned int height);
     virtual ~Texture();
@@ -72,6 +73,13 @@ public:
 
     void loadFromRGB(unsigned int* data);
     void loadFromRGBA(unsigned int* data);
+
+    void setAlpha(unsigned char alpha);
+    void setColor(unsigned char r, unsigned char g, unsigned char b);
+    unsigned char r();
+    unsigned char g();
+    unsigned char b();
+    unsigned char a();
 
 };
 
