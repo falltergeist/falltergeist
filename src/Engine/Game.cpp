@@ -29,8 +29,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/GameTime.h"
 #include "../Engine/Graphics/AnimatedPalette.h"
-#include "../Engine/Graphics/OpenGLRenderer.h"
-#include "../Engine/Graphics/SDLRenderer.h"
+#include "../Engine/Graphics/Renderer.h"
 #include "../Engine/Input/Mouse.h"
 #include "../Engine/Logger.h"
 #include "../Engine/ResourceManager.h"
@@ -41,6 +40,7 @@
 #include "../UI/TextArea.h"
 
 // Third patry includes
+#include "SDL.h"
 
 namespace Falltergeist
 {
@@ -73,15 +73,7 @@ void Game::_initialize()
     auto width = _engineSettings->screenWidth();
     auto height = _engineSettings->screenHeight();
 
-    switch (_engineSettings->renderer())
-    {
-        case EngineSettings::Renderer::SDL:
-            _renderer = new SDLRenderer(width, height);
-            break;
-        case EngineSettings::Renderer::OPENGL:
-            _renderer = new OpenGLRenderer(width, height);
-            break;
-    }
+    _renderer = new Renderer(width, height);
 
     Logger::info("GAME") << CrossPlatform::getVersion() << std::endl;
     Logger::info("GAME") << "Opensource Fallout 2 game engine" << std::endl;
