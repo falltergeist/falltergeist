@@ -21,6 +21,9 @@
 
 // Falltergeist includes
 #include "../Game/GameWallObject.h"
+#include "../Engine/Game.h"
+#include "../Game/GameDudeObject.h"
+#include "../Engine/PathFinding/Hexagon.h"
 
 // Third party includes
 
@@ -34,6 +37,25 @@ GameWallObject::GameWallObject() : GameObject()
 
 GameWallObject::~GameWallObject()
 {
+}
+
+void GameWallObject::think()
+{
+    GameObject::think();
+    auto dude = Game::getInstance()->player();
+    auto hex = dude->hexagon();
+
+    int dx = (hexagon()->number() % 200) - (hex->number() % 200);
+    int dy = (hexagon()->number() / 200) - (hex->number() / 200);
+
+    if ((dx>0 && dx<3 && dy>0 && dy<3))// || (dy>0 && dy<3 && dx>-3 && dx<3))
+    {
+        _transparent = true;
+    }
+    else
+    {
+        _transparent = false;
+    }
 }
 
 }

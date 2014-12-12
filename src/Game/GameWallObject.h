@@ -36,6 +36,9 @@ protected:
 public:
     GameWallObject();
     virtual ~GameWallObject();
+    virtual void think();
+private:
+    bool _transparent = false;
 };
 
 }
