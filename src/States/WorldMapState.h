@@ -36,8 +36,6 @@ class WorldMapState : public State
 {
 public:
 
-    bool WorldMapFullscreen = true; // true = fullscreen, false = classic 640x480
-
     WorldMapState();
 
     virtual void init();

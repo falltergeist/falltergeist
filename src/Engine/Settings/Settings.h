@@ -53,6 +53,8 @@ public:
 
     bool displayFps() const;
 
+    bool worldMapFullscreen() const;
+
     bool displayMousePosition() const;
 
     bool audioEnabled() const;
@@ -108,6 +110,7 @@ private:
     std::string _initLocation;
     bool _forceLocation;
     bool _displayFps;
+    bool _worldMapFullscreen;
     bool _displayMousePosition;
     std::string _loggerLevel;
     bool _loggerColors;
@@ -149,6 +152,7 @@ private:
     static const std::string _defaultLoggerLevel;
     static const bool _defaultLoggerColors;
     static const bool _defaultDisplayFps;
+    static const bool _defaultWorldMapFullscreen;
     static const bool _defaultDisplayMousePosition;
     static const unsigned int _defaultScale;
     static const bool _defaultFullscreen;
