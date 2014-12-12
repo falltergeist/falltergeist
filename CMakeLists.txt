@@ -46,12 +46,6 @@ if(NOT SDLMIXER_FOUND)
 endif(NOT SDLMIXER_FOUND)
 include_directories(${SDLMIXER_INCLUDE_DIR})
 
-find_package(OpenGL REQUIRED)
-if(NOT OPENGL_FOUND)
-    message(FATAL_ERROR "OpenGL library not found")
-endif(NOT OPENGL_FOUND)
-include_directories(${OPENGL_INCLUDE_DIR})
-
 configure_file(src/Engine/CrossPlatform.cpp.in src/Engine/CrossPlatform.cpp)
 
 set(SOURCES main.cpp
@@ -622,7 +616,7 @@ endif()
 
 add_executable(falltergeist-bin ${SOURCES})
 set_target_properties(falltergeist-bin PROPERTIES OUTPUT_NAME falltergeist)
-target_link_libraries(falltergeist-bin ${SDL2_LIBRARY} ${SDLMIXER_LIBRARY} ${OPENGL_LIBRARIES} ${LIBFALLTERGEIST_LIBRARY})
+target_link_libraries(falltergeist-bin ${SDL2_LIBRARY} ${SDLMIXER_LIBRARY} ${LIBFALLTERGEIST_LIBRARY})
 
 #
 # Install section
