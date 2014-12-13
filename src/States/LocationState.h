@@ -24,7 +24,7 @@
 #include <memory>
 
 // Falltergeist includes
-#include "../Engine/State.h"
+#include "../State.h"
 #include "../UI/ImageButton.h"
 
 // Third party includes

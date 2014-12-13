@@ -20,16 +20,16 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/Game.h"
-#include "../Engine/Graphics/Renderer.h"
-#include "../Engine/ResourceManager.h"
+#include "../Game.h"
+#include "../Graphics/Renderer.h"
+#include "../ResourceManager.h"
 #include "../States/SettingsMenuState.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/MultistateImageButton.h"
 #include "../UI/Slider.h"
 #include "../UI/TextArea.h"
-#include "../Engine/Settings.h"
+#include "../Settings.h"
 
 // Third party includes
 

@@ -20,11 +20,11 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/Game.h"
-#include "../Engine/Graphics/Renderer.h"
-#include "../Engine/Event/KeyboardEvent.h"
-#include "../Engine/Input/Mouse.h"
-#include "../Engine/ResourceManager.h"
+#include "../Game.h"
+#include "../Graphics/Renderer.h"
+#include "../Event/KeyboardEvent.h"
+#include "../Input/Mouse.h"
+#include "../ResourceManager.h"
 #include "../States/PipBoyState.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"

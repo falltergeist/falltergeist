@@ -26,7 +26,7 @@
 #include <memory>
 
 // Falltergeist includes
-#include "../Engine/Event/Event.h"
+#include "../Event/Event.h"
 
 // Third party includes
 

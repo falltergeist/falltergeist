@@ -22,10 +22,10 @@
 
 // Falltergeist includes
 #include "../UI/MvePlayer.h"
-#include "../Engine/Game.h"
-#include "../Engine/Graphics/Renderer.h"
-#include "../Engine/Exception.h"
-#include "../Engine/Logger.h"
+#include "../Game.h"
+#include "../Graphics/Renderer.h"
+#include "../Exception.h"
+#include "../Logger.h"
 
 // Third party includes
 

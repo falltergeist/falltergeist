@@ -26,7 +26,7 @@
 // Falltergeist includes
 #include "../Game/GameObject.h"
 #include "../Game/GameArmorItemObject.h"
-#include "../Engine/PathFinding/Hexagon.h"
+#include "../PathFinding/Hexagon.h"
 
 // Third party includes
 

@@ -25,7 +25,7 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Engine/State.h"
+#include "../State.h"
 #include "../UI/BigCounter.h"
 #include "../UI/HiddenMask.h"
 #include "../UI/ImageButton.h"

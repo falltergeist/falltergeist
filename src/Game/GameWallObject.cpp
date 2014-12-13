@@ -21,9 +21,9 @@
 
 // Falltergeist includes
 #include "../Game/GameWallObject.h"
-#include "../Engine/Game.h"
+#include "../Game.h"
 #include "../Game/GameDudeObject.h"
-#include "../Engine/PathFinding/Hexagon.h"
+#include "../PathFinding/Hexagon.h"
 
 // Third party includes
 

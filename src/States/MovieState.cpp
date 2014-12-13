@@ -20,20 +20,20 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/Event/KeyboardEvent.h"
-#include "../Engine/Event/MouseEvent.h"
-#include "../Engine/Game.h"
+#include "../Event/KeyboardEvent.h"
+#include "../Event/MouseEvent.h"
+#include "../Game.h"
 #include "../UI/MvePlayer.h"
 #include "../UI/TextArea.h"
-#include "../Engine/Input/Mouse.h"
-#include "../Engine/ResourceManager.h"
+#include "../Input/Mouse.h"
+#include "../ResourceManager.h"
 #include "../States/MovieState.h"
 #include "../States/MainMenuState.h"
-#include "../Engine/Graphics/Renderer.h"
-#include "../Engine/Ini/Parser.h"
-#include "../Engine/Ini/File.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Audio/AudioMixer.h"
+#include "../Graphics/Renderer.h"
+#include "../Ini/Parser.h"
+#include "../Ini/File.h"
+#include "../CrossPlatform.h"
+#include "../Audio/AudioMixer.h"
 
 // Third party includes
 

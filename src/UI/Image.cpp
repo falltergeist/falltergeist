@@ -20,8 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/Graphics/Texture.h"
-#include "../Engine/ResourceManager.h"
+#include "../Graphics/Texture.h"
+#include "../ResourceManager.h"
 #include "../UI/Image.h"
 
 // Third party includes

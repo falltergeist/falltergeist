@@ -21,7 +21,7 @@
 #define FALLTERGEIST_PIPBOYSTATE_H
 
 // C++ standard includes
-#include "../Engine/State.h"
+#include "../State.h"
 
 // Third party includes
 

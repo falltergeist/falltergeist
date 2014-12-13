@@ -21,10 +21,10 @@
 #include <sstream>
 
 // Falltergeist includes
-#include "../Engine/Game.h"
-#include "../Engine/Graphics/Renderer.h"
-#include "../Engine/ResourceManager.h"
-#include "../Engine/Event/StateEvent.h"
+#include "../Game.h"
+#include "../Graphics/Renderer.h"
+#include "../ResourceManager.h"
+#include "../Event/StateEvent.h"
 #include "../Game/GameDudeObject.h"
 #include "../States/NewGameState.h"
 #include "../States/LocationState.h"

@@ -22,15 +22,15 @@
 
 // Falltergeist includes
 #include "../States/CreditsState.h"
-#include "../Engine/Event/KeyboardEvent.h"
-#include "../Engine/Event/MouseEvent.h"
-#include "../Engine/Event/StateEvent.h"
-#include "../Engine/Game.h"
+#include "../Event/KeyboardEvent.h"
+#include "../Event/MouseEvent.h"
+#include "../Event/StateEvent.h"
+#include "../Game.h"
 #include "../UI/TextArea.h"
-#include "../Engine/Input/Mouse.h"
-#include "../Engine/ResourceManager.h"
-#include "../Engine/Graphics/Renderer.h"
-#include "../Engine/CrossPlatform.h"
+#include "../Input/Mouse.h"
+#include "../ResourceManager.h"
+#include "../Graphics/Renderer.h"
+#include "../CrossPlatform.h"
 
 // Third party includes
 

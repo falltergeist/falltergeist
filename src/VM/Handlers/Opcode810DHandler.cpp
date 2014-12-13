@@ -21,7 +21,7 @@
 #include <algorithm>
 
 // Falltergeist includes
-#include "../../Engine/Logger.h"
+#include "../../Logger.h"
 #include "../../VM/Handlers/Opcode810DHandler.h"
 #include "../../VM/VM.h"
 #include "../../Game/GameCritterObject.h"

@@ -22,8 +22,8 @@
 #include <string.h>
 
 // Falltergeist includes
-#include "../Engine/Graphics/Texture.h"
-#include "../Engine/ResourceManager.h"
+#include "../Graphics/Texture.h"
+#include "../ResourceManager.h"
 #include "../UI/Image.h"
 #include "../UI/SmallCounter.h"
 

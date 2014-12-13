@@ -22,7 +22,7 @@
 // Falltergeist includes
 #include "../UI/MonthCounter.h"
 #include "../UI/Image.h"
-#include "../Engine/Graphics/Texture.h"
+#include "../Graphics/Texture.h"
 
 // Third party includes
 

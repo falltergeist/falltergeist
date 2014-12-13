@@ -22,13 +22,13 @@
 #include <sstream>
 
 // Falltergeist includes
-#include "../Engine/Exception.h"
-#include "../Engine/Game.h"
-#include "../Engine/Graphics/Animation.h"
-#include "../Engine/Logger.h"
-#include "../Engine/PathFinding/Hexagon.h"
-#include "../Engine/PathFinding/HexagonGrid.h"
-#include "../Engine/ResourceManager.h"
+#include "../Exception.h"
+#include "../Game.h"
+#include "../Graphics/Animation.h"
+#include "../Logger.h"
+#include "../PathFinding/Hexagon.h"
+#include "../PathFinding/HexagonGrid.h"
+#include "../ResourceManager.h"
 #include "../Game/GameAmmoItemObject.h"
 #include "../Game/GameArmorItemObject.h"
 #include "../Game/GameContainerItemObject.h"

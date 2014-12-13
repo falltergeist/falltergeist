@@ -24,7 +24,7 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Engine/State.h"
+#include "../State.h"
 #include "../UI/TextArea.h"
 
 // Third party includes

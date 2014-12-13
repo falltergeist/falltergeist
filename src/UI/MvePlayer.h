@@ -23,7 +23,7 @@
 #include <ctime>
 
 // Falltergeist includes
-#include "../Engine/Graphics/UI.h"
+#include "../Graphics/UI.h"
 
 // Third party includes
 #include <libfalltergeist.h>

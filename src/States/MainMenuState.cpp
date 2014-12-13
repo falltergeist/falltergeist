@@ -21,13 +21,13 @@
 #include <sstream>
 
 // Falltergeist includes
-#include "../Engine/Event/StateEvent.h"
-#include "../Engine/Game.h"
-#include "../Engine/Graphics/Animation.h"
-#include "../Engine/Graphics/Renderer.h"
-#include "../Engine/Audio/AudioMixer.h"
-#include "../Engine/Input/Mouse.h"
-#include "../Engine/ResourceManager.h"
+#include "../Event/StateEvent.h"
+#include "../Game.h"
+#include "../Graphics/Animation.h"
+#include "../Graphics/Renderer.h"
+#include "../Audio/AudioMixer.h"
+#include "../Input/Mouse.h"
+#include "../ResourceManager.h"
 #include "../States/CreditsState.h"
 #include "../States/LoadGameState.h"
 #include "../States/MainMenuState.h"

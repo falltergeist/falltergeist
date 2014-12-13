@@ -20,15 +20,15 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Logger.h"
+#include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80D4Handler.h"
-#include "../../Engine/Exception.h"
-#include "../../Engine/Game.h"
-#include "../../Engine/ResourceManager.h"
+#include "../../Exception.h"
+#include "../../Game.h"
+#include "../../ResourceManager.h"
 #include "../../Game/GameObject.h"
 #include "../../States/LocationState.h"
-#include "../../Engine/PathFinding/Hexagon.h"
-#include "../../Engine/PathFinding/HexagonGrid.h"
+#include "../../PathFinding/Hexagon.h"
+#include "../../PathFinding/HexagonGrid.h"
 #include "../../VM/VM.h"
 
 

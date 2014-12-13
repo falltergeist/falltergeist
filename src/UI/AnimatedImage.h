@@ -24,8 +24,8 @@
 #include <string>
 
 // Falltergeist includes
-#include "../Engine/Graphics/ActiveUI.h"
-#include "../Engine/Graphics/UI.h"
+#include "../Graphics/ActiveUI.h"
+#include "../Graphics/UI.h"
 
 // Third party includes
 #include <libfalltergeist.h>

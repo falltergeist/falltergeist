@@ -23,7 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/State.h"
+#include "../State.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 

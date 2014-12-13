@@ -37,8 +37,8 @@
 #include "../Game/GameStairsSceneryObject.h"
 #include "../Game/GameWallObject.h"
 #include "../Game/GameWeaponItemObject.h"
-#include "../Engine/Exception.h"
-#include "../Engine/ResourceManager.h"
+#include "../Exception.h"
+#include "../ResourceManager.h"
 #include "../VM/VM.h"
 
 // Third party includes

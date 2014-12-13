@@ -23,11 +23,11 @@
 #include <ctime>
 
 // Falltergeist includes
-#include "../Engine/Game.h"
-#include "../Engine/Graphics/Renderer.h"
-#include "../Engine/Input/Mouse.h"
-#include "../Engine/ResourceManager.h"
-#include "../Engine/Settings.h"
+#include "../Game.h"
+#include "../Graphics/Renderer.h"
+#include "../Input/Mouse.h"
+#include "../ResourceManager.h"
+#include "../Settings.h"
 #include "../Game/GameDudeObject.h"
 #include "../States/CritterDialogState.h"
 #include "../States/MainMenuState.h"

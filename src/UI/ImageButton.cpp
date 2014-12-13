@@ -21,11 +21,11 @@
 #include <string>
 
 // Falltergeist includes
-#include "../Engine/Exception.h"
-#include "../Engine/ResourceManager.h"
+#include "../Exception.h"
+#include "../ResourceManager.h"
 #include "../UI/ImageButton.h"
-#include "../Engine/Game.h"
-#include "../Engine/Audio/AudioMixer.h"
+#include "../Game.h"
+#include "../Audio/AudioMixer.h"
 
 // Third party includes
 

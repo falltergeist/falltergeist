@@ -20,11 +20,11 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/Exception.h"
-#include "../Engine/Game.h"
-#include "../Engine/Graphics/Renderer.h"
-#include "../Engine/Graphics/Texture.h"
-#include "../Engine/Input/Mouse.h"
+#include "../Exception.h"
+#include "../Game.h"
+#include "../Graphics/Renderer.h"
+#include "../Graphics/Texture.h"
+#include "../Input/Mouse.h"
 #include "../Game/GameCritterObject.h"
 #include "../Game/GameDudeObject.h"
 #include "../States/CursorDropdownState.h"

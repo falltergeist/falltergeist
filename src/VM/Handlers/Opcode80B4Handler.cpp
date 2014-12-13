@@ -21,7 +21,7 @@
 #include <cstdlib>
 #include <ctime>
 // Falltergeist includes
-#include "../../Engine/Logger.h"
+#include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80B4Handler.h"
 #include "../../VM/VM.h"
 

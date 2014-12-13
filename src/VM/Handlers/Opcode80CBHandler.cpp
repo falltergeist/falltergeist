@@ -20,8 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Exception.h"
-#include "../../Engine/Logger.h"
+#include "../../Exception.h"
+#include "../../Logger.h"
 #include "../../Game/GameCritterObject.h"
 #include "../../Game/GameDudeObject.h"
 #include "../../VM/Handlers/Opcode80CBHandler.h"

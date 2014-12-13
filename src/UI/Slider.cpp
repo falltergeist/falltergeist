@@ -22,8 +22,8 @@
 // Falltergeist includes
 #include "../UI/Image.h"
 #include "../UI/Slider.h"
-#include "../Engine/Game.h"
-#include "../Engine/Audio/AudioMixer.h"
+#include "../Game.h"
+#include "../Audio/AudioMixer.h"
 
 // Third party includes
 

@@ -20,9 +20,9 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "src/Engine/Exception.h"
-#include "src/Engine/Game.h"
-#include "src/Engine/Logger.h"
+#include "src/Exception.h"
+#include "src/Game.h"
+#include "src/Logger.h"
 #include "src/States/StartState.h"
 
 // Third party includes

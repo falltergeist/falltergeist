@@ -21,11 +21,11 @@
 #include <iostream>
 
 // Falltergeist includes
-#include "../Engine/Game.h"
-#include "../Engine/Graphics/Renderer.h"
-#include "../Engine/Input/Mouse.h"
-#include "../Engine/ResourceManager.h"
-#include "../Engine/Settings.h"
+#include "../Game.h"
+#include "../Graphics/Renderer.h"
+#include "../Input/Mouse.h"
+#include "../ResourceManager.h"
+#include "../Settings.h"
 #include "../States/WorldMapState.h"
 #include "../States/LocationState.h"
 #include "../States/MainMenuState.h"
