@@ -23,7 +23,7 @@
 #include "src/Exception.h"
 #include "src/Game.h"
 #include "src/Logger.h"
-#include "src/States/StartState.h"
+#include "src/State/Start.h"
 
 // Third party includes
 #include <libfalltergeist.h>
@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
     try
     {
         auto game = Game::getInstance();
-        game->setState(new StartState());
+        game->setState(new State::Start());
         game->run();
         game->shutdown();
         return 0;

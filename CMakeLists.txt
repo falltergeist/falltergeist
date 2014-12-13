@@ -117,8 +117,6 @@ set(SOURCES main.cpp
     src/ResourceManager.h
     src/Settings.cpp
     src/Settings.h
-    src/State.cpp
-    src/State.h
     src/Game/GameDefines.h
     src/Game/GameDudeObject.cpp
     src/Game/GameDudeObject.h
@@ -166,64 +164,66 @@ set(SOURCES main.cpp
     src/Game/GameLocation.h
     src/Game/GameLocationElevation.cpp
     src/Game/GameLocationElevation.h
-    src/States/CreditsState.cpp
-    src/States/CreditsState.h
-    src/States/CritterBarterState.cpp
-    src/States/CritterBarterState.h
-    src/States/CritterDialogReviewState.cpp
-    src/States/CritterDialogReviewState.h
-    src/States/CritterDialogState.cpp
-    src/States/CritterDialogState.h
-    src/States/CritterInteractState.cpp
-    src/States/CritterInteractState.h
-    src/States/CursorDropdownState.cpp
-    src/States/CursorDropdownState.h
-    src/States/ExitConfirmState.cpp
-    src/States/ExitConfirmState.h
-    src/States/GameMenuState.cpp
-    src/States/GameMenuState.h
-    src/States/InventoryDragItemState.cpp
-    src/States/InventoryDragItemState.h
-    src/States/InventoryState.cpp
-    src/States/InventoryState.h
-    src/States/LoadGameState.cpp
-    src/States/LoadGameState.h
-    src/States/LocationState.cpp
-    src/States/LocationState.h
-    src/States/MainMenuState.cpp
-    src/States/MainMenuState.h
-    src/States/MovieState.cpp
-    src/States/MovieState.h
-    src/States/NewGameState.cpp
-    src/States/NewGameState.h
-    src/States/PipBoyState.cpp
-    src/States/PipBoyState.h
-    src/States/PlayerCreateOptionsState.cpp
-    src/States/PlayerCreateOptionsState.h
-    src/States/PlayerCreateState.cpp
-    src/States/PlayerCreateState.h
-    src/States/PlayerEditState.cpp
-    src/States/PlayerEditState.h
-    src/States/PlayerEditAgeState.cpp
-    src/States/PlayerEditAgeState.h
-    src/States/PlayerEditAlertState.cpp
-    src/States/PlayerEditAlertState.h
-    src/States/PlayerEditGenderState.cpp
-    src/States/PlayerEditGenderState.h
-    src/States/PlayerEditNameState.cpp
-    src/States/PlayerEditNameState.h
-    src/States/PlayerPanelState.cpp
-    src/States/PlayerPanelState.h
-    src/States/SaveGameState.cpp
-    src/States/SaveGameState.h
-    src/States/SettingsMenuState.cpp
-    src/States/SettingsMenuState.h
-    src/States/SkilldexState.cpp
-    src/States/SkilldexState.h
-    src/States/StartState.cpp
-    src/States/StartState.h
-    src/States/WorldMapState.cpp
-    src/States/WorldMapState.h
+    src/State/Credits.cpp
+    src/State/Credits.h
+    src/State/CritterBarter.cpp
+    src/State/CritterBarter.h
+    src/State/CritterDialogReview.cpp
+    src/State/CritterDialogReview.h
+    src/State/CritterDialog.cpp
+    src/State/CritterDialog.h
+    src/State/CritterInteract.cpp
+    src/State/CritterInteract.h
+    src/State/CursorDropdown.cpp
+    src/State/CursorDropdown.h
+    src/State/ExitConfirm.cpp
+    src/State/ExitConfirm.h
+    src/State/GameMenu.cpp
+    src/State/GameMenu.h
+    src/State/InventoryDragItem.cpp
+    src/State/InventoryDragItem.h
+    src/State/Inventory.cpp
+    src/State/Inventory.h
+    src/State/LoadGame.cpp
+    src/State/LoadGame.h
+    src/State/Location.cpp
+    src/State/Location.h
+    src/State/MainMenu.cpp
+    src/State/MainMenu.h
+    src/State/Movie.cpp
+    src/State/Movie.h
+    src/State/NewGame.cpp
+    src/State/NewGame.h
+    src/State/PipBoy.cpp
+    src/State/PipBoy.h
+    src/State/PlayerCreateOptions.cpp
+    src/State/PlayerCreateOptions.h
+    src/State/PlayerCreate.cpp
+    src/State/PlayerCreate.h
+    src/State/PlayerEdit.cpp
+    src/State/PlayerEdit.h
+    src/State/PlayerEditAge.cpp
+    src/State/PlayerEditAge.h
+    src/State/PlayerEditAlert.cpp
+    src/State/PlayerEditAlert.h
+    src/State/PlayerEditGender.cpp
+    src/State/PlayerEditGender.h
+    src/State/PlayerEditName.cpp
+    src/State/PlayerEditName.h
+    src/State/PlayerPanel.cpp
+    src/State/PlayerPanel.h
+    src/State/SaveGame.cpp
+    src/State/SaveGame.h
+    src/State/SettingsMenu.cpp
+    src/State/SettingsMenu.h
+    src/State/Skilldex.cpp
+    src/State/Skilldex.h
+    src/State/Start.cpp
+    src/State/Start.h
+    src/State/State.cpp
+    src/State/State.h
+    src/State/WorldMap.cpp
+    src/State/WorldMap.h
     src/UI/AnimatedImage.cpp
     src/UI/AnimatedImage.h
     src/UI/BigCounter.cpp
