@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_ENGINE_INI_VALUE_H
-#define FALLTERGEIST_ENGINE_INI_VALUE_H
+#ifndef FALLTERGEIST_INI_VALUE_H
+#define FALLTERGEIST_INI_VALUE_H
 
 // C++ standard includes
 #include <string>
@@ -30,8 +30,6 @@
 // Third party includes
 
 namespace Falltergeist
-{
-namespace Engine
 {
 namespace Ini
 {
@@ -86,7 +84,6 @@ private:
 };
 
 } // Ini
-} // Engine
 } // Falltergeist
 
 #endif // FALLTERGEIST_INI_VALUE_H

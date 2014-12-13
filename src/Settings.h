@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_ENGINE_SETTINGS_H
-#define FALLTERGEIST_ENGINE_SETTINGS_H
+#ifndef FALLTERGEIST_SETTINGS_H
+#define FALLTERGEIST_SETTINGS_H
 
 // C++ standard includes
 #include <string>
@@ -28,8 +28,6 @@
 // Third patry includes
 
 namespace Falltergeist
-{
-namespace Engine
 {
 namespace Ini
 {
@@ -146,8 +144,8 @@ private:
     double _sfxVolume;
     double _voiceVolume;
 
-    void _createDefaultConfig(Engine::Ini::File &ini);
-    void _readConfig(Engine::Ini::File &ini);
+    void _createDefaultConfig(Ini::File &ini);
+    void _readConfig(Ini::File &ini);
 
     // DEFAULTS
     static const unsigned int _defaultScreenWidth;
@@ -189,7 +187,6 @@ private:
 
 };
 
-} // Engine
 } // Falltergeist
 
-#endif // FALLTERGEIST_ENGINE_SETTINGS_H
+#endif // FALLTERGEIST_SETTINGS_H

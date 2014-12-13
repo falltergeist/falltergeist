@@ -27,8 +27,6 @@
 
 namespace Falltergeist
 {
-namespace Engine
-{
 namespace Ini
 {
 
@@ -202,5 +200,4 @@ Value::Tag Value::tag() const
 }
 
 } // Ini
-} // Engine
 } // Falltergeist

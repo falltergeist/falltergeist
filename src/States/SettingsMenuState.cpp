@@ -63,51 +63,51 @@ void SettingsMenuState::init()
     // Switches (big)
     auto combatDifficultySwitch = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, backgroundX+76, backgroundY+71);
     combatDifficultySwitch->setMaxState(3);
-    combatDifficultySwitch->setState(Game::getInstance()->engineSettings()->combatDifficulty());
+    combatDifficultySwitch->setState(Game::getInstance()->settings()->combatDifficulty());
     addUI("combat_difficulty",combatDifficultySwitch);
 
     auto gameDifficultySwitch = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, backgroundX+76, backgroundY+149);
     gameDifficultySwitch->setMaxState(3);
-    gameDifficultySwitch->setState(Game::getInstance()->engineSettings()->gameDifficulty());
+    gameDifficultySwitch->setState(Game::getInstance()->settings()->gameDifficulty());
     addUI("game_difficulty",gameDifficultySwitch);
 
     auto violenceLevelSwitch = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, backgroundX+76, backgroundY+227);
-    violenceLevelSwitch->setState(Game::getInstance()->engineSettings()->violenceLevel());
+    violenceLevelSwitch->setState(Game::getInstance()->settings()->violenceLevel());
     addUI("violence_level",violenceLevelSwitch);
 
     auto targetHighlightSwitch = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, backgroundX+76, backgroundY+309);
     targetHighlightSwitch->setMaxState(3);
-    targetHighlightSwitch->setState(Game::getInstance()->engineSettings()->targetHighlight());
+    targetHighlightSwitch->setState(Game::getInstance()->settings()->targetHighlight());
     addUI("target_highlight",targetHighlightSwitch);
 
     auto combatLooksSwitch = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, backgroundX+76, backgroundY+387);
     combatLooksSwitch->setMaxState(2);
-    combatLooksSwitch->setState(Game::getInstance()->engineSettings()->combatLooks());
+    combatLooksSwitch->setState(Game::getInstance()->settings()->combatLooks());
     addUI("combat_looks",combatLooksSwitch);
 
     // Switches (small)
     auto combatMessagesSwitch = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74);
-    combatMessagesSwitch->setState(Game::getInstance()->engineSettings()->combatMessages());
+    combatMessagesSwitch->setState(Game::getInstance()->settings()->combatMessages());
     addUI("combat_messages",combatMessagesSwitch);
 
     auto combatTauntsSwitch = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74+66);
-    combatTauntsSwitch->setState(Game::getInstance()->engineSettings()->combatTaunts());
+    combatTauntsSwitch->setState(Game::getInstance()->settings()->combatTaunts());
     addUI("combat_taunts",combatTauntsSwitch);
 
     auto languageFilterSwitch = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74+66*2);
-    languageFilterSwitch->setState(Game::getInstance()->engineSettings()->languageFilter());
+    languageFilterSwitch->setState(Game::getInstance()->settings()->languageFilter());
     addUI("language_filter",languageFilterSwitch);
 
     auto runningSwitch = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74+66*3);
-    runningSwitch->setState(Game::getInstance()->engineSettings()->running());
+    runningSwitch->setState(Game::getInstance()->settings()->running());
     addUI("running",runningSwitch);
 
     auto subtitlesSwitch = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74+66*4);
-    subtitlesSwitch->setState(Game::getInstance()->engineSettings()->subtitles());
+    subtitlesSwitch->setState(Game::getInstance()->settings()->subtitles());
     addUI("subtitles",subtitlesSwitch);
 
     auto itemHightlightSwitch = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74+66*5);
-    itemHightlightSwitch->setState(Game::getInstance()->engineSettings()->itemHighlight());
+    itemHightlightSwitch->setState(Game::getInstance()->settings()->itemHighlight());
     addUI("item_highlight",itemHightlightSwitch);
 
     // LABELS
@@ -307,7 +307,7 @@ void SettingsMenuState::init()
 
     // button: Affect player speed
     auto affectPlayerSpeedCheckBox = new ImageButton(ImageButton::TYPE_CHECKBOX, backgroundX+383, backgroundY+68);
-    affectPlayerSpeedCheckBox->setChecked(Game::getInstance()->engineSettings()->playerSpeedup());
+    affectPlayerSpeedCheckBox->setChecked(Game::getInstance()->settings()->playerSpeedup());
     addUI("player_speedup", affectPlayerSpeedCheckBox);
 
     // SLIDERS
@@ -315,42 +315,42 @@ void SettingsMenuState::init()
     auto combatSpeedSlider = new Slider(backgroundX+384, backgroundY+50);
     combatSpeedSlider->setMinValue(0.0);
     combatSpeedSlider->setMaxValue(50.0);
-    combatSpeedSlider->setValue(Game::getInstance()->engineSettings()->combatSpeed());
+    combatSpeedSlider->setValue(Game::getInstance()->settings()->combatSpeed());
     addUI("combat_speed",combatSpeedSlider);
 
     // TEXT DELAY SLIDER
     auto textDelaySlider = new Slider(backgroundX+384, backgroundY+125);
-    textDelaySlider->setValue(Game::getInstance()->engineSettings()->textDelay());
+    textDelaySlider->setValue(Game::getInstance()->settings()->textDelay());
     addUI("text_delay",textDelaySlider);
 
     // MASTER AUDIO VOLUME SLIDER
     auto masterAudioVolumeSlider = new Slider(backgroundX+384, backgroundY+196);
-    masterAudioVolumeSlider->setValue(Game::getInstance()->engineSettings()->masterVolume());
+    masterAudioVolumeSlider->setValue(Game::getInstance()->settings()->masterVolume());
     addUI("master_volume", masterAudioVolumeSlider);
 
     // MUSIC VOLUME SLIDER
     auto musicVolumeSlider = new Slider(backgroundX+384, backgroundY+196+51);
-    musicVolumeSlider->setValue(Game::getInstance()->engineSettings()->musicVolume());
+    musicVolumeSlider->setValue(Game::getInstance()->settings()->musicVolume());
     addUI("music_volume", musicVolumeSlider);
 
     // SOUND EFFECTS VOLUME SLIDER
     auto soundEffectsVolumeSlider = new Slider(backgroundX+384, backgroundY+196+51*2);
-    soundEffectsVolumeSlider->setValue(Game::getInstance()->engineSettings()->sfxVolume());
+    soundEffectsVolumeSlider->setValue(Game::getInstance()->settings()->sfxVolume());
     addUI("sfx_volume", soundEffectsVolumeSlider);
 
     // SPEECH VOLUME SLIDER
     auto speechVolumeSlider = new Slider(backgroundX+384, backgroundY+196+51*3);
-    speechVolumeSlider->setValue(Game::getInstance()->engineSettings()->voiceVolume());
+    speechVolumeSlider->setValue(Game::getInstance()->settings()->voiceVolume());
     addUI("voice_volume", speechVolumeSlider);
 
     // BRIGHTNESS LEVEL SLIDER
     auto brightnessLevelSlider = new Slider(backgroundX+384, backgroundY+196+51*4);
-    brightnessLevelSlider->setValue(Game::getInstance()->engineSettings()->brightness());
+    brightnessLevelSlider->setValue(Game::getInstance()->settings()->brightness());
     addUI("brightness", brightnessLevelSlider);
 
     // MOUSE SENSITIVITY SLIDER
     auto mouseSensitivitySlider = new Slider(backgroundX+384, backgroundY+196+51*5);
-    mouseSensitivitySlider->setValue(Game::getInstance()->engineSettings()->mouseSensitivity());
+    mouseSensitivitySlider->setValue(Game::getInstance()->settings()->mouseSensitivity());
     addUI("mouse_sensitivity",mouseSensitivitySlider);
 }
 
@@ -418,31 +418,31 @@ void SettingsMenuState::onCancelButtonClick(MouseEvent* event)
 
 void SettingsMenuState::onSaveButtonClick(MouseEvent* event)
 {
-    Game::getInstance()->engineSettings()->setCombatDifficulty(((MultistateImageButton*)getUI("combat_difficulty"))->state());
-    Game::getInstance()->engineSettings()->setGameDifficulty(((MultistateImageButton*)getUI("game_difficulty"))->state());
-    Game::getInstance()->engineSettings()->setViolenceLevel(((MultistateImageButton*)getUI("violence_level"))->state());
-    Game::getInstance()->engineSettings()->setTargetHighlight(((MultistateImageButton*)getUI("target_highlight"))->state());
-    Game::getInstance()->engineSettings()->setCombatLooks(((MultistateImageButton*)getUI("combat_looks"))->state());
-    Game::getInstance()->engineSettings()->setCombatMessages(((MultistateImageButton*)getUI("combat_messages"))->state());
-    Game::getInstance()->engineSettings()->setCombatTaunts(((MultistateImageButton*)getUI("combat_taunts"))->state());
-    Game::getInstance()->engineSettings()->setLanguageFilter(((MultistateImageButton*)getUI("language_filter"))->state());
-    Game::getInstance()->engineSettings()->setRunning(((MultistateImageButton*)getUI("running"))->state());
-    Game::getInstance()->engineSettings()->setSubtitles(((MultistateImageButton*)getUI("subtitles"))->state());
-    Game::getInstance()->engineSettings()->setItemHighlight(((MultistateImageButton*)getUI("item_highlight"))->state());
+    Game::getInstance()->settings()->setCombatDifficulty(((MultistateImageButton*)getUI("combat_difficulty"))->state());
+    Game::getInstance()->settings()->setGameDifficulty(((MultistateImageButton*)getUI("game_difficulty"))->state());
+    Game::getInstance()->settings()->setViolenceLevel(((MultistateImageButton*)getUI("violence_level"))->state());
+    Game::getInstance()->settings()->setTargetHighlight(((MultistateImageButton*)getUI("target_highlight"))->state());
+    Game::getInstance()->settings()->setCombatLooks(((MultistateImageButton*)getUI("combat_looks"))->state());
+    Game::getInstance()->settings()->setCombatMessages(((MultistateImageButton*)getUI("combat_messages"))->state());
+    Game::getInstance()->settings()->setCombatTaunts(((MultistateImageButton*)getUI("combat_taunts"))->state());
+    Game::getInstance()->settings()->setLanguageFilter(((MultistateImageButton*)getUI("language_filter"))->state());
+    Game::getInstance()->settings()->setRunning(((MultistateImageButton*)getUI("running"))->state());
+    Game::getInstance()->settings()->setSubtitles(((MultistateImageButton*)getUI("subtitles"))->state());
+    Game::getInstance()->settings()->setItemHighlight(((MultistateImageButton*)getUI("item_highlight"))->state());
 
-    Game::getInstance()->engineSettings()->setMasterVolume(((Slider*)getUI("master_volume"))->value());
-    Game::getInstance()->engineSettings()->setMusicVolume(((Slider*)getUI("music_volume"))->value());
-    Game::getInstance()->engineSettings()->setVoiceVolume(((Slider*)getUI("voice_volume"))->value());
-    Game::getInstance()->engineSettings()->setSfxVolume(((Slider*)getUI("sfx_volume"))->value());
+    Game::getInstance()->settings()->setMasterVolume(((Slider*)getUI("master_volume"))->value());
+    Game::getInstance()->settings()->setMusicVolume(((Slider*)getUI("music_volume"))->value());
+    Game::getInstance()->settings()->setVoiceVolume(((Slider*)getUI("voice_volume"))->value());
+    Game::getInstance()->settings()->setSfxVolume(((Slider*)getUI("sfx_volume"))->value());
 
-    Game::getInstance()->engineSettings()->setTextDelay(((Slider*)getUI("text_delay"))->value());
-    Game::getInstance()->engineSettings()->setCombatSpeed(((Slider*)getUI("combat_speed"))->value());
-    Game::getInstance()->engineSettings()->setBrightness(((Slider*)getUI("brightness"))->value());
-    Game::getInstance()->engineSettings()->setMouseSensitivity(((Slider*)getUI("mouse_sensitivity"))->value());
+    Game::getInstance()->settings()->setTextDelay(((Slider*)getUI("text_delay"))->value());
+    Game::getInstance()->settings()->setCombatSpeed(((Slider*)getUI("combat_speed"))->value());
+    Game::getInstance()->settings()->setBrightness(((Slider*)getUI("brightness"))->value());
+    Game::getInstance()->settings()->setMouseSensitivity(((Slider*)getUI("mouse_sensitivity"))->value());
 
-    Game::getInstance()->engineSettings()->setPlayerSpeedup(((ImageButton*)getUI("player_speedup"))->checked());
+    Game::getInstance()->settings()->setPlayerSpeedup(((ImageButton*)getUI("player_speedup"))->checked());
 
-    Game::getInstance()->engineSettings()->saveConfig();
+    Game::getInstance()->settings()->saveConfig();
     Game::getInstance()->popState();
 }
 

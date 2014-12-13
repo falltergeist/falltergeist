@@ -74,7 +74,7 @@ void MovieState::init()
         //parse ini
         moviecfg->setPosition(0);
         std::istream str(moviecfg.get());
-        auto inifile = new Engine::Ini::Parser(str);
+        auto inifile = new Ini::Parser(str);
         auto ini = inifile->parse();
         int total_effects = ini->section("info")->propertyInt("total_effects",0);
         auto effect_frames = ini->section("info")->propertyArray("effect_frames");

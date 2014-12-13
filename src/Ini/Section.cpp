@@ -28,8 +28,6 @@
 
 namespace Falltergeist
 {
-namespace Engine
-{
 namespace Ini
 {
 
@@ -234,5 +232,4 @@ Section::const_iterator Section::end() const
 }
 
 } // Ini
-} // Engine
 } // Falltergeist

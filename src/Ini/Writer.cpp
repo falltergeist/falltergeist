@@ -28,8 +28,6 @@
 
 namespace Falltergeist
 {
-namespace Engine
-{
 namespace Ini
 {
 
@@ -60,5 +58,4 @@ void Writer::write(std::ostream &stream)
 }
 
 } // Ini
-} // Engine
 } // Falltergeist

@@ -124,7 +124,7 @@ void AudioMixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len)
 void AudioMixer::playACMMusic(std::string filename, bool loop)
 {
     Mix_HookMusic(NULL, NULL);
-    auto acm = ResourceManager::acmFileType(Game::getInstance()->engineSettings()->musicPath()+filename);
+    auto acm = ResourceManager::acmFileType(Game::getInstance()->settings()->musicPath()+filename);
     if (!acm) return;
     _loop = loop;
     musicCallback = std::bind(&AudioMixer::_musicCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);

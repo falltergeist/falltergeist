@@ -67,7 +67,7 @@ void Renderer::init()
     // Game::getInstance()->engineSettings()->setScale(1); //or 2, if fullhd device
 
     std::string message =  "SDL_CreateWindow " + std::to_string(_width) + "x" + std::to_string(_height) + "x" +std::to_string(32)+ " - ";
-    if (Game::getInstance()->engineSettings()->fullscreen())
+    if (Game::getInstance()->settings()->fullscreen())
     {
         _window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _width, _height, SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
     }
@@ -91,9 +91,9 @@ void Renderer::init()
 
     Logger::info("RENDERER") << message + "[OK]" << std::endl;
 
-    if (Game::getInstance()->engineSettings()->scale() != 0)
+    if (Game::getInstance()->settings()->scale() != 0)
     {
-        switch (Game::getInstance()->engineSettings()->scale())
+        switch (Game::getInstance()->settings()->scale())
         {
             default:
             case 1:

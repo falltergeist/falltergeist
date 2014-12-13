@@ -83,7 +83,7 @@ void WorldMapState::init()
     //addUI(_hotspot);
 
     // creating screen
-    if (Game::getInstance()->engineSettings()->worldMapFullscreen())
+    if (Game::getInstance()->settings()->worldMapFullscreen())
     {
         _panel = new Image("art/intrface/wminfce2.frm"); // panel small
         mapWidth = renderWidth - 168;
@@ -172,7 +172,7 @@ void WorldMapState::render()
     unsigned int panelX;
     unsigned int panelY;
 
-    if (Game::getInstance()->engineSettings()->worldMapFullscreen())
+    if (Game::getInstance()->settings()->worldMapFullscreen())
     {
         panelX = renderWidth - 168; // only panel right
     }

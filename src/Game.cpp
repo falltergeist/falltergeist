@@ -69,9 +69,9 @@ void Game::_initialize()
     if (_initialized) return;
     _initialized = true;
 
-    _engineSettings = new Engine::Settings();
-    auto width = _engineSettings->screenWidth();
-    auto height = _engineSettings->screenHeight();
+    _settings = new Settings();
+    auto width = _settings->screenWidth();
+    auto height = _settings->screenHeight();
 
     _renderer = new Renderer(width, height);
 
@@ -112,7 +112,7 @@ Game::~Game()
     delete _resourceManager;
     while (!_states.empty()) popState();
     delete _renderer;
-    delete _engineSettings;
+    delete _settings;
     delete _gameTime;
     delete _currentTime;
 }
@@ -126,7 +126,7 @@ void Game::shutdown()
     delete _mixer;
     delete _resourceManager;
     while (!_states.empty()) popState();
-    delete _engineSettings;
+    delete _settings;
     delete _gameTime;
     delete _currentTime;
     delete _renderer;
@@ -306,9 +306,9 @@ Renderer* Game::renderer()
     return _renderer;
 }
 
-Engine::Settings* Game::engineSettings()
+Settings* Game::settings()
 {
-    return _engineSettings;
+    return _settings;
 }
 
 void Game::handle()
@@ -428,9 +428,9 @@ void Game::render()
     {
         state->render();
     }
-    if (engineSettings()->displayFps()) _fpsCounter->render();
+    if (settings()->displayFps()) _fpsCounter->render();
     _falltergeistVersion->render();
-    if (engineSettings()->displayMousePosition()) _mousePosition->render();
+    if (settings()->displayMousePosition()) _mousePosition->render();
     _currentTime->render();
     _mouse->render();
     renderer()->endFrame();

@@ -29,8 +29,6 @@
 
 namespace Falltergeist
 {
-namespace Engine
-{
 namespace Ini
 {
 
@@ -368,5 +366,4 @@ std::shared_ptr<File> Parser::parse()
 }
 
 } // Ini
-} // Engine
 } // Falltergeist

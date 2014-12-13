@@ -92,7 +92,7 @@ void LocationState::init()
     setModal(true);
 
     auto game = Game::getInstance();
-    setLocation("maps/" + game->engineSettings()->initialLocation() + ".map");
+    setLocation("maps/" + game->settings()->initialLocation() + ".map");
     game->pushState(new PlayerPanelState());
 }
 
@@ -103,7 +103,7 @@ void LocationState::setLocation(std::string name)
     if (mapFile == nullptr)
     {
         Logger::warning() << "No such map: `" << name << "`; using default map" << std::endl;
-        mapFile = ResourceManager::mapFileType("maps/" + Engine::Settings::defaultInitLocation() + ".map");
+        mapFile = ResourceManager::mapFileType("maps/" + Settings::defaultInitLocation() + ".map");
     }
 
     _currentElevation = mapFile->defaultElevation();
@@ -450,7 +450,7 @@ void LocationState::handle(Event* event)
                     if (path.size())
                     {
                         game->player()->movementQueue()->clear();
-                        game->player()->setRunning(game->engineSettings()->running());
+                        game->player()->setRunning(game->settings()->running());
                         for (auto hexagon : path)
                         {
                             game->player()->movementQueue()->push_back(hexagon);

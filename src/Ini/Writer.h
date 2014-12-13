@@ -28,8 +28,6 @@
 
 namespace Falltergeist
 {
-namespace Engine
-{
 namespace Ini
 {
 
@@ -47,7 +45,6 @@ public:
 };
 
 } // Ini
-} // Engine
 } // Falltergeist
 
 #endif // FALLTERGEIST_INI_WRITER_H

@@ -34,8 +34,6 @@
 
 namespace Falltergeist
 {
-namespace Engine
-{
 
 const unsigned int Settings::_defaultScreenWidth = 640;
 const unsigned int Settings::_defaultScreenHeight = 480;
@@ -83,7 +81,7 @@ Settings::Settings()
 
     if (stream)
     {
-        Engine::Ini::Parser iniParser(stream);
+        Ini::Parser iniParser(stream);
         auto ini = iniParser.parse();
 
         _readConfig(*ini);
@@ -125,7 +123,7 @@ Settings::Settings()
     }
 }
 
-void Settings::_createDefaultConfig(Engine::Ini::File &ini)
+void Settings::_createDefaultConfig(Ini::File &ini)
 {
     auto video = ini.section("video");
     video->setPropertyInt("width", _defaultScreenWidth);
@@ -280,7 +278,7 @@ bool Settings::forceLocation() const
     return _forceLocation;
 }
 
-void Settings::_readConfig(Engine::Ini::File &ini)
+void Settings::_readConfig(Ini::File &ini)
 {
     auto video = ini.section("video");
     _screenWidth = video->propertyInt("width", _defaultScreenWidth);
@@ -571,5 +569,4 @@ bool Settings::fullscreen() const
     return _fullscreen;
 }
 
-} // Engine
 } // Falltergeist

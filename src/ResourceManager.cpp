@@ -514,7 +514,7 @@ GameLocation* ResourceManager::gameLocation(unsigned int number)
     }
 
     std::istream stream(datFileItem("data/maps.txt").get());
-    Engine::Ini::Parser iniParser(stream);
+    Ini::Parser iniParser(stream);
     auto ini = iniParser.parse();
 
     std::stringstream ss;
