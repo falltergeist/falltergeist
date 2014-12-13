@@ -29,7 +29,7 @@
 #include "../Graphics/TileMap.h"
 #include "../LocationCamera.h"
 #include "../ResourceManager.h"
-#include "../States/LocationState.h"
+#include "../State/Location.h"
 
 // Thrird party includes
 
@@ -54,7 +54,7 @@ void TileMap::render()
 {
     if (!_texture) _generateTexture();
 
-    auto camera = Game::getInstance()->locationState()->camera();
+    auto camera = Game::getInstance()->Location()->camera();
     auto renderer = Game::getInstance()->renderer();
 
     for (auto tile : _tiles)

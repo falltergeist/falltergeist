@@ -23,7 +23,7 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80C3Handler.h"
 #include "../../Game.h"
-#include "../../States/LocationState.h"
+#include "../../State/Location.h"
 #include "../../VM/VM.h"
 
 // Third party includes
@@ -44,7 +44,7 @@ void Opcode80C3Handler::_run()
         _vm->pushDataInteger(0);
     }
     auto game = Game::getInstance();
-    _vm->pushDataInteger(game->locationState()->MVAR(num));
+    _vm->pushDataInteger(game->Location()->MVAR(num));
 }
 
 }

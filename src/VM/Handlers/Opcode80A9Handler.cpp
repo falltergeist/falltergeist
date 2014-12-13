@@ -24,7 +24,7 @@
 #include "../../VM/Handlers/Opcode80A9Handler.h"
 #include "../../Game.h"
 #include "../../Game/GameDudeObject.h"
-#include "../../States/LocationState.h"
+#include "../../State/Location.h"
 #include "../../PathFinding/Hexagon.h"
 #include "../../PathFinding/HexagonGrid.h"
 #include "../../VM/VM.h"
@@ -48,8 +48,8 @@ void Opcode80A9Handler::_run()
     auto position = y*200 + x;
     auto game = Game::getInstance();
     auto player = game->player();
-    auto hexagon = game->locationState()->hexagonGrid()->at(position);
-    LocationState::moveObjectToHexagon(player, hexagon);
+    auto hexagon = game->Location()->hexagonGrid()->at(position);
+    State::Location::moveObjectToHexagon(player, hexagon);
                 //player->setPosition(position);
     player->setOrientation(orientation);
     player->setElevation(elevation);

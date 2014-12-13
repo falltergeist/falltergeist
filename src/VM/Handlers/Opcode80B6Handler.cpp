@@ -25,7 +25,7 @@
 #include "../../Exception.h"
 #include "../../Game.h"
 #include "../../Game/GameDudeObject.h"
-#include "../../States/LocationState.h"
+#include "../../State/Location.h"
 #include "../../PathFinding/Hexagon.h"
 #include "../../PathFinding/HexagonGrid.h"
 #include "../../VM/VM.h"
@@ -49,8 +49,8 @@ void Opcode80B6Handler::_run()
     auto position = _vm->popDataInteger();
     auto object = static_cast<GameObject*>(_vm->popDataPointer());
     if (!object) throw new Exception("Opcode 80b6 error");
-    auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
-    LocationState::moveObjectToHexagon(object, hexagon);
+    auto hexagon = Game::getInstance()->Location()->hexagonGrid()->at(position);
+    State::Location::moveObjectToHexagon(object, hexagon);
     object->setElevation(elevation);
     _vm->pushDataInteger(1);
 }

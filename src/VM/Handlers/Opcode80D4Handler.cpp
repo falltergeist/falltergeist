@@ -26,7 +26,7 @@
 #include "../../Game.h"
 #include "../../ResourceManager.h"
 #include "../../Game/GameObject.h"
-#include "../../States/LocationState.h"
+#include "../../State/Location.h"
 #include "../../PathFinding/Hexagon.h"
 #include "../../PathFinding/HexagonGrid.h"
 #include "../../VM/VM.h"

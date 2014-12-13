@@ -24,8 +24,8 @@
 #include "../../Game.h"
 #include "../../Logger.h"
 #include "../../Game/GameCritterObject.h"
-#include "../../States/CritterDialogState.h"
-#include "../../States/CritterInteractState.h"
+#include "../../State/CritterDialog.h"
+#include "../../State/CritterInteract.h"
 #include "../../VM/Handlers/Opcode80DEHandler.h"
 #include "../../VM/VM.h"
 
@@ -49,7 +49,7 @@ void Opcode80DEHandler::_run()
 
     int msgFileID = _vm->popDataInteger();
 
-    auto interact = new CritterInteractState();
+    auto interact = new State::CritterInteract();
     interact->setBackgroundID(backgroundID);
     interact->setHeadID(headID);
     interact->setMood(mood);

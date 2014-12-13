@@ -22,7 +22,7 @@
 // Falltergeist includes
 #include "../../Game.h"
 #include "../../Logger.h"
-#include "../../States/LocationState.h"
+#include "../../State/Location.h"
 #include "../../VM/Handlers/Opcode8016Handler.h"
 #include "../../VM/VM.h"
 
@@ -38,7 +38,7 @@ Opcode8016Handler::Opcode8016Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8016Handler::_run()
 {
     auto name = *static_cast<std::string*>(_vm->popDataPointer());
-    auto EVARS = Game::getInstance()->locationState()->EVARS();
+    auto EVARS = Game::getInstance()->Location()->EVARS();
     if (EVARS->find(name) == EVARS->end())
     {
         EVARS->insert(std::make_pair(name, nullptr));

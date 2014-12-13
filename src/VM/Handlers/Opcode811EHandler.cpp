@@ -20,12 +20,12 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Handlers/Opcode811EHandler.h"
-#include "../../VM/VM.h"
 #include "../../Game.h"
-#include "../../States/CritterDialogState.h"
+#include "../../Logger.h"
+#include "../../State/CritterDialog.h"
+#include "../../VM/Handlers/Opcode811EHandler.h"
 #include "../../VM/VMStackValue.h"
+#include "../../VM/VM.h"
 
 // Third party includes
 
@@ -39,7 +39,7 @@ Opcode811EHandler::Opcode811EHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode811EHandler::_run()
 {
     Logger::debug("SCRIPT") << "[811E] [=] void gSay_Reply(int msg_file_num, int msg_num)" << std::endl;
-    auto dialog = dynamic_cast<CritterDialogState*>(Game::getInstance()->states()->back());
+    auto dialog = dynamic_cast<State::CritterDialog*>(Game::getInstance()->states()->back());
     dialog->deleteAnswers();
     if (_vm->dataStack()->top()->type() == VMStackValue::TYPE_POINTER)
     {

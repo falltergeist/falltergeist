@@ -33,7 +33,7 @@
 #include "../Game/GameCritterObject.h"
 #include "../Game/GameDefines.h"
 #include "../Game/GameObject.h"
-#include "../States/LocationState.h"
+#include "../State/Location.h"
 #include "../UI/AnimatedImage.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
@@ -158,7 +158,7 @@ void GameObject::setUI(ActiveUI* ui)
 {
     delete _ui;
     _ui = ui;
-    _ui->addEventHandler("mouseleftdown", std::bind(&LocationState::onMouseDown, Game::getInstance()->locationState(), std::placeholders::_1, this));
+    _ui->addEventHandler("mouseleftdown", std::bind(&State::Location::onMouseDown, Game::getInstance()->Location(), std::placeholders::_1, this));
 }
 
 void GameObject::_generateUi()
@@ -186,7 +186,7 @@ void GameObject::_generateUi()
 
     if (_ui)
     {
-        _ui->addEventHandler("mouseleftdown", std::bind(&LocationState::onMouseDown, Game::getInstance()->locationState(), std::placeholders::_1, this));
+        _ui->addEventHandler("mouseleftdown", std::bind(&State::Location::onMouseDown, Game::getInstance()->Location(), std::placeholders::_1, this));
     }
 }
 
@@ -224,7 +224,7 @@ void GameObject::render()
 {
     if (!_ui) return;
 
-    auto camera = Game::getInstance()->locationState()->camera();
+    auto camera = Game::getInstance()->Location()->camera();
     _ui->setX(hexagon()->x() - camera->x() - std::floor(static_cast<double>(_ui->width())/2));
     _ui->setY(hexagon()->y() - camera->y() - _ui->height());
 

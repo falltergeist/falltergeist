@@ -32,7 +32,11 @@
 
 namespace Falltergeist
 {
-class State;
+namespace State
+{
+    class Location;
+    class State;
+}
 class Exception;
 class Screen;
 class ResourceManager;
@@ -40,7 +44,6 @@ class GameDudeObject;
 class GameTime;
 class FpsCounter;
 class Mouse;
-class LocationState;
 class AudioMixer;
 class Renderer;
 class UI;
@@ -52,10 +55,10 @@ class Game
 {
 protected:
     std::vector<int> _GVARS;
-    std::vector<State*> _states;
-    std::vector<State*> _statesForRender;
-    std::vector<State*> _statesForThinkAndHandle;
-    std::vector<State*> _statesForDelete;
+    std::vector<State::State*> _states;
+    std::vector<State::State*> _statesForRender;
+    std::vector<State::State*> _statesForThinkAndHandle;
+    std::vector<State::State*> _statesForDelete;
 
     GameDudeObject* _player = 0;
     GameTime* _gameTime = 0;
@@ -85,11 +88,11 @@ public:
     static Game* getInstance();
 
     void shutdown();
-    std::vector<State*>* states();
-    std::vector<State*>* statesForRender();
-    std::vector<State*>* statesForThinkAndHandle();
-    void pushState(State* state);
-    void setState(State* state);
+    std::vector<State::State*>* states();
+    std::vector<State::State*>* statesForRender();
+    std::vector<State::State*>* statesForThinkAndHandle();
+    void pushState(State::State* state);
+    void setState(State::State* state);
     void popState();
     void run();
     void quit();
@@ -103,7 +106,7 @@ public:
     Mouse* mouse();
     Renderer* renderer();
     GameTime* gameTime();
-    LocationState* locationState();
+    State::Location* Location();
     AudioMixer* mixer();
 
     void setGVAR(unsigned int number, int value);

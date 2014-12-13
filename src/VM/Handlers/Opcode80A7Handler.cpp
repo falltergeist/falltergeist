@@ -24,7 +24,7 @@
 #include "../../VM/Handlers/Opcode80A7Handler.h"
 #include "../../Game.h"
 #include "../../Game/GameObject.h"
-#include "../../States/LocationState.h"
+#include "../../State/Location.h"
 #include "../../PathFinding/Hexagon.h"
 #include "../../PathFinding/HexagonGrid.h"
 #include "../../VM/VM.h"
@@ -49,7 +49,7 @@ void Opcode80A7Handler::_run()
     auto position = _vm->popDataInteger();
     auto game = Game::getInstance();
     GameObject* found = 0;
-    for (auto object : *game->locationState()->hexagonGrid()->at(position)->objects())
+    for (auto object : *game->Location()->hexagonGrid()->at(position)->objects())
     {
         if (object->PID() == PID && object->elevation() == elevation)
         {

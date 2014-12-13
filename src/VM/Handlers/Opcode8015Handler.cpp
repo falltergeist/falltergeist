@@ -22,7 +22,7 @@
 // Falltergeist includes
 #include "../../Exception.h"
 #include "../../Game.h"
-#include "../../States/LocationState.h"
+#include "../../State/Location.h"
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8015Handler.h"
 #include "../../VM/VM.h"
@@ -43,7 +43,7 @@ void Opcode8015Handler::_run()
     auto name = static_cast<std::string*>(_vm->popDataPointer());
     auto value = _vm->dataStack()->pop();
     auto game = Game::getInstance();
-    auto EVARS = game->locationState()->EVARS();
+    auto EVARS = game->Location()->EVARS();
     EVARS->at(*name) = value;
 }
 

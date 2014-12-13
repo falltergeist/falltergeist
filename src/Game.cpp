@@ -34,8 +34,8 @@
 #include "Logger.h"
 #include "ResourceManager.h"
 #include "Settings.h"
-#include "State.h"
-#include "States/LocationState.h"
+#include "State/State.h"
+#include "State/Location.h"
 #include "UI/FpsCounter.h"
 #include "UI/TextArea.h"
 
@@ -132,7 +132,7 @@ void Game::shutdown()
     delete _renderer;
 }
 
-void Game::pushState(State* state)
+void Game::pushState(State::State* state)
 {
     _states.push_back(state);
     if (!state->initialized()) state->init();
@@ -151,7 +151,7 @@ void Game::popState()
     delete event;
 }
 
-void Game::setState(State* state)
+void Game::setState(State::State* state)
 {
     while (!_states.empty()) popState();
     pushState(state);
@@ -195,14 +195,14 @@ Mouse* Game::mouse()
     return _mouse;
 }
 
-LocationState* Game::locationState()
+State::Location* Game::Location()
 {
     for (auto state : _states)
     {
-        auto locationState = dynamic_cast<LocationState*>(state);
-        if (locationState)
+        auto Location = dynamic_cast<State::Location*>(state);
+        if (Location)
         {
-            return locationState;
+            return Location;
         }
     }
     return 0;
@@ -238,12 +238,12 @@ void Game::_initGVARS()
     }
 }
 
-std::vector<State*>* Game::states()
+std::vector<State::State*>* Game::states()
 {
     return &_states;
 }
 
-std::vector<State*>* Game::statesForRender()
+std::vector<State::State*>* Game::statesForRender()
 {
     // we must render all states from last fullscreen state to the top of stack
     _statesForRender.clear();
@@ -261,7 +261,7 @@ std::vector<State*>* Game::statesForRender()
     return &_statesForRender;
 }
 
-std::vector<State*>* Game::statesForThinkAndHandle()
+std::vector<State::State*>* Game::statesForThinkAndHandle()
 {
     // we must handle all states from top to bottom of stack
     _statesForThinkAndHandle.clear();

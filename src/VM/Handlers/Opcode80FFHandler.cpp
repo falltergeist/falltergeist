@@ -27,7 +27,7 @@
 #include "../../ResourceManager.h"
 #include "../../Game/GameObject.h"
 #include "../../Game/GameCritterObject.h"
-#include "../../States/LocationState.h"
+#include "../../State/Location.h"
 #include "../../PathFinding/Hexagon.h"
 #include "../../PathFinding/HexagonGrid.h"
 #include "../../VM/VM.h"
@@ -48,8 +48,8 @@ void Opcode80FFHandler::_run()
     auto position = _vm->popDataInteger();
     auto critter = static_cast<GameCritterObject*>(_vm->popDataPointer());
     if (!critter) throw new Exception("Opcode 80ff error");
-    auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
-    LocationState::moveObjectToHexagon(critter, hexagon);
+    auto hexagon = Game::getInstance()->Location()->hexagonGrid()->at(position);
+    State::Location::moveObjectToHexagon(critter, hexagon);
     critter->setElevation(elevation);
     _vm->pushDataInteger(1);
 }

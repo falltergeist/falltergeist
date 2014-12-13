@@ -24,7 +24,7 @@
 #include "../../VM/Handlers/Opcode80C4Handler.h"
 #include "../../Game.h"
 #include "../../Game/GameObject.h"
-#include "../../States/LocationState.h"
+#include "../../State/Location.h"
 #include "../../VM/VM.h"
 
 // Third party includes
@@ -42,7 +42,7 @@ void Opcode80C4Handler::_run()
     auto value = _vm->popDataInteger();
     auto num = _vm->popDataInteger();
     auto game = Game::getInstance();
-    game->locationState()->setMVAR(num, value);
+    game->Location()->setMVAR(num, value);
 }
 
 }

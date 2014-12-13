@@ -27,7 +27,7 @@
 #include "../../ResourceManager.h"
 #include "../../Game/GameObject.h"
 #include "../../Game/GameObjectFactory.h"
-#include "../../States/LocationState.h"
+#include "../../State/Location.h"
 #include "../../PathFinding/Hexagon.h"
 #include "../../PathFinding/HexagonGrid.h"
 #include "../../VM/VM.h"
@@ -51,8 +51,8 @@ void Opcode80B7Handler::_run()
     auto position = _vm->popDataInteger();
     auto PID = _vm->popDataInteger();
     auto object = GameObjectFactory::createObject(PID);
-    auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
-    LocationState::moveObjectToHexagon(object, hexagon);
+    auto hexagon = Game::getInstance()->Location()->hexagonGrid()->at(position);
+    State::Location::moveObjectToHexagon(object, hexagon);
     object->setElevation(elevation);
     if (SID > 0)
     {

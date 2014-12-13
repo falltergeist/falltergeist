@@ -29,7 +29,7 @@
 #include "../Input/Mouse.h"
 #include "../Logger.h"
 #include "../Settings.h"
-#include "../State.h"
+#include "../State/State.h"
 
 // Third party includes
 

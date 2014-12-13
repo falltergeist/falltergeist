@@ -25,7 +25,7 @@
 #include "../../VM/VM.h"
 #include "../../VM/VMStackValue.h"
 #include "../../Game.h"
-#include "../../States/CritterDialogState.h"
+#include "../../State/CritterDialog.h"
 #include "../../Game/GameDudeObject.h"
 
 // Third party includes
@@ -57,7 +57,7 @@ void Opcode8121Handler::_run()
     }
     auto iq = _vm->popDataInteger();
     auto game = Game::getInstance();
-    auto dialog = dynamic_cast<CritterDialogState*>(game->states()->back());
+    auto dialog = dynamic_cast<State::CritterDialog*>(game->states()->back());
     if (iq >= 0)
     {
         if (game->player()->stat(game->player()->STATS_INTELLIGENCE) >= iq)

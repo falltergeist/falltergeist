@@ -30,7 +30,7 @@
 #include "../Graphics/AnimationQueue.h"
 #include "../Logger.h"
 #include "../ResourceManager.h"
-#include "../States/LocationState.h"
+#include "../State/Location.h"
 #include "../VM/VM.h"
 
 // Third party includes
@@ -470,7 +470,7 @@ void GameCritterObject::onMovementAnimationEnded(Event* event)
 {
     auto hexagon = movementQueue()->back();
     movementQueue()->pop_back();
-    Game::getInstance()->locationState()->moveObjectToHexagon(this, hexagon);
+    Game::getInstance()->Location()->moveObjectToHexagon(this, hexagon);
 
     if (movementQueue()->size() == 0)
     {

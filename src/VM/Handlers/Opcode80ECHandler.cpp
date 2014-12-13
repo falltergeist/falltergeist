@@ -26,7 +26,7 @@
 #include "../../Game.h"
 #include "../../Game/GameObject.h"
 #include "../../Game/GameObjectFactory.h"
-#include "../../States/LocationState.h"
+#include "../../State/Location.h"
 #include "../../VM/VM.h"
 
 

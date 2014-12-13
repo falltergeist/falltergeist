@@ -29,7 +29,7 @@
 #include "../Graphics/AnimationQueue.h"
 #include "../Logger.h"
 #include "../ResourceManager.h"
-#include "../States/LocationState.h"
+#include "../State/Location.h"
 #include "../UI/AnimatedImage.h"
 #include "../UI/Image.h"
 
@@ -282,7 +282,7 @@ void GameDudeObject::_generateUi()
 
     if (_ui)
     {
-        _ui->addEventHandler("mouseleftdown", std::bind(&LocationState::onMouseDown, Game::getInstance()->locationState(), std::placeholders::_1, static_cast<GameObject*>(this)));
+        _ui->addEventHandler("mouseleftdown", std::bind(&State::Location::onMouseDown, Game::getInstance()->Location(), std::placeholders::_1, static_cast<GameObject*>(this)));
     }
 }
 
