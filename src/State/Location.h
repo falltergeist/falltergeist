@@ -31,12 +31,15 @@
 
 namespace Falltergeist
 {
+namespace Game
+{
+    class GameObject;
+
+}
 class Animation;
-class GameObject;
 class Hexagon;
 class HexagonGrid;
 class Image;
-class Location;
 class LocationCamera;
 class Tile;
 class TileMap;
@@ -70,7 +73,7 @@ protected:
     bool _scrollTop = false;
     bool _scrollBottom = false;
 
-    std::vector<GameObject*> _objects;
+    std::vector<Game::GameObject*> _objects;
 
 public:
     Location();
@@ -91,13 +94,13 @@ public:
 
     std::map<std::string, VMStackValue*>* EVARS();
 
-    static void moveObjectToHexagon(GameObject* object, Hexagon* hexagon);
-    void handleAction(GameObject* object, int action);
+    static void moveObjectToHexagon(Game::GameObject* object, Hexagon* hexagon);
+    void handleAction(Game::GameObject* object, int action);
 
     void onBackgroundClick(MouseEvent* event);
     void onKeyUp(std::shared_ptr<KeyboardEvent> event);
     void onObjectClick(MouseEvent* event);
-    void onMouseDown(Event* event, GameObject* object);
+    void onMouseDown(Event* event, Game::GameObject* object);
     void onKeyboardUp(std::shared_ptr<KeyboardEvent> event);
 };
 

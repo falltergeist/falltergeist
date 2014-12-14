@@ -29,7 +29,10 @@
 
 namespace Falltergeist
 {
-class GameCritterObject;
+namespace Game
+{
+    class GameCritterObject;
+}
 class VM;
 
 namespace State
@@ -45,7 +48,7 @@ protected:
     int _mood = 0;
     int _msgFileID = -1;
     VM* _script;
-    GameCritterObject* _critter = 0;
+    Game::GameCritterObject* _critter = 0;
 public:
     CritterInteract();
     virtual ~CritterInteract();
@@ -60,8 +63,8 @@ public:
     int mood();
     void setMood(int mood);
 
-    GameCritterObject* critter();
-    void setCritter(GameCritterObject* critter);
+    Game::GameCritterObject* critter();
+    void setCritter(Game::GameCritterObject* critter);
 
     int msgFileID();
     void setMsgFileID(int value);

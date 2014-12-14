@@ -21,7 +21,7 @@
 #include <sstream>
 
 // Falltergeist includes
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../ResourceManager.h"
 #include "../UI/FpsCounter.h"
 

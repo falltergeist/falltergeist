@@ -25,7 +25,7 @@
 #include "../Graphics/Texture.h"
 #include "../UI/Image.h"
 #include "../UI/MultistateImageButton.h"
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../Audio/AudioMixer.h"
 
 // Third party includes

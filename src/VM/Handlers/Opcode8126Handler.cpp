@@ -23,7 +23,7 @@
 #include "../../Exception.h"
 #include "../../Graphics/AnimationQueue.h"
 #include "../../Logger.h"
-#include "../../Game/GameObject.h"
+#include "../../Game/Object.h"
 #include "../../VM/Handlers/Opcode8126Handler.h"
 #include "../../VM/VM.h"
 
@@ -47,7 +47,7 @@ void Opcode8126Handler::_run()
         throw Exception("Opcode8126Handler - delay must be -1");
     }
     */
-    auto object = static_cast<GameObject*>(_vm->popDataPointer());
+    auto object = static_cast<Game::GameObject*>(_vm->popDataPointer());
     auto queue = dynamic_cast<AnimationQueue*>(object->ui());
     if (queue)
     {

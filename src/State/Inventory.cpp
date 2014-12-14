@@ -21,17 +21,17 @@
 #include <sstream>
 
 // Falltergeist includes
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "State.h"
-#include "../Game/GameArmorItemObject.h"
-#include "../Game/GameCritterObject.h"
-#include "../Game/GameDudeObject.h"
-#include "../Game/GameObject.h"
-#include "../Game/GameObjectFactory.h"
-#include "../Game/GameWeaponItemObject.h"
+#include "../Game/ArmorItemObject.h"
+#include "../Game/CritterObject.h"
+#include "../Game/DudeObject.h"
+#include "../Game/Object.h"
+#include "../Game/ObjectFactory.h"
+#include "../Game/WeaponItemObject.h"
 #include "../State/GameMenu.h"
 #include "../State/InventoryDragItem.h"
 #include "../State/Inventory.h"
@@ -128,28 +128,28 @@ void Inventory::init()
     armorClassLabel->setWidth(46)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
     // armorSlot, leftHand, rightHand
-    GameArmorItemObject* armorSlot = player->armorSlot();
-    GameItemObject* leftHand = player->leftHandSlot();
-    GameItemObject* rightHand = player->rightHandSlot();
+    Game::GameArmorItemObject* armorSlot = player->armorSlot();
+    Game::GameItemObject* leftHand = player->leftHandSlot();
+    Game::GameItemObject* rightHand = player->rightHandSlot();
 
 
     // label: damage treshold levels
     ss.str("");
     if (armorSlot)
     {
-        ss << player->damageThreshold(GameCritterObject::DAMAGE_NORMAL) + armorSlot->damageThreshold(GameArmorItemObject::DAMAGE_NORMAL) <<"/\n";
-        ss << player->damageThreshold(GameCritterObject::DAMAGE_LASER) + armorSlot->damageThreshold(GameArmorItemObject::DAMAGE_LASER) <<"/\n";
-        ss << player->damageThreshold(GameCritterObject::DAMAGE_FIRE) + armorSlot->damageThreshold(GameArmorItemObject::DAMAGE_FIRE) <<"/\n";
-        ss << player->damageThreshold(GameCritterObject::DAMAGE_PLASMA) + armorSlot->damageThreshold(GameArmorItemObject::DAMAGE_PLASMA) <<"/\n";
-        ss << player->damageThreshold(GameCritterObject::DAMAGE_EXPLOSION) + armorSlot->damageThreshold(GameArmorItemObject::DAMAGE_NORMAL) <<"/";
+        ss << player->damageThreshold(Game::GameCritterObject::DAMAGE_NORMAL) + armorSlot->damageThreshold(Game::GameArmorItemObject::DAMAGE_NORMAL) <<"/\n";
+        ss << player->damageThreshold(Game::GameCritterObject::DAMAGE_LASER) + armorSlot->damageThreshold(Game::GameArmorItemObject::DAMAGE_LASER) <<"/\n";
+        ss << player->damageThreshold(Game::GameCritterObject::DAMAGE_FIRE) + armorSlot->damageThreshold(Game::GameArmorItemObject::DAMAGE_FIRE) <<"/\n";
+        ss << player->damageThreshold(Game::GameCritterObject::DAMAGE_PLASMA) + armorSlot->damageThreshold(Game::GameArmorItemObject::DAMAGE_PLASMA) <<"/\n";
+        ss << player->damageThreshold(Game::GameCritterObject::DAMAGE_EXPLOSION) + armorSlot->damageThreshold(Game::GameArmorItemObject::DAMAGE_NORMAL) <<"/";
     }
     else
     {
-        ss << player->damageThreshold(GameCritterObject::DAMAGE_NORMAL) <<"/\n";
-        ss << player->damageThreshold(GameCritterObject::DAMAGE_LASER) <<"/\n";
-        ss << player->damageThreshold(GameCritterObject::DAMAGE_FIRE) <<"/\n";
-        ss << player->damageThreshold(GameCritterObject::DAMAGE_PLASMA) <<"/\n";
-        ss << player->damageThreshold(GameCritterObject::DAMAGE_EXPLOSION) <<"/";
+        ss << player->damageThreshold(Game::GameCritterObject::DAMAGE_NORMAL) <<"/\n";
+        ss << player->damageThreshold(Game::GameCritterObject::DAMAGE_LASER) <<"/\n";
+        ss << player->damageThreshold(Game::GameCritterObject::DAMAGE_FIRE) <<"/\n";
+        ss << player->damageThreshold(Game::GameCritterObject::DAMAGE_PLASMA) <<"/\n";
+        ss << player->damageThreshold(Game::GameCritterObject::DAMAGE_EXPLOSION) <<"/";
     }
     auto damageThresholdLabel = new TextArea(ss.str(), screenX+94, screenY+40);
     damageThresholdLabel->setWidth(26)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
@@ -158,19 +158,19 @@ void Inventory::init()
     ss.str("");
     if (armorSlot)
     {
-        ss << player->damageResist(GameCritterObject::DAMAGE_NORMAL) + armorSlot->damageResist(GameArmorItemObject::DAMAGE_NORMAL) <<"%\n";
-        ss << player->damageResist(GameCritterObject::DAMAGE_LASER) + armorSlot->damageResist(GameArmorItemObject::DAMAGE_LASER) <<"%\n";
-        ss << player->damageResist(GameCritterObject::DAMAGE_FIRE) + armorSlot->damageResist(GameArmorItemObject::DAMAGE_FIRE) <<"%\n";
-        ss << player->damageResist(GameCritterObject::DAMAGE_PLASMA) + armorSlot->damageResist(GameArmorItemObject::DAMAGE_PLASMA) <<"%\n";
-        ss << player->damageResist(GameCritterObject::DAMAGE_EXPLOSION) + armorSlot->damageResist(GameArmorItemObject::DAMAGE_NORMAL) <<"%";
+        ss << player->damageResist(Game::GameCritterObject::DAMAGE_NORMAL) + armorSlot->damageResist(Game::GameArmorItemObject::DAMAGE_NORMAL) <<"%\n";
+        ss << player->damageResist(Game::GameCritterObject::DAMAGE_LASER) + armorSlot->damageResist(Game::GameArmorItemObject::DAMAGE_LASER) <<"%\n";
+        ss << player->damageResist(Game::GameCritterObject::DAMAGE_FIRE) + armorSlot->damageResist(Game::GameArmorItemObject::DAMAGE_FIRE) <<"%\n";
+        ss << player->damageResist(Game::GameCritterObject::DAMAGE_PLASMA) + armorSlot->damageResist(Game::GameArmorItemObject::DAMAGE_PLASMA) <<"%\n";
+        ss << player->damageResist(Game::GameCritterObject::DAMAGE_EXPLOSION) + armorSlot->damageResist(Game::GameArmorItemObject::DAMAGE_NORMAL) <<"%";
     }
     else
     {
-        ss << player->damageResist(GameCritterObject::DAMAGE_NORMAL) <<"%\n";
-        ss << player->damageResist(GameCritterObject::DAMAGE_LASER) <<"%\n";
-        ss << player->damageResist(GameCritterObject::DAMAGE_FIRE) <<"%\n";
-        ss << player->damageResist(GameCritterObject::DAMAGE_PLASMA) <<"%\n";
-        ss << player->damageResist(GameCritterObject::DAMAGE_EXPLOSION) <<"%";
+        ss << player->damageResist(Game::GameCritterObject::DAMAGE_NORMAL) <<"%\n";
+        ss << player->damageResist(Game::GameCritterObject::DAMAGE_LASER) <<"%\n";
+        ss << player->damageResist(Game::GameCritterObject::DAMAGE_FIRE) <<"%\n";
+        ss << player->damageResist(Game::GameCritterObject::DAMAGE_PLASMA) <<"%\n";
+        ss << player->damageResist(Game::GameCritterObject::DAMAGE_EXPLOSION) <<"%";
     }
     auto damageResistanceLabel = new TextArea(ss.str(), screenX+120, screenY+40);
 
@@ -367,23 +367,23 @@ void Inventory::onRightHandSlotMouseDown(MouseEvent* event)
 //    //Game::getInstance()->states()->back()->ui()->push_back(dragUi);
 //}
 
-std::string Inventory::_handItemSummary (GameItemObject* hand)
+std::string Inventory::_handItemSummary (Game::GameItemObject* hand)
 {
     std::stringstream ss;
     if (hand)
     {
         ss << hand->name() << "\n";
         // is it weapon
-        if (hand->subtype() == GameObject::TYPE_ITEM_WEAPON)
+        if (hand->subtype() == Game::GameObject::TYPE_ITEM_WEAPON)
         {
-            auto weapon = dynamic_cast<GameWeaponItemObject*>(hand);
+            auto weapon = dynamic_cast<Game::GameWeaponItemObject*>(hand);
             ss << "Dmg: " << weapon->damageMin() << "-" << weapon->damageMax() << " ";
             ss << "Rng: " << weapon->rangePrimary();
             // has it ammo?
             if (weapon->ammoType() != 0)
             {
                 ss << "\nAmmo: /" << weapon->ammoCapacity() << " ";
-                auto ammo = GameObjectFactory::createObject(weapon->ammoPID());
+                auto ammo = Game::GameObjectFactory::createObject(weapon->ammoPID());
                 ss << ammo->name();
             }
         }

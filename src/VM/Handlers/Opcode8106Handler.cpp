@@ -23,10 +23,10 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8106Handler.h"
 #include "../../Exception.h"
-#include "../../Game.h"
-#include "../../Game/GameObject.h"
-#include "../../Game/GameCritterObject.h"
-#include "../../Game/GameObjectFactory.h"
+#include "../../Game/Game.h"
+#include "../../Game/Object.h"
+#include "../../Game/CritterObject.h"
+#include "../../Game/ObjectFactory.h"
 #include "../../VM/VM.h"
 
 
@@ -44,7 +44,7 @@ void Opcode8106Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8106] [=] void* (int) critter_inven_obj(GameCritterObject* critter, int where)" << std::endl;
     auto where = _vm->popDataInteger();
-    auto critter = static_cast<GameCritterObject*>(_vm->popDataPointer());
+    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataPointer());
     switch (where)
     {
     case 0: // ARMOR SLOT

@@ -27,7 +27,7 @@
 #include "../UI/Image.h"
 #include "../Graphics/Animation.h"
 #include "../Graphics/Renderer.h"
-#include "../Game.h"
+#include "../Game/Game.h"
 
 // Third party includes
 #include "SDL.h"

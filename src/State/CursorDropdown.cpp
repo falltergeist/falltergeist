@@ -21,12 +21,12 @@
 
 // Falltergeist includes
 #include "../Exception.h"
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../Input/Mouse.h"
-#include "../Game/GameCritterObject.h"
-#include "../Game/GameDudeObject.h"
+#include "../Game/CritterObject.h"
+#include "../Game/DudeObject.h"
 #include "../State/CursorDropdown.h"
 #include "../State/Location.h"
 #include "../UI/HiddenMask.h"
@@ -164,7 +164,12 @@ void CursorDropdown::init()
 
 }
 
-void CursorDropdown::setObject(GameObject* object)
+Game::GameObject* CursorDropdown::object()
+{
+    return _object;
+}
+
+void CursorDropdown::setObject(Game::GameObject* object)
 {
     _object = object;
 }
@@ -211,7 +216,7 @@ void CursorDropdown::onLeftButtonUp(MouseEvent* event)
     game->mouse()->setY(_initialY);
     game->mouse()->popState();
     game->popState();
-    game->Location()->handleAction(_object, _icons.at(_currentSurface));
+    game->locationState()->handleAction(object(), _icons.at(_currentSurface));
 }
 
 }

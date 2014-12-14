@@ -22,7 +22,7 @@
 
 // Falltergeist includes
 #include "../UI/MvePlayer.h"
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Exception.h"
 #include "../Logger.h"

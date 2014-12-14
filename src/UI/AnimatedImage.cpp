@@ -24,7 +24,7 @@
 #include "../ResourceManager.h"
 #include "../UI/AnimatedImage.h"
 #include "../Graphics/AnimatedPalette.h"
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 
 // Third party includes

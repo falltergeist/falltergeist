@@ -21,7 +21,7 @@
 
 // Falltergeist includes
 #include "../../Logger.h"
-#include "../../Game/GameDoorSceneryObject.h"
+#include "../../Game/DoorSceneryObject.h"
 #include "../../VM/Handlers/Opcode812FHandler.h"
 #include "../../VM/VM.h"
 
@@ -37,7 +37,7 @@ Opcode812FHandler::Opcode812FHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode812FHandler::_run()
 {
     Logger::debug("SCRIPT") << "[812F] [+] void unlock(GameDoorSceneryObject* object)" << std::endl;
-    auto object = static_cast<GameDoorSceneryObject*>(_vm->popDataPointer());
+    auto object = static_cast<Game::GameDoorSceneryObject*>(_vm->popDataPointer());
     object->setLocked(false);
 }
 

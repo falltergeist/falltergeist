@@ -21,11 +21,11 @@
 #include <sstream>
 
 // Falltergeist includes
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
 #include "../Event/StateEvent.h"
-#include "../Game/GameDudeObject.h"
+#include "../Game/DudeObject.h"
 #include "../State/NewGame.h"
 #include "../State/Location.h"
 #include "../State/PlayerCreate.h"
@@ -106,17 +106,17 @@ void NewGame::init()
 
     addUI("stats3_values", new TextArea(383, 150));
 
-    auto combat = new GameDudeObject();
+    auto combat = new Game::GameDudeObject();
     combat->loadFromGCDFile(ResourceManager::gcdFileType("premade/combat.gcd"));
     combat->setBiography(ResourceManager::bioFileType("premade/combat.bio")->text());
     _characters.push_back(combat);
 
-    auto stealth = new GameDudeObject();
+    auto stealth = new Game::GameDudeObject();
     stealth->loadFromGCDFile(ResourceManager::gcdFileType("premade/stealth.gcd"));
     stealth->setBiography(ResourceManager::bioFileType("premade/stealth.bio")->text());
     _characters.push_back(stealth);
 
-    auto diplomat = new GameDudeObject();
+    auto diplomat = new Game::GameDudeObject();
     diplomat->loadFromGCDFile(ResourceManager::gcdFileType("premade/diplomat.gcd"));
     diplomat->setBiography(ResourceManager::bioFileType("premade/diplomat.bio")->text());
     _characters.push_back(diplomat);
@@ -235,7 +235,7 @@ void NewGame::onEditButtonClick(MouseEvent* event)
 
 void NewGame::onCreateButtonClick(MouseEvent* event)
 {
-    auto none = new GameDudeObject();
+    auto none = new Game::GameDudeObject();
     none->loadFromGCDFile(ResourceManager::gcdFileType("premade/blank.gcd"));
     Game::getInstance()->setPlayer(none);
     Game::getInstance()->pushState(new PlayerCreate());

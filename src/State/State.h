@@ -33,9 +33,12 @@
 
 namespace Falltergeist
 {
+namespace Game
+{
+    class Game;
+}
 class ActiveUI;
 class Event;
-class Game;
 class ImageList;
 class SmallCounter;
 class StateEvent;

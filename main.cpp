@@ -21,7 +21,7 @@
 
 // Falltergeist includes
 #include "src/Exception.h"
-#include "src/Game.h"
+#include "src/Game/Game.h"
 #include "src/Logger.h"
 #include "src/State/Start.h"
 
@@ -30,12 +30,11 @@
 
 using namespace Falltergeist;
 
-
 int main(int argc, char* argv[])
 {
     try
     {
-        auto game = Game::getInstance();
+        auto game = Game::Game::getInstance();
         game->setState(new State::Start());
         game->run();
         game->shutdown();

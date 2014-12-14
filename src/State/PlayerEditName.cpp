@@ -21,11 +21,11 @@
 #include <ctype.h>
 
 // Falltergeist includes
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
-#include "../Game/GameDudeObject.h"
+#include "../Game/DudeObject.h"
 #include "../State/PlayerEditName.h"
 #include "../UI/TextArea.h"
 #include "../UI/ImageButton.h"

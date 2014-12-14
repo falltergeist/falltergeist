@@ -31,9 +31,12 @@
 
 namespace Falltergeist
 {
+namespace Game
+{
+    class GameObject;
+}
 class Surface;
 class HiddenMask;
-class GameObject;
 
 namespace State
 {
@@ -41,7 +44,7 @@ namespace State
 class CursorDropdown : public State
 {
 protected:
-    GameObject* _object;
+    Game::GameObject* _object;
     int _initialType;
     std::vector<int> _icons;
     int _initialX;
@@ -60,8 +63,8 @@ public:
 
     void onLeftButtonUp(MouseEvent* event);
 
-    GameObject* object();
-    void setObject(GameObject* object);
+    Game::GameObject* object();
+    void setObject(Game::GameObject* object);
 };
 
 }

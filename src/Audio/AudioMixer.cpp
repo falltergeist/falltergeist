@@ -25,7 +25,7 @@
 #include "../Exception.h"
 #include "../Logger.h"
 #include "../UI/MvePlayer.h"
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
 

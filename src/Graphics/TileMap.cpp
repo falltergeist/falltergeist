@@ -22,7 +22,7 @@
 #include <cmath>
 
 // Falltergeist includes
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../Graphics/Tile.h"
@@ -54,7 +54,7 @@ void TileMap::render()
 {
     if (!_texture) _generateTexture();
 
-    auto camera = Game::getInstance()->Location()->camera();
+    auto camera = Game::getInstance()->locationState()->camera();
     auto renderer = Game::getInstance()->renderer();
 
     for (auto tile : _tiles)

@@ -24,7 +24,7 @@
 #include "../Exception.h"
 #include "../ResourceManager.h"
 #include "../UI/ImageButton.h"
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../Audio/AudioMixer.h"
 
 // Third party includes

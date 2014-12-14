@@ -21,12 +21,12 @@
 
 // Falltergeist includes
 #include "../Audio/AudioMixer.h"
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../Graphics/ActiveUI.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
 #include "../Input/Mouse.h"
-#include "../Game/GameDudeObject.h"
+#include "../Game/DudeObject.h"
 #include "../State/GameMenu.h"
 #include "../State/Inventory.h"
 #include "../State/PipBoy.h"
@@ -178,7 +178,7 @@ void PlayerPanel::onPipBoyButtonClick(MouseEvent* event)
 void PlayerPanel::onChangeHandButtonClick(MouseEvent* event)
 {
     auto player = Game::getInstance()->player();
-    player->setCurrentHand(player->currentHand() == GameCritterObject::HAND_LEFT ? GameCritterObject::HAND_RIGHT : GameCritterObject::HAND_LEFT);
+    player->setCurrentHand(player->currentHand() == Game::GameCritterObject::HAND_LEFT ? Game::GameCritterObject::HAND_RIGHT : Game::GameCritterObject::HAND_LEFT);
 }
 
 void PlayerPanel::onPanelMouseIn(MouseEvent* event)

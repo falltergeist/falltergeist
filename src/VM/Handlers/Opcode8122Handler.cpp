@@ -22,7 +22,7 @@
 // Falltergeist includes
 #include "../../Exception.h"
 #include "../../Logger.h"
-#include "../../Game/GameCritterObject.h"
+#include "../../Game/CritterObject.h"
 #include "../../VM/Handlers/Opcode8122Handler.h"
 #include "../../VM/VM.h"
 
@@ -38,7 +38,7 @@ Opcode8122Handler::Opcode8122Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8122Handler::_run()
 {
     int amount = _vm->popDataInteger();
-    auto critter = static_cast<GameCritterObject*>(_vm->popDataPointer());
+    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataPointer());
     if (!critter)
     {
         throw Exception("VM::opcode8122 pointer error");

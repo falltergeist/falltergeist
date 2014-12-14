@@ -22,8 +22,8 @@
 // Falltergeist includes
 #include "../../Exception.h"
 #include "../../Logger.h"
-#include "../../Game/GameCritterObject.h"
-#include "../../Game/GameDudeObject.h"
+#include "../../Game/CritterObject.h"
+#include "../../Game/DudeObject.h"
 #include "../../VM/Handlers/Opcode80CBHandler.h"
 #include "../../VM/VM.h"
 
@@ -44,13 +44,13 @@ void Opcode80CBHandler::_run()
     {
         throw Exception("VM::opcode80CB - number out of range:" + std::to_string(number));
     }
-    auto object = static_cast<GameCritterObject*>(_vm->popDataPointer());
+    auto object = static_cast<Game::GameCritterObject*>(_vm->popDataPointer());
     if (!object)
     {
         throw Exception("VM::opcode80CB pointer error");
     }
     object->setStat(number, value);
-    if (dynamic_cast<GameDudeObject*>(object))
+    if (dynamic_cast<Game::GameDudeObject*>(object))
     {
         _vm->pushDataInteger(3); // for dude
     }

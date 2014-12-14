@@ -23,10 +23,10 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80BBHandler.h"
 #include "../../Exception.h"
-#include "../../Game.h"
+#include "../../Game/Game.h"
 #include "../../ResourceManager.h"
-#include "../../Game/GameObject.h"
-#include "../../Game/GameObjectFactory.h"
+#include "../../Game/Object.h"
+#include "../../Game/ObjectFactory.h"
 #include "../../State/Location.h"
 #include "../../PathFinding/Hexagon.h"
 #include "../../PathFinding/HexagonGrid.h"
@@ -51,7 +51,7 @@ void Opcode80BBHandler::_run()
     auto position = _vm->popDataInteger();
     auto game = Game::getInstance();
     int found = 0;
-    for (auto object : *game->Location()->hexagonGrid()->at(position)->objects())
+    for (auto object : *game->locationState()->hexagonGrid()->at(position)->objects())
     {
         if (object->PID() == PID && object->elevation() == elevation)
         {

@@ -21,9 +21,9 @@
 
 // Falltergeist includes
 #include "../../Exception.h"
-#include "../../Game.h"
+#include "../../Game/Game.h"
 #include "../../Logger.h"
-#include "../../Game/GameCritterObject.h"
+#include "../../Game/CritterObject.h"
 #include "../../State/CritterDialog.h"
 #include "../../State/CritterInteract.h"
 #include "../../VM/Handlers/Opcode80DEHandler.h"
@@ -44,7 +44,7 @@ void Opcode80DEHandler::_run()
     int headID = _vm->popDataInteger();
     int mood = _vm->popDataInteger();
 
-    auto critter = static_cast<GameCritterObject*>(_vm->popDataPointer());
+    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataPointer());
     if (!critter) throw Exception("VM::opcode80de - wrong critter pointers");
 
     int msgFileID = _vm->popDataInteger();

@@ -23,12 +23,12 @@
 #include <ctime>
 
 // Falltergeist includes
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
-#include "../Game/GameDudeObject.h"
+#include "../Game/DudeObject.h"
 #include "../State/CritterDialog.h"
 #include "../State/MainMenu.h"
 #include "../State/Movie.h"
@@ -81,7 +81,7 @@ void Start::think()
     State::think();
     if (game->settings()->forceLocation())
     {
-        auto player = new GameDudeObject();
+        auto player = new Game::GameDudeObject();
         player->loadFromGCDFile(ResourceManager::gcdFileType("premade/combat.gcd"));
         game->setPlayer(player);
         game->setState(new Location());

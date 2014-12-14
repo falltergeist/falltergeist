@@ -22,8 +22,8 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80A7Handler.h"
-#include "../../Game.h"
-#include "../../Game/GameObject.h"
+#include "../../Game/Game.h"
+#include "../../Game/Object.h"
 #include "../../State/Location.h"
 #include "../../PathFinding/Hexagon.h"
 #include "../../PathFinding/HexagonGrid.h"
@@ -48,8 +48,8 @@ void Opcode80A7Handler::_run()
     auto elevation = _vm->popDataInteger();
     auto position = _vm->popDataInteger();
     auto game = Game::getInstance();
-    GameObject* found = 0;
-    for (auto object : *game->Location()->hexagonGrid()->at(position)->objects())
+    Game::GameObject* found = 0;
+    for (auto object : *game->locationState()->hexagonGrid()->at(position)->objects())
     {
         if (object->PID() == PID && object->elevation() == elevation)
         {

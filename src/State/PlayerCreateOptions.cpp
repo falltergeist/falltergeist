@@ -21,7 +21,7 @@
 
 // Falltergeist includes
 #include "../Audio/AudioMixer.h"
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
 #include "../State/ExitConfirm.h"

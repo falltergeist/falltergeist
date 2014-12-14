@@ -30,13 +30,16 @@
 
 namespace Falltergeist
 {
-class GameObject;
+namespace Game
+{
+    class GameObject;
+}
 
 class Hexagon
 {
 protected:
     std::vector<Hexagon*> _neighbors;
-    std::list<GameObject*> _objects;
+    std::list<Game::GameObject*> _objects;
     unsigned int _number = 0; // position in hexagonal grid
 
     int _x = 0;
@@ -65,7 +68,7 @@ public:
 
     std::vector<Hexagon*>* neighbors();
 
-    std::list<GameObject*>* objects();
+    std::list<Game::GameObject*>* objects();
 
     int cubeX();
     void setCubeX(int value);

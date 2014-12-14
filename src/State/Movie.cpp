@@ -22,7 +22,7 @@
 // Falltergeist includes
 #include "../Event/KeyboardEvent.h"
 #include "../Event/MouseEvent.h"
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../UI/MvePlayer.h"
 #include "../UI/TextArea.h"
 #include "../Input/Mouse.h"

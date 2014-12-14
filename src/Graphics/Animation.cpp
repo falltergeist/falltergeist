@@ -24,7 +24,7 @@
 #include "../Graphics/Animation.h"
 #include "../Graphics/AnimationFrame.h"
 #include "../Graphics/Texture.h"
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/AnimatedPalette.h"
 #include "../ResourceManager.h"

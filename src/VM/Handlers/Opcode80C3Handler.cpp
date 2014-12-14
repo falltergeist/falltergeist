@@ -22,7 +22,7 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80C3Handler.h"
-#include "../../Game.h"
+#include "../../Game/Game.h"
 #include "../../State/Location.h"
 #include "../../VM/VM.h"
 
@@ -44,7 +44,7 @@ void Opcode80C3Handler::_run()
         _vm->pushDataInteger(0);
     }
     auto game = Game::getInstance();
-    _vm->pushDataInteger(game->Location()->MVAR(num));
+    _vm->pushDataInteger(game->locationState()->MVAR(num));
 }
 
 }

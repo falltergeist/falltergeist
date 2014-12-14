@@ -21,7 +21,7 @@
 
 // Falltergeist includes
 #include "../../Logger.h"
-#include "../../Game/GameCritterObject.h"
+#include "../../Game/CritterObject.h"
 #include "../../VM/Handlers/Opcode813CHandler.h"
 #include "../../VM/VM.h"
 
@@ -38,7 +38,7 @@ void Opcode813CHandler::_run()
 {
     int amount = _vm->popDataInteger();
     int skill = _vm->popDataInteger();
-    auto critter = static_cast<GameCritterObject*>(_vm->popDataPointer());
+    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataPointer());
 
     critter->setSkillGainedValue(skill, critter->skillGainedValue(skill) + amount);
 

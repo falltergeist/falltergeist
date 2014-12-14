@@ -31,7 +31,7 @@
 #include "ResourceManager.h"
 #include "Ini/File.h"
 #include "Ini/Parser.h"
-#include "Game/GameLocation.h"
+#include "Game/Location.h"
 
 // Third party includes
 
@@ -42,7 +42,7 @@ std::vector<std::shared_ptr<libfalltergeist::DatFile>> ResourceManager::_datFile
 std::map<std::string, std::shared_ptr<libfalltergeist::DatFileItem>> ResourceManager::_datFilesItems;
 std::map<std::string, Texture*> ResourceManager::_textures;
 std::map<std::string, std::shared_ptr<Font>> ResourceManager::_fonts;
-std::map<unsigned int, GameLocation*> ResourceManager::_gameLocations;
+std::map<unsigned int, Game::GameLocation*> ResourceManager::_gameLocations;
 
 ResourceManager::ResourceManager()
 {
@@ -506,7 +506,7 @@ std::map<std::string, Texture*>* ResourceManager::textures()
     return &_textures;
 }
 
-GameLocation* ResourceManager::gameLocation(unsigned int number)
+Game::GameLocation* ResourceManager::gameLocation(unsigned int number)
 {
     if (_gameLocations.find(number) != _gameLocations.end())
     {
@@ -523,7 +523,7 @@ GameLocation* ResourceManager::gameLocation(unsigned int number)
     auto section = ini->section(ss.str());
     if (!section) return 0;
 
-    GameLocation* location = new GameLocation();
+    Game::GameLocation* location = new Game::GameLocation();
 
     for (auto property : *section.get())
     {

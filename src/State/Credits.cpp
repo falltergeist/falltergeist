@@ -25,7 +25,7 @@
 #include "../Event/KeyboardEvent.h"
 #include "../Event/MouseEvent.h"
 #include "../Event/StateEvent.h"
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../UI/TextArea.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"

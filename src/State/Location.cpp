@@ -25,8 +25,8 @@
 // Falltergeist includes
 #include "../Event/MouseEvent.h"
 #include "../Exception.h"
-#include "../Game.h"
-#include "../GameTime.h"
+#include "../Game/Game.h"
+#include "../Game/Time.h"
 #include "../Graphics/Animation.h"
 #include "../Graphics/AnimationQueue.h"
 #include "../Graphics/Renderer.h"
@@ -39,13 +39,13 @@
 #include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
-#include "../Game/GameDefines.h"
-#include "../Game/GameDoorSceneryObject.h"
-#include "../Game/GameDudeObject.h"
-#include "../Game/GameExitMiscObject.h"
-#include "../Game/GameObject.h"
-#include "../Game/GameObjectFactory.h"
-#include "../Game/GameWeaponItemObject.h"
+#include "../Game/Defines.h"
+#include "../Game/DoorSceneryObject.h"
+#include "../Game/DudeObject.h"
+#include "../Game/ExitMiscObject.h"
+#include "../Game/Object.h"
+#include "../Game/ObjectFactory.h"
+#include "../Game/WeaponItemObject.h"
 #include "../State/CursorDropdown.h"
 #include "../State/ExitConfirm.h"
 #include "../State/Location.h"
@@ -130,7 +130,7 @@ void Location::setLocation(std::string name)
     // @todo remove old objects from hexagonal grid
     for (auto mapObject : *mapObjects)
     {
-        auto object = GameObjectFactory::createObject(mapObject->PID());
+        auto object = Game::GameObjectFactory::createObject(mapObject->PID());
         if (!object)
         {
             Logger::error() << "Location::setLocation() - cant create object with PID: " << mapObject->PID() << std::endl;
@@ -141,7 +141,7 @@ void Location::setLocation(std::string name)
         object->setElevation(_currentElevation);
         object->setOrientation(mapObject->orientation());
 
-        if (auto exitGrid = dynamic_cast<GameExitMiscObject*>(object))
+        if (auto exitGrid = dynamic_cast<Game::GameExitMiscObject*>(object))
         {
             exitGrid->setExitMapNumber(mapObject->exitMap());
             exitGrid->setExitElevationNumber(mapObject->exitElevation());
@@ -171,12 +171,12 @@ void Location::setLocation(std::string name)
         auto player = Game::getInstance()->player();
         // Just for testing
         {
-            auto armor = GameObjectFactory::createObject(0x00000003); // powered armor
-            player->setArmorSlot(dynamic_cast<GameArmorItemObject*>(armor));
-            auto leftHand = GameObjectFactory::createObject(0x0000000C); // minigun
-            player->setLeftHandSlot(dynamic_cast<GameWeaponItemObject*>(leftHand));
-            auto rightHand = GameObjectFactory::createObject(0x00000007); // spear
-            player->setRightHandSlot(dynamic_cast<GameWeaponItemObject*>(rightHand));
+            auto armor = Game::GameObjectFactory::createObject(0x00000003); // powered armor
+            player->setArmorSlot(dynamic_cast<Game::GameArmorItemObject*>(armor));
+            auto leftHand = Game::GameObjectFactory::createObject(0x0000000C); // minigun
+            player->setLeftHandSlot(dynamic_cast<Game::GameWeaponItemObject*>(leftHand));
+            auto rightHand = Game::GameObjectFactory::createObject(0x00000007); // spear
+            player->setRightHandSlot(dynamic_cast<Game::GameWeaponItemObject*>(rightHand));
         }
         player->setPID(0x01000001);
         player->setFID(FID_HERO_MALE);
@@ -194,7 +194,7 @@ void Location::setLocation(std::string name)
     // Location script
     if (mapFile->scriptId() > 0)
     {
-        _locationScript = new VM(ResourceManager::intFileType(mapFile->scriptId()-1), Game::getInstance()->Location());
+        _locationScript = new VM(ResourceManager::intFileType(mapFile->scriptId()-1), Game::getInstance()->locationState());
     }
 
     // Generates floor and roof images
@@ -222,7 +222,7 @@ void Location::setLocation(std::string name)
     }
 }
 
-void Location::onMouseDown(Event* event, GameObject* object)
+void Location::onMouseDown(Event* event, Game::GameObject* object)
 {
     if (!object) return;
 
@@ -232,19 +232,19 @@ void Location::onMouseDown(Event* event, GameObject* object)
     {
         icons.push_back(Mouse::ICON_USE);
     }
-    else if (dynamic_cast<GameDoorSceneryObject*>(object))
+    else if (dynamic_cast<Game::GameDoorSceneryObject*>(object))
     {
         icons.push_back(Mouse::ICON_USE);
     }
 
     switch(object->type())
     {
-        case GameObject::TYPE_DUDE:
+        case Game::GameObject::TYPE_DUDE:
             icons.push_back(Mouse::ICON_ROTATE);
             break;
-        case GameObject::TYPE_SCENERY:
+        case Game::GameObject::TYPE_SCENERY:
             break;
-        case GameObject::TYPE_CRITTER:
+        case Game::GameObject::TYPE_CRITTER:
             icons.push_back(Mouse::ICON_TALK);
             break;
         default:
@@ -556,7 +556,7 @@ std::map<std::string, VMStackValue*>* Location::EVARS()
     return &_EVARS;
 }
 
-void Location::moveObjectToHexagon(GameObject* object, Hexagon* hexagon)
+void Location::moveObjectToHexagon(Game::GameObject* object, Hexagon* hexagon)
 {
     auto oldHexagon = object->hexagon();
     if (oldHexagon)
@@ -591,7 +591,7 @@ void Location::moveObjectToHexagon(GameObject* object, Hexagon* hexagon)
     hexagon->objects()->push_back(object);
 }
 
-void Location::handleAction(GameObject* object, int action)
+void Location::handleAction(Game::GameObject* object, int action)
 {
     switch (action)
     {
@@ -609,7 +609,7 @@ void Location::handleAction(GameObject* object, int action)
         }
         case Mouse::ICON_ROTATE:
         {
-            auto dude = dynamic_cast<GameDudeObject*>(object);
+            auto dude = dynamic_cast<Game::GameDudeObject*>(object);
             if (!dude) throw Exception("Location::handleAction() - only Dude can be rotated");
 
             int orientation = dude->orientation() + 1;
@@ -620,7 +620,7 @@ void Location::handleAction(GameObject* object, int action)
         }
         case Mouse::ICON_TALK:
         {
-            if (auto critter = dynamic_cast<GameCritterObject*>(object))
+            if (auto critter = dynamic_cast<Game::GameCritterObject*>(object))
             {
                 critter->talk_p_proc();
             }

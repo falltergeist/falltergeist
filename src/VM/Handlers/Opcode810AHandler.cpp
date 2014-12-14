@@ -23,7 +23,7 @@
 #include "../../Exception.h"
 #include "../../Logger.h"
 #include "../../ResourceManager.h"
-#include "../../Game/GameObject.h"
+#include "../../Game/Object.h"
 #include "../../UI/TextArea.h"
 #include "../../VM/Handlers/Opcode810AHandler.h"
 #include "../../VM/VM.h"
@@ -91,7 +91,7 @@ void Opcode810AHandler::_run()
     }
 
     auto string = static_cast<std::string*>(_vm->popDataPointer());
-    auto object = static_cast<GameObject*>(_vm->popDataPointer());
+    auto object = static_cast<Game::GameObject*>(_vm->popDataPointer());
 
     auto floatMessage = new TextArea(*string);
     floatMessage->setWidth(200);

@@ -22,8 +22,8 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80BFHandler.h"
-#include "../../Game.h"
-#include "../../Game/GameDudeObject.h"
+#include "../../Game/Game.h"
+#include "../../Game/DudeObject.h"
 #include "../../VM/VM.h"
 
 // Third party includes

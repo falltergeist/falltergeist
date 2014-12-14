@@ -22,7 +22,7 @@
 
 // Falltergeist includes
 #include "../Event/StateEvent.h"
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../Graphics/Animation.h"
 #include "../Graphics/Renderer.h"
 #include "../Audio/AudioMixer.h"

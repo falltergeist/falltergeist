@@ -20,11 +20,11 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../LocationCamera.h"
 #include "../PathFinding/Hexagon.h"
-#include "../Game/GameCritterObject.h"
+#include "../Game/CritterObject.h"
 #include "../State/CritterInteract.h"
 #include "../State/Location.h"
 #include "../UI/Image.h"
@@ -42,7 +42,7 @@ CritterInteract::CritterInteract() : State()
 
 CritterInteract::~CritterInteract()
 {
-    auto camera = Game::getInstance()->Location()->camera();
+    auto camera = Game::getInstance()->locationState()->camera();
     camera->setXPosition(_oldCameraX);
     camera->setYPosition(_oldCameraY);
 }
@@ -61,12 +61,12 @@ void CritterInteract::init()
     addUI("background", new Image("art/intrface/alltlk.frm"));
 
     // Centering camera on critter position
-    auto Location = Game::getInstance()->Location();
-    _oldCameraX = Location->camera()->xPosition();
-    _oldCameraY = Location->camera()->yPosition();
+    auto locationState = Game::getInstance()->locationState();
+    _oldCameraX = locationState->camera()->xPosition();
+    _oldCameraY = locationState->camera()->yPosition();
 
-    Location->camera()->setXPosition(critter()->hexagon()->x());
-    Location->camera()->setYPosition(critter()->hexagon()->y() + 100);
+    locationState->camera()->setXPosition(critter()->hexagon()->x());
+    locationState->camera()->setYPosition(critter()->hexagon()->y() + 100);
 }
 
 int CritterInteract::backgroundID()
@@ -99,12 +99,12 @@ void CritterInteract::setMood(int mood)
     _mood = mood;
 }
 
-GameCritterObject* CritterInteract::critter()
+Game::GameCritterObject* CritterInteract::critter()
 {
     return _critter;
 }
 
-void CritterInteract::setCritter(GameCritterObject* critter)
+void CritterInteract::setCritter(Game::GameCritterObject* critter)
 {
     _critter = critter;
 }

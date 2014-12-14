@@ -69,10 +69,6 @@ set(SOURCES main.cpp
     src/Font.h
     src/FontString.cpp
     src/FontString.h
-    src/Game.cpp
-    src/Game.h
-    src/GameTime.cpp
-    src/GameTime.h
     src/Graphics/ActiveUI.cpp
     src/Graphics/ActiveUI.h
     src/Graphics/AnimatedPalette.cpp
@@ -117,53 +113,57 @@ set(SOURCES main.cpp
     src/ResourceManager.h
     src/Settings.cpp
     src/Settings.h
-    src/Game/GameDefines.h
-    src/Game/GameDudeObject.cpp
-    src/Game/GameDudeObject.h
-    src/Game/GameObject.cpp
-    src/Game/GameObject.h
-    src/Game/GameObjectFactory.cpp
-    src/Game/GameObjectFactory.h
-    src/Game/GameCritterObject.cpp
-    src/Game/GameCritterObject.h
-    src/Game/GameItemObject.cpp
-    src/Game/GameItemObject.h
-    src/Game/GameAmmoItemObject.cpp
-    src/Game/GameAmmoItemObject.h
-    src/Game/GameArmorItemObject.cpp
-    src/Game/GameArmorItemObject.h
-    src/Game/GameContainerItemObject.cpp
-    src/Game/GameContainerItemObject.h
-    src/Game/GameDrugItemObject.cpp
-    src/Game/GameDrugItemObject.h
-    src/Game/GameKeyItemObject.cpp
-    src/Game/GameKeyItemObject.h
-    src/Game/GameMiscItemObject.cpp
-    src/Game/GameMiscItemObject.h
-    src/Game/GameWeaponItemObject.cpp
-    src/Game/GameWeaponItemObject.h
-    src/Game/GameSceneryObject.cpp
-    src/Game/GameSceneryObject.h
-    src/Game/GameDoorSceneryObject.cpp
-    src/Game/GameDoorSceneryObject.h
-    src/Game/GameGenericSceneryObject.cpp
-    src/Game/GameGenericSceneryObject.h
-    src/Game/GameLadderSceneryObject.cpp
-    src/Game/GameLadderSceneryObject.h
-    src/Game/GameStairsSceneryObject.cpp
-    src/Game/GameStairsSceneryObject.h
-    src/Game/GameElevatorSceneryObject.cpp
-    src/Game/GameElevatorSceneryObject.h
-    src/Game/GameWallObject.cpp
-    src/Game/GameWallObject.h
-    src/Game/GameExitMiscObject.cpp
-    src/Game/GameExitMiscObject.h
-    src/Game/GameMiscObject.cpp
-    src/Game/GameMiscObject.h
-    src/Game/GameLocation.cpp
-    src/Game/GameLocation.h
-    src/Game/GameLocationElevation.cpp
-    src/Game/GameLocationElevation.h
+    src/Game/Game.cpp
+    src/Game/Game.h
+    src/Game/Defines.h
+    src/Game/DudeObject.cpp
+    src/Game/DudeObject.h
+    src/Game/Object.cpp
+    src/Game/Object.h
+    src/Game/ObjectFactory.cpp
+    src/Game/ObjectFactory.h
+    src/Game/CritterObject.cpp
+    src/Game/CritterObject.h
+    src/Game/ItemObject.cpp
+    src/Game/ItemObject.h
+    src/Game/AmmoItemObject.cpp
+    src/Game/AmmoItemObject.h
+    src/Game/ArmorItemObject.cpp
+    src/Game/ArmorItemObject.h
+    src/Game/ContainerItemObject.cpp
+    src/Game/ContainerItemObject.h
+    src/Game/DrugItemObject.cpp
+    src/Game/DrugItemObject.h
+    src/Game/KeyItemObject.cpp
+    src/Game/KeyItemObject.h
+    src/Game/MiscItemObject.cpp
+    src/Game/MiscItemObject.h
+    src/Game/WeaponItemObject.cpp
+    src/Game/WeaponItemObject.h
+    src/Game/SceneryObject.cpp
+    src/Game/SceneryObject.h
+    src/Game/Time.cpp
+    src/Game/Time.h
+    src/Game/DoorSceneryObject.cpp
+    src/Game/DoorSceneryObject.h
+    src/Game/GenericSceneryObject.cpp
+    src/Game/GenericSceneryObject.h
+    src/Game/LadderSceneryObject.cpp
+    src/Game/LadderSceneryObject.h
+    src/Game/StairsSceneryObject.cpp
+    src/Game/StairsSceneryObject.h
+    src/Game/ElevatorSceneryObject.cpp
+    src/Game/ElevatorSceneryObject.h
+    src/Game/WallObject.cpp
+    src/Game/WallObject.h
+    src/Game/ExitMiscObject.cpp
+    src/Game/ExitMiscObject.h
+    src/Game/MiscObject.cpp
+    src/Game/MiscObject.h
+    src/Game/Location.cpp
+    src/Game/Location.h
+    src/Game/LocationElevation.cpp
+    src/Game/LocationElevation.h
     src/State/Credits.cpp
     src/State/Credits.h
     src/State/CritterBarter.cpp

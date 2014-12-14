@@ -20,11 +20,11 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../Logger.h"
 #include "../PathFinding/Hexagon.h"
-#include "../Game/GameObject.h"
-#include "../Game/GameDoorSceneryObject.h"
+#include "../Game/Object.h"
+#include "../Game/DoorSceneryObject.h"
 
 // Third party includes
 
@@ -55,7 +55,7 @@ std::vector<Hexagon*>* Hexagon::neighbors()
     return &_neighbors;
 }
 
-std::list<GameObject*>* Hexagon::objects()
+std::list<Game::GameObject*>* Hexagon::objects()
 {
     return &_objects;
 }
@@ -125,7 +125,7 @@ bool Hexagon::canWalkThru()
     bool canWalkThru = true;
     for (auto object : _objects)
     {
-        if (auto door = dynamic_cast<GameDoorSceneryObject*>(object))
+        if (auto door = dynamic_cast<Game::GameDoorSceneryObject*>(object))
         {
             return door->canWalkThru();
         }

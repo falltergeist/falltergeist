@@ -22,8 +22,8 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80A9Handler.h"
-#include "../../Game.h"
-#include "../../Game/GameDudeObject.h"
+#include "../../Game/Game.h"
+#include "../../Game/DudeObject.h"
 #include "../../State/Location.h"
 #include "../../PathFinding/Hexagon.h"
 #include "../../PathFinding/HexagonGrid.h"
@@ -48,7 +48,7 @@ void Opcode80A9Handler::_run()
     auto position = y*200 + x;
     auto game = Game::getInstance();
     auto player = game->player();
-    auto hexagon = game->Location()->hexagonGrid()->at(position);
+    auto hexagon = game->locationState()->hexagonGrid()->at(position);
     State::Location::moveObjectToHexagon(player, hexagon);
                 //player->setPosition(position);
     player->setOrientation(orientation);

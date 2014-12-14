@@ -25,7 +25,7 @@
 #include "../Exception.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/UI.h"
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
 #include "../Settings.h"

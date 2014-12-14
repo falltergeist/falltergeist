@@ -21,7 +21,7 @@
 
 // Falltergeist includes
 #include "../Graphics/Texture.h"
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 
 // Third party includes

@@ -23,9 +23,9 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80D4Handler.h"
 #include "../../Exception.h"
-#include "../../Game.h"
+#include "../../Game/Game.h"
 #include "../../ResourceManager.h"
-#include "../../Game/GameObject.h"
+#include "../../Game/Object.h"
 #include "../../State/Location.h"
 #include "../../PathFinding/Hexagon.h"
 #include "../../PathFinding/HexagonGrid.h"
@@ -45,7 +45,7 @@ Opcode80D4Handler::Opcode80D4Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80D4Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80D4] [+] int objectPosition(GameObject* object)" << std::endl;
-    auto object = static_cast<GameObject*>(_vm->popDataPointer());
+    auto object = static_cast<Game::GameObject*>(_vm->popDataPointer());
     if (!object) throw new Exception("Opcode 80d4 error");
     _vm->pushDataInteger(object->hexagon()->number());
 }

@@ -21,7 +21,7 @@
 
 // Falltergeist includes
 #include "../../Exception.h"
-#include "../../Game.h"
+#include "../../Game/Game.h"
 #include "../../State/Location.h"
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8014Handler.h"
@@ -42,7 +42,7 @@ void Opcode8014Handler::_run()
 {
     auto& debug = Logger::debug("SCRIPT");
     auto game = Game::getInstance();
-    auto EVARS = game->Location()->EVARS();
+    auto EVARS = game->locationState()->EVARS();
     std::string name;
     switch (_vm->dataStack()->top()->type())
     {

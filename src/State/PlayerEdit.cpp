@@ -23,10 +23,10 @@
 
 // Falltergeist includes
 #include "../Font.h"
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
-#include "../Game/GameDudeObject.h"
+#include "../Game/DudeObject.h"
 #include "../State/Location.h"
 #include "../State/PlayerEditAlert.h"
 #include "../State/PlayerEdit.h"

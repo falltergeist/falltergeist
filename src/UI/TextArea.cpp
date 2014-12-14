@@ -24,7 +24,7 @@
 #include "../CrossPlatform.h"
 #include "../Font.h"
 #include "../FontString.h"
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"

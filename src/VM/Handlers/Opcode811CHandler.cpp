@@ -21,7 +21,7 @@
 
 // Falltergeist includes
 #include "../../Logger.h"
-#include "../../Game.h"
+#include "../../Game/Game.h"
 #include "../../State/CritterDialog.h"
 #include "../../VM/Handlers/Opcode811CHandler.h"
 #include "../../VM/VM.h"

@@ -23,10 +23,10 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80B7Handler.h"
 #include "../../Exception.h"
-#include "../../Game.h"
+#include "../../Game/Game.h"
 #include "../../ResourceManager.h"
-#include "../../Game/GameObject.h"
-#include "../../Game/GameObjectFactory.h"
+#include "../../Game/Object.h"
+#include "../../Game/ObjectFactory.h"
 #include "../../State/Location.h"
 #include "../../PathFinding/Hexagon.h"
 #include "../../PathFinding/HexagonGrid.h"
@@ -50,8 +50,8 @@ void Opcode80B7Handler::_run()
     auto elevation = _vm->popDataInteger();
     auto position = _vm->popDataInteger();
     auto PID = _vm->popDataInteger();
-    auto object = GameObjectFactory::createObject(PID);
-    auto hexagon = Game::getInstance()->Location()->hexagonGrid()->at(position);
+    auto object = Game::GameObjectFactory::createObject(PID);
+    auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
     State::Location::moveObjectToHexagon(object, hexagon);
     object->setElevation(elevation);
     if (SID > 0)

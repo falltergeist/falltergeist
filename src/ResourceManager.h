@@ -33,10 +33,14 @@
 
 namespace Falltergeist
 {
+namespace Game
+{
+    class GameLocation;
+}
+
 class Surface;
 class Texture;
 class Font;
-class GameLocation;
 
 class ResourceManager
 {
@@ -45,7 +49,7 @@ protected:
     static std::map<std::string, std::shared_ptr<libfalltergeist::DatFileItem>> _datFilesItems;
     static std::map<std::string, Texture*> _textures;
     static std::map<std::string, std::shared_ptr<Font>> _fonts;
-    static std::map<unsigned int, GameLocation*> _gameLocations;
+    static std::map<unsigned int, Game::GameLocation*> _gameLocations;
 
 public:
     ResourceManager();
@@ -75,7 +79,7 @@ public:
     static std::shared_ptr<Font> font(std::string filename = "font1.aaf", unsigned int color = 0x3ff800ff);
     static void unloadResources();
     static std::string FIDtoFrmName(unsigned int FID);
-    static GameLocation* gameLocation(unsigned int number);
+    static Game::GameLocation* gameLocation(unsigned int number);
 };
 
 }

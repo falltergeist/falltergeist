@@ -23,12 +23,12 @@
 
 // Falltergeist includes
 #include "../Exception.h"
-#include "../Game.h"
+#include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../LocationCamera.h"
 #include "../PathFinding/Hexagon.h"
 #include "../ResourceManager.h"
-#include "../Game/GameCritterObject.h"
+#include "../Game/CritterObject.h"
 #include "../State/CritterDialog.h"
 #include "../State/CritterDialogReview.h"
 #include "../State/CritterInteract.h"

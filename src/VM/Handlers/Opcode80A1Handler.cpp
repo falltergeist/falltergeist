@@ -23,8 +23,8 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80A1Handler.h"
 #include "../../VM/VM.h"
-#include "../../Game.h"
-#include "../../Game/GameDudeObject.h"
+#include "../../Game/Game.h"
+#include "../../Game/DudeObject.h"
 
 // Third party includes
 

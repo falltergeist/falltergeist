@@ -24,9 +24,9 @@
 #include "../../VM/Handlers/Opcode8121Handler.h"
 #include "../../VM/VM.h"
 #include "../../VM/VMStackValue.h"
-#include "../../Game.h"
+#include "../../Game/Game.h"
 #include "../../State/CritterDialog.h"
-#include "../../Game/GameDudeObject.h"
+#include "../../Game/DudeObject.h"
 
 // Third party includes
 

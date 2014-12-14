@@ -22,7 +22,7 @@
 // Falltergeist includes
 #include "../../Exception.h"
 #include "../../Logger.h"
-#include "../../Game/GameCritterObject.h"
+#include "../../Game/CritterObject.h"
 #include "../../VM/Handlers/Opcode80CAHandler.h"
 #include "../../VM/VM.h"
 
@@ -38,7 +38,7 @@ Opcode80CAHandler::Opcode80CAHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80CAHandler::_run()
 {
     int number = _vm->popDataInteger();
-    auto critter = static_cast<GameCritterObject*>(_vm->popDataPointer());
+    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataPointer());
     if (!critter)
     {
         throw Exception("VM::opcode80CA pointer error");
