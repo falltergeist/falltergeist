@@ -46,6 +46,12 @@ if(NOT SDLMIXER_FOUND)
 endif(NOT SDLMIXER_FOUND)
 include_directories(${SDLMIXER_INCLUDE_DIR})
 
+find_package(SDL2_image REQUIRED)
+if(NOT SDLIMAGE_FOUND)
+    message(FATAL_ERROR "SDL2_image library not found")
+endif(NOT SDLIMAGE_FOUND)
+include_directories(${SDLIMAGE_INCLUDE_DIR})
+
 configure_file(src/CrossPlatform.cpp.in src/CrossPlatform.cpp)
 
 set(SOURCES main.cpp
@@ -616,7 +622,7 @@ endif()
 
 add_executable(falltergeist-bin ${SOURCES})
 set_target_properties(falltergeist-bin PROPERTIES OUTPUT_NAME falltergeist)
-target_link_libraries(falltergeist-bin ${SDL2_LIBRARY} ${SDLMIXER_LIBRARY} ${LIBFALLTERGEIST_LIBRARY})
+target_link_libraries(falltergeist-bin ${SDL2_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLIMAGE_LIBRARY} ${LIBFALLTERGEIST_LIBRARY})
 
 #
 # Install section

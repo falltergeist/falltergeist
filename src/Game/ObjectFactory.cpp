@@ -219,6 +219,30 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
                 object->setDescription(msg->message(proto->messageId() + 1)->text());
             }
             catch (libfalltergeist::Exception) {}
+
+            //first two bytes are orientation. second two - unknown
+            unsigned short orientation = proto->flagsExt() >> 16;
+            switch (orientation)
+            {
+                case 0x0000:
+                    object->setLightOrientation(GameObject::ORIENTATION_NS);
+                    break;
+                case 0x0800:
+                    object->setLightOrientation(GameObject::ORIENTATION_EW);
+                    break;
+                case 0x1000:
+                    object->setLightOrientation(GameObject::ORIENTATION_NC);
+                    break;
+                case 0x2000:
+                    object->setLightOrientation(GameObject::ORIENTATION_SC);
+                    break;
+                case 0x4000:
+                    object->setLightOrientation(GameObject::ORIENTATION_EC);
+                    break;
+                case 0x8000:
+                    object->setLightOrientation(GameObject::ORIENTATION_WC);
+                    break;
+            }
             break;
         }
         case libfalltergeist::ProFileType::TYPE_TILE:

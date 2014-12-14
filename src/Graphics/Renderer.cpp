@@ -19,6 +19,7 @@
 
 // C++ standard includes
 #include <cmath>
+#include <SDL_image.h>
 
 // Falltergeist includes
 #include "../Event/StateEvent.h"
@@ -163,6 +164,9 @@ void Renderer::init()
     Logger::info("RENDERER") << "max_texture_width: " << rendererInfo.max_texture_width << std::endl;
     Logger::info("RENDERER") << "max_texture_height: " << rendererInfo.max_texture_height << std::endl;
 
+    IMG_Init(IMG_INIT_JPG|IMG_INIT_PNG);
+    _egg=new Texture(0,0);
+    _egg->loadFromImage("data/egg.png");
 }
 
 void Renderer::think()
@@ -267,7 +271,7 @@ void Renderer::registerTexture(Texture* texture)
     SDL_UpdateTexture(sdlTexture, NULL, texture->data(), texture->width() * 4);
     _surfaces.push_back(sdlTexture);
 
-    SDL_SetTextureBlendMode(sdlTexture, SDL_BLENDMODE_BLEND);
+    SDL_SetTextureBlendMode(sdlTexture, (SDL_BlendMode)texture->blendmode());
 
     texture->setId(_texturesCounter);
     _texturesCounter++;
@@ -288,6 +292,7 @@ void Renderer::drawTexture(Texture* texture, int x, int y, int sourceX, int sour
 
     SDL_SetTextureColorMod(_surfaces.at(texture->id() - 1), texture->r(), texture->g(), texture->b());
     SDL_SetTextureAlphaMod(_surfaces.at(texture->id() - 1), texture->a());
+    SDL_SetTextureBlendMode(_surfaces.at(texture->id() - 1), (SDL_BlendMode)texture->blendmode());
 
     if (!sourceX && !sourceY && !sourceWidth && !sourceHeight)
     {
@@ -349,6 +354,11 @@ float Renderer::scaleX()
 float Renderer::scaleY()
 {
     return _scaleY;
+}
+
+Texture* Renderer::egg()
+{
+    return _egg;
 }
 
 }

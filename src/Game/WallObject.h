@@ -29,6 +29,7 @@
 
 namespace Falltergeist
 {
+class Texture;
 namespace Game
 {
 
@@ -38,9 +39,10 @@ protected:
 public:
     GameWallObject();
     virtual ~GameWallObject();
-    virtual void think();
+    virtual void render();
 private:
     bool _transparent = false;
+    Texture* _tmptex = NULL;
 };
 
 }

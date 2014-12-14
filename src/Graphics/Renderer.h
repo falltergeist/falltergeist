@@ -53,6 +53,7 @@ protected:
     SDL_Window* _window;
     SDL_Color _fadeColor;
     SDL_Renderer* _renderer;
+    Texture* _egg = NULL;
 
 public:
     Renderer(unsigned int width, unsigned int height);
@@ -82,7 +83,7 @@ public:
     virtual void drawTexture( Texture* texture, int x, int y, int sourceX = 0, int sourceY = 0, int unsigned sourceWidth = 0, unsigned int sourceHeight = 0);
 
     virtual Texture* screenshot();
-
+    Texture* egg();
 };
 
 }

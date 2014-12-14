@@ -18,6 +18,7 @@
  */
 
 // C++ standard includes
+#include <SDL_image.h>
 
 // Falltergeist includes
 #include "../Graphics/Texture.h"
@@ -120,6 +121,23 @@ void Texture::loadFromRGBA(unsigned int* data)
 {
     _unregister();
     for (unsigned int i = 0; i != _width*_height; ++i) _data[i] = data[i];
+}
+
+void Texture::loadFromImage(std::string name)
+{
+    _unregister();
+    SDL_Surface* tmp=IMG_Load(name.c_str());
+    SDL_PixelFormat* fmt = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
+    SDL_Surface* tmp2 = SDL_ConvertSurface(tmp, fmt, 0);
+    SDL_FreeFormat(fmt);
+    SDL_FreeSurface(tmp);
+    _width = tmp2->w;
+    _height = tmp2->h;
+    delete [] _data;
+    _data = new unsigned int[_width*_height]();
+    unsigned int* data = (unsigned int*)(tmp2->pixels);
+    for (unsigned int i = 0; i != _width*_height; ++i) _data[i] = data[i];
+    SDL_FreeSurface(tmp2);
 }
 
 void Texture::copyTo(Texture* destination, unsigned int destinationX, unsigned int destinationY, unsigned int sourceX, unsigned int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
@@ -243,6 +261,16 @@ unsigned char Texture::b()
 unsigned char Texture::a()
 {
     return _modifier.a;
+}
+
+void Texture::setBlend(SDL_BlendMode blendmode)
+{
+    _blendmode = blendmode;
+}
+
+SDL_BlendMode Texture::blendmode()
+{
+    return _blendmode;
 }
 
 }
