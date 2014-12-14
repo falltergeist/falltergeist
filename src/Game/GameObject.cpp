@@ -368,4 +368,14 @@ unsigned int GameObject::trans()
     return _trans;
 }
 
+void GameObject::setLightOrientation(unsigned short orientation)
+{
+    _lightOrientation = orientation;
+}
+
+unsigned short GameObject::lightOrientation()
+{
+    return _lightOrientation;
+}
+
 }
