@@ -20,7 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/Exception.h"
+#include "../Exception.h"
 #include "../VM/OpcodeFactory.h"
 #include "../VM/Handlers/Opcode8002Handler.h"
 #include "../VM/Handlers/Opcode8003Handler.h"

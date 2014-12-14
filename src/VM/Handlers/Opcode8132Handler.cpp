@@ -20,8 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Logger.h"
-#include "../../Game/GameDoorSceneryObject.h"
+#include "../../Logger.h"
+#include "../../Game/DoorSceneryObject.h"
 #include "../../VM/Handlers/Opcode8132Handler.h"
 #include "../../VM/VM.h"
 
@@ -37,7 +37,7 @@ Opcode8132Handler::Opcode8132Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8132Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8132] [+] void close(GameDoorSceneryObject* object) " << std::endl;
-    auto object = static_cast<GameDoorSceneryObject*>(_vm->popDataPointer());
+    auto object = static_cast<Game::GameDoorSceneryObject*>(_vm->popDataPointer());
     object->setOpened(false);
 }
 

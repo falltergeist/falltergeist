@@ -20,14 +20,11 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Logger.h"
+#include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80AAHandler.h"
-#include "../../Game/GameCritterObject.h"
-#include "../../Engine/Exception.h"
+#include "../../Game/CritterObject.h"
+#include "../../Exception.h"
 #include "../../VM/VM.h"
-
-
-
 
 // Third party includes
 
@@ -45,7 +42,7 @@ void Opcode80AAHandler::_run()
     {
         throw Exception("VM::opcode80AA - number out of range: " + std::to_string(skill));
     }
-    auto object = static_cast<GameCritterObject*>(_vm->popDataPointer());
+    auto object = static_cast<Game::GameCritterObject*>(_vm->popDataPointer());
     int value = object->skillValue(skill);
     _vm->pushDataInteger(value);
 

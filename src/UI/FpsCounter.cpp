@@ -21,9 +21,8 @@
 #include <sstream>
 
 // Falltergeist includes
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Game.h"
-#include "../Engine/ResourceManager.h"
+#include "../Game/Game.h"
+#include "../ResourceManager.h"
 #include "../UI/FpsCounter.h"
 
 // Third party includes

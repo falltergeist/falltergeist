@@ -20,10 +20,10 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Logger.h"
+#include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80A4Handler.h"
-#include "../../Engine/Game.h"
-#include "../../Game/GameCritterObject.h"
+#include "../../Game/Game.h"
+#include "../../Game/CritterObject.h"
 #include "../../VM/VM.h"
 #include "../../VM/VMStackPointerValue.h"
 
@@ -41,7 +41,7 @@ Opcode80A4Handler::Opcode80A4Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80A4Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80A4] [+] std::string* obj_name(GameCritterObject* who)" << std::endl;
-    auto critter = static_cast<GameCritterObject*>(_vm->popDataPointer());
+    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataPointer());
     _vm->pushDataPointer(new std::string(critter->name()), VMStackPointerValue::POINTER_TYPE_STRING);
 }
 

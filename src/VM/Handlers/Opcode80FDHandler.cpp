@@ -20,9 +20,9 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Exception.h"
-#include "../../Engine/Logger.h"
-#include "../../Game/GameDudeObject.h"
+#include "../../Exception.h"
+#include "../../Logger.h"
+#include "../../Game/DudeObject.h"
 #include "../../VM/Handlers/Opcode80FDHandler.h"
 #include "../../VM/VM.h"
 
@@ -38,7 +38,7 @@ Opcode80FDHandler::Opcode80FDHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80FDHandler::_run()
 {
     int amount = _vm->popDataInteger();
-    auto critter = static_cast<GameDudeObject*>(_vm->popDataPointer());
+    auto critter = static_cast<Game::GameDudeObject*>(_vm->popDataPointer());
     if (!critter)
     {
         throw Exception("VM::opcode80FD pointer error");

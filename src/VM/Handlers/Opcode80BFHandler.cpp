@@ -20,13 +20,11 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Logger.h"
+#include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80BFHandler.h"
-#include "../../Engine/Game.h"
-#include "../../Game/GameDudeObject.h"
+#include "../../Game/Game.h"
+#include "../../Game/DudeObject.h"
 #include "../../VM/VM.h"
-
-
 
 // Third party includes
 

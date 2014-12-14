@@ -20,10 +20,10 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Exception.h"
-#include "../../Engine/Logger.h"
-#include "../../Game/GameCritterObject.h"
-#include "../../Game/GameObject.h"
+#include "../../Exception.h"
+#include "../../Logger.h"
+#include "../../Game/CritterObject.h"
+#include "../../Game/Object.h"
 #include "../../VM/Handlers/Opcode810CHandler.h"
 #include "../../VM/VM.h"
 
@@ -41,7 +41,7 @@ void Opcode810CHandler::_run()
 {
     int direction = _vm->popDataInteger();
     int animation = _vm->popDataInteger();
-    auto critter = static_cast<GameCritterObject*>(_vm->popDataPointer());
+    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataPointer());
 
     Logger::debug("SCRIPT") << "[810C] [*] void anim(GameCritterObject* who, int animation, int direction)" << std::endl
                             << "    direction = 0x" << std::hex << direction << std::endl

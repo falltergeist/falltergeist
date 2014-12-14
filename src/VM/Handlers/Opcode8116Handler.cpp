@@ -20,14 +20,14 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Logger.h"
+#include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8116Handler.h"
-#include "../../Engine/Exception.h"
-#include "../../Engine/Game.h"
-#include "../../Game/GameObject.h"
-#include "../../Game/GameCritterObject.h"
-#include "../../Game/GameContainerItemObject.h"
-#include "../../Game/GameObjectFactory.h"
+#include "../../Exception.h"
+#include "../../Game/Game.h"
+#include "../../Game/Object.h"
+#include "../../Game/CritterObject.h"
+#include "../../Game/ContainerItemObject.h"
+#include "../../Game/ObjectFactory.h"
 #include "../../VM/VM.h"
 
 
@@ -45,16 +45,16 @@ void Opcode8116Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8116] [+] void add_mult_objs_to_inven(GameObject* who, GameItemObject* item, int amount)" << std::endl;
     auto amount = _vm->popDataInteger();
-    auto item = static_cast<GameItemObject*>(_vm->popDataPointer());
+    auto item = static_cast<Game::GameItemObject*>(_vm->popDataPointer());
     if (!item) throw Exception("VM::opcode8116 - item not instanceof GameItemObject");
     item->setAmount(amount);
     // who can be critter or container
-    auto pointer = static_cast<GameObject*>(_vm->popDataPointer());
-    if (auto critter = dynamic_cast<GameCritterObject*>(pointer))
+    auto pointer = static_cast<Game::GameObject*>(_vm->popDataPointer());
+    if (auto critter = dynamic_cast<Game::GameCritterObject*>(pointer))
     {
         critter->inventory()->push_back(item);
     }
-    else if (auto container = dynamic_cast<GameContainerItemObject*>(pointer))
+    else if (auto container = dynamic_cast<Game::GameContainerItemObject*>(pointer))
     {
         container->inventory()->push_back(item);
     }

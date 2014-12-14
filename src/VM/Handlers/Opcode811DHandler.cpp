@@ -20,9 +20,9 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Game.h"
-#include "../../Engine/Logger.h"
-#include "../../States/CritterDialogState.h"
+#include "../../Game/Game.h"
+#include "../../Logger.h"
+#include "../../State/CritterDialog.h"
 #include "../../VM/Handlers/Opcode811DHandler.h"
 #include "../../VM/VMHaltException.h"
 #include "../../VM/VM.h"
@@ -39,7 +39,7 @@ Opcode811DHandler::Opcode811DHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode811DHandler::_run()
 {
     Logger::debug("SCRIPT") << "[811D] [?] gsay_end" << std::endl;
-    auto dialog = dynamic_cast<CritterDialogState*>(Game::getInstance()->states()->back());
+    auto dialog = dynamic_cast<State::CritterDialog*>(Game::getInstance()->states()->back());
     if (dialog->hasAnswers())
     {
         _vm->pushDataInteger(0); // function return value

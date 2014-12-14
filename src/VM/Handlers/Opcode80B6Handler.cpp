@@ -20,14 +20,14 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Logger.h"
+#include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80B6Handler.h"
-#include "../../Engine/Exception.h"
-#include "../../Engine/Game.h"
-#include "../../Game/GameDudeObject.h"
-#include "../../States/LocationState.h"
-#include "../../Engine/PathFinding/Hexagon.h"
-#include "../../Engine/PathFinding/HexagonGrid.h"
+#include "../../Exception.h"
+#include "../../Game/Game.h"
+#include "../../Game/DudeObject.h"
+#include "../../State/Location.h"
+#include "../../PathFinding/Hexagon.h"
+#include "../../PathFinding/HexagonGrid.h"
 #include "../../VM/VM.h"
 
 
@@ -47,10 +47,10 @@ void Opcode80B6Handler::_run()
     Logger::debug("SCRIPT") << "[80B6] [+] int move_to(GameObject* object, int position, int elevation)" << std::endl;
     auto elevation = _vm->popDataInteger();
     auto position = _vm->popDataInteger();
-    auto object = static_cast<GameObject*>(_vm->popDataPointer());
+    auto object = static_cast<Game::GameObject*>(_vm->popDataPointer());
     if (!object) throw new Exception("Opcode 80b6 error");
     auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
-    LocationState::moveObjectToHexagon(object, hexagon);
+    State::Location::moveObjectToHexagon(object, hexagon);
     object->setElevation(elevation);
     _vm->pushDataInteger(1);
 }

@@ -20,19 +20,17 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Logger.h"
+#include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80FFHandler.h"
-#include "../../Engine/Exception.h"
-#include "../../Engine/Game.h"
-#include "../../Engine/ResourceManager.h"
-#include "../../Game/GameObject.h"
-#include "../../Game/GameCritterObject.h"
-#include "../../States/LocationState.h"
-#include "../../Engine/PathFinding/Hexagon.h"
-#include "../../Engine/PathFinding/HexagonGrid.h"
+#include "../../Exception.h"
+#include "../../Game/Game.h"
+#include "../../ResourceManager.h"
+#include "../../Game/Object.h"
+#include "../../Game/CritterObject.h"
+#include "../../State/Location.h"
+#include "../../PathFinding/Hexagon.h"
+#include "../../PathFinding/HexagonGrid.h"
 #include "../../VM/VM.h"
-
-
 
 // Third party includes
 
@@ -48,10 +46,10 @@ void Opcode80FFHandler::_run()
     Logger::debug("SCRIPT") << "[80FF] [*] int critter_attempt_placement(GameCritterObject* critter, int position, int elevation)" << std::endl;
     auto elevation = _vm->popDataInteger();
     auto position = _vm->popDataInteger();
-    auto critter = static_cast<GameCritterObject*>(_vm->popDataPointer());
+    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataPointer());
     if (!critter) throw new Exception("Opcode 80ff error");
     auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
-    LocationState::moveObjectToHexagon(critter, hexagon);
+    State::Location::moveObjectToHexagon(critter, hexagon);
     critter->setElevation(elevation);
     _vm->pushDataInteger(1);
 }

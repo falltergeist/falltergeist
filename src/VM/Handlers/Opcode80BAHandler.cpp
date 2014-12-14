@@ -20,10 +20,10 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Exception.h"
-#include "../../Engine/Logger.h"
-#include "../../Game/GameCritterObject.h"
-#include "../../Game/GameContainerItemObject.h"
+#include "../../Exception.h"
+#include "../../Logger.h"
+#include "../../Game/CritterObject.h"
+#include "../../Game/ContainerItemObject.h"
 #include "../../VM/Handlers/Opcode80BAHandler.h"
 #include "../../VM/VM.h"
 
@@ -39,11 +39,11 @@ Opcode80BAHandler::Opcode80BAHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80BAHandler::_run()
 {
     auto PID = _vm->popDataInteger();
-    auto pointer = static_cast<GameObject*>(_vm->popDataPointer());
+    auto pointer = static_cast<Game::GameObject*>(_vm->popDataPointer());
 
     int amount = 0;
-    auto critter = dynamic_cast<GameCritterObject*>(pointer);
-    auto container = dynamic_cast<GameContainerItemObject*>(pointer);
+    auto critter = dynamic_cast<Game::GameCritterObject*>(pointer);
+    auto container = dynamic_cast<Game::GameContainerItemObject*>(pointer);
     if (critter)
     {
         for (auto object : *critter->inventory()) if (object->PID() == PID) amount += object->amount();

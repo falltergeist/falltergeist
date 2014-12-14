@@ -20,8 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Logger.h"
-#include "../../Game/GameDoorSceneryObject.h"
+#include "../../Logger.h"
+#include "../../Game/DoorSceneryObject.h"
 #include "../../VM/Handlers/Opcode812EHandler.h"
 #include "../../VM/VM.h"
 
@@ -36,7 +36,7 @@ Opcode812EHandler::Opcode812EHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode812EHandler::_run()
 {
-    auto object = static_cast<GameDoorSceneryObject*>(_vm->popDataPointer());
+    auto object = static_cast<Game::GameDoorSceneryObject*>(_vm->popDataPointer());
     object->setLocked(true);
     Logger::debug("SCRIPT") << "[812E] [+] void lock(GameDoorSceneryObject* object)" << std::endl
                             << "    PID: 0x"<< std::hex << object->PID() << std::endl;
