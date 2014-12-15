@@ -60,13 +60,18 @@ void GameWallObject::render()
     switch (_lightOrientation)
     {
         case ORIENTATION_NS:
+        case ORIENTATION_NC:
             if ((dx>=0 && dx<=4 && dy>=-7 && dy<=7))
                 _transparent = true;
             break;
         case ORIENTATION_EW:
         case ORIENTATION_EC:
-        case ORIENTATION_SC:
             if ((dx>=-3 && dx<=3 && dy>=0 && dy<=3))
+                _transparent = true;
+            break;
+        case ORIENTATION_WC:
+        case ORIENTATION_SC:
+            if ((dx>=0 && dx<=3 && dy>=0 && dy<=3))
                 _transparent = true;
             break;
     }
