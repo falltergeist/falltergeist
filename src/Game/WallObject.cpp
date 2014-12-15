@@ -61,12 +61,12 @@ void GameWallObject::render()
     {
         case ORIENTATION_NS:
         case ORIENTATION_NC:
-            if ((dx>=0 && dx<=4 && dy>=-7 && dy<=7))
+            if ((dx>0 && dx<=4 && dy>=-3 && dy<=7))
                 _transparent = true;
             break;
         case ORIENTATION_EW:
         case ORIENTATION_EC:
-            if ((dx>=-3 && dx<=3 && dy>=0 && dy<=3))
+            if ((dx>=-3 && dx<=4 && dy>0 && dy<=8))
                 _transparent = true;
             break;
         case ORIENTATION_WC:
