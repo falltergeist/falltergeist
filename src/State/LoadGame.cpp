@@ -113,9 +113,16 @@ void LoadGame::onDoneButtonClick(MouseEvent* event)
 
 void LoadGame::onCancelButtonClick(MouseEvent* event)
 {
-    removeEventHandlers("fadedone");
-    addEventHandler("fadedone", [this](Event* event){ this->onCancelFadeDone(dynamic_cast<StateEvent*>(event)); });
-    Game::getInstance()->renderer()->fadeOut(255,255,255,1000);
+    if (!Game::getInstance()->locationState())
+    {
+        removeEventHandlers("fadedone");
+        addEventHandler("fadedone", [this](Event* event){ this->onCancelFadeDone(dynamic_cast<StateEvent*>(event)); });
+        Game::getInstance()->renderer()->fadeOut(255,255,255,1000);
+    }
+    else
+    {
+        Game::getInstance()->popState();
+    }
 }
 
 void LoadGame::onCancelFadeDone(StateEvent* event)
@@ -126,7 +133,8 @@ void LoadGame::onCancelFadeDone(StateEvent* event)
 
 void LoadGame::onStateActivate(StateEvent* event)
 {
-    Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
+    if (!Game::getInstance()->locationState())
+        Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
 }
 
 }
