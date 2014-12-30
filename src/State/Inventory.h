@@ -47,6 +47,8 @@ public:
     //void onSlotMouseUp(MouseEvent* event);
     //void onSlotDrag(MouseEvent* event);
     void backgroundRightClick(MouseEvent* event);
+
+
 private:
     std::string _handItemSummary (Game::GameItemObject* hand);
     void _screenShow (unsigned int PID);

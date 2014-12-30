@@ -20,7 +20,9 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "ContainerItemObject.h"
+#include "../Game/ContainerItemObject.h"
+#include "../Game/Game.h"
+#include "../State/Container.h"
 
 // Third party includes
 
@@ -41,6 +43,13 @@ GameContainerItemObject::~GameContainerItemObject()
 std::vector<GameItemObject*>* GameContainerItemObject::inventory()
 {
     return &_inventory;
+}
+
+void GameContainerItemObject::use_p_proc()
+{
+    auto state = new State::Container();
+    state->setObject(this);
+    Game::getInstance()->pushState(state);
 }
 
 }

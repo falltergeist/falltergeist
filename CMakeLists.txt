@@ -170,6 +170,8 @@ set(SOURCES main.cpp
     src/Game/Location.h
     src/Game/LocationElevation.cpp
     src/Game/LocationElevation.h
+    src/State/Container.cpp
+    src/State/Container.h
     src/State/Credits.cpp
     src/State/Credits.h
     src/State/CritterBarter.cpp
@@ -244,6 +246,10 @@ set(SOURCES main.cpp
     src/UI/ImageButton.h
     src/UI/ImageList.cpp
     src/UI/ImageList.h
+    src/UI/InventoryItem.cpp
+    src/UI/InventoryItem.h
+    src/UI/ItemsList.cpp
+    src/UI/ItemsList.h
     src/UI/MultistateImageButton.cpp
     src/UI/MultistateImageButton.h
     src/UI/MonthCounter.cpp

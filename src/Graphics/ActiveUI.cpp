@@ -40,7 +40,6 @@ void ActiveUI::handle(Event* event)
 {
     if(auto mouseEvent = dynamic_cast<MouseEvent*>(event))
     {
-        if (!texture()) return;
 
         int x = mouseEvent->x() - this->x();
         int y = mouseEvent->y() - this->y();

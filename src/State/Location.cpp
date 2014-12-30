@@ -26,6 +26,7 @@
 #include "../Event/MouseEvent.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
+#include "../Game/ContainerItemObject.h"
 #include "../Game/Time.h"
 #include "../Graphics/Animation.h"
 #include "../Graphics/AnimationQueue.h"
@@ -149,6 +150,21 @@ void Location::setLocation(std::string name)
             exitGrid->setExitDirection(mapObject->exitOrientation());
         }
 
+        if (auto container = dynamic_cast<Game::GameContainerItemObject*>(object))
+        {
+            for (auto child : *mapObject->children())
+            {
+                auto item = dynamic_cast<Game::GameItemObject*>(Game::GameObjectFactory::createObject(child->PID()));
+                if (!item)
+                {
+                    Logger::error() << "Location::setLocation() - cant create object with PID: " << child->PID() << std::endl;
+                    continue;
+                }
+                item->setAmount(child->ammount());
+                container->inventory()->push_back(item);
+            }
+        }
+
         if (mapObject->scriptId() > 0)
         {
             auto intFile = ResourceManager::intFileType(mapObject->scriptId());
@@ -236,9 +252,15 @@ void Location::onMouseDown(Event* event, Game::GameObject* object)
     {
         icons.push_back(Mouse::ICON_USE);
     }
+    else if (dynamic_cast<Game::GameContainerItemObject*>(object))
+    {
+        icons.push_back(Mouse::ICON_USE);
+    }
 
     switch(object->type())
     {
+        case Game::GameObject::TYPE_ITEM:
+            break;
         case Game::GameObject::TYPE_DUDE:
             icons.push_back(Mouse::ICON_ROTATE);
             break;
@@ -340,7 +362,7 @@ void Location::think()
         }
 
     }
-
+    return;
     if (_locationEnter)
     {
         _locationEnter = false;

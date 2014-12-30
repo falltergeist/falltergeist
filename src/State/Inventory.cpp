@@ -37,6 +37,8 @@
 #include "../State/Inventory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
+#include "../UI/ItemsList.h"
+#include "../UI/InventoryItem.h"
 #include "../UI/TextArea.h"
 #include "../UI/ImageList.h"
 
@@ -72,8 +74,8 @@ void Inventory::init()
 
     auto game = Game::getInstance();
 
-    setX((game->renderer()->width()  - 499)*0.5);
-    setY((game->renderer()->height() - 427)*0.5);
+    setX((game->renderer()->width()  - 499)/2);
+    setY((game->renderer()->height() - 427)/2);
 
     addUI("background", new Image("art/intrface/invbox.frm"));
     getActiveUI("background")->addEventHandler("mouserightclick", [this](Event* event){ this->backgroundRightClick(dynamic_cast<MouseEvent*>(event)); });
@@ -240,55 +242,39 @@ void Inventory::init()
     addUI("rightHandLabel", rightHandLabel);
     addUI("screenLabel", screenLabel);
 
+    auto inventoryList = new ItemsList(40, 40);
+    inventoryList->setItems(game->player()->inventory());
+    addUI(inventoryList);
 
     // BIG ICONS
     // icon: armor
     if (armorSlot)
     {
-        auto armorUi = new ImageList();
-        armorUi->addImage(new Image(armorSlot->inventorySlotUi()));
-        armorUi->addImage(new Image(armorSlot->inventoryDragUi()));
-        armorUi->setX(200 - armorUi->width()*0.5);
-        armorUi->setY(215 - armorUi->height()*0.5);
-        addUI(armorUi);
-
-        armorUi->addEventHandler("mouseleftdown", [this](Event* event){ this->onArmorSlotMouseDown(dynamic_cast<MouseEvent*>(event)); });
-        //armorUi->addEventHandler("mouseleftup", this, (EventRecieverMethod) &Inventory::onArmorSlotMouseUp);
-        //armorUi->addEventHandler("mousedrag", armorSlot.get(), (EventRecieverMethod) &Inventory::onSlotDrag);
-        //armorUi->addEventHandler("mouseleftdown", armorSlot.get(), (EventRecieverMethod) &Inventory::onSlotMouseDown);
-        //armorUi->addEventHandler("mouseleftup", armorSlot.get(), (EventRecieverMethod) &Inventory::onSlotMouseUp);
+        auto inventoryItem = new InventoryItem(armorSlot, 154, 183);
+        inventoryItem->setType(InventoryItem::TYPE_SLOT);
+        inventoryItem->addEventHandler("itemdragstop", [inventoryList](Event* event){ inventoryList->onItemDragStop(dynamic_cast<MouseEvent*>(event)); });
+        inventoryList->addEventHandler("itemdragstop", [inventoryItem](Event* event){ inventoryItem->onArmorDragStop(dynamic_cast<MouseEvent*>(event)); });
+        addUI(inventoryItem);
     }
 
     // icon: left hand
     if (leftHand)
     {
-        auto leftHandUi = new ImageList();
-        leftHandUi->addImage(new Image(leftHand->inventorySlotUi()));
-        leftHandUi->addImage(new Image(leftHand->inventoryDragUi()));
-        leftHandUi->setX(200 - leftHandUi->width()*0.5);
-        leftHandUi->setY(317 - leftHandUi->height()*0.5);
-        addUI(leftHandUi);
-
-        leftHandUi->addEventHandler("mouseleftdown", [this](Event* event){ this->onLeftHandSlotMouseDown(dynamic_cast<MouseEvent*>(event)); });
-        //leftHandUi->addEventHandler("mousedrag", leftHand.get(), (EventRecieverMethod) &Inventory::onSlotDrag);
-        //leftHandUi->addEventHandler("mouseleftdown", leftHand.get(), (EventRecieverMethod) &Inventory::onSlotMouseDown);
-        //leftHandUi->addEventHandler("mouseleftup", leftHand.get(), (EventRecieverMethod) &Inventory::onSlotMouseUp);
+        auto inventoryItem = new InventoryItem(leftHand, 154, 286);
+        inventoryItem->setType(InventoryItem::TYPE_SLOT);
+        inventoryItem->addEventHandler("itemdragstop", [inventoryList](Event* event){ inventoryList->onItemDragStop(dynamic_cast<MouseEvent*>(event)); });
+        inventoryList->addEventHandler("itemdragstop", [inventoryItem](Event* event){ inventoryItem->onHandDragStop(dynamic_cast<MouseEvent*>(event)); });
+        addUI(inventoryItem);
     }
 
     // icon: right hand
     if (rightHand)
     {
-        auto rightHandUi = new ImageList();
-        rightHandUi->addImage(new Image(rightHand->inventorySlotUi()));
-        rightHandUi->addImage(new Image(rightHand->inventoryDragUi()));
-        rightHandUi->setX(290 - rightHandUi->width()*0.5);
-        rightHandUi->setY(317 - rightHandUi->height()*0.5);
-        addUI(rightHandUi);
-
-        rightHandUi->addEventHandler("mouseleftdown", [this](Event* event){ this->onRightHandSlotMouseDown(dynamic_cast<MouseEvent*>(event)); });
-        //rightHandUi->addEventHandler("mousedrag", rightHand.get(), (EventRecieverMethod) &Inventory::onSlotDrag);
-        //rightHandUi->addEventHandler("mouseleftdown", rightHand.get(), (EventRecieverMethod) &Inventory::onSlotMouseDown);
-        //rightHandUi->addEventHandler("mouseleftup", rightHand.get(), (EventRecieverMethod) &Inventory::onSlotMouseUp);
+        auto inventoryItem = new InventoryItem(rightHand, 247, 286);
+        inventoryItem->setType(InventoryItem::TYPE_SLOT);
+        inventoryItem->addEventHandler("itemdragstop", [inventoryList](Event* event){ inventoryList->onItemDragStop(dynamic_cast<MouseEvent*>(event)); });
+        inventoryList->addEventHandler("itemdragstop", [inventoryItem](Event* event){ inventoryItem->onHandDragStop(dynamic_cast<MouseEvent*>(event)); });
+        addUI(inventoryItem);
     }
 
 }
@@ -457,6 +443,7 @@ void Inventory::_screenShow (unsigned int PID)
     leftHandLabel->setVisible(PID == 0);
     rightHandLabel->setVisible(PID == 0);
 }
+
 
 }
 }

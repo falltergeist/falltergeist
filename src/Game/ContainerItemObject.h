@@ -41,6 +41,8 @@ public:
     GameContainerItemObject();
     virtual ~GameContainerItemObject();
     std::vector<GameItemObject*>* inventory();
+
+    virtual void use_p_proc();
 };
 
 }

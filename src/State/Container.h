@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_CREDITS_H
-#define FALLTERGEIST_CREDITS_H
+#ifndef FALLTERGEIST_STATE_CONTAINER_H
+#define FALLTERGEIST_STATE_CONTAINER_H
 
 // C++ standard includes
 
@@ -29,29 +29,30 @@
 
 namespace Falltergeist
 {
+namespace Game
+{
+    class GameContainerItemObject;
+}
 namespace State
 {
 
-class Credits : public State
+class Container : public State
 {
 protected:
+    Game::GameContainerItemObject* _object = 0;
 public:
-    Credits();
-    virtual ~Credits();
+    Container();
+    virtual ~Container();
 
     virtual void init();
-    virtual void think();
-    virtual void handle(Event* event);
 
-    void onCreditsFinished();
-    void onCreditsFadeDone(StateEvent* event);
-    void onStateActivate(StateEvent* event);
-private:
-    std::vector<TextArea*> _lines;
-    unsigned long int _lastTicks;
+    Game::GameContainerItemObject* object();
+    void setObject(Game::GameContainerItemObject* object);
+
+    void onDoneButtonClick(MouseEvent* event);
 };
 
 }
 }
 
-#endif // FALLTERGEIST_CREDITS_H
+#endif // FALLTERGEIST_STATE_CONTAINER_H
