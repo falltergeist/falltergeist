@@ -362,7 +362,6 @@ void Location::think()
         }
 
     }
-    return;
     if (_locationEnter)
     {
         _locationEnter = false;
