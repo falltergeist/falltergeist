@@ -28,9 +28,11 @@ set(falltergeist_VERSION  0.2.0)
 
 option(LIBFALLTERGEIST_EMBEDDED "Use embedded libfalltergeist" ON)
 
+include_directories(src)
+
 if(LIBFALLTERGEIST_EMBEDDED)
     set(LIBFALLTERGEIST_LIBRARY falltergeist)
-    include_directories(${CMAKE_SOURCE_DIR}/lib/libfalltergeist)
+    include_directories(${CMAKE_SOURCE_DIR}/lib/libfalltergeist/src)
     set(LIBFALLTERGEIST_EMBEDDED ON CACHE BOOL "")
 else()
     find_package(LIBFALLTERGEIST REQUIRED)
@@ -56,8 +58,6 @@ endif(NOT SDLIMAGE_FOUND)
 include_directories(${SDLIMAGE_INCLUDE_DIR})
 
 configure_file(src/CrossPlatform.cpp.in src/CrossPlatform.cpp)
-
-include_directories(src)
 
 set(SOURCES main.cpp
     src/Audio/AudioMixer.h
@@ -641,10 +641,6 @@ if(WIN32)
     install(TARGETS falltergeist-bin RUNTIME DESTINATION .)
     install(DIRECTORY data DESTINATION .)
 
-    if(LIBFALLTERGEIST_EMBEDDED)
-        install(FILES ${CMAKE_BINARY_DIR}/lib/libfalltergeist/libfalltergeist.dll DESTINATION .)
-    endif()
-
     #MinGW runtime
     if(MINGW)
         get_filename_component(MINGW_BIN_PATH ${CMAKE_CXX_COMPILER} PATH )
@@ -655,17 +651,12 @@ if(WIN32)
 
     #dependencies
     file(GLOB dep_files ${dep_files} "${CMAKE_FIND_ROOT_PATH}/bin/*.dll")
-
     install(FILES ${dep_files} DESTINATION .)
 endif()
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
     install(TARGETS falltergeist-bin RUNTIME DESTINATION bin)
     install(DIRECTORY data DESTINATION share/falltergeist)
-
-    if(LIBFALLTERGEIST_EMBEDDED)
-        install(FILES ${CMAKE_BINARY_DIR}/lib/libfalltergeist/libfalltergeist.so DESTINATION lib)
-    endif()
 endif()
 
 if(APPLE)
