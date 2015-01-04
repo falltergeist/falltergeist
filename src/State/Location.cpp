@@ -218,8 +218,10 @@ void Location::setLocation(std::string name)
 
         for (unsigned int i = 0; i != 100*100; ++i)
         {
-            unsigned int x = (100 - i%100 - 1)*48 + 32*ceil(i/100);
-            unsigned int y = ceil(i/100)*24 +(i%100)*12;
+            unsigned int tileX = std::ceil(((double)i)/100);
+            unsigned int tileY = i%100;
+            unsigned int x = (100 - tileY - 1)*48 + 32*(tileX - 1);
+            unsigned int y = tileX*24 +(tileY - 1)*12 + 1;
 
             unsigned int tileNum = mapFile->elevations()->at(_currentElevation)->floorTiles()->at(i);
             if (tileNum > 1)
@@ -231,7 +233,7 @@ void Location::setLocation(std::string name)
             tileNum = mapFile->elevations()->at(_currentElevation)->roofTiles()->at(i);
             if (tileNum > 1)
             {
-                auto tile = new Tile(tileNum, x, y - 80);
+                auto tile = new Tile(tileNum, x, y - 104);
                 _roof->tiles()->push_back(tile);
             }
         }

@@ -227,7 +227,7 @@ void GameObject::render()
     if (!_ui) return;
 
     auto camera = Game::getInstance()->locationState()->camera();
-    _ui->setX(hexagon()->x() - camera->x() - std::floor(static_cast<double>(_ui->width())/2));
+    _ui->setX(hexagon()->x() - camera->x() - std::floor((double)_ui->width()/2));
     _ui->setY(hexagon()->y() - camera->y() - _ui->height());
 
     setInRender(false);
