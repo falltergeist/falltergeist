@@ -231,7 +231,7 @@ void Location::setLocation(std::string name)
             tileNum = mapFile->elevations()->at(_currentElevation)->roofTiles()->at(i);
             if (tileNum > 1)
             {
-                auto tile = new Tile(tileNum, x, y);
+                auto tile = new Tile(tileNum, x, y - 80);
                 _roof->tiles()->push_back(tile);
             }
         }
@@ -299,7 +299,6 @@ void Location::onKeyUp(std::shared_ptr<KeyboardEvent> event)
 void Location::render()
 {
     _floor->render();
-    //_roof->render();
     for (auto hexagon : *hexagonGrid()->hexagons())
     {
         hexagon->setInRender(false);
@@ -312,6 +311,7 @@ void Location::render()
             }
         }
     }
+    //_roof->render();
 }
 
 void Location::think()

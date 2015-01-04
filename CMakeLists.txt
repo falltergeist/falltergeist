@@ -57,12 +57,10 @@ if(NOT SDLIMAGE_FOUND)
 endif(NOT SDLIMAGE_FOUND)
 include_directories(${SDLIMAGE_INCLUDE_DIR})
 
-configure_file(src/CrossPlatform.cpp.in src/CrossPlatform.cpp)
-
 set(SOURCES main.cpp
-    src/Audio/AudioMixer.h
     src/Audio/AudioMixer.cpp
-    ${CMAKE_BINARY_DIR}/src/CrossPlatform.cpp
+    src/Audio/AudioMixer.h
+    src/CrossPlatform.cpp
     src/CrossPlatform.h
     src/Event/Event.cpp
     src/Event/Event.h

@@ -13,4 +13,3 @@ falltergeist.cbp
 .idea/
 *.autosave
 /src/nbproject/private/
-src/CrossPlatform.cpp
