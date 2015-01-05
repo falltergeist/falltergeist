@@ -74,7 +74,7 @@ protected:
     bool _scrollBottom = false;
 
     std::vector<Game::GameObject*> _objects;
-
+    TextArea* _hexagonInfo = 0;
 public:
     Location();
     ~Location();

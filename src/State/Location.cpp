@@ -75,6 +75,9 @@ Location::Location() : State()
     _roof = new TileMap();
     _hexagonGrid = new HexagonGrid();
 
+    _hexagonInfo = new TextArea("", game->renderer()->width() - 135, 25);
+    _hexagonInfo->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+
 }
 
 Location::~Location()
@@ -84,6 +87,7 @@ Location::~Location()
     delete _floor;
     delete _roof;
     delete _locationScript;
+    delete _hexagonInfo;
 }
 
 void Location::init()
@@ -314,6 +318,10 @@ void Location::render()
         }
     }
     //_roof->render();
+    if (active())
+    {
+        _hexagonInfo->render();
+    }
 }
 
 void Location::think()
@@ -510,6 +518,13 @@ void Location::handle(Event* event)
             _scrollRight = mouseEvent->x() > game->renderer()->width()- scrollArea ? true : false;
             _scrollTop = mouseEvent->y() < scrollArea ? true : false;
             _scrollBottom = mouseEvent->y() > game->renderer()->height() - scrollArea ? true : false;
+
+            auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
+            std::string text = "Hex number: " + std::to_string(hexagon->number()) + "\n";
+            text += "Hex position: " + std::to_string(hexagon->number()%200) + "," + std::to_string((unsigned int)(hexagon->number()/200)) + "\n";
+            text += "Hex coords: " + std::to_string(hexagon->x()) + "," + std::to_string(hexagon->y());
+            _hexagonInfo->setText(text);
+
         }
     }
 
