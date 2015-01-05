@@ -498,11 +498,12 @@ void Location::handle(Event* event)
 
         if (mouseEvent->name() == "mousemove")
         {
+            auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
+
             switch (mouse->state())
             {
                 case Mouse::HEXAGON_RED:
                 {
-                    auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
                     if (!hexagon)
                     {
                         break;
@@ -519,7 +520,6 @@ void Location::handle(Event* event)
             _scrollTop = mouseEvent->y() < scrollArea ? true : false;
             _scrollBottom = mouseEvent->y() > game->renderer()->height() - scrollArea ? true : false;
 
-            auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
             std::string text = "Hex number: " + std::to_string(hexagon->number()) + "\n";
             text += "Hex position: " + std::to_string(hexagon->number()%200) + "," + std::to_string((unsigned int)(hexagon->number()/200)) + "\n";
             text += "Hex coords: " + std::to_string(hexagon->x()) + "," + std::to_string(hexagon->y());
