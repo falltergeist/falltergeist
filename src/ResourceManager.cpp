@@ -466,18 +466,12 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
             prefix = "art/tiles/";
             lstFile = "tiles.lst";
             break;
-        case libfalltergeist::FrmFileType::TYPE_BACKGROUND:
-            prefix = "art/backgrnd/";
-            lstFile = "backgrnd.lst";
+        case libfalltergeist::FrmFileType::TYPE_MISC:
+            prefix = "art/misc/";
+            lstFile = "misc.lst";
 
-            // ???
-            if (id == 1) return "";
             // Map scroll blockers
-            if (id == 12) return "art/intrface/msef001.frm";
-            // Exit tiles
-            if (id >= 16 && id <= 23) return "art/intrface/msef001.frm";
-            // ???
-            if (id == 24) return "art/intrface/msef001.frm";
+            if (id == 1) return "art/misc/scrblk.frm";
 
             break;
         case libfalltergeist::FrmFileType::TYPE_INTERFACE:
