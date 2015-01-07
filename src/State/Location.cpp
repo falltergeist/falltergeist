@@ -520,11 +520,17 @@ void Location::handle(Event* event)
             _scrollTop = mouseEvent->y() < scrollArea ? true : false;
             _scrollBottom = mouseEvent->y() > game->renderer()->height() - scrollArea ? true : false;
 
-            std::string text = "Hex number: " + std::to_string(hexagon->number()) + "\n";
-            text += "Hex position: " + std::to_string(hexagon->number()%200) + "," + std::to_string((unsigned int)(hexagon->number()/200)) + "\n";
-            text += "Hex coords: " + std::to_string(hexagon->x()) + "," + std::to_string(hexagon->y());
-            _hexagonInfo->setText(text);
-
+            if (hexagon)
+            {
+                std::string text = "Hex number: " + std::to_string(hexagon->number()) + "\n";
+                text += "Hex position: " + std::to_string(hexagon->number()%200) + "," + std::to_string((unsigned int)(hexagon->number()/200)) + "\n";
+                text += "Hex coords: " + std::to_string(hexagon->x()) + "," + std::to_string(hexagon->y());
+                _hexagonInfo->setText(text);
+            }
+            else
+            {
+                _hexagonInfo->setText("No hex");
+            }
         }
     }
 
