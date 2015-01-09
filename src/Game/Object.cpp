@@ -324,24 +324,37 @@ void GameObject::render()
 
     if (_transparent)
     {
-        if (!_tmptex) _tmptex = new Texture(_ui->texture()->width(),_ui->texture()->height());
-        _ui->texture()->copyTo(_tmptex);
-
         int egg_x = dude->hexagon()->x() - camera->x() - 63 + dude->ui()->xOffset();
         int egg_y = dude->hexagon()->y() - camera->y() - 98 + dude->ui()->yOffset();
 
         int egg_dx = _ui->x() - egg_x;
         int egg_dy = _ui->y() - egg_y;
 
+        auto egg = Game::getInstance()->renderer()->egg();
+
+        //check if egg and texture intersects
+        SDL_Rect egg_rect = { egg_x, egg_y, (int)egg->width(), (int)egg->height() };
+        SDL_Rect tex_rect = { _ui->x(), _ui->y(), (int)_ui->texture()->width(), (int)_ui->texture()->height() };
+
+        if (!SDL_HasIntersection(&egg_rect, &tex_rect))
+        {
+            _ui->render();
+            return;
+        }
+
+        if (!_tmptex) _tmptex = new Texture(_ui->texture()->width(),_ui->texture()->height());
+        _ui->texture()->copyTo(_tmptex);
+
+        //This is sloooow. But unfortunately sdl doesnt allow to blit over only alpha =/
         for (unsigned int x = 0; x < _ui->texture()->width(); x++)
         {
             for (unsigned int y = 0; y < _ui->texture()->height(); y++)
             {
-                if (x+egg_dx >= Game::getInstance()->renderer()->egg()->width()) continue;
-                if (y+egg_dy >= Game::getInstance()->renderer()->egg()->height()) continue;
+                if (x+egg_dx >= egg->width()) continue;
+                if (y+egg_dy >= egg->height()) continue;
                 if (x+egg_dx < 0) continue;
                 if (y+egg_dy < 0) continue;
-                _tmptex->setPixel(x, y, _tmptex->pixel(x,y) & Game::getInstance()->renderer()->egg()->pixel(x+egg_dx, y+egg_dy));
+                _tmptex->setPixel(x, y, _tmptex->pixel(x,y) & egg->pixel(x+egg_dx, y+egg_dy));
             }
         }
         Game::getInstance()->renderer()->drawTexture(_tmptex, _ui->x(),_ui->y());
