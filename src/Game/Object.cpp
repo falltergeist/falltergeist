@@ -268,8 +268,13 @@ void GameObject::render()
         }
     }
 
-    //TODO: check for NoBlock flag in proto. If not set - just render
-    if ((trans() != TRANS_NONE) || (_type != TYPE_WALL))// && !(_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC))
+    if ((trans() != TRANS_NONE) || ((_type != TYPE_WALL) && !(_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC)))
+    {
+        _ui->render();
+        return;
+    }
+
+    if ((_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC) && !canWalkThru())
     {
         _ui->render();
         return;
@@ -313,14 +318,9 @@ void GameObject::render()
             break;
     }
 
-    if (noBlockTrans && 0) //TODO: check for NoBlock flag in proto
-        _transparent = false;
+//    if (noBlockTrans && canWalkThru())
+//        _transparent = false;
 
-    if ((_type != TYPE_WALL))// && !(_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC))
-        _transparent = false;
-
-    if (trans() != TRANS_NONE)
-        _transparent = false;
 
     if (_transparent)
     {
