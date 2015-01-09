@@ -41,6 +41,7 @@ class Image;
 class Location;
 class TextArea;
 class VM;
+class Texture;
 
 namespace Game
 {
@@ -66,6 +67,8 @@ protected:
     bool _inRender = false;
     unsigned int _trans = 0;
     unsigned short _lightOrientation;
+    bool _transparent = false;
+    Texture* _tmptex = NULL;
 public:
     enum { TYPE_ITEM = 0, TYPE_CRITTER, TYPE_SCENERY, TYPE_WALL, TYPE_TILE, TYPE_MISC, TYPE_DUDE };
     enum { TYPE_ITEM_ARMOR = 0, TYPE_ITEM_CONTAINER, TYPE_ITEM_DRUG, TYPE_ITEM_WEAPON, TYPE_ITEM_AMMO, TYPE_ITEM_MISC, TYPE_ITEM_KEY };
