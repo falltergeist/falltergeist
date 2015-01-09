@@ -25,6 +25,7 @@
 #include "../Graphics/Animation.h"
 #include "../Graphics/AnimationQueue.h"
 #include "../Graphics/Texture.h"
+#include "../Graphics/Renderer.h"
 #include "Game.h"
 #include "../LocationCamera.h"
 #include "../Logger.h"
@@ -33,6 +34,7 @@
 #include "CritterObject.h"
 #include "Defines.h"
 #include "Object.h"
+#include "DudeObject.h"
 #include "../State/Location.h"
 #include "../UI/AnimatedImage.h"
 #include "../UI/Image.h"
@@ -222,6 +224,17 @@ void GameObject::setFloatMessage(TextArea* floatMessage)
     _floatMessage = floatMessage;
 }
 
+static bool to_right_of(int x1, int y1, int x2, int y2)
+{
+  return (double)(x2 - x1) <= (double)(y2 - y1) * (4.0/3.0);
+}
+
+static bool in_front_of(int x1, int y1, int x2, int y2)
+{
+  return (double)(x2 - x1) <= (double)(y2 - y1) * -4.0;
+}
+
+
 void GameObject::render()
 {
     if (!_ui) return;
@@ -255,7 +268,88 @@ void GameObject::render()
         }
     }
 
-    _ui->render();
+    //TODO: check for NoBlock flag in proto. If not set - just render
+    if ((trans() != TRANS_NONE) || (_type != TYPE_WALL))// && !(_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC))
+    {
+        _ui->render();
+        return;
+    }
+
+    auto dude = Game::getInstance()->player();
+
+    Hexagon* hex;
+
+    if (dude->movementQueue()->size())
+        hex = dude->movementQueue()->back();
+    else
+        hex = dude->hexagon();
+
+    auto obj_x = hexagon()->x();
+    auto obj_y = hexagon()->y();
+
+    auto dude_x = hex->x();
+    auto dude_y = hex->y();
+
+    _transparent = false;
+
+    bool noBlockTrans = false;
+
+    switch (_lightOrientation)
+    {
+        case ORIENTATION_EW:
+        case ORIENTATION_WC:
+            _transparent = in_front_of(obj_x, obj_y, dude_x, dude_y);
+            noBlockTrans = to_right_of(obj_x, obj_y, dude_x, dude_y);
+            break;
+        case ORIENTATION_NC:
+            _transparent = (in_front_of(obj_x, obj_y, dude_x, dude_y) | to_right_of(dude_x, dude_y, obj_x, obj_y));
+            break;
+        case ORIENTATION_SC:
+            _transparent = (in_front_of(obj_x, obj_y, dude_x, dude_y) && to_right_of(dude_x, dude_y, obj_x, obj_y));
+            break;
+        default:
+            _transparent = to_right_of(dude_x, dude_y, obj_x, obj_y);
+            noBlockTrans = in_front_of(dude_x, dude_y, obj_x, obj_y);
+            break;
+    }
+
+    if (noBlockTrans && 0) //TODO: check for NoBlock flag in proto
+        _transparent = false;
+
+    if ((_type != TYPE_WALL))// && !(_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC))
+        _transparent = false;
+
+    if (trans() != TRANS_NONE)
+        _transparent = false;
+
+    if (_transparent)
+    {
+        if (!_tmptex) _tmptex = new Texture(_ui->texture()->width(),_ui->texture()->height());
+        _ui->texture()->copyTo(_tmptex);
+
+        int egg_x = dude->hexagon()->x() - camera->x() - 63 + dude->ui()->xOffset();
+        int egg_y = dude->hexagon()->y() - camera->y() - 98 + dude->ui()->yOffset();
+
+        int egg_dx = _ui->x() - egg_x;
+        int egg_dy = _ui->y() - egg_y;
+
+        for (unsigned int x = 0; x < _ui->texture()->width(); x++)
+        {
+            for (unsigned int y = 0; y < _ui->texture()->height(); y++)
+            {
+                if (x+egg_dx >= Game::getInstance()->renderer()->egg()->width()) continue;
+                if (y+egg_dy >= Game::getInstance()->renderer()->egg()->height()) continue;
+                if (x+egg_dx < 0) continue;
+                if (y+egg_dy < 0) continue;
+                _tmptex->setPixel(x, y, _tmptex->pixel(x,y) & Game::getInstance()->renderer()->egg()->pixel(x+egg_dx, y+egg_dy));
+            }
+        }
+        Game::getInstance()->renderer()->drawTexture(_tmptex, _ui->x(),_ui->y());
+    }
+    else
+    {
+        _ui->render();
+    }
 }
 
 void GameObject::think()

@@ -21,13 +21,6 @@
 
 // Falltergeist includes
 #include "WallObject.h"
-#include "Game.h"
-#include "DudeObject.h"
-#include "../PathFinding/Hexagon.h"
-#include "../State/Location.h"
-#include "../Graphics/ActiveUI.h"
-#include "../Graphics/Renderer.h"
-#include "../LocationCamera.h"
 
 // Third party includes
 
@@ -43,78 +36,6 @@ GameWallObject::GameWallObject() : GameObject()
 
 GameWallObject::~GameWallObject()
 {
-}
-
-void GameWallObject::render()
-{
-    if (!_ui) return;
-
-    auto game = Game::getInstance();
-    auto dude = game->player();
-    auto hex = dude->hexagon();
-
-    int dx = (hexagon()->number() % 200) - (hex->number() % 200);
-    int dy = (hexagon()->number() / 200) - (hex->number() / 200);
-
-    _transparent = false;
-    switch (_lightOrientation)
-    {
-        case ORIENTATION_NS:
-        case ORIENTATION_NC:
-            if ((dx>0 && dx<=4 && dy>=-3 && dy<=7))
-                _transparent = true;
-            break;
-        case ORIENTATION_EW:
-        case ORIENTATION_EC:
-            if ((dx>=-3 && dx<=4 && dy>0 && dy<=8))
-                _transparent = true;
-            break;
-        case ORIENTATION_WC:
-        case ORIENTATION_SC:
-            if ((dx>=0 && dx<=3 && dy>=0 && dy<=3))
-                _transparent = true;
-            break;
-    }
-
-    if (_transparent)
-    {
-        auto camera = game->locationState()->camera();
-        _ui->setX(hexagon()->x() - camera->x() - std::floor(static_cast<double>(_ui->width())/2));
-        _ui->setY(hexagon()->y() - camera->y() - _ui->height());
-
-        setInRender(false);
-
-        if (_ui->x() + (int)_ui->width() < 0) return;
-        if (_ui->x() > (int)camera->width()) return;
-        if (_ui->y() + (int)_ui->height() < 0) return;
-        if (_ui->y() > (int)camera->height()) return;
-
-        setInRender(true);
-        if (!_tmptex) _tmptex = new Texture(_ui->texture()->width(),_ui->texture()->height());
-        _ui->texture()->copyTo(_tmptex);
-
-        int egg_x = dude->ui()->x()+(dude->ui()->width()/2) - 63 + dude->ui()->xOffset();
-        int egg_y = dude->ui()->y()+(dude->ui()->height()) - 98 + dude->ui()->yOffset();
-        int egg_dx = _ui->x() - egg_x;
-        int egg_dy = _ui->y() - egg_y;
-
-        for (int x = 0; x < _ui->texture()->width(); x++)
-        {
-            for (int y = 0; y < _ui->texture()->height(); y++)
-            {
-                if (x+egg_dx >= game->renderer()->egg()->width()) continue;
-                if (y+egg_dy >= game->renderer()->egg()->height()) continue;
-                if (x+egg_dx < 0) continue;
-                if (y+egg_dy < 0) continue;
-                _tmptex->setPixel(x, y, _tmptex->pixel(x,y) & game->renderer()->egg()->pixel(x+egg_dx, y+egg_dy));
-            }
-        }
-        game->renderer()->drawTexture(_tmptex, _ui->x(),_ui->y());
-    }
-    else
-    {
-        GameObject::render();
-    }
 }
 
 }
