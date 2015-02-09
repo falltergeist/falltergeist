@@ -19,7 +19,6 @@
 
 // C++ standard includes
 #include <sstream>
-#include <string.h>
 
 // Falltergeist includes
 #include "../Audio/AudioMixer.h"
@@ -85,7 +84,7 @@ void Game::_initialize()
     Logger::info("GAME") << CrossPlatform::getVersion() << std::endl;
     Logger::info("GAME") << "Opensource Fallout 2 game engine" << std::endl;
 
-    putenv(strdup("SDL_VIDEO_CENTERED=1"));
+    SDL_setenv("SDL_VIDEO_CENTERED", "1", 1);
 
     _resourceManager = new ResourceManager();
 
