@@ -46,6 +46,13 @@ public:
     void onSettingsButtonClick(MouseEvent* event);
     void onIntroButtonClick(MouseEvent* event);
     void onCreditsButtonClick(MouseEvent* event);
+    void doExit();
+    void doNewGame();
+    void doLoadGame();
+    void doSettings();
+    void doIntro();
+    void doCredits();
+    void onKeyPress(KeyboardEvent* event);
 
     void onStateActivate(StateEvent* event);
 
