@@ -236,7 +236,8 @@ void MainMenu::onCreditsStart(StateEvent* event)
 
 void MainMenu::onKeyPress(KeyboardEvent* event)
 {
-    switch (event->keyCode()) {
+    switch (event->keyCode())
+    {
         case SDLK_e:
         case SDLK_ESCAPE:
             doExit();

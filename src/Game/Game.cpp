@@ -39,7 +39,6 @@
 #include "../UI/TextArea.h"
 
 // Third patry includes
-#include "SDL.h"
 
 namespace Falltergeist
 {

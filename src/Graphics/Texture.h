@@ -37,13 +37,11 @@ protected:
     unsigned int _id = 0;
     unsigned int _width = 0;
     unsigned int _height = 0;
-    unsigned int _texwidth = 0;
-    unsigned int _texheight = 0;
     unsigned int* _data = 0; // array of RGBA pixels
-    void _unregister();
     SDL_Texture* _sdlTexture = 0;
     SDL_Color _modifier = {255, 255, 255, 255};
     SDL_BlendMode _blendmode = SDL_BLENDMODE_BLEND;
+    void _unregister();
 public:
     Texture(unsigned int width, unsigned int height);
     virtual ~Texture();
@@ -55,10 +53,6 @@ public:
 
     unsigned int width();
     unsigned int height();
-    unsigned int texWidth();
-    unsigned int texHeight();
-    void texWidth(unsigned int _w);
-    void texHeight(unsigned int _h);
     unsigned int* data();
 
     unsigned int pixel(unsigned int x, unsigned int y);
@@ -78,10 +72,12 @@ public:
 
     void setAlpha(unsigned char alpha);
     void setColor(unsigned char r, unsigned char g, unsigned char b);
+
     unsigned char r();
     unsigned char g();
     unsigned char b();
     unsigned char a();
+
     void setBlend(SDL_BlendMode blendmode);
     SDL_BlendMode blendmode();
 

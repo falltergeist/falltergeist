@@ -72,26 +72,6 @@ unsigned int Texture::height()
     return _height;
 }
 
-unsigned int Texture::texWidth()
-{
-    return _texwidth;
-}
-
-unsigned int Texture::texHeight()
-{
-    return _texheight;
-}
-
-void Texture::texWidth(unsigned int _w)
-{
-    _texwidth = _w;
-}
-
-void Texture::texHeight(unsigned int _h)
-{
-    _texheight = _h;
-}
-
 unsigned int* Texture::data()
 {
     return _data;
@@ -127,9 +107,11 @@ void Texture::loadFromRGBA(unsigned int* data)
 void Texture::loadFromImage(std::string name)
 {
     _unregister();
-    SDL_Surface* tmp=IMG_Load(name.c_str());
+    SDL_Surface* tmp = IMG_Load(name.c_str());
     if (tmp == NULL)
+    {
         throw Exception("Texture::loadFromImage(name) - cannot load texture from file " + name + ": " + IMG_GetError());
+    }
     SDL_PixelFormat* fmt = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
     SDL_Surface* tmp2 = SDL_ConvertSurface(tmp, fmt, 0);
     SDL_FreeFormat(fmt);
@@ -139,14 +121,24 @@ void Texture::loadFromImage(std::string name)
     delete [] _data;
     _data = new unsigned int[_width*_height]();
     unsigned int* data = (unsigned int*)(tmp2->pixels);
-    for (unsigned int i = 0; i != _width*_height; ++i) _data[i] = data[i];
+    for (unsigned int i = 0; i != _width*_height; ++i)
+    {
+        _data[i] = data[i];
+    }
     SDL_FreeSurface(tmp2);
 }
 
 void Texture::copyTo(Texture* destination, unsigned int destinationX, unsigned int destinationY, unsigned int sourceX, unsigned int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
 {
-    if (sourceWidth == 0) sourceWidth = width();
-    if (sourceHeight == 0) sourceHeight = height();
+    if (sourceWidth == 0)
+    {
+        sourceWidth = width();
+    }
+
+    if (sourceHeight == 0)
+    {
+        sourceHeight = height();
+    }
 
     for (unsigned int y = 0; y != sourceHeight; y++)
     {
@@ -159,8 +151,15 @@ void Texture::copyTo(Texture* destination, unsigned int destinationX, unsigned i
 
 void Texture::blitTo(Texture* destination, unsigned int destinationX, unsigned int destinationY, unsigned int sourceX, unsigned int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
 {
-    if (sourceWidth == 0) sourceWidth = width();
-    if (sourceHeight == 0) sourceHeight = height();
+    if (sourceWidth == 0)
+    {
+        sourceWidth = width();
+    }
+
+    if (sourceHeight == 0)
+    {
+        sourceHeight = height();
+    }
 
     for (unsigned int y = 0; y != sourceHeight; y++)
     {
@@ -220,7 +219,7 @@ Texture* Texture::fitTo(unsigned int width, unsigned int height)
 
     unsigned int newWidth = static_cast<unsigned int>(static_cast<double>(this->width()) * static_cast<double>(heightRatio));
 
-    if ( newWidth <= width)
+    if (newWidth <= width)
     {
         return this->resize(newWidth, height);
     }
