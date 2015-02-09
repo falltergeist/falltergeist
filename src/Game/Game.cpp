@@ -19,7 +19,7 @@
 
 // C++ standard includes
 #include <sstream>
-#include <string>
+#include <string.h>
 
 // Falltergeist includes
 #include "../Audio/AudioMixer.h"
