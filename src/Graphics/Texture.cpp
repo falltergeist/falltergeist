@@ -24,6 +24,7 @@
 #include "../Graphics/Texture.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
+#include "../Exception.h"
 
 // Third party includes
 
@@ -127,6 +128,8 @@ void Texture::loadFromImage(std::string name)
 {
     _unregister();
     SDL_Surface* tmp=IMG_Load(name.c_str());
+    if (tmp == NULL)
+        throw Exception("Texture::loadFromImage(name) - cannot load texture from file " + name + ": " + IMG_GetError());
     SDL_PixelFormat* fmt = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
     SDL_Surface* tmp2 = SDL_ConvertSurface(tmp, fmt, 0);
     SDL_FreeFormat(fmt);

@@ -37,6 +37,7 @@
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
+#include "../Logger.h"
 
 // Third party includes
 
@@ -68,7 +69,8 @@ void MainMenu::init()
     setX((renderer->width()  - 640)*0.5);
     setY((renderer->height() - 480)*0.5);
 
-    addUI("background", new Image("art/intrface/mainmenu.frm"));
+    auto background = addUI("background", new Image("art/intrface/mainmenu.frm"));
+    background->addEventHandler("keydown", [this](Event* event){ this->onKeyPress(dynamic_cast<KeyboardEvent*>(event)); });
 
     // intro button
     auto introButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19));
@@ -130,11 +132,49 @@ void MainMenu::init()
     addUI(exitButtonLabel);
 }
 
-void MainMenu::onExitButtonClick(MouseEvent* event)
+void MainMenu::doExit()
 {
     removeEventHandlers("fadedone");
     addEventHandler("fadedone", [this](Event* event){ this->onExitStart(dynamic_cast<StateEvent*>(event)); });
     Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+}
+
+void MainMenu::doNewGame()
+{
+    removeEventHandlers("fadedone");
+    addEventHandler("fadedone", [this](Event* event){ this->onNewGameStart(dynamic_cast<StateEvent*>(event)); });
+    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+}
+
+void MainMenu::doLoadGame()
+{
+    removeEventHandlers("fadedone");
+    addEventHandler("fadedone", [this](Event* event){ this->onLoadGameStart(dynamic_cast<StateEvent*>(event)); });
+    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+}
+
+void MainMenu::doSettings()
+{
+    Game::getInstance()->pushState(new SettingsMenu());
+}
+
+void MainMenu::doIntro()
+{
+    removeEventHandlers("fadedone");
+    addEventHandler("fadedone", [this](Event* event){ this->onIntroStart(dynamic_cast<StateEvent*>(event)); });
+    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+}
+
+void MainMenu::doCredits()
+{
+    removeEventHandlers("fadedone");
+    addEventHandler("fadedone", [this](Event* event){ this->onCreditsStart(dynamic_cast<StateEvent*>(event)); });
+    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+}
+
+void MainMenu::onExitButtonClick(MouseEvent* event)
+{
+    doExit();
 }
 
 void MainMenu::onExitStart(StateEvent* event)
@@ -146,9 +186,7 @@ void MainMenu::onExitStart(StateEvent* event)
 
 void MainMenu::onNewGameButtonClick(MouseEvent* event)
 {
-    removeEventHandlers("fadedone");
-    addEventHandler("fadedone", [this](Event* event){ this->onNewGameStart(dynamic_cast<StateEvent*>(event)); });
-    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+    doNewGame();
 }
 
 void MainMenu::onNewGameStart(StateEvent* event)
@@ -159,9 +197,7 @@ void MainMenu::onNewGameStart(StateEvent* event)
 
 void MainMenu::onLoadGameButtonClick(MouseEvent* event)
 {
-    removeEventHandlers("fadedone");
-    addEventHandler("fadedone", [this](Event* event){ this->onLoadGameStart(dynamic_cast<StateEvent*>(event)); });
-    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+    doLoadGame();
 }
 
 void MainMenu::onLoadGameStart(StateEvent* event)
@@ -172,14 +208,12 @@ void MainMenu::onLoadGameStart(StateEvent* event)
 
 void MainMenu::onSettingsButtonClick(MouseEvent* event)
 {
-    Game::getInstance()->pushState(new SettingsMenu());
+    doSettings();
 }
 
 void MainMenu::onIntroButtonClick(MouseEvent* event)
 {
-    removeEventHandlers("fadedone");
-    addEventHandler("fadedone", [this](Event* event){ this->onIntroStart(dynamic_cast<StateEvent*>(event)); });
-    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+    doIntro();
 }
 
 void MainMenu::onIntroStart(StateEvent* event)
@@ -191,15 +225,38 @@ void MainMenu::onIntroStart(StateEvent* event)
 
 void MainMenu::onCreditsButtonClick(MouseEvent* event)
 {
-    removeEventHandlers("fadedone");
-    addEventHandler("fadedone", [this](Event* event){ this->onCreditsStart(dynamic_cast<StateEvent*>(event)); });
-    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+    doCredits();
 }
 
 void MainMenu::onCreditsStart(StateEvent* event)
 {
     removeEventHandlers("fadedone");
     Game::getInstance()->pushState(new Credits());
+}
+
+void MainMenu::onKeyPress(KeyboardEvent* event)
+{
+    switch (event->keyCode()) {
+        case SDLK_e:
+        case SDLK_ESCAPE:
+            doExit();
+            break;
+        case SDLK_n:
+            doNewGame();
+            break;
+        case SDLK_l:
+            doLoadGame();
+            break;
+        case SDLK_i:
+            doIntro();
+            break;
+        case SDLK_o:
+            doCredits();
+            break;
+        case SDLK_s:
+            doSettings();
+            break;
+    }
 }
 
 void MainMenu::onStateActivate(StateEvent* event)
