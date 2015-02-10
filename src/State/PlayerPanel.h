@@ -62,8 +62,8 @@ public:
     void openMap();
     void openPopBoy();
     void openCharacterScreen();
-    void doSaveGame(bool quick = false);
     void doLoadGame(bool quick = false);
+    void doSaveGame(bool quick = false);
 };
 
 }

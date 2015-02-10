@@ -37,8 +37,9 @@
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/SmallCounter.h"
-#include "LoadGame.h"
-#include "ExitConfirm.h"
+#include "../State/SaveGame.h"
+#include "../State/LoadGame.h"
+#include "../State/ExitConfirm.h"
 
 // Third party includes
 

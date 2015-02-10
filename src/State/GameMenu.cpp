@@ -33,7 +33,7 @@
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
-#include "Input/Mouse.h"
+#include "../Input/Mouse.h"
 
 // Third party includes
 

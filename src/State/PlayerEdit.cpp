@@ -31,7 +31,7 @@
 #include "../State/PlayerEditAlert.h"
 #include "../State/PlayerEdit.h"
 #include "../UI/Image.h"
-#include "Input/Mouse.h"
+#include "../Input/Mouse.h"
 
 // Third party includes
 #include <libfalltergeist.h>
