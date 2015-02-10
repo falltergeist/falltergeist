@@ -29,6 +29,7 @@
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
+#include "../Input/Mouse.h"
 
 // Third party includes
 
@@ -53,6 +54,7 @@ void ExitConfirm::init()
 
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
+    background->addEventHandler("keydown", [this](Event* event){ this->onKeyPress(dynamic_cast<KeyboardEvent*>(event)); });
 
     auto box1 = new Image("art/intrface/donebox.frm");
     auto box2 = new Image("art/intrface/donebox.frm");
@@ -63,8 +65,8 @@ void ExitConfirm::init()
 
     auto yesButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+50, backgroundY+102);
     auto noButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+183, backgroundY+102);
-    yesButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onYesButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    noButton->addEventHandler("mouseleftclick",  [this](Event* event){ this->onNoButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    yesButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doYes(); });
+    noButton->addEventHandler("mouseleftclick",  [this](Event* event){ this->doNo(); });
 
     // label: Are you sure you want to quit?
     auto msg = ResourceManager::msgFileType("text/english/game/misc.msg");
@@ -95,15 +97,41 @@ void ExitConfirm::init()
     addUI(noButtonLabel);
 }
 
-void ExitConfirm::onYesButtonClick(MouseEvent* event)
+void ExitConfirm::doYes()
 {
     Game::getInstance()->setState(new MainMenu());
 }
 
-void ExitConfirm::onNoButtonClick(MouseEvent* event)
+void ExitConfirm::doNo()
 {
     Game::getInstance()->popState();
 }
+
+void ExitConfirm::onKeyPress(KeyboardEvent* event)
+{
+    switch (event->keyCode()) 
+    {
+        case SDLK_ESCAPE:
+        case SDLK_n:
+            doNo();
+            break;
+        case SDLK_RETURN:
+        case SDLK_y:
+            doYes();
+            break;
+    }
+}
+
+void ExitConfirm::onStateActivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+}
+
+void ExitConfirm::onStateDeactivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->popState();
+}
+
 
 }
 }

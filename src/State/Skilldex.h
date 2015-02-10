@@ -40,6 +40,7 @@ public:
     virtual void init();
 
     void onCancelButtonClick(MouseEvent* event);
+    void onKeyPress(KeyboardEvent* event);
 };
 
 }

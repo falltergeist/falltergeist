@@ -57,6 +57,7 @@ void Skilldex::init()
     auto backgroundY = (Game::getInstance()->renderer()->height() - 480 + 6);
     background->setX(backgroundX);
     background->setY(backgroundY);
+    background->addEventHandler("keydown", [this](Event* event){ this->onKeyPress(dynamic_cast<KeyboardEvent*>(event)); });
 
     // buttons
     auto sneakButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44);
@@ -136,6 +137,15 @@ void Skilldex::onCancelButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
 }
+
+void Skilldex::onKeyPress(KeyboardEvent* event)
+{
+    if (event->keyCode() == SDLK_ESCAPE)
+    {
+        Game::getInstance()->popState();
+    }
+}
+
 
 }
 }

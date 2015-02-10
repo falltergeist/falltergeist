@@ -238,7 +238,7 @@ void PlayerPanel::onKeyPress(KeyboardEvent* event)
             openPopBoy(); // @TODO: go to clock
             break;
         case SDLK_ESCAPE:
-        case SDLK_d:
+        case SDLK_o:
             openOptions();
             break;
         case SDLK_b:
