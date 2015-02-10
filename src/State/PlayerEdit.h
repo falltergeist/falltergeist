@@ -78,10 +78,13 @@ public:
     void onNameButtonClick(MouseEvent* event);
     void onGenderButtonClick(MouseEvent* event);
     void onLabelClick(MouseEvent* event);
-    void onBackButtonClick(MouseEvent* event);
-    void onDoneButtonClick(MouseEvent* event);
+    void doCancel();
+    void doDone();
+    void doPrint();
     virtual void onStateActivate(StateEvent* event);
     virtual void onStateDeactivate(StateEvent* event);
+    
+    void onKeyPress(KeyboardEvent* event);
 
 };
 

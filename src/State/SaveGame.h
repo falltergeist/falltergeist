@@ -41,6 +41,12 @@ public:
 
     void onDoneButtonClick(MouseEvent* event);
     void onCancelButtonClick(MouseEvent* event);
+
+    virtual void onStateActivate(StateEvent* event);
+    virtual void onStateDeactivate(StateEvent* event);
+    
+    void onKeyPress(KeyboardEvent* event);
+
 private:
 };
 

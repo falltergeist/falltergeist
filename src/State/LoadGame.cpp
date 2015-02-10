@@ -136,6 +136,12 @@ void LoadGame::onStateActivate(StateEvent* event)
 {
     if (!Game::getInstance()->locationState())
         Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
+    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+}
+
+void LoadGame::onStateDeactivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->popState();
 }
 
 void LoadGame::onKeyPress(KeyboardEvent* event)

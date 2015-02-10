@@ -142,6 +142,8 @@ void PlayerCreateOptions::onKeyPress(KeyboardEvent* event)
     switch (event->keyCode())
     {
         case SDLK_ESCAPE:
+        case SDLK_RETURN:
+        case SDLK_d:
             Game::getInstance()->popState();
             break;
     }

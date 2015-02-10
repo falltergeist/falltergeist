@@ -65,6 +65,7 @@ void SaveGame::init()
     bg->setX(bgX);
     bg->setY(bgY);
     addUI(bg);
+    bg->addEventHandler("keydown", [this](Event* event){ this->onKeyPress(dynamic_cast<KeyboardEvent*>(event)); });
 
     // BUTTONS
 
@@ -114,6 +115,27 @@ void SaveGame::onCancelButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
 }
+
+void SaveGame::onStateActivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+}
+
+void SaveGame::onStateDeactivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->popState();
+}
+
+void SaveGame::onKeyPress(KeyboardEvent* event)
+{
+    switch (event->keyCode()) 
+    {
+        case SDLK_ESCAPE:
+            Game::getInstance()->popState();
+            break;
+    }
+}
+
 
 }
 }

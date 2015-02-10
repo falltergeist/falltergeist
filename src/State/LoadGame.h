@@ -42,7 +42,9 @@ public:
     void onDoneButtonClick(MouseEvent* event);
     void doCancel();
     void onCancelFadeDone(StateEvent* event);
-    void onStateActivate(StateEvent* event);
+    virtual void onStateActivate(StateEvent* event);
+    virtual void onStateDeactivate(StateEvent* event);
+
     void onKeyPress(KeyboardEvent* event);
     
 private:
