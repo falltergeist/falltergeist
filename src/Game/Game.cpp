@@ -381,12 +381,7 @@ void Game::handle()
 
                     if (!keyboardEvent->handled())
                     {
-                        if (keyboardEvent->keyCode() == SDLK_F10)
-                        {
-                            _quit = true;
-                        }
-
-                        if (keyboardEvent->keyCode() == SDLK_F11)
+                        if (keyboardEvent->keyCode() == SDLK_F12)
                         {
                             Texture* texture = renderer()->screenshot();
                             SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(texture->data(), texture->width(), texture->height(), 32, texture->width()*4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
