@@ -139,10 +139,11 @@ void PlayerCreateOptions::onDoneButtonClick(MouseEvent* event)
 
 void PlayerCreateOptions::onKeyPress(KeyboardEvent* event)
 {
-    switch (event->keyCode()) {
-    case SDLK_ESCAPE:
-        Game::getInstance()->popState();
-        break;
+    switch (event->keyCode())
+    {
+        case SDLK_ESCAPE:
+            Game::getInstance()->popState();
+            break;
     }
 }
 

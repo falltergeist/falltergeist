@@ -107,18 +107,19 @@ void PlayerEditGender::onMaleButtonPress(MouseEvent* event)
 
 void PlayerEditGender::onKeyPress(KeyboardEvent* event)
 {
-    switch (event->keyCode()) {
-    case SDLK_ESCAPE:
-        Game::getInstance()->popState();
-        break;
-    case SDLK_RETURN:
-        Game::getInstance()->player()->setGender(_gender);
-        Game::getInstance()->popState();
-        break;
-    case SDLK_LEFT:
-    case SDLK_RIGHT:
-        setGender(_gender ? 0 : 1);
-        break;
+    switch (event->keyCode())
+    {
+        case SDLK_ESCAPE:
+            Game::getInstance()->popState();
+            break;
+        case SDLK_RETURN:
+            Game::getInstance()->player()->setGender(_gender);
+            Game::getInstance()->popState();
+            break;
+        case SDLK_LEFT:
+        case SDLK_RIGHT:
+            setGender(_gender ? 0 : 1);
+            break;
     }
 }
 

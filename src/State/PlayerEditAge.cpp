@@ -123,7 +123,8 @@ void PlayerEditAge::doBack()
 void PlayerEditAge::doDec()
 {
     unsigned char age = _counter->number();
-    if (age > 16) {
+    if (age > 16)
+    {
         age--;
         _counter->setNumber(age);
     }
@@ -138,7 +139,8 @@ void PlayerEditAge::doDone()
 void PlayerEditAge::doInc()
 {
     unsigned char age = _counter->number();
-    if (age < 35) {
+    if (age < 35)
+    {
         age++;
         _counter->setNumber(age);
     }
@@ -146,19 +148,20 @@ void PlayerEditAge::doInc()
 
 void PlayerEditAge::onKeyPress(KeyboardEvent* event)
 {
-    switch (event->keyCode()) {
-    case SDLK_RIGHT:
-        doInc();
-        break;
-    case SDLK_LEFT:
-        doDec();
-        break;
-    case SDLK_ESCAPE:
-        doBack();
-        break;
-    case SDLK_RETURN:
-        doDone();
-        break;
+    switch (event->keyCode())
+    {
+        case SDLK_RIGHT:
+            doInc();
+            break;
+        case SDLK_LEFT:
+            doDec();
+            break;
+        case SDLK_ESCAPE:
+            doBack();
+            break;
+        case SDLK_RETURN:
+            doDone();
+            break;
     }
 }
 

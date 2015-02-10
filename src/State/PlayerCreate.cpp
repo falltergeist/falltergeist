@@ -659,26 +659,27 @@ void PlayerCreate::doOptions()
 
 void PlayerCreate::onKeyPress(KeyboardEvent* event)
 {
-    switch (event->keyCode()) {
-    case SDLK_ESCAPE:
-    case SDLK_c:
-        doBack();
-        break;
-    case SDLK_d:
-        doDone();
-        break;
-    case SDLK_o:
-        doOptions();
-        break;
-    case SDLK_a:
-        doAge();
-        break;
-    case SDLK_s:
-        doGender();
-        break;
-    case SDLK_n:
-        doName();
-        break;
+    switch (event->keyCode())
+    {
+        case SDLK_ESCAPE:
+        case SDLK_c:
+            doBack();
+            break;
+        case SDLK_d:
+            doDone();
+            break;
+        case SDLK_o:
+            doOptions();
+            break;
+        case SDLK_a:
+            doAge();
+            break;
+        case SDLK_s:
+            doGender();
+            break;
+        case SDLK_n:
+            doName();
+            break;
     }
 }
 
