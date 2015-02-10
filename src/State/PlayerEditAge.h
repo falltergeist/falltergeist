@@ -45,6 +45,11 @@ public:
     void onIncButtonClick(MouseEvent* event);
     void onDecButtonClick(MouseEvent* event);
     void onDoneButtonClick(MouseEvent* event);
+    void doInc();
+    void doDec();
+    void doDone();
+    void doBack();
+    void onKeyPress(KeyboardEvent* event);
 };
 
 }

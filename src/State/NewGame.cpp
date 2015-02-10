@@ -67,7 +67,8 @@ void NewGame::init()
     setX((renderer->width()  - 640)*0.5);
     setY((renderer->height() - 480)*0.5);
 
-    addUI("background", new Image("art/intrface/pickchar.frm"));
+    auto background = addUI("background", new Image("art/intrface/pickchar.frm"));
+    background->addEventHandler("keydown", [this](Event* event){ this->onKeyPress(dynamic_cast<KeyboardEvent*>(event)); });
 
     auto beginGameButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 322));
     beginGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onBeginGameButtonClick(dynamic_cast<MouseEvent*>(event)); });
@@ -129,11 +130,37 @@ void NewGame::think()
     State::think();
 }
 
-void NewGame::onBackButtonClick(MouseEvent* event)
+void NewGame::doBeginGame()
+{
+    auto player = _characters.at(_selectedCharacter);
+    Game::getInstance()->setPlayer(player);
+    Game::getInstance()->setState(new Location());
+}
+
+void NewGame::doEdit()
+{
+    Game::getInstance()->setPlayer(_characters.at(_selectedCharacter));
+    Game::getInstance()->pushState(new PlayerCreate()); 
+}
+
+void NewGame::doCreate()
+{
+    auto none = new Game::GameDudeObject();
+    none->loadFromGCDFile(ResourceManager::gcdFileType("premade/blank.gcd"));
+    Game::getInstance()->setPlayer(none);
+    Game::getInstance()->pushState(new PlayerCreate());
+}
+
+void NewGame::doBack()
 {
     removeEventHandlers("fadedone");
     addEventHandler("fadedone", [this](Event* event){ this->onBackFadeDone(dynamic_cast<StateEvent*>(event)); });
     Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+}
+
+void NewGame::onBackButtonClick(MouseEvent* event)
+{
+    doBack();
 }
 
 void NewGame::onBackFadeDone(StateEvent* event)
@@ -229,29 +256,44 @@ std::string NewGame::_statToString(unsigned int stat)
 
 void NewGame::onEditButtonClick(MouseEvent* event)
 {
-    Game::getInstance()->setPlayer(_characters.at(_selectedCharacter));
-    Game::getInstance()->pushState(new PlayerCreate());
+    doEdit();
 }
 
 void NewGame::onCreateButtonClick(MouseEvent* event)
 {
-    auto none = new Game::GameDudeObject();
-    none->loadFromGCDFile(ResourceManager::gcdFileType("premade/blank.gcd"));
-    Game::getInstance()->setPlayer(none);
-    Game::getInstance()->pushState(new PlayerCreate());
+    doCreate();
 }
 
 void NewGame::onBeginGameButtonClick(MouseEvent* event)
 {
-    auto player = _characters.at(_selectedCharacter);
-    Game::getInstance()->setPlayer(player);
-    Game::getInstance()->setState(new Location());
+    doBeginGame();
+}
+
+void NewGame::onKeyPress(KeyboardEvent* event)
+{
+    switch (event->keyCode())
+    {
+        case SDLK_ESCAPE:
+        case SDLK_b:
+            doBack();
+            break;
+        case SDLK_t:
+            doBeginGame();
+            break;
+        case SDLK_c:
+            doCreate();
+            break;
+        case SDLK_m:
+            doEdit();
+            break;
+    }
 }
 
 void NewGame::onStateActivate(StateEvent* event)
 {
     Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
 }
+
 
 }
 }

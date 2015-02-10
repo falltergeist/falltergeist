@@ -113,7 +113,7 @@ void PlayerEditName::init()
     doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     _name = new TextArea(Game::getInstance()->player()->name(), bgX+43, bgY+15);
-    _name->addEventHandler("keyup", [this](Event* event){ this->onKeyboardPress(dynamic_cast<KeyboardEvent*>(event)); });
+    _name->addEventHandler("keydown", [this](Event* event){ this->onKeyboardPress(dynamic_cast<KeyboardEvent*>(event)); });
 
     _cursor = new Image(5, 8);
     _cursor->setX(bgX+83);
@@ -148,10 +148,13 @@ void PlayerEditName::onKeyboardPress(KeyboardEvent* event)
 
     if (event->keyCode() == SDLK_RETURN) //enter
     {
-        auto mouseEvent = new MouseEvent();
-        mouseEvent->setEmitter(event->emitter());
-        onDoneButtonClick(mouseEvent);
-        delete mouseEvent;
+        doDone();
+        return;
+    }
+    
+    if (event->keyCode() == SDLK_ESCAPE)
+    {
+        doBack();
         return;
     }
 
@@ -179,12 +182,7 @@ void PlayerEditName::onKeyboardPress(KeyboardEvent* event)
 
 void PlayerEditName::onDoneButtonClick(MouseEvent* event)
 {
-    std::string text(_name->text());
-    if (text.length() > 0)
-    {
-        Game::getInstance()->player()->setName(text.c_str());
-    }
-    Game::getInstance()->popState();
+    doDone();
 }
 
 PlayerEditName::~PlayerEditName()
@@ -210,6 +208,23 @@ void PlayerEditName::think()
 
     _cursor->setX(bgX+_name->width() + 45);
 }
+
+void PlayerEditName::doBack()
+{
+    Game::getInstance()->popState();
+}
+
+void PlayerEditName::doDone()
+{
+    std::string text(_name->text());
+    if (text.length() > 0)
+    {
+        Game::getInstance()->player()->setName(text.c_str());
+    }
+    Game::getInstance()->popState();
+}
+
+
 
 }
 }

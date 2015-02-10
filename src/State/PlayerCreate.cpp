@@ -65,6 +65,7 @@ void PlayerCreate::init()
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
     background->setX(backgroundX);
     background->setY(backgroundY);
+    background->addEventHandler("keydown", [this](Event* event){ this->onKeyPress(dynamic_cast<KeyboardEvent*>(event)); });
     addUI(background);
 
     // STATS
@@ -596,34 +597,89 @@ void PlayerCreate::onMaskClick(MouseEvent* event)
 
 void PlayerCreate::onNameButtonClick(MouseEvent* event)
 {
-    Game::getInstance()->pushState(new PlayerEditName());
+    doName();
 }
 
 void PlayerCreate::onAgeButtonClick(MouseEvent* event)
 {
-    Game::getInstance()->pushState(new PlayerEditAge());
+    doAge();
 }
 
 void PlayerCreate::onGenderButtonClick(MouseEvent* event)
 {
-    Game::getInstance()->pushState(new PlayerEditGender());
+    doGender();
 }
 
 void PlayerCreate::onBackButtonClick(MouseEvent* event)
 {
-    Game::getInstance()->popState();
+    doBack();
 }
 
 void PlayerCreate::onDoneButtonClick(MouseEvent* event)
+{
+    doDone();
+}
+
+void PlayerCreate::onOptionsButtonClick(MouseEvent* event)
+{
+    doOptions();
+}
+
+void PlayerCreate::doAge()
+{
+    Game::getInstance()->pushState(new PlayerEditAge());
+}
+
+void PlayerCreate::doBack()
+{
+    Game::getInstance()->popState();
+}
+
+void PlayerCreate::doDone()
 {
     auto player = Game::getInstance()->player();
     player->setHitPoints(player->hitPointsMax());
     Game::getInstance()->setState(new Location());
 }
 
-void PlayerCreate::onOptionsButtonClick(MouseEvent* event)
+void PlayerCreate::doGender()
+{
+    Game::getInstance()->pushState(new PlayerEditGender());
+}
+
+void PlayerCreate::doName()
+{
+    Game::getInstance()->pushState(new PlayerEditName());
+}
+
+void PlayerCreate::doOptions()
 {
     Game::getInstance()->pushState(new PlayerCreateOptions());
+}
+
+void PlayerCreate::onKeyPress(KeyboardEvent* event)
+{
+    switch (event->keyCode()) {
+    case SDLK_ESCAPE:
+    case SDLK_c:
+        doBack();
+        break;
+    case SDLK_d:
+        doDone();
+        break;
+    case SDLK_o:
+        doOptions();
+        break;
+    case SDLK_a:
+        doAge();
+        break;
+    case SDLK_s:
+        doGender();
+        break;
+    case SDLK_n:
+        doName();
+        break;
+    }
 }
 
 }

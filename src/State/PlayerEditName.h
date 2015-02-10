@@ -50,6 +50,8 @@ public:
     void think();
     void onDoneButtonClick(MouseEvent* event);
     void onKeyboardPress(KeyboardEvent* event);
+    void doDone();
+    void doBack();
 };
 
 

@@ -39,12 +39,15 @@ class PlayerEditGender : public State
 protected:
     ImageList* _maleImage = 0;
     ImageList* _femaleImage = 0;
+    unsigned int _gender = 0;
 public:
     PlayerEditGender();
     void init();
     void onFemaleButtonPress(MouseEvent* event);
     void onMaleButtonPress(MouseEvent* event);
     void onDoneButtonClick(MouseEvent* event);
+    void onKeyPress(KeyboardEvent* event);
+    void setGender(unsigned int gender);
 };
 
 }
