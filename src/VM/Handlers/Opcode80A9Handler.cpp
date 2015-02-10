@@ -53,6 +53,7 @@ void Opcode80A9Handler::_run()
                 //player->setPosition(position);
     player->setOrientation(orientation);
     player->setElevation(elevation);
+    Game::getInstance()->locationState()->centerCameraAtHexagon(player->hexagon());
 }
 
 }

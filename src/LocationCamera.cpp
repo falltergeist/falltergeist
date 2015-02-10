@@ -84,6 +84,12 @@ void LocationCamera::setYPosition(int value)
     }
 }
 
+void LocationCamera::setPosition(int x, int y)
+{
+    setXPosition(x);
+    setYPosition(y);
+}
+
 int LocationCamera::width()
 {
     return _width;

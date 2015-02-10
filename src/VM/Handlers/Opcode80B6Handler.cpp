@@ -52,6 +52,9 @@ void Opcode80B6Handler::_run()
     auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
     State::Location::moveObjectToHexagon(object, hexagon);
     object->setElevation(elevation);
+    if (object == Game::getInstance()->player()) {
+        Game::getInstance()->locationState()->centerCameraAtHexagon(object->hexagon());
+    }
     _vm->pushDataInteger(1);
 }
 

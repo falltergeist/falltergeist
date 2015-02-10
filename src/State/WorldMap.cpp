@@ -224,5 +224,17 @@ void WorldMap::handle(Event* event)
     }
 }
 
+void WorldMap::onStateActivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+}
+
+void WorldMap::onStateDeactivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->popState();
+}
+
+
+
 }
 }

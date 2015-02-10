@@ -216,7 +216,7 @@ void Location::setLocation(std::string name)
     {
         _locationScript = new VM(ResourceManager::intFileType(mapFile->scriptId()-1), Game::getInstance()->locationState());
     }
-
+    
     // Generates floor and roof images
     {
 
@@ -420,6 +420,31 @@ void Location::think()
     }
 }
 
+void Location::toggleCursorMode()
+{
+    auto mouse = Game::getInstance()->mouse();
+    switch (mouse->state())
+    {
+        case Mouse::ACTION:
+        {
+            auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
+            if (!hexagon)
+            {
+                break;
+            }
+            mouse->pushState(Mouse::HEXAGON_RED);
+            mouse->ui()->setX(hexagon->x() - camera()->x());
+            mouse->ui()->setY(hexagon->y() - camera()->y());
+            break;
+        }
+        case Mouse::HEXAGON_RED:
+        {
+            mouse->popState();
+            break;
+        }
+    }
+}
+
 void Location::handle(Event* event)
 {
     auto game = Game::getInstance();
@@ -429,28 +454,9 @@ void Location::handle(Event* event)
         auto mouse = Game::getInstance()->mouse();
 
         // Right button pressed
-        if (mouseEvent->name() == "mouseup" && mouseEvent->rightButton())
+        if (mouseEvent->name() == "mousedown" && mouseEvent->rightButton())
         {
-            switch (mouse->state())
-            {
-                case Mouse::ACTION:
-                {
-                    auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
-                    if (!hexagon)
-                    {
-                        break;
-                    }
-                    mouse->pushState(Mouse::HEXAGON_RED);
-                    mouse->ui()->setX(hexagon->x() - camera()->x());
-                    mouse->ui()->setY(hexagon->y() - camera()->y());
-                    break;
-                }
-                case Mouse::HEXAGON_RED:
-                {
-                    mouse->popState();
-                    break;
-                }
-            }
+            toggleCursorMode();
             event->setHandled(true);
         }
 
@@ -548,6 +554,62 @@ void Location::handle(Event* event)
                 }
             }
         }
+        else if (event->name() == "keydown")
+        {
+            switch (keyboardEvent->keyCode())
+            {
+                case SDLK_m:
+                    toggleCursorMode();
+                    break;
+                case SDLK_COMMA: 
+                {
+                    auto player = game->player();
+                    player->setOrientation((player->orientation() + 5) % 6); // rotate left
+                    break;
+                }
+                case SDLK_PERIOD:
+                {
+                    auto player = game->player();
+                    player->setOrientation((player->orientation() + 1) % 6); // rotate right
+                    break;
+                }
+                case SDLK_HOME:
+                    centerCameraAtHexagon(game->player()->hexagon());
+                    break;
+                case SDLK_PLUS:
+                case SDLK_KP_PLUS:
+                    // @TODO: increase brightness
+                    break;
+                case SDLK_MINUS:
+                case SDLK_KP_MINUS:
+                    // @TODO: decrease brightness
+                    break;
+                case SDLK_1:
+                    // @TODO: use skill: sneak
+                    break;
+                case SDLK_2:
+                    // @TODO: use skill: lockpick
+                    break;
+                case SDLK_3:
+                    // @TODO: use skill: steal
+                    break;
+                case SDLK_4:
+                    // @TODO: use skill: traps
+                    break;
+                case SDLK_5:
+                    // @TODO: use skill: first aid
+                    break;
+                case SDLK_6:
+                    // @TODO: use skill: doctor
+                    break;
+                case SDLK_7:
+                    // @TODO: use skill: science
+                    break;
+                case SDLK_8:
+                    // @TODO: use skill: repair
+                    break;
+            }
+        }
     }
     for (auto it = hexagonGrid()->hexagons()->rbegin(); it != hexagonGrid()->hexagons()->rend(); ++it)
     {
@@ -633,6 +695,11 @@ void Location::moveObjectToHexagon(Game::GameObject* object, Hexagon* hexagon)
 
     object->setHexagon(hexagon);
     hexagon->objects()->push_back(object);
+}
+
+void Location::centerCameraAtHexagon(Hexagon* hexagon)
+{
+    camera()->setPosition(hexagon->x(), hexagon->y());
 }
 
 void Location::handleAction(Game::GameObject* object, int action)

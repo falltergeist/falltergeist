@@ -31,6 +31,7 @@
 #include "../State/PlayerEditAlert.h"
 #include "../State/PlayerEdit.h"
 #include "../UI/Image.h"
+#include "Input/Mouse.h"
 
 // Third party includes
 #include <libfalltergeist.h>
@@ -61,7 +62,7 @@ void PlayerEdit::init()
     auto msgEditor = ResourceManager::msgFileType("text/english/game/editor.msg");
     auto msgSkills = ResourceManager::msgFileType("text/english/game/skill.msg");
     auto msgHealth = ResourceManager::msgFileType("text/english/game/editor.msg");
-
+   
     // background
     auto background = new Image("art/intrface/edtredt.frm");
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
@@ -536,6 +537,16 @@ void PlayerEdit::onBackButtonClick(MouseEvent* event)
 void PlayerEdit::onDoneButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
+}
+
+void PlayerEdit::onStateActivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+}
+
+void PlayerEdit::onStateDeactivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->popState();
 }
 
 }

@@ -95,7 +95,9 @@ public:
     std::map<std::string, VMStackValue*>* EVARS();
 
     static void moveObjectToHexagon(Game::GameObject* object, Hexagon* hexagon);
+    void centerCameraAtHexagon(Hexagon* hexagon);
     void handleAction(Game::GameObject* object, int action);
+    void toggleCursorMode();
 
     void onBackgroundClick(MouseEvent* event);
     void onKeyUp(std::shared_ptr<KeyboardEvent> event);

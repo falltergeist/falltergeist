@@ -55,4 +55,14 @@ void  KeyboardEvent::setShiftPressed(bool value)
     _shiftPressed = value;
 }
 
+bool KeyboardEvent::controlPressed()
+{
+    return _controlPressed;
+}
+
+void KeyboardEvent::setControlPressed(bool value)
+{
+    _controlPressed = value;
+}
+
 }

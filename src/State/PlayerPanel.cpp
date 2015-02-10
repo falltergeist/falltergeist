@@ -66,10 +66,12 @@ void PlayerPanel::init()
     setX((game->renderer()->width() - 640)*0.5);
     setY(game->renderer()->height() - 99);
 
-    addUI("background", new Image("art/intrface/iface.frm"));
-    getActiveUI("background")->addEventHandler("mouseleftdown", [this](Event* event){ this->onPanelMouseDown(dynamic_cast<MouseEvent*>(event)); });
-    getActiveUI("background")->addEventHandler("mousein", [this](Event* event){ this->onPanelMouseIn(dynamic_cast<MouseEvent*>(event)); });
-    getActiveUI("background")->addEventHandler("mouseout", [this](Event* event){ this->onPanelMouseOut(dynamic_cast<MouseEvent*>(event)); });
+    auto background = addUI("background", new Image("art/intrface/iface.frm"));
+    background->addEventHandler("mouseleftdown", [this](Event* event){ this->onPanelMouseDown(dynamic_cast<MouseEvent*>(event)); });
+    background->addEventHandler("mousein", [this](Event* event){ this->onPanelMouseIn(dynamic_cast<MouseEvent*>(event)); });
+    background->addEventHandler("mouseout", [this](Event* event){ this->onPanelMouseOut(dynamic_cast<MouseEvent*>(event)); });
+    background->addEventHandler("keydown", [this](Event* event){ this->onKeyPress(dynamic_cast<KeyboardEvent*>(event)); });
+    
 
     addUI("change_hand_button", new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 218, 5));
     getActiveUI("change_hand_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onChangeHandButtonClick(dynamic_cast<MouseEvent*>(event)); });
@@ -147,38 +149,37 @@ void PlayerPanel::onPanelMouseDown(MouseEvent* event)
 
 void PlayerPanel::onInventoryButtonClick(MouseEvent* event)
 {
-    Game::getInstance()->pushState(new Inventory());
+    openInventory();
 }
 
 void PlayerPanel::onOptionsButtonClick(MouseEvent* event)
 {
-    Game::getInstance()->pushState(new GameMenu());
+    openOptions();
 }
 
 void PlayerPanel::onSkilldexButtonClick(MouseEvent* event)
 {
-    Game::getInstance()->pushState(new Skilldex());
+    openSkilldex();
 }
 
 void PlayerPanel::onMapButtonClick(MouseEvent* event)
 {
-    Game::getInstance()->pushState(new WorldMap());
+    openMap();
 }
 
 void PlayerPanel::onChaButtonClick(MouseEvent* event)
 {
-    Game::getInstance()->pushState(new PlayerEdit());
+    openCharacterScreen();
 }
 
 void PlayerPanel::onPipBoyButtonClick(MouseEvent* event)
 {
-    Game::getInstance()->pushState(new PipBoy());
+    openPopBoy();
 }
 
 void PlayerPanel::onChangeHandButtonClick(MouseEvent* event)
 {
-    auto player = Game::getInstance()->player();
-    player->setCurrentHand(player->currentHand() == Game::GameCritterObject::HAND_LEFT ? Game::GameCritterObject::HAND_RIGHT : Game::GameCritterObject::HAND_LEFT);
+    toggleActiveHand();
 }
 
 void PlayerPanel::onPanelMouseIn(MouseEvent* event)
@@ -206,6 +207,137 @@ void PlayerPanel::onPanelMouseOut(MouseEvent* event)
 void PlayerPanel::onPanelMouseUp(MouseEvent* event)
 {
 }
+
+void PlayerPanel::onKeyPress(KeyboardEvent* event)
+{
+    switch (event->keyCode())
+    {
+        case SDLK_a:
+            // initiateCombat();
+            break;
+        case SDLK_c:
+            openCharacterScreen();
+            break;
+        case SDLK_i:
+            openInventory();
+            break;
+        case SDLK_p:
+            if (event->controlPressed()) 
+            {
+                // @TODO: pause game
+            }
+            else 
+            {
+                openPopBoy();
+            }
+            break;
+        case SDLK_z:
+            openPopBoy(); // @TODO: go to clock
+            break;
+        case SDLK_ESCAPE:
+        case SDLK_d:
+            openOptions();
+            break;
+        case SDLK_b:
+            toggleActiveHand();
+            break;
+        // M button is handled in State::Location
+        case SDLK_n:
+            // @TODO: toggleItemMode();
+            break;
+        case SDLK_s:
+            if (event->controlPressed())
+            {
+                // @TODO: save game
+            }
+            else
+            {
+                openSkilldex();
+            }                
+            break;
+        case SDLK_l:
+            if (event->controlPressed()) 
+            {
+                // @TODO: load game
+            }
+            break;
+        case SDLK_x:
+            if (event->controlPressed())
+            {
+                // @TODO: quit to main menu after confirmation
+            }
+        case SDLK_SLASH:
+            // @TODO: printCurrentTime();
+            break;
+        case SDLK_TAB:
+            openMap();
+            break;
+        case SDLK_F1:
+            // @TODO: help screen
+            break;
+        case SDLK_F2:
+            // @TODO: volume down
+            break;
+        case SDLK_F3:
+            // @TODO: volume up
+            break;
+        case SDLK_F4:
+            // @TODO: save game screen
+            break;
+        case SDLK_F5:
+            // @TODO: load game screen
+            break;
+        case SDLK_F6:
+            // @TODO: quick save
+            break;
+        case SDLK_F7:
+            // @TODO: quick load
+            break;
+        case SDLK_F10:
+            // @TODO: quit to main menu after confirmation
+            break;
+        case SDLK_F12:
+            // @TODO: save screenshot
+            break;
+    }
+}
+
+void PlayerPanel::openInventory()
+{
+    Game::getInstance()->pushState(new Inventory());
+}
+
+void PlayerPanel::openMap()
+{
+    Game::getInstance()->pushState(new WorldMap());
+}
+
+void PlayerPanel::openOptions()
+{
+    Game::getInstance()->pushState(new GameMenu());
+}
+
+void PlayerPanel::openPopBoy()
+{
+    Game::getInstance()->pushState(new PipBoy());
+}
+
+void PlayerPanel::openSkilldex()
+{
+    Game::getInstance()->pushState(new Skilldex());
+}
+
+void PlayerPanel::toggleActiveHand()
+{
+    auto player = Game::getInstance()->player();
+    player->setCurrentHand(player->currentHand() == Game::GameCritterObject::HAND_LEFT ? Game::GameCritterObject::HAND_RIGHT : Game::GameCritterObject::HAND_LEFT);
+}
+
+void PlayerPanel::openCharacterScreen()
+{
+    Game::getInstance()->pushState(new PlayerEdit());
+}
+
 
 }
 }

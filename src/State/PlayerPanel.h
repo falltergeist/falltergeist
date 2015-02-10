@@ -54,6 +54,14 @@ public:
     void onPanelMouseIn(MouseEvent* event);
     void onPanelMouseOut(MouseEvent* event);
     void onPanelMouseUp(MouseEvent* event);
+    void onKeyPress(KeyboardEvent* event);
+    void toggleActiveHand();
+    void openInventory();
+    void openOptions();
+    void openSkilldex();
+    void openMap();
+    void openPopBoy();
+    void openCharacterScreen();
 
 };
 
