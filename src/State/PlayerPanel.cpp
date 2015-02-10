@@ -37,6 +37,8 @@
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/SmallCounter.h"
+#include "LoadGame.h"
+#include "ExitConfirm.h"
 
 // Third party includes
 
@@ -213,7 +215,7 @@ void PlayerPanel::onKeyPress(KeyboardEvent* event)
     switch (event->keyCode())
     {
         case SDLK_a:
-            // initiateCombat();
+            // @TODO: initiateCombat();
             break;
         case SDLK_c:
             openCharacterScreen();
@@ -248,7 +250,7 @@ void PlayerPanel::onKeyPress(KeyboardEvent* event)
         case SDLK_s:
             if (event->controlPressed())
             {
-                // @TODO: save game
+                doSaveGame();
             }
             else
             {
@@ -258,13 +260,13 @@ void PlayerPanel::onKeyPress(KeyboardEvent* event)
         case SDLK_l:
             if (event->controlPressed()) 
             {
-                // @TODO: load game
+                doLoadGame();
             }
             break;
         case SDLK_x:
             if (event->controlPressed())
             {
-                // @TODO: quit to main menu after confirmation
+                Game::getInstance()->pushState(new ExitConfirm());
             }
         case SDLK_SLASH:
             // @TODO: printCurrentTime();
@@ -282,19 +284,19 @@ void PlayerPanel::onKeyPress(KeyboardEvent* event)
             // @TODO: volume up
             break;
         case SDLK_F4:
-            // @TODO: save game screen
+            doSaveGame();
             break;
         case SDLK_F5:
-            // @TODO: load game screen
+            doLoadGame();
             break;
         case SDLK_F6:
-            // @TODO: quick save
+            doSaveGame(true);
             break;
         case SDLK_F7:
-            // @TODO: quick load
+            doLoadGame(true);
             break;
         case SDLK_F10:
-            // @TODO: quit to main menu after confirmation
+            Game::getInstance()->pushState(new ExitConfirm());
             break;
         case SDLK_F12:
             // @TODO: save screenshot
@@ -337,6 +339,19 @@ void PlayerPanel::openCharacterScreen()
 {
     Game::getInstance()->pushState(new PlayerEdit());
 }
+
+void PlayerPanel::doLoadGame(bool quick)
+{
+    Game::getInstance()->pushState(new LoadGame());
+    // @TODO: quick load logic
+}
+
+void PlayerPanel::doSaveGame(bool quick)
+{
+    Game::getInstance()->pushState(new SaveGame());
+    // @TODO: quick save logic
+}
+
 
 
 }
