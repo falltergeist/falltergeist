@@ -113,7 +113,7 @@ void PlayerEditName::init()
     doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     _name = new TextArea(Game::getInstance()->player()->name(), bgX+43, bgY+15);
-    _name->addEventHandler("keydown", [this](Event* event){ this->onKeyboardPress(dynamic_cast<KeyboardEvent*>(event)); });
+    _name->addEventHandler("keydown", [this](Event* event){ this->onTextAreaKeyDown(dynamic_cast<KeyboardEvent*>(event)); });
 
     _cursor = new Image(5, 8);
     _cursor->setX(bgX+83);
@@ -129,7 +129,7 @@ void PlayerEditName::init()
     addUI(_cursor);
 }
 
-void PlayerEditName::onKeyboardPress(KeyboardEvent* event)
+void PlayerEditName::onTextAreaKeyDown(KeyboardEvent* event)
 {
     auto sender = dynamic_cast<TextArea*>(event->emitter());
 

@@ -52,7 +52,7 @@ public:
     void doSettings();
     void doIntro();
     void doCredits();
-    void onKeyPress(KeyboardEvent* event);
+    virtual void onKeyDown(KeyboardEvent* event);
 
     void onStateActivate(StateEvent* event);
 

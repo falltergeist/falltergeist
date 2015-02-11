@@ -54,7 +54,6 @@ void ExitConfirm::init()
 
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
-    background->addEventHandler("keydown", [this](Event* event){ this->onKeyPress(dynamic_cast<KeyboardEvent*>(event)); });
 
     auto box1 = new Image("art/intrface/donebox.frm");
     auto box2 = new Image("art/intrface/donebox.frm");
@@ -107,7 +106,7 @@ void ExitConfirm::doNo()
     Game::getInstance()->popState();
 }
 
-void ExitConfirm::onKeyPress(KeyboardEvent* event)
+void ExitConfirm::onKeyDown(KeyboardEvent* event)
 {
     switch (event->keyCode()) 
     {

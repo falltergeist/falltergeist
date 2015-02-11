@@ -66,7 +66,6 @@ void LoadGame::init()
     bg->setX(bgX);
     bg->setY(bgY);
     addUI(bg);
-    bg->addEventHandler("keydown", [this](Event* event){ this->onKeyPress(dynamic_cast<KeyboardEvent*>(event)); });
 
     // BUTTONS
 
@@ -144,7 +143,7 @@ void LoadGame::onStateDeactivate(StateEvent* event)
     Game::getInstance()->mouse()->popState();
 }
 
-void LoadGame::onKeyPress(KeyboardEvent* event)
+void LoadGame::onKeyDown(KeyboardEvent* event)
 {
     switch (event->keyCode()) 
     {

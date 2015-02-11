@@ -67,8 +67,7 @@ void NewGame::init()
     setX((renderer->width()  - 640)*0.5);
     setY((renderer->height() - 480)*0.5);
 
-    auto background = addUI("background", new Image("art/intrface/pickchar.frm"));
-    background->addEventHandler("keydown", [this](Event* event){ this->onKeyPress(dynamic_cast<KeyboardEvent*>(event)); });
+    addUI("background", new Image("art/intrface/pickchar.frm"));
 
     auto beginGameButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 322));
     beginGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onBeginGameButtonClick(dynamic_cast<MouseEvent*>(event)); });
@@ -269,7 +268,7 @@ void NewGame::onBeginGameButtonClick(MouseEvent* event)
     doBeginGame();
 }
 
-void NewGame::onKeyPress(KeyboardEvent* event)
+void NewGame::onKeyDown(KeyboardEvent* event)
 {
     switch (event->keyCode())
     {

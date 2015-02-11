@@ -71,7 +71,7 @@ public:
     void doEdit();
     void doCreate();
     void doBack();
-    void onKeyPress(KeyboardEvent* event);
+    virtual void onKeyDown(KeyboardEvent* event);
 };
 
 }

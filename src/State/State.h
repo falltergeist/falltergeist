@@ -106,6 +106,7 @@ public:
 
     virtual void onStateActivate(StateEvent* event);
     virtual void onStateDeactivate(StateEvent* event);
+    virtual void onKeyDown(KeyboardEvent* event);
 };
 
 }

@@ -66,7 +66,6 @@ void CritterDialog::init()
 
     auto background = new Image("art/intrface/di_talk.frm");
     addUI("background", background);
-    background->addEventHandler("keyup", [this](Event* event){ this->onKeyboardUp(dynamic_cast<KeyboardEvent*>(event)); });
 
     auto question = new TextArea("question", 140, -55);
     question->setWidth(370);
@@ -143,7 +142,7 @@ void CritterDialog::onBarterButtonClick(Event* event)
     Game::getInstance()->pushState(state);
 }
 
-void CritterDialog::onKeyboardUp(KeyboardEvent* event)
+void CritterDialog::onKeyDown(KeyboardEvent* event)
 {
     static std::vector<uint32_t> numkeys = {
             SDLK_1, SDLK_2, SDLK_3, SDLK_4, SDLK_5, SDLK_6, SDLK_7, SDLK_8, SDLK_9,

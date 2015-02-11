@@ -44,7 +44,7 @@ public:
     void onPrintToFileButtonClick(MouseEvent* event);
     void onEraseButtonClick(MouseEvent* event);
     void onDoneButtonClick(MouseEvent* event);
-    void onKeyPress(KeyboardEvent* event);
+    virtual void onKeyDown(KeyboardEvent* event);
 };
 
 }

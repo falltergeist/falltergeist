@@ -55,7 +55,6 @@ void PlayerEditGender::init()
     auto bg = new Image("art/intrface/charwin.frm");
     bg->setX(bgX+236);
     bg->setY(bgY+0);
-    bg->addEventHandler("keydown", [this](Event* event){ this->onKeyPress(dynamic_cast<KeyboardEvent*>(event)); });
 
     _maleImage = new ImageList((std::vector<std::string>){
                                     "art/intrface/maleoff.frm",
@@ -105,7 +104,7 @@ void PlayerEditGender::onMaleButtonPress(MouseEvent* event)
     setGender(0); // 0 - male
 }
 
-void PlayerEditGender::onKeyPress(KeyboardEvent* event)
+void PlayerEditGender::onKeyDown(KeyboardEvent* event)
 {
     switch (event->keyCode())
     {

@@ -45,7 +45,7 @@ public:
     virtual void onStateActivate(StateEvent* event);
     virtual void onStateDeactivate(StateEvent* event);
     
-    void onKeyPress(KeyboardEvent* event);
+    virtual void onKeyDown(KeyboardEvent* event);
 
 private:
 };

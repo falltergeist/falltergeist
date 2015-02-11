@@ -46,7 +46,7 @@ public:
     void onFemaleButtonPress(MouseEvent* event);
     void onMaleButtonPress(MouseEvent* event);
     void onDoneButtonClick(MouseEvent* event);
-    void onKeyPress(KeyboardEvent* event);
+    virtual void onKeyDown(KeyboardEvent* event);
     void setGender(unsigned int gender);
 };
 

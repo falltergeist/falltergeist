@@ -103,7 +103,8 @@ public:
     void onKeyUp(std::shared_ptr<KeyboardEvent> event);
     void onObjectClick(MouseEvent* event);
     void onMouseDown(Event* event, Game::GameObject* object);
-    void onKeyboardUp(std::shared_ptr<KeyboardEvent> event);
+    virtual void onKeyDown(KeyboardEvent* event);
+
 };
 
 }

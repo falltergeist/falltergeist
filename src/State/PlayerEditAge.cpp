@@ -56,7 +56,6 @@ void PlayerEditAge::init()
     auto bg = new Image("art/intrface/charwin.frm");
     bg->setX(backgroundX+160);
     bg->setY(backgroundY+0);
-    bg->addEventHandler("keydown", [this](Event* event){ this->onKeyPress(dynamic_cast<KeyboardEvent*>(event)); });
 
     auto ageBox = new Image("art/intrface/agebox.frm");
     ageBox->setX(backgroundX+168);
@@ -146,7 +145,7 @@ void PlayerEditAge::doInc()
     }
 }
 
-void PlayerEditAge::onKeyPress(KeyboardEvent* event)
+void PlayerEditAge::onKeyDown(KeyboardEvent* event)
 {
     switch (event->keyCode())
     {

@@ -49,7 +49,7 @@ public:
     void init();
     void think();
     void onDoneButtonClick(MouseEvent* event);
-    void onKeyboardPress(KeyboardEvent* event);
+    void onTextAreaKeyDown(KeyboardEvent* event);
     void doDone();
     void doBack();
 };

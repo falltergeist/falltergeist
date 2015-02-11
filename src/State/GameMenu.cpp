@@ -58,8 +58,6 @@ void GameMenu::init()
 
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
-    
-    background->addEventHandler("keydown", [this](Event* event){ this->onKeyPress(dynamic_cast<KeyboardEvent*>(event)); });
 
     auto saveGameButton = new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18);
     auto loadGameButton = new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37);
@@ -148,7 +146,7 @@ void GameMenu::onStateDeactivate(StateEvent* event)
     Game::getInstance()->mouse()->popState();
 }
 
-void GameMenu::onKeyPress(KeyboardEvent* event)
+void GameMenu::onKeyDown(KeyboardEvent* event)
 {
     switch (event->keyCode())
     {

@@ -79,7 +79,6 @@ void Inventory::init()
 
     addUI("background", new Image("art/intrface/invbox.frm"));
     getActiveUI("background")->addEventHandler("mouserightclick", [this](Event* event){ this->backgroundRightClick(dynamic_cast<MouseEvent*>(event)); });
-    getActiveUI("background")->addEventHandler("keydown", [this](Event* event){ this->onKeyPress(dynamic_cast<KeyboardEvent*>(event)); });
 
     addUI("button_up",   new ImageButton(ImageButton::TYPE_INVENTORY_UP_ARROW,   128, 40));
     addUI("button_down", new ImageButton(ImageButton::TYPE_INVENTORY_DOWN_ARROW, 128, 65));
@@ -445,7 +444,7 @@ void Inventory::_screenShow (unsigned int PID)
     rightHandLabel->setVisible(PID == 0);
 }
 
-void Inventory::onKeyPress(KeyboardEvent* event)
+void Inventory::onKeyDown(KeyboardEvent* event)
 {
     switch (event->keyCode())
     {

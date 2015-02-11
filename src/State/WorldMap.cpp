@@ -214,13 +214,7 @@ void WorldMap::handle(Event* event)
 
     if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
     {
-        switch (keyboardEvent->keyCode())
-        {
-            case SDLK_ESCAPE:
-            {
-                game->popState();
-            }
-        }
+        emitEvent(keyboardEvent);
     }
 }
 
@@ -232,6 +226,17 @@ void WorldMap::onStateActivate(StateEvent* event)
 void WorldMap::onStateDeactivate(StateEvent* event)
 {
     Game::getInstance()->mouse()->popState();
+}
+
+void WorldMap::onKeyDown(KeyboardEvent* event)
+{
+    switch (event->keyCode())
+    {
+        case SDLK_ESCAPE:
+        {
+            Game::getInstance()->popState();
+        }
+    }
 }
 
 

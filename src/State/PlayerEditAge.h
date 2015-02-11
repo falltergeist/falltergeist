@@ -49,7 +49,7 @@ public:
     void doDec();
     void doDone();
     void doBack();
-    void onKeyPress(KeyboardEvent* event);
+    virtual void onKeyDown(KeyboardEvent* event);
 };
 
 }

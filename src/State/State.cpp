@@ -41,6 +41,7 @@ State::State() : EventEmitter()
 {
     addEventHandler("activate",   [this](Event* event){ this->onStateActivate(dynamic_cast<StateEvent*>(event)); });
     addEventHandler("deactivate", [this](Event* event){ this->onStateDeactivate(dynamic_cast<StateEvent*>(event)); });
+    addEventHandler("keydown",    [this](Event* event){ this->onKeyDown(dynamic_cast<KeyboardEvent*>(event)); });
 }
 
 State::~State()
@@ -178,6 +179,10 @@ UI* State::getUI(std::string name)
 
 void State::handle(Event* event)
 {
+    if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
+    {
+        emitEvent(keyboardEvent);
+    }
     for (auto it = _ui.rbegin(); it != _ui.rend(); ++it)
     {
         if (event->handled()) return;
@@ -216,6 +221,10 @@ void State::onStateActivate(StateEvent* event)
 }
 
 void State::onStateDeactivate(StateEvent* event)
+{
+}
+
+void State::onKeyDown(KeyboardEvent* event)
 {
 }
 

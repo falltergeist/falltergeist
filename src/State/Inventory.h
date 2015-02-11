@@ -47,7 +47,7 @@ public:
     //void onSlotMouseUp(MouseEvent* event);
     //void onSlotDrag(MouseEvent* event);
     void backgroundRightClick(MouseEvent* event);
-    void onKeyPress(KeyboardEvent* event);
+    virtual void onKeyDown(KeyboardEvent* event);
 
 private:
     std::string _handItemSummary (Game::GameItemObject* hand);

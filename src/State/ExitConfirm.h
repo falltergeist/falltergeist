@@ -41,7 +41,7 @@ public:
 
     void doYes();
     void doNo();
-    void onKeyPress(KeyboardEvent* event);
+    virtual void onKeyDown(KeyboardEvent* event);
     
     virtual void onStateActivate(StateEvent* event);
     virtual void onStateDeactivate(StateEvent* event);

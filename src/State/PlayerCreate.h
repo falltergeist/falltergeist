@@ -87,7 +87,7 @@ public:
     void doOptions();
     void doDone();
     void doBack();
-    void onKeyPress(KeyboardEvent* event);
+    virtual void onKeyDown(KeyboardEvent* event);
 };
 
 }

@@ -554,61 +554,9 @@ void Location::handle(Event* event)
                 }
             }
         }
-        else if (event->name() == "keydown")
+        else
         {
-            switch (keyboardEvent->keyCode())
-            {
-                case SDLK_m:
-                    toggleCursorMode();
-                    break;
-                case SDLK_COMMA: 
-                {
-                    auto player = game->player();
-                    player->setOrientation((player->orientation() + 5) % 6); // rotate left
-                    break;
-                }
-                case SDLK_PERIOD:
-                {
-                    auto player = game->player();
-                    player->setOrientation((player->orientation() + 1) % 6); // rotate right
-                    break;
-                }
-                case SDLK_HOME:
-                    centerCameraAtHexagon(game->player()->hexagon());
-                    break;
-                case SDLK_PLUS:
-                case SDLK_KP_PLUS:
-                    // @TODO: increase brightness
-                    break;
-                case SDLK_MINUS:
-                case SDLK_KP_MINUS:
-                    // @TODO: decrease brightness
-                    break;
-                case SDLK_1:
-                    // @TODO: use skill: sneak
-                    break;
-                case SDLK_2:
-                    // @TODO: use skill: lockpick
-                    break;
-                case SDLK_3:
-                    // @TODO: use skill: steal
-                    break;
-                case SDLK_4:
-                    // @TODO: use skill: traps
-                    break;
-                case SDLK_5:
-                    // @TODO: use skill: first aid
-                    break;
-                case SDLK_6:
-                    // @TODO: use skill: doctor
-                    break;
-                case SDLK_7:
-                    // @TODO: use skill: science
-                    break;
-                case SDLK_8:
-                    // @TODO: use skill: repair
-                    break;
-            }
+            emitEvent(keyboardEvent);
         }
     }
     for (auto it = hexagonGrid()->hexagons()->rbegin(); it != hexagonGrid()->hexagons()->rend(); ++it)
@@ -625,14 +573,63 @@ void Location::handle(Event* event)
     }
 }
 
-void Location::onKeyboardUp(std::shared_ptr<KeyboardEvent> event)
+void Location::onKeyDown(KeyboardEvent* event)
 {
-    if (event->keyCode() == SDLK_F10)
+    switch (event->keyCode())
     {
-        Game::getInstance()->pushState(new ExitConfirm());
-        //event->setHandled(true);
+        case SDLK_m:
+            toggleCursorMode();
+            break;
+        case SDLK_COMMA: 
+        {
+            auto player = Game::getInstance()->player();
+            player->setOrientation((player->orientation() + 5) % 6); // rotate left
+            break;
+        }
+        case SDLK_PERIOD:
+        {
+            auto player = Game::getInstance()->player();
+            player->setOrientation((player->orientation() + 1) % 6); // rotate right
+            break;
+        }
+        case SDLK_HOME:
+            centerCameraAtHexagon(Game::getInstance()->player()->hexagon());
+            break;
+        case SDLK_PLUS:
+        case SDLK_KP_PLUS:
+            // @TODO: increase brightness
+            break;
+        case SDLK_MINUS:
+        case SDLK_KP_MINUS:
+            // @TODO: decrease brightness
+            break;
+        case SDLK_1:
+            // @TODO: use skill: sneak
+            break;
+        case SDLK_2:
+            // @TODO: use skill: lockpick
+            break;
+        case SDLK_3:
+            // @TODO: use skill: steal
+            break;
+        case SDLK_4:
+            // @TODO: use skill: traps
+            break;
+        case SDLK_5:
+            // @TODO: use skill: first aid
+            break;
+        case SDLK_6:
+            // @TODO: use skill: doctor
+            break;
+        case SDLK_7:
+            // @TODO: use skill: science
+            break;
+        case SDLK_8:
+            // @TODO: use skill: repair
+            break;
     }
 }
+
 
 LocationCamera* Location::camera()
 {

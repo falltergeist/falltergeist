@@ -57,7 +57,6 @@ void PlayerCreateOptions::init()
 
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
-    background->addEventHandler("keydown", [this](Event* event) { this->onKeyPress(dynamic_cast<KeyboardEvent*>(event)); });
 
     auto saveButton = new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18);
     auto loadButton = new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37);
@@ -137,7 +136,7 @@ void PlayerCreateOptions::onDoneButtonClick(MouseEvent* event)
     Game::getInstance()->popState();
 }
 
-void PlayerCreateOptions::onKeyPress(KeyboardEvent* event)
+void PlayerCreateOptions::onKeyDown(KeyboardEvent* event)
 {
     switch (event->keyCode())
     {

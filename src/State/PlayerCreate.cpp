@@ -65,7 +65,6 @@ void PlayerCreate::init()
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
     background->setX(backgroundX);
     background->setY(backgroundY);
-    background->addEventHandler("keydown", [this](Event* event){ this->onKeyPress(dynamic_cast<KeyboardEvent*>(event)); });
     addUI(background);
 
     // STATS
@@ -657,7 +656,7 @@ void PlayerCreate::doOptions()
     Game::getInstance()->pushState(new PlayerCreateOptions());
 }
 
-void PlayerCreate::onKeyPress(KeyboardEvent* event)
+void PlayerCreate::onKeyDown(KeyboardEvent* event)
 {
     switch (event->keyCode())
     {

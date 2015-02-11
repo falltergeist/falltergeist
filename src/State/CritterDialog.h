@@ -64,7 +64,7 @@ public:
     void onAnswerIn(Event* event);
     void onAnswerOut(Event* event);
     void onAnswerClick(Event* event);
-    void onKeyboardUp(KeyboardEvent* event);
+    virtual void onKeyDown(KeyboardEvent* event);
 
 };
 

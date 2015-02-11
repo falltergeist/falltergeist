@@ -69,8 +69,7 @@ void MainMenu::init()
     setX((renderer->width()  - 640)*0.5);
     setY((renderer->height() - 480)*0.5);
 
-    auto background = addUI("background", new Image("art/intrface/mainmenu.frm"));
-    background->addEventHandler("keydown", [this](Event* event){ this->onKeyPress(dynamic_cast<KeyboardEvent*>(event)); });
+    addUI("background", new Image("art/intrface/mainmenu.frm"));
 
     // intro button
     auto introButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19));
@@ -234,7 +233,7 @@ void MainMenu::onCreditsStart(StateEvent* event)
     Game::getInstance()->pushState(new Credits());
 }
 
-void MainMenu::onKeyPress(KeyboardEvent* event)
+void MainMenu::onKeyDown(KeyboardEvent* event)
 {
     switch (event->keyCode())
     {
@@ -251,10 +250,10 @@ void MainMenu::onKeyPress(KeyboardEvent* event)
         case SDLK_i:
             doIntro();
             break;
-        case SDLK_o:
+        case SDLK_c:
             doCredits();
             break;
-        case SDLK_s:
+        case SDLK_o:
             doSettings();
             break;
     }

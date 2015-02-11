@@ -73,8 +73,6 @@ void PlayerPanel::init()
     background->addEventHandler("mouseleftdown", [this](Event* event){ this->onPanelMouseDown(dynamic_cast<MouseEvent*>(event)); });
     background->addEventHandler("mousein", [this](Event* event){ this->onPanelMouseIn(dynamic_cast<MouseEvent*>(event)); });
     background->addEventHandler("mouseout", [this](Event* event){ this->onPanelMouseOut(dynamic_cast<MouseEvent*>(event)); });
-    background->addEventHandler("keydown", [this](Event* event){ this->onKeyPress(dynamic_cast<KeyboardEvent*>(event)); });
-    
 
     addUI("change_hand_button", new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 218, 5));
     getActiveUI("change_hand_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onChangeHandButtonClick(dynamic_cast<MouseEvent*>(event)); });
@@ -211,7 +209,7 @@ void PlayerPanel::onPanelMouseUp(MouseEvent* event)
 {
 }
 
-void PlayerPanel::onKeyPress(KeyboardEvent* event)
+void PlayerPanel::onKeyDown(KeyboardEvent* event)
 {
     switch (event->keyCode())
     {

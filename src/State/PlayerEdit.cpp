@@ -69,7 +69,6 @@ void PlayerEdit::init()
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
     background->setX(backgroundX);
     background->setY(backgroundY);
-    background->addEventHandler("keydown", [this](Event* event){ this->onKeyPress(dynamic_cast<KeyboardEvent*>(event)); });
     addUI(background);
 
     // STATS
@@ -556,7 +555,7 @@ void PlayerEdit::onStateDeactivate(StateEvent* event)
     Game::getInstance()->mouse()->popState();
 }
 
-void PlayerEdit::onKeyPress(KeyboardEvent* event)
+void PlayerEdit::onKeyDown(KeyboardEvent* event)
 {
     switch (event->keyCode())
     {

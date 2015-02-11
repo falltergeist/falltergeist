@@ -54,7 +54,7 @@ public:
     void onPanelMouseIn(MouseEvent* event);
     void onPanelMouseOut(MouseEvent* event);
     void onPanelMouseUp(MouseEvent* event);
-    void onKeyPress(KeyboardEvent* event);
+    virtual void onKeyDown(KeyboardEvent* event);
     void toggleActiveHand();
     void openInventory();
     void openOptions();
