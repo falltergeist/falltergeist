@@ -554,9 +554,9 @@ void Location::handle(Event* event)
                 }
             }
         }
-        else
+        else if (event->name() == "keydown")
         {
-            emitEvent(keyboardEvent);
+            onKeyDown(keyboardEvent);
         }
     }
     for (auto it = hexagonGrid()->hexagons()->rbegin(); it != hexagonGrid()->hexagons()->rend(); ++it)

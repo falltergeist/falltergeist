@@ -212,9 +212,9 @@ void WorldMap::handle(Event* event)
         }
     }
 
-    if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
+    if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event) && keyboardEvent->name() == "keydown")
     {
-        emitEvent(keyboardEvent);
+        onKeyDown(keyboardEvent);
     }
 }
 
