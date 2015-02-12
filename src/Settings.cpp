@@ -70,6 +70,7 @@ const double Settings::_defaultMasterVolume=1.0;
 const double Settings::_defaultMusicVolume=1.0;
 const double Settings::_defaultSFXVolume=1.0;
 const double Settings::_defaultVoiceVolume=1.0;
+const int Settings::_defaultAudioBufferSize = 512;
 
 Settings::Settings()
 {
@@ -138,6 +139,7 @@ void Settings::_createDefaultConfig(Ini::File &ini)
     audio->setPropertyDouble("voice_volume", _defaultVoiceVolume);
     audio->setPropertyDouble("sfx_volume", _defaultSFXVolume);
     audio->setPropertyString("music_path", _defaultMusicPath);
+    audio->setPropertyInt("buffer_size", _defaultAudioBufferSize);
 
     auto logger = ini.section("logger");
     logger->setPropertyString("level", _defaultLoggerLevel);
@@ -190,6 +192,7 @@ void Settings::saveConfig()
     audio->setPropertyDouble("voice_volume", _voiceVolume);
     audio->setPropertyDouble("sfx_volume", _sfxVolume);
     audio->setPropertyString("music_path", _musicPath);
+    audio->setPropertyInt("buffer_size", _audioBufferSize);
 
     auto logger = ini.section("logger");
     logger->setPropertyString("level", _loggerLevel);
@@ -294,6 +297,7 @@ void Settings::_readConfig(Ini::File &ini)
     _voiceVolume = audio->propertyDouble("voice_volume", _defaultVoiceVolume);
     _sfxVolume = audio->propertyDouble("sfx_volume", _defaultSFXVolume);
     _musicPath = audio->propertyString("music_path", _defaultMusicPath);
+    _audioBufferSize = audio->propertyInt("buffer_size", _defaultAudioBufferSize);
 
     auto logger = ini.section("logger");
     _loggerLevel = logger->propertyString("level", _defaultLoggerLevel);
@@ -567,6 +571,16 @@ void Settings::setFullscreen(bool _fullscreen)
 bool Settings::fullscreen() const
 {
     return _fullscreen;
+}
+
+void Settings::setAudioBufferSize(int _audioBufferSize)
+{
+    this->_audioBufferSize = _audioBufferSize;
+}
+
+int Settings::audioBufferSize() const
+{
+    return _audioBufferSize;
 }
 
 } // Falltergeist
