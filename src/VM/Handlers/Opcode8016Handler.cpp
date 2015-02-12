@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -20,9 +20,9 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Game.h"
-#include "../../Engine/Logger.h"
-#include "../../States/LocationState.h"
+#include "../../Game/Game.h"
+#include "../../Logger.h"
+#include "../../State/Location.h"
 #include "../../VM/Handlers/Opcode8016Handler.h"
 #include "../../VM/VM.h"
 

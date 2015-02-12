@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -23,7 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/Graphics/ActiveUI.h"
+#include "../Graphics/ActiveUI.h"
 #include "../UI/ImageList.h"
 
 // Third party includes

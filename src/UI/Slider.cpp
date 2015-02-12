@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -22,8 +22,8 @@
 // Falltergeist includes
 #include "../UI/Image.h"
 #include "../UI/Slider.h"
-#include "../Engine/Game.h"
-#include "../Engine/Audio/AudioMixer.h"
+#include "../Game/Game.h"
+#include "../Audio/AudioMixer.h"
 
 // Third party includes
 

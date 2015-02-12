@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -20,23 +20,22 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "src/Engine/Exception.h"
-#include "src/Engine/Game.h"
-#include "src/Engine/Logger.h"
-#include "src/States/StartState.h"
+#include "src/Exception.h"
+#include "src/Game/Game.h"
+#include "src/Logger.h"
+#include "src/State/Start.h"
 
 // Third party includes
 #include <libfalltergeist.h>
 
 using namespace Falltergeist;
 
-
 int main(int argc, char* argv[])
 {
     try
     {
-        auto game = Game::getInstance();
-        game->setState(new StartState());
+        auto game = Game::Game::getInstance();
+        game->setState(new State::Start());
         game->run();
         game->shutdown();
         return 0;

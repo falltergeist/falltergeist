@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -24,7 +24,7 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Engine/Graphics/ActiveUI.h"
+#include "../Graphics/ActiveUI.h"
 
 // Third party includes
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -20,12 +20,12 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Exception.h"
-#include "../../Engine/Game.h"
-#include "../../Engine/Logger.h"
-#include "../../Game/GameCritterObject.h"
-#include "../../States/CritterDialogState.h"
-#include "../../States/CritterInteractState.h"
+#include "../../Exception.h"
+#include "../../Game/Game.h"
+#include "../../Logger.h"
+#include "../../Game/CritterObject.h"
+#include "../../State/CritterDialog.h"
+#include "../../State/CritterInteract.h"
 #include "../../VM/Handlers/Opcode80DEHandler.h"
 #include "../../VM/VM.h"
 
@@ -44,12 +44,12 @@ void Opcode80DEHandler::_run()
     int headID = _vm->popDataInteger();
     int mood = _vm->popDataInteger();
 
-    auto critter = static_cast<GameCritterObject*>(_vm->popDataPointer());
+    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataPointer());
     if (!critter) throw Exception("VM::opcode80de - wrong critter pointers");
 
     int msgFileID = _vm->popDataInteger();
 
-    auto interact = new CritterInteractState();
+    auto interact = new State::CritterInteract();
     interact->setBackgroundID(backgroundID);
     interact->setHeadID(headID);
     interact->setMood(mood);

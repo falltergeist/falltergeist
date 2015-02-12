@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -21,13 +21,13 @@
 #include <sstream>
 
 // Falltergeist includes
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Font.h"
-#include "../Engine/FontString.h"
-#include "../Engine/Game.h"
-#include "../Engine/Graphics/Renderer.h"
-#include "../Engine/Graphics/Texture.h"
-#include "../Engine/ResourceManager.h"
+#include "../CrossPlatform.h"
+#include "../Font.h"
+#include "../FontString.h"
+#include "../Game/Game.h"
+#include "../Graphics/Renderer.h"
+#include "../Graphics/Texture.h"
+#include "../ResourceManager.h"
 #include "../UI/TextArea.h"
 
 // Third party includes

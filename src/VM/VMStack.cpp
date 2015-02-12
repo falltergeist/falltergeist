@@ -22,7 +22,7 @@
 // Falltergeist includes
 #include "../VM/VMStack.h"
 #include "../VM/VMStackValue.h"
-#include "../Engine/Exception.h"
+#include "../Exception.h"
 
 // Third party includes
 

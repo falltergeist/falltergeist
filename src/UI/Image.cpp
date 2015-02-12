@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -20,8 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/Graphics/Texture.h"
-#include "../Engine/ResourceManager.h"
+#include "../Graphics/Texture.h"
+#include "../ResourceManager.h"
 #include "../UI/Image.h"
 
 // Third party includes
@@ -36,8 +36,10 @@ Image::Image(std::string filename) : ActiveUI()
 
 Image::Image(Image* image) : ActiveUI()
 {
+    // @fixme: we should use "clone" feature here
     setTexture(new Texture(image->texture()->width(), image->texture()->height()));
-    _texture->loadFromRGBA(image->texture()->data());
+    unsigned int* pixels = (unsigned int*)image->texture()->sdlSurface()->pixels;
+    _texture->loadFromRGBA(pixels);
 }
 
 Image::Image(unsigned int width, unsigned int height) : ActiveUI()

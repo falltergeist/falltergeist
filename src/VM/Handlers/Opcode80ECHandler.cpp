@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -20,13 +20,13 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Logger.h"
+#include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80ECHandler.h"
-#include "../../Engine/Exception.h"
-#include "../../Engine/Game.h"
-#include "../../Game/GameObject.h"
-#include "../../Game/GameObjectFactory.h"
-#include "../../States/LocationState.h"
+#include "../../Exception.h"
+#include "../../Game/Game.h"
+#include "../../Game/Object.h"
+#include "../../Game/ObjectFactory.h"
+#include "../../State/Location.h"
 #include "../../VM/VM.h"
 
 
@@ -43,7 +43,7 @@ Opcode80ECHandler::Opcode80ECHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80ECHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80EC] [=] int elevation(void* obj)" << std::endl;
-    auto object = static_cast<GameObject*>(_vm->popDataPointer());
+    auto object = static_cast<Game::GameObject*>(_vm->popDataPointer());
     if (!object) throw new Exception("Opcode 80ec error");
     _vm->pushDataInteger(object->elevation());
 }

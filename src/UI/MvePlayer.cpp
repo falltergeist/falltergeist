@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -22,10 +22,10 @@
 
 // Falltergeist includes
 #include "../UI/MvePlayer.h"
-#include "../Engine/Game.h"
-#include "../Engine/Graphics/Renderer.h"
-#include "../Engine/Exception.h"
-#include "../Engine/Logger.h"
+#include "../Game/Game.h"
+#include "../Graphics/Renderer.h"
+#include "../Exception.h"
+#include "../Logger.h"
 
 // Third party includes
 

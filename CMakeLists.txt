@@ -1,5 +1,5 @@
 #
-# Copyright 2012-2014 Falltergeist Developers.
+# Copyright 2012-2015 Falltergeist Developers.
 #
 # This file is part of Falltergeist.
 #
@@ -17,6 +17,9 @@
 # along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# It must be set before project
+set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Choose the type of build (by default Debug)")
+
 cmake_minimum_required(VERSION 2.8)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules)
 
@@ -25,9 +28,11 @@ set(falltergeist_VERSION  0.2.0)
 
 option(LIBFALLTERGEIST_EMBEDDED "Use embedded libfalltergeist" ON)
 
+include_directories(src)
+
 if(LIBFALLTERGEIST_EMBEDDED)
     set(LIBFALLTERGEIST_LIBRARY falltergeist)
-    include_directories(${CMAKE_SOURCE_DIR}/lib/libfalltergeist)
+    include_directories(${CMAKE_SOURCE_DIR}/lib/libfalltergeist/src)
     set(LIBFALLTERGEIST_EMBEDDED ON CACHE BOOL "")
 else()
     find_package(LIBFALLTERGEIST REQUIRED)
@@ -46,190 +51,190 @@ if(NOT SDLMIXER_FOUND)
 endif(NOT SDLMIXER_FOUND)
 include_directories(${SDLMIXER_INCLUDE_DIR})
 
-find_package(OpenGL REQUIRED)
-if(NOT OPENGL_FOUND)
-    message(FATAL_ERROR "OpenGL library not found")
-endif(NOT OPENGL_FOUND)
-include_directories(${OPENGL_INCLUDE_DIR})
-
-configure_file(src/Engine/CrossPlatform.cpp.in src/Engine/CrossPlatform.cpp)
+find_package(SDL2_image REQUIRED)
+if(NOT SDLIMAGE_FOUND)
+    message(FATAL_ERROR "SDL2_image library not found")
+endif(NOT SDLIMAGE_FOUND)
+include_directories(${SDLIMAGE_INCLUDE_DIR})
 
 set(SOURCES main.cpp
-    src/Engine/Audio/AudioMixer.h
-    src/Engine/Audio/AudioMixer.cpp
-    src/Engine/CrossPlatform.cpp
-    src/Engine/CrossPlatform.h
-    src/Engine/Event/Event.cpp
-    src/Engine/Event/Event.h
-    src/Engine/Event/EventEmitter.cpp
-    src/Engine/Event/EventEmitter.h
-    src/Engine/Event/KeyboardEvent.cpp
-    src/Engine/Event/KeyboardEvent.h
-    src/Engine/Event/MouseEvent.cpp
-    src/Engine/Event/MouseEvent.h
-    src/Engine/Event/StateEvent.cpp
-    src/Engine/Event/StateEvent.h
-    src/Engine/Exception.cpp
-    src/Engine/Exception.h
-    src/Engine/Font.cpp
-    src/Engine/Font.h
-    src/Engine/FontString.cpp
-    src/Engine/FontString.h
-    src/Engine/Game.cpp
-    src/Engine/Game.h
-    src/Engine/GameTime.cpp
-    src/Engine/GameTime.h
-    src/Engine/Graphics/ActiveUI.cpp
-    src/Engine/Graphics/ActiveUI.h
-    src/Engine/Graphics/AnimatedPalette.cpp
-    src/Engine/Graphics/AnimatedPalette.h
-    src/Engine/Graphics/Animation.cpp
-    src/Engine/Graphics/Animation.h
-    src/Engine/Graphics/AnimationFrame.cpp
-    src/Engine/Graphics/AnimationFrame.h
-    src/Engine/Graphics/AnimationQueue.cpp
-    src/Engine/Graphics/AnimationQueue.h
-    src/Engine/Graphics/Renderer.cpp
-    src/Engine/Graphics/Renderer.h
-    src/Engine/Graphics/Texture.cpp
-    src/Engine/Graphics/Texture.h
-    src/Engine/Graphics/Tile.cpp
-    src/Engine/Graphics/Tile.h
-    src/Engine/Graphics/TileMap.cpp
-    src/Engine/Graphics/TileMap.h
-    src/Engine/Graphics/UI.cpp
-    src/Engine/Graphics/UI.h
-    src/Engine/Input/Mouse.cpp
-    src/Engine/Input/Mouse.h
-    src/Engine/LocationCamera.cpp
-    src/Engine/LocationCamera.h
-    src/Engine/Logger.cpp
-    src/Engine/Logger.h
-    src/Engine/PathFinding/Hexagon.cpp
-    src/Engine/PathFinding/Hexagon.h
-    src/Engine/PathFinding/HexagonGrid.cpp
-    src/Engine/PathFinding/HexagonGrid.h
-    src/Engine/ResourceManager.cpp
-    src/Engine/ResourceManager.h
-    src/Engine/Settings/IniFile.cpp
-    src/Engine/Settings/IniFile.h
-    src/Engine/Settings/IniParser.cpp
-    src/Engine/Settings/IniParser.h
-    src/Engine/Settings/IniSection.cpp
-    src/Engine/Settings/IniSection.h
-    src/Engine/Settings/IniWriter.cpp
-    src/Engine/Settings/IniWriter.h
-    src/Engine/Settings/IniValue.cpp
-    src/Engine/Settings/IniValue.h
-    src/Engine/Settings/Settings.cpp
-    src/Engine/Settings/Settings.h
-    src/Engine/State.cpp
-    src/Engine/State.h
-    src/Game/GameDefines.h
-    src/Game/GameDudeObject.cpp
-    src/Game/GameDudeObject.h
-    src/Game/GameObject.cpp
-    src/Game/GameObject.h
-    src/Game/GameObjectFactory.cpp
-    src/Game/GameObjectFactory.h
-    src/Game/GameCritterObject.cpp
-    src/Game/GameCritterObject.h
-    src/Game/GameItemObject.cpp
-    src/Game/GameItemObject.h
-    src/Game/GameAmmoItemObject.cpp
-    src/Game/GameAmmoItemObject.h
-    src/Game/GameArmorItemObject.cpp
-    src/Game/GameArmorItemObject.h
-    src/Game/GameContainerItemObject.cpp
-    src/Game/GameContainerItemObject.h
-    src/Game/GameDrugItemObject.cpp
-    src/Game/GameDrugItemObject.h
-    src/Game/GameKeyItemObject.cpp
-    src/Game/GameKeyItemObject.h
-    src/Game/GameMiscItemObject.cpp
-    src/Game/GameMiscItemObject.h
-    src/Game/GameWeaponItemObject.cpp
-    src/Game/GameWeaponItemObject.h
-    src/Game/GameSceneryObject.cpp
-    src/Game/GameSceneryObject.h
-    src/Game/GameDoorSceneryObject.cpp
-    src/Game/GameDoorSceneryObject.h
-    src/Game/GameGenericSceneryObject.cpp
-    src/Game/GameGenericSceneryObject.h
-    src/Game/GameLadderSceneryObject.cpp
-    src/Game/GameLadderSceneryObject.h
-    src/Game/GameStairsSceneryObject.cpp
-    src/Game/GameStairsSceneryObject.h
-    src/Game/GameElevatorSceneryObject.cpp
-    src/Game/GameElevatorSceneryObject.h
-    src/Game/GameWallObject.cpp
-    src/Game/GameWallObject.h
-    src/Game/GameExitMiscObject.cpp
-    src/Game/GameExitMiscObject.h
-    src/Game/GameMiscObject.cpp
-    src/Game/GameMiscObject.h
-    src/Game/GameLocation.cpp
-    src/Game/GameLocation.h
-    src/Game/GameLocationElevation.cpp
-    src/Game/GameLocationElevation.h
-    src/States/CreditsState.cpp
-    src/States/CreditsState.h
-    src/States/CritterBarterState.cpp
-    src/States/CritterBarterState.h
-    src/States/CritterDialogReviewState.cpp
-    src/States/CritterDialogReviewState.h
-    src/States/CritterDialogState.cpp
-    src/States/CritterDialogState.h
-    src/States/CritterInteractState.cpp
-    src/States/CritterInteractState.h
-    src/States/CursorDropdownState.cpp
-    src/States/CursorDropdownState.h
-    src/States/ExitConfirmState.cpp
-    src/States/ExitConfirmState.h
-    src/States/GameMenuState.cpp
-    src/States/GameMenuState.h
-    src/States/InventoryDragItemState.cpp
-    src/States/InventoryDragItemState.h
-    src/States/InventoryState.cpp
-    src/States/InventoryState.h
-    src/States/LoadGameState.cpp
-    src/States/LoadGameState.h
-    src/States/LocationState.cpp
-    src/States/LocationState.h
-    src/States/MainMenuState.cpp
-    src/States/MainMenuState.h
-    src/States/MovieState.cpp
-    src/States/MovieState.h
-    src/States/NewGameState.cpp
-    src/States/NewGameState.h
-    src/States/PipBoyState.cpp
-    src/States/PipBoyState.h
-    src/States/PlayerCreateOptionsState.cpp
-    src/States/PlayerCreateOptionsState.h
-    src/States/PlayerCreateState.cpp
-    src/States/PlayerCreateState.h
-    src/States/PlayerEditState.cpp
-    src/States/PlayerEditState.h
-    src/States/PlayerEditAgeState.cpp
-    src/States/PlayerEditAgeState.h
-    src/States/PlayerEditAlertState.cpp
-    src/States/PlayerEditAlertState.h
-    src/States/PlayerEditGenderState.cpp
-    src/States/PlayerEditGenderState.h
-    src/States/PlayerEditNameState.cpp
-    src/States/PlayerEditNameState.h
-    src/States/PlayerPanelState.cpp
-    src/States/PlayerPanelState.h
-    src/States/SaveGameState.cpp
-    src/States/SaveGameState.h
-    src/States/SettingsMenuState.cpp
-    src/States/SettingsMenuState.h
-    src/States/SkilldexState.cpp
-    src/States/SkilldexState.h
-    src/States/StartState.cpp
-    src/States/StartState.h
-    src/States/WorldMapState.cpp
-    src/States/WorldMapState.h
+    src/Audio/AudioMixer.cpp
+    src/Audio/AudioMixer.h
+    src/CrossPlatform.cpp
+    src/CrossPlatform.h
+    src/Event/Event.cpp
+    src/Event/Event.h
+    src/Event/EventEmitter.cpp
+    src/Event/EventEmitter.h
+    src/Event/KeyboardEvent.cpp
+    src/Event/KeyboardEvent.h
+    src/Event/MouseEvent.cpp
+    src/Event/MouseEvent.h
+    src/Event/StateEvent.cpp
+    src/Event/StateEvent.h
+    src/Exception.cpp
+    src/Exception.h
+    src/Font.cpp
+    src/Font.h
+    src/FontString.cpp
+    src/FontString.h
+    src/Graphics/ActiveUI.cpp
+    src/Graphics/ActiveUI.h
+    src/Graphics/AnimatedPalette.cpp
+    src/Graphics/AnimatedPalette.h
+    src/Graphics/Animation.cpp
+    src/Graphics/Animation.h
+    src/Graphics/AnimationFrame.cpp
+    src/Graphics/AnimationFrame.h
+    src/Graphics/AnimationQueue.cpp
+    src/Graphics/AnimationQueue.h
+    src/Graphics/Renderer.cpp
+    src/Graphics/Renderer.h
+    src/Graphics/Texture.cpp
+    src/Graphics/Texture.h
+    src/Graphics/Tile.cpp
+    src/Graphics/Tile.h
+    src/Graphics/TileMap.cpp
+    src/Graphics/TileMap.h
+    src/Graphics/UI.cpp
+    src/Graphics/UI.h
+    src/Ini/File.cpp
+    src/Ini/File.h
+    src/Ini/Parser.cpp
+    src/Ini/Parser.h
+    src/Ini/Section.cpp
+    src/Ini/Section.h
+    src/Ini/Writer.cpp
+    src/Ini/Writer.h
+    src/Ini/Value.cpp
+    src/Ini/Value.h
+    src/Input/Mouse.cpp
+    src/Input/Mouse.h
+    src/LocationCamera.cpp
+    src/LocationCamera.h
+    src/Logger.cpp
+    src/Logger.h
+    src/PathFinding/Hexagon.cpp
+    src/PathFinding/Hexagon.h
+    src/PathFinding/HexagonGrid.cpp
+    src/PathFinding/HexagonGrid.h
+    src/ResourceManager.cpp
+    src/ResourceManager.h
+    src/Settings.cpp
+    src/Settings.h
+    src/Game/Game.cpp
+    src/Game/Game.h
+    src/Game/Defines.h
+    src/Game/DudeObject.cpp
+    src/Game/DudeObject.h
+    src/Game/Object.cpp
+    src/Game/Object.h
+    src/Game/ObjectFactory.cpp
+    src/Game/ObjectFactory.h
+    src/Game/CritterObject.cpp
+    src/Game/CritterObject.h
+    src/Game/ItemObject.cpp
+    src/Game/ItemObject.h
+    src/Game/AmmoItemObject.cpp
+    src/Game/AmmoItemObject.h
+    src/Game/ArmorItemObject.cpp
+    src/Game/ArmorItemObject.h
+    src/Game/ContainerItemObject.cpp
+    src/Game/ContainerItemObject.h
+    src/Game/DrugItemObject.cpp
+    src/Game/DrugItemObject.h
+    src/Game/KeyItemObject.cpp
+    src/Game/KeyItemObject.h
+    src/Game/MiscItemObject.cpp
+    src/Game/MiscItemObject.h
+    src/Game/WeaponItemObject.cpp
+    src/Game/WeaponItemObject.h
+    src/Game/SceneryObject.cpp
+    src/Game/SceneryObject.h
+    src/Game/Time.cpp
+    src/Game/Time.h
+    src/Game/DoorSceneryObject.cpp
+    src/Game/DoorSceneryObject.h
+    src/Game/GenericSceneryObject.cpp
+    src/Game/GenericSceneryObject.h
+    src/Game/LadderSceneryObject.cpp
+    src/Game/LadderSceneryObject.h
+    src/Game/StairsSceneryObject.cpp
+    src/Game/StairsSceneryObject.h
+    src/Game/ElevatorSceneryObject.cpp
+    src/Game/ElevatorSceneryObject.h
+    src/Game/WallObject.cpp
+    src/Game/WallObject.h
+    src/Game/ExitMiscObject.cpp
+    src/Game/ExitMiscObject.h
+    src/Game/MiscObject.cpp
+    src/Game/MiscObject.h
+    src/Game/Location.cpp
+    src/Game/Location.h
+    src/Game/LocationElevation.cpp
+    src/Game/LocationElevation.h
+    src/State/Container.cpp
+    src/State/Container.h
+    src/State/Credits.cpp
+    src/State/Credits.h
+    src/State/CritterBarter.cpp
+    src/State/CritterBarter.h
+    src/State/CritterDialogReview.cpp
+    src/State/CritterDialogReview.h
+    src/State/CritterDialog.cpp
+    src/State/CritterDialog.h
+    src/State/CritterInteract.cpp
+    src/State/CritterInteract.h
+    src/State/CursorDropdown.cpp
+    src/State/CursorDropdown.h
+    src/State/ExitConfirm.cpp
+    src/State/ExitConfirm.h
+    src/State/GameMenu.cpp
+    src/State/GameMenu.h
+    src/State/InventoryDragItem.cpp
+    src/State/InventoryDragItem.h
+    src/State/Inventory.cpp
+    src/State/Inventory.h
+    src/State/LoadGame.cpp
+    src/State/LoadGame.h
+    src/State/Location.cpp
+    src/State/Location.h
+    src/State/MainMenu.cpp
+    src/State/MainMenu.h
+    src/State/Movie.cpp
+    src/State/Movie.h
+    src/State/NewGame.cpp
+    src/State/NewGame.h
+    src/State/PipBoy.cpp
+    src/State/PipBoy.h
+    src/State/PlayerCreateOptions.cpp
+    src/State/PlayerCreateOptions.h
+    src/State/PlayerCreate.cpp
+    src/State/PlayerCreate.h
+    src/State/PlayerEdit.cpp
+    src/State/PlayerEdit.h
+    src/State/PlayerEditAge.cpp
+    src/State/PlayerEditAge.h
+    src/State/PlayerEditAlert.cpp
+    src/State/PlayerEditAlert.h
+    src/State/PlayerEditGender.cpp
+    src/State/PlayerEditGender.h
+    src/State/PlayerEditName.cpp
+    src/State/PlayerEditName.h
+    src/State/PlayerPanel.cpp
+    src/State/PlayerPanel.h
+    src/State/SaveGame.cpp
+    src/State/SaveGame.h
+    src/State/SettingsMenu.cpp
+    src/State/SettingsMenu.h
+    src/State/Skilldex.cpp
+    src/State/Skilldex.h
+    src/State/Start.cpp
+    src/State/Start.h
+    src/State/State.cpp
+    src/State/State.h
+    src/State/WorldMap.cpp
+    src/State/WorldMap.h
     src/UI/AnimatedImage.cpp
     src/UI/AnimatedImage.h
     src/UI/BigCounter.cpp
@@ -244,6 +249,10 @@ set(SOURCES main.cpp
     src/UI/ImageButton.h
     src/UI/ImageList.cpp
     src/UI/ImageList.h
+    src/UI/InventoryItem.cpp
+    src/UI/InventoryItem.h
+    src/UI/ItemsList.cpp
+    src/UI/ItemsList.h
     src/UI/MultistateImageButton.cpp
     src/UI/MultistateImageButton.h
     src/UI/MonthCounter.cpp
@@ -614,7 +623,6 @@ set(SOURCES main.cpp
     src/VM/VMStackPointerValue.h)
 
 add_definitions (-std=c++11 -Wall)
-set(CMAKE_BUILD_TYPE Debug)
 
 if(LIBFALLTERGEIST_EMBEDDED)
     add_subdirectory(lib/libfalltergeist)
@@ -622,7 +630,7 @@ endif()
 
 add_executable(falltergeist-bin ${SOURCES})
 set_target_properties(falltergeist-bin PROPERTIES OUTPUT_NAME falltergeist)
-target_link_libraries(falltergeist-bin ${SDL2_LIBRARY} ${SDLMIXER_LIBRARY} ${OPENGL_LIBRARIES} ${LIBFALLTERGEIST_LIBRARY})
+target_link_libraries(falltergeist-bin ${SDL2_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLIMAGE_LIBRARY} ${LIBFALLTERGEIST_LIBRARY})
 
 #
 # Install section
@@ -630,10 +638,6 @@ target_link_libraries(falltergeist-bin ${SDL2_LIBRARY} ${SDLMIXER_LIBRARY} ${OPE
 if(WIN32)
     install(TARGETS falltergeist-bin RUNTIME DESTINATION .)
     install(DIRECTORY data DESTINATION .)
-
-    if(LIBFALLTERGEIST_EMBEDDED)
-        install(FILES ${CMAKE_BINARY_DIR}/lib/libfalltergeist/libfalltergeist.dll DESTINATION .)
-    endif()
 
     #MinGW runtime
     if(MINGW)
@@ -645,17 +649,12 @@ if(WIN32)
 
     #dependencies
     file(GLOB dep_files ${dep_files} "${CMAKE_FIND_ROOT_PATH}/bin/*.dll")
-
     install(FILES ${dep_files} DESTINATION .)
 endif()
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
     install(TARGETS falltergeist-bin RUNTIME DESTINATION bin)
     install(DIRECTORY data DESTINATION share/falltergeist)
-
-    if(LIBFALLTERGEIST_EMBEDDED)
-        install(FILES ${CMAKE_BINARY_DIR}/lib/libfalltergeist/libfalltergeist.so DESTINATION lib)
-    endif()
 endif()
 
 if(APPLE)

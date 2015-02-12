@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -23,7 +23,7 @@
 #include <ctime>
 
 // Falltergeist includes
-#include "../Engine/Graphics/UI.h"
+#include "../Graphics/UI.h"
 
 // Third party includes
 #include <libfalltergeist.h>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -22,7 +22,7 @@
 // Falltergeist includes
 #include "../UI/MonthCounter.h"
 #include "../UI/Image.h"
-#include "../Engine/Graphics/Texture.h"
+#include "../Graphics/Texture.h"
 
 // Third party includes
 

@@ -20,10 +20,10 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Logger.h"
+#include "../../Logger.h"
+#include "../../Game/Game.h"
+#include "../../State/CritterDialog.h"
 #include "../../VM/Handlers/Opcode811CHandler.h"
-#include "../../Engine/Game.h"
-#include "../../States/CritterDialogState.h"
 #include "../../VM/VM.h"
 
 
@@ -40,7 +40,7 @@ Opcode811CHandler::Opcode811CHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode811CHandler::_run()
 {
     Logger::debug("SCRIPT") << "[811C] [?] gsay_start" << std::endl;
-    auto dialog = new CritterDialogState();
+    auto dialog = new State::CritterDialog();
     Game::getInstance()->pushState(dialog);
 }
 

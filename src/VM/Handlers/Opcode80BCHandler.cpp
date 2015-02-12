@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -20,8 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Logger.h"
-#include "../../Game/GameCritterObject.h"
+#include "../../Logger.h"
+#include "../../Game/CritterObject.h"
 #include "../../VM/Handlers/Opcode80BCHandler.h"
 #include "../../VM/VM.h"
 

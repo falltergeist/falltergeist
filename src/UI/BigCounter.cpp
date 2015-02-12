@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -22,8 +22,8 @@
 #include <string.h>
 
 // Falltergeist includes
-#include "../Engine/Graphics/Texture.h"
-#include "../Engine/ResourceManager.h"
+#include "../Graphics/Texture.h"
+#include "../ResourceManager.h"
 #include "../UI/BigCounter.h"
 #include "../UI/Image.h"
 

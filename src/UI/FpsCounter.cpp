@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -21,9 +21,8 @@
 #include <sstream>
 
 // Falltergeist includes
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Game.h"
-#include "../Engine/ResourceManager.h"
+#include "../Game/Game.h"
+#include "../ResourceManager.h"
 #include "../UI/FpsCounter.h"
 
 // Third party includes

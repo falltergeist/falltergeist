@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -20,18 +20,18 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Logger.h"
+#include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80C9Handler.h"
-#include "../../Engine/Exception.h"
-#include "../../Engine/Game.h"
-#include "../../Game/GameObject.h"
-#include "../../Game/GameArmorItemObject.h"
-#include "../../Game/GameContainerItemObject.h"
-#include "../../Game/GameDrugItemObject.h"
-#include "../../Game/GameWeaponItemObject.h"
-#include "../../Game/GameAmmoItemObject.h"
-#include "../../Game/GameMiscItemObject.h"
-#include "../../Game/GameKeyItemObject.h"
+#include "../../Exception.h"
+#include "../../Game/Game.h"
+#include "../../Game/Object.h"
+#include "../../Game/ArmorItemObject.h"
+#include "../../Game/ContainerItemObject.h"
+#include "../../Game/DrugItemObject.h"
+#include "../../Game/WeaponItemObject.h"
+#include "../../Game/AmmoItemObject.h"
+#include "../../Game/MiscItemObject.h"
+#include "../../Game/KeyItemObject.h"
 #include "../../VM/VM.h"
 
 
@@ -49,13 +49,13 @@ void Opcode80C9Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80C9] [+] int obj_item_subtype(GameItemObject* object)" << std::endl;
     auto pointer = _vm->popDataPointer();
-    if      (static_cast<GameArmorItemObject*>(pointer))     _vm->pushDataInteger(0);
-    else if (static_cast<GameContainerItemObject*>(pointer)) _vm->pushDataInteger(1);
-    else if (static_cast<GameDrugItemObject*>(pointer))      _vm->pushDataInteger(2);
-    else if (static_cast<GameWeaponItemObject*>(pointer))    _vm->pushDataInteger(3);
-    else if (static_cast<GameAmmoItemObject*>(pointer))      _vm->pushDataInteger(4);
-    else if (static_cast<GameMiscItemObject*>(pointer))      _vm->pushDataInteger(5);
-    else if (static_cast<GameKeyItemObject*>(pointer))       _vm->pushDataInteger(6);
+    if      (static_cast<Game::GameArmorItemObject*>(pointer))     _vm->pushDataInteger(0);
+    else if (static_cast<Game::GameContainerItemObject*>(pointer)) _vm->pushDataInteger(1);
+    else if (static_cast<Game::GameDrugItemObject*>(pointer))      _vm->pushDataInteger(2);
+    else if (static_cast<Game::GameWeaponItemObject*>(pointer))    _vm->pushDataInteger(3);
+    else if (static_cast<Game::GameAmmoItemObject*>(pointer))      _vm->pushDataInteger(4);
+    else if (static_cast<Game::GameMiscItemObject*>(pointer))      _vm->pushDataInteger(5);
+    else if (static_cast<Game::GameKeyItemObject*>(pointer))       _vm->pushDataInteger(6);
     else _vm->pushDataInteger(-1);
 }
 

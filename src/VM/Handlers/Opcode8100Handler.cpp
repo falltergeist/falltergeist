@@ -20,15 +20,13 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Logger.h"
+#include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8100Handler.h"
-#include "../../Engine/Exception.h"
-#include "../../Engine/Game.h"
-#include "../../Game/GameObject.h"
-#include "../../Game/GameObjectFactory.h"
+#include "../../Exception.h"
+#include "../../Game/Game.h"
+#include "../../Game/Object.h"
+#include "../../Game/ObjectFactory.h"
 #include "../../VM/VM.h"
-
-
 
 // Third party includes
 
@@ -42,7 +40,7 @@ Opcode8100Handler::Opcode8100Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8100Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8100] [+] int obj_pid(void* obj)" << std::endl;
-    auto object = static_cast<GameObject*>(_vm->popDataPointer());
+    auto object = static_cast<Game::GameObject*>(_vm->popDataPointer());
     if (!object) throw new Exception("Opcode 8100 error");
     _vm->pushDataInteger(object->PID());
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -20,13 +20,13 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Engine/Exception.h"
-#include "../Engine/Graphics/ActiveUI.h"
-#include "../Engine/Graphics/Texture.h"
+#include "../Exception.h"
+#include "../Graphics/ActiveUI.h"
+#include "../Graphics/Texture.h"
 #include "../UI/Image.h"
 #include "../UI/MultistateImageButton.h"
-#include "../Engine/Game.h"
-#include "../Engine/Audio/AudioMixer.h"
+#include "../Game/Game.h"
+#include "../Audio/AudioMixer.h"
 
 // Third party includes
 

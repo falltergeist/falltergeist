@@ -21,10 +21,10 @@
 #include <algorithm>
 
 // Falltergeist includes
-#include "../../Engine/Logger.h"
+#include "../../Logger.h"
 #include "../../VM/Handlers/Opcode810DHandler.h"
 #include "../../VM/VM.h"
-#include "../../Game/GameCritterObject.h"
+#include "../../Game/CritterObject.h"
 
 // Third party includes
 
@@ -40,10 +40,10 @@ void Opcode810DHandler::_run()
     Logger::debug("SCRIPT") << "[810D] [=] void* obj_carrying_pid_obj(void* who, int pid)" << std::endl;
     const int pid = _vm->popDataInteger();
     auto who = _vm->popDataPointer();
-    if (auto critter = dynamic_cast<GameCritterObject*>((GameObject*)who))
+    if (auto critter = dynamic_cast<Game::GameCritterObject*>((Game::GameObject*)who))
     {
         auto iterator = std::find_if(critter->inventory()->begin(), critter->inventory()->end(),
-                                    [&] (GameItemObject * &item) { return item->PID() == pid; });
+                                    [&] (Game::GameItemObject * &item) { return item->PID() == pid; });
         const bool found = iterator != critter->inventory()->end();
         _vm->pushDataPointer(found ? *iterator : nullptr);
     }

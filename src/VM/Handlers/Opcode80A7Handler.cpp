@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -20,13 +20,13 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Engine/Logger.h"
+#include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80A7Handler.h"
-#include "../../Engine/Game.h"
-#include "../../Game/GameObject.h"
-#include "../../States/LocationState.h"
-#include "../../Engine/PathFinding/Hexagon.h"
-#include "../../Engine/PathFinding/HexagonGrid.h"
+#include "../../Game/Game.h"
+#include "../../Game/Object.h"
+#include "../../State/Location.h"
+#include "../../PathFinding/Hexagon.h"
+#include "../../PathFinding/HexagonGrid.h"
 #include "../../VM/VM.h"
 
 
@@ -48,7 +48,7 @@ void Opcode80A7Handler::_run()
     auto elevation = _vm->popDataInteger();
     auto position = _vm->popDataInteger();
     auto game = Game::getInstance();
-    GameObject* found = 0;
+    Game::GameObject* found = 0;
     for (auto object : *game->locationState()->hexagonGrid()->at(position)->objects())
     {
         if (object->PID() == PID && object->elevation() == elevation)
