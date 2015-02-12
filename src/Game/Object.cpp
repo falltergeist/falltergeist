@@ -162,7 +162,7 @@ void GameObject::setUI(ActiveUI* ui)
 {
     delete _ui;
     _ui = ui;
-    _ui->addEventHandler("mouseleftdown", std::bind(&State::Location::onMouseDown, Game::getInstance()->locationState(), std::placeholders::_1, this));
+    _ui->addEventHandler("mouseleftdown", std::bind(&State::Location::onObjectMouseDown, Game::getInstance()->locationState(), std::placeholders::_1, this));
 }
 
 void GameObject::_generateUi()
@@ -190,7 +190,7 @@ void GameObject::_generateUi()
 
     if (_ui)
     {
-        _ui->addEventHandler("mouseleftdown", std::bind(&State::Location::onMouseDown, Game::getInstance()->locationState(), std::placeholders::_1, this));
+        _ui->addEventHandler("mouseleftdown", std::bind(&State::Location::onObjectMouseDown, Game::getInstance()->locationState(), std::placeholders::_1, this));
     }
 }
 

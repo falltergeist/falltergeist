@@ -244,9 +244,11 @@ void Location::setLocation(std::string name)
     }
 }
 
-void Location::onMouseDown(Event* event, Game::GameObject* object)
+void Location::onObjectMouseDown(Event* event, Game::GameObject* object)
 {
     if (!object) return;
+    
+    _actionPressedTicks = SDL_GetTicks();
 
     std::vector<int> icons;
 
@@ -291,14 +293,6 @@ void Location::onMouseDown(Event* event, Game::GameObject* object)
 }
 
 void Location::onBackgroundClick(MouseEvent* event)
-{
-}
-
-void Location::onObjectClick(MouseEvent* event)
-{
-}
-
-void Location::onKeyUp(std::shared_ptr<KeyboardEvent> event)
 {
 }
 

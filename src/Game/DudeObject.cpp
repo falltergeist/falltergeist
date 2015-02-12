@@ -284,7 +284,7 @@ void GameDudeObject::_generateUi()
 
     if (_ui)
     {
-        _ui->addEventHandler("mouseleftdown", std::bind(&State::Location::onMouseDown, Game::getInstance()->locationState(), std::placeholders::_1, static_cast<GameObject*>(this)));
+        _ui->addEventHandler("mouseleftdown", std::bind(&State::Location::onObjectMouseDown, Game::getInstance()->locationState(), std::placeholders::_1, static_cast<GameObject*>(this)));
     }
 }
 

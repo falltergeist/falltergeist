@@ -57,6 +57,7 @@ protected:
     // Timers
     unsigned int _scrollTicks = 0;
     unsigned int _scriptsTicks = 0;
+    unsigned int _actionPressedTicks = 0;
 
     HexagonGrid* _hexagonGrid = 0;
     LocationCamera* _camera = 0;
@@ -103,9 +104,7 @@ public:
     void toggleCursorMode();
 
     void onBackgroundClick(MouseEvent* event);
-    void onKeyUp(std::shared_ptr<KeyboardEvent> event);
-    void onObjectClick(MouseEvent* event);
-    void onMouseDown(Event* event, Game::GameObject* object);
+    void onObjectMouseDown(Event* event, Game::GameObject* object);
     virtual void onKeyDown(KeyboardEvent* event);
 
 };
