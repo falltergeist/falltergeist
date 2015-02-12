@@ -63,14 +63,14 @@ void Renderer::init()
     // Game::getInstance()->engineSettings()->setScale(1); //or 2, if fullhd device
 
     std::string message =  "SDL_CreateWindow " + std::to_string(_width) + "x" + std::to_string(_height) + "x" +std::to_string(32)+ " - ";
+
+    uint32_t flags = SDL_WINDOW_SHOWN;
     if (Game::getInstance()->settings()->fullscreen())
     {
-        _sdlWindow = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _width, _height, SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
+        flags |= SDL_WINDOW_FULLSCREEN;
     }
-    else
-    {
-        _sdlWindow = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _width, _height, SDL_WINDOW_SHOWN);
-    }
+
+    _sdlWindow = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _width, _height, flags);
     if (!_sdlWindow)
     {
         throw Exception(message + "[FAIL]");
@@ -86,6 +86,8 @@ void Renderer::init()
     }
 
     Logger::info("RENDERER") << message + "[OK]" << std::endl;
+
+    SDL_SetRenderDrawBlendMode(_sdlRenderer, SDL_BLENDMODE_BLEND);
 
     if (Game::getInstance()->settings()->scale() != 0)
     {
@@ -185,7 +187,6 @@ void Renderer::think()
 
 bool Renderer::fadeDone()
 {
-    // @fixme: do we really need to check fadeAlpha here?
     return _fadeDone && _fadeAlpha == 0;
 }
 
@@ -226,12 +227,11 @@ void Renderer::endFrame()
 {
     if (!fadeDone())
     {
-        uint8_t r,g,b,a;
-        SDL_GetRenderDrawColor(_sdlRenderer, &r, &g, &b, &a);
-        SDL_SetRenderDrawBlendMode(_sdlRenderer, SDL_BLENDMODE_BLEND);
+        SDL_Color color;
+        SDL_GetRenderDrawColor(_sdlRenderer, &color.r, &color.g, &color.b, &color.a);
         SDL_SetRenderDrawColor(_sdlRenderer, _fadeColor.r, _fadeColor.g, _fadeColor.b, _fadeColor.a);
         SDL_RenderFillRect(_sdlRenderer, NULL);
-        SDL_SetRenderDrawColor(_sdlRenderer, r, g, b, a);
+        SDL_SetRenderDrawColor(_sdlRenderer, color.r, color.g, color.b, color.a);
     }
     SDL_RenderPresent(_sdlRenderer);
 }
@@ -263,25 +263,9 @@ void Renderer::drawTexture(Texture* texture, int x, int y, int sourceX, int sour
 
 Texture* Renderer::screenshot()
 {
-    unsigned int width = Game::getInstance()->renderer()->width();
-    unsigned int height = Game::getInstance()->renderer()->height();
-
-    // get current masks (they are different for LE and BE)
-    int bpp;
-    uint32_t Rmask, Gmask, Bmask, Amask;
-    SDL_PixelFormatEnumToMasks(
-        SDL_PIXELFORMAT_RGBA8888, &bpp,
-        &Rmask, &Gmask, &Bmask, &Amask
-    );
-
-    SDL_Surface* surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32, Rmask, Gmask, Bmask, Amask);
+    auto texture = new Texture(width(), height());
+    auto surface = texture->sdlSurface();
     SDL_RenderReadPixels(_sdlRenderer, NULL, surface->format->format, surface->pixels, surface->pitch);
-
-    auto texture = new Texture(width, height);
-    texture->loadFromRGBA((unsigned int*)surface->pixels);
-
-    SDL_FreeSurface(surface);
-
     return texture;
 }
 
