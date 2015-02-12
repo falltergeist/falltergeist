@@ -60,7 +60,7 @@ protected:
     void _addTitle(std::string name, std::string title);
     void _addDescription(std::string name, std::string description);
     void _addImage(std::string name, Image* image);
-
+    
     bool _statIncrease(unsigned int num);
     bool _statDecrease(unsigned int num);
     bool _traitToggle(unsigned int num);
@@ -78,8 +78,14 @@ public:
     void onNameButtonClick(MouseEvent* event);
     void onGenderButtonClick(MouseEvent* event);
     void onLabelClick(MouseEvent* event);
-    void onBackButtonClick(MouseEvent* event);
-    void onDoneButtonClick(MouseEvent* event);
+    void doCancel();
+    void doDone();
+    void doPrint();
+    virtual void onStateActivate(StateEvent* event);
+    virtual void onStateDeactivate(StateEvent* event);
+    
+    virtual void onKeyDown(KeyboardEvent* event);
+
 };
 
 }

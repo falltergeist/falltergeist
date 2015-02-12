@@ -33,6 +33,7 @@
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
+#include "../Input/Mouse.h"
 
 // Third party includes
 
@@ -64,9 +65,9 @@ void GameMenu::init()
     auto exitGameButton = new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3);
     auto doneButton = new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4);
 
-    preferencesButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onPreferencesButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    exitGameButton->addEventHandler("mouseleftclick",    [this](Event* event){ this->onExitButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    doneButton->addEventHandler("mouseleftclick",        [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    preferencesButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doPreferences(); });
+    exitGameButton->addEventHandler("mouseleftclick",    [this](Event* event){ this->doExit(); });
+    doneButton->addEventHandler("mouseleftclick",        [this](Event* event){ this->closeMenu(); });
 
 
     auto msg = ResourceManager::msgFileType("text/english/game/options.msg");
@@ -75,12 +76,12 @@ void GameMenu::init()
     // label: save game
     auto saveGameButtonLabel = new TextArea(msg->message(0), backgroundX+8, backgroundY+26);
     saveGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
-    saveGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onSaveGameButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    saveGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doSaveGame(); });
 
     // label: load game
     auto loadGameButtonLabel = new TextArea(msg->message(1), backgroundX+8, backgroundY+26+37);
     loadGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
-    loadGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onLoadGameButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    loadGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doLoadGame(); });
 
     // label: preferences
     auto preferencesButtonLabel = new TextArea(msg->message(2), backgroundX+8, backgroundY+26+37*2);
@@ -110,30 +111,64 @@ void GameMenu::init()
     addUI(doneButtonLabel);
 }
 
-void GameMenu::onSaveGameButtonClick(MouseEvent* event)
+void GameMenu::doSaveGame()
 {
     Game::getInstance()->pushState(new SaveGame());
 }
 
-void GameMenu::onLoadGameButtonClick(MouseEvent* event)
+void GameMenu::doLoadGame()
 {
     Game::getInstance()->pushState(new LoadGame());
 }
 
-void GameMenu::onPreferencesButtonClick(MouseEvent* event)
+void GameMenu::doPreferences()
 {
     Game::getInstance()->pushState(new SettingsMenu());
 }
 
-void GameMenu::onExitButtonClick(MouseEvent* event)
+void GameMenu::doExit()
 {
     Game::getInstance()->pushState(new ExitConfirm());
 }
 
-void GameMenu::onDoneButtonClick(MouseEvent* event)
+void GameMenu::closeMenu()
 {
     Game::getInstance()->popState();
 }
+
+void GameMenu::onStateActivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+}
+
+void GameMenu::onStateDeactivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->popState();
+}
+
+void GameMenu::onKeyDown(KeyboardEvent* event)
+{
+    switch (event->keyCode())
+    {
+        case SDLK_ESCAPE:
+        case SDLK_d:
+            closeMenu();
+            break;
+        case SDLK_s:
+            doSaveGame();
+            break;
+        case SDLK_l:
+            doLoadGame();
+            break;
+        case SDLK_p:
+            doPreferences();
+            break;
+        case SDLK_e:
+            doExit();
+            break;
+    }
+}
+
 
 }
 }

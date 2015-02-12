@@ -115,5 +115,26 @@ void SaveGame::onCancelButtonClick(MouseEvent* event)
     Game::getInstance()->popState();
 }
 
+void SaveGame::onStateActivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+}
+
+void SaveGame::onStateDeactivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->popState();
+}
+
+void SaveGame::onKeyDown(KeyboardEvent* event)
+{
+    switch (event->keyCode()) 
+    {
+        case SDLK_ESCAPE:
+            Game::getInstance()->popState();
+            break;
+    }
+}
+
+
 }
 }

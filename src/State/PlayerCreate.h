@@ -81,6 +81,13 @@ public:
     void onBackButtonClick(MouseEvent* event);
     void onDoneButtonClick(MouseEvent* event);
     void onOptionsButtonClick(MouseEvent* event);
+    void doAge();
+    void doName();
+    void doGender();
+    void doOptions();
+    void doDone();
+    void doBack();
+    virtual void onKeyDown(KeyboardEvent* event);
 };
 
 }

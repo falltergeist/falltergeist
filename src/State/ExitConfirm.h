@@ -39,8 +39,14 @@ public:
 
     virtual void init();
 
-    void onYesButtonClick(MouseEvent* event);
-    void onNoButtonClick(MouseEvent* event);
+    void doYes();
+    void doNo();
+    virtual void onKeyDown(KeyboardEvent* event);
+    
+    virtual void onStateActivate(StateEvent* event);
+    virtual void onStateDeactivate(StateEvent* event);
+
+
 };
 
 }

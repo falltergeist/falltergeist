@@ -30,6 +30,7 @@
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
+#include "../Input/Mouse.h"
 
 // Third party includes
 
@@ -136,6 +137,25 @@ void Skilldex::onCancelButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
 }
+
+void Skilldex::onKeyDown(KeyboardEvent* event)
+{
+    if (event->keyCode() == SDLK_ESCAPE)
+    {
+        Game::getInstance()->popState();
+    }
+}
+
+void Skilldex::onStateActivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+}
+
+void Skilldex::onStateDeactivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->popState();
+}
+
 
 }
 }

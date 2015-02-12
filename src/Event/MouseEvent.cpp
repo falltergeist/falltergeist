@@ -39,6 +39,8 @@ MouseEvent::MouseEvent(MouseEvent* event) : Event("mouse")
     _yOffset = event->_yOffset;
     _leftButton = event->_leftButton;
     _rightButton = event->_rightButton;
+    _shiftPressed = event->_shiftPressed;
+    _controlPressed = event->_controlPressed;
     _name = event->_name;
 }
 
@@ -105,5 +107,27 @@ bool MouseEvent::rightButton()
 {
     return _rightButton;
 }
+
+void MouseEvent::setControlPressed(bool _controlPressed)
+{
+    this->_controlPressed = _controlPressed;
+}
+
+bool MouseEvent::controlPressed() const
+{
+    return _controlPressed;
+}
+
+void MouseEvent::setShiftPressed(bool _shiftPressed)
+{
+    this->_shiftPressed = _shiftPressed;
+}
+
+bool MouseEvent::shiftPressed() const
+{
+    return _shiftPressed;
+}
+
+
 
 }

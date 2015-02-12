@@ -101,30 +101,69 @@ PlayerEditAge::~PlayerEditAge()
 
 void PlayerEditAge::onDecButtonClick(MouseEvent* event)
 {
-    unsigned char age = Game::getInstance()->player()->age();
-    if (age > 16)
-    {
-        age--;
-        Game::getInstance()->player()->setAge(age);
-        _counter->setNumber(age);
-    }
+    doDec();
 }
 
 void PlayerEditAge::onIncButtonClick(MouseEvent* event)
 {
-    unsigned char age = Game::getInstance()->player()->age();
-    if (age < 35)
-    {
-        age++;
-        Game::getInstance()->player()->setAge(age);
-        _counter->setNumber(age);
-    }
+    doInc();
 }
 
 void PlayerEditAge::onDoneButtonClick(MouseEvent* event)
 {
+    doDone();
+}
+
+void PlayerEditAge::doBack()
+{
     Game::getInstance()->popState();
 }
+
+void PlayerEditAge::doDec()
+{
+    unsigned char age = _counter->number();
+    if (age > 16)
+    {
+        age--;
+        _counter->setNumber(age);
+    }
+}
+
+void PlayerEditAge::doDone()
+{
+    Game::getInstance()->player()->setAge(_counter->number());
+    Game::getInstance()->popState();
+}
+
+void PlayerEditAge::doInc()
+{
+    unsigned char age = _counter->number();
+    if (age < 35)
+    {
+        age++;
+        _counter->setNumber(age);
+    }
+}
+
+void PlayerEditAge::onKeyDown(KeyboardEvent* event)
+{
+    switch (event->keyCode())
+    {
+        case SDLK_RIGHT:
+            doInc();
+            break;
+        case SDLK_LEFT:
+            doDec();
+            break;
+        case SDLK_ESCAPE:
+            doBack();
+            break;
+        case SDLK_RETURN:
+            doDone();
+            break;
+    }
+}
+
 
 }
 }

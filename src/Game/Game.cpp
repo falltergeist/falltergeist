@@ -333,22 +333,16 @@ void Game::handle()
             switch (_event.type)
             {
                 case SDL_MOUSEBUTTONDOWN:
-                {
-                    mouseEvent = new MouseEvent("mousedown");
-                    mouseEvent->setX(_event.button.x);
-                    mouseEvent->setY(_event.button.y);
-                    mouseEvent->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
-                    mouseEvent->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
-                    for (auto state : *statesForThinkAndHandle()) state->handle(mouseEvent);
-                    break;
-                }
                 case SDL_MOUSEBUTTONUP:
                 {
-                    mouseEvent = new MouseEvent("mouseup");
+                    SDL_Keymod mods = SDL_GetModState();
+                    mouseEvent = new MouseEvent((_event.type == SDL_MOUSEBUTTONDOWN) ? "mousedown" : "mouseup");
                     mouseEvent->setX(_event.button.x);
                     mouseEvent->setY(_event.button.y);
                     mouseEvent->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
                     mouseEvent->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
+                    mouseEvent->setShiftPressed(mods & KMOD_SHIFT);
+                    mouseEvent->setControlPressed(mods & KMOD_CTRL);
                     for (auto state : *statesForThinkAndHandle()) state->handle(mouseEvent);
                     break;
                 }
@@ -366,7 +360,9 @@ void Game::handle()
                 {
                     keyboardEvent = new KeyboardEvent("keydown");
                     keyboardEvent->setKeyCode(_event.key.keysym.sym);
-                    keyboardEvent->setShiftPressed(_event.key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
+                    keyboardEvent->setAltPressed(_event.key.keysym.mod & KMOD_ALT);
+                    keyboardEvent->setShiftPressed(_event.key.keysym.mod & KMOD_SHIFT);
+                    keyboardEvent->setControlPressed(_event.key.keysym.mod & KMOD_CTRL);
                     for (auto state : *statesForThinkAndHandle()) state->handle(keyboardEvent);
                     break;
                 }
@@ -374,17 +370,14 @@ void Game::handle()
                 {
                     keyboardEvent = new KeyboardEvent("keyup");
                     keyboardEvent->setKeyCode(_event.key.keysym.sym);
-                    keyboardEvent->setShiftPressed(_event.key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
+                    keyboardEvent->setAltPressed(_event.key.keysym.mod & KMOD_ALT);
+                    keyboardEvent->setShiftPressed(_event.key.keysym.mod & KMOD_SHIFT);
+                    keyboardEvent->setControlPressed(_event.key.keysym.mod & KMOD_CTRL);;
                     for (auto state : *statesForThinkAndHandle()) state->handle(keyboardEvent);
 
                     if (!keyboardEvent->handled())
                     {
-                        if (keyboardEvent->keyCode() == SDLK_F10)
-                        {
-                            _quit = true;
-                        }
-
-                        if (keyboardEvent->keyCode() == SDLK_F11)
+                        if (keyboardEvent->keyCode() == SDLK_F12)
                         {
                             Texture* texture = renderer()->screenshot();
                             SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(texture->data(), texture->width(), texture->height(), 32, texture->width()*4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);

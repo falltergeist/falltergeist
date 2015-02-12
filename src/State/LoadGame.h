@@ -40,9 +40,13 @@ public:
     virtual void init();
 
     void onDoneButtonClick(MouseEvent* event);
-    void onCancelButtonClick(MouseEvent* event);
+    void doCancel();
     void onCancelFadeDone(StateEvent* event);
-    void onStateActivate(StateEvent* event);
+    virtual void onStateActivate(StateEvent* event);
+    virtual void onStateDeactivate(StateEvent* event);
+
+    virtual void onKeyDown(KeyboardEvent* event);
+    
 private:
 };
 

@@ -67,6 +67,13 @@ public:
     void onPrevCharacterButtonClick(MouseEvent* event);
     void onNextCharacterButtonClick(MouseEvent* event);
     void onStateActivate(StateEvent* event);
+    void doBeginGame();
+    void doEdit();
+    void doCreate();
+    void doBack();
+    void doNext();
+    void doPrev();
+    virtual void onKeyDown(KeyboardEvent* event);
 };
 
 }

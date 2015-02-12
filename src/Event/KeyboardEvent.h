@@ -35,6 +35,8 @@ class KeyboardEvent : public Event
 protected:
     int _keyCode = 0;
     bool _shiftPressed = false;
+    bool _controlPressed = false;
+    bool _altPressed = false;
 public:
     KeyboardEvent(std::string name = "keyboard");
     virtual ~KeyboardEvent();
@@ -42,6 +44,10 @@ public:
     void setKeyCode(int value);
     bool shiftPressed();
     void setShiftPressed(bool value);
+    bool controlPressed();
+    void setControlPressed(bool value);
+    void setAltPressed(bool _altPressed);
+    bool altPressed() const;
 };
 
 }

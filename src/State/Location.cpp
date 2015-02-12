@@ -216,7 +216,7 @@ void Location::setLocation(std::string name)
     {
         _locationScript = new VM(ResourceManager::intFileType(mapFile->scriptId()-1), Game::getInstance()->locationState());
     }
-
+    
     // Generates floor and roof images
     {
 
@@ -420,6 +420,31 @@ void Location::think()
     }
 }
 
+void Location::toggleCursorMode()
+{
+    auto mouse = Game::getInstance()->mouse();
+    switch (mouse->state())
+    {
+        case Mouse::ACTION:
+        {
+            auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
+            if (!hexagon)
+            {
+                break;
+            }
+            mouse->pushState(Mouse::HEXAGON_RED);
+            mouse->ui()->setX(hexagon->x() - camera()->x());
+            mouse->ui()->setY(hexagon->y() - camera()->y());
+            break;
+        }
+        case Mouse::HEXAGON_RED:
+        {
+            mouse->popState();
+            break;
+        }
+    }
+}
+
 void Location::handle(Event* event)
 {
     auto game = Game::getInstance();
@@ -429,28 +454,9 @@ void Location::handle(Event* event)
         auto mouse = Game::getInstance()->mouse();
 
         // Right button pressed
-        if (mouseEvent->name() == "mouseup" && mouseEvent->rightButton())
+        if (mouseEvent->name() == "mousedown" && mouseEvent->rightButton())
         {
-            switch (mouse->state())
-            {
-                case Mouse::ACTION:
-                {
-                    auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
-                    if (!hexagon)
-                    {
-                        break;
-                    }
-                    mouse->pushState(Mouse::HEXAGON_RED);
-                    mouse->ui()->setX(hexagon->x() - camera()->x());
-                    mouse->ui()->setY(hexagon->y() - camera()->y());
-                    break;
-                }
-                case Mouse::HEXAGON_RED:
-                {
-                    mouse->popState();
-                    break;
-                }
-            }
+            toggleCursorMode();
             event->setHandled(true);
         }
 
@@ -483,7 +489,7 @@ void Location::handle(Event* event)
                     if (path.size())
                     {
                         game->player()->movementQueue()->clear();
-                        game->player()->setRunning(game->settings()->running());
+                        game->player()->setRunning((_lastClickedTile != 0 && hexagon->number() == _lastClickedTile) || (mouseEvent->shiftPressed() != game->settings()->running()));
                         for (auto hexagon : path)
                         {
                             game->player()->movementQueue()->push_back(hexagon);
@@ -491,6 +497,7 @@ void Location::handle(Event* event)
                         //moveObjectToHexagon(game->player(), hexagon);
                     }
                     event->setHandled(true);
+                    _lastClickedTile = hexagon->number();
                     break;
                 }
             }
@@ -548,6 +555,10 @@ void Location::handle(Event* event)
                 }
             }
         }
+        else if (event->name() == "keydown")
+        {
+            onKeyDown(keyboardEvent);
+        }
     }
     for (auto it = hexagonGrid()->hexagons()->rbegin(); it != hexagonGrid()->hexagons()->rend(); ++it)
     {
@@ -563,14 +574,75 @@ void Location::handle(Event* event)
     }
 }
 
-void Location::onKeyboardUp(std::shared_ptr<KeyboardEvent> event)
+void Location::onKeyDown(KeyboardEvent* event)
 {
-    if (event->keyCode() == SDLK_F10)
+    switch (event->keyCode())
     {
-        Game::getInstance()->pushState(new ExitConfirm());
-        //event->setHandled(true);
+        case SDLK_m:
+            toggleCursorMode();
+            break;
+        case SDLK_COMMA: 
+        {
+            auto player = Game::getInstance()->player();
+            player->setOrientation((player->orientation() + 5) % 6); // rotate left
+            break;
+        }
+        case SDLK_PERIOD:
+        {
+            auto player = Game::getInstance()->player();
+            player->setOrientation((player->orientation() + 1) % 6); // rotate right
+            break;
+        }
+        case SDLK_HOME:
+            centerCameraAtHexagon(Game::getInstance()->player()->hexagon());
+            break;
+        case SDLK_PLUS:
+        case SDLK_KP_PLUS:
+            // @TODO: increase brightness
+            break;
+        case SDLK_MINUS:
+        case SDLK_KP_MINUS:
+            // @TODO: decrease brightness
+            break;
+        case SDLK_1:
+            // @TODO: use skill: sneak
+            break;
+        case SDLK_2:
+            // @TODO: use skill: lockpick
+            break;
+        case SDLK_3:
+            // @TODO: use skill: steal
+            break;
+        case SDLK_4:
+            // @TODO: use skill: traps
+            break;
+        case SDLK_5:
+            // @TODO: use skill: first aid
+            break;
+        case SDLK_6:
+            // @TODO: use skill: doctor
+            break;
+        case SDLK_7:
+            // @TODO: use skill: science
+            break;
+        case SDLK_8:
+            // @TODO: use skill: repair
+            break;
+        case SDLK_LEFT:
+            camera()->setXPosition(camera()->xPosition() - KEYBOARD_SCROLL_STEP);
+            break;
+        case SDLK_RIGHT:
+            camera()->setXPosition(camera()->xPosition() + KEYBOARD_SCROLL_STEP);
+            break;
+        case SDLK_UP:
+            camera()->setYPosition(camera()->yPosition() - KEYBOARD_SCROLL_STEP);
+            break;
+        case SDLK_DOWN:
+            camera()->setYPosition(camera()->yPosition() + KEYBOARD_SCROLL_STEP);
+            break;
     }
 }
+
 
 LocationCamera* Location::camera()
 {
@@ -633,6 +705,11 @@ void Location::moveObjectToHexagon(Game::GameObject* object, Hexagon* hexagon)
 
     object->setHexagon(hexagon);
     hexagon->objects()->push_back(object);
+}
+
+void Location::centerCameraAtHexagon(Hexagon* hexagon)
+{
+    camera()->setPosition(hexagon->x(), hexagon->y());
 }
 
 void Location::handleAction(Game::GameObject* object, int action)

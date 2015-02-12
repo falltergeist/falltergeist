@@ -49,6 +49,8 @@ public:
 
     int yPosition();
     void setYPosition(int value);
+    
+    void setPosition(int x, int y);
 
     int height();
     void setHeight(int value);

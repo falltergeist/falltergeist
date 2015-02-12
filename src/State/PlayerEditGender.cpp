@@ -61,14 +61,12 @@ void PlayerEditGender::init()
                                     "art/intrface/maleon.frm"
                                 }, bgX+260, bgY+2);
     _maleImage->addEventHandler("mouseleftclick", [this](Event* event){ this->onMaleButtonPress(dynamic_cast<MouseEvent*>(event)); });
-    if (Game::getInstance()->player()->gender() == 0) _maleImage->setCurrentImage(1); // 0 - male
 
     _femaleImage = new ImageList((std::vector<std::string>){
                                                             "art/intrface/femoff.frm",
                                                             "art/intrface/femon.frm"
                                                             }, bgX+310, bgY+2);
     _femaleImage->addEventHandler("mouseleftclick", [this](Event* event){ this->onFemaleButtonPress(dynamic_cast<MouseEvent*>(event)); });
-    if (Game::getInstance()->player()->gender() == 1) _femaleImage->setCurrentImage(1); // 1 - female
 
     auto doneBox = new Image("art/intrface/donebox.frm");
     doneBox->setX(bgX+250);
@@ -88,6 +86,7 @@ void PlayerEditGender::init()
     addUI(doneLabel);
     addUI(_maleImage);
     addUI(_femaleImage);
+    setGender(Game::getInstance()->player()->gender());
 }
 
 void PlayerEditGender::onDoneButtonClick(MouseEvent* event)
@@ -97,17 +96,40 @@ void PlayerEditGender::onDoneButtonClick(MouseEvent* event)
 
 void PlayerEditGender::onFemaleButtonPress(MouseEvent* event)
 {
-    Game::getInstance()->player()->setGender(1); // 1 - female
-    _maleImage->setCurrentImage(0);
-    _femaleImage->setCurrentImage(1);
+    setGender(1); // 1 - female
 }
 
 void PlayerEditGender::onMaleButtonPress(MouseEvent* event)
 {
-    Game::getInstance()->player()->setGender(0); // 0 - male
-    _maleImage->setCurrentImage(1);
-    _femaleImage->setCurrentImage(0);
+    setGender(0); // 0 - male
 }
+
+void PlayerEditGender::onKeyDown(KeyboardEvent* event)
+{
+    switch (event->keyCode())
+    {
+        case SDLK_ESCAPE:
+            Game::getInstance()->popState();
+            break;
+        case SDLK_RETURN:
+            Game::getInstance()->player()->setGender(_gender);
+            Game::getInstance()->popState();
+            break;
+        case SDLK_LEFT:
+        case SDLK_RIGHT:
+            setGender(_gender ? 0 : 1);
+            break;
+    }
+}
+
+void PlayerEditGender::setGender(unsigned int gender)
+{
+    _gender = gender ? 1 : 0;
+    _maleImage->setCurrentImage(gender ? 0 : 1);
+    _femaleImage->setCurrentImage(gender ? 1 : 0);
+}
+
+
 
 }
 }

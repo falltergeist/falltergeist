@@ -30,6 +30,7 @@
 #include "../UI/Slider.h"
 #include "../UI/TextArea.h"
 #include "../Settings.h"
+#include "../Input/Mouse.h"
 
 // Third party includes
 
@@ -299,12 +300,12 @@ void SettingsMenu::init()
 
     // button: Done
     auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+148, backgroundY+450);
-    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onSaveButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doSave(); });
     addUI(doneButton);
 
     // button: Cancel
     auto cancelButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+263, backgroundY+450);
-    cancelButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCancelButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    cancelButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doCancel(); });
     addUI(cancelButton);
 
     // button: Affect player speed
@@ -412,13 +413,13 @@ TextArea* SettingsMenu::_addTextArea(TextArea* parent, unsigned int x, unsigned 
     return textArea;
 }
 
-void SettingsMenu::onCancelButtonClick(MouseEvent* event)
+void SettingsMenu::doCancel()
 {
     // TODO: restore volume and mouse sensitivity
     Game::getInstance()->popState();
 }
 
-void SettingsMenu::onSaveButtonClick(MouseEvent* event)
+void SettingsMenu::doSave()
 {
     Game::getInstance()->settings()->setCombatDifficulty(((MultistateImageButton*)getUI("combat_difficulty"))->state());
     Game::getInstance()->settings()->setGameDifficulty(((MultistateImageButton*)getUI("game_difficulty"))->state());
@@ -451,6 +452,30 @@ void SettingsMenu::onSaveButtonClick(MouseEvent* event)
 void SettingsMenu::onDefaultButtonClick(MouseEvent* event)
 {
 }
+
+void SettingsMenu::onKeyDown(KeyboardEvent* event)
+{
+    switch (event->keyCode())
+    {
+        case SDLK_ESCAPE:
+            doCancel();
+            break;
+        case SDLK_RETURN:
+            doSave();
+            break;
+    }
+}
+
+void SettingsMenu::onStateActivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+}
+
+void SettingsMenu::onStateDeactivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->popState();
+}
+
 
 }
 }

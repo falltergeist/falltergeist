@@ -444,6 +444,16 @@ void Inventory::_screenShow (unsigned int PID)
     rightHandLabel->setVisible(PID == 0);
 }
 
+void Inventory::onKeyDown(KeyboardEvent* event)
+{
+    switch (event->keyCode())
+    {
+        case SDLK_ESCAPE:
+            Game::getInstance()->popState();
+            break;
+    }
+}
+
 
 }
 }

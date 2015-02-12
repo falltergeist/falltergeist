@@ -54,7 +54,16 @@ public:
     void onPanelMouseIn(MouseEvent* event);
     void onPanelMouseOut(MouseEvent* event);
     void onPanelMouseUp(MouseEvent* event);
-
+    virtual void onKeyDown(KeyboardEvent* event);
+    void toggleActiveHand();
+    void openInventory();
+    void openOptions();
+    void openSkilldex();
+    void openMap();
+    void openPopBoy();
+    void openCharacterScreen();
+    void doLoadGame(bool quick = false);
+    void doSaveGame(bool quick = false);
 };
 
 }

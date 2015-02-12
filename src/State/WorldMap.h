@@ -44,7 +44,13 @@ public:
 
     void render();
     virtual void handle(Event* event);
-    //void onKeyboardUp(KeyboardEvent* event);
+    virtual void onKeyDown(KeyboardEvent* event);
+
+    
+    virtual void onStateActivate(StateEvent* event);
+    virtual void onStateDeactivate(StateEvent* event);
+
+
 private:
     Image* _panel;
     Image* _screenMap;

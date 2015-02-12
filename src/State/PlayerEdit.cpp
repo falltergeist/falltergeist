@@ -31,6 +31,7 @@
 #include "../State/PlayerEditAlert.h"
 #include "../State/PlayerEdit.h"
 #include "../UI/Image.h"
+#include "../Input/Mouse.h"
 
 // Third party includes
 #include <libfalltergeist.h>
@@ -61,7 +62,7 @@ void PlayerEdit::init()
     auto msgEditor = ResourceManager::msgFileType("text/english/game/editor.msg");
     auto msgSkills = ResourceManager::msgFileType("text/english/game/skill.msg");
     auto msgHealth = ResourceManager::msgFileType("text/english/game/editor.msg");
-
+   
     // background
     auto background = new Image("art/intrface/edtredt.frm");
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
@@ -80,7 +81,7 @@ void PlayerEdit::init()
         _addTitle(ss.str(), msgStats->message(100 + i)->text());       // stat title
         _addDescription(ss.str(), msgStats->message(200 + i)->text()); // stat description
         _addImage(ss.str(), new Image("art/skilldex/" + imagesStats[i] + ".frm")); // stat image
-        _addLabel(ss.str(), new TextArea(backgroundX+102, backgroundY+46+33*i));          // stat value label
+        _addLabel(ss.str(), new TextArea(backgroundX+104, backgroundY+46+33*i));          // stat value label
         _addCounter(ss.str(), new BigCounter(backgroundX+59, backgroundY+37+33*i));       // stat value counter
         _addMask(ss.str(), new HiddenMask(133, 29, backgroundX+14, backgroundY+36+33*i)); // stat click mask
 //        _addButton(ss.str() + "_increase", new ImageButton(ImageButton::TYPE_PLUS,  backgroundX+149, backgroundY+38+33*i)); // stat increase button
@@ -142,7 +143,7 @@ void PlayerEdit::init()
                 tmp << expNext;
                 break;
         }
-        _addLabel(ss.str(), new TextArea(tmp.str(), backgroundX+30, backgroundY+280+10*i));            // stat value label
+        _addLabel(ss.str(), new TextArea(tmp.str(), backgroundX + 32, backgroundY + 280 + 11*i));            // stat value label
 //        _addCounter(ss.str(), std::shared_ptr<BigCounter>(new BigCounter(backgroundX+59, backgroundY+37+33*i)));       // stat value counter
 //        _addMask(ss.str(), std::shared_ptr<HiddenMask>(new HiddenMask(133, 29, backgroundX+14, backgroundY+36+33*i))); // stat click mask
     }
@@ -194,17 +195,17 @@ void PlayerEdit::init()
         _addTitle(ss.str(), msgStats->message(params[i])->text());
         _addDescription(ss.str(), msgStats->message(params[i] + 100)->text());
         _addImage(ss.str(), new Image("art/skilldex/" + imagesParams[i] + ".frm"));
-        _addLabel(ss.str(), new TextArea(msgEditor->message(labels[i]), backgroundX+194, backgroundY+182+13*i));
-        _addLabel(ss.str() + "_value",  new TextArea("", backgroundX+288, backgroundY+182+13*i));
+        _addLabel(ss.str(), new TextArea(msgEditor->message(labels[i]), backgroundX + 194, backgroundY + 179 + 13*i));
+        _addLabel(ss.str() + "_value",  new TextArea("", backgroundX + 288, backgroundY + 179 + 13*i));
     }
 
-    _addButton("options", new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+345, backgroundY+454));
+    _addButton("print", new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+345, backgroundY+454));
     _addButton("done",    new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+455, backgroundY+454));
     _addButton("cancel",  new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+554, backgroundY+454));
 
     auto font3_b89c28ff = ResourceManager::font("font3.aaf", 0xb89c28ff);
 
-    _addLabel("options", new TextArea(msgEditor->message(101), backgroundX+365, backgroundY+453))->setFont(font3_b89c28ff);
+    _addLabel("print", new TextArea(msgEditor->message(103), backgroundX+365, backgroundY+453))->setFont(font3_b89c28ff);
     _addLabel("next",    new TextArea(msgEditor->message(100), backgroundX+473, backgroundY+453))->setFont(font3_b89c28ff);
     _addLabel("cancel",  new TextArea(msgEditor->message(102), backgroundX+571, backgroundY+453))->setFont(font3_b89c28ff);
     _addLabel("name",    new TextArea(Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7))->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setFont(font3_b89c28ff);
@@ -263,7 +264,7 @@ void PlayerEdit::init()
     for(auto it = _labels.rbegin(); it != _labels.rend(); ++it)
     {
         it->second->setBackgroundColor(0xffffff00); // hidden mask for event handling
-        it->second->addEventHandler("mouseleftclick", [this](Event* event){ this->onLabelClick(dynamic_cast<MouseEvent*>(event)); });
+        it->second->addEventHandler("mouseleftdown", [this](Event* event){ this->onLabelClick(dynamic_cast<MouseEvent*>(event)); });
         addUI(it->second);
     }
 
@@ -276,7 +277,7 @@ void PlayerEdit::init()
     // add hidden masks
     for(auto it = _masks.begin(); it != _masks.end(); ++it)
     {
-        it->second->addEventHandler("mouseleftclick", [this](Event* event){ this->onMaskClick(dynamic_cast<MouseEvent*>(event)); });
+        it->second->addEventHandler("mouseleftdown", [this](Event* event){ this->onMaskClick(dynamic_cast<MouseEvent*>(event)); });
         addUI(it->second);
     }
 
@@ -348,6 +349,7 @@ void PlayerEdit::think()
     State::think();
     auto player = Game::getInstance()->player();
     auto msgEditor = ResourceManager::msgFileType("text/english/game/editor.msg");
+    auto msgStat = ResourceManager::msgFileType("text/english/game/stat.msg");
 
     _labels.at("name")->setText(player->name());
     _labels.at("age")->setText(msgEditor->message(104))->appendText(" ")->appendText(std::to_string(player->age()));
@@ -381,7 +383,7 @@ void PlayerEdit::think()
             val = 10;
             _counters.at(ss.str())->setColor(BigCounter::COLOR_RED);
         }
-        _labels.at(ss.str())->setText(msgEditor->message(199 + (val < 1 ? 1 : val)));
+        _labels.at(ss.str())->setText(msgStat->message(300 + (val < 1 ? 1 : val)));
     }
 
     // Skills values
@@ -481,8 +483,8 @@ void PlayerEdit::onButtonClick(MouseEvent* event)
         {
             std::string name = it->first;
 
-            if (name == "cancel") return onBackButtonClick(event);
-            if (name == "done") return onDoneButtonClick(event);
+            if (name == "cancel") return doCancel();
+            if (name == "done") return doDone();
 
         }
     }
@@ -528,15 +530,49 @@ void PlayerEdit::onMaskClick(MouseEvent* event)
     }
 }
 
-void PlayerEdit::onBackButtonClick(MouseEvent* event)
+void PlayerEdit::doCancel()
 {
     Game::getInstance()->popState();
 }
 
-void PlayerEdit::onDoneButtonClick(MouseEvent* event)
+void PlayerEdit::doDone()
 {
     Game::getInstance()->popState();
 }
+
+void PlayerEdit::doPrint()
+{
+    // @TODO: implement
+}
+
+void PlayerEdit::onStateActivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+}
+
+void PlayerEdit::onStateDeactivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->popState();
+}
+
+void PlayerEdit::onKeyDown(KeyboardEvent* event)
+{
+    switch (event->keyCode())
+    {
+        case SDLK_ESCAPE:
+        case SDLK_c:
+            doCancel();
+            break;
+        case SDLK_RETURN:
+        case SDLK_d:
+            doDone();
+            break;
+        case SDLK_p:
+            doPrint();
+            break;
+    }
+}
+
 
 }
 }

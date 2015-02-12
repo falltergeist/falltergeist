@@ -64,9 +64,6 @@ void PipBoy::init()
     background->setX(backgroundX);
     background->setY(backgroundY);
 
-    // Close PipBoy when ESC is hit
-    background->addEventHandler("keyup", [this](Event* event){ this->onKeyboardUp(dynamic_cast<KeyboardEvent*>(event)); });
-
     // Buttons
     auto alarmButton = new ImageButton(ImageButton::TYPE_PIPBOY_ALARM_BUTTON, backgroundX+124, backgroundY+13);
     auto statusButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+340);
@@ -118,7 +115,7 @@ void PipBoy::onCloseButtonClick(MouseEvent* event)
     Game::getInstance()->popState();
 }
 
-void PipBoy::onKeyboardUp(KeyboardEvent* event)
+void PipBoy::onKeyDown(KeyboardEvent* event)
 {
     if (event->keyCode() == SDLK_ESCAPE)
     {

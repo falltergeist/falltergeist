@@ -129,20 +129,48 @@ void NewGame::think()
     State::think();
 }
 
-void NewGame::onBackButtonClick(MouseEvent* event)
+void NewGame::doBeginGame()
+{
+    auto player = _characters.at(_selectedCharacter);
+    Game::getInstance()->setPlayer(player);
+    Game::getInstance()->setState(new Location());
+}
+
+void NewGame::doEdit()
+{
+    Game::getInstance()->setPlayer(_characters.at(_selectedCharacter));
+    Game::getInstance()->pushState(new PlayerCreate()); 
+}
+
+void NewGame::doCreate()
+{
+    auto none = new Game::GameDudeObject();
+    none->loadFromGCDFile(ResourceManager::gcdFileType("premade/blank.gcd"));
+    Game::getInstance()->setPlayer(none);
+    Game::getInstance()->pushState(new PlayerCreate());
+}
+
+void NewGame::doBack()
 {
     removeEventHandlers("fadedone");
     addEventHandler("fadedone", [this](Event* event){ this->onBackFadeDone(dynamic_cast<StateEvent*>(event)); });
     Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
 }
 
-void NewGame::onBackFadeDone(StateEvent* event)
+void NewGame::doNext()
 {
-    removeEventHandlers("fadedone");
-    Game::getInstance()->popState();
+    if (_selectedCharacter < 2)
+    {
+        _selectedCharacter++;
+    }
+    else
+    {
+        _selectedCharacter = 0;
+    }
+    _changeCharacter();
 }
 
-void NewGame::onPrevCharacterButtonClick(MouseEvent* event)
+void NewGame::doPrev()
 {
     if (_selectedCharacter > 0)
     {
@@ -155,17 +183,25 @@ void NewGame::onPrevCharacterButtonClick(MouseEvent* event)
     _changeCharacter();
 }
 
+void NewGame::onBackButtonClick(MouseEvent* event)
+{
+    doBack();
+}
+
+void NewGame::onBackFadeDone(StateEvent* event)
+{
+    removeEventHandlers("fadedone");
+    Game::getInstance()->popState();
+}
+
+void NewGame::onPrevCharacterButtonClick(MouseEvent* event)
+{
+    doPrev();
+}
+
 void NewGame::onNextCharacterButtonClick(MouseEvent* event)
 {
-    if (_selectedCharacter < 2)
-    {
-        _selectedCharacter++;
-    }
-    else
-    {
-        _selectedCharacter = 0;
-    }
-    _changeCharacter();
+    doNext();
 }
 
 void NewGame::_changeCharacter()
@@ -229,29 +265,50 @@ std::string NewGame::_statToString(unsigned int stat)
 
 void NewGame::onEditButtonClick(MouseEvent* event)
 {
-    Game::getInstance()->setPlayer(_characters.at(_selectedCharacter));
-    Game::getInstance()->pushState(new PlayerCreate());
+    doEdit();
 }
 
 void NewGame::onCreateButtonClick(MouseEvent* event)
 {
-    auto none = new Game::GameDudeObject();
-    none->loadFromGCDFile(ResourceManager::gcdFileType("premade/blank.gcd"));
-    Game::getInstance()->setPlayer(none);
-    Game::getInstance()->pushState(new PlayerCreate());
+    doCreate();
 }
 
 void NewGame::onBeginGameButtonClick(MouseEvent* event)
 {
-    auto player = _characters.at(_selectedCharacter);
-    Game::getInstance()->setPlayer(player);
-    Game::getInstance()->setState(new Location());
+    doBeginGame();
+}
+
+void NewGame::onKeyDown(KeyboardEvent* event)
+{
+    switch (event->keyCode())
+    {
+        case SDLK_ESCAPE:
+        case SDLK_b:
+            doBack();
+            break;
+        case SDLK_t:
+            doBeginGame();
+            break;
+        case SDLK_c:
+            doCreate();
+            break;
+        case SDLK_m:
+            doEdit();
+            break;
+        case SDLK_LEFT:
+            doPrev();
+            break;
+        case SDLK_RIGHT:
+            doNext();
+            break;
+    }
 }
 
 void NewGame::onStateActivate(StateEvent* event)
 {
     Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
 }
+
 
 }
 }

@@ -78,7 +78,7 @@ void PlayerCreate::init()
         _addTitle(ss.str(), msgStats->message(100 + i)->text());       // stat title
         _addDescription(ss.str(), msgStats->message(200 + i)->text()); // stat description
         _addImage(ss.str(), new Image("art/skilldex/" + imagesStats[i] + ".frm")); // stat image
-        _addLabel(ss.str(), new TextArea(backgroundX+102, backgroundY+46+33*i));          // stat value label
+        _addLabel(ss.str(), new TextArea(backgroundX+104, backgroundY+46+33*i));          // stat value label
         _addCounter(ss.str(), new BigCounter(backgroundX+59, backgroundY+37+33*i));       // stat value counter
         _addMask(ss.str(), new HiddenMask(133, 29, backgroundX+14, backgroundY+36+33*i)); // stat click mask
         _addButton(ss.str() + "_increase", new ImageButton(ImageButton::TYPE_PLUS,  backgroundX+149, backgroundY+38+33*i)); // stat increase button
@@ -163,8 +163,8 @@ void PlayerCreate::init()
         _addTitle(ss.str(), msgStat->message(params[i])->text());
         _addDescription(ss.str(), msgStat->message(params[i] + 100)->text());
         _addImage(ss.str(), new Image("art/skilldex/" + imagesParams[i] + ".frm"));
-        _addLabel(ss.str(), new TextArea(msgEditor->message(labels[i]), backgroundX+194, backgroundY+182+13*i));
-        _addLabel(ss.str() + "_value", new TextArea("", backgroundX+288, backgroundY+182+13*i));
+        _addLabel(ss.str(), new TextArea(msgEditor->message(labels[i]), backgroundX + 194, backgroundY + 179 + 13*i));
+        _addLabel(ss.str() + "_value", new TextArea("", backgroundX + 288, backgroundY + 179 + 13*i));
     }
 
     _addButton("options", new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+345, backgroundY+454));
@@ -217,7 +217,7 @@ void PlayerCreate::init()
     for(auto it = _labels.rbegin(); it != _labels.rend(); ++it)
     {
         it->second->setBackgroundColor(0xffffff00); // hidden mask for event handling
-        it->second->addEventHandler("mouseleftclick", [this](Event* event){ this->onLabelClick(dynamic_cast<MouseEvent*>(event)); });
+        it->second->addEventHandler("mouseleftdown", [this](Event* event){ this->onLabelClick(dynamic_cast<MouseEvent*>(event)); });
         addUI(it->second);
     }
 
@@ -230,7 +230,7 @@ void PlayerCreate::init()
     // add hidden masks
     for(auto it = _masks.begin(); it != _masks.end(); ++it)
     {
-        it->second->addEventHandler("mouseleftclick", [this](Event* event){ this->onMaskClick(dynamic_cast<MouseEvent*>(event)); });
+        it->second->addEventHandler("mouseleftdown", [this](Event* event){ this->onMaskClick(dynamic_cast<MouseEvent*>(event)); });
         addUI(it->second);
     }
 
@@ -596,34 +596,91 @@ void PlayerCreate::onMaskClick(MouseEvent* event)
 
 void PlayerCreate::onNameButtonClick(MouseEvent* event)
 {
-    Game::getInstance()->pushState(new PlayerEditName());
+    doName();
 }
 
 void PlayerCreate::onAgeButtonClick(MouseEvent* event)
 {
-    Game::getInstance()->pushState(new PlayerEditAge());
+    doAge();
 }
 
 void PlayerCreate::onGenderButtonClick(MouseEvent* event)
 {
-    Game::getInstance()->pushState(new PlayerEditGender());
+    doGender();
 }
 
 void PlayerCreate::onBackButtonClick(MouseEvent* event)
 {
-    Game::getInstance()->popState();
+    doBack();
 }
 
 void PlayerCreate::onDoneButtonClick(MouseEvent* event)
+{
+    doDone();
+}
+
+void PlayerCreate::onOptionsButtonClick(MouseEvent* event)
+{
+    doOptions();
+}
+
+void PlayerCreate::doAge()
+{
+    Game::getInstance()->pushState(new PlayerEditAge());
+}
+
+void PlayerCreate::doBack()
+{
+    Game::getInstance()->popState();
+}
+
+void PlayerCreate::doDone()
 {
     auto player = Game::getInstance()->player();
     player->setHitPoints(player->hitPointsMax());
     Game::getInstance()->setState(new Location());
 }
 
-void PlayerCreate::onOptionsButtonClick(MouseEvent* event)
+void PlayerCreate::doGender()
+{
+    Game::getInstance()->pushState(new PlayerEditGender());
+}
+
+void PlayerCreate::doName()
+{
+    Game::getInstance()->pushState(new PlayerEditName());
+}
+
+void PlayerCreate::doOptions()
 {
     Game::getInstance()->pushState(new PlayerCreateOptions());
+}
+
+void PlayerCreate::onKeyDown(KeyboardEvent* event)
+{
+    switch (event->keyCode())
+    {
+        case SDLK_ESCAPE:
+        case SDLK_c:
+            doBack();
+            break;
+        case SDLK_RETURN:
+        case SDLK_d:
+            doDone();
+            break;
+        case SDLK_o:
+            doOptions();
+            break;
+        case SDLK_a:
+            doAge();
+            break;
+        case SDLK_s:
+            doGender();
+            break;
+        case SDLK_n:
+            doName();
+            break;
+    }
 }
 
 }

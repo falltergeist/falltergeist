@@ -39,11 +39,16 @@ public:
 
     virtual void init();
 
-    void onSaveGameButtonClick(MouseEvent* event);
-    void onLoadGameButtonClick(MouseEvent* event);
-    void onPreferencesButtonClick(MouseEvent* event);
-    void onExitButtonClick(MouseEvent* event);
-    void onDoneButtonClick(MouseEvent* event);
+    void doSaveGame();
+    void doLoadGame();
+    void doPreferences();
+    void doExit();
+    void closeMenu();
+    virtual void onKeyDown(KeyboardEvent* event);
+    
+    virtual void onStateActivate(StateEvent* event);
+    virtual void onStateDeactivate(StateEvent* event);
+
 };
 
 }

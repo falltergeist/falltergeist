@@ -51,6 +51,8 @@ namespace State
 class Location : public State
 {
 protected:
+    
+    const int KEYBOARD_SCROLL_STEP = 35;
 
     // Timers
     unsigned int _scrollTicks = 0;
@@ -67,6 +69,7 @@ protected:
 
     bool _locationEnter = true;
     unsigned int _currentElevation = 0;
+    unsigned int _lastClickedTile = 0;
 
     bool _scrollLeft = false;
     bool _scrollRight = false;
@@ -95,13 +98,16 @@ public:
     std::map<std::string, VMStackValue*>* EVARS();
 
     static void moveObjectToHexagon(Game::GameObject* object, Hexagon* hexagon);
+    void centerCameraAtHexagon(Hexagon* hexagon);
     void handleAction(Game::GameObject* object, int action);
+    void toggleCursorMode();
 
     void onBackgroundClick(MouseEvent* event);
     void onKeyUp(std::shared_ptr<KeyboardEvent> event);
     void onObjectClick(MouseEvent* event);
     void onMouseDown(Event* event, Game::GameObject* object);
-    void onKeyboardUp(std::shared_ptr<KeyboardEvent> event);
+    virtual void onKeyDown(KeyboardEvent* event);
+
 };
 
 }

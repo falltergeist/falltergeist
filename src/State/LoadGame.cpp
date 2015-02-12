@@ -81,7 +81,7 @@ void LoadGame::init()
 
     // button: Cancel
     auto cancelButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+495, bgY+349);
-    cancelButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCancelButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    cancelButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doCancel(); });
     addUI(cancelButton);
 
     // LABELS
@@ -111,7 +111,7 @@ void LoadGame::onDoneButtonClick(MouseEvent* event)
     Game::getInstance()->popState();
 }
 
-void LoadGame::onCancelButtonClick(MouseEvent* event)
+void LoadGame::doCancel()
 {
     if (!Game::getInstance()->locationState())
     {
@@ -135,7 +135,24 @@ void LoadGame::onStateActivate(StateEvent* event)
 {
     if (!Game::getInstance()->locationState())
         Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
+    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
 }
+
+void LoadGame::onStateDeactivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->popState();
+}
+
+void LoadGame::onKeyDown(KeyboardEvent* event)
+{
+    switch (event->keyCode()) 
+    {
+        case SDLK_ESCAPE:
+            doCancel();
+            break;
+    }
+}
+
 
 }
 }

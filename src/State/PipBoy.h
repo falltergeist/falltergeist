@@ -38,7 +38,7 @@ public:
     void init();
 
     void onCloseButtonClick(MouseEvent* event);
-    void onKeyboardUp(KeyboardEvent* event);
+    virtual void onKeyDown(KeyboardEvent* event);
 };
 
 }
