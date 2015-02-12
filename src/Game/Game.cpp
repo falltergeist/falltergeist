@@ -39,6 +39,7 @@
 #include "../UI/TextArea.h"
 
 // Third patry includes
+#include <SDL_image.h>
 
 namespace Falltergeist
 {
@@ -104,6 +105,8 @@ void Game::_initialize()
     _animatedPalette = new AnimatedPalette();
     _gameTime = new GameTime();
     _currentTime = new TextArea(renderer()->width() - 150, renderer()->height() - 10);
+
+    IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 }
 
 Game::~Game()

@@ -19,7 +19,6 @@
 
 // C++ standard includes
 #include <cmath>
-#include <SDL_image.h>
 
 // Falltergeist includes
 #include "../Event/StateEvent.h"
@@ -29,7 +28,6 @@
 #include "../Game/Game.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
-#include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../State/State.h"
 
@@ -160,10 +158,6 @@ void Renderer::init()
     }
     Logger::info("RENDERER") << "max_texture_width: " << rendererInfo.max_texture_width << std::endl;
     Logger::info("RENDERER") << "max_texture_height: " << rendererInfo.max_texture_height << std::endl;
-
-    IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
-
-    _egg = ResourceManager::texture("data/egg.png");
 }
 
 void Renderer::think()
@@ -319,11 +313,6 @@ float Renderer::scaleX()
 float Renderer::scaleY()
 {
     return _scaleY;
-}
-
-Texture* Renderer::egg()
-{
-    return _egg;
 }
 
 }

@@ -330,7 +330,7 @@ void GameObject::render()
         int egg_dx = _ui->x() - egg_x;
         int egg_dy = _ui->y() - egg_y;
 
-        auto egg = Game::getInstance()->renderer()->egg();
+        auto egg = ResourceManager::texture("data/egg.png");
 
         //check if egg and texture intersects
         SDL_Rect egg_rect = { egg_x, egg_y, (int)egg->width(), (int)egg->height() };
