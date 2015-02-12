@@ -20,14 +20,15 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Input/Mouse.h"
+#include "../Game/Game.h"
 #include "../Graphics/AnimationQueue.h"
-#include "../Graphics/Texture.h"
-#include "../ResourceManager.h"
-#include "../UI/Image.h"
 #include "../Graphics/Animation.h"
 #include "../Graphics/Renderer.h"
-#include "../Game/Game.h"
+#include "../Graphics/Texture.h"
+#include "../Input/Mouse.h"
+#include "../ResourceManager.h"
+#include "../Settings.h"
+#include "../UI/Image.h"
 
 // Third party includes
 #include "SDL.h"
@@ -39,6 +40,11 @@ Mouse::Mouse()
 {
     // Hide cursor
     SDL_ShowCursor(0);
+    // Trap mouse in window
+    if (!Game::getInstance()->settings()->fullscreen())
+    {
+        SDL_SetRelativeMouseMode(SDL_TRUE);
+    }
 }
 
 Mouse::~Mouse()

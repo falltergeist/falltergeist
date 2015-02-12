@@ -538,6 +538,7 @@ void Location::handle(Event* event)
             {
                 _hexagonInfo->setText("No hex");
             }
+            event->setHandled(true);
         }
     }
 
