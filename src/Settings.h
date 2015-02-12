@@ -106,6 +106,8 @@ public:
     unsigned int scale() const;
     void setFullscreen(bool _fullscreen);
     bool fullscreen() const;
+    void setAudioBufferSize(int _audioBufferSize);
+    int audioBufferSize() const;
 
 private:
     unsigned int _screenWidth;
@@ -143,6 +145,7 @@ private:
     double _musicVolume;
     double _sfxVolume;
     double _voiceVolume;
+    int _audioBufferSize;
 
     void _createDefaultConfig(Ini::File &ini);
     void _readConfig(Ini::File &ini);
@@ -184,6 +187,7 @@ private:
     static const double _defaultMusicVolume;
     static const double _defaultSFXVolume;
     static const double _defaultVoiceVolume;
+    static const int _defaultAudioBufferSize;
 
 };
 

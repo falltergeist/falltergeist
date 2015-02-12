@@ -62,7 +62,7 @@ void AudioMixer::_init()
     Logger::info() << message + "[OK]" << std::endl;
 
     message = "[AUDIO] - Mix_OpenAudio - ";
-    if (Mix_OpenAudio(22050, AUDIO_S16LSB, 2, 4096) < 0)
+    if (Mix_OpenAudio(22050, AUDIO_S16LSB, 2, Game::getInstance()->settings()->audioBufferSize()) < 0)
     {
         Logger::critical() << message + "[FAIL]" << std::endl;
         throw Exception(Mix_GetError());
