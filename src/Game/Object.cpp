@@ -330,7 +330,7 @@ void GameObject::render()
         int egg_dx = _ui->x() - egg_x;
         int egg_dy = _ui->y() - egg_y;
 
-        auto egg = Game::getInstance()->renderer()->egg();
+        auto egg = ResourceManager::texture("data/egg.png");
 
         //check if egg and texture intersects
         SDL_Rect egg_rect = { egg_x, egg_y, (int)egg->width(), (int)egg->height() };
@@ -450,25 +450,24 @@ void GameObject::setTrans(unsigned int value)
     _trans = value;
     if (_ui)
     {
+        SDL_Color modifier = _ui->texture()->colorModifier();
         switch (_trans)
         {
             case TRANS_GLASS:
-                _ui->texture()->setAlpha(128);
+                modifier.a = 128;
                 break;
             case TRANS_ENERGY:
-                _ui->texture()->setAlpha(128);
-                _ui->texture()->setColor(200,200,0);
+                modifier = {200, 200, 0, 128};
                 break;
             case TRANS_RED:
-                _ui->texture()->setAlpha(128);
-                _ui->texture()->setColor(255,0,0);
+                modifier = {255, 0, 0, 128};
                 break;
             case TRANS_NONE:
             default:
-                _ui->texture()->setAlpha(255);
-                _ui->texture()->setColor(255,255,255);
+                modifier = {255, 255, 255, 255};
                 break;
         }
+        _ui->texture()->setColorModifier(modifier);
     }
 }
 

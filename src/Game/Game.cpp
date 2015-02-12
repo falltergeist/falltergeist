@@ -39,6 +39,7 @@
 #include "../UI/TextArea.h"
 
 // Third patry includes
+#include <SDL_image.h>
 
 namespace Falltergeist
 {
@@ -104,6 +105,8 @@ void Game::_initialize()
     _animatedPalette = new AnimatedPalette();
     _gameTime = new GameTime();
     _currentTime = new TextArea(renderer()->width() - 150, renderer()->height() - 10);
+
+    IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 }
 
 Game::~Game()
@@ -375,19 +378,14 @@ void Game::handle()
                     keyboardEvent->setControlPressed(_event.key.keysym.mod & KMOD_CTRL);;
                     for (auto state : *statesForThinkAndHandle()) state->handle(keyboardEvent);
 
-                    if (!keyboardEvent->handled())
+                    if (keyboardEvent->keyCode() == SDLK_F12)
                     {
-                        if (keyboardEvent->keyCode() == SDLK_F12)
-                        {
-                            Texture* texture = renderer()->screenshot();
-                            SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(texture->data(), texture->width(), texture->height(), 32, texture->width()*4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
-                            std::string name = std::to_string(SDL_GetTicks()) +  ".bmp";
-                            SDL_SaveBMP(surface, name.c_str());
-                            SDL_FreeSurface(surface);
-                            delete texture;
-                            Logger::info("GAME") << "Screenshot saved to " + name << std::endl;
+                        Texture* texture = renderer()->screenshot();
+                        std::string name = std::to_string(SDL_GetTicks()) +  ".bmp";
+                        SDL_SaveBMP(texture->sdlSurface(), name.c_str());
+                        delete texture;
+                        Logger::info("GAME") << "Screenshot saved to " + name << std::endl;
 
-                        }
                     }
                     break;
                 }

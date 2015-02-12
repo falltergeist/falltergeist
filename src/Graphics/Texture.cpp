@@ -18,7 +18,6 @@
  */
 
 // C++ standard includes
-#include <SDL_image.h>
 
 // Falltergeist includes
 #include "../Graphics/Texture.h"
@@ -35,31 +34,56 @@ Texture::Texture(unsigned int width, unsigned int height)
 {
     _width = width;
     _height = height;
-    _data = new unsigned int[width*height](); // RGBA data for each pixel
+    _init();
+}
+
+Texture::Texture(SDL_Surface* surface)
+{
+    _width = surface->w;
+    _height = surface->h;
+    _init();
+    loadFromRGBA((unsigned int*)surface->pixels);
 }
 
 Texture::~Texture()
 {
-    _unregister();
-    delete [] _data;
+    SDL_FreeSurface(_sdlSurface);
+    SDL_DestroyTexture(_sdlTexture);
 }
 
-void Texture::_unregister()
+void Texture::_init()
 {
-    if (!id()) return;
-    auto game = Game::getInstance();
-    game->renderer()->unregisterTexture(this);
-    _id = 0;
-}
+    Uint32 rmask, gmask, bmask, amask;
 
-unsigned int Texture::id()
-{
-    return _id;
-}
+    /* SDL interprets each pixel as a 32-bit number, so our masks must depend on the endianness (byte order) of the machine */
+    #if SDL_BYTEORDER != SDL_BIG_ENDIAN
+        rmask = 0xff000000;
+        gmask = 0x00ff0000;
+        bmask = 0x0000ff00;
+        amask = 0x000000ff;
+    #else
+        rmask = 0x000000ff;
+        gmask = 0x0000ff00;
+        bmask = 0x00ff0000;
+        amask = 0xff000000;
+    #endif
 
-void Texture::setId(unsigned int value)
-{
-    _id = value;
+    _sdlSurface = SDL_CreateRGBSurface(0, width(), height(), 32, rmask, gmask, bmask, amask);
+    if(!_sdlSurface)
+    {
+        throw Exception(SDL_GetError());
+    }
+
+    SDL_SetSurfaceBlendMode(_sdlSurface, SDL_BLENDMODE_BLEND);
+
+    _sdlTexture = SDL_CreateTexture(Game::getInstance()->renderer()->sdlRenderer(), SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, width(), height());
+    if(!_sdlTexture)
+    {
+        throw Exception(SDL_GetError());
+    }
+
+    setBlendMode(_blendMode);
+    setColorModifier(_colorModifier);
 }
 
 unsigned int Texture::width()
@@ -72,60 +96,90 @@ unsigned int Texture::height()
     return _height;
 }
 
-unsigned int* Texture::data()
-{
-    return _data;
-}
-
 unsigned int Texture::pixel(unsigned int x, unsigned int y)
 {
     if (x >= _width || y >= _height) return 0;
-    unsigned int index = (y*_width) + x;
-    return _data[index];
+
+    unsigned int pixel = 0;
+
+    if (SDL_MUSTLOCK(_sdlSurface))
+    {
+        SDL_LockSurface(_sdlSurface);
+    }
+
+    unsigned int* pixels = (unsigned int*)_sdlSurface->pixels;
+    pixel = pixels[(y * width()) + x];
+
+    if(SDL_MUSTLOCK(_sdlSurface))
+    {
+        SDL_UnlockSurface(_sdlSurface);
+    }
+
+    return pixel;
 }
 
 void Texture::setPixel(unsigned int x, unsigned int y, unsigned int color)
 {
     if (x >= _width || y >= _height) return;
-    _unregister();
-    unsigned int index = (y*_width) + x;
-    _data[index] = color;
+
+    if (SDL_MUSTLOCK(_sdlSurface))
+    {
+        SDL_LockSurface(_sdlSurface);
+    }
+
+    unsigned int* pixels = (unsigned int*)_sdlSurface->pixels;
+    pixels[(y * width()) + x] = color;
+
+    if(SDL_MUSTLOCK(_sdlSurface))
+    {
+        SDL_UnlockSurface(_sdlSurface);
+    }
+
+    _changed = true;
 }
 
 void Texture::loadFromRGB(unsigned int* data)
 {
-    _unregister();
-    for (unsigned int i = 0; i != _width*_height; ++i) _data[i] = (data[i] << 8)|0xFF;
+    if (SDL_MUSTLOCK(_sdlSurface))
+    {
+        SDL_LockSurface(_sdlSurface);
+    }
+
+    unsigned int* pixels = (unsigned int*)_sdlSurface->pixels;
+
+    for (unsigned int i = 0; i != width()*height(); ++i)
+    {
+        pixels[i] = (data[i] << 8) | 0xFF;
+    }
+
+    if(SDL_MUSTLOCK(_sdlSurface))
+    {
+        SDL_UnlockSurface(_sdlSurface);
+    }
+
+    _changed = true;
 }
 
 void Texture::loadFromRGBA(unsigned int* data)
 {
-    _unregister();
-    for (unsigned int i = 0; i != _width*_height; ++i) _data[i] = data[i];
-}
+    if (SDL_MUSTLOCK(_sdlSurface))
+    {
+        SDL_LockSurface(_sdlSurface);
+    }
 
-void Texture::loadFromImage(std::string name)
-{
-    _unregister();
-    SDL_Surface* tmp = IMG_Load(name.c_str());
-    if (tmp == NULL)
+    unsigned int* pixels = (unsigned int*)_sdlSurface->pixels;
+
+    for (unsigned int i = 0; i != width()*height(); ++i)
     {
-        throw Exception("Texture::loadFromImage(name) - cannot load texture from file " + name + ": " + IMG_GetError());
+        pixels[i] = data[i];
     }
-    SDL_PixelFormat* fmt = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
-    SDL_Surface* tmp2 = SDL_ConvertSurface(tmp, fmt, 0);
-    SDL_FreeFormat(fmt);
-    SDL_FreeSurface(tmp);
-    _width = tmp2->w;
-    _height = tmp2->h;
-    delete [] _data;
-    _data = new unsigned int[_width*_height]();
-    unsigned int* data = (unsigned int*)(tmp2->pixels);
-    for (unsigned int i = 0; i != _width*_height; ++i)
+
+    if(SDL_MUSTLOCK(_sdlSurface))
     {
-        _data[i] = data[i];
+        SDL_UnlockSurface(_sdlSurface);
     }
-    SDL_FreeSurface(tmp2);
+
+    _changed = true;
 }
 
 void Texture::copyTo(Texture* destination, unsigned int destinationX, unsigned int destinationY, unsigned int sourceX, unsigned int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
@@ -140,6 +194,7 @@ void Texture::copyTo(Texture* destination, unsigned int destinationX, unsigned i
         sourceHeight = height();
     }
 
+    // @fixme: optimize this section
     for (unsigned int y = 0; y != sourceHeight; y++)
     {
         for(unsigned int x = 0; x != sourceWidth; x++)
@@ -161,6 +216,7 @@ void Texture::blitTo(Texture* destination, unsigned int destinationX, unsigned i
         sourceHeight = height();
     }
 
+    // @fixme: optimize this section
     for (unsigned int y = 0; y != sourceHeight; y++)
     {
         for(unsigned int x = 0; x != sourceWidth; x++)
@@ -176,6 +232,7 @@ void Texture::blitTo(Texture* destination, unsigned int destinationX, unsigned i
 
 void Texture::fill(unsigned int color)
 {
+    // @fixme: SDL_FillRect must be used
     for (unsigned int y = 0; y != _height; y++)
     {
         for(unsigned int x = 0; x != _width; x++)
@@ -183,6 +240,7 @@ void Texture::fill(unsigned int color)
             setPixel(x, y, color);
         }
     }
+    _changed = true;
 }
 
 Texture* Texture::resize(unsigned int width, unsigned int height)
@@ -228,51 +286,43 @@ Texture* Texture::fitTo(unsigned int width, unsigned int height)
     return this->resize(width, newHeight);
 }
 
+SDL_Surface* Texture::sdlSurface()
+{
+    return _sdlSurface;
+}
+
 SDL_Texture* Texture::sdlTexture()
 {
+    if (_changed)
+    {
+        SDL_UpdateTexture(_sdlTexture, NULL, _sdlSurface->pixels, _sdlSurface->pitch);
+        _changed = false;
+
+    }
     return _sdlTexture;
 }
 
-void Texture::setAlpha(unsigned char alpha)
+SDL_Color Texture::colorModifier()
 {
-    _modifier.a = alpha;
+    return _colorModifier;
 }
 
-void Texture::setColor(unsigned char r, unsigned char g, unsigned char b)
+void Texture::setColorModifier(SDL_Color color)
 {
-    _modifier.r = r;
-    _modifier.g = g;
-    _modifier.b = b;
+    _colorModifier = color;
+    SDL_SetTextureColorMod(_sdlTexture, color.r, color.g, color.b);
+    SDL_SetTextureAlphaMod(_sdlTexture, color.a);
 }
 
-unsigned char Texture::r()
+void Texture::setBlendMode(SDL_BlendMode blendMode)
 {
-    return _modifier.r;
+    _blendMode = blendMode;
+    SDL_SetTextureBlendMode(_sdlTexture, _blendMode);
 }
 
-unsigned char Texture::g()
+SDL_BlendMode Texture::blendMode()
 {
-    return _modifier.g;
-}
-
-unsigned char Texture::b()
-{
-    return _modifier.b;
-}
-
-unsigned char Texture::a()
-{
-    return _modifier.a;
-}
-
-void Texture::setBlend(SDL_BlendMode blendmode)
-{
-    _blendmode = blendmode;
-}
-
-SDL_BlendMode Texture::blendmode()
-{
-    return _blendmode;
+    return _blendMode;
 }
 
 }
