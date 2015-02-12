@@ -30,6 +30,7 @@
 #include "../UI/Slider.h"
 #include "../UI/TextArea.h"
 #include "../Settings.h"
+#include "../Input/Mouse.h"
 
 // Third party includes
 
@@ -463,6 +464,16 @@ void SettingsMenu::onKeyDown(KeyboardEvent* event)
             doSave();
             break;
     }
+}
+
+void SettingsMenu::onStateActivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+}
+
+void SettingsMenu::onStateDeactivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->popState();
 }
 
 

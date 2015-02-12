@@ -51,6 +51,8 @@ namespace State
 class Location : public State
 {
 protected:
+    
+    const int KEYBOARD_SCROLL_STEP = 35;
 
     // Timers
     unsigned int _scrollTicks = 0;
@@ -67,6 +69,7 @@ protected:
 
     bool _locationEnter = true;
     unsigned int _currentElevation = 0;
+    unsigned int _lastClickedTile = 0;
 
     bool _scrollLeft = false;
     bool _scrollRight = false;

@@ -157,6 +157,32 @@ void NewGame::doBack()
     Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
 }
 
+void NewGame::doNext()
+{
+    if (_selectedCharacter < 2)
+    {
+        _selectedCharacter++;
+    }
+    else
+    {
+        _selectedCharacter = 0;
+    }
+    _changeCharacter();
+}
+
+void NewGame::doPrev()
+{
+    if (_selectedCharacter > 0)
+    {
+        _selectedCharacter--;
+    }
+    else
+    {
+        _selectedCharacter = 2;
+    }
+    _changeCharacter();
+}
+
 void NewGame::onBackButtonClick(MouseEvent* event)
 {
     doBack();
@@ -170,28 +196,12 @@ void NewGame::onBackFadeDone(StateEvent* event)
 
 void NewGame::onPrevCharacterButtonClick(MouseEvent* event)
 {
-    if (_selectedCharacter > 0)
-    {
-        _selectedCharacter--;
-    }
-    else
-    {
-        _selectedCharacter = 2;
-    }
-    _changeCharacter();
+    doPrev();
 }
 
 void NewGame::onNextCharacterButtonClick(MouseEvent* event)
 {
-    if (_selectedCharacter < 2)
-    {
-        _selectedCharacter++;
-    }
-    else
-    {
-        _selectedCharacter = 0;
-    }
-    _changeCharacter();
+    doNext();
 }
 
 void NewGame::_changeCharacter()
@@ -284,6 +294,12 @@ void NewGame::onKeyDown(KeyboardEvent* event)
             break;
         case SDLK_m:
             doEdit();
+            break;
+        case SDLK_LEFT:
+            doPrev();
+            break;
+        case SDLK_RIGHT:
+            doNext();
             break;
     }
 }

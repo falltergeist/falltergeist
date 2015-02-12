@@ -40,6 +40,8 @@ protected:
     int _yOffset = 0;
     int _leftButton = false;
     int _rightButton = false;
+    bool _shiftPressed = false;
+    bool _controlPressed = false;
 public:
     MouseEvent(std::string eventName = "mouse");
     MouseEvent(MouseEvent* event);
@@ -62,6 +64,10 @@ public:
 
     bool rightButton();
     void setRightButton(bool value);
+    void setControlPressed(bool _controlPressed);
+    bool controlPressed() const;
+    void setShiftPressed(bool _shiftPressed);
+    bool shiftPressed() const;
 };
 
 }

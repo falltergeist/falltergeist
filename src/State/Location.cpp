@@ -489,7 +489,7 @@ void Location::handle(Event* event)
                     if (path.size())
                     {
                         game->player()->movementQueue()->clear();
-                        game->player()->setRunning(game->settings()->running());
+                        game->player()->setRunning((_lastClickedTile != 0 && hexagon->number() == _lastClickedTile) || (mouseEvent->shiftPressed() != game->settings()->running()));
                         for (auto hexagon : path)
                         {
                             game->player()->movementQueue()->push_back(hexagon);
@@ -497,6 +497,7 @@ void Location::handle(Event* event)
                         //moveObjectToHexagon(game->player(), hexagon);
                     }
                     event->setHandled(true);
+                    _lastClickedTile = hexagon->number();
                     break;
                 }
             }
@@ -626,6 +627,18 @@ void Location::onKeyDown(KeyboardEvent* event)
             break;
         case SDLK_8:
             // @TODO: use skill: repair
+            break;
+        case SDLK_LEFT:
+            camera()->setXPosition(camera()->xPosition() - KEYBOARD_SCROLL_STEP);
+            break;
+        case SDLK_RIGHT:
+            camera()->setXPosition(camera()->xPosition() + KEYBOARD_SCROLL_STEP);
+            break;
+        case SDLK_UP:
+            camera()->setYPosition(camera()->yPosition() - KEYBOARD_SCROLL_STEP);
+            break;
+        case SDLK_DOWN:
+            camera()->setYPosition(camera()->yPosition() + KEYBOARD_SCROLL_STEP);
             break;
     }
 }
