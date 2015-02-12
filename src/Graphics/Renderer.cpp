@@ -29,6 +29,7 @@
 #include "../Game/Game.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
+#include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../State/State.h"
 
@@ -41,10 +42,6 @@ Renderer::Renderer(unsigned int width, unsigned int height)
 {
     _width = width;
     _height = height;
-    _fadeColor.r=0;
-    _fadeColor.g=0;
-    _fadeColor.b=0;
-    _fadeColor.a=0;
 
     std::string message = "Renderer initialization - ";
     if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
@@ -70,13 +67,13 @@ void Renderer::init()
     std::string message =  "SDL_CreateWindow " + std::to_string(_width) + "x" + std::to_string(_height) + "x" +std::to_string(32)+ " - ";
     if (Game::getInstance()->settings()->fullscreen())
     {
-        _window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _width, _height, SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
+        _sdlWindow = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _width, _height, SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
     }
     else
     {
-        _window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _width, _height, SDL_WINDOW_SHOWN);
+        _sdlWindow = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _width, _height, SDL_WINDOW_SHOWN);
     }
-    if (!_window)
+    if (!_sdlWindow)
     {
         throw Exception(message + "[FAIL]");
     }
@@ -84,8 +81,8 @@ void Renderer::init()
     Logger::info("RENDERER") << message + "[OK]" << std::endl;
 
     message =  "SDL_CreateRenderer - ";
-    _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
-    if (!_renderer)
+    _sdlRenderer = SDL_CreateRenderer(_sdlWindow, -1, SDL_RENDERER_ACCELERATED);
+    if (!_sdlRenderer)
     {
         throw Exception(message + "[FAIL]");
     }
@@ -106,12 +103,12 @@ void Renderer::init()
                 _height= 960;
                 break;
         }
-        SDL_RenderSetLogicalSize(_renderer, _width, _height);
-        SDL_RenderGetScale(_renderer, &_scaleX, &_scaleY);
+        SDL_RenderSetLogicalSize(_sdlRenderer, _width, _height);
+        SDL_RenderGetScale(_sdlRenderer, &_scaleX, &_scaleY);
     }
 
     SDL_RendererInfo rendererInfo;
-    SDL_GetRendererInfo(_renderer, &rendererInfo);
+    SDL_GetRendererInfo(_sdlRenderer, &rendererInfo);
 
     Logger::info("RENDERER") << "name: " << rendererInfo.name << std::endl;
     if (rendererInfo.flags & SDL_RENDERER_SOFTWARE)
@@ -164,42 +161,38 @@ void Renderer::init()
     Logger::info("RENDERER") << "max_texture_width: " << rendererInfo.max_texture_width << std::endl;
     Logger::info("RENDERER") << "max_texture_height: " << rendererInfo.max_texture_height << std::endl;
 
-    IMG_Init(IMG_INIT_JPG|IMG_INIT_PNG);
-    _egg=new Texture(0,0);
-    _egg->loadFromImage("data/egg.png");
+    IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
+
+    _egg = ResourceManager::texture("data/egg.png");
 }
 
 void Renderer::think()
 {
     if (_fadeDone) return;
-    unsigned int _nt = SDL_GetTicks();
-    if (_nt-_lt>_delay)
+
+    unsigned int ticks = SDL_GetTicks();
+    if (ticks - _fadeTimer > _fadeDelay)
     {
-        _alpha+=_step;
-        if (_alpha<=0 || _alpha>255)
+        _fadeAlpha += _fadeStep;
+        if (_fadeAlpha <= 0 || _fadeAlpha > 255)
         {
-            if (_alpha<0)
-            {
-                _alpha=0;
-            }
-            if (_alpha>255)
-            {
-                _alpha=255;
-            }
-            _fadeDone=true;
+            _fadeAlpha = (_fadeAlpha <= 0 ? 0 : 255);
+            _fadeDone = true;
+
             auto event = new StateEvent("fadedone");
             Game::getInstance()->states()->back()->emitEvent(event);
             delete event;
             return;
         }
-        _lt=_nt;
+        _fadeTimer = ticks;
     }
-    _fadeColor.a=_alpha;
+    _fadeColor.a = _fadeAlpha;
 }
 
 bool Renderer::fadeDone()
 {
-    return _fadeDone && _alpha==0;
+    // @fixme: do we really need to check fadeAlpha here?
+    return _fadeDone && _fadeAlpha == 0;
 }
 
 bool Renderer::fading()
@@ -207,33 +200,31 @@ bool Renderer::fading()
     return !_fadeDone && !_inmovie;
 }
 
-void Renderer::fadeIn(unsigned int r, unsigned int g, unsigned int b, unsigned int time, bool inmovie)
+void Renderer::fadeIn(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie)
 {
+    // @fixme: rgb color is not used here
     _inmovie = inmovie;
-    _fadeColor.a=255;
-    _alpha=255;
-    _step=-1;
-    _fadeDone=false;
-    _delay=round(time/256);
+    _fadeColor.a = 255;
+    _fadeAlpha = 255;
+    _fadeStep = -1;
+    _fadeDone = false;
+    _fadeDelay = round(time / 256);
 }
 
-void Renderer::fadeOut(unsigned int r, unsigned int g, unsigned int b, unsigned int time, bool inmovie)
+void Renderer::fadeOut(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie)
 {
     _inmovie = inmovie;
-    _fadeColor.r=r;
-    _fadeColor.g=g;
-    _fadeColor.b=b;
-    _fadeColor.a=0;
-    _alpha=0;
-    _step=1;
-    _fadeDone=false;
-    _delay=round(time/256);
+    _fadeColor = {r, g, b, 0};
+    _fadeAlpha = 0;
+    _fadeStep = 1;
+    _fadeDone = false;
+    _fadeDelay = round(time / 256);
 }
 
 
 void Renderer::beginFrame()
 {
-    SDL_RenderClear(_renderer);
+    SDL_RenderClear(_sdlRenderer);
     think();
 }
 
@@ -241,14 +232,14 @@ void Renderer::endFrame()
 {
     if (!fadeDone())
     {
-        uint8_t        r,g,b,a;
-        SDL_GetRenderDrawColor(_renderer,&r,&g,&b,&a);
-        SDL_SetRenderDrawBlendMode(_renderer,SDL_BLENDMODE_BLEND);
-        SDL_SetRenderDrawColor(_renderer, _fadeColor.r,_fadeColor.g, _fadeColor.b,_fadeColor.a);
-        SDL_RenderFillRect(_renderer, NULL);
-        SDL_SetRenderDrawColor(_renderer, r, g, b, a);
+        uint8_t r,g,b,a;
+        SDL_GetRenderDrawColor(_sdlRenderer, &r, &g, &b, &a);
+        SDL_SetRenderDrawBlendMode(_sdlRenderer, SDL_BLENDMODE_BLEND);
+        SDL_SetRenderDrawColor(_sdlRenderer, _fadeColor.r, _fadeColor.g, _fadeColor.b, _fadeColor.a);
+        SDL_RenderFillRect(_sdlRenderer, NULL);
+        SDL_SetRenderDrawColor(_sdlRenderer, r, g, b, a);
     }
-    SDL_RenderPresent(_renderer);
+    SDL_RenderPresent(_sdlRenderer);
 }
 
 unsigned int Renderer::width()
@@ -261,49 +252,18 @@ unsigned int Renderer::height()
     return _height;
 }
 
-void Renderer::registerTexture(Texture* texture)
-{
-    if (texture->id()) return; // if registered
-
-    SDL_Texture* sdlTexture = SDL_CreateTexture(_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, texture->width(), texture->height());
-    if (sdlTexture == 0) throw Exception(SDL_GetError());
-
-    SDL_UpdateTexture(sdlTexture, NULL, texture->data(), texture->width() * 4);
-    _surfaces.push_back(sdlTexture);
-
-    SDL_SetTextureBlendMode(sdlTexture, (SDL_BlendMode)texture->blendmode());
-
-    texture->setId(_texturesCounter);
-    _texturesCounter++;
-}
-
-void Renderer::unregisterTexture(Texture* texture)
-{
-    if (!texture->id()) return;
-
-    SDL_DestroyTexture(_surfaces.at(texture->id() - 1));
-    _surfaces.at(texture->id() -1) = 0;
-    texture->setId(0);
-}
-
 void Renderer::drawTexture(Texture* texture, int x, int y, int sourceX, int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
 {
-    if (!texture->id()) registerTexture(texture);
-
-    SDL_SetTextureColorMod(_surfaces.at(texture->id() - 1), texture->r(), texture->g(), texture->b());
-    SDL_SetTextureAlphaMod(_surfaces.at(texture->id() - 1), texture->a());
-    SDL_SetTextureBlendMode(_surfaces.at(texture->id() - 1), (SDL_BlendMode)texture->blendmode());
-
     if (!sourceX && !sourceY && !sourceWidth && !sourceHeight)
     {
         SDL_Rect dest = {(short)x, (short)y, (unsigned short)texture->width(), (unsigned short)texture->height()};
-        SDL_RenderCopy(_renderer, _surfaces.at(texture->id() - 1), NULL, &dest);
+        SDL_RenderCopy(_sdlRenderer, texture->sdlTexture(), NULL, &dest);
     }
     else
     {
         SDL_Rect dest = {(short)x, (short)y, (unsigned short)sourceWidth, (unsigned short)sourceHeight};
         SDL_Rect src = {(short)sourceX, (short)sourceY, (unsigned short)sourceWidth, (unsigned short)sourceHeight};
-        SDL_RenderCopy(_renderer, _surfaces.at(texture->id() - 1), &src, &dest);
+        SDL_RenderCopy(_sdlRenderer, texture->sdlTexture(), &src, &dest);
     }
 }
 
@@ -321,7 +281,7 @@ Texture* Renderer::screenshot()
     );
 
     SDL_Surface* surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32, Rmask, Gmask, Bmask, Amask);
-    SDL_RenderReadPixels(_renderer, NULL, surface->format->format, surface->pixels, surface->pitch);
+    SDL_RenderReadPixels(_sdlRenderer, NULL, surface->format->format, surface->pixels, surface->pitch);
 
     auto texture = new Texture(width, height);
     texture->loadFromRGBA((unsigned int*)surface->pixels);
@@ -338,12 +298,17 @@ std::string Renderer::name()
 
 void Renderer::setCaption(std::string caption)
 {
-    SDL_SetWindowTitle(_window, caption.c_str());
+    SDL_SetWindowTitle(_sdlWindow, caption.c_str());
 }
 
-SDL_Window* Renderer::window()
+SDL_Window* Renderer::sdlWindow()
 {
-    return _window;
+    return _sdlWindow;
+}
+
+SDL_Renderer* Renderer::sdlRenderer()
+{
+    return _sdlRenderer;
 }
 
 float Renderer::scaleX()

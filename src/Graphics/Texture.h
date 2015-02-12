@@ -34,26 +34,33 @@ namespace Falltergeist
 class Texture
 {
 protected:
-    unsigned int _id = 0;
+
     unsigned int _width = 0;
     unsigned int _height = 0;
-    unsigned int* _data = 0; // array of RGBA pixels
+
     SDL_Texture* _sdlTexture = 0;
-    SDL_Color _modifier = {255, 255, 255, 255};
-    SDL_BlendMode _blendmode = SDL_BLENDMODE_BLEND;
-    void _unregister();
+    SDL_Surface* _sdlSurface = 0;
+
+    SDL_Color _colorModifier = {255, 255, 255, 255};
+    SDL_BlendMode _blendMode = SDL_BLENDMODE_BLEND;
+
+    bool _changed = false;
+
+    void _init();
+
 public:
     Texture(unsigned int width, unsigned int height);
+    Texture(SDL_Surface* surface);
     virtual ~Texture();
 
+    SDL_Surface* sdlSurface();
     SDL_Texture* sdlTexture();
 
-    unsigned int id();
-    void setId(unsigned int value);
+    SDL_Color colorModifier();
+    void setColorModifier(SDL_Color color);
 
     unsigned int width();
     unsigned int height();
-    unsigned int* data();
 
     unsigned int pixel(unsigned int x, unsigned int y);
     void setPixel(unsigned int x, unsigned int y, unsigned int color);
@@ -70,16 +77,8 @@ public:
     void loadFromRGBA(unsigned int* data);
     void loadFromImage(std::string name);
 
-    void setAlpha(unsigned char alpha);
-    void setColor(unsigned char r, unsigned char g, unsigned char b);
-
-    unsigned char r();
-    unsigned char g();
-    unsigned char b();
-    unsigned char a();
-
-    void setBlend(SDL_BlendMode blendmode);
-    SDL_BlendMode blendmode();
+    void setBlendMode(SDL_BlendMode blendMode);
+    SDL_BlendMode blendMode();
 
 };
 

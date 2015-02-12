@@ -36,8 +36,10 @@ Image::Image(std::string filename) : ActiveUI()
 
 Image::Image(Image* image) : ActiveUI()
 {
+    // @fixme: we should use "clone" feature here
     setTexture(new Texture(image->texture()->width(), image->texture()->height()));
-    _texture->loadFromRGBA(image->texture()->data());
+    unsigned int* pixels = (unsigned int*)image->texture()->sdlSurface()->pixels;
+    _texture->loadFromRGBA(pixels);
 }
 
 Image::Image(unsigned int width, unsigned int height) : ActiveUI()

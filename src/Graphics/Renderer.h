@@ -37,22 +37,24 @@ namespace Falltergeist
 class Renderer
 {
 protected:
-    bool _inmovie = false;
-    short _step;
     unsigned int _width;
     unsigned int _height;
-    unsigned int _lt=0;
-    unsigned int _delay=0;
-    unsigned int _alpha=0;
-    unsigned int _fadeDone=true;
-    unsigned int _texturesCounter = 1;
-    float _scaleX=1.0;
-    float _scaleY=1.0;
+
+    short _fadeStep = 0;
+    unsigned int _fadeTimer = 0;
+    unsigned int _fadeDelay = 0;
+    unsigned int _fadeAlpha = 0;
+    bool _fadeDone = true;
+    SDL_Color _fadeColor = {0, 0, 0, 0};
+
+    bool _inmovie = false;
+
+    float _scaleX = 1.0;
+    float _scaleY = 1.0;
+
     std::string _name;
-    std::vector<SDL_Texture*> _surfaces;
-    SDL_Window* _window;
-    SDL_Color _fadeColor;
-    SDL_Renderer* _renderer;
+    SDL_Window* _sdlWindow;
+    SDL_Renderer* _sdlRenderer;
     Texture* _egg = NULL;
 
 public:
@@ -69,18 +71,20 @@ public:
     unsigned int height();
     float scaleX();
     float scaleY();
+
     bool fadeDone();
     bool fading();
-    virtual void fadeIn(unsigned int r, unsigned int g, unsigned int b, unsigned int time, bool inmovie = false);
-    virtual void fadeOut(unsigned int r, unsigned int g, unsigned int b, unsigned int time, bool inmovie = false);
+
+    virtual void fadeIn(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie = false);
+    virtual void fadeOut(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie = false);
+
     void setCaption(std::string caption);
-    SDL_Window* window();
+    SDL_Window* sdlWindow();
+    SDL_Renderer* sdlRenderer();
 
     virtual std::string name();
 
-    virtual void registerTexture(Texture* texture);
-    virtual void unregisterTexture(Texture* texture);
-    virtual void drawTexture( Texture* texture, int x, int y, int sourceX = 0, int sourceY = 0, int unsigned sourceWidth = 0, unsigned int sourceHeight = 0);
+    virtual void drawTexture(Texture* texture, int x, int y, int sourceX = 0, int sourceY = 0, int unsigned sourceWidth = 0, unsigned int sourceHeight = 0);
 
     virtual Texture* screenshot();
     Texture* egg();

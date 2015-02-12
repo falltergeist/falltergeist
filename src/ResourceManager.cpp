@@ -34,6 +34,7 @@
 #include "Game/Location.h"
 
 // Third party includes
+#include <SDL_image.h>
 
 namespace Falltergeist
 {
@@ -239,7 +240,25 @@ Texture* ResourceManager::texture(std::string filename)
 
     Texture* texture = 0;
 
-    if (ext == ".rix")
+    if (ext == ".png")
+    {
+        // @fixme: this section looks quite ugly. we should try to do something with it someday
+        SDL_Surface* tempSurface = IMG_Load(filename.c_str());
+        if (tempSurface == NULL)
+        {
+            throw Exception("ResourceManager::texture(name) - cannot load texture from file " + filename + ": " + IMG_GetError());
+        }
+
+        SDL_PixelFormat* pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
+        SDL_Surface* tempSurface2 = SDL_ConvertSurface(tempSurface, pixelFormat, 0);
+        texture = new Texture(tempSurface2);
+
+        SDL_FreeFormat(pixelFormat);
+        SDL_FreeSurface(tempSurface);
+        SDL_FreeSurface(tempSurface2);
+
+    }
+    else if (ext == ".rix")
     {
         auto rix = rixFileType(filename);
         if (!rix) return 0;

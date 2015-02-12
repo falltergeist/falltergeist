@@ -380,10 +380,10 @@ void Game::handle()
                         if (keyboardEvent->keyCode() == SDLK_F12)
                         {
                             Texture* texture = renderer()->screenshot();
-                            SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(texture->data(), texture->width(), texture->height(), 32, texture->width()*4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+                            //SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(texture->data(), texture->width(), texture->height(), 32, texture->width()*4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
                             std::string name = std::to_string(SDL_GetTicks()) +  ".bmp";
-                            SDL_SaveBMP(surface, name.c_str());
-                            SDL_FreeSurface(surface);
+                            SDL_SaveBMP(texture->sdlSurface(), name.c_str());
+                            //SDL_FreeSurface(surface);
                             delete texture;
                             Logger::info("GAME") << "Screenshot saved to " + name << std::endl;
 
