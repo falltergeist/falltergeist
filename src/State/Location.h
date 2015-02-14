@@ -57,7 +57,7 @@ protected:
     // Timers
     unsigned int _scrollTicks = 0;
     unsigned int _scriptsTicks = 0;
-    unsigned int _actionPressedTicks = 0;
+    unsigned int _actionCursorTicks = 0;
 
     HexagonGrid* _hexagonGrid = 0;
     LocationCamera* _camera = 0;
@@ -71,6 +71,8 @@ protected:
     bool _locationEnter = true;
     unsigned int _currentElevation = 0;
     unsigned int _lastClickedTile = 0;
+    Game::GameObject* _actionCursorLastObject = NULL;
+    bool _actionCursorButtonPressed = false;
 
     bool _scrollLeft = false;
     bool _scrollRight = false;
@@ -79,6 +81,8 @@ protected:
 
     std::vector<Game::GameObject*> _objects;
     TextArea* _hexagonInfo = 0;
+    
+    std::vector<int> getCursorIconsForObject(Game::GameObject* object);
 public:
     Location();
     ~Location();
@@ -102,9 +106,12 @@ public:
     void centerCameraAtHexagon(Hexagon* hexagon);
     void handleAction(Game::GameObject* object, int action);
     void toggleCursorMode();
+    
+    void displayMessage(std::string message);
 
     void onBackgroundClick(MouseEvent* event);
-    void onObjectMouseDown(Event* event, Game::GameObject* object);
+    void onObjectMouseEvent(Event* event, Game::GameObject* object);
+    void onObjectHover(Event* event, Game::GameObject* object);
     virtual void onKeyDown(KeyboardEvent* event);
 
 };

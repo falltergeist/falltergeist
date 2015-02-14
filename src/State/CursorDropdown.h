@@ -45,7 +45,7 @@ class CursorDropdown : public State
 {
 protected:
     Game::GameObject* _object;
-    int _initialType;
+    bool _onlyShowIcon;
     std::vector<int> _icons;
     int _initialX;
     int _initialY;
@@ -55,8 +55,11 @@ protected:
     UI* _surface = 0;
     HiddenMask* _mask = 0;
     UI* _cursor = 0;
+    unsigned int _activatedAt = 0;
+    
+    void showMenu();
 public:
-    CursorDropdown(std::vector<int> icons);
+    CursorDropdown(std::vector<int> icons, bool onlyIcon = false);
     virtual ~CursorDropdown();
     virtual void init();
     virtual void think();
@@ -65,6 +68,10 @@ public:
 
     Game::GameObject* object();
     void setObject(Game::GameObject* object);
+
+    virtual void onStateActivate(StateEvent* event);
+    virtual void onStateDeactivate(StateEvent* event);
+
 };
 
 }

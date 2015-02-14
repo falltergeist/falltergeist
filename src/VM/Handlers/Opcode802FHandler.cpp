@@ -37,7 +37,7 @@ void Opcode802FHandler::_run()
 {
     auto condition = _vm->popDataLogical();
     auto address = _vm->popDataInteger();
-    Logger::debug("SCRIPT") << "[802F] [*] ifthen(address, condition)" << std::endl
+    Logger::debug("SCRIPT") << "[802F] [*] ifthen(address, condition) " << std::hex << _vm->programCounter() << std::endl
                             << "    address = " << std::hex << address << std::endl
                             << "    condition = " << std::dec << condition << std::endl;
     if (!condition)

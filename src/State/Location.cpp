@@ -57,6 +57,7 @@
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
 #include "../VM/VM.h"
+#include "Audio/AudioMixer.h"
 
 // Third party includes
 
@@ -244,14 +245,9 @@ void Location::setLocation(std::string name)
     }
 }
 
-void Location::onObjectMouseDown(Event* event, Game::GameObject* object)
+std::vector<int> Location::getCursorIconsForObject(Game::GameObject* object)
 {
-    if (!object) return;
-    
-    _actionPressedTicks = SDL_GetTicks();
-
     std::vector<int> icons;
-
     if (object->script() && object->script()->hasFunction("use_p_proc"))
     {
         icons.push_back(Mouse::ICON_USE);
@@ -277,20 +273,48 @@ void Location::onObjectMouseDown(Event* event, Game::GameObject* object)
         case Game::GameObject::TYPE_CRITTER:
             icons.push_back(Mouse::ICON_TALK);
             break;
-        default:
-            return;
     }
     icons.push_back(Mouse::ICON_LOOK);
     icons.push_back(Mouse::ICON_INVENTORY);
     icons.push_back(Mouse::ICON_SKILL);
     icons.push_back(Mouse::ICON_CANCEL);
+    return icons;
+}
 
-    auto state = new CursorDropdown(icons);
-    state->setObject(object);
-    auto game = Game::getInstance();
-    game->pushState(state);
+
+void Location::onObjectMouseEvent(Event* event, Game::GameObject* object)
+{
+    if (!object) return;
+    if (event->name() == "mouseleftdown")
+    {
+        _actionCursorLastObject = object;
+        _actionCursorTicks = SDL_GetTicks();
+        _actionCursorButtonPressed = true;
+    }
+    else if (event->name() == "mouseleftup")
+    {
+        auto icons = getCursorIconsForObject(object);
+        if (icons.size() > 0)
+        {
+            handleAction(object, icons.front());
+            _actionCursorLastObject = NULL;
+            _actionCursorTicks = 0;
+        }
+    }
     event->setHandled(true);
 }
+
+void Location::onObjectHover(Event* event, Game::GameObject* object)
+{
+    if (event->name() == "mousein")
+    {
+        _actionCursorLastObject = object;
+        _actionCursorButtonPressed = false;
+    }
+    _actionCursorTicks = SDL_GetTicks();
+    event->setHandled(true);
+}
+
 
 void Location::onBackgroundClick(MouseEvent* event)
 {
@@ -412,6 +436,29 @@ void Location::think()
             }
         }
     }
+    
+    // action cursor stuff
+    if (_actionCursorLastObject && _actionCursorTicks + 500 < SDL_GetTicks())
+    {
+        if (!_actionCursorButtonPressed)
+        {
+            _actionCursorLastObject->look_at_p_proc();
+        }
+        auto icons = getCursorIconsForObject(_actionCursorLastObject);
+        if (icons.size() > 0)
+        {
+            auto state = new CursorDropdown(icons, !_actionCursorButtonPressed);
+            state->setObject(_actionCursorLastObject);
+            auto game = Game::getInstance();
+            if (auto dropdownState = dynamic_cast<CursorDropdown>(game->states()->back()))
+            {
+                game->popState();
+            }
+            Game::getInstance()->pushState(state);
+        }
+        _actionCursorLastObject = NULL;
+        _actionCursorTicks = 0;
+    }
 }
 
 void Location::toggleCursorMode()
@@ -429,6 +476,7 @@ void Location::toggleCursorMode()
             mouse->pushState(Mouse::HEXAGON_RED);
             mouse->ui()->setX(hexagon->x() - camera()->x());
             mouse->ui()->setY(hexagon->y() - camera()->y());
+            _actionCursorLastObject = NULL;
             break;
         }
         case Mouse::HEXAGON_RED:
@@ -532,7 +580,11 @@ void Location::handle(Event* event)
             {
                 _hexagonInfo->setText("No hex");
             }
-            event->setHandled(true);
+            // let event fall down to all objects when using action cursor
+            if (mouse->state() != Mouse::ACTION)
+            {
+                event->setHandled(true);
+            }
         }
     }
 
@@ -748,6 +800,13 @@ void Location::handleAction(Game::GameObject* object, int action)
 
     }
 }
+
+void Location::displayMessage(std::string message)
+{
+    Game::getInstance()->mixer()->playACMSound("sound/sfx/monitor.acm");
+    Logger::info("MESSAGE") << message << std::endl;
+}
+
 
 HexagonGrid* Location::hexagonGrid()
 {

@@ -63,6 +63,7 @@ protected:
     ActiveUI* _ui = 0;
     Hexagon* _hexagon = 0;
     virtual void _generateUi();
+    void addUIEventHandlers();
     TextArea* _floatMessage = 0;
     bool _inRender = false;
     unsigned int _trans = 0;

@@ -162,8 +162,20 @@ void GameObject::setUI(ActiveUI* ui)
 {
     delete _ui;
     _ui = ui;
-    _ui->addEventHandler("mouseleftdown", std::bind(&State::Location::onObjectMouseDown, Game::getInstance()->locationState(), std::placeholders::_1, this));
+    addUIEventHandlers();
 }
+
+void GameObject::addUIEventHandlers()
+{
+    if (_ui)
+    {
+        _ui->addEventHandler("mouseleftdown", std::bind(&State::Location::onObjectMouseEvent, Game::getInstance()->locationState(), std::placeholders::_1, this));
+        _ui->addEventHandler("mouseleftup", std::bind(&State::Location::onObjectMouseEvent, Game::getInstance()->locationState(), std::placeholders::_1, this));
+        _ui->addEventHandler("mousein", std::bind(&State::Location::onObjectHover, Game::getInstance()->locationState(), std::placeholders::_1, this));
+        _ui->addEventHandler("mousemove", std::bind(&State::Location::onObjectHover, Game::getInstance()->locationState(), std::placeholders::_1, this));
+    }
+}
+
 
 void GameObject::_generateUi()
 {
@@ -188,10 +200,7 @@ void GameObject::_generateUi()
         }
     }
 
-    if (_ui)
-    {
-        _ui->addEventHandler("mouseleftdown", std::bind(&State::Location::onObjectMouseDown, Game::getInstance()->locationState(), std::placeholders::_1, this));
-    }
+    addUIEventHandlers();
 }
 
 bool GameObject::canWalkThru()
@@ -388,11 +397,22 @@ void GameObject::setInRender(bool value)
 void GameObject::description_p_proc()
 {
     Logger::info("SCRIPT") << "description_p_proc() - 0x" << std::hex << PID() << " " << name() << " " << script() << std::endl;
+    bool useDefault = true;
+    if (script() && script()->hasFunction("description_p_proc"))
+    {
+        script()->call("description_p_proc");
+        if (script()->overrides())
+            useDefault = false;
+    }
+    if (useDefault) 
+    {
+        Game::getInstance()->locationState()->displayMessage(description());
+    }
 }
 
 void GameObject::use_p_proc()
 {
-    if (script())
+    if (script() && script()->hasFunction("use_p_proc"))
     {
         script()->call("use_p_proc");
     }
@@ -404,6 +424,20 @@ void GameObject::destroy_p_proc()
 
 void GameObject::look_at_p_proc()
 {
+    bool useDefault = true;
+    if (script() && script()->hasFunction("look_at_p_proc"))
+    {
+        script()->call("look_at_p_proc");
+        if (script()->overrides())
+            useDefault = false;
+    }
+    if (useDefault) 
+    {
+        auto protoMsg = ResourceManager::msgFileType("text/english/game/proto.msg");
+        char buf[512];
+        sprintf(buf, protoMsg->message(490)->text().c_str(), name().c_str());
+        Game::getInstance()->locationState()->displayMessage(std::string(buf));
+    }
 }
 
 void GameObject::map_enter_p_proc()
