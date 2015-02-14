@@ -42,6 +42,8 @@ void Opcode80CFHandler::_run()
     _vm->popDataInteger();
     _vm->popDataInteger();
     _vm->popDataInteger();
+    _vm->popDataInteger();
+    // @TODO: implement
     _vm->pushDataInteger(0);
 }
 
