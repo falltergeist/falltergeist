@@ -55,7 +55,6 @@ protected:
     UI* _surface = 0;
     HiddenMask* _mask = 0;
     UI* _cursor = 0;
-    unsigned int _activatedAt = 0;
     
     void showMenu();
 public:

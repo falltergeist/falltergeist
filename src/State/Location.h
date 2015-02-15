@@ -25,6 +25,7 @@
 
 // Falltergeist includes
 #include "State.h"
+#include "../State/PlayerPanel.h"
 #include "../UI/ImageButton.h"
 
 // Third party includes
@@ -71,8 +72,10 @@ protected:
     bool _locationEnter = true;
     unsigned int _currentElevation = 0;
     unsigned int _lastClickedTile = 0;
+    Game::GameObject* _objectUnderCursor = NULL;
     Game::GameObject* _actionCursorLastObject = NULL;
     bool _actionCursorButtonPressed = false;
+    PlayerPanel* _playerPanel = NULL;
 
     bool _scrollLeft = false;
     bool _scrollRight = false;
@@ -106,6 +109,8 @@ public:
     void centerCameraAtHexagon(Hexagon* hexagon);
     void handleAction(Game::GameObject* object, int action);
     void toggleCursorMode();
+    unsigned int viewWidth();
+    unsigned int viewHeight();
     
     void displayMessage(std::string message);
 
