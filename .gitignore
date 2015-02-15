@@ -11,6 +11,8 @@ falltergeist.cbp
 *.php
 *.bmp
 *.png
+!icon.png
+!ic_launcher.png
 .idea/
 *.autosave
 /src/nbproject/private/
