@@ -1,0 +1,39 @@
+LOCAL_PATH := $(call my-dir)
+
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := main
+
+SDL_PATH := ../SDL
+
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/$(SDL_PATH)/include
+LOCAL_CPP_INCLUDES := $(LOCAL_PATH)/$(SDL_PATH)/include
+LOCAL_CFLAGS := --std=c++11 -O2
+LOCAL_CPPFLAGS := --std=c++11 -O2
+
+SDL_MIX_PATH := ../SDL_mixer
+
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(SDL_MIX_PATH)/include
+LOCAL_CPP_INCLUDES += $(LOCAL_PATH)/$(SDL_MIX_PATH)/include
+
+SDL_IMG_PATH := ../SDL_image
+
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(SDL_IMG_PATH)/include
+LOCAL_CPP_INCLUDES += $(LOCAL_PATH)/$(SDL_IMG_PATH)/include
+
+LIBFALL_PATH := @CMAKE_SOURCE_DIR@/lib/libfalltergeist/src
+
+LOCAL_C_INCLUDES += $(LIBFALL_PATH)
+LOCAL_CPP_INCLUDES += $(LIBFALL_PATH)
+
+APPSRC_PATH := ../../..
+
+# Add your application source files here...
+LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c@ANDROID_SOURCES@
+
+
+LOCAL_SHARED_LIBRARIES := SDL2 SDL2_mixer SDL2_image falltergeist
+
+LOCAL_LDLIBS := -lGLESv1_CM -lGLESv2 -llog
+
+include $(BUILD_SHARED_LIBRARY)

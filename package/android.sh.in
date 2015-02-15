@@ -1,0 +1,18 @@
+#!/bin/sh
+
+rm -rf tmp
+mkdir tmp
+cp -r @CMAKE_SOURCE_DIR@/package/android tmp/
+cp -r package/android tmp/
+cp -r lib/libfalltergeist/package/android tmp/
+cd tmp/android/jni
+hg clone http://hg.libsdl.org/SDL -u 944aa9c47940
+hg clone http://hg.libsdl.org/SDL_mixer -u b28b41b93ba7
+hg clone http://hg.libsdl.org/SDL_image -u 2b0ada991468
+cd SDL
+patch -p1 < ../../sdl.patch
+cd ../../
+ndk-build
+ant debug
+cp bin/Falltergeist-debug.apk ../../Falltergeist-debug-@falltergeist_VERSION@.apk
+rm -rf tmp

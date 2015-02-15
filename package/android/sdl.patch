@@ -1,0 +1,41 @@
+diff -r af5be9462bb4 src/video/android/SDL_androidvideo.c
+--- a/src/video/android/SDL_androidvideo.c	Thu Feb 12 21:40:53 2015 +0100
++++ b/src/video/android/SDL_androidvideo.c	Sat Feb 14 22:24:45 2015 +0300
+@@ -165,12 +165,37 @@
+ Android_VideoInit(_THIS)
+ {
+     SDL_DisplayMode mode;
++    SDL_PixelFormat pixelFormat;
++    Uint32 mask;
++    int bitCount;
+ 
+     mode.format = Android_ScreenFormat;
+     mode.w = Android_ScreenWidth;
+     mode.h = Android_ScreenHeight;
+     mode.refresh_rate = Android_ScreenRate;
+     mode.driverdata = NULL;
++
++    /* We need to set color sizes */
++    if(!SDL_InitFormat(&pixelFormat, mode.format)){
++        for(mask = pixelFormat.Rmask >> pixelFormat.Rshift,
++            bitCount = 0; mask > 0; mask >>= 1)
++            bitCount += 1;
++        SDL_GL_SetAttribute(SDL_GL_RED_SIZE, bitCount);
++        for(mask = pixelFormat.Gmask >> pixelFormat.Gshift,
++            bitCount = 0; mask > 0; mask >>= 1)
++            bitCount += 1;
++        SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, bitCount);
++        for(mask = pixelFormat.Bmask >> pixelFormat.Bshift,
++            bitCount = 0; mask > 0; mask >>= 1)
++            bitCount += 1;
++        SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, bitCount);
++        for(mask = pixelFormat.Amask >> pixelFormat.Ashift,
++            bitCount = 0; mask > 0; mask >>= 1)
++            bitCount += 1;
++        SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, bitCount);
++    }
++
++
+     if (SDL_AddBasicVideoDisplay(&mode) < 0) {
+         return -1;
+     }

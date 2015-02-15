@@ -83,6 +83,8 @@ std::string CrossPlatform::getVersion()
     _version = "Falltergeist 0.2.0";
 #if defined(_WIN32) || defined(WIN32)
     _version += " (Windows)";
+#elif defined(__ANDROID__)
+    _version += " (Android)";
 #elif defined(__linux__)
     _version += " (Linux)";
 #elif defined(__APPLE__)
@@ -100,6 +102,8 @@ std::string CrossPlatform::getHomeDirectory()
     LPITEMIDLIST pidl;
     SHGetSpecialFolderLocation(NULL, CSIDL_PROFILE  ,&pidl);
     SHGetPathFromIDList(pidl, cwd);
+#elif defined (__ANDROID__)
+    char *cwd = "";
 #else
     char *cwd = getenv("HOME");
 #endif
@@ -108,9 +112,13 @@ std::string CrossPlatform::getHomeDirectory()
 
 std::string CrossPlatform::getExecutableDirectory()
 {
+#if defined(__ANDROID__)
+    std::string path("/");
+#else
     char* buffer=SDL_GetBasePath();
     std::string path(buffer);
     SDL_free(buffer);
+#endif
     return path;
 }
 
@@ -130,7 +138,7 @@ std::vector<std::string> CrossPlatform::getCdDrivePaths()
         }
     }
 
-#elif defined(__linux__)
+#elif defined(__linux__) && !defined(__ANDROID__)
     FILE *mtab = setmntent("/etc/mtab", "r");
     struct mntent *m;
     struct mntent mnt;
@@ -361,7 +369,7 @@ void CrossPlatform::createDirectory(const std::string &path)
 
 std::string CrossPlatform::getConfigPath()
 {
-#if defined(__unix__)
+#if defined(__unix__) && !defined(__ANDROID__)
     char *maybeConfigHome = getenv("XDG_CONFIG_HOME");
     if (maybeConfigHome == nullptr || *maybeConfigHome == '\0')
         return getHomeDirectory() + "/.config/falltergeist";
@@ -372,6 +380,8 @@ std::string CrossPlatform::getConfigPath()
     char path[256];
     SHGetFolderPath(nullptr, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, 0, path);
     return std::string(path) + "/falltergeist";
+#elif defined(__ANDROID__)
+    return std::string(SDL_AndroidGetInternalStoragePath());
 #else
 #error Platform not supported: CrossPlatform::getConfigPath not implemented
 #endif
@@ -380,7 +390,7 @@ std::string CrossPlatform::getConfigPath()
 std::vector<std::string> CrossPlatform::getDataPaths()
 {
     std::vector<std::string> _dataPaths;
-#if defined(__unix__)
+#if defined(__unix__) && !defined(__ANDROID__)
     char *maybeDataHome = getenv("XDG_DATA_HOME");
     if (maybeDataHome == nullptr || *maybeDataHome == '\0')
         _dataPaths.push_back(getHomeDirectory() + "/.local/share/falltergeist");
@@ -395,6 +405,13 @@ std::vector<std::string> CrossPlatform::getDataPaths()
         _dataPaths.push_back(sharedir.c_str());
     }
     closedir(pxDir);
+#elif defined(__ANDROID__)
+    _dataPaths.push_back("/sdcard/falltergeist");
+    _dataPaths.push_back("/mnt/extSdCard/falltergeist");
+    _dataPaths.push_back("/mnt/sdcard/falltergeist");
+    _dataPaths.push_back("/storage/sdcard0/falltergeist");
+    _dataPaths.push_back("/storage/sdcard1/falltergeist");
+    _dataPaths.push_back("/storage/extSdCard/falltergeist");
 #else
     _dataPaths.push_back(getConfigPath());
 #endif

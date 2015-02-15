@@ -668,3 +668,16 @@ if(APPLE)
   )
   add_custom_target(dmg DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Falltergeist.dmg)
 endif()
+
+SET(ANDROID_SOURCES "")
+  FOREACH(VAL ${SOURCES})
+    SET(ANDROID_SOURCES "${ANDROID_SOURCES} \\\n${CMAKE_SOURCE_DIR}/${VAL}")
+  ENDFOREACH(VAL ${${LISTNAME}})
+
+configure_file(package/android/jni/src/Android.mk.in package/android/jni/src/Android.mk)
+configure_file(package/android.sh.in package/android.sh)
+  add_custom_command(
+    OUTPUT Falltergeist.apk
+    COMMAND sh ./package/android.sh
+  )
+  add_custom_target(apk DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Falltergeist.apk)
