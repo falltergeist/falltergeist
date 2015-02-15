@@ -138,9 +138,8 @@ void CursorDropdown::showMenu()
     _surface = new Image(40, 40*_icons.size());
     _surface->setX(_initialX + 29);
     _surface->setY(_initialY);
-    auto location = game->locationState();
-    int deltaX = _surface->x() + _surface->width() - location->viewWidth();
-    int deltaY = _surface->y() + _surface->height() - location->viewHeight();
+    int deltaX = _surface->x() + _surface->width() - game->renderer()->width();
+    int deltaY = _surface->y() + _surface->height() - game->renderer()->height() + game->locationState()->playerPanelState()->height();
     if (deltaX > 0)
     {
         _surface->setX(_surface->x() - 40 - 29 - 29);

@@ -109,8 +109,7 @@ public:
     void centerCameraAtHexagon(Hexagon* hexagon);
     void handleAction(Game::GameObject* object, int action);
     void toggleCursorMode();
-    unsigned int viewWidth();
-    unsigned int viewHeight();
+    PlayerPanel* playerPanelState();
     
     void displayMessage(std::string message);
 

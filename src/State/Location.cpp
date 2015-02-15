@@ -608,7 +608,7 @@ void Location::handle(Event* event)
             }
         }
         // let event fall down to all objects when using action cursor and within active view
-        if ((mouse->state() != Mouse::ACTION && mouse->state() != Mouse::NONE) || mouseEvent->y() > viewHeight())
+        if (mouse->state() != Mouse::ACTION && mouse->state() != Mouse::NONE)
         {
             event->setHandled(true);
         }
@@ -834,14 +834,9 @@ void Location::displayMessage(std::string message)
     Logger::info("MESSAGE") << message << std::endl;
 }
 
-unsigned int Location::viewWidth()
+PlayerPanel* Location::playerPanelState()
 {
-    return Game::getInstance()->renderer()->width();
-}
-
-unsigned int Location::viewHeight()
-{
-    return Game::getInstance()->renderer()->height() - _playerPanel->height();
+    return _playerPanel;
 }
 
 HexagonGrid* Location::hexagonGrid()
