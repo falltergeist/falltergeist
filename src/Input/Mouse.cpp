@@ -40,12 +40,11 @@ Mouse::Mouse()
 {
     // Hide cursor
     SDL_ShowCursor(0);
-    //SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1");
-    // Trap mouse in window
-    if (!Game::getInstance()->settings()->fullscreen())
+    // Trap mouse in window         - mouse warp doesn't work currently with this setting -- phobos2077
+    /*if (!Game::getInstance()->settings()->fullscreen())
     {
-        //SDL_SetRelativeMouseMode(SDL_TRUE);
-    }
+        SDL_SetRelativeMouseMode(SDL_TRUE);
+    }*/
 }
 
 Mouse::~Mouse()

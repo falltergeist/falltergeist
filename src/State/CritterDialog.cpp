@@ -37,7 +37,6 @@
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
 #include "../VM/VM.h"
-#include "Input/Mouse.h"
 
 // Third party includes
 
