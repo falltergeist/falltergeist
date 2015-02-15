@@ -54,7 +54,7 @@ void ExitConfirm::init()
     auto background = new Image("art/intrface/lgdialog.frm");
 
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
-    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
+    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height() - 99)*0.5; // 99 = art/intrface/iface.frm height
 
     auto box1 = new Image("art/intrface/donebox.frm");
     auto box2 = new Image("art/intrface/donebox.frm");
