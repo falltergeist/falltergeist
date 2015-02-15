@@ -105,6 +105,17 @@ void Location::init()
     game->pushState(_playerPanel);
 }
 
+void Location::onStateActivate(StateEvent* event)
+{
+
+}
+
+void Location::onStateDeactivate(StateEvent* event)
+{
+    _objectUnderCursor = NULL;
+    _actionCursorTicks = 0;
+}
+
 void Location::setLocation(std::string name)
 {
     auto mapFile = ResourceManager::mapFileType(name);
@@ -375,8 +386,6 @@ void Location::think()
         // if scrolling is active
         if (_scrollLeft || _scrollRight || _scrollTop || _scrollBottom)
         {
-            if (mouse->scrollState()) mouse->popState();
-
             unsigned int state;
             if (_scrollLeft)   state = Mouse::SCROLL_W;
             if (_scrollRight)  state = Mouse::SCROLL_E;
@@ -386,7 +395,14 @@ void Location::think()
             if (_scrollLeft && _scrollBottom)  state = Mouse::SCROLL_SW;
             if (_scrollRight && _scrollTop)    state = Mouse::SCROLL_NE;
             if (_scrollRight && _scrollBottom) state = Mouse::SCROLL_SE;
-            mouse->pushState(state);
+            if (mouse->state() != state) 
+            {
+                if (mouse->scrollState())
+                {
+                    mouse->popState();
+                }
+                mouse->pushState(state);
+            }
         }
         // scrolling is not active
         else
@@ -475,10 +491,14 @@ void Location::think()
 
 void Location::toggleCursorMode()
 {
-    auto mouse = Game::getInstance()->mouse();
+    auto game = Game::getInstance();
+    auto mouse = game->mouse();
+    if (dynamic_cast<CursorDropdown*>(game->states()->back()) != NULL) {
+        game->popState();
+    }
     switch (mouse->state())
     {
-        case Mouse::NONE:
+        case Mouse::NONE: // just for testing
         {
             mouse->pushState(Mouse::ACTION);
             break;
@@ -519,17 +539,6 @@ void Location::handle(Event* event)
             event->setHandled(true);
         }
 
-        // Left button down
-        if (mouseEvent->name() == "mousedown" && mouseEvent->leftButton())
-        {
-            switch (mouse->state())
-            {
-                case Mouse::HEXAGON_RED:
-                    // Preventing dropdown state
-                    event->setHandled(true);
-                    break;
-            }
-        }
         // Left button up
         if (mouseEvent->name() == "mouseup" && mouseEvent->leftButton())
         {
@@ -597,11 +606,11 @@ void Location::handle(Event* event)
             {
                 _hexagonInfo->setText("No hex");
             }
-            // let event fall down to all objects when using action cursor
-            if (mouse->state() != Mouse::ACTION)
-            {
-                event->setHandled(true);
-            }
+        }
+        // let event fall down to all objects when using action cursor and within active view
+        if ((mouse->state() != Mouse::ACTION && mouse->state() != Mouse::NONE) || mouseEvent->y() > viewHeight())
+        {
+            event->setHandled(true);
         }
     }
 
@@ -623,6 +632,7 @@ void Location::handle(Event* event)
         {
             onKeyDown(keyboardEvent);
         }
+        event->setHandled(true);
     }
     for (auto it = hexagonGrid()->hexagons()->rbegin(); it != hexagonGrid()->hexagons()->rend(); ++it)
     {

@@ -234,17 +234,40 @@ void CursorDropdown::think()
 
 void CursorDropdown::onStateActivate(StateEvent* event)
 {
-    
+    if (_needToHide)
+    {
+        Game::getInstance()->popState();
+    }
 }
 
 void CursorDropdown::onStateDeactivate(StateEvent* event)
 {
     auto game = Game::getInstance();
-    game->mouse()->popState();
-    if (!_onlyShowIcon)
+    bool deleted = true;
+    for (auto state : *game->states()) 
     {
-        game->mouse()->setX(_initialX);
-        game->mouse()->setY(_initialY);
+        if (state == this)
+        {
+            deleted = false;
+            break;
+        }
+    }
+    if (deleted) // this happens when state is deactivated after popState())
+    {
+        game->mouse()->popState();
+    }
+    if (!_needToHide)
+    {
+        if (!_onlyShowIcon)
+        {
+            game->mouse()->setX(_initialX);
+            game->mouse()->setY(_initialY);
+        }
+        for (auto ui : _ui)
+        {
+            ui->setVisible(false);
+        }
+        _needToHide = true;
     }
 }
 

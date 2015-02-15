@@ -283,7 +283,8 @@ void PlayerPanel::onKeyDown(KeyboardEvent* event)
             // @TODO: volume up
             break;
         case SDLK_F4:
-            doSaveGame();
+            if (!event->altPressed())
+                doSaveGame();
             break;
         case SDLK_F5:
             doLoadGame();

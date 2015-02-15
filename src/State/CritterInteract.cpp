@@ -40,10 +40,6 @@ namespace State
 
 CritterInteract::CritterInteract() : State()
 {
-    auto game = Game::getInstance();
-    if (dynamic_cast<CursorDropdown*>(game->states()->back()) != NULL) {
-        game->popState();
-    }
 }
 
 CritterInteract::~CritterInteract()

@@ -55,6 +55,7 @@ protected:
     UI* _surface = 0;
     HiddenMask* _mask = 0;
     UI* _cursor = 0;
+    bool _needToHide = false;
     
     void showMenu();
 public:
