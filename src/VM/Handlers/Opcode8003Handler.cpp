@@ -34,7 +34,7 @@ Opcode8003Handler::Opcode8003Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8003Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8003] unlock" << std::endl;
+    Logger::debug("SCRIPT") << "[8003] op_critical_done" << std::endl;
 }
 
 }

@@ -36,7 +36,7 @@ Opcode802CHandler::Opcode802CHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode802CHandler::_run()
 {
     _vm->setSVARbase(_vm->dataStack()->size());
-    Logger::debug("SCRIPT") << "[802C] [*] set SVAR_base = " << _vm->SVARbase() << std::endl;
+    Logger::debug("SCRIPT") << "[802C] [*] op_set_global = " << _vm->SVARbase() << std::endl;
 }
 
 }

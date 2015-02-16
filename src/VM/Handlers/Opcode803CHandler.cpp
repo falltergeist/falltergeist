@@ -23,6 +23,7 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode803CHandler.h"
 #include "../../VM/VM.h"
+#include "VMHaltException.h"
 
 // Third party includes
 
@@ -35,9 +36,15 @@ Opcode803CHandler::Opcode803CHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode803CHandler::_run()
 {
-    Logger::debug("SCRIPT") << "[803C] [*] div /" << std::endl;
+    Logger::debug("SCRIPT") << "[803C] [*] op_div /" << std::endl;
+    // @TODO: other types
     auto b = _vm->popDataInteger();
     auto a = _vm->popDataInteger();
+    if (b == 0) 
+    {
+        Logger::warning("SCRIPT") << "division by zero!" << std::endl;
+        throw VMHaltException();
+    }
     _vm->pushDataInteger(a/b);
 }
 

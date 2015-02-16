@@ -202,6 +202,8 @@ OpcodeHandler* OpcodeFactory::createOpcode(unsigned int number, VM* vm)
 {
     switch (number)
     {
+        case 0x8000: // O_NOOP
+            break;
         case 0x8002:
             return new Opcode8002Handler(vm);
             break;

@@ -226,6 +226,7 @@ unsigned int VM::programCounter()
 
 void VM::setProgramCounter(unsigned int value)
 {
+    // @TODO: add check for valid address
     _programCounter = value;
 }
 

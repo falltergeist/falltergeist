@@ -35,9 +35,17 @@ Opcode8028Handler::Opcode8028Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8028Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8028] [?] ? lookup_string_proc(? p1)" << std::endl;
-    _vm->popDataInteger();
-    _vm->pushDataPointer(0);
+    Logger::debug("SCRIPT") << "[8028] [?] int lookup_string_proc(string)" << std::endl;
+    std::string* name = _vm->popDataPointer();
+    try
+    {
+        _vm->pushDataInteger(_vm->script()->function(name));
+    }
+    catch (libfalltergeist::Exception &e)
+    {
+        Logger::warning("SCRIPT") << "lookup_string_proc: " << e.what() << std::endl;
+        throw VMHaltException();
+    }
 }
 
 }

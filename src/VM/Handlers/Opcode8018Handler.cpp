@@ -35,7 +35,7 @@ Opcode8018Handler::Opcode8018Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8018Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8018] [*] dswap" << std::endl;
+    Logger::debug("SCRIPT") << "[8018] [*] op_swap" << std::endl;
     _vm->dataStack()->swap();
 }
 

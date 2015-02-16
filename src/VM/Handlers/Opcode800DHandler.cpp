@@ -35,7 +35,7 @@ Opcode800DHandler::Opcode800DHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode800DHandler::_run()
 {
-    Logger::debug("SCRIPT") << "[800D] [*] pop_d => push_r" << std::endl;
+    Logger::debug("SCRIPT") << "[800D] [*] op_d_to_a" << std::endl;
     _vm->returnStack()->push(_vm->dataStack()->pop());
 }
 
