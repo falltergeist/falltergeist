@@ -595,6 +595,8 @@ set(SOURCES main.cpp
     src/VM/Handlers/Opcode8150Handler.cpp
     src/VM/Handlers/Opcode8151Handler.h
     src/VM/Handlers/Opcode8151Handler.cpp
+    src/VM/Handlers/Opcode8152Handler.h
+    src/VM/Handlers/Opcode8152Handler.cpp
     src/VM/Handlers/Opcode8153Handler.h
     src/VM/Handlers/Opcode8153Handler.cpp
     src/VM/Handlers/Opcode8154Handler.h

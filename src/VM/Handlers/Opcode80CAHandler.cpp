@@ -31,8 +31,6 @@
 namespace Falltergeist
 {
 
-using namespace Game;
-
 Opcode80CAHandler::Opcode80CAHandler(VM* vm) : OpcodeHandler(vm)
 {
 }
@@ -105,82 +103,82 @@ void Opcode80CAHandler::_run()
             break;
         case 17: // 
         {
-            result = critter->damageThreshold(GameCritterObject::DAMAGE_NORMAL);
+            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_NORMAL);
             break;
         }
         case 18: // 
         {
-            result = critter->damageThreshold(GameCritterObject::DAMAGE_LASER);
+            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_LASER);
             break;
         }
         case 19: // 
         {
-            result = critter->damageThreshold(GameCritterObject::DAMAGE_FIRE);
+            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_FIRE);
             break;
         }
         case 20: // 
         {
-            result = critter->damageThreshold(GameCritterObject::DAMAGE_PLASMA);
+            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_PLASMA);
             break;
         }
         case 21: // 
         {
-            result = critter->damageThreshold(GameCritterObject::DAMAGE_ELECTRICAL);
+            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_ELECTRICAL);
             break;
         }
         case 22: // 
         {
-            result = critter->damageThreshold(GameCritterObject::DAMAGE_EMP);
+            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_EMP);
             break;
         }
         case 23: // 
         {
-            result = critter->damageThreshold(GameCritterObject::DAMAGE_EXPLOSION);
+            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_EXPLOSION);
             break;
         }
         case 24: // 
         {
-            result = critter->damageResist(GameCritterObject::DAMAGE_NORMAL);
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_NORMAL);
             break;
         }
         case 25: // 
         {
-            result = critter->damageResist(GameCritterObject::DAMAGE_LASER);
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_LASER);
             break;
         }
         case 26: // 
         {
-            result = critter->damageResist(GameCritterObject::DAMAGE_FIRE);
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_FIRE);
             break;
         }
         case 27: // 
         {
-            result = critter->damageResist(GameCritterObject::DAMAGE_PLASMA);
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_PLASMA);
             break;
         }
         case 28: // 
         {
-            result = critter->damageResist(GameCritterObject::DAMAGE_ELECTRICAL);
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_ELECTRICAL);
             break;
         }
         case 29: // 
         {
-            result = critter->damageResist(GameCritterObject::DAMAGE_EMP);
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_EMP);
             break;
         }
         case 30: // 
         {
-            result = critter->damageResist(GameCritterObject::DAMAGE_EXPLOSION);
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_EXPLOSION);
             break;
         }
         case 31: // rad resist
         {
-            result = critter->damageResist(GameCritterObject::DAMAGE_RADIATION);
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_RADIATION);
             break;
         }
         case 32: // poison resist
         {
-            result = critter->damageResist(GameCritterObject::DAMAGE_POISON);
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_POISON);
             break;
         }
         case 33: // age

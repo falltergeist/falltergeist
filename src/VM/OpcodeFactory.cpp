@@ -187,6 +187,7 @@
 #include "../VM/Handlers/Opcode814EHandler.h"
 #include "../VM/Handlers/Opcode8150Handler.h"
 #include "../VM/Handlers/Opcode8151Handler.h"
+#include "../VM/Handlers/Opcode8152Handler.h"
 #include "../VM/Handlers/Opcode8153Handler.h"
 #include "../VM/Handlers/Opcode8154Handler.h"
 #include "../VM/Handlers/Opcode9001Handler.h"
@@ -698,6 +699,9 @@ OpcodeHandler* OpcodeFactory::createOpcode(unsigned int number, VM* vm)
             break;
         case 0x8151:
             return new Opcode8151Handler(vm);
+            break;
+        case 0x8152:
+            return new Opcode8152Handler(vm);
             break;
         case 0x8153:
             return new Opcode8153Handler(vm);
