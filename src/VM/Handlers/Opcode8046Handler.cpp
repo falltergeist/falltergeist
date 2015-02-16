@@ -23,8 +23,8 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8046Handler.h"
 #include "../../VM/VM.h"
-#include "VMStackIntValue.h"
-#include "VMStackFloatValue.h"
+#include "../../VM/VMStackIntValue.h"
+#include "../../VM/VMStackFloatValue.h"
 
 // Third party includes
 
@@ -41,12 +41,12 @@ void Opcode8046Handler::_run()
     auto value = _vm->dataStack()->pop();
     if (value->type() == VMStackValue::TYPE_INTEGER) 
     {
-        _vm->pushDataInteger(- static_cast<VMStackIntValue>(value)->value());
+        _vm->pushDataInteger(- (dynamic_cast<VMStackIntValue*>(value))->value());
     }
     else
     if (value->type() == VMStackValue::TYPE_FLOAT) 
     {
-        _vm->pushDataFloat(- static_cast<VMStackFloatValue>(value)->value());
+        _vm->pushDataFloat(- (dynamic_cast<VMStackFloatValue*>(value))->value());
     }
     else
     {

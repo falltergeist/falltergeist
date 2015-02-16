@@ -23,7 +23,7 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode803CHandler.h"
 #include "../../VM/VM.h"
-#include "VMHaltException.h"
+#include "../../VM/VMHaltException.h"
 
 // Third party includes
 

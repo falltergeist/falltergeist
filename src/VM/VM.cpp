@@ -171,6 +171,29 @@ void VM::pushDataPointer(void* value, unsigned int type)
     _dataStack.push(pointer);
 }
 
+std::string VM::popDataString()
+{
+    auto stackValue = _dataStack.pop();
+    if (stackValue->type() == VMStackValue::TYPE_POINTER)
+    {
+        auto stackPointerValue = dynamic_cast<VMStackPointerValue*>(stackValue);
+        if (stackPointerValue->type() == VMStackPointerValue::POINTER_TYPE_STRING)
+        {
+            auto value = static_cast<std::string*>(stackPointerValue->value());
+            return *value;
+        }
+        throw Exception("VM::popDataString() - stack value is not a string");
+    }
+    throw Exception("VM::popDataString() - stack value is not a pointer");
+}
+
+void VM::pushDataString(std::string value)
+{
+    auto pointer = new VMStackPointerValue(new std::string(value));
+    pointer->setPointerType(VMStackPointerValue::POINTER_TYPE_STRING);
+    _dataStack.push(pointer);
+}
+
 int VM::popReturnInteger()
 {
     auto stackValue = _returnStack.pop();

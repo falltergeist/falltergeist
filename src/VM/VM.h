@@ -79,6 +79,8 @@ public:
     void pushDataFloat(float value);
     void* popDataPointer();
     void pushDataPointer(void* value, unsigned int type = VMStackPointerValue::POINTER_TYPE_UNKNOWN);
+    std::string popDataString();
+    void pushDataString(std::string value);
     bool popDataLogical();
 
     VMStack* dataStack();
