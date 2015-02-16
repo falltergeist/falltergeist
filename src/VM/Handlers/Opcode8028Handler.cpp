@@ -23,7 +23,7 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8028Handler.h"
 #include "../../VM/VM.h"
-#include "../../VM/VMHaltException.h"
+#include "../../Exception.h"
 
 // Third party includes
 
@@ -44,8 +44,7 @@ void Opcode8028Handler::_run()
     }
     catch (libfalltergeist::Exception &e)
     {
-        Logger::warning("SCRIPT") << "lookup_string_proc: " << e.what() << std::endl;
-        throw VMHaltException();
+        throw Exception(std::string("lookup_string_proc - ") + e.what());
     }
 }
 

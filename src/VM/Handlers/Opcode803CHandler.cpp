@@ -23,7 +23,7 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode803CHandler.h"
 #include "../../VM/VM.h"
-#include "../../VM/VMHaltException.h"
+#include "../../Exception.h"
 
 // Third party includes
 
@@ -42,8 +42,7 @@ void Opcode803CHandler::_run()
     auto a = _vm->popDataInteger();
     if (b == 0) 
     {
-        Logger::warning("SCRIPT") << "division by zero!" << std::endl;
-        throw VMHaltException();
+        throw Exception("Opcode803CHandler - division by zero!");
     }
     _vm->pushDataInteger(a/b);
 }
