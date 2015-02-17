@@ -56,11 +56,22 @@ Renderer::~Renderer()
 
 void Renderer::init()
 {
-    // TODO: android/ios
-    // _width = deviceWidth;
-    // _height = deviceHeight;
-    // Game::getInstance()->engineSettings()->setFullscreen(true);
-    // Game::getInstance()->engineSettings()->setScale(1); //or 2, if fullhd device
+
+#ifdef __ANDROID__
+    SDL_DisplayMode mode;
+    SDL_GetDisplayMode(0, 0,&mode);
+    _width = mode.w;
+    _height= mode.h;
+    Game::getInstance()->settings()->setFullscreen(true);
+    if (_width > 1280 && _height > 960)
+    {
+        Game::getInstance()->settings()->setScale(2);
+    }
+    else
+    {
+        Game::getInstance()->settings()->setScale(1);
+    }
+#endif
 
     std::string message =  "SDL_CreateWindow " + std::to_string(_width) + "x" + std::to_string(_height) + "x" +std::to_string(32)+ " - ";
 
