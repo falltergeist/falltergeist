@@ -25,6 +25,8 @@
 
 // Falltergeist includes
 #include "../VM/VMStack.h"
+#include "../VM/VMStackIntValue.h"
+#include "../VM/VMStackFloatValue.h"
 #include "../VM/VMStackPointerValue.h"
 
 // Third party includes

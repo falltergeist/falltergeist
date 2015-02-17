@@ -64,6 +64,7 @@
 #include "../VM/Handlers/Opcode803FHandler.h"
 #include "../VM/Handlers/Opcode8040Handler.h"
 #include "../VM/Handlers/Opcode8041Handler.h"
+#include "../VM/Handlers/Opcode8044Handler.h"
 #include "../VM/Handlers/Opcode8045Handler.h"
 #include "../VM/Handlers/Opcode8046Handler.h"
 #include "../VM/Handlers/Opcode80A1Handler.h"
@@ -330,6 +331,9 @@ OpcodeHandler* OpcodeFactory::createOpcode(unsigned int number, VM* vm)
             break;
         case 0x8041:
             return new Opcode8041Handler(vm);
+            break;
+        case 0x8044:
+            return new Opcode8044Handler(vm);
             break;
         case 0x8045:
             return new Opcode8045Handler(vm);
