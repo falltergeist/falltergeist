@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Exception.h"
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
 #include "../UI/Image.h"
@@ -54,8 +55,27 @@ Image::Image(Texture* texture) : ActiveUI()
 
 Image::Image(std::shared_ptr<libfalltergeist::FrmFileType> frm, unsigned int direction)
 {
-    setTexture(new Texture(frm->width(), frm->height()));
-    _texture->loadFromRGBA(frm->rgba(ResourceManager::palFileType("color.pal")));
+    if (direction >= frm->directions())
+    {
+        throw Exception("Image::Image(frm, direction) - direction not found: " + std::to_string(direction));
+    }
+
+    // direction texture
+    setTexture(new Texture(frm->width(direction), frm->height(direction)));
+
+    // full frm texture
+    Texture* texture = new Texture(frm->width(), frm->height());
+    texture->loadFromRGBA(frm->rgba(ResourceManager::palFileType("color.pal")));
+
+    // direction offset in full texture
+    unsigned int y = 0;
+    for (unsigned int i = 0; i != direction; ++i)
+    {
+        y += frm->height(direction);
+    }
+
+    texture->copyTo(_texture, 0, 0, 0, y, frm->width(direction), frm->height(direction));
+
     setXOffset(frm->offsetX(direction) + frm->shiftX(direction));
     setYOffset(frm->offsetY(direction) + frm->shiftY(direction));
 }
