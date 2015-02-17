@@ -75,6 +75,7 @@ Image::Image(std::shared_ptr<libfalltergeist::FrmFileType> frm, unsigned int dir
     }
 
     texture->copyTo(_texture, 0, 0, 0, y, frm->width(direction), frm->height(direction));
+    delete texture;
 
     setXOffset(frm->offsetX(direction) + frm->shiftX(direction));
     setYOffset(frm->offsetY(direction) + frm->shiftY(direction));
