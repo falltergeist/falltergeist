@@ -57,6 +57,7 @@
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
 #include "../VM/VM.h"
+#include "Audio/AudioMixer.h"
 
 // Third party includes
 
@@ -100,7 +101,19 @@ void Location::init()
 
     auto game = Game::getInstance();
     setLocation("maps/" + game->settings()->initialLocation() + ".map");
-    game->pushState(new PlayerPanel());
+    _playerPanel = new PlayerPanel();
+    game->pushState(_playerPanel);
+}
+
+void Location::onStateActivate(StateEvent* event)
+{
+
+}
+
+void Location::onStateDeactivate(StateEvent* event)
+{
+    _objectUnderCursor = NULL;
+    _actionCursorTicks = 0;
 }
 
 void Location::setLocation(std::string name)
@@ -138,7 +151,7 @@ void Location::setLocation(std::string name)
         auto object = Game::GameObjectFactory::createObject(mapObject->PID());
         if (!object)
         {
-            Logger::error() << "Location::setLocation() - cant create object with PID: " << mapObject->PID() << std::endl;
+            Logger::error() << "Location::setLocation() - can't create object with PID: " << mapObject->PID() << std::endl;
             continue;
         }
 
@@ -161,7 +174,7 @@ void Location::setLocation(std::string name)
                 auto item = dynamic_cast<Game::GameItemObject*>(Game::GameObjectFactory::createObject(child->PID()));
                 if (!item)
                 {
-                    Logger::error() << "Location::setLocation() - cant create object with PID: " << child->PID() << std::endl;
+                    Logger::error() << "Location::setLocation() - can't create object with PID: " << child->PID() << std::endl;
                     continue;
                 }
                 item->setAmount(child->ammount());
@@ -244,12 +257,9 @@ void Location::setLocation(std::string name)
     }
 }
 
-void Location::onMouseDown(Event* event, Game::GameObject* object)
+std::vector<int> Location::getCursorIconsForObject(Game::GameObject* object)
 {
-    if (!object) return;
-
     std::vector<int> icons;
-
     if (object->script() && object->script()->hasFunction("use_p_proc"))
     {
         icons.push_back(Mouse::ICON_USE);
@@ -275,30 +285,57 @@ void Location::onMouseDown(Event* event, Game::GameObject* object)
         case Game::GameObject::TYPE_CRITTER:
             icons.push_back(Mouse::ICON_TALK);
             break;
-        default:
-            return;
     }
     icons.push_back(Mouse::ICON_LOOK);
     icons.push_back(Mouse::ICON_INVENTORY);
     icons.push_back(Mouse::ICON_SKILL);
     icons.push_back(Mouse::ICON_CANCEL);
+    return icons;
+}
 
-    auto state = new CursorDropdown(icons);
-    state->setObject(object);
-    auto game = Game::getInstance();
-    game->pushState(state);
+
+void Location::onObjectMouseEvent(Event* event, Game::GameObject* object)
+{
+    if (!object) return;
+    if (event->name() == "mouseleftdown")
+    {
+        _objectUnderCursor = object;
+        _actionCursorTicks = SDL_GetTicks();
+        _actionCursorButtonPressed = true;
+    }
+    else if (event->name() == "mouseleftup")
+    {
+        auto icons = getCursorIconsForObject(object);
+        if (icons.size() > 0)
+        {
+            handleAction(object, icons.front());
+            _actionCursorButtonPressed = false;
+        }
+    }
     event->setHandled(true);
 }
 
+void Location::onObjectHover(Event* event, Game::GameObject* object)
+{
+    if (event->name() == "mouseout")
+    {
+        if (_objectUnderCursor == object)
+            _objectUnderCursor = NULL;
+    }
+    else 
+    {    
+        if (_objectUnderCursor == NULL || event->name() == "mousein")
+        {
+            _objectUnderCursor = object;
+            _actionCursorButtonPressed = false;
+        }
+        _actionCursorTicks = SDL_GetTicks();
+        event->setHandled(true);
+    }
+}
+
+
 void Location::onBackgroundClick(MouseEvent* event)
-{
-}
-
-void Location::onObjectClick(MouseEvent* event)
-{
-}
-
-void Location::onKeyUp(std::shared_ptr<KeyboardEvent> event)
 {
 }
 
@@ -349,8 +386,6 @@ void Location::think()
         // if scrolling is active
         if (_scrollLeft || _scrollRight || _scrollTop || _scrollBottom)
         {
-            if (mouse->scrollState()) mouse->popState();
-
             unsigned int state;
             if (_scrollLeft)   state = Mouse::SCROLL_W;
             if (_scrollRight)  state = Mouse::SCROLL_E;
@@ -360,7 +395,14 @@ void Location::think()
             if (_scrollLeft && _scrollBottom)  state = Mouse::SCROLL_SW;
             if (_scrollRight && _scrollTop)    state = Mouse::SCROLL_NE;
             if (_scrollRight && _scrollBottom) state = Mouse::SCROLL_SE;
-            mouse->pushState(state);
+            if (mouse->state() != state) 
+            {
+                if (mouse->scrollState())
+                {
+                    mouse->popState();
+                }
+                mouse->pushState(state);
+            }
         }
         // scrolling is not active
         else
@@ -418,13 +460,49 @@ void Location::think()
             }
         }
     }
+    
+    // action cursor stuff
+    if (_objectUnderCursor && _actionCursorTicks && _actionCursorTicks + 500 < SDL_GetTicks())
+    {
+        auto game = Game::getInstance();
+        if (_actionCursorButtonPressed || game->mouse()->state() == Mouse::ACTION)
+        {
+            if (!_actionCursorButtonPressed && (_actionCursorLastObject != _objectUnderCursor))
+            {
+                _objectUnderCursor->look_at_p_proc();
+                _actionCursorLastObject = _objectUnderCursor;
+            }
+            auto icons = getCursorIconsForObject(_objectUnderCursor);
+            if (icons.size() > 0)
+            {
+                auto state = new CursorDropdown(icons, !_actionCursorButtonPressed);
+                state->setObject(_objectUnderCursor);
+                if (dynamic_cast<CursorDropdown*>(game->states()->back()) != NULL)
+                {
+                    game->popState();
+                }
+                Game::getInstance()->pushState(state);
+            }
+        }
+        _actionCursorButtonPressed = false;
+        _actionCursorTicks = 0;
+    }
 }
 
 void Location::toggleCursorMode()
 {
-    auto mouse = Game::getInstance()->mouse();
+    auto game = Game::getInstance();
+    auto mouse = game->mouse();
+    if (dynamic_cast<CursorDropdown*>(game->states()->back()) != NULL) {
+        game->popState();
+    }
     switch (mouse->state())
     {
+        case Mouse::NONE: // just for testing
+        {
+            mouse->pushState(Mouse::ACTION);
+            break;
+        }
         case Mouse::ACTION:
         {
             auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
@@ -435,6 +513,7 @@ void Location::toggleCursorMode()
             mouse->pushState(Mouse::HEXAGON_RED);
             mouse->ui()->setX(hexagon->x() - camera()->x());
             mouse->ui()->setY(hexagon->y() - camera()->y());
+            _objectUnderCursor = NULL;
             break;
         }
         case Mouse::HEXAGON_RED:
@@ -460,17 +539,6 @@ void Location::handle(Event* event)
             event->setHandled(true);
         }
 
-        // Left button down
-        if (mouseEvent->name() == "mousedown" && mouseEvent->leftButton())
-        {
-            switch (mouse->state())
-            {
-                case Mouse::HEXAGON_RED:
-                    // Preventing dropdown state
-                    event->setHandled(true);
-                    break;
-            }
-        }
         // Left button up
         if (mouseEvent->name() == "mouseup" && mouseEvent->leftButton())
         {
@@ -538,6 +606,10 @@ void Location::handle(Event* event)
             {
                 _hexagonInfo->setText("No hex");
             }
+        }
+        // let event fall down to all objects when using action cursor and within active view
+        if (mouse->state() != Mouse::ACTION && mouse->state() != Mouse::NONE)
+        {
             event->setHandled(true);
         }
     }
@@ -560,6 +632,7 @@ void Location::handle(Event* event)
         {
             onKeyDown(keyboardEvent);
         }
+        event->setHandled(true);
     }
     for (auto it = hexagonGrid()->hexagons()->rbegin(); it != hexagonGrid()->hexagons()->rend(); ++it)
     {
@@ -753,6 +826,17 @@ void Location::handleAction(Game::GameObject* object, int action)
         }
 
     }
+}
+
+void Location::displayMessage(std::string message)
+{
+    Game::getInstance()->mixer()->playACMSound("sound/sfx/monitor.acm");
+    Logger::info("MESSAGE") << message << std::endl;
+}
+
+PlayerPanel* Location::playerPanelState()
+{
+    return _playerPanel;
 }
 
 HexagonGrid* Location::hexagonGrid()

@@ -117,7 +117,7 @@ void ActiveUI::handle(Event* event)
         }
         else
         {
-            if (mouseEvent->name() == "mousemove"&& _hovered)
+            if (mouseEvent->name() == "mousemove" && _hovered)
             {
                 if (_drag)
                 {
