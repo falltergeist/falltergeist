@@ -36,16 +36,14 @@ Opcode8005Handler::Opcode8005Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8005Handler::_run()
 {
     auto functionIndex = _vm->popDataInteger();
-    auto argumentCount = _vm->popDataInteger();
+    // @TODO: pass arguments and call external procedures
+    /*auto argumentCount = _vm->popDataInteger();
     std::vector<int> args;
-    // just eat arguments from stack for now, so scripts won't crash completely
     for (int i = 0; i < argumentCount; i++)  
     {
         args.push_back(_vm->popDataInteger());
-    }
-    // @TODO: pass arguments
+    }*/
     _vm->setProgramCounter(_vm->script()->function(functionIndex));
-
     Logger::debug("SCRIPT") << "[8005] [*] op_call(0x" << std::hex << functionIndex << ") = 0x" << _vm->programCounter() << std::endl;
 }
 
