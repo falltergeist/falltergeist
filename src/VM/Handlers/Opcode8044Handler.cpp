@@ -39,16 +39,14 @@ void Opcode8044Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8044] [*] op_floor" << std::endl;
     auto value = _vm->dataStack()->pop();
-    auto intValue = dynamic_cast<VMStackIntValue*>(value);
-    auto floatValue = dynamic_cast<VMStackFloatValue*>(value);
     int result = 0;
-    if (intValue) 
-    {
-        result = intValue->value();
-    }
-    else if (floatValue)
+    if (auto floatValue = dynamic_cast<VMStackFloatValue*>(value))
     {
         result = (int)floatValue->value(); // this is how "floor" originally worked..
+    }
+    else if (auto intValue = dynamic_cast<VMStackIntValue*>(value)) 
+    {
+        result = intValue->value();
     }
     _vm->pushDataInteger(result);
 }
