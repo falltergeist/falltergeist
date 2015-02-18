@@ -56,9 +56,10 @@ void GameMenu::init()
     setFullscreen(false);
 
     auto background = new Image("art/intrface/opbase.frm");
+    auto panelHeight = Game::getInstance()->locationState()->playerPanelState()->height();
 
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
-    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height() - 99)*0.5; // 99 = art/intrface/iface.frm height
+    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height() - panelHeight)*0.5;
 
     auto saveGameButton = new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18);
     auto loadGameButton = new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37);
