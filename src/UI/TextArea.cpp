@@ -18,8 +18,8 @@
  */
 
 // C++ standard includes
-#include <sstream>
 #include <algorithm>
+#include <sstream>
 
 // Falltergeist includes
 #include "../CrossPlatform.h"
@@ -225,7 +225,7 @@ void TextArea::_calculate()
         symbol.setFont(font());
         lines.back().push_back(symbol);
 
-        x += font()->aaf()->glyphs()->at(*it)->width() + font()->horizontalGap();
+        x += font()->aaf()->glyphs()->at(symbol.chr())->width() + font()->horizontalGap();
         widths.back() = x;
     }
 
@@ -338,6 +338,16 @@ TextArea& TextArea::operator+=(signed value)
 {
     appendText(std::to_string(value));
     return *this;
+}
+
+unsigned int TextArea::pixel(unsigned int x, unsigned int y)
+{
+    if ( x >= width() || y >= height())
+    {
+        return 0; // transparent
+    }
+
+    return 0xFFFFFFFF; // white color
 }
 
 }

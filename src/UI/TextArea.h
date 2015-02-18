@@ -92,6 +92,7 @@ public:
     std::shared_ptr<Font> font();
 
     virtual void render();
+    virtual unsigned int pixel(unsigned int x, unsigned int y);
 
     unsigned int timestampCreated();
 
