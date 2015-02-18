@@ -133,6 +133,7 @@ void PlayerPanel::think()
 
 void PlayerPanel::handle(Event* event)
 {
+    State::handle(event);
     // object in hand
     if (auto item = Game::getInstance()->player()->currentHandSlot())
     {
@@ -140,7 +141,6 @@ void PlayerPanel::handle(Event* event)
         itemUi->handle(event);
         if (event->handled()) return;
     }
-    State::handle(event);
 }
 
 void PlayerPanel::onPanelMouseDown(MouseEvent* event)

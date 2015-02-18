@@ -493,9 +493,6 @@ void Location::toggleCursorMode()
 {
     auto game = Game::getInstance();
     auto mouse = game->mouse();
-    if (dynamic_cast<CursorDropdown*>(game->states()->back()) != NULL) {
-        game->popState();
-    }
     switch (mouse->state())
     {
         case Mouse::NONE: // just for testing
