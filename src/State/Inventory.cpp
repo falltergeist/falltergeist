@@ -36,6 +36,7 @@
 #include "../State/GameMenu.h"
 #include "../State/InventoryDragItem.h"
 #include "../State/Inventory.h"
+#include "../State/Location.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/ItemsList.h"
