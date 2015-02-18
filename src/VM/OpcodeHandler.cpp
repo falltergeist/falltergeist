@@ -38,4 +38,11 @@ void OpcodeHandler::run()
     _run();
 }
 
+void OpcodeHandler::_run()
+{
+
+}
+
+
+
 }

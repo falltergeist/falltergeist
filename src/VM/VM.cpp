@@ -110,6 +110,7 @@ void VM::run()
         try
         {
             opcodeHandler->run();
+            delete opcodeHandler;
         }
         catch(VMHaltException& e)
         {
@@ -173,10 +174,9 @@ void VM::pushDataPointer(void* value, unsigned int type)
 
 std::string VM::popDataString()
 {
-    auto stackValue = _dataStack.pop();
-    if (stackValue->type() == VMStackValue::TYPE_POINTER)
+    auto stackPointerValue = dynamic_cast<VMStackPointerValue*>(_dataStack.pop());
+    if (stackPointerValue)
     {
-        auto stackPointerValue = dynamic_cast<VMStackPointerValue*>(stackValue);
         if (stackPointerValue->type() == VMStackPointerValue::POINTER_TYPE_STRING)
         {
             auto value = static_cast<std::string*>(stackPointerValue->value());

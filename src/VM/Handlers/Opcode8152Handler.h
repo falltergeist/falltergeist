@@ -39,4 +39,4 @@ private:
 };
 
 }
-#endif
+#endif // FALLTERGEIST_OPCODE8152HANDLER_H
