@@ -38,7 +38,7 @@ void Opcode8004Handler::_run()
     auto address = _vm->popDataInteger();
     _vm->setProgramCounter(address);
 
-    Logger::debug("SCRIPT") << "[8004] [*] goto(address)" << std::endl
+    Logger::debug("SCRIPT") << "[8004] [*] op_jmp(address)" << std::endl
                             << "    address: " << std::hex << address << std::endl;
 
 

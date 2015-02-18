@@ -43,7 +43,7 @@ void Opcode8016Handler::_run()
     {
         EVARS->insert(std::make_pair(name, nullptr));
     }
-    Logger::debug("SCRIPT") << "[8016] [*] export(name)" << std::endl
+    Logger::debug("SCRIPT") << "[8016] [*] op_export_var(name)" << std::endl
                             << "    name: " << name << std::endl;
 }
 

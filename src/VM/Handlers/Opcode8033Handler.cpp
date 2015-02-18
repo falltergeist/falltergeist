@@ -36,7 +36,7 @@ Opcode8033Handler::Opcode8033Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8033Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8033] [*] eq ==" << std::endl;
+    Logger::debug("SCRIPT") << "[8033] [*] op_equal ==" << std::endl;
     switch (_vm->dataStack()->top()->type())
     {
         case VMStackValue::TYPE_INTEGER:
@@ -67,6 +67,7 @@ void Opcode8033Handler::_run()
         }
         case VMStackValue::TYPE_POINTER:
         {
+            // @TODO: proper string comparison
             auto p2 = _vm->popDataPointer();
             auto p1 = _vm->popDataPointer();
             _vm->pushDataInteger(p1 == p2);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -17,30 +17,38 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_OPCODEHANDLER_H
-#define FALLTERGEIST_OPCODEHANDLER_H
-
 // C++ standard includes
-#include <memory>
 
 // Falltergeist includes
+#include "../../Logger.h"
+#include "../../VM/Handlers/Opcode8044Handler.h"
+#include "../../VM/VM.h"
+#include "../../VM/VMStackValue.h"
+#include "../../Exception.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-class VM;
 
-class OpcodeHandler
+Opcode8044Handler::Opcode8044Handler(VM* vm) : OpcodeHandler(vm)
 {
-protected:
-    VM* _vm;
-    virtual void _run();
-public:
-    OpcodeHandler(VM* vm);
-    virtual ~OpcodeHandler();
-    void run();
-};
+}
+
+void Opcode8044Handler::_run()
+{
+    Logger::debug("SCRIPT") << "[8044] [*] op_floor" << std::endl;
+    auto value = _vm->dataStack()->pop();
+    int result = 0;
+    if (auto floatValue = dynamic_cast<VMStackFloatValue*>(value))
+    {
+        result = (int)floatValue->value(); // this is how "floor" originally worked..
+    }
+    else if (auto intValue = dynamic_cast<VMStackIntValue*>(value)) 
+    {
+        result = intValue->value();
+    }
+    _vm->pushDataInteger(result);
+}
 
 }
-#endif // FALLTERGEIST_OPCODEHANDLER_H

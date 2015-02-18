@@ -35,7 +35,8 @@ Opcode803BHandler::Opcode803BHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode803BHandler::_run()
 {
-    Logger::debug("SCRIPT") << "[803B] [*] mult *" << std::endl;
+    Logger::debug("SCRIPT") << "[803B] [*] op_mul(a, b) *" << std::endl;
+    // @TODO: other types
     auto b = _vm->popDataInteger();
     auto a = _vm->popDataInteger();
     _vm->pushDataInteger(a * b);

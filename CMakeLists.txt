@@ -349,6 +349,8 @@ set(SOURCES main.cpp
     src/VM/Handlers/Opcode8040Handler.cpp
     src/VM/Handlers/Opcode8041Handler.h
     src/VM/Handlers/Opcode8041Handler.cpp
+    src/VM/Handlers/Opcode8044Handler.h
+    src/VM/Handlers/Opcode8044Handler.cpp
     src/VM/Handlers/Opcode8045Handler.h
     src/VM/Handlers/Opcode8045Handler.cpp
     src/VM/Handlers/Opcode8046Handler.h
@@ -595,6 +597,8 @@ set(SOURCES main.cpp
     src/VM/Handlers/Opcode8150Handler.cpp
     src/VM/Handlers/Opcode8151Handler.h
     src/VM/Handlers/Opcode8151Handler.cpp
+    src/VM/Handlers/Opcode8152Handler.h
+    src/VM/Handlers/Opcode8152Handler.cpp
     src/VM/Handlers/Opcode8153Handler.h
     src/VM/Handlers/Opcode8153Handler.cpp
     src/VM/Handlers/Opcode8154Handler.h

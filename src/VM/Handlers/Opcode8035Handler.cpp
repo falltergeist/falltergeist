@@ -35,7 +35,8 @@ Opcode8035Handler::Opcode8035Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8035Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8035] [*] leq <=" << std::endl;
+    Logger::debug("SCRIPT") << "[8035] [*] op_less_equal <=" << std::endl;
+    // @TODO: add float and string comparison
     auto b = _vm->popDataInteger();
     auto a = _vm->popDataInteger();
     _vm->pushDataInteger(a <= b);

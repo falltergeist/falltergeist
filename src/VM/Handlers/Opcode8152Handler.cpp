@@ -17,30 +17,31 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_OPCODEHANDLER_H
-#define FALLTERGEIST_OPCODEHANDLER_H
-
 // C++ standard includes
-#include <memory>
 
 // Falltergeist includes
+#include "../../Logger.h"
+#include "../../VM/Handlers/Opcode8152Handler.h"
+#include "../../VM/VM.h"
+
+
 
 // Third party includes
 
 namespace Falltergeist
 {
-class VM;
 
-class OpcodeHandler
+Opcode8152Handler::Opcode8152Handler(VM* vm) : OpcodeHandler(vm)
 {
-protected:
-    VM* _vm;
-    virtual void _run();
-public:
-    OpcodeHandler(VM* vm);
-    virtual ~OpcodeHandler();
-    void run();
-};
+}
+
+void Opcode8152Handler::_run()
+{
+    Logger::debug("SCRIPT") << "[8152] [=] void op_critter_set_flee_state(critter who, boolean flag)" << std::endl;
+    // @TODO: add implementation
+    _vm->popDataLogical();
+    _vm->popDataPointer();
+}
 
 }
-#endif // FALLTERGEIST_OPCODEHANDLER_H
+

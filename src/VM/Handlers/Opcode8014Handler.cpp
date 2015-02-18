@@ -61,7 +61,7 @@ void Opcode8014Handler::_run()
     auto value = EVARS->at(name);
     _vm->dataStack()->push(value);
 
-    debug << "[8014] [+] value = getExported(name)" << std::endl;
+    debug << "[8014] [+] value = op_fetch_external(name)" << std::endl;
     debug << "    name = " << name << std::endl;
     debug << "    type = " << value->type() << std::endl;
     switch (value->type())

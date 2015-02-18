@@ -45,7 +45,7 @@ void Opcode8012Handler::_run()
 
     auto& debug = Logger::debug("SCRIPT");
 
-    debug   << "[8012] [*] value = SVAR[num]" << std::endl
+    debug   << "[8012] [*] value = op_fetch_global[num]" << std::endl
             << "      num: "  << number << std::endl
             << "     type: " << value->type() << std::endl
             << "    value: ";

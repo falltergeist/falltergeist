@@ -555,6 +555,15 @@ Animation* GameCritterObject::setActionAnimation(std::string action)
     return animation;
 }
 
+void GameCritterObject::setRadiationLevel(int radiationLevel)
+{
+    this->_radiationLevel = radiationLevel;
+}
+
+int GameCritterObject::radiationLevel()
+{
+    return _radiationLevel;
+}
 
 std::string GameCritterObject::_generateArmorFrmString()
 {

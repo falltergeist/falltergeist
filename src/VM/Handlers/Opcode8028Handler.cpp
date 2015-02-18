@@ -23,6 +23,7 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8028Handler.h"
 #include "../../VM/VM.h"
+#include "../../Exception.h"
 
 // Third party includes
 
@@ -35,9 +36,16 @@ Opcode8028Handler::Opcode8028Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8028Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8028] [?] ? lookup_string_proc(? p1)" << std::endl;
-    _vm->popDataInteger();
-    _vm->pushDataPointer(0);
+    Logger::debug("SCRIPT") << "[8028] [?] int lookup_string_proc(string)" << std::endl;
+    std::string name = _vm->popDataString();
+    try
+    {
+        _vm->pushDataInteger(_vm->script()->function(name));
+    }
+    catch (libfalltergeist::Exception &e)
+    {
+        throw Exception(std::string("lookup_string_proc - ") + e.what());
+    }
 }
 
 }

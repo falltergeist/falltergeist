@@ -38,7 +38,7 @@ void Opcode802BHandler::_run()
     auto argumentsCounter = _vm->popDataInteger();
     _vm->pushReturnInteger(_vm->DVARbase());
     _vm->setDVARBase(_vm->dataStack()->size() - argumentsCounter);
-    Logger::debug("SCRIPT") << "[802B] [*] set DVAR base = " << _vm->DVARbase() << std::endl;
+    Logger::debug("SCRIPT") << "[802B] [*] op_push_base = " << _vm->DVARbase() << std::endl;
 }
 
 }

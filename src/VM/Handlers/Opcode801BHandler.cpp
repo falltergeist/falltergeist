@@ -35,8 +35,8 @@ Opcode801BHandler::Opcode801BHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode801BHandler::_run()
 {
-    Logger::debug("SCRIPT") << "[801B] [?] dup_r" << std::endl;
-    _vm->returnStack()->push(_vm->returnStack()->top());
+    Logger::debug("SCRIPT") << "[801B] op_dup" << std::endl;
+    _vm->dataStack()->push(_vm->dataStack()->top());
 }
 
 }

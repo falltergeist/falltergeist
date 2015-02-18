@@ -35,7 +35,8 @@ Opcode8036Handler::Opcode8036Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8036Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8036] [*] geq >=" << std::endl;
+    Logger::debug("SCRIPT") << "[8036] [*] op_greater_equal >=" << std::endl;
+    // @TODO: float and string comparison
     auto b = _vm->popDataInteger();
     auto a = _vm->popDataInteger();
     _vm->pushDataInteger(a >= b);

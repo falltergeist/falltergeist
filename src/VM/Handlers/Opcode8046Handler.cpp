@@ -23,6 +23,8 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8046Handler.h"
 #include "../../VM/VM.h"
+#include "../../VM/VMStackIntValue.h"
+#include "../../VM/VMStackFloatValue.h"
 
 // Third party includes
 
@@ -35,9 +37,20 @@ Opcode8046Handler::Opcode8046Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8046Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8046] [*] - value (change sign)" << std::endl;
-    auto value = _vm->popDataInteger();
-    _vm-> pushDataInteger(-value);
+    Logger::debug("SCRIPT") << "[8046] [*] op_negate" << std::endl;
+    auto value = _vm->dataStack()->pop();
+    if (auto stackIntValue = dynamic_cast<VMStackIntValue*>(value)) 
+    {
+        _vm->pushDataInteger(- stackIntValue->value());
+    }
+    else if (auto stackFloatValue = dynamic_cast<VMStackFloatValue*>(value))
+    {
+        _vm->pushDataFloat(- stackFloatValue->value());
+    }
+    else
+    {
+        _vm->pushDataInteger(0);
+    }
 }
 
 }

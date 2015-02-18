@@ -32,10 +32,22 @@ OpcodeHandler::OpcodeHandler(VM* vm) : _vm(vm)
 {
 }
 
+OpcodeHandler::~OpcodeHandler()
+{
+}
+
+
 void OpcodeHandler::run()
 {
     _vm->setProgramCounter(_vm->programCounter() + 2);
     _run();
 }
+
+void OpcodeHandler::_run()
+{
+
+}
+
+
 
 }

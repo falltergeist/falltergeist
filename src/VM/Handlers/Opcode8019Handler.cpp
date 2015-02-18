@@ -35,7 +35,7 @@ Opcode8019Handler::Opcode8019Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8019Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8019] [*] rswap" << std::endl;
+    Logger::debug("SCRIPT") << "[8019] [*] op_swapa" << std::endl;
     _vm->returnStack()->swap();
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -17,30 +17,25 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_OPCODEHANDLER_H
-#define FALLTERGEIST_OPCODEHANDLER_H
+#ifndef FALLTERGEIST_OPCODE8044HANDLER_H
+#define FALLTERGEIST_OPCODE8044HANDLER_H
 
 // C++ standard includes
-#include <memory>
 
 // Falltergeist includes
+#include "../../VM/OpcodeHandler.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-class VM;
 
-class OpcodeHandler
+class Opcode8044Handler : public OpcodeHandler
 {
-protected:
-    VM* _vm;
-    virtual void _run();
 public:
-    OpcodeHandler(VM* vm);
-    virtual ~OpcodeHandler();
-    void run();
+    Opcode8044Handler(VM* vm);
+    virtual void _run();
 };
 
 }
-#endif // FALLTERGEIST_OPCODEHANDLER_H
+#endif // FALLTERGEIST_OPCODE8044HANDLER_H
