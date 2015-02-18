@@ -243,7 +243,7 @@ Texture* ResourceManager::texture(std::string filename)
     if (ext == ".png")
     {
         // @fixme: this section looks quite ugly. we should try to do something with it someday
-        SDL_Surface* tempSurface = IMG_Load(filename.c_str());
+        SDL_Surface* tempSurface = IMG_Load(std::string(CrossPlatform::findFalltergeistDataPath() + "/" +filename).c_str());
         if (tempSurface == NULL)
         {
             throw Exception("ResourceManager::texture(name) - cannot load texture from file " + filename + ": " + IMG_GetError());
