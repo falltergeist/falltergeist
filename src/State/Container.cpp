@@ -29,6 +29,7 @@
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/ItemsList.h"
+#include "../Input/Mouse.h"
 
 // Third party includes
 
@@ -99,6 +100,26 @@ void Container::onDoneButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
 }
+
+void Container::onStateActivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+}
+
+void Container::onStateDeactivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->popState();
+}
+
+void Container::onKeyDown(KeyboardEvent* event)
+{
+    if (event->keyCode() == SDLK_ESCAPE)
+    {
+        Game::getInstance()->popState();
+    }
+}
+
+
 
 }
 }
