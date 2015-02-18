@@ -58,7 +58,7 @@ Inventory::Inventory() : State()
 Inventory::~Inventory()
 {
     // If hand cursor now
-    if (Game::getInstance()->mouse()->state() != Mouse::ACTION)
+    if (Game::getInstance()->mouse()->state() == Mouse::HAND)
     {
         Game::getInstance()->mouse()->popState();
     }
