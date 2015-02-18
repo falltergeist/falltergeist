@@ -26,8 +26,10 @@
 #include "../PathFinding/Hexagon.h"
 #include "../Game/CritterObject.h"
 #include "../State/CritterInteract.h"
+#include "../State/CursorDropdown.h"
 #include "../State/Location.h"
 #include "../UI/Image.h"
+#include "../Input/Mouse.h"
 
 // Third party includes
 
@@ -45,6 +47,16 @@ CritterInteract::~CritterInteract()
     auto camera = Game::getInstance()->locationState()->camera();
     camera->setXPosition(_oldCameraX);
     camera->setYPosition(_oldCameraY);
+}
+
+void CritterInteract::onStateActivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+}
+
+void CritterInteract::onStateDeactivate(StateEvent* event)
+{
+    Game::getInstance()->mouse()->popState();
 }
 
 void CritterInteract::init()

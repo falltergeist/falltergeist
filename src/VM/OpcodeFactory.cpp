@@ -64,6 +64,7 @@
 #include "../VM/Handlers/Opcode803FHandler.h"
 #include "../VM/Handlers/Opcode8040Handler.h"
 #include "../VM/Handlers/Opcode8041Handler.h"
+#include "../VM/Handlers/Opcode8044Handler.h"
 #include "../VM/Handlers/Opcode8045Handler.h"
 #include "../VM/Handlers/Opcode8046Handler.h"
 #include "../VM/Handlers/Opcode80A1Handler.h"
@@ -187,6 +188,7 @@
 #include "../VM/Handlers/Opcode814EHandler.h"
 #include "../VM/Handlers/Opcode8150Handler.h"
 #include "../VM/Handlers/Opcode8151Handler.h"
+#include "../VM/Handlers/Opcode8152Handler.h"
 #include "../VM/Handlers/Opcode8153Handler.h"
 #include "../VM/Handlers/Opcode8154Handler.h"
 #include "../VM/Handlers/Opcode9001Handler.h"
@@ -202,514 +204,179 @@ OpcodeHandler* OpcodeFactory::createOpcode(unsigned int number, VM* vm)
 {
     switch (number)
     {
-        case 0x8002:
-            return new Opcode8002Handler(vm);
-            break;
-        case 0x8003:
-            return new Opcode8003Handler(vm);
-            break;
-        case 0x8004:
-            return new Opcode8004Handler(vm);
-            break;
-        case 0x8005:
-            return new Opcode8005Handler(vm);
-            break;
-        case 0x800C:
-            return new Opcode800CHandler(vm);
-            break;
-        case 0x800D:
-            return new Opcode800DHandler(vm);
-            break;
-        case 0x8010:
-            return new Opcode8010Handler(vm);
-            break;
-        case 0x8012:
-            return new Opcode8012Handler(vm);
-            break;
-        case 0x8013:
-            return new Opcode8013Handler(vm);
-            break;
-        case 0x8014:
-            return new Opcode8014Handler(vm);
-            break;
-        case 0x8015:
-            return new Opcode8015Handler(vm);
-            break;
-        case 0x8016:
-            return new Opcode8016Handler(vm);
-            break;
-        case 0x8018:
-            return new Opcode8018Handler(vm);
-            break;
-        case 0x8019:
-            return new Opcode8019Handler(vm);
-            break;
-        case 0x801A:
-            return new Opcode801AHandler(vm);
-            break;
-        case 0x801B:
-            return new Opcode801BHandler(vm);
-            break;
-        case 0x801C:
-            return new Opcode801CHandler(vm);
-            break;
-        case 0x8027:
-            return new Opcode8027Handler(vm);
-            break;
-        case 0x8028:
-            return new Opcode8028Handler(vm);
-            break;
-        case 0x8029:
-            return new Opcode8029Handler(vm);
-            break;
-        case 0x802A:
-            return new Opcode802AHandler(vm);
-            break;
-        case 0x802B:
-            return new Opcode802BHandler(vm);
-            break;
-        case 0x802C:
-            return new Opcode802CHandler(vm);
-            break;
-        case 0x802F:
-            return new Opcode802FHandler(vm);
-            break;
-        case 0x8030:
-            return new Opcode8030Handler(vm);
-            break;
-        case 0x8031:
-            return new Opcode8031Handler(vm);
-            break;
-        case 0x8032:
-            return new Opcode8032Handler(vm);
-            break;
-        case 0x8033:
-            return new Opcode8033Handler(vm);
-            break;
-        case 0x8034:
-            return new Opcode8034Handler(vm);
-            break;
-        case 0x8035:
-            return new Opcode8035Handler(vm);
-            break;
-        case 0x8036:
-            return new Opcode8036Handler(vm);
-            break;
-        case 0x8037:
-            return new Opcode8037Handler(vm);
-            break;
-        case 0x8038:
-            return new Opcode8038Handler(vm);
-            break;
-        case 0x8039:
-            return new Opcode8039Handler(vm);
-            break;
-        case 0x803A:
-            return new Opcode803AHandler(vm);
-            break;
-        case 0x803B:
-            return new Opcode803BHandler(vm);
-            break;
-        case 0x803C:
-            return new Opcode803CHandler(vm);
-            break;
-        case 0x803D:
-            return new Opcode803DHandler(vm);
-            break;
-        case 0x803E:
-            return new Opcode803EHandler(vm);
-            break;
-        case 0x803F:
-            return new Opcode803FHandler(vm);
-            break;
-        case 0x8040:
-            return new Opcode8040Handler(vm);
-            break;
-        case 0x8041:
-            return new Opcode8041Handler(vm);
-            break;
-        case 0x8045:
-            return new Opcode8045Handler(vm);
-            break;
-        case 0x8046:
-            return new Opcode8046Handler(vm);
-            break;
-        case 0x80A1:
-            return new Opcode80A1Handler(vm);
-            break;
-        case 0x80A3:
-            return new Opcode80A3Handler(vm);
-            break;
-        case 0x80A4:
-            return new Opcode80A4Handler(vm);
-            break;
-        case 0x80A6:
-            return new Opcode80A6Handler(vm);
-            break;
-        case 0x80A7:
-            return new Opcode80A7Handler(vm);
-            break;
-        case 0x80A8:
-            return new Opcode80A8Handler(vm);
-            break;
-        case 0x80A9:
-            return new Opcode80A9Handler(vm);
-            break;
-        case 0x80AA:
-            return new Opcode80AAHandler(vm);
-            break;
-        case 0x80AB:
-            return new Opcode80ABHandler(vm);
-            break;
-        case 0x80AC:
-            return new Opcode80ACHandler(vm);
-            break;
-        case 0x80AE:
-            return new Opcode80AEHandler(vm);
-            break;
-        case 0x80AF:
-            return new Opcode80AFHandler(vm);
-            break;
-        case 0x80B0:
-            return new Opcode80B0Handler(vm);
-            break;
-        case 0x80B2:
-            return new Opcode80B2Handler(vm);
-            break;
-        case 0x80B4:
-            return new Opcode80B4Handler(vm);
-            break;
-        case 0x80B6:
-            return new Opcode80B6Handler(vm);
-            break;
-        case 0x80B7:
-            return new Opcode80B7Handler(vm);
-            break;
-        case 0x80B8:
-            return new Opcode80B8Handler(vm);
-            break;
-        case 0x80B9:
-            return new Opcode80B9Handler(vm);
-            break;
-        case 0x80BA:
-            return new Opcode80BAHandler(vm);
-            break;
-        case 0x80BB:
-            return new Opcode80BBHandler(vm);
-            break;
-        case 0x80BC:
-            return new Opcode80BCHandler(vm);
-            break;
-        case 0x80BD:
-            return new Opcode80BDHandler(vm);
-            break;
-        case 0x80BF:
-            return new Opcode80BFHandler(vm);
-            break;
-        case 0x80C1:
-            return new Opcode80C1Handler(vm);
-            break;
-        case 0x80C2:
-            return new Opcode80C2Handler(vm);
-            break;
-        case 0x80C3:
-            return new Opcode80C3Handler(vm);
-            break;
-        case 0x80C4:
-            return new Opcode80C4Handler(vm);
-            break;
-        case 0x80C5:
-            return new Opcode80C5Handler(vm);
-            break;
-        case 0x80C6:
-            return new Opcode80C6Handler(vm);
-            break;
-        case 0x80C7:
-            return new Opcode80C7Handler(vm);
-            break;
-        case 0x80C8:
-            return new Opcode80C8Handler(vm);
-            break;
-        case 0x80C9:
-            return new Opcode80C9Handler(vm);
-            break;
-        case 0x80CA:
-            return new Opcode80CAHandler(vm);
-            break;
-        case 0x80CB:
-            return new Opcode80CBHandler(vm);
-            break;
-        case 0x80CC:
-            return new Opcode80CCHandler(vm);
-            break;
-        case 0x80CE:
-            return new Opcode80CEHandler(vm);
-            break;
-        case 0x80CF:
-            return new Opcode80CFHandler(vm);
-            break;
-        case 0x80D0:
-            return new Opcode80D0Handler(vm);
-            break;
-        case 0x80D2:
-            return new Opcode80D2Handler(vm);
-            break;
-        case 0x80D3:
-            return new Opcode80D3Handler(vm);
-            break;
-        case 0x80D4:
-            return new Opcode80D4Handler(vm);
-            break;
-        case 0x80D5:
-            return new Opcode80D5Handler(vm);
-            break;
-        case 0x80D8:
-            return new Opcode80D8Handler(vm);
-            break;
-        case 0x80D9:
-            return new Opcode80D9Handler(vm);
-            break;
-        case 0x80DA:
-            return new Opcode80DAHandler(vm);
-            break;
-        case 0x80DC:
-            return new Opcode80DCHandler(vm);
-            break;
-        case 0x80DE:
-            return new Opcode80DEHandler(vm);
-            break;
-        case 0x80DF:
-            return new Opcode80DFHandler(vm);
-            break;
-        case 0x80E1:
-            return new Opcode80E1Handler(vm);
-            break;
-        case 0x80E3:
-            return new Opcode80E3Handler(vm);
-            break;
-        case 0x80E4:
-            return new Opcode80E4Handler(vm);
-            break;
-        case 0x80E5:
-            return new Opcode80E5Handler(vm);
-            break;
-        case 0x80E7:
-            return new Opcode80E7Handler(vm);
-            break;
-        case 0x80E8:
-            return new Opcode80E8Handler(vm);
-            break;
-        case 0x80E9:
-            return new Opcode80E9Handler(vm);
-            break;
-        case 0x80EA:
-            return new Opcode80EAHandler(vm);
-            break;
-        case 0x80EC:
-            return new Opcode80ECHandler(vm);
-            break;
-        case 0x80EF:
-            return new Opcode80EFHandler(vm);
-            break;
-        case 0x80F0:
-            return new Opcode80F0Handler(vm);
-            break;
-        case 0x80F1:
-            return new Opcode80F1Handler(vm);
-            break;
-        case 0x80F2:
-            return new Opcode80F2Handler(vm);
-            break;
-        case 0x80F3:
-            return new Opcode80F3Handler(vm);
-            break;
-        case 0x80F4:
-            return new Opcode80F4Handler(vm);
-            break;
-        case 0x80F6:
-            return new Opcode80F6Handler(vm);
-            break;
-        case 0x80F7:
-            return new Opcode80F7Handler(vm);
-            break;
-        case 0x80F9:
-            return new Opcode80F9Handler(vm);
-            break;
-        case 0x80FA:
-            return new Opcode80FAHandler(vm);
-            break;
-        case 0x80FB:
-            return new Opcode80FBHandler(vm);
-            break;
-        case 0x80FC:
-            return new Opcode80FCHandler(vm);
-            break;
-        case 0x80FD:
-            return new Opcode80FDHandler(vm);
-            break;
-        case 0x80FE:
-            return new Opcode80FEHandler(vm);
-            break;
-        case 0x80FF:
-            return new Opcode80FFHandler(vm);
-            break;
-        case 0x8100:
-            return new Opcode8100Handler(vm);
-            break;
-        case 0x8101:
-            return new Opcode8101Handler(vm);
-            break;
-        case 0x8102:
-            return new Opcode8102Handler(vm);
-            break;
-        case 0x8105:
-            return new Opcode8105Handler(vm);
-            break;
-        case 0x8106:
-            return new Opcode8106Handler(vm);
-            break;
-        case 0x810A:
-            return new Opcode810AHandler(vm);
-            break;
-        case 0x810B:
-            return new Opcode810BHandler(vm);
-            break;
-        case 0x810C:
-            return new Opcode810CHandler(vm);
-            break;
-        case 0x810D:
-            return new Opcode810DHandler(vm);
-            break;
-        case 0x810E:
-            return new Opcode810EHandler(vm);
-            break;
-        case 0x810F:
-            return new Opcode810FHandler(vm);
-            break;
-        case 0x8113:
-            return new Opcode8113Handler(vm);
-            break;
-        case 0x8115:
-            return new Opcode8115Handler(vm);
-            break;
-        case 0x8116:
-            return new Opcode8115Handler(vm);
-            break;
-        case 0x8117:
-            return new Opcode8117Handler(vm);
-            break;
-        case 0x8118:
-            return new Opcode8118Handler(vm);
-            break;
-        case 0x8119:
-            return new Opcode8119Handler(vm);
-            break;
-        case 0x811C:
-            return new Opcode811CHandler(vm);
-            break;
-        case 0x811D:
-            return new Opcode811DHandler(vm);
-            break;
-        case 0x811E:
-            return new Opcode811EHandler(vm);
-            break;
-        case 0x8120:
-            return new Opcode8120Handler(vm);
-            break;
-        case 0x8121:
-            return new Opcode8121Handler(vm);
-            break;
-        case 0x8122:
-            return new Opcode8122Handler(vm);
-            break;
-        case 0x8123:
-            return new Opcode8123Handler(vm);
-            break;
-        case 0x8126:
-            return new Opcode8126Handler(vm);
-            break;
-        case 0x8127:
-            return new Opcode8127Handler(vm);
-            break;
-        case 0x8128:
-            return new Opcode8128Handler(vm);
-            break;
-        case 0x8129:
-            return new Opcode8129Handler(vm);
-            break;
-        case 0x812D:
-            return new Opcode812DHandler(vm);
-            break;
-        case 0x812E:
-            return new Opcode812EHandler(vm);
-            break;
-        case 0x812F:
-            return new Opcode812FHandler(vm);
-            break;
-        case 0x8130:
-            return new Opcode8130Handler(vm);
-            break;
-        case 0x8131:
-            return new Opcode8131Handler(vm);
-            break;
-        case 0x8132:
-            return new Opcode8132Handler(vm);
-            break;
-        case 0x8134:
-            return new Opcode8134Handler(vm);
-            break;
-        case 0x8136:
-            return new Opcode8136Handler(vm);
-            break;
-        case 0x8137:
-            return new Opcode8137Handler(vm);
-            break;
-        case 0x8138:
-            return new Opcode8138Handler(vm);
-            break;
-        case 0x8139:
-            return new Opcode8139Handler(vm);
-            break;
-        case 0x813C:
-            return new Opcode813CHandler(vm);
-            break;
-        case 0x8143:
-            return new Opcode8143Handler(vm);
-            break;
-        case 0x8147:
-            return new Opcode8147Handler(vm);
-            break;
-        case 0x8149:
-            return new Opcode8149Handler(vm);
-            break;
-        case 0x814B:
-            return new Opcode814BHandler(vm);
-            break;
-        case 0x814C:
-            return new Opcode814CHandler(vm);
-            break;
-        case 0x814E:
-            return new Opcode814EHandler(vm);
-            break;
-        case 0x8150:
-            return new Opcode8150Handler(vm);
-            break;
-        case 0x8151:
-            return new Opcode8151Handler(vm);
-            break;
-        case 0x8153:
-            return new Opcode8153Handler(vm);
-            break;
-        case 0x8154:
-            return new Opcode8154Handler(vm);
-            break;
-        case 0x9001:
-            return new Opcode9001Handler(vm);
-            break;
-        case 0xC001:
-            return new OpcodeC001Handler(vm);
-            break;
-        default:
+        case 0x8000: return new OpcodeHandler(vm); // O_NOOP
+        case 0x8002: return new Opcode8002Handler(vm);
+        case 0x8003: return new Opcode8003Handler(vm);
+        case 0x8004: return new Opcode8004Handler(vm);
+        case 0x8005: return new Opcode8005Handler(vm);
+        case 0x800C: return new Opcode800CHandler(vm);
+        case 0x800D: return new Opcode800DHandler(vm);
+        case 0x8010: return new Opcode8010Handler(vm);
+        case 0x8012: return new Opcode8012Handler(vm);
+        case 0x8013: return new Opcode8013Handler(vm);
+        case 0x8014: return new Opcode8014Handler(vm);
+        case 0x8015: return new Opcode8015Handler(vm);
+        case 0x8016: return new Opcode8016Handler(vm);
+        case 0x8018: return new Opcode8018Handler(vm);
+        case 0x8019: return new Opcode8019Handler(vm);
+        case 0x801A: return new Opcode801AHandler(vm);
+        case 0x801B: return new Opcode801BHandler(vm);
+        case 0x801C: return new Opcode801CHandler(vm);
+        case 0x8027: return new Opcode8027Handler(vm);
+        case 0x8028: return new Opcode8028Handler(vm);
+        case 0x8029: return new Opcode8029Handler(vm);
+        case 0x802A: return new Opcode802AHandler(vm);
+        case 0x802B: return new Opcode802BHandler(vm);
+        case 0x802C: return new Opcode802CHandler(vm);
+        case 0x802F: return new Opcode802FHandler(vm);
+        case 0x8030: return new Opcode8030Handler(vm);
+        case 0x8031: return new Opcode8031Handler(vm);
+        case 0x8032: return new Opcode8032Handler(vm);
+        case 0x8033: return new Opcode8033Handler(vm);
+        case 0x8034: return new Opcode8034Handler(vm);
+        case 0x8035: return new Opcode8035Handler(vm);
+        case 0x8036: return new Opcode8036Handler(vm);
+        case 0x8037: return new Opcode8037Handler(vm);
+        case 0x8038: return new Opcode8038Handler(vm);
+        case 0x8039: return new Opcode8039Handler(vm);
+        case 0x803A: return new Opcode803AHandler(vm);
+        case 0x803B: return new Opcode803BHandler(vm);
+        case 0x803C: return new Opcode803CHandler(vm);
+        case 0x803D: return new Opcode803DHandler(vm);
+        case 0x803E: return new Opcode803EHandler(vm);
+        case 0x803F: return new Opcode803FHandler(vm);
+        case 0x8040: return new Opcode8040Handler(vm);
+        case 0x8041: return new Opcode8041Handler(vm);
+        case 0x8044: return new Opcode8044Handler(vm);
+        case 0x8045: return new Opcode8045Handler(vm);
+        case 0x8046: return new Opcode8046Handler(vm);
+        case 0x80A1: return new Opcode80A1Handler(vm);
+        case 0x80A3: return new Opcode80A3Handler(vm);
+        case 0x80A4: return new Opcode80A4Handler(vm);
+        case 0x80A6: return new Opcode80A6Handler(vm);
+        case 0x80A7: return new Opcode80A7Handler(vm);
+        case 0x80A8: return new Opcode80A8Handler(vm);
+        case 0x80A9: return new Opcode80A9Handler(vm);
+        case 0x80AA: return new Opcode80AAHandler(vm);
+        case 0x80AB: return new Opcode80ABHandler(vm);
+        case 0x80AC: return new Opcode80ACHandler(vm);
+        case 0x80AE: return new Opcode80AEHandler(vm);
+        case 0x80AF: return new Opcode80AFHandler(vm);
+        case 0x80B0: return new Opcode80B0Handler(vm);
+        case 0x80B2: return new Opcode80B2Handler(vm);
+        case 0x80B4: return new Opcode80B4Handler(vm);
+        case 0x80B6: return new Opcode80B6Handler(vm);
+        case 0x80B7: return new Opcode80B7Handler(vm);
+        case 0x80B8: return new Opcode80B8Handler(vm);
+        case 0x80B9: return new Opcode80B9Handler(vm);
+        case 0x80BA: return new Opcode80BAHandler(vm);
+        case 0x80BB: return new Opcode80BBHandler(vm);
+        case 0x80BC: return new Opcode80BCHandler(vm);
+        case 0x80BD: return new Opcode80BDHandler(vm);
+        case 0x80BF: return new Opcode80BFHandler(vm);
+        case 0x80C1: return new Opcode80C1Handler(vm);
+        case 0x80C2: return new Opcode80C2Handler(vm);
+        case 0x80C3: return new Opcode80C3Handler(vm);
+        case 0x80C4: return new Opcode80C4Handler(vm);
+        case 0x80C5: return new Opcode80C5Handler(vm);
+        case 0x80C6: return new Opcode80C6Handler(vm);
+        case 0x80C7: return new Opcode80C7Handler(vm);
+        case 0x80C8: return new Opcode80C8Handler(vm);
+        case 0x80C9: return new Opcode80C9Handler(vm);
+        case 0x80CA: return new Opcode80CAHandler(vm);
+        case 0x80CB: return new Opcode80CBHandler(vm);
+        case 0x80CC: return new Opcode80CCHandler(vm);
+        case 0x80CE: return new Opcode80CEHandler(vm);
+        case 0x80CF: return new Opcode80CFHandler(vm);
+        case 0x80D0: return new Opcode80D0Handler(vm);
+        case 0x80D2: return new Opcode80D2Handler(vm);
+        case 0x80D3: return new Opcode80D3Handler(vm);
+        case 0x80D4: return new Opcode80D4Handler(vm);
+        case 0x80D5: return new Opcode80D5Handler(vm);
+        case 0x80D8: return new Opcode80D8Handler(vm);
+        case 0x80D9: return new Opcode80D9Handler(vm);
+        case 0x80DA: return new Opcode80DAHandler(vm);
+        case 0x80DC: return new Opcode80DCHandler(vm);
+        case 0x80DE: return new Opcode80DEHandler(vm);
+        case 0x80DF: return new Opcode80DFHandler(vm);
+        case 0x80E1: return new Opcode80E1Handler(vm);
+        case 0x80E3: return new Opcode80E3Handler(vm);
+        case 0x80E4: return new Opcode80E4Handler(vm);
+        case 0x80E5: return new Opcode80E5Handler(vm);
+        case 0x80E7: return new Opcode80E7Handler(vm);
+        case 0x80E8: return new Opcode80E8Handler(vm);
+        case 0x80E9: return new Opcode80E9Handler(vm);
+        case 0x80EA: return new Opcode80EAHandler(vm);
+        case 0x80EC: return new Opcode80ECHandler(vm);
+        case 0x80EF: return new Opcode80EFHandler(vm);
+        case 0x80F0: return new Opcode80F0Handler(vm);
+        case 0x80F1: return new Opcode80F1Handler(vm);
+        case 0x80F2: return new Opcode80F2Handler(vm);
+        case 0x80F3: return new Opcode80F3Handler(vm);
+        case 0x80F4: return new Opcode80F4Handler(vm);
+        case 0x80F6: return new Opcode80F6Handler(vm);
+        case 0x80F7: return new Opcode80F7Handler(vm);
+        case 0x80F9: return new Opcode80F9Handler(vm);
+        case 0x80FA: return new Opcode80FAHandler(vm);
+        case 0x80FB: return new Opcode80FBHandler(vm);
+        case 0x80FC: return new Opcode80FCHandler(vm);
+        case 0x80FD: return new Opcode80FDHandler(vm);
+        case 0x80FE: return new Opcode80FEHandler(vm);
+        case 0x80FF: return new Opcode80FFHandler(vm);
+        case 0x8100: return new Opcode8100Handler(vm);
+        case 0x8101: return new Opcode8101Handler(vm);
+        case 0x8102: return new Opcode8102Handler(vm);
+        case 0x8105: return new Opcode8105Handler(vm);
+        case 0x8106: return new Opcode8106Handler(vm);
+        case 0x810A: return new Opcode810AHandler(vm);
+        case 0x810B: return new Opcode810BHandler(vm);
+        case 0x810C: return new Opcode810CHandler(vm);
+        case 0x810D: return new Opcode810DHandler(vm);
+        case 0x810E: return new Opcode810EHandler(vm);
+        case 0x810F: return new Opcode810FHandler(vm);
+        case 0x8113: return new Opcode8113Handler(vm);
+        case 0x8115: return new Opcode8115Handler(vm);
+        case 0x8116: return new Opcode8115Handler(vm);
+        case 0x8117: return new Opcode8117Handler(vm);
+        case 0x8118: return new Opcode8118Handler(vm);
+        case 0x8119: return new Opcode8119Handler(vm);
+        case 0x811C: return new Opcode811CHandler(vm);
+        case 0x811D: return new Opcode811DHandler(vm);
+        case 0x811E: return new Opcode811EHandler(vm);
+        case 0x8120: return new Opcode8120Handler(vm);
+        case 0x8121: return new Opcode8121Handler(vm);
+        case 0x8122: return new Opcode8122Handler(vm);
+        case 0x8123: return new Opcode8123Handler(vm);
+        case 0x8126: return new Opcode8126Handler(vm);
+        case 0x8127: return new Opcode8127Handler(vm);
+        case 0x8128: return new Opcode8128Handler(vm);
+        case 0x8129: return new Opcode8129Handler(vm);
+        case 0x812D: return new Opcode812DHandler(vm);
+        case 0x812E: return new Opcode812EHandler(vm);
+        case 0x812F: return new Opcode812FHandler(vm);
+        case 0x8130: return new Opcode8130Handler(vm);
+        case 0x8131: return new Opcode8131Handler(vm);
+        case 0x8132: return new Opcode8132Handler(vm);
+        case 0x8134: return new Opcode8134Handler(vm);
+        case 0x8136: return new Opcode8136Handler(vm);
+        case 0x8137: return new Opcode8137Handler(vm);
+        case 0x8138: return new Opcode8138Handler(vm);
+        case 0x8139: return new Opcode8139Handler(vm);
+        case 0x813C: return new Opcode813CHandler(vm);
+        case 0x8143: return new Opcode8143Handler(vm);
+        case 0x8147: return new Opcode8147Handler(vm);
+        case 0x8149: return new Opcode8149Handler(vm);
+        case 0x814B: return new Opcode814BHandler(vm);
+        case 0x814C: return new Opcode814CHandler(vm);
+        case 0x814E: return new Opcode814EHandler(vm);
+        case 0x8150: return new Opcode8150Handler(vm);
+        case 0x8151: return new Opcode8151Handler(vm);
+        case 0x8152: return new Opcode8152Handler(vm);
+        case 0x8153: return new Opcode8153Handler(vm);
+        case 0x8154: return new Opcode8154Handler(vm);
+        case 0x9001: return new Opcode9001Handler(vm);
+        case 0xC001: return new OpcodeC001Handler(vm);
+        default: 
             throw Exception("OpcodeFactory::createOpcode() - unimplemented opcode: " + std::to_string(number));
     }
 }

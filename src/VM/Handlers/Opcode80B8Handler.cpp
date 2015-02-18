@@ -23,8 +23,8 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80B8Handler.h"
 #include "../../VM/VM.h"
-
-
+#include "../../Game/Game.h"
+#include "../../State/Location.h"
 
 
 // Third party includes
@@ -40,7 +40,8 @@ void Opcode80B8Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80B8] [*] void display_msg(string*)" << std::endl;
     std::string* pointer = static_cast<std::string*>(_vm->popDataPointer());
-    Logger::debug("SCRIPT") << *pointer << std::endl;
+    auto game = Game::getInstance();
+    game->locationState()->displayMessage(*pointer);
 }
 
 }

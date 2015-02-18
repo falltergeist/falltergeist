@@ -20,31 +20,39 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Handlers/Opcode803CHandler.h"
-#include "../../VM/VM.h"
-#include "../../Exception.h"
+#include "Exception.h"
+#include "functions.h"
+#include "ResourceManager.h"
 
 // Third party includes
+#include <libfalltergeist.h>
 
 namespace Falltergeist
 {
 
-Opcode803CHandler::Opcode803CHandler(VM* vm) : OpcodeHandler(vm)
+std::string _t(MSG_TYPE type, size_t number)
 {
-}
+    std::vector<std::string> msgFiles = {
+        "text/english/game/inventry.msg",
+        "text/english/game/lsgame.msg",
+        "text/english/game/options.msg",
+        "text/english/game/misc.msg",
+        "text/english/game/editor.msg",
+        "text/english/game/trait.msg",
+        "text/english/game/skill.msg",
+        "text/english/game/stat.msg",
+        "text/english/game/skilldex.msg",
+        "text/english/game/dbox.msg",
+        "text/english/game/pro_item.msg"
+    };
 
-void Opcode803CHandler::_run()
-{
-    Logger::debug("SCRIPT") << "[803C] [*] op_div /" << std::endl;
-    // @TODO: other types
-    auto b = _vm->popDataInteger();
-    auto a = _vm->popDataInteger();
-    if (b == 0) 
+    if (type < 0 || type >= msgFiles.size())
     {
-        throw Exception("Opcode803CHandler - division by zero!");
+        throw Exception("_t() - wrong MSG file type: " + std::to_string(type));
     }
-    _vm->pushDataInteger(a/b);
+
+    auto msg = ResourceManager::msgFileType(msgFiles.at(type));
+    return msg->message(number)->text();
 }
 
 }

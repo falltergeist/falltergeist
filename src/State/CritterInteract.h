@@ -71,6 +71,9 @@ public:
 
     VM* script();
     void setScript(VM* script);
+    
+    virtual void onStateActivate(StateEvent* event);
+    virtual void onStateDeactivate(StateEvent* event);
 };
 
 }

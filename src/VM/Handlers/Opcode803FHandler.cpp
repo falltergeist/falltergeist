@@ -35,7 +35,7 @@ Opcode803FHandler::Opcode803FHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode803FHandler::_run()
 {
-        Logger::debug("SCRIPT") << "[803F] [+] ||" << std::endl;
+        Logger::debug("SCRIPT") << "[803F] [+] op_or" << std::endl;
         auto b = _vm->popDataLogical();
         auto a = _vm->popDataLogical();
         _vm->pushDataInteger(a || b);

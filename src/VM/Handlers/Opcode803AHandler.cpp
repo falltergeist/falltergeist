@@ -35,7 +35,8 @@ Opcode803AHandler::Opcode803AHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode803AHandler::_run()
 {
-    Logger::debug("SCRIPT") << "[803A] [*] minus -" << std::endl;
+    Logger::debug("SCRIPT") << "[803A] [*] op_sub(a, b) -" << std::endl;
+    // @TODO: other types
     auto b = _vm->popDataInteger();
     auto a = _vm->popDataInteger();
     _vm->pushDataInteger(a - b);

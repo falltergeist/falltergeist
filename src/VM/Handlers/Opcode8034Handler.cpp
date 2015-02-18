@@ -55,6 +55,7 @@ void Opcode8034Handler::_run()
         }
         case VMStackValue::TYPE_POINTER:
         {
+            // @TODO: add string comparison
             auto p2 = (int)(bool)_vm->popDataPointer();
             if (_vm->dataStack()->top()->type() == VMStackValue::TYPE_POINTER) // to check if the pointer is null
             {
@@ -76,7 +77,7 @@ void Opcode8034Handler::_run()
             break;
         }
     }
-    Logger::debug("SCRIPT") << "[8034] [*] neq !=" << std::endl;
+    Logger::debug("SCRIPT") << "[8034] [*] op_not_equal !=" << std::endl;
 
 }
 

@@ -41,17 +41,29 @@ void Opcode80E1Handler::_run()
     auto p2 = _vm->popDataInteger();
     auto p1 = _vm->dataStack()->pop();
     auto meta = _vm->popDataInteger();
-    int result;
+    int result = 0;
     switch(meta)
     {
-        case 100: // rm_fixed_timer_event
-            result = 0;
+        case 100: // rm_fixed_timer_event(object, fixed_param, 0) 
             break;
-        case 110:   // unknown
-            result = 0;
+        case 101: // mark subtile visited on worldmap - mark_world_subtile_visited(x, y, radius)
+            break;
+        case 102: // METARULE3_SET_WM_MUSIC - (map index, ACM file name)
+            break;
+        case 103: // player_kill_count(critterType)
+            break;
+        case 104: // int mark_map_entrance_state(int map_idx, int state, int elev); elev -1 means for all elevations
+            break;
+        case 105: // int wm_get_subtile_state(int xPos, int yPos)  (0 - unknown, 1 - known, 2 - visited)
+            break;
+        case 106: // ObjectPtr tile_get_next_critter(int tile_num, int elev, ObjectPtr last_critter)
+            break; 
+        case 107: // int art_change_fid_num(ObjectPtr who, int fid) - change base FID num for object
+            break;
+        case 108: // void tile_set_center(int tileNum) - center camera on given tile
             break;
         default:
-            throw Exception("Opcode80E11Handler - unknown meta: " + std::to_string(meta));
+            throw Exception("Opcode80E1Handler - unknown meta: " + std::to_string(meta));
             break;
     }
     _vm->pushDataInteger(result);

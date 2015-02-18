@@ -36,9 +36,10 @@ Opcode8027Handler::Opcode8027Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8027Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8027] [?] unknown pop_d pop_d" << std::endl;
-    _vm->dataStack()->pop();
-    _vm->dataStack()->pop();
+    Logger::debug("SCRIPT") << "[8027] [?] op_check_arg_count" << std::endl;
+    _vm->dataStack()->pop(); // number of actual arguments
+    _vm->dataStack()->pop(); // procedure index
+    // @TODO: compare number of arguments with procedure info and throw script exception if they are not equal
 }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -17,11 +17,11 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_OPCODEHANDLER_H
-#define FALLTERGEIST_OPCODEHANDLER_H
+#ifndef FALLTERGEIST_FUNCTIONS_H
+#define FALLTERGEIST_FUNCTIONS_H
 
 // C++ standard includes
-#include <memory>
+#include <string>
 
 // Falltergeist includes
 
@@ -29,18 +29,23 @@
 
 namespace Falltergeist
 {
-class VM;
 
-class OpcodeHandler
+enum MSG_TYPE
 {
-protected:
-    VM* _vm;
-    virtual void _run();
-public:
-    OpcodeHandler(VM* vm);
-    virtual ~OpcodeHandler();
-    void run();
+    MSG_INVENTORY = 0,
+    MSG_LOAD_SAVE,
+    MSG_OPTIONS,
+    MSG_MISC,
+    MSG_EDITOR,
+    MSG_TRAITS,
+    MSG_SKILLS,
+    MSG_STATS,
+    MSG_SKILLDEX,
+    MSG_DIALOG_BOX,
+    MSG_PROTO_ITEMS
 };
 
+std::string _t(MSG_TYPE type, size_t number);
+
 }
-#endif // FALLTERGEIST_OPCODEHANDLER_H
+#endif // FALLTERGEIST_FUNCTIONS_H

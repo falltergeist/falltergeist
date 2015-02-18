@@ -42,6 +42,8 @@ public:
     virtual void render();
     virtual void think();
     virtual void handle(Event* event);
+    
+    unsigned int height();
 
     void onChangeHandButtonClick(MouseEvent* event);
     void onPanelMouseDown(MouseEvent* event);

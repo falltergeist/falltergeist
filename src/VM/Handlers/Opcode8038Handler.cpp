@@ -35,10 +35,11 @@ Opcode8038Handler::Opcode8038Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8038Handler::_run()
 {
+    // @TODO: float, string comparison
     auto b = _vm->popDataInteger();
     auto a = _vm->popDataInteger();
     auto result = a > b;
-    Logger::debug("SCRIPT") << "[8038] [*] gt >" << std::endl
+    Logger::debug("SCRIPT") << "[8038] [*] op_greater >" << std::endl
                             << "    a = " << a << std::endl
                             << "    b = " << b << std::endl
                             << "    result = " << result << std::endl;

@@ -66,14 +66,14 @@ void PlayerPanel::init()
 
     auto game = Game::getInstance();
 
+    auto iface = new Image("art/intrface/iface.frm");
     setX((game->renderer()->width() - 640)*0.5);
-    setY(game->renderer()->height() - 99);
-
-    auto background = addUI("background", new Image("art/intrface/iface.frm"));
+    setY(game->renderer()->height() - iface->height());
+    auto background = addUI("background", iface);
     background->addEventHandler("mouseleftdown", [this](Event* event){ this->onPanelMouseDown(dynamic_cast<MouseEvent*>(event)); });
     background->addEventHandler("mousein", [this](Event* event){ this->onPanelMouseIn(dynamic_cast<MouseEvent*>(event)); });
     background->addEventHandler("mouseout", [this](Event* event){ this->onPanelMouseOut(dynamic_cast<MouseEvent*>(event)); });
-
+  
     addUI("change_hand_button", new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 218, 5));
     getActiveUI("change_hand_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onChangeHandButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
@@ -283,7 +283,8 @@ void PlayerPanel::onKeyDown(KeyboardEvent* event)
             // @TODO: volume up
             break;
         case SDLK_F4:
-            doSaveGame();
+            if (!event->altPressed())
+                doSaveGame();
             break;
         case SDLK_F5:
             doLoadGame();
@@ -301,6 +302,11 @@ void PlayerPanel::onKeyDown(KeyboardEvent* event)
             // @TODO: save screenshot
             break;
     }
+}
+
+unsigned int PlayerPanel::height()
+{
+    return getActiveUI("background")->height();
 }
 
 void PlayerPanel::openInventory()

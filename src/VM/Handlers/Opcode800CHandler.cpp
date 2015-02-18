@@ -35,7 +35,7 @@ Opcode800CHandler::Opcode800CHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode800CHandler::_run()
 {
-    Logger::debug("SCRIPT") << "[800C] [*] pop_r => push_d" << std::endl;
+    Logger::debug("SCRIPT") << "[800C] [*] op_a_to_d" << std::endl;
     _vm->dataStack()->push(_vm->returnStack()->pop());
 }
 

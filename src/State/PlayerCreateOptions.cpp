@@ -21,6 +21,7 @@
 
 // Falltergeist includes
 #include "../Audio/AudioMixer.h"
+#include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
@@ -70,27 +71,26 @@ void PlayerCreateOptions::init()
     eraseButton->addEventHandler("mouseleftclick",       [this](Event* event){ this->onEraseButtonClick(dynamic_cast<MouseEvent*>(event)); });
     doneButton->addEventHandler("mouseleftclick",        [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
-    auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
     auto font = ResourceManager::font("font3.aaf", 0xb89c28ff);
 
     // label: save
-    auto saveButtonLabel = new TextArea(msg->message(600), backgroundX+8, backgroundY+26);
+    auto saveButtonLabel = new TextArea(_t(MSG_EDITOR, 600), backgroundX+8, backgroundY+26);
     saveButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // label: load
-    auto loadButtonLabel = new TextArea(msg->message(601), backgroundX+8, backgroundY+26+37);
+    auto loadButtonLabel = new TextArea(_t(MSG_EDITOR, 601), backgroundX+8, backgroundY+26+37);
     loadButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // label: print to file
-    auto printToFileButtonLabel = new TextArea(msg->message(602), backgroundX+8, backgroundY+26+37*2);
+    auto printToFileButtonLabel = new TextArea(_t(MSG_EDITOR, 602), backgroundX+8, backgroundY+26+37*2);
     printToFileButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // label: erase
-    auto eraseButtonLabel = new TextArea(msg->message(603), backgroundX+8, backgroundY+26+37*3);
+    auto eraseButtonLabel = new TextArea(_t(MSG_EDITOR, 603), backgroundX+8, backgroundY+26+37*3);
     eraseButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // label: done
-    auto doneButtonLabel = new TextArea(msg->message(604), backgroundX+8, backgroundY+26+37*4);
+    auto doneButtonLabel = new TextArea(_t(MSG_EDITOR, 604), backgroundX+8, backgroundY+26+37*4);
     doneButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     background->setX(backgroundX);

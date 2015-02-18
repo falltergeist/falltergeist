@@ -37,7 +37,7 @@ void Opcode8031Handler::_run()
 {
     auto num = _vm->popDataInteger();
     auto value = _vm->dataStack()->pop();
-    Logger::debug("SCRIPT") << "[8031] [*] DVAR[num] = value " << "num = " << std::hex << num << " type = " << value->type() << std::endl;
+    Logger::debug("SCRIPT") << "[8031] [*] op_store " << "var" << std::hex << num << " type = " << value->type() << std::endl;
     _vm->dataStack()->values()->at(_vm->DVARbase() + num) = value;
 }
 

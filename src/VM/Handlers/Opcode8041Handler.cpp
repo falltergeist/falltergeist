@@ -35,7 +35,8 @@ Opcode8041Handler::Opcode8041Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8041Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8041] [*] |" << std::endl;
+    Logger::debug("SCRIPT") << "[8041] [*] op_bwor" << std::endl;
+    // @TODO: type conversions or checks
     auto b = _vm->popDataInteger();
     auto a = _vm->popDataInteger();
     _vm->pushDataInteger(a | b);

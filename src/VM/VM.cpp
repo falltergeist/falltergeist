@@ -110,6 +110,7 @@ void VM::run()
         try
         {
             opcodeHandler->run();
+            delete opcodeHandler;
         }
         catch(VMHaltException& e)
         {
@@ -171,6 +172,28 @@ void VM::pushDataPointer(void* value, unsigned int type)
     _dataStack.push(pointer);
 }
 
+std::string& VM::popDataString()
+{
+    auto stackPointerValue = dynamic_cast<VMStackPointerValue*>(_dataStack.pop());
+    if (stackPointerValue)
+    {
+        if (stackPointerValue->type() == VMStackPointerValue::POINTER_TYPE_STRING)
+        {
+            auto value = static_cast<std::string*>(stackPointerValue->value());
+            return *value;
+        }
+        throw Exception("VM::popDataString() - stack value is not a string");
+    }
+    throw Exception("VM::popDataString() - stack value is not a pointer");
+}
+
+void VM::pushDataString(std::string &value)
+{
+    auto pointer = new VMStackPointerValue(new std::string(value));
+    pointer->setPointerType(VMStackPointerValue::POINTER_TYPE_STRING);
+    _dataStack.push(pointer);
+}
+
 int VM::popReturnInteger()
 {
     auto stackValue = _returnStack.pop();
@@ -226,6 +249,7 @@ unsigned int VM::programCounter()
 
 void VM::setProgramCounter(unsigned int value)
 {
+    // @TODO: add check for valid address
     _programCounter = value;
 }
 

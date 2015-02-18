@@ -34,7 +34,7 @@ class FpsCounter : public TextArea
 {
 protected:
     unsigned int _lastTicks;
-    unsigned int _frames;
+    unsigned int _frames = 0;
 public:
     FpsCounter(int x = 598, int y = 2);
 

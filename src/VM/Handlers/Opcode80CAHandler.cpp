@@ -98,6 +98,89 @@ void Opcode80CAHandler::_run()
             result = critter->criticalChance();
             break;
         }
+        case 16: // better criticals
+            // @TODO
+            break;
+        case 17: // 
+        {
+            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_NORMAL);
+            break;
+        }
+        case 18: // 
+        {
+            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_LASER);
+            break;
+        }
+        case 19: // 
+        {
+            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_FIRE);
+            break;
+        }
+        case 20: // 
+        {
+            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_PLASMA);
+            break;
+        }
+        case 21: // 
+        {
+            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_ELECTRICAL);
+            break;
+        }
+        case 22: // 
+        {
+            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_EMP);
+            break;
+        }
+        case 23: // 
+        {
+            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_EXPLOSION);
+            break;
+        }
+        case 24: // 
+        {
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_NORMAL);
+            break;
+        }
+        case 25: // 
+        {
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_LASER);
+            break;
+        }
+        case 26: // 
+        {
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_FIRE);
+            break;
+        }
+        case 27: // 
+        {
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_PLASMA);
+            break;
+        }
+        case 28: // 
+        {
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_ELECTRICAL);
+            break;
+        }
+        case 29: // 
+        {
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_EMP);
+            break;
+        }
+        case 30: // 
+        {
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_EXPLOSION);
+            break;
+        }
+        case 31: // rad resist
+        {
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_RADIATION);
+            break;
+        }
+        case 32: // poison resist
+        {
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_POISON);
+            break;
+        }
         case 33: // age
         {
             result = critter->gender();
@@ -111,6 +194,16 @@ void Opcode80CAHandler::_run()
         case 35: // hit points
         {
             result = critter->hitPoints();
+            break;
+        }
+        case 36: // current poison
+        {
+            result = critter->poisonLevel();
+            break;
+        }
+        case 37: // current radiation
+        {
+            result = critter->radiationLevel();
             break;
         }
         default:
