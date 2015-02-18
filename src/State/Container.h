@@ -50,6 +50,12 @@ public:
     void setObject(Game::GameContainerItemObject* object);
 
     void onDoneButtonClick(MouseEvent* event);
+    
+    virtual void onStateActivate(StateEvent* event);
+    virtual void onStateDeactivate(StateEvent* event);
+    virtual void onKeyDown(KeyboardEvent* event);
+
+
 };
 
 }
