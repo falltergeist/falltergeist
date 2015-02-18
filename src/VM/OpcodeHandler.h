@@ -38,6 +38,7 @@ protected:
     virtual void _run();
 public:
     OpcodeHandler(VM* vm);
+    virtual ~OpcodeHandler();
     void run();
 };
 
