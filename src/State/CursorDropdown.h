@@ -63,6 +63,7 @@ public:
     virtual ~CursorDropdown();
     virtual void init();
     virtual void think();
+    virtual void handle(Event* event);
 
     void onLeftButtonUp(MouseEvent* event);
 

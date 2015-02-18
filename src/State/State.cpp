@@ -178,6 +178,7 @@ UI* State::getUI(std::string name)
 
 void State::handle(Event* event)
 {
+    if (event->handled()) return;
     if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
     {
         if (keyboardEvent->name() == "keydown")
@@ -187,10 +188,10 @@ void State::handle(Event* event)
     }
     for (auto it = _ui.rbegin(); it != _ui.rend(); ++it)
     {
-        if (event->handled()) return;
         if (auto activeUI = dynamic_cast<ActiveUI*>(*it))
         {
             activeUI->handle(event);
+            if (event->handled()) return;
         }
     }
 }
