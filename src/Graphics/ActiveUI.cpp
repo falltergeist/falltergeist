@@ -38,6 +38,7 @@ ActiveUI::~ActiveUI()
 
 void ActiveUI::handle(Event* event)
 {
+    if (event->handled()) return;
     if(auto mouseEvent = dynamic_cast<MouseEvent*>(event))
     {
 
@@ -136,7 +137,7 @@ void ActiveUI::handle(Event* event)
                     emitEvent(newEvent);
                 }
             }
-            else if(mouseEvent->name() == "mouseup")
+            else if (mouseEvent->name() == "mouseup")
             {
                 if (mouseEvent->leftButton())
                 {
@@ -153,7 +154,7 @@ void ActiveUI::handle(Event* event)
                         _leftButtonPressed = false;
                     }
                 }
-                else if(mouseEvent->rightButton())
+                else if (mouseEvent->rightButton())
                 {
                     if (_rightButtonPressed)
                     {
@@ -164,7 +165,10 @@ void ActiveUI::handle(Event* event)
                 }
             }
         }
-        event->setHandled(newEvent->handled());
+        if (newEvent->handled())
+        {
+            event->setHandled(true);
+        }
         delete newEvent;
         return;
     }

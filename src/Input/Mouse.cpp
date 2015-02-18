@@ -29,6 +29,7 @@
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../UI/Image.h"
+#include "../Logger.h"
 
 // Third party includes
 #include "SDL.h"
@@ -100,12 +101,14 @@ void Mouse::popState()
         _setType(_states.at(_states.size() - 2));
     }
     _states.pop_back();
+    Logger::info("mouse") << "pop to " << _states.back() << std::endl;
 }
 
 void Mouse::pushState(unsigned int state)
 {
     _setType(state);
     _states.push_back(state);
+    Logger::info("mouse") << "push " << state << std::endl;
 }
 
 unsigned int Mouse::state()
