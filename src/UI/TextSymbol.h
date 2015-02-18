@@ -17,49 +17,52 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_SettingsMenu_H
-#define FALLTERGEIST_SettingsMenu_H
+#ifndef FALLTERGEIST_TEXTSYMBOL_H
+#define FALLTERGEIST_TEXTSYMBOL_H
 
 // C++ standard includes
-#include <map>
+#include <cstdint>
+#include <memory>
 
 // Falltergeist includes
-#include "State.h"
 
 // Third party includes
-#include <libfalltergeist.h>
 
 namespace Falltergeist
 {
-class TextArea;
 
-namespace State
-{
+class Font;
 
-class SettingsMenu : public State
+class TextSymbol
 {
 protected:
-    std::map<std::string, TextArea*> _labels;
-    TextArea* _addLabel(std::string name, TextArea* label);
-    TextArea* _addTextArea(std::string message, unsigned int x, unsigned int y);
-    TextArea* _addTextArea(TextArea* parent, unsigned int x, unsigned int y);
+    uint8_t _chr;
+
+    int32_t _x = 0;
+    int32_t _y = 0;
+
+    std::shared_ptr<Font> _font;
+
 public:
-    SettingsMenu();
-    virtual ~SettingsMenu();
-    virtual void init();
-    virtual void think();
+    TextSymbol(const uint8_t chr, int32_t x = 0, int32_t y = 0);
+    TextSymbol(const TextSymbol& other);
 
-    void onDefaultButtonClick(MouseEvent* event);
-    void doCancel();
-    void doSave();
+    virtual ~TextSymbol();
 
-    virtual void onKeyDown(KeyboardEvent* event);
+    std::shared_ptr<Font> font();
+    void setFont(std::shared_ptr<Font> font);
 
-    virtual void onStateActivate(StateEvent* event);
-    virtual void onStateDeactivate(StateEvent* event);
+    int32_t x();
+    void setX(int32_t x);
+
+    int32_t y();
+    void setY(int32_t y);
+
+    void render(int32_t offsetX = 0, int32_t offsetY = 0);
+
+    uint8_t chr();
+
 };
 
 }
-}
-
-#endif // FALLTERGEIST_SettingsMenu_H
+#endif // FALLTERGEIST_TEXTSYMBOL_H

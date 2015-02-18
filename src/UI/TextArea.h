@@ -21,6 +21,7 @@
 #define FALLTERGEIST_TEXTAREA_H
 
 // C++ standard includes
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -34,37 +35,40 @@ namespace Falltergeist
 {
 class Font;
 class FontString;
+class TextSymbol;
 
 class TextArea : public ActiveUI
 {
 protected:
-    std::vector<FontString*> _strings;
-    void init();
+    bool _changed = true;
+    std::vector<TextSymbol> _symbols;
+    std::string _text;
+    std::shared_ptr<Font> _font;
+
     unsigned char _horizontalAlign = HORIZONTAL_ALIGN_LEFT;
     unsigned char _verticalAlign = VERTICAL_ALIGN_TOP;
+
     unsigned int _width = 0;
     unsigned int _height = 0;
+
+    // not used when _width || _height are set manualy
+    unsigned int _calculatedWidth = 0;
+    unsigned int _calculatedHeight = 0;
+
     unsigned int _backgroundColor = 0;
     bool _wordWrap = false;
     unsigned int _outlineColor = 0;
     unsigned int _timestampCreated = 0;
+
+    void _calculate();
 public:
     enum { HORIZONTAL_ALIGN_LEFT = 0, HORIZONTAL_ALIGN_CENTER, HORIZONTAL_ALIGN_RIGHT, HORIZONTAL_ALIGN_JUSTIFY };
     enum { VERTICAL_ALIGN_TOP = 0, VERTICAL_ALIGN_CENTER, VERTICAL_ALIGN_BOTTOM, VERTICAL_ALIGN_JUSTIFY };
-    TextArea(std::shared_ptr<libfalltergeist::MsgMessage> message, int x = 0, int y = 0);
     TextArea(std::string text, int x = 0, int y = 0);
     TextArea(int x = 0, int y = 0);
     TextArea(TextArea* textArea, int x = 0, int y = 0);
     ~TextArea();
 
-    TextArea* setBackgroundColor(unsigned int color);
-    unsigned int getBackgroundColor();
-
-    TextArea* setOutlineColor(unsigned int color);
-    unsigned int getOutlineColor();
-
-    TextArea* setText(std::shared_ptr<libfalltergeist::MsgMessage> message);
-    TextArea* setText(int number);
     TextArea* setText(std::string text);
     TextArea* appendText(std::string text);
     std::string text();
@@ -87,10 +91,22 @@ public:
     TextArea* setFont(std::shared_ptr<Font> font);
     std::shared_ptr<Font> font();
 
-    virtual Texture* texture();
     virtual void render();
+    virtual unsigned int pixel(unsigned int x, unsigned int y);
 
     unsigned int timestampCreated();
+
+    TextArea& operator<<(const std::string& text);
+    TextArea& operator<<(unsigned value);
+    TextArea& operator<<(signed value);
+
+    TextArea& operator+=(const std::string& text);
+    TextArea& operator+=(unsigned value);
+    TextArea& operator+=(signed value);
+
+    TextArea& operator=(const std::string& text);
+    TextArea& operator=(unsigned value);
+    TextArea& operator=(signed value);
 };
 
 }

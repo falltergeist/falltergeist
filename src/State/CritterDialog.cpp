@@ -202,7 +202,6 @@ void CritterDialog::addAnswer(std::string text)
     }
 
     auto answer = new TextArea(line, 140, y);
-    answer->setBackgroundColor(0x00000001);
     answer->setWordWrap(true);
     answer->setWidth(370);
 

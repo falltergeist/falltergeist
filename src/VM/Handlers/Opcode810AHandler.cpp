@@ -98,7 +98,6 @@ void Opcode810AHandler::_run()
     floatMessage->setWordWrap(true);
     floatMessage->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     floatMessage->setFont(ResourceManager::font("font1.aaf", color));
-    floatMessage->setOutlineColor(0x000000ff);
     object->setFloatMessage(floatMessage);
 
 }
