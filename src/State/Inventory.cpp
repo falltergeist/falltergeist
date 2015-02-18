@@ -36,6 +36,7 @@
 #include "../State/GameMenu.h"
 #include "../State/InventoryDragItem.h"
 #include "../State/Inventory.h"
+#include "../State/Location.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/ItemsList.h"
@@ -74,9 +75,10 @@ void Inventory::init()
     setFullscreen(false);
 
     auto game = Game::getInstance();
+    auto panelHeight = Game::getInstance()->locationState()->playerPanelState()->height();
 
-    setX((game->renderer()->width()  - 499)/2);
-    setY((game->renderer()->height() - 427)/2);
+    setX((game->renderer()->width()  - 499)/2); // 499x377 = art/intrface/invbox.frm
+    setY((game->renderer()->height() - 377 - panelHeight)/2);
 
     addUI("background", new Image("art/intrface/invbox.frm"));
     getActiveUI("background")->addEventHandler("mouserightclick", [this](Event* event){ this->backgroundRightClick(dynamic_cast<MouseEvent*>(event)); });
