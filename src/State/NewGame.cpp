@@ -21,6 +21,7 @@
 #include <sstream>
 
 // Falltergeist includes
+#include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
@@ -207,37 +208,34 @@ void NewGame::onNextCharacterButtonClick(MouseEvent* event)
 void NewGame::_changeCharacter()
 {
     auto dude = _characters.at(_selectedCharacter);
-    std::stringstream ss;
-    auto msg = ResourceManager::msgFileType("text/english/game/stat.msg");
-    ss  << msg->message(100)->text() << " " << (dude->stat(0) < 10 ? "0" : "") << dude->stat(0) << "\n"
-        << msg->message(101)->text() << " " << (dude->stat(1) < 10 ? "0" : "") << dude->stat(1) << "\n"
-        << msg->message(102)->text() << " " << (dude->stat(2) < 10 ? "0" : "") << dude->stat(2) << "\n"
-        << msg->message(103)->text() << " " << (dude->stat(3) < 10 ? "0" : "") << dude->stat(3) << "\n"
-        << msg->message(104)->text() << " " << (dude->stat(4) < 10 ? "0" : "") << dude->stat(4) << "\n"
-        << msg->message(105)->text() << " " << (dude->stat(5) < 10 ? "0" : "") << dude->stat(5) << "\n"
-        << msg->message(106)->text() << " " << (dude->stat(6) < 10 ? "0" : "") << dude->stat(6) << "\n";
-    getTextArea("stats_1")->setText(ss.str());
+   *getTextArea("stats_1") = "";
+   *getTextArea("stats_1")
+        << _t(MSG_STATS, 100) << " " << (dude->stat(0) < 10 ? "0" : "") << dude->stat(0) << "\n"
+        << _t(MSG_STATS, 101) << " " << (dude->stat(1) < 10 ? "0" : "") << dude->stat(1) << "\n"
+        << _t(MSG_STATS, 102) << " " << (dude->stat(2) < 10 ? "0" : "") << dude->stat(2) << "\n"
+        << _t(MSG_STATS, 103) << " " << (dude->stat(3) < 10 ? "0" : "") << dude->stat(3) << "\n"
+        << _t(MSG_STATS, 104) << " " << (dude->stat(4) < 10 ? "0" : "") << dude->stat(4) << "\n"
+        << _t(MSG_STATS, 105) << " " << (dude->stat(5) < 10 ? "0" : "") << dude->stat(5) << "\n"
+        << _t(MSG_STATS, 106) << " " << (dude->stat(6) < 10 ? "0" : "") << dude->stat(6) << "\n";
 
-    ss.str("");
-    ss  << _statToString(dude->stat(0)) << "\n"
-        << _statToString(dude->stat(1)) << "\n"
-        << _statToString(dude->stat(2)) << "\n"
-        << _statToString(dude->stat(3)) << "\n"
-        << _statToString(dude->stat(4)) << "\n"
-        << _statToString(dude->stat(5)) << "\n"
-        << _statToString(dude->stat(6)) << "\n";
-    getTextArea("stats_2")->setText(ss.str());
+    *getTextArea("stats_2") = "";
+    *getTextArea("stats_2")
+        << _t(MSG_STATS, dude->stat(0) + 300) << "\n"
+        << _t(MSG_STATS, dude->stat(1) + 300) << "\n"
+        << _t(MSG_STATS, dude->stat(2) + 300) << "\n"
+        << _t(MSG_STATS, dude->stat(3) + 300) << "\n"
+        << _t(MSG_STATS, dude->stat(4) + 300) << "\n"
+        << _t(MSG_STATS, dude->stat(5) + 300) << "\n"
+        << _t(MSG_STATS, dude->stat(6) + 300) << "\n";
 
     getTextArea("bio")->setText(dude->biography());
     getTextArea("name")->setText(dude->name());
     getImageList("images")->setCurrentImage(_selectedCharacter);
 
-    auto msgMisc = ResourceManager::msgFileType("text/english/game/misc.msg");
-
-    std::string stats3  = msgMisc->message(16)->text() +  "\n"    // Hit Points
-                        + msg->message(109)->text()    + "\n"     // Armor Class
-                        + msgMisc->message(15)->text() + "\n"     // Action Points
-                        + msg->message(111)->text()    + "\n";    // Melee Damage
+    std::string stats3  = _t(MSG_MISC,  16)  + "\n"    // Hit Points
+                        + _t(MSG_STATS, 109) + "\n"     // Armor Class
+                        + _t(MSG_MISC,  15)  + "\n"     // Action Points
+                        + _t(MSG_STATS, 111) + "\n";    // Melee Damage
 
     std::string stats3_values   = std::to_string(dude->hitPointsMax()) + "/" + std::to_string(dude->hitPointsMax()) + "\n"
                                 + std::to_string(dude->armorClass())   + "\n"
@@ -246,21 +244,15 @@ void NewGame::_changeCharacter()
 
     for (unsigned int i=0; i != 17; ++i) if (dude->skillTagged(i))
     {
-        stats3 += "\n" + ResourceManager::msgFileType("text/english/game/skill.msg")->message(100 + i)->text();
+        stats3 += "\n" + _t(MSG_SKILLS, 100 + i);
         stats3_values += "\n" + std::to_string(dude->skillValue(i)) + "%";
     }
     for (unsigned int i=0; i != 16; ++i) if (dude->traitTagged(i))
     {
-        stats3 += "\n" + ResourceManager::msgFileType("text/english/game/trait.msg")->message(100 + i)->text();
+        stats3 += "\n" + _t(MSG_TRAITS, 100 + i);
     }
     getTextArea("stats_3")->setText(stats3);
     getTextArea("stats3_values")->setText(stats3_values);
-}
-
-std::string NewGame::_statToString(unsigned int stat)
-{
-    auto msg = ResourceManager::msgFileType("text/english/game/stat.msg");
-    return msg->message(stat+300)->text();
 }
 
 void NewGame::onEditButtonClick(MouseEvent* event)

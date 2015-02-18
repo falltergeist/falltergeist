@@ -17,12 +17,11 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_TEXTSYMBOL_H
-#define FALLTERGEIST_TEXTSYMBOL_H
+#ifndef FALLTERGEIST_FUNCTIONS_H
+#define FALLTERGEIST_FUNCTIONS_H
 
 // C++ standard includes
-#include <cstdint>
-#include <memory>
+#include <string>
 
 // Falltergeist includes
 
@@ -31,38 +30,22 @@
 namespace Falltergeist
 {
 
-class Font;
-
-class TextSymbol
+enum MSG_TYPE
 {
-protected:
-    uint8_t _chr;
-
-    int32_t _x = 0;
-    int32_t _y = 0;
-
-    std::shared_ptr<Font> _font;
-
-public:
-    TextSymbol(const uint8_t chr, int32_t x = 0, int32_t y = 0);
-    TextSymbol(const TextSymbol& other);
-
-    virtual ~TextSymbol();
-
-    std::shared_ptr<Font> font();
-    void setFont(std::shared_ptr<Font> font);
-
-    int32_t x();
-    void setX(int32_t x);
-
-    int32_t y();
-    void setY(int32_t y);
-
-    void render(int32_t offsetX = 0, int32_t offsetY = 0);
-
-    uint8_t chr();
-
+    MSG_INVENTORY = 0,
+    MSG_LOAD_SAVE,
+    MSG_OPTIONS,
+    MSG_MISC,
+    MSG_EDITOR,
+    MSG_TRAITS,
+    MSG_SKILLS,
+    MSG_STATS,
+    MSG_SKILLDEX,
+    MSG_DIALOG_BOX,
+    MSG_PROTO_ITEMS
 };
 
+std::string _t(MSG_TYPE type, size_t number);
+
 }
-#endif // FALLTERGEIST_TEXTSYMBOL_H
+#endif // FALLTERGEIST_FUNCTIONS_H

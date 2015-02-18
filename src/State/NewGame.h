@@ -50,7 +50,6 @@ protected:
     std::vector<Game::GameDudeObject*> _characters;
 
     void _changeCharacter();
-    std::string _statToString(unsigned int stat);
 
 public:
     NewGame();

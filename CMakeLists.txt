@@ -78,6 +78,8 @@ set(SOURCES main.cpp
     src/Font.h
     src/FontString.cpp
     src/FontString.h
+    src/functions.cpp
+    src/functions.h
     src/Graphics/ActiveUI.cpp
     src/Graphics/ActiveUI.h
     src/Graphics/AnimatedPalette.cpp

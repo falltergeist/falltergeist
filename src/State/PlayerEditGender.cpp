@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
@@ -72,8 +73,7 @@ void PlayerEditGender::init()
     doneBox->setX(bgX+250);
     doneBox->setY(bgY+42);
 
-    auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
-    auto doneLabel = new TextArea(msg->message(100), bgX+281, bgY+45);
+    auto doneLabel = new TextArea(_t(MSG_EDITOR, 100), bgX+281, bgY+45);
     auto font3_b89c28ff = ResourceManager::font("font3.aaf", 0xb89c28ff);
     doneLabel->setFont(font3_b89c28ff);
 

@@ -21,12 +21,14 @@
 #include <sstream>
 
 // Falltergeist includes
+#include "../Audio/AudioMixer.h"
 #include "../Event/StateEvent.h"
+#include "functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Animation.h"
 #include "../Graphics/Renderer.h"
-#include "../Audio/AudioMixer.h"
 #include "../Input/Mouse.h"
+#include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../State/Credits.h"
 #include "../State/LoadGame.h"
@@ -37,7 +39,6 @@
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
-#include "../Logger.h"
 
 // Third party includes
 
@@ -95,31 +96,30 @@ void MainMenu::init()
     auto exitButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*5));
     exitButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onExitButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
-    auto msg = ResourceManager::msgFileType("text/english/game/misc.msg");
     auto font4 = ResourceManager::font("font4.aaf", 0xb89c28ff);
 
     // "Intro" label
-    auto introButtonLabel = new TextArea(msg->message(9), 50, 20);
+    auto introButtonLabel = new TextArea(_t(MSG_MISC, 9), 50, 20);
     introButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "New Game" label
-    auto newGameButtonLabel = new TextArea(msg->message(10), 50, 20 + 41);
+    auto newGameButtonLabel = new TextArea(_t(MSG_MISC, 10), 50, 20 + 41);
     newGameButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Load Game" label
-    auto loadGameButtonLabel = new TextArea(msg->message(11), 50, 20 + 41*2);
+    auto loadGameButtonLabel = new TextArea(_t(MSG_MISC, 11), 50, 20 + 41*2);
     loadGameButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Options" label
-    auto optionsButtonLabel = new TextArea(msg->message(12), 50, 20 + 41*3);
+    auto optionsButtonLabel = new TextArea(_t(MSG_MISC, 12), 50, 20 + 41*3);
     optionsButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Credits" label
-    auto creditsButtonLabel = new TextArea(msg->message(13), 50, 20 + 41*4);
+    auto creditsButtonLabel = new TextArea(_t(MSG_MISC, 13), 50, 20 + 41*4);
     creditsButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Exit" label
-    auto exitButtonLabel = new TextArea(msg->message(14), 50, 20 + 41*5);
+    auto exitButtonLabel = new TextArea(_t(MSG_MISC, 14), 50, 20 + 41*5);
     exitButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // Text areas

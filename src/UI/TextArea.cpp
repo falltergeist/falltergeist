@@ -38,12 +38,6 @@
 namespace Falltergeist
 {
 
-TextArea::TextArea(std::shared_ptr<libfalltergeist::MsgMessage> message, int x, int y) : ActiveUI(x, y)
-{
-    _timestampCreated = SDL_GetTicks();
-    setText(message->text());
-}
-
 TextArea::TextArea(int x, int y) : ActiveUI(x, y)
 {
     _timestampCreated = SDL_GetTicks();
@@ -104,16 +98,6 @@ TextArea * TextArea::setVerticalAlign(unsigned char align)
     _verticalAlign = align;
     _changed = true;
     return this;
-}
-
-TextArea* TextArea::setText(std::shared_ptr<libfalltergeist::MsgMessage> message)
-{
-    return setText(message->text());
-}
-
-TextArea * TextArea::setText(int number)
-{
-    return setText(std::to_string(number));
 }
 
 TextArea * TextArea::setText(std::string text)
@@ -323,6 +307,36 @@ TextArea& TextArea::operator<<(signed value)
 TextArea& TextArea::operator=(const std::string& text)
 {
     setText(text);
+    return *this;
+}
+
+TextArea& TextArea::operator=(unsigned value)
+{
+    setText(std::to_string(value));
+    return *this;
+}
+
+TextArea& TextArea::operator=(signed value)
+{
+    setText(std::to_string(value));
+    return *this;
+}
+
+TextArea& TextArea::operator+=(const std::string& text)
+{
+    appendText(text);
+    return *this;
+}
+
+TextArea& TextArea::operator+=(unsigned value)
+{
+    appendText(std::to_string(value));
+    return *this;
+}
+
+TextArea& TextArea::operator+=(signed value)
+{
+    appendText(std::to_string(value));
     return *this;
 }
 

@@ -17,49 +17,42 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_SettingsMenu_H
-#define FALLTERGEIST_SettingsMenu_H
-
 // C++ standard includes
-#include <map>
 
 // Falltergeist includes
-#include "State.h"
+#include "Exception.h"
+#include "functions.h"
+#include "ResourceManager.h"
 
 // Third party includes
 #include <libfalltergeist.h>
 
 namespace Falltergeist
 {
-class TextArea;
 
-namespace State
+std::string _t(MSG_TYPE type, size_t number)
 {
+    std::vector<std::string> msgFiles = {
+        "text/english/game/inventry.msg",
+        "text/english/game/lsgame.msg",
+        "text/english/game/options.msg",
+        "text/english/game/misc.msg",
+        "text/english/game/editor.msg",
+        "text/english/game/trait.msg",
+        "text/english/game/skill.msg",
+        "text/english/game/stat.msg",
+        "text/english/game/skilldex.msg",
+        "text/english/game/dbox.msg",
+        "text/english/game/pro_item.msg"
+    };
 
-class SettingsMenu : public State
-{
-protected:
-    std::map<std::string, TextArea*> _labels;
-    TextArea* _addLabel(std::string name, TextArea* label);
-    TextArea* _addTextArea(std::string message, unsigned int x, unsigned int y);
-    TextArea* _addTextArea(TextArea* parent, unsigned int x, unsigned int y);
-public:
-    SettingsMenu();
-    virtual ~SettingsMenu();
-    virtual void init();
-    virtual void think();
+    if (type < 0 || type >= msgFiles.size())
+    {
+        throw Exception("_t() - wrong MSG file type: " + std::to_string(type));
+    }
 
-    void onDefaultButtonClick(MouseEvent* event);
-    void doCancel();
-    void doSave();
-
-    virtual void onKeyDown(KeyboardEvent* event);
-
-    virtual void onStateActivate(StateEvent* event);
-    virtual void onStateDeactivate(StateEvent* event);
-};
-
-}
+    auto msg = ResourceManager::msgFileType(msgFiles.at(type));
+    return msg->message(number)->text();
 }
 
-#endif // FALLTERGEIST_SettingsMenu_H
+}

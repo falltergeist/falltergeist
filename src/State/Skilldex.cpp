@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
@@ -74,40 +75,39 @@ void Skilldex::init()
     cancelButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCancelButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     // LABELS
-    auto msg = ResourceManager::msgFileType("text/english/game/skilldex.msg");
     auto font = ResourceManager::font("font3.aaf", 0xb89c28ff);
 
     // label: skilldex (100)
-    auto skilldexLabel = new TextArea(msg->message(100), backgroundX+56, backgroundY+14);
+    auto skilldexLabel = new TextArea(_t(MSG_SKILLDEX, 100), backgroundX+56, backgroundY+14);
     skilldexLabel->setFont(font)->setWidth(76)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // label: sneak (102)
-    auto sneakLabel = new TextArea(msg->message(102), backgroundX+17, backgroundY+52);
+    auto sneakLabel = new TextArea(_t(MSG_SKILLDEX, 102), backgroundX+17, backgroundY+52);
     sneakLabel->setFont(font)->setWidth(84)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     // label: lockpick (103)
-    auto lockpickLabel = new TextArea(msg->message(103), backgroundX+17, backgroundY+52+36);
+    auto lockpickLabel = new TextArea(_t(MSG_SKILLDEX, 103), backgroundX+17, backgroundY+52+36);
     lockpickLabel->setFont(font)->setWidth(84)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     // label: steal (104)
-    auto stealLabel = new TextArea(msg->message(104), backgroundX+17, backgroundY+52+36*2);
+    auto stealLabel = new TextArea(_t(MSG_SKILLDEX, 104), backgroundX+17, backgroundY+52+36*2);
     stealLabel->setFont(font)->setWidth(84)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     // label: traps (105)
-    auto trapsLabel = new TextArea(msg->message(105), backgroundX+17, backgroundY+52+36*3);
+    auto trapsLabel = new TextArea(_t(MSG_SKILLDEX, 105), backgroundX+17, backgroundY+52+36*3);
     trapsLabel->setFont(font)->setWidth(84)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     // label: first aid (106)
-    auto firstAidLabel = new TextArea(msg->message(106), backgroundX+17, backgroundY+52+36*4);
+    auto firstAidLabel = new TextArea(_t(MSG_SKILLDEX, 106), backgroundX+17, backgroundY+52+36*4);
     firstAidLabel->setFont(font)->setWidth(84)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     // label: doctor (107)
-    auto doctorLabel = new TextArea(msg->message(107), backgroundX+17, backgroundY+52+36*5);
+    auto doctorLabel = new TextArea(_t(MSG_SKILLDEX, 107), backgroundX+17, backgroundY+52+36*5);
     doctorLabel->setFont(font)->setWidth(84)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     // label: science (108)
-    auto scienceLabel = new TextArea(msg->message(108), backgroundX+17, backgroundY+52+36*6);
+    auto scienceLabel = new TextArea(_t(MSG_SKILLDEX, 108), backgroundX+17, backgroundY+52+36*6);
     scienceLabel->setFont(font)->setWidth(84)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     // label: repair (109)
-    auto repairLabel = new TextArea(msg->message(109), backgroundX+17, backgroundY+52+36*7);
+    auto repairLabel = new TextArea(_t(MSG_SKILLDEX, 109), backgroundX+17, backgroundY+52+36*7);
     repairLabel->setFont(font)->setWidth(84)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // label: cancel (101)
-    auto cancelButtonLabel = new TextArea(msg->message(101), backgroundX+70, backgroundY+337);
+    auto cancelButtonLabel = new TextArea(_t(MSG_SKILLDEX, 101), backgroundX+70, backgroundY+337);
     cancelButtonLabel->setFont(font);
 
     // add all buttons and labels

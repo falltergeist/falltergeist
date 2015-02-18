@@ -34,8 +34,7 @@ namespace Falltergeist
 FpsCounter::FpsCounter(int x, int y) : TextArea(x,y)
 {
     _lastTicks = SDL_GetTicks();
-    _frames = 0;
-    setText(_frames);
+    setText("0");
     setWidth(40);
     setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 }
@@ -48,7 +47,7 @@ void FpsCounter::think()
     }
     else
     {
-        setText(_frames);
+        setText(std::to_string(_frames));
         _frames = 0;
         _lastTicks = SDL_GetTicks();
     }
