@@ -152,17 +152,9 @@ bool TextArea::wordWrap()
     return _wordWrap;
 }
 
-TextArea* TextArea::setBackgroundColor(unsigned int color)
-{
-    if (_backgroundColor == color) return this;
-    _backgroundColor = color;
-    _changed = true;
-    return this;
-}
 
 TextArea* TextArea::setWidth(unsigned int width)
 {
-    // don't do anything if size didn't changed
     if (_width == width)
     {
         return this;
@@ -293,19 +285,6 @@ void TextArea::_calculate()
 std::string TextArea::text()
 {
     return _text;
-}
-
-TextArea* TextArea::setOutlineColor(unsigned int color)
-{
-    if (_outlineColor == color) return this;
-    _outlineColor = color;
-    _changed = true;
-    return this;
-}
-
-unsigned int TextArea::getOutlineColor()
-{
-    return _outlineColor;
 }
 
 unsigned int TextArea::timestampCreated()

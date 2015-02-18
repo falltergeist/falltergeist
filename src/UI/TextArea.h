@@ -70,12 +70,6 @@ public:
     TextArea(TextArea* textArea, int x = 0, int y = 0);
     ~TextArea();
 
-    TextArea* setBackgroundColor(unsigned int color);
-    unsigned int getBackgroundColor();
-
-    TextArea* setOutlineColor(unsigned int color);
-    unsigned int getOutlineColor();
-
     TextArea* setText(std::shared_ptr<libfalltergeist::MsgMessage> message);
     TextArea* setText(int number);
     TextArea* setText(std::string text);
