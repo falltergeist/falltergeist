@@ -235,9 +235,9 @@ void Animation::think()
     {
         _frameTicks = SDL_GetTicks();
 
-        if (_progress < frames()->size() - 1)
+        _progress += 1;
+        if (_progress < frames()->size())
         {
-            _progress += 1;
             _currentFrame = _reverse ? frames()->size() - _progress - 1 : _progress;
             if (_actionFrame == _currentFrame)
             {
