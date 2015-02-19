@@ -188,10 +188,10 @@ void State::handle(Event* event)
     }
     for (auto it = _ui.rbegin(); it != _ui.rend(); ++it)
     {
+        if (event->handled()) return;
         if (auto activeUI = dynamic_cast<ActiveUI*>(*it))
         {
             activeUI->handle(event);
-            if (event->handled()) return;
         }
     }
 }
