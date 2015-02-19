@@ -53,7 +53,8 @@ class Location : public State
 {
 protected:
     
-    const int KEYBOARD_SCROLL_STEP = 35;
+    static const int KEYBOARD_SCROLL_STEP;
+    static const int DROPDOWN_DELAY;
 
     // Timers
     unsigned int _scrollTicks = 0;

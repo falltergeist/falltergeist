@@ -51,6 +51,8 @@ CursorDropdown::CursorDropdown(std::vector<int> icons, bool onlyIcon) : State()
         _icons.resize(1);
     }
     auto mouse = Game::getInstance()->mouse();
+    _initialMouseStack = mouse->states()->size();
+    mouse->pushState(Mouse::NONE);
     _initialX = mouse->x();
     _initialY = mouse->y();
 }
@@ -185,12 +187,21 @@ void CursorDropdown::handle(Event* event)
             Game::getInstance()->popState();
             event->setHandled(true);
         }
-        else if (mouseEvent->name() == "mousedown")
+        else if (mouseEvent->name() == "mousedown" && !mouseEvent->leftButton())
         {
             Game::getInstance()->popState();
         }
     }
 }
+
+void CursorDropdown::render()
+{
+    if (!_deactivated)
+    {
+        State::render();
+    }
+}
+
 
 Game::GameObject* CursorDropdown::object()
 {
@@ -242,16 +253,38 @@ void CursorDropdown::think()
 
 void CursorDropdown::onStateActivate(StateEvent* event)
 {
-    auto mouse = Game::getInstance()->mouse();
-    mouse->pushState(Mouse::NONE);
+    if (_deactivated)
+    {
+        Game::getInstance()->popState(); // remove when re-activated
+    }
 }
 
 void CursorDropdown::onStateDeactivate(StateEvent* event)
 {
-    auto mouse = Game::getInstance()->mouse();
-    mouse->popState();
-    mouse->setX(_initialX);
-    mouse->setY(_initialY);
+    if (!_deactivated)
+    {
+        auto game = Game::getInstance();
+        auto mouse = game->mouse();
+        // workaround to get rid of cursor disappearing issues
+        std::vector<unsigned int> icons;
+        while (mouse->states()->size() > _initialMouseStack)
+        {
+            icons.push_back(mouse->state());
+            mouse->popState();
+        }
+        if (icons.size() > 0)
+        {
+            icons.pop_back(); // remove empty icon from CursorDropdown state
+            // place only new icons back in stack
+            for (auto it = icons.rbegin(); it != icons.rend(); it++)
+            {
+                mouse->pushState(*it);
+            }
+        }
+        mouse->setX(_initialX);
+        mouse->setY(_initialY);
+        _deactivated = true;
+    }
 }
 
 void CursorDropdown::onLeftButtonUp(MouseEvent* event)
