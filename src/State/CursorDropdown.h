@@ -53,9 +53,9 @@ protected:
     std::vector<UI*> _activeIcons;
     std::vector<UI*> _inactiveIcons;
     UI* _surface = 0;
-    HiddenMask* _mask = 0;
     UI* _cursor = 0;
-    bool _needToHide = false;
+    bool _deactivated = false;
+    unsigned int _initialMouseStack;
     
     void showMenu();
 public:
@@ -64,6 +64,7 @@ public:
     virtual void init();
     virtual void think();
     virtual void handle(Event* event);
+    virtual void render();
 
     void onLeftButtonUp(MouseEvent* event);
 
