@@ -24,6 +24,7 @@
 #include "../../Graphics/AnimationQueue.h"
 #include "../../Logger.h"
 #include "../../Game/Object.h"
+#include "../../Game/CritterObject.h"
 #include "../../VM/Handlers/Opcode810EHandler.h"
 #include "../../VM/VM.h"
 
@@ -54,10 +55,14 @@ void Opcode810EHandler::_run()
         case 0x2: // ANIM_CLEAR
         {
             auto object = static_cast<Game::GameObject*>(_vm->popDataPointer());
-            auto queue = dynamic_cast<AnimationQueue*>(object->ui());
-            if (queue)
+            if (auto critterObject = dynamic_cast<Game::GameCritterObject*>(object))
             {
-                queue->clear();
+                critterObject->stopMovement();
+            }
+            else
+            {
+                auto queue = dynamic_cast<AnimationQueue*>(object->ui());
+                if (queue) queue->stop();
             }
             break;
         }
