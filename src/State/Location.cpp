@@ -66,7 +66,7 @@ namespace Falltergeist
 namespace State
 {
 
-const int Location::DROPDOWN_DELAY = 300;
+const int Location::DROPDOWN_DELAY = 350;
 const int Location::KEYBOARD_SCROLL_STEP = 35;
 
 Location::Location() : State()
