@@ -49,7 +49,8 @@ protected:
     std::vector<int> _icons;
     int _initialX;
     int _initialY;
-    int _currentSurface = 0;
+    int _previousIcon = 0;
+    int _currentIcon = 0;
     std::vector<UI*> _activeIcons;
     std::vector<UI*> _inactiveIcons;
     UI* _surface = 0;
