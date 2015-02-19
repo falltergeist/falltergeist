@@ -259,6 +259,8 @@ public:
 
     virtual bool running();
     virtual void setRunning(bool value);
+    
+    virtual void stopMovement();
 
     virtual Animation* setActionAnimation(std::string action);
 };

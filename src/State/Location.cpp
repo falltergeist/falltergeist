@@ -556,7 +556,7 @@ void Location::handle(Event* event)
                     auto path = hexagonGrid()->findPath(game->player()->hexagon(), hexagon);
                     if (path.size())
                     {
-                        game->player()->movementQueue()->clear();
+                        game->player()->stopMovement();
                         game->player()->setRunning((_lastClickedTile != 0 && hexagon->number() == _lastClickedTile) || (mouseEvent->shiftPressed() != game->settings()->running()));
                         for (auto hexagon : path)
                         {
