@@ -75,6 +75,7 @@ public:
     void setReverse(bool value);
 
     unsigned int currentFrame();
+    void setCurrentFrame(unsigned int value);
     unsigned int actionFrame();
     void setActionFrame(unsigned int value);
 
