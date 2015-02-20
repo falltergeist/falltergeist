@@ -473,22 +473,42 @@ void GameCritterObject::onMovementAnimationEnded(Event* event)
     auto hexagon = movementQueue()->back();
     movementQueue()->pop_back();
     Game::getInstance()->locationState()->moveObjectToHexagon(this, hexagon);
+    auto animation = dynamic_cast<Animation*>(ui());
 
     if (movementQueue()->size() == 0)
     {
         _moving = false;
-        dynamic_cast<Animation*>(_ui)->stop();
+        animation->stop();
         setActionAnimation("aa");
         return;
     }
 
     auto newHexagon = movementQueue()->back();
     auto newOrientation = this->hexagon()->orientationTo(newHexagon);
+    
+    if (event->name() == "animationEnded" || newOrientation != orientation())
+    {
+        _orientation = newOrientation;
+        auto newAnimation = _generateMovementAnimation();
+        if (event->name() == "actionFrame") 
+        {
+            newAnimation->setCurrentFrame(animation->currentFrame());
+            newAnimation->setActionFrame(animation->actionFrame());
+        }
+        else
+        {
+            newAnimation->setActionFrame(_running ? 2 : 4);
+        }
+        newAnimation->addEventHandler("actionFrame",    std::bind(&GameCritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
+        newAnimation->addEventHandler("animationEnded", std::bind(&GameCritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
+        newAnimation->play();
+        delete _ui;
+        _ui = animation = newAnimation;
+    }
 
-    if (event->name() == "actionFrame" && newOrientation == orientation())
+    if (event->name() == "actionFrame")
     {
         // at each action frame critter switches to the next hex and frame positions are offset relative to the action frame offsets
-        auto animation = dynamic_cast<Animation*>(ui());
         auto actionFrame = animation->frames()->at(animation->actionFrame());
         for (auto it = animation->frames()->rbegin(); it != animation->frames()->rend(); ++it)
         {
@@ -514,18 +534,6 @@ void GameCritterObject::onMovementAnimationEnded(Event* event)
                     break;
             }
         }
-
-    }
-    else // animationEnded || new orientation
-    {
-        delete _ui;
-        _orientation = newOrientation;
-        auto animation = _generateMovementAnimation();
-        animation->setActionFrame(_running ? 2 : 4);
-        animation->addEventHandler("actionFrame",    std::bind(&GameCritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
-        animation->addEventHandler("animationEnded", std::bind(&GameCritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
-        animation->play();
-        _ui = animation;
     }
 }
 
@@ -659,8 +667,15 @@ void GameCritterObject::setRunning(bool value)
 void GameCritterObject::stopMovement()
 {
     _movementQueue.clear();
-    auto queue = dynamic_cast<AnimationQueue*>(_ui);
-    if (queue) queue->stop();
+    // @TODO: _ui probably needs to be always one type
+    if (auto queue = dynamic_cast<AnimationQueue*>(_ui))
+    {
+        queue->stop();
+    }
+    else if (auto animation = dynamic_cast<Animation*>(_ui))
+    {
+        animation->stop();
+    }
     _moving = false;
 }
 
