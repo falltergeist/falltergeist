@@ -201,7 +201,7 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
     }
     addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
     addEventHandler("mouseleftdown", [this](Event* event){ this->_onLeftButtonDown(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mouseleftup", [this](Event* event){ this->_onLeftButtonUp(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseout", [this](Event* event){ this->_onMouseOut(dynamic_cast<MouseEvent*>(event)); });
 }
 
 ImageButton::~ImageButton()
@@ -224,6 +224,10 @@ void ImageButton::_onLeftButtonClick(MouseEvent* event)
     {
         sender->_checked = !sender->_checked;
     }
+    if (!sender->_upSnd.empty())
+    {
+        Game::getInstance()->mixer()->playACMSound(sender->_upSnd);
+    }
 }
 
 void ImageButton::_onLeftButtonDown(MouseEvent* event)
@@ -236,10 +240,10 @@ void ImageButton::_onLeftButtonDown(MouseEvent* event)
 }
 
 
-void ImageButton::_onLeftButtonUp(MouseEvent* event)
+void ImageButton::_onMouseOut(MouseEvent* event)
 {
     auto sender = dynamic_cast<ImageButton*>(event->emitter());
-    if (!sender->_upSnd.empty())
+    if (_leftButtonPressed && !sender->_upSnd.empty())
     {
         Game::getInstance()->mixer()->playACMSound(sender->_upSnd);
     }

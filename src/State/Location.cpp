@@ -306,7 +306,7 @@ void Location::onObjectMouseEvent(Event* event, Game::GameObject* object)
         _actionCursorTicks = SDL_GetTicks();
         _actionCursorButtonPressed = true;
     }
-    else if (event->name() == "mouseleftup")
+    else if (event->name() == "mouseleftclick")
     {
         auto icons = getCursorIconsForObject(object);
         if (icons.size() > 0)

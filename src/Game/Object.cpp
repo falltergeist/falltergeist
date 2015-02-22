@@ -170,7 +170,7 @@ void GameObject::addUIEventHandlers()
     if (_ui)
     {
         _ui->addEventHandler("mouseleftdown", std::bind(&State::Location::onObjectMouseEvent, Game::getInstance()->locationState(), std::placeholders::_1, this));
-        _ui->addEventHandler("mouseleftup", std::bind(&State::Location::onObjectMouseEvent, Game::getInstance()->locationState(), std::placeholders::_1, this));
+        _ui->addEventHandler("mouseleftclick", std::bind(&State::Location::onObjectMouseEvent, Game::getInstance()->locationState(), std::placeholders::_1, this));
         _ui->addEventHandler("mousein", std::bind(&State::Location::onObjectHover, Game::getInstance()->locationState(), std::placeholders::_1, this));
         _ui->addEventHandler("mousemove", std::bind(&State::Location::onObjectHover, Game::getInstance()->locationState(), std::placeholders::_1, this));
         _ui->addEventHandler("mouseout", std::bind(&State::Location::onObjectHover, Game::getInstance()->locationState(), std::placeholders::_1, this));
