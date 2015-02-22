@@ -45,8 +45,8 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
         case TYPE_BIG_RED_CIRCLE:
             _textures.push_back(ResourceManager::texture("art/intrface/bigredup.frm"));
             _textures.push_back(ResourceManager::texture("art/intrface/bigreddn.frm"));
-            _downSnd = "sound/sfx/ib2lu1x1.acm";
-            _upSnd = "sound/sfx/ib1p1xx1.acm";
+            _downSnd = "sound/sfx/ib2p1xx1.acm";
+            _upSnd = "sound/sfx/ib2lu1x1.acm";
             break;
         case TYPE_MENU_RED_CIRCLE:
             _textures.push_back(ResourceManager::texture("art/intrface/menuup.frm"));
@@ -99,14 +99,14 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
         case TYPE_PANEL_INVENTORY:
             _textures.push_back(ResourceManager::texture("art/intrface/invbutup.frm"));
             _textures.push_back(ResourceManager::texture("art/intrface/invbutdn.frm"));
-            _downSnd = "sound/sfx/ib2lu1x1.acm";
-            _upSnd = "sound/sfx/ib1p1xx1.acm";
+            _downSnd = "sound/sfx/ib2p1xx1.acm";
+            _upSnd = "sound/sfx/ib2lu1x1.acm";
             break;
         case TYPE_PANEL_OPTIONS:
             _textures.push_back(ResourceManager::texture("art/intrface/optiup.frm"));
             _textures.push_back(ResourceManager::texture("art/intrface/optidn.frm"));
-            _downSnd = "sound/sfx/ib2lu1x1.acm";
-            _upSnd = "sound/sfx/ib1p1xx1.acm";
+            _downSnd = "sound/sfx/ib2p1xx1.acm";
+            _upSnd = "sound/sfx/ib2lu1x1.acm";
             break;
         case TYPE_PANEL_ATTACK:
             _textures.push_back(ResourceManager::texture("art/intrface/sattkbup.frm"));
@@ -117,20 +117,20 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
         case TYPE_PANEL_MAP:
             _textures.push_back(ResourceManager::texture("art/intrface/mapup.frm"));
             _textures.push_back(ResourceManager::texture("art/intrface/mapdn.frm"));
-            _downSnd = "sound/sfx/ib2lu1x1.acm";
-            _upSnd = "sound/sfx/ib1p1xx1.acm";
+            _downSnd = "sound/sfx/ib2p1xx1.acm";
+            _upSnd = "sound/sfx/ib2lu1x1.acm";
             break;
         case TYPE_PANEL_CHA:
             _textures.push_back(ResourceManager::texture("art/intrface/chaup.frm"));
             _textures.push_back(ResourceManager::texture("art/intrface/chadn.frm"));
-            _downSnd = "sound/sfx/ib2lu1x1.acm";
-            _upSnd = "sound/sfx/ib1p1xx1.acm";
+            _downSnd = "sound/sfx/ib2p1xx1.acm";
+            _upSnd = "sound/sfx/ib2lu1x1.acm";
             break;
         case TYPE_PANEL_PIP:
             _textures.push_back(ResourceManager::texture("art/intrface/pipup.frm"));
             _textures.push_back(ResourceManager::texture("art/intrface/pipdn.frm"));
-            _downSnd = "sound/sfx/ib2lu1x1.acm";
-            _upSnd = "sound/sfx/ib1p1xx1.acm";
+            _downSnd = "sound/sfx/ib2p1xx1.acm";
+            _upSnd = "sound/sfx/ib2lu1x1.acm";
             break;
         case TYPE_OPTIONS_BUTTON:
             _textures.push_back(ResourceManager::texture("art/intrface/opbtnoff.frm"));
