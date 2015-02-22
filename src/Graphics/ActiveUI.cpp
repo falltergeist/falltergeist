@@ -39,9 +39,8 @@ ActiveUI::~ActiveUI()
 void ActiveUI::handle(Event* event)
 {
     if (event->handled()) return;
-    if(auto mouseEvent = dynamic_cast<MouseEvent*>(event))
+    if (auto mouseEvent = dynamic_cast<MouseEvent*>(event))
     {
-
         int x = mouseEvent->x() - this->x();
         int y = mouseEvent->y() - this->y();
 
@@ -51,89 +50,84 @@ void ActiveUI::handle(Event* event)
         {
             if (mouseEvent->name() == "mousemove")
             {
-                    if (_leftButtonPressed)
-                    {
-                        newEvent->setName( _drag ? "mousedrag" : "mousedragstart");
-                        if (!_drag) _drag = true;
-                        emitEvent(newEvent);
-                    }
-                    if (!_hovered)
-                    {
-                        _hovered = true;
-                        newEvent->setName("mousein");
-                        emitEvent(newEvent);
-                    }
-                    else
-                    {
-                        newEvent->setName("mousemove");
-                        emitEvent(newEvent);
-                    }
+                if (_leftButtonPressed)
+                {
+                    newEvent->setName( _drag ? "mousedrag" : "mousedragstart");
+                    if (!_drag) _drag = true;
+                    emitEvent(newEvent);
+                }
+                if (!_hovered)
+                {
+                    _hovered = true;
+                    newEvent->setName("mousein");
+                    emitEvent(newEvent);
+                }
+                else
+                {
+                    newEvent->setName("mousemove");
+                    emitEvent(newEvent);
+                }
             }
             else if (mouseEvent->name() == "mousedown")
             {
-                    if (mouseEvent->leftButton())
-                    {
-                        _leftButtonPressed = true;
-                        newEvent->setName("mouseleftdown");
-                        emitEvent(newEvent);
-                    }
-                    else if (mouseEvent->rightButton())
-                    {
-                        _rightButtonPressed = true;
-                        newEvent->setName("mouserightdown");
-                        emitEvent(newEvent);
-                    }
+                if (mouseEvent->leftButton())
+                {
+                    _leftButtonPressed = true;
+                    newEvent->setName("mouseleftdown");
+                    emitEvent(newEvent);
+                }
+                else if (mouseEvent->rightButton())
+                {
+                    _rightButtonPressed = true;
+                    newEvent->setName("mouserightdown");
+                    emitEvent(newEvent);
+                }
             }
             else if (mouseEvent->name() == "mouseup")
             {
                 if (mouseEvent->leftButton())
+                {
+                    newEvent->setName("mouseleftup");
+                    emitEvent(newEvent);
+                    if (_leftButtonPressed)
                     {
-                        newEvent->setName("mouseleftup");
-                        emitEvent(newEvent);
-                        if (_leftButtonPressed)
+                        if (_drag)
                         {
-                            if (_drag)
-                            {
-                                _drag = false;
-                                newEvent->setName("mousedragstop");
-                                emitEvent(newEvent);
-                            }
-                            newEvent->setName("mouseleftclick");
+                            _drag = false;
+                            newEvent->setName("mousedragstop");
                             emitEvent(newEvent);
                         }
-                        _leftButtonPressed = false;
-                    }
-                    else if(mouseEvent->rightButton())
-                    {
-                        newEvent->setName("mouserightup");
+                        newEvent->setName("mouseleftclick");
                         emitEvent(newEvent);
-                        if (_rightButtonPressed)
-                        {
-                            newEvent->setName("mouserightclick");
-                            emitEvent(newEvent);
-                        }
-                        _rightButtonPressed = false;
                     }
+                    _leftButtonPressed = false;
+                }
+                else if (mouseEvent->rightButton())
+                {
+                    newEvent->setName("mouserightup");
+                    emitEvent(newEvent);
+                    if (_rightButtonPressed)
+                    {
+                        newEvent->setName("mouserightclick");
+                        emitEvent(newEvent);
+                    }
+                    _rightButtonPressed = false;
+                }
             }
         }
         else
         {
-            if (mouseEvent->name() == "mousemove" && _hovered)
+            if (mouseEvent->name() == "mousemove")
             {
                 if (_drag)
                 {
                     newEvent->setName("mousedrag");
                     emitEvent(newEvent);
                 }
-                _hovered = false;
-                newEvent->setName("mouseout");
-                emitEvent(newEvent);
-            }
-            else if (mouseEvent->name() == "mousemove" && !_hovered)
-            {
-                if (_drag)
+                if (_hovered)
                 {
-                    newEvent->setName("mousedrag");
+                    _hovered = false;
+                    newEvent->setName("mouseout");
                     emitEvent(newEvent);
                 }
             }
@@ -149,8 +143,6 @@ void ActiveUI::handle(Event* event)
                             newEvent->setName("mousedragstop");
                             emitEvent(newEvent);
                         }
-                        newEvent->setName("mouseleftup");
-                        emitEvent(newEvent);
                         _leftButtonPressed = false;
                     }
                 }
@@ -158,8 +150,6 @@ void ActiveUI::handle(Event* event)
                 {
                     if (_rightButtonPressed)
                     {
-                        newEvent->setName("mouserightup");
-                        emitEvent(newEvent);
                         _rightButtonPressed = false;
                     }
                 }
@@ -173,11 +163,10 @@ void ActiveUI::handle(Event* event)
         return;
     }
 
-    if(auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
+    if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
     {
         emitEvent(keyboardEvent);
     }
-
 }
 
 }
