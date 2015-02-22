@@ -178,6 +178,7 @@ UI* State::getUI(std::string name)
 
 void State::handle(Event* event)
 {
+    if (event->handled()) return;
     if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
     {
         if (keyboardEvent->name() == "keydown")

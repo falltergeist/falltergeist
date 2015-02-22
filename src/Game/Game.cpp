@@ -174,11 +174,11 @@ void Game::run()
         think();
         render();
         SDL_Delay(1);
-        while (!_statesForDelete.empty())
+        for (auto state : _statesForDelete)
         {
-            delete _statesForDelete.back();
-            _statesForDelete.pop_back();
+            delete state;
         }
+        _statesForDelete.clear();
     }
     Logger::info("GAME") << "Stopping main loop" << std::endl;
 }

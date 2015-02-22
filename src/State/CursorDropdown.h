@@ -49,13 +49,14 @@ protected:
     std::vector<int> _icons;
     int _initialX;
     int _initialY;
-    int _currentSurface = 0;
+    int _previousIcon = 0;
+    int _currentIcon = 0;
     std::vector<UI*> _activeIcons;
     std::vector<UI*> _inactiveIcons;
     UI* _surface = 0;
-    HiddenMask* _mask = 0;
     UI* _cursor = 0;
-    bool _needToHide = false;
+    bool _deactivated = false;
+    unsigned int _initialMouseStack;
     
     void showMenu();
 public:
@@ -63,6 +64,8 @@ public:
     virtual ~CursorDropdown();
     virtual void init();
     virtual void think();
+    virtual void handle(Event* event);
+    virtual void render();
 
     void onLeftButtonUp(MouseEvent* event);
 

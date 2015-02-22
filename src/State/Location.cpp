@@ -66,6 +66,9 @@ namespace Falltergeist
 namespace State
 {
 
+const int Location::DROPDOWN_DELAY = 350;
+const int Location::KEYBOARD_SCROLL_STEP = 35;
+
 Location::Location() : State()
 {
     auto game = Game::getInstance();
@@ -462,7 +465,7 @@ void Location::think()
     }
     
     // action cursor stuff
-    if (_objectUnderCursor && _actionCursorTicks && _actionCursorTicks + 500 < SDL_GetTicks())
+    if (_objectUnderCursor && _actionCursorTicks && _actionCursorTicks + DROPDOWN_DELAY < SDL_GetTicks())
     {
         auto game = Game::getInstance();
         if (_actionCursorButtonPressed || game->mouse()->state() == Mouse::ACTION)
@@ -475,12 +478,12 @@ void Location::think()
             auto icons = getCursorIconsForObject(_objectUnderCursor);
             if (icons.size() > 0)
             {
-                auto state = new CursorDropdown(icons, !_actionCursorButtonPressed);
-                state->setObject(_objectUnderCursor);
                 if (dynamic_cast<CursorDropdown*>(game->states()->back()) != NULL)
                 {
                     game->popState();
                 }
+                auto state = new CursorDropdown(icons, !_actionCursorButtonPressed);
+                state->setObject(_objectUnderCursor);
                 Game::getInstance()->pushState(state);
             }
         }
@@ -493,9 +496,6 @@ void Location::toggleCursorMode()
 {
     auto game = Game::getInstance();
     auto mouse = game->mouse();
-    if (dynamic_cast<CursorDropdown*>(game->states()->back()) != NULL) {
-        game->popState();
-    }
     switch (mouse->state())
     {
         case Mouse::NONE: // just for testing
