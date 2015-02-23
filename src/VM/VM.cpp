@@ -56,6 +56,11 @@ VM::~VM()
 {
 }
 
+std::string VM::filename()
+{
+    return _script->filename();
+}
+
 bool VM::hasFunction(std::string name)
 {
     try
