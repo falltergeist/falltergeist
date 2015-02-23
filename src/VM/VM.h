@@ -36,6 +36,12 @@ namespace Falltergeist
 {
 class GameCritterObject;
 
+/*
+ * VM class represents Virtual Machine for running vanilla Fallout scripts.
+ * VM uses 2 stacks (return stack and data stack).
+ * Each operator from .INT script is handled by one of the Handler classes and it manipulates one or both stacks in some way.
+ * Typical scripting command takes 0 or more arguments from the data stack and puts one return value to the same stack.
+ */
 class VM
 {
 protected:
@@ -62,7 +68,10 @@ public:
     void setOverrides(bool Value);
     void setInitialized(bool value);
     std::string msgMessage(int msg_file_num, int msg_num);
-
+    /*
+     * Returns filename of an .int script file 
+     */
+    std::string filename();
     bool hasFunction(std::string name);
 
     void call(std::string name);

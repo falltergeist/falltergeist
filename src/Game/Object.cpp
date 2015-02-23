@@ -397,7 +397,7 @@ void GameObject::setInRender(bool value)
 
 void GameObject::description_p_proc()
 {
-    Logger::info("SCRIPT") << "description_p_proc() - 0x" << std::hex << PID() << " " << name() << " " << script() << std::endl;
+    Logger::info("SCRIPT") << "description_p_proc() - 0x" << std::hex << PID() << " " << name() << " " << (script() ? script()->filename() : "") << std::endl;
     bool useDefault = true;
     if (script() && script()->hasFunction("description_p_proc"))
     {
