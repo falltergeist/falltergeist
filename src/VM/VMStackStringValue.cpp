@@ -17,28 +17,33 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_VMSTACKVALUE_H
-#define FALLTERGEIST_VMSTACKVALUE_H
-
 // C++ standard includes
 
 // Falltergeist includes
+#include "../VM/VMStackStringValue.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class VMStackValue
+VMStackStringValue::VMStackStringValue(std::string value) : VMStackValue(TYPE_STRING)
 {
-protected:
-    int _type = 0;
-public:
-    enum {TYPE_INTEGER = 1, TYPE_FLOAT, TYPE_STRING, TYPE_POINTER};
-    VMStackValue(int type);
-    virtual ~VMStackValue();
-    int type();
-};
+    _value = value;
+}
+
+VMStackStringValue::~VMStackStringValue()
+{
+}
+
+void VMStackStringValue::setValue(std::string value)
+{
+    _value = value;
+}
+
+void* VMStackStringValue::value()
+{
+    return _value;
+}
 
 }
-#endif // FALLTERGEIST_VMSTACKVALUE_H
