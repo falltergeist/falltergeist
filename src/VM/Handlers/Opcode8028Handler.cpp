@@ -40,7 +40,7 @@ void Opcode8028Handler::_run()
     std::string name = _vm->dataStack()->popString();
     try
     {
-        _vm->dataStack()->push(_vm->script()->function(name));
+        _vm->dataStack()->push((int)_vm->script()->function(name));
     }
     catch (libfalltergeist::Exception &e)
     {

@@ -23,8 +23,8 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8046Handler.h"
 #include "../../VM/VM.h"
-#include "../../VM/VMStackIntValue.h"
-#include "../../VM/VMStackFloatValue.h"
+#include "../../VM/VMStackValue.h"
+#include "../../Exception.h"
 
 // Third party includes
 
@@ -39,17 +39,17 @@ void Opcode8046Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8046] [*] op_negate" << std::endl;
     auto value = _vm->dataStack()->pop();
-    if (auto stackIntValue = dynamic_cast<VMStackIntValue*>(value)) 
+    if (value.type() == VMStackValue::TYPE_INTEGER) 
     {
-        _vm->dataStack()->push(- stackIntValue->value());
+        _vm->dataStack()->push(- value.integerValue());
     }
-    else if (auto stackFloatValue = dynamic_cast<VMStackFloatValue*>(value))
+    else if (value.type() == VMStackValue::TYPE_FLOAT)
     {
-        _vm->dataStack()->push(- stackFloatValue->value());
+        _vm->dataStack()->push(- value.floatValue());
     }
     else
     {
-        _vm->dataStack()->push(0);
+        throw Exception(std::string("Invalid argument type: ") + value.typeName());
     }
 }
 

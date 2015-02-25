@@ -230,7 +230,7 @@ void Location::setLocation(std::string name)
     // Location script
     if (mapFile->scriptId() > 0)
     {
-        _locationScript = new VM(ResourceManager::intFileType(mapFile->scriptId()-1), Game::getInstance()->locationState());
+        _locationScript = new VM(ResourceManager::intFileType(mapFile->scriptId()-1), nullptr);
     }
     
     // Generates floor and roof images
@@ -784,6 +784,18 @@ void Location::moveObjectToHexagon(Game::GameObject* object, Hexagon* hexagon)
 void Location::centerCameraAtHexagon(Hexagon* hexagon)
 {
     camera()->setPosition(hexagon->x(), hexagon->y());
+}
+
+void Location::centerCameraAtHexagon(int tileNum)
+{
+    try 
+    {
+        centerCameraAtHexagon(_hexagonGrid->at((unsigned int)tileNum));
+    } 
+    catch (std::out_of_range ex) 
+    {
+        throw Exception(std::string("Tile number out of range: ") + std::to_string(tileNum));
+    }
 }
 
 void Location::handleAction(Game::GameObject* object, int action)

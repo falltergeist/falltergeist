@@ -486,7 +486,7 @@ void GameCritterObject::onMovementAnimationEnded(Event* event)
     auto newHexagon = movementQueue()->back();
     auto newOrientation = this->hexagon()->orientationTo(newHexagon);
     
-    if (event->name() == "animationEnded" || newOrientation != orientation())
+    if (event->name() == "animationEnded" || (int)newOrientation != orientation())
     {
         _orientation = newOrientation;
         auto newAnimation = _generateMovementAnimation();

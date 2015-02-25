@@ -38,12 +38,12 @@ VMStack::~VMStack()
 {
 }
 
-void VMStack::push(const VMStackValue value)
+void VMStack::push(const VMStackValue& value)
 {
     _values.push_back(value);
 }
 
-const VMStackValue& VMStack::pop()
+const VMStackValue VMStack::pop()
 {
     if (_values.size() == 0) throw Exception("VMStack::pop() - stack is empty");
     auto value = _values.back();
@@ -71,14 +71,19 @@ std::vector<VMStackValue>* VMStack::values()
     return &_values;
 }
 
-const VMStackValue& VMStack::top()
+const VMStackValue VMStack::top()
 {
     return _values.back();
 }
 
 int VMStack::popInteger()
 {
-    return pop()->integerValue();
+    return pop().integerValue();
+}
+
+void VMStack::push(unsigned int value)
+{
+    push((int)value);
 }
 
 void VMStack::push(int value)
@@ -88,7 +93,7 @@ void VMStack::push(int value)
 
 float VMStack::popFloat()
 {
-    return pop()->floatValue();
+    return pop().floatValue();
 }
 
 void VMStack::push(float value)
@@ -98,7 +103,7 @@ void VMStack::push(float value)
 
 Game::GameObject* VMStack::popObject()
 {
-    return pop()->objectValue();
+    return pop().objectValue();
 }
 
 void VMStack::push(Game::GameObject* value)
@@ -106,9 +111,9 @@ void VMStack::push(Game::GameObject* value)
     push(VMStackValue(value));
 }
 
-std::string& VMStack::popString()
+std::string VMStack::popString()
 {
-    return pop()->stringValue();
+    return pop().stringValue();
 }
 
 void VMStack::push(const std::string &value)
@@ -116,21 +121,21 @@ void VMStack::push(const std::string &value)
     push(VMStackValue(value));
 }
 
-bool VM::popDataLogical()
+bool VMStack::popLogical()
 {
-    auto stackValue = _dataStack.pop();
-    switch (stackValue->type())
+    auto stackValue = pop();
+    switch (stackValue.type())
     {
         case VMStackValue::TYPE_INTEGER:
-            return stackValue->integerValue() != 0;
+            return stackValue.integerValue() != 0;
         case VMStackValue::TYPE_FLOAT:
-            return (bool)stackValue->floatValue();
+            return (bool)stackValue.floatValue();
         case VMStackValue::TYPE_STRING:
-            return stackValue->stringValue().length() > 0;
+            return stackValue.stringValue().length() > 0;
         case VMStackValue::TYPE_OBJECT:
-            return stackValue->objectValue() != nullptr;
+            return stackValue.objectValue() != nullptr;
     }
-    throw Exception("VM::popDataLogical() - something strange happened");
+    throw Exception("VMStack::popLogical() - something strange happened");
 }
 
 }

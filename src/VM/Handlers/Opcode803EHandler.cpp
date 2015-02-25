@@ -36,8 +36,8 @@ Opcode803EHandler::Opcode803EHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode803EHandler::_run()
 {
         Logger::debug("SCRIPT") << "[803E] [*] op_and" << std::endl;
-        auto b = _vm->popDataLogical();
-        auto a = _vm->popDataLogical();
+        auto b = _vm->dataStack()->popLogical();
+        auto a = _vm->dataStack()->popLogical();
         _vm->dataStack()->push(a && b);
 }
 

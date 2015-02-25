@@ -48,13 +48,13 @@ void Opcode8106Handler::_run()
     switch (where)
     {
     case 0: // ARMOR SLOT
-        _vm->pushDataObject(critter->armorSlot());
+        _vm->dataStack()->push(critter->armorSlot());
         break;
     case 1: // RIGHT HAND SLOT
-        _vm->pushDataObject(critter->rightHandSlot());
+        _vm->dataStack()->push(critter->rightHandSlot());
         break;
     case 2: // LEFT HAND SLOT
-        _vm->pushDataObject(critter->leftHandSlot());
+        _vm->dataStack()->push(critter->leftHandSlot());
         break;
     case -2: // INVENTORY COUNT
         _vm->dataStack()->push(critter->inventory()->size());
