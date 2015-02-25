@@ -36,8 +36,7 @@ Opcode80BCHandler::Opcode80BCHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80BCHandler::_run()
 {
-    _vm->pushDataObject(_vm->owner());
-
+    _vm->dataStack()->push(_vm->owner());
     Logger::debug("SCRIPT") << "[80BC] [+] GameObject* self_obj()" << std::endl;
 }
 

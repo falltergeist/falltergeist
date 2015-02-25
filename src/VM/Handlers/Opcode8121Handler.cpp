@@ -43,17 +43,17 @@ void Opcode8121Handler::_run()
 
     auto reaction = _vm->dataStack()->popInteger();
     auto function = _vm->dataStack()->popInteger();
-    std::string* text = 0;
-    if (_vm->dataStack()->top()->type() == VMStackValue::TYPE_OBJECT)
+    std::string text;
+    if (_vm->dataStack()->top().type() == VMStackValue::TYPE_STRING)
     {
-        text = static_cast<std::string*>(_vm->dataStack()->popObject());
+        text = _vm->dataStack()->popString();
         _vm->dataStack()->popInteger(); // msg_list
     }
     else
     {
         auto msg_num = _vm->dataStack()->popInteger();
         auto msg_file_num = _vm->dataStack()->popInteger();
-        text = new std::string(_vm->msgMessage(msg_file_num, msg_num));
+        text = _vm->msgMessage(msg_file_num, msg_num);
     }
     auto iq = _vm->dataStack()->popInteger();
     auto game = Game::getInstance();
@@ -64,7 +64,7 @@ void Opcode8121Handler::_run()
         {
             dialog->reactions()->push_back(reaction);
             dialog->functions()->push_back(function);
-            dialog->addAnswer(*text);
+            dialog->addAnswer(text);
         }
     }
     if (iq < 0)
@@ -73,7 +73,7 @@ void Opcode8121Handler::_run()
         {
             dialog->reactions()->push_back(reaction);
             dialog->functions()->push_back(function);
-            dialog->addAnswer(*text);
+            dialog->addAnswer(text);
         }
     }
     //delete text;

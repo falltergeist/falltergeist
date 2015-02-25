@@ -30,8 +30,6 @@
 #include "../../VM/VM.h"
 
 
-
-
 // Third party includes
 
 namespace Falltergeist
@@ -48,15 +46,16 @@ void Opcode80A7Handler::_run()
     auto elevation = _vm->dataStack()->popInteger();
     auto position = _vm->dataStack()->popInteger();
     auto game = Game::getInstance();
-    Game::GameObject* found = 0;
+    Game::GameObject* found = nullptr;
     for (auto object : *game->locationState()->hexagonGrid()->at(position)->objects())
     {
         if (object->PID() == PID && object->elevation() == elevation)
         {
             found = object;
+            break;
         }
     }
-    _vm->pushDataObject(found);
+    _vm->dataStack()->push(found);
 }
 
 }

@@ -31,7 +31,7 @@
 namespace Falltergeist
 {
 class VMStackValue;
-class Game::GameObject;
+namespace Game { class GameObject; };
 
 class VMStack
 {
@@ -41,18 +41,19 @@ public:
     VMStack();
     ~VMStack();
     void push(const VMStackValue &value);
+    void push(unsigned int value);
     void push(int value);
     void push(float value);
     void push(Game::GameObject* value);
     void push(const std::string &value);
     
-    const VMStackValue& pop();
+    const VMStackValue pop();
     int popInteger();
     float popFloat();
-    std::string &popString();
+    std::string popString();
     Game::GameObject* popObject();
     bool popLogical();
-    const VMStackValue& top();
+    const VMStackValue top();
     std::vector<VMStackValue>* values();
     int size();
     void swap();

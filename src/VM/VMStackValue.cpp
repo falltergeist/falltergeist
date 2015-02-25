@@ -70,49 +70,68 @@ int VMStackValue::type() const
     return _type;
 }
 
+bool VMStackValue::isNumber() const
+{
+    return (_type == TYPE_FLOAT || _type == TYPE_INTEGER);
+}
+
 int VMStackValue::integerValue() const
 {
-    if (_type != TYPE_INTEGER) throw Exception("VMStackValue::integerValue() - stack value is not integer, it is " + typeName(_type));
+    if (_type != TYPE_INTEGER) throw Exception(std::string("VMStackValue::integerValue() - stack value is not integer, it is ") + typeName(_type));
     return _intValue;
 }
 
 float VMStackValue::floatValue() const
 {
-    if (_type != TYPE_FLOAT) throw Exception("VMStackValue::floatValue() - stack value is not float, it is " + typeName(_type));
+    if (_type != TYPE_FLOAT) throw Exception(std::string("VMStackValue::floatValue() - stack value is not float, it is ") + typeName(_type));
     return _floatValue;
 }
 
 std::string VMStackValue::stringValue() const
 {
-    if (_type != TYPE_STRING) throw Exception("VMStackValue::stringValue() - stack value is not string, it is " + typeName(_type));
+    if (_type != TYPE_STRING) throw Exception(std::string("VMStackValue::stringValue() - stack value is not string, it is ") + typeName(_type));
     return _stringValue;
 }
 
 Game::GameObject* VMStackValue::objectValue() const
 {
-    if (_type != TYPE_OBJECT) throw Exception("VMStackValue::objectValue() - stack value is not an object, it is " + typeName(_type));
+    if (_type != TYPE_OBJECT) throw Exception(std::string("VMStackValue::objectValue() - stack value is not an object, it is ") + typeName(_type));
     return _objectValue;
 }
 
 std::string VMStackValue::toString() const
 {
-    switch (type)
+    switch (_type)
     {
         case TYPE_INTEGER: return std::to_string(_intValue);
         case TYPE_FLOAT:   return std::to_string(_floatValue);
         case TYPE_STRING:  return _stringValue;
-        case TYPE_OBJECT:  return _objectValue ? _objectValue->name() : std::string('(null)'); // just in case, we should never create null object value
+        case TYPE_OBJECT:  return _objectValue ? _objectValue->name() : std::string("(null)"); // just in case, we should never create null object value
         default:
-            throw Exception("VMStackValue::toString() - wrong type: " + std::to_string(type));
+            throw Exception("VMStackValue::toString() - wrong type: " + std::to_string(_type));
     }
 }
 
-const std::string VMStackValue::typeName()
+int VMStackValue::toInteger() const
+{
+    switch (_type)
+    {
+        case TYPE_INTEGER: return _intValue;
+        case TYPE_FLOAT:   return (int)_floatValue;
+        case TYPE_STRING:  return std::stoi(_stringValue);
+        case TYPE_OBJECT:  return 0;
+        default:
+            throw Exception("VMStackValue::toString() - wrong type: " + std::to_string(_type));
+    }
+}
+
+
+const char* VMStackValue::typeName()
 {
     return typeName(_type);
 }
 
-const std::string VMStackValue::typeName(int type)
+const char* VMStackValue::typeName(int type)
 {
     switch (type)
     {

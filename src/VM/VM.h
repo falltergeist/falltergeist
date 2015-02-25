@@ -25,15 +25,15 @@
 
 // Falltergeist includes
 #include "../VM/VMStack.h"
-#include "../VM/VMStackIntValue.h"
-#include "../VM/VMStackFloatValue.h"
-#include "../VM/VMStackPointerValue.h"
+#include "../VM/VMStackValue.h"
 
 // Third party includes
 #include <libfalltergeist.h>
 
 namespace Falltergeist
 {
+    
+namespace Game { class GameObject; }
 
 /*
  * VM class represents Virtual Machine for running vanilla Fallout scripts.
@@ -44,7 +44,7 @@ namespace Falltergeist
 class VM
 {
 protected:
-    void* _owner = 0;
+    Game::GameObject* _owner = 0;
     libfalltergeist::IntFileType* _script = 0;
     bool _initialized = false;
     bool _overrides = false;
@@ -56,8 +56,8 @@ protected:
     int _SVAR_base = 0;
 
 public:
-    VM(libfalltergeist::IntFileType* script, void* owner);
-    VM(std::string filename, void* owner);
+    VM(libfalltergeist::IntFileType* script, Game::GameObject* owner);
+    VM(std::string filename, Game::GameObject* owner);
     virtual ~VM();
     void run();
     void initialize();
@@ -76,16 +76,14 @@ public:
     void call(std::string name);
     libfalltergeist::IntFileType* script();
 
-    void* owner();
+    Game::GameObject* owner();
 
     unsigned int programCounter();
     void setProgramCounter(unsigned int value);
 
-    bool popDataLogical();
-
     VMStack* dataStack();
     VMStack* returnStack();
-    std::vector<VMStackValue*>* LVARS();
+    std::vector<VMStackValue>* LVARS();
 
     int DVARbase();
     void setDVARBase(int Value);

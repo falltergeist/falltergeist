@@ -43,18 +43,19 @@ void Opcode8014Handler::_run()
     auto game = Game::getInstance();
     auto EVARS = game->locationState()->EVARS();
     std::string name;
-    switch (_vm->dataStack()->top()->type())
+    auto nameValue = _vm->dataStack()->pop();
+    switch (nameValue.type())
     {
         case VMStackValue::TYPE_INTEGER:
-            name = _vm->script()->identifiers()->at(_vm->dataStack()->popInteger());
+            name = _vm->script()->identifiers()->at(nameValue.integerValue());
             break;
         case VMStackValue::TYPE_STRING:
         {
-            name = _vm->dataStack()->popString();
+            name = nameValue.stringValue();
             break;
         }
         default:
-            throw Exception("VM::opcode8014() - invalid argument type: " + VMStackValue::typeName(_vm->dataStack()->top()->type()));
+            throw Exception(std::string("VM::opcode8014() - invalid argument type: ") + VMStackValue::typeName(nameValue.type()));
     }
 
     auto value = EVARS->at(name);
@@ -62,12 +63,8 @@ void Opcode8014Handler::_run()
 
     debug << "[8014] [+] value = op_fetch_external(name)" << std::endl;
     debug << "    name = " << name << std::endl;
-    debug << "    type = " << value->type() << std::endl;
-    switch (value->type())
-    {
-        case VMStackValue::TYPE_INTEGER:
-            debug << "    value = " << std::hex << ((VMStackIntValue*)value)->value() << std::endl;
-            break;
-    }
+    debug << "    type = " << value.type() << std::endl;
+    debug << "    type = " << value.toString() << std::endl;
 }
+
 }
