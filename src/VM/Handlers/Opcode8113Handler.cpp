@@ -40,7 +40,7 @@ void Opcode8113Handler::_run()
     Logger::debug("SCRIPT") << "[8113] [=] void reg_anim_obj_move_to_tile(void* who, int dest_tile, int delay)" << std::endl;
     _vm->popDataInteger(); // -1
     _vm->popDataInteger();
-    _vm->popDataPointer();
+    _vm->popDataObject();
 }
 
 }

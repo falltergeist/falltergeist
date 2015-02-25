@@ -38,7 +38,7 @@ Opcode80E7Handler::Opcode80E7Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80E7Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80E7] [=] int anim_busy(void* obj)" << std::endl;
-    _vm->popDataPointer();//auto object = (GameObject*)popDataPointer();
+    _vm->popDataObject();//auto object = (GameObject*)popDataPointer();
     //pushDataInteger(object->animationQueue()->enabled());
     _vm->pushDataInteger(1);
 

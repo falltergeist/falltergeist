@@ -42,27 +42,27 @@ void Opcode8039Handler::_run()
     auto b = _vm->dataStack()->top();
     switch (b->type())
     {
-        case VMStackValue::TYPE_POINTER: // STRING
+        case VMStackValue::TYPE_OBJECT: // STRING
         {
             std::string string2;
             switch(((VMStackPointerValue*)b)->pointerType())
             {
                 case VMStackPointerValue::POINTER_TYPE_STRING:
-                    string2 = *static_cast<std::string*>(_vm->popDataPointer());
+                    string2 = *static_cast<std::string*>(_vm->popDataObject());
                     break;
                 default:
-                    _vm->popDataPointer();
+                    _vm->popDataObject();
                     string2 = "UNSUPPORTED";
                     break;
             }
             auto a = _vm->dataStack()->top();
             switch(a->type())
             {
-                case VMStackValue::TYPE_POINTER: // STRING + STRING
+                case VMStackValue::TYPE_OBJECT: // STRING + STRING
                 {
-                    auto p1 = static_cast<std::string*>(_vm->popDataPointer());
+                    auto p1 = static_cast<std::string*>(_vm->popDataObject());
                     std::string string1 = (p1 ? *p1 : "");
-                    _vm->pushDataPointer(new std::string(string1 + string2), VMStackPointerValue::POINTER_TYPE_STRING);
+                    _vm->pushDataObject(new std::string(string1 + string2), VMStackPointerValue::POINTER_TYPE_STRING);
                     break;
                 }
                 case VMStackValue::TYPE_FLOAT: // FLOAT + STRING
@@ -95,11 +95,11 @@ void Opcode8039Handler::_run()
                     _vm->pushDataFloat(p1 + p2);
                     break;
                 }
-                case VMStackValue::TYPE_POINTER: // STRING + INTEGER
+                case VMStackValue::TYPE_OBJECT: // STRING + INTEGER
                 {
-                    auto p1 = static_cast<std::string*>(_vm->popDataPointer());
+                    auto p1 = static_cast<std::string*>(_vm->popDataObject());
                     std::string string1 = (p1 ? *p1 : "");
-                    _vm->pushDataPointer(new std::string(string1 + std::to_string(p2)), VMStackPointerValue::POINTER_TYPE_STRING);
+                    _vm->pushDataObject(new std::string(string1 + std::to_string(p2)), VMStackPointerValue::POINTER_TYPE_STRING);
                     break;
                 }
             }
@@ -125,12 +125,12 @@ void Opcode8039Handler::_run()
                     _vm->pushDataFloat(p1 + p2);
                     break;
                 }
-                case VMStackValue::TYPE_POINTER: // STRING + FLOAT
+                case VMStackValue::TYPE_OBJECT: // STRING + FLOAT
                 {
-                    auto p1 = static_cast<std::string*>(_vm->popDataPointer());
+                    auto p1 = static_cast<std::string*>(_vm->popDataObject());
                     std::string string1 = (p1 ? *p1 : "");
 
-                    _vm->pushDataPointer(new std::string(string1 + std::to_string(p2)), VMStackPointerValue::POINTER_TYPE_STRING);
+                    _vm->pushDataObject(new std::string(string1 + std::to_string(p2)), VMStackPointerValue::POINTER_TYPE_STRING);
                     break;
                 }
             }

@@ -40,7 +40,7 @@ void Opcode80F0Handler::_run()
     Logger::debug("SCRIPT") << "[80F0] [=] void add_timer_event(void* obj, int time, int info)" << std::endl;
     _vm->popDataInteger();
     _vm->popDataInteger();
-    _vm->popDataPointer();
+    _vm->popDataObject();
 }
 
 }

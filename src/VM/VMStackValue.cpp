@@ -18,37 +18,107 @@
  */
 
 // C++ standard includes
+#include <string>
 
 // Falltergeist includes
 #include "../VM/VMStackValue.h"
 #include "../Exception.h"
+#include "../Game/Object.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-VMStackValue::VMStackValue(int type)
+VMStackValue::VMStackValue()
 {
-    switch (type)
-    {
-        case TYPE_INTEGER:
-        case TYPE_POINTER:
-        case TYPE_FLOAT:
-            _type = type;
-            break;
-        default:
-            throw Exception("VMStackValue::VMStackValue() - wrong type: " + std::to_string(type));
-    }
+    _type = TYPE_INTEGER;
+    _intValue = 0;
+}
+
+VMStackValue::VMStackValue(int value)
+{
+    _type = TYPE_INTEGER;
+    _intValue = value;
+}
+
+VMStackValue::VMStackValue(float value)
+{
+    _type = TYPE_FLOAT;
+    _floatValue = value;
+}
+
+VMStackValue::VMStackValue(const std::string &value)
+{
+    _type = TYPE_STRING;
+    _stringValue = value;
+}
+
+VMStackValue::VMStackValue(Game::GameObject *value)
+{
+    _type = TYPE_OBJECT;
+    _objectValue = value;
 }
 
 VMStackValue::~VMStackValue()
 {
 }
 
-int VMStackValue::type()
+int VMStackValue::type() const
 {
     return _type;
 }
+
+int VMStackValue::integerValue() const
+{
+    if (_type != TYPE_INTEGER) throw Exception("VMStackValue::integerValue() - stack value is not integer, it is " + typeName(_type));
+    return _intValue;
+}
+
+float VMStackValue::floatValue() const
+{
+    if (_type != TYPE_FLOAT) throw Exception("VMStackValue::floatValue() - stack value is not float, it is " + typeName(_type));
+    return _floatValue;
+}
+
+std::string VMStackValue::stringValue() const
+{
+    if (_type != TYPE_STRING) throw Exception("VMStackValue::stringValue() - stack value is not string, it is " + typeName(_type));
+    return _stringValue;
+}
+
+Game::GameObject* VMStackValue::objectValue() const
+{
+    if (_type != TYPE_OBJECT) throw Exception("VMStackValue::objectValue() - stack value is not an object, it is " + typeName(_type));
+    return _objectValue;
+}
+
+std::string VMStackValue::toString() const
+{
+    switch (type)
+    {
+        case TYPE_INTEGER: return std::to_string(_intValue);
+        case TYPE_FLOAT:   return std::to_string(_floatValue);
+        case TYPE_STRING:  return _stringValue;
+        case TYPE_OBJECT:  return _objectValue ? _objectValue->name() : std::string('(null)');
+        default:
+            throw Exception("VMStackValue::toString() - wrong type: " + std::to_string(type));
+    }
+}
+
+
+const std::string VMStackValue::typeName(int type)
+{
+    switch (type)
+    {
+        case TYPE_INTEGER: return "integer";
+        case TYPE_FLOAT:   return "float";
+        case TYPE_STRING:  return "string";
+        case TYPE_OBJECT:  return "object";
+        default:
+            throw Exception("VMStackValue::typeName() - wrong type: " + std::to_string(type));
+    }
+}
+
 
 }

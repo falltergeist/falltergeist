@@ -43,7 +43,7 @@ Opcode80ECHandler::Opcode80ECHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80ECHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80EC] [=] int elevation(void* obj)" << std::endl;
-    auto object = static_cast<Game::GameObject*>(_vm->popDataPointer());
+    auto object = static_cast<Game::GameObject*>(_vm->popDataObject());
     if (!object) throw new Exception("Opcode 80ec error");
     _vm->pushDataInteger(object->elevation());
 }

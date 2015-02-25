@@ -52,13 +52,13 @@ void Opcode9001Handler::_run()
         case 0x8016: // export var
         {
             pointer = new std::string(_vm->script()->identificators()->at(data));
-            _vm->pushDataPointer(pointer, VMStackPointerValue::POINTER_TYPE_STRING);
+            _vm->pushDataObject(pointer, VMStackPointerValue::POINTER_TYPE_STRING);
             break;
         }
         default:
         {
             pointer = new std::string(_vm->script()->strings()->at(data));
-            _vm->pushDataPointer(pointer, VMStackPointerValue::POINTER_TYPE_STRING);
+            _vm->pushDataObject(pointer, VMStackPointerValue::POINTER_TYPE_STRING);
             break;
         }
     }

@@ -38,7 +38,7 @@ Opcode80CAHandler::Opcode80CAHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80CAHandler::_run()
 {
     int number = _vm->popDataInteger();
-    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataPointer());
+    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
     if (!critter)
     {
         throw Exception("VM::opcode80CA pointer error");

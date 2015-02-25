@@ -37,7 +37,7 @@ Opcode812FHandler::Opcode812FHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode812FHandler::_run()
 {
     Logger::debug("SCRIPT") << "[812F] [+] void unlock(GameDoorSceneryObject* object)" << std::endl;
-    auto object = static_cast<Game::GameDoorSceneryObject*>(_vm->popDataPointer());
+    auto object = static_cast<Game::GameDoorSceneryObject*>(_vm->popDataObject());
     object->setLocked(false);
 }
 

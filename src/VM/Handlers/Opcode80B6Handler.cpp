@@ -47,7 +47,7 @@ void Opcode80B6Handler::_run()
     Logger::debug("SCRIPT") << "[80B6] [+] int move_to(GameObject* object, int position, int elevation)" << std::endl;
     auto elevation = _vm->popDataInteger();
     auto position = _vm->popDataInteger();
-    auto object = static_cast<Game::GameObject*>(_vm->popDataPointer());
+    auto object = static_cast<Game::GameObject*>(_vm->popDataObject());
     if (!object) throw new Exception("Opcode 80b6 error");
     auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
     State::Location::moveObjectToHexagon(object, hexagon);

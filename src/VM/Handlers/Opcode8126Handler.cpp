@@ -47,7 +47,7 @@ void Opcode8126Handler::_run()
         throw Exception("Opcode8126Handler - delay must be -1");
     }
     */
-    auto object = static_cast<Game::GameObject*>(_vm->popDataPointer());
+    auto object = static_cast<Game::GameObject*>(_vm->popDataObject());
     auto queue = dynamic_cast<AnimationQueue*>(object->ui());
     if (queue)
     {

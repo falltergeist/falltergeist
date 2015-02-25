@@ -39,7 +39,7 @@ Opcode80BDHandler::Opcode80BDHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80BDHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80BD] [=] void* source_obj()" << std::endl;
-    _vm->pushDataPointer(0);
+    _vm->pushDataObject(0);
 }
 
 }

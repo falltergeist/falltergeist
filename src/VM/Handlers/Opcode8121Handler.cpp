@@ -44,9 +44,9 @@ void Opcode8121Handler::_run()
     auto reaction = _vm->popDataInteger();
     auto function = _vm->popDataInteger();
     std::string* text = 0;
-    if (_vm->dataStack()->top()->type() == VMStackValue::TYPE_POINTER)
+    if (_vm->dataStack()->top()->type() == VMStackValue::TYPE_OBJECT)
     {
-        text = static_cast<std::string*>(_vm->popDataPointer());
+        text = static_cast<std::string*>(_vm->popDataObject());
         _vm->popDataInteger(); // msg_list
     }
     else

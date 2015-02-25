@@ -62,7 +62,7 @@ void Opcode80B7Handler::_run()
             object->setScript(new VM(intFile, object));
         }
     }
-    _vm->pushDataPointer(object);
+    _vm->pushDataObject(object);
 }
 
 }

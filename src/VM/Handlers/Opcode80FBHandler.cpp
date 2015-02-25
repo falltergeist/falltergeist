@@ -38,7 +38,7 @@ Opcode80FBHandler::Opcode80FBHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80FBHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80FB] [=] int critter_state(void* who)" << std::endl;
-    _vm->popDataPointer();
+    _vm->popDataObject();
     _vm->pushDataInteger(0);
 }
 

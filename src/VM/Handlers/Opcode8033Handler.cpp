@@ -56,20 +56,20 @@ void Opcode8033Handler::_run()
                     _vm->pushDataInteger(p1 == p2);
                     break;
                 }
-                case VMStackValue::TYPE_POINTER:
+                case VMStackValue::TYPE_OBJECT:
                 {
-                    auto p1 = (int)(bool)_vm->popDataPointer();
+                    auto p1 = (int)(bool)_vm->popDataObject();
                     _vm->pushDataInteger(p1 == p2);
                     break;
                 }
             }
             break;
         }
-        case VMStackValue::TYPE_POINTER:
+        case VMStackValue::TYPE_OBJECT:
         {
             // @TODO: proper string comparison
-            auto p2 = _vm->popDataPointer();
-            auto p1 = _vm->popDataPointer();
+            auto p2 = _vm->popDataObject();
+            auto p1 = _vm->popDataObject();
             _vm->pushDataInteger(p1 == p2);
             break;
         }
