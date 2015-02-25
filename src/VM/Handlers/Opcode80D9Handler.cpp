@@ -38,8 +38,8 @@ Opcode80D9Handler::Opcode80D9Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80D9Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80D9] [=] void rm_obj_from_inven(void* who, void* obj)" << std::endl;
-    _vm->popDataPointer();
-    _vm->popDataPointer();
+    _vm->popDataObject();
+    _vm->popDataObject();
 }
 
 }

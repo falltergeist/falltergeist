@@ -44,17 +44,17 @@ void Opcode8106Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8106] [=] void* (int) critter_inven_obj(GameCritterObject* critter, int where)" << std::endl;
     auto where = _vm->popDataInteger();
-    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataPointer());
+    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
     switch (where)
     {
     case 0: // ARMOR SLOT
-        _vm->pushDataPointer(critter->armorSlot());
+        _vm->pushDataObject(critter->armorSlot());
         break;
     case 1: // RIGHT HAND SLOT
-        _vm->pushDataPointer(critter->rightHandSlot());
+        _vm->pushDataObject(critter->rightHandSlot());
         break;
     case 2: // LEFT HAND SLOT
-        _vm->pushDataPointer(critter->leftHandSlot());
+        _vm->pushDataObject(critter->leftHandSlot());
         break;
     case -2: // INVENTORY COUNT
         _vm->pushDataInteger(critter->inventory()->size());

@@ -36,7 +36,7 @@ Opcode8138Handler::Opcode8138Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8138Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8138] [=] int item_caps_total(void* obj)" << std::endl;
-    _vm->popDataPointer();
+    _vm->popDataObject();
     _vm->pushDataInteger(0);
 }
 

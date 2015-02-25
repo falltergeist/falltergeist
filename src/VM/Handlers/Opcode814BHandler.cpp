@@ -39,7 +39,7 @@ void Opcode814BHandler::_run()
 {
     Logger::debug("SCRIPT") << "[814B] [*] void* party_member_obj(int pid)" << std::endl;
     _vm->popDataInteger();
-    _vm->pushDataPointer(0);
+    _vm->pushDataObject(0);
 }
 
 }

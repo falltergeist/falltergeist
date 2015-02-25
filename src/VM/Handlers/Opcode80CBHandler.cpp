@@ -44,7 +44,7 @@ void Opcode80CBHandler::_run()
     {
         throw Exception("VM::opcode80CB - number out of range:" + std::to_string(number));
     }
-    auto object = static_cast<Game::GameCritterObject*>(_vm->popDataPointer());
+    auto object = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
     if (!object)
     {
         throw Exception("VM::opcode80CB pointer error");

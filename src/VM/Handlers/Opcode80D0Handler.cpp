@@ -46,7 +46,7 @@ void Opcode80D0Handler::_run()
     _vm->popDataInteger();
     _vm->popDataInteger();
     _vm->popDataInteger();
-    _vm->popDataPointer();
+    _vm->popDataObject();
 }
 
 }

@@ -48,7 +48,7 @@ Opcode80C9Handler::Opcode80C9Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80C9Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80C9] [+] int obj_item_subtype(GameItemObject* object)" << std::endl;
-    auto pointer = _vm->popDataPointer();
+    auto pointer = _vm->popDataObject();
     if      (static_cast<Game::GameArmorItemObject*>(pointer))     _vm->pushDataInteger(0);
     else if (static_cast<Game::GameContainerItemObject*>(pointer)) _vm->pushDataInteger(1);
     else if (static_cast<Game::GameDrugItemObject*>(pointer))      _vm->pushDataInteger(2);

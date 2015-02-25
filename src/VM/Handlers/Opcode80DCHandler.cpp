@@ -38,8 +38,8 @@ Opcode80DCHandler::Opcode80DCHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80DCHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80DC] [=] int obj_can_see_obj(GameObject* src_obj, GameObject* dst_obj)" << std::endl;
-    _vm->popDataPointer();
-    _vm->popDataPointer();
+    _vm->popDataObject();
+    _vm->popDataObject();
     _vm->pushDataInteger(1);
 }
 

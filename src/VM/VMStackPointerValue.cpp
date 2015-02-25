@@ -27,7 +27,7 @@
 namespace Falltergeist
 {
 
-VMStackPointerValue::VMStackPointerValue(void* value) : VMStackValue(TYPE_POINTER)
+VMStackPointerValue::VMStackPointerValue(void* value) : VMStackValue(TYPE_OBJECT)
 {
     _value = value;
 }

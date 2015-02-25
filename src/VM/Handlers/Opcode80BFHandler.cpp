@@ -39,7 +39,7 @@ void Opcode80BFHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80BF] [+] GameDudeObject* dude_obj()" << std::endl;
     auto game = Game::getInstance();
-    _vm->pushDataPointer(game->player());
+    _vm->pushDataObject(game->player());
 }
 
 }

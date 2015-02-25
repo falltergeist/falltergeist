@@ -46,7 +46,7 @@ void Opcode80FFHandler::_run()
     Logger::debug("SCRIPT") << "[80FF] [*] int critter_attempt_placement(GameCritterObject* critter, int position, int elevation)" << std::endl;
     auto elevation = _vm->popDataInteger();
     auto position = _vm->popDataInteger();
-    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataPointer());
+    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
     if (!critter) throw new Exception("Opcode 80ff error");
     auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
     State::Location::moveObjectToHexagon(critter, hexagon);

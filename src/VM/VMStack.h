@@ -35,14 +35,14 @@ class VMStackValue;
 class VMStack
 {
 protected:
-    std::vector<VMStackValue*> _values;
+    std::vector<VMStackValue> _values;
 public:
     VMStack();
     ~VMStack();
-    void push(VMStackValue* value);
-    VMStackValue* pop();
-    VMStackValue* top();
-    std::vector<VMStackValue*>* values();
+    void push(const VMStackValue &value);
+    const VMStackValue& pop();
+    const VMStackValue& top();
+    std::vector<VMStackValue>* values();
     int size();
     void swap();
 };

@@ -32,6 +32,7 @@
 #include "../VM/VMStackIntValue.h"
 #include "../VM/VMStackFloatValue.h"
 #include "../VM/VMStackPointerValue.h"
+#include "../VM/VMStackStringValue.h"
 
 // Third party includes
 
@@ -126,106 +127,73 @@ void VM::run()
 
 int VM::popDataInteger()
 {
-    auto stackValue = _dataStack.pop();
-    if (stackValue->type() == VMStackValue::TYPE_INTEGER)
-    {
-        auto stackIntValue = dynamic_cast<VMStackIntValue*>(stackValue);
-        auto value = stackIntValue->value();
-        return value;
-    }
-    throw Exception("VM::popDataInteger() - stack value is not integer");
+    return _dataStack.pop()->integerValue();
 }
 
 void VM::pushDataInteger(int value)
 {
-    _dataStack.push(new VMStackIntValue(value));
+    _dataStack.push(VMStackValue(value));
 }
 
 float VM::popDataFloat()
 {
-    auto stackValue = _dataStack.pop();
-    if (stackValue->type() == VMStackValue::TYPE_FLOAT)
-    {
-        auto stackFloatValue = dynamic_cast<VMStackFloatValue*>(stackValue);
-        auto value = stackFloatValue->value();
-        return value;
-    }
-    throw Exception("VM::popDataFloat() - stack value is not float");
+    return _dataStack.pop()->floatValue();
 }
 
 void VM::pushDataFloat(float value)
 {
-    _dataStack.push(new VMStackFloatValue(value));
+    _dataStack.push(VMStackValue(value));
 }
 
-void* VM::popDataPointer()
+Game::GameObject* VM::popDataObject()
 {
-    auto stackValue = _dataStack.pop();
-    if (stackValue->type() == VMStackValue::TYPE_POINTER)
-    {
-        auto stackPointerValue = dynamic_cast<VMStackPointerValue*>(stackValue);
-        auto value = stackPointerValue->value();
-        return value;
-    }
-    throw Exception("VM::popDataPointer() - stack value is not a pointer");
+    return _dataStack.pop()->objectValue();
 }
 
-void VM::pushDataPointer(void* value, unsigned int type)
+void VM::pushDataObject(Game::GameObject* value)
 {
-    auto pointer = new VMStackPointerValue(value);
-    pointer->setPointerType(type);
-    _dataStack.push(pointer);
+    _dataStack.push(VMStackValue(value));
 }
 
 std::string& VM::popDataString()
 {
-    auto stackPointerValue = dynamic_cast<VMStackPointerValue*>(_dataStack.pop());
-    if (stackPointerValue)
+    auto stackStringValue = dynamic_cast<VMStackStringValue*>(_dataStack.pop());
+    if (stackStringValue)
     {
-        if (stackPointerValue->type() == VMStackPointerValue::POINTER_TYPE_STRING)
-        {
-            auto value = static_cast<std::string*>(stackPointerValue->value());
-            return *value;
-        }
-        throw Exception("VM::popDataString() - stack value is not a string");
+        return stackStringValue->value();
     }
-    throw Exception("VM::popDataString() - stack value is not a pointer");
+    throw Exception("VM::popDataString() - stack value is not a string");
 }
 
 void VM::pushDataString(std::string &value)
 {
-    auto pointer = new VMStackPointerValue(new std::string(value));
-    pointer->setPointerType(VMStackPointerValue::POINTER_TYPE_STRING);
-    _dataStack.push(pointer);
+    auto stackStringValue = new VMStackStringValue(value);
+    _dataStack.push(stackStringValue);
 }
 
 int VM::popReturnInteger()
 {
-    auto stackValue = _returnStack.pop();
-    if (stackValue->type() == VMStackValue::TYPE_INTEGER)
-    {
-        auto stackIntValue = dynamic_cast<VMStackIntValue*>(stackValue);
-        auto value = stackIntValue->value();
-        return value;
-    }
-    throw Exception("VM::popReturnInteger() - stack value is not integer");
+    return _returnStack.pop()->integerValue();
 }
 
 void VM::pushReturnInteger(int value)
 {
-    _returnStack.push(new VMStackIntValue(value));
+    _returnStack.push(VMStackValue(value));
 }
 
 bool VM::popDataLogical()
 {
-    switch (_dataStack.top()->type())
+    auto stackValue = _dataStack.pop();
+    switch (stackValue->type())
     {
-        case VMStackValue::TYPE_FLOAT:
-            return (bool) popDataFloat();
         case VMStackValue::TYPE_INTEGER:
-            return (bool) popDataInteger();
-        case VMStackValue::TYPE_POINTER:
-            return (bool) popDataPointer();
+            return stackValue->integerValue() != 0;
+        case VMStackValue::TYPE_FLOAT:
+            return (bool)stackValue->floatValue();
+        case VMStackValue::TYPE_STRING:
+            return stackValue->stringValue().length() > 0;
+        case VMStackValue::TYPE_OBJECT:
+            return stackValue->objectValue() != nullptr;
     }
     throw Exception("VM::popDataLogical() - something strange happened");
 }
@@ -268,7 +236,7 @@ VMStack* VM::returnStack()
     return &_returnStack;
 }
 
-std::vector<VMStackValue*>* VM::LVARS()
+std::vector<VMStackValue>* VM::LVARS()
 {
     return &_LVARS;
 }

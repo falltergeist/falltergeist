@@ -39,7 +39,7 @@ void Opcode80E3Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80E3] [=] void set_obj_visibility(void* obj, int visibility)" << std::endl;
     _vm->popDataInteger();
-    _vm->popDataPointer();
+    _vm->popDataObject();
 }
 
 }

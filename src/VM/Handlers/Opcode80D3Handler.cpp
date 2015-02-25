@@ -38,8 +38,8 @@ Opcode80D3Handler::Opcode80D3Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80D3Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80D3] int tile_distance_objs(void* p2, void* p1)" << std::endl;
-    _vm->popDataPointer();
-    _vm->popDataPointer();
+    _vm->popDataObject();
+    _vm->popDataObject();
     _vm->pushDataInteger(10);
 }
 

@@ -34,7 +34,7 @@
 
 namespace Falltergeist
 {
-class GameCritterObject;
+class Game::GameObject;
 
 /*
  * VM class represents Virtual Machine for running vanilla Fallout scripts.
@@ -51,7 +51,7 @@ protected:
     bool _overrides = false;
     VMStack _dataStack;
     VMStack _returnStack;
-    std::vector<VMStackValue*> _LVARS;
+    std::vector<VMStackValue> _LVARS;
     unsigned int _programCounter = 0;
     int _DVAR_base = 0;
     int _SVAR_base = 0;
@@ -88,10 +88,10 @@ public:
     void pushDataInteger(int value);
     float popDataFloat();
     void pushDataFloat(float value);
-    void* popDataPointer();
-    void pushDataPointer(void* value, unsigned int type = VMStackPointerValue::POINTER_TYPE_UNKNOWN);
+    Game::GameObject* popDataObject();
+    void pushDataObject(Game::GameObject* value);
     std::string &popDataString();
-    void pushDataString(std::string &value);
+    void pushDataString(const std::string &value);
     bool popDataLogical();
 
     VMStack* dataStack();

@@ -41,7 +41,7 @@ void Opcode8105Handler::_run()
     Logger::debug("SCRIPT") << "[8105] [+] string* msgMessage(int msg_list, int msg_num);" << std::endl;
     auto msgNum = _vm->popDataInteger();
     auto msgList = _vm->popDataInteger();
-    _vm->pushDataPointer(new std::string(_vm->msgMessage(msgList, msgNum)), VMStackPointerValue::POINTER_TYPE_STRING);
+    _vm->pushDataObject(new std::string(_vm->msgMessage(msgList, msgNum)), VMStackPointerValue::POINTER_TYPE_STRING);
 }
 
 }

@@ -41,9 +41,9 @@ void Opcode811EHandler::_run()
     Logger::debug("SCRIPT") << "[811E] [=] void gSay_Reply(int msg_file_num, int msg_num)" << std::endl;
     auto dialog = dynamic_cast<State::CritterDialog*>(Game::getInstance()->states()->back());
     dialog->deleteAnswers();
-    if (_vm->dataStack()->top()->type() == VMStackValue::TYPE_POINTER)
+    if (_vm->dataStack()->top()->type() == VMStackValue::TYPE_OBJECT)
     {
-        auto question = static_cast<std::string*>(_vm->popDataPointer());
+        auto question = static_cast<std::string*>(_vm->popDataObject());
         dialog->setQuestion(*question);
         //delete question;
     }

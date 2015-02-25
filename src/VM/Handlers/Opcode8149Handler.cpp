@@ -40,7 +40,7 @@ Opcode8149Handler::Opcode8149Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8149Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8149] [+] int obj_art_fid(void* obj)" << std::endl;
-    auto object = static_cast<Game::GameObject*>(_vm->popDataPointer());
+    auto object = static_cast<Game::GameObject*>(_vm->popDataObject());
     if (!object) throw Exception("VM::opcode8149() - can't convert pointer to object");
     _vm->pushDataInteger(object->FID());
 }

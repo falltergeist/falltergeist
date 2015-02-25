@@ -41,7 +41,7 @@ void Opcode8102Handler::_run()
     auto amount = _vm->popDataInteger();
     auto trait = _vm->popDataInteger();
     auto trait_type = _vm->popDataInteger();
-    auto who = _vm->popDataPointer();
+    auto who = _vm->popDataObject();
     _vm->pushDataInteger(0);
 }
 

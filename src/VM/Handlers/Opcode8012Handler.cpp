@@ -58,7 +58,7 @@ void Opcode8012Handler::_run()
         case VMStackValue::TYPE_FLOAT:
             debug << ((VMStackFloatValue*)value)->value();
             break;
-        case VMStackValue::TYPE_POINTER:
+        case VMStackValue::TYPE_OBJECT:
             debug << ((VMStackPointerValue*)value)->value();
             break;
     }
