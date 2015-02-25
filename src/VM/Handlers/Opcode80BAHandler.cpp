@@ -39,7 +39,7 @@ Opcode80BAHandler::Opcode80BAHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80BAHandler::_run()
 {
     auto PID = _vm->popDataInteger();
-    auto pointer = static_cast<Game::GameObject*>(_vm->popDataPointer());
+    auto pointer = static_cast<Game::GameObject*>(_vm->popDataObject());
 
     int amount = 0;
     auto critter = dynamic_cast<Game::GameCritterObject*>(pointer);

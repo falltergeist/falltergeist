@@ -49,9 +49,9 @@ void Opcode8014Handler::_run()
         case VMStackValue::TYPE_INTEGER:
             name = _vm->script()->identificators()->at(_vm->popDataInteger());
             break;
-        case VMStackValue::TYPE_POINTER:
+        case VMStackValue::TYPE_OBJECT:
         {
-            name = *static_cast<std::string*>(_vm->popDataPointer());
+            name = *static_cast<std::string*>(_vm->popDataObject());
             break;
         }
         default:

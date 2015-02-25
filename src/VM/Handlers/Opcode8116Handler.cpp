@@ -45,11 +45,11 @@ void Opcode8116Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8116] [+] void add_mult_objs_to_inven(GameObject* who, GameItemObject* item, int amount)" << std::endl;
     auto amount = _vm->popDataInteger();
-    auto item = static_cast<Game::GameItemObject*>(_vm->popDataPointer());
+    auto item = static_cast<Game::GameItemObject*>(_vm->popDataObject());
     if (!item) throw Exception("VM::opcode8116 - item not instanceof GameItemObject");
     item->setAmount(amount);
     // who can be critter or container
-    auto pointer = static_cast<Game::GameObject*>(_vm->popDataPointer());
+    auto pointer = static_cast<Game::GameObject*>(_vm->popDataObject());
     if (auto critter = dynamic_cast<Game::GameCritterObject*>(pointer))
     {
         critter->inventory()->push_back(item);

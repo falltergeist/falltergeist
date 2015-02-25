@@ -54,7 +54,7 @@ void Opcode810EHandler::_run()
         }
         case 0x2: // ANIM_CLEAR
         {
-            auto object = static_cast<Game::GameObject*>(_vm->popDataPointer());
+            auto object = static_cast<Game::GameObject*>(_vm->popDataObject());
             if (auto critterObject = dynamic_cast<Game::GameCritterObject*>(object))
             {
                 critterObject->stopMovement();

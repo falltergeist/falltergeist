@@ -37,7 +37,7 @@ void Opcode8139Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8139] [=] int item_caps_adjust(void* obj, int amount)" << std::endl;
     _vm->popDataInteger();
-    _vm->popDataPointer();
+    _vm->popDataObject();
     _vm->pushDataInteger(0);
 }
 

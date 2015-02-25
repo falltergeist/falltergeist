@@ -41,7 +41,7 @@ void Opcode810CHandler::_run()
 {
     int direction = _vm->popDataInteger();
     int animation = _vm->popDataInteger();
-    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataPointer());
+    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
 
     Logger::debug("SCRIPT") << "[810C] [*] void anim(GameCritterObject* who, int animation, int direction)" << std::endl
                             << "    direction = 0x" << std::hex << direction << std::endl

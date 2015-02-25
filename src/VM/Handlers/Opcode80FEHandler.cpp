@@ -38,7 +38,7 @@ Opcode80FEHandler::Opcode80FEHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80FEHandler::_run()
 {
     int amount = _vm->popDataInteger();
-    auto critter = static_cast<Game::GameDudeObject*>(_vm->popDataPointer());
+    auto critter = static_cast<Game::GameDudeObject*>(_vm->popDataObject());
     if (!critter)
     {
         throw Exception("VM::opcode80FE pointer error");

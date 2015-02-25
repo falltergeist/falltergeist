@@ -40,7 +40,7 @@ void Opcode810FHandler::_run()
     Logger::debug("SCRIPT") << "[810F] [=] void reg_anim_animate(void* what, int anim, int delay) " << std::endl;
     _vm->popDataInteger();
     _vm->popDataInteger();
-    _vm->popDataPointer();
+    _vm->popDataObject();
 }
 
 }

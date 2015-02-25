@@ -38,8 +38,8 @@ Opcode8147Handler::Opcode8147Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8147Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8147] [=] void move_obj_inven_to_obj(void* srcObj, void* destObj)" << std::endl;
-    _vm->popDataPointer();
-    _vm->popDataPointer();
+    _vm->popDataObject();
+    _vm->popDataObject();
 }
 
 }

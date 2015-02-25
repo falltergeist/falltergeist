@@ -39,7 +39,7 @@ Opcode80B8Handler::Opcode80B8Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80B8Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80B8] [*] void display_msg(string*)" << std::endl;
-    std::string* pointer = static_cast<std::string*>(_vm->popDataPointer());
+    std::string* pointer = static_cast<std::string*>(_vm->popDataObject());
     auto game = Game::getInstance();
     game->locationState()->displayMessage(*pointer);
 }

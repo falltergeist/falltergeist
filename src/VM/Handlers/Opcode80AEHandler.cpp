@@ -41,7 +41,7 @@ void Opcode80AEHandler::_run()
     Logger::debug("SCRIPT") << "[80AE] [=] int do_check(ObjectPtr who, int check, int modifier)" << std::endl;
     _vm->popDataInteger();
     _vm->popDataInteger();
-    _vm->popDataPointer();
+    _vm->popDataObject();
     _vm->pushDataInteger(2);
 }
 

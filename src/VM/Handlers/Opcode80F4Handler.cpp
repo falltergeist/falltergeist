@@ -38,7 +38,7 @@ Opcode80F4Handler::Opcode80F4Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80F4Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80F4] [=] int destroy_object(void* obj)" << std::endl;
-    _vm->popDataPointer();
+    _vm->popDataObject();
     _vm->pushDataInteger(0);
 }
 

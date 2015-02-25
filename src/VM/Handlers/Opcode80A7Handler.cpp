@@ -56,7 +56,7 @@ void Opcode80A7Handler::_run()
             found = object;
         }
     }
-    _vm->pushDataPointer(found);
+    _vm->pushDataObject(found);
 }
 
 }

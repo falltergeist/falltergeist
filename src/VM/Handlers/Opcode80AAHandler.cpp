@@ -42,7 +42,7 @@ void Opcode80AAHandler::_run()
     {
         throw Exception("VM::opcode80AA - number out of range: " + std::to_string(skill));
     }
-    auto object = static_cast<Game::GameCritterObject*>(_vm->popDataPointer());
+    auto object = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
     int value = object->skillValue(skill);
     _vm->pushDataInteger(value);
 

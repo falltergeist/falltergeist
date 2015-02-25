@@ -39,7 +39,7 @@ void Opcode80F3Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80F3] [=] int has_trait(int type,void* who, int trait)" << std::endl;
     _vm->popDataInteger();
-    _vm->popDataPointer();
+    _vm->popDataObject();
     _vm->popDataInteger();
     _vm->pushDataInteger(1);
 }

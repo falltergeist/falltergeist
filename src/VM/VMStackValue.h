@@ -21,6 +21,7 @@
 #define FALLTERGEIST_VMSTACKVALUE_H
 
 // C++ standard includes
+#include <string>
 
 // Falltergeist includes
 
@@ -28,16 +29,36 @@
 
 namespace Falltergeist
 {
+    
+class Game::GameObject;
 
 class VMStackValue
 {
 protected:
     int _type = 0;
+    union
+    {
+        int _intValue;
+        float _floatValue;
+        std::string _stringValue;
+        Game::GameObject* _objectValue;
+    };
 public:
-    enum {TYPE_INTEGER = 1, TYPE_FLOAT, TYPE_STRING, TYPE_POINTER};
-    VMStackValue(int type);
+    enum { TYPE_INTEGER = 1, TYPE_FLOAT, TYPE_STRING, TYPE_OBJECT };
+    VMStackValue();
+    VMStackValue(int value);
+    VMStackValue(float value);
+    VMStackValue(const std::string &value);
+    VMStackValue(Game::GameObject *value);
     virtual ~VMStackValue();
-    int type();
+    int type() const;
+    int integerValue() const;
+    float floatValue() const;
+    std::string stringValue() const;
+    Game::GameObject* objectValue() const;
+    std::string toString() const;
+    
+    static const std::string typeName(int type);
 };
 
 }

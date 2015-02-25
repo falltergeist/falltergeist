@@ -41,9 +41,9 @@ void Opcode8034Handler::_run()
         case VMStackValue::TYPE_INTEGER:
         {
             auto p2 = _vm->popDataInteger();
-            if (_vm->dataStack()->top()->type() == VMStackValue::TYPE_POINTER) // to check if the pointer is null
+            if (_vm->dataStack()->top()->type() == VMStackValue::TYPE_OBJECT) // to check if the pointer is null
             {
-                auto p1 = (int)(bool)_vm->popDataPointer();
+                auto p1 = (int)(bool)_vm->popDataObject();
                 _vm->pushDataInteger(p1 != p2);
             }
             else
@@ -53,13 +53,13 @@ void Opcode8034Handler::_run()
             }
             break;
         }
-        case VMStackValue::TYPE_POINTER:
+        case VMStackValue::TYPE_OBJECT:
         {
             // @TODO: add string comparison
-            auto p2 = (int)(bool)_vm->popDataPointer();
-            if (_vm->dataStack()->top()->type() == VMStackValue::TYPE_POINTER) // to check if the pointer is null
+            auto p2 = (int)(bool)_vm->popDataObject();
+            if (_vm->dataStack()->top()->type() == VMStackValue::TYPE_OBJECT) // to check if the pointer is null
             {
-                auto p1 = (int)(bool)_vm->popDataPointer();
+                auto p1 = (int)(bool)_vm->popDataObject();
                 _vm->pushDataInteger(p1 != p2);
             }
             else

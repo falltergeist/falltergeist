@@ -628,7 +628,9 @@ set(SOURCES main.cpp
     src/VM/VMStackIntValue.cpp
     src/VM/VMStackIntValue.h
     src/VM/VMStackPointerValue.cpp
-    src/VM/VMStackPointerValue.h)
+    src/VM/VMStackPointerValue.h
+    src/VM/VMStackStringValue.cpp
+    src/VM/VMStackStringValue.h)
 
 add_definitions (-std=c++11 -Wall)
 

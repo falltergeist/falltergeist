@@ -40,7 +40,7 @@ void Opcode80CEHandler::_run()
     Logger::debug("SCRIPT") << "[80CE] [=] void animate_move_obj_to_tile(void* who, int tile, int speed)" << std::endl;
     _vm->popDataInteger();
     _vm->popDataInteger();
-    _vm->popDataPointer();
+    _vm->popDataObject();
 }
 
 }

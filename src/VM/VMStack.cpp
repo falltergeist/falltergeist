@@ -37,12 +37,12 @@ VMStack::~VMStack()
 {
 }
 
-void VMStack::push(VMStackValue* value)
+void VMStack::push(const VMStackValue value)
 {
     _values.push_back(value);
 }
 
-VMStackValue* VMStack::pop()
+const VMStackValue& VMStack::pop()
 {
     if (_values.size() == 0) throw Exception("VMStack::pop() - stack is empty");
     auto value = _values.back();
@@ -65,12 +65,12 @@ void VMStack::swap()
     _values.push_back(value2);
 }
 
-std::vector<VMStackValue*>* VMStack::values()
+std::vector<VMStackValue>* VMStack::values()
 {
     return &_values;
 }
 
-VMStackValue* VMStack::top()
+const VMStackValue& VMStack::top()
 {
     return _values.back();
 }
