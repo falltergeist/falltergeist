@@ -58,6 +58,7 @@ public:
     Game::GameObject* objectValue() const;
     std::string toString() const;
     
+    const std::string typeName();
     static const std::string typeName(int type);
 };
 

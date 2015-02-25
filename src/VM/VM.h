@@ -34,7 +34,6 @@
 
 namespace Falltergeist
 {
-class Game::GameObject;
 
 /*
  * VM class represents Virtual Machine for running vanilla Fallout scripts.
@@ -82,16 +81,6 @@ public:
     unsigned int programCounter();
     void setProgramCounter(unsigned int value);
 
-    int popReturnInteger();
-    void pushReturnInteger(int value);
-    int popDataInteger();
-    void pushDataInteger(int value);
-    float popDataFloat();
-    void pushDataFloat(float value);
-    Game::GameObject* popDataObject();
-    void pushDataObject(Game::GameObject* value);
-    std::string &popDataString();
-    void pushDataString(const std::string &value);
     bool popDataLogical();
 
     VMStack* dataStack();

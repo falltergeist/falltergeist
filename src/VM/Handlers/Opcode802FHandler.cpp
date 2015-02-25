@@ -36,7 +36,7 @@ Opcode802FHandler::Opcode802FHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode802FHandler::_run()
 {
     auto condition = _vm->popDataLogical();
-    auto address = _vm->popDataInteger();
+    auto address = _vm->dataStack()->popInteger();
     Logger::debug("SCRIPT") << "[802F] [*] ifthen(address, condition) " << std::hex << _vm->programCounter() << std::endl
                             << "    address = " << std::hex << address << std::endl
                             << "    condition = " << std::dec << condition << std::endl;

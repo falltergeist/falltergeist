@@ -81,11 +81,11 @@ void VM::call(std::string name)
     try
     {
         _programCounter = _script->function(name);
-        pushDataInteger(0); // arguments counter;
-        pushReturnInteger(0); // return adrress
+        _dataStack.push(0); // arguments counter;
+        _returnStack.push(0); // return adrress
         Logger::debug("SCRIPT") << "CALLED: " << name << " [" << _script->filename() << "]" << std::endl;
         run();
-        popDataInteger(); // remove function result
+        _dataStack->popInteger(); // remove function result
         Logger::debug("SCRIPT") << "Function ended" << std::endl;
     }
     catch (libfalltergeist::Exception &e)
@@ -99,7 +99,7 @@ void VM::initialize()
     if (_initialized) return;
     _programCounter = 0;
     run();
-    popDataInteger(); // remove @start function result
+    _dataStack.popInteger(); // remove @start function result
 }
 
 void VM::run()
@@ -123,79 +123,6 @@ void VM::run()
             return;
         }
     }
-}
-
-int VM::popDataInteger()
-{
-    return _dataStack.pop()->integerValue();
-}
-
-void VM::pushDataInteger(int value)
-{
-    _dataStack.push(VMStackValue(value));
-}
-
-float VM::popDataFloat()
-{
-    return _dataStack.pop()->floatValue();
-}
-
-void VM::pushDataFloat(float value)
-{
-    _dataStack.push(VMStackValue(value));
-}
-
-Game::GameObject* VM::popDataObject()
-{
-    return _dataStack.pop()->objectValue();
-}
-
-void VM::pushDataObject(Game::GameObject* value)
-{
-    _dataStack.push(VMStackValue(value));
-}
-
-std::string& VM::popDataString()
-{
-    auto stackStringValue = dynamic_cast<VMStackStringValue*>(_dataStack.pop());
-    if (stackStringValue)
-    {
-        return stackStringValue->value();
-    }
-    throw Exception("VM::popDataString() - stack value is not a string");
-}
-
-void VM::pushDataString(std::string &value)
-{
-    auto stackStringValue = new VMStackStringValue(value);
-    _dataStack.push(stackStringValue);
-}
-
-int VM::popReturnInteger()
-{
-    return _returnStack.pop()->integerValue();
-}
-
-void VM::pushReturnInteger(int value)
-{
-    _returnStack.push(VMStackValue(value));
-}
-
-bool VM::popDataLogical()
-{
-    auto stackValue = _dataStack.pop();
-    switch (stackValue->type())
-    {
-        case VMStackValue::TYPE_INTEGER:
-            return stackValue->integerValue() != 0;
-        case VMStackValue::TYPE_FLOAT:
-            return (bool)stackValue->floatValue();
-        case VMStackValue::TYPE_STRING:
-            return stackValue->stringValue().length() > 0;
-        case VMStackValue::TYPE_OBJECT:
-            return stackValue->objectValue() != nullptr;
-    }
-    throw Exception("VM::popDataLogical() - something strange happened");
 }
 
 std::string VM::msgMessage(int msg_file_num, int msg_num)

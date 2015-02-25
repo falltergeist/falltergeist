@@ -38,13 +38,13 @@ void Opcode803CHandler::_run()
 {
     Logger::debug("SCRIPT") << "[803C] [*] op_div /" << std::endl;
     // @TODO: other types
-    auto b = _vm->popDataInteger();
-    auto a = _vm->popDataInteger();
+    auto b = _vm->dataStack()->popInteger();
+    auto a = _vm->dataStack()->popInteger();
     if (b == 0) 
     {
         throw Exception("Opcode803CHandler - division by zero!");
     }
-    _vm->pushDataInteger(a/b);
+    _vm->dataStack()->push(a/b);
 }
 
 }

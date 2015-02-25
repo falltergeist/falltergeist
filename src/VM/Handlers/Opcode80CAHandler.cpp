@@ -37,8 +37,8 @@ Opcode80CAHandler::Opcode80CAHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80CAHandler::_run()
 {
-    int number = _vm->popDataInteger();
-    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
+    int number = _vm->dataStack()->popInteger();
+    auto critter = dynamic_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
     if (!critter)
     {
         throw Exception("VM::opcode80CA pointer error");
@@ -211,7 +211,7 @@ void Opcode80CAHandler::_run()
             throw Exception("VM::opcode80CA - unimplemented number:" + std::to_string(number));
         }
     }
-    _vm->pushDataInteger(result);
+    _vm->dataStack()->push(result);
     Logger::debug("SCRIPT") << "[80CA] [+] int value = get_critter_stat(GameCritterObject* who, int number)" << std::endl
                             << "    number = " << number << std::endl
                             << "    value  = " << result << std::endl;

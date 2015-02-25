@@ -37,9 +37,9 @@ void Opcode8035Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8035] [*] op_less_equal <=" << std::endl;
     // @TODO: add float and string comparison
-    auto b = _vm->popDataInteger();
-    auto a = _vm->popDataInteger();
-    _vm->pushDataInteger(a <= b);
+    auto b = _vm->dataStack()->popInteger();
+    auto a = _vm->dataStack()->popInteger();
+    _vm->dataStack()->push(a <= b);
 }
 
 }

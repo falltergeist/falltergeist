@@ -39,7 +39,7 @@ Opcode8126Handler::Opcode8126Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8126Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8126] [-] void reg_anim_animate_forever(GameObject* obj , int delay)" << std::endl;
-    int delay = _vm->popDataInteger();
+    int delay = _vm->dataStack()->popInteger();
     /*
     // delay - must be -1
     if (delay != -1)
@@ -47,7 +47,7 @@ void Opcode8126Handler::_run()
         throw Exception("Opcode8126Handler - delay must be -1");
     }
     */
-    auto object = static_cast<Game::GameObject*>(_vm->popDataObject());
+    auto object = _vm->dataStack()->popObject();
     auto queue = dynamic_cast<AnimationQueue*>(object->ui());
     if (queue)
     {

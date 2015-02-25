@@ -37,8 +37,8 @@ Opcode80E8Handler::Opcode80E8Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80E8Handler::_run()
 {
-    int amount = _vm->popDataInteger();
-    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
+    int amount = _vm->dataStack()->popInteger();
+    auto critter = dynamic_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
     if (!critter)
     {
         throw Exception("VM::opcode80E8 pointer error");

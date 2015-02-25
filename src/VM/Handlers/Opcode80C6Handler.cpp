@@ -38,8 +38,8 @@ Opcode80C6Handler::Opcode80C6Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80C6Handler::_run()
 {
-    auto value = _vm->popDataInteger();
-    auto num = _vm->popDataInteger();
+    auto value = _vm->dataStack()->popInteger();
+    auto num = _vm->dataStack()->popInteger();
     auto game = Game::getInstance();
     game->setGVAR(num, value);
 

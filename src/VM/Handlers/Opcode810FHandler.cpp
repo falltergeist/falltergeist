@@ -38,9 +38,9 @@ Opcode810FHandler::Opcode810FHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode810FHandler::_run()
 {
     Logger::debug("SCRIPT") << "[810F] [=] void reg_anim_animate(void* what, int anim, int delay) " << std::endl;
-    _vm->popDataInteger();
-    _vm->popDataInteger();
-    _vm->popDataObject();
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popObject();
 }
 
 }

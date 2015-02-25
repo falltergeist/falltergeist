@@ -35,7 +35,7 @@ Opcode8136Handler::Opcode8136Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8136Handler::_run()
 {
-    int time = _vm->popDataInteger();
+    int time = _vm->dataStack()->popInteger();
     Logger::debug("SCRIPT") << "[8136] [=] void gfade_out(int time)" << std::endl
                             << "    time = " << time << std::endl;
 }

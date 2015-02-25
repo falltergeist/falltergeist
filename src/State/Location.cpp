@@ -741,7 +741,7 @@ int Location::MVAR(unsigned int number)
     return _MVARS.at(number);
 }
 
-std::map<std::string, VMStackValue*>* Location::EVARS()
+std::map<std::string, VMStackValue>* Location::EVARS()
 {
     return &_EVARS;
 }
@@ -828,7 +828,7 @@ void Location::handleAction(Game::GameObject* object, int action)
     }
 }
 
-void Location::displayMessage(std::string message)
+void Location::displayMessage(const std::string& message)
 {
     Game::getInstance()->mixer()->playACMSound("sound/sfx/monitor.acm");
     Logger::info("MESSAGE") << message << std::endl;

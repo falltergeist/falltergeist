@@ -38,8 +38,8 @@ Opcode80D8Handler::Opcode80D8Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80D8Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80D8] [=] void add_obj_to_inven(void* who, void* item)" << std::endl;
-    _vm->popDataObject();
-    _vm->popDataObject();
+    _vm->dataStack()->popObject();
+    _vm->dataStack()->popObject();
 
 }
 

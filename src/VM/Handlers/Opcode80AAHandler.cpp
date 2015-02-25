@@ -37,15 +37,22 @@ Opcode80AAHandler::Opcode80AAHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80AAHandler::_run()
 {
-    int skill = _vm->popDataInteger();
+    int skill = _vm->dataStack()->popInteger();
     if (skill > 17 || skill < 0)
     {
         throw Exception("VM::opcode80AA - number out of range: " + std::to_string(skill));
     }
-    auto object = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
-    int value = object->skillValue(skill);
-    _vm->pushDataInteger(value);
-
+    auto object = _vm->dataStack()->popObject();
+    int value = 0;
+    if (auto critter = dynamic_cast<Game::GameCritterObject>(object))
+    {
+        value = critter->skillValue(skill);
+        _vm->dataStack()->push(value);
+    }
+    else 
+    {
+        throw Exception("get_skill_value(who, skill): who is not critter");
+    }
     Logger::debug("SCRIPT") << "[80AA] [+] int get_skill_value(GameCritterObject* who, int skill) " << std::endl
                             << "    skill = " << skill << std::endl
                             << "    value = " << value << std::endl;

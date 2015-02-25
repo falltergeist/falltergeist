@@ -38,7 +38,7 @@ Opcode80F1Handler::Opcode80F1Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80F1Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80F1] [=] void rm_timer_event (void* obj)" << std::endl;
-    _vm->popDataObject();
+    _vm->dataStack()->popObject();
 }
 
 }

@@ -51,7 +51,7 @@ void Opcode9001Handler::_run()
         case 0x8015: // set exported var value
         case 0x8016: // export var
         {
-            pointer = new std::string(_vm->script()->identificators()->at(data));
+            pointer = new std::string(_vm->script()->identifiers()->at(data));
             _vm->pushDataObject(pointer, VMStackPointerValue::POINTER_TYPE_STRING);
             break;
         }

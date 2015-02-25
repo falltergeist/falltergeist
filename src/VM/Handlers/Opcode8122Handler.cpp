@@ -37,8 +37,8 @@ Opcode8122Handler::Opcode8122Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8122Handler::_run()
 {
-    int amount = _vm->popDataInteger();
-    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
+    int amount = _vm->dataStack()->popInteger();
+    auto critter = dynamic_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
     if (!critter)
     {
         throw Exception("VM::opcode8122 pointer error");

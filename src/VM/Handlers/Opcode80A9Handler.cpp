@@ -41,10 +41,10 @@ Opcode80A9Handler::Opcode80A9Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80A9Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80A9] [+] void override_map_start(int x, int y, int elevation, int orientation)" << std::endl;
-    auto orientation = _vm->popDataInteger();
-    auto elevation = _vm->popDataInteger();
-    auto y = _vm->popDataInteger();
-    auto x = _vm->popDataInteger();
+    auto orientation = _vm->dataStack()->popInteger();
+    auto elevation = _vm->dataStack()->popInteger();
+    auto y = _vm->dataStack()->popInteger();
+    auto x = _vm->dataStack()->popInteger();
     auto position = y*200 + x;
     auto game = Game::getInstance();
     auto player = game->player();

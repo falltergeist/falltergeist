@@ -41,20 +41,20 @@ void Opcode810EHandler::_run()
 {
     Logger::debug("SCRIPT") << "[810E] [=] void reg_anim_func(int p1, int p2)" << std::endl;
     auto p2 = _vm->dataStack()->pop(); // pointer or integer
-    auto p1 = _vm->popDataInteger();
+    auto p1 = _vm->dataStack()->popInteger();
     _vm->dataStack()->push(p2);
     switch (p1)
     {
         case 0x1: // ANIM_BEGIN
         {
-            _vm->popDataInteger();//auto p2 = popDataInteger();
+            _vm->dataStack()->popInteger();//auto p2 = popDataInteger();
             // RB_UNRESERVED (1) - незарезервированная последовательность, может не воспроизвестись, если отсутствуют свободные слоты
             // RB_RESERVED (2) - зарезервированная последовательность, должна воспроизвестись в любом случае
             break;
         }
         case 0x2: // ANIM_CLEAR
         {
-            auto object = static_cast<Game::GameObject*>(_vm->popDataObject());
+            auto object = static_cast<Game::GameObject*>(_vm->dataStack()->popObject());
             if (auto critterObject = dynamic_cast<Game::GameCritterObject*>(object))
             {
                 critterObject->stopMovement();
@@ -68,7 +68,7 @@ void Opcode810EHandler::_run()
         }
         case 0x3: // ANIMATION_END
         {
-            _vm->popDataInteger(); // always 0
+            _vm->dataStack()->popInteger(); // always 0
             break;
         }
         default:

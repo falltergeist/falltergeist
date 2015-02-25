@@ -38,7 +38,7 @@ Opcode8128Handler::Opcode8128Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8128Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8128] [=] int combat_is_initialized()" << std::endl;
-    _vm->pushDataInteger(0);
+    _vm->dataStack()->push(0);
 }
 
 }

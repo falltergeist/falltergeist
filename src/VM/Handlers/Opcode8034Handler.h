@@ -29,7 +29,8 @@
 
 namespace Falltergeist
 {
-
+    
+// @TODO: remove this class, use the same handler as for op_equal!
 class Opcode8034Handler : public OpcodeHandler
 {
 public:

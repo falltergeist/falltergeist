@@ -40,7 +40,7 @@ Opcode80C1Handler::Opcode80C1Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80C1Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80C1] [*] LVAR[num]" << std::endl;
-    unsigned int num = _vm->popDataInteger();
+    unsigned int num = _vm->dataStack()->popInteger();
     while (num >= _vm->LVARS()->size()) _vm->LVARS()->push_back(new VMStackIntValue(0));
     _vm->dataStack()->push(_vm->LVARS()->at(num));
 }

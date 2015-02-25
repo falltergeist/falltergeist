@@ -42,7 +42,7 @@ void Opcode811DHandler::_run()
     auto dialog = dynamic_cast<State::CritterDialog*>(Game::getInstance()->states()->back());
     if (dialog->hasAnswers())
     {
-        _vm->pushDataInteger(0); // function return value
+        _vm->dataStack()->push(0); // function return value
         throw VMHaltException();
     }
     Game::getInstance()->popState(); // dialog state

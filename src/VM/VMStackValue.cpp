@@ -56,6 +56,7 @@ VMStackValue::VMStackValue(const std::string &value)
 
 VMStackValue::VMStackValue(Game::GameObject *value)
 {
+    //throw Exception("VMStackValue::VMStackValue(Game::GameObject*) - null object value is not allowed, use integer 0");
     _type = TYPE_OBJECT;
     _objectValue = value;
 }
@@ -100,12 +101,16 @@ std::string VMStackValue::toString() const
         case TYPE_INTEGER: return std::to_string(_intValue);
         case TYPE_FLOAT:   return std::to_string(_floatValue);
         case TYPE_STRING:  return _stringValue;
-        case TYPE_OBJECT:  return _objectValue ? _objectValue->name() : std::string('(null)');
+        case TYPE_OBJECT:  return _objectValue ? _objectValue->name() : std::string('(null)'); // just in case, we should never create null object value
         default:
             throw Exception("VMStackValue::toString() - wrong type: " + std::to_string(type));
     }
 }
 
+const std::string VMStackValue::typeName()
+{
+    return typeName(_type);
+}
 
 const std::string VMStackValue::typeName(int type)
 {
