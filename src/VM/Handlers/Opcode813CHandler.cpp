@@ -36,9 +36,15 @@ Opcode813CHandler::Opcode813CHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode813CHandler::_run()
 {
+<<<<<<< HEAD
     int amount = _vm->dataStack()->popInteger();
     int skill = _vm->dataStack()->popInteger();
     auto critter = static_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
+=======
+    int amount = _vm->popDataInteger();
+    int skill = _vm->popDataInteger();
+    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 
     critter->setSkillGainedValue((SKILL)skill, critter->skillGainedValue((SKILL)skill) + amount);
 

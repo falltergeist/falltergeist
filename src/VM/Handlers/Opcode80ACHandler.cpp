@@ -39,10 +39,17 @@ Opcode80ACHandler::Opcode80ACHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80ACHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80AC] [=] int roll_vs_skill(ObjectPtr who, int skill, int modifier)" << std::endl;
+<<<<<<< HEAD
     _vm->dataStack()->popInteger();
     _vm->dataStack()->popInteger();
     _vm->dataStack()->popObject();
     _vm->dataStack()->push(2);
+=======
+    _vm->popDataInteger();
+    _vm->popDataInteger();
+    _vm->popDataObject();
+    _vm->pushDataInteger(2);
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

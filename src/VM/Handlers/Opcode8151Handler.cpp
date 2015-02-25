@@ -38,8 +38,13 @@ Opcode8151Handler::Opcode8151Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8151Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8151] [=] int critter_is_fleeing(void* who)" << std::endl;
+<<<<<<< HEAD
     _vm->dataStack()->popObject();
     _vm->dataStack()->push(0);
+=======
+    _vm->popDataObject();
+    _vm->pushDataInteger(0);
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

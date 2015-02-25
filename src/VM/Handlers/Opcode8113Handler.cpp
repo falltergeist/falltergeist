@@ -38,9 +38,15 @@ Opcode8113Handler::Opcode8113Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8113Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8113] [=] void reg_anim_obj_move_to_tile(void* who, int dest_tile, int delay)" << std::endl;
+<<<<<<< HEAD
     _vm->dataStack()->popInteger(); // -1
     _vm->dataStack()->popInteger();
     _vm->dataStack()->popObject();
+=======
+    _vm->popDataInteger(); // -1
+    _vm->popDataInteger();
+    _vm->popDataObject();
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

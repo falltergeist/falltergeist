@@ -36,6 +36,17 @@ Opcode80FEHandler::Opcode80FEHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80FEHandler::_run()
 {
+<<<<<<< HEAD
+=======
+    int amount = _vm->popDataInteger();
+    auto critter = static_cast<Game::GameDudeObject*>(_vm->popDataObject());
+    if (!critter)
+    {
+        throw Exception("VM::opcode80FE pointer error");
+    }
+    critter->setRadiationLevel(critter->radiationLevel() - amount);
+
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
     auto &debug = Logger::debug("SCRIPT");
     debug << "[80FE] [+] void radiation_dec(GameObject* who, int amount)" << std::endl;
     int amount = _vm->dataStack()->popInteger();

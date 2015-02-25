@@ -36,6 +36,7 @@ Opcode80CAHandler::Opcode80CAHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80CAHandler::_run()
 {
+<<<<<<< HEAD
     auto& debug = Logger::debug("SCRIPT");
     debug << "[80CA] [+] int value = get_critter_stat(GameCritterObject* who, int number)" << std::endl;
     int number = _vm->dataStack()->popInteger();
@@ -46,6 +47,10 @@ void Opcode80CAHandler::_run()
         _error("get_critter_stat(who, stat) - who is NULL");
     }
     auto critter = dynamic_cast<Game::GameCritterObject*>(object);
+=======
+    int number = _vm->popDataInteger();
+    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
     if (!critter)
     {
         _error("get_critter_stat(who, stat) - who is not a critter");

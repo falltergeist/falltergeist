@@ -36,8 +36,13 @@ Opcode8138Handler::Opcode8138Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8138Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8138] [=] int item_caps_total(void* obj)" << std::endl;
+<<<<<<< HEAD
     _vm->dataStack()->popObject();
     _vm->dataStack()->push(0);
+=======
+    _vm->popDataObject();
+    _vm->pushDataInteger(0);
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

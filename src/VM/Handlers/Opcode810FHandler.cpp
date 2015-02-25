@@ -38,9 +38,15 @@ Opcode810FHandler::Opcode810FHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode810FHandler::_run()
 {
     Logger::debug("SCRIPT") << "[810F] [=] void reg_anim_animate(void* what, int anim, int delay) " << std::endl;
+<<<<<<< HEAD
     _vm->dataStack()->popInteger();
     _vm->dataStack()->popInteger();
     _vm->dataStack()->popObject();
+=======
+    _vm->popDataInteger();
+    _vm->popDataInteger();
+    _vm->popDataObject();
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

@@ -18,15 +18,23 @@
  */
 
 // C++ standard includes
+<<<<<<< HEAD
 #include <iomanip>
 #include <sstream>
 #include <stdexcept>
+=======
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 #include <string>
 
 // Falltergeist includes
 #include "../Game/Object.h"
 #include "../VM/VMErrorException.h"
 #include "../VM/VMStackValue.h"
+<<<<<<< HEAD
+=======
+#include "../Exception.h"
+#include "../Game/Object.h"
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 
 // Third party includes
 
@@ -59,6 +67,7 @@ VMStackValue::VMStackValue(const std::string &value)
 
 VMStackValue::VMStackValue(Game::GameObject *value)
 {
+<<<<<<< HEAD
     //throw Exception("VMStackValue::VMStackValue(Game::GameObject*) - null object value is not allowed, use integer 0");
     _type = TYPE_OBJECT;
     _objectValue = value;
@@ -161,6 +170,10 @@ bool VMStackValue::toBoolean() const
             return _objectValue != nullptr;
     }
     throw VMErrorException("VMStackValue::toBoolean() - something strange happened");
+=======
+    _type = TYPE_OBJECT;
+    _objectValue = value;
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 const char* VMStackValue::typeName()
@@ -168,7 +181,11 @@ const char* VMStackValue::typeName()
     return typeName(_type);
 }
 
+<<<<<<< HEAD
 const char* VMStackValue::typeName(int type)
+=======
+int VMStackValue::type() const
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 {
     switch (type)
     {
@@ -181,5 +198,59 @@ const char* VMStackValue::typeName(int type)
     }
 }
 
+<<<<<<< HEAD
+=======
+int VMStackValue::integerValue() const
+{
+    if (_type != TYPE_INTEGER) throw Exception("VMStackValue::integerValue() - stack value is not integer, it is " + typeName(_type));
+    return _intValue;
+}
+
+float VMStackValue::floatValue() const
+{
+    if (_type != TYPE_FLOAT) throw Exception("VMStackValue::floatValue() - stack value is not float, it is " + typeName(_type));
+    return _floatValue;
+}
+
+std::string VMStackValue::stringValue() const
+{
+    if (_type != TYPE_STRING) throw Exception("VMStackValue::stringValue() - stack value is not string, it is " + typeName(_type));
+    return _stringValue;
+}
+
+Game::GameObject* VMStackValue::objectValue() const
+{
+    if (_type != TYPE_OBJECT) throw Exception("VMStackValue::objectValue() - stack value is not an object, it is " + typeName(_type));
+    return _objectValue;
+}
+
+std::string VMStackValue::toString() const
+{
+    switch (type)
+    {
+        case TYPE_INTEGER: return std::to_string(_intValue);
+        case TYPE_FLOAT:   return std::to_string(_floatValue);
+        case TYPE_STRING:  return _stringValue;
+        case TYPE_OBJECT:  return _objectValue ? _objectValue->name() : std::string('(null)');
+        default:
+            throw Exception("VMStackValue::toString() - wrong type: " + std::to_string(type));
+    }
+}
+
+
+const std::string VMStackValue::typeName(int type)
+{
+    switch (type)
+    {
+        case TYPE_INTEGER: return "integer";
+        case TYPE_FLOAT:   return "float";
+        case TYPE_STRING:  return "string";
+        case TYPE_OBJECT:  return "object";
+        default:
+            throw Exception("VMStackValue::typeName() - wrong type: " + std::to_string(type));
+    }
+}
+
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 
 }

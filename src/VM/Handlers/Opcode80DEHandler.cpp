@@ -44,8 +44,13 @@ void Opcode80DEHandler::_run()
     int headID = _vm->dataStack()->popInteger();
     int mood = _vm->dataStack()->popInteger();
 
+<<<<<<< HEAD
     auto critter = dynamic_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
     if (!critter) _error("start_gdialog - wrong critter pointer");
+=======
+    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
+    if (!critter) throw Exception("VM::opcode80de - wrong critter pointers");
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 
     int msgFileID = _vm->dataStack()->popInteger();
 

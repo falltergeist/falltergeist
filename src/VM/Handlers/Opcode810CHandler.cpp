@@ -38,9 +38,15 @@ Opcode810CHandler::Opcode810CHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode810CHandler::_run()
 {
+<<<<<<< HEAD
     int direction = _vm->dataStack()->popInteger();
     int animation = _vm->dataStack()->popInteger();
     auto critter = static_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
+=======
+    int direction = _vm->popDataInteger();
+    int animation = _vm->popDataInteger();
+    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 
     Logger::debug("SCRIPT") << "[810C] [*] void anim(GameCritterObject* who, int animation, int direction)" << std::endl
                             << "    direction = 0x" << std::hex << direction << std::endl

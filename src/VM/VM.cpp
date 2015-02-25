@@ -31,7 +31,14 @@
 #include "../VM/VM.h"
 #include "../VM/VMErrorException.h"
 #include "../VM/VMHaltException.h"
+<<<<<<< HEAD
 #include "../VM/VMStackValue.h"
+=======
+#include "../VM/VMStackIntValue.h"
+#include "../VM/VMStackFloatValue.h"
+#include "../VM/VMStackPointerValue.h"
+#include "../VM/VMStackStringValue.h"
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 
 // Third party includes
 
@@ -113,6 +120,7 @@ void VM::run()
         {
             return;
         }
+<<<<<<< HEAD
         catch (VMErrorException& e)
         {
             Logger::error("SCRIPT") << e.what() << " in [" << std::hex << opcode << "] at " << _script->filename() << ":0x" << offset << std::endl;
@@ -121,6 +129,82 @@ void VM::run()
             return;
         }
     }
+=======
+    }
+}
+
+int VM::popDataInteger()
+{
+    return _dataStack.pop()->integerValue();
+}
+
+void VM::pushDataInteger(int value)
+{
+    _dataStack.push(VMStackValue(value));
+}
+
+float VM::popDataFloat()
+{
+    return _dataStack.pop()->floatValue();
+}
+
+void VM::pushDataFloat(float value)
+{
+    _dataStack.push(VMStackValue(value));
+}
+
+Game::GameObject* VM::popDataObject()
+{
+    return _dataStack.pop()->objectValue();
+}
+
+void VM::pushDataObject(Game::GameObject* value)
+{
+    _dataStack.push(VMStackValue(value));
+}
+
+std::string& VM::popDataString()
+{
+    auto stackStringValue = dynamic_cast<VMStackStringValue*>(_dataStack.pop());
+    if (stackStringValue)
+    {
+        return stackStringValue->value();
+    }
+    throw Exception("VM::popDataString() - stack value is not a string");
+}
+
+void VM::pushDataString(std::string &value)
+{
+    auto stackStringValue = new VMStackStringValue(value);
+    _dataStack.push(stackStringValue);
+}
+
+int VM::popReturnInteger()
+{
+    return _returnStack.pop()->integerValue();
+}
+
+void VM::pushReturnInteger(int value)
+{
+    _returnStack.push(VMStackValue(value));
+}
+
+bool VM::popDataLogical()
+{
+    auto stackValue = _dataStack.pop();
+    switch (stackValue->type())
+    {
+        case VMStackValue::TYPE_INTEGER:
+            return stackValue->integerValue() != 0;
+        case VMStackValue::TYPE_FLOAT:
+            return (bool)stackValue->floatValue();
+        case VMStackValue::TYPE_STRING:
+            return stackValue->stringValue().length() > 0;
+        case VMStackValue::TYPE_OBJECT:
+            return stackValue->objectValue() != nullptr;
+    }
+    throw Exception("VM::popDataLogical() - something strange happened");
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 std::string VM::msgMessage(int msg_file_num, int msg_num)

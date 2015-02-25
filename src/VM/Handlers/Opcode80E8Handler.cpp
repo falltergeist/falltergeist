@@ -36,10 +36,15 @@ Opcode80E8Handler::Opcode80E8Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80E8Handler::_run()
 {
+<<<<<<< HEAD
     auto &debug = Logger::debug("SCRIPT") << "[80E8] [+] void critter_heal(ObjectPtr who, int amount)" << std::endl;
     int amount = _vm->dataStack()->popInteger();
     debug << "    amount = " << amount << std::endl;
     auto critter = dynamic_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
+=======
+    int amount = _vm->popDataInteger();
+    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
     if (!critter)
     {
         _error("VM::critter_heal - invalid critter pointer");

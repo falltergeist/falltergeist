@@ -47,6 +47,21 @@ void Opcode8013Handler::_run()
             << "     type: " << value.typeName() << std::endl
             << "    value: " << value.toString();
 
+<<<<<<< HEAD
+=======
+    switch (value->type())
+    {
+        case VMStackValue::TYPE_INTEGER:
+            debug << ((VMStackIntValue*)value)->value();
+            break;
+        case VMStackValue::TYPE_FLOAT:
+            debug << ((VMStackFloatValue*)value)->value();
+            break;
+        case VMStackValue::TYPE_OBJECT:
+            debug << ((VMStackPointerValue*)value)->value();
+            break;
+    }
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
     debug << std::endl;
 }
 

@@ -36,6 +36,11 @@ Opcode80BCHandler::Opcode80BCHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80BCHandler::_run()
 {
+<<<<<<< HEAD
+=======
+    _vm->pushDataObject(_vm->owner());
+
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
     Logger::debug("SCRIPT") << "[80BC] [+] GameObject* self_obj()" << std::endl;
     _vm->dataStack()->push(_vm->owner());
 }

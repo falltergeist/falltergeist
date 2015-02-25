@@ -39,7 +39,11 @@ Opcode80BDHandler::Opcode80BDHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80BDHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80BD] [=] void* source_obj()" << std::endl;
+<<<<<<< HEAD
     _vm->dataStack()->push(_vm->sourceObject());
+=======
+    _vm->pushDataObject(0);
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

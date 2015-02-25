@@ -38,8 +38,13 @@ Opcode8147Handler::Opcode8147Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8147Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8147] [=] void move_obj_inven_to_obj(void* srcObj, void* destObj)" << std::endl;
+<<<<<<< HEAD
     _vm->dataStack()->popObject();
     _vm->dataStack()->popObject();
+=======
+    _vm->popDataObject();
+    _vm->popDataObject();
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

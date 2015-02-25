@@ -36,8 +36,13 @@ Opcode8143Handler::Opcode8143Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8143Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8143] [=] void attack_setup(ObjectPtr who, ObjectPtr victim)" << std::endl;
+<<<<<<< HEAD
     _vm->dataStack()->popObject();
     _vm->dataStack()->popObject();
+=======
+    _vm->popDataObject();
+    _vm->popDataObject();
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

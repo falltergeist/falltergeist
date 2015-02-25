@@ -49,9 +49,15 @@ void Opcode8014Handler::_run()
         case VMStackValue::TYPE_INTEGER:
             name = _vm->script()->identifiers()->at(nameValue.integerValue());
             break;
+<<<<<<< HEAD
         case VMStackValue::TYPE_STRING:
         {
             name = nameValue.stringValue();
+=======
+        case VMStackValue::TYPE_OBJECT:
+        {
+            name = *static_cast<std::string*>(_vm->popDataObject());
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
             break;
         }
         default:

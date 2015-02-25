@@ -39,8 +39,13 @@ void Opcode80C8Handler::_run()
 {
     // @TODO: implement
     Logger::debug("SCRIPT") << "[80C8] [=] int obj_type(void* obj)" << std::endl;
+<<<<<<< HEAD
     _vm->dataStack()->popObject();
     _vm->dataStack()->push(0);
+=======
+    _vm->popDataObject();
+    _vm->pushDataInteger(0);
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

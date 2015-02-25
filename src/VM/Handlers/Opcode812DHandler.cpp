@@ -37,8 +37,13 @@ Opcode812DHandler::Opcode812DHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode812DHandler::_run()
 {
     Logger::debug("SCRIPT") << "[812D] [+] int is_locked(GameDoorSceneryObject* object)" << std::endl;
+<<<<<<< HEAD
     auto object = dynamic_cast<Game::GameDoorSceneryObject*>(_vm->dataStack()->popObject());
     _vm->dataStack()->push(object->locked());
+=======
+    auto object = static_cast<Game::GameDoorSceneryObject*>(_vm->popDataObject());
+    _vm->pushDataInteger(object->locked());
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

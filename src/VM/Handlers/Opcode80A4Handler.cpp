@@ -39,8 +39,13 @@ Opcode80A4Handler::Opcode80A4Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80A4Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80A4] [+] std::string* obj_name(GameCritterObject* who)" << std::endl;
+<<<<<<< HEAD
     auto object = _vm->dataStack()->popObject();
     _vm->dataStack()->push(object->name());
+=======
+    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
+    _vm->pushDataObject(new std::string(critter->name()), VMStackPointerValue::POINTER_TYPE_STRING);
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

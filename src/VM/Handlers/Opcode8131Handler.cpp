@@ -37,6 +37,7 @@ Opcode8131Handler::Opcode8131Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8131Handler::_run()
 {
+<<<<<<< HEAD
     Logger::debug("SCRIPT") << "[8131] [+] void obj_open(GameDoorSceneryObject* object) " << std::endl;
     auto object = _vm->dataStack()->popObject();
     if (!object)
@@ -56,6 +57,11 @@ void Opcode8131Handler::_run()
     {
         _error("obj_open: object is not openable type!");
     }
+=======
+    Logger::debug("SCRIPT") << "[8131] [+] void open(GameDoorSceneryObject* object) " << std::endl;
+    auto object = static_cast<Game::GameDoorSceneryObject*>(_vm->popDataObject());
+    object->setOpened(true);
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

@@ -37,10 +37,17 @@ Opcode8105Handler::Opcode8105Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8105Handler::_run()
 {
+<<<<<<< HEAD
     Logger::debug("SCRIPT") << "[8105] [+] string message_str(int msg_list, int msg_num);" << std::endl;
     auto msgNum = _vm->dataStack()->popInteger();
     auto msgList = _vm->dataStack()->popInteger();
     _vm->dataStack()->push(_vm->msgMessage(msgList, msgNum));
+=======
+    Logger::debug("SCRIPT") << "[8105] [+] string* msgMessage(int msg_list, int msg_num);" << std::endl;
+    auto msgNum = _vm->popDataInteger();
+    auto msgList = _vm->popDataInteger();
+    _vm->pushDataObject(new std::string(_vm->msgMessage(msgList, msgNum)), VMStackPointerValue::POINTER_TYPE_STRING);
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

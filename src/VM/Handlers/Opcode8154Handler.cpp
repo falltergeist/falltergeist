@@ -38,8 +38,14 @@ Opcode8154Handler::Opcode8154Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8154Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8154] [*] void debug(string*)" << std::endl;
+<<<<<<< HEAD
     auto value = _vm->dataStack()->pop();
     Logger::debug("SCRIPT") << value.toString() << std::endl;
+=======
+    auto string = static_cast<std::string*>(_vm->popDataObject());
+    Logger::debug("SCRIPT") << *string << std::endl;
+    //delete string;
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

@@ -38,7 +38,11 @@ Opcode80CCHandler::Opcode80CCHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80CCHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80CC] [=] void animate_stand_obj(void* obj)" << std::endl;
+<<<<<<< HEAD
     _vm->dataStack()->popObject();
+=======
+    _vm->popDataObject();
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

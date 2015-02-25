@@ -36,8 +36,13 @@ Opcode8127Handler::Opcode8127Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8127Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8127] [*] void critter_injure(ObjectPtr who, int how)" << std::endl;
+<<<<<<< HEAD
     _vm->dataStack()->popInteger();
     _vm->dataStack()->popObject();
+=======
+    _vm->popDataInteger();
+    _vm->popDataObject();
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

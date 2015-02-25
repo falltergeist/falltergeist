@@ -43,11 +43,16 @@ void Opcode8039Handler::_run()
     debug << "    types: " << aValue.typeName() << " + " << bValue.typeName() << std::endl;
     switch (bValue.type())
     {
+<<<<<<< HEAD
         case VMStackValue::TYPE_INTEGER: // INTEGER
+=======
+        case VMStackValue::TYPE_OBJECT: // STRING
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
         {
             int arg2 = bValue.integerValue();
             switch (aValue.type())
             {
+<<<<<<< HEAD
                 case VMStackValue::TYPE_INTEGER: // INTEGER + INTEGER
                 {
                     _vm->dataStack()->push(aValue.integerValue() + arg2);
@@ -56,6 +61,24 @@ void Opcode8039Handler::_run()
                 case VMStackValue::TYPE_FLOAT: // FLOAT + INTEGER
                 {
                     _vm->dataStack()->push(aValue.floatValue() + (float)arg2);
+=======
+                case VMStackPointerValue::POINTER_TYPE_STRING:
+                    string2 = *static_cast<std::string*>(_vm->popDataObject());
+                    break;
+                default:
+                    _vm->popDataObject();
+                    string2 = "UNSUPPORTED";
+                    break;
+            }
+            auto a = _vm->dataStack()->top();
+            switch(a->type())
+            {
+                case VMStackValue::TYPE_OBJECT: // STRING + STRING
+                {
+                    auto p1 = static_cast<std::string*>(_vm->popDataObject());
+                    std::string string1 = (p1 ? *p1 : "");
+                    _vm->pushDataObject(new std::string(string1 + string2), VMStackPointerValue::POINTER_TYPE_STRING);
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
                     break;
                 }
                 case VMStackValue::TYPE_STRING: // STRING + INTEGER
@@ -89,9 +112,18 @@ void Opcode8039Handler::_run()
                 {
                     _error("op_add - INTEGER+STRING not allowed");
                 }
+<<<<<<< HEAD
                 default:
                 {
                     _error(std::string("op_add - invalid left argument type: ") + aValue.typeName());
+=======
+                case VMStackValue::TYPE_OBJECT: // STRING + INTEGER
+                {
+                    auto p1 = static_cast<std::string*>(_vm->popDataObject());
+                    std::string string1 = (p1 ? *p1 : "");
+                    _vm->pushDataObject(new std::string(string1 + std::to_string(p2)), VMStackPointerValue::POINTER_TYPE_STRING);
+                    break;
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
                 }
             }
             break;
@@ -111,10 +143,19 @@ void Opcode8039Handler::_run()
                     _vm->dataStack()->push(aValue.floatValue() + arg2);
                     break;
                 }
+<<<<<<< HEAD
                 case VMStackValue::TYPE_STRING: // STRING + FLOAT
                 {
                     auto arg1 = aValue.stringValue();
                     _vm->dataStack()->push(arg1 + bValue.toString());
+=======
+                case VMStackValue::TYPE_OBJECT: // STRING + FLOAT
+                {
+                    auto p1 = static_cast<std::string*>(_vm->popDataObject());
+                    std::string string1 = (p1 ? *p1 : "");
+
+                    _vm->pushDataObject(new std::string(string1 + std::to_string(p2)), VMStackPointerValue::POINTER_TYPE_STRING);
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
                     break;
                 }
                 default:

@@ -41,6 +41,7 @@ void Opcode8121Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8121] [+] void giQ_Option(int iq_test, int msg_list, int msg_num, procedure target, int reaction)" << std::endl;
 
+<<<<<<< HEAD
     auto reaction = _vm->dataStack()->popInteger();
     auto function = _vm->dataStack()->popInteger();
     std::string text;
@@ -48,6 +49,15 @@ void Opcode8121Handler::_run()
     {
         text = _vm->dataStack()->popString();
         _vm->dataStack()->popInteger(); // msg_list
+=======
+    auto reaction = _vm->popDataInteger();
+    auto function = _vm->popDataInteger();
+    std::string* text = 0;
+    if (_vm->dataStack()->top()->type() == VMStackValue::TYPE_OBJECT)
+    {
+        text = static_cast<std::string*>(_vm->popDataObject());
+        _vm->popDataInteger(); // msg_list
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
     }
     else
     {

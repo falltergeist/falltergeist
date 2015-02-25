@@ -55,7 +55,11 @@ void Opcode80A7Handler::_run()
             break;
         }
     }
+<<<<<<< HEAD
     _vm->dataStack()->push(found);
+=======
+    _vm->pushDataObject(found);
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

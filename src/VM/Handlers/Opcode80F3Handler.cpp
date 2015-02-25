@@ -38,10 +38,17 @@ Opcode80F3Handler::Opcode80F3Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80F3Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80F3] [=] int has_trait(int type,void* who, int trait)" << std::endl;
+<<<<<<< HEAD
     _vm->dataStack()->popInteger();
     _vm->dataStack()->popObject();
     _vm->dataStack()->popInteger();
     _vm->dataStack()->push(1);
+=======
+    _vm->popDataInteger();
+    _vm->popDataObject();
+    _vm->popDataInteger();
+    _vm->pushDataInteger(1);
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

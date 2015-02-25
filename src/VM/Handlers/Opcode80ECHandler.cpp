@@ -40,12 +40,18 @@ Opcode80ECHandler::Opcode80ECHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80ECHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80EC] [=] int elevation(void* obj)" << std::endl;
+<<<<<<< HEAD
     auto object = _vm->dataStack()->popObject();
     if (!object) 
     {
         _error("elevation - object is NULL");
     }
     _vm->dataStack()->push(object->elevation());
+=======
+    auto object = static_cast<Game::GameObject*>(_vm->popDataObject());
+    if (!object) throw new Exception("Opcode 80ec error");
+    _vm->pushDataInteger(object->elevation());
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

@@ -41,10 +41,18 @@ void Opcode811EHandler::_run()
     Logger::debug("SCRIPT") << "[811E] [=] void gSay_Reply(int msg_file_num, int msg_num)" << std::endl;
     auto dialog = dynamic_cast<State::CritterDialog*>(Game::getInstance()->states()->back());
     dialog->deleteAnswers();
+<<<<<<< HEAD
     if (_vm->dataStack()->top().type() == VMStackValue::TYPE_STRING)
     {
         auto question = _vm->dataStack()->popString();
         dialog->setQuestion(question);
+=======
+    if (_vm->dataStack()->top()->type() == VMStackValue::TYPE_OBJECT)
+    {
+        auto question = static_cast<std::string*>(_vm->popDataObject());
+        dialog->setQuestion(*question);
+        //delete question;
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
     }
     else
     {

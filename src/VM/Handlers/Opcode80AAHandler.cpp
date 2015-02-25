@@ -55,6 +55,17 @@ void Opcode80AAHandler::_run()
     {
         _error("get_skill_value(who, skill): who is not critter");
     }
+<<<<<<< HEAD
+=======
+    auto object = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
+    int value = object->skillValue(skill);
+    _vm->pushDataInteger(value);
+
+    Logger::debug("SCRIPT") << "[80AA] [+] int get_skill_value(GameCritterObject* who, int skill) " << std::endl
+                            << "    skill = " << skill << std::endl
+                            << "    value = " << value << std::endl;
+
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

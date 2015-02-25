@@ -53,7 +53,11 @@ void Opcode810EHandler::_run()
         }
         case 0x2: // ANIM_CLEAR
         {
+<<<<<<< HEAD
             auto object = arg.objectValue();
+=======
+            auto object = static_cast<Game::GameObject*>(_vm->popDataObject());
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
             if (auto critterObject = dynamic_cast<Game::GameCritterObject*>(object))
             {
                 critterObject->stopMovement();

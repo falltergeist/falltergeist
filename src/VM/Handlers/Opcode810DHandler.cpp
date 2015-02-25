@@ -38,19 +38,33 @@ Opcode810DHandler::Opcode810DHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode810DHandler::_run()
 {
     Logger::debug("SCRIPT") << "[810D] [=] void* obj_carrying_pid_obj(void* who, int pid)" << std::endl;
+<<<<<<< HEAD
     const int pid = _vm->dataStack()->popInteger();
     auto who = _vm->dataStack()->popObject();
+=======
+    const int pid = _vm->popDataInteger();
+    auto who = _vm->popDataObject();
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
     if (auto critter = dynamic_cast<Game::GameCritterObject*>((Game::GameObject*)who))
     {
         auto iterator = std::find_if(critter->inventory()->begin(), critter->inventory()->end(),
                                     [&] (Game::GameItemObject * &item) { return item->PID() == pid; });
         const bool found = iterator != critter->inventory()->end();
+<<<<<<< HEAD
         _vm->dataStack()->push(found ? *iterator : nullptr);
     }
     else
     {
         _warning(std::string("obj_carrying_pid_obj: 'who' is not valid GameCritterObject. It is ") + typeid(who).name());
         _vm->dataStack()->push(nullptr);
+=======
+        _vm->pushDataObject(found ? *iterator : nullptr);
+    }
+    else
+    {
+        Logger::warning("SCRIPT") << "[810D] - 'who' is not valid GameCritterObject. It is " << std::string(typeid(who).name());
+        _vm->pushDataObject(nullptr);
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
     }
 }
 

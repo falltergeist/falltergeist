@@ -38,12 +38,20 @@ VMStack::~VMStack()
 {
 }
 
+<<<<<<< HEAD
 void VMStack::push(const VMStackValue& value)
+=======
+void VMStack::push(const VMStackValue value)
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 {
     _values.push_back(value);
 }
 
+<<<<<<< HEAD
 const VMStackValue VMStack::pop()
+=======
+const VMStackValue& VMStack::pop()
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 {
     if (_values.size() == 0) throw Exception("VMStack::pop() - stack is empty");
     auto value = _values.back();
@@ -71,7 +79,11 @@ std::vector<VMStackValue>* VMStack::values()
     return &_values;
 }
 
+<<<<<<< HEAD
 const VMStackValue VMStack::top()
+=======
+const VMStackValue& VMStack::top()
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 {
     return _values.back();
 }

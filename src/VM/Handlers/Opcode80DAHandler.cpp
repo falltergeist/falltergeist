@@ -38,8 +38,13 @@ Opcode80DAHandler::Opcode80DAHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80DAHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80DA] [=] void wield_obj_critter(void* who, void* obj)" << std::endl;
+<<<<<<< HEAD
     _vm->dataStack()->popObject();
     _vm->dataStack()->popObject();
+=======
+    _vm->popDataObject();
+    _vm->popDataObject();
+>>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }
