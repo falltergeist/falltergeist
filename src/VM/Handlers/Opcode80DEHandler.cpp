@@ -40,14 +40,14 @@ Opcode80DEHandler::Opcode80DEHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80DEHandler::_run()
 {
-    int backgroundID = _vm->popDataInteger();
-    int headID = _vm->popDataInteger();
-    int mood = _vm->popDataInteger();
+    int backgroundID = _vm->dataStack()->popInteger();
+    int headID = _vm->dataStack()->popInteger();
+    int mood = _vm->dataStack()->popInteger();
 
-    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
+    auto critter = static_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
     if (!critter) throw Exception("VM::opcode80de - wrong critter pointers");
 
-    int msgFileID = _vm->popDataInteger();
+    int msgFileID = _vm->dataStack()->popInteger();
 
     auto interact = new State::CritterInteract();
     interact->setBackgroundID(backgroundID);

@@ -37,7 +37,7 @@ Opcode8016Handler::Opcode8016Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8016Handler::_run()
 {
-    auto name = *static_cast<std::string*>(_vm->popDataObject());
+    auto name = _vm->dataStack()->popString();
     auto EVARS = Game::getInstance()->locationState()->EVARS();
     if (EVARS->find(name) == EVARS->end())
     {

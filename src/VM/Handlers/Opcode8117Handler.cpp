@@ -38,10 +38,10 @@ Opcode8117Handler::Opcode8117Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8117Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8117] [=] int rm_mult_objs_from_inven(void* who, void* obj, int count)" << std::endl;
-    _vm->popDataInteger();
-    _vm->popDataObject();
-    _vm->popDataObject();
-    _vm->pushDataInteger(0);
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popObject();
+    _vm->dataStack()->popObject();
+    _vm->dataStack()->push(0);
 }
 
 }

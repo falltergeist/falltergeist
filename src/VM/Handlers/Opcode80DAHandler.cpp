@@ -38,8 +38,8 @@ Opcode80DAHandler::Opcode80DAHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80DAHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80DA] [=] void wield_obj_critter(void* who, void* obj)" << std::endl;
-    _vm->popDataObject();
-    _vm->popDataObject();
+    _vm->dataStack()->popObject();
+    _vm->dataStack()->popObject();
 }
 
 }

@@ -45,9 +45,9 @@ Opcode80D4Handler::Opcode80D4Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80D4Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80D4] [+] int objectPosition(GameObject* object)" << std::endl;
-    auto object = static_cast<Game::GameObject*>(_vm->popDataObject());
+    auto object = _vm->dataStack()->popObject();
     if (!object) throw new Exception("Opcode 80d4 error");
-    _vm->pushDataInteger(object->hexagon()->number());
+    _vm->dataStack()->push(object->hexagon()->number());
 }
 
 }

@@ -48,7 +48,7 @@ void Opcode8044Handler::_run()
     {
         result = intValue->value();
     }
-    _vm->pushDataInteger(result);
+    _vm->dataStack()->push(result);
 }
 
 }

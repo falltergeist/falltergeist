@@ -38,8 +38,8 @@ Opcode810DHandler::Opcode810DHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode810DHandler::_run()
 {
     Logger::debug("SCRIPT") << "[810D] [=] void* obj_carrying_pid_obj(void* who, int pid)" << std::endl;
-    const int pid = _vm->popDataInteger();
-    auto who = _vm->popDataObject();
+    const int pid = _vm->dataStack()->popInteger();
+    auto who = _vm->dataStack()->popObject();
     if (auto critter = dynamic_cast<Game::GameCritterObject*>((Game::GameObject*)who))
     {
         auto iterator = std::find_if(critter->inventory()->begin(), critter->inventory()->end(),

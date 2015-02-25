@@ -38,13 +38,13 @@ Opcode80CBHandler::Opcode80CBHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80CBHandler::_run()
 {
-    int value = _vm->popDataInteger();
-    int number = _vm->popDataInteger();
+    int value = _vm->dataStack()->popInteger();
+    int number = _vm->dataStack()->popInteger();
     if (number > 6)
     {
         throw Exception("VM::opcode80CB - number out of range:" + std::to_string(number));
     }
-    auto object = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
+    auto object = static_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
     if (!object)
     {
         throw Exception("VM::opcode80CB pointer error");
@@ -52,11 +52,11 @@ void Opcode80CBHandler::_run()
     object->setStat(number, value);
     if (dynamic_cast<Game::GameDudeObject*>(object))
     {
-        _vm->pushDataInteger(3); // for dude
+        _vm->dataStack()->push(3); // for dude
     }
     else
     {
-        _vm->pushDataInteger(-1); // for critter
+        _vm->dataStack()->push(-1); // for critter
     }
     Logger::debug("SCRIPT") << "[80CB] [+] int set_critter_stat(GameCritterObject* who, int number, int value)" << std::endl;
 }

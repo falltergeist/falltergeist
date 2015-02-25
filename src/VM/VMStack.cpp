@@ -18,6 +18,7 @@
  */
 
 // C++ standard includes
+#include <string>
 
 // Falltergeist includes
 #include "../VM/VMStack.h"
@@ -73,6 +74,63 @@ std::vector<VMStackValue>* VMStack::values()
 const VMStackValue& VMStack::top()
 {
     return _values.back();
+}
+
+int VMStack::popInteger()
+{
+    return pop()->integerValue();
+}
+
+void VMStack::push(int value)
+{
+    push(VMStackValue(value));
+}
+
+float VMStack::popFloat()
+{
+    return pop()->floatValue();
+}
+
+void VMStack::push(float value)
+{
+    push(VMStackValue(value));
+}
+
+Game::GameObject* VMStack::popObject()
+{
+    return pop()->objectValue();
+}
+
+void VMStack::push(Game::GameObject* value)
+{
+    push(VMStackValue(value));
+}
+
+std::string& VMStack::popString()
+{
+    return pop()->stringValue();
+}
+
+void VMStack::push(const std::string &value)
+{
+    push(VMStackValue(value));
+}
+
+bool VM::popDataLogical()
+{
+    auto stackValue = _dataStack.pop();
+    switch (stackValue->type())
+    {
+        case VMStackValue::TYPE_INTEGER:
+            return stackValue->integerValue() != 0;
+        case VMStackValue::TYPE_FLOAT:
+            return (bool)stackValue->floatValue();
+        case VMStackValue::TYPE_STRING:
+            return stackValue->stringValue().length() > 0;
+        case VMStackValue::TYPE_OBJECT:
+            return stackValue->objectValue() != nullptr;
+    }
+    throw Exception("VM::popDataLogical() - something strange happened");
 }
 
 }

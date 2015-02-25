@@ -38,7 +38,7 @@ Opcode8118Handler::Opcode8118Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8118Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8118] [*] int get_month" << std::endl;
-    _vm->pushDataInteger(Game::getInstance()->gameTime()->month());
+    _vm->dataStack()->push(Game::getInstance()->gameTime()->month());
 }
 
 }

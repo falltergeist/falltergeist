@@ -37,9 +37,9 @@ void Opcode8040Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8040] [*] op_bwand" << std::endl;
     // @TODO: may need type conversion
-    auto b = _vm->popDataInteger();
-    auto a = _vm->popDataInteger();
-    _vm->pushDataInteger(a & b);
+    auto b = _vm->dataStack()->popInteger();
+    auto a = _vm->dataStack()->popInteger();
+    _vm->dataStack()->push(a & b);
 }
 
 }

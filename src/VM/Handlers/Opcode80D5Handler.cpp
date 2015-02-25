@@ -36,11 +36,11 @@ Opcode80D5Handler::Opcode80D5Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80D5Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80D5] [*] int tile_num_in_direction(int start_tile, int dir, int distance)" << std::endl;
-    auto distance = _vm->popDataInteger();
-    auto dir = _vm->popDataInteger();
-    auto start_tile = _vm->popDataInteger();
+    auto distance = _vm->dataStack()->popInteger();
+    auto dir = _vm->dataStack()->popInteger();
+    auto start_tile = _vm->dataStack()->popInteger();
     // dirty hack... should be fixed in future
-    _vm->pushDataInteger(start_tile);
+    _vm->dataStack()->push(start_tile);
 }
 
 }

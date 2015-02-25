@@ -36,8 +36,8 @@ Opcode8037Handler::Opcode8037Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8037Handler::_run()
 {
     // @TODO: float, string comparison
-    auto b = _vm->popDataInteger();
-    auto a = _vm->popDataInteger();
+    auto b = _vm->dataStack()->popInteger();
+    auto a = _vm->dataStack()->popInteger();
     auto result = a < b;
 
     Logger::debug("SCRIPT") << "[8037] [*] op_less (a < b)" << std::endl
@@ -45,7 +45,7 @@ void Opcode8037Handler::_run()
                             << "    b = " << b << std::endl
                             << "    result = " << result << std::endl;
 
-    _vm->pushDataInteger(result);
+    _vm->dataStack()->push(result);
 }
 
 }

@@ -43,8 +43,8 @@ Opcode8106Handler::Opcode8106Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8106Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8106] [=] void* (int) critter_inven_obj(GameCritterObject* critter, int where)" << std::endl;
-    auto where = _vm->popDataInteger();
-    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
+    auto where = _vm->dataStack()->popInteger();
+    auto critter = dynamic_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
     switch (where)
     {
     case 0: // ARMOR SLOT
@@ -57,7 +57,7 @@ void Opcode8106Handler::_run()
         _vm->pushDataObject(critter->leftHandSlot());
         break;
     case -2: // INVENTORY COUNT
-        _vm->pushDataInteger(critter->inventory()->size());
+        _vm->dataStack()->push(critter->inventory()->size());
         break;
     default:
         throw Exception("VM::opcode8106 error");

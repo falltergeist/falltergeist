@@ -39,9 +39,9 @@ Opcode80B2Handler::Opcode80B2Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80B2Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80B2] [=] void mark_area_known(int AREA_MARK_TYPE, int AreaNum, int MARK_STATE);" << std::endl;
-    _vm->popDataInteger();
-    _vm->popDataInteger();
-    _vm->popDataInteger();
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popInteger();
 }
 
 }

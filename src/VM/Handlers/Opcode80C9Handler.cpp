@@ -48,15 +48,15 @@ Opcode80C9Handler::Opcode80C9Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80C9Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80C9] [+] int obj_item_subtype(GameItemObject* object)" << std::endl;
-    auto pointer = _vm->popDataObject();
-    if      (static_cast<Game::GameArmorItemObject*>(pointer))     _vm->pushDataInteger(0);
-    else if (static_cast<Game::GameContainerItemObject*>(pointer)) _vm->pushDataInteger(1);
-    else if (static_cast<Game::GameDrugItemObject*>(pointer))      _vm->pushDataInteger(2);
-    else if (static_cast<Game::GameWeaponItemObject*>(pointer))    _vm->pushDataInteger(3);
-    else if (static_cast<Game::GameAmmoItemObject*>(pointer))      _vm->pushDataInteger(4);
-    else if (static_cast<Game::GameMiscItemObject*>(pointer))      _vm->pushDataInteger(5);
-    else if (static_cast<Game::GameKeyItemObject*>(pointer))       _vm->pushDataInteger(6);
-    else _vm->pushDataInteger(-1);
+    auto object = _vm->dataStack()->popObject();
+    if      (dynamic_cast<Game::GameArmorItemObject*>(object))     _vm->dataStack()->push(0);
+    else if (dynamic_cast<Game::GameContainerItemObject*>(object)) _vm->dataStack()->push(1);
+    else if (dynamic_cast<Game::GameDrugItemObject*>(object))      _vm->dataStack()->push(2);
+    else if (dynamic_cast<Game::GameWeaponItemObject*>(object))    _vm->dataStack()->push(3);
+    else if (dynamic_cast<Game::GameAmmoItemObject*>(object))      _vm->dataStack()->push(4);
+    else if (dynamic_cast<Game::GameMiscItemObject*>(object))      _vm->dataStack()->push(5);
+    else if (dynamic_cast<Game::GameKeyItemObject*>(object))       _vm->dataStack()->push(6);
+    else _vm->dataStack()->push(-1);
 }
 
 }

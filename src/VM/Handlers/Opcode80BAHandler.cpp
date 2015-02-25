@@ -38,12 +38,12 @@ Opcode80BAHandler::Opcode80BAHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80BAHandler::_run()
 {
-    auto PID = _vm->popDataInteger();
-    auto pointer = static_cast<Game::GameObject*>(_vm->popDataObject());
+    auto PID = _vm->dataStack()->popInteger();
+    auto object = _vm->dataStack()->popObject();
 
     int amount = 0;
-    auto critter = dynamic_cast<Game::GameCritterObject*>(pointer);
-    auto container = dynamic_cast<Game::GameContainerItemObject*>(pointer);
+    auto critter = dynamic_cast<Game::GameCritterObject*>(object);
+    auto container = dynamic_cast<Game::GameContainerItemObject*>(object);
     if (critter)
     {
         for (auto object : *critter->inventory()) if (object->PID() == PID) amount += object->amount();
@@ -56,7 +56,7 @@ void Opcode80BAHandler::_run()
     {
         throw Exception("VM::opcode80ba - unknown object type");
     }
-    _vm->pushDataInteger(amount);
+    _vm->dataStack()->push(amount);
 
     Logger::debug("SCRIPT") << "[80BA] [+] int obj_is_carrying_obj_pid(GameObject* object, int PID)" << std::endl;
 }

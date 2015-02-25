@@ -37,7 +37,7 @@ Opcode8132Handler::Opcode8132Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8132Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8132] [+] void close(GameDoorSceneryObject* object) " << std::endl;
-    auto object = static_cast<Game::GameDoorSceneryObject*>(_vm->popDataObject());
+    auto object = dynamic_cast<Game::GameDoorSceneryObject*>(_vm->dataStack()->popObject());
     object->setOpened(false);
 }
 

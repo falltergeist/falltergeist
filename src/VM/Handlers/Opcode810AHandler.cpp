@@ -40,7 +40,7 @@ Opcode810AHandler::Opcode810AHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode810AHandler::_run()
 {
     Logger::debug("SCRIPT") << "[810A] [=] void float_msg(void* who, string* msg, int type) " << std::endl;
-    int type = _vm->popDataInteger();
+    int type = _vm->dataStack()->popInteger();
     unsigned int color;
     switch (type)
     {
@@ -90,8 +90,8 @@ void Opcode810AHandler::_run()
             throw Exception("Opcode810AHandler - wrong type: " + std::to_string(type));
     }
 
-    auto string = static_cast<std::string*>(_vm->popDataObject());
-    auto object = static_cast<Game::GameObject*>(_vm->popDataObject());
+    auto string = _vm->dataStack()->popString();
+    auto object = _vm->dataStack()->popObject();
 
     auto floatMessage = new TextArea(*string);
     floatMessage->setWidth(200);
