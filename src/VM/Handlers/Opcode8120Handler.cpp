@@ -36,9 +36,9 @@ Opcode8120Handler::Opcode8120Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8120Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8120] [=] void gSay_Message(int msg_list, int msg_num, int reaction)" << std::endl;
-    _vm->popDataInteger();
+    _vm->dataStack()->popInteger();
     _vm->dataStack()->pop(); // string or integer
-    _vm->popDataInteger();
+    _vm->dataStack()->popInteger();
 }
 
 }

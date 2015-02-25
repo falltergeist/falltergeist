@@ -38,13 +38,13 @@ Opcode80CFHandler::Opcode80CFHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80CFHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80CF] [=] int tile_in_tile_rect(int tile1, int tile2, int tile3, int tile4, int tile)" << std::endl;
-    _vm->popDataInteger();
-    _vm->popDataInteger();
-    _vm->popDataInteger();
-    _vm->popDataInteger();
-    _vm->popDataInteger();
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popInteger();
     // @TODO: implement
-    _vm->pushDataInteger(0);
+    _vm->dataStack()->push(0);
 }
 
 }

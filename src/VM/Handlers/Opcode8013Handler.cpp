@@ -39,7 +39,7 @@ Opcode8013Handler::Opcode8013Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8013Handler::_run()
 {
-    auto number = _vm->popDataInteger();
+    auto number = _vm->dataStack()->popInteger();
     auto value = _vm->dataStack()->pop();
     _vm->dataStack()->values()->at(_vm->SVARbase() + number) = value;
 

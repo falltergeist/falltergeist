@@ -41,7 +41,7 @@ void Opcode80F6Handler::_run()
     unsigned int hours = Game::getInstance()->gameTime()->hours();
     unsigned int minutes = Game::getInstance()->gameTime()->minutes();
 
-    _vm->pushDataInteger(hours*100 + minutes);
+    _vm->dataStack()->push(hours*100 + minutes);
 }
 
 }

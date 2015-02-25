@@ -40,9 +40,9 @@ Opcode8100Handler::Opcode8100Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8100Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8100] [+] int obj_pid(void* obj)" << std::endl;
-    auto object = static_cast<Game::GameObject*>(_vm->popDataObject());
+    auto object = _vm->dataStack()->popObject();
     if (!object) throw new Exception("Opcode 8100 error");
-    _vm->pushDataInteger(object->PID());
+    _vm->dataStack()->push(object->PID());
 }
 
 }

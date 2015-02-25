@@ -35,7 +35,7 @@ Opcode8029Handler::Opcode8029Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8029Handler::_run()
 {
-    _vm->setDVARBase(_vm->popReturnInteger());
+    _vm->setDVARBase(_vm->returnStack()->popInteger());
     Logger::debug("SCRIPT") << "[8029] [*] op_pop_base " << _vm->DVARbase() << std::endl;
 }
 

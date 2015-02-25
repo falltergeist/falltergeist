@@ -38,103 +38,105 @@ Opcode8039Handler::Opcode8039Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8039Handler::_run()
 {
     auto& debug = Logger::debug("SCRIPT");
-    debug << "[8039] [*] op_add(a, b)" << std::endl;
-    auto b = _vm->dataStack()->top();
-    switch (b->type())
+    debug << "[8039] [*] op_add(aValue, bValue)" << std::endl;
+    auto bValue = _vm->dataStack()->top();
+    switch (bValue.type())
     {
-        case VMStackValue::TYPE_OBJECT: // STRING
+        case VMStackValue::TYPE_STRING: 
         {
-            std::string string2;
-            switch(((VMStackPointerValue*)b)->pointerType())
+            auto arg2 = _vm->dataStack()->popString();
+            auto aValue = _vm->dataStack()->top();
+            switch (aValue.type())
             {
-                case VMStackPointerValue::POINTER_TYPE_STRING:
-                    string2 = *static_cast<std::string*>(_vm->popDataObject());
-                    break;
-                default:
-                    _vm->popDataObject();
-                    string2 = "UNSUPPORTED";
-                    break;
-            }
-            auto a = _vm->dataStack()->top();
-            switch(a->type())
-            {
-                case VMStackValue::TYPE_OBJECT: // STRING + STRING
+                case VMStackValue::TYPE_STRING: // STRING + STRING
                 {
-                    auto p1 = static_cast<std::string*>(_vm->popDataObject());
-                    std::string string1 = (p1 ? *p1 : "");
-                    _vm->pushDataObject(new std::string(string1 + string2), VMStackPointerValue::POINTER_TYPE_STRING);
+                    std::string arg1 = _vm->dataStack()->popString();
+                    _vm->dataStack()->push(arg1 + arg2);
                     break;
                 }
                 case VMStackValue::TYPE_FLOAT: // FLOAT + STRING
                 {
-                    throw Exception("VM::opcode PLUS - FLOAT+POINTER not allowed");
+                    throw Exception("VM::opcode PLUS - FLOAT+STRING not allowed");
                 }
                 case VMStackValue::TYPE_INTEGER: // INTEGER + STRING
                 {
-                    throw Exception("VM::opcode PLUS - INTEGER+POINTER not allowed");
+                    throw Exception("VM::opcode PLUS - INTEGER+STRING not allowed");
+                }
+                default:
+                {
+                    throw Exception("VM::opcode PLUS - invalid left argument type: " + aValue.typeName());
                 }
             }
             break;
         }
         case VMStackValue::TYPE_INTEGER: // INTEGER
         {
-            auto p2 = _vm->popDataInteger();
-            auto a = _vm->dataStack()->top();
-            debug << "    value2 type: " << a->type() << std::endl;
-            switch(a->type())
+            auto arg2 = _vm->dataStack()->popInteger();
+            auto aValue = _vm->dataStack()->top();
+            debug << "    value2 type: " << aValue.typeName() << std::endl;
+            switch (aValue.type())
             {
                 case VMStackValue::TYPE_INTEGER: // INTEGER + INTEGER
                 {
-                    auto p1 = _vm->popDataInteger();
-                    _vm->pushDataInteger(p1 + p2);
+                    int arg1 = _vm->dataStack()->popInteger();
+                    _vm->dataStack()->push(arg1 + arg2);
                     break;
                 }
                 case VMStackValue::TYPE_FLOAT: // FLOAT + INTEGER
                 {
-                    auto p1 = _vm->popDataFloat();
-                    _vm->pushDataFloat(p1 + p2);
+                    float arg1 = _vm->dataStack()->popFloat();
+                    _vm->dataStack()->push(arg1 + arg2);
                     break;
                 }
-                case VMStackValue::TYPE_OBJECT: // STRING + INTEGER
+                case VMStackValue::TYPE_STRING: // STRING + INTEGER
                 {
-                    auto p1 = static_cast<std::string*>(_vm->popDataObject());
-                    std::string string1 = (p1 ? *p1 : "");
-                    _vm->pushDataObject(new std::string(string1 + std::to_string(p2)), VMStackPointerValue::POINTER_TYPE_STRING);
+                    std::string arg1 = _vm->dataStack()->popString();
+                    _vm->dataStack()->push(arg1 + bValue.toString());
                     break;
+                }
+                default:
+                {
+                    throw Exception("VM::opcode PLUS - invalid left argument type: " + aValue.typeName());
                 }
             }
             break;
         }
         case VMStackValue::TYPE_FLOAT: // FLOAT
         {
-            auto p2 = _vm->popDataFloat();
-            auto a = _vm->dataStack()->top();
-            debug << "    value2 type: " << a->type() << std::endl;
-            switch(a->type())
+            auto arg2 = _vm->dataStack()->popFloat();
+            auto aValue = _vm->dataStack()->top();
+            debug << "    value2 type: " << aValue.typeName() << std::endl;
+            switch (aValue.type())
             {
                 case VMStackValue::TYPE_INTEGER: // INTEGER + FLOAT
                 {
-                    auto p1 = _vm->popDataInteger();
-                    _vm->pushDataFloat(p1 + p2);
+                    auto arg1 = _vm->dataStack()->popInteger();
+                    _vm->dataStack()->push(arg1 + arg2);
 
                     break;
                 }
                 case VMStackValue::TYPE_FLOAT: // FLOAT + FLOAT
                 {
-                    auto p1 = _vm->popDataFloat();
-                    _vm->pushDataFloat(p1 + p2);
+                    auto arg1 = _vm->dataStack()->popFloat();
+                    _vm->dataStack()->push(arg1 + arg2);
                     break;
                 }
                 case VMStackValue::TYPE_OBJECT: // STRING + FLOAT
                 {
-                    auto p1 = static_cast<std::string*>(_vm->popDataObject());
-                    std::string string1 = (p1 ? *p1 : "");
-
-                    _vm->pushDataObject(new std::string(string1 + std::to_string(p2)), VMStackPointerValue::POINTER_TYPE_STRING);
+                    auto arg1 = _vm->dataStack()->popString();
+                    _vm->dataStack()->push(arg1 + bValue.toString());
                     break;
+                }
+                default:
+                {
+                    throw Exception("VM::opcode PLUS - invalid left argument type: " + aValue.typeName());
                 }
             }
             break;
+        }
+        default:
+        {
+            throw Exception("VM::opcode PLUS - invalid right argument type: " + bValue.typeName());
         }
     }
 }

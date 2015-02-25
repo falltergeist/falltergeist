@@ -38,9 +38,9 @@ Opcode80F0Handler::Opcode80F0Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80F0Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80F0] [=] void add_timer_event(void* obj, int time, int info)" << std::endl;
-    _vm->popDataInteger();
-    _vm->popDataInteger();
-    _vm->popDataObject();
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popObject();
 }
 
 }

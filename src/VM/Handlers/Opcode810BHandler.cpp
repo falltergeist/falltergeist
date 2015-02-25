@@ -38,7 +38,7 @@ void Opcode810BHandler::_run()
 {
     Logger::debug("SCRIPT") << "[810B] [*] int metarule(int type, value)" << std::endl;
     auto value = _vm->dataStack()->pop();
-    auto type = _vm->popDataInteger();
+    auto type = _vm->dataStack()->popInteger();
     int result;
 
     switch(type)
@@ -80,7 +80,7 @@ void Opcode810BHandler::_run()
             throw Exception("Opcode810BHandler - unimplemented type: " + std::to_string(type));
     }
 
-    _vm->pushDataInteger(result);
+    _vm->dataStack()->push(result);
 }
 
 }

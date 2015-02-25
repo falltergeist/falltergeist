@@ -41,15 +41,15 @@ void Opcode8046Handler::_run()
     auto value = _vm->dataStack()->pop();
     if (auto stackIntValue = dynamic_cast<VMStackIntValue*>(value)) 
     {
-        _vm->pushDataInteger(- stackIntValue->value());
+        _vm->dataStack()->push(- stackIntValue->value());
     }
     else if (auto stackFloatValue = dynamic_cast<VMStackFloatValue*>(value))
     {
-        _vm->pushDataFloat(- stackFloatValue->value());
+        _vm->dataStack()->push(- stackFloatValue->value());
     }
     else
     {
-        _vm->pushDataInteger(0);
+        _vm->dataStack()->push(0);
     }
 }
 

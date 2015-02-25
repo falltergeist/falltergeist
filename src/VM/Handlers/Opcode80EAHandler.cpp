@@ -38,7 +38,7 @@ Opcode80EAHandler::Opcode80EAHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80EAHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80EA] [*] int gameTime()" << std::endl;
-    _vm->pushDataInteger(Game::getInstance()->gameTime()->ticks());
+    _vm->dataStack()->push(Game::getInstance()->gameTime()->ticks());
 }
 
 }

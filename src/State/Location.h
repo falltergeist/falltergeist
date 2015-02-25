@@ -67,7 +67,7 @@ protected:
     TileMap* _roof = 0;
     VM* _locationScript = 0;
     std::vector<int> _MVARS;
-    std::map<std::string, VMStackValue*> _EVARS;
+    std::map<std::string, VMStackValue> _EVARS;
     std::vector<ActiveUI*> _floatMessages;
 
     bool _locationEnter = true;
@@ -112,7 +112,7 @@ public:
     void toggleCursorMode();
     PlayerPanel* playerPanelState();
     
-    void displayMessage(std::string message);
+    void displayMessage(const std::string& message);
 
     void onBackgroundClick(MouseEvent* event);
     void onObjectMouseEvent(Event* event, Game::GameObject* object);

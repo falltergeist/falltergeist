@@ -26,7 +26,6 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8014Handler.h"
 #include "../../VM/VM.h"
-#include "../../VM/VMStackIntValue.h"
 #include "../../VM/VMStackValue.h"
 
 // Third party includes
@@ -47,15 +46,15 @@ void Opcode8014Handler::_run()
     switch (_vm->dataStack()->top()->type())
     {
         case VMStackValue::TYPE_INTEGER:
-            name = _vm->script()->identificators()->at(_vm->popDataInteger());
+            name = _vm->script()->identifiers()->at(_vm->dataStack()->popInteger());
             break;
-        case VMStackValue::TYPE_OBJECT:
+        case VMStackValue::TYPE_STRING:
         {
-            name = *static_cast<std::string*>(_vm->popDataObject());
+            name = _vm->dataStack()->popString();
             break;
         }
         default:
-            throw Exception("VM::opcode8014 error");
+            throw Exception("VM::opcode8014() - invalid argument type: " + VMStackValue::typeName(_vm->dataStack()->top()->type()));
     }
 
     auto value = EVARS->at(name);

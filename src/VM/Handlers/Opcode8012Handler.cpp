@@ -39,7 +39,7 @@ Opcode8012Handler::Opcode8012Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8012Handler::_run()
 {
-    auto number = _vm->popDataInteger();
+    auto number = _vm->dataStack()->popInteger();
     auto value = _vm->dataStack()->values()->at(_vm->SVARbase() + number);
     _vm->dataStack()->push(value);
 

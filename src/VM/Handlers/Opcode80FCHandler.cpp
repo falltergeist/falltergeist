@@ -38,7 +38,7 @@ Opcode80FCHandler::Opcode80FCHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80FCHandler::_run()
 {
 
-    int amount = _vm->popDataInteger();
+    int amount = _vm->dataStack()->popInteger();
     Logger::debug("SCRIPT") << "[80FC] [=] void game_time_advance(int amount)" << std::endl
                             << "    amount = " << amount << std::endl;
     auto time = Game::getInstance()->gameTime();

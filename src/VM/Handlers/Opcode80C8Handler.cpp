@@ -37,9 +37,10 @@ Opcode80C8Handler::Opcode80C8Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80C8Handler::_run()
 {
+    // @TODO: implement
     Logger::debug("SCRIPT") << "[80C8] [=] int obj_type(void* obj)" << std::endl;
-    _vm->popDataObject();
-    _vm->pushDataInteger(0);
+    _vm->dataStack()->popObject();
+    _vm->dataStack()->push(0);
 }
 
 }

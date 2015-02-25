@@ -36,9 +36,9 @@ Opcode8123Handler::Opcode8123Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8123Handler::_run()
 {
-    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
+    auto critter = dynamic_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
     auto value = critter->poisonLevel();
-    _vm->pushDataInteger(value);
+    _vm->dataStack()->push(value);
     Logger::debug("SCRIPT") << "[8123] [+] int value = GetPoison(GameCritterObject* critter)" << std::endl
                             << "    value = " << value << std::endl;
 }

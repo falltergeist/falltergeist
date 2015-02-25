@@ -40,40 +40,40 @@ void Opcode8034Handler::_run()
     {
         case VMStackValue::TYPE_INTEGER:
         {
-            auto p2 = _vm->popDataInteger();
+            auto p2 = _vm->dataStack()->popInteger();
             if (_vm->dataStack()->top()->type() == VMStackValue::TYPE_OBJECT) // to check if the pointer is null
             {
-                auto p1 = (int)(bool)_vm->popDataObject();
-                _vm->pushDataInteger(p1 != p2);
+                auto p1 = (int)(bool)_vm->dataStack()->popObject();
+                _vm->dataStack()->push(p1 != p2);
             }
             else
             {
-                auto p1 = _vm->popDataInteger();
-                _vm->pushDataInteger(p1 != p2);
+                auto p1 = _vm->dataStack()->popInteger();
+                _vm->dataStack()->push(p1 != p2);
             }
             break;
         }
         case VMStackValue::TYPE_OBJECT:
         {
             // @TODO: add string comparison
-            auto p2 = (int)(bool)_vm->popDataObject();
+            auto p2 = (int)(bool)_vm->dataStack()->popObject();
             if (_vm->dataStack()->top()->type() == VMStackValue::TYPE_OBJECT) // to check if the pointer is null
             {
-                auto p1 = (int)(bool)_vm->popDataObject();
-                _vm->pushDataInteger(p1 != p2);
+                auto p1 = (int)(bool)_vm->dataStack()->popObject();
+                _vm->dataStack()->push(p1 != p2);
             }
             else
             {
-                auto p1 = _vm->popDataInteger();
-                _vm->pushDataInteger(p1 != p2);
+                auto p1 = _vm->dataStack()->popInteger();
+                _vm->dataStack()->push(p1 != p2);
             }
             break;
         }
         case VMStackValue::TYPE_FLOAT:
         {
-            auto p2 = _vm->popDataFloat();
-            auto p1 = _vm->popDataFloat();
-            _vm->pushDataInteger(p1 != p2);
+            auto p2 = _vm->dataStack()->popFloat();
+            auto p1 = _vm->dataStack()->popFloat();
+            _vm->dataStack()->push(p1 != p2);
             break;
         }
     }

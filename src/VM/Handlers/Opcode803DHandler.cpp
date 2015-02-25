@@ -42,7 +42,7 @@ void Opcode803DHandler::_run()
     auto a = _vm->dataStack()->pop();
     auto p1 = dynamic_cast<VMStackIntValue*>(a);
     auto p2 = dynamic_cast<VMStackIntValue*>(b);
-    _vm->pushDataInteger(p1->value() % p2->value());
+    _vm->dataStack()->push(p1->value() % p2->value());
 }
 
 }
