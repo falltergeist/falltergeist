@@ -23,8 +23,7 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode814BHandler.h"
 #include "../../VM/VM.h"
-
-
+#include "../../Game/Object.h"
 
 // Third party includes
 
@@ -37,9 +36,10 @@ Opcode814BHandler::Opcode814BHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode814BHandler::_run()
 {
+    // @TODO
     Logger::debug("SCRIPT") << "[814B] [*] void* party_member_obj(int pid)" << std::endl;
     _vm->dataStack()->popInteger();
-    _vm->pushDataObject(0);
+    _vm->dataStack()->push((Game::GameObject*)nullptr);
 }
 
 }

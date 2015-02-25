@@ -24,29 +24,27 @@
 // Falltergeist includes
 #include "../Exception.h"
 #include "../Game/Game.h"
+#include "../Game/Object.h"
 #include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../VM/OpcodeFactory.h"
 #include "../VM/VM.h"
 #include "../VM/VMHaltException.h"
-#include "../VM/VMStackIntValue.h"
-#include "../VM/VMStackFloatValue.h"
-#include "../VM/VMStackPointerValue.h"
-#include "../VM/VMStackStringValue.h"
+#include "../VM/VMStackValue.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-VM::VM(libfalltergeist::IntFileType* script, void* owner)
+VM::VM(libfalltergeist::IntFileType* script, Game::GameObject* owner)
 {
     _owner = owner;
     _script = script;
     if (!_script) throw Exception("VM::VM() - script is null");
 }
 
-VM::VM(std::string filename, void* owner)
+VM::VM(std::string filename, Game::GameObject* owner)
 {
     _owner = owner;
     _script = ResourceManager::intFileType(filename);
@@ -85,7 +83,7 @@ void VM::call(std::string name)
         _returnStack.push(0); // return adrress
         Logger::debug("SCRIPT") << "CALLED: " << name << " [" << _script->filename() << "]" << std::endl;
         run();
-        _dataStack->popInteger(); // remove function result
+        _dataStack.popInteger(); // remove function result
         Logger::debug("SCRIPT") << "Function ended" << std::endl;
     }
     catch (libfalltergeist::Exception &e)
@@ -168,10 +166,11 @@ std::vector<VMStackValue>* VM::LVARS()
     return &_LVARS;
 }
 
-void* VM::owner()
+Game::GameObject* VM::owner()
 {
     return _owner;
 }
+
 
 bool VM::initialized()
 {

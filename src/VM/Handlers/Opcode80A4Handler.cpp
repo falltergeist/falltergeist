@@ -25,9 +25,7 @@
 #include "../../Game/Game.h"
 #include "../../Game/CritterObject.h"
 #include "../../VM/VM.h"
-#include "../../VM/VMStackPointerValue.h"
-
-
+#include "../../VM/VMStackValue.h"
 
 // Third party includes
 

@@ -39,7 +39,7 @@ Opcode810AHandler::Opcode810AHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode810AHandler::_run()
 {
-    Logger::debug("SCRIPT") << "[810A] [=] void float_msg(void* who, string* msg, int type) " << std::endl;
+    Logger::debug("SCRIPT") << "[810A] [=] void float_msg(object who, string msg, int type) " << std::endl;
     int type = _vm->dataStack()->popInteger();
     unsigned int color;
     switch (type)
@@ -93,7 +93,7 @@ void Opcode810AHandler::_run()
     auto string = _vm->dataStack()->popString();
     auto object = _vm->dataStack()->popObject();
 
-    auto floatMessage = new TextArea(*string);
+    auto floatMessage = new TextArea(string);
     floatMessage->setWidth(200);
     floatMessage->setWordWrap(true);
     floatMessage->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);

@@ -22,9 +22,8 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8105Handler.h"
-#include "../../VM/VMStackPointerValue.h"
+#include "../../VM/VMStackValue.h"
 #include "../../VM/VM.h"
-
 
 
 // Third party includes
@@ -38,10 +37,10 @@ Opcode8105Handler::Opcode8105Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8105Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8105] [+] string* msgMessage(int msg_list, int msg_num);" << std::endl;
+    Logger::debug("SCRIPT") << "[8105] [+] string message_str(int msg_list, int msg_num);" << std::endl;
     auto msgNum = _vm->dataStack()->popInteger();
     auto msgList = _vm->dataStack()->popInteger();
-    _vm->pushDataObject(new std::string(_vm->msgMessage(msgList, msgNum)), VMStackPointerValue::POINTER_TYPE_STRING);
+    _vm->dataStack()->push(_vm->msgMessage(msgList, msgNum));
 }
 
 }

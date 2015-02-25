@@ -40,7 +40,7 @@ Opcode8015Handler::Opcode8015Handler(Falltergeist::VM *vm) : OpcodeHandler(vm)
 void Opcode8015Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8015] [*] op_store_external(name, value)" << std::endl;
-    std::string& name = _vm->dataStack()->popString();
+    std::string name = _vm->dataStack()->popString();
     auto value = _vm->dataStack()->pop();
     auto game = Game::getInstance();
     auto EVARS = game->locationState()->EVARS();

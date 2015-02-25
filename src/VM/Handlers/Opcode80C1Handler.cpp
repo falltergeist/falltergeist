@@ -23,10 +23,7 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80C1Handler.h"
 #include "../../VM/VM.h"
-#include "../../VM/VMStackIntValue.h"
-
-
-
+#include "../../VM/VMStackValue.h"
 
 // Third party includes
 
@@ -41,7 +38,10 @@ void Opcode80C1Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80C1] [*] LVAR[num]" << std::endl;
     unsigned int num = _vm->dataStack()->popInteger();
-    while (num >= _vm->LVARS()->size()) _vm->LVARS()->push_back(new VMStackIntValue(0));
+    while (num >= _vm->LVARS()->size()) 
+    {
+        _vm->LVARS()->push_back(VMStackValue(0));
+    }
     _vm->dataStack()->push(_vm->LVARS()->at(num));
 }
 

@@ -36,12 +36,12 @@ Opcode8034Handler::Opcode8034Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8034Handler::_run()
 {
-    switch (_vm->dataStack()->top()->type())
+    switch (_vm->dataStack()->top().type())
     {
         case VMStackValue::TYPE_INTEGER:
         {
             auto p2 = _vm->dataStack()->popInteger();
-            if (_vm->dataStack()->top()->type() == VMStackValue::TYPE_OBJECT) // to check if the pointer is null
+            if (_vm->dataStack()->top().type() == VMStackValue::TYPE_OBJECT) // to check if the pointer is null
             {
                 auto p1 = (int)(bool)_vm->dataStack()->popObject();
                 _vm->dataStack()->push(p1 != p2);
@@ -57,7 +57,7 @@ void Opcode8034Handler::_run()
         {
             // @TODO: add string comparison
             auto p2 = (int)(bool)_vm->dataStack()->popObject();
-            if (_vm->dataStack()->top()->type() == VMStackValue::TYPE_OBJECT) // to check if the pointer is null
+            if (_vm->dataStack()->top().type() == VMStackValue::TYPE_OBJECT) // to check if the pointer is null
             {
                 auto p1 = (int)(bool)_vm->dataStack()->popObject();
                 _vm->dataStack()->push(p1 != p2);

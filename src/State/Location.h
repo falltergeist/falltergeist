@@ -104,10 +104,11 @@ public:
     void setMVAR(unsigned int number, int value);
     int MVAR(unsigned int number);
 
-    std::map<std::string, VMStackValue*>* EVARS();
+    std::map<std::string, VMStackValue>* EVARS();
 
     static void moveObjectToHexagon(Game::GameObject* object, Hexagon* hexagon);
     void centerCameraAtHexagon(Hexagon* hexagon);
+    void centerCameraAtHexagon(int tileNum);
     void handleAction(Game::GameObject* object, int action);
     void toggleCursorMode();
     PlayerPanel* playerPanelState();

@@ -39,22 +39,22 @@ Opcode810EHandler::Opcode810EHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode810EHandler::_run()
 {
-    Logger::debug("SCRIPT") << "[810E] [=] void reg_anim_func(int p1, int p2)" << std::endl;
-    auto p2 = _vm->dataStack()->pop(); // pointer or integer
+    Logger::debug("SCRIPT") << "[810E] [=] void reg_anim_func(int mode, int arg)" << std::endl;
+    auto arg = _vm->dataStack()->pop(); // pointer or integer
     auto p1 = _vm->dataStack()->popInteger();
-    _vm->dataStack()->push(p2);
     switch (p1)
     {
         case 0x1: // ANIM_BEGIN
         {
-            _vm->dataStack()->popInteger();//auto p2 = popDataInteger();
+            // @TODO: implement
+            // auto arg = popDataInteger();
             // RB_UNRESERVED (1) - незарезервированная последовательность, может не воспроизвестись, если отсутствуют свободные слоты
             // RB_RESERVED (2) - зарезервированная последовательность, должна воспроизвестись в любом случае
             break;
         }
         case 0x2: // ANIM_CLEAR
         {
-            auto object = static_cast<Game::GameObject*>(_vm->dataStack()->popObject());
+            auto object = arg.objectValue();
             if (auto critterObject = dynamic_cast<Game::GameCritterObject*>(object))
             {
                 critterObject->stopMovement();
@@ -68,12 +68,12 @@ void Opcode810EHandler::_run()
         }
         case 0x3: // ANIMATION_END
         {
-            _vm->dataStack()->popInteger(); // always 0
+            // @TODO: implement
             break;
         }
         default:
         {
-            throw Exception("Opcode810EHandler - unsupported p1");
+            throw Exception("Opcode810EHandler - unsupported mode");
         }
     }
 

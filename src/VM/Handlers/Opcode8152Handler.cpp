@@ -39,8 +39,8 @@ void Opcode8152Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8152] [=] void op_critter_set_flee_state(critter who, boolean flag)" << std::endl;
     // @TODO: add implementation
-    _vm->popDataLogical();
-    _vm->popDataPointer();
+    _vm->dataStack()->popLogical();
+    _vm->dataStack()->popObject();
 }
 
 }

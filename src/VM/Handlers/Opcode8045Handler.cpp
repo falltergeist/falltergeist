@@ -36,7 +36,7 @@ Opcode8045Handler::Opcode8045Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8045Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8045] [*] op_not" << std::endl;
-    auto a = _vm->popDataLogical();
+    auto a = _vm->dataStack()->popLogical();
     _vm->dataStack()->push(!a);
 }
 

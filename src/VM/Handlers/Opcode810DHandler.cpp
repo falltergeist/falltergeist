@@ -45,12 +45,12 @@ void Opcode810DHandler::_run()
         auto iterator = std::find_if(critter->inventory()->begin(), critter->inventory()->end(),
                                     [&] (Game::GameItemObject * &item) { return item->PID() == pid; });
         const bool found = iterator != critter->inventory()->end();
-        _vm->pushDataObject(found ? *iterator : nullptr);
+        _vm->dataStack()->push(found ? *iterator : nullptr);
     }
     else
     {
         Logger::warning("SCRIPT") << "[810D] - 'who' is not valid GameCritterObject. It is " << std::string(typeid(who).name());
-        _vm->pushDataObject(nullptr);
+        _vm->dataStack()->push(nullptr);
     }
 }
 

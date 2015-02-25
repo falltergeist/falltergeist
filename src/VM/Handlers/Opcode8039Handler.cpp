@@ -39,19 +39,47 @@ void Opcode8039Handler::_run()
 {
     auto& debug = Logger::debug("SCRIPT");
     debug << "[8039] [*] op_add(aValue, bValue)" << std::endl;
-    auto bValue = _vm->dataStack()->top();
+    auto bValue = _vm->dataStack()->pop();
+    auto aValue = _vm->dataStack()->pop();
+    debug << "    types: " << aValue.typeName() << " + " << bValue.typeName() << std::endl;
     switch (bValue.type())
     {
+        case VMStackValue::TYPE_INTEGER: // INTEGER
+        {
+            int arg2 = bValue.integerValue();
+            switch (aValue.type())
+            {
+                case VMStackValue::TYPE_INTEGER: // INTEGER + INTEGER
+                {
+                    _vm->dataStack()->push(aValue.integerValue() + arg2);
+                    break;
+                }
+                case VMStackValue::TYPE_FLOAT: // FLOAT + INTEGER
+                {
+                    _vm->dataStack()->push(aValue.floatValue() + (float)arg2);
+                    break;
+                }
+                case VMStackValue::TYPE_STRING: // STRING + INTEGER
+                {
+                    std::string arg1 = aValue.stringValue();
+                    _vm->dataStack()->push(arg1 + bValue.toString());
+                    break;
+                }
+                default:
+                {
+                    throw Exception(std::string("VM::opcode PLUS - invalid left argument type: ") + aValue.typeName());
+                }
+            }
+            break;
+        }
         case VMStackValue::TYPE_STRING: 
         {
-            auto arg2 = _vm->dataStack()->popString();
-            auto aValue = _vm->dataStack()->top();
+            auto arg2 = bValue.stringValue();
             switch (aValue.type())
             {
                 case VMStackValue::TYPE_STRING: // STRING + STRING
                 {
-                    std::string arg1 = _vm->dataStack()->popString();
-                    _vm->dataStack()->push(arg1 + arg2);
+                    _vm->dataStack()->push(aValue.stringValue() + arg2);
                     break;
                 }
                 case VMStackValue::TYPE_FLOAT: // FLOAT + STRING
@@ -64,79 +92,42 @@ void Opcode8039Handler::_run()
                 }
                 default:
                 {
-                    throw Exception("VM::opcode PLUS - invalid left argument type: " + aValue.typeName());
+                    throw Exception(std::string("VM::opcode PLUS - invalid left argument type: ") + aValue.typeName());
                 }
             }
             break;
-        }
-        case VMStackValue::TYPE_INTEGER: // INTEGER
-        {
-            auto arg2 = _vm->dataStack()->popInteger();
-            auto aValue = _vm->dataStack()->top();
-            debug << "    value2 type: " << aValue.typeName() << std::endl;
-            switch (aValue.type())
-            {
-                case VMStackValue::TYPE_INTEGER: // INTEGER + INTEGER
-                {
-                    int arg1 = _vm->dataStack()->popInteger();
-                    _vm->dataStack()->push(arg1 + arg2);
-                    break;
-                }
-                case VMStackValue::TYPE_FLOAT: // FLOAT + INTEGER
-                {
-                    float arg1 = _vm->dataStack()->popFloat();
-                    _vm->dataStack()->push(arg1 + arg2);
-                    break;
-                }
-                case VMStackValue::TYPE_STRING: // STRING + INTEGER
-                {
-                    std::string arg1 = _vm->dataStack()->popString();
-                    _vm->dataStack()->push(arg1 + bValue.toString());
-                    break;
-                }
-                default:
-                {
-                    throw Exception("VM::opcode PLUS - invalid left argument type: " + aValue.typeName());
-                }
-            }
-            break;
-        }
+        }        
         case VMStackValue::TYPE_FLOAT: // FLOAT
         {
-            auto arg2 = _vm->dataStack()->popFloat();
-            auto aValue = _vm->dataStack()->top();
-            debug << "    value2 type: " << aValue.typeName() << std::endl;
+            auto arg2 = bValue.floatValue();
             switch (aValue.type())
             {
                 case VMStackValue::TYPE_INTEGER: // INTEGER + FLOAT
                 {
-                    auto arg1 = _vm->dataStack()->popInteger();
-                    _vm->dataStack()->push(arg1 + arg2);
-
+                    _vm->dataStack()->push((float)aValue.integerValue() + arg2);
                     break;
                 }
                 case VMStackValue::TYPE_FLOAT: // FLOAT + FLOAT
                 {
-                    auto arg1 = _vm->dataStack()->popFloat();
-                    _vm->dataStack()->push(arg1 + arg2);
+                    _vm->dataStack()->push(aValue.floatValue() + arg2);
                     break;
                 }
                 case VMStackValue::TYPE_OBJECT: // STRING + FLOAT
                 {
-                    auto arg1 = _vm->dataStack()->popString();
+                    auto arg1 = aValue.stringValue();
                     _vm->dataStack()->push(arg1 + bValue.toString());
                     break;
                 }
                 default:
                 {
-                    throw Exception("VM::opcode PLUS - invalid left argument type: " + aValue.typeName());
+                    throw Exception(std::string("VM::opcode PLUS - invalid left argument type: ") + aValue.typeName());
                 }
             }
             break;
         }
         default:
         {
-            throw Exception("VM::opcode PLUS - invalid right argument type: " + bValue.typeName());
+            throw Exception(std::string("VM::opcode PLUS - invalid right argument type: ") + bValue.typeName());
         }
     }
 }

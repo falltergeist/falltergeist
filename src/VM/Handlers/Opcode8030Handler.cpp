@@ -36,7 +36,7 @@ Opcode8030Handler::Opcode8030Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8030Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8030] [*] while(address, condition)" << std::endl;
-    auto condition = _vm->popDataLogical();
+    auto condition = _vm->dataStack()->popLogical();
     auto address = _vm->dataStack()->popInteger();
     if (!condition)
     {

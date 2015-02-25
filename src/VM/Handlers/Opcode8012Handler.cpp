@@ -23,9 +23,6 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8012Handler.h"
 #include "../../VM/VMStackValue.h"
-#include "../../VM/VMStackFloatValue.h"
-#include "../../VM/VMStackIntValue.h"
-#include "../../VM/VMStackPointerValue.h"
 #include "../../VM/VM.h"
 
 // Third party includes
@@ -47,23 +44,10 @@ void Opcode8012Handler::_run()
 
     debug   << "[8012] [*] value = op_fetch_global[num]" << std::endl
             << "      num: "  << number << std::endl
-            << "     type: " << value->type() << std::endl
-            << "    value: ";
+            << "     type: " << value.typeName() << std::endl
+            << "    value: " << value.toString();
 
-    switch (value->type())
-    {
-        case VMStackValue::TYPE_INTEGER:
-            debug << ((VMStackIntValue*)value)->value();
-            break;
-        case VMStackValue::TYPE_FLOAT:
-            debug << ((VMStackFloatValue*)value)->value();
-            break;
-        case VMStackValue::TYPE_OBJECT:
-            debug << ((VMStackPointerValue*)value)->value();
-            break;
-    }
     debug << std::endl;
-
 }
 
 }
