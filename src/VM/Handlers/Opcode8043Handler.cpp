@@ -21,31 +21,28 @@
 
 // Falltergeist includes
 #include "../../Logger.h"
-#include "../../VM/Handlers/Opcode8037Handler.h"
+#include "../../VM/Handlers/Opcode8043Handler.h"
 #include "../../VM/VM.h"
+#include "../../Exception.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Opcode8037Handler::Opcode8037Handler(VM* vm) : OpcodeHandler(vm)
+Opcode8043Handler::Opcode8043Handler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode8037Handler::_run()
+void Opcode8043Handler::_run()
 {
-    // @TODO: float, string comparison
-    auto b = _vm->dataStack()->popInteger();
-    auto a = _vm->dataStack()->popInteger();
-    auto result = a < b;
-
-    Logger::debug("SCRIPT") << "[8037] [*] op_less (a < b)" << std::endl
-                            << "    a = " << a << std::endl
-                            << "    b = " << b << std::endl
-                            << "    result = " << result << std::endl;
-
-    _vm->dataStack()->push(result);
+    Logger::debug("SCRIPT") << "[8043] [*] op_bwnot" << std::endl;
+    auto arg = _vm->dataStack()->pop();
+    if (!arg.isNumber()) 
+    {
+        throw Exception(std::string("op_bwnot: invalid argument type: ") + arg.typeName());
+    }
+    _vm->dataStack()->push(~ arg.toInteger());
 }
 
 }

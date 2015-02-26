@@ -95,6 +95,10 @@ std::string VMStackValue::stringValue() const
 
 Game::GameObject* VMStackValue::objectValue() const
 {
+    if (_type == TYPE_INTEGER && _intValue == 0)
+    {
+        return nullptr;
+    }
     if (_type != TYPE_OBJECT) throw Exception(std::string("VMStackValue::objectValue() - stack value is not an object, it is ") + typeName(_type));
     return _objectValue;
 }

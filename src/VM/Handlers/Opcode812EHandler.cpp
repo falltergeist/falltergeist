@@ -36,10 +36,24 @@ Opcode812EHandler::Opcode812EHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode812EHandler::_run()
 {
-    auto object = dynamic_cast<Game::GameDoorSceneryObject*>(_vm->dataStack()->popObject());
-    object->setLocked(true);
-    Logger::debug("SCRIPT") << "[812E] [+] void lock(GameDoorSceneryObject* object)" << std::endl
-                            << "    PID: 0x"<< std::hex << object->PID() << std::endl;
+    auto &debug = Logger::debug("SCRIPT") << "[812E] [+] void obj_lock(GameDoorSceneryObject* object)" << std::endl;
+    auto object = _vm->dataStack()->popObject();
+    if (object)
+    {
+        debug << "    PID: 0x" << std::hex << (object ? object->PID() : 0) << std::endl;
+        if (auto door = dynamic_cast<Game::GameDoorSceneryObject*>(object)) 
+        {
+            door->setLocked(true);
+        }
+        else
+        {
+            Logger::warning("SCRIPT") << "Opcode812EHandler: object is not door" << std::endl;
+        }
+    }
+    else
+    {
+        Logger::warning("SCRIPT") << "Opcode812EHandler: object is null" << std::endl;
+    }
 }
 
 }
