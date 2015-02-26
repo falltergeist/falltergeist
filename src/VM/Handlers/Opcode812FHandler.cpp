@@ -36,9 +36,23 @@ Opcode812FHandler::Opcode812FHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode812FHandler::_run()
 {
-    Logger::debug("SCRIPT") << "[812F] [+] void unlock(GameDoorSceneryObject* object)" << std::endl;
-    auto object = dynamic_cast<Game::GameDoorSceneryObject*>(_vm->dataStack()->popObject());
-    object->setLocked(false);
+    Logger::debug("SCRIPT") << "[812F] [+] void obj_unlock(GameDoorSceneryObject* object)" << std::endl;
+    auto object = _vm->dataStack()->popObject();
+    if (object)
+    {
+        if (auto door = dynamic_cast<Game::GameDoorSceneryObject*>(object)) 
+        {
+            door->setLocked(true);
+        }
+        else
+        {
+            Logger::warning("SCRIPT") << "Opcode812FHandler: object is not door" << std::endl;
+        }
+    }
+    else
+    {
+        Logger::warning("SCRIPT") << "Opcode812FHandler: object is null" << std::endl;
+    }
 }
 
 }

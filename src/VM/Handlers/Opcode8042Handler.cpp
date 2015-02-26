@@ -21,25 +21,29 @@
 
 // Falltergeist includes
 #include "../../Logger.h"
-#include "../../VM/Handlers/Opcode8035Handler.h"
+#include "../../VM/Handlers/Opcode8042Handler.h"
 #include "../../VM/VM.h"
+#include "../../Exception.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Opcode8035Handler::Opcode8035Handler(VM* vm) : OpcodeHandler(vm)
+Opcode8042Handler::Opcode8042Handler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode8035Handler::_run()
+void Opcode8042Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8035] [*] op_less_equal <=" << std::endl;
-    // @TODO: add float and string comparison
-    auto b = _vm->dataStack()->popInteger();
-    auto a = _vm->dataStack()->popInteger();
-    _vm->dataStack()->push(a <= b);
+    Logger::debug("SCRIPT") << "[8042] [*] op_bwxor" << std::endl;
+    auto bValue = _vm->dataStack()->pop();
+    auto aValue = _vm->dataStack()->pop();
+    if (!aValue.isNumber() || !bValue.isNumber()) 
+    {
+        throw Exception(std::string("op_bwxor: invalid argument types: ") + aValue.typeName() + " bwxor " + bValue.typeName());
+    }
+    _vm->dataStack()->push(aValue.toInteger() ^ bValue.toInteger());
 }
 
 }
