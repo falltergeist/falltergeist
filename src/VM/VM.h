@@ -44,7 +44,7 @@ namespace Game { class GameObject; }
 class VM
 {
 protected:
-    Game::GameObject* _owner = 0;
+    Game::GameObject* _owner = nullptr;
     libfalltergeist::IntFileType* _script = 0;
     bool _initialized = false;
     bool _overrides = false;

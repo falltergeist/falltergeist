@@ -59,6 +59,8 @@
 #include "../VM/Handlers/Opcode803FHandler.h"
 #include "../VM/Handlers/Opcode8040Handler.h"
 #include "../VM/Handlers/Opcode8041Handler.h"
+#include "../VM/Handlers/Opcode8042Handler.h"
+#include "../VM/Handlers/Opcode8043Handler.h"
 #include "../VM/Handlers/Opcode8044Handler.h"
 #include "../VM/Handlers/Opcode8045Handler.h"
 #include "../VM/Handlers/Opcode8046Handler.h"
@@ -242,6 +244,8 @@ OpcodeHandler* OpcodeFactory::createOpcode(unsigned int number, VM* vm)
         case 0x803F: return new Opcode803FHandler(vm);
         case 0x8040: return new Opcode8040Handler(vm);
         case 0x8041: return new Opcode8041Handler(vm);
+        case 0x8042: return new Opcode8042Handler(vm); // bwxor
+        case 0x8043: return new Opcode8043Handler(vm); // bwnot
         case 0x8044: return new Opcode8044Handler(vm);
         case 0x8045: return new Opcode8045Handler(vm);
         case 0x8046: return new Opcode8046Handler(vm);

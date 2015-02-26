@@ -41,7 +41,7 @@ void Opcode8041Handler::_run()
     auto aValue = _vm->dataStack()->pop();
     if (!aValue.isNumber() || !bValue.isNumber()) 
     {
-        throw Exception(std::string("op_bwand: invalid argument types: ") + aValue.typeName() + " bwor " + bValue.typeName());
+        throw Exception(std::string("op_bwor: invalid argument types: ") + aValue.typeName() + " bwor " + bValue.typeName());
     }
     _vm->dataStack()->push(aValue.toInteger() | bValue.toInteger());
 }
