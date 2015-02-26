@@ -67,7 +67,7 @@ void Opcode8039Handler::_run()
                 }
                 default:
                 {
-                    throw Exception(std::string("VM::opcode PLUS - invalid left argument type: ") + aValue.typeName());
+                    throw Exception(std::string("VM::opcode op_add - invalid left argument type: ") + aValue.typeName());
                 }
             }
             break;
@@ -84,19 +84,19 @@ void Opcode8039Handler::_run()
                 }
                 case VMStackValue::TYPE_FLOAT: // FLOAT + STRING
                 {
-                    throw Exception("VM::opcode PLUS - FLOAT+STRING not allowed");
+                    throw Exception("VM::opcode op_add - FLOAT+STRING not allowed");
                 }
                 case VMStackValue::TYPE_INTEGER: // INTEGER + STRING
                 {
-                    throw Exception("VM::opcode PLUS - INTEGER+STRING not allowed");
+                    throw Exception("VM::opcode op_add - INTEGER+STRING not allowed");
                 }
                 default:
                 {
-                    throw Exception(std::string("VM::opcode PLUS - invalid left argument type: ") + aValue.typeName());
+                    throw Exception(std::string("VM::opcode op_add - invalid left argument type: ") + aValue.typeName());
                 }
             }
             break;
-        }        
+        }
         case VMStackValue::TYPE_FLOAT: // FLOAT
         {
             auto arg2 = bValue.floatValue();
@@ -120,14 +120,14 @@ void Opcode8039Handler::_run()
                 }
                 default:
                 {
-                    throw Exception(std::string("VM::opcode PLUS - invalid left argument type: ") + aValue.typeName());
+                    throw Exception(std::string("VM::opcode op_add - invalid left argument type: ") + aValue.typeName());
                 }
             }
             break;
         }
         default:
         {
-            throw Exception(std::string("VM::opcode PLUS - invalid right argument type: ") + bValue.typeName());
+            throw Exception(std::string("VM::opcode op_add - invalid right argument type: ") + bValue.typeName());
         }
     }
 }

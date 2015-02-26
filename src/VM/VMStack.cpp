@@ -123,19 +123,7 @@ void VMStack::push(const std::string &value)
 
 bool VMStack::popLogical()
 {
-    auto stackValue = pop();
-    switch (stackValue.type())
-    {
-        case VMStackValue::TYPE_INTEGER:
-            return stackValue.integerValue() != 0;
-        case VMStackValue::TYPE_FLOAT:
-            return (bool)stackValue.floatValue();
-        case VMStackValue::TYPE_STRING:
-            return stackValue.stringValue().length() > 0;
-        case VMStackValue::TYPE_OBJECT:
-            return stackValue.objectValue() != nullptr;
-    }
-    throw Exception("VMStack::popLogical() - something strange happened");
+    return pop().toBoolean();
 }
 
 }

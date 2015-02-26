@@ -38,7 +38,7 @@ void Opcode803FHandler::_run()
         Logger::debug("SCRIPT") << "[803F] [+] op_or" << std::endl;
         auto b = _vm->dataStack()->popLogical();
         auto a = _vm->dataStack()->popLogical();
-        _vm->dataStack()->push(a || b);
+        _vm->dataStack()->push(a || b); // integer 1 or 0
 }
 
 }
