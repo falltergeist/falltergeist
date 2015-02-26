@@ -37,7 +37,7 @@ void Opcode8045Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8045] [*] op_not" << std::endl;
     auto a = _vm->dataStack()->popLogical();
-    _vm->dataStack()->push(!a);
+    _vm->dataStack()->push((int)(!a));
 }
 
 }

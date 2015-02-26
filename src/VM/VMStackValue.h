@@ -66,6 +66,7 @@ public:
     std::string toString() const;
     // converts any value to integer representation
     int toInteger() const;
+    bool toBoolean() const;
     
     const char* typeName();
     static const char* typeName(int type);
