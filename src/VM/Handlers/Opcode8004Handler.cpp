@@ -36,12 +36,9 @@ Opcode8004Handler::Opcode8004Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8004Handler::_run()
 {
     auto address = _vm->dataStack()->popInteger();
-    _vm->setProgramCounter(address);
-
     Logger::debug("SCRIPT") << "[8004] [*] op_jmp(address)" << std::endl
                             << "    address: " << std::hex << address << std::endl;
-
-
+    _vm->setProgramCounter(address);
 }
 
 }

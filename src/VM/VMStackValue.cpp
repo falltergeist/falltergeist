@@ -118,13 +118,38 @@ int VMStackValue::toInteger() const
     {
         case TYPE_INTEGER: return _intValue;
         case TYPE_FLOAT:   return (int)_floatValue;
-        case TYPE_STRING:  return std::stoi(_stringValue);
-        case TYPE_OBJECT:  return 0;
+        case TYPE_STRING: 
+        {
+            int result = 0;
+            try 
+            {
+                result = std::stoi(_stringValue, nullptr, 0);
+            }
+            catch (std::invalid_argument ex) { }
+            catch (std::out_of_range ex) { }
+            return result;
+        }
+        case TYPE_OBJECT:  return (int)(_objectValue != nullptr);
         default:
-            throw Exception("VMStackValue::toString() - wrong type: " + std::to_string(_type));
+            throw Exception("VMStackValue::toInteger() - wrong type: " + std::to_string(_type));
     }
 }
 
+bool VMStackValue::toBoolean() const
+{
+    switch (_type)
+    {
+        case TYPE_INTEGER:
+            return _intValue != 0;
+        case TYPE_FLOAT:
+            return (bool)_floatValue;
+        case TYPE_STRING:
+            return _stringValue.length() > 0;
+        case TYPE_OBJECT:
+            return _objectValue != nullptr;
+    }
+    throw Exception("VMStackValue::toBoolean() - something strange happened");
+}
 
 const char* VMStackValue::typeName()
 {

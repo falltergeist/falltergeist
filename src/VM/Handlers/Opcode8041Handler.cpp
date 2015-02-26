@@ -23,6 +23,7 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8041Handler.h"
 #include "../../VM/VM.h"
+#include "../../Exception.h"
 
 // Third party includes
 
@@ -36,10 +37,13 @@ Opcode8041Handler::Opcode8041Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8041Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8041] [*] op_bwor" << std::endl;
-    // @TODO: type conversions or checks
-    auto b = _vm->dataStack()->popInteger();
-    auto a = _vm->dataStack()->popInteger();
-    _vm->dataStack()->push(a | b);
+    auto bValue = _vm->dataStack()->pop();
+    auto aValue = _vm->dataStack()->pop();
+    if (!aValue.isNumber() || !bValue.isNumber()) 
+    {
+        throw Exception(std::string("op_bwand: invalid argument types: ") + aValue.typeName() + " bwor " + bValue.typeName());
+    }
+    _vm->dataStack()->push(aValue.toInteger() | bValue.toInteger());
 }
 
 }
