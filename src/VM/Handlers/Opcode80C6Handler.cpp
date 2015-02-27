@@ -22,7 +22,6 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80C6Handler.h"
-#include "../../Exception.h"
 #include "../../Game/Game.h"
 #include "../../Game/Object.h"
 #include "../../VM/VM.h"
@@ -38,14 +37,13 @@ Opcode80C6Handler::Opcode80C6Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80C6Handler::_run()
 {
+    auto& debug = Logger::debug("SCRIPT");
+    debug << "[80C6] [+] GVAR[num] = value" << std::endl;
     auto value = _vm->dataStack()->popInteger();
     auto num = _vm->dataStack()->popInteger();
     auto game = Game::getInstance();
     game->setGVAR(num, value);
-
-    Logger::debug("SCRIPT") << "[80C6] [+] GVAR[num] = value" << std::endl
-                            << "    num = " << num << std::endl
-                            << "    value = " << value << std::endl;
+    debug << "    num = " << num << ", value = " << value << std::endl;
 }
 
 }

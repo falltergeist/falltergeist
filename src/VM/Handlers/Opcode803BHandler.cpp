@@ -23,7 +23,6 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode803BHandler.h"
 #include "../../VM/VM.h"
-#include "../../Exception.h"
 
 // Third party includes
 
@@ -41,7 +40,7 @@ void Opcode803BHandler::_run()
     auto aValue = _vm->dataStack()->pop();
     if (!bValue.isNumber() || !aValue.isNumber())
     {
-        throw Exception(std::string("op_mul(a, b): Incompatible types: ") + aValue.typeName() + " * " + bValue.typeName());
+        _error(std::string("op_mul(a, b): Incompatible types: ") + aValue.typeName() + " * " + bValue.typeName());
     }
     if (aValue.type() == VMStackValue::TYPE_INTEGER)
     {

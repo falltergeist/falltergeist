@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80E1Handler.h"
 #include "../../VM/VM.h"
@@ -67,7 +66,7 @@ void Opcode80E1Handler::_run()
             Game::getInstance()->locationState()->centerCameraAtHexagon(arg1.integerValue());
             break;
         default:
-            throw Exception("Opcode80E1Handler - unknown meta: " + std::to_string(meta));
+            _error("metarule3 - unknown meta: " + std::to_string(meta));
             break;
     }
     _vm->dataStack()->push(result);

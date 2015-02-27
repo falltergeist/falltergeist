@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode810BHandler.h"
 #include "../../VM/VM.h"
@@ -77,7 +76,7 @@ void Opcode810BHandler::_run()
             result = 0;
             break;
         default:
-            throw Exception("Opcode810BHandler - unimplemented type: " + std::to_string(type));
+            _error("metarule - unimplemented type: " + std::to_string(type));
     }
 
     _vm->dataStack()->push(result);

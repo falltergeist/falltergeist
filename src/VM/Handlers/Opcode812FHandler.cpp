@@ -22,6 +22,7 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../Game/DoorSceneryObject.h"
+#include "../../Game/ContainerItemObject.h"
 #include "../../VM/Handlers/Opcode812FHandler.h"
 #include "../../VM/VM.h"
 
@@ -36,22 +37,26 @@ Opcode812FHandler::Opcode812FHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode812FHandler::_run()
 {
-    Logger::debug("SCRIPT") << "[812F] [+] void obj_unlock(GameDoorSceneryObject* object)" << std::endl;
+    Logger::debug("SCRIPT") << "[812F] [+] void obj_unlock(GameObject* object)" << std::endl;
     auto object = _vm->dataStack()->popObject();
     if (object)
     {
         if (auto door = dynamic_cast<Game::GameDoorSceneryObject*>(object)) 
         {
-            door->setLocked(true);
+            door->setLocked(false);
+        }
+        else if (auto container = dynamic_cast<Game::GameContainerItemObject*>(object)) 
+        {
+            container->setLocked(false);
         }
         else
         {
-            Logger::warning("SCRIPT") << "Opcode812FHandler: object is not door" << std::endl;
+            _warning("obj_unlock: object is not door or container");
         }
     }
     else
     {
-        Logger::warning("SCRIPT") << "Opcode812FHandler: object is null" << std::endl;
+        _warning("obj_unlock: object is null");
     }
 }
 

@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Logger.h"
 #include "../../ResourceManager.h"
 #include "../../Game/Object.h"
@@ -45,12 +44,12 @@ void Opcode810AHandler::_run()
     switch (type)
     {
         case -2:
-            //БОЛЬШИЕ КРАСНЫЕ БУКВЫ	FF 00 00
+            // CAPITAL RED LETTERS  FF 00 00
             color = 0xff0000ff;
             break;
         case -1:
-            //Самоперебирающиеся цвета @todo
-            color = 0xff0000ff; // временно взят из -2
+            // Self-rotating colors @todo
+            color = 0xff0000ff; // temporary taken from -2
             break;
         case 0:
         case 8:
@@ -87,7 +86,7 @@ void Opcode810AHandler::_run()
             color = 0x757575ff;
             break;
         default:
-            throw Exception("Opcode810AHandler - wrong type: " + std::to_string(type));
+            _error("float_msg - wrong type: " + std::to_string(type));
     }
 
     auto string = _vm->dataStack()->popString();

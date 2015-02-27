@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Logger.h"
 #include "../../Game/CritterObject.h"
 #include "../../VM/Handlers/Opcode80E8Handler.h"
@@ -37,17 +36,15 @@ Opcode80E8Handler::Opcode80E8Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80E8Handler::_run()
 {
+    auto &debug = Logger::debug("SCRIPT") << "[80E8] [+] void critter_heal(ObjectPtr who, int amount)" << std::endl;
     int amount = _vm->dataStack()->popInteger();
+    debug << "    amount = " << amount << std::endl;
     auto critter = dynamic_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
     if (!critter)
     {
-        throw Exception("VM::opcode80E8 pointer error");
+        _error("VM::critter_heal - invalid critter pointer");
     }
     critter->setHitPoints(critter->hitPoints() + amount);
-
-    auto &debug = Logger::debug("SCRIPT");
-    debug << "[80E8] [+] void critter_heal(ObjectPtr who, int amount)" << std::endl;
-    debug << "    amount = " << amount << std::endl;
 }
 
 }

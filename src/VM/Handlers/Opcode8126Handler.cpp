@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Graphics/AnimationQueue.h"
 #include "../../Logger.h"
 #include "../../Game/Object.h"
@@ -44,7 +43,7 @@ void Opcode8126Handler::_run()
     // delay - must be -1
     if (delay != -1)
     {
-        throw Exception("Opcode8126Handler - delay must be -1");
+        _error("Opcode8126Handler - delay must be -1");
     }
     */
     auto object = _vm->dataStack()->popObject();

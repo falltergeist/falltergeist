@@ -23,7 +23,6 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8042Handler.h"
 #include "../../VM/VM.h"
-#include "../../Exception.h"
 
 // Third party includes
 
@@ -41,7 +40,7 @@ void Opcode8042Handler::_run()
     auto aValue = _vm->dataStack()->pop();
     if (!aValue.isNumber() || !bValue.isNumber()) 
     {
-        throw Exception(std::string("op_bwxor: invalid argument types: ") + aValue.typeName() + " bwxor " + bValue.typeName());
+        _error(std::string("op_bwxor: invalid argument types: ") + aValue.typeName() + " bwxor " + bValue.typeName());
     }
     _vm->dataStack()->push(aValue.toInteger() ^ bValue.toInteger());
 }

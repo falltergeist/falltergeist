@@ -24,7 +24,6 @@
 #include "../../VM/Handlers/Opcode8044Handler.h"
 #include "../../VM/VM.h"
 #include "../../VM/VMStackValue.h"
-#include "../../Exception.h"
 
 // Third party includes
 
@@ -50,7 +49,7 @@ void Opcode8044Handler::_run()
     }
     else
     {
-        throw Exception(std::string("op_floor: invalid argument type: ") + value.typeName());
+        _error(std::string("op_floor: invalid argument type: ") + value.typeName());
     }
     _vm->dataStack()->push(result);
 }

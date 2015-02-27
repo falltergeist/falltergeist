@@ -24,8 +24,8 @@
 
 // Falltergeist includes
 #include "../VM/VMStackValue.h"
-#include "../Exception.h"
 #include "../Game/Object.h"
+#include "../VM/VMErrorException.h"
 
 // Third party includes
 
@@ -79,19 +79,19 @@ bool VMStackValue::isNumber() const
 
 int VMStackValue::integerValue() const
 {
-    if (_type != TYPE_INTEGER) throw Exception(std::string("VMStackValue::integerValue() - stack value is not integer, it is ") + typeName(_type));
+    if (_type != TYPE_INTEGER) throw VMErrorException(std::string("VMStackValue::integerValue() - stack value is not integer, it is ") + typeName(_type));
     return _intValue;
 }
 
 float VMStackValue::floatValue() const
 {
-    if (_type != TYPE_FLOAT) throw Exception(std::string("VMStackValue::floatValue() - stack value is not float, it is ") + typeName(_type));
+    if (_type != TYPE_FLOAT) throw VMErrorException(std::string("VMStackValue::floatValue() - stack value is not float, it is ") + typeName(_type));
     return _floatValue;
 }
 
 std::string VMStackValue::stringValue() const
 {
-    if (_type != TYPE_STRING) throw Exception(std::string("VMStackValue::stringValue() - stack value is not string, it is ") + typeName(_type));
+    if (_type != TYPE_STRING) throw VMErrorException(std::string("VMStackValue::stringValue() - stack value is not string, it is ") + typeName(_type));
     return _stringValue;
 }
 
@@ -101,7 +101,7 @@ Game::GameObject* VMStackValue::objectValue() const
     {
         return nullptr;
     }
-    if (_type != TYPE_OBJECT) throw Exception(std::string("VMStackValue::objectValue() - stack value is not an object, it is ") + typeName(_type));
+    if (_type != TYPE_OBJECT) throw VMErrorException(std::string("VMStackValue::objectValue() - stack value is not an object, it is ") + typeName(_type));
     return _objectValue;
 }
 
@@ -119,7 +119,7 @@ std::string VMStackValue::toString() const
         case TYPE_STRING:  return _stringValue;
         case TYPE_OBJECT:  return _objectValue ? _objectValue->name() : std::string("(null)"); // just in case, we should never create null object value
         default:
-            throw Exception("VMStackValue::toString() - wrong type: " + std::to_string(_type));
+            throw VMErrorException("VMStackValue::toString() - wrong type: " + std::to_string(_type));
     }
 }
 
@@ -142,7 +142,7 @@ int VMStackValue::toInteger() const
         }
         case TYPE_OBJECT:  return (int)(_objectValue != nullptr);
         default:
-            throw Exception("VMStackValue::toInteger() - wrong type: " + std::to_string(_type));
+            throw VMErrorException("VMStackValue::toInteger() - wrong type: " + std::to_string(_type));
     }
 }
 
@@ -159,7 +159,7 @@ bool VMStackValue::toBoolean() const
         case TYPE_OBJECT:
             return _objectValue != nullptr;
     }
-    throw Exception("VMStackValue::toBoolean() - something strange happened");
+    throw VMErrorException("VMStackValue::toBoolean() - something strange happened");
 }
 
 const char* VMStackValue::typeName()
@@ -176,7 +176,7 @@ const char* VMStackValue::typeName(int type)
         case TYPE_STRING:  return "string";
         case TYPE_OBJECT:  return "object";
         default:
-            throw Exception("VMStackValue::typeName() - wrong type: " + std::to_string(type));
+            throw VMErrorException("VMStackValue::typeName() - wrong type: " + std::to_string(type));
     }
 }
 

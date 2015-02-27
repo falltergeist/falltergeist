@@ -24,7 +24,6 @@
 #include "../../VM/Handlers/Opcode8046Handler.h"
 #include "../../VM/VM.h"
 #include "../../VM/VMStackValue.h"
-#include "../../Exception.h"
 
 // Third party includes
 
@@ -49,7 +48,7 @@ void Opcode8046Handler::_run()
     }
     else
     {
-        throw Exception(std::string("Invalid argument type: ") + value.typeName());
+        _error(std::string("Invalid argument type: ") + value.typeName());
     }
 }
 

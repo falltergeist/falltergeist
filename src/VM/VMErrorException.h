@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2014 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -17,33 +17,24 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef FALLTERGEIST_VMERROREXCEPTION_H
+#define FALLTERGEIST_VMERROREXCEPTION_H
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Game/Game.h"
-#include "../../State/Location.h"
-#include "../../Logger.h"
-#include "../../VM/Handlers/Opcode8015Handler.h"
-#include "../../VM/VM.h"
-#include "../../VM/VMStackValue.h"
+#include "../Exception.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Opcode8015Handler::Opcode8015Handler(Falltergeist::VM *vm) : OpcodeHandler(vm)
+class VMErrorException : public Exception
 {
-}
-
-void Opcode8015Handler::_run()
-{
-    Logger::debug("SCRIPT") << "[8015] [*] op_store_external(name, value)" << std::endl;
-    std::string name = _vm->dataStack()->popString();
-    auto value = _vm->dataStack()->pop();
-    auto game = Game::getInstance();
-    auto EVARS = game->locationState()->EVARS();
-    EVARS->at(name) = value;
-}
+public:
+    VMErrorException(const std::string& message);
+};
 
 }
+#endif // FALLTERGEIST_VMERROREXCEPTION_H
