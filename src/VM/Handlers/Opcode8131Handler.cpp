@@ -23,6 +23,7 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8131Handler.h"
 #include "../../VM/VM.h"
+#include "../../Game/ContainerItemObject.h"
 #include "../../Game/DoorSceneryObject.h"
 
 // Third party includes
@@ -36,9 +37,25 @@ Opcode8131Handler::Opcode8131Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8131Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8131] [+] void open(GameDoorSceneryObject* object) " << std::endl;
-    auto object = dynamic_cast<Game::GameDoorSceneryObject*>(_vm->dataStack()->popObject());
-    object->setOpened(true);
+    Logger::debug("SCRIPT") << "[8131] [+] void obj_open(GameDoorSceneryObject* object) " << std::endl;
+    auto object = _vm->dataStack()->popObject();
+    if (!object)
+    {
+        _error("obj_open: object is NULL");
+    }
+    // @TODO: need some refactoring to get rid of this ugly if-elses
+    if (auto door = dynamic_cast<Game::GameDoorSceneryObject*>(object))
+    {
+        door->setOpened(true);
+    }
+    else if (auto container = dynamic_cast<Game::GameContainerItemObject*>(object))
+    {
+        container->setOpened(true);
+    }
+    else
+    {
+        _error("obj_open: object is not openable type!");
+    }
 }
 
 }
