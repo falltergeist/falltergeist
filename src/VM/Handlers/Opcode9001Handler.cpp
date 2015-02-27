@@ -61,7 +61,7 @@ void Opcode9001Handler::_run()
 
     auto value = _vm->dataStack()->top();
     auto& debug = Logger::debug("SCRIPT");
-    debug   << "[9001] [*] push_d value" << std::endl
+    debug   << "[9001] [*] push_d string" << std::endl
             << "     type: " << value.typeName() << std::endl
             << "    value: " << value.toString() << std::endl;
 }

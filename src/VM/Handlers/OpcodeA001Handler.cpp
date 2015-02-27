@@ -21,7 +21,7 @@
 
 // Falltergeist includes
 #include "../../Logger.h"
-#include "../../VM/Handlers/OpcodeC001Handler.h"
+#include "../../VM/Handlers/OpcodeA001Handler.h"
 #include "../../VM/VM.h"
 #include "../../VM/VMStackValue.h"
 
@@ -30,22 +30,25 @@
 namespace Falltergeist
 {
 
-OpcodeC001Handler::OpcodeC001Handler(VM* vm) : OpcodeHandler(vm)
+OpcodeA001Handler::OpcodeA001Handler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void OpcodeC001Handler::_run()
+void OpcodeA001Handler::_run()
 {
-    int value;
-    *(_vm->script()) >> value;
+    union {
+        unsigned int iValue;
+        float fValue;
+    } uValue;
+    *(_vm->script()) >> uValue.iValue;
 
-    // Skip 4 bytes for readed integer value
+    // Skip 4 bytes for read float value
     _vm->setProgramCounter(_vm->programCounter() + 4);
-    _vm->dataStack()->push(VMStackValue(value));
+    _vm->dataStack()->push(VMStackValue(uValue.fValue));
 
     auto& debug = Logger::debug("SCRIPT");
-    debug << "[C001] [*] push_d integer" << std::endl;
-    debug << "    value: " << std::to_string(value) << std::endl;
+    debug << "[A001] [*] push_d float" << std::endl;
+    debug << "    value: " << std::to_string(uValue.fValue) << std::endl;
 }
 
 }
