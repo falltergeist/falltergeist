@@ -22,7 +22,6 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80BBHandler.h"
-#include "../../Exception.h"
 #include "../../Game/Game.h"
 #include "../../ResourceManager.h"
 #include "../../Game/Object.h"

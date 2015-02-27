@@ -22,7 +22,6 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80C9Handler.h"
-#include "../../Exception.h"
 #include "../../Game/Game.h"
 #include "../../Game/Object.h"
 #include "../../Game/ArmorItemObject.h"

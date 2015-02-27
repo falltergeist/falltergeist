@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Logger.h"
 #include "../../Game/CritterObject.h"
 #include "../../Game/ContainerItemObject.h"
@@ -38,6 +37,7 @@ Opcode80BAHandler::Opcode80BAHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80BAHandler::_run()
 {
+    Logger::debug("SCRIPT") << "[80BA] [+] int obj_is_carrying_obj_pid(GameObject* object, int PID)" << std::endl;
     auto PID = _vm->dataStack()->popInteger();
     auto object = _vm->dataStack()->popObject();
 
@@ -54,11 +54,9 @@ void Opcode80BAHandler::_run()
     }
     else
     {
-        throw Exception("VM::opcode80ba - unknown object type");
+        _error("obj_is_carrying_obj_pid - invalid object type");
     }
     _vm->dataStack()->push(amount);
-
-    Logger::debug("SCRIPT") << "[80BA] [+] int obj_is_carrying_obj_pid(GameObject* object, int PID)" << std::endl;
 }
 
 }

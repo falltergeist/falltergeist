@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Logger.h"
 #include "../../Game/CritterObject.h"
 #include "../../VM/Handlers/Opcode8122Handler.h"
@@ -37,17 +36,16 @@ Opcode8122Handler::Opcode8122Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8122Handler::_run()
 {
+    auto &debug = Logger::debug("SCRIPT");
+    debug << "[8122] [+] void poison(GameCritterObject* who, int amount)" << std::endl;
     int amount = _vm->dataStack()->popInteger();
+    debug << "    amount = " << amount << std::endl;
     auto critter = dynamic_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
     if (!critter)
     {
-        throw Exception("VM::opcode8122 pointer error");
+        _error("poison - WHO is not critter");
     }
     critter->setPoisonLevel(critter->poisonLevel() + amount);
-
-    auto &debug = Logger::debug("SCRIPT");
-    debug << "[8122] [+] void poison(GameCritterObject* who, int amount)" << std::endl;
-    debug << "    amount = " << amount << std::endl;
 }
 
 }

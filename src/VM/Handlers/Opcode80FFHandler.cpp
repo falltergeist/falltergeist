@@ -22,7 +22,6 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80FFHandler.h"
-#include "../../Exception.h"
 #include "../../Game/Game.h"
 #include "../../ResourceManager.h"
 #include "../../Game/Object.h"
@@ -47,7 +46,10 @@ void Opcode80FFHandler::_run()
     auto elevation = _vm->dataStack()->popInteger();
     auto position = _vm->dataStack()->popInteger();
     auto critter = static_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
-    if (!critter) throw new Exception("Opcode 80ff error");
+    if (!critter) 
+    {
+        _error("critter_attempt_placement - invalid critter pointer");
+    }
     auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
     State::Location::moveObjectToHexagon(critter, hexagon);
     critter->setElevation(elevation);

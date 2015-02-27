@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Logger.h"
 #include "../../Game/CritterObject.h"
 #include "../../Game/Object.h"
@@ -54,8 +53,9 @@ void Opcode810CHandler::_run()
             break;
         }
         default:
-            throw Exception("Opcode810C - unimplemented animation: " + std::to_string(animation));
-            break;
+        {
+            _error("op_anim - unimplemented animation: " + std::to_string(animation));
+        }
     }
 }
 

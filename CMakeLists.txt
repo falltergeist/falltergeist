@@ -615,6 +615,8 @@ set(SOURCES main.cpp
     src/VM/OpcodeHandler.cpp
     src/VM/VM.cpp
     src/VM/VM.h
+    src/VM/VMErrorException.cpp
+    src/VM/VMErrorException.h
     src/VM/VMHaltException.cpp
     src/VM/VMHaltException.h
     src/VM/VMStack.cpp

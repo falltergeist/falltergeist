@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Logger.h"
 #include "../../Game/CritterObject.h"
 #include "../../Game/DudeObject.h"
@@ -38,19 +37,25 @@ Opcode80CBHandler::Opcode80CBHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80CBHandler::_run()
 {
+    Logger::debug("SCRIPT") << "[80CB] [+] int set_critter_stat(GameCritterObject* who, int number, int value)" << std::endl;
     int value = _vm->dataStack()->popInteger();
     int number = _vm->dataStack()->popInteger();
     if (number > 6)
     {
-        throw Exception("VM::opcode80CB - number out of range:" + std::to_string(number));
+        _error("set_critter_stat - number out of range:" + std::to_string(number));
     }
-    auto object = static_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
-    if (!object)
+    auto object = _vm->dataStack()->popObject();
+    if (!object) 
     {
-        throw Exception("VM::opcode80CB pointer error");
+        _error("set_critter_stat(who, num, value) - who is null");
     }
-    object->setStat(number, value);
-    if (dynamic_cast<Game::GameDudeObject*>(object))
+    auto critter = dynamic_cast<Game::GameCritterObject*>(object);
+    if (!critter)
+    {
+        _error("set_critter_stat(who, num, value) - who is not a critter");
+    }
+    critter->setStat(number, value);
+    if (dynamic_cast<Game::GameDudeObject*>(critter))
     {
         _vm->dataStack()->push(3); // for dude
     }
@@ -58,7 +63,6 @@ void Opcode80CBHandler::_run()
     {
         _vm->dataStack()->push(-1); // for critter
     }
-    Logger::debug("SCRIPT") << "[80CB] [+] int set_critter_stat(GameCritterObject* who, int number, int value)" << std::endl;
 }
 
 }
