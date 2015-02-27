@@ -24,7 +24,6 @@
 #include "../../VM/Handlers/Opcode803DHandler.h"
 #include "../../VM/VM.h"
 #include "../../VM/VMStackValue.h"
-#include "../../Exception.h"
 
 // Third party includes
 
@@ -42,7 +41,7 @@ void Opcode803DHandler::_run()
     auto aValue = _vm->dataStack()->pop();
     if (!aValue.isNumber() || !bValue.isNumber()) 
     {
-        throw Exception(std::string("op_mod: invalid argument types: ") + aValue.typeName() + " % " + bValue.typeName());
+        _error(std::string("op_mod: invalid argument types: ") + aValue.typeName() + " % " + bValue.typeName());
     }
     _vm->dataStack()->push(aValue.toInteger() % bValue.toInteger());
 }

@@ -49,7 +49,7 @@ void Opcode810DHandler::_run()
     }
     else
     {
-        Logger::warning("SCRIPT") << "[810D] - 'who' is not valid GameCritterObject. It is " << std::string(typeid(who).name());
+        _warning(std::string("obj_carrying_pid_obj: 'who' is not valid GameCritterObject. It is ") + typeid(who).name());
         _vm->dataStack()->push(nullptr);
     }
 }

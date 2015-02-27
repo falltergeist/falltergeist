@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Game/Game.h"
 #include "../../State/Location.h"
 #include "../../Logger.h"
@@ -40,6 +39,7 @@ Opcode8014Handler::Opcode8014Handler(Falltergeist::VM *vm) : OpcodeHandler(vm)
 void Opcode8014Handler::_run()
 {
     auto& debug = Logger::debug("SCRIPT");
+    debug << "[8014] [+] value = op_fetch_external(name)" << std::endl;
     auto game = Game::getInstance();
     auto EVARS = game->locationState()->EVARS();
     std::string name;
@@ -55,16 +55,12 @@ void Opcode8014Handler::_run()
             break;
         }
         default:
-            throw Exception(std::string("VM::opcode8014() - invalid argument type: ") + VMStackValue::typeName(nameValue.type()));
+            _error(std::string("op_fetch_external - invalid argument type: ") + nameValue.typeName());
     }
-
+    debug << " name = " << name;
     auto value = EVARS->at(name);
+    debug << ", type = " << value.type() << ", value = " << value.toString() << std::endl;
     _vm->dataStack()->push(value);
-
-    debug << "[8014] [+] value = op_fetch_external(name)" << std::endl;
-    debug << "    name = " << name << std::endl;
-    debug << "    type = " << value.type() << std::endl;
-    debug << "    type = " << value.toString() << std::endl;
 }
 
 }

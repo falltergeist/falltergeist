@@ -37,12 +37,19 @@ class GameContainerItemObject : public GameItemObject
 {
 protected:
     std::vector<GameItemObject*> _inventory;
+    bool _opened = false;
+    bool _locked = false;
 public:
     GameContainerItemObject();
     virtual ~GameContainerItemObject();
     std::vector<GameItemObject*>* inventory();
 
     virtual void use_p_proc();
+    
+    void setLocked(bool _locked);
+    bool locked() const;
+    void setOpened(bool _opened);
+    bool opened() const;
 };
 
 }

@@ -81,7 +81,7 @@ void OpcodeComparisonHandler::_run()
                 }
                 default:
                 {
-                    throw Exception(std::string() + _cmpOpcodeName() + ": invalid right argument type: " + bValue.typeName());
+                    _error(std::string() + _cmpOpcodeName() + ": invalid right argument type: " + bValue.typeName());
                 }
             }
             break;
@@ -115,7 +115,7 @@ void OpcodeComparisonHandler::_run()
                 }
                 default:
                 {
-                    throw Exception(std::string() + _cmpOpcodeName() + ": invalid right argument type: " + bValue.typeName());
+                    _error(std::string() + _cmpOpcodeName() + ": invalid right argument type: " + bValue.typeName());
                 }
             }
             break;
@@ -148,7 +148,7 @@ void OpcodeComparisonHandler::_run()
                 }
                 default:
                 {
-                    throw Exception(std::string() + _cmpOpcodeName() + ": invalid right argument type: " + bValue.typeName());
+                    _error(std::string() + _cmpOpcodeName() + ": invalid right argument type: " + bValue.typeName());
                 }
             }
             break;
@@ -174,14 +174,14 @@ void OpcodeComparisonHandler::_run()
                 }
                 default:
                 {
-                    throw Exception(std::string() + _cmpOpcodeName() + ": invalid right argument type: " + bValue.typeName());
+                    _error(std::string() + _cmpOpcodeName() + ": invalid right argument type: " + bValue.typeName());
                 }
             }
             break;
         }
         default:
         {
-            throw Exception(std::string() + _cmpOpcodeName() + ": invalid left argument type: " + aValue.typeName());
+            _error(std::string() + _cmpOpcodeName() + ": invalid left argument type: " + aValue.typeName());
         }
     }
     _vm->dataStack()->push(result);

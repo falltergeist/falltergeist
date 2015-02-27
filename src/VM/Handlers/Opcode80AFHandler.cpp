@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80AFHandler.h"
 #include "../../VM/VM.h"
@@ -49,8 +48,7 @@ void Opcode80AFHandler::_run()
             _vm->dataStack()->push(1);
             break;
         default:
-            throw Exception("Opcode80AFHandler - wrong value: " + std::to_string(value));
-            _vm->dataStack()->push(-1);
+            _error("is_success - wrong argument: " + std::to_string(value));
             break;
     }
 }

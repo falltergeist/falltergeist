@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Graphics/AnimationQueue.h"
 #include "../../Logger.h"
 #include "../../Game/Object.h"
@@ -48,8 +47,8 @@ void Opcode810EHandler::_run()
         {
             // @TODO: implement
             // auto arg = popDataInteger();
-            // RB_UNRESERVED (1) - незарезервированная последовательность, может не воспроизвестись, если отсутствуют свободные слоты
-            // RB_RESERVED (2) - зарезервированная последовательность, должна воспроизвестись в любом случае
+            // RB_UNRESERVED (1) - unreserved sequence, may not play, if there are no free slots left
+            // RB_RESERVED (2) - reserved sequence, should always play
             break;
         }
         case 0x2: // ANIM_CLEAR
@@ -73,7 +72,7 @@ void Opcode810EHandler::_run()
         }
         default:
         {
-            throw Exception("Opcode810EHandler - unsupported mode");
+            _error("reg_anim_func - unsupported mode");
         }
     }
 

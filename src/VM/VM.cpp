@@ -29,6 +29,7 @@
 #include "../ResourceManager.h"
 #include "../VM/OpcodeFactory.h"
 #include "../VM/VM.h"
+#include "../VM/VMErrorException.h"
 #include "../VM/VMHaltException.h"
 #include "../VM/VMStackValue.h"
 
@@ -80,7 +81,7 @@ void VM::call(std::string name)
     {
         _programCounter = _script->function(name);
         _dataStack.push(0); // arguments counter;
-        _returnStack.push(0); // return adrress
+        _returnStack.push(0); // return address
         Logger::debug("SCRIPT") << "CALLED: " << name << " [" << _script->filename() << "]" << std::endl;
         run();
         _dataStack.popInteger(); // remove function result
@@ -108,7 +109,7 @@ void VM::run()
     while (_programCounter != _script->size())
     {
         if (_programCounter == 0 && _initialized) return;
-
+        auto offset = _programCounter;
         _script->setPosition(_programCounter);
         unsigned short opcode;
         *_script >> opcode;
@@ -119,8 +120,13 @@ void VM::run()
             opcodeHandler->run();
             delete opcodeHandler;
         }
-        catch(VMHaltException& e)
+        catch (VMHaltException& e)
         {
+            return;
+        }
+        catch (VMErrorException& e)
+        {
+            Logger::error("SCRIPT") << e.what() << " in [" << std::hex << opcode << "] at " << _script->filename() << ":0x" << offset << std::endl;
             return;
         }
     }
@@ -150,7 +156,12 @@ unsigned int VM::programCounter()
 
 void VM::setProgramCounter(unsigned int value)
 {
-    // @TODO: add check for valid address
+    if (value >= _script->size())
+    {
+        std::stringstream ss;
+        ss << "VM::setProgramCounter() - address out of range: " << std::hex << value;
+        throw VMErrorException(ss.str());
+    }
     _programCounter = value;
 }
 

@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Logger.h"
 #include "../../Game/DudeObject.h"
 #include "../../VM/Handlers/Opcode80FDHandler.h"
@@ -37,17 +36,24 @@ Opcode80FDHandler::Opcode80FDHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80FDHandler::_run()
 {
-    int amount = _vm->dataStack()->popInteger();
-    auto critter = dynamic_cast<Game::GameDudeObject*>(_vm->dataStack()->popObject());
-    if (!critter)
-    {
-        throw Exception("VM::opcode80FD pointer error");
-    }
-    critter->setRadiationLevel(critter->radiationLevel() + amount);
-
     auto &debug = Logger::debug("SCRIPT");
-    debug << "[80FD] [+] void increaseRadiationLevel(GameDude* who, int amount)" << std::endl;
+    debug << "[80FD] [+] void radiation_inc(GameObject* who, int amount)" << std::endl;
+    int amount = _vm->dataStack()->popInteger();
     debug << "    amount = " << amount << std::endl;
+    auto object = _vm->dataStack()->popObject();
+    if (!object)
+    {
+        _error("radiation_inc - object is NULL");
+    }
+    auto critter = dynamic_cast<Game::GameCritterObject*>(object);
+    if (critter)
+    {
+        critter->setRadiationLevel(critter->radiationLevel() + amount);
+    }
+    else 
+    {
+        _warning("radiation_inc - object is not critter");
+    }
 }
 
 }

@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Game/Game.h"
 #include "../../Logger.h"
 #include "../../Game/CritterObject.h"
@@ -40,12 +39,13 @@ Opcode80DEHandler::Opcode80DEHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80DEHandler::_run()
 {
+    Logger::debug("SCRIPT") << "[80DE] [*] void start_gdialog(int msgFileID, GameCritterObject* critter, int mood, int headID, int backgroundID)" << std::endl;
     int backgroundID = _vm->dataStack()->popInteger();
     int headID = _vm->dataStack()->popInteger();
     int mood = _vm->dataStack()->popInteger();
 
-    auto critter = static_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
-    if (!critter) throw Exception("VM::opcode80de - wrong critter pointers");
+    auto critter = dynamic_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
+    if (!critter) _error("start_gdialog - wrong critter pointer");
 
     int msgFileID = _vm->dataStack()->popInteger();
 
@@ -57,8 +57,6 @@ void Opcode80DEHandler::_run()
     interact->setMsgFileID(msgFileID);
     interact->setScript(_vm);
     Game::getInstance()->pushState(interact);
-
-    Logger::debug("SCRIPT") << "[80DE] [*] void start_gdialog(int msgFileID, GameCritterObject* critter, int mood, int headID, int backgroundID)" << std::endl;
 }
 
 }

@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8039Handler.h"
 #include "../../VM/VM.h"
@@ -67,7 +66,7 @@ void Opcode8039Handler::_run()
                 }
                 default:
                 {
-                    throw Exception(std::string("VM::opcode op_add - invalid left argument type: ") + aValue.typeName());
+                    _error(std::string("op_add - invalid left argument type: ") + aValue.typeName());
                 }
             }
             break;
@@ -84,15 +83,15 @@ void Opcode8039Handler::_run()
                 }
                 case VMStackValue::TYPE_FLOAT: // FLOAT + STRING
                 {
-                    throw Exception("VM::opcode op_add - FLOAT+STRING not allowed");
+                    _error("op_add - FLOAT+STRING not allowed");
                 }
                 case VMStackValue::TYPE_INTEGER: // INTEGER + STRING
                 {
-                    throw Exception("VM::opcode op_add - INTEGER+STRING not allowed");
+                    _error("op_add - INTEGER+STRING not allowed");
                 }
                 default:
                 {
-                    throw Exception(std::string("VM::opcode op_add - invalid left argument type: ") + aValue.typeName());
+                    _error(std::string("op_add - invalid left argument type: ") + aValue.typeName());
                 }
             }
             break;
@@ -120,14 +119,14 @@ void Opcode8039Handler::_run()
                 }
                 default:
                 {
-                    throw Exception(std::string("VM::opcode op_add - invalid left argument type: ") + aValue.typeName());
+                    _error(std::string("op_add - invalid left argument type: ") + aValue.typeName());
                 }
             }
             break;
         }
         default:
         {
-            throw Exception(std::string("VM::opcode op_add - invalid right argument type: ") + bValue.typeName());
+            _error(std::string("op_add - invalid right argument type: ") + bValue.typeName());
         }
     }
 }

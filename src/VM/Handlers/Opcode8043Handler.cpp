@@ -23,7 +23,6 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8043Handler.h"
 #include "../../VM/VM.h"
-#include "../../Exception.h"
 
 // Third party includes
 
@@ -40,7 +39,7 @@ void Opcode8043Handler::_run()
     auto arg = _vm->dataStack()->pop();
     if (!arg.isNumber()) 
     {
-        throw Exception(std::string("op_bwnot: invalid argument type: ") + arg.typeName());
+        _error(std::string("op_bwnot: invalid argument type: ") + arg.typeName());
     }
     _vm->dataStack()->push(~ arg.toInteger());
 }

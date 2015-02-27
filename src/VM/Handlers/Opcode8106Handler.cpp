@@ -22,11 +22,9 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8106Handler.h"
-#include "../../Exception.h"
 #include "../../Game/Game.h"
 #include "../../Game/Object.h"
 #include "../../Game/CritterObject.h"
-#include "../../Game/ObjectFactory.h"
 #include "../../VM/VM.h"
 
 
@@ -60,7 +58,7 @@ void Opcode8106Handler::_run()
         _vm->dataStack()->push(critter->inventory()->size());
         break;
     default:
-        throw Exception("VM::opcode8106 error");
+        _error(std::string("critter_inven_obj - invalid slot: ") + std::to_string(where));
     }
 }
 

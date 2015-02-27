@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Logger.h"
 #include "../../Game/CritterObject.h"
 #include "../../VM/Handlers/Opcode80CAHandler.h"
@@ -37,13 +36,20 @@ Opcode80CAHandler::Opcode80CAHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80CAHandler::_run()
 {
+    auto& debug = Logger::debug("SCRIPT");
+    debug << "[80CA] [+] int value = get_critter_stat(GameCritterObject* who, int number)" << std::endl;
     int number = _vm->dataStack()->popInteger();
-    auto critter = dynamic_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
+    debug << "    number = " << number << std::endl;
+    auto object = _vm->dataStack()->popObject();
+    if (!object) 
+    {
+        _error("get_critter_stat(who, stat) - who is NULL");
+    }
+    auto critter = dynamic_cast<Game::GameCritterObject*>(object);
     if (!critter)
     {
-        throw Exception("VM::opcode80CA pointer error");
+        _error("get_critter_stat(who, stat) - who is not a critter");
     }
-
     int result;
     switch (number)
     {
@@ -208,13 +214,11 @@ void Opcode80CAHandler::_run()
         }
         default:
         {
-            throw Exception("VM::opcode80CA - unimplemented number:" + std::to_string(number));
+            _error("VM::opcode80CA - unimplemented number:" + std::to_string(number));
         }
     }
     _vm->dataStack()->push(result);
-    Logger::debug("SCRIPT") << "[80CA] [+] int value = get_critter_stat(GameCritterObject* who, int number)" << std::endl
-                            << "    number = " << number << std::endl
-                            << "    value  = " << result << std::endl;
+    debug << "    value  = " << result << std::endl;
 }
 
 }
