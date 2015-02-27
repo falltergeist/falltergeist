@@ -419,9 +419,12 @@ GameItemObject* GameCritterObject::currentHandSlot()
 
 void GameCritterObject::talk_p_proc()
 {
-    script()
-        ->setSourceObject(Game::getInstance()->player())
-        ->call("talk_p_proc");
+    if (_script && _script->hasFunction("talk_p_proc"))
+    {
+        _script
+            ->setSourceObject(Game::getInstance()->player())
+            ->call("talk_p_proc");
+    }
 }
 
 void GameCritterObject::damage_p_proc()
@@ -434,7 +437,10 @@ void GameCritterObject::combat_p_proc()
 
 void GameCritterObject::critter_p_proc()
 {
-    script()->call("critter_p_proc");
+    if (_script && _script->hasFunction("critter_p_proc"))
+    {
+        _script->call("critter_p_proc");
+    }
 }
 
 void GameCritterObject::is_dropping_p_proc()
