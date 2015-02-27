@@ -22,6 +22,7 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8130Handler.h"
+#include "../../Game/ContainerItemObject.h"
 #include "../../Game/DoorSceneryObject.h"
 #include "../../VM/VM.h"
 
@@ -36,9 +37,25 @@ Opcode8130Handler::Opcode8130Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8130Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8130] [+] int is_opened(GameDoorSceneryObject* object) " << std::endl;
-    auto object = dynamic_cast<Game::GameDoorSceneryObject*>(_vm->dataStack()->popObject());
-    _vm->dataStack()->push(object->opened());
+    Logger::debug("SCRIPT") << "[8130] [+] int obj_is_open(GameObject* object) " << std::endl;
+    auto object = _vm->dataStack()->popObject();
+    if (!object)
+    {
+        _error("obj_is_open: object is NULL");
+    }
+    // @TODO: need some refactoring to get rid of this ugly if-elses
+    if (auto door = dynamic_cast<Game::GameDoorSceneryObject*>(object))
+    {
+        _vm->dataStack()->push(door->opened());
+    }
+    else if (auto container = dynamic_cast<Game::GameContainerItemObject*>(object))
+    {
+        _vm->dataStack()->push(container->opened());
+    }
+    else
+    {
+        _error("obj_is_open: object is not openable type!");
+    }
 }
 
 }
