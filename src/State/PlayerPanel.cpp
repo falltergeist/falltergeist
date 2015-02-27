@@ -106,6 +106,11 @@ void PlayerPanel::init()
     getActiveUI("pip_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onPipBoyButtonClick(dynamic_cast<MouseEvent*>(event)); });
 }
 
+void PlayerPanel::playWindowOpenSfx()
+{
+    Game::getInstance()->mixer()->playACMSound("sound/sfx/ib1p1xx1.acm");
+}
+
 void PlayerPanel::render()
 {
     State::render();
@@ -266,6 +271,7 @@ void PlayerPanel::onKeyDown(KeyboardEvent* event)
             if (event->controlPressed())
             {
                 Game::getInstance()->pushState(new ExitConfirm());
+                playWindowOpenSfx();
             }
         case SDLK_SLASH:
             // @TODO: printCurrentTime();
@@ -297,6 +303,7 @@ void PlayerPanel::onKeyDown(KeyboardEvent* event)
             break;
         case SDLK_F10:
             Game::getInstance()->pushState(new ExitConfirm());
+            playWindowOpenSfx();
             break;
         case SDLK_F12:
             // @TODO: save screenshot
@@ -312,48 +319,57 @@ unsigned int PlayerPanel::height()
 void PlayerPanel::openInventory()
 {
     Game::getInstance()->pushState(new Inventory());
+    playWindowOpenSfx();
 }
 
 void PlayerPanel::openMap()
 {
     Game::getInstance()->pushState(new WorldMap());
+    playWindowOpenSfx();
 }
 
 void PlayerPanel::openOptions()
 {
     Game::getInstance()->pushState(new GameMenu());
+    playWindowOpenSfx();
 }
 
 void PlayerPanel::openPopBoy()
 {
     Game::getInstance()->pushState(new PipBoy());
+    playWindowOpenSfx();
 }
 
 void PlayerPanel::openSkilldex()
 {
     Game::getInstance()->pushState(new Skilldex());
+    playWindowOpenSfx();
 }
 
 void PlayerPanel::toggleActiveHand()
 {
     auto player = Game::getInstance()->player();
     player->setCurrentHand(player->currentHand() == Game::GameCritterObject::HAND_LEFT ? Game::GameCritterObject::HAND_RIGHT : Game::GameCritterObject::HAND_LEFT);
+    playWindowOpenSfx();
 }
 
 void PlayerPanel::openCharacterScreen()
 {
     Game::getInstance()->pushState(new PlayerEdit());
+    playWindowOpenSfx();
 }
 
 void PlayerPanel::doLoadGame(bool quick)
 {
     Game::getInstance()->pushState(new LoadGame());
+    playWindowOpenSfx();
     // @TODO: quick load logic
 }
 
 void PlayerPanel::doSaveGame(bool quick)
 {
     Game::getInstance()->pushState(new SaveGame());
+    playWindowOpenSfx();
     // @TODO: quick save logic
 }
 
