@@ -35,9 +35,12 @@ namespace Game
 class GameSceneryObject : public GameObject
 {
 protected:
+    char _soundId = 0;
 public:
     GameSceneryObject();
     virtual ~GameSceneryObject();
+    void setSoundId(char soundId);
+    char soundId() const;
 };
 
 }
