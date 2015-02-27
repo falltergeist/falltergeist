@@ -38,7 +38,7 @@ Opcode80F7Handler::Opcode80F7Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80F7Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80F7] [=] int fixed_param()" << std::endl;
-    _vm->dataStack()->push(1);
+    _vm->dataStack()->push(_vm->fixedParam());
 }
 
 }
