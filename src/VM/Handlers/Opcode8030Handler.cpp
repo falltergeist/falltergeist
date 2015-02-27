@@ -37,10 +37,9 @@ void Opcode8030Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8030] [*] op_while(address, condition)" << std::endl;
     auto condition = _vm->dataStack()->popLogical();
-    auto address = _vm->dataStack()->popInteger();
     if (!condition)
     {
-        _vm->setProgramCounter(address);
+        _vm->setProgramCounter(_vm->dataStack()->popInteger());
     }
 }
 
