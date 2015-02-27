@@ -87,6 +87,7 @@
 #include "../VM/Handlers/Opcode80BBHandler.h"
 #include "../VM/Handlers/Opcode80BCHandler.h"
 #include "../VM/Handlers/Opcode80BDHandler.h"
+#include "../VM/Handlers/Opcode80BEHandler.h"
 #include "../VM/Handlers/Opcode80BFHandler.h"
 #include "../VM/Handlers/Opcode80C1Handler.h"
 #include "../VM/Handlers/Opcode80C2Handler.h"
@@ -271,9 +272,11 @@ OpcodeHandler* OpcodeFactory::createOpcode(unsigned int number, VM* vm)
         case 0x80B9: return new Opcode80B9Handler(vm);
         case 0x80BA: return new Opcode80BAHandler(vm);
         case 0x80BB: return new Opcode80BBHandler(vm);
-        case 0x80BC: return new Opcode80BCHandler(vm);
-        case 0x80BD: return new Opcode80BDHandler(vm);
-        case 0x80BF: return new Opcode80BFHandler(vm);
+        case 0x80BC: return new Opcode80BCHandler(vm); // self_obj
+        case 0x80BD: return new Opcode80BDHandler(vm); // source_obj
+        case 0x80BE: return new Opcode80BEHandler(vm); // target_obj
+        case 0x80BF: return new Opcode80BFHandler(vm); // dude_obj
+        case 0x80C0: return new Opcode80BEHandler(vm); // obj_being_used_with - uses the same code as target_obj in original
         case 0x80C1: return new Opcode80C1Handler(vm);
         case 0x80C2: return new Opcode80C2Handler(vm);
         case 0x80C3: return new Opcode80C3Handler(vm);

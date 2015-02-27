@@ -21,7 +21,7 @@
 
 // Falltergeist includes
 #include "../../Logger.h"
-#include "../../VM/Handlers/Opcode80BDHandler.h"
+#include "../../VM/Handlers/Opcode80BEHandler.h"
 #include "../../VM/VM.h"
 
 
@@ -32,14 +32,14 @@
 namespace Falltergeist
 {
 
-Opcode80BDHandler::Opcode80BDHandler(VM* vm) : OpcodeHandler(vm)
+Opcode80BEHandler::Opcode80BEHandler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode80BDHandler::_run()
+void Opcode80BEHandler::_run()
 {
-    Logger::debug("SCRIPT") << "[80BD] [=] void* source_obj()" << std::endl;
-    _vm->dataStack()->push(_vm->sourceObject());
+    Logger::debug("SCRIPT") << "[80BE/80C0] [=] object target_obj/obj_being_used_with()" << std::endl;
+    _vm->dataStack()->push(_vm->targetObject());
 }
 
 }

@@ -17,31 +17,26 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef FALLTERGEIST_OPCODE80BEHANDLER_H
+#define FALLTERGEIST_OPCODE80BEHANDLER_H
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Handlers/Opcode80BDHandler.h"
-#include "../../VM/VM.h"
-
-
-
+#include "../../VM/OpcodeHandler.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Opcode80BDHandler::Opcode80BDHandler(VM* vm) : OpcodeHandler(vm)
+class Opcode80BEHandler : public OpcodeHandler
 {
-}
-
-void Opcode80BDHandler::_run()
-{
-    Logger::debug("SCRIPT") << "[80BD] [=] void* source_obj()" << std::endl;
-    _vm->dataStack()->push(_vm->sourceObject());
-}
+public:
+    Opcode80BEHandler(VM* vm);
+private:
+    void _run();
+};
 
 }
-
-
+#endif
