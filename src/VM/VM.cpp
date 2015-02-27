@@ -127,6 +127,8 @@ void VM::run()
         catch (VMErrorException& e)
         {
             Logger::error("SCRIPT") << e.what() << " in [" << std::hex << opcode << "] at " << _script->filename() << ":0x" << offset << std::endl;
+            _dataStack.values()->clear();
+            _dataStack.push(0); // to end script properly
             return;
         }
     }
