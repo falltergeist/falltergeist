@@ -112,7 +112,7 @@ void Opcode8039Handler::_run()
                     _vm->dataStack()->push(aValue.floatValue() + arg2);
                     break;
                 }
-                case VMStackValue::TYPE_OBJECT: // STRING + FLOAT
+                case VMStackValue::TYPE_STRING: // STRING + FLOAT
                 {
                     auto arg1 = aValue.stringValue();
                     _vm->dataStack()->push(arg1 + bValue.toString());

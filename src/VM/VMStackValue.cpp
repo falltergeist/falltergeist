@@ -19,6 +19,8 @@
 
 // C++ standard includes
 #include <string>
+#include <sstream>
+#include <iomanip>
 
 // Falltergeist includes
 #include "../VM/VMStackValue.h"
@@ -108,7 +110,12 @@ std::string VMStackValue::toString() const
     switch (_type)
     {
         case TYPE_INTEGER: return std::to_string(_intValue);
-        case TYPE_FLOAT:   return std::to_string(_floatValue);
+        case TYPE_FLOAT:   
+        {
+            std::stringstream ss;
+            ss << std::fixed << std::setprecision(5) << _floatValue;
+            return ss.str();
+        }
         case TYPE_STRING:  return _stringValue;
         case TYPE_OBJECT:  return _objectValue ? _objectValue->name() : std::string("(null)"); // just in case, we should never create null object value
         default:

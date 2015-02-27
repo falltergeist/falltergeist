@@ -190,6 +190,7 @@
 #include "../VM/Handlers/Opcode8154Handler.h"
 #include "../VM/Handlers/Opcode9001Handler.h"
 #include "../VM/Handlers/OpcodeC001Handler.h"
+#include "../VM/Handlers/OpcodeA001Handler.h"
 #include "../VM/VM.h"
 
 // Third party includes
@@ -375,6 +376,7 @@ OpcodeHandler* OpcodeFactory::createOpcode(unsigned int number, VM* vm)
         case 0x8154: return new Opcode8154Handler(vm);
         case 0x9001: return new Opcode9001Handler(vm);
         case 0xC001: return new OpcodeC001Handler(vm);
+        case 0xA001: return new OpcodeA001Handler(vm);
         default: 
             throw Exception("OpcodeFactory::createOpcode() - unimplemented opcode: " + std::to_string(number));
     }
