@@ -90,6 +90,9 @@ void VM::call(std::string name)
     {
         Logger::debug("SCRIPT") << "Function not exist: " << name << std::endl;
     }
+    // reset special script arguments
+    _sourceObject = _targetObject = nullptr;
+    _actionUsed = _fixedParam = 0;
 }
 
 void VM::initialize()
@@ -190,6 +193,50 @@ int VM::SVARbase()
 void VM::setSVARbase(int Value)
 {
     _SVAR_base = Value;
+}
+
+VM* VM::setFixedParam(int fixedParam)
+{
+    this->_fixedParam = fixedParam;
+    return this;
+}
+
+int VM::fixedParam() const
+{
+    return _fixedParam;
+}
+
+VM* VM::setTargetObject(Game::GameObject* targetObject)
+{
+    this->_targetObject = targetObject;
+    return this;
+}
+
+Game::GameObject* VM::targetObject() const
+{
+    return _targetObject;
+}
+
+VM* VM::setSourceObject(Game::GameObject* sourceObject)
+{
+    this->_sourceObject = sourceObject;
+    return this;
+}
+
+Game::GameObject* VM::sourceObject() const
+{
+    return _sourceObject;
+}
+
+VM* VM::setActionUsed(int actionUsed)
+{
+    this->_actionUsed = actionUsed;
+    return this;
+}
+
+int VM::actionUsed() const
+{
+    return _actionUsed;
 }
 
 int VM::DVARbase()

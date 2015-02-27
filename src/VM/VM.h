@@ -45,6 +45,10 @@ class VM
 {
 protected:
     Game::GameObject* _owner = nullptr;
+    Game::GameObject* _sourceObject = nullptr;
+    Game::GameObject* _targetObject = nullptr;
+    int _fixedParam = 0;
+    int _actionUsed = 0;
     libfalltergeist::IntFileType* _script = 0;
     bool _initialized = false;
     bool _overrides = false;
@@ -89,6 +93,15 @@ public:
     void setDVARBase(int Value);
     int SVARbase();
     void setSVARbase(int Value);
+    
+    VM* setFixedParam(int _fixedParam);
+    int fixedParam() const;
+    VM* setTargetObject(Game::GameObject* _targetObject);
+    Game::GameObject* targetObject() const;
+    VM* setSourceObject(Game::GameObject* _sourceObject);
+    Game::GameObject* sourceObject() const;
+    VM* setActionUsed(int _actionUsed);
+    int actionUsed() const;
 
 };
 

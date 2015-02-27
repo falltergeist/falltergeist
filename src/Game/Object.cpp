@@ -401,7 +401,9 @@ void GameObject::description_p_proc()
     bool useDefault = true;
     if (script() && script()->hasFunction("description_p_proc"))
     {
-        script()->call("description_p_proc");
+        script()
+            ->setSourceObject(Game::getInstance()->player())
+            ->call("description_p_proc");
         if (script()->overrides())
             useDefault = false;
     }
@@ -415,7 +417,9 @@ void GameObject::use_p_proc()
 {
     if (script() && script()->hasFunction("use_p_proc"))
     {
-        script()->call("use_p_proc");
+        script()
+            ->setSourceObject(Game::getInstance()->player())
+            ->call("use_p_proc");
     }
 }
 
@@ -428,7 +432,9 @@ void GameObject::look_at_p_proc()
     bool useDefault = true;
     if (script() && script()->hasFunction("look_at_p_proc"))
     {
-        script()->call("look_at_p_proc");
+        script()
+            ->setSourceObject(Game::getInstance()->player())
+            ->call("look_at_p_proc");
         if (script()->overrides())
             useDefault = false;
     }

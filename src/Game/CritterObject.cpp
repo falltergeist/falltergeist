@@ -25,6 +25,7 @@
 #include "WeaponItemObject.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
+#include "../Game/DudeObject.h"
 #include "../Graphics/Animation.h"
 #include "../Graphics/AnimationFrame.h"
 #include "../Graphics/AnimationQueue.h"
@@ -418,7 +419,9 @@ GameItemObject* GameCritterObject::currentHandSlot()
 
 void GameCritterObject::talk_p_proc()
 {
-    script()->call("talk_p_proc");
+    script()
+        ->setSourceObject(Game::getInstance()->player())
+        ->call("talk_p_proc");
 }
 
 void GameCritterObject::damage_p_proc()
