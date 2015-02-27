@@ -17,35 +17,26 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef FALLTERGEIST_OPCODEA001HANDLER_H
+#define FALLTERGEIST_OPCODEA001HANDLER_H
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Handlers/OpcodeC001Handler.h"
-#include "../../VM/VM.h"
-#include "../../VM/VMStackValue.h"
+#include "../../VM/OpcodeHandler.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-OpcodeC001Handler::OpcodeC001Handler(VM* vm) : OpcodeHandler(vm)
+class OpcodeA001Handler : public OpcodeHandler
 {
-}
-
-void OpcodeC001Handler::_run()
-{
-    int value;
-    *(_vm->script()) >> value;
-
-    // Skip 4 bytes for readed integer value
-    _vm->setProgramCounter(_vm->programCounter() + 4);
-    _vm->dataStack()->push(VMStackValue(value));
-
-    auto& debug = Logger::debug("SCRIPT");
-    debug << "[C001] [*] push_d integer" << std::endl;
-    debug << "    value: " << std::to_string(value) << std::endl;
-}
+public:
+    OpcodeA001Handler(VM* vm);
+private:
+    void _run();
+};
 
 }
+#endif // FALLTERGEIST_OPCODEA001HANDLER_H

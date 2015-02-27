@@ -605,6 +605,8 @@ set(SOURCES main.cpp
     src/VM/Handlers/Opcode9001Handler.cpp
     src/VM/Handlers/OpcodeC001Handler.h
     src/VM/Handlers/OpcodeC001Handler.cpp
+    src/VM/Handlers/OpcodeA001Handler.h
+    src/VM/Handlers/OpcodeA001Handler.cpp
     src/VM/OpcodeFactory.h
     src/VM/OpcodeFactory.cpp
     src/VM/OpcodeHandler.h
