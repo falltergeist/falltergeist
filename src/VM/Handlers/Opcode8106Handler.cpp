@@ -55,7 +55,7 @@ void Opcode8106Handler::_run()
         _vm->dataStack()->push(critter->leftHandSlot());
         break;
     case -2: // INVENTORY COUNT
-        _vm->dataStack()->push(critter->inventory()->size());
+        _vm->dataStack()->push((unsigned int)critter->inventory()->size());
         break;
     default:
         _error(std::string("critter_inven_obj - invalid slot: ") + std::to_string(where));
