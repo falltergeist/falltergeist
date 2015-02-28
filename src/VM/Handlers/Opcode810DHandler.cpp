@@ -38,19 +38,19 @@ Opcode810DHandler::Opcode810DHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode810DHandler::_run()
 {
     Logger::debug("SCRIPT") << "[810D] [=] void* obj_carrying_pid_obj(void* who, int pid)" << std::endl;
-    const int pid = _vm->popDataInteger();
-    auto who = _vm->popDataPointer();
+    const int pid = _vm->dataStack()->popInteger();
+    auto who = _vm->dataStack()->popObject();
     if (auto critter = dynamic_cast<Game::GameCritterObject*>((Game::GameObject*)who))
     {
         auto iterator = std::find_if(critter->inventory()->begin(), critter->inventory()->end(),
                                     [&] (Game::GameItemObject * &item) { return item->PID() == pid; });
         const bool found = iterator != critter->inventory()->end();
-        _vm->pushDataPointer(found ? *iterator : nullptr);
+        _vm->dataStack()->push(found ? *iterator : nullptr);
     }
     else
     {
-        Logger::warning("SCRIPT") << "[810D] - 'who' is not valid GameCritterObject. It is " << std::string(typeid(who).name());
-        _vm->pushDataPointer(nullptr);
+        _warning(std::string("obj_carrying_pid_obj: 'who' is not valid GameCritterObject. It is ") + typeid(who).name());
+        _vm->dataStack()->push(nullptr);
     }
 }
 

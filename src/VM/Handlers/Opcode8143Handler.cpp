@@ -36,8 +36,8 @@ Opcode8143Handler::Opcode8143Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8143Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8143] [=] void attack_setup(ObjectPtr who, ObjectPtr victim)" << std::endl;
-    _vm->popDataPointer();
-    _vm->popDataPointer();
+    _vm->dataStack()->popObject();
+    _vm->dataStack()->popObject();
 }
 
 }

@@ -230,7 +230,7 @@ void Location::setLocation(std::string name)
     // Location script
     if (mapFile->scriptId() > 0)
     {
-        _locationScript = new VM(ResourceManager::intFileType(mapFile->scriptId()-1), Game::getInstance()->locationState());
+        _locationScript = new VM(ResourceManager::intFileType(mapFile->scriptId()-1), nullptr);
     }
     
     // Generates floor and roof images
@@ -741,7 +741,7 @@ int Location::MVAR(unsigned int number)
     return _MVARS.at(number);
 }
 
-std::map<std::string, VMStackValue*>* Location::EVARS()
+std::map<std::string, VMStackValue>* Location::EVARS()
 {
     return &_EVARS;
 }
@@ -786,6 +786,18 @@ void Location::centerCameraAtHexagon(Hexagon* hexagon)
     camera()->setPosition(hexagon->x(), hexagon->y());
 }
 
+void Location::centerCameraAtHexagon(int tileNum)
+{
+    try 
+    {
+        centerCameraAtHexagon(_hexagonGrid->at((unsigned int)tileNum));
+    } 
+    catch (std::out_of_range ex) 
+    {
+        throw Exception(std::string("Tile number out of range: ") + std::to_string(tileNum));
+    }
+}
+
 void Location::handleAction(Game::GameObject* object, int action)
 {
     switch (action)
@@ -828,7 +840,7 @@ void Location::handleAction(Game::GameObject* object, int action)
     }
 }
 
-void Location::displayMessage(std::string message)
+void Location::displayMessage(const std::string& message)
 {
     Game::getInstance()->mixer()->playACMSound("sound/sfx/monitor.acm");
     Logger::info("MESSAGE") << message << std::endl;

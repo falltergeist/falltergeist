@@ -38,7 +38,7 @@ Opcode8101Handler::Opcode8101Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8101Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8101] [=] int cur_map_index()" << std::endl;
-    _vm->pushDataInteger(3);
+    _vm->dataStack()->push(3);
 }
 
 }

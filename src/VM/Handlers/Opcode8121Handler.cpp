@@ -41,21 +41,21 @@ void Opcode8121Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8121] [+] void giQ_Option(int iq_test, int msg_list, int msg_num, procedure target, int reaction)" << std::endl;
 
-    auto reaction = _vm->popDataInteger();
-    auto function = _vm->popDataInteger();
-    std::string* text = 0;
-    if (_vm->dataStack()->top()->type() == VMStackValue::TYPE_POINTER)
+    auto reaction = _vm->dataStack()->popInteger();
+    auto function = _vm->dataStack()->popInteger();
+    std::string text;
+    if (_vm->dataStack()->top().type() == VMStackValue::TYPE_STRING)
     {
-        text = static_cast<std::string*>(_vm->popDataPointer());
-        _vm->popDataInteger(); // msg_list
+        text = _vm->dataStack()->popString();
+        _vm->dataStack()->popInteger(); // msg_list
     }
     else
     {
-        auto msg_num = _vm->popDataInteger();
-        auto msg_file_num = _vm->popDataInteger();
-        text = new std::string(_vm->msgMessage(msg_file_num, msg_num));
+        auto msg_num = _vm->dataStack()->popInteger();
+        auto msg_file_num = _vm->dataStack()->popInteger();
+        text = _vm->msgMessage(msg_file_num, msg_num);
     }
-    auto iq = _vm->popDataInteger();
+    auto iq = _vm->dataStack()->popInteger();
     auto game = Game::getInstance();
     auto dialog = dynamic_cast<State::CritterDialog*>(game->states()->back());
     if (iq >= 0)
@@ -64,7 +64,7 @@ void Opcode8121Handler::_run()
         {
             dialog->reactions()->push_back(reaction);
             dialog->functions()->push_back(function);
-            dialog->addAnswer(*text);
+            dialog->addAnswer(text);
         }
     }
     if (iq < 0)
@@ -73,7 +73,7 @@ void Opcode8121Handler::_run()
         {
             dialog->reactions()->push_back(reaction);
             dialog->functions()->push_back(function);
-            dialog->addAnswer(*text);
+            dialog->addAnswer(text);
         }
     }
     //delete text;

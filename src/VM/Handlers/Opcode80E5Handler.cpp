@@ -38,9 +38,9 @@ Opcode80E5Handler::Opcode80E5Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80E5Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80E5] [=] void wm_area_set_pos(int areaIdx, int xPos, int yPos)" << std::endl;
-    _vm->popDataInteger();
-    _vm->popDataInteger();
-    _vm->popDataInteger();
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popInteger();
 }
 
 }

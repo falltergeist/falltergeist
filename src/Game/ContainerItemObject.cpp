@@ -52,5 +52,25 @@ void GameContainerItemObject::use_p_proc()
     Game::getInstance()->pushState(state);
 }
 
+void GameContainerItemObject::setLocked(bool locked)
+{
+    this->_locked = locked;
+}
+
+bool GameContainerItemObject::locked() const
+{
+    return _locked;
+}
+
+void GameContainerItemObject::setOpened(bool opened)
+{
+    this->_opened = opened;
+}
+
+bool GameContainerItemObject::opened() const
+{
+    return _opened;
+}
+
 }
 }

@@ -39,14 +39,14 @@ Opcode80B0Handler::Opcode80B0Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80B0Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80B0] [*] int is_critical(int val)" << std::endl;
-    auto value = _vm->popDataInteger();
+    auto value = _vm->dataStack()->popInteger();
     if (value == 0 || value == 3)
     {
-        _vm->pushDataInteger(1);
+        _vm->dataStack()->push(1);
     }
     else
     {
-        _vm->pushDataInteger(0);
+        _vm->dataStack()->push(0);
     }
 }
 

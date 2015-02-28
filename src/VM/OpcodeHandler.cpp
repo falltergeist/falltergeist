@@ -22,6 +22,8 @@
 // Falltergeist includes
 #include "../VM/OpcodeHandler.h"
 #include "../VM/VM.h"
+#include "../VM/VMErrorException.h"
+#include "../Logger.h"
 
 // Third party icnludes
 
@@ -30,6 +32,7 @@ namespace Falltergeist
 
 OpcodeHandler::OpcodeHandler(VM* vm) : _vm(vm)
 {
+    _offset = vm->programCounter();
 }
 
 OpcodeHandler::~OpcodeHandler()
@@ -48,6 +51,14 @@ void OpcodeHandler::_run()
 
 }
 
+void OpcodeHandler::_warning(const std::string& message)
+{
+    Logger::warning("SCRIPT") << message << " at " << _vm->script()->filename() << ":0x" << std::hex << _offset << std::endl;
+}
 
+void OpcodeHandler::_error(const std::string& message)
+{
+    throw VMErrorException(message);
+}
 
 }

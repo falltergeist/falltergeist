@@ -38,9 +38,8 @@ Opcode8154Handler::Opcode8154Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8154Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8154] [*] void debug(string*)" << std::endl;
-    auto string = static_cast<std::string*>(_vm->popDataPointer());
-    Logger::debug("SCRIPT") << *string << std::endl;
-    //delete string;
+    auto value = _vm->dataStack()->pop();
+    Logger::debug("SCRIPT") << value.toString() << std::endl;
 }
 
 }

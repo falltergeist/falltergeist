@@ -22,7 +22,6 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80BBHandler.h"
-#include "../../Exception.h"
 #include "../../Game/Game.h"
 #include "../../ResourceManager.h"
 #include "../../Game/Object.h"
@@ -46,9 +45,9 @@ Opcode80BBHandler::Opcode80BBHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80BBHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80BB] [+] int tile_contains_obj_pid(int position, int elevation, int PID)" << std::endl;
-    auto PID = _vm->popDataInteger();
-    auto elevation = _vm->popDataInteger();
-    auto position = _vm->popDataInteger();
+    auto PID = _vm->dataStack()->popInteger();
+    auto elevation = _vm->dataStack()->popInteger();
+    auto position = _vm->dataStack()->popInteger();
     auto game = Game::getInstance();
     int found = 0;
     for (auto object : *game->locationState()->hexagonGrid()->at(position)->objects())
@@ -58,7 +57,7 @@ void Opcode80BBHandler::_run()
             found = 1;
         }
     }
-    _vm->pushDataInteger(found);
+    _vm->dataStack()->push(found);
 }
 
 }

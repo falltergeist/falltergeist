@@ -35,7 +35,7 @@ Opcode801CHandler::Opcode801CHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode801CHandler::_run()
 {
-    _vm->setProgramCounter(_vm->popReturnInteger());
+    _vm->setProgramCounter(_vm->returnStack()->popInteger());
     Logger::debug("SCRIPT") << "[801C] [*] op_pop_return 0x" << std::hex << _vm->programCounter() << std::endl;
 }
 

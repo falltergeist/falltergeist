@@ -22,11 +22,8 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80ECHandler.h"
-#include "../../Exception.h"
 #include "../../Game/Game.h"
 #include "../../Game/Object.h"
-#include "../../Game/ObjectFactory.h"
-#include "../../State/Location.h"
 #include "../../VM/VM.h"
 
 
@@ -43,9 +40,12 @@ Opcode80ECHandler::Opcode80ECHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80ECHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80EC] [=] int elevation(void* obj)" << std::endl;
-    auto object = static_cast<Game::GameObject*>(_vm->popDataPointer());
-    if (!object) throw new Exception("Opcode 80ec error");
-    _vm->pushDataInteger(object->elevation());
+    auto object = _vm->dataStack()->popObject();
+    if (!object) 
+    {
+        _error("elevation - object is NULL");
+    }
+    _vm->dataStack()->push(object->elevation());
 }
 
 }

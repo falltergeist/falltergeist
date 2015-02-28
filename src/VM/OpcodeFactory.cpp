@@ -49,12 +49,7 @@
 #include "../VM/Handlers/Opcode8030Handler.h"
 #include "../VM/Handlers/Opcode8031Handler.h"
 #include "../VM/Handlers/Opcode8032Handler.h"
-#include "../VM/Handlers/Opcode8033Handler.h"
-#include "../VM/Handlers/Opcode8034Handler.h"
-#include "../VM/Handlers/Opcode8035Handler.h"
-#include "../VM/Handlers/Opcode8036Handler.h"
-#include "../VM/Handlers/Opcode8037Handler.h"
-#include "../VM/Handlers/Opcode8038Handler.h"
+#include "../VM/Handlers/OpcodeComparisonHandler.h"
 #include "../VM/Handlers/Opcode8039Handler.h"
 #include "../VM/Handlers/Opcode803AHandler.h"
 #include "../VM/Handlers/Opcode803BHandler.h"
@@ -64,6 +59,8 @@
 #include "../VM/Handlers/Opcode803FHandler.h"
 #include "../VM/Handlers/Opcode8040Handler.h"
 #include "../VM/Handlers/Opcode8041Handler.h"
+#include "../VM/Handlers/Opcode8042Handler.h"
+#include "../VM/Handlers/Opcode8043Handler.h"
 #include "../VM/Handlers/Opcode8044Handler.h"
 #include "../VM/Handlers/Opcode8045Handler.h"
 #include "../VM/Handlers/Opcode8046Handler.h"
@@ -90,6 +87,7 @@
 #include "../VM/Handlers/Opcode80BBHandler.h"
 #include "../VM/Handlers/Opcode80BCHandler.h"
 #include "../VM/Handlers/Opcode80BDHandler.h"
+#include "../VM/Handlers/Opcode80BEHandler.h"
 #include "../VM/Handlers/Opcode80BFHandler.h"
 #include "../VM/Handlers/Opcode80C1Handler.h"
 #include "../VM/Handlers/Opcode80C2Handler.h"
@@ -193,6 +191,7 @@
 #include "../VM/Handlers/Opcode8154Handler.h"
 #include "../VM/Handlers/Opcode9001Handler.h"
 #include "../VM/Handlers/OpcodeC001Handler.h"
+#include "../VM/Handlers/OpcodeA001Handler.h"
 #include "../VM/VM.h"
 
 // Third party includes
@@ -232,12 +231,12 @@ OpcodeHandler* OpcodeFactory::createOpcode(unsigned int number, VM* vm)
         case 0x8030: return new Opcode8030Handler(vm);
         case 0x8031: return new Opcode8031Handler(vm);
         case 0x8032: return new Opcode8032Handler(vm);
-        case 0x8033: return new Opcode8033Handler(vm);
-        case 0x8034: return new Opcode8034Handler(vm);
-        case 0x8035: return new Opcode8035Handler(vm);
-        case 0x8036: return new Opcode8036Handler(vm);
-        case 0x8037: return new Opcode8037Handler(vm);
-        case 0x8038: return new Opcode8038Handler(vm);
+        case 0x8033: return new OpcodeComparisonHandler(vm, OpcodeComparisonHandler::CMP_EQUAL);
+        case 0x8034: return new OpcodeComparisonHandler(vm, OpcodeComparisonHandler::CMP_NOT_EQUAL);
+        case 0x8035: return new OpcodeComparisonHandler(vm, OpcodeComparisonHandler::CMP_LESS_EQUAL);
+        case 0x8036: return new OpcodeComparisonHandler(vm, OpcodeComparisonHandler::CMP_GREATER_EQUAL);
+        case 0x8037: return new OpcodeComparisonHandler(vm, OpcodeComparisonHandler::CMP_LESS);
+        case 0x8038: return new OpcodeComparisonHandler(vm, OpcodeComparisonHandler::CMP_GREATER);
         case 0x8039: return new Opcode8039Handler(vm);
         case 0x803A: return new Opcode803AHandler(vm);
         case 0x803B: return new Opcode803BHandler(vm);
@@ -247,6 +246,8 @@ OpcodeHandler* OpcodeFactory::createOpcode(unsigned int number, VM* vm)
         case 0x803F: return new Opcode803FHandler(vm);
         case 0x8040: return new Opcode8040Handler(vm);
         case 0x8041: return new Opcode8041Handler(vm);
+        case 0x8042: return new Opcode8042Handler(vm); // bwxor
+        case 0x8043: return new Opcode8043Handler(vm); // bwnot
         case 0x8044: return new Opcode8044Handler(vm);
         case 0x8045: return new Opcode8045Handler(vm);
         case 0x8046: return new Opcode8046Handler(vm);
@@ -271,9 +272,11 @@ OpcodeHandler* OpcodeFactory::createOpcode(unsigned int number, VM* vm)
         case 0x80B9: return new Opcode80B9Handler(vm);
         case 0x80BA: return new Opcode80BAHandler(vm);
         case 0x80BB: return new Opcode80BBHandler(vm);
-        case 0x80BC: return new Opcode80BCHandler(vm);
-        case 0x80BD: return new Opcode80BDHandler(vm);
-        case 0x80BF: return new Opcode80BFHandler(vm);
+        case 0x80BC: return new Opcode80BCHandler(vm); // self_obj
+        case 0x80BD: return new Opcode80BDHandler(vm); // source_obj
+        case 0x80BE: return new Opcode80BEHandler(vm); // target_obj
+        case 0x80BF: return new Opcode80BFHandler(vm); // dude_obj
+        case 0x80C0: return new Opcode80BEHandler(vm); // obj_being_used_with - uses the same code as target_obj in original
         case 0x80C1: return new Opcode80C1Handler(vm);
         case 0x80C2: return new Opcode80C2Handler(vm);
         case 0x80C3: return new Opcode80C3Handler(vm);
@@ -376,7 +379,8 @@ OpcodeHandler* OpcodeFactory::createOpcode(unsigned int number, VM* vm)
         case 0x8154: return new Opcode8154Handler(vm);
         case 0x9001: return new Opcode9001Handler(vm);
         case 0xC001: return new OpcodeC001Handler(vm);
-        default: 
+        case 0xA001: return new OpcodeA001Handler(vm);
+        default:
             throw Exception("OpcodeFactory::createOpcode() - unimplemented opcode: " + std::to_string(number));
     }
 }

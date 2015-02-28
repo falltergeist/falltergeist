@@ -35,10 +35,10 @@ Opcode8032Handler::Opcode8032Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8032Handler::_run()
 {
-    auto num = _vm->popDataInteger();
+    auto num = _vm->dataStack()->popInteger();
     auto value = _vm->dataStack()->values()->at(_vm->DVARbase() + num);
     _vm->dataStack()->push(value);
-    Logger::debug("SCRIPT") << "[8032] [*] op_fetch " << "var" << std::hex << num << " type = " << value->type() << std::endl;
+    Logger::debug("SCRIPT") << "[8032] [*] op_fetch " << "var" << std::hex << num << " type = " << value.typeName() << std::endl;
 }
 
 }

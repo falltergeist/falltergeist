@@ -36,7 +36,7 @@ Opcode8129Handler::Opcode8129Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8129Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8129] [=] void gdialog_mod_barter(int modifier)" << std::endl;
-    _vm->popDataInteger();
+    _vm->dataStack()->popInteger();
 }
 
 }

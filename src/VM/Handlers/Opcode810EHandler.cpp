@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Graphics/AnimationQueue.h"
 #include "../../Logger.h"
 #include "../../Game/Object.h"
@@ -39,22 +38,22 @@ Opcode810EHandler::Opcode810EHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode810EHandler::_run()
 {
-    Logger::debug("SCRIPT") << "[810E] [=] void reg_anim_func(int p1, int p2)" << std::endl;
-    auto p2 = _vm->dataStack()->pop(); // pointer or integer
-    auto p1 = _vm->popDataInteger();
-    _vm->dataStack()->push(p2);
+    Logger::debug("SCRIPT") << "[810E] [=] void reg_anim_func(int mode, int arg)" << std::endl;
+    auto arg = _vm->dataStack()->pop(); // pointer or integer
+    auto p1 = _vm->dataStack()->popInteger();
     switch (p1)
     {
         case 0x1: // ANIM_BEGIN
         {
-            _vm->popDataInteger();//auto p2 = popDataInteger();
-            // RB_UNRESERVED (1) - незарезервированная последовательность, может не воспроизвестись, если отсутствуют свободные слоты
-            // RB_RESERVED (2) - зарезервированная последовательность, должна воспроизвестись в любом случае
+            // @TODO: implement
+            // auto arg = popDataInteger();
+            // RB_UNRESERVED (1) - unreserved sequence, may not play, if there are no free slots left
+            // RB_RESERVED (2) - reserved sequence, should always play
             break;
         }
         case 0x2: // ANIM_CLEAR
         {
-            auto object = static_cast<Game::GameObject*>(_vm->popDataPointer());
+            auto object = arg.objectValue();
             if (auto critterObject = dynamic_cast<Game::GameCritterObject*>(object))
             {
                 critterObject->stopMovement();
@@ -68,12 +67,12 @@ void Opcode810EHandler::_run()
         }
         case 0x3: // ANIMATION_END
         {
-            _vm->popDataInteger(); // always 0
+            // @TODO: implement
             break;
         }
         default:
         {
-            throw Exception("Opcode810EHandler - unsupported p1");
+            _error("reg_anim_func - unsupported mode");
         }
     }
 

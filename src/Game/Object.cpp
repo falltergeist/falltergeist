@@ -307,14 +307,14 @@ void GameObject::render()
 
     _transparent = false;
 
-    bool noBlockTrans = false;
+    //bool noBlockTrans = false;
 
     switch (_lightOrientation)
     {
         case ORIENTATION_EW:
         case ORIENTATION_WC:
             _transparent = in_front_of(obj_x, obj_y, dude_x, dude_y);
-            noBlockTrans = to_right_of(obj_x, obj_y, dude_x, dude_y);
+            //noBlockTrans = to_right_of(obj_x, obj_y, dude_x, dude_y);
             break;
         case ORIENTATION_NC:
             _transparent = (in_front_of(obj_x, obj_y, dude_x, dude_y) | to_right_of(dude_x, dude_y, obj_x, obj_y));
@@ -324,7 +324,7 @@ void GameObject::render()
             break;
         default:
             _transparent = to_right_of(dude_x, dude_y, obj_x, obj_y);
-            noBlockTrans = in_front_of(dude_x, dude_y, obj_x, obj_y);
+            //noBlockTrans = in_front_of(dude_x, dude_y, obj_x, obj_y);
             break;
     }
 
@@ -397,11 +397,13 @@ void GameObject::setInRender(bool value)
 
 void GameObject::description_p_proc()
 {
-    Logger::info("SCRIPT") << "description_p_proc() - 0x" << std::hex << PID() << " " << name() << " " << script() << std::endl;
+    Logger::info("SCRIPT") << "description_p_proc() - 0x" << std::hex << PID() << " " << name() << " " << (script() ? script()->filename() : "") << std::endl;
     bool useDefault = true;
     if (script() && script()->hasFunction("description_p_proc"))
     {
-        script()->call("description_p_proc");
+        script()
+            ->setSourceObject(Game::getInstance()->player())
+            ->call("description_p_proc");
         if (script()->overrides())
             useDefault = false;
     }
@@ -415,7 +417,9 @@ void GameObject::use_p_proc()
 {
     if (script() && script()->hasFunction("use_p_proc"))
     {
-        script()->call("use_p_proc");
+        script()
+            ->setSourceObject(Game::getInstance()->player())
+            ->call("use_p_proc");
     }
 }
 
@@ -428,7 +432,9 @@ void GameObject::look_at_p_proc()
     bool useDefault = true;
     if (script() && script()->hasFunction("look_at_p_proc"))
     {
-        script()->call("look_at_p_proc");
+        script()
+            ->setSourceObject(Game::getInstance()->player())
+            ->call("look_at_p_proc");
         if (script()->overrides())
             useDefault = false;
     }

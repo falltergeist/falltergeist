@@ -18,6 +18,7 @@
  */
 
 // C++ standard includes
+#include <string>
 
 // Falltergeist includes
 #include "../VM/VMStack.h"
@@ -37,12 +38,12 @@ VMStack::~VMStack()
 {
 }
 
-void VMStack::push(VMStackValue* value)
+void VMStack::push(const VMStackValue& value)
 {
     _values.push_back(value);
 }
 
-VMStackValue* VMStack::pop()
+const VMStackValue VMStack::pop()
 {
     if (_values.size() == 0) throw Exception("VMStack::pop() - stack is empty");
     auto value = _values.back();
@@ -65,14 +66,64 @@ void VMStack::swap()
     _values.push_back(value2);
 }
 
-std::vector<VMStackValue*>* VMStack::values()
+std::vector<VMStackValue>* VMStack::values()
 {
     return &_values;
 }
 
-VMStackValue* VMStack::top()
+const VMStackValue VMStack::top()
 {
     return _values.back();
+}
+
+int VMStack::popInteger()
+{
+    return pop().integerValue();
+}
+
+void VMStack::push(unsigned int value)
+{
+    push((int)value);
+}
+
+void VMStack::push(int value)
+{
+    push(VMStackValue(value));
+}
+
+float VMStack::popFloat()
+{
+    return pop().floatValue();
+}
+
+void VMStack::push(float value)
+{
+    push(VMStackValue(value));
+}
+
+Game::GameObject* VMStack::popObject()
+{
+    return pop().objectValue();
+}
+
+void VMStack::push(Game::GameObject* value)
+{
+    push(VMStackValue(value));
+}
+
+std::string VMStack::popString()
+{
+    return pop().stringValue();
+}
+
+void VMStack::push(const std::string &value)
+{
+    push(VMStackValue(value));
+}
+
+bool VMStack::popLogical()
+{
+    return pop().toBoolean();
 }
 
 }

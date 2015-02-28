@@ -37,7 +37,7 @@ Opcode8119Handler::Opcode8119Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8119Handler::_run()
 {
-    _vm->pushDataInteger(Game::getInstance()->gameTime()->day());
+    _vm->dataStack()->push(Game::getInstance()->gameTime()->day());
     Logger::debug("SCRIPT") << "[8119] [*] int get_day()" << std::endl;
 }
 

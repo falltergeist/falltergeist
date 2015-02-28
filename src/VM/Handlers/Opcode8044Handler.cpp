@@ -24,7 +24,6 @@
 #include "../../VM/Handlers/Opcode8044Handler.h"
 #include "../../VM/VM.h"
 #include "../../VM/VMStackValue.h"
-#include "../../Exception.h"
 
 // Third party includes
 
@@ -40,15 +39,19 @@ void Opcode8044Handler::_run()
     Logger::debug("SCRIPT") << "[8044] [*] op_floor" << std::endl;
     auto value = _vm->dataStack()->pop();
     int result = 0;
-    if (auto floatValue = dynamic_cast<VMStackFloatValue*>(value))
+    if (value.type() == VMStackValue::TYPE_FLOAT)
     {
-        result = (int)floatValue->value(); // this is how "floor" originally worked..
+        result = (int)value.floatValue(); // this is how "floor" originally worked..
     }
-    else if (auto intValue = dynamic_cast<VMStackIntValue*>(value)) 
+    else if (value.type() == VMStackValue::TYPE_INTEGER)
     {
-        result = intValue->value();
+        result = value.integerValue();
     }
-    _vm->pushDataInteger(result);
+    else
+    {
+        _error(std::string("op_floor: invalid argument type: ") + value.typeName());
+    }
+    _vm->dataStack()->push(result);
 }
 
 }

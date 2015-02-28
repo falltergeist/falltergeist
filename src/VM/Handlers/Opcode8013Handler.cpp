@@ -23,9 +23,6 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8013Handler.h"
 #include "../../VM/VMStackValue.h"
-#include "../../VM/VMStackFloatValue.h"
-#include "../../VM/VMStackIntValue.h"
-#include "../../VM/VMStackPointerValue.h"
 #include "../../VM/VM.h"
 
 // Third party includes
@@ -39,7 +36,7 @@ Opcode8013Handler::Opcode8013Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8013Handler::_run()
 {
-    auto number = _vm->popDataInteger();
+    auto number = _vm->dataStack()->popInteger();
     auto value = _vm->dataStack()->pop();
     _vm->dataStack()->values()->at(_vm->SVARbase() + number) = value;
 
@@ -47,21 +44,9 @@ void Opcode8013Handler::_run()
 
     debug   << "[8013] [*] op_store_global" << std::endl
             << "      num: "  << number << std::endl
-            << "     type: " << value->type() << std::endl
-            << "    value: ";
+            << "     type: " << value.typeName() << std::endl
+            << "    value: " << value.toString();
 
-    switch (value->type())
-    {
-        case VMStackValue::TYPE_INTEGER:
-            debug << ((VMStackIntValue*)value)->value();
-            break;
-        case VMStackValue::TYPE_FLOAT:
-            debug << ((VMStackFloatValue*)value)->value();
-            break;
-        case VMStackValue::TYPE_POINTER:
-            debug << ((VMStackPointerValue*)value)->value();
-            break;
-    }
     debug << std::endl;
 }
 

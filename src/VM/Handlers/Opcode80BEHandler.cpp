@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -20,31 +20,28 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../VM/VMStackFloatValue.h"
+#include "../../Logger.h"
+#include "../../VM/Handlers/Opcode80BEHandler.h"
+#include "../../VM/VM.h"
 
-// Thirdparty includes
+
+
+
+// Third party includes
 
 namespace Falltergeist
 {
 
-VMStackFloatValue::VMStackFloatValue(float value) : VMStackValue(TYPE_FLOAT)
-{
-    _value = value;
-}
-
-VMStackFloatValue::~VMStackFloatValue()
+Opcode80BEHandler::Opcode80BEHandler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-float VMStackFloatValue::value()
+void Opcode80BEHandler::_run()
 {
-    return _value;
+    Logger::debug("SCRIPT") << "[80BE/80C0] [=] object target_obj/obj_being_used_with()" << std::endl;
+    _vm->dataStack()->push(_vm->targetObject());
 }
 
-void VMStackFloatValue::setValue(float value)
-{
-    _value = value;
 }
 
 
-}

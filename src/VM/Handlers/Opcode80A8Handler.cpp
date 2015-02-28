@@ -39,10 +39,10 @@ Opcode80A8Handler::Opcode80A8Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80A8Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80A8] [=] void set_map_start(int x, int y, int elev, int rot)" << std::endl;
-    _vm->popDataInteger();
-    _vm->popDataInteger();
-    _vm->popDataInteger();
-    _vm->popDataInteger();
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popInteger();
 }
 
 }

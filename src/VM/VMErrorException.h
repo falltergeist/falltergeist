@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2014 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -17,26 +17,24 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_OPCODE8034HANDLER_H
-#define FALLTERGEIST_OPCODE8034HANDLER_H
+#ifndef FALLTERGEIST_VMERROREXCEPTION_H
+#define FALLTERGEIST_VMERROREXCEPTION_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../VM/OpcodeHandler.h"
+#include "../Exception.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class Opcode8034Handler : public OpcodeHandler
+class VMErrorException : public Exception
 {
 public:
-    Opcode8034Handler(VM* vm);
-private:
-    void _run();
+    VMErrorException(const std::string& message);
 };
 
 }
-#endif // FALLTERGEIST_OPCODE8034HANDLER_H
+#endif // FALLTERGEIST_VMERROREXCEPTION_H
