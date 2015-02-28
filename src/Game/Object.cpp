@@ -214,6 +214,16 @@ void GameObject::setCanWalkThru(bool value)
     _canWalkThru = value;
 }
 
+bool GameObject::wallTransEnd()
+{
+    return _wallTransEnd;
+}
+
+void GameObject::setWallTransEnd(bool value)
+{
+    _wallTransEnd = value;
+}
+
 Hexagon* GameObject::hexagon()
 {
     return _hexagon;
@@ -236,12 +246,12 @@ void GameObject::setFloatMessage(TextArea* floatMessage)
 
 static bool to_right_of(int x1, int y1, int x2, int y2)
 {
-  return (double)(x2 - x1) <= (double)(y2 - y1) * (4.0/3.0);
+  return (double)(x2 - x1) <= ((double)(y2 - y1) * (double)(4.0/3.0));
 }
 
 static bool in_front_of(int x1, int y1, int x2, int y2)
 {
-  return (double)(x2 - x1) <= (double)(y2 - y1) * -4.0;
+  return (double)(x2 - x1) <= ((double)(y2 - y1) * -4.0);
 }
 
 
@@ -278,18 +288,18 @@ void GameObject::render()
         }
     }
 
-    if ((trans() != TRANS_NONE) || ((_type != TYPE_WALL) && !(_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC)))
+    if ((trans() != TRANS_DEFAULT) || ((_type != TYPE_WALL) && !(_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC)))
     {
         _ui->render();
         return;
     }
 
-    if ((_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC) && !canWalkThru())
+/*    if ((_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC) && !canWalkThru())
     {
         _ui->render();
         return;
     }
-
+*/
     auto dude = Game::getInstance()->player();
 
     Hexagon* hex;
@@ -307,35 +317,35 @@ void GameObject::render()
 
     _transparent = false;
 
-    //bool noBlockTrans = false;
+    bool noBlockTrans = false;
 
     switch (_lightOrientation)
     {
         case ORIENTATION_EW:
         case ORIENTATION_WC:
             _transparent = in_front_of(obj_x, obj_y, dude_x, dude_y);
-            //noBlockTrans = to_right_of(obj_x, obj_y, dude_x, dude_y);
+            noBlockTrans = to_right_of(obj_x, obj_y, dude_x, dude_y);
             break;
         case ORIENTATION_NC:
-            _transparent = (in_front_of(obj_x, obj_y, dude_x, dude_y) | to_right_of(dude_x, dude_y, obj_x, obj_y));
+            _transparent = (to_right_of(dude_x, dude_y, obj_x, obj_y) | in_front_of(obj_x, obj_y, dude_x, dude_y));
             break;
         case ORIENTATION_SC:
             _transparent = (in_front_of(obj_x, obj_y, dude_x, dude_y) && to_right_of(dude_x, dude_y, obj_x, obj_y));
             break;
         default:
             _transparent = to_right_of(dude_x, dude_y, obj_x, obj_y);
-            //noBlockTrans = in_front_of(dude_x, dude_y, obj_x, obj_y);
+            noBlockTrans = in_front_of(dude_x, dude_y, obj_x, obj_y);
             break;
     }
 
-//    if (noBlockTrans && canWalkThru())
-//        _transparent = false;
+    if (noBlockTrans && wallTransEnd())
+        _transparent = false;
 
 
     if (_transparent)
     {
         int egg_x = dude->hexagon()->x() - camera->x() - 63 + dude->ui()->xOffset();
-        int egg_y = dude->hexagon()->y() - camera->y() - 98 + dude->ui()->yOffset();
+        int egg_y = dude->hexagon()->y() - camera->y() - 78 + dude->ui()->yOffset();
 
         int egg_dx = _ui->x() - egg_x;
         int egg_dy = _ui->y() - egg_y;
