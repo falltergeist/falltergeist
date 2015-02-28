@@ -48,7 +48,7 @@ public:
     GameDudeObject();
     virtual ~GameDudeObject();
 
-    void loadFromGCDFile(std::shared_ptr<libfalltergeist::GcdFileType> gcd);
+    void loadFromGCDFile(std::shared_ptr<libfalltergeist::Gcd::File> gcd);
 
     int experience();
     void setExperience(int value);

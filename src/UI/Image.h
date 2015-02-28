@@ -42,7 +42,7 @@ public:
     Image(unsigned int width, unsigned int height);
     Image(Image* image);
     Image(Texture* texture);
-    Image(std::shared_ptr<libfalltergeist::FrmFileType> frm, unsigned int direction);
+    Image(std::shared_ptr<libfalltergeist::Frm::File> frm, unsigned int direction);
     unsigned int width();
     unsigned int height();
     ~Image();

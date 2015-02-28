@@ -49,7 +49,7 @@ protected:
     Game::GameObject* _targetObject = nullptr;
     int _fixedParam = 0;
     int _actionUsed = 0;
-    libfalltergeist::IntFileType* _script = 0;
+    libfalltergeist::Int::File* _script = 0;
     bool _initialized = false;
     bool _overrides = false;
     VMStack _dataStack;
@@ -60,7 +60,7 @@ protected:
     int _SVAR_base = 0;
 
 public:
-    VM(libfalltergeist::IntFileType* script, Game::GameObject* owner);
+    VM(libfalltergeist::Int::File* script, Game::GameObject* owner);
     VM(std::string filename, Game::GameObject* owner);
     virtual ~VM();
     void run();
@@ -78,7 +78,7 @@ public:
     bool hasFunction(std::string name);
 
     void call(std::string name);
-    libfalltergeist::IntFileType* script();
+    libfalltergeist::Int::File* script();
 
     Game::GameObject* owner();
 
