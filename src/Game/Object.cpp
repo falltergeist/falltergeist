@@ -278,7 +278,7 @@ void GameObject::render()
         }
     }
 
-    if ((trans() != TRANS_NONE) || ((_type != TYPE_WALL) && !(_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC)))
+    if ((trans() != TRANS_DEFAULT) || ((_type != TYPE_WALL) && !(_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC)))
     {
         _ui->render();
         return;
