@@ -18,14 +18,15 @@
  */
 
 // C++ standard includes
-#include <string>
-#include <sstream>
 #include <iomanip>
+#include <sstream>
+#include <stdexcept>
+#include <string>
 
 // Falltergeist includes
-#include "../VM/VMStackValue.h"
 #include "../Game/Object.h"
 #include "../VM/VMErrorException.h"
+#include "../VM/VMStackValue.h"
 
 // Third party includes
 
