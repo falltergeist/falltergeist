@@ -25,9 +25,7 @@
 #include "../../Game/Game.h"
 #include "../../Game/CritterObject.h"
 #include "../../VM/VM.h"
-#include "../../VM/VMStackPointerValue.h"
-
-
+#include "../../VM/VMStackValue.h"
 
 // Third party includes
 
@@ -41,8 +39,8 @@ Opcode80A4Handler::Opcode80A4Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80A4Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80A4] [+] std::string* obj_name(GameCritterObject* who)" << std::endl;
-    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataPointer());
-    _vm->pushDataPointer(new std::string(critter->name()), VMStackPointerValue::POINTER_TYPE_STRING);
+    auto object = _vm->dataStack()->popObject();
+    _vm->dataStack()->push(object->name());
 }
 
 }

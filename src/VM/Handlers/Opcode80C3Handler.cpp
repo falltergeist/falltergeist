@@ -38,13 +38,13 @@ Opcode80C3Handler::Opcode80C3Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80C3Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80C3] [?] MVAR[num]" << std::endl;
-    auto num = _vm->popDataInteger();
+    auto num = _vm->dataStack()->popInteger();
     if (num < 0)
     {
-        _vm->pushDataInteger(0);
+        _vm->dataStack()->push(0);
     }
     auto game = Game::getInstance();
-    _vm->pushDataInteger(game->locationState()->MVAR(num));
+    _vm->dataStack()->push(game->locationState()->MVAR(num));
 }
 
 }

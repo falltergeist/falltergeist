@@ -20,10 +20,11 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80E1Handler.h"
 #include "../../VM/VM.h"
+#include "../../Game/Game.h"
+#include "../../State/Location.h"
 
 // Third party includes
 
@@ -36,11 +37,12 @@ Opcode80E1Handler::Opcode80E1Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80E1Handler::_run()
 {
+    // @TODO: add implementation
     Logger::debug("SCRIPT") << "[80E1] [*] int metarule3(int meta, int p1, int p2, int p3)" << std::endl;
-    auto p3 = _vm->popDataInteger();
-    auto p2 = _vm->popDataInteger();
-    auto p1 = _vm->dataStack()->pop();
-    auto meta = _vm->popDataInteger();
+    auto arg3 = _vm->dataStack()->popInteger();
+    auto arg2 = _vm->dataStack()->popInteger();
+    auto arg1 = _vm->dataStack()->pop();
+    auto meta = _vm->dataStack()->popInteger();
     int result = 0;
     switch(meta)
     {
@@ -61,12 +63,13 @@ void Opcode80E1Handler::_run()
         case 107: // int art_change_fid_num(ObjectPtr who, int fid) - change base FID num for object
             break;
         case 108: // void tile_set_center(int tileNum) - center camera on given tile
+            Game::getInstance()->locationState()->centerCameraAtHexagon(arg1.integerValue());
             break;
         default:
-            throw Exception("Opcode80E1Handler - unknown meta: " + std::to_string(meta));
+            _error("metarule3 - unknown meta: " + std::to_string(meta));
             break;
     }
-    _vm->pushDataInteger(result);
+    _vm->dataStack()->push(result);
 }
 
 }

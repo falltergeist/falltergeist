@@ -38,8 +38,8 @@ Opcode80F2Handler::Opcode80F2Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80F2Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80F2] [=] int game_ticks(int seconds)" << std::endl;
-    auto seconds = _vm->popDataInteger();
-    _vm->pushDataInteger(seconds*1000);
+    auto seconds = _vm->dataStack()->popInteger();
+    _vm->dataStack()->push(seconds*1000);
 }
 
 }

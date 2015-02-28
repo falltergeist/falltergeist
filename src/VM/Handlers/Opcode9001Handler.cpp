@@ -23,7 +23,6 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode9001Handler.h"
 #include "../../VM/VMStackValue.h"
-#include "../../VM/VMStackPointerValue.h"
 #include "../../VM/VM.h"
 
 // Third party includes
@@ -44,34 +43,27 @@ void Opcode9001Handler::_run()
     // Skip 4 readed bytes
     _vm->setProgramCounter(_vm->programCounter() + 4);
 
-    std::string* pointer;
     switch(nextOpcode)
     {
         case 0x8014: // get exported var value
         case 0x8015: // set exported var value
         case 0x8016: // export var
         {
-            pointer = new std::string(_vm->script()->identificators()->at(data));
-            _vm->pushDataPointer(pointer, VMStackPointerValue::POINTER_TYPE_STRING);
+            _vm->dataStack()->push(_vm->script()->identifiers()->at(data));
             break;
         }
         default:
         {
-            pointer = new std::string(_vm->script()->strings()->at(data));
-            _vm->pushDataPointer(pointer, VMStackPointerValue::POINTER_TYPE_STRING);
+            _vm->dataStack()->push(_vm->script()->strings()->at(data));
             break;
         }
     }
 
     auto value = _vm->dataStack()->top();
-
-    auto string = static_cast<std::string*>(((VMStackPointerValue*)value)->value());
-
     auto& debug = Logger::debug("SCRIPT");
-    debug   << "[9001] [*] push_d value" << std::endl
-            << "     type: " << value->type() << std::endl
-            << "    value: " << ((VMStackPointerValue*)value)->value() << std::endl
-            << "   string: " << *string << std::endl;
+    debug   << "[9001] [*] push_d string" << std::endl
+            << "     type: " << value.typeName() << std::endl
+            << "    value: " << value.toString() << std::endl;
 }
 
 }

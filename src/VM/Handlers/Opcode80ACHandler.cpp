@@ -39,10 +39,10 @@ Opcode80ACHandler::Opcode80ACHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80ACHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80AC] [=] int roll_vs_skill(ObjectPtr who, int skill, int modifier)" << std::endl;
-    _vm->popDataInteger();
-    _vm->popDataInteger();
-    _vm->popDataPointer();
-    _vm->pushDataInteger(2);
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popObject();
+    _vm->dataStack()->push(2);
 }
 
 }

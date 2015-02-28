@@ -38,7 +38,7 @@ Opcode80C7Handler::Opcode80C7Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80C7Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80C7] [*] int script_action()" << std::endl;
-    _vm->pushDataInteger(21);
+    _vm->dataStack()->push(21);
 }
 
 }

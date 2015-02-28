@@ -36,7 +36,7 @@ Opcode8125Handler::Opcode8125Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8125Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8125] [=] void party_remove(void* who)" << std::endl;
-    _vm->popDataPointer();
+    _vm->dataStack()->popObject();
 }
 
 }

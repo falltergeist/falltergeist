@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -20,30 +20,29 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../VM/VMStackIntValue.h"
+#include "../../Logger.h"
+#include "../../VM/Handlers/Opcode8042Handler.h"
+#include "../../VM/VM.h"
 
-// Thirdparty includes
+// Third party includes
 
 namespace Falltergeist
 {
 
-VMStackIntValue::VMStackIntValue(int value) : VMStackValue(TYPE_INTEGER)
-{
-    _value = value;
-}
-
-VMStackIntValue::~VMStackIntValue()
+Opcode8042Handler::Opcode8042Handler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-int VMStackIntValue::value()
+void Opcode8042Handler::_run()
 {
-    return _value;
-}
-
-void VMStackIntValue::setValue(int value)
-{
-    _value = value;
+    Logger::debug("SCRIPT") << "[8042] [*] op_bwxor" << std::endl;
+    auto bValue = _vm->dataStack()->pop();
+    auto aValue = _vm->dataStack()->pop();
+    if (!aValue.isNumber() || !bValue.isNumber()) 
+    {
+        _error(std::string("op_bwxor: invalid argument types: ") + aValue.typeName() + " bwxor " + bValue.typeName());
+    }
+    _vm->dataStack()->push(aValue.toInteger() ^ bValue.toInteger());
 }
 
 }

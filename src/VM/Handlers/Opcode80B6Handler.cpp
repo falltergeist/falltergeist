@@ -22,7 +22,6 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80B6Handler.h"
-#include "../../Exception.h"
 #include "../../Game/Game.h"
 #include "../../Game/DudeObject.h"
 #include "../../State/Location.h"
@@ -45,17 +44,20 @@ Opcode80B6Handler::Opcode80B6Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80B6Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80B6] [+] int move_to(GameObject* object, int position, int elevation)" << std::endl;
-    auto elevation = _vm->popDataInteger();
-    auto position = _vm->popDataInteger();
-    auto object = static_cast<Game::GameObject*>(_vm->popDataPointer());
-    if (!object) throw new Exception("Opcode 80b6 error");
+    auto elevation = _vm->dataStack()->popInteger();
+    auto position = _vm->dataStack()->popInteger();
+    auto object = _vm->dataStack()->popObject();
+    if (!object) 
+    {
+        _error("move_to: object is NULL");
+    }
     auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
     State::Location::moveObjectToHexagon(object, hexagon);
     object->setElevation(elevation);
     if (object == Game::getInstance()->player()) {
         Game::getInstance()->locationState()->centerCameraAtHexagon(object->hexagon());
     }
-    _vm->pushDataInteger(1);
+    _vm->dataStack()->push(0);
 }
 
 }

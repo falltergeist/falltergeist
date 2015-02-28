@@ -23,7 +23,7 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode803DHandler.h"
 #include "../../VM/VM.h"
-#include "../../VM/VMStackIntValue.h"
+#include "../../VM/VMStackValue.h"
 
 // Third party includes
 
@@ -37,12 +37,13 @@ Opcode803DHandler::Opcode803DHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode803DHandler::_run()
 {
     Logger::debug("SCRIPT") << "[803D] [*] op_mod %" << std::endl;
-    // @TODO: may probably need type conversions
-    auto b = _vm->dataStack()->pop();
-    auto a = _vm->dataStack()->pop();
-    auto p1 = dynamic_cast<VMStackIntValue*>(a);
-    auto p2 = dynamic_cast<VMStackIntValue*>(b);
-    _vm->pushDataInteger(p1->value() % p2->value());
+    auto bValue = _vm->dataStack()->pop();
+    auto aValue = _vm->dataStack()->pop();
+    if (!aValue.isNumber() || !bValue.isNumber()) 
+    {
+        _error(std::string("op_mod: invalid argument types: ") + aValue.typeName() + " % " + bValue.typeName());
+    }
+    _vm->dataStack()->push(aValue.toInteger() % bValue.toInteger());
 }
 
 }

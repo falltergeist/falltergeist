@@ -36,10 +36,13 @@ Opcode8041Handler::Opcode8041Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8041Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8041] [*] op_bwor" << std::endl;
-    // @TODO: type conversions or checks
-    auto b = _vm->popDataInteger();
-    auto a = _vm->popDataInteger();
-    _vm->pushDataInteger(a | b);
+    auto bValue = _vm->dataStack()->pop();
+    auto aValue = _vm->dataStack()->pop();
+    if (!aValue.isNumber() || !bValue.isNumber()) 
+    {
+        _error(std::string("op_bwor: invalid argument types: ") + aValue.typeName() + " bwor " + bValue.typeName());
+    }
+    _vm->dataStack()->push(aValue.toInteger() | bValue.toInteger());
 }
 
 }

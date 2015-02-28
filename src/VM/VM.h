@@ -25,34 +25,43 @@
 
 // Falltergeist includes
 #include "../VM/VMStack.h"
-#include "../VM/VMStackIntValue.h"
-#include "../VM/VMStackFloatValue.h"
-#include "../VM/VMStackPointerValue.h"
+#include "../VM/VMStackValue.h"
 
 // Third party includes
 #include <libfalltergeist.h>
 
 namespace Falltergeist
 {
-class GameCritterObject;
+    
+namespace Game { class GameObject; }
 
+/*
+ * VM class represents Virtual Machine for running vanilla Fallout scripts.
+ * VM uses 2 stacks (return stack and data stack).
+ * Each operator from .INT script is handled by one of the Handler classes and it manipulates one or both stacks in some way.
+ * Typical scripting command takes 0 or more arguments from the data stack and puts one return value to the same stack.
+ */
 class VM
 {
 protected:
-    void* _owner = 0;
+    Game::GameObject* _owner = nullptr;
+    Game::GameObject* _sourceObject = nullptr;
+    Game::GameObject* _targetObject = nullptr;
+    int _fixedParam = 0;
+    int _actionUsed = 0;
     libfalltergeist::IntFileType* _script = 0;
     bool _initialized = false;
     bool _overrides = false;
     VMStack _dataStack;
     VMStack _returnStack;
-    std::vector<VMStackValue*> _LVARS;
+    std::vector<VMStackValue> _LVARS;
     unsigned int _programCounter = 0;
     int _DVAR_base = 0;
     int _SVAR_base = 0;
 
 public:
-    VM(libfalltergeist::IntFileType* script, void* owner);
-    VM(std::string filename, void* owner);
+    VM(libfalltergeist::IntFileType* script, Game::GameObject* owner);
+    VM(std::string filename, Game::GameObject* owner);
     virtual ~VM();
     void run();
     void initialize();
@@ -62,37 +71,37 @@ public:
     void setOverrides(bool Value);
     void setInitialized(bool value);
     std::string msgMessage(int msg_file_num, int msg_num);
-
+    /*
+     * Returns filename of an .int script file 
+     */
+    std::string filename();
     bool hasFunction(std::string name);
 
     void call(std::string name);
     libfalltergeist::IntFileType* script();
 
-    void* owner();
+    Game::GameObject* owner();
 
     unsigned int programCounter();
     void setProgramCounter(unsigned int value);
 
-    int popReturnInteger();
-    void pushReturnInteger(int value);
-    int popDataInteger();
-    void pushDataInteger(int value);
-    float popDataFloat();
-    void pushDataFloat(float value);
-    void* popDataPointer();
-    void pushDataPointer(void* value, unsigned int type = VMStackPointerValue::POINTER_TYPE_UNKNOWN);
-    std::string &popDataString();
-    void pushDataString(std::string &value);
-    bool popDataLogical();
-
     VMStack* dataStack();
     VMStack* returnStack();
-    std::vector<VMStackValue*>* LVARS();
+    std::vector<VMStackValue>* LVARS();
 
     int DVARbase();
     void setDVARBase(int Value);
     int SVARbase();
     void setSVARbase(int Value);
+    
+    VM* setFixedParam(int _fixedParam);
+    int fixedParam() const;
+    VM* setTargetObject(Game::GameObject* _targetObject);
+    Game::GameObject* targetObject() const;
+    VM* setSourceObject(Game::GameObject* _sourceObject);
+    Game::GameObject* sourceObject() const;
+    VM* setActionUsed(int _actionUsed);
+    int actionUsed() const;
 
 };
 

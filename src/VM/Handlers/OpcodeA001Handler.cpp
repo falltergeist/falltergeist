@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2014 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -17,25 +17,38 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_OPCODE8038HANDLER_H
-#define FALLTERGEIST_OPCODE8038HANDLER_H
-
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../VM/OpcodeHandler.h"
+#include "../../Logger.h"
+#include "../../VM/Handlers/OpcodeA001Handler.h"
+#include "../../VM/VM.h"
+#include "../../VM/VMStackValue.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class Opcode8038Handler : public OpcodeHandler
+OpcodeA001Handler::OpcodeA001Handler(VM* vm) : OpcodeHandler(vm)
 {
-public:
-    Opcode8038Handler(VM* vm);
-    virtual void _run();
-};
+}
+
+void OpcodeA001Handler::_run()
+{
+    union {
+        unsigned int iValue;
+        float fValue;
+    } uValue;
+    *(_vm->script()) >> uValue.iValue;
+
+    // Skip 4 bytes for read float value
+    _vm->setProgramCounter(_vm->programCounter() + 4);
+    _vm->dataStack()->push(VMStackValue(uValue.fValue));
+
+    auto& debug = Logger::debug("SCRIPT");
+    debug << "[A001] [*] push_d float" << std::endl;
+    debug << "    value: " << std::to_string(uValue.fValue) << std::endl;
+}
 
 }
-#endif // FALLTERGEIST_OPCODE8038HANDLER_H

@@ -38,7 +38,7 @@ Opcode80A3Handler::Opcode80A3Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80A3Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80A3] [=] void play_sfx(string* p1)" << std::endl;
-    auto name = _vm->popDataString();
+    auto name = _vm->dataStack()->popString();
     Game::Game::getInstance()->mixer()->playACMSound("sound/sfx/" + name + ".acm");
 }
 

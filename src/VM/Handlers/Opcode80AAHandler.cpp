@@ -23,7 +23,6 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80AAHandler.h"
 #include "../../Game/CritterObject.h"
-#include "../../Exception.h"
 #include "../../VM/VM.h"
 
 // Third party includes
@@ -37,19 +36,25 @@ Opcode80AAHandler::Opcode80AAHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80AAHandler::_run()
 {
-    int skill = _vm->popDataInteger();
+    auto &debug = Logger::debug("SCRIPT");
+    debug << "[80AA] [+] int get_skill_value(GameCritterObject* who, int skill) " << std::endl;
+    int skill = _vm->dataStack()->popInteger();
+    debug << "    skill = " << skill << std::endl;
     if (skill > 17 || skill < 0)
     {
-        throw Exception("VM::opcode80AA - number out of range: " + std::to_string(skill));
+        _error("get_skill_value - skill out of range: " + std::to_string(skill));
     }
-    auto object = static_cast<Game::GameCritterObject*>(_vm->popDataPointer());
-    int value = object->skillValue(skill);
-    _vm->pushDataInteger(value);
-
-    Logger::debug("SCRIPT") << "[80AA] [+] int get_skill_value(GameCritterObject* who, int skill) " << std::endl
-                            << "    skill = " << skill << std::endl
-                            << "    value = " << value << std::endl;
-
+    auto object = _vm->dataStack()->popObject();
+    int value = 0;
+    if (auto critter = dynamic_cast<Game::GameCritterObject*>(object))
+    {
+        value = critter->skillValue(skill);
+        _vm->dataStack()->push(value);
+    }
+    else 
+    {
+        _error("get_skill_value(who, skill): who is not critter");
+    }
 }
 
 }

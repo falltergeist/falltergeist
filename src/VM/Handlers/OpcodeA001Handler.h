@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2014 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_OPCODE8033HANDLER_H
-#define FALLTERGEIST_OPCODE8033HANDLER_H
+#ifndef FALLTERGEIST_OPCODEA001HANDLER_H
+#define FALLTERGEIST_OPCODEA001HANDLER_H
 
 // C++ standard includes
 
@@ -30,13 +30,13 @@
 namespace Falltergeist
 {
 
-class Opcode8033Handler : public OpcodeHandler
+class OpcodeA001Handler : public OpcodeHandler
 {
 public:
-    Opcode8033Handler(VM* vm);
+    OpcodeA001Handler(VM* vm);
 private:
     void _run();
 };
 
 }
-#endif // FALLTERGEIST_OPCODE8033HANDLER_H
+#endif // FALLTERGEIST_OPCODEA001HANDLER_H

@@ -40,10 +40,10 @@ Opcode80B4Handler::Opcode80B4Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80B4Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80B4] [+] int rand(int min, int max)" << std::endl;
-    auto max = _vm->popDataInteger();
-    auto min = _vm->popDataInteger();
+    auto max = _vm->dataStack()->popInteger();
+    auto min = _vm->dataStack()->popInteger();
     srand(time(0));
-    _vm->pushDataInteger(rand()%(max - min + 1) + min);
+    _vm->dataStack()->push(rand()%(max - min + 1) + min);
 }
 
 }

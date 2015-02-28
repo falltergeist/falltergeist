@@ -17,25 +17,31 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_OPCODE8035HANDLER_H
-#define FALLTERGEIST_OPCODE8035HANDLER_H
-
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../VM/OpcodeHandler.h"
+#include "../../Logger.h"
+#include "../../VM/Handlers/Opcode8043Handler.h"
+#include "../../VM/VM.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class Opcode8035Handler : public OpcodeHandler
+Opcode8043Handler::Opcode8043Handler(VM* vm) : OpcodeHandler(vm)
 {
-public:
-    Opcode8035Handler(VM* vm);
-    virtual void _run();
-};
+}
+
+void Opcode8043Handler::_run()
+{
+    Logger::debug("SCRIPT") << "[8043] [*] op_bwnot" << std::endl;
+    auto arg = _vm->dataStack()->pop();
+    if (!arg.isNumber()) 
+    {
+        _error(std::string("op_bwnot: invalid argument type: ") + arg.typeName());
+    }
+    _vm->dataStack()->push(~ arg.toInteger());
+}
 
 }
-#endif // FALLTERGEIST_OPCODE8035HANDLER_H

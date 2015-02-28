@@ -36,8 +36,8 @@ Opcode8127Handler::Opcode8127Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8127Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8127] [*] void critter_injure(ObjectPtr who, int how)" << std::endl;
-    _vm->popDataInteger();
-    _vm->popDataPointer();
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popObject();
 }
 
 }

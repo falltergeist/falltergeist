@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2014 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -20,26 +20,15 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Handlers/Opcode8035Handler.h"
-#include "../../VM/VM.h"
+#include "../VM/VMErrorException.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Opcode8035Handler::Opcode8035Handler(VM* vm) : OpcodeHandler(vm)
+VMErrorException::VMErrorException(const std::string& message) : Exception(message)
 {
-}
-
-void Opcode8035Handler::_run()
-{
-    Logger::debug("SCRIPT") << "[8035] [*] op_less_equal <=" << std::endl;
-    // @TODO: add float and string comparison
-    auto b = _vm->popDataInteger();
-    auto a = _vm->popDataInteger();
-    _vm->pushDataInteger(a <= b);
 }
 
 }

@@ -24,28 +24,28 @@
 // Falltergeist includes
 #include "../Exception.h"
 #include "../Game/Game.h"
+#include "../Game/Object.h"
 #include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../VM/OpcodeFactory.h"
 #include "../VM/VM.h"
+#include "../VM/VMErrorException.h"
 #include "../VM/VMHaltException.h"
-#include "../VM/VMStackIntValue.h"
-#include "../VM/VMStackFloatValue.h"
-#include "../VM/VMStackPointerValue.h"
+#include "../VM/VMStackValue.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-VM::VM(libfalltergeist::IntFileType* script, void* owner)
+VM::VM(libfalltergeist::IntFileType* script, Game::GameObject* owner)
 {
     _owner = owner;
     _script = script;
     if (!_script) throw Exception("VM::VM() - script is null");
 }
 
-VM::VM(std::string filename, void* owner)
+VM::VM(std::string filename, Game::GameObject* owner)
 {
     _owner = owner;
     _script = ResourceManager::intFileType(filename);
@@ -54,6 +54,11 @@ VM::VM(std::string filename, void* owner)
 
 VM::~VM()
 {
+}
+
+std::string VM::filename()
+{
+    return _script->filename();
 }
 
 bool VM::hasFunction(std::string name)
@@ -75,17 +80,20 @@ void VM::call(std::string name)
     try
     {
         _programCounter = _script->function(name);
-        pushDataInteger(0); // arguments counter;
-        pushReturnInteger(0); // return adrress
+        _dataStack.push(0); // arguments counter;
+        _returnStack.push(0); // return address
         Logger::debug("SCRIPT") << "CALLED: " << name << " [" << _script->filename() << "]" << std::endl;
         run();
-        popDataInteger(); // remove function result
+        _dataStack.popInteger(); // remove function result
         Logger::debug("SCRIPT") << "Function ended" << std::endl;
     }
     catch (libfalltergeist::Exception &e)
     {
         Logger::debug("SCRIPT") << "Function not exist: " << name << std::endl;
     }
+    // reset special script arguments
+    _sourceObject = _targetObject = nullptr;
+    _actionUsed = _fixedParam = 0;
 }
 
 void VM::initialize()
@@ -93,7 +101,7 @@ void VM::initialize()
     if (_initialized) return;
     _programCounter = 0;
     run();
-    popDataInteger(); // remove @start function result
+    _dataStack.popInteger(); // remove @start function result
 }
 
 void VM::run()
@@ -101,7 +109,7 @@ void VM::run()
     while (_programCounter != _script->size())
     {
         if (_programCounter == 0 && _initialized) return;
-
+        auto offset = _programCounter;
         _script->setPosition(_programCounter);
         unsigned short opcode;
         *_script >> opcode;
@@ -112,117 +120,18 @@ void VM::run()
             opcodeHandler->run();
             delete opcodeHandler;
         }
-        catch(VMHaltException& e)
+        catch (VMHaltException& e)
         {
             return;
         }
-    }
-}
-
-int VM::popDataInteger()
-{
-    auto stackValue = _dataStack.pop();
-    if (stackValue->type() == VMStackValue::TYPE_INTEGER)
-    {
-        auto stackIntValue = dynamic_cast<VMStackIntValue*>(stackValue);
-        auto value = stackIntValue->value();
-        return value;
-    }
-    throw Exception("VM::popDataInteger() - stack value is not integer");
-}
-
-void VM::pushDataInteger(int value)
-{
-    _dataStack.push(new VMStackIntValue(value));
-}
-
-float VM::popDataFloat()
-{
-    auto stackValue = _dataStack.pop();
-    if (stackValue->type() == VMStackValue::TYPE_FLOAT)
-    {
-        auto stackFloatValue = dynamic_cast<VMStackFloatValue*>(stackValue);
-        auto value = stackFloatValue->value();
-        return value;
-    }
-    throw Exception("VM::popDataFloat() - stack value is not float");
-}
-
-void VM::pushDataFloat(float value)
-{
-    _dataStack.push(new VMStackFloatValue(value));
-}
-
-void* VM::popDataPointer()
-{
-    auto stackValue = _dataStack.pop();
-    if (stackValue->type() == VMStackValue::TYPE_POINTER)
-    {
-        auto stackPointerValue = dynamic_cast<VMStackPointerValue*>(stackValue);
-        auto value = stackPointerValue->value();
-        return value;
-    }
-    throw Exception("VM::popDataPointer() - stack value is not a pointer");
-}
-
-void VM::pushDataPointer(void* value, unsigned int type)
-{
-    auto pointer = new VMStackPointerValue(value);
-    pointer->setPointerType(type);
-    _dataStack.push(pointer);
-}
-
-std::string& VM::popDataString()
-{
-    auto stackPointerValue = dynamic_cast<VMStackPointerValue*>(_dataStack.pop());
-    if (stackPointerValue)
-    {
-        if (stackPointerValue->type() == VMStackPointerValue::POINTER_TYPE_STRING)
+        catch (VMErrorException& e)
         {
-            auto value = static_cast<std::string*>(stackPointerValue->value());
-            return *value;
+            Logger::error("SCRIPT") << e.what() << " in [" << std::hex << opcode << "] at " << _script->filename() << ":0x" << offset << std::endl;
+            _dataStack.values()->clear();
+            _dataStack.push(0); // to end script properly
+            return;
         }
-        throw Exception("VM::popDataString() - stack value is not a string");
     }
-    throw Exception("VM::popDataString() - stack value is not a pointer");
-}
-
-void VM::pushDataString(std::string &value)
-{
-    auto pointer = new VMStackPointerValue(new std::string(value));
-    pointer->setPointerType(VMStackPointerValue::POINTER_TYPE_STRING);
-    _dataStack.push(pointer);
-}
-
-int VM::popReturnInteger()
-{
-    auto stackValue = _returnStack.pop();
-    if (stackValue->type() == VMStackValue::TYPE_INTEGER)
-    {
-        auto stackIntValue = dynamic_cast<VMStackIntValue*>(stackValue);
-        auto value = stackIntValue->value();
-        return value;
-    }
-    throw Exception("VM::popReturnInteger() - stack value is not integer");
-}
-
-void VM::pushReturnInteger(int value)
-{
-    _returnStack.push(new VMStackIntValue(value));
-}
-
-bool VM::popDataLogical()
-{
-    switch (_dataStack.top()->type())
-    {
-        case VMStackValue::TYPE_FLOAT:
-            return (bool) popDataFloat();
-        case VMStackValue::TYPE_INTEGER:
-            return (bool) popDataInteger();
-        case VMStackValue::TYPE_POINTER:
-            return (bool) popDataPointer();
-    }
-    throw Exception("VM::popDataLogical() - something strange happened");
 }
 
 std::string VM::msgMessage(int msg_file_num, int msg_num)
@@ -249,7 +158,12 @@ unsigned int VM::programCounter()
 
 void VM::setProgramCounter(unsigned int value)
 {
-    // @TODO: add check for valid address
+    if (value >= _script->size())
+    {
+        std::stringstream ss;
+        ss << "VM::setProgramCounter() - address out of range: " << std::hex << value;
+        throw VMErrorException(ss.str());
+    }
     _programCounter = value;
 }
 
@@ -263,15 +177,16 @@ VMStack* VM::returnStack()
     return &_returnStack;
 }
 
-std::vector<VMStackValue*>* VM::LVARS()
+std::vector<VMStackValue>* VM::LVARS()
 {
     return &_LVARS;
 }
 
-void* VM::owner()
+Game::GameObject* VM::owner()
 {
     return _owner;
 }
+
 
 bool VM::initialized()
 {
@@ -291,6 +206,50 @@ int VM::SVARbase()
 void VM::setSVARbase(int Value)
 {
     _SVAR_base = Value;
+}
+
+VM* VM::setFixedParam(int fixedParam)
+{
+    this->_fixedParam = fixedParam;
+    return this;
+}
+
+int VM::fixedParam() const
+{
+    return _fixedParam;
+}
+
+VM* VM::setTargetObject(Game::GameObject* targetObject)
+{
+    this->_targetObject = targetObject;
+    return this;
+}
+
+Game::GameObject* VM::targetObject() const
+{
+    return _targetObject;
+}
+
+VM* VM::setSourceObject(Game::GameObject* sourceObject)
+{
+    this->_sourceObject = sourceObject;
+    return this;
+}
+
+Game::GameObject* VM::sourceObject() const
+{
+    return _sourceObject;
+}
+
+VM* VM::setActionUsed(int actionUsed)
+{
+    this->_actionUsed = actionUsed;
+    return this;
+}
+
+int VM::actionUsed() const
+{
+    return _actionUsed;
 }
 
 int VM::DVARbase()

@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Logger.h"
 #include "../../ResourceManager.h"
 #include "../../Game/Object.h"
@@ -39,18 +38,18 @@ Opcode810AHandler::Opcode810AHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode810AHandler::_run()
 {
-    Logger::debug("SCRIPT") << "[810A] [=] void float_msg(void* who, string* msg, int type) " << std::endl;
-    int type = _vm->popDataInteger();
+    Logger::debug("SCRIPT") << "[810A] [=] void float_msg(object who, string msg, int type) " << std::endl;
+    int type = _vm->dataStack()->popInteger();
     unsigned int color;
     switch (type)
     {
         case -2:
-            //БОЛЬШИЕ КРАСНЫЕ БУКВЫ	FF 00 00
+            // CAPITAL RED LETTERS  FF 00 00
             color = 0xff0000ff;
             break;
         case -1:
-            //Самоперебирающиеся цвета @todo
-            color = 0xff0000ff; // временно взят из -2
+            // Self-rotating colors @todo
+            color = 0xff0000ff; // temporary taken from -2
             break;
         case 0:
         case 8:
@@ -87,13 +86,13 @@ void Opcode810AHandler::_run()
             color = 0x757575ff;
             break;
         default:
-            throw Exception("Opcode810AHandler - wrong type: " + std::to_string(type));
+            _error("float_msg - wrong type: " + std::to_string(type));
     }
 
-    auto string = static_cast<std::string*>(_vm->popDataPointer());
-    auto object = static_cast<Game::GameObject*>(_vm->popDataPointer());
+    auto string = _vm->dataStack()->popString();
+    auto object = _vm->dataStack()->popObject();
 
-    auto floatMessage = new TextArea(*string);
+    auto floatMessage = new TextArea(string);
     floatMessage->setWidth(200);
     floatMessage->setWordWrap(true);
     floatMessage->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);

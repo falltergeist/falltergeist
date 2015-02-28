@@ -207,6 +207,7 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
                 object->setDescription(msg->message(proto->messageId() + 1)->text());
             }
             catch (libfalltergeist::Exception) {}
+            ((GameSceneryObject*)object)->setSoundId((char)proto->soundId());
             break;
         }
         case libfalltergeist::ProFileType::TYPE_WALL:

@@ -21,6 +21,7 @@
 #define FALLTERGEIST_VMSTACKVALUE_H
 
 // C++ standard includes
+#include <string>
 
 // Falltergeist includes
 
@@ -28,16 +29,47 @@
 
 namespace Falltergeist
 {
+    
+namespace Game { class GameObject; };
 
 class VMStackValue
 {
 protected:
     int _type = 0;
+    union
+    {
+        int _intValue;
+        float _floatValue;
+        Game::GameObject* _objectValue;
+    };
+    std::string _stringValue;
 public:
-    enum {TYPE_INTEGER = 1, TYPE_FLOAT, TYPE_POINTER};
-    VMStackValue(int type);
+    enum { TYPE_INTEGER = 1, TYPE_FLOAT, TYPE_STRING, TYPE_OBJECT };
+    VMStackValue();
+    VMStackValue(int value);
+    VMStackValue(float value);
+    VMStackValue(const std::string &value);
+    VMStackValue(Game::GameObject *value);
     virtual ~VMStackValue();
-    int type();
+    int type() const;
+    bool isNumber() const;
+    // returns integer value or throws exception if it's not integer
+    int integerValue() const;
+    // returns float value or throws exception if it's not float
+    float floatValue() const;
+    // returns string value or throws exception if it's not string
+    std::string stringValue() const;
+    // returns object pointer or throws exception if it's not object
+    Game::GameObject* objectValue() const;
+    
+    // converts value of any type to string representation
+    std::string toString() const;
+    // converts any value to integer representation
+    int toInteger() const;
+    bool toBoolean() const;
+    
+    const char* typeName();
+    static const char* typeName(int type);
 };
 
 }

@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Game/Game.h"
 #include "../../State/Location.h"
 #include "../../Logger.h"
@@ -40,11 +39,11 @@ Opcode8015Handler::Opcode8015Handler(Falltergeist::VM *vm) : OpcodeHandler(vm)
 void Opcode8015Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8015] [*] op_store_external(name, value)" << std::endl;
-    auto name = static_cast<std::string*>(_vm->popDataPointer());
+    std::string name = _vm->dataStack()->popString();
     auto value = _vm->dataStack()->pop();
     auto game = Game::getInstance();
     auto EVARS = game->locationState()->EVARS();
-    EVARS->at(*name) = value;
+    EVARS->at(name) = value;
 }
 
 }

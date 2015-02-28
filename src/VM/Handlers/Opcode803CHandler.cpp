@@ -23,7 +23,6 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode803CHandler.h"
 #include "../../VM/VM.h"
-#include "../../Exception.h"
 
 // Third party includes
 
@@ -37,14 +36,34 @@ Opcode803CHandler::Opcode803CHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode803CHandler::_run()
 {
     Logger::debug("SCRIPT") << "[803C] [*] op_div /" << std::endl;
-    // @TODO: other types
-    auto b = _vm->popDataInteger();
-    auto a = _vm->popDataInteger();
-    if (b == 0) 
+    auto bValue = _vm->dataStack()->pop();
+    auto aValue = _vm->dataStack()->pop();
+    if (!bValue.isNumber() || !aValue.isNumber())
     {
-        throw Exception("Opcode803CHandler - division by zero!");
+        _error(std::string("op_div(a, b): Incompatible types: ") + aValue.typeName() + " / " + bValue.typeName());
     }
-    _vm->pushDataInteger(a/b);
+    if (aValue.type() == VMStackValue::TYPE_INTEGER)
+    {
+        if (bValue.type() == VMStackValue::TYPE_INTEGER)
+        {
+            _vm->dataStack()->push(aValue.integerValue() / bValue.integerValue());
+        }
+        else
+        {
+            _vm->dataStack()->push((float)aValue.integerValue() / bValue.floatValue());
+        }
+    }
+    else
+    {
+        if (bValue.type() == VMStackValue::TYPE_INTEGER)
+        {
+            _vm->dataStack()->push(aValue.floatValue() / (float)bValue.integerValue());
+        }
+        else
+        {
+            _vm->dataStack()->push(aValue.floatValue() / bValue.floatValue());
+        }
+    }
 }
 
 }

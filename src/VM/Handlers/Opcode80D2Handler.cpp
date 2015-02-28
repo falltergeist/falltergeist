@@ -38,9 +38,9 @@ Opcode80D2Handler::Opcode80D2Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80D2Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80D2] [=] int tile_distance(int tile1, int tile2)" << std::endl;
-    _vm->popDataInteger();
-    _vm->popDataInteger();
-    _vm->pushDataInteger(4);
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->push(4);
 }
 
 }

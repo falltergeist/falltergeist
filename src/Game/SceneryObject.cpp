@@ -38,5 +38,15 @@ GameSceneryObject::~GameSceneryObject()
 {
 }
 
+void GameSceneryObject::setSoundId(char soundId)
+{
+    this->_soundId = soundId;
+}
+
+char GameSceneryObject::soundId() const
+{
+    return _soundId;
+}
+
 }
 }

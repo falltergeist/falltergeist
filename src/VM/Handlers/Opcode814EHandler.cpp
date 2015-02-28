@@ -38,7 +38,7 @@ Opcode814EHandler::Opcode814EHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode814EHandler::_run()
 {
     Logger::debug("SCRIPT") << "[814E] [=] void gdialog_set_barter_mod(int mod)" << std::endl;
-    _vm->popDataInteger();
+    _vm->dataStack()->popInteger();
 }
 
 }
