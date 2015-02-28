@@ -53,9 +53,9 @@ Image::Image(Texture* texture) : ActiveUI()
     setTexture(texture);
 }
 
-Image::Image(std::shared_ptr<libfalltergeist::FrmFileType> frm, unsigned int direction)
+Image::Image(std::shared_ptr<libfalltergeist::Frm::File> frm, unsigned int direction)
 {
-    if (direction >= frm->directions())
+    if (direction >= frm->directions()->size())
     {
         throw Exception("Image::Image(frm, direction) - direction not found: " + std::to_string(direction));
     }

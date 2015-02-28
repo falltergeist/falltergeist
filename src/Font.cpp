@@ -90,7 +90,7 @@ Texture* Font::texture()
     return _texture;
 }
 
-std::shared_ptr<libfalltergeist::AafFileType> Font::aaf()
+std::shared_ptr<libfalltergeist::Aaf::File> Font::aaf()
 {
     return _aaf;
 }

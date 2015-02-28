@@ -38,7 +38,7 @@
 namespace Falltergeist
 {
 
-VM::VM(libfalltergeist::IntFileType* script, Game::GameObject* owner)
+VM::VM(libfalltergeist::Int::File* script, Game::GameObject* owner)
 {
     _owner = owner;
     _script = script;
@@ -146,7 +146,7 @@ std::string VM::msgMessage(int msg_file_num, int msg_num)
     return msg->message(msg_num)->text();
 }
 
-libfalltergeist::IntFileType* VM::script()
+libfalltergeist::Int::File* VM::script()
 {
     return _script;
 }
