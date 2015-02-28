@@ -316,6 +316,7 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
     if (proto->flags()&0x00020000) object->setTrans(GameObject::TRANS_GLASS);
     if (proto->flags()&0x00040000) object->setTrans(GameObject::TRANS_STEAM);
     if (proto->flags()&0x00080000) object->setTrans(GameObject::TRANS_ENERGY);
+    if (proto->flags()&0x10000000) object->setWallTransEnd(true);
 
     if (proto->scriptId() > 0)
     {
