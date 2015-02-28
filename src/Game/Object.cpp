@@ -294,12 +294,12 @@ void GameObject::render()
         return;
     }
 
-    if ((_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC) && !canWalkThru())
+/*    if ((_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC) && !canWalkThru())
     {
         _ui->render();
         return;
     }
-
+*/
     auto dude = Game::getInstance()->player();
 
     Hexagon* hex;
