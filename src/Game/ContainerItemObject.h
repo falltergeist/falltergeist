@@ -46,9 +46,9 @@ public:
 
     virtual void use_p_proc();
     
-    void setLocked(bool _locked);
+    void setLocked(bool locked);
     bool locked() const;
-    void setOpened(bool _opened);
+    void setOpened(bool opened);
     bool opened() const;
 };
 
