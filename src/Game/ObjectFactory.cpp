@@ -309,7 +309,7 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
     object->setFID(proto->FID());
     object->setCanWalkThru(proto->flags()&0x00000010);
 
-    object->setTrans(GameObject::TRANS_NONE);
+    object->setTrans(GameObject::TRANS_DEFAULT);
     if (proto->flags()&0x00004000) object->setTrans(GameObject::TRANS_RED);
     if (proto->flags()&0x00008000) object->setTrans(GameObject::TRANS_NONE);
     if (proto->flags()&0x00010000) object->setTrans(GameObject::TRANS_WALL);
