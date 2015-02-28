@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_Movie_H
-#define FALLTERGEIST_Movie_H
+#ifndef FALLTERGEIST_MOVIE_H
+#define FALLTERGEIST_MOVIE_H
 
 // C++ standard includes
 
@@ -26,6 +26,7 @@
 #include "State.h"
 
 // Third party includes
+#include <libfalltergeist.h>
 
 namespace Falltergeist
 {
@@ -59,7 +60,7 @@ private:
     int _id;
     bool _started;
     std::pair<unsigned int,std::string> _nextSubLine;
-    libfalltergeist::SveFileType* _subs;
+    libfalltergeist::Sve::File* _subs;
     bool _hasSubs = false;
     std::vector<effect_t> _effects;
     unsigned int _effect_index=0;
@@ -67,5 +68,4 @@ private:
 
 }
 }
-
-#endif // FALLTERGEIST_Movie_H
+#endif // FALLTERGEIST_MOVIE_H
