@@ -86,7 +86,7 @@ void AudioMixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len)
 {
     if (_paused) return;
 
-    auto pacm = (libfalltergeist::AcmFileType*)(udata);
+    auto pacm = (libfalltergeist::Acm::File*)(udata);
     if (pacm->samplesLeft() <= 0)
     {
         if (_loop)

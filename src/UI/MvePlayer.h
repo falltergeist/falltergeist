@@ -35,10 +35,10 @@ namespace Falltergeist
 class MvePlayer : public UI
 {
 public:
-    MvePlayer(libfalltergeist::MveFileType* mve);
+    MvePlayer(libfalltergeist::Mve::File* mve);
     ~MvePlayer();
 private:
-    libfalltergeist::MveFileType* _mve;
+    libfalltergeist::Mve::File* _mve;
     bool _timerStarted = false;
     bool _finished = false;
     uint32_t  _frame = 0;
@@ -50,7 +50,7 @@ private:
     uint32_t _audioBufTail=0;
     uint32_t _audioBufSize=0;
     uint32_t _samplesReady=0;
-    std::shared_ptr<libfalltergeist::MveChunk> _chunk;
+    std::shared_ptr<libfalltergeist::Mve::Chunk> _chunk;
     SDL_Surface* _currentBuf=NULL;
     SDL_Surface* _backBuf=NULL;
     void _processChunk();
