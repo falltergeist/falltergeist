@@ -317,24 +317,24 @@ void GameObject::render()
 
     _transparent = false;
 
-    //bool noBlockTrans = false;
+    bool noBlockTrans = false;
 
     switch (_lightOrientation)
     {
         case ORIENTATION_EW:
         case ORIENTATION_WC:
             _transparent = in_front_of(obj_x, obj_y, dude_x, dude_y);
-            //noBlockTrans = to_right_of(obj_x, obj_y, dude_x, dude_y);
+            noBlockTrans = to_right_of(obj_x, obj_y, dude_x, dude_y);
             break;
         case ORIENTATION_NC:
-            _transparent = (in_front_of(obj_x, obj_y, dude_x, dude_y) | to_right_of(dude_x, dude_y, obj_x, obj_y));
+            _transparent = (to_right_of(dude_x, dude_y, obj_x, obj_y) | in_front_of(obj_x, obj_y, dude_x, dude_y));
             break;
         case ORIENTATION_SC:
             _transparent = (in_front_of(obj_x, obj_y, dude_x, dude_y) && to_right_of(dude_x, dude_y, obj_x, obj_y));
             break;
         default:
             _transparent = to_right_of(dude_x, dude_y, obj_x, obj_y);
-            //noBlockTrans = in_front_of(dude_x, dude_y, obj_x, obj_y);
+            noBlockTrans = in_front_of(dude_x, dude_y, obj_x, obj_y);
             break;
     }
 
