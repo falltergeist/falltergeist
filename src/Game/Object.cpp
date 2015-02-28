@@ -214,6 +214,16 @@ void GameObject::setCanWalkThru(bool value)
     _canWalkThru = value;
 }
 
+bool GameObject::wallTransEnd()
+{
+    return _wallTransEnd;
+}
+
+void GameObject::setWallTransEnd(bool value)
+{
+    _wallTransEnd = value;
+}
+
 Hexagon* GameObject::hexagon()
 {
     return _hexagon;
@@ -328,8 +338,8 @@ void GameObject::render()
             break;
     }
 
-//    if (noBlockTrans && canWalkThru())
-//        _transparent = false;
+    if (noBlockTrans && wallTransEnd())
+        _transparent = false;
 
 
     if (_transparent)

@@ -51,6 +51,7 @@ class GameObject : public EventEmitter
 {
 protected:
     bool _canWalkThru = true;
+    bool _wallTransEnd = false;
     int _type = -1;
     int _subtype = -1;
     int _PID = -1;
@@ -82,6 +83,9 @@ public:
 
     bool canWalkThru();
     virtual void setCanWalkThru(bool value);
+
+    bool wallTransEnd();
+    virtual void setWallTransEnd(bool value);
 
     int type();
     int subtype();
