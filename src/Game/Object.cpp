@@ -345,7 +345,7 @@ void GameObject::render()
     if (_transparent)
     {
         int egg_x = dude->hexagon()->x() - camera->x() - 63 + dude->ui()->xOffset();
-        int egg_y = dude->hexagon()->y() - camera->y() - 98 + dude->ui()->yOffset();
+        int egg_y = dude->hexagon()->y() - camera->y() - 78 + dude->ui()->yOffset();
 
         int egg_dx = _ui->x() - egg_x;
         int egg_dy = _ui->y() - egg_y;
