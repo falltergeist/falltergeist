@@ -246,12 +246,12 @@ void GameObject::setFloatMessage(TextArea* floatMessage)
 
 static bool to_right_of(int x1, int y1, int x2, int y2)
 {
-  return (double)(x2 - x1) <= (double)(y2 - y1) * (4.0/3.0);
+  return (double)(x2 - x1) <= ((double)(y2 - y1) * (double)(4.0/3.0));
 }
 
 static bool in_front_of(int x1, int y1, int x2, int y2)
 {
-  return (double)(x2 - x1) <= (double)(y2 - y1) * -4.0;
+  return (double)(x2 - x1) <= ((double)(y2 - y1) * -4.0);
 }
 
 
