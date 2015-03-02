@@ -63,34 +63,23 @@ std::string VM::filename()
 
 bool VM::hasFunction(std::string name)
 {
-    try
-    {
-        _script->function(name);
-    }
-    catch (libfalltergeist::Exception &e)
-    {
-        return false;
-    }
-    return true;
+    return _script->procedure(name) != 0;
 }
 
 void VM::call(std::string name)
 {
     _overrides = false;
-    try
-    {
-        _programCounter = _script->function(name);
-        _dataStack.push(0); // arguments counter;
-        _returnStack.push(0); // return address
-        Logger::debug("SCRIPT") << "CALLED: " << name << " [" << _script->filename() << "]" << std::endl;
-        run();
-        _dataStack.popInteger(); // remove function result
-        Logger::debug("SCRIPT") << "Function ended" << std::endl;
-    }
-    catch (libfalltergeist::Exception &e)
-    {
-        Logger::debug("SCRIPT") << "Function not exist: " << name << std::endl;
-    }
+    auto procedure = _script->procedure(name);
+    if (!procedure) return;
+
+    _programCounter = procedure->bodyOffset();
+    _dataStack.push(0); // arguments counter;
+    _returnStack.push(0); // return address
+    Logger::debug("SCRIPT") << "CALLED: " << name << " [" << _script->filename() << "]" << std::endl;
+    run();
+    _dataStack.popInteger(); // remove function result
+    Logger::debug("SCRIPT") << "Function ended" << std::endl;
+
     // reset special script arguments
     _sourceObject = _targetObject = nullptr;
     _actionUsed = _fixedParam = 0;
