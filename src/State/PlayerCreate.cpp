@@ -302,8 +302,8 @@ void PlayerCreate::think()
 
     *_labels.at("gender") = _t(MSG_EDITOR, player->gender() == 0 ? 107 : 108); // 0 - male   1 - female
 
-    *_counters.at("statsPoints") = player->statsPoints();
-    *_counters.at("skillsPoints") = player->skillsPoints();
+    _counters.at("statsPoints")->setNumber(player->statsPoints());
+    _counters.at("skillsPoints")->setNumber(player->skillsPoints());
 
     *_labels.at("health_1") = _t(MSG_EDITOR, 300) + "  " + std::to_string(player->hitPointsMax()) + "/" + std::to_string(player->hitPointsMax());
     *_labels.at("params_1_value") = player->armorClass();
