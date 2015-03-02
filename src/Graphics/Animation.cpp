@@ -46,8 +46,8 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
 
     _actionFrame = frm->actionFrame();
 
-    _xShift = frm->shiftX(direction);
-    _yShift = frm->shiftY(direction);
+    _xShift = frm->directions()->at(direction)->shiftX();
+    _yShift = frm->directions()->at(direction)->shiftY();
 
     // Смещение кадра в текстуре анимации
     unsigned int x = 0;
@@ -55,7 +55,7 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
 
     for (unsigned int d = 0; d != direction; ++d)
     {
-        y += frm->height(d); //? может i - 1
+        y += frm->directions()->at(d)->height(); //? может i - 1
     }
 
     int xOffset = 0;
@@ -66,8 +66,8 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
         yOffset += frm->offsetY(direction, f);
 
         auto frame = new AnimationFrame();
-        frame->setWidth(frm->width(direction, f));
-        frame->setHeight(frm->height(direction, f));
+        frame->setWidth(frm->directions()->at(direction)->frames()->at(f)->width());
+        frame->setHeight(frm->directions()->at(direction)->frames()->at(f)->height());
         frame->setXOffset(xOffset);
         frame->setYOffset(yOffset);
         frame->setY(y);
@@ -83,7 +83,7 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
             frame->setDuration(std::round(1000.0/static_cast<double>(frm->framesPerSecond())));
         }
 
-        x += frm->width(direction);
+        x += frame->width();
         frames()->push_back(frame);
     }
 

@@ -178,7 +178,8 @@ void CritterDialog::_selectAnswer(size_t i)
     auto game = Game::getInstance();
     auto dialog = dynamic_cast<CritterInteract*>(game->states()->at(game->states()->size() - 2));
 
-    int newOffset = dialog->script()->script()->function(_functions.at(i));
+    // @todo optimize
+    int newOffset = dialog->script()->script()->procedures()->at(_functions.at(i))->bodyOffset();
     int oldOffset = dialog->script()->programCounter() - 2;
     deleteAnswers();
     dialog->script()->dataStack()->push(0); // arguments counter;

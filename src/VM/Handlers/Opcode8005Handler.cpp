@@ -43,7 +43,7 @@ void Opcode8005Handler::_run()
     {
         args.push_back(_vm->dataStack()->popInteger());
     }*/
-    _vm->setProgramCounter(_vm->script()->function(functionIndex));
+    _vm->setProgramCounter(_vm->script()->procedures()->at(functionIndex)->bodyOffset());
     Logger::debug("SCRIPT") << "[8005] [*] op_call(0x" << std::hex << functionIndex << ") = 0x" << _vm->programCounter() << std::endl;
 }
 
