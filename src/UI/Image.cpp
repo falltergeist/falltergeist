@@ -61,7 +61,7 @@ Image::Image(std::shared_ptr<libfalltergeist::Frm::File> frm, unsigned int direc
     }
 
     // direction texture
-    setTexture(new Texture(frm->width(direction), frm->height(direction)));
+    setTexture(new Texture(frm->directions()->at(direction)->width(), frm->directions()->at(direction)->height()));
 
     // full frm texture
     Texture* texture = new Texture(frm->width(), frm->height());
@@ -71,14 +71,14 @@ Image::Image(std::shared_ptr<libfalltergeist::Frm::File> frm, unsigned int direc
     unsigned int y = 0;
     for (unsigned int i = 0; i != direction; ++i)
     {
-        y += frm->height(direction);
+        y += frm->directions()->at(direction)->height();
     }
 
-    texture->copyTo(_texture, 0, 0, 0, y, frm->width(direction), frm->height(direction));
+    texture->copyTo(_texture, 0, 0, 0, y, frm->directions()->at(direction)->width(), frm->directions()->at(direction)->height());
     delete texture;
 
-    setXOffset(frm->offsetX(direction) + frm->shiftX(direction));
-    setYOffset(frm->offsetY(direction) + frm->shiftY(direction));
+    setXOffset(frm->offsetX(direction) + frm->directions()->at(direction)->shiftX());
+    setYOffset(frm->offsetY(direction) + frm->directions()->at(direction)->shiftY());
 }
 
 Image::~Image()
