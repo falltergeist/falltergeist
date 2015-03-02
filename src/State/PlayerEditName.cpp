@@ -21,6 +21,7 @@
 #include <ctype.h>
 
 // Falltergeist includes
+#include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
@@ -104,8 +105,7 @@ void PlayerEditName::init()
     doneBox->setX(bgX+35);
     doneBox->setY(bgY+40);
 
-    auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
-    auto doneLabel = new TextArea(msg->message(100), bgX+65, bgY+43);
+    auto doneLabel = new TextArea(_t(MSG_EDITOR, 100), bgX+65, bgY+43);
     auto font3_b89c28ff = ResourceManager::font("font3.aaf", 0xb89c28ff);
     doneLabel->setFont(font3_b89c28ff);
 

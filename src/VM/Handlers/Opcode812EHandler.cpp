@@ -22,6 +22,7 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../Game/DoorSceneryObject.h"
+#include "../../Game/ContainerItemObject.h"
 #include "../../VM/Handlers/Opcode812EHandler.h"
 #include "../../VM/VM.h"
 
@@ -36,10 +37,28 @@ Opcode812EHandler::Opcode812EHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode812EHandler::_run()
 {
-    auto object = static_cast<Game::GameDoorSceneryObject*>(_vm->popDataPointer());
-    object->setLocked(true);
-    Logger::debug("SCRIPT") << "[812E] [+] void lock(GameDoorSceneryObject* object)" << std::endl
-                            << "    PID: 0x"<< std::hex << object->PID() << std::endl;
+    auto &debug = Logger::debug("SCRIPT") << "[812E] [+] void obj_lock(GameObject* object)" << std::endl;
+    auto object = _vm->dataStack()->popObject();
+    if (object)
+    {
+        debug << "    PID: 0x" << std::hex << (object ? object->PID() : 0) << std::endl;
+        if (auto door = dynamic_cast<Game::GameDoorSceneryObject*>(object)) 
+        {
+            door->setLocked(true);
+        }
+        else if (auto container = dynamic_cast<Game::GameContainerItemObject*>(object)) 
+        {
+            container->setLocked(true);
+        }
+        else
+        {
+            _warning("obj_lock: object is not door or container");
+        }
+    }
+    else
+    {
+        _warning("obj_lock: object is null");
+    }
 }
 
 }

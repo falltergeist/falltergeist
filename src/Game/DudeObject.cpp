@@ -49,7 +49,7 @@ GameDudeObject::~GameDudeObject()
 {
 }
 
-void GameDudeObject::loadFromGCDFile(std::shared_ptr<libfalltergeist::GcdFileType> gcd)
+void GameDudeObject::loadFromGCDFile(std::shared_ptr<libfalltergeist::Gcd::File> gcd)
 {
     for (unsigned int i = 0; i <= 6; i++)
     {

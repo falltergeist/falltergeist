@@ -66,6 +66,9 @@ namespace Falltergeist
 namespace State
 {
 
+const int Location::DROPDOWN_DELAY = 350;
+const int Location::KEYBOARD_SCROLL_STEP = 35;
+
 Location::Location() : State()
 {
     auto game = Game::getInstance();
@@ -227,7 +230,7 @@ void Location::setLocation(std::string name)
     // Location script
     if (mapFile->scriptId() > 0)
     {
-        _locationScript = new VM(ResourceManager::intFileType(mapFile->scriptId()-1), Game::getInstance()->locationState());
+        _locationScript = new VM(ResourceManager::intFileType(mapFile->scriptId()-1), nullptr);
     }
     
     // Generates floor and roof images
@@ -303,7 +306,7 @@ void Location::onObjectMouseEvent(Event* event, Game::GameObject* object)
         _actionCursorTicks = SDL_GetTicks();
         _actionCursorButtonPressed = true;
     }
-    else if (event->name() == "mouseleftup")
+    else if (event->name() == "mouseleftclick")
     {
         auto icons = getCursorIconsForObject(object);
         if (icons.size() > 0)
@@ -462,7 +465,7 @@ void Location::think()
     }
     
     // action cursor stuff
-    if (_objectUnderCursor && _actionCursorTicks && _actionCursorTicks + 500 < SDL_GetTicks())
+    if (_objectUnderCursor && _actionCursorTicks && _actionCursorTicks + DROPDOWN_DELAY < SDL_GetTicks())
     {
         auto game = Game::getInstance();
         if (_actionCursorButtonPressed || game->mouse()->state() == Mouse::ACTION)
@@ -475,12 +478,12 @@ void Location::think()
             auto icons = getCursorIconsForObject(_objectUnderCursor);
             if (icons.size() > 0)
             {
-                auto state = new CursorDropdown(icons, !_actionCursorButtonPressed);
-                state->setObject(_objectUnderCursor);
                 if (dynamic_cast<CursorDropdown*>(game->states()->back()) != NULL)
                 {
                     game->popState();
                 }
+                auto state = new CursorDropdown(icons, !_actionCursorButtonPressed);
+                state->setObject(_objectUnderCursor);
                 Game::getInstance()->pushState(state);
             }
         }
@@ -493,9 +496,6 @@ void Location::toggleCursorMode()
 {
     auto game = Game::getInstance();
     auto mouse = game->mouse();
-    if (dynamic_cast<CursorDropdown*>(game->states()->back()) != NULL) {
-        game->popState();
-    }
     switch (mouse->state())
     {
         case Mouse::NONE: // just for testing
@@ -556,7 +556,7 @@ void Location::handle(Event* event)
                     auto path = hexagonGrid()->findPath(game->player()->hexagon(), hexagon);
                     if (path.size())
                     {
-                        game->player()->movementQueue()->clear();
+                        game->player()->stopMovement();
                         game->player()->setRunning((_lastClickedTile != 0 && hexagon->number() == _lastClickedTile) || (mouseEvent->shiftPressed() != game->settings()->running()));
                         for (auto hexagon : path)
                         {
@@ -741,7 +741,7 @@ int Location::MVAR(unsigned int number)
     return _MVARS.at(number);
 }
 
-std::map<std::string, VMStackValue*>* Location::EVARS()
+std::map<std::string, VMStackValue>* Location::EVARS()
 {
     return &_EVARS;
 }
@@ -786,6 +786,18 @@ void Location::centerCameraAtHexagon(Hexagon* hexagon)
     camera()->setPosition(hexagon->x(), hexagon->y());
 }
 
+void Location::centerCameraAtHexagon(int tileNum)
+{
+    try 
+    {
+        centerCameraAtHexagon(_hexagonGrid->at((unsigned int)tileNum));
+    } 
+    catch (std::out_of_range ex) 
+    {
+        throw Exception(std::string("Tile number out of range: ") + std::to_string(tileNum));
+    }
+}
+
 void Location::handleAction(Game::GameObject* object, int action)
 {
     switch (action)
@@ -828,7 +840,7 @@ void Location::handleAction(Game::GameObject* object, int action)
     }
 }
 
-void Location::displayMessage(std::string message)
+void Location::displayMessage(const std::string& message)
 {
     Game::getInstance()->mixer()->playACMSound("sound/sfx/monitor.acm");
     Logger::info("MESSAGE") << message << std::endl;

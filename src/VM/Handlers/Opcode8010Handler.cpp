@@ -36,7 +36,7 @@ Opcode8010Handler::Opcode8010Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8010Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8010] [*] startdone" << std::endl;
+    Logger::debug("SCRIPT") << "[8010] [*] op_exit_prog" << std::endl;
     _vm->setInitialized(true);
     throw VMHaltException();
 }

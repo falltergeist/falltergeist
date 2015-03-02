@@ -178,11 +178,12 @@ void CritterDialog::_selectAnswer(size_t i)
     auto game = Game::getInstance();
     auto dialog = dynamic_cast<CritterInteract*>(game->states()->at(game->states()->size() - 2));
 
-    auto newOffset = dialog->script()->script()->function(_functions.at(i));
-    auto oldOffset = dialog->script()->programCounter() - 2;
+    // @todo optimize
+    int newOffset = dialog->script()->script()->procedures()->at(_functions.at(i))->bodyOffset();
+    int oldOffset = dialog->script()->programCounter() - 2;
     deleteAnswers();
-    dialog->script()->pushDataInteger(0); // arguments counter;
-    dialog->script()->pushReturnInteger(oldOffset); // return adrress
+    dialog->script()->dataStack()->push(0); // arguments counter;
+    dialog->script()->returnStack()->push(oldOffset); // return adrress
     dialog->script()->setProgramCounter(newOffset);
     dialog->script()->run();
 }
@@ -202,7 +203,6 @@ void CritterDialog::addAnswer(std::string text)
     }
 
     auto answer = new TextArea(line, 140, y);
-    answer->setBackgroundColor(0x00000001);
     answer->setWordWrap(true);
     answer->setWidth(370);
 

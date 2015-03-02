@@ -21,20 +21,22 @@
 #include <sstream>
 
 // Falltergeist includes
-#include "../Game/Game.h"
-#include "../Graphics/Renderer.h"
-#include "../Input/Mouse.h"
-#include "../ResourceManager.h"
-#include "State.h"
+#include "../functions.h"
 #include "../Game/ArmorItemObject.h"
 #include "../Game/CritterObject.h"
 #include "../Game/DudeObject.h"
+#include "../Game/Game.h"
 #include "../Game/Object.h"
 #include "../Game/ObjectFactory.h"
 #include "../Game/WeaponItemObject.h"
+#include "../Graphics/Renderer.h"
+#include "../Input/Mouse.h"
+#include "../ResourceManager.h"
+#include "../State/State.h"
 #include "../State/GameMenu.h"
 #include "../State/InventoryDragItem.h"
 #include "../State/Inventory.h"
+#include "../State/Location.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/ItemsList.h"
@@ -57,7 +59,7 @@ Inventory::Inventory() : State()
 Inventory::~Inventory()
 {
     // If hand cursor now
-    if (Game::getInstance()->mouse()->state() != Mouse::ACTION)
+    if (Game::getInstance()->mouse()->state() == Mouse::HAND)
     {
         Game::getInstance()->mouse()->popState();
     }
@@ -73,9 +75,10 @@ void Inventory::init()
     setFullscreen(false);
 
     auto game = Game::getInstance();
+    auto panelHeight = Game::getInstance()->locationState()->playerPanelState()->height();
 
-    setX((game->renderer()->width()  - 499)/2);
-    setY((game->renderer()->height() - 427)/2);
+    setX((game->renderer()->width()  - 499)/2); // 499x377 = art/intrface/invbox.frm
+    setY((game->renderer()->height() - 377 - panelHeight)/2);
 
     addUI("background", new Image("art/intrface/invbox.frm"));
     getActiveUI("background")->addEventHandler("mouserightclick", [this](Event* event){ this->backgroundRightClick(dynamic_cast<MouseEvent*>(event)); });
@@ -99,10 +102,8 @@ void Inventory::init()
     line1->setY(screenY+16);
     line1->texture()->fill(0x3ff800ff); // default green color
 
-    auto msg = ResourceManager::msgFileType("text/english/game/inventry.msg");
-
     std::string statsLabels;
-    for (unsigned int i = 0; i != 7; ++i) statsLabels += msg->message(i)->text() + "\n";
+    for (unsigned int i = 0; i != 7; ++i) statsLabels += _t(MSG_INVENTORY, i) + "\n";
     addUI("label_stats", new TextArea(statsLabels, screenX, screenY + 10*2));
 
     std::string statsValues;
@@ -112,7 +113,7 @@ void Inventory::init()
     std::stringstream ss;
     for (unsigned int i=7; i<14; i++)
     {
-        ss << msg->message(i)->text() << "\n";
+        ss << _t(MSG_INVENTORY, i) << "\n";
     }
     auto textLabel = new TextArea(ss.str(), screenX+40, screenY+20);
 
@@ -192,7 +193,7 @@ void Inventory::init()
 
     ss.str("");
     ss << weight;
-    auto totalWtLabel = new TextArea(msg->message(20), screenX+14, screenY+180);
+    auto totalWtLabel = new TextArea(_t(MSG_INVENTORY, 20), screenX+14, screenY+180);
     auto weightLabel = new TextArea(ss.str(), screenX+70, screenY+180);
     weightLabel->setWidth(24)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
     ss.str("");
@@ -422,9 +423,8 @@ void Inventory::_screenShow (unsigned int PID)
     }
     else
     {
-        auto msg = ResourceManager::msgFileType("text/english/game/pro_item.msg");
-        playerNameLabel->setText(msg->message(PID*100)->text()); // item name
-        screenLabel->setText(msg->message(PID*100+1)->text()); // item dedcription
+        playerNameLabel->setText(_t(MSG_PROTO_ITEMS, PID*100)); // item name
+        screenLabel->setText(_t(MSG_PROTO_ITEMS, PID*100 + 1)); // item dedcription
     }
 
     screenLabel->setVisible(PID != 0);

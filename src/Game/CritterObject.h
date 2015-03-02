@@ -46,6 +46,7 @@ protected:
 
     int _gender = GENDER_MALE;
     int _poisonLevel = 0;
+    int _radiationLevel = 0;
     int _hitPoints = 0;
     int _hitPointsMax = 0;
     int _healingRate = 0;
@@ -233,6 +234,9 @@ public:
 
     int poisonLevel();
     void setPoisonLevel(int value);
+    
+    int radiationLevel();
+    void setRadiationLevel(int radiationLevel);
 
     virtual int damageResist(unsigned int type);
     void setDamageResist(unsigned int type, int value);
@@ -255,6 +259,8 @@ public:
 
     virtual bool running();
     virtual void setRunning(bool value);
+    
+    virtual void stopMovement();
 
     virtual Animation* setActionAnimation(std::string action);
 };

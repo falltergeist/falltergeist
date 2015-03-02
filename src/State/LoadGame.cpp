@@ -21,12 +21,13 @@
 #include <sstream>
 
 // Falltergeist includes
+#include "../Event/StateEvent.h"
+#include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
-#include "State.h"
-#include "../Event/StateEvent.h"
+#include "../State/State.h"
 #include "../State/LoadGame.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
@@ -85,23 +86,21 @@ void LoadGame::init()
     addUI(cancelButton);
 
     // LABELS
-    auto msgOptions = ResourceManager::msgFileType("text/english/game/options.msg");
-    auto msgLoadSave = ResourceManager::msgFileType("text/english/game/lsgame.msg");
 
     auto font3_907824ff = ResourceManager::font("font3.aaf", 0x907824ff);
 
     // LOAD GAME LABEL
-    auto saveGameLabel = new TextArea(msgLoadSave->message(110), bgX+48, bgY+27);
+    auto saveGameLabel = new TextArea(_t(MSG_LOAD_SAVE, 110), bgX+48, bgY+27);
     saveGameLabel->setFont(font3_907824ff);
     addUI(saveGameLabel);
 
     // DONE BUTTON LABEL
-    auto doneButtonLabel = new TextArea(msgOptions->message(300), bgX+410, bgY+348);
+    auto doneButtonLabel = new TextArea(_t(MSG_OPTIONS, 300), bgX+410, bgY+348);
     doneButtonLabel->setFont(font3_907824ff);
     addUI(doneButtonLabel);
 
     // CANCEL BUTTON LABEL
-    auto cancelButtonLabel = new TextArea(msgOptions->message(121), bgX+515, bgY+348);
+    auto cancelButtonLabel = new TextArea(_t(MSG_OPTIONS, 121), bgX+515, bgY+348);
     cancelButtonLabel->setFont(font3_907824ff);
     addUI(cancelButtonLabel);
 }

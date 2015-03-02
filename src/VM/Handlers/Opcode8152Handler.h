@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2014 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -17,34 +17,26 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef FALLTERGEIST_OPCODE8152HANDLER_H
+#define FALLTERGEIST_OPCODE8152HANDLER_H
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Handlers/Opcode8037Handler.h"
-#include "../../VM/VM.h"
+#include "../../VM/OpcodeHandler.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Opcode8037Handler::Opcode8037Handler(VM* vm) : OpcodeHandler(vm)
+class Opcode8152Handler : public OpcodeHandler
 {
-}
-
-void Opcode8037Handler::_run()
-{
-    auto b = _vm->popDataInteger();
-    auto a = _vm->popDataInteger();
-    auto result = a < b;
-
-    Logger::debug("SCRIPT") << "[8037] [*] lt (a < b)" << std::endl
-                            << "    a = " << a << std::endl
-                            << "    b = " << b << std::endl
-                            << "    result = " << result << std::endl;
-
-    _vm->pushDataInteger(result);
-}
+public:
+    Opcode8152Handler(VM* vm);
+private:
+    void _run();
+};
 
 }
+#endif // FALLTERGEIST_OPCODE8152HANDLER_H

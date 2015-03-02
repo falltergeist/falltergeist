@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
@@ -51,9 +52,10 @@ void ExitConfirm::init()
     setFullscreen(false);
 
     auto background = new Image("art/intrface/lgdialog.frm");
+    auto panelHeight = Game::getInstance()->locationState()->playerPanelState()->height();
 
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
-    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
+    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height() - panelHeight)*0.5;
 
     auto box1 = new Image("art/intrface/donebox.frm");
     auto box2 = new Image("art/intrface/donebox.frm");
@@ -68,19 +70,17 @@ void ExitConfirm::init()
     noButton->addEventHandler("mouseleftclick",  [this](Event* event){ this->doNo(); });
 
     // label: Are you sure you want to quit?
-    auto msg = ResourceManager::msgFileType("text/english/game/misc.msg");
     auto font = ResourceManager::font("font1.aaf", 0xb89c28ff);
-    auto quitLabel = new TextArea(msg->message(0), backgroundX+30, backgroundY+52);
+    auto quitLabel = new TextArea(_t(MSG_MISC, 0), backgroundX+30, backgroundY+52);
     quitLabel->setFont(font)->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // label: yes & no
-    auto msg2 = ResourceManager::msgFileType("text/english/game/dbox.msg");
     auto fontBig = ResourceManager::font("font3.aaf", 0xb89c28ff);
     // label: yes 101
-    auto yesButtonLabel = new TextArea(msg2->message(101), backgroundX+74, backgroundY+101);
+    auto yesButtonLabel = new TextArea(_t(MSG_DIALOG_BOX, 101), backgroundX+74, backgroundY+101);
     yesButtonLabel->setFont(fontBig);
     // label: no 102
-    auto noButtonLabel = new TextArea(msg2->message(102), backgroundX+204, backgroundY+101);
+    auto noButtonLabel = new TextArea(_t(MSG_DIALOG_BOX, 102), backgroundX+204, backgroundY+101);
     noButtonLabel->setFont(fontBig);
 
     background->setX(backgroundX);

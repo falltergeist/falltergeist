@@ -51,6 +51,7 @@ class GameObject : public EventEmitter
 {
 protected:
     bool _canWalkThru = true;
+    bool _wallTransEnd = false;
     int _type = -1;
     int _subtype = -1;
     int _PID = -1;
@@ -74,7 +75,7 @@ public:
     enum { TYPE_ITEM = 0, TYPE_CRITTER, TYPE_SCENERY, TYPE_WALL, TYPE_TILE, TYPE_MISC, TYPE_DUDE };
     enum { TYPE_ITEM_ARMOR = 0, TYPE_ITEM_CONTAINER, TYPE_ITEM_DRUG, TYPE_ITEM_WEAPON, TYPE_ITEM_AMMO, TYPE_ITEM_MISC, TYPE_ITEM_KEY };
     enum { TYPE_SCENERY_DOOR = 0, TYPE_SCENERY_STAIRS, TYPE_SCENERY_ELEVATOR, TYPE_SCENERY_LADDER, TYPE_SCENERY_GENERIC };
-    enum { TRANS_NONE = 0, TRANS_WALL, TRANS_GLASS, TRANS_STEAM, TRANS_ENERGY, TRANS_RED };
+    enum { TRANS_DEFAULT = 0, TRANS_NONE, TRANS_WALL, TRANS_GLASS, TRANS_STEAM, TRANS_ENERGY, TRANS_RED };
     enum { ORIENTATION_NS = 0, ORIENTATION_EW, ORIENTATION_NC, ORIENTATION_SC, ORIENTATION_EC, ORIENTATION_WC };
 
     GameObject();
@@ -82,6 +83,9 @@ public:
 
     bool canWalkThru();
     virtual void setCanWalkThru(bool value);
+
+    bool wallTransEnd();
+    virtual void setWallTransEnd(bool value);
 
     int type();
     int subtype();

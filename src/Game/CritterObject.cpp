@@ -25,6 +25,7 @@
 #include "WeaponItemObject.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
+#include "../Game/DudeObject.h"
 #include "../Graphics/Animation.h"
 #include "../Graphics/AnimationFrame.h"
 #include "../Graphics/AnimationQueue.h"
@@ -418,7 +419,12 @@ GameItemObject* GameCritterObject::currentHandSlot()
 
 void GameCritterObject::talk_p_proc()
 {
-    script()->call("talk_p_proc");
+    if (_script && _script->hasFunction("talk_p_proc"))
+    {
+        _script
+            ->setSourceObject(Game::getInstance()->player())
+            ->call("talk_p_proc");
+    }
 }
 
 void GameCritterObject::damage_p_proc()
@@ -431,7 +437,10 @@ void GameCritterObject::combat_p_proc()
 
 void GameCritterObject::critter_p_proc()
 {
-    script()->call("critter_p_proc");
+    if (_script && _script->hasFunction("critter_p_proc"))
+    {
+        _script->call("critter_p_proc");
+    }
 }
 
 void GameCritterObject::is_dropping_p_proc()
@@ -458,7 +467,7 @@ void GameCritterObject::think()
             delete _ui;
             _orientation = hexagon()->orientationTo(movementQueue()->back());
             auto animation = _generateMovementAnimation();
-            animation->setActionFrame(_running ? 3 : 4);
+            animation->setActionFrame(_running ? 2 : 4);
             animation->addEventHandler("actionFrame",    std::bind(&GameCritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
             animation->addEventHandler("animationEnded", std::bind(&GameCritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
             animation->play();
@@ -473,57 +482,67 @@ void GameCritterObject::onMovementAnimationEnded(Event* event)
     auto hexagon = movementQueue()->back();
     movementQueue()->pop_back();
     Game::getInstance()->locationState()->moveObjectToHexagon(this, hexagon);
+    auto animation = dynamic_cast<Animation*>(ui());
 
     if (movementQueue()->size() == 0)
     {
         _moving = false;
-        dynamic_cast<Animation*>(_ui)->stop();
+        animation->stop();
         setActionAnimation("aa");
         return;
     }
 
     auto newHexagon = movementQueue()->back();
     auto newOrientation = this->hexagon()->orientationTo(newHexagon);
-
-    if (event->name() == "actionFrame" && newOrientation == orientation())
+    
+    if (event->name() == "animationEnded" || (int)newOrientation != orientation())
     {
-        // fixing animation offsets
-        auto animation = dynamic_cast<Animation*>(ui());
-        auto actionFrame = animation->frames()->at(animation->actionFrame() - 1);
+        _orientation = newOrientation;
+        auto newAnimation = _generateMovementAnimation();
+        if (event->name() == "actionFrame") 
+        {
+            newAnimation->setCurrentFrame(animation->currentFrame());
+            newAnimation->setActionFrame(animation->actionFrame());
+        }
+        else
+        {
+            newAnimation->setActionFrame(_running ? 2 : 4);
+        }
+        newAnimation->addEventHandler("actionFrame",    std::bind(&GameCritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
+        newAnimation->addEventHandler("animationEnded", std::bind(&GameCritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
+        newAnimation->play();
+        delete _ui;
+        _ui = animation = newAnimation;
+    }
 
+    if (event->name() == "actionFrame")
+    {
+        // at each action frame critter switches to the next hex and frame positions are offset relative to the action frame offsets
+        auto actionFrame = animation->frames()->at(animation->actionFrame());
         for (auto it = animation->frames()->rbegin(); it != animation->frames()->rend(); ++it)
         {
             auto frame = (*it);
-            if (frame == actionFrame) break;
-
             frame->setXOffset(frame->xOffset() - actionFrame->xOffset());
             frame->setYOffset(frame->yOffset() - actionFrame->yOffset());
+            if (frame == actionFrame) break;
         }
 
         if (_running)
         {
             switch (animation->actionFrame())
             {
-                case 3:
-                    animation->setActionFrame(5);
+                // those frame numbers were guessed to make seamless running animation
+                case 2:
+                    animation->setActionFrame(4);
+                    break;
+                case 4:
+                    animation->setActionFrame(6);
                     break;
                 case 5:
-                    animation->setActionFrame(8);
+                    animation->setActionFrame(7);
                     break;
             }
         }
-
-    }
-    else // animationEnded || new orientation
-    {
-        delete _ui;
-        _orientation = newOrientation;
-        auto animation = _generateMovementAnimation();
-        animation->setActionFrame(_running ? 3 : 4);
-        animation->addEventHandler("actionFrame",    std::bind(&GameCritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
-        animation->addEventHandler("animationEnded", std::bind(&GameCritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
-        animation->play();
-        _ui = animation;
     }
 }
 
@@ -555,6 +574,15 @@ Animation* GameCritterObject::setActionAnimation(std::string action)
     return animation;
 }
 
+void GameCritterObject::setRadiationLevel(int radiationLevel)
+{
+    this->_radiationLevel = radiationLevel;
+}
+
+int GameCritterObject::radiationLevel()
+{
+    return _radiationLevel;
+}
 
 std::string GameCritterObject::_generateArmorFrmString()
 {
@@ -644,6 +672,22 @@ void GameCritterObject::setRunning(bool value)
 {
     _running = value;
 }
+
+void GameCritterObject::stopMovement()
+{
+    _movementQueue.clear();
+    // @TODO: _ui probably needs to be always one type
+    if (auto queue = dynamic_cast<AnimationQueue*>(_ui))
+    {
+        queue->stop();
+    }
+    else if (auto animation = dynamic_cast<Animation*>(_ui))
+    {
+        animation->stop();
+    }
+    _moving = false;
+}
+
 
 }
 }

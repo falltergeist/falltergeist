@@ -35,7 +35,7 @@ Opcode8137Handler::Opcode8137Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8137Handler::_run()
 {
-    int time = _vm->popDataInteger();
+    int time = _vm->dataStack()->popInteger();
     Logger::debug("SCRIPT") << "[8137] [=] void gfade_in(int time)" << std::endl
                             << "    time = " << time << std::endl;
 }

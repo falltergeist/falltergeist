@@ -39,7 +39,7 @@ void Opcode80C5Handler::_run()
 {
     auto& debug = Logger::debug("SCRIPT");
     debug << "[80C5] [?] GVAR[num]" << std::endl;
-    int num = _vm->popDataInteger();
+    int num = _vm->dataStack()->popInteger();
     int value;
     if (num < 0)
         {
@@ -50,7 +50,7 @@ void Opcode80C5Handler::_run()
             auto game = Game::getInstance();
             value = game->GVAR(num);
         }
-    _vm->pushDataInteger(value);
+    _vm->dataStack()->push(value);
 
     debug << "    num = 0x" << std::hex << num << std::endl;
     debug << "    value = 0x" << std::hex << value << std::endl;

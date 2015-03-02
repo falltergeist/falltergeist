@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -20,40 +20,38 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../VM/VMStackPointerValue.h"
+#include "../../Logger.h"
+#include "../../VM/Handlers/Opcode8044Handler.h"
+#include "../../VM/VM.h"
+#include "../../VM/VMStackValue.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-VMStackPointerValue::VMStackPointerValue(void* value) : VMStackValue(TYPE_POINTER)
-{
-    _value = value;
-}
-
-VMStackPointerValue::~VMStackPointerValue()
+Opcode8044Handler::Opcode8044Handler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void VMStackPointerValue::setValue(void* value)
+void Opcode8044Handler::_run()
 {
-    _value = value;
-}
-
-void* VMStackPointerValue::value()
-{
-    return _value;
-}
-
-void VMStackPointerValue::setPointerType(unsigned int type)
-{
-    _pointerType = type;
-}
-
-unsigned int VMStackPointerValue::pointerType()
-{
-    return _pointerType;
+    Logger::debug("SCRIPT") << "[8044] [*] op_floor" << std::endl;
+    auto value = _vm->dataStack()->pop();
+    int result = 0;
+    if (value.type() == VMStackValue::TYPE_FLOAT)
+    {
+        result = (int)value.floatValue(); // this is how "floor" originally worked..
+    }
+    else if (value.type() == VMStackValue::TYPE_INTEGER)
+    {
+        result = value.integerValue();
+    }
+    else
+    {
+        _error(std::string("op_floor: invalid argument type: ") + value.typeName());
+    }
+    _vm->dataStack()->push(result);
 }
 
 }

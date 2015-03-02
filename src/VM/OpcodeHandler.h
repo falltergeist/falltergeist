@@ -35,9 +35,16 @@ class OpcodeHandler
 {
 protected:
     VM* _vm;
-    virtual void _run() = 0;
+    unsigned int _offset;
+    
+    virtual void _run();
+    // print warning message to log
+    void _warning(const std::string& message);
+    // prints error message to logs and throws VMErrorException
+    void _error(const std::string& message);
 public:
     OpcodeHandler(VM* vm);
+    virtual ~OpcodeHandler();
     void run();
 };
 

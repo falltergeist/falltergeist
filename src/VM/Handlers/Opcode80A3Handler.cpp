@@ -23,6 +23,8 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80A3Handler.h"
 #include "../../VM/VM.h"
+#include "../../Game/Game.h"
+#include "../../Audio/AudioMixer.h"
 
 // Third party includes
 
@@ -36,7 +38,8 @@ Opcode80A3Handler::Opcode80A3Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80A3Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80A3] [=] void play_sfx(string* p1)" << std::endl;
-    _vm->popDataPointer();
+    auto name = _vm->dataStack()->popString();
+    Game::Game::getInstance()->mixer()->playACMSound("sound/sfx/" + name + ".acm");
 }
 
 }

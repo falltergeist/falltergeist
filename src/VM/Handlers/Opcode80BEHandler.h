@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -17,29 +17,26 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_VMSTACKFLOATVALUE_H
-#define FALLTERGEIST_VMSTACKFLOATVALUE_H
+#ifndef FALLTERGEIST_OPCODE80BEHANDLER_H
+#define FALLTERGEIST_OPCODE80BEHANDLER_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../VM/VMStackValue.h"
+#include "../../VM/OpcodeHandler.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class VMStackFloatValue : public VMStackValue
+class Opcode80BEHandler : public OpcodeHandler
 {
-protected:
-    float _value;
 public:
-    VMStackFloatValue(float value);
-    virtual ~VMStackFloatValue();
-    float value();
-    void setValue(float value);
+    Opcode80BEHandler(VM* vm);
+private:
+    void _run();
 };
 
 }
-#endif // FALLTERGEIST_VMSTACKFLOATVALUE_H
+#endif

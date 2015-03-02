@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Logger.h"
 #include "../../Game/CritterObject.h"
 #include "../../VM/Handlers/Opcode80CAHandler.h"
@@ -37,13 +36,20 @@ Opcode80CAHandler::Opcode80CAHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80CAHandler::_run()
 {
-    int number = _vm->popDataInteger();
-    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataPointer());
+    auto& debug = Logger::debug("SCRIPT");
+    debug << "[80CA] [+] int value = get_critter_stat(GameCritterObject* who, int number)" << std::endl;
+    int number = _vm->dataStack()->popInteger();
+    debug << "    number = " << number << std::endl;
+    auto object = _vm->dataStack()->popObject();
+    if (!object) 
+    {
+        _error("get_critter_stat(who, stat) - who is NULL");
+    }
+    auto critter = dynamic_cast<Game::GameCritterObject*>(object);
     if (!critter)
     {
-        throw Exception("VM::opcode80CA pointer error");
+        _error("get_critter_stat(who, stat) - who is not a critter");
     }
-
     int result;
     switch (number)
     {
@@ -98,6 +104,89 @@ void Opcode80CAHandler::_run()
             result = critter->criticalChance();
             break;
         }
+        case 16: // better criticals
+            // @TODO
+            break;
+        case 17: // 
+        {
+            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_NORMAL);
+            break;
+        }
+        case 18: // 
+        {
+            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_LASER);
+            break;
+        }
+        case 19: // 
+        {
+            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_FIRE);
+            break;
+        }
+        case 20: // 
+        {
+            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_PLASMA);
+            break;
+        }
+        case 21: // 
+        {
+            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_ELECTRICAL);
+            break;
+        }
+        case 22: // 
+        {
+            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_EMP);
+            break;
+        }
+        case 23: // 
+        {
+            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_EXPLOSION);
+            break;
+        }
+        case 24: // 
+        {
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_NORMAL);
+            break;
+        }
+        case 25: // 
+        {
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_LASER);
+            break;
+        }
+        case 26: // 
+        {
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_FIRE);
+            break;
+        }
+        case 27: // 
+        {
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_PLASMA);
+            break;
+        }
+        case 28: // 
+        {
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_ELECTRICAL);
+            break;
+        }
+        case 29: // 
+        {
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_EMP);
+            break;
+        }
+        case 30: // 
+        {
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_EXPLOSION);
+            break;
+        }
+        case 31: // rad resist
+        {
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_RADIATION);
+            break;
+        }
+        case 32: // poison resist
+        {
+            result = critter->damageResist(Game::GameCritterObject::DAMAGE_POISON);
+            break;
+        }
         case 33: // age
         {
             result = critter->gender();
@@ -113,15 +202,23 @@ void Opcode80CAHandler::_run()
             result = critter->hitPoints();
             break;
         }
+        case 36: // current poison
+        {
+            result = critter->poisonLevel();
+            break;
+        }
+        case 37: // current radiation
+        {
+            result = critter->radiationLevel();
+            break;
+        }
         default:
         {
-            throw Exception("VM::opcode80CA - unimplemented number:" + std::to_string(number));
+            _error("VM::opcode80CA - unimplemented number:" + std::to_string(number));
         }
     }
-    _vm->pushDataInteger(result);
-    Logger::debug("SCRIPT") << "[80CA] [+] int value = get_critter_stat(GameCritterObject* who, int number)" << std::endl
-                            << "    number = " << number << std::endl
-                            << "    value  = " << result << std::endl;
+    _vm->dataStack()->push(result);
+    debug << "    value  = " << result << std::endl;
 }
 
 }

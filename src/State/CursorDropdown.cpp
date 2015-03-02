@@ -31,6 +31,7 @@
 #include "../State/Location.h"
 #include "../UI/HiddenMask.h"
 #include "Audio/AudioMixer.h"
+#include "../Logger.h"
 
 // Third party includes
 
@@ -49,6 +50,11 @@ CursorDropdown::CursorDropdown(std::vector<int> icons, bool onlyIcon) : State()
     {
         _icons.resize(1);
     }
+    auto mouse = Game::getInstance()->mouse();
+    _initialMouseStack = mouse->states()->size();
+    mouse->pushState(Mouse::NONE);
+    _initialX = mouse->x();
+    _initialY = mouse->y();
 }
 
 CursorDropdown::~CursorDropdown()
@@ -66,10 +72,6 @@ void CursorDropdown::init()
 {
     if (_initialized) return;
     State::init();
-    auto mouse = Game::getInstance()->mouse();
-    _initialX = mouse->x();
-    _initialY = mouse->y();
-    mouse->pushState(Mouse::NONE);
     setFullscreen(false);
     if (!_onlyShowIcon)
     {
@@ -160,27 +162,22 @@ void CursorDropdown::showMenu()
     _cursor->setX(_initialX);
     _cursor->setY(_initialY);
     addUI(_cursor);
-    _mask = new HiddenMask(game->renderer()->width(), game->renderer()->height());
-    if (_onlyShowIcon)
+    addUI(_surface);
+    // draw icons on the surface for the first time
+    for (auto ui : _inactiveIcons)
     {
-        _mask->addEventHandler("mousemove", [this](Event* event) {
-            auto game = Game::getInstance();
-            game->popState();
-        });
+        ui->texture()->copyTo(_surface->texture(), ui->x(), ui->y());
     }
-    else
-    {        
+    if (!_onlyShowIcon)
+    {
         if (deltaY > 0)
         {
             game->mouse()->setX(_initialX);
             game->mouse()->setY(_surface->y());
         }
-        _mask->addEventHandler("mouseleftup", [this](Event* event){ this->onLeftButtonUp(dynamic_cast<MouseEvent*>(event)); });
         Game::getInstance()->mixer()->playACMSound("sound/sfx/iaccuxx1.acm");
+        _activeIcons.at(0)->texture()->copyTo(_surface->texture(), 0,  0); // highlight first item
     }
-    _mask->setVisible(true);
-    addUI(_mask);
-    addUI(_surface);
 }
 
 Game::GameObject* CursorDropdown::object()
@@ -193,32 +190,48 @@ void CursorDropdown::setObject(Game::GameObject* object)
     _object = object;
 }
 
+void CursorDropdown::handle(Event* event)
+{
+    if (auto mouseEvent = dynamic_cast<MouseEvent*>(event)) 
+    {
+        if (mouseEvent->name() == "mouseup" && mouseEvent->leftButton())
+        {
+            onLeftButtonUp(mouseEvent);
+        }
+        else if (mouseEvent->name() == "mousemove" && _onlyShowIcon)
+        {
+            Game::getInstance()->popState();
+            event->setHandled(true);
+        }
+        else if (mouseEvent->name() == "mousedown" && !mouseEvent->leftButton())
+        {
+            Game::getInstance()->popState();
+        }
+    }
+}
+
 void CursorDropdown::think()
 {
     State::think();
 
     auto game = Game::getInstance();
-    for (auto ui : _inactiveIcons)
-    {
-        ui->texture()->copyTo(_surface->texture(), ui->x(), ui->y());
-    }
     
     const int mousePixelsForItem = 10;
-
-    _currentSurface = (game->mouse()->y() - _surface->y())/mousePixelsForItem;
-    if (_currentSurface < 0)
+    // select current icon
+    _previousIcon = _currentIcon;
+    _currentIcon = (game->mouse()->y() - _surface->y())/mousePixelsForItem;
+    if (_currentIcon < 0)
     {
         if (!_onlyShowIcon)
             game->mouse()->setY(_surface->y());
-        _currentSurface = 0;
+        _currentIcon = 0;
     }
-    if ((unsigned int)_currentSurface >= _icons.size())
+    if ((unsigned int)_currentIcon >= _icons.size())
     {
         if (!_onlyShowIcon)
             game->mouse()->setY(_surface->y() + _icons.size()*mousePixelsForItem);
-        _currentSurface = _icons.size() - 1;
+        _currentIcon = _icons.size() - 1;
     }
-
     if (!_onlyShowIcon)
     {
         int xDelta = game->mouse()->x() - _surface->x();
@@ -226,47 +239,57 @@ void CursorDropdown::think()
         {
             game->mouse()->setX(_initialX);
         }
-        auto activeIcon = _activeIcons.at(_currentSurface);
-        activeIcon->texture()->copyTo(_surface->texture(), activeIcon->x(), activeIcon->y());
+    }
+}
+
+void CursorDropdown::render()
+{
+    if (!_deactivated)
+    {
+        if (_currentIcon != _previousIcon) 
+        {
+            auto inactiveIcon = _inactiveIcons.at(_previousIcon);
+            inactiveIcon->texture()->copyTo(_surface->texture(), inactiveIcon->x(), inactiveIcon->y());
+            auto activeIcon = _activeIcons.at(_currentIcon);
+            activeIcon->texture()->copyTo(_surface->texture(), activeIcon->x(), activeIcon->y());
+        }
+        State::render();
     }
 }
 
 void CursorDropdown::onStateActivate(StateEvent* event)
 {
-    if (_needToHide)
+    if (_deactivated)
     {
-        Game::getInstance()->popState();
+        Game::getInstance()->popState(); // remove when re-activated
     }
 }
 
 void CursorDropdown::onStateDeactivate(StateEvent* event)
 {
-    auto game = Game::getInstance();
-    bool deleted = true;
-    for (auto state : *game->states()) 
+    if (!_deactivated)
     {
-        if (state == this)
+        auto game = Game::getInstance();
+        auto mouse = game->mouse();
+        // workaround to get rid of cursor disappearing issues
+        std::vector<unsigned int> icons;
+        while (mouse->states()->size() > _initialMouseStack)
         {
-            deleted = false;
-            break;
+            icons.push_back(mouse->state());
+            mouse->popState();
         }
-    }
-    if (deleted) // this happens when state is deactivated after popState())
-    {
-        game->mouse()->popState();
-    }
-    if (!_needToHide)
-    {
-        if (!_onlyShowIcon)
+        if (icons.size() > 0)
         {
-            game->mouse()->setX(_initialX);
-            game->mouse()->setY(_initialY);
+            icons.pop_back(); // remove empty icon from CursorDropdown state
+            // place only new icons back in stack
+            for (auto it = icons.rbegin(); it != icons.rend(); it++)
+            {
+                mouse->pushState(*it);
+            }
         }
-        for (auto ui : _ui)
-        {
-            ui->setVisible(false);
-        }
-        _needToHide = true;
+        mouse->setX(_initialX);
+        mouse->setY(_initialY);
+        _deactivated = true;
     }
 }
 
@@ -274,9 +297,10 @@ void CursorDropdown::onLeftButtonUp(MouseEvent* event)
 {
     auto game = Game::getInstance();
     game->popState();
-    if (!_onlyShowIcon)
+    if (!_onlyShowIcon) 
     {
-        game->locationState()->handleAction(object(), _icons.at(_currentSurface));
+        game->locationState()->handleAction(object(), _icons.at(_currentIcon));
+        event->setHandled(true);
     }
 }
 

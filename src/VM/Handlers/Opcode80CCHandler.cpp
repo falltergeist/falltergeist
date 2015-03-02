@@ -38,7 +38,7 @@ Opcode80CCHandler::Opcode80CCHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80CCHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80CC] [=] void animate_stand_obj(void* obj)" << std::endl;
-    _vm->popDataPointer();
+    _vm->dataStack()->popObject();
 }
 
 }

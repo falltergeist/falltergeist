@@ -35,10 +35,35 @@ Opcode803BHandler::Opcode803BHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode803BHandler::_run()
 {
-    Logger::debug("SCRIPT") << "[803B] [*] mult *" << std::endl;
-    auto b = _vm->popDataInteger();
-    auto a = _vm->popDataInteger();
-    _vm->pushDataInteger(a * b);
+    Logger::debug("SCRIPT") << "[803B] [*] op_mul(a, b) *" << std::endl;
+    auto bValue = _vm->dataStack()->pop();
+    auto aValue = _vm->dataStack()->pop();
+    if (!bValue.isNumber() || !aValue.isNumber())
+    {
+        _error(std::string("op_mul(a, b): Incompatible types: ") + aValue.typeName() + " * " + bValue.typeName());
+    }
+    if (aValue.type() == VMStackValue::TYPE_INTEGER)
+    {
+        if (bValue.type() == VMStackValue::TYPE_INTEGER)
+        {
+            _vm->dataStack()->push(aValue.integerValue() * bValue.integerValue());
+        }
+        else
+        {
+            _vm->dataStack()->push((float)aValue.integerValue() * bValue.floatValue());
+        }
+    }
+    else
+    {
+        if (bValue.type() == VMStackValue::TYPE_INTEGER)
+        {
+            _vm->dataStack()->push(aValue.floatValue() * (float)bValue.integerValue());
+        }
+        else
+        {
+            _vm->dataStack()->push(aValue.floatValue() * bValue.floatValue());
+        }
+    }
 }
 
 }

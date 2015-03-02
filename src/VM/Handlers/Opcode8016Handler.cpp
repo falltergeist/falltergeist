@@ -37,13 +37,13 @@ Opcode8016Handler::Opcode8016Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8016Handler::_run()
 {
-    auto name = *static_cast<std::string*>(_vm->popDataPointer());
+    auto name = _vm->dataStack()->popString();
     auto EVARS = Game::getInstance()->locationState()->EVARS();
     if (EVARS->find(name) == EVARS->end())
     {
         EVARS->insert(std::make_pair(name, nullptr));
     }
-    Logger::debug("SCRIPT") << "[8016] [*] export(name)" << std::endl
+    Logger::debug("SCRIPT") << "[8016] [*] op_export_var(name)" << std::endl
                             << "    name: " << name << std::endl;
 }
 

@@ -174,11 +174,11 @@ void Game::run()
         think();
         render();
         SDL_Delay(1);
-        while (!_statesForDelete.empty())
+        for (auto state : _statesForDelete)
         {
-            delete _statesForDelete.back();
-            _statesForDelete.pop_back();
+            delete state;
         }
+        _statesForDelete.clear();
     }
     Logger::info("GAME") << "Stopping main loop" << std::endl;
 }
@@ -403,14 +403,18 @@ void Game::think()
 
     _animatedPalette->think();
 
-    _mousePosition->setText(std::to_string(mouse()->x()) + " : " + std::to_string(mouse()->y()));
+    *_mousePosition = "";
+    *_mousePosition << mouse()->x() << " : " << mouse()->y();
 
-    std::string time = std::to_string(_gameTime->year()) + "-" + std::to_string(_gameTime->month()) + "-" + std::to_string(_gameTime->day()) + " ";
-    time += std::to_string(_gameTime->hours()) + ":" + std::to_string(_gameTime->minutes()) + ":" + std::to_string(_gameTime->seconds()) + " ";
-    time += std::to_string(_gameTime->ticks());
-    _currentTime->setText(time);
+    *_currentTime = "";
+    *_currentTime << _gameTime->year()  << "-" << _gameTime->month()   << "-" << _gameTime->day() << " "
+                  << _gameTime->hours() << ":" << _gameTime->minutes() << ":" << _gameTime->seconds() << " " << _gameTime->ticks();
 
-    if (_renderer->fading()) return;
+    if (_renderer->fading())
+    {
+        return;
+    }
+
     for (auto state : *statesForThinkAndHandle())
     {
         state->think();
@@ -420,13 +424,24 @@ void Game::think()
 void Game::render()
 {
     renderer()->beginFrame();
+
     for (auto state : *statesForRender())
     {
         state->render();
     }
-    if (settings()->displayFps()) _fpsCounter->render();
+
+    if (settings()->displayFps())
+    {
+        _fpsCounter->render();
+    }
+
     _falltergeistVersion->render();
-    if (settings()->displayMousePosition()) _mousePosition->render();
+
+    if (settings()->displayMousePosition())
+    {
+        _mousePosition->render();
+    }
+
     _currentTime->render();
     _mouse->render();
     renderer()->endFrame();

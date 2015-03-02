@@ -38,8 +38,8 @@ Opcode8151Handler::Opcode8151Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8151Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8151] [=] int critter_is_fleeing(void* who)" << std::endl;
-    _vm->popDataPointer();
-    _vm->pushDataInteger(0);
+    _vm->dataStack()->popObject();
+    _vm->dataStack()->push(0);
 }
 
 }

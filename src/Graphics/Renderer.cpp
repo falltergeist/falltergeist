@@ -274,9 +274,16 @@ void Renderer::drawTexture(Texture* texture, int x, int y, int sourceX, int sour
 
 Texture* Renderer::screenshot()
 {
-    auto texture = new Texture(width(), height());
+    SDL_Surface* window = SDL_GetWindowSurface(sdlWindow());
+    if (!window)
+    {
+        throw Exception(SDL_GetError());
+    }
+
+    auto texture = new Texture(window->w, window->h);
     auto surface = texture->sdlSurface();
     SDL_RenderReadPixels(_sdlRenderer, NULL, surface->format->format, surface->pixels, surface->pitch);
+    SDL_FreeSurface(window);
     return texture;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -17,29 +17,31 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_VMSTACKINTVALUE_H
-#define FALLTERGEIST_VMSTACKINTVALUE_H
-
 // C++ standard includes
 
 // Falltergeist includes
-#include "../VM/VMStackValue.h"
+#include "../../Logger.h"
+#include "../../VM/Handlers/Opcode8043Handler.h"
+#include "../../VM/VM.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class VMStackIntValue : public VMStackValue
+Opcode8043Handler::Opcode8043Handler(VM* vm) : OpcodeHandler(vm)
 {
-protected:
-    int _value;
-public:
-    VMStackIntValue(int value);
-    virtual ~VMStackIntValue();
-    int value();
-    void setValue(int value);
-};
+}
+
+void Opcode8043Handler::_run()
+{
+    Logger::debug("SCRIPT") << "[8043] [*] op_bwnot" << std::endl;
+    auto arg = _vm->dataStack()->pop();
+    if (!arg.isNumber()) 
+    {
+        _error(std::string("op_bwnot: invalid argument type: ") + arg.typeName());
+    }
+    _vm->dataStack()->push(~ arg.toInteger());
+}
 
 }
-#endif // FALLTERGEIST_VMSTACKINTVALUE_H

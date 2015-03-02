@@ -44,7 +44,7 @@ protected:
     std::vector<Texture*> _monitorTextures;
     std::vector<Texture*> _reddotTextures;
 public:
-    AnimatedImage(std::shared_ptr<libfalltergeist::FrmFileType> frm, unsigned int direction);
+    AnimatedImage(std::shared_ptr<libfalltergeist::Frm::File> frm, unsigned int direction);
     unsigned int width();
     unsigned int height();
     ~AnimatedImage();

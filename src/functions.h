@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -17,33 +17,35 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef FALLTERGEIST_FUNCTIONS_H
+#define FALLTERGEIST_FUNCTIONS_H
+
 // C++ standard includes
+#include <string>
 
 // Falltergeist includes
-#include "../VM/VMStackIntValue.h"
 
-// Thirdparty includes
+// Third party includes
 
 namespace Falltergeist
 {
 
-VMStackIntValue::VMStackIntValue(int value) : VMStackValue(TYPE_INTEGER)
+enum MSG_TYPE
 {
-    _value = value;
-}
+    MSG_INVENTORY = 0,
+    MSG_LOAD_SAVE,
+    MSG_OPTIONS,
+    MSG_MISC,
+    MSG_EDITOR,
+    MSG_TRAITS,
+    MSG_SKILLS,
+    MSG_STATS,
+    MSG_SKILLDEX,
+    MSG_DIALOG_BOX,
+    MSG_PROTO_ITEMS
+};
 
-VMStackIntValue::~VMStackIntValue()
-{
-}
-
-int VMStackIntValue::value()
-{
-    return _value;
-}
-
-void VMStackIntValue::setValue(int value)
-{
-    _value = value;
-}
+std::string _t(MSG_TYPE type, size_t number);
 
 }
+#endif // FALLTERGEIST_FUNCTIONS_H

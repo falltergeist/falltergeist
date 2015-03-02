@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2014 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -21,24 +21,27 @@
 
 // Falltergeist includes
 #include "../../Logger.h"
-#include "../../VM/Handlers/Opcode8036Handler.h"
+#include "../../VM/Handlers/Opcode8152Handler.h"
 #include "../../VM/VM.h"
+
+
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Opcode8036Handler::Opcode8036Handler(VM* vm) : OpcodeHandler(vm)
+Opcode8152Handler::Opcode8152Handler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode8036Handler::_run()
+void Opcode8152Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8036] [*] geq >=" << std::endl;
-    auto b = _vm->popDataInteger();
-    auto a = _vm->popDataInteger();
-    _vm->pushDataInteger(a >= b);
+    Logger::debug("SCRIPT") << "[8152] [=] void op_critter_set_flee_state(critter who, boolean flag)" << std::endl;
+    // @TODO: add implementation
+    _vm->dataStack()->popLogical();
+    _vm->dataStack()->popObject();
 }
 
 }
+

@@ -34,6 +34,8 @@ namespace State
 
 class PlayerPanel : public State
 {
+protected:
+    void playWindowOpenSfx();
 public:
     PlayerPanel();
     virtual ~PlayerPanel();

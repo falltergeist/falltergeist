@@ -38,7 +38,7 @@ Opcode80FAHandler::Opcode80FAHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80FAHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80FA] [=] int action_being_used()" << std::endl;
-    _vm->pushDataInteger(1);
+    _vm->dataStack()->push(_vm->actionUsed());
 }
 
 }

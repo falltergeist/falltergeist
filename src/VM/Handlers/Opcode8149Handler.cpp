@@ -21,7 +21,6 @@
 
 // Falltergeist includes
 #include "../../Logger.h"
-#include "../../Exception.h"
 #include "../../VM/Handlers/Opcode8149Handler.h"
 #include "../../VM/VM.h"
 #include "../../Game/Object.h"
@@ -40,9 +39,8 @@ Opcode8149Handler::Opcode8149Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8149Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8149] [+] int obj_art_fid(void* obj)" << std::endl;
-    auto object = static_cast<Game::GameObject*>(_vm->popDataPointer());
-    if (!object) throw Exception("VM::opcode8149() - can't convert pointer to object");
-    _vm->pushDataInteger(object->FID());
+    auto object = _vm->dataStack()->popObject();
+    _vm->dataStack()->push(object->FID());
 }
 
 }

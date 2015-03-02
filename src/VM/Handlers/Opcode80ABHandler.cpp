@@ -38,10 +38,11 @@ Opcode80ABHandler::Opcode80ABHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80ABHandler::_run()
 {
+    // @TODO: implement
     Logger::debug("SCRIPT") << "[80AB] [=] int using_skill(GameCritterObject* who, int skill)" << std::endl;
-    _vm->popDataInteger();
-    _vm->popDataPointer();
-    _vm->pushDataInteger(0);
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popObject();
+    _vm->dataStack()->push(0);
 }
 
 }

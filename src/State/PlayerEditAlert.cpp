@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
@@ -78,8 +79,7 @@ void PlayerEditAlert::init()
     auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+264, bgY+273);
     doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
-    auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
-    auto doneLabel = new TextArea(msg->message(100), bgX+284, bgY+273);
+    auto doneLabel = new TextArea(_t(MSG_EDITOR, 100), bgX+284, bgY+273);
     auto font3_b89c28ff = ResourceManager::font("font3.aaf", 0xb89c28ff);
     doneLabel->setFont(font3_b89c28ff);
 

@@ -22,10 +22,11 @@
 
 // Falltergeist includes
 #include "../Font.h"
+#include "../functions.h"
+#include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
-#include "../Game/DudeObject.h"
 #include "../State/Location.h"
 #include "../State/PlayerEditAge.h"
 #include "../State/PlayerEditAlert.h"
@@ -68,15 +69,14 @@ void PlayerCreate::init()
     addUI(background);
 
     // STATS
-    auto msgStats = ResourceManager::msgFileType("text/english/game/stat.msg");
     std::string imagesStats[] = { "strength", "perceptn", "endur", "charisma", "intel", "agility", "luck"};
     for (unsigned int i = 0; i != 7; ++i)
     {
         std::stringstream ss;
         ss << "stats_" << (i+1);
 
-        _addTitle(ss.str(), msgStats->message(100 + i)->text());       // stat title
-        _addDescription(ss.str(), msgStats->message(200 + i)->text()); // stat description
+        _addTitle(ss.str(), _t(MSG_STATS, 100 + i));       // stat title
+        _addDescription(ss.str(), _t(MSG_STATS, 200 + i)); // stat description
         _addImage(ss.str(), new Image("art/skilldex/" + imagesStats[i] + ".frm")); // stat image
         _addLabel(ss.str(), new TextArea(backgroundX+104, backgroundY+46+33*i));          // stat value label
         _addCounter(ss.str(), new BigCounter(backgroundX+59, backgroundY+37+33*i));       // stat value counter
@@ -88,54 +88,51 @@ void PlayerCreate::init()
     _addCounter("statsPoints", new BigCounter(backgroundX+126, backgroundY+282)); // Free stats points counter
 
     // TRAITS
-    auto msgTraits = ResourceManager::msgFileType("text/english/game/trait.msg");
     std::string imagesTraits[] =  { "fastmeta", "bruiser", "smlframe", "onehand", "finesse",  "kamikaze", "heavyhnd", "fastshot",
                                     "bldmess",  "jinxed",  "goodnatr", "addict",  "drugrest", "empathy", "skilled",   "gifted" };
     for (unsigned int i = 0; i != 16; ++i)
     {
         std::stringstream ss;
         ss << "traits_" << (i+1);
-        _addTitle(ss.str(), msgTraits->message(100 + i)->text()); // trait title
-        _addDescription(ss.str(), msgTraits->message(200 + i)->text()); // trait description
+        _addTitle(ss.str(), _t(MSG_TRAITS, 100 + i)); // trait title
+        _addDescription(ss.str(), _t(MSG_TRAITS, 200 + i)); // trait description
         _addImage(ss.str(), new Image("art/skilldex/" + imagesTraits[i] + ".frm")); // trait image
         // left column
         if (i <= 7)
         {
-            _addLabel(ss.str(),  new TextArea(msgTraits->message(100 + i), backgroundX+48, backgroundY+353+13*i)); // trate label
+            _addLabel(ss.str(),  new TextArea(_t(MSG_TRAITS, 100 + i), backgroundX+48, backgroundY+353+13*i)); // trate label
             _addButton(ss.str(), new ImageButton(ImageButton::TYPE_SKILL_TOGGLE, backgroundX+23, backgroundY+352+13*i)); // trate toggle button
         }
         //right column
         else
         {
-            _addLabel(ss.str(),  new TextArea(msgTraits->message(100 + i), backgroundX+169, backgroundY+353+13*(i-8)))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT); // trate label
+            _addLabel(ss.str(),  new TextArea(_t(MSG_TRAITS, 100 + i), backgroundX+169, backgroundY+353+13*(i-8)))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT); // trate label
             _addButton(ss.str(), new ImageButton(ImageButton::TYPE_SKILL_TOGGLE, backgroundX+299, backgroundY+352+13*(i-8))); // trate toggle button
         }
     }
 
     // SKILLS
-    auto msgSkills = ResourceManager::msgFileType("text/english/game/skill.msg");
     std::string imagesSkills[]  = { "gunsml",   "gunbig", "energywp", "unarmed", "melee",  "throwing", "firstaid", "doctor",   "sneak",
                                     "lockpick", "steal",  "traps",    "science", "repair", "speech",   "barter",   "gambling", "outdoors"};
     for (unsigned int i = 0; i != 18; ++i)
     {
         std::stringstream ss;
         ss << "skills_" << (i+1);
-        _addTitle(ss.str(), msgSkills->message(100 + i)->text());
-        _addDescription(ss.str(), msgSkills->message(200 + i)->text());
+        _addTitle(ss.str(), _t(MSG_SKILLS, 100 + i));
+        _addDescription(ss.str(), _t(MSG_SKILLS, 200 + i));
         _addImage(ss.str(), new Image("art/skilldex/" + imagesSkills[i] + ".frm"));
         _addButton(ss.str(), new ImageButton(ImageButton::TYPE_SKILL_TOGGLE, backgroundX+347, backgroundY+26+11*i));
-        _addLabel(ss.str(),  new TextArea(msgSkills->message(100 + i), backgroundX+377, backgroundY+27+11*i))->setWidth(240);
+        _addLabel(ss.str(),  new TextArea(_t(MSG_SKILLS, 100 + i), backgroundX+377, backgroundY+27+11*i))->setWidth(240);
         _addLabel(ss.str() + "_value",  new TextArea("", backgroundX+577, backgroundY+27+11*i));
     }
     // Free skill points counts
     _addCounter("skillsPoints", new BigCounter(backgroundX+522, backgroundY+228));
 
     // HEALTH CONDITION
-    auto msgHealth = ResourceManager::msgFileType("text/english/game/editor.msg");
     std::string imagesHealth[] = { "hitpoint", "poisoned", "radiated", "eyedamag", "armright", "armleft", "legright", "legleft"};
-    _addTitle("health_1", msgHealth->message(300)->text());
-    _addLabel("health_1",  new TextArea(msgHealth->message(300), backgroundX+194, backgroundY+46)); //health
-    _addDescription("health_1", ResourceManager::msgFileType("text/english/game/stat.msg")->message(207)->text());
+    _addTitle("health_1", _t(MSG_EDITOR, 300));
+    _addLabel("health_1",  new TextArea(_t(MSG_EDITOR, 300), backgroundX+194, backgroundY+46)); //health
+    _addDescription("health_1", _t(MSG_STATS, 207));
     _addImage("health_1", new Image("art/skilldex/" + imagesHealth[0] + ".frm"));
 
     auto font1_0x183018ff = ResourceManager::font("font1.aaf", 0x183018ff);
@@ -144,15 +141,13 @@ void PlayerCreate::init()
     {
         std::stringstream ss;
         ss << "health_" << (i+2);
-        _addTitle(ss.str(), msgHealth->message(312 + i)->text());
-        _addDescription(ss.str(), msgHealth->message(400 + i)->text());
-        _addLabel(ss.str(), new TextArea(msgHealth->message(312+i), backgroundX+194, backgroundY+46+13*(i+1)))->setFont(font1_0x183018ff);
+        _addTitle(ss.str(), _t(MSG_EDITOR, 312 + i));
+        _addDescription(ss.str(), _t(MSG_EDITOR, 400 + i));
+        _addLabel(ss.str(), new TextArea(_t(MSG_EDITOR, 312 + i), backgroundX+194, backgroundY+46+13*(i+1)))->setFont(font1_0x183018ff);
         _addImage(ss.str(), new Image("art/skilldex/" + imagesHealth[i+1] + ".frm"));
     }
 
     // PLAYER PARAMS
-    auto msgStat = ResourceManager::msgFileType("text/english/game/stat.msg");
-    auto msgEditor = ResourceManager::msgFileType("text/english/game/editor.msg");
     std::string imagesParams[] = {"armorcls", "actionpt", "carryamt", "meleedam", "damresis", "poisnres", "radresis", "sequence", "healrate", "critchnc"};
     unsigned int labels[] = {302, 301, 311, 304, 305, 306, 307, 308, 309, 310};
     const int params[] = {109, 108, 112, 111, 124, 132, 131, 113, 114, 115};
@@ -160,10 +155,10 @@ void PlayerCreate::init()
     {
         std::stringstream ss;
         ss << "params_" << (i+1);
-        _addTitle(ss.str(), msgStat->message(params[i])->text());
-        _addDescription(ss.str(), msgStat->message(params[i] + 100)->text());
+        _addTitle(ss.str(), _t(MSG_STATS, params[i]));
+        _addDescription(ss.str(), _t(MSG_STATS, params[i] + 100));
         _addImage(ss.str(), new Image("art/skilldex/" + imagesParams[i] + ".frm"));
-        _addLabel(ss.str(), new TextArea(msgEditor->message(labels[i]), backgroundX + 194, backgroundY + 179 + 13*i));
+        _addLabel(ss.str(), new TextArea(_t(MSG_EDITOR, labels[i]), backgroundX + 194, backgroundY + 179 + 13*i));
         _addLabel(ss.str() + "_value", new TextArea("", backgroundX + 288, backgroundY + 179 + 13*i));
     }
 
@@ -173,24 +168,24 @@ void PlayerCreate::init()
 
     auto font3_b89c28ff = ResourceManager::font("font3.aaf", 0xb89c28ff);
 
-    _addLabel("options", new TextArea(msgEditor->message(101), backgroundX+365, backgroundY+453))->setFont(font3_b89c28ff);
-    _addLabel("next",    new TextArea(msgEditor->message(100), backgroundX+473, backgroundY+453))->setFont(font3_b89c28ff);
-    _addLabel("cancel",  new TextArea(msgEditor->message(102), backgroundX+571, backgroundY+453))->setFont(font3_b89c28ff);
+    _addLabel("options", new TextArea(_t(MSG_EDITOR, 101), backgroundX+365, backgroundY+453))->setFont(font3_b89c28ff);
+    _addLabel("next",    new TextArea(_t(MSG_EDITOR, 100), backgroundX+473, backgroundY+453))->setFont(font3_b89c28ff);
+    _addLabel("cancel",  new TextArea(_t(MSG_EDITOR, 102), backgroundX+571, backgroundY+453))->setFont(font3_b89c28ff);
     _addLabel("name",    new TextArea(Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7))->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setFont(font3_b89c28ff);
-    _addLabel("age",     new TextArea("AGE", backgroundX+163, backgroundY+7))->setFont(font3_b89c28ff);
-    _addLabel("gender",  new TextArea(msgEditor->message(Game::getInstance()->player()->gender() == 0 ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff); // 0 -male 1 - female
-    _addLabel("label_1", new TextArea(msgEditor->message(116), backgroundX+14, backgroundY+286))->setFont(font3_b89c28ff);  // char points
-    _addLabel("label_2", new TextArea(msgEditor->message(139), backgroundX+50, backgroundY+326))->setFont(font3_b89c28ff);  // optinal traits
-    _addLabel("label_3", new TextArea(msgEditor->message(117), backgroundX+383, backgroundY+5))->setFont(font3_b89c28ff);   // skills
-    _addLabel("label_4", new TextArea(msgEditor->message(138), backgroundX+428, backgroundY+233))->setFont(font3_b89c28ff); // tag skills
-    _addTitle("label_1", msgEditor->message(120)->text());
-    _addTitle("label_2", msgEditor->message(146)->text());
-    _addTitle("label_3", msgEditor->message(150)->text());
-    _addTitle("label_4", msgEditor->message(144)->text());
-    _addDescription("label_1", msgEditor->message(121)->text());
-    _addDescription("label_2", msgEditor->message(147)->text());
-    _addDescription("label_3", msgEditor->message(151)->text());
-    _addDescription("label_4", msgEditor->message(145)->text());
+    _addLabel("age",     new TextArea(_t(MSG_EDITOR, 104), backgroundX+163, backgroundY+7))->setFont(font3_b89c28ff);
+    _addLabel("gender",  new TextArea(_t(MSG_EDITOR, Game::getInstance()->player()->gender() == 0 ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff); // 0 -male 1 - female
+    _addLabel("label_1", new TextArea(_t(MSG_EDITOR, 116), backgroundX+14, backgroundY+286))->setFont(font3_b89c28ff);  // char points
+    _addLabel("label_2", new TextArea(_t(MSG_EDITOR, 139), backgroundX+50, backgroundY+326))->setFont(font3_b89c28ff);  // optinal traits
+    _addLabel("label_3", new TextArea(_t(MSG_EDITOR, 117), backgroundX+383, backgroundY+5))->setFont(font3_b89c28ff);   // skills
+    _addLabel("label_4", new TextArea(_t(MSG_EDITOR, 138), backgroundX+428, backgroundY+233))->setFont(font3_b89c28ff); // tag skills
+    _addTitle("label_1", _t(MSG_EDITOR, 120));
+    _addTitle("label_2", _t(MSG_EDITOR, 146));
+    _addTitle("label_3", _t(MSG_EDITOR, 150));
+    _addTitle("label_4", _t(MSG_EDITOR, 144));
+    _addDescription("label_1", _t(MSG_EDITOR, 121));
+    _addDescription("label_2", _t(MSG_EDITOR, 147));
+    _addDescription("label_3", _t(MSG_EDITOR, 151));
+    _addDescription("label_4", _t(MSG_EDITOR, 145));
     _addImage("label_1", new Image("art/skilldex/generic.frm"));
     _addImage("label_2", new Image("art/skilldex/traits.frm"));
     _addImage("label_3", new Image("art/skilldex/skills.frm"));
@@ -216,7 +211,6 @@ void PlayerCreate::init()
     // reverse iterator to change drawing order
     for(auto it = _labels.rbegin(); it != _labels.rend(); ++it)
     {
-        it->second->setBackgroundColor(0xffffff00); // hidden mask for event handling
         it->second->addEventHandler("mouseleftdown", [this](Event* event){ this->onLabelClick(dynamic_cast<MouseEvent*>(event)); });
         addUI(it->second);
     }
@@ -302,26 +296,35 @@ void PlayerCreate::think()
 {
     State::think();
     auto player = Game::getInstance()->player();
-    auto msgEditor = ResourceManager::msgFileType("text/english/game/editor.msg");
 
-    _labels.at("name")->setText(player->name());
-    _labels.at("age")->setText(msgEditor->message(104))->appendText(" ")->appendText(std::to_string(player->age()));
-    _labels.at("gender")->setText(msgEditor->message(player->gender() == 0 ? 107 : 108)); // 0 - male   1 - female
+    *_labels.at("name") = player->name();
+    *_labels.at("age") = _t(MSG_EDITOR, 104) +  " " + std::to_string(player->age());
+
+    *_labels.at("gender") = _t(MSG_EDITOR, player->gender() == 0 ? 107 : 108); // 0 - male   1 - female
 
     _counters.at("statsPoints")->setNumber(player->statsPoints());
     _counters.at("skillsPoints")->setNumber(player->skillsPoints());
 
-    _labels.at("health_1")->setText(msgEditor->message(300))->appendText("  ")->appendText(std::to_string(player->hitPointsMax()))->appendText("/")->appendText(std::to_string(player->hitPointsMax()));
-    _labels.at("params_1_value")->setText(player->armorClass());
-    _labels.at("params_2_value")->setText(player->actionPoints());
-    _labels.at("params_3_value")->setText(player->carryWeightMax());
-    _labels.at("params_4_value")->setText(player->meleeDamage());
-    _labels.at("params_5_value")->setText(player->damageResistance())->appendText("%");
-    _labels.at("params_6_value")->setText(player->poisonResistance())->appendText("%");
-    _labels.at("params_7_value")->setText(player->radiationResistance())->appendText("%");
-    _labels.at("params_8_value")->setText(player->sequence());
-    _labels.at("params_9_value")->setText(player->healingRate());
-    _labels.at("params_10_value")->setText(player->criticalChance())->appendText("%");
+    *_labels.at("health_1") = _t(MSG_EDITOR, 300) + "  " + std::to_string(player->hitPointsMax()) + "/" + std::to_string(player->hitPointsMax());
+    *_labels.at("params_1_value") = player->armorClass();
+    *_labels.at("params_2_value") = player->actionPoints();
+    *_labels.at("params_3_value") = player->carryWeightMax();
+    *_labels.at("params_4_value") = player->meleeDamage();
+
+    *_labels.at("params_5_value") = player->damageResistance();
+    *_labels.at("params_5_value")+= "%";
+
+    *_labels.at("params_6_value") = player->poisonResistance();
+    *_labels.at("params_6_value")+= "%";
+
+    *_labels.at("params_7_value") = player->radiationResistance();
+    *_labels.at("params_7_value")+= "%";
+
+    *_labels.at("params_8_value") = player->sequence();
+    *_labels.at("params_9_value") = player->healingRate();
+    *_labels.at("params_10_value") = player->criticalChance();
+
+    *_labels.at("params_10_value") += "%";
 
     // Stats counters and labels
     for (unsigned int i = 0; i < 7; i++)
@@ -336,7 +339,7 @@ void PlayerCreate::think()
             val = 10;
             _counters.at(ss.str())->setColor(BigCounter::COLOR_RED);
         }
-        _labels.at(ss.str())->setText(msgEditor->message(199 + (val < 1 ? 1 : val)));
+        _labels.at(ss.str())->setText(_t(MSG_EDITOR, 199 + (val < 1 ? 1 : val)));
     }
 
     // Skills values
@@ -344,7 +347,8 @@ void PlayerCreate::think()
     {
         std::stringstream ss;
         ss << "skills_" << (i + 1) << "_value";
-        _labels.at(ss.str())->setText(player->skillValue(i))->appendText("%");
+        *_labels.at(ss.str()) = player->skillValue(i);
+        *_labels.at(ss.str())+= "%";
     }
 
     // Default labels colors
@@ -531,9 +535,7 @@ void PlayerCreate::onButtonClick(MouseEvent* event)
                 if (!_traitToggle(number - 1))
                 {
                     auto state = new PlayerEditAlert();
-                    auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
-                    std::string text = msg->message(148)->text() + "\n" + msg->message(149)->text();
-                    state->setMessage(text);
+                    state->setMessage(_t(MSG_EDITOR, 148) + "\n" + _t(MSG_EDITOR, 149));
                     Game::getInstance()->pushState(state);
                 }
             }
@@ -546,9 +548,7 @@ void PlayerCreate::onButtonClick(MouseEvent* event)
                 if (!_skillToggle(number - 1))
                 {
                     auto state = new PlayerEditAlert();
-                    auto msg = ResourceManager::msgFileType("text/english/game/editor.msg");
-                    std::string text = msg->message(140)->text() + "\n" + msg->message(141)->text();
-                    state->setMessage(text);
+                    state->setMessage(_t(MSG_EDITOR, 140) + "\n" + _t(MSG_EDITOR, 141));
                     Game::getInstance()->pushState(state);
                 }
             }

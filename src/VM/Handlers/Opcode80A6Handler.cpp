@@ -38,8 +38,8 @@ Opcode80A6Handler::Opcode80A6Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80A6Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80A6] [=] int SkillPoints(int PCStatNum)" << std::endl;
-    _vm->popDataInteger();
-    _vm->pushDataInteger(0);
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->push(0);
 }
 
 }

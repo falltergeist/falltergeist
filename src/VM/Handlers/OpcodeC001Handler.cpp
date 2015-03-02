@@ -23,7 +23,7 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/OpcodeC001Handler.h"
 #include "../../VM/VM.h"
-#include "../../VM/VMStackIntValue.h"
+#include "../../VM/VMStackValue.h"
 
 // Third party includes
 
@@ -41,11 +41,11 @@ void OpcodeC001Handler::_run()
 
     // Skip 4 bytes for readed integer value
     _vm->setProgramCounter(_vm->programCounter() + 4);
-    _vm->dataStack()->push(new VMStackIntValue(value));
+    _vm->dataStack()->push(VMStackValue(value));
 
     auto& debug = Logger::debug("SCRIPT");
-    debug << "[C001] [*] push_d value" << std::endl;
-    debug << "    value: " << std::hex << "0x" << value << std::endl;
+    debug << "[C001] [*] push_d integer" << std::endl;
+    debug << "    value: " << std::to_string(value) << std::endl;
 }
 
 }

@@ -20,13 +20,11 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Game/Game.h"
 #include "../../State/Location.h"
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8014Handler.h"
 #include "../../VM/VM.h"
-#include "../../VM/VMStackIntValue.h"
 #include "../../VM/VMStackValue.h"
 
 // Third party includes
@@ -41,34 +39,28 @@ Opcode8014Handler::Opcode8014Handler(Falltergeist::VM *vm) : OpcodeHandler(vm)
 void Opcode8014Handler::_run()
 {
     auto& debug = Logger::debug("SCRIPT");
+    debug << "[8014] [+] value = op_fetch_external(name)" << std::endl;
     auto game = Game::getInstance();
     auto EVARS = game->locationState()->EVARS();
     std::string name;
-    switch (_vm->dataStack()->top()->type())
+    auto nameValue = _vm->dataStack()->pop();
+    switch (nameValue.type())
     {
         case VMStackValue::TYPE_INTEGER:
-            name = _vm->script()->identificators()->at(_vm->popDataInteger());
+            name = _vm->script()->identifiers()->at(nameValue.integerValue());
             break;
-        case VMStackValue::TYPE_POINTER:
+        case VMStackValue::TYPE_STRING:
         {
-            name = *static_cast<std::string*>(_vm->popDataPointer());
+            name = nameValue.stringValue();
             break;
         }
         default:
-            throw Exception("VM::opcode8014 error");
+            _error(std::string("op_fetch_external - invalid argument type: ") + nameValue.typeName());
     }
-
+    debug << " name = " << name;
     auto value = EVARS->at(name);
+    debug << ", type = " << value.type() << ", value = " << value.toString() << std::endl;
     _vm->dataStack()->push(value);
-
-    debug << "[8014] [+] value = getExported(name)" << std::endl;
-    debug << "    name = " << name << std::endl;
-    debug << "    type = " << value->type() << std::endl;
-    switch (value->type())
-    {
-        case VMStackValue::TYPE_INTEGER:
-            debug << "    value = " << std::hex << ((VMStackIntValue*)value)->value() << std::endl;
-            break;
-    }
 }
+
 }

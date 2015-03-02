@@ -78,6 +78,8 @@ set(SOURCES main.cpp
     src/Font.h
     src/FontString.cpp
     src/FontString.h
+    src/functions.cpp
+    src/functions.h
     src/Graphics/ActiveUI.cpp
     src/Graphics/ActiveUI.h
     src/Graphics/AnimatedPalette.cpp
@@ -265,6 +267,8 @@ set(SOURCES main.cpp
     src/UI/SmallCounter.h
     src/UI/TextArea.cpp
     src/UI/TextArea.h
+    src/UI/TextSymbol.cpp
+    src/UI/TextSymbol.h
     src/VM/Handlers/Opcode8002Handler.h
     src/VM/Handlers/Opcode8002Handler.cpp
     src/VM/Handlers/Opcode8003Handler.h
@@ -319,18 +323,8 @@ set(SOURCES main.cpp
     src/VM/Handlers/Opcode8031Handler.cpp
     src/VM/Handlers/Opcode8032Handler.h
     src/VM/Handlers/Opcode8032Handler.cpp
-    src/VM/Handlers/Opcode8033Handler.h
-    src/VM/Handlers/Opcode8033Handler.cpp
-    src/VM/Handlers/Opcode8034Handler.h
-    src/VM/Handlers/Opcode8034Handler.cpp
-    src/VM/Handlers/Opcode8035Handler.h
-    src/VM/Handlers/Opcode8035Handler.cpp
-    src/VM/Handlers/Opcode8036Handler.h
-    src/VM/Handlers/Opcode8036Handler.cpp
-    src/VM/Handlers/Opcode8037Handler.h
-    src/VM/Handlers/Opcode8037Handler.cpp
-    src/VM/Handlers/Opcode8038Handler.h
-    src/VM/Handlers/Opcode8038Handler.cpp
+    src/VM/Handlers/OpcodeComparisonHandler.h
+    src/VM/Handlers/OpcodeComparisonHandler.cpp
     src/VM/Handlers/Opcode8039Handler.h
     src/VM/Handlers/Opcode8039Handler.cpp
     src/VM/Handlers/Opcode803AHandler.h
@@ -349,6 +343,12 @@ set(SOURCES main.cpp
     src/VM/Handlers/Opcode8040Handler.cpp
     src/VM/Handlers/Opcode8041Handler.h
     src/VM/Handlers/Opcode8041Handler.cpp
+    src/VM/Handlers/Opcode8042Handler.h
+    src/VM/Handlers/Opcode8042Handler.cpp
+    src/VM/Handlers/Opcode8043Handler.h
+    src/VM/Handlers/Opcode8043Handler.cpp
+    src/VM/Handlers/Opcode8044Handler.h
+    src/VM/Handlers/Opcode8044Handler.cpp
     src/VM/Handlers/Opcode8045Handler.h
     src/VM/Handlers/Opcode8045Handler.cpp
     src/VM/Handlers/Opcode8046Handler.h
@@ -399,6 +399,8 @@ set(SOURCES main.cpp
     src/VM/Handlers/Opcode80BCHandler.cpp
     src/VM/Handlers/Opcode80BDHandler.h
     src/VM/Handlers/Opcode80BDHandler.cpp
+    src/VM/Handlers/Opcode80BEHandler.h
+    src/VM/Handlers/Opcode80BEHandler.cpp
     src/VM/Handlers/Opcode80BFHandler.h
     src/VM/Handlers/Opcode80BFHandler.cpp
     src/VM/Handlers/Opcode80C1Handler.h
@@ -595,6 +597,8 @@ set(SOURCES main.cpp
     src/VM/Handlers/Opcode8150Handler.cpp
     src/VM/Handlers/Opcode8151Handler.h
     src/VM/Handlers/Opcode8151Handler.cpp
+    src/VM/Handlers/Opcode8152Handler.h
+    src/VM/Handlers/Opcode8152Handler.cpp
     src/VM/Handlers/Opcode8153Handler.h
     src/VM/Handlers/Opcode8153Handler.cpp
     src/VM/Handlers/Opcode8154Handler.h
@@ -603,24 +607,22 @@ set(SOURCES main.cpp
     src/VM/Handlers/Opcode9001Handler.cpp
     src/VM/Handlers/OpcodeC001Handler.h
     src/VM/Handlers/OpcodeC001Handler.cpp
+    src/VM/Handlers/OpcodeA001Handler.h
+    src/VM/Handlers/OpcodeA001Handler.cpp
     src/VM/OpcodeFactory.h
     src/VM/OpcodeFactory.cpp
     src/VM/OpcodeHandler.h
     src/VM/OpcodeHandler.cpp
     src/VM/VM.cpp
     src/VM/VM.h
+    src/VM/VMErrorException.cpp
+    src/VM/VMErrorException.h
     src/VM/VMHaltException.cpp
     src/VM/VMHaltException.h
     src/VM/VMStack.cpp
     src/VM/VMStack.h
     src/VM/VMStackValue.cpp
-    src/VM/VMStackValue.h
-    src/VM/VMStackFloatValue.cpp
-    src/VM/VMStackFloatValue.h
-    src/VM/VMStackIntValue.cpp
-    src/VM/VMStackIntValue.h
-    src/VM/VMStackPointerValue.cpp
-    src/VM/VMStackPointerValue.h)
+    src/VM/VMStackValue.h)
 
 add_definitions (-std=c++11 -Wall)
 

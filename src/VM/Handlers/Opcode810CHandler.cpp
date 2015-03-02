@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Exception.h"
 #include "../../Logger.h"
 #include "../../Game/CritterObject.h"
 #include "../../Game/Object.h"
@@ -39,9 +38,9 @@ Opcode810CHandler::Opcode810CHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode810CHandler::_run()
 {
-    int direction = _vm->popDataInteger();
-    int animation = _vm->popDataInteger();
-    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataPointer());
+    int direction = _vm->dataStack()->popInteger();
+    int animation = _vm->dataStack()->popInteger();
+    auto critter = static_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
 
     Logger::debug("SCRIPT") << "[810C] [*] void anim(GameCritterObject* who, int animation, int direction)" << std::endl
                             << "    direction = 0x" << std::hex << direction << std::endl
@@ -54,8 +53,9 @@ void Opcode810CHandler::_run()
             break;
         }
         default:
-            throw Exception("Opcode810C - unimplemented animation: " + std::to_string(animation));
-            break;
+        {
+            _error("op_anim - unimplemented animation: " + std::to_string(animation));
+        }
     }
 }
 

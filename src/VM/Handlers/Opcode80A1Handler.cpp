@@ -37,8 +37,8 @@ Opcode80A1Handler::Opcode80A1Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80A1Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[80A1] [+] void giveExpPoints(int points)" << std::endl;
-    auto points = _vm->popDataInteger();
+    Logger::debug("SCRIPT") << "[80A1] [+] void give_exp_points(int points)" << std::endl;
+    auto points = _vm->dataStack()->popInteger();
     auto game = Game::getInstance();
     game->player()->setExperience(game->player()->experience() + points);
 }

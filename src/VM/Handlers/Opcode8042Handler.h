@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2015 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -17,35 +17,25 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_VMSTACKPOINTERVALUE_H
-#define FALLTERGEIST_VMSTACKPOINTERVALUE_H
+#ifndef FALLTERGEIST_OPCODE8042HANDLER_H
+#define FALLTERGEIST_OPCODE8042HANDLER_H
 
 // C++ standard includes
-#include <memory>
 
 // Falltergeist includes
-#include "../VM/VMStackValue.h"
+#include "../../VM/OpcodeHandler.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class VMStackPointerValue  : public VMStackValue
+class Opcode8042Handler : public OpcodeHandler
 {
-protected:
-    void* _value;
-    unsigned int _pointerType = POINTER_TYPE_UNKNOWN;
 public:
-    enum { POINTER_TYPE_UNKNOWN = 0, POINTER_TYPE_STRING };
-    VMStackPointerValue(void* value);
-    virtual ~VMStackPointerValue();
-    void setValue(void* value);
-    void* value();
-    void setPointerType(unsigned int type);
-    unsigned int pointerType();
-
+    Opcode8042Handler(VM* vm);
+    virtual void _run();
 };
 
 }
-#endif // FALLTERGEIST_VMSTACKPOINTERVALUE_H
+#endif // FALLTERGEIST_OPCODE8042HANDLER_H

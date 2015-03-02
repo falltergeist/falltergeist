@@ -35,7 +35,7 @@ Opcode801AHandler::Opcode801AHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode801AHandler::_run()
 {
-    Logger::debug("SCRIPT") << "[801A] [*] pop_d" << std::endl;
+    Logger::debug("SCRIPT") << "[801A] [*] op_pop" << std::endl;
     _vm->dataStack()->pop();
 }
 

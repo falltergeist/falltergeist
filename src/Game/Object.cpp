@@ -170,7 +170,7 @@ void GameObject::addUIEventHandlers()
     if (_ui)
     {
         _ui->addEventHandler("mouseleftdown", std::bind(&State::Location::onObjectMouseEvent, Game::getInstance()->locationState(), std::placeholders::_1, this));
-        _ui->addEventHandler("mouseleftup", std::bind(&State::Location::onObjectMouseEvent, Game::getInstance()->locationState(), std::placeholders::_1, this));
+        _ui->addEventHandler("mouseleftclick", std::bind(&State::Location::onObjectMouseEvent, Game::getInstance()->locationState(), std::placeholders::_1, this));
         _ui->addEventHandler("mousein", std::bind(&State::Location::onObjectHover, Game::getInstance()->locationState(), std::placeholders::_1, this));
         _ui->addEventHandler("mousemove", std::bind(&State::Location::onObjectHover, Game::getInstance()->locationState(), std::placeholders::_1, this));
         _ui->addEventHandler("mouseout", std::bind(&State::Location::onObjectHover, Game::getInstance()->locationState(), std::placeholders::_1, this));
@@ -214,6 +214,16 @@ void GameObject::setCanWalkThru(bool value)
     _canWalkThru = value;
 }
 
+bool GameObject::wallTransEnd()
+{
+    return _wallTransEnd;
+}
+
+void GameObject::setWallTransEnd(bool value)
+{
+    _wallTransEnd = value;
+}
+
 Hexagon* GameObject::hexagon()
 {
     return _hexagon;
@@ -236,12 +246,12 @@ void GameObject::setFloatMessage(TextArea* floatMessage)
 
 static bool to_right_of(int x1, int y1, int x2, int y2)
 {
-  return (double)(x2 - x1) <= (double)(y2 - y1) * (4.0/3.0);
+    return (double)(x2 - x1) <= ((double)(y2 - y1) * (double)(4.0/3.0));
 }
 
 static bool in_front_of(int x1, int y1, int x2, int y2)
 {
-  return (double)(x2 - x1) <= (double)(y2 - y1) * -4.0;
+  return (double)(x2 - x1) <= ((double)(y2 - y1) * -4.0);
 }
 
 
@@ -278,18 +288,18 @@ void GameObject::render()
         }
     }
 
-    if ((trans() != TRANS_NONE) || ((_type != TYPE_WALL) && !(_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC)))
+    if ((trans() != TRANS_DEFAULT) || ((_type != TYPE_WALL) && !(_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC)))
     {
         _ui->render();
         return;
     }
 
-    if ((_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC) && !canWalkThru())
+/*    if ((_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC) && !canWalkThru())
     {
         _ui->render();
         return;
     }
-
+*/
     auto dude = Game::getInstance()->player();
 
     Hexagon* hex;
@@ -317,7 +327,7 @@ void GameObject::render()
             noBlockTrans = to_right_of(obj_x, obj_y, dude_x, dude_y);
             break;
         case ORIENTATION_NC:
-            _transparent = (in_front_of(obj_x, obj_y, dude_x, dude_y) | to_right_of(dude_x, dude_y, obj_x, obj_y));
+            _transparent = (to_right_of(dude_x, dude_y, obj_x, obj_y) | in_front_of(obj_x, obj_y, dude_x, dude_y));
             break;
         case ORIENTATION_SC:
             _transparent = (in_front_of(obj_x, obj_y, dude_x, dude_y) && to_right_of(dude_x, dude_y, obj_x, obj_y));
@@ -328,14 +338,14 @@ void GameObject::render()
             break;
     }
 
-//    if (noBlockTrans && canWalkThru())
-//        _transparent = false;
+    if (noBlockTrans && wallTransEnd())
+        _transparent = false;
 
 
     if (_transparent)
     {
         int egg_x = dude->hexagon()->x() - camera->x() - 63 + dude->ui()->xOffset();
-        int egg_y = dude->hexagon()->y() - camera->y() - 98 + dude->ui()->yOffset();
+        int egg_y = dude->hexagon()->y() - camera->y() - 78 + dude->ui()->yOffset();
 
         int egg_dx = _ui->x() - egg_x;
         int egg_dy = _ui->y() - egg_y;
@@ -397,11 +407,13 @@ void GameObject::setInRender(bool value)
 
 void GameObject::description_p_proc()
 {
-    Logger::info("SCRIPT") << "description_p_proc() - 0x" << std::hex << PID() << " " << name() << " " << script() << std::endl;
+    Logger::info("SCRIPT") << "description_p_proc() - 0x" << std::hex << PID() << " " << name() << " " << (script() ? script()->filename() : "") << std::endl;
     bool useDefault = true;
     if (script() && script()->hasFunction("description_p_proc"))
     {
-        script()->call("description_p_proc");
+        script()
+            ->setSourceObject(Game::getInstance()->player())
+            ->call("description_p_proc");
         if (script()->overrides())
             useDefault = false;
     }
@@ -415,7 +427,9 @@ void GameObject::use_p_proc()
 {
     if (script() && script()->hasFunction("use_p_proc"))
     {
-        script()->call("use_p_proc");
+        script()
+            ->setSourceObject(Game::getInstance()->player())
+            ->call("use_p_proc");
     }
 }
 
@@ -428,7 +442,9 @@ void GameObject::look_at_p_proc()
     bool useDefault = true;
     if (script() && script()->hasFunction("look_at_p_proc"))
     {
-        script()->call("look_at_p_proc");
+        script()
+            ->setSourceObject(Game::getInstance()->player())
+            ->call("look_at_p_proc");
         if (script()->overrides())
             useDefault = false;
     }

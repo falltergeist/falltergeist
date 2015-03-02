@@ -20,39 +20,39 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Handlers/Opcode80AFHandler.h"
-#include "../../VM/VM.h"
+#include "Exception.h"
+#include "functions.h"
+#include "ResourceManager.h"
 
 // Third party includes
+#include <libfalltergeist.h>
 
 namespace Falltergeist
 {
 
-Opcode80AFHandler::Opcode80AFHandler(VM* vm) : OpcodeHandler(vm)
+std::string _t(MSG_TYPE type, size_t number)
 {
-}
+    std::vector<std::string> msgFiles = {
+        "text/english/game/inventry.msg",
+        "text/english/game/lsgame.msg",
+        "text/english/game/options.msg",
+        "text/english/game/misc.msg",
+        "text/english/game/editor.msg",
+        "text/english/game/trait.msg",
+        "text/english/game/skill.msg",
+        "text/english/game/stat.msg",
+        "text/english/game/skilldex.msg",
+        "text/english/game/dbox.msg",
+        "text/english/game/pro_item.msg"
+    };
 
-void Opcode80AFHandler::_run()
-{
-    Logger::debug("SCRIPT") << "[80AF] [*] int is_success(int val)" << std::endl;
-    auto value = _vm->dataStack()->popInteger();
-    switch(value)
+    if (type < 0 || type >= msgFiles.size())
     {
-        case 0:
-        case 1:
-            _vm->dataStack()->push(0);
-            break;
-        case 2:
-        case 3:
-            _vm->dataStack()->push(1);
-            break;
-        default:
-            _error("is_success - wrong argument: " + std::to_string(value));
-            break;
+        throw Exception("_t() - wrong MSG file type: " + std::to_string(type));
     }
+
+    auto msg = ResourceManager::msgFileType(msgFiles.at(type));
+    return msg->message(number)->text();
 }
 
 }
-
-

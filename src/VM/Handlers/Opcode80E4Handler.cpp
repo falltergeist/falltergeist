@@ -38,8 +38,8 @@ Opcode80E4Handler::Opcode80E4Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80E4Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80E4] [=] void load_map(string* map, int param)" << std::endl;
-    _vm->popDataInteger();
-    _vm->popDataPointer();
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popObject();
 }
 
 }

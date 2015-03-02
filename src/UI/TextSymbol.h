@@ -17,26 +17,52 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_OPCODE8034HANDLER_H
-#define FALLTERGEIST_OPCODE8034HANDLER_H
+#ifndef FALLTERGEIST_TEXTSYMBOL_H
+#define FALLTERGEIST_TEXTSYMBOL_H
 
 // C++ standard includes
+#include <cstdint>
+#include <memory>
 
 // Falltergeist includes
-#include "../../VM/OpcodeHandler.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class Opcode8034Handler : public OpcodeHandler
+class Font;
+
+class TextSymbol
 {
+protected:
+    uint8_t _chr;
+
+    int32_t _x = 0;
+    int32_t _y = 0;
+
+    std::shared_ptr<Font> _font;
+
 public:
-    Opcode8034Handler(VM* vm);
-private:
-    void _run();
+    TextSymbol(const uint8_t chr, int32_t x = 0, int32_t y = 0);
+    TextSymbol(const TextSymbol& other);
+
+    virtual ~TextSymbol();
+
+    std::shared_ptr<Font> font();
+    void setFont(std::shared_ptr<Font> font);
+
+    int32_t x();
+    void setX(int32_t x);
+
+    int32_t y();
+    void setY(int32_t y);
+
+    void render(int32_t offsetX = 0, int32_t offsetY = 0);
+
+    uint8_t chr();
+
 };
 
 }
-#endif // FALLTERGEIST_OPCODE8034HANDLER_H
+#endif // FALLTERGEIST_TEXTSYMBOL_H

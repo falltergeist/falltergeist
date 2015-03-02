@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../functions.h"
 #include "../Audio/AudioMixer.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -55,9 +56,10 @@ void GameMenu::init()
     setFullscreen(false);
 
     auto background = new Image("art/intrface/opbase.frm");
+    auto panelHeight = Game::getInstance()->locationState()->playerPanelState()->height();
 
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
-    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
+    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height() - panelHeight)*0.5;
 
     auto saveGameButton = new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18);
     auto loadGameButton = new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37);
@@ -69,30 +71,28 @@ void GameMenu::init()
     exitGameButton->addEventHandler("mouseleftclick",    [this](Event* event){ this->doExit(); });
     doneButton->addEventHandler("mouseleftclick",        [this](Event* event){ this->closeMenu(); });
 
-
-    auto msg = ResourceManager::msgFileType("text/english/game/options.msg");
     auto font = ResourceManager::font("font3.aaf", 0xb89c28ff);
 
     // label: save game
-    auto saveGameButtonLabel = new TextArea(msg->message(0), backgroundX+8, backgroundY+26);
+    auto saveGameButtonLabel = new TextArea(_t(MSG_OPTIONS, 0), backgroundX+8, backgroundY+26);
     saveGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     saveGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doSaveGame(); });
 
     // label: load game
-    auto loadGameButtonLabel = new TextArea(msg->message(1), backgroundX+8, backgroundY+26+37);
+    auto loadGameButtonLabel = new TextArea(_t(MSG_OPTIONS, 1), backgroundX+8, backgroundY+26+37);
     loadGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     loadGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doLoadGame(); });
 
     // label: preferences
-    auto preferencesButtonLabel = new TextArea(msg->message(2), backgroundX+8, backgroundY+26+37*2);
+    auto preferencesButtonLabel = new TextArea(_t(MSG_OPTIONS, 2), backgroundX+8, backgroundY+26+37*2);
     preferencesButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // label: exit game
-    auto exitGameButtonLabel = new TextArea(msg->message(3), backgroundX+8, backgroundY+26+37*3);
+    auto exitGameButtonLabel = new TextArea(_t(MSG_OPTIONS, 3), backgroundX+8, backgroundY+26+37*3);
     exitGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // label: done
-    auto doneButtonLabel = new TextArea(msg->message(4), backgroundX+8, backgroundY+26+37*4);
+    auto doneButtonLabel = new TextArea(_t(MSG_OPTIONS, 4), backgroundX+8, backgroundY+26+37*4);
     doneButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     background->setX(backgroundX);

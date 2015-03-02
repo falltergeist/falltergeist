@@ -38,9 +38,9 @@ Opcode814CHandler::Opcode814CHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode814CHandler::_run()
 {
     Logger::debug("SCRIPT") << "[814C] [=] int rotation_to_tile(int srcTile, int destTile)" << std::endl;
-    _vm->popDataInteger();
-    _vm->popDataInteger();
-    _vm->pushDataInteger(0);
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->push(0);
 }
 
 }
