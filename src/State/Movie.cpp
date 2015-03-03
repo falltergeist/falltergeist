@@ -75,7 +75,7 @@ void Movie::init()
         auto moviecfg = ResourceManager::datFileItem(moviecfgfile);
         //parse ini
         moviecfg->setPosition(0);
-        std::istream str(moviecfg.get());
+        std::istream str(moviecfg);
         auto inifile = new Ini::Parser(str);
         auto ini = inifile->parse();
         int total_effects = ini->section("info")->propertyInt("total_effects",0);
@@ -103,10 +103,10 @@ void Movie::init()
 
     if (sublst->strings()->at(_id)!="reserved.sve")
     {
-        _subs = ResourceManager::sveFileType(subfile).get();
+        _subs = ResourceManager::sveFileType(subfile);
         if (_subs) _hasSubs = true;
     }
-    addUI("movie", new MvePlayer(ResourceManager::mveFileType(movie).get()));
+    addUI("movie", new MvePlayer(ResourceManager::mveFileType(movie)));
 
     auto font0_ffffffff = ResourceManager::font("font1.aaf", 0xffffffff);
     auto subLabel = new TextArea("", 0, 320+35);

@@ -45,8 +45,8 @@ class Font;
 class ResourceManager
 {
 protected:
-    static std::vector<std::shared_ptr<libfalltergeist::Dat::File>> _datFiles;
-    static std::map<std::string, std::shared_ptr<libfalltergeist::Dat::Item>> _datFilesItems;
+    static std::vector<libfalltergeist::Dat::File*> _datFiles;
+    static std::map<std::string, libfalltergeist::Dat::Item*> _datFilesItems;
     static std::map<std::string, Texture*> _textures;
     static std::map<std::string, std::shared_ptr<Font>> _fonts;
     static std::map<unsigned int, Game::GameLocation*> _gameLocations;
@@ -54,26 +54,26 @@ protected:
 public:
     ResourceManager();
     ~ResourceManager();
-    static std::shared_ptr<libfalltergeist::Aaf::File> aafFileType(std::string filename);
-    static std::shared_ptr<libfalltergeist::Acm::File> acmFileType(std::string filename);
-    static std::shared_ptr<libfalltergeist::Bio::File> bioFileType(std::string filename);
-    static std::shared_ptr<libfalltergeist::Dat::Item> datFileItem(std::string filename);
-    static std::shared_ptr<libfalltergeist::Frm::File> frmFileType(std::string filename);
-    static std::shared_ptr<libfalltergeist::Frm::File> frmFileType(unsigned int FID);
-    static std::shared_ptr<libfalltergeist::Fon::File> fonFileType(std::string filename);
-    static std::shared_ptr<libfalltergeist::Gam::File> gamFileType(std::string filename);
-    static std::shared_ptr<libfalltergeist::Gcd::File> gcdFileType(std::string filename);
-    static std::shared_ptr<libfalltergeist::Pal::File> palFileType(std::string filename);
+    static libfalltergeist::Aaf::File* aafFileType(std::string filename);
+    static libfalltergeist::Acm::File* acmFileType(std::string filename);
+    static libfalltergeist::Bio::File* bioFileType(std::string filename);
+    static libfalltergeist::Dat::Item* datFileItem(std::string filename);
+    static libfalltergeist::Frm::File* frmFileType(std::string filename);
+    static libfalltergeist::Frm::File* frmFileType(unsigned int FID);
+    static libfalltergeist::Fon::File* fonFileType(std::string filename);
+    static libfalltergeist::Gam::File* gamFileType(std::string filename);
+    static libfalltergeist::Gcd::File* gcdFileType(std::string filename);
+    static libfalltergeist::Pal::File* palFileType(std::string filename);
     static libfalltergeist::Int::File* intFileType(std::string filename);
     static libfalltergeist::Int::File* intFileType(unsigned int SID);
-    static std::shared_ptr<libfalltergeist::Lst::File> lstFileType(std::string filename);
-    static std::shared_ptr<libfalltergeist::Map::File> mapFileType(std::string filename);
-    static std::shared_ptr<libfalltergeist::Msg::File> msgFileType(std::string filename);
-    static std::shared_ptr<libfalltergeist::Mve::File> mveFileType(std::string filename);
-    static std::shared_ptr<libfalltergeist::Pro::File> proFileType(std::string filename);
-    static std::shared_ptr<libfalltergeist::Pro::File> proFileType(unsigned int PID);
-    static std::shared_ptr<libfalltergeist::Rix::File> rixFileType(std::string filename);
-    static std::shared_ptr<libfalltergeist::Sve::File> sveFileType(std::string filename);
+    static libfalltergeist::Lst::File* lstFileType(std::string filename);
+    static libfalltergeist::Map::File* mapFileType(std::string filename);
+    static libfalltergeist::Msg::File* msgFileType(std::string filename);
+    static libfalltergeist::Mve::File* mveFileType(std::string filename);
+    static libfalltergeist::Pro::File* proFileType(std::string filename);
+    static libfalltergeist::Pro::File* proFileType(unsigned int PID);
+    static libfalltergeist::Rix::File* rixFileType(std::string filename);
+    static libfalltergeist::Sve::File* sveFileType(std::string filename);
     static Texture* texture(std::string filename);
     static std::map<std::string, Texture*>* textures();
     static std::shared_ptr<Font> font(std::string filename = "font1.aaf", unsigned int color = 0x3ff800ff);

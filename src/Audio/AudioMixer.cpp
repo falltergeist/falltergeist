@@ -130,7 +130,7 @@ void AudioMixer::playACMMusic(std::string filename, bool loop)
     musicCallback = std::bind(&AudioMixer::_musicCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
     acm->init();
     acm->rewind();
-    Mix_HookMusic(myMusicPlayer, (void *)(acm.get()));
+    Mix_HookMusic(myMusicPlayer, (void *)acm);
 }
 
 void AudioMixer::_movieCallback(void *udata, uint8_t *stream, uint32_t len)

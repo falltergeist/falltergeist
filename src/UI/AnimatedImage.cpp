@@ -32,7 +32,7 @@
 namespace Falltergeist
 {
 
-AnimatedImage::AnimatedImage(std::shared_ptr<libfalltergeist::Frm::File> frm, unsigned int direction)
+AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direction)
 {
 
     setTexture(new Texture(frm->width(), frm->height()));
