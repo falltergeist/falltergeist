@@ -63,7 +63,7 @@ void Credits::init()
     auto credits = ResourceManager::datFileItem("text/english/credits.txt");
     std::stringstream ss;
     credits->setPosition(0);
-    ss << credits.get();
+    ss << credits;
     std::string line;
 
     auto font_default = ResourceManager::font("font4.aaf", 0x907824ff);
