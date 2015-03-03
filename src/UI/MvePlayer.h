@@ -38,21 +38,26 @@ public:
     MvePlayer(libfalltergeist::Mve::File* mve);
     ~MvePlayer();
 private:
-    libfalltergeist::Mve::File* _mve;
+    libfalltergeist::Mve::File* _mve = nullptr;
+    std::shared_ptr<libfalltergeist::Mve::Chunk> _chunk;
+
     bool _timerStarted = false;
     bool _finished = false;
+
+    uint8_t* _decodingMap = nullptr;
+    int16_t* _audioBuf = nullptr;
+
     uint32_t  _frame = 0;
-    uint32_t _delay;
+    uint32_t _delay = 0;
+    uint32_t _audioBufHead = 0;
+    uint32_t _audioBufTail = 0;
+    uint32_t _audioBufSize = 0;
+    uint32_t _samplesReady = 0;
+
     struct timespec _lastts;
-    uint8_t* _decodingMap=NULL;
-    int16_t* _audioBuf=NULL;
-    uint32_t _audioBufHead=0;
-    uint32_t _audioBufTail=0;
-    uint32_t _audioBufSize=0;
-    uint32_t _samplesReady=0;
-    std::shared_ptr<libfalltergeist::Mve::Chunk> _chunk;
-    SDL_Surface* _currentBuf=NULL;
-    SDL_Surface* _backBuf=NULL;
+    SDL_Surface* _currentBuf = NULL;
+    SDL_Surface* _backBuf = NULL;
+
     void _processChunk();
     void _decodeVideo(uint8_t* data, uint32_t len);
     void _decodeFrame(uint8_t* data, uint32_t len);
@@ -63,7 +68,15 @@ private:
     void _initAudioBuffer(uint8_t version, uint8_t* data);
     void _playAudio();
     void _decodeAudio(uint8_t* data, uint32_t len);
-    enum { CHUNK_INIT_AUDIO = 0, CHUNK_AUDIO, CHUNK_INIT_VIDEO, CHUNK_VIDEO, CHUNK_SHUTDOWN, CHUNK_END };
+    enum
+    {
+        CHUNK_INIT_AUDIO = 0,
+        CHUNK_AUDIO,
+        CHUNK_INIT_VIDEO,
+        CHUNK_VIDEO,
+        CHUNK_SHUTDOWN,
+        CHUNK_END
+    };
     enum
     {
             OPCODE_END_STREAM = 0, OPCODE_END_CHUNK, OPCODE_CREATE_TIMER, OPCODE_INIT_AUDIO_BUF,

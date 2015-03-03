@@ -53,7 +53,7 @@ Image::Image(Texture* texture) : ActiveUI()
     setTexture(texture);
 }
 
-Image::Image(std::shared_ptr<libfalltergeist::Frm::File> frm, unsigned int direction)
+Image::Image(libfalltergeist::Frm::File* frm, unsigned int direction)
 {
     if (direction >= frm->directions()->size())
     {

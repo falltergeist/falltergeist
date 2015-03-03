@@ -37,8 +37,8 @@ class Font
 {
 protected:
     unsigned int _color = 0;
-    std::shared_ptr<libfalltergeist::Aaf::File> _aaf;
-    Texture* _texture = 0;
+    libfalltergeist::Aaf::File* _aaf = nullptr;
+    Texture* _texture = nullptr;
 public:
     Font(std::string filename, unsigned int color);
     ~Font();
@@ -56,7 +56,7 @@ public:
 
     Texture* texture();
 
-    std::shared_ptr<libfalltergeist::Aaf::File> aaf();
+    libfalltergeist::Aaf::File* aaf();
 };
 
 }
