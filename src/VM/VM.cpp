@@ -63,7 +63,7 @@ std::string VM::filename()
 
 bool VM::hasFunction(std::string name)
 {
-    return _script->procedure(name) != 0;
+    return _script->procedure(name) != nullptr;
 }
 
 void VM::call(std::string name)
