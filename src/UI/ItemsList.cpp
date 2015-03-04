@@ -20,10 +20,12 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Game/ArmorItemObject.h"
+#include "../Game/DudeObject.h"
+#include "../Game/Game.h"
 #include "../Game/ItemObject.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
-#include "../Game/Game.h"
 #include "../Logger.h"
 #include "../UI/InventoryItem.h"
 #include "../UI/ItemsList.h"
@@ -166,6 +168,10 @@ void ItemsList::onItemDragStop(MouseEvent* event)
         this->addItem(inventoryItem, 1);
         this->update();
 
+        if (auto armor = dynamic_cast<Game::GameArmorItemObject*>(inventoryItem->item()) && inventoryItem->type() == InventoryItem::TYPE_SLOT)
+        {
+            Game::getInstance()->player()->setArmorSlot(nullptr);
+        }
         inventoryItem->setItem(0);
     }
 

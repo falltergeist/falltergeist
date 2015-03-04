@@ -21,11 +21,12 @@
 #include <string>
 
 // Falltergeist includes
-#include "CritterObject.h"
-#include "WeaponItemObject.h"
 #include "../Exception.h"
-#include "../Game/Game.h"
+#include "../Game/CritterObject.h"
+#include "../Game/Defines.h"
 #include "../Game/DudeObject.h"
+#include "../Game/Game.h"
+#include "../Game/WeaponItemObject.h"
 #include "../Graphics/Animation.h"
 #include "../Graphics/AnimationFrame.h"
 #include "../Graphics/AnimationQueue.h"
@@ -67,6 +68,14 @@ GameArmorItemObject* GameCritterObject::armorSlot() const
 
 void GameCritterObject::setArmorSlot(GameArmorItemObject* object)
 {
+    if (object) 
+    {
+        setFID((_gender == GENDER_FEMALE) ? object->femaleFID() : object->maleFID());
+    }
+    else
+    {
+        setFID((_gender == GENDER_FEMALE) ? FID_HFJMPS : FID_HMJMPS); 
+    }
     _armorSlot = object;
 }
 
@@ -591,7 +600,7 @@ std::string GameCritterObject::_generateArmorFrmString()
         return ResourceManager::FIDtoFrmName(FID()).substr(13,6);
     }
 
-    switch(gender())
+    switch (gender())
     {
         case GENDER_FEMALE:
         {
