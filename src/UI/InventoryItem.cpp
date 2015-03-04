@@ -21,6 +21,7 @@
 
 // Falltergeist includes
 #include "../Game/Game.h"
+#include "../Game/DudeObject.h"
 #include "../Game/ItemObject.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
@@ -86,7 +87,7 @@ void InventoryItem::render()
 unsigned int InventoryItem::pixel(unsigned int x, unsigned int y)
 {
     if (!_item) return 0;
-    return texture()->pixel(x - (width() - texture()->width())/2, y - (height() - texture()->height())/2);
+    return x < width() && y < height();
 }
 
 Game::GameItemObject* InventoryItem::item()
@@ -143,6 +144,10 @@ void InventoryItem::onArmorDragStop(MouseEvent* event)
         itemsList->update();
 
         this->setItem(item->item());
+        if (auto armor = dynamic_cast<Game::GameArmorItemObject*>(item->item()))
+        {
+            Game::getInstance()->player()->setArmorSlot(armor);
+        }
     }
 }
 

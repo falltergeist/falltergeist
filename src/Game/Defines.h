@@ -109,6 +109,8 @@ namespace Game
 
 // Critters FID
 
+#define FID_HMJMPS      0x0100000B   // vault13 jumpsuit male
+#define FID_HFJMPS      0x01000004   // vault13 jumpsuit female
 #define FID_HERO_MALE   0x0100003E
 #define FID_HERO_FEMALE 0x0100003D
 

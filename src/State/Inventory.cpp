@@ -249,7 +249,6 @@ void Inventory::init()
 
     // BIG ICONS
     // icon: armor
-    if (armorSlot)
     {
         auto inventoryItem = new InventoryItem(armorSlot, 154, 183);
         inventoryItem->setType(InventoryItem::TYPE_SLOT);
@@ -259,7 +258,6 @@ void Inventory::init()
     }
 
     // icon: left hand
-    if (leftHand)
     {
         auto inventoryItem = new InventoryItem(leftHand, 154, 286);
         inventoryItem->setType(InventoryItem::TYPE_SLOT);
@@ -269,7 +267,6 @@ void Inventory::init()
     }
 
     // icon: right hand
-    if (rightHand)
     {
         auto inventoryItem = new InventoryItem(rightHand, 247, 286);
         inventoryItem->setType(InventoryItem::TYPE_SLOT);
