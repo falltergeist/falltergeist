@@ -51,6 +51,8 @@ class GameObject : public EventEmitter
 {
 protected:
     bool _canWalkThru = true;
+    bool _canLightThru = true;
+    bool _canShootThru = true;
     bool _wallTransEnd = false;
     int _type = -1;
     int _subtype = -1;
@@ -84,7 +86,15 @@ public:
     // whether this object is transparent in terms of walking through it by a critter
     bool canWalkThru() const;
     virtual void setCanWalkThru(bool value);
+    
+    // whether this object is transparent to the light
+    bool canLightThru() const;
+    virtual void setCanLightThru(bool value);
 
+    // whether this object is transparent to projectiles
+    bool canShootThru() const;
+    virtual void setCanShootThru(bool value);
+    
     bool wallTransEnd() const;
     virtual void setWallTransEnd(bool value);
 
