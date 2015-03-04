@@ -21,6 +21,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <locale>
 
 // Falltergeist includes
 #include "CrossPlatform.h"
@@ -80,6 +81,11 @@ ResourceManager::~ResourceManager()
 
 libfalltergeist::Dat::Item* ResourceManager::datFileItem(std::string filename)
 {
+    std::locale loc;
+    for (auto it = filename.begin(); it != filename.end(); it++)
+    {
+        *it = std::tolower(*it, loc);
+    }
     // Return item from cache
     if (_datFilesItems.find(filename) != _datFilesItems.end())
     {
