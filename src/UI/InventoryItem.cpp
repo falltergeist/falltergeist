@@ -139,12 +139,16 @@ void InventoryItem::onArmorDragStop(MouseEvent* event)
 
     if (ItemsList* itemsList = dynamic_cast<ItemsList*>(event->emitter()))
     {
-        InventoryItem* item = itemsList->draggedItem();
-        itemsList->removeItem(item, 1);
-        itemsList->update();
-
-        this->setItem(item->item());
-        if (auto armor = dynamic_cast<Game::GameArmorItemObject*>(item->item()))
+        InventoryItem* draggedItem = itemsList->draggedItem();
+        auto itemObject = draggedItem->item();
+        itemsList->removeItem(draggedItem, 1);
+        // place current armor back to inventory
+        if (_item)
+        {
+            itemsList->addItem(this, 1);
+        }
+        this->setItem(itemObject);
+        if (auto armor = dynamic_cast<Game::GameArmorItemObject*>(itemObject))
         {
             Game::getInstance()->player()->setArmorSlot(armor);
         }
@@ -161,8 +165,11 @@ void InventoryItem::onHandDragStop(MouseEvent* event)
     {
         InventoryItem* item = itemsList->draggedItem();
         itemsList->removeItem(item, 1);
-        itemsList->update();
-
+        // place current weapon back to inventory
+        if (_item)
+        {
+            itemsList->addItem(this, 1);
+        }
         this->setItem(item->item());
     }
 }
