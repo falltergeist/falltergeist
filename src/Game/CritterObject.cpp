@@ -45,6 +45,7 @@ namespace Game
 GameCritterObject::GameCritterObject() : GameObject()
 {
     _type = TYPE_CRITTER;
+    _setupNextIdleAnim();
 }
 
 GameCritterObject::~GameCritterObject()
@@ -483,6 +484,18 @@ void GameCritterObject::think()
             _ui = animation;
         }
     }
+    else 
+    {
+        auto anim = (Animation*)ui();
+        if (!_moving && (!anim || !anim->playing()))
+        {
+            if (SDL_GetTicks() > _nextIdleAnim)
+            {
+                setActionAnimation("aa");
+                _setupNextIdleAnim();
+            }
+        }
+    }
     GameObject::think();
 }
 
@@ -497,7 +510,8 @@ void GameCritterObject::onMovementAnimationEnded(Event* event)
     {
         _moving = false;
         animation->stop();
-        setActionAnimation("aa");
+        setActionAnimation("aa")->stop();
+        _setupNextIdleAnim();
         return;
     }
 
@@ -574,12 +588,16 @@ Animation* GameCritterObject::_generateMovementAnimation()
 Animation* GameCritterObject::setActionAnimation(std::string action)
 {
     Animation* animation = new Animation("art/critters/" + _generateArmorFrmString() + action + ".frm", orientation());
+    animation->addEventHandler("animationEnded", [animation](Event* event) 
+    {
+        animation->setCurrentFrame(0);
+    });
     animation->play();
-    auto queue = new AnimationQueue();
+    /*auto queue = new AnimationQueue();
     queue->setRepeat(true);
     queue->animations()->push_back(animation);
-    queue->start();
-    setUI(queue);
+    queue->start();*/
+    setUI(animation);
     return animation;
 }
 
@@ -696,6 +714,12 @@ void GameCritterObject::stopMovement()
     }
     _moving = false;
 }
+
+void GameCritterObject::_setupNextIdleAnim()
+{
+    _nextIdleAnim = SDL_GetTicks() + 10000 + (rand() % 7000);
+}
+
 
 
 }

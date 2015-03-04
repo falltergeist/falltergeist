@@ -59,6 +59,8 @@ protected:
     int _meleeDamage = 0;
     int _sequence = 0;
     int _criticalChance = 0;
+    
+    unsigned int _nextIdleAnim = 0;
 
     unsigned int _currentHand = HAND_RIGHT;
     unsigned int _carryWeightMax = 0;
@@ -79,6 +81,7 @@ protected:
     virtual Animation* _generateMovementAnimation();
     virtual std::string _generateArmorFrmString();
     virtual std::string _generateWeaponFrmString();
+    void _setupNextIdleAnim();
 public:
     enum { HAND_RIGHT = 0, HAND_LEFT };
     enum { GENDER_MALE = 0, GENDER_FEMALE };
