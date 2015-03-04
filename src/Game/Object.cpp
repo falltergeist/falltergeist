@@ -214,6 +214,26 @@ void GameObject::setCanWalkThru(bool value)
     _canWalkThru = value;
 }
 
+bool GameObject::canLightThru() const
+{
+    return _canLightThru;
+}
+
+void GameObject::setCanLightThru(bool value)
+{
+    _canLightThru = value;
+}
+
+bool GameObject::canShootThru() const
+{
+    return _canShootThru;
+}
+
+void GameObject::setCanShootThru(bool value)
+{
+    _canShootThru = value;
+}
+
 bool GameObject::wallTransEnd() const
 {
     return _wallTransEnd;

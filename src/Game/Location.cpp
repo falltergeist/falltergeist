@@ -18,7 +18,6 @@
  */
 
 // C++ standard includes
-#include <algorithm>
 
 // Falltergeist includes
 #include "Location.h"
@@ -51,7 +50,6 @@ std::string GameLocation::filename()
 
 void GameLocation::setFilename(std::string value)
 {
-    std::transform(value.begin(), value.end(), value.begin(), ::tolower);
     _filename = value;
 }
 
@@ -62,7 +60,6 @@ std::string GameLocation::music()
 
 void GameLocation::setMusic(std::string value)
 {
-    std::transform(value.begin(), value.end(), value.begin(), ::tolower);
     _music = value;
 }
 
