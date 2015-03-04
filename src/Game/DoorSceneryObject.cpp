@@ -44,7 +44,7 @@ GameDoorSceneryObject::~GameDoorSceneryObject()
 {
 }
 
-bool GameDoorSceneryObject::opened()
+bool GameDoorSceneryObject::opened() const
 {
     return _opened;
 }
@@ -54,7 +54,7 @@ void GameDoorSceneryObject::setOpened(bool value)
     _opened = value;
 }
 
-bool GameDoorSceneryObject::locked()
+bool GameDoorSceneryObject::locked() const
 {
     return _locked;
 }
@@ -76,7 +76,7 @@ void GameDoorSceneryObject::use_p_proc()
             queue->start();
             queue->currentAnimation()->setReverse(false);
             queue->addEventHandler("animationEnded", std::bind(&GameDoorSceneryObject::onOpeningAnimationEnded, this, std::placeholders::_1));
-            if (_soundId) Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/sodoors") + _soundId + ".acm");
+            if (_soundId) Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/sodoors") + (char)tolower(_soundId) + ".acm");
         }
     }
     else
@@ -86,12 +86,12 @@ void GameDoorSceneryObject::use_p_proc()
             queue->start();
             queue->currentAnimation()->setReverse(true);
             queue->addEventHandler("animationEnded", std::bind(&GameDoorSceneryObject::onClosingAnimationEnded, this, std::placeholders::_1));
-            if (_soundId) Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/scdoors") + _soundId + ".acm");
+            if (_soundId) Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/scdoors") + (char)tolower(_soundId) + ".acm");
         }
     }
 }
 
-bool GameDoorSceneryObject::canWalkThru()
+bool GameDoorSceneryObject::canWalkThru() const
 {
     return opened();
 }

@@ -32,6 +32,9 @@ namespace Falltergeist
 namespace Game
 {
 
+/**
+ * Doors. Can be opened, closed, locked and unlocked.
+ */
 class GameDoorSceneryObject : public GameSceneryObject
 {
 protected:
@@ -41,13 +44,13 @@ public:
     GameDoorSceneryObject();
     virtual ~GameDoorSceneryObject();
 
-    bool opened();
+    bool opened() const;
     void setOpened(bool value);
 
-    bool locked();
+    bool locked() const;
     void setLocked(bool value);
 
-    virtual bool canWalkThru();
+    virtual bool canWalkThru() const;
 
     virtual void use_p_proc();
 

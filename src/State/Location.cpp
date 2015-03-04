@@ -86,6 +86,7 @@ Location::Location() : State()
 
 Location::~Location()
 {
+    for (auto obj : _objects) delete obj;
     delete _hexagonGrid;
     delete _camera;
     delete _floor;
@@ -779,6 +780,30 @@ void Location::moveObjectToHexagon(Game::GameObject* object, Hexagon* hexagon)
 
     object->setHexagon(hexagon);
     hexagon->objects()->push_back(object);
+}
+
+void Location::destroyObject(Game::GameObject* object)
+{
+    auto objectsAtHex = object->hexagon()->objects();
+    object->destroy_p_proc();
+    for (auto it = objectsAtHex->begin(); it != objectsAtHex->end(); ++it)
+    {
+        if (*it == object)
+        {
+            objectsAtHex->erase(it);
+            break;
+        }
+    }
+    if (_objectUnderCursor == object) _objectUnderCursor = nullptr;
+    for (auto it = _objects.begin(); it != _objects.end(); ++it)
+    {
+        if (*it == object)
+        {
+            _objects.erase(it);
+            break;
+        }
+    }
+    delete object;
 }
 
 void Location::centerCameraAtHexagon(Hexagon* hexagon)

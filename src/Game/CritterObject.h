@@ -38,6 +38,9 @@ namespace Game
 {
 class ItemObject;
 
+/**
+ * Critter refers to player, all NPCs, creatures, robots, etc - all movable and shootable objects.
+ */
 class GameCritterObject : public GameObject
 {
 protected:
@@ -79,172 +82,156 @@ protected:
 public:
     enum { HAND_RIGHT = 0, HAND_LEFT };
     enum { GENDER_MALE = 0, GENDER_FEMALE };
-    enum { STATS_STRENGTH = 0, STATS_PERCEPTION, STATS_ENDURANCE, STATS_CHARISMA, STATS_INTELLIGENCE, STATS_AGILITY, STATS_LUCK };
-    enum { DAMAGE_NORMAL = 0, DAMAGE_LASER, DAMAGE_FIRE, DAMAGE_PLASMA, DAMAGE_ELECTRICAL, DAMAGE_EMP, DAMAGE_EXPLOSION, DAMAGE_RADIATION, DAMAGE_POISON };
-    enum {
-            TRAITS_1 = 0, // Fast Metabolism
-            TRAITS_2, // Bruiser
-            TRAITS_3, // Small Frame
-            TRAITS_4, // One Handed
-            TRAITS_5, // Finesse
-            TRAITS_6, // Kamikaze
-            TRAITS_7, // Heavy Handed
-            TRAITS_8, // Fast Shot
-            TRAITS_9, // Bloody Mess
-            TRAITS_10, // Jinxed
-            TRAITS_11, // Good Natured
-            TRAITS_12, // Chem Reliant
-            TRAITS_13, // Chem Resistant
-            TRAITS_14, // Sex Appeal
-            TRAITS_15, // Skilled
-            TRAITS_16  // Gifted
-        };
-    enum {
-            TRAITS_FAST_METABOLISM = 0,
-            TRAITS_BRUISER,
-            TRAITS_SMALL_FRAME,
-            TRAITS_ONE_HANDED,
-            TRAITS_FINESSE,
-            TRAITS_KAMIKAZE,
-            TRAITS_HEAVY_HANDED,
-            TRAITS_FAST_SHOT,
-            TRAITS_BLOODY_MESS,
-            TRAITS_JINXED,
-            TRAITS_GOOD_NATURED,
-            TRAITS_CHEM_RELIANT,
-            TRAITS_CHEM_RESISTANT,
-            TRAITS_SEX_APPEAL,
-            TRAITS_SKILLED,
-            TRAITS_GIFTED
-        };
+    enum 
+    { 
+        STAT_STRENGTH = 0, 
+        STAT_PERCEPTION, 
+        STAT_ENDURANCE, 
+        STAT_CHARISMA,
+        STAT_INTELLIGENCE, 
+        STAT_AGILITY, 
+        STAT_LUCK 
+    };
+    enum 
+    { 
+        DAMAGE_NORMAL = 0, 
+        DAMAGE_LASER, 
+        DAMAGE_FIRE, 
+        DAMAGE_PLASMA, 
+        DAMAGE_ELECTRICAL, 
+        DAMAGE_EMP, 
+        DAMAGE_EXPLOSION, 
+        DAMAGE_RADIATION, 
+        DAMAGE_POISON 
+    };
+    enum 
+    {
+        TRAIT_FAST_METABOLISM = 0,
+        TRAIT_BRUISER,
+        TRAIT_SMALL_FRAME,
+        TRAIT_ONE_HANDED,
+        TRAIT_FINESSE,
+        TRAIT_KAMIKAZE,
+        TRAIT_HEAVY_HANDED,
+        TRAIT_FAST_SHOT,
+        TRAIT_BLOODY_MESS,
+        TRAIT_JINXED,
+        TRAIT_GOOD_NATURED,
+        TRAIT_CHEM_RELIANT,
+        TRAIT_CHEM_RESISTANT,
+        TRAIT_SEX_APPEAL,
+        TRAIT_SKILLED,
+        TRAIT_GIFTED
+    };
     enum
     {
-            SKILLS_1 = 0, // Small Guns
-            SKILLS_2, // Big Guns
-            SKILLS_3, // Energy Weapons
-            SKILLS_4, // Unarmed
-            SKILLS_5, // Melee Weapons
-            SKILLS_6, // Throwing
-            SKILLS_7, // First Aid
-            SKILLS_8, // Doctor
-            SKILLS_9, // Sneak
-            SKILLS_10, // Lockpick
-            SKILLS_11, // Steal
-            SKILLS_12, // Traps
-            SKILLS_13, // Science
-            SKILLS_14, // Repair
-            SKILLS_15, // Speech
-            SKILLS_16, // Barter
-            SKILLS_17, // Gambling
-            SKILLS_18  // Outdoorsman
-        };
-    enum
-    {
-            SKILLS_SMALL_GUNS = 0,
-            SKILLS_BIG_GUNS,
-            SKILLS_ENERGY_WEAPONS,
-            SKILLS_UNARMED,
-            SKILLS_MELEE_WEAPONS,
-            SKILLS_THROWING,
-            SKILLS_FIRST_AID,
-            SKILLS_DOCTOR,
-            SKILLS_SNEAK,
-            SKILLS_LOCKPICK,
-            SKILLS_STEAL,
-            SKILLS_TRAPS,
-            SKILLS_SCIENCE,
-            SKILLS_REPAIR,
-            SKILLS_SPEECH,
-            SKILLS_BARTER,
-            SKILLS_GAMBLING,
-            SKILLS_OUTDOORSMAN
+        SKILL_SMALL_GUNS = 0,
+        SKILL_BIG_GUNS,
+        SKILL_ENERGY_WEAPONS,
+        SKILL_UNARMED,
+        SKILL_MELEE_WEAPONS,
+        SKILL_THROWING,
+        SKILL_FIRST_AID,
+        SKILL_DOCTOR,
+        SKILL_SNEAK,
+        SKILL_LOCKPICK,
+        SKILL_STEAL,
+        SKILL_TRAPS,
+        SKILL_SCIENCE,
+        SKILL_REPAIR,
+        SKILL_SPEECH,
+        SKILL_BARTER,
+        SKILL_GAMBLING,
+        SKILL_OUTDOORSMAN
     };
 
     GameCritterObject();
     virtual ~GameCritterObject();
 
+    // critter's own inventory
     std::vector<GameItemObject*>* inventory();
     virtual void setOrientation(int value);
 
     std::vector<Hexagon*>* movementQueue();
 
-    GameArmorItemObject* armorSlot();
+    GameArmorItemObject* armorSlot() const;
     void setArmorSlot(GameArmorItemObject* object);
 
-    GameItemObject* leftHandSlot();
+    GameItemObject* leftHandSlot() const;
     void setLeftHandSlot(GameItemObject* object);
 
-    GameItemObject* rightHandSlot();
+    GameItemObject* rightHandSlot() const;
     void setRightHandSlot(GameItemObject* object);
 
-    GameItemObject* currentHandSlot();
+    GameItemObject* currentHandSlot() const;
 
-    int gender();
+    int gender() const;
     void setGender(unsigned int value);
 
-    int stat(unsigned int stat);
+    int stat(unsigned int stat) const;
     void setStat(unsigned int stat, int value);
 
-    int statBonus(unsigned int stat);
+    int statBonus(unsigned int stat) const;
     void setStatBonus(unsigned int stat, int value);
 
-    int statTotal(unsigned int num);
+    // returns total stat value (with bonuses)
+    int statTotal(unsigned int num) const;
 
-    int skillTagged(unsigned int skill);
+    int skillTagged(unsigned int skill) const;
     void setSkillTagged(unsigned int skill, int value);
 
-    int skillBaseValue(unsigned int skill);
-    int skillGainedValue(unsigned int skill);
+    int skillBaseValue(unsigned int skill) const;
+    int skillGainedValue(unsigned int skill) const;
     void setSkillGainedValue(unsigned int skill, int value);
-    int skillValue(unsigned int skill);
+    int skillValue(unsigned int skill) const;
 
-    int traitTagged(unsigned int num);
+    int traitTagged(unsigned int num) const;
     void setTraitTagged(unsigned int num, int value);
 
-    int hitPoints();
+    int hitPoints() const;
     void setHitPoints(int value);
 
-    virtual int hitPointsMax();
+    virtual int hitPointsMax() const;
     void setHitPointsMax(int value);
 
-    virtual int armorClass();
+    virtual int armorClass() const;
     void setArmorClass(int value);
 
-    virtual int actionPoints();
+    virtual int actionPoints() const;
     void setActionPoints(int value);
 
-    virtual int actionPointsMax();
+    virtual int actionPointsMax() const;
     void setActionPointsMax(int value);
 
-    virtual unsigned int carryWeight();
-    virtual unsigned int carryWeightMax();
+    virtual unsigned int carryWeight() const;
+    virtual unsigned int carryWeightMax() const;
     void setCarryWeightMax(unsigned int value);
 
-    virtual int meleeDamage();
+    virtual int meleeDamage() const;
     void setMeleeDamage(int value);
 
-    virtual int sequence();
+    virtual int sequence() const;
     void setSequence(int value);
 
-    virtual int criticalChance();
+    virtual int criticalChance() const;
     void setCriticalChance(int value);
 
-    virtual int healingRate();
+    virtual int healingRate() const;
     void setHealingRate(int value);
 
-    int poisonLevel();
+    int poisonLevel() const;
     void setPoisonLevel(int value);
     
-    int radiationLevel();
+    int radiationLevel() const;
     void setRadiationLevel(int radiationLevel);
 
-    virtual int damageResist(unsigned int type);
+    virtual int damageResist(unsigned int type) const;
     void setDamageResist(unsigned int type, int value);
 
-    virtual int damageThreshold(unsigned int type);
+    virtual int damageThreshold(unsigned int type) const;
     void setDamageThreshold(unsigned int type, int value);
 
-    unsigned int currentHand();
+    unsigned int currentHand() const;
     void setCurrentHand(unsigned int value);
 
     virtual void damage_p_proc();
@@ -257,7 +244,7 @@ public:
     virtual void think();
     virtual void onMovementAnimationEnded(Event* event);
 
-    virtual bool running();
+    virtual bool running() const;
     virtual void setRunning(bool value);
     
     virtual void stopMovement();

@@ -42,16 +42,16 @@ protected:
 public:
     GameExitMiscObject();
 
-    int exitHexagonNumber();
+    int exitHexagonNumber() const;
     void setExitHexagonNumber(int value);
 
-    int exitElevationNumber();
+    int exitElevationNumber() const;
     void setExitElevationNumber(int value);
 
-    int exitDirection();
+    int exitDirection() const;
     void setExitDirection(int value);
 
-    int exitMapNumber();
+    int exitMapNumber() const;
     void setExitMapNumber(int value);
 };
 
