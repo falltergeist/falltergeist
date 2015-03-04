@@ -32,6 +32,9 @@ namespace Falltergeist
 namespace Game
 {
 
+/**
+ * Walls
+ */
 class GameWallObject : public GameObject
 {
 protected:

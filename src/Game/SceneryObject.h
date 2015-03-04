@@ -32,6 +32,9 @@ namespace Falltergeist
 namespace Game
 {
 
+/**
+ * Stationary object used as scenery.
+ */
 class GameSceneryObject : public GameObject
 {
 protected:

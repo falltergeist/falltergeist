@@ -58,17 +58,17 @@ GameObject::~GameObject()
     delete _floatMessage;
 }
 
-int GameObject::type()
+int GameObject::type() const
 {
     return _type;
 }
 
-int GameObject::subtype()
+int GameObject::subtype() const
 {
     return _subtype;
 }
 
-int GameObject::PID()
+int GameObject::PID() const
 {
     return _PID;
 }
@@ -78,7 +78,7 @@ void GameObject::setPID(int value)
     _PID = value;
 }
 
-int GameObject::FID()
+int GameObject::FID() const
 {
     return _FID;
 }
@@ -90,7 +90,7 @@ void GameObject::setFID(int value)
     _generateUi();
 }
 
-int GameObject::elevation()
+int GameObject::elevation() const
 {
     return _elevation;
 }
@@ -104,7 +104,7 @@ void GameObject::setElevation(int value)
     _elevation = value;
 }
 
-int GameObject::orientation()
+int GameObject::orientation() const
 {
     return _orientation;
 }
@@ -122,7 +122,7 @@ void GameObject::setOrientation(int value)
     _generateUi();
 }
 
-std::string GameObject::name()
+std::string GameObject::name() const
 {
     return _name;
 }
@@ -132,7 +132,7 @@ void GameObject::setName(std::string value)
     _name = value;
 }
 
-std::string GameObject::description()
+std::string GameObject::description() const
 {
     return _description;
 }
@@ -142,7 +142,7 @@ void GameObject::setDescription(std::string value)
     _description = value;
 }
 
-VM* GameObject::script()
+VM* GameObject::script() const
 {
     return _script;
 }
@@ -153,7 +153,7 @@ void GameObject::setScript(VM* script)
     _script = script;
 }
 
-ActiveUI* GameObject::ui()
+ActiveUI* GameObject::ui() const
 {
     return _ui;
 }
@@ -204,7 +204,7 @@ void GameObject::_generateUi()
     addUIEventHandlers();
 }
 
-bool GameObject::canWalkThru()
+bool GameObject::canWalkThru() const
 {
     return _canWalkThru;
 }
@@ -214,7 +214,7 @@ void GameObject::setCanWalkThru(bool value)
     _canWalkThru = value;
 }
 
-bool GameObject::wallTransEnd()
+bool GameObject::wallTransEnd() const
 {
     return _wallTransEnd;
 }
@@ -224,7 +224,7 @@ void GameObject::setWallTransEnd(bool value)
     _wallTransEnd = value;
 }
 
-Hexagon* GameObject::hexagon()
+Hexagon* GameObject::hexagon() const
 {
     return _hexagon;
 }
@@ -234,7 +234,7 @@ void GameObject::setHexagon(Hexagon* hexagon)
     _hexagon = hexagon;
 }
 
-TextArea* GameObject::floatMessage()
+TextArea* GameObject::floatMessage() const
 {
     return _floatMessage;
 }
@@ -395,7 +395,7 @@ void GameObject::handle(Event* event)
     if (_ui) _ui->handle(event);
 }
 
-bool GameObject::inRender()
+bool GameObject::inRender() const
 {
     return _inRender;
 }
@@ -435,6 +435,12 @@ void GameObject::use_p_proc()
 
 void GameObject::destroy_p_proc()
 {
+    if (script() && script()->hasFunction("destroy_p_proc"))
+    {
+        script()
+            ->setSourceObject(Game::getInstance()->player())
+            ->call("destroy_p_proc");
+    }
 }
 
 void GameObject::look_at_p_proc()
@@ -522,7 +528,7 @@ void GameObject::setTrans(unsigned int value)
     }
 }
 
-unsigned int GameObject::trans()
+unsigned int GameObject::trans() const
 {
     return _trans;
 }
@@ -532,7 +538,7 @@ void GameObject::setLightOrientation(unsigned short orientation)
     _lightOrientation = orientation;
 }
 
-unsigned short GameObject::lightOrientation()
+unsigned short GameObject::lightOrientation() const
 {
     return _lightOrientation;
 }

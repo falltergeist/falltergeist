@@ -38,7 +38,7 @@ GameWeaponItemObject::~GameWeaponItemObject()
 {
 }
 
-unsigned int GameWeaponItemObject::animationCode()
+unsigned int GameWeaponItemObject::animationCode() const
 {
     return _animationCode;
 }
@@ -48,7 +48,7 @@ void GameWeaponItemObject::setAnimationCode(unsigned int value)
     _animationCode = value;
 }
 
-unsigned int GameWeaponItemObject::damageMin()
+unsigned int GameWeaponItemObject::damageMin() const
 {
     return _damageMin;
 }
@@ -58,7 +58,7 @@ void GameWeaponItemObject::setDamageMin(unsigned int value)
     _damageMin = value;
 }
 
-unsigned int GameWeaponItemObject::damageMax()
+unsigned int GameWeaponItemObject::damageMax() const
 {
     return _damageMax;
 }
@@ -68,7 +68,7 @@ void GameWeaponItemObject::setDamageMax(unsigned int value)
     _damageMax = value;
 }
 
-unsigned int GameWeaponItemObject::damageType()
+unsigned int GameWeaponItemObject::damageType() const
 {
     return _damageType;
 }
@@ -78,7 +78,7 @@ void GameWeaponItemObject::setDamageType(unsigned int value)
     _damageType = value;
 }
 
-unsigned int GameWeaponItemObject::rangePrimary()
+unsigned int GameWeaponItemObject::rangePrimary() const
 {
     return _rangePrimary;
 }
@@ -88,7 +88,7 @@ void GameWeaponItemObject::setRangePrimary(unsigned int value)
     _rangePrimary = value;
 }
 
-unsigned int GameWeaponItemObject::rangeSecondary()
+unsigned int GameWeaponItemObject::rangeSecondary() const
 {
     return _rangeSecondary;
 }
@@ -98,8 +98,7 @@ void GameWeaponItemObject::setRangeSecondary(unsigned int value)
     _rangeSecondary = value;
 }
 
-\
-unsigned int GameWeaponItemObject::minimumStrength()
+unsigned int GameWeaponItemObject::minimumStrength() const
 {
     return _minimumStrength;
 }
@@ -109,7 +108,7 @@ void GameWeaponItemObject::setMinimumStrength(unsigned int value)
     _minimumStrength = value;
 }
 
-unsigned int GameWeaponItemObject::actionCostPrimary()
+unsigned int GameWeaponItemObject::actionCostPrimary() const
 {
     return _actionCostPrimary;
 }
@@ -119,7 +118,7 @@ void GameWeaponItemObject::setActionCostPrimary(unsigned int value)
     _actionCostPrimary = value;
 }
 
-unsigned int GameWeaponItemObject::actionCostSecondary()
+unsigned int GameWeaponItemObject::actionCostSecondary() const
 {
     return _actionCostSecondary;
 }
@@ -129,7 +128,7 @@ void GameWeaponItemObject::setActionCostSecondary(unsigned int value)
     _actionCostSecondary = value;
 }
 
-unsigned int GameWeaponItemObject::burstRounds()
+unsigned int GameWeaponItemObject::burstRounds() const
 {
     return _burstRounds;
 }
@@ -139,7 +138,7 @@ void GameWeaponItemObject::setBurstRounds(unsigned int value)
     _burstRounds = value;
 }
 
-unsigned int GameWeaponItemObject::ammoType()
+unsigned int GameWeaponItemObject::ammoType() const
 {
     return _ammoType;
 }
@@ -149,7 +148,7 @@ void GameWeaponItemObject::setAmmoType(unsigned int value)
     _ammoType = value;
 }
 
-unsigned int GameWeaponItemObject::ammoPID()
+unsigned int GameWeaponItemObject::ammoPID() const
 {
     return _ammoPID;
 }
@@ -159,7 +158,7 @@ void GameWeaponItemObject::setAmmoPID(unsigned int value)
     _ammoPID = value;
 }
 
-unsigned int GameWeaponItemObject::ammoCapacity()
+unsigned int GameWeaponItemObject::ammoCapacity() const
 {
     return _ammoCapacity;
 }
@@ -169,7 +168,7 @@ void GameWeaponItemObject::setAmmoCapacity(unsigned int value)
     _ammoCapacity = value;
 }
 
-int GameWeaponItemObject::perk()
+int GameWeaponItemObject::perk() const
 {
     return _perk;
 }

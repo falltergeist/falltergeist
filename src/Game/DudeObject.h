@@ -33,6 +33,9 @@ namespace Falltergeist
 namespace Game
 {
 
+/**
+ * Player-controlled critter
+ */
 class GameDudeObject : public GameCritterObject
 {
 protected:
@@ -41,7 +44,6 @@ protected:
     int _statsPoints = 0;
     int _skillsPoints = 3;
     int _age = 0;
-    unsigned int _radiationLevel = 0;
     std::string _biography;
     virtual void _generateUi();
 public:
@@ -50,39 +52,37 @@ public:
 
     void loadFromGCDFile(libfalltergeist::Gcd::File* gcd);
 
-    int experience();
+    int experience() const;
     void setExperience(int value);
 
-    std::string biography();
+    std::string biography() const;
     void setBiography(std::string value);
 
-    int age();
+    int age() const;
     void setAge(int value);
 
-    int statsPoints();
+    int statsPoints() const;
     void setStatsPoints(int value);
 
-    int skillsPoints();
+    int skillsPoints() const;
     void setSkillsPoints(int value);
 
-    int level();
+    int level() const;
     void setLevel(int value);
 
-    int damageResistance();
-    int poisonResistance();
-    int radiationResistance();
+    int damageResistance() const;
+    int poisonResistance() const;
+    int radiationResistance() const;
     // Overloaded
-    int hitPointsMax();
-    int actionPointsMax();
-    int armorClass();
-    int meleeDamage();
-    int sequence();
-    int healingRate();
-    int criticalChance();
-    unsigned int carryWeightMax();
-
-    unsigned int radiationLevel();
-    void setRadiationLevel(unsigned int value);
+    int hitPointsMax() const;
+    int actionPointsMax() const;
+    int armorClass() const;
+    int meleeDamage() const;
+    int sequence() const;
+    int healingRate() const;
+    int criticalChance() const;
+    unsigned int carryWeightMax() const;
+    
 };
 
 }

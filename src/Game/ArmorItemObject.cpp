@@ -39,7 +39,7 @@ GameArmorItemObject::~GameArmorItemObject()
 {
 }
 
-int GameArmorItemObject::damageResist(unsigned int type)
+int GameArmorItemObject::damageResist(unsigned int type) const
 {
     if (type > DAMAGE_POISON) throw Exception("GameArmorItemObject::damageResist(type) - type out of range:" + std::to_string(type));
     return _damageResist.at(type);
@@ -51,7 +51,7 @@ void GameArmorItemObject::setDamageResist(unsigned int type, int value)
     _damageResist.at(type) = value;
 }
 
-int GameArmorItemObject::damageThreshold(unsigned int type)
+int GameArmorItemObject::damageThreshold(unsigned int type) const
 {
     if ( type > DAMAGE_POISON) throw Exception("GameArmorItemObject::damageThreshold(type) - type out of range:" + std::to_string(type));
     return _damageThreshold.at(type);
@@ -63,7 +63,7 @@ void GameArmorItemObject::setDamageThreshold(unsigned int type, int value)
     _damageThreshold.at(type) = value;
 }
 
-int GameArmorItemObject::perk()
+int GameArmorItemObject::perk() const
 {
     return _perk;
 }
@@ -73,7 +73,7 @@ void GameArmorItemObject::setPerk(int value)
     _perk = value;
 }
 
-unsigned int GameArmorItemObject::maleFID()
+unsigned int GameArmorItemObject::maleFID() const
 {
     return _maleFID;
 }
@@ -83,7 +83,7 @@ void GameArmorItemObject::setMaleFID(unsigned int value)
     _maleFID = value;
 }
 
-unsigned int GameArmorItemObject::femaleFID()
+unsigned int GameArmorItemObject::femaleFID() const
 {
     return _femaleFID;
 }
@@ -93,7 +93,7 @@ void GameArmorItemObject::setFemaleFID(unsigned int value)
     _femaleFID = value;
 }
 
-unsigned int GameArmorItemObject::armorClass()
+unsigned int GameArmorItemObject::armorClass() const
 {
     return _armorClass;
 }
