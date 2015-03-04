@@ -510,16 +510,20 @@ void GameObject::use_obj_on_p_proc()
 void GameObject::onUseAnimationActionFrame(Event* event, GameCritterObject* critter)
 {
     use_p_proc();
-    Animation* animation = dynamic_cast<AnimationQueue*>(critter->ui())->animations()->back();
-    animation->removeEventHandlers("actionFrame");
-    animation->addEventHandler("animationEnded", [this, critter](Event* event){
-        this->onUseAnimationEnd(event, critter);
-    });
+    Animation* animation = dynamic_cast<Animation*>(critter->ui());
+    if (animation)
+    {
+        animation->removeEventHandlers("actionFrame");
+        animation->addEventHandler("animationEnded", [this, critter](Event* event){
+            this->onUseAnimationEnd(event, critter);
+        });
+    }
+    else throw Exception("No animation for object!");
 }
 
 void GameObject::onUseAnimationEnd(Event* event, GameCritterObject* critter)
 {
-    critter->setActionAnimation("aa");
+    critter->setActionAnimation("aa")->stop();
 }
 
 void GameObject::setTrans(unsigned int value)

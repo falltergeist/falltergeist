@@ -74,12 +74,13 @@ public:
     void stop();
     void setReverse(bool value);
 
-    unsigned int currentFrame();
+    unsigned int currentFrame() const;
     void setCurrentFrame(unsigned int value);
-    unsigned int actionFrame();
+    unsigned int actionFrame() const;
     void setActionFrame(unsigned int value);
 
-    bool ended();
+    bool ended() const;
+    bool playing() const;
 };
 
 }
