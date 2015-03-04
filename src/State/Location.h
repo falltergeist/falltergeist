@@ -49,6 +49,14 @@ class VM;
 
 namespace State
 {
+    
+/**
+ * Location state works whenever player is on some map.
+ * This state holds pointers to all object on current map, hexagon grid and other map-specific information.
+ * 
+ * pushed: when player starts new game or loads new game
+ * popped: when player closes the game, exits to main menu or loads the game
+ */
 class Location : public State
 {
 protected:
@@ -107,6 +115,7 @@ public:
     std::map<std::string, VMStackValue>* EVARS();
 
     static void moveObjectToHexagon(Game::GameObject* object, Hexagon* hexagon);
+    void destroyObject(Game::GameObject* object);
     void centerCameraAtHexagon(Hexagon* hexagon);
     void centerCameraAtHexagon(int tileNum);
     void handleAction(Game::GameObject* object, int action);

@@ -32,6 +32,9 @@ namespace Falltergeist
 namespace Game
 {
 
+/**
+ * All items that can be used as a weapon.
+ */
 class GameWeaponItemObject : public GameItemObject
 {
 protected:
@@ -53,46 +56,46 @@ public:
     GameWeaponItemObject();
     virtual ~GameWeaponItemObject();
 
-    unsigned int animationCode();
+    unsigned int animationCode() const;
     void setAnimationCode(unsigned int value);
 
-    unsigned int damageMin();
+    unsigned int damageMin() const;
     void setDamageMin(unsigned int value);
 
-    unsigned int damageMax();
+    unsigned int damageMax() const;
     void setDamageMax(unsigned int value);
 
-    unsigned int damageType();
+    unsigned int damageType() const;
     void setDamageType(unsigned int value);
 
-    unsigned int rangePrimary();
+    unsigned int rangePrimary() const;
     void setRangePrimary(unsigned int value);
 
-    unsigned int rangeSecondary();
+    unsigned int rangeSecondary() const;
     void setRangeSecondary(unsigned int value);
 
-    unsigned int minimumStrength();
+    unsigned int minimumStrength() const;
     void setMinimumStrength(unsigned int value);
 
-    unsigned int actionCostPrimary();
+    unsigned int actionCostPrimary() const;
     void setActionCostPrimary(unsigned int value);
 
-    unsigned int actionCostSecondary();
+    unsigned int actionCostSecondary() const;
     void setActionCostSecondary(unsigned int value);
 
-    unsigned int burstRounds();
+    unsigned int burstRounds() const;
     void setBurstRounds(unsigned int value);
 
-    unsigned int ammoType();
+    unsigned int ammoType() const;
     void setAmmoType(unsigned int value);
 
-    unsigned int ammoPID();
+    unsigned int ammoPID() const;
     void setAmmoPID(unsigned int value);
 
-    unsigned int ammoCapacity();
+    unsigned int ammoCapacity() const;
     void setAmmoCapacity(unsigned int value);
 
-    int perk();
+    int perk() const;
     void setPerk(int value);
 
 };

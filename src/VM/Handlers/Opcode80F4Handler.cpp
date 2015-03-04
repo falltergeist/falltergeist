@@ -23,7 +23,8 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80F4Handler.h"
 #include "../../VM/VM.h"
-
+#include "../../Game/Game.h"
+#include "../../State/Location.h"
 
 
 // Third party includes
@@ -38,7 +39,8 @@ Opcode80F4Handler::Opcode80F4Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80F4Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80F4] [=] int destroy_object(void* obj)" << std::endl;
-    _vm->dataStack()->popObject();
+    auto object = _vm->dataStack()->popObject();
+    Game::Game::getInstance()->locationState()->destroyObject(object);
     _vm->dataStack()->push(0);
 }
 
