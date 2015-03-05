@@ -32,6 +32,9 @@ namespace Falltergeist
 namespace Game
 {
 
+/**
+ * Items wearable in "armor" slot.
+ */
 class GameArmorItemObject : public GameItemObject
 {
 protected:
@@ -47,22 +50,28 @@ public:
     GameArmorItemObject();
     virtual ~GameArmorItemObject();
 
-    virtual int damageResist(unsigned int type);
+    // damage resistance bonus of the armor
+    virtual int damageResist(unsigned int type) const;
     void setDamageResist(unsigned int type, int value);
 
-    virtual int damageThreshold(unsigned int type);
+    // damage threshold bonus of the armor
+    virtual int damageThreshold(unsigned int type) const;
     void setDamageThreshold(unsigned int type, int value);
 
-    int perk();
+    // special perk given to player when wearing armor
+    int perk() const;
     void setPerk(int value);
 
-    unsigned int maleFID();
+    // base frame ID used when wearing this type of armor by male critter
+    unsigned int maleFID() const;
     void setMaleFID(unsigned int value);
 
-    unsigned int femaleFID();
+    // base frame ID used when wearing this type of armor by female critter
+    unsigned int femaleFID() const;
     void setFemaleFID(unsigned int value);
 
-    unsigned int armorClass();
+    // armor class (%)
+    unsigned int armorClass() const;
     void setArmorClass(unsigned int value);
 
 };

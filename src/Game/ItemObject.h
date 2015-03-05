@@ -31,12 +31,16 @@ namespace Falltergeist
 {
 namespace Game
 {
-
+    
+/**
+ * Item. Can be placed inside other object inventories (critters and containers)
+ */
 class GameItemObject : public GameObject
 {
 protected:
     unsigned int _amount = 1;
     unsigned int _weight = 0;
+    unsigned int _volume = 0;
     int _inventoryFID = -1;
     Image* _inventoryUi = 0;
     Image* _inventorySlotUi = 0;
@@ -46,18 +50,25 @@ public:
     GameItemObject();
     virtual ~GameItemObject();
 
-    unsigned int amount();
+    // item stack size in inventory or on the ground
+    unsigned int amount() const;
     void setAmount(unsigned int value);
 
-    unsigned int weight();
+    // item weight, in pounds
+    unsigned int weight() const;
     void setWeight(unsigned int value);
+    
+    // item volume
+    unsigned int volume() const;
+    void setVolume(unsigned int volume);
 
-    int inventoryFID();
+    // item inventory frame ID
+    int inventoryFID() const;
     void setInventoryFID(int value);
 
-    Image* inventoryUi();
-    Image* inventorySlotUi();
-    Image* inventoryDragUi();
+    Image* inventoryUi() const;
+    Image* inventorySlotUi() const;
+    Image* inventoryDragUi() const;
 };
 
 }

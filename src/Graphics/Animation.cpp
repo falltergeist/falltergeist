@@ -219,12 +219,12 @@ std::vector<AnimationFrame*>* Animation::frames()
 
 int Animation::xOffset()
 {
-    return frames()->at(_currentFrame)->xOffset() + xShift();
+    return _animationFrames.at(_currentFrame)->xOffset() + xShift();
 }
 
 int Animation::yOffset()
 {
-    return frames()->at(_currentFrame)->yOffset() + yShift();
+    return _animationFrames.at(_currentFrame)->yOffset() + yShift();
 }
 
 void Animation::think()
@@ -285,12 +285,12 @@ void Animation::render()
 
 unsigned int Animation::height()
 {
-    return frames()->at(_currentFrame)->height();
+    return _animationFrames.at(_currentFrame)->height();
 }
 
 unsigned int Animation::width()
 {
-    return frames()->at(_currentFrame)->width();
+    return _animationFrames.at(_currentFrame)->width();
 }
 
 unsigned int Animation::pixel(unsigned int x, unsigned int y)
@@ -323,12 +323,17 @@ void Animation::setReverse(bool value)
     _reverse = value;
 }
 
-bool Animation::ended()
+bool Animation::ended() const
 {
     return _ended;
 }
 
-unsigned int Animation::currentFrame()
+bool Animation::playing() const
+{
+    return _playing;
+}
+
+unsigned int Animation::currentFrame() const
 {
     return _currentFrame;
 }
@@ -339,7 +344,7 @@ void Animation::setCurrentFrame(unsigned int value)
     _progress = _reverse ? frames()->size() - _currentFrame - 1 : _currentFrame;
 }
 
-unsigned int Animation::actionFrame()
+unsigned int Animation::actionFrame() const
 {
     return _actionFrame;
 }

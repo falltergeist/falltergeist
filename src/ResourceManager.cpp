@@ -21,6 +21,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <locale>
 
 // Falltergeist includes
 #include "CrossPlatform.h"
@@ -80,6 +81,11 @@ ResourceManager::~ResourceManager()
 
 libfalltergeist::Dat::Item* ResourceManager::datFileItem(std::string filename)
 {
+    std::locale loc;
+    for (auto it = filename.begin(); it != filename.end(); it++)
+    {
+        *it = std::tolower(*it, loc);
+    }
     // Return item from cache
     if (_datFilesItems.find(filename) != _datFilesItems.end())
     {
@@ -390,10 +396,10 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
     std::string prefix;
     std::string lstFile;
 
-    auto id = FID & 0x00000FFF;
+    auto baseId = FID & 0x00000FFF;
     auto type = FID >> 24;
 
-    switch(type)
+    switch (type)
     {
         case libfalltergeist::Frm::TYPE_ITEM:
             prefix = "art/items/";
@@ -401,49 +407,48 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
             break;
         case libfalltergeist::Frm::TYPE_CRITTER:
         {
-            unsigned int frmId = FID & 0x00000FFF;
-            unsigned int ID1 = (FID & 0x0000F000) >> 12;
-            unsigned int ID2 = (FID & 0x00FF0000) >> 16;
+            unsigned int weaponId = (FID & 0x0000F000) >> 12;
+            unsigned int animId = (FID & 0x00FF0000) >> 16;
             unsigned int ID3 = (FID & 0xF0000000) >> 28;
             auto lst = ResourceManager::lstFileType("art/critters/critters.lst");
-            std::string frmName = lst->strings()->at(frmId);
+            std::string frmName = lst->strings()->at(baseId);
             std::string frmBase = frmName.substr(0, 6);
 
-            if (ID2 >= 0x26 && ID2 <= 0x2F)
+            if (animId >= 0x26 && animId <= 0x2F)
             {
-                if (ID1 >= 0x0B || ID1 == 0) throw Exception("Critter ID1 unsupported value");
-                frmBase += ID1 + 0x63;
-                frmBase += ID2 + 0x3D;
+                if (weaponId >= 0x0B || weaponId == 0) throw Exception("Critter weaponId unsupported value");
+                frmBase += weaponId + 0x63;
+                frmBase += animId + 0x3D;
             }
-            else if (ID2 == 0x24)
+            else if (animId == 0x24)
             {
                 frmBase += "ch";
             }
-            else if (ID2 == 0x25)
+            else if (animId == 0x25)
             {
                 frmBase += "cj";
             }
-            else if (ID2 == 0x40)
+            else if (animId == 0x40)
             {
                 frmBase += "na";
             }
-            else if (ID2 >= 0x30)
+            else if (animId >= 0x30)
             {
                 frmBase += "r";
-                frmBase += ID2 + 0x31;
+                frmBase += animId + 0x31;
             }
-            else if (ID2 >= 0x14)
+            else if (animId >= 0x14)
             {
                 frmBase += "b";
-                frmBase += ID2 + 0x4d;
+                frmBase += animId + 0x4d;
             }
-            else if (ID2 == 0x12)
+            else if (animId == 0x12)
             {
-                if (ID1 == 0x01)
+                if (weaponId == 0x01)
                 {
                     frmBase += "dm";
                 }
-                else if (ID1 == 0x04)
+                else if (weaponId == 0x04)
                 {
                     frmBase += "gm";
                 }
@@ -452,11 +457,11 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
                     frmBase += "as";
                 }
             }
-            else if (ID2 == 0x0D)
+            else if (animId == 0x0D)
             {
-                if (ID1 > 0)
+                if (weaponId > 0)
                 {
-                    frmBase += ID1 + 0x63;
+                    frmBase += weaponId + 0x63;
                     frmBase += "e";
                 }
                 else
@@ -464,15 +469,15 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
                     frmBase += "an";
                 }
             }
-            else if (ID2 <= 0x01 && ID1 > 0)
+            else if (animId <= 0x01 && weaponId > 0)
             {
-                frmBase += ID1 + 0x63;
-                frmBase += ID2 + 0x61;
+                frmBase += weaponId + 0x63;
+                frmBase += animId + 0x61;
             }
             else
             {
                 frmBase += "a";
-                frmBase += ID2 + 0x61;
+                frmBase += animId + 0x61;
             }
 
             std::string extensions[] = {"frm", "frm0", "frm1", "frm2", "fr3", "frm4", "frm5", "frm6"};
@@ -497,8 +502,7 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
             lstFile = "misc.lst";
 
             // Map scroll blockers
-            if (id == 1) return "art/misc/scrblk.frm";
-
+            if (baseId == 1) return "art/misc/scrblk.frm";
             break;
         case libfalltergeist::Frm::TYPE_INTERFACE:
             prefix = "art/intrface/";
@@ -513,12 +517,12 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
             break;
     }
     auto lst = lstFileType(prefix + lstFile);
-    if (id >= lst->strings()->size())
+    if (baseId >= lst->strings()->size())
     {
-        Logger::error() << "ResourceManager::FIDtoFrmName(unsigned int) - LST size " << lst->strings()->size() << " <= frmID: " << id << " frmType: " << type << std::endl;
+        Logger::error() << "ResourceManager::FIDtoFrmName(unsigned int) - LST size " << lst->strings()->size() << " <= frmID: " << baseId << " frmType: " << type << std::endl;
         return "";
     }
-    return prefix + lst->strings()->at(id);
+    return prefix + lst->strings()->at(baseId);
 }
 
 std::map<std::string, Texture*>* ResourceManager::textures()

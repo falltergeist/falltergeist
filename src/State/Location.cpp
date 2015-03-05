@@ -86,6 +86,7 @@ Location::Location() : State()
 
 Location::~Location()
 {
+    for (auto obj : _objects) delete obj;
     delete _hexagonGrid;
     delete _camera;
     delete _floor;
@@ -205,17 +206,19 @@ void Location::setLocation(std::string name)
     // Adding dude
     {
         auto player = Game::getInstance()->player();
+        player->setArmorSlot(nullptr);
         // Just for testing
         {
-            auto armor = Game::GameObjectFactory::createObject(0x00000003); // powered armor
-            player->setArmorSlot(dynamic_cast<Game::GameArmorItemObject*>(armor));
+            player->inventory()->push_back((Game::GameItemObject*)Game::GameObjectFactory::createObject(0x00000003)); // power armor
+            player->inventory()->push_back((Game::GameItemObject*)Game::GameObjectFactory::createObject(0x0000004A)); // leather jacket
+            player->inventory()->push_back((Game::GameItemObject*)Game::GameObjectFactory::createObject(0x00000011)); // combat armor
+            player->inventory()->push_back((Game::GameItemObject*)Game::GameObjectFactory::createObject(0x00000071)); // purple robe
             auto leftHand = Game::GameObjectFactory::createObject(0x0000000C); // minigun
             player->setLeftHandSlot(dynamic_cast<Game::GameWeaponItemObject*>(leftHand));
             auto rightHand = Game::GameObjectFactory::createObject(0x00000007); // spear
             player->setRightHandSlot(dynamic_cast<Game::GameWeaponItemObject*>(rightHand));
         }
         player->setPID(0x01000001);
-        player->setFID(FID_HERO_MALE);
         player->setOrientation(mapFile->defaultOrientation());
 
         // Player script
@@ -779,6 +782,30 @@ void Location::moveObjectToHexagon(Game::GameObject* object, Hexagon* hexagon)
 
     object->setHexagon(hexagon);
     hexagon->objects()->push_back(object);
+}
+
+void Location::destroyObject(Game::GameObject* object)
+{
+    auto objectsAtHex = object->hexagon()->objects();
+    object->destroy_p_proc();
+    for (auto it = objectsAtHex->begin(); it != objectsAtHex->end(); ++it)
+    {
+        if (*it == object)
+        {
+            objectsAtHex->erase(it);
+            break;
+        }
+    }
+    if (_objectUnderCursor == object) _objectUnderCursor = nullptr;
+    for (auto it = _objects.begin(); it != _objects.end(); ++it)
+    {
+        if (*it == object)
+        {
+            _objects.erase(it);
+            break;
+        }
+    }
+    delete object;
 }
 
 void Location::centerCameraAtHexagon(Hexagon* hexagon)
