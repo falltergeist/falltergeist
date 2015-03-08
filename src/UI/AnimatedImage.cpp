@@ -45,10 +45,9 @@ AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direc
 
     if ((*masks)[libfalltergeist::Frm::File::MASK_MONITOR] != NULL)
     {
+        unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
         for (auto i=0; i<5; i++)
         {
-            unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
-
             //modify
             for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
             {
@@ -59,14 +58,15 @@ AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direc
             texture->loadFromRGBA(mask);
             _monitorTextures.push_back(texture);
         }
+        delete[] mask;
     }
 
     if ((*masks)[libfalltergeist::Frm::File::MASK_SLIME] != NULL)
     {
+        unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
+
         for (auto i=0; i<4; i++)
         {
-            unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
-
             //modify
             for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
             {
@@ -77,14 +77,15 @@ AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direc
             texture->loadFromRGBA(mask);
             _slimeTextures.push_back(texture);
         }
+        delete[] mask;
     }
 
     if ((*masks)[libfalltergeist::Frm::File::MASK_SHORE] != NULL)
     {
+        unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
+
         for (auto i=0; i<6; i++)
         {
-            unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
-
             //modify
             for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
             {
@@ -95,15 +96,16 @@ AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direc
             texture->loadFromRGBA(mask);
             _shoreTextures.push_back(texture);
         }
+        delete[] mask;
     }
 
 
     if ((*masks)[libfalltergeist::Frm::File::MASK_FIRE_SLOW] != NULL)
     {
+        unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
+
         for (auto i=0; i<5; i++)
         {
-            unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
-
             //modify
             for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
             {
@@ -114,14 +116,16 @@ AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direc
             texture->loadFromRGBA(mask);
             _fireSlowTextures.push_back(texture);
         }
+        delete[] mask;
     }
 
 
     if ((*masks)[libfalltergeist::Frm::File::MASK_FIRE_FAST] != NULL)
     {
+        unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
+
         for (auto i=0; i<5; i++)
         {
-            unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
             //modify
             for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
             {
@@ -132,15 +136,16 @@ AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direc
             texture->loadFromRGBA(mask);
             _fireFastTextures.push_back(texture);
         }
+        delete[] mask;
     }
 
 
     if ((*masks)[libfalltergeist::Frm::File::MASK_REDDOT] != NULL)
     {
+        unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
+
         for (auto i=0; i<16; i++)
         {
-            unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
-
             //modify
             for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
             {
@@ -151,6 +156,7 @@ AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direc
             texture->loadFromRGBA(mask);
             _reddotTextures.push_back(texture);
         }
+        delete[] mask;
     }
 }
 
