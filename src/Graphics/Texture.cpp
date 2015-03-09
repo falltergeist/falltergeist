@@ -96,6 +96,11 @@ unsigned int Texture::height()
     return _height;
 }
 
+void Texture::update()
+{
+   _changed = true;
+}
+
 unsigned int Texture::pixel(unsigned int x, unsigned int y)
 {
     if (x >= _width || y >= _height) return 0;
@@ -135,7 +140,7 @@ void Texture::setPixel(unsigned int x, unsigned int y, unsigned int color)
         SDL_UnlockSurface(_sdlSurface);
     }
 
-    _changed = true;
+    update();
 }
 
 void Texture::loadFromRGB(unsigned int* data)
@@ -157,7 +162,7 @@ void Texture::loadFromRGB(unsigned int* data)
         SDL_UnlockSurface(_sdlSurface);
     }
 
-    _changed = true;
+    update();
 }
 
 void Texture::loadFromRGBA(unsigned int* data)
@@ -179,7 +184,7 @@ void Texture::loadFromRGBA(unsigned int* data)
         SDL_UnlockSurface(_sdlSurface);
     }
 
-    _changed = true;
+    update();
 }
 
 void Texture::copyTo(Texture* destination, unsigned int destinationX, unsigned int destinationY, unsigned int sourceX, unsigned int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
@@ -194,79 +199,29 @@ void Texture::copyTo(Texture* destination, unsigned int destinationX, unsigned i
         sourceHeight = height();
     }
 
-    // @fixme: optimize this section
-    for (unsigned int y = 0; y != sourceHeight; y++)
-    {
-        for(unsigned int x = 0; x != sourceWidth; x++)
-        {
-            destination->setPixel(destinationX + x, destinationY + y, pixel(sourceX + x, sourceY + y));
-        }
-    }
-}
+    SDL_Rect src = {(int)sourceX, (int)sourceY, (int)sourceWidth,(int)sourceHeight};
+    SDL_Rect dst = {(int)destinationX, (int)destinationY, (int)sourceWidth,(int)sourceHeight};
 
-void Texture::blitTo(Texture* destination, unsigned int destinationX, unsigned int destinationY, unsigned int sourceX, unsigned int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
-{
-    if (sourceWidth == 0)
-    {
-        sourceWidth = width();
-    }
-
-    if (sourceHeight == 0)
-    {
-        sourceHeight = height();
-    }
-
-    // @fixme: optimize this section
-    for (unsigned int y = 0; y != sourceHeight; y++)
-    {
-        for(unsigned int x = 0; x != sourceWidth; x++)
-        {
-            unsigned int color = pixel(sourceX + x, sourceY + y);
-            if (color & 0x000000ff)
-            {
-                destination->setPixel(destinationX + x, destinationY + y, color);
-            }
-        }
-    }
+    SDL_BlitSurface(sdlSurface(), &src, destination->sdlSurface(), &dst);
+    destination->update();
 }
 
 void Texture::fill(unsigned int color)
 {
-    // @fixme: SDL_FillRect must be used
-    for (unsigned int y = 0; y != _height; y++)
-    {
-        for(unsigned int x = 0; x != _width; x++)
-        {
-            setPixel(x, y, color);
-        }
-    }
-    _changed = true;
+    SDL_FillRect(sdlSurface(), NULL, color);
+    update();
 }
 
 Texture* Texture::resize(unsigned int width, unsigned int height)
 {
     auto resized = new Texture(width, height);
 
-    double _stretch_factor_x = static_cast<double>(width)  / static_cast<double>(this->width());
-    double _stretch_factor_y = static_cast<double>(height) / static_cast<double>(this->height());
-
-    //Run across all Y pixels.
-    for(unsigned int y = 0; y < this->height(); y++)
+    if (SDL_SoftStretch(sdlSurface(), NULL, resized->sdlSurface(), NULL) != 0)
     {
-        //Run across all X pixels.
-        for(unsigned int x = 0; x < this->width(); x++)
-        {
-            //Draw _stretch_factor_y pixels for each Y pixel.
-            for(unsigned int o_y = 0; o_y < _stretch_factor_y; ++o_y)
-            {
-                //Draw _stretch_factor_x pixels for each X pixel.
-                for(unsigned int o_x = 0; o_x < _stretch_factor_x; ++o_x)
-                {
-                    resized->setPixel(static_cast<unsigned int>(_stretch_factor_x * x) + o_x, static_cast<unsigned int>(_stretch_factor_y * y) + o_y, this->pixel(x, y));
-                }
-            }
-        }
+        throw Exception(SDL_GetError());
     }
+    resized->update();
+
     return resized;
 }
 
