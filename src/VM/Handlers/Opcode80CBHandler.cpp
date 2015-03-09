@@ -54,7 +54,7 @@ void Opcode80CBHandler::_run()
     {
         _error("set_critter_stat(who, num, value) - who is not a critter");
     }
-    critter->setStat(number, value);
+    critter->setStat((STAT)number, value);
     if (dynamic_cast<Game::GameDudeObject*>(critter))
     {
         _vm->dataStack()->push(3); // for dude

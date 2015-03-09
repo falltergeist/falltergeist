@@ -26,6 +26,7 @@
 #include "ItemObject.h"
 
 // Third party includes
+#include <libfalltergeist.h>
 
 namespace Falltergeist
 {
@@ -45,18 +46,17 @@ protected:
     unsigned int _femaleFID = 0;
     unsigned int _armorClass = 0;
 public:
-    enum { DAMAGE_NORMAL = 0, DAMAGE_LASER, DAMAGE_FIRE, DAMAGE_PLASMA, DAMAGE_ELECTRICAL, DAMAGE_EMP, DAMAGE_EXPLOSION, DAMAGE_RADIATION, DAMAGE_POISON };
 
     GameArmorItemObject();
     virtual ~GameArmorItemObject();
 
     // damage resistance bonus of the armor
-    virtual int damageResist(unsigned int type) const;
-    void setDamageResist(unsigned int type, int value);
+    virtual int damageResist(DAMAGE type) const;
+    void setDamageResist(DAMAGE type, int value);
 
     // damage threshold bonus of the armor
-    virtual int damageThreshold(unsigned int type) const;
-    void setDamageThreshold(unsigned int type, int value);
+    virtual int damageThreshold(DAMAGE type) const;
+    void setDamageThreshold(DAMAGE type, int value);
 
     // special perk given to player when wearing armor
     int perk() const;

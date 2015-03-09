@@ -349,7 +349,7 @@ void PlayerPanel::openSkilldex()
 void PlayerPanel::toggleActiveHand()
 {
     auto player = Game::getInstance()->player();
-    player->setCurrentHand(player->currentHand() == Game::GameCritterObject::HAND_LEFT ? Game::GameCritterObject::HAND_RIGHT : Game::GameCritterObject::HAND_LEFT);
+    player->setCurrentHand(player->currentHand());
     playWindowOpenSfx();
 }
 

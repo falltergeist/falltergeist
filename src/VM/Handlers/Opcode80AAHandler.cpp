@@ -48,7 +48,7 @@ void Opcode80AAHandler::_run()
     int value = 0;
     if (auto critter = dynamic_cast<Game::GameCritterObject*>(object))
     {
-        value = critter->skillValue(skill);
+        value = critter->skillValue((SKILL)skill);
         _vm->dataStack()->push(value);
     }
     else 

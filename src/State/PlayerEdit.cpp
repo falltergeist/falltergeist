@@ -200,7 +200,7 @@ void PlayerEdit::init()
     _addLabel("cancel",  new TextArea(_t(MSG_EDITOR, 102), backgroundX+571, backgroundY+453))->setFont(font3_b89c28ff);
     _addLabel("name",    new TextArea(Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7))->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setFont(font3_b89c28ff);
     _addLabel("age",     new TextArea(_t(MSG_EDITOR, 104), backgroundX+163, backgroundY+7))->setFont(font3_b89c28ff);
-    _addLabel("gender",  new TextArea(_t(MSG_EDITOR, Game::getInstance()->player()->gender() == 0 ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff); // 0 -male 1 - female
+    _addLabel("gender",  new TextArea(_t(MSG_EDITOR, Game::getInstance()->player()->gender() == GENDER::MALE ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff);
 
     _addLabel("label_1", new TextArea(_t(MSG_EDITOR, 112), backgroundX+398, backgroundY+233))->setFont(font3_b89c28ff); // skill points on tag skills place!
     _addLabel("label_3", new TextArea(_t(MSG_EDITOR, 117), backgroundX+383, backgroundY+5))->setFont(font3_b89c28ff);  // skills
@@ -334,12 +334,10 @@ void PlayerEdit::think()
 {
     State::think();
     auto player = Game::getInstance()->player();
-    auto msgEditor = ResourceManager::msgFileType("text/english/game/editor.msg");
-    auto msgStat = ResourceManager::msgFileType("text/english/game/stat.msg");
 
     *_labels.at("name") = player->name();
     *_labels.at("age") = _t(MSG_EDITOR, 104) + " " + std::to_string(player->age());
-    *_labels.at("gender") = _t(MSG_EDITOR, player->gender() == 0 ? 107 : 108); // 0 - male   1 - female
+    *_labels.at("gender") = _t(MSG_EDITOR, player->gender() == GENDER::MALE ? 107 : 108);
 
     _counters.at("skillsPoints")->setNumber(player->skillsPoints());
 
@@ -360,11 +358,11 @@ void PlayerEdit::think()
     *_labels.at("params_10_value")+= "%";
 
     // Stats counters and labels
-    for (unsigned int i = 0; i < 7; i++)
+    for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
     {
         std::stringstream ss;
         ss << "stats_" << (i+1);
-        unsigned int val = player->statTotal(i);
+        unsigned int val = player->statTotal((STAT)i);
         _counters.at(ss.str())->setNumber(val);
         _counters.at(ss.str())->setColor(BigCounter::COLOR_WHITE);
         if (val > 10)
@@ -376,11 +374,11 @@ void PlayerEdit::think()
     }
 
     // Skills values
-    for (unsigned int i = 0; i != 18; ++i)
+    for (unsigned i = (unsigned)SKILL::SMALL_GUNS; i <= (unsigned)SKILL::OUTDOORSMAN; i++)
     {
         std::stringstream ss;
         ss << "skills_" << (i + 1) << "_value";
-        *_labels.at(ss.str()) = player->skillValue(i);
+        *_labels.at(ss.str()) = player->skillValue((SKILL)i);
         *_labels.at(ss.str())+= "%";
     }
 
@@ -406,8 +404,8 @@ void PlayerEdit::think()
 
         if (name.find("skills_") == 0)
         {
-            unsigned int number = atoi(name.substr(7).c_str());
-            it->second->setFont(player->skillTagged(number - 1) ? font1_a0a0a0ff : font1_3ff800ff);
+            unsigned number = atoi(name.substr(7).c_str()) - 1;
+            it->second->setFont(player->skillTagged((SKILL)number) ? font1_a0a0a0ff : font1_3ff800ff);
         }
 
         if (name.find("health_") == 0)
@@ -450,9 +448,9 @@ void PlayerEdit::think()
 
         if (name.find("skills_") == 0)
         {
-            unsigned int number = atoi(name.substr(7).c_str());
-            it->second->setFont(player->skillTagged(number - 1) ? font1_ffffffff : font1_ffff7fff);
-            _labels.at(name+"_value")->setFont(player->skillTagged(number - 1) ? font1_ffffffff : font1_ffff7fff);
+            unsigned number = atoi(name.substr(7).c_str()) - 1;
+            it->second->setFont(player->skillTagged((SKILL)number) ? font1_ffffffff : font1_ffff7fff);
+            _labels.at(name+"_value")->setFont(player->skillTagged((SKILL)number) ? font1_ffffffff : font1_ffff7fff);
         }
 
         if (name.find("health_") == 0)

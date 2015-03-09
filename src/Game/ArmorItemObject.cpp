@@ -39,28 +39,28 @@ GameArmorItemObject::~GameArmorItemObject()
 {
 }
 
-int GameArmorItemObject::damageResist(unsigned int type) const
+int GameArmorItemObject::damageResist(DAMAGE type) const
 {
-    if (type > DAMAGE_POISON) throw Exception("GameArmorItemObject::damageResist(type) - type out of range:" + std::to_string(type));
-    return _damageResist.at(type);
+    if (type > DAMAGE::POISON) throw Exception("GameArmorItemObject::damageResist(type) - type out of range:" + std::to_string((unsigned)type));
+    return _damageResist.at((unsigned)type);
 }
 
-void GameArmorItemObject::setDamageResist(unsigned int type, int value)
+void GameArmorItemObject::setDamageResist(DAMAGE type, int value)
 {
-    if (type > DAMAGE_POISON) throw Exception("GameArmorItemObject::setDamageResist(type, value) - type out of range:" + std::to_string(type));
-    _damageResist.at(type) = value;
+    if (type > DAMAGE::POISON) throw Exception("GameArmorItemObject::setDamageResist(type, value) - type out of range:" + std::to_string((unsigned)type));
+    _damageResist.at((unsigned)type) = value;
 }
 
-int GameArmorItemObject::damageThreshold(unsigned int type) const
+int GameArmorItemObject::damageThreshold(DAMAGE type) const
 {
-    if ( type > DAMAGE_POISON) throw Exception("GameArmorItemObject::damageThreshold(type) - type out of range:" + std::to_string(type));
-    return _damageThreshold.at(type);
+    if ( type > DAMAGE::POISON) throw Exception("GameArmorItemObject::damageThreshold(type) - type out of range:" + std::to_string((unsigned)type));
+    return _damageThreshold.at((unsigned)type);
 }
 
-void GameArmorItemObject::setDamageThreshold(unsigned int type, int value)
+void GameArmorItemObject::setDamageThreshold(DAMAGE type, int value)
 {
-    if ( type > DAMAGE_POISON) throw Exception("GameArmorItemObject::setDamageThreshold(type, value) - type out of range:" + std::to_string(type));
-    _damageThreshold.at(type) = value;
+    if ( type > DAMAGE::POISON) throw Exception("GameArmorItemObject::setDamageThreshold(type, value) - type out of range:" + std::to_string((unsigned)type));
+    _damageThreshold.at((unsigned)type) = value;
 }
 
 int GameArmorItemObject::perk() const

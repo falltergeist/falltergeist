@@ -173,7 +173,7 @@ void PlayerCreate::init()
     _addLabel("cancel",  new TextArea(_t(MSG_EDITOR, 102), backgroundX+571, backgroundY+453))->setFont(font3_b89c28ff);
     _addLabel("name",    new TextArea(Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7))->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setFont(font3_b89c28ff);
     _addLabel("age",     new TextArea(_t(MSG_EDITOR, 104), backgroundX+163, backgroundY+7))->setFont(font3_b89c28ff);
-    _addLabel("gender",  new TextArea(_t(MSG_EDITOR, Game::getInstance()->player()->gender() == 0 ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff); // 0 -male 1 - female
+    _addLabel("gender",  new TextArea(_t(MSG_EDITOR, Game::getInstance()->player()->gender() == GENDER::MALE ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff);
     _addLabel("label_1", new TextArea(_t(MSG_EDITOR, 116), backgroundX+14, backgroundY+286))->setFont(font3_b89c28ff);  // char points
     _addLabel("label_2", new TextArea(_t(MSG_EDITOR, 139), backgroundX+50, backgroundY+326))->setFont(font3_b89c28ff);  // optinal traits
     _addLabel("label_3", new TextArea(_t(MSG_EDITOR, 117), backgroundX+383, backgroundY+5))->setFont(font3_b89c28ff);   // skills
@@ -300,7 +300,7 @@ void PlayerCreate::think()
     *_labels.at("name") = player->name();
     *_labels.at("age") = _t(MSG_EDITOR, 104) +  " " + std::to_string(player->age());
 
-    *_labels.at("gender") = _t(MSG_EDITOR, player->gender() == 0 ? 107 : 108); // 0 - male   1 - female
+    *_labels.at("gender") = _t(MSG_EDITOR, player->gender() == GENDER::MALE ? 107 : 108);
 
     _counters.at("statsPoints")->setNumber(player->statsPoints());
     _counters.at("skillsPoints")->setNumber(player->skillsPoints());
@@ -327,11 +327,11 @@ void PlayerCreate::think()
     *_labels.at("params_10_value") += "%";
 
     // Stats counters and labels
-    for (unsigned int i = 0; i < 7; i++)
+    for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
     {
         std::stringstream ss;
         ss << "stats_" << (i+1);
-        unsigned int val = player->statTotal(i);
+        unsigned int val = player->statTotal((STAT)i);
         _counters.at(ss.str())->setNumber(val);
         _counters.at(ss.str())->setColor(BigCounter::COLOR_WHITE);
         if (val > 10)
@@ -343,11 +343,11 @@ void PlayerCreate::think()
     }
 
     // Skills values
-    for (unsigned int i = 0; i != 18; ++i)
+    for (unsigned i = (unsigned)SKILL::SMALL_GUNS; i <= (unsigned)SKILL::OUTDOORSMAN; i++)
     {
         std::stringstream ss;
         ss << "skills_" << (i + 1) << "_value";
-        *_labels.at(ss.str()) = player->skillValue(i);
+        *_labels.at(ss.str()) = player->skillValue((SKILL)i);
         *_labels.at(ss.str())+= "%";
     }
 
@@ -367,14 +367,14 @@ void PlayerCreate::think()
 
         if (name.find("traits_") == 0)
         {
-            unsigned int number = atoi(name.substr(7).c_str());
-            it->second->setFont(player->traitTagged(number - 1) ? font1_a0a0a0ff : font1_3ff800ff);
+            unsigned number = atoi(name.substr(7).c_str()) - 1;
+            it->second->setFont(player->traitTagged((TRAIT)number) ? font1_a0a0a0ff : font1_3ff800ff);
         }
 
         if (name.find("skills_") == 0)
         {
-            unsigned int number = atoi(name.substr(7).c_str());
-            it->second->setFont(player->skillTagged(number - 1) ? font1_a0a0a0ff : font1_3ff800ff);
+            unsigned number = atoi(name.substr(7).c_str()) - 1;
+            it->second->setFont(player->skillTagged((SKILL)number) ? font1_a0a0a0ff : font1_3ff800ff);
         }
 
         if (name.find("health_") == 0)
@@ -411,15 +411,15 @@ void PlayerCreate::think()
 
         if (name.find("traits_") == 0)
         {
-            unsigned int number = atoi(name.substr(7).c_str());
-            it->second->setFont(player->traitTagged(number - 1) ? font1_ffffffff : font1_ffff7fff);
+            unsigned number = atoi(name.substr(7).c_str()) - 1;
+            it->second->setFont(player->traitTagged((TRAIT)number) ? font1_ffffffff : font1_ffff7fff);
         }
 
         if (name.find("skills_") == 0)
         {
-            unsigned int number = atoi(name.substr(7).c_str());
-            it->second->setFont(player->skillTagged(number - 1) ? font1_ffffffff : font1_ffff7fff);
-            _labels.at(name+"_value")->setFont(player->skillTagged(number - 1) ? font1_ffffffff : font1_ffff7fff);
+            unsigned number = atoi(name.substr(7).c_str()) - 1;
+            it->second->setFont(player->skillTagged((SKILL)number) ? font1_ffffffff : font1_ffff7fff);
+            _labels.at(name+"_value")->setFont(player->skillTagged((SKILL)number) ? font1_ffffffff : font1_ffff7fff);
         }
 
         if (name.find("health_") == 0)
@@ -433,9 +433,9 @@ void PlayerCreate::think()
 bool PlayerCreate::_statDecrease(unsigned int num)
 {
     auto player = Game::getInstance()->player();
-    if (player->stat(num) <= 1) return false;
+    if (player->stat((STAT)num) <= 1) return false;
 
-    player->setStat(num, player->stat(num) - 1);
+    player->setStat((STAT)num, player->stat((STAT)num) - 1);
     player->setStatsPoints(player->statsPoints() + 1);
     return true;
 }
@@ -445,9 +445,9 @@ bool PlayerCreate::_statIncrease(unsigned int num)
     auto player = Game::getInstance()->player();
     if (player->statsPoints() <= 0) return false;
 
-    if (player->stat(num) + player->statBonus(num) >= 10) return false;
+    if (player->stat((STAT)num) + player->statBonus((STAT)num) >= 10) return false;
 
-    player->setStat(num, player->stat(num) + 1);
+    player->setStat((STAT)num, player->stat((STAT)num) + 1);
     player->setStatsPoints(player->statsPoints() - 1);
     return true;
 }
@@ -455,18 +455,21 @@ bool PlayerCreate::_statIncrease(unsigned int num)
 bool PlayerCreate::_traitToggle(unsigned int num)
 {
     auto player = Game::getInstance()->player();
-    if (player->traitTagged(num))
+    if (player->traitTagged((TRAIT)num))
     {
-        player->setTraitTagged(num, 0);
+        player->setTraitTagged((TRAIT)num, 0);
         return true;
     }
     else
     {
         unsigned int selectedTraits = 0;
-        for (unsigned int i = 0; i != 16; ++i) if (player->traitTagged(i)) selectedTraits++;
+        for (unsigned i = (unsigned)TRAIT::FAST_METABOLISM; i <= (unsigned)TRAIT::GIFTED; i++)
+        {
+            if (player->traitTagged((TRAIT)i)) selectedTraits++;
+        }
         if (selectedTraits < 2)
         {
-            player->setTraitTagged(num, 1);
+            player->setTraitTagged((TRAIT)num, 1);
             return true;
         }
     }
@@ -476,9 +479,9 @@ bool PlayerCreate::_traitToggle(unsigned int num)
 bool PlayerCreate::_skillToggle(unsigned int num)
 {
     auto player = Game::getInstance()->player();
-    if (player->skillTagged(num))
+    if (player->skillTagged((SKILL)num))
     {
-        player->setSkillTagged(num, 0);
+        player->setSkillTagged((SKILL)num, 0);
         player->setSkillsPoints(player->skillsPoints() + 1);
         return true;
     }
@@ -486,7 +489,7 @@ bool PlayerCreate::_skillToggle(unsigned int num)
     {
         if (player->skillsPoints() > 0)
         {
-            player->setSkillTagged(num, 1);
+            player->setSkillTagged((SKILL)num, 1);
             player->setSkillsPoints(player->skillsPoints() - 1);
             return true;
         }

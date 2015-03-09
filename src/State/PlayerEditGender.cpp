@@ -96,12 +96,12 @@ void PlayerEditGender::onDoneButtonClick(MouseEvent* event)
 
 void PlayerEditGender::onFemaleButtonPress(MouseEvent* event)
 {
-    setGender(1); // 1 - female
+    setGender(GENDER::FEMALE);
 }
 
 void PlayerEditGender::onMaleButtonPress(MouseEvent* event)
 {
-    setGender(0); // 0 - male
+    setGender(GENDER::MALE);
 }
 
 void PlayerEditGender::onKeyDown(KeyboardEvent* event)
@@ -117,19 +117,17 @@ void PlayerEditGender::onKeyDown(KeyboardEvent* event)
             break;
         case SDLK_LEFT:
         case SDLK_RIGHT:
-            setGender(_gender ? 0 : 1);
+            setGender(_gender);
             break;
     }
 }
 
-void PlayerEditGender::setGender(unsigned int gender)
+void PlayerEditGender::setGender(GENDER gender)
 {
-    _gender = gender ? 1 : 0;
-    _maleImage->setCurrentImage(gender ? 0 : 1);
-    _femaleImage->setCurrentImage(gender ? 1 : 0);
+    _gender = gender;
+    _maleImage->setCurrentImage(gender == GENDER::MALE ? 0 : 1);
+    _femaleImage->setCurrentImage(gender == GENDER::FEMALE ? 1 : 0);
 }
-
-
 
 }
 }
