@@ -42,7 +42,7 @@ unsigned int HiddenMask::pixel(unsigned int x, unsigned int y)
     return 0xffffffff;
 }
 
-void HiddenMask::render()
+void HiddenMask::render(bool eggTransparency)
 {
 }
 
