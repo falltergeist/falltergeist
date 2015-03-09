@@ -133,6 +133,7 @@ public:
     void setScript(VM* script);
 
     virtual void render();
+    virtual void renderText();
     virtual void think();
     virtual void handle(Event* event);
 
