@@ -40,7 +40,7 @@ void Opcode813CHandler::_run()
     int skill = _vm->dataStack()->popInteger();
     auto critter = static_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
 
-    critter->setSkillGainedValue(skill, critter->skillGainedValue(skill) + amount);
+    critter->setSkillGainedValue((SKILL)skill, critter->skillGainedValue((SKILL)skill) + amount);
 
     Logger::debug("SCRIPT") << "[813C] void critter_mod_skill(GameCritterObject* who, int skill, int amount)" << std::endl
                             << "    skill = " << skill << std::endl

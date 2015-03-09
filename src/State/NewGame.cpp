@@ -210,23 +210,23 @@ void NewGame::_changeCharacter()
     auto dude = _characters.at(_selectedCharacter);
    *getTextArea("stats_1") = "";
    *getTextArea("stats_1")
-        << _t(MSG_STATS, 100) << " " << (dude->stat(0) < 10 ? "0" : "") << dude->stat(0) << "\n"
-        << _t(MSG_STATS, 101) << " " << (dude->stat(1) < 10 ? "0" : "") << dude->stat(1) << "\n"
-        << _t(MSG_STATS, 102) << " " << (dude->stat(2) < 10 ? "0" : "") << dude->stat(2) << "\n"
-        << _t(MSG_STATS, 103) << " " << (dude->stat(3) < 10 ? "0" : "") << dude->stat(3) << "\n"
-        << _t(MSG_STATS, 104) << " " << (dude->stat(4) < 10 ? "0" : "") << dude->stat(4) << "\n"
-        << _t(MSG_STATS, 105) << " " << (dude->stat(5) < 10 ? "0" : "") << dude->stat(5) << "\n"
-        << _t(MSG_STATS, 106) << " " << (dude->stat(6) < 10 ? "0" : "") << dude->stat(6) << "\n";
+        << _t(MSG_STATS, 100) << " " << (dude->stat(STAT::STRENGTH)     < 10 ? "0" : "") << dude->stat(STAT::STRENGTH)     << "\n"
+        << _t(MSG_STATS, 101) << " " << (dude->stat(STAT::PERCEPTION)   < 10 ? "0" : "") << dude->stat(STAT::PERCEPTION)   << "\n"
+        << _t(MSG_STATS, 102) << " " << (dude->stat(STAT::ENDURANCE)    < 10 ? "0" : "") << dude->stat(STAT::ENDURANCE)    << "\n"
+        << _t(MSG_STATS, 103) << " " << (dude->stat(STAT::CHARISMA)     < 10 ? "0" : "") << dude->stat(STAT::CHARISMA)     << "\n"
+        << _t(MSG_STATS, 104) << " " << (dude->stat(STAT::INTELLIGENCE) < 10 ? "0" : "") << dude->stat(STAT::INTELLIGENCE) << "\n"
+        << _t(MSG_STATS, 105) << " " << (dude->stat(STAT::AGILITY)      < 10 ? "0" : "") << dude->stat(STAT::AGILITY)      << "\n"
+        << _t(MSG_STATS, 106) << " " << (dude->stat(STAT::LUCK)         < 10 ? "0" : "") << dude->stat(STAT::LUCK)         << "\n";
 
     *getTextArea("stats_2") = "";
     *getTextArea("stats_2")
-        << _t(MSG_STATS, dude->stat(0) + 300) << "\n"
-        << _t(MSG_STATS, dude->stat(1) + 300) << "\n"
-        << _t(MSG_STATS, dude->stat(2) + 300) << "\n"
-        << _t(MSG_STATS, dude->stat(3) + 300) << "\n"
-        << _t(MSG_STATS, dude->stat(4) + 300) << "\n"
-        << _t(MSG_STATS, dude->stat(5) + 300) << "\n"
-        << _t(MSG_STATS, dude->stat(6) + 300) << "\n";
+        << _t(MSG_STATS, dude->stat(STAT::STRENGTH)     + 300) << "\n"
+        << _t(MSG_STATS, dude->stat(STAT::PERCEPTION)   + 300) << "\n"
+        << _t(MSG_STATS, dude->stat(STAT::ENDURANCE)    + 300) << "\n"
+        << _t(MSG_STATS, dude->stat(STAT::CHARISMA)     + 300) << "\n"
+        << _t(MSG_STATS, dude->stat(STAT::INTELLIGENCE) + 300) << "\n"
+        << _t(MSG_STATS, dude->stat(STAT::AGILITY)      + 300) << "\n"
+        << _t(MSG_STATS, dude->stat(STAT::LUCK)         + 300) << "\n";
 
     getTextArea("bio")->setText(dude->biography());
     getTextArea("name")->setText(dude->name());
@@ -242,14 +242,20 @@ void NewGame::_changeCharacter()
                                 + std::to_string(dude->actionPoints()) + "\n"
                                 + std::to_string(dude->meleeDamage())  + "\n";
 
-    for (unsigned int i=0; i != 17; ++i) if (dude->skillTagged(i))
+    for (unsigned i = (unsigned)SKILL::SMALL_GUNS; i <= (unsigned)SKILL::OUTDOORSMAN; i++)
     {
-        stats3 += "\n" + _t(MSG_SKILLS, 100 + i);
-        stats3_values += "\n" + std::to_string(dude->skillValue(i)) + "%";
+        if (dude->skillTagged((SKILL)i))
+        {
+            stats3 += "\n" + _t(MSG_SKILLS, 100 + i);
+            stats3_values += "\n" + std::to_string(dude->skillValue((SKILL)i)) + "%";
+        }
     }
-    for (unsigned int i=0; i != 16; ++i) if (dude->traitTagged(i))
+    for (unsigned i = (unsigned)TRAIT::FAST_METABOLISM; i <= (unsigned)TRAIT::GIFTED; i++)
     {
-        stats3 += "\n" + _t(MSG_TRAITS, 100 + i);
+        if (dude->traitTagged((TRAIT)i))
+        {
+            stats3 += "\n" + _t(MSG_TRAITS, 100 + i);
+        }
     }
     getTextArea("stats_3")->setText(stats3);
     getTextArea("stats3_values")->setText(stats3_values);

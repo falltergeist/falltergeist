@@ -29,6 +29,9 @@
 #include "../PathFinding/Hexagon.h"
 
 // Third party includes
+#include <libfalltergeist.h>
+
+using namespace libfalltergeist;
 
 namespace Falltergeist
 {
@@ -43,110 +46,8 @@ class ItemObject;
  */
 class GameCritterObject : public GameObject
 {
-protected:
-    bool _moving  = false;
-    bool _running = false;
 
-    int _gender = GENDER_MALE;
-    int _poisonLevel = 0;
-    int _radiationLevel = 0;
-    int _hitPoints = 0;
-    int _hitPointsMax = 0;
-    int _healingRate = 0;
-    int _armorClass = 0;
-    int _actionPoints = 0;
-    int _actionPointsMax = 0;
-    int _meleeDamage = 0;
-    int _sequence = 0;
-    int _criticalChance = 0;
-    
-    unsigned int _nextIdleAnim = 0;
-
-    unsigned int _currentHand = HAND_RIGHT;
-    unsigned int _carryWeightMax = 0;
-
-    std::vector<int> _stats = {0, 0, 0, 0, 0, 0, 0};
-    std::vector<int> _statsBonus = {0, 0, 0, 0, 0, 0, 0};
-    std::vector<int> _skillsTagged = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    std::vector<int> _skillsGainedValue = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    std::vector<int> _traitsTagged = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    std::vector<int> _damageResist = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-    std::vector<int> _damageThreshold = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-    std::vector<GameItemObject*> _inventory;
-    std::vector<Hexagon*> _movementQueue;
-    GameArmorItemObject* _armorSlot = 0;
-    GameItemObject* _leftHandSlot = 0;
-    GameItemObject* _rightHandSlot = 0;
-
-    virtual Animation* _generateMovementAnimation();
-    virtual std::string _generateArmorFrmString();
-    virtual std::string _generateWeaponFrmString();
-    void _setupNextIdleAnim();
 public:
-    enum { HAND_RIGHT = 0, HAND_LEFT };
-    enum { GENDER_MALE = 0, GENDER_FEMALE };
-    enum 
-    { 
-        STAT_STRENGTH = 0, 
-        STAT_PERCEPTION, 
-        STAT_ENDURANCE, 
-        STAT_CHARISMA,
-        STAT_INTELLIGENCE, 
-        STAT_AGILITY, 
-        STAT_LUCK 
-    };
-    enum 
-    { 
-        DAMAGE_NORMAL = 0, 
-        DAMAGE_LASER, 
-        DAMAGE_FIRE, 
-        DAMAGE_PLASMA, 
-        DAMAGE_ELECTRICAL, 
-        DAMAGE_EMP, 
-        DAMAGE_EXPLOSION, 
-        DAMAGE_RADIATION, 
-        DAMAGE_POISON 
-    };
-    enum 
-    {
-        TRAIT_FAST_METABOLISM = 0,
-        TRAIT_BRUISER,
-        TRAIT_SMALL_FRAME,
-        TRAIT_ONE_HANDED,
-        TRAIT_FINESSE,
-        TRAIT_KAMIKAZE,
-        TRAIT_HEAVY_HANDED,
-        TRAIT_FAST_SHOT,
-        TRAIT_BLOODY_MESS,
-        TRAIT_JINXED,
-        TRAIT_GOOD_NATURED,
-        TRAIT_CHEM_RELIANT,
-        TRAIT_CHEM_RESISTANT,
-        TRAIT_SEX_APPEAL,
-        TRAIT_SKILLED,
-        TRAIT_GIFTED
-    };
-    enum
-    {
-        SKILL_SMALL_GUNS = 0,
-        SKILL_BIG_GUNS,
-        SKILL_ENERGY_WEAPONS,
-        SKILL_UNARMED,
-        SKILL_MELEE_WEAPONS,
-        SKILL_THROWING,
-        SKILL_FIRST_AID,
-        SKILL_DOCTOR,
-        SKILL_SNEAK,
-        SKILL_LOCKPICK,
-        SKILL_STEAL,
-        SKILL_TRAPS,
-        SKILL_SCIENCE,
-        SKILL_REPAIR,
-        SKILL_SPEECH,
-        SKILL_BARTER,
-        SKILL_GAMBLING,
-        SKILL_OUTDOORSMAN
-    };
 
     GameCritterObject();
     virtual ~GameCritterObject();
@@ -168,28 +69,31 @@ public:
 
     GameItemObject* currentHandSlot() const;
 
-    int gender() const;
-    void setGender(unsigned int value);
+    GENDER gender() const;
+    void setGender(GENDER value);
 
-    int stat(unsigned int stat) const;
-    void setStat(unsigned int stat, int value);
+    unsigned age() const;
+    void setAge(unsigned value);
 
-    int statBonus(unsigned int stat) const;
-    void setStatBonus(unsigned int stat, int value);
+    int stat(STAT stat) const;
+    void setStat(STAT stat, int value);
+
+    int statBonus(STAT stat) const;
+    void setStatBonus(STAT stat, int value);
 
     // returns total stat value (with bonuses)
-    int statTotal(unsigned int num) const;
+    int statTotal(STAT num) const;
 
-    int skillTagged(unsigned int skill) const;
-    void setSkillTagged(unsigned int skill, int value);
+    int skillTagged(SKILL skill) const;
+    void setSkillTagged(SKILL skill, int value);
 
-    int skillBaseValue(unsigned int skill) const;
-    int skillGainedValue(unsigned int skill) const;
-    void setSkillGainedValue(unsigned int skill, int value);
-    int skillValue(unsigned int skill) const;
+    int skillBaseValue(SKILL skill) const;
+    int skillGainedValue(SKILL skill) const;
+    void setSkillGainedValue(SKILL skill, int value);
+    int skillValue(SKILL skill) const;
 
-    int traitTagged(unsigned int num) const;
-    void setTraitTagged(unsigned int num, int value);
+    int traitTagged(TRAIT num) const;
+    void setTraitTagged(TRAIT num, int value);
 
     int hitPoints() const;
     void setHitPoints(int value);
@@ -228,14 +132,14 @@ public:
     int radiationLevel() const;
     void setRadiationLevel(int radiationLevel);
 
-    virtual int damageResist(unsigned int type) const;
-    void setDamageResist(unsigned int type, int value);
+    virtual int damageResist(DAMAGE type) const;
+    void setDamageResist(DAMAGE type, int value);
 
-    virtual int damageThreshold(unsigned int type) const;
-    void setDamageThreshold(unsigned int type, int value);
+    virtual int damageThreshold(DAMAGE type) const;
+    void setDamageThreshold(DAMAGE type, int value);
 
-    unsigned int currentHand() const;
-    void setCurrentHand(unsigned int value);
+    HAND currentHand() const;
+    void setCurrentHand(HAND value);
 
     virtual void damage_p_proc();
     virtual void combat_p_proc();
@@ -253,6 +157,48 @@ public:
     virtual void stopMovement();
 
     virtual Animation* setActionAnimation(std::string action);
+
+protected:
+    bool _moving  = false;
+    bool _running = false;
+
+    GENDER _gender = GENDER::MALE;
+    int _poisonLevel = 0;
+    int _radiationLevel = 0;
+    int _hitPoints = 0;
+    int _hitPointsMax = 0;
+    int _healingRate = 0;
+    int _armorClass = 0;
+    int _actionPoints = 0;
+    int _actionPointsMax = 0;
+    int _meleeDamage = 0;
+    int _sequence = 0;
+    int _criticalChance = 0;
+
+    unsigned int _nextIdleAnim = 0;
+    unsigned _age = 0;
+
+    HAND _currentHand = HAND::RIGHT;
+    unsigned int _carryWeightMax = 0;
+
+    std::vector<int> _stats = {0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> _statsBonus = {0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> _skillsTagged = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> _skillsGainedValue = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> _traitsTagged = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> _damageResist = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> _damageThreshold = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<GameItemObject*> _inventory;
+    std::vector<Hexagon*> _movementQueue;
+    GameArmorItemObject* _armorSlot = 0;
+    GameItemObject* _leftHandSlot = 0;
+    GameItemObject* _rightHandSlot = 0;
+
+    virtual Animation* _generateMovementAnimation();
+    virtual std::string _generateArmorFrmString();
+    virtual std::string _generateWeaponFrmString();
+    void _setupNextIdleAnim();
+
 };
 
 }
