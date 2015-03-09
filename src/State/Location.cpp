@@ -360,6 +360,14 @@ void Location::render()
             }
         }
     }
+
+    for (auto hexagon : *hexagonGrid()->hexagons())
+    {
+        for (auto object : *hexagon->objects())
+        {
+            object->renderText();
+        }
+    }
     //_roof->render();
     if (active())
     {

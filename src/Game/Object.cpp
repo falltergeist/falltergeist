@@ -274,6 +274,23 @@ static bool in_front_of(int x1, int y1, int x2, int y2)
   return (double)(x2 - x1) <= ((double)(y2 - y1) * -4.0);
 }
 
+void GameObject::renderText()
+{
+    if (auto message = floatMessage())
+    {
+        if (SDL_GetTicks() - message->timestampCreated() >= 7000)
+        {
+            delete floatMessage();
+            setFloatMessage(nullptr);
+        }
+        else
+        {
+            message->setX(_ui->x() + _ui->width()*0.5 - message->width()*0.5);
+            message->setY(_ui->y() - 4 - message->height());
+            message->render();
+        }
+    }
+}
 
 void GameObject::render()
 {
@@ -291,22 +308,6 @@ void GameObject::render()
     if (_ui->y() > (int)camera->height()) return;
 
     setInRender(true);
-
-
-    if (auto message = floatMessage())
-    {
-        if (SDL_GetTicks() - message->timestampCreated() >= 7000)
-        {
-            delete floatMessage();
-            setFloatMessage(nullptr);
-        }
-        else
-        {
-            message->setX(_ui->x() + _ui->width()*0.5 - message->width()*0.5);
-            message->setY(_ui->y() - 4 - message->height());
-            message->render();
-        }
-    }
 
     if ((trans() != TRANS_DEFAULT) || ((_type != TYPE_WALL) && !(_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC)))
     {
