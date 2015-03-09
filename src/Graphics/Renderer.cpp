@@ -248,6 +248,7 @@ unsigned int Renderer::height()
 
 void Renderer::drawTexture(Texture* texture, int x, int y, int sourceX, int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
 {
+    if (!texture) return;
     if (!sourceX && !sourceY && !sourceWidth && !sourceHeight)
     {
         SDL_Rect dest = {(short)x, (short)y, (unsigned short)texture->width(), (unsigned short)texture->height()};

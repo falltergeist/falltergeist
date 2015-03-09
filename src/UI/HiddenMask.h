@@ -35,7 +35,7 @@ class HiddenMask : public Image
 public:
     HiddenMask(unsigned int width = 0, unsigned int height = 0, int x = 0, int y = 0);
     virtual unsigned int pixel(unsigned int x, unsigned int y);
-    virtual void render();
+    virtual void render(bool eggTransparency = false);
     virtual void think();
 };
 

@@ -76,7 +76,7 @@ Texture* InventoryItem::texture()
     return _item->inventoryUi()->texture();
 }
 
-void InventoryItem::render()
+void InventoryItem::render(bool eggTransparency)
 {
     //return ActiveUI::render();
     if (!_item) return;

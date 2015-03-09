@@ -59,7 +59,7 @@ public:
     ~Animation();
     std::vector<AnimationFrame*>* frames();
     virtual void think();
-    virtual void render();
+    virtual void render(bool eggTransparency = false);
     virtual int xOffset();
     virtual int yOffset();
     virtual int xShift();

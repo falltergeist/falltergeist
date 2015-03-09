@@ -71,11 +71,11 @@ void AnimationQueue::setRepeat(bool value)
     _repeat = value;
 }
 
-void AnimationQueue::render()
+void AnimationQueue::render(bool eggTransparency)
 {
     currentAnimation()->setX(this->x());
     currentAnimation()->setY(this->y());
-    currentAnimation()->render();
+    currentAnimation()->render(eggTransparency);
 }
 
 void AnimationQueue::think()
