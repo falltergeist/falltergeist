@@ -31,6 +31,8 @@
 // Third party includes
 #include <libfalltergeist.h>
 
+using namespace libfalltergeist;
+
 namespace Falltergeist
 {
 namespace Game

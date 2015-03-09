@@ -103,11 +103,17 @@ void Inventory::init()
     line1->texture()->fill(0x3ff800ff); // default green color
 
     std::string statsLabels;
-    for (unsigned int i = 0; i != 7; ++i) statsLabels += _t(MSG_INVENTORY, i) + "\n";
+    for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
+    {
+        statsLabels += _t(MSG_INVENTORY, i) + "\n";
+    }
     addUI("label_stats", new TextArea(statsLabels, screenX, screenY + 10*2));
 
     std::string statsValues;
-    for (unsigned int i = 0; i != 7; ++i) statsValues += std::to_string(player->stat(i)) + "\n";
+    for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
+    {
+        statsValues += std::to_string(player->stat((STAT)i)) + "\n";
+    }
     addUI("label_stats_values", new TextArea(statsValues, screenX + 22, screenY + 20));
 
     std::stringstream ss;
@@ -140,19 +146,19 @@ void Inventory::init()
     ss.str("");
     if (armorSlot)
     {
-        ss << player->damageThreshold(Game::GameCritterObject::DAMAGE_NORMAL) + armorSlot->damageThreshold(Game::GameArmorItemObject::DAMAGE_NORMAL) <<"/\n";
-        ss << player->damageThreshold(Game::GameCritterObject::DAMAGE_LASER) + armorSlot->damageThreshold(Game::GameArmorItemObject::DAMAGE_LASER) <<"/\n";
-        ss << player->damageThreshold(Game::GameCritterObject::DAMAGE_FIRE) + armorSlot->damageThreshold(Game::GameArmorItemObject::DAMAGE_FIRE) <<"/\n";
-        ss << player->damageThreshold(Game::GameCritterObject::DAMAGE_PLASMA) + armorSlot->damageThreshold(Game::GameArmorItemObject::DAMAGE_PLASMA) <<"/\n";
-        ss << player->damageThreshold(Game::GameCritterObject::DAMAGE_EXPLOSION) + armorSlot->damageThreshold(Game::GameArmorItemObject::DAMAGE_NORMAL) <<"/";
+        ss << player->damageThreshold(DAMAGE::NORMAL) + armorSlot->damageThreshold(DAMAGE::NORMAL) <<"/\n";
+        ss << player->damageThreshold(DAMAGE::LASER) + armorSlot->damageThreshold(DAMAGE::LASER) <<"/\n";
+        ss << player->damageThreshold(DAMAGE::FIRE) + armorSlot->damageThreshold(DAMAGE::FIRE) <<"/\n";
+        ss << player->damageThreshold(DAMAGE::PLASMA) + armorSlot->damageThreshold(DAMAGE::PLASMA) <<"/\n";
+        ss << player->damageThreshold(DAMAGE::EXPLOSIVE) + armorSlot->damageThreshold(DAMAGE::NORMAL) <<"/";
     }
     else
     {
-        ss << player->damageThreshold(Game::GameCritterObject::DAMAGE_NORMAL) <<"/\n";
-        ss << player->damageThreshold(Game::GameCritterObject::DAMAGE_LASER) <<"/\n";
-        ss << player->damageThreshold(Game::GameCritterObject::DAMAGE_FIRE) <<"/\n";
-        ss << player->damageThreshold(Game::GameCritterObject::DAMAGE_PLASMA) <<"/\n";
-        ss << player->damageThreshold(Game::GameCritterObject::DAMAGE_EXPLOSION) <<"/";
+        ss << player->damageThreshold(DAMAGE::NORMAL) <<"/\n";
+        ss << player->damageThreshold(DAMAGE::LASER) <<"/\n";
+        ss << player->damageThreshold(DAMAGE::FIRE) <<"/\n";
+        ss << player->damageThreshold(DAMAGE::PLASMA) <<"/\n";
+        ss << player->damageThreshold(DAMAGE::EXPLOSIVE) <<"/";
     }
     auto damageThresholdLabel = new TextArea(ss.str(), screenX+94, screenY+40);
     damageThresholdLabel->setWidth(26)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
@@ -161,19 +167,19 @@ void Inventory::init()
     ss.str("");
     if (armorSlot)
     {
-        ss << player->damageResist(Game::GameCritterObject::DAMAGE_NORMAL) + armorSlot->damageResist(Game::GameArmorItemObject::DAMAGE_NORMAL) <<"%\n";
-        ss << player->damageResist(Game::GameCritterObject::DAMAGE_LASER) + armorSlot->damageResist(Game::GameArmorItemObject::DAMAGE_LASER) <<"%\n";
-        ss << player->damageResist(Game::GameCritterObject::DAMAGE_FIRE) + armorSlot->damageResist(Game::GameArmorItemObject::DAMAGE_FIRE) <<"%\n";
-        ss << player->damageResist(Game::GameCritterObject::DAMAGE_PLASMA) + armorSlot->damageResist(Game::GameArmorItemObject::DAMAGE_PLASMA) <<"%\n";
-        ss << player->damageResist(Game::GameCritterObject::DAMAGE_EXPLOSION) + armorSlot->damageResist(Game::GameArmorItemObject::DAMAGE_NORMAL) <<"%";
+        ss << player->damageResist(DAMAGE::NORMAL) + armorSlot->damageResist(DAMAGE::NORMAL) <<"%\n";
+        ss << player->damageResist(DAMAGE::LASER) + armorSlot->damageResist(DAMAGE::LASER) <<"%\n";
+        ss << player->damageResist(DAMAGE::FIRE) + armorSlot->damageResist(DAMAGE::FIRE) <<"%\n";
+        ss << player->damageResist(DAMAGE::PLASMA) + armorSlot->damageResist(DAMAGE::PLASMA) <<"%\n";
+        ss << player->damageResist(DAMAGE::EXPLOSIVE) + armorSlot->damageResist(DAMAGE::NORMAL) <<"%";
     }
     else
     {
-        ss << player->damageResist(Game::GameCritterObject::DAMAGE_NORMAL) <<"%\n";
-        ss << player->damageResist(Game::GameCritterObject::DAMAGE_LASER) <<"%\n";
-        ss << player->damageResist(Game::GameCritterObject::DAMAGE_FIRE) <<"%\n";
-        ss << player->damageResist(Game::GameCritterObject::DAMAGE_PLASMA) <<"%\n";
-        ss << player->damageResist(Game::GameCritterObject::DAMAGE_EXPLOSION) <<"%";
+        ss << player->damageResist(DAMAGE::NORMAL) <<"%\n";
+        ss << player->damageResist(DAMAGE::LASER) <<"%\n";
+        ss << player->damageResist(DAMAGE::FIRE) <<"%\n";
+        ss << player->damageResist(DAMAGE::PLASMA) <<"%\n";
+        ss << player->damageResist(DAMAGE::EXPLOSIVE) <<"%";
     }
     auto damageResistanceLabel = new TextArea(ss.str(), screenX+120, screenY+40);
 

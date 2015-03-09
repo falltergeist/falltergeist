@@ -43,7 +43,6 @@ protected:
     int _experience = 0;
     int _statsPoints = 0;
     int _skillsPoints = 3;
-    int _age = 0;
     std::string _biography;
     virtual void _generateUi();
 public:
@@ -57,9 +56,6 @@ public:
 
     std::string biography() const;
     void setBiography(std::string value);
-
-    int age() const;
-    void setAge(int value);
 
     int statsPoints() const;
     void setStatsPoints(int value);
