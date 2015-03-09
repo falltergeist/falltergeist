@@ -123,6 +123,7 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
                 }
             }
             ((GameItemObject*)object)->setWeight(proto->weight());
+            // @TODO: ((GameItemObject*)object)->setVolume(proto->containerSize());
             ((GameItemObject*)object)->setInventoryFID(proto->inventoryFID());
             auto msg = ResourceManager::msgFileType("text/english/game/pro_item.msg");
             try
@@ -307,16 +308,18 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
     }
     object->setPID(PID);
     object->setFID(proto->FID());
-    object->setCanWalkThru(proto->flags()&0x00000010);
+    object->setCanWalkThru(proto->flags() & 0x00000010);
+    object->setCanLightThru(proto->flags() & 0x20000000);
+    object->setCanShootThru(proto->flags() & 0x80000000);
 
     object->setTrans(GameObject::TRANS_DEFAULT);
-    if (proto->flags()&0x00004000) object->setTrans(GameObject::TRANS_RED);
-    if (proto->flags()&0x00008000) object->setTrans(GameObject::TRANS_NONE);
-    if (proto->flags()&0x00010000) object->setTrans(GameObject::TRANS_WALL);
-    if (proto->flags()&0x00020000) object->setTrans(GameObject::TRANS_GLASS);
-    if (proto->flags()&0x00040000) object->setTrans(GameObject::TRANS_STEAM);
-    if (proto->flags()&0x00080000) object->setTrans(GameObject::TRANS_ENERGY);
-    if (proto->flags()&0x10000000) object->setWallTransEnd(true);
+    if (proto->flags() & 0x00004000) object->setTrans(GameObject::TRANS_RED);
+    if (proto->flags() & 0x00008000) object->setTrans(GameObject::TRANS_NONE);
+    if (proto->flags() & 0x00010000) object->setTrans(GameObject::TRANS_WALL);
+    if (proto->flags() & 0x00020000) object->setTrans(GameObject::TRANS_GLASS);
+    if (proto->flags() & 0x00040000) object->setTrans(GameObject::TRANS_STEAM);
+    if (proto->flags() & 0x00080000) object->setTrans(GameObject::TRANS_ENERGY);
+    if (proto->flags() & 0x10000000) object->setWallTransEnd(true);
 
     if (proto->scriptId() > 0)
     {

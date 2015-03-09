@@ -45,7 +45,7 @@ GameItemObject::~GameItemObject()
     delete _inventoryUi;
 }
 
-unsigned int GameItemObject::amount()
+unsigned int GameItemObject::amount() const
 {
     return _amount;
 }
@@ -55,7 +55,7 @@ void GameItemObject::setAmount(unsigned int value)
     _amount = value;
 }
 
-unsigned int GameItemObject::weight()
+unsigned int GameItemObject::weight() const
 {
     return _weight;
 }
@@ -65,7 +65,7 @@ void GameItemObject::setWeight(unsigned int value)
     _weight = value;
 }
 
-int GameItemObject::inventoryFID()
+int GameItemObject::inventoryFID() const
 {
     return _inventoryFID;
 }
@@ -75,17 +75,27 @@ void GameItemObject::setInventoryFID(int value)
     _inventoryFID = value;
 }
 
-Image* GameItemObject::inventoryDragUi()
+Image* GameItemObject::inventoryDragUi() const
 {
     return _inventoryDragUi;
 }
 
-Image* GameItemObject::inventoryUi()
+void GameItemObject::setVolume(unsigned int volume)
+{
+    _volume = volume;
+}
+
+unsigned int GameItemObject::volume() const
+{
+    return _volume;
+}
+
+Image* GameItemObject::inventoryUi() const
 {
     return _inventoryUi;
 }
 
-Image* GameItemObject::inventorySlotUi()
+Image* GameItemObject::inventorySlotUi() const
 {
     return _inventorySlotUi;
 }

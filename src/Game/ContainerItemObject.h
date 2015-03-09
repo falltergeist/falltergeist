@@ -33,6 +33,9 @@ namespace Falltergeist
 namespace Game
 {
 
+/**
+ * Items able to hold other items in their inventory.
+ */
 class GameContainerItemObject : public GameItemObject
 {
 protected:

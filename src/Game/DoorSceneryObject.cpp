@@ -44,7 +44,7 @@ GameDoorSceneryObject::~GameDoorSceneryObject()
 {
 }
 
-bool GameDoorSceneryObject::opened()
+bool GameDoorSceneryObject::opened() const
 {
     return _opened;
 }
@@ -54,7 +54,7 @@ void GameDoorSceneryObject::setOpened(bool value)
     _opened = value;
 }
 
-bool GameDoorSceneryObject::locked()
+bool GameDoorSceneryObject::locked() const
 {
     return _locked;
 }
@@ -91,7 +91,7 @@ void GameDoorSceneryObject::use_p_proc()
     }
 }
 
-bool GameDoorSceneryObject::canWalkThru()
+bool GameDoorSceneryObject::canWalkThru() const
 {
     return opened();
 }

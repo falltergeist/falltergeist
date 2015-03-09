@@ -20,10 +20,12 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Game/ArmorItemObject.h"
+#include "../Game/DudeObject.h"
+#include "../Game/Game.h"
 #include "../Game/ItemObject.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
-#include "../Game/Game.h"
 #include "../Logger.h"
 #include "../UI/InventoryItem.h"
 #include "../UI/ItemsList.h"
@@ -112,7 +114,7 @@ void ItemsList::onMouseDragStart(MouseEvent* event)
     _draggedItem->setType(InventoryItem::TYPE_DRAG);
     _draggedItem->setX(event->x());
     _draggedItem->setY(event->y());
-    Logger::critical() << "mousedragstart" << std::endl;
+    Logger::critical() << "mousedragstart at " << index << " (" << _draggedItem->item()->name() << ")" << std::endl;
 }
 
 void ItemsList::onMouseDrag(MouseEvent* event)
@@ -154,7 +156,6 @@ void ItemsList::onItemDragStop(MouseEvent* event)
     {
         // @todo create addItem method
         this->addItem(itemsList->draggedItem(), 1);
-        this->update();
 
         itemsList->removeItem(itemsList->draggedItem(), 1);
         itemsList->update();
@@ -164,8 +165,11 @@ void ItemsList::onItemDragStop(MouseEvent* event)
     {
         // @todo create addItem method
         this->addItem(inventoryItem, 1);
-        this->update();
 
+        if (dynamic_cast<Game::GameArmorItemObject*>(inventoryItem->item()) && inventoryItem->type() == InventoryItem::TYPE_SLOT)
+        {
+            Game::getInstance()->player()->setArmorSlot(nullptr);
+        }
         inventoryItem->setItem(0);
     }
 
@@ -177,12 +181,13 @@ InventoryItem* ItemsList::draggedItem()
     return _draggedItem;
 }
 
-void ItemsList::addItem(InventoryItem* item, unsigned int ammount)
+void ItemsList::addItem(InventoryItem* item, unsigned int amount)
 {
     _items->push_back(item->item());
+    this->update();
 }
 
-void ItemsList::removeItem(InventoryItem* item, unsigned int ammount)
+void ItemsList::removeItem(InventoryItem* item, unsigned int amount)
 {
     for (auto it = _items->begin(); it != _items->end(); ++it)
     {
@@ -190,10 +195,10 @@ void ItemsList::removeItem(InventoryItem* item, unsigned int ammount)
         if (object == item->item())
         {
             _items->erase(it);
-            return;
+            break;
         }
     }
-
+    this->update();
 }
 
 

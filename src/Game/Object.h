@@ -51,6 +51,8 @@ class GameObject : public EventEmitter
 {
 protected:
     bool _canWalkThru = true;
+    bool _canLightThru = true;
+    bool _canShootThru = true;
     bool _wallTransEnd = false;
     int _type = -1;
     int _subtype = -1;
@@ -81,71 +83,104 @@ public:
     GameObject();
     virtual ~GameObject();
 
-    bool canWalkThru();
+    // whether this object is transparent in terms of walking through it by a critter
+    bool canWalkThru() const;
     virtual void setCanWalkThru(bool value);
+    
+    // whether this object is transparent to the light
+    bool canLightThru() const;
+    virtual void setCanLightThru(bool value);
 
-    bool wallTransEnd();
+    // whether this object is transparent to projectiles
+    bool canShootThru() const;
+    virtual void setCanShootThru(bool value);
+    
+    bool wallTransEnd() const;
     virtual void setWallTransEnd(bool value);
 
-    int type();
-    int subtype();
+    // object type (TYPE_ITEM, TYPE_CRITTER, etc.)
+    int type() const;
+    // object subtype (for items and scenery))
+    int subtype() const;
 
-    int PID();
+    // object prototype ID - refers to numeric ID as used in original game
+    int PID() const;
     void setPID(int value);
 
-    int FID();
+    // object base frame ID
+    int FID() const;
     virtual void setFID(int value);
 
-    int elevation();
+    // object current elevation index on the map (0-based)
+    int elevation() const;
     void setElevation(int value);
 
-    int orientation();
+    // returns facing direction (0 - 5)
+    int orientation() const;
+    // changes object facing direction (0 - 5)
     virtual void setOrientation(int value);
 
-    std::string name();
+    // object name, as defined in proto msg file
+    std::string name() const;
     void setName(std::string value);
 
-    std::string description();
+    // object description, as defined in proto msg file
+    std::string description() const;
     void setDescription(std::string value);
 
-    VM* script();
+    // script entity associated with the object
+    VM* script() const;
     void setScript(VM* script);
 
     virtual void render();
     virtual void think();
     virtual void handle(Event* event);
 
-    ActiveUI* ui();
+    // ActiveUI used to display object on screen and capture mouse events
+    ActiveUI* ui() const;
     void setUI(ActiveUI* ui);
 
-    Hexagon* hexagon();
+    // Hexagon of object current position
+    Hexagon* hexagon() const;
     void setHexagon(Hexagon* hexagon);
 
-    TextArea* floatMessage();
+    // TextArea, currently floating above the object
+    TextArea* floatMessage() const;
     void setFloatMessage(TextArea* floatMessage);
 
+    // is object currently being rendered
+    bool inRender() const;
     void setInRender(bool value);
-    bool inRender();
 
+    // object translucency mode
+    unsigned int trans() const;
     void setTrans(unsigned int value);
-    unsigned int trans();
 
+    // request description of the object to console, may call "description_p_proc" procedure of underlying script entity
     virtual void description_p_proc();
+    // call "destroy_p_proc" procedure of underlying script entity (use this just before killing critter or destroying the object)
     virtual void destroy_p_proc();
+    // request brief description of the object to console, may call "look_at_p_proc" of the script
     virtual void look_at_p_proc();
+    // call "map_enter_p_proc" of the script entity (use this when dude travels to another map via exit grid or worldmap)
     virtual void map_enter_p_proc();
+    // call "map_exit_p_proc" of the script entity (use this when dude travels out of current map via exit grid or worldmap)
     virtual void map_exit_p_proc();
+    // call "map_update_p_proc" when map is updating (once every N frames, after times skip in pipboy)
     virtual void map_update_p_proc();
+    // call "pickup_p_proc" of the script entity (when picking up item object)
     virtual void pickup_p_proc();
     virtual void spatial_p_proc();
+    // perform "use" action, may call "use_p_proc" of the underlying script
     virtual void use_p_proc();
+    // perform "use object on" action, may call "use_obj_on_p_proc" procedure
     virtual void use_obj_on_p_proc();
 
     virtual void onUseAnimationActionFrame(Event* event, GameCritterObject* critter);
     virtual void onUseAnimationEnd(Event* event, GameCritterObject* critter);
 
+    unsigned short lightOrientation() const;
     virtual void setLightOrientation(unsigned short orientation);
-    unsigned short lightOrientation();
 };
 
 }

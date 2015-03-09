@@ -49,7 +49,7 @@ GameDudeObject::~GameDudeObject()
 {
 }
 
-void GameDudeObject::loadFromGCDFile(std::shared_ptr<libfalltergeist::Gcd::File> gcd)
+void GameDudeObject::loadFromGCDFile(libfalltergeist::Gcd::File* gcd)
 {
     for (unsigned int i = 0; i <= 6; i++)
     {
@@ -87,7 +87,7 @@ void GameDudeObject::loadFromGCDFile(std::shared_ptr<libfalltergeist::Gcd::File>
     setActionPoints(actionPointsMax());
 }
 
-int GameDudeObject::experience()
+int GameDudeObject::experience() const
 {
     return _experience;
 }
@@ -97,7 +97,7 @@ void GameDudeObject::setExperience(int value)
     _experience = value;
 }
 
-std::string GameDudeObject::biography()
+std::string GameDudeObject::biography() const
 {
     return _biography;
 }
@@ -107,7 +107,7 @@ void GameDudeObject::setBiography(std::string value)
     _biography = value;
 }
 
-int GameDudeObject::age()
+int GameDudeObject::age() const
 {
     return _age;
 }
@@ -117,7 +117,7 @@ void GameDudeObject::setAge(int value)
     _age = value;
 }
 
-int GameDudeObject::statsPoints()
+int GameDudeObject::statsPoints() const
 {
     return _statsPoints;
 }
@@ -127,7 +127,7 @@ void GameDudeObject::setStatsPoints(int value)
     _statsPoints = value;
 }
 
-int GameDudeObject::skillsPoints()
+int GameDudeObject::skillsPoints() const
 {
     return _skillsPoints;
 }
@@ -137,16 +137,16 @@ void GameDudeObject::setSkillsPoints(int value)
     _skillsPoints = value;
 }
 
-int GameDudeObject::hitPointsMax()
+int GameDudeObject::hitPointsMax() const
 {
     int value = 15;
-    value += statTotal(STATS_ENDURANCE) * 2;
-    value += statTotal(STATS_STRENGTH);
-    value += (2 + ceil(statTotal(STATS_ENDURANCE)/2))*(level() - 1);
+    value += statTotal(STAT_ENDURANCE) * 2;
+    value += statTotal(STAT_STRENGTH);
+    value += (2 + ceil(statTotal(STAT_ENDURANCE)/2))*(level() - 1);
     return value;
 }
 
-int GameDudeObject::level()
+int GameDudeObject::level() const
 {
     return _level;
 }
@@ -156,37 +156,37 @@ void GameDudeObject::setLevel(int value)
     _level = value;
 }
 
-int GameDudeObject::armorClass()
+int GameDudeObject::armorClass() const
 {
     unsigned int value = 0;
-    if (!traitTagged(TRAITS_KAMIKAZE))
+    if (!traitTagged(TRAIT_KAMIKAZE))
     {
-        value += statTotal(STATS_AGILITY) > 10 ? 10 : statTotal(STATS_AGILITY);
+        value += statTotal(STAT_AGILITY) > 10 ? 10 : statTotal(STAT_AGILITY);
     }
     return value;
 
 }
 
-int GameDudeObject::actionPointsMax()
+int GameDudeObject::actionPointsMax() const
 {
     unsigned int value = 0;
-    value += 5 + ceil(statTotal(STATS_AGILITY)/2);
-    if (traitTagged(TRAITS_BRUISER))
+    value += 5 + ceil(statTotal(STAT_AGILITY)/2);
+    if (traitTagged(TRAIT_BRUISER))
     {
         value -= 2;
     }
     return value;
 }
 
-unsigned int GameDudeObject::carryWeightMax()
+unsigned int GameDudeObject::carryWeightMax() const
 {
     unsigned int value = 0;
-    unsigned int st = statTotal(STATS_STRENGTH);
+    unsigned int st = statTotal(STAT_STRENGTH);
 
-    if (traitTagged(TRAITS_SMALL_FRAME))
+    if (traitTagged(TRAIT_SMALL_FRAME))
     {
         value += 25 + 15*(st > 10 ? 10 : st);
-        if (traitTagged(TRAITS_GIFTED) && st <= 10)
+        if (traitTagged(TRAIT_GIFTED) && st <= 10)
         {
             value += 10;
         }
@@ -198,71 +198,71 @@ unsigned int GameDudeObject::carryWeightMax()
     return value;
 }
 
-int GameDudeObject::meleeDamage()
+int GameDudeObject::meleeDamage() const
 {
     unsigned int value = 0;
-    unsigned int st = statTotal(STATS_STRENGTH);
+    unsigned int st = statTotal(STAT_STRENGTH);
     if (st > 10) st = 10;
     value += st > 5 ? st - 5 : 1;
-    if (traitTagged(TRAITS_HEAVY_HANDED))
+    if (traitTagged(TRAIT_HEAVY_HANDED))
     {
         value += 4;
     }
     return value;
 }
 
-int GameDudeObject::damageResistance()
+int GameDudeObject::damageResistance() const
 {
     return 0;
 }
 
-int GameDudeObject::radiationResistance()
+int GameDudeObject::radiationResistance() const
 {
     return 0;
 }
 
-int GameDudeObject::poisonResistance()
+int GameDudeObject::poisonResistance() const
 {
     int value = 0;
-    if (!traitTagged(TRAITS_FAST_METABOLISM))
+    if (!traitTagged(TRAIT_FAST_METABOLISM))
     {
-        value += 5*statTotal(STATS_ENDURANCE);
+        value += 5*statTotal(STAT_ENDURANCE);
     }
     return value;
 }
 
-int GameDudeObject::sequence()
+int GameDudeObject::sequence() const
 {
     unsigned int value = 0;
-    unsigned int pe = statTotal(STATS_PERCEPTION);
+    unsigned int pe = statTotal(STAT_PERCEPTION);
     value += 2*(pe > 10 ? 10 : pe);
-    if (traitTagged(TRAITS_KAMIKAZE))
+    if (traitTagged(TRAIT_KAMIKAZE))
     {
         value += 5;
     }
     return value;
 }
 
-int GameDudeObject::healingRate()
+int GameDudeObject::healingRate() const
 {
     unsigned int value = 0;
-    unsigned int en = statTotal(STATS_ENDURANCE);
+    unsigned int en = statTotal(STAT_ENDURANCE);
     value += ceil((en > 10 ? 10 : en) / 3);
     if (value == 0) value = 1;
 
-    if (traitTagged(TRAITS_FAST_METABOLISM))
+    if (traitTagged(TRAIT_FAST_METABOLISM))
     {
         value += 2;
     }
     return value;
 }
 
-int GameDudeObject::criticalChance()
+int GameDudeObject::criticalChance() const
 {
     unsigned int value = 0;
-    unsigned int lk = statTotal(STATS_LUCK);
+    unsigned int lk = statTotal(STAT_LUCK);
     value += lk > 10 ? 10 : lk;
-    if (traitTagged(TRAITS_FINESSE))
+    if (traitTagged(TRAIT_FINESSE))
     {
         value += 10;
     }
@@ -283,16 +283,6 @@ void GameDudeObject::_generateUi()
     _ui = queue;
 
     addUIEventHandlers();
-}
-
-unsigned int GameDudeObject::radiationLevel()
-{
-    return _radiationLevel;
-}
-
-void GameDudeObject::setRadiationLevel(unsigned int value)
-{
-    _radiationLevel = value;
 }
 
 }

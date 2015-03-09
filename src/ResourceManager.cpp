@@ -21,6 +21,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <locale>
 
 // Falltergeist includes
 #include "CrossPlatform.h"
@@ -39,8 +40,8 @@
 namespace Falltergeist
 {
 
-std::vector<std::shared_ptr<libfalltergeist::Dat::File>> ResourceManager::_datFiles;
-std::map<std::string, std::shared_ptr<libfalltergeist::Dat::Item>> ResourceManager::_datFilesItems;
+std::vector<libfalltergeist::Dat::File*> ResourceManager::_datFiles;
+std::map<std::string, libfalltergeist::Dat::Item*> ResourceManager::_datFilesItems;
 std::map<std::string, Texture*> ResourceManager::_textures;
 std::map<std::string, std::shared_ptr<Font>> ResourceManager::_fonts;
 std::map<unsigned int, Game::GameLocation*> ResourceManager::_gameLocations;
@@ -51,27 +52,40 @@ ResourceManager::ResourceManager()
     for (auto it = files->begin(); it != files->end(); ++it)
     {
         std::string path = CrossPlatform::findFalloutDataPath() + "/" + (*it);
-        _datFiles.push_back(std::shared_ptr<libfalltergeist::Dat::File>(new libfalltergeist::Dat::File(path)));
+        _datFiles.push_back(new libfalltergeist::Dat::File(path));
     }
 }
 
 ResourceManager::~ResourceManager()
-{
-    for (auto it = _textures.begin(); it != _textures.end(); ++it)
+{    
+    for (auto texture : _textures)
     {
-        delete it->second;
+        delete texture.second;
     }
 
-    for (auto it = _gameLocations.begin(); it != _gameLocations.end(); ++it)
+    for (auto location : _gameLocations)
     {
-        delete it->second;
+        delete location.second;
+    }
+
+    for (auto item : _datFilesItems)
+    {
+        delete item.second;
+    }
+
+    for (auto dat : _datFiles)
+    {
+        delete dat;
     }
 }
 
-
-
-std::shared_ptr<libfalltergeist::Dat::Item> ResourceManager::datFileItem(std::string filename)
+libfalltergeist::Dat::Item* ResourceManager::datFileItem(std::string filename)
 {
+    std::locale loc;
+    for (auto it = filename.begin(); it != filename.end(); it++)
+    {
+        *it = std::tolower(*it, loc);
+    }
     // Return item from cache
     if (_datFilesItems.find(filename) != _datFilesItems.end())
     {
@@ -101,25 +115,25 @@ std::shared_ptr<libfalltergeist::Dat::Item> ResourceManager::datFileItem(std::st
         {
 
             std::string extension = filename.substr(filename.length() - 3, 3);
-            std::shared_ptr<libfalltergeist::Dat::Item> item;
-            if      (extension == "aaf") item = std::shared_ptr<libfalltergeist::Aaf::File>(new libfalltergeist::Aaf::File(stream));
-            else if (extension == "acm") item = std::shared_ptr<libfalltergeist::Acm::File>(new libfalltergeist::Acm::File(stream));
-            else if (extension == "bio") item = std::shared_ptr<libfalltergeist::Bio::File>(new libfalltergeist::Bio::File(stream));
-            else if (extension == "fon") item = std::shared_ptr<libfalltergeist::Fon::File>(new libfalltergeist::Fon::File(stream));
-            else if (extension == "frm") item = std::shared_ptr<libfalltergeist::Frm::File>(new libfalltergeist::Frm::File(stream));
-            else if (extension == "gam") item = std::shared_ptr<libfalltergeist::Gam::File>(new libfalltergeist::Gam::File(stream));
-            else if (extension == "gcd") item = std::shared_ptr<libfalltergeist::Gcd::File>(new libfalltergeist::Gcd::File(stream));
-            else if (extension == "int") item = std::shared_ptr<libfalltergeist::Int::File>(new libfalltergeist::Int::File(stream));
-            else if (extension == "lst") item = std::shared_ptr<libfalltergeist::Lst::File>(new libfalltergeist::Lst::File(stream));
-            else if (extension == "map") item = std::shared_ptr<libfalltergeist::Map::File>(new libfalltergeist::Map::File(stream));
-            else if (extension == "msg") item = std::shared_ptr<libfalltergeist::Msg::File>(new libfalltergeist::Msg::File(stream));
-            else if (extension == "mve") item = std::shared_ptr<libfalltergeist::Mve::File>(new libfalltergeist::Mve::File(stream));
-            else if (extension == "pal") item = std::shared_ptr<libfalltergeist::Pal::File>(new libfalltergeist::Pal::File(stream));
-            else if (extension == "pro") item = std::shared_ptr<libfalltergeist::Pro::File>(new libfalltergeist::Pro::File(stream));
-            else if (extension == "rix") item = std::shared_ptr<libfalltergeist::Rix::File>(new libfalltergeist::Rix::File(stream));
+            libfalltergeist::Dat::Item* item = nullptr;
+            if      (extension == "aaf") item = new libfalltergeist::Aaf::File(stream);
+            else if (extension == "acm") item = new libfalltergeist::Acm::File(stream);
+            else if (extension == "bio") item = new libfalltergeist::Bio::File(stream);
+            else if (extension == "fon") item = new libfalltergeist::Fon::File(stream);
+            else if (extension == "frm") item = new libfalltergeist::Frm::File(stream);
+            else if (extension == "gam") item = new libfalltergeist::Gam::File(stream);
+            else if (extension == "gcd") item = new libfalltergeist::Gcd::File(stream);
+            else if (extension == "int") item = new libfalltergeist::Int::File(stream);
+            else if (extension == "lst") item = new libfalltergeist::Lst::File(stream);
+            else if (extension == "map") item = new libfalltergeist::Map::File(stream);
+            else if (extension == "msg") item = new libfalltergeist::Msg::File(stream);
+            else if (extension == "mve") item = new libfalltergeist::Mve::File(stream);
+            else if (extension == "pal") item = new libfalltergeist::Pal::File(stream);
+            else if (extension == "pro") item = new libfalltergeist::Pro::File(stream);
+            else if (extension == "rix") item = new libfalltergeist::Rix::File(stream);
             else
             {
-                item = std::shared_ptr<libfalltergeist::Dat::Item>(new libfalltergeist::Dat::Item(stream));
+                item = new libfalltergeist::Dat::Item(stream);
             }
 
             item->setFilename(filename);
@@ -135,7 +149,6 @@ std::shared_ptr<libfalltergeist::Dat::Item> ResourceManager::datFileItem(std::st
         auto item = datfile->item(filename.c_str());
         if (item)
         {
-            _datFilesItems.insert(std::make_pair(filename, item));
             Logger::debug("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM " << datfile->filename() << "]" << std::endl;
             return item;
         }
@@ -144,69 +157,69 @@ std::shared_ptr<libfalltergeist::Dat::Item> ResourceManager::datFileItem(std::st
     return 0;
 }
 
-std::shared_ptr<libfalltergeist::Frm::File> ResourceManager::frmFileType(std::string filename)
+libfalltergeist::Frm::File* ResourceManager::frmFileType(std::string filename)
 {
-    return std::dynamic_pointer_cast<libfalltergeist::Frm::File>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::Frm::File*>(datFileItem(filename));
 }
 
-std::shared_ptr<libfalltergeist::Pal::File> ResourceManager::palFileType(std::string filename)
+libfalltergeist::Pal::File* ResourceManager::palFileType(std::string filename)
 {
-    return std::dynamic_pointer_cast<libfalltergeist::Pal::File>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::Pal::File*>(datFileItem(filename));
 }
 
-std::shared_ptr<libfalltergeist::Lst::File> ResourceManager::lstFileType(std::string filename)
+libfalltergeist::Lst::File* ResourceManager::lstFileType(std::string filename)
 {
-    return std::dynamic_pointer_cast<libfalltergeist::Lst::File>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::Lst::File*>(datFileItem(filename));
 }
 
-std::shared_ptr<libfalltergeist::Aaf::File> ResourceManager::aafFileType(std::string filename)
+libfalltergeist::Aaf::File* ResourceManager::aafFileType(std::string filename)
 {
-    return std::dynamic_pointer_cast<libfalltergeist::Aaf::File>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::Aaf::File*>(datFileItem(filename));
 }
 
-std::shared_ptr<libfalltergeist::Acm::File> ResourceManager::acmFileType(std::string filename)
+libfalltergeist::Acm::File* ResourceManager::acmFileType(std::string filename)
 {
-    return std::dynamic_pointer_cast<libfalltergeist::Acm::File>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::Acm::File*>(datFileItem(filename));
 }
 
-std::shared_ptr<libfalltergeist::Fon::File> ResourceManager::fonFileType(std::string filename)
+libfalltergeist::Fon::File* ResourceManager::fonFileType(std::string filename)
 {
-    return std::dynamic_pointer_cast<libfalltergeist::Fon::File>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::Fon::File*>(datFileItem(filename));
 }
 
-std::shared_ptr<libfalltergeist::Gam::File> ResourceManager::gamFileType(std::string filename)
+libfalltergeist::Gam::File* ResourceManager::gamFileType(std::string filename)
 {
-    return std::dynamic_pointer_cast<libfalltergeist::Gam::File>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::Gam::File*>(datFileItem(filename));
 }
 
-std::shared_ptr<libfalltergeist::Gcd::File> ResourceManager::gcdFileType(std::string filename)
+libfalltergeist::Gcd::File* ResourceManager::gcdFileType(std::string filename)
 {
-    return std::dynamic_pointer_cast<libfalltergeist::Gcd::File>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::Gcd::File*>(datFileItem(filename));
 }
 
 libfalltergeist::Int::File* ResourceManager::intFileType(std::string filename)
 {
-    return dynamic_cast<libfalltergeist::Int::File*>(datFileItem(filename).get());
+    return dynamic_cast<libfalltergeist::Int::File*>(datFileItem(filename));
 }
 
-std::shared_ptr<libfalltergeist::Msg::File> ResourceManager::msgFileType(std::string filename)
+libfalltergeist::Msg::File* ResourceManager::msgFileType(std::string filename)
 {
-    return std::dynamic_pointer_cast<libfalltergeist::Msg::File>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::Msg::File*>(datFileItem(filename));
 }
 
-std::shared_ptr<libfalltergeist::Mve::File> ResourceManager::mveFileType(std::string filename)
+libfalltergeist::Mve::File* ResourceManager::mveFileType(std::string filename)
 {
-    return std::dynamic_pointer_cast<libfalltergeist::Mve::File>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::Mve::File*>(datFileItem(filename));
 }
 
-std::shared_ptr<libfalltergeist::Bio::File> ResourceManager::bioFileType(std::string filename)
+libfalltergeist::Bio::File* ResourceManager::bioFileType(std::string filename)
 {
-    return std::dynamic_pointer_cast<libfalltergeist::Bio::File>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::Bio::File*>(datFileItem(filename));
 }
 
-std::shared_ptr<libfalltergeist::Map::File> ResourceManager::mapFileType(std::string filename)
+libfalltergeist::Map::File* ResourceManager::mapFileType(std::string filename)
 {
-    auto item = std::dynamic_pointer_cast<libfalltergeist::Map::File>(datFileItem(filename));
+    auto item = dynamic_cast<libfalltergeist::Map::File*>(datFileItem(filename));
     if (item)
     {
         item->setCallback(&ResourceManager::proFileType);
@@ -214,19 +227,19 @@ std::shared_ptr<libfalltergeist::Map::File> ResourceManager::mapFileType(std::st
     return item;
 }
 
-std::shared_ptr<libfalltergeist::Pro::File> ResourceManager::proFileType(std::string filename)
+libfalltergeist::Pro::File* ResourceManager::proFileType(std::string filename)
 {
-    return std::dynamic_pointer_cast<libfalltergeist::Pro::File>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::Pro::File*>(datFileItem(filename));
 }
 
-std::shared_ptr<libfalltergeist::Rix::File> ResourceManager::rixFileType(std::string filename)
+libfalltergeist::Rix::File* ResourceManager::rixFileType(std::string filename)
 {
-    return std::dynamic_pointer_cast<libfalltergeist::Rix::File>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::Rix::File*>(datFileItem(filename));
 }
 
-std::shared_ptr<libfalltergeist::Sve::File> ResourceManager::sveFileType(std::string filename)
+libfalltergeist::Sve::File* ResourceManager::sveFileType(std::string filename)
 {
-    return std::dynamic_pointer_cast<libfalltergeist::Sve::File>(datFileItem(filename));
+    return dynamic_cast<libfalltergeist::Sve::File*>(datFileItem(filename));
 }
 
 Texture* ResourceManager::texture(std::string filename)
@@ -297,7 +310,7 @@ std::shared_ptr<Font> ResourceManager::font(std::string filename, unsigned int c
 
 
 
-std::shared_ptr<libfalltergeist::Pro::File> ResourceManager::proFileType(unsigned int PID)
+libfalltergeist::Pro::File* ResourceManager::proFileType(unsigned int PID)
 {
     unsigned int typeId = PID >> 24;
     std::string listFile;
@@ -323,7 +336,7 @@ std::shared_ptr<libfalltergeist::Pro::File> ResourceManager::proFileType(unsigne
             break;
         default:
             Logger::error() << "ResourceManager::proFileType(unsigned int) - wrong PID: " << PID << std::endl;
-            return 0;
+            return nullptr;
     }
 
     auto lst = lstFileType(listFile);
@@ -333,7 +346,7 @@ std::shared_ptr<libfalltergeist::Pro::File> ResourceManager::proFileType(unsigne
     if (index > lst->strings()->size())
     {
         Logger::error() << "ResourceManager::proFileType(unsigned int) - LST size < PID: " << PID << std::endl;
-        return 0;
+        return nullptr;
     }
 
     std::string protoName = lst->strings()->at(index-1);
@@ -353,7 +366,7 @@ std::shared_ptr<libfalltergeist::Pro::File> ResourceManager::proFileType(unsigne
         case libfalltergeist::Pro::TYPE_MISC:
             return proFileType("proto/misc/" + protoName);
     }
-    return 0;
+    return nullptr;
 }
 
 void ResourceManager::unloadResources()
@@ -361,7 +374,7 @@ void ResourceManager::unloadResources()
     _datFilesItems.clear();
 }
 
-std::shared_ptr<libfalltergeist::Frm::File> ResourceManager::frmFileType(unsigned int FID)
+libfalltergeist::Frm::File* ResourceManager::frmFileType(unsigned int FID)
 {
     if (FIDtoFrmName(FID) == "") return 0;
     return frmFileType(FIDtoFrmName(FID));
@@ -383,10 +396,10 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
     std::string prefix;
     std::string lstFile;
 
-    auto id = FID & 0x00000FFF;
+    auto baseId = FID & 0x00000FFF;
     auto type = FID >> 24;
 
-    switch(type)
+    switch (type)
     {
         case libfalltergeist::Frm::TYPE_ITEM:
             prefix = "art/items/";
@@ -394,49 +407,48 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
             break;
         case libfalltergeist::Frm::TYPE_CRITTER:
         {
-            unsigned int frmId = FID & 0x00000FFF;
-            unsigned int ID1 = (FID & 0x0000F000) >> 12;
-            unsigned int ID2 = (FID & 0x00FF0000) >> 16;
+            unsigned int weaponId = (FID & 0x0000F000) >> 12;
+            unsigned int animId = (FID & 0x00FF0000) >> 16;
             unsigned int ID3 = (FID & 0xF0000000) >> 28;
             auto lst = ResourceManager::lstFileType("art/critters/critters.lst");
-            std::string frmName = lst->strings()->at(frmId);
+            std::string frmName = lst->strings()->at(baseId);
             std::string frmBase = frmName.substr(0, 6);
 
-            if (ID2 >= 0x26 && ID2 <= 0x2F)
+            if (animId >= 0x26 && animId <= 0x2F)
             {
-                if (ID1 >= 0x0B || ID1 == 0) throw Exception("Critter ID1 unsupported value");
-                frmBase += ID1 + 0x63;
-                frmBase += ID2 + 0x3D;
+                if (weaponId >= 0x0B || weaponId == 0) throw Exception("Critter weaponId unsupported value");
+                frmBase += weaponId + 0x63;
+                frmBase += animId + 0x3D;
             }
-            else if (ID2 == 0x24)
+            else if (animId == 0x24)
             {
                 frmBase += "ch";
             }
-            else if (ID2 == 0x25)
+            else if (animId == 0x25)
             {
                 frmBase += "cj";
             }
-            else if (ID2 == 0x40)
+            else if (animId == 0x40)
             {
                 frmBase += "na";
             }
-            else if (ID2 >= 0x30)
+            else if (animId >= 0x30)
             {
                 frmBase += "r";
-                frmBase += ID2 + 0x31;
+                frmBase += animId + 0x31;
             }
-            else if (ID2 >= 0x14)
+            else if (animId >= 0x14)
             {
                 frmBase += "b";
-                frmBase += ID2 + 0x4d;
+                frmBase += animId + 0x4d;
             }
-            else if (ID2 == 0x12)
+            else if (animId == 0x12)
             {
-                if (ID1 == 0x01)
+                if (weaponId == 0x01)
                 {
                     frmBase += "dm";
                 }
-                else if (ID1 == 0x04)
+                else if (weaponId == 0x04)
                 {
                     frmBase += "gm";
                 }
@@ -445,11 +457,11 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
                     frmBase += "as";
                 }
             }
-            else if (ID2 == 0x0D)
+            else if (animId == 0x0D)
             {
-                if (ID1 > 0)
+                if (weaponId > 0)
                 {
-                    frmBase += ID1 + 0x63;
+                    frmBase += weaponId + 0x63;
                     frmBase += "e";
                 }
                 else
@@ -457,15 +469,15 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
                     frmBase += "an";
                 }
             }
-            else if (ID2 <= 0x01 && ID1 > 0)
+            else if (animId <= 0x01 && weaponId > 0)
             {
-                frmBase += ID1 + 0x63;
-                frmBase += ID2 + 0x61;
+                frmBase += weaponId + 0x63;
+                frmBase += animId + 0x61;
             }
             else
             {
                 frmBase += "a";
-                frmBase += ID2 + 0x61;
+                frmBase += animId + 0x61;
             }
 
             std::string extensions[] = {"frm", "frm0", "frm1", "frm2", "fr3", "frm4", "frm5", "frm6"};
@@ -490,8 +502,7 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
             lstFile = "misc.lst";
 
             // Map scroll blockers
-            if (id == 1) return "art/misc/scrblk.frm";
-
+            if (baseId == 1) return "art/misc/scrblk.frm";
             break;
         case libfalltergeist::Frm::TYPE_INTERFACE:
             prefix = "art/intrface/";
@@ -506,12 +517,12 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
             break;
     }
     auto lst = lstFileType(prefix + lstFile);
-    if (id >= lst->strings()->size())
+    if (baseId >= lst->strings()->size())
     {
-        Logger::error() << "ResourceManager::FIDtoFrmName(unsigned int) - LST size " << lst->strings()->size() << " <= frmID: " << id << " frmType: " << type << std::endl;
+        Logger::error() << "ResourceManager::FIDtoFrmName(unsigned int) - LST size " << lst->strings()->size() << " <= frmID: " << baseId << " frmType: " << type << std::endl;
         return "";
     }
-    return prefix + lst->strings()->at(id);
+    return prefix + lst->strings()->at(baseId);
 }
 
 std::map<std::string, Texture*>* ResourceManager::textures()
@@ -526,7 +537,7 @@ Game::GameLocation* ResourceManager::gameLocation(unsigned int number)
         return _gameLocations.at(number);
     }
 
-    std::istream stream(datFileItem("data/maps.txt").get());
+    std::istream stream(datFileItem("data/maps.txt"));
     Ini::Parser iniParser(stream);
     auto ini = iniParser.parse();
 

@@ -33,7 +33,7 @@ GameExitMiscObject::GameExitMiscObject()
 {
 }
 
-int GameExitMiscObject::exitMapNumber()
+int GameExitMiscObject::exitMapNumber() const
 {
     return _exitMapNumber;
 }
@@ -43,7 +43,7 @@ void GameExitMiscObject::setExitMapNumber(int value)
     _exitMapNumber = value;
 }
 
-int GameExitMiscObject::exitElevationNumber()
+int GameExitMiscObject::exitElevationNumber() const
 {
     return _exitElevationNumber;
 }
@@ -53,7 +53,7 @@ void GameExitMiscObject::setExitElevationNumber(int value)
     _exitElevationNumber = value;
 }
 
-int GameExitMiscObject::exitHexagonNumber()
+int GameExitMiscObject::exitHexagonNumber() const
 {
     return _exitHexagonNumber;
 }
@@ -63,7 +63,7 @@ void GameExitMiscObject::setExitHexagonNumber(int value)
     _exitHexagonNumber = value;
 }
 
-int GameExitMiscObject::exitDirection()
+int GameExitMiscObject::exitDirection() const
 {
     return _exitDirection;
 }
