@@ -202,7 +202,7 @@ void State::render()
     {
         if ((*it)->visible())
         {
-            (*it)->render();
+            (*it)->render(false);
         }
     }
     while (!_uiToDelete.empty())

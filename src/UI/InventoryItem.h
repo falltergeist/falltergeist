@@ -52,7 +52,7 @@ public:
     Game::GameItemObject* item();
     void setItem(Game::GameItemObject* item);
 
-    virtual void render();
+    virtual void render(bool eggTransparency = false);
     virtual unsigned int pixel(unsigned int x, unsigned int y);
     virtual Texture* texture();
     virtual unsigned int width();

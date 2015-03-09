@@ -71,7 +71,7 @@ public:
     bool canScrollUp();
     bool canScrollDown();
 
-    virtual void render();
+    virtual void render(bool eggTransparency = false);
     virtual unsigned int pixel(unsigned int x, unsigned int y);
 
     void onMouseLeftDown(MouseEvent* event);

@@ -118,7 +118,7 @@ MvePlayer::~MvePlayer()
     SDL_FreeSurface(_backBuf);
 }
 
-void MvePlayer::render()
+void MvePlayer::render(bool eggTransparency)
 {
     //we dont have data yet
     if (!_timerStarted)

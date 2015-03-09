@@ -26,6 +26,10 @@
 #include "../Graphics/Texture.h"
 #include "../Graphics/UI.h"
 #include "../ResourceManager.h"
+#include "../Game/DudeObject.h"
+#include "../State/Location.h"
+#include "../LocationCamera.h"
+
 
 // Third party includes
 
@@ -90,9 +94,63 @@ void UI::think()
 {
 }
 
-void UI::render()
+void UI::render(bool eggTransparency)
 {
-    Game::getInstance()->renderer()->drawTexture(texture(), x(), y());
+
+    if (eggTransparency)
+    {
+        auto dude = Game::getInstance()->player();
+
+        if (!dude || !Game::getInstance()->locationState())
+        {
+            Game::getInstance()->renderer()->drawTexture(texture(), x(), y());
+            return;
+        }
+
+        auto camera = Game::getInstance()->locationState()->camera();
+
+        int egg_x = dude->hexagon()->x() - camera->x() - 63 + dude->ui()->xOffset();
+        int egg_y = dude->hexagon()->y() - camera->y() - 78 + dude->ui()->yOffset();
+
+        int egg_dx = x() - egg_x;
+        int egg_dy = y() - egg_y;
+
+        auto egg = ResourceManager::texture("data/egg.png");
+
+        //check if egg and texture intersects
+        SDL_Rect egg_rect = { egg_x, egg_y, (int)egg->width(), (int)egg->height() };
+        SDL_Rect tex_rect = { x(), y(), (int)texture()->width(), (int)texture()->height() };
+
+        if (!SDL_HasIntersection(&egg_rect, &tex_rect))
+        {
+            Game::getInstance()->renderer()->drawTexture(texture(), x(), y());
+            return;
+        }
+
+        if (!_tmptex) _tmptex = new Texture(texture()->width(),texture()->height());
+        texture()->copyTo(_tmptex);
+
+        //This is sloooow. But unfortunately sdl doesnt allow to blit over only alpha =/
+        for (unsigned int x = 0; x < texture()->width(); x++)
+        {
+            for (unsigned int y = 0; y < texture()->height(); y++)
+            {
+                if (x+egg_dx >= egg->width()) continue;
+                if (y+egg_dy >= egg->height()) continue;
+                if (x+egg_dx < 0) continue;
+                if (y+egg_dy < 0) continue;
+                _tmptex->setPixel(x, y, _tmptex->pixel(x,y) & egg->pixel(x+egg_dx, y+egg_dy));
+            }
+        }
+        Game::getInstance()->renderer()->drawTexture(_tmptex, x(), y());
+    }
+    else
+    {
+        Game::getInstance()->renderer()->drawTexture(texture(), x(), y());
+    }
+
+
+
 }
 
 void UI::setVisible(bool value)
