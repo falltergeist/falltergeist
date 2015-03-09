@@ -72,7 +72,7 @@ void ItemsList::update()
     }
 }
 
-void ItemsList::render()
+void ItemsList::render(bool eggTransparency)
 {
     //ActiveUI::render();
     unsigned int i = 0;
