@@ -306,7 +306,7 @@ void Animation::render(bool eggTransparency)
 
         //check if egg and texture intersects
         SDL_Rect egg_rect = { egg_x, egg_y, (int)egg->width(), (int)egg->height() };
-        SDL_Rect tex_rect = { x() + xOffset(), y() + yOffset(), frame->width(), frame->height() };
+        SDL_Rect tex_rect = { x() + xOffset(), y() + yOffset(), (int)frame->width(), (int)frame->height() };
 
         if (!SDL_HasIntersection(&egg_rect, &tex_rect))
         {
