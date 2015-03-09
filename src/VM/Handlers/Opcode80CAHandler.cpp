@@ -61,7 +61,7 @@ void Opcode80CAHandler::_run()
         case 5: // AG
         case 6: // LU
         {
-            result = critter->statTotal(number);
+            result = critter->statTotal((STAT)number);
             break;
         }
         case 7: // max hit points
@@ -109,92 +109,92 @@ void Opcode80CAHandler::_run()
             break;
         case 17: // 
         {
-            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_NORMAL);
+            result = critter->damageThreshold(DAMAGE::NORMAL);
             break;
         }
         case 18: // 
         {
-            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_LASER);
+            result = critter->damageThreshold(DAMAGE::LASER);
             break;
         }
         case 19: // 
         {
-            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_FIRE);
+            result = critter->damageThreshold(DAMAGE::FIRE);
             break;
         }
         case 20: // 
         {
-            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_PLASMA);
+            result = critter->damageThreshold(DAMAGE::PLASMA);
             break;
         }
         case 21: // 
         {
-            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_ELECTRICAL);
+            result = critter->damageThreshold(DAMAGE::ELECTRICAL);
             break;
         }
         case 22: // 
         {
-            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_EMP);
+            result = critter->damageThreshold(DAMAGE::EMP);
             break;
         }
         case 23: // 
         {
-            result = critter->damageThreshold(Game::GameCritterObject::DAMAGE_EXPLOSION);
+            result = critter->damageThreshold(DAMAGE::EXPLOSIVE);
             break;
         }
         case 24: // 
         {
-            result = critter->damageResist(Game::GameCritterObject::DAMAGE_NORMAL);
+            result = critter->damageResist(DAMAGE::NORMAL);
             break;
         }
         case 25: // 
         {
-            result = critter->damageResist(Game::GameCritterObject::DAMAGE_LASER);
+            result = critter->damageResist(DAMAGE::LASER);
             break;
         }
         case 26: // 
         {
-            result = critter->damageResist(Game::GameCritterObject::DAMAGE_FIRE);
+            result = critter->damageResist(DAMAGE::FIRE);
             break;
         }
         case 27: // 
         {
-            result = critter->damageResist(Game::GameCritterObject::DAMAGE_PLASMA);
+            result = critter->damageResist(DAMAGE::PLASMA);
             break;
         }
         case 28: // 
         {
-            result = critter->damageResist(Game::GameCritterObject::DAMAGE_ELECTRICAL);
+            result = critter->damageResist(DAMAGE::ELECTRICAL);
             break;
         }
         case 29: // 
         {
-            result = critter->damageResist(Game::GameCritterObject::DAMAGE_EMP);
+            result = critter->damageResist(DAMAGE::EMP);
             break;
         }
         case 30: // 
         {
-            result = critter->damageResist(Game::GameCritterObject::DAMAGE_EXPLOSION);
+            result = critter->damageResist(DAMAGE::EXPLOSIVE);
             break;
         }
         case 31: // rad resist
         {
-            result = critter->damageResist(Game::GameCritterObject::DAMAGE_RADIATION);
+            result = critter->damageResist(DAMAGE::RADIATION);
             break;
         }
         case 32: // poison resist
         {
-            result = critter->damageResist(Game::GameCritterObject::DAMAGE_POISON);
+            result = critter->damageResist(DAMAGE::POISON);
             break;
         }
         case 33: // age
         {
-            result = critter->gender();
+            result = critter->age();
             break;
         }
         case 34: // gender
         {
-            result = critter->gender();
+            result = (unsigned)critter->gender();
             break;
         }
         case 35: // hit points

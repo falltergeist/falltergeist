@@ -60,7 +60,7 @@ void Opcode8121Handler::_run()
     auto dialog = dynamic_cast<State::CritterDialog*>(game->states()->back());
     if (iq >= 0)
     {
-        if (game->player()->stat(game->player()->STAT_INTELLIGENCE) >= iq)
+        if (game->player()->stat(STAT::INTELLIGENCE) >= iq)
         {
             dialog->reactions()->push_back(reaction);
             dialog->functions()->push_back(function);
@@ -69,14 +69,13 @@ void Opcode8121Handler::_run()
     }
     if (iq < 0)
     {
-        if (game->player()->stat(game->player()->STAT_INTELLIGENCE) <= abs(iq))
+        if (game->player()->stat(STAT::INTELLIGENCE) <= abs(iq))
         {
             dialog->reactions()->push_back(reaction);
             dialog->functions()->push_back(function);
             dialog->addAnswer(text);
         }
     }
-    //delete text;
 }
 
 }

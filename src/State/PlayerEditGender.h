@@ -26,6 +26,9 @@
 #include "State.h"
 
 // Third party includes
+#include <libfalltergeist.h>
+
+using namespace libfalltergeist;
 
 namespace Falltergeist
 {
@@ -39,7 +42,7 @@ class PlayerEditGender : public State
 protected:
     ImageList* _maleImage = 0;
     ImageList* _femaleImage = 0;
-    unsigned int _gender = 0;
+    GENDER _gender = GENDER::MALE;
 public:
     PlayerEditGender();
     void init();
@@ -47,7 +50,7 @@ public:
     void onMaleButtonPress(MouseEvent* event);
     void onDoneButtonClick(MouseEvent* event);
     virtual void onKeyDown(KeyboardEvent* event);
-    void setGender(unsigned int gender);
+    void setGender(GENDER gender);
 };
 
 }

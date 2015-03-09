@@ -314,24 +314,24 @@ libfalltergeist::Pro::File* ResourceManager::proFileType(unsigned int PID)
 {
     unsigned int typeId = PID >> 24;
     std::string listFile;
-    switch (typeId)
+    switch ((OBJECT_TYPE)typeId)
     {
-        case libfalltergeist::Pro::TYPE_ITEM:
+        case OBJECT_TYPE::ITEM:
             listFile += "proto/items/items.lst";
             break;
-        case libfalltergeist::Pro::TYPE_CRITTER:
+        case OBJECT_TYPE::CRITTER:
             listFile += "proto/critters/critters.lst";
             break;
-        case libfalltergeist::Pro::TYPE_SCENERY:
+        case OBJECT_TYPE::SCENERY:
             listFile += "proto/scenery/scenery.lst";
             break;
-        case libfalltergeist::Pro::TYPE_WALL:
+        case OBJECT_TYPE::WALL:
             listFile += "proto/walls/walls.lst";
             break;
-        case libfalltergeist::Pro::TYPE_TILE:
+        case OBJECT_TYPE::TILE:
             listFile += "proto/tiles/tiles.lst";
             break;
-        case libfalltergeist::Pro::TYPE_MISC:
+        case OBJECT_TYPE::MISC:
             listFile += "proto/misc/misc.lst";
             break;
         default:
@@ -351,19 +351,19 @@ libfalltergeist::Pro::File* ResourceManager::proFileType(unsigned int PID)
 
     std::string protoName = lst->strings()->at(index-1);
 
-    switch (typeId)
+    switch ((OBJECT_TYPE)typeId)
     {
-        case libfalltergeist::Pro::TYPE_ITEM:
+        case OBJECT_TYPE::ITEM:
             return proFileType("proto/items/" + protoName);
-        case libfalltergeist::Pro::TYPE_CRITTER:
+        case OBJECT_TYPE::CRITTER:
             return proFileType("proto/critters/" + protoName);
-        case libfalltergeist::Pro::TYPE_SCENERY:
+        case OBJECT_TYPE::SCENERY:
             return proFileType("proto/scenery/" + protoName);
-        case libfalltergeist::Pro::TYPE_WALL:
+        case OBJECT_TYPE::WALL:
             return proFileType("proto/walls/" + protoName);
-        case libfalltergeist::Pro::TYPE_TILE:
+        case OBJECT_TYPE::TILE:
             return proFileType("proto/tiles/" + protoName);
-        case libfalltergeist::Pro::TYPE_MISC:
+        case OBJECT_TYPE::MISC:
             return proFileType("proto/misc/" + protoName);
     }
     return nullptr;
@@ -399,13 +399,13 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
     auto baseId = FID & 0x00000FFF;
     auto type = FID >> 24;
 
-    switch (type)
+    switch ((FRM_TYPE)type)
     {
-        case libfalltergeist::Frm::TYPE_ITEM:
+        case FRM_TYPE::ITEM:
             prefix = "art/items/";
             lstFile = "items.lst";
             break;
-        case libfalltergeist::Frm::TYPE_CRITTER:
+        case FRM_TYPE::CRITTER:
         {
             unsigned int weaponId = (FID & 0x0000F000) >> 12;
             unsigned int animId = (FID & 0x00FF0000) >> 16;
@@ -485,30 +485,30 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
 
             return "art/critters/" + frmBase;
         }
-        case libfalltergeist::Frm::TYPE_SCENERY:
+        case FRM_TYPE::SCENERY:
             prefix = "art/scenery/";
             lstFile = "scenery.lst";
             break;
-        case libfalltergeist::Frm::TYPE_WALL:
+        case FRM_TYPE::WALL:
             prefix = "art/walls/";
             lstFile = "walls.lst";
             break;
-        case libfalltergeist::Frm::TYPE_TILE:
+        case FRM_TYPE::TILE:
             prefix = "art/tiles/";
             lstFile = "tiles.lst";
             break;
-        case libfalltergeist::Frm::TYPE_MISC:
+        case FRM_TYPE::MISC:
             prefix = "art/misc/";
             lstFile = "misc.lst";
 
             // Map scroll blockers
             if (baseId == 1) return "art/misc/scrblk.frm";
             break;
-        case libfalltergeist::Frm::TYPE_INTERFACE:
+        case FRM_TYPE::INTERFACE:
             prefix = "art/intrface/";
             lstFile = "intrface.lst";
             break;
-        case libfalltergeist::Frm::TYPE_INVENTORY:
+        case FRM_TYPE::INVENTORY:
             prefix = "art/inven/";
             lstFile = "inven.lst";
             break;

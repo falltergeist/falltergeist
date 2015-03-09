@@ -71,11 +71,11 @@ void GameCritterObject::setArmorSlot(GameArmorItemObject* object)
 {
     if (object) 
     {
-        setFID((_gender == GENDER_FEMALE) ? object->femaleFID() : object->maleFID());
+        setFID((_gender == GENDER::FEMALE) ? object->femaleFID() : object->maleFID());
     }
     else
     {
-        setFID((_gender == GENDER_FEMALE) ? FID_HFJMPS : FID_HMJMPS); 
+        setFID((_gender == GENDER::FEMALE) ? FID_HFJMPS : FID_HMJMPS);
     }
     _armorSlot = object;
 }
@@ -100,143 +100,147 @@ void GameCritterObject::setRightHandSlot(GameItemObject* object)
     _rightHandSlot = object;
 }
 
-int GameCritterObject::gender() const
+GENDER GameCritterObject::gender() const
 {
     return _gender;
 }
 
-void GameCritterObject::setGender(unsigned int value)
+void GameCritterObject::setGender(GENDER value)
 {
-    if (value > 1) throw Exception("GameCritterObject::setGender(value) - value out of range:" + std::to_string(value));
+    if (value > GENDER::FEMALE) throw Exception("GameCritterObject::setGender(value) - value out of range:" + std::to_string((unsigned)value));
     _gender = value;
 }
 
-int GameCritterObject::stat(unsigned int num) const
+int GameCritterObject::stat(STAT num) const
 {
-    if (num >= _stats.size()) throw Exception("GameCritterObject::stat(num) - num out of range:" + std::to_string(num));
-    return _stats.at(num);
+    if (num > STAT::LUCK) throw Exception("GameCritterObject::stat(num) - num out of range:" + std::to_string((unsigned)num));
+    return _stats.at((unsigned)num);
 }
 
-void GameCritterObject::setStat(unsigned int num, int value)
+void GameCritterObject::setStat(STAT num, int value)
 {
-    if (num >= _stats.size()) throw Exception("GameCritterObject::setStat(num, value) - num out of range:" + std::to_string(num));
-    _stats.at(num) = value;
+    if (num > STAT::LUCK) throw Exception("GameCritterObject::setStat(num, value) - num out of range:" + std::to_string((unsigned)num));
+    _stats.at((unsigned)num) = value;
 }
 
-int GameCritterObject::statTotal(unsigned int num) const
+int GameCritterObject::statTotal(STAT num) const
 {
-    if (num >= _stats.size()) throw Exception("GameCritterObject::statTotal(num) - num out of range:" + std::to_string(num));
+    if (num > STAT::LUCK) throw Exception("GameCritterObject::statTotal(num) - num out of range:" + std::to_string((unsigned)num));
     return stat(num) + statBonus(num);
 }
 
-int GameCritterObject::statBonus(unsigned int num) const
+int GameCritterObject::statBonus(STAT num) const
 {
-    if (num >= _statsBonus.size()) throw Exception("GameCritterObject::statBonus(num) - num out of range:" + std::to_string(num));
+    if (num > STAT::LUCK) throw Exception("GameCritterObject::statBonus(num) - num out of range:" + std::to_string((unsigned)num));
     int bonus = 0;
-    if (traitTagged(TRAIT_GIFTED)) bonus += 1;
-    switch (num)
+    if (traitTagged(TRAIT::GIFTED)) bonus += 1;
+    switch(num)
     {
-        case STAT_STRENGTH:
-            if (traitTagged(TRAIT_BRUISER)) bonus += 2;
+        case STAT::STRENGTH:
+            if (traitTagged(TRAIT::BRUISER)) bonus += 2;
             break;
-        case STAT_AGILITY:
-            if (traitTagged(TRAIT_SMALL_FRAME)) bonus += 1;
+        case STAT::AGILITY:
+            if (traitTagged(TRAIT::SMALL_FRAME)) bonus += 1;
+            break;
+        default:
             break;
     }
-    return _statsBonus.at(num) + bonus;
+    return _statsBonus.at((unsigned)num) + bonus;
 }
 
-void GameCritterObject::setStatBonus(unsigned int num, int value)
+void GameCritterObject::setStatBonus(STAT num, int value)
 {
-    if (num >= _statsBonus.size()) throw Exception("GameCritterObject::setStatBonus(num, value) - num out of range:" + std::to_string(num));
-    _statsBonus.at(num) = value;
+    if (num > STAT::LUCK) throw Exception("GameCritterObject::setStatBonus(num, value) - num out of range:" + std::to_string((unsigned)num));
+    _statsBonus.at((unsigned)num) = value;
 }
 
-int GameCritterObject::skillTagged(unsigned int num) const
+int GameCritterObject::skillTagged(SKILL num) const
 {
-    if (num >= _skillsTagged.size()) throw Exception("GameCritterObject::skillTagged(num) - num out of range:" + std::to_string(num));
-    return _skillsTagged.at(num);
+    if (num > SKILL::OUTDOORSMAN) throw Exception("GameCritterObject::skillTagged(num) - num out of range:" + std::to_string((unsigned)num));
+    return _skillsTagged.at((unsigned)num);
 }
 
-void GameCritterObject::setSkillTagged(unsigned int num, int value)
+void GameCritterObject::setSkillTagged(SKILL num, int value)
 {
-    if (num >= _skillsTagged.size()) throw Exception("GameCritterObject::setSkillTagged(num, value) - num out of range:" + std::to_string(num));
-    _skillsTagged.at(num) = value;
+    if (num > SKILL::OUTDOORSMAN) throw Exception("GameCritterObject::setSkillTagged(num, value) - num out of range:" + std::to_string((unsigned)num));
+    _skillsTagged.at((unsigned)num) = value;
 }
 
-int GameCritterObject::skillBaseValue(unsigned int skill) const
+int GameCritterObject::skillBaseValue(SKILL skill) const
 {
-    if (skill >= _skillsTagged.size()) throw Exception("GameCritterObject::skillBaseValue(num) - num out of range:" + std::to_string(skill));
+    if (skill > SKILL::OUTDOORSMAN) throw Exception("GameCritterObject::skillBaseValue(num) - num out of range:" + std::to_string((unsigned)skill));
     int value = 0;
     switch(skill)
     {
-        case SKILL_SMALL_GUNS:
-            value += 5 + 4 * statTotal(STAT_AGILITY);
-            if (traitTagged(TRAIT_GOOD_NATURED)) value -= 10;
+        case SKILL::SMALL_GUNS:
+            value += 5 + 4 * statTotal(STAT::AGILITY);
+            if (traitTagged(TRAIT::GOOD_NATURED)) value -= 10;
             break;
-        case SKILL_BIG_GUNS:
-            value += 2*statTotal(STAT_AGILITY);
-            if (traitTagged(TRAIT_GOOD_NATURED)) value -= 10;
+        case SKILL::BIG_GUNS:
+            value += 2*statTotal(STAT::AGILITY);
+            if (traitTagged(TRAIT::GOOD_NATURED)) value -= 10;
             break;
-        case SKILL_ENERGY_WEAPONS:
-            value += 2*statTotal(STAT_AGILITY);
-            if (traitTagged(TRAIT_GOOD_NATURED)) value -= 10;
+        case SKILL::ENERGY_WEAPONS:
+            value += 2*statTotal(STAT::AGILITY);
+            if (traitTagged(TRAIT::GOOD_NATURED)) value -= 10;
             break;
-        case SKILL_UNARMED:
-            value += 30 + 2*(statTotal(STAT_AGILITY) + statTotal(STAT_STRENGTH));
-            if (traitTagged(TRAIT_GOOD_NATURED)) value -= 10;
+        case SKILL::UNARMED:
+            value += 30 + 2*(statTotal(STAT::AGILITY) + statTotal(STAT::STRENGTH));
+            if (traitTagged(TRAIT::GOOD_NATURED)) value -= 10;
             break;
-        case SKILL_MELEE_WEAPONS:
-            value += 20 + 2*(statTotal(STAT_AGILITY) + statTotal(STAT_STRENGTH));
-            if (traitTagged(TRAIT_GOOD_NATURED)) value -= 10;
+        case SKILL::MELEE_WEAPONS:
+            value += 20 + 2*(statTotal(STAT::AGILITY) + statTotal(STAT::STRENGTH));
+            if (traitTagged(TRAIT::GOOD_NATURED)) value -= 10;
             break;
-        case SKILL_THROWING:
-            value += 4*statTotal(STAT_AGILITY);
-            if (traitTagged(TRAIT_GOOD_NATURED)) value -= 10;
+        case SKILL::THROWING:
+            value += 4*statTotal(STAT::AGILITY);
+            if (traitTagged(TRAIT::GOOD_NATURED)) value -= 10;
             break;
-        case SKILL_FIRST_AID:
-            value += 20 + 2*(statTotal(STAT_PERCEPTION) + statTotal(STAT_INTELLIGENCE));
-            if (traitTagged(TRAIT_GOOD_NATURED)) value += 15;
+        case SKILL::FIRST_AID:
+            value += 20 + 2*(statTotal(STAT::PERCEPTION) + statTotal(STAT::INTELLIGENCE));
+            if (traitTagged(TRAIT::GOOD_NATURED)) value += 15;
             break;
-        case SKILL_DOCTOR:
-            value += 20 + 5 + (statTotal(STAT_PERCEPTION) + statTotal(STAT_INTELLIGENCE));
-            if (traitTagged(TRAIT_GOOD_NATURED)) value += 15;
+        case SKILL::DOCTOR:
+            value += 20 + 5 + (statTotal(STAT::PERCEPTION) + statTotal(STAT::INTELLIGENCE));
+            if (traitTagged(TRAIT::GOOD_NATURED)) value += 15;
             break;
-        case SKILL_SNEAK:
-            value += 20 + 5 + 3*statTotal(STAT_AGILITY);
+        case SKILL::SNEAK:
+            value += 20 + 5 + 3*statTotal(STAT::AGILITY);
             break;
-        case SKILL_LOCKPICK:
-            value += 20 + 10 + (statTotal(STAT_PERCEPTION) + statTotal(STAT_AGILITY));
+        case SKILL::LOCKPICK:
+            value += 20 + 10 + (statTotal(STAT::PERCEPTION) + statTotal(STAT::AGILITY));
             break;
-        case SKILL_STEAL:
-            value += 20 + 3*statTotal(STAT_AGILITY);
+        case SKILL::STEAL:
+            value += 20 + 3*statTotal(STAT::AGILITY);
             break;
-        case SKILL_TRAPS:
-            value += 20 + 10 + (statTotal(STAT_PERCEPTION) + statTotal(STAT_AGILITY));
+        case SKILL::TRAPS:
+            value += 20 + 10 + (statTotal(STAT::PERCEPTION) + statTotal(STAT::AGILITY));
             break;
-        case SKILL_SCIENCE:
-            value += 20 + 4*statTotal(STAT_INTELLIGENCE);
+        case SKILL::SCIENCE:
+            value += 20 + 4*statTotal(STAT::INTELLIGENCE);
             break;
-        case SKILL_REPAIR:
-            value += 20 + 3*statTotal(STAT_INTELLIGENCE);
+        case SKILL::REPAIR:
+            value += 20 + 3*statTotal(STAT::INTELLIGENCE);
             break;
-        case SKILL_SPEECH:
-            value += 20 + 5*statTotal(STAT_CHARISMA);
-            if (traitTagged(TRAIT_GOOD_NATURED)) value += 15;
+        case SKILL::SPEECH:
+            value += 20 + 5*statTotal(STAT::CHARISMA);
+            if (traitTagged(TRAIT::GOOD_NATURED)) value += 15;
             break;
-        case SKILL_BARTER:
-            value += 20 + 4*statTotal(STAT_CHARISMA);
-            if (traitTagged(TRAIT_GOOD_NATURED)) value += 15;
+        case SKILL::BARTER:
+            value += 20 + 4*statTotal(STAT::CHARISMA);
+            if (traitTagged(TRAIT::GOOD_NATURED)) value += 15;
             break;
-        case SKILL_GAMBLING:
-            value += 20 + 5*statTotal(STAT_LUCK);
+        case SKILL::GAMBLING:
+            value += 20 + 5*statTotal(STAT::LUCK);
             break;
-        case SKILL_OUTDOORSMAN:
-            value += 20 + 2*(statTotal(STAT_ENDURANCE) + statTotal(STAT_INTELLIGENCE));
+        case SKILL::OUTDOORSMAN:
+            value += 20 + 2*(statTotal(STAT::ENDURANCE) + statTotal(STAT::INTELLIGENCE));
+            break;
+        default:
             break;
     }
 
-    if (traitTagged(TRAIT_GIFTED))
+    if (traitTagged(TRAIT::GIFTED))
     {
         value -= 10;
     }
@@ -249,16 +253,16 @@ int GameCritterObject::skillBaseValue(unsigned int skill) const
     return value;
 }
 
-int GameCritterObject::traitTagged(unsigned int num) const
+int GameCritterObject::traitTagged(TRAIT num) const
 {
-    if (num >= _traitsTagged.size()) throw Exception("GameCritterObject::traitTagged(num) - num out of range:" + std::to_string(num));
-    return _traitsTagged.at(num);
+    if (num > TRAIT::GIFTED) throw Exception("GameCritterObject::traitTagged(num) - num out of range:" + std::to_string((unsigned)num));
+    return _traitsTagged.at((unsigned)num);
 }
 
-void GameCritterObject::setTraitTagged(unsigned int num, int value)
+void GameCritterObject::setTraitTagged(TRAIT num, int value)
 {
-    if (num >= _traitsTagged.size()) throw Exception("GameCritterObject::setTraitTagged(num, value) - num out of range:" + std::to_string(num));
-    _traitsTagged.at(num) = value;
+    if (num > TRAIT::GIFTED) throw Exception("GameCritterObject::setTraitTagged(num, value) - num out of range:" + std::to_string((unsigned)num));
+    _traitsTagged.at((unsigned)num) = value;
 }
 
 int GameCritterObject::hitPoints() const
@@ -387,44 +391,44 @@ void GameCritterObject::setHealingRate(int value)
     _healingRate = value;
 }
 
-int GameCritterObject::damageResist(unsigned int type) const
+int GameCritterObject::damageResist(DAMAGE type) const
 {
-    if (type > DAMAGE_POISON) throw Exception("GameCritterObject::damageResist(type) - type out of range: " + std::to_string(type));
-    return _damageResist.at(type);
+    if (type > DAMAGE::POISON) throw Exception("GameCritterObject::damageResist(type) - type out of range: " + std::to_string((unsigned)type));
+    return _damageResist.at((unsigned)type);
 }
 
-void GameCritterObject::setDamageResist(unsigned int type, int value)
+void GameCritterObject::setDamageResist(DAMAGE type, int value)
 {
-    if (type > DAMAGE_POISON) throw Exception("GameCritterObject::setDamageResist(type, value) - type out of range: " + std::to_string(type));
-    _damageResist.at(type) = value;
+    if (type > DAMAGE::POISON) throw Exception("GameCritterObject::setDamageResist(type, value) - type out of range: " + std::to_string((unsigned)type));
+    _damageResist.at((unsigned)type) = value;
 }
 
-int GameCritterObject::damageThreshold(unsigned int type) const
+int GameCritterObject::damageThreshold(DAMAGE type) const
 {
-    if ( type > DAMAGE_POISON) throw Exception("GameCritterObject::damageThreshold(type) - type out of range: " + std::to_string(type));
-    return _damageThreshold.at(type);
+    if ( type > DAMAGE::POISON) throw Exception("GameCritterObject::damageThreshold(type) - type out of range: " + std::to_string((unsigned)type));
+    return _damageThreshold.at((unsigned)type);
 }
 
-void GameCritterObject::setDamageThreshold(unsigned int type, int value)
+void GameCritterObject::setDamageThreshold(DAMAGE type, int value)
 {
-    if ( type > DAMAGE_POISON) throw Exception("GameCritterObject::setDamageThreshold(type, value) - type out of range: " + std::to_string(type));
-    _damageThreshold.at(type) = value;
+    if ( type > DAMAGE::POISON) throw Exception("GameCritterObject::setDamageThreshold(type, value) - type out of range: " + std::to_string((unsigned)type));
+    _damageThreshold.at((unsigned)type) = value;
 }
 
-unsigned int GameCritterObject::currentHand() const
+HAND GameCritterObject::currentHand() const
 {
     return _currentHand;
 }
 
-void GameCritterObject::setCurrentHand(unsigned int value)
+void GameCritterObject::setCurrentHand(HAND value)
 {
-    if (value > HAND_LEFT) throw Exception("GameCritterObject::setCurrentHand(value) - value out of range: " + std::to_string(value));
+    if (value > HAND::LEFT) throw Exception("GameCritterObject::setCurrentHand(value) - value out of range: " + std::to_string((unsigned)value));
     _currentHand = value;
 }
 
 GameItemObject* GameCritterObject::currentHandSlot() const
 {
-    return currentHand() == HAND_RIGHT ? rightHandSlot() : leftHandSlot();
+    return currentHand() == HAND::RIGHT ? rightHandSlot() : leftHandSlot();
 }
 
 void GameCritterObject::talk_p_proc()
@@ -620,7 +624,7 @@ std::string GameCritterObject::_generateArmorFrmString()
 
     switch (gender())
     {
-        case GENDER_FEMALE:
+        case GENDER::FEMALE:
         {
             return ResourceManager::FIDtoFrmName(armorSlot()->femaleFID()).substr(13, 6);
         }
@@ -672,22 +676,22 @@ void GameCritterObject::setPoisonLevel(int value)
     _poisonLevel = value;
 }
 
-int GameCritterObject::skillValue(unsigned int skill) const
+int GameCritterObject::skillValue(SKILL skill) const
 {
-    if (skill >= _skillsTagged.size()) throw Exception("GameCritterObject::skillValue(skill) - skill out of range:" + std::to_string(skill));
+    if (skill > SKILL::OUTDOORSMAN) throw Exception("GameCritterObject::skillValue(skill) - skill out of range:" + std::to_string((unsigned)skill));
     return skillBaseValue(skill) + skillGainedValue(skill);
 }
 
-int GameCritterObject::skillGainedValue(unsigned int skill) const
+int GameCritterObject::skillGainedValue(SKILL skill) const
 {
-    if (skill >= _skillsTagged.size()) throw Exception("GameCritterObject::skillGainedValue(skill) - skill out of range:" + std::to_string(skill));
-    return _skillsGainedValue.at(skill);
+    if (skill > SKILL::OUTDOORSMAN) throw Exception("GameCritterObject::skillGainedValue(skill) - skill out of range:" + std::to_string((unsigned)skill));
+    return _skillsGainedValue.at((unsigned)skill);
 }
 
-void GameCritterObject::setSkillGainedValue(unsigned int skill, int value)
+void GameCritterObject::setSkillGainedValue(SKILL skill, int value)
 {
-    if (skill >= _skillsTagged.size()) throw Exception("GameCritterObject::setSkillGainedCalue(skill) - skill out of range:" + std::to_string(skill));
-    _skillsGainedValue.at(skill) = value;
+    if (skill > SKILL::OUTDOORSMAN) throw Exception("GameCritterObject::setSkillGainedCalue(skill) - skill out of range:" + std::to_string((unsigned)skill));
+    _skillsGainedValue.at((unsigned)skill) = value;
 }
 
 bool GameCritterObject::running() const
@@ -720,6 +724,15 @@ void GameCritterObject::_setupNextIdleAnim()
     _nextIdleAnim = SDL_GetTicks() + 10000 + (rand() % 7000);
 }
 
+unsigned GameCritterObject::age() const
+{
+    return _age;
+}
+
+void GameCritterObject::setAge(unsigned value)
+{
+    _age = value;
+}
 
 
 }

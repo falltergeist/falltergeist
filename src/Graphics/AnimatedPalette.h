@@ -25,7 +25,7 @@
 // Falltergeist includes
 
 // Third party includes
-
+#include <libfalltergeist.h>
 
 namespace Falltergeist
 {
@@ -56,7 +56,7 @@ public:
     ~AnimatedPalette();
     unsigned int color(unsigned char index, unsigned char counter);
     void think();
-    unsigned int getCounter(unsigned char type);
+    unsigned int getCounter(MASK type);
 };
 
 }
