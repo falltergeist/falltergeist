@@ -73,6 +73,8 @@ protected:
     unsigned short _lightOrientation;
     bool _transparent = false;
     Texture* _tmptex = NULL;
+    unsigned int _lightIntensity = 0;
+    unsigned int _lightRadius = 0;
 public:
     enum { TYPE_ITEM = 0, TYPE_CRITTER, TYPE_SCENERY, TYPE_WALL, TYPE_TILE, TYPE_MISC, TYPE_DUDE };
     enum { TYPE_ITEM_ARMOR = 0, TYPE_ITEM_CONTAINER, TYPE_ITEM_DRUG, TYPE_ITEM_WEAPON, TYPE_ITEM_AMMO, TYPE_ITEM_MISC, TYPE_ITEM_KEY };
@@ -182,6 +184,14 @@ public:
 
     unsigned short lightOrientation() const;
     virtual void setLightOrientation(unsigned short orientation);
+
+    unsigned int lightIntensity() const;
+    virtual void setLightIntensity(unsigned int intensity);
+
+    unsigned int lightRadius() const;
+    virtual void setLightRadius(unsigned int radius);
+
+    virtual void parseFlags(unsigned int flags);
 };
 
 }
