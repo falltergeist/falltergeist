@@ -351,15 +351,37 @@ void Location::onBackgroundClick(MouseEvent* event)
 void Location::render()
 {
     _floor->render();
+
+    //render only flat objects first
     for (auto hexagon : *hexagonGrid()->hexagons())
     {
         hexagon->setInRender(false);
         for (auto object : *hexagon->objects())
         {
-            object->render();
-            if (object->inRender())
+            if (object->flat())
             {
-                hexagon->setInRender(true);
+                object->render();
+                if (object->inRender())
+                {
+                    hexagon->setInRender(true);
+                }
+            }
+        }
+    }
+
+    // now render all other objects
+    for (auto hexagon : *hexagonGrid()->hexagons())
+    {
+        hexagon->setInRender(false);
+        for (auto object : *hexagon->objects())
+        {
+            if (!object->flat())
+            {
+                object->render();
+                if (object->inRender())
+                {
+                    hexagon->setInRender(true);
+                }
             }
         }
     }
