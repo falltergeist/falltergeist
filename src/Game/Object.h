@@ -54,6 +54,7 @@ protected:
     bool _canLightThru = true;
     bool _canShootThru = true;
     bool _wallTransEnd = false;
+    bool _flat = false;
     int _type = -1;
     int _subtype = -1;
     int _PID = -1;
@@ -192,6 +193,9 @@ public:
     virtual void setLightRadius(unsigned int radius);
 
     virtual void parseFlags(unsigned int flags);
+
+    bool flat();
+    virtual void setFlat(bool value);
 };
 
 }

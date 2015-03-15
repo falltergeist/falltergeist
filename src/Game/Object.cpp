@@ -551,6 +551,7 @@ unsigned int GameObject::lightRadius() const
 
 void GameObject::parseFlags(unsigned int flags)
 {
+    setFlat(flags & 0x00000008);
     setCanWalkThru(flags & 0x00000010);
     setCanLightThru(flags & 0x20000000);
     setCanShootThru(flags & 0x80000000);
@@ -563,6 +564,16 @@ void GameObject::parseFlags(unsigned int flags)
     if (flags & 0x00080000) setTrans(GameObject::TRANS_ENERGY);
     if (flags & 0x10000000) setWallTransEnd(true);
 
+}
+
+bool GameObject::flat()
+{
+    return _flat;
+}
+
+void GameObject::setFlat(bool value)
+{
+    _flat = value;
 }
 
 }
