@@ -28,6 +28,7 @@
 
 // Falltergeist includes
 #include "../Event/Event.h"
+#include "../Event/EventSender.h"
 
 // Third party includes
 
@@ -47,35 +48,8 @@ namespace Game
 {
 class GameCritterObject;
 
-class GameObject : public EventEmitter
+class GameObject : public EventSender
 {
-protected:
-    bool _canWalkThru = true;
-    bool _canLightThru = true;
-    bool _canShootThru = true;
-    bool _wallTransEnd = false;
-    bool _flat = false;
-    int _type = -1;
-    int _subtype = -1;
-    int _PID = -1;
-    int _FID = -1;
-    int _elevation = 0;
-    int _orientation = 0;
-    std::string _name;
-    std::string _description;
-    VM* _script = 0;
-    ActiveUI* _ui = 0;
-    Hexagon* _hexagon = 0;
-    virtual void _generateUi();
-    void addUIEventHandlers();
-    TextArea* _floatMessage = 0;
-    bool _inRender = false;
-    unsigned int _trans = 0;
-    unsigned short _lightOrientation;
-    bool _transparent = false;
-    Texture* _tmptex = NULL;
-    unsigned int _lightIntensity = 0;
-    unsigned int _lightRadius = 0;
 public:
     enum { TYPE_ITEM = 0, TYPE_CRITTER, TYPE_SCENERY, TYPE_WALL, TYPE_TILE, TYPE_MISC, TYPE_DUDE };
     enum { TYPE_ITEM_ARMOR = 0, TYPE_ITEM_CONTAINER, TYPE_ITEM_DRUG, TYPE_ITEM_WEAPON, TYPE_ITEM_AMMO, TYPE_ITEM_MISC, TYPE_ITEM_KEY };
@@ -196,6 +170,35 @@ public:
 
     bool flat() const;
     virtual void setFlat(bool value);
+
+protected:
+    bool _canWalkThru = true;
+    bool _canLightThru = true;
+    bool _canShootThru = true;
+    bool _wallTransEnd = false;
+    bool _flat = false;
+    int _type = -1;
+    int _subtype = -1;
+    int _PID = -1;
+    int _FID = -1;
+    int _elevation = 0;
+    int _orientation = 0;
+    std::string _name;
+    std::string _description;
+    VM* _script = 0;
+    ActiveUI* _ui = 0;
+    Hexagon* _hexagon = 0;
+    virtual void _generateUi();
+    void addUIEventHandlers();
+    TextArea* _floatMessage = 0;
+    bool _inRender = false;
+    unsigned int _trans = 0;
+    unsigned short _lightOrientation;
+    bool _transparent = false;
+    Texture* _tmptex = NULL;
+    unsigned int _lightIntensity = 0;
+    unsigned int _lightRadius = 0;
+
 };
 
 }

@@ -21,6 +21,7 @@
 #include <cmath>
 
 // Falltergeist includes
+#include "../Event/EventManager.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
@@ -245,7 +246,8 @@ void Animation::think()
             if (_actionFrame == _currentFrame)
             {
                 auto event = new Event("actionFrame");
-                emitEvent(event);
+                event->setSender(this);
+                EventManager::getInstance()->handle(event);
                 delete event;
             }
         }
@@ -254,7 +256,8 @@ void Animation::think()
             _ended = true;
             _playing = false;
             auto event = new Event("animationEnded");
-            emitEvent(event);
+            event->setSender(this);
+            EventManager::getInstance()->handle(event);
             delete event;
         }
     }

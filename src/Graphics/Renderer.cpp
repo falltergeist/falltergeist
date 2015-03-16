@@ -21,6 +21,7 @@
 #include <cmath>
 
 // Falltergeist includes
+#include "../Event/EventManager.h"
 #include "../Event/StateEvent.h"
 #include "../Exception.h"
 #include "../Graphics/Renderer.h"
@@ -176,7 +177,7 @@ void Renderer::think()
             _fadeDone = true;
 
             auto event = new StateEvent("fadedone");
-            Game::getInstance()->states()->back()->emitEvent(event);
+            EventManager::getInstance()->handle(event);
             delete event;
             return;
         }

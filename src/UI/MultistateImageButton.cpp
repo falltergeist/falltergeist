@@ -20,13 +20,14 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Audio/AudioMixer.h"
+#include "../Event/EventManager.h"
 #include "../Exception.h"
+#include "../Game/Game.h"
 #include "../Graphics/ActiveUI.h"
 #include "../Graphics/Texture.h"
 #include "../UI/Image.h"
 #include "../UI/MultistateImageButton.h"
-#include "../Game/Game.h"
-#include "../Audio/AudioMixer.h"
 
 // Third party includes
 
@@ -35,13 +36,13 @@ namespace Falltergeist
 
 MultistateImageButton::MultistateImageButton(int x, int y) : ActiveUI(x, y)
 {
-    addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); }, this);
 }
 
 MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
 {
-    addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mouseleftup", [this](Event* event){ this->_onLeftButtonUp(dynamic_cast<MouseEvent*>(event)); });
+    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); }, this);
+    EventManager::getInstance()->addHandler("mouseleftup", [this](Event* event){ this->_onLeftButtonUp(dynamic_cast<MouseEvent*>(event)); }, this);
     //Image* image;
     switch (type)
     {
@@ -89,7 +90,7 @@ MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : 
 
 MultistateImageButton::MultistateImageButton(ImageList* imageList, int x, int y) : ActiveUI(x, y)
 {
-    addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); }, this);
     for (auto image: *imageList->images()) _imageList.addImage(new Image(image));
 }
 
@@ -134,7 +135,7 @@ int MultistateImageButton::mode()
 
 void MultistateImageButton::_onLeftButtonClick(MouseEvent* event)
 {
-    auto sender = dynamic_cast<MultistateImageButton*>(event->emitter());
+    auto sender = (MultistateImageButton*)event->sender();
 
     if (sender->mode() == MODE_PROGRESSION)
     {
@@ -163,7 +164,7 @@ void MultistateImageButton::_onLeftButtonClick(MouseEvent* event)
 
 void MultistateImageButton::_onLeftButtonUp(MouseEvent* event)
 {
-    auto sender = dynamic_cast<MultistateImageButton*>(event->emitter());
+    auto sender = (MultistateImageButton*)event->sender();
 
     if (!sender->_downSnd.empty())
     {
