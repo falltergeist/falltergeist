@@ -54,6 +54,7 @@ protected:
     bool _canLightThru = true;
     bool _canShootThru = true;
     bool _wallTransEnd = false;
+    bool _flat = false;
     int _type = -1;
     int _subtype = -1;
     int _PID = -1;
@@ -73,6 +74,8 @@ protected:
     unsigned short _lightOrientation;
     bool _transparent = false;
     Texture* _tmptex = NULL;
+    unsigned int _lightIntensity = 0;
+    unsigned int _lightRadius = 0;
 public:
     enum { TYPE_ITEM = 0, TYPE_CRITTER, TYPE_SCENERY, TYPE_WALL, TYPE_TILE, TYPE_MISC, TYPE_DUDE };
     enum { TYPE_ITEM_ARMOR = 0, TYPE_ITEM_CONTAINER, TYPE_ITEM_DRUG, TYPE_ITEM_WEAPON, TYPE_ITEM_AMMO, TYPE_ITEM_MISC, TYPE_ITEM_KEY };
@@ -133,6 +136,7 @@ public:
     void setScript(VM* script);
 
     virtual void render();
+    virtual void renderText();
     virtual void think();
     virtual void handle(Event* event);
 
@@ -181,6 +185,17 @@ public:
 
     unsigned short lightOrientation() const;
     virtual void setLightOrientation(unsigned short orientation);
+
+    unsigned int lightIntensity() const;
+    virtual void setLightIntensity(unsigned int intensity);
+
+    unsigned int lightRadius() const;
+    virtual void setLightRadius(unsigned int radius);
+
+    virtual void setFlags(unsigned int flags);
+
+    bool flat() const;
+    virtual void setFlat(bool value);
 };
 
 }

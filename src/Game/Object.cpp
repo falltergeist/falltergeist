@@ -274,6 +274,23 @@ static bool in_front_of(int x1, int y1, int x2, int y2)
   return (double)(x2 - x1) <= ((double)(y2 - y1) * -4.0);
 }
 
+void GameObject::renderText()
+{
+    if (auto message = floatMessage())
+    {
+        if (SDL_GetTicks() - message->timestampCreated() >= 7000)
+        {
+            delete floatMessage();
+            setFloatMessage(nullptr);
+        }
+        else
+        {
+            message->setX(_ui->x() + _ui->width()*0.5 - message->width()*0.5);
+            message->setY(_ui->y() - 4 - message->height());
+            message->render();
+        }
+    }
+}
 
 void GameObject::render()
 {
@@ -291,22 +308,6 @@ void GameObject::render()
     if (_ui->y() > (int)camera->height()) return;
 
     setInRender(true);
-
-
-    if (auto message = floatMessage())
-    {
-        if (SDL_GetTicks() - message->timestampCreated() >= 7000)
-        {
-            delete floatMessage();
-            setFloatMessage(nullptr);
-        }
-        else
-        {
-            message->setX(_ui->x() + _ui->width()*0.5 - message->width()*0.5);
-            message->setY(_ui->y() - 4 - message->height());
-            message->render();
-        }
-    }
 
     if ((trans() != TRANS_DEFAULT) || ((_type != TYPE_WALL) && !(_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC)))
     {
@@ -526,6 +527,53 @@ void GameObject::setLightOrientation(unsigned short orientation)
 unsigned short GameObject::lightOrientation() const
 {
     return _lightOrientation;
+}
+
+void GameObject::setLightIntensity(unsigned int intensity)
+{
+    _lightIntensity = intensity;
+}
+
+unsigned int GameObject::lightIntensity() const
+{
+    return _lightIntensity;
+}
+
+void GameObject::setLightRadius(unsigned int radius)
+{
+    _lightRadius = radius;
+}
+
+unsigned int GameObject::lightRadius() const
+{
+    return _lightRadius;
+}
+
+void GameObject::setFlags(unsigned int flags)
+{
+    setFlat(flags & 0x00000008);
+    setCanWalkThru(flags & 0x00000010);
+    setCanLightThru(flags & 0x20000000);
+    setCanShootThru(flags & 0x80000000);
+
+    if (flags & 0x00004000) setTrans(GameObject::TRANS_RED);
+    if (flags & 0x00008000) setTrans(GameObject::TRANS_NONE);
+    if (flags & 0x00010000) setTrans(GameObject::TRANS_WALL);
+    if (flags & 0x00020000) setTrans(GameObject::TRANS_GLASS);
+    if (flags & 0x00040000) setTrans(GameObject::TRANS_STEAM);
+    if (flags & 0x00080000) setTrans(GameObject::TRANS_ENERGY);
+    if (flags & 0x10000000) setWallTransEnd(true);
+
+}
+
+bool GameObject::flat() const
+{
+    return _flat;
+}
+
+void GameObject::setFlat(bool value)
+{
+    _flat = value;
 }
 
 }

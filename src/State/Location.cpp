@@ -162,6 +162,9 @@ void Location::setLocation(std::string name)
         object->setFID(mapObject->FID());
         object->setElevation(_currentElevation);
         object->setOrientation(mapObject->orientation());
+        object->setLightRadius(mapObject->lightRadius());
+        object->setLightIntensity(mapObject->lightIntensity());
+        object->setFlags(mapObject->flags());
 
         if (auto exitGrid = dynamic_cast<Game::GameExitMiscObject*>(object))
         {
@@ -348,16 +351,46 @@ void Location::onBackgroundClick(MouseEvent* event)
 void Location::render()
 {
     _floor->render();
+
+    //render only flat objects first
     for (auto hexagon : *hexagonGrid()->hexagons())
     {
         hexagon->setInRender(false);
         for (auto object : *hexagon->objects())
         {
-            object->render();
-            if (object->inRender())
+            if (object->flat())
             {
-                hexagon->setInRender(true);
+                object->render();
+                if (object->inRender())
+                {
+                    hexagon->setInRender(true);
+                }
             }
+        }
+    }
+
+    // now render all other objects
+    for (auto hexagon : *hexagonGrid()->hexagons())
+    {
+        hexagon->setInRender(false);
+        for (auto object : *hexagon->objects())
+        {
+            if (!object->flat())
+            {
+                object->render();
+                if (object->inRender())
+                {
+                    hexagon->setInRender(true);
+                }
+            }
+        }
+    }
+
+    for (auto hexagon : *hexagonGrid()->hexagons())
+    {
+        for (auto object : *hexagon->objects())
+        {
+            object->renderText();
         }
     }
     //_roof->render();
