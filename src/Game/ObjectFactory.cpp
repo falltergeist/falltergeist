@@ -308,7 +308,7 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
     }
     object->setPID(PID);
     object->setFID(proto->FID());
-    object->parseFlags(proto->flags());
+    object->setFlags(proto->flags());
 
     if (proto->scriptId() > 0)
     {
