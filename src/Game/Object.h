@@ -192,7 +192,7 @@ public:
     unsigned int lightRadius() const;
     virtual void setLightRadius(unsigned int radius);
 
-    virtual void parseFlags(unsigned int flags);
+    virtual void setFlags(unsigned int flags);
 
     bool flat() const;
     virtual void setFlat(bool value);
