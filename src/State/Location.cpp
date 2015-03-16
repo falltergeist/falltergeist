@@ -164,7 +164,7 @@ void Location::setLocation(std::string name)
         object->setOrientation(mapObject->orientation());
         object->setLightRadius(mapObject->lightRadius());
         object->setLightIntensity(mapObject->lightIntensity());
-        object->parseFlags(mapObject->flags());
+        object->setFlags(mapObject->flags());
 
         if (auto exitGrid = dynamic_cast<Game::GameExitMiscObject*>(object))
         {

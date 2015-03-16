@@ -549,7 +549,7 @@ unsigned int GameObject::lightRadius() const
     return _lightRadius;
 }
 
-void GameObject::parseFlags(unsigned int flags)
+void GameObject::setFlags(unsigned int flags)
 {
     setFlat(flags & 0x00000008);
     setCanWalkThru(flags & 0x00000010);
@@ -566,7 +566,7 @@ void GameObject::parseFlags(unsigned int flags)
 
 }
 
-bool GameObject::flat()
+bool GameObject::flat() const
 {
     return _flat;
 }
