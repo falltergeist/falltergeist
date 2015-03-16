@@ -194,7 +194,7 @@ public:
 
     virtual void parseFlags(unsigned int flags);
 
-    bool flat();
+    bool flat() const;
     virtual void setFlat(bool value);
 };
 
