@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Event/EventManager.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../State/CritterDialogReview.h"
@@ -57,7 +58,7 @@ void CritterDialogReview::init()
 
     // Interface buttons
     auto doneButton = new ImageButton(ImageButton::TYPE_DIALOG_DONE_BUTTON, backgroundX + 500, backgroundY + 398);
-    doneButton->addEventHandler("mouseleftclick", std::bind(&CritterDialogReview::onDoneButtonClick, this, std::placeholders::_1));
+    EventManager::getInstance()->addHandler("mouseleftclick", std::bind(&CritterDialogReview::onDoneButtonClick, this, std::placeholders::_1), doneButton);
 
     auto upButton = new ImageButton(ImageButton::TYPE_DIALOG_BIG_UP_ARROW, backgroundX + 476, backgroundY + 154);
 

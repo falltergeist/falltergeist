@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Event/EventManager.h"
 #include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -67,13 +68,13 @@ void PlayerEditAge::init()
     doneBox->setY(backgroundY+40);
 
     auto decButton = new ImageButton(ImageButton::TYPE_LEFT_ARROW, backgroundX+178, backgroundY+14);
-    decButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDecButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onDecButtonClick(dynamic_cast<MouseEvent*>(event)); }, decButton);
 
     auto incButton = new ImageButton(ImageButton::TYPE_RIGHT_ARROW, backgroundX+262, backgroundY+14);
-    incButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onIncButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onIncButtonClick(dynamic_cast<MouseEvent*>(event)); }, incButton);
 
     auto doneButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+188, backgroundY+43);
-    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); }, doneButton);
 
     auto doneLabel = new TextArea(_t(MSG_EDITOR, 100), backgroundX+210, backgroundY+43);
 
