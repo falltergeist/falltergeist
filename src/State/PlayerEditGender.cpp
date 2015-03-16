@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Event/EventManager.h"
 #include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -61,13 +62,13 @@ void PlayerEditGender::init()
                                     "art/intrface/maleoff.frm",
                                     "art/intrface/maleon.frm"
                                 }, bgX+260, bgY+2);
-    _maleImage->addEventHandler("mouseleftclick", [this](Event* event){ this->onMaleButtonPress(dynamic_cast<MouseEvent*>(event)); });
+    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onMaleButtonPress(dynamic_cast<MouseEvent*>(event)); }, _maleImage);
 
     _femaleImage = new ImageList((std::vector<std::string>){
                                                             "art/intrface/femoff.frm",
                                                             "art/intrface/femon.frm"
                                                             }, bgX+310, bgY+2);
-    _femaleImage->addEventHandler("mouseleftclick", [this](Event* event){ this->onFemaleButtonPress(dynamic_cast<MouseEvent*>(event)); });
+    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onFemaleButtonPress(dynamic_cast<MouseEvent*>(event)); }, _femaleImage);
 
     auto doneBox = new Image("art/intrface/donebox.frm");
     doneBox->setX(bgX+250);
@@ -78,7 +79,7 @@ void PlayerEditGender::init()
     doneLabel->setFont(font3_b89c28ff);
 
     auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+260, bgY+45);
-    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); }, doneButton);
 
     addUI(bg);
     addUI(doneBox);

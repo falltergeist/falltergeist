@@ -21,16 +21,17 @@
 #include <sstream>
 
 // Falltergeist includes
-#include "../State/Credits.h"
+#include "../CrossPlatform.h"
+#include "../Event/EventManager.h"
 #include "../Event/KeyboardEvent.h"
 #include "../Event/MouseEvent.h"
 #include "../Event/StateEvent.h"
 #include "../Game/Game.h"
-#include "../UI/TextArea.h"
+#include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
-#include "../Graphics/Renderer.h"
-#include "../CrossPlatform.h"
+#include "../State/Credits.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 
@@ -155,14 +156,14 @@ void Credits::handle(Event* event)
 
 void Credits::onCreditsFinished()
 {
-    removeEventHandlers("fadedone");
-    addEventHandler("fadedone", [this](Event* event){ this->onCreditsFadeDone(dynamic_cast<StateEvent*>(event)); });
+    EventManager::getInstance()->removeHandlers("fadedone");
+    EventManager::getInstance()->addHandler("fadedone", [this](Event* event){ this->onCreditsFadeDone(dynamic_cast<StateEvent*>(event)); });
     Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
 }
 
 void Credits::onCreditsFadeDone(StateEvent* event)
 {
-    removeEventHandlers("fadedone");
+    EventManager::getInstance()->removeHandlers("fadedone");
     Game::getInstance()->mouse()->popState();
     Game::getInstance()->popState();
 }
