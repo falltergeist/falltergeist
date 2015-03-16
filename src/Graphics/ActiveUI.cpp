@@ -20,6 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Event/EventSender.h"
+#include "../Event/EventManager.h"
 #include "../Graphics/ActiveUI.h"
 #include "../Graphics/Texture.h"
 
@@ -28,12 +30,13 @@
 namespace Falltergeist
 {
 
-ActiveUI::ActiveUI(int x, int y) : EventEmitter(), UI(x, y)
+ActiveUI::ActiveUI(int x, int y) : UI(x, y), EventSender()
 {
 }
 
 ActiveUI::~ActiveUI()
 {
+    EventManager::getInstance()->removeHandlers(this);
 }
 
 void ActiveUI::handle(Event* event)
@@ -45,6 +48,7 @@ void ActiveUI::handle(Event* event)
         int y = mouseEvent->y() - this->y();
 
         auto newEvent = new MouseEvent(mouseEvent);
+        newEvent->setSender(this);
 
         if (this->pixel(x, y))
         {
@@ -54,18 +58,18 @@ void ActiveUI::handle(Event* event)
                 {
                     newEvent->setName( _drag ? "mousedrag" : "mousedragstart");
                     if (!_drag) _drag = true;
-                    emitEvent(newEvent);
+                    EventManager::getInstance()->handle(newEvent);
                 }
                 if (!_hovered)
                 {
                     _hovered = true;
                     newEvent->setName("mousein");
-                    emitEvent(newEvent);
+                    EventManager::getInstance()->handle(newEvent);
                 }
                 else
                 {
                     newEvent->setName("mousemove");
-                    emitEvent(newEvent);
+                    EventManager::getInstance()->handle(newEvent);
                 }
             }
             else if (mouseEvent->name() == "mousedown")
@@ -74,13 +78,13 @@ void ActiveUI::handle(Event* event)
                 {
                     _leftButtonPressed = true;
                     newEvent->setName("mouseleftdown");
-                    emitEvent(newEvent);
+                    EventManager::getInstance()->handle(newEvent);
                 }
                 else if (mouseEvent->rightButton())
                 {
                     _rightButtonPressed = true;
                     newEvent->setName("mouserightdown");
-                    emitEvent(newEvent);
+                    EventManager::getInstance()->handle(newEvent);
                 }
             }
             else if (mouseEvent->name() == "mouseup")
@@ -88,28 +92,28 @@ void ActiveUI::handle(Event* event)
                 if (mouseEvent->leftButton())
                 {
                     newEvent->setName("mouseleftup");
-                    emitEvent(newEvent);
+                    EventManager::getInstance()->handle(newEvent);
                     if (_leftButtonPressed)
                     {
                         if (_drag)
                         {
                             _drag = false;
                             newEvent->setName("mousedragstop");
-                            emitEvent(newEvent);
+                            EventManager::getInstance()->handle(newEvent);
                         }
                         newEvent->setName("mouseleftclick");
-                        emitEvent(newEvent);
+                        EventManager::getInstance()->handle(newEvent);
                     }
                     _leftButtonPressed = false;
                 }
                 else if (mouseEvent->rightButton())
                 {
                     newEvent->setName("mouserightup");
-                    emitEvent(newEvent);
+                    EventManager::getInstance()->handle(newEvent);
                     if (_rightButtonPressed)
                     {
                         newEvent->setName("mouserightclick");
-                        emitEvent(newEvent);
+                        EventManager::getInstance()->handle(newEvent);
                     }
                     _rightButtonPressed = false;
                 }
@@ -122,13 +126,13 @@ void ActiveUI::handle(Event* event)
                 if (_drag)
                 {
                     newEvent->setName("mousedrag");
-                    emitEvent(newEvent);
+                    EventManager::getInstance()->handle(newEvent);
                 }
                 if (_hovered)
                 {
                     _hovered = false;
                     newEvent->setName("mouseout");
-                    emitEvent(newEvent);
+                    EventManager::getInstance()->handle(newEvent);
                 }
             }
             else if (mouseEvent->name() == "mouseup")
@@ -141,7 +145,7 @@ void ActiveUI::handle(Event* event)
                         {
                             _drag = false;
                             newEvent->setName("mousedragstop");
-                            emitEvent(newEvent);
+                            EventManager::getInstance()->handle(newEvent);
                         }
                         _leftButtonPressed = false;
                     }
@@ -165,7 +169,8 @@ void ActiveUI::handle(Event* event)
 
     if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
     {
-        emitEvent(keyboardEvent);
+        keyboardEvent->setSender(this);
+        EventManager::getInstance()->handle(keyboardEvent);
     }
 }
 

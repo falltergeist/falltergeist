@@ -21,6 +21,8 @@
 #include <sstream>
 
 // Falltergeist includes
+#include "../Event/EventManager.h"
+#include "../Event/EventSender.h"
 #include "../Font.h"
 #include "../functions.h"
 #include "../Game/DudeObject.h"
@@ -203,7 +205,7 @@ void PlayerCreate::init()
     // add buttons to the state
     for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
     {
-        it->second->addEventHandler("mouseleftclick", [this](Event* event){ this->onButtonClick(dynamic_cast<MouseEvent*>(event)); });
+        EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onButtonClick(dynamic_cast<MouseEvent*>(event)); }, it->second);
         addUI(it->second);
     }
 
@@ -211,7 +213,7 @@ void PlayerCreate::init()
     // reverse iterator to change drawing order
     for(auto it = _labels.rbegin(); it != _labels.rend(); ++it)
     {
-        it->second->addEventHandler("mouseleftdown", [this](Event* event){ this->onLabelClick(dynamic_cast<MouseEvent*>(event)); });
+        EventManager::getInstance()->addHandler("mouseleftdown", [this](Event* event){ this->onLabelClick(dynamic_cast<MouseEvent*>(event)); }, it->second);
         addUI(it->second);
     }
 
@@ -224,7 +226,7 @@ void PlayerCreate::init()
     // add hidden masks
     for(auto it = _masks.begin(); it != _masks.end(); ++it)
     {
-        it->second->addEventHandler("mouseleftdown", [this](Event* event){ this->onMaskClick(dynamic_cast<MouseEvent*>(event)); });
+        EventManager::getInstance()->addHandler("mouseleftdown", [this](Event* event){ this->onMaskClick(dynamic_cast<MouseEvent*>(event)); }, it->second);
         addUI(it->second);
     }
 
@@ -499,7 +501,7 @@ bool PlayerCreate::_skillToggle(unsigned int num)
 
 void PlayerCreate::onButtonClick(MouseEvent* event)
 {
-    auto sender = dynamic_cast<ImageButton*>(event->emitter());
+    auto sender = dynamic_cast<ImageButton*>(event->sender());
 
     for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
     {
@@ -564,7 +566,7 @@ void PlayerCreate::onLabelClick(MouseEvent* event)
     for(auto it = _labels.begin(); it != _labels.end(); ++it)
     {
         std::string name = it->first;
-        if (it->second == event->emitter())
+        if (it->second == event->sender())
         {
             if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0 || name.find("label_") == 0)
             {
@@ -584,7 +586,7 @@ void PlayerCreate::onMaskClick(MouseEvent* event)
 {
     for(auto it = _masks.begin(); it != _masks.end(); ++it)
     {
-        if (it->second == event->emitter())
+        if (it->second == event->sender())
         {
             std::string name = it->first;
             if (name.find("stats_") == 0)

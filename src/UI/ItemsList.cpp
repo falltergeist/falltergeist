@@ -20,6 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Event/EventManager.h"
+#include "../Event/EventSender.h"
 #include "../Game/ArmorItemObject.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
@@ -40,10 +42,10 @@ ItemsList::ItemsList(int x, int y) : ActiveUI(x, y)
     _texture = new Texture(_slotWidth, _slotHeight * _slotsNumber);
     _texture->fill(0x000000FF);
 
-    addEventHandler("mouseleftdown", [this](Event* event){ this->onMouseLeftDown(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mousedragstart", [this](Event* event){ this->onMouseDragStart(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mousedrag", [this](Event* event){ this->onMouseDrag(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mousedragstop", [this](Event* event){ this->onMouseDragStop(dynamic_cast<MouseEvent*>(event)); });
+    EventManager::getInstance()->addHandler("mouseleftdown", [this](Event* event){ this->onMouseLeftDown(dynamic_cast<MouseEvent*>(event)); }, this);
+    EventManager::getInstance()->addHandler("mousedragstart", [this](Event* event){ this->onMouseDragStart(dynamic_cast<MouseEvent*>(event)); }, this);
+    EventManager::getInstance()->addHandler("mousedrag", [this](Event* event){ this->onMouseDrag(dynamic_cast<MouseEvent*>(event)); }, this);
+    EventManager::getInstance()->addHandler("mousedragstop", [this](Event* event){ this->onMouseDragStop(dynamic_cast<MouseEvent*>(event)); }, this);
 }
 
 void ItemsList::setItems(std::vector<Game::GameItemObject *>* items)
@@ -132,8 +134,8 @@ void ItemsList::onMouseDragStop(MouseEvent* event)
     auto itemevent = new MouseEvent("itemdragstop");
     itemevent->setX(event->x());
     itemevent->setY(event->y());
-    itemevent->setEmitter(this);
-    emitEvent(itemevent);
+    itemevent->setSender(this);
+    EventManager::getInstance()->handle(itemevent);
     delete itemevent;
     _draggedItem = 0;
     Logger::critical() << "mousedragstop" << std::endl;
@@ -152,7 +154,7 @@ void ItemsList::onItemDragStop(MouseEvent* event)
     if (x < 0 || x > _slotWidth) return;
     if (y < 0 || y > _slotHeight*_slotsNumber) return;
 
-    if (auto itemsList = dynamic_cast<ItemsList*>(event->emitter()))
+    if (auto itemsList = dynamic_cast<ItemsList*>(event->sender()))
     {
         // @todo create addItem method
         this->addItem(itemsList->draggedItem(), 1);
@@ -161,7 +163,7 @@ void ItemsList::onItemDragStop(MouseEvent* event)
         itemsList->update();
     }
 
-    if (auto inventoryItem = dynamic_cast<InventoryItem*>(event->emitter()))
+    if (auto inventoryItem = dynamic_cast<InventoryItem*>(event->sender()))
     {
         // @todo create addItem method
         this->addItem(inventoryItem, 1);

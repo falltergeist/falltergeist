@@ -22,19 +22,21 @@
 
 // Falltergeist includes
 #include "../Exception.h"
+#include "../Event/EventSender.h"
+#include "../Event/EventManager.h"
+#include "../Game/CritterObject.h"
+#include "../Game/Defines.h"
+#include "../Game/DudeObject.h"
+#include "../Game/Game.h"
+#include "../Game/Object.h"
 #include "../Graphics/Animation.h"
 #include "../Graphics/AnimationQueue.h"
-#include "../Graphics/Texture.h"
 #include "../Graphics/Renderer.h"
-#include "Game.h"
+#include "../Graphics/Texture.h"
 #include "../LocationCamera.h"
 #include "../Logger.h"
 #include "../PathFinding/Hexagon.h"
 #include "../ResourceManager.h"
-#include "CritterObject.h"
-#include "Defines.h"
-#include "Object.h"
-#include "DudeObject.h"
 #include "../State/Location.h"
 #include "../UI/AnimatedImage.h"
 #include "../UI/Image.h"
@@ -43,19 +45,22 @@
 
 // Third party includes
 
+using namespace std::placeholders;
+
 namespace Falltergeist
 {
 namespace Game
 {
 
-GameObject::GameObject() : EventEmitter()
+GameObject::GameObject() : EventSender()
 {
 }
 
 GameObject::~GameObject()
 {
     delete _ui;
-    delete _floatMessage;
+    delete _floatMessage;    
+    EventManager::getInstance()->removeHandlers(this);
 }
 
 int GameObject::type() const
@@ -169,11 +174,14 @@ void GameObject::addUIEventHandlers()
 {
     if (_ui)
     {
-        _ui->addEventHandler("mouseleftdown", std::bind(&State::Location::onObjectMouseEvent, Game::getInstance()->locationState(), std::placeholders::_1, this));
-        _ui->addEventHandler("mouseleftclick", std::bind(&State::Location::onObjectMouseEvent, Game::getInstance()->locationState(), std::placeholders::_1, this));
-        _ui->addEventHandler("mousein", std::bind(&State::Location::onObjectHover, Game::getInstance()->locationState(), std::placeholders::_1, this));
-        _ui->addEventHandler("mousemove", std::bind(&State::Location::onObjectHover, Game::getInstance()->locationState(), std::placeholders::_1, this));
-        _ui->addEventHandler("mouseout", std::bind(&State::Location::onObjectHover, Game::getInstance()->locationState(), std::placeholders::_1, this));
+        auto state = Game::getInstance()->locationState();
+        auto eventManager = EventManager::getInstance();
+
+        eventManager->addHandler("mouseleftdown",  std::bind(&State::Location::onObjectMouseEvent, state, _1, this), _ui);
+        eventManager->addHandler("mouseleftclick", std::bind(&State::Location::onObjectMouseEvent, state, _1, this), _ui);
+        eventManager->addHandler("mousein",        std::bind(&State::Location::onObjectHover,      state, _1, this), _ui);
+        eventManager->addHandler("mousemove",      std::bind(&State::Location::onObjectHover,      state, _1, this), _ui);
+        eventManager->addHandler("mouseout",       std::bind(&State::Location::onObjectHover,      state, _1, this), _ui);
     }
 }
 
@@ -475,10 +483,10 @@ void GameObject::onUseAnimationActionFrame(Event* event, GameCritterObject* crit
     Animation* animation = dynamic_cast<Animation*>(critter->ui());
     if (animation)
     {
-        animation->removeEventHandlers("actionFrame");
-        animation->addEventHandler("animationEnded", [this, critter](Event* event){
+        EventManager::getInstance()->removeHandlers("actionFrame", animation);
+        EventManager::getInstance()->addHandler("animationEnded", [this, critter](Event* event){
             this->onUseAnimationEnd(event, critter);
-        });
+        }, animation);
     }
     else throw Exception("No animation for object!");
 }

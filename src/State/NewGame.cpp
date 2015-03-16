@@ -21,6 +21,7 @@
 #include <sstream>
 
 // Falltergeist includes
+#include "../Event/EventManager.h"
 #include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -71,22 +72,22 @@ void NewGame::init()
     addUI("background", new Image("art/intrface/pickchar.frm"));
 
     auto beginGameButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 322));
-    beginGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onBeginGameButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onBeginGameButtonClick(dynamic_cast<MouseEvent*>(event)); }, beginGameButton);
 
     auto editButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 436, 319));
-    editButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onEditButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onEditButtonClick(dynamic_cast<MouseEvent*>(event)); }, editButton);
 
     auto createButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 424));
-    createButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCreateButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onCreateButtonClick(dynamic_cast<MouseEvent*>(event)); }, createButton);
 
     auto backButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 461, 424));
-    backButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onBackButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onBackButtonClick(dynamic_cast<MouseEvent*>(event)); }, backButton);
 
     auto prevCharacterButton = addUI(new ImageButton(ImageButton::TYPE_LEFT_ARROW, 292, 320));
-    prevCharacterButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onPrevCharacterButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onPrevCharacterButtonClick(dynamic_cast<MouseEvent*>(event)); }, prevCharacterButton);
 
     auto nextCharacterButton = addUI(new ImageButton(ImageButton::TYPE_RIGHT_ARROW, 318, 320));
-    nextCharacterButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onNextCharacterButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onNextCharacterButtonClick(dynamic_cast<MouseEvent*>(event)); }, nextCharacterButton);
 
     addUI("images", new ImageList({
                                     "art/intrface/combat.frm",
@@ -153,8 +154,8 @@ void NewGame::doCreate()
 
 void NewGame::doBack()
 {
-    removeEventHandlers("fadedone");
-    addEventHandler("fadedone", [this](Event* event){ this->onBackFadeDone(dynamic_cast<StateEvent*>(event)); });
+    EventManager::getInstance()->removeHandlers("fadedone");
+    EventManager::getInstance()->addHandler("fadedone", [this](Event* event){ this->onBackFadeDone(dynamic_cast<StateEvent*>(event)); });
     Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
 }
 
@@ -191,7 +192,7 @@ void NewGame::onBackButtonClick(MouseEvent* event)
 
 void NewGame::onBackFadeDone(StateEvent* event)
 {
-    removeEventHandlers("fadedone");
+    EventManager::getInstance()->removeHandlers("fadedone");
     Game::getInstance()->popState();
 }
 
