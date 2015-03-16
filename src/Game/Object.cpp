@@ -529,5 +529,52 @@ unsigned short GameObject::lightOrientation() const
     return _lightOrientation;
 }
 
+void GameObject::setLightIntensity(unsigned int intensity)
+{
+    _lightIntensity = intensity;
+}
+
+unsigned int GameObject::lightIntensity() const
+{
+    return _lightIntensity;
+}
+
+void GameObject::setLightRadius(unsigned int radius)
+{
+    _lightRadius = radius;
+}
+
+unsigned int GameObject::lightRadius() const
+{
+    return _lightRadius;
+}
+
+void GameObject::setFlags(unsigned int flags)
+{
+    setFlat(flags & 0x00000008);
+    setCanWalkThru(flags & 0x00000010);
+    setCanLightThru(flags & 0x20000000);
+    setCanShootThru(flags & 0x80000000);
+
+    if (flags & 0x00004000) setTrans(GameObject::TRANS_RED);
+    if (flags & 0x00008000) setTrans(GameObject::TRANS_NONE);
+    if (flags & 0x00010000) setTrans(GameObject::TRANS_WALL);
+    if (flags & 0x00020000) setTrans(GameObject::TRANS_GLASS);
+    if (flags & 0x00040000) setTrans(GameObject::TRANS_STEAM);
+    if (flags & 0x00080000) setTrans(GameObject::TRANS_ENERGY);
+    if (flags & 0x10000000) setWallTransEnd(true);
+
+}
+
+bool GameObject::flat() const
+{
+    return _flat;
+}
+
+void GameObject::setFlat(bool value)
+{
+    _flat = value;
+}
+
 }
 }
