@@ -58,6 +58,10 @@ void Opcode8014Handler::_run()
             _error(std::string("op_fetch_external - invalid argument type: ") + nameValue.typeName());
     }
     debug << " name = " << name;
+    if (EVARS->find(name) == EVARS->end())
+    {
+        _error(std::string() + "op_fetch_external: exported variable \"" + name + "\" not found.");
+    }
     auto value = EVARS->at(name);
     debug << ", type = " << value.type() << ", value = " << value.toString() << std::endl;
     _vm->dataStack()->push(value);

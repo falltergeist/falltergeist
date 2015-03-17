@@ -47,7 +47,7 @@ public:
     virtual ~GameContainerItemObject();
     std::vector<GameItemObject*>* inventory();
 
-    virtual void use_p_proc();
+    virtual void use_p_proc(GameCritterObject* usedBy);
     
     void setLocked(bool locked);
     bool locked() const;

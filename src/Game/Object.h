@@ -173,12 +173,12 @@ public:
     // call "map_update_p_proc" when map is updating (once every N frames, after times skip in pipboy)
     virtual void map_update_p_proc();
     // call "pickup_p_proc" of the script entity (when picking up item object)
-    virtual void pickup_p_proc();
+    virtual void pickup_p_proc(GameCritterObject* pickedUpBy);
     virtual void spatial_p_proc();
     // perform "use" action, may call "use_p_proc" of the underlying script
-    virtual void use_p_proc();
+    virtual void use_p_proc(GameCritterObject* usedBy);
     // perform "use object on" action, may call "use_obj_on_p_proc" procedure
-    virtual void use_obj_on_p_proc();
+    virtual void use_obj_on_p_proc(GameObject* objectUsed, GameCritterObject* usedBy);
 
     virtual void onUseAnimationActionFrame(Event* event, GameCritterObject* critter);
     virtual void onUseAnimationEnd(Event* event, GameCritterObject* critter);

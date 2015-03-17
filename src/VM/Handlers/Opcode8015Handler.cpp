@@ -43,7 +43,7 @@ void Opcode8015Handler::_run()
     auto value = _vm->dataStack()->pop();
     auto game = Game::getInstance();
     auto EVARS = game->locationState()->EVARS();
-    EVARS->at(name) = value;
+    (*EVARS)[name] = value;
 }
 
 }
