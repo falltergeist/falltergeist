@@ -52,7 +52,8 @@ public:
 
     virtual bool canWalkThru() const;
 
-    virtual void use_p_proc();
+    virtual void use_p_proc(GameCritterObject* usedBy);
+
 
     void onOpeningAnimationEnded(Event* event);
     void onClosingAnimationEnded(Event* event);

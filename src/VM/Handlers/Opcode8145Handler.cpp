@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2014 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -20,31 +20,44 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Game/Game.h"
+#include "../../Game/CritterObject.h"
 #include "../../Logger.h"
-#include "../../State/Location.h"
-#include "../../VM/Handlers/Opcode8016Handler.h"
+#include "../../VM/Handlers/Opcode8145Handler.h"
 #include "../../VM/VM.h"
+
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Opcode8016Handler::Opcode8016Handler(VM* vm) : OpcodeHandler(vm)
+Opcode8145Handler::Opcode8145Handler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode8016Handler::_run()
+void Opcode8145Handler::_run()
 {
-    auto name = _vm->dataStack()->popString();
-    auto EVARS = Game::getInstance()->locationState()->EVARS();
-    if (EVARS->find(name) == EVARS->end())
+    Logger::debug("SCRIPT") << "[8145] [=] void use_obj_on_obj(void* item, void* target)" << std::endl;
+    auto selfCritter = dynamic_cast<Game::GameCritterObject*>(_vm->owner());
+    if (!selfCritter)
     {
-        EVARS->insert(std::make_pair(name, VMStackValue(0)));
+        _error("use_obj_on_obj: owner is not a critter!");
     }
-    Logger::debug("SCRIPT") << "[8016] [*] op_export_var(name)" << std::endl
-                            << "    name: " << name << std::endl;
+    auto target = _vm->dataStack()->popObject();
+    if (!target)
+    {
+        _error("use_obj_on_obj: target is null");
+    }
+    auto item = _vm->dataStack()->popObject();
+    if (!item)
+    {
+        _error("use_obj_on_obj: item is null");
+    }
+    // @TODO: play animation
+    //selfCritter->setActionAnimation("al");
+    target->use_obj_on_p_proc(item, selfCritter);
+    
 }
 
 }
+

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2014 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -17,34 +17,26 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef FALLTERGEIST_OPCODE8145HANDLER_H
+#define FALLTERGEIST_OPCODE8145HANDLER_H
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Game/Game.h"
-#include "../../Logger.h"
-#include "../../State/Location.h"
-#include "../../VM/Handlers/Opcode8016Handler.h"
-#include "../../VM/VM.h"
+#include "../../VM/OpcodeHandler.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Opcode8016Handler::Opcode8016Handler(VM* vm) : OpcodeHandler(vm)
+class Opcode8145Handler : public OpcodeHandler
 {
-}
-
-void Opcode8016Handler::_run()
-{
-    auto name = _vm->dataStack()->popString();
-    auto EVARS = Game::getInstance()->locationState()->EVARS();
-    if (EVARS->find(name) == EVARS->end())
-    {
-        EVARS->insert(std::make_pair(name, VMStackValue(0)));
-    }
-    Logger::debug("SCRIPT") << "[8016] [*] op_export_var(name)" << std::endl
-                            << "    name: " << name << std::endl;
-}
+public:
+    Opcode8145Handler(VM* vm);
+private:
+    void _run();
+};
 
 }
+#endif
