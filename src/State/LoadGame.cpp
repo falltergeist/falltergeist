@@ -21,6 +21,7 @@
 #include <sstream>
 
 // Falltergeist includes
+#include "../Event/EventManager.h"
 #include "../Event/StateEvent.h"
 #include "../functions.h"
 #include "../Game/Game.h"
@@ -77,12 +78,12 @@ void LoadGame::init()
 
     // button: Done
     auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+391, bgY+349);
-    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); }, doneButton);
     addUI(doneButton);
 
     // button: Cancel
     auto cancelButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+495, bgY+349);
-    cancelButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doCancel(); });
+    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->doCancel(); }, cancelButton);
     addUI(cancelButton);
 
     // LABELS
@@ -114,8 +115,8 @@ void LoadGame::doCancel()
 {
     if (!Game::getInstance()->locationState())
     {
-        removeEventHandlers("fadedone");
-        addEventHandler("fadedone", [this](Event* event){ this->onCancelFadeDone(dynamic_cast<StateEvent*>(event)); });
+        EventManager::getInstance()->removeHandlers("fadedone");
+        EventManager::getInstance()->addHandler("fadedone", [this](Event* event){ this->onCancelFadeDone(dynamic_cast<StateEvent*>(event)); });
         Game::getInstance()->renderer()->fadeOut(255,255,255,1000);
     }
     else
@@ -126,7 +127,7 @@ void LoadGame::doCancel()
 
 void LoadGame::onCancelFadeDone(StateEvent* event)
 {
-    removeEventHandlers("fadedone");
+    EventManager::getInstance()->removeHandlers("fadedone");
     Game::getInstance()->popState();
 }
 

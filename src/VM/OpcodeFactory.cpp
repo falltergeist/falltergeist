@@ -18,7 +18,6 @@
  */
 
 // C++ standard includes
-#include <sstream>
 
 // Falltergeist includes
 #include "../Exception.h"
@@ -180,7 +179,6 @@
 #include "../VM/Handlers/Opcode8139Handler.h"
 #include "../VM/Handlers/Opcode813CHandler.h"
 #include "../VM/Handlers/Opcode8143Handler.h"
-#include "../VM/Handlers/Opcode8145Handler.h"
 #include "../VM/Handlers/Opcode8147Handler.h"
 #include "../VM/Handlers/Opcode8149Handler.h"
 #include "../VM/Handlers/Opcode814BHandler.h"
@@ -369,7 +367,6 @@ OpcodeHandler* OpcodeFactory::createOpcode(unsigned int number, VM* vm)
         case 0x8139: return new Opcode8139Handler(vm);
         case 0x813C: return new Opcode813CHandler(vm);
         case 0x8143: return new Opcode8143Handler(vm);
-        case 0x8145: return new Opcode8145Handler(vm);
         case 0x8147: return new Opcode8147Handler(vm);
         case 0x8149: return new Opcode8149Handler(vm);
         case 0x814B: return new Opcode814BHandler(vm);
@@ -384,11 +381,7 @@ OpcodeHandler* OpcodeFactory::createOpcode(unsigned int number, VM* vm)
         case 0xC001: return new OpcodeC001Handler(vm);
         case 0xA001: return new OpcodeA001Handler(vm);
         default:
-        {
-            std::stringstream ss;
-            ss << "OpcodeFactory::createOpcode() - unimplemented opcode: " << std::hex << number;
-            throw Exception(ss.str());
-        }
+            throw Exception("OpcodeFactory::createOpcode() - unimplemented opcode: " + std::to_string(number));
     }
 }
 

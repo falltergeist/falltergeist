@@ -17,33 +17,44 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef FALLTERGEIST_EVENTHANDLER_H
+#define FALLTERGEIST_EVENTHANDLER_H
+
 // C++ standard includes
+#include <functional>
 
 // Falltergeist includes
-#include "../../Game/Game.h"
-#include "../../State/Location.h"
-#include "../../Logger.h"
-#include "../../VM/Handlers/Opcode8015Handler.h"
-#include "../../VM/VM.h"
-#include "../../VM/VMStackValue.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+class Event;
+class EventSender;
 
-Opcode8015Handler::Opcode8015Handler(Falltergeist::VM *vm) : OpcodeHandler(vm)
+class EventHandler
 {
-}
 
-void Opcode8015Handler::_run()
-{
-    Logger::debug("SCRIPT") << "[8015] [*] op_store_external(name, value)" << std::endl;
-    std::string name = _vm->dataStack()->popString();
-    auto value = _vm->dataStack()->pop();
-    auto game = Game::getInstance();
-    auto EVARS = game->locationState()->EVARS();
-    EVARS->at(name) = value;
-}
+public:
+    EventHandler(std::function<void(Event*)> handler);
+    ~EventHandler();
+
+    bool deleted() const;
+    void setDeleted(bool value);
+
+    EventSender* sender() const;
+    void setSender(EventSender* sender);
+
+    void operator()(Event*);
+
+protected:
+
+    bool _deleted = false;
+    EventSender* _sender = nullptr;
+
+    std::function<void(Event*)> _handler;
+
+};
 
 }
+#endif // FALLTERGEIST_EVENTHANDLER_H

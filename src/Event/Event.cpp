@@ -36,7 +36,7 @@ Event::~Event()
 {
 }
 
-std::string Event::name()
+std::string Event::name() const
 {
     return _name;
 }
@@ -46,17 +46,17 @@ void Event::setName(std::string name)
     _name = name;
 }
 
-EventEmitter* Event::emitter()
+EventSender* Event::sender() const
 {
-    return _emitter;
+    return _sender;
 }
 
-void Event::setEmitter(EventEmitter* value)
+void Event::setSender(EventSender* value)
 {
-    _emitter = value;
+    _sender = value;
 }
 
-bool Event::handled()
+bool Event::handled() const
 {
     return _handled;
 }

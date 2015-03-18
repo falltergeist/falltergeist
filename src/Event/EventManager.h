@@ -17,48 +17,47 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMEDOORSCENERYOBJECT_H
-#define FALLTERGEIST_GAMEDOORSCENERYOBJECT_H
+#ifndef FALLTERGEIST_EVENTMANAGER_H
+#define FALLTERGEIST_EVENTMANAGER_H
 
 // C++ standard includes
+#include <functional>
+#include <map>
+#include <string>
+#include <vector>
 
 // Falltergeist includes
-#include "SceneryObject.h"
+#include "../Event/Event.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-namespace Game
+
+class EventHandler;
+class EventSender;
+
+class EventManager
 {
 
-/**
- * Doors. Can be opened, closed, locked and unlocked.
- */
-class GameDoorSceneryObject : public GameSceneryObject
-{
-protected:
-    bool _opened = false;
-    bool _locked = false;
 public:
-    GameDoorSceneryObject();
-    virtual ~GameDoorSceneryObject();
+    static EventManager* getInstance();
+    void handle(Event* event);
+    void addHandler(std::string eventName, std::function<void(Event*)> function, EventSender* sender = nullptr);
+    void removeHandlers(std::string eventName, EventSender* sender = nullptr);
+    void removeHandlers(EventSender *sender = nullptr);
+    void think();
 
-    bool opened() const;
-    void setOpened(bool value);
+protected:
+    static EventManager* _instance;
+    std::map<std::string, std::vector<EventHandler*>> _handlers;
 
-    bool locked() const;
-    void setLocked(bool value);
+    EventManager();
+    EventManager(const EventManager&);
+    EventManager& operator=(EventManager&);
+    ~EventManager();
 
-    virtual bool canWalkThru() const;
-
-    virtual void use_p_proc();
-
-    void onOpeningAnimationEnded(Event* event);
-    void onClosingAnimationEnded(Event* event);
 };
 
 }
-}
-
-#endif // FALLTERGEIST_GAMEDOORSCENERYOBJECT_H
+#endif // FALLTERGEIST_EVENTMANAGER_H

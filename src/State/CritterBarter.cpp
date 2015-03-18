@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Event/EventManager.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../State/CritterBarter.h"
@@ -54,12 +55,12 @@ void CritterBarter::init()
     setY((Game::getInstance()->renderer()->height() - 480)*0.5 + 291);
 
     addUI("background",new Image("art/intrface/barter.frm"));
-    getActiveUI("background")->addEventHandler("mouseleftclick", std::bind(&CritterBarter::onBackgroundClick, this, std::placeholders::_1));
+    EventManager::getInstance()->addHandler("mouseleftclick", std::bind(&CritterBarter::onBackgroundClick, this, std::placeholders::_1), getActiveUI("background"));
 
     addUI("offerButton", new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, 40, 162));
 
     addUI("talkButton", new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, 583, 162));
-    getActiveUI("talkButton")->addEventHandler("mouseleftclick", std::bind(&CritterBarter::onTalkButtonClick, this, std::placeholders::_1));
+    EventManager::getInstance()->addHandler("mouseleftclick", std::bind(&CritterBarter::onTalkButtonClick, this, std::placeholders::_1), getActiveUI("talkButton"));
 
     addUI("mineInventoryScrollUpButton",   new ImageButton(ImageButton::TYPE_DIALOG_UP_ARROW,   190, 56));
     addUI("mineInventoryScrollDownButton", new ImageButton(ImageButton::TYPE_DIALOG_DOWN_ARROW, 190, 82));

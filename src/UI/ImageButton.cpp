@@ -21,11 +21,12 @@
 #include <string>
 
 // Falltergeist includes
+#include "../Audio/AudioMixer.h"
+#include "../Event/EventManager.h"
 #include "../Exception.h"
+#include "../Game/Game.h"
 #include "../ResourceManager.h"
 #include "../UI/ImageButton.h"
-#include "../Game/Game.h"
-#include "../Audio/AudioMixer.h"
 
 // Third party includes
 
@@ -199,9 +200,9 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
     }
-    addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mouseleftdown", [this](Event* event){ this->_onLeftButtonDown(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mouseout", [this](Event* event){ this->_onMouseOut(dynamic_cast<MouseEvent*>(event)); });
+    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); }, this);
+    EventManager::getInstance()->addHandler("mouseleftdown", [this](Event* event){ this->_onLeftButtonDown(dynamic_cast<MouseEvent*>(event)); }, this);
+    EventManager::getInstance()->addHandler("mouseout", [this](Event* event){ this->_onMouseOut(dynamic_cast<MouseEvent*>(event)); }, this);
 }
 
 ImageButton::~ImageButton()
@@ -219,7 +220,7 @@ Texture* ImageButton::texture()
 
 void ImageButton::_onLeftButtonClick(MouseEvent* event)
 {
-    auto sender = dynamic_cast<ImageButton*>(event->emitter());
+    auto sender = (ImageButton*)event->sender();
     if (sender->_checkboxMode)
     {
         sender->_checked = !sender->_checked;
@@ -232,23 +233,21 @@ void ImageButton::_onLeftButtonClick(MouseEvent* event)
 
 void ImageButton::_onLeftButtonDown(MouseEvent* event)
 {
-    auto sender = dynamic_cast<ImageButton*>(event->emitter());
+    auto sender = (ImageButton*)event->sender();
     if (!sender->_downSnd.empty())
     {
         Game::getInstance()->mixer()->playACMSound(sender->_downSnd);
     }
 }
 
-
 void ImageButton::_onMouseOut(MouseEvent* event)
 {
-    auto sender = dynamic_cast<ImageButton*>(event->emitter());
+    auto sender = (ImageButton*)event->sender();
     if (_leftButtonPressed && !sender->_upSnd.empty())
     {
         Game::getInstance()->mixer()->playACMSound(sender->_upSnd);
     }
 }
-
 
 bool ImageButton::checked()
 {

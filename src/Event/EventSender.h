@@ -17,15 +17,10 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_EVENTEMITTER_H
-#define FALLTERGEIST_EVENTEMITTER_H
+#ifndef FALLTERGEIST_EVENTSENDER_H
+#define FALLTERGEIST_EVENTSENDER_H
 
 // C++ standard includes
-#include <map>
-#include <vector>
-#include <string>
-#include <memory>
-#include <functional>
 
 // Falltergeist includes
 
@@ -33,22 +28,13 @@
 
 namespace Falltergeist
 {
-class Event;
-class EventReciever;
-class EventHandler;
 
-class EventEmitter
+class EventSender
 {
-protected:
-    std::map<std::string, std::vector<std::function<void(Event*)>>> _eventHandlers;
 public:
-    EventEmitter();
-    virtual ~EventEmitter();
-
-    void addEventHandler(std::string eventName, std::function<void(Event*)> handler);
-    void emitEvent(Event* event);
-    void removeEventHandlers(std::string eventName);
+    EventSender();
+    virtual ~EventSender();
 };
 
 }
-#endif // FALLTERGEIST_EVENTEMITTER_H
+#endif // FALLTERGEIST_EVENTSENDER_H

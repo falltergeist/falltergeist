@@ -41,7 +41,7 @@ void Opcode8016Handler::_run()
     auto EVARS = Game::getInstance()->locationState()->EVARS();
     if (EVARS->find(name) == EVARS->end())
     {
-        EVARS->insert(std::make_pair(name, VMStackValue(0)));
+        EVARS->insert(std::make_pair(name, nullptr));
     }
     Logger::debug("SCRIPT") << "[8016] [*] op_export_var(name)" << std::endl
                             << "    name: " << name << std::endl;

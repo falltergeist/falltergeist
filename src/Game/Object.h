@@ -28,6 +28,7 @@
 
 // Falltergeist includes
 #include "../Event/Event.h"
+#include "../Event/EventSender.h"
 
 // Third party includes
 
@@ -47,35 +48,8 @@ namespace Game
 {
 class GameCritterObject;
 
-class GameObject : public EventEmitter
+class GameObject : public EventSender
 {
-protected:
-    bool _canWalkThru = true;
-    bool _canLightThru = true;
-    bool _canShootThru = true;
-    bool _wallTransEnd = false;
-    bool _flat = false;
-    int _type = -1;
-    int _subtype = -1;
-    int _PID = -1;
-    int _FID = -1;
-    int _elevation = 0;
-    int _orientation = 0;
-    std::string _name;
-    std::string _description;
-    VM* _script = 0;
-    ActiveUI* _ui = 0;
-    Hexagon* _hexagon = 0;
-    virtual void _generateUi();
-    void addUIEventHandlers();
-    TextArea* _floatMessage = 0;
-    bool _inRender = false;
-    unsigned int _trans = 0;
-    unsigned short _lightOrientation;
-    bool _transparent = false;
-    Texture* _tmptex = NULL;
-    unsigned int _lightIntensity = 0;
-    unsigned int _lightRadius = 0;
 public:
     enum { TYPE_ITEM = 0, TYPE_CRITTER, TYPE_SCENERY, TYPE_WALL, TYPE_TILE, TYPE_MISC, TYPE_DUDE };
     enum { TYPE_ITEM_ARMOR = 0, TYPE_ITEM_CONTAINER, TYPE_ITEM_DRUG, TYPE_ITEM_WEAPON, TYPE_ITEM_AMMO, TYPE_ITEM_MISC, TYPE_ITEM_KEY };
@@ -173,12 +147,12 @@ public:
     // call "map_update_p_proc" when map is updating (once every N frames, after times skip in pipboy)
     virtual void map_update_p_proc();
     // call "pickup_p_proc" of the script entity (when picking up item object)
-    virtual void pickup_p_proc(GameCritterObject* pickedUpBy);
+    virtual void pickup_p_proc();
     virtual void spatial_p_proc();
     // perform "use" action, may call "use_p_proc" of the underlying script
-    virtual void use_p_proc(GameCritterObject* usedBy);
+    virtual void use_p_proc();
     // perform "use object on" action, may call "use_obj_on_p_proc" procedure
-    virtual void use_obj_on_p_proc(GameObject* objectUsed, GameCritterObject* usedBy);
+    virtual void use_obj_on_p_proc();
 
     virtual void onUseAnimationActionFrame(Event* event, GameCritterObject* critter);
     virtual void onUseAnimationEnd(Event* event, GameCritterObject* critter);
@@ -196,6 +170,35 @@ public:
 
     bool flat() const;
     virtual void setFlat(bool value);
+
+protected:
+    bool _canWalkThru = true;
+    bool _canLightThru = true;
+    bool _canShootThru = true;
+    bool _wallTransEnd = false;
+    bool _flat = false;
+    int _type = -1;
+    int _subtype = -1;
+    int _PID = -1;
+    int _FID = -1;
+    int _elevation = 0;
+    int _orientation = 0;
+    std::string _name;
+    std::string _description;
+    VM* _script = 0;
+    ActiveUI* _ui = 0;
+    Hexagon* _hexagon = 0;
+    virtual void _generateUi();
+    void addUIEventHandlers();
+    TextArea* _floatMessage = 0;
+    bool _inRender = false;
+    unsigned int _trans = 0;
+    unsigned short _lightOrientation;
+    bool _transparent = false;
+    Texture* _tmptex = NULL;
+    unsigned int _lightIntensity = 0;
+    unsigned int _lightRadius = 0;
+
 };
 
 }
