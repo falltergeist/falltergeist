@@ -25,6 +25,7 @@
 
 // Falltergeist includes
 #include "../Event/Event.h"
+#include "../Event/EventSender.h"
 #include "../Event/MouseEvent.h"
 #include "../Event/KeyboardEvent.h"
 #include "../Graphics/UI.h"
@@ -34,7 +35,7 @@
 namespace Falltergeist
 {
 
-class ActiveUI : public EventEmitter, public UI
+class ActiveUI : public UI, public EventSender
 {
 protected:
     std::string _downSnd = "";

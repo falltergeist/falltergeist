@@ -45,7 +45,7 @@ std::vector<GameItemObject*>* GameContainerItemObject::inventory()
     return &_inventory;
 }
 
-void GameContainerItemObject::use_p_proc(GameCritterObject* usedBy)
+void GameContainerItemObject::use_p_proc()
 {
     auto state = new State::Container();
     state->setObject(this);

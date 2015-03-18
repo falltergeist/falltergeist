@@ -20,30 +20,46 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Game/Game.h"
-#include "../../State/Location.h"
-#include "../../Logger.h"
-#include "../../VM/Handlers/Opcode8015Handler.h"
-#include "../../VM/VM.h"
-#include "../../VM/VMStackValue.h"
+#include "../Event/EventHandler.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Opcode8015Handler::Opcode8015Handler(Falltergeist::VM *vm) : OpcodeHandler(vm)
+EventHandler::EventHandler(std::function<void(Event*)> handler)
+{
+    _handler = handler;
+}
+
+EventHandler::~EventHandler()
 {
 }
 
-void Opcode8015Handler::_run()
+bool EventHandler::deleted() const
 {
-    Logger::debug("SCRIPT") << "[8015] [*] op_store_external(name, value)" << std::endl;
-    std::string name = _vm->dataStack()->popString();
-    auto value = _vm->dataStack()->pop();
-    auto game = Game::getInstance();
-    auto EVARS = game->locationState()->EVARS();
-    EVARS->at(name) = value;
+    return _deleted;
+}
+
+void EventHandler::setDeleted(bool value)
+{
+    _deleted = value;
+}
+
+EventSender* EventHandler::sender() const
+{
+    return _sender;
+}
+
+void EventHandler::setSender(EventSender* sender)
+{
+    _sender = sender;
+}
+
+void EventHandler::operator()(Event* event)
+{
+    if (_deleted) return;
+    return _handler(event);
 }
 
 }

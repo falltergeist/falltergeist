@@ -21,16 +21,17 @@
 #include <cmath>
 
 // Falltergeist includes
+#include "../Event/EventManager.h"
+#include "../Game/DudeObject.h"
+#include "../Game/Game.h"
+#include "../Graphics/AnimatedPalette.h"
 #include "../Graphics/Animation.h"
 #include "../Graphics/AnimationFrame.h"
-#include "../Graphics/Texture.h"
-#include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
-#include "../Graphics/AnimatedPalette.h"
-#include "../ResourceManager.h"
-#include "../Game/DudeObject.h"
-#include "../State/Location.h"
+#include "../Graphics/Texture.h"
 #include "../LocationCamera.h"
+#include "../ResourceManager.h"
+#include "../State/Location.h"
 
 // Third party includes
 #include "SDL.h"
@@ -102,7 +103,7 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
                 unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
 
                 //modify
-                for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
+                for (auto j = 0; j < frm->width() * frm->height(); j++)
                 {
                     mask[j] = palette->color((*masks)[MASK::MONITOR][j],i);
                 }
@@ -115,12 +116,12 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
 
         if ((*masks)[MASK::SLIME] != NULL)
         {
-            for (auto i=0; i<4; i++)
+            for (auto i = 0; i < 4; i++)
             {
                 unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
 
                 //modify
-                for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
+                for (auto j = 0; j < frm->width() * frm->height(); j++)
                 {
                     mask[j] = palette->color(((*masks)[MASK::SLIME][j]),i);
                 }
@@ -133,12 +134,12 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
 
         if ((*masks)[MASK::SHORE] != NULL)
         {
-            for (auto i=0; i<6; i++)
+            for (auto i = 0; i < 6; i++)
             {
                 unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
 
                 //modify
-                for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
+                for (auto j = 0; j < frm->width() * frm->height(); j++)
                 {
                     mask[j] = palette->color(((*masks)[MASK::SHORE][j]),i);
                 }
@@ -152,12 +153,12 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
 
         if ((*masks)[MASK::FIRE_SLOW] != NULL)
         {
-            for (auto i=0; i<5; i++)
+            for (auto i = 0; i < 5; i++)
             {
                 unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
 
                 //modify
-                for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
+                for (auto j = 0; j < frm->width() * frm->height(); j++)
                 {
                     mask[j] = palette->color(((*masks)[MASK::FIRE_SLOW][j]),i);
                 }
@@ -171,11 +172,11 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
 
         if ((*masks)[MASK::FIRE_FAST] != NULL)
         {
-            for (auto i=0; i<5; i++)
+            for (auto i = 0; i < 5; i++)
             {
                 unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
                 //modify
-                for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
+                for (auto j = 0; j < frm->width() * frm->height(); j++)
                 {
                     mask[j] = palette->color(((*masks)[MASK::FIRE_FAST][j]),i);
                 }
@@ -188,11 +189,11 @@ Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
 
         if ((*masks)[MASK::REDDOT] != NULL)
         {
-            for (auto i=0; i<16; i++)
+            for (auto i = 0; i < 16; i++)
             {
                 unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
                 //modify
-                for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
+                for (auto j = 0; j < frm->width() * frm->height(); j++)
                 {
                     mask[j] = palette->color(((*masks)[MASK::REDDOT][j]),i);
                 }
@@ -245,7 +246,8 @@ void Animation::think()
             if (_actionFrame == _currentFrame)
             {
                 auto event = new Event("actionFrame");
-                emitEvent(event);
+                event->setSender(this);
+                EventManager::getInstance()->handle(event);
                 delete event;
             }
         }
@@ -254,7 +256,8 @@ void Animation::think()
             _ended = true;
             _playing = false;
             auto event = new Event("animationEnded");
-            emitEvent(event);
+            event->setSender(this);
+            EventManager::getInstance()->handle(event);
             delete event;
         }
     }
@@ -274,22 +277,34 @@ void Animation::render(bool eggTransparency)
             Game::getInstance()->renderer()->drawTexture(_texture, x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
 
             if (pal->getCounter(MASK::FIRE_FAST) < _fireFastTextures.size())
+            {
                 Game::getInstance()->renderer()->drawTexture(_fireFastTextures.at(pal->getCounter(MASK::FIRE_FAST)), x(), y(), frame->x(), frame->y(), frame->width(), frame->height());
+            }
 
             if (pal->getCounter(MASK::FIRE_SLOW) < _fireSlowTextures.size())
+            {
                 Game::getInstance()->renderer()->drawTexture(_fireSlowTextures.at(pal->getCounter(MASK::FIRE_SLOW)), x(), y(), frame->x(), frame->y(), frame->width(), frame->height());
+            }
 
             if (pal->getCounter(MASK::SLIME) < _slimeTextures.size())
+            {
                 Game::getInstance()->renderer()->drawTexture(_slimeTextures.at(pal->getCounter(MASK::SLIME)), x(), y(), frame->x(), frame->y(), frame->width(), frame->height());
+            }
 
             if (pal->getCounter(MASK::SHORE) < _shoreTextures.size())
+            {
                 Game::getInstance()->renderer()->drawTexture(_shoreTextures.at(pal->getCounter(MASK::SHORE)), x(), y(), frame->x(), frame->y(), frame->width(), frame->height());
+            }
 
             if (pal->getCounter(MASK::MONITOR) < _monitorTextures.size())
+            {
                 Game::getInstance()->renderer()->drawTexture(_monitorTextures.at(pal->getCounter(MASK::MONITOR)), x(), y(), frame->x(), frame->y(), frame->width(), frame->height());
+            }
 
             if (pal->getCounter(MASK::REDDOT) < _reddotTextures.size())
+            {
                 Game::getInstance()->renderer()->drawTexture(_reddotTextures.at(pal->getCounter(MASK::REDDOT)), x(), y(), frame->x(), frame->y(), frame->width(), frame->height());
+            }
 
             return;
         }
@@ -313,22 +328,34 @@ void Animation::render(bool eggTransparency)
             Game::getInstance()->renderer()->drawTexture(_texture, x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
 
             if (pal->getCounter(MASK::FIRE_FAST) < _fireFastTextures.size())
+            {
                 Game::getInstance()->renderer()->drawTexture(_fireFastTextures.at(pal->getCounter(MASK::FIRE_FAST)), x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+            }
 
             if (pal->getCounter(MASK::FIRE_SLOW) < _fireSlowTextures.size())
+            {
                 Game::getInstance()->renderer()->drawTexture(_fireSlowTextures.at(pal->getCounter(MASK::FIRE_SLOW)), x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+            }
 
             if (pal->getCounter(MASK::SLIME) < _slimeTextures.size())
+            {
                 Game::getInstance()->renderer()->drawTexture(_slimeTextures.at(pal->getCounter(MASK::SLIME)), x(), y(), frame->x() + xOffset(), frame->y() + yOffset(), frame->width(), frame->height());
+            }
 
             if (pal->getCounter(MASK::SHORE) < _shoreTextures.size())
+            {
                 Game::getInstance()->renderer()->drawTexture(_shoreTextures.at(pal->getCounter(MASK::SHORE)), x(), y(), frame->x() + xOffset(), frame->y() + yOffset(), frame->width(), frame->height());
+            }
 
             if (pal->getCounter(MASK::MONITOR) < _monitorTextures.size())
+            {
                 Game::getInstance()->renderer()->drawTexture(_monitorTextures.at(pal->getCounter(MASK::MONITOR)), x(), y(), frame->x() + xOffset(), frame->y() + yOffset(), frame->width(), frame->height());
+            }
 
             if (pal->getCounter(MASK::REDDOT) < _reddotTextures.size())
+            {
                 Game::getInstance()->renderer()->drawTexture(_reddotTextures.at(pal->getCounter(MASK::REDDOT)), x(), y(), frame->x() + xOffset(), frame->y() + yOffset(), frame->width(), frame->height());
+            }
 
             return;
         }
@@ -337,33 +364,45 @@ void Animation::render(bool eggTransparency)
         texture()->copyTo(_tmptex);
 
         if (pal->getCounter(MASK::FIRE_FAST) < _fireFastTextures.size())
+        {
             _fireFastTextures.at(pal->getCounter(MASK::FIRE_FAST))->copyTo(_tmptex);
+        }
 
         if (pal->getCounter(MASK::FIRE_SLOW) < _fireSlowTextures.size())
+        {
            _fireSlowTextures.at(pal->getCounter(MASK::FIRE_SLOW))->copyTo(_tmptex);
+        }
 
         if (pal->getCounter(MASK::SLIME) < _slimeTextures.size())
+        {
             _slimeTextures.at(pal->getCounter(MASK::SLIME))->copyTo(_tmptex);
+        }
 
         if (pal->getCounter(MASK::SHORE) < _shoreTextures.size())
+        {
             _shoreTextures.at(pal->getCounter(MASK::SHORE))->copyTo(_tmptex);
+        }
 
         if (pal->getCounter(MASK::MONITOR) < _monitorTextures.size())
+        {
             _monitorTextures.at(pal->getCounter(MASK::MONITOR))->copyTo(_tmptex);
+        }
 
         if (pal->getCounter(MASK::REDDOT) < _reddotTextures.size())
+        {
             _reddotTextures.at(pal->getCounter(MASK::REDDOT))->copyTo(_tmptex);
+        }
 
         //This is sloooow. But unfortunately sdl doesnt allow to blit over only alpha =/
         for (unsigned int x = 0; x < texture()->width(); x++)
         {
             for (unsigned int y = 0; y < texture()->height(); y++)
             {
-                if (x+egg_dx >= egg->width()) continue;
-                if (y+egg_dy >= egg->height()) continue;
-                if (x+egg_dx < 0) continue;
-                if (y+egg_dy < 0) continue;
-                _tmptex->setPixel(x, y, _tmptex->pixel(x,y) & egg->pixel(x+egg_dx, y+egg_dy));
+                if (x + egg_dx >= egg->width()) continue;
+                if (y + egg_dy >= egg->height()) continue;
+                if (x + egg_dx < 0) continue;
+                if (y + egg_dy < 0) continue;
+                _tmptex->setPixel(x, y, _tmptex->pixel(x, y) & egg->pixel(x + egg_dx, y + egg_dy));
             }
         }
         Game::getInstance()->renderer()->drawTexture(_tmptex, x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
@@ -373,22 +412,34 @@ void Animation::render(bool eggTransparency)
         Game::getInstance()->renderer()->drawTexture(_texture, x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
 
         if (pal->getCounter(MASK::FIRE_FAST) < _fireFastTextures.size())
+        {
             Game::getInstance()->renderer()->drawTexture(_fireFastTextures.at(pal->getCounter(MASK::FIRE_FAST)), x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+        }
 
         if (pal->getCounter(MASK::FIRE_SLOW) < _fireSlowTextures.size())
+        {
             Game::getInstance()->renderer()->drawTexture(_fireSlowTextures.at(pal->getCounter(MASK::FIRE_SLOW)), x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+        }
 
         if (pal->getCounter(MASK::SLIME) < _slimeTextures.size())
+        {
             Game::getInstance()->renderer()->drawTexture(_slimeTextures.at(pal->getCounter(MASK::SLIME)), x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+        }
 
         if (pal->getCounter(MASK::SHORE) < _shoreTextures.size())
+        {
             Game::getInstance()->renderer()->drawTexture(_shoreTextures.at(pal->getCounter(MASK::SHORE)), x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+        }
 
         if (pal->getCounter(MASK::MONITOR) < _monitorTextures.size())
+        {
             Game::getInstance()->renderer()->drawTexture(_monitorTextures.at(pal->getCounter(MASK::MONITOR)), x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+        }
 
         if (pal->getCounter(MASK::REDDOT) < _reddotTextures.size())
+        {
             Game::getInstance()->renderer()->drawTexture(_reddotTextures.at(pal->getCounter(MASK::REDDOT)), x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+        }
     }
 }
 

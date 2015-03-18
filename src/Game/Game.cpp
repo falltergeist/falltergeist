@@ -23,10 +23,11 @@
 // Falltergeist includes
 #include "../Audio/AudioMixer.h"
 #include "../CrossPlatform.h"
+#include "../Event/EventManager.h"
 #include "../Event/StateEvent.h"
 #include "../Exception.h"
-#include "Game.h"
-#include "Time.h"
+#include "../Game/Game.h"
+#include "../Game/Time.h"
 #include "../Graphics/AnimatedPalette.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
@@ -155,7 +156,8 @@ void Game::popState()
     _statesForDelete.push_back(state);
 
     auto event = new StateEvent("deactivate");
-    state->emitEvent(event);
+    event->setSender(state);
+    EventManager::getInstance()->handle(event);
     delete event;
 }
 
@@ -282,7 +284,8 @@ std::vector<State::State*>* Game::statesForThinkAndHandle()
         if (!state->active())
         {
             auto event = new StateEvent("activate");
-            state->emitEvent(event);
+            event->setSender(state);
+            EventManager::getInstance()->handle(event);
             state->setActive(true);
             delete event;
         }
@@ -300,7 +303,8 @@ std::vector<State::State*>* Game::statesForThinkAndHandle()
         if (state->active())
         {
             auto event = new StateEvent("deactivate");
-            state->emitEvent(event);
+            event->setSender(state);
+            EventManager::getInstance()->handle(event);
             state->setActive(false);
             delete event;
         }
@@ -418,7 +422,8 @@ void Game::think()
     for (auto state : *statesForThinkAndHandle())
     {
         state->think();
-    }
+    }    
+    EventManager::getInstance()->think();
 }
 
 void Game::render()

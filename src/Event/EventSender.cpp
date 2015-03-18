@@ -20,30 +20,19 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Game/Game.h"
-#include "../../State/Location.h"
-#include "../../Logger.h"
-#include "../../VM/Handlers/Opcode8015Handler.h"
-#include "../../VM/VM.h"
-#include "../../VM/VMStackValue.h"
+#include "../Event/EventSender.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Opcode8015Handler::Opcode8015Handler(Falltergeist::VM *vm) : OpcodeHandler(vm)
+EventSender::EventSender()
 {
 }
 
-void Opcode8015Handler::_run()
+EventSender::~EventSender()
 {
-    Logger::debug("SCRIPT") << "[8015] [*] op_store_external(name, value)" << std::endl;
-    std::string name = _vm->dataStack()->popString();
-    auto value = _vm->dataStack()->pop();
-    auto game = Game::getInstance();
-    auto EVARS = game->locationState()->EVARS();
-    EVARS->at(name) = value;
 }
 
 }
