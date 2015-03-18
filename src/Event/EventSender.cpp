@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Event/EventManager.h"
 #include "../Event/EventSender.h"
 
 // Third party includes
@@ -33,6 +34,22 @@ EventSender::EventSender()
 
 EventSender::~EventSender()
 {
+    EventManager::getInstance()->removeHandlers(this);
+}
+
+void EventSender::addEventHandler(std::string eventName, std::function<void(Event*)> handler)
+{
+    EventManager::getInstance()->addHandler(eventName, handler, this);
+}
+
+void EventSender::removeEventHandlers(std::string eventName)
+{
+    EventManager::getInstance()->removeHandlers(eventName, this);
+}
+
+void EventSender::removeEventHandlers()
+{
+    EventManager::getInstance()->removeHandlers(this);
 }
 
 }

@@ -23,7 +23,6 @@
 // Falltergeist includes
 #include "../Exception.h"
 #include "../Event/EventSender.h"
-#include "../Event/EventManager.h"
 #include "../Game/CritterObject.h"
 #include "../Game/Defines.h"
 #include "../Game/DudeObject.h"
@@ -59,8 +58,7 @@ GameObject::GameObject() : EventSender()
 GameObject::~GameObject()
 {
     delete _ui;
-    delete _floatMessage;    
-    EventManager::getInstance()->removeHandlers(this);
+    delete _floatMessage;        
 }
 
 int GameObject::type() const
@@ -175,13 +173,12 @@ void GameObject::addUIEventHandlers()
     if (_ui)
     {
         auto state = Game::getInstance()->locationState();
-        auto eventManager = EventManager::getInstance();
 
-        eventManager->addHandler("mouseleftdown",  std::bind(&State::Location::onObjectMouseEvent, state, _1, this), _ui);
-        eventManager->addHandler("mouseleftclick", std::bind(&State::Location::onObjectMouseEvent, state, _1, this), _ui);
-        eventManager->addHandler("mousein",        std::bind(&State::Location::onObjectHover,      state, _1, this), _ui);
-        eventManager->addHandler("mousemove",      std::bind(&State::Location::onObjectHover,      state, _1, this), _ui);
-        eventManager->addHandler("mouseout",       std::bind(&State::Location::onObjectHover,      state, _1, this), _ui);
+        _ui->addEventHandler("mouseleftdown",  std::bind(&State::Location::onObjectMouseEvent, state, _1, this));
+        _ui->addEventHandler("mouseleftclick", std::bind(&State::Location::onObjectMouseEvent, state, _1, this));
+        _ui->addEventHandler("mousein",        std::bind(&State::Location::onObjectHover,      state, _1, this));
+        _ui->addEventHandler("mousemove",      std::bind(&State::Location::onObjectHover,      state, _1, this));
+        _ui->addEventHandler("mouseout",       std::bind(&State::Location::onObjectHover,      state, _1, this));
     }
 }
 
@@ -510,10 +507,10 @@ void GameObject::onUseAnimationActionFrame(Event* event, GameCritterObject* crit
     Animation* animation = dynamic_cast<Animation*>(critter->ui());
     if (animation)
     {
-        EventManager::getInstance()->removeHandlers("actionFrame", animation);
-        EventManager::getInstance()->addHandler("animationEnded", [this, critter](Event* event){
+        animation->removeEventHandlers("actionFrame");
+        animation->addEventHandler("animationEnded", [this, critter](Event* event){
             this->onUseAnimationEnd(event, critter);
-        }, animation);
+        });
     }
     else throw Exception("No animation for object!");
 }

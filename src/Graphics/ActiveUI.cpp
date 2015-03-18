@@ -36,7 +36,6 @@ ActiveUI::ActiveUI(int x, int y) : UI(x, y), EventSender()
 
 ActiveUI::~ActiveUI()
 {
-    EventManager::getInstance()->removeHandlers(this);
 }
 
 void ActiveUI::handle(Event* event)

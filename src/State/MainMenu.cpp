@@ -75,27 +75,27 @@ void MainMenu::init()
 
     // intro button
     auto introButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19));
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onIntroButtonClick(dynamic_cast<MouseEvent*>(event)); }, introButton);
+    introButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onIntroButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     // new game button
     auto newGameButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41));
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onNewGameButtonClick(dynamic_cast<MouseEvent*>(event)); }, newGameButton);
+    newGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onNewGameButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     // load game button
     auto loadGameButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*2));
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onLoadGameButtonClick(dynamic_cast<MouseEvent*>(event)); }, loadGameButton);
+    loadGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onLoadGameButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     // settings button
     auto settingsButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*3));
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onSettingsButtonClick(dynamic_cast<MouseEvent*>(event)); }, settingsButton);
+    settingsButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onSettingsButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     // credits button
     auto creditsButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*4));
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onCreditsButtonClick(dynamic_cast<MouseEvent*>(event)); }, creditsButton);
+    creditsButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCreditsButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     // exit button
     auto exitButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*5));
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onExitButtonClick(dynamic_cast<MouseEvent*>(event)); }, exitButton);
+    exitButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onExitButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     auto font4 = ResourceManager::font("font4.aaf", 0xb89c28ff);
 

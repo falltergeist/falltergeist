@@ -21,7 +21,6 @@
 #include <ctype.h>
 
 // Falltergeist includes
-#include "../Event/EventManager.h"
 #include "../Event/EventSender.h"
 #include "../functions.h"
 #include "../Game/Game.h"
@@ -112,10 +111,10 @@ void PlayerEditName::init()
     doneLabel->setFont(font3_b89c28ff);
 
     auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+45, bgY+43);
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); }, doneButton);
+    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     _name = new TextArea(Game::getInstance()->player()->name(), bgX+43, bgY+15);
-    EventManager::getInstance()->addHandler("keydown", [this](Event* event){ this->onTextAreaKeyDown(dynamic_cast<KeyboardEvent*>(event)); }, _name);
+    _name->addEventHandler("keydown", [this](Event* event){ this->onTextAreaKeyDown(dynamic_cast<KeyboardEvent*>(event)); });
 
     _cursor = new Image(5, 8);
     _cursor->setX(bgX+83);

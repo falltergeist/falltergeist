@@ -21,7 +21,6 @@
 
 // Falltergeist includes
 #include "../Audio/AudioMixer.h"
-#include "../Event/EventManager.h"
 #include "../Game/Game.h"
 #include "../Graphics/ActiveUI.h"
 #include "../Graphics/Renderer.h"
@@ -71,18 +70,18 @@ void PlayerPanel::init()
     setX((game->renderer()->width() - 640)*0.5);
     setY(game->renderer()->height() - iface->height());
     auto background = addUI("background", iface);
-    EventManager::getInstance()->addHandler("mouseleftdown", [this](Event* event){ this->onPanelMouseDown(dynamic_cast<MouseEvent*>(event)); }, background);
-    EventManager::getInstance()->addHandler("mousein", [this](Event* event){ this->onPanelMouseIn(dynamic_cast<MouseEvent*>(event)); }, background);
-    EventManager::getInstance()->addHandler("mouseout", [this](Event* event){ this->onPanelMouseOut(dynamic_cast<MouseEvent*>(event)); }, background);
+    background->addEventHandler("mouseleftdown", [this](Event* event){ this->onPanelMouseDown(dynamic_cast<MouseEvent*>(event)); });
+    background->addEventHandler("mousein", [this](Event* event){ this->onPanelMouseIn(dynamic_cast<MouseEvent*>(event)); });
+    background->addEventHandler("mouseout", [this](Event* event){ this->onPanelMouseOut(dynamic_cast<MouseEvent*>(event)); });
   
     addUI("change_hand_button", new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 218, 5));
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onChangeHandButtonClick(dynamic_cast<MouseEvent*>(event)); }, getActiveUI("change_hand_button"));
+    getActiveUI("change_hand_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onChangeHandButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     addUI("inventory_button", new ImageButton(ImageButton::TYPE_PANEL_INVENTORY, 211, 40));    
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onInventoryButtonClick(dynamic_cast<MouseEvent*>(event)); }, getActiveUI("inventory_button"));
+    getActiveUI("inventory_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onInventoryButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     addUI("options_button", new ImageButton(ImageButton::TYPE_PANEL_OPTIONS, 210, 61));
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onOptionsButtonClick(dynamic_cast<MouseEvent*>(event)); }, getActiveUI("options_button"));
+    getActiveUI("options_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onOptionsButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     addUI("attack_button", new ImageButton(ImageButton::TYPE_PANEL_ATTACK, 267, 25));
 
@@ -95,16 +94,16 @@ void PlayerPanel::init()
     getSmallCounter("armor_class")->setType(SmallCounter::SIGNED);
 
     addUI("skilldex_button", new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 523, 5));
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onSkilldexButtonClick(dynamic_cast<MouseEvent*>(event)); }, getActiveUI("skilldex_button"));
+    getActiveUI("skilldex_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onSkilldexButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     addUI("map_button", new ImageButton(ImageButton::TYPE_PANEL_MAP, 526, 39));
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onMapButtonClick(dynamic_cast<MouseEvent*>(event)); }, getActiveUI("map_button"));
+    getActiveUI("map_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onMapButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     addUI("cha_button", new ImageButton(ImageButton::TYPE_PANEL_CHA, 526, 58));
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onChaButtonClick(dynamic_cast<MouseEvent*>(event)); }, getActiveUI("cha_button"));
+    getActiveUI("cha_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onChaButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     addUI("pip_button", new ImageButton(ImageButton::TYPE_PANEL_PIP, 526, 77));
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onPipBoyButtonClick(dynamic_cast<MouseEvent*>(event)); }, getActiveUI("pip_button"));
+    getActiveUI("pip_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onPipBoyButtonClick(dynamic_cast<MouseEvent*>(event)); });
 }
 
 void PlayerPanel::playWindowOpenSfx()

@@ -22,7 +22,6 @@
 #include <algorithm>
 
 // Falltergeist includes
-#include "../Event/EventManager.h"
 #include "../Event/EventSender.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
@@ -41,6 +40,8 @@
 #include "../VM/VM.h"
 
 // Third party includes
+
+using namespace std::placeholders;
 
 namespace Falltergeist
 {
@@ -76,11 +77,11 @@ void CritterDialog::init()
 
     // Interface buttons
     auto reviewButton = new ImageButton(ImageButton::TYPE_DIALOG_REVIEW_BUTTON, 13, 154);
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onReviewButtonClick(dynamic_cast<MouseEvent*>(event)); }, reviewButton);
+    reviewButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onReviewButtonClick(dynamic_cast<MouseEvent*>(event)); });
     addUI(reviewButton);
 
     auto barterButton = new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, 593, 40);
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onBarterButtonClick(dynamic_cast<MouseEvent*>(event)); }, barterButton);
+    barterButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onBarterButtonClick(dynamic_cast<MouseEvent*>(event)); });
     addUI(barterButton);
 }
 
@@ -208,9 +209,9 @@ void CritterDialog::addAnswer(std::string text)
     answer->setWordWrap(true);
     answer->setWidth(370);
 
-    EventManager::getInstance()->addHandler("mousein", std::bind(&CritterDialog::onAnswerIn, this, std::placeholders::_1), answer);
-    EventManager::getInstance()->addHandler("mouseout", std::bind(&CritterDialog::onAnswerOut, this, std::placeholders::_1), answer);
-    EventManager::getInstance()->addHandler("mouseleftclick", std::bind(&CritterDialog::onAnswerClick, this, std::placeholders::_1), answer);
+    answer->addEventHandler("mousein", std::bind(&CritterDialog::onAnswerIn, this, _1));
+    answer->addEventHandler("mouseout", std::bind(&CritterDialog::onAnswerOut, this, _1));
+    answer->addEventHandler("mouseleftclick", std::bind(&CritterDialog::onAnswerClick, this, _1));
     _answers.push_back(answer);
     addUI(answer);
 }

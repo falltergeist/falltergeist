@@ -42,10 +42,10 @@ ItemsList::ItemsList(int x, int y) : ActiveUI(x, y)
     _texture = new Texture(_slotWidth, _slotHeight * _slotsNumber);
     _texture->fill(0x000000FF);
 
-    EventManager::getInstance()->addHandler("mouseleftdown", [this](Event* event){ this->onMouseLeftDown(dynamic_cast<MouseEvent*>(event)); }, this);
-    EventManager::getInstance()->addHandler("mousedragstart", [this](Event* event){ this->onMouseDragStart(dynamic_cast<MouseEvent*>(event)); }, this);
-    EventManager::getInstance()->addHandler("mousedrag", [this](Event* event){ this->onMouseDrag(dynamic_cast<MouseEvent*>(event)); }, this);
-    EventManager::getInstance()->addHandler("mousedragstop", [this](Event* event){ this->onMouseDragStop(dynamic_cast<MouseEvent*>(event)); }, this);
+    this->addEventHandler("mouseleftdown", [this](Event* event){ this->onMouseLeftDown(dynamic_cast<MouseEvent*>(event)); });
+    this->addEventHandler("mousedragstart", [this](Event* event){ this->onMouseDragStart(dynamic_cast<MouseEvent*>(event)); });
+    this->addEventHandler("mousedrag", [this](Event* event){ this->onMouseDrag(dynamic_cast<MouseEvent*>(event)); });
+    this->addEventHandler("mousedragstop", [this](Event* event){ this->onMouseDragStop(dynamic_cast<MouseEvent*>(event)); });
 }
 
 void ItemsList::setItems(std::vector<Game::GameItemObject *>* items)
@@ -131,12 +131,12 @@ void ItemsList::onMouseDragStop(MouseEvent* event)
     _draggedItem->setXOffset(0);
     _draggedItem->setYOffset(0);
     _draggedItem->setType(_type);
-    auto itemevent = new MouseEvent("itemdragstop");
-    itemevent->setX(event->x());
-    itemevent->setY(event->y());
-    itemevent->setSender(this);
-    EventManager::getInstance()->handle(itemevent);
-    delete itemevent;
+    MouseEvent itemevent("itemdragstop");
+    itemevent.setX(event->x());
+    itemevent.setY(event->y());
+    itemevent.setSender(this);
+    EventManager::getInstance()->handle(&itemevent);
+
     _draggedItem = 0;
     Logger::critical() << "mousedragstop" << std::endl;
 }

@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Event/EventManager.h"
 #include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -67,8 +66,8 @@ void ExitConfirm::init()
 
     auto yesButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+50, backgroundY+102);
     auto noButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+183, backgroundY+102);
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->doYes(); }, yesButton);
-    EventManager::getInstance()->addHandler("mouseleftclick",  [this](Event* event){ this->doNo(); }, noButton);
+    yesButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doYes(); });
+    noButton->addEventHandler("mouseleftclick",  [this](Event* event){ this->doNo(); });
 
     // label: Are you sure you want to quit?
     auto font = ResourceManager::font("font1.aaf", 0xb89c28ff);

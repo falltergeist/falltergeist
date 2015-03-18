@@ -39,10 +39,10 @@ namespace Falltergeist
 InventoryItem::InventoryItem(Game::GameItemObject *item, int x, int y) : ActiveUI(x, y)
 {
     _item = item;
-    EventManager::getInstance()->addHandler("mouseleftdown", [this](Event* event){ this->onMouseLeftDown(dynamic_cast<MouseEvent*>(event)); }, this);
-    EventManager::getInstance()->addHandler("mousedragstart", [this](Event* event){ this->onMouseDragStart(dynamic_cast<MouseEvent*>(event)); }, this);
-    EventManager::getInstance()->addHandler("mousedrag", [this](Event* event){ this->onMouseDrag(dynamic_cast<MouseEvent*>(event)); }, this);
-    EventManager::getInstance()->addHandler("mousedragstop", [this](Event* event){ this->onMouseDragStop(dynamic_cast<MouseEvent*>(event)); }, this);
+    this->addEventHandler("mouseleftdown", [this](Event* event){ this->onMouseLeftDown(dynamic_cast<MouseEvent*>(event)); });
+    this->addEventHandler("mousedragstart", [this](Event* event){ this->onMouseDragStart(dynamic_cast<MouseEvent*>(event)); });
+    this->addEventHandler("mousedrag", [this](Event* event){ this->onMouseDrag(dynamic_cast<MouseEvent*>(event)); });
+    this->addEventHandler("mousedragstop", [this](Event* event){ this->onMouseDragStop(dynamic_cast<MouseEvent*>(event)); });
 }
 
 unsigned int InventoryItem::type()
@@ -123,13 +123,11 @@ void InventoryItem::onMouseDragStop(MouseEvent* event)
     setYOffset(0);
     setType(_oldType);
 
-    auto itemevent = new MouseEvent("itemdragstop");
-    itemevent->setX(event->x());
-    itemevent->setY(event->y());
-    itemevent->setSender(this);
-    EventManager::getInstance()->handle(itemevent);
-    delete itemevent;
-
+    MouseEvent itemevent("itemdragstop");
+    itemevent.setX(event->x());
+    itemevent.setY(event->y());
+    itemevent.setSender(this);
+    EventManager::getInstance()->handle(&itemevent);
 }
 
 void InventoryItem::onArmorDragStop(MouseEvent* event)

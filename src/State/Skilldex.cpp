@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Event/EventManager.h"
 #include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -73,7 +72,7 @@ void Skilldex::init()
     auto cancelButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+48, backgroundY+338);
 
     // events
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onCancelButtonClick(dynamic_cast<MouseEvent*>(event)); }, cancelButton);
+    cancelButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCancelButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     // LABELS
     auto font = ResourceManager::font("font3.aaf", 0xb89c28ff);

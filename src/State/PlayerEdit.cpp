@@ -22,7 +22,6 @@
 #include <iostream>
 
 // Falltergeist includes
-#include "../Event/EventManager.h"
 #include "../Font.h"
 #include "../functions.h"
 #include "../Game/DudeObject.h"
@@ -243,7 +242,7 @@ void PlayerEdit::init()
     // add buttons to the state
     for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
     {
-        EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onButtonClick(dynamic_cast<MouseEvent*>(event)); }, it->second);
+        it->second->addEventHandler("mouseleftclick", [this](Event* event){ this->onButtonClick(dynamic_cast<MouseEvent*>(event)); });
         addUI(it->second);
     }
 
@@ -251,7 +250,7 @@ void PlayerEdit::init()
     // reverse iterator to change drawing order
     for(auto it = _labels.rbegin(); it != _labels.rend(); ++it)
     {
-        EventManager::getInstance()->addHandler("mouseleftdown", [this](Event* event){ this->onLabelClick(dynamic_cast<MouseEvent*>(event)); }, it->second);
+        it->second->addEventHandler("mouseleftdown", [this](Event* event){ this->onLabelClick(dynamic_cast<MouseEvent*>(event)); });
         addUI(it->second);
     }
 
@@ -264,7 +263,7 @@ void PlayerEdit::init()
     // add hidden masks
     for(auto it = _masks.begin(); it != _masks.end(); ++it)
     {
-        EventManager::getInstance()->addHandler("mouseleftdown", [this](Event* event){ this->onMaskClick(dynamic_cast<MouseEvent*>(event)); }, it->second);
+        it->second->addEventHandler("mouseleftdown", [this](Event* event){ this->onMaskClick(dynamic_cast<MouseEvent*>(event)); });
         addUI(it->second);
     }
 

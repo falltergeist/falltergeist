@@ -21,7 +21,6 @@
 #include <sstream>
 
 // Falltergeist includes
-#include "../Event/EventManager.h"
 #include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -77,12 +76,12 @@ void SaveGame::init()
 
     // button: Done
     auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+391, bgY+349);
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); }, doneButton);
+    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
     addUI(doneButton);
 
     // button: Cancel
     auto cancelButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+495, bgY+349);
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onCancelButtonClick(dynamic_cast<MouseEvent*>(event)); }, cancelButton);
+    cancelButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCancelButtonClick(dynamic_cast<MouseEvent*>(event)); });
     addUI(cancelButton);
 
     // LABELS

@@ -176,9 +176,8 @@ void Renderer::think()
             _fadeAlpha = (_fadeAlpha <= 0 ? 0 : 255);
             _fadeDone = true;
 
-            auto event = new StateEvent("fadedone");
-            EventManager::getInstance()->handle(event);
-            delete event;
+            StateEvent event("fadedone");
+            EventManager::getInstance()->handle(&event);
             return;
         }
         _fadeTimer = ticks;

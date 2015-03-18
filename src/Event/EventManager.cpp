@@ -38,7 +38,7 @@ EventManager::EventManager()
 
 EventManager* EventManager::getInstance()
 {
-    if(!_instance)
+    if (!_instance)
     {
         _instance = new EventManager();
     }
@@ -82,7 +82,7 @@ void EventManager::addHandler(std::string eventName, std::function<void(Event*)>
 
 void EventManager::removeHandlers(EventSender* sender)
 {
-    for(auto& map : _handlers)
+    for (auto& map : _handlers)
     {
         for (auto handler : map.second)
         {
@@ -113,7 +113,7 @@ void EventManager::removeHandlers(std::string eventName, EventSender* sender)
 
 void EventManager::think()
 {
-    for(auto& map : _handlers)
+    for (auto& map : _handlers)
     {
         for (auto it = map.second.begin(); it != map.second.end();)
         {

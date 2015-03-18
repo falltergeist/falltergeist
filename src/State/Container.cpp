@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Event/EventManager.h"
 #include "../Game/ContainerItemObject.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
@@ -62,7 +61,7 @@ void Container::init()
     addUI("background", new Image("art/intrface/loot.frm"));
 
     addUI("button_done", new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 478, 331));
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); }, getActiveUI("button_done"));
+    getActiveUI("button_done")->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
 
     // TAKEALL
@@ -82,8 +81,8 @@ void Container::init()
     containerList->setItems(object()->inventory());
     addUI(containerList);
 
-    EventManager::getInstance()->addHandler("itemdragstop", [containerList](Event* event){ containerList->onItemDragStop(dynamic_cast<MouseEvent*>(event)); }, dudeList);
-    EventManager::getInstance()->addHandler("itemdragstop", [dudeList](Event* event){ dudeList->onItemDragStop(dynamic_cast<MouseEvent*>(event)); }, containerList);
+    dudeList->addEventHandler("itemdragstop", [containerList](Event* event){ containerList->onItemDragStop(dynamic_cast<MouseEvent*>(event)); });
+    containerList->addEventHandler("itemdragstop", [dudeList](Event* event){ dudeList->onItemDragStop(dynamic_cast<MouseEvent*>(event)); });
 
 }
 

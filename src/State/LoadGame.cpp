@@ -78,12 +78,12 @@ void LoadGame::init()
 
     // button: Done
     auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+391, bgY+349);
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); }, doneButton);
+    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
     addUI(doneButton);
 
     // button: Cancel
     auto cancelButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+495, bgY+349);
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->doCancel(); }, cancelButton);
+    cancelButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doCancel(); });
     addUI(cancelButton);
 
     // LABELS

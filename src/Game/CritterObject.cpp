@@ -22,7 +22,6 @@
 
 // Falltergeist includes
 #include "../Exception.h"
-#include "../Event/EventManager.h"
 #include "../Game/CritterObject.h"
 #include "../Game/Defines.h"
 #include "../Game/DudeObject.h"
@@ -485,8 +484,8 @@ void GameCritterObject::think()
             _orientation = hexagon()->orientationTo(movementQueue()->back());
             auto animation = _generateMovementAnimation();
             animation->setActionFrame(_running ? 2 : 4);
-            EventManager::getInstance()->addHandler("actionFrame",    std::bind(&GameCritterObject::onMovementAnimationEnded, this, _1), animation);
-            EventManager::getInstance()->addHandler("animationEnded", std::bind(&GameCritterObject::onMovementAnimationEnded, this, _1), animation);
+            animation->addEventHandler("actionFrame",    std::bind(&GameCritterObject::onMovementAnimationEnded, this, _1));
+            animation->addEventHandler("animationEnded", std::bind(&GameCritterObject::onMovementAnimationEnded, this, _1));
             animation->play();
             _ui = animation;
         }
@@ -538,8 +537,8 @@ void GameCritterObject::onMovementAnimationEnded(Event* event)
         {
             newAnimation->setActionFrame(_running ? 2 : 4);
         }
-        EventManager::getInstance()->addHandler("actionFrame",    std::bind(&GameCritterObject::onMovementAnimationEnded, this, _1), newAnimation);
-        EventManager::getInstance()->addHandler("animationEnded", std::bind(&GameCritterObject::onMovementAnimationEnded, this, _1), newAnimation);
+        newAnimation->addEventHandler("actionFrame",    std::bind(&GameCritterObject::onMovementAnimationEnded, this, _1));
+        newAnimation->addEventHandler("animationEnded", std::bind(&GameCritterObject::onMovementAnimationEnded, this, _1));
         newAnimation->play();
         delete _ui;
         _ui = animation = newAnimation;
@@ -595,10 +594,10 @@ Animation* GameCritterObject::_generateMovementAnimation()
 Animation* GameCritterObject::setActionAnimation(std::string action)
 {
     Animation* animation = new Animation("art/critters/" + _generateArmorFrmString() + action + ".frm", orientation());
-    EventManager::getInstance()->addHandler("animationEnded", [animation](Event* event)
+    animation->addEventHandler("animationEnded", [animation](Event* event)
     {
         animation->setCurrentFrame(0);
-    }, animation);
+    });
     animation->play();
     /*auto queue = new AnimationQueue();
     queue->setRepeat(true);

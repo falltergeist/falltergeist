@@ -21,6 +21,8 @@
 #define FALLTERGEIST_EVENTSENDER_H
 
 // C++ standard includes
+#include <functional>
+#include <string>
 
 // Falltergeist includes
 
@@ -28,12 +30,17 @@
 
 namespace Falltergeist
 {
+class Event;
 
 class EventSender
 {
 public:
     EventSender();
     virtual ~EventSender();
+
+    void addEventHandler(std::string eventName, std::function<void(Event*)> handler);
+    void removeEventHandlers(std::string eventName);
+    void removeEventHandlers();
 };
 
 }

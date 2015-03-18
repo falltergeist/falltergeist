@@ -22,7 +22,6 @@
 
 // Falltergeist includes
 #include "../Audio/AudioMixer.h"
-#include "../Event/EventManager.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
 #include "../ResourceManager.h"
@@ -200,9 +199,9 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
     }
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); }, this);
-    EventManager::getInstance()->addHandler("mouseleftdown", [this](Event* event){ this->_onLeftButtonDown(dynamic_cast<MouseEvent*>(event)); }, this);
-    EventManager::getInstance()->addHandler("mouseout", [this](Event* event){ this->_onMouseOut(dynamic_cast<MouseEvent*>(event)); }, this);
+    this->addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    this->addEventHandler("mouseleftdown", [this](Event* event){ this->_onLeftButtonDown(dynamic_cast<MouseEvent*>(event)); });
+    this->addEventHandler("mouseout", [this](Event* event){ this->_onMouseOut(dynamic_cast<MouseEvent*>(event)); });
 }
 
 ImageButton::~ImageButton()

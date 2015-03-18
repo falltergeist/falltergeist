@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Event/EventManager.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Event/KeyboardEvent.h"
@@ -71,7 +70,7 @@ void PipBoy::init()
     auto automapsButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+394);
     auto archivesButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+423);
     auto closeButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+448);
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onCloseButtonClick(dynamic_cast<MouseEvent*>(event)); }, closeButton);
+    closeButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCloseButtonClick(dynamic_cast<MouseEvent*>(event)); });
     // Date and time
     // FIXME: use current in-game datetime
     // Date

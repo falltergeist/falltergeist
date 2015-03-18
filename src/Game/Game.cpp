@@ -155,10 +155,9 @@ void Game::popState()
     _states.pop_back();
     _statesForDelete.push_back(state);
 
-    auto event = new StateEvent("deactivate");
-    event->setSender(state);
-    EventManager::getInstance()->handle(event);
-    delete event;
+    StateEvent event("deactivate");
+    event.setSender(state);
+    EventManager::getInstance()->handle(&event);
 }
 
 void Game::setState(State::State* state)
@@ -283,11 +282,10 @@ std::vector<State::State*>* Game::statesForThinkAndHandle()
         auto state = *it;
         if (!state->active())
         {
-            auto event = new StateEvent("activate");
-            event->setSender(state);
-            EventManager::getInstance()->handle(event);
+            StateEvent event("activate");
+            event.setSender(state);
+            EventManager::getInstance()->handle(&event);
             state->setActive(true);
-            delete event;
         }
         _statesForThinkAndHandle.push_back(state);
         if (state->modal() || state->fullscreen())
@@ -302,11 +300,10 @@ std::vector<State::State*>* Game::statesForThinkAndHandle()
         auto state = *it;
         if (state->active())
         {
-            auto event = new StateEvent("deactivate");
-            event->setSender(state);
-            EventManager::getInstance()->handle(event);
+            StateEvent event("deactivate");
+            event.setSender(state);
+            EventManager::getInstance()->handle(&event);
             state->setActive(false);
-            delete event;
         }
     }
 

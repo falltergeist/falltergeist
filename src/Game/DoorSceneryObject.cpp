@@ -21,7 +21,6 @@
 
 // Falltergeist includes
 #include "../Audio/AudioMixer.h"
-#include "../Event/EventManager.h"
 #include "../Game/DoorSceneryObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/Animation.h"
@@ -78,7 +77,7 @@ void GameDoorSceneryObject::use_p_proc(GameCritterObject* usedBy)
         {
             queue->start();
             queue->currentAnimation()->setReverse(false);
-            EventManager::getInstance()->addHandler("animationEnded", std::bind(&GameDoorSceneryObject::onOpeningAnimationEnded, this, _1), queue);
+            queue->addEventHandler("animationEnded", std::bind(&GameDoorSceneryObject::onOpeningAnimationEnded, this, _1));
             if (_soundId) Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/sodoors") + _soundId + ".acm");
         }
     }
@@ -88,7 +87,7 @@ void GameDoorSceneryObject::use_p_proc(GameCritterObject* usedBy)
         {
             queue->start();
             queue->currentAnimation()->setReverse(true);
-            EventManager::getInstance()->addHandler("animationEnded", std::bind(&GameDoorSceneryObject::onClosingAnimationEnded, this, _1), queue);
+            queue->addEventHandler("animationEnded", std::bind(&GameDoorSceneryObject::onClosingAnimationEnded, this, _1));
             if (_soundId) Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/scdoors") + _soundId + ".acm");
         }
     }
@@ -103,7 +102,7 @@ void GameDoorSceneryObject::onOpeningAnimationEnded(Event* event)
 {
     auto queue = (AnimationQueue*)event->sender();
     setOpened(true);
-    EventManager::getInstance()->removeHandlers("animationEnded", queue);
+    queue->removeEventHandlers("animationEnded");
     queue->stop();
     Logger::info() << "Door opened: " << opened() << std::endl;
 }
@@ -112,7 +111,7 @@ void GameDoorSceneryObject::onClosingAnimationEnded(Event* event)
 {
     auto queue = (AnimationQueue*)event->sender();
     setOpened(false);
-    EventManager::getInstance()->removeHandlers("animationEnded", queue);
+    queue->removeEventHandlers("animationEnded");
     queue->stop();
     Logger::info() << "Door opened: " << opened() << std::endl;
 }

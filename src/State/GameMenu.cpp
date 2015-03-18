@@ -20,9 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Event/EventManager.h"
-#include "../functions.h"
 #include "../Audio/AudioMixer.h"
+#include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
@@ -68,21 +67,21 @@ void GameMenu::init()
     auto exitGameButton = new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3);
     auto doneButton = new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4);
 
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->doPreferences(); }, preferencesButton);
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->doExit(); }, exitGameButton);
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->closeMenu(); }, doneButton);
+    preferencesButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doPreferences(); });
+    exitGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doExit(); });
+    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->closeMenu(); });
 
     auto font = ResourceManager::font("font3.aaf", 0xb89c28ff);
 
     // label: save game
     auto saveGameButtonLabel = new TextArea(_t(MSG_OPTIONS, 0), backgroundX+8, backgroundY+26);
     saveGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->doSaveGame(); }, saveGameButton);
+    saveGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doSaveGame(); });
 
     // label: load game
     auto loadGameButtonLabel = new TextArea(_t(MSG_OPTIONS, 1), backgroundX+8, backgroundY+26+37);
     loadGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->doLoadGame(); }, loadGameButton);
+    loadGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doLoadGame(); });
 
     // label: preferences
     auto preferencesButtonLabel = new TextArea(_t(MSG_OPTIONS, 2), backgroundX+8, backgroundY+26+37*2);

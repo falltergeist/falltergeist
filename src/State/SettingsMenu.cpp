@@ -20,7 +20,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Event/EventManager.h"
 #include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -295,17 +294,17 @@ void SettingsMenu::init()
 
     // button: Default
     auto defaultButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+23, backgroundY+450);
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onDefaultButtonClick(dynamic_cast<MouseEvent*>(event)); }, defaultButton);
+    defaultButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDefaultButtonClick(dynamic_cast<MouseEvent*>(event)); });
     addUI(defaultButton);
 
     // button: Done
     auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+148, backgroundY+450);
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->doSave(); }, doneButton);
+    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doSave(); });
     addUI(doneButton);
 
     // button: Cancel
     auto cancelButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+263, backgroundY+450);
-    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->doCancel(); }, cancelButton);
+    cancelButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doCancel(); });
     addUI(cancelButton);
 
     // button: Affect player speed
