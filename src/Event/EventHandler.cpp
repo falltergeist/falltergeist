@@ -17,47 +17,49 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_EVENTMANAGER_H
-#define FALLTERGEIST_EVENTMANAGER_H
-
 // C++ standard includes
-#include <functional>
-#include <map>
-#include <string>
-#include <vector>
 
 // Falltergeist includes
-#include "../Event/Event.h"
+#include "../Event/EventHandler.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class EventHandler;
-class EventSender;
-
-class EventManager
+EventHandler::EventHandler(std::function<void(Event*)> handler)
 {
+    _handler = handler;
+}
 
-public:
-    static EventManager* getInstance();
-    void handle(Event* event);
-    void addHandler(std::string eventName, std::function<void(Event*)> function, EventSender* sender = nullptr);
-    void removeHandlers(std::string eventName, EventSender* sender = nullptr);
-    void removeHandlers(EventSender *sender = nullptr);
-    void think();
+EventHandler::~EventHandler()
+{
+}
 
-protected:
-    static EventManager* _instance;
-    std::map<std::string, std::vector<EventHandler*>> _handlers;
+bool EventHandler::deleted() const
+{
+    return _deleted;
+}
 
-    EventManager();
-    EventManager(const EventManager&);
-    EventManager& operator=(EventManager&);
-    ~EventManager();
+void EventHandler::setDeleted(bool value)
+{
+    _deleted = value;
+}
 
-};
+EventSender* EventHandler::sender() const
+{
+    return _sender;
+}
+
+void EventHandler::setSender(EventSender* sender)
+{
+    _sender = sender;
+}
+
+void EventHandler::operator()(Event* event)
+{
+    if (_deleted) return;
+    return _handler(event);
+}
 
 }
-#endif // FALLTERGEIST_EVENTMANAGER_H
