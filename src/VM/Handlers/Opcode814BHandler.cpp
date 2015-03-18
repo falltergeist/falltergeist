@@ -38,13 +38,8 @@ void Opcode814BHandler::_run()
 {
     // @TODO
     Logger::debug("SCRIPT") << "[814B] [*] void* party_member_obj(int pid)" << std::endl;
-<<<<<<< HEAD
     _vm->dataStack()->popInteger();
     _vm->dataStack()->push((Game::GameObject*)nullptr);
-=======
-    _vm->popDataInteger();
-    _vm->pushDataObject(0);
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

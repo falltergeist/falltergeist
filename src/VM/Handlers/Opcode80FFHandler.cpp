@@ -43,7 +43,6 @@ Opcode80FFHandler::Opcode80FFHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80FFHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80FF] [*] int critter_attempt_placement(GameCritterObject* critter, int position, int elevation)" << std::endl;
-<<<<<<< HEAD
     auto elevation = _vm->dataStack()->popInteger();
     auto position = _vm->dataStack()->popInteger();
     auto critter = static_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
@@ -51,12 +50,6 @@ void Opcode80FFHandler::_run()
     {
         _error("critter_attempt_placement - invalid critter pointer");
     }
-=======
-    auto elevation = _vm->popDataInteger();
-    auto position = _vm->popDataInteger();
-    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
-    if (!critter) throw new Exception("Opcode 80ff error");
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
     auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
     State::Location::moveObjectToHexagon(critter, hexagon);
     critter->setElevation(elevation);

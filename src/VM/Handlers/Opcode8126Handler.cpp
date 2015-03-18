@@ -46,11 +46,7 @@ void Opcode8126Handler::_run()
         _error("Opcode8126Handler - delay must be -1");
     }
     */
-<<<<<<< HEAD
     auto object = _vm->dataStack()->popObject();
-=======
-    auto object = static_cast<Game::GameObject*>(_vm->popDataObject());
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
     auto queue = dynamic_cast<AnimationQueue*>(object->ui());
     if (queue)
     {

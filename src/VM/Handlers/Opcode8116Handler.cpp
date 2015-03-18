@@ -42,7 +42,6 @@ Opcode8116Handler::Opcode8116Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8116Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8116] [+] void add_mult_objs_to_inven(GameObject* who, GameItemObject* item, int amount)" << std::endl;
-<<<<<<< HEAD
     auto amount = _vm->dataStack()->popInteger();
     auto item = dynamic_cast<Game::GameItemObject*>(_vm->dataStack()->popObject());
     if (!item) _error("add_mult_objs_to_inven - item not instanceof GameItemObject");
@@ -50,15 +49,6 @@ void Opcode8116Handler::_run()
     // who can be critter or container
     auto object = _vm->dataStack()->popObject();
     if (auto critter = dynamic_cast<Game::GameCritterObject*>(object))
-=======
-    auto amount = _vm->popDataInteger();
-    auto item = static_cast<Game::GameItemObject*>(_vm->popDataObject());
-    if (!item) throw Exception("VM::opcode8116 - item not instanceof GameItemObject");
-    item->setAmount(amount);
-    // who can be critter or container
-    auto pointer = static_cast<Game::GameObject*>(_vm->popDataObject());
-    if (auto critter = dynamic_cast<Game::GameCritterObject*>(pointer))
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
     {
         critter->inventory()->push_back(item);
     }

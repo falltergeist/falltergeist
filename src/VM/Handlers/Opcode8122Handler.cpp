@@ -36,16 +36,11 @@ Opcode8122Handler::Opcode8122Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8122Handler::_run()
 {
-<<<<<<< HEAD
     auto &debug = Logger::debug("SCRIPT");
     debug << "[8122] [+] void poison(GameCritterObject* who, int amount)" << std::endl;
     int amount = _vm->dataStack()->popInteger();
     debug << "    amount = " << amount << std::endl;
     auto critter = dynamic_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
-=======
-    int amount = _vm->popDataInteger();
-    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
     if (!critter)
     {
         _error("poison - WHO is not critter");

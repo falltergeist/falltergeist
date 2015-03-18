@@ -39,14 +39,9 @@ Opcode80F4Handler::Opcode80F4Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80F4Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80F4] [=] int destroy_object(void* obj)" << std::endl;
-<<<<<<< HEAD
     auto object = _vm->dataStack()->popObject();
     Game::Game::getInstance()->locationState()->destroyObject(object);
     _vm->dataStack()->push(0);
-=======
-    _vm->popDataObject();
-    _vm->pushDataInteger(0);
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

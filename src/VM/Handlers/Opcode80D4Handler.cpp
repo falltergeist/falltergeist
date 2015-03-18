@@ -43,17 +43,10 @@ Opcode80D4Handler::Opcode80D4Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80D4Handler::_run()
 {
-<<<<<<< HEAD
     Logger::debug("SCRIPT") << "[80D4] [+] int tile_num(GameObject* object)" << std::endl;
     auto object = _vm->dataStack()->popObject();
     if (!object) _error("tile_num - object is NULL");
     _vm->dataStack()->push((int)object->hexagon()->number());
-=======
-    Logger::debug("SCRIPT") << "[80D4] [+] int objectPosition(GameObject* object)" << std::endl;
-    auto object = static_cast<Game::GameObject*>(_vm->popDataObject());
-    if (!object) throw new Exception("Opcode 80d4 error");
-    _vm->pushDataInteger(object->hexagon()->number());
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

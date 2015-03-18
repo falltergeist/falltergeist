@@ -26,14 +26,7 @@
 
 
 
-<<<<<<< HEAD:src/VM/Handlers/Opcode8101Handler.cpp
 // Third party includes
-=======
-VMStackPointerValue::VMStackPointerValue(void* value) : VMStackValue(TYPE_OBJECT)
-{
-    _value = value;
-}
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts:src/VM/VMStackPointerValue.cpp
 
 namespace Falltergeist
 {

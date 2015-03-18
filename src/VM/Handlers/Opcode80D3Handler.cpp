@@ -38,15 +38,9 @@ Opcode80D3Handler::Opcode80D3Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80D3Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80D3] int tile_distance_objs(void* p2, void* p1)" << std::endl;
-<<<<<<< HEAD
     _vm->dataStack()->popObject();
     _vm->dataStack()->popObject();
     _vm->dataStack()->push(10);
-=======
-    _vm->popDataObject();
-    _vm->popDataObject();
-    _vm->pushDataInteger(10);
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

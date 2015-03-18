@@ -41,7 +41,6 @@ Opcode8106Handler::Opcode8106Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8106Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8106] [=] void* (int) critter_inven_obj(GameCritterObject* critter, int where)" << std::endl;
-<<<<<<< HEAD
     auto where = _vm->dataStack()->popInteger();
     auto critter = dynamic_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
     switch (where)
@@ -54,20 +53,6 @@ void Opcode8106Handler::_run()
         break;
     case 2: // LEFT HAND SLOT
         _vm->dataStack()->push(critter->leftHandSlot());
-=======
-    auto where = _vm->popDataInteger();
-    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
-    switch (where)
-    {
-    case 0: // ARMOR SLOT
-        _vm->pushDataObject(critter->armorSlot());
-        break;
-    case 1: // RIGHT HAND SLOT
-        _vm->pushDataObject(critter->rightHandSlot());
-        break;
-    case 2: // LEFT HAND SLOT
-        _vm->pushDataObject(critter->leftHandSlot());
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
         break;
     case -2: // INVENTORY COUNT
         _vm->dataStack()->push((unsigned int)critter->inventory()->size());

@@ -40,15 +40,9 @@ void Opcode80ABHandler::_run()
 {
     // @TODO: implement
     Logger::debug("SCRIPT") << "[80AB] [=] int using_skill(GameCritterObject* who, int skill)" << std::endl;
-<<<<<<< HEAD
     _vm->dataStack()->popInteger();
     _vm->dataStack()->popObject();
     _vm->dataStack()->push(0);
-=======
-    _vm->popDataInteger();
-    _vm->popDataObject();
-    _vm->pushDataInteger(0);
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

@@ -32,12 +32,8 @@
 
 namespace Falltergeist
 {
-<<<<<<< HEAD
     
 namespace Game { class GameObject; }
-=======
-class Game::GameObject;
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 
 /*
  * VM class represents Virtual Machine for running vanilla Fallout scripts.
@@ -89,21 +85,6 @@ public:
     unsigned int programCounter();
     void setProgramCounter(unsigned int value);
 
-<<<<<<< HEAD
-=======
-    int popReturnInteger();
-    void pushReturnInteger(int value);
-    int popDataInteger();
-    void pushDataInteger(int value);
-    float popDataFloat();
-    void pushDataFloat(float value);
-    Game::GameObject* popDataObject();
-    void pushDataObject(Game::GameObject* value);
-    std::string &popDataString();
-    void pushDataString(const std::string &value);
-    bool popDataLogical();
-
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
     VMStack* dataStack();
     VMStack* returnStack();
     std::vector<VMStackValue>* LVARS();

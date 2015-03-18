@@ -36,11 +36,7 @@ Opcode8125Handler::Opcode8125Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8125Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8125] [=] void party_remove(void* who)" << std::endl;
-<<<<<<< HEAD
     _vm->dataStack()->popObject();
-=======
-    _vm->popDataObject();
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

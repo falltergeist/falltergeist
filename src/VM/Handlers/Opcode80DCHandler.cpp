@@ -38,15 +38,9 @@ Opcode80DCHandler::Opcode80DCHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80DCHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80DC] [=] int obj_can_see_obj(GameObject* src_obj, GameObject* dst_obj)" << std::endl;
-<<<<<<< HEAD
     _vm->dataStack()->popObject();
     _vm->dataStack()->popObject();
     _vm->dataStack()->push(1);
-=======
-    _vm->popDataObject();
-    _vm->popDataObject();
-    _vm->pushDataInteger(1);
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

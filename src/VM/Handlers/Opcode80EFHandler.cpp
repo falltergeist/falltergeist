@@ -38,15 +38,9 @@ Opcode80EFHandler::Opcode80EFHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80EFHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80EF] void critter_dmg(ObjectPtr who, int dmg_amount, int dmg_type)" << std::endl;
-<<<<<<< HEAD
     _vm->dataStack()->popInteger();
     _vm->dataStack()->popInteger();
     _vm->dataStack()->popObject();
-=======
-    _vm->popDataInteger();
-    _vm->popDataInteger();
-    _vm->popDataObject();
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

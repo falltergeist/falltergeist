@@ -44,7 +44,6 @@ Opcode80B6Handler::Opcode80B6Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80B6Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80B6] [+] int move_to(GameObject* object, int position, int elevation)" << std::endl;
-<<<<<<< HEAD
     auto elevation = _vm->dataStack()->popInteger();
     auto position = _vm->dataStack()->popInteger();
     auto object = _vm->dataStack()->popObject();
@@ -52,12 +51,6 @@ void Opcode80B6Handler::_run()
     {
         _error("move_to: object is NULL");
     }
-=======
-    auto elevation = _vm->popDataInteger();
-    auto position = _vm->popDataInteger();
-    auto object = static_cast<Game::GameObject*>(_vm->popDataObject());
-    if (!object) throw new Exception("Opcode 80b6 error");
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
     auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
     State::Location::moveObjectToHexagon(object, hexagon);
     object->setElevation(elevation);

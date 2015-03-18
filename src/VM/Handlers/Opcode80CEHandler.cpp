@@ -38,15 +38,9 @@ Opcode80CEHandler::Opcode80CEHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80CEHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80CE] [=] void animate_move_obj_to_tile(void* who, int tile, int speed)" << std::endl;
-<<<<<<< HEAD
     _vm->dataStack()->popInteger();
     _vm->dataStack()->popInteger();
     _vm->dataStack()->popObject();
-=======
-    _vm->popDataInteger();
-    _vm->popDataInteger();
-    _vm->popDataObject();
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

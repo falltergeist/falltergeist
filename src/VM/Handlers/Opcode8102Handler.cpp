@@ -38,19 +38,11 @@ Opcode8102Handler::Opcode8102Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8102Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8102] [*] int critter_add_trait(void* who, int trait_type, int trait, int amount) " << std::endl;
-<<<<<<< HEAD
     auto amount = _vm->dataStack()->popInteger();
     auto trait = _vm->dataStack()->popInteger();
     auto trait_type = _vm->dataStack()->popInteger();
     auto who = _vm->dataStack()->popObject();
     _vm->dataStack()->push(0);
-=======
-    auto amount = _vm->popDataInteger();
-    auto trait = _vm->popDataInteger();
-    auto trait_type = _vm->popDataInteger();
-    auto who = _vm->popDataObject();
-    _vm->pushDataInteger(0);
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

@@ -39,15 +39,11 @@ Opcode8015Handler::Opcode8015Handler(Falltergeist::VM *vm) : OpcodeHandler(vm)
 void Opcode8015Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8015] [*] op_store_external(name, value)" << std::endl;
-<<<<<<< HEAD
     std::string name = _vm->dataStack()->popString();
-=======
-    auto name = static_cast<std::string*>(_vm->popDataObject());
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
     auto value = _vm->dataStack()->pop();
     auto game = Game::getInstance();
     auto EVARS = game->locationState()->EVARS();
-    (*EVARS)[name] = value;
+    EVARS->at(name) = value;
 }
 
 }

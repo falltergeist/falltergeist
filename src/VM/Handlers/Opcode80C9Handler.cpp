@@ -47,7 +47,6 @@ Opcode80C9Handler::Opcode80C9Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80C9Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80C9] [+] int obj_item_subtype(GameItemObject* object)" << std::endl;
-<<<<<<< HEAD
     auto object = _vm->dataStack()->popObject();
     if      (dynamic_cast<Game::GameArmorItemObject*>(object))     _vm->dataStack()->push(0);
     else if (dynamic_cast<Game::GameContainerItemObject*>(object)) _vm->dataStack()->push(1);
@@ -57,17 +56,6 @@ void Opcode80C9Handler::_run()
     else if (dynamic_cast<Game::GameMiscItemObject*>(object))      _vm->dataStack()->push(5);
     else if (dynamic_cast<Game::GameKeyItemObject*>(object))       _vm->dataStack()->push(6);
     else _vm->dataStack()->push(-1);
-=======
-    auto pointer = _vm->popDataObject();
-    if      (static_cast<Game::GameArmorItemObject*>(pointer))     _vm->pushDataInteger(0);
-    else if (static_cast<Game::GameContainerItemObject*>(pointer)) _vm->pushDataInteger(1);
-    else if (static_cast<Game::GameDrugItemObject*>(pointer))      _vm->pushDataInteger(2);
-    else if (static_cast<Game::GameWeaponItemObject*>(pointer))    _vm->pushDataInteger(3);
-    else if (static_cast<Game::GameAmmoItemObject*>(pointer))      _vm->pushDataInteger(4);
-    else if (static_cast<Game::GameMiscItemObject*>(pointer))      _vm->pushDataInteger(5);
-    else if (static_cast<Game::GameKeyItemObject*>(pointer))       _vm->pushDataInteger(6);
-    else _vm->pushDataInteger(-1);
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

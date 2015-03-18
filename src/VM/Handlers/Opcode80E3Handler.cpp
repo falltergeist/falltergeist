@@ -38,13 +38,8 @@ Opcode80E3Handler::Opcode80E3Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80E3Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80E3] [=] void set_obj_visibility(void* obj, int visibility)" << std::endl;
-<<<<<<< HEAD
     _vm->dataStack()->popInteger();
     _vm->dataStack()->popObject();
-=======
-    _vm->popDataInteger();
-    _vm->popDataObject();
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

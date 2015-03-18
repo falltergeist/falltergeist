@@ -38,15 +38,9 @@ Opcode80F0Handler::Opcode80F0Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80F0Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80F0] [=] void add_timer_event(void* obj, int time, int info)" << std::endl;
-<<<<<<< HEAD
     _vm->dataStack()->popInteger();
     _vm->dataStack()->popInteger();
     _vm->dataStack()->popObject();
-=======
-    _vm->popDataInteger();
-    _vm->popDataInteger();
-    _vm->popDataObject();
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

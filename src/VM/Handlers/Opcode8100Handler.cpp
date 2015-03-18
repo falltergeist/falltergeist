@@ -39,15 +39,9 @@ Opcode8100Handler::Opcode8100Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8100Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8100] [+] int obj_pid(void* obj)" << std::endl;
-<<<<<<< HEAD
     auto object = _vm->dataStack()->popObject();
     if (!object) _error("obj_pid - obj is NULL");
     _vm->dataStack()->push(object->PID());
-=======
-    auto object = static_cast<Game::GameObject*>(_vm->popDataObject());
-    if (!object) throw new Exception("Opcode 8100 error");
-    _vm->pushDataInteger(object->PID());
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

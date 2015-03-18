@@ -30,11 +30,7 @@
 namespace Falltergeist
 {
     
-<<<<<<< HEAD
 namespace Game { class GameObject; };
-=======
-class Game::GameObject;
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 
 class VMStackValue
 {
@@ -44,15 +40,9 @@ protected:
     {
         int _intValue;
         float _floatValue;
-<<<<<<< HEAD
         Game::GameObject* _objectValue;
     };
     std::string _stringValue;
-=======
-        std::string _stringValue;
-        Game::GameObject* _objectValue;
-    };
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 public:
     enum { TYPE_INTEGER = 1, TYPE_FLOAT, TYPE_STRING, TYPE_OBJECT };
     VMStackValue();
@@ -62,7 +52,6 @@ public:
     VMStackValue(Game::GameObject *value);
     virtual ~VMStackValue();
     int type() const;
-<<<<<<< HEAD
     bool isNumber() const;
     // returns integer value or throws exception if it's not integer
     int integerValue() const;
@@ -81,15 +70,6 @@ public:
     
     const char* typeName();
     static const char* typeName(int type);
-=======
-    int integerValue() const;
-    float floatValue() const;
-    std::string stringValue() const;
-    Game::GameObject* objectValue() const;
-    std::string toString() const;
-    
-    static const std::string typeName(int type);
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 };
 
 }

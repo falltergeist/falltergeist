@@ -89,13 +89,8 @@ void Opcode810AHandler::_run()
             _error("float_msg - wrong type: " + std::to_string(type));
     }
 
-<<<<<<< HEAD
     auto string = _vm->dataStack()->popString();
     auto object = _vm->dataStack()->popObject();
-=======
-    auto string = static_cast<std::string*>(_vm->popDataObject());
-    auto object = static_cast<Game::GameObject*>(_vm->popDataObject());
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 
     auto floatMessage = new TextArea(string);
     floatMessage->setWidth(200);

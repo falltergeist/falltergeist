@@ -49,13 +49,8 @@ void Opcode80CBHandler::_run()
     {
         _error("set_critter_stat(who, num, value) - who is null");
     }
-<<<<<<< HEAD
     auto critter = dynamic_cast<Game::GameCritterObject*>(object);
     if (!critter)
-=======
-    auto object = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
-    if (!object)
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
     {
         _error("set_critter_stat(who, num, value) - who is not a critter");
     }

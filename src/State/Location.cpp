@@ -476,7 +476,10 @@ void Location::think()
         for (auto it = _objects.rbegin(); it != _objects.rend(); ++it)
         {
             auto object = *it;
-            object->map_enter_p_proc();
+            if (object->script())
+            {
+                object->script()->call("map_enter_p_proc");
+            }
         }
     }
     else
@@ -490,7 +493,10 @@ void Location::think()
             }
             for (auto object : _objects)
             {
-                object->map_update_p_proc();
+                if (object->script())
+                {
+                    object->script()->call("map_update_p_proc");
+                }
             }
         }
     }

@@ -37,7 +37,6 @@ Opcode812FHandler::Opcode812FHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode812FHandler::_run()
 {
-<<<<<<< HEAD
     Logger::debug("SCRIPT") << "[812F] [+] void obj_unlock(GameObject* object)" << std::endl;
     auto object = _vm->dataStack()->popObject();
     if (object)
@@ -59,11 +58,6 @@ void Opcode812FHandler::_run()
     {
         _warning("obj_unlock: object is null");
     }
-=======
-    Logger::debug("SCRIPT") << "[812F] [+] void unlock(GameDoorSceneryObject* object)" << std::endl;
-    auto object = static_cast<Game::GameDoorSceneryObject*>(_vm->popDataObject());
-    object->setLocked(false);
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

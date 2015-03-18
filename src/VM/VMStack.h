@@ -41,7 +41,6 @@ public:
     VMStack();
     ~VMStack();
     void push(const VMStackValue &value);
-<<<<<<< HEAD
     void push(unsigned int value);
     void push(int value);
     void push(float value);
@@ -55,10 +54,6 @@ public:
     Game::GameObject* popObject();
     bool popLogical();
     const VMStackValue top();
-=======
-    const VMStackValue& pop();
-    const VMStackValue& top();
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
     std::vector<VMStackValue>* values();
     int size();
     void swap();

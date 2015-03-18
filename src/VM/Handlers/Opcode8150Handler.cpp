@@ -38,13 +38,8 @@ Opcode8150Handler::Opcode8150Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8150Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8150] [=] int obj_on_screen(void* obj)" << std::endl;
-<<<<<<< HEAD
     _vm->dataStack()->popObject();
     _vm->dataStack()->push(1);
-=======
-    _vm->popDataObject();
-    _vm->pushDataInteger(1);
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

@@ -67,9 +67,9 @@ void GameDoorSceneryObject::setLocked(bool value)
     _locked = value;
 }
 
-void GameDoorSceneryObject::use_p_proc(GameCritterObject* usedBy)
+void GameDoorSceneryObject::use_p_proc()
 {
-    GameObject::use_p_proc(usedBy);
+    GameObject::use_p_proc();
     if (script() && script()->overrides()) return;
 
     if (!opened())

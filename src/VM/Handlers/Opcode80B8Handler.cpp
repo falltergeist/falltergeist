@@ -38,13 +38,8 @@ Opcode80B8Handler::Opcode80B8Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80B8Handler::_run()
 {
-<<<<<<< HEAD
     Logger::debug("SCRIPT") << "[80B8] [*] void display_msg(string)" << std::endl;
     auto value = _vm->dataStack()->pop();
-=======
-    Logger::debug("SCRIPT") << "[80B8] [*] void display_msg(string*)" << std::endl;
-    std::string* pointer = static_cast<std::string*>(_vm->popDataObject());
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
     auto game = Game::getInstance();
     game->locationState()->displayMessage(value.toString());
 }

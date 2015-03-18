@@ -38,13 +38,8 @@ Opcode80D8Handler::Opcode80D8Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80D8Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80D8] [=] void add_obj_to_inven(void* who, void* item)" << std::endl;
-<<<<<<< HEAD
     _vm->dataStack()->popObject();
     _vm->dataStack()->popObject();
-=======
-    _vm->popDataObject();
-    _vm->popDataObject();
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 
 }
 

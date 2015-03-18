@@ -39,11 +39,7 @@ void Opcode80BFHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80BF] [+] GameDudeObject* dude_obj()" << std::endl;
     auto game = Game::getInstance();
-<<<<<<< HEAD
     _vm->dataStack()->push(game->player());
-=======
-    _vm->pushDataObject(game->player());
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

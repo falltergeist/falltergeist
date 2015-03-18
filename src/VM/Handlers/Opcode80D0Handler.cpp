@@ -39,7 +39,6 @@ void Opcode80D0Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80D0] [=] void attack_complex(ObjectPtr who, int called_shot, int num_attacks, int bonus"
                             ", int min_damage, int max_damage, int attacker_results, int target_results)" << std::endl;
-<<<<<<< HEAD
     _vm->dataStack()->popInteger();
     _vm->dataStack()->popInteger();
     _vm->dataStack()->popInteger();
@@ -48,16 +47,6 @@ void Opcode80D0Handler::_run()
     _vm->dataStack()->popInteger();
     _vm->dataStack()->popInteger();
     _vm->dataStack()->popObject();
-=======
-    _vm->popDataInteger();
-    _vm->popDataInteger();
-    _vm->popDataInteger();
-    _vm->popDataInteger();
-    _vm->popDataInteger();
-    _vm->popDataInteger();
-    _vm->popDataInteger();
-    _vm->popDataObject();
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

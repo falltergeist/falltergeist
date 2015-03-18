@@ -49,22 +49,12 @@ void Opcode9001Handler::_run()
         case 0x8015: // set exported var value
         case 0x8016: // export var
         {
-<<<<<<< HEAD
             _vm->dataStack()->push(_vm->script()->identifiers()->at(data));
-=======
-            pointer = new std::string(_vm->script()->identificators()->at(data));
-            _vm->pushDataObject(pointer, VMStackPointerValue::POINTER_TYPE_STRING);
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
             break;
         }
         default:
         {
-<<<<<<< HEAD
             _vm->dataStack()->push(_vm->script()->strings()->at(data));
-=======
-            pointer = new std::string(_vm->script()->strings()->at(data));
-            _vm->pushDataObject(pointer, VMStackPointerValue::POINTER_TYPE_STRING);
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
             break;
         }
     }

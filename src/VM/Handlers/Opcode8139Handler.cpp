@@ -36,15 +36,9 @@ Opcode8139Handler::Opcode8139Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8139Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8139] [=] int item_caps_adjust(void* obj, int amount)" << std::endl;
-<<<<<<< HEAD
     _vm->dataStack()->popInteger();
     _vm->dataStack()->popObject();
     _vm->dataStack()->push(0);
-=======
-    _vm->popDataInteger();
-    _vm->popDataObject();
-    _vm->pushDataInteger(0);
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 }
 
 }

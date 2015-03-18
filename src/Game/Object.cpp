@@ -413,12 +413,12 @@ void GameObject::description_p_proc()
     }
 }
 
-void GameObject::use_p_proc(GameCritterObject* usedBy)
+void GameObject::use_p_proc()
 {
     if (script() && script()->hasFunction("use_p_proc"))
     {
         script()
-            ->setSourceObject(usedBy)
+            ->setSourceObject(Game::getInstance()->player())
             ->call("use_p_proc");
     }
 }
@@ -455,58 +455,31 @@ void GameObject::look_at_p_proc()
 
 void GameObject::map_enter_p_proc()
 {
-    if (script())
-    {
-        script()->call("map_enter_p_proc");
-    }
 }
 
 void GameObject::map_exit_p_proc()
 {
-    if (script())
-    {
-        script()->call("map_exit_p_proc");
-    }
 }
 
 void GameObject::map_update_p_proc()
 {
-    if (script())
-    {
-        script()->call("map_update_p_proc");
-    }
 }
 
-void GameObject::pickup_p_proc(GameCritterObject* pickedUpBy)
+void GameObject::pickup_p_proc()
 {
-    if (script() && script()->hasFunction("pickup_p_proc"))
-    {
-        script()
-            ->setSourceObject(pickedUpBy)
-            ->call("pickup_p_proc");
-    }
-    // @TODO: standard handler
 }
 
 void GameObject::spatial_p_proc()
 {
 }
 
-void GameObject::use_obj_on_p_proc(GameObject* objectUsed, GameCritterObject* usedBy)
+void GameObject::use_obj_on_p_proc()
 {
-    if (script() && script()->hasFunction("use_obj_on_p_proc"))
-    {
-        script()
-            ->setSourceObject(usedBy)
-            ->setTargetObject(objectUsed)
-            ->call("use_obj_on_p_proc");
-    }
-    // @TODO: standard handlers for drugs, etc.
 }
 
 void GameObject::onUseAnimationActionFrame(Event* event, GameCritterObject* critter)
 {
-    use_p_proc(critter);
+    use_p_proc();
     Animation* animation = dynamic_cast<Animation*>(critter->ui());
     if (animation)
     {

@@ -38,11 +38,7 @@ Opcode80E7Handler::Opcode80E7Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80E7Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80E7] [=] int anim_busy(void* obj)" << std::endl;
-<<<<<<< HEAD
     _vm->dataStack()->popObject();//auto object = (GameObject*)popDataPointer();
-=======
-    _vm->popDataObject();//auto object = (GameObject*)popDataPointer();
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
     //pushDataInteger(object->animationQueue()->enabled());
     _vm->dataStack()->push(1);
 

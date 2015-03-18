@@ -37,14 +37,9 @@ Opcode80BAHandler::Opcode80BAHandler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode80BAHandler::_run()
 {
-<<<<<<< HEAD
     Logger::debug("SCRIPT") << "[80BA] [+] int obj_is_carrying_obj_pid(GameObject* object, int PID)" << std::endl;
     auto PID = _vm->dataStack()->popInteger();
     auto object = _vm->dataStack()->popObject();
-=======
-    auto PID = _vm->popDataInteger();
-    auto pointer = static_cast<Game::GameObject*>(_vm->popDataObject());
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
 
     int amount = 0;
     auto critter = dynamic_cast<Game::GameCritterObject*>(object);

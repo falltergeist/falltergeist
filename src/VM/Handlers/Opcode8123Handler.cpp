@@ -36,11 +36,7 @@ Opcode8123Handler::Opcode8123Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8123Handler::_run()
 {
-<<<<<<< HEAD
     auto critter = dynamic_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
-=======
-    auto critter = static_cast<Game::GameCritterObject*>(_vm->popDataObject());
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
     auto value = critter->poisonLevel();
     _vm->dataStack()->push(value);
     Logger::debug("SCRIPT") << "[8123] [+] int value = GetPoison(GameCritterObject* critter)" << std::endl

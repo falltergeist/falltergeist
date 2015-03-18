@@ -49,25 +49,15 @@ void Opcode8014Handler::_run()
         case VMStackValue::TYPE_INTEGER:
             name = _vm->script()->identifiers()->at(nameValue.integerValue());
             break;
-<<<<<<< HEAD
         case VMStackValue::TYPE_STRING:
         {
             name = nameValue.stringValue();
-=======
-        case VMStackValue::TYPE_OBJECT:
-        {
-            name = *static_cast<std::string*>(_vm->popDataObject());
->>>>>>> VM type system refactoring: make one class for all types, all stacks will contain values directly. No pointers and dynamic_casts
             break;
         }
         default:
             _error(std::string("op_fetch_external - invalid argument type: ") + nameValue.typeName());
     }
     debug << " name = " << name;
-    if (EVARS->find(name) == EVARS->end())
-    {
-        _error(std::string() + "op_fetch_external: exported variable \"" + name + "\" not found.");
-    }
     auto value = EVARS->at(name);
     debug << ", type = " << value.type() << ", value = " << value.toString() << std::endl;
     _vm->dataStack()->push(value);
