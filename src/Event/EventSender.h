@@ -17,34 +17,24 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_ACTIVEUI_H
-#define FALLTERGEIST_ACTIVEUI_H
+#ifndef FALLTERGEIST_EVENTSENDER_H
+#define FALLTERGEIST_EVENTSENDER_H
 
 // C++ standard includes
-#include <string>
 
 // Falltergeist includes
-#include "../Event/Event.h"
-#include "../Event/EventSender.h"
-#include "../Event/MouseEvent.h"
-#include "../Event/KeyboardEvent.h"
-#include "../Graphics/UI.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class ActiveUI : public UI, public EventSender
+class EventSender
 {
-protected:
-    std::string _downSnd = "";
-    std::string _upSnd = "";
 public:
-    ActiveUI(int x = 0, int y = 0);
-    virtual ~ActiveUI();
-    virtual void handle(Event* event);
+    EventSender();
+    virtual ~EventSender();
 };
 
 }
-#endif // FALLTERGEIST_ACTIVEUI_H
+#endif // FALLTERGEIST_EVENTSENDER_H

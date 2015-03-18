@@ -17,34 +17,47 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_ACTIVEUI_H
-#define FALLTERGEIST_ACTIVEUI_H
+#ifndef FALLTERGEIST_EVENTMANAGER_H
+#define FALLTERGEIST_EVENTMANAGER_H
 
 // C++ standard includes
+#include <functional>
+#include <map>
 #include <string>
+#include <vector>
 
 // Falltergeist includes
 #include "../Event/Event.h"
-#include "../Event/EventSender.h"
-#include "../Event/MouseEvent.h"
-#include "../Event/KeyboardEvent.h"
-#include "../Graphics/UI.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-class ActiveUI : public UI, public EventSender
+class EventHandler;
+class EventSender;
+
+class EventManager
 {
-protected:
-    std::string _downSnd = "";
-    std::string _upSnd = "";
+
 public:
-    ActiveUI(int x = 0, int y = 0);
-    virtual ~ActiveUI();
-    virtual void handle(Event* event);
+    static EventManager* getInstance();
+    void handle(Event* event);
+    void addHandler(std::string eventName, std::function<void(Event*)> function, EventSender* sender = nullptr);
+    void removeHandlers(std::string eventName, EventSender* sender = nullptr);
+    void removeHandlers(EventSender *sender = nullptr);
+    void think();
+
+protected:
+    static EventManager* _instance;
+    std::map<std::string, std::vector<EventHandler*>> _handlers;
+
+    EventManager();
+    EventManager(const EventManager&);
+    EventManager& operator=(EventManager&);
+    ~EventManager();
+
 };
 
 }
-#endif // FALLTERGEIST_ACTIVEUI_H
+#endif // FALLTERGEIST_EVENTMANAGER_H

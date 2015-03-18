@@ -20,10 +20,11 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Audio/AudioMixer.h"
+#include "../Event/EventManager.h"
+#include "../Game/Game.h"
 #include "../UI/Image.h"
 #include "../UI/Slider.h"
-#include "../Game/Game.h"
-#include "../Audio/AudioMixer.h"
 
 // Third party includes
 
@@ -32,9 +33,9 @@ namespace Falltergeist
 
 Slider::Slider(int x, int y) : ActiveUI(x, y)
 {
-    addEventHandler("mousedrag", [this](Event* event){ this->_onDrag(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mouseleftdown", [this](Event* event){ this->_onLeftButtonDown(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mouseleftup", [this](Event* event){ this->_onLeftButtonUp(dynamic_cast<MouseEvent*>(event)); });
+    EventManager::getInstance()->addHandler("mousedrag", [this](Event* event){ this->_onDrag(dynamic_cast<MouseEvent*>(event)); }, this);
+    EventManager::getInstance()->addHandler("mouseleftdown", [this](Event* event){ this->_onLeftButtonDown(dynamic_cast<MouseEvent*>(event)); }, this);
+    EventManager::getInstance()->addHandler("mouseleftup", [this](Event* event){ this->_onLeftButtonUp(dynamic_cast<MouseEvent*>(event)); }, this);
     _imageList.addImage("art/intrface/prfsldon.frm");
     _imageList.addImage("art/intrface/prfsldof.frm");
     _downSnd = "sound/sfx/ib1p1xx1.acm";
@@ -77,7 +78,7 @@ void Slider::handle(Event* event)
 
 void Slider::_onDrag(MouseEvent* event)
 {
-    auto sender = dynamic_cast<Slider*>(event->emitter());
+    auto sender = dynamic_cast<Slider*>(event->sender());
     auto newOffset = sender->_xOffset + event->xOffset();
     if (newOffset <= 218 && newOffset >= 0)
     {
@@ -88,7 +89,7 @@ void Slider::_onDrag(MouseEvent* event)
 
 void Slider::_onLeftButtonDown(MouseEvent* event)
 {
-    auto sender = dynamic_cast<Slider*>(event->emitter());
+    auto sender = dynamic_cast<Slider*>(event->sender());
     if (!sender->_downSnd.empty())
     {
         Game::getInstance()->mixer()->playACMSound(sender->_downSnd);
@@ -97,7 +98,7 @@ void Slider::_onLeftButtonDown(MouseEvent* event)
 
 void Slider::_onLeftButtonUp(MouseEvent* event)
 {
-    auto sender = dynamic_cast<Slider*>(event->emitter());
+    auto sender = dynamic_cast<Slider*>(event->sender());
     if (!sender->_upSnd.empty())
     {
         Game::getInstance()->mixer()->playACMSound(sender->_upSnd);

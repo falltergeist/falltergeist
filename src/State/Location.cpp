@@ -23,6 +23,7 @@
 #include <algorithm>
 
 // Falltergeist includes
+#include "../Event/EventManager.h"
 #include "../Event/MouseEvent.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
@@ -865,7 +866,7 @@ void Location::handleAction(Game::GameObject* object, int action)
         {
             auto player = Game::getInstance()->player();
             auto animation = player->setActionAnimation("al");
-            animation->addEventHandler("actionFrame", [object, player](Event* event){ object->onUseAnimationActionFrame(event, player); });
+            EventManager::getInstance()->addHandler("actionFrame", [object, player](Event* event){ object->onUseAnimationActionFrame(event, player); }, animation);
             break;
         }
         case Mouse::ICON_ROTATE:

@@ -22,10 +22,9 @@
 
 // C++ standard includes
 #include <string>
-#include <memory>
 
 // Falltergeist includes
-#include "../Event/EventEmitter.h"
+#include "../Event/EventSender.h"
 
 // Third party includes
 
@@ -34,21 +33,25 @@ namespace Falltergeist
 
 class Event
 {
-protected:
-    std::string _name;
-    EventEmitter* _emitter = 0;
-    bool _handled = false;
+
 public:
     Event(std::string name);
     virtual ~Event();
-    std::string name();
+
+    std::string name() const;
     void setName(std::string name);
 
-    EventEmitter* emitter();
-    void setEmitter(EventEmitter* value);
+    EventSender* sender() const;
+    void setSender(EventSender* value);
 
-    bool handled();
+    bool handled() const;
     void setHandled(bool value);
+
+protected:
+    std::string _name;
+    EventSender* _sender = nullptr;
+    bool _handled = false;
+
 };
 
 }

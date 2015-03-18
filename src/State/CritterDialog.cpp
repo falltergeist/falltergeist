@@ -22,6 +22,8 @@
 #include <algorithm>
 
 // Falltergeist includes
+#include "../Event/EventManager.h"
+#include "../Event/EventSender.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -74,11 +76,11 @@ void CritterDialog::init()
 
     // Interface buttons
     auto reviewButton = new ImageButton(ImageButton::TYPE_DIALOG_REVIEW_BUTTON, 13, 154);
-    reviewButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onReviewButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onReviewButtonClick(dynamic_cast<MouseEvent*>(event)); }, reviewButton);
     addUI(reviewButton);
 
     auto barterButton = new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, 593, 40);
-    barterButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onBarterButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    EventManager::getInstance()->addHandler("mouseleftclick", [this](Event* event){ this->onBarterButtonClick(dynamic_cast<MouseEvent*>(event)); }, barterButton);
     addUI(barterButton);
 }
 
@@ -95,14 +97,14 @@ void CritterDialog::setQuestion(std::string value)
 
 void CritterDialog::onAnswerIn(Event* event)
 {
-    auto sender = dynamic_cast<TextArea*>(event->emitter());
+    auto sender = dynamic_cast<TextArea*>(event->sender());
     auto font3_a0a0a0ff = ResourceManager::font("font1.aaf", 0xffff7fff);
     sender->setFont(font3_a0a0a0ff);
 }
 
 void CritterDialog::onAnswerOut(Event* event)
 {
-    auto sender = dynamic_cast<TextArea*>(event->emitter());
+    auto sender = dynamic_cast<TextArea*>(event->sender());
     auto font3_3ff800ff = ResourceManager::font("font1.aaf", 0x3ff800ff);
     sender->setFont(font3_3ff800ff);
 }
@@ -206,9 +208,9 @@ void CritterDialog::addAnswer(std::string text)
     answer->setWordWrap(true);
     answer->setWidth(370);
 
-    answer->addEventHandler("mousein", std::bind(&CritterDialog::onAnswerIn, this, std::placeholders::_1));
-    answer->addEventHandler("mouseout", std::bind(&CritterDialog::onAnswerOut, this, std::placeholders::_1));
-    answer->addEventHandler("mouseleftclick", std::bind(&CritterDialog::onAnswerClick, this, std::placeholders::_1));
+    EventManager::getInstance()->addHandler("mousein", std::bind(&CritterDialog::onAnswerIn, this, std::placeholders::_1), answer);
+    EventManager::getInstance()->addHandler("mouseout", std::bind(&CritterDialog::onAnswerOut, this, std::placeholders::_1), answer);
+    EventManager::getInstance()->addHandler("mouseleftclick", std::bind(&CritterDialog::onAnswerClick, this, std::placeholders::_1), answer);
     _answers.push_back(answer);
     addUI(answer);
 }
@@ -220,7 +222,7 @@ bool CritterDialog::hasAnswers()
 
 void CritterDialog::onAnswerClick(Event* event)
 {
-    auto sender = dynamic_cast<TextArea*>(event->emitter());
+    auto sender = dynamic_cast<TextArea*>(event->sender());
 
     size_t i = 0;
     for (auto answer : _answers)
