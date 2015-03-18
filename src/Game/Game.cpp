@@ -422,7 +422,8 @@ void Game::think()
     for (auto state : *statesForThinkAndHandle())
     {
         state->think();
-    }
+    }    
+    EventManager::getInstance()->think();
 }
 
 void Game::render()
