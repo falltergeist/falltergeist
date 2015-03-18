@@ -199,9 +199,9 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
     }
-    this->addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    this->addEventHandler("mouseleftdown", [this](Event* event){ this->_onLeftButtonDown(dynamic_cast<MouseEvent*>(event)); });
-    this->addEventHandler("mouseout", [this](Event* event){ this->_onMouseOut(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseleftdown", [this](Event* event){ this->_onLeftButtonDown(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseout", [this](Event* event){ this->_onMouseOut(dynamic_cast<MouseEvent*>(event)); });
 }
 
 ImageButton::~ImageButton()

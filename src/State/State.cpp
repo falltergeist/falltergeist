@@ -40,8 +40,8 @@ namespace State
 
 State::State() : EventSender()
 {
-    this->addEventHandler("activate",   [this](Event* event){ this->onStateActivate(dynamic_cast<StateEvent*>(event)); });
-    this->addEventHandler("deactivate", [this](Event* event){ this->onStateDeactivate(dynamic_cast<StateEvent*>(event)); });
+    addEventHandler("activate",   [this](Event* event){ this->onStateActivate(dynamic_cast<StateEvent*>(event)); });
+    addEventHandler("deactivate", [this](Event* event){ this->onStateDeactivate(dynamic_cast<StateEvent*>(event)); });
 }
 
 State::~State()

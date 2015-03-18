@@ -32,9 +32,9 @@ namespace Falltergeist
 
 Slider::Slider(int x, int y) : ActiveUI(x, y)
 {
-    this->addEventHandler("mousedrag", [this](Event* event){ this->_onDrag(dynamic_cast<MouseEvent*>(event)); });
-    this->addEventHandler("mouseleftdown", [this](Event* event){ this->_onLeftButtonDown(dynamic_cast<MouseEvent*>(event)); });
-    this->addEventHandler("mouseleftup", [this](Event* event){ this->_onLeftButtonUp(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mousedrag", [this](Event* event){ this->_onDrag(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseleftdown", [this](Event* event){ this->_onLeftButtonDown(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseleftup", [this](Event* event){ this->_onLeftButtonUp(dynamic_cast<MouseEvent*>(event)); });
     _imageList.addImage("art/intrface/prfsldon.frm");
     _imageList.addImage("art/intrface/prfsldof.frm");
     _downSnd = "sound/sfx/ib1p1xx1.acm";

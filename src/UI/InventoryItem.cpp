@@ -39,10 +39,10 @@ namespace Falltergeist
 InventoryItem::InventoryItem(Game::GameItemObject *item, int x, int y) : ActiveUI(x, y)
 {
     _item = item;
-    this->addEventHandler("mouseleftdown", [this](Event* event){ this->onMouseLeftDown(dynamic_cast<MouseEvent*>(event)); });
-    this->addEventHandler("mousedragstart", [this](Event* event){ this->onMouseDragStart(dynamic_cast<MouseEvent*>(event)); });
-    this->addEventHandler("mousedrag", [this](Event* event){ this->onMouseDrag(dynamic_cast<MouseEvent*>(event)); });
-    this->addEventHandler("mousedragstop", [this](Event* event){ this->onMouseDragStop(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseleftdown", [this](Event* event){ this->onMouseLeftDown(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mousedragstart", [this](Event* event){ this->onMouseDragStart(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mousedrag", [this](Event* event){ this->onMouseDrag(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mousedragstop", [this](Event* event){ this->onMouseDragStop(dynamic_cast<MouseEvent*>(event)); });
 }
 
 unsigned int InventoryItem::type()

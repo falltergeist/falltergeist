@@ -42,10 +42,10 @@ ItemsList::ItemsList(int x, int y) : ActiveUI(x, y)
     _texture = new Texture(_slotWidth, _slotHeight * _slotsNumber);
     _texture->fill(0x000000FF);
 
-    this->addEventHandler("mouseleftdown", [this](Event* event){ this->onMouseLeftDown(dynamic_cast<MouseEvent*>(event)); });
-    this->addEventHandler("mousedragstart", [this](Event* event){ this->onMouseDragStart(dynamic_cast<MouseEvent*>(event)); });
-    this->addEventHandler("mousedrag", [this](Event* event){ this->onMouseDrag(dynamic_cast<MouseEvent*>(event)); });
-    this->addEventHandler("mousedragstop", [this](Event* event){ this->onMouseDragStop(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseleftdown", [this](Event* event){ this->onMouseLeftDown(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mousedragstart", [this](Event* event){ this->onMouseDragStart(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mousedrag", [this](Event* event){ this->onMouseDrag(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mousedragstop", [this](Event* event){ this->onMouseDragStop(dynamic_cast<MouseEvent*>(event)); });
 }
 
 void ItemsList::setItems(std::vector<Game::GameItemObject *>* items)

@@ -35,13 +35,13 @@ namespace Falltergeist
 
 MultistateImageButton::MultistateImageButton(int x, int y) : ActiveUI(x, y)
 {
-    this->addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
 }
 
 MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
 {
-    this->addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    this->addEventHandler("mouseleftup", [this](Event* event){ this->_onLeftButtonUp(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseleftup", [this](Event* event){ this->_onLeftButtonUp(dynamic_cast<MouseEvent*>(event)); });
     //Image* image;
     switch (type)
     {
@@ -89,7 +89,7 @@ MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : 
 
 MultistateImageButton::MultistateImageButton(ImageList* imageList, int x, int y) : ActiveUI(x, y)
 {
-    this->addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
     for (auto image: *imageList->images()) _imageList.addImage(new Image(image));
 }
 
