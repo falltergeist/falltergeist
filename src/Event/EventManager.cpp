@@ -21,6 +21,7 @@
 #include <algorithm>
 
 // Falltergeist includes
+#include "../Event/EventHandler.h"
 #include "../Event/EventManager.h"
 #include "../Event/EventSender.h"
 
@@ -52,47 +53,44 @@ void EventManager::handle(Event* event)
         return;
     }
 
-    for(auto map : _handlers.at(event->name()))
+    // Iterating thru handlers with given eventName
+    for (auto handler : _handlers.at(event->name()))
     {
-        if (map.first == nullptr || map.first == event->sender())
+        if (event->handled()) return;
+        if (handler->deleted()) continue;
+
+        if (handler->sender() == nullptr || handler->sender() == event->sender())
         {
-            for (auto& handler : map.second)
-            {
-                if (event->handled())
-                {
-                    break;
-                }
-                handler(event);
-            }
+            (*handler)(event);
         }
     }
-    think();
 }
 
-void EventManager::addHandler(std::string eventName, std::function<void(Event*)> handler, EventSender* sender)
+void EventManager::addHandler(std::string eventName, std::function<void(Event*)> function, EventSender* sender)
 {
     // if such eventName is not registered yet
     if (_handlers.find(eventName) == _handlers.end())
     {
-        std::map<EventSender*, std::vector<std::function<void(Event*)>>> map;
-        _handlers.insert(std::make_pair(eventName, map));
+        _handlers.insert(std::make_pair(eventName, std::vector<EventHandler*>()));
     }
 
-    // if such sender is not registered yet
-    if (_handlers.at(eventName).find(sender) == _handlers.at(eventName).end())
-    {
-        std::vector<std::function<void(Event*)>> vector;
-        _handlers.at(eventName).insert(std::make_pair(sender, vector));
-    }
+    auto handler = new EventHandler(function);
+    handler->setSender(sender);
 
-    _handlers.at(eventName).at(sender).push_back(handler);
+    _handlers.at(eventName).push_back(handler);
 }
 
 void EventManager::removeHandlers(EventSender* sender)
 {
     for(auto& map : _handlers)
     {
-        removeHandlers(map.first, sender);
+        for (auto handler : map.second)
+        {
+            if (handler->sender() == sender)
+            {
+                handler->setDeleted(true);
+            }
+        }
     }
 }
 
@@ -104,39 +102,32 @@ void EventManager::removeHandlers(std::string eventName, EventSender* sender)
         return;
     }
 
-    if (_handlersToDelete.find(eventName) == _handlersToDelete.end())
+    for (auto handler : _handlers.at(eventName))
     {
-        std::vector<EventSender*> vector;
-        _handlersToDelete.insert(std::make_pair(eventName, vector));
-    }
-
-    _handlersToDelete.at(eventName).push_back(sender);
-}
-
-void EventManager::think()
-{
-    for (auto map : _handlersToDelete)
-    {
-        for (auto sender : map.second)
+        if (sender == nullptr || handler->sender() == sender)
         {
-            // remove all handlers
-            if (sender == nullptr)
-            {
-                _handlers.erase(map.first);
-            }
-            else
-            {
-                // if such sender is not registered
-                if (_handlers.at(map.first).find(sender) == _handlers.at(map.first).end())
-                {
-                    continue;
-                }
-
-                _handlers.at(map.first).erase(sender);
-            }
+            handler->setDeleted(true);
         }
     }
 }
 
+void EventManager::think()
+{
+    for(auto& map : _handlers)
+    {
+        for (auto it = map.second.begin(); it != map.second.end();)
+        {
+            if ((*it)->deleted())
+            {
+                delete *it;
+                it = map.second.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
+    }
+}
 
 }
