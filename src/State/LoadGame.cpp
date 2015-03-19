@@ -21,6 +21,7 @@
 #include <sstream>
 
 // Falltergeist includes
+#include "../Event/EventManager.h"
 #include "../Event/StateEvent.h"
 #include "../functions.h"
 #include "../Game/Game.h"
@@ -114,8 +115,8 @@ void LoadGame::doCancel()
 {
     if (!Game::getInstance()->locationState())
     {
-        removeEventHandlers("fadedone");
-        addEventHandler("fadedone", [this](Event* event){ this->onCancelFadeDone(dynamic_cast<StateEvent*>(event)); });
+        EventManager::getInstance()->removeHandlers("fadedone");
+        EventManager::getInstance()->addHandler("fadedone", [this](Event* event){ this->onCancelFadeDone(dynamic_cast<StateEvent*>(event)); });
         Game::getInstance()->renderer()->fadeOut(255,255,255,1000);
     }
     else
@@ -126,7 +127,7 @@ void LoadGame::doCancel()
 
 void LoadGame::onCancelFadeDone(StateEvent* event)
 {
-    removeEventHandlers("fadedone");
+    EventManager::getInstance()->removeHandlers("fadedone");
     Game::getInstance()->popState();
 }
 

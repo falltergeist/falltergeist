@@ -21,6 +21,7 @@
 #include <sstream>
 
 // Falltergeist includes
+#include "../Event/EventManager.h"
 #include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -153,8 +154,8 @@ void NewGame::doCreate()
 
 void NewGame::doBack()
 {
-    removeEventHandlers("fadedone");
-    addEventHandler("fadedone", [this](Event* event){ this->onBackFadeDone(dynamic_cast<StateEvent*>(event)); });
+    EventManager::getInstance()->removeHandlers("fadedone");
+    EventManager::getInstance()->addHandler("fadedone", [this](Event* event){ this->onBackFadeDone(dynamic_cast<StateEvent*>(event)); });
     Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
 }
 
@@ -191,7 +192,7 @@ void NewGame::onBackButtonClick(MouseEvent* event)
 
 void NewGame::onBackFadeDone(StateEvent* event)
 {
-    removeEventHandlers("fadedone");
+    EventManager::getInstance()->removeHandlers("fadedone");
     Game::getInstance()->popState();
 }
 

@@ -21,6 +21,7 @@
 #include <ctype.h>
 
 // Falltergeist includes
+#include "../Event/EventSender.h"
 #include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -131,7 +132,7 @@ void PlayerEditName::init()
 
 void PlayerEditName::onTextAreaKeyDown(KeyboardEvent* event)
 {
-    auto sender = dynamic_cast<TextArea*>(event->emitter());
+    auto sender = dynamic_cast<TextArea*>(event->sender());
 
     std::string text = sender->text();
 

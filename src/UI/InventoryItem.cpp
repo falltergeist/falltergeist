@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Event/EventManager.h"
 #include "../Game/Game.h"
 #include "../Game/DudeObject.h"
 #include "../Game/ItemObject.h"
@@ -122,13 +123,11 @@ void InventoryItem::onMouseDragStop(MouseEvent* event)
     setYOffset(0);
     setType(_oldType);
 
-    auto itemevent = new MouseEvent("itemdragstop");
-    itemevent->setX(event->x());
-    itemevent->setY(event->y());
-    itemevent->setEmitter(this);
-    emitEvent(itemevent);
-    delete itemevent;
-
+    MouseEvent itemevent("itemdragstop");
+    itemevent.setX(event->x());
+    itemevent.setY(event->y());
+    itemevent.setSender(this);
+    EventManager::getInstance()->handle(&itemevent);
 }
 
 void InventoryItem::onArmorDragStop(MouseEvent* event)
@@ -137,7 +136,7 @@ void InventoryItem::onArmorDragStop(MouseEvent* event)
     if (event->x() <= x() || event->x() >= x() + width()) return;
     if (event->y() <= y() || event->y() >= y() + height()) return;
 
-    if (ItemsList* itemsList = dynamic_cast<ItemsList*>(event->emitter()))
+    if (ItemsList* itemsList = dynamic_cast<ItemsList*>(event->sender()))
     {
         InventoryItem* draggedItem = itemsList->draggedItem();
         auto itemObject = draggedItem->item();
@@ -161,7 +160,7 @@ void InventoryItem::onHandDragStop(MouseEvent* event)
     if (event->x() <= x() || event->x() >= x() + width()) return;
     if (event->y() <= y() || event->y() >= y() + height()) return;
 
-    if (ItemsList* itemsList = dynamic_cast<ItemsList*>(event->emitter()))
+    if (ItemsList* itemsList = dynamic_cast<ItemsList*>(event->sender()))
     {
         InventoryItem* item = itemsList->draggedItem();
         itemsList->removeItem(item, 1);

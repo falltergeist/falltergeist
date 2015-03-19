@@ -22,6 +22,7 @@
 #include <algorithm>
 
 // Falltergeist includes
+#include "../Event/EventSender.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -39,6 +40,8 @@
 #include "../VM/VM.h"
 
 // Third party includes
+
+using namespace std::placeholders;
 
 namespace Falltergeist
 {
@@ -95,14 +98,14 @@ void CritterDialog::setQuestion(std::string value)
 
 void CritterDialog::onAnswerIn(Event* event)
 {
-    auto sender = dynamic_cast<TextArea*>(event->emitter());
+    auto sender = dynamic_cast<TextArea*>(event->sender());
     auto font3_a0a0a0ff = ResourceManager::font("font1.aaf", 0xffff7fff);
     sender->setFont(font3_a0a0a0ff);
 }
 
 void CritterDialog::onAnswerOut(Event* event)
 {
-    auto sender = dynamic_cast<TextArea*>(event->emitter());
+    auto sender = dynamic_cast<TextArea*>(event->sender());
     auto font3_3ff800ff = ResourceManager::font("font1.aaf", 0x3ff800ff);
     sender->setFont(font3_3ff800ff);
 }
@@ -206,9 +209,9 @@ void CritterDialog::addAnswer(std::string text)
     answer->setWordWrap(true);
     answer->setWidth(370);
 
-    answer->addEventHandler("mousein", std::bind(&CritterDialog::onAnswerIn, this, std::placeholders::_1));
-    answer->addEventHandler("mouseout", std::bind(&CritterDialog::onAnswerOut, this, std::placeholders::_1));
-    answer->addEventHandler("mouseleftclick", std::bind(&CritterDialog::onAnswerClick, this, std::placeholders::_1));
+    answer->addEventHandler("mousein", std::bind(&CritterDialog::onAnswerIn, this, _1));
+    answer->addEventHandler("mouseout", std::bind(&CritterDialog::onAnswerOut, this, _1));
+    answer->addEventHandler("mouseleftclick", std::bind(&CritterDialog::onAnswerClick, this, _1));
     _answers.push_back(answer);
     addUI(answer);
 }
@@ -220,7 +223,7 @@ bool CritterDialog::hasAnswers()
 
 void CritterDialog::onAnswerClick(Event* event)
 {
-    auto sender = dynamic_cast<TextArea*>(event->emitter());
+    auto sender = dynamic_cast<TextArea*>(event->sender());
 
     size_t i = 0;
     for (auto answer : _answers)

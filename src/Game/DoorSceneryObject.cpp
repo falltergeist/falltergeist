@@ -21,14 +21,16 @@
 
 // Falltergeist includes
 #include "../Audio/AudioMixer.h"
+#include "../Game/DoorSceneryObject.h"
+#include "../Game/Game.h"
 #include "../Graphics/Animation.h"
 #include "../Graphics/AnimationQueue.h"
 #include "../Logger.h"
-#include "../Game/Game.h"
-#include "../Game/DoorSceneryObject.h"
 #include "../VM/VM.h"
 
 // Third party includes
+
+using namespace std::placeholders;
 
 namespace Falltergeist
 {
@@ -75,7 +77,7 @@ void GameDoorSceneryObject::use_p_proc(GameCritterObject* usedBy)
         {
             queue->start();
             queue->currentAnimation()->setReverse(false);
-            queue->addEventHandler("animationEnded", std::bind(&GameDoorSceneryObject::onOpeningAnimationEnded, this, std::placeholders::_1));
+            queue->addEventHandler("animationEnded", std::bind(&GameDoorSceneryObject::onOpeningAnimationEnded, this, _1));
             if (_soundId) Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/sodoors") + _soundId + ".acm");
         }
     }
@@ -85,7 +87,7 @@ void GameDoorSceneryObject::use_p_proc(GameCritterObject* usedBy)
         {
             queue->start();
             queue->currentAnimation()->setReverse(true);
-            queue->addEventHandler("animationEnded", std::bind(&GameDoorSceneryObject::onClosingAnimationEnded, this, std::placeholders::_1));
+            queue->addEventHandler("animationEnded", std::bind(&GameDoorSceneryObject::onClosingAnimationEnded, this, _1));
             if (_soundId) Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/scdoors") + _soundId + ".acm");
         }
     }
@@ -98,7 +100,7 @@ bool GameDoorSceneryObject::canWalkThru() const
 
 void GameDoorSceneryObject::onOpeningAnimationEnded(Event* event)
 {
-    auto queue = (AnimationQueue*)event->emitter();
+    auto queue = (AnimationQueue*)event->sender();
     setOpened(true);
     queue->removeEventHandlers("animationEnded");
     queue->stop();
@@ -107,7 +109,7 @@ void GameDoorSceneryObject::onOpeningAnimationEnded(Event* event)
 
 void GameDoorSceneryObject::onClosingAnimationEnded(Event* event)
 {
-    auto queue = (AnimationQueue*)event->emitter();
+    auto queue = (AnimationQueue*)event->sender();
     setOpened(false);
     queue->removeEventHandlers("animationEnded");
     queue->stop();

@@ -292,7 +292,7 @@ void Inventory::onArmorSlotMouseDown(MouseEvent* event)
 {
     if (Game::getInstance()->mouse()->state() == Mouse::HAND)
     {
-        auto itemUi = dynamic_cast<ImageList*>(event->emitter());
+        auto itemUi = dynamic_cast<ImageList*>(event->sender());
         Game::getInstance()->pushState(new InventoryDragItem(itemUi));
     }
     else
@@ -306,7 +306,7 @@ void Inventory::onLeftHandSlotMouseDown(MouseEvent* event)
 {
     if (Game::getInstance()->mouse()->state() == Mouse::HAND)
     {
-        auto itemUi = dynamic_cast<ImageList*>(event->emitter());
+        auto itemUi = dynamic_cast<ImageList*>(event->sender());
         Game::getInstance()->pushState(new InventoryDragItem(itemUi));
     }
     else
@@ -320,7 +320,7 @@ void Inventory::onRightHandSlotMouseDown(MouseEvent* event)
 {
     if (Game::getInstance()->mouse()->state() == Mouse::HAND)
     {
-        auto itemUi = dynamic_cast<ImageList*>(event->emitter());
+        auto itemUi = dynamic_cast<ImageList*>(event->sender());
         Game::getInstance()->pushState(new InventoryDragItem(itemUi));
     }
     else

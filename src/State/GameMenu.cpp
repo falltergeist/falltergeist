@@ -20,8 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../functions.h"
 #include "../Audio/AudioMixer.h"
+#include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
@@ -68,8 +68,8 @@ void GameMenu::init()
     auto doneButton = new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4);
 
     preferencesButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doPreferences(); });
-    exitGameButton->addEventHandler("mouseleftclick",    [this](Event* event){ this->doExit(); });
-    doneButton->addEventHandler("mouseleftclick",        [this](Event* event){ this->closeMenu(); });
+    exitGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doExit(); });
+    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->closeMenu(); });
 
     auto font = ResourceManager::font("font3.aaf", 0xb89c28ff);
 

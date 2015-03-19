@@ -23,10 +23,11 @@
 // Falltergeist includes
 #include "../Audio/AudioMixer.h"
 #include "../CrossPlatform.h"
+#include "../Event/EventManager.h"
 #include "../Event/StateEvent.h"
 #include "../Exception.h"
-#include "Game.h"
-#include "Time.h"
+#include "../Game/Game.h"
+#include "../Game/Time.h"
 #include "../Graphics/AnimatedPalette.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
@@ -154,9 +155,9 @@ void Game::popState()
     _states.pop_back();
     _statesForDelete.push_back(state);
 
-    auto event = new StateEvent("deactivate");
-    state->emitEvent(event);
-    delete event;
+    StateEvent event("deactivate");
+    event.setSender(state);
+    EventManager::getInstance()->handle(&event);
 }
 
 void Game::setState(State::State* state)
@@ -281,10 +282,10 @@ std::vector<State::State*>* Game::statesForThinkAndHandle()
         auto state = *it;
         if (!state->active())
         {
-            auto event = new StateEvent("activate");
-            state->emitEvent(event);
+            StateEvent event("activate");
+            event.setSender(state);
+            EventManager::getInstance()->handle(&event);
             state->setActive(true);
-            delete event;
         }
         _statesForThinkAndHandle.push_back(state);
         if (state->modal() || state->fullscreen())
@@ -299,10 +300,10 @@ std::vector<State::State*>* Game::statesForThinkAndHandle()
         auto state = *it;
         if (state->active())
         {
-            auto event = new StateEvent("deactivate");
-            state->emitEvent(event);
+            StateEvent event("deactivate");
+            event.setSender(state);
+            EventManager::getInstance()->handle(&event);
             state->setActive(false);
-            delete event;
         }
     }
 
@@ -418,7 +419,8 @@ void Game::think()
     for (auto state : *statesForThinkAndHandle())
     {
         state->think();
-    }
+    }    
+    EventManager::getInstance()->think();
 }
 
 void Game::render()
