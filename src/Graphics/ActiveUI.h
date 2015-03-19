@@ -37,13 +37,16 @@ namespace Falltergeist
 
 class ActiveUI : public UI, public EventSender
 {
-protected:
-    std::string _downSnd = "";
-    std::string _upSnd = "";
+
 public:
     ActiveUI(int x = 0, int y = 0);
     virtual ~ActiveUI();
     virtual void handle(Event* event);
+
+protected:
+    std::string _soundDown = "";
+    std::string _soundUp = "";
+
 };
 
 }

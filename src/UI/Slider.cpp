@@ -32,13 +32,13 @@ namespace Falltergeist
 
 Slider::Slider(int x, int y) : ActiveUI(x, y)
 {
-    addEventHandler("mousedrag", [this](Event* event){ this->_onDrag(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mouseleftdown", [this](Event* event){ this->_onLeftButtonDown(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mouseleftup", [this](Event* event){ this->_onLeftButtonUp(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mousedrag",    [this](Event* event){ this->_onDrag(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseleftdown",[this](Event* event){ this->_onLeftButtonDown(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseleftup",  [this](Event* event){ this->_onLeftButtonUp(dynamic_cast<MouseEvent*>(event)); });
     _imageList.addImage("art/intrface/prfsldon.frm");
     _imageList.addImage("art/intrface/prfsldof.frm");
-    _downSnd = "sound/sfx/ib1p1xx1.acm";
-    _upSnd = "sound/sfx/ib1lu1x1.acm";
+    _soundDown = "sound/sfx/ib1p1xx1.acm";
+    _soundUp = "sound/sfx/ib1lu1x1.acm";
 }
 
 Slider::~Slider()
@@ -55,18 +55,24 @@ void Slider::handle(Event* event)
         int y = mouseEvent->y() - _y;
 
         //if we are in slider coordinates and not on thumb (slider size = 218 + thumb size, thumb size = 21)
-        if (x > 0 && x < 239 && y > 0 && y < this->height() && !this->pixel(mouseEvent->x() - _xOffset, mouseEvent->y() - _yOffset))
+        if (x > 0 && x < 239 && y > 0 && y < height() && !pixel(mouseEvent->x() - _xOffset, mouseEvent->y() - _yOffset))
         {
             //on left button up only when not dragging thumb
             if (mouseEvent->name() == "mouseup" && mouseEvent->leftButton() && !_drag)
             {
                 x -= 10; //~middle of thumb
-                if (x < 0) x = 0;
-                if (x > 218) x = 218;
+                if (x < 0)
+                {
+                    x = 0;
+                }
+                if (x > 218)
+                {
+                    x = 218;
+                }
                 _xOffset = x;
                 _value = ((maxValue() - minValue())/218)*_xOffset;
-                Game::getInstance()->mixer()->playACMSound(_downSnd);
-                Game::getInstance()->mixer()->playACMSound(_upSnd);
+                Game::getInstance()->mixer()->playACMSound(_soundDown);
+                Game::getInstance()->mixer()->playACMSound(_soundUp);
                 return;
             }
         }
@@ -89,18 +95,18 @@ void Slider::_onDrag(MouseEvent* event)
 void Slider::_onLeftButtonDown(MouseEvent* event)
 {
     auto sender = dynamic_cast<Slider*>(event->sender());
-    if (!sender->_downSnd.empty())
+    if (!sender->_soundDown.empty())
     {
-        Game::getInstance()->mixer()->playACMSound(sender->_downSnd);
+        Game::getInstance()->mixer()->playACMSound(sender->_soundDown);
     }
 }
 
 void Slider::_onLeftButtonUp(MouseEvent* event)
 {
     auto sender = dynamic_cast<Slider*>(event->sender());
-    if (!sender->_upSnd.empty())
+    if (!sender->_soundUp.empty())
     {
-        Game::getInstance()->mixer()->playACMSound(sender->_upSnd);
+        Game::getInstance()->mixer()->playACMSound(sender->_soundUp);
     }
 }
 

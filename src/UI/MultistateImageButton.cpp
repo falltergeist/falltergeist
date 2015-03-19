@@ -63,8 +63,8 @@ MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : 
             addImage(image3);
             addImage(image4);
             delete image;
-            _downSnd = "sound/sfx/ib3p1xx1.acm";
-            _upSnd = "sound/sfx/ib3lu1x1.acm";
+            _soundDown = "sound/sfx/ib3p1xx1.acm";
+            _soundUp = "sound/sfx/ib3lu1x1.acm";
             break;
         }
         case TYPE_SMALL_SWITCH:
@@ -77,8 +77,8 @@ MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : 
             addImage(image1);
             addImage(image2);
             delete image;
-            _downSnd = "sound/sfx/ib2p1xx1.acm";
-            _upSnd = "sound/sfx/ib2lu1x1.acm";
+            _soundDown = "sound/sfx/ib2p1xx1.acm";
+            _soundUp = "sound/sfx/ib2lu1x1.acm";
             break;
         }
         default:
@@ -165,13 +165,13 @@ void MultistateImageButton::_onLeftButtonUp(MouseEvent* event)
 {
     auto sender = (MultistateImageButton*)event->sender();
 
-    if (!sender->_downSnd.empty())
+    if (!sender->_soundDown.empty())
     {
-        Game::getInstance()->mixer()->playACMSound(sender->_downSnd);
+        Game::getInstance()->mixer()->playACMSound(sender->_soundDown);
     }
-    if (!sender->_upSnd.empty())
+    if (!sender->_soundUp.empty())
     {
-        Game::getInstance()->mixer()->playACMSound(sender->_upSnd);
+        Game::getInstance()->mixer()->playACMSound(sender->_soundUp);
     }
 }
 
