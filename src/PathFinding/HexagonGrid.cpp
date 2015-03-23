@@ -192,4 +192,54 @@ unsigned int HexagonGrid::distance(Hexagon* from, Hexagon* to)
     return (std::abs(from->cubeX() - to->cubeX()) + std::abs(from->cubeY() - to->cubeY()) + std::abs(from->cubeZ() - to->cubeZ())) / 2;
 }
 
+Hexagon* HexagonGrid::hexInDirection(Hexagon* from, unsigned short rotation, unsigned int distance)
+{
+    if (distance == 0 || rotation > 5)
+    {
+        return from;
+    }
+
+    int startX = from->cubeX();
+    int startY = from->cubeY();
+    int startZ = from->cubeZ();
+
+    switch (rotation)
+    {
+        case 0:
+            startY+=distance;
+            startZ-=distance;
+            break;
+        case 1:
+            startZ-=distance;
+            startX+=distance;
+            break;
+        case 2:
+            startX+=distance;
+            startY-=distance;
+            break;
+        case 3:
+            startY-=distance;
+            startZ+=distance;
+            break;
+        case 4:
+            startZ+=distance;
+            startX-=distance;
+            break;
+        case 5:
+            startX-=distance;
+            startY+=distance;
+            break;
+
+    }
+    int p = startZ;
+    int q = startX + (p + (p&1))/2;
+    int index = 200*q + p;
+    if (index < 0 || index >= 200*200)
+    {
+        return from;
+    }
+    return at(index);
+
+}
+
 }
