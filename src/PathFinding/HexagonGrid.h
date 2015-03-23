@@ -44,6 +44,7 @@ public:
     Hexagon* at(unsigned int index);
     std::vector<Hexagon*> findPath(Hexagon* from, Hexagon* to);
     Hexagon* hexInDirection(Hexagon* from, unsigned short rotation, unsigned int distance);
+    std::vector<Hexagon*> ring(Hexagon* from, unsigned int radius);
 };
 
 }
