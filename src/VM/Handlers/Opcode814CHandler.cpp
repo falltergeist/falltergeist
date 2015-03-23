@@ -23,8 +23,10 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode814CHandler.h"
 #include "../../VM/VM.h"
-
-
+#include "../../Game/Game.h"
+#include "../../State/Location.h"
+#include "../../PathFinding/HexagonGrid.h"
+#include "../../PathFinding/Hexagon.h"
 
 // Third party includes
 
@@ -38,9 +40,14 @@ Opcode814CHandler::Opcode814CHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode814CHandler::_run()
 {
     Logger::debug("SCRIPT") << "[814C] [=] int rotation_to_tile(int srcTile, int destTile)" << std::endl;
-    _vm->dataStack()->popInteger();
-    _vm->dataStack()->popInteger();
-    _vm->dataStack()->push(0);
+    // TODO: error checking
+    auto to_index = _vm->dataStack()->popInteger();
+    auto from_index =_vm->dataStack()->popInteger();
+    auto grid = Game::getInstance()->locationState()->hexagonGrid();
+    auto from_hex = grid->at(from_index);
+    auto to_hex = grid->at(to_index);
+    auto rotation = from_hex->orientationTo(to_hex);
+    _vm->dataStack()->push(rotation);
 }
 
 }
