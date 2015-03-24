@@ -125,8 +125,9 @@ void VM::run()
 
 std::string VM::msgMessage(int msg_file_num, int msg_num)
 {
-    auto lst = ResourceManager::lstFileType("data/dialogs.lst");
-    auto msg = ResourceManager::msgFileType("text/english/dialog/" + lst->strings()->at(msg_file_num - 1));
+    auto lst = ResourceManager::lstFileType("scripts/scripts.lst");
+    auto scriptName = lst->strings()->at(msg_file_num - 1);
+    auto msg = ResourceManager::msgFileType("text/english/dialog/" + scriptName.substr(0, scriptName.find(".int")).append(".msg"));
     if (!msg)
     {
         Logger::debug("SCRIPT") << "VM::msgMessage(file, num) not found. file: " + std::to_string(msg_file_num) + " num: " + std::to_string(msg_num) << std::endl;
