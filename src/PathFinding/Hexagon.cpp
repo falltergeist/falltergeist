@@ -149,20 +149,17 @@ unsigned int Hexagon::orientationTo(Hexagon* hexagon)
     int dx = hexagon->cubeX() - cubeX();
     int dy = hexagon->cubeY() - cubeY();
 
-    switch(dx)
+    if (dx == 0) // 0 || 3
     {
-        case 0: // 0 || 3
-        {
-            return dy == 1 ? 0 : 3;
-        }
-        case 1: // 1 || 2
-        {
-            return dy == 0 ? 1 : 2;
-        }
-        case -1: // 4 || 5
-        {
-            return dy == 0 ? 4 : 5;
-        }
+        return dy > 0 ? 0 : 3;
+    }
+    else if (dx > 0) // 1 || 2
+    {
+        return dy == 0 ? 1 : 2;
+    }
+    else // 4 || 5
+    {
+        return dy == 0 ? 4 : 5;
     }
     return 0;
 }

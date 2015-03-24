@@ -23,6 +23,10 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80D5Handler.h"
 #include "../../VM/VM.h"
+#include "../../Game/Game.h"
+#include "../../State/Location.h"
+#include "../../PathFinding/HexagonGrid.h"
+#include "../../PathFinding/Hexagon.h"
 
 // Third party includes
 
@@ -39,8 +43,26 @@ void Opcode80D5Handler::_run()
     auto distance = _vm->dataStack()->popInteger();
     auto dir = _vm->dataStack()->popInteger();
     auto start_tile = _vm->dataStack()->popInteger();
-    // dirty hack... should be fixed in future
-    _vm->dataStack()->push(start_tile);
+
+    if (dir < 0 || dir > 5 || distance < 0)
+    {
+        //error?
+        _vm->dataStack()->push(start_tile);
+    }
+    else
+    {
+        auto grid = Game::getInstance()->locationState()->hexagonGrid();
+        auto hex = grid->hexInDirection(grid->at(start_tile), dir, distance);
+        if (hex)
+        {
+            _vm->dataStack()->push(hex->number());
+
+        }
+        else
+        {
+            _vm->dataStack()->push(start_tile);
+        }
+    }
 }
 
 }

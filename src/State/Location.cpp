@@ -629,7 +629,10 @@ void Location::handle(Event* event)
             {
                 std::string text = "Hex number: " + std::to_string(hexagon->number()) + "\n";
                 text += "Hex position: " + std::to_string(hexagon->number()%200) + "," + std::to_string((unsigned int)(hexagon->number()/200)) + "\n";
-                text += "Hex coords: " + std::to_string(hexagon->x()) + "," + std::to_string(hexagon->y());
+                text += "Hex coords: " + std::to_string(hexagon->x()) + "," + std::to_string(hexagon->y()) + "\n";
+                auto dude = Game::getInstance()->player();
+                auto hex = dude->hexagon();
+                text += "Hex delta:\n dx=" + std::to_string(hex->cubeX()-hexagon->cubeX()) + "\n dy="+ std::to_string(hex->cubeY()-hexagon->cubeY()) + "\n dz=" + std::to_string(hex->cubeZ()-hexagon->cubeZ());
                 _hexagonInfo->setText(text);
             }
             else
