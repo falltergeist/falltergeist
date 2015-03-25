@@ -230,16 +230,16 @@ std::string CrossPlatform::findFalltergeistDataPath()
 
     for (auto &directory : directories)
     {
-        std::ifstream stream(directory + "/data/dialogs.lst");
+        std::ifstream stream(directory + "/data/movies.lst");
         if (stream)
         {
-            Logger::info() << "Searching in directory: " << directory << "data/dialogs.lst [FOUND]" << std::endl;
+            Logger::info() << "Searching in directory: " << directory << "data/movies.lst [FOUND]" << std::endl;
             _falltergeistDataPath = directory;
             return _falltergeistDataPath;
         }
         else
         {
-            Logger::info() << "Searching in directory: " << directory << "data/dialogs.lst [NOT FOUND]" << std::endl;
+            Logger::info() << "Searching in directory: " << directory << "data/movies.lst [NOT FOUND]" << std::endl;
         }
     }
 
