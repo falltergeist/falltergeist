@@ -18,6 +18,7 @@
  */
 
 // C++ standard includes
+#include <cmath>
 
 // Falltergeist includes
 #include "../Game/Game.h"
@@ -146,22 +147,40 @@ void Hexagon::setInRender(bool value)
 
 unsigned int Hexagon::orientationTo(Hexagon* hexagon)
 {
-    int dx = hexagon->cubeX() - cubeX();
-    int dy = hexagon->cubeY() - cubeY();
 
-    if (dx == 0) // 0 || 3
+    int x1 = x();
+    int y1 = y();
+    int x2 = hexagon->x();
+    int y2 = hexagon->y();
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+
+    unsigned int result = 0;
+
+    if (dx)
     {
-        return dy > 0 ? 0 : 3;
+        // triginometry magick.
+        // basically, we try to find angle to second hex in circle, where first hex is center
+        // and then find out to which of 60º slices it belongs
+
+        double degree = atan2((double)-dy, (double)dx) * 180.0 * 0.3183098862851122; //  180 * 1/PI
+
+        result = (360 - ((signed int)degree + 180) - 90 + ((char)-(360 - ((signed int)degree + 180) - 90 < 0) & 360)) / 60;
+        if ( result > 5 )
+        {
+            result = 5;
+        }
     }
-    else if (dx > 0) // 1 || 2
+    else if ( dy < 0 )
     {
-        return dy == 0 ? 1 : 2;
+        result = 0;
     }
-    else // 4 || 5
+    else
     {
-        return dy == 0 ? 4 : 5;
+        result = 2;
     }
-    return 0;
+
+    return result;
 }
 
 }
