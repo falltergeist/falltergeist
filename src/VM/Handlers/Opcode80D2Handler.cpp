@@ -23,7 +23,11 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80D2Handler.h"
 #include "../../VM/VM.h"
-
+#include "../../VM/Handlers/Opcode80B6Handler.h"
+#include "../../Game/Game.h"
+#include "../../State/Location.h"
+#include "../../PathFinding/Hexagon.h"
+#include "../../PathFinding/HexagonGrid.h"
 
 
 // Third party includes
@@ -38,9 +42,18 @@ Opcode80D2Handler::Opcode80D2Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80D2Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80D2] [=] int tile_distance(int tile1, int tile2)" << std::endl;
-    _vm->dataStack()->popInteger();
-    _vm->dataStack()->popInteger();
-    _vm->dataStack()->push(4);
+    auto tile1 = _vm->dataStack()->popInteger();
+    auto tile2 = _vm->dataStack()->popInteger();
+    if (tile1 < 0 || tile1 >= 200*200 || tile2 < 0 || tile2 >= 200*200)
+    {
+        _vm->dataStack()->push(9999);
+    }
+    else
+    {
+        auto grid = Game::getInstance()->locationState()->hexagonGrid();
+        auto dist = grid->distance(grid->at(tile1), grid->at(tile2));
+        _vm->dataStack()->push(dist);
+    }
 }
 
 }
