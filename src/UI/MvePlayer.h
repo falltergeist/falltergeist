@@ -96,7 +96,7 @@ private:
     void _drawQuadrant4colors(uint32_t x, uint32_t y, uint8_t c1, uint8_t c2, uint8_t c3, uint8_t c4, uint8_t mask1, uint8_t mask2, uint8_t mask3, uint8_t mask4);
 public:
     void think();
-    void render(bool eggTransparency = false);
+    void render(bool eggTransparency = false, bool grayscale = false);
     bool finished();
     uint32_t getAudio(uint8_t* data, uint32_t len);
     uint32_t samplesLeft();

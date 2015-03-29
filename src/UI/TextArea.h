@@ -91,7 +91,7 @@ public:
     TextArea* setFont(std::shared_ptr<Font> font);
     std::shared_ptr<Font> font();
 
-    virtual void render(bool eggTransparency = false);
+    virtual void render(bool eggTransparency = false, bool grayscale = false);
     virtual unsigned int pixel(unsigned int x, unsigned int y);
 
     unsigned int timestampCreated();

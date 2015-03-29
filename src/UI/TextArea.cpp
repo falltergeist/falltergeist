@@ -276,7 +276,7 @@ unsigned int TextArea::timestampCreated()
     return _timestampCreated;
 }
 
-void TextArea::render(bool eggTransparency)
+void TextArea::render(bool eggTransparency, bool grayscale)
 {
     if (_changed) _calculate();
 

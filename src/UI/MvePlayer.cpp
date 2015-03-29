@@ -118,7 +118,7 @@ MvePlayer::~MvePlayer()
     SDL_FreeSurface(_backBuf);
 }
 
-void MvePlayer::render(bool eggTransparency)
+void MvePlayer::render(bool eggTransparency, bool grayscale)
 {
     //we dont have data yet
     if (!_timerStarted)

@@ -177,7 +177,7 @@ unsigned int AnimatedImage::height()
     return texture()->height();
 }
 
-void AnimatedImage::render(bool eggTransparency)
+void AnimatedImage::render(bool eggTransparency, bool grayscale)
 {
     AnimatedPalette* pal = Game::getInstance()->animatedPalette();
 

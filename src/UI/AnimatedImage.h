@@ -48,7 +48,7 @@ public:
     unsigned int width();
     unsigned int height();
     ~AnimatedImage();
-    void render(bool eggTransparency = false);
+    void render(bool eggTransparency = false, bool grayscale = false);
 };
 
 }

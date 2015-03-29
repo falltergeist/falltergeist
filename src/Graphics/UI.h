@@ -40,6 +40,7 @@ protected:
     int _yOffset = 0;
     Texture* _texture = 0;
     Texture* _tmptex = 0;
+    Texture* _graytex = 0;
     bool _leftButtonPressed = false;
     bool _rightButtonPressed = false;
     bool _drag = false;
@@ -68,7 +69,7 @@ public:
     virtual bool visible();
 
     virtual void think();
-    virtual void render(bool eggTransparency = false);
+    virtual void render(bool eggTransparency = false, bool grayscale = false);
 
     virtual unsigned int width();
     virtual unsigned int height();

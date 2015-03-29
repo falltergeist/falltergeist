@@ -54,7 +54,7 @@ public:
 
 
     virtual Texture* texture();
-    virtual void render(bool eggTransparency = false);
+    virtual void render(bool eggTransparency = false, bool grayscale = false);
     virtual void think();
     virtual unsigned int pixel(unsigned int x, unsigned int y);
 

@@ -280,4 +280,27 @@ SDL_BlendMode Texture::blendMode()
     return _blendMode;
 }
 
+void Texture::grayscale()
+{
+    for (unsigned int y = 0; y < height(); y++)
+    {
+        for (unsigned int x = 0; x < width(); x++)
+        {
+            uint32_t pixel = ((uint32_t*)_sdlSurface->pixels)[y * width() + x];
+            uint8_t r = pixel >> 24 & 0xFF;
+            uint8_t g = pixel >> 16 & 0xFF;
+            uint8_t b = pixel >> 8 & 0xFF;
+            uint8_t a = pixel & 0xFF;
+            uint32_t v = 0.212671f * r + 0.715160f * g + 0.072169f * b + 50;
+            if (v > 200)
+            {
+                v = 200;
+            }
+            pixel = (v << 24) | (v << 16) | (v << 8) | a;
+            ((uint32_t*)_sdlSurface->pixels)[y * width() + x] = pixel;
+        }
+    }
+
+}
+
 }
