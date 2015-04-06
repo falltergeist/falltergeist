@@ -10,6 +10,12 @@ IRC channel: #falltergeist on [freenode.net](http://webchat.freenode.net/?channe
 
 Jabber chanel: falltergeist on conference.jabber.ru
 
+##Dependencies
+
+- [SDL](http://www.libsdl.org) (libsdl2)
+- [SDL\_mixer](http://www.libsdl.org/projects/SDL_mixer/) (libsdl2-mixer)
+- [SDL\_image](http://www.libsdl.org/projects/SDL_image/) (libsdl2-image)
+
 ##Compilation under linux
 
 ```
