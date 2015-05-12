@@ -21,6 +21,7 @@
 
 // Falltergeist includes
 #include "../Game/Game.h"
+#include "../Game/Time.h"
 #include "../Graphics/Renderer.h"
 #include "../Event/KeyboardEvent.h"
 #include "../Input/Mouse.h"
@@ -72,25 +73,25 @@ void PipBoy::init()
     auto closeButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+448);
     closeButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCloseButtonClick(dynamic_cast<MouseEvent*>(event)); });
     // Date and time
-    // FIXME: use current in-game datetime
+
     // Date
     auto day = new SmallCounter(backgroundX+21, backgroundY+17);
-    day->setNumber(9);
+    day->setNumber(Game::getInstance()->gameTime()->day());
     day->setColor(SmallCounter::COLOR_WHITE);
     day->setType(SmallCounter::UNSIGNED);
     day->setLength(2);
 
-    auto month = new MonthCounter(MonthCounter::JUNE, backgroundX+46, backgroundY+18);
+    auto month = new MonthCounter(static_cast<MonthCounter::Month>(Game::getInstance()->gameTime()->month()), backgroundX+46, backgroundY+18);
 
     auto year = new SmallCounter(backgroundX+84, backgroundY+17);
-    year->setNumber(2242);
+    year->setNumber(Game::getInstance()->gameTime()->year());
     year->setColor(SmallCounter::COLOR_WHITE);
     year->setType(SmallCounter::UNSIGNED);
     year->setLength(4);
 
     // Time
     auto time = new SmallCounter(backgroundX+160, backgroundY+17);
-    time->setNumber(800);
+    time->setNumber((Game::getInstance()->gameTime()->hours() * 100) + Game::getInstance()->gameTime()->minutes());
     time->setColor(SmallCounter::COLOR_WHITE);
     time->setType(SmallCounter::UNSIGNED);
     time->setLength(4);
