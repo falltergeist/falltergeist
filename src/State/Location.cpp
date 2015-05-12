@@ -413,7 +413,7 @@ void Location::think()
     if (_scrollTicks + 10 < SDL_GetTicks())
     {
         _scrollTicks = SDL_GetTicks();
-        unsigned int scrollDelta = 5;
+        unsigned int scrollDelta = 10;
 
         //Game::getInstance()->mouse()->setType(Mouse::ACTION);
 

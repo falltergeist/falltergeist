@@ -40,7 +40,7 @@ protected:
     unsigned int _length = 2;
 public:
     enum {COLOR_WHITE = 1, COLOR_RED};
-    BigCounter(int x = 0, int y = 0);
+    BigCounter(int x = 0, int y = 0, unsigned int len = 2);
     ~BigCounter();
 
     virtual Texture* texture();
