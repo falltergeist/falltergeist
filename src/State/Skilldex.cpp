@@ -21,6 +21,7 @@
 
 // Falltergeist includes
 #include "../functions.h"
+#include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
@@ -28,12 +29,14 @@
 #include "../State/Skilldex.h"
 #include "../State/Location.h"
 #include "../State/SettingsMenu.h"
+#include "../UI/BigCounter.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
 #include "../Input/Mouse.h"
 
 // Third party includes
+#include <libfalltergeist.h>
 
 namespace Falltergeist
 {
@@ -70,6 +73,26 @@ void Skilldex::init()
     auto scienceButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*6);
     auto repairButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*7);
     auto cancelButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+48, backgroundY+338);
+
+    // counters
+    auto sneakCounter = new BigCounter(backgroundX + 111, backgroundY + 48, 3);
+    auto lockpickCounter = new BigCounter(backgroundX + 111, backgroundY + 48 + 36, 3);
+    auto stealCounter = new BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 2, 3);
+    auto trapsCounter = new BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 3, 3);
+    auto firstAidCounter = new BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 4, 3);
+    auto doctorCounter = new BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 5, 3);
+    auto scienceCounter = new BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 6, 3);
+    auto repairCounter = new BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 7, 3);
+
+    //set counters with player's current skill values
+    sneakCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::SNEAK));
+    lockpickCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::LOCKPICK));
+    stealCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::STEAL));
+    trapsCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::TRAPS));
+    firstAidCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::FIRST_AID));
+    doctorCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::DOCTOR));
+    scienceCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::SCIENCE));
+    repairCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::REPAIR));
 
     // events
     cancelButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCancelButtonClick(dynamic_cast<MouseEvent*>(event)); });
@@ -110,7 +133,7 @@ void Skilldex::init()
     auto cancelButtonLabel = new TextArea(_t(MSG_SKILLDEX, 101), backgroundX+70, backgroundY+337);
     cancelButtonLabel->setFont(font);
 
-    // add all buttons and labels
+    // add all buttons and labels and counters
     addUI(background);
     addUI(sneakButton);
     addUI(lockpickButton);
@@ -131,6 +154,15 @@ void Skilldex::init()
     addUI(scienceLabel);
     addUI(repairLabel);
     addUI(cancelButtonLabel);
+    addUI(sneakCounter);
+    addUI(lockpickCounter);
+    addUI(stealCounter);
+    addUI(trapsCounter);
+    addUI(firstAidCounter);
+    addUI(doctorCounter);
+    addUI(scienceCounter);
+    addUI(repairCounter);
+
 }
 
 void Skilldex::onCancelButtonClick(MouseEvent* event)

@@ -32,8 +32,9 @@
 namespace Falltergeist
 {
 
-BigCounter::BigCounter(int x, int y) : ActiveUI(x, y)
+BigCounter::BigCounter(int x, int y, unsigned int length) : ActiveUI(x, y)
 {
+    _length = length;
 }
 
 BigCounter::~BigCounter()
