@@ -201,6 +201,34 @@ void ItemsList::removeItem(InventoryItem* item, unsigned int amount)
     this->update();
 }
 
+bool ItemsList::canScrollUp()
+{
+    if(_slotOffset > 0)
+    {
+        return true;
+    }
+    return false;
+}
 
+bool ItemsList::canScrollDown()
+{
+    if(_slotOffset + _slotsNumber == _items->size())
+    {
+        return false;
+    }
+    return true;
+}
+
+void ItemsList::scrollUp()
+{
+    _slotOffset--;
+    this->update();
+}
+
+void ItemsList::scrollDown()
+{
+    _slotOffset++;
+    this->update();
+}
 
 }
