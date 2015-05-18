@@ -88,6 +88,8 @@ void Inventory::init()
 
     addUI("button_done", new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 438, 328));
     getActiveUI("button_done")->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    getActiveUI("button_up")->addEventHandler("mouseleftclick", [this](Event* event){ this->onScrollUpButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    getActiveUI("button_down")->addEventHandler("mouseleftclick", [this](Event* event){ this->onScrollDownButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     // screen
     auto screenX = 300;
@@ -251,7 +253,7 @@ void Inventory::init()
 
     auto inventoryList = new ItemsList(40, 40);
     inventoryList->setItems(game->player()->inventory());
-    addUI(inventoryList);
+    addUI("inventory_list", inventoryList);
 
     // BIG ICONS
     // icon: armor
@@ -286,6 +288,24 @@ void Inventory::init()
 void Inventory::onDoneButtonClick(MouseEvent* event)
 {
     Game::getInstance()->popState();
+}
+
+void Inventory::onScrollUpButtonClick(MouseEvent* event)
+{
+    auto inventory = dynamic_cast<ItemsList*>(getUI("inventory_list"));
+    if(inventory->canScrollUp())
+    {
+        inventory->scrollUp();
+    }
+}
+
+void Inventory::onScrollDownButtonClick(MouseEvent* event)
+{
+    auto inventory = dynamic_cast<ItemsList*>(getUI("inventory_list"));
+    if(inventory->canScrollDown())
+    {
+        inventory->scrollDown();
+    }
 }
 
 void Inventory::onArmorSlotMouseDown(MouseEvent* event)
