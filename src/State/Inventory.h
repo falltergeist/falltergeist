@@ -40,6 +40,8 @@ public:
     virtual void init();
 
     void onDoneButtonClick(MouseEvent* event);
+    void onScrollUpButtonClick(MouseEvent* event);
+    void onScrollDownButtonClick(MouseEvent* event);
     void onArmorSlotMouseDown(MouseEvent* event);
     void onLeftHandSlotMouseDown(MouseEvent* event);
     void onRightHandSlotMouseDown(MouseEvent* event);
