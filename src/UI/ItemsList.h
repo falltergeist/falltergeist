@@ -46,6 +46,7 @@ protected:
     unsigned int _slotOffset = 0;
     unsigned int _slotWidth = 77;
     unsigned int _slotHeight = 40;
+    bool _dragging = false;
 public:
     enum { TYPE_INVENTORY = 0, TYPE_SLOT};
 
@@ -75,6 +76,7 @@ public:
     virtual unsigned int pixel(unsigned int x, unsigned int y);
 
     void onMouseLeftDown(MouseEvent* event);
+    void onMouseLeftUp(MouseEvent* event);
     void onMouseDragStart(MouseEvent* event);
     void onMouseDrag(MouseEvent* event);
     void onMouseDragStop(MouseEvent* event);
