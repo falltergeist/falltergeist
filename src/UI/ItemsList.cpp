@@ -109,7 +109,12 @@ void ItemsList::onMouseLeftDown(MouseEvent* event)
 
 void ItemsList::onMouseDragStart(MouseEvent* event)
 {
-    unsigned int index = (event->y() - y())/_slotHeight;
+    //half-assed fix for crashing when dragging items
+    unsigned int index = (unsigned int)(((event->y()) - y()) / _slotHeight);
+    if(index > inventoryItems()->size() - 1)
+    {
+        index--;
+    }
     _draggedItem = inventoryItems()->at(index);
     _draggedItem->setType(InventoryItem::TYPE_DRAG);
     _draggedItem->setX(event->x());
