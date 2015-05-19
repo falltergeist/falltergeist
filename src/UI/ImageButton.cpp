@@ -210,6 +210,8 @@ ImageButton::~ImageButton()
 
 Texture* ImageButton::texture()
 {
+    if(!_enabled) return _textures.at(2);
+    
     if (_checkboxMode && _checked) return _textures.at(1);
 
     if (_hovered && _leftButtonPressed) return _textures.at(1);
@@ -219,34 +221,43 @@ Texture* ImageButton::texture()
 
 void ImageButton::_onLeftButtonClick(MouseEvent* event)
 {
-    auto sender = dynamic_cast<ImageButton*>(event->emitter());
-    if (sender->_checkboxMode)
-    {
-        sender->_checked = !sender->_checked;
-    }
-    if (!sender->_upSnd.empty())
-    {
-        Game::getInstance()->mixer()->playACMSound(sender->_upSnd);
-    }
+    //if(_enabled)
+    //{
+        auto sender = dynamic_cast<ImageButton*>(event->emitter());
+        if (sender->_checkboxMode)
+        {
+            sender->_checked = !sender->_checked;
+        }
+        if (!sender->_upSnd.empty())
+        {
+            Game::getInstance()->mixer()->playACMSound(sender->_upSnd);
+        }
+    //}
 }
 
 void ImageButton::_onLeftButtonDown(MouseEvent* event)
 {
-    auto sender = dynamic_cast<ImageButton*>(event->emitter());
-    if (!sender->_downSnd.empty())
-    {
-        Game::getInstance()->mixer()->playACMSound(sender->_downSnd);
-    }
+    //if(_enabled)
+    //{
+        auto sender = dynamic_cast<ImageButton*>(event->emitter());
+        if (!sender->_downSnd.empty())
+        {
+            Game::getInstance()->mixer()->playACMSound(sender->_downSnd);
+        }
+    //}
 }
 
 
 void ImageButton::_onMouseOut(MouseEvent* event)
 {
-    auto sender = dynamic_cast<ImageButton*>(event->emitter());
-    if (_leftButtonPressed && !sender->_upSnd.empty())
-    {
-        Game::getInstance()->mixer()->playACMSound(sender->_upSnd);
-    }
+    //if(_enabled)
+    //{
+        auto sender = dynamic_cast<ImageButton*>(event->emitter());
+        if (_leftButtonPressed && !sender->_upSnd.empty())
+        {
+            Game::getInstance()->mixer()->playACMSound(sender->_upSnd);
+        }
+    //}
 }
 
 
@@ -255,9 +266,19 @@ bool ImageButton::checked()
     return _checked;
 }
 
+bool ImageButton::enabled()
+{
+    return _enabled;
+}
+
 void ImageButton::setChecked(bool _checked)
 {
     this->_checked = _checked;
+}
+
+void ImageButton::setEnabled(bool enable)
+{
+    this->_enabled = enable;
 }
 
 }

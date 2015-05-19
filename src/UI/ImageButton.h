@@ -36,6 +36,7 @@ class ImageButton : public ActiveUI
 protected:
     bool _checkboxMode = false; // remember new state after click
     bool _checked = false;
+    bool _enabled = true;
 
     std::vector<Texture*> _textures;
     void _onLeftButtonClick(MouseEvent* event);
@@ -79,11 +80,13 @@ public:
     };
     ImageButton(unsigned int type, int x = 0, int y = 0);
     ~ImageButton();
-
+    
     void setState(unsigned int value);
     virtual Texture* texture();
     bool checked();
+    bool enabled();
     void setChecked(bool _checked);
+    void setEnabled(bool enabled);
 };
 
 }
