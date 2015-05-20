@@ -39,6 +39,7 @@ protected:
     unsigned int _color = 0;
     libfalltergeist::Aaf::File* _aaf = nullptr;
     Texture* _texture = nullptr;
+    std::string _filename = "";
 public:
     Font(std::string filename, unsigned int color);
     ~Font();
@@ -53,6 +54,8 @@ public:
 
     unsigned short width();
     unsigned short height();
+    
+    std::string filename();
 
     Texture* texture();
 

@@ -57,6 +57,7 @@ protected:
 
     unsigned int _backgroundColor = 0;
     bool _wordWrap = false;
+    bool _outline = false;
     unsigned int _outlineColor = 0;
     unsigned int _timestampCreated = 0;
 
@@ -87,6 +88,12 @@ public:
 
     TextArea* setWordWrap(bool wordWrap);
     bool wordWrap();
+    
+    TextArea* setOutline(bool outLine);
+    bool outline();
+    
+    TextArea* setOutlineColor(unsigned int color);
+    unsigned int outlineColor();
 
     TextArea* setFont(std::shared_ptr<Font> font);
     std::shared_ptr<Font> font();
