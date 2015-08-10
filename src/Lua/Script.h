@@ -44,7 +44,7 @@ public:
     Script(std::string filename);
     ~Script();
     void run();
-
+    static int l_write(lua_State* L);
 
 private:
     std::string _filename;

@@ -35,6 +35,7 @@ int main(int argc, char* argv[])
 {
     try
     {
+
         // just for testing
         Lua::Script script("data/scripts/test.lua");
         script.run();

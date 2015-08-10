@@ -18,6 +18,7 @@
  */
 
 // C++ standard includes
+#include <iostream>
 
 // Falltergeist includes
 #include "../Exception.h"
@@ -37,8 +38,14 @@ Script::Script(std::string filename)
     luaL_openlibs(_lua_State);
     if (luaL_loadfile(_lua_State, filename.c_str()))
     {
-        throw Exception("Lua::Script::Script() can't load file: " + _filename);
+        std::string error = lua_tostring(_lua_State, -1);
+        // pop error message from the stack
+        lua_pop(_lua_State, 1);
+        throw Exception("Lua::Script::Script() " + error);
     }
+
+    lua_pushcfunction(_lua_State, l_write);
+    lua_setglobal(_lua_State, "write");
 }
 
 void Script::run()
@@ -47,8 +54,18 @@ void Script::run()
 
     if (result)
     {
-        throw Exception("Lua::Script::run() error happened in file: " + _filename);
+        std::string error = lua_tostring(_lua_State, -1);
+        // pop error message from the stack
+        lua_pop(_lua_State, 1);
+        throw Exception("Lua::Script::run() " + error);
     }
+}
+
+int Script::l_write(lua_State* L)
+{
+    const char* str = lua_tostring(L, 1);
+    std::cout << str << std::endl;
+    return 0;
 }
 
 Script::~Script()
