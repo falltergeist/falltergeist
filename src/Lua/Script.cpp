@@ -20,45 +20,41 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "src/Exception.h"
-#include "src/Game/Game.h"
-#include "src/Logger.h"
-#include "src/State/Start.h"
-#include "src/Lua/Script.h"
+#include "../Exception.h"
+#include "../Lua/Script.h"
 
 // Third party includes
-#include <libfalltergeist.h>
 
-using namespace Falltergeist;
-
-int main(int argc, char* argv[])
+namespace Falltergeist
 {
-    try
-    {
-        // just for testing
-        Lua::Script script("data/scripts/test.lua");
-        script.run();
+namespace Lua
+{
 
-        auto game = Game::Game::getInstance();
-        game->setState(new State::Start());
-        game->run();
-        game->shutdown();
-        return 0;
-    }
-    catch(const libfalltergeist::Exception &e)
+Script::Script(std::string filename)
+{
+    _filename = filename;
+    _lua_State = lua_open();
+    luaL_openlibs(_lua_State);
+    if (luaL_loadfile(_lua_State, filename.c_str()))
     {
-        Logger::critical() << e.what() << std::endl;
+        throw Exception("Lua::Script::Script() can't load file: " + _filename);
     }
-    catch(const Exception &e)
-    {
-        Logger::critical() << e.what() << std::endl;
-    }
-    /*
-    catch (const std::exception &e)
-    {
-        Logger::critical() << e.what() << std::endl;
-    }
-    */
-    return 1;
 }
 
+void Script::run()
+{
+    int result = lua_pcall(_lua_State, 0, 0, 0);
+
+    if (result)
+    {
+        throw Exception("Lua::Script::run() error happened in file: " + _filename);
+    }
+}
+
+Script::~Script()
+{
+    lua_close(_lua_State);
+}
+
+}
+}
