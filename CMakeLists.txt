@@ -63,6 +63,7 @@ if (NOT Lua_FOUND)
 endif(NOT Lua_FOUND)
 include_directories(${LUA_INCLUDE_DIRS})
 
+include_directories(${CMAKE_SOURCE_DIR}/lib/LuaBridge/Source/LuaBridge)
 
 file(GLOB_RECURSE SOURCES  src/*.cpp)
 file(GLOB_RECURSE HEADERS  src/*.h)

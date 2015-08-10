@@ -17,45 +17,29 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_LUA_SCRIPT_H
-#define FALLTERGEIST_LUA_SCRIPT_H
-
 // C++ standard includes
-#include <string>
-#include <memory>
-#include <vector>
 
 // Falltergeist includes
+#include "../Lua/Module.h"
 
 // Third party includes
-extern "C"
-{
-    #include "lua.h"
-    #include "lauxlib.h"
-    #include "lualib.h"
-}
 
 namespace Falltergeist
 {
 namespace Lua
 {
-class Module;
 
-class Script
+Module::Module()
 {
-public:
-    Script(std::string filename);
-    ~Script();
-    void run();
-    static int l_write(lua_State* L);
-    void addModule(std::shared_ptr<Module> module);
+}
 
-private:
-    std::vector<std::shared_ptr<Module>> _modules;
-    std::string _filename;
-    lua_State* _lua_State;
-};
+Module::~Module()
+{
+}
+
+void Module::attach(lua_State* L)
+{
+}
 
 }
 }
-#endif // FALLTERGEIST_LUA_SCRIPT_H

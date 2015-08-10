@@ -22,6 +22,8 @@
 
 // Falltergeist includes
 #include "../Exception.h"
+#include "../Lua/Console.h"
+#include "../Lua/Module.h"
 #include "../Lua/Script.h"
 
 // Third party includes
@@ -30,6 +32,8 @@ namespace Falltergeist
 {
 namespace Lua
 {
+
+using namespace luabridge;
 
 Script::Script(std::string filename)
 {
@@ -44,8 +48,7 @@ Script::Script(std::string filename)
         throw Exception("Lua::Script::Script() " + error);
     }
 
-    lua_pushcfunction(_lua_State, l_write);
-    lua_setglobal(_lua_State, "write");
+    addModule(std::shared_ptr<Module>(new Console));
 }
 
 void Script::run()
@@ -61,11 +64,10 @@ void Script::run()
     }
 }
 
-int Script::l_write(lua_State* L)
+void Script::addModule(std::shared_ptr<Module> module)
 {
-    const char* str = lua_tostring(L, 1);
-    std::cout << str << std::endl;
-    return 0;
+    _modules.push_back(module);
+    module->attach(_lua_State);
 }
 
 Script::~Script()
