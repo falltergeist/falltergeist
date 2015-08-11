@@ -94,7 +94,7 @@ void UI::think()
 {
 }
 
-void UI::render(bool eggTransparency)
+void UI::render(bool eggTransparency, bool grayscale)
 {
 
     if (eggTransparency)

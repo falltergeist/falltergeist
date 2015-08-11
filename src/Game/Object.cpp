@@ -311,7 +311,7 @@ void GameObject::render()
 
     if ((trans() != TRANS_DEFAULT) || ((_type != TYPE_WALL) && !(_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC)))
     {
-        _ui->render(false);
+        _ui->render(false,_trans == TRANS_STEAM);
         return;
     }
 
@@ -362,8 +362,7 @@ void GameObject::render()
     if (noBlockTrans && wallTransEnd())
         _transparent = false;
 
-
-    _ui->render(_transparent);
+    _ui->render(_transparent,_trans == TRANS_STEAM);
 
 }
 
@@ -531,6 +530,8 @@ void GameObject::setTrans(unsigned int value)
                 break;
             case TRANS_RED:
                 modifier = {255, 0, 0, 128};
+                break;
+            case TRANS_STEAM:
                 break;
             case TRANS_NONE:
             default:

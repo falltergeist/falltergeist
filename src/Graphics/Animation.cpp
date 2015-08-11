@@ -260,7 +260,7 @@ void Animation::think()
     }
 }
 
-void Animation::render(bool eggTransparency)
+void Animation::render(bool eggTransparency, bool grayscale)
 {
     auto frame = frames()->at(_currentFrame);
     AnimatedPalette* pal = Game::getInstance()->animatedPalette();
@@ -370,7 +370,22 @@ void Animation::render(bool eggTransparency)
     }
     else
     {
-        Game::getInstance()->renderer()->drawTexture(_texture, x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+        if (grayscale)
+        {
+            if (!_graytex)
+            {
+                _graytex = new Texture(texture()->width(),texture()->height());
+                texture()->copyTo(_graytex);
+                _graytex->grayscale();
+                _graytex->setColorModifier({255,255,255,128});
+            }
+
+            Game::getInstance()->renderer()->drawTexture(_graytex, x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+        }
+        else
+        {
+            Game::getInstance()->renderer()->drawTexture(_texture, x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+        }
 
         if (pal->getCounter(MASK::FIRE_FAST) < _fireFastTextures.size())
             Game::getInstance()->renderer()->drawTexture(_fireFastTextures.at(pal->getCounter(MASK::FIRE_FAST)), x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());

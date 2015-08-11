@@ -72,7 +72,7 @@ void ItemsList::update()
     }
 }
 
-void ItemsList::render(bool eggTransparency)
+void ItemsList::render(bool eggTransparency, bool grayscale)
 {
     //ActiveUI::render();
     unsigned int i = 0;

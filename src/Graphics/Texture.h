@@ -81,6 +81,8 @@ public:
     void setBlendMode(SDL_BlendMode blendMode);
     SDL_BlendMode blendMode();
 
+    void grayscale();
+
 };
 
 }
