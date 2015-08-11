@@ -141,16 +141,19 @@ void InventoryItem::onArmorDragStop(MouseEvent* event)
     {
         InventoryItem* draggedItem = itemsList->draggedItem();
         auto itemObject = draggedItem->item();
-        itemsList->removeItem(draggedItem, 1);
-        // place current armor back to inventory
-        if (_item)
+        if(itemObject->subtype() == (unsigned int)ITEM_TYPE::ARMOR)
         {
-            itemsList->addItem(this, 1);
-        }
-        this->setItem(itemObject);
-        if (auto armor = dynamic_cast<Game::GameArmorItemObject*>(itemObject))
-        {
-            Game::getInstance()->player()->setArmorSlot(armor);
+            itemsList->removeItem(draggedItem, 1);
+            // place current armor back to inventory
+            if (_item)
+            {
+                itemsList->addItem(this, 1);
+            }
+            this->setItem(itemObject);
+            if (auto armor = dynamic_cast<Game::GameArmorItemObject*>(itemObject))
+            {
+                Game::getInstance()->player()->setArmorSlot(armor);
+            }
         }
     }
 }
