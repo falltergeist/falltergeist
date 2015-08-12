@@ -61,7 +61,7 @@ find_package(Lua 5.1 REQUIRED)
 if (NOT LUA_FOUND)
     message(FATAL_ERROR "Lua library not found")
 endif(NOT LUA_FOUND)
-include_directories(${LUA_INCLUDE_DIRS})
+include_directories(${LUA_INCLUDE_DIR})
 
 include_directories(${CMAKE_SOURCE_DIR}/lib/LuaBridge/Source/LuaBridge)
 
