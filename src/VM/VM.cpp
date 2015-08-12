@@ -19,6 +19,7 @@
 
 // C++ standard includes
 #include <ctime>
+#include <memory>
 #include <sstream>
 
 // Falltergeist includes
@@ -103,11 +104,10 @@ void VM::run()
         unsigned short opcode;
         *_script >> opcode;
 
-        OpcodeHandler* opcodeHandler = OpcodeFactory::createOpcode(opcode, this);
+        std::unique_ptr<OpcodeHandler> opcodeHandler(OpcodeFactory::createOpcode(opcode, this));
         try
         {
             opcodeHandler->run();
-            delete opcodeHandler;
         }
         catch (VMHaltException& e)
         {
