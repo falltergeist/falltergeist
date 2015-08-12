@@ -18,6 +18,7 @@
  */
 
 // C++ standard includes
+#include <type_traits>
 
 // Falltergeist includes
 #include "Exception.h"
@@ -32,7 +33,7 @@ namespace Falltergeist
 
 std::string _t(MSG_TYPE type, size_t number)
 {
-    std::vector<std::string> msgFiles = {
+    static const std::string msgFiles[] = {
         "text/english/game/inventry.msg",
         "text/english/game/lsgame.msg",
         "text/english/game/options.msg",
@@ -45,13 +46,16 @@ std::string _t(MSG_TYPE type, size_t number)
         "text/english/game/dbox.msg",
         "text/english/game/pro_item.msg"
     };
+    static const auto msgFilesSize = sizeof(msgFiles) / sizeof(*msgFiles);
+    static_assert(MSG_TYPE_COUNT <= msgFilesSize,
+                  "MSG_TYPE enum doesn't match with msg files!");
 
-    if (type < 0 || type >= msgFiles.size())
+    if (type < 0 || type >= msgFilesSize)
     {
         throw Exception("_t() - wrong MSG file type: " + std::to_string(type));
     }
 
-    auto msg = ResourceManager::msgFileType(msgFiles.at(type));
+    auto msg = ResourceManager::msgFileType(msgFiles[type]);
     return msg->message(number)->text();
 }
 
