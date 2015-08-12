@@ -1,42 +1,84 @@
-# Copyright (c) 2013 Martin Felis &lt;martin@fysx.org&gt;
-# License: Public Domain (Unlicense: http://unlicense.org/)
+# The MIT License (MIT)
 #
-# Try to find Lua or LuaJIT depending on the variable LUA_USE_LUAJIT.
+# Copyright (c) 2015 Falltergeist developers
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
 # Sets the following variables:
-#   Lua_FOUND
+#   LUA_FOUND
 #   LUA_INCLUDE_DIR
 #   LUA_LIBRARY
 #
-# Use it in a CMakeLists.txt script as:
-#
-#   OPTION (LUA_USE_LUAJIT "Use LuaJIT instead of default Lua" OFF)
-#   UNSET(Lua_FOUND CACHE)
-#   UNSET(LUA_INCLUDE_DIR CACHE)
-#   UNSET(LUA_LIBRARY CACHE)
-#   FIND_PACKAGE (Lua REQUIRED)
  
-SET (Lua_FOUND FALSE)
-     
-SET (LUA_INTERPRETER_TYPE "")
-     
-IF (LUA_USE_LUAJIT)
-    SET (LUA_INTERPRETER_TYPE "LuaJIT")
-    SET (LUA_LIBRARY_NAME luajit-5.1)
-    SET (LUA_INCLUDE_DIRS /usr/include/luajit-2.0 /usr/local/include/luajit-2.0)
-ELSE (LUA_USE_LUAJIT)
-    SET (LUA_INTERPRETER_TYPE "Lua")
-    SET (LUA_LIBRARY_NAME lua5.1)
-    SET (LUA_INCLUDE_DIRS /usr/include/lua5.1 /usr/local/include/lua5.1)
-ENDIF(LUA_USE_LUAJIT)
-     
-FIND_PATH (LUA_INCLUDE_DIR lua.h ${LUA_INCLUDE_DIRS} )
-FIND_LIBRARY (LUA_LIBRARY NAMES ${LUA_LIBRARY_NAME} PATHS /usr/lib /usr/local/lib)
-     
-IF (LUA_INCLUDE_DIR AND LUA_LIBRARY)
-    SET (Lua_FOUND TRUE)
-ENDIF (LUA_INCLUDE_DIR AND LUA_LIBRARY)
-          
-INCLUDE (FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS (Lua  DEFAULT_MSG LUA_LIBRARY LUA_INCLUDE_DIR)
-     
-MARK_AS_ADVANCED (LUA_INCLUDE_DIR LUA_LIBRARY)
+if(Lua_FIND_VERSION_MAJOR AND Lua_FIND_VERSION_MINOR)
+    set(LUA_SUFFIXES "${Lua_FIND_VERSION_MAJOR}${Lua_FIND_VERSION_MINOR}"
+                     "${Lua_FIND_VERSION_MAJOR}.${Lua_FIND_VERSION_MINOR}"
+                     "-${Lua_FIND_VERSION_MAJOR}.${Lua_FIND_VERSION_MINOR}")
+else(Lua_FIND_VERSION_MAJOR AND Lua_FIND_VERSION_MINOR)
+    set(LUA_SUFFIXES "51"
+                     "5.1"
+                     "-5.1"
+                     "52"
+                     "5.2"
+                     "-5.2")
+endif(Lua_FIND_VERSION_MAJOR AND Lua_FIND_VERSION_MINOR)
+
+set(LUA_INCLUDE_SEARCH_PATH include include/lua)
+set(LUA_LIBRARY_SEARCH_PATH lua)
+
+foreach(LUA_SUFFIX ${LUA_SUFFIXES})
+    list(APPEND LUA_INCLUDE_SEARCH_PATH "include/lua${LUA_SUFFIX}")
+    list(APPEND LUA_LIBRARY_SEARCH_PATH "lua${LUA_SUFFIX}")
+endforeach(LUA_SUFFIX)
+
+find_path(LUA_INCLUDE_DIR lua.h
+    HINTS
+        $ENV{LUA_DIR}
+        PATH_SUFFIXES ${LUA_INCLUDE_SEARCH_PATH}
+    PATHS
+        ~/Library/Frameworks
+        /Library/Frameworks
+        /usr
+        /usr/local
+        /usr
+        /sw # Fink
+        /opt/local # DarwinPorts
+        /opt/csw # Blastwave
+        /opt
+)
+
+find_library(LUA_LIBRARY 
+    NAMES ${LUA_LIBRARY_SEARCH_PATH}
+    HINTS
+        $ENV{LUA_DIR}
+        PATH_SUFFIXES lib64 lib
+    PATHS
+        ~/Library/Frameworks
+        /Library/Frameworks
+        /usr/local
+        /usr
+        /sw
+        /opt/local
+        /opt/csw
+        /opt
+)
+
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(Lua REQUIRED_VARS LUA_LIBRARY LUA_INCLUDE_DIR)
+mark_as_advanced(LUA_INCLUDE_DIR LUA_LIBRARY)
