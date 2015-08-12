@@ -42,6 +42,11 @@ void Opcode8102Handler::_run()
     auto trait = _vm->dataStack()->popInteger();
     auto trait_type = _vm->dataStack()->popInteger();
     auto who = _vm->dataStack()->popObject();
+
+    UNUSED_ARG(amount);
+    UNUSED_ARG(trait);
+    UNUSED_ARG(trait_type);
+    UNUSED_ARG(who);
     _vm->dataStack()->push(0);
 }
 

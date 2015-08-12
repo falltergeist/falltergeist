@@ -27,6 +27,9 @@
 
 // Third party includes
 
+// Marks handler parameter as unused and prevents compiler warnings.
+#define UNUSED_ARG(arg) (void)(arg)
+
 namespace Falltergeist
 {
 class VM;
@@ -36,7 +39,7 @@ class OpcodeHandler
 protected:
     VM* _vm;
     unsigned int _offset;
-    
+
     virtual void _run();
     // print warning message to log
     void _warning(const std::string& message);

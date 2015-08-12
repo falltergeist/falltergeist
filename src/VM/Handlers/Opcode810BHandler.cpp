@@ -38,7 +38,7 @@ void Opcode810BHandler::_run()
     Logger::debug("SCRIPT") << "[810B] [*] int metarule(int type, value)" << std::endl;
     auto value = _vm->dataStack()->pop();
     auto type = _vm->dataStack()->popInteger();
-    int result;
+    int result = 0;
 
     switch(type)
     {

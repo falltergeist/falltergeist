@@ -37,6 +37,7 @@ void Opcode8115Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8115] [*] void playMovie(int movie)" << std::endl;
     int movie = _vm->dataStack()->popInteger();
+    UNUSED_ARG(movie);
 }
 
 }

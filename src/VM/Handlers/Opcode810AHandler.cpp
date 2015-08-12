@@ -40,7 +40,7 @@ void Opcode810AHandler::_run()
 {
     Logger::debug("SCRIPT") << "[810A] [=] void float_msg(object who, string msg, int type) " << std::endl;
     int type = _vm->dataStack()->popInteger();
-    unsigned int color;
+    unsigned int color = 0x000000ff;
     switch (type)
     {
         case -2:
