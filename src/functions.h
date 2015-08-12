@@ -42,7 +42,10 @@ enum MSG_TYPE
     MSG_STATS,
     MSG_SKILLDEX,
     MSG_DIALOG_BOX,
-    MSG_PROTO_ITEMS
+    MSG_PROTO_ITEMS,
+
+    // Should be last entry.
+    MSG_TYPE_COUNT
 };
 
 std::string _t(MSG_TYPE type, size_t number);
