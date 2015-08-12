@@ -354,18 +354,7 @@ void Animation::render(bool eggTransparency)
         if (pal->getCounter(MASK::REDDOT) < _reddotTextures.size())
             _reddotTextures.at(pal->getCounter(MASK::REDDOT))->copyTo(_tmptex);
 
-        //This is sloooow. But unfortunately sdl doesnt allow to blit over only alpha =/
-        for (unsigned int x = 0; x < texture()->width(); x++)
-        {
-            for (unsigned int y = 0; y < texture()->height(); y++)
-            {
-                if (x+egg_dx >= egg->width()) continue;
-                if (y+egg_dy >= egg->height()) continue;
-                if (x+egg_dx < 0) continue;
-                if (y+egg_dy < 0) continue;
-                _tmptex->setPixel(x, y, _tmptex->pixel(x,y) & egg->pixel(x+egg_dx, y+egg_dy));
-            }
-        }
+        _tmptex->blitWithAlpha(egg, egg_dx, egg_dy);
         Game::getInstance()->renderer()->drawTexture(_tmptex, x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
     }
     else
@@ -404,13 +393,13 @@ unsigned int Animation::width()
 
 unsigned int Animation::pixel(unsigned int x, unsigned int y)
 {
-    auto frame = frames()->at(_currentFrame);
+    const auto frame = frames()->at(_currentFrame);
 
     x -= xOffset();
     y -= yOffset();
 
-    if (x < 0 || x > frame->width()) return 0;
-    if (y < 0 || y > frame->height()) return 0;
+    if (x > frame->width()) return 0;
+    if (y > frame->height()) return 0;
 
     return ActiveUI::pixel(x + frame->x(), y + frame->y());
 }
