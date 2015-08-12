@@ -125,14 +125,14 @@ UI* State::addUI(UI* ui)
     return ui;
 }
 
-UI* State::addUI(std::string name, UI* ui)
+UI* State::addUI(const std::string& name, UI* ui)
 {
     addUI(ui);
     _labeledUI.insert(std::pair<std::string, UI*>(name, ui));
     return ui;
 }
 
-ActiveUI* State::addUI(std::string name, ActiveUI* ui)
+ActiveUI* State::addUI(const std::string& name, ActiveUI* ui)
 {
     addUI(name, (UI*)ui);
     return ui;
@@ -147,27 +147,27 @@ void State::addUI(std::vector<UI*> uis)
     }
 }
 
-ActiveUI* State::getActiveUI(std::string name)
+ActiveUI* State::getActiveUI(const std::string& name)
 {
     return dynamic_cast<ActiveUI*>(getUI(name));
 }
 
-TextArea* State::getTextArea(std::string name)
+TextArea* State::getTextArea(const std::string& name)
 {
     return dynamic_cast<TextArea*>(getUI(name));
 }
 
-ImageList* State::getImageList(std::string name)
+ImageList* State::getImageList(const std::string& name)
 {
     return dynamic_cast<ImageList*>(getUI(name));
 }
 
-SmallCounter* State::getSmallCounter(std::string name)
+SmallCounter* State::getSmallCounter(const std::string& name)
 {
     return dynamic_cast<SmallCounter*>(getUI(name));
 }
 
-UI* State::getUI(std::string name)
+UI* State::getUI(const std::string& name)
 {
     if (_labeledUI.find(name) != _labeledUI.end())
     {

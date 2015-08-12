@@ -42,8 +42,8 @@ public:
     ~AudioMixer();
     void stopMusic();
     void stopSounds();
-    void playACMMusic(std::string filename, bool loop = false);
-    void playACMSound(std::string filename);
+    void playACMMusic(const std::string& filename, bool loop = false);
+    void playACMSound(const std::string& filename);
     void playMovieMusic(MvePlayer* mve);
     void pauseMusic();
     void resumeMusic();

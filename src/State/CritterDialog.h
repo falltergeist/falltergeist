@@ -50,14 +50,14 @@ public:
     virtual void init();
     virtual void think();
 
-    void setQuestion(std::string value);
+    void setQuestion(const std::string& value);
 
     std::vector<int>* functions();
     std::vector<int>* reactions();
 
     void deleteAnswers();
     bool hasAnswers();
-    void addAnswer(std::string text);
+    void addAnswer(const std::string& text);
 
     void onReviewButtonClick(Event* event);
     void onBarterButtonClick(Event* event);

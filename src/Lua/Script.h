@@ -44,7 +44,7 @@ class Module;
 class Script
 {
 public:
-    Script(std::string filename);
+    Script(const std::string& filename);
     ~Script();
     void run();
     static int l_write(lua_State* L);

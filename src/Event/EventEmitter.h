@@ -45,9 +45,9 @@ public:
     EventEmitter();
     virtual ~EventEmitter();
 
-    void addEventHandler(std::string eventName, std::function<void(Event*)> handler);
+    void addEventHandler(const std::string& eventName, std::function<void(Event*)> handler);
     void emitEvent(Event* event);
-    void removeEventHandlers(std::string eventName);
+    void removeEventHandlers(const std::string& eventName);
 };
 
 }

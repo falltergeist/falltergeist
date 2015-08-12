@@ -156,7 +156,7 @@ public:
     
     virtual void stopMovement();
 
-    virtual Animation* setActionAnimation(std::string action);
+    virtual Animation* setActionAnimation(const std::string& action);
 
 protected:
     bool _moving  = false;

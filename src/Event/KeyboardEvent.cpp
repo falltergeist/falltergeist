@@ -27,7 +27,7 @@
 namespace Falltergeist
 {
 
-KeyboardEvent::KeyboardEvent(std::string name) : Event(name)
+KeyboardEvent::KeyboardEvent(const std::string& name) : Event(name)
 {
 }
 

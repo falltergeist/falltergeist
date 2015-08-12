@@ -127,7 +127,7 @@ std::string GameObject::name() const
     return _name;
 }
 
-void GameObject::setName(std::string value)
+void GameObject::setName(const std::string& value)
 {
     _name = value;
 }
@@ -137,7 +137,7 @@ std::string GameObject::description() const
     return _description;
 }
 
-void GameObject::setDescription(std::string value)
+void GameObject::setDescription(const std::string& value)
 {
     _description = value;
 }

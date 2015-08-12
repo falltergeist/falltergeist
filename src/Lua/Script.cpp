@@ -35,7 +35,7 @@ namespace Lua
 
 using namespace luabridge;
 
-Script::Script(std::string filename)
+Script::Script(const std::string& filename)
 {
     _filename = filename;
     _lua_State = lua_open();

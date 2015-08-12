@@ -104,7 +104,7 @@ std::string GameDudeObject::biography() const
     return _biography;
 }
 
-void GameDudeObject::setBiography(std::string value)
+void GameDudeObject::setBiography(const std::string& value)
 {
     _biography = value;
 }

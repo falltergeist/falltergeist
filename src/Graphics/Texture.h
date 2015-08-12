@@ -76,7 +76,7 @@ public:
 
     void loadFromRGB(unsigned int* data);
     void loadFromRGBA(unsigned int* data);
-    void loadFromImage(std::string name);
+    void loadFromImage(const std::string& name);
 
     void setBlendMode(SDL_BlendMode blendMode);
     SDL_BlendMode blendMode();

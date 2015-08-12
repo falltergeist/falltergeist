@@ -58,7 +58,7 @@ public:
     Value(int integerVal);
 
     Value(bool booleanVal);
-    Value(std::string stringVal);
+    Value(const std::string& stringVal);
     Value(const Value &rhs);
     Value(std::vector<Value> iniVal);
 

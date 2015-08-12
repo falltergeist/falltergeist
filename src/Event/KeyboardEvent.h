@@ -38,7 +38,7 @@ protected:
     bool _controlPressed = false;
     bool _altPressed = false;
 public:
-    KeyboardEvent(std::string name = "keyboard");
+    KeyboardEvent(const std::string& name = "keyboard");
     virtual ~KeyboardEvent();
     int keyCode();
     void setKeyCode(int value);

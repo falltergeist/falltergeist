@@ -38,7 +38,7 @@ std::string GameLocation::name()
     return _name;
 }
 
-void GameLocation::setName(std::string value)
+void GameLocation::setName(const std::string& value)
 {
     _name = value;
 }
@@ -48,7 +48,7 @@ std::string GameLocation::filename()
     return _filename;
 }
 
-void GameLocation::setFilename(std::string value)
+void GameLocation::setFilename(const std::string& value)
 {
     _filename = value;
 }
@@ -58,7 +58,7 @@ std::string GameLocation::music()
     return _music;
 }
 
-void GameLocation::setMusic(std::string value)
+void GameLocation::setMusic(const std::string& value)
 {
     _music = value;
 }

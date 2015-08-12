@@ -192,7 +192,7 @@ std::string CrossPlatform::findFalloutDataPath()
         if (std::all_of(
                 necessaryDatFiles.begin(),
                 necessaryDatFiles.end(),
-                [directory](std::string file) {
+                [directory](const std::string& file) {
                     std::ifstream stream(directory + "/" + file);
                     if (stream)
                     {

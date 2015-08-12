@@ -55,7 +55,7 @@ protected:
     std::vector<Texture*> _reddotTextures;
 public:
     Animation();
-    Animation(std::string frmName, unsigned int direction = 0);
+    Animation(const std::string& frmName, unsigned int direction = 0);
     ~Animation();
     std::vector<AnimationFrame*>* frames();
     virtual void think();

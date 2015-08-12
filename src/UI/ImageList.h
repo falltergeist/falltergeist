@@ -44,7 +44,7 @@ public:
     ~ImageList();
 
     void addImage(Image* image);
-    void addImage(std::string filename);
+    void addImage(const std::string& filename);
     void setCurrentImage(unsigned int number);
     unsigned int currentImage();
     virtual Texture* texture();

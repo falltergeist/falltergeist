@@ -87,7 +87,7 @@ void CritterDialog::think()
     State::think();
 }
 
-void CritterDialog::setQuestion(std::string value)
+void CritterDialog::setQuestion(const std::string& value)
 {
     auto question = getTextArea("question");
     question->setText(value);
@@ -189,7 +189,7 @@ void CritterDialog::_selectAnswer(size_t i)
 }
 
 
-void CritterDialog::addAnswer(std::string text)
+void CritterDialog::addAnswer(const std::string& text)
 {
     std::string line = "";
     line += 0x95;

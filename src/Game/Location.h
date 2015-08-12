@@ -49,13 +49,13 @@ public:
     GameLocation();
 
     std::string name();
-    void setName(std::string value);
+    void setName(const std::string& value);
 
     std::string filename();
-    void setFilename(std::string value);
+    void setFilename(const std::string& value);
 
     std::string music();
-    void setMusic(std::string value);
+    void setMusic(const std::string& value);
 
     std::map<std::string, unsigned int>* ambient();
 

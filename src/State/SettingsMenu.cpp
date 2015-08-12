@@ -392,13 +392,13 @@ void SettingsMenu::think()
 //    });
 //}
 
-TextArea* SettingsMenu::_addLabel(std::string name, TextArea* label)
+TextArea* SettingsMenu::_addLabel(const std::string& name, TextArea* label)
 {
     _labels.insert(std::make_pair(name, label));
     return label;
 }
 
-TextArea* SettingsMenu::_addTextArea(std::string message, unsigned int x, unsigned int y)
+TextArea* SettingsMenu::_addTextArea(const std::string& message, unsigned int x, unsigned int y)
 {
     auto textArea = new TextArea(message, x, y);
     addUI(textArea);

@@ -27,7 +27,7 @@
 namespace Falltergeist
 {
 
-Event::Event(std::string name)
+Event::Event(const std::string& name)
 {
     _name = name;
 }
@@ -41,7 +41,7 @@ std::string Event::name()
     return _name;
 }
 
-void Event::setName(std::string name)
+void Event::setName(const std::string& name)
 {
     _name = name;
 }

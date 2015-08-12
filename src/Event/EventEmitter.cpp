@@ -36,7 +36,7 @@ EventEmitter::~EventEmitter()
 {
 }
 
-void EventEmitter::addEventHandler(std::string eventName, std::function<void(Event*)> handler)
+void EventEmitter::addEventHandler(const std::string& eventName, std::function<void(Event*)> handler)
 {
     if (_eventHandlers.find(eventName) == _eventHandlers.end())
     {
@@ -58,7 +58,7 @@ void EventEmitter::emitEvent(Event* event)
     }
 }
 
-void EventEmitter::removeEventHandlers(std::string eventName)
+void EventEmitter::removeEventHandlers(const std::string& eventName)
 {
     if (_eventHandlers.find(eventName) == _eventHandlers.end()) return;
 

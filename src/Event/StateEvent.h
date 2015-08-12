@@ -33,7 +33,7 @@ namespace Falltergeist
 class StateEvent : public Event
 {
 public:
-    StateEvent(std::string name);
+    StateEvent(const std::string& name);
     virtual ~StateEvent();
 };
 

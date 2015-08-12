@@ -27,7 +27,7 @@
 namespace Falltergeist
 {
 
-MouseEvent::MouseEvent(std::string name) : Event(name)
+MouseEvent::MouseEvent(const std::string& name) : Event(name)
 {
 }
 

@@ -85,7 +85,7 @@ Value::Value(int integerVal) : _tag(Value::Tag::INTEGER), _integerVal(integerVal
 Value::Value(bool booleanVal) : _tag(Value::Tag::BOOLEAN), _booleanVal(booleanVal)
 {}
 
-Value::Value(std::string stringVal) : _tag(Value::Tag::STRING)
+Value::Value(const std::string& stringVal) : _tag(Value::Tag::STRING)
 {
     new(&_stringVal) std::string(stringVal);
 }

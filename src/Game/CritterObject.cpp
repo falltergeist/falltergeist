@@ -589,7 +589,7 @@ Animation* GameCritterObject::_generateMovementAnimation()
     return new Animation("art/critters/" + frmString + ".frm", orientation());
 }
 
-Animation* GameCritterObject::setActionAnimation(std::string action)
+Animation* GameCritterObject::setActionAnimation(const std::string& action)
 {
     Animation* animation = new Animation("art/critters/" + _generateArmorFrmString() + action + ".frm", orientation());
     animation->addEventHandler("animationEnded", [animation](Event* event) 
