@@ -40,7 +40,7 @@ protected:
     libfalltergeist::Aaf::File* _aaf = nullptr;
     Texture* _texture = nullptr;
 public:
-    Font(std::string filename, unsigned int color);
+    Font(const std::string& filename, unsigned int color);
     ~Font();
 
     unsigned int color();

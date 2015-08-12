@@ -125,11 +125,11 @@ public:
 
     // object name, as defined in proto msg file
     std::string name() const;
-    void setName(std::string value);
+    void setName(const std::string& value);
 
     // object description, as defined in proto msg file
     std::string description() const;
-    void setDescription(std::string value);
+    void setDescription(const std::string& value);
 
     // script entity associated with the object
     VM* script() const;

@@ -252,41 +252,41 @@ void PlayerCreate::init()
     addUI(_description);
 }
 
-TextArea* PlayerCreate::_addLabel(std::string name, TextArea* label)
+TextArea* PlayerCreate::_addLabel(const std::string& name, TextArea* label)
 {
     _labels.insert(std::pair<std::string,TextArea*>(name, label));
     return label;
 }
 
-ImageButton* PlayerCreate::_addButton(std::string name, ImageButton* button)
+ImageButton* PlayerCreate::_addButton(const std::string& name, ImageButton* button)
 {
     _buttons.insert(std::pair<std::string,ImageButton*>(name, button));
     return button;
 }
 
-BigCounter* PlayerCreate::_addCounter(std::string name, BigCounter* counter)
+BigCounter* PlayerCreate::_addCounter(const std::string& name, BigCounter* counter)
 {
     _counters.insert(std::pair<std::string,BigCounter*>(name, counter));
     return counter;
 }
 
-HiddenMask* PlayerCreate::_addMask(std::string name, HiddenMask* mask)
+HiddenMask* PlayerCreate::_addMask(const std::string& name, HiddenMask* mask)
 {
     _masks.insert(std::pair<std::string,HiddenMask*>(name, mask));
     return mask;
 }
 
-void PlayerCreate::_addTitle(std::string name, std::string title)
+void PlayerCreate::_addTitle(const std::string& name, std::string title)
 {
     _titles.insert(std::pair<std::string,std::string>(name, title));
 }
 
-void PlayerCreate::_addDescription(std::string name, std::string description)
+void PlayerCreate::_addDescription(const std::string& name, std::string description)
 {
     _descriptions.insert(std::pair<std::string,std::string>(name, description));
 }
 
-void PlayerCreate::_addImage(std::string name, Image* image)
+void PlayerCreate::_addImage(const std::string& name, Image* image)
 {
     _images.insert(std::pair<std::string, Image*>(name, image));
 }

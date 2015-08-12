@@ -40,7 +40,7 @@ protected:
 public:
     PlayerEditAlert();
     ~PlayerEditAlert();
-    void setMessage(std::string message);
+    void setMessage(const std::string& message);
     void init();
     void onDoneButtonClick(MouseEvent* event);
 };

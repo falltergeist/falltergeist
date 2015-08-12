@@ -77,7 +77,7 @@ public:
     virtual void fadeIn(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie = false);
     virtual void fadeOut(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie = false);
 
-    void setCaption(std::string caption);
+    void setCaption(const std::string& caption);
     SDL_Window* sdlWindow();
     SDL_Renderer* sdlRenderer();
 

@@ -57,7 +57,7 @@ ResourceManager::ResourceManager()
 }
 
 ResourceManager::~ResourceManager()
-{    
+{
     for (auto texture : _textures)
     {
         delete texture.second;
@@ -157,67 +157,67 @@ libfalltergeist::Dat::Item* ResourceManager::datFileItem(std::string filename)
     return 0;
 }
 
-libfalltergeist::Frm::File* ResourceManager::frmFileType(std::string filename)
+libfalltergeist::Frm::File* ResourceManager::frmFileType(const std::string& filename)
 {
     return dynamic_cast<libfalltergeist::Frm::File*>(datFileItem(filename));
 }
 
-libfalltergeist::Pal::File* ResourceManager::palFileType(std::string filename)
+libfalltergeist::Pal::File* ResourceManager::palFileType(const std::string& filename)
 {
     return dynamic_cast<libfalltergeist::Pal::File*>(datFileItem(filename));
 }
 
-libfalltergeist::Lst::File* ResourceManager::lstFileType(std::string filename)
+libfalltergeist::Lst::File* ResourceManager::lstFileType(const std::string& filename)
 {
     return dynamic_cast<libfalltergeist::Lst::File*>(datFileItem(filename));
 }
 
-libfalltergeist::Aaf::File* ResourceManager::aafFileType(std::string filename)
+libfalltergeist::Aaf::File* ResourceManager::aafFileType(const std::string& filename)
 {
     return dynamic_cast<libfalltergeist::Aaf::File*>(datFileItem(filename));
 }
 
-libfalltergeist::Acm::File* ResourceManager::acmFileType(std::string filename)
+libfalltergeist::Acm::File* ResourceManager::acmFileType(const std::string& filename)
 {
     return dynamic_cast<libfalltergeist::Acm::File*>(datFileItem(filename));
 }
 
-libfalltergeist::Fon::File* ResourceManager::fonFileType(std::string filename)
+libfalltergeist::Fon::File* ResourceManager::fonFileType(const std::string& filename)
 {
     return dynamic_cast<libfalltergeist::Fon::File*>(datFileItem(filename));
 }
 
-libfalltergeist::Gam::File* ResourceManager::gamFileType(std::string filename)
+libfalltergeist::Gam::File* ResourceManager::gamFileType(const std::string& filename)
 {
     return dynamic_cast<libfalltergeist::Gam::File*>(datFileItem(filename));
 }
 
-libfalltergeist::Gcd::File* ResourceManager::gcdFileType(std::string filename)
+libfalltergeist::Gcd::File* ResourceManager::gcdFileType(const std::string& filename)
 {
     return dynamic_cast<libfalltergeist::Gcd::File*>(datFileItem(filename));
 }
 
-libfalltergeist::Int::File* ResourceManager::intFileType(std::string filename)
+libfalltergeist::Int::File* ResourceManager::intFileType(const std::string& filename)
 {
     return dynamic_cast<libfalltergeist::Int::File*>(datFileItem(filename));
 }
 
-libfalltergeist::Msg::File* ResourceManager::msgFileType(std::string filename)
+libfalltergeist::Msg::File* ResourceManager::msgFileType(const std::string& filename)
 {
     return dynamic_cast<libfalltergeist::Msg::File*>(datFileItem(filename));
 }
 
-libfalltergeist::Mve::File* ResourceManager::mveFileType(std::string filename)
+libfalltergeist::Mve::File* ResourceManager::mveFileType(const std::string& filename)
 {
     return dynamic_cast<libfalltergeist::Mve::File*>(datFileItem(filename));
 }
 
-libfalltergeist::Bio::File* ResourceManager::bioFileType(std::string filename)
+libfalltergeist::Bio::File* ResourceManager::bioFileType(const std::string& filename)
 {
     return dynamic_cast<libfalltergeist::Bio::File*>(datFileItem(filename));
 }
 
-libfalltergeist::Map::File* ResourceManager::mapFileType(std::string filename)
+libfalltergeist::Map::File* ResourceManager::mapFileType(const std::string& filename)
 {
     auto item = dynamic_cast<libfalltergeist::Map::File*>(datFileItem(filename));
     if (item)
@@ -227,22 +227,22 @@ libfalltergeist::Map::File* ResourceManager::mapFileType(std::string filename)
     return item;
 }
 
-libfalltergeist::Pro::File* ResourceManager::proFileType(std::string filename)
+libfalltergeist::Pro::File* ResourceManager::proFileType(const std::string& filename)
 {
     return dynamic_cast<libfalltergeist::Pro::File*>(datFileItem(filename));
 }
 
-libfalltergeist::Rix::File* ResourceManager::rixFileType(std::string filename)
+libfalltergeist::Rix::File* ResourceManager::rixFileType(const std::string& filename)
 {
     return dynamic_cast<libfalltergeist::Rix::File*>(datFileItem(filename));
 }
 
-libfalltergeist::Sve::File* ResourceManager::sveFileType(std::string filename)
+libfalltergeist::Sve::File* ResourceManager::sveFileType(const std::string& filename)
 {
     return dynamic_cast<libfalltergeist::Sve::File*>(datFileItem(filename));
 }
 
-Texture* ResourceManager::texture(std::string filename)
+Texture* ResourceManager::texture(const std::string& filename)
 {
     if (_textures.find(filename) != _textures.end())
     {
@@ -294,7 +294,7 @@ Texture* ResourceManager::texture(std::string filename)
     return texture;
 }
 
-std::shared_ptr<Font> ResourceManager::font(std::string filename, unsigned int color)
+std::shared_ptr<Font> ResourceManager::font(const std::string& filename, unsigned int color)
 {
     std::string fontname = filename + std::to_string(color);
 

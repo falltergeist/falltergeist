@@ -55,7 +55,7 @@ public:
     void setExperience(int value);
 
     std::string biography() const;
-    void setBiography(std::string value);
+    void setBiography(const std::string& value);
 
     int statsPoints() const;
     void setStatsPoints(int value);

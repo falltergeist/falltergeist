@@ -121,7 +121,7 @@ void AudioMixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len)
     }
 }
 
-void AudioMixer::playACMMusic(std::string filename, bool loop)
+void AudioMixer::playACMMusic(const std::string& filename, bool loop)
 {
     Mix_HookMusic(NULL, NULL);
     auto acm = ResourceManager::acmFileType(Game::getInstance()->settings()->musicPath()+filename);
@@ -152,7 +152,7 @@ void AudioMixer::playMovieMusic(MvePlayer* mve)
     Mix_HookMusic(myMusicPlayer, reinterpret_cast<void *>(mve));
 }
 
-void AudioMixer::playACMSound(std::string filename)
+void AudioMixer::playACMSound(const std::string& filename)
 {
     auto acm = ResourceManager::acmFileType(filename);
     if (!acm) return;

@@ -28,7 +28,7 @@
 namespace Falltergeist
 {
 
-Font::Font(std::string filename, unsigned int color)
+Font::Font(const std::string& filename, unsigned int color)
 {
     _aaf = ResourceManager::aafFileType(filename);
     _color = color;

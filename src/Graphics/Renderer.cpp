@@ -282,7 +282,7 @@ std::string Renderer::name()
     return _name;
 }
 
-void Renderer::setCaption(std::string caption)
+void Renderer::setCaption(const std::string& caption)
 {
     SDL_SetWindowTitle(_sdlWindow, caption.c_str());
 }

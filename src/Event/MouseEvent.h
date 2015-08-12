@@ -43,7 +43,7 @@ protected:
     bool _shiftPressed = false;
     bool _controlPressed = false;
 public:
-    MouseEvent(std::string eventName = "mouse");
+    MouseEvent(const std::string& eventName = "mouse");
     MouseEvent(MouseEvent* event);
     virtual ~MouseEvent();
 

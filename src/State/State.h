@@ -71,16 +71,16 @@ public:
 
     ActiveUI* addUI(ActiveUI* ui);
     UI* addUI(UI* ui);
-    ActiveUI* addUI(std::string name, ActiveUI* ui);
-    UI* addUI(std::string name, UI* ui);
+    ActiveUI* addUI(const std::string& name, ActiveUI* ui);
+    UI* addUI(const std::string& name, UI* ui);
     void addUI(std::vector<UI*> uis);
     void popUI();
 
-    UI* getUI(std::string name);
-    ActiveUI* getActiveUI(std::string name);
-    TextArea* getTextArea(std::string name);
-    ImageList* getImageList(std::string name);
-    SmallCounter* getSmallCounter(std::string name);
+    UI* getUI(const std::string& name);
+    ActiveUI* getActiveUI(const std::string& name);
+    TextArea* getTextArea(const std::string& name);
+    ImageList* getImageList(const std::string& name);
+    SmallCounter* getSmallCounter(const std::string& name);
 
     int x();
     void setX(int x);

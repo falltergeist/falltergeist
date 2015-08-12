@@ -39,10 +39,10 @@ protected:
     EventEmitter* _emitter = 0;
     bool _handled = false;
 public:
-    Event(std::string name);
+    Event(const std::string& name);
     virtual ~Event();
     std::string name();
-    void setName(std::string name);
+    void setName(const std::string& name);
 
     EventEmitter* emitter();
     void setEmitter(EventEmitter* value);

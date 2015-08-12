@@ -99,7 +99,7 @@ public:
     Location();
     ~Location();
 
-    void setLocation(std::string name);
+    void setLocation(const std::string& name);
 
     virtual void init();
     virtual void think();

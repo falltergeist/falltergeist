@@ -40,8 +40,8 @@ class SettingsMenu : public State
 {
 protected:
     std::map<std::string, TextArea*> _labels;
-    TextArea* _addLabel(std::string name, TextArea* label);
-    TextArea* _addTextArea(std::string message, unsigned int x, unsigned int y);
+    TextArea* _addLabel(const std::string& name, TextArea* label);
+    TextArea* _addTextArea(const std::string& message, unsigned int x, unsigned int y);
     TextArea* _addTextArea(TextArea* parent, unsigned int x, unsigned int y);
 public:
     SettingsMenu();

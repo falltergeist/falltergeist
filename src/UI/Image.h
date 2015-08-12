@@ -38,7 +38,7 @@ class Image : public ActiveUI
 {
 protected:
 public:
-    Image(std::string filename);
+    Image(const std::string& filename);
     Image(unsigned int width, unsigned int height);
     Image(Image* image);
     Image(Texture* texture);

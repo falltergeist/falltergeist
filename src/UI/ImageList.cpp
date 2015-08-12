@@ -66,7 +66,7 @@ void ImageList::addImage(Image* image)
     images()->push_back(image);
 }
 
-void ImageList::addImage(std::string filename)
+void ImageList::addImage(const std::string& filename)
 {
     addImage(new Image(filename));
 }

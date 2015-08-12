@@ -42,7 +42,7 @@ Animation::Animation() : ActiveUI()
 {
 }
 
-Animation::Animation(std::string frmName, unsigned int direction) : ActiveUI()
+Animation::Animation(const std::string& frmName, unsigned int direction) : ActiveUI()
 {
     auto frm = ResourceManager::frmFileType(frmName);
     setTexture(ResourceManager::texture(frmName));

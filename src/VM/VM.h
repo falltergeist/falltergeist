@@ -61,7 +61,7 @@ protected:
 
 public:
     VM(libfalltergeist::Int::File* script, Game::GameObject* owner);
-    VM(std::string filename, Game::GameObject* owner);
+    VM(const std::string& filename, Game::GameObject* owner);
     virtual ~VM();
     void run();
     void initialize();
@@ -75,9 +75,9 @@ public:
      * Returns filename of an .int script file 
      */
     std::string filename();
-    bool hasFunction(std::string name);
+    bool hasFunction(const std::string& name);
 
-    void call(std::string name);
+    void call(const std::string& name);
     libfalltergeist::Int::File* script();
 
     Game::GameObject* owner();

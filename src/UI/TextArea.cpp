@@ -43,7 +43,7 @@ TextArea::TextArea(int x, int y) : ActiveUI(x, y)
     _timestampCreated = SDL_GetTicks();
 }
 
-TextArea::TextArea(std::string text, int x, int y) : ActiveUI(x, y)
+TextArea::TextArea(const std::string& text, int x, int y) : ActiveUI(x, y)
 {
     _timestampCreated = SDL_GetTicks();
     setText(text);
@@ -66,7 +66,7 @@ TextArea::~TextArea()
 {
 }
 
-TextArea* TextArea::appendText(std::string text)
+TextArea* TextArea::appendText(const std::string& text)
 {
     _text += text;
     _changed = true;
@@ -100,7 +100,7 @@ TextArea * TextArea::setVerticalAlign(unsigned char align)
     return this;
 }
 
-TextArea * TextArea::setText(std::string text)
+TextArea * TextArea::setText(const std::string& text)
 {
     _text = text;
     _changed = true;

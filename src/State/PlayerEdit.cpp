@@ -291,41 +291,41 @@ void PlayerEdit::init()
     addUI(_description);
 }
 
-TextArea* PlayerEdit::_addLabel(std::string name, TextArea* label)
+TextArea* PlayerEdit::_addLabel(const std::string& name, TextArea* label)
 {
     _labels.insert(std::pair<std::string,TextArea*>(name, label));
     return label;
 }
 
-ImageButton* PlayerEdit::_addButton(std::string name, ImageButton* button)
+ImageButton* PlayerEdit::_addButton(const std::string& name, ImageButton* button)
 {
     _buttons.insert(std::pair<std::string,ImageButton*>(name, button));
     return button;
 }
 
-BigCounter* PlayerEdit::_addCounter(std::string name, BigCounter* counter)
+BigCounter* PlayerEdit::_addCounter(const std::string& name, BigCounter* counter)
 {
     _counters.insert(std::pair<std::string,BigCounter*>(name, counter));
     return counter;
 }
 
-HiddenMask* PlayerEdit::_addMask(std::string name, HiddenMask* mask)
+HiddenMask* PlayerEdit::_addMask(const std::string& name, HiddenMask* mask)
 {
     _masks.insert(std::pair<std::string,HiddenMask*>(name, mask));
     return mask;
 }
 
-void PlayerEdit::_addTitle(std::string name, std::string title)
+void PlayerEdit::_addTitle(const std::string& name, std::string title)
 {
     _titles.insert(std::pair<std::string,std::string>(name, title));
 }
 
-void PlayerEdit::_addDescription(std::string name, std::string description)
+void PlayerEdit::_addDescription(const std::string& name, std::string description)
 {
     _descriptions.insert(std::pair<std::string,std::string>(name, description));
 }
 
-void PlayerEdit::_addImage(std::string name, Image* image)
+void PlayerEdit::_addImage(const std::string& name, Image* image)
 {
     _images.insert(std::pair<std::string, Image*>(name, image));
 }

@@ -45,7 +45,7 @@ VM::VM(libfalltergeist::Int::File* script, Game::GameObject* owner)
     if (!_script) throw Exception("VM::VM() - script is null");
 }
 
-VM::VM(std::string filename, Game::GameObject* owner)
+VM::VM(const std::string& filename, Game::GameObject* owner)
 {
     _owner = owner;
     _script = ResourceManager::intFileType(filename);
@@ -61,12 +61,12 @@ std::string VM::filename()
     return _script->filename();
 }
 
-bool VM::hasFunction(std::string name)
+bool VM::hasFunction(const std::string& name)
 {
     return _script->procedure(name) != nullptr;
 }
 
-void VM::call(std::string name)
+void VM::call(const std::string& name)
 {
     _overrides = false;
     auto procedure = _script->procedure(name);

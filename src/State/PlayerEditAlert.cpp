@@ -44,7 +44,7 @@ PlayerEditAlert::~PlayerEditAlert()
 {
 }
 
-void PlayerEditAlert::setMessage(std::string message)
+void PlayerEditAlert::setMessage(const std::string& message)
 {
     _message = message;
 }

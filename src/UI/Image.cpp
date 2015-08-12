@@ -30,7 +30,7 @@
 namespace Falltergeist
 {
 
-Image::Image(std::string filename) : ActiveUI()
+Image::Image(const std::string& filename) : ActiveUI()
 {
     setTexture(ResourceManager::texture(filename));
 }

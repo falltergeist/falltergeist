@@ -38,11 +38,11 @@ protected:
     std::string _text;
     std::shared_ptr<Font> _font;
 public:
-    FontString(std::string text, std::shared_ptr<Font> font = 0);
+    FontString(const std::string& text, std::shared_ptr<Font> font = 0);
     std::shared_ptr<Font> font();
     FontString* setFont(std::shared_ptr<Font> font);
     std::string text();
-    FontString* setText(std::string text);
+    FontString* setText(const std::string& text);
 };
 
 }

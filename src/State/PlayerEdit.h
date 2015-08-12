@@ -53,13 +53,13 @@ protected:
     std::map<std::string, std::string> _descriptions;
     std::map<std::string, Image*> _images;
 
-    TextArea* _addLabel(std::string name, TextArea* label);
-    ImageButton* _addButton(std::string name, ImageButton* button);
-    BigCounter* _addCounter(std::string name, BigCounter* counter);
-    HiddenMask* _addMask(std::string name, HiddenMask* mask);
-    void _addTitle(std::string name, std::string title);
-    void _addDescription(std::string name, std::string description);
-    void _addImage(std::string name, Image* image);
+    TextArea* _addLabel(const std::string& name, TextArea* label);
+    ImageButton* _addButton(const std::string& name, ImageButton* button);
+    BigCounter* _addCounter(const std::string& name, BigCounter* counter);
+    HiddenMask* _addMask(const std::string& name, HiddenMask* mask);
+    void _addTitle(const std::string& name, std::string title);
+    void _addDescription(const std::string& name, std::string description);
+    void _addImage(const std::string& name, Image* image);
     
     bool _statIncrease(unsigned int num);
     bool _statDecrease(unsigned int num);

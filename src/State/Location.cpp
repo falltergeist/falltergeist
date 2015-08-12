@@ -120,7 +120,7 @@ void Location::onStateDeactivate(StateEvent* event)
     _actionCursorTicks = 0;
 }
 
-void Location::setLocation(std::string name)
+void Location::setLocation(const std::string& name)
 {
     auto mapFile = ResourceManager::mapFileType(name);
 

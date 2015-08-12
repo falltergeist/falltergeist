@@ -27,7 +27,7 @@
 namespace Falltergeist
 {
 
-StateEvent::StateEvent(std::string name) : Event(name)
+StateEvent::StateEvent(const std::string& name) : Event(name)
 {
 }
 
