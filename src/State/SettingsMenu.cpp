@@ -444,7 +444,7 @@ void SettingsMenu::doSave()
 
     Game::getInstance()->settings()->setPlayerSpeedup(((ImageButton*)getUI("player_speedup"))->checked());
 
-    Game::getInstance()->settings()->saveConfig();
+    Game::getInstance()->settings()->save();
     Game::getInstance()->popState();
 }
 

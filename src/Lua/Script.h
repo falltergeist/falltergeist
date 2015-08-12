@@ -50,10 +50,16 @@ public:
     static int l_write(lua_State* L);
     void addModule(std::shared_ptr<Module> module);
 
+    bool get(const std::string& name, bool defaultValue = false);
+    int  get(const std::string& name, int  defaultValue = 0);
+    double get(const std::string& name, double defaultValue = 0);
+    std::string get(const std::string& name, const std::string& defaultValue);
+
 private:
     std::vector<std::shared_ptr<Module>> _modules;
     std::string _filename;
     lua_State* _lua_State;
+
 };
 
 }

@@ -126,8 +126,9 @@ void Location::setLocation(const std::string& name)
 
     if (mapFile == nullptr)
     {
+        auto defaultSettings = new Settings;
         Logger::warning() << "No such map: `" << name << "`; using default map" << std::endl;
-        mapFile = ResourceManager::mapFileType("maps/" + Settings::defaultInitLocation() + ".map");
+        mapFile = ResourceManager::mapFileType("maps/" + defaultSettings->initialLocation() + ".map");
     }
 
     _currentElevation = mapFile->defaultElevation();

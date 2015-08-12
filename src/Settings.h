@@ -32,8 +32,11 @@ namespace Falltergeist
 namespace Ini
 {
     class File;
-} // Ini
-
+}
+namespace Lua
+{
+    class Script;
+}
 
 class Settings
 {
@@ -42,15 +45,14 @@ public:
     Settings();
     ~Settings();
 
-    void saveConfig();
+    bool save();
+    bool load();
 
     unsigned int screenWidth() const;
 
     unsigned int screenHeight() const;
 
-    const std::string &initialLocation() const;
-
-    static const std::string &defaultInitLocation();
+    const std::string& initialLocation() const;
 
     bool forceLocation() const;
 
@@ -110,85 +112,42 @@ public:
     int audioBufferSize() const;
 
 private:
-    unsigned int _screenWidth;
-    unsigned int _screenHeight;
-    std::string _initLocation;
-    bool _forceLocation;
-    bool _displayFps;
-    bool _worldMapFullscreen;
-    bool _displayMousePosition;
-    std::string _loggerLevel;
-    bool _loggerColors;
-    unsigned int _scale;
-    bool _fullscreen;
+    unsigned int _screenWidth = 640;
+    unsigned int _screenHeight = 480;
+    std::string _initLocation = "klamall";
+    bool _forceLocation = false;
+    bool _displayFps = true;
+    bool _worldMapFullscreen = false;
+    bool _displayMousePosition = true;
+    std::string _loggerLevel = "info";
+    bool _loggerColors = true;
+    unsigned int _scale = 0;
+    bool _fullscreen = false;
 
-    double _brightness;
-    unsigned int _gameDifficulty;
-    unsigned int _combatDifficulty;
-    bool _combatLooks;
-    bool _combatMessages;
-    bool _combatTaunts;
-    unsigned int _combatSpeed;
-    bool _itemHighlight;
-    bool _languageFilter;
-    double _mouseSensitivity;
-    bool _playerSpeedup;
-    bool _running;
-    bool _subtitles;
-    bool _targetHighlight;
-    double _textDelay;
-    unsigned int _violenceLevel;
+    double _brightness = 1.0;
+    unsigned int _gameDifficulty = 1;
+    unsigned int _combatDifficulty = 1;
+    bool _combatLooks = false;
+    bool _combatMessages = true;
+    bool _combatTaunts = false;
+    unsigned int _combatSpeed = 0;
+    bool _itemHighlight = false;
+    bool _languageFilter = false;
+    double _mouseSensitivity = 1.0;
+    bool _playerSpeedup = false;
+    bool _running = false;
+    bool _subtitles = false;
+    bool _targetHighlight = false;
+    double _textDelay = 0.0;
+    unsigned int _violenceLevel = 2;
     // [sound]
-    std::string _musicPath;
-    bool _audioEnabled;
-    double _masterVolume;
-    double _musicVolume;
-    double _sfxVolume;
-    double _voiceVolume;
-    int _audioBufferSize;
-
-    void _createDefaultConfig(Ini::File &ini);
-    void _readConfig(Ini::File &ini);
-
-    // DEFAULTS
-    static const unsigned int _defaultScreenWidth;
-    static const unsigned int _defaultScreenHeight;
-    static const std::string _defaultInitLocation;
-    static const bool _defaultForceLocation;
-    static const std::string _defaultLoggerLevel;
-    static const bool _defaultLoggerColors;
-    static const bool _defaultDisplayFps;
-    static const bool _defaultWorldMapFullscreen;
-    static const bool _defaultDisplayMousePosition;
-    static const unsigned int _defaultScale;
-    static const bool _defaultFullscreen;
-
-    // [preferences]
-    static const double _defaultBrightness;
-    static const unsigned int _defaultGameDifficulty;
-    static const unsigned int _defaultCombatDifficulty;
-    static const bool _defaultCombatLooks;
-    static const bool _defaultCombatMessages;
-    static const bool _defaultCombatTaunts;
-    static const unsigned int _defaultCombatSpeed;
-    static const bool _defaultItemHighlight;
-    static const bool _defaultLanguageFilter;
-    static const double _defaultMouseSensitivity;
-    static const bool _defaultPlayerSpeedup;
-    static const bool _defaultRunning;
-    static const bool _defaultSubtitles;
-    static const bool _defaultTargetHighlight;
-    static const double _defaultTextDelay;
-    static const unsigned int _defaultViolenceLevel;
-    // [sound]
-    static const std::string _defaultMusicPath;
-    static const bool _defaultAudioEnabled;
-    static const double _defaultMasterVolume;
-    static const double _defaultMusicVolume;
-    static const double _defaultSFXVolume;
-    static const double _defaultVoiceVolume;
-    static const int _defaultAudioBufferSize;
-
+    std::string _musicPath = "data/sound/music/";
+    bool _audioEnabled = true;
+    double _masterVolume = 1.0;
+    double _musicVolume = 1.0;
+    double _sfxVolume = 1.0;
+    double _voiceVolume = 1.0;
+    int _audioBufferSize = 512;
 };
 
 } // Falltergeist

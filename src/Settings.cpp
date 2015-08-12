@@ -26,6 +26,7 @@
 #include "CrossPlatform.h"
 #include "Exception.h"
 #include "Logger.h"
+#include "Lua/Script.h"
 #include "Ini/File.h"
 #include "Ini/Writer.h"
 #include "Settings.h"
@@ -35,220 +36,73 @@
 namespace Falltergeist
 {
 
-const unsigned int Settings::_defaultScreenWidth = 640;
-const unsigned int Settings::_defaultScreenHeight = 480;
-const std::string Settings::_defaultInitLocation = "klamall";
-const bool Settings::_defaultForceLocation = false;
-const std::string Settings::_defaultLoggerLevel = "info";
-const bool Settings::_defaultLoggerColors = true;
-const bool Settings::_defaultDisplayFps = true;
-const bool Settings::_defaultWorldMapFullscreen = false;
-const bool Settings::_defaultDisplayMousePosition = true;
-const unsigned int  Settings::_defaultScale = 0;
-const bool Settings::_defaultFullscreen = false;
-
-const double Settings::_defaultBrightness=1.0;
-const unsigned int Settings::_defaultGameDifficulty=1;
-const unsigned int Settings::_defaultCombatDifficulty=1;
-const bool Settings::_defaultCombatLooks=false;
-const bool Settings::_defaultCombatMessages=true;
-const bool Settings::_defaultCombatTaunts=false;
-const unsigned int Settings::_defaultCombatSpeed=0;
-const bool Settings::_defaultItemHighlight=false;
-const bool Settings::_defaultLanguageFilter=false;
-const double Settings::_defaultMouseSensitivity=1.0;
-const bool Settings::_defaultPlayerSpeedup=false;
-const bool Settings::_defaultRunning=false;
-const bool Settings::_defaultSubtitles=false;
-const bool Settings::_defaultTargetHighlight=false;
-const double Settings::_defaultTextDelay=0.0;
-const unsigned int Settings::_defaultViolenceLevel=2;
-// [sound]
-const std::string Settings::_defaultMusicPath = "data/sound/music/";
-const bool Settings::_defaultAudioEnabled=true;
-const double Settings::_defaultMasterVolume=1.0;
-const double Settings::_defaultMusicVolume=1.0;
-const double Settings::_defaultSFXVolume=1.0;
-const double Settings::_defaultVoiceVolume=1.0;
-const int Settings::_defaultAudioBufferSize = 512;
-
 Settings::Settings()
 {
-    std::string configPath = CrossPlatform::getConfigPath();
-    std::string configFile = configPath + "/config.ini";
-    std::ifstream stream(configFile);
-
-    Logger::info() << "Read config from " << configFile << std::endl;
-
-    if (stream)
+    if (!load())
     {
-        Ini::Parser iniParser(stream);
-        auto ini = iniParser.parse();
-
-        _readConfig(*ini);
+        save();
     }
-    else
-    {
-        Logger::warning() << "Cannot open config file at `" << configFile << "`; creating default configuraton file" << std::endl;
-        stream.close();
-
-        Ini::File ini;
-
-        _createDefaultConfig(ini);
-        _readConfig(ini);
-
-        // Create config path if not exists
-        try
-        {
-            CrossPlatform::createDirectory(configPath);
-
-            // Write default configuration
-            Ini::Writer writer(ini);
-            std::ofstream os(configFile);
-
-            if (os)
-            {
-                writer.write(os);
-            }
-            else
-            {
-                Logger::error("[INI]") << "Cannot write to file `" << configFile << "`" << std::endl;
-            }
-        }
-        catch (const std::runtime_error &e)
-        {
-            Logger::error("[INI]") << "Cannot create directory `" <<
-                    configPath << "` to write config file: " <<
-                    e.what() << std::endl;
-        }
-    }
-}
-
-void Settings::_createDefaultConfig(Ini::File &ini)
-{
-    auto video = ini.section("video");
-    video->setPropertyInt("width", _defaultScreenWidth);
-    video->setPropertyInt("height", _defaultScreenHeight);
-    video->setPropertyInt("scale", _defaultScale);
-    video->setPropertyBool("fullscreen", _defaultFullscreen);
-
-    auto audio = ini.section("audio");
-    audio->setPropertyBool("enabled", _defaultAudioEnabled);
-    audio->setPropertyDouble("master_volume", _defaultMasterVolume);
-    audio->setPropertyDouble("music_volume", _defaultMusicVolume);
-    audio->setPropertyDouble("voice_volume", _defaultVoiceVolume);
-    audio->setPropertyDouble("sfx_volume", _defaultSFXVolume);
-    audio->setPropertyString("music_path", _defaultMusicPath);
-    audio->setPropertyInt("buffer_size", _defaultAudioBufferSize);
-
-    auto logger = ini.section("logger");
-    logger->setPropertyString("level", _defaultLoggerLevel);
-    logger->setPropertyBool("colors", _defaultLoggerColors);
-
-    auto game = ini.section("game");
-    game->setPropertyString("init_location", _defaultInitLocation);
-    game->setPropertyBool("force_location", _defaultForceLocation);
-    game->setPropertyBool("display_fps", _defaultDisplayFps);
-    game->setPropertyBool("worldmap_fullscreen", _defaultWorldMapFullscreen);
-    game->setPropertyBool("display_mouse_position", _defaultDisplayMousePosition);
-
-    auto preferences = ini.section("preferences");
-    preferences->setPropertyDouble("brightness", _defaultBrightness);
-    preferences->setPropertyInt("game_difficulty", _defaultGameDifficulty);
-    preferences->setPropertyInt("combat_difficulty", _defaultCombatDifficulty);
-    preferences->setPropertyBool("combat_looks", _defaultCombatLooks);
-    preferences->setPropertyBool("combat_messages", _defaultCombatMessages);
-    preferences->setPropertyBool("combat_taunts", _defaultCombatTaunts);
-    preferences->setPropertyInt("combat_speed", _defaultCombatSpeed);
-    preferences->setPropertyBool("item_highlight", _defaultItemHighlight);
-    preferences->setPropertyBool("language_filter", _defaultLanguageFilter);
-    preferences->setPropertyDouble("mouse_sensitivity", _defaultMouseSensitivity);
-    preferences->setPropertyBool("player_speedup", _defaultPlayerSpeedup);
-    preferences->setPropertyBool("running", _defaultRunning);
-    preferences->setPropertyBool("subtitles", _defaultSubtitles);
-    preferences->setPropertyBool("target_highlight", _defaultTargetHighlight);
-    preferences->setPropertyDouble("text_delay", _defaultTextDelay);
-    preferences->setPropertyInt("violence_level", _defaultViolenceLevel);
 }
 
 Settings::~Settings()
 {
 }
 
-void Settings::saveConfig()
+bool Settings::save()
 {
-    Ini::File ini;
+    CrossPlatform::createDirectory(CrossPlatform::getConfigPath());
+    std::string configFile = CrossPlatform::getConfigPath() + "/config.lua";
+    std::ofstream stream(configFile);
 
-    auto video = ini.section("video");
-    video->setPropertyInt("width", _screenWidth);
-    video->setPropertyInt("height", _screenHeight);
-    video->setPropertyInt("scale", _scale);
-    video->setPropertyBool("fullscreen", _fullscreen);
+    Logger::info() << "Saving config to " << configFile << std::endl;
 
-    auto audio = ini.section("audio");
-    audio->setPropertyBool("enabled", _audioEnabled);
-    audio->setPropertyDouble("master_volume", _masterVolume);
-    audio->setPropertyDouble("music_volume", _musicVolume);
-    audio->setPropertyDouble("voice_volume", _voiceVolume);
-    audio->setPropertyDouble("sfx_volume", _sfxVolume);
-    audio->setPropertyString("music_path", _musicPath);
-    audio->setPropertyInt("buffer_size", _audioBufferSize);
-
-    auto logger = ini.section("logger");
-    logger->setPropertyString("level", _loggerLevel);
-    logger->setPropertyBool("colors", _loggerColors);
-
-    auto game = ini.section("game");
-    game->setPropertyString("init_location", _initLocation);
-    game->setPropertyBool("force_location", _forceLocation);
-    game->setPropertyBool("display_fps", _displayFps);
-    game->setPropertyBool("worldmap_fullscreen", _worldMapFullscreen);
-    game->setPropertyBool("display_mouse_position", _displayMousePosition);
-
-    auto preferences = ini.section("preferences");
-    preferences->setPropertyDouble("brightness", _brightness);
-    preferences->setPropertyInt("game_difficulty", _gameDifficulty);
-    preferences->setPropertyInt("combat_difficulty", _combatDifficulty);
-    preferences->setPropertyBool("combat_looks", _combatLooks);
-    preferences->setPropertyBool("combat_messages", _combatMessages);
-    preferences->setPropertyBool("combat_taunts", _combatTaunts);
-    preferences->setPropertyInt("combat_speed", _combatSpeed);
-    preferences->setPropertyBool("item_highlight", _itemHighlight);
-    preferences->setPropertyBool("language_filter", _languageFilter);
-    preferences->setPropertyDouble("mouse_sensitivity", _mouseSensitivity);
-    preferences->setPropertyBool("player_speedup", _playerSpeedup);
-    preferences->setPropertyBool("running", _running);
-    preferences->setPropertyBool("subtitles", _subtitles);
-    preferences->setPropertyBool("target_highlight", _targetHighlight);
-    preferences->setPropertyDouble("text_delay", _textDelay);
-    preferences->setPropertyInt("violence_level", _violenceLevel);
-
-    // Create config path if not exists
-    std::string configPath = CrossPlatform::getConfigPath();
-    std::string configFile = configPath + "/config.ini";
-    try
+    if (!stream)
     {
-        CrossPlatform::createDirectory(configPath);
-
-        // Write default configuration
-        Ini::Writer writer(ini);
-        std::ofstream os(configFile);
-
-        if (os)
-        {
-            writer.write(os);
-        }
-        else
-        {
-            Logger::error("[INI]") << "Cannot write to file `" << configFile << "`" << std::endl;
-        }
+        Logger::warning() << "Cannot open config file at `" << configFile << "`;" << std::endl;
+        return false;
     }
-    catch (const std::runtime_error &e)
-    {
-        Logger::error("[INI]") << "Cannot create directory `" <<
-                configPath << "` to write config file: " <<
-                e.what() << std::endl;
-    }
+
+    stream << "-- video" << std::endl
+           << "width = "  << _screenWidth << std::endl
+           << "height = " << _screenHeight << std::endl
+           << "scale = "  << _scale << std::endl
+           << "fullscreen = " << (_fullscreen ? "true" : "false") << std::endl
+           << "-- audio"  << std::endl
+           << "audio_enabled = " << (_audioEnabled ? "true" : "false") << std::endl
+           << "master_volume = " << std::to_string(_masterVolume) << std::endl
+           << "music_volume = " <<  std::to_string(_musicVolume) << std::endl
+           << "voice_volume = " <<  std::to_string(_voiceVolume) << std::endl
+           << "sfx_volume = " <<    std::to_string(_sfxVolume)  << std::endl
+           << "music_path = \"" << _musicPath << "\"" << std::endl
+           << "audio_buffer_size = " << _audioBufferSize << std::endl
+           << "-- logger" << std::endl
+           << "logger_level = \"" << _loggerLevel << "\"" << std::endl
+           << "logger_colors = " << (_loggerColors ? "true" : "false") << std::endl
+           << "-- game" << std::endl
+           << "init_location = \"" << _initLocation << "\"" << std::endl
+           << "force_location = " << (_forceLocation ? "true" : "false") << std::endl
+           << "display_fps = " << (_displayFps ? "true" : "false") << std::endl
+           << "worldmap_fullscreen = " << (_worldMapFullscreen ? "true" : "false") << std::endl
+           << "display_mouse_position = " << (_displayMousePosition ? "true" : "false") << std::endl
+           << "-- preferences" << std::endl
+           << "brightness = "  << std::to_string(_brightness) << std::endl
+           << "game_difficulty = " << _gameDifficulty << std::endl
+           << "combat_difficulty = " << _combatDifficulty << std::endl
+           << "combat_looks = " << (_combatLooks ? "true" : "false") << std::endl
+           << "combat_messages = " << (_combatMessages ? "true" : "false") << std::endl
+           << "combat_taunts = " << (_combatTaunts ? "true" : "false") << std::endl
+           << "combat_speed = " << _combatSpeed << std::endl
+           << "item_highlight = " << (_itemHighlight ? "true" : "false") << std::endl
+           << "language_filter = " << (_languageFilter ? "true" : "false") << std::endl
+           << "mouse_sensitivity = " << std::to_string(_mouseSensitivity) << std::endl
+           << "player_speedup = " << (_playerSpeedup ? "true" : "false") << std::endl
+           << "running = " << (_running ? "true" : "false") << std::endl
+           << "subtitles = " << (_subtitles ? "true" : "false") << std::endl
+           << "target_highlight = " << (_targetHighlight ? "true" : "false") << std::endl
+           << "text_delay = " << std::to_string(_textDelay) << std::endl
+           << "violence_level = " << _violenceLevel << std::endl;
+
+    return true;
 }
 
 unsigned int Settings::screenWidth() const
@@ -266,12 +120,7 @@ bool Settings::audioEnabled() const
     return _audioEnabled;
 }
 
-const std::string &Settings::defaultInitLocation()
-{
-    return _defaultInitLocation;
-}
-
-const std::string &Settings::initialLocation() const
+const std::string& Settings::initialLocation() const
 {
     return _initLocation;
 }
@@ -281,56 +130,66 @@ bool Settings::forceLocation() const
     return _forceLocation;
 }
 
-void Settings::_readConfig(Ini::File &ini)
+bool Settings::load()
 {
-    auto video = ini.section("video");
-    _screenWidth = video->propertyInt("width", _defaultScreenWidth);
-    _screenHeight = video->propertyInt("height", _defaultScreenHeight);
-    _scale = video->propertyInt("scale", _defaultScale);
+    std::string configFile = CrossPlatform::getConfigPath() + "/config.lua";
+    std::ifstream stream(configFile);
+
+    Logger::info() << "Loading config from " << configFile << std::endl;
+
+    if (!stream)
+    {
+        Logger::warning() << "Cannot open config file at `" << configFile << "`;" << std::endl;
+        return false;
+    }
+
+    Lua::Script script(configFile);
+    script.run();
+
+    _screenWidth  = script.get("width",  (int)_screenWidth);
+    _screenHeight = script.get("height", (int)_screenHeight);
+    _scale        = script.get("scale",  (int)_scale);
     if (_scale > 2) _scale = 2;
-    _fullscreen = video->propertyBool("fullscreen", _defaultFullscreen);
+    _fullscreen   = script.get("fullscreen", (bool)_fullscreen);
 
-    auto audio = ini.section("audio");
-    _audioEnabled = audio->propertyBool("enabled", _defaultAudioEnabled);
-    _masterVolume = audio->propertyDouble("master_volume", _defaultMasterVolume);
-    _musicVolume = audio->propertyDouble("music_volume", _defaultMusicVolume);
-    _voiceVolume = audio->propertyDouble("voice_volume", _defaultVoiceVolume);
-    _sfxVolume = audio->propertyDouble("sfx_volume", _defaultSFXVolume);
-    _musicPath = audio->propertyString("music_path", _defaultMusicPath);
-    _audioBufferSize = audio->propertyInt("buffer_size", _defaultAudioBufferSize);
+    _audioEnabled    = script.get("audio_enabled", (bool)_audioEnabled);
+    _masterVolume    = script.get("master_volume", (double)_masterVolume);
+    _musicVolume     = script.get("music_volume",  (double)_musicVolume);
+    _voiceVolume     = script.get("voice_volume",  (double)_voiceVolume);
+    _sfxVolume       = script.get("sfx_volume",    (double)_sfxVolume);
+    _musicPath       = script.get("music_path",    (const std::string&)_musicPath);
+    _audioBufferSize = script.get("audio_buffer_size",   (int)_audioBufferSize);
 
-    auto logger = ini.section("logger");
-    _loggerLevel = logger->propertyString("level", _defaultLoggerLevel);
+    _loggerLevel  = script.get("logger_level", (const std::string&)_loggerLevel);
     Logger::setLevel(_loggerLevel);
-    _loggerColors = logger->propertyBool("colors", _defaultLoggerColors);
+    _loggerColors = script.get("logger_colors", (bool)_loggerColors);
     Logger::useColors(_loggerColors);
 
-    auto game = ini.section("game");
-    _initLocation = game->propertyString("init_location", _defaultInitLocation);
-    _forceLocation = game->propertyBool("force_location", _defaultForceLocation);
+    _initLocation  = script.get("init_location",  (const std::string&)_initLocation);
+    _forceLocation = script.get("force_location", (bool)_forceLocation);
 
+    _displayFps           = script.get("display_fps",            (bool)_displayFps);
+    _worldMapFullscreen   = script.get("worldmap_fullscreen",    (bool)_worldMapFullscreen);
+    _displayMousePosition = script.get("display_mouse_position", (bool)_displayMousePosition);
 
-    _displayFps = game->propertyBool("display_fps", _defaultDisplayFps);
-    _worldMapFullscreen = game->propertyBool("worldmap_fullscreen", _defaultWorldMapFullscreen);
-    _displayMousePosition = game->propertyBool("display_mouse_position", _defaultDisplayMousePosition);
+    _brightness       = script.get("brightness",        (double)_brightness);
+    _gameDifficulty   = script.get("game_difficulty",   (int)_gameDifficulty);
+    _combatDifficulty = script.get("combat_difficulty", (int)_combatDifficulty);
+    _combatLooks      = script.get("combat_looks",      (bool)_combatLooks);
+    _combatMessages   = script.get("combat_messages",   (bool)_combatMessages);
+    _combatTaunts     = script.get("combat_taunts",     (bool)_combatTaunts);
+    _combatSpeed      = script.get("combat_speed",      (int)_combatSpeed);
+    _itemHighlight    = script.get("item_highlight",    (bool)_itemHighlight);
+    _languageFilter   = script.get("language_filter",   (bool)_languageFilter);
+    _mouseSensitivity = script.get("mouse_sensitivity", (double)_mouseSensitivity);
+    _playerSpeedup    = script.get("player_speedup",    (bool)_playerSpeedup);
+    _running          = script.get("running",           (bool)_running);
+    _subtitles        = script.get("subtitles",         (bool)_subtitles);
+    _targetHighlight  = script.get("target_highlight",  (bool)_targetHighlight);
+    _textDelay        = script.get("text_delay",        (double)_textDelay);
+    _violenceLevel    = script.get("violence_level",    (int)_violenceLevel);
 
-    auto preferences = ini.section("preferences");
-    _brightness = preferences->propertyDouble("brightness", _defaultBrightness);
-    _gameDifficulty = preferences->propertyInt("game_difficulty", _defaultGameDifficulty);
-    _combatDifficulty = preferences->propertyInt("combat_difficulty", _defaultCombatDifficulty);
-    _combatLooks = preferences->propertyBool("combat_looks", _defaultCombatLooks);
-    _combatMessages = preferences->propertyBool("combat_messages", _defaultCombatMessages);
-    _combatTaunts = preferences->propertyBool("combat_taunts", _defaultCombatTaunts);
-    _combatSpeed = preferences->propertyInt("combat_speed", _defaultCombatSpeed);
-    _itemHighlight = preferences->propertyBool("item_highlight", _defaultItemHighlight);
-    _languageFilter = preferences->propertyBool("language_filter", _defaultLanguageFilter);
-    _mouseSensitivity = preferences->propertyDouble("mouse_sensitivity", _defaultMouseSensitivity);
-    _playerSpeedup = preferences->propertyBool("player_speedup", _defaultPlayerSpeedup);
-    _running = preferences->propertyBool("running", _defaultRunning);
-    _subtitles = preferences->propertyBool("subtitles", _defaultSubtitles);
-    _targetHighlight = preferences->propertyBool("target_highlight", _defaultTargetHighlight);
-    _textDelay = preferences->propertyDouble("text_delay", _defaultTextDelay);
-    _violenceLevel = preferences->propertyInt("violence_level", _defaultViolenceLevel);
+    return true;
 }
 
 bool Settings::displayFps() const
@@ -583,4 +442,4 @@ int Settings::audioBufferSize() const
     return _audioBufferSize;
 }
 
-} // Falltergeist
+}

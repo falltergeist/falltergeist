@@ -319,7 +319,7 @@ bool CrossPlatform::_createDirectory(const char *dir)
         throw std::runtime_error("CreateDirectory failed with code: " + std::to_string(errorId));
     }
 #else
-#error Platform not supported: CrossPlatform::createDirectoryIfNotExists not implemented
+    #error Platform not supported: CrossPlatform::createDirectoryIfNotExists not implemented
 #endif
     return false;
 }
@@ -373,7 +373,7 @@ std::string CrossPlatform::getConfigPath()
     SHGetFolderPath(nullptr, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, 0, path);
     return std::string(path) + "/falltergeist";
 #else
-#error Platform not supported: CrossPlatform::getConfigPath not implemented
+    #error Platform not supported: CrossPlatform::getConfigPath not implemented
 #endif
 }
 

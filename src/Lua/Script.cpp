@@ -75,5 +75,46 @@ Script::~Script()
     lua_close(_lua_State);
 }
 
+bool Script::get(const std::string& name, bool defaultValue)
+{
+    lua_getglobal(_lua_State, name.c_str());
+    if (lua_isnil(_lua_State, -1))
+    {
+        return defaultValue;
+    }
+
+    return lua_toboolean(_lua_State, -1);
+}
+
+int Script::get(const std::string& name, int defaultValue)
+{
+    lua_getglobal(_lua_State, name.c_str());
+    if (!lua_isnumber(_lua_State, -1))
+    {
+        return defaultValue;
+    }
+    return lua_tointeger(_lua_State, -1);
+}
+
+double Script::get(const std::string& name, double defaultValue)
+{
+    lua_getglobal(_lua_State, name.c_str());
+    if (!lua_isnumber(_lua_State, -1))
+    {
+        return defaultValue;
+    }
+    return lua_tonumber(_lua_State, -1);
+}
+
+std::string Script::get(const std::string& name, const std::string& defaultValue)
+{
+    lua_getglobal(_lua_State, name.c_str());
+    if (!lua_isstring(_lua_State, -1))
+    {
+        return defaultValue;
+    }
+    return lua_tostring(_lua_State, -1);
+}
+
 }
 }

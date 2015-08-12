@@ -35,11 +35,6 @@ int main(int argc, char* argv[])
 {
     try
     {
-
-        // just for testing
-        Lua::Script script("data/scripts/test.lua");
-        script.run();
-
         auto game = Game::Game::getInstance();
         game->setState(new State::Start());
         game->run();
