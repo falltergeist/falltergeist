@@ -36,7 +36,7 @@ Opcode8115Handler::Opcode8115Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8115Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8115] [*] void playMovie(int movie)" << std::endl;
-    int movie = _vm->dataStack()->popInteger();
+    /* int movie = */ (void)_vm->dataStack()->popInteger();
 }
 
 }

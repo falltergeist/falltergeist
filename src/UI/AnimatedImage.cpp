@@ -268,18 +268,7 @@ void AnimatedImage::render(bool eggTransparency)
         if (pal->getCounter(MASK::REDDOT) < _reddotTextures.size())
             _reddotTextures.at(pal->getCounter(MASK::REDDOT))->copyTo(_tmptex);
 
-        //This is sloooow. But unfortunately sdl doesnt allow to blit over only alpha =/
-        for (unsigned int x = 0; x < texture()->width(); x++)
-        {
-            for (unsigned int y = 0; y < texture()->height(); y++)
-            {
-                if (x+egg_dx >= egg->width()) continue;
-                if (y+egg_dy >= egg->height()) continue;
-                if (x+egg_dx < 0) continue;
-                if (y+egg_dy < 0) continue;
-                _tmptex->setPixel(x, y, _tmptex->pixel(x,y) & egg->pixel(x+egg_dx, y+egg_dy));
-            }
-        }
+        _tmptex->blitWithAlpha(egg, egg_dx, egg_dy);
         Game::getInstance()->renderer()->drawTexture(_tmptex, x(), y());
     }
     else

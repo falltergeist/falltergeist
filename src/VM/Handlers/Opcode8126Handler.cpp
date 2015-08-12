@@ -38,7 +38,7 @@ Opcode8126Handler::Opcode8126Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8126Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8126] [-] void reg_anim_animate_forever(GameObject* obj , int delay)" << std::endl;
-    int delay = _vm->dataStack()->popInteger();
+    /* int delay = */ (void)_vm->dataStack()->popInteger();
     /*
     // delay - must be -1
     if (delay != -1)

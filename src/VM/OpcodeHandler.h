@@ -36,7 +36,7 @@ class OpcodeHandler
 protected:
     VM* _vm;
     unsigned int _offset;
-    
+
     virtual void _run();
     // print warning message to log
     void _warning(const std::string& message);

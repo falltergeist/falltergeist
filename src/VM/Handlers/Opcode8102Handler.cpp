@@ -38,10 +38,10 @@ Opcode8102Handler::Opcode8102Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8102Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8102] [*] int critter_add_trait(void* who, int trait_type, int trait, int amount) " << std::endl;
-    auto amount = _vm->dataStack()->popInteger();
-    auto trait = _vm->dataStack()->popInteger();
-    auto trait_type = _vm->dataStack()->popInteger();
-    auto who = _vm->dataStack()->popObject();
+    /* auto amount = */ (void)_vm->dataStack()->popInteger();
+    /* auto trait = */ (void)_vm->dataStack()->popInteger();
+    /* auto trait_type = */ (void)_vm->dataStack()->popInteger();
+    /* auto who = */ (void)_vm->dataStack()->popObject();
     _vm->dataStack()->push(0);
 }
 

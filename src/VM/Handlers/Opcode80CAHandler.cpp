@@ -41,7 +41,7 @@ void Opcode80CAHandler::_run()
     int number = _vm->dataStack()->popInteger();
     debug << "    number = " << number << std::endl;
     auto object = _vm->dataStack()->popObject();
-    if (!object) 
+    if (!object)
     {
         _error("get_critter_stat(who, stat) - who is NULL");
     }
@@ -50,7 +50,7 @@ void Opcode80CAHandler::_run()
     {
         _error("get_critter_stat(who, stat) - who is not a critter");
     }
-    int result;
+    int result = 0;
     switch (number)
     {
         case 0: // ST
@@ -107,72 +107,72 @@ void Opcode80CAHandler::_run()
         case 16: // better criticals
             // @TODO
             break;
-        case 17: // 
+        case 17: //
         {
             result = critter->damageThreshold(DAMAGE::NORMAL);
             break;
         }
-        case 18: // 
+        case 18: //
         {
             result = critter->damageThreshold(DAMAGE::LASER);
             break;
         }
-        case 19: // 
+        case 19: //
         {
             result = critter->damageThreshold(DAMAGE::FIRE);
             break;
         }
-        case 20: // 
+        case 20: //
         {
             result = critter->damageThreshold(DAMAGE::PLASMA);
             break;
         }
-        case 21: // 
+        case 21: //
         {
             result = critter->damageThreshold(DAMAGE::ELECTRICAL);
             break;
         }
-        case 22: // 
+        case 22: //
         {
             result = critter->damageThreshold(DAMAGE::EMP);
             break;
         }
-        case 23: // 
+        case 23: //
         {
             result = critter->damageThreshold(DAMAGE::EXPLOSIVE);
             break;
         }
-        case 24: // 
+        case 24: //
         {
             result = critter->damageResist(DAMAGE::NORMAL);
             break;
         }
-        case 25: // 
+        case 25: //
         {
             result = critter->damageResist(DAMAGE::LASER);
             break;
         }
-        case 26: // 
+        case 26: //
         {
             result = critter->damageResist(DAMAGE::FIRE);
             break;
         }
-        case 27: // 
+        case 27: //
         {
             result = critter->damageResist(DAMAGE::PLASMA);
             break;
         }
-        case 28: // 
+        case 28: //
         {
             result = critter->damageResist(DAMAGE::ELECTRICAL);
             break;
         }
-        case 29: // 
+        case 29: //
         {
             result = critter->damageResist(DAMAGE::EMP);
             break;
         }
-        case 30: // 
+        case 30: //
         {
             result = critter->damageResist(DAMAGE::EXPLOSIVE);
             break;
