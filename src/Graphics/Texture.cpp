@@ -280,4 +280,27 @@ SDL_BlendMode Texture::blendMode()
     return _blendMode;
 }
 
+bool Texture::blitWithAlpha(Texture* blitMask, int maskOffsetX, int maskOffsetY)
+{
+    if (!blitMask)
+        return false;
+
+    // TODO: Lock both surfaces only once and then use direct pixel access to blend.
+    const auto thisWidth = width();
+    const auto thisHeight = height();
+    const auto maskWidth = blitMask->width();
+    const auto maskHeight = blitMask->height();
+
+    //This is sloooow. But unfortunately sdl doesnt allow to blit over only alpha =/
+    for (unsigned int x = 0, maskX = std::max(0, maskOffsetX); x < thisWidth && maskX < maskWidth; ++x, ++maskX)
+    {
+        for (unsigned int y = 0, maskY = std::max(0, maskOffsetY); y < thisHeight && maskY < maskHeight; ++y, ++maskY)
+        {
+            setPixel(x, y, pixel(x,y) & blitMask->pixel(maskX, maskY));
+        }
+    }
+
+    return true;
+}
+
 }

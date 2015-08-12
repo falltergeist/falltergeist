@@ -81,6 +81,7 @@ public:
     void setBlendMode(SDL_BlendMode blendMode);
     SDL_BlendMode blendMode();
 
+    bool blitWithAlpha(Texture* blitMask, int maskOffsetX, int maskOffsetY);
 };
 
 }
