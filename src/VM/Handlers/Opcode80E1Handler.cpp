@@ -39,11 +39,8 @@ void Opcode80E1Handler::_run()
 {
     // @TODO: add implementation
     Logger::debug("SCRIPT") << "[80E1] [*] int metarule3(int meta, int p1, int p2, int p3)" << std::endl;
-    auto arg3 = _vm->dataStack()->popInteger();
-    auto arg2 = _vm->dataStack()->popInteger();
-    // Unused at the moment.
-    UNUSED_ARG(arg3);
-    UNUSED_ARG(arg2);
+    /* auto arg3 = */ (void)_vm->dataStack()->popInteger();
+    /* auto arg2 = */ (void)_vm->dataStack()->popInteger();
     auto arg1 = _vm->dataStack()->pop();
     auto meta = _vm->dataStack()->popInteger();
     int result = 0;

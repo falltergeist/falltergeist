@@ -27,9 +27,6 @@
 
 // Third party includes
 
-// Marks handler parameter as unused and prevents compiler warnings.
-#define UNUSED_ARG(arg) (void)(arg)
-
 namespace Falltergeist
 {
 class VM;

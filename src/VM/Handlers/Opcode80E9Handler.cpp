@@ -36,9 +36,7 @@ Opcode80E9Handler::Opcode80E9Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80E9Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80E9] [*] void set_light_level(int level)" << std::endl;
-    auto level = _vm->dataStack()->popInteger();
-    // Unused at the moment.
-    UNUSED_ARG(level);
+    /* auto level = */ (void)_vm->dataStack()->popInteger();
 }
 
 }
