@@ -75,23 +75,33 @@ void PlayerCreateOptions::init()
 
     // label: save
     auto saveButtonLabel = new TextArea(_t(MSG_EDITOR, 600), backgroundX+8, backgroundY+26);
-    saveButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    saveButtonLabel->setFont(font);
+    saveButtonLabel->setWidth(150);
+    saveButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // label: load
     auto loadButtonLabel = new TextArea(_t(MSG_EDITOR, 601), backgroundX+8, backgroundY+26+37);
-    loadButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    loadButtonLabel->setFont(font);
+    loadButtonLabel->setWidth(150);
+    loadButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // label: print to file
     auto printToFileButtonLabel = new TextArea(_t(MSG_EDITOR, 602), backgroundX+8, backgroundY+26+37*2);
-    printToFileButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    printToFileButtonLabel->setFont(font);
+    printToFileButtonLabel->setWidth(150);
+    printToFileButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // label: erase
     auto eraseButtonLabel = new TextArea(_t(MSG_EDITOR, 603), backgroundX+8, backgroundY+26+37*3);
-    eraseButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    eraseButtonLabel->setFont(font);
+    eraseButtonLabel->setWidth(150);
+    eraseButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // label: done
     auto doneButtonLabel = new TextArea(_t(MSG_EDITOR, 604), backgroundX+8, backgroundY+26+37*4);
-    doneButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    doneButtonLabel->setFont(font);
+    doneButtonLabel->setWidth(150);
+    doneButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     background->setX(backgroundX);
     background->setY(backgroundY);

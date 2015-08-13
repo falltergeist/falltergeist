@@ -91,7 +91,9 @@ void Credits::init()
         }
 
         auto tx = new TextArea(line,0,y);
-        tx->setFont(cur_font)->setWidth(640)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+        tx->setFont(cur_font);
+        tx->setWidth(640);
+        tx->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
         addUI(tx);
         _lines.push_back(tx);
         y+=tx->height();

@@ -28,6 +28,7 @@
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
+#include "../Lua/Script.h"
 #include "../ResourceManager.h"
 #include "../UI/TextArea.h"
 #include "../UI/TextSymbol.h"
@@ -41,6 +42,7 @@ namespace Falltergeist
 TextArea::TextArea(int x, int y) : ActiveUI(x, y)
 {
     _timestampCreated = SDL_GetTicks();
+    _calculate();
 }
 
 TextArea::TextArea(const std::string& text, int x, int y) : ActiveUI(x, y)
@@ -60,51 +62,52 @@ TextArea::TextArea(TextArea* textArea, int x, int y) : ActiveUI(x, y)
     _horizontalAlign = textArea->_horizontalAlign;
     _verticalAlign = textArea->_verticalAlign;
     _wordWrap = textArea->_wordWrap;
+    _calculate();
 }
 
 TextArea::~TextArea()
 {
 }
 
-TextArea* TextArea::appendText(const std::string& text)
+void TextArea::appendText(const std::string& text)
 {
     _text += text;
     _changed = true;
-    return this;
+    _calculate();
 }
 
 
-unsigned char TextArea::horizontalAlign()
+unsigned char TextArea::horizontalAlign() const
 {
     return _horizontalAlign;
 }
 
-TextArea * TextArea::setHorizontalAlign(unsigned char align)
+void TextArea::setHorizontalAlign(unsigned char align)
 {
-    if (_horizontalAlign == align) return this;
+    if (_horizontalAlign == align) return;
     _horizontalAlign = align;
     _changed = true;
-    return this;
+    _calculate();
 }
 
-unsigned char TextArea::verticalAlign()
+unsigned char TextArea::verticalAlign() const
 {
     return _verticalAlign;
 }
 
-TextArea * TextArea::setVerticalAlign(unsigned char align)
+void TextArea::setVerticalAlign(unsigned char align)
 {
-    if (_verticalAlign == align) return this;
+    if (_verticalAlign == align) return;
     _verticalAlign = align;
     _changed = true;
-    return this;
+    _calculate();
 }
 
-TextArea * TextArea::setText(const std::string& text)
+void TextArea::setText(const std::string& text)
 {
     _text = text;
     _changed = true;
-    return this;
+    _calculate();
 }
 
 std::shared_ptr<Font> TextArea::font()
@@ -116,67 +119,56 @@ std::shared_ptr<Font> TextArea::font()
     return _font;
 }
 
-TextArea * TextArea::setFont(std::shared_ptr<Font> font)
+void TextArea::setFont(std::shared_ptr<Font> font)
 {
     _font = font;
     _changed = true;
-    return this;
+    _calculate();
 }
 
-TextArea * TextArea::setWordWrap(bool wordWrap)
+void TextArea::setWordWrap(bool wordWrap)
 {
-    if (_wordWrap == wordWrap) return this;
+    if (_wordWrap == wordWrap) return;
     _wordWrap = wordWrap;
     _changed = true;
-    return this;
+    _calculate();
 }
 
-bool TextArea::wordWrap()
+bool TextArea::wordWrap() const
 {
     return _wordWrap;
 }
 
 
-TextArea* TextArea::setWidth(unsigned int width)
+void TextArea::setWidth(unsigned int width)
 {
-    if (_width == width)
-    {
-        return this;
-    }
+    if (_width == width) return;
     _width = width;
     _changed = true;
-    return this;
+    _calculate();
 }
 
-unsigned int TextArea::width()
+unsigned int TextArea::width() const
 {
     if (_width == 0)
     {
-        if (_calculatedWidth == 0)
-        {
-            _calculate();
-        }
         return _calculatedWidth;
     }
     return _width;
 }
 
-TextArea* TextArea::setHeight(unsigned int height)
+void TextArea::setHeight(unsigned int height)
 {
-    if (_height == height) return this;
+    if (_height == height) return;
     _height = height;
     _changed = true;
-    return this;
+    _calculate();
 }
 
-unsigned int TextArea::height()
+unsigned int TextArea::height() const
 {
     if (_height == 0)
     {
-        if (_calculatedHeight == 0)
-        {
-            _calculate();
-        }
         return _calculatedHeight;
     }
     return _width;
@@ -266,7 +258,7 @@ void TextArea::_calculate()
     _changed = false;
 }
 
-std::string TextArea::text()
+std::string TextArea::text() const
 {
     return _text;
 }
@@ -348,6 +340,20 @@ unsigned int TextArea::pixel(unsigned int x, unsigned int y)
     }
 
     return 0xFFFFFFFF; // white color
+}
+
+void TextArea::export_to_lua_script(Lua::Script* script)
+{
+    luabridge::getGlobalNamespace(script->luaState())
+        .beginNamespace("game")
+            .beginNamespace("ui")
+                .deriveClass<TextArea, ActiveUI>("TextArea")
+                    .addConstructor<void(*)(const char*, int, int)>()
+                    .addProperty("width", &TextArea::width, &TextArea::setWidth)
+                    .addProperty("horizontalAlign", &TextArea::horizontalAlign, &TextArea::setHorizontalAlign)
+                .endClass()
+            .endNamespace()
+        .endNamespace();
 }
 
 }

@@ -39,6 +39,55 @@ class TextSymbol;
 
 class TextArea : public ActiveUI
 {
+public:
+    enum { HORIZONTAL_ALIGN_LEFT = 1, HORIZONTAL_ALIGN_CENTER, HORIZONTAL_ALIGN_RIGHT, HORIZONTAL_ALIGN_JUSTIFY };
+    enum { VERTICAL_ALIGN_TOP = 1, VERTICAL_ALIGN_CENTER, VERTICAL_ALIGN_BOTTOM, VERTICAL_ALIGN_JUSTIFY };
+    TextArea(const std::string& text, int x = 0, int y = 0);
+    TextArea(int x = 0, int y = 0);
+    TextArea(TextArea* textArea, int x = 0, int y = 0);
+    ~TextArea();
+
+    void setText(const std::string& text);
+    void appendText(const std::string& text);
+    std::string text() const;
+
+    void setHorizontalAlign(unsigned char align);
+    unsigned char horizontalAlign() const;
+
+    void setVerticalAlign(unsigned char align);
+    unsigned char verticalAlign() const;
+
+    void setHeight(unsigned int height);
+    unsigned int height() const;
+
+    void setWidth(unsigned int width);
+    unsigned int width() const;
+
+    void setWordWrap(bool wordWrap);
+    bool wordWrap() const;
+
+    void setFont(std::shared_ptr<Font> font);
+    std::shared_ptr<Font> font();
+
+    virtual void render(bool eggTransparency = false);
+    virtual unsigned int pixel(unsigned int x, unsigned int y);
+
+    unsigned int timestampCreated();
+
+    TextArea& operator<<(const std::string& text);
+    TextArea& operator<<(unsigned value);
+    TextArea& operator<<(signed value);
+
+    TextArea& operator+=(const std::string& text);
+    TextArea& operator+=(unsigned value);
+    TextArea& operator+=(signed value);
+
+    TextArea& operator=(const std::string& text);
+    TextArea& operator=(unsigned value);
+    TextArea& operator=(signed value);
+
+    static void export_to_lua_script(Lua::Script* script);
+
 protected:
     bool _changed = true;
     std::vector<TextSymbol> _symbols;
@@ -61,52 +110,7 @@ protected:
     unsigned int _timestampCreated = 0;
 
     void _calculate();
-public:
-    enum { HORIZONTAL_ALIGN_LEFT = 1, HORIZONTAL_ALIGN_CENTER, HORIZONTAL_ALIGN_RIGHT, HORIZONTAL_ALIGN_JUSTIFY };
-    enum { VERTICAL_ALIGN_TOP = 1, VERTICAL_ALIGN_CENTER, VERTICAL_ALIGN_BOTTOM, VERTICAL_ALIGN_JUSTIFY };
-    TextArea(const std::string& text, int x = 0, int y = 0);
-    TextArea(int x = 0, int y = 0);
-    TextArea(TextArea* textArea, int x = 0, int y = 0);
-    ~TextArea();
 
-    TextArea* setText(const std::string& text);
-    TextArea* appendText(const std::string& text);
-    std::string text();
-
-    TextArea* setHorizontalAlign(unsigned char align);
-    unsigned char horizontalAlign();
-
-    TextArea* setVerticalAlign(unsigned char align);
-    unsigned char verticalAlign();
-
-    TextArea* setHeight(unsigned int height);
-    unsigned int height();
-
-    TextArea* setWidth(unsigned int width);
-    unsigned int width();
-
-    TextArea* setWordWrap(bool wordWrap);
-    bool wordWrap();
-
-    TextArea* setFont(std::shared_ptr<Font> font);
-    std::shared_ptr<Font> font();
-
-    virtual void render(bool eggTransparency = false);
-    virtual unsigned int pixel(unsigned int x, unsigned int y);
-
-    unsigned int timestampCreated();
-
-    TextArea& operator<<(const std::string& text);
-    TextArea& operator<<(unsigned value);
-    TextArea& operator<<(signed value);
-
-    TextArea& operator+=(const std::string& text);
-    TextArea& operator+=(unsigned value);
-    TextArea& operator+=(signed value);
-
-    TextArea& operator=(const std::string& text);
-    TextArea& operator=(unsigned value);
-    TextArea& operator=(signed value);
 };
 
 }

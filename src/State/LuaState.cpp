@@ -25,6 +25,7 @@
 #include "../State/LuaState.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 
@@ -43,6 +44,7 @@ LuaState::LuaState(const std::string& filename) : State()
     ActiveUI::export_to_lua_script(_script);
     Image::export_to_lua_script(_script);
     ImageButton::export_to_lua_script(_script);       
+    TextArea::export_to_lua_script(_script);
 
     _script->run();
 }

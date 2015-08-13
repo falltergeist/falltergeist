@@ -29,8 +29,8 @@ init = function(state)
 
     introLabel = game.ui.TextArea(game.translate("intro", "mainmenu"), 50, 20)
     --introLabel.font = font
-    --introLabel.width = 150
-    --introLabel.horizontalAlign = enum.TEXT_ALIGN.CENTER    
+    introLabel.width = 150
+    introLabel.horizontalAlign = enum.TEXT_ALIGN.CENTER    
 
 
     state:addUI(background)

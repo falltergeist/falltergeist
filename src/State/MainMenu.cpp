@@ -100,27 +100,39 @@ void MainMenu::init()
 
     // "Intro" label
     auto introButtonLabel = new TextArea(translate("intro", "mainmenu"), 50, 20);
-    introButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    introButtonLabel->setFont(font4);
+    introButtonLabel->setWidth(150);
+    introButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "New Game" label
     auto newGameButtonLabel = new TextArea(translate("new_game", "mainmenu"), 50, 20 + 41);
-    newGameButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    newGameButtonLabel->setFont(font4);
+    newGameButtonLabel->setWidth(150);
+    newGameButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Load Game" label
     auto loadGameButtonLabel = new TextArea(translate("load_game", "mainmenu"), 50, 20 + 41*2);
-    loadGameButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    loadGameButtonLabel->setFont(font4);
+    loadGameButtonLabel->setWidth(150);
+    loadGameButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Options" label
     auto optionsButtonLabel = new TextArea(translate("options", "mainmenu"), 50, 20 + 41*3);
-    optionsButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    optionsButtonLabel->setFont(font4);
+    optionsButtonLabel->setWidth(150);
+    optionsButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Credits" label
     auto creditsButtonLabel = new TextArea(translate("credits", "mainmenu"), 50, 20 + 41*4);
-    creditsButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    creditsButtonLabel->setFont(font4);
+    creditsButtonLabel->setWidth(150);
+    creditsButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Exit" label
     auto exitButtonLabel = new TextArea(translate("exit", "mainmenu"), 50, 20 + 41*5);
-    exitButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    exitButtonLabel->setFont(font4);
+    exitButtonLabel->setWidth(150);
+    exitButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // Text areas
     addUI(introButtonLabel);

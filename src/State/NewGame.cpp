@@ -97,13 +97,15 @@ void NewGame::init()
     addUI("name", new TextArea(300, 40));
 
     addUI("stats_1", new TextArea(0, 70));
-    getTextArea("stats_1")->setWidth(362)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    getTextArea("stats_1")->setWidth(362);
+    getTextArea("stats_1")->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
     addUI("stats_2", new TextArea(374, 70));
     addUI("bio",     new TextArea(437, 40));
 
     addUI("stats_3", new TextArea(294, 150));
-    getTextArea("stats_3")->setWidth(85)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    getTextArea("stats_3")->setWidth(85);
+    getTextArea("stats_3")->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
     addUI("stats3_values", new TextArea(383, 150));
 

@@ -131,12 +131,14 @@ void Inventory::init()
     ss << "/";
     ss << player->hitPointsMax();
     auto hitPointsLabel = new TextArea(ss.str(), screenX+94, screenY+20);
-    hitPointsLabel->setWidth(46)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    hitPointsLabel->setWidth(46);
+    hitPointsLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
     // label: armor class
     ss.str("");
     ss << player->armorClass();
     auto armorClassLabel = new TextArea(ss.str(), screenX+94, screenY+30);
-    armorClassLabel->setWidth(46)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    armorClassLabel->setWidth(46);
+    armorClassLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
     // armorSlot, leftHand, rightHand
     Game::GameArmorItemObject* armorSlot = player->armorSlot();
@@ -163,7 +165,8 @@ void Inventory::init()
         ss << player->damageThreshold(DAMAGE::EXPLOSIVE) <<"/";
     }
     auto damageThresholdLabel = new TextArea(ss.str(), screenX+94, screenY+40);
-    damageThresholdLabel->setWidth(26)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    damageThresholdLabel->setWidth(26);
+    damageThresholdLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
     // label: damage resistance levels
     ss.str("");
@@ -203,7 +206,8 @@ void Inventory::init()
     ss << weight;
     auto totalWtLabel = new TextArea(_t(MSG_INVENTORY, 20), screenX+14, screenY+180);
     auto weightLabel = new TextArea(ss.str(), screenX+70, screenY+180);
-    weightLabel->setWidth(24)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    weightLabel->setWidth(24);
+    weightLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
     ss.str("");
     ss << "/" << weightMax;
     auto weightMaxLabel = new TextArea(ss.str(), screenX+94, screenY+180);

@@ -124,7 +124,9 @@ void SettingsMenu::init()
 
     // COMBAT DIFFICULTY
     auto difficulty = _addTextArea(_t(MSG_OPTIONS, 102), backgroundX+21, backgroundY+48);
-    difficulty->setWidth(158)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setFont(font1_907824ff);
+    difficulty->setWidth(158);
+    difficulty->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    difficulty->setFont(font1_907824ff);
 
     // GAME DIFFICULTY
     _addTextArea(difficulty, backgroundX+21, backgroundY+48+77)->setText(_t(MSG_OPTIONS, 101));
@@ -183,13 +185,19 @@ void SettingsMenu::init()
     _addTextArea(combatSpeed, backgroundX+384, backgroundY+165+51*5)->setText(_t(MSG_OPTIONS, 119));
 
     // DEFAULT BUTTON LABEL
-    _addTextArea(combatSpeed, backgroundX+43, backgroundY+449)->setText(_t(MSG_OPTIONS, 120))->setFont(font3_907824ff);
+    auto label = _addTextArea(combatSpeed, backgroundX+43, backgroundY+449);
+    label->setText(_t(MSG_OPTIONS, 120));
+    label->setFont(font3_907824ff);
 
     // DONE BUTTON LABEL
-    _addTextArea(combatSpeed, backgroundX+169, backgroundY+449)->setText(_t(MSG_OPTIONS, 300))->setFont(font3_907824ff);
+    label = _addTextArea(combatSpeed, backgroundX+169, backgroundY+449);
+    label->setText(_t(MSG_OPTIONS, 300));
+    label->setFont(font3_907824ff);
 
     // CANCEL BUTTON LABEL
-    _addTextArea(combatSpeed, backgroundX+283, backgroundY+449)->setText(_t(MSG_OPTIONS, 121))->setFont(font3_907824ff);
+    label = _addTextArea(combatSpeed, backgroundX+283, backgroundY+449);
+    label->setText(_t(MSG_OPTIONS, 121));
+    label->setFont(font3_907824ff);
 
     // COMBAT DIFFICULTY SWITCH LABELS
     _addTextArea(_t(MSG_OPTIONS, 203), backgroundX+43, backgroundY+81)->setFont(font1_907824ff);     // EASY
@@ -205,12 +213,17 @@ void SettingsMenu::init()
     _addTextArea(_t(MSG_OPTIONS, 214), backgroundX+56, backgroundY+236)->setFont(font1_907824ff);    // NONE
     _addTextArea(_t(MSG_OPTIONS, 215), backgroundX+65, backgroundY+222)->setFont(font1_907824ff);    // MINIMUM
     _addTextArea(_t(MSG_OPTIONS, 207), backgroundX+122, backgroundY+236)->setFont(font1_907824ff);   // NORMAL
-    _addTextArea(_t(MSG_OPTIONS, 216), backgroundX+122, backgroundY+257)->setFont(font1_907824ff)->setWidth(60); // MAXIMUM BLOOD
+    label = _addTextArea(_t(MSG_OPTIONS, 216), backgroundX+122, backgroundY+257);
+    label->setFont(font1_907824ff);
+    label->setWidth(60); // MAXIMUM BLOOD
 
     // TARGET HIGHLIGHT SWITCH LABELS
     _addTextArea(_t(MSG_OPTIONS, 202), backgroundX+42, backgroundY+319)->setFont(font1_907824ff);    // OFF
     _addTextArea(_t(MSG_OPTIONS, 201), backgroundX+88, backgroundY+305)->setFont(font1_907824ff);    // ON
-    _addTextArea(_t(MSG_OPTIONS, 213), backgroundX+122, backgroundY+319)->setFont(font1_907824ff)->setWidth(70)->setWordWrap(true); // TARGETING ONLY
+    label = _addTextArea(_t(MSG_OPTIONS, 213), backgroundX+122, backgroundY+319);
+    label->setFont(font1_907824ff);
+    label->setWidth(70);
+    label->setWordWrap(true); // TARGETING ONLY
 
     // COMBAT LOOKS SWITCH LABELS
     _addTextArea(_t(MSG_OPTIONS, 202), backgroundX+42, backgroundY+397)->setFont(font1_907824ff);    // OFF
@@ -218,9 +231,9 @@ void SettingsMenu::init()
 
     // COMBAT MESSAGES SWITCH LABELS
     auto verboseLabel = _addTextArea(_t(MSG_OPTIONS, 211), backgroundX+203, backgroundY+69);         // VERBOSE
-    verboseLabel->setFont(font1_907824ff)
-                ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT)
-                ->setWidth(100);
+    verboseLabel->setFont(font1_907824ff);
+    verboseLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    verboseLabel->setWidth(100);
     _addTextArea(_t(MSG_OPTIONS, 212), backgroundX+320, backgroundY+69)->setFont(font1_907824ff);    // BRIEF
 
     // COMBAT TAUNTS SWITCH LABELS
@@ -249,9 +262,9 @@ void SettingsMenu::init()
     // COMBAT SPEED SLIDER LABELS
     _addTextArea(_t(MSG_OPTIONS, 209), backgroundX+384, backgroundY+38)->setFont(font1_907824ff);      // NORMAL
     auto fastestLabel = _addTextArea(_t(MSG_OPTIONS, 210), backgroundX+524, backgroundY+38);           // FASTEST
-    fastestLabel->setFont(font1_907824ff)
-            ->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT)
-            ->setWidth(100);
+    fastestLabel->setFont(font1_907824ff);
+    fastestLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    fastestLabel->setWidth(100);
 
     // TEXT DELAY SLIDER LABELS
     _addTextArea(_t(MSG_OPTIONS, 217), backgroundX+384, backgroundY+113)->setFont(font1_907824ff);     // SLOW

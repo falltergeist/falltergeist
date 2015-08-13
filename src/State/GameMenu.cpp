@@ -75,25 +75,35 @@ void GameMenu::init()
 
     // label: save game
     auto saveGameButtonLabel = new TextArea(_t(MSG_OPTIONS, 0), backgroundX+8, backgroundY+26);
-    saveGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    saveGameButtonLabel->setFont(font);
+    saveGameButtonLabel->setWidth(150);
+    saveGameButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     saveGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doSaveGame(); });
 
     // label: load game
     auto loadGameButtonLabel = new TextArea(_t(MSG_OPTIONS, 1), backgroundX+8, backgroundY+26+37);
-    loadGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    loadGameButtonLabel->setFont(font);
+    loadGameButtonLabel->setWidth(150);
+    loadGameButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
     loadGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doLoadGame(); });
 
     // label: preferences
     auto preferencesButtonLabel = new TextArea(_t(MSG_OPTIONS, 2), backgroundX+8, backgroundY+26+37*2);
-    preferencesButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    preferencesButtonLabel->setFont(font);
+    preferencesButtonLabel->setWidth(150);
+    preferencesButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // label: exit game
     auto exitGameButtonLabel = new TextArea(_t(MSG_OPTIONS, 3), backgroundX+8, backgroundY+26+37*3);
-    exitGameButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    exitGameButtonLabel->setFont(font);
+    exitGameButtonLabel->setWidth(150);
+    exitGameButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // label: done
     auto doneButtonLabel = new TextArea(_t(MSG_OPTIONS, 4), backgroundX+8, backgroundY+26+37*4);
-    doneButtonLabel->setFont(font)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    doneButtonLabel->setFont(font);
+    doneButtonLabel->setWidth(150);
+    doneButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     background->setX(backgroundX);
     background->setY(backgroundY);

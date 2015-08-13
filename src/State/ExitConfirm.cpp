@@ -72,7 +72,9 @@ void ExitConfirm::init()
     // label: Are you sure you want to quit?
     auto font = ResourceManager::getInstance()->font("font1.aaf", 0xb89c28ff);
     auto quitLabel = new TextArea(_t(MSG_MISC, 0), backgroundX+30, backgroundY+52);
-    quitLabel->setFont(font)->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    quitLabel->setFont(font);
+    quitLabel->setWidth(244);
+    quitLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // label: yes & no
     auto fontBig = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);

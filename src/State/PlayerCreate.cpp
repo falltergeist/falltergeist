@@ -106,7 +106,10 @@ void PlayerCreate::init()
         //right column
         else
         {
-            _addLabel(ss.str(),  new TextArea(_t(MSG_TRAITS, 100 + i), backgroundX+169, backgroundY+353+13*(i-8)))->setWidth(122)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT); // trate label
+            auto label = new TextArea(_t(MSG_TRAITS, 100 + i), backgroundX+169, backgroundY+353+13*(i-8));
+            label->setWidth(122);
+            label->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+            _addLabel(ss.str(),  label); // trate label
             _addButton(ss.str(), new ImageButton(ImageButton::TYPE_SKILL_TOGGLE, backgroundX+299, backgroundY+352+13*(i-8))); // trate toggle button
         }
     }
@@ -171,7 +174,10 @@ void PlayerCreate::init()
     _addLabel("options", new TextArea(_t(MSG_EDITOR, 101), backgroundX+365, backgroundY+453))->setFont(font3_b89c28ff);
     _addLabel("next",    new TextArea(_t(MSG_EDITOR, 100), backgroundX+473, backgroundY+453))->setFont(font3_b89c28ff);
     _addLabel("cancel",  new TextArea(_t(MSG_EDITOR, 102), backgroundX+571, backgroundY+453))->setFont(font3_b89c28ff);
-    _addLabel("name",    new TextArea(Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7))->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER)->setFont(font3_b89c28ff);
+    auto label = _addLabel("name",    new TextArea(Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7));
+    label->setWidth(150);
+    label->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    label->setFont(font3_b89c28ff);
     _addLabel("age",     new TextArea(_t(MSG_EDITOR, 104), backgroundX+163, backgroundY+7))->setFont(font3_b89c28ff);
     _addLabel("gender",  new TextArea(_t(MSG_EDITOR, Game::getInstance()->player()->gender() == GENDER::MALE ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff);
     _addLabel("label_1", new TextArea(_t(MSG_EDITOR, 116), backgroundX+14, backgroundY+286))->setFont(font3_b89c28ff);  // char points
@@ -248,7 +254,10 @@ void PlayerCreate::init()
     addUI(line);
 
     _description = new TextArea("", backgroundX+350, backgroundY+315);
-    _description->setFont(font1_000000ff)->setWidth(140)->setHeight(120)->setWordWrap(true);
+    _description->setFont(font1_000000ff);
+    _description->setWidth(140);
+    _description->setHeight(120);
+    _description->setWordWrap(true);
     addUI(_description);
 }
 
