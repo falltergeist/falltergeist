@@ -71,7 +71,7 @@ void GameMenu::init()
     exitGameButton->addEventHandler("mouseleftclick",    [this](Event* event){ this->doExit(); });
     doneButton->addEventHandler("mouseleftclick",        [this](Event* event){ this->closeMenu(); });
 
-    auto font = ResourceManager::font("font3.aaf", 0xb89c28ff);
+    auto font = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
 
     // label: save game
     auto saveGameButtonLabel = new TextArea(_t(MSG_OPTIONS, 0), backgroundX+8, backgroundY+26);

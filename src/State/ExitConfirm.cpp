@@ -70,12 +70,12 @@ void ExitConfirm::init()
     noButton->addEventHandler("mouseleftclick",  [this](Event* event){ this->doNo(); });
 
     // label: Are you sure you want to quit?
-    auto font = ResourceManager::font("font1.aaf", 0xb89c28ff);
+    auto font = ResourceManager::getInstance()->font("font1.aaf", 0xb89c28ff);
     auto quitLabel = new TextArea(_t(MSG_MISC, 0), backgroundX+30, backgroundY+52);
     quitLabel->setFont(font)->setWidth(244)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // label: yes & no
-    auto fontBig = ResourceManager::font("font3.aaf", 0xb89c28ff);
+    auto fontBig = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
     // label: yes 101
     auto yesButtonLabel = new TextArea(_t(MSG_DIALOG_BOX, 101), backgroundX+74, backgroundY+101);
     yesButtonLabel->setFont(fontBig);
@@ -108,7 +108,7 @@ void ExitConfirm::doNo()
 
 void ExitConfirm::onKeyDown(KeyboardEvent* event)
 {
-    switch (event->keyCode()) 
+    switch (event->keyCode())
     {
         case SDLK_ESCAPE:
         case SDLK_n:

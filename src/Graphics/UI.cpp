@@ -48,7 +48,7 @@ UI::~UI()
     if (_texture)
     {
         bool found = false;
-        for (auto it = ResourceManager::textures()->begin(); it != ResourceManager::textures()->end(); ++it)
+        for (auto it = ResourceManager::getInstance()->textures()->begin(); it != ResourceManager::getInstance()->textures()->end(); ++it)
         {
             if (it->second == _texture)
             {
@@ -128,7 +128,7 @@ void UI::render(bool eggTransparency)
         int egg_dx = x() - egg_x;
         int egg_dy = y() - egg_y;
 
-        auto egg = ResourceManager::texture("data/egg.png");
+        auto egg = ResourceManager::getInstance()->texture("data/egg.png");
 
         //check if egg and texture intersects
         SDL_Rect egg_rect = { egg_x, egg_y, (int)egg->width(), (int)egg->height() };

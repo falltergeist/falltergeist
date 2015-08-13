@@ -71,7 +71,7 @@ void PlayerCreateOptions::init()
     eraseButton->addEventHandler("mouseleftclick",       [this](Event* event){ this->onEraseButtonClick(dynamic_cast<MouseEvent*>(event)); });
     doneButton->addEventHandler("mouseleftclick",        [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
-    auto font = ResourceManager::font("font3.aaf", 0xb89c28ff);
+    auto font = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
 
     // label: save
     auto saveButtonLabel = new TextArea(_t(MSG_EDITOR, 600), backgroundX+8, backgroundY+26);

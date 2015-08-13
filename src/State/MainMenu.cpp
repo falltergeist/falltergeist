@@ -96,7 +96,7 @@ void MainMenu::init()
     auto exitButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*5));
     exitButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onExitButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
-    auto font4 = ResourceManager::font("font4.aaf", 0xb89c28ff);
+    auto font4 = ResourceManager::getInstance()->font("font4.aaf", 0xb89c28ff);
 
     // "Intro" label
     auto introButtonLabel = new TextArea(translate("intro", "mainmenu"), 50, 20);

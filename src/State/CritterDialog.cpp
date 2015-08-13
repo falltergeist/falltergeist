@@ -96,14 +96,14 @@ void CritterDialog::setQuestion(const std::string& value)
 void CritterDialog::onAnswerIn(Event* event)
 {
     auto sender = dynamic_cast<TextArea*>(event->emitter());
-    auto font3_a0a0a0ff = ResourceManager::font("font1.aaf", 0xffff7fff);
+    auto font3_a0a0a0ff = ResourceManager::getInstance()->font("font1.aaf", 0xffff7fff);
     sender->setFont(font3_a0a0a0ff);
 }
 
 void CritterDialog::onAnswerOut(Event* event)
 {
     auto sender = dynamic_cast<TextArea*>(event->emitter());
-    auto font3_3ff800ff = ResourceManager::font("font1.aaf", 0x3ff800ff);
+    auto font3_3ff800ff = ResourceManager::getInstance()->font("font1.aaf", 0x3ff800ff);
     sender->setFont(font3_3ff800ff);
 }
 

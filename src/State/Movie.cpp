@@ -63,16 +63,16 @@ void Movie::init()
     setX((renderer->width()  - 640)*0.5);
     setY((renderer->height() - 320)*0.5);
 
-    auto lst = ResourceManager::lstFileType("data/movies.lst");
+    auto lst = ResourceManager::getInstance()->lstFileType("data/movies.lst");
     std::string movie = "art/cuts/" + lst->strings()->at(_id);
 
-    auto cfglst = ResourceManager::lstFileType("data/moviecfgs.lst");
+    auto cfglst = ResourceManager::getInstance()->lstFileType("data/moviecfgs.lst");
     std::string moviecfgfile = "art/cuts/" + cfglst->strings()->at(_id);
     _effects.push_back({0,1, 0, 0, 0, 1});
 
     if (cfglst->strings()->at(_id)!="reserved.cfg")
     {
-        auto moviecfg = ResourceManager::datFileItem(moviecfgfile);
+        auto moviecfg = ResourceManager::getInstance()->datFileItem(moviecfgfile);
         //parse ini
         moviecfg->setPosition(0);
         std::istream str(moviecfg);
@@ -98,17 +98,17 @@ void Movie::init()
         _effects.push_back({1,-1, 0, 0, 0, 1});
     }
 
-    auto sublst = ResourceManager::lstFileType("data/subtitles.lst");
+    auto sublst = ResourceManager::getInstance()->lstFileType("data/subtitles.lst");
     std::string subfile = "text/english/cuts/" + sublst->strings()->at(_id);
 
     if (sublst->strings()->at(_id)!="reserved.sve")
     {
-        _subs = ResourceManager::sveFileType(subfile);
+        _subs = ResourceManager::getInstance()->sveFileType(subfile);
         if (_subs) _hasSubs = true;
     }
-    addUI("movie", new MvePlayer(ResourceManager::mveFileType(movie)));
+    addUI("movie", new MvePlayer(ResourceManager::getInstance()->mveFileType(movie)));
 
-    auto font0_ffffffff = ResourceManager::font("font1.aaf", 0xffffffff);
+    auto font0_ffffffff = ResourceManager::getInstance()->font("font1.aaf", 0xffffffff);
     auto subLabel = new TextArea("", 0, 320+35);
 
     subLabel->setFont(font0_ffffffff)->setWidth(640)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);

@@ -74,7 +74,7 @@ std::string _t(MSG_TYPE type, size_t number)
         throw Exception("_t() - wrong MSG file type: " + std::to_string(type));
     }
 
-    auto msg = ResourceManager::msgFileType(msgFiles[type]);
+    auto msg = ResourceManager::getInstance()->msgFileType(msgFiles[type]);
     return msg->message(number)->text();
 }
 

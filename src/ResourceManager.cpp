@@ -40,11 +40,13 @@
 namespace Falltergeist
 {
 
-std::vector<libfalltergeist::Dat::File*> ResourceManager::_datFiles;
-std::map<std::string, libfalltergeist::Dat::Item*> ResourceManager::_datFilesItems;
-std::map<std::string, Texture*> ResourceManager::_textures;
-std::map<std::string, std::shared_ptr<Font>> ResourceManager::_fonts;
-std::map<unsigned int, Game::GameLocation*> ResourceManager::_gameLocations;
+namespace
+{
+libfalltergeist::Pro::File* fetchProFileType(unsigned int PID)
+{
+    return ResourceManager::getInstance()->proFileType(PID);
+}
+}
 
 ResourceManager::ResourceManager()
 {
@@ -58,25 +60,12 @@ ResourceManager::ResourceManager()
 
 ResourceManager::~ResourceManager()
 {
-    for (auto texture : _textures)
-    {
-        delete texture.second;
-    }
+}
 
-    for (auto location : _gameLocations)
-    {
-        delete location.second;
-    }
-
-    for (auto item : _datFilesItems)
-    {
-        delete item.second;
-    }
-
-    for (auto dat : _datFiles)
-    {
-        delete dat;
-    }
+// static
+ResourceManager* ResourceManager::getInstance()
+{
+    return Singleton<ResourceManager>::get();
 }
 
 libfalltergeist::Dat::Item* ResourceManager::datFileItem(std::string filename)
@@ -222,7 +211,7 @@ libfalltergeist::Map::File* ResourceManager::mapFileType(const std::string& file
     auto item = dynamic_cast<libfalltergeist::Map::File*>(datFileItem(filename));
     if (item)
     {
-        item->setCallback(&ResourceManager::proFileType);
+        item->setCallback(&fetchProFileType);
     }
     return item;
 }
@@ -307,8 +296,6 @@ std::shared_ptr<Font> ResourceManager::font(const std::string& filename, unsigne
     _fonts.insert(std::pair<std::string, std::shared_ptr<Font>>(fontname, font));
     return font;
 }
-
-
 
 libfalltergeist::Pro::File* ResourceManager::proFileType(unsigned int PID)
 {
@@ -525,7 +512,7 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
     return prefix + lst->strings()->at(baseId);
 }
 
-std::map<std::string, Texture*>* ResourceManager::textures()
+std::unordered_map<std::string, Texture*>* ResourceManager::textures()
 {
     return &_textures;
 }
@@ -578,6 +565,31 @@ Game::GameLocation* ResourceManager::gameLocation(unsigned int number)
     _gameLocations.insert(std::make_pair(number, location));
 
     return _gameLocations.at(number);
+}
+
+void ResourceManager::shutdown()
+{
+    for (auto texture : _textures)
+    {
+        delete texture.second;
+    }
+
+    for (auto location : _gameLocations)
+    {
+        delete location.second;
+    }
+
+    for (auto item : _datFilesItems)
+    {
+        delete item.second;
+    }
+
+    for (auto dat : _datFiles)
+    {
+        delete dat;
+    }
+
+    unloadResources();
 }
 
 }

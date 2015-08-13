@@ -124,7 +124,7 @@ void AudioMixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len)
 void AudioMixer::playACMMusic(const std::string& filename, bool loop)
 {
     Mix_HookMusic(NULL, NULL);
-    auto acm = ResourceManager::acmFileType(Game::getInstance()->settings()->musicPath()+filename);
+    auto acm = ResourceManager::getInstance()->acmFileType(Game::getInstance()->settings()->musicPath()+filename);
     if (!acm) return;
     _loop = loop;
     musicCallback = std::bind(&AudioMixer::_musicCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
@@ -154,7 +154,7 @@ void AudioMixer::playMovieMusic(MvePlayer* mve)
 
 void AudioMixer::playACMSound(const std::string& filename)
 {
-    auto acm = ResourceManager::acmFileType(filename);
+    auto acm = ResourceManager::getInstance()->acmFileType(filename);
     if (!acm) return;
     Logger::debug("AudioMixer") << "playing: " << acm->filename() << std::endl;
     Mix_Chunk *chunk = NULL;

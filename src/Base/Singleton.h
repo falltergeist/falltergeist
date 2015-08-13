@@ -17,49 +17,39 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef FALLTERGEIST_BASE_SINGLETON_H
+#define FALLTERGEIST_BASE_SINGLETON_H
+
 // C++ standard includes
-
-// Falltergeist includes
-#include "FontString.h"
-#include "Font.h"
-#include "ResourceManager.h"
-
-// Third party includes
+#include <new>
 
 namespace Falltergeist
 {
 
-FontString::FontString(const std::string& text, std::shared_ptr<Font> font)
-{
-    _text = text;
+// Attention: this is NOT a thread-safe implementation of a Singleton pattern!
+// If needed it will be easy to implement thread-safe behavior using
+// C++11 atomics.
+template <typename Type>
+class Singleton {
+private:
+    // Classes using the Singleton<T> pattern should declare a getInstance()
+    // method and call Singleton::get() from within that.
+    friend Type* Type::getInstance();
 
-    if (!font)
+    static Type* get()
     {
-        font = ResourceManager::getInstance()->font();
+        if (!instance_)
+            instance_ = new Type();
+
+        return instance_;
     }
-    _font = font;
-}
 
-std::shared_ptr<Font> FontString::font()
-{
-    return _font;
-}
+    static Type* instance_;
+};
 
-FontString* FontString::setFont(std::shared_ptr<Font> font)
-{
-    _font = font;
-    return this;
-}
-
-std::string FontString::text()
-{
-    return _text;
-}
-
-FontString* FontString::setText(const std::string& text)
-{
-    _text = text;
-    return this;
-}
+template <typename Type>
+Type* Singleton<Type>::instance_ = nullptr;
 
 }
+
+#endif // FALLTERGEIST_BASE_SINGLETON_H

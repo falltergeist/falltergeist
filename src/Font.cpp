@@ -30,7 +30,7 @@ namespace Falltergeist
 
 Font::Font(const std::string& filename, unsigned int color)
 {
-    _aaf = ResourceManager::aafFileType(filename);
+    _aaf = ResourceManager::getInstance()->aafFileType(filename);
     _color = color;
 
     unsigned int width = _aaf->maximumWidth()*16;
