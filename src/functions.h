@@ -48,6 +48,8 @@ enum MSG_TYPE
     MSG_TYPE_COUNT
 };
 
+std::string translate(std::string key, std::string file);
+
 std::string _t(MSG_TYPE type, size_t number);
 
 }

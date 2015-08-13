@@ -57,36 +57,6 @@ class GameTime;
 
 class Game
 {
-protected:
-    std::vector<int> _GVARS;
-    std::vector<State::State*> _states;
-    std::vector<State::State*> _statesForRender;
-    std::vector<State::State*> _statesForThinkAndHandle;
-    std::vector<State::State*> _statesForDelete;
-
-    GameDudeObject* _player = 0;
-    GameTime* _gameTime = 0;
-    Renderer* _renderer = 0;
-    ResourceManager* _resourceManager = 0;
-    Mouse* _mouse = 0;
-    AudioMixer* _mixer = 0;
-    FpsCounter* _fpsCounter = 0;
-    TextArea* _mousePosition = 0;
-    TextArea* _currentTime = 0;
-    TextArea* _falltergeistVersion = 0;
-    Settings* _settings = 0;
-    AnimatedPalette* _animatedPalette = 0;
-    bool _quit = false;
-    SDL_Event _event;
-    bool _initialized = false;
-    void _initialize();
-    void _initGVARS();
-private:
-    Game() {}
-    Game(Game const&);
-    void operator=(Game const&);
-    static Game* _instance;
-    static bool _instanceFlag;
 public:
     ~Game();
     static Game* getInstance();
@@ -118,6 +88,37 @@ public:
 
     Settings* settings();
     AnimatedPalette* animatedPalette();
+
+protected:
+    std::vector<int> _GVARS;
+    std::vector<State::State*> _states;
+    std::vector<State::State*> _statesForRender;
+    std::vector<State::State*> _statesForThinkAndHandle;
+    std::vector<State::State*> _statesForDelete;
+
+    GameDudeObject* _player = 0;
+    GameTime* _gameTime = 0;
+    Renderer* _renderer = 0;
+    ResourceManager* _resourceManager = 0;
+    Mouse* _mouse = 0;
+    AudioMixer* _mixer = 0;
+    FpsCounter* _fpsCounter = 0;
+    TextArea* _mousePosition = 0;
+    TextArea* _currentTime = 0;
+    TextArea* _falltergeistVersion = 0;
+    Settings* _settings = 0;
+    AnimatedPalette* _animatedPalette = 0;
+    bool _quit = false;
+    SDL_Event _event;
+    bool _initialized = false;
+    void _initialize();
+    void _initGVARS();
+private:
+    Game() {}
+    Game(Game const&);
+    void operator=(Game const&);
+    static Game* _instance;
+    static bool _instanceFlag;
 
 };
 

@@ -99,27 +99,27 @@ void MainMenu::init()
     auto font4 = ResourceManager::font("font4.aaf", 0xb89c28ff);
 
     // "Intro" label
-    auto introButtonLabel = new TextArea(_t(MSG_MISC, 9), 50, 20);
+    auto introButtonLabel = new TextArea(translate("intro", "mainmenu"), 50, 20);
     introButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "New Game" label
-    auto newGameButtonLabel = new TextArea(_t(MSG_MISC, 10), 50, 20 + 41);
+    auto newGameButtonLabel = new TextArea(translate("new_game", "mainmenu"), 50, 20 + 41);
     newGameButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Load Game" label
-    auto loadGameButtonLabel = new TextArea(_t(MSG_MISC, 11), 50, 20 + 41*2);
+    auto loadGameButtonLabel = new TextArea(translate("load_game", "mainmenu"), 50, 20 + 41*2);
     loadGameButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Options" label
-    auto optionsButtonLabel = new TextArea(_t(MSG_MISC, 12), 50, 20 + 41*3);
+    auto optionsButtonLabel = new TextArea(translate("options", "mainmenu"), 50, 20 + 41*3);
     optionsButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Credits" label
-    auto creditsButtonLabel = new TextArea(_t(MSG_MISC, 13), 50, 20 + 41*4);
+    auto creditsButtonLabel = new TextArea(translate("credits", "mainmenu"), 50, 20 + 41*4);
     creditsButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // "Exit" label
-    auto exitButtonLabel = new TextArea(_t(MSG_MISC, 14), 50, 20 + 41*5);
+    auto exitButtonLabel = new TextArea(translate("exit", "mainmenu"), 50, 20 + 41*5);
     exitButtonLabel->setFont(font4)->setWidth(150)->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
 
     // Text areas

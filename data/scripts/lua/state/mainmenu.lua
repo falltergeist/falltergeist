@@ -1,5 +1,11 @@
-ImageButton = {
-    TYPE_MENU_RED_CIRCLE = 3
+enum = {
+    BUTTON_TYPE = {
+        MENU_RED_CIRCLE = 3
+    },
+
+    TEXT_ALIGN = {
+        CENTER = 2
+    }
 }
 
 
@@ -10,12 +16,22 @@ init = function(state)
 
     background = game.ui.Image("art/intrface/mainmenu.frm")
 
-    introButton    = game.ui.ImageButton(ImageButton.TYPE_MENU_RED_CIRCLE, 30, 19);
-    newGameButton  = game.ui.ImageButton(ImageButton.TYPE_MENU_RED_CIRCLE, 30, 19 + 41);
-    loadGameButton = game.ui.ImageButton(ImageButton.TYPE_MENU_RED_CIRCLE, 30, 19 + 41*2);
-    settingsButton = game.ui.ImageButton(ImageButton.TYPE_MENU_RED_CIRCLE, 30, 19 + 41*3);
-    creditsButton  = game.ui.ImageButton(ImageButton.TYPE_MENU_RED_CIRCLE, 30, 19 + 41*4);
-    exitButton     = game.ui.ImageButton(ImageButton.TYPE_MENU_RED_CIRCLE, 30, 19 + 41*5);
+    -- Buttons
+    introButton    = game.ui.ImageButton(enum.BUTTON_TYPE.MENU_RED_CIRCLE, 30, 19);
+    newGameButton  = game.ui.ImageButton(enum.BUTTON_TYPE.MENU_RED_CIRCLE, 30, 19 + 41);
+    loadGameButton = game.ui.ImageButton(enum.BUTTON_TYPE.MENU_RED_CIRCLE, 30, 19 + 41*2);
+    settingsButton = game.ui.ImageButton(enum.BUTTON_TYPE.MENU_RED_CIRCLE, 30, 19 + 41*3);
+    creditsButton  = game.ui.ImageButton(enum.BUTTON_TYPE.MENU_RED_CIRCLE, 30, 19 + 41*4);
+    exitButton     = game.ui.ImageButton(enum.BUTTON_TYPE.MENU_RED_CIRCLE, 30, 19 + 41*5);
+    
+    -- Labels
+    font = game.resourceManager.getFont("font4.aaf", 0xb89c28ff)
+
+    introLabel = game.ui.TextArea(game.translate("intro", "mainmenu"), 50, 20)
+    introLabel.font = font
+    introLabel.width = 150
+    introLabel.horizontalAlign = enum.TEXT_ALIGN.CENTER    
+
 
     state:addUI(background)
     state:addUI(introButton)
@@ -24,6 +40,8 @@ init = function(state)
     state:addUI(settingsButton)
     state:addUI(creditsButton)
     state:addUI(exitButton)
+
+    state:addUI(introLabel)
 
 end
 

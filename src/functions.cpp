@@ -23,6 +23,7 @@
 // Falltergeist includes
 #include "Exception.h"
 #include "functions.h"
+#include "Lua/Script.h"
 #include "ResourceManager.h"
 
 // Third party includes
@@ -30,6 +31,24 @@
 
 namespace Falltergeist
 {
+
+std::string translate(std::string key, std::string file)
+{
+    // @todo
+    // move locale to config file
+    // save Lua::Script(file) to future function calls
+    std::string locale = "en_US";
+
+    Lua::Script script("data/languages/" + locale + "/" + file + ".lua");
+    script.run();
+
+    luabridge::LuaRef value = luabridge::getGlobal(script.luaState(), key.c_str());
+    if (value.isString())
+    {
+        return value;
+    }
+    return file + "." + key;
+}
 
 std::string _t(MSG_TYPE type, size_t number)
 {
