@@ -48,7 +48,7 @@ private:
 };
 
 template <typename Type>
-Type* Singleton::instance_ = nullptr;
+Type* Singleton<Type>::instance_ = nullptr;
 
 }
 
