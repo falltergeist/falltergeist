@@ -40,7 +40,6 @@ namespace Falltergeist
 {
 namespace Lua
 {
-class Module;
 
 class Script
 {
@@ -48,8 +47,6 @@ public:
     Script(const std::string& filename);
     ~Script();
     void run();
-    static int l_write(lua_State* L);
-    void addModule(std::shared_ptr<Module> module);
 
     lua_State* luaState();
 
@@ -59,7 +56,6 @@ public:
     std::string get(const std::string& name, const std::string& defaultValue);
 
 private:
-    std::vector<std::shared_ptr<Module>> _modules;
     std::string _filename;
     lua_State* _lua_State;
 

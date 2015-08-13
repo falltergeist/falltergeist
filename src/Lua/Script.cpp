@@ -22,8 +22,7 @@
 
 // Falltergeist includes
 #include "../Exception.h"
-#include "../Lua/Console.h"
-#include "../Lua/Module.h"
+#include "../functions.h"
 #include "../Lua/Script.h"
 
 // Third party includes
@@ -39,7 +38,14 @@ Script::Script(const std::string& filename)
 {
     _filename = filename;
     _lua_State = lua_open();
+
     luaL_openlibs(_lua_State);
+
+    luabridge::getGlobalNamespace(_lua_State)
+        .beginNamespace("game")
+            .addFunction("translate", translate)
+        .endNamespace();
+
     if (luaL_loadfile(_lua_State, filename.c_str()))
     {
         std::string error = lua_tostring(_lua_State, -1);
@@ -48,7 +54,6 @@ Script::Script(const std::string& filename)
         throw Exception("Lua::Script::Script() " + error);
     }
 
-    addModule(std::shared_ptr<Module>(new Console));
 }
 
 void Script::run()
@@ -62,12 +67,6 @@ void Script::run()
         lua_pop(_lua_State, 1);
         throw Exception("Lua::Script::run() " + error);
     }
-}
-
-void Script::addModule(std::shared_ptr<Module> module)
-{
-    _modules.push_back(module);
-    module->attach(_lua_State);
 }
 
 Script::~Script()

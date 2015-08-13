@@ -25,12 +25,12 @@ init = function(state)
     exitButton     = game.ui.ImageButton(enum.BUTTON_TYPE.MENU_RED_CIRCLE, 30, 19 + 41*5);
     
     -- Labels
-    font = game.resourceManager.getFont("font4.aaf", 0xb89c28ff)
+    --font = game.resourceManager.getFont("font4.aaf", 0xb89c28ff)
 
     introLabel = game.ui.TextArea(game.translate("intro", "mainmenu"), 50, 20)
-    introLabel.font = font
-    introLabel.width = 150
-    introLabel.horizontalAlign = enum.TEXT_ALIGN.CENTER    
+    --introLabel.font = font
+    --introLabel.width = 150
+    --introLabel.horizontalAlign = enum.TEXT_ALIGN.CENTER    
 
 
     state:addUI(background)

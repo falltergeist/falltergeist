@@ -36,12 +36,14 @@ namespace State
 LuaState::LuaState(const std::string& filename) : State()
 {
     _script = new Lua::Script(filename);
+
     Event::export_to_lua_script(_script);
     LuaState::export_to_lua_script(_script);
     UI::export_to_lua_script(_script);
     ActiveUI::export_to_lua_script(_script);
     Image::export_to_lua_script(_script);
-    ImageButton::export_to_lua_script(_script);
+    ImageButton::export_to_lua_script(_script);       
+
     _script->run();
 }
 
@@ -108,6 +110,7 @@ void LuaState::render()
 
 void LuaState::addUI(ActiveUI* ui)
 {
+    if (!ui) return;
     State::addUI(ui);
 }
 
