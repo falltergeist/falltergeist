@@ -21,11 +21,12 @@
 #include <string>
 
 // Falltergeist includes
+#include "../Audio/AudioMixer.h"
 #include "../Exception.h"
+#include "../Game/Game.h"
+#include "../Lua/Script.h"
 #include "../ResourceManager.h"
 #include "../UI/ImageButton.h"
-#include "../Game/Game.h"
-#include "../Audio/AudioMixer.h"
 
 // Third party includes
 
@@ -206,6 +207,18 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
 
 ImageButton::~ImageButton()
 {
+}
+
+void ImageButton::export_to_lua_script(Lua::Script* script)
+{
+    luabridge::getGlobalNamespace(script->luaState())
+        .beginNamespace("game")
+            .beginNamespace("ui")
+                .deriveClass<ImageButton, ActiveUI>("ImageButton")
+                    .addConstructor<void(*)(unsigned int, int, int)>()
+                .endClass()
+            .endNamespace()
+        .endNamespace();
 }
 
 Texture* ImageButton::texture()

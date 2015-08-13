@@ -36,13 +36,16 @@ namespace Falltergeist
 
 class ActiveUI : public EventEmitter, public UI
 {
+public:
+    ActiveUI(int x = 0, int y = 0);    
+    virtual ~ActiveUI();
+
+    virtual void handle(Event* event);
+    static void export_to_lua_script(Lua::Script* script);
+
 protected:
     std::string _downSnd = "";
     std::string _upSnd = "";
-public:
-    ActiveUI(int x = 0, int y = 0);
-    virtual ~ActiveUI();
-    virtual void handle(Event* event);
 };
 
 }

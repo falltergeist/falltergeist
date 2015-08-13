@@ -18,11 +18,13 @@
  */
 
 // C++ standard includes
+#include <iostream>
 
 // Falltergeist includes
 #include "../Lua/Script.h"
 #include "../State/LuaState.h"
 #include "../UI/Image.h"
+#include "../UI/ImageButton.h"
 
 // Third party includes
 
@@ -36,7 +38,10 @@ LuaState::LuaState(const std::string& filename) : State()
     _script = new Lua::Script(filename);
     Event::export_to_lua_script(_script);
     LuaState::export_to_lua_script(_script);
+    UI::export_to_lua_script(_script);
+    ActiveUI::export_to_lua_script(_script);
     Image::export_to_lua_script(_script);
+    ImageButton::export_to_lua_script(_script);
     _script->run();
 }
 
@@ -54,7 +59,7 @@ void LuaState::export_to_lua_script(Lua::Script* script)
                 .addProperty("y", &LuaState::y, &LuaState::setY)
                 .addProperty("fullscreen", &LuaState::fullscreen, &LuaState::setFullscreen)
                 .addProperty("modal", &LuaState::modal, &LuaState::setModal)
-                .addFunction("addImage", &LuaState::addImage)
+                .addFunction("addUI", &LuaState::addUI)
             .endClass()
         .endNamespace();
 }
@@ -101,11 +106,10 @@ void LuaState::render()
     }
 }
 
-void LuaState::addImage(Image* ui)
+void LuaState::addUI(ActiveUI* ui)
 {
     State::addUI(ui);
 }
-
 
 int LuaState::x() const
 {

@@ -29,33 +29,26 @@
 
 namespace Falltergeist
 {
+namespace Lua
+{
+    class Script;
+}
+
 class Texture;
 
 class UI
 {
-protected:
-    int _x = 0;
-    int _y = 0;
-    int _xOffset = 0;
-    int _yOffset = 0;
-    Texture* _texture = 0;
-    Texture* _tmptex = 0;
-    bool _leftButtonPressed = false;
-    bool _rightButtonPressed = false;
-    bool _drag = false;
-    bool _hovered = false;
-    bool _visible = true;
 public:
     UI(int x = 0, int y = 0);
     virtual ~UI();
 
-    virtual int x();
+    virtual int x() const;
     virtual void setX(int value);
 
     virtual int xOffset();
     virtual void setXOffset(int xOffset);
 
-    virtual int y();
+    virtual int y() const;
     virtual void setY(int value);
 
     virtual int yOffset();
@@ -74,6 +67,21 @@ public:
     virtual unsigned int height();
 
     virtual unsigned int pixel(unsigned int x, int unsigned y);
+
+    static void export_to_lua_script(Lua::Script* script);
+
+protected:
+    int _x = 0;
+    int _y = 0;
+    int _xOffset = 0;
+    int _yOffset = 0;
+    Texture* _texture = 0;
+    Texture* _tmptex = 0;
+    bool _leftButtonPressed = false;
+    bool _rightButtonPressed = false;
+    bool _drag = false;
+    bool _hovered = false;
+    bool _visible = true;
 };
 
 }

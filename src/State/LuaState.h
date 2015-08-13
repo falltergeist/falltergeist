@@ -62,7 +62,7 @@ public:
     virtual void handle(Event* event);
     virtual void render();
 
-    virtual void addImage(Image* ui);
+    virtual void addUI(ActiveUI* ui);
 
 
     static void export_to_lua_script(Lua::Script* script);

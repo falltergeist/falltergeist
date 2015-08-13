@@ -22,14 +22,14 @@
 
 // Falltergeist includes
 #include "../Game/Game.h"
+#include "../Game/DudeObject.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../Graphics/UI.h"
-#include "../ResourceManager.h"
-#include "../Game/DudeObject.h"
-#include "../State/Location.h"
 #include "../LocationCamera.h"
-
+#include "../Lua/Script.h"
+#include "../ResourceManager.h"
+#include "../State/Location.h"
 
 // Third party includes
 
@@ -60,7 +60,20 @@ UI::~UI()
     }
 }
 
-int UI::x()
+void UI::export_to_lua_script(Lua::Script* script)
+{
+    luabridge::getGlobalNamespace(script->luaState())
+        .beginNamespace("game")
+            .beginNamespace("ui")
+                .beginClass<UI>("UI")
+                    //.addProperty("x", &UI::x, &UI::setX)
+                    //.addProperty("y", &UI::y, &UI::setY)
+                .endClass()
+            .endNamespace()
+        .endNamespace();
+}
+
+int UI::x() const
 {
     return _x + _xOffset;
 }
@@ -70,7 +83,7 @@ void UI::setX(int value)
     _x = value;
 }
 
-int UI::y()
+int UI::y() const
 {
     return _y + _yOffset;
 }

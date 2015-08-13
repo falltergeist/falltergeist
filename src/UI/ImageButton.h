@@ -33,14 +33,6 @@ namespace Falltergeist
 
 class ImageButton : public ActiveUI
 {
-protected:
-    bool _checkboxMode = false; // remember new state after click
-    bool _checked = false;
-
-    std::vector<Texture*> _textures;
-    void _onLeftButtonClick(MouseEvent* event);
-    void _onLeftButtonDown(MouseEvent* event);
-    void _onMouseOut(MouseEvent* event);
 public:
     enum ButtonType {
         TYPE_SMALL_RED_CIRCLE = 1,
@@ -84,6 +76,18 @@ public:
     virtual Texture* texture();
     bool checked();
     void setChecked(bool _checked);
+
+    static void export_to_lua_script(Lua::Script* script);
+
+protected:
+    bool _checkboxMode = false; // remember new state after click
+    bool _checked = false;
+
+    std::vector<Texture*> _textures;
+    void _onLeftButtonClick(MouseEvent* event);
+    void _onLeftButtonDown(MouseEvent* event);
+    void _onMouseOut(MouseEvent* event);
+
 };
 
 }
