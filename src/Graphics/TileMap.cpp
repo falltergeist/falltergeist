@@ -102,10 +102,10 @@ void TileMap::_generateTexture()
 
     _texture = new Texture(_square*80, _square*36);
 
-    auto tilesLst = ResourceManager::lstFileType("art/tiles/tiles.lst");
+    auto tilesLst = ResourceManager::getInstance()->lstFileType("art/tiles/tiles.lst");
     for (unsigned int i = 0; i != numbers.size(); ++i)
     {
-        auto texture = ResourceManager::texture("art/tiles/" + tilesLst->strings()->at(numbers.at(i)));
+        auto texture = ResourceManager::getInstance()->texture("art/tiles/" + tilesLst->strings()->at(numbers.at(i)));
         unsigned int x = (i%_square)*80;
         unsigned int y = (i/_square)*36;
         texture->copyTo(_texture, x, y);

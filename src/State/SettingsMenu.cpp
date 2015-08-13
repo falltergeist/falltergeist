@@ -115,9 +115,9 @@ void SettingsMenu::init()
     addUI("item_highlight",itemHightlightSwitch);
 
     // LABELS
-    auto font1_907824ff = ResourceManager::font("font1.aaf", 0x907824ff);
-    auto font3_907824ff = ResourceManager::font("font3.aaf", 0x907824ff);
-    auto font4_907824ff = ResourceManager::font("font4.aaf", 0x907824ff);
+    auto font1_907824ff = ResourceManager::getInstance()->font("font1.aaf", 0x907824ff);
+    auto font3_907824ff = ResourceManager::getInstance()->font("font3.aaf", 0x907824ff);
+    auto font4_907824ff = ResourceManager::getInstance()->font("font4.aaf", 0x907824ff);
 
     // GAME PREFERENCES
     _addTextArea(_t(MSG_OPTIONS, 100), backgroundX+74, backgroundY+10)->setFont(font4_907824ff);

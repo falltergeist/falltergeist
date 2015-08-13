@@ -122,13 +122,13 @@ void Location::onStateDeactivate(StateEvent* event)
 
 void Location::setLocation(const std::string& name)
 {
-    auto mapFile = ResourceManager::mapFileType(name);
+    auto mapFile = ResourceManager::getInstance()->mapFileType(name);
 
     if (mapFile == nullptr)
     {
         auto defaultSettings = new Settings;
         Logger::warning() << "No such map: `" << name << "`; using default map" << std::endl;
-        mapFile = ResourceManager::mapFileType("maps/" + defaultSettings->initialLocation() + ".map");
+        mapFile = ResourceManager::getInstance()->mapFileType("maps/" + defaultSettings->initialLocation() + ".map");
     }
 
     _currentElevation = mapFile->defaultElevation();
@@ -141,7 +141,7 @@ void Location::setLocation(const std::string& name)
     if (mapFile->MVARS()->size() > 0)
     {
         auto name = mapFile->name();
-        auto gam = ResourceManager::gamFileType("maps/" + name.substr(0, name.find(".")) + ".gam");
+        auto gam = ResourceManager::getInstance()->gamFileType("maps/" + name.substr(0, name.find(".")) + ".gam");
         for (auto mvar : *gam->MVARS())
         {
             _MVARS.push_back(mvar.second);
@@ -192,12 +192,12 @@ void Location::setLocation(const std::string& name)
 
         if (mapObject->scriptId() > 0)
         {
-            auto intFile = ResourceManager::intFileType(mapObject->scriptId());
+            auto intFile = ResourceManager::getInstance()->intFileType(mapObject->scriptId());
             if (intFile) object->setScript(new VM(intFile,object));
         }
         if (mapObject->mapScriptId() > 0 && mapObject->mapScriptId() != mapObject->scriptId())
         {
-            auto intFile = ResourceManager::intFileType(mapObject->mapScriptId());
+            auto intFile = ResourceManager::getInstance()->intFileType(mapObject->mapScriptId());
             if (intFile) object->setScript(new VM(intFile, object));
         }
 
@@ -226,7 +226,7 @@ void Location::setLocation(const std::string& name)
         player->setOrientation(mapFile->defaultOrientation());
 
         // Player script
-        player->setScript(new VM(ResourceManager::intFileType(0), player));
+        player->setScript(new VM(ResourceManager::getInstance()->intFileType(0), player));
 
         auto hexagon = hexagonGrid()->at(mapFile->defaultPosition());
         Location::moveObjectToHexagon(player, hexagon);
@@ -237,9 +237,9 @@ void Location::setLocation(const std::string& name)
     // Location script
     if (mapFile->scriptId() > 0)
     {
-        _locationScript = new VM(ResourceManager::intFileType(mapFile->scriptId()-1), nullptr);
+        _locationScript = new VM(ResourceManager::getInstance()->intFileType(mapFile->scriptId()-1), nullptr);
     }
-    
+
     // Generates floor and roof images
     {
 
@@ -332,8 +332,8 @@ void Location::onObjectHover(Event* event, Game::GameObject* object)
         if (_objectUnderCursor == object)
             _objectUnderCursor = NULL;
     }
-    else 
-    {    
+    else
+    {
         if (_objectUnderCursor == NULL || event->name() == "mousein")
         {
             _objectUnderCursor = object;
@@ -435,7 +435,7 @@ void Location::think()
             if (_scrollLeft && _scrollBottom)  state = Mouse::SCROLL_SW;
             if (_scrollRight && _scrollTop)    state = Mouse::SCROLL_NE;
             if (_scrollRight && _scrollBottom) state = Mouse::SCROLL_SE;
-            if (mouse->state() != state) 
+            if (mouse->state() != state)
             {
                 if (mouse->scrollState())
                 {
@@ -494,7 +494,7 @@ void Location::think()
             }
         }
     }
-    
+
     // action cursor stuff
     if (_objectUnderCursor && _actionCursorTicks && _actionCursorTicks + DROPDOWN_DELAY < SDL_GetTicks())
     {
@@ -689,7 +689,7 @@ void Location::onKeyDown(KeyboardEvent* event)
         case SDLK_m:
             toggleCursorMode();
             break;
-        case SDLK_COMMA: 
+        case SDLK_COMMA:
         {
             auto player = Game::getInstance()->player();
             player->setOrientation((player->orientation() + 5) % 6); // rotate left
@@ -809,7 +809,7 @@ void Location::moveObjectToHexagon(Game::GameObject* object, Hexagon* hexagon)
             }
         }
         */
-    }    
+    }
 
     object->setHexagon(hexagon);
     hexagon->objects()->push_back(object);
@@ -846,11 +846,11 @@ void Location::centerCameraAtHexagon(Hexagon* hexagon)
 
 void Location::centerCameraAtHexagon(int tileNum)
 {
-    try 
+    try
     {
         centerCameraAtHexagon(_hexagonGrid->at((unsigned int)tileNum));
-    } 
-    catch (std::out_of_range ex) 
+    }
+    catch (std::out_of_range ex)
     {
         throw Exception(std::string("Tile number out of range: ") + std::to_string(tileNum));
     }

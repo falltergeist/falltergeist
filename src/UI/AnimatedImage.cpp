@@ -39,7 +39,7 @@ AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direc
 {
 
     setTexture(new Texture(frm->width(), frm->height()));
-    _texture->loadFromRGBA(frm->rgba(ResourceManager::palFileType("color.pal")));
+    _texture->loadFromRGBA(frm->rgba(ResourceManager::getInstance()->palFileType("color.pal")));
     setXOffset(frm->offsetX(direction) + frm->directions()->at(direction)->shiftX());
     setYOffset(frm->offsetY(direction) + frm->directions()->at(direction)->shiftY());
 
@@ -217,7 +217,7 @@ void AnimatedImage::render(bool eggTransparency)
         int egg_dx = x() - egg_x;
         int egg_dy = y() - egg_y;
 
-        auto egg = ResourceManager::texture("data/egg.png");
+        auto egg = ResourceManager::getInstance()->texture("data/egg.png");
 
         //check if egg and texture intersects
         SDL_Rect egg_rect = { egg_x, egg_y, (int)egg->width(), (int)egg->height() };

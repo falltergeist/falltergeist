@@ -99,7 +99,6 @@ protected:
     GameDudeObject* _player = 0;
     GameTime* _gameTime = 0;
     Renderer* _renderer = 0;
-    ResourceManager* _resourceManager = 0;
     Mouse* _mouse = 0;
     AudioMixer* _mixer = 0;
     FpsCounter* _fpsCounter = 0;

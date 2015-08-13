@@ -49,7 +49,7 @@ VM::VM(libfalltergeist::Int::File* script, Game::GameObject* owner)
 VM::VM(const std::string& filename, Game::GameObject* owner)
 {
     _owner = owner;
-    _script = ResourceManager::intFileType(filename);
+    _script = ResourceManager::getInstance()->intFileType(filename);
     if (!_script) throw Exception("VM::VM() - script is null: " + filename);
 }
 
@@ -125,9 +125,9 @@ void VM::run()
 
 std::string VM::msgMessage(int msg_file_num, int msg_num)
 {
-    auto lst = ResourceManager::lstFileType("scripts/scripts.lst");
+    auto lst = ResourceManager::getInstance()->lstFileType("scripts/scripts.lst");
     auto scriptName = lst->strings()->at(msg_file_num - 1);
-    auto msg = ResourceManager::msgFileType("text/english/dialog/" + scriptName.substr(0, scriptName.find(".int")).append(".msg"));
+    auto msg = ResourceManager::getInstance()->msgFileType("text/english/dialog/" + scriptName.substr(0, scriptName.find(".int")).append(".msg"));
     if (!msg)
     {
         Logger::debug("SCRIPT") << "VM::msgMessage(file, num) not found. file: " + std::to_string(msg_file_num) + " num: " + std::to_string(msg_num) << std::endl;

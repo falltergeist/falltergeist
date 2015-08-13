@@ -35,7 +35,7 @@ FontString::FontString(const std::string& text, std::shared_ptr<Font> font)
 
     if (!font)
     {
-        font = ResourceManager::font();
+        font = ResourceManager::getInstance()->font();
     }
     _font = font;
 }

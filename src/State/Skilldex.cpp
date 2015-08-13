@@ -98,7 +98,7 @@ void Skilldex::init()
     cancelButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCancelButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     // LABELS
-    auto font = ResourceManager::font("font3.aaf", 0xb89c28ff);
+    auto font = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
 
     // label: skilldex (100)
     auto skilldexLabel = new TextArea(_t(MSG_SKILLDEX, 100), backgroundX+56, backgroundY+14);

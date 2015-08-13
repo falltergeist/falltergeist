@@ -44,8 +44,8 @@ Animation::Animation() : ActiveUI()
 
 Animation::Animation(const std::string& frmName, unsigned int direction) : ActiveUI()
 {
-    auto frm = ResourceManager::frmFileType(frmName);
-    setTexture(ResourceManager::texture(frmName));
+    auto frm = ResourceManager::getInstance()->frmFileType(frmName);
+    setTexture(ResourceManager::getInstance()->texture(frmName));
 
     _actionFrame = frm->actionFrame();
 
@@ -302,7 +302,7 @@ void Animation::render(bool eggTransparency)
         int egg_dx = x() - egg_x;
         int egg_dy = y() - egg_y;
 
-        auto egg = ResourceManager::texture("data/egg.png");
+        auto egg = ResourceManager::getInstance()->texture("data/egg.png");
 
         //check if egg and texture intersects
         SDL_Rect egg_rect = { egg_x, egg_y, (int)egg->width(), (int)egg->height() };

@@ -209,7 +209,7 @@ void Inventory::init()
     auto weightMaxLabel = new TextArea(ss.str(), screenX+94, screenY+180);
     if (weight>weightMax)
     {
-        weightLabel->setFont(ResourceManager::font("font1.aaf", 0xff0000ff));
+        weightLabel->setFont(ResourceManager::getInstance()->font("font1.aaf", 0xff0000ff));
     }
 
     // label: left hand

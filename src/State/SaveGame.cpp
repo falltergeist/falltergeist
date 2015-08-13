@@ -85,7 +85,7 @@ void SaveGame::init()
     addUI(cancelButton);
 
     // LABELS
-    auto font3_907824ff = ResourceManager::font("font3.aaf", 0x907824ff);
+    auto font3_907824ff = ResourceManager::getInstance()->font("font3.aaf", 0x907824ff);
 
     // SAVE GAME LABEL
     auto saveGameLabel = new TextArea(_t(MSG_LOAD_SAVE, 109), bgX+48, bgY+27);
@@ -125,7 +125,7 @@ void SaveGame::onStateDeactivate(StateEvent* event)
 
 void SaveGame::onKeyDown(KeyboardEvent* event)
 {
-    switch (event->keyCode()) 
+    switch (event->keyCode())
     {
         case SDLK_ESCAPE:
             Game::getInstance()->popState();

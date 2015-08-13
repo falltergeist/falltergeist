@@ -33,7 +33,7 @@ namespace Falltergeist
 
 Image::Image(const std::string& filename) : ActiveUI()
 {
-    setTexture(ResourceManager::texture(filename));
+    setTexture(ResourceManager::getInstance()->texture(filename));
 }
 
 Image::Image(Image* image) : ActiveUI()
@@ -66,7 +66,7 @@ Image::Image(libfalltergeist::Frm::File* frm, unsigned int direction)
 
     // full frm texture
     Texture* texture = new Texture(frm->width(), frm->height());
-    texture->loadFromRGBA(frm->rgba(ResourceManager::palFileType("color.pal")));
+    texture->loadFromRGBA(frm->rgba(ResourceManager::getInstance()->palFileType("color.pal")));
 
     // direction offset in full texture
     unsigned int y = 0;

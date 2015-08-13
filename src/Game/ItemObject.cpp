@@ -107,7 +107,7 @@ void GameItemObject::_generateUi()
     if (inventoryFID() == -1) return;
 
     // Big unscaled image of item
-    _inventoryDragUi = new Image(ResourceManager::FIDtoFrmName(inventoryFID()));
+    _inventoryDragUi = new Image(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
 
     // Small scaled image
     auto inventoryUiTexture = _inventoryDragUi->texture()->fitTo(57, 40);

@@ -69,7 +69,7 @@ GameArmorItemObject* GameCritterObject::armorSlot() const
 
 void GameCritterObject::setArmorSlot(GameArmorItemObject* object)
 {
-    if (object) 
+    if (object)
     {
         setFID((_gender == GENDER::FEMALE) ? object->femaleFID() : object->maleFID());
     }
@@ -488,7 +488,7 @@ void GameCritterObject::think()
             _ui = animation;
         }
     }
-    else 
+    else
     {
         auto anim = (Animation*)ui();
         if (!_moving && (!anim || !anim->playing()))
@@ -521,12 +521,12 @@ void GameCritterObject::onMovementAnimationEnded(Event* event)
 
     auto newHexagon = movementQueue()->back();
     auto newOrientation = this->hexagon()->orientationTo(newHexagon);
-    
+
     if (event->name() == "animationEnded" || (int)newOrientation != orientation())
     {
         _orientation = newOrientation;
         auto newAnimation = _generateMovementAnimation();
-        if (event->name() == "actionFrame") 
+        if (event->name() == "actionFrame")
         {
             newAnimation->setCurrentFrame(animation->currentFrame());
             newAnimation->setActionFrame(animation->actionFrame());
@@ -592,7 +592,7 @@ Animation* GameCritterObject::_generateMovementAnimation()
 Animation* GameCritterObject::setActionAnimation(const std::string& action)
 {
     Animation* animation = new Animation("art/critters/" + _generateArmorFrmString() + action + ".frm", orientation());
-    animation->addEventHandler("animationEnded", [animation](Event* event) 
+    animation->addEventHandler("animationEnded", [animation](Event* event)
     {
         animation->setCurrentFrame(0);
     });
@@ -619,18 +619,18 @@ std::string GameCritterObject::_generateArmorFrmString()
 {
     if (!armorSlot())
     {
-        return ResourceManager::FIDtoFrmName(FID()).substr(13,6);
+        return ResourceManager::getInstance()->FIDtoFrmName(FID()).substr(13,6);
     }
 
     switch (gender())
     {
         case GENDER::FEMALE:
         {
-            return ResourceManager::FIDtoFrmName(armorSlot()->femaleFID()).substr(13, 6);
+            return ResourceManager::getInstance()->FIDtoFrmName(armorSlot()->femaleFID()).substr(13, 6);
         }
         default: // MALE
         {
-            return ResourceManager::FIDtoFrmName(armorSlot()->maleFID()).substr(13, 6);
+            return ResourceManager::getInstance()->FIDtoFrmName(armorSlot()->maleFID()).substr(13, 6);
         }
     }
 }

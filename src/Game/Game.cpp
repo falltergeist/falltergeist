@@ -86,7 +86,8 @@ void Game::_initialize()
 
     SDL_setenv("SDL_VIDEO_CENTERED", "1", 1);
 
-    _resourceManager = new ResourceManager();
+    // Force ResourceManager to initialize instance.
+    (void)ResourceManager::getInstance();
 
     renderer()->init();
 
@@ -112,17 +113,7 @@ void Game::_initialize()
 Game::~Game()
 {
     _instanceFlag = false;
-    delete _mouse;
-    delete _fpsCounter;
-    delete _mousePosition;
-    delete _falltergeistVersion;
-    delete _mixer;
-    delete _resourceManager;
-    while (!_states.empty()) popState();
-    delete _renderer;
-    delete _settings;
-    delete _gameTime;
-    delete _currentTime;
+    shutdown();
 }
 
 void Game::shutdown()
@@ -132,7 +123,7 @@ void Game::shutdown()
     delete _mousePosition;
     delete _falltergeistVersion;
     delete _mixer;
-    delete _resourceManager;
+    ResourceManager::getInstance()->shutdown();
     while (!_states.empty()) popState();
     delete _settings;
     delete _gameTime;
@@ -239,7 +230,7 @@ int Game::GVAR(unsigned int number)
 void Game::_initGVARS()
 {
     if (_GVARS.size() > 0) return;
-    auto gam = ResourceManager::gamFileType("data/vault13.gam");
+    auto gam = ResourceManager::getInstance()->gamFileType("data/vault13.gam");
     for (auto gvar : *gam->GVARS())
     {
         _GVARS.push_back(gvar.second);

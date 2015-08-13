@@ -55,7 +55,7 @@ void Opcode80B7Handler::_run()
     object->setElevation(elevation);
     if (SID > 0)
     {
-        auto intFile = ResourceManager::intFileType(SID);
+        auto intFile = ResourceManager::getInstance()->intFileType(SID);
         if (intFile)
         {
             object->setScript(new VM(intFile, object));

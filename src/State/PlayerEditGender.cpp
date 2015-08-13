@@ -74,7 +74,7 @@ void PlayerEditGender::init()
     doneBox->setY(bgY+42);
 
     auto doneLabel = new TextArea(_t(MSG_EDITOR, 100), bgX+281, bgY+45);
-    auto font3_b89c28ff = ResourceManager::font("font3.aaf", 0xb89c28ff);
+    auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
     doneLabel->setFont(font3_b89c28ff);
 
     auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+260, bgY+45);

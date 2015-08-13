@@ -181,14 +181,14 @@ void GameObject::addUIEventHandlers()
 void GameObject::_generateUi()
 {
     delete _ui; _ui = 0;
-    auto frm = ResourceManager::frmFileType(FID());
+    auto frm = ResourceManager::getInstance()->frmFileType(FID());
     if (frm)
     {
-        frm->rgba(ResourceManager::palFileType("color.pal")); // TODO: figure out, why not calling this brokes animated overlays
+        frm->rgba(ResourceManager::getInstance()->palFileType("color.pal")); // TODO: figure out, why not calling this brokes animated overlays
         if (frm->framesPerDirection() > 1)
         {
             auto queue = new AnimationQueue();
-            queue->animations()->push_back(new Animation(ResourceManager::FIDtoFrmName(FID()), orientation()));
+            queue->animations()->push_back(new Animation(ResourceManager::getInstance()->FIDtoFrmName(FID()), orientation()));
             _ui = queue;
         }
         else if (frm->animatedPalette())
@@ -399,7 +399,7 @@ void GameObject::description_p_proc()
         if (script()->overrides())
             useDefault = false;
     }
-    if (useDefault) 
+    if (useDefault)
     {
         Game::getInstance()->locationState()->displayMessage(description());
     }
@@ -436,9 +436,9 @@ void GameObject::look_at_p_proc()
         if (script()->overrides())
             useDefault = false;
     }
-    if (useDefault) 
+    if (useDefault)
     {
-        auto protoMsg = ResourceManager::msgFileType("text/english/game/proto.msg");
+        auto protoMsg = ResourceManager::getInstance()->msgFileType("text/english/game/proto.msg");
         char buf[512];
         sprintf(buf, protoMsg->message(490)->text().c_str(), name().c_str());
         Game::getInstance()->locationState()->displayMessage(std::string(buf));

@@ -59,7 +59,7 @@ void PlayerEdit::init()
     setFullscreen(true);
 
     auto player = Game::getInstance()->player();
-   
+
     // background
     auto background = new Image("art/intrface/edtredt.frm");
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
@@ -162,7 +162,7 @@ void PlayerEdit::init()
     _addDescription("health_1", _t(MSG_STATS, 207));
     _addImage("health_1", new Image("art/skilldex/" + imagesHealth[0] + ".frm"));
 
-    auto font1_0x183018ff = ResourceManager::font("font1.aaf", 0x183018ff);
+    auto font1_0x183018ff = ResourceManager::getInstance()->font("font1.aaf", 0x183018ff);
 
     for (unsigned int i = 0; i != 7; ++i)
     {
@@ -193,7 +193,7 @@ void PlayerEdit::init()
     _addButton("done",    new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+455, backgroundY+454));
     _addButton("cancel",  new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+554, backgroundY+454));
 
-    auto font3_b89c28ff = ResourceManager::font("font3.aaf", 0xb89c28ff);
+    auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
 
     _addLabel("print", new TextArea(_t(MSG_EDITOR, 103), backgroundX+365, backgroundY+453))->setFont(font3_b89c28ff);
     _addLabel("next",    new TextArea(_t(MSG_EDITOR, 100), backgroundX+473, backgroundY+453))->setFont(font3_b89c28ff);
@@ -273,8 +273,8 @@ void PlayerEdit::init()
     _selectedImage->setY(backgroundY+310);
     addUI(_selectedImage);
 
-    auto font1_000000ff = ResourceManager::font("font1.aaf", 0x000000FF);
-    auto font2_000000ff = ResourceManager::font("font2.aaf", 0x000000FF);
+    auto font1_000000ff = ResourceManager::getInstance()->font("font1.aaf", 0x000000FF);
+    auto font2_000000ff = ResourceManager::getInstance()->font("font2.aaf", 0x000000FF);
 
     _title = new TextArea("", backgroundX+350, backgroundY+275);
     _title->setFont(font2_000000ff);
@@ -387,9 +387,9 @@ void PlayerEdit::think()
     {
         std::string name = it->first;
 
-        auto font1_3ff800ff = ResourceManager::font("font1.aaf", 0x3ff800ff);
-        auto font1_a0a0a0ff = ResourceManager::font("font1.aaf", 0xa0a0a0ff);
-        auto font1_183018ff = ResourceManager::font("font1.aaf", 0x183018ff);
+        auto font1_3ff800ff = ResourceManager::getInstance()->font("font1.aaf", 0x3ff800ff);
+        auto font1_a0a0a0ff = ResourceManager::getInstance()->font("font1.aaf", 0xa0a0a0ff);
+        auto font1_183018ff = ResourceManager::getInstance()->font("font1.aaf", 0x183018ff);
 
         if (name.find("stats_") == 0 || name.find("params_") == 0)
         {
@@ -425,9 +425,9 @@ void PlayerEdit::think()
         _description->setText(_descriptions.at(name));
         _selectedImage->setTexture(_images.at(name)->texture());
 
-        auto font1_ffff7fff = ResourceManager::font("font1.aaf", 0xffff7fff);
-        auto font1_ffffffff = ResourceManager::font("font1.aaf", 0xffffffff);
-        auto font1_707820ff = ResourceManager::font("font1.aaf", 0x707820ff);
+        auto font1_ffff7fff = ResourceManager::getInstance()->font("font1.aaf", 0xffff7fff);
+        auto font1_ffffffff = ResourceManager::getInstance()->font("font1.aaf", 0xffffffff);
+        auto font1_707820ff = ResourceManager::getInstance()->font("font1.aaf", 0x707820ff);
 
         if (name.find("stats_") == 0)
         {

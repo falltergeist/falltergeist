@@ -108,18 +108,18 @@ void NewGame::init()
     addUI("stats3_values", new TextArea(383, 150));
 
     auto combat = new Game::GameDudeObject();
-    combat->loadFromGCDFile(ResourceManager::gcdFileType("premade/combat.gcd"));
-    combat->setBiography(ResourceManager::bioFileType("premade/combat.bio")->text());
+    combat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/combat.gcd"));
+    combat->setBiography(ResourceManager::getInstance()->bioFileType("premade/combat.bio")->text());
     _characters.push_back(combat);
 
     auto stealth = new Game::GameDudeObject();
-    stealth->loadFromGCDFile(ResourceManager::gcdFileType("premade/stealth.gcd"));
-    stealth->setBiography(ResourceManager::bioFileType("premade/stealth.bio")->text());
+    stealth->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/stealth.gcd"));
+    stealth->setBiography(ResourceManager::getInstance()->bioFileType("premade/stealth.bio")->text());
     _characters.push_back(stealth);
 
     auto diplomat = new Game::GameDudeObject();
-    diplomat->loadFromGCDFile(ResourceManager::gcdFileType("premade/diplomat.gcd"));
-    diplomat->setBiography(ResourceManager::bioFileType("premade/diplomat.bio")->text());
+    diplomat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/diplomat.gcd"));
+    diplomat->setBiography(ResourceManager::getInstance()->bioFileType("premade/diplomat.bio")->text());
     _characters.push_back(diplomat);
 
     _changeCharacter();
@@ -140,13 +140,13 @@ void NewGame::doBeginGame()
 void NewGame::doEdit()
 {
     Game::getInstance()->setPlayer(_characters.at(_selectedCharacter));
-    Game::getInstance()->pushState(new PlayerCreate()); 
+    Game::getInstance()->pushState(new PlayerCreate());
 }
 
 void NewGame::doCreate()
 {
     auto none = new Game::GameDudeObject();
-    none->loadFromGCDFile(ResourceManager::gcdFileType("premade/blank.gcd"));
+    none->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/blank.gcd"));
     Game::getInstance()->setPlayer(none);
     Game::getInstance()->pushState(new PlayerCreate());
 }

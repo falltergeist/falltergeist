@@ -53,7 +53,7 @@ std::shared_ptr<Font> TextSymbol::font()
 {
     if (!_font)
     {
-        return ResourceManager::font();
+        return ResourceManager::getInstance()->font();
     }
     return _font;
 }

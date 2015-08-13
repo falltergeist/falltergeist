@@ -65,7 +65,7 @@ void PlayerEditAlert::init()
     bg->setX(bgX+164);
     bg->setY(bgY+173);
 
-    auto font1_ff9f48ff = ResourceManager::font("font1.aaf", 0xff9f48ff);
+    auto font1_ff9f48ff = ResourceManager::getInstance()->font("font1.aaf", 0xff9f48ff);
 
     auto message = new TextArea(_message.c_str(), bgX+194, bgY+213);
     message->setWidth(250);
@@ -80,7 +80,7 @@ void PlayerEditAlert::init()
     doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     auto doneLabel = new TextArea(_t(MSG_EDITOR, 100), bgX+284, bgY+273);
-    auto font3_b89c28ff = ResourceManager::font("font3.aaf", 0xb89c28ff);
+    auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
     doneLabel->setFont(font3_b89c28ff);
 
     addUI(bg);

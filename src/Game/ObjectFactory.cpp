@@ -54,7 +54,7 @@ GameObjectFactory::GameObjectFactory()
 
 GameObject* GameObjectFactory::createObject(unsigned int PID)
 {
-    auto proto = ResourceManager::proFileType(PID);
+    auto proto = ResourceManager::getInstance()->proFileType(PID);
     GameObject* object = 0;
     switch ((OBJECT_TYPE)proto->typeId())
     {
@@ -125,7 +125,7 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
             ((GameItemObject*)object)->setWeight(proto->weight());
             // @TODO: ((GameItemObject*)object)->setVolume(proto->containerSize());
             ((GameItemObject*)object)->setInventoryFID(proto->inventoryFID());
-            auto msg = ResourceManager::msgFileType("text/english/game/pro_item.msg");
+            auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_item.msg");
             try
             {
                 object->setName(msg->message(proto->messageId())->text());
@@ -137,7 +137,7 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
         case OBJECT_TYPE::CRITTER:
         {
             object = new GameCritterObject();
-            auto msg = ResourceManager::msgFileType("text/english/game/pro_crit.msg");
+            auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_crit.msg");
             try
             {
                 object->setName(msg->message(proto->messageId())->text());
@@ -201,7 +201,7 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
                     break;
                 }
             }
-            auto msg = ResourceManager::msgFileType("text/english/game/pro_scen.msg");
+            auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_scen.msg");
             try
             {
                 object->setName(msg->message(proto->messageId())->text());
@@ -239,7 +239,7 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
         case OBJECT_TYPE::WALL:
         {
             object = new GameWallObject();
-            auto msg = ResourceManager::msgFileType("text/english/game/pro_wall.msg");
+            auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_wall.msg");
             try
             {
                 object->setName(msg->message(proto->messageId())->text());
@@ -296,7 +296,7 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
                     break;
             }
 
-            auto msg = ResourceManager::msgFileType("text/english/game/pro_misc.msg");
+            auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_misc.msg");
             try
             {
                 object->setName(msg->message(proto->messageId())->text());
@@ -312,7 +312,7 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
 
     if (proto->scriptId() > 0)
     {
-        auto intFile = ResourceManager::intFileType(proto->scriptId());
+        auto intFile = ResourceManager::getInstance()->intFileType(proto->scriptId());
         if (intFile) object->setScript(new VM(intFile, object));
     }
 

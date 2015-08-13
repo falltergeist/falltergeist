@@ -111,7 +111,7 @@ std::shared_ptr<Font> TextArea::font()
 {
     if (!_font)
     {
-        return ResourceManager::font();
+        return ResourceManager::getInstance()->font();
     }
     return _font;
 }
@@ -203,7 +203,7 @@ void TextArea::_calculate()
     // Parsing lines of text
     // Cutting lines when it is needed (\n or when exceeding _width)
     for (auto it = _text.begin(); it != _text.end(); ++it)
-    {       
+    {
         if (*it == ' ')
         {
             x += font()->aaf()->spaceWidth() + font()->horizontalGap();

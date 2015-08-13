@@ -77,7 +77,7 @@ void PlayerEditAge::init()
 
     auto doneLabel = new TextArea(_t(MSG_EDITOR, 100), backgroundX+210, backgroundY+43);
 
-    auto font3_b89c28ff = ResourceManager::font("font3.aaf", 0xb89c28ff);
+    auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
 
     doneLabel->setFont(font3_b89c28ff);
 
