@@ -46,36 +46,29 @@ namespace Falltergeist
 namespace Game
 {
 
+class GameDudeObject;
+
 Game* getInstance()
 {
     return ::Falltergeist::Game::Game::getInstance();
 }
 
-class GameDudeObject;
-bool Game::_instanceFlag = false;
-Game* Game::_instance = NULL;
-
-Game* Game::getInstance()
+Game::Game()
 {
-    if(!_instanceFlag)
-    {
-        _instance = new Game();
-        _instanceFlag = true;
-        _instance->_initialize();
-        return _instance;
-    }
-    else
-    {
-        return _instance;
-    }
 }
 
-void Game::_initialize()
+// static
+Game* Game::getInstance()
+{
+    return Singleton<Game>::get();
+}
+
+void Game::init(std::unique_ptr<Settings> settings)
 {
     if (_initialized) return;
     _initialized = true;
 
-    _settings = new Settings();
+    _settings = std::move(settings);
     auto width = _settings->screenWidth();
     auto height = _settings->screenHeight();
 
@@ -112,7 +105,6 @@ void Game::_initialize()
 
 Game::~Game()
 {
-    _instanceFlag = false;
     shutdown();
 }
 
@@ -125,7 +117,7 @@ void Game::shutdown()
     delete _mixer;
     ResourceManager::getInstance()->shutdown();
     while (!_states.empty()) popState();
-    delete _settings;
+    _settings.reset();
     delete _gameTime;
     delete _currentTime;
     delete _renderer;
@@ -305,9 +297,9 @@ Renderer* Game::renderer()
     return _renderer;
 }
 
-Settings* Game::settings()
+Settings* Game::settings() const
 {
-    return _settings;
+    return _settings.get();
 }
 
 void Game::handle()
