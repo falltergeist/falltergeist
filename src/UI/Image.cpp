@@ -22,6 +22,7 @@
 // Falltergeist includes
 #include "../Exception.h"
 #include "../Graphics/Texture.h"
+#include "../Lua/Script.h"
 #include "../ResourceManager.h"
 #include "../UI/Image.h"
 
@@ -83,6 +84,19 @@ Image::Image(libfalltergeist::Frm::File* frm, unsigned int direction)
 
 Image::~Image()
 {
+}
+
+void Image::export_to_lua_script(Lua::Script* script)
+{
+    // expose LuaState to lua instance
+    luabridge::getGlobalNamespace(script->luaState())
+        .beginNamespace("game")
+            .beginNamespace("ui")
+                .beginClass<Image>("Image")
+                    .addConstructor<void(*)(char const*)>()
+                .endClass()
+            .endNamespace()
+        .endNamespace();
 }
 
 unsigned int Image::width()

@@ -116,5 +116,10 @@ std::string Script::get(const std::string& name, const std::string& defaultValue
     return lua_tostring(_lua_State, -1);
 }
 
+lua_State* Script::luaState()
+{
+    return _lua_State;
+}
+
 }
 }

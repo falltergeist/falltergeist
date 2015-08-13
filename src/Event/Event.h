@@ -31,17 +31,18 @@
 
 namespace Falltergeist
 {
+namespace Lua
+{
+    class Script;
+}
 
 class Event
 {
-protected:
-    std::string _name;
-    EventEmitter* _emitter = 0;
-    bool _handled = false;
 public:
     Event(const std::string& name);
     virtual ~Event();
-    std::string name();
+
+    std::string name() const;
     void setName(const std::string& name);
 
     EventEmitter* emitter();
@@ -49,6 +50,13 @@ public:
 
     bool handled();
     void setHandled(bool value);
+
+    static void export_to_lua_script(Lua::Script* script);
+
+protected:
+    std::string _name;
+    EventEmitter* _emitter = 0;
+    bool _handled = false;
 };
 
 }

@@ -33,6 +33,10 @@
 
 namespace Falltergeist
 {
+namespace Lua
+{
+    class Script;
+}
 
 class Image : public ActiveUI
 {
@@ -43,9 +47,13 @@ public:
     Image(Image* image);
     Image(Texture* texture);
     Image(libfalltergeist::Frm::File* frm, unsigned int direction);
+    ~Image();
+
+    static void export_to_lua_script(Lua::Script* script);
+
+
     unsigned int width();
     unsigned int height();
-    ~Image();
 };
 
 }

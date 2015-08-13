@@ -23,8 +23,8 @@
 #include "src/Exception.h"
 #include "src/Game/Game.h"
 #include "src/Logger.h"
+#include "src/State/LuaState.h"
 #include "src/State/Start.h"
-#include "src/Lua/Script.h"
 
 // Third party includes
 #include <libfalltergeist.h>
@@ -37,6 +37,7 @@ int main(int argc, char* argv[])
     {
         auto game = Game::Game::getInstance();
         game->setState(new State::Start());
+        //game->setState(new State::LuaState("data/scripts/lua/state/mainmenu.lua"));
         game->run();
         game->shutdown();
         return 0;

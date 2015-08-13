@@ -17,54 +17,61 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_LUA_SCRIPT_H
-#define FALLTERGEIST_LUA_SCRIPT_H
+#ifndef FALLTERGEIST_STATE_LUASTATE_H
+#define FALLTERGEIST_STATE_LUASTATE_H
 
 // C++ standard includes
-#include <string>
-#include <memory>
-#include <vector>
 
 // Falltergeist includes
+#include "../State/State.h"
 
 // Third party includes
-extern "C"
-{
-    #include "lua.h"
-    #include "lauxlib.h"
-    #include "lualib.h"
-}
-#include "LuaBridge.h"
 
 namespace Falltergeist
 {
+class Image;
+
 namespace Lua
 {
-class Module;
-
-class Script
+    class Script;
+}
+namespace State
 {
+
+class LuaState : public State
+{
+
 public:
-    Script(const std::string& filename);
-    ~Script();
-    void run();
-    static int l_write(lua_State* L);
-    void addModule(std::shared_ptr<Module> module);
+    LuaState(const std::string& filename);
+    virtual ~LuaState();
 
-    lua_State* luaState();
+    virtual int x() const;
+    virtual void setX(int value);
 
-    bool get(const std::string& name, bool defaultValue = false);
-    int  get(const std::string& name, int  defaultValue = 0);
-    double get(const std::string& name, double defaultValue = 0);
-    std::string get(const std::string& name, const std::string& defaultValue);
+    virtual int y() const;
+    virtual void setY(int value);
+
+    virtual bool modal() const;
+    virtual void setModal(bool value);
+
+    virtual bool fullscreen() const;
+    virtual void setFullscreen(bool value);
+
+    virtual void init();
+    virtual void think();
+    virtual void handle(Event* event);
+    virtual void render();
+
+    virtual void addImage(Image* ui);
+
+
+    static void export_to_lua_script(Lua::Script* script);
 
 private:
-    std::vector<std::shared_ptr<Module>> _modules;
-    std::string _filename;
-    lua_State* _lua_State;
+    Lua::Script* _script = nullptr;
 
 };
 
 }
 }
-#endif // FALLTERGEIST_LUA_SCRIPT_H
+#endif // FALLTERGEIST_STATE_LUASTATE_H

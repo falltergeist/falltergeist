@@ -82,16 +82,16 @@ public:
     ImageList* getImageList(const std::string& name);
     SmallCounter* getSmallCounter(const std::string& name);
 
-    int x();
-    void setX(int x);
+    virtual int x() const;
+    virtual void setX(int x);
 
-    int y();
-    void setY(int y);
+    virtual int y() const;
+    virtual void setY(int y);
 
-    virtual bool fullscreen();
+    virtual bool fullscreen() const;
     virtual void setFullscreen(bool value);
 
-    virtual bool modal();
+    virtual bool modal() const;
     virtual void setModal(bool value);
 
     virtual bool active();

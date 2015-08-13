@@ -64,7 +64,7 @@ void State::think()
     }
 }
 
-int State::x()
+int State::x() const
 {
     return _x;
 }
@@ -74,7 +74,7 @@ void State::setX(int x)
     _x = x;
 }
 
-int State::y()
+int State::y() const
 {
     return _y;
 }
@@ -89,7 +89,7 @@ bool State::initialized()
     return _initialized;
 }
 
-bool State::fullscreen()
+bool State::fullscreen() const
 {
     return _fullscreen;
 }
@@ -99,7 +99,7 @@ void State::setFullscreen(bool value)
     _fullscreen = value;
 }
 
-bool State::modal()
+bool State::modal() const
 {
     return _modal;
 }
