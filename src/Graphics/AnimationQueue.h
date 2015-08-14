@@ -45,7 +45,7 @@ public:
     virtual ~AnimationQueue();
 
     std::vector<Animation*>* animations();
-    Animation* currentAnimation();
+    Animation* currentAnimation() const;
 
     void clear();
     void stop();
@@ -53,14 +53,14 @@ public:
     void setRepeat(bool value);
 
 
-    virtual Texture* texture();
+    Texture* texture() const override;
     virtual void render(bool eggTransparency = false);
     virtual void think();
     virtual unsigned int pixel(unsigned int x, unsigned int y);
 
 
-    virtual unsigned int width();
-    virtual unsigned int height();
+    unsigned int width() const override;
+    unsigned int height() const override;
     virtual int xOffset();
     virtual int yOffset();
 

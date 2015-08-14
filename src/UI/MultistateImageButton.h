@@ -62,7 +62,7 @@ public:
     int mode();
     void setModeFactor(int factor);
     int modeFactor();
-    virtual Texture* texture();
+    Texture* texture() const override;
 };
 
 }

@@ -104,7 +104,7 @@ void Slider::_onLeftButtonUp(MouseEvent* event)
     }
 }
 
-Texture* Slider::texture()
+Texture* Slider::texture() const
 {
     if (_drag) return _imageList.images()->at(0)->texture();
     return _imageList.images()->at(1)->texture();
@@ -141,7 +141,7 @@ void Slider::setValue(double value)
     _xOffset = (218/(maxValue() - minValue())) * _value;
 }
 
-int Slider::x()
+int Slider::x() const
 {
     return _x + _xOffset;
 }

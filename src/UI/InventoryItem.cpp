@@ -44,7 +44,7 @@ InventoryItem::InventoryItem(Game::GameItemObject *item, int x, int y) : ActiveU
     addEventHandler("mousedragstop", [this](Event* event){ this->onMouseDragStop(dynamic_cast<MouseEvent*>(event)); });
 }
 
-unsigned int InventoryItem::type()
+unsigned int InventoryItem::type() const
 {
     return _type;
 }
@@ -54,7 +54,7 @@ void InventoryItem::setType(unsigned int value)
     _type = value;
 }
 
-Texture* InventoryItem::texture()
+Texture* InventoryItem::texture() const
 {
     //if (!_texture)
     //{
@@ -174,12 +174,12 @@ void InventoryItem::onHandDragStop(MouseEvent* event)
     }
 }
 
-unsigned int InventoryItem::width()
+unsigned int InventoryItem::width() const
 {
     return type() == TYPE_SLOT ? 90 : 70;
 }
 
-unsigned int InventoryItem::height()
+unsigned int InventoryItem::height() const
 {
     return type() == TYPE_SLOT ? 63 : 49;
 }

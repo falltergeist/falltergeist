@@ -51,7 +51,7 @@ ImageList::~ImageList()
     }
 }
 
-unsigned int ImageList::currentImage()
+unsigned int ImageList::currentImage() const
 {
     return _currentImage;
 }
@@ -63,7 +63,7 @@ void ImageList::setCurrentImage(unsigned int number)
 
 void ImageList::addImage(Image* image)
 {
-    images()->push_back(image);
+    _images.push_back(image);
 }
 
 void ImageList::addImage(const std::string& filename)
@@ -71,12 +71,12 @@ void ImageList::addImage(const std::string& filename)
     addImage(new Image(filename));
 }
 
-Texture* ImageList::texture()
+Texture* ImageList::texture() const
 {
     return images()->at(currentImage())->texture();
 }
 
-std::vector<Image*>* ImageList::images()
+const std::vector<Image*>* ImageList::images() const
 {
     return &_images;
 }

@@ -37,7 +37,7 @@ namespace Falltergeist
 class ActiveUI : public EventEmitter, public UI
 {
 public:
-    ActiveUI(int x = 0, int y = 0);    
+    ActiveUI(int x = 0, int y = 0);
     virtual ~ActiveUI();
 
     virtual void handle(Event* event);
