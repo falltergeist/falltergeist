@@ -30,7 +30,9 @@
 #include "../Graphics/AnimatedPalette.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
+#include "../Input/InputController.h"
 #include "../Logger.h"
+#include "../Lua/Script.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../State/State.h"
@@ -55,6 +57,22 @@ class GameDudeObject;
 bool Game::_instanceFlag = false;
 Game* Game::_instance = NULL;
 
+// static
+void Game::export_to_lua_script(Lua::Script* script)
+{
+    // Namespace::addProperty cannot deduce setter type =(
+    static void (* const kEmptyInputSetter)(InputController*) = nullptr;
+    static InputController* (*const getGameInput)() = []() -> InputController*
+    {
+        return Game::getInstance()->inputController();
+    };
+
+    luabridge::getGlobalNamespace(script->luaState())
+        .beginNamespace("game")
+            .addProperty("input", getGameInput, kEmptyInputSetter)
+        .endNamespace();
+}
+
 Game* Game::getInstance()
 {
     if(!_instanceFlag)
@@ -69,6 +87,8 @@ Game* Game::getInstance()
         return _instance;
     }
 }
+
+Game::Game() {}
 
 void Game::_initialize()
 {
@@ -106,6 +126,7 @@ void Game::_initialize()
     _animatedPalette = new AnimatedPalette();
     _gameTime = new GameTime();
     _currentTime = new TextArea(renderer()->width() - 150, renderer()->height() - 10);
+    inputController_.reset(new InputController(_mouse));
 
     IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 }
@@ -118,6 +139,7 @@ Game::~Game()
 
 void Game::shutdown()
 {
+    inputController_.reset();
     delete _mouse;
     delete _fpsCounter;
     delete _mousePosition;
@@ -451,6 +473,11 @@ GameTime* Game::gameTime()
 AudioMixer* Game::mixer()
 {
     return _mixer;
+}
+
+InputController* Game::inputController() const
+{
+    return inputController_.get();
 }
 
 }

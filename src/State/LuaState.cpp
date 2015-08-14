@@ -21,6 +21,8 @@
 #include <iostream>
 
 // Falltergeist includes
+#include "../Game/Game.h"
+#include "../Input/InputController.h"
 #include "../Lua/Script.h"
 #include "../State/LuaState.h"
 #include "../UI/Image.h"
@@ -43,8 +45,10 @@ LuaState::LuaState(const std::string& filename) : State()
     UI::export_to_lua_script(_script);
     ActiveUI::export_to_lua_script(_script);
     Image::export_to_lua_script(_script);
-    ImageButton::export_to_lua_script(_script);       
+    ImageButton::export_to_lua_script(_script);
     TextArea::export_to_lua_script(_script);
+    Game::Game::export_to_lua_script(_script);
+    InputController::export_to_lua_script(_script);
 
     _script->run();
 }

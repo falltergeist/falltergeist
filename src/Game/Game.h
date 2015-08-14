@@ -32,6 +32,10 @@
 
 namespace Falltergeist
 {
+namespace Lua
+{
+    class Script;
+}
 namespace State
 {
     class Location;
@@ -48,6 +52,7 @@ class UI;
 class TextArea;
 class AnimatedPalette;
 class Settings;
+class InputController;
 
 namespace Game
 {
@@ -60,6 +65,7 @@ class Game
 public:
     ~Game();
     static Game* getInstance();
+    static void export_to_lua_script(Lua::Script* script);
 
     void shutdown();
     std::vector<State::State*>* states();
@@ -82,6 +88,7 @@ public:
     GameTime* gameTime();
     State::Location* locationState();
     AudioMixer* mixer();
+    InputController* inputController() const;
 
     void setGVAR(unsigned int number, int value);
     int GVAR(unsigned int number);
@@ -110,10 +117,11 @@ protected:
     bool _quit = false;
     SDL_Event _event;
     bool _initialized = false;
+    std::unique_ptr<InputController> inputController_;
     void _initialize();
     void _initGVARS();
 private:
-    Game() {}
+    Game();
     Game(Game const&);
     void operator=(Game const&);
     static Game* _instance;
