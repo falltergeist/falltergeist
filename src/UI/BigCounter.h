@@ -43,7 +43,7 @@ public:
     BigCounter(int x = 0, int y = 0, unsigned int length = 2);
     ~BigCounter();
 
-    virtual Texture* texture();
+    Texture* texture() const override;
 
     void setColor(unsigned char color);
     unsigned char color();

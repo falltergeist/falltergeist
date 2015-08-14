@@ -82,6 +82,16 @@ public:
     SDL_BlendMode blendMode();
 
     bool blitWithAlpha(Texture* blitMask, int maskOffsetX, int maskOffsetY);
+
+    // Helpers to build some specific textures.
+    static std::unique_ptr<Texture> generateTextureForNumber(
+        unsigned int number,
+        unsigned int maxLength,
+        Texture* symbolSource,
+        unsigned int charWidth,
+        unsigned int charHeight,
+        unsigned int xOffsetByColor,
+        bool isSigned = false);
 };
 
 }

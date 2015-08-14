@@ -46,7 +46,7 @@ public:
     SmallCounter(int x = 0, int y = 0);
     ~SmallCounter();
 
-    virtual Texture* texture();
+    Texture* texture() const override;
 
     void setColor(unsigned char color);
     unsigned char color();

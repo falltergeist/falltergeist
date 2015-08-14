@@ -40,68 +40,39 @@ SmallCounter::~SmallCounter()
 {
 }
 
-Texture* SmallCounter::texture()
+Texture* SmallCounter::texture() const
 {
+    static const int kCharWidth = 9;
+    static const int kCharHeight = 16;
+
     if (_texture) return _texture;
 
     auto numbers = std::shared_ptr<Image>(new Image("art/intrface/numbers.frm"));
+    unsigned int xOffsetByColor = 0;
+    switch (_color)
+    {
+        case COLOR_WHITE:
+            break;
+        case COLOR_YELLOW:
+            xOffsetByColor = 120;
+            break;
+        case COLOR_RED:
+            xOffsetByColor = 240;
+            break;
+    }
 
     // number as text, always positive
-    signed int result = _number;
-    std::stringstream ss;
-    if (_number<0)
-    {
-        result = abs(_number);
-    }
-    ss << result;
-
-    _texture = new Texture(9*(_length+1), 16);
-
-    char* textNumber = new char[_length + 1]();
-
-    for (unsigned int i = 0; i < _length; ++i)
-    {
-        textNumber[i] = '0';
-    }
-
-    unsigned int len = strlen(ss.str().c_str());
-    unsigned int diff = _length - len;
-    for (unsigned int i = 0; i < len; i++)
-    {
-        textNumber[diff + i] = ss.str().c_str()[i];
-    }
-
-    for (unsigned int i = 0; i < _length; i++)
-    {
-        int key = 9 -  ('9' - textNumber[i]);
-        unsigned int x = 9 * key;
-        switch (_color)
-        {
-            case COLOR_WHITE:
-                break;
-            case COLOR_YELLOW:
-                x += 120;
-                break;
-            case COLOR_RED:
-                x += 240;
-                break;
-        }
-        numbers->texture()->copyTo(_texture, 9*_type+9*i, 0, x+1, 0, 9, 16);
-    }
+    auto texture = Texture::generateTextureForNumber(
+        abs(_number), _length, numbers->texture(),
+        kCharWidth, kCharHeight, xOffsetByColor, true);
     if (_type == SIGNED)
     {
+        // must be 9*13+1, but it is 113
+        const auto signOffset = _number < 0 ? kCharWidth * 12 + 1 : 113;
         // sign of _number
-        if (_number<0)
-        {
-            numbers->texture()->copyTo(_texture, 0, 0, 9*12+1, 0, 9, 16);
-        }
-        else
-        {
-            numbers->texture()->copyTo(_texture, 0, 0, 113, 0, 9, 16); // must be 9*13+1, but it is 113
-        }
+        numbers->texture()->copyTo(_texture, 0, 0, signOffset, 0, kCharWidth, kCharHeight);
     }
-    delete [] textNumber;
-    return _texture;
+    return (_texture = texture.release());
 }
 
 void SmallCounter::setLength(unsigned int length)

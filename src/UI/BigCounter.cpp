@@ -41,48 +41,28 @@ BigCounter::~BigCounter()
 {
 }
 
-Texture* BigCounter::texture()
+Texture* BigCounter::texture() const
 {
+    static const int kCharWidth = 14;
+    static const int kCharHeight = 24;
+
     if (_texture) return _texture;
 
-    auto numbers = std::shared_ptr<Image>(new Image("art/intrface/bignum.frm"));
-
-    // number as text
-    std::stringstream ss;
-    ss << _number;
-
-    _texture = new Texture(14*_length, 24);
-
-    char* textNumber = new char[_length + 1]();
-
-    for (unsigned int i = 0; i < _length; ++i)
+    auto numbers = std::unique_ptr<Image>(new Image("art/intrface/bignum.frm"));
+    unsigned int xOffsetByColor = 0;
+    switch (_color)
     {
-        textNumber[i] = '0';
+        case COLOR_WHITE:
+            break;
+        case COLOR_RED:
+            xOffsetByColor = 168;
+            break;
     }
 
-    unsigned int length = strlen(ss.str().c_str());
-    unsigned int diff = _length - length;
-    for (unsigned int i = 0; i < length; i++)
-    {
-        textNumber[diff + i] = ss.str().c_str()[i];
-    }
-
-    for (unsigned int i = 0; i < _length; i++)
-    {
-        int key = 9 -  ('9' - textNumber[i]);
-        unsigned int x = 14 * key;
-        switch (_color)
-        {
-            case COLOR_WHITE:
-                break;
-            case COLOR_RED:
-                x += 168;
-                break;
-        }
-        numbers->texture()->copyTo(_texture, 14*i, 0, x, 0, 14, 24);
-    }
-    delete [] textNumber;
-    return _texture;
+    auto texture = Texture::generateTextureForNumber(
+        _number, _length, numbers->texture(),
+        kCharWidth, kCharHeight, xOffsetByColor);
+    return (_texture = texture.release());
 }
 
 void BigCounter::setNumber(unsigned int number)
