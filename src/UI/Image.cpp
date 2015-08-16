@@ -86,7 +86,7 @@ Image::~Image()
 {
 }
 
-void Image::export_to_lua_script(Lua::Script* script)
+void Image::exportToLuaScript(Lua::Script* script)
 {
     // expose LuaState to lua instance
     luabridge::getGlobalNamespace(script->luaState())

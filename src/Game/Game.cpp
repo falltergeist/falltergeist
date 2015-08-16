@@ -58,7 +58,7 @@ bool Game::_instanceFlag = false;
 Game* Game::_instance = NULL;
 
 // static
-void Game::export_to_lua_script(Lua::Script* script)
+void Game::exportToLuaScript(Lua::Script* script)
 {
     // Namespace::addProperty cannot deduce setter type =(
     static void (* const kEmptyInputSetter)(InputController*) = nullptr;
@@ -126,7 +126,7 @@ void Game::_initialize()
     _animatedPalette = new AnimatedPalette();
     _gameTime = new GameTime();
     _currentTime = new TextArea(renderer()->width() - 150, renderer()->height() - 10);
-    inputController_.reset(new InputController(_mouse));
+    _inputController.reset(new InputController(_mouse));
 
     IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 }
@@ -139,7 +139,7 @@ Game::~Game()
 
 void Game::shutdown()
 {
-    inputController_.reset();
+    _inputController.reset();
     delete _mouse;
     delete _fpsCounter;
     delete _mousePosition;
@@ -477,7 +477,7 @@ AudioMixer* Game::mixer()
 
 InputController* Game::inputController() const
 {
-    return inputController_.get();
+    return _inputController.get();
 }
 
 }

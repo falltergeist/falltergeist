@@ -30,7 +30,7 @@ namespace Falltergeist
 {
 
 // static
-void InputController::export_to_lua_script(Lua::Script* script)
+void InputController::exportToLuaScript(Lua::Script* script)
 {
     luabridge::getGlobalNamespace(script->luaState())
         .beginNamespace("game")
@@ -40,16 +40,16 @@ void InputController::export_to_lua_script(Lua::Script* script)
         .endNamespace();
 }
 
-InputController::InputController(Mouse* mouse) : mouse_(mouse)
+InputController::InputController(Mouse* mouse) : _mouse(mouse)
 {}
 
 unsigned int InputController::mouseCursorType() const
 {
-    return mouse_->state();
+    return _mouse->state();
 }
 
 void InputController::setMouseCursorType(unsigned int type)
 {
-    mouse_->setState(type);
+    _mouse->setState(type);
 }
 }

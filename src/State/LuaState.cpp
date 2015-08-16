@@ -40,15 +40,15 @@ LuaState::LuaState(const std::string& filename) : State()
 {
     _script = new Lua::Script(filename);
 
-    Event::export_to_lua_script(_script);
-    LuaState::export_to_lua_script(_script);
-    UI::export_to_lua_script(_script);
-    ActiveUI::export_to_lua_script(_script);
-    Image::export_to_lua_script(_script);
-    ImageButton::export_to_lua_script(_script);
-    TextArea::export_to_lua_script(_script);
-    Game::Game::export_to_lua_script(_script);
-    InputController::export_to_lua_script(_script);
+    Event::exportToLuaScript(_script);
+    LuaState::exportToLuaScript(_script);
+    UI::exportToLuaScript(_script);
+    ActiveUI::exportToLuaScript(_script);
+    Image::exportToLuaScript(_script);
+    ImageButton::exportToLuaScript(_script);
+    TextArea::exportToLuaScript(_script);
+    Game::Game::exportToLuaScript(_script);
+    InputController::exportToLuaScript(_script);
 
     _script->run();
 }
@@ -58,7 +58,7 @@ LuaState::~LuaState()
     delete _script;
 }
 
-void LuaState::export_to_lua_script(Lua::Script* script)
+void LuaState::exportToLuaScript(Lua::Script* script)
 {
     luabridge::getGlobalNamespace(script->luaState())
         .beginNamespace("game")

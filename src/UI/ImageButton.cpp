@@ -209,7 +209,7 @@ ImageButton::~ImageButton()
 {
 }
 
-void ImageButton::export_to_lua_script(Lua::Script* script)
+void ImageButton::exportToLuaScript(Lua::Script* script)
 {
     luabridge::getGlobalNamespace(script->luaState())
         .beginNamespace("game")

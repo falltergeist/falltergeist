@@ -51,7 +51,7 @@ public:
     bool handled();
     void setHandled(bool value);
 
-    static void export_to_lua_script(Lua::Script* script);
+    static void exportToLuaScript(Lua::Script* script);
 
 protected:
     std::string _name;

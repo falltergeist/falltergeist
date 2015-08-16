@@ -65,7 +65,7 @@ class Game
 public:
     ~Game();
     static Game* getInstance();
-    static void export_to_lua_script(Lua::Script* script);
+    static void exportToLuaScript(Lua::Script* script);
 
     void shutdown();
     std::vector<State::State*>* states();
@@ -117,7 +117,7 @@ protected:
     bool _quit = false;
     SDL_Event _event;
     bool _initialized = false;
-    std::unique_ptr<InputController> inputController_;
+    std::unique_ptr<InputController> _inputController;
     void _initialize();
     void _initGVARS();
 private:

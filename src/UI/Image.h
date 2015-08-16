@@ -49,7 +49,7 @@ public:
     Image(libfalltergeist::Frm::File* frm, unsigned int direction);
     ~Image();
 
-    static void export_to_lua_script(Lua::Script* script);
+    static void exportToLuaScript(Lua::Script* script);
 
 
     unsigned int width();

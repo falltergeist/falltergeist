@@ -65,7 +65,7 @@ public:
     virtual void addUI(ActiveUI* ui);
 
 
-    static void export_to_lua_script(Lua::Script* script);
+    static void exportToLuaScript(Lua::Script* script);
 
 private:
     Lua::Script* _script = nullptr;

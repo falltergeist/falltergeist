@@ -39,7 +39,7 @@ class Mouse;
 class InputController
 {
 public:
-    static void export_to_lua_script(Lua::Script* script);
+    static void exportToLuaScript(Lua::Script* script);
 
     InputController(Mouse* mouse);
 
@@ -50,7 +50,7 @@ private:
     InputController(const InputController&) = delete;
     void operator=(const InputController&) = delete;
 
-    Mouse* const mouse_;
+    Mouse* const _mouse;
 };
 
 }

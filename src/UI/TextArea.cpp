@@ -342,7 +342,7 @@ unsigned int TextArea::pixel(unsigned int x, unsigned int y)
     return 0xFFFFFFFF; // white color
 }
 
-void TextArea::export_to_lua_script(Lua::Script* script)
+void TextArea::exportToLuaScript(Lua::Script* script)
 {
     luabridge::getGlobalNamespace(script->luaState())
         .beginNamespace("game")

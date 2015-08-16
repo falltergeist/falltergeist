@@ -37,7 +37,7 @@ ActiveUI::~ActiveUI()
 {
 }
 
-void ActiveUI::export_to_lua_script(Lua::Script* script)
+void ActiveUI::exportToLuaScript(Lua::Script* script)
 {
     luabridge::getGlobalNamespace(script->luaState())
         .beginNamespace("game")

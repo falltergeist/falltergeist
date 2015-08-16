@@ -77,7 +77,7 @@ public:
     bool checked();
     void setChecked(bool _checked);
 
-    static void export_to_lua_script(Lua::Script* script);
+    static void exportToLuaScript(Lua::Script* script);
 
 protected:
     bool _checkboxMode = false; // remember new state after click

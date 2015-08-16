@@ -68,7 +68,7 @@ public:
 
     virtual unsigned int pixel(unsigned int x, int unsigned y);
 
-    static void export_to_lua_script(Lua::Script* script);
+    static void exportToLuaScript(Lua::Script* script);
 
 protected:
     int _x = 0;
