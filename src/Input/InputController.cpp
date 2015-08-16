@@ -22,6 +22,7 @@
 // Falltergeist includes
 #include "../Input/InputController.h"
 #include "../Input/Mouse.h"
+#include "../Logger.h"
 #include "../Lua/Script.h"
 
 // Third party includes
@@ -50,6 +51,13 @@ unsigned int InputController::mouseCursorType() const
 
 void InputController::setMouseCursorType(unsigned int type)
 {
+    // Filter only script allowed values.
+    if (type != Mouse::BIG_ARROW &&
+        type != Mouse::WAIT &&
+        type != Mouse::NONE)
+        return;
+
+    Logger::debug("INPUT") << "Set mouse cursor to " << type << std::endl;
     _mouse->setState(type);
 }
 }
