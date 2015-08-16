@@ -64,8 +64,8 @@ void ExitConfirm::init()
     box2->setX(backgroundX+170);
     box2->setY(backgroundY+98);
 
-    auto yesButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+50, backgroundY+102);
-    auto noButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+183, backgroundY+102);
+    auto yesButton = new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+50, backgroundY+102);
+    auto noButton = new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+183, backgroundY+102);
     yesButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doYes(); });
     noButton->addEventHandler("mouseleftclick",  [this](Event* event){ this->doNo(); });
 
@@ -74,7 +74,7 @@ void ExitConfirm::init()
     auto quitLabel = new TextArea(_t(MSG_MISC, 0), backgroundX+30, backgroundY+52);
     quitLabel->setFont(font);
     quitLabel->setWidth(244);
-    quitLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    quitLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
 
     // label: yes & no
     auto fontBig = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);

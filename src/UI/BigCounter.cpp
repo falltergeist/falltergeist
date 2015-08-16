@@ -73,9 +73,9 @@ Texture* BigCounter::texture()
         unsigned int x = 14 * key;
         switch (_color)
         {
-            case COLOR_WHITE:
+            case Color::WHITE:
                 break;
-            case COLOR_RED:
+            case Color::RED:
                 x += 168;
                 break;
         }
@@ -98,12 +98,12 @@ unsigned int BigCounter::number()
 }
 
 
-void BigCounter::setColor(unsigned char color)
+void BigCounter::setColor(Color color)
 {
-    switch(color)
+    switch (color)
     {
-        case COLOR_WHITE:
-        case COLOR_RED:
+        case Color::WHITE:
+        case Color::RED:
             if (_color != color)
             {
                 _color = color;
@@ -113,7 +113,7 @@ void BigCounter::setColor(unsigned char color)
     }
 }
 
-unsigned char BigCounter::color()
+BigCounter::Color BigCounter::color()
 {
     return _color;
 }

@@ -38,14 +38,14 @@ MultistateImageButton::MultistateImageButton(int x, int y) : ActiveUI(x, y)
     addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
 }
 
-MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
+MultistateImageButton::MultistateImageButton(Type type, int x, int y) : ActiveUI(x, y)
 {
     addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
     addEventHandler("mouseleftup", [this](Event* event){ this->_onLeftButtonUp(dynamic_cast<MouseEvent*>(event)); });
     //Image* image;
     switch (type)
     {
-        case TYPE_BIG_SWITCH:
+        case Type::BIG_SWITCH:
         {
             auto image = new Image("art/intrface/prfbknbs.frm");
 
@@ -67,7 +67,7 @@ MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : 
             _upSnd = "sound/sfx/ib3lu1x1.acm";
             break;
         }
-        case TYPE_SMALL_SWITCH:
+        case Type::SMALL_SWITCH:
         {
             auto image = new Image("art/intrface/prflknbs.frm");
             auto image1 = new Image(22, 25);
@@ -114,20 +114,12 @@ void MultistateImageButton::setState(unsigned int state)
     _currentState = state;
 }
 
-void MultistateImageButton::setMode(int mode)
+void MultistateImageButton::setMode(Mode mode)
 {
-    switch(mode)
-    {
-        case MODE_CYCLIC:
-        case MODE_PROGRESSION:
-                break;
-        default:
-            throw Exception("MultistateImageButton::setMode(int) - wrong mode number: " + std::to_string(mode));
-    }
     _mode = mode;
 }
 
-int MultistateImageButton::mode()
+MultistateImageButton::Mode MultistateImageButton::mode()
 {
     return _mode;
 }
@@ -136,7 +128,7 @@ void MultistateImageButton::_onLeftButtonClick(MouseEvent* event)
 {
     auto sender = dynamic_cast<MultistateImageButton*>(event->emitter());
 
-    if (sender->mode() == MODE_PROGRESSION)
+    if (sender->mode() == Mode::PROGRESSION)
     {
         if (sender->modeFactor() > 0)
         {
@@ -147,7 +139,7 @@ void MultistateImageButton::_onLeftButtonClick(MouseEvent* event)
             sender->_currentState = (sender->_currentState > 0) ? sender->_currentState + sender->modeFactor() : sender->_maxState - 1;
         }
     }
-    else // MODE_CYCLIC
+    else // Mode::CYCLIC
     {
         if (sender->modeFactor() > 0)
         {

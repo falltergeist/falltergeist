@@ -34,22 +34,24 @@ class Image;
 
 class BigCounter : public ActiveUI
 {
-protected:
-    unsigned char _color = COLOR_WHITE;
-    unsigned int _number = 0;
-    unsigned int _length = 2;
 public:
-    enum {COLOR_WHITE = 1, COLOR_RED};
+    enum class Color { WHITE = 1, RED };
+
     BigCounter(int x = 0, int y = 0, unsigned int length = 2);
     ~BigCounter();
 
     virtual Texture* texture();
 
-    void setColor(unsigned char color);
-    unsigned char color();
+    void setColor(Color color);
+    Color color();
 
     void setNumber(unsigned int number);
     unsigned int number();
+
+protected:
+    Color _color = Color::WHITE;
+    unsigned int _number = 0;
+    unsigned int _length = 2;
 };
 
 }

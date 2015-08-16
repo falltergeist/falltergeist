@@ -189,9 +189,9 @@ void PlayerEdit::init()
         _addLabel(ss.str() + "_value",  new TextArea("", backgroundX + 288, backgroundY + 179 + 13*i));
     }
 
-    _addButton("print", new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+345, backgroundY+454));
-    _addButton("done",    new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+455, backgroundY+454));
-    _addButton("cancel",  new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+554, backgroundY+454));
+    _addButton("print", new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+345, backgroundY+454));
+    _addButton("done",    new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+455, backgroundY+454));
+    _addButton("cancel",  new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+554, backgroundY+454));
 
     auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
 
@@ -200,7 +200,7 @@ void PlayerEdit::init()
     _addLabel("cancel",  new TextArea(_t(MSG_EDITOR, 102), backgroundX+571, backgroundY+453))->setFont(font3_b89c28ff);
     auto label = _addLabel("name",    new TextArea(Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7));
     label->setWidth(150);
-    label->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    label->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
     label->setFont(font3_b89c28ff);
     _addLabel("age",     new TextArea(_t(MSG_EDITOR, 104), backgroundX+163, backgroundY+7))->setFont(font3_b89c28ff);
     _addLabel("gender",  new TextArea(_t(MSG_EDITOR, Game::getInstance()->player()->gender() == GENDER::MALE ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff);
@@ -370,11 +370,11 @@ void PlayerEdit::think()
         ss << "stats_" << (i+1);
         unsigned int val = player->statTotal((STAT)i);
         _counters.at(ss.str())->setNumber(val);
-        _counters.at(ss.str())->setColor(BigCounter::COLOR_WHITE);
+        _counters.at(ss.str())->setColor(BigCounter::Color::WHITE);
         if (val > 10)
         {
             val = 10;
-            _counters.at(ss.str())->setColor(BigCounter::COLOR_RED);
+            _counters.at(ss.str())->setColor(BigCounter::Color::RED);
         }
         _labels.at(ss.str())->setText(_t(MSG_STATS, 300 + (val < 1 ? 1 : val)));
     }

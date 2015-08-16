@@ -66,13 +66,13 @@ void PlayerEditAge::init()
     doneBox->setX(backgroundX+175);
     doneBox->setY(backgroundY+40);
 
-    auto decButton = new ImageButton(ImageButton::TYPE_LEFT_ARROW, backgroundX+178, backgroundY+14);
+    auto decButton = new ImageButton(ImageButton::Type::LEFT_ARROW, backgroundX+178, backgroundY+14);
     decButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDecButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
-    auto incButton = new ImageButton(ImageButton::TYPE_RIGHT_ARROW, backgroundX+262, backgroundY+14);
+    auto incButton = new ImageButton(ImageButton::Type::RIGHT_ARROW, backgroundX+262, backgroundY+14);
     incButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onIncButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
-    auto doneButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+188, backgroundY+43);
+    auto doneButton= new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+188, backgroundY+43);
     doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     auto doneLabel = new TextArea(_t(MSG_EDITOR, 100), backgroundX+210, backgroundY+43);

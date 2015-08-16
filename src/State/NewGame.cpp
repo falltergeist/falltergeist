@@ -70,22 +70,22 @@ void NewGame::init()
 
     addUI("background", new Image("art/intrface/pickchar.frm"));
 
-    auto beginGameButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 322));
+    auto beginGameButton = addUI(new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, 81, 322));
     beginGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onBeginGameButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
-    auto editButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 436, 319));
+    auto editButton = addUI(new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, 436, 319));
     editButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onEditButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
-    auto createButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 424));
+    auto createButton = addUI(new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, 81, 424));
     createButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCreateButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
-    auto backButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 461, 424));
+    auto backButton = addUI(new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, 461, 424));
     backButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onBackButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
-    auto prevCharacterButton = addUI(new ImageButton(ImageButton::TYPE_LEFT_ARROW, 292, 320));
+    auto prevCharacterButton = addUI(new ImageButton(ImageButton::Type::LEFT_ARROW, 292, 320));
     prevCharacterButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onPrevCharacterButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
-    auto nextCharacterButton = addUI(new ImageButton(ImageButton::TYPE_RIGHT_ARROW, 318, 320));
+    auto nextCharacterButton = addUI(new ImageButton(ImageButton::Type::RIGHT_ARROW, 318, 320));
     nextCharacterButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onNextCharacterButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     addUI("images", new ImageList({
@@ -98,14 +98,14 @@ void NewGame::init()
 
     addUI("stats_1", new TextArea(0, 70));
     getTextArea("stats_1")->setWidth(362);
-    getTextArea("stats_1")->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    getTextArea("stats_1")->setHorizontalAlign(TextArea::HorizontalAlign::RIGHT);
 
     addUI("stats_2", new TextArea(374, 70));
     addUI("bio",     new TextArea(437, 40));
 
     addUI("stats_3", new TextArea(294, 150));
     getTextArea("stats_3")->setWidth(85);
-    getTextArea("stats_3")->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    getTextArea("stats_3")->setHorizontalAlign(TextArea::HorizontalAlign::RIGHT);
 
     addUI("stats3_values", new TextArea(383, 150));
 

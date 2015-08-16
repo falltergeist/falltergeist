@@ -34,42 +34,43 @@ namespace Falltergeist
 class ImageButton : public ActiveUI
 {
 public:
-    enum ButtonType {
-        TYPE_SMALL_RED_CIRCLE = 1,
-        TYPE_BIG_RED_CIRCLE,
-        TYPE_MENU_RED_CIRCLE,
-        TYPE_SKILL_TOGGLE,
-        TYPE_PLUS,
-        TYPE_MINUS,
-        TYPE_LEFT_ARROW,
-        TYPE_RIGHT_ARROW,
-        TYPE_CHECKBOX,
-        TYPE_PLAYER_NAME,
-        TYPE_PLAYER_AGE,
-        TYPE_PLAYER_GENDER,
-        TYPE_PANEL_INVENTORY,
-        TYPE_PANEL_OPTIONS,
-        TYPE_PANEL_ATTACK,
-        TYPE_PANEL_MAP,
-        TYPE_PANEL_CHA,
-        TYPE_PANEL_PIP,
-        TYPE_OPTIONS_BUTTON,
-        TYPE_SKILLDEX_BUTTON,
-        TYPE_INVENTORY_UP_ARROW,
-        TYPE_INVENTORY_DOWN_ARROW,
-        TYPE_PIPBOY_ALARM_BUTTON,
-        TYPE_DIALOG_RED_BUTTON,
-        TYPE_DIALOG_REVIEW_BUTTON,
-        TYPE_DIALOG_DONE_BUTTON,
-        TYPE_DIALOG_BIG_UP_ARROW,
-        TYPE_DIALOG_BIG_DOWN_ARROW,
-        TYPE_DIALOG_UP_ARROW,
-        TYPE_DIALOG_DOWN_ARROW,
-        TYPE_SMALL_UP_ARROW,
-        TYPE_SMALL_DOWN_ARROW,
-        TYPE_MAP_HOTSPOT
+    enum class Type
+    {
+        SMALL_RED_CIRCLE = 1,
+        BIG_RED_CIRCLE,
+        MENU_RED_CIRCLE,
+        SKILL_TOGGLE,
+        PLUS,
+        MINUS,
+        LEFT_ARROW,
+        RIGHT_ARROW,
+        CHECKBOX,
+        PLAYER_NAME,
+        PLAYER_AGE,
+        PLAYER_GENDER,
+        PANEL_INVENTORY,
+        PANEL_OPTIONS,
+        PANEL_ATTACK,
+        PANEL_MAP,
+        PANEL_CHA,
+        PANEL_PIP,
+        OPTIONS_BUTTON,
+        SKILLDEX_BUTTON,
+        INVENTORY_UP_ARROW,
+        INVENTORY_DOWN_ARROW,
+        PIPBOY_ALARM_BUTTON,
+        DIALOG_RED_BUTTON,
+        DIALOG_REVIEW_BUTTON,
+        DIALOG_DONE_BUTTON,
+        DIALOG_BIG_UP_ARROW,
+        DIALOG_BIG_DOWN_ARROW,
+        DIALOG_UP_ARROW,
+        DIALOG_DOWN_ARROW,
+        SMALL_UP_ARROW,
+        SMALL_DOWN_ARROW,
+        MAP_HOTSPOT
     };
-    ImageButton(unsigned int type, int x = 0, int y = 0);
+    ImageButton(Type type, int x = 0, int y = 0);
     ~ImageButton();
 
     void setState(unsigned int value);

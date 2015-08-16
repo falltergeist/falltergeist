@@ -66,34 +66,34 @@ void PipBoy::init()
     background->setY(backgroundY);
 
     // Buttons
-    auto alarmButton = new ImageButton(ImageButton::TYPE_PIPBOY_ALARM_BUTTON, backgroundX+124, backgroundY+13);
-    auto statusButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+340);
-    auto automapsButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+394);
-    auto archivesButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+423);
-    auto closeButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+448);
+    auto alarmButton = new ImageButton(ImageButton::Type::PIPBOY_ALARM_BUTTON, backgroundX+124, backgroundY+13);
+    auto statusButton = new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+340);
+    auto automapsButton = new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+394);
+    auto archivesButton = new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+423);
+    auto closeButton = new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+448);
     closeButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCloseButtonClick(dynamic_cast<MouseEvent*>(event)); });
     // Date and time
 
     // Date
     auto day = new SmallCounter(backgroundX+21, backgroundY+17);
     day->setNumber(Game::getInstance()->gameTime()->day());
-    day->setColor(SmallCounter::COLOR_WHITE);
-    day->setType(SmallCounter::UNSIGNED);
+    day->setColor(SmallCounter::Color::WHITE);
+    day->setType(SmallCounter::Type::UNSIGNED);
     day->setLength(2);
 
     auto month = new MonthCounter(static_cast<MonthCounter::Month>(Game::getInstance()->gameTime()->month()), backgroundX+46, backgroundY+18);
 
     auto year = new SmallCounter(backgroundX+84, backgroundY+17);
     year->setNumber(Game::getInstance()->gameTime()->year());
-    year->setColor(SmallCounter::COLOR_WHITE);
-    year->setType(SmallCounter::UNSIGNED);
+    year->setColor(SmallCounter::Color::WHITE);
+    year->setType(SmallCounter::Type::UNSIGNED);
     year->setLength(4);
 
     // Time
     auto time = new SmallCounter(backgroundX+160, backgroundY+17);
     time->setNumber((Game::getInstance()->gameTime()->hours() * 100) + Game::getInstance()->gameTime()->minutes());
-    time->setColor(SmallCounter::COLOR_WHITE);
-    time->setType(SmallCounter::UNSIGNED);
+    time->setColor(SmallCounter::Color::WHITE);
+    time->setType(SmallCounter::Type::UNSIGNED);
     time->setLength(4);
 
     addUI(background);

@@ -77,18 +77,18 @@ Texture* SmallCounter::texture()
         unsigned int x = 9 * key;
         switch (_color)
         {
-            case COLOR_WHITE:
+            case Color::WHITE:
                 break;
-            case COLOR_YELLOW:
+            case Color::YELLOW:
                 x += 120;
                 break;
-            case COLOR_RED:
+            case Color::RED:
                 x += 240;
                 break;
         }
-        numbers->texture()->copyTo(_texture, 9*_type+9*i, 0, x+1, 0, 9, 16);
+        numbers->texture()->copyTo(_texture, 9*(int)_type+9*i, 0, x+1, 0, 9, 16);
     }
-    if (_type == SIGNED)
+    if (_type == Type::SIGNED)
     {
         // sign of _number
         if (_number<0)
@@ -128,13 +128,13 @@ signed int SmallCounter::number()
     return _number;
 }
 
-void SmallCounter::setColor(unsigned char color)
+void SmallCounter::setColor(Color color)
 {
     switch(color)
     {
-        case COLOR_WHITE:
-        case COLOR_YELLOW:
-        case COLOR_RED:
+        case Color::WHITE:
+        case Color::YELLOW:
+        case Color::RED:
             if (_color != color)
             {
                 _color = color;
@@ -144,24 +144,17 @@ void SmallCounter::setColor(unsigned char color)
     }
 }
 
-unsigned char SmallCounter::color()
+SmallCounter::Color SmallCounter::color()
 {
     return _color;
 }
 
-void SmallCounter::setType(unsigned int type)
+void SmallCounter::setType(Type type)
 {
-    _type = 0; // unsigned by default
-    switch(type)
-    {
-        case UNSIGNED:
-        case SIGNED:
-            _type = type;
-            break;
-    }
+    _type = type;
 }
 
-unsigned int SmallCounter::type()
+SmallCounter::Type SmallCounter::type()
 {
     return _type;
 }

@@ -70,17 +70,17 @@ void SaveGame::init()
     // BUTTONS
 
     // button: up arrow
-    addUI("button_up", new ImageButton(ImageButton::TYPE_SMALL_UP_ARROW, bgX+35, bgY+58));
+    addUI("button_up", new ImageButton(ImageButton::Type::SMALL_UP_ARROW, bgX+35, bgY+58));
     // button: down arrow
-    addUI("button_down", new ImageButton(ImageButton::TYPE_SMALL_DOWN_ARROW, bgX+35, bgY+72));
+    addUI("button_down", new ImageButton(ImageButton::Type::SMALL_DOWN_ARROW, bgX+35, bgY+72));
 
     // button: Done
-    auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+391, bgY+349);
+    auto doneButton = new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, bgX+391, bgY+349);
     doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
     addUI(doneButton);
 
     // button: Cancel
-    auto cancelButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+495, bgY+349);
+    auto cancelButton = new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, bgX+495, bgY+349);
     cancelButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCancelButtonClick(dynamic_cast<MouseEvent*>(event)); });
     addUI(cancelButton);
 

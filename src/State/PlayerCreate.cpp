@@ -81,8 +81,8 @@ void PlayerCreate::init()
         _addLabel(ss.str(), new TextArea(backgroundX+104, backgroundY+46+33*i));          // stat value label
         _addCounter(ss.str(), new BigCounter(backgroundX+59, backgroundY+37+33*i));       // stat value counter
         _addMask(ss.str(), new HiddenMask(133, 29, backgroundX+14, backgroundY+36+33*i)); // stat click mask
-        _addButton(ss.str() + "_increase", new ImageButton(ImageButton::TYPE_PLUS,  backgroundX+149, backgroundY+38+33*i)); // stat increase button
-        _addButton(ss.str() + "_decrease", new ImageButton(ImageButton::TYPE_MINUS, backgroundX+149, backgroundY+49+33*i)); // stat decrease button
+        _addButton(ss.str() + "_increase", new ImageButton(ImageButton::Type::PLUS,  backgroundX+149, backgroundY+38+33*i)); // stat increase button
+        _addButton(ss.str() + "_decrease", new ImageButton(ImageButton::Type::MINUS, backgroundX+149, backgroundY+49+33*i)); // stat decrease button
     }
 
     _addCounter("statsPoints", new BigCounter(backgroundX+126, backgroundY+282)); // Free stats points counter
@@ -101,16 +101,16 @@ void PlayerCreate::init()
         if (i <= 7)
         {
             _addLabel(ss.str(),  new TextArea(_t(MSG_TRAITS, 100 + i), backgroundX+48, backgroundY+353+13*i)); // trate label
-            _addButton(ss.str(), new ImageButton(ImageButton::TYPE_SKILL_TOGGLE, backgroundX+23, backgroundY+352+13*i)); // trate toggle button
+            _addButton(ss.str(), new ImageButton(ImageButton::Type::SKILL_TOGGLE, backgroundX+23, backgroundY+352+13*i)); // trate toggle button
         }
         //right column
         else
         {
             auto label = new TextArea(_t(MSG_TRAITS, 100 + i), backgroundX+169, backgroundY+353+13*(i-8));
             label->setWidth(122);
-            label->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+            label->setHorizontalAlign(TextArea::HorizontalAlign::RIGHT);
             _addLabel(ss.str(),  label); // trate label
-            _addButton(ss.str(), new ImageButton(ImageButton::TYPE_SKILL_TOGGLE, backgroundX+299, backgroundY+352+13*(i-8))); // trate toggle button
+            _addButton(ss.str(), new ImageButton(ImageButton::Type::SKILL_TOGGLE, backgroundX+299, backgroundY+352+13*(i-8))); // trate toggle button
         }
     }
 
@@ -124,7 +124,7 @@ void PlayerCreate::init()
         _addTitle(ss.str(), _t(MSG_SKILLS, 100 + i));
         _addDescription(ss.str(), _t(MSG_SKILLS, 200 + i));
         _addImage(ss.str(), new Image("art/skilldex/" + imagesSkills[i] + ".frm"));
-        _addButton(ss.str(), new ImageButton(ImageButton::TYPE_SKILL_TOGGLE, backgroundX+347, backgroundY+26+11*i));
+        _addButton(ss.str(), new ImageButton(ImageButton::Type::SKILL_TOGGLE, backgroundX+347, backgroundY+26+11*i));
         _addLabel(ss.str(),  new TextArea(_t(MSG_SKILLS, 100 + i), backgroundX+377, backgroundY+27+11*i))->setWidth(240);
         _addLabel(ss.str() + "_value",  new TextArea("", backgroundX+577, backgroundY+27+11*i));
     }
@@ -165,9 +165,9 @@ void PlayerCreate::init()
         _addLabel(ss.str() + "_value", new TextArea("", backgroundX + 288, backgroundY + 179 + 13*i));
     }
 
-    _addButton("options", new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+345, backgroundY+454));
-    _addButton("done",    new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+455, backgroundY+454));
-    _addButton("cancel",  new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+554, backgroundY+454));
+    _addButton("options", new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+345, backgroundY+454));
+    _addButton("done",    new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+455, backgroundY+454));
+    _addButton("cancel",  new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+554, backgroundY+454));
 
     auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
 
@@ -176,7 +176,7 @@ void PlayerCreate::init()
     _addLabel("cancel",  new TextArea(_t(MSG_EDITOR, 102), backgroundX+571, backgroundY+453))->setFont(font3_b89c28ff);
     auto label = _addLabel("name",    new TextArea(Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7));
     label->setWidth(150);
-    label->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    label->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
     label->setFont(font3_b89c28ff);
     _addLabel("age",     new TextArea(_t(MSG_EDITOR, 104), backgroundX+163, backgroundY+7))->setFont(font3_b89c28ff);
     _addLabel("gender",  new TextArea(_t(MSG_EDITOR, Game::getInstance()->player()->gender() == GENDER::MALE ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff);
@@ -198,13 +198,13 @@ void PlayerCreate::init()
     _addImage("label_4", new Image("art/skilldex/skills.frm"));
 
     // Name change button
-    _addButton("name",  new ImageButton(ImageButton::TYPE_PLAYER_NAME, backgroundX+13, backgroundY+0));
+    _addButton("name",  new ImageButton(ImageButton::Type::PLAYER_NAME, backgroundX+13, backgroundY+0));
 
     // Age change button
-    _addButton("age", new ImageButton(ImageButton::TYPE_PLAYER_AGE, backgroundX+156, backgroundY+0));
+    _addButton("age", new ImageButton(ImageButton::Type::PLAYER_AGE, backgroundX+156, backgroundY+0));
 
     //Gender change button
-    _addButton("gender", new ImageButton(ImageButton::TYPE_PLAYER_GENDER, backgroundX+236, backgroundY+0));
+    _addButton("gender", new ImageButton(ImageButton::Type::PLAYER_GENDER, backgroundX+236, backgroundY+0));
 
     // add buttons to the state
     for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
@@ -342,11 +342,11 @@ void PlayerCreate::think()
         ss << "stats_" << (i+1);
         unsigned int val = player->statTotal((STAT)i);
         _counters.at(ss.str())->setNumber(val);
-        _counters.at(ss.str())->setColor(BigCounter::COLOR_WHITE);
+        _counters.at(ss.str())->setColor(BigCounter::Color::WHITE);
         if (val > 10)
         {
             val = 10;
-            _counters.at(ss.str())->setColor(BigCounter::COLOR_RED);
+            _counters.at(ss.str())->setColor(BigCounter::Color::RED);
         }
         _labels.at(ss.str())->setText(_t(MSG_EDITOR, 199 + (val < 1 ? 1 : val)));
     }

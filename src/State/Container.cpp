@@ -60,7 +60,7 @@ void Container::init()
 
     addUI("background", new Image("art/intrface/loot.frm"));
 
-    addUI("button_done", new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 478, 331));
+    addUI("button_done", new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, 478, 331));
     getActiveUI("button_done")->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
 

@@ -34,22 +34,17 @@ class Image;
 
 class SmallCounter : public ActiveUI
 {
-protected:
-    unsigned char _color = COLOR_WHITE;
-    signed int _number = 0;
-    unsigned int _length = 3;
-    unsigned int _type = UNSIGNED; // unsigned by default
 public:
-    enum {COLOR_WHITE = 1, COLOR_YELLOW, COLOR_RED};
-    enum {UNSIGNED = 0, SIGNED};
+    enum class Color { WHITE = 1, YELLOW, RED };
+    enum class Type { UNSIGNED = 0, SIGNED };
 
     SmallCounter(int x = 0, int y = 0);
     ~SmallCounter();
 
     virtual Texture* texture();
 
-    void setColor(unsigned char color);
-    unsigned char color();
+    void setColor(Color color);
+    Color color();
 
     void setLength(unsigned int length);
     unsigned int length();
@@ -57,8 +52,15 @@ public:
     void setNumber(signed int number);
     signed int number();
 
-    void setType(unsigned int type);
-    unsigned int type();
+    void setType(Type type);
+    Type type();
+
+protected:
+    Color _color = Color::WHITE;
+    signed int _number = 0;
+    unsigned int _length = 3;
+    Type _type = Type::UNSIGNED; // unsigned by default
+
 };
 
 }

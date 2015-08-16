@@ -36,18 +36,13 @@ namespace Game
 
 class InventoryItem : public ActiveUI
 {
-protected:
-    Game::GameItemObject* _item = 0;
-    unsigned int _type = TYPE_INVENTORY;
-    unsigned int _oldType = TYPE_INVENTORY;
 public:
-    enum { TYPE_INVENTORY = 0, TYPE_SLOT, TYPE_DRAG };
+    enum class Type { INVENTORY = 0, SLOT, DRAG };
 
     InventoryItem(Game::GameItemObject* item, int x = 0, int y = 0);
 
-
-    unsigned int type();
-    void setType(unsigned int value);
+    Type type();
+    void setType(Type value);
 
     Game::GameItemObject* item();
     void setItem(Game::GameItemObject* item);
@@ -66,7 +61,10 @@ public:
     void onArmorDragStop(MouseEvent* event);
     void onHandDragStop(MouseEvent* event);
 
-
+protected:
+    Game::GameItemObject* _item = 0;
+    Type _type = Type::INVENTORY;
+    Type _oldType = Type::INVENTORY;
 
 };
 

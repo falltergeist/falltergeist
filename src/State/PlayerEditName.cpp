@@ -109,7 +109,7 @@ void PlayerEditName::init()
     auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
     doneLabel->setFont(font3_b89c28ff);
 
-    auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+45, bgY+43);
+    auto doneButton = new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, bgX+45, bgY+43);
     doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
 
     _name = new TextArea(Game::getInstance()->player()->name(), bgX+43, bgY+15);

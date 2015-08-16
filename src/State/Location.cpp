@@ -80,7 +80,7 @@ Location::Location() : State()
     _hexagonGrid = new HexagonGrid();
 
     _hexagonInfo = new TextArea("", game->renderer()->width() - 135, 25);
-    _hexagonInfo->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    _hexagonInfo->setHorizontalAlign(TextArea::HorizontalAlign::RIGHT);
 
 }
 
@@ -267,20 +267,20 @@ void Location::setLocation(const std::string& name)
     }
 }
 
-std::vector<int> Location::getCursorIconsForObject(Game::GameObject* object)
+std::vector<Mouse::Icon> Location::getCursorIconsForObject(Game::GameObject* object)
 {
-    std::vector<int> icons;
+    std::vector<Mouse::Icon> icons;
     if (object->script() && object->script()->hasFunction("use_p_proc"))
     {
-        icons.push_back(Mouse::ICON_USE);
+        icons.push_back(Mouse::Icon::USE);
     }
     else if (dynamic_cast<Game::GameDoorSceneryObject*>(object))
     {
-        icons.push_back(Mouse::ICON_USE);
+        icons.push_back(Mouse::Icon::USE);
     }
     else if (dynamic_cast<Game::GameContainerItemObject*>(object))
     {
-        icons.push_back(Mouse::ICON_USE);
+        icons.push_back(Mouse::Icon::USE);
     }
 
     switch (object->type())
@@ -288,19 +288,19 @@ std::vector<int> Location::getCursorIconsForObject(Game::GameObject* object)
         case Game::GameObject::Type::ITEM:
             break;
         case Game::GameObject::Type::DUDE:
-            icons.push_back(Mouse::ICON_ROTATE);
+            icons.push_back(Mouse::Icon::ROTATE);
             break;
         case Game::GameObject::Type::SCENERY:
             break;
         case Game::GameObject::Type::CRITTER:
-            icons.push_back(Mouse::ICON_TALK);
+            icons.push_back(Mouse::Icon::TALK);
             break;
         default: break;
     }
-    icons.push_back(Mouse::ICON_LOOK);
-    icons.push_back(Mouse::ICON_INVENTORY);
-    icons.push_back(Mouse::ICON_SKILL);
-    icons.push_back(Mouse::ICON_CANCEL);
+    icons.push_back(Mouse::Icon::LOOK);
+    icons.push_back(Mouse::Icon::INVENTORY);
+    icons.push_back(Mouse::Icon::SKILL);
+    icons.push_back(Mouse::Icon::CANCEL);
     return icons;
 }
 
@@ -514,7 +514,7 @@ void Location::think()
                 {
                     game->popState();
                 }
-                auto state = new CursorDropdown(icons, !_actionCursorButtonPressed);
+                auto state = new CursorDropdown(std::move(icons), !_actionCursorButtonPressed);
                 state->setObject(_objectUnderCursor);
                 Game::getInstance()->pushState(state);
             }
@@ -857,23 +857,23 @@ void Location::centerCameraAtHexagon(int tileNum)
     }
 }
 
-void Location::handleAction(Game::GameObject* object, int action)
+void Location::handleAction(Game::GameObject* object, Mouse::Icon action)
 {
     switch (action)
     {
-        case Mouse::ICON_LOOK:
+        case Mouse::Icon::LOOK:
         {
             object->description_p_proc();
             break;
         }
-        case Mouse::ICON_USE:
+        case Mouse::Icon::USE:
         {
             auto player = Game::getInstance()->player();
             auto animation = player->setActionAnimation("al");
             animation->addEventHandler("actionFrame", [object, player](Event* event){ object->onUseAnimationActionFrame(event, player); });
             break;
         }
-        case Mouse::ICON_ROTATE:
+        case Mouse::Icon::ROTATE:
         {
             auto dude = dynamic_cast<Game::GameDudeObject*>(object);
             if (!dude) throw Exception("Location::handleAction() - only Dude can be rotated");
@@ -884,7 +884,7 @@ void Location::handleAction(Game::GameObject* object, int action)
 
             break;
         }
-        case Mouse::ICON_TALK:
+        case Mouse::Icon::TALK:
         {
             if (auto critter = dynamic_cast<Game::GameCritterObject*>(object))
             {
@@ -895,7 +895,7 @@ void Location::handleAction(Game::GameObject* object, int action)
                 throw Exception("Location::handleAction() - can talk only with critters!");
             }
         }
-
+        default: {}
     }
 }
 

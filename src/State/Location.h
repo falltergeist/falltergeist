@@ -25,6 +25,7 @@
 
 // Falltergeist includes
 #include "State.h"
+#include "../Input/Mouse.h"
 #include "../State/PlayerPanel.h"
 #include "../UI/ImageButton.h"
 
@@ -94,7 +95,7 @@ protected:
     std::vector<Game::GameObject*> _objects;
     TextArea* _hexagonInfo = 0;
     
-    std::vector<int> getCursorIconsForObject(Game::GameObject* object);
+    std::vector<Mouse::Icon> getCursorIconsForObject(Game::GameObject* object);
 public:
     Location();
     ~Location();
@@ -118,7 +119,7 @@ public:
     void destroyObject(Game::GameObject* object);
     void centerCameraAtHexagon(Hexagon* hexagon);
     void centerCameraAtHexagon(int tileNum);
-    void handleAction(Game::GameObject* object, int action);
+    void handleAction(Game::GameObject* object, Mouse::Icon action);
     void toggleCursorMode();
     PlayerPanel* playerPanelState();
     
