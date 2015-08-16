@@ -18,10 +18,9 @@
  */
 
 // C++ standard includes
-#include <sstream>
-#include <string.h>
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
 #include "../UI/BigCounter.h"
@@ -48,7 +47,7 @@ Texture* BigCounter::texture() const
 
     if (_texture) return _texture;
 
-    auto numbers = std::unique_ptr<Image>(new Image("art/intrface/bignum.frm"));
+    auto numbers = make_unique<Image>("art/intrface/bignum.frm");
     unsigned int xOffsetByColor = 0;
     switch (_color)
     {

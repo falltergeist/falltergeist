@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Graphics/Texture.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -316,9 +317,8 @@ std::unique_ptr<Texture> Texture::generateTextureForNumber(
     unsigned int xOffsetByColor,
     bool isSigned)
 {
-    // number as text
-    const auto charsCount = maxLength + (isSigned ? 1 : 0);
-    auto texture = std::unique_ptr<Texture>(new Texture(charWidth * charsCount, charHeight));
+    const auto charsCount = maxLength + (isSigned ? 1U : 0U);
+    auto texture = make_unique<Texture>(charWidth * charsCount, charHeight);
 
     // number as text
     auto number_text = std::to_string(number);
