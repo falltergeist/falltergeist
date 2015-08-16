@@ -33,7 +33,7 @@ namespace Game
 
 GameContainerItemObject::GameContainerItemObject() : GameItemObject()
 {
-    _subtype = TYPE_ITEM_CONTAINER;
+    _subtype = Subtype::CONTAINER;
 }
 
 GameContainerItemObject::~GameContainerItemObject()

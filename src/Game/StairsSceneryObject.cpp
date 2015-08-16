@@ -31,7 +31,7 @@ namespace Game
 
 GameStairsSceneryObject::GameStairsSceneryObject() : GameSceneryObject()
 {
-    _subtype = TYPE_SCENERY_STAIRS;
+    _subtype = Subtype::STAIRS;
 }
 
 GameStairsSceneryObject::~GameStairsSceneryObject()

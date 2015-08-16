@@ -37,7 +37,7 @@ namespace Game
 
 GameDoorSceneryObject::GameDoorSceneryObject() : GameSceneryObject()
 {
-    _subtype = TYPE_SCENERY_DOOR;
+    _subtype = Subtype::DOOR;
 }
 
 GameDoorSceneryObject::~GameDoorSceneryObject()

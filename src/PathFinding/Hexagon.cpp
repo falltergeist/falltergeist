@@ -145,7 +145,7 @@ void Hexagon::setInRender(bool value)
     _inRender = value;
 }
 
-unsigned int Hexagon::orientationTo(Hexagon* hexagon)
+Game::Orientation Hexagon::orientationTo(Hexagon *hexagon)
 {
 
     int x1 = x();

@@ -388,7 +388,7 @@ std::string Inventory::_handItemSummary (Game::GameItemObject* hand)
     {
         ss << hand->name() << "\n";
         // is it weapon
-        if (hand->subtype() == Game::GameObject::TYPE_ITEM_WEAPON)
+        if (hand->subtype() == Game::GameItemObject::Subtype::WEAPON)
         {
             auto weapon = dynamic_cast<Game::GameWeaponItemObject*>(hand);
             ss << "Dmg: " << weapon->damageMin() << "-" << weapon->damageMax() << " ";

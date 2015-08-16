@@ -31,7 +31,7 @@ namespace Game
 
 GameSceneryObject::GameSceneryObject() : GameObject()
 {
-    _type = TYPE_SCENERY;
+    _type = Type::SCENERY;
 }
 
 GameSceneryObject::~GameSceneryObject()

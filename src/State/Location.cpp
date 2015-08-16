@@ -283,18 +283,19 @@ std::vector<int> Location::getCursorIconsForObject(Game::GameObject* object)
         icons.push_back(Mouse::ICON_USE);
     }
 
-    switch(object->type())
+    switch (object->type())
     {
-        case Game::GameObject::TYPE_ITEM:
+        case Game::GameObject::Type::ITEM:
             break;
-        case Game::GameObject::TYPE_DUDE:
+        case Game::GameObject::Type::DUDE:
             icons.push_back(Mouse::ICON_ROTATE);
             break;
-        case Game::GameObject::TYPE_SCENERY:
+        case Game::GameObject::Type::SCENERY:
             break;
-        case Game::GameObject::TYPE_CRITTER:
+        case Game::GameObject::Type::CRITTER:
             icons.push_back(Mouse::ICON_TALK);
             break;
+        default: break;
     }
     icons.push_back(Mouse::ICON_LOOK);
     icons.push_back(Mouse::ICON_INVENTORY);
@@ -692,13 +693,13 @@ void Location::onKeyDown(KeyboardEvent* event)
         case SDLK_COMMA:
         {
             auto player = Game::getInstance()->player();
-            player->setOrientation((player->orientation() + 5) % 6); // rotate left
+            player->setOrientation(player->orientation() + 5); // rotate left
             break;
         }
         case SDLK_PERIOD:
         {
             auto player = Game::getInstance()->player();
-            player->setOrientation((player->orientation() + 1) % 6); // rotate right
+            player->setOrientation(player->orientation() + 1); // rotate right
             break;
         }
         case SDLK_HOME:
@@ -877,7 +878,7 @@ void Location::handleAction(Game::GameObject* object, int action)
             auto dude = dynamic_cast<Game::GameDudeObject*>(object);
             if (!dude) throw Exception("Location::handleAction() - only Dude can be rotated");
 
-            int orientation = dude->orientation() + 1;
+            auto orientation = dude->orientation() + 1;
             if (orientation > 5) orientation = 0;
             dude->setOrientation(orientation);
 

@@ -52,7 +52,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Activ
     _xShift = frm->directions()->at(direction)->shiftX();
     _yShift = frm->directions()->at(direction)->shiftY();
 
-    // Смещение кадра в текстуре анимации
+    // Frame offset in texture's animation
     unsigned int x = 0;
     unsigned int y = 0;
 

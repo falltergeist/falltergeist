@@ -35,6 +35,8 @@ namespace Game
 class GameGenericSceneryObject : public GameSceneryObject
 {
 protected:
+    virtual bool _useEggTransparency() override;
+
 public:
     GameGenericSceneryObject();
     virtual ~GameGenericSceneryObject();

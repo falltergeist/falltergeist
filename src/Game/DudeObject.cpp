@@ -44,7 +44,7 @@ namespace Game
 
 GameDudeObject::GameDudeObject() : GameCritterObject()
 {
-    _type = TYPE_DUDE;
+    _type = Type::DUDE;
 }
 
 GameDudeObject::~GameDudeObject()

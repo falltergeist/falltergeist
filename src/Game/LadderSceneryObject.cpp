@@ -31,7 +31,7 @@ namespace Game
 
 GameLadderSceneryObject::GameLadderSceneryObject() : GameSceneryObject()
 {
-    _subtype = TYPE_SCENERY_LADDER;
+    _subtype = Subtype::LADDER;
 }
 
 GameLadderSceneryObject::~GameLadderSceneryObject()

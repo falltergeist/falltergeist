@@ -31,7 +31,7 @@ namespace Game
 
 GameMiscObject::GameMiscObject() : GameObject()
 {
-    _type = TYPE_MISC;
+    _type = Type::MISC;
 }
 
 GameMiscObject::~GameMiscObject()

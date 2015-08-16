@@ -31,7 +31,7 @@ namespace Game
 
 GameAmmoItemObject::GameAmmoItemObject() : GameItemObject()
 {
-    _subtype = TYPE_ITEM_AMMO;
+    _subtype = Subtype::AMMO;
 }
 
 GameAmmoItemObject::~GameAmmoItemObject()

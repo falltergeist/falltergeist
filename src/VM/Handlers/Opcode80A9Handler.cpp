@@ -34,6 +34,8 @@
 namespace Falltergeist
 {
 
+using namespace Game;
+
 Opcode80A9Handler::Opcode80A9Handler(VM* vm) : OpcodeHandler(vm)
 {
 }

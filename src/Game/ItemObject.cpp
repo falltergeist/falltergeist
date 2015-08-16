@@ -35,7 +35,7 @@ namespace Game
 
 GameItemObject::GameItemObject() : GameObject()
 {
-    _type = TYPE_ITEM;
+    _type = Type::ITEM;
 }
 
 GameItemObject::~GameItemObject()
@@ -120,5 +120,9 @@ void GameItemObject::_generateUi()
     _inventorySlotUi->setTexture(inventorySlotUiTexture);
 }
 
+GameItemObject::Subtype GameItemObject::subtype() const
+{
+    return _subtype;
+}
 }
 }

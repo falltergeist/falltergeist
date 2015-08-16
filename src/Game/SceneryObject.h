@@ -37,13 +37,24 @@ namespace Game
  */
 class GameSceneryObject : public GameObject
 {
-protected:
-    char _soundId = 0;
 public:
+    enum class Subtype
+    {
+        DOOR = 0,
+        STAIRS,
+        ELEVATOR,
+        LADDER,
+        GENERIC
+    };
+
     GameSceneryObject();
     virtual ~GameSceneryObject();
     void setSoundId(char soundId);
     char soundId() const;
+
+protected:
+    char _soundId = 0;
+    Subtype _subtype;
 };
 
 }

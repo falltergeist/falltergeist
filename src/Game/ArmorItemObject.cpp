@@ -32,7 +32,7 @@ namespace Game
 
 GameArmorItemObject::GameArmorItemObject() : GameItemObject()
 {
-    _subtype = TYPE_ITEM_ARMOR;
+    _subtype = Subtype::ARMOR;
 }
 
 GameArmorItemObject::~GameArmorItemObject()

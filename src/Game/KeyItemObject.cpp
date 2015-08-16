@@ -31,7 +31,7 @@ namespace Game
 
 GameKeyItemObject::GameKeyItemObject() : GameItemObject()
 {
-    _subtype = TYPE_ITEM_KEY;
+    _subtype = Subtype::KEY;
 }
 
 GameKeyItemObject::~GameKeyItemObject()

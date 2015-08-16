@@ -58,14 +58,9 @@ GameObject::~GameObject()
     delete _floatMessage;
 }
 
-int GameObject::type() const
+GameObject::Type GameObject::type() const
 {
     return _type;
-}
-
-int GameObject::subtype() const
-{
-    return _subtype;
 }
 
 int GameObject::PID() const
@@ -104,18 +99,13 @@ void GameObject::setElevation(int value)
     _elevation = value;
 }
 
-int GameObject::orientation() const
+Orientation GameObject::orientation() const
 {
     return _orientation;
 }
 
-void GameObject::setOrientation(int value)
+void GameObject::setOrientation(Orientation value)
 {
-    if (value < 0 || value > 5)
-    {
-        throw Exception("GameObject::setOrientation() - value out of range: " + std::to_string(value));
-    }
-
     if (_orientation == value) return;
 
     _orientation = value;
@@ -297,33 +287,26 @@ void GameObject::render()
     if (!_ui) return;
 
     auto camera = Game::getInstance()->locationState()->camera();
-    _ui->setX(hexagon()->x() - camera->x() - std::floor((double)_ui->width()/2));
+    _ui->setX(hexagon()->x() - camera->x() - std::floor((double)_ui->width() / 2));
     _ui->setY(hexagon()->y() - camera->y() - _ui->height());
 
     setInRender(false);
 
     if (_ui->x() + (int)_ui->width() < 0) return;
-    if (_ui->x() > (int)camera->width()) return;
+    if (_ui->x() > camera->width()) return;
     if (_ui->y() + (int)_ui->height() < 0) return;
-    if (_ui->y() > (int)camera->height()) return;
+    if (_ui->y() > camera->height()) return;
 
     setInRender(true);
 
-    if ((trans() != TRANS_DEFAULT) || ((_type != TYPE_WALL) && !(_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC)))
-    {
-        _ui->render(false);
-        return;
-    }
+    _ui->render(_useEggTransparency() && _getEggTransparency());
+}
 
-/*    if ((_type == TYPE_SCENERY && _subtype == TYPE_SCENERY_GENERIC) && !canWalkThru())
-    {
-        _ui->render();
-        return;
-    }
-*/
+
+bool GameObject::_getEggTransparency()
+{
     auto dude = Game::getInstance()->player();
-
-    Hexagon* hex;
+    Hexagon *hex;
 
     if (dude->movementQueue()->size())
         hex = dude->movementQueue()->back();
@@ -336,35 +319,31 @@ void GameObject::render()
     auto dude_x = hex->x();
     auto dude_y = hex->y();
 
-    _transparent = false;
-
     bool noBlockTrans = false;
+    bool transparent;
 
     switch (_lightOrientation)
     {
-        case ORIENTATION_EW:
-        case ORIENTATION_WC:
-            _transparent = in_front_of(obj_x, obj_y, dude_x, dude_y);
+        case Orientation::EW:
+        case Orientation::WC:
+            transparent = in_front_of(obj_x, obj_y, dude_x, dude_y);
             noBlockTrans = to_right_of(obj_x, obj_y, dude_x, dude_y);
             break;
-        case ORIENTATION_NC:
-            _transparent = (to_right_of(dude_x, dude_y, obj_x, obj_y) | in_front_of(obj_x, obj_y, dude_x, dude_y));
+        case Orientation::NC:
+            transparent = (to_right_of(dude_x, dude_y, obj_x, obj_y) | in_front_of(obj_x, obj_y, dude_x, dude_y));
             break;
-        case ORIENTATION_SC:
-            _transparent = (in_front_of(obj_x, obj_y, dude_x, dude_y) && to_right_of(dude_x, dude_y, obj_x, obj_y));
+        case Orientation::SC:
+            transparent = (in_front_of(obj_x, obj_y, dude_x, dude_y) && to_right_of(dude_x, dude_y, obj_x, obj_y));
             break;
         default:
-            _transparent = to_right_of(dude_x, dude_y, obj_x, obj_y);
+            transparent = to_right_of(dude_x, dude_y, obj_x, obj_y);
             noBlockTrans = in_front_of(dude_x, dude_y, obj_x, obj_y);
             break;
     }
 
-    if (noBlockTrans && wallTransEnd())
-        _transparent = false;
-
-
-    _ui->render(_transparent);
-
+    return (noBlockTrans && wallTransEnd())
+        ? false
+        : transparent;
 }
 
 void GameObject::think()
@@ -515,7 +494,7 @@ void GameObject::onUseAnimationEnd(Event* event, GameCritterObject* critter)
     critter->setActionAnimation("aa")->stop();
 }
 
-void GameObject::setTrans(unsigned int value)
+void GameObject::setTrans(Trans value)
 {
     _trans = value;
     if (_ui)
@@ -523,16 +502,16 @@ void GameObject::setTrans(unsigned int value)
         SDL_Color modifier = _ui->texture()->colorModifier();
         switch (_trans)
         {
-            case TRANS_GLASS:
+            case Trans::GLASS:
                 modifier.a = 128;
                 break;
-            case TRANS_ENERGY:
+            case Trans::ENERGY:
                 modifier = {200, 200, 0, 128};
                 break;
-            case TRANS_RED:
+            case Trans::RED:
                 modifier = {255, 0, 0, 128};
                 break;
-            case TRANS_NONE:
+            case Trans::NONE:
             default:
                 modifier = {255, 255, 255, 255};
                 break;
@@ -541,12 +520,12 @@ void GameObject::setTrans(unsigned int value)
     }
 }
 
-unsigned int GameObject::trans() const
+GameObject::Trans GameObject::trans() const
 {
     return _trans;
 }
 
-void GameObject::setLightOrientation(unsigned short orientation)
+void GameObject::setLightOrientation(Orientation orientation)
 {
     _lightOrientation = orientation;
 }
@@ -578,17 +557,17 @@ unsigned int GameObject::lightRadius() const
 
 void GameObject::setFlags(unsigned int flags)
 {
-    setFlat(flags & 0x00000008);
-    setCanWalkThru(flags & 0x00000010);
-    setCanLightThru(flags & 0x20000000);
-    setCanShootThru(flags & 0x80000000);
+    setFlat((flags & 0x00000008) != 0);
+    setCanWalkThru((flags & 0x00000010) != 0);
+    setCanLightThru((flags & 0x20000000) != 0);
+    setCanShootThru((flags & 0x80000000) != 0);
 
-    if (flags & 0x00004000) setTrans(GameObject::TRANS_RED);
-    if (flags & 0x00008000) setTrans(GameObject::TRANS_NONE);
-    if (flags & 0x00010000) setTrans(GameObject::TRANS_WALL);
-    if (flags & 0x00020000) setTrans(GameObject::TRANS_GLASS);
-    if (flags & 0x00040000) setTrans(GameObject::TRANS_STEAM);
-    if (flags & 0x00080000) setTrans(GameObject::TRANS_ENERGY);
+    if (flags & 0x00004000) setTrans(GameObject::Trans::RED);
+    if (flags & 0x00008000) setTrans(GameObject::Trans::NONE);
+    if (flags & 0x00010000) setTrans(GameObject::Trans::WALL);
+    if (flags & 0x00020000) setTrans(GameObject::Trans::GLASS);
+    if (flags & 0x00040000) setTrans(GameObject::Trans::STEAM);
+    if (flags & 0x00080000) setTrans(GameObject::Trans::ENERGY);
     if (flags & 0x10000000) setWallTransEnd(true);
 
 }
@@ -601,6 +580,11 @@ bool GameObject::flat() const
 void GameObject::setFlat(bool value)
 {
     _flat = value;
+}
+
+bool GameObject::_useEggTransparency()
+{
+    return false;
 }
 
 }

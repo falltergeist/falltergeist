@@ -38,6 +38,8 @@ namespace Game
 class GameWallObject : public GameObject
 {
 protected:
+    virtual bool _useEggTransparency() override;
+
 public:
     GameWallObject();
     virtual ~GameWallObject();

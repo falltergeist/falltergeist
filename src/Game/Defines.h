@@ -99,14 +99,6 @@ namespace Game
 #define ANIM_max_anim                 65 // 65
 
 
-// Object orientation
-#define ORIENTATION_NE 0
-#define ORIENTATION_E  1
-#define ORIENTATION_SE 2
-#define ORIENTATION_SW 3
-#define ORIENTATION_W  4
-#define ORIENTATION_NW 5
-
 // Critters FID
 
 #define FID_HMJMPS      0x0100000B   // vault13 jumpsuit male

@@ -31,7 +31,7 @@ namespace Game
 
 GameElevatorSceneryObject::GameElevatorSceneryObject() : GameSceneryObject()
 {
-    _subtype = TYPE_SCENERY_ELEVATOR;
+    _subtype = Subtype::ELEVATOR;
 }
 
 GameElevatorSceneryObject::~GameElevatorSceneryObject()

@@ -31,11 +31,16 @@ namespace Game
 
 GameWallObject::GameWallObject() : GameObject()
 {
-    _type = TYPE_WALL;
+    _type = Type::WALL;
 }
 
 GameWallObject::~GameWallObject()
 {
+}
+
+bool GameWallObject::_useEggTransparency()
+{
+    return (_trans == Trans::DEFAULT);
 }
 
 }
