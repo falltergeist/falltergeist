@@ -31,6 +31,8 @@
 namespace Falltergeist
 {
 
+using namespace Base;
+
 Texture::Texture(unsigned int width, unsigned int height)
 {
     _width = width;

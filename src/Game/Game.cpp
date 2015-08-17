@@ -49,7 +49,7 @@ namespace Falltergeist
 namespace Game
 {
 
-class GameDudeObject;
+using namespace Base;
 
 Game* getInstance()
 {
@@ -63,7 +63,7 @@ Game::Game()
 // static
 Game* Game::getInstance()
 {
-    return Singleton<Game>::get();
+    return Base::Singleton<Game>::get();
 }
 
 void Game::init(std::unique_ptr<Settings> settings)

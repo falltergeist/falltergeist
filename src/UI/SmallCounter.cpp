@@ -31,6 +31,8 @@
 namespace Falltergeist
 {
 
+using namespace Base;
+
 SmallCounter::SmallCounter(int x, int y) : ActiveUI(x, y)
 {
 }

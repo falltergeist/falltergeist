@@ -31,6 +31,8 @@
 namespace Falltergeist
 {
 
+using namespace Base;
+
 BigCounter::BigCounter(int x, int y, unsigned int length) : ActiveUI(x, y)
 {
     _length = length;

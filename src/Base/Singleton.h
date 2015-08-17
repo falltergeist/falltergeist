@@ -23,14 +23,21 @@
 // C++ standard includes
 #include <new>
 
+// Falltergeist includes
+
+// Third party includes
+
 namespace Falltergeist
+{
+namespace Base
 {
 
 // Attention: this is NOT a thread-safe implementation of a Singleton pattern!
 // If needed it will be easy to implement thread-safe behavior using
 // C++11 atomics.
 template <typename Type>
-class Singleton {
+class Singleton
+{
 private:
     // Classes using the Singleton<T> pattern should declare a getInstance()
     // method and call Singleton::get() from within that.
@@ -38,18 +45,20 @@ private:
 
     static Type* get()
     {
-        if (!instance_)
-            instance_ = new Type();
+        if (!_instance)
+        {
+            _instance = new Type();
+        }
 
-        return instance_;
+        return _instance;
     }
 
-    static Type* instance_;
+    static Type* _instance;
 };
 
 template <typename Type>
-Type* Singleton<Type>::instance_ = nullptr;
+Type* Singleton<Type>::_instance = nullptr;
 
 }
-
+}
 #endif // FALLTERGEIST_BASE_SINGLETON_H

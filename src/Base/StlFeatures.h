@@ -20,36 +20,51 @@
 #ifndef FALLTERGEIST_BASE_STLFEATURES_H
 #define FALLTERGEIST_BASE_STLFEATURES_H
 
+// C++ standard includes
 #include <cstddef>
 #include <memory>
 #include <type_traits>
 #include <utility>
 
+// Falltergeist includes
+
+// Third party includes
+
 namespace Falltergeist
 {
-namespace Detail {
-template<class T> struct UniqueIf {
+namespace Base
+{
+namespace Detail
+{
+
+template<class T> struct UniqueIf
+{
     typedef std::unique_ptr<T> SingleObject;
 };
 
-template<class T> struct UniqueIf<T[]> {
+template<class T> struct UniqueIf<T[]>
+{
     typedef std::unique_ptr<T[]> UnknownBound;
 };
 
-template<class T, std::size_t N> struct UniqueIf<T[N]> {
+template<class T, std::size_t N> struct UniqueIf<T[N]>
+{
     typedef void KnownBound;
 };
-}  // namespace detail
+
+}  // namespace Detail
 
 template<class T, class... Args>
 typename Detail::UniqueIf<T>::SingleObject
-make_unique(Args&&... args) {
+make_unique(Args&&... args)
+{
     return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
 }
 
 template<class T>
 typename Detail::UniqueIf<T>::UnknownBound
-make_unique(std::size_t n) {
+make_unique(std::size_t n)
+{
     typedef typename std::remove_extent<T>::type U;
     return std::unique_ptr<T>(new U[n]());
 }
@@ -57,5 +72,7 @@ make_unique(std::size_t n) {
 template<class T, class... Args>
 typename Detail::UniqueIf<T>::KnownBound
 make_unique(Args&&...) = delete;
+
+}
 }
 #endif // FALLTERGEIST_BASE_STLFEATURES_H

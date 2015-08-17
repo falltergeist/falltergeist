@@ -116,7 +116,7 @@ protected:
     bool _initialized = false;
     void _initGVARS();
 private:
-    friend class Singleton<Game>;
+    friend class Base::Singleton<Game>;
 
     Game();
     ~Game();
