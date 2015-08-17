@@ -32,8 +32,11 @@
 
 namespace Falltergeist
 {
-    
-namespace Game { class GameObject; }
+
+namespace Game
+{
+    class GameObject;
+}
 
 /*
  * VM class represents Virtual Machine for running vanilla Fallout scripts.

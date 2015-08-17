@@ -34,8 +34,6 @@
 namespace Falltergeist
 {
 
-using namespace Game;
-
 Opcode80A9Handler::Opcode80A9Handler(VM* vm) : OpcodeHandler(vm)
 {
 }
@@ -48,14 +46,14 @@ void Opcode80A9Handler::_run()
     auto y = _vm->dataStack()->popInteger();
     auto x = _vm->dataStack()->popInteger();
     auto position = y*200 + x;
-    auto game = Game::getInstance();
+    auto game = Game::Game::getInstance();
     auto player = game->player();
     auto hexagon = game->locationState()->hexagonGrid()->at(position);
     State::Location::moveObjectToHexagon(player, hexagon);
                 //player->setPosition(position);
     player->setOrientation(orientation);
     player->setElevation(elevation);
-    Game::getInstance()->locationState()->centerCameraAtHexagon(player->hexagon());
+    Game::Game::getInstance()->locationState()->centerCameraAtHexagon(player->hexagon());
 }
 
 }
