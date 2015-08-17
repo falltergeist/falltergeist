@@ -5,6 +5,12 @@ enum = {
 
     TEXT_ALIGN = {
         CENTER = 2
+    },
+
+    CURSOR = {
+        BIG_ARROW = 1,
+        WAIT = 21,
+        HAND = 22
     }
 }
 
@@ -14,8 +20,11 @@ init = function(state)
     state.modal = true
     state.fullscreen = true
 
-    background = game.ui.Image("art/intrface/mainmenu.frm")
+    game.mouse.cursor = enum.CURSOR.BIG_ARROW
+    game.mouse.x = 400
+    game.mouse.y = 400
 
+    background = game.ui.Image("art/intrface/mainmenu.frm")
     -- Buttons
     introButton    = game.ui.ImageButton(enum.BUTTON_TYPE.MENU_RED_CIRCLE, 30, 19);
     newGameButton  = game.ui.ImageButton(enum.BUTTON_TYPE.MENU_RED_CIRCLE, 30, 19 + 41);
@@ -23,14 +32,14 @@ init = function(state)
     settingsButton = game.ui.ImageButton(enum.BUTTON_TYPE.MENU_RED_CIRCLE, 30, 19 + 41*3);
     creditsButton  = game.ui.ImageButton(enum.BUTTON_TYPE.MENU_RED_CIRCLE, 30, 19 + 41*4);
     exitButton     = game.ui.ImageButton(enum.BUTTON_TYPE.MENU_RED_CIRCLE, 30, 19 + 41*5);
-    
+
     -- Labels
     --font = game.resourceManager.getFont("font4.aaf", 0xb89c28ff)
 
     introLabel = game.ui.TextArea(game.translate("intro", "mainmenu"), 50, 20)
     --introLabel.font = font
     introLabel.width = 150
-    introLabel.horizontalAlign = enum.TEXT_ALIGN.CENTER    
+    introLabel.horizontalAlign = enum.TEXT_ALIGN.CENTER
 
 
     state:addUI(background)

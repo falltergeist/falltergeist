@@ -21,6 +21,7 @@
 #include <iostream>
 
 // Falltergeist includes
+#include "../Game/Game.h"
 #include "../Lua/Script.h"
 #include "../State/LuaState.h"
 #include "../UI/Image.h"
@@ -37,35 +38,12 @@ namespace State
 LuaState::LuaState(const std::string& filename) : State()
 {
     _script = new Lua::Script(filename);
-
-    Event::Event::export_to_lua_script(_script);
-    LuaState::export_to_lua_script(_script);
-    UI::export_to_lua_script(_script);
-    ActiveUI::export_to_lua_script(_script);
-    Image::export_to_lua_script(_script);
-    ImageButton::export_to_lua_script(_script);       
-    TextArea::export_to_lua_script(_script);
-
     _script->run();
 }
 
 LuaState::~LuaState()
 {
     delete _script;
-}
-
-void LuaState::export_to_lua_script(Lua::Script* script)
-{
-    luabridge::getGlobalNamespace(script->luaState())
-        .beginNamespace("game")
-            .beginClass<LuaState>("State")
-                .addProperty("x", &LuaState::x, &LuaState::setX)
-                .addProperty("y", &LuaState::y, &LuaState::setY)
-                .addProperty("fullscreen", &LuaState::fullscreen, &LuaState::setFullscreen)
-                .addProperty("modal", &LuaState::modal, &LuaState::setModal)
-                .addFunction("addUI", &LuaState::addUI)
-            .endClass()
-        .endNamespace();
 }
 
 void LuaState::init()

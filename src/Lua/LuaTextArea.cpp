@@ -17,37 +17,57 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_IMAGE_H
-#define FALLTERGEIST_IMAGE_H
+// Related headers
+#include "../Lua/LuaTextArea.h"
 
 // C++ standard includes
-#include <string>
 
 // Falltergeist includes
-#include "../Graphics/ActiveUI.h"
-#include "../Graphics/UI.h"
 
 // Third party includes
-#include <libfalltergeist.h>
-
 
 namespace Falltergeist
 {
-
-class Image : public ActiveUI
+namespace Lua
 {
-protected:
-public:
-    Image(const std::string& filename);
-    Image(unsigned int width, unsigned int height);
-    Image(Image* image);
-    Image(Texture* texture);
-    Image(libfalltergeist::Frm::File* frm, unsigned int direction);
-    ~Image();
 
-    unsigned int width() const override;
-    unsigned int height() const override;
-};
+LuaTextArea::LuaTextArea(const std::string& text, int x, int y) : TextArea(text, x, y)
+{
+}
+
+LuaTextArea::LuaTextArea(int x, int y) : TextArea(x, y)
+{
+}
+
+LuaTextArea::LuaTextArea(LuaTextArea* textArea, int x, int y) : TextArea(textArea, x, y)
+{
+}
+
+LuaTextArea::~LuaTextArea()
+{
+}
+
+unsigned LuaTextArea::luaHorizontalAlign() const
+{
+    return static_cast<unsigned>(_horizontalAlign);
+}
+
+void LuaTextArea::setLuaHorizontalAlign(unsigned align)
+{
+    if (align > static_cast<unsigned>(HorizontalAlign::JUSTIFY)) return; //@todo Log error
+
+    setHorizontalAlign(static_cast<HorizontalAlign>(align));
+}
+
+void LuaTextArea::setWidth(unsigned int width)
+{
+    TextArea::setWidth(width);
+}
+
+unsigned int LuaTextArea::width() const
+{
+    return TextArea::width();
+}
 
 }
-#endif // FALLTERGEIST_IMAGE_H
+}

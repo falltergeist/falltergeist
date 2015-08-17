@@ -29,7 +29,6 @@
 #include "../Event/Mouse.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
-#include "../Lua/Script.h"
 #include "../ResourceManager.h"
 
 // Third party includes
@@ -39,7 +38,16 @@ namespace Falltergeist
 
 ImageButton::ImageButton(Type type, int x, int y) : ActiveUI(x, y)
 {
-    switch (type)
+    _init(type);
+}
+
+ImageButton::~ImageButton()
+{
+}
+
+void ImageButton::_init(Type type)
+{
+    switch(type)
     {
         case Type::SMALL_RED_CIRCLE:
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/lilredup.frm"));
@@ -207,22 +215,6 @@ ImageButton::ImageButton(Type type, int x, int y) : ActiveUI(x, y)
     addEventHandler("mouseleftclick", [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); });
     addEventHandler("mouseleftdown", [this](Event::Event* event){ this->_onLeftButtonDown(dynamic_cast<Event::Mouse*>(event)); });
     addEventHandler("mouseout", [this](Event::Event* event){ this->_onMouseOut(dynamic_cast<Event::Mouse*>(event)); });
-}
-
-ImageButton::~ImageButton()
-{
-}
-
-void ImageButton::export_to_lua_script(Lua::Script* script)
-{
-    luabridge::getGlobalNamespace(script->luaState())
-        .beginNamespace("game")
-            .beginNamespace("ui")
-                .deriveClass<ImageButton, ActiveUI>("ImageButton")
-                    .addConstructor<void(*)(Type, int, int)>()
-                .endClass()
-            .endNamespace()
-        .endNamespace();
 }
 
 Texture* ImageButton::texture() const

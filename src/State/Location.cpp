@@ -74,7 +74,7 @@ const int Location::KEYBOARD_SCROLL_STEP = 35;
 Location::Location() : State()
 {
     auto game = Game::getInstance();
-    game->mouse()->setState(Mouse::ACTION);
+    game->mouse()->setState(Mouse::Cursor::ACTION);
 
     _camera = new LocationCamera(game->renderer()->width(), game->renderer()->height(), 0, 0);
     _floor = new TileMap();
@@ -428,15 +428,15 @@ void Location::think()
         // if scrolling is active
         if (_scrollLeft || _scrollRight || _scrollTop || _scrollBottom)
         {
-            unsigned int state;
-            if (_scrollLeft)   state = Mouse::SCROLL_W;
-            if (_scrollRight)  state = Mouse::SCROLL_E;
-            if (_scrollTop)    state = Mouse::SCROLL_N;
-            if (_scrollBottom) state = Mouse::SCROLL_S;
-            if (_scrollLeft && _scrollTop)     state = Mouse::SCROLL_NW;
-            if (_scrollLeft && _scrollBottom)  state = Mouse::SCROLL_SW;
-            if (_scrollRight && _scrollTop)    state = Mouse::SCROLL_NE;
-            if (_scrollRight && _scrollBottom) state = Mouse::SCROLL_SE;
+            Mouse::Cursor state;
+            if (_scrollLeft)   state = Mouse::Cursor::SCROLL_W;
+            if (_scrollRight)  state = Mouse::Cursor::SCROLL_E;
+            if (_scrollTop)    state = Mouse::Cursor::SCROLL_N;
+            if (_scrollBottom) state = Mouse::Cursor::SCROLL_S;
+            if (_scrollLeft && _scrollTop)     state = Mouse::Cursor::SCROLL_NW;
+            if (_scrollLeft && _scrollBottom)  state = Mouse::Cursor::SCROLL_SW;
+            if (_scrollRight && _scrollTop)    state = Mouse::Cursor::SCROLL_NE;
+            if (_scrollRight && _scrollBottom) state = Mouse::Cursor::SCROLL_SE;
             if (mouse->state() != state)
             {
                 if (mouse->scrollState())
@@ -501,7 +501,7 @@ void Location::think()
     if (_objectUnderCursor && _actionCursorTicks && _actionCursorTicks + DROPDOWN_DELAY < SDL_GetTicks())
     {
         auto game = Game::getInstance();
-        if (_actionCursorButtonPressed || game->mouse()->state() == Mouse::ACTION)
+        if (_actionCursorButtonPressed || game->mouse()->state() == Mouse::Cursor::ACTION)
         {
             if (!_actionCursorButtonPressed && (_actionCursorLastObject != _objectUnderCursor))
             {
@@ -531,29 +531,31 @@ void Location::toggleCursorMode()
     auto mouse = game->mouse();
     switch (mouse->state())
     {
-        case Mouse::NONE: // just for testing
+        case Mouse::Cursor::NONE: // just for testing
         {
-            mouse->pushState(Mouse::ACTION);
+            mouse->pushState(Mouse::Cursor::ACTION);
             break;
         }
-        case Mouse::ACTION:
+        case Mouse::Cursor::ACTION:
         {
             auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
             if (!hexagon)
             {
                 break;
             }
-            mouse->pushState(Mouse::HEXAGON_RED);
+            mouse->pushState(Mouse::Cursor::HEXAGON_RED);
             mouse->ui()->setX(hexagon->x() - camera()->x());
             mouse->ui()->setY(hexagon->y() - camera()->y());
             _objectUnderCursor = NULL;
             break;
         }
-        case Mouse::HEXAGON_RED:
+        case Mouse::Cursor::HEXAGON_RED:
         {
             mouse->popState();
             break;
         }
+        default:
+            break;
     }
 }
 
@@ -577,7 +579,7 @@ void Location::handle(Event::Event* event)
         {
             switch (mouse->state())
             {
-                case Mouse::HEXAGON_RED:
+                case Mouse::Cursor::HEXAGON_RED:
                 {
                     // Here goes the movement
                     auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
@@ -601,6 +603,8 @@ void Location::handle(Event::Event* event)
                     _lastClickedTile = hexagon->number();
                     break;
                 }
+                default:
+                    break;
             }
         }
 
@@ -610,7 +614,7 @@ void Location::handle(Event::Event* event)
 
             switch (mouse->state())
             {
-                case Mouse::HEXAGON_RED:
+                case Mouse::Cursor::HEXAGON_RED:
                 {
                     if (!hexagon)
                     {
@@ -620,6 +624,8 @@ void Location::handle(Event::Event* event)
                     mouse->ui()->setY(hexagon->y() - camera()->y());
                     break;
                 }
+                default:
+                    break;
             }
 
             unsigned int scrollArea = 8;
@@ -644,7 +650,7 @@ void Location::handle(Event::Event* event)
             }
         }
         // let event fall down to all objects when using action cursor and within active view
-        if (mouse->state() != Mouse::ACTION && mouse->state() != Mouse::NONE)
+        if (mouse->state() != Mouse::Cursor::ACTION && mouse->state() != Mouse::Cursor::NONE)
         {
             event->setHandled(true);
         }

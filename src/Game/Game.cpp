@@ -34,6 +34,7 @@
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
+#include "../Lua/Script.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../State/State.h"
@@ -60,7 +61,6 @@ Game::Game()
 {
 }
 
-// static
 Game* Game::getInstance()
 {
     return Base::Singleton<Game>::get();
@@ -184,7 +184,7 @@ DudeObject* Game::player()
     return _player;
 }
 
-Mouse* Game::mouse()
+Mouse* Game::mouse() const
 {
     return _mouse;
 }

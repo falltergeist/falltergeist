@@ -34,32 +34,34 @@ class UI;
 class Mouse
 {
 public:
-    enum {
-        NONE = 0,
-        BIG_ARROW,
-        SCROLL_W,
-        SCROLL_W_X,
-        SCROLL_NW,
-        SCROLL_NW_X,
-        SCROLL_N,
-        SCROLL_N_X,
-        SCROLL_NE,
-        SCROLL_NE_X,
-        SCROLL_E,
-        SCROLL_E_X,
-        SCROLL_SE,
-        SCROLL_SE_X,
-        SCROLL_S,
-        SCROLL_S_X,
-        SCROLL_SW,
-        SCROLL_SW_X,
-        HEXAGON_RED,
-        ACTION,
-        ACTION_REVERSE,
-        WAIT,
-        HAND
+    enum class Cursor : unsigned
+    {
+        NONE           = 0,
+        BIG_ARROW      = 1,
+        SCROLL_W       = 2,
+        SCROLL_W_X     = 3,
+        SCROLL_NW      = 4,
+        SCROLL_NW_X    = 5,
+        SCROLL_N       = 6,
+        SCROLL_N_X     = 7,
+        SCROLL_NE      = 8,
+        SCROLL_NE_X    = 9,
+        SCROLL_E       = 10,
+        SCROLL_E_X     = 11,
+        SCROLL_SE      = 12,
+        SCROLL_SE_X    = 13,
+        SCROLL_S       = 14,
+        SCROLL_S_X     = 15,
+        SCROLL_SW      = 16,
+        SCROLL_SW_X    = 17,
+        HEXAGON_RED    = 18,
+        ACTION         = 19,
+        ACTION_REVERSE = 20,
+        WAIT           = 21,
+        HAND           = 22
     };
-    enum class Icon
+
+    enum class Icon : unsigned
     {
         ROTATE = 1,
         SKILL,
@@ -74,17 +76,22 @@ public:
     Mouse();
     ~Mouse();
 
-    int x();
+    int x() const;
     void setX(int x);
 
-    int y();
+    int y() const;
     void setY(int y);
 
-    void setState(unsigned int state);
-    void pushState(unsigned int state);
+    void pushState(Cursor state);
     void popState();
-    unsigned int state();
-    std::vector<unsigned int>* states();
+
+    Cursor state() const;
+    void setState(Cursor state);
+
+    unsigned cursor() const; // for lua sripts
+    void setCursor(unsigned value); // for lua scripts
+
+    std::vector<Cursor>* states();
 
     bool scrollState();
 
@@ -97,10 +104,10 @@ protected:
     int _x = 320;
     int _y = 240;
     bool _visible = true;
-    unsigned int _type = NONE;
-    std::vector<unsigned int> _states;
+    Cursor _type = Cursor::NONE;
+    std::vector<Cursor> _states;
     UI* _ui = 0;
-    void _setType(unsigned int type);
+    void _setType(Cursor type);
 };
 
 }

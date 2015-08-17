@@ -61,7 +61,7 @@ void Movie::init()
     setFullscreen(true);
     setModal(true);
 
-    Game::getInstance()->mouse()->pushState(Mouse::NONE);
+    Game::getInstance()->mouse()->pushState(Mouse::Cursor::NONE);
     auto renderer = Game::getInstance()->renderer();
     setX((renderer->width()  - 640)*0.5);
     setY((renderer->height() - 320)*0.5);

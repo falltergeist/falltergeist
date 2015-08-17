@@ -27,7 +27,6 @@
 #include "../Graphics/Texture.h"
 #include "../Graphics/UI.h"
 #include "../LocationCamera.h"
-#include "../Lua/Script.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 
@@ -58,19 +57,6 @@ UI::~UI()
         }
         if (!found) delete _texture;
     }
-}
-
-void UI::export_to_lua_script(Lua::Script* script)
-{
-    luabridge::getGlobalNamespace(script->luaState())
-        .beginNamespace("game")
-            .beginNamespace("ui")
-                .beginClass<UI>("UI")
-                    //.addProperty("x", &UI::x, &UI::setX)
-                    //.addProperty("y", &UI::y, &UI::setY)
-                .endClass()
-            .endNamespace()
-        .endNamespace();
 }
 
 int UI::x() const

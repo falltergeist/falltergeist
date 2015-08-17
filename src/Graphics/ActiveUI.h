@@ -39,7 +39,6 @@ public:
     ~ActiveUI() override;
 
     virtual void handle(Event::Event* event);
-    static void export_to_lua_script(Lua::Script* script);
 
 protected:
     std::string _downSnd = "";

@@ -40,14 +40,14 @@ class TextSymbol;
 class TextArea : public ActiveUI
 {
 public:
-    enum class HorizontalAlign
+    enum class HorizontalAlign : unsigned
     {
         LEFT = 1,
         CENTER,
         RIGHT,
         JUSTIFY
     };
-    enum class VerticalAlign
+    enum class VerticalAlign : unsigned
     {
         TOP = 1,
         CENTER,
@@ -57,7 +57,7 @@ public:
     TextArea(const std::string& text, int x = 0, int y = 0);
     TextArea(int x = 0, int y = 0);
     TextArea(TextArea* textArea, int x = 0, int y = 0);
-    ~TextArea();
+    virtual ~TextArea();
 
     void setText(const std::string& text);
     void appendText(const std::string& text);
@@ -72,8 +72,8 @@ public:
     void setHeight(unsigned int height);
     unsigned int height() const;
 
-    void setWidth(unsigned int width);
-    unsigned int width() const;
+    virtual void setWidth(unsigned int width);
+    virtual unsigned int width() const;
 
     void setWordWrap(bool wordWrap);
     bool wordWrap() const;
@@ -97,8 +97,6 @@ public:
     TextArea& operator=(const std::string& text);
     TextArea& operator=(unsigned value);
     TextArea& operator=(signed value);
-
-    static void export_to_lua_script(Lua::Script* script);
 
 protected:
     bool _changed = true;

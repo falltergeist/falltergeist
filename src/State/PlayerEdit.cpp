@@ -541,7 +541,7 @@ void PlayerEdit::doPrint()
 
 void PlayerEdit::onStateActivate(Event::State* event)
 {
-    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+    Game::getInstance()->mouse()->pushState(Mouse::Cursor::BIG_ARROW);
 }
 
 void PlayerEdit::onStateDeactivate(Event::State* event)

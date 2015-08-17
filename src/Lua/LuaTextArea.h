@@ -17,37 +17,41 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_IMAGE_H
-#define FALLTERGEIST_IMAGE_H
+#ifndef FALLTERGEIST_LUA_LUATEXTAREA_H
+#define FALLTERGEIST_LUA_LUATEXTAREA_H
 
 // C++ standard includes
-#include <string>
 
 // Falltergeist includes
-#include "../Graphics/ActiveUI.h"
-#include "../Graphics/UI.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
-#include <libfalltergeist.h>
-
 
 namespace Falltergeist
 {
-
-class Image : public ActiveUI
+namespace Lua
 {
-protected:
-public:
-    Image(const std::string& filename);
-    Image(unsigned int width, unsigned int height);
-    Image(Image* image);
-    Image(Texture* texture);
-    Image(libfalltergeist::Frm::File* frm, unsigned int direction);
-    ~Image();
 
+/**
+ * This class provides lua interface to TextArea class
+ * We are forced to have this class because TextArea have methods with strongly typed enums
+ */
+class LuaTextArea : public TextArea
+{
+public:
+    LuaTextArea(const std::string& text, int x = 0, int y = 0);
+    LuaTextArea(int x = 0, int y = 0);
+    LuaTextArea(LuaTextArea* textArea, int x = 0, int y = 0);
+    ~LuaTextArea() override;
+
+    void setWidth(unsigned int width) override;
     unsigned int width() const override;
-    unsigned int height() const override;
+
+    void setLuaHorizontalAlign(unsigned align);
+    unsigned luaHorizontalAlign() const;
+
 };
 
 }
-#endif // FALLTERGEIST_IMAGE_H
+}
+#endif // FALLTERGEIST_LUA_LUATEXTAREA_H

@@ -51,7 +51,7 @@ CritterInteract::~CritterInteract()
 
 void CritterInteract::onStateActivate(Event::State* event)
 {
-    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+    Game::getInstance()->mouse()->pushState(Mouse::Cursor::BIG_ARROW);
 }
 
 void CritterInteract::onStateDeactivate(Event::State* event)

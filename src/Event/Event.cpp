@@ -23,7 +23,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Lua/Script.h"
 
 // Third party includes
 
@@ -39,16 +38,6 @@ Event::Event(const std::string& name)
 
 Event::~Event()
 {
-}
-
-void Event::export_to_lua_script(Lua::Script* script)
-{
-    luabridge::getGlobalNamespace(script->luaState())
-        .beginNamespace("game")
-            .beginClass<Event>("Event")
-                .addProperty("name", &Event::name, &Event::setName)
-            .endClass()
-        .endNamespace();
 }
 
 std::string Event::name() const

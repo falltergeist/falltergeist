@@ -154,7 +154,7 @@ void GameMenu::closeMenu()
 
 void GameMenu::onStateActivate(Event::State* event)
 {
-    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+    Game::getInstance()->mouse()->pushState(Mouse::Cursor::BIG_ARROW);
 }
 
 void GameMenu::onStateDeactivate(Event::State* event)
