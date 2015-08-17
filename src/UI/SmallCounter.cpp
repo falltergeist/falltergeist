@@ -52,12 +52,12 @@ Texture* SmallCounter::texture() const
     unsigned int xOffsetByColor = 0;
     switch (_color)
     {
-        case COLOR_WHITE:
+        case Color::WHITE:
             break;
-        case COLOR_YELLOW:
+        case Color::YELLOW:
             xOffsetByColor = 120;
             break;
-        case COLOR_RED:
+        case Color::RED:
             xOffsetByColor = 240;
             break;
     }
@@ -66,7 +66,7 @@ Texture* SmallCounter::texture() const
     auto texture = Texture::generateTextureForNumber(
         abs(_number), _length, numbers->texture(),
         kCharWidth, kCharHeight, xOffsetByColor, true);
-    if (_type == SIGNED)
+    if (_type == Type::SIGNED)
     {
         // must be 9*13+1, but it is 113
         const auto signOffset = _number < 0 ? kCharWidth * 12 + 1 : 113;
@@ -105,13 +105,13 @@ signed int SmallCounter::number()
     return _number;
 }
 
-void SmallCounter::setColor(unsigned char color)
+void SmallCounter::setColor(Color color)
 {
     switch(color)
     {
-        case COLOR_WHITE:
-        case COLOR_YELLOW:
-        case COLOR_RED:
+        case Color::WHITE:
+        case Color::YELLOW:
+        case Color::RED:
             if (_color != color)
             {
                 _color = color;
@@ -121,24 +121,17 @@ void SmallCounter::setColor(unsigned char color)
     }
 }
 
-unsigned char SmallCounter::color()
+SmallCounter::Color SmallCounter::color()
 {
     return _color;
 }
 
-void SmallCounter::setType(unsigned int type)
+void SmallCounter::setType(Type type)
 {
-    _type = 0; // unsigned by default
-    switch(type)
-    {
-        case UNSIGNED:
-        case SIGNED:
-            _type = type;
-            break;
-    }
+    _type = type;
 }
 
-unsigned int SmallCounter::type()
+SmallCounter::Type SmallCounter::type()
 {
     return _type;
 }

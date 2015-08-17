@@ -46,7 +46,7 @@ namespace Game
 
 DudeObject::DudeObject() : CritterObject()
 {
-    _type = TYPE_DUDE;
+    _type = Type::DUDE;
 }
 
 DudeObject::~DudeObject()

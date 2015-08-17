@@ -38,8 +38,21 @@ namespace Game
 class ItemObject : public Object
 {
 public:
+    enum class Subtype
+    {
+        ARMOR = 0,
+        CONTAINER,
+        DRUG,
+        WEAPON,
+        AMMO,
+        MISC,
+        KEY
+    };
+
     ItemObject();
     ~ItemObject() override;
+
+    Subtype subtype() const;
 
     // item stack size in inventory or on the ground
     unsigned int amount() const;
@@ -48,7 +61,7 @@ public:
     // item weight, in pounds
     unsigned int weight() const;
     void setWeight(unsigned int value);
-    
+
     // item volume
     unsigned int volume() const;
     void setVolume(unsigned int volume);
@@ -62,6 +75,7 @@ public:
     Image* inventoryDragUi() const;
 
 protected:
+    Subtype _subtype;
     unsigned int _amount = 1;
     unsigned int _weight = 0;
     unsigned int _volume = 0;

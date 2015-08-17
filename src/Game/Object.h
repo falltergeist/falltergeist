@@ -50,14 +50,53 @@ namespace Game
 {
 class CritterObject;
 
+// represents orientation in hexagonal space
+// @todo move this class to separate file!
+class Orientation
+{
+private:
+    unsigned char _dir;
+
+public:
+    enum
+    {
+        NS = 0, EW, NC, SC, EC, WC
+    };
+
+    Orientation(unsigned char value = NS)
+    {
+        _dir = (unsigned char)(value % 6);
+    }
+
+    operator unsigned char() const { return _dir; }
+};
+
+
 class Object : public Event::Emitter
 {
 public:
-    enum { TYPE_ITEM = 0, TYPE_CRITTER, TYPE_SCENERY, TYPE_WALL, TYPE_TILE, TYPE_MISC, TYPE_DUDE };
-    enum { TYPE_ITEM_ARMOR = 0, TYPE_ITEM_CONTAINER, TYPE_ITEM_DRUG, TYPE_ITEM_WEAPON, TYPE_ITEM_AMMO, TYPE_ITEM_MISC, TYPE_ITEM_KEY };
-    enum { TYPE_SCENERY_DOOR = 0, TYPE_SCENERY_STAIRS, TYPE_SCENERY_ELEVATOR, TYPE_SCENERY_LADDER, TYPE_SCENERY_GENERIC };
-    enum { TRANS_DEFAULT = 0, TRANS_NONE, TRANS_WALL, TRANS_GLASS, TRANS_STEAM, TRANS_ENERGY, TRANS_RED };
-    enum { ORIENTATION_NS = 0, ORIENTATION_EW, ORIENTATION_NC, ORIENTATION_SC, ORIENTATION_EC, ORIENTATION_WC };
+    // Object type as defined in prototype
+    enum class Type
+    {
+        ITEM = 0,
+        CRITTER,
+        SCENERY,
+        WALL,
+        TILE,
+        MISC,
+        DUDE
+    };
+
+    enum class Trans
+    {
+        DEFAULT = 0,
+        NONE,
+        WALL,
+        GLASS,
+        STEAM,
+        ENERGY,
+        RED
+    };
 
     Object();
     ~Object() override;
@@ -77,10 +116,8 @@ public:
     virtual bool wallTransEnd() const;
     virtual void setWallTransEnd(bool value);
 
-    // object type (TYPE_ITEM, TYPE_CRITTER, etc.)
-    int type() const;
-    // object subtype (for items and scenery))
-    int subtype() const;
+    // object type
+    Type type() const;
 
     // object prototype ID - refers to numeric ID as used in original game
     int PID() const;
@@ -95,9 +132,9 @@ public:
     void setElevation(int value);
 
     // returns facing direction (0 - 5)
-    int orientation() const;
+    Orientation orientation() const;
     // changes object facing direction (0 - 5)
-    virtual void setOrientation(int value);
+    virtual void setOrientation(Orientation value);
 
     // object name, as defined in proto msg file
     std::string name() const;
@@ -133,8 +170,9 @@ public:
     void setInRender(bool value);
 
     // object translucency mode
-    unsigned int trans() const;
-    void setTrans(unsigned int value);
+    Trans trans() const;
+    // sets object translucency mode
+    void setTrans(Trans value);
 
     // request description of the object to console, may call "description_p_proc" procedure of underlying script entity
     virtual void description_p_proc();
@@ -160,7 +198,7 @@ public:
     virtual void onUseAnimationEnd(Event::Event* event, CritterObject* critter);
 
     unsigned short lightOrientation() const;
-    virtual void setLightOrientation(unsigned short orientation);
+    virtual void setLightOrientation(Orientation orientation);
 
     unsigned int lightIntensity() const;
     virtual void setLightIntensity(unsigned int intensity);
@@ -179,12 +217,11 @@ protected:
     bool _canShootThru = true;
     bool _wallTransEnd = false;
     bool _flat = false;
-    int _type = -1;
-    int _subtype = -1;
+    Type _type;
     int _PID = -1;
     int _FID = -1;
     int _elevation = 0;
-    int _orientation = 0;
+    Orientation _orientation;
     std::string _name;
     std::string _description;
     VM* _script = 0;
@@ -194,12 +231,16 @@ protected:
     void addUIEventHandlers();
     TextArea* _floatMessage = 0;
     bool _inRender = false;
-    unsigned int _trans = 0;
-    unsigned short _lightOrientation;
-    bool _transparent = false;
+    Trans _trans = Trans::DEFAULT;
+    Orientation _lightOrientation;
     Texture* _tmptex = NULL;
     unsigned int _lightIntensity = 0;
     unsigned int _lightRadius = 0;
+    virtual bool _useEggTransparency();
+
+private:
+    bool _getEggTransparency();
+
 };
 
 }

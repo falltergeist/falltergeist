@@ -116,7 +116,7 @@ void Movie::init()
 
     subLabel->setFont(font0_ffffffff);
     subLabel->setWidth(640);
-    subLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    subLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
     addUI("subs",subLabel);
 
     if (_hasSubs)

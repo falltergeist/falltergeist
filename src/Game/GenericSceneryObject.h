@@ -34,9 +34,13 @@ namespace Game
 
 class GenericSceneryObject : public SceneryObject
 {
+
 public:
     GenericSceneryObject();
     ~GenericSceneryObject() override;
+
+protected:
+    bool _useEggTransparency() override;
 };
 
 }

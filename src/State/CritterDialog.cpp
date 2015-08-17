@@ -73,11 +73,11 @@ void CritterDialog::init()
     addUI("question", question);
 
     // Interface buttons
-    auto reviewButton = new ImageButton(ImageButton::TYPE_DIALOG_REVIEW_BUTTON, 13, 154);
+    auto reviewButton = new ImageButton(ImageButton::Type::DIALOG_REVIEW_BUTTON, 13, 154);
     reviewButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onReviewButtonClick(dynamic_cast<Event::Mouse*>(event)); });
     addUI(reviewButton);
 
-    auto barterButton = new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, 593, 40);
+    auto barterButton = new ImageButton(ImageButton::Type::DIALOG_RED_BUTTON, 593, 40);
     barterButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onBarterButtonClick(dynamic_cast<Event::Mouse*>(event)); });
     addUI(barterButton);
 }

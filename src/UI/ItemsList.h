@@ -24,6 +24,7 @@
 
 // Falltergeist includes
 #include "../UI/Image.h"
+#include "../UI/InventoryItem.h"
 
 // Third party includes
 
@@ -37,22 +38,10 @@ namespace Game
 {
     class ItemObject;
 }
-class InventoryItem;
 
 class ItemsList : public ActiveUI
 {
-protected:
-    std::vector<Game::ItemObject*>* _items = 0;
-    InventoryItem* _draggedItem = 0;
-    std::vector<InventoryItem*> _inventoryItems;
-    unsigned int _type = TYPE_INVENTORY;
-    unsigned int _slotsNumber = 7; // Height of widget in items
-    unsigned int _slotOffset = 0;
-    unsigned int _slotWidth = 77;
-    unsigned int _slotHeight = 40;
 public:
-    enum { TYPE_INVENTORY = 0, TYPE_SLOT};
-
     ItemsList(int x = 0, int y = 0);
 
     void setItems(std::vector<Game::ItemObject*>* items);
@@ -86,6 +75,16 @@ public:
 
     void addItem(InventoryItem* item, unsigned int ammount);
     void removeItem(InventoryItem* item, unsigned int ammount);
+
+protected:
+    std::vector<Game::ItemObject*>* _items = 0;
+    InventoryItem* _draggedItem = 0;
+    std::vector<InventoryItem*> _inventoryItems;
+    InventoryItem::Type _type = InventoryItem::Type::INVENTORY;
+    unsigned int _slotsNumber = 7; // Height of widget in items
+    unsigned int _slotOffset = 0;
+    unsigned int _slotWidth = 77;
+    unsigned int _slotHeight = 40;
 
 };
 

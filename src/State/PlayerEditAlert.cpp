@@ -69,14 +69,14 @@ void PlayerEditAlert::init()
 
     auto message = new TextArea(_message.c_str(), bgX+194, bgY+213);
     message->setWidth(250);
-    message->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    message->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
     message->setFont(font1_ff9f48ff);
 
     auto doneBox = new Image("art/intrface/donebox.frm");
     doneBox->setX(bgX+254);
     doneBox->setY(bgY+270);
 
-    auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+264, bgY+273);
+    auto doneButton = new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, bgX+264, bgY+273);
     doneButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     auto doneLabel = new TextArea(_t(MSG_EDITOR, 100), bgX+284, bgY+273);

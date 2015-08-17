@@ -33,14 +33,6 @@ class UI;
 
 class Mouse
 {
-protected:
-    int _x = 320;
-    int _y = 240;
-    bool _visible = true;
-    unsigned int _type = NONE;
-    std::vector<unsigned int> _states;
-    UI* _ui = 0;
-    void _setType(unsigned int type);
 public:
     enum {
         NONE = 0,
@@ -67,16 +59,17 @@ public:
         WAIT,
         HAND
     };
-    enum {
-        ICON_ROTATE = 1,
-        ICON_SKILL,
-        ICON_INVENTORY,
-        ICON_CANCEL,
-        ICON_LOOK,
-        ICON_TALK,
-        ICON_PUSH,
-        ICON_UNLOAD,
-        ICON_USE
+    enum class Icon
+    {
+        ROTATE = 1,
+        SKILL,
+        INVENTORY,
+        CANCEL,
+        LOOK,
+        TALK,
+        PUSH,
+        UNLOAD,
+        USE
     };
     Mouse();
     ~Mouse();
@@ -99,6 +92,15 @@ public:
     void think();
 
     UI* ui();
+
+protected:
+    int _x = 320;
+    int _y = 240;
+    bool _visible = true;
+    unsigned int _type = NONE;
+    std::vector<unsigned int> _states;
+    UI* _ui = 0;
+    void _setType(unsigned int type);
 };
 
 }

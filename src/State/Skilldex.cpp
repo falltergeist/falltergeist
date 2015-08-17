@@ -68,15 +68,15 @@ void Skilldex::init()
     background->setY(backgroundY);
 
     // buttons
-    auto sneakButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44);
-    auto lockpickButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36);
-    auto stealButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*2);
-    auto trapsButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*3);
-    auto firstAidButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*4);
-    auto doctorButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*5);
-    auto scienceButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*6);
-    auto repairButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*7);
-    auto cancelButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+48, backgroundY+338);
+    auto sneakButton = new ImageButton(ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44);
+    auto lockpickButton = new ImageButton(ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36);
+    auto stealButton = new ImageButton(ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*2);
+    auto trapsButton = new ImageButton(ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*3);
+    auto firstAidButton = new ImageButton(ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*4);
+    auto doctorButton = new ImageButton(ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*5);
+    auto scienceButton = new ImageButton(ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*6);
+    auto repairButton = new ImageButton(ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*7);
+    auto cancelButton = new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+48, backgroundY+338);
 
     // counters
     auto sneakCounter = new BigCounter(backgroundX + 111, backgroundY + 48, 3);
@@ -108,55 +108,55 @@ void Skilldex::init()
     auto skilldexLabel = new TextArea(_t(MSG_SKILLDEX, 100), backgroundX+56, backgroundY+14);
     skilldexLabel->setFont(font);
     skilldexLabel->setWidth(76);
-    skilldexLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    skilldexLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
 
     // label: sneak (102)
     auto sneakLabel = new TextArea(_t(MSG_SKILLDEX, 102), backgroundX+17, backgroundY+52);
     sneakLabel->setFont(font);
     sneakLabel->setWidth(84);
-    sneakLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    sneakLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
 
     // label: lockpick (103)
     auto lockpickLabel = new TextArea(_t(MSG_SKILLDEX, 103), backgroundX+17, backgroundY+52+36);
     lockpickLabel->setFont(font);
     lockpickLabel->setWidth(84);
-    lockpickLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    lockpickLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
 
     // label: steal (104)
     auto stealLabel = new TextArea(_t(MSG_SKILLDEX, 104), backgroundX+17, backgroundY+52+36*2);
     stealLabel->setFont(font);
     stealLabel->setWidth(84);
-    stealLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    stealLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
 
     // label: traps (105)
     auto trapsLabel = new TextArea(_t(MSG_SKILLDEX, 105), backgroundX+17, backgroundY+52+36*3);
     trapsLabel->setFont(font);
     trapsLabel->setWidth(84);
-    trapsLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    trapsLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
 
     // label: first aid (106)
     auto firstAidLabel = new TextArea(_t(MSG_SKILLDEX, 106), backgroundX+17, backgroundY+52+36*4);
     firstAidLabel->setFont(font);
     firstAidLabel->setWidth(84);
-    firstAidLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    firstAidLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
 
     // label: doctor (107)
     auto doctorLabel = new TextArea(_t(MSG_SKILLDEX, 107), backgroundX+17, backgroundY+52+36*5);
     doctorLabel->setFont(font);
     doctorLabel->setWidth(84);
-    doctorLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    doctorLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
 
     // label: science (108)
     auto scienceLabel = new TextArea(_t(MSG_SKILLDEX, 108), backgroundX+17, backgroundY+52+36*6);
     scienceLabel->setFont(font);
     scienceLabel->setWidth(84);
-    scienceLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    scienceLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
 
     // label: repair (109)
     auto repairLabel = new TextArea(_t(MSG_SKILLDEX, 109), backgroundX+17, backgroundY+52+36*7);
     repairLabel->setFont(font);
     repairLabel->setWidth(84);
-    repairLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    repairLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
 
     // label: cancel (101)
     auto cancelButtonLabel = new TextArea(_t(MSG_SKILLDEX, 101), backgroundX+70, backgroundY+337);

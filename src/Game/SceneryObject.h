@@ -38,6 +38,15 @@ namespace Game
 class SceneryObject : public Object
 {
 public:
+    enum class Subtype
+    {
+        DOOR = 0,
+        STAIRS,
+        ELEVATOR,
+        LADDER,
+        GENERIC
+    };
+
     SceneryObject();
     ~SceneryObject() override;
 
@@ -46,6 +55,7 @@ public:
 
 protected:
     char _soundId = 0;
+    Subtype _subtype;
 };
 
 }

@@ -113,7 +113,7 @@ void ItemsList::onMouseDragStart(Event::Mouse* event)
 {
     unsigned int index = (event->y() - y())/_slotHeight;
     _draggedItem = inventoryItems()->at(index);
-    _draggedItem->setType(InventoryItem::TYPE_DRAG);
+    _draggedItem->setType(InventoryItem::Type::DRAG);
     _draggedItem->setX(event->x());
     _draggedItem->setY(event->y());
     Logger::critical() << "mousedragstart at " << index << " (" << _draggedItem->item()->name() << ")" << std::endl;
@@ -168,7 +168,7 @@ void ItemsList::onItemDragStop(Event::Mouse* event)
         // @todo create addItem method
         this->addItem(inventoryItem, 1);
 
-        if (dynamic_cast<Game::ArmorItemObject*>(inventoryItem->item()) && inventoryItem->type() == InventoryItem::TYPE_SLOT)
+        if (dynamic_cast<Game::ArmorItemObject*>(inventoryItem->item()) && inventoryItem->type() == InventoryItem::Type::SLOT)
         {
             Game::getInstance()->player()->setArmorSlot(nullptr);
         }

@@ -43,9 +43,9 @@ void Opcode803AHandler::_run()
     {
         _error(std::string("op_sub(a, b): Incompatible types: ") + aValue.typeName() + " - " + bValue.typeName());
     }
-    if (aValue.type() == VMStackValue::TYPE_INTEGER)
+    if (aValue.type() == VMStackValue::Type::INTEGER)
     {
-        if (bValue.type() == VMStackValue::TYPE_INTEGER)
+        if (bValue.type() == VMStackValue::Type::INTEGER)
         {
             _vm->dataStack()->push(aValue.integerValue() - bValue.integerValue());
         }
@@ -56,7 +56,7 @@ void Opcode803AHandler::_run()
     }
     else
     {
-        if (bValue.type() == VMStackValue::TYPE_INTEGER)
+        if (bValue.type() == VMStackValue::Type::INTEGER)
         {
             _vm->dataStack()->push(aValue.floatValue() - (float)bValue.integerValue());
         }
