@@ -26,6 +26,7 @@
 #include <memory>
 
 // Falltergeist includes
+#include "Base/Singleton.h"
 
 // Third party includes
 #include "SDL.h"
@@ -58,7 +59,6 @@ class GameTime;
 class Game
 {
 public:
-    ~Game();
     static Game* getInstance();
 
     void shutdown();
@@ -70,6 +70,7 @@ public:
     void popState();
     void run();
     void quit();
+    void init(std::unique_ptr<Settings> settings);
 
     void handle();
     void think();
@@ -86,7 +87,7 @@ public:
     void setGVAR(unsigned int number, int value);
     int GVAR(unsigned int number);
 
-    Settings* settings();
+    Settings* settings() const;
     AnimatedPalette* animatedPalette();
 
 protected:
@@ -105,20 +106,19 @@ protected:
     TextArea* _mousePosition = 0;
     TextArea* _currentTime = 0;
     TextArea* _falltergeistVersion = 0;
-    Settings* _settings = 0;
+    std::unique_ptr<Settings> _settings;
     AnimatedPalette* _animatedPalette = 0;
     bool _quit = false;
     SDL_Event _event;
     bool _initialized = false;
-    void _initialize();
     void _initGVARS();
 private:
-    Game() {}
-    Game(Game const&);
-    void operator=(Game const&);
-    static Game* _instance;
-    static bool _instanceFlag;
+    friend class Singleton<Game>;
 
+    Game();
+    ~Game();
+    Game(Game const&) = delete;
+    void operator=(Game const&) = delete;
 };
 
 Game* getInstance();
