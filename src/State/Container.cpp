@@ -86,12 +86,12 @@ void Container::init()
 
 }
 
-Game::GameContainerItemObject* Container::object()
+Game::ContainerItemObject* Container::object()
 {
     return _object;
 }
 
-void Container::setObject(Game::GameContainerItemObject* object)
+void Container::setObject(Game::ContainerItemObject* object)
 {
     _object = object;
 }

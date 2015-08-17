@@ -17,10 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Game/StairsSceneryObject.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "StairsSceneryObject.h"
 
 // Third party includes
 
@@ -29,12 +31,12 @@ namespace Falltergeist
 namespace Game
 {
 
-GameStairsSceneryObject::GameStairsSceneryObject() : GameSceneryObject()
+StairsSceneryObject::StairsSceneryObject() : SceneryObject()
 {
     _subtype = TYPE_SCENERY_STAIRS;
 }
 
-GameStairsSceneryObject::~GameStairsSceneryObject()
+StairsSceneryObject::~StairsSceneryObject()
 {
 }
 

@@ -17,16 +17,16 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAME_H
-#define FALLTERGEIST_GAME_H
+#ifndef FALLTERGEIST_GAME_GAME_H
+#define FALLTERGEIST_GAME_GAME_H
 
 // C++ standard includes
-#include <vector>
-#include <string>
 #include <memory>
+#include <string>
+#include <vector>
 
 // Falltergeist includes
-#include "Base/Singleton.h"
+#include "../Base/Singleton.h"
 
 // Third party includes
 #include "SDL.h"
@@ -55,9 +55,8 @@ class Settings;
 
 namespace Game
 {
-
-class GameDudeObject;
-class GameTime;
+class DudeObject;
+class Time;
 
 class Game
 {
@@ -79,11 +78,11 @@ public:
     void think();
     void render();
 
-    void setPlayer(GameDudeObject* player);
-    GameDudeObject* player();
+    void setPlayer(DudeObject* player);
+    DudeObject* player();
     Mouse* mouse();
     Renderer* renderer();
-    GameTime* gameTime();
+    Time* gameTime();
     State::Location* locationState();
     Audio::Mixer* mixer();
 
@@ -100,8 +99,8 @@ protected:
     std::vector<State::State*> _statesForThinkAndHandle;
     std::vector<State::State*> _statesForDelete;
 
-    GameDudeObject* _player = 0;
-    GameTime* _gameTime = 0;
+    DudeObject* _player = 0;
+    Time* _gameTime = 0;
     Renderer* _renderer = 0;
     Mouse* _mouse = 0;
     std::unique_ptr<Audio::Mixer> _mixer;
@@ -129,4 +128,4 @@ Game* getInstance();
 }
 }
 
-#endif // FALLTERGEIST_GAME_H
+#endif // FALLTERGEIST_GAME_GAME_H

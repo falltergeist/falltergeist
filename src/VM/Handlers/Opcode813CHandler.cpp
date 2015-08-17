@@ -38,7 +38,7 @@ void Opcode813CHandler::_run()
 {
     int amount = _vm->dataStack()->popInteger();
     int skill = _vm->dataStack()->popInteger();
-    auto critter = static_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
+    auto critter = static_cast<Game::CritterObject*>(_vm->dataStack()->popObject());
 
     critter->setSkillGainedValue((SKILL)skill, critter->skillGainedValue((SKILL)skill) + amount);
 

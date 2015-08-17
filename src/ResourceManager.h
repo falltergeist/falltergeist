@@ -38,7 +38,7 @@ namespace Falltergeist
 {
 namespace Game
 {
-    class GameLocation;
+    class Location;
 }
 
 class Surface;
@@ -47,19 +47,6 @@ class Font;
 
 class ResourceManager
 {
-protected:
-    friend class Base::Singleton<ResourceManager>;
-
-    std::vector<libfalltergeist::Dat::File*> _datFiles;
-    std::unordered_map<std::string, libfalltergeist::Dat::Item*> _datFilesItems;
-    std::unordered_map<std::string, Texture*> _textures;
-    std::unordered_map<std::string, std::shared_ptr<Font>> _fonts;
-    std::unordered_map<unsigned int, Game::GameLocation*> _gameLocations;
-
-    ResourceManager();
-    ~ResourceManager();
-    ResourceManager(const ResourceManager&) = delete;
-    ResourceManager& operator=(const ResourceManager&) = delete;
 
 public:
     static ResourceManager* getInstance();
@@ -89,8 +76,22 @@ public:
     std::shared_ptr<Font> font(const std::string& filename = "font1.aaf", unsigned int color = 0x3ff800ff);
     void unloadResources();
     std::string FIDtoFrmName(unsigned int FID);
-    Game::GameLocation* gameLocation(unsigned int number);
+    Game::Location* gameLocation(unsigned int number);
     void shutdown();
+
+protected:
+    friend class Base::Singleton<ResourceManager>;
+
+    std::vector<libfalltergeist::Dat::File*> _datFiles;
+    std::unordered_map<std::string, libfalltergeist::Dat::Item*> _datFilesItems;
+    std::unordered_map<std::string, Texture*> _textures;
+    std::unordered_map<std::string, std::shared_ptr<Font>> _fonts;
+    std::unordered_map<unsigned int, Game::Location*> _gameLocations;
+
+    ResourceManager();
+    ~ResourceManager();
+    ResourceManager(const ResourceManager&) = delete;
+    ResourceManager& operator=(const ResourceManager&) = delete;
 };
 
 }

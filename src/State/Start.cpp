@@ -81,7 +81,7 @@ void Start::think()
     State::think();
     if (game->settings()->forceLocation())
     {
-        auto player = new Game::GameDudeObject();
+        auto player = new Game::DudeObject();
         player->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/combat.gcd"));
         game->setPlayer(player);
         game->setState(new Location());

@@ -40,7 +40,7 @@ void Opcode8122Handler::_run()
     debug << "[8122] [+] void poison(GameCritterObject* who, int amount)" << std::endl;
     int amount = _vm->dataStack()->popInteger();
     debug << "    amount = " << amount << std::endl;
-    auto critter = dynamic_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
+    auto critter = dynamic_cast<Game::CritterObject*>(_vm->dataStack()->popObject());
     if (!critter)
     {
         _error("poison - WHO is not critter");

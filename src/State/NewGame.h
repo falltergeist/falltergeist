@@ -32,7 +32,7 @@ namespace Falltergeist
 {
 namespace Game
 {
-    class GameDudeObject;
+    class DudeObject;
 }
 
 class GcdFileType;
@@ -47,7 +47,7 @@ class NewGame : public State
 {
 protected:
     unsigned char _selectedCharacter = 0;
-    std::vector<Game::GameDudeObject*> _characters;
+    std::vector<Game::DudeObject*> _characters;
 
     void _changeCharacter();
 

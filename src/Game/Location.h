@@ -17,12 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMELOCATION_H
-#define FALLTERGEIST_GAMELOCATION_H
+#ifndef FALLTERGEIST_GAME_LOCATION_H
+#define FALLTERGEIST_GAME_LOCATION_H
 
 // C++ standard includes
-#include <string>
 #include <map>
+#include <string>
 #include <vector>
 
 // Falltergeist includes
@@ -34,19 +34,11 @@ namespace Falltergeist
 namespace Game
 {
 
-class GameLocation
+class Location
 {
-protected:
-    std::string _name;
-    std::string _filename;
-    std::string _music;
-    std::map<std::string, unsigned int> _ambient;
-    bool _saveable = false;
-    bool _removeBodies = false;
-    bool _pipboy = true;
-    std::map<unsigned int, unsigned int> _startPoints;
 public:
-    GameLocation();
+    Location();
+    ~Location();
 
     std::string name();
     void setName(const std::string& value);
@@ -69,9 +61,18 @@ public:
     void setPipboy(bool value);
 
     std::map<unsigned int, unsigned int>* startPoints();
+
+protected:
+    std::string _name;
+    std::string _filename;
+    std::string _music;
+    std::map<std::string, unsigned int> _ambient;
+    bool _saveable = false;
+    bool _removeBodies = false;
+    bool _pipboy = true;
+    std::map<unsigned int, unsigned int> _startPoints;
 };
 
 }
 }
-
-#endif // FALLTERGEIST_GAMELOCATION_H
+#endif // FALLTERGEIST_GAME_LOCATION_H

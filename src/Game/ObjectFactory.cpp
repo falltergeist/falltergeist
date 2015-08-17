@@ -17,26 +17,28 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Game/ObjectFactory.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "AmmoItemObject.h"
-#include "ArmorItemObject.h"
-#include "ContainerItemObject.h"
-#include "CritterObject.h"
-#include "DoorSceneryObject.h"
-#include "DrugItemObject.h"
-#include "ElevatorSceneryObject.h"
-#include "ExitMiscObject.h"
-#include "GenericSceneryObject.h"
-#include "KeyItemObject.h"
-#include "LadderSceneryObject.h"
-#include "MiscItemObject.h"
-#include "MiscObject.h"
-#include "ObjectFactory.h"
-#include "StairsSceneryObject.h"
-#include "WallObject.h"
-#include "WeaponItemObject.h"
+#include "../Game/AmmoItemObject.h"
+#include "../Game/ArmorItemObject.h"
+#include "../Game/ContainerItemObject.h"
+#include "../Game/CritterObject.h"
+#include "../Game/DoorSceneryObject.h"
+#include "../Game/DrugItemObject.h"
+#include "../Game/ElevatorSceneryObject.h"
+#include "../Game/ExitMiscObject.h"
+#include "../Game/GenericSceneryObject.h"
+#include "../Game/KeyItemObject.h"
+#include "../Game/LadderSceneryObject.h"
+#include "../Game/MiscItemObject.h"
+#include "../Game/MiscObject.h"
+#include "../Game/StairsSceneryObject.h"
+#include "../Game/WallObject.h"
+#include "../Game/WeaponItemObject.h"
 #include "../Exception.h"
 #include "../ResourceManager.h"
 #include "../VM/VM.h"
@@ -48,14 +50,15 @@ namespace Falltergeist
 namespace Game
 {
 
-GameObjectFactory::GameObjectFactory()
+ObjectFactory* ObjectFactory::getInstance()
 {
+    return Base::Singleton<ObjectFactory>::get();
 }
 
-GameObject* GameObjectFactory::createObject(unsigned int PID)
+Object* ObjectFactory::createObject(unsigned int PID)
 {
     auto proto = ResourceManager::getInstance()->proFileType(PID);
-    GameObject* object = 0;
+    Object* object = 0;
     switch ((OBJECT_TYPE)proto->typeId())
     {
         case OBJECT_TYPE::ITEM:
@@ -64,67 +67,67 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
             {
                 case ITEM_TYPE::AMMO:
                 {
-                    object = new GameAmmoItemObject();
+                    object = new AmmoItemObject();
                     break;
                 }
                 case ITEM_TYPE::ARMOR:
                 {
-                    object = new GameArmorItemObject();
+                    object = new ArmorItemObject();
                     for (unsigned i = (unsigned)DAMAGE::NORMAL; i != (unsigned)DAMAGE::POISON; ++i)
                     {
-                        ((GameArmorItemObject*)object)->setDamageResist((DAMAGE)i, proto->damageResist()->at(i));
-                        ((GameArmorItemObject*)object)->setDamageThreshold((DAMAGE)i, proto->damageThreshold()->at(i));
+                        ((ArmorItemObject*)object)->setDamageResist((DAMAGE)i, proto->damageResist()->at(i));
+                        ((ArmorItemObject*)object)->setDamageThreshold((DAMAGE)i, proto->damageThreshold()->at(i));
                     }
-                    ((GameArmorItemObject*)object)->setPerk(proto->perk());
-                    ((GameArmorItemObject*)object)->setMaleFID(proto->armorMaleFID());
-                    ((GameArmorItemObject*)object)->setFemaleFID(proto->armorFemaleFID());
-                    ((GameArmorItemObject*)object)->setArmorClass(proto->armorClass());
+                    ((ArmorItemObject*)object)->setPerk(proto->perk());
+                    ((ArmorItemObject*)object)->setMaleFID(proto->armorMaleFID());
+                    ((ArmorItemObject*)object)->setFemaleFID(proto->armorFemaleFID());
+                    ((ArmorItemObject*)object)->setArmorClass(proto->armorClass());
                     break;
                 }
                 case ITEM_TYPE::CONTAINER:
                 {
-                    object = new GameContainerItemObject();
+                    object = new ContainerItemObject();
                     break;
                 }
                 case ITEM_TYPE::DRUG:
                 {
-                    object = new GameDrugItemObject();
+                    object = new DrugItemObject();
                     break;
                 }
                 case ITEM_TYPE::KEY:
                 {
-                    object = new GameKeyItemObject();
+                    object = new KeyItemObject();
                     break;
                 }
                 case ITEM_TYPE::MISC:
                 {
-                    object = new GameMiscItemObject();
+                    object = new MiscItemObject();
                     break;
                 }
                 case ITEM_TYPE::WEAPON:
                 {
-                    object = new GameWeaponItemObject();
+                    object = new WeaponItemObject();
 
-                    ((GameWeaponItemObject*)object)->setPerk(proto->perk());
-                    ((GameWeaponItemObject*)object)->setAnimationCode(proto->weaponAnimationCode());
-                    ((GameWeaponItemObject*)object)->setDamageMin(proto->weaponDamageMin());
-                    ((GameWeaponItemObject*)object)->setDamageMax(proto->weaponDamageMax());
-                    ((GameWeaponItemObject*)object)->setDamageType(proto->weaponDamageType());
-                    ((GameWeaponItemObject*)object)->setRangePrimary(proto->weaponRangePrimary());
-                    ((GameWeaponItemObject*)object)->setRangeSecondary(proto->weaponRangeSecondary());
-                    ((GameWeaponItemObject*)object)->setMinimumStrength(proto->weaponMinimumStrenght());
-                    ((GameWeaponItemObject*)object)->setActionCostPrimary(proto->weaponActionCostPrimary());
-                    ((GameWeaponItemObject*)object)->setActionCostSecondary(proto->weaponActionCostSecondary());
-                    ((GameWeaponItemObject*)object)->setBurstRounds(proto->weaponBurstRounds());
-                    ((GameWeaponItemObject*)object)->setAmmoType(proto->weaponAmmoType());
-                    ((GameWeaponItemObject*)object)->setAmmoPID(proto->weaponAmmoPID());
-                    ((GameWeaponItemObject*)object)->setAmmoCapacity(proto->weaponAmmoCapacity());
+                    ((WeaponItemObject*)object)->setPerk(proto->perk());
+                    ((WeaponItemObject*)object)->setAnimationCode(proto->weaponAnimationCode());
+                    ((WeaponItemObject*)object)->setDamageMin(proto->weaponDamageMin());
+                    ((WeaponItemObject*)object)->setDamageMax(proto->weaponDamageMax());
+                    ((WeaponItemObject*)object)->setDamageType(proto->weaponDamageType());
+                    ((WeaponItemObject*)object)->setRangePrimary(proto->weaponRangePrimary());
+                    ((WeaponItemObject*)object)->setRangeSecondary(proto->weaponRangeSecondary());
+                    ((WeaponItemObject*)object)->setMinimumStrength(proto->weaponMinimumStrenght());
+                    ((WeaponItemObject*)object)->setActionCostPrimary(proto->weaponActionCostPrimary());
+                    ((WeaponItemObject*)object)->setActionCostSecondary(proto->weaponActionCostSecondary());
+                    ((WeaponItemObject*)object)->setBurstRounds(proto->weaponBurstRounds());
+                    ((WeaponItemObject*)object)->setAmmoType(proto->weaponAmmoType());
+                    ((WeaponItemObject*)object)->setAmmoPID(proto->weaponAmmoPID());
+                    ((WeaponItemObject*)object)->setAmmoCapacity(proto->weaponAmmoCapacity());
                     break;
                 }
             }
-            ((GameItemObject*)object)->setWeight(proto->weight());
+            ((ItemObject*)object)->setWeight(proto->weight());
             // @TODO: ((GameItemObject*)object)->setVolume(proto->containerSize());
-            ((GameItemObject*)object)->setInventoryFID(proto->inventoryFID());
+            ((ItemObject*)object)->setInventoryFID(proto->inventoryFID());
             auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_item.msg");
             try
             {
@@ -136,7 +139,7 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
         }
         case OBJECT_TYPE::CRITTER:
         {
-            object = new GameCritterObject();
+            object = new CritterObject();
             auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_crit.msg");
             try
             {
@@ -147,26 +150,26 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
 
             for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
             {
-                ((GameCritterObject*)object)->setStat((STAT)i, proto->critterStats()->at(i));
-                ((GameCritterObject*)object)->setStatBonus((STAT)i, proto->critterStatsBonus()->at(i));
+                ((CritterObject*)object)->setStat((STAT)i, proto->critterStats()->at(i));
+                ((CritterObject*)object)->setStatBonus((STAT)i, proto->critterStatsBonus()->at(i));
             }
             for (unsigned i = (unsigned)SKILL::SMALL_GUNS; i <= (unsigned)SKILL::OUTDOORSMAN; i++)
             {
-                ((GameCritterObject*)object)->setSkillTagged((SKILL)i, proto->critterSkills()->at(i));
+                ((CritterObject*)object)->setSkillTagged((SKILL)i, proto->critterSkills()->at(i));
             }
-            ((GameCritterObject*)object)->setActionPoints(proto->critterActionPoints());
-            ((GameCritterObject*)object)->setActionPointsMax(proto->critterActionPoints());
-            ((GameCritterObject*)object)->setHitPointsMax(proto->critterHitPointsMax());
-            ((GameCritterObject*)object)->setArmorClass(proto->critterArmorClass());
-            ((GameCritterObject*)object)->setCarryWeightMax(proto->critterCarryWeightMax());
-            ((GameCritterObject*)object)->setMeleeDamage(proto->critterMeleeDamage());
-            ((GameCritterObject*)object)->setSequence(proto->critterSequence());
-            ((GameCritterObject*)object)->setCriticalChance(proto->critterCriticalChance());
-            ((GameCritterObject*)object)->setHealingRate(proto->critterHealingRate());
+            ((CritterObject*)object)->setActionPoints(proto->critterActionPoints());
+            ((CritterObject*)object)->setActionPointsMax(proto->critterActionPoints());
+            ((CritterObject*)object)->setHitPointsMax(proto->critterHitPointsMax());
+            ((CritterObject*)object)->setArmorClass(proto->critterArmorClass());
+            ((CritterObject*)object)->setCarryWeightMax(proto->critterCarryWeightMax());
+            ((CritterObject*)object)->setMeleeDamage(proto->critterMeleeDamage());
+            ((CritterObject*)object)->setSequence(proto->critterSequence());
+            ((CritterObject*)object)->setCriticalChance(proto->critterCriticalChance());
+            ((CritterObject*)object)->setHealingRate(proto->critterHealingRate());
             for (unsigned i = (unsigned)DAMAGE::NORMAL; i <= (unsigned)DAMAGE::POISON; i++)
             {
-                ((GameCritterObject*)object)->setDamageResist((DAMAGE)i, proto->damageResist()->at(i));
-                ((GameCritterObject*)object)->setDamageThreshold((DAMAGE)i, proto->damageThreshold()->at(i));
+                ((CritterObject*)object)->setDamageResist((DAMAGE)i, proto->damageResist()->at(i));
+                ((CritterObject*)object)->setDamageThreshold((DAMAGE)i, proto->damageThreshold()->at(i));
             }
             break;
         }
@@ -176,28 +179,28 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
             {
                 case SCENERY_TYPE::DOOR:
                 {
-                    object = new GameDoorSceneryObject();
+                    object = new DoorSceneryObject();
                     break;
                 }
                 case SCENERY_TYPE::ELEVATOR:
                 {
-                    object = new GameElevatorSceneryObject();
+                    object = new ElevatorSceneryObject();
                     break;
                 }
                 case SCENERY_TYPE::GENERIC:
                 {
-                    object = new GameGenericSceneryObject();
+                    object = new GenericSceneryObject();
                     break;
                 }
                 case SCENERY_TYPE::LADDER_TOP:
                 case SCENERY_TYPE::LADDER_BOTTOM:
                 {
-                    object = new GameLadderSceneryObject();
+                    object = new LadderSceneryObject();
                     break;
                 }
                 case SCENERY_TYPE::STAIRS:
                 {
-                    object = new GameStairsSceneryObject();
+                    object = new StairsSceneryObject();
                     break;
                 }
             }
@@ -209,36 +212,36 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
             }
             catch (libfalltergeist::Exception) {}
 
-            ((GameSceneryObject*)object)->setSoundId((char)proto->soundId());
+            ((SceneryObject*)object)->setSoundId((char)proto->soundId());
 
             //first two bytes are orientation. second two - unknown
             unsigned short orientation = proto->flagsExt() >> 16;
             switch (orientation)
             {
                 case 0x0000:
-                    object->setLightOrientation(GameObject::ORIENTATION_NS);
+                    object->setLightOrientation(Object::ORIENTATION_NS);
                     break;
                 case 0x0800:
-                    object->setLightOrientation(GameObject::ORIENTATION_EW);
+                    object->setLightOrientation(Object::ORIENTATION_EW);
                     break;
                 case 0x1000:
-                    object->setLightOrientation(GameObject::ORIENTATION_NC);
+                    object->setLightOrientation(Object::ORIENTATION_NC);
                     break;
                 case 0x2000:
-                    object->setLightOrientation(GameObject::ORIENTATION_SC);
+                    object->setLightOrientation(Object::ORIENTATION_SC);
                     break;
                 case 0x4000:
-                    object->setLightOrientation(GameObject::ORIENTATION_EC);
+                    object->setLightOrientation(Object::ORIENTATION_EC);
                     break;
                 case 0x8000:
-                    object->setLightOrientation(GameObject::ORIENTATION_WC);
+                    object->setLightOrientation(Object::ORIENTATION_WC);
                     break;
             }
             break;
         }
         case OBJECT_TYPE::WALL:
         {
-            object = new GameWallObject();
+            object = new WallObject();
             auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_wall.msg");
             try
             {
@@ -252,29 +255,29 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
             switch (orientation)
             {
                 case 0x0000:
-                    object->setLightOrientation(GameObject::ORIENTATION_NS);
+                    object->setLightOrientation(Object::ORIENTATION_NS);
                     break;
                 case 0x0800:
-                    object->setLightOrientation(GameObject::ORIENTATION_EW);
+                    object->setLightOrientation(Object::ORIENTATION_EW);
                     break;
                 case 0x1000:
-                    object->setLightOrientation(GameObject::ORIENTATION_NC);
+                    object->setLightOrientation(Object::ORIENTATION_NC);
                     break;
                 case 0x2000:
-                    object->setLightOrientation(GameObject::ORIENTATION_SC);
+                    object->setLightOrientation(Object::ORIENTATION_SC);
                     break;
                 case 0x4000:
-                    object->setLightOrientation(GameObject::ORIENTATION_EC);
+                    object->setLightOrientation(Object::ORIENTATION_EC);
                     break;
                 case 0x8000:
-                    object->setLightOrientation(GameObject::ORIENTATION_WC);
+                    object->setLightOrientation(Object::ORIENTATION_WC);
                     break;
             }
             break;
         }
         case OBJECT_TYPE::TILE:
         {
-            throw Exception("GameObjectFactory - unexpected tile object");
+            throw Exception("ObjectFactory - unexpected tile object");
         }
         case OBJECT_TYPE::MISC:
         {
@@ -289,10 +292,10 @@ GameObject* GameObjectFactory::createObject(unsigned int PID)
                 case 21:
                 case 22:
                 case 23:
-                    object = new GameExitMiscObject();
+                    object = new ExitMiscObject();
                     break;
                 default:
-                    object = new GameMiscObject();
+                    object = new MiscObject();
                     break;
             }
 

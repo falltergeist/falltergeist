@@ -109,17 +109,17 @@ void NewGame::init()
 
     addUI("stats3_values", new TextArea(383, 150));
 
-    auto combat = new Game::GameDudeObject();
+    auto combat = new Game::DudeObject();
     combat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/combat.gcd"));
     combat->setBiography(ResourceManager::getInstance()->bioFileType("premade/combat.bio")->text());
     _characters.push_back(combat);
 
-    auto stealth = new Game::GameDudeObject();
+    auto stealth = new Game::DudeObject();
     stealth->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/stealth.gcd"));
     stealth->setBiography(ResourceManager::getInstance()->bioFileType("premade/stealth.bio")->text());
     _characters.push_back(stealth);
 
-    auto diplomat = new Game::GameDudeObject();
+    auto diplomat = new Game::DudeObject();
     diplomat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/diplomat.gcd"));
     diplomat->setBiography(ResourceManager::getInstance()->bioFileType("premade/diplomat.bio")->text());
     _characters.push_back(diplomat);
@@ -147,7 +147,7 @@ void NewGame::doEdit()
 
 void NewGame::doCreate()
 {
-    auto none = new Game::GameDudeObject();
+    auto none = new Game::DudeObject();
     none->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/blank.gcd"));
     Game::getInstance()->setPlayer(none);
     Game::getInstance()->pushState(new PlayerCreate());

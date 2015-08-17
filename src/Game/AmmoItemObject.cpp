@@ -17,10 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Game/AmmoItemObject.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "AmmoItemObject.h"
 
 // Third party includes
 
@@ -29,12 +31,12 @@ namespace Falltergeist
 namespace Game
 {
 
-GameAmmoItemObject::GameAmmoItemObject() : GameItemObject()
+AmmoItemObject::AmmoItemObject() : ItemObject()
 {
     _subtype = TYPE_ITEM_AMMO;
 }
 
-GameAmmoItemObject::~GameAmmoItemObject()
+AmmoItemObject::~AmmoItemObject()
 {
 }
 

@@ -54,7 +54,7 @@ void Opcode810EHandler::_run()
         case 0x2: // ANIM_CLEAR
         {
             auto object = arg.objectValue();
-            if (auto critterObject = dynamic_cast<Game::GameCritterObject*>(object))
+            if (auto critterObject = dynamic_cast<Game::CritterObject*>(object))
             {
                 critterObject->stopMovement();
             }

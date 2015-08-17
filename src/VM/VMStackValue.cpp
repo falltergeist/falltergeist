@@ -57,7 +57,7 @@ VMStackValue::VMStackValue(const std::string &value)
     _stringValue = value;
 }
 
-VMStackValue::VMStackValue(Game::GameObject *value)
+VMStackValue::VMStackValue(Game::Object *value)
 {
     //throw Exception("VMStackValue::VMStackValue(Game::GameObject*) - null object value is not allowed, use integer 0");
     _type = TYPE_OBJECT;
@@ -96,7 +96,7 @@ std::string VMStackValue::stringValue() const
     return _stringValue;
 }
 
-Game::GameObject* VMStackValue::objectValue() const
+Game::Object* VMStackValue::objectValue() const
 {
     if (_type == TYPE_INTEGER && _intValue == 0)
     {

@@ -35,14 +35,14 @@ namespace Event
 }
 namespace Game
 {
-    class GameItemObject;
+    class ItemObject;
 }
 class InventoryItem;
 
 class ItemsList : public ActiveUI
 {
 protected:
-    std::vector<Game::GameItemObject*>* _items = 0;
+    std::vector<Game::ItemObject*>* _items = 0;
     InventoryItem* _draggedItem = 0;
     std::vector<InventoryItem*> _inventoryItems;
     unsigned int _type = TYPE_INVENTORY;
@@ -55,8 +55,8 @@ public:
 
     ItemsList(int x = 0, int y = 0);
 
-    void setItems(std::vector<Game::GameItemObject*>* items);
-    std::vector<Game::GameItemObject*>* items();
+    void setItems(std::vector<Game::ItemObject*>* items);
+    std::vector<Game::ItemObject*>* items();
 
     std::vector<InventoryItem*>* inventoryItems();
     InventoryItem* draggedItem();

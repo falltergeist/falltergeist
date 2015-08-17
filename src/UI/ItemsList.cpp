@@ -48,13 +48,13 @@ ItemsList::ItemsList(int x, int y) : ActiveUI(x, y)
     addEventHandler("mousedragstop",  [this](Event::Event* event){ this->onMouseDragStop(dynamic_cast<Event::Mouse*>(event)); });
 }
 
-void ItemsList::setItems(std::vector<Game::GameItemObject *>* items)
+void ItemsList::setItems(std::vector<Game::ItemObject*>* items)
 {
     _items = items;
     update();
 }
 
-std::vector<Game::GameItemObject*>* ItemsList::items()
+std::vector<Game::ItemObject*>* ItemsList::items()
 {
     return _items;
 }
@@ -168,7 +168,7 @@ void ItemsList::onItemDragStop(Event::Mouse* event)
         // @todo create addItem method
         this->addItem(inventoryItem, 1);
 
-        if (dynamic_cast<Game::GameArmorItemObject*>(inventoryItem->item()) && inventoryItem->type() == InventoryItem::TYPE_SLOT)
+        if (dynamic_cast<Game::ArmorItemObject*>(inventoryItem->item()) && inventoryItem->type() == InventoryItem::TYPE_SLOT)
         {
             Game::getInstance()->player()->setArmorSlot(nullptr);
         }
@@ -193,7 +193,7 @@ void ItemsList::removeItem(InventoryItem* item, unsigned int amount)
 {
     for (auto it = _items->begin(); it != _items->end(); ++it)
     {
-        Game::GameItemObject* object = *it;
+        Game::ItemObject* object = *it;
         if (object == item->item())
         {
             _items->erase(it);

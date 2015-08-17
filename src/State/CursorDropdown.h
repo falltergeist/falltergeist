@@ -38,7 +38,7 @@ namespace Event
 }
 namespace Game
 {
-    class GameObject;
+    class Object;
 }
 class Surface;
 class HiddenMask;
@@ -49,7 +49,7 @@ namespace State
 class CursorDropdown : public State
 {
 protected:
-    Game::GameObject* _object;
+    Game::Object* _object = nullptr;
     bool _onlyShowIcon;
     std::vector<int> _icons;
     int _initialX;
@@ -75,8 +75,8 @@ public:
 
     void onLeftButtonUp(Event::Mouse* event);
 
-    Game::GameObject* object();
-    void setObject(Game::GameObject* object);
+    Game::Object* object();
+    void setObject(Game::Object* object);
 
     void onStateActivate(Event::State* event) override;
     void onStateDeactivate(Event::State* event) override;

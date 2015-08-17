@@ -34,8 +34,7 @@ namespace Falltergeist
 {
 namespace Game
 {
-    class GameObject;
-
+    class Object;
 }
 class Animation;
 class Hexagon;
@@ -81,8 +80,8 @@ protected:
     bool _locationEnter = true;
     unsigned int _currentElevation = 0;
     unsigned int _lastClickedTile = 0;
-    Game::GameObject* _objectUnderCursor = NULL;
-    Game::GameObject* _actionCursorLastObject = NULL;
+    Game::Object* _objectUnderCursor = NULL;
+    Game::Object* _actionCursorLastObject = NULL;
     bool _actionCursorButtonPressed = false;
     PlayerPanel* _playerPanel = NULL;
 
@@ -91,10 +90,10 @@ protected:
     bool _scrollTop = false;
     bool _scrollBottom = false;
 
-    std::vector<Game::GameObject*> _objects;
+    std::vector<Game::Object*> _objects;
     TextArea* _hexagonInfo = 0;
     
-    std::vector<int> getCursorIconsForObject(Game::GameObject* object);
+    std::vector<int> getCursorIconsForObject(Game::Object* object);
 public:
     Location();
     ~Location();
@@ -114,19 +113,19 @@ public:
 
     std::map<std::string, VMStackValue>* EVARS();
 
-    static void moveObjectToHexagon(Game::GameObject* object, Hexagon* hexagon);
-    void destroyObject(Game::GameObject* object);
+    static void moveObjectToHexagon(Game::Object* object, Hexagon* hexagon);
+    void destroyObject(Game::Object* object);
     void centerCameraAtHexagon(Hexagon* hexagon);
     void centerCameraAtHexagon(int tileNum);
-    void handleAction(Game::GameObject* object, int action);
+    void handleAction(Game::Object* object, int action);
     void toggleCursorMode();
     PlayerPanel* playerPanelState();
     
     void displayMessage(const std::string& message);
 
     void onBackgroundClick(Event::Mouse* event);
-    void onObjectMouseEvent(Event::Event* event, Game::GameObject* object);
-    void onObjectHover(Event::Event* event, Game::GameObject* object);
+    void onObjectMouseEvent(Event::Event* event, Game::Object* object);
+    void onObjectHover(Event::Event* event, Game::Object* object);
     virtual void onKeyDown(Event::Keyboard* event);
 
     virtual void onStateActivate(Event::State* event);

@@ -45,7 +45,7 @@ void Opcode80FEHandler::_run()
     {
         _error("radiation_dec - object is NULL");
     }
-    auto critter = dynamic_cast<Game::GameCritterObject*>(object);
+    auto critter = dynamic_cast<Game::CritterObject*>(object);
     if (critter)
     {
         critter->setRadiationLevel(critter->radiationLevel() - amount);

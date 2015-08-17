@@ -23,7 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "State.h"
+#include "../State/State.h"
 
 // Third party includes
 
@@ -53,7 +53,7 @@ public:
     void onKeyDown(Event::Keyboard* event) override;
 
 private:
-    std::string _handItemSummary (Game::GameItemObject* hand);
+    std::string _handItemSummary (Game::ItemObject* hand);
     void _screenShow (unsigned int PID);
 };
 

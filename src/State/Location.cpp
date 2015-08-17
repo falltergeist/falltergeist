@@ -154,7 +154,7 @@ void Location::setLocation(const std::string& name)
     // @todo remove old objects from hexagonal grid
     for (auto mapObject : *mapObjects)
     {
-        auto object = Game::GameObjectFactory::createObject(mapObject->PID());
+        auto object = Game::ObjectFactory::getInstance()->createObject(mapObject->PID());
         if (!object)
         {
             Logger::error() << "Location::setLocation() - can't create object with PID: " << mapObject->PID() << std::endl;
@@ -168,7 +168,7 @@ void Location::setLocation(const std::string& name)
         object->setLightIntensity(mapObject->lightIntensity());
         object->setFlags(mapObject->flags());
 
-        if (auto exitGrid = dynamic_cast<Game::GameExitMiscObject*>(object))
+        if (auto exitGrid = dynamic_cast<Game::ExitMiscObject*>(object))
         {
             exitGrid->setExitMapNumber(mapObject->exitMap());
             exitGrid->setExitElevationNumber(mapObject->exitElevation());
@@ -176,11 +176,11 @@ void Location::setLocation(const std::string& name)
             exitGrid->setExitDirection(mapObject->exitOrientation());
         }
 
-        if (auto container = dynamic_cast<Game::GameContainerItemObject*>(object))
+        if (auto container = dynamic_cast<Game::ContainerItemObject*>(object))
         {
             for (auto child : *mapObject->children())
             {
-                auto item = dynamic_cast<Game::GameItemObject*>(Game::GameObjectFactory::createObject(child->PID()));
+                auto item = dynamic_cast<Game::ItemObject*>(Game::ObjectFactory::getInstance()->createObject(child->PID()));
                 if (!item)
                 {
                     Logger::error() << "Location::setLocation() - can't create object with PID: " << child->PID() << std::endl;
@@ -214,14 +214,14 @@ void Location::setLocation(const std::string& name)
         player->setArmorSlot(nullptr);
         // Just for testing
         {
-            player->inventory()->push_back((Game::GameItemObject*)Game::GameObjectFactory::createObject(0x00000003)); // power armor
-            player->inventory()->push_back((Game::GameItemObject*)Game::GameObjectFactory::createObject(0x0000004A)); // leather jacket
-            player->inventory()->push_back((Game::GameItemObject*)Game::GameObjectFactory::createObject(0x00000011)); // combat armor
-            player->inventory()->push_back((Game::GameItemObject*)Game::GameObjectFactory::createObject(0x00000071)); // purple robe
-            auto leftHand = Game::GameObjectFactory::createObject(0x0000000C); // minigun
-            player->setLeftHandSlot(dynamic_cast<Game::GameWeaponItemObject*>(leftHand));
-            auto rightHand = Game::GameObjectFactory::createObject(0x00000007); // spear
-            player->setRightHandSlot(dynamic_cast<Game::GameWeaponItemObject*>(rightHand));
+            player->inventory()->push_back((Game::ItemObject*)Game::ObjectFactory::getInstance()->createObject(0x00000003)); // power armor
+            player->inventory()->push_back((Game::ItemObject*)Game::ObjectFactory::getInstance()->createObject(0x0000004A)); // leather jacket
+            player->inventory()->push_back((Game::ItemObject*)Game::ObjectFactory::getInstance()->createObject(0x00000011)); // combat armor
+            player->inventory()->push_back((Game::ItemObject*)Game::ObjectFactory::getInstance()->createObject(0x00000071)); // purple robe
+            auto leftHand = Game::ObjectFactory::getInstance()->createObject(0x0000000C); // minigun
+            player->setLeftHandSlot(dynamic_cast<Game::WeaponItemObject*>(leftHand));
+            auto rightHand = Game::ObjectFactory::getInstance()->createObject(0x00000007); // spear
+            player->setRightHandSlot(dynamic_cast<Game::WeaponItemObject*>(rightHand));
         }
         player->setPID(0x01000001);
         player->setOrientation(mapFile->defaultOrientation());
@@ -268,32 +268,32 @@ void Location::setLocation(const std::string& name)
     }
 }
 
-std::vector<int> Location::getCursorIconsForObject(Game::GameObject* object)
+std::vector<int> Location::getCursorIconsForObject(Game::Object* object)
 {
     std::vector<int> icons;
     if (object->script() && object->script()->hasFunction("use_p_proc"))
     {
         icons.push_back(Mouse::ICON_USE);
     }
-    else if (dynamic_cast<Game::GameDoorSceneryObject*>(object))
+    else if (dynamic_cast<Game::DoorSceneryObject*>(object))
     {
         icons.push_back(Mouse::ICON_USE);
     }
-    else if (dynamic_cast<Game::GameContainerItemObject*>(object))
+    else if (dynamic_cast<Game::ContainerItemObject*>(object))
     {
         icons.push_back(Mouse::ICON_USE);
     }
 
     switch(object->type())
     {
-        case Game::GameObject::TYPE_ITEM:
+        case Game::Object::TYPE_ITEM:
             break;
-        case Game::GameObject::TYPE_DUDE:
+        case Game::Object::TYPE_DUDE:
             icons.push_back(Mouse::ICON_ROTATE);
             break;
-        case Game::GameObject::TYPE_SCENERY:
+        case Game::Object::TYPE_SCENERY:
             break;
-        case Game::GameObject::TYPE_CRITTER:
+        case Game::Object::TYPE_CRITTER:
             icons.push_back(Mouse::ICON_TALK);
             break;
     }
@@ -305,7 +305,7 @@ std::vector<int> Location::getCursorIconsForObject(Game::GameObject* object)
 }
 
 
-void Location::onObjectMouseEvent(Event::Event* event, Game::GameObject* object)
+void Location::onObjectMouseEvent(Event::Event* event, Game::Object* object)
 {
     if (!object) return;
     if (event->name() == "mouseleftdown")
@@ -326,7 +326,7 @@ void Location::onObjectMouseEvent(Event::Event* event, Game::GameObject* object)
     event->setHandled(true);
 }
 
-void Location::onObjectHover(Event::Event* event, Game::GameObject* object)
+void Location::onObjectHover(Event::Event* event, Game::Object* object)
 {
     if (event->name() == "mouseout")
     {
@@ -780,7 +780,7 @@ std::map<std::string, VMStackValue>* Location::EVARS()
     return &_EVARS;
 }
 
-void Location::moveObjectToHexagon(Game::GameObject* object, Hexagon* hexagon)
+void Location::moveObjectToHexagon(Game::Object* object, Hexagon* hexagon)
 {
     auto oldHexagon = object->hexagon();
     if (oldHexagon)
@@ -815,7 +815,7 @@ void Location::moveObjectToHexagon(Game::GameObject* object, Hexagon* hexagon)
     hexagon->objects()->push_back(object);
 }
 
-void Location::destroyObject(Game::GameObject* object)
+void Location::destroyObject(Game::Object* object)
 {
     auto objectsAtHex = object->hexagon()->objects();
     object->destroy_p_proc();
@@ -856,7 +856,7 @@ void Location::centerCameraAtHexagon(int tileNum)
     }
 }
 
-void Location::handleAction(Game::GameObject* object, int action)
+void Location::handleAction(Game::Object* object, int action)
 {
     switch (action)
     {
@@ -874,7 +874,7 @@ void Location::handleAction(Game::GameObject* object, int action)
         }
         case Mouse::ICON_ROTATE:
         {
-            auto dude = dynamic_cast<Game::GameDudeObject*>(object);
+            auto dude = dynamic_cast<Game::DudeObject*>(object);
             if (!dude) throw Exception("Location::handleAction() - only Dude can be rotated");
 
             int orientation = dude->orientation() + 1;
@@ -885,7 +885,7 @@ void Location::handleAction(Game::GameObject* object, int action)
         }
         case Mouse::ICON_TALK:
         {
-            if (auto critter = dynamic_cast<Game::GameCritterObject*>(object))
+            if (auto critter = dynamic_cast<Game::CritterObject*>(object))
             {
                 critter->talk_p_proc();
             }

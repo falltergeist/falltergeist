@@ -41,11 +41,11 @@ void Opcode812FHandler::_run()
     auto object = _vm->dataStack()->popObject();
     if (object)
     {
-        if (auto door = dynamic_cast<Game::GameDoorSceneryObject*>(object)) 
+        if (auto door = dynamic_cast<Game::DoorSceneryObject*>(object))
         {
             door->setLocked(false);
         }
-        else if (auto container = dynamic_cast<Game::GameContainerItemObject*>(object)) 
+        else if (auto container = dynamic_cast<Game::ContainerItemObject*>(object))
         {
             container->setLocked(false);
         }

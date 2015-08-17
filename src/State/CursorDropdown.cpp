@@ -182,12 +182,12 @@ void CursorDropdown::showMenu()
     }
 }
 
-Game::GameObject* CursorDropdown::object()
+Game::Object* CursorDropdown::object()
 {
     return _object;
 }
 
-void CursorDropdown::setObject(Game::GameObject* object)
+void CursorDropdown::setObject(Game::Object* object)
 {
     _object = object;
 }

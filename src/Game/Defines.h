@@ -17,9 +17,11 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMEDEFINES_H
-#define FALLTERGEIST_GAMEDEFINES_H
+#ifndef FALLTERGEIST_GAME_DEFINES_H
+#define FALLTERGEIST_GAME_DEFINES_H
 
+namespace Falltergeist
+{
 namespace Game
 {
 
@@ -115,5 +117,5 @@ namespace Game
 #define FID_HERO_FEMALE 0x0100003D
 
 }
-
-#endif // FALLTERGEIST_GAMEDEFINES_H
+}
+#endif // FALLTERGEIST_GAME_DEFINES_H

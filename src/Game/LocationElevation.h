@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMELOCATIONELEVATION_H
-#define FALLTERGEIST_GAMELOCATIONELEVATION_H
+#ifndef FALLTERGEIST_GAME_LOCATIONELEVATION_H
+#define FALLTERGEIST_GAME_LOCATIONELEVATION_H
 
 // C++ standard includes
 
@@ -31,13 +31,13 @@ namespace Falltergeist
 namespace Game
 {
 
-class GameLocationElevation
+class LocationElevation
 {
 public:
-    GameLocationElevation();
+    LocationElevation();
+    ~LocationElevation();
 };
 
 }
 }
-
-#endif // FALLTERGEIST_GAMELOCATIONELEVATION_H
+#endif // FALLTERGEIST_GAME_LOCATIONELEVATION_H

@@ -111,12 +111,12 @@ void CritterInteract::setMood(int mood)
     _mood = mood;
 }
 
-Game::GameCritterObject* CritterInteract::critter()
+Game::CritterObject* CritterInteract::critter()
 {
     return _critter;
 }
 
-void CritterInteract::setCritter(Game::GameCritterObject* critter)
+void CritterInteract::setCritter(Game::CritterObject* critter)
 {
     _critter = critter;
 }

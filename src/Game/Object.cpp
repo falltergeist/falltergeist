@@ -17,6 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Game/Object.h"
+
 // C++ standard includes
 #include <cmath>
 
@@ -30,7 +33,6 @@
 #include "../Game/Defines.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
-#include "../Game/Object.h"
 #include "../LocationCamera.h"
 #include "../Logger.h"
 #include "../PathFinding/Hexagon.h"
@@ -48,72 +50,72 @@ namespace Falltergeist
 namespace Game
 {
 
-GameObject::GameObject() : Event::Emitter()
+Object::Object() : Event::Emitter()
 {
 }
 
-GameObject::~GameObject()
+Object::~Object()
 {
     delete _ui;
     delete _floatMessage;
 }
 
-int GameObject::type() const
+int Object::type() const
 {
     return _type;
 }
 
-int GameObject::subtype() const
+int Object::subtype() const
 {
     return _subtype;
 }
 
-int GameObject::PID() const
+int Object::PID() const
 {
     return _PID;
 }
 
-void GameObject::setPID(int value)
+void Object::setPID(int value)
 {
     _PID = value;
 }
 
-int GameObject::FID() const
+int Object::FID() const
 {
     return _FID;
 }
 
-void GameObject::setFID(int value)
+void Object::setFID(int value)
 {
     if (_FID == value) return;
     _FID = value;
     _generateUi();
 }
 
-int GameObject::elevation() const
+int Object::elevation() const
 {
     return _elevation;
 }
 
-void GameObject::setElevation(int value)
+void Object::setElevation(int value)
 {
     if (value < 0 || value > 3)
     {
-        throw Exception("GameObject::setElevation() - value out of range: " + std::to_string(value));
+        throw Exception("Object::setElevation() - value out of range: " + std::to_string(value));
     }
     _elevation = value;
 }
 
-int GameObject::orientation() const
+int Object::orientation() const
 {
     return _orientation;
 }
 
-void GameObject::setOrientation(int value)
+void Object::setOrientation(int value)
 {
     if (value < 0 || value > 5)
     {
-        throw Exception("GameObject::setOrientation() - value out of range: " + std::to_string(value));
+        throw Exception("Object::setOrientation() - value out of range: " + std::to_string(value));
     }
 
     if (_orientation == value) return;
@@ -122,50 +124,50 @@ void GameObject::setOrientation(int value)
     _generateUi();
 }
 
-std::string GameObject::name() const
+std::string Object::name() const
 {
     return _name;
 }
 
-void GameObject::setName(const std::string& value)
+void Object::setName(const std::string& value)
 {
     _name = value;
 }
 
-std::string GameObject::description() const
+std::string Object::description() const
 {
     return _description;
 }
 
-void GameObject::setDescription(const std::string& value)
+void Object::setDescription(const std::string& value)
 {
     _description = value;
 }
 
-VM* GameObject::script() const
+VM* Object::script() const
 {
     return _script;
 }
 
-void GameObject::setScript(VM* script)
+void Object::setScript(VM* script)
 {
     delete _script;
     _script = script;
 }
 
-ActiveUI* GameObject::ui() const
+ActiveUI* Object::ui() const
 {
     return _ui;
 }
 
-void GameObject::setUI(ActiveUI* ui)
+void Object::setUI(ActiveUI* ui)
 {
     delete _ui;
     _ui = ui;
     addUIEventHandlers();
 }
 
-void GameObject::addUIEventHandlers()
+void Object::addUIEventHandlers()
 {
     if (_ui)
     {
@@ -178,7 +180,7 @@ void GameObject::addUIEventHandlers()
 }
 
 
-void GameObject::_generateUi()
+void Object::_generateUi()
 {
     delete _ui; _ui = 0;
     auto frm = ResourceManager::getInstance()->frmFileType(FID());
@@ -204,62 +206,62 @@ void GameObject::_generateUi()
     addUIEventHandlers();
 }
 
-bool GameObject::canWalkThru() const
+bool Object::canWalkThru() const
 {
     return _canWalkThru;
 }
 
-void GameObject::setCanWalkThru(bool value)
+void Object::setCanWalkThru(bool value)
 {
     _canWalkThru = value;
 }
 
-bool GameObject::canLightThru() const
+bool Object::canLightThru() const
 {
     return _canLightThru;
 }
 
-void GameObject::setCanLightThru(bool value)
+void Object::setCanLightThru(bool value)
 {
     _canLightThru = value;
 }
 
-bool GameObject::canShootThru() const
+bool Object::canShootThru() const
 {
     return _canShootThru;
 }
 
-void GameObject::setCanShootThru(bool value)
+void Object::setCanShootThru(bool value)
 {
     _canShootThru = value;
 }
 
-bool GameObject::wallTransEnd() const
+bool Object::wallTransEnd() const
 {
     return _wallTransEnd;
 }
 
-void GameObject::setWallTransEnd(bool value)
+void Object::setWallTransEnd(bool value)
 {
     _wallTransEnd = value;
 }
 
-Hexagon* GameObject::hexagon() const
+Hexagon* Object::hexagon() const
 {
     return _hexagon;
 }
 
-void GameObject::setHexagon(Hexagon* hexagon)
+void Object::setHexagon(Hexagon* hexagon)
 {
     _hexagon = hexagon;
 }
 
-TextArea* GameObject::floatMessage() const
+TextArea* Object::floatMessage() const
 {
     return _floatMessage;
 }
 
-void GameObject::setFloatMessage(TextArea* floatMessage)
+void Object::setFloatMessage(TextArea* floatMessage)
 {
     _floatMessage = floatMessage;
 }
@@ -274,7 +276,7 @@ static bool in_front_of(int x1, int y1, int x2, int y2)
   return (double)(x2 - x1) <= ((double)(y2 - y1) * -4.0);
 }
 
-void GameObject::renderText()
+void Object::renderText()
 {
     if (auto message = floatMessage())
     {
@@ -292,7 +294,7 @@ void GameObject::renderText()
     }
 }
 
-void GameObject::render()
+void Object::render()
 {
     if (!_ui) return;
 
@@ -367,27 +369,27 @@ void GameObject::render()
 
 }
 
-void GameObject::think()
+void Object::think()
 {
     if (_ui) _ui->think();
 }
 
-void GameObject::handle(Event::Event* event)
+void Object::handle(Event::Event* event)
 {
     if (_ui) _ui->handle(event);
 }
 
-bool GameObject::inRender() const
+bool Object::inRender() const
 {
     return _inRender;
 }
 
-void GameObject::setInRender(bool value)
+void Object::setInRender(bool value)
 {
     _inRender = value;
 }
 
-void GameObject::description_p_proc()
+void Object::description_p_proc()
 {
     Logger::info("SCRIPT") << "description_p_proc() - 0x" << std::hex << PID() << " " << name() << " " << (script() ? script()->filename() : "") << std::endl;
     bool useDefault = true;
@@ -405,7 +407,7 @@ void GameObject::description_p_proc()
     }
 }
 
-void GameObject::use_p_proc(GameCritterObject* usedBy)
+void Object::use_p_proc(CritterObject* usedBy)
 {
     if (script() && script()->hasFunction("use_p_proc"))
     {
@@ -415,7 +417,7 @@ void GameObject::use_p_proc(GameCritterObject* usedBy)
     }
 }
 
-void GameObject::destroy_p_proc()
+void Object::destroy_p_proc()
 {
     if (script() && script()->hasFunction("destroy_p_proc"))
     {
@@ -425,7 +427,7 @@ void GameObject::destroy_p_proc()
     }
 }
 
-void GameObject::look_at_p_proc()
+void Object::look_at_p_proc()
 {
     bool useDefault = true;
     if (script() && script()->hasFunction("look_at_p_proc"))
@@ -445,7 +447,7 @@ void GameObject::look_at_p_proc()
     }
 }
 
-void GameObject::map_enter_p_proc()
+void Object::map_enter_p_proc()
 {
     if (script())
     {
@@ -453,7 +455,7 @@ void GameObject::map_enter_p_proc()
     }
 }
 
-void GameObject::map_exit_p_proc()
+void Object::map_exit_p_proc()
 {
     if (script())
     {
@@ -461,7 +463,7 @@ void GameObject::map_exit_p_proc()
     }
 }
 
-void GameObject::map_update_p_proc()
+void Object::map_update_p_proc()
 {
     if (script())
     {
@@ -469,7 +471,7 @@ void GameObject::map_update_p_proc()
     }
 }
 
-void GameObject::pickup_p_proc(GameCritterObject* pickedUpBy)
+void Object::pickup_p_proc(CritterObject* pickedUpBy)
 {
     if (script() && script()->hasFunction("pickup_p_proc"))
     {
@@ -480,11 +482,11 @@ void GameObject::pickup_p_proc(GameCritterObject* pickedUpBy)
     // @TODO: standard handler
 }
 
-void GameObject::spatial_p_proc()
+void Object::spatial_p_proc()
 {
 }
 
-void GameObject::use_obj_on_p_proc(GameObject* objectUsed, GameCritterObject* usedBy)
+void Object::use_obj_on_p_proc(Object* objectUsed, CritterObject* usedBy)
 {
     if (script() && script()->hasFunction("use_obj_on_p_proc"))
     {
@@ -496,7 +498,7 @@ void GameObject::use_obj_on_p_proc(GameObject* objectUsed, GameCritterObject* us
     // @TODO: standard handlers for drugs, etc.
 }
 
-void GameObject::onUseAnimationActionFrame(Event::Event* event, GameCritterObject* critter)
+void Object::onUseAnimationActionFrame(Event::Event* event, CritterObject* critter)
 {
     use_p_proc(critter);
     Animation* animation = dynamic_cast<Animation*>(critter->ui());
@@ -510,12 +512,12 @@ void GameObject::onUseAnimationActionFrame(Event::Event* event, GameCritterObjec
     else throw Exception("No animation for object!");
 }
 
-void GameObject::onUseAnimationEnd(Event::Event* event, GameCritterObject* critter)
+void Object::onUseAnimationEnd(Event::Event* event, CritterObject* critter)
 {
     critter->setActionAnimation("aa")->stop();
 }
 
-void GameObject::setTrans(unsigned int value)
+void Object::setTrans(unsigned int value)
 {
     _trans = value;
     if (_ui)
@@ -541,64 +543,64 @@ void GameObject::setTrans(unsigned int value)
     }
 }
 
-unsigned int GameObject::trans() const
+unsigned int Object::trans() const
 {
     return _trans;
 }
 
-void GameObject::setLightOrientation(unsigned short orientation)
+void Object::setLightOrientation(unsigned short orientation)
 {
     _lightOrientation = orientation;
 }
 
-unsigned short GameObject::lightOrientation() const
+unsigned short Object::lightOrientation() const
 {
     return _lightOrientation;
 }
 
-void GameObject::setLightIntensity(unsigned int intensity)
+void Object::setLightIntensity(unsigned int intensity)
 {
     _lightIntensity = intensity;
 }
 
-unsigned int GameObject::lightIntensity() const
+unsigned int Object::lightIntensity() const
 {
     return _lightIntensity;
 }
 
-void GameObject::setLightRadius(unsigned int radius)
+void Object::setLightRadius(unsigned int radius)
 {
     _lightRadius = radius;
 }
 
-unsigned int GameObject::lightRadius() const
+unsigned int Object::lightRadius() const
 {
     return _lightRadius;
 }
 
-void GameObject::setFlags(unsigned int flags)
+void Object::setFlags(unsigned int flags)
 {
     setFlat(flags & 0x00000008);
     setCanWalkThru(flags & 0x00000010);
     setCanLightThru(flags & 0x20000000);
     setCanShootThru(flags & 0x80000000);
 
-    if (flags & 0x00004000) setTrans(GameObject::TRANS_RED);
-    if (flags & 0x00008000) setTrans(GameObject::TRANS_NONE);
-    if (flags & 0x00010000) setTrans(GameObject::TRANS_WALL);
-    if (flags & 0x00020000) setTrans(GameObject::TRANS_GLASS);
-    if (flags & 0x00040000) setTrans(GameObject::TRANS_STEAM);
-    if (flags & 0x00080000) setTrans(GameObject::TRANS_ENERGY);
+    if (flags & 0x00004000) setTrans(Object::TRANS_RED);
+    if (flags & 0x00008000) setTrans(Object::TRANS_NONE);
+    if (flags & 0x00010000) setTrans(Object::TRANS_WALL);
+    if (flags & 0x00020000) setTrans(Object::TRANS_GLASS);
+    if (flags & 0x00040000) setTrans(Object::TRANS_STEAM);
+    if (flags & 0x00080000) setTrans(Object::TRANS_ENERGY);
     if (flags & 0x10000000) setWallTransEnd(true);
 
 }
 
-bool GameObject::flat() const
+bool Object::flat() const
 {
     return _flat;
 }
 
-void GameObject::setFlat(bool value)
+void Object::setFlat(bool value)
 {
     _flat = value;
 }

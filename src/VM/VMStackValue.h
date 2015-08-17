@@ -29,8 +29,10 @@
 
 namespace Falltergeist
 {
-    
-namespace Game { class GameObject; };
+namespace Game
+{
+    class Object;
+};
 
 class VMStackValue
 {
@@ -40,7 +42,7 @@ protected:
     {
         int _intValue;
         float _floatValue;
-        Game::GameObject* _objectValue;
+        Game::Object* _objectValue;
     };
     std::string _stringValue;
 public:
@@ -49,7 +51,7 @@ public:
     VMStackValue(int value);
     VMStackValue(float value);
     VMStackValue(const std::string &value);
-    VMStackValue(Game::GameObject *value);
+    VMStackValue(Game::Object *value);
     virtual ~VMStackValue();
     int type() const;
     bool isNumber() const;
@@ -60,7 +62,7 @@ public:
     // returns string value or throws exception if it's not string
     std::string stringValue() const;
     // returns object pointer or throws exception if it's not object
-    Game::GameObject* objectValue() const;
+    Game::Object* objectValue() const;
     
     // converts value of any type to string representation
     std::string toString() const;

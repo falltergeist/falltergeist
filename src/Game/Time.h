@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMETIME_H
-#define FALLTERGEIST_GAMETIME_H
+#ifndef FALLTERGEIST_GAME_TIME_H
+#define FALLTERGEIST_GAME_TIME_H
 
 // C++ standard includes
 
@@ -31,8 +31,24 @@ namespace Falltergeist
 namespace Game
 {
 
-class GameTime
+class Time
 {
+
+public:
+    Time();
+    ~Time();
+
+    void think();
+
+    void increaseTicks();
+    unsigned int ticks();
+    unsigned int seconds();
+    unsigned int minutes();
+    unsigned int hours();
+    unsigned int day();
+    unsigned int month();
+    unsigned int year();
+
 protected:
     unsigned int _timer = 0;
     unsigned int _ticks = 300000;
@@ -50,23 +66,8 @@ protected:
     void _increaseMonth();
     void _increaseYear();
 
-public:
-    GameTime();
-    virtual ~GameTime();
-
-    void think();
-
-    void increaseTicks();
-    unsigned int ticks();
-    unsigned int seconds();
-    unsigned int minutes();
-    unsigned int hours();
-    unsigned int day();
-    unsigned int month();
-    unsigned int year();
 };
 
 }
 }
-
-#endif // FALLTERGEIST_GAMETIME_H
+#endif // FALLTERGEIST_GAME_TIME_H

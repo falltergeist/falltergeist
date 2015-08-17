@@ -17,12 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMEOBJECTFACTORY_H
-#define FALLTERGEIST_GAMEOBJECTFACTORY_H
+#ifndef FALLTERGEIST_GAME_OBJECTFACTORY_H
+#define FALLTERGEIST_GAME_OBJECTFACTORY_H
 
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Base/Singleton.h"
 
 // Third party includes
 
@@ -30,18 +31,24 @@ namespace Falltergeist
 {
 namespace Game
 {
+class Object;
 
-class GameObject;
-
-class GameObjectFactory
+class ObjectFactory
 {
-protected:
-    GameObjectFactory();
 public:
-    static GameObject* createObject(unsigned int PID);
+    static ObjectFactory* getInstance();
+    Object* createObject(unsigned int PID);
+
+private:
+    friend class Base::Singleton<ObjectFactory>;
+
+    ObjectFactory() = default;
+    ~ObjectFactory() = default;
+    ObjectFactory(ObjectFactory const&) = delete;
+    void operator=(ObjectFactory const&) = delete;
 };
 
 }
 }
 
-#endif // GAMEOBJECTFACTORY_H
+#endif // FALLTERGEIST_GAME_OBJECTFACTORY_H

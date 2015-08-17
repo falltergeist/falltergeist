@@ -39,7 +39,7 @@ void Opcode814BHandler::_run()
     // @TODO
     Logger::debug("SCRIPT") << "[814B] [*] void* party_member_obj(int pid)" << std::endl;
     _vm->dataStack()->popInteger();
-    _vm->dataStack()->push((Game::GameObject*)nullptr);
+    _vm->dataStack()->push((Game::Object*)nullptr);
 }
 
 }

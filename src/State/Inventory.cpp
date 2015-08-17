@@ -143,9 +143,9 @@ void Inventory::init()
     armorClassLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
 
     // armorSlot, leftHand, rightHand
-    Game::GameArmorItemObject* armorSlot = player->armorSlot();
-    Game::GameItemObject* leftHand = player->leftHandSlot();
-    Game::GameItemObject* rightHand = player->rightHandSlot();
+    Game::ArmorItemObject* armorSlot = player->armorSlot();
+    Game::ItemObject* leftHand = player->leftHandSlot();
+    Game::ItemObject* rightHand = player->rightHandSlot();
 
 
     // label: damage treshold levels
@@ -383,23 +383,23 @@ void Inventory::onRightHandSlotMouseDown(Event::Mouse* event)
 //    //Game::getInstance()->states()->back()->ui()->push_back(dragUi);
 //}
 
-std::string Inventory::_handItemSummary (Game::GameItemObject* hand)
+std::string Inventory::_handItemSummary (Game::ItemObject* hand)
 {
     std::stringstream ss;
     if (hand)
     {
         ss << hand->name() << "\n";
         // is it weapon
-        if (hand->subtype() == Game::GameObject::TYPE_ITEM_WEAPON)
+        if (hand->subtype() == Game::Object::TYPE_ITEM_WEAPON)
         {
-            auto weapon = dynamic_cast<Game::GameWeaponItemObject*>(hand);
+            auto weapon = dynamic_cast<Game::WeaponItemObject*>(hand);
             ss << "Dmg: " << weapon->damageMin() << "-" << weapon->damageMax() << " ";
             ss << "Rng: " << weapon->rangePrimary();
             // has it ammo?
             if (weapon->ammoType() != 0)
             {
                 ss << "\nAmmo: /" << weapon->ammoCapacity() << " ";
-                auto ammo = Game::GameObjectFactory::createObject(weapon->ammoPID());
+                auto ammo = Game::ObjectFactory::getInstance()->createObject(weapon->ammoPID());
                 ss << ammo->name();
             }
         }

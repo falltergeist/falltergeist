@@ -17,10 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Game/ContainerItemObject.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Game/ContainerItemObject.h"
 #include "../Game/Game.h"
 #include "../State/Container.h"
 
@@ -31,43 +33,43 @@ namespace Falltergeist
 namespace Game
 {
 
-GameContainerItemObject::GameContainerItemObject() : GameItemObject()
+ContainerItemObject::ContainerItemObject() : ItemObject()
 {
     _subtype = TYPE_ITEM_CONTAINER;
 }
 
-GameContainerItemObject::~GameContainerItemObject()
+ContainerItemObject::~ContainerItemObject()
 {
 }
 
-std::vector<GameItemObject*>* GameContainerItemObject::inventory()
+std::vector<ItemObject*>* ContainerItemObject::inventory()
 {
     return &_inventory;
 }
 
-void GameContainerItemObject::use_p_proc(GameCritterObject* usedBy)
+void ContainerItemObject::use_p_proc(CritterObject* usedBy)
 {
     auto state = new State::Container();
     state->setObject(this);
     Game::getInstance()->pushState(state);
 }
 
-void GameContainerItemObject::setLocked(bool locked)
+void ContainerItemObject::setLocked(bool locked)
 {
     this->_locked = locked;
 }
 
-bool GameContainerItemObject::locked() const
+bool ContainerItemObject::locked() const
 {
     return _locked;
 }
 
-void GameContainerItemObject::setOpened(bool opened)
+void ContainerItemObject::setOpened(bool opened)
 {
     this->_opened = opened;
 }
 
-bool GameContainerItemObject::opened() const
+bool ContainerItemObject::opened() const
 {
     return _opened;
 }

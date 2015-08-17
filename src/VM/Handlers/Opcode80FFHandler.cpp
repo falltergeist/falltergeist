@@ -45,7 +45,7 @@ void Opcode80FFHandler::_run()
     Logger::debug("SCRIPT") << "[80FF] [*] int critter_attempt_placement(GameCritterObject* critter, int position, int elevation)" << std::endl;
     auto elevation = _vm->dataStack()->popInteger();
     auto position = _vm->dataStack()->popInteger();
-    auto critter = static_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
+    auto critter = static_cast<Game::CritterObject*>(_vm->dataStack()->popObject());
     if (!critter) 
     {
         _error("critter_attempt_placement - invalid critter pointer");

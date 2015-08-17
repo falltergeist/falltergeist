@@ -17,13 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMEITEMOBJECT_H
-#define FALLTERGEIST_GAMEITEMOBJECT_H
+#ifndef FALLTERGEIST_GAME_ITEMOBJECT_H
+#define FALLTERGEIST_GAME_ITEMOBJECT_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "Object.h"
+#include "../Game/Object.h"
 
 // Third party includes
 
@@ -35,20 +35,11 @@ namespace Game
 /**
  * Item. Can be placed inside other object inventories (critters and containers)
  */
-class GameItemObject : public GameObject
+class ItemObject : public Object
 {
-protected:
-    unsigned int _amount = 1;
-    unsigned int _weight = 0;
-    unsigned int _volume = 0;
-    int _inventoryFID = -1;
-    Image* _inventoryUi = 0;
-    Image* _inventorySlotUi = 0;
-    Image* _inventoryDragUi = 0;
-    virtual void _generateUi();
 public:
-    GameItemObject();
-    virtual ~GameItemObject();
+    ItemObject();
+    ~ItemObject() override;
 
     // item stack size in inventory or on the ground
     unsigned int amount() const;
@@ -69,9 +60,19 @@ public:
     Image* inventoryUi() const;
     Image* inventorySlotUi() const;
     Image* inventoryDragUi() const;
+
+protected:
+    unsigned int _amount = 1;
+    unsigned int _weight = 0;
+    unsigned int _volume = 0;
+    int _inventoryFID = -1;
+    Image* _inventoryUi = 0;
+    Image* _inventorySlotUi = 0;
+    Image* _inventoryDragUi = 0;
+    void _generateUi() override;
 };
 
 }
 }
 
-#endif // FALLTERGEIST_GAMEITEMOBJECT_H
+#endif // FALLTERGEIST_GAME_ITEMOBJECT_H

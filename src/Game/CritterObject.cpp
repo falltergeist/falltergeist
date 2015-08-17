@@ -17,12 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Game/CritterObject.h"
+
 // C++ standard includes
 #include <string>
 
 // Falltergeist includes
 #include "../Exception.h"
-#include "../Game/CritterObject.h"
 #include "../Game/Defines.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
@@ -42,32 +44,32 @@ namespace Falltergeist
 namespace Game
 {
 
-GameCritterObject::GameCritterObject() : GameObject()
+CritterObject::CritterObject() : Object()
 {
     _type = TYPE_CRITTER;
     _setupNextIdleAnim();
 }
 
-GameCritterObject::~GameCritterObject()
+CritterObject::~CritterObject()
 {
 }
 
-std::vector<GameItemObject*>* GameCritterObject::inventory()
+std::vector<ItemObject*>* CritterObject::inventory()
 {
     return &_inventory;
 }
 
-void GameCritterObject::setOrientation(int value)
+void CritterObject::setOrientation(int value)
 {
-    GameObject::setOrientation(value);
+    Object::setOrientation(value);
 }
 
-GameArmorItemObject* GameCritterObject::armorSlot() const
+ArmorItemObject* CritterObject::armorSlot() const
 {
     return _armorSlot;
 }
 
-void GameCritterObject::setArmorSlot(GameArmorItemObject* object)
+void CritterObject::setArmorSlot(ArmorItemObject* object)
 {
     if (object)
     {
@@ -80,58 +82,58 @@ void GameCritterObject::setArmorSlot(GameArmorItemObject* object)
     _armorSlot = object;
 }
 
-GameItemObject* GameCritterObject::leftHandSlot() const
+ItemObject* CritterObject::leftHandSlot() const
 {
     return _leftHandSlot;
 }
 
-void GameCritterObject::setLeftHandSlot(GameItemObject* object)
+void CritterObject::setLeftHandSlot(ItemObject* object)
 {
     _leftHandSlot = object;
 }
 
-GameItemObject* GameCritterObject::rightHandSlot() const
+ItemObject* CritterObject::rightHandSlot() const
 {
     return _rightHandSlot;
 }
 
-void GameCritterObject::setRightHandSlot(GameItemObject* object)
+void CritterObject::setRightHandSlot(ItemObject* object)
 {
     _rightHandSlot = object;
 }
 
-GENDER GameCritterObject::gender() const
+GENDER CritterObject::gender() const
 {
     return _gender;
 }
 
-void GameCritterObject::setGender(GENDER value)
+void CritterObject::setGender(GENDER value)
 {
-    if (value > GENDER::FEMALE) throw Exception("GameCritterObject::setGender(value) - value out of range:" + std::to_string((unsigned)value));
+    if (value > GENDER::FEMALE) throw Exception("CritterObject::setGender(value) - value out of range:" + std::to_string((unsigned)value));
     _gender = value;
 }
 
-int GameCritterObject::stat(STAT num) const
+int CritterObject::stat(STAT num) const
 {
-    if (num > STAT::LUCK) throw Exception("GameCritterObject::stat(num) - num out of range:" + std::to_string((unsigned)num));
+    if (num > STAT::LUCK) throw Exception("CritterObject::stat(num) - num out of range:" + std::to_string((unsigned)num));
     return _stats.at((unsigned)num);
 }
 
-void GameCritterObject::setStat(STAT num, int value)
+void CritterObject::setStat(STAT num, int value)
 {
-    if (num > STAT::LUCK) throw Exception("GameCritterObject::setStat(num, value) - num out of range:" + std::to_string((unsigned)num));
+    if (num > STAT::LUCK) throw Exception("CritterObject::setStat(num, value) - num out of range:" + std::to_string((unsigned)num));
     _stats.at((unsigned)num) = value;
 }
 
-int GameCritterObject::statTotal(STAT num) const
+int CritterObject::statTotal(STAT num) const
 {
-    if (num > STAT::LUCK) throw Exception("GameCritterObject::statTotal(num) - num out of range:" + std::to_string((unsigned)num));
+    if (num > STAT::LUCK) throw Exception("CritterObject::statTotal(num) - num out of range:" + std::to_string((unsigned)num));
     return stat(num) + statBonus(num);
 }
 
-int GameCritterObject::statBonus(STAT num) const
+int CritterObject::statBonus(STAT num) const
 {
-    if (num > STAT::LUCK) throw Exception("GameCritterObject::statBonus(num) - num out of range:" + std::to_string((unsigned)num));
+    if (num > STAT::LUCK) throw Exception("CritterObject::statBonus(num) - num out of range:" + std::to_string((unsigned)num));
     int bonus = 0;
     if (traitTagged(TRAIT::GIFTED)) bonus += 1;
     switch(num)
@@ -148,27 +150,27 @@ int GameCritterObject::statBonus(STAT num) const
     return _statsBonus.at((unsigned)num) + bonus;
 }
 
-void GameCritterObject::setStatBonus(STAT num, int value)
+void CritterObject::setStatBonus(STAT num, int value)
 {
-    if (num > STAT::LUCK) throw Exception("GameCritterObject::setStatBonus(num, value) - num out of range:" + std::to_string((unsigned)num));
+    if (num > STAT::LUCK) throw Exception("CritterObject::setStatBonus(num, value) - num out of range:" + std::to_string((unsigned)num));
     _statsBonus.at((unsigned)num) = value;
 }
 
-int GameCritterObject::skillTagged(SKILL num) const
+int CritterObject::skillTagged(SKILL num) const
 {
-    if (num > SKILL::OUTDOORSMAN) throw Exception("GameCritterObject::skillTagged(num) - num out of range:" + std::to_string((unsigned)num));
+    if (num > SKILL::OUTDOORSMAN) throw Exception("CritterObject::skillTagged(num) - num out of range:" + std::to_string((unsigned)num));
     return _skillsTagged.at((unsigned)num);
 }
 
-void GameCritterObject::setSkillTagged(SKILL num, int value)
+void CritterObject::setSkillTagged(SKILL num, int value)
 {
-    if (num > SKILL::OUTDOORSMAN) throw Exception("GameCritterObject::setSkillTagged(num, value) - num out of range:" + std::to_string((unsigned)num));
+    if (num > SKILL::OUTDOORSMAN) throw Exception("CritterObject::setSkillTagged(num, value) - num out of range:" + std::to_string((unsigned)num));
     _skillsTagged.at((unsigned)num) = value;
 }
 
-int GameCritterObject::skillBaseValue(SKILL skill) const
+int CritterObject::skillBaseValue(SKILL skill) const
 {
-    if (skill > SKILL::OUTDOORSMAN) throw Exception("GameCritterObject::skillBaseValue(num) - num out of range:" + std::to_string((unsigned)skill));
+    if (skill > SKILL::OUTDOORSMAN) throw Exception("CritterObject::skillBaseValue(num) - num out of range:" + std::to_string((unsigned)skill));
     int value = 0;
     switch(skill)
     {
@@ -253,69 +255,69 @@ int GameCritterObject::skillBaseValue(SKILL skill) const
     return value;
 }
 
-int GameCritterObject::traitTagged(TRAIT num) const
+int CritterObject::traitTagged(TRAIT num) const
 {
-    if (num > TRAIT::GIFTED) throw Exception("GameCritterObject::traitTagged(num) - num out of range:" + std::to_string((unsigned)num));
+    if (num > TRAIT::GIFTED) throw Exception("CritterObject::traitTagged(num) - num out of range:" + std::to_string((unsigned)num));
     return _traitsTagged.at((unsigned)num);
 }
 
-void GameCritterObject::setTraitTagged(TRAIT num, int value)
+void CritterObject::setTraitTagged(TRAIT num, int value)
 {
-    if (num > TRAIT::GIFTED) throw Exception("GameCritterObject::setTraitTagged(num, value) - num out of range:" + std::to_string((unsigned)num));
+    if (num > TRAIT::GIFTED) throw Exception("CritterObject::setTraitTagged(num, value) - num out of range:" + std::to_string((unsigned)num));
     _traitsTagged.at((unsigned)num) = value;
 }
 
-int GameCritterObject::hitPoints() const
+int CritterObject::hitPoints() const
 {
     return _hitPoints;
 }
 
-void GameCritterObject::setHitPoints(int value)
+void CritterObject::setHitPoints(int value)
 {
     _hitPoints = value;
 }
 
-int GameCritterObject::hitPointsMax() const
+int CritterObject::hitPointsMax() const
 {
     return _hitPointsMax;
 }
 
-void GameCritterObject::setHitPointsMax(int value)
+void CritterObject::setHitPointsMax(int value)
 {
     _hitPointsMax = value;
 }
 
-int GameCritterObject::armorClass() const
+int CritterObject::armorClass() const
 {
     return _armorClass;
 }
 
-void GameCritterObject::setArmorClass(int value)
+void CritterObject::setArmorClass(int value)
 {
     _armorClass = value;
 }
 
-int GameCritterObject::actionPoints() const
+int CritterObject::actionPoints() const
 {
     return _actionPoints;
 }
 
-void GameCritterObject::setActionPoints(int value)
+void CritterObject::setActionPoints(int value)
 {
     _actionPoints = value;
 }
 
-int GameCritterObject::actionPointsMax() const
+int CritterObject::actionPointsMax() const
 {
     return _actionPointsMax;
 }
 
-void GameCritterObject::setActionPointsMax(int value)
+void CritterObject::setActionPointsMax(int value)
 {
     _actionPointsMax = value;
 }
 
-unsigned int GameCritterObject::carryWeight() const
+unsigned int CritterObject::carryWeight() const
 {
     unsigned int weight = 0;
     for (auto item : _inventory)
@@ -323,17 +325,17 @@ unsigned int GameCritterObject::carryWeight() const
         weight += item->weight();
     }
 
-    if (auto armor = dynamic_cast<GameItemObject*>(armorSlot()))
+    if (auto armor = dynamic_cast<ItemObject*>(armorSlot()))
     {
         weight += armor->weight();
     }
 
-    if (auto leftHand = dynamic_cast<GameItemObject*>(leftHandSlot()))
+    if (auto leftHand = dynamic_cast<ItemObject*>(leftHandSlot()))
     {
         weight += leftHand->weight();
     }
 
-    if (auto rightHand = dynamic_cast<GameItemObject*>(rightHandSlot()))
+    if (auto rightHand = dynamic_cast<ItemObject*>(rightHandSlot()))
     {
         weight += rightHand->weight();
     }
@@ -341,97 +343,97 @@ unsigned int GameCritterObject::carryWeight() const
     return weight;
 }
 
-void GameCritterObject::setCarryWeightMax(unsigned int value)
+void CritterObject::setCarryWeightMax(unsigned int value)
 {
     _carryWeightMax = value;
 }
 
-unsigned int GameCritterObject::carryWeightMax() const
+unsigned int CritterObject::carryWeightMax() const
 {
     return _carryWeightMax;
 }
 
-int GameCritterObject::meleeDamage() const
+int CritterObject::meleeDamage() const
 {
     return _meleeDamage;
 }
 
-void GameCritterObject::setMeleeDamage(int value)
+void CritterObject::setMeleeDamage(int value)
 {
     _meleeDamage = value;
 }
 
-int GameCritterObject::sequence() const
+int CritterObject::sequence() const
 {
     return _sequence;
 }
 
-void GameCritterObject::setSequence(int value)
+void CritterObject::setSequence(int value)
 {
     _sequence = value;
 }
 
-int GameCritterObject::criticalChance() const
+int CritterObject::criticalChance() const
 {
     return _criticalChance;
 }
 
-void GameCritterObject::setCriticalChance(int value)
+void CritterObject::setCriticalChance(int value)
 {
     _criticalChance = value;
 }
 
-int GameCritterObject::healingRate() const
+int CritterObject::healingRate() const
 {
     return _healingRate;
 }
 
-void GameCritterObject::setHealingRate(int value)
+void CritterObject::setHealingRate(int value)
 {
     _healingRate = value;
 }
 
-int GameCritterObject::damageResist(DAMAGE type) const
+int CritterObject::damageResist(DAMAGE type) const
 {
-    if (type > DAMAGE::POISON) throw Exception("GameCritterObject::damageResist(type) - type out of range: " + std::to_string((unsigned)type));
+    if (type > DAMAGE::POISON) throw Exception("CritterObject::damageResist(type) - type out of range: " + std::to_string((unsigned)type));
     return _damageResist.at((unsigned)type);
 }
 
-void GameCritterObject::setDamageResist(DAMAGE type, int value)
+void CritterObject::setDamageResist(DAMAGE type, int value)
 {
-    if (type > DAMAGE::POISON) throw Exception("GameCritterObject::setDamageResist(type, value) - type out of range: " + std::to_string((unsigned)type));
+    if (type > DAMAGE::POISON) throw Exception("CritterObject::setDamageResist(type, value) - type out of range: " + std::to_string((unsigned)type));
     _damageResist.at((unsigned)type) = value;
 }
 
-int GameCritterObject::damageThreshold(DAMAGE type) const
+int CritterObject::damageThreshold(DAMAGE type) const
 {
-    if ( type > DAMAGE::POISON) throw Exception("GameCritterObject::damageThreshold(type) - type out of range: " + std::to_string((unsigned)type));
+    if ( type > DAMAGE::POISON) throw Exception("CritterObject::damageThreshold(type) - type out of range: " + std::to_string((unsigned)type));
     return _damageThreshold.at((unsigned)type);
 }
 
-void GameCritterObject::setDamageThreshold(DAMAGE type, int value)
+void CritterObject::setDamageThreshold(DAMAGE type, int value)
 {
-    if ( type > DAMAGE::POISON) throw Exception("GameCritterObject::setDamageThreshold(type, value) - type out of range: " + std::to_string((unsigned)type));
+    if ( type > DAMAGE::POISON) throw Exception("CritterObject::setDamageThreshold(type, value) - type out of range: " + std::to_string((unsigned)type));
     _damageThreshold.at((unsigned)type) = value;
 }
 
-HAND GameCritterObject::currentHand() const
+HAND CritterObject::currentHand() const
 {
     return _currentHand;
 }
 
-void GameCritterObject::setCurrentHand(HAND value)
+void CritterObject::setCurrentHand(HAND value)
 {
-    if (value > HAND::LEFT) throw Exception("GameCritterObject::setCurrentHand(value) - value out of range: " + std::to_string((unsigned)value));
+    if (value > HAND::LEFT) throw Exception("CritterObject::setCurrentHand(value) - value out of range: " + std::to_string((unsigned)value));
     _currentHand = value;
 }
 
-GameItemObject* GameCritterObject::currentHandSlot() const
+ItemObject* CritterObject::currentHandSlot() const
 {
     return currentHand() == HAND::RIGHT ? rightHandSlot() : leftHandSlot();
 }
 
-void GameCritterObject::talk_p_proc()
+void CritterObject::talk_p_proc()
 {
     if (_script && _script->hasFunction("talk_p_proc"))
     {
@@ -441,15 +443,15 @@ void GameCritterObject::talk_p_proc()
     }
 }
 
-void GameCritterObject::damage_p_proc()
+void CritterObject::damage_p_proc()
 {
 }
 
-void GameCritterObject::combat_p_proc()
+void CritterObject::combat_p_proc()
 {
 }
 
-void GameCritterObject::critter_p_proc()
+void CritterObject::critter_p_proc()
 {
     if (_script && _script->hasFunction("critter_p_proc"))
     {
@@ -457,20 +459,20 @@ void GameCritterObject::critter_p_proc()
     }
 }
 
-void GameCritterObject::is_dropping_p_proc()
+void CritterObject::is_dropping_p_proc()
 {
 }
 
-void GameCritterObject::use_skill_on_p_proc()
+void CritterObject::use_skill_on_p_proc()
 {
 }
 
-std::vector<Hexagon*>* GameCritterObject::movementQueue()
+std::vector<Hexagon*>* CritterObject::movementQueue()
 {
     return &_movementQueue;
 }
 
-void GameCritterObject::think()
+void CritterObject::think()
 {
     if (movementQueue()->size() > 0)
     {
@@ -482,8 +484,8 @@ void GameCritterObject::think()
             _orientation = hexagon()->orientationTo(movementQueue()->back());
             auto animation = _generateMovementAnimation();
             animation->setActionFrame(_running ? 2 : 4);
-            animation->addEventHandler("actionFrame",    std::bind(&GameCritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
-            animation->addEventHandler("animationEnded", std::bind(&GameCritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
+            animation->addEventHandler("actionFrame",    std::bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
+            animation->addEventHandler("animationEnded", std::bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
             animation->play();
             _ui = animation;
         }
@@ -500,10 +502,10 @@ void GameCritterObject::think()
             }
         }
     }
-    GameObject::think();
+    Object::think();
 }
 
-void GameCritterObject::onMovementAnimationEnded(Event::Event* event)
+void CritterObject::onMovementAnimationEnded(Event::Event* event)
 {
     auto hexagon = movementQueue()->back();
     movementQueue()->pop_back();
@@ -535,8 +537,8 @@ void GameCritterObject::onMovementAnimationEnded(Event::Event* event)
         {
             newAnimation->setActionFrame(_running ? 2 : 4);
         }
-        newAnimation->addEventHandler("actionFrame",    std::bind(&GameCritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
-        newAnimation->addEventHandler("animationEnded", std::bind(&GameCritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
+        newAnimation->addEventHandler("actionFrame",    std::bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
+        newAnimation->addEventHandler("animationEnded", std::bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
         newAnimation->play();
         delete _ui;
         _ui = animation = newAnimation;
@@ -573,7 +575,7 @@ void GameCritterObject::onMovementAnimationEnded(Event::Event* event)
     }
 }
 
-Animation* GameCritterObject::_generateMovementAnimation()
+Animation* CritterObject::_generateMovementAnimation()
 {
     std::string frmString = _generateArmorFrmString();
 
@@ -589,7 +591,7 @@ Animation* GameCritterObject::_generateMovementAnimation()
     return new Animation("art/critters/" + frmString + ".frm", orientation());
 }
 
-Animation* GameCritterObject::setActionAnimation(const std::string& action)
+Animation* CritterObject::setActionAnimation(const std::string& action)
 {
     Animation* animation = new Animation("art/critters/" + _generateArmorFrmString() + action + ".frm", orientation());
     animation->addEventHandler("animationEnded", [animation](Event::Event* event)
@@ -605,17 +607,17 @@ Animation* GameCritterObject::setActionAnimation(const std::string& action)
     return animation;
 }
 
-void GameCritterObject::setRadiationLevel(int radiationLevel)
+void CritterObject::setRadiationLevel(int radiationLevel)
 {
     this->_radiationLevel = radiationLevel;
 }
 
-int GameCritterObject::radiationLevel() const
+int CritterObject::radiationLevel() const
 {
     return _radiationLevel;
 }
 
-std::string GameCritterObject::_generateArmorFrmString()
+std::string CritterObject::_generateArmorFrmString()
 {
     if (!armorSlot())
     {
@@ -635,9 +637,9 @@ std::string GameCritterObject::_generateArmorFrmString()
     }
 }
 
-std::string GameCritterObject::_generateWeaponFrmString()
+std::string CritterObject::_generateWeaponFrmString()
 {
-    if (auto weapon = dynamic_cast<GameWeaponItemObject*>(currentHandSlot()))
+    if (auto weapon = dynamic_cast<WeaponItemObject*>(currentHandSlot()))
     {
         switch (weapon->animationCode())
         {
@@ -666,45 +668,45 @@ std::string GameCritterObject::_generateWeaponFrmString()
     return "a";
 }
 
-int GameCritterObject::poisonLevel() const
+int CritterObject::poisonLevel() const
 {
     return _poisonLevel;
 }
 
-void GameCritterObject::setPoisonLevel(int value)
+void CritterObject::setPoisonLevel(int value)
 {
     _poisonLevel = value;
 }
 
-int GameCritterObject::skillValue(SKILL skill) const
+int CritterObject::skillValue(SKILL skill) const
 {
-    if (skill > SKILL::OUTDOORSMAN) throw Exception("GameCritterObject::skillValue(skill) - skill out of range:" + std::to_string((unsigned)skill));
+    if (skill > SKILL::OUTDOORSMAN) throw Exception("CritterObject::skillValue(skill) - skill out of range:" + std::to_string((unsigned)skill));
     return skillBaseValue(skill) + skillGainedValue(skill);
 }
 
-int GameCritterObject::skillGainedValue(SKILL skill) const
+int CritterObject::skillGainedValue(SKILL skill) const
 {
-    if (skill > SKILL::OUTDOORSMAN) throw Exception("GameCritterObject::skillGainedValue(skill) - skill out of range:" + std::to_string((unsigned)skill));
+    if (skill > SKILL::OUTDOORSMAN) throw Exception("CritterObject::skillGainedValue(skill) - skill out of range:" + std::to_string((unsigned)skill));
     return _skillsGainedValue.at((unsigned)skill);
 }
 
-void GameCritterObject::setSkillGainedValue(SKILL skill, int value)
+void CritterObject::setSkillGainedValue(SKILL skill, int value)
 {
-    if (skill > SKILL::OUTDOORSMAN) throw Exception("GameCritterObject::setSkillGainedCalue(skill) - skill out of range:" + std::to_string((unsigned)skill));
+    if (skill > SKILL::OUTDOORSMAN) throw Exception("CritterObject::setSkillGainedCalue(skill) - skill out of range:" + std::to_string((unsigned)skill));
     _skillsGainedValue.at((unsigned)skill) = value;
 }
 
-bool GameCritterObject::running() const
+bool CritterObject::running() const
 {
     return _running;
 }
 
-void GameCritterObject::setRunning(bool value)
+void CritterObject::setRunning(bool value)
 {
     _running = value;
 }
 
-void GameCritterObject::stopMovement()
+void CritterObject::stopMovement()
 {
     _movementQueue.clear();
     // @TODO: _ui probably needs to be always one type
@@ -719,17 +721,17 @@ void GameCritterObject::stopMovement()
     _moving = false;
 }
 
-void GameCritterObject::_setupNextIdleAnim()
+void CritterObject::_setupNextIdleAnim()
 {
     _nextIdleAnim = SDL_GetTicks() + 10000 + (rand() % 7000);
 }
 
-unsigned GameCritterObject::age() const
+unsigned CritterObject::age() const
 {
     return _age;
 }
 
-void GameCritterObject::setAge(unsigned value)
+void CritterObject::setAge(unsigned value)
 {
     _age = value;
 }

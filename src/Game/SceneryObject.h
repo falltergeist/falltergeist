@@ -17,13 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMESCENERYOBJECT_H
-#define FALLTERGEIST_GAMESCENERYOBJECT_H
+#ifndef FALLTERGEIST_GAME_SCENERYOBJECT_H
+#define FALLTERGEIST_GAME_SCENERYOBJECT_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "Object.h"
+#include "../Game/Object.h"
 
 // Third party includes
 
@@ -35,18 +35,19 @@ namespace Game
 /**
  * Stationary object used as scenery.
  */
-class GameSceneryObject : public GameObject
+class SceneryObject : public Object
 {
+public:
+    SceneryObject();
+    ~SceneryObject() override;
+
+    char soundId() const;
+    void setSoundId(char soundId);
+
 protected:
     char _soundId = 0;
-public:
-    GameSceneryObject();
-    virtual ~GameSceneryObject();
-    void setSoundId(char soundId);
-    char soundId() const;
 };
 
 }
 }
-
-#endif // FALLTERGEIST_GAMESCENERYOBJECT_H
+#endif // FALLTERGEIST_GAME_SCENERYOBJECT_H

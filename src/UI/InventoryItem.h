@@ -35,26 +35,26 @@ namespace Event
 }
 namespace Game
 {
-    class GameItemObject;
+    class ItemObject;
 }
 
 class InventoryItem : public ActiveUI
 {
 protected:
-    Game::GameItemObject* _item = 0;
+    Game::ItemObject* _item = 0;
     unsigned int _type = TYPE_INVENTORY;
     unsigned int _oldType = TYPE_INVENTORY;
 public:
     enum { TYPE_INVENTORY = 0, TYPE_SLOT, TYPE_DRAG };
 
-    InventoryItem(Game::GameItemObject* item, int x = 0, int y = 0);
+    InventoryItem(Game::ItemObject* item, int x = 0, int y = 0);
 
 
     unsigned int type() const;
     void setType(unsigned int value);
 
-    Game::GameItemObject* item();
-    void setItem(Game::GameItemObject* item);
+    Game::ItemObject* item();
+    void setItem(Game::ItemObject* item);
 
     virtual void render(bool eggTransparency = false);
     virtual unsigned int pixel(unsigned int x, unsigned int y);

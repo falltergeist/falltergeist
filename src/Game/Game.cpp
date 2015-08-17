@@ -100,7 +100,7 @@ void Game::init(std::unique_ptr<Settings> settings)
     _falltergeistVersion = new TextArea(version, 3, renderer()->height() - 10);
     _mousePosition = new TextArea("", renderer()->width() - 55, 14);
     _animatedPalette = new AnimatedPalette();
-    _gameTime = new GameTime();
+    _gameTime = new Time();
     _currentTime = new TextArea(renderer()->width() - 150, renderer()->height() - 10);
 
     IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
@@ -174,12 +174,12 @@ void Game::quit()
     _quit = true;
 }
 
-void Game::setPlayer(GameDudeObject* player)
+void Game::setPlayer(DudeObject* player)
 {
     _player = player;
 }
 
-GameDudeObject* Game::player()
+DudeObject* Game::player()
 {
     return _player;
 }
@@ -438,7 +438,7 @@ AnimatedPalette* Game::animatedPalette()
     return _animatedPalette;
 }
 
-GameTime* Game::gameTime()
+Time* Game::gameTime()
 {
     return _gameTime;
 }

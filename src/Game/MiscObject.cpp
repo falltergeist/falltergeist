@@ -17,10 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Game/MiscObject.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "MiscObject.h"
 
 // Third party includes
 
@@ -29,12 +31,12 @@ namespace Falltergeist
 namespace Game
 {
 
-GameMiscObject::GameMiscObject() : GameObject()
+MiscObject::MiscObject() : Object()
 {
     _type = TYPE_MISC;
 }
 
-GameMiscObject::~GameMiscObject()
+MiscObject::~MiscObject()
 {
 }
 

@@ -17,14 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMEOBJECT_H
-#define FALLTERGEIST_GAMEOBJECT_H
+#ifndef FALLTERGEIST_GAME_OBJECT_H
+#define FALLTERGEIST_GAME_OBJECT_H
 
 // C++ standard includes
-#include <vector>
-#include <string>
-#include <memory>
 #include <cmath>
+#include <memory>
+#include <string>
+#include <vector>
 
 // Falltergeist includes
 #include "../Event/Emitter.h"
@@ -48,9 +48,9 @@ class Texture;
 
 namespace Game
 {
-class GameCritterObject;
+class CritterObject;
 
-class GameObject : public Event::Emitter
+class Object : public Event::Emitter
 {
 public:
     enum { TYPE_ITEM = 0, TYPE_CRITTER, TYPE_SCENERY, TYPE_WALL, TYPE_TILE, TYPE_MISC, TYPE_DUDE };
@@ -59,22 +59,22 @@ public:
     enum { TRANS_DEFAULT = 0, TRANS_NONE, TRANS_WALL, TRANS_GLASS, TRANS_STEAM, TRANS_ENERGY, TRANS_RED };
     enum { ORIENTATION_NS = 0, ORIENTATION_EW, ORIENTATION_NC, ORIENTATION_SC, ORIENTATION_EC, ORIENTATION_WC };
 
-    GameObject();
-    virtual ~GameObject();
+    Object();
+    ~Object() override;
 
     // whether this object is transparent in terms of walking through it by a critter
-    bool canWalkThru() const;
+    virtual bool canWalkThru() const;
     virtual void setCanWalkThru(bool value);
     
     // whether this object is transparent to the light
-    bool canLightThru() const;
+    virtual bool canLightThru() const;
     virtual void setCanLightThru(bool value);
 
     // whether this object is transparent to projectiles
-    bool canShootThru() const;
+    virtual bool canShootThru() const;
     virtual void setCanShootThru(bool value);
     
-    bool wallTransEnd() const;
+    virtual bool wallTransEnd() const;
     virtual void setWallTransEnd(bool value);
 
     // object type (TYPE_ITEM, TYPE_CRITTER, etc.)
@@ -149,15 +149,15 @@ public:
     // call "map_update_p_proc" when map is updating (once every N frames, after times skip in pipboy)
     virtual void map_update_p_proc();
     // call "pickup_p_proc" of the script entity (when picking up item object)
-    virtual void pickup_p_proc(GameCritterObject* pickedUpBy);
+    virtual void pickup_p_proc(CritterObject* pickedUpBy);
     virtual void spatial_p_proc();
     // perform "use" action, may call "use_p_proc" of the underlying script
-    virtual void use_p_proc(GameCritterObject* usedBy);
+    virtual void use_p_proc(CritterObject* usedBy);
     // perform "use object on" action, may call "use_obj_on_p_proc" procedure
-    virtual void use_obj_on_p_proc(GameObject* objectUsed, GameCritterObject* usedBy);
+    virtual void use_obj_on_p_proc(Object* objectUsed, CritterObject* usedBy);
 
-    virtual void onUseAnimationActionFrame(Event::Event* event, GameCritterObject* critter);
-    virtual void onUseAnimationEnd(Event::Event* event, GameCritterObject* critter);
+    virtual void onUseAnimationActionFrame(Event::Event* event, CritterObject* critter);
+    virtual void onUseAnimationEnd(Event::Event* event, CritterObject* critter);
 
     unsigned short lightOrientation() const;
     virtual void setLightOrientation(unsigned short orientation);
@@ -172,6 +172,7 @@ public:
 
     bool flat() const;
     virtual void setFlat(bool value);
+
 protected:
     bool _canWalkThru = true;
     bool _canLightThru = true;
@@ -203,5 +204,4 @@ protected:
 
 }
 }
-
-#endif // FALLTERGEIST_GAMEOBJECT_H
+#endif // FALLTERGEIST_GAME_OBJECT_H

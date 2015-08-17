@@ -17,14 +17,16 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Game/DudeObject.h"
+
 // C++ standard includes
 #include <cmath>
 #include <functional>
 
 // Falltergeist includes
-#include "DudeObject.h"
-#include "WeaponItemObject.h"
 #include "../Game/Game.h"
+#include "../Game/WeaponItemObject.h"
 #include "../Graphics/Animation.h"
 #include "../Graphics/AnimationQueue.h"
 #include "../Logger.h"
@@ -42,16 +44,16 @@ namespace Falltergeist
 namespace Game
 {
 
-GameDudeObject::GameDudeObject() : GameCritterObject()
+DudeObject::DudeObject() : CritterObject()
 {
     _type = TYPE_DUDE;
 }
 
-GameDudeObject::~GameDudeObject()
+DudeObject::~DudeObject()
 {
 }
 
-void GameDudeObject::loadFromGCDFile(libfalltergeist::Gcd::File* gcd)
+void DudeObject::loadFromGCDFile(libfalltergeist::Gcd::File* gcd)
 {
     for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
     {
@@ -89,47 +91,47 @@ void GameDudeObject::loadFromGCDFile(libfalltergeist::Gcd::File* gcd)
     setActionPoints(actionPointsMax());
 }
 
-int GameDudeObject::experience() const
+int DudeObject::experience() const
 {
     return _experience;
 }
 
-void GameDudeObject::setExperience(int value)
+void DudeObject::setExperience(int value)
 {
     _experience = value;
 }
 
-std::string GameDudeObject::biography() const
+std::string DudeObject::biography() const
 {
     return _biography;
 }
 
-void GameDudeObject::setBiography(const std::string& value)
+void DudeObject::setBiography(const std::string& value)
 {
     _biography = value;
 }
 
-int GameDudeObject::statsPoints() const
+int DudeObject::statsPoints() const
 {
     return _statsPoints;
 }
 
-void GameDudeObject::setStatsPoints(int value)
+void DudeObject::setStatsPoints(int value)
 {
     _statsPoints = value;
 }
 
-int GameDudeObject::skillsPoints() const
+int DudeObject::skillsPoints() const
 {
     return _skillsPoints;
 }
 
-void GameDudeObject::setSkillsPoints(int value)
+void DudeObject::setSkillsPoints(int value)
 {
     _skillsPoints = value;
 }
 
-int GameDudeObject::hitPointsMax() const
+int DudeObject::hitPointsMax() const
 {
     int value = 15;
     value += statTotal(STAT::ENDURANCE) * 2;
@@ -138,17 +140,17 @@ int GameDudeObject::hitPointsMax() const
     return value;
 }
 
-int GameDudeObject::level() const
+int DudeObject::level() const
 {
     return _level;
 }
 
-void GameDudeObject::setLevel(int value)
+void DudeObject::setLevel(int value)
 {
     _level = value;
 }
 
-int GameDudeObject::armorClass() const
+int DudeObject::armorClass() const
 {
     unsigned int value = 0;
     if (!traitTagged(TRAIT::KAMIKAZE))
@@ -159,7 +161,7 @@ int GameDudeObject::armorClass() const
 
 }
 
-int GameDudeObject::actionPointsMax() const
+int DudeObject::actionPointsMax() const
 {
     unsigned int value = 0;
     value += 5 + ceil(statTotal(STAT::AGILITY)/2);
@@ -170,7 +172,7 @@ int GameDudeObject::actionPointsMax() const
     return value;
 }
 
-unsigned int GameDudeObject::carryWeightMax() const
+unsigned int DudeObject::carryWeightMax() const
 {
     unsigned int value = 0;
     unsigned int st = statTotal(STAT::STRENGTH);
@@ -190,7 +192,7 @@ unsigned int GameDudeObject::carryWeightMax() const
     return value;
 }
 
-int GameDudeObject::meleeDamage() const
+int DudeObject::meleeDamage() const
 {
     unsigned int value = 0;
     unsigned int st = statTotal(STAT::STRENGTH);
@@ -203,17 +205,17 @@ int GameDudeObject::meleeDamage() const
     return value;
 }
 
-int GameDudeObject::damageResistance() const
+int DudeObject::damageResistance() const
 {
     return 0;
 }
 
-int GameDudeObject::radiationResistance() const
+int DudeObject::radiationResistance() const
 {
     return 0;
 }
 
-int GameDudeObject::poisonResistance() const
+int DudeObject::poisonResistance() const
 {
     int value = 0;
     if (!traitTagged(TRAIT::FAST_METABOLISM))
@@ -223,7 +225,7 @@ int GameDudeObject::poisonResistance() const
     return value;
 }
 
-int GameDudeObject::sequence() const
+int DudeObject::sequence() const
 {
     unsigned int value = 0;
     unsigned int pe = statTotal(STAT::PERCEPTION);
@@ -235,7 +237,7 @@ int GameDudeObject::sequence() const
     return value;
 }
 
-int GameDudeObject::healingRate() const
+int DudeObject::healingRate() const
 {
     unsigned int value = 0;
     unsigned int en = statTotal(STAT::ENDURANCE);
@@ -249,7 +251,7 @@ int GameDudeObject::healingRate() const
     return value;
 }
 
-int GameDudeObject::criticalChance() const
+int DudeObject::criticalChance() const
 {
     unsigned int value = 0;
     unsigned int lk = statTotal(STAT::LUCK);
@@ -261,9 +263,9 @@ int GameDudeObject::criticalChance() const
     return value;
 }
 
-void GameDudeObject::_generateUi()
+void DudeObject::_generateUi()
 {
-    GameCritterObject::_generateUi();
+    CritterObject::_generateUi();
     return;
     delete _ui; _ui = 0;
 

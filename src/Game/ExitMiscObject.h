@@ -17,13 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMEEXITMISCOBJECT_H
-#define FALLTERGEIST_GAMEEXITMISCOBJECT_H
+#ifndef FALLTERGEIST_GAME_EXITMISCOBJECT_H
+#define FALLTERGEIST_GAME_EXITMISCOBJECT_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "MiscObject.h"
+#include "../Game/MiscObject.h"
 
 // Third party includes
 
@@ -32,15 +32,11 @@ namespace Falltergeist
 namespace Game
 {
 
-class GameExitMiscObject : public GameMiscObject
+class ExitMiscObject : public MiscObject
 {
-protected:
-    int _exitHexagonNumber = 0;
-    int _exitElevationNumber = 0;
-    int _exitDirection = 0;
-    int _exitMapNumber = 0;
 public:
-    GameExitMiscObject();
+    ExitMiscObject();
+    ~ExitMiscObject() override;
 
     int exitHexagonNumber() const;
     void setExitHexagonNumber(int value);
@@ -53,8 +49,14 @@ public:
 
     int exitMapNumber() const;
     void setExitMapNumber(int value);
+
+protected:
+    int _exitHexagonNumber = 0;
+    int _exitElevationNumber = 0;
+    int _exitDirection = 0;
+    int _exitMapNumber = 0;
 };
 
 }
 }
-#endif // FALLTERGEIST_GAMEEXITMISCOBJECT_H
+#endif // FALLTERGEIST_GAME_EXITMISCOBJECT_H

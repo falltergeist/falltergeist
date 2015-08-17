@@ -517,7 +517,7 @@ std::unordered_map<std::string, Texture*>* ResourceManager::textures()
     return &_textures;
 }
 
-Game::GameLocation* ResourceManager::gameLocation(unsigned int number)
+Game::Location* ResourceManager::gameLocation(unsigned int number)
 {
     if (_gameLocations.find(number) != _gameLocations.end())
     {
@@ -534,7 +534,7 @@ Game::GameLocation* ResourceManager::gameLocation(unsigned int number)
     auto section = ini->section(ss.str());
     if (!section) return 0;
 
-    Game::GameLocation* location = new Game::GameLocation();
+    Game::Location* location = new Game::Location();
 
     for (auto property : *section.get())
     {

@@ -45,7 +45,7 @@ void Opcode80CAHandler::_run()
     {
         _error("get_critter_stat(who, stat) - who is NULL");
     }
-    auto critter = dynamic_cast<Game::GameCritterObject*>(object);
+    auto critter = dynamic_cast<Game::CritterObject*>(object);
     if (!critter)
     {
         _error("get_critter_stat(who, stat) - who is not a critter");

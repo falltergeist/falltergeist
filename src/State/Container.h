@@ -36,30 +36,30 @@ namespace Event
 }
 namespace Game
 {
-    class GameContainerItemObject;
+    class ContainerItemObject;
 }
 namespace State
 {
 
 class Container : public State
 {
-protected:
-    Game::GameContainerItemObject* _object = 0;
 public:
     Container();
-    virtual ~Container();
+    ~Container() override;
 
-    virtual void init();
+    void init() override;
 
-    Game::GameContainerItemObject* object();
-    void setObject(Game::GameContainerItemObject* object);
+    Game::ContainerItemObject* object();
+    void setObject(Game::ContainerItemObject* object);
 
     void onDoneButtonClick(Event::Mouse* event);
     
-    virtual void onStateActivate(Event::State* event);
-    virtual void onStateDeactivate(Event::State* event);
-    virtual void onKeyDown(Event::Keyboard* event);
+    void onStateActivate(Event::State* event) override;
+    void onStateDeactivate(Event::State* event) override;
+    void onKeyDown(Event::Keyboard* event) override;
 
+protected:
+    Game::ContainerItemObject* _object = nullptr;
 
 };
 

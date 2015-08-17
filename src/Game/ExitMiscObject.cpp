@@ -17,10 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Game/ExitMiscObject.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "ExitMiscObject.h"
 
 // Third party includes
 
@@ -29,46 +31,50 @@ namespace Falltergeist
 namespace Game
 {
 
-GameExitMiscObject::GameExitMiscObject()
+ExitMiscObject::ExitMiscObject()
 {
 }
 
-int GameExitMiscObject::exitMapNumber() const
+ExitMiscObject::~ExitMiscObject()
+{
+}
+
+int ExitMiscObject::exitMapNumber() const
 {
     return _exitMapNumber;
 }
 
-void GameExitMiscObject::setExitMapNumber(int value)
+void ExitMiscObject::setExitMapNumber(int value)
 {
     _exitMapNumber = value;
 }
 
-int GameExitMiscObject::exitElevationNumber() const
+int ExitMiscObject::exitElevationNumber() const
 {
     return _exitElevationNumber;
 }
 
-void GameExitMiscObject::setExitElevationNumber(int value)
+void ExitMiscObject::setExitElevationNumber(int value)
 {
     _exitElevationNumber = value;
 }
 
-int GameExitMiscObject::exitHexagonNumber() const
+int ExitMiscObject::exitHexagonNumber() const
 {
     return _exitHexagonNumber;
 }
 
-void GameExitMiscObject::setExitHexagonNumber(int value)
+void ExitMiscObject::setExitHexagonNumber(int value)
 {
     _exitHexagonNumber = value;
 }
 
-int GameExitMiscObject::exitDirection() const
+int ExitMiscObject::exitDirection() const
 {
     return _exitDirection;
 }
 
-void GameExitMiscObject::setExitDirection(int value)
+void ExitMiscObject::setExitDirection(int value)
 {
     _exitDirection = value;
 }

@@ -35,7 +35,7 @@ namespace Event
 }
 namespace Game
 {
-    class GameCritterObject;
+    class CritterObject;
 }
 class VM;
 
@@ -44,19 +44,11 @@ namespace State
 
 class CritterInteract : public State
 {
-protected:
-    unsigned int _oldCameraX;
-    unsigned int _oldCameraY;
-    int _backgroundID = -1;
-    int _headID = -1;
-    int _mood = 0;
-    int _msgFileID = -1;
-    VM* _script;
-    Game::GameCritterObject* _critter = 0;
 public:
     CritterInteract();
-    virtual ~CritterInteract();
-    virtual void init();
+    ~CritterInteract() override;
+
+    void init() override;
 
     int backgroundID();
     void setBackgroundID(int backgroundID);
@@ -67,8 +59,8 @@ public:
     int mood();
     void setMood(int mood);
 
-    Game::GameCritterObject* critter();
-    void setCritter(Game::GameCritterObject* critter);
+    Game::CritterObject* critter();
+    void setCritter(Game::CritterObject* critter);
 
     int msgFileID();
     void setMsgFileID(int value);
@@ -78,6 +70,16 @@ public:
     
     void onStateActivate(Event::State* event) override;
     void onStateDeactivate(Event::State* event) override;
+
+protected:
+    unsigned int _oldCameraX;
+    unsigned int _oldCameraY;
+    int _backgroundID = -1;
+    int _headID = -1;
+    int _mood = 0;
+    int _msgFileID = -1;
+    VM* _script;
+    Game::CritterObject* _critter = nullptr;
 };
 
 }

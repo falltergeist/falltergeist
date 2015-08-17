@@ -17,13 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMEWEAPONITEMOBJECT_H
-#define FALLTERGEIST_GAMEWEAPONITEMOBJECT_H
+#ifndef FALLTERGEIST_GAME_WEAPONITEMOBJECT_H
+#define FALLTERGEIST_GAME_WEAPONITEMOBJECT_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "ItemObject.h"
+#include "../Game/ItemObject.h"
 
 // Third party includes
 
@@ -35,26 +35,11 @@ namespace Game
 /**
  * All items that can be used as a weapon.
  */
-class GameWeaponItemObject : public GameItemObject
+class WeaponItemObject : public ItemObject
 {
-protected:
-    unsigned int _animationCode = 0;
-    unsigned int _damageMin = 0;
-    unsigned int _damageMax = 0;
-    unsigned int _damageType = 0;
-    unsigned int _rangePrimary = 0;
-    unsigned int _rangeSecondary = 0;
-    unsigned int _minimumStrength = 0;
-    unsigned int _actionCostPrimary = 0;
-    unsigned int _actionCostSecondary = 0;
-    unsigned int _burstRounds = 0;
-    unsigned int _ammoType = 0;
-    unsigned int _ammoPID = 0;
-    unsigned int _ammoCapacity = 0;
-    int _perk = -1;
 public:
-    GameWeaponItemObject();
-    virtual ~GameWeaponItemObject();
+    WeaponItemObject();
+    ~WeaponItemObject() override;
 
     unsigned int animationCode() const;
     void setAnimationCode(unsigned int value);
@@ -98,9 +83,23 @@ public:
     int perk() const;
     void setPerk(int value);
 
+protected:
+    unsigned int _animationCode = 0;
+    unsigned int _damageMin = 0;
+    unsigned int _damageMax = 0;
+    unsigned int _damageType = 0;
+    unsigned int _rangePrimary = 0;
+    unsigned int _rangeSecondary = 0;
+    unsigned int _minimumStrength = 0;
+    unsigned int _actionCostPrimary = 0;
+    unsigned int _actionCostSecondary = 0;
+    unsigned int _burstRounds = 0;
+    unsigned int _ammoType = 0;
+    unsigned int _ammoPID = 0;
+    unsigned int _ammoCapacity = 0;
+    int _perk = -1;
 };
 
 }
 }
-
-#endif // FALLTERGEIST_GAMEWEAPONITEMOBJECT_H
+#endif // FALLTERGEIST_GAME_WEAPONITEMOBJECT_H

@@ -37,7 +37,7 @@
 namespace Falltergeist
 {
 
-InventoryItem::InventoryItem(Game::GameItemObject *item, int x, int y) : ActiveUI(x, y)
+InventoryItem::InventoryItem(Game::ItemObject *item, int x, int y) : ActiveUI(x, y)
 {
     _item = item;
     addEventHandler("mouseleftdown", [this](Event::Event* event){ this->onMouseLeftDown(dynamic_cast<Event::Mouse*>(event)); });
@@ -92,12 +92,12 @@ unsigned int InventoryItem::pixel(unsigned int x, unsigned int y)
     return x < width() && y < height();
 }
 
-Game::GameItemObject* InventoryItem::item()
+Game::ItemObject* InventoryItem::item()
 {
     return _item;
 }
 
-void InventoryItem::setItem(Game::GameItemObject* item)
+void InventoryItem::setItem(Game::ItemObject* item)
 {
     _item = item;
 }
@@ -150,7 +150,7 @@ void InventoryItem::onArmorDragStop(Event::Mouse* event)
             itemsList->addItem(this, 1);
         }
         this->setItem(itemObject);
-        if (auto armor = dynamic_cast<Game::GameArmorItemObject*>(itemObject))
+        if (auto armor = dynamic_cast<Game::ArmorItemObject*>(itemObject))
         {
             Game::getInstance()->player()->setArmorSlot(armor);
         }
