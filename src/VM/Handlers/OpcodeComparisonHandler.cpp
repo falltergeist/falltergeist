@@ -30,7 +30,7 @@
 namespace Falltergeist
 {
 
-OpcodeComparisonHandler::OpcodeComparisonHandler(VM* vm, Cmp cmpType) : OpcodeHandler(vm)
+OpcodeComparisonHandler::OpcodeComparisonHandler(VM* vm, Type cmpType) : OpcodeHandler(vm)
 {
     _cmpType = cmpType;
 }
@@ -39,17 +39,16 @@ const char* OpcodeComparisonHandler::_cmpOpcodeName()
 {
     switch (_cmpType)
     {
-        case Cmp::EQUAL:         return "op_equal";
-        case Cmp::NOT_EQUAL:     return "op_not_equal";
-        case Cmp::LESS:          return "op_less";
-        case Cmp::LESS_EQUAL:    return "op_less_equal";
-        case Cmp::GREATER:       return "op_greater";
-        case Cmp::GREATER_EQUAL: return "op_greater_equal";
+        case Type::EQUAL:         return "op_equal";
+        case Type::NOT_EQUAL:     return "op_not_equal";
+        case Type::LESS:          return "op_less";
+        case Type::LESS_EQUAL:    return "op_less_equal";
+        case Type::GREATER:       return "op_greater";
+        case Type::GREATER_EQUAL: return "op_greater_equal";
         default:
             throw Exception("Invalid compare type!");
     }
 }
-
 
 void OpcodeComparisonHandler::_run()
 {

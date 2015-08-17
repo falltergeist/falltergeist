@@ -87,11 +87,28 @@ private:
     };
     enum class Opcode
     {
-        END_STREAM = 0, END_CHUNK, CREATE_TIMER, INIT_AUDIO_BUF,
-        START_AUDIO, INIT_VIDIO_BUF, UNKNOWN_0x06, SEND_BUFFER, AUDIO_DATA,
-        AUDIO_SILENCE, INIT_VIDEO, CREATE_GRADIENT, SET_PALETTE, SET_PALETTE_COMPRESSED,
-        UNKNOWN_0xe, SET_DECODING_MAP, UNKNOWN_0x10, VIDEO_DATA,
-        UNKNOWN_0x12, UNKNOWN_0x13, UNKNOWN_0x14, UNKNOWN_0x15
+        END_STREAM = 0,
+        END_CHUNK,
+        CREATE_TIMER,
+        INIT_AUDIO_BUF,
+        START_AUDIO,
+        INIT_VIDIO_BUF,
+        UNKNOWN_0x06,
+        SEND_BUFFER,
+        AUDIO_DATA,
+        AUDIO_SILENCE,
+        INIT_VIDEO,
+        CREATE_GRADIENT,
+        SET_PALETTE,
+        SET_PALETTE_COMPRESSED,
+        UNKNOWN_0xe,
+        SET_DECODING_MAP,
+        UNKNOWN_0x10,
+        VIDEO_DATA,
+        UNKNOWN_0x12,
+        UNKNOWN_0x13,
+        UNKNOWN_0x14,
+        UNKNOWN_0x15
     };
     //drawing helpers
     void _drawRow(uint32_t x, uint32_t y, uint8_t c1, uint8_t c2, uint8_t mask);

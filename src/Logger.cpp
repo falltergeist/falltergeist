@@ -48,7 +48,7 @@ std::ostream &Logger::log(Logger::Level level, const std::string &subsystem)
 }
 
 // Initial level; overridden with config option with default level INFO
-Logger::Level Logger::_level = Logger::Level::LEVEL_DEBUG;
+Logger::Level Logger::_level = Logger::Level::DEBUG;
 bool Logger::_useColors = true;
 
 #if defined(__unix__) || defined(__APPLE__)
@@ -63,15 +63,15 @@ const char *Logger::levelString(Logger::Level level)
     {
         switch (level)
         {
-            case Logger::Level::LEVEL_DEBUG:
+            case Logger::Level::DEBUG:
                 return "[DEBUG]";
-            case Logger::Level::LEVEL_INFO:
+            case Logger::Level::INFO:
                 return "\x1b[32m[INFO]\x1b[0m";
-            case Logger::Level::LEVEL_WARNING:
+            case Logger::Level::WARNING:
                 return "\x1b[33m[WARNING]\x1b[0m";
-            case Logger::Level::LEVEL_ERROR:
+            case Logger::Level::ERROR:
                 return "\x1b[31m[ERROR]\x1b[0m";
-            case Logger::Level::LEVEL_CRITICAL:
+            case Logger::Level::CRITICAL:
                 return "\x1b[31;1m[CRITICAL]\x1b[0m";
         }
     }
@@ -79,15 +79,15 @@ const char *Logger::levelString(Logger::Level level)
     {
         switch (level)
         {
-            case Logger::Level::LEVEL_DEBUG:
+            case Logger::Level::DEBUG:
                 return "[DEBUG]";
-            case Logger::Level::LEVEL_INFO:
+            case Logger::Level::INFO:
                 return "[INFO]";
-            case Logger::Level::LEVEL_WARNING:
+            case Logger::Level::WARNING:
                 return "[WARNING]";
-            case Logger::Level::LEVEL_ERROR:
+            case Logger::Level::ERROR:
                 return "[ERROR]";
-            case Logger::Level::LEVEL_CRITICAL:
+            case Logger::Level::CRITICAL:
                 return "[CRITICAL]";
         };
     }
@@ -97,27 +97,27 @@ const char *Logger::levelString(Logger::Level level)
 
 std::ostream &Logger::debug(const std::string &subsystem)
 {
-    return log(Logger::Level::LEVEL_DEBUG, subsystem);
+    return log(Logger::Level::DEBUG, subsystem);
 }
 
 std::ostream &Logger::info(const std::string &subsystem)
 {
-    return log(Logger::Level::LEVEL_INFO, subsystem);
+    return log(Logger::Level::INFO, subsystem);
 }
 
 std::ostream &Logger::warning(const std::string &subsystem)
 {
-    return log(Logger::Level::LEVEL_WARNING, subsystem);
+    return log(Logger::Level::WARNING, subsystem);
 }
 
 std::ostream &Logger::error(const std::string &subsystem)
 {
-    return log(Logger::Level::LEVEL_ERROR, subsystem);
+    return log(Logger::Level::ERROR, subsystem);
 }
 
 std::ostream &Logger::critical(const std::string &subsystem)
 {
-    return log(Logger::Level::LEVEL_CRITICAL, subsystem);
+    return log(Logger::Level::CRITICAL, subsystem);
 }
 
 void Logger::useColors(bool useColors)
@@ -131,23 +131,23 @@ void Logger::setLevel(const std::string &level)
 
     if (level == "debug")
     {
-        lvl = Level::LEVEL_DEBUG;
+        lvl = Level::DEBUG;
     }
     else if (level == "info")
     {
-        lvl = Level::LEVEL_INFO;
+        lvl = Level::INFO;
     }
     else if (level == "warning")
     {
-        lvl = Level::LEVEL_WARNING;
+        lvl = Level::WARNING;
     }
     else if (level == "error")
     {
-        lvl = Level::LEVEL_ERROR;
+        lvl = Level::ERROR;
     }
     else if (level == "critical")
     {
-        lvl = Level::LEVEL_CRITICAL;
+        lvl = Level::CRITICAL;
     }
     else
     {

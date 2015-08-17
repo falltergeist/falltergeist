@@ -35,8 +35,17 @@ class Image;
 class SmallCounter : public ActiveUI
 {
 public:
-    enum class Color { WHITE = 1, YELLOW, RED };
-    enum class Type { UNSIGNED = 0, SIGNED };
+    enum class Color
+    {
+        WHITE = 1,
+        YELLOW,
+        RED
+    };
+    enum class Type
+    {
+        UNSIGNED = 0,
+        SIGNED
+    };
 
     SmallCounter(int x = 0, int y = 0);
     ~SmallCounter() override;

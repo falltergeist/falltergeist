@@ -35,7 +35,11 @@ class Image;
 class BigCounter : public ActiveUI
 {
 public:
-    enum class Color { WHITE = 1, RED };
+    enum class Color
+    {
+        WHITE = 1,
+        RED
+    };
 
     BigCounter(int x = 0, int y = 0, unsigned int length = 2);
     ~BigCounter() override;

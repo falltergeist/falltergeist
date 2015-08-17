@@ -34,12 +34,20 @@ namespace Falltergeist
 class OpcodeComparisonHandler : public OpcodeHandler
 {
 public:
-    enum class Cmp { EQUAL = 1, NOT_EQUAL, LESS, LESS_EQUAL, GREATER, GREATER_EQUAL };
+    enum class Type
+    {
+        EQUAL = 1,
+        NOT_EQUAL,
+        LESS,
+        LESS_EQUAL,
+        GREATER,
+        GREATER_EQUAL
+    };
     
-    OpcodeComparisonHandler(VM* vm, Cmp cmpType);
+    OpcodeComparisonHandler(VM* vm, Type cmpType);
 
 private:
-    Cmp _cmpType;
+    Type _cmpType;
     void _run();
     const char* _cmpOpcodeName();
     
@@ -48,27 +56,27 @@ private:
     {
         switch (_cmpType)
         {
-            case Cmp::EQUAL:
+            case Type::EQUAL:
             {
                 return arg1 == arg2;
             }
-            case Cmp::NOT_EQUAL:
+            case Type::NOT_EQUAL:
             {
                 return arg1 != arg2;
             }
-            case Cmp::LESS:
+            case Type::LESS:
             {
                 return arg1 < arg2;
             }
-            case Cmp::LESS_EQUAL:
+            case Type::LESS_EQUAL:
             {
                 return arg1 <= arg2;
             }
-            case Cmp::GREATER:
+            case Type::GREATER:
             {
                 return arg1 > arg2;
             }
-            case Cmp::GREATER_EQUAL:
+            case Type::GREATER_EQUAL:
             {
                 return arg1 >= arg2;
             }

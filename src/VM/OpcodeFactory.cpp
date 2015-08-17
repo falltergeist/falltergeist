@@ -233,12 +233,12 @@ OpcodeHandler* OpcodeFactory::createOpcode(unsigned int number, VM* vm)
         case 0x8030: return new Opcode8030Handler(vm);
         case 0x8031: return new Opcode8031Handler(vm);
         case 0x8032: return new Opcode8032Handler(vm);
-        case 0x8033: return new OpcodeComparisonHandler(vm, OpcodeComparisonHandler::Cmp::EQUAL);
-        case 0x8034: return new OpcodeComparisonHandler(vm, OpcodeComparisonHandler::Cmp::NOT_EQUAL);
-        case 0x8035: return new OpcodeComparisonHandler(vm, OpcodeComparisonHandler::Cmp::LESS_EQUAL);
-        case 0x8036: return new OpcodeComparisonHandler(vm, OpcodeComparisonHandler::Cmp::GREATER_EQUAL);
-        case 0x8037: return new OpcodeComparisonHandler(vm, OpcodeComparisonHandler::Cmp::LESS);
-        case 0x8038: return new OpcodeComparisonHandler(vm, OpcodeComparisonHandler::Cmp::GREATER);
+        case 0x8033: return new OpcodeComparisonHandler(vm, OpcodeComparisonHandler::Type::EQUAL);
+        case 0x8034: return new OpcodeComparisonHandler(vm, OpcodeComparisonHandler::Type::NOT_EQUAL);
+        case 0x8035: return new OpcodeComparisonHandler(vm, OpcodeComparisonHandler::Type::LESS_EQUAL);
+        case 0x8036: return new OpcodeComparisonHandler(vm, OpcodeComparisonHandler::Type::GREATER_EQUAL);
+        case 0x8037: return new OpcodeComparisonHandler(vm, OpcodeComparisonHandler::Type::LESS);
+        case 0x8038: return new OpcodeComparisonHandler(vm, OpcodeComparisonHandler::Type::GREATER);
         case 0x8039: return new Opcode8039Handler(vm);
         case 0x803A: return new Opcode803AHandler(vm);
         case 0x803B: return new Opcode803BHandler(vm);

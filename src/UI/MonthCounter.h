@@ -38,8 +38,18 @@ public:
 
     enum class Month
     {
-        JANUARY = 0, FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY,
-        AUGUST, SEPTEMBER, OCTOBER, NOVEMBER, DECEMBER
+        JANUARY = 0,
+        FEBRUARY,
+        MARCH,
+        APRIL,
+        MAY,
+        JUNE,
+        JULY,
+        AUGUST,
+        SEPTEMBER,
+        OCTOBER,
+        NOVEMBER,
+        DECEMBER
     };
 
     MonthCounter(int x = 0, int y = 0);
