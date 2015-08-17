@@ -54,7 +54,7 @@ public:
     virtual int yOffset();
     virtual void setYOffset(int yOffset);
 
-    virtual Texture* texture();
+    virtual Texture* texture() const;
     virtual void setTexture(Texture* texture);
 
     virtual void setVisible(bool value);
@@ -63,8 +63,8 @@ public:
     virtual void think();
     virtual void render(bool eggTransparency = false);
 
-    virtual unsigned int width();
-    virtual unsigned int height();
+    virtual unsigned int width() const;
+    virtual unsigned int height() const;
 
     virtual unsigned int pixel(unsigned int x, int unsigned y);
 

@@ -18,10 +18,9 @@
  */
 
 // C++ standard includes
-#include <sstream>
-#include <string.h>
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
 #include "../UI/BigCounter.h"
@@ -41,54 +40,39 @@ BigCounter::~BigCounter()
 {
 }
 
-Texture* BigCounter::texture()
+Texture* BigCounter::texture() const
 {
-    if (_texture) return _texture;
+    static const int kCharWidth = 14;
+    static const int kCharHeight = 24;
 
-    auto numbers = std::shared_ptr<Image>(new Image("art/intrface/bignum.frm"));
+    if (_textureOnDemand) return _textureOnDemand.get();
 
-    // number as text
-    std::stringstream ss;
-    ss << _number;
-
-    _texture = new Texture(14*_length, 24);
-
-    char* textNumber = new char[_length + 1]();
-
-    for (unsigned int i = 0; i < _length; ++i)
+    auto numbers = make_unique<Image>("art/intrface/bignum.frm");
+    unsigned int xOffsetByColor = 0;
+    switch (_color)
     {
-        textNumber[i] = '0';
+        case COLOR_WHITE:
+            break;
+        case COLOR_RED:
+            xOffsetByColor = 168;
+            break;
     }
 
-    unsigned int length = strlen(ss.str().c_str());
-    unsigned int diff = _length - length;
-    for (unsigned int i = 0; i < length; i++)
-    {
-        textNumber[diff + i] = ss.str().c_str()[i];
-    }
+    _textureOnDemand = Texture::generateTextureForNumber(
+        _number, _length, numbers->texture(),
+        kCharWidth, kCharHeight, xOffsetByColor);
+    return _textureOnDemand.get();
+}
 
-    for (unsigned int i = 0; i < _length; i++)
-    {
-        int key = 9 -  ('9' - textNumber[i]);
-        unsigned int x = 14 * key;
-        switch (_color)
-        {
-            case COLOR_WHITE:
-                break;
-            case COLOR_RED:
-                x += 168;
-                break;
-        }
-        numbers->texture()->copyTo(_texture, 14*i, 0, x, 0, 14, 24);
-    }
-    delete [] textNumber;
-    return _texture;
+void BigCounter::setTexture(Texture* texture)
+{
+    _textureOnDemand.reset(texture);
 }
 
 void BigCounter::setNumber(unsigned int number)
 {
     if (_number == number) return;
-    delete _texture; _texture = 0;
+    _textureOnDemand.reset();
     _number = number;
 }
 
@@ -96,7 +80,6 @@ unsigned int BigCounter::number()
 {
     return _number;
 }
-
 
 void BigCounter::setColor(unsigned char color)
 {
@@ -107,7 +90,7 @@ void BigCounter::setColor(unsigned char color)
             if (_color != color)
             {
                 _color = color;
-                delete _texture; _texture = 0;
+                _textureOnDemand.reset();
             }
             break;
     }

@@ -221,7 +221,7 @@ void ImageButton::export_to_lua_script(Lua::Script* script)
         .endNamespace();
 }
 
-Texture* ImageButton::texture()
+Texture* ImageButton::texture() const
 {
     if (_checkboxMode && _checked) return _textures.at(1);
 

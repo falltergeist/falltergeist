@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Graphics/Texture.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -304,6 +305,37 @@ bool Texture::blitWithAlpha(Texture* blitMask, int maskOffsetX, int maskOffsetY)
     }
 
     return true;
+}
+
+// static
+std::unique_ptr<Texture> Texture::generateTextureForNumber(
+    unsigned int number,
+    unsigned int maxLength,
+    Texture* symbolSource,
+    unsigned int charWidth,
+    unsigned int charHeight,
+    unsigned int xOffsetByColor,
+    bool isSigned)
+{
+    const auto charsCount = maxLength + (isSigned ? 1U : 0U);
+    auto texture = make_unique<Texture>(charWidth * charsCount, charHeight);
+
+    // number as text
+    auto number_text = std::to_string(number);
+
+    // Fill counter padding with leading zeroes.
+    if (number_text.size() < maxLength)
+    {
+        number_text.insert(0, maxLength - number_text.size(), '0');
+    }
+
+    for (unsigned int i = 0; i < maxLength; i++)
+    {
+        const unsigned int key = 9 -  ('9' - number_text[i]);
+        const unsigned int x = charWidth * key + xOffsetByColor;
+        symbolSource->copyTo(texture.get(), charWidth * i, 0, x, 0, charWidth, charHeight);
+    }
+    return std::move(texture);
 }
 
 }

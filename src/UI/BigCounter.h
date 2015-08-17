@@ -21,7 +21,7 @@
 #define FALLTERGEIST_BIGCOUNTER_H
 
 // C++ standard includes
-#include <vector>
+#include <memory>
 
 // Falltergeist includes
 #include "../Graphics/ActiveUI.h"
@@ -38,18 +38,30 @@ protected:
     unsigned char _color = COLOR_WHITE;
     unsigned int _number = 0;
     unsigned int _length = 2;
+    mutable std::unique_ptr<Texture> _textureOnDemand;
+
+    // We should override this method to prevent changing old _texture field.
+    void setTexture(Texture* texture) override;
+
 public:
     enum {COLOR_WHITE = 1, COLOR_RED};
     BigCounter(int x = 0, int y = 0, unsigned int length = 2);
-    ~BigCounter();
+    ~BigCounter() override;
 
-    virtual Texture* texture();
+    Texture* texture() const override;
 
     void setColor(unsigned char color);
     unsigned char color();
 
     void setNumber(unsigned int number);
     unsigned int number();
+
+private:
+    // Hide unused field from childs.
+    using ActiveUI::_texture;
+
+    BigCounter(const BigCounter&) = delete;
+    void operator=(const BigCounter&) = delete;
 };
 
 }

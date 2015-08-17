@@ -118,7 +118,7 @@ void AnimationQueue::think()
     }
 }
 
-Texture* AnimationQueue::texture()
+Texture* AnimationQueue::texture() const
 {
     return currentAnimation()->texture();
 }
@@ -130,17 +130,17 @@ unsigned int AnimationQueue::pixel(unsigned int x, unsigned int y)
     return currentAnimation()->pixel(x, y);
 }
 
-Animation* AnimationQueue::currentAnimation()
+Animation* AnimationQueue::currentAnimation() const
 {
     return _animations.at(_currentAnimation);
 }
 
-unsigned int AnimationQueue::width()
+unsigned int AnimationQueue::width() const
 {
     return currentAnimation()->width();
 }
 
-unsigned int AnimationQueue::height()
+unsigned int AnimationQueue::height() const
 {
     return currentAnimation()->height();
 }
