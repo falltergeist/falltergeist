@@ -72,6 +72,10 @@ private:
             {
                 return arg1 >= arg2;
             }
+            default:
+            {
+                throw Exception("Invalid compare type!");
+            }
         }
     }
 };

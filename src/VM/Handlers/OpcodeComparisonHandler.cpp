@@ -45,6 +45,8 @@ const char* OpcodeComparisonHandler::_cmpOpcodeName()
         case Cmp::LESS_EQUAL:    return "op_less_equal";
         case Cmp::GREATER:       return "op_greater";
         case Cmp::GREATER_EQUAL: return "op_greater_equal";
+        default:
+            throw Exception("Invalid compare type!");
     }
 }
 
