@@ -26,6 +26,7 @@
 // Falltergeist includes
 #include "../Graphics/ActiveUI.h"
 #include "../UI/ImageList.h"
+
 // Third party includes
 
 namespace Falltergeist

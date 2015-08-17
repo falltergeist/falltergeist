@@ -17,39 +17,42 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../State/Location.h"
+
 // C++ standard includes
+#include <algorithm>
 #include <cmath>
 #include <list>
-#include <algorithm>
 
 // Falltergeist includes
+#include "../Audio/Mixer.h"
 #include "../Event/MouseEvent.h"
 #include "../Exception.h"
-#include "../Game/Game.h"
 #include "../Game/ContainerItemObject.h"
+#include "../Game/Defines.h"
+#include "../Game/DoorSceneryObject.h"
+#include "../Game/DudeObject.h"
+#include "../Game/ExitMiscObject.h"
+#include "../Game/Game.h"
+#include "../Game/Object.h"
+#include "../Game/ObjectFactory.h"
 #include "../Game/Time.h"
+#include "../Game/WeaponItemObject.h"
 #include "../Graphics/Animation.h"
 #include "../Graphics/AnimationQueue.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Tile.h"
 #include "../Graphics/TileMap.h"
-#include "../PathFinding/Hexagon.h"
-#include "../PathFinding/HexagonGrid.h"
 #include "../Input/Mouse.h"
 #include "../LocationCamera.h"
 #include "../Logger.h"
+#include "../PathFinding/Hexagon.h"
+#include "../PathFinding/HexagonGrid.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
-#include "../Game/Defines.h"
-#include "../Game/DoorSceneryObject.h"
-#include "../Game/DudeObject.h"
-#include "../Game/ExitMiscObject.h"
-#include "../Game/Object.h"
-#include "../Game/ObjectFactory.h"
-#include "../Game/WeaponItemObject.h"
 #include "../State/CursorDropdown.h"
 #include "../State/ExitConfirm.h"
-#include "../State/Location.h"
 #include "../State/MainMenu.h"
 #include "../State/PlayerPanel.h"
 #include "../UI/Image.h"
@@ -57,7 +60,6 @@
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
 #include "../VM/VM.h"
-#include "Audio/AudioMixer.h"
 
 // Third party includes
 

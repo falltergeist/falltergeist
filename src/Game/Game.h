@@ -33,6 +33,10 @@
 
 namespace Falltergeist
 {
+namespace Audio
+{
+    class Mixer;
+}
 namespace State
 {
     class Location;
@@ -43,7 +47,6 @@ class Screen;
 class ResourceManager;
 class FpsCounter;
 class Mouse;
-class AudioMixer;
 class Renderer;
 class UI;
 class TextArea;
@@ -82,7 +85,7 @@ public:
     Renderer* renderer();
     GameTime* gameTime();
     State::Location* locationState();
-    AudioMixer* mixer();
+    Audio::Mixer* mixer();
 
     void setGVAR(unsigned int number, int value);
     int GVAR(unsigned int number);
@@ -101,7 +104,7 @@ protected:
     GameTime* _gameTime = 0;
     Renderer* _renderer = 0;
     Mouse* _mouse = 0;
-    AudioMixer* _mixer = 0;
+    std::unique_ptr<Audio::Mixer> _mixer;
     FpsCounter* _fpsCounter = 0;
     TextArea* _mousePosition = 0;
     TextArea* _currentTime = 0;

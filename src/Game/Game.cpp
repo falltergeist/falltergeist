@@ -17,16 +17,19 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Game/Game.h"
+
 // C++ standard includes
 #include <sstream>
 
 // Falltergeist includes
-#include "../Audio/AudioMixer.h"
+#include "../Audio/Mixer.h"
+#include "../Base/StlFeatures.h"
 #include "../CrossPlatform.h"
 #include "../Event/StateEvent.h"
 #include "../Exception.h"
-#include "Game.h"
-#include "Time.h"
+#include "../Game/Time.h"
 #include "../Graphics/AnimatedPalette.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
@@ -87,7 +90,7 @@ void Game::init(std::unique_ptr<Settings> settings)
     std::string version = CrossPlatform::getVersion();
     renderer()->setCaption(version.c_str());
 
-    _mixer = new AudioMixer();
+    _mixer = make_unique<Audio::Mixer>();
     _mouse = new Mouse();
     _fpsCounter = new FpsCounter(renderer()->width() - 42, 2);
 
@@ -114,7 +117,7 @@ void Game::shutdown()
     delete _fpsCounter;
     delete _mousePosition;
     delete _falltergeistVersion;
-    delete _mixer;
+    _mixer.reset();
     ResourceManager::getInstance()->shutdown();
     while (!_states.empty()) popState();
     _settings.reset();
@@ -440,9 +443,9 @@ GameTime* Game::gameTime()
     return _gameTime;
 }
 
-AudioMixer* Game::mixer()
+Audio::Mixer* Game::mixer()
 {
-    return _mixer;
+    return _mixer.get();
 }
 
 }
