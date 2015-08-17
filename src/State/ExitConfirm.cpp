@@ -39,7 +39,11 @@ namespace Falltergeist
 namespace State
 {
 
-ExitConfirm::ExitConfirm()
+ExitConfirm::ExitConfirm() : State()
+{
+}
+
+ExitConfirm::~ExitConfirm()
 {
 }
 
@@ -66,8 +70,8 @@ void ExitConfirm::init()
 
     auto yesButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+50, backgroundY+102);
     auto noButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+183, backgroundY+102);
-    yesButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doYes(); });
-    noButton->addEventHandler("mouseleftclick",  [this](Event* event){ this->doNo(); });
+    yesButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doYes(); });
+    noButton->addEventHandler("mouseleftclick",  [this](Event::Event* event){ this->doNo(); });
 
     // label: Are you sure you want to quit?
     auto font = ResourceManager::getInstance()->font("font1.aaf", 0xb89c28ff);
@@ -108,7 +112,7 @@ void ExitConfirm::doNo()
     Game::getInstance()->popState();
 }
 
-void ExitConfirm::onKeyDown(KeyboardEvent* event)
+void ExitConfirm::onKeyDown(Event::Keyboard* event)
 {
     switch (event->keyCode())
     {
@@ -123,16 +127,15 @@ void ExitConfirm::onKeyDown(KeyboardEvent* event)
     }
 }
 
-void ExitConfirm::onStateActivate(StateEvent* event)
+void ExitConfirm::onStateActivate(Event::State* event)
 {
     Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
 }
 
-void ExitConfirm::onStateDeactivate(StateEvent* event)
+void ExitConfirm::onStateDeactivate(Event::State* event)
 {
     Game::getInstance()->mouse()->popState();
 }
-
 
 }
 }

@@ -20,6 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Event/Event.h"
+#include "../Event/Mouse.h"
 #include "../Game/Game.h"
 #include "../Game/DudeObject.h"
 #include "../Game/ItemObject.h"
@@ -38,10 +40,10 @@ namespace Falltergeist
 InventoryItem::InventoryItem(Game::GameItemObject *item, int x, int y) : ActiveUI(x, y)
 {
     _item = item;
-    addEventHandler("mouseleftdown", [this](Event* event){ this->onMouseLeftDown(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mousedragstart", [this](Event* event){ this->onMouseDragStart(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mousedrag", [this](Event* event){ this->onMouseDrag(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mousedragstop", [this](Event* event){ this->onMouseDragStop(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseleftdown", [this](Event::Event* event){ this->onMouseLeftDown(dynamic_cast<Event::Mouse*>(event)); });
+    addEventHandler("mousedragstart", [this](Event::Event* event){ this->onMouseDragStart(dynamic_cast<Event::Mouse*>(event)); });
+    addEventHandler("mousedrag", [this](Event::Event* event){ this->onMouseDrag(dynamic_cast<Event::Mouse*>(event)); });
+    addEventHandler("mousedragstop", [this](Event::Event* event){ this->onMouseDragStop(dynamic_cast<Event::Mouse*>(event)); });
 }
 
 unsigned int InventoryItem::type() const
@@ -100,29 +102,29 @@ void InventoryItem::setItem(Game::GameItemObject* item)
     _item = item;
 }
 
-void InventoryItem::onMouseLeftDown(MouseEvent* event)
+void InventoryItem::onMouseLeftDown(Event::Mouse* event)
 {
 }
 
-void InventoryItem::onMouseDragStart(MouseEvent* event)
+void InventoryItem::onMouseDragStart(Event::Mouse* event)
 {
     _oldType = type();
     setType(TYPE_DRAG);
 }
 
-void InventoryItem::onMouseDrag(MouseEvent* event)
+void InventoryItem::onMouseDrag(Event::Mouse* event)
 {
     setXOffset(xOffset() + event->xOffset());
     setYOffset(yOffset() + event->yOffset());
 }
 
-void InventoryItem::onMouseDragStop(MouseEvent* event)
+void InventoryItem::onMouseDragStop(Event::Mouse* event)
 {
     setXOffset(0);
     setYOffset(0);
     setType(_oldType);
 
-    auto itemevent = new MouseEvent("itemdragstop");
+    auto itemevent = new Event::Mouse("itemdragstop");
     itemevent->setX(event->x());
     itemevent->setY(event->y());
     itemevent->setEmitter(this);
@@ -131,7 +133,7 @@ void InventoryItem::onMouseDragStop(MouseEvent* event)
 
 }
 
-void InventoryItem::onArmorDragStop(MouseEvent* event)
+void InventoryItem::onArmorDragStop(Event::Mouse* event)
 {
     // Check if mouse is over this item
     if (event->x() <= x() || event->x() >= x() + width()) return;
@@ -155,7 +157,7 @@ void InventoryItem::onArmorDragStop(MouseEvent* event)
     }
 }
 
-void InventoryItem::onHandDragStop(MouseEvent* event)
+void InventoryItem::onHandDragStop(Event::Mouse* event)
 {
     // Check if mouse is over this item
     if (event->x() <= x() || event->x() >= x() + width()) return;

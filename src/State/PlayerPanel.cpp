@@ -72,18 +72,18 @@ void PlayerPanel::init()
     setX((game->renderer()->width() - 640)*0.5);
     setY(game->renderer()->height() - iface->height());
     auto background = addUI("background", iface);
-    background->addEventHandler("mouseleftdown", [this](Event* event){ this->onPanelMouseDown(dynamic_cast<MouseEvent*>(event)); });
-    background->addEventHandler("mousein", [this](Event* event){ this->onPanelMouseIn(dynamic_cast<MouseEvent*>(event)); });
-    background->addEventHandler("mouseout", [this](Event* event){ this->onPanelMouseOut(dynamic_cast<MouseEvent*>(event)); });
+    background->addEventHandler("mouseleftdown", [this](Event::Event* event){ this->onPanelMouseDown(dynamic_cast<Event::Mouse*>(event)); });
+    background->addEventHandler("mousein",       [this](Event::Event* event){ this->onPanelMouseIn(dynamic_cast<Event::Mouse*>(event)); });
+    background->addEventHandler("mouseout",      [this](Event::Event* event){ this->onPanelMouseOut(dynamic_cast<Event::Mouse*>(event)); });
   
     addUI("change_hand_button", new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 218, 5));
-    getActiveUI("change_hand_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onChangeHandButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    getActiveUI("change_hand_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onChangeHandButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     addUI("inventory_button", new ImageButton(ImageButton::TYPE_PANEL_INVENTORY, 211, 40));
-    getActiveUI("inventory_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onInventoryButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    getActiveUI("inventory_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onInventoryButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     addUI("options_button", new ImageButton(ImageButton::TYPE_PANEL_OPTIONS, 210, 61));
-    getActiveUI("options_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onOptionsButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    getActiveUI("options_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onOptionsButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     addUI("attack_button", new ImageButton(ImageButton::TYPE_PANEL_ATTACK, 267, 25));
 
@@ -96,16 +96,16 @@ void PlayerPanel::init()
     getSmallCounter("armor_class")->setType(SmallCounter::SIGNED);
 
     addUI("skilldex_button", new ImageButton(ImageButton::TYPE_BIG_RED_CIRCLE, 523, 5));
-    getActiveUI("skilldex_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onSkilldexButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    getActiveUI("skilldex_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onSkilldexButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     addUI("map_button", new ImageButton(ImageButton::TYPE_PANEL_MAP, 526, 39));
-    getActiveUI("map_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onMapButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    getActiveUI("map_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onMapButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     addUI("cha_button", new ImageButton(ImageButton::TYPE_PANEL_CHA, 526, 58));
-    getActiveUI("cha_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onChaButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    getActiveUI("cha_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onChaButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     addUI("pip_button", new ImageButton(ImageButton::TYPE_PANEL_PIP, 526, 77));
-    getActiveUI("pip_button")->addEventHandler("mouseleftclick", [this](Event* event){ this->onPipBoyButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    getActiveUI("pip_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onPipBoyButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 }
 
 void PlayerPanel::playWindowOpenSfx()
@@ -138,7 +138,7 @@ void PlayerPanel::think()
     }
 }
 
-void PlayerPanel::handle(Event* event)
+void PlayerPanel::handle(Event::Event* event)
 {
     State::handle(event);
     // object in hand
@@ -150,52 +150,52 @@ void PlayerPanel::handle(Event* event)
     }
 }
 
-void PlayerPanel::onPanelMouseDown(MouseEvent* event)
+void PlayerPanel::onPanelMouseDown(Event::Mouse* event)
 {
     event->setHandled(true);
 }
 
-void PlayerPanel::onInventoryButtonClick(MouseEvent* event)
+void PlayerPanel::onInventoryButtonClick(Event::Mouse* event)
 {
     openInventory();
 }
 
-void PlayerPanel::onOptionsButtonClick(MouseEvent* event)
+void PlayerPanel::onOptionsButtonClick(Event::Mouse* event)
 {
     openOptions();
 }
 
-void PlayerPanel::onSkilldexButtonClick(MouseEvent* event)
+void PlayerPanel::onSkilldexButtonClick(Event::Mouse* event)
 {
     openSkilldex();
 }
 
-void PlayerPanel::onMapButtonClick(MouseEvent* event)
+void PlayerPanel::onMapButtonClick(Event::Mouse* event)
 {
     openMap();
 }
 
-void PlayerPanel::onChaButtonClick(MouseEvent* event)
+void PlayerPanel::onChaButtonClick(Event::Mouse* event)
 {
     openCharacterScreen();
 }
 
-void PlayerPanel::onPipBoyButtonClick(MouseEvent* event)
+void PlayerPanel::onPipBoyButtonClick(Event::Mouse* event)
 {
     openPopBoy();
 }
 
-void PlayerPanel::onChangeHandButtonClick(MouseEvent* event)
+void PlayerPanel::onChangeHandButtonClick(Event::Mouse* event)
 {
     toggleActiveHand();
 }
 
-void PlayerPanel::onPanelMouseIn(MouseEvent* event)
+void PlayerPanel::onPanelMouseIn(Event::Mouse* event)
 {
     Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
 }
 
-void PlayerPanel::onPanelMouseOut(MouseEvent* event)
+void PlayerPanel::onPanelMouseOut(Event::Mouse* event)
 {
     auto mouse = Game::getInstance()->mouse();
     if (mouse->scrollState())
@@ -212,11 +212,11 @@ void PlayerPanel::onPanelMouseOut(MouseEvent* event)
     }
 }
 
-void PlayerPanel::onPanelMouseUp(MouseEvent* event)
+void PlayerPanel::onPanelMouseUp(Event::Mouse* event)
 {
 }
 
-void PlayerPanel::onKeyDown(KeyboardEvent* event)
+void PlayerPanel::onKeyDown(Event::Keyboard* event)
 {
     switch (event->keyCode())
     {

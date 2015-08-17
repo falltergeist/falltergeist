@@ -38,9 +38,12 @@ namespace Falltergeist
 namespace State
 {
 
-PlayerEditAge::PlayerEditAge():State()
+PlayerEditAge::PlayerEditAge() : State()
 {
+}
 
+PlayerEditAge::~PlayerEditAge()
+{
 }
 
 void PlayerEditAge::init()
@@ -67,13 +70,13 @@ void PlayerEditAge::init()
     doneBox->setY(backgroundY+40);
 
     auto decButton = new ImageButton(ImageButton::TYPE_LEFT_ARROW, backgroundX+178, backgroundY+14);
-    decButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDecButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    decButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDecButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     auto incButton = new ImageButton(ImageButton::TYPE_RIGHT_ARROW, backgroundX+262, backgroundY+14);
-    incButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onIncButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    incButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onIncButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     auto doneButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+188, backgroundY+43);
-    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    doneButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     auto doneLabel = new TextArea(_t(MSG_EDITOR, 100), backgroundX+210, backgroundY+43);
 
@@ -95,21 +98,17 @@ void PlayerEditAge::init()
 
 }
 
-PlayerEditAge::~PlayerEditAge()
-{
-}
-
-void PlayerEditAge::onDecButtonClick(MouseEvent* event)
+void PlayerEditAge::onDecButtonClick(Event::Mouse* event)
 {
     doDec();
 }
 
-void PlayerEditAge::onIncButtonClick(MouseEvent* event)
+void PlayerEditAge::onIncButtonClick(Event::Mouse* event)
 {
     doInc();
 }
 
-void PlayerEditAge::onDoneButtonClick(MouseEvent* event)
+void PlayerEditAge::onDoneButtonClick(Event::Mouse* event)
 {
     doDone();
 }
@@ -145,7 +144,7 @@ void PlayerEditAge::doInc()
     }
 }
 
-void PlayerEditAge::onKeyDown(KeyboardEvent* event)
+void PlayerEditAge::onKeyDown(Event::Keyboard* event)
 {
     switch (event->keyCode())
     {

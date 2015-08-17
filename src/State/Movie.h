@@ -35,7 +35,8 @@ class MvePlayer;
 namespace State
 {
 
-typedef struct {
+typedef struct
+{
     unsigned int frame;
     int direction;
     int r;
@@ -49,13 +50,14 @@ class Movie : public State
 protected:
 public:
     Movie(int id);
-    virtual ~Movie();
+    ~Movie() override;
 
-    virtual void init();
-    virtual void think();
-    virtual void handle(Event* event);
+    void init() override;
+    void think() override;
+    void handle(Event::Event* event) override;
 
     void onVideoFinished();
+
 private:
     int _id;
     bool _started;

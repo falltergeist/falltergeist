@@ -21,7 +21,9 @@
 #include <sstream>
 
 // Falltergeist includes
-#include "../Event/StateEvent.h"
+#include "../Event/Event.h"
+#include "../Event/Mouse.h"
+#include "../Event/State.h"
 #include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -77,12 +79,12 @@ void LoadGame::init()
 
     // button: Done
     auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+391, bgY+349);
-    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    doneButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
     addUI(doneButton);
 
     // button: Cancel
     auto cancelButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+495, bgY+349);
-    cancelButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doCancel(); });
+    cancelButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doCancel(); });
     addUI(cancelButton);
 
     // LABELS
@@ -105,7 +107,7 @@ void LoadGame::init()
     addUI(cancelButtonLabel);
 }
 
-void LoadGame::onDoneButtonClick(MouseEvent* event)
+void LoadGame::onDoneButtonClick(Event::Mouse* event)
 {
     Game::getInstance()->popState();
 }
@@ -115,7 +117,7 @@ void LoadGame::doCancel()
     if (!Game::getInstance()->locationState())
     {
         removeEventHandlers("fadedone");
-        addEventHandler("fadedone", [this](Event* event){ this->onCancelFadeDone(dynamic_cast<StateEvent*>(event)); });
+        addEventHandler("fadedone", [this](Event::Event* event){ this->onCancelFadeDone(dynamic_cast<Event::State*>(event)); });
         Game::getInstance()->renderer()->fadeOut(255,255,255,1000);
     }
     else
@@ -124,25 +126,25 @@ void LoadGame::doCancel()
     }
 }
 
-void LoadGame::onCancelFadeDone(StateEvent* event)
+void LoadGame::onCancelFadeDone(Event::State* event)
 {
     removeEventHandlers("fadedone");
     Game::getInstance()->popState();
 }
 
-void LoadGame::onStateActivate(StateEvent* event)
+void LoadGame::onStateActivate(Event::State* event)
 {
     if (!Game::getInstance()->locationState())
         Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
     Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
 }
 
-void LoadGame::onStateDeactivate(StateEvent* event)
+void LoadGame::onStateDeactivate(Event::State* event)
 {
     Game::getInstance()->mouse()->popState();
 }
 
-void LoadGame::onKeyDown(KeyboardEvent* event)
+void LoadGame::onKeyDown(Event::Keyboard* event)
 {
     switch (event->keyCode())
     {

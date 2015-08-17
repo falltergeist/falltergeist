@@ -29,6 +29,10 @@
 
 namespace Falltergeist
 {
+namespace Event
+{
+    class Mouse;
+}
 namespace Game
 {
     class GameItemObject;
@@ -58,13 +62,13 @@ public:
     unsigned int width() const override;
     unsigned int height() const override;
 
-    void onMouseLeftDown(MouseEvent* event);
-    void onMouseDragStart(MouseEvent* event);
-    void onMouseDrag(MouseEvent* event);
-    void onMouseDragStop(MouseEvent* event);
+    void onMouseLeftDown(Event::Mouse* event);
+    void onMouseDragStart(Event::Mouse* event);
+    void onMouseDrag(Event::Mouse* event);
+    void onMouseDragStop(Event::Mouse* event);
 
-    void onArmorDragStop(MouseEvent* event);
-    void onHandDragStop(MouseEvent* event);
+    void onArmorDragStop(Event::Mouse* event);
+    void onHandDragStop(Event::Mouse* event);
 
 
 

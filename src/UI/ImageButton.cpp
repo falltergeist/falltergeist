@@ -25,6 +25,8 @@
 
 // Falltergeist includes
 #include "../Audio/Mixer.h"
+#include "../Event/Event.h"
+#include "../Event/Mouse.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
 #include "../Lua/Script.h"
@@ -202,9 +204,9 @@ ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
     }
-    addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mouseleftdown", [this](Event* event){ this->_onLeftButtonDown(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mouseout", [this](Event* event){ this->_onMouseOut(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseleftclick", [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    addEventHandler("mouseleftdown", [this](Event::Event* event){ this->_onLeftButtonDown(dynamic_cast<Event::Mouse*>(event)); });
+    addEventHandler("mouseout", [this](Event::Event* event){ this->_onMouseOut(dynamic_cast<Event::Mouse*>(event)); });
 }
 
 ImageButton::~ImageButton()
@@ -232,7 +234,7 @@ Texture* ImageButton::texture() const
     return _textures.at(0);
 }
 
-void ImageButton::_onLeftButtonClick(MouseEvent* event)
+void ImageButton::_onLeftButtonClick(Event::Mouse* event)
 {
     auto sender = dynamic_cast<ImageButton*>(event->emitter());
     if (sender->_checkboxMode)
@@ -245,7 +247,7 @@ void ImageButton::_onLeftButtonClick(MouseEvent* event)
     }
 }
 
-void ImageButton::_onLeftButtonDown(MouseEvent* event)
+void ImageButton::_onLeftButtonDown(Event::Mouse* event)
 {
     auto sender = dynamic_cast<ImageButton*>(event->emitter());
     if (!sender->_downSnd.empty())
@@ -255,7 +257,7 @@ void ImageButton::_onLeftButtonDown(MouseEvent* event)
 }
 
 
-void ImageButton::_onMouseOut(MouseEvent* event)
+void ImageButton::_onMouseOut(Event::Mouse* event)
 {
     auto sender = dynamic_cast<ImageButton*>(event->emitter());
     if (_leftButtonPressed && !sender->_upSnd.empty())

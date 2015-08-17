@@ -44,7 +44,11 @@ namespace Falltergeist
 namespace State
 {
 
-PlayerCreateOptions::PlayerCreateOptions()
+PlayerCreateOptions::PlayerCreateOptions() : State()
+{
+}
+
+PlayerCreateOptions::~PlayerCreateOptions()
 {
 }
 
@@ -67,11 +71,11 @@ void PlayerCreateOptions::init()
     auto eraseButton = new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3);
     auto doneButton = new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4);
 
-    saveButton->addEventHandler("mouseleftclick",    [this](Event* event){ this->onSaveButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    loadButton->addEventHandler("mouseleftclick",    [this](Event* event){ this->onLoadButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    printToFileButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onPrintToFileButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    eraseButton->addEventHandler("mouseleftclick",       [this](Event* event){ this->onEraseButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    doneButton->addEventHandler("mouseleftclick",        [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    saveButton->addEventHandler("mouseleftclick",    [this](Event::Event* event){ this->onSaveButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    loadButton->addEventHandler("mouseleftclick",    [this](Event::Event* event){ this->onLoadButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    printToFileButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onPrintToFileButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    eraseButton->addEventHandler("mouseleftclick",       [this](Event::Event* event){ this->onEraseButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    doneButton->addEventHandler("mouseleftclick",        [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     auto font = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
 
@@ -123,32 +127,32 @@ void PlayerCreateOptions::init()
     addUI(doneButtonLabel);
 }
 
-void PlayerCreateOptions::onSaveButtonClick(MouseEvent* event)
+void PlayerCreateOptions::onSaveButtonClick(Event::Mouse* event)
 {
 //    Game::getInstance()->pushState(new SavePlayerStatState());
 }
 
-void PlayerCreateOptions::onLoadButtonClick(MouseEvent* event)
+void PlayerCreateOptions::onLoadButtonClick(Event::Mouse* event)
 {
 //    Game::getInstance()->pushState(new LoadPlayerStatState());
 }
 
-void PlayerCreateOptions::onPrintToFileButtonClick(MouseEvent* event)
+void PlayerCreateOptions::onPrintToFileButtonClick(Event::Mouse* event)
 {
 //    Game::getInstance()->pushState(new SettingsMenu());
 }
 
-void PlayerCreateOptions::onEraseButtonClick(MouseEvent* event)
+void PlayerCreateOptions::onEraseButtonClick(Event::Mouse* event)
 {
 //    Game::getInstance()->pushState(new EraseConfirmState());
 }
 
-void PlayerCreateOptions::onDoneButtonClick(MouseEvent* event)
+void PlayerCreateOptions::onDoneButtonClick(Event::Mouse* event)
 {
     Game::getInstance()->popState();
 }
 
-void PlayerCreateOptions::onKeyDown(KeyboardEvent* event)
+void PlayerCreateOptions::onKeyDown(Event::Keyboard* event)
 {
     switch (event->keyCode())
     {

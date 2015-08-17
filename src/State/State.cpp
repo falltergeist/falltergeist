@@ -17,15 +17,17 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../State/State.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Event/StateEvent.h"
+#include "../Event/State.h"
 #include "../Game/Game.h"
 #include "../Graphics/ActiveUI.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/UI.h"
-#include "State.h"
 #include "../UI/ImageList.h"
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
@@ -37,10 +39,10 @@ namespace Falltergeist
 namespace State
 {
 
-State::State() : EventEmitter()
+State::State() : Event::Emitter()
 {
-    addEventHandler("activate",   [this](Event* event){ this->onStateActivate(dynamic_cast<StateEvent*>(event)); });
-    addEventHandler("deactivate", [this](Event* event){ this->onStateDeactivate(dynamic_cast<StateEvent*>(event)); });
+    addEventHandler("activate",   [this](Event::Event* event){ this->onStateActivate(dynamic_cast<Event::State*>(event)); });
+    addEventHandler("deactivate", [this](Event::Event* event){ this->onStateDeactivate(dynamic_cast<Event::State*>(event)); });
 }
 
 State::~State()
@@ -176,10 +178,10 @@ UI* State::getUI(const std::string& name)
     return nullptr;
 }
 
-void State::handle(Event* event)
+void State::handle(Event::Event* event)
 {
     if (event->handled()) return;
-    if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
+    if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
     {
         if (keyboardEvent->name() == "keydown")
         {
@@ -219,15 +221,15 @@ void State::popUI()
     _ui.pop_back();
 }
 
-void State::onStateActivate(StateEvent* event)
+void State::onStateActivate(Event::State* event)
 {
 }
 
-void State::onStateDeactivate(StateEvent* event)
+void State::onStateDeactivate(Event::State* event)
 {
 }
 
-void State::onKeyDown(KeyboardEvent* event)
+void State::onKeyDown(Event::Keyboard* event)
 {
 }
 

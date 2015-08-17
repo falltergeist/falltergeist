@@ -29,6 +29,10 @@
 
 namespace Falltergeist
 {
+namespace Event
+{
+    class Mouse;
+}
 namespace Game
 {
     class GameItemObject;
@@ -74,11 +78,11 @@ public:
     virtual void render(bool eggTransparency = false);
     virtual unsigned int pixel(unsigned int x, unsigned int y);
 
-    void onMouseLeftDown(MouseEvent* event);
-    void onMouseDragStart(MouseEvent* event);
-    void onMouseDrag(MouseEvent* event);
-    void onMouseDragStop(MouseEvent* event);
-    void onItemDragStop(MouseEvent* event);
+    void onMouseLeftDown(Event::Mouse* event);
+    void onMouseDragStart(Event::Mouse* event);
+    void onMouseDrag(Event::Mouse* event);
+    void onMouseDragStop(Event::Mouse* event);
+    void onItemDragStop(Event::Mouse* event);
 
     void addItem(InventoryItem* item, unsigned int ammount);
     void removeItem(InventoryItem* item, unsigned int ammount);

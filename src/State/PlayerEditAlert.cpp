@@ -77,7 +77,7 @@ void PlayerEditAlert::init()
     doneBox->setY(bgY+270);
 
     auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+264, bgY+273);
-    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    doneButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     auto doneLabel = new TextArea(_t(MSG_EDITOR, 100), bgX+284, bgY+273);
     auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
@@ -90,7 +90,7 @@ void PlayerEditAlert::init()
     addUI(doneLabel);
 }
 
-void PlayerEditAlert::onDoneButtonClick(MouseEvent* event)
+void PlayerEditAlert::onDoneButtonClick(Event::Mouse* event)
 {
     Game::getInstance()->popState();
 }

@@ -23,12 +23,16 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "State.h"
+#include "../State/State.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace Event
+{
+    class State;
+}
 namespace Game
 {
     class GameCritterObject;
@@ -72,8 +76,8 @@ public:
     VM* script();
     void setScript(VM* script);
     
-    virtual void onStateActivate(StateEvent* event);
-    virtual void onStateDeactivate(StateEvent* event);
+    void onStateActivate(Event::State* event) override;
+    void onStateDeactivate(Event::State* event) override;
 };
 
 }

@@ -31,6 +31,10 @@
 
 namespace Falltergeist
 {
+namespace Event
+{
+    class Mouse;
+}
 class ImageList;
 class Image;
 
@@ -43,8 +47,8 @@ protected:
     int _modeFactor = 1; // or -1
     unsigned int _maxState = 0;
     unsigned int _minState = 0;
-    void _onLeftButtonClick(MouseEvent* event);
-    void _onLeftButtonUp(MouseEvent* event);
+    void _onLeftButtonClick(Event::Mouse* event);
+    void _onLeftButtonUp(Event::Mouse* event);
 public:
     enum {MODE_PROGRESSION = 1, MODE_CYCLIC};
     enum {TYPE_BIG_SWITCH = 1, TYPE_SMALL_SWITCH};
@@ -53,8 +57,10 @@ public:
     MultistateImageButton(ImageList* imageList, int x = 0, int y = 0);
     virtual ~MultistateImageButton();
     void addImage(Image* image);
+
     unsigned int state();
     void setState(unsigned int state);
+
     unsigned int minState();
     void setMinState(unsigned int value);
     unsigned int maxState();

@@ -24,9 +24,7 @@
 #include <string>
 
 // Falltergeist includes
-#include "../Event/Event.h"
-#include "../Event/MouseEvent.h"
-#include "../Event/KeyboardEvent.h"
+#include "../Event/Emitter.h"
 #include "../Graphics/UI.h"
 
 // Third party includes
@@ -34,13 +32,13 @@
 namespace Falltergeist
 {
 
-class ActiveUI : public EventEmitter, public UI
+class ActiveUI : public Event::Emitter, public UI
 {
 public:
     ActiveUI(int x = 0, int y = 0);
     ~ActiveUI() override;
 
-    virtual void handle(Event* event);
+    virtual void handle(Event::Event* event);
     static void export_to_lua_script(Lua::Script* script);
 
 protected:

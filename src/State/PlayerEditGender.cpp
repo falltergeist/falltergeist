@@ -42,6 +42,10 @@ PlayerEditGender::PlayerEditGender() : State()
 {
 }
 
+PlayerEditGender::~PlayerEditGender()
+{
+}
+
 void PlayerEditGender::init()
 {
     if (_initialized) return;
@@ -61,13 +65,13 @@ void PlayerEditGender::init()
                                     "art/intrface/maleoff.frm",
                                     "art/intrface/maleon.frm"
                                 }, bgX+260, bgY+2);
-    _maleImage->addEventHandler("mouseleftclick", [this](Event* event){ this->onMaleButtonPress(dynamic_cast<MouseEvent*>(event)); });
+    _maleImage->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onMaleButtonPress(dynamic_cast<Event::Mouse*>(event)); });
 
     _femaleImage = new ImageList((std::vector<std::string>){
                                                             "art/intrface/femoff.frm",
                                                             "art/intrface/femon.frm"
                                                             }, bgX+310, bgY+2);
-    _femaleImage->addEventHandler("mouseleftclick", [this](Event* event){ this->onFemaleButtonPress(dynamic_cast<MouseEvent*>(event)); });
+    _femaleImage->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onFemaleButtonPress(dynamic_cast<Event::Mouse*>(event)); });
 
     auto doneBox = new Image("art/intrface/donebox.frm");
     doneBox->setX(bgX+250);
@@ -78,7 +82,7 @@ void PlayerEditGender::init()
     doneLabel->setFont(font3_b89c28ff);
 
     auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+260, bgY+45);
-    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    doneButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     addUI(bg);
     addUI(doneBox);
@@ -89,22 +93,22 @@ void PlayerEditGender::init()
     setGender(Game::getInstance()->player()->gender());
 }
 
-void PlayerEditGender::onDoneButtonClick(MouseEvent* event)
+void PlayerEditGender::onDoneButtonClick(Event::Mouse* event)
 {
     Game::getInstance()->popState();
 }
 
-void PlayerEditGender::onFemaleButtonPress(MouseEvent* event)
+void PlayerEditGender::onFemaleButtonPress(Event::Mouse* event)
 {
     setGender(GENDER::FEMALE);
 }
 
-void PlayerEditGender::onMaleButtonPress(MouseEvent* event)
+void PlayerEditGender::onMaleButtonPress(Event::Mouse* event)
 {
     setGender(GENDER::MALE);
 }
 
-void PlayerEditGender::onKeyDown(KeyboardEvent* event)
+void PlayerEditGender::onKeyDown(Event::Keyboard* event)
 {
     switch (event->keyCode())
     {

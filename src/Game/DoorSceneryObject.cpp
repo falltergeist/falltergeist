@@ -24,6 +24,7 @@
 
 // Falltergeist includes
 #include "../Audio/Mixer.h"
+#include "../Event/Event.h"
 #include "../Game/Game.h"
 #include "../Graphics/Animation.h"
 #include "../Graphics/AnimationQueue.h"
@@ -98,7 +99,7 @@ bool GameDoorSceneryObject::canWalkThru() const
     return opened();
 }
 
-void GameDoorSceneryObject::onOpeningAnimationEnded(Event* event)
+void GameDoorSceneryObject::onOpeningAnimationEnded(Event::Event* event)
 {
     auto queue = (AnimationQueue*)event->emitter();
     setOpened(true);
@@ -107,7 +108,7 @@ void GameDoorSceneryObject::onOpeningAnimationEnded(Event* event)
     Logger::info() << "Door opened: " << opened() << std::endl;
 }
 
-void GameDoorSceneryObject::onClosingAnimationEnded(Event* event)
+void GameDoorSceneryObject::onClosingAnimationEnded(Event::Event* event)
 {
     auto queue = (AnimationQueue*)event->emitter();
     setOpened(false);

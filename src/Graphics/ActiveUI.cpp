@@ -20,6 +20,9 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Event/Event.h"
+#include "../Event/Keyboard.h"
+#include "../Event/Mouse.h"
 #include "../Graphics/ActiveUI.h"
 #include "../Graphics/Texture.h"
 #include "../Lua/Script.h"
@@ -29,7 +32,7 @@
 namespace Falltergeist
 {
 
-ActiveUI::ActiveUI(int x, int y) : EventEmitter(), UI(x, y)
+ActiveUI::ActiveUI(int x, int y) : Event::Emitter(), UI(x, y)
 {
 }
 
@@ -48,15 +51,15 @@ void ActiveUI::export_to_lua_script(Lua::Script* script)
         .endNamespace();
 }
 
-void ActiveUI::handle(Event* event)
+void ActiveUI::handle(Event::Event* event)
 {
     if (event->handled()) return;
-    if (auto mouseEvent = dynamic_cast<MouseEvent*>(event))
+    if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
         int x = mouseEvent->x() - this->x();
         int y = mouseEvent->y() - this->y();
 
-        auto newEvent = new MouseEvent(mouseEvent);
+        auto newEvent = new Event::Mouse(mouseEvent);
 
         if (this->pixel(x, y))
         {
@@ -175,7 +178,7 @@ void ActiveUI::handle(Event* event)
         return;
     }
 
-    if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
+    if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
     {
         emitEvent(keyboardEvent);
     }

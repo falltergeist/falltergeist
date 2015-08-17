@@ -39,10 +39,13 @@ protected:
     std::string _message;
 public:
     PlayerEditAlert();
-    ~PlayerEditAlert();
+    ~PlayerEditAlert() override;
+
     void setMessage(const std::string& message);
-    void init();
-    void onDoneButtonClick(MouseEvent* event);
+
+    void init() override;
+
+    void onDoneButtonClick(Event::Mouse* event);
 };
 
 }

@@ -17,26 +17,30 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Event/Emitter.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Event/EventEmitter.h"
 #include "../Event/Event.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace Event
+{
 
-EventEmitter::EventEmitter()
+Emitter::Emitter()
 {
 }
 
-EventEmitter::~EventEmitter()
+Emitter::~Emitter()
 {
 }
 
-void EventEmitter::addEventHandler(const std::string& eventName, std::function<void(Event*)> handler)
+void Emitter::addEventHandler(const std::string& eventName, std::function<void(Event*)> handler)
 {
     if (_eventHandlers.find(eventName) == _eventHandlers.end())
     {
@@ -47,7 +51,7 @@ void EventEmitter::addEventHandler(const std::string& eventName, std::function<v
     _eventHandlers.at(eventName).push_back(handler);
 }
 
-void EventEmitter::emitEvent(Event* event)
+void Emitter::emitEvent(Event* event)
 {
     if (_eventHandlers.find(event->name()) == _eventHandlers.end()) return;
     event->setEmitter(this);
@@ -58,7 +62,7 @@ void EventEmitter::emitEvent(Event* event)
     }
 }
 
-void EventEmitter::removeEventHandlers(const std::string& eventName)
+void Emitter::removeEventHandlers(const std::string& eventName)
 {
     if (_eventHandlers.find(eventName) == _eventHandlers.end()) return;
 
@@ -66,4 +70,5 @@ void EventEmitter::removeEventHandlers(const std::string& eventName)
     _eventHandlers.erase(eventName);
 }
 
+}
 }

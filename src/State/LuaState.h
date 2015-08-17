@@ -59,7 +59,7 @@ public:
 
     virtual void init();
     virtual void think();
-    virtual void handle(Event* event);
+    virtual void handle(Event::Event* event);
     virtual void render();
 
     virtual void addUI(ActiveUI* ui);

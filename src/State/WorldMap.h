@@ -39,17 +39,14 @@ class WorldMap : public State
 public:
 
     WorldMap();
+    ~WorldMap() override;
 
-    virtual void init();
-
-    void render();
-    virtual void handle(Event* event);
-    virtual void onKeyDown(KeyboardEvent* event);
-
-    
-    virtual void onStateActivate(StateEvent* event);
-    virtual void onStateDeactivate(StateEvent* event);
-
+    void init() override;
+    void render() override;
+    void handle(Event::Event* event);
+    void onKeyDown(Event::Keyboard* event) override;
+    void onStateActivate(Event::State* event) override;
+    void onStateDeactivate(Event::State* event) override;
 
 private:
     Image* _panel;

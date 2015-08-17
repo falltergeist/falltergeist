@@ -31,6 +31,12 @@
 
 namespace Falltergeist
 {
+namespace Event
+{
+    class Event;
+    class Keyboard;
+}
+
 namespace State
 {
 
@@ -59,12 +65,12 @@ public:
     bool hasAnswers();
     void addAnswer(const std::string& text);
 
-    void onReviewButtonClick(Event* event);
-    void onBarterButtonClick(Event* event);
-    void onAnswerIn(Event* event);
-    void onAnswerOut(Event* event);
-    void onAnswerClick(Event* event);
-    virtual void onKeyDown(KeyboardEvent* event);
+    void onReviewButtonClick(Event::Event* event);
+    void onBarterButtonClick(Event::Event* event);
+    void onAnswerIn(Event::Event* event);
+    void onAnswerOut(Event::Event* event);
+    void onAnswerClick(Event::Event* event);
+    void onKeyDown(Event::Keyboard* event) override;
 
 };
 

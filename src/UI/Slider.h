@@ -30,6 +30,11 @@
 
 namespace Falltergeist
 {
+namespace Event
+{
+    class Event;
+    class Mouse;
+}
 
 class Slider : public ActiveUI
 {
@@ -38,15 +43,15 @@ protected:
     double _minValue = 0.0;
     double _maxValue = 1.0;
     double _value = 0.0;
-    void _onDrag(MouseEvent* event);
-    void _onLeftButtonDown(MouseEvent* event);
-    void _onLeftButtonUp(MouseEvent* event);
+    void _onDrag(Event::Mouse* event);
+    void _onLeftButtonDown(Event::Mouse* event);
+    void _onLeftButtonUp(Event::Mouse* event);
 public:
     Slider(int x, int y);
     virtual ~Slider();
     Texture* texture() const override;
     int x() const override;
-    virtual void handle(Event* event);
+    virtual void handle(Event::Event* event);
     double minValue();
     void setMinValue(double value);
     double maxValue();

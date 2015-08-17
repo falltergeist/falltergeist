@@ -17,25 +17,67 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_STATEEVENT_H
-#define FALLTERGEIST_STATEEVENT_H
+// Related headers
+#include "../Event/Keyboard.h"
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Event/Event.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-
-class StateEvent : public Event
+namespace Event
 {
-public:
-    StateEvent(const std::string& name);
-    virtual ~StateEvent();
-};
+
+Keyboard::Keyboard(const std::string& name) : Event(name)
+{
+}
+
+Keyboard::~Keyboard()
+{
+}
+
+int Keyboard::keyCode() const
+{
+    return _keyCode;
+}
+
+void Keyboard::setKeyCode(int value)
+{
+    _keyCode = value;
+}
+
+bool Keyboard::shiftPressed() const
+{
+    return _shiftPressed;
+}
+
+void  Keyboard::setShiftPressed(bool value)
+{
+    _shiftPressed = value;
+}
+
+bool Keyboard::controlPressed() const
+{
+    return _controlPressed;
+}
+
+void Keyboard::setControlPressed(bool value)
+{
+    _controlPressed = value;
+}
+
+void Keyboard::setAltPressed(bool value)
+{
+    this->_altPressed = value;
+}
+
+bool Keyboard::altPressed() const
+{
+    return _altPressed;
+}
 
 }
-#endif // FALLTERGEIST_STATEEVENT_H
+}

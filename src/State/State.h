@@ -26,22 +26,26 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Event/MouseEvent.h"
-#include "../Event/KeyboardEvent.h"
+#include "../Event/Emitter.h"
+#include "../Event/Keyboard.h"
+#include "../Event/Mouse.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace Event
+{
+    class Event;
+    class State;
+}
 namespace Game
 {
     class Game;
 }
 class ActiveUI;
-class Event;
 class ImageList;
 class SmallCounter;
-class StateEvent;
 class Surface;
 class TextArea;
 class UI;
@@ -49,7 +53,7 @@ class UI;
 namespace State
 {
 
-class State : public EventEmitter
+class State : public Event::Emitter
 {
 protected:
     std::vector<UI*> _ui;
@@ -101,12 +105,12 @@ public:
     virtual void init();
 
     virtual void think();
-    virtual void handle(Event* event);
+    virtual void handle(Event::Event* event);
     virtual void render();
 
-    virtual void onStateActivate(StateEvent* event);
-    virtual void onStateDeactivate(StateEvent* event);
-    virtual void onKeyDown(KeyboardEvent* event);
+    virtual void onStateActivate(Event::State* event);
+    virtual void onStateDeactivate(Event::State* event);
+    virtual void onKeyDown(Event::Keyboard* event);
 };
 
 }

@@ -27,7 +27,7 @@
 #include "../Audio/Mixer.h"
 #include "../Base/StlFeatures.h"
 #include "../CrossPlatform.h"
-#include "../Event/StateEvent.h"
+#include "../Event/State.h"
 #include "../Exception.h"
 #include "../Game/Time.h"
 #include "../Graphics/AnimatedPalette.h"
@@ -140,7 +140,7 @@ void Game::popState()
     _states.pop_back();
     _statesForDelete.push_back(state);
 
-    auto event = new StateEvent("deactivate");
+    auto event = new Event::State("deactivate");
     state->emitEvent(event);
     delete event;
 }
@@ -267,7 +267,7 @@ std::vector<State::State*>* Game::statesForThinkAndHandle()
         auto state = *it;
         if (!state->active())
         {
-            auto event = new StateEvent("activate");
+            auto event = new Event::State("activate");
             state->emitEvent(event);
             state->setActive(true);
             delete event;
@@ -285,7 +285,7 @@ std::vector<State::State*>* Game::statesForThinkAndHandle()
         auto state = *it;
         if (state->active())
         {
-            auto event = new StateEvent("deactivate");
+            auto event = new Event::State("deactivate");
             state->emitEvent(event);
             state->setActive(false);
             delete event;
@@ -317,15 +317,15 @@ void Game::handle()
         }
         else
         {
-            MouseEvent* mouseEvent = 0;
-            KeyboardEvent* keyboardEvent = 0;
+            Event::Mouse* mouseEvent = nullptr;
+            Event::Keyboard* keyboardEvent = nullptr;
             switch (_event.type)
             {
                 case SDL_MOUSEBUTTONDOWN:
                 case SDL_MOUSEBUTTONUP:
                 {
                     SDL_Keymod mods = SDL_GetModState();
-                    mouseEvent = new MouseEvent((_event.type == SDL_MOUSEBUTTONDOWN) ? "mousedown" : "mouseup");
+                    mouseEvent = new Event::Mouse((_event.type == SDL_MOUSEBUTTONDOWN) ? "mousedown" : "mouseup");
                     mouseEvent->setX(_event.button.x);
                     mouseEvent->setY(_event.button.y);
                     mouseEvent->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
@@ -337,7 +337,7 @@ void Game::handle()
                 }
                 case SDL_MOUSEMOTION:
                 {
-                    mouseEvent = new MouseEvent("mousemove");
+                    mouseEvent = new Event::Mouse("mousemove");
                     mouseEvent->setX(_event.motion.x);
                     mouseEvent->setY(_event.motion.y);
                     mouseEvent->setXOffset(_event.motion.xrel);
@@ -347,7 +347,7 @@ void Game::handle()
                 }
                 case SDL_KEYDOWN:
                 {
-                    keyboardEvent = new KeyboardEvent("keydown");
+                    keyboardEvent = new Event::Keyboard("keydown");
                     keyboardEvent->setKeyCode(_event.key.keysym.sym);
                     keyboardEvent->setAltPressed(_event.key.keysym.mod & KMOD_ALT);
                     keyboardEvent->setShiftPressed(_event.key.keysym.mod & KMOD_SHIFT);
@@ -357,7 +357,7 @@ void Game::handle()
                 }
                 case SDL_KEYUP:
                 {
-                    keyboardEvent = new KeyboardEvent("keyup");
+                    keyboardEvent = new Event::Keyboard("keyup");
                     keyboardEvent->setKeyCode(_event.key.keysym.sym);
                     keyboardEvent->setAltPressed(_event.key.keysym.mod & KMOD_ALT);
                     keyboardEvent->setShiftPressed(_event.key.keysym.mod & KMOD_SHIFT);

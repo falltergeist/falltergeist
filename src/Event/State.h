@@ -17,38 +17,28 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_EVENTEMITTER_H
-#define FALLTERGEIST_EVENTEMITTER_H
+#ifndef FALLTERGEIST_EVENT_STATE_H
+#define FALLTERGEIST_EVENT_STATE_H
 
 // C++ standard includes
-#include <map>
-#include <vector>
-#include <string>
-#include <memory>
-#include <functional>
 
 // Falltergeist includes
+#include "../Event/Event.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-class Event;
-class EventReciever;
-class EventHandler;
-
-class EventEmitter
+namespace Event
 {
-protected:
-    std::map<std::string, std::vector<std::function<void(Event*)>>> _eventHandlers;
-public:
-    EventEmitter();
-    virtual ~EventEmitter();
 
-    void addEventHandler(const std::string& eventName, std::function<void(Event*)> handler);
-    void emitEvent(Event* event);
-    void removeEventHandlers(const std::string& eventName);
+class State : public Event
+{
+public:
+    State(const std::string& name);
+    ~State() override;
 };
 
 }
-#endif // FALLTERGEIST_EVENTEMITTER_H
+}
+#endif // FALLTERGEIST_EVENT_STATE_H

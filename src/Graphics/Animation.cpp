@@ -244,7 +244,7 @@ void Animation::think()
             _currentFrame = _reverse ? frames()->size() - _progress - 1 : _progress;
             if (_actionFrame == _currentFrame)
             {
-                auto event = new Event("actionFrame");
+                auto event = new Event::Event("actionFrame");
                 emitEvent(event);
                 delete event;
             }
@@ -253,7 +253,7 @@ void Animation::think()
         {
             _ended = true;
             _playing = false;
-            auto event = new Event("animationEnded");
+            auto event = new Event::Event("animationEnded");
             emitEvent(event);
             delete event;
         }

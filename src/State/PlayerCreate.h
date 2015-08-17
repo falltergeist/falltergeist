@@ -68,26 +68,27 @@ protected:
 
 public:
     PlayerCreate();
-    void init();
-    void think();
-    virtual ~PlayerCreate();
+    ~PlayerCreate() override;
 
-    void onMaskClick(MouseEvent* event);
-    void onButtonClick(MouseEvent* event);
-    void onAgeButtonClick(MouseEvent* event);
-    void onNameButtonClick(MouseEvent* event);
-    void onGenderButtonClick(MouseEvent* event);
-    void onLabelClick(MouseEvent* event);
-    void onBackButtonClick(MouseEvent* event);
-    void onDoneButtonClick(MouseEvent* event);
-    void onOptionsButtonClick(MouseEvent* event);
+    void init() override;
+    void think() override;
+
+    void onMaskClick(Event::Mouse* event);
+    void onButtonClick(Event::Mouse* event);
+    void onAgeButtonClick(Event::Mouse* event);
+    void onNameButtonClick(Event::Mouse* event);
+    void onGenderButtonClick(Event::Mouse* event);
+    void onLabelClick(Event::Mouse* event);
+    void onBackButtonClick(Event::Mouse* event);
+    void onDoneButtonClick(Event::Mouse* event);
+    void onOptionsButtonClick(Event::Mouse* event);
     void doAge();
     void doName();
     void doGender();
     void doOptions();
     void doDone();
     void doBack();
-    virtual void onKeyDown(KeyboardEvent* event);
+    void onKeyDown(Event::Keyboard* event) override;
 };
 
 }

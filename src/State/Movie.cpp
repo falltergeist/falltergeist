@@ -25,8 +25,8 @@
 // Falltergeist includes
 #include "../Audio/Mixer.h"
 #include "../CrossPlatform.h"
-#include "../Event/KeyboardEvent.h"
-#include "../Event/MouseEvent.h"
+#include "../Event/Keyboard.h"
+#include "../Event/Mouse.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Ini/File.h"
@@ -44,8 +44,9 @@ namespace Falltergeist
 namespace State
 {
 
-Movie::Movie(int id) : _id(id)
+Movie::Movie(int id) : State()
 {
+    _id = id;
 }
 
 Movie::~Movie()
@@ -159,9 +160,9 @@ void Movie::think()
 }
 
 
-void Movie::handle(Event* event)
+void Movie::handle(Event::Event* event)
 {
-    if (auto mouseEvent = dynamic_cast<MouseEvent*>(event))
+    if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
         if (mouseEvent->name() == "mouseup")
         {
@@ -169,7 +170,7 @@ void Movie::handle(Event* event)
         }
     }
 
-    if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
+    if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
     {
         if (keyboardEvent->name() == "keyup")
         {

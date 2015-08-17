@@ -192,9 +192,9 @@ void CursorDropdown::setObject(Game::GameObject* object)
     _object = object;
 }
 
-void CursorDropdown::handle(Event* event)
+void CursorDropdown::handle(Event::Event* event)
 {
-    if (auto mouseEvent = dynamic_cast<MouseEvent*>(event)) 
+    if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
         if (mouseEvent->name() == "mouseup" && mouseEvent->leftButton())
         {
@@ -259,7 +259,7 @@ void CursorDropdown::render()
     }
 }
 
-void CursorDropdown::onStateActivate(StateEvent* event)
+void CursorDropdown::onStateActivate(Event::State* event)
 {
     if (_deactivated)
     {
@@ -267,7 +267,7 @@ void CursorDropdown::onStateActivate(StateEvent* event)
     }
 }
 
-void CursorDropdown::onStateDeactivate(StateEvent* event)
+void CursorDropdown::onStateDeactivate(Event::State* event)
 {
     if (!_deactivated)
     {
@@ -295,7 +295,7 @@ void CursorDropdown::onStateDeactivate(StateEvent* event)
     }
 }
 
-void CursorDropdown::onLeftButtonUp(MouseEvent* event)
+void CursorDropdown::onLeftButtonUp(Event::Mouse* event)
 {
     auto game = Game::getInstance();
     game->popState();

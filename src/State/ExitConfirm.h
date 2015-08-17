@@ -17,18 +17,23 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_ExitConfirm_H
-#define FALLTERGEIST_ExitConfirm_H
+#ifndef FALLTERGEIST_STATE_EXITCONFIRM_H
+#define FALLTERGEIST_STATE_EXITCONFIRM_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "State.h"
+#include "../State/State.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace Event
+{
+    class Keyboard;
+    class State;
+}
 namespace State
 {
 
@@ -36,20 +41,20 @@ class ExitConfirm : public State
 {
 public:
     ExitConfirm();
+    ~ExitConfirm() override;
 
-    virtual void init();
+    void init() override;
 
     void doYes();
     void doNo();
-    virtual void onKeyDown(KeyboardEvent* event);
-    
-    virtual void onStateActivate(StateEvent* event);
-    virtual void onStateDeactivate(StateEvent* event);
 
+    void onKeyDown(Event::Keyboard* event) override;
+    void onStateActivate(Event::State* event) override;
+    void onStateDeactivate(Event::State* event) override;
 
 };
 
 }
 }
 
-#endif // FALLTERGEIST_ExitConfirm_H
+#endif // FALLTERGEIST_STATE_EXITCONFIRM_H

@@ -23,7 +23,7 @@
 #include "../Game/Game.h"
 #include "../Game/Time.h"
 #include "../Graphics/Renderer.h"
-#include "../Event/KeyboardEvent.h"
+#include "../Event/Keyboard.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../State/PipBoy.h"
@@ -71,7 +71,7 @@ void PipBoy::init()
     auto automapsButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+394);
     auto archivesButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+423);
     auto closeButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+53, backgroundY+448);
-    closeButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCloseButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    closeButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onCloseButtonClick(dynamic_cast<Event::Mouse*>(event)); });
     // Date and time
 
     // Date
@@ -111,12 +111,12 @@ void PipBoy::init()
     addUI(closeButton);
 }
 
-void PipBoy::onCloseButtonClick(MouseEvent* event)
+void PipBoy::onCloseButtonClick(Event::Mouse* event)
 {
     Game::getInstance()->popState();
 }
 
-void PipBoy::onKeyDown(KeyboardEvent* event)
+void PipBoy::onKeyDown(Event::Keyboard* event)
 {
     if (event->keyCode() == SDLK_ESCAPE)
     {

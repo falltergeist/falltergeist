@@ -29,6 +29,11 @@
 
 namespace Falltergeist
 {
+namespace Event
+{
+    class Event;
+}
+
 namespace Game
 {
 
@@ -55,8 +60,8 @@ public:
     virtual void use_p_proc(GameCritterObject* usedBy);
 
 
-    void onOpeningAnimationEnded(Event* event);
-    void onClosingAnimationEnded(Event* event);
+    void onOpeningAnimationEnded(Event::Event* event);
+    void onClosingAnimationEnded(Event::Event* event);
 };
 
 }

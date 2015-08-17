@@ -68,12 +68,12 @@ void CritterBarter::init()
     addUI("theirsInventoryScrollDownButton", new ImageButton(ImageButton::TYPE_DIALOG_DOWN_ARROW, 421, 82));
 }
 
-void CritterBarter::onTalkButtonClick(Event* event)
+void CritterBarter::onTalkButtonClick(Event::Event* event)
 {
     Game::getInstance()->popState();
 }
 
-void CritterBarter::onBackgroundClick(Event* event)
+void CritterBarter::onBackgroundClick(Event::Event* event)
 {
     // to prevent event propagation to dialog state
     event->setHandled(true);

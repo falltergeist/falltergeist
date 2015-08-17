@@ -43,22 +43,22 @@ public:
     virtual void init();
     virtual void render();
     virtual void think();
-    virtual void handle(Event* event);
+    virtual void handle(Event::Event* event);
     
     unsigned int height();
 
-    void onChangeHandButtonClick(MouseEvent* event);
-    void onPanelMouseDown(MouseEvent* event);
-    void onInventoryButtonClick(MouseEvent* event);
-    void onOptionsButtonClick(MouseEvent* event);
-    void onSkilldexButtonClick(MouseEvent* event);
-    void onMapButtonClick(MouseEvent* event);
-    void onChaButtonClick(MouseEvent* event);
-    void onPipBoyButtonClick(MouseEvent* event);
-    void onPanelMouseIn(MouseEvent* event);
-    void onPanelMouseOut(MouseEvent* event);
-    void onPanelMouseUp(MouseEvent* event);
-    virtual void onKeyDown(KeyboardEvent* event);
+    void onChangeHandButtonClick(Event::Mouse* event);
+    void onPanelMouseDown(Event::Mouse* event);
+    void onInventoryButtonClick(Event::Mouse* event);
+    void onOptionsButtonClick(Event::Mouse* event);
+    void onSkilldexButtonClick(Event::Mouse* event);
+    void onMapButtonClick(Event::Mouse* event);
+    void onChaButtonClick(Event::Mouse* event);
+    void onPipBoyButtonClick(Event::Mouse* event);
+    void onPanelMouseIn(Event::Mouse* event);
+    void onPanelMouseOut(Event::Mouse* event);
+    void onPanelMouseUp(Event::Mouse* event);
+    virtual void onKeyDown(Event::Keyboard* event);
     void toggleActiveHand();
     void openInventory();
     void openOptions();

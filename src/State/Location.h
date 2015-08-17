@@ -103,7 +103,7 @@ public:
 
     virtual void init();
     virtual void think();
-    virtual void handle(Event* event);
+    virtual void handle(Event::Event* event);
     virtual void render();
 
     HexagonGrid* hexagonGrid();
@@ -124,13 +124,13 @@ public:
     
     void displayMessage(const std::string& message);
 
-    void onBackgroundClick(MouseEvent* event);
-    void onObjectMouseEvent(Event* event, Game::GameObject* object);
-    void onObjectHover(Event* event, Game::GameObject* object);
-    virtual void onKeyDown(KeyboardEvent* event);
+    void onBackgroundClick(Event::Mouse* event);
+    void onObjectMouseEvent(Event::Event* event, Game::GameObject* object);
+    void onObjectHover(Event::Event* event, Game::GameObject* object);
+    virtual void onKeyDown(Event::Keyboard* event);
 
-    virtual void onStateActivate(StateEvent* event);
-    virtual void onStateDeactivate(StateEvent* event);
+    virtual void onStateActivate(Event::State* event);
+    virtual void onStateDeactivate(Event::State* event);
 
 
 

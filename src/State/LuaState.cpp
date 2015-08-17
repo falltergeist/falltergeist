@@ -38,7 +38,7 @@ LuaState::LuaState(const std::string& filename) : State()
 {
     _script = new Lua::Script(filename);
 
-    Event::export_to_lua_script(_script);
+    Event::Event::export_to_lua_script(_script);
     LuaState::export_to_lua_script(_script);
     UI::export_to_lua_script(_script);
     ActiveUI::export_to_lua_script(_script);
@@ -90,7 +90,7 @@ void LuaState::think()
     }
 }
 
-void LuaState::handle(Event* event)
+void LuaState::handle(Event::Event* event)
 {
     luabridge::LuaRef func = luabridge::getGlobal(_script->luaState(), "handle");
     if (func.isFunction())

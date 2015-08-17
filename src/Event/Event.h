@@ -17,15 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_EVENT_H
-#define FALLTERGEIST_EVENT_H
+#ifndef FALLTERGEIST_EVENT_EVENT_H
+#define FALLTERGEIST_EVENT_EVENT_H
 
 // C++ standard includes
-#include <string>
 #include <memory>
+#include <string>
 
 // Falltergeist includes
-#include "../Event/EventEmitter.h"
 
 // Third party includes
 
@@ -35,6 +34,9 @@ namespace Lua
 {
     class Script;
 }
+namespace Event
+{
+class Emitter;
 
 class Event
 {
@@ -45,19 +47,20 @@ public:
     std::string name() const;
     void setName(const std::string& name);
 
-    EventEmitter* emitter();
-    void setEmitter(EventEmitter* value);
+    Emitter* emitter() const;
+    void setEmitter(Emitter* value);
 
-    bool handled();
+    bool handled() const;
     void setHandled(bool value);
 
     static void export_to_lua_script(Lua::Script* script);
 
 protected:
     std::string _name;
-    EventEmitter* _emitter = 0;
+    Emitter* _emitter = 0;
     bool _handled = false;
 };
 
 }
-#endif // FALLTERGEIST_EVENT_H
+}
+#endif // FALLTERGEIST_EVENT_EVENT_H

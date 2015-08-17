@@ -30,6 +30,10 @@
 
 namespace Falltergeist
 {
+namespace Event
+{
+    class Mouse;
+}
 
 class ImageButton : public ActiveUI
 {
@@ -84,9 +88,9 @@ protected:
     bool _checked = false;
 
     std::vector<Texture*> _textures;
-    void _onLeftButtonClick(MouseEvent* event);
-    void _onLeftButtonDown(MouseEvent* event);
-    void _onMouseOut(MouseEvent* event);
+    void _onLeftButtonClick(Event::Mouse* event);
+    void _onLeftButtonDown(Event::Mouse* event);
+    void _onMouseOut(Event::Mouse* event);
 
 };
 

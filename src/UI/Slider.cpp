@@ -24,6 +24,8 @@
 
 // Falltergeist includes
 #include "../Audio/Mixer.h"
+#include "../Event/Event.h"
+#include "../Event/Mouse.h"
 #include "../Game/Game.h"
 #include "../UI/Image.h"
 
@@ -34,9 +36,9 @@ namespace Falltergeist
 
 Slider::Slider(int x, int y) : ActiveUI(x, y)
 {
-    addEventHandler("mousedrag", [this](Event* event){ this->_onDrag(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mouseleftdown", [this](Event* event){ this->_onLeftButtonDown(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mouseleftup", [this](Event* event){ this->_onLeftButtonUp(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mousedrag", [this](Event::Event* event){ this->_onDrag(dynamic_cast<Event::Mouse*>(event)); });
+    addEventHandler("mouseleftdown", [this](Event::Event* event){ this->_onLeftButtonDown(dynamic_cast<Event::Mouse*>(event)); });
+    addEventHandler("mouseleftup", [this](Event::Event* event){ this->_onLeftButtonUp(dynamic_cast<Event::Mouse*>(event)); });
     _imageList.addImage("art/intrface/prfsldon.frm");
     _imageList.addImage("art/intrface/prfsldof.frm");
     _downSnd = "sound/sfx/ib1p1xx1.acm";
@@ -47,9 +49,9 @@ Slider::~Slider()
 {
 }
 
-void Slider::handle(Event* event)
+void Slider::handle(Event::Event* event)
 {
-    if(auto mouseEvent = dynamic_cast<MouseEvent*>(event))
+    if(auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
         if (!texture()) return;
 
@@ -77,7 +79,7 @@ void Slider::handle(Event* event)
     ActiveUI::handle(event);
 }
 
-void Slider::_onDrag(MouseEvent* event)
+void Slider::_onDrag(Event::Mouse* event)
 {
     auto sender = dynamic_cast<Slider*>(event->emitter());
     auto newOffset = sender->_xOffset + event->xOffset();
@@ -88,7 +90,7 @@ void Slider::_onDrag(MouseEvent* event)
     }
 }
 
-void Slider::_onLeftButtonDown(MouseEvent* event)
+void Slider::_onLeftButtonDown(Event::Mouse* event)
 {
     auto sender = dynamic_cast<Slider*>(event->emitter());
     if (!sender->_downSnd.empty())
@@ -97,7 +99,7 @@ void Slider::_onLeftButtonDown(MouseEvent* event)
     }
 }
 
-void Slider::_onLeftButtonUp(MouseEvent* event)
+void Slider::_onLeftButtonUp(Event::Mouse* event)
 {
     auto sender = dynamic_cast<Slider*>(event->emitter());
     if (!sender->_upSnd.empty())

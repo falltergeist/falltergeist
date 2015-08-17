@@ -29,6 +29,11 @@
 
 namespace Falltergeist
 {
+namespace Event
+{
+    class Keyboard;
+    class Mouse;
+}
 namespace Game
 {
     class GameContainerItemObject;
@@ -49,11 +54,11 @@ public:
     Game::GameContainerItemObject* object();
     void setObject(Game::GameContainerItemObject* object);
 
-    void onDoneButtonClick(MouseEvent* event);
+    void onDoneButtonClick(Event::Mouse* event);
     
-    virtual void onStateActivate(StateEvent* event);
-    virtual void onStateDeactivate(StateEvent* event);
-    virtual void onKeyDown(KeyboardEvent* event);
+    virtual void onStateActivate(Event::State* event);
+    virtual void onStateDeactivate(Event::State* event);
+    virtual void onKeyDown(Event::Keyboard* event);
 
 
 };

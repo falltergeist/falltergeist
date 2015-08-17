@@ -503,7 +503,7 @@ void GameCritterObject::think()
     GameObject::think();
 }
 
-void GameCritterObject::onMovementAnimationEnded(Event* event)
+void GameCritterObject::onMovementAnimationEnded(Event::Event* event)
 {
     auto hexagon = movementQueue()->back();
     movementQueue()->pop_back();
@@ -592,7 +592,7 @@ Animation* GameCritterObject::_generateMovementAnimation()
 Animation* GameCritterObject::setActionAnimation(const std::string& action)
 {
     Animation* animation = new Animation("art/critters/" + _generateArmorFrmString() + action + ".frm", orientation());
-    animation->addEventHandler("animationEnded", [animation](Event* event)
+    animation->addEventHandler("animationEnded", [animation](Event::Event* event)
     {
         animation->setCurrentFrame(0);
     });

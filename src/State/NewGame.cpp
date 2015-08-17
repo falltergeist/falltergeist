@@ -25,7 +25,7 @@
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
-#include "../Event/StateEvent.h"
+#include "../Event/State.h"
 #include "../Game/DudeObject.h"
 #include "../State/NewGame.h"
 #include "../State/Location.h"
@@ -71,22 +71,22 @@ void NewGame::init()
     addUI("background", new Image("art/intrface/pickchar.frm"));
 
     auto beginGameButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 322));
-    beginGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onBeginGameButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    beginGameButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onBeginGameButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     auto editButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 436, 319));
-    editButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onEditButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    editButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onEditButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     auto createButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 424));
-    createButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCreateButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    createButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onCreateButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     auto backButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 461, 424));
-    backButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onBackButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    backButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onBackButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     auto prevCharacterButton = addUI(new ImageButton(ImageButton::TYPE_LEFT_ARROW, 292, 320));
-    prevCharacterButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onPrevCharacterButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    prevCharacterButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onPrevCharacterButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     auto nextCharacterButton = addUI(new ImageButton(ImageButton::TYPE_RIGHT_ARROW, 318, 320));
-    nextCharacterButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onNextCharacterButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    nextCharacterButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onNextCharacterButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     addUI("images", new ImageList({
                                     "art/intrface/combat.frm",
@@ -156,7 +156,7 @@ void NewGame::doCreate()
 void NewGame::doBack()
 {
     removeEventHandlers("fadedone");
-    addEventHandler("fadedone", [this](Event* event){ this->onBackFadeDone(dynamic_cast<StateEvent*>(event)); });
+    addEventHandler("fadedone", [this](Event::Event* event){ this->onBackFadeDone(dynamic_cast<Event::State*>(event)); });
     Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
 }
 
@@ -186,23 +186,23 @@ void NewGame::doPrev()
     _changeCharacter();
 }
 
-void NewGame::onBackButtonClick(MouseEvent* event)
+void NewGame::onBackButtonClick(Event::Mouse* event)
 {
     doBack();
 }
 
-void NewGame::onBackFadeDone(StateEvent* event)
+void NewGame::onBackFadeDone(Event::State* event)
 {
     removeEventHandlers("fadedone");
     Game::getInstance()->popState();
 }
 
-void NewGame::onPrevCharacterButtonClick(MouseEvent* event)
+void NewGame::onPrevCharacterButtonClick(Event::Mouse* event)
 {
     doPrev();
 }
 
-void NewGame::onNextCharacterButtonClick(MouseEvent* event)
+void NewGame::onNextCharacterButtonClick(Event::Mouse* event)
 {
     doNext();
 }
@@ -263,22 +263,22 @@ void NewGame::_changeCharacter()
     getTextArea("stats3_values")->setText(stats3_values);
 }
 
-void NewGame::onEditButtonClick(MouseEvent* event)
+void NewGame::onEditButtonClick(Event::Mouse* event)
 {
     doEdit();
 }
 
-void NewGame::onCreateButtonClick(MouseEvent* event)
+void NewGame::onCreateButtonClick(Event::Mouse* event)
 {
     doCreate();
 }
 
-void NewGame::onBeginGameButtonClick(MouseEvent* event)
+void NewGame::onBeginGameButtonClick(Event::Mouse* event)
 {
     doBeginGame();
 }
 
-void NewGame::onKeyDown(KeyboardEvent* event)
+void NewGame::onKeyDown(Event::Keyboard* event)
 {
     switch (event->keyCode())
     {
@@ -304,7 +304,7 @@ void NewGame::onKeyDown(KeyboardEvent* event)
     }
 }
 
-void NewGame::onStateActivate(StateEvent* event)
+void NewGame::onStateActivate(Event::State* event)
 {
     Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
 }

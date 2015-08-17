@@ -245,7 +245,7 @@ void PlayerEdit::init()
     // add buttons to the state
     for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
     {
-        it->second->addEventHandler("mouseleftclick", [this](Event* event){ this->onButtonClick(dynamic_cast<MouseEvent*>(event)); });
+        it->second->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onButtonClick(dynamic_cast<Event::Mouse*>(event)); });
         addUI(it->second);
     }
 
@@ -253,7 +253,7 @@ void PlayerEdit::init()
     // reverse iterator to change drawing order
     for(auto it = _labels.rbegin(); it != _labels.rend(); ++it)
     {
-        it->second->addEventHandler("mouseleftdown", [this](Event* event){ this->onLabelClick(dynamic_cast<MouseEvent*>(event)); });
+        it->second->addEventHandler("mouseleftdown", [this](Event::Event* event){ this->onLabelClick(dynamic_cast<Event::Mouse*>(event)); });
         addUI(it->second);
     }
 
@@ -266,7 +266,7 @@ void PlayerEdit::init()
     // add hidden masks
     for(auto it = _masks.begin(); it != _masks.end(); ++it)
     {
-        it->second->addEventHandler("mouseleftdown", [this](Event* event){ this->onMaskClick(dynamic_cast<MouseEvent*>(event)); });
+        it->second->addEventHandler("mouseleftdown", [this](Event::Event* event){ this->onMaskClick(dynamic_cast<Event::Mouse*>(event)); });
         addUI(it->second);
     }
 
@@ -467,7 +467,7 @@ void PlayerEdit::think()
 
 }
 
-void PlayerEdit::onButtonClick(MouseEvent* event)
+void PlayerEdit::onButtonClick(Event::Mouse* event)
 {
     auto sender = dynamic_cast<ImageButton*>(event->emitter());
 
@@ -484,7 +484,7 @@ void PlayerEdit::onButtonClick(MouseEvent* event)
     }
 }
 
-void PlayerEdit::onLabelClick(MouseEvent* event)
+void PlayerEdit::onLabelClick(Event::Mouse* event)
 {
     for(auto it = _labels.begin(); it != _labels.end(); ++it)
     {
@@ -508,7 +508,7 @@ void PlayerEdit::onLabelClick(MouseEvent* event)
     }
 }
 
-void PlayerEdit::onMaskClick(MouseEvent* event)
+void PlayerEdit::onMaskClick(Event::Mouse* event)
 {
     for(auto it = _masks.begin(); it != _masks.end(); ++it)
     {
@@ -539,17 +539,17 @@ void PlayerEdit::doPrint()
     // @TODO: implement
 }
 
-void PlayerEdit::onStateActivate(StateEvent* event)
+void PlayerEdit::onStateActivate(Event::State* event)
 {
     Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
 }
 
-void PlayerEdit::onStateDeactivate(StateEvent* event)
+void PlayerEdit::onStateDeactivate(Event::State* event)
 {
     Game::getInstance()->mouse()->popState();
 }
 
-void PlayerEdit::onKeyDown(KeyboardEvent* event)
+void PlayerEdit::onKeyDown(Event::Keyboard* event)
 {
     switch (event->keyCode())
     {
@@ -566,7 +566,6 @@ void PlayerEdit::onKeyDown(KeyboardEvent* event)
             break;
     }
 }
-
 
 }
 }

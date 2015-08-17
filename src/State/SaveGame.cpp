@@ -76,12 +76,12 @@ void SaveGame::init()
 
     // button: Done
     auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+391, bgY+349);
-    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    doneButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
     addUI(doneButton);
 
     // button: Cancel
     auto cancelButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+495, bgY+349);
-    cancelButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCancelButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    cancelButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onCancelButtonClick(dynamic_cast<Event::Mouse*>(event)); });
     addUI(cancelButton);
 
     // LABELS
@@ -103,27 +103,27 @@ void SaveGame::init()
     addUI(cancelButtonLabel);
 }
 
-void SaveGame::onDoneButtonClick(MouseEvent* event)
+void SaveGame::onDoneButtonClick(Event::Mouse* event)
 {
     Game::getInstance()->popState();
 }
 
-void SaveGame::onCancelButtonClick(MouseEvent* event)
+void SaveGame::onCancelButtonClick(Event::Mouse* event)
 {
     Game::getInstance()->popState();
 }
 
-void SaveGame::onStateActivate(StateEvent* event)
+void SaveGame::onStateActivate(Event::State* event)
 {
     Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
 }
 
-void SaveGame::onStateDeactivate(StateEvent* event)
+void SaveGame::onStateDeactivate(Event::State* event)
 {
     Game::getInstance()->mouse()->popState();
 }
 
-void SaveGame::onKeyDown(KeyboardEvent* event)
+void SaveGame::onKeyDown(Event::Keyboard* event)
 {
     switch (event->keyCode())
     {

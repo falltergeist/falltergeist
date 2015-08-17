@@ -27,7 +27,7 @@
 
 // Falltergeist includes
 #include "../Audio/Mixer.h"
-#include "../Event/MouseEvent.h"
+#include "../Event/Mouse.h"
 #include "../Exception.h"
 #include "../Game/ContainerItemObject.h"
 #include "../Game/Defines.h"
@@ -111,12 +111,11 @@ void Location::init()
     game->pushState(_playerPanel);
 }
 
-void Location::onStateActivate(StateEvent* event)
+void Location::onStateActivate(Event::State* event)
 {
-
 }
 
-void Location::onStateDeactivate(StateEvent* event)
+void Location::onStateDeactivate(Event::State* event)
 {
     _objectUnderCursor = NULL;
     _actionCursorTicks = 0;
@@ -306,7 +305,7 @@ std::vector<int> Location::getCursorIconsForObject(Game::GameObject* object)
 }
 
 
-void Location::onObjectMouseEvent(Event* event, Game::GameObject* object)
+void Location::onObjectMouseEvent(Event::Event* event, Game::GameObject* object)
 {
     if (!object) return;
     if (event->name() == "mouseleftdown")
@@ -327,7 +326,7 @@ void Location::onObjectMouseEvent(Event* event, Game::GameObject* object)
     event->setHandled(true);
 }
 
-void Location::onObjectHover(Event* event, Game::GameObject* object)
+void Location::onObjectHover(Event::Event* event, Game::GameObject* object)
 {
     if (event->name() == "mouseout")
     {
@@ -346,8 +345,7 @@ void Location::onObjectHover(Event* event, Game::GameObject* object)
     }
 }
 
-
-void Location::onBackgroundClick(MouseEvent* event)
+void Location::onBackgroundClick(Event::Mouse* event)
 {
 }
 
@@ -557,11 +555,11 @@ void Location::toggleCursorMode()
     }
 }
 
-void Location::handle(Event* event)
+void Location::handle(Event::Event* event)
 {
     auto game = Game::getInstance();
 
-    if (auto mouseEvent = dynamic_cast<MouseEvent*>(event))
+    if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
         auto mouse = Game::getInstance()->mouse();
 
@@ -650,7 +648,7 @@ void Location::handle(Event* event)
         }
     }
 
-    if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
+    if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
     {
         if (event->name() == "keyup")
         {
@@ -684,7 +682,7 @@ void Location::handle(Event* event)
     }
 }
 
-void Location::onKeyDown(KeyboardEvent* event)
+void Location::onKeyDown(Event::Keyboard* event)
 {
     switch (event->keyCode())
     {
@@ -871,7 +869,7 @@ void Location::handleAction(Game::GameObject* object, int action)
         {
             auto player = Game::getInstance()->player();
             auto animation = player->setActionAnimation("al");
-            animation->addEventHandler("actionFrame", [object, player](Event* event){ object->onUseAnimationActionFrame(event, player); });
+            animation->addEventHandler("actionFrame", [object, player](Event::Event* event){ object->onUseAnimationActionFrame(event, player); });
             break;
         }
         case Mouse::ICON_ROTATE:

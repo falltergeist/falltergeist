@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Event/Event.h"
 #include "../Graphics/AnimationQueue.h"
 #include "../Graphics/Animation.h"
 
@@ -95,7 +96,7 @@ void AnimationQueue::think()
             {
                 if (!_repeat)
                 {
-                    auto event = new Event("animationEnded");
+                    auto event = new Event::Event("animationEnded");
                     emitEvent(event);
                     delete event;
                     _playing = false;

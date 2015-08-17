@@ -149,7 +149,7 @@ public:
     virtual void is_dropping_p_proc();
 
     virtual void think();
-    virtual void onMovementAnimationEnded(Event* event);
+    virtual void onMovementAnimationEnded(Event::Event* event);
 
     virtual bool running() const;
     virtual void setRunning(bool value);

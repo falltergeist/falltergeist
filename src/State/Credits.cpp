@@ -22,9 +22,9 @@
 
 // Falltergeist includes
 #include "../State/Credits.h"
-#include "../Event/KeyboardEvent.h"
-#include "../Event/MouseEvent.h"
-#include "../Event/StateEvent.h"
+#include "../Event/Keyboard.h"
+#include "../Event/Mouse.h"
+#include "../Event/State.h"
 #include "../Game/Game.h"
 #include "../UI/TextArea.h"
 #include "../Input/Mouse.h"
@@ -136,9 +136,9 @@ void Credits::think()
 }
 
 
-void Credits::handle(Event* event)
+void Credits::handle(Event::Event* event)
 {
-    if (auto mouseEvent = dynamic_cast<MouseEvent*>(event))
+    if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
         if (mouseEvent->name() == "mouseup")
         {
@@ -146,7 +146,7 @@ void Credits::handle(Event* event)
         }
     }
 
-    if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
+    if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
     {
         if (keyboardEvent->name() == "keyup")
         {
@@ -158,18 +158,18 @@ void Credits::handle(Event* event)
 void Credits::onCreditsFinished()
 {
     removeEventHandlers("fadedone");
-    addEventHandler("fadedone", [this](Event* event){ this->onCreditsFadeDone(dynamic_cast<StateEvent*>(event)); });
+    addEventHandler("fadedone", [this](Event::Event* event){ this->onCreditsFadeDone(dynamic_cast<Event::State*>(event)); });
     Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
 }
 
-void Credits::onCreditsFadeDone(StateEvent* event)
+void Credits::onCreditsFadeDone(Event::State* event)
 {
     removeEventHandlers("fadedone");
     Game::getInstance()->mouse()->popState();
     Game::getInstance()->popState();
 }
 
-void Credits::onStateActivate(StateEvent* event)
+void Credits::onStateActivate(Event::State* event)
 {
     Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
 }

@@ -31,7 +31,6 @@
 #include "../ResourceManager.h"
 #include "../Settings.h"
 
-
 // Third party includes
 #include <SDL.h>
 

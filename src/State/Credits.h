@@ -34,18 +34,17 @@ namespace State
 
 class Credits : public State
 {
-protected:
 public:
     Credits();
-    virtual ~Credits();
+    ~Credits() override;
 
-    virtual void init();
-    virtual void think();
-    virtual void handle(Event* event);
+    void init() override;
+    void think() override;
+    void handle(Event::Event* event) override;
 
     void onCreditsFinished();
-    void onCreditsFadeDone(StateEvent* event);
-    void onStateActivate(StateEvent* event);
+    void onCreditsFadeDone(Event::State* event);
+    void onStateActivate(Event::State* event) override;
 private:
     std::vector<TextArea*> _lines;
     unsigned long int _lastTicks;

@@ -307,17 +307,17 @@ void SettingsMenu::init()
 
     // button: Default
     auto defaultButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+23, backgroundY+450);
-    defaultButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDefaultButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    defaultButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDefaultButtonClick(dynamic_cast<Event::Mouse*>(event)); });
     addUI(defaultButton);
 
     // button: Done
     auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+148, backgroundY+450);
-    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doSave(); });
+    doneButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doSave(); });
     addUI(doneButton);
 
     // button: Cancel
     auto cancelButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+263, backgroundY+450);
-    cancelButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doCancel(); });
+    cancelButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doCancel(); });
     addUI(cancelButton);
 
     // button: Affect player speed
@@ -461,11 +461,11 @@ void SettingsMenu::doSave()
     Game::getInstance()->popState();
 }
 
-void SettingsMenu::onDefaultButtonClick(MouseEvent* event)
+void SettingsMenu::onDefaultButtonClick(Event::Mouse* event)
 {
 }
 
-void SettingsMenu::onKeyDown(KeyboardEvent* event)
+void SettingsMenu::onKeyDown(Event::Keyboard* event)
 {
     switch (event->keyCode())
     {
@@ -478,12 +478,12 @@ void SettingsMenu::onKeyDown(KeyboardEvent* event)
     }
 }
 
-void SettingsMenu::onStateActivate(StateEvent* event)
+void SettingsMenu::onStateActivate(Event::State* event)
 {
     Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
 }
 
-void SettingsMenu::onStateDeactivate(StateEvent* event)
+void SettingsMenu::onStateDeactivate(Event::State* event)
 {
     Game::getInstance()->mouse()->popState();
 }

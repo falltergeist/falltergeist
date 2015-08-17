@@ -24,17 +24,17 @@
 #include "../Exception.h"
 #include "../Graphics/Animation.h"
 #include "../Graphics/AnimationQueue.h"
-#include "../Graphics/Texture.h"
 #include "../Graphics/Renderer.h"
-#include "Game.h"
+#include "../Graphics/Texture.h"
+#include "../Game/CritterObject.h"
+#include "../Game/Defines.h"
+#include "../Game/DudeObject.h"
+#include "../Game/Game.h"
+#include "../Game/Object.h"
 #include "../LocationCamera.h"
 #include "../Logger.h"
 #include "../PathFinding/Hexagon.h"
 #include "../ResourceManager.h"
-#include "CritterObject.h"
-#include "Defines.h"
-#include "Object.h"
-#include "DudeObject.h"
 #include "../State/Location.h"
 #include "../UI/AnimatedImage.h"
 #include "../UI/Image.h"
@@ -48,7 +48,7 @@ namespace Falltergeist
 namespace Game
 {
 
-GameObject::GameObject() : EventEmitter()
+GameObject::GameObject() : Event::Emitter()
 {
 }
 
@@ -372,7 +372,7 @@ void GameObject::think()
     if (_ui) _ui->think();
 }
 
-void GameObject::handle(Event* event)
+void GameObject::handle(Event::Event* event)
 {
     if (_ui) _ui->handle(event);
 }
@@ -496,21 +496,21 @@ void GameObject::use_obj_on_p_proc(GameObject* objectUsed, GameCritterObject* us
     // @TODO: standard handlers for drugs, etc.
 }
 
-void GameObject::onUseAnimationActionFrame(Event* event, GameCritterObject* critter)
+void GameObject::onUseAnimationActionFrame(Event::Event* event, GameCritterObject* critter)
 {
     use_p_proc(critter);
     Animation* animation = dynamic_cast<Animation*>(critter->ui());
     if (animation)
     {
         animation->removeEventHandlers("actionFrame");
-        animation->addEventHandler("animationEnded", [this, critter](Event* event){
+        animation->addEventHandler("animationEnded", [this, critter](Event::Event* event){
             this->onUseAnimationEnd(event, critter);
         });
     }
     else throw Exception("No animation for object!");
 }
 
-void GameObject::onUseAnimationEnd(Event* event, GameCritterObject* critter)
+void GameObject::onUseAnimationEnd(Event::Event* event, GameCritterObject* critter)
 {
     critter->setActionAnimation("aa")->stop();
 }

@@ -209,7 +209,7 @@ void PlayerCreate::init()
     // add buttons to the state
     for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
     {
-        it->second->addEventHandler("mouseleftclick", [this](Event* event){ this->onButtonClick(dynamic_cast<MouseEvent*>(event)); });
+        it->second->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onButtonClick(dynamic_cast<Event::Mouse*>(event)); });
         addUI(it->second);
     }
 
@@ -217,7 +217,7 @@ void PlayerCreate::init()
     // reverse iterator to change drawing order
     for(auto it = _labels.rbegin(); it != _labels.rend(); ++it)
     {
-        it->second->addEventHandler("mouseleftdown", [this](Event* event){ this->onLabelClick(dynamic_cast<MouseEvent*>(event)); });
+        it->second->addEventHandler("mouseleftdown", [this](Event::Event* event){ this->onLabelClick(dynamic_cast<Event::Mouse*>(event)); });
         addUI(it->second);
     }
 
@@ -230,7 +230,7 @@ void PlayerCreate::init()
     // add hidden masks
     for(auto it = _masks.begin(); it != _masks.end(); ++it)
     {
-        it->second->addEventHandler("mouseleftdown", [this](Event* event){ this->onMaskClick(dynamic_cast<MouseEvent*>(event)); });
+        it->second->addEventHandler("mouseleftdown", [this](Event::Event* event){ this->onMaskClick(dynamic_cast<Event::Mouse*>(event)); });
         addUI(it->second);
     }
 
@@ -506,7 +506,7 @@ bool PlayerCreate::_skillToggle(unsigned int num)
     return false;
 }
 
-void PlayerCreate::onButtonClick(MouseEvent* event)
+void PlayerCreate::onButtonClick(Event::Mouse* event)
 {
     auto sender = dynamic_cast<ImageButton*>(event->emitter());
 
@@ -568,7 +568,7 @@ void PlayerCreate::onButtonClick(MouseEvent* event)
     }
 }
 
-void PlayerCreate::onLabelClick(MouseEvent* event)
+void PlayerCreate::onLabelClick(Event::Mouse* event)
 {
     for(auto it = _labels.begin(); it != _labels.end(); ++it)
     {
@@ -589,7 +589,7 @@ void PlayerCreate::onLabelClick(MouseEvent* event)
     }
 }
 
-void PlayerCreate::onMaskClick(MouseEvent* event)
+void PlayerCreate::onMaskClick(Event::Mouse* event)
 {
     for(auto it = _masks.begin(); it != _masks.end(); ++it)
     {
@@ -606,32 +606,32 @@ void PlayerCreate::onMaskClick(MouseEvent* event)
 }
 
 
-void PlayerCreate::onNameButtonClick(MouseEvent* event)
+void PlayerCreate::onNameButtonClick(Event::Mouse* event)
 {
     doName();
 }
 
-void PlayerCreate::onAgeButtonClick(MouseEvent* event)
+void PlayerCreate::onAgeButtonClick(Event::Mouse* event)
 {
     doAge();
 }
 
-void PlayerCreate::onGenderButtonClick(MouseEvent* event)
+void PlayerCreate::onGenderButtonClick(Event::Mouse* event)
 {
     doGender();
 }
 
-void PlayerCreate::onBackButtonClick(MouseEvent* event)
+void PlayerCreate::onBackButtonClick(Event::Mouse* event)
 {
     doBack();
 }
 
-void PlayerCreate::onDoneButtonClick(MouseEvent* event)
+void PlayerCreate::onDoneButtonClick(Event::Mouse* event)
 {
     doDone();
 }
 
-void PlayerCreate::onOptionsButtonClick(MouseEvent* event)
+void PlayerCreate::onOptionsButtonClick(Event::Mouse* event)
 {
     doOptions();
 }
@@ -668,7 +668,7 @@ void PlayerCreate::doOptions()
     Game::getInstance()->pushState(new PlayerCreateOptions());
 }
 
-void PlayerCreate::onKeyDown(KeyboardEvent* event)
+void PlayerCreate::onKeyDown(Event::Keyboard* event)
 {
     switch (event->keyCode())
     {

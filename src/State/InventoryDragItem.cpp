@@ -66,9 +66,9 @@ void InventoryDragItem::init()
 
 }
 
-void InventoryDragItem::handle(Event* event)
+void InventoryDragItem::handle(Event::Event* event)
 {
-    if (auto mouseEvent = dynamic_cast<MouseEvent*>(event))
+    if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
         _itemUi->setCurrentImage(1);
         _itemUi->setX(mouseEvent->x() - _itemUi->width()*0.5);

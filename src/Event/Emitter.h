@@ -17,38 +17,39 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_KEYBOARDEVENT_H
-#define FALLTERGEIST_KEYBOARDEVENT_H
+#ifndef FALLTERGEIST_EVENT_EMITTER_H
+#define FALLTERGEIST_EVENT_EMITTER_H
 
 // C++ standard includes
+#include <functional>
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
 
 // Falltergeist includes
-#include "../Event/Event.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace Event
+{
+class Event;
 
-class KeyboardEvent : public Event
+class Emitter
 {
 protected:
-    int _keyCode = 0;
-    bool _shiftPressed = false;
-    bool _controlPressed = false;
-    bool _altPressed = false;
+    std::map<std::string, std::vector<std::function<void(Event*)>>> _eventHandlers;
 public:
-    KeyboardEvent(const std::string& name = "keyboard");
-    virtual ~KeyboardEvent();
-    int keyCode();
-    void setKeyCode(int value);
-    bool shiftPressed();
-    void setShiftPressed(bool value);
-    bool controlPressed();
-    void setControlPressed(bool value);
-    void setAltPressed(bool _altPressed);
-    bool altPressed() const;
+    Emitter();
+    virtual ~Emitter();
+
+    void addEventHandler(const std::string& eventName, std::function<void(Event*)> handler);
+    void emitEvent(Event* event);
+    void removeEventHandlers(const std::string& eventName);
 };
 
 }
-#endif // FALLTERGEIST_KEYBOARDEVENT_H
+}
+#endif // FALLTERGEIST_EVENT_EMITTER_H

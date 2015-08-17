@@ -21,7 +21,7 @@
 #define FALLTERGEIST_PipBoy_H
 
 // C++ standard includes
-#include "State.h"
+#include "../State/State.h"
 
 // Third party includes
 
@@ -34,11 +34,12 @@ class PipBoy : public State
 {
 public:
     PipBoy();
-    ~PipBoy();
-    void init();
+    ~PipBoy() override;
 
-    void onCloseButtonClick(MouseEvent* event);
-    virtual void onKeyDown(KeyboardEvent* event);
+    void init() override;
+
+    void onCloseButtonClick(Event::Mouse* event);
+    void onKeyDown(Event::Keyboard* event) override;
 };
 
 }

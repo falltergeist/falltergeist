@@ -36,20 +36,21 @@ class Inventory : public State
 {
 public:
     Inventory();
-    virtual ~Inventory();
-    virtual void init();
+    ~Inventory() override;
 
-    void onDoneButtonClick(MouseEvent* event);
-    void onScrollUpButtonClick(MouseEvent* event);
-    void onScrollDownButtonClick(MouseEvent* event);
-    void onArmorSlotMouseDown(MouseEvent* event);
-    void onLeftHandSlotMouseDown(MouseEvent* event);
-    void onRightHandSlotMouseDown(MouseEvent* event);
-    //void onSlotMouseDown(MouseEvent* event);
-    //void onSlotMouseUp(MouseEvent* event);
-    //void onSlotDrag(MouseEvent* event);
-    void backgroundRightClick(MouseEvent* event);
-    virtual void onKeyDown(KeyboardEvent* event);
+    void init() override;
+
+    void onDoneButtonClick(Event::Mouse* event);
+    void onScrollUpButtonClick(Event::Mouse* event);
+    void onScrollDownButtonClick(Event::Mouse* event);
+    void onArmorSlotMouseDown(Event::Mouse* event);
+    void onLeftHandSlotMouseDown(Event::Mouse* event);
+    void onRightHandSlotMouseDown(Event::Mouse* event);
+    //void onSlotMouseDown(Event::Mouse* event);
+    //void onSlotMouseUp(Event::Mouse* event);
+    //void onSlotDrag(Event::Mouse* event);
+    void backgroundRightClick(Event::Mouse* event);
+    void onKeyDown(Event::Keyboard* event) override;
 
 private:
     std::string _handItemSummary (Game::GameItemObject* hand);

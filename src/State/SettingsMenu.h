@@ -31,6 +31,12 @@
 
 namespace Falltergeist
 {
+namespace Event
+{
+    class Keyboard;
+    class Mouse;
+    class State;
+}
 class TextArea;
 
 namespace State
@@ -45,18 +51,18 @@ protected:
     TextArea* _addTextArea(TextArea* parent, unsigned int x, unsigned int y);
 public:
     SettingsMenu();
-    virtual ~SettingsMenu();
-    virtual void init();
-    virtual void think();
+    ~SettingsMenu() override;
 
-    void onDefaultButtonClick(MouseEvent* event);
+    void init() override;
+    void think() override;
+
+    void onDefaultButtonClick(Event::Mouse* event);
     void doCancel();
     void doSave();
 
-    virtual void onKeyDown(KeyboardEvent* event);
-
-    virtual void onStateActivate(StateEvent* event);
-    virtual void onStateDeactivate(StateEvent* event);
+    void onKeyDown(Event::Keyboard* event) override;
+    void onStateActivate(Event::State* event) override;
+    void onStateDeactivate(Event::State* event) override;
 };
 
 }

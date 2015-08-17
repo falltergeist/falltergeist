@@ -43,7 +43,11 @@ namespace Falltergeist
 namespace State
 {
 
-Skilldex::Skilldex()
+Skilldex::Skilldex() : State()
+{
+}
+
+Skilldex::~Skilldex()
 {
 }
 
@@ -95,7 +99,7 @@ void Skilldex::init()
     repairCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::REPAIR));
 
     // events
-    cancelButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCancelButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    cancelButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onCancelButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     // LABELS
     auto font = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
@@ -190,12 +194,12 @@ void Skilldex::init()
 
 }
 
-void Skilldex::onCancelButtonClick(MouseEvent* event)
+void Skilldex::onCancelButtonClick(Event::Mouse* event)
 {
     Game::getInstance()->popState();
 }
 
-void Skilldex::onKeyDown(KeyboardEvent* event)
+void Skilldex::onKeyDown(Event::Keyboard* event)
 {
     if (event->keyCode() == SDLK_ESCAPE)
     {
@@ -203,16 +207,15 @@ void Skilldex::onKeyDown(KeyboardEvent* event)
     }
 }
 
-void Skilldex::onStateActivate(StateEvent* event)
+void Skilldex::onStateActivate(Event::State* event)
 {
     Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
 }
 
-void Skilldex::onStateDeactivate(StateEvent* event)
+void Skilldex::onStateDeactivate(Event::State* event)
 {
     Game::getInstance()->mouse()->popState();
 }
-
 
 }
 }

@@ -74,11 +74,11 @@ void CritterDialog::init()
 
     // Interface buttons
     auto reviewButton = new ImageButton(ImageButton::TYPE_DIALOG_REVIEW_BUTTON, 13, 154);
-    reviewButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onReviewButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    reviewButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onReviewButtonClick(dynamic_cast<Event::Mouse*>(event)); });
     addUI(reviewButton);
 
     auto barterButton = new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, 593, 40);
-    barterButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onBarterButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    barterButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onBarterButtonClick(dynamic_cast<Event::Mouse*>(event)); });
     addUI(barterButton);
 }
 
@@ -93,14 +93,14 @@ void CritterDialog::setQuestion(const std::string& value)
     question->setText(value);
 }
 
-void CritterDialog::onAnswerIn(Event* event)
+void CritterDialog::onAnswerIn(Event::Event* event)
 {
     auto sender = dynamic_cast<TextArea*>(event->emitter());
     auto font3_a0a0a0ff = ResourceManager::getInstance()->font("font1.aaf", 0xffff7fff);
     sender->setFont(font3_a0a0a0ff);
 }
 
-void CritterDialog::onAnswerOut(Event* event)
+void CritterDialog::onAnswerOut(Event::Event* event)
 {
     auto sender = dynamic_cast<TextArea*>(event->emitter());
     auto font3_3ff800ff = ResourceManager::getInstance()->font("font1.aaf", 0x3ff800ff);
@@ -128,21 +128,21 @@ void CritterDialog::deleteAnswers()
     _reactions.clear();
 }
 
-void CritterDialog::onReviewButtonClick(Event* event)
+void CritterDialog::onReviewButtonClick(Event::Event* event)
 {
     // FIXME : don't create new state each time the button is clicked
     auto state = new CritterDialogReview();
     Game::getInstance()->pushState(state);
 }
 
-void CritterDialog::onBarterButtonClick(Event* event)
+void CritterDialog::onBarterButtonClick(Event::Event* event)
 {
     // FIXME : don't create new state each time the button is clicked
     auto state = new CritterBarter();
     Game::getInstance()->pushState(state);
 }
 
-void CritterDialog::onKeyDown(KeyboardEvent* event)
+void CritterDialog::onKeyDown(Event::Keyboard* event)
 {
     static std::vector<uint32_t> numkeys = {
             SDLK_1, SDLK_2, SDLK_3, SDLK_4, SDLK_5, SDLK_6, SDLK_7, SDLK_8, SDLK_9,
@@ -218,7 +218,7 @@ bool CritterDialog::hasAnswers()
     return _answers.size() > 0;
 }
 
-void CritterDialog::onAnswerClick(Event* event)
+void CritterDialog::onAnswerClick(Event::Event* event)
 {
     auto sender = dynamic_cast<TextArea*>(event->emitter());
 

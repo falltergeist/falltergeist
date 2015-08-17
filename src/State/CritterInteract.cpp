@@ -49,12 +49,12 @@ CritterInteract::~CritterInteract()
     camera->setYPosition(_oldCameraY);
 }
 
-void CritterInteract::onStateActivate(StateEvent* event)
+void CritterInteract::onStateActivate(Event::State* event)
 {
     Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
 }
 
-void CritterInteract::onStateDeactivate(StateEvent* event)
+void CritterInteract::onStateDeactivate(Event::State* event)
 {
     Game::getInstance()->mouse()->popState();
 }

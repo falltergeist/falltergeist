@@ -68,23 +68,24 @@ protected:
 
 public:
     PlayerEdit();
-    void init();
-    void think();
-    virtual ~PlayerEdit();
+    ~PlayerEdit() override;
 
-    void onMaskClick(MouseEvent* event);
-    void onButtonClick(MouseEvent* event);
-    void onAgeButtonClick(MouseEvent* event);
-    void onNameButtonClick(MouseEvent* event);
-    void onGenderButtonClick(MouseEvent* event);
-    void onLabelClick(MouseEvent* event);
+    void init() override;
+    void think() override;
+
+    void onMaskClick(Event::Mouse* event);
+    void onButtonClick(Event::Mouse* event);
+    void onAgeButtonClick(Event::Mouse* event);
+    void onNameButtonClick(Event::Mouse* event);
+    void onGenderButtonClick(Event::Mouse* event);
+    void onLabelClick(Event::Mouse* event);
     void doCancel();
     void doDone();
     void doPrint();
-    virtual void onStateActivate(StateEvent* event);
-    virtual void onStateDeactivate(StateEvent* event);
-    
-    virtual void onKeyDown(KeyboardEvent* event);
+
+    void onStateActivate(Event::State* event) override;
+    void onStateDeactivate(Event::State* event) override;
+    void onKeyDown(Event::Keyboard* event) override;
 
 };
 

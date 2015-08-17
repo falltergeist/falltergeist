@@ -41,7 +41,11 @@ namespace Falltergeist
 namespace State
 {
 
-WorldMap::WorldMap()
+WorldMap::WorldMap() : State()
+{
+}
+
+WorldMap::~WorldMap()
 {
 }
 
@@ -190,11 +194,11 @@ void WorldMap::render()
 
 }
 
-void WorldMap::handle(Event* event)
+void WorldMap::handle(Event::Event* event)
 {
     auto game = Game::getInstance();
 
-    if (auto mouseEvent = dynamic_cast<MouseEvent*>(event))
+    if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
         auto mouse = game->mouse();
 
@@ -212,24 +216,24 @@ void WorldMap::handle(Event* event)
         }
     }
 
-    if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
+    if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
     {
         if (keyboardEvent->name() == "keydown")
             onKeyDown(keyboardEvent);
     }
 }
 
-void WorldMap::onStateActivate(StateEvent* event)
+void WorldMap::onStateActivate(Event::State* event)
 {
     Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
 }
 
-void WorldMap::onStateDeactivate(StateEvent* event)
+void WorldMap::onStateDeactivate(Event::State* event)
 {
     Game::getInstance()->mouse()->popState();
 }
 
-void WorldMap::onKeyDown(KeyboardEvent* event)
+void WorldMap::onKeyDown(Event::Keyboard* event)
 {
     switch (event->keyCode())
     {
@@ -239,8 +243,6 @@ void WorldMap::onKeyDown(KeyboardEvent* event)
         }
     }
 }
-
-
 
 }
 }

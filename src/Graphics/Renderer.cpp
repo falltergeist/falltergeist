@@ -17,15 +17,17 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Graphics/Renderer.h"
+
 // C++ standard includes
 #include <cmath>
 
 // Falltergeist includes
-#include "../Event/StateEvent.h"
+#include "../Event/State.h"
 #include "../Exception.h"
-#include "../Graphics/Renderer.h"
-#include "../Graphics/UI.h"
 #include "../Game/Game.h"
+#include "../Graphics/UI.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
 #include "../Settings.h"
@@ -175,7 +177,7 @@ void Renderer::think()
             _fadeAlpha = (_fadeAlpha <= 0 ? 0 : 255);
             _fadeDone = true;
 
-            auto event = new StateEvent("fadedone");
+            auto event = new Event::State("fadedone");
             Game::getInstance()->states()->back()->emitEvent(event);
             delete event;
             return;

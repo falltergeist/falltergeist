@@ -45,11 +45,14 @@ protected:
     GENDER _gender = GENDER::MALE;
 public:
     PlayerEditGender();
-    void init();
-    void onFemaleButtonPress(MouseEvent* event);
-    void onMaleButtonPress(MouseEvent* event);
-    void onDoneButtonClick(MouseEvent* event);
-    virtual void onKeyDown(KeyboardEvent* event);
+    ~PlayerEditGender() override;
+
+    void init() override;
+
+    void onFemaleButtonPress(Event::Mouse* event);
+    void onMaleButtonPress(Event::Mouse* event);
+    void onDoneButtonClick(Event::Mouse* event);
+    void onKeyDown(Event::Keyboard* event) override;
     void setGender(GENDER gender);
 };
 

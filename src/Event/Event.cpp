@@ -17,15 +17,19 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Event/Event.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Event/Event.h"
 #include "../Lua/Script.h"
 
 // Third party includes
 
 namespace Falltergeist
+{
+namespace Event
 {
 
 Event::Event(const std::string& name)
@@ -57,17 +61,17 @@ void Event::setName(const std::string& name)
     _name = name;
 }
 
-EventEmitter* Event::emitter()
+Emitter* Event::emitter() const
 {
     return _emitter;
 }
 
-void Event::setEmitter(EventEmitter* value)
+void Event::setEmitter(Emitter* value)
 {
     _emitter = value;
 }
 
-bool Event::handled()
+bool Event::handled() const
 {
     return _handled;
 }
@@ -77,4 +81,5 @@ void Event::setHandled(bool value)
     _handled = value;
 }
 
+}
 }

@@ -37,11 +37,11 @@ class CritterDialogReview : public State
 private:
 public:
     CritterDialogReview();
-    ~CritterDialogReview();
+    ~CritterDialogReview() override;
 
-    void init();
+    void init() override;
 
-    void onDoneButtonClick(Event* event);
+    void onDoneButtonClick(Event::Event* event);
 };
 
 }

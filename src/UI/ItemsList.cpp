@@ -20,6 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Event/Event.h"
+#include "../Event/Mouse.h"
 #include "../Game/ArmorItemObject.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
@@ -40,10 +42,10 @@ ItemsList::ItemsList(int x, int y) : ActiveUI(x, y)
     _texture = new Texture(_slotWidth, _slotHeight * _slotsNumber);
     _texture->fill(0x000000FF);
 
-    addEventHandler("mouseleftdown", [this](Event* event){ this->onMouseLeftDown(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mousedragstart", [this](Event* event){ this->onMouseDragStart(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mousedrag", [this](Event* event){ this->onMouseDrag(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mousedragstop", [this](Event* event){ this->onMouseDragStop(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseleftdown",  [this](Event::Event* event){ this->onMouseLeftDown(dynamic_cast<Event::Mouse*>(event)); });
+    addEventHandler("mousedragstart", [this](Event::Event* event){ this->onMouseDragStart(dynamic_cast<Event::Mouse*>(event)); });
+    addEventHandler("mousedrag",      [this](Event::Event* event){ this->onMouseDrag(dynamic_cast<Event::Mouse*>(event)); });
+    addEventHandler("mousedragstop",  [this](Event::Event* event){ this->onMouseDragStop(dynamic_cast<Event::Mouse*>(event)); });
 }
 
 void ItemsList::setItems(std::vector<Game::GameItemObject *>* items)
@@ -102,12 +104,12 @@ std::vector<InventoryItem*>* ItemsList::inventoryItems()
     return &_inventoryItems;
 }
 
-void ItemsList::onMouseLeftDown(MouseEvent* event)
+void ItemsList::onMouseLeftDown(Event::Mouse* event)
 {
     Logger::critical() << "mouseleftdown" << std::endl;
 }
 
-void ItemsList::onMouseDragStart(MouseEvent* event)
+void ItemsList::onMouseDragStart(Event::Mouse* event)
 {
     unsigned int index = (event->y() - y())/_slotHeight;
     _draggedItem = inventoryItems()->at(index);
@@ -117,19 +119,19 @@ void ItemsList::onMouseDragStart(MouseEvent* event)
     Logger::critical() << "mousedragstart at " << index << " (" << _draggedItem->item()->name() << ")" << std::endl;
 }
 
-void ItemsList::onMouseDrag(MouseEvent* event)
+void ItemsList::onMouseDrag(Event::Mouse* event)
 {
     _draggedItem->setXOffset(_draggedItem->xOffset() + event->xOffset());
     _draggedItem->setYOffset(_draggedItem->yOffset() + event->yOffset());
     Logger::critical() << "mousedrag" << std::endl;
 }
 
-void ItemsList::onMouseDragStop(MouseEvent* event)
+void ItemsList::onMouseDragStop(Event::Mouse* event)
 {
     _draggedItem->setXOffset(0);
     _draggedItem->setYOffset(0);
     _draggedItem->setType(_type);
-    auto itemevent = new MouseEvent("itemdragstop");
+    auto itemevent = new Event::Mouse("itemdragstop");
     itemevent->setX(event->x());
     itemevent->setY(event->y());
     itemevent->setEmitter(this);
@@ -139,7 +141,7 @@ void ItemsList::onMouseDragStop(MouseEvent* event)
     Logger::critical() << "mousedragstop" << std::endl;
 }
 
-void ItemsList::onItemDragStop(MouseEvent* event)
+void ItemsList::onItemDragStop(Event::Mouse* event)
 {
     Logger::critical() << "itemdragstop" << std::endl;
 

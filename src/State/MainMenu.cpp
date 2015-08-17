@@ -25,7 +25,7 @@
 
 // Falltergeist includes
 #include "../Audio/Mixer.h"
-#include "../Event/StateEvent.h"
+#include "../Event/State.h"
 #include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Animation.h"
@@ -76,27 +76,27 @@ void MainMenu::init()
 
     // intro button
     auto introButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19));
-    introButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onIntroButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    introButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onIntroButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     // new game button
     auto newGameButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41));
-    newGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onNewGameButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    newGameButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onNewGameButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     // load game button
     auto loadGameButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*2));
-    loadGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onLoadGameButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    loadGameButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onLoadGameButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     // settings button
     auto settingsButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*3));
-    settingsButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onSettingsButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    settingsButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onSettingsButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     // credits button
     auto creditsButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*4));
-    creditsButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCreditsButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    creditsButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onCreditsButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     // exit button
     auto exitButton = addUI(new ImageButton(ImageButton::TYPE_MENU_RED_CIRCLE, 30, 19 + 41*5));
-    exitButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onExitButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    exitButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onExitButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     auto font4 = ResourceManager::getInstance()->font("font4.aaf", 0xb89c28ff);
 
@@ -148,21 +148,21 @@ void MainMenu::init()
 void MainMenu::doExit()
 {
     removeEventHandlers("fadedone");
-    addEventHandler("fadedone", [this](Event* event){ this->onExitStart(dynamic_cast<StateEvent*>(event)); });
+    addEventHandler("fadedone", [this](Event::Event* event){ this->onExitStart(dynamic_cast<Event::State*>(event)); });
     Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
 }
 
 void MainMenu::doNewGame()
 {
     removeEventHandlers("fadedone");
-    addEventHandler("fadedone", [this](Event* event){ this->onNewGameStart(dynamic_cast<StateEvent*>(event)); });
+    addEventHandler("fadedone", [this](Event::Event* event){ this->onNewGameStart(dynamic_cast<Event::State*>(event)); });
     Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
 }
 
 void MainMenu::doLoadGame()
 {
     removeEventHandlers("fadedone");
-    addEventHandler("fadedone", [this](Event* event){ this->onLoadGameStart(dynamic_cast<StateEvent*>(event)); });
+    addEventHandler("fadedone", [this](Event::Event* event){ this->onLoadGameStart(dynamic_cast<Event::State*>(event)); });
     Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
 }
 
@@ -174,80 +174,80 @@ void MainMenu::doSettings()
 void MainMenu::doIntro()
 {
     removeEventHandlers("fadedone");
-    addEventHandler("fadedone", [this](Event* event){ this->onIntroStart(dynamic_cast<StateEvent*>(event)); });
+    addEventHandler("fadedone", [this](Event::Event* event){ this->onIntroStart(dynamic_cast<Event::State*>(event)); });
     Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
 }
 
 void MainMenu::doCredits()
 {
     removeEventHandlers("fadedone");
-    addEventHandler("fadedone", [this](Event* event){ this->onCreditsStart(dynamic_cast<StateEvent*>(event)); });
+    addEventHandler("fadedone", [this](Event::Event* event){ this->onCreditsStart(dynamic_cast<Event::State*>(event)); });
     Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
 }
 
-void MainMenu::onExitButtonClick(MouseEvent* event)
+void MainMenu::onExitButtonClick(Event::Mouse* event)
 {
     doExit();
 }
 
-void MainMenu::onExitStart(StateEvent* event)
+void MainMenu::onExitStart(Event::State* event)
 {
     removeEventHandlers("fadedone");
     Game::getInstance()->mixer()->stopMusic();
     Game::getInstance()->quit();
 }
 
-void MainMenu::onNewGameButtonClick(MouseEvent* event)
+void MainMenu::onNewGameButtonClick(Event::Mouse* event)
 {
     doNewGame();
 }
 
-void MainMenu::onNewGameStart(StateEvent* event)
+void MainMenu::onNewGameStart(Event::State* event)
 {
     removeEventHandlers("fadedone");
     Game::getInstance()->pushState(new NewGame());
 }
 
-void MainMenu::onLoadGameButtonClick(MouseEvent* event)
+void MainMenu::onLoadGameButtonClick(Event::Mouse* event)
 {
     doLoadGame();
 }
 
-void MainMenu::onLoadGameStart(StateEvent* event)
+void MainMenu::onLoadGameStart(Event::State* event)
 {
     removeEventHandlers("fadedone");
     Game::getInstance()->pushState(new LoadGame());
 }
 
-void MainMenu::onSettingsButtonClick(MouseEvent* event)
+void MainMenu::onSettingsButtonClick(Event::Mouse* event)
 {
     doSettings();
 }
 
-void MainMenu::onIntroButtonClick(MouseEvent* event)
+void MainMenu::onIntroButtonClick(Event::Mouse* event)
 {
     doIntro();
 }
 
-void MainMenu::onIntroStart(StateEvent* event)
+void MainMenu::onIntroStart(Event::State* event)
 {
     removeEventHandlers("fadedone");
     Game::getInstance()->pushState(new Movie(17));
     Game::getInstance()->pushState(new Movie(1));
 }
 
-void MainMenu::onCreditsButtonClick(MouseEvent* event)
+void MainMenu::onCreditsButtonClick(Event::Mouse* event)
 {
     doCredits();
 }
 
-void MainMenu::onCreditsStart(StateEvent* event)
+void MainMenu::onCreditsStart(Event::State* event)
 {
     removeEventHandlers("fadedone");
     Game::getInstance()->pushState(new Credits());
 }
 
-void MainMenu::onKeyDown(KeyboardEvent* event)
+void MainMenu::onKeyDown(Event::Keyboard* event)
 {
     switch (event->keyCode())
     {
@@ -273,7 +273,7 @@ void MainMenu::onKeyDown(KeyboardEvent* event)
     }
 }
 
-void MainMenu::onStateActivate(StateEvent* event)
+void MainMenu::onStateActivate(Event::State* event)
 {
     Game::getInstance()->mixer()->playACMMusic("07desert.acm",true);
     Game::getInstance()->renderer()->fadeIn(0,0,0,1000);

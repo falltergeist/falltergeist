@@ -53,26 +53,26 @@ protected:
 
 public:
     NewGame();
-    virtual ~NewGame();
+    ~NewGame() override;
 
-    virtual void init();
-    virtual void think();
+    void init() override;
+    void think() override;
 
-    void onBackButtonClick(MouseEvent* event);
-    void onBackFadeDone(StateEvent* event);
-    void onBeginGameButtonClick(MouseEvent* event);
-    void onEditButtonClick(MouseEvent* event);
-    void onCreateButtonClick(MouseEvent* event);
-    void onPrevCharacterButtonClick(MouseEvent* event);
-    void onNextCharacterButtonClick(MouseEvent* event);
-    void onStateActivate(StateEvent* event);
+    void onBackButtonClick(Event::Mouse* event);
+    void onBackFadeDone(Event::State* event);
+    void onBeginGameButtonClick(Event::Mouse* event);
+    void onEditButtonClick(Event::Mouse* event);
+    void onCreateButtonClick(Event::Mouse* event);
+    void onPrevCharacterButtonClick(Event::Mouse* event);
+    void onNextCharacterButtonClick(Event::Mouse* event);
+    void onStateActivate(Event::State* event) override;
     void doBeginGame();
     void doEdit();
     void doCreate();
     void doBack();
     void doNext();
     void doPrev();
-    virtual void onKeyDown(KeyboardEvent* event);
+    void onKeyDown(Event::Keyboard* event) override;
 };
 
 }

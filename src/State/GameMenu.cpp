@@ -45,7 +45,11 @@ namespace Falltergeist
 namespace State
 {
 
-GameMenu::GameMenu()
+GameMenu::GameMenu() : State()
+{
+}
+
+GameMenu::~GameMenu()
 {
 }
 
@@ -69,9 +73,9 @@ void GameMenu::init()
     auto exitGameButton = new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3);
     auto doneButton = new ImageButton(ImageButton::TYPE_OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4);
 
-    preferencesButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doPreferences(); });
-    exitGameButton->addEventHandler("mouseleftclick",    [this](Event* event){ this->doExit(); });
-    doneButton->addEventHandler("mouseleftclick",        [this](Event* event){ this->closeMenu(); });
+    preferencesButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doPreferences(); });
+    exitGameButton->addEventHandler("mouseleftclick",    [this](Event::Event* event){ this->doExit(); });
+    doneButton->addEventHandler("mouseleftclick",        [this](Event::Event* event){ this->closeMenu(); });
 
     auto font = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
 
@@ -80,14 +84,14 @@ void GameMenu::init()
     saveGameButtonLabel->setFont(font);
     saveGameButtonLabel->setWidth(150);
     saveGameButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
-    saveGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doSaveGame(); });
+    saveGameButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doSaveGame(); });
 
     // label: load game
     auto loadGameButtonLabel = new TextArea(_t(MSG_OPTIONS, 1), backgroundX+8, backgroundY+26+37);
     loadGameButtonLabel->setFont(font);
     loadGameButtonLabel->setWidth(150);
     loadGameButtonLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
-    loadGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doLoadGame(); });
+    loadGameButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doLoadGame(); });
 
     // label: preferences
     auto preferencesButtonLabel = new TextArea(_t(MSG_OPTIONS, 2), backgroundX+8, backgroundY+26+37*2);
@@ -148,17 +152,17 @@ void GameMenu::closeMenu()
     Game::getInstance()->popState();
 }
 
-void GameMenu::onStateActivate(StateEvent* event)
+void GameMenu::onStateActivate(Event::State* event)
 {
     Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
 }
 
-void GameMenu::onStateDeactivate(StateEvent* event)
+void GameMenu::onStateDeactivate(Event::State* event)
 {
     Game::getInstance()->mouse()->popState();
 }
 
-void GameMenu::onKeyDown(KeyboardEvent* event)
+void GameMenu::onKeyDown(Event::Keyboard* event)
 {
     switch (event->keyCode())
     {

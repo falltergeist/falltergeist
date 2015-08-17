@@ -43,6 +43,10 @@ PlayerEditName::PlayerEditName() : State()
 {
 }
 
+PlayerEditName::~PlayerEditName()
+{
+}
+
 void PlayerEditName::init()
 {
     if (_initialized) return;
@@ -110,10 +114,10 @@ void PlayerEditName::init()
     doneLabel->setFont(font3_b89c28ff);
 
     auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+45, bgY+43);
-    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    doneButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     _name = new TextArea(Game::getInstance()->player()->name(), bgX+43, bgY+15);
-    _name->addEventHandler("keydown", [this](Event* event){ this->onTextAreaKeyDown(dynamic_cast<KeyboardEvent*>(event)); });
+    _name->addEventHandler("keydown", [this](Event::Event* event){ this->onTextAreaKeyDown(dynamic_cast<Event::Keyboard*>(event)); });
 
     _cursor = new Image(5, 8);
     _cursor->setX(bgX+83);
@@ -129,7 +133,7 @@ void PlayerEditName::init()
     addUI(_cursor);
 }
 
-void PlayerEditName::onTextAreaKeyDown(KeyboardEvent* event)
+void PlayerEditName::onTextAreaKeyDown(Event::Keyboard* event)
 {
     auto sender = dynamic_cast<TextArea*>(event->emitter());
 
@@ -180,13 +184,9 @@ void PlayerEditName::onTextAreaKeyDown(KeyboardEvent* event)
     }
 }
 
-void PlayerEditName::onDoneButtonClick(MouseEvent* event)
+void PlayerEditName::onDoneButtonClick(Event::Mouse* event)
 {
     doDone();
-}
-
-PlayerEditName::~PlayerEditName()
-{
 }
 
 void PlayerEditName::think()
@@ -223,8 +223,6 @@ void PlayerEditName::doDone()
     }
     Game::getInstance()->popState();
 }
-
-
 
 }
 }

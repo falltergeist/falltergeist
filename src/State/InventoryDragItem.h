@@ -38,8 +38,9 @@ protected:
     ImageList* _itemUi;
 public:
     InventoryDragItem(ImageList* itemUi);
-    virtual ~InventoryDragItem();
-    virtual void init();
+    ~InventoryDragItem() override;
+
+    void init() override;
 
     //void onDoneButtonClick(MouseEvent* event);
     //void onArmorSlotMouseDown(MouseEvent* event);
@@ -50,7 +51,7 @@ public:
     //void onSlotDrag(MouseEvent* event);
     //void backgroundRightClick(MouseEvent* event);
     //void onMouseButtonUp(MouseEvent* event);
-    void handle(Event* event);
+    void handle(Event::Event* event) override;
     //virtual void handle(Event* event);
 //private:
     //std::string _handItemSummary (GameItemObject* hand);
