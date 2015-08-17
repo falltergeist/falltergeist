@@ -36,7 +36,7 @@ FpsCounter::FpsCounter(int x, int y) : TextArea(x,y)
     _lastTicks = SDL_GetTicks();
     setText("0");
     setWidth(40);
-    setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    setHorizontalAlign(TextArea::HorizontalAlign::RIGHT);
 }
 
 void FpsCounter::think()

@@ -219,22 +219,22 @@ Object* ObjectFactory::createObject(unsigned int PID)
             switch (orientation)
             {
                 case 0x0000:
-                    object->setLightOrientation(Object::ORIENTATION_NS);
+                    object->setLightOrientation(Orientation::NS);
                     break;
                 case 0x0800:
-                    object->setLightOrientation(Object::ORIENTATION_EW);
+                    object->setLightOrientation(Orientation::EW);
                     break;
                 case 0x1000:
-                    object->setLightOrientation(Object::ORIENTATION_NC);
+                    object->setLightOrientation(Orientation::NC);
                     break;
                 case 0x2000:
-                    object->setLightOrientation(Object::ORIENTATION_SC);
+                    object->setLightOrientation(Orientation::SC);
                     break;
                 case 0x4000:
-                    object->setLightOrientation(Object::ORIENTATION_EC);
+                    object->setLightOrientation(Orientation::EC);
                     break;
                 case 0x8000:
-                    object->setLightOrientation(Object::ORIENTATION_WC);
+                    object->setLightOrientation(Orientation::WC);
                     break;
             }
             break;
@@ -255,22 +255,22 @@ Object* ObjectFactory::createObject(unsigned int PID)
             switch (orientation)
             {
                 case 0x0000:
-                    object->setLightOrientation(Object::ORIENTATION_NS);
+                    object->setLightOrientation(Orientation::NS);
                     break;
                 case 0x0800:
-                    object->setLightOrientation(Object::ORIENTATION_EW);
+                    object->setLightOrientation(Orientation::EW);
                     break;
                 case 0x1000:
-                    object->setLightOrientation(Object::ORIENTATION_NC);
+                    object->setLightOrientation(Orientation::NC);
                     break;
                 case 0x2000:
-                    object->setLightOrientation(Object::ORIENTATION_SC);
+                    object->setLightOrientation(Orientation::SC);
                     break;
                 case 0x4000:
-                    object->setLightOrientation(Object::ORIENTATION_EC);
+                    object->setLightOrientation(Orientation::EC);
                     break;
                 case 0x8000:
-                    object->setLightOrientation(Object::ORIENTATION_WC);
+                    object->setLightOrientation(Orientation::WC);
                     break;
             }
             break;

@@ -33,7 +33,7 @@ namespace Game
 
 DrugItemObject::DrugItemObject() : ItemObject()
 {
-    _subtype = TYPE_ITEM_DRUG;
+    _subtype = Subtype::DRUG;
 }
 
 DrugItemObject::~DrugItemObject()

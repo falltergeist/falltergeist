@@ -40,8 +40,20 @@ class TextSymbol;
 class TextArea : public ActiveUI
 {
 public:
-    enum { HORIZONTAL_ALIGN_LEFT = 1, HORIZONTAL_ALIGN_CENTER, HORIZONTAL_ALIGN_RIGHT, HORIZONTAL_ALIGN_JUSTIFY };
-    enum { VERTICAL_ALIGN_TOP = 1, VERTICAL_ALIGN_CENTER, VERTICAL_ALIGN_BOTTOM, VERTICAL_ALIGN_JUSTIFY };
+    enum class HorizontalAlign
+    {
+        LEFT = 1,
+        CENTER,
+        RIGHT,
+        JUSTIFY
+    };
+    enum class VerticalAlign
+    {
+        TOP = 1,
+        CENTER,
+        BOTTOM,
+        JUSTIFY
+    };
     TextArea(const std::string& text, int x = 0, int y = 0);
     TextArea(int x = 0, int y = 0);
     TextArea(TextArea* textArea, int x = 0, int y = 0);
@@ -51,11 +63,11 @@ public:
     void appendText(const std::string& text);
     std::string text() const;
 
-    void setHorizontalAlign(unsigned char align);
-    unsigned char horizontalAlign() const;
+    void setHorizontalAlign(HorizontalAlign align);
+    HorizontalAlign horizontalAlign() const;
 
-    void setVerticalAlign(unsigned char align);
-    unsigned char verticalAlign() const;
+    void setVerticalAlign(VerticalAlign align);
+    VerticalAlign verticalAlign() const;
 
     void setHeight(unsigned int height);
     unsigned int height() const;
@@ -94,8 +106,8 @@ protected:
     std::string _text;
     std::shared_ptr<Font> _font;
 
-    unsigned char _horizontalAlign = HORIZONTAL_ALIGN_LEFT;
-    unsigned char _verticalAlign = VERTICAL_ALIGN_TOP;
+    HorizontalAlign _horizontalAlign = HorizontalAlign::LEFT;
+    VerticalAlign _verticalAlign = VerticalAlign::TOP;
 
     unsigned int _width = 0;
     unsigned int _height = 0;

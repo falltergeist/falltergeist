@@ -118,7 +118,7 @@ void Mouse::_setType(unsigned int state)
 {
     if (this->state() == state) return;
     delete _ui; _ui = 0;
-    switch(state)
+    switch (state)
     {
         case BIG_ARROW:
             _ui = new Image("art/intrface/stdarrow.frm");

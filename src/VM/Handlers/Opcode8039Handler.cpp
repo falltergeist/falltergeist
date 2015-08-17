@@ -43,22 +43,22 @@ void Opcode8039Handler::_run()
     debug << "    types: " << aValue.typeName() << " + " << bValue.typeName() << std::endl;
     switch (bValue.type())
     {
-        case VMStackValue::TYPE_INTEGER: // INTEGER
+        case VMStackValue::Type::INTEGER: // INTEGER
         {
             int arg2 = bValue.integerValue();
             switch (aValue.type())
             {
-                case VMStackValue::TYPE_INTEGER: // INTEGER + INTEGER
+                case VMStackValue::Type::INTEGER: // INTEGER + INTEGER
                 {
                     _vm->dataStack()->push(aValue.integerValue() + arg2);
                     break;
                 }
-                case VMStackValue::TYPE_FLOAT: // FLOAT + INTEGER
+                case VMStackValue::Type::FLOAT: // FLOAT + INTEGER
                 {
                     _vm->dataStack()->push(aValue.floatValue() + (float)arg2);
                     break;
                 }
-                case VMStackValue::TYPE_STRING: // STRING + INTEGER
+                case VMStackValue::Type::STRING: // STRING + INTEGER
                 {
                     std::string arg1 = aValue.stringValue();
                     _vm->dataStack()->push(arg1 + bValue.toString());
@@ -71,21 +71,21 @@ void Opcode8039Handler::_run()
             }
             break;
         }
-        case VMStackValue::TYPE_STRING: 
+        case VMStackValue::Type::STRING:
         {
             auto arg2 = bValue.stringValue();
             switch (aValue.type())
             {
-                case VMStackValue::TYPE_STRING: // STRING + STRING
+                case VMStackValue::Type::STRING: // STRING + STRING
                 {
                     _vm->dataStack()->push(aValue.stringValue() + arg2);
                     break;
                 }
-                case VMStackValue::TYPE_FLOAT: // FLOAT + STRING
+                case VMStackValue::Type::FLOAT: // FLOAT + STRING
                 {
                     _error("op_add - FLOAT+STRING not allowed");
                 }
-                case VMStackValue::TYPE_INTEGER: // INTEGER + STRING
+                case VMStackValue::Type::INTEGER: // INTEGER + STRING
                 {
                     _error("op_add - INTEGER+STRING not allowed");
                 }
@@ -96,22 +96,22 @@ void Opcode8039Handler::_run()
             }
             break;
         }
-        case VMStackValue::TYPE_FLOAT: // FLOAT
+        case VMStackValue::Type::FLOAT: // FLOAT
         {
             auto arg2 = bValue.floatValue();
             switch (aValue.type())
             {
-                case VMStackValue::TYPE_INTEGER: // INTEGER + FLOAT
+                case VMStackValue::Type::INTEGER: // INTEGER + FLOAT
                 {
                     _vm->dataStack()->push((float)aValue.integerValue() + arg2);
                     break;
                 }
-                case VMStackValue::TYPE_FLOAT: // FLOAT + FLOAT
+                case VMStackValue::Type::FLOAT: // FLOAT + FLOAT
                 {
                     _vm->dataStack()->push(aValue.floatValue() + arg2);
                     break;
                 }
-                case VMStackValue::TYPE_STRING: // STRING + FLOAT
+                case VMStackValue::Type::STRING: // STRING + FLOAT
                 {
                     auto arg1 = aValue.stringValue();
                     _vm->dataStack()->push(arg1 + bValue.toString());

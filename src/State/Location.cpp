@@ -82,7 +82,7 @@ Location::Location() : State()
     _hexagonGrid = new HexagonGrid();
 
     _hexagonInfo = new TextArea("", game->renderer()->width() - 135, 25);
-    _hexagonInfo->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    _hexagonInfo->setHorizontalAlign(TextArea::HorizontalAlign::RIGHT);
 
 }
 
@@ -268,39 +268,41 @@ void Location::setLocation(const std::string& name)
     }
 }
 
-std::vector<int> Location::getCursorIconsForObject(Game::Object* object)
+std::vector<Mouse::Icon> Location::getCursorIconsForObject(Game::Object* object)
 {
-    std::vector<int> icons;
+    std::vector<Mouse::Icon> icons;
     if (object->script() && object->script()->hasFunction("use_p_proc"))
     {
-        icons.push_back(Mouse::ICON_USE);
+        icons.push_back(Mouse::Icon::USE);
     }
     else if (dynamic_cast<Game::DoorSceneryObject*>(object))
     {
-        icons.push_back(Mouse::ICON_USE);
+        icons.push_back(Mouse::Icon::USE);
     }
     else if (dynamic_cast<Game::ContainerItemObject*>(object))
     {
-        icons.push_back(Mouse::ICON_USE);
+        icons.push_back(Mouse::Icon::USE);
     }
 
-    switch(object->type())
+    switch (object->type())
     {
-        case Game::Object::TYPE_ITEM:
+        case Game::Object::Type::ITEM:
             break;
-        case Game::Object::TYPE_DUDE:
-            icons.push_back(Mouse::ICON_ROTATE);
+        case Game::Object::Type::DUDE:
+            icons.push_back(Mouse::Icon::ROTATE);
             break;
-        case Game::Object::TYPE_SCENERY:
+        case Game::Object::Type::SCENERY:
             break;
-        case Game::Object::TYPE_CRITTER:
-            icons.push_back(Mouse::ICON_TALK);
+        case Game::Object::Type::CRITTER:
+            icons.push_back(Mouse::Icon::TALK);
+            break;
+        default:
             break;
     }
-    icons.push_back(Mouse::ICON_LOOK);
-    icons.push_back(Mouse::ICON_INVENTORY);
-    icons.push_back(Mouse::ICON_SKILL);
-    icons.push_back(Mouse::ICON_CANCEL);
+    icons.push_back(Mouse::Icon::LOOK);
+    icons.push_back(Mouse::Icon::INVENTORY);
+    icons.push_back(Mouse::Icon::SKILL);
+    icons.push_back(Mouse::Icon::CANCEL);
     return icons;
 }
 
@@ -513,7 +515,7 @@ void Location::think()
                 {
                     game->popState();
                 }
-                auto state = new CursorDropdown(icons, !_actionCursorButtonPressed);
+                auto state = new CursorDropdown(std::move(icons), !_actionCursorButtonPressed);
                 state->setObject(_objectUnderCursor);
                 Game::getInstance()->pushState(state);
             }
@@ -692,13 +694,13 @@ void Location::onKeyDown(Event::Keyboard* event)
         case SDLK_COMMA:
         {
             auto player = Game::getInstance()->player();
-            player->setOrientation((player->orientation() + 5) % 6); // rotate left
+            player->setOrientation(player->orientation() + 5); // rotate left
             break;
         }
         case SDLK_PERIOD:
         {
             auto player = Game::getInstance()->player();
-            player->setOrientation((player->orientation() + 1) % 6); // rotate right
+            player->setOrientation(player->orientation() + 1); // rotate right
             break;
         }
         case SDLK_HOME:
@@ -856,34 +858,34 @@ void Location::centerCameraAtHexagon(int tileNum)
     }
 }
 
-void Location::handleAction(Game::Object* object, int action)
+void Location::handleAction(Game::Object* object, Mouse::Icon action)
 {
     switch (action)
     {
-        case Mouse::ICON_LOOK:
+        case Mouse::Icon::LOOK:
         {
             object->description_p_proc();
             break;
         }
-        case Mouse::ICON_USE:
+        case Mouse::Icon::USE:
         {
             auto player = Game::getInstance()->player();
             auto animation = player->setActionAnimation("al");
             animation->addEventHandler("actionFrame", [object, player](Event::Event* event){ object->onUseAnimationActionFrame(event, player); });
             break;
         }
-        case Mouse::ICON_ROTATE:
+        case Mouse::Icon::ROTATE:
         {
             auto dude = dynamic_cast<Game::DudeObject*>(object);
             if (!dude) throw Exception("Location::handleAction() - only Dude can be rotated");
 
-            int orientation = dude->orientation() + 1;
+            auto orientation = dude->orientation() + 1;
             if (orientation > 5) orientation = 0;
             dude->setOrientation(orientation);
 
             break;
         }
-        case Mouse::ICON_TALK:
+        case Mouse::Icon::TALK:
         {
             if (auto critter = dynamic_cast<Game::CritterObject*>(object))
             {
@@ -894,7 +896,7 @@ void Location::handleAction(Game::Object* object, int action)
                 throw Exception("Location::handleAction() - can talk only with critters!");
             }
         }
-
+        default: {}
     }
 }
 

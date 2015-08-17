@@ -85,7 +85,7 @@ void WorldMap::init()
                             }, 0, 0);
 
     //auto cross = new Image("art/intrface/wmaploc.frm");
-    _hotspot = new ImageButton(ImageButton::TYPE_MAP_HOTSPOT, 0, 0);
+    _hotspot = new ImageButton(ImageButton::Type::MAP_HOTSPOT, 0, 0);
     //addUI(_hotspot);
 
     // creating screen

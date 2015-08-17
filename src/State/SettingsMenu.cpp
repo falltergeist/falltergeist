@@ -65,52 +65,52 @@ void SettingsMenu::init()
     addUI(background);
 
     // Switches (big)
-    auto combatDifficultySwitch = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, backgroundX+76, backgroundY+71);
+    auto combatDifficultySwitch = new MultistateImageButton(MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+71);
     combatDifficultySwitch->setMaxState(3);
     combatDifficultySwitch->setState(Game::getInstance()->settings()->combatDifficulty());
     addUI("combat_difficulty",combatDifficultySwitch);
 
-    auto gameDifficultySwitch = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, backgroundX+76, backgroundY+149);
+    auto gameDifficultySwitch = new MultistateImageButton(MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+149);
     gameDifficultySwitch->setMaxState(3);
     gameDifficultySwitch->setState(Game::getInstance()->settings()->gameDifficulty());
     addUI("game_difficulty",gameDifficultySwitch);
 
-    auto violenceLevelSwitch = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, backgroundX+76, backgroundY+227);
+    auto violenceLevelSwitch = new MultistateImageButton(MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+227);
     violenceLevelSwitch->setState(Game::getInstance()->settings()->violenceLevel());
     addUI("violence_level",violenceLevelSwitch);
 
-    auto targetHighlightSwitch = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, backgroundX+76, backgroundY+309);
+    auto targetHighlightSwitch = new MultistateImageButton(MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+309);
     targetHighlightSwitch->setMaxState(3);
     targetHighlightSwitch->setState(Game::getInstance()->settings()->targetHighlight());
     addUI("target_highlight",targetHighlightSwitch);
 
-    auto combatLooksSwitch = new MultistateImageButton(MultistateImageButton::TYPE_BIG_SWITCH, backgroundX+76, backgroundY+387);
+    auto combatLooksSwitch = new MultistateImageButton(MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+387);
     combatLooksSwitch->setMaxState(2);
     combatLooksSwitch->setState(Game::getInstance()->settings()->combatLooks());
     addUI("combat_looks",combatLooksSwitch);
 
     // Switches (small)
-    auto combatMessagesSwitch = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74);
+    auto combatMessagesSwitch = new MultistateImageButton(MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74);
     combatMessagesSwitch->setState(Game::getInstance()->settings()->combatMessages());
     addUI("combat_messages",combatMessagesSwitch);
 
-    auto combatTauntsSwitch = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74+66);
+    auto combatTauntsSwitch = new MultistateImageButton(MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66);
     combatTauntsSwitch->setState(Game::getInstance()->settings()->combatTaunts());
     addUI("combat_taunts",combatTauntsSwitch);
 
-    auto languageFilterSwitch = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74+66*2);
+    auto languageFilterSwitch = new MultistateImageButton(MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66*2);
     languageFilterSwitch->setState(Game::getInstance()->settings()->languageFilter());
     addUI("language_filter",languageFilterSwitch);
 
-    auto runningSwitch = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74+66*3);
+    auto runningSwitch = new MultistateImageButton(MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66*3);
     runningSwitch->setState(Game::getInstance()->settings()->running());
     addUI("running",runningSwitch);
 
-    auto subtitlesSwitch = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74+66*4);
+    auto subtitlesSwitch = new MultistateImageButton(MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66*4);
     subtitlesSwitch->setState(Game::getInstance()->settings()->subtitles());
     addUI("subtitles",subtitlesSwitch);
 
-    auto itemHightlightSwitch = new MultistateImageButton(MultistateImageButton::TYPE_SMALL_SWITCH, backgroundX+299, backgroundY+74+66*5);
+    auto itemHightlightSwitch = new MultistateImageButton(MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66*5);
     itemHightlightSwitch->setState(Game::getInstance()->settings()->itemHighlight());
     addUI("item_highlight",itemHightlightSwitch);
 
@@ -125,7 +125,7 @@ void SettingsMenu::init()
     // COMBAT DIFFICULTY
     auto difficulty = _addTextArea(_t(MSG_OPTIONS, 102), backgroundX+21, backgroundY+48);
     difficulty->setWidth(158);
-    difficulty->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    difficulty->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
     difficulty->setFont(font1_907824ff);
 
     // GAME DIFFICULTY
@@ -232,7 +232,7 @@ void SettingsMenu::init()
     // COMBAT MESSAGES SWITCH LABELS
     auto verboseLabel = _addTextArea(_t(MSG_OPTIONS, 211), backgroundX+203, backgroundY+69);         // VERBOSE
     verboseLabel->setFont(font1_907824ff);
-    verboseLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    verboseLabel->setHorizontalAlign(TextArea::HorizontalAlign::RIGHT);
     verboseLabel->setWidth(100);
     _addTextArea(_t(MSG_OPTIONS, 212), backgroundX+320, backgroundY+69)->setFont(font1_907824ff);    // BRIEF
 
@@ -263,7 +263,7 @@ void SettingsMenu::init()
     _addTextArea(_t(MSG_OPTIONS, 209), backgroundX+384, backgroundY+38)->setFont(font1_907824ff);      // NORMAL
     auto fastestLabel = _addTextArea(_t(MSG_OPTIONS, 210), backgroundX+524, backgroundY+38);           // FASTEST
     fastestLabel->setFont(font1_907824ff);
-    fastestLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    fastestLabel->setHorizontalAlign(TextArea::HorizontalAlign::RIGHT);
     fastestLabel->setWidth(100);
 
     // TEXT DELAY SLIDER LABELS
@@ -306,22 +306,22 @@ void SettingsMenu::init()
     // BUTTONS
 
     // button: Default
-    auto defaultButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+23, backgroundY+450);
+    auto defaultButton = new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+23, backgroundY+450);
     defaultButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDefaultButtonClick(dynamic_cast<Event::Mouse*>(event)); });
     addUI(defaultButton);
 
     // button: Done
-    auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+148, backgroundY+450);
+    auto doneButton = new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+148, backgroundY+450);
     doneButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doSave(); });
     addUI(doneButton);
 
     // button: Cancel
-    auto cancelButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+263, backgroundY+450);
+    auto cancelButton = new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+263, backgroundY+450);
     cancelButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doCancel(); });
     addUI(cancelButton);
 
     // button: Affect player speed
-    auto affectPlayerSpeedCheckBox = new ImageButton(ImageButton::TYPE_CHECKBOX, backgroundX+383, backgroundY+68);
+    auto affectPlayerSpeedCheckBox = new ImageButton(ImageButton::Type::CHECKBOX, backgroundX+383, backgroundY+68);
     affectPlayerSpeedCheckBox->setChecked(Game::getInstance()->settings()->playerSpeedup());
     addUI("player_speedup", affectPlayerSpeedCheckBox);
 

@@ -46,12 +46,12 @@ InventoryItem::InventoryItem(Game::ItemObject *item, int x, int y) : ActiveUI(x,
     addEventHandler("mousedragstop", [this](Event::Event* event){ this->onMouseDragStop(dynamic_cast<Event::Mouse*>(event)); });
 }
 
-unsigned int InventoryItem::type() const
+InventoryItem::Type InventoryItem::type() const
 {
     return _type;
 }
 
-void InventoryItem::setType(unsigned int value)
+void InventoryItem::setType(Type value)
 {
     _type = value;
 }
@@ -69,10 +69,11 @@ Texture* InventoryItem::texture() const
 
     switch (_type)
     {
-        case TYPE_SLOT:
+        case Type::SLOT:
             return _item->inventorySlotUi()->texture();
-        case TYPE_DRAG:
+        case Type::DRAG:
             return _item->inventoryDragUi()->texture();
+        default: {}
     }
 
     return _item->inventoryUi()->texture();
@@ -109,7 +110,7 @@ void InventoryItem::onMouseLeftDown(Event::Mouse* event)
 void InventoryItem::onMouseDragStart(Event::Mouse* event)
 {
     _oldType = type();
-    setType(TYPE_DRAG);
+    setType(Type::DRAG);
 }
 
 void InventoryItem::onMouseDrag(Event::Mouse* event)
@@ -178,12 +179,12 @@ void InventoryItem::onHandDragStop(Event::Mouse* event)
 
 unsigned int InventoryItem::width() const
 {
-    return type() == TYPE_SLOT ? 90 : 70;
+    return type() == Type::SLOT ? 90 : 70;
 }
 
 unsigned int InventoryItem::height() const
 {
-    return type() == TYPE_SLOT ? 63 : 49;
+    return type() == Type::SLOT ? 63 : 49;
 }
 
 }

@@ -53,7 +53,7 @@ public:
     ~CritterObject() override;
 
     std::vector<ItemObject*>* inventory(); // critter's own inventory
-    void setOrientation(int value) override;
+    virtual void setOrientation(Orientation value) override;
 
     std::vector<Hexagon*>* movementQueue();
 

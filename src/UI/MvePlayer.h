@@ -37,6 +37,14 @@ class MvePlayer : public UI
 public:
     MvePlayer(libfalltergeist::Mve::File* mve);
     ~MvePlayer();
+
+    void think();
+    void render(bool eggTransparency = false);
+    bool finished();
+    uint32_t getAudio(uint8_t* data, uint32_t len);
+    uint32_t samplesLeft();
+    uint32_t frame();
+
 private:
     libfalltergeist::Mve::File* _mve = nullptr;
     std::shared_ptr<libfalltergeist::Mve::Chunk> _chunk;
@@ -68,22 +76,22 @@ private:
     void _initAudioBuffer(uint8_t version, uint8_t* data);
     void _playAudio();
     void _decodeAudio(uint8_t* data, uint32_t len);
-    enum
+    enum class Chunk: uint16_t
     {
-        CHUNK_INIT_AUDIO = 0,
-        CHUNK_AUDIO,
-        CHUNK_INIT_VIDEO,
-        CHUNK_VIDEO,
-        CHUNK_SHUTDOWN,
-        CHUNK_END
+        INIT_AUDIO = 0,
+        AUDIO,
+        INIT_VIDEO,
+        VIDEO,
+        SHUTDOWN,
+        END
     };
-    enum
+    enum class Opcode
     {
-            OPCODE_END_STREAM = 0, OPCODE_END_CHUNK, OPCODE_CREATE_TIMER, OPCODE_INIT_AUDIO_BUF,
-            OPCODE_START_AUDIO, OPCODE_INIT_VIDIO_BUF, OPCODE_UNKNOWN_0x06, OPCODE_SEND_BUFFER, OPCODE_AUDIO_DATA,
-            OPCODE_AUDIO_SILENCE, OPCODE_INIT_VIDEO, OPCODE_CREATE_GRADIENT, OPCODE_SET_PALETTE, OPCODE_SET_PALETTE_COMPRESSED,
-            OPCODE_UNKNOWN_0xe, OPCODE_SET_DECODING_MAP, OPCODE_UNKNOWN_0x10, OPCODE_VIDEO_DATA,
-            OPCODE_UNKNOWN_0x12, OPCODE_UNKNOWN_0x13, OPCODE_UNKNOWN_0x14, OPCODE_UNKNOWN_0x15
+        END_STREAM = 0, END_CHUNK, CREATE_TIMER, INIT_AUDIO_BUF,
+        START_AUDIO, INIT_VIDIO_BUF, UNKNOWN_0x06, SEND_BUFFER, AUDIO_DATA,
+        AUDIO_SILENCE, INIT_VIDEO, CREATE_GRADIENT, SET_PALETTE, SET_PALETTE_COMPRESSED,
+        UNKNOWN_0xe, SET_DECODING_MAP, UNKNOWN_0x10, VIDEO_DATA,
+        UNKNOWN_0x12, UNKNOWN_0x13, UNKNOWN_0x14, UNKNOWN_0x15
     };
     //drawing helpers
     void _drawRow(uint32_t x, uint32_t y, uint8_t c1, uint8_t c2, uint8_t mask);
@@ -94,13 +102,7 @@ private:
     void _drawRow4colors1x2(uint32_t x, uint32_t y, uint8_t c1, uint8_t c2, uint8_t c3, uint8_t c4, uint8_t mask1, uint8_t mask2);
     void _drawQuadrant(uint32_t x, uint32_t y, uint8_t c1, uint8_t c2, uint8_t mask1, uint8_t mask2);
     void _drawQuadrant4colors(uint32_t x, uint32_t y, uint8_t c1, uint8_t c2, uint8_t c3, uint8_t c4, uint8_t mask1, uint8_t mask2, uint8_t mask3, uint8_t mask4);
-public:
-    void think();
-    void render(bool eggTransparency = false);
-    bool finished();
-    uint32_t getAudio(uint8_t* data, uint32_t len);
-    uint32_t samplesLeft();
-    uint32_t frame();
+
 };
 
 }

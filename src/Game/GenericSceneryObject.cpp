@@ -33,12 +33,16 @@ namespace Game
 
 GenericSceneryObject::GenericSceneryObject() : SceneryObject()
 {
-    _subtype = TYPE_SCENERY_GENERIC;
+    _subtype = Subtype::GENERIC;
 }
 
 GenericSceneryObject::~GenericSceneryObject()
 {
 }
 
+bool GenericSceneryObject::_useEggTransparency()
+{
+    return (_trans == Trans::DEFAULT);
+}
 }
 }

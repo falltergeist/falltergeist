@@ -77,12 +77,12 @@ void TextArea::appendText(const std::string& text)
 }
 
 
-unsigned char TextArea::horizontalAlign() const
+TextArea::HorizontalAlign TextArea::horizontalAlign() const
 {
     return _horizontalAlign;
 }
 
-void TextArea::setHorizontalAlign(unsigned char align)
+void TextArea::setHorizontalAlign(HorizontalAlign align)
 {
     if (_horizontalAlign == align) return;
     _horizontalAlign = align;
@@ -90,12 +90,12 @@ void TextArea::setHorizontalAlign(unsigned char align)
     _calculate();
 }
 
-unsigned char TextArea::verticalAlign() const
+TextArea::VerticalAlign TextArea::verticalAlign() const
 {
     return _verticalAlign;
 }
 
-void TextArea::setVerticalAlign(unsigned char align)
+void TextArea::setVerticalAlign(VerticalAlign align)
 {
     if (_verticalAlign == align) return;
     _verticalAlign = align;
@@ -239,10 +239,10 @@ void TextArea::_calculate()
         unsigned xOffset = 0;
         unsigned yOffset = 0;
 
-        if (_horizontalAlign != HORIZONTAL_ALIGN_LEFT)
+        if (_horizontalAlign != HorizontalAlign::LEFT)
         {
             xOffset = (_width ? _width : _calculatedWidth) - widths.at(i);
-            if(_horizontalAlign == HORIZONTAL_ALIGN_CENTER)
+            if(_horizontalAlign == HorizontalAlign::CENTER)
             {
                 xOffset =  xOffset / 2;
             }

@@ -33,11 +33,16 @@ namespace Game
 
 WallObject::WallObject() : Object()
 {
-    _type = TYPE_WALL;
+    _type = Type::WALL;
 }
 
 WallObject::~WallObject()
 {
+}
+
+bool WallObject::_useEggTransparency()
+{
+    return (_trans == Trans::DEFAULT);
 }
 
 }

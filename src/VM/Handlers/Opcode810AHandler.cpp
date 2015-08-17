@@ -95,7 +95,7 @@ void Opcode810AHandler::_run()
     auto floatMessage = new TextArea(string);
     floatMessage->setWidth(200);
     floatMessage->setWordWrap(true);
-    floatMessage->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    floatMessage->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
     floatMessage->setFont(ResourceManager::getInstance()->font("font1.aaf", color));
     object->setFloatMessage(floatMessage);
 

@@ -40,6 +40,9 @@ class WallObject : public Object
 public:
     WallObject();
     ~WallObject() override;
+
+protected:
+    bool _useEggTransparency() override;
 };
 
 }

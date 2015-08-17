@@ -26,6 +26,7 @@
 
 // Falltergeist includes
 #include "State.h"
+#include "../Input/Mouse.h"
 
 // Third party includes
 
@@ -51,7 +52,7 @@ class CursorDropdown : public State
 protected:
     Game::Object* _object = nullptr;
     bool _onlyShowIcon;
-    std::vector<int> _icons;
+    std::vector<Mouse::Icon> _icons;
     int _initialX;
     int _initialY;
     int _previousIcon = 0;
@@ -65,7 +66,7 @@ protected:
     
     void showMenu();
 public:
-    CursorDropdown(std::vector<int> icons, bool onlyIcon = false);
+    CursorDropdown(std::vector<Mouse::Icon>&& icons, bool onlyIcon = false);
     ~CursorDropdown() override;
 
     void init() override;

@@ -46,7 +46,7 @@ namespace Game
 
 CritterObject::CritterObject() : Object()
 {
-    _type = TYPE_CRITTER;
+    _type = Type::CRITTER;
     _setupNextIdleAnim();
 }
 
@@ -59,7 +59,7 @@ std::vector<ItemObject*>* CritterObject::inventory()
     return &_inventory;
 }
 
-void CritterObject::setOrientation(int value)
+void CritterObject::setOrientation(Orientation value)
 {
     Object::setOrientation(value);
 }
@@ -524,7 +524,7 @@ void CritterObject::onMovementAnimationEnded(Event::Event* event)
     auto newHexagon = movementQueue()->back();
     auto newOrientation = this->hexagon()->orientationTo(newHexagon);
 
-    if (event->name() == "animationEnded" || (int)newOrientation != orientation())
+    if (event->name() == "animationEnded" || newOrientation != orientation())
     {
         _orientation = newOrientation;
         auto newAnimation = _generateMovementAnimation();

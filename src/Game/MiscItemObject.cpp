@@ -33,7 +33,7 @@ namespace Game
 
 MiscItemObject::MiscItemObject() : ItemObject()
 {
-    _subtype = TYPE_ITEM_MISC;
+    _subtype = Subtype::MISC;
 }
 
 MiscItemObject::~MiscItemObject()

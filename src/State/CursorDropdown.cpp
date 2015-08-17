@@ -42,7 +42,7 @@ namespace Falltergeist
 namespace State
 {
 
-CursorDropdown::CursorDropdown(std::vector<int> icons, bool onlyIcon) : State()
+CursorDropdown::CursorDropdown(std::vector<Mouse::Icon>&& icons, bool onlyIcon) : State()
 {
     if (icons.size() == 0) 
         throw Exception("CursorDropdown::CursorDropdown() - empty icons list!");
@@ -91,39 +91,39 @@ void CursorDropdown::showMenu()
         std::string inactiveSurface;
         switch (icon)
         {
-            case Mouse::ICON_INVENTORY:
+            case Mouse::Icon::INVENTORY:
                 activeSurface = "invenh.frm";
                 inactiveSurface = "invenn.frm";
                 break;
-            case Mouse::ICON_CANCEL:
+            case Mouse::Icon::CANCEL:
                 activeSurface = "cancelh.frm";
                 inactiveSurface = "canceln.frm";
                 break;
-            case Mouse::ICON_ROTATE:
+            case Mouse::Icon::ROTATE:
                 activeSurface = "rotateh.frm";
                 inactiveSurface = "rotaten.frm";
                 break;
-            case Mouse::ICON_SKILL:
+            case Mouse::Icon::SKILL:
                 activeSurface = "skillh.frm";
                 inactiveSurface = "skilln.frm";
                 break;
-            case Mouse::ICON_LOOK:
+            case Mouse::Icon::LOOK:
                 activeSurface = "lookh.frm";
                 inactiveSurface = "lookn.frm";
                 break;
-            case Mouse::ICON_TALK:
+            case Mouse::Icon::TALK:
                 activeSurface = "talkh.frm";
                 inactiveSurface = "talkn.frm";
                 break;
-            case Mouse::ICON_PUSH:
+            case Mouse::Icon::PUSH:
                 activeSurface = "pushh.frm";
                 inactiveSurface = "pushn.frm";
                 break;
-            case Mouse::ICON_UNLOAD:
+            case Mouse::Icon::UNLOAD:
                 activeSurface = "unloadh.frm";
                 inactiveSurface = "unloadn.frm";
                 break;
-            case Mouse::ICON_USE:
+            case Mouse::Icon::USE:
                 activeSurface = "usegeth.frm";
                 inactiveSurface = "usegetn.frm";
                 break;

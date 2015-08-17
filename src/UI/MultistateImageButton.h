@@ -40,20 +40,19 @@ class Image;
 
 class MultistateImageButton : public ActiveUI
 {
-protected:
-    ImageList _imageList;
-    unsigned int _currentState = 0;
-    int _mode = MODE_CYCLIC;
-    int _modeFactor = 1; // or -1
-    unsigned int _maxState = 0;
-    unsigned int _minState = 0;
-    void _onLeftButtonClick(Event::Mouse* event);
-    void _onLeftButtonUp(Event::Mouse* event);
 public:
-    enum {MODE_PROGRESSION = 1, MODE_CYCLIC};
-    enum {TYPE_BIG_SWITCH = 1, TYPE_SMALL_SWITCH};
+    enum class Mode
+    {
+        PROGRESSION = 1,
+        CYCLIC
+    };
+    enum class Type
+    {
+        BIG_SWITCH = 1,
+        SMALL_SWITCH
+    };
     MultistateImageButton(int x = 0, int y = 0);
-    MultistateImageButton(unsigned int type, int x = 0, int y = 0);
+    MultistateImageButton(Type type, int x = 0, int y = 0);
     MultistateImageButton(ImageList* imageList, int x = 0, int y = 0);
     virtual ~MultistateImageButton();
     void addImage(Image* image);
@@ -65,11 +64,22 @@ public:
     void setMinState(unsigned int value);
     unsigned int maxState();
     void setMaxState(unsigned int value);
-    void setMode(int mode);
-    int mode();
+    void setMode(Mode mode);
+    Mode mode();
     void setModeFactor(int factor);
     int modeFactor();
     Texture* texture() const override;
+
+protected:
+    ImageList _imageList;
+    unsigned int _currentState = 0;
+    Mode _mode = Mode::CYCLIC;
+    int _modeFactor = 1; // or -1
+    unsigned int _maxState = 0;
+    unsigned int _minState = 0;
+    void _onLeftButtonClick(Event::Mouse* event);
+    void _onLeftButtonUp(Event::Mouse* event);
+
 };
 
 }

@@ -53,9 +53,9 @@ Texture* BigCounter::texture() const
     unsigned int xOffsetByColor = 0;
     switch (_color)
     {
-        case COLOR_WHITE:
+        case Color::WHITE:
             break;
-        case COLOR_RED:
+        case Color::RED:
             xOffsetByColor = 168;
             break;
     }
@@ -83,12 +83,13 @@ unsigned int BigCounter::number()
     return _number;
 }
 
-void BigCounter::setColor(unsigned char color)
+
+void BigCounter::setColor(Color color)
 {
-    switch(color)
+    switch (color)
     {
-        case COLOR_WHITE:
-        case COLOR_RED:
+        case Color::WHITE:
+        case Color::RED:
             if (_color != color)
             {
                 _color = color;
@@ -98,7 +99,7 @@ void BigCounter::setColor(unsigned char color)
     }
 }
 
-unsigned char BigCounter::color()
+BigCounter::Color BigCounter::color()
 {
     return _color;
 }

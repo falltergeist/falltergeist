@@ -25,6 +25,7 @@
 #include <list>
 
 // Falltergeist includes
+#include "../Game/Object.h"
 
 // Third party includes
 
@@ -87,7 +88,7 @@ public:
     void setInRender(bool value);
     bool inRender();
 
-    unsigned int orientationTo(Hexagon* hexagon);
+    Game::Orientation orientationTo(Hexagon *hexagon);
 };
 
 }
