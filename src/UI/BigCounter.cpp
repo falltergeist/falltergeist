@@ -45,7 +45,7 @@ Texture* BigCounter::texture() const
     static const int kCharWidth = 14;
     static const int kCharHeight = 24;
 
-    if (_texture) return _texture;
+    if (_textureOnDemand) return _textureOnDemand.get();
 
     auto numbers = make_unique<Image>("art/intrface/bignum.frm");
     unsigned int xOffsetByColor = 0;
@@ -58,16 +58,21 @@ Texture* BigCounter::texture() const
             break;
     }
 
-    auto texture = Texture::generateTextureForNumber(
+    _textureOnDemand = Texture::generateTextureForNumber(
         _number, _length, numbers->texture(),
         kCharWidth, kCharHeight, xOffsetByColor);
-    return (_texture = texture.release());
+    return _textureOnDemand.get();
+}
+
+void BigCounter::setTexture(Texture* texture)
+{
+    _textureOnDemand.reset(texture);
 }
 
 void BigCounter::setNumber(unsigned int number)
 {
     if (_number == number) return;
-    delete _texture; _texture = 0;
+    _textureOnDemand.reset();
     _number = number;
 }
 
@@ -75,7 +80,6 @@ unsigned int BigCounter::number()
 {
     return _number;
 }
-
 
 void BigCounter::setColor(unsigned char color)
 {
@@ -86,7 +90,7 @@ void BigCounter::setColor(unsigned char color)
             if (_color != color)
             {
                 _color = color;
-                delete _texture; _texture = 0;
+                _textureOnDemand.reset();
             }
             break;
     }

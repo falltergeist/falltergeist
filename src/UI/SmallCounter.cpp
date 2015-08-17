@@ -18,10 +18,9 @@
  */
 
 // C++ standard includes
-#include <sstream>
-#include <string.h>
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
 #include "../UI/Image.h"
@@ -45,9 +44,9 @@ Texture* SmallCounter::texture() const
     static const int kCharWidth = 9;
     static const int kCharHeight = 16;
 
-    if (_texture) return _texture;
+    if (_textureOnDemand) return _textureOnDemand.get();
 
-    auto numbers = std::shared_ptr<Image>(new Image("art/intrface/numbers.frm"));
+    auto numbers = make_unique<Image>("art/intrface/numbers.frm");
     unsigned int xOffsetByColor = 0;
     switch (_color)
     {
@@ -70,15 +69,20 @@ Texture* SmallCounter::texture() const
         // must be 9*13+1, but it is 113
         const auto signOffset = _number < 0 ? kCharWidth * 12 + 1 : 113;
         // sign of _number
-        numbers->texture()->copyTo(_texture, 0, 0, signOffset, 0, kCharWidth, kCharHeight);
+        numbers->texture()->copyTo(texture.get(), 0, 0, signOffset, 0, kCharWidth, kCharHeight);
     }
-    return (_texture = texture.release());
+    return (_textureOnDemand = std::move(texture)).get();
+}
+
+void SmallCounter::setTexture(Texture* texture)
+{
+    _textureOnDemand.reset(texture);
 }
 
 void SmallCounter::setLength(unsigned int length)
 {
     if (_length == length) return;
-    delete _texture; _texture = 0;
+    _textureOnDemand.reset();
     _length = length;
 }
 
@@ -90,7 +94,7 @@ unsigned int SmallCounter::length()
 void SmallCounter::setNumber(signed int number)
 {
     if (_number == number) return;
-    delete _texture; _texture = 0;
+    _textureOnDemand.reset();
     _number = number;
 }
 
@@ -109,7 +113,7 @@ void SmallCounter::setColor(unsigned char color)
             if (_color != color)
             {
                 _color = color;
-                delete _texture; _texture = 0;
+                _textureOnDemand.reset();
             }
             break;
     }

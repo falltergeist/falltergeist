@@ -75,7 +75,7 @@ protected:
     int _y = 0;
     int _xOffset = 0;
     int _yOffset = 0;
-    mutable Texture* _texture = 0;
+    Texture* _texture = 0;
     Texture* _tmptex = 0;
     bool _leftButtonPressed = false;
     bool _rightButtonPressed = false;
