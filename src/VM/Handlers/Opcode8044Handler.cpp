@@ -39,11 +39,11 @@ void Opcode8044Handler::_run()
     Logger::debug("SCRIPT") << "[8044] [*] op_floor" << std::endl;
     auto value = _vm->dataStack()->pop();
     int result = 0;
-    if (value.type() == VMStackValue::TYPE_FLOAT)
+    if (value.type() == VMStackValue::Type::FLOAT)
     {
         result = (int)value.floatValue(); // this is how "floor" originally worked..
     }
-    else if (value.type() == VMStackValue::TYPE_INTEGER)
+    else if (value.type() == VMStackValue::Type::INTEGER)
     {
         result = value.integerValue();
     }

@@ -44,7 +44,7 @@ void Opcode8121Handler::_run()
     auto reaction = _vm->dataStack()->popInteger();
     auto function = _vm->dataStack()->popInteger();
     std::string text;
-    if (_vm->dataStack()->top().type() == VMStackValue::TYPE_STRING)
+    if (_vm->dataStack()->top().type() == VMStackValue::Type::STRING)
     {
         text = _vm->dataStack()->popString();
         _vm->dataStack()->popInteger(); // msg_list

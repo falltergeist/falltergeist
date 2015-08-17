@@ -35,32 +35,32 @@ namespace Falltergeist
 
 VMStackValue::VMStackValue()
 {
-    _type = TYPE_INTEGER;
+    _type = Type::INTEGER;
     _intValue = 0;
 }
 
 VMStackValue::VMStackValue(int value)
 {
-    _type = TYPE_INTEGER;
+    _type = Type::INTEGER;
     _intValue = value;
 }
 
 VMStackValue::VMStackValue(float value)
 {
-    _type = TYPE_FLOAT;
+    _type = Type::FLOAT;
     _floatValue = value;
 }
 
 VMStackValue::VMStackValue(const std::string &value)
 {
-    _type = TYPE_STRING;
+    _type = Type::STRING;
     _stringValue = value;
 }
 
 VMStackValue::VMStackValue(Game::GameObject *value)
 {
     //throw Exception("VMStackValue::VMStackValue(Game::GameObject*) - null object value is not allowed, use integer 0");
-    _type = TYPE_OBJECT;
+    _type = Type::OBJECT;
     _objectValue = value;
 }
 
@@ -68,41 +68,41 @@ VMStackValue::~VMStackValue()
 {
 }
 
-int VMStackValue::type() const
+VMStackValue::Type VMStackValue::type() const
 {
     return _type;
 }
 
 bool VMStackValue::isNumber() const
 {
-    return (_type == TYPE_FLOAT || _type == TYPE_INTEGER);
+    return (_type == Type::FLOAT || _type == Type::INTEGER);
 }
 
 int VMStackValue::integerValue() const
 {
-    if (_type != TYPE_INTEGER) throw VMErrorException(std::string("VMStackValue::integerValue() - stack value is not integer, it is ") + typeName(_type));
+    if (_type != Type::INTEGER) throw VMErrorException(std::string("VMStackValue::integerValue() - stack value is not integer, it is ") + typeName(_type));
     return _intValue;
 }
 
 float VMStackValue::floatValue() const
 {
-    if (_type != TYPE_FLOAT) throw VMErrorException(std::string("VMStackValue::floatValue() - stack value is not float, it is ") + typeName(_type));
+    if (_type != Type::FLOAT) throw VMErrorException(std::string("VMStackValue::floatValue() - stack value is not float, it is ") + typeName(_type));
     return _floatValue;
 }
 
 std::string VMStackValue::stringValue() const
 {
-    if (_type != TYPE_STRING) throw VMErrorException(std::string("VMStackValue::stringValue() - stack value is not string, it is ") + typeName(_type));
+    if (_type != Type::STRING) throw VMErrorException(std::string("VMStackValue::stringValue() - stack value is not string, it is ") + typeName(_type));
     return _stringValue;
 }
 
 Game::GameObject* VMStackValue::objectValue() const
 {
-    if (_type == TYPE_INTEGER && _intValue == 0)
+    if (_type == Type::INTEGER && _intValue == 0)
     {
         return nullptr;
     }
-    if (_type != TYPE_OBJECT) throw VMErrorException(std::string("VMStackValue::objectValue() - stack value is not an object, it is ") + typeName(_type));
+    if (_type != Type::OBJECT) throw VMErrorException(std::string("VMStackValue::objectValue() - stack value is not an object, it is ") + typeName(_type));
     return _objectValue;
 }
 
@@ -110,17 +110,17 @@ std::string VMStackValue::toString() const
 {
     switch (_type)
     {
-        case TYPE_INTEGER: return std::to_string(_intValue);
-        case TYPE_FLOAT:   
+        case Type::INTEGER: return std::to_string(_intValue);
+        case Type::FLOAT:
         {
             std::stringstream ss;
             ss << std::fixed << std::setprecision(5) << _floatValue;
             return ss.str();
         }
-        case TYPE_STRING:  return _stringValue;
-        case TYPE_OBJECT:  return _objectValue ? _objectValue->name() : std::string("(null)"); // just in case, we should never create null object value
+        case Type::STRING:  return _stringValue;
+        case Type::OBJECT:  return _objectValue ? _objectValue->name() : std::string("(null)"); // just in case, we should never create null object value
         default:
-            throw VMErrorException("VMStackValue::toString() - wrong type: " + std::to_string(_type));
+            throw VMErrorException("VMStackValue::toString() - cannot convert type to string: " + std::to_string((int)_type));
     }
 }
 
@@ -128,9 +128,9 @@ int VMStackValue::toInteger() const
 {
     switch (_type)
     {
-        case TYPE_INTEGER: return _intValue;
-        case TYPE_FLOAT:   return (int)_floatValue;
-        case TYPE_STRING: 
+        case Type::INTEGER: return _intValue;
+        case Type::FLOAT:   return (int)_floatValue;
+        case Type::STRING:
         {
             int result = 0;
             try 
@@ -141,9 +141,8 @@ int VMStackValue::toInteger() const
             catch (std::out_of_range ex) { }
             return result;
         }
-        case TYPE_OBJECT:  return (int)(_objectValue != nullptr);
-        default:
-            throw VMErrorException("VMStackValue::toInteger() - wrong type: " + std::to_string(_type));
+        case Type::OBJECT:  return (int)(_objectValue != nullptr);
+        default:            return 0;
     }
 }
 
@@ -151,33 +150,33 @@ bool VMStackValue::toBoolean() const
 {
     switch (_type)
     {
-        case TYPE_INTEGER:
+        case Type::INTEGER:
             return _intValue != 0;
-        case TYPE_FLOAT:
+        case Type::FLOAT:
             return (bool)_floatValue;
-        case TYPE_STRING:
+        case Type::STRING:
             return _stringValue.length() > 0;
-        case TYPE_OBJECT:
+        case Type::OBJECT:
             return _objectValue != nullptr;
     }
     throw VMErrorException("VMStackValue::toBoolean() - something strange happened");
 }
 
-const char* VMStackValue::typeName()
+const char* VMStackValue::typeName() const
 {
     return typeName(_type);
 }
 
-const char* VMStackValue::typeName(int type)
+const char* VMStackValue::typeName(Type type)
 {
     switch (type)
     {
-        case TYPE_INTEGER: return "integer";
-        case TYPE_FLOAT:   return "float";
-        case TYPE_STRING:  return "string";
-        case TYPE_OBJECT:  return "object";
+        case Type::INTEGER: return "integer";
+        case Type::FLOAT:   return "float";
+        case Type::STRING:  return "string";
+        case Type::OBJECT:  return "object";
         default:
-            throw VMErrorException("VMStackValue::typeName() - wrong type: " + std::to_string(type));
+            throw VMErrorException("VMStackValue::typeName() - no name for type: " + std::to_string((int)type));
     }
 }
 

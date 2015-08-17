@@ -46,10 +46,10 @@ void Opcode8014Handler::_run()
     auto nameValue = _vm->dataStack()->pop();
     switch (nameValue.type())
     {
-        case VMStackValue::TYPE_INTEGER:
-            name = _vm->script()->identifiers()->at(nameValue.integerValue());
+        case VMStackValue::Type::INTEGER:
+            name = _vm->script()->identifiers()->at((unsigned int)nameValue.integerValue());
             break;
-        case VMStackValue::TYPE_STRING:
+        case VMStackValue::Type::STRING:
         {
             name = nameValue.stringValue();
             break;
@@ -63,7 +63,7 @@ void Opcode8014Handler::_run()
         _error(std::string() + "op_fetch_external: exported variable \"" + name + "\" not found.");
     }
     auto value = EVARS->at(name);
-    debug << ", type = " << value.type() << ", value = " << value.toString() << std::endl;
+    debug << ", type = " << value.typeName() << ", value = " << value.toString() << std::endl;
     _vm->dataStack()->push(value);
 }
 
