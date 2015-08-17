@@ -54,7 +54,7 @@ CursorDropdown::CursorDropdown(std::vector<Mouse::Icon>&& icons, bool onlyIcon) 
     }
     auto mouse = Game::getInstance()->mouse();
     _initialMouseStack = mouse->states()->size();
-    mouse->pushState(Mouse::NONE);
+    mouse->pushState(Mouse::Cursor::NONE);
     _initialX = mouse->x();
     _initialY = mouse->y();
 }
@@ -274,7 +274,7 @@ void CursorDropdown::onStateDeactivate(Event::State* event)
         auto game = Game::getInstance();
         auto mouse = game->mouse();
         // workaround to get rid of cursor disappearing issues
-        std::vector<unsigned int> icons;
+        std::vector<Mouse::Cursor> icons;
         while (mouse->states()->size() > _initialMouseStack)
         {
             icons.push_back(mouse->state());

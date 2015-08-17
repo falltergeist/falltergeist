@@ -29,11 +29,6 @@
 
 namespace Falltergeist
 {
-namespace Lua
-{
-    class Script;
-}
-
 class Texture;
 
 class UI
@@ -67,8 +62,6 @@ public:
     virtual unsigned int height() const;
 
     virtual unsigned int pixel(unsigned int x, int unsigned y);
-
-    static void export_to_lua_script(Lua::Script* script);
 
 protected:
     int _x = 0;

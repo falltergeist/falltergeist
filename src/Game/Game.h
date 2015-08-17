@@ -37,6 +37,10 @@ namespace Audio
 {
     class Mixer;
 }
+namespace Lua
+{
+    class Script;
+}
 namespace State
 {
     class Location;
@@ -52,6 +56,7 @@ class UI;
 class TextArea;
 class AnimatedPalette;
 class Settings;
+class InputController;
 
 namespace Game
 {
@@ -62,6 +67,7 @@ class Game
 {
 public:
     static Game* getInstance();
+    static void exportToLuaScript(Lua::Script* script);
 
     void shutdown();
     std::vector<State::State*>* states();
@@ -80,7 +86,7 @@ public:
 
     void setPlayer(DudeObject* player);
     DudeObject* player();
-    Mouse* mouse();
+    Mouse* mouse() const;
     Renderer* renderer();
     Time* gameTime();
     State::Location* locationState();
@@ -113,9 +119,10 @@ protected:
     bool _quit = false;
     SDL_Event _event;
     bool _initialized = false;
-    void _initGVARS();
+
 private:
     friend class Base::Singleton<Game>;
+    void _initGVARS();
 
     Game();
     ~Game();

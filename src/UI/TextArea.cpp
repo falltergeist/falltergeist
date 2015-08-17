@@ -28,7 +28,6 @@
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
-#include "../Lua/Script.h"
 #include "../ResourceManager.h"
 #include "../UI/TextArea.h"
 #include "../UI/TextSymbol.h"
@@ -75,7 +74,6 @@ void TextArea::appendText(const std::string& text)
     _changed = true;
     _calculate();
 }
-
 
 TextArea::HorizontalAlign TextArea::horizontalAlign() const
 {
@@ -342,19 +340,4 @@ unsigned int TextArea::pixel(unsigned int x, unsigned int y)
     return 0xFFFFFFFF; // white color
 }
 
-void TextArea::export_to_lua_script(Lua::Script* script)
-{
-    luabridge::getGlobalNamespace(script->luaState())
-        .beginNamespace("game")
-            .beginNamespace("ui")
-                .deriveClass<TextArea, ActiveUI>("TextArea")
-                    .addConstructor<void(*)(const char*, int, int)>()
-                    .addProperty("width", &TextArea::width, &TextArea::setWidth)
-                    .addProperty("horizontalAlign", &TextArea::horizontalAlign, &TextArea::setHorizontalAlign)
-                .endClass()
-            .endNamespace()
-        .endNamespace();
 }
-
-}
-

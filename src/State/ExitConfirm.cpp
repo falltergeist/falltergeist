@@ -129,7 +129,7 @@ void ExitConfirm::onKeyDown(Event::Keyboard* event)
 
 void ExitConfirm::onStateActivate(Event::State* event)
 {
-    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+    Game::getInstance()->mouse()->pushState(Mouse::Cursor::BIG_ARROW);
 }
 
 void ExitConfirm::onStateDeactivate(Event::State* event)

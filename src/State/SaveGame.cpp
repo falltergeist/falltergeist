@@ -115,7 +115,7 @@ void SaveGame::onCancelButtonClick(Event::Mouse* event)
 
 void SaveGame::onStateActivate(Event::State* event)
 {
-    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+    Game::getInstance()->mouse()->pushState(Mouse::Cursor::BIG_ARROW);
 }
 
 void SaveGame::onStateDeactivate(Event::State* event)

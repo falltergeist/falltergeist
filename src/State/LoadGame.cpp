@@ -136,7 +136,7 @@ void LoadGame::onStateActivate(Event::State* event)
 {
     if (!Game::getInstance()->locationState())
         Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
-    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+    Game::getInstance()->mouse()->pushState(Mouse::Cursor::BIG_ARROW);
 }
 
 void LoadGame::onStateDeactivate(Event::State* event)

@@ -75,14 +75,13 @@ public:
         MAP_HOTSPOT
     };
     ImageButton(Type type, int x = 0, int y = 0);
-    ~ImageButton();
+    ~ImageButton() override;
 
     void setState(unsigned int value);
     Texture* texture() const;
+
     bool checked();
     void setChecked(bool _checked);
-
-    static void export_to_lua_script(Lua::Script* script);
 
 protected:
     bool _checkboxMode = false; // remember new state after click
@@ -92,6 +91,7 @@ protected:
     void _onLeftButtonClick(Event::Mouse* event);
     void _onLeftButtonDown(Event::Mouse* event);
     void _onMouseOut(Event::Mouse* event);
+    void _init(Type type);
 
 };
 

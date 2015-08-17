@@ -25,7 +25,6 @@
 #include "../Event/Mouse.h"
 #include "../Graphics/ActiveUI.h"
 #include "../Graphics/Texture.h"
-#include "../Lua/Script.h"
 
 // Third party includes
 
@@ -38,17 +37,6 @@ ActiveUI::ActiveUI(int x, int y) : Event::Emitter(), UI(x, y)
 
 ActiveUI::~ActiveUI()
 {
-}
-
-void ActiveUI::export_to_lua_script(Lua::Script* script)
-{
-    luabridge::getGlobalNamespace(script->luaState())
-        .beginNamespace("game")
-            .beginNamespace("ui")
-                .deriveClass<ActiveUI, UI>("ActiveUI")
-                .endClass()
-            .endNamespace()
-        .endNamespace();
 }
 
 void ActiveUI::handle(Event::Event* event)

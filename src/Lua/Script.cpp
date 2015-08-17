@@ -21,9 +21,16 @@
 #include <iostream>
 
 // Falltergeist includes
+#include "../Event/Event.h"
 #include "../Exception.h"
 #include "../functions.h"
+#include "../Game/Game.h"
+#include "../Input/Mouse.h"
+#include "../Lua/LuaImageButton.h"
+#include "../Lua/LuaTextArea.h"
 #include "../Lua/Script.h"
+#include "../State/LuaState.h"
+#include "../UI/Image.h"
 
 // Third party includes
 
@@ -39,12 +46,7 @@ Script::Script(const std::string& filename)
     _filename = filename;
     _lua_State = lua_open();
 
-    luaL_openlibs(_lua_State);
-
-    luabridge::getGlobalNamespace(_lua_State)
-        .beginNamespace("game")
-            .addFunction("translate", translate)
-        .endNamespace();
+    _initialize();
 
     if (luaL_loadfile(_lua_State, filename.c_str()))
     {
@@ -54,6 +56,78 @@ Script::Script(const std::string& filename)
         throw Exception("Lua::Script::Script() " + error);
     }
 
+}
+
+void Script::_initialize()
+{
+    luaL_openlibs(_lua_State);
+
+    // luabridge::Namespace::addProperty cannot deduce setter type =(
+    static void (*const setterGameMouse)(Mouse*) = nullptr;
+    static Mouse* (*const getterGameMouse)() = []() -> Mouse*
+    {
+        return Game::getInstance()->mouse();
+    };
+
+    luabridge::getGlobalNamespace(_lua_State)
+        .beginNamespace("game")
+
+            // game.Mouse
+            .beginClass<Mouse>("Mouse")
+                .addProperty("x", &Mouse::x, &Mouse::setX)
+                .addProperty("y", &Mouse::y, &Mouse::setY)
+                .addProperty("cursor", &Mouse::cursor, &Mouse::setCursor)
+            .endClass()
+
+            // game.Event
+            .beginClass<Event::Event>("Event")
+                .addProperty("name", &Event::Event::name, &Event::Event::setName)
+            .endClass()
+
+            // game.State
+            .beginClass<State::LuaState>("State")
+                .addProperty("x", &State::LuaState::x, &State::LuaState::setX)
+                .addProperty("y", &State::LuaState::y, &State::LuaState::setY)
+                .addProperty("fullscreen", &State::LuaState::fullscreen, &State::LuaState::setFullscreen)
+                .addProperty("modal", &State::LuaState::modal, &State::LuaState::setModal)
+                .addFunction("addUI", &State::LuaState::addUI)
+            .endClass()
+            .beginNamespace("ui")
+
+                // game.ui.UI
+                .beginClass<UI>("UI")
+                    //.addProperty("x", &UI::x, &UI::setX)
+                    //.addProperty("y", &UI::y, &UI::setY)
+                .endClass()
+
+                // game.ui.ActiveUI
+                .deriveClass<ActiveUI, UI>("ActiveUI")
+                .endClass()
+
+                // game.ui.Image
+                .deriveClass<Image, ActiveUI>("Image")
+                    .addConstructor<void(*)(char const*)>()
+                .endClass()
+
+                // game.ui.ImageButton
+                .deriveClass<LuaImageButton, ActiveUI>("ImageButton")
+                    .addConstructor<void(*)(unsigned, int, int)>()
+                .endClass()
+
+                // game.ui.TextArea
+                .deriveClass<LuaTextArea, ActiveUI>("TextArea")
+                    .addConstructor<void(*)(const char*, int, int)>()
+                    .addProperty("width", &LuaTextArea::width, &LuaTextArea::setWidth)
+                    .addProperty("horizontalAlign", &LuaTextArea::luaHorizontalAlign, &LuaTextArea::setLuaHorizontalAlign)
+                .endClass()
+            .endNamespace()
+
+            // game.translate
+            .addFunction("translate", translate)
+
+            // game.mouse
+            .addProperty ("mouse", getterGameMouse, setterGameMouse)
+        .endNamespace();
 }
 
 void Script::run()

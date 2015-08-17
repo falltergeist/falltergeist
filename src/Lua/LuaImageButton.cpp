@@ -17,37 +17,27 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_IMAGE_H
-#define FALLTERGEIST_IMAGE_H
+// Related headers
+#include "../Lua/LuaImageButton.h"
 
 // C++ standard includes
-#include <string>
 
 // Falltergeist includes
-#include "../Graphics/ActiveUI.h"
-#include "../Graphics/UI.h"
 
 // Third party includes
-#include <libfalltergeist.h>
-
 
 namespace Falltergeist
 {
-
-class Image : public ActiveUI
+namespace Lua
 {
-protected:
-public:
-    Image(const std::string& filename);
-    Image(unsigned int width, unsigned int height);
-    Image(Image* image);
-    Image(Texture* texture);
-    Image(libfalltergeist::Frm::File* frm, unsigned int direction);
-    ~Image();
 
-    unsigned int width() const override;
-    unsigned int height() const override;
-};
+LuaImageButton::LuaImageButton(unsigned type, int x, int y) : ImageButton(static_cast<Type>(type), x, y)
+{
+}
+
+LuaImageButton::~LuaImageButton()
+{
+}
 
 }
-#endif // FALLTERGEIST_IMAGE_H
+}
