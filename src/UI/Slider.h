@@ -44,8 +44,8 @@ protected:
 public:
     Slider(int x, int y);
     virtual ~Slider();
-    virtual Texture* texture();
-    virtual int x();
+    Texture* texture() const override;
+    int x() const override;
     virtual void handle(Event* event);
     double minValue();
     void setMinValue(double value);

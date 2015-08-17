@@ -66,8 +66,8 @@ public:
     virtual void setXShift(int value);
     virtual int yShift();
     virtual void setYShift(int value);
-    virtual unsigned int width();
-    virtual unsigned int height();
+    unsigned int width() const override;
+    unsigned int height() const override;
     virtual unsigned int pixel(unsigned int x, unsigned int y);
 
     void play();

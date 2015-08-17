@@ -17,16 +17,19 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Game/Game.h"
+
 // C++ standard includes
 #include <sstream>
 
 // Falltergeist includes
-#include "../Audio/AudioMixer.h"
+#include "../Audio/Mixer.h"
+#include "../Base/StlFeatures.h"
 #include "../CrossPlatform.h"
 #include "../Event/StateEvent.h"
 #include "../Exception.h"
-#include "Game.h"
-#include "Time.h"
+#include "../Game/Time.h"
 #include "../Graphics/AnimatedPalette.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
@@ -46,36 +49,29 @@ namespace Falltergeist
 namespace Game
 {
 
+using namespace Base;
+
 Game* getInstance()
 {
     return ::Falltergeist::Game::Game::getInstance();
 }
 
-class GameDudeObject;
-bool Game::_instanceFlag = false;
-Game* Game::_instance = NULL;
-
-Game* Game::getInstance()
+Game::Game()
 {
-    if(!_instanceFlag)
-    {
-        _instance = new Game();
-        _instanceFlag = true;
-        _instance->_initialize();
-        return _instance;
-    }
-    else
-    {
-        return _instance;
-    }
 }
 
-void Game::_initialize()
+// static
+Game* Game::getInstance()
+{
+    return Base::Singleton<Game>::get();
+}
+
+void Game::init(std::unique_ptr<Settings> settings)
 {
     if (_initialized) return;
     _initialized = true;
 
-    _settings = new Settings();
+    _settings = std::move(settings);
     auto width = _settings->screenWidth();
     auto height = _settings->screenHeight();
 
@@ -94,7 +90,7 @@ void Game::_initialize()
     std::string version = CrossPlatform::getVersion();
     renderer()->setCaption(version.c_str());
 
-    _mixer = new AudioMixer();
+    _mixer = make_unique<Audio::Mixer>();
     _mouse = new Mouse();
     _fpsCounter = new FpsCounter(renderer()->width() - 42, 2);
 
@@ -112,7 +108,6 @@ void Game::_initialize()
 
 Game::~Game()
 {
-    _instanceFlag = false;
     shutdown();
 }
 
@@ -122,10 +117,10 @@ void Game::shutdown()
     delete _fpsCounter;
     delete _mousePosition;
     delete _falltergeistVersion;
-    delete _mixer;
+    _mixer.reset();
     ResourceManager::getInstance()->shutdown();
     while (!_states.empty()) popState();
-    delete _settings;
+    _settings.reset();
     delete _gameTime;
     delete _currentTime;
     delete _renderer;
@@ -305,9 +300,9 @@ Renderer* Game::renderer()
     return _renderer;
 }
 
-Settings* Game::settings()
+Settings* Game::settings() const
 {
-    return _settings;
+    return _settings.get();
 }
 
 void Game::handle()
@@ -448,9 +443,9 @@ GameTime* Game::gameTime()
     return _gameTime;
 }
 
-AudioMixer* Game::mixer()
+Audio::Mixer* Game::mixer()
 {
-    return _mixer;
+    return _mixer.get();
 }
 
 }

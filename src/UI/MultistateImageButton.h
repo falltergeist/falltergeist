@@ -26,6 +26,7 @@
 // Falltergeist includes
 #include "../Graphics/ActiveUI.h"
 #include "../UI/ImageList.h"
+
 // Third party includes
 
 namespace Falltergeist
@@ -53,7 +54,7 @@ public:
     Mode mode();
     void setModeFactor(int factor);
     int modeFactor();
-    virtual Texture* texture();
+    Texture* texture() const override;
 
 protected:
     ImageList _imageList;

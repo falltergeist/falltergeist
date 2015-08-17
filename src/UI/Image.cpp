@@ -99,12 +99,12 @@ void Image::export_to_lua_script(Lua::Script* script)
         .endNamespace();
 }
 
-unsigned int Image::width()
+unsigned int Image::width() const
 {
     return texture()->width();
 }
 
-unsigned int Image::height()
+unsigned int Image::height() const
 {
     return texture()->height();
 }

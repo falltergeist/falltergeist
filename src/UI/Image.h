@@ -52,8 +52,8 @@ public:
     static void export_to_lua_script(Lua::Script* script);
 
 
-    unsigned int width();
-    unsigned int height();
+    unsigned int width() const override;
+    unsigned int height() const override;
 };
 
 }

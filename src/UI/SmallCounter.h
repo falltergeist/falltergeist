@@ -21,7 +21,7 @@
 #define FALLTERGEIST_SMALLCOUNTER_H
 
 // C++ standard includes
-#include <vector>
+#include <memory>
 
 // Falltergeist includes
 #include "../Graphics/ActiveUI.h"
@@ -39,9 +39,9 @@ public:
     enum class Type { UNSIGNED = 0, SIGNED };
 
     SmallCounter(int x = 0, int y = 0);
-    ~SmallCounter();
+    ~SmallCounter() override;
 
-    virtual Texture* texture();
+    Texture* texture() const override;
 
     void setColor(Color color);
     Color color();
@@ -59,8 +59,18 @@ protected:
     Color _color = Color::WHITE;
     signed int _number = 0;
     unsigned int _length = 3;
-    Type _type = Type::UNSIGNED; // unsigned by default
+    Type _type = Type::UNSIGNED;
+    mutable std::unique_ptr<Texture> _textureOnDemand;
 
+    void setTexture(Texture* texture) override;
+
+private:
+    // Hide unused field from childs.
+    using ActiveUI::_texture;
+
+    SmallCounter(const SmallCounter&) = delete;
+    void operator=(const SmallCounter&) = delete;
+    
 };
 
 }

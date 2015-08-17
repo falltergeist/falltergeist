@@ -381,12 +381,12 @@ void Animation::render(bool eggTransparency)
     }
 }
 
-unsigned int Animation::height()
+unsigned int Animation::height() const
 {
     return _animationFrames.at(_currentFrame)->height();
 }
 
-unsigned int Animation::width()
+unsigned int Animation::width() const
 {
     return _animationFrames.at(_currentFrame)->width();
 }

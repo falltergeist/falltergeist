@@ -74,7 +74,7 @@ public:
     ~ImageButton();
 
     void setState(unsigned int value);
-    virtual Texture* texture();
+    Texture* texture() const;
     bool checked();
     void setChecked(bool _checked);
 

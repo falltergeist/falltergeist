@@ -17,15 +17,17 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Game/DoorSceneryObject.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Audio/AudioMixer.h"
+#include "../Audio/Mixer.h"
+#include "../Game/Game.h"
 #include "../Graphics/Animation.h"
 #include "../Graphics/AnimationQueue.h"
 #include "../Logger.h"
-#include "../Game/Game.h"
-#include "../Game/DoorSceneryObject.h"
 #include "../VM/VM.h"
 
 // Third party includes

@@ -26,12 +26,17 @@
 #include <memory>
 
 // Falltergeist includes
+#include "Base/Singleton.h"
 
 // Third party includes
 #include "SDL.h"
 
 namespace Falltergeist
 {
+namespace Audio
+{
+    class Mixer;
+}
 namespace State
 {
     class Location;
@@ -42,7 +47,6 @@ class Screen;
 class ResourceManager;
 class FpsCounter;
 class Mouse;
-class AudioMixer;
 class Renderer;
 class UI;
 class TextArea;
@@ -58,7 +62,6 @@ class GameTime;
 class Game
 {
 public:
-    ~Game();
     static Game* getInstance();
 
     void shutdown();
@@ -70,6 +73,7 @@ public:
     void popState();
     void run();
     void quit();
+    void init(std::unique_ptr<Settings> settings);
 
     void handle();
     void think();
@@ -81,12 +85,12 @@ public:
     Renderer* renderer();
     GameTime* gameTime();
     State::Location* locationState();
-    AudioMixer* mixer();
+    Audio::Mixer* mixer();
 
     void setGVAR(unsigned int number, int value);
     int GVAR(unsigned int number);
 
-    Settings* settings();
+    Settings* settings() const;
     AnimatedPalette* animatedPalette();
 
 protected:
@@ -100,25 +104,24 @@ protected:
     GameTime* _gameTime = 0;
     Renderer* _renderer = 0;
     Mouse* _mouse = 0;
-    AudioMixer* _mixer = 0;
+    std::unique_ptr<Audio::Mixer> _mixer;
     FpsCounter* _fpsCounter = 0;
     TextArea* _mousePosition = 0;
     TextArea* _currentTime = 0;
     TextArea* _falltergeistVersion = 0;
-    Settings* _settings = 0;
+    std::unique_ptr<Settings> _settings;
     AnimatedPalette* _animatedPalette = 0;
     bool _quit = false;
     SDL_Event _event;
     bool _initialized = false;
-    void _initialize();
     void _initGVARS();
 private:
-    Game() {}
-    Game(Game const&);
-    void operator=(Game const&);
-    static Game* _instance;
-    static bool _instanceFlag;
+    friend class Base::Singleton<Game>;
 
+    Game();
+    ~Game();
+    Game(Game const&) = delete;
+    void operator=(Game const&) = delete;
 };
 
 Game* getInstance();

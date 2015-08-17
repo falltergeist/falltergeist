@@ -17,21 +17,23 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../State/CursorDropdown.h"
+
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Audio/Mixer.h"
 #include "../Exception.h"
+#include "../Game/CritterObject.h"
+#include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../Input/Mouse.h"
-#include "../Game/CritterObject.h"
-#include "../Game/DudeObject.h"
-#include "../State/CursorDropdown.h"
+#include "../Logger.h"
 #include "../State/Location.h"
 #include "../UI/HiddenMask.h"
-#include "Audio/AudioMixer.h"
-#include "../Logger.h"
 
 // Third party includes
 

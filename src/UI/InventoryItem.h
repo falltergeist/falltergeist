@@ -41,7 +41,7 @@ public:
 
     InventoryItem(Game::GameItemObject* item, int x = 0, int y = 0);
 
-    Type type();
+    Type type() const;
     void setType(Type value);
 
     Game::GameItemObject* item();
@@ -49,9 +49,9 @@ public:
 
     virtual void render(bool eggTransparency = false);
     virtual unsigned int pixel(unsigned int x, unsigned int y);
-    virtual Texture* texture();
-    virtual unsigned int width();
-    virtual unsigned int height();
+    Texture* texture() const override;
+    unsigned int width() const override;
+    unsigned int height() const override;
 
     void onMouseLeftDown(MouseEvent* event);
     void onMouseDragStart(MouseEvent* event);

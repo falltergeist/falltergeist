@@ -93,7 +93,7 @@ void UI::setY(int value)
     _y = value;
 }
 
-Texture* UI::texture()
+Texture* UI::texture() const
 {
     return _texture;
 }
@@ -185,13 +185,13 @@ void UI::setYOffset(int yOffset)
     _yOffset = yOffset;
 }
 
-unsigned int UI::width()
+unsigned int UI::width() const
 {
     if (!texture()) return 0;
     return texture()->width();
 }
 
-unsigned int UI::height()
+unsigned int UI::height() const
 {
     if (!texture()) return 0;
     return texture()->height();

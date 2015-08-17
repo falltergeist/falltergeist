@@ -17,13 +17,15 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/Slider.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../UI/Image.h"
-#include "../UI/Slider.h"
+#include "../Audio/Mixer.h"
 #include "../Game/Game.h"
-#include "../Audio/AudioMixer.h"
+#include "../UI/Image.h"
 
 // Third party includes
 
@@ -104,7 +106,7 @@ void Slider::_onLeftButtonUp(MouseEvent* event)
     }
 }
 
-Texture* Slider::texture()
+Texture* Slider::texture() const
 {
     if (_drag) return _imageList.images()->at(0)->texture();
     return _imageList.images()->at(1)->texture();
@@ -141,7 +143,7 @@ void Slider::setValue(double value)
     _xOffset = (218/(maxValue() - minValue())) * _value;
 }
 
-int Slider::x()
+int Slider::x() const
 {
     return _x + _xOffset;
 }

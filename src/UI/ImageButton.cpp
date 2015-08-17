@@ -17,16 +17,18 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/ImageButton.h"
+
 // C++ standard includes
 #include <string>
 
 // Falltergeist includes
-#include "../Audio/AudioMixer.h"
+#include "../Audio/Mixer.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
 #include "../Lua/Script.h"
 #include "../ResourceManager.h"
-#include "../UI/ImageButton.h"
 
 // Third party includes
 
@@ -221,7 +223,7 @@ void ImageButton::export_to_lua_script(Lua::Script* script)
         .endNamespace();
 }
 
-Texture* ImageButton::texture()
+Texture* ImageButton::texture() const
 {
     if (_checkboxMode && _checked) return _textures.at(1);
 

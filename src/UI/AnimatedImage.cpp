@@ -167,12 +167,12 @@ AnimatedImage::~AnimatedImage()
 {
 }
 
-unsigned int AnimatedImage::width()
+unsigned int AnimatedImage::width() const
 {
     return texture()->width();
 }
 
-unsigned int AnimatedImage::height()
+unsigned int AnimatedImage::height() const
 {
     return texture()->height();
 }

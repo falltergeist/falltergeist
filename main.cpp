@@ -18,11 +18,13 @@
  */
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
 #include "src/Exception.h"
 #include "src/Game/Game.h"
 #include "src/Logger.h"
+#include "src/Settings.h"
 #include "src/State/LuaState.h"
 #include "src/State/Start.h"
 
@@ -36,6 +38,7 @@ int main(int argc, char* argv[])
     try
     {
         auto game = Game::Game::getInstance();
+        game->init(std::unique_ptr<Settings>(new Settings()));
         game->setState(new State::Start());
         //game->setState(new State::LuaState("data/scripts/lua/state/mainmenu.lua"));
         game->run();

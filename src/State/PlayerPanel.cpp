@@ -17,29 +17,31 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../State/PlayerPanel.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Audio/AudioMixer.h"
+#include "../Audio/Mixer.h"
+#include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/ActiveUI.h"
 #include "../Graphics/Renderer.h"
-#include "../ResourceManager.h"
 #include "../Input/Mouse.h"
-#include "../Game/DudeObject.h"
+#include "../ResourceManager.h"
+#include "../State/ExitConfirm.h"
 #include "../State/GameMenu.h"
 #include "../State/Inventory.h"
+#include "../State/LoadGame.h"
 #include "../State/PipBoy.h"
 #include "../State/PlayerEdit.h"
-#include "../State/PlayerPanel.h"
+#include "../State/SaveGame.h"
 #include "../State/Skilldex.h"
 #include "../State/WorldMap.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/SmallCounter.h"
-#include "../State/SaveGame.h"
-#include "../State/LoadGame.h"
-#include "../State/ExitConfirm.h"
 
 // Third party includes
 

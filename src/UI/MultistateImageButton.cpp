@@ -17,16 +17,18 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/MultistateImageButton.h"
+
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Audio/Mixer.h"
 #include "../Exception.h"
+#include "../Game/Game.h"
 #include "../Graphics/ActiveUI.h"
 #include "../Graphics/Texture.h"
 #include "../UI/Image.h"
-#include "../UI/MultistateImageButton.h"
-#include "../Game/Game.h"
-#include "../Audio/AudioMixer.h"
 
 // Third party includes
 
@@ -167,7 +169,7 @@ void MultistateImageButton::_onLeftButtonUp(MouseEvent* event)
     }
 }
 
-Texture* MultistateImageButton::texture()
+Texture* MultistateImageButton::texture() const
 {
     return _imageList.images()->at(_currentState)->texture();
 }

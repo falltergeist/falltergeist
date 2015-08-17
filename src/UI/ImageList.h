@@ -46,9 +46,9 @@ public:
     void addImage(Image* image);
     void addImage(const std::string& filename);
     void setCurrentImage(unsigned int number);
-    unsigned int currentImage();
-    virtual Texture* texture();
-    std::vector<Image*>* images();
+    unsigned int currentImage() const;
+    Texture* texture() const override;
+    const std::vector<Image*>* images() const;
 };
 
 }

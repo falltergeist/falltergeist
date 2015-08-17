@@ -17,13 +17,16 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../State/MainMenu.h"
+
 // C++ standard includes
 #include <sstream>
 
 // Falltergeist includes
-#include "../Audio/AudioMixer.h"
+#include "../Audio/Mixer.h"
 #include "../Event/StateEvent.h"
-#include "functions.h"
+#include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Animation.h"
 #include "../Graphics/Renderer.h"
@@ -32,7 +35,6 @@
 #include "../ResourceManager.h"
 #include "../State/Credits.h"
 #include "../State/LoadGame.h"
-#include "../State/MainMenu.h"
 #include "../State/Movie.h"
 #include "../State/NewGame.h"
 #include "../State/SettingsMenu.h"

@@ -48,7 +48,7 @@ class Font;
 class ResourceManager
 {
 protected:
-    friend class Singleton<ResourceManager>;
+    friend class Base::Singleton<ResourceManager>;
 
     std::vector<libfalltergeist::Dat::File*> _datFiles;
     std::unordered_map<std::string, libfalltergeist::Dat::Item*> _datFilesItems;

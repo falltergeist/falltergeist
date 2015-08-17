@@ -65,7 +65,7 @@ ResourceManager::~ResourceManager()
 // static
 ResourceManager* ResourceManager::getInstance()
 {
-    return Singleton<ResourceManager>::get();
+    return Base::Singleton<ResourceManager>::get();
 }
 
 libfalltergeist::Dat::Item* ResourceManager::datFileItem(std::string filename)

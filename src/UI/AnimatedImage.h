@@ -45,8 +45,8 @@ protected:
     std::vector<Texture*> _reddotTextures;
 public:
     AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direction);
-    unsigned int width();
-    unsigned int height();
+    unsigned int width() const override;
+    unsigned int height() const override;
     ~AnimatedImage();
     void render(bool eggTransparency = false);
 };

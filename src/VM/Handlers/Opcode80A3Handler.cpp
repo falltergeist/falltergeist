@@ -17,14 +17,16 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../../VM/Handlers/Opcode80A3Handler.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Handlers/Opcode80A3Handler.h"
-#include "../../VM/VM.h"
+#include "../../Audio/Mixer.h"
 #include "../../Game/Game.h"
-#include "../../Audio/AudioMixer.h"
+#include "../../Logger.h"
+#include "../../VM/VM.h"
 
 // Third party includes
 

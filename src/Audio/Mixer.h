@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_AUDIOMIXER_H
-#define FALLTERGEIST_AUDIOMIXER_H
+#ifndef FALLTERGEIST_AUDIO_MIXER_H
+#define FALLTERGEIST_AUDIO_MIXER_H
 
 // C++ standard includes
 #include <cstdint>
@@ -33,13 +33,15 @@
 namespace Falltergeist
 {
 class MvePlayer;
-class AudioMixer
+
+namespace Audio
 {
-protected:
-    void _init();
+
+class Mixer
+{
 public:
-    AudioMixer();
-    ~AudioMixer();
+    Mixer();
+    ~Mixer();
     void stopMusic();
     void stopSounds();
     void playACMMusic(const std::string& filename, bool loop = false);
@@ -47,13 +49,16 @@ public:
     void playMovieMusic(MvePlayer* mve);
     void pauseMusic();
     void resumeMusic();
+protected:
+    void _init();
 private:
-    void _musicCallback(void *udata, uint8_t *stream, uint32_t len);
-    void _movieCallback(void *udata, uint8_t *stream, uint32_t len);
+    void _musicCallback(void* udata, uint8_t* stream, uint32_t len);
+    void _movieCallback(void* udata, uint8_t* stream, uint32_t len);
     std::unordered_map<std::string,Mix_Chunk*> _sfx;
     bool _paused = false;
     bool _loop = false;
 };
 
 }
-#endif // FALLTERGEIST_AUDIOMIXER_H
+}
+#endif // FALLTERGEIST_AUDIO_MIXER_H
