@@ -32,7 +32,7 @@ namespace Falltergeist
 namespace Lua
 {
 
-class LuaImageButton : public ImageButton
+class LuaImageButton : public UI::ImageButton
 {
 public:
     LuaImageButton(unsigned type, int x = 0, int y = 0);

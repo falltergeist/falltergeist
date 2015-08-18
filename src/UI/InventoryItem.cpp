@@ -17,33 +17,41 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/InventoryItem.h"
+
 // C++ standard includes
 
 // Falltergeist includes
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
-#include "../Game/Game.h"
 #include "../Game/DudeObject.h"
+#include "../Game/Game.h"
 #include "../Game/ItemObject.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../Logger.h"
-#include "../UI/InventoryItem.h"
-#include "../UI/ItemsList.h"
 #include "../UI/Image.h"
+#include "../UI/ItemsList.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace UI
+{
 
-InventoryItem::InventoryItem(Game::ItemObject *item, int x, int y) : ActiveUI(x, y)
+InventoryItem::InventoryItem(Game::ItemObject *item, int x, int y) : Falltergeist::UI::Base(x, y)
 {
     _item = item;
     addEventHandler("mouseleftdown", [this](Event::Event* event){ this->onMouseLeftDown(dynamic_cast<Event::Mouse*>(event)); });
     addEventHandler("mousedragstart", [this](Event::Event* event){ this->onMouseDragStart(dynamic_cast<Event::Mouse*>(event)); });
     addEventHandler("mousedrag", [this](Event::Event* event){ this->onMouseDrag(dynamic_cast<Event::Mouse*>(event)); });
     addEventHandler("mousedragstop", [this](Event::Event* event){ this->onMouseDragStop(dynamic_cast<Event::Mouse*>(event)); });
+}
+
+InventoryItem::~InventoryItem()
+{
 }
 
 InventoryItem::Type InventoryItem::type() const
@@ -187,4 +195,5 @@ unsigned int InventoryItem::height() const
     return type() == Type::SLOT ? 63 : 49;
 }
 
+}
 }

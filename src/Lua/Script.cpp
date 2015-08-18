@@ -95,27 +95,23 @@ void Script::_initialize()
             .beginNamespace("ui")
 
                 // game.ui.UI
-                .beginClass<UI>("UI")
+                .beginClass<Falltergeist::UI::Base>("UI")
                     //.addProperty("x", &UI::x, &UI::setX)
                     //.addProperty("y", &UI::y, &UI::setY)
                 .endClass()
 
-                // game.ui.ActiveUI
-                .deriveClass<ActiveUI, UI>("ActiveUI")
-                .endClass()
-
                 // game.ui.Image
-                .deriveClass<Image, ActiveUI>("Image")
+                .deriveClass<UI::Image, Falltergeist::UI::Base>("Image")
                     .addConstructor<void(*)(char const*)>()
                 .endClass()
 
                 // game.ui.ImageButton
-                .deriveClass<LuaImageButton, ActiveUI>("ImageButton")
+                .deriveClass<LuaImageButton, Falltergeist::UI::Base>("ImageButton")
                     .addConstructor<void(*)(unsigned, int, int)>()
                 .endClass()
 
                 // game.ui.TextArea
-                .deriveClass<LuaTextArea, ActiveUI>("TextArea")
+                .deriveClass<LuaTextArea, Falltergeist::UI::Base>("TextArea")
                     .addConstructor<void(*)(const char*, int, int)>()
                     .addProperty("width", &LuaTextArea::width, &LuaTextArea::setWidth)
                     .addProperty("horizontalAlign", &LuaTextArea::luaHorizontalAlign, &LuaTextArea::setLuaHorizontalAlign)

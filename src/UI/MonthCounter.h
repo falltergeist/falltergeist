@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_MONTH_COUNTER_H
-#define FALLTERGEIST_MONTH_COUNTER_H
+#ifndef FALLTERGEIST_UI_MONTHCOUNTER_H
+#define FALLTERGEIST_UI_MONTHCOUNTER_H
 
 // C++ standard includes
 
@@ -28,6 +28,8 @@
 // Third party includes
 
 namespace Falltergeist
+{
+namespace UI
 {
 
 class Image;
@@ -63,5 +65,5 @@ private:
 };
 
 }
-
-#endif // FALLTERGEIST_MONTH_COUNTER_H
+}
+#endif // FALLTERGEIST_UI_MONTHCOUNTER_H

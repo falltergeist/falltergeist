@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_TEXTAREA_H
-#define FALLTERGEIST_TEXTAREA_H
+#ifndef FALLTERGEIST_UI_TEXTAREA_H
+#define FALLTERGEIST_UI_TEXTAREA_H
 
 // C++ standard includes
 #include <cstdint>
@@ -26,7 +26,7 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Graphics/ActiveUI.h"
+#include "../UI/Base.h"
 
 // Third party includes
 #include <libfalltergeist.h>
@@ -37,7 +37,10 @@ class Font;
 class FontString;
 class TextSymbol;
 
-class TextArea : public ActiveUI
+namespace UI
+{
+
+class TextArea : public Falltergeist::UI::Base
 {
 public:
     enum class HorizontalAlign : unsigned
@@ -57,32 +60,32 @@ public:
     TextArea(const std::string& text, int x = 0, int y = 0);
     TextArea(int x = 0, int y = 0);
     TextArea(TextArea* textArea, int x = 0, int y = 0);
-    virtual ~TextArea();
+    ~TextArea() override;
 
+    std::string text() const;
     void setText(const std::string& text);
     void appendText(const std::string& text);
-    std::string text() const;
 
-    void setHorizontalAlign(HorizontalAlign align);
     HorizontalAlign horizontalAlign() const;
+    void setHorizontalAlign(HorizontalAlign align);
 
-    void setVerticalAlign(VerticalAlign align);
     VerticalAlign verticalAlign() const;
+    void setVerticalAlign(VerticalAlign align);
 
+    unsigned int height() const override;
     void setHeight(unsigned int height);
-    unsigned int height() const;
 
-    virtual void setWidth(unsigned int width);
-    virtual unsigned int width() const;
+    unsigned int width() const override;
+    void setWidth(unsigned int width);
 
-    void setWordWrap(bool wordWrap);
     bool wordWrap() const;
+    void setWordWrap(bool wordWrap);
 
-    void setFont(std::shared_ptr<Font> font);
     std::shared_ptr<Font> font();
+    void setFont(std::shared_ptr<Font> font);
 
-    virtual void render(bool eggTransparency = false);
-    virtual unsigned int pixel(unsigned int x, unsigned int y);
+    void render(bool eggTransparency = false) override;
+    unsigned int pixel(unsigned int x, unsigned int y) override;
 
     unsigned int timestampCreated();
 
@@ -124,4 +127,5 @@ protected:
 };
 
 }
-#endif // FALLTERGEIST_TEXTAREA_H
+}
+#endif // FALLTERGEIST_UI_TEXTAREA_H

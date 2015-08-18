@@ -57,10 +57,10 @@ protected:
     int _initialY;
     int _previousIcon = 0;
     int _currentIcon = 0;
-    std::vector<UI*> _activeIcons;
-    std::vector<UI*> _inactiveIcons;
-    UI* _surface = 0;
-    UI* _cursor = 0;
+    std::vector<UI::Base*> _activeIcons;
+    std::vector<UI::Base*> _inactiveIcons;
+    UI::Base* _surface = nullptr;
+    UI::Base* _cursor = nullptr;
     bool _deactivated = false;
     unsigned int _initialMouseStack;
     

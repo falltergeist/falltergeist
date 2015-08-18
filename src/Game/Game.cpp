@@ -92,16 +92,16 @@ void Game::init(std::unique_ptr<Settings> settings)
 
     _mixer = make_unique<Audio::Mixer>();
     _mouse = new Mouse();
-    _fpsCounter = new FpsCounter(renderer()->width() - 42, 2);
+    _fpsCounter = new UI::FpsCounter(renderer()->width() - 42, 2);
 
     version += " " + std::to_string(renderer()->width()) + "x" + std::to_string(renderer()->height());
     version += " " + renderer()->name();
 
-    _falltergeistVersion = new TextArea(version, 3, renderer()->height() - 10);
-    _mousePosition = new TextArea("", renderer()->width() - 55, 14);
+    _falltergeistVersion = new UI::TextArea(version, 3, renderer()->height() - 10);
+    _mousePosition = new UI::TextArea("", renderer()->width() - 55, 14);
     _animatedPalette = new AnimatedPalette();
     _gameTime = new Time();
-    _currentTime = new TextArea(renderer()->width() - 150, renderer()->height() - 10);
+    _currentTime = new UI::TextArea(renderer()->width() - 150, renderer()->height() - 10);
 
     IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 }

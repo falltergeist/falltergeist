@@ -29,6 +29,10 @@
 
 namespace Falltergeist
 {
+namespace UI
+{
+    class TextArea;
+}
 namespace State
 {
 
@@ -46,7 +50,7 @@ public:
     void onCreditsFadeDone(Event::State* event);
     void onStateActivate(Event::State* event) override;
 private:
-    std::vector<TextArea*> _lines;
+    std::vector<UI::TextArea*> _lines;
     unsigned long int _lastTicks;
 };
 

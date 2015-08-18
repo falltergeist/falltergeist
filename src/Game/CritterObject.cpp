@@ -29,12 +29,12 @@
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Game/WeaponItemObject.h"
-#include "../Graphics/Animation.h"
-#include "../Graphics/AnimationFrame.h"
-#include "../Graphics/AnimationQueue.h"
 #include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
+#include "../UI/Animation.h"
+#include "../UI/AnimationFrame.h"
+#include "../UI/AnimationQueue.h"
 #include "../VM/VM.h"
 
 // Third party includes
@@ -492,7 +492,7 @@ void CritterObject::think()
     }
     else
     {
-        auto anim = (Animation*)ui();
+        auto anim = (UI::Animation*)ui();
         if (!_moving && (!anim || !anim->playing()))
         {
             if (SDL_GetTicks() > _nextIdleAnim)
@@ -510,7 +510,7 @@ void CritterObject::onMovementAnimationEnded(Event::Event* event)
     auto hexagon = movementQueue()->back();
     movementQueue()->pop_back();
     Game::getInstance()->locationState()->moveObjectToHexagon(this, hexagon);
-    auto animation = dynamic_cast<Animation*>(ui());
+    auto animation = dynamic_cast<UI::Animation*>(ui());
 
     if (movementQueue()->size() == 0)
     {
@@ -575,7 +575,7 @@ void CritterObject::onMovementAnimationEnded(Event::Event* event)
     }
 }
 
-Animation* CritterObject::_generateMovementAnimation()
+UI::Animation* CritterObject::_generateMovementAnimation()
 {
     std::string frmString = _generateArmorFrmString();
 
@@ -588,12 +588,12 @@ Animation* CritterObject::_generateMovementAnimation()
         frmString += _generateWeaponFrmString() + "b";
     }
 
-    return new Animation("art/critters/" + frmString + ".frm", orientation());
+    return new UI::Animation("art/critters/" + frmString + ".frm", orientation());
 }
 
-Animation* CritterObject::setActionAnimation(const std::string& action)
+UI::Animation* CritterObject::setActionAnimation(const std::string& action)
 {
-    Animation* animation = new Animation("art/critters/" + _generateArmorFrmString() + action + ".frm", orientation());
+    UI::Animation* animation = new UI::Animation("art/critters/" + _generateArmorFrmString() + action + ".frm", orientation());
     animation->addEventHandler("animationEnded", [animation](Event::Event* event)
     {
         animation->setCurrentFrame(0);
@@ -710,11 +710,11 @@ void CritterObject::stopMovement()
 {
     _movementQueue.clear();
     // @TODO: _ui probably needs to be always one type
-    if (auto queue = dynamic_cast<AnimationQueue*>(_ui))
+    if (auto queue = dynamic_cast<UI::AnimationQueue*>(_ui))
     {
         queue->stop();
     }
-    else if (auto animation = dynamic_cast<Animation*>(_ui))
+    else if (auto animation = dynamic_cast<UI::Animation*>(_ui))
     {
         animation->stop();
     }

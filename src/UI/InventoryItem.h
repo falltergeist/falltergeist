@@ -23,7 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Graphics/ActiveUI.h"
+#include "../UI/Base.h"
 
 // Third party includes
 
@@ -37,8 +37,10 @@ namespace Game
 {
     class ItemObject;
 }
+namespace UI
+{
 
-class InventoryItem : public ActiveUI
+class InventoryItem : public Falltergeist::UI::Base
 {
 public:
     enum class Type
@@ -49,6 +51,7 @@ public:
     };
 
     InventoryItem(Game::ItemObject* item, int x = 0, int y = 0);
+    ~InventoryItem() override;
 
     Type type() const;
     void setType(Type value);
@@ -56,8 +59,8 @@ public:
     Game::ItemObject* item();
     void setItem(Game::ItemObject* item);
 
-    virtual void render(bool eggTransparency = false);
-    virtual unsigned int pixel(unsigned int x, unsigned int y);
+    void render(bool eggTransparency = false) override;
+    unsigned int pixel(unsigned int x, unsigned int y) override;
     Texture* texture() const override;
     unsigned int width() const override;
     unsigned int height() const override;
@@ -77,5 +80,6 @@ protected:
 
 };
 
+}
 }
 #endif // FALLTERGEIST_UI_INVENTORYITEM_H

@@ -31,7 +31,7 @@ namespace Falltergeist
 namespace Lua
 {
 
-LuaImageButton::LuaImageButton(unsigned type, int x, int y) : ImageButton(static_cast<Type>(type), x, y)
+LuaImageButton::LuaImageButton(unsigned type, int x, int y) : UI::ImageButton(static_cast<Type>(type), x, y)
 {
 }
 

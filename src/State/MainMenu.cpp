@@ -28,7 +28,6 @@
 #include "../Event/State.h"
 #include "../functions.h"
 #include "../Game/Game.h"
-#include "../Graphics/Animation.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
@@ -38,6 +37,7 @@
 #include "../State/Movie.h"
 #include "../State/NewGame.h"
 #include "../State/SettingsMenu.h"
+#include "../UI/Animation.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
@@ -72,69 +72,69 @@ void MainMenu::init()
     setX((renderer->width()  - 640)*0.5);
     setY((renderer->height() - 480)*0.5);
 
-    addUI("background", new Image("art/intrface/mainmenu.frm"));
+    addUI("background", new UI::Image("art/intrface/mainmenu.frm"));
 
     // intro button
-    auto introButton = addUI(new ImageButton(ImageButton::Type::MENU_RED_CIRCLE, 30, 19));
+    auto introButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19));
     introButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onIntroButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     // new game button
-    auto newGameButton = addUI(new ImageButton(ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41));
+    auto newGameButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41));
     newGameButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onNewGameButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     // load game button
-    auto loadGameButton = addUI(new ImageButton(ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41*2));
+    auto loadGameButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41*2));
     loadGameButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onLoadGameButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     // settings button
-    auto settingsButton = addUI(new ImageButton(ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41*3));
+    auto settingsButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41*3));
     settingsButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onSettingsButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     // credits button
-    auto creditsButton = addUI(new ImageButton(ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41*4));
+    auto creditsButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41*4));
     creditsButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onCreditsButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     // exit button
-    auto exitButton = addUI(new ImageButton(ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41*5));
+    auto exitButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41*5));
     exitButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onExitButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     auto font4 = ResourceManager::getInstance()->font("font4.aaf", 0xb89c28ff);
 
     // "Intro" label
-    auto introButtonLabel = new TextArea(translate("intro", "mainmenu"), 50, 20);
+    auto introButtonLabel = new UI::TextArea(translate("intro", "mainmenu"), 50, 20);
     introButtonLabel->setFont(font4);
     introButtonLabel->setWidth(150);
-    introButtonLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
+    introButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // "New Game" label
-    auto newGameButtonLabel = new TextArea(translate("new_game", "mainmenu"), 50, 20 + 41);
+    auto newGameButtonLabel = new UI::TextArea(translate("new_game", "mainmenu"), 50, 20 + 41);
     newGameButtonLabel->setFont(font4);
     newGameButtonLabel->setWidth(150);
-    newGameButtonLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
+    newGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // "Load Game" label
-    auto loadGameButtonLabel = new TextArea(translate("load_game", "mainmenu"), 50, 20 + 41*2);
+    auto loadGameButtonLabel = new UI::TextArea(translate("load_game", "mainmenu"), 50, 20 + 41*2);
     loadGameButtonLabel->setFont(font4);
     loadGameButtonLabel->setWidth(150);
-    loadGameButtonLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
+    loadGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // "Options" label
-    auto optionsButtonLabel = new TextArea(translate("options", "mainmenu"), 50, 20 + 41*3);
+    auto optionsButtonLabel = new UI::TextArea(translate("options", "mainmenu"), 50, 20 + 41*3);
     optionsButtonLabel->setFont(font4);
     optionsButtonLabel->setWidth(150);
-    optionsButtonLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
+    optionsButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // "Credits" label
-    auto creditsButtonLabel = new TextArea(translate("credits", "mainmenu"), 50, 20 + 41*4);
+    auto creditsButtonLabel = new UI::TextArea(translate("credits", "mainmenu"), 50, 20 + 41*4);
     creditsButtonLabel->setFont(font4);
     creditsButtonLabel->setWidth(150);
-    creditsButtonLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
+    creditsButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // "Exit" label
-    auto exitButtonLabel = new TextArea(translate("exit", "mainmenu"), 50, 20 + 41*5);
+    auto exitButtonLabel = new UI::TextArea(translate("exit", "mainmenu"), 50, 20 + 41*5);
     exitButtonLabel->setFont(font4);
     exitButtonLabel->setWidth(150);
-    exitButtonLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
+    exitButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // Text areas
     addUI(introButtonLabel);

@@ -20,10 +20,10 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Graphics/AnimationQueue.h"
 #include "../../Logger.h"
 #include "../../Game/Object.h"
 #include "../../Game/CritterObject.h"
+#include "../../UI/AnimationQueue.h"
 #include "../../VM/Handlers/Opcode810EHandler.h"
 #include "../../VM/VM.h"
 
@@ -60,7 +60,7 @@ void Opcode810EHandler::_run()
             }
             else
             {
-                auto queue = dynamic_cast<AnimationQueue*>(object->ui());
+                auto queue = dynamic_cast<UI::AnimationQueue*>(object->ui());
                 if (queue) queue->stop();
             }
             break;

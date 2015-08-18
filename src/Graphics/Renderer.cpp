@@ -27,7 +27,6 @@
 #include "../Event/State.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
-#include "../Graphics/UI.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
 #include "../Settings.h"

@@ -37,7 +37,10 @@ namespace Event
     class Mouse;
     class State;
 }
-class TextArea;
+namespace UI
+{
+    class TextArea;
+}
 
 namespace State
 {
@@ -45,10 +48,10 @@ namespace State
 class SettingsMenu : public State
 {
 protected:
-    std::map<std::string, TextArea*> _labels;
-    TextArea* _addLabel(const std::string& name, TextArea* label);
-    TextArea* _addTextArea(const std::string& message, unsigned int x, unsigned int y);
-    TextArea* _addTextArea(TextArea* parent, unsigned int x, unsigned int y);
+    std::map<std::string, UI::TextArea*> _labels;
+    UI::TextArea* _addLabel(const std::string& name, UI::TextArea* label);
+    UI::TextArea* _addTextArea(const std::string& message, unsigned int x, unsigned int y);
+    UI::TextArea* _addTextArea(UI::TextArea* parent, unsigned int x, unsigned int y);
 public:
     SettingsMenu();
     ~SettingsMenu() override;

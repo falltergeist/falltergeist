@@ -17,6 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/TextArea.h"
+
 // C++ standard includes
 #include <algorithm>
 #include <sstream>
@@ -29,7 +32,6 @@
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
-#include "../UI/TextArea.h"
 #include "../UI/TextSymbol.h"
 
 // Third party includes
@@ -37,20 +39,22 @@
 
 namespace Falltergeist
 {
+namespace UI
+{
 
-TextArea::TextArea(int x, int y) : ActiveUI(x, y)
+TextArea::TextArea(int x, int y) : Falltergeist::UI::Base(x, y)
 {
     _timestampCreated = SDL_GetTicks();
     _calculate();
 }
 
-TextArea::TextArea(const std::string& text, int x, int y) : ActiveUI(x, y)
+TextArea::TextArea(const std::string& text, int x, int y) : Falltergeist::UI::Base(x, y)
 {
     _timestampCreated = SDL_GetTicks();
     setText(text);
 }
 
-TextArea::TextArea(TextArea* textArea, int x, int y) : ActiveUI(x, y)
+TextArea::TextArea(TextArea* textArea, int x, int y) : Falltergeist::UI::Base(x, y)
 {
     _timestampCreated = textArea->_timestampCreated;
     _text = textArea->_text;
@@ -340,4 +344,5 @@ unsigned int TextArea::pixel(unsigned int x, unsigned int y)
     return 0xFFFFFFFF; // white color
 }
 
+}
 }

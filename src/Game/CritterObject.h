@@ -35,7 +35,10 @@ using namespace libfalltergeist;
 
 namespace Falltergeist
 {
-class Animation;
+namespace UI
+{
+    class Animation;
+}
 
 namespace Game
 {
@@ -155,7 +158,7 @@ public:
     
     virtual void stopMovement();
 
-    virtual Animation* setActionAnimation(const std::string& action);
+    virtual UI::Animation* setActionAnimation(const std::string& action);
 
 protected:
     bool _moving  = false;
@@ -193,7 +196,7 @@ protected:
     ItemObject* _leftHandSlot = 0;
     ItemObject* _rightHandSlot = 0;
 
-    virtual Animation* _generateMovementAnimation();
+    virtual UI::Animation* _generateMovementAnimation();
     virtual std::string _generateArmorFrmString();
     virtual std::string _generateWeaponFrmString();
     void _setupNextIdleAnim();

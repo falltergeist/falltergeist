@@ -17,19 +17,23 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/AnimationQueue.h"
+
 // C++ standard includes
 
 // Falltergeist includes
 #include "../Event/Event.h"
-#include "../Graphics/AnimationQueue.h"
-#include "../Graphics/Animation.h"
+#include "../UI/Animation.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace UI
+{
 
-AnimationQueue::AnimationQueue() : ActiveUI()
+AnimationQueue::AnimationQueue() : Falltergeist::UI::Base()
 {
 }
 
@@ -146,14 +150,15 @@ unsigned int AnimationQueue::height() const
     return currentAnimation()->height();
 }
 
-int AnimationQueue::xOffset()
+int AnimationQueue::xOffset() const
 {
     return currentAnimation()->xOffset();
 }
 
-int AnimationQueue::yOffset()
+int AnimationQueue::yOffset() const
 {
     return currentAnimation()->yOffset();
 }
 
+}
 }

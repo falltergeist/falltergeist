@@ -17,13 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_UI_H
-#define FALLTERGEIST_UI_H
+#ifndef FALLTERGEIST_UI_BASE_H
+#define FALLTERGEIST_UI_BASE_H
 
 // C++ standard includes
-#include <memory>
 
 // Falltergeist includes
+#include "../Event/Emitter.h"
 
 // Third party includes
 
@@ -31,32 +31,36 @@ namespace Falltergeist
 {
 class Texture;
 
-class UI
+namespace UI
+{
+
+class Base : public Event::Emitter
 {
 public:
-    UI(int x = 0, int y = 0);
-    virtual ~UI();
+    Base(int x = 0, int y = 0);
+    ~Base() override;
 
     virtual int x() const;
     virtual void setX(int value);
 
-    virtual int xOffset();
+    virtual int xOffset() const;
     virtual void setXOffset(int xOffset);
 
     virtual int y() const;
     virtual void setY(int value);
 
-    virtual int yOffset();
+    virtual int yOffset() const;
     virtual void setYOffset(int yOffset);
 
     virtual Texture* texture() const;
     virtual void setTexture(Texture* texture);
 
+    virtual bool visible() const;
     virtual void setVisible(bool value);
-    virtual bool visible();
 
     virtual void think();
     virtual void render(bool eggTransparency = false);
+    virtual void handle(Event::Event* event);
 
     virtual unsigned int width() const;
     virtual unsigned int height() const;
@@ -75,7 +79,11 @@ protected:
     bool _drag = false;
     bool _hovered = false;
     bool _visible = true;
+    // @todo Should it really be here?
+    std::string _downSound = "";
+    std::string _upSound = "";
 };
 
 }
-#endif // FALLTERGEIST_UI_H
+}
+#endif // FALLTERGEIST_UI_BASE_H

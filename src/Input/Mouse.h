@@ -29,7 +29,10 @@
 
 namespace Falltergeist
 {
-class UI;
+namespace UI
+{
+    class Base;
+}
 
 class Mouse
 {
@@ -98,7 +101,7 @@ public:
     void render();
     void think();
 
-    UI* ui();
+    UI::Base* ui();
 
 protected:
     int _x = 320;
@@ -106,7 +109,7 @@ protected:
     bool _visible = true;
     Cursor _type = Cursor::NONE;
     std::vector<Cursor> _states;
-    UI* _ui = 0;
+    UI::Base* _ui = nullptr;
     void _setType(Cursor type);
 };
 

@@ -46,14 +46,16 @@ namespace State
     class Location;
     class State;
 }
+namespace UI
+{
+    class FpsCounter;
+    class TextArea;
+}
 class Exception;
 class Screen;
 class ResourceManager;
-class FpsCounter;
 class Mouse;
 class Renderer;
-class UI;
-class TextArea;
 class AnimatedPalette;
 class Settings;
 class InputController;
@@ -110,10 +112,10 @@ protected:
     Renderer* _renderer = 0;
     Mouse* _mouse = 0;
     std::unique_ptr<Audio::Mixer> _mixer;
-    FpsCounter* _fpsCounter = 0;
-    TextArea* _mousePosition = 0;
-    TextArea* _currentTime = 0;
-    TextArea* _falltergeistVersion = 0;
+    UI::FpsCounter* _fpsCounter =  nullptr;
+    UI::TextArea* _mousePosition = nullptr;
+    UI::TextArea* _currentTime = nullptr;
+    UI::TextArea* _falltergeistVersion = nullptr;
     std::unique_ptr<Settings> _settings;
     AnimatedPalette* _animatedPalette = 0;
     bool _quit = false;

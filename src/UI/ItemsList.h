@@ -23,7 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../UI/Image.h"
+#include "../UI/Base.h"
 #include "../UI/InventoryItem.h"
 
 // Third party includes
@@ -38,8 +38,10 @@ namespace Game
 {
     class ItemObject;
 }
+namespace UI
+{
 
-class ItemsList : public ActiveUI
+class ItemsList : public Falltergeist::UI::Base
 {
 public:
     ItemsList(int x = 0, int y = 0);
@@ -88,5 +90,6 @@ protected:
 
 };
 
+}
 }
 #endif // FALLTERGEIST_UI_ITEMSLIST_H

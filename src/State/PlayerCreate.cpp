@@ -34,7 +34,10 @@
 #include "../State/PlayerEditName.h"
 #include "../State/PlayerCreateOptions.h"
 #include "../State/PlayerCreate.h"
+#include "../UI/BigCounter.h"
+#include "../UI/HiddenMask.h"
 #include "../UI/Image.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 #include <libfalltergeist.h>
@@ -61,7 +64,7 @@ void PlayerCreate::init()
     setModal(true);
 
     // background
-    auto background = new Image("art/intrface/edtrcrte.frm");
+    auto background = new UI::Image("art/intrface/edtrcrte.frm");
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
     background->setX(backgroundX);
@@ -77,15 +80,15 @@ void PlayerCreate::init()
 
         _addTitle(ss.str(), _t(MSG_STATS, 100 + i));       // stat title
         _addDescription(ss.str(), _t(MSG_STATS, 200 + i)); // stat description
-        _addImage(ss.str(), new Image("art/skilldex/" + imagesStats[i] + ".frm")); // stat image
-        _addLabel(ss.str(), new TextArea(backgroundX+104, backgroundY+46+33*i));          // stat value label
-        _addCounter(ss.str(), new BigCounter(backgroundX+59, backgroundY+37+33*i));       // stat value counter
-        _addMask(ss.str(), new HiddenMask(133, 29, backgroundX+14, backgroundY+36+33*i)); // stat click mask
-        _addButton(ss.str() + "_increase", new ImageButton(ImageButton::Type::PLUS,  backgroundX+149, backgroundY+38+33*i)); // stat increase button
-        _addButton(ss.str() + "_decrease", new ImageButton(ImageButton::Type::MINUS, backgroundX+149, backgroundY+49+33*i)); // stat decrease button
+        _addImage(ss.str(), new UI::Image("art/skilldex/" + imagesStats[i] + ".frm")); // stat image
+        _addLabel(ss.str(), new UI::TextArea(backgroundX+104, backgroundY+46+33*i));          // stat value label
+        _addCounter(ss.str(), new UI::BigCounter(backgroundX+59, backgroundY+37+33*i));       // stat value counter
+        _addMask(ss.str(), new UI::HiddenMask(133, 29, backgroundX+14, backgroundY+36+33*i)); // stat click mask
+        _addButton(ss.str() + "_increase", new UI::ImageButton(UI::ImageButton::Type::PLUS,  backgroundX+149, backgroundY+38+33*i)); // stat increase button
+        _addButton(ss.str() + "_decrease", new UI::ImageButton(UI::ImageButton::Type::MINUS, backgroundX+149, backgroundY+49+33*i)); // stat decrease button
     }
 
-    _addCounter("statsPoints", new BigCounter(backgroundX+126, backgroundY+282)); // Free stats points counter
+    _addCounter("statsPoints", new UI::BigCounter(backgroundX+126, backgroundY+282)); // Free stats points counter
 
     // TRAITS
     std::string imagesTraits[] =  { "fastmeta", "bruiser", "smlframe", "onehand", "finesse",  "kamikaze", "heavyhnd", "fastshot",
@@ -96,21 +99,21 @@ void PlayerCreate::init()
         ss << "traits_" << (i+1);
         _addTitle(ss.str(), _t(MSG_TRAITS, 100 + i)); // trait title
         _addDescription(ss.str(), _t(MSG_TRAITS, 200 + i)); // trait description
-        _addImage(ss.str(), new Image("art/skilldex/" + imagesTraits[i] + ".frm")); // trait image
+        _addImage(ss.str(), new UI::Image("art/skilldex/" + imagesTraits[i] + ".frm")); // trait image
         // left column
         if (i <= 7)
         {
-            _addLabel(ss.str(),  new TextArea(_t(MSG_TRAITS, 100 + i), backgroundX+48, backgroundY+353+13*i)); // trate label
-            _addButton(ss.str(), new ImageButton(ImageButton::Type::SKILL_TOGGLE, backgroundX+23, backgroundY+352+13*i)); // trate toggle button
+            _addLabel(ss.str(),  new UI::TextArea(_t(MSG_TRAITS, 100 + i), backgroundX+48, backgroundY+353+13*i)); // trate label
+            _addButton(ss.str(), new UI::ImageButton(UI::ImageButton::Type::SKILL_TOGGLE, backgroundX+23, backgroundY+352+13*i)); // trate toggle button
         }
         //right column
         else
         {
-            auto label = new TextArea(_t(MSG_TRAITS, 100 + i), backgroundX+169, backgroundY+353+13*(i-8));
+            auto label = new UI::TextArea(_t(MSG_TRAITS, 100 + i), backgroundX+169, backgroundY+353+13*(i-8));
             label->setWidth(122);
-            label->setHorizontalAlign(TextArea::HorizontalAlign::RIGHT);
+            label->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
             _addLabel(ss.str(),  label); // trate label
-            _addButton(ss.str(), new ImageButton(ImageButton::Type::SKILL_TOGGLE, backgroundX+299, backgroundY+352+13*(i-8))); // trate toggle button
+            _addButton(ss.str(), new UI::ImageButton(UI::ImageButton::Type::SKILL_TOGGLE, backgroundX+299, backgroundY+352+13*(i-8))); // trate toggle button
         }
     }
 
@@ -123,20 +126,20 @@ void PlayerCreate::init()
         ss << "skills_" << (i+1);
         _addTitle(ss.str(), _t(MSG_SKILLS, 100 + i));
         _addDescription(ss.str(), _t(MSG_SKILLS, 200 + i));
-        _addImage(ss.str(), new Image("art/skilldex/" + imagesSkills[i] + ".frm"));
-        _addButton(ss.str(), new ImageButton(ImageButton::Type::SKILL_TOGGLE, backgroundX+347, backgroundY+26+11*i));
-        _addLabel(ss.str(),  new TextArea(_t(MSG_SKILLS, 100 + i), backgroundX+377, backgroundY+27+11*i))->setWidth(240);
-        _addLabel(ss.str() + "_value",  new TextArea("", backgroundX+577, backgroundY+27+11*i));
+        _addImage(ss.str(),  new UI::Image("art/skilldex/" + imagesSkills[i] + ".frm"));
+        _addButton(ss.str(), new UI::ImageButton(UI::ImageButton::Type::SKILL_TOGGLE, backgroundX+347, backgroundY+26+11*i));
+        _addLabel(ss.str(),  new UI::TextArea(_t(MSG_SKILLS, 100 + i), backgroundX+377, backgroundY+27+11*i))->setWidth(240);
+        _addLabel(ss.str() + "_value",  new UI::TextArea("", backgroundX+577, backgroundY+27+11*i));
     }
     // Free skill points counts
-    _addCounter("skillsPoints", new BigCounter(backgroundX+522, backgroundY+228));
+    _addCounter("skillsPoints", new UI::BigCounter(backgroundX+522, backgroundY+228));
 
     // HEALTH CONDITION
     std::string imagesHealth[] = { "hitpoint", "poisoned", "radiated", "eyedamag", "armright", "armleft", "legright", "legleft"};
     _addTitle("health_1", _t(MSG_EDITOR, 300));
-    _addLabel("health_1",  new TextArea(_t(MSG_EDITOR, 300), backgroundX+194, backgroundY+46)); //health
+    _addLabel("health_1",  new UI::TextArea(_t(MSG_EDITOR, 300), backgroundX+194, backgroundY+46)); //health
     _addDescription("health_1", _t(MSG_STATS, 207));
-    _addImage("health_1", new Image("art/skilldex/" + imagesHealth[0] + ".frm"));
+    _addImage("health_1", new UI::Image("art/skilldex/" + imagesHealth[0] + ".frm"));
 
     auto font1_0x183018ff = ResourceManager::getInstance()->font("font1.aaf", 0x183018ff);
 
@@ -146,8 +149,8 @@ void PlayerCreate::init()
         ss << "health_" << (i+2);
         _addTitle(ss.str(), _t(MSG_EDITOR, 312 + i));
         _addDescription(ss.str(), _t(MSG_EDITOR, 400 + i));
-        _addLabel(ss.str(), new TextArea(_t(MSG_EDITOR, 312 + i), backgroundX+194, backgroundY+46+13*(i+1)))->setFont(font1_0x183018ff);
-        _addImage(ss.str(), new Image("art/skilldex/" + imagesHealth[i+1] + ".frm"));
+        _addLabel(ss.str(), new UI::TextArea(_t(MSG_EDITOR, 312 + i), backgroundX+194, backgroundY+46+13*(i+1)))->setFont(font1_0x183018ff);
+        _addImage(ss.str(), new UI::Image("art/skilldex/" + imagesHealth[i+1] + ".frm"));
     }
 
     // PLAYER PARAMS
@@ -160,30 +163,30 @@ void PlayerCreate::init()
         ss << "params_" << (i+1);
         _addTitle(ss.str(), _t(MSG_STATS, params[i]));
         _addDescription(ss.str(), _t(MSG_STATS, params[i] + 100));
-        _addImage(ss.str(), new Image("art/skilldex/" + imagesParams[i] + ".frm"));
-        _addLabel(ss.str(), new TextArea(_t(MSG_EDITOR, labels[i]), backgroundX + 194, backgroundY + 179 + 13*i));
-        _addLabel(ss.str() + "_value", new TextArea("", backgroundX + 288, backgroundY + 179 + 13*i));
+        _addImage(ss.str(), new UI::Image("art/skilldex/" + imagesParams[i] + ".frm"));
+        _addLabel(ss.str(), new UI::TextArea(_t(MSG_EDITOR, labels[i]), backgroundX + 194, backgroundY + 179 + 13*i));
+        _addLabel(ss.str() + "_value", new UI::TextArea("", backgroundX + 288, backgroundY + 179 + 13*i));
     }
 
-    _addButton("options", new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+345, backgroundY+454));
-    _addButton("done",    new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+455, backgroundY+454));
-    _addButton("cancel",  new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+554, backgroundY+454));
+    _addButton("options", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+345, backgroundY+454));
+    _addButton("done",    new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+455, backgroundY+454));
+    _addButton("cancel",  new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+554, backgroundY+454));
 
     auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
 
-    _addLabel("options", new TextArea(_t(MSG_EDITOR, 101), backgroundX+365, backgroundY+453))->setFont(font3_b89c28ff);
-    _addLabel("next",    new TextArea(_t(MSG_EDITOR, 100), backgroundX+473, backgroundY+453))->setFont(font3_b89c28ff);
-    _addLabel("cancel",  new TextArea(_t(MSG_EDITOR, 102), backgroundX+571, backgroundY+453))->setFont(font3_b89c28ff);
-    auto label = _addLabel("name",    new TextArea(Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7));
+    _addLabel("options", new UI::TextArea(_t(MSG_EDITOR, 101), backgroundX+365, backgroundY+453))->setFont(font3_b89c28ff);
+    _addLabel("next",    new UI::TextArea(_t(MSG_EDITOR, 100), backgroundX+473, backgroundY+453))->setFont(font3_b89c28ff);
+    _addLabel("cancel",  new UI::TextArea(_t(MSG_EDITOR, 102), backgroundX+571, backgroundY+453))->setFont(font3_b89c28ff);
+    auto label = _addLabel("name",    new UI::TextArea(Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7));
     label->setWidth(150);
-    label->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
+    label->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
     label->setFont(font3_b89c28ff);
-    _addLabel("age",     new TextArea(_t(MSG_EDITOR, 104), backgroundX+163, backgroundY+7))->setFont(font3_b89c28ff);
-    _addLabel("gender",  new TextArea(_t(MSG_EDITOR, Game::getInstance()->player()->gender() == GENDER::MALE ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff);
-    _addLabel("label_1", new TextArea(_t(MSG_EDITOR, 116), backgroundX+14, backgroundY+286))->setFont(font3_b89c28ff);  // char points
-    _addLabel("label_2", new TextArea(_t(MSG_EDITOR, 139), backgroundX+50, backgroundY+326))->setFont(font3_b89c28ff);  // optinal traits
-    _addLabel("label_3", new TextArea(_t(MSG_EDITOR, 117), backgroundX+383, backgroundY+5))->setFont(font3_b89c28ff);   // skills
-    _addLabel("label_4", new TextArea(_t(MSG_EDITOR, 138), backgroundX+428, backgroundY+233))->setFont(font3_b89c28ff); // tag skills
+    _addLabel("age",     new UI::TextArea(_t(MSG_EDITOR, 104), backgroundX+163, backgroundY+7))->setFont(font3_b89c28ff);
+    _addLabel("gender",  new UI::TextArea(_t(MSG_EDITOR, Game::getInstance()->player()->gender() == GENDER::MALE ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff);
+    _addLabel("label_1", new UI::TextArea(_t(MSG_EDITOR, 116), backgroundX+14, backgroundY+286))->setFont(font3_b89c28ff);  // char points
+    _addLabel("label_2", new UI::TextArea(_t(MSG_EDITOR, 139), backgroundX+50, backgroundY+326))->setFont(font3_b89c28ff);  // optinal traits
+    _addLabel("label_3", new UI::TextArea(_t(MSG_EDITOR, 117), backgroundX+383, backgroundY+5))->setFont(font3_b89c28ff);   // skills
+    _addLabel("label_4", new UI::TextArea(_t(MSG_EDITOR, 138), backgroundX+428, backgroundY+233))->setFont(font3_b89c28ff); // tag skills
     _addTitle("label_1", _t(MSG_EDITOR, 120));
     _addTitle("label_2", _t(MSG_EDITOR, 146));
     _addTitle("label_3", _t(MSG_EDITOR, 150));
@@ -192,19 +195,19 @@ void PlayerCreate::init()
     _addDescription("label_2", _t(MSG_EDITOR, 147));
     _addDescription("label_3", _t(MSG_EDITOR, 151));
     _addDescription("label_4", _t(MSG_EDITOR, 145));
-    _addImage("label_1", new Image("art/skilldex/generic.frm"));
-    _addImage("label_2", new Image("art/skilldex/traits.frm"));
-    _addImage("label_3", new Image("art/skilldex/skills.frm"));
-    _addImage("label_4", new Image("art/skilldex/skills.frm"));
+    _addImage("label_1", new UI::Image("art/skilldex/generic.frm"));
+    _addImage("label_2", new UI::Image("art/skilldex/traits.frm"));
+    _addImage("label_3", new UI::Image("art/skilldex/skills.frm"));
+    _addImage("label_4", new UI::Image("art/skilldex/skills.frm"));
 
     // Name change button
-    _addButton("name",  new ImageButton(ImageButton::Type::PLAYER_NAME, backgroundX+13, backgroundY+0));
+    _addButton("name",  new UI::ImageButton(UI::ImageButton::Type::PLAYER_NAME, backgroundX+13, backgroundY+0));
 
     // Age change button
-    _addButton("age", new ImageButton(ImageButton::Type::PLAYER_AGE, backgroundX+156, backgroundY+0));
+    _addButton("age", new UI::ImageButton(UI::ImageButton::Type::PLAYER_AGE, backgroundX+156, backgroundY+0));
 
     //Gender change button
-    _addButton("gender", new ImageButton(ImageButton::Type::PLAYER_GENDER, backgroundX+236, backgroundY+0));
+    _addButton("gender", new UI::ImageButton(UI::ImageButton::Type::PLAYER_GENDER, backgroundX+236, backgroundY+0));
 
     // add buttons to the state
     for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
@@ -243,17 +246,17 @@ void PlayerCreate::init()
     auto font1_000000ff = ResourceManager::getInstance()->font("font1.aaf", 0x000000FF);
     auto font2_000000ff = ResourceManager::getInstance()->font("font2.aaf", 0x000000FF);
 
-    _title = new TextArea("", backgroundX+350, backgroundY+275);
+    _title = new UI::TextArea("", backgroundX+350, backgroundY+275);
     _title->setFont(font2_000000ff);
     addUI(_title);
 
-    auto line = new Image(270, 2);
+    auto line = new UI::Image(270, 2);
     line->setX(backgroundX+350);
     line->setY(backgroundY+300);
     line->texture()->fill(0x000000ff);
     addUI(line);
 
-    _description = new TextArea("", backgroundX+350, backgroundY+315);
+    _description = new UI::TextArea("", backgroundX+350, backgroundY+315);
     _description->setFont(font1_000000ff);
     _description->setWidth(140);
     _description->setHeight(120);
@@ -261,27 +264,27 @@ void PlayerCreate::init()
     addUI(_description);
 }
 
-TextArea* PlayerCreate::_addLabel(const std::string& name, TextArea* label)
+UI::TextArea* PlayerCreate::_addLabel(const std::string& name, UI::TextArea* label)
 {
-    _labels.insert(std::pair<std::string,TextArea*>(name, label));
+    _labels.insert(std::pair<std::string,UI::TextArea*>(name, label));
     return label;
 }
 
-ImageButton* PlayerCreate::_addButton(const std::string& name, ImageButton* button)
+UI::ImageButton* PlayerCreate::_addButton(const std::string& name, UI::ImageButton* button)
 {
-    _buttons.insert(std::pair<std::string,ImageButton*>(name, button));
+    _buttons.insert(std::pair<std::string,UI::ImageButton*>(name, button));
     return button;
 }
 
-BigCounter* PlayerCreate::_addCounter(const std::string& name, BigCounter* counter)
+UI::BigCounter* PlayerCreate::_addCounter(const std::string& name, UI::BigCounter* counter)
 {
-    _counters.insert(std::pair<std::string,BigCounter*>(name, counter));
+    _counters.insert(std::pair<std::string,UI::BigCounter*>(name, counter));
     return counter;
 }
 
-HiddenMask* PlayerCreate::_addMask(const std::string& name, HiddenMask* mask)
+UI::HiddenMask* PlayerCreate::_addMask(const std::string& name, UI::HiddenMask* mask)
 {
-    _masks.insert(std::pair<std::string,HiddenMask*>(name, mask));
+    _masks.insert(std::pair<std::string,UI::HiddenMask*>(name, mask));
     return mask;
 }
 
@@ -295,11 +298,10 @@ void PlayerCreate::_addDescription(const std::string& name, std::string descript
     _descriptions.insert(std::pair<std::string,std::string>(name, description));
 }
 
-void PlayerCreate::_addImage(const std::string& name, Image* image)
+void PlayerCreate::_addImage(const std::string& name, UI::Image* image)
 {
-    _images.insert(std::pair<std::string, Image*>(name, image));
+    _images.insert(std::pair<std::string, UI::Image*>(name, image));
 }
-
 
 void PlayerCreate::think()
 {
@@ -342,11 +344,11 @@ void PlayerCreate::think()
         ss << "stats_" << (i+1);
         unsigned int val = player->statTotal((STAT)i);
         _counters.at(ss.str())->setNumber(val);
-        _counters.at(ss.str())->setColor(BigCounter::Color::WHITE);
+        _counters.at(ss.str())->setColor(UI::BigCounter::Color::WHITE);
         if (val > 10)
         {
             val = 10;
-            _counters.at(ss.str())->setColor(BigCounter::Color::RED);
+            _counters.at(ss.str())->setColor(UI::BigCounter::Color::RED);
         }
         _labels.at(ss.str())->setText(_t(MSG_EDITOR, 199 + (val < 1 ? 1 : val)));
     }
@@ -508,7 +510,7 @@ bool PlayerCreate::_skillToggle(unsigned int num)
 
 void PlayerCreate::onButtonClick(Event::Mouse* event)
 {
-    auto sender = dynamic_cast<ImageButton*>(event->emitter());
+    auto sender = dynamic_cast<UI::ImageButton*>(event->emitter());
 
     for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
     {

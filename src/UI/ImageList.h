@@ -17,31 +17,30 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_IMAGELIST_H
-#define FALLTERGEIST_IMAGELIST_H
+#ifndef FALLTERGEIST_UI_IMAGELIST_H
+#define FALLTERGEIST_UI_IMAGELIST_H
 
 // C++ standard includes
 #include <vector>
 
 // Falltergeist includes
-#include "../Graphics/ActiveUI.h"
+#include "../UI/Base.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace UI
+{
 class Image;
 
-class ImageList : public ActiveUI
+class ImageList : public Falltergeist::UI::Base
 {
-protected:
-    std::vector<Image*> _images;
-    unsigned int _currentImage = 0;
 public:
     ImageList(std::vector<std::string> imageList, int x = 0, int y = 0);
     ImageList(std::vector<Image*> imageList, int x = 0, int y = 0);
     ImageList(int x = 0, int y = 0);
-    ~ImageList();
+    ~ImageList() override;
 
     void addImage(Image* image);
     void addImage(const std::string& filename);
@@ -49,7 +48,12 @@ public:
     unsigned int currentImage() const;
     Texture* texture() const override;
     const std::vector<Image*>* images() const;
+
+protected:
+    std::vector<Image*> _images;
+    unsigned int _currentImage = 0;
 };
 
 }
-#endif // FALLTERGEIST_IMAGELIST_H
+}
+#endif // FALLTERGEIST_UI_IMAGELIST_H

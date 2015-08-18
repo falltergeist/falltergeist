@@ -17,32 +17,36 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/Animation.h"
+
 // C++ standard includes
 #include <cmath>
 
 // Falltergeist includes
-#include "../Graphics/Animation.h"
-#include "../Graphics/AnimationFrame.h"
-#include "../Graphics/Texture.h"
-#include "../Game/Game.h"
-#include "../Graphics/Renderer.h"
-#include "../Graphics/AnimatedPalette.h"
-#include "../ResourceManager.h"
 #include "../Game/DudeObject.h"
-#include "../State/Location.h"
+#include "../Game/Game.h"
+#include "../Graphics/AnimatedPalette.h"
+#include "../Graphics/Renderer.h"
+#include "../Graphics/Texture.h"
 #include "../LocationCamera.h"
+#include "../ResourceManager.h"
+#include "../State/Location.h"
+#include "../UI/AnimationFrame.h"
 
 // Third party includes
 #include "SDL.h"
 
 namespace Falltergeist
 {
+namespace UI
+{
 
-Animation::Animation() : ActiveUI()
+Animation::Animation() : Falltergeist::UI::Base()
 {
 }
 
-Animation::Animation(const std::string& frmName, unsigned int direction) : ActiveUI()
+Animation::Animation(const std::string& frmName, unsigned int direction) : Falltergeist::UI::Base()
 {
     auto frm = ResourceManager::getInstance()->frmFileType(frmName);
     setTexture(ResourceManager::getInstance()->texture(frmName));
@@ -205,7 +209,6 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Activ
     }
 }
 
-
 Animation::~Animation()
 {
     while (!_animationFrames.empty())
@@ -220,12 +223,12 @@ std::vector<AnimationFrame*>* Animation::frames()
     return &_animationFrames;
 }
 
-int Animation::xOffset()
+int Animation::xOffset() const
 {
     return _animationFrames.at(_currentFrame)->xOffset() + xShift();
 }
 
-int Animation::yOffset()
+int Animation::yOffset() const
 {
     return _animationFrames.at(_currentFrame)->yOffset() + yShift();
 }
@@ -401,7 +404,7 @@ unsigned int Animation::pixel(unsigned int x, unsigned int y)
     if (x > frame->width()) return 0;
     if (y > frame->height()) return 0;
 
-    return ActiveUI::pixel(x + frame->x(), y + frame->y());
+    return Falltergeist::UI::Base::pixel(x + frame->x(), y + frame->y());
 }
 
 void Animation::play()
@@ -452,7 +455,7 @@ void Animation::setActionFrame(unsigned int value)
     _actionFrame = value;
 }
 
-int Animation::xShift()
+int Animation::xShift() const
 {
     return _xShift;
 }
@@ -462,7 +465,7 @@ void Animation::setXShift(int value)
     _xShift = value;
 }
 
-int Animation::yShift()
+int Animation::yShift() const
 {
     return _yShift;
 }
@@ -472,4 +475,5 @@ void Animation::setYShift(int value)
     _yShift = value;
 }
 
+}
 }

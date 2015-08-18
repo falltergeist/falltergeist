@@ -17,25 +17,29 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/Image.h"
+
 // C++ standard includes
 
 // Falltergeist includes
 #include "../Exception.h"
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
-#include "../UI/Image.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace UI
+{
 
-Image::Image(const std::string& filename) : ActiveUI()
+Image::Image(const std::string& filename) : Falltergeist::UI::Base()
 {
     setTexture(ResourceManager::getInstance()->texture(filename));
 }
 
-Image::Image(Image* image) : ActiveUI()
+Image::Image(Image* image) : Falltergeist::UI::Base()
 {
     // @fixme: we should use "clone" feature here
     setTexture(new Texture(image->texture()->width(), image->texture()->height()));
@@ -43,17 +47,17 @@ Image::Image(Image* image) : ActiveUI()
     _texture->loadFromRGBA(pixels);
 }
 
-Image::Image(unsigned int width, unsigned int height) : ActiveUI()
+Image::Image(unsigned int width, unsigned int height) : Falltergeist::UI::Base()
 {
     setTexture(new Texture(width, height));
 }
 
-Image::Image(Texture* texture) : ActiveUI()
+Image::Image(Texture* texture) : Falltergeist::UI::Base()
 {
     setTexture(texture);
 }
 
-Image::Image(libfalltergeist::Frm::File* frm, unsigned int direction)
+Image::Image(libfalltergeist::Frm::File* frm, unsigned int direction) : Falltergeist::UI::Base()
 {
     if (direction >= frm->directions()->size())
     {
@@ -95,4 +99,5 @@ unsigned int Image::height() const
     return texture()->height();
 }
 
+}
 }

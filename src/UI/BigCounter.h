@@ -17,22 +17,25 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_BIGCOUNTER_H
-#define FALLTERGEIST_BIGCOUNTER_H
+#ifndef FALLTERGEIST_UI_BIGCOUNTER_H
+#define FALLTERGEIST_UI_BIGCOUNTER_H
 
 // C++ standard includes
 #include <memory>
 
 // Falltergeist includes
-#include "../Graphics/ActiveUI.h"
+#include "../UI/Base.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace UI
+{
+
 class Image;
 
-class BigCounter : public ActiveUI
+class BigCounter : public Falltergeist::UI::Base
 {
 public:
     enum class Color
@@ -58,16 +61,15 @@ protected:
     unsigned int _length = 2;
     mutable std::unique_ptr<Texture> _textureOnDemand;
 
-    // We should override this method to prevent changing old _texture field.
-    void setTexture(Texture* texture) override;
+    void setTexture(Texture* texture) override; // We should override this method to prevent changing old _texture field.
 
 private:
-    // Hide unused field from childs.
-    using ActiveUI::_texture;
+    using Falltergeist::UI::Base::_texture; // Hide unused field from childs.
 
     BigCounter(const BigCounter&) = delete;
     void operator=(const BigCounter&) = delete;
 };
 
 }
-#endif // FALLTERGEIST_BIGCOUNTER_H
+}
+#endif // FALLTERGEIST_UI_BIGCOUNTER_H

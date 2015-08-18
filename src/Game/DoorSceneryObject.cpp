@@ -26,9 +26,9 @@
 #include "../Audio/Mixer.h"
 #include "../Event/Event.h"
 #include "../Game/Game.h"
-#include "../Graphics/Animation.h"
-#include "../Graphics/AnimationQueue.h"
 #include "../Logger.h"
+#include "../UI/Animation.h"
+#include "../UI/AnimationQueue.h"
 #include "../VM/VM.h"
 
 // Third party includes
@@ -74,7 +74,7 @@ void DoorSceneryObject::use_p_proc(CritterObject* usedBy)
 
     if (!opened())
     {
-        if (AnimationQueue* queue = dynamic_cast<AnimationQueue*>(this->ui()))
+        if (UI::AnimationQueue* queue = dynamic_cast<UI::AnimationQueue*>(this->ui()))
         {
             queue->start();
             queue->currentAnimation()->setReverse(false);
@@ -84,7 +84,7 @@ void DoorSceneryObject::use_p_proc(CritterObject* usedBy)
     }
     else
     {
-        if (AnimationQueue* queue = dynamic_cast<AnimationQueue*>(this->ui()))
+        if (UI::AnimationQueue* queue = dynamic_cast<UI::AnimationQueue*>(this->ui()))
         {
             queue->start();
             queue->currentAnimation()->setReverse(true);
@@ -101,7 +101,7 @@ bool DoorSceneryObject::canWalkThru() const
 
 void DoorSceneryObject::onOpeningAnimationEnded(Event::Event* event)
 {
-    auto queue = (AnimationQueue*)event->emitter();
+    auto queue = (UI::AnimationQueue*)event->emitter();
     setOpened(true);
     queue->removeEventHandlers("animationEnded");
     queue->stop();
@@ -110,7 +110,7 @@ void DoorSceneryObject::onOpeningAnimationEnded(Event::Event* event)
 
 void DoorSceneryObject::onClosingAnimationEnded(Event::Event* event)
 {
-    auto queue = (AnimationQueue*)event->emitter();
+    auto queue = (UI::AnimationQueue*)event->emitter();
     setOpened(false);
     queue->removeEventHandlers("animationEnded");
     queue->stop();

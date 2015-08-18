@@ -36,7 +36,7 @@ namespace Lua
  * This class provides lua interface to TextArea class
  * We are forced to have this class because TextArea have methods with strongly typed enums
  */
-class LuaTextArea : public TextArea
+class LuaTextArea : public UI::TextArea
 {
 public:
     LuaTextArea(const std::string& text, int x = 0, int y = 0);
@@ -44,7 +44,7 @@ public:
     LuaTextArea(LuaTextArea* textArea, int x = 0, int y = 0);
     ~LuaTextArea() override;
 
-    void setWidth(unsigned int width) override;
+    void setWidth(unsigned int width);
     unsigned int width() const override;
 
     void setLuaHorizontalAlign(unsigned align);

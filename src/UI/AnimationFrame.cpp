@@ -17,14 +17,18 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/AnimationFrame.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Graphics/AnimationFrame.h"
 
 // Third party includes
 
 namespace Falltergeist
+{
+namespace UI
 {
 
 AnimationFrame::AnimationFrame()
@@ -40,7 +44,7 @@ void AnimationFrame::setX(unsigned int x)
     _x = x;
 }
 
-unsigned int AnimationFrame::x()
+unsigned int AnimationFrame::x() const
 {
     return _x;
 }
@@ -50,7 +54,7 @@ void AnimationFrame::setY(unsigned int y)
     _y = y;
 }
 
-unsigned int AnimationFrame::y()
+unsigned int AnimationFrame::y() const
 {
     return _y;
 }
@@ -60,7 +64,7 @@ void AnimationFrame::setWidth(unsigned int width)
     _width = width;
 }
 
-unsigned int AnimationFrame::width()
+unsigned int AnimationFrame::width() const
 {
     return _width;
 }
@@ -70,7 +74,7 @@ void AnimationFrame::setHeight(unsigned int height)
     _height = height;
 }
 
-unsigned int AnimationFrame::height()
+unsigned int AnimationFrame::height() const
 {
     return _height;
 }
@@ -80,7 +84,7 @@ void AnimationFrame::setXOffset(unsigned int xOffset)
     _xOffset = xOffset;
 }
 
-unsigned int AnimationFrame::xOffset()
+unsigned int AnimationFrame::xOffset() const
 {
     return _xOffset;
 }
@@ -90,7 +94,7 @@ void AnimationFrame::setYOffset(unsigned int yOffset)
     _yOffset = yOffset;
 }
 
-unsigned int AnimationFrame::yOffset()
+unsigned int AnimationFrame::yOffset() const
 {
     return _yOffset;
 }
@@ -100,9 +104,10 @@ void AnimationFrame::setDuration(unsigned int duration)
     _duration = duration;
 }
 
-unsigned int AnimationFrame::duration()
+unsigned int AnimationFrame::duration() const
 {
     return _duration;
 }
 
+}
 }

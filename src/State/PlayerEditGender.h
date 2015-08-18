@@ -32,7 +32,10 @@ using namespace libfalltergeist;
 
 namespace Falltergeist
 {
-class ImageList;
+namespace UI
+{
+    class ImageList;
+}
 
 namespace State
 {
@@ -40,8 +43,8 @@ namespace State
 class PlayerEditGender : public State
 {
 protected:
-    ImageList* _maleImage = 0;
-    ImageList* _femaleImage = 0;
+    UI::ImageList* _maleImage = nullptr;
+    UI::ImageList* _femaleImage = nullptr;
     GENDER _gender = GENDER::MALE;
 public:
     PlayerEditGender();

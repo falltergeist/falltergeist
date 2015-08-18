@@ -24,13 +24,17 @@
 
 // Falltergeist includes
 #include "State.h"
-#include "../UI/Image.h"
-#include "../UI/ImageButton.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace UI
+{
+    class Image;
+    class ImageButton;
+    class ImageList;
+}
 namespace State
 {
 
@@ -49,10 +53,10 @@ public:
     void onStateDeactivate(Event::State* event) override;
 
 private:
-    Image* _panel;
-    Image* _screenMap;
-    ImageList* _tiles = 0;
-    ImageButton* _hotspot;
+    UI::Image* _panel = nullptr;
+    UI::Image* _screenMap = nullptr;
+    UI::ImageList* _tiles = nullptr;
+    UI::ImageButton* _hotspot = nullptr;
 
     // temporary!
     // @todo: move it to other place!

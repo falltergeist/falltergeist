@@ -90,10 +90,10 @@ void Credits::init()
             line = "    ";
         }
 
-        auto tx = new TextArea(line,0,y);
+        auto tx = new UI::TextArea(line,0,y);
         tx->setFont(cur_font);
         tx->setWidth(640);
-        tx->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
+        tx->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
         addUI(tx);
         _lines.push_back(tx);
         y+=tx->height();

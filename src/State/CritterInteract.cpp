@@ -70,7 +70,7 @@ void CritterInteract::init()
     setX((Game::getInstance()->renderer()->width() - 640)*0.5);
     setY((Game::getInstance()->renderer()->height() - 480)*0.5);
 
-    addUI("background", new Image("art/intrface/alltlk.frm"));
+    addUI("background", new UI::Image("art/intrface/alltlk.frm"));
 
     // Centering camera on critter position
     auto locationState = Game::getInstance()->locationState();

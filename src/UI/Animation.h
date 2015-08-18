@@ -17,25 +17,63 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_ANIMATION_H
-#define FALLTERGEIST_ANIMATION_H
+#ifndef FALLTERGEIST_UI_ANIMATION_H
+#define FALLTERGEIST_UI_ANIMATION_H
 
 // C++ standard includes
 #include <vector>
 #include <string>
 
 // Falltergeist includes
-#include "../Graphics/ActiveUI.h"
+#include "../UI/Base.h"
 
 // Third party includes
 
-
 namespace Falltergeist
+{
+namespace UI
 {
 class AnimationFrame;
 
-class Animation : public ActiveUI
+class Animation : public Falltergeist::UI::Base
 {
+public:
+    Animation();
+    Animation(const std::string& frmName, unsigned int direction = 0);
+    ~Animation() override;
+
+    std::vector<AnimationFrame*>* frames();
+
+    void think() override;
+    void render(bool eggTransparency = false) override;
+
+    int xOffset() const override;
+    int yOffset() const override;
+
+    int xShift() const;
+    void setXShift(int value);
+
+    int yShift() const;
+    void setYShift(int value);
+
+    unsigned int width() const override;
+    unsigned int height() const override;
+
+    unsigned int pixel(unsigned int x, unsigned int y) override;
+
+    void play();
+    void stop();
+    void setReverse(bool value);
+
+    unsigned int currentFrame() const;
+    void setCurrentFrame(unsigned int value);
+
+    unsigned int actionFrame() const;
+    void setActionFrame(unsigned int value);
+
+    bool ended() const;
+    bool playing() const;
+
 protected:
     bool _playing = false;
     bool _ended = false;
@@ -53,35 +91,9 @@ protected:
     std::vector<Texture*> _shoreTextures;
     std::vector<Texture*> _monitorTextures;
     std::vector<Texture*> _reddotTextures;
-public:
-    Animation();
-    Animation(const std::string& frmName, unsigned int direction = 0);
-    ~Animation();
-    std::vector<AnimationFrame*>* frames();
-    virtual void think();
-    virtual void render(bool eggTransparency = false);
-    virtual int xOffset();
-    virtual int yOffset();
-    virtual int xShift();
-    virtual void setXShift(int value);
-    virtual int yShift();
-    virtual void setYShift(int value);
-    unsigned int width() const override;
-    unsigned int height() const override;
-    virtual unsigned int pixel(unsigned int x, unsigned int y);
 
-    void play();
-    void stop();
-    void setReverse(bool value);
-
-    unsigned int currentFrame() const;
-    void setCurrentFrame(unsigned int value);
-    unsigned int actionFrame() const;
-    void setActionFrame(unsigned int value);
-
-    bool ended() const;
-    bool playing() const;
 };
 
 }
-#endif // FALLTERGEIST_ANIMATION_H
+}
+#endif // FALLTERGEIST_UI_ANIMATION_H

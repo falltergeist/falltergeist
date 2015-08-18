@@ -61,17 +61,17 @@ void GameMenu::init()
     setModal(true);
     setFullscreen(false);
 
-    auto background = new Image("art/intrface/opbase.frm");
+    auto background = new UI::Image("art/intrface/opbase.frm");
     auto panelHeight = Game::getInstance()->locationState()->playerPanelState()->height();
 
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height() - panelHeight)*0.5;
 
-    auto saveGameButton = new ImageButton(ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18);
-    auto loadGameButton = new ImageButton(ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37);
-    auto preferencesButton = new ImageButton(ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*2);
-    auto exitGameButton = new ImageButton(ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3);
-    auto doneButton = new ImageButton(ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4);
+    auto saveGameButton    = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18);
+    auto loadGameButton    = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37);
+    auto preferencesButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*2);
+    auto exitGameButton    = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3);
+    auto doneButton        = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4);
 
     preferencesButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doPreferences(); });
     exitGameButton->addEventHandler("mouseleftclick",    [this](Event::Event* event){ this->doExit(); });
@@ -80,36 +80,36 @@ void GameMenu::init()
     auto font = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
 
     // label: save game
-    auto saveGameButtonLabel = new TextArea(_t(MSG_OPTIONS, 0), backgroundX+8, backgroundY+26);
+    auto saveGameButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 0), backgroundX+8, backgroundY+26);
     saveGameButtonLabel->setFont(font);
     saveGameButtonLabel->setWidth(150);
-    saveGameButtonLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
+    saveGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
     saveGameButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doSaveGame(); });
 
     // label: load game
-    auto loadGameButtonLabel = new TextArea(_t(MSG_OPTIONS, 1), backgroundX+8, backgroundY+26+37);
+    auto loadGameButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 1), backgroundX+8, backgroundY+26+37);
     loadGameButtonLabel->setFont(font);
     loadGameButtonLabel->setWidth(150);
-    loadGameButtonLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
+    loadGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
     loadGameButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doLoadGame(); });
 
     // label: preferences
-    auto preferencesButtonLabel = new TextArea(_t(MSG_OPTIONS, 2), backgroundX+8, backgroundY+26+37*2);
+    auto preferencesButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 2), backgroundX+8, backgroundY+26+37*2);
     preferencesButtonLabel->setFont(font);
     preferencesButtonLabel->setWidth(150);
-    preferencesButtonLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
+    preferencesButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: exit game
-    auto exitGameButtonLabel = new TextArea(_t(MSG_OPTIONS, 3), backgroundX+8, backgroundY+26+37*3);
+    auto exitGameButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 3), backgroundX+8, backgroundY+26+37*3);
     exitGameButtonLabel->setFont(font);
     exitGameButtonLabel->setWidth(150);
-    exitGameButtonLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
+    exitGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: done
-    auto doneButtonLabel = new TextArea(_t(MSG_OPTIONS, 4), backgroundX+8, backgroundY+26+37*4);
+    auto doneButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 4), backgroundX+8, backgroundY+26+37*4);
     doneButtonLabel->setFont(font);
     doneButtonLabel->setWidth(150);
-    doneButtonLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
+    doneButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     background->setX(backgroundX);
     background->setY(backgroundY);

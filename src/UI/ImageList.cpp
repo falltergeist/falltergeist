@@ -17,28 +17,32 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/ImageList.h"
+
 // C++ standard includes
 
 // Falltergeist includes
 #include "../UI/Image.h"
-#include "../UI/ImageList.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace UI
+{
 
-ImageList::ImageList(std::vector<std::string> imageList, int x, int y) : ActiveUI(x,y)
+ImageList::ImageList(std::vector<std::string> imageList, int x, int y) : Falltergeist::UI::Base(x,y)
 {
     for (auto& frmName : imageList) addImage(new Image(frmName));
 }
 
-ImageList::ImageList(std::vector<Image*> imageList, int x, int y) : ActiveUI(x,y)
+ImageList::ImageList(std::vector<Image*> imageList, int x, int y) : Falltergeist::UI::Base(x,y)
 {
     for (auto& image : imageList) addImage(new Image(image));
 }
 
-ImageList::ImageList(int x, int y) : ActiveUI(x,y)
+ImageList::ImageList(int x, int y) : Falltergeist::UI::Base(x,y)
 {
 }
 
@@ -81,4 +85,5 @@ const std::vector<Image*>* ImageList::images() const
     return &_images;
 }
 
+}
 }

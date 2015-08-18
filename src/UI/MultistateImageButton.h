@@ -17,14 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_MULTISTATEIMAGEBUTTON_H
-#define	FALLTERGEIST_MULTISTATEIMAGEBUTTON_H
+#ifndef FALLTERGEIST_UI_MULTISTATEIMAGEBUTTON_H
+#define	FALLTERGEIST_UI_MULTISTATEIMAGEBUTTON_H
 
 // C++ standard includes
 #include <vector>
 
 // Falltergeist includes
-#include "../Graphics/ActiveUI.h"
+#include "../UI/Base.h"
 #include "../UI/ImageList.h"
 
 // Third party includes
@@ -35,10 +35,13 @@ namespace Event
 {
     class Mouse;
 }
+namespace UI
+{
+
 class ImageList;
 class Image;
 
-class MultistateImageButton : public ActiveUI
+class MultistateImageButton : public Falltergeist::UI::Base
 {
 public:
     enum class Mode
@@ -54,20 +57,25 @@ public:
     MultistateImageButton(int x = 0, int y = 0);
     MultistateImageButton(Type type, int x = 0, int y = 0);
     MultistateImageButton(ImageList* imageList, int x = 0, int y = 0);
-    virtual ~MultistateImageButton();
+    ~MultistateImageButton() override;
+
     void addImage(Image* image);
 
-    unsigned int state();
+    unsigned int state() const;
     void setState(unsigned int state);
 
-    unsigned int minState();
+    unsigned int minState() const;
     void setMinState(unsigned int value);
-    unsigned int maxState();
+
+    unsigned int maxState() const;
     void setMaxState(unsigned int value);
+
+    Mode mode() const;
     void setMode(Mode mode);
-    Mode mode();
+
+    int modeFactor() const;
     void setModeFactor(int factor);
-    int modeFactor();
+
     Texture* texture() const override;
 
 protected:
@@ -83,5 +91,6 @@ protected:
 };
 
 }
-#endif	/* FALLTERGEIST_MULTISTATEIMAGEBUTTON_H */
+}
+#endif	// FALLTERGEIST_UI_MULTISTATEIMAGEBUTTON_H
 

@@ -27,12 +27,12 @@
 // Falltergeist includes
 #include "../Game/Game.h"
 #include "../Game/WeaponItemObject.h"
-#include "../Graphics/Animation.h"
-#include "../Graphics/AnimationQueue.h"
 #include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../UI/AnimatedImage.h"
+#include "../UI/Animation.h"
+#include "../UI/AnimationQueue.h"
 #include "../UI/Image.h"
 
 // Third party includes
@@ -269,7 +269,7 @@ void DudeObject::_generateUi()
     return;
     delete _ui; _ui = 0;
 
-    auto queue = new AnimationQueue();
+    auto queue = new UI::AnimationQueue();
     auto animation = _generateMovementAnimation();
     queue->animations()->push_back(animation);
     queue->setRepeat(true);

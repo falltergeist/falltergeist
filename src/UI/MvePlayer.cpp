@@ -17,11 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/MvePlayer.h"
+
 // C++ standard includes
 #include <bitset>
 
 // Falltergeist includes
-#include "../UI/MvePlayer.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Exception.h"
@@ -29,6 +31,7 @@
 
 // Third party includes
 
+//@todo Move this to Crossplatform
 #ifdef __MACH__
 #include <mach/mach_time.h>
 #define CLOCK_REALTIME 0
@@ -48,6 +51,8 @@ int clock_gettime(int clk_id, struct timespec* t)
 #endif
 
 namespace Falltergeist
+{
+namespace UI
 {
 
 static const int16_t audio_exp_table[256] =
@@ -97,7 +102,7 @@ int32_t get_int(uint8_t *data)
 }
 
 
-MvePlayer::MvePlayer(libfalltergeist::Mve::File* mve) : UI()
+MvePlayer::MvePlayer(libfalltergeist::Mve::File* mve) : Falltergeist::UI::Base()
 {
     _texture = NULL;
     _mve = mve;
@@ -923,4 +928,5 @@ uint32_t MvePlayer::frame()
     return _frame;
 }
 
+}
 }

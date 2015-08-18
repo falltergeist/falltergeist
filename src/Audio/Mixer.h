@@ -32,7 +32,10 @@
 
 namespace Falltergeist
 {
-class MvePlayer;
+namespace UI
+{
+    class MvePlayer;
+}
 
 namespace Audio
 {
@@ -46,7 +49,7 @@ public:
     void stopSounds();
     void playACMMusic(const std::string& filename, bool loop = false);
     void playACMSound(const std::string& filename);
-    void playMovieMusic(MvePlayer* mve);
+    void playMovieMusic(UI::MvePlayer* mve);
     void pauseMusic();
     void resumeMusic();
 protected:

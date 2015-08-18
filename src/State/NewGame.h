@@ -35,11 +35,6 @@ namespace Game
     class DudeObject;
 }
 
-class GcdFileType;
-class Surface;
-class ImageList;
-class TextArea;
-
 namespace State
 {
 

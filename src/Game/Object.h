@@ -33,16 +33,19 @@
 
 namespace Falltergeist
 {
-class ActiveUI;
-class AnimationQueue;
 namespace Event
 {
     class Event;
 }
+namespace UI
+{
+    class AnimationQueue;
+    class Base;
+    class Image;
+    class TextArea;
+}
 class Hexagon;
-class Image;
 class Location;
-class TextArea;
 class VM;
 class Texture;
 
@@ -154,16 +157,16 @@ public:
     virtual void handle(Event::Event* event);
 
     // ActiveUI used to display object on screen and capture mouse events
-    ActiveUI* ui() const;
-    void setUI(ActiveUI* ui);
+    UI::Base* ui() const;
+    void setUI(UI::Base* ui);
 
     // Hexagon of object current position
     Hexagon* hexagon() const;
     void setHexagon(Hexagon* hexagon);
 
     // TextArea, currently floating above the object
-    TextArea* floatMessage() const;
-    void setFloatMessage(TextArea* floatMessage);
+    UI::TextArea* floatMessage() const;
+    void setFloatMessage(UI::TextArea* floatMessage);
 
     // is object currently being rendered
     bool inRender() const;
@@ -225,11 +228,11 @@ protected:
     std::string _name;
     std::string _description;
     VM* _script = 0;
-    ActiveUI* _ui = 0;
+    UI::Base* _ui = nullptr;
     Hexagon* _hexagon = 0;
     virtual void _generateUi();
     void addUIEventHandlers();
-    TextArea* _floatMessage = 0;
+    UI::TextArea* _floatMessage = nullptr;
     bool _inRender = false;
     Trans _trans = Trans::DEFAULT;
     Orientation _lightOrientation;

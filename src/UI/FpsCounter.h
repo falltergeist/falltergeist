@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_FPSCOUNTER_H
-#define FALLTERGEIST_FPSCOUNTER_H
+#ifndef FALLTERGEIST_UI_FPSCOUNTER_H
+#define FALLTERGEIST_UI_FPSCOUNTER_H
 
 // C++ standard includes
 
@@ -29,18 +29,23 @@
 
 namespace Falltergeist
 {
+namespace UI
+{
 
 class FpsCounter : public TextArea
 {
-protected:
-    unsigned int _lastTicks;
-    unsigned int _frames = 0;
 public:
     FpsCounter(int x = 598, int y = 2);
+    ~FpsCounter() override;
 
-    virtual void think();
+    void think() override;
     unsigned int frames();
+
+protected:
+    unsigned int _lastTicks = 0;
+    unsigned int _frames = 0;
 };
 
 }
-#endif // FALLTERGEIST_FPSCOUNTER_H
+}
+#endif // FALLTERGEIST_UI_FPSCOUNTER_H

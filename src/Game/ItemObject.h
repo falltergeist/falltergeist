@@ -70,9 +70,9 @@ public:
     int inventoryFID() const;
     void setInventoryFID(int value);
 
-    Image* inventoryUi() const;
-    Image* inventorySlotUi() const;
-    Image* inventoryDragUi() const;
+    UI::Image* inventoryUi() const;
+    UI::Image* inventorySlotUi() const;
+    UI::Image* inventoryDragUi() const;
 
 protected:
     Subtype _subtype;
@@ -80,9 +80,9 @@ protected:
     unsigned int _weight = 0;
     unsigned int _volume = 0;
     int _inventoryFID = -1;
-    Image* _inventoryUi = 0;
-    Image* _inventorySlotUi = 0;
-    Image* _inventoryDragUi = 0;
+    UI::Image* _inventoryUi = 0;
+    UI::Image* _inventorySlotUi = 0;
+    UI::Image* _inventoryDragUi = 0;
     void _generateUi() override;
 };
 

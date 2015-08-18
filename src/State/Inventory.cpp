@@ -82,16 +82,16 @@ void Inventory::init()
     setX((game->renderer()->width()  - 499)/2); // 499x377 = art/intrface/invbox.frm
     setY((game->renderer()->height() - 377 - panelHeight)/2);
 
-    addUI("background", new Image("art/intrface/invbox.frm"));
-    getActiveUI("background")->addEventHandler("mouserightclick", [this](Event::Event* event){ this->backgroundRightClick(dynamic_cast<Event::Mouse*>(event)); });
+    addUI("background", new UI::Image("art/intrface/invbox.frm"));
+    getUI("background")->addEventHandler("mouserightclick", [this](Event::Event* event){ this->backgroundRightClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    addUI("button_up",   new ImageButton(ImageButton::Type::INVENTORY_UP_ARROW,   128, 40));
-    addUI("button_down", new ImageButton(ImageButton::Type::INVENTORY_DOWN_ARROW, 128, 65));
+    addUI("button_up",   new UI::ImageButton(UI::ImageButton::Type::INVENTORY_UP_ARROW,   128, 40));
+    addUI("button_down", new UI::ImageButton(UI::ImageButton::Type::INVENTORY_DOWN_ARROW, 128, 65));
+    addUI("button_done", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 438, 328));
 
-    addUI("button_done", new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, 438, 328));
-    getActiveUI("button_done")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
-    getActiveUI("button_up")->addEventHandler("mouseleftclick",   [this](Event::Event* event){ this->onScrollUpButtonClick(dynamic_cast<Event::Mouse*>(event)); });
-    getActiveUI("button_down")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onScrollDownButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    getUI("button_done")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    getUI("button_up")->addEventHandler("mouseleftclick",   [this](Event::Event* event){ this->onScrollUpButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    getUI("button_down")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onScrollDownButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     // screen
     auto screenX = 300;
@@ -99,9 +99,9 @@ void Inventory::init()
 
     auto player = Game::getInstance()->player();
 
-    addUI("player_name", new TextArea(player->name(), screenX, screenY));
+    addUI("player_name", new UI::TextArea(player->name(), screenX, screenY));
 
-    auto line1 = new Image(142, 1);
+    auto line1 = new UI::Image(142, 1);
     line1->setX(screenX);
     line1->setY(screenY+16);
     line1->texture()->fill(0x3ff800ff); // default green color
@@ -111,36 +111,36 @@ void Inventory::init()
     {
         statsLabels += _t(MSG_INVENTORY, i) + "\n";
     }
-    addUI("label_stats", new TextArea(statsLabels, screenX, screenY + 10*2));
+    addUI("label_stats", new UI::TextArea(statsLabels, screenX, screenY + 10*2));
 
     std::string statsValues;
     for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
     {
         statsValues += std::to_string(player->stat((STAT)i)) + "\n";
     }
-    addUI("label_stats_values", new TextArea(statsValues, screenX + 22, screenY + 20));
+    addUI("label_stats_values", new UI::TextArea(statsValues, screenX + 22, screenY + 20));
 
     std::stringstream ss;
     for (unsigned int i=7; i<14; i++)
     {
         ss << _t(MSG_INVENTORY, i) << "\n";
     }
-    auto textLabel = new TextArea(ss.str(), screenX+40, screenY+20);
+    auto textLabel = new UI::TextArea(ss.str(), screenX+40, screenY+20);
 
     // label: hit points
     ss.str("");
     ss << player->hitPoints();
     ss << "/";
     ss << player->hitPointsMax();
-    auto hitPointsLabel = new TextArea(ss.str(), screenX+94, screenY+20);
+    auto hitPointsLabel = new UI::TextArea(ss.str(), screenX+94, screenY+20);
     hitPointsLabel->setWidth(46);
-    hitPointsLabel->setHorizontalAlign(TextArea::HorizontalAlign::RIGHT);
+    hitPointsLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
     // label: armor class
     ss.str("");
     ss << player->armorClass();
-    auto armorClassLabel = new TextArea(ss.str(), screenX+94, screenY+30);
+    auto armorClassLabel = new UI::TextArea(ss.str(), screenX+94, screenY+30);
     armorClassLabel->setWidth(46);
-    armorClassLabel->setHorizontalAlign(TextArea::HorizontalAlign::RIGHT);
+    armorClassLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
     // armorSlot, leftHand, rightHand
     Game::ArmorItemObject* armorSlot = player->armorSlot();
@@ -166,9 +166,9 @@ void Inventory::init()
         ss << player->damageThreshold(DAMAGE::PLASMA) <<"/\n";
         ss << player->damageThreshold(DAMAGE::EXPLOSIVE) <<"/";
     }
-    auto damageThresholdLabel = new TextArea(ss.str(), screenX+94, screenY+40);
+    auto damageThresholdLabel = new UI::TextArea(ss.str(), screenX+94, screenY+40);
     damageThresholdLabel->setWidth(26);
-    damageThresholdLabel->setHorizontalAlign(TextArea::HorizontalAlign::RIGHT);
+    damageThresholdLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
     // label: damage resistance levels
     ss.str("");
@@ -188,14 +188,14 @@ void Inventory::init()
         ss << player->damageResist(DAMAGE::PLASMA) <<"%\n";
         ss << player->damageResist(DAMAGE::EXPLOSIVE) <<"%";
     }
-    auto damageResistanceLabel = new TextArea(ss.str(), screenX+120, screenY+40);
+    auto damageResistanceLabel = new UI::TextArea(ss.str(), screenX+120, screenY+40);
 
-    auto line2 = new Image(142, 1);
+    auto line2 = new UI::Image(142, 1);
     line2->setX(screenX);
     line2->setY(screenY+94);
     line2->texture()->fill(0x3ff800ff); // default green color
 
-    auto line3 = new Image(142, 1);
+    auto line3 = new UI::Image(142, 1);
     line3->setX(screenX);
     line3->setY(screenY+134);
     line3->texture()->fill(0x3ff800ff); // default green color
@@ -206,13 +206,13 @@ void Inventory::init()
 
     ss.str("");
     ss << weight;
-    auto totalWtLabel = new TextArea(_t(MSG_INVENTORY, 20), screenX+14, screenY+180);
-    auto weightLabel = new TextArea(ss.str(), screenX+70, screenY+180);
+    auto totalWtLabel = new UI::TextArea(_t(MSG_INVENTORY, 20), screenX+14, screenY+180);
+    auto weightLabel = new UI::TextArea(ss.str(), screenX+70, screenY+180);
     weightLabel->setWidth(24);
-    weightLabel->setHorizontalAlign(TextArea::HorizontalAlign::RIGHT);
+    weightLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
     ss.str("");
     ss << "/" << weightMax;
-    auto weightMaxLabel = new TextArea(ss.str(), screenX+94, screenY+180);
+    auto weightMaxLabel = new UI::TextArea(ss.str(), screenX+94, screenY+180);
     if (weight>weightMax)
     {
         weightLabel->setFont(ResourceManager::getInstance()->font("font1.aaf", 0xff0000ff));
@@ -224,7 +224,7 @@ void Inventory::init()
     {
         ss << _handItemSummary(leftHand);
     }
-    auto leftHandLabel = new TextArea(ss.str(), screenX, screenY+100);
+    auto leftHandLabel = new UI::TextArea(ss.str(), screenX, screenY+100);
 
     // label: right hand
     ss.str("");
@@ -232,10 +232,10 @@ void Inventory::init()
     {
         ss << _handItemSummary(rightHand);
     }
-    auto rightHandLabel = new TextArea(ss.str(), screenX, screenY+140);
+    auto rightHandLabel = new UI::TextArea(ss.str(), screenX, screenY+140);
 
     // screen info
-    auto screenLabel = new TextArea("", screenX, screenY+20);
+    auto screenLabel = new UI::TextArea("", screenX, screenY+20);
     screenLabel->setWidth(140); //screen size
     screenLabel->setHeight(168);
     screenLabel->setVisible(false);
@@ -257,15 +257,15 @@ void Inventory::init()
     addUI("rightHandLabel", rightHandLabel);
     addUI("screenLabel", screenLabel);
 
-    auto inventoryList = new ItemsList(40, 40);
+    auto inventoryList = new UI::ItemsList(40, 40);
     inventoryList->setItems(game->player()->inventory());
     addUI("inventory_list", inventoryList);
 
     // BIG ICONS
     // icon: armor
     {
-        auto inventoryItem = new InventoryItem(armorSlot, 154, 183);
-        inventoryItem->setType(InventoryItem::Type::SLOT);
+        auto inventoryItem = new UI::InventoryItem(armorSlot, 154, 183);
+        inventoryItem->setType(UI::InventoryItem::Type::SLOT);
         inventoryItem->addEventHandler("itemdragstop", [inventoryList](Event::Event* event){ inventoryList->onItemDragStop(dynamic_cast<Event::Mouse*>(event)); });
         inventoryList->addEventHandler("itemdragstop", [inventoryItem](Event::Event* event){ inventoryItem->onArmorDragStop(dynamic_cast<Event::Mouse*>(event)); });
         addUI(inventoryItem);
@@ -273,8 +273,8 @@ void Inventory::init()
 
     // icon: left hand
     {
-        auto inventoryItem = new InventoryItem(leftHand, 154, 286);
-        inventoryItem->setType(InventoryItem::Type::SLOT);
+        auto inventoryItem = new UI::InventoryItem(leftHand, 154, 286);
+        inventoryItem->setType(UI::InventoryItem::Type::SLOT);
         inventoryItem->addEventHandler("itemdragstop", [inventoryList](Event::Event* event){ inventoryList->onItemDragStop(dynamic_cast<Event::Mouse*>(event)); });
         inventoryList->addEventHandler("itemdragstop", [inventoryItem](Event::Event* event){ inventoryItem->onHandDragStop(dynamic_cast<Event::Mouse*>(event)); });
         addUI(inventoryItem);
@@ -282,8 +282,8 @@ void Inventory::init()
 
     // icon: right hand
     {
-        auto inventoryItem = new InventoryItem(rightHand, 247, 286);
-        inventoryItem->setType(InventoryItem::Type::SLOT);
+        auto inventoryItem = new UI::InventoryItem(rightHand, 247, 286);
+        inventoryItem->setType(UI::InventoryItem::Type::SLOT);
         inventoryItem->addEventHandler("itemdragstop", [inventoryList](Event::Event* event){ inventoryList->onItemDragStop(dynamic_cast<Event::Mouse*>(event)); });
         inventoryList->addEventHandler("itemdragstop", [inventoryItem](Event::Event* event){ inventoryItem->onHandDragStop(dynamic_cast<Event::Mouse*>(event)); });
         addUI(inventoryItem);
@@ -298,7 +298,7 @@ void Inventory::onDoneButtonClick(Event::Mouse* event)
 
 void Inventory::onScrollUpButtonClick(Event::Mouse* event)
 {
-    auto inventory = dynamic_cast<ItemsList*>(getUI("inventory_list"));
+    auto inventory = dynamic_cast<UI::ItemsList*>(getUI("inventory_list"));
     if(inventory->canScrollUp())
     {
         inventory->scrollUp();
@@ -307,7 +307,7 @@ void Inventory::onScrollUpButtonClick(Event::Mouse* event)
 
 void Inventory::onScrollDownButtonClick(Event::Mouse* event)
 {
-    auto inventory = dynamic_cast<ItemsList*>(getUI("inventory_list"));
+    auto inventory = dynamic_cast<UI::ItemsList*>(getUI("inventory_list"));
     if(inventory->canScrollDown())
     {
         inventory->scrollDown();
@@ -318,7 +318,7 @@ void Inventory::onArmorSlotMouseDown(Event::Mouse* event)
 {
     if (Game::getInstance()->mouse()->state() == Mouse::Cursor::HAND)
     {
-        auto itemUi = dynamic_cast<ImageList*>(event->emitter());
+        auto itemUi = dynamic_cast<UI::ImageList*>(event->emitter());
         Game::getInstance()->pushState(new InventoryDragItem(itemUi));
     }
     else
@@ -332,7 +332,7 @@ void Inventory::onLeftHandSlotMouseDown(Event::Mouse* event)
 {
     if (Game::getInstance()->mouse()->state() == Mouse::Cursor::HAND)
     {
-        auto itemUi = dynamic_cast<ImageList*>(event->emitter());
+        auto itemUi = dynamic_cast<UI::ImageList*>(event->emitter());
         Game::getInstance()->pushState(new InventoryDragItem(itemUi));
     }
     else
@@ -346,7 +346,7 @@ void Inventory::onRightHandSlotMouseDown(Event::Mouse* event)
 {
     if (Game::getInstance()->mouse()->state() == Mouse::Cursor::HAND)
     {
-        auto itemUi = dynamic_cast<ImageList*>(event->emitter());
+        auto itemUi = dynamic_cast<UI::ImageList*>(event->emitter());
         Game::getInstance()->pushState(new InventoryDragItem(itemUi));
     }
     else
@@ -437,8 +437,8 @@ void Inventory::_screenShow (unsigned int PID)
     auto armorClassLabel = getTextArea("armorClassLabel");
     auto damageThresholdLabel = getTextArea("damageThresholdLabel");
     auto damageResistanceLabel = getTextArea("damageResistanceLabel");
-    auto line2 = dynamic_cast<Image*>(getUI("line2"));
-    auto line3 = dynamic_cast<Image*>(getUI("line3"));
+    auto line2 = dynamic_cast<UI::Image*>(getUI("line2"));
+    auto line3 = dynamic_cast<UI::Image*>(getUI("line3"));
     auto totalWtLabel = getTextArea("totalWtLabel");
     auto weightLabel = getTextArea("weightLabel");
     auto weightMaxLabel = getTextArea("weightMaxLabel");

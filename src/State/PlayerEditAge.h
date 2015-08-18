@@ -29,7 +29,10 @@
 
 namespace Falltergeist
 {
-class BigCounter;
+namespace UI
+{
+    class BigCounter;
+}
 
 namespace State
 {
@@ -52,7 +55,7 @@ public:
     void onKeyDown(Event::Keyboard* event) override;
 
 protected:
-    BigCounter* _counter = 0;
+    UI::BigCounter* _counter = nullptr;
 };
 
 }

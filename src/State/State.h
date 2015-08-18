@@ -43,48 +43,33 @@ namespace Game
 {
     class Game;
 }
-class ActiveUI;
-class ImageList;
-class SmallCounter;
-class Surface;
-class TextArea;
-class UI;
+namespace UI
+{
+    class ImageList;
+    class SmallCounter;
+    class TextArea;
+    class Base;
+}
 
 namespace State
 {
 
 class State : public Event::Emitter
 {
-protected:
-    std::vector<UI*> _ui;
-    std::vector<UI*> _uiToDelete;
-    std::map<std::string, UI*> _labeledUI;
-
-    int _x = 0;
-    int _y = 0;
-
-    // prevents all states before this one to call think() method
-    bool _modal = false;
-    bool _active = false;
-    // prevents render all states before this one
-    bool _fullscreen = true;
-    bool _initialized = false;
 public:
     State();
     virtual ~State();
 
-    ActiveUI* addUI(ActiveUI* ui);
-    UI* addUI(UI* ui);
-    ActiveUI* addUI(const std::string& name, ActiveUI* ui);
-    UI* addUI(const std::string& name, UI* ui);
-    void addUI(std::vector<UI*> uis);
+    UI::Base* addUI(UI::Base* ui);
+    UI::Base* addUI(const std::string& name, UI::Base* ui);
+    void addUI(std::vector<UI::Base*> uis);
     void popUI();
 
-    UI* getUI(const std::string& name);
-    ActiveUI* getActiveUI(const std::string& name);
-    TextArea* getTextArea(const std::string& name);
-    ImageList* getImageList(const std::string& name);
-    SmallCounter* getSmallCounter(const std::string& name);
+    UI::Base* getUI(const std::string& name);
+
+    UI::TextArea* getTextArea(const std::string& name);
+    UI::ImageList* getImageList(const std::string& name);
+    UI::SmallCounter* getSmallCounter(const std::string& name);
 
     virtual int x() const;
     virtual void setX(int x);
@@ -111,6 +96,21 @@ public:
     virtual void onStateActivate(Event::State* event);
     virtual void onStateDeactivate(Event::State* event);
     virtual void onKeyDown(Event::Keyboard* event);
+
+protected:
+    std::vector<UI::Base*> _ui;
+    std::vector<UI::Base*> _uiToDelete;
+    std::map<std::string, UI::Base*> _labeledUI;
+
+    int _x = 0;
+    int _y = 0;
+
+    bool _modal = false; // prevents all states before this one to call think() method
+    bool _active = false;
+
+    bool _fullscreen = true; // prevents render all states before this one
+    bool _initialized = false;
+
 };
 
 }

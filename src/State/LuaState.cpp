@@ -88,7 +88,7 @@ void LuaState::render()
     }
 }
 
-void LuaState::addUI(ActiveUI* ui)
+void LuaState::addUI(UI::Base* ui)
 {
     if (!ui) return;
     State::addUI(ui);

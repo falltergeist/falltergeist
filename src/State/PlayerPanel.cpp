@@ -26,7 +26,6 @@
 #include "../Audio/Mixer.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
-#include "../Graphics/ActiveUI.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
@@ -68,7 +67,7 @@ void PlayerPanel::init()
 
     auto game = Game::getInstance();
 
-    auto iface = new Image("art/intrface/iface.frm");
+    auto iface = new UI::Image("art/intrface/iface.frm");
     setX((game->renderer()->width() - 640)*0.5);
     setY(game->renderer()->height() - iface->height());
     auto background = addUI("background", iface);
@@ -76,36 +75,36 @@ void PlayerPanel::init()
     background->addEventHandler("mousein",       [this](Event::Event* event){ this->onPanelMouseIn(dynamic_cast<Event::Mouse*>(event)); });
     background->addEventHandler("mouseout",      [this](Event::Event* event){ this->onPanelMouseOut(dynamic_cast<Event::Mouse*>(event)); });
   
-    addUI("change_hand_button", new ImageButton(ImageButton::Type::BIG_RED_CIRCLE, 218, 5));
-    getActiveUI("change_hand_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onChangeHandButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    addUI("change_hand_button", new UI::ImageButton(UI::ImageButton::Type::BIG_RED_CIRCLE, 218, 5));
+    getUI("change_hand_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onChangeHandButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    addUI("inventory_button", new ImageButton(ImageButton::Type::PANEL_INVENTORY, 211, 40));
-    getActiveUI("inventory_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onInventoryButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    addUI("inventory_button", new UI::ImageButton(UI::ImageButton::Type::PANEL_INVENTORY, 211, 40));
+    getUI("inventory_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onInventoryButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    addUI("options_button", new ImageButton(ImageButton::Type::PANEL_OPTIONS, 210, 61));
-    getActiveUI("options_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onOptionsButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    addUI("options_button", new UI::ImageButton(UI::ImageButton::Type::PANEL_OPTIONS, 210, 61));
+    getUI("options_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onOptionsButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    addUI("attack_button", new ImageButton(ImageButton::Type::PANEL_ATTACK, 267, 25));
+    addUI("attack_button", new UI::ImageButton(UI::ImageButton::Type::PANEL_ATTACK, 267, 25));
 
-    addUI("hit_points", new SmallCounter(471, 40));
+    addUI("hit_points", new UI::SmallCounter(471, 40));
     getSmallCounter("hit_points")->setNumber(game->player()->hitPoints());
-    getSmallCounter("hit_points")->setType(SmallCounter::Type::SIGNED);
+    getSmallCounter("hit_points")->setType(UI::SmallCounter::Type::SIGNED);
 
-    addUI("armor_class", new SmallCounter(472, 76));
+    addUI("armor_class", new UI::SmallCounter(472, 76));
     getSmallCounter("armor_class")->setNumber(game->player()->armorClass());
-    getSmallCounter("armor_class")->setType(SmallCounter::Type::SIGNED);
+    getSmallCounter("armor_class")->setType(UI::SmallCounter::Type::SIGNED);
 
-    addUI("skilldex_button", new ImageButton(ImageButton::Type::BIG_RED_CIRCLE, 523, 5));
-    getActiveUI("skilldex_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onSkilldexButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    addUI("skilldex_button", new UI::ImageButton(UI::ImageButton::Type::BIG_RED_CIRCLE, 523, 5));
+    getUI("skilldex_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onSkilldexButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    addUI("map_button", new ImageButton(ImageButton::Type::PANEL_MAP, 526, 39));
-    getActiveUI("map_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onMapButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    addUI("map_button", new UI::ImageButton(UI::ImageButton::Type::PANEL_MAP, 526, 39));
+    getUI("map_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onMapButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    addUI("cha_button", new ImageButton(ImageButton::Type::PANEL_CHA, 526, 58));
-    getActiveUI("cha_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onChaButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    addUI("cha_button", new UI::ImageButton(UI::ImageButton::Type::PANEL_CHA, 526, 58));
+    getUI("cha_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onChaButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    addUI("pip_button", new ImageButton(ImageButton::Type::PANEL_PIP, 526, 77));
-    getActiveUI("pip_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onPipBoyButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    addUI("pip_button", new UI::ImageButton(UI::ImageButton::Type::PANEL_PIP, 526, 77));
+    getUI("pip_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onPipBoyButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 }
 
 void PlayerPanel::playWindowOpenSfx()
@@ -315,7 +314,7 @@ void PlayerPanel::onKeyDown(Event::Keyboard* event)
 
 unsigned int PlayerPanel::height()
 {
-    return getActiveUI("background")->height();
+    return getUI("background")->height();
 }
 
 void PlayerPanel::openInventory()

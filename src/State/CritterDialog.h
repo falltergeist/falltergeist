@@ -25,7 +25,6 @@
 
 // Falltergeist includes
 #include "../State/State.h"
-#include "../UI/TextArea.h"
 
 // Third party includes
 
@@ -35,6 +34,10 @@ namespace Event
 {
     class Event;
     class Keyboard;
+}
+namespace UI
+{
+    class TextArea;
 }
 
 namespace State
@@ -46,7 +49,7 @@ protected:
 
     std::vector<int> _functions;
     std::vector<int> _reactions;
-    std::vector<TextArea*> _answers;
+    std::vector<UI::TextArea*> _answers;
 
     void _selectAnswer(size_t i);
 

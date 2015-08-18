@@ -17,14 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_IMAGEBUTTON_H
-#define FALLTERGEIST_IMAGEBUTTON_H
+#ifndef FALLTERGEIST_UI_IMAGEBUTTON_H
+#define FALLTERGEIST_UI_IMAGEBUTTON_H
 
 // C++ standard includes
 #include <vector>
 
 // Falltergeist includes
-#include "../Graphics/ActiveUI.h"
+#include "../UI/Base.h"
 
 // Third party includes
 
@@ -34,8 +34,10 @@ namespace Event
 {
     class Mouse;
 }
+namespace UI
+{
 
-class ImageButton : public ActiveUI
+class ImageButton : public Falltergeist::UI::Base
 {
 public:
     enum class Type
@@ -96,4 +98,5 @@ protected:
 };
 
 }
-#endif // FALLTERGEIST_IMAGEBUTTON_H
+}
+#endif // FALLTERGEIST_UI_IMAGEBUTTON_H

@@ -17,6 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/ItemsList.h"
+
 // C++ standard includes
 
 // Falltergeist includes
@@ -30,14 +33,15 @@
 #include "../Graphics/Texture.h"
 #include "../Logger.h"
 #include "../UI/InventoryItem.h"
-#include "../UI/ItemsList.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace UI
+{
 
-ItemsList::ItemsList(int x, int y) : ActiveUI(x, y)
+ItemsList::ItemsList(int x, int y) : Falltergeist::UI::Base(x, y)
 {
     _texture = new Texture(_slotWidth, _slotHeight * _slotsNumber);
     _texture->fill(0x000000FF);
@@ -163,7 +167,7 @@ void ItemsList::onItemDragStop(Event::Mouse* event)
         itemsList->update();
     }
 
-    if (auto inventoryItem = dynamic_cast<InventoryItem*>(event->emitter()))
+    if (auto inventoryItem = dynamic_cast<UI::InventoryItem*>(event->emitter()))
     {
         // @todo create addItem method
         this->addItem(inventoryItem, 1);
@@ -233,4 +237,5 @@ void ItemsList::scrollDown()
     this->update();
 }
 
+}
 }

@@ -16,14 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef FALLTERGEIST_MVEPLAYER_H
-#define FALLTERGEIST_MVEPLAYER_H
+
+#ifndef FALLTERGEIST_UI_MVEPLAYER_H
+#define FALLTERGEIST_UI_MVEPLAYER_H
 
 // C++ standard includes
 #include <ctime>
 
 // Falltergeist includes
-#include "../Graphics/UI.h"
+#include "../UI/Base.h"
 
 // Third party includes
 #include <libfalltergeist.h>
@@ -31,15 +32,17 @@
 
 namespace Falltergeist
 {
+namespace UI
+{
 
-class MvePlayer : public UI
+class MvePlayer : public Falltergeist::UI::Base
 {
 public:
     MvePlayer(libfalltergeist::Mve::File* mve);
-    ~MvePlayer();
+    ~MvePlayer() override;
 
-    void think();
-    void render(bool eggTransparency = false);
+    void think() override;
+    void render(bool eggTransparency = false) override;
     bool finished();
     uint32_t getAudio(uint8_t* data, uint32_t len);
     uint32_t samplesLeft();
@@ -123,5 +126,5 @@ private:
 };
 
 }
-
-#endif // FALLTERGEIST_MVEPLAYER_H
+}
+#endif // FALLTERGEIST_UI_MVEPLAYER_H

@@ -17,22 +17,25 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_SMALLCOUNTER_H
-#define FALLTERGEIST_SMALLCOUNTER_H
+#ifndef FALLTERGEIST_UI_SMALLCOUNTER_H
+#define FALLTERGEIST_UI_SMALLCOUNTER_H
 
 // C++ standard includes
 #include <memory>
 
 // Falltergeist includes
-#include "../Graphics/ActiveUI.h"
+#include "../UI/Base.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace UI
+{
+
 class Image;
 
-class SmallCounter : public ActiveUI
+class SmallCounter : public Falltergeist::UI::Base
 {
 public:
     enum class Color
@@ -52,17 +55,17 @@ public:
 
     Texture* texture() const override;
 
+    Color color() const;
     void setColor(Color color);
-    Color color();
 
+    unsigned int length() const;
     void setLength(unsigned int length);
-    unsigned int length();
 
+    signed int number() const;
     void setNumber(signed int number);
-    signed int number();
 
+    Type type() const;
     void setType(Type type);
-    Type type();
 
 protected:
     Color _color = Color::WHITE;
@@ -75,7 +78,7 @@ protected:
 
 private:
     // Hide unused field from childs.
-    using ActiveUI::_texture;
+    using Falltergeist::UI::Base::_texture;
 
     SmallCounter(const SmallCounter&) = delete;
     void operator=(const SmallCounter&) = delete;
@@ -83,4 +86,5 @@ private:
 };
 
 }
-#endif // FALLTERGEIST_SMALLCOUNTER_H
+}
+#endif // FALLTERGEIST_UI_SMALLCOUNTER_H

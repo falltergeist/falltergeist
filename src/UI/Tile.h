@@ -17,33 +17,42 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_ACTIVEUI_H
-#define FALLTERGEIST_ACTIVEUI_H
+#ifndef FALLTERGEIST_UI_TILE_H
+#define FALLTERGEIST_UI_TILE_H
 
 // C++ standard includes
-#include <string>
+#include <memory>
 
 // Falltergeist includes
-#include "../Event/Emitter.h"
-#include "../Graphics/UI.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+class Texture;
 
-class ActiveUI : public Event::Emitter, public UI
+namespace UI
+{
+
+class Tile
 {
 public:
-    ActiveUI(int x = 0, int y = 0);
-    ~ActiveUI() override;
+    Tile(unsigned int number, int x = 0, int y = 0);
 
-    virtual void handle(Event::Event* event);
+    unsigned int number() const;
+    int x() const;
+    int y() const;
+
+    unsigned int index() const;
+    void setIndex(unsigned int value);
 
 protected:
-    std::string _downSnd = "";
-    std::string _upSnd = "";
+    unsigned int _index = 0;
+    unsigned int _number = 0;
+    int _x = 0;
+    int _y = 0;
 };
 
 }
-#endif // FALLTERGEIST_ACTIVEUI_H
+}
+#endif // FALLTERGEIST_UI_TILE_H

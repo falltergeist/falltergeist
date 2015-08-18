@@ -30,8 +30,11 @@
 
 namespace Falltergeist
 {
-class TextArea;
-class Image;
+namespace UI
+{
+    class TextArea;
+    class Image;
+}
 
 namespace State
 {
@@ -53,8 +56,8 @@ public:
 
 protected:
     unsigned int _timer;
-    TextArea* _name = 0;
-    Image* _cursor = 0;
+    UI::TextArea* _name = nullptr;
+    UI::Image* _cursor = nullptr;
     std::map<char,char> _keyCodes;
 };
 

@@ -17,21 +17,29 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headeres
+#include "../UI/HiddenMask.h"
+
 // C++ standard includes
 
 // Falltergeist includes
 #include "../Graphics/Texture.h"
-#include "../UI/HiddenMask.h"
 
 // Third party includes
 
 namespace Falltergeist
+{
+namespace UI
 {
 
 HiddenMask::HiddenMask(unsigned int width, unsigned int height, int x, int y) : Image(width, height)
 {
     setX(x);
     setY(y);
+}
+
+HiddenMask::~HiddenMask()
+{
 }
 
 unsigned int HiddenMask::pixel(unsigned int x, unsigned int y)
@@ -50,4 +58,5 @@ void HiddenMask::think()
 {
 }
 
+}
 }

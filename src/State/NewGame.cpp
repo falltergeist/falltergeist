@@ -68,46 +68,46 @@ void NewGame::init()
     setX((renderer->width()  - 640)*0.5);
     setY((renderer->height() - 480)*0.5);
 
-    addUI("background", new Image("art/intrface/pickchar.frm"));
+    addUI("background", new UI::Image("art/intrface/pickchar.frm"));
 
-    auto beginGameButton = addUI(new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, 81, 322));
+    auto beginGameButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 81, 322));
     beginGameButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onBeginGameButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    auto editButton = addUI(new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, 436, 319));
+    auto editButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 436, 319));
     editButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onEditButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    auto createButton = addUI(new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, 81, 424));
+    auto createButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 81, 424));
     createButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onCreateButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    auto backButton = addUI(new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, 461, 424));
+    auto backButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 461, 424));
     backButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onBackButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    auto prevCharacterButton = addUI(new ImageButton(ImageButton::Type::LEFT_ARROW, 292, 320));
+    auto prevCharacterButton = addUI(new UI::ImageButton(UI::ImageButton::Type::LEFT_ARROW, 292, 320));
     prevCharacterButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onPrevCharacterButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    auto nextCharacterButton = addUI(new ImageButton(ImageButton::Type::RIGHT_ARROW, 318, 320));
+    auto nextCharacterButton = addUI(new UI::ImageButton(UI::ImageButton::Type::RIGHT_ARROW, 318, 320));
     nextCharacterButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onNextCharacterButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    addUI("images", new ImageList({
+    addUI("images", new UI::ImageList({
                                     "art/intrface/combat.frm",
                                     "art/intrface/stealth.frm",
                                     "art/intrface/diplomat.frm"
                                     }, 27, 23));
 
-    addUI("name", new TextArea(300, 40));
+    addUI("name", new UI::TextArea(300, 40));
 
-    addUI("stats_1", new TextArea(0, 70));
+    addUI("stats_1", new UI::TextArea(0, 70));
     getTextArea("stats_1")->setWidth(362);
-    getTextArea("stats_1")->setHorizontalAlign(TextArea::HorizontalAlign::RIGHT);
+    getTextArea("stats_1")->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
-    addUI("stats_2", new TextArea(374, 70));
-    addUI("bio",     new TextArea(437, 40));
+    addUI("stats_2", new UI::TextArea(374, 70));
+    addUI("bio",     new UI::TextArea(437, 40));
 
-    addUI("stats_3", new TextArea(294, 150));
+    addUI("stats_3", new UI::TextArea(294, 150));
     getTextArea("stats_3")->setWidth(85);
-    getTextArea("stats_3")->setHorizontalAlign(TextArea::HorizontalAlign::RIGHT);
+    getTextArea("stats_3")->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
-    addUI("stats3_values", new TextArea(383, 150));
+    addUI("stats3_values", new UI::TextArea(383, 150));
 
     auto combat = new Game::DudeObject();
     combat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/combat.gcd"));

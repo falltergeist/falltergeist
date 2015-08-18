@@ -17,17 +17,21 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/Tile.h"
+
 // C++ standard includes
 
 // Falltergeist includes
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
-#include "../Graphics/Tile.h"
 
 // Third party includes
 
 namespace Falltergeist
+{
+namespace UI
 {
 
 Tile::Tile(unsigned int number, int x, int y)
@@ -37,22 +41,22 @@ Tile::Tile(unsigned int number, int x, int y)
     _y = y;
 }
 
-unsigned int Tile::number()
+unsigned int Tile::number() const
 {
     return _number;
 }
 
-int Tile::x()
+int Tile::x() const
 {
     return _x;
 }
 
-int Tile::y()
+int Tile::y() const
 {
     return _y;
 }
 
-unsigned int Tile::index()
+unsigned int Tile::index() const
 {
     return _index;
 }
@@ -62,4 +66,5 @@ void Tile::setIndex(unsigned int value)
     _index = value;
 }
 
+}
 }

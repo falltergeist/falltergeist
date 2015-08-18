@@ -17,25 +17,29 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/AnimatedImage.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Graphics/Texture.h"
-#include "../ResourceManager.h"
-#include "../UI/AnimatedImage.h"
-#include "../Graphics/AnimatedPalette.h"
-#include "../Game/Game.h"
-#include "../Graphics/Renderer.h"
 #include "../Game/DudeObject.h"
-#include "../State/Location.h"
+#include "../Game/Game.h"
+#include "../Graphics/AnimatedPalette.h"
+#include "../Graphics/Renderer.h"
+#include "../Graphics/Texture.h"
 #include "../LocationCamera.h"
+#include "../ResourceManager.h"
+#include "../State/Location.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace UI
+{
 
-AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direction)
+AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direction) : Falltergeist::UI::Base()
 {
 
     setTexture(new Texture(frm->width(), frm->height()));
@@ -296,4 +300,5 @@ void AnimatedImage::render(bool eggTransparency)
 
 }
 
+}
 }

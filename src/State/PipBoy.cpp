@@ -59,41 +59,41 @@ void PipBoy::init()
     Game::getInstance()->mouse()->pushState(Mouse::Cursor::BIG_ARROW);
 
     // Background
-    auto background = new Image("art/intrface/pip.frm");
+    auto background = new UI::Image("art/intrface/pip.frm");
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
     background->setX(backgroundX);
     background->setY(backgroundY);
 
     // Buttons
-    auto alarmButton = new ImageButton(ImageButton::Type::PIPBOY_ALARM_BUTTON, backgroundX+124, backgroundY+13);
-    auto statusButton = new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+340);
-    auto automapsButton = new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+394);
-    auto archivesButton = new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+423);
-    auto closeButton = new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+448);
+    auto alarmButton = new UI::ImageButton(UI::ImageButton::Type::PIPBOY_ALARM_BUTTON, backgroundX+124, backgroundY+13);
+    auto statusButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+340);
+    auto automapsButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+394);
+    auto archivesButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+423);
+    auto closeButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+448);
     closeButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onCloseButtonClick(dynamic_cast<Event::Mouse*>(event)); });
     // Date and time
 
     // Date
-    auto day = new SmallCounter(backgroundX+21, backgroundY+17);
+    auto day = new UI::SmallCounter(backgroundX+21, backgroundY+17);
     day->setNumber(Game::getInstance()->gameTime()->day());
-    day->setColor(SmallCounter::Color::WHITE);
-    day->setType(SmallCounter::Type::UNSIGNED);
+    day->setColor(UI::SmallCounter::Color::WHITE);
+    day->setType(UI::SmallCounter::Type::UNSIGNED);
     day->setLength(2);
 
-    auto month = new MonthCounter(static_cast<MonthCounter::Month>(Game::getInstance()->gameTime()->month()), backgroundX+46, backgroundY+18);
+    auto month = new UI::MonthCounter(static_cast<UI::MonthCounter::Month>(Game::getInstance()->gameTime()->month()), backgroundX+46, backgroundY+18);
 
-    auto year = new SmallCounter(backgroundX+84, backgroundY+17);
+    auto year = new UI::SmallCounter(backgroundX+84, backgroundY+17);
     year->setNumber(Game::getInstance()->gameTime()->year());
-    year->setColor(SmallCounter::Color::WHITE);
-    year->setType(SmallCounter::Type::UNSIGNED);
+    year->setColor(UI::SmallCounter::Color::WHITE);
+    year->setType(UI::SmallCounter::Type::UNSIGNED);
     year->setLength(4);
 
     // Time
-    auto time = new SmallCounter(backgroundX+160, backgroundY+17);
+    auto time = new UI::SmallCounter(backgroundX+160, backgroundY+17);
     time->setNumber((Game::getInstance()->gameTime()->hours() * 100) + Game::getInstance()->gameTime()->minutes());
-    time->setColor(SmallCounter::Color::WHITE);
-    time->setType(SmallCounter::Type::UNSIGNED);
+    time->setColor(UI::SmallCounter::Color::WHITE);
+    time->setType(UI::SmallCounter::Type::UNSIGNED);
     time->setLength(4);
 
     addUI(background);

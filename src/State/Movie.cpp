@@ -109,14 +109,14 @@ void Movie::init()
         _subs = ResourceManager::getInstance()->sveFileType(subfile);
         if (_subs) _hasSubs = true;
     }
-    addUI("movie", new MvePlayer(ResourceManager::getInstance()->mveFileType(movie)));
+    addUI("movie", new UI::MvePlayer(ResourceManager::getInstance()->mveFileType(movie)));
 
     auto font0_ffffffff = ResourceManager::getInstance()->font("font1.aaf", 0xffffffff);
-    auto subLabel = new TextArea("", 0, 320+35);
+    auto subLabel = new UI::TextArea("", 0, 320+35);
 
     subLabel->setFont(font0_ffffffff);
     subLabel->setWidth(640);
-    subLabel->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
+    subLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
     addUI("subs",subLabel);
 
     if (_hasSubs)
@@ -129,11 +129,11 @@ void Movie::think()
 {
     State::think();
 
-    unsigned int frame = dynamic_cast<MvePlayer*>(getUI("movie"))->frame();
+    unsigned int frame = dynamic_cast<UI::MvePlayer*>(getUI("movie"))->frame();
     if ( frame >= _nextSubLine.first)
     {
-        dynamic_cast<TextArea*>(getUI("subs"))->setText(_nextSubLine.second);
-        if (_hasSubs) _nextSubLine = _subs->getSubLine(dynamic_cast<MvePlayer*>(getUI("movie"))->frame());
+        dynamic_cast<UI::TextArea*>(getUI("subs"))->setText(_nextSubLine.second);
+        if (_hasSubs) _nextSubLine = _subs->getSubLine(dynamic_cast<UI::MvePlayer*>(getUI("movie"))->frame());
     }
     if (_effect_index<_effects.size() && frame>=_effects[_effect_index].frame)
     {
@@ -150,10 +150,10 @@ void Movie::think()
 
     if (!_started)
     {
-        Game::getInstance()->mixer()->playMovieMusic(dynamic_cast<MvePlayer*>(getUI("movie")));
+        Game::getInstance()->mixer()->playMovieMusic(dynamic_cast<UI::MvePlayer*>(getUI("movie")));
         _started = true;
     }
-    if ((dynamic_cast<MvePlayer*>(getUI("movie")))->finished())
+    if ((dynamic_cast<UI::MvePlayer*>(getUI("movie")))->finished())
     {
         this->onVideoFinished();
     }

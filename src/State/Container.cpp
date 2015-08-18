@@ -58,10 +58,10 @@ void Container::init()
     setX((game->renderer()->width()  - 537)/2);
     setY((game->renderer()->height() - 376)/2);
 
-    addUI("background", new Image("art/intrface/loot.frm"));
+    addUI("background", new UI::Image("art/intrface/loot.frm"));
 
-    addUI("button_done", new ImageButton(ImageButton::Type::SMALL_RED_CIRCLE, 478, 331));
-    getActiveUI("button_done")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    addUI("button_done", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 478, 331));
+    getUI("button_done")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
 
     // TAKEALL
@@ -73,11 +73,11 @@ void Container::init()
     // invupout
 
 
-    auto dudeList = new ItemsList(170, 35);
+    auto dudeList = new UI::ItemsList(170, 35);
     dudeList->setItems(Game::getInstance()->player()->inventory());
     addUI(dudeList);
 
-    auto containerList = new ItemsList(292, 35);
+    auto containerList = new UI::ItemsList(292, 35);
     containerList->setItems(object()->inventory());
     addUI(containerList);
 

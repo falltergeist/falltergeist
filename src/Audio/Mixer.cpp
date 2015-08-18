@@ -138,7 +138,7 @@ void Mixer::playACMMusic(const std::string& filename, bool loop)
 
 void Mixer::_movieCallback(void *udata, uint8_t *stream, uint32_t len)
 {
-    auto pmve = (MvePlayer*)(udata);
+    auto pmve = (UI::MvePlayer*)(udata);
     if (pmve->samplesLeft() <= 0)
     {
         Logger::debug("AUDIO") << "buffer underrun?" << std::endl;
@@ -149,7 +149,7 @@ void Mixer::_movieCallback(void *udata, uint8_t *stream, uint32_t len)
     pmve->getAudio(stream, len);
 }
 
-void Mixer::playMovieMusic(MvePlayer* mve)
+void Mixer::playMovieMusic(UI::MvePlayer* mve)
 {
     musicCallback = std::bind(&Mixer::_movieCallback,this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
     Mix_HookMusic(myMusicPlayer, reinterpret_cast<void *>(mve));

@@ -17,6 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/SmallCounter.h"
+
 // C++ standard includes
 
 // Falltergeist includes
@@ -24,16 +27,17 @@
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
 #include "../UI/Image.h"
-#include "../UI/SmallCounter.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace UI
+{
 
 using namespace Base;
 
-SmallCounter::SmallCounter(int x, int y) : ActiveUI(x, y)
+SmallCounter::SmallCounter(int x, int y) : Falltergeist::UI::Base(x, y)
 {
 }
 
@@ -88,7 +92,7 @@ void SmallCounter::setLength(unsigned int length)
     _length = length;
 }
 
-unsigned int SmallCounter::length()
+unsigned int SmallCounter::length() const
 {
     return _length;
 }
@@ -100,7 +104,7 @@ void SmallCounter::setNumber(signed int number)
     _number = number;
 }
 
-signed int SmallCounter::number()
+signed int SmallCounter::number() const
 {
     return _number;
 }
@@ -121,7 +125,7 @@ void SmallCounter::setColor(Color color)
     }
 }
 
-SmallCounter::Color SmallCounter::color()
+SmallCounter::Color SmallCounter::color() const
 {
     return _color;
 }
@@ -131,9 +135,10 @@ void SmallCounter::setType(Type type)
     _type = type;
 }
 
-SmallCounter::Type SmallCounter::type()
+SmallCounter::Type SmallCounter::type() const
 {
     return _type;
 }
 
+}
 }

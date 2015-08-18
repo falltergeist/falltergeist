@@ -37,13 +37,16 @@ namespace Game
 {
     class Object;
 }
-class Animation;
+namespace UI
+{
+    class Animation;
+    class Image;
+    class Tile;
+    class TileMap;
+}
 class Hexagon;
 class HexagonGrid;
-class Image;
 class LocationCamera;
-class Tile;
-class TileMap;
 class VMStackValue;
 class VM;
 
@@ -71,12 +74,12 @@ protected:
 
     HexagonGrid* _hexagonGrid = 0;
     LocationCamera* _camera = 0;
-    TileMap* _floor = 0;
-    TileMap* _roof = 0;
+    UI::TileMap* _floor = nullptr;
+    UI::TileMap* _roof = nullptr;
     VM* _locationScript = 0;
     std::vector<int> _MVARS;
     std::map<std::string, VMStackValue> _EVARS;
-    std::vector<ActiveUI*> _floatMessages;
+    std::vector<UI::Base*> _floatMessages;
 
     bool _locationEnter = true;
     unsigned int _currentElevation = 0;
@@ -92,7 +95,7 @@ protected:
     bool _scrollBottom = false;
 
     std::vector<Game::Object*> _objects;
-    TextArea* _hexagonInfo = 0;
+    UI::TextArea* _hexagonInfo = 0;
     
     std::vector<Mouse::Icon> getCursorIconsForObject(Game::Object* object);
 public:

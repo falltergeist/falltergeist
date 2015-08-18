@@ -31,15 +31,15 @@ namespace Falltergeist
 namespace Lua
 {
 
-LuaTextArea::LuaTextArea(const std::string& text, int x, int y) : TextArea(text, x, y)
+LuaTextArea::LuaTextArea(const std::string& text, int x, int y) : UI::TextArea(text, x, y)
 {
 }
 
-LuaTextArea::LuaTextArea(int x, int y) : TextArea(x, y)
+LuaTextArea::LuaTextArea(int x, int y) : UI::TextArea(x, y)
 {
 }
 
-LuaTextArea::LuaTextArea(LuaTextArea* textArea, int x, int y) : TextArea(textArea, x, y)
+LuaTextArea::LuaTextArea(LuaTextArea* textArea, int x, int y) : UI::TextArea(textArea, x, y)
 {
 }
 

@@ -35,8 +35,10 @@
 
 namespace Falltergeist
 {
+namespace UI
+{
 
-ImageButton::ImageButton(Type type, int x, int y) : ActiveUI(x, y)
+ImageButton::ImageButton(Type type, int x, int y) : Falltergeist::UI::Base(x, y)
 {
     _init(type);
 }
@@ -52,20 +54,20 @@ void ImageButton::_init(Type type)
         case Type::SMALL_RED_CIRCLE:
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/lilredup.frm"));
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/lilreddn.frm"));
-            _downSnd = "sound/sfx/ib1p1xx1.acm";
-            _upSnd = "sound/sfx/ib1lu1x1.acm";
+            _downSound = "sound/sfx/ib1p1xx1.acm";
+            _upSound = "sound/sfx/ib1lu1x1.acm";
             break;
         case Type::BIG_RED_CIRCLE:
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/bigredup.frm"));
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/bigreddn.frm"));
-            _downSnd = "sound/sfx/ib2p1xx1.acm";
-            _upSnd = "sound/sfx/ib2lu1x1.acm";
+            _downSound = "sound/sfx/ib2p1xx1.acm";
+            _upSound = "sound/sfx/ib2lu1x1.acm";
             break;
         case Type::MENU_RED_CIRCLE:
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/menuup.frm"));
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/menudown.frm"));
-            _downSnd = "sound/sfx/nmselec0.acm";
-            _upSnd = "sound/sfx/nmselec1.acm";
+            _downSound = "sound/sfx/nmselec0.acm";
+            _upSound = "sound/sfx/nmselec1.acm";
             break;
         case Type::SKILL_TOGGLE:
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/tgskloff.frm"));
@@ -82,19 +84,19 @@ void ImageButton::_init(Type type)
         case Type::LEFT_ARROW:
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/slu.frm"));
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sld.frm"));
-            _downSnd = "sound/sfx/ib2p1xx1.acm";
-            _upSnd = "sound/sfx/ib2lu1x1.acm";
+            _downSound = "sound/sfx/ib2p1xx1.acm";
+            _upSound = "sound/sfx/ib2lu1x1.acm";
             break;
         case Type::RIGHT_ARROW:
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sru.frm"));
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/srd.frm"));
-            _downSnd = "sound/sfx/ib2p1xx1.acm";
-            _upSnd = "sound/sfx/ib2lu1x1.acm";
+            _downSound = "sound/sfx/ib2p1xx1.acm";
+            _upSound = "sound/sfx/ib2lu1x1.acm";
             break;
         case Type::CHECKBOX:
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/prfxout.frm"));
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/prfxin.frm"));
-            _upSnd = "sound/sfx/ib2p1xx1.acm";
+            _upSound = "sound/sfx/ib2p1xx1.acm";
             _checkboxMode = true;
             break;
         case Type::PLAYER_NAME:
@@ -112,50 +114,50 @@ void ImageButton::_init(Type type)
         case Type::PANEL_INVENTORY:
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/invbutup.frm"));
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/invbutdn.frm"));
-            _downSnd = "sound/sfx/ib2p1xx1.acm";
-            _upSnd = "sound/sfx/ib2lu1x1.acm";
+            _downSound = "sound/sfx/ib2p1xx1.acm";
+            _upSound = "sound/sfx/ib2lu1x1.acm";
             break;
         case Type::PANEL_OPTIONS:
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/optiup.frm"));
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/optidn.frm"));
-            _downSnd = "sound/sfx/ib2p1xx1.acm";
-            _upSnd = "sound/sfx/ib2lu1x1.acm";
+            _downSound = "sound/sfx/ib2p1xx1.acm";
+            _upSound = "sound/sfx/ib2lu1x1.acm";
             break;
         case Type::PANEL_ATTACK:
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sattkbup.frm"));
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sattkbdn.frm"));
-            _downSnd = "sound/sfx/ib3p1xx1.acm";
-            _upSnd = "sound/sfx/ib3lu1x1.acm";
+            _downSound = "sound/sfx/ib3p1xx1.acm";
+            _upSound = "sound/sfx/ib3lu1x1.acm";
             break;
         case Type::PANEL_MAP:
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/mapup.frm"));
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/mapdn.frm"));
-            _downSnd = "sound/sfx/ib2p1xx1.acm";
-            _upSnd = "sound/sfx/ib2lu1x1.acm";
+            _downSound = "sound/sfx/ib2p1xx1.acm";
+            _upSound = "sound/sfx/ib2lu1x1.acm";
             break;
         case Type::PANEL_CHA:
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/chaup.frm"));
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/chadn.frm"));
-            _downSnd = "sound/sfx/ib2p1xx1.acm";
-            _upSnd = "sound/sfx/ib2lu1x1.acm";
+            _downSound = "sound/sfx/ib2p1xx1.acm";
+            _upSound = "sound/sfx/ib2lu1x1.acm";
             break;
         case Type::PANEL_PIP:
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/pipup.frm"));
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/pipdn.frm"));
-            _downSnd = "sound/sfx/ib2p1xx1.acm";
-            _upSnd = "sound/sfx/ib2lu1x1.acm";
+            _downSound = "sound/sfx/ib2p1xx1.acm";
+            _upSound = "sound/sfx/ib2lu1x1.acm";
             break;
         case Type::OPTIONS_BUTTON:
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/opbtnoff.frm"));
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/opbtnon.frm"));
-            _downSnd = "sound/sfx/ib3p1xx1.acm";
-            _upSnd = "sound/sfx/ib3lu1x1.acm";
+            _downSound = "sound/sfx/ib3p1xx1.acm";
+            _upSound = "sound/sfx/ib3lu1x1.acm";
             break;
         case Type::SKILLDEX_BUTTON:
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/skldxoff.frm"));
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/skldxon.frm"));
-            _downSnd = "sound/sfx/ib2lu1x1.acm";
-            _upSnd = "sound/sfx/ib1p1xx1.acm";
+            _downSound = "sound/sfx/ib2lu1x1.acm";
+            _upSound = "sound/sfx/ib1p1xx1.acm";
             break;
         case Type::INVENTORY_UP_ARROW:
             _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/invupout.frm"));
@@ -233,18 +235,18 @@ void ImageButton::_onLeftButtonClick(Event::Mouse* event)
     {
         sender->_checked = !sender->_checked;
     }
-    if (!sender->_upSnd.empty())
+    if (!sender->_upSound.empty())
     {
-        Game::getInstance()->mixer()->playACMSound(sender->_upSnd);
+        Game::getInstance()->mixer()->playACMSound(sender->_upSound);
     }
 }
 
 void ImageButton::_onLeftButtonDown(Event::Mouse* event)
 {
     auto sender = dynamic_cast<ImageButton*>(event->emitter());
-    if (!sender->_downSnd.empty())
+    if (!sender->_downSound.empty())
     {
-        Game::getInstance()->mixer()->playACMSound(sender->_downSnd);
+        Game::getInstance()->mixer()->playACMSound(sender->_downSound);
     }
 }
 
@@ -252,9 +254,9 @@ void ImageButton::_onLeftButtonDown(Event::Mouse* event)
 void ImageButton::_onMouseOut(Event::Mouse* event)
 {
     auto sender = dynamic_cast<ImageButton*>(event->emitter());
-    if (_leftButtonPressed && !sender->_upSnd.empty())
+    if (_leftButtonPressed && !sender->_upSound.empty())
     {
-        Game::getInstance()->mixer()->playACMSound(sender->_upSnd);
+        Game::getInstance()->mixer()->playACMSound(sender->_upSound);
     }
 }
 
@@ -269,4 +271,5 @@ void ImageButton::setChecked(bool _checked)
     this->_checked = _checked;
 }
 
+}
 }

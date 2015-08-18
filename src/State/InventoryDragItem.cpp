@@ -47,7 +47,7 @@ namespace Falltergeist
 namespace State
 {
 
-InventoryDragItem::InventoryDragItem(ImageList* itemUi) : State()
+InventoryDragItem::InventoryDragItem(UI::ImageList* itemUi) : State()
 {
     _itemUi = itemUi;
 }

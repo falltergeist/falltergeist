@@ -39,11 +39,7 @@
 #include "../Game/ObjectFactory.h"
 #include "../Game/Time.h"
 #include "../Game/WeaponItemObject.h"
-#include "../Graphics/Animation.h"
-#include "../Graphics/AnimationQueue.h"
 #include "../Graphics/Renderer.h"
-#include "../Graphics/Tile.h"
-#include "../Graphics/TileMap.h"
 #include "../Input/Mouse.h"
 #include "../LocationCamera.h"
 #include "../Logger.h"
@@ -55,10 +51,14 @@
 #include "../State/ExitConfirm.h"
 #include "../State/MainMenu.h"
 #include "../State/PlayerPanel.h"
+#include "../UI/Animation.h"
+#include "../UI/AnimationQueue.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
+#include "../UI/Tile.h"
+#include "../UI/TileMap.h"
 #include "../VM/VM.h"
 
 // Third party includes
@@ -77,12 +77,12 @@ Location::Location() : State()
     game->mouse()->setState(Mouse::Cursor::ACTION);
 
     _camera = new LocationCamera(game->renderer()->width(), game->renderer()->height(), 0, 0);
-    _floor = new TileMap();
-    _roof = new TileMap();
+    _floor = new UI::TileMap();
+    _roof = new UI::TileMap();
     _hexagonGrid = new HexagonGrid();
 
-    _hexagonInfo = new TextArea("", game->renderer()->width() - 135, 25);
-    _hexagonInfo->setHorizontalAlign(TextArea::HorizontalAlign::RIGHT);
+    _hexagonInfo = new UI::TextArea("", game->renderer()->width() - 135, 25);
+    _hexagonInfo->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
 }
 
@@ -254,14 +254,14 @@ void Location::setLocation(const std::string& name)
             unsigned int tileNum = mapFile->elevations()->at(_currentElevation)->floorTiles()->at(i);
             if (tileNum > 1)
             {
-                auto tile = new Tile(tileNum, x, y);
+                auto tile = new UI::Tile(tileNum, x, y);
                 _floor->tiles()->push_back(tile);
             }
 
             tileNum = mapFile->elevations()->at(_currentElevation)->roofTiles()->at(i);
             if (tileNum > 1)
             {
-                auto tile = new Tile(tileNum, x, y - 104);
+                auto tile = new UI::Tile(tileNum, x, y - 104);
                 _roof->tiles()->push_back(tile);
             }
         }

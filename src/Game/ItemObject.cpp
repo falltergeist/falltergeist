@@ -23,9 +23,9 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Graphics/Animation.h"
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
+#include "../UI/Animation.h"
 #include "../UI/Image.h"
 
 // Third party includes
@@ -77,7 +77,7 @@ void ItemObject::setInventoryFID(int value)
     _inventoryFID = value;
 }
 
-Image* ItemObject::inventoryDragUi() const
+UI::Image* ItemObject::inventoryDragUi() const
 {
     return _inventoryDragUi;
 }
@@ -92,12 +92,12 @@ unsigned int ItemObject::volume() const
     return _volume;
 }
 
-Image* ItemObject::inventoryUi() const
+UI::Image* ItemObject::inventoryUi() const
 {
     return _inventoryUi;
 }
 
-Image* ItemObject::inventorySlotUi() const
+UI::Image* ItemObject::inventorySlotUi() const
 {
     return _inventorySlotUi;
 }
@@ -109,16 +109,16 @@ void ItemObject::_generateUi()
     if (inventoryFID() == -1) return;
 
     // Big unscaled image of item
-    _inventoryDragUi = new Image(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
+    _inventoryDragUi = new UI::Image(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
 
     // Small scaled image
     auto inventoryUiTexture = _inventoryDragUi->texture()->fitTo(57, 40);
-    _inventoryUi = new Image(inventoryUiTexture->width(),inventoryUiTexture->height());
+    _inventoryUi = new UI::Image(inventoryUiTexture->width(),inventoryUiTexture->height());
     _inventoryUi->setTexture(inventoryUiTexture);
 
     // Medium scaled image
     auto inventorySlotUiTexture = _inventoryDragUi->texture()->fitTo(88, 58);
-    _inventorySlotUi = new Image(inventorySlotUiTexture->width(),inventorySlotUiTexture->height());
+    _inventorySlotUi = new UI::Image(inventorySlotUiTexture->width(),inventorySlotUiTexture->height());
     _inventorySlotUi->setTexture(inventorySlotUiTexture);
 }
 

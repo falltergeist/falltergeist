@@ -17,23 +17,27 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/BigCounter.h"
+
 // C++ standard includes
 
 // Falltergeist includes
 #include "../Base/StlFeatures.h"
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
-#include "../UI/BigCounter.h"
 #include "../UI/Image.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace UI
+{
 
 using namespace Base;
 
-BigCounter::BigCounter(int x, int y, unsigned int length) : ActiveUI(x, y)
+BigCounter::BigCounter(int x, int y, unsigned int length) : Falltergeist::UI::Base(x, y)
 {
     _length = length;
 }
@@ -104,4 +108,5 @@ BigCounter::Color BigCounter::color()
     return _color;
 }
 
+}
 }

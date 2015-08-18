@@ -25,8 +25,6 @@
 
 // Falltergeist includes
 #include "../Exception.h"
-#include "../Graphics/Animation.h"
-#include "../Graphics/AnimationQueue.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../Game/CritterObject.h"
@@ -39,6 +37,8 @@
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../UI/AnimatedImage.h"
+#include "../UI/Animation.h"
+#include "../UI/AnimationQueue.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
 #include "../VM/VM.h"
@@ -145,12 +145,12 @@ void Object::setScript(VM* script)
     _script = script;
 }
 
-ActiveUI* Object::ui() const
+UI::Base* Object::ui() const
 {
     return _ui;
 }
 
-void Object::setUI(ActiveUI* ui)
+void Object::setUI(UI::Base* ui)
 {
     delete _ui;
     _ui = ui;
@@ -179,17 +179,17 @@ void Object::_generateUi()
         frm->rgba(ResourceManager::getInstance()->palFileType("color.pal")); // TODO: figure out, why not calling this brokes animated overlays
         if (frm->framesPerDirection() > 1)
         {
-            auto queue = new AnimationQueue();
-            queue->animations()->push_back(new Animation(ResourceManager::getInstance()->FIDtoFrmName(FID()), orientation()));
+            auto queue = new UI::AnimationQueue();
+            queue->animations()->push_back(new UI::Animation(ResourceManager::getInstance()->FIDtoFrmName(FID()), orientation()));
             _ui = queue;
         }
         else if (frm->animatedPalette())
         {
-            _ui = new AnimatedImage(frm, orientation());
+            _ui = new UI::AnimatedImage(frm, orientation());
         }
         else
         {
-            _ui = new Image(frm, orientation());
+            _ui = new UI::Image(frm, orientation());
         }
     }
 
@@ -246,12 +246,12 @@ void Object::setHexagon(Hexagon* hexagon)
     _hexagon = hexagon;
 }
 
-TextArea* Object::floatMessage() const
+UI::TextArea* Object::floatMessage() const
 {
     return _floatMessage;
 }
 
-void Object::setFloatMessage(TextArea* floatMessage)
+void Object::setFloatMessage(UI::TextArea* floatMessage)
 {
     _floatMessage = floatMessage;
 }
@@ -480,7 +480,7 @@ void Object::use_obj_on_p_proc(Object* objectUsed, CritterObject* usedBy)
 void Object::onUseAnimationActionFrame(Event::Event* event, CritterObject* critter)
 {
     use_p_proc(critter);
-    Animation* animation = dynamic_cast<Animation*>(critter->ui());
+    UI::Animation* animation = dynamic_cast<UI::Animation*>(critter->ui());
     if (animation)
     {
         animation->removeEventHandlers("actionFrame");

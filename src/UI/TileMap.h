@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_TILEMAP_H
-#define FALLTERGEIST_TILEMAP_H
+#ifndef FALLTERGEIST_UI_TILEMAP_H
+#define FALLTERGEIST_UI_TILEMAP_H
 
 // C++ standard includes
 #include <vector>
@@ -30,8 +30,10 @@
 
 namespace Falltergeist
 {
-
 class Texture;
+namespace UI
+{
+
 class Tile;
 
 class TileMap
@@ -44,9 +46,11 @@ protected:
 public:
     TileMap();
     ~TileMap();
+
     std::vector<Tile*>* tiles();
     void render();
 };
 
 }
-#endif // FALLTERGEIST_TILEMAP_H
+}
+#endif // FALLTERGEIST_UI_TILEMAP_H

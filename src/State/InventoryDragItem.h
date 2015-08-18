@@ -29,33 +29,25 @@
 
 namespace Falltergeist
 {
+namespace UI
+{
+    class ImageList;
+}
+
 namespace State
 {
 
 class InventoryDragItem : public State
 {
-protected:
-    ImageList* _itemUi;
 public:
-    InventoryDragItem(ImageList* itemUi);
+    InventoryDragItem(UI::ImageList* itemUi);
     ~InventoryDragItem() override;
 
     void init() override;
-
-    //void onDoneButtonClick(MouseEvent* event);
-    //void onArmorSlotMouseDown(MouseEvent* event);
-    //void onLeftHandSlotMouseDown(MouseEvent* event);
-    //void onRightHandSlotMouseDown(MouseEvent* event);
-    //void onSlotMouseDown(MouseEvent* event);
-    //void onSlotMouseUp(MouseEvent* event);
-    //void onSlotDrag(MouseEvent* event);
-    //void backgroundRightClick(MouseEvent* event);
-    //void onMouseButtonUp(MouseEvent* event);
     void handle(Event::Event* event) override;
-    //virtual void handle(Event* event);
-//private:
-    //std::string _handItemSummary (GameItemObject* hand);
-    //void _screenShow (unsigned int PID);
+
+protected:
+    UI::ImageList* _itemUi = nullptr;
 };
 
 }
