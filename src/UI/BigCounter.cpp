@@ -46,7 +46,7 @@ BigCounter::~BigCounter()
 {
 }
 
-Texture* BigCounter::texture() const
+Graphics::Texture* BigCounter::texture() const
 {
     static const int kCharWidth = 14;
     static const int kCharHeight = 24;
@@ -64,13 +64,13 @@ Texture* BigCounter::texture() const
             break;
     }
 
-    _textureOnDemand = Texture::generateTextureForNumber(
+    _textureOnDemand = Graphics::Texture::generateTextureForNumber(
         _number, _length, numbers->texture(),
         kCharWidth, kCharHeight, xOffsetByColor);
     return _textureOnDemand.get();
 }
 
-void BigCounter::setTexture(Texture* texture)
+void BigCounter::setTexture(Graphics::Texture* texture)
 {
     _textureOnDemand.reset(texture);
 }

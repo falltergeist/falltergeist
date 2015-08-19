@@ -83,12 +83,12 @@ void Base::setY(int value)
     _y = value;
 }
 
-Texture* Base::texture() const
+Graphics::Texture* Base::texture() const
 {
     return _texture;
 }
 
-void Base::setTexture(Texture* texture)
+void Base::setTexture(Graphics::Texture* texture)
 {
     _texture = texture;
 }
@@ -130,7 +130,7 @@ void Base::render(bool eggTransparency)
             return;
         }
 
-        if (!_tmptex) _tmptex = new Texture(texture()->width(),texture()->height());
+        if (!_tmptex) _tmptex = new Graphics::Texture(texture()->width(),texture()->height());
         texture()->copyTo(_tmptex);
 
         _tmptex->blitWithAlpha(egg, egg_dx, egg_dy);

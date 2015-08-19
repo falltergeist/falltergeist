@@ -45,7 +45,7 @@ public:
     Slider(int x, int y);
     ~Slider() override;
 
-    Texture* texture() const override;
+    Graphics::Texture* texture() const override;
     int x() const override;
 
     void handle(Event::Event* event) override;

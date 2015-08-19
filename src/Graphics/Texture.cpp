@@ -17,11 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Graphics/Texture.h"
+
 // C++ standard includes
 
 // Falltergeist includes
 #include "../Base/StlFeatures.h"
-#include "../Graphics/Texture.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Exception.h"
@@ -29,6 +31,8 @@
 // Third party includes
 
 namespace Falltergeist
+{
+namespace Graphics
 {
 
 using namespace Base;
@@ -341,4 +345,5 @@ std::unique_ptr<Texture> Texture::generateTextureForNumber(
     return std::move(texture);
 }
 
+}
 }

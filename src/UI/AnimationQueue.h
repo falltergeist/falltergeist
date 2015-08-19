@@ -49,7 +49,7 @@ public:
     void start();
     void setRepeat(bool value);
 
-    Texture* texture() const override;
+    Graphics::Texture* texture() const override;
     void render(bool eggTransparency = false) override;
     void think() override;
     unsigned int pixel(unsigned int x, unsigned int y) override;

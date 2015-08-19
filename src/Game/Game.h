@@ -37,6 +37,11 @@ namespace Audio
 {
     class Mixer;
 }
+namespace Graphics
+{
+    class AnimatedPalette;
+    class Renderer;
+}
 namespace Lua
 {
     class Script;
@@ -52,13 +57,9 @@ namespace UI
     class TextArea;
 }
 class Exception;
-class Screen;
 class ResourceManager;
 class Mouse;
-class Renderer;
-class AnimatedPalette;
 class Settings;
-class InputController;
 
 namespace Game
 {
@@ -89,7 +90,7 @@ public:
     void setPlayer(DudeObject* player);
     DudeObject* player();
     Mouse* mouse() const;
-    Renderer* renderer();
+    Graphics::Renderer* renderer();
     Time* gameTime();
     State::Location* locationState();
     Audio::Mixer* mixer();
@@ -98,7 +99,7 @@ public:
     int GVAR(unsigned int number);
 
     Settings* settings() const;
-    AnimatedPalette* animatedPalette();
+    Graphics::AnimatedPalette* animatedPalette();
 
 protected:
     std::vector<int> _GVARS;
@@ -107,17 +108,17 @@ protected:
     std::vector<State::State*> _statesForThinkAndHandle;
     std::vector<State::State*> _statesForDelete;
 
-    DudeObject* _player = 0;
-    Time* _gameTime = 0;
-    Renderer* _renderer = 0;
-    Mouse* _mouse = 0;
+    DudeObject* _player = nullptr;
+    Time* _gameTime = nullptr;
+    Graphics::Renderer* _renderer = nullptr;
+    Mouse* _mouse = nullptr;
     std::unique_ptr<Audio::Mixer> _mixer;
     UI::FpsCounter* _fpsCounter =  nullptr;
     UI::TextArea* _mousePosition = nullptr;
     UI::TextArea* _currentTime = nullptr;
     UI::TextArea* _falltergeistVersion = nullptr;
     std::unique_ptr<Settings> _settings;
-    AnimatedPalette* _animatedPalette = 0;
+    Graphics::AnimatedPalette* _animatedPalette = nullptr;
     bool _quit = false;
     SDL_Event _event;
     bool _initialized = false;

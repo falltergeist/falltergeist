@@ -38,7 +38,7 @@ class Font
 protected:
     unsigned int _color = 0;
     libfalltergeist::Aaf::File* _aaf = nullptr;
-    Texture* _texture = nullptr;
+    Graphics::Texture* _texture = nullptr;
 public:
     Font(const std::string& filename, unsigned int color);
     ~Font();
@@ -54,7 +54,7 @@ public:
     unsigned short width();
     unsigned short height();
 
-    Texture* texture();
+    Graphics::Texture* texture();
 
     libfalltergeist::Aaf::File* aaf();
 };

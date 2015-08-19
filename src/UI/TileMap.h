@@ -30,7 +30,10 @@
 
 namespace Falltergeist
 {
-class Texture;
+namespace Graphics
+{
+    class Texture;
+}
 namespace UI
 {
 
@@ -38,17 +41,19 @@ class Tile;
 
 class TileMap
 {
-protected:
-    unsigned int _square = 0;
-    Texture* _texture = 0;
-    std::vector<Tile*> _tiles;
-    void _generateTexture();
 public:
     TileMap();
     ~TileMap();
 
     std::vector<Tile*>* tiles();
     void render();
+
+protected:
+    unsigned int _square = 0;
+    Graphics::Texture* _texture = nullptr;
+    std::vector<Tile*> _tiles;
+    void _generateTexture();
+
 };
 
 }

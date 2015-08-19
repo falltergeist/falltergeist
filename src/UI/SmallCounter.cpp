@@ -45,7 +45,7 @@ SmallCounter::~SmallCounter()
 {
 }
 
-Texture* SmallCounter::texture() const
+Graphics::Texture* SmallCounter::texture() const
 {
     static const int kCharWidth = 9;
     static const int kCharHeight = 16;
@@ -67,7 +67,7 @@ Texture* SmallCounter::texture() const
     }
 
     // number as text, always positive
-    auto texture = Texture::generateTextureForNumber(
+    auto texture = Graphics::Texture::generateTextureForNumber(
         abs(_number), _length, numbers->texture(),
         kCharWidth, kCharHeight, xOffsetByColor, true);
     if (_type == Type::SIGNED)
@@ -80,7 +80,7 @@ Texture* SmallCounter::texture() const
     return (_textureOnDemand = std::move(texture)).get();
 }
 
-void SmallCounter::setTexture(Texture* texture)
+void SmallCounter::setTexture(Graphics::Texture* texture)
 {
     _textureOnDemand.reset(texture);
 }

@@ -64,7 +64,7 @@ void InventoryItem::setType(Type value)
     _type = value;
 }
 
-Texture* InventoryItem::texture() const
+Graphics::Texture* InventoryItem::texture() const
 {
     //if (!_texture)
     //{

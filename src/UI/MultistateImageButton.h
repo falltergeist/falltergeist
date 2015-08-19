@@ -76,7 +76,7 @@ public:
     int modeFactor() const;
     void setModeFactor(int factor);
 
-    Texture* texture() const override;
+    Graphics::Texture* texture() const override;
 
 protected:
     ImageList _imageList;

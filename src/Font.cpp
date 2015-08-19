@@ -49,7 +49,7 @@ Font::Font(const std::string& filename, unsigned int color)
         }
     }
 
-    _texture = new Texture(width, height);
+    _texture = new Graphics::Texture(width, height);
     _texture->loadFromRGBA(rgba);
     delete [] rgba;
 
@@ -85,7 +85,7 @@ unsigned short Font::spaceWidth()
     return _aaf->spaceWidth();
 }
 
-Texture* Font::texture()
+Graphics::Texture* Font::texture()
 {
     return _texture;
 }

@@ -171,7 +171,7 @@ void MultistateImageButton::_onLeftButtonUp(Event::Mouse* event)
     }
 }
 
-Texture* MultistateImageButton::texture() const
+Graphics::Texture* MultistateImageButton::texture() const
 {
     return _imageList.images()->at(_currentState)->texture();
 }

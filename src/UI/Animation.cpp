@@ -96,7 +96,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
 
     if (frm->animatedPalette())
     {
-        AnimatedPalette*  palette=Game::getInstance()->animatedPalette();
+        Graphics::AnimatedPalette*  palette=Game::getInstance()->animatedPalette();
         auto masks = frm->animatedMasks();
 
         if ((*masks)[MASK::MONITOR] != NULL)
@@ -111,7 +111,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
                     mask[j] = palette->color((*masks)[MASK::MONITOR][j],i);
                 }
                 //set
-                auto texture = new Texture(frm->width(), frm->height());
+                auto texture = new Graphics::Texture(frm->width(), frm->height());
                 texture->loadFromRGBA(mask);
                 _monitorTextures.push_back(texture);
             }
@@ -129,7 +129,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
                     mask[j] = palette->color(((*masks)[MASK::SLIME][j]),i);
                 }
                 //set
-                auto texture = new Texture(frm->width(), frm->height());
+                auto texture = new Graphics::Texture(frm->width(), frm->height());
                 texture->loadFromRGBA(mask);
                 _slimeTextures.push_back(texture);
             }
@@ -147,7 +147,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
                     mask[j] = palette->color(((*masks)[MASK::SHORE][j]),i);
                 }
                 //set
-                auto texture = new Texture(frm->width(), frm->height());
+                auto texture = new Graphics::Texture(frm->width(), frm->height());
                 texture->loadFromRGBA(mask);
                 _shoreTextures.push_back(texture);
             }
@@ -166,7 +166,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
                     mask[j] = palette->color(((*masks)[MASK::FIRE_SLOW][j]),i);
                 }
                 //set
-                auto texture = new Texture(frm->width(), frm->height());
+                auto texture = new Graphics::Texture(frm->width(), frm->height());
                 texture->loadFromRGBA(mask);
                 _fireSlowTextures.push_back(texture);
             }
@@ -184,7 +184,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
                     mask[j] = palette->color(((*masks)[MASK::FIRE_FAST][j]),i);
                 }
                 //set
-                auto texture = new Texture(frm->width(), frm->height());
+                auto texture = new Graphics::Texture(frm->width(), frm->height());
                 texture->loadFromRGBA(mask);
                 _fireFastTextures.push_back(texture);
             }
@@ -201,7 +201,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
                     mask[j] = palette->color(((*masks)[MASK::REDDOT][j]),i);
                 }
                 //set
-                auto texture = new Texture(frm->width(), frm->height());
+                auto texture = new Graphics::Texture(frm->width(), frm->height());
                 texture->loadFromRGBA(mask);
                 _reddotTextures.push_back(texture);
             }
@@ -266,7 +266,7 @@ void Animation::think()
 void Animation::render(bool eggTransparency)
 {
     auto frame = frames()->at(_currentFrame);
-    AnimatedPalette* pal = Game::getInstance()->animatedPalette();
+    Graphics::AnimatedPalette* pal = Game::getInstance()->animatedPalette();
 
     if (eggTransparency)
     {
@@ -336,7 +336,7 @@ void Animation::render(bool eggTransparency)
             return;
         }
 
-        if (!_tmptex) _tmptex = new Texture(texture()->width(),texture()->height());
+        if (!_tmptex) _tmptex = new Graphics::Texture(texture()->width(),texture()->height());
         texture()->copyTo(_tmptex);
 
         if (pal->getCounter(MASK::FIRE_FAST) < _fireFastTextures.size())

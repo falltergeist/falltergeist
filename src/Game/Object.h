@@ -37,6 +37,10 @@ namespace Event
 {
     class Event;
 }
+namespace Graphics
+{
+    class Texture;
+}
 namespace UI
 {
     class AnimationQueue;
@@ -47,7 +51,6 @@ namespace UI
 class Hexagon;
 class Location;
 class VM;
-class Texture;
 
 namespace Game
 {
@@ -227,16 +230,16 @@ protected:
     Orientation _orientation;
     std::string _name;
     std::string _description;
-    VM* _script = 0;
+    VM* _script = nullptr;
     UI::Base* _ui = nullptr;
-    Hexagon* _hexagon = 0;
+    Hexagon* _hexagon = nullptr;
     virtual void _generateUi();
     void addUIEventHandlers();
     UI::TextArea* _floatMessage = nullptr;
     bool _inRender = false;
     Trans _trans = Trans::DEFAULT;
     Orientation _lightOrientation;
-    Texture* _tmptex = NULL;
+    Graphics::Texture* _tmptex = nullptr;
     unsigned int _lightIntensity = 0;
     unsigned int _lightRadius = 0;
     virtual bool _useEggTransparency();

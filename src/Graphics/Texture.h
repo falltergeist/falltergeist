@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_TEXTURE_H
-#define FALLTERGEIST_TEXTURE_H
+#ifndef FALLTERGEIST_GRAPHICS_TEXTURE_H
+#define FALLTERGEIST_GRAPHICS_TEXTURE_H
 
 // C++ standard includes
 #include <memory>
@@ -30,28 +30,16 @@
 
 namespace Falltergeist
 {
+namespace Graphics
+{
 
 class Texture
 {
-protected:
-
-    unsigned int _width = 0;
-    unsigned int _height = 0;
-
-    SDL_Texture* _sdlTexture = 0;
-    SDL_Surface* _sdlSurface = 0;
-
-    SDL_Color _colorModifier = {255, 255, 255, 255};
-    SDL_BlendMode _blendMode = SDL_BLENDMODE_BLEND;
-
-    bool _changed = false;
-
-    void _init();
 
 public:
     Texture(unsigned int width, unsigned int height);
     Texture(SDL_Surface* surface);
-    virtual ~Texture();
+    ~Texture();
 
     SDL_Surface* sdlSurface();
     SDL_Texture* sdlTexture();
@@ -92,7 +80,23 @@ public:
         unsigned int charHeight,
         unsigned int xOffsetByColor,
         bool isSigned = false);
+
+protected:
+
+    unsigned int _width = 0;
+    unsigned int _height = 0;
+
+    SDL_Texture* _sdlTexture = 0;
+    SDL_Surface* _sdlSurface = 0;
+
+    SDL_Color _colorModifier = {255, 255, 255, 255};
+    SDL_BlendMode _blendMode = SDL_BLENDMODE_BLEND;
+
+    bool _changed = false;
+
+    void _init();
 };
 
 }
-#endif // FALLTERGEIST_TEXTURE_H
+}
+#endif // FALLTERGEIST_GRAPHICS_TEXTURE_H

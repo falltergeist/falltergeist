@@ -29,7 +29,10 @@
 
 namespace Falltergeist
 {
-class Texture;
+namespace Graphics
+{
+    class Texture;
+}
 
 namespace UI
 {

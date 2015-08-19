@@ -40,7 +40,7 @@ public:
     Image(const std::string& filename);
     Image(unsigned int width, unsigned int height);
     Image(Image* image);
-    Image(Texture* texture);
+    Image(Graphics::Texture* texture);
     Image(libfalltergeist::Frm::File* frm, unsigned int direction);
     ~Image() override;
 

@@ -219,7 +219,7 @@ void ImageButton::_init(Type type)
     addEventHandler("mouseout", [this](Event::Event* event){ this->_onMouseOut(dynamic_cast<Event::Mouse*>(event)); });
 }
 
-Texture* ImageButton::texture() const
+Graphics::Texture* ImageButton::texture() const
 {
     if (_checkboxMode && _checked) return _textures.at(1);
 

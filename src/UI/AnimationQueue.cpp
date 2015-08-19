@@ -123,7 +123,7 @@ void AnimationQueue::think()
     }
 }
 
-Texture* AnimationQueue::texture() const
+Graphics::Texture* AnimationQueue::texture() const
 {
     return currentAnimation()->texture();
 }

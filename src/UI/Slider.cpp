@@ -110,7 +110,7 @@ void Slider::_onLeftButtonUp(Event::Mouse* event)
     }
 }
 
-Texture* Slider::texture() const
+Graphics::Texture* Slider::texture() const
 {
     if (_drag) return _imageList.images()->at(0)->texture();
     return _imageList.images()->at(1)->texture();

@@ -75,7 +75,7 @@ void ImageList::addImage(const std::string& filename)
     addImage(new Image(filename));
 }
 
-Texture* ImageList::texture() const
+Graphics::Texture* ImageList::texture() const
 {
     return images()->at(currentImage())->texture();
 }

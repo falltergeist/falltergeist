@@ -80,7 +80,7 @@ public:
     ~ImageButton() override;
 
     void setState(unsigned int value);
-    Texture* texture() const;
+    Graphics::Texture* texture() const;
 
     bool checked();
     void setChecked(bool _checked);
@@ -89,7 +89,7 @@ protected:
     bool _checkboxMode = false; // remember new state after click
     bool _checked = false;
 
-    std::vector<Texture*> _textures;
+    std::vector<Graphics::Texture*> _textures;
     void _onLeftButtonClick(Event::Mouse* event);
     void _onLeftButtonDown(Event::Mouse* event);
     void _onMouseOut(Event::Mouse* event);

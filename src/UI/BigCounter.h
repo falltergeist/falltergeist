@@ -47,7 +47,7 @@ public:
     BigCounter(int x = 0, int y = 0, unsigned int length = 2);
     ~BigCounter() override;
 
-    Texture* texture() const override;
+    Graphics::Texture* texture() const override;
 
     void setColor(Color color);
     Color color();
@@ -59,9 +59,9 @@ protected:
     Color _color = Color::WHITE;
     unsigned int _number = 0;
     unsigned int _length = 2;
-    mutable std::unique_ptr<Texture> _textureOnDemand;
+    mutable std::unique_ptr<Graphics::Texture> _textureOnDemand;
 
-    void setTexture(Texture* texture) override; // We should override this method to prevent changing old _texture field.
+    void setTexture(Graphics::Texture* texture) override; // We should override this method to prevent changing old _texture field.
 
 private:
     using Falltergeist::UI::Base::_texture; // Hide unused field from childs.

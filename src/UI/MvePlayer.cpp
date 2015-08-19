@@ -745,7 +745,7 @@ void MvePlayer::_initVideoBuffer(uint8_t* data)
     _decodingMap = new uint8_t [(width*height / (8*8))];
 
     if (_texture != NULL) return;
-    _texture = new Texture(width, height);
+    _texture = new Graphics::Texture(width, height);
 }
 
 

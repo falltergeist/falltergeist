@@ -75,7 +75,7 @@ void Game::init(std::unique_ptr<Settings> settings)
     auto width = _settings->screenWidth();
     auto height = _settings->screenHeight();
 
-    _renderer = new Renderer(width, height);
+    _renderer = new Graphics::Renderer(width, height);
 
     Logger::info("GAME") << CrossPlatform::getVersion() << std::endl;
     Logger::info("GAME") << "Opensource Fallout 2 game engine" << std::endl;
@@ -99,7 +99,7 @@ void Game::init(std::unique_ptr<Settings> settings)
 
     _falltergeistVersion = new UI::TextArea(version, 3, renderer()->height() - 10);
     _mousePosition = new UI::TextArea("", renderer()->width() - 55, 14);
-    _animatedPalette = new AnimatedPalette();
+    _animatedPalette = new Graphics::AnimatedPalette();
     _gameTime = new Time();
     _currentTime = new UI::TextArea(renderer()->width() - 150, renderer()->height() - 10);
 
@@ -295,7 +295,7 @@ std::vector<State::State*>* Game::statesForThinkAndHandle()
     return &_statesForThinkAndHandle;
 }
 
-Renderer* Game::renderer()
+Graphics::Renderer* Game::renderer()
 {
     return _renderer;
 }
@@ -366,7 +366,7 @@ void Game::handle()
 
                     if (keyboardEvent->keyCode() == SDLK_F12)
                     {
-                        Texture* texture = renderer()->screenshot();
+                        Graphics::Texture* texture = renderer()->screenshot();
                         std::string name = std::to_string(SDL_GetTicks()) +  ".bmp";
                         SDL_SaveBMP(texture->sdlSurface(), name.c_str());
                         delete texture;
@@ -433,7 +433,7 @@ void Game::render()
     renderer()->endFrame();
 }
 
-AnimatedPalette* Game::animatedPalette()
+Graphics::AnimatedPalette* Game::animatedPalette()
 {
     return _animatedPalette;
 }

@@ -29,7 +29,10 @@
 
 namespace Falltergeist
 {
-class Texture;
+namespace Graphics
+{
+    class Texture;
+}
 
 namespace UI
 {
@@ -52,8 +55,8 @@ public:
     virtual int yOffset() const;
     virtual void setYOffset(int yOffset);
 
-    virtual Texture* texture() const;
-    virtual void setTexture(Texture* texture);
+    virtual Graphics::Texture* texture() const;
+    virtual void setTexture(Graphics::Texture* texture);
 
     virtual bool visible() const;
     virtual void setVisible(bool value);
@@ -72,8 +75,8 @@ protected:
     int _y = 0;
     int _xOffset = 0;
     int _yOffset = 0;
-    Texture* _texture = 0;
-    Texture* _tmptex = 0;
+    Graphics::Texture* _texture = 0;
+    Graphics::Texture* _tmptex = 0;
     bool _leftButtonPressed = false;
     bool _rightButtonPressed = false;
     bool _drag = false;

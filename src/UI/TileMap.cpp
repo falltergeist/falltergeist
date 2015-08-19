@@ -104,7 +104,7 @@ void TileMap::_generateTexture()
 
     _square = std::ceil(std::sqrt(numbers.size()));
 
-    _texture = new Texture(_square*80, _square*36);
+    _texture = new Graphics::Texture(_square*80, _square*36);
 
     auto tilesLst = ResourceManager::getInstance()->lstFileType("art/tiles/tiles.lst");
     for (unsigned int i = 0; i != numbers.size(); ++i)

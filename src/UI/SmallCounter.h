@@ -53,7 +53,7 @@ public:
     SmallCounter(int x = 0, int y = 0);
     ~SmallCounter() override;
 
-    Texture* texture() const override;
+    Graphics::Texture* texture() const override;
 
     Color color() const;
     void setColor(Color color);
@@ -72,9 +72,9 @@ protected:
     signed int _number = 0;
     unsigned int _length = 3;
     Type _type = Type::UNSIGNED;
-    mutable std::unique_ptr<Texture> _textureOnDemand;
+    mutable std::unique_ptr<Graphics::Texture> _textureOnDemand;
 
-    void setTexture(Texture* texture) override;
+    void setTexture(Graphics::Texture* texture) override;
 
 private:
     // Hide unused field from childs.

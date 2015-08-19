@@ -61,7 +61,7 @@ public:
 
     void render(bool eggTransparency = false) override;
     unsigned int pixel(unsigned int x, unsigned int y) override;
-    Texture* texture() const override;
+    Graphics::Texture* texture() const override;
     unsigned int width() const override;
     unsigned int height() const override;
 

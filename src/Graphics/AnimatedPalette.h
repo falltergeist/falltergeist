@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_ANIMATEDPALETTE_H
-#define FALLTERGEIST_ANIMATEDPALETTE_H
+#ifndef FALLTERGEIST_GRAPHICS_ANIMATEDPALETTE_H
+#define FALLTERGEIST_GRAPHICS_ANIMATEDPALETTE_H
 
 // C++ standard includes
 
@@ -29,9 +29,19 @@
 
 namespace Falltergeist
 {
+namespace Graphics
+{
 
 class AnimatedPalette
 {
+public:
+    AnimatedPalette();
+    ~AnimatedPalette();
+
+    unsigned int color(unsigned char index, unsigned char counter);
+    void think();
+    unsigned int getCounter(MASK type);
+
 protected:
     unsigned int * _slimePalette;
     unsigned int * _fireSlowPalette;
@@ -51,14 +61,8 @@ protected:
     unsigned int _blinkingRedTicks = 0;
     unsigned char _blinkingRedCounter = 0;
     short _blinkingRed = -1;
-public:
-    AnimatedPalette();
-    ~AnimatedPalette();
-    unsigned int color(unsigned char index, unsigned char counter);
-    void think();
-    unsigned int getCounter(MASK type);
 };
 
 }
-
-#endif // FALLTERGEIST_ANIMATEDPALETTE_H
+}
+#endif // FALLTERGEIST_GRAPHICS_ANIMATEDPALETTE_H

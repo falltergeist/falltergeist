@@ -36,6 +36,8 @@
 
 namespace Falltergeist
 {
+namespace Graphics
+{
 
 Renderer::Renderer(unsigned int width, unsigned int height)
 {
@@ -308,4 +310,5 @@ float Renderer::scaleY()
     return _scaleY;
 }
 
+}
 }

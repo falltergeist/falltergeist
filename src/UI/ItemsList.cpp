@@ -43,7 +43,7 @@ namespace UI
 
 ItemsList::ItemsList(int x, int y) : Falltergeist::UI::Base(x, y)
 {
-    _texture = new Texture(_slotWidth, _slotHeight * _slotsNumber);
+    _texture = new Graphics::Texture(_slotWidth, _slotHeight * _slotsNumber);
     _texture->fill(0x000000FF);
 
     addEventHandler("mouseleftdown",  [this](Event::Event* event){ this->onMouseLeftDown(dynamic_cast<Event::Mouse*>(event)); });

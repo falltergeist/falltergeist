@@ -231,7 +231,7 @@ libfalltergeist::Sve::File* ResourceManager::sveFileType(const std::string& file
     return dynamic_cast<libfalltergeist::Sve::File*>(datFileItem(filename));
 }
 
-Texture* ResourceManager::texture(const std::string& filename)
+Graphics::Texture* ResourceManager::texture(const std::string& filename)
 {
     if (_textures.find(filename) != _textures.end())
     {
@@ -240,7 +240,7 @@ Texture* ResourceManager::texture(const std::string& filename)
 
     std::string ext = filename.substr(filename.length() - 4);
 
-    Texture* texture = 0;
+    Graphics::Texture* texture = nullptr;
 
     if (ext == ".png")
     {
@@ -253,7 +253,7 @@ Texture* ResourceManager::texture(const std::string& filename)
 
         SDL_PixelFormat* pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
         SDL_Surface* tempSurface2 = SDL_ConvertSurface(tempSurface, pixelFormat, 0);
-        texture = new Texture(tempSurface2);
+        texture = new Graphics::Texture(tempSurface2);
 
         SDL_FreeFormat(pixelFormat);
         SDL_FreeSurface(tempSurface);
@@ -264,14 +264,14 @@ Texture* ResourceManager::texture(const std::string& filename)
     {
         auto rix = rixFileType(filename);
         if (!rix) return 0;
-        texture = new Texture(rix->width(), rix->height());
+        texture = new Graphics::Texture(rix->width(), rix->height());
         texture->loadFromRGBA(rix->rgba());
     }
     else if (ext == ".frm")
     {
         auto frm = frmFileType(filename);
         if (!frm) return 0;
-        texture = new Texture(frm->width(), frm->height());
+        texture = new Graphics::Texture(frm->width(), frm->height());
         texture->loadFromRGBA(frm->rgba(palFileType("color.pal")));
     }
     else
@@ -279,7 +279,7 @@ Texture* ResourceManager::texture(const std::string& filename)
         throw Exception("ResourceManager::surface() - unknown image type:" + filename);
     }
 
-    _textures.insert(std::pair<std::string, Texture*>(filename, texture));
+    _textures.insert(std::pair<std::string, Graphics::Texture*>(filename, texture));
     return texture;
 }
 
@@ -512,7 +512,7 @@ std::string ResourceManager::FIDtoFrmName(unsigned int FID)
     return prefix + lst->strings()->at(baseId);
 }
 
-std::unordered_map<std::string, Texture*>* ResourceManager::textures()
+std::unordered_map<std::string, Graphics::Texture*>* ResourceManager::textures()
 {
     return &_textures;
 }

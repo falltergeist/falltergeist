@@ -45,12 +45,12 @@ public:
     void render(bool eggTransparency = false) override;
 
 protected:
-    std::vector<Texture*> _slimeTextures;
-    std::vector<Texture*> _fireSlowTextures;
-    std::vector<Texture*> _fireFastTextures;
-    std::vector<Texture*> _shoreTextures;
-    std::vector<Texture*> _monitorTextures;
-    std::vector<Texture*> _reddotTextures;
+    std::vector<Graphics::Texture*> _slimeTextures;
+    std::vector<Graphics::Texture*> _fireSlowTextures;
+    std::vector<Graphics::Texture*> _fireFastTextures;
+    std::vector<Graphics::Texture*> _shoreTextures;
+    std::vector<Graphics::Texture*> _monitorTextures;
+    std::vector<Graphics::Texture*> _reddotTextures;
 };
 
 }

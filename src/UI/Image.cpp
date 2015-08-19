@@ -42,17 +42,17 @@ Image::Image(const std::string& filename) : Falltergeist::UI::Base()
 Image::Image(Image* image) : Falltergeist::UI::Base()
 {
     // @fixme: we should use "clone" feature here
-    setTexture(new Texture(image->texture()->width(), image->texture()->height()));
+    setTexture(new Graphics::Texture(image->texture()->width(), image->texture()->height()));
     unsigned int* pixels = (unsigned int*)image->texture()->sdlSurface()->pixels;
     _texture->loadFromRGBA(pixels);
 }
 
 Image::Image(unsigned int width, unsigned int height) : Falltergeist::UI::Base()
 {
-    setTexture(new Texture(width, height));
+    setTexture(new Graphics::Texture(width, height));
 }
 
-Image::Image(Texture* texture) : Falltergeist::UI::Base()
+Image::Image(Graphics::Texture* texture) : Falltergeist::UI::Base()
 {
     setTexture(texture);
 }
@@ -65,10 +65,10 @@ Image::Image(libfalltergeist::Frm::File* frm, unsigned int direction) : Fallterg
     }
 
     // direction texture
-    setTexture(new Texture(frm->directions()->at(direction)->width(), frm->directions()->at(direction)->height()));
+    setTexture(new Graphics::Texture(frm->directions()->at(direction)->width(), frm->directions()->at(direction)->height()));
 
     // full frm texture
-    Texture* texture = new Texture(frm->width(), frm->height());
+    Graphics::Texture* texture = new Graphics::Texture(frm->width(), frm->height());
     texture->loadFromRGBA(frm->rgba(ResourceManager::getInstance()->palFileType("color.pal")));
 
     // direction offset in full texture

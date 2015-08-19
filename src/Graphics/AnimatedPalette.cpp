@@ -17,10 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Graphics/AnimatedPalette.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Graphics/AnimatedPalette.h"
 
 // Third party includes
 #include <SDL.h>
@@ -28,6 +30,8 @@
 using namespace libfalltergeist;
 
 namespace Falltergeist
+{
+namespace Graphics
 {
 
 AnimatedPalette::AnimatedPalette()
@@ -192,5 +196,5 @@ unsigned int AnimatedPalette::getCounter(MASK type)
     return 0;
 }
 
-
+}
 }
