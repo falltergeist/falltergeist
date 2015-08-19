@@ -44,7 +44,7 @@ using namespace luabridge;
 Script::Script(const std::string& filename)
 {
     _filename = filename;
-    _lua_State = lua_open();
+    _lua_State = luaL_newstate();
 
     _initialize();
 
@@ -151,8 +151,9 @@ bool Script::get(const std::string& name, bool defaultValue)
     {
         return defaultValue;
     }
-
-    return lua_toboolean(_lua_State, -1);
+    bool ret = lua_toboolean(_lua_State, -1);
+    lua_pop(_lua_State, 1);
+    return ret;
 }
 
 int Script::get(const std::string& name, int defaultValue)
@@ -162,7 +163,9 @@ int Script::get(const std::string& name, int defaultValue)
     {
         return defaultValue;
     }
-    return lua_tointeger(_lua_State, -1);
+    int ret = lua_tointeger(_lua_State, -1);
+    lua_pop(_lua_State, 1);
+    return ret;
 }
 
 double Script::get(const std::string& name, double defaultValue)
@@ -172,7 +175,9 @@ double Script::get(const std::string& name, double defaultValue)
     {
         return defaultValue;
     }
-    return lua_tonumber(_lua_State, -1);
+    double ret = lua_tonumber(_lua_State, -1);
+    lua_pop(_lua_State, 1);
+    return ret;
 }
 
 std::string Script::get(const std::string& name, const std::string& defaultValue)
@@ -182,7 +187,9 @@ std::string Script::get(const std::string& name, const std::string& defaultValue
     {
         return defaultValue;
     }
-    return lua_tostring(_lua_State, -1);
+    std::string ret = lua_tostring(_lua_State, -1);
+    lua_pop(_lua_State, 1);
+    return ret;
 }
 
 lua_State* Script::luaState()
