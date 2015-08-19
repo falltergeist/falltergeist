@@ -17,12 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Ini/File.h"
+
 // C++ standard includes
 #include <algorithm>
 
 // Falltergeist includes
 #include "../Exception.h"
-#include "../Ini/File.h"
 
 // Third party includes
 
@@ -30,6 +32,14 @@ namespace Falltergeist
 {
 namespace Ini
 {
+
+File::File()
+{
+}
+
+File::~File()
+{
+}
 
 std::shared_ptr<Section> File::section(const std::string &name)
 {
@@ -53,12 +63,6 @@ std::map<std::string, std::shared_ptr<Section>>* File::sections()
     return &_sections;
 }
 
-File::File()
-{}
-
-File::~File()
-{}
-
 File::iterator File::begin()
 {
     return _sections.begin();
@@ -79,5 +83,5 @@ File::const_iterator File::end() const
     return _sections.end();
 }
 
-} // Ini
-} // Falltergeist
+}
+}

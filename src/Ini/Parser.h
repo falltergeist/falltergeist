@@ -38,6 +38,12 @@ class Value;
 
 class Parser
 {
+public:
+    Parser(std::istream &stream);
+    ~Parser();
+
+    std::shared_ptr<File> parse();
+
 private:
     std::istream &_stream; // stream to parse
     std::string  _section; // current section
@@ -64,12 +70,8 @@ protected:
     bool _parseArrayDecimal(std::vector<Value> &vec, std::string val);
     bool _parseArrayBool(std::vector<Value> &vec, std::string val);
 
-public:
-    Parser(std::istream &stream);
-    std::shared_ptr<File> parse();
 };
 
-} // Ini
-} // Falltergeist
-
+}
+}
 #endif // FALLTERGEIST_INI_PARSER_H

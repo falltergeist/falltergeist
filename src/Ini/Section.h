@@ -37,32 +37,14 @@ namespace Ini
 
 class Section
 {
-private:
+public:
     using PropertyMap = std::map<std::string, Value>;
     using PropertyMapConstIterator = PropertyMap::const_iterator;
-
-    PropertyMap _properties;
-    std::string _name;
-
-    static void _property(PropertyMapConstIterator iter, double &ret, double def);
-
-    static void _property(PropertyMapConstIterator iter, int &ret, int def);
-
-    static void _property(PropertyMapConstIterator iter, bool &ret, bool def);
-
-    static void _property(PropertyMapConstIterator iter, std::string &ret, const std::string &def);
-
-    static void _property(PropertyMapConstIterator iter, std::vector<Value> &ret);
-
-    static bool _hasType(PropertyMapConstIterator iter, Value::Tag tag);
-
-public:
-    Section(const std::string &name);
-    ~Section();
-
-
     using iterator = PropertyMap::iterator;
     using const_iterator = PropertyMap::const_iterator;
+
+    Section(const std::string &name);
+    ~Section();
 
     iterator begin();
     const_iterator begin() const;
@@ -92,9 +74,26 @@ public:
     void setPropertyArray(const std::string &name, const std::vector<Value> &value);
 
     bool hasProperty(const std::string &name) const;
+
+private:
+
+    PropertyMap _properties;
+    std::string _name;
+
+    static void _property(PropertyMapConstIterator iter, double &ret, double def);
+
+    static void _property(PropertyMapConstIterator iter, int &ret, int def);
+
+    static void _property(PropertyMapConstIterator iter, bool &ret, bool def);
+
+    static void _property(PropertyMapConstIterator iter, std::string &ret, const std::string &def);
+
+    static void _property(PropertyMapConstIterator iter, std::vector<Value> &ret);
+
+    static bool _hasType(PropertyMapConstIterator iter, Value::Tag tag);
+
 };
 
-} // Ini
-} // Falltergeist
-
+}
+}
 #endif // FALLTERGEIST_INI_SECTION_H

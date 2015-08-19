@@ -41,7 +41,6 @@ namespace Ini
 
 class File
 {
-    std::map<std::string, std::shared_ptr<Section>> _sections;
 public:
     using iterator = std::map<std::string, std::shared_ptr<Section>>::iterator;
     using const_iterator = std::map<std::string, std::shared_ptr<Section>>::const_iterator;
@@ -57,9 +56,12 @@ public:
     const_iterator end() const;
 
     bool hasSection(const std::string &name) const;
+
+private:
+    std::map<std::string, std::shared_ptr<Section>> _sections;
+
 };
 
-} // Ini
-} // Falltergeist
-
+}
+}
 #endif	// FALLTERGEIST_INI_FILE_H

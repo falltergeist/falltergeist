@@ -17,6 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Ini/Parser.h"
+
 // C++ standard includes
 #include <algorithm>
 #include <sstream>
@@ -31,6 +34,14 @@ namespace Falltergeist
 {
 namespace Ini
 {
+
+Parser::Parser(std::istream &stream) : _stream(stream), _section("")
+{
+}
+
+Parser::~Parser()
+{
+}
 
 void Parser::_trim(std::string &line)
 {
@@ -302,11 +313,6 @@ bool Parser::_parseArray(std::string &name, std::string &line, std::shared_ptr<F
     return false;
 }
 
-Parser::Parser(std::istream &stream) : _stream(stream), _section("")
-{
-
-}
-
 std::shared_ptr<File> Parser::parse()
 {
     auto ini = std::shared_ptr<File>(new File());
@@ -365,5 +371,5 @@ std::shared_ptr<File> Parser::parse()
     return ini;
 }
 
-} // Ini
-} // Falltergeist
+}
+}

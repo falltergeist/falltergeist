@@ -17,12 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Ini/Writer.h"
+
 // C++ standard includes
 
 // Falltergeist includes
 
 #include "../Ini/File.h"
-#include "../Ini/Writer.h"
 
 // Third party includes
 
@@ -57,5 +59,5 @@ void Writer::write(std::ostream &stream)
     }
 }
 
-} // Ini
-} // Falltergeist
+}
+}

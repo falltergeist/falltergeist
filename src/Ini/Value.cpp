@@ -17,11 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Ini/Value.h"
+
 // C++ standard includes
 #include <sstream>
 
 // Falltergeist includes
-#include "../Ini/Value.h"
 
 // Third party includes
 
@@ -77,13 +79,16 @@ Value &Value::operator=(const Value &rhs)
 }
 
 Value::Value(double doubleVal) : _tag(Value::Tag::DOUBLE), _doubleVal(doubleVal)
-{}
+{
+}
 
 Value::Value(int integerVal) : _tag(Value::Tag::INTEGER), _integerVal(integerVal)
-{}
+{
+}
 
 Value::Value(bool booleanVal) : _tag(Value::Tag::BOOLEAN), _booleanVal(booleanVal)
-{}
+{
+}
 
 Value::Value(const std::string& stringVal) : _tag(Value::Tag::STRING)
 {
@@ -192,12 +197,10 @@ double Value::doubleValue() const
     return 0.0;
 }
 
-
-
 Value::Tag Value::tag() const
 {
     return _tag;
 }
 
-} // Ini
-} // Falltergeist
+}
+}
