@@ -78,37 +78,6 @@ add_executable(falltergeist-bin main.cpp ${SOURCES} ${HEADERS})
 set_target_properties(falltergeist-bin PROPERTIES OUTPUT_NAME falltergeist)
 target_link_libraries(falltergeist-bin ${SDL2_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLIMAGE_LIBRARY} ${LIBFALLTERGEIST_LIBRARY} ${LUA_LIBRARY})
 
-#
-# Install section
-#
-if(WIN32)
-    install(TARGETS falltergeist-bin RUNTIME DESTINATION .)
-    install(DIRECTORY data DESTINATION .)
-
-    #MinGW runtime
-    if(MINGW)
-        get_filename_component(MINGW_BIN_PATH ${CMAKE_CXX_COMPILER} PATH )
-        set(dep_files ${dep_files} "${MINGW_BIN_PATH}/libwinpthread-*.dll")
-        set(dep_files ${dep_files} "${MINGW_BIN_PATH}/libgcc_s_*.dll")
-        set(dep_files ${dep_files} "${MINGW_BIN_PATH}/libstdc++-*.dll")
-    endif()
-
-    #dependencies
-    file(GLOB dep_files ${dep_files} "${CMAKE_FIND_ROOT_PATH}/bin/*.dll")
-    install(FILES ${dep_files} DESTINATION .)
-endif()
-
-if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-    install(TARGETS falltergeist-bin RUNTIME DESTINATION bin)
-    install(DIRECTORY data DESTINATION share/falltergeist)
-endif()
-
-if(APPLE)
-  configure_file(package/osx/Info.plist.in package/osx/Info.plist)
-  configure_file(package/osx.sh.in package/osx.sh)
-  add_custom_command(
-    OUTPUT Falltergeist.dmg
-    COMMAND sh ./package/osx.sh
-  )
-  add_custom_target(dmg DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Falltergeist.dmg)
-endif()
+include(cmake/install/windows.cmake)
+include(cmake/install/linux.cmake)
+include(cmake/install/apple.cmake)
