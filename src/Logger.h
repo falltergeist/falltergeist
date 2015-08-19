@@ -36,11 +36,11 @@ class Logger
 public:
     enum class Level
     {
-        DEBUG    = 0,
-        INFO     = 1,
-        WARNING  = 2,
-        ERROR    = 3,
-        CRITICAL = 4
+        LOG_DEBUG     = 0,
+        LOG_INFO      = 1,
+        LOG_WARNING   = 2,
+        LOG_ERROR     = 3,
+        LOG_CRITICAL  = 4
     };
 
     static Level level();
