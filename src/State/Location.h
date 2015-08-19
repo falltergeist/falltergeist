@@ -97,7 +97,7 @@ protected:
     std::vector<Game::Object*> _objects;
     UI::TextArea* _hexagonInfo = 0;
     
-    std::vector<Mouse::Icon> getCursorIconsForObject(Game::Object* object);
+    std::vector<Input::Mouse::Icon> getCursorIconsForObject(Game::Object* object);
 public:
     Location();
     ~Location();
@@ -121,7 +121,7 @@ public:
     void destroyObject(Game::Object* object);
     void centerCameraAtHexagon(Hexagon* hexagon);
     void centerCameraAtHexagon(int tileNum);
-    void handleAction(Game::Object* object, Mouse::Icon action);
+    void handleAction(Game::Object* object, Input::Mouse::Icon action);
     void toggleCursorMode();
     PlayerPanel* playerPanelState();
     

@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_MOUSE_H
-#define FALLTERGEIST_MOUSE_H
+#ifndef FALLTERGEIST_INPUT_MOUSE_H
+#define FALLTERGEIST_INPUT_MOUSE_H
 
 // C++ standard includes
 #include <vector>
@@ -33,6 +33,8 @@ namespace UI
 {
     class Base;
 }
+namespace Input
+{
 
 class Mouse
 {
@@ -114,5 +116,5 @@ protected:
 };
 
 }
-
-#endif // FALLTERGEIST_MOUSE_H
+}
+#endif // FALLTERGEIST_INPUT_MOUSE_H

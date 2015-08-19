@@ -66,7 +66,7 @@ void MainMenu::init()
     setModal(true);
     setFullscreen(true);
 
-    Game::getInstance()->mouse()->setState(Mouse::Cursor::BIG_ARROW);
+    Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
 
     auto renderer = Game::getInstance()->renderer();
     setX((renderer->width()  - 640)*0.5);

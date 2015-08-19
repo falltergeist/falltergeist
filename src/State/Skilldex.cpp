@@ -209,7 +209,7 @@ void Skilldex::onKeyDown(Event::Keyboard* event)
 
 void Skilldex::onStateActivate(Event::State* event)
 {
-    Game::getInstance()->mouse()->pushState(Mouse::Cursor::BIG_ARROW);
+    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
 }
 
 void Skilldex::onStateDeactivate(Event::State* event)

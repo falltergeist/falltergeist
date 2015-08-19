@@ -42,6 +42,10 @@ namespace Graphics
     class AnimatedPalette;
     class Renderer;
 }
+namespace Input
+{
+    class Mouse;
+}
 namespace Lua
 {
     class Script;
@@ -58,7 +62,6 @@ namespace UI
 }
 class Exception;
 class ResourceManager;
-class Mouse;
 class Settings;
 
 namespace Game
@@ -89,7 +92,7 @@ public:
 
     void setPlayer(DudeObject* player);
     DudeObject* player();
-    Mouse* mouse() const;
+    Input::Mouse* mouse() const;
     Graphics::Renderer* renderer();
     Time* gameTime();
     State::Location* locationState();
@@ -111,7 +114,7 @@ protected:
     DudeObject* _player = nullptr;
     Time* _gameTime = nullptr;
     Graphics::Renderer* _renderer = nullptr;
-    Mouse* _mouse = nullptr;
+    Input::Mouse* _mouse = nullptr;
     std::unique_ptr<Audio::Mixer> _mixer;
     UI::FpsCounter* _fpsCounter =  nullptr;
     UI::TextArea* _mousePosition = nullptr;

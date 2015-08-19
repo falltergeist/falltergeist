@@ -91,7 +91,7 @@ void Game::init(std::unique_ptr<Settings> settings)
     renderer()->setCaption(version.c_str());
 
     _mixer = make_unique<Audio::Mixer>();
-    _mouse = new Mouse();
+    _mouse = new Input::Mouse();
     _fpsCounter = new UI::FpsCounter(renderer()->width() - 42, 2);
 
     version += " " + std::to_string(renderer()->width()) + "x" + std::to_string(renderer()->height());
@@ -184,7 +184,7 @@ DudeObject* Game::player()
     return _player;
 }
 
-Mouse* Game::mouse() const
+Input::Mouse* Game::mouse() const
 {
     return _mouse;
 }

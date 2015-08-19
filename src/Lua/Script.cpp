@@ -63,8 +63,8 @@ void Script::_initialize()
     luaL_openlibs(_lua_State);
 
     // luabridge::Namespace::addProperty cannot deduce setter type =(
-    static void (*const setterGameMouse)(Mouse*) = nullptr;
-    static Mouse* (*const getterGameMouse)() = []() -> Mouse*
+    static void (*const setterGameMouse)(Input::Mouse*) = nullptr;
+    static Input::Mouse* (*const getterGameMouse)() = []() -> Input::Mouse*
     {
         return Game::getInstance()->mouse();
     };
@@ -73,10 +73,10 @@ void Script::_initialize()
         .beginNamespace("game")
 
             // game.Mouse
-            .beginClass<Mouse>("Mouse")
-                .addProperty("x", &Mouse::x, &Mouse::setX)
-                .addProperty("y", &Mouse::y, &Mouse::setY)
-                .addProperty("cursor", &Mouse::cursor, &Mouse::setCursor)
+            .beginClass<Input::Mouse>("Mouse")
+                .addProperty("x", &Input::Mouse::x, &Input::Mouse::setX)
+                .addProperty("y", &Input::Mouse::y, &Input::Mouse::setY)
+                .addProperty("cursor", &Input::Mouse::cursor, &Input::Mouse::setCursor)
             .endClass()
 
             // game.Event

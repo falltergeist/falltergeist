@@ -42,7 +42,7 @@ namespace Falltergeist
 namespace State
 {
 
-CursorDropdown::CursorDropdown(std::vector<Mouse::Icon>&& icons, bool onlyIcon) : State()
+CursorDropdown::CursorDropdown(std::vector<Input::Mouse::Icon>&& icons, bool onlyIcon) : State()
 {
     if (icons.size() == 0) 
         throw Exception("CursorDropdown::CursorDropdown() - empty icons list!");
@@ -54,7 +54,7 @@ CursorDropdown::CursorDropdown(std::vector<Mouse::Icon>&& icons, bool onlyIcon) 
     }
     auto mouse = Game::getInstance()->mouse();
     _initialMouseStack = mouse->states()->size();
-    mouse->pushState(Mouse::Cursor::NONE);
+    mouse->pushState(Input::Mouse::Cursor::NONE);
     _initialX = mouse->x();
     _initialY = mouse->y();
 }
@@ -91,39 +91,39 @@ void CursorDropdown::showMenu()
         std::string inactiveSurface;
         switch (icon)
         {
-            case Mouse::Icon::INVENTORY:
+            case Input::Mouse::Icon::INVENTORY:
                 activeSurface = "invenh.frm";
                 inactiveSurface = "invenn.frm";
                 break;
-            case Mouse::Icon::CANCEL:
+            case Input::Mouse::Icon::CANCEL:
                 activeSurface = "cancelh.frm";
                 inactiveSurface = "canceln.frm";
                 break;
-            case Mouse::Icon::ROTATE:
+            case Input::Mouse::Icon::ROTATE:
                 activeSurface = "rotateh.frm";
                 inactiveSurface = "rotaten.frm";
                 break;
-            case Mouse::Icon::SKILL:
+            case Input::Mouse::Icon::SKILL:
                 activeSurface = "skillh.frm";
                 inactiveSurface = "skilln.frm";
                 break;
-            case Mouse::Icon::LOOK:
+            case Input::Mouse::Icon::LOOK:
                 activeSurface = "lookh.frm";
                 inactiveSurface = "lookn.frm";
                 break;
-            case Mouse::Icon::TALK:
+            case Input::Mouse::Icon::TALK:
                 activeSurface = "talkh.frm";
                 inactiveSurface = "talkn.frm";
                 break;
-            case Mouse::Icon::PUSH:
+            case Input::Mouse::Icon::PUSH:
                 activeSurface = "pushh.frm";
                 inactiveSurface = "pushn.frm";
                 break;
-            case Mouse::Icon::UNLOAD:
+            case Input::Mouse::Icon::UNLOAD:
                 activeSurface = "unloadh.frm";
                 inactiveSurface = "unloadn.frm";
                 break;
-            case Mouse::Icon::USE:
+            case Input::Mouse::Icon::USE:
                 activeSurface = "usegeth.frm";
                 inactiveSurface = "usegetn.frm";
                 break;
@@ -274,7 +274,7 @@ void CursorDropdown::onStateDeactivate(Event::State* event)
         auto game = Game::getInstance();
         auto mouse = game->mouse();
         // workaround to get rid of cursor disappearing issues
-        std::vector<Mouse::Cursor> icons;
+        std::vector<Input::Mouse::Cursor> icons;
         while (mouse->states()->size() > _initialMouseStack)
         {
             icons.push_back(mouse->state());

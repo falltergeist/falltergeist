@@ -56,7 +56,7 @@ void PipBoy::init()
     setModal(true);
     setFullscreen(true);
 
-    Game::getInstance()->mouse()->pushState(Mouse::Cursor::BIG_ARROW);
+    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
 
     // Background
     auto background = new UI::Image("art/intrface/pip.frm");

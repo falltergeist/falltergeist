@@ -55,7 +55,7 @@ void Credits::init()
     setModal(true);
     setFullscreen(true);
 
-    Game::getInstance()->mouse()->pushState(Mouse::Cursor::NONE);
+    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
     auto renderer = Game::getInstance()->renderer();
     setX((renderer->width()  - 640)*0.5);
     setY(renderer->height());

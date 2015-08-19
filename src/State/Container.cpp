@@ -103,7 +103,7 @@ void Container::onDoneButtonClick(Event::Mouse* event)
 
 void Container::onStateActivate(Event::State* event)
 {
-    Game::getInstance()->mouse()->pushState(Mouse::Cursor::BIG_ARROW);
+    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
 }
 
 void Container::onStateDeactivate(Event::State* event)

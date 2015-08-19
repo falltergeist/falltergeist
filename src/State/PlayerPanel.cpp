@@ -191,7 +191,7 @@ void PlayerPanel::onChangeHandButtonClick(Event::Mouse* event)
 
 void PlayerPanel::onPanelMouseIn(Event::Mouse* event)
 {
-    Game::getInstance()->mouse()->pushState(Mouse::Cursor::BIG_ARROW);
+    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
 }
 
 void PlayerPanel::onPanelMouseOut(Event::Mouse* event)

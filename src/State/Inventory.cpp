@@ -55,13 +55,13 @@ namespace State
 
 Inventory::Inventory() : State()
 {
-    Game::getInstance()->mouse()->pushState(Mouse::Cursor::ACTION);
+    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::ACTION);
 }
 
 Inventory::~Inventory()
 {
     // If hand cursor now
-    if (Game::getInstance()->mouse()->state() == Mouse::Cursor::HAND)
+    if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND)
     {
         Game::getInstance()->mouse()->popState();
     }
@@ -316,7 +316,7 @@ void Inventory::onScrollDownButtonClick(Event::Mouse* event)
 
 void Inventory::onArmorSlotMouseDown(Event::Mouse* event)
 {
-    if (Game::getInstance()->mouse()->state() == Mouse::Cursor::HAND)
+    if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND)
     {
         auto itemUi = dynamic_cast<UI::ImageList*>(event->emitter());
         Game::getInstance()->pushState(new InventoryDragItem(itemUi));
@@ -330,7 +330,7 @@ void Inventory::onArmorSlotMouseDown(Event::Mouse* event)
 
 void Inventory::onLeftHandSlotMouseDown(Event::Mouse* event)
 {
-    if (Game::getInstance()->mouse()->state() == Mouse::Cursor::HAND)
+    if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND)
     {
         auto itemUi = dynamic_cast<UI::ImageList*>(event->emitter());
         Game::getInstance()->pushState(new InventoryDragItem(itemUi));
@@ -344,7 +344,7 @@ void Inventory::onLeftHandSlotMouseDown(Event::Mouse* event)
 
 void Inventory::onRightHandSlotMouseDown(Event::Mouse* event)
 {
-    if (Game::getInstance()->mouse()->state() == Mouse::Cursor::HAND)
+    if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND)
     {
         auto itemUi = dynamic_cast<UI::ImageList*>(event->emitter());
         Game::getInstance()->pushState(new InventoryDragItem(itemUi));
@@ -414,9 +414,9 @@ std::string Inventory::_handItemSummary (Game::ItemObject* hand)
 void Inventory::backgroundRightClick(Event::Mouse* event)
 {
     auto mouse = Game::getInstance()->mouse();
-    if (mouse->state() == Mouse::Cursor::ACTION)
+    if (mouse->state() == Input::Mouse::Cursor::ACTION)
     {
-        mouse->pushState(Mouse::Cursor::HAND);
+        mouse->pushState(Input::Mouse::Cursor::HAND);
     }
     else
     {

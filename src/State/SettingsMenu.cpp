@@ -480,7 +480,7 @@ void SettingsMenu::onKeyDown(Event::Keyboard* event)
 
 void SettingsMenu::onStateActivate(Event::State* event)
 {
-    Game::getInstance()->mouse()->pushState(Mouse::Cursor::BIG_ARROW);
+    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
 }
 
 void SettingsMenu::onStateDeactivate(Event::State* event)

@@ -52,7 +52,7 @@ class CursorDropdown : public State
 protected:
     Game::Object* _object = nullptr;
     bool _onlyShowIcon;
-    std::vector<Mouse::Icon> _icons;
+    std::vector<Input::Mouse::Icon> _icons;
     int _initialX;
     int _initialY;
     int _previousIcon = 0;
@@ -66,7 +66,7 @@ protected:
     
     void showMenu();
 public:
-    CursorDropdown(std::vector<Mouse::Icon>&& icons, bool onlyIcon = false);
+    CursorDropdown(std::vector<Input::Mouse::Icon>&& icons, bool onlyIcon = false);
     ~CursorDropdown() override;
 
     void init() override;

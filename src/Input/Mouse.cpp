@@ -17,13 +17,15 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Input/Mouse.h"
+
 // C++ standard includes
 
 // Falltergeist includes
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
-#include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../UI/Animation.h"
@@ -35,23 +37,18 @@
 
 namespace Falltergeist
 {
+namespace Input
+{
 
 Mouse::Mouse()
 {
-    // Hide cursor
-    SDL_ShowCursor(0);
-    // Trap mouse in window         - mouse warp doesn't work currently with this setting -- phobos2077
-    /*if (!Game::getInstance()->settings()->fullscreen())
-    {
-        SDL_SetRelativeMouseMode(SDL_TRUE);
-    }*/
+    SDL_ShowCursor(0); // Hide cursor
 }
 
 Mouse::~Mouse()
 {
     delete _ui;
-    // Show cursor
-    SDL_ShowCursor(1);
+    SDL_ShowCursor(1); // Show cursor
 }
 
 int Mouse::x() const
@@ -294,4 +291,5 @@ void Mouse::setCursor(unsigned value)
     setState(static_cast<Cursor>(value));
 }
 
+}
 }
