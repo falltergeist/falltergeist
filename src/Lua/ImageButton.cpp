@@ -18,7 +18,7 @@
  */
 
 // Related headers
-#include "../Lua/LuaImageButton.h"
+#include "../Lua/ImageButton.h"
 
 // C++ standard includes
 
@@ -31,11 +31,11 @@ namespace Falltergeist
 namespace Lua
 {
 
-LuaImageButton::LuaImageButton(unsigned type, int x, int y) : UI::ImageButton(static_cast<Type>(type), x, y)
+ImageButton::ImageButton(unsigned type, int x, int y) : UI::ImageButton(static_cast<Type>(type), x, y)
 {
 }
 
-LuaImageButton::~LuaImageButton()
+ImageButton::~ImageButton()
 {
 }
 

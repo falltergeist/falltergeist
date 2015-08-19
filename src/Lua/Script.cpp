@@ -26,8 +26,8 @@
 #include "../functions.h"
 #include "../Game/Game.h"
 #include "../Input/Mouse.h"
-#include "../Lua/LuaImageButton.h"
-#include "../Lua/LuaTextArea.h"
+#include "../Lua/ImageButton.h"
+#include "../Lua/TextArea.h"
 #include "../Lua/Script.h"
 #include "../State/LuaState.h"
 #include "../UI/Image.h"
@@ -106,15 +106,15 @@ void Script::_initialize()
                 .endClass()
 
                 // game.ui.ImageButton
-                .deriveClass<LuaImageButton, Falltergeist::UI::Base>("ImageButton")
+                .deriveClass<Lua::ImageButton, Falltergeist::UI::Base>("ImageButton")
                     .addConstructor<void(*)(unsigned, int, int)>()
                 .endClass()
 
                 // game.ui.TextArea
-                .deriveClass<LuaTextArea, Falltergeist::UI::Base>("TextArea")
+                .deriveClass<Lua::TextArea, Falltergeist::UI::Base>("TextArea")
                     .addConstructor<void(*)(const char*, int, int)>()
-                    .addProperty("width", &LuaTextArea::width, &LuaTextArea::setWidth)
-                    .addProperty("horizontalAlign", &LuaTextArea::luaHorizontalAlign, &LuaTextArea::setLuaHorizontalAlign)
+                    .addProperty("width", &Lua::TextArea::width, &Lua::TextArea::setWidth)
+                    .addProperty("horizontalAlign", &Lua::TextArea::luaHorizontalAlign, &Lua::TextArea::setLuaHorizontalAlign)
                 .endClass()
             .endNamespace()
 

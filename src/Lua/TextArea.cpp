@@ -17,13 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_LUA_LUATEXTAREA_H
-#define FALLTERGEIST_LUA_LUATEXTAREA_H
+// Related headers
+#include "../Lua/TextArea.h"
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../UI/TextArea.h"
 
 // Third party includes
 
@@ -32,26 +31,43 @@ namespace Falltergeist
 namespace Lua
 {
 
-/**
- * This class provides lua interface to TextArea class
- * We are forced to have this class because TextArea have methods with strongly typed enums
- */
-class LuaTextArea : public UI::TextArea
+TextArea::TextArea(const std::string& text, int x, int y) : UI::TextArea(text, x, y)
 {
-public:
-    LuaTextArea(const std::string& text, int x = 0, int y = 0);
-    LuaTextArea(int x = 0, int y = 0);
-    LuaTextArea(LuaTextArea* textArea, int x = 0, int y = 0);
-    ~LuaTextArea() override;
+}
 
-    void setWidth(unsigned int width);
-    unsigned int width() const override;
+TextArea::TextArea(int x, int y) : UI::TextArea(x, y)
+{
+}
 
-    void setLuaHorizontalAlign(unsigned align);
-    unsigned luaHorizontalAlign() const;
+TextArea::TextArea(UI::TextArea* textArea, int x, int y) : UI::TextArea(textArea, x, y)
+{
+}
 
-};
+TextArea::~TextArea()
+{
+}
+
+unsigned TextArea::luaHorizontalAlign() const
+{
+    return static_cast<unsigned>(_horizontalAlign);
+}
+
+void TextArea::setLuaHorizontalAlign(unsigned align)
+{
+    if (align > static_cast<unsigned>(HorizontalAlign::JUSTIFY)) return; //@todo Log error
+
+    setHorizontalAlign(static_cast<HorizontalAlign>(align));
+}
+
+void TextArea::setWidth(unsigned int width)
+{
+    TextArea::setWidth(width);
+}
+
+unsigned int TextArea::width() const
+{
+    return TextArea::width();
+}
 
 }
 }
-#endif // FALLTERGEIST_LUA_LUATEXTAREA_H

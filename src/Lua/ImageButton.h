@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_LUA_LUAIMAGEBUTTON_H
-#define FALLTERGEIST_LUA_LUAIMAGEBUTTON_H
+#ifndef FALLTERGEIST_LUA_IMAGEBUTTON_H
+#define FALLTERGEIST_LUA_IMAGEBUTTON_H
 
 // C++ standard includes
 
@@ -32,13 +32,13 @@ namespace Falltergeist
 namespace Lua
 {
 
-class LuaImageButton : public UI::ImageButton
+class ImageButton : public UI::ImageButton
 {
 public:
-    LuaImageButton(unsigned type, int x = 0, int y = 0);
-    ~LuaImageButton() override;
+    ImageButton(unsigned type, int x = 0, int y = 0);
+    ~ImageButton() override;
 };
 
 }
 }
-#endif // FALLTERGEIST_LUA_LUAIMAGEBUTTON_H
+#endif // FALLTERGEIST_LUA_IMAGEBUTTON_H
