@@ -25,6 +25,7 @@
 #include "../Exception.h"
 #include "../functions.h"
 #include "../Game/Game.h"
+#include "../Point.h"
 #include "../Input/Mouse.h"
 #include "../Lua/ImageButton.h"
 #include "../Lua/TextArea.h"
@@ -88,11 +89,29 @@ void Script::_initialize()
             .beginClass<State::LuaState>("State")
                 .addProperty("x", &State::LuaState::x, &State::LuaState::setX)
                 .addProperty("y", &State::LuaState::y, &State::LuaState::setY)
+                //.addProperty("position", &State::State::position, &State::State::setPosition)
                 .addProperty("fullscreen", &State::LuaState::fullscreen, &State::LuaState::setFullscreen)
                 .addProperty("modal", &State::LuaState::modal, &State::LuaState::setModal)
                 .addFunction("addUI", &State::LuaState::addUI)
             .endClass()
             .beginNamespace("ui")
+
+                .beginClass<Falltergeist::Point>("Point")
+                    .addConstructor<void(*)(int, int)>()
+                    .addProperty("x", &Falltergeist::Point::x, &Falltergeist::Point::setX)
+                    .addProperty("y", &Falltergeist::Point::y, &Falltergeist::Point::setY)
+                    .addFunction("add", &Falltergeist::Point::add)
+                    .addFunction("sub", &Falltergeist::Point::sub)
+                    //.addFunction("__add", &Falltergeist::Point::operator+)
+                .endClass()
+
+                .beginClass<Falltergeist::Size>("Size")
+                    .addConstructor<void(*)(int, int)>()
+                    .addProperty("width", &Falltergeist::Size::width, &Falltergeist::Size::setWidth)
+                    .addProperty("height", &Falltergeist::Size::height, &Falltergeist::Size::setHeight)
+                    .addFunction("add", &Falltergeist::Size::add)
+                    .addFunction("sub", &Falltergeist::Size::sub)
+                .endClass()
 
                 // game.ui.UI
                 .beginClass<Falltergeist::UI::Base>("UI")

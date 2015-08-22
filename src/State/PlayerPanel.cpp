@@ -68,8 +68,13 @@ void PlayerPanel::init()
     auto game = Game::getInstance();
 
     auto iface = new UI::Image("art/intrface/iface.frm");
-    setX((game->renderer()->width() - 640)*0.5);
-    setY(game->renderer()->height() - iface->height());
+
+    auto screenSize = game->renderer()->size();
+    setPosition(Point(
+        (screenSize.width() - 640) / 2,
+        screenSize.height() - iface->height()
+    ));
+
     auto background = addUI("background", iface);
     background->addEventHandler("mouseleftdown", [this](Event::Event* event){ this->onPanelMouseDown(dynamic_cast<Event::Mouse*>(event)); });
     background->addEventHandler("mousein",       [this](Event::Event* event){ this->onPanelMouseIn(dynamic_cast<Event::Mouse*>(event)); });

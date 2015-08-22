@@ -53,6 +53,10 @@ Renderer::Renderer(unsigned int width, unsigned int height)
     Logger::info("VIDEO") << message + "[OK]" << std::endl;
 }
 
+Renderer::Renderer(const Size& size) : Renderer((unsigned)size.width(), (unsigned)size.height())
+{
+}
+
 Renderer::~Renderer()
 {
 }
@@ -247,6 +251,11 @@ unsigned int Renderer::width()
 unsigned int Renderer::height()
 {
     return _height;
+}
+
+Size Renderer::size() const
+{
+    return Size(_width, _height);
 }
 
 void Renderer::drawTexture(Texture* texture, int x, int y, int sourceX, int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)

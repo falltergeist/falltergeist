@@ -96,22 +96,22 @@ void LuaState::addUI(UI::Base* ui)
 
 int LuaState::x() const
 {
-    return _x;
+    return State::x();
 }
 
 void LuaState::setX(int value)
 {
-    _x = value;
+    State::setX(value);
 }
 
 int LuaState::y() const
 {
-    return _y;
+    return State::y();
 }
 
 void LuaState::setY(int value)
 {
-    _y = value;
+    State::setY(value);
 }
 
 bool LuaState::fullscreen() const

@@ -69,8 +69,7 @@ void MainMenu::init()
     Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
 
     auto renderer = Game::getInstance()->renderer();
-    setX((renderer->width()  - 640)*0.5);
-    setY((renderer->height() - 480)*0.5);
+    setPosition((renderer->size() - Point(640, 480)) / 2);
 
     addUI("background", new UI::Image("art/intrface/mainmenu.frm"));
 

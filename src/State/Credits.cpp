@@ -57,8 +57,7 @@ void Credits::init()
 
     Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
     auto renderer = Game::getInstance()->renderer();
-    setX((renderer->width()  - 640)*0.5);
-    setY(renderer->height());
+    setPosition(Point((renderer->size().width() - 640) / 2, renderer->size().height()));
 
     auto credits = ResourceManager::getInstance()->datFileItem("text/english/credits.txt");
     std::stringstream ss;

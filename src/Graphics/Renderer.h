@@ -27,6 +27,7 @@
 
 // Falltergeist includes
 #include "../Graphics/Texture.h"
+#include "../Point.h"
 
 // Third party includes
 #include <SDL.h>
@@ -41,6 +42,7 @@ class Renderer
 
 public:
     Renderer(unsigned int width, unsigned int height);
+    Renderer(const Size& size);
     ~Renderer();
 
     void init();
@@ -51,6 +53,8 @@ public:
 
     unsigned int width();
     unsigned int height();
+    Size size() const;
+
     float scaleX();
     float scaleY();
 

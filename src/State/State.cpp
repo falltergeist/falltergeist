@@ -66,22 +66,32 @@ void State::think()
 
 int State::x() const
 {
-    return _x;
+    return _position.x();
 }
 
 void State::setX(int x)
 {
-    _x = x;
+    _position.setX(x);
 }
 
 int State::y() const
 {
-    return _y;
+    return _position.y();
 }
 
 void State::setY(int y)
 {
-    _y = y;
+    _position.setY(y);
+}
+
+Point State::position() const
+{
+    return _position;
+}
+
+void State::setPosition(Point pos)
+{
+    _position = pos;
 }
 
 bool State::initialized()

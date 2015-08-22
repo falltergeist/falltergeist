@@ -79,8 +79,7 @@ void Inventory::init()
     auto game = Game::getInstance();
     auto panelHeight = Game::getInstance()->locationState()->playerPanelState()->height();
 
-    setX((game->renderer()->width()  - 499)/2); // 499x377 = art/intrface/invbox.frm
-    setY((game->renderer()->height() - 377 - panelHeight)/2);
+    setPosition((game->renderer()->size() - Point(499, 377 + panelHeight)) / 2); // 499x377 = art/intrface/invbox.frm
 
     addUI("background", new UI::Image("art/intrface/invbox.frm"));
     getUI("background")->addEventHandler("mouserightclick", [this](Event::Event* event){ this->backgroundRightClick(dynamic_cast<Event::Mouse*>(event)); });

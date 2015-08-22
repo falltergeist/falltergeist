@@ -184,7 +184,7 @@ int Size::height() const
     return _height;
 }
 
-int& Size::rwidth()
+/*int& Size::rwidth()
 {
     return _width;
 }
@@ -192,7 +192,7 @@ int& Size::rwidth()
 int& Size::rheight()
 {
     return _height;
-}
+}*/
 
 void Size::setWidth(int width)
 {

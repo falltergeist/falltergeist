@@ -135,6 +135,7 @@ void Location::setLocation(const std::string& name)
     _currentElevation = mapFile->defaultElevation();
 
     // Set camera position on default
+    // camera()->setPosition(hexagonGrid()->at(mapFile->defaultPosition())->position());
     camera()->setXPosition(hexagonGrid()->at(mapFile->defaultPosition())->x());
     camera()->setYPosition(hexagonGrid()->at(mapFile->defaultPosition())->y());
 
@@ -420,6 +421,7 @@ void Location::think()
 
         //Game::getInstance()->mouse()->setType(Mouse::ACTION);
 
+        // camera()->setPosition(camera()->position() + Point(...));
         camera()->setXPosition(camera()->xPosition() + (_scrollLeft ? -scrollDelta : (_scrollRight ? scrollDelta : 0)));
         camera()->setYPosition(camera()->yPosition() + (_scrollTop ? -scrollDelta : (_scrollBottom ? scrollDelta : 0)));
 
@@ -745,6 +747,7 @@ void Location::onKeyDown(Event::Keyboard* event)
             // @TODO: use skill: repair
             break;
         case SDLK_LEFT:
+            // camera()->setPosition(camera()->position() - Point(KEYBOARD_SCROLL_STEP, 0));
             camera()->setXPosition(camera()->xPosition() - KEYBOARD_SCROLL_STEP);
             break;
         case SDLK_RIGHT:

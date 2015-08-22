@@ -100,9 +100,9 @@ public:
 
     int height() const;
 
-    int& rwidth();
+    /*int& rwidth();
 
-    int& rheight();
+    int& rheight();*/
 
     void setWidth(int width);
 

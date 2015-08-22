@@ -67,8 +67,7 @@ void CritterInteract::init()
     setFullscreen(false);
     setModal(true);
 
-    setX((Game::getInstance()->renderer()->width() - 640)*0.5);
-    setY((Game::getInstance()->renderer()->height() - 480)*0.5);
+    setPosition((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
 
     addUI("background", new UI::Image("art/intrface/alltlk.frm"));
 

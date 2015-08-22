@@ -64,8 +64,7 @@ void Start::init()
 
     auto renderer = Game::getInstance()->renderer();
 
-    setX((renderer->width()  - 640)*0.5);
-    setY((renderer->height() - 480)*0.5);
+    setPosition((renderer->size() - Point(640, 480)) / 2);
 
     srand(time(NULL)); // seed
     addUI("splash", new UI::Image("art/splash/" + splashes.at(rand() % splashes.size())));
