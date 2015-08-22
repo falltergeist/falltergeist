@@ -326,8 +326,7 @@ void Game::handle()
                 {
                     SDL_Keymod mods = SDL_GetModState();
                     mouseEvent = new Event::Mouse((_event.type == SDL_MOUSEBUTTONDOWN) ? "mousedown" : "mouseup");
-                    mouseEvent->setX(_event.button.x);
-                    mouseEvent->setY(_event.button.y);
+                    mouseEvent->setPosition({_event.button.x, _event.button.y});
                     mouseEvent->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
                     mouseEvent->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
                     mouseEvent->setShiftPressed(mods & KMOD_SHIFT);
@@ -338,10 +337,8 @@ void Game::handle()
                 case SDL_MOUSEMOTION:
                 {
                     mouseEvent = new Event::Mouse("mousemove");
-                    mouseEvent->setX(_event.motion.x);
-                    mouseEvent->setY(_event.motion.y);
-                    mouseEvent->setXOffset(_event.motion.xrel);
-                    mouseEvent->setYOffset(_event.motion.yrel);
+                    mouseEvent->setPosition({_event.motion.x, _event.motion.y});
+                    mouseEvent->setOffset({_event.motion.xrel,_event.motion.yrel});
                     for (auto state : *statesForThinkAndHandle()) state->handle(mouseEvent);
                     break;
                 }

@@ -34,8 +34,7 @@ namespace UI
 
 HiddenMask::HiddenMask(unsigned int width, unsigned int height, int x, int y) : Image(width, height)
 {
-    setX(x);
-    setY(y);
+    setPosition({x, y});
 }
 
 HiddenMask::~HiddenMask()

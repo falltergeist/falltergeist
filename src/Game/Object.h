@@ -71,7 +71,13 @@ public:
 
     Orientation(unsigned char value = NS)
     {
+        *this = value;
+    }
+
+    Orientation& operator =(unsigned char value)
+    {
         _dir = (unsigned char)(value % 6);
+        return *this;
     }
 
     operator unsigned char() const { return _dir; }

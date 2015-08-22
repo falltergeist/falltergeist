@@ -56,6 +56,11 @@ int Tile::y() const
     return _y;
 }
 
+Point Tile::position() const
+{
+    return Point(_x, _y);
+}
+
 unsigned int Tile::index() const
 {
     return _index;

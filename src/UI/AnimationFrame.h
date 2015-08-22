@@ -59,19 +59,19 @@ public:
     void setDuration(unsigned int duration);
 
 protected:
-    // Смещение начала кадра анимации относительно начала спрайта
+    // Offset of animation frame position relative to sprite position
     unsigned int _x = 0;
     unsigned int _y = 0;
 
-    // Высота и ширина кадра анимации
+    // Animation frame width and height
     unsigned int _height = 0;
     unsigned int _width = 0;
 
-    // Смещение кадра анимации на экране относительно первого кадра анимации
+    // Offset of animation frame on screen relative to first animation frame
     unsigned int _xOffset = 0;
     unsigned int _yOffset = 0;
 
-    // Длительность кадра анимации в милисекундах
+    // Duration of animation frame in milliseconds
     unsigned int _duration = 0;
 };
 

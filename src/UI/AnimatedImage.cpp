@@ -29,6 +29,7 @@
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../LocationCamera.h"
+#include "../Point.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 
@@ -215,16 +216,15 @@ void AnimatedImage::render(bool eggTransparency)
 
         auto camera = Game::getInstance()->locationState()->camera();
 
-        int egg_x = dude->hexagon()->x() - camera->x() - 63 + dude->ui()->xOffset();
-        int egg_y = dude->hexagon()->y() - camera->y() - 78 + dude->ui()->yOffset();
+        Point eggPos = dude->hexagon()->position() - camera->topLeft() - Point(63, 78) + dude->ui()->offset();
 
-        int egg_dx = x() - egg_x;
-        int egg_dy = y() - egg_y;
+        int egg_dx = x() - eggPos.x();
+        int egg_dy = y() - eggPos.y();
 
         auto egg = ResourceManager::getInstance()->texture("data/egg.png");
 
         //check if egg and texture intersects
-        SDL_Rect egg_rect = { egg_x, egg_y, (int)egg->width(), (int)egg->height() };
+        SDL_Rect egg_rect = { eggPos.x(), eggPos.y(), (int)egg->width(), (int)egg->height() };
         SDL_Rect tex_rect = { x(), y(), (int)texture()->width(), (int)texture()->height() };
 
         if (!SDL_HasIntersection(&egg_rect, &tex_rect))

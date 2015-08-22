@@ -27,6 +27,8 @@
 namespace Falltergeist
 {
 
+class Size;
+
 /**
  * Represents a Point coordinates on screen
  */
@@ -75,6 +77,12 @@ public:
 
     friend std::ostream& operator <<(std::ostream& lhs, const Point& rhs);
 
+    // checks if given point is located withing the rectangle with given top-left position and size
+    static bool inRect(const Point& needle, const Point& topLeft, const Size& size);
+
+    // checks if two rectangles, given as their top-left positions and sizes, intersect each other
+    static bool rectIntersects(const Point& topLeft1, const Size& size1, const Point& topLeft2, const Size& size2);
+
 protected:
     int _x;
     int _y;
@@ -109,12 +117,14 @@ public:
     void setHeight(int height);
 
     Size& operator +=(const Size& rhs);
-
     Size& operator -=(const Size& rhs);
+    Size& operator *=(double rhs);
+    Size& operator /=(double rhs);
 
     friend Size operator +(Size lhs, const Size& rhs);
-
     friend Size operator -(Size lhs, const Size& rhs);
+    friend Size operator *(Size lhs, double rhs);
+    friend Size operator /(Size lhs, double rhs);
 
     Size add(const Size& rhs) const;
 
@@ -126,6 +136,7 @@ protected:
     int _width;
     int _height;
 };
+
 
 class PointTest
 {

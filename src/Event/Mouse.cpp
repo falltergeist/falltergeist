@@ -35,61 +35,19 @@ Mouse::Mouse(const std::string& name) : Event(name)
 {
 }
 
-Mouse::Mouse(Mouse* event) : Event("mouse")
+Mouse::Mouse(const Mouse& event) : Event("mouse")
 {
-    _x = event->_x;
-    _y = event->_y;
-    _xOffset = event->_xOffset;
-    _yOffset = event->_yOffset;
-    _leftButton = event->_leftButton;
-    _rightButton = event->_rightButton;
-    _shiftPressed = event->_shiftPressed;
-    _controlPressed = event->_controlPressed;
-    _name = event->_name;
+    _position = event._position;
+    _offset = event._offset;
+    _leftButton = event._leftButton;
+    _rightButton = event._rightButton;
+    _shiftPressed = event._shiftPressed;
+    _controlPressed = event._controlPressed;
+    _name = event._name;
 }
 
 Mouse::~Mouse()
 {
-}
-
-void Mouse::setX(unsigned int value)
-{
-    _x = value;
-}
-
-unsigned int Mouse::x() const
-{
-    return _x;
-}
-
-void Mouse::setY(unsigned int value)
-{
-    _y = value;
-}
-
-unsigned int Mouse::y() const
-{
-    return _y;
-}
-
-void Mouse::setXOffset(int value)
-{
-    _xOffset = value;
-}
-
-int Mouse::xOffset() const
-{
-    return _xOffset;
-}
-
-void Mouse::setYOffset(int value)
-{
-    _yOffset = value;
-}
-
-int Mouse::yOffset() const
-{
-    return _yOffset;
 }
 
 void Mouse::setLeftButton(bool value)
@@ -132,5 +90,24 @@ bool Mouse::shiftPressed() const
     return _shiftPressed;
 }
 
+const Point& Mouse::position() const
+{
+    return _position;
+}
+
+void Mouse::setPosition(const Point& position)
+{
+    _position = position;
+}
+
+const Point& Mouse::offset() const
+{
+    return _offset;
+}
+
+void Mouse::setOffset(const Point& offset)
+{
+    _offset = offset;
+}
 }
 }

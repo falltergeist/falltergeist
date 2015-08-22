@@ -31,6 +31,7 @@
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../Logger.h"
+#include "../Point.h"
 #include "../UI/Image.h"
 #include "../UI/ItemsList.h"
 
@@ -123,8 +124,7 @@ void InventoryItem::onMouseDragStart(Event::Mouse* event)
 
 void InventoryItem::onMouseDrag(Event::Mouse* event)
 {
-    setXOffset(xOffset() + event->xOffset());
-    setYOffset(yOffset() + event->yOffset());
+    setOffset(offset() + event->offset());
 }
 
 void InventoryItem::onMouseDragStop(Event::Mouse* event)
@@ -134,8 +134,7 @@ void InventoryItem::onMouseDragStop(Event::Mouse* event)
     setType(_oldType);
 
     auto itemevent = new Event::Mouse("itemdragstop");
-    itemevent->setX(event->x());
-    itemevent->setY(event->y());
+    itemevent->setPosition(event->position());
     itemevent->setEmitter(this);
     emitEvent(itemevent);
     delete itemevent;
@@ -145,8 +144,10 @@ void InventoryItem::onMouseDragStop(Event::Mouse* event)
 void InventoryItem::onArmorDragStop(Event::Mouse* event)
 {
     // Check if mouse is over this item
-    if (event->x() <= x() || event->x() >= x() + width()) return;
-    if (event->y() <= y() || event->y() >= y() + height()) return;
+    if (!Point::inRect(event->position(), position(), size()))
+    {
+        return;
+    }
 
     if (ItemsList* itemsList = dynamic_cast<ItemsList*>(event->emitter()))
     {
@@ -169,8 +170,10 @@ void InventoryItem::onArmorDragStop(Event::Mouse* event)
 void InventoryItem::onHandDragStop(Event::Mouse* event)
 {
     // Check if mouse is over this item
-    if (event->x() <= x() || event->x() >= x() + width()) return;
-    if (event->y() <= y() || event->y() >= y() + height()) return;
+    if (!Point::inRect(event->position(), position(), size()))
+    {
+        return;
+    }
 
     if (ItemsList* itemsList = dynamic_cast<ItemsList*>(event->emitter()))
     {

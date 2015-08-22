@@ -24,6 +24,7 @@
 #include <memory>
 
 // Falltergeist includes
+#include "../Point.h"
 
 // Third party includes
 
@@ -45,6 +46,8 @@ public:
     unsigned int number() const;
     int x() const;
     int y() const;
+
+    Point position() const;
 
     unsigned int index() const;
     void setIndex(unsigned int value);

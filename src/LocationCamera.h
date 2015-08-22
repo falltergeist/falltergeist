@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "Point.h"
 
 // Third party includes
 
@@ -32,31 +33,20 @@ namespace Falltergeist
 class LocationCamera
 {
 protected:
-    int _xPosition = 0;
-    int _yPosition = 0;
-    int _width = 0;
-    int _height = 0;
+    Point _center;
+    Size _size;
 
 public:
-    LocationCamera(int width, int height, int xPosition, int yPosition);
+    LocationCamera(const Size& size, const Point& center);
     ~LocationCamera();
 
-    int x();
-    int y();
+    Point topLeft() const;
 
-    int xPosition();
-    void setXPosition(int value);
+    Point center() const;
+    void setCenter(const Point& pos);
 
-    int yPosition();
-    void setYPosition(int value);
-    
-    void setPosition(int x, int y);
-
-    int height();
-    void setHeight(int value);
-
-    int width();
-    void setWidth(int value);
+    Size size() const;
+    void setSize(const Size& size);
 };
 
 }

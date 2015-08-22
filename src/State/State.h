@@ -72,6 +72,7 @@ public:
     UI::ImageList* getImageList(const std::string& name);
     UI::SmallCounter* getSmallCounter(const std::string& name);
 
+    // @todo: remove getters/setters for x, y?
     virtual int x() const;
     virtual void setX(int x);
 

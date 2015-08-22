@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Point.h"
 #include "../UI/Base.h"
 #include "../UI/ImageList.h"
 
@@ -46,7 +47,6 @@ public:
     ~Slider() override;
 
     Graphics::Texture* texture() const override;
-    int x() const override;
 
     void handle(Event::Event* event) override;
 

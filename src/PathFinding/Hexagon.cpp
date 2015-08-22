@@ -61,24 +61,14 @@ std::list<Game::Object*>* Hexagon::objects()
     return &_objects;
 }
 
-int Hexagon::x()
+Point Hexagon::position() const
 {
-    return _x;
+    return _position;
 }
 
-void Hexagon::setX(int value)
+void Hexagon::setPosition(const Point& pos)
 {
-    _x = value;
-}
-
-int Hexagon::y()
-{
-    return _y;
-}
-
-void Hexagon::setY(int value)
-{
-    _y = value;
+    _position = pos;
 }
 
 int Hexagon::cubeX()
@@ -147,19 +137,15 @@ void Hexagon::setInRender(bool value)
 
 Game::Orientation Hexagon::orientationTo(Hexagon *hexagon)
 {
+    Point delta = hexagon->position() - _position;
+    int dx = delta.x();
+    int dy = delta.y();
 
-    int x1 = x();
-    int y1 = y();
-    int x2 = hexagon->x();
-    int y2 = hexagon->y();
-    int dx = x2 - x1;
-    int dy = y2 - y1;
-
-    unsigned int result = 0;
+    unsigned char result;
 
     if (dx)
     {
-        // triginometry magick.
+        // trigonometry magic.
         // basically, we try to find angle to second hex in circle, where first hex is center
         // and then find out to which of 60º slices it belongs
 
@@ -180,7 +166,7 @@ Game::Orientation Hexagon::orientationTo(Hexagon *hexagon)
         result = 2;
     }
 
-    return result;
+    return Game::Orientation(result);
 }
 
 }

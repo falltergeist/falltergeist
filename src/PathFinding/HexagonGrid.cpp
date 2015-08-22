@@ -61,8 +61,7 @@ HexagonGrid::HexagonGrid()
             hexagon->setCubeZ(p);
             hexagon->setCubeY(-hexagon->cubeX() - hexagon->cubeZ());
 
-            hexagon->setX(x);
-            hexagon->setY(y);
+            hexagon->setPosition({x, y});
             _hexagons.push_back(hexagon);
         }
     }
@@ -116,17 +115,20 @@ Hexagon* HexagonGrid::at(unsigned int index)
     return _hexagons.at(index);
 }
 
-Hexagon* HexagonGrid::hexagonAt(unsigned int x, unsigned int y)
+Hexagon* HexagonGrid::hexagonAt(const Point& pos)
 {
     for (auto hexagon : _hexagons)
     {
-        if (y >= hexagon->y() - 8 && y < hexagon->y() + 4)
-        if (x >= hexagon->x() - 16 && x < hexagon->x() + 16)
+        auto hexPos = hexagon->position();
+        if (pos.x() >= hexPos.x() - 16
+            && pos.x() < hexPos.x() + 16
+            && pos.y() >= hexPos.y() - 8
+            && pos.y() < hexPos.y() + 4)
         {
             return hexagon;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 std::vector<Hexagon*>* HexagonGrid::hexagons()

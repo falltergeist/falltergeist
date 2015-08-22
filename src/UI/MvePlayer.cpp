@@ -130,7 +130,7 @@ void MvePlayer::render(bool eggTransparency)
     {
         return;
     }
-    Game::getInstance()->renderer()->drawTexture(_texture, _x, _y, 0, 0, 640, 320);
+    Game::getInstance()->renderer()->drawTexture(_texture, _position, Point(0, 0), Size(640, 320));
 }
 
 SDL_Rect relClose(uint32_t b, int8_t sign, uint32_t _x, uint32_t _y)

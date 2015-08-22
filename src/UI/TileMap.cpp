@@ -29,6 +29,7 @@
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../LocationCamera.h"
+#include "../Point.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../UI/Tile.h"
@@ -63,18 +64,13 @@ void TileMap::render()
 
     for (auto tile : _tiles)
     {
-
-        if (tile->x() + 80 < (int)camera->x()) continue;
-        if (tile->y() + 36 < (int)camera->y()) continue;
-        if (tile->x() - (int)camera->width()  > (int)camera->x()) continue;
-        if (tile->y() - (int)camera->height() > (int)camera->y()) continue;
-
-        auto x = tile->x() - camera->x();
-        auto y = tile->y() - camera->y();
-        auto sx = (tile->index() % _square) * 80;
-        auto sy = (tile->index() / _square) * 36;
-
-        renderer->drawTexture(_texture, x, y, sx, sy, 80, 36);
+        if (Point::rectIntersects(tile->position(), Size(80, 36), camera->topLeft(), camera->size()))
+        {
+            auto pos = tile->position() - camera->topLeft();
+            auto sx = (tile->index() % _square) * 80;
+            auto sy = (tile->index() / _square) * 36;
+            renderer->drawTexture(_texture, pos.x(), pos.y(), sx, sy, 80, 36);
+        }
     }
 }
 

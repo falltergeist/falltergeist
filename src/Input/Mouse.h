@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <vector>
+#include <Point.h>
 
 // Falltergeist includes
 
@@ -86,6 +87,9 @@ public:
 
     int y() const;
     void setY(int y);
+
+    Point position() const;
+    void setPosition(const Point& pos);
 
     void pushState(Cursor state);
     void popState();

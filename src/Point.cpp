@@ -150,6 +150,22 @@ std::ostream& operator <<(std::ostream& lhs, const Point& rhs)
     return lhs;
 }
 
+bool Point::inRect(const Point& needle, const Point& topLeft, const Size& size)
+{
+    Point bottomRight = topLeft + size;
+    return (needle.x() >= topLeft.x()
+           && needle.x() < bottomRight.x()
+           && needle.y() >= topLeft.y()
+           && needle.y() < bottomRight.y());
+}
+
+bool Point::rectIntersects(const Point& topLeft1, const Size& size1, const Point& topLeft2, const Size& size2)
+{
+    Point bottomRight1 = topLeft1 + size1;
+    Point bottomRight2 = topLeft2 + size2;
+    return (bottomRight1.x() >= topLeft2.x() && bottomRight1.y() >= topLeft2.y())
+        || (bottomRight2.x() >= topLeft1.x() && bottomRight2.y() >= topLeft1.y());
+}
 
 Size::Size(int width, int height)
 {
@@ -226,6 +242,18 @@ Size& Size::operator -=(const Size& rhs)
     return *this;
 }
 
+Size& Size::operator *=(double rhs)
+{
+    setWidth((int)(_width * rhs));
+    return *this;
+}
+
+Size& Size::operator /=(double rhs)
+{
+    setWidth((int)(_height * rhs));
+    return *this;
+}
+
 Size operator +(Size lhs, const Size& rhs)
 {
     lhs += rhs;
@@ -235,6 +263,18 @@ Size operator +(Size lhs, const Size& rhs)
 Size operator -(Size lhs, const Size& rhs)
 {
     lhs -= rhs;
+    return lhs;
+}
+
+Size operator *(Size lhs, double rhs)
+{
+    lhs *= rhs;
+    return lhs;
+}
+
+Size operator /(Size lhs, double rhs)
+{
+    lhs /= rhs;
     return lhs;
 }
 

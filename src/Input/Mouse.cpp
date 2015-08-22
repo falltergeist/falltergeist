@@ -79,6 +79,17 @@ void Mouse::setY(int y)
     SDL_WarpMouseInWindow(renderer->sdlWindow(), _x*scaleX, _y*scaleY);
 }
 
+Point Mouse::position() const
+{
+    return Point(_x, _y);
+}
+
+void Mouse::setPosition(const Point& pos)
+{
+    setX(pos.x());
+    setY(pos.y());
+}
+
 void Mouse::setState(Cursor state)
 {
     _states.clear();
@@ -228,8 +239,7 @@ void Mouse::render()
 
     if (state() != Cursor::HEXAGON_RED)
     {
-        _ui->setX(_x);
-        _ui->setY(_y);
+        _ui->setPosition(position());
     }
     _ui->render();
 }
@@ -237,8 +247,8 @@ void Mouse::render()
 void Mouse::think()
 {
     SDL_GetMouseState(&_x, &_y);
-    _x=_x/Game::getInstance()->renderer()->scaleX();
-    _y=_y/Game::getInstance()->renderer()->scaleY();
+    _x = _x / Game::getInstance()->renderer()->scaleX();
+    _y = _y / Game::getInstance()->renderer()->scaleY();
     if (_ui) _ui->think();
 }
 

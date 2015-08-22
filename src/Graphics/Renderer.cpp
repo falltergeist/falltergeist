@@ -274,6 +274,11 @@ void Renderer::drawTexture(Texture* texture, int x, int y, int sourceX, int sour
     }
 }
 
+void Renderer::drawTexture(Texture* texture, const Point& pos, const Point& src, const Size& srcSize)
+{
+    drawTexture(texture, pos.x(), pos.y(), src.x(), src.y(), (unsigned int)srcSize.width(), (unsigned int)srcSize.height());
+}
+
 Texture* Renderer::screenshot()
 {
     SDL_Surface* window = SDL_GetWindowSurface(sdlWindow());

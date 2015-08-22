@@ -27,87 +27,48 @@
 namespace Falltergeist
 {
 
-LocationCamera::LocationCamera(int width, int height, int xPosition, int yPosition)
+
+LocationCamera::LocationCamera(const Size& size, const Point& center)
 {
-    setWidth(width);
-    setHeight(height);
-    setXPosition(xPosition);
-    setYPosition(yPosition);
+    _center = center;
+    _size = size;
 }
 
 LocationCamera::~LocationCamera()
 {
 }
 
-int LocationCamera::x()
+Point LocationCamera::topLeft() const
 {
-    return xPosition() - width()*0.5;
+    return _center - (_size / 2.0);
 }
 
-
-int LocationCamera::y()
+Point LocationCamera::center() const
 {
-    return yPosition() - height()*0.5;
+    return _center;
 }
 
-int LocationCamera::xPosition()
+void LocationCamera::setCenter(const Point& pos)
 {
-    return _xPosition;
-}
-
-void LocationCamera::setXPosition(int value)
-{
-    if (value < width()*0.5)
+    _center = pos;
+    if (_center.x() < _size.width() / 2)
     {
-        _xPosition = width()*0.5;
+        _center.setX(_size.width() / 2);
     }
-    else
+    if (_center.y() < _size.height() / 2)
     {
-        _xPosition = value;
+        _center.setY(_size.height() / 2);
     }
 }
 
-int LocationCamera::yPosition()
+Size LocationCamera::size() const
 {
-    return _yPosition;
+    return _size;
 }
 
-void LocationCamera::setYPosition(int value)
+void LocationCamera::setSize(const Size& size)
 {
-    if (value < height()*0.5)
-    {
-        _yPosition = height()*0.5;
-    }
-    else
-    {
-        _yPosition = value;
-    }
-}
-
-void LocationCamera::setPosition(int x, int y)
-{
-    setXPosition(x);
-    setYPosition(y);
-}
-
-int LocationCamera::width()
-{
-    return _width;
-}
-
-void LocationCamera::setWidth(int value)
-{
-    _width = value;
-}
-
-int LocationCamera::height()
-{
-    return _height;
-}
-
-void LocationCamera::setHeight(int value)
-{
-    _height = value;
+    _size = size;
 }
 
 }

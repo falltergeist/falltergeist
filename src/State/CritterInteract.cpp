@@ -45,8 +45,7 @@ CritterInteract::CritterInteract() : State()
 CritterInteract::~CritterInteract()
 {
     auto camera = Game::getInstance()->locationState()->camera();
-    camera->setXPosition(_oldCameraX);
-    camera->setYPosition(_oldCameraY);
+    camera->setCenter(_oldCameraCenter);
 }
 
 void CritterInteract::onStateActivate(Event::State* event)
@@ -73,11 +72,9 @@ void CritterInteract::init()
 
     // Centering camera on critter position
     auto locationState = Game::getInstance()->locationState();
-    _oldCameraX = locationState->camera()->xPosition();
-    _oldCameraY = locationState->camera()->yPosition();
+    _oldCameraCenter = locationState->camera()->center();
 
-    locationState->camera()->setXPosition(critter()->hexagon()->x());
-    locationState->camera()->setYPosition(critter()->hexagon()->y() + 100);
+    locationState->camera()->setCenter(critter()->hexagon()->position() + Point(0, 100));
 }
 
 int CritterInteract::backgroundID()
