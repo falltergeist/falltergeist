@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <memory>
+#include <string>
 #include <vector>
 
 // Falltergeist includes
