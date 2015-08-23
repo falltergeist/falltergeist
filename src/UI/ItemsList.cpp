@@ -148,7 +148,7 @@ void ItemsList::onItemDragStop(Event::Mouse* event)
     Logger::critical() << "itemdragstop" << std::endl;
 
     // check if mouse is in this item list
-    if (!Point::inRect(event->position(), position(), Size(_slotWidth, _slotHeight*_slotsNumber)))
+    if (!Rect::inRect(event->position(), position(), Size(_slotWidth, _slotHeight*_slotsNumber)))
     {
         return;
     }

@@ -72,7 +72,7 @@ void PlayerPanel::init()
     auto screenSize = game->renderer()->size();
     setPosition(Point(
         (screenSize.width() - 640) / 2,
-        screenSize.height() - iface->height()
+        screenSize.height() - iface->size().height()
     ));
 
     auto background = addUI("background", iface);
@@ -125,8 +125,7 @@ void PlayerPanel::render()
     if (auto item = Game::getInstance()->player()->currentHandSlot())
     {
         auto itemUi = item->inventoryDragUi();
-        itemUi->setX(x() + 360 - itemUi->width()*0.5);
-        itemUi->setY(y() + 60 - itemUi->height()*0.5);
+        itemUi->setPosition(position() + Point(360, 60) - itemUi->size() / 2);
         itemUi->render();
     }
 }
@@ -319,7 +318,7 @@ void PlayerPanel::onKeyDown(Event::Keyboard* event)
 
 unsigned int PlayerPanel::height()
 {
-    return getUI("background")->height();
+    return getUI("background")->size().height();
 }
 
 void PlayerPanel::openInventory()

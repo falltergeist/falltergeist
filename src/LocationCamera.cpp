@@ -21,6 +21,7 @@
 
 // Falltergeist includes
 #include "LocationCamera.h"
+#include "Logger.h"
 
 // Third party includes
 
@@ -30,8 +31,8 @@ namespace Falltergeist
 
 LocationCamera::LocationCamera(const Size& size, const Point& center)
 {
-    _center = center;
-    _size = size;
+    setSize(size);
+    setCenter(center);
 }
 
 LocationCamera::~LocationCamera()

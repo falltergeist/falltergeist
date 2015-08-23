@@ -300,7 +300,7 @@ void Object::render()
     setInRender(false);
 
     // don't draw if outside of screen
-    if (!Point::rectIntersects(_ui->position(), _ui->size(), Point(0, 0), camera->size()))
+    if (!Rect::intersects(_ui->position(), _ui->size(), Point(0, 0), camera->size()))
     {
         return;
     }

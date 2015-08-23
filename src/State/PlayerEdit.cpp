@@ -65,8 +65,9 @@ void PlayerEdit::init()
 
     // background
     auto background = new UI::Image("art/intrface/edtredt.frm");
-    auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
-    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
+    Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
+    int backgroundX = backgroundPos.x();
+    int backgroundY = backgroundPos.y();
     background->setX(backgroundX);
     background->setY(backgroundY);
     addUI(background);
@@ -294,8 +295,7 @@ void PlayerEdit::init()
 
     _description = new UI::TextArea("", backgroundX+350, backgroundY+315);
     _description->setFont(font1_000000ff);
-    _description->setWidth(140);
-    _description->setHeight(120);
+    _description->setPosition({140, 120});
     _description->setWordWrap(true);
     addUI(_description);
 }

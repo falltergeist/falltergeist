@@ -26,6 +26,7 @@
 #include <vector>
 
 // Falltergeist includes
+#include "../Point.h"
 #include "../UI/Base.h"
 
 // Third party includes
@@ -57,9 +58,11 @@ public:
         BOTTOM,
         JUSTIFY
     };
-    TextArea(const std::string& text, int x = 0, int y = 0);
+    TextArea(const Point& pos = Point());
     TextArea(int x = 0, int y = 0);
-    TextArea(TextArea* textArea, int x = 0, int y = 0);
+    TextArea(const std::string& text, const Point& pos = Point());
+    TextArea(const std::string& text, int x, int y);
+    TextArea(const TextArea& textArea, Point pos = Point());
     ~TextArea() override;
 
     std::string text() const;
@@ -72,11 +75,10 @@ public:
     VerticalAlign verticalAlign() const;
     void setVerticalAlign(VerticalAlign align);
 
-    unsigned int height() const override;
-    void setHeight(unsigned int height);
+    Size size() const override;
+    void setSize(const Size& size);
 
-    unsigned int width() const override;
-    void setWidth(unsigned int width);
+    void setWidth(int width);
 
     bool wordWrap() const;
     void setWordWrap(bool wordWrap);
@@ -110,12 +112,10 @@ protected:
     HorizontalAlign _horizontalAlign = HorizontalAlign::LEFT;
     VerticalAlign _verticalAlign = VerticalAlign::TOP;
 
-    unsigned int _width = 0;
-    unsigned int _height = 0;
+    Size _size;
 
     // not used when _width || _height are set manualy
-    unsigned int _calculatedWidth = 0;
-    unsigned int _calculatedHeight = 0;
+    Size _calculatedSize;
 
     unsigned int _backgroundColor = 0;
     bool _wordWrap = false;

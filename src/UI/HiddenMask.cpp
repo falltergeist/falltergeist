@@ -43,10 +43,7 @@ HiddenMask::~HiddenMask()
 
 unsigned int HiddenMask::pixel(unsigned int x, unsigned int y)
 {
-    if (x > width())  return 0;
-    if (y > height()) return 0;
-
-    return 0xffffffff;
+    return Rect::inRect(Point(x, y), size()) ? 0xffffffff : 0;
 }
 
 void HiddenMask::render(bool eggTransparency)

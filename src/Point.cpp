@@ -17,6 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <vector>
+
 #include "Point.h"
 #include "Logger.h"
 
@@ -25,7 +27,6 @@ namespace Falltergeist
 
 PointTest::PointTest()
 {
-    bool except = false;
     Point pt = Point(-100, -100);
     Point pt2 = Point();
     Size siz = Size(50, 50);
@@ -39,7 +40,13 @@ PointTest::PointTest()
     siz = pt;
     Logger::info("GAME") << "Equals = " << (pt == siz) << std::endl;
     siz = Point(-5, 5);
-    Logger::info("GAME") << "Min size " << except << " for " << siz << std::endl;
+    Logger::info("GAME") << "Min size " << siz << std::endl;
+    siz = Size(640, 480) / 2;
+    Logger::info("GAME") << "Half size " << siz << std::endl;
+    siz = Size(640, 480) / 2.0;
+    Logger::info("GAME") << "Half size 2 " << siz << std::endl;
+    pt = Size(640, 480) / 2.0;
+    Logger::info("GAME") << "Half size 3 " << pt << std::endl;
 }
 
 int Point::x() const
@@ -150,23 +157,6 @@ std::ostream& operator <<(std::ostream& lhs, const Point& rhs)
     return lhs;
 }
 
-bool Point::inRect(const Point& needle, const Point& topLeft, const Size& size)
-{
-    Point bottomRight = topLeft + size;
-    return (needle.x() >= topLeft.x()
-           && needle.x() < bottomRight.x()
-           && needle.y() >= topLeft.y()
-           && needle.y() < bottomRight.y());
-}
-
-bool Point::rectIntersects(const Point& topLeft1, const Size& size1, const Point& topLeft2, const Size& size2)
-{
-    Point bottomRight1 = topLeft1 + size1;
-    Point bottomRight2 = topLeft2 + size2;
-    return (bottomRight1.x() >= topLeft2.x() && bottomRight1.y() >= topLeft2.y())
-        || (bottomRight2.x() >= topLeft1.x() && bottomRight2.y() >= topLeft1.y());
-}
-
 Size::Size(int width, int height)
 {
     setWidth(width);
@@ -245,13 +235,25 @@ Size& Size::operator -=(const Size& rhs)
 Size& Size::operator *=(double rhs)
 {
     setWidth((int)(_width * rhs));
+    setHeight((int)(_height * rhs));
     return *this;
 }
 
 Size& Size::operator /=(double rhs)
 {
-    setWidth((int)(_height * rhs));
+    setWidth((int)(_width / rhs));
+    setHeight((int)(_height / rhs));
     return *this;
+}
+
+bool Size::operator ==(const Size& rhs) const
+{
+    return _width == rhs._width && _height == rhs._height;
+}
+
+bool Size::operator !=(const Size& rhs) const
+{
+    return !(*this == rhs);
 }
 
 Size operator +(Size lhs, const Size& rhs)
@@ -293,5 +295,32 @@ std::ostream& operator <<(std::ostream& lhs, const Size& rhs)
     lhs << "(" << rhs._width << "," << rhs._height << ")";
     return lhs;
 }
+
+
+bool Rect::inRect(const Point& needle, const Size& size)
+{
+    return (needle.x() >= 0
+            && needle.x() < size.width()
+            && needle.y() >= 0
+            && needle.y() < size.height());
+}
+
+bool Rect::inRect(const Point& needle, const Point& topLeft, const Size& size)
+{
+    Point bottomRight = topLeft + size;
+    return (needle.x() >= topLeft.x()
+            && needle.x() < bottomRight.x()
+            && needle.y() >= topLeft.y()
+            && needle.y() < bottomRight.y());
+}
+
+bool Rect::intersects(const Point& topLeft1, const Size& size1, const Point& topLeft2, const Size& size2)
+{
+    Point bottomRight1 = topLeft1 + size1;
+    Point bottomRight2 = topLeft2 + size2;
+    return (bottomRight1.x() >= topLeft2.x() && bottomRight1.y() >= topLeft2.y())
+           || (bottomRight2.x() >= topLeft1.x() && bottomRight2.y() >= topLeft1.y());
+}
+
 
 }

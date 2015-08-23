@@ -89,15 +89,5 @@ Image::~Image()
 {
 }
 
-unsigned int Image::width() const
-{
-    return texture()->width();
-}
-
-unsigned int Image::height() const
-{
-    return texture()->height();
-}
-
 }
 }

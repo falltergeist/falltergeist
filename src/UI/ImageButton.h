@@ -76,6 +76,7 @@ public:
         SMALL_DOWN_ARROW,
         MAP_HOTSPOT
     };
+    ImageButton(Type type, Point pos = Point());
     ImageButton(Type type, int x = 0, int y = 0);
     ~ImageButton() override;
 

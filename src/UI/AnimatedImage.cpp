@@ -172,16 +172,6 @@ AnimatedImage::~AnimatedImage()
 {
 }
 
-unsigned int AnimatedImage::width() const
-{
-    return texture()->width();
-}
-
-unsigned int AnimatedImage::height() const
-{
-    return texture()->height();
-}
-
 void AnimatedImage::render(bool eggTransparency)
 {
     Graphics::AnimatedPalette* pal = Game::getInstance()->animatedPalette();

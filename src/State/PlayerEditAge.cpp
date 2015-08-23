@@ -54,8 +54,9 @@ void PlayerEditAge::init()
     setFullscreen(false);
     setModal(true);
 
-    auto backgroundX = (Game::getInstance()->renderer()->width() - 640)*0.5;
-    auto backgroundY = (Game::getInstance()->renderer()->height() - 480)*0.5;
+    Point backgroundPos = Point((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
+    int backgroundX = backgroundPos.x();
+    int backgroundY = backgroundPos.y();
 
     auto bg = new UI::Image("art/intrface/charwin.frm");
     bg->setX(backgroundX+160);

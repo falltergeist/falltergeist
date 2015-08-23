@@ -55,8 +55,9 @@ void PlayerEditName::init()
     setFullscreen(false);
     setModal(true);
 
-    auto bgX = (Game::getInstance()->renderer()->width() - 640)*0.5;
-    auto bgY = (Game::getInstance()->renderer()->height() - 480)*0.5;
+    Point bgPos = Point((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
+    int bgX = bgPos.x();
+    int bgY = bgPos.y();
 
     _keyCodes.insert(std::make_pair(SDLK_a, 'a'));
     _keyCodes.insert(std::make_pair(SDLK_b, 'b'));
@@ -206,7 +207,7 @@ void PlayerEditName::think()
         _timer = SDL_GetTicks();
     }
 
-    _cursor->setX(bgX+_name->width() + 45);
+    _cursor->setX(bgX+_name->size().width() + 45);
 }
 
 void PlayerEditName::doBack()

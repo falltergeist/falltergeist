@@ -140,25 +140,14 @@ Animation* AnimationQueue::currentAnimation() const
     return _animations.at(_currentAnimation);
 }
 
-unsigned int AnimationQueue::width() const
+Size AnimationQueue::size() const
 {
-    return currentAnimation()->width();
+    return currentAnimation()->size();
 }
 
-unsigned int AnimationQueue::height() const
+Point AnimationQueue::offset() const
 {
-    return currentAnimation()->height();
+    return currentAnimation()->offset();
 }
-
-int AnimationQueue::xOffset() const
-{
-    return currentAnimation()->xOffset();
-}
-
-int AnimationQueue::yOffset() const
-{
-    return currentAnimation()->yOffset();
-}
-
 }
 }

@@ -235,8 +235,7 @@ void Inventory::init()
 
     // screen info
     auto screenLabel = new UI::TextArea("", screenX, screenY+20);
-    screenLabel->setWidth(140); //screen size
-    screenLabel->setHeight(168);
+    screenLabel->setSize({140, 168}); // screen size
     screenLabel->setVisible(false);
     screenLabel->setWordWrap(true);
 

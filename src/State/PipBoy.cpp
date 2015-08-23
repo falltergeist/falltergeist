@@ -60,10 +60,10 @@ void PipBoy::init()
 
     // Background
     auto background = new UI::Image("art/intrface/pip.frm");
-    auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
-    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
-    background->setX(backgroundX);
-    background->setY(backgroundY);
+    Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
+    int backgroundX = backgroundPos.x();
+    int backgroundY = backgroundPos.y();
+    background->setPosition(backgroundPos);
 
     // Buttons
     auto alarmButton = new UI::ImageButton(UI::ImageButton::Type::PIPBOY_ALARM_BUTTON, backgroundX+124, backgroundY+13);

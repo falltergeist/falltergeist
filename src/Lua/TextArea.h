@@ -40,12 +40,7 @@ class TextArea : public UI::TextArea
 {
 public:
     TextArea(const std::string& text, int x = 0, int y = 0);
-    TextArea(int x = 0, int y = 0);
-    TextArea(UI::TextArea* textArea, int x = 0, int y = 0);
     ~TextArea() override;
-
-    void setWidth(unsigned int width);
-    unsigned int width() const override;
 
     void setLuaHorizontalAlign(unsigned align);
     unsigned luaHorizontalAlign() const;

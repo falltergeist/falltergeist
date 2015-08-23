@@ -52,9 +52,8 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
     setTexture(ResourceManager::getInstance()->texture(frmName));
 
     _actionFrame = frm->actionFrame();
-
-    _xShift = frm->directions()->at(direction)->shiftX();
-    _yShift = frm->directions()->at(direction)->shiftY();
+    auto dir = frm->directions()->at(direction);
+    _shift = Point(dir->shiftX(), dir->shiftY());
 
     // Frame offset in texture's animation
     unsigned int x = 0;
@@ -223,16 +222,6 @@ std::vector<AnimationFrame*>* Animation::frames()
     return &_animationFrames;
 }
 
-int Animation::xOffset() const
-{
-    return _animationFrames.at(_currentFrame)->xOffset() + xShift();
-}
-
-int Animation::yOffset() const
-{
-    return _animationFrames.at(_currentFrame)->yOffset() + yShift();
-}
-
 void Animation::think()
 {
     if (!_playing) return;
@@ -382,14 +371,26 @@ void Animation::render(bool eggTransparency)
     }
 }
 
-unsigned int Animation::height() const
+Size Animation::size() const
 {
-    return _animationFrames.at(_currentFrame)->height();
+    auto frame = _animationFrames.at(_currentFrame);
+    return Size(frame->width(), frame->height());
 }
 
-unsigned int Animation::width() const
+Point Animation::offset() const
 {
-    return _animationFrames.at(_currentFrame)->width();
+    auto frame = _animationFrames.at(_currentFrame);
+    return Point(frame->xOffset(), frame->yOffset()) + shift();
+}
+
+Point Animation::shift() const
+{
+    return _shift;
+}
+
+void Animation::setShift(const Point& value)
+{
+    _shift = value;
 }
 
 unsigned int Animation::pixel(unsigned int x, unsigned int y)
@@ -451,26 +452,6 @@ unsigned int Animation::actionFrame() const
 void Animation::setActionFrame(unsigned int value)
 {
     _actionFrame = value;
-}
-
-int Animation::xShift() const
-{
-    return _xShift;
-}
-
-void Animation::setXShift(int value)
-{
-    _xShift = value;
-}
-
-int Animation::yShift() const
-{
-    return _yShift;
-}
-
-void Animation::setYShift(int value)
-{
-    _yShift = value;
 }
 
 }

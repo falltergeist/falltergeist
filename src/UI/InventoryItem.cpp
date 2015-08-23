@@ -93,13 +93,14 @@ void InventoryItem::render(bool eggTransparency)
     //return ActiveUI::render();
     if (!_item) return;
     auto game = Game::getInstance();
-    game->renderer()->drawTexture(texture(), x() + (width() - texture()->width())/2, y() + (height() - texture()->height())/2);
+    Size texSize = Size(texture()->width(), texture()->height());
+    game->renderer()->drawTexture(texture(), position() + (size() - texSize) / 2);
 }
 
 unsigned int InventoryItem::pixel(unsigned int x, unsigned int y)
 {
     if (!_item) return 0;
-    return x < width() && y < height();
+    return Rect::inRect(Point(x, y), Size()) ? 1 : 0;
 }
 
 Game::ItemObject* InventoryItem::item()
@@ -144,7 +145,7 @@ void InventoryItem::onMouseDragStop(Event::Mouse* event)
 void InventoryItem::onArmorDragStop(Event::Mouse* event)
 {
     // Check if mouse is over this item
-    if (!Point::inRect(event->position(), position(), size()))
+    if (!Rect::inRect(event->position(), position(), size()))
     {
         return;
     }
@@ -170,7 +171,7 @@ void InventoryItem::onArmorDragStop(Event::Mouse* event)
 void InventoryItem::onHandDragStop(Event::Mouse* event)
 {
     // Check if mouse is over this item
-    if (!Point::inRect(event->position(), position(), size()))
+    if (!Rect::inRect(event->position(), position(), size()))
     {
         return;
     }
@@ -188,14 +189,11 @@ void InventoryItem::onHandDragStop(Event::Mouse* event)
     }
 }
 
-unsigned int InventoryItem::width() const
+Size InventoryItem::size() const
 {
-    return type() == Type::SLOT ? 90 : 70;
-}
-
-unsigned int InventoryItem::height() const
-{
-    return type() == Type::SLOT ? 63 : 49;
+    return type() == Type::SLOT
+           ? Size(90, 63)
+           : Size(70, 49);
 }
 
 }

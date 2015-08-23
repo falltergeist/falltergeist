@@ -47,17 +47,11 @@ public:
     void think() override;
     void render(bool eggTransparency = false) override;
 
-    int xOffset() const override;
-    int yOffset() const override;
+    Point shift() const;
+    void setShift(const Point& value);
 
-    int xShift() const;
-    void setXShift(int value);
-
-    int yShift() const;
-    void setYShift(int value);
-
-    unsigned int width() const override;
-    unsigned int height() const override;
+    Size size() const override;
+    Point offset() const override;
 
     unsigned int pixel(unsigned int x, unsigned int y) override;
 
@@ -79,8 +73,7 @@ protected:
     bool _ended = false;
     bool _reverse = false;
     std::vector<AnimationFrame*> _animationFrames;
-    int _xShift = 0;
-    int _yShift = 0;
+    Point _shift;
     unsigned int _currentFrame = 0;
     unsigned int _actionFrame = 0;
     unsigned int _progress = 0;

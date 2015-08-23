@@ -24,6 +24,7 @@
 #include <vector>
 
 // Falltergeist includes
+#include "../Point.h"
 #include "../UI/Base.h"
 
 // Third party includes
@@ -54,10 +55,8 @@ public:
     void think() override;
     unsigned int pixel(unsigned int x, unsigned int y) override;
 
-    unsigned int width() const override;
-    unsigned int height() const override;
-    int xOffset() const override;
-    int yOffset() const override;
+    Size size() const override;
+    Point offset() const override;
 
 protected:
     bool _playing = false;

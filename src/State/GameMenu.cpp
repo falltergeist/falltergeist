@@ -64,8 +64,9 @@ void GameMenu::init()
     auto background = new UI::Image("art/intrface/opbase.frm");
     auto panelHeight = Game::getInstance()->locationState()->playerPanelState()->height();
 
-    auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
-    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height() - panelHeight)*0.5;
+    auto backgroundPos = (Game::getInstance()->renderer()->size() - background->size() - Point(0, panelHeight)) / 2;
+    int backgroundX = backgroundPos.x();
+    int backgroundY = backgroundPos.y();
 
     auto saveGameButton    = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18);
     auto loadGameButton    = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37);
@@ -82,33 +83,33 @@ void GameMenu::init()
     // label: save game
     auto saveGameButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 0), backgroundX+8, backgroundY+26);
     saveGameButtonLabel->setFont(font);
-    saveGameButtonLabel->setWidth(150);
+    saveGameButtonLabel->setSize({150, 0});
     saveGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
     saveGameButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doSaveGame(); });
 
     // label: load game
     auto loadGameButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 1), backgroundX+8, backgroundY+26+37);
     loadGameButtonLabel->setFont(font);
-    loadGameButtonLabel->setWidth(150);
+    loadGameButtonLabel->setSize({150, 0});
     loadGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
     loadGameButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doLoadGame(); });
 
     // label: preferences
     auto preferencesButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 2), backgroundX+8, backgroundY+26+37*2);
     preferencesButtonLabel->setFont(font);
-    preferencesButtonLabel->setWidth(150);
+    preferencesButtonLabel->setSize({150, 0});
     preferencesButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: exit game
     auto exitGameButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 3), backgroundX+8, backgroundY+26+37*3);
     exitGameButtonLabel->setFont(font);
-    exitGameButtonLabel->setWidth(150);
+    exitGameButtonLabel->setSize({150, 0});
     exitGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: done
     auto doneButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 4), backgroundX+8, backgroundY+26+37*4);
     doneButtonLabel->setFont(font);
-    doneButtonLabel->setWidth(150);
+    doneButtonLabel->setSize({150, 0});
     doneButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     background->setX(backgroundX);

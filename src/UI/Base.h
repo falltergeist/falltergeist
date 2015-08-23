@@ -75,8 +75,6 @@ public:
     virtual void handle(Event::Event* event);
 
     virtual Size size() const;
-    virtual unsigned int width() const;
-    virtual unsigned int height() const;
 
     virtual unsigned int pixel(const Point& pos);
     virtual unsigned int pixel(unsigned int x, int unsigned y);

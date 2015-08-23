@@ -27,8 +27,6 @@
 namespace Falltergeist
 {
 
-class Size;
-
 /**
  * Represents a Point coordinates on screen
  */
@@ -52,23 +50,16 @@ public:
     void setY(int y);
 
     Point& operator +=(const Point& rhs);
-
     Point& operator -=(const Point& rhs);
-
     Point& operator *=(double rhs);
-
     Point& operator /=(double rhs);
 
     bool operator ==(const Point& rhs) const;
-
     bool operator !=(const Point& rhs) const;
 
     friend Point operator +(Point lhs, const Point& rhs);
-
     friend Point operator -(Point lhs, const Point& rhs);
-
     friend Point operator *(Point lhs, double rhs);
-
     friend Point operator /(Point lhs, double rhs);
 
     Point add(const Point& rhs) const;
@@ -76,12 +67,6 @@ public:
     Point sub(const Point& rhs) const;
 
     friend std::ostream& operator <<(std::ostream& lhs, const Point& rhs);
-
-    // checks if given point is located withing the rectangle with given top-left position and size
-    static bool inRect(const Point& needle, const Point& topLeft, const Size& size);
-
-    // checks if two rectangles, given as their top-left positions and sizes, intersect each other
-    static bool rectIntersects(const Point& topLeft1, const Size& size1, const Point& topLeft2, const Size& size2);
 
 protected:
     int _x;
@@ -121,6 +106,9 @@ public:
     Size& operator *=(double rhs);
     Size& operator /=(double rhs);
 
+    bool operator ==(const Size& rhs) const;
+    bool operator !=(const Size& rhs) const;
+
     friend Size operator +(Size lhs, const Size& rhs);
     friend Size operator -(Size lhs, const Size& rhs);
     friend Size operator *(Size lhs, double rhs);
@@ -135,6 +123,20 @@ public:
 protected:
     int _width;
     int _height;
+};
+
+// static class
+class Rect
+{
+public:
+    // checks if given point is located withing the rectangle specified by size
+    static bool inRect(const Point& needle, const Size& size);
+
+    // checks if given point is located withing the rectangle with given top-left position and size
+    static bool inRect(const Point& needle, const Point& topLeft, const Size& size);
+
+    // checks if two rectangles, given as their top-left positions and sizes, intersect each other
+    static bool intersects(const Point& topLeft1, const Size& size1, const Point& topLeft2, const Size& size2);
 };
 
 

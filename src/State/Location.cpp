@@ -77,7 +77,7 @@ Location::Location() : State()
     auto game = Game::getInstance();
     game->mouse()->setState(Input::Mouse::Cursor::ACTION);
 
-    _camera = new LocationCamera({0, 0}, game->renderer()->size());
+    _camera = new LocationCamera(game->renderer()->size(), Point(0, 0));
     _floor = new UI::TileMap();
     _roof = new UI::TileMap();
     _hexagonGrid = new HexagonGrid();

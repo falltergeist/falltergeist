@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Point.h"
 #include "../UI/Base.h"
 
 // Third party includes
@@ -62,8 +63,7 @@ public:
     void render(bool eggTransparency = false) override;
     unsigned int pixel(unsigned int x, unsigned int y) override;
     Graphics::Texture* texture() const override;
-    unsigned int width() const override;
-    unsigned int height() const override;
+    Size size() const override;
 
     void onMouseLeftDown(Event::Mouse* event);
     void onMouseDragStart(Event::Mouse* event);

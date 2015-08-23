@@ -25,6 +25,7 @@
 
 // Falltergeist includes
 #include "../UI/Base.h"
+#include "../Point.h"
 
 // Third party includes
 #include <libfalltergeist.h>
@@ -43,9 +44,6 @@ public:
     Image(Graphics::Texture* texture);
     Image(libfalltergeist::Frm::File* frm, unsigned int direction);
     ~Image() override;
-
-    unsigned int width() const override;
-    unsigned int height() const override;
 };
 
 }

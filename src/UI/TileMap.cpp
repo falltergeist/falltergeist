@@ -64,7 +64,7 @@ void TileMap::render()
 
     for (auto tile : _tiles)
     {
-        if (Point::rectIntersects(tile->position(), Size(80, 36), camera->topLeft(), camera->size()))
+        if (Rect::intersects(tile->position(), Size(80, 36), camera->topLeft(), camera->size()))
         {
             auto pos = tile->position() - camera->topLeft();
             auto sx = (tile->index() % _square) * 80;

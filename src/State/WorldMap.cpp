@@ -184,9 +184,9 @@ void WorldMap::render()
     }
     else
     {
-        panelX = (renderWidth - _panel->width())*0.5;
+        panelX = (renderWidth - _panel->size().width()) / 2;
     }
-    panelY = (renderHeight - _panel->height())*0.5;
+    panelY = (renderHeight - _panel->size().height()) / 2;
 
     _panel->setX(panelX);
     _panel->setY(panelY);

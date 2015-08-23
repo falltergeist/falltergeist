@@ -198,22 +198,11 @@ void Base::setOffset(const Point& pos)
     _offset = pos;
 }
 
-unsigned int Base::width() const
-{
-    if (!texture()) return 0;
-    return texture()->width();
-}
-
-unsigned int Base::height() const
-{
-    if (!texture()) return 0;
-    return texture()->height();
-}
-
 Size Base::size() const
 {
-    if (!_texture) return Size();
-    return Size(_texture->width(), _texture->height());
+    auto tex = texture();
+    if (!tex) return Size();
+    return Size(tex->width(), tex->height());
 }
 
 unsigned int Base::pixel(const Point& pos)

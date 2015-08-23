@@ -67,7 +67,7 @@ void CritterDialog::init()
     addUI("background", background);
 
     auto question = new UI::TextArea("question", 140, -55);
-    question->setWidth(370);
+    question->setSize({370, 0});
     question->setWordWrap(true);
     addUI("question", question);
 
@@ -198,12 +198,12 @@ void CritterDialog::addAnswer(const std::string& text)
     int y = 50;
     for (auto answer : _answers)
     {
-        y += answer->height() + 5;
+        y += answer->size().height() + 5;
     }
 
     auto answer = new UI::TextArea(line, 140, y);
     answer->setWordWrap(true);
-    answer->setWidth(370);
+    answer->setSize({370, 0});
 
     answer->addEventHandler("mousein", std::bind(&CritterDialog::onAnswerIn, this, std::placeholders::_1));
     answer->addEventHandler("mouseout", std::bind(&CritterDialog::onAnswerOut, this, std::placeholders::_1));

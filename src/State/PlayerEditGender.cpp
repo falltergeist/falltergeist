@@ -54,8 +54,9 @@ void PlayerEditGender::init()
     setFullscreen(false);
     setModal(true);
 
-    auto bgX = (Game::getInstance()->renderer()->width() - 640)*0.5;
-    auto bgY = (Game::getInstance()->renderer()->height() - 480)*0.5;
+    Point bgPos = Point((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
+    int bgX = bgPos.x();
+    int bgY = bgPos.y();
 
     auto bg = new UI::Image("art/intrface/charwin.frm");
     bg->setX(bgX+236);

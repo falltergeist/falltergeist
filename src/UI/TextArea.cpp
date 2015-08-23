@@ -42,29 +42,36 @@ namespace Falltergeist
 namespace UI
 {
 
-TextArea::TextArea(int x, int y) : Falltergeist::UI::Base(x, y)
+TextArea::TextArea(const Point& pos) : Base(pos)
 {
     _timestampCreated = SDL_GetTicks();
     _calculate();
 }
 
-TextArea::TextArea(const std::string& text, int x, int y) : Falltergeist::UI::Base(x, y)
+TextArea::TextArea(int x, int y) : TextArea(Point(x, y))
+{
+}
+
+TextArea::TextArea(const std::string& text, const Point& pos) : Base(pos)
 {
     _timestampCreated = SDL_GetTicks();
     setText(text);
 }
 
-TextArea::TextArea(TextArea* textArea, int x, int y) : Falltergeist::UI::Base(x, y)
+TextArea::TextArea(const std::string& text, int x, int y) : TextArea(text, Point(x, y))
 {
-    _timestampCreated = textArea->_timestampCreated;
-    _text = textArea->_text;
-    _font = textArea->_font;
-    _backgroundColor = textArea->_backgroundColor;
-    _height = textArea->_height;
-    _width = textArea->_width;
-    _horizontalAlign = textArea->_horizontalAlign;
-    _verticalAlign = textArea->_verticalAlign;
-    _wordWrap = textArea->_wordWrap;
+}
+
+TextArea::TextArea(const TextArea& textArea, Point pos) : Base(pos)
+{
+    _timestampCreated = textArea._timestampCreated;
+    _text = textArea._text;
+    _font = textArea._font;
+    _backgroundColor = textArea._backgroundColor;
+    _size = textArea._size;
+    _horizontalAlign = textArea._horizontalAlign;
+    _verticalAlign = textArea._verticalAlign;
+    _wordWrap = textArea._wordWrap;
     _calculate();
 }
 
@@ -141,39 +148,25 @@ bool TextArea::wordWrap() const
     return _wordWrap;
 }
 
-
-void TextArea::setWidth(unsigned int width)
+Size TextArea::size() const
 {
-    if (_width == width) return;
-    _width = width;
+    return Size(
+        _size.width() ?: _calculatedSize.width(),
+        _size.height() ?: _calculatedSize.height()
+    );
+}
+
+void TextArea::setSize(const Size& size)
+{
+    if (_size == size) return;
+    _size = size;
     _changed = true;
     _calculate();
 }
 
-unsigned int TextArea::width() const
+void TextArea::setWidth(int width)
 {
-    if (_width == 0)
-    {
-        return _calculatedWidth;
-    }
-    return _width;
-}
-
-void TextArea::setHeight(unsigned int height)
-{
-    if (_height == height) return;
-    _height = height;
-    _changed = true;
-    _calculate();
-}
-
-unsigned int TextArea::height() const
-{
-    if (_height == 0)
-    {
-        return _calculatedHeight;
-    }
-    return _width;
+    setSize({width, _size.height()});
 }
 
 void TextArea::_calculate()
@@ -203,7 +196,7 @@ void TextArea::_calculate()
             x += font()->aaf()->spaceWidth() + font()->horizontalGap();
         }
 
-        if (*it == '\n' || (_width && x >= _width))
+        if (*it == '\n' || (_size.width() && x >= _size.width()))
         {
             widths.back() = x;
             x = 0;
@@ -224,13 +217,13 @@ void TextArea::_calculate()
     }
 
     // Calculating textarea sizes if needed
-    if (_width == 0)
+    if (_size.width() == 0)
     {
-        _calculatedWidth = *std::max_element(widths.begin(), widths.end());
+        _calculatedSize.setWidth(*std::max_element(widths.begin(), widths.end()));
     }
-    if (_height == 0)
+    if (_size.height() == 0)
     {
-        _calculatedHeight = lines.size()*font()->height() + (lines.size() - 1)*font()->verticalGap();
+        _calculatedSize.setHeight(lines.size()*font()->height() + (lines.size() - 1)*font()->verticalGap());
     }
 
     // Align
@@ -243,7 +236,7 @@ void TextArea::_calculate()
 
         if (_horizontalAlign != HorizontalAlign::LEFT)
         {
-            xOffset = (_width ? _width : _calculatedWidth) - widths.at(i);
+            xOffset = (_size.width() ? _size.width() : _calculatedSize.width()) - widths.at(i);
             if(_horizontalAlign == HorizontalAlign::CENTER)
             {
                 xOffset =  xOffset / 2;
@@ -336,7 +329,7 @@ TextArea& TextArea::operator+=(signed value)
 
 unsigned int TextArea::pixel(unsigned int x, unsigned int y)
 {
-    if ( x >= width() || y >= height())
+    if ( x >= size().width() || y >= size().height())
     {
         return 0; // transparent
     }
