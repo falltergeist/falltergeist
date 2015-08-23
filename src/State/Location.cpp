@@ -254,14 +254,14 @@ void Location::setLocation(const std::string& name)
             unsigned int tileNum = mapFile->elevations()->at(_currentElevation)->floorTiles()->at(i);
             if (tileNum > 1)
             {
-                auto tile = new UI::Tile(tileNum, {x, y});
+                auto tile = new UI::Tile(tileNum, Point(x, y));
                 _floor->tiles()->push_back(tile);
             }
 
             tileNum = mapFile->elevations()->at(_currentElevation)->roofTiles()->at(i);
             if (tileNum > 1)
             {
-                auto tile = new UI::Tile(tileNum, {x, y - 104});
+                auto tile = new UI::Tile(tileNum, Point(x, y - 104));
                 _roof->tiles()->push_back(tile);
             }
         }

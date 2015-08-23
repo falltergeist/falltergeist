@@ -20,15 +20,20 @@
 #ifndef FALLTERGEIST_POINT_H
 #define FALLTERGEIST_POINT_H
 
+// C++ standard includes
 #include <ostream>
 
+// Falltergeist includes
 #include "Exception.h"
+
+// Third party includes
+
 
 namespace Falltergeist
 {
 
 /**
- * Represents a Point coordinates on screen
+ * Represents a Point on screen: x and y coordinates, in pixels.
  */
 class Point
 {
@@ -38,15 +43,12 @@ public:
     Point(int x, int y) : _x(x), _y(y) {}
 
     int x() const;
-
     int y() const;
 
     int& rx();
-
     int& ry();
 
     void setX(int x);
-
     void setY(int y);
 
     Point& operator +=(const Point& rhs);
@@ -62,9 +64,14 @@ public:
     friend Point operator *(Point lhs, double rhs);
     friend Point operator /(Point lhs, double rhs);
 
+    // Addition of given Point
     Point add(const Point& rhs) const;
-
+    // Subtraction of given Point
     Point sub(const Point& rhs) const;
+    // Multiplication by given number
+    Point mul(double rhs) const;
+    // Division by given number
+    Point div(double rhs) const;
 
     friend std::ostream& operator <<(std::ostream& lhs, const Point& rhs);
 
@@ -74,7 +81,9 @@ protected:
 
 };
 
-
+/**
+ * Represents a Size of a rectangular object: width and height, in pixels.
+ */
 class Size
 {
 public:
@@ -90,7 +99,6 @@ public:
     operator Point() const;
 
     int width() const;
-
     int height() const;
 
     /*int& rwidth();
@@ -98,7 +106,6 @@ public:
     int& rheight();*/
 
     void setWidth(int width);
-
     void setHeight(int height);
 
     Size& operator +=(const Size& rhs);
@@ -114,9 +121,14 @@ public:
     friend Size operator *(Size lhs, double rhs);
     friend Size operator /(Size lhs, double rhs);
 
+    // Addition of another Size
     Size add(const Size& rhs) const;
-
+    // Subtraction of another Size
     Size sub(const Size& rhs) const;
+    // Multiplication of width/height by given number
+    Size mul(double rhs) const;
+    // Division by given number
+    Size div(double rhs) const;
 
     friend std::ostream& operator <<(std::ostream& lhs, const Size& rhs);
 
@@ -125,7 +137,7 @@ protected:
     int _height;
 };
 
-// static class
+// static class for Rectangle-related function
 class Rect
 {
 public:

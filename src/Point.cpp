@@ -49,6 +49,9 @@ PointTest::PointTest()
     Logger::info("GAME") << "Half size 3 " << pt << std::endl;
 }
 
+
+// Point class members
+
 int Point::x() const
 {
     return _x;
@@ -151,11 +154,26 @@ Point Point::sub(const Point& rhs) const
     return *this - rhs;
 }
 
+Point Point::mul(double rhs) const
+{
+    return *this * rhs;
+}
+
+Point Point::div(double rhs) const
+{
+    return *this / rhs;
+}
+
 std::ostream& operator <<(std::ostream& lhs, const Point& rhs)
 {
     lhs << "(" << rhs._x << "," << rhs._y << ")";
     return lhs;
 }
+
+// end Point class
+
+
+// Size class members
 
 Size::Size(int width, int height)
 {
@@ -290,12 +308,26 @@ Size Size::sub(const Size& rhs) const
     return *this - rhs;
 }
 
+Size Size::mul(double rhs) const
+{
+    return *this * rhs;
+}
+
+Size Size::div(double rhs) const
+{
+    return *this / rhs;
+}
+
 std::ostream& operator <<(std::ostream& lhs, const Size& rhs)
 {
     lhs << "(" << rhs._width << "," << rhs._height << ")";
     return lhs;
 }
 
+// end Size class
+
+
+// Rect class members
 
 bool Rect::inRect(const Point& needle, const Size& size)
 {
@@ -322,5 +354,6 @@ bool Rect::intersects(const Point& topLeft1, const Size& size1, const Point& top
            || (bottomRight2.x() >= topLeft1.x() && bottomRight2.y() >= topLeft1.y());
 }
 
+// end Rect class
 
 }

@@ -28,9 +28,6 @@
 #include "src/State/LuaState.h"
 #include "src/State/Start.h"
 
-#include "Point.h"
-#include "LocationCamera.h"
-
 // Third party includes
 #include <libfalltergeist.h>
 
@@ -40,10 +37,6 @@ int main(int argc, char* argv[])
 {
     try
     {
-        {
-            PointTest();
-            //return 0;
-        }
         auto game = Game::Game::getInstance();
         game->init(std::unique_ptr<Settings>(new Settings()));
         game->setState(new State::Start());

@@ -60,6 +60,11 @@ Font::~Font()
     delete _texture;
 }
 
+unsigned int Font::color()
+{
+    return _color;
+}
+
 unsigned short Font::height()
 {
     return _aaf->maximumHeight();
