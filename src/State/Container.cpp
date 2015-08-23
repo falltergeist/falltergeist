@@ -55,7 +55,7 @@ void Container::init()
 
     auto game = Game::getInstance();
 
-    setPosition((Point(game->renderer()->width(), game->renderer()->height()) - Point(537, 376)) / 2);
+    setPosition((game->renderer()->size() - Point(537, 376)) / 2);
 
     addUI("background", new UI::Image("art/intrface/loot.frm"));
 
