@@ -24,7 +24,6 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Point.h"
 #include "../UI/Base.h"
 
 // Third party includes

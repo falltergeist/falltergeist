@@ -27,10 +27,10 @@ namespace Falltergeist
 
 PointTest::PointTest()
 {
-    Point pt = Point(-100, -100);
+    Point pt = Point(-70, -100);
     Point pt2 = Point();
-    Size siz = Size(50, 50);
-    pt += (siz + Point(40, 40) - pt2);
+    Size siz = Size(50, 65);
+    pt += (siz + Point(42, 40) / 2 - pt2);
     siz -= Size(Point(60, 60)) + Size(5, 5);
     Logger::info("GAME") << "Min size " << siz << std::endl;
     Logger::info("GAME") << "Point a = " << pt << std::endl;

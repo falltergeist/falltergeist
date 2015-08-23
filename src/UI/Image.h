@@ -25,7 +25,6 @@
 
 // Falltergeist includes
 #include "../UI/Base.h"
-#include "../Point.h"
 
 // Third party includes
 #include <libfalltergeist.h>

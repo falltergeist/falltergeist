@@ -94,13 +94,13 @@ void InventoryItem::render(bool eggTransparency)
     if (!_item) return;
     auto game = Game::getInstance();
     Size texSize = Size(texture()->width(), texture()->height());
-    game->renderer()->drawTexture(texture(), position() + (size() - texSize) / 2);
+    game->renderer()->drawTexture(texture(), position() + (this->size() - texSize) / 2);
 }
 
 unsigned int InventoryItem::pixel(unsigned int x, unsigned int y)
 {
     if (!_item) return 0;
-    return Rect::inRect(Point(x, y), Size()) ? 1 : 0;
+    return Rect::inRect(Point(x, y), this->size()) ? 1 : 0;
 }
 
 Game::ItemObject* InventoryItem::item()
@@ -130,8 +130,7 @@ void InventoryItem::onMouseDrag(Event::Mouse* event)
 
 void InventoryItem::onMouseDragStop(Event::Mouse* event)
 {
-    setXOffset(0);
-    setYOffset(0);
+    setOffset({0, 0});
     setType(_oldType);
 
     auto itemevent = new Event::Mouse("itemdragstop");

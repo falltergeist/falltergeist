@@ -78,8 +78,7 @@ void AnimationQueue::setRepeat(bool value)
 
 void AnimationQueue::render(bool eggTransparency)
 {
-    currentAnimation()->setX(this->x());
-    currentAnimation()->setY(this->y());
+    currentAnimation()->setPosition(this->position());
     currentAnimation()->render(eggTransparency);
 }
 
@@ -130,8 +129,7 @@ Graphics::Texture* AnimationQueue::texture() const
 
 unsigned int AnimationQueue::pixel(unsigned int x, unsigned int y)
 {
-    currentAnimation()->setX(this->x());
-    currentAnimation()->setY(this->y());
+    currentAnimation()->setPosition(this->position());
     return currentAnimation()->pixel(x, y);
 }
 

@@ -201,7 +201,7 @@ void Base::setOffset(const Point& pos)
 Size Base::size() const
 {
     auto tex = texture();
-    if (!tex) return Size();
+    if (!tex) return Size(0, 0);
     return Size(tex->width(), tex->height());
 }
 

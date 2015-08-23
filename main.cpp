@@ -40,11 +40,10 @@ int main(int argc, char* argv[])
 {
     try
     {
-        /*{
-            LocationCamera cam = LocationCamera(Size(640, 480), Point(0, 0));
-            Logger::info("GAME") << cam.size() << cam.center() << cam.topLeft() << std::endl;
-            return 0;
-        }*/
+        {
+            PointTest();
+            //return 0;
+        }
         auto game = Game::Game::getInstance();
         game->init(std::unique_ptr<Settings>(new Settings()));
         game->setState(new State::Start());
