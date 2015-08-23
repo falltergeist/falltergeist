@@ -52,11 +52,11 @@ public:
     std::vector<InventoryItem*>* inventoryItems();
     InventoryItem* draggedItem();
 
-    void setSlotsNumber(unsigned int value);
+    /*void setSlotsNumber(unsigned int value);
     unsigned int slotsNumber();
 
     void setSlotOffset(unsigned int value);
-    unsigned int slotOffset();
+    unsigned int slotOffset();*/
 
     void update();
 
@@ -67,7 +67,7 @@ public:
     bool canScrollDown();
 
     virtual void render(bool eggTransparency = false);
-    virtual unsigned int pixel(unsigned int x, unsigned int y);
+    virtual unsigned int pixel(const Point& pos);
 
     void onMouseLeftDown(Event::Mouse* event);
     void onMouseDragStart(Event::Mouse* event);

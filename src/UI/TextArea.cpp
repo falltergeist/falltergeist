@@ -269,7 +269,8 @@ void TextArea::render(bool eggTransparency)
 
     for (auto& symbol : _symbols)
     {
-        symbol.render(x(), y());
+        auto pos = position();
+        symbol.render(pos.x(), pos.y());
     }
 }
 
@@ -327,13 +328,12 @@ TextArea& TextArea::operator+=(signed value)
     return *this;
 }
 
-unsigned int TextArea::pixel(unsigned int x, unsigned int y)
+unsigned int TextArea::pixel(const Point& pos)
 {
-    if ( x >= size().width() || y >= size().height())
+    if (!Rect::inRect(pos, this->size()))
     {
         return 0; // transparent
     }
-
     return 0xFFFFFFFF; // white color
 }
 

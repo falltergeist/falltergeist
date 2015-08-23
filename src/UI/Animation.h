@@ -53,7 +53,7 @@ public:
     Size size() const override;
     Point offset() const override;
 
-    unsigned int pixel(unsigned int x, unsigned int y) override;
+    unsigned int pixel(const Point& pos) override;
 
     void play();
     void stop();

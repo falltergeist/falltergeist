@@ -85,19 +85,18 @@ void ItemsList::render(bool eggTransparency)
     unsigned int i = 0;
     for (auto item : *inventoryItems())
     {
-        item->setX(x());
-        item->setY(y() + _slotHeight*i);
+        item->setPosition(position() + Point(0, _slotHeight*i));
         item->render();
         i++;
     }
 }
 
-unsigned int ItemsList::pixel(unsigned int x, unsigned int y)
+unsigned int ItemsList::pixel(const Point& pos)
 {
     unsigned int i = 0;
     for (auto item : *inventoryItems())
     {
-        unsigned int pixel = item->pixel(x, y - _slotHeight*i);
+        unsigned int pixel = item->pixel(pos - Point(0, _slotHeight*i));
         if (pixel) return pixel;
         i++;
     }

@@ -122,8 +122,7 @@ void State::setModal(bool value)
 UI::Base* State::addUI(UI::Base* ui)
 {
     // Add to UI state position
-    if (x()) ui->setX(ui->x() + x());
-    if (y()) ui->setY(ui->y() + y());
+    ui->setPosition(ui->position() + position());
 
     _ui.push_back(ui);
     return ui;

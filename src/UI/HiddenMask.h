@@ -43,7 +43,7 @@ public:
     HiddenMask(unsigned int width = 0, unsigned int height = 0, int x = 0, int y = 0);
     ~HiddenMask() override;
 
-    unsigned int pixel(unsigned int x, unsigned int y) override;
+    unsigned int pixel(const Point& pos) override;
     void render(bool eggTransparency = false) override;
     void think() override;
 };

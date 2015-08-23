@@ -112,8 +112,7 @@ void GameMenu::init()
     doneButtonLabel->setSize({150, 0});
     doneButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
-    background->setX(backgroundX);
-    background->setY(backgroundY);
+    background->setPosition(backgroundPos);
 
     addUI(background);
     addUI(saveGameButton);

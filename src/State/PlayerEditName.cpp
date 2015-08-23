@@ -99,16 +99,13 @@ void PlayerEditName::init()
     _timer = SDL_GetTicks();
 
     auto bg = new UI::Image("art/intrface/charwin.frm");
-    bg->setX(bgX+22);
-    bg->setY(bgY+0);
+    bg->setPosition(bgPos + Point(22, 0));
 
     auto nameBox = new UI::Image("art/intrface/namebox.frm");
-    nameBox->setX(bgX+35);
-    nameBox->setY(bgY+10);
+    nameBox->setPosition(bgPos + Point(35, 10));
 
     auto doneBox = new UI::Image("art/intrface/donebox.frm");
-    doneBox->setX(bgX+35);
-    doneBox->setY(bgY+40);
+    doneBox->setPosition(bgPos + Point(35, 40));
 
     auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX+65, bgY+43);
     auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
@@ -121,8 +118,7 @@ void PlayerEditName::init()
     _name->addEventHandler("keydown", [this](Event::Event* event){ this->onTextAreaKeyDown(dynamic_cast<Event::Keyboard*>(event)); });
 
     _cursor = new UI::Image(5, 8);
-    _cursor->setX(bgX+83);
-    _cursor->setY(bgY+15);
+    _cursor->setPosition(bgPos + Point(83, 15));
     _cursor->texture()->fill(0x3FF800FF);
 
     addUI(bg);
@@ -192,22 +188,15 @@ void PlayerEditName::onDoneButtonClick(Event::Mouse* event)
 
 void PlayerEditName::think()
 {
-    auto bgX = (Game::getInstance()->renderer()->width() - 640)*0.5;
+    int bgX = (Game::getInstance()->renderer()->width() - 640) / 2;
     State::think();
     if (SDL_GetTicks() - _timer > 300)
     {
-        if (_cursor->visible())
-        {
-            _cursor->setVisible(false);
-        }
-        else
-        {
-            _cursor->setVisible(true);
-        }
+        _cursor->setVisible(!_cursor->visible());
         _timer = SDL_GetTicks();
     }
 
-    _cursor->setX(bgX+_name->size().width() + 45);
+    _cursor->setPosition({bgX + _name->size().width() + 45, _cursor->position().y()});
 }
 
 void PlayerEditName::doBack()

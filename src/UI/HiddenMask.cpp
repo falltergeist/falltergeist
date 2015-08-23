@@ -41,9 +41,9 @@ HiddenMask::~HiddenMask()
 {
 }
 
-unsigned int HiddenMask::pixel(unsigned int x, unsigned int y)
+unsigned int HiddenMask::pixel(const Point& pos)
 {
-    return Rect::inRect(Point(x, y), size()) ? 0xffffffff : 0;
+    return Rect::inRect(pos, this->size()) ? 0xffffffff : 0;
 }
 
 void HiddenMask::render(bool eggTransparency)

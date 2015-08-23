@@ -68,12 +68,12 @@ Base::~Base()
 
 int Base::x() const
 {
-    return _position.x() + _offset.x();
+    return (position() + offset()).x();
 }
 
 void Base::setX(int value)
 {
-    _position.setX(value);
+    setPosition(Point(value, position().y()));
 }
 
 int Base::y() const
@@ -83,7 +83,7 @@ int Base::y() const
 
 void Base::setY(int value)
 {
-    _position.setY(value);
+    setPosition(Point(position().x(), value));
 }
 
 Graphics::Texture* Base::texture() const
@@ -109,7 +109,7 @@ void Base::render(bool eggTransparency)
 
         if (!dude || !Game::getInstance()->locationState())
         {
-            Game::getInstance()->renderer()->drawTexture(texture(), x(), y());
+            Game::getInstance()->renderer()->drawTexture(texture(), position());
             return;
         }
 
@@ -117,8 +117,7 @@ void Base::render(bool eggTransparency)
 
         Point eggPos = dude->hexagon()->position() - camera->topLeft() - Point(63, 78) + dude->ui()->offset();
 
-        int egg_dx = x() - eggPos.x();
-        int egg_dy = y() - eggPos.y();
+        Point eggDelta = position() - eggPos;
 
         auto egg = ResourceManager::getInstance()->texture("data/egg.png");
 
@@ -128,19 +127,19 @@ void Base::render(bool eggTransparency)
 
         if (!SDL_HasIntersection(&egg_rect, &tex_rect))
         {
-            Game::getInstance()->renderer()->drawTexture(texture(), x(), y());
+            Game::getInstance()->renderer()->drawTexture(texture(), position());
             return;
         }
 
         if (!_tmptex) _tmptex = new Graphics::Texture(texture()->width(),texture()->height());
         texture()->copyTo(_tmptex);
 
-        _tmptex->blitWithAlpha(egg, egg_dx, egg_dy);
-        Game::getInstance()->renderer()->drawTexture(_tmptex, x(), y());
+        _tmptex->blitWithAlpha(egg, eggDelta.x(), eggDelta.y());
+        Game::getInstance()->renderer()->drawTexture(_tmptex, position());
     }
     else
     {
-        Game::getInstance()->renderer()->drawTexture(texture(), x(), y());
+        Game::getInstance()->renderer()->drawTexture(texture(), position());
     }
 
 
@@ -191,12 +190,12 @@ Size Base::size() const
 
 unsigned int Base::pixel(const Point& pos)
 {
-    return pixel(pos.x(), pos.y());
+    return texture() ? texture()->pixel(pos.x(), pos.y()) : 0;
 }
 
 unsigned int Base::pixel(unsigned int x, unsigned int y)
 {
-    return texture() ? texture()->pixel(x, y) : 0;
+    return pixel(Point(x, y));
 }
 
 void Base::handle(Event::Event* event)

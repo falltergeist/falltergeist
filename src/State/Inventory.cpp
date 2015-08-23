@@ -101,8 +101,7 @@ void Inventory::init()
     addUI("player_name", new UI::TextArea(player->name(), screenX, screenY));
 
     auto line1 = new UI::Image(142, 1);
-    line1->setX(screenX);
-    line1->setY(screenY+16);
+    line1->setPosition({screenX, screenY+16});
     line1->texture()->fill(0x3ff800ff); // default green color
 
     std::string statsLabels;
@@ -190,13 +189,11 @@ void Inventory::init()
     auto damageResistanceLabel = new UI::TextArea(ss.str(), screenX+120, screenY+40);
 
     auto line2 = new UI::Image(142, 1);
-    line2->setX(screenX);
-    line2->setY(screenY+94);
+    line2->setPosition({screenX, screenY+94});
     line2->texture()->fill(0x3ff800ff); // default green color
 
     auto line3 = new UI::Image(142, 1);
-    line3->setX(screenX);
-    line3->setY(screenY+134);
+    line3->setPosition({screenX, screenY+134});
     line3->texture()->fill(0x3ff800ff); // default green color
 
     // label: Total Wt: (20)

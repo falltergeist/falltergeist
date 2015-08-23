@@ -293,8 +293,7 @@ void Animation::render(bool eggTransparency)
         auto camera = Game::getInstance()->locationState()->camera();
         Point eggPos = dude->hexagon()->position() - camera->topLeft() - Point(63, 78) + dude->ui()->offset();
 
-        int egg_dx = x() - eggPos.x();
-        int egg_dy = y() - eggPos.y();
+        Point eggDelta = position() - eggPos;
 
         auto egg = ResourceManager::getInstance()->texture("data/egg.png");
 
@@ -348,7 +347,7 @@ void Animation::render(bool eggTransparency)
         if (pal->getCounter(MASK::REDDOT) < _reddotTextures.size())
             _reddotTextures.at(pal->getCounter(MASK::REDDOT))->copyTo(_tmptex);
 
-        _tmptex->blitWithAlpha(egg, egg_dx, egg_dy);
+        _tmptex->blitWithAlpha(egg, eggDelta.x(), eggDelta.y());
         Game::getInstance()->renderer()->drawTexture(_tmptex, offsetPosition, framePos, frameSize);
     }
     else
@@ -397,18 +396,16 @@ void Animation::setShift(const Point& value)
     _shift = value;
 }
 
-unsigned int Animation::pixel(unsigned int x, unsigned int y)
+unsigned int Animation::pixel(const Point& pos)
 {
     const auto frame = frames()->at(_currentFrame);
 
-    Point ofs = offset();
-    x -= ofs.x();
-    y -= ofs.y();
-
-    if (x > frame->width()) return 0;
-    if (y > frame->height()) return 0;
-
-    return Falltergeist::UI::Base::pixel(x + frame->x(), y + frame->y());
+    Point offsetPos = pos - offset();
+    if (!Rect::inRect(offsetPos, Size(frame->width(), frame->height())))
+    {
+        return 0;
+    }
+    return Base::pixel(offsetPos + Point(frame->x(), frame->y()));
 }
 
 void Animation::play()

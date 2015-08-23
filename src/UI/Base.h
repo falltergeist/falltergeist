@@ -45,12 +45,11 @@ public:
     Base(const Point& pos);
     ~Base();
 
-    // @todo: remove getters/setters for x, y, xOffset, yOffset, width, height?
-    virtual int x() const;
-    virtual void setX(int value);
+    int x() const;
+    void setX(int value);
 
-    virtual int y() const;
-    virtual void setY(int value);
+    int y() const;
+    void setY(int value);
 
     virtual Point position() const;
     virtual void setPosition(const Point& pos);
@@ -72,7 +71,7 @@ public:
     virtual Size size() const;
 
     virtual unsigned int pixel(const Point& pos);
-    virtual unsigned int pixel(unsigned int x, int unsigned y);
+    unsigned int pixel(unsigned int x, int unsigned y);
 
 protected:
     Point _position;

@@ -86,7 +86,7 @@ public:
     void setFont(std::shared_ptr<Font> font);
 
     void render(bool eggTransparency = false) override;
-    unsigned int pixel(unsigned int x, unsigned int y) override;
+    unsigned int pixel(const Point& pos) override;
 
     unsigned int timestampCreated();
 

@@ -97,10 +97,10 @@ void InventoryItem::render(bool eggTransparency)
     game->renderer()->drawTexture(texture(), position() + (this->size() - texSize) / 2);
 }
 
-unsigned int InventoryItem::pixel(unsigned int x, unsigned int y)
+unsigned int InventoryItem::pixel(const Point& pos)
 {
     if (!_item) return 0;
-    return Rect::inRect(Point(x, y), this->size()) ? 1 : 0;
+    return Rect::inRect(pos, this->size()) ? 1 : 0;
 }
 
 Game::ItemObject* InventoryItem::item()

@@ -127,10 +127,10 @@ Graphics::Texture* AnimationQueue::texture() const
     return currentAnimation()->texture();
 }
 
-unsigned int AnimationQueue::pixel(unsigned int x, unsigned int y)
+unsigned int AnimationQueue::pixel(const Point& pos)
 {
     currentAnimation()->setPosition(this->position());
-    return currentAnimation()->pixel(x, y);
+    return currentAnimation()->pixel(pos);
 }
 
 Animation* AnimationQueue::currentAnimation() const

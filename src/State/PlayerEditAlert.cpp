@@ -73,8 +73,7 @@ void PlayerEditAlert::init()
     message->setFont(font1_ff9f48ff);
 
     auto doneBox = new UI::Image("art/intrface/donebox.frm");
-    doneBox->setX(bgX + 254);
-    doneBox->setY(bgY + 270);
+    doneBox->setPosition(bgPos + Point(254, 270));
 
     auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX + 264, bgY + 273);
     doneButton->addEventHandler("mouseleftclick", [this](Event::Event* event)

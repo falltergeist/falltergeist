@@ -68,8 +68,7 @@ void PlayerCreate::init()
     Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
     int backgroundX = backgroundPos.x();
     int backgroundY = backgroundPos.y();
-    background->setX(backgroundX);
-    background->setY(backgroundY);
+    background->setPosition(backgroundPos);
     addUI(background);
 
     // STATS
@@ -240,8 +239,7 @@ void PlayerCreate::init()
 
     _selectedImage = _images.at("stats_1");
     _selectedLabel = _labels.at("stats_1");
-    _selectedImage->setX(backgroundX+480);
-    _selectedImage->setY(backgroundY+310);
+    _selectedImage->setPosition(backgroundPos + Point(480, 310));
     addUI(_selectedImage);
 
     auto font1_000000ff = ResourceManager::getInstance()->font("font1.aaf", 0x000000FF);

@@ -60,7 +60,7 @@ public:
     void setItem(Game::ItemObject* item);
 
     void render(bool eggTransparency = false) override;
-    unsigned int pixel(unsigned int x, unsigned int y) override;
+    unsigned int pixel(const Point& pos) override;
     Graphics::Texture* texture() const override;
     Size size() const override;
 
