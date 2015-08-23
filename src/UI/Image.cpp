@@ -39,12 +39,16 @@ Image::Image(const std::string& filename) : Falltergeist::UI::Base()
     setTexture(ResourceManager::getInstance()->texture(filename));
 }
 
-Image::Image(Image* image) : Falltergeist::UI::Base()
+Image::Image(const Image& image) : Falltergeist::UI::Base()
 {
     // @fixme: we should use "clone" feature here
-    setTexture(new Graphics::Texture(image->texture()->width(), image->texture()->height()));
-    unsigned int* pixels = (unsigned int*)image->texture()->sdlSurface()->pixels;
+    setTexture(new Graphics::Texture(image.texture()->width(), image.texture()->height()));
+    unsigned int* pixels = (unsigned int*)image.texture()->sdlSurface()->pixels;
     _texture->loadFromRGBA(pixels);
+}
+
+Image::Image(const Size& size) : Image((unsigned)size.width(), (unsigned)size.height())
+{
 }
 
 Image::Image(unsigned int width, unsigned int height) : Falltergeist::UI::Base()

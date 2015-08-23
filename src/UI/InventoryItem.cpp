@@ -42,7 +42,7 @@ namespace Falltergeist
 namespace UI
 {
 
-InventoryItem::InventoryItem(Game::ItemObject *item, int x, int y) : Falltergeist::UI::Base(x, y)
+InventoryItem::InventoryItem(Game::ItemObject *item, const Point& pos) : Falltergeist::UI::Base(pos)
 {
     _item = item;
     addEventHandler("mouseleftdown", [this](Event::Event* event){ this->onMouseLeftDown(dynamic_cast<Event::Mouse*>(event)); });

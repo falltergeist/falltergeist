@@ -39,7 +39,8 @@ class Image : public Falltergeist::UI::Base
 public:
     Image(const std::string& filename);
     Image(unsigned int width, unsigned int height);
-    Image(Image* image);
+    Image(const Size& size);
+    Image(const Image& image);
     Image(Graphics::Texture* texture);
     Image(libfalltergeist::Frm::File* frm, unsigned int direction);
     ~Image() override;

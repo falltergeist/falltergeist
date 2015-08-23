@@ -37,7 +37,11 @@ namespace Falltergeist
 namespace UI
 {
 
-Slider::Slider(int x, int y) : Falltergeist::UI::Base(x, y)
+Slider::Slider(const Point& pos) : Base(pos)
+{
+}
+
+Slider::Slider(int x, int y) : Falltergeist::UI::Base(Point(x, y))
 {
     addEventHandler("mousedrag", [this](Event::Event* event){ this->_onDrag(dynamic_cast<Event::Mouse*>(event)); });
     addEventHandler("mouseleftdown", [this](Event::Event* event){ this->_onLeftButtonDown(dynamic_cast<Event::Mouse*>(event)); });

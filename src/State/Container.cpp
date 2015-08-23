@@ -72,11 +72,11 @@ void Container::init()
     // invupout
 
 
-    auto dudeList = new UI::ItemsList(170, 35);
+    auto dudeList = new UI::ItemsList({170, 35});
     dudeList->setItems(Game::getInstance()->player()->inventory());
     addUI(dudeList);
 
-    auto containerList = new UI::ItemsList(292, 35);
+    auto containerList = new UI::ItemsList({292, 35});
     containerList->setItems(object()->inventory());
     addUI(containerList);
 

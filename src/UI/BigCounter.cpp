@@ -37,7 +37,11 @@ namespace UI
 
 using namespace Base;
 
-BigCounter::BigCounter(int x, int y, unsigned int length) : Falltergeist::UI::Base(x, y)
+BigCounter::BigCounter(int x, int y, unsigned int length) : BigCounter(Point(x, y), length)
+{
+}
+
+BigCounter::BigCounter(const Point& pos, unsigned int length) : Base(pos)
 {
     _length = length;
 }

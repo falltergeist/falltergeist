@@ -54,9 +54,9 @@ public:
         BIG_SWITCH = 1,
         SMALL_SWITCH
     };
-    MultistateImageButton(int x = 0, int y = 0);
-    MultistateImageButton(Type type, int x = 0, int y = 0);
-    MultistateImageButton(ImageList* imageList, int x = 0, int y = 0);
+    MultistateImageButton(const Point& pos);
+    MultistateImageButton(Type type, int x, int y);
+    MultistateImageButton(ImageList* imageList, const Point& pos);
     ~MultistateImageButton() override;
 
     void addImage(Image* image);

@@ -106,7 +106,7 @@ void WorldMap::init()
         mapMinY = (renderHeight - 480)/2 + 21;
     }
     _screenMap = new UI::Image (mapWidth, mapHeight);
-    _screenMap->setPosition({mapMinX, mapMinY});
+    _screenMap->setPosition(Point(mapMinX, mapMinY));
 }
 
 void WorldMap::render()
@@ -169,7 +169,7 @@ void WorldMap::render()
     _screenMap->render();
 
     // hostpot show
-    _hotspot->setPosition({mapMinX + worldMapX - deltaX, mapMinY + worldMapY - deltaY});
+    _hotspot->setPosition(Point(mapMinX + worldMapX - deltaX, mapMinY + worldMapY - deltaY));
     _hotspot->render();
 
     // panel
@@ -186,7 +186,7 @@ void WorldMap::render()
     }
     panelY = (renderHeight - _panel->size().height()) / 2;
 
-    _panel->setPosition({panelX, panelY});
+    _panel->setPosition(Point(panelX, panelY));
     _panel->render();
 
 }

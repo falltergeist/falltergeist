@@ -77,10 +77,10 @@ public:
         MAP_HOTSPOT
     };
     ImageButton(Type type, Point pos = Point());
-    ImageButton(Type type, int x = 0, int y = 0);
+    ImageButton(Type type, int x, int y);
     ~ImageButton() override;
 
-    void setState(unsigned int value);
+    //void setState(unsigned int value);
     Graphics::Texture* texture() const;
 
     bool checked();

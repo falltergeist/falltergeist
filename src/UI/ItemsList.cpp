@@ -42,7 +42,7 @@ namespace Falltergeist
 namespace UI
 {
 
-ItemsList::ItemsList(int x, int y) : Falltergeist::UI::Base(x, y)
+ItemsList::ItemsList(const Point& pos) : Falltergeist::UI::Base(pos)
 {
     _texture = new Graphics::Texture(_slotWidth, _slotHeight * _slotsNumber);
     _texture->fill(0x000000FF);

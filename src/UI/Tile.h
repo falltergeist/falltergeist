@@ -41,11 +41,9 @@ namespace UI
 class Tile
 {
 public:
-    Tile(unsigned int number, int x = 0, int y = 0);
+    Tile(unsigned int number, const Point& pos = Point());
 
     unsigned int number() const;
-    int x() const;
-    int y() const;
 
     Point position() const;
 
@@ -55,8 +53,7 @@ public:
 protected:
     unsigned int _index = 0;
     unsigned int _number = 0;
-    int _x = 0;
-    int _y = 0;
+    Point _position;
 };
 
 }

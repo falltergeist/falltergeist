@@ -91,11 +91,11 @@ void PlayerPanel::init()
 
     addUI("attack_button", new UI::ImageButton(UI::ImageButton::Type::PANEL_ATTACK, 267, 25));
 
-    addUI("hit_points", new UI::SmallCounter(471, 40));
+    addUI("hit_points", new UI::SmallCounter(Point(471, 40)));
     getSmallCounter("hit_points")->setNumber(game->player()->hitPoints());
     getSmallCounter("hit_points")->setType(UI::SmallCounter::Type::SIGNED);
 
-    addUI("armor_class", new UI::SmallCounter(472, 76));
+    addUI("armor_class", new UI::SmallCounter(Point(472, 76)));
     getSmallCounter("armor_class")->setNumber(game->player()->armorClass());
     getSmallCounter("armor_class")->setType(UI::SmallCounter::Type::SIGNED);
 

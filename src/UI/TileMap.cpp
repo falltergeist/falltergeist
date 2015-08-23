@@ -64,12 +64,15 @@ void TileMap::render()
 
     for (auto tile : _tiles)
     {
-        if (Rect::intersects(tile->position(), Size(80, 36), camera->topLeft(), camera->size()))
+        const Size tileSize = Size(80, 36);
+        if (Rect::intersects(tile->position(), tileSize, camera->topLeft(), camera->size()))
         {
-            auto pos = tile->position() - camera->topLeft();
-            auto sx = (tile->index() % _square) * 80;
-            auto sy = (tile->index() / _square) * 36;
-            renderer->drawTexture(_texture, pos.x(), pos.y(), sx, sy, 80, 36);
+            Point positionOnScreen = tile->position() - camera->topLeft();
+            Point square = Point(
+                (tile->index() % _square) * tileSize.width(),
+                (tile->index() / _square) * tileSize.height()
+            );
+            renderer->drawTexture(_texture, positionOnScreen, square, tileSize);
         }
     }
 }

@@ -44,7 +44,7 @@ namespace UI
 class ItemsList : public Falltergeist::UI::Base
 {
 public:
-    ItemsList(int x = 0, int y = 0);
+    ItemsList(const Point& pos);
 
     void setItems(std::vector<Game::ItemObject*>* items);
     std::vector<Game::ItemObject*>* items();

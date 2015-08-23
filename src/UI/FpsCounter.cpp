@@ -35,12 +35,16 @@ namespace Falltergeist
 namespace UI
 {
 
-FpsCounter::FpsCounter(int x, int y) : TextArea(x,y)
+FpsCounter::FpsCounter(const Point& pos) : TextArea(pos)
 {
     _lastTicks = SDL_GetTicks();
     setText("0");
     setWidth(40);
     setHorizontalAlign(TextArea::HorizontalAlign::RIGHT);
+}
+
+FpsCounter::FpsCounter(int x, int y) : FpsCounter(Point(x, y))
+{
 }
 
 FpsCounter::~FpsCounter()

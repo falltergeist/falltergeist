@@ -50,7 +50,7 @@ public:
         DRAG
     };
 
-    InventoryItem(Game::ItemObject* item, int x = 0, int y = 0);
+    InventoryItem(Game::ItemObject* item, const Point& pos = Point());
     ~InventoryItem() override;
 
     Type type() const;

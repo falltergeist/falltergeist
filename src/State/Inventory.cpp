@@ -252,14 +252,14 @@ void Inventory::init()
     addUI("rightHandLabel", rightHandLabel);
     addUI("screenLabel", screenLabel);
 
-    auto inventoryList = new UI::ItemsList(40, 40);
+    auto inventoryList = new UI::ItemsList({40, 40});
     inventoryList->setItems(game->player()->inventory());
     addUI("inventory_list", inventoryList);
 
     // BIG ICONS
     // icon: armor
     {
-        auto inventoryItem = new UI::InventoryItem(armorSlot, 154, 183);
+        auto inventoryItem = new UI::InventoryItem(armorSlot, {154, 183});
         inventoryItem->setType(UI::InventoryItem::Type::SLOT);
         inventoryItem->addEventHandler("itemdragstop", [inventoryList](Event::Event* event){ inventoryList->onItemDragStop(dynamic_cast<Event::Mouse*>(event)); });
         inventoryList->addEventHandler("itemdragstop", [inventoryItem](Event::Event* event){ inventoryItem->onArmorDragStop(dynamic_cast<Event::Mouse*>(event)); });
@@ -268,7 +268,7 @@ void Inventory::init()
 
     // icon: left hand
     {
-        auto inventoryItem = new UI::InventoryItem(leftHand, 154, 286);
+        auto inventoryItem = new UI::InventoryItem(leftHand, {154, 286});
         inventoryItem->setType(UI::InventoryItem::Type::SLOT);
         inventoryItem->addEventHandler("itemdragstop", [inventoryList](Event::Event* event){ inventoryList->onItemDragStop(dynamic_cast<Event::Mouse*>(event)); });
         inventoryList->addEventHandler("itemdragstop", [inventoryItem](Event::Event* event){ inventoryItem->onHandDragStop(dynamic_cast<Event::Mouse*>(event)); });
@@ -277,7 +277,7 @@ void Inventory::init()
 
     // icon: right hand
     {
-        auto inventoryItem = new UI::InventoryItem(rightHand, 247, 286);
+        auto inventoryItem = new UI::InventoryItem(rightHand, {247, 286});
         inventoryItem->setType(UI::InventoryItem::Type::SLOT);
         inventoryItem->addEventHandler("itemdragstop", [inventoryList](Event::Event* event){ inventoryList->onItemDragStop(dynamic_cast<Event::Mouse*>(event)); });
         inventoryList->addEventHandler("itemdragstop", [inventoryItem](Event::Event* event){ inventoryItem->onHandDragStop(dynamic_cast<Event::Mouse*>(event)); });
