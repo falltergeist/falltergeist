@@ -157,27 +157,6 @@ bool Base::visible() const
     return _visible;
 }
 
-int Base::xOffset() const
-{
-    return _offset.x();
-}
-
-void Base::setXOffset(int xOffset)
-{
-    _offset.setX(xOffset);
-}
-
-int Base::yOffset() const
-{
-    return _offset.y();
-}
-
-void Base::setYOffset(int yOffset)
-{
-    _offset.setY(yOffset);
-}
-
-
 Point Base::position() const
 {
     return _position + _offset;
@@ -196,6 +175,11 @@ Point Base::offset() const
 void Base::setOffset(const Point& pos)
 {
     _offset = pos;
+}
+
+void Base::setOffset(int x, int y)
+{
+    setOffset(Point(x, y));
 }
 
 Size Base::size() const

@@ -255,6 +255,10 @@ void Animation::think()
 void Animation::render(bool eggTransparency)
 {
     auto frame = frames()->at(_currentFrame);
+    Point framePos = Point(frame->x(), frame->y());
+    Size frameSize = Size(frame->width(), frame->height());
+    Point offsetPosition = position() + offset();
+    Point offsetFramePos = framePos + offset();
     Graphics::AnimatedPalette* pal = Game::getInstance()->animatedPalette();
 
     if (eggTransparency)
@@ -263,25 +267,25 @@ void Animation::render(bool eggTransparency)
 
         if (!dude || !Game::getInstance()->locationState())
         {
-            Game::getInstance()->renderer()->drawTexture(_texture, x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+            Game::getInstance()->renderer()->drawTexture(_texture, offsetPosition, framePos, frameSize);
 
             if (pal->getCounter(MASK::FIRE_FAST) < _fireFastTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_fireFastTextures.at(pal->getCounter(MASK::FIRE_FAST)), x(), y(), frame->x(), frame->y(), frame->width(), frame->height());
+                Game::getInstance()->renderer()->drawTexture(_fireFastTextures.at(pal->getCounter(MASK::FIRE_FAST)), position(), framePos, frameSize);
 
             if (pal->getCounter(MASK::FIRE_SLOW) < _fireSlowTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_fireSlowTextures.at(pal->getCounter(MASK::FIRE_SLOW)), x(), y(), frame->x(), frame->y(), frame->width(), frame->height());
+                Game::getInstance()->renderer()->drawTexture(_fireSlowTextures.at(pal->getCounter(MASK::FIRE_SLOW)), position(), framePos, frameSize);
 
             if (pal->getCounter(MASK::SLIME) < _slimeTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_slimeTextures.at(pal->getCounter(MASK::SLIME)), x(), y(), frame->x(), frame->y(), frame->width(), frame->height());
+                Game::getInstance()->renderer()->drawTexture(_slimeTextures.at(pal->getCounter(MASK::SLIME)), position(), framePos, frameSize);
 
             if (pal->getCounter(MASK::SHORE) < _shoreTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_shoreTextures.at(pal->getCounter(MASK::SHORE)), x(), y(), frame->x(), frame->y(), frame->width(), frame->height());
+                Game::getInstance()->renderer()->drawTexture(_shoreTextures.at(pal->getCounter(MASK::SHORE)), position(), framePos, frameSize);
 
             if (pal->getCounter(MASK::MONITOR) < _monitorTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_monitorTextures.at(pal->getCounter(MASK::MONITOR)), x(), y(), frame->x(), frame->y(), frame->width(), frame->height());
+                Game::getInstance()->renderer()->drawTexture(_monitorTextures.at(pal->getCounter(MASK::MONITOR)), position(), framePos, frameSize);
 
             if (pal->getCounter(MASK::REDDOT) < _reddotTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_reddotTextures.at(pal->getCounter(MASK::REDDOT)), x(), y(), frame->x(), frame->y(), frame->width(), frame->height());
+                Game::getInstance()->renderer()->drawTexture(_reddotTextures.at(pal->getCounter(MASK::REDDOT)), position(), framePos, frameSize);
 
             return;
         }
@@ -296,29 +300,29 @@ void Animation::render(bool eggTransparency)
 
         //check if egg and texture intersects
         SDL_Rect egg_rect = { eggPos.x(), eggPos.y(), (int)egg->width(), (int)egg->height() };
-        SDL_Rect tex_rect = { x() + xOffset(), y() + yOffset(), (int)frame->width(), (int)frame->height() };
+        SDL_Rect tex_rect = { offsetPosition.x(), offsetPosition.y(), (int)frame->width(), (int)frame->height() };
 
         if (!SDL_HasIntersection(&egg_rect, &tex_rect))
         {
-            Game::getInstance()->renderer()->drawTexture(_texture, x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+            Game::getInstance()->renderer()->drawTexture(_texture, offsetPosition, framePos, frameSize);
 
             if (pal->getCounter(MASK::FIRE_FAST) < _fireFastTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_fireFastTextures.at(pal->getCounter(MASK::FIRE_FAST)), x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+                Game::getInstance()->renderer()->drawTexture(_fireFastTextures.at(pal->getCounter(MASK::FIRE_FAST)), offsetPosition, framePos, frameSize);
 
             if (pal->getCounter(MASK::FIRE_SLOW) < _fireSlowTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_fireSlowTextures.at(pal->getCounter(MASK::FIRE_SLOW)), x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+                Game::getInstance()->renderer()->drawTexture(_fireSlowTextures.at(pal->getCounter(MASK::FIRE_SLOW)), offsetPosition, framePos, frameSize);
 
             if (pal->getCounter(MASK::SLIME) < _slimeTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_slimeTextures.at(pal->getCounter(MASK::SLIME)), x(), y(), frame->x() + xOffset(), frame->y() + yOffset(), frame->width(), frame->height());
+                Game::getInstance()->renderer()->drawTexture(_slimeTextures.at(pal->getCounter(MASK::SLIME)), position(), offsetFramePos, frameSize);
 
             if (pal->getCounter(MASK::SHORE) < _shoreTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_shoreTextures.at(pal->getCounter(MASK::SHORE)), x(), y(), frame->x() + xOffset(), frame->y() + yOffset(), frame->width(), frame->height());
+                Game::getInstance()->renderer()->drawTexture(_shoreTextures.at(pal->getCounter(MASK::SHORE)), position(), offsetFramePos, frameSize);
 
             if (pal->getCounter(MASK::MONITOR) < _monitorTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_monitorTextures.at(pal->getCounter(MASK::MONITOR)), x(), y(), frame->x() + xOffset(), frame->y() + yOffset(), frame->width(), frame->height());
+                Game::getInstance()->renderer()->drawTexture(_monitorTextures.at(pal->getCounter(MASK::MONITOR)), position(), offsetFramePos, frameSize);
 
             if (pal->getCounter(MASK::REDDOT) < _reddotTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_reddotTextures.at(pal->getCounter(MASK::REDDOT)), x(), y(), frame->x() + xOffset(), frame->y() + yOffset(), frame->width(), frame->height());
+                Game::getInstance()->renderer()->drawTexture(_reddotTextures.at(pal->getCounter(MASK::REDDOT)), position(), offsetFramePos, frameSize);
 
             return;
         }
@@ -345,29 +349,29 @@ void Animation::render(bool eggTransparency)
             _reddotTextures.at(pal->getCounter(MASK::REDDOT))->copyTo(_tmptex);
 
         _tmptex->blitWithAlpha(egg, egg_dx, egg_dy);
-        Game::getInstance()->renderer()->drawTexture(_tmptex, x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+        Game::getInstance()->renderer()->drawTexture(_tmptex, offsetPosition, framePos, frameSize);
     }
     else
     {
-        Game::getInstance()->renderer()->drawTexture(_texture, x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+        Game::getInstance()->renderer()->drawTexture(_texture, offsetPosition, framePos, frameSize);
 
         if (pal->getCounter(MASK::FIRE_FAST) < _fireFastTextures.size())
-            Game::getInstance()->renderer()->drawTexture(_fireFastTextures.at(pal->getCounter(MASK::FIRE_FAST)), x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+            Game::getInstance()->renderer()->drawTexture(_fireFastTextures.at(pal->getCounter(MASK::FIRE_FAST)), offsetPosition, framePos, frameSize);
 
         if (pal->getCounter(MASK::FIRE_SLOW) < _fireSlowTextures.size())
-            Game::getInstance()->renderer()->drawTexture(_fireSlowTextures.at(pal->getCounter(MASK::FIRE_SLOW)), x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+            Game::getInstance()->renderer()->drawTexture(_fireSlowTextures.at(pal->getCounter(MASK::FIRE_SLOW)), offsetPosition, framePos, frameSize);
 
         if (pal->getCounter(MASK::SLIME) < _slimeTextures.size())
-            Game::getInstance()->renderer()->drawTexture(_slimeTextures.at(pal->getCounter(MASK::SLIME)), x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+            Game::getInstance()->renderer()->drawTexture(_slimeTextures.at(pal->getCounter(MASK::SLIME)), offsetPosition, framePos, frameSize);
 
         if (pal->getCounter(MASK::SHORE) < _shoreTextures.size())
-            Game::getInstance()->renderer()->drawTexture(_shoreTextures.at(pal->getCounter(MASK::SHORE)), x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+            Game::getInstance()->renderer()->drawTexture(_shoreTextures.at(pal->getCounter(MASK::SHORE)), offsetPosition, framePos, frameSize);
 
         if (pal->getCounter(MASK::MONITOR) < _monitorTextures.size())
-            Game::getInstance()->renderer()->drawTexture(_monitorTextures.at(pal->getCounter(MASK::MONITOR)), x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+            Game::getInstance()->renderer()->drawTexture(_monitorTextures.at(pal->getCounter(MASK::MONITOR)), offsetPosition, framePos, frameSize);
 
         if (pal->getCounter(MASK::REDDOT) < _reddotTextures.size())
-            Game::getInstance()->renderer()->drawTexture(_reddotTextures.at(pal->getCounter(MASK::REDDOT)), x() + xOffset(), y() + yOffset(), frame->x(), frame->y(), frame->width(), frame->height());
+            Game::getInstance()->renderer()->drawTexture(_reddotTextures.at(pal->getCounter(MASK::REDDOT)), offsetPosition, framePos, frameSize);
     }
 }
 
@@ -397,8 +401,9 @@ unsigned int Animation::pixel(unsigned int x, unsigned int y)
 {
     const auto frame = frames()->at(_currentFrame);
 
-    x -= xOffset();
-    y -= yOffset();
+    Point ofs = offset();
+    x -= ofs.x();
+    y -= ofs.y();
 
     if (x > frame->width()) return 0;
     if (y > frame->height()) return 0;

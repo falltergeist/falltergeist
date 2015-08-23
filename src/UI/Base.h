@@ -49,20 +49,15 @@ public:
     virtual int x() const;
     virtual void setX(int value);
 
-    virtual int xOffset() const;
-    virtual void setXOffset(int xOffset);
-
     virtual int y() const;
     virtual void setY(int value);
-
-    virtual int yOffset() const;
-    virtual void setYOffset(int yOffset);
 
     virtual Point position() const;
     virtual void setPosition(const Point& pos);
 
     virtual Point offset() const;
     virtual void setOffset(const Point& pos);
+    void setOffset(int x, int y);
 
     virtual Graphics::Texture* texture() const;
     virtual void setTexture(Graphics::Texture* texture);

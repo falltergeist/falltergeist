@@ -80,9 +80,11 @@ Image::Image(libfalltergeist::Frm::File* frm, unsigned int direction) : Fallterg
 
     texture->copyTo(_texture, 0, 0, 0, y, frm->directions()->at(direction)->width(), frm->directions()->at(direction)->height());
     delete texture;
-
-    setXOffset(frm->offsetX(direction) + frm->directions()->at(direction)->shiftX());
-    setYOffset(frm->offsetY(direction) + frm->directions()->at(direction)->shiftY());
+    auto dir = frm->directions()->at(direction);
+    setOffset(
+        frm->offsetX(direction) + dir->shiftX(),
+        frm->offsetY(direction) + dir->shiftY()
+    );
 }
 
 Image::~Image()

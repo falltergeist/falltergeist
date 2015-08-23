@@ -152,14 +152,12 @@ void CursorDropdown::showMenu()
     {
         _surface->setX(_surface->x() - 40 - 29 - 29);
         _cursor = new UI::Image("art/intrface/actarrom.frm");
-        _cursor->setXOffset(-29);
-        _cursor->setYOffset(0);
+        _cursor->setOffset(-29, 0);
     }
     else
     {
         _cursor = new UI::Image("art/intrface/actarrow.frm");
-        _cursor->setXOffset(0);
-        _cursor->setYOffset(0);
+        _cursor->setOffset(0, 0);
     }
     if (deltaY > 0)
     {

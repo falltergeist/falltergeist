@@ -45,8 +45,8 @@ AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direc
 
     setTexture(new Graphics::Texture(frm->width(), frm->height()));
     _texture->loadFromRGBA(frm->rgba(ResourceManager::getInstance()->palFileType("color.pal")));
-    setXOffset(frm->offsetX(direction) + frm->directions()->at(direction)->shiftX());
-    setYOffset(frm->offsetY(direction) + frm->directions()->at(direction)->shiftY());
+    auto dir = frm->directions()->at(direction);
+    setOffset(frm->offsetX(direction) + dir->shiftX(), frm->offsetY(direction) + dir->shiftY());
 
     Graphics::AnimatedPalette*  palette=Game::getInstance()->animatedPalette();
     auto masks = frm->animatedMasks();

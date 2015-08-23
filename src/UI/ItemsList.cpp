@@ -131,8 +131,7 @@ void ItemsList::onMouseDrag(Event::Mouse* event)
 
 void ItemsList::onMouseDragStop(Event::Mouse* event)
 {
-    _draggedItem->setXOffset(0);
-    _draggedItem->setYOffset(0);
+    _draggedItem->setOffset(0, 0);
     _draggedItem->setType(_type);
     auto itemevent = new Event::Mouse("itemdragstop");
     itemevent->setPosition(event->position());
