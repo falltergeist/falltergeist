@@ -53,13 +53,14 @@ void Emitter::addEventHandler(const std::string& eventName, std::function<void(E
     _eventHandlers.at(eventName).push_back(handler);
 }
 
-void Emitter::emitEvent(Event* event)
+void Emitter::emitEvent(std::unique_ptr<Event> event)
 {
     if (_eventHandlers.find(event->name()) == _eventHandlers.end()) return;
-    Dispatcher::getInstance()->postEventHandler(this, event);
+    //Dispatcher::getInstance()->postEventHandler(this, std::move(event));
+    processEvent(std::move(event));
 }
 
-void Emitter::processEvent(Event* event)
+void Emitter::processEvent(std::unique_ptr<Event> event)
 {
     const auto it = _eventHandlers.find(event->name());
     if (it == _eventHandlers.end()) return;
@@ -67,7 +68,7 @@ void Emitter::processEvent(Event* event)
     for (auto eventHandler : it->second)
     {
         if (event->handled()) return;
-        eventHandler(event);
+        eventHandler(event.get());
     }
 }
 

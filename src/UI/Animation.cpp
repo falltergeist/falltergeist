@@ -24,6 +24,7 @@
 #include <cmath>
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
@@ -39,6 +40,8 @@
 
 namespace Falltergeist
 {
+using Base::make_unique;
+
 namespace UI
 {
 
@@ -247,18 +250,18 @@ void Animation::think()
             _currentFrame = _reverse ? frames()->size() - _progress - 1 : _progress;
             if (_actionFrame == _currentFrame)
             {
-                auto event = new Event::Event("actionFrame");
-                emitEvent(event);
-                delete event;
+                //auto event = new Event::Event("actionFrame");
+                emitEvent(make_unique<Event::Event>("actionFrame"));
+                //delete event;
             }
         }
         else
         {
             _ended = true;
             _playing = false;
-            auto event = new Event::Event("animationEnded");
-            emitEvent(event);
-            delete event;
+            //auto event = new Event::Event("animationEnded");
+            emitEvent(make_unique<Event::Event>("animationEnded"));
+            //delete event;
         }
     }
 }

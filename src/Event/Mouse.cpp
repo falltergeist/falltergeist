@@ -35,7 +35,8 @@ Mouse::Mouse(const std::string& name) : Event(name)
 {
 }
 
-Mouse::Mouse(Mouse* event) : Event("mouse")
+Mouse::Mouse(Mouse* event, const std::string& name)
+    : Event(name)
 {
     _x = event->_x;
     _y = event->_y;
@@ -47,6 +48,8 @@ Mouse::Mouse(Mouse* event) : Event("mouse")
     _controlPressed = event->_controlPressed;
     _name = event->_name;
 }
+
+Mouse::Mouse(Mouse* event) : Mouse(event, "mouse") {}
 
 Mouse::~Mouse()
 {

@@ -140,9 +140,9 @@ void Game::popState()
     _states.pop_back();
     _statesForDelete.push_back(state);
 
-    auto event = new Event::State("deactivate");
-    state->emitEvent(event);
-    delete event;
+    //auto event = new Event::State("deactivate");
+    state->emitEvent(make_unique<Event::State>("deactivate"));
+    //delete event;
 }
 
 void Game::setState(State::State* state)
@@ -267,10 +267,10 @@ const std::vector<State::State*>& Game::statesForThinkAndHandle()
         auto state = *it;
         if (!state->active())
         {
-            auto event = new Event::State("activate");
-            state->emitEvent(event);
+            //auto event = make_unique<Event::State>("activate");
+            state->emitEvent(make_unique<Event::State>("activate"));
             state->setActive(true);
-            delete event;
+            //delete event;
         }
         _statesForThinkAndHandle.push_back(state);
         if (state->modal() || state->fullscreen())
@@ -285,10 +285,10 @@ const std::vector<State::State*>& Game::statesForThinkAndHandle()
         auto state = *it;
         if (state->active())
         {
-            auto event = new Event::State("deactivate");
-            state->emitEvent(event);
+            //auto event = new Event::State("deactivate");
+            state->emitEvent(make_unique<Event::State>("deactivate"));
             state->setActive(false);
-            delete event;
+            //delete event;
         }
     }
 
@@ -381,9 +381,13 @@ void Game::handle()
                     state->handle(event.get());
             }
 
-            for (const auto& task : _scheduledEvents)
-            {
-                task.first->processEvent(task.second);
+            if (!_scheduledEvents.empty()) {
+                decltype(_scheduledEvents) copyOfEvents;
+                std::swap(copyOfEvents, _scheduledEvents);
+                for (auto& task : copyOfEvents)
+                {
+                    task.first->processEvent(std::move(task.second));
+                }
             }
         }
     }
@@ -455,9 +459,9 @@ Audio::Mixer* Game::mixer()
     return _mixer.get();
 }
 
-void Game::postEventHandler(Event::Emitter* emitter, Event::Event* event)
+void Game::postEventHandler(Event::Emitter* emitter, std::unique_ptr<Event::Event> event)
 {
-    _scheduledEvents.emplace_back(emitter, event);
+    _scheduledEvents.emplace_back(emitter, std::move(event));
 }
 
 void Game::removeEventHandler(Event::Emitter* emitter)

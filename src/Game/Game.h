@@ -127,13 +127,13 @@ protected:
     bool _quit = false;
     SDL_Event _event;
     bool _initialized = false;
-    std::list<std::pair<Event::Emitter*, Event::Event*>> _scheduledEvents;
+    std::list<std::pair<Event::Emitter*, std::unique_ptr<Event::Event>>> _scheduledEvents;
 
 private:
     friend class Base::Singleton<Game>;
     void _initGVARS();
 
-    void postEventHandler(Event::Emitter* emitter, Event::Event* event) override final;
+    void postEventHandler(Event::Emitter* emitter, std::unique_ptr<Event::Event> event) override final;
     void removeEventHandler(Event::Emitter* emitter) override final;
 
     Game();

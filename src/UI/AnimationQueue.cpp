@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Event/Event.h"
 #include "../UI/Animation.h"
 
@@ -30,6 +31,8 @@
 
 namespace Falltergeist
 {
+using Base::make_unique;
+
 namespace UI
 {
 
@@ -100,9 +103,9 @@ void AnimationQueue::think()
             {
                 if (!_repeat)
                 {
-                    auto event = new Event::Event("animationEnded");
-                    emitEvent(event);
-                    delete event;
+                    //auto event = new Event::Event("animationEnded");
+                    emitEvent(make_unique<Event::Event>("animationEnded"));
+                    //delete event;
                     _playing = false;
                     return;
                 }

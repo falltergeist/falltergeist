@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
 #include "../Game/DudeObject.h"
@@ -38,6 +39,8 @@
 
 namespace Falltergeist
 {
+using Base::make_unique;
+
 namespace UI
 {
 
@@ -133,13 +136,12 @@ void InventoryItem::onMouseDragStop(Event::Mouse* event)
     setYOffset(0);
     setType(_oldType);
 
-    auto itemevent = new Event::Mouse("itemdragstop");
+    auto itemevent = make_unique<Event::Mouse>("itemdragstop");
     itemevent->setX(event->x());
     itemevent->setY(event->y());
     itemevent->setEmitter(this);
-    emitEvent(itemevent);
-    delete itemevent;
-
+    emitEvent(std::move(itemevent));
+    //delete itemevent;
 }
 
 void InventoryItem::onArmorDragStop(Event::Mouse* event)

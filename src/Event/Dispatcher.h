@@ -21,6 +21,7 @@
 #define FALLTERGEIST_EVENT_DISPATCHER_H
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
 
@@ -38,7 +39,7 @@ class Dispatcher
 public:
     static Dispatcher* getInstance();
 
-    virtual void postEventHandler(Emitter* emitter, Event* event) = 0;
+    virtual void postEventHandler(Emitter* emitter, std::unique_ptr<Event> event) = 0;
     virtual void removeEventHandler(Emitter* emitter) = 0;
 };
 
