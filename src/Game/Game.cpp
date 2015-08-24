@@ -42,7 +42,7 @@
 #include "../UI/FpsCounter.h"
 #include "../UI/TextArea.h"
 
-// Third patry includes
+// Third party includes
 #include <SDL_image.h>
 
 namespace Falltergeist
@@ -140,9 +140,7 @@ void Game::popState()
     _states.pop_back();
     _statesForDelete.push_back(state);
 
-    //auto event = new Event::State("deactivate");
     state->emitEvent(make_unique<Event::State>("deactivate"));
-    //delete event;
 }
 
 void Game::setState(State::State* state)
@@ -267,10 +265,8 @@ const std::vector<State::State*>& Game::statesForThinkAndHandle()
         auto state = *it;
         if (!state->active())
         {
-            //auto event = make_unique<Event::State>("activate");
             state->emitEvent(make_unique<Event::State>("activate"));
             state->setActive(true);
-            //delete event;
         }
         _statesForThinkAndHandle.push_back(state);
         if (state->modal() || state->fullscreen())
@@ -285,10 +281,8 @@ const std::vector<State::State*>& Game::statesForThinkAndHandle()
         auto state = *it;
         if (state->active())
         {
-            //auto event = new Event::State("deactivate");
             state->emitEvent(make_unique<Event::State>("deactivate"));
             state->setActive(false);
-            //delete event;
         }
     }
 

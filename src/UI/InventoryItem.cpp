@@ -141,7 +141,6 @@ void InventoryItem::onMouseDragStop(Event::Mouse* event)
     itemevent->setY(event->y());
     itemevent->setEmitter(this);
     emitEvent(std::move(itemevent));
-    //delete itemevent;
 }
 
 void InventoryItem::onArmorDragStop(Event::Mouse* event)

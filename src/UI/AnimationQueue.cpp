@@ -103,9 +103,7 @@ void AnimationQueue::think()
             {
                 if (!_repeat)
                 {
-                    //auto event = new Event::Event("animationEnded");
                     emitEvent(make_unique<Event::Event>("animationEnded"));
-                    //delete event;
                     _playing = false;
                     return;
                 }

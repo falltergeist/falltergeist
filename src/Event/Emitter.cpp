@@ -42,22 +42,16 @@ Emitter::~Emitter()
     Dispatcher::getInstance()->removeEventHandler(this);
 }
 
-void Emitter::addEventHandler(const std::string& eventName, std::function<void(Event*)> handler)
+void Emitter::addEventHandler(const std::string& eventName, Emitter::Handler handler)
 {
-    if (_eventHandlers.find(eventName) == _eventHandlers.end())
-    {
-        std::vector<std::function<void(Event*)>> vector;
-        _eventHandlers.insert(std::make_pair(eventName, vector));
-    }
-
-    _eventHandlers.at(eventName).push_back(handler);
+    _eventHandlers[eventName].push_back(handler);
 }
 
 void Emitter::emitEvent(std::unique_ptr<Event> event)
 {
     if (_eventHandlers.find(event->name()) == _eventHandlers.end()) return;
-    //Dispatcher::getInstance()->postEventHandler(this, std::move(event));
-    processEvent(std::move(event));
+
+    Dispatcher::getInstance()->postEventHandler(this, std::move(event));
 }
 
 void Emitter::processEvent(std::unique_ptr<Event> event)
@@ -74,10 +68,11 @@ void Emitter::processEvent(std::unique_ptr<Event> event)
 
 void Emitter::removeEventHandlers(const std::string& eventName)
 {
-    if (_eventHandlers.find(eventName) == _eventHandlers.end()) return;
+    const auto it = _eventHandlers.find(eventName);
+    if (it == _eventHandlers.end()) return;
 
-    _eventHandlers.at(eventName).clear();
-    _eventHandlers.erase(eventName);
+    it->second.clear();
+    _eventHandlers.erase(it);
 }
 
 }

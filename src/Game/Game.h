@@ -24,7 +24,6 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include <list>
 
 // Falltergeist includes
 #include "../Base/Singleton.h"

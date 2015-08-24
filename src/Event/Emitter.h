@@ -39,9 +39,9 @@ class Event;
 
 class Emitter
 {
-protected:
-    std::unordered_map<std::string, std::vector<std::function<void(Event*)>>> _eventHandlers;
 public:
+    using Handler = std::function<void(Event*)>;
+
     Emitter();
     virtual ~Emitter();
 
@@ -49,6 +49,9 @@ public:
     void emitEvent(std::unique_ptr<Event> event);
     void processEvent(std::unique_ptr<Event> event);
     void removeEventHandlers(const std::string& eventName);
+
+protected:
+    std::unordered_map<std::string, std::vector<Handler>> _eventHandlers;
 };
 
 }

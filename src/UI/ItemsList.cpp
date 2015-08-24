@@ -140,7 +140,6 @@ void ItemsList::onMouseDragStop(Event::Mouse* event)
     itemevent->setY(event->y());
     itemevent->setEmitter(this);
     emitEvent(std::move(itemevent));
-    //delete itemevent;
     _draggedItem = 0;
     Logger::critical() << "mousedragstop" << std::endl;
 }
