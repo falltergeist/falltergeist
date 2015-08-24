@@ -24,9 +24,11 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <list>
 
 // Falltergeist includes
 #include "../Base/Singleton.h"
+#include "../Event/Dispatcher.h"
 
 // Third party includes
 #include "SDL.h"
@@ -69,7 +71,7 @@ namespace Game
 class DudeObject;
 class Time;
 
-class Game
+class Game : public Event::Dispatcher
 {
 public:
     static Game* getInstance();
@@ -78,7 +80,7 @@ public:
     void shutdown();
     std::vector<State::State*>* states();
     std::vector<State::State*>* statesForRender();
-    std::vector<State::State*>* statesForThinkAndHandle();
+    const std::vector<State::State*>& statesForThinkAndHandle();
     void pushState(State::State* state);
     void setState(State::State* state);
     void popState();
@@ -125,10 +127,14 @@ protected:
     bool _quit = false;
     SDL_Event _event;
     bool _initialized = false;
+    std::list<std::pair<Event::Emitter*, Event::Event*>> _scheduledEvents;
 
 private:
     friend class Base::Singleton<Game>;
     void _initGVARS();
+
+    void postEventHandler(Event::Emitter* emitter, Event::Event* event) override final;
+    void removeEventHandler(Event::Emitter* emitter) override final;
 
     Game();
     ~Game();

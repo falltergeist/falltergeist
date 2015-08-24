@@ -24,6 +24,7 @@
 
 // Falltergeist includes
 #include "../Event/Event.h"
+#include "../Event/Dispatcher.h"
 
 // Third party includes
 
@@ -38,6 +39,7 @@ Emitter::Emitter()
 
 Emitter::~Emitter()
 {
+    Dispatcher::getInstance()->removeEventHandler(this);
 }
 
 void Emitter::addEventHandler(const std::string& eventName, std::function<void(Event*)> handler)
@@ -54,8 +56,15 @@ void Emitter::addEventHandler(const std::string& eventName, std::function<void(E
 void Emitter::emitEvent(Event* event)
 {
     if (_eventHandlers.find(event->name()) == _eventHandlers.end()) return;
+    Dispatcher::getInstance()->postEventHandler(this, event);
+}
+
+void Emitter::processEvent(Event* event)
+{
+    const auto it = _eventHandlers.find(event->name());
+    if (it == _eventHandlers.end()) return;
     event->setEmitter(this);
-    for (auto eventHandler : _eventHandlers.at(event->name()))
+    for (auto eventHandler : it->second)
     {
         if (event->handled()) return;
         eventHandler(event);

@@ -22,10 +22,10 @@
 
 // C++ standard includes
 #include <functional>
-#include <map>
 #include <memory>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 // Falltergeist includes
 
@@ -40,13 +40,14 @@ class Event;
 class Emitter
 {
 protected:
-    std::map<std::string, std::vector<std::function<void(Event*)>>> _eventHandlers;
+    std::unordered_map<std::string, std::vector<std::function<void(Event*)>>> _eventHandlers;
 public:
     Emitter();
     virtual ~Emitter();
 
     void addEventHandler(const std::string& eventName, std::function<void(Event*)> handler);
     void emitEvent(Event* event);
+    void processEvent(Event* event);
     void removeEventHandlers(const std::string& eventName);
 };
 
