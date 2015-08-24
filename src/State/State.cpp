@@ -171,7 +171,7 @@ void State::handle(Event::Event* event)
     for (auto it = _ui.rbegin(); it != _ui.rend(); ++it)
     {
         if (event->handled()) return;
-        if (auto ui = dynamic_cast<UI::Base*>(*it))
+        if (auto ui = *it)
         {
             ui->handle(event);
         }

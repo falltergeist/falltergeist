@@ -17,16 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_EVENT_DISPATCHER_H
-#define FALLTERGEIST_EVENT_DISPATCHER_H
+// Related headers
+#include "../Event/Dispatcher.h"
 
 // C++ standard includes
-#include <list>
-#include <memory>
-#include <utility>
 
 // Falltergeist includes
-#include "../Event/Event.h"
+#include "../Event/Emitter.h"
 
 // Third party includes
 
@@ -34,26 +31,36 @@ namespace Falltergeist
 {
 namespace Event
 {
-class Emitter;
 
-class Dispatcher
+void Dispatcher::postEventHandler(Emitter* emitter, std::unique_ptr<Event> event)
 {
-public:
-    static Dispatcher* getInstance();
+    _scheduledEvents.emplace_back(emitter, std::move(event));
+}
 
-    Dispatcher() {}
+void Dispatcher::processScheduledEvents()
+{
+    using std::swap;
 
-    void postEventHandler(Emitter* emitter, std::unique_ptr<Event> event);
-    void processScheduledEvents();
-    void removeEventHandler(Emitter* emitter);
+    if (_scheduledEvents.empty())
+        return;
 
-private:
-    Dispatcher(const Dispatcher&) = delete;
-    void operator=(const Dispatcher&) = delete;
+    decltype(_scheduledEvents) copyOfEvents;
+    swap(copyOfEvents, _scheduledEvents);
+    for (auto& task : copyOfEvents)
+    {
+        task.first->processEvent(std::move(task.second));
+    }
+}
 
-    std::list<std::pair<Emitter*, std::unique_ptr<Event>>> _scheduledEvents;
-};
+void Dispatcher::removeEventHandler(Emitter* emitter)
+{
+    using ElemType = decltype(_scheduledEvents)::value_type;
+
+    _scheduledEvents.remove_if([emitter](const ElemType& elem)
+    {
+        return emitter == elem.first;
+    });
+}
 
 }
 }
-#endif // FALLTERGEIST_EVENT_DISPATCHER_H

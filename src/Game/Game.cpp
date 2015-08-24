@@ -381,14 +381,7 @@ void Game::handle()
                     state->handle(event.get());
             }
 
-            if (!_scheduledEvents.empty()) {
-                decltype(_scheduledEvents) copyOfEvents;
-                std::swap(copyOfEvents, _scheduledEvents);
-                for (auto& task : copyOfEvents)
-                {
-                    task.first->processEvent(std::move(task.second));
-                }
-            }
+            _eventDispatcher.processScheduledEvents();
         }
     }
 }
@@ -459,18 +452,9 @@ Audio::Mixer* Game::mixer()
     return _mixer.get();
 }
 
-void Game::postEventHandler(Event::Emitter* emitter, std::unique_ptr<Event::Event> event)
+Event::Dispatcher& Game::eventDispatcher()
 {
-    _scheduledEvents.emplace_back(emitter, std::move(event));
-}
-
-void Game::removeEventHandler(Event::Emitter* emitter)
-{
-    using ElemType = decltype(*std::begin(_scheduledEvents));
-    _scheduledEvents.remove_if([emitter](const ElemType& elem)
-    {
-        return emitter == elem.first;
-    });
+    return _eventDispatcher;
 }
 
 }
@@ -480,7 +464,7 @@ namespace Event
 // static
 Dispatcher* Dispatcher::getInstance()
 {
-    return Game::getInstance();
+    return &Game::getInstance()->eventDispatcher();
 }
 }
 }

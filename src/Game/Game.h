@@ -71,7 +71,7 @@ namespace Game
 class DudeObject;
 class Time;
 
-class Game : public Event::Dispatcher
+class Game
 {
 public:
     static Game* getInstance();
@@ -106,6 +106,8 @@ public:
     Settings* settings() const;
     Graphics::AnimatedPalette* animatedPalette();
 
+    Event::Dispatcher& eventDispatcher();
+
 protected:
     std::vector<int> _GVARS;
     std::vector<State::State*> _states;
@@ -127,14 +129,11 @@ protected:
     bool _quit = false;
     SDL_Event _event;
     bool _initialized = false;
-    std::list<std::pair<Event::Emitter*, std::unique_ptr<Event::Event>>> _scheduledEvents;
+    Event::Dispatcher _eventDispatcher;
 
 private:
     friend class Base::Singleton<Game>;
     void _initGVARS();
-
-    void postEventHandler(Event::Emitter* emitter, std::unique_ptr<Event::Event> event) override final;
-    void removeEventHandler(Event::Emitter* emitter) override final;
 
     Game();
     ~Game();
