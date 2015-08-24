@@ -318,7 +318,7 @@ void Base::handle(Event::Event* event)
             }
         }
 
-        //*
+        /*
         if (newEvent->handled())
         {
             event->setHandled(true);
