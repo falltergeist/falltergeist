@@ -632,9 +632,9 @@ void Location::handle(Event::Event* event)
             int scrollArea = 8;
             Point evPos = mouseEvent->position();
             _scrollLeft = (evPos.x() < scrollArea);
-            _scrollRight = (evPos.x() > game->renderer()->width()- scrollArea);
+            _scrollRight = (evPos.x() > (int)game->renderer()->width()- scrollArea);
             _scrollTop = (evPos.y() < scrollArea);
-            _scrollBottom = (evPos.y() > game->renderer()->height() - scrollArea);
+            _scrollBottom = (evPos.y() > (int)game->renderer()->height() - scrollArea);
 
             if (hexagon)
             {

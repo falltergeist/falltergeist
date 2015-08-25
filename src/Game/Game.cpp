@@ -101,7 +101,7 @@ void Game::init(std::unique_ptr<Settings> settings)
     _mousePosition = new UI::TextArea("", renderer()->width() - 55, 14);
     _animatedPalette = new Graphics::AnimatedPalette();
     _gameTime = new Time();
-    _currentTime = new UI::TextArea("", renderer()->width() - 150, renderer()->height() - 10);
+    _currentTime = new UI::TextArea("", renderer()->size() - Point(150, 10));
 
     IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 }
@@ -387,7 +387,7 @@ void Game::think()
     _animatedPalette->think();
 
     *_mousePosition = "";
-    *_mousePosition << mouse()->x() << " : " << mouse()->y();
+    *_mousePosition << mouse()->position().x() << " : " << mouse()->position().y();
 
     *_currentTime = "";
     *_currentTime << _gameTime->year()  << "-" << _gameTime->month()   << "-" << _gameTime->day() << " "

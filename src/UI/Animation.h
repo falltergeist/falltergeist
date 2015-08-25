@@ -47,7 +47,7 @@ public:
     void think() override;
     void render(bool eggTransparency = false) override;
 
-    Point shift() const;
+    const Point& shift() const;
     void setShift(const Point& value);
 
     Size size() const override;

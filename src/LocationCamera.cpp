@@ -44,7 +44,7 @@ Point LocationCamera::topLeft() const
     return _center - (_size / 2.0);
 }
 
-Point LocationCamera::center() const
+const Point& LocationCamera::center() const
 {
     return _center;
 }
@@ -62,7 +62,7 @@ void LocationCamera::setCenter(const Point& pos)
     }
 }
 
-Size LocationCamera::size() const
+const Size& LocationCamera::size() const
 {
     return _size;
 }

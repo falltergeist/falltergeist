@@ -253,7 +253,7 @@ unsigned int Renderer::height()
     return _height;
 }
 
-Size Renderer::size() const
+const Size& Renderer::size() const
 {
     return Size(_width, _height);
 }

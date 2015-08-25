@@ -96,6 +96,7 @@ void Script::_initialize()
             .beginClass<Input::Mouse>("Mouse")
                 .addProperty("x", &Input::Mouse::x, &Input::Mouse::setX)
                 .addProperty("y", &Input::Mouse::y, &Input::Mouse::setY)
+                .addProperty("position", &Input::Mouse::position, &Input::Mouse::setPosition)
                 .addProperty("cursor", &Input::Mouse::cursor, &Input::Mouse::setCursor)
             .endClass()
 
@@ -106,9 +107,7 @@ void Script::_initialize()
 
             // game.State
             .beginClass<State::LuaState>("State")
-                .addProperty("x", &State::LuaState::x, &State::LuaState::setX)
-                .addProperty("y", &State::LuaState::y, &State::LuaState::setY)
-                //.addProperty("position", &State::State::position, &State::State::setPosition)
+                .addProperty("position", &State::LuaState::position, &State::LuaState::setPosition)
                 .addProperty("fullscreen", &State::LuaState::fullscreen, &State::LuaState::setFullscreen)
                 .addProperty("modal", &State::LuaState::modal, &State::LuaState::setModal)
                 .addFunction("addUI", &State::LuaState::addUI)
@@ -116,8 +115,7 @@ void Script::_initialize()
             .beginNamespace("ui")
                 // game.ui.UI
                 .beginClass<Falltergeist::UI::Base>("UI")
-                    //.addProperty("x", &UI::x, &UI::setX)
-                    //.addProperty("y", &UI::y, &UI::setY)
+                    .addProperty("position", &UI::Base::position, &UI::Base::setPosition)
                 .endClass()
 
                 // game.ui.Image

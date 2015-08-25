@@ -53,7 +53,7 @@ public:
 
     unsigned int width();
     unsigned int height();
-    Size size() const;
+    const Size& size() const;
 
     float scaleX();
     float scaleY();

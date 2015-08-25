@@ -84,12 +84,12 @@ void State::setY(int y)
     _position.setY(y);
 }
 
-Point State::position() const
+const Point& State::position() const
 {
     return _position;
 }
 
-void State::setPosition(Point pos)
+void State::setPosition(const Point& pos)
 {
     _position = pos;
 }

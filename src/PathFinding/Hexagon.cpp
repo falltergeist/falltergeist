@@ -61,7 +61,7 @@ std::list<Game::Object*>* Hexagon::objects()
     return &_objects;
 }
 
-Point Hexagon::position() const
+const Point& Hexagon::position() const
 {
     return _position;
 }

@@ -40,29 +40,26 @@ namespace State
 
 class LuaState : public State
 {
-
 public:
+
     LuaState(const std::string& filename);
     ~LuaState() override;
 
-    virtual int x() const;
-    virtual void setX(int value);
+    bool modal() const override ;
+    void setModal(bool value) override;
 
-    virtual int y() const;
-    virtual void setY(int value);
+    bool fullscreen() const override;
+    void setFullscreen(bool value) override;
 
-    virtual bool modal() const;
-    virtual void setModal(bool value);
+    const Point& position() const override;
+    void setPosition(const Point& pos) override;
 
-    virtual bool fullscreen() const;
-    virtual void setFullscreen(bool value);
+    void init() override;
+    void think() override;
+    void handle(Event::Event* event) override;
+    void render() override;
 
-    virtual void init();
-    virtual void think();
-    virtual void handle(Event::Event* event);
-    virtual void render();
-
-    virtual void addUI(UI::Base* ui);
+    void addUI(UI::Base* ui);
 
 private:
     Lua::Script* _script = nullptr;

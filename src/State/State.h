@@ -79,8 +79,8 @@ public:
     virtual int y() const;
     virtual void setY(int y);
 
-    virtual Point position() const;
-    virtual void setPosition(Point pos);
+    virtual const Point& position() const;
+    virtual void setPosition(const Point& pos);
 
     virtual bool fullscreen() const;
     virtual void setFullscreen(bool value);

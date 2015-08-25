@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <ostream>
+#include <string>
 
 // Falltergeist includes
 #include "Exception.h"

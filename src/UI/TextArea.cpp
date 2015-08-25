@@ -181,8 +181,8 @@ void TextArea::_calculate()
         return;
     }
 
-    unsigned x = 0;
-    unsigned y = 0;
+    int x = 0;
+    int y = 0;
 
     std::vector<std::vector<TextSymbol>> lines = {std::vector<TextSymbol>()};
     std::vector<unsigned> widths = {0};

@@ -291,8 +291,7 @@ void CursorDropdown::onStateDeactivate(Event::State* event)
                 mouse->pushState(*it);
             }
         }
-        mouse->setX(_initialX);
-        mouse->setY(_initialY);
+        mouse->setPosition({_initialX, _initialY});
         _deactivated = true;
     }
 }

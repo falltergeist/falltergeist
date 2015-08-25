@@ -43,7 +43,7 @@ public:
     Hexagon();
     Hexagon(unsigned int number);
 
-    Point position() const;
+    const Point& position() const;
     void setPosition(const Point& pos);
 
     unsigned int number();

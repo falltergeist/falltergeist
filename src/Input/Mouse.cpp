@@ -53,41 +53,36 @@ Mouse::~Mouse()
 
 int Mouse::x() const
 {
-    return _x;
+    return _position.x();
 }
 
 int Mouse::y() const
 {
-    return _y;
+    return _position.y();
 }
 
 void Mouse::setX(int x)
 {
-    _x = x;
-    auto renderer = Game::getInstance()->renderer();
-    float scaleX = renderer->scaleX();
-    float scaleY = renderer->scaleY();
-    SDL_WarpMouseInWindow(renderer->sdlWindow(), _x*scaleX, _y*scaleY);
+    setPosition({x, _position.y()});
 }
 
 void Mouse::setY(int y)
 {
-    _y = y;
-    auto renderer = Game::getInstance()->renderer();
-    float scaleX = renderer->scaleX();
-    float scaleY = renderer->scaleY();
-    SDL_WarpMouseInWindow(renderer->sdlWindow(), _x*scaleX, _y*scaleY);
+    setPosition({_position.x(), y});
 }
 
-Point Mouse::position() const
+const Point& Mouse::position() const
 {
-    return Point(_x, _y);
+    return _position;
 }
 
 void Mouse::setPosition(const Point& pos)
 {
-    setX(pos.x());
-    setY(pos.y());
+    _position = pos;
+    auto renderer = Game::getInstance()->renderer();
+    float scaleX = renderer->scaleX();
+    float scaleY = renderer->scaleY();
+    SDL_WarpMouseInWindow(renderer->sdlWindow(), (int)(pos.x() * scaleX), (int)(pos.y() * scaleY));
 }
 
 void Mouse::setState(Cursor state)
@@ -238,9 +233,9 @@ void Mouse::render()
 
 void Mouse::think()
 {
-    SDL_GetMouseState(&_x, &_y);
-    _x = _x / Game::getInstance()->renderer()->scaleX();
-    _y = _y / Game::getInstance()->renderer()->scaleY();
+    SDL_GetMouseState(&_position.rx(), &_position.ry());
+    _position.rx() /= Game::getInstance()->renderer()->scaleX();
+    _position.ry() /= Game::getInstance()->renderer()->scaleY();
     if (_ui) _ui->think();
 }
 

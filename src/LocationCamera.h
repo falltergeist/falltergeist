@@ -42,10 +42,10 @@ public:
 
     Point topLeft() const;
 
-    Point center() const;
+    const Point& center() const;
     void setCenter(const Point& pos);
 
-    Size size() const;
+    const Size& size() const;
     void setSize(const Size& size);
 };
 
