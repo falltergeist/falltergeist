@@ -181,8 +181,8 @@ void TextArea::_calculate()
         return;
     }
 
-    int x = 0;
-    int y = 0;
+    unsigned x = 0;
+    unsigned y = 0;
 
     std::vector<std::vector<TextSymbol>> lines = {std::vector<TextSymbol>()};
     std::vector<unsigned> widths = {0};
@@ -196,7 +196,7 @@ void TextArea::_calculate()
             x += font()->aaf()->spaceWidth() + font()->horizontalGap();
         }
 
-        if (*it == '\n' || (_size.width() && x >= _size.width()))
+        if (*it == '\n' || (_size.width() && x >= (unsigned)_size.width()))
         {
             widths.back() = x;
             x = 0;

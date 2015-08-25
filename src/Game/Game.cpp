@@ -94,7 +94,7 @@ void Game::init(std::unique_ptr<Settings> settings)
     _mouse = new Input::Mouse();
     _fpsCounter = new UI::FpsCounter(renderer()->width() - 42, 2);
 
-    version += " " + std::to_string(renderer()->width()) + "x" + std::to_string(renderer()->height());
+    version += " " + to_string(renderer()->size());
     version += " " + renderer()->name();
 
     _falltergeistVersion = new UI::TextArea(version, 3, renderer()->height() - 10);

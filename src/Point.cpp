@@ -17,14 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <vector>
-
 #include "Point.h"
 #include "Logger.h"
 
 namespace Falltergeist
 {
 
+// TODO: move to proper Unit Test
 PointTest::PointTest()
 {
     Point pt = Point(-70, -100);
@@ -162,12 +161,6 @@ Point Point::mul(double rhs) const
 Point Point::div(double rhs) const
 {
     return *this / rhs;
-}
-
-std::ostream& operator <<(std::ostream& lhs, const Point& rhs)
-{
-    lhs << "(" << rhs._x << "," << rhs._y << ")";
-    return lhs;
 }
 
 // end Point class
@@ -316,12 +309,6 @@ Size Size::mul(double rhs) const
 Size Size::div(double rhs) const
 {
     return *this / rhs;
-}
-
-std::ostream& operator <<(std::ostream& lhs, const Size& rhs)
-{
-    lhs << "(" << rhs._width << "," << rhs._height << ")";
-    return lhs;
 }
 
 // end Size class

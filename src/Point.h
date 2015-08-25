@@ -21,11 +21,8 @@
 #define FALLTERGEIST_POINT_H
 
 // C++ standard includes
-#include <ostream>
-#include <string>
 
 // Falltergeist includes
-#include "Exception.h"
 
 // Third party includes
 
@@ -46,7 +43,9 @@ public:
     int x() const;
     int y() const;
 
+    // Reference to x coordinate
     int& rx();
+    // Reference to y coordinate
     int& ry();
 
     void setX(int x);
@@ -73,8 +72,6 @@ public:
     Point mul(double rhs) const;
     // Division by given number
     Point div(double rhs) const;
-
-    friend std::ostream& operator <<(std::ostream& lhs, const Point& rhs);
 
 protected:
     int _x;
@@ -103,7 +100,6 @@ public:
     int height() const;
 
     /*int& rwidth();
-
     int& rheight();*/
 
     void setWidth(int width);
@@ -130,8 +126,6 @@ public:
     Size mul(double rhs) const;
     // Division by given number
     Size div(double rhs) const;
-
-    friend std::ostream& operator <<(std::ostream& lhs, const Size& rhs);
 
 protected:
     int _width;

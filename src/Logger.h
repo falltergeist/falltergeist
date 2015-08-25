@@ -25,6 +25,7 @@
 #include <iostream>
 
 // Falltergeist includes
+#include "Point.h"
 
 // Third party includes
 
@@ -62,6 +63,15 @@ private:
     static Level _level;
     static bool _useColors;
 };
+
+
+// Support for custom types in output streams:
+
+std::ostream& operator<<(std::ostream& lhs, const Point& rhs);
+std::ostream& operator<<(std::ostream& lhs, const Size& rhs);
+
+std::string to_string(const Point& point);
+std::string to_string(const Size& size);
 
 }
 
