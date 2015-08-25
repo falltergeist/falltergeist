@@ -50,7 +50,7 @@ namespace Falltergeist
 namespace Game
 {
 
-Object::Object() : Event::Emitter()
+Object::Object() : Event::Emitter(Game::getInstance()->eventDispatcher())
 {
 }
 

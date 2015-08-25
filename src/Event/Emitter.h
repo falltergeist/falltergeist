@@ -36,13 +36,14 @@ namespace Falltergeist
 namespace Event
 {
 class Event;
+class Dispatcher;
 
 class Emitter
 {
 public:
     using Handler = std::function<void(Event*)>;
 
-    Emitter();
+    explicit Emitter(Dispatcher* dispatcher);
     virtual ~Emitter();
 
     void addEventHandler(const std::string& eventName, std::function<void(Event*)> handler);
@@ -52,6 +53,7 @@ public:
 
 protected:
     std::unordered_map<std::string, std::vector<Handler>> _eventHandlers;
+    Dispatcher* const _eventDispatcher;
 };
 
 }

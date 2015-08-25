@@ -42,7 +42,7 @@ using Base::make_unique;
 namespace UI
 {
 
-Base::Base(int x, int y) : Event::Emitter()
+Base::Base(int x, int y) : Event::Emitter(Game::getInstance()->eventDispatcher())
 {
     _x = x;
     _y = y;

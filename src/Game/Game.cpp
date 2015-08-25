@@ -446,19 +446,10 @@ Audio::Mixer* Game::mixer()
     return _mixer.get();
 }
 
-Event::Dispatcher& Game::eventDispatcher()
+Event::Dispatcher* Game::eventDispatcher()
 {
-    return _eventDispatcher;
+    return &_eventDispatcher;
 }
 
-}
-
-namespace Event
-{
-// static
-Dispatcher* Dispatcher::getInstance()
-{
-    return &Game::getInstance()->eventDispatcher();
-}
 }
 }

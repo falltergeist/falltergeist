@@ -39,8 +39,6 @@ class Emitter;
 class Dispatcher
 {
 public:
-    static Dispatcher* getInstance();
-
     Dispatcher() {}
 
     void postEventHandler(Emitter* emitter, std::unique_ptr<Event> event);

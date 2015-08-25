@@ -105,7 +105,7 @@ public:
     Settings* settings() const;
     Graphics::AnimatedPalette* animatedPalette();
 
-    Event::Dispatcher& eventDispatcher();
+    Event::Dispatcher* eventDispatcher();
 
 protected:
     std::vector<int> _GVARS;

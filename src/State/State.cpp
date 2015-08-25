@@ -37,7 +37,7 @@ namespace Falltergeist
 namespace State
 {
 
-State::State() : Event::Emitter()
+State::State() : Event::Emitter(Game::getInstance()->eventDispatcher())
 {
     addEventHandler("activate",   [this](Event::Event* event){ this->onStateActivate(dynamic_cast<Event::State*>(event)); });
     addEventHandler("deactivate", [this](Event::Event* event){ this->onStateDeactivate(dynamic_cast<Event::State*>(event)); });

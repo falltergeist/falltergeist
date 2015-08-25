@@ -33,13 +33,13 @@ namespace Falltergeist
 namespace Event
 {
 
-Emitter::Emitter()
+Emitter::Emitter(Dispatcher* dispatcher) : _eventDispatcher(dispatcher)
 {
 }
 
 Emitter::~Emitter()
 {
-    Dispatcher::getInstance()->removeEventHandler(this);
+    _eventDispatcher->removeEventHandler(this);
 }
 
 void Emitter::addEventHandler(const std::string& eventName, Emitter::Handler handler)
@@ -51,7 +51,7 @@ void Emitter::emitEvent(std::unique_ptr<Event> event)
 {
     if (_eventHandlers.find(event->name()) == _eventHandlers.end()) return;
 
-    Dispatcher::getInstance()->postEventHandler(this, std::move(event));
+    _eventDispatcher->postEventHandler(this, std::move(event));
 }
 
 void Emitter::processEvent(std::unique_ptr<Event> event)
