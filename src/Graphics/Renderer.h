@@ -51,8 +51,8 @@ public:
     void endFrame();
     void think();
 
-    unsigned int width();
-    unsigned int height();
+    int width();
+    int height();
     const Size& size() const;
 
     float scaleX();
@@ -76,8 +76,7 @@ public:
     Texture* screenshot();
 
 protected:
-    unsigned int _width;
-    unsigned int _height;
+    Size _size;
 
     short _fadeStep = 0;
     unsigned int _fadeTimer = 0;
