@@ -18,7 +18,7 @@
  */
 
 // Related headers
-#include "../Event/Emitter.h"
+#include "../Event/EventTarget.h"
 
 // C++ standard includes
 
@@ -33,32 +33,32 @@ namespace Falltergeist
 namespace Event
 {
 
-Emitter::Emitter(Dispatcher* dispatcher) : _eventDispatcher(dispatcher)
+EventTarget::EventTarget(Dispatcher* dispatcher) : _eventDispatcher(dispatcher)
 {
 }
 
-Emitter::~Emitter()
+EventTarget::~EventTarget()
 {
     _eventDispatcher->removeEventHandler(this);
 }
 
-void Emitter::addEventHandler(const std::string& eventName, Emitter::Handler handler)
+void EventTarget::addEventHandler(const std::string& eventName, EventTarget::Handler handler)
 {
     _eventHandlers[eventName].push_back(handler);
 }
 
-void Emitter::emitEvent(std::unique_ptr<Event> event)
+void EventTarget::emitEvent(std::unique_ptr<Event> event)
 {
     if (_eventHandlers.find(event->name()) == _eventHandlers.end()) return;
 
     _eventDispatcher->postEventHandler(this, std::move(event));
 }
 
-void Emitter::processEvent(std::unique_ptr<Event> event)
+void EventTarget::processEvent(std::unique_ptr<Event> event)
 {
     const auto it = _eventHandlers.find(event->name());
     if (it == _eventHandlers.end()) return;
-    event->setEmitter(this);
+    event->setEventTarget(this);
     for (auto eventHandler : it->second)
     {
         if (event->handled()) return;
@@ -66,7 +66,7 @@ void Emitter::processEvent(std::unique_ptr<Event> event)
     }
 }
 
-void Emitter::removeEventHandlers(const std::string& eventName)
+void EventTarget::removeEventHandlers(const std::string& eventName)
 {
     const auto it = _eventHandlers.find(eventName);
     if (it == _eventHandlers.end()) return;

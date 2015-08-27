@@ -32,7 +32,7 @@ namespace Falltergeist
 {
 namespace Event
 {
-class Emitter;
+class EventTarget;
 
 class Event
 {
@@ -43,15 +43,15 @@ public:
     std::string name() const;
     void setName(const std::string& name);
 
-    Emitter* emitter() const;
-    void setEmitter(Emitter* value);
+    EventTarget* eventTarget() const;
+    void setEventTarget(EventTarget* value);
 
     bool handled() const;
     void setHandled(bool value);
 
 protected:
     std::string _name;
-    Emitter* _emitter = 0;
+    EventTarget* _eventTarget = 0;
     bool _handled = false;
 };
 

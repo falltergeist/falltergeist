@@ -34,22 +34,22 @@ namespace Falltergeist
 {
 namespace Event
 {
-class Emitter;
+class EventTarget;
 
 class Dispatcher
 {
 public:
     Dispatcher() {}
 
-    void postEventHandler(Emitter* emitter, std::unique_ptr<Event> event);
+    void postEventHandler(EventTarget* EventTarget, std::unique_ptr<Event> event);
     void processScheduledEvents();
-    void removeEventHandler(Emitter* emitter);
+    void removeEventHandler(EventTarget* EventTarget);
 
 private:
     Dispatcher(const Dispatcher&) = delete;
     void operator=(const Dispatcher&) = delete;
 
-    std::list<std::pair<Emitter*, std::unique_ptr<Event>>> _scheduledEvents;
+    std::list<std::pair<EventTarget*, std::unique_ptr<Event>>> _scheduledEvents;
 };
 
 }

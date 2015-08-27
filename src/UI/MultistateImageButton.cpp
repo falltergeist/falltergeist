@@ -130,7 +130,7 @@ MultistateImageButton::Mode MultistateImageButton::mode() const
 
 void MultistateImageButton::_onLeftButtonClick(Event::Mouse* event)
 {
-    auto sender = dynamic_cast<MultistateImageButton*>(event->emitter());
+    auto sender = dynamic_cast<MultistateImageButton*>(event->eventTarget());
 
     if (sender->mode() == Mode::PROGRESSION)
     {
@@ -159,7 +159,7 @@ void MultistateImageButton::_onLeftButtonClick(Event::Mouse* event)
 
 void MultistateImageButton::_onLeftButtonUp(Event::Mouse* event)
 {
-    auto sender = dynamic_cast<MultistateImageButton*>(event->emitter());
+    auto sender = dynamic_cast<MultistateImageButton*>(event->eventTarget());
 
     if (!sender->_downSound.empty())
     {

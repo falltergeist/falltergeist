@@ -27,7 +27,7 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Event/Emitter.h"
+#include "../Event/EventTarget.h"
 
 // Third party includes
 
@@ -78,7 +78,7 @@ public:
 };
 
 
-class Object : public Event::Emitter
+class Object : public Event::EventTarget
 {
 public:
     // Object type as defined in prototype
@@ -110,7 +110,7 @@ public:
     // whether this object is transparent in terms of walking through it by a critter
     virtual bool canWalkThru() const;
     virtual void setCanWalkThru(bool value);
-    
+
     // whether this object is transparent to the light
     virtual bool canLightThru() const;
     virtual void setCanLightThru(bool value);
@@ -118,7 +118,7 @@ public:
     // whether this object is transparent to projectiles
     virtual bool canShootThru() const;
     virtual void setCanShootThru(bool value);
-    
+
     virtual bool wallTransEnd() const;
     virtual void setWallTransEnd(bool value);
 

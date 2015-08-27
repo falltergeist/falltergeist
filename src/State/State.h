@@ -26,7 +26,7 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Event/Emitter.h"
+#include "../Event/EventTarget.h"
 #include "../Event/Keyboard.h"
 #include "../Event/Mouse.h"
 
@@ -54,7 +54,7 @@ namespace UI
 namespace State
 {
 
-class State : public Event::Emitter
+class State : public Event::EventTarget
 {
 public:
     State();

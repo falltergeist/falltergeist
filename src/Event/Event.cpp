@@ -50,14 +50,14 @@ void Event::setName(const std::string& name)
     _name = name;
 }
 
-Emitter* Event::emitter() const
+EventTarget* Event::eventTarget() const
 {
-    return _emitter;
+    return _eventTarget;
 }
 
-void Event::setEmitter(Emitter* value)
+void Event::setEventTarget(EventTarget* value)
 {
-    _emitter = value;
+    _eventTarget = value;
 }
 
 bool Event::handled() const

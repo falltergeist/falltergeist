@@ -139,7 +139,7 @@ void InventoryItem::onMouseDragStop(Event::Mouse* event)
     auto itemevent = make_unique<Event::Mouse>("itemdragstop");
     itemevent->setX(event->x());
     itemevent->setY(event->y());
-    itemevent->setEmitter(this);
+    itemevent->setEventTarget(this);
     emitEvent(std::move(itemevent));
 }
 
@@ -149,7 +149,7 @@ void InventoryItem::onArmorDragStop(Event::Mouse* event)
     if (event->x() <= x() || event->x() >= x() + width()) return;
     if (event->y() <= y() || event->y() >= y() + height()) return;
 
-    if (ItemsList* itemsList = dynamic_cast<ItemsList*>(event->emitter()))
+    if (ItemsList* itemsList = dynamic_cast<ItemsList*>(event->eventTarget()))
     {
         InventoryItem* draggedItem = itemsList->draggedItem();
         auto itemObject = draggedItem->item();
@@ -173,7 +173,7 @@ void InventoryItem::onHandDragStop(Event::Mouse* event)
     if (event->x() <= x() || event->x() >= x() + width()) return;
     if (event->y() <= y() || event->y() >= y() + height()) return;
 
-    if (ItemsList* itemsList = dynamic_cast<ItemsList*>(event->emitter()))
+    if (ItemsList* itemsList = dynamic_cast<ItemsList*>(event->eventTarget()))
     {
         InventoryItem* item = itemsList->draggedItem();
         itemsList->removeItem(item, 1);

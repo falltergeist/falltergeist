@@ -23,7 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Event/Emitter.h"
+#include "../Event/EventTarget.h"
 
 // Third party includes
 
@@ -32,33 +32,33 @@ namespace Falltergeist
 namespace Event
 {
 
-void Dispatcher::postEventHandler(Emitter* emitter, std::unique_ptr<Event> event)
+void Dispatcher::postEventHandler(EventTarget* EventTarget, std::unique_ptr<Event> event)
 {
-    _scheduledEvents.emplace_back(emitter, std::move(event));
+    _scheduledEvents.emplace_back(EventTarget, std::move(event));
 }
 
 void Dispatcher::processScheduledEvents()
 {
     using std::swap;
 
-    if (_scheduledEvents.empty())
-        return;
-
-    decltype(_scheduledEvents) copyOfEvents;
-    swap(copyOfEvents, _scheduledEvents);
-    for (auto& task : copyOfEvents)
+    while (!_scheduledEvents.empty())
     {
-        task.first->processEvent(std::move(task.second));
+        decltype(_scheduledEvents) copyOfEvents;
+        swap(copyOfEvents, _scheduledEvents);
+        for (auto& task : copyOfEvents)
+        {
+            task.first->processEvent(std::move(task.second));
+        }
     }
 }
 
-void Dispatcher::removeEventHandler(Emitter* emitter)
+void Dispatcher::removeEventHandler(EventTarget* EventTarget)
 {
     using ElemType = decltype(_scheduledEvents)::value_type;
 
-    _scheduledEvents.remove_if([emitter](const ElemType& elem)
+    _scheduledEvents.remove_if([EventTarget](const ElemType& elem)
     {
-        return emitter == elem.first;
+        return EventTarget == elem.first;
     });
 }
 

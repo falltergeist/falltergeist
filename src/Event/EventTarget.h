@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_EVENT_EMITTER_H
-#define FALLTERGEIST_EVENT_EMITTER_H
+#ifndef FALLTERGEIST_EVENT_EventTarget_H
+#define FALLTERGEIST_EVENT_EventTarget_H
 
 // C++ standard includes
 #include <functional>
@@ -38,15 +38,15 @@ namespace Event
 class Event;
 class Dispatcher;
 
-class Emitter
+class EventTarget
 {
 public:
     using Handler = std::function<void(Event*)>;
 
-    explicit Emitter(Dispatcher* dispatcher);
-    virtual ~Emitter();
+    explicit EventTarget(Dispatcher* dispatcher);
+    virtual ~EventTarget();
 
-    void addEventHandler(const std::string& eventName, std::function<void(Event*)> handler);
+    void addEventHandler(const std::string& eventName, Handler handler);
     void emitEvent(std::unique_ptr<Event> event);
     void processEvent(std::unique_ptr<Event> event);
     void removeEventHandlers(const std::string& eventName);
@@ -54,8 +54,12 @@ public:
 protected:
     std::unordered_map<std::string, std::vector<Handler>> _eventHandlers;
     Dispatcher* const _eventDispatcher;
+
+private:
+    EventTarget(const EventTarget&) = delete;
+    void operator=(const EventTarget&) = delete;
 };
 
 }
 }
-#endif // FALLTERGEIST_EVENT_EMITTER_H
+#endif // FALLTERGEIST_EVENT_EventTarget_H

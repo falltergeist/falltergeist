@@ -510,7 +510,7 @@ bool PlayerCreate::_skillToggle(unsigned int num)
 
 void PlayerCreate::onButtonClick(Event::Mouse* event)
 {
-    auto sender = dynamic_cast<UI::ImageButton*>(event->emitter());
+    auto sender = dynamic_cast<UI::ImageButton*>(event->eventTarget());
 
     for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
     {
@@ -575,7 +575,7 @@ void PlayerCreate::onLabelClick(Event::Mouse* event)
     for(auto it = _labels.begin(); it != _labels.end(); ++it)
     {
         std::string name = it->first;
-        if (it->second == event->emitter())
+        if (it->second == event->eventTarget())
         {
             if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0 || name.find("label_") == 0)
             {
@@ -595,7 +595,7 @@ void PlayerCreate::onMaskClick(Event::Mouse* event)
 {
     for(auto it = _masks.begin(); it != _masks.end(); ++it)
     {
-        if (it->second == event->emitter())
+        if (it->second == event->eventTarget())
         {
             std::string name = it->first;
             if (name.find("stats_") == 0)
