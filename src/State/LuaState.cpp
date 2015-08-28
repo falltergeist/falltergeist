@@ -88,7 +88,7 @@ void LuaState::render()
     }
 }
 
-void LuaState::addUI(UI::Base* ui)
+void LuaState::addUI(std::shared_ptr<UI::Base> ui)
 {
     if (!ui) return;
     State::addUI(ui);

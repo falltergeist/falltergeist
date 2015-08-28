@@ -111,7 +111,7 @@ protected:
     bool _visible = true;
     Cursor _type = Cursor::NONE;
     std::vector<Cursor> _states;
-    UI::Base* _ui = nullptr;
+    std::shared_ptr<UI::Base> _ui;
     void _setType(Cursor type);
 };
 

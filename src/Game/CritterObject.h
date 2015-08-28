@@ -158,7 +158,7 @@ public:
     
     virtual void stopMovement();
 
-    virtual UI::Animation* setActionAnimation(const std::string& action);
+    virtual std::shared_ptr<UI::Animation> setActionAnimation(const std::string& action);
 
 protected:
     bool _moving  = false;
@@ -196,7 +196,7 @@ protected:
     ItemObject* _leftHandSlot = 0;
     ItemObject* _rightHandSlot = 0;
 
-    virtual UI::Animation* _generateMovementAnimation();
+    virtual std::shared_ptr<UI::Animation> _generateMovementAnimation();
     virtual std::string _generateArmorFrmString();
     virtual std::string _generateWeaponFrmString();
     void _setupNextIdleAnim();

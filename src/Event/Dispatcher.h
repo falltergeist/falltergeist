@@ -17,14 +17,16 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_EVENT_EVENT_H
-#define FALLTERGEIST_EVENT_EVENT_H
+#ifndef FALLTERGEIST_EVENT_DISPATCHER_H
+#define FALLTERGEIST_EVENT_DISPATCHER_H
 
 // C++ standard includes
+#include <list>
 #include <memory>
-#include <string>
+#include <utility>
 
 // Falltergeist includes
+#include "../Event/Event.h"
 
 // Third party includes
 
@@ -34,27 +36,22 @@ namespace Event
 {
 class EventTarget;
 
-class Event
+class Dispatcher
 {
 public:
-    Event(const std::string& name);
-    virtual ~Event();
+    Dispatcher() {}
 
-    std::string name() const;
-    void setName(const std::string& name);
+    void postEventHandler(std::weak_ptr<EventTarget>, std::unique_ptr<Event> event);
+    void processScheduledEvents();
+    void removeEventHandler(EventTarget* eventTarget);
 
-    EventTarget* eventTarget() const;
-    void setEventTarget(EventTarget* value);
+private:
+    Dispatcher(const Dispatcher&) = delete;
+    void operator=(const Dispatcher&) = delete;
 
-    bool handled() const;
-    void setHandled(bool value);
-
-protected:
-    std::string _name;
-    EventTarget* _eventTarget = 0;
-    bool _handled = false;
+    std::list<std::pair<std::weak_ptr<EventTarget>, std::unique_ptr<Event>>> _scheduledEvents;
 };
 
 }
 }
-#endif // FALLTERGEIST_EVENT_EVENT_H
+#endif // FALLTERGEIST_EVENT_DISPATCHER_H

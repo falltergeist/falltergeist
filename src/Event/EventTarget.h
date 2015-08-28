@@ -17,15 +17,15 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_EVENT_EMITTER_H
-#define FALLTERGEIST_EVENT_EMITTER_H
+#ifndef FALLTERGEIST_EVENT_EventTarget_H
+#define FALLTERGEIST_EVENT_EventTarget_H
 
 // C++ standard includes
 #include <functional>
-#include <map>
 #include <memory>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 // Falltergeist includes
 
@@ -36,20 +36,30 @@ namespace Falltergeist
 namespace Event
 {
 class Event;
+class Dispatcher;
 
-class Emitter
+class EventTarget : public std::enable_shared_from_this<EventTarget>
 {
-protected:
-    std::map<std::string, std::vector<std::function<void(Event*)>>> _eventHandlers;
 public:
-    Emitter();
-    virtual ~Emitter();
+    using Handler = std::function<void(Event*)>;
 
-    void addEventHandler(const std::string& eventName, std::function<void(Event*)> handler);
-    void emitEvent(Event* event);
+    explicit EventTarget(Dispatcher* dispatcher);
+    virtual ~EventTarget();
+
+    void addEventHandler(const std::string& eventName, Handler handler);
+    void emitEvent(std::unique_ptr<Event> event);
+    void processEvent(std::unique_ptr<Event> event);
     void removeEventHandlers(const std::string& eventName);
+
+protected:
+    std::unordered_map<std::string, std::vector<Handler>> _eventHandlers;
+    Dispatcher* const _eventDispatcher;
+
+private:
+    EventTarget(const EventTarget&) = delete;
+    void operator=(const EventTarget&) = delete;
 };
 
 }
 }
-#endif // FALLTERGEIST_EVENT_EMITTER_H
+#endif // FALLTERGEIST_EVENT_EventTarget_H

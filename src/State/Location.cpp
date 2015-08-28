@@ -81,7 +81,7 @@ Location::Location() : State()
     _roof = new UI::TileMap();
     _hexagonGrid = new HexagonGrid();
 
-    _hexagonInfo = new UI::TextArea("", game->renderer()->width() - 135, 25);
+    _hexagonInfo = std::make_shared<UI::TextArea>("", game->renderer()->width() - 135, 25);
     _hexagonInfo->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
 }
@@ -94,7 +94,7 @@ Location::~Location()
     delete _floor;
     delete _roof;
     delete _locationScript;
-    delete _hexagonInfo;
+    //delete _hexagonInfo;
 }
 
 void Location::init()
@@ -107,7 +107,7 @@ void Location::init()
 
     auto game = Game::getInstance();
     setLocation("maps/" + game->settings()->initialLocation() + ".map");
-    _playerPanel = new PlayerPanel();
+    _playerPanel = std::make_shared<PlayerPanel>();
     game->pushState(_playerPanel);
 }
 
@@ -511,11 +511,11 @@ void Location::think()
             auto icons = getCursorIconsForObject(_objectUnderCursor);
             if (icons.size() > 0)
             {
-                if (dynamic_cast<CursorDropdown*>(game->states()->back()) != NULL)
+                if (dynamic_cast<CursorDropdown*>(game->currentState()))
                 {
                     game->popState();
                 }
-                auto state = new CursorDropdown(std::move(icons), !_actionCursorButtonPressed);
+                auto state = std::make_shared<CursorDropdown>(std::move(icons), !_actionCursorButtonPressed);
                 state->setObject(_objectUnderCursor);
                 Game::getInstance()->pushState(state);
             }
@@ -914,7 +914,7 @@ void Location::displayMessage(const std::string& message)
 
 PlayerPanel* Location::playerPanelState()
 {
-    return _playerPanel;
+    return _playerPanel.get();
 }
 
 HexagonGrid* Location::hexagonGrid()

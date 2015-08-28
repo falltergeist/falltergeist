@@ -480,7 +480,6 @@ void CritterObject::think()
         {
             _moving = true;
 
-            delete _ui;
             _orientation = hexagon()->orientationTo(movementQueue()->back());
             auto animation = _generateMovementAnimation();
             animation->setActionFrame(_running ? 2 : 4);
@@ -540,8 +539,8 @@ void CritterObject::onMovementAnimationEnded(Event::Event* event)
         newAnimation->addEventHandler("actionFrame",    std::bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
         newAnimation->addEventHandler("animationEnded", std::bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
         newAnimation->play();
-        delete _ui;
-        _ui = animation = newAnimation;
+        _ui = newAnimation;
+        animation = newAnimation.get();
     }
 
     if (event->name() == "actionFrame")
@@ -575,7 +574,7 @@ void CritterObject::onMovementAnimationEnded(Event::Event* event)
     }
 }
 
-UI::Animation* CritterObject::_generateMovementAnimation()
+std::shared_ptr<UI::Animation> CritterObject::_generateMovementAnimation()
 {
     std::string frmString = _generateArmorFrmString();
 
@@ -588,13 +587,13 @@ UI::Animation* CritterObject::_generateMovementAnimation()
         frmString += _generateWeaponFrmString() + "b";
     }
 
-    return new UI::Animation("art/critters/" + frmString + ".frm", orientation());
+    return std::make_shared<UI::Animation>("art/critters/" + frmString + ".frm", orientation());
 }
 
-UI::Animation* CritterObject::setActionAnimation(const std::string& action)
+std::shared_ptr<UI::Animation> CritterObject::setActionAnimation(const std::string& action)
 {
-    UI::Animation* animation = new UI::Animation("art/critters/" + _generateArmorFrmString() + action + ".frm", orientation());
-    animation->addEventHandler("animationEnded", [animation](Event::Event* event)
+    auto animation = std::make_shared<UI::Animation>("art/critters/" + _generateArmorFrmString() + action + ".frm", orientation());
+    animation->addEventHandler("animationEnded", [animation](Event::Event*)
     {
         animation->setCurrentFrame(0);
     });
@@ -710,11 +709,11 @@ void CritterObject::stopMovement()
 {
     _movementQueue.clear();
     // @TODO: _ui probably needs to be always one type
-    if (auto queue = dynamic_cast<UI::AnimationQueue*>(_ui))
+    if (auto queue = dynamic_cast<UI::AnimationQueue*>(ui()))
     {
         queue->stop();
     }
-    else if (auto animation = dynamic_cast<UI::Animation*>(_ui))
+    else if (auto animation = dynamic_cast<UI::Animation*>(ui()))
     {
         animation->stop();
     }

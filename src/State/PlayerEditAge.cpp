@@ -57,34 +57,34 @@ void PlayerEditAge::init()
     auto backgroundX = (Game::getInstance()->renderer()->width() - 640)*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - 480)*0.5;
 
-    auto bg = new UI::Image("art/intrface/charwin.frm");
+    auto bg = std::make_shared<UI::Image>("art/intrface/charwin.frm");
     bg->setX(backgroundX+160);
     bg->setY(backgroundY+0);
 
-    auto ageBox = new UI::Image("art/intrface/agebox.frm");
+    auto ageBox = std::make_shared<UI::Image>("art/intrface/agebox.frm");
     ageBox->setX(backgroundX+168);
     ageBox->setY(backgroundY+10);
 
-    auto doneBox = new UI::Image("art/intrface/donebox.frm");
+    auto doneBox = std::make_shared<UI::Image>("art/intrface/donebox.frm");
     doneBox->setX(backgroundX+175);
     doneBox->setY(backgroundY+40);
 
-    auto decButton = new UI::ImageButton(UI::ImageButton::Type::LEFT_ARROW, backgroundX+178, backgroundY+14);
+    auto decButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::LEFT_ARROW, backgroundX+178, backgroundY+14);
     decButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDecButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    auto incButton = new UI::ImageButton(UI::ImageButton::Type::RIGHT_ARROW, backgroundX+262, backgroundY+14);
+    auto incButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::RIGHT_ARROW, backgroundX+262, backgroundY+14);
     incButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onIncButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    auto doneButton= new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+188, backgroundY+43);
+    auto doneButton= std::make_shared<UI::ImageButton>(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+188, backgroundY+43);
     doneButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), backgroundX+210, backgroundY+43);
+    auto doneLabel = std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 100), backgroundX+210, backgroundY+43);
 
     auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
 
     doneLabel->setFont(font3_b89c28ff);
 
-    _counter = new UI::BigCounter(backgroundX+215, backgroundY+13);
+    _counter = std::make_shared<UI::BigCounter>(backgroundX+215, backgroundY+13);
     _counter->setNumber(Game::getInstance()->player()->age());
 
     addUI(bg);

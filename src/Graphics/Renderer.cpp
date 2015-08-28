@@ -24,6 +24,7 @@
 #include <cmath>
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Event/State.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
@@ -36,6 +37,8 @@
 
 namespace Falltergeist
 {
+using Base::make_unique;
+
 namespace Graphics
 {
 
@@ -178,9 +181,7 @@ void Renderer::think()
             _fadeAlpha = (_fadeAlpha <= 0 ? 0 : 255);
             _fadeDone = true;
 
-            auto event = new Event::State("fadedone");
-            Game::getInstance()->states()->back()->emitEvent(event);
-            delete event;
+            Game::getInstance()->currentState()->emitEvent(make_unique<Event::State>("fadedone"));
             return;
         }
         _fadeTimer = ticks;

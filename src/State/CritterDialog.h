@@ -49,7 +49,7 @@ protected:
 
     std::vector<int> _functions;
     std::vector<int> _reactions;
-    std::vector<UI::TextArea*> _answers;
+    std::vector<std::shared_ptr<UI::TextArea>> _answers;
 
     void _selectAnswer(size_t i);
 

@@ -101,7 +101,7 @@ bool DoorSceneryObject::canWalkThru() const
 
 void DoorSceneryObject::onOpeningAnimationEnded(Event::Event* event)
 {
-    auto queue = (UI::AnimationQueue*)event->emitter();
+    auto queue = (UI::AnimationQueue*)event->eventTarget();
     setOpened(true);
     queue->removeEventHandlers("animationEnded");
     queue->stop();
@@ -110,7 +110,7 @@ void DoorSceneryObject::onOpeningAnimationEnded(Event::Event* event)
 
 void DoorSceneryObject::onClosingAnimationEnded(Event::Event* event)
 {
-    auto queue = (UI::AnimationQueue*)event->emitter();
+    auto queue = (UI::AnimationQueue*)event->eventTarget();
     setOpened(false);
     queue->removeEventHandlers("animationEnded");
     queue->stop();

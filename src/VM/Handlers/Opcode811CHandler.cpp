@@ -40,7 +40,7 @@ Opcode811CHandler::Opcode811CHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode811CHandler::_run()
 {
     Logger::debug("SCRIPT") << "[811C] [?] gsay_start" << std::endl;
-    auto dialog = new State::CritterDialog();
+    auto dialog = std::make_shared<State::CritterDialog>();
     Game::getInstance()->pushState(dialog);
 }
 

@@ -50,14 +50,13 @@ namespace Falltergeist
 namespace Game
 {
 
-Object::Object() : Event::Emitter()
+Object::Object() : Event::EventTarget(Game::getInstance()->eventDispatcher())
 {
 }
 
 Object::~Object()
 {
-    delete _ui;
-    delete _floatMessage;
+    //delete _floatMessage;
 }
 
 Object::Type Object::type() const
@@ -147,12 +146,11 @@ void Object::setScript(VM* script)
 
 UI::Base* Object::ui() const
 {
-    return _ui;
+    return _ui.get();
 }
 
-void Object::setUI(UI::Base* ui)
+void Object::setUI(std::shared_ptr<UI::Base> ui)
 {
-    delete _ui;
     _ui = ui;
     addUIEventHandlers();
 }
@@ -169,27 +167,25 @@ void Object::addUIEventHandlers()
     }
 }
 
-
 void Object::_generateUi()
 {
-    delete _ui; _ui = 0;
     auto frm = ResourceManager::getInstance()->frmFileType(FID());
     if (frm)
     {
         frm->rgba(ResourceManager::getInstance()->palFileType("color.pal")); // TODO: figure out, why not calling this brokes animated overlays
         if (frm->framesPerDirection() > 1)
         {
-            auto queue = new UI::AnimationQueue();
+            auto queue = std::make_shared<UI::AnimationQueue>();
             queue->animations()->push_back(new UI::Animation(ResourceManager::getInstance()->FIDtoFrmName(FID()), orientation()));
-            _ui = queue;
+            _ui = std::move(queue);
         }
         else if (frm->animatedPalette())
         {
-            _ui = new UI::AnimatedImage(frm, orientation());
+            _ui = std::make_shared<UI::AnimatedImage>(frm, orientation());
         }
         else
         {
-            _ui = new UI::Image(frm, orientation());
+            _ui = std::make_shared<UI::Image>(frm, orientation());
         }
     }
 
@@ -248,10 +244,10 @@ void Object::setHexagon(Hexagon* hexagon)
 
 UI::TextArea* Object::floatMessage() const
 {
-    return _floatMessage;
+    return _floatMessage.get();
 }
 
-void Object::setFloatMessage(UI::TextArea* floatMessage)
+void Object::setFloatMessage(std::shared_ptr<UI::TextArea> floatMessage)
 {
     _floatMessage = floatMessage;
 }
@@ -272,8 +268,7 @@ void Object::renderText()
     {
         if (SDL_GetTicks() - message->timestampCreated() >= 7000)
         {
-            delete floatMessage();
-            setFloatMessage(nullptr);
+            setFloatMessage(std::shared_ptr<UI::TextArea>());
         }
         else
         {

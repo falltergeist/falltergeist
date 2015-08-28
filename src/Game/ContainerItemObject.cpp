@@ -49,7 +49,7 @@ std::vector<ItemObject*>* ContainerItemObject::inventory()
 
 void ContainerItemObject::use_p_proc(CritterObject* usedBy)
 {
-    auto state = new State::Container();
+    auto state = std::make_shared<State::Container>();
     state->setObject(this);
     Game::getInstance()->pushState(state);
 }

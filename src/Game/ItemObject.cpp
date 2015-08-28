@@ -42,9 +42,6 @@ ItemObject::ItemObject() : Object()
 
 ItemObject::~ItemObject()
 {
-    delete _inventoryDragUi;
-    delete _inventorySlotUi;
-    delete _inventoryUi;
 }
 
 unsigned int ItemObject::amount() const
@@ -79,7 +76,7 @@ void ItemObject::setInventoryFID(int value)
 
 UI::Image* ItemObject::inventoryDragUi() const
 {
-    return _inventoryDragUi;
+    return _inventoryDragUi.get();
 }
 
 void ItemObject::setVolume(unsigned int volume)
@@ -94,12 +91,12 @@ unsigned int ItemObject::volume() const
 
 UI::Image* ItemObject::inventoryUi() const
 {
-    return _inventoryUi;
+    return _inventoryUi.get();
 }
 
 UI::Image* ItemObject::inventorySlotUi() const
 {
-    return _inventorySlotUi;
+    return _inventorySlotUi.get();
 }
 
 void ItemObject::_generateUi()
@@ -109,16 +106,16 @@ void ItemObject::_generateUi()
     if (inventoryFID() == -1) return;
 
     // Big unscaled image of item
-    _inventoryDragUi = new UI::Image(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
+    _inventoryDragUi = std::make_shared<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
 
     // Small scaled image
     auto inventoryUiTexture = _inventoryDragUi->texture()->fitTo(57, 40);
-    _inventoryUi = new UI::Image(inventoryUiTexture->width(),inventoryUiTexture->height());
+    _inventoryUi = std::make_shared<UI::Image>(inventoryUiTexture->width(),inventoryUiTexture->height());
     _inventoryUi->setTexture(inventoryUiTexture);
 
     // Medium scaled image
     auto inventorySlotUiTexture = _inventoryDragUi->texture()->fitTo(88, 58);
-    _inventorySlotUi = new UI::Image(inventorySlotUiTexture->width(),inventorySlotUiTexture->height());
+    _inventorySlotUi = std::make_shared<UI::Image>(inventorySlotUiTexture->width(),inventorySlotUiTexture->height());
     _inventorySlotUi->setTexture(inventorySlotUiTexture);
 }
 

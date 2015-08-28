@@ -59,38 +59,38 @@ void PipBoy::init()
     Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
 
     // Background
-    auto background = new UI::Image("art/intrface/pip.frm");
+    auto background = std::make_shared<UI::Image>("art/intrface/pip.frm");
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
     background->setX(backgroundX);
     background->setY(backgroundY);
 
     // Buttons
-    auto alarmButton = new UI::ImageButton(UI::ImageButton::Type::PIPBOY_ALARM_BUTTON, backgroundX+124, backgroundY+13);
-    auto statusButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+340);
-    auto automapsButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+394);
-    auto archivesButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+423);
-    auto closeButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+448);
+    auto alarmButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::PIPBOY_ALARM_BUTTON, backgroundX+124, backgroundY+13);
+    auto statusButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+340);
+    auto automapsButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+394);
+    auto archivesButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+423);
+    auto closeButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+448);
     closeButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onCloseButtonClick(dynamic_cast<Event::Mouse*>(event)); });
     // Date and time
 
     // Date
-    auto day = new UI::SmallCounter(backgroundX+21, backgroundY+17);
+    auto day = std::make_shared<UI::SmallCounter>(backgroundX+21, backgroundY+17);
     day->setNumber(Game::getInstance()->gameTime()->day());
     day->setColor(UI::SmallCounter::Color::WHITE);
     day->setType(UI::SmallCounter::Type::UNSIGNED);
     day->setLength(2);
 
-    auto month = new UI::MonthCounter(static_cast<UI::MonthCounter::Month>(Game::getInstance()->gameTime()->month()), backgroundX+46, backgroundY+18);
+    auto month = std::make_shared<UI::MonthCounter>(static_cast<UI::MonthCounter::Month>(Game::getInstance()->gameTime()->month()), backgroundX+46, backgroundY+18);
 
-    auto year = new UI::SmallCounter(backgroundX+84, backgroundY+17);
+    auto year = std::make_shared<UI::SmallCounter>(backgroundX+84, backgroundY+17);
     year->setNumber(Game::getInstance()->gameTime()->year());
     year->setColor(UI::SmallCounter::Color::WHITE);
     year->setType(UI::SmallCounter::Type::UNSIGNED);
     year->setLength(4);
 
     // Time
-    auto time = new UI::SmallCounter(backgroundX+160, backgroundY+17);
+    auto time = std::make_shared<UI::SmallCounter>(backgroundX+160, backgroundY+17);
     time->setNumber((Game::getInstance()->gameTime()->hours() * 100) + Game::getInstance()->gameTime()->minutes());
     time->setColor(UI::SmallCounter::Color::WHITE);
     time->setType(UI::SmallCounter::Type::UNSIGNED);

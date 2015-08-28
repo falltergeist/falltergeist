@@ -27,7 +27,7 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Event/Emitter.h"
+#include "../Event/EventTarget.h"
 
 // Third party includes
 
@@ -78,7 +78,7 @@ public:
 };
 
 
-class Object : public Event::Emitter
+class Object : public Event::EventTarget
 {
 public:
     // Object type as defined in prototype
@@ -110,7 +110,7 @@ public:
     // whether this object is transparent in terms of walking through it by a critter
     virtual bool canWalkThru() const;
     virtual void setCanWalkThru(bool value);
-    
+
     // whether this object is transparent to the light
     virtual bool canLightThru() const;
     virtual void setCanLightThru(bool value);
@@ -118,7 +118,7 @@ public:
     // whether this object is transparent to projectiles
     virtual bool canShootThru() const;
     virtual void setCanShootThru(bool value);
-    
+
     virtual bool wallTransEnd() const;
     virtual void setWallTransEnd(bool value);
 
@@ -161,7 +161,7 @@ public:
 
     // ActiveUI used to display object on screen and capture mouse events
     UI::Base* ui() const;
-    void setUI(UI::Base* ui);
+    void setUI(std::shared_ptr<UI::Base> ui);
 
     // Hexagon of object current position
     Hexagon* hexagon() const;
@@ -169,7 +169,7 @@ public:
 
     // TextArea, currently floating above the object
     UI::TextArea* floatMessage() const;
-    void setFloatMessage(UI::TextArea* floatMessage);
+    void setFloatMessage(std::shared_ptr<UI::TextArea> floatMessage);
 
     // is object currently being rendered
     bool inRender() const;
@@ -231,11 +231,11 @@ protected:
     std::string _name;
     std::string _description;
     VM* _script = nullptr;
-    UI::Base* _ui = nullptr;
+    std::shared_ptr<UI::Base> _ui;
     Hexagon* _hexagon = nullptr;
     virtual void _generateUi();
     void addUIEventHandlers();
-    UI::TextArea* _floatMessage = nullptr;
+    std::shared_ptr<UI::TextArea> _floatMessage;
     bool _inRender = false;
     Trans _trans = Trans::DEFAULT;
     Orientation _lightOrientation;

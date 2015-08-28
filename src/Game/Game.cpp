@@ -42,7 +42,7 @@
 #include "../UI/FpsCounter.h"
 #include "../UI/TextArea.h"
 
-// Third patry includes
+// Third party includes
 #include <SDL_image.h>
 
 namespace Falltergeist
@@ -97,11 +97,11 @@ void Game::init(std::unique_ptr<Settings> settings)
     version += " " + std::to_string(renderer()->width()) + "x" + std::to_string(renderer()->height());
     version += " " + renderer()->name();
 
-    _falltergeistVersion = new UI::TextArea(version, 3, renderer()->height() - 10);
-    _mousePosition = new UI::TextArea("", renderer()->width() - 55, 14);
+    _falltergeistVersion = std::make_shared<UI::TextArea>(version, 3, renderer()->height() - 10);
+    _mousePosition = std::make_shared<UI::TextArea>("", renderer()->width() - 55, 14);
     _animatedPalette = new Graphics::AnimatedPalette();
     _gameTime = new Time();
-    _currentTime = new UI::TextArea(renderer()->width() - 150, renderer()->height() - 10);
+    _currentTime = std::make_shared<UI::TextArea>(renderer()->width() - 150, renderer()->height() - 10);
 
     IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 }
@@ -115,18 +115,15 @@ void Game::shutdown()
 {
     delete _mouse;
     delete _fpsCounter;
-    delete _mousePosition;
-    delete _falltergeistVersion;
     _mixer.reset();
     ResourceManager::getInstance()->shutdown();
     while (!_states.empty()) popState();
     _settings.reset();
     delete _gameTime;
-    delete _currentTime;
     delete _renderer;
 }
 
-void Game::pushState(State::State* state)
+void Game::pushState(std::shared_ptr<State::State> state)
 {
     _states.push_back(state);
     if (!state->initialized()) state->init();
@@ -140,12 +137,10 @@ void Game::popState()
     _states.pop_back();
     _statesForDelete.push_back(state);
 
-    auto event = new Event::State("deactivate");
-    state->emitEvent(event);
-    delete event;
+    state->emitEvent(make_unique<Event::State>("deactivate"));
 }
 
-void Game::setState(State::State* state)
+void Game::setState(std::shared_ptr<State::State> state)
 {
     while (!_states.empty()) popState();
     pushState(state);
@@ -160,10 +155,7 @@ void Game::run()
         think();
         render();
         SDL_Delay(1);
-        for (auto state : _statesForDelete)
-        {
-            delete state;
-        }
+
         _statesForDelete.clear();
     }
     Logger::info("GAME") << "Stopping main loop" << std::endl;
@@ -193,7 +185,7 @@ State::Location* Game::locationState()
 {
     for (auto state : _states)
     {
-        auto location = dynamic_cast<State::Location*>(state);
+        auto location = dynamic_cast<State::Location*>(state.get());
         if (location)
         {
             return location;
@@ -232,12 +224,12 @@ void Game::_initGVARS()
     }
 }
 
-std::vector<State::State*>* Game::states()
+const std::vector<std::shared_ptr<State::State>>& Game::states() const
 {
-    return &_states;
+    return _states;
 }
 
-std::vector<State::State*>* Game::statesForRender()
+const std::vector<std::shared_ptr<State::State>>& Game::statesForRender()
 {
     // we must render all states from last fullscreen state to the top of stack
     _statesForRender.clear();
@@ -252,10 +244,10 @@ std::vector<State::State*>* Game::statesForRender()
     {
         if (*it) _statesForRender.push_back(*it);
     }
-    return &_statesForRender;
+    return _statesForRender;
 }
 
-std::vector<State::State*>* Game::statesForThinkAndHandle()
+const std::vector<std::shared_ptr<State::State>>& Game::statesForThinkAndHandle()
 {
     // we must handle all states from top to bottom of stack
     _statesForThinkAndHandle.clear();
@@ -267,10 +259,8 @@ std::vector<State::State*>* Game::statesForThinkAndHandle()
         auto state = *it;
         if (!state->active())
         {
-            auto event = new Event::State("activate");
-            state->emitEvent(event);
+            state->emitEvent(make_unique<Event::State>("activate"));
             state->setActive(true);
-            delete event;
         }
         _statesForThinkAndHandle.push_back(state);
         if (state->modal() || state->fullscreen())
@@ -285,14 +275,12 @@ std::vector<State::State*>* Game::statesForThinkAndHandle()
         auto state = *it;
         if (state->active())
         {
-            auto event = new Event::State("deactivate");
-            state->emitEvent(event);
+            state->emitEvent(make_unique<Event::State>("deactivate"));
             state->setActive(false);
-            delete event;
         }
     }
 
-    return &_statesForThinkAndHandle;
+    return _statesForThinkAndHandle;
 }
 
 Graphics::Renderer* Game::renderer()
@@ -317,67 +305,71 @@ void Game::handle()
         }
         else
         {
-            Event::Mouse* mouseEvent = nullptr;
-            Event::Keyboard* keyboardEvent = nullptr;
+            std::unique_ptr<Event::Event> event;
             switch (_event.type)
             {
                 case SDL_MOUSEBUTTONDOWN:
                 case SDL_MOUSEBUTTONUP:
                 {
                     SDL_Keymod mods = SDL_GetModState();
-                    mouseEvent = new Event::Mouse((_event.type == SDL_MOUSEBUTTONDOWN) ? "mousedown" : "mouseup");
+                    auto mouseEvent = make_unique<Event::Mouse>((_event.type == SDL_MOUSEBUTTONDOWN) ? "mousedown" : "mouseup");
                     mouseEvent->setX(_event.button.x);
                     mouseEvent->setY(_event.button.y);
                     mouseEvent->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
                     mouseEvent->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
                     mouseEvent->setShiftPressed(mods & KMOD_SHIFT);
                     mouseEvent->setControlPressed(mods & KMOD_CTRL);
-                    for (auto state : *statesForThinkAndHandle()) state->handle(mouseEvent);
+                    event = std::move(mouseEvent);
                     break;
                 }
                 case SDL_MOUSEMOTION:
                 {
-                    mouseEvent = new Event::Mouse("mousemove");
+                    auto mouseEvent = make_unique<Event::Mouse>("mousemove");
                     mouseEvent->setX(_event.motion.x);
                     mouseEvent->setY(_event.motion.y);
                     mouseEvent->setXOffset(_event.motion.xrel);
                     mouseEvent->setYOffset(_event.motion.yrel);
-                    for (auto state : *statesForThinkAndHandle()) state->handle(mouseEvent);
+                    event = std::move(mouseEvent);
                     break;
                 }
                 case SDL_KEYDOWN:
                 {
-                    keyboardEvent = new Event::Keyboard("keydown");
+                    auto keyboardEvent = make_unique<Event::Keyboard>("keydown");
                     keyboardEvent->setKeyCode(_event.key.keysym.sym);
                     keyboardEvent->setAltPressed(_event.key.keysym.mod & KMOD_ALT);
                     keyboardEvent->setShiftPressed(_event.key.keysym.mod & KMOD_SHIFT);
                     keyboardEvent->setControlPressed(_event.key.keysym.mod & KMOD_CTRL);
-                    for (auto state : *statesForThinkAndHandle()) state->handle(keyboardEvent);
+                    event = std::move(keyboardEvent);
                     break;
                 }
                 case SDL_KEYUP:
                 {
-                    keyboardEvent = new Event::Keyboard("keyup");
+                    auto keyboardEvent = make_unique<Event::Keyboard>("keyup");
                     keyboardEvent->setKeyCode(_event.key.keysym.sym);
                     keyboardEvent->setAltPressed(_event.key.keysym.mod & KMOD_ALT);
                     keyboardEvent->setShiftPressed(_event.key.keysym.mod & KMOD_SHIFT);
                     keyboardEvent->setControlPressed(_event.key.keysym.mod & KMOD_CTRL);;
-                    for (auto state : *statesForThinkAndHandle()) state->handle(keyboardEvent);
 
                     if (keyboardEvent->keyCode() == SDLK_F12)
                     {
-                        Graphics::Texture* texture = renderer()->screenshot();
-                        std::string name = std::to_string(SDL_GetTicks()) +  ".bmp";
+                        const std::unique_ptr<Graphics::Texture> texture(renderer()->screenshot());
+                        const std::string name(std::to_string(SDL_GetTicks()) +  ".bmp");
                         SDL_SaveBMP(texture->sdlSurface(), name.c_str());
-                        delete texture;
-                        Logger::info("GAME") << "Screenshot saved to " + name << std::endl;
+                        Logger::info("GAME") << "Screenshot saved to " << name << std::endl;
 
                     }
+                    event = std::move(keyboardEvent);
                     break;
                 }
             }
-            delete keyboardEvent;
-            delete mouseEvent;
+
+            if (event)
+            {
+                for (auto state : statesForThinkAndHandle())
+                    state->handle(event.get());
+            }
+
+            _eventDispatcher.processScheduledEvents();
         }
     }
 }
@@ -401,7 +393,7 @@ void Game::think()
         return;
     }
 
-    for (auto state : *statesForThinkAndHandle())
+    for (auto state : statesForThinkAndHandle())
     {
         state->think();
     }
@@ -411,7 +403,7 @@ void Game::render()
 {
     renderer()->beginFrame();
 
-    for (auto state : *statesForRender())
+    for (auto state : statesForRender())
     {
         state->render();
     }
@@ -446,6 +438,17 @@ Time* Game::gameTime()
 Audio::Mixer* Game::mixer()
 {
     return _mixer.get();
+}
+
+Event::Dispatcher* Game::eventDispatcher()
+{
+    return &_eventDispatcher;
+}
+
+State::State* Game::currentState() const
+{
+    assert(!states().empty());
+    return states().back().get();
 }
 
 }

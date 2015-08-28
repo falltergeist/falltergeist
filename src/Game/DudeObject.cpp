@@ -267,9 +267,9 @@ void DudeObject::_generateUi()
 {
     CritterObject::_generateUi();
     return;
-    delete _ui; _ui = 0;
 
-    auto queue = new UI::AnimationQueue();
+#if 0
+    auto queue = std::make_shared<UI::AnimationQueue>();
     auto animation = _generateMovementAnimation();
     queue->animations()->push_back(animation);
     queue->setRepeat(true);
@@ -277,6 +277,7 @@ void DudeObject::_generateUi()
     _ui = queue;
 
     addUIEventHandlers();
+#endif
 }
 
 }

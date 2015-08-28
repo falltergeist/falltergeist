@@ -135,12 +135,11 @@ void ItemsList::onMouseDragStop(Event::Mouse* event)
     _draggedItem->setXOffset(0);
     _draggedItem->setYOffset(0);
     _draggedItem->setType(_type);
-    auto itemevent = new Event::Mouse("itemdragstop");
+    std::unique_ptr<Event::Mouse> itemevent(new Event::Mouse("itemdragstop"));
     itemevent->setX(event->x());
     itemevent->setY(event->y());
-    itemevent->setEmitter(this);
-    emitEvent(itemevent);
-    delete itemevent;
+    itemevent->setEventTarget(this);
+    emitEvent(std::move(itemevent));
     _draggedItem = 0;
     Logger::critical() << "mousedragstop" << std::endl;
 }
@@ -158,7 +157,7 @@ void ItemsList::onItemDragStop(Event::Mouse* event)
     if (x < 0 || x > _slotWidth) return;
     if (y < 0 || y > _slotHeight*_slotsNumber) return;
 
-    if (auto itemsList = dynamic_cast<ItemsList*>(event->emitter()))
+    if (auto itemsList = dynamic_cast<ItemsList*>(event->eventTarget()))
     {
         // @todo create addItem method
         this->addItem(itemsList->draggedItem(), 1);
@@ -167,7 +166,7 @@ void ItemsList::onItemDragStop(Event::Mouse* event)
         itemsList->update();
     }
 
-    if (auto inventoryItem = dynamic_cast<UI::InventoryItem*>(event->emitter()))
+    if (auto inventoryItem = dynamic_cast<UI::InventoryItem*>(event->eventTarget()))
     {
         // @todo create addItem method
         this->addItem(inventoryItem, 1);

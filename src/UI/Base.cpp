@@ -24,6 +24,7 @@
 #include <algorithm>
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Game/Game.h"
 #include "../Game/DudeObject.h"
 #include "../Graphics/Renderer.h"
@@ -36,10 +37,12 @@
 
 namespace Falltergeist
 {
+using Base::make_unique;
+
 namespace UI
 {
 
-Base::Base(int x, int y) : Event::Emitter()
+Base::Base(int x, int y) : Event::EventTarget(Game::getInstance()->eventDispatcher())
 {
     _x = x;
     _y = y;
@@ -200,28 +203,23 @@ void Base::handle(Event::Event* event)
         int x = mouseEvent->x() - this->x();
         int y = mouseEvent->y() - this->y();
 
-        auto newEvent = new Event::Mouse(mouseEvent);
-
         if (this->pixel(x, y))
         {
             if (mouseEvent->name() == "mousemove")
             {
                 if (_leftButtonPressed)
                 {
-                    newEvent->setName( _drag ? "mousedrag" : "mousedragstart");
                     if (!_drag) _drag = true;
-                    emitEvent(newEvent);
+                    emitEvent(make_unique<Event::Mouse>(mouseEvent, _drag ? "mousedrag" : "mousedragstart"));
                 }
                 if (!_hovered)
                 {
                     _hovered = true;
-                    newEvent->setName("mousein");
-                    emitEvent(newEvent);
+                    emitEvent(make_unique<Event::Mouse>(mouseEvent, "mousein"));
                 }
                 else
                 {
-                    newEvent->setName("mousemove");
-                    emitEvent(newEvent);
+                    emitEvent(make_unique<Event::Mouse>(mouseEvent, "mousemove"));
                 }
             }
             else if (mouseEvent->name() == "mousedown")
@@ -229,43 +227,36 @@ void Base::handle(Event::Event* event)
                 if (mouseEvent->leftButton())
                 {
                     _leftButtonPressed = true;
-                    newEvent->setName("mouseleftdown");
-                    emitEvent(newEvent);
+                    emitEvent(make_unique<Event::Mouse>(mouseEvent, "mouseleftdown"));
                 }
                 else if (mouseEvent->rightButton())
                 {
                     _rightButtonPressed = true;
-                    newEvent->setName("mouserightdown");
-                    emitEvent(newEvent);
+                    emitEvent(make_unique<Event::Mouse>(mouseEvent, "mouserightdown"));
                 }
             }
             else if (mouseEvent->name() == "mouseup")
             {
                 if (mouseEvent->leftButton())
                 {
-                    newEvent->setName("mouseleftup");
-                    emitEvent(newEvent);
+                    emitEvent(make_unique<Event::Mouse>(mouseEvent, "mouseleftup"));
                     if (_leftButtonPressed)
                     {
                         if (_drag)
                         {
                             _drag = false;
-                            newEvent->setName("mousedragstop");
-                            emitEvent(newEvent);
+                            emitEvent(make_unique<Event::Mouse>(mouseEvent, "mousedragstop"));
                         }
-                        newEvent->setName("mouseleftclick");
-                        emitEvent(newEvent);
+                        emitEvent(make_unique<Event::Mouse>(mouseEvent, "mouseleftclick"));
                     }
                     _leftButtonPressed = false;
                 }
                 else if (mouseEvent->rightButton())
                 {
-                    newEvent->setName("mouserightup");
-                    emitEvent(newEvent);
+                    emitEvent(make_unique<Event::Mouse>(mouseEvent, "mouserightup"));
                     if (_rightButtonPressed)
                     {
-                        newEvent->setName("mouserightclick");
-                        emitEvent(newEvent);
+                        emitEvent(make_unique<Event::Mouse>(mouseEvent, "mouserightclick"));
                     }
                     _rightButtonPressed = false;
                 }
@@ -277,14 +268,12 @@ void Base::handle(Event::Event* event)
             {
                 if (_drag)
                 {
-                    newEvent->setName("mousedrag");
-                    emitEvent(newEvent);
+                    emitEvent(make_unique<Event::Mouse>(mouseEvent, "mousedrag"));
                 }
                 if (_hovered)
                 {
                     _hovered = false;
-                    newEvent->setName("mouseout");
-                    emitEvent(newEvent);
+                    emitEvent(make_unique<Event::Mouse>(mouseEvent, "mouseout"));
                 }
             }
             else if (mouseEvent->name() == "mouseup")
@@ -296,8 +285,7 @@ void Base::handle(Event::Event* event)
                         if (_drag)
                         {
                             _drag = false;
-                            newEvent->setName("mousedragstop");
-                            emitEvent(newEvent);
+                            emitEvent(make_unique<Event::Mouse>(mouseEvent, "mousedragstop"));
                         }
                         _leftButtonPressed = false;
                     }
@@ -311,17 +299,22 @@ void Base::handle(Event::Event* event)
                 }
             }
         }
+
+#if 0
+        // TODO(dreamer.dead): Find out how to set |handled| flag properly.
+        // After changing event emitting to async model it's hard to say
+        // whether event was handled or not.
         if (newEvent->handled())
         {
             event->setHandled(true);
         }
-        delete newEvent;
+#endif
         return;
     }
 
     if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
     {
-        emitEvent(keyboardEvent);
+        emitEvent(make_unique<Event::Keyboard>(*keyboardEvent));
     }
 }
 

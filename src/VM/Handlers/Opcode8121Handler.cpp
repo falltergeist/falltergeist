@@ -57,7 +57,7 @@ void Opcode8121Handler::_run()
     }
     auto iq = _vm->dataStack()->popInteger();
     auto game = Game::getInstance();
-    auto dialog = dynamic_cast<State::CritterDialog*>(game->states()->back());
+    auto dialog = game->currentStateAs<State::CritterDialog>();
     if (iq >= 0)
     {
         if (game->player()->stat(STAT::INTELLIGENCE) >= iq)

@@ -72,66 +72,66 @@ void MainMenu::init()
     setX((renderer->width()  - 640)*0.5);
     setY((renderer->height() - 480)*0.5);
 
-    addUI("background", new UI::Image("art/intrface/mainmenu.frm"));
+    addUI("background", std::make_shared<UI::Image>("art/intrface/mainmenu.frm"));
 
     // intro button
-    auto introButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19));
+    auto introButton = addUI(std::make_shared<UI::ImageButton>(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19));
     introButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onIntroButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     // new game button
-    auto newGameButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41));
+    auto newGameButton = addUI(std::make_shared<UI::ImageButton>(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41));
     newGameButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onNewGameButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     // load game button
-    auto loadGameButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41*2));
+    auto loadGameButton = addUI(std::make_shared<UI::ImageButton>(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41*2));
     loadGameButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onLoadGameButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     // settings button
-    auto settingsButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41*3));
+    auto settingsButton = addUI(std::make_shared<UI::ImageButton>(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41*3));
     settingsButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onSettingsButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     // credits button
-    auto creditsButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41*4));
+    auto creditsButton = addUI(std::make_shared<UI::ImageButton>(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41*4));
     creditsButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onCreditsButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     // exit button
-    auto exitButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41*5));
+    auto exitButton = addUI(std::make_shared<UI::ImageButton>(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41*5));
     exitButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onExitButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     auto font4 = ResourceManager::getInstance()->font("font4.aaf", 0xb89c28ff);
 
     // "Intro" label
-    auto introButtonLabel = new UI::TextArea(translate("intro", "mainmenu"), 50, 20);
+    auto introButtonLabel = std::make_shared<UI::TextArea>(translate("intro", "mainmenu"), 50, 20);
     introButtonLabel->setFont(font4);
     introButtonLabel->setWidth(150);
     introButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // "New Game" label
-    auto newGameButtonLabel = new UI::TextArea(translate("new_game", "mainmenu"), 50, 20 + 41);
+    auto newGameButtonLabel = std::make_shared<UI::TextArea>(translate("new_game", "mainmenu"), 50, 20 + 41);
     newGameButtonLabel->setFont(font4);
     newGameButtonLabel->setWidth(150);
     newGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // "Load Game" label
-    auto loadGameButtonLabel = new UI::TextArea(translate("load_game", "mainmenu"), 50, 20 + 41*2);
+    auto loadGameButtonLabel = std::make_shared<UI::TextArea>(translate("load_game", "mainmenu"), 50, 20 + 41*2);
     loadGameButtonLabel->setFont(font4);
     loadGameButtonLabel->setWidth(150);
     loadGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // "Options" label
-    auto optionsButtonLabel = new UI::TextArea(translate("options", "mainmenu"), 50, 20 + 41*3);
+    auto optionsButtonLabel = std::make_shared<UI::TextArea>(translate("options", "mainmenu"), 50, 20 + 41*3);
     optionsButtonLabel->setFont(font4);
     optionsButtonLabel->setWidth(150);
     optionsButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // "Credits" label
-    auto creditsButtonLabel = new UI::TextArea(translate("credits", "mainmenu"), 50, 20 + 41*4);
+    auto creditsButtonLabel = std::make_shared<UI::TextArea>(translate("credits", "mainmenu"), 50, 20 + 41*4);
     creditsButtonLabel->setFont(font4);
     creditsButtonLabel->setWidth(150);
     creditsButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // "Exit" label
-    auto exitButtonLabel = new UI::TextArea(translate("exit", "mainmenu"), 50, 20 + 41*5);
+    auto exitButtonLabel = std::make_shared<UI::TextArea>(translate("exit", "mainmenu"), 50, 20 + 41*5);
     exitButtonLabel->setFont(font4);
     exitButtonLabel->setWidth(150);
     exitButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
@@ -168,7 +168,7 @@ void MainMenu::doLoadGame()
 
 void MainMenu::doSettings()
 {
-    Game::getInstance()->pushState(new SettingsMenu());
+    Game::getInstance()->pushState(std::make_shared<SettingsMenu>());
 }
 
 void MainMenu::doIntro()
@@ -205,7 +205,7 @@ void MainMenu::onNewGameButtonClick(Event::Mouse* event)
 void MainMenu::onNewGameStart(Event::State* event)
 {
     removeEventHandlers("fadedone");
-    Game::getInstance()->pushState(new NewGame());
+    Game::getInstance()->pushState(std::make_shared<NewGame>());
 }
 
 void MainMenu::onLoadGameButtonClick(Event::Mouse* event)
@@ -216,7 +216,7 @@ void MainMenu::onLoadGameButtonClick(Event::Mouse* event)
 void MainMenu::onLoadGameStart(Event::State* event)
 {
     removeEventHandlers("fadedone");
-    Game::getInstance()->pushState(new LoadGame());
+    Game::getInstance()->pushState(std::make_shared<LoadGame>());
 }
 
 void MainMenu::onSettingsButtonClick(Event::Mouse* event)
@@ -232,8 +232,8 @@ void MainMenu::onIntroButtonClick(Event::Mouse* event)
 void MainMenu::onIntroStart(Event::State* event)
 {
     removeEventHandlers("fadedone");
-    Game::getInstance()->pushState(new Movie(17));
-    Game::getInstance()->pushState(new Movie(1));
+    Game::getInstance()->pushState(std::make_shared<Movie>(17));
+    Game::getInstance()->pushState(std::make_shared<Movie>(1));
 }
 
 void MainMenu::onCreditsButtonClick(Event::Mouse* event)
@@ -244,7 +244,7 @@ void MainMenu::onCreditsButtonClick(Event::Mouse* event)
 void MainMenu::onCreditsStart(Event::State* event)
 {
     removeEventHandlers("fadedone");
-    Game::getInstance()->pushState(new Credits());
+    Game::getInstance()->pushState(std::make_shared<Credits>());
 }
 
 void MainMenu::onKeyDown(Event::Keyboard* event)

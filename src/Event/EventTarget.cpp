@@ -18,12 +18,13 @@
  */
 
 // Related headers
-#include "../Event/Emitter.h"
+#include "../Event/EventTarget.h"
 
 // C++ standard includes
 
 // Falltergeist includes
 #include "../Event/Event.h"
+#include "../Event/Dispatcher.h"
 
 // Third party includes
 
@@ -32,42 +33,47 @@ namespace Falltergeist
 namespace Event
 {
 
-Emitter::Emitter()
+EventTarget::EventTarget(Dispatcher* dispatcher) : _eventDispatcher(dispatcher)
 {
 }
 
-Emitter::~Emitter()
+EventTarget::~EventTarget()
 {
+    _eventDispatcher->removeEventHandler(this);
 }
 
-void Emitter::addEventHandler(const std::string& eventName, std::function<void(Event*)> handler)
+void EventTarget::addEventHandler(const std::string& eventName, EventTarget::Handler handler)
 {
-    if (_eventHandlers.find(eventName) == _eventHandlers.end())
-    {
-        std::vector<std::function<void(Event*)>> vector;
-        _eventHandlers.insert(std::make_pair(eventName, vector));
-    }
-
-    _eventHandlers.at(eventName).push_back(handler);
+    _eventHandlers[eventName].push_back(handler);
 }
 
-void Emitter::emitEvent(Event* event)
+void EventTarget::emitEvent(std::unique_ptr<Event> event)
 {
     if (_eventHandlers.find(event->name()) == _eventHandlers.end()) return;
-    event->setEmitter(this);
-    for (auto eventHandler : _eventHandlers.at(event->name()))
+
+    _eventDispatcher->postEventHandler(shared_from_this(), std::move(event));
+}
+
+void EventTarget::processEvent(std::unique_ptr<Event> event)
+{
+    const auto it = _eventHandlers.find(event->name());
+    if (it == _eventHandlers.end()) return;
+
+    event->setEventTarget(this);
+    for (auto eventHandler : it->second)
     {
         if (event->handled()) return;
-        eventHandler(event);
+        eventHandler(event.get());
     }
 }
 
-void Emitter::removeEventHandlers(const std::string& eventName)
+void EventTarget::removeEventHandlers(const std::string& eventName)
 {
-    if (_eventHandlers.find(eventName) == _eventHandlers.end()) return;
+    const auto it = _eventHandlers.find(eventName);
+    if (it == _eventHandlers.end()) return;
 
-    _eventHandlers.at(eventName).clear();
-    _eventHandlers.erase(eventName);
+    it->second.clear();
+    _eventHandlers.erase(it);
 }
 
 }

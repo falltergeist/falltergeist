@@ -61,32 +61,32 @@ void Skilldex::init()
 
     // original coordinates = 455x6
     // background size = 185x368
-    auto background = new UI::Image("art/intrface/skldxbox.frm");
+    auto background = std::make_shared<UI::Image>("art/intrface/skldxbox.frm");
     auto backgroundX = (Game::getInstance()->renderer()->width() + 640 - 2*background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - 480 + 6);
     background->setX(backgroundX);
     background->setY(backgroundY);
 
     // buttons
-    auto sneakButton    = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44);
-    auto lockpickButton = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36);
-    auto stealButton    = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*2);
-    auto trapsButton    = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*3);
-    auto firstAidButton = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*4);
-    auto doctorButton   = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*5);
-    auto scienceButton  = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*6);
-    auto repairButton   = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*7);
-    auto cancelButton   = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+48, backgroundY+338);
+    auto sneakButton    = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44);
+    auto lockpickButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36);
+    auto stealButton    = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*2);
+    auto trapsButton    = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*3);
+    auto firstAidButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*4);
+    auto doctorButton   = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*5);
+    auto scienceButton  = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*6);
+    auto repairButton   = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*7);
+    auto cancelButton   = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+48, backgroundY+338);
 
     // counters
-    auto sneakCounter    = new UI::BigCounter(backgroundX + 111, backgroundY + 48, 3);
-    auto lockpickCounter = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36, 3);
-    auto stealCounter    = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 2, 3);
-    auto trapsCounter    = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 3, 3);
-    auto firstAidCounter = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 4, 3);
-    auto doctorCounter   = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 5, 3);
-    auto scienceCounter  = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 6, 3);
-    auto repairCounter   = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 7, 3);
+    auto sneakCounter    = std::make_shared<UI::BigCounter>(backgroundX + 111, backgroundY + 48, 3);
+    auto lockpickCounter = std::make_shared<UI::BigCounter>(backgroundX + 111, backgroundY + 48 + 36, 3);
+    auto stealCounter    = std::make_shared<UI::BigCounter>(backgroundX + 111, backgroundY + 48 + 36 * 2, 3);
+    auto trapsCounter    = std::make_shared<UI::BigCounter>(backgroundX + 111, backgroundY + 48 + 36 * 3, 3);
+    auto firstAidCounter = std::make_shared<UI::BigCounter>(backgroundX + 111, backgroundY + 48 + 36 * 4, 3);
+    auto doctorCounter   = std::make_shared<UI::BigCounter>(backgroundX + 111, backgroundY + 48 + 36 * 5, 3);
+    auto scienceCounter  = std::make_shared<UI::BigCounter>(backgroundX + 111, backgroundY + 48 + 36 * 6, 3);
+    auto repairCounter   = std::make_shared<UI::BigCounter>(backgroundX + 111, backgroundY + 48 + 36 * 7, 3);
 
     //set counters with player's current skill values
     sneakCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::SNEAK));
@@ -105,61 +105,61 @@ void Skilldex::init()
     auto font = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
 
     // label: skilldex (100)
-    auto skilldexLabel = new UI::TextArea(_t(MSG_SKILLDEX, 100), backgroundX+56, backgroundY+14);
+    auto skilldexLabel = std::make_shared<UI::TextArea>(_t(MSG_SKILLDEX, 100), backgroundX+56, backgroundY+14);
     skilldexLabel->setFont(font);
     skilldexLabel->setWidth(76);
     skilldexLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: sneak (102)
-    auto sneakLabel = new UI::TextArea(_t(MSG_SKILLDEX, 102), backgroundX+17, backgroundY+52);
+    auto sneakLabel = std::make_shared<UI::TextArea>(_t(MSG_SKILLDEX, 102), backgroundX+17, backgroundY+52);
     sneakLabel->setFont(font);
     sneakLabel->setWidth(84);
     sneakLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: lockpick (103)
-    auto lockpickLabel = new UI::TextArea(_t(MSG_SKILLDEX, 103), backgroundX+17, backgroundY+52+36);
+    auto lockpickLabel = std::make_shared<UI::TextArea>(_t(MSG_SKILLDEX, 103), backgroundX+17, backgroundY+52+36);
     lockpickLabel->setFont(font);
     lockpickLabel->setWidth(84);
     lockpickLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: steal (104)
-    auto stealLabel = new UI::TextArea(_t(MSG_SKILLDEX, 104), backgroundX+17, backgroundY+52+36*2);
+    auto stealLabel = std::make_shared<UI::TextArea>(_t(MSG_SKILLDEX, 104), backgroundX+17, backgroundY+52+36*2);
     stealLabel->setFont(font);
     stealLabel->setWidth(84);
     stealLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: traps (105)
-    auto trapsLabel = new UI::TextArea(_t(MSG_SKILLDEX, 105), backgroundX+17, backgroundY+52+36*3);
+    auto trapsLabel = std::make_shared<UI::TextArea>(_t(MSG_SKILLDEX, 105), backgroundX+17, backgroundY+52+36*3);
     trapsLabel->setFont(font);
     trapsLabel->setWidth(84);
     trapsLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: first aid (106)
-    auto firstAidLabel = new UI::TextArea(_t(MSG_SKILLDEX, 106), backgroundX+17, backgroundY+52+36*4);
+    auto firstAidLabel = std::make_shared<UI::TextArea>(_t(MSG_SKILLDEX, 106), backgroundX+17, backgroundY+52+36*4);
     firstAidLabel->setFont(font);
     firstAidLabel->setWidth(84);
     firstAidLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: doctor (107)
-    auto doctorLabel = new UI::TextArea(_t(MSG_SKILLDEX, 107), backgroundX+17, backgroundY+52+36*5);
+    auto doctorLabel = std::make_shared<UI::TextArea>(_t(MSG_SKILLDEX, 107), backgroundX+17, backgroundY+52+36*5);
     doctorLabel->setFont(font);
     doctorLabel->setWidth(84);
     doctorLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: science (108)
-    auto scienceLabel = new UI::TextArea(_t(MSG_SKILLDEX, 108), backgroundX+17, backgroundY+52+36*6);
+    auto scienceLabel = std::make_shared<UI::TextArea>(_t(MSG_SKILLDEX, 108), backgroundX+17, backgroundY+52+36*6);
     scienceLabel->setFont(font);
     scienceLabel->setWidth(84);
     scienceLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: repair (109)
-    auto repairLabel = new UI::TextArea(_t(MSG_SKILLDEX, 109), backgroundX+17, backgroundY+52+36*7);
+    auto repairLabel = std::make_shared<UI::TextArea>(_t(MSG_SKILLDEX, 109), backgroundX+17, backgroundY+52+36*7);
     repairLabel->setFont(font);
     repairLabel->setWidth(84);
     repairLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: cancel (101)
-    auto cancelButtonLabel = new UI::TextArea(_t(MSG_SKILLDEX, 101), backgroundX+70, backgroundY+337);
+    auto cancelButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_SKILLDEX, 101), backgroundX+70, backgroundY+337);
     cancelButtonLabel->setFont(font);
 
     // add all buttons and labels and counters

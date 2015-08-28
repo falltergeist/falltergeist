@@ -80,9 +80,9 @@ protected:
     unsigned int _weight = 0;
     unsigned int _volume = 0;
     int _inventoryFID = -1;
-    UI::Image* _inventoryUi = 0;
-    UI::Image* _inventorySlotUi = 0;
-    UI::Image* _inventoryDragUi = 0;
+    std::shared_ptr<UI::Image> _inventoryUi;
+    std::shared_ptr<UI::Image> _inventorySlotUi;
+    std::shared_ptr<UI::Image> _inventoryDragUi;
     void _generateUi() override;
 };
 

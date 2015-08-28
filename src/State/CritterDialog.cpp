@@ -64,20 +64,20 @@ void CritterDialog::init()
     setX((Game::getInstance()->renderer()->width() - 640)*0.5);
     setY((Game::getInstance()->renderer()->height() - 480)*0.5 + 291);
 
-    auto background = new UI::Image("art/intrface/di_talk.frm");
+    auto background = std::make_shared<UI::Image>("art/intrface/di_talk.frm");
     addUI("background", background);
 
-    auto question = new UI::TextArea("question", 140, -55);
+    auto question = std::make_shared<UI::TextArea>("question", 140, -55);
     question->setWidth(370);
     question->setWordWrap(true);
     addUI("question", question);
 
     // Interface buttons
-    auto reviewButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_REVIEW_BUTTON, 13, 154);
+    auto reviewButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::DIALOG_REVIEW_BUTTON, 13, 154);
     reviewButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onReviewButtonClick(dynamic_cast<Event::Mouse*>(event)); });
     addUI(reviewButton);
 
-    auto barterButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_RED_BUTTON, 593, 40);
+    auto barterButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::DIALOG_RED_BUTTON, 593, 40);
     barterButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onBarterButtonClick(dynamic_cast<Event::Mouse*>(event)); });
     addUI(barterButton);
 }
@@ -95,14 +95,14 @@ void CritterDialog::setQuestion(const std::string& value)
 
 void CritterDialog::onAnswerIn(Event::Event* event)
 {
-    auto sender = dynamic_cast<UI::TextArea*>(event->emitter());
+    auto sender = dynamic_cast<UI::TextArea*>(event->eventTarget());
     auto font3_a0a0a0ff = ResourceManager::getInstance()->font("font1.aaf", 0xffff7fff);
     sender->setFont(font3_a0a0a0ff);
 }
 
 void CritterDialog::onAnswerOut(Event::Event* event)
 {
-    auto sender = dynamic_cast<UI::TextArea*>(event->emitter());
+    auto sender = dynamic_cast<UI::TextArea*>(event->eventTarget());
     auto font3_3ff800ff = ResourceManager::getInstance()->font("font1.aaf", 0x3ff800ff);
     sender->setFont(font3_3ff800ff);
 }
@@ -131,14 +131,14 @@ void CritterDialog::deleteAnswers()
 void CritterDialog::onReviewButtonClick(Event::Event* event)
 {
     // FIXME : don't create new state each time the button is clicked
-    auto state = new CritterDialogReview();
+    auto state = std::make_shared<CritterDialogReview>();
     Game::getInstance()->pushState(state);
 }
 
 void CritterDialog::onBarterButtonClick(Event::Event* event)
 {
     // FIXME : don't create new state each time the button is clicked
-    auto state = new CritterBarter();
+    auto state = std::make_shared<CritterBarter>();
     Game::getInstance()->pushState(state);
 }
 
@@ -176,7 +176,8 @@ void CritterDialog::_selectAnswer(size_t i)
     if (i >= _answers.size()) throw Exception("No answer with number " + std::to_string(i));
 
     auto game = Game::getInstance();
-    auto dialog = dynamic_cast<CritterInteract*>(game->states()->at(game->states()->size() - 2));
+    auto statePtr = game->states().at(game->states().size() - 2);
+    auto dialog = dynamic_cast<CritterInteract*>(statePtr.get());
 
     // @todo optimize
     int newOffset = dialog->script()->script()->procedures()->at(_functions.at(i))->bodyOffset();
@@ -202,7 +203,7 @@ void CritterDialog::addAnswer(const std::string& text)
         y += answer->height() + 5;
     }
 
-    auto answer = new UI::TextArea(line, 140, y);
+    auto answer = std::make_shared<UI::TextArea>(line, 140, y);
     answer->setWordWrap(true);
     answer->setWidth(370);
 
@@ -220,12 +221,12 @@ bool CritterDialog::hasAnswers()
 
 void CritterDialog::onAnswerClick(Event::Event* event)
 {
-    auto sender = dynamic_cast<UI::TextArea*>(event->emitter());
+    auto sender = dynamic_cast<UI::TextArea*>(event->eventTarget());
 
     size_t i = 0;
     for (auto answer : _answers)
     {
-        if (answer == sender)
+        if (answer.get() == sender)
         {
             event->setHandled(true);
             _selectAnswer(i);

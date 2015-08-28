@@ -92,7 +92,7 @@ void Opcode810AHandler::_run()
     auto string = _vm->dataStack()->popString();
     auto object = _vm->dataStack()->popObject();
 
-    auto floatMessage = new UI::TextArea(string);
+    auto floatMessage = std::make_shared<UI::TextArea>(string);
     floatMessage->setWidth(200);
     floatMessage->setWordWrap(true);
     floatMessage->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);

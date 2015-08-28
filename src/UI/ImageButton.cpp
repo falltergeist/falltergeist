@@ -230,7 +230,7 @@ Graphics::Texture* ImageButton::texture() const
 
 void ImageButton::_onLeftButtonClick(Event::Mouse* event)
 {
-    auto sender = dynamic_cast<ImageButton*>(event->emitter());
+    auto sender = dynamic_cast<ImageButton*>(event->eventTarget());
     if (sender->_checkboxMode)
     {
         sender->_checked = !sender->_checked;
@@ -243,7 +243,7 @@ void ImageButton::_onLeftButtonClick(Event::Mouse* event)
 
 void ImageButton::_onLeftButtonDown(Event::Mouse* event)
 {
-    auto sender = dynamic_cast<ImageButton*>(event->emitter());
+    auto sender = dynamic_cast<ImageButton*>(event->eventTarget());
     if (!sender->_downSound.empty())
     {
         Game::getInstance()->mixer()->playACMSound(sender->_downSound);
@@ -253,7 +253,7 @@ void ImageButton::_onLeftButtonDown(Event::Mouse* event)
 
 void ImageButton::_onMouseOut(Event::Mouse* event)
 {
-    auto sender = dynamic_cast<ImageButton*>(event->emitter());
+    auto sender = dynamic_cast<ImageButton*>(event->eventTarget());
     if (_leftButtonPressed && !sender->_upSound.empty())
     {
         Game::getInstance()->mixer()->playACMSound(sender->_upSound);

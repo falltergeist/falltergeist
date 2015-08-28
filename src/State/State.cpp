@@ -37,7 +37,7 @@ namespace Falltergeist
 namespace State
 {
 
-State::State() : Event::Emitter()
+State::State() : Event::EventTarget(Game::getInstance()->eventDispatcher())
 {
     addEventHandler("activate",   [this](Event::Event* event){ this->onStateActivate(dynamic_cast<Event::State*>(event)); });
     addEventHandler("deactivate", [this](Event::Event* event){ this->onStateDeactivate(dynamic_cast<Event::State*>(event)); });
@@ -45,10 +45,6 @@ State::State() : Event::Emitter()
 
 State::~State()
 {
-    for (auto ui : _ui)
-    {
-        delete ui;
-    }
 }
 
 void State::init()
@@ -109,24 +105,24 @@ void State::setModal(bool value)
     _modal = value;
 }
 
-UI::Base* State::addUI(UI::Base* ui)
+UI::Base* State::addUI(std::shared_ptr<UI::Base> ui)
 {
     // Add to UI state position
     if (x()) ui->setX(ui->x() + x());
     if (y()) ui->setY(ui->y() + y());
 
     _ui.push_back(ui);
-    return ui;
+    return ui.get();
 }
 
-UI::Base* State::addUI(const std::string& name, UI::Base* ui)
+UI::Base* State::addUI(const std::string& name, std::shared_ptr<UI::Base> ui)
 {
     addUI(ui);
-    _labeledUI.insert(std::pair<std::string, UI::Base*>(name, ui));
-    return ui;
+    _labeledUI.insert({name, ui});
+    return ui.get();
 }
 
-void State::addUI(std::vector<UI::Base*> uis)
+void State::addUI(std::vector<std::shared_ptr<UI::Base>> uis)
 {
     for (auto ui : uis)
     {
@@ -153,7 +149,7 @@ UI::Base* State::getUI(const std::string& name)
 {
     if (_labeledUI.find(name) != _labeledUI.end())
     {
-        return _labeledUI.at(name);
+        return _labeledUI.at(name).get();
     }
     return nullptr;
 }
@@ -171,7 +167,7 @@ void State::handle(Event::Event* event)
     for (auto it = _ui.rbegin(); it != _ui.rend(); ++it)
     {
         if (event->handled()) return;
-        if (auto ui = dynamic_cast<UI::Base*>(*it))
+        if (auto ui = *it)
         {
             ui->handle(event);
         }
@@ -187,11 +183,8 @@ void State::render()
             (*it)->render(false);
         }
     }
-    while (!_uiToDelete.empty())
-    {
-        delete _uiToDelete.back();
-        _uiToDelete.pop_back();
-    }
+
+    _uiToDelete.clear();
 }
 
 void State::popUI()

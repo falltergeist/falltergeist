@@ -60,16 +60,16 @@ void PlayerCreateOptions::init()
     setModal(true);
     setFullscreen(false);
 
-    auto background = new UI::Image("art/intrface/opbase.frm");
+    auto background = std::make_shared<UI::Image>("art/intrface/opbase.frm");
 
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
 
-    auto saveButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18);
-    auto loadButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37);
-    auto printToFileButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*2);
-    auto eraseButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3);
-    auto doneButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4);
+    auto saveButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18);
+    auto loadButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37);
+    auto printToFileButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*2);
+    auto eraseButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3);
+    auto doneButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4);
 
     saveButton->addEventHandler("mouseleftclick",    [this](Event::Event* event){ this->onSaveButtonClick(dynamic_cast<Event::Mouse*>(event)); });
     loadButton->addEventHandler("mouseleftclick",    [this](Event::Event* event){ this->onLoadButtonClick(dynamic_cast<Event::Mouse*>(event)); });
@@ -80,31 +80,31 @@ void PlayerCreateOptions::init()
     auto font = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
 
     // label: save
-    auto saveButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 600), backgroundX+8, backgroundY+26);
+    auto saveButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 600), backgroundX+8, backgroundY+26);
     saveButtonLabel->setFont(font);
     saveButtonLabel->setWidth(150);
     saveButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: load
-    auto loadButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 601), backgroundX+8, backgroundY+26+37);
+    auto loadButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 601), backgroundX+8, backgroundY+26+37);
     loadButtonLabel->setFont(font);
     loadButtonLabel->setWidth(150);
     loadButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: print to file
-    auto printToFileButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 602), backgroundX+8, backgroundY+26+37*2);
+    auto printToFileButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 602), backgroundX+8, backgroundY+26+37*2);
     printToFileButtonLabel->setFont(font);
     printToFileButtonLabel->setWidth(150);
     printToFileButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: erase
-    auto eraseButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 603), backgroundX+8, backgroundY+26+37*3);
+    auto eraseButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 603), backgroundX+8, backgroundY+26+37*3);
     eraseButtonLabel->setFont(font);
     eraseButtonLabel->setWidth(150);
     eraseButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: done
-    auto doneButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 604), backgroundX+8, backgroundY+26+37*4);
+    auto doneButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 604), backgroundX+8, backgroundY+26+37*4);
     doneButtonLabel->setFont(font);
     doneButtonLabel->setWidth(150);
     doneButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);

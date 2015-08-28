@@ -24,9 +24,11 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <type_traits>
 
 // Falltergeist includes
 #include "../Base/Singleton.h"
+#include "../Event/Dispatcher.h"
 
 // Third party includes
 #include "SDL.h"
@@ -76,11 +78,9 @@ public:
     static void exportToLuaScript(Lua::Script* script);
 
     void shutdown();
-    std::vector<State::State*>* states();
-    std::vector<State::State*>* statesForRender();
-    std::vector<State::State*>* statesForThinkAndHandle();
-    void pushState(State::State* state);
-    void setState(State::State* state);
+    const std::vector<std::shared_ptr<State::State>>& states() const;
+    void pushState(std::shared_ptr<State::State>);
+    void setState(std::shared_ptr<State::State>);
     void popState();
     void run();
     void quit();
@@ -104,12 +104,25 @@ public:
     Settings* settings() const;
     Graphics::AnimatedPalette* animatedPalette();
 
+    Event::Dispatcher* eventDispatcher();
+    State::State* currentState() const;
+
+    template <typename DesiredState>
+    typename std::enable_if<std::is_base_of<State::State, DesiredState>::value, DesiredState*>::type
+    currentStateAs() const
+    {
+        return dynamic_cast<DesiredState*>(currentState());
+    }
+
 protected:
+    const std::vector<std::shared_ptr<State::State>>& statesForRender();
+    const std::vector<std::shared_ptr<State::State>>& statesForThinkAndHandle();
+
     std::vector<int> _GVARS;
-    std::vector<State::State*> _states;
-    std::vector<State::State*> _statesForRender;
-    std::vector<State::State*> _statesForThinkAndHandle;
-    std::vector<State::State*> _statesForDelete;
+    std::vector<std::shared_ptr<State::State>> _states;
+    std::vector<std::shared_ptr<State::State>> _statesForRender;
+    std::vector<std::shared_ptr<State::State>> _statesForThinkAndHandle;
+    std::vector<std::shared_ptr<State::State>> _statesForDelete;
 
     DudeObject* _player = nullptr;
     Time* _gameTime = nullptr;
@@ -117,14 +130,15 @@ protected:
     Input::Mouse* _mouse = nullptr;
     std::unique_ptr<Audio::Mixer> _mixer;
     UI::FpsCounter* _fpsCounter =  nullptr;
-    UI::TextArea* _mousePosition = nullptr;
-    UI::TextArea* _currentTime = nullptr;
-    UI::TextArea* _falltergeistVersion = nullptr;
+    std::shared_ptr<UI::TextArea> _mousePosition;
+    std::shared_ptr<UI::TextArea> _currentTime;
+    std::shared_ptr<UI::TextArea> _falltergeistVersion;
     std::unique_ptr<Settings> _settings;
     Graphics::AnimatedPalette* _animatedPalette = nullptr;
     bool _quit = false;
     SDL_Event _event;
     bool _initialized = false;
+    Event::Dispatcher _eventDispatcher;
 
 private:
     friend class Base::Singleton<Game>;
