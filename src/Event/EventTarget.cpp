@@ -52,7 +52,7 @@ void EventTarget::emitEvent(std::unique_ptr<Event> event)
 {
     if (_eventHandlers.find(event->name()) == _eventHandlers.end()) return;
 
-    _eventDispatcher->postEventHandler(this, std::move(event));
+    _eventDispatcher->postEventHandler(shared_from_this(), std::move(event));
 }
 
 void EventTarget::processEvent(std::unique_ptr<Event> event)
@@ -61,7 +61,6 @@ void EventTarget::processEvent(std::unique_ptr<Event> event)
     const auto it = _eventHandlers.find(event->name());
     if (it == _eventHandlers.end()) return;
 
-    const auto thisGuard = shared_from_this();
     event->setEventTarget(this);
     for (auto eventHandler : it->second)
     {

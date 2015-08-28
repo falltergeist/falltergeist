@@ -42,16 +42,15 @@ class Dispatcher
 public:
     Dispatcher() {}
 
-    void postEventHandler(EventTarget* EventTarget, std::unique_ptr<Event> event);
+    void postEventHandler(std::weak_ptr<EventTarget>, std::unique_ptr<Event> event);
     void processScheduledEvents();
-    void removeEventHandler(EventTarget* EventTarget);
+    void removeEventHandler(EventTarget* eventTarget);
 
 private:
     Dispatcher(const Dispatcher&) = delete;
     void operator=(const Dispatcher&) = delete;
 
-    std::list<std::pair<EventTarget*, std::unique_ptr<Event>>> _scheduledEvents;
-    std::set<EventTarget*> _deletedTargets;
+    std::list<std::pair<std::weak_ptr<EventTarget>, std::unique_ptr<Event>>> _scheduledEvents;
 };
 
 }

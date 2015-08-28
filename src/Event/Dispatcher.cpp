@@ -32,9 +32,9 @@ namespace Falltergeist
 namespace Event
 {
 
-void Dispatcher::postEventHandler(EventTarget* EventTarget, std::unique_ptr<Event> event)
+void Dispatcher::postEventHandler(std::weak_ptr<EventTarget> eventTarget, std::unique_ptr<Event> event)
 {
-    _scheduledEvents.emplace_back(EventTarget, std::move(event));
+    _scheduledEvents.emplace_back(eventTarget, std::move(event));
 }
 
 void Dispatcher::processScheduledEvents()
@@ -45,24 +45,10 @@ void Dispatcher::processScheduledEvents()
     {
         decltype(_scheduledEvents) copyOfEvents;
         swap(copyOfEvents, _scheduledEvents);
-        auto it = copyOfEvents.begin();
-        while (it != copyOfEvents.end())
+        for (auto& task : copyOfEvents)
         {
-            it->first->processEvent(std::move(it->second));
-            ++it;
-            if (!_deletedTargets.empty())
-            {
-                for (; _deletedTargets.count(it->first) > 0 && it != copyOfEvents.end(); ++it)
-                {}
-
-                using ElemType = decltype(copyOfEvents)::value_type;
-                copyOfEvents.remove_if([this](const ElemType& elem)
-                {
-                    return _deletedTargets.count(elem.first) > 0;
-                });
-
-                _deletedTargets.clear();
-            }
+            if (auto eventTarget = task.first.lock())
+                eventTarget->processEvent(std::move(task.second));
         }
     }
 }
@@ -73,9 +59,8 @@ void Dispatcher::removeEventHandler(EventTarget* eventTarget)
 
     _scheduledEvents.remove_if([eventTarget](const ElemType& elem)
     {
-        return eventTarget == elem.first;
+        return eventTarget == elem.first.lock().get() || elem.first.expired();
     });
-    _deletedTargets.insert(eventTarget);
 }
 
 }
