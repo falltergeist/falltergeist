@@ -268,8 +268,7 @@ void Object::renderText()
     {
         if (SDL_GetTicks() - message->timestampCreated() >= 7000)
         {
-            delete floatMessage();
-            setFloatMessage(nullptr);
+            setFloatMessage(std::shared_ptr<UI::TextArea>());
         }
         else
         {

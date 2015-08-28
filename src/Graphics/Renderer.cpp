@@ -181,7 +181,7 @@ void Renderer::think()
             _fadeAlpha = (_fadeAlpha <= 0 ? 0 : 255);
             _fadeDone = true;
 
-            Game::getInstance()->states()->back()->emitEvent(make_unique<Event::State>("fadedone"));
+            Game::getInstance()->currentState()->emitEvent(make_unique<Event::State>("fadedone"));
             return;
         }
         _fadeTimer = ticks;

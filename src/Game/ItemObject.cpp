@@ -42,9 +42,6 @@ ItemObject::ItemObject() : Object()
 
 ItemObject::~ItemObject()
 {
-    //delete _inventoryDragUi;
-    //delete _inventorySlotUi;
-    //delete _inventoryUi;
 }
 
 unsigned int ItemObject::amount() const

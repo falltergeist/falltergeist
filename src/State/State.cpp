@@ -45,12 +45,6 @@ State::State() : Event::EventTarget(Game::getInstance()->eventDispatcher())
 
 State::~State()
 {
-    /*
-    for (auto ui : _ui)
-    {
-        delete ui;
-    }
-    //*/
 }
 
 void State::init()
@@ -189,13 +183,7 @@ void State::render()
             (*it)->render(false);
         }
     }
-    /*
-    while (!_uiToDelete.empty())
-    {
-        delete _uiToDelete.back();
-        _uiToDelete.pop_back();
-    }
-    //*/
+
     _uiToDelete.clear();
 }
 

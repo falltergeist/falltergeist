@@ -115,14 +115,11 @@ void Game::shutdown()
 {
     delete _mouse;
     delete _fpsCounter;
-    //delete _mousePosition;
-    //delete _falltergeistVersion;
     _mixer.reset();
     ResourceManager::getInstance()->shutdown();
     while (!_states.empty()) popState();
     _settings.reset();
     delete _gameTime;
-    //delete _currentTime;
     delete _renderer;
 }
 
@@ -158,12 +155,7 @@ void Game::run()
         think();
         render();
         SDL_Delay(1);
-        /*
-        for (auto state : _statesForDelete)
-        {
-            delete state;
-        }
-        //*/
+
         _statesForDelete.clear();
     }
     Logger::info("GAME") << "Stopping main loop" << std::endl;
@@ -232,12 +224,12 @@ void Game::_initGVARS()
     }
 }
 
-std::vector<std::shared_ptr<State::State>>* Game::states()
+const std::vector<std::shared_ptr<State::State>>& Game::states() const
 {
-    return &_states;
+    return _states;
 }
 
-std::vector<std::shared_ptr<State::State>>* Game::statesForRender()
+const std::vector<std::shared_ptr<State::State>>& Game::statesForRender()
 {
     // we must render all states from last fullscreen state to the top of stack
     _statesForRender.clear();
@@ -252,7 +244,7 @@ std::vector<std::shared_ptr<State::State>>* Game::statesForRender()
     {
         if (*it) _statesForRender.push_back(*it);
     }
-    return &_statesForRender;
+    return _statesForRender;
 }
 
 const std::vector<std::shared_ptr<State::State>>& Game::statesForThinkAndHandle()
@@ -411,7 +403,7 @@ void Game::render()
 {
     renderer()->beginFrame();
 
-    for (auto state : *statesForRender())
+    for (auto state : statesForRender())
     {
         state->render();
     }
@@ -451,6 +443,12 @@ Audio::Mixer* Game::mixer()
 Event::Dispatcher* Game::eventDispatcher()
 {
     return &_eventDispatcher;
+}
+
+State::State* Game::currentState() const
+{
+    assert(!states().empty());
+    return states().back().get();
 }
 
 }

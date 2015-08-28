@@ -39,7 +39,7 @@ Opcode811DHandler::Opcode811DHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode811DHandler::_run()
 {
     Logger::debug("SCRIPT") << "[811D] [?] gsay_end" << std::endl;
-    auto dialog = dynamic_cast<State::CritterDialog*>(Game::getInstance()->states()->back().get());
+    auto dialog = dynamic_cast<State::CritterDialog*>(Game::getInstance()->currentState());
     if (dialog->hasAnswers())
     {
         _vm->dataStack()->push(0); // function return value

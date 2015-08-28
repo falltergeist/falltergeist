@@ -24,6 +24,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <type_traits>
 
 // Falltergeist includes
 #include "../Base/Singleton.h"
@@ -77,9 +78,7 @@ public:
     static void exportToLuaScript(Lua::Script* script);
 
     void shutdown();
-    std::vector<std::shared_ptr<State::State>>* states();
-    std::vector<std::shared_ptr<State::State>>* statesForRender();
-    const std::vector<std::shared_ptr<State::State>>& statesForThinkAndHandle();
+    const std::vector<std::shared_ptr<State::State>>& states() const;
     void pushState(std::shared_ptr<State::State>);
     void setState(std::shared_ptr<State::State>);
     void popState();
@@ -106,8 +105,19 @@ public:
     Graphics::AnimatedPalette* animatedPalette();
 
     Event::Dispatcher* eventDispatcher();
+    State::State* currentState() const;
+
+    template <typename DesiredState>
+    typename std::enable_if<std::is_base_of<State::State, DesiredState>::value, DesiredState*>::type
+    currentStateAs() const
+    {
+        return dynamic_cast<DesiredState*>(currentState());
+    }
 
 protected:
+    const std::vector<std::shared_ptr<State::State>>& statesForRender();
+    const std::vector<std::shared_ptr<State::State>>& statesForThinkAndHandle();
+
     std::vector<int> _GVARS;
     std::vector<std::shared_ptr<State::State>> _states;
     std::vector<std::shared_ptr<State::State>> _statesForRender;

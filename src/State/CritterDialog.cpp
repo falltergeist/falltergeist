@@ -176,7 +176,7 @@ void CritterDialog::_selectAnswer(size_t i)
     if (i >= _answers.size()) throw Exception("No answer with number " + std::to_string(i));
 
     auto game = Game::getInstance();
-    auto statePtr = game->states()->at(game->states()->size() - 2);
+    auto statePtr = game->states().at(game->states().size() - 2);
     auto dialog = dynamic_cast<CritterInteract*>(statePtr.get());
 
     // @todo optimize
