@@ -109,10 +109,10 @@ void Movie::init()
         _subs = ResourceManager::getInstance()->sveFileType(subfile);
         if (_subs) _hasSubs = true;
     }
-    addUI("movie", new UI::MvePlayer(ResourceManager::getInstance()->mveFileType(movie)));
+    addUI("movie", std::make_shared<UI::MvePlayer>(ResourceManager::getInstance()->mveFileType(movie)));
 
     auto font0_ffffffff = ResourceManager::getInstance()->font("font1.aaf", 0xffffffff);
-    auto subLabel = new UI::TextArea("", 0, 320+35);
+    auto subLabel = std::make_shared<UI::TextArea>("", 0, 320+35);
 
     subLabel->setFont(font0_ffffffff);
     subLabel->setWidth(640);

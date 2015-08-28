@@ -45,21 +45,37 @@ void Dispatcher::processScheduledEvents()
     {
         decltype(_scheduledEvents) copyOfEvents;
         swap(copyOfEvents, _scheduledEvents);
-        for (auto& task : copyOfEvents)
+        auto it = copyOfEvents.begin();
+        while (it != copyOfEvents.end())
         {
-            task.first->processEvent(std::move(task.second));
+            it->first->processEvent(std::move(it->second));
+            ++it;
+            if (!_deletedTargets.empty())
+            {
+                for (; _deletedTargets.count(it->first) > 0 && it != copyOfEvents.end(); ++it)
+                {}
+
+                using ElemType = decltype(copyOfEvents)::value_type;
+                copyOfEvents.remove_if([this](const ElemType& elem)
+                {
+                    return _deletedTargets.count(elem.first) > 0;
+                });
+
+                _deletedTargets.clear();
+            }
         }
     }
 }
 
-void Dispatcher::removeEventHandler(EventTarget* EventTarget)
+void Dispatcher::removeEventHandler(EventTarget* eventTarget)
 {
     using ElemType = decltype(_scheduledEvents)::value_type;
 
-    _scheduledEvents.remove_if([EventTarget](const ElemType& elem)
+    _scheduledEvents.remove_if([eventTarget](const ElemType& elem)
     {
-        return EventTarget == elem.first;
+        return eventTarget == elem.first;
     });
+    _deletedTargets.insert(eventTarget);
 }
 
 }

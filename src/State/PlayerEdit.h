@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <map>
+#include <memory>
 #include <vector>
 
 // Falltergeist includes
@@ -45,25 +46,26 @@ namespace State
 class PlayerEdit : public State
 {
 protected:
-    UI::TextArea* _selectedLabel = nullptr;
-    UI::TextArea* _title = nullptr;
-    UI::TextArea* _description = nullptr;
-    UI::Image* _selectedImage = nullptr;
-    std::map<std::string, UI::TextArea*> _labels;
-    std::map<std::string, UI::BigCounter*> _counters;
-    std::map<std::string, UI::ImageButton*> _buttons;
-    std::map<std::string, UI::HiddenMask*> _masks;
+    std::shared_ptr<UI::TextArea> _selectedLabel;
+    std::shared_ptr<UI::TextArea> _title;
+    std::shared_ptr<UI::TextArea> _description;
+    std::shared_ptr<UI::Image> _selectedImage;
+
+    std::map<std::string, std::shared_ptr<UI::TextArea>> _labels;
+    std::map<std::string, std::shared_ptr<UI::BigCounter>> _counters;
+    std::map<std::string, std::shared_ptr<UI::ImageButton>> _buttons;
+    std::map<std::string, std::shared_ptr<UI::HiddenMask>> _masks;
     std::map<std::string, std::string> _titles;
     std::map<std::string, std::string> _descriptions;
-    std::map<std::string, UI::Image*> _images;
+    std::map<std::string, std::shared_ptr<UI::Image>> _images;
 
-    UI::TextArea* _addLabel(const std::string& name, UI::TextArea* label);
-    UI::ImageButton* _addButton(const std::string& name, UI::ImageButton* button);
-    UI::BigCounter* _addCounter(const std::string& name, UI::BigCounter* counter);
-    UI::HiddenMask* _addMask(const std::string& name, UI::HiddenMask* mask);
+    UI::TextArea* _addLabel(const std::string& name, std::shared_ptr<UI::TextArea> label);
+    UI::ImageButton* _addButton(const std::string& name, std::shared_ptr<UI::ImageButton> button);
+    UI::BigCounter* _addCounter(const std::string& name, std::shared_ptr<UI::BigCounter> counter);
+    UI::HiddenMask* _addMask(const std::string& name, std::shared_ptr<UI::HiddenMask> mask);
     void _addTitle(const std::string& name, std::string title);
     void _addDescription(const std::string& name, std::string description);
-    void _addImage(const std::string& name, UI::Image* image);
+    void _addImage(const std::string& name, std::shared_ptr<UI::Image> image);
     
     bool _statIncrease(unsigned int num);
     bool _statDecrease(unsigned int num);

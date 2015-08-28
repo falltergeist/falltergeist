@@ -62,7 +62,7 @@ public:
     virtual void handle(Event::Event* event);
     virtual void render();
 
-    virtual void addUI(UI::Base* ui);
+    virtual void addUI(std::shared_ptr<UI::Base> ui);
 
 private:
     Lua::Script* _script = nullptr;

@@ -77,11 +77,11 @@ public:
     static void exportToLuaScript(Lua::Script* script);
 
     void shutdown();
-    std::vector<State::State*>* states();
-    std::vector<State::State*>* statesForRender();
-    const std::vector<State::State*>& statesForThinkAndHandle();
-    void pushState(State::State* state);
-    void setState(State::State* state);
+    std::vector<std::shared_ptr<State::State>>* states();
+    std::vector<std::shared_ptr<State::State>>* statesForRender();
+    const std::vector<std::shared_ptr<State::State>>& statesForThinkAndHandle();
+    void pushState(std::shared_ptr<State::State>);
+    void setState(std::shared_ptr<State::State>);
     void popState();
     void run();
     void quit();
@@ -109,10 +109,10 @@ public:
 
 protected:
     std::vector<int> _GVARS;
-    std::vector<State::State*> _states;
-    std::vector<State::State*> _statesForRender;
-    std::vector<State::State*> _statesForThinkAndHandle;
-    std::vector<State::State*> _statesForDelete;
+    std::vector<std::shared_ptr<State::State>> _states;
+    std::vector<std::shared_ptr<State::State>> _statesForRender;
+    std::vector<std::shared_ptr<State::State>> _statesForThinkAndHandle;
+    std::vector<std::shared_ptr<State::State>> _statesForDelete;
 
     DudeObject* _player = nullptr;
     Time* _gameTime = nullptr;
@@ -120,9 +120,9 @@ protected:
     Input::Mouse* _mouse = nullptr;
     std::unique_ptr<Audio::Mixer> _mixer;
     UI::FpsCounter* _fpsCounter =  nullptr;
-    UI::TextArea* _mousePosition = nullptr;
-    UI::TextArea* _currentTime = nullptr;
-    UI::TextArea* _falltergeistVersion = nullptr;
+    std::shared_ptr<UI::TextArea> _mousePosition;
+    std::shared_ptr<UI::TextArea> _currentTime;
+    std::shared_ptr<UI::TextArea> _falltergeistVersion;
     std::unique_ptr<Settings> _settings;
     Graphics::AnimatedPalette* _animatedPalette = nullptr;
     bool _quit = false;

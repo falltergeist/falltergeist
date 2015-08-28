@@ -161,7 +161,7 @@ public:
 
     // ActiveUI used to display object on screen and capture mouse events
     UI::Base* ui() const;
-    void setUI(UI::Base* ui);
+    void setUI(std::shared_ptr<UI::Base> ui);
 
     // Hexagon of object current position
     Hexagon* hexagon() const;
@@ -169,7 +169,7 @@ public:
 
     // TextArea, currently floating above the object
     UI::TextArea* floatMessage() const;
-    void setFloatMessage(UI::TextArea* floatMessage);
+    void setFloatMessage(std::shared_ptr<UI::TextArea> floatMessage);
 
     // is object currently being rendered
     bool inRender() const;
@@ -231,11 +231,11 @@ protected:
     std::string _name;
     std::string _description;
     VM* _script = nullptr;
-    UI::Base* _ui = nullptr;
+    std::shared_ptr<UI::Base> _ui;
     Hexagon* _hexagon = nullptr;
     virtual void _generateUi();
     void addUIEventHandlers();
-    UI::TextArea* _floatMessage = nullptr;
+    std::shared_ptr<UI::TextArea> _floatMessage;
     bool _inRender = false;
     Trans _trans = Trans::DEFAULT;
     Orientation _lightOrientation;

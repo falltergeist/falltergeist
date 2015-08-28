@@ -67,7 +67,7 @@ void PlayerPanel::init()
 
     auto game = Game::getInstance();
 
-    auto iface = new UI::Image("art/intrface/iface.frm");
+    auto iface = std::make_shared<UI::Image>("art/intrface/iface.frm");
     setX((game->renderer()->width() - 640)*0.5);
     setY(game->renderer()->height() - iface->height());
     auto background = addUI("background", iface);
@@ -75,35 +75,35 @@ void PlayerPanel::init()
     background->addEventHandler("mousein",       [this](Event::Event* event){ this->onPanelMouseIn(dynamic_cast<Event::Mouse*>(event)); });
     background->addEventHandler("mouseout",      [this](Event::Event* event){ this->onPanelMouseOut(dynamic_cast<Event::Mouse*>(event)); });
   
-    addUI("change_hand_button", new UI::ImageButton(UI::ImageButton::Type::BIG_RED_CIRCLE, 218, 5));
+    addUI("change_hand_button", std::make_shared<UI::ImageButton>(UI::ImageButton::Type::BIG_RED_CIRCLE, 218, 5));
     getUI("change_hand_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onChangeHandButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    addUI("inventory_button", new UI::ImageButton(UI::ImageButton::Type::PANEL_INVENTORY, 211, 40));
+    addUI("inventory_button", std::make_shared<UI::ImageButton>(UI::ImageButton::Type::PANEL_INVENTORY, 211, 40));
     getUI("inventory_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onInventoryButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    addUI("options_button", new UI::ImageButton(UI::ImageButton::Type::PANEL_OPTIONS, 210, 61));
+    addUI("options_button", std::make_shared<UI::ImageButton>(UI::ImageButton::Type::PANEL_OPTIONS, 210, 61));
     getUI("options_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onOptionsButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    addUI("attack_button", new UI::ImageButton(UI::ImageButton::Type::PANEL_ATTACK, 267, 25));
+    addUI("attack_button", std::make_shared<UI::ImageButton>(UI::ImageButton::Type::PANEL_ATTACK, 267, 25));
 
-    addUI("hit_points", new UI::SmallCounter(471, 40));
+    addUI("hit_points", std::make_shared<UI::SmallCounter>(471, 40));
     getSmallCounter("hit_points")->setNumber(game->player()->hitPoints());
     getSmallCounter("hit_points")->setType(UI::SmallCounter::Type::SIGNED);
 
-    addUI("armor_class", new UI::SmallCounter(472, 76));
+    addUI("armor_class", std::make_shared<UI::SmallCounter>(472, 76));
     getSmallCounter("armor_class")->setNumber(game->player()->armorClass());
     getSmallCounter("armor_class")->setType(UI::SmallCounter::Type::SIGNED);
 
-    addUI("skilldex_button", new UI::ImageButton(UI::ImageButton::Type::BIG_RED_CIRCLE, 523, 5));
+    addUI("skilldex_button", std::make_shared<UI::ImageButton>(UI::ImageButton::Type::BIG_RED_CIRCLE, 523, 5));
     getUI("skilldex_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onSkilldexButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    addUI("map_button", new UI::ImageButton(UI::ImageButton::Type::PANEL_MAP, 526, 39));
+    addUI("map_button", std::make_shared<UI::ImageButton>(UI::ImageButton::Type::PANEL_MAP, 526, 39));
     getUI("map_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onMapButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    addUI("cha_button", new UI::ImageButton(UI::ImageButton::Type::PANEL_CHA, 526, 58));
+    addUI("cha_button", std::make_shared<UI::ImageButton>(UI::ImageButton::Type::PANEL_CHA, 526, 58));
     getUI("cha_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onChaButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    addUI("pip_button", new UI::ImageButton(UI::ImageButton::Type::PANEL_PIP, 526, 77));
+    addUI("pip_button", std::make_shared<UI::ImageButton>(UI::ImageButton::Type::PANEL_PIP, 526, 77));
     getUI("pip_button")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onPipBoyButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 }
 
@@ -271,7 +271,7 @@ void PlayerPanel::onKeyDown(Event::Keyboard* event)
         case SDLK_x:
             if (event->controlPressed())
             {
-                Game::getInstance()->pushState(new ExitConfirm());
+                Game::getInstance()->pushState(std::make_shared<ExitConfirm>());
                 playWindowOpenSfx();
             }
         case SDLK_SLASH:
@@ -303,7 +303,7 @@ void PlayerPanel::onKeyDown(Event::Keyboard* event)
             doLoadGame(true);
             break;
         case SDLK_F10:
-            Game::getInstance()->pushState(new ExitConfirm());
+            Game::getInstance()->pushState(std::make_shared<ExitConfirm>());
             playWindowOpenSfx();
             break;
         case SDLK_F12:
@@ -319,31 +319,31 @@ unsigned int PlayerPanel::height()
 
 void PlayerPanel::openInventory()
 {
-    Game::getInstance()->pushState(new Inventory());
+    Game::getInstance()->pushState(std::make_shared<Inventory>());
     playWindowOpenSfx();
 }
 
 void PlayerPanel::openMap()
 {
-    Game::getInstance()->pushState(new WorldMap());
+    Game::getInstance()->pushState(std::make_shared<WorldMap>());
     playWindowOpenSfx();
 }
 
 void PlayerPanel::openOptions()
 {
-    Game::getInstance()->pushState(new GameMenu());
+    Game::getInstance()->pushState(std::make_shared<GameMenu>());
     playWindowOpenSfx();
 }
 
 void PlayerPanel::openPopBoy()
 {
-    Game::getInstance()->pushState(new PipBoy());
+    Game::getInstance()->pushState(std::make_shared<PipBoy>());
     playWindowOpenSfx();
 }
 
 void PlayerPanel::openSkilldex()
 {
-    Game::getInstance()->pushState(new Skilldex());
+    Game::getInstance()->pushState(std::make_shared<Skilldex>());
     playWindowOpenSfx();
 }
 
@@ -356,20 +356,20 @@ void PlayerPanel::toggleActiveHand()
 
 void PlayerPanel::openCharacterScreen()
 {
-    Game::getInstance()->pushState(new PlayerEdit());
+    Game::getInstance()->pushState(std::make_shared<PlayerEdit>());
     playWindowOpenSfx();
 }
 
 void PlayerPanel::doLoadGame(bool quick)
 {
-    Game::getInstance()->pushState(new LoadGame());
+    Game::getInstance()->pushState(std::make_shared<LoadGame>());
     playWindowOpenSfx();
     // @TODO: quick load logic
 }
 
 void PlayerPanel::doSaveGame(bool quick)
 {
-    Game::getInstance()->pushState(new SaveGame());
+    Game::getInstance()->pushState(std::make_shared<SaveGame>());
     playWindowOpenSfx();
     // @TODO: quick save logic
 }

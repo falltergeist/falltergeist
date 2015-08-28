@@ -57,7 +57,7 @@ void SettingsMenu::init()
     setFullscreen(true);
 
     // background
-    auto background = new UI::Image("art/intrface/prefscrn.frm");
+    auto background = std::make_shared<UI::Image>("art/intrface/prefscrn.frm");
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
     background->setX(backgroundX);
@@ -65,52 +65,52 @@ void SettingsMenu::init()
     addUI(background);
 
     // Switches (big)
-    auto combatDifficultySwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+71);
+    auto combatDifficultySwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+71);
     combatDifficultySwitch->setMaxState(3);
     combatDifficultySwitch->setState(Game::getInstance()->settings()->combatDifficulty());
     addUI("combat_difficulty",combatDifficultySwitch);
 
-    auto gameDifficultySwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+149);
+    auto gameDifficultySwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+149);
     gameDifficultySwitch->setMaxState(3);
     gameDifficultySwitch->setState(Game::getInstance()->settings()->gameDifficulty());
     addUI("game_difficulty",gameDifficultySwitch);
 
-    auto violenceLevelSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+227);
+    auto violenceLevelSwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+227);
     violenceLevelSwitch->setState(Game::getInstance()->settings()->violenceLevel());
     addUI("violence_level",violenceLevelSwitch);
 
-    auto targetHighlightSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+309);
+    auto targetHighlightSwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+309);
     targetHighlightSwitch->setMaxState(3);
     targetHighlightSwitch->setState(Game::getInstance()->settings()->targetHighlight());
     addUI("target_highlight",targetHighlightSwitch);
 
-    auto combatLooksSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+387);
+    auto combatLooksSwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+387);
     combatLooksSwitch->setMaxState(2);
     combatLooksSwitch->setState(Game::getInstance()->settings()->combatLooks());
     addUI("combat_looks",combatLooksSwitch);
 
     // Switches (small)
-    auto combatMessagesSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74);
+    auto combatMessagesSwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74);
     combatMessagesSwitch->setState(Game::getInstance()->settings()->combatMessages());
     addUI("combat_messages",combatMessagesSwitch);
 
-    auto combatTauntsSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66);
+    auto combatTauntsSwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66);
     combatTauntsSwitch->setState(Game::getInstance()->settings()->combatTaunts());
     addUI("combat_taunts",combatTauntsSwitch);
 
-    auto languageFilterSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66*2);
+    auto languageFilterSwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66*2);
     languageFilterSwitch->setState(Game::getInstance()->settings()->languageFilter());
     addUI("language_filter",languageFilterSwitch);
 
-    auto runningSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66*3);
+    auto runningSwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66*3);
     runningSwitch->setState(Game::getInstance()->settings()->running());
     addUI("running",runningSwitch);
 
-    auto subtitlesSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66*4);
+    auto subtitlesSwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66*4);
     subtitlesSwitch->setState(Game::getInstance()->settings()->subtitles());
     addUI("subtitles",subtitlesSwitch);
 
-    auto itemHightlightSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66*5);
+    auto itemHightlightSwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66*5);
     itemHightlightSwitch->setState(Game::getInstance()->settings()->itemHighlight());
     addUI("item_highlight",itemHightlightSwitch);
 
@@ -306,65 +306,65 @@ void SettingsMenu::init()
     // BUTTONS
 
     // button: Default
-    auto defaultButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+23, backgroundY+450);
+    auto defaultButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+23, backgroundY+450);
     defaultButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDefaultButtonClick(dynamic_cast<Event::Mouse*>(event)); });
     addUI(defaultButton);
 
     // button: Done
-    auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+148, backgroundY+450);
+    auto doneButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+148, backgroundY+450);
     doneButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doSave(); });
     addUI(doneButton);
 
     // button: Cancel
-    auto cancelButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+263, backgroundY+450);
+    auto cancelButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+263, backgroundY+450);
     cancelButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doCancel(); });
     addUI(cancelButton);
 
     // button: Affect player speed
-    auto affectPlayerSpeedCheckBox = new UI::ImageButton(UI::ImageButton::Type::CHECKBOX, backgroundX+383, backgroundY+68);
+    auto affectPlayerSpeedCheckBox = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::CHECKBOX, backgroundX+383, backgroundY+68);
     affectPlayerSpeedCheckBox->setChecked(Game::getInstance()->settings()->playerSpeedup());
     addUI("player_speedup", affectPlayerSpeedCheckBox);
 
     // SLIDERS
     // COMBAT SPEED SLIDER
-    auto combatSpeedSlider = new UI::Slider(backgroundX+384, backgroundY+50);
+    auto combatSpeedSlider = std::make_shared<UI::Slider>(backgroundX+384, backgroundY+50);
     combatSpeedSlider->setMinValue(0.0);
     combatSpeedSlider->setMaxValue(50.0);
     combatSpeedSlider->setValue(Game::getInstance()->settings()->combatSpeed());
     addUI("combat_speed",combatSpeedSlider);
 
     // TEXT DELAY SLIDER
-    auto textDelaySlider = new UI::Slider(backgroundX+384, backgroundY+125);
+    auto textDelaySlider = std::make_shared<UI::Slider>(backgroundX+384, backgroundY+125);
     textDelaySlider->setValue(Game::getInstance()->settings()->textDelay());
     addUI("text_delay",textDelaySlider);
 
     // MASTER AUDIO VOLUME SLIDER
-    auto masterAudioVolumeSlider = new UI::Slider(backgroundX+384, backgroundY+196);
+    auto masterAudioVolumeSlider = std::make_shared<UI::Slider>(backgroundX+384, backgroundY+196);
     masterAudioVolumeSlider->setValue(Game::getInstance()->settings()->masterVolume());
     addUI("master_volume", masterAudioVolumeSlider);
 
     // MUSIC VOLUME SLIDER
-    auto musicVolumeSlider = new UI::Slider(backgroundX+384, backgroundY+196+51);
+    auto musicVolumeSlider = std::make_shared<UI::Slider>(backgroundX+384, backgroundY+196+51);
     musicVolumeSlider->setValue(Game::getInstance()->settings()->musicVolume());
     addUI("music_volume", musicVolumeSlider);
 
     // SOUND EFFECTS VOLUME SLIDER
-    auto soundEffectsVolumeSlider = new UI::Slider(backgroundX+384, backgroundY+196+51*2);
+    auto soundEffectsVolumeSlider = std::make_shared<UI::Slider>(backgroundX+384, backgroundY+196+51*2);
     soundEffectsVolumeSlider->setValue(Game::getInstance()->settings()->sfxVolume());
     addUI("sfx_volume", soundEffectsVolumeSlider);
 
     // SPEECH VOLUME SLIDER
-    auto speechVolumeSlider = new UI::Slider(backgroundX+384, backgroundY+196+51*3);
+    auto speechVolumeSlider = std::make_shared<UI::Slider>(backgroundX+384, backgroundY+196+51*3);
     speechVolumeSlider->setValue(Game::getInstance()->settings()->voiceVolume());
     addUI("voice_volume", speechVolumeSlider);
 
     // BRIGHTNESS LEVEL SLIDER
-    auto brightnessLevelSlider = new UI::Slider(backgroundX+384, backgroundY+196+51*4);
+    auto brightnessLevelSlider = std::make_shared<UI::Slider>(backgroundX+384, backgroundY+196+51*4);
     brightnessLevelSlider->setValue(Game::getInstance()->settings()->brightness());
     addUI("brightness", brightnessLevelSlider);
 
     // MOUSE SENSITIVITY SLIDER
-    auto mouseSensitivitySlider = new UI::Slider(backgroundX+384, backgroundY+196+51*5);
+    auto mouseSensitivitySlider = std::make_shared<UI::Slider>(backgroundX+384, backgroundY+196+51*5);
     mouseSensitivitySlider->setValue(Game::getInstance()->settings()->mouseSensitivity());
     addUI("mouse_sensitivity",mouseSensitivitySlider);
 }
@@ -413,16 +413,16 @@ UI::TextArea* SettingsMenu::_addLabel(const std::string& name, UI::TextArea* lab
 
 UI::TextArea* SettingsMenu::_addTextArea(const std::string& message, unsigned int x, unsigned int y)
 {
-    auto textArea = new UI::TextArea(message, x, y);
+    auto textArea = std::make_shared<UI::TextArea>(message, x, y);
     addUI(textArea);
-    return textArea;
+    return textArea.get();
 }
 
 UI::TextArea* SettingsMenu::_addTextArea(UI::TextArea* parent, unsigned int x, unsigned int y)
 {
-    auto textArea = new UI::TextArea(parent, x, y);
+    auto textArea = std::make_shared<UI::TextArea>(parent, x, y);
     addUI(textArea);
-    return textArea;
+    return textArea.get();
 }
 
 void SettingsMenu::doCancel()

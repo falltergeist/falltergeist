@@ -68,7 +68,7 @@ void Start::init()
     setY((renderer->height() - 480)*0.5);
 
     srand(time(NULL)); // seed
-    addUI("splash", new UI::Image("art/splash/" + splashes.at(rand() % splashes.size())));
+    addUI("splash", std::make_shared<UI::Image>("art/splash/" + splashes.at(rand() % splashes.size())));
 
     _splashTicks = SDL_GetTicks();
 
@@ -84,15 +84,15 @@ void Start::think()
         auto player = new Game::DudeObject();
         player->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/combat.gcd"));
         game->setPlayer(player);
-        game->setState(new Location());
+        game->setState(std::make_shared<Location>());
         return;
     }
     if (_splashTicks + 3000 < SDL_GetTicks())
     {
-        game->setState(new MainMenu());
-        game->pushState(new Movie(17));
-        game->pushState(new Movie(1));
-        game->pushState(new Movie(0));
+        game->setState(std::make_shared<MainMenu>());
+        game->pushState(std::make_shared<Movie>(17));
+        game->pushState(std::make_shared<Movie>(1));
+        game->pushState(std::make_shared<Movie>(0));
     }
 }
 

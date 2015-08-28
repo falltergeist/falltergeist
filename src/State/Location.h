@@ -87,7 +87,7 @@ protected:
     Game::Object* _objectUnderCursor = NULL;
     Game::Object* _actionCursorLastObject = NULL;
     bool _actionCursorButtonPressed = false;
-    PlayerPanel* _playerPanel = NULL;
+    std::shared_ptr<PlayerPanel> _playerPanel;
 
     bool _scrollLeft = false;
     bool _scrollRight = false;
@@ -95,7 +95,7 @@ protected:
     bool _scrollBottom = false;
 
     std::vector<Game::Object*> _objects;
-    UI::TextArea* _hexagonInfo = 0;
+    std::shared_ptr<UI::TextArea> _hexagonInfo;
     
     std::vector<Input::Mouse::Icon> getCursorIconsForObject(Game::Object* object);
 public:

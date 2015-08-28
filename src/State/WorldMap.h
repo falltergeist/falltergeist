@@ -53,10 +53,10 @@ public:
     void onStateDeactivate(Event::State* event) override;
 
 private:
-    UI::Image* _panel = nullptr;
-    UI::Image* _screenMap = nullptr;
-    UI::ImageList* _tiles = nullptr;
-    UI::ImageButton* _hotspot = nullptr;
+    std::shared_ptr<UI::Image> _panel;
+    std::shared_ptr<UI::Image> _screenMap;
+    std::shared_ptr<UI::ImageList> _tiles;
+    std::shared_ptr<UI::ImageButton> _hotspot;
 
     // temporary!
     // @todo: move it to other place!

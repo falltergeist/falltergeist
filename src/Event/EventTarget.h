@@ -38,7 +38,7 @@ namespace Event
 class Event;
 class Dispatcher;
 
-class EventTarget
+class EventTarget : public std::enable_shared_from_this<EventTarget>
 {
 public:
     using Handler = std::function<void(Event*)>;

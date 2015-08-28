@@ -61,7 +61,7 @@ void WorldMap::init()
     unsigned int renderHeight = Game::getInstance()->renderer()->height();
 
     // loading map tiles
-    _tiles = new UI::ImageList((std::vector<std::string>){
+    _tiles = std::make_shared<UI::ImageList>(std::vector<std::string>{
                             "art/intrface/wrldmp00.frm",
                             "art/intrface/wrldmp01.frm",
                             "art/intrface/wrldmp02.frm",
@@ -85,13 +85,13 @@ void WorldMap::init()
                             }, 0, 0);
 
     //auto cross = new Image("art/intrface/wmaploc.frm");
-    _hotspot = new UI::ImageButton(UI::ImageButton::Type::MAP_HOTSPOT, 0, 0);
+    _hotspot = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::MAP_HOTSPOT, 0, 0);
     //addUI(_hotspot);
 
     // creating screen
     if (Game::getInstance()->settings()->worldMapFullscreen())
     {
-        _panel = new UI::Image("art/intrface/wminfce2.frm"); // panel small
+        _panel = std::make_shared<UI::Image>("art/intrface/wminfce2.frm"); // panel small
         mapWidth = renderWidth - 168;
         mapHeight = renderHeight;
         mapMinX = 0;
@@ -99,13 +99,13 @@ void WorldMap::init()
     }
     else
     {
-        _panel = new UI::Image("art/intrface/wmapbox.frm"); // panel full
+        _panel = std::make_shared<UI::Image>("art/intrface/wmapbox.frm"); // panel full
         mapWidth = 450;   // fallout 2 map screen width
         mapHeight = 442;  // fallout 2 map screen height
         mapMinX = (renderWidth - 640)*0.5 + 22;
         mapMinY = (renderHeight - 480)*0.5 + 21;
     }
-    _screenMap = new UI::Image (mapWidth, mapHeight);
+    _screenMap = std::make_shared<UI::Image>(mapWidth, mapHeight);
     _screenMap->setX(mapMinX);
     _screenMap->setY(mapMinY);
 }

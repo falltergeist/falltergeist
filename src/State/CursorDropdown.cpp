@@ -63,8 +63,8 @@ CursorDropdown::~CursorDropdown()
 {
     while (!_activeIcons.empty())
     {
-        delete _activeIcons.back();
-        delete _inactiveIcons.back();
+        //delete _activeIcons.back();
+        //delete _inactiveIcons.back();
         _activeIcons.pop_back();
         _inactiveIcons.pop_back();
     }
@@ -131,15 +131,15 @@ void CursorDropdown::showMenu()
                 throw Exception("CursorDropdown::init() - unknown icon type");
 
         }
-        _activeIcons.push_back(new UI::Image("art/intrface/" + activeSurface));
+        _activeIcons.push_back(std::make_shared<UI::Image>("art/intrface/" + activeSurface));
         _activeIcons.back()->setY(40*i);
-        _inactiveIcons.push_back(new UI::Image("art/intrface/" + inactiveSurface));
+        _inactiveIcons.push_back(std::make_shared<UI::Image>("art/intrface/" + inactiveSurface));
         _inactiveIcons.back()->setY(40*i);
         i++;
     }
 
     auto game = Game::getInstance();
-    _surface = new UI::Image(40, 40*_icons.size());
+    _surface = std::make_shared<UI::Image>(40, 40*_icons.size());
     _surface->setX(_initialX + 29);
     _surface->setY(_initialY);
     int deltaX = _surface->x() + _surface->width() - game->renderer()->width();
@@ -147,13 +147,13 @@ void CursorDropdown::showMenu()
     if (deltaX > 0)
     {
         _surface->setX(_surface->x() - 40 - 29 - 29);
-        _cursor = new UI::Image("art/intrface/actarrom.frm");
+        _cursor = std::make_shared<UI::Image>("art/intrface/actarrom.frm");
         _cursor->setXOffset(-29);
         _cursor->setYOffset(0);
     }
     else
     {
-        _cursor = new UI::Image("art/intrface/actarrow.frm");
+        _cursor = std::make_shared<UI::Image>("art/intrface/actarrow.frm");
         _cursor->setXOffset(0);
         _cursor->setYOffset(0);
     }

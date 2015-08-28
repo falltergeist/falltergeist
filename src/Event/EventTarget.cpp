@@ -39,6 +39,7 @@ EventTarget::EventTarget(Dispatcher* dispatcher) : _eventDispatcher(dispatcher)
 
 EventTarget::~EventTarget()
 {
+    printf("EventTarget::~EventTarget(%p)\n", this);
     _eventDispatcher->removeEventHandler(this);
 }
 
@@ -56,8 +57,11 @@ void EventTarget::emitEvent(std::unique_ptr<Event> event)
 
 void EventTarget::processEvent(std::unique_ptr<Event> event)
 {
+    printf("EventTarget::processEvent(%p, %p)\n", this, event.get());
     const auto it = _eventHandlers.find(event->name());
     if (it == _eventHandlers.end()) return;
+
+    const auto thisGuard = shared_from_this();
     event->setEventTarget(this);
     for (auto eventHandler : it->second)
     {

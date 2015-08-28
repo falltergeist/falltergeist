@@ -21,6 +21,7 @@
 #define FALLTERGEIST_PlayerEditAge_H
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
 #include "State.h"
@@ -55,7 +56,7 @@ public:
     void onKeyDown(Event::Keyboard* event) override;
 
 protected:
-    UI::BigCounter* _counter = nullptr;
+    std::shared_ptr<UI::BigCounter> _counter;
 };
 
 }

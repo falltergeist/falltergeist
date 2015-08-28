@@ -60,9 +60,9 @@ public:
     State();
     virtual ~State();
 
-    UI::Base* addUI(UI::Base* ui);
-    UI::Base* addUI(const std::string& name, UI::Base* ui);
-    void addUI(std::vector<UI::Base*> uis);
+    UI::Base* addUI(std::shared_ptr<UI::Base> ui);
+    UI::Base* addUI(const std::string& name, std::shared_ptr<UI::Base> ui);
+    void addUI(std::vector<std::shared_ptr<UI::Base>> uis);
     void popUI();
 
     UI::Base* getUI(const std::string& name);
@@ -98,9 +98,9 @@ public:
     virtual void onKeyDown(Event::Keyboard* event);
 
 protected:
-    std::vector<UI::Base*> _ui;
-    std::vector<UI::Base*> _uiToDelete;
-    std::map<std::string, UI::Base*> _labeledUI;
+    std::vector<std::shared_ptr<UI::Base>> _ui;
+    std::vector<std::shared_ptr<UI::Base>> _uiToDelete;
+    std::map<std::string, std::shared_ptr<UI::Base>> _labeledUI;
 
     int _x = 0;
     int _y = 0;

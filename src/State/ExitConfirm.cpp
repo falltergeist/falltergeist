@@ -55,27 +55,27 @@ void ExitConfirm::init()
     setModal(true);
     setFullscreen(false);
 
-    auto background = new UI::Image("art/intrface/lgdialog.frm");
+    auto background = std::make_shared<UI::Image>("art/intrface/lgdialog.frm");
     auto panelHeight = Game::getInstance()->locationState()->playerPanelState()->height();
 
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height() - panelHeight)*0.5;
 
-    auto box1 = new UI::Image("art/intrface/donebox.frm");
-    auto box2 = new UI::Image("art/intrface/donebox.frm");
+    auto box1 = std::make_shared<UI::Image>("art/intrface/donebox.frm");
+    auto box2 = std::make_shared<UI::Image>("art/intrface/donebox.frm");
     box1->setX(backgroundX+38);
     box1->setY(backgroundY+98);
     box2->setX(backgroundX+170);
     box2->setY(backgroundY+98);
 
-    auto yesButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+50, backgroundY+102);
-    auto noButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+183, backgroundY+102);
+    auto yesButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+50, backgroundY+102);
+    auto noButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+183, backgroundY+102);
     yesButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doYes(); });
     noButton->addEventHandler("mouseleftclick",  [this](Event::Event* event){ this->doNo(); });
 
     // label: Are you sure you want to quit?
     auto font = ResourceManager::getInstance()->font("font1.aaf", 0xb89c28ff);
-    auto quitLabel = new UI::TextArea(_t(MSG_MISC, 0), backgroundX+30, backgroundY+52);
+    auto quitLabel = std::make_shared<UI::TextArea>(_t(MSG_MISC, 0), backgroundX+30, backgroundY+52);
     quitLabel->setFont(font);
     quitLabel->setWidth(244);
     quitLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
@@ -83,10 +83,10 @@ void ExitConfirm::init()
     // label: yes & no
     auto fontBig = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
     // label: yes 101
-    auto yesButtonLabel = new UI::TextArea(_t(MSG_DIALOG_BOX, 101), backgroundX+74, backgroundY+101);
+    auto yesButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_DIALOG_BOX, 101), backgroundX+74, backgroundY+101);
     yesButtonLabel->setFont(fontBig);
     // label: no 102
-    auto noButtonLabel = new UI::TextArea(_t(MSG_DIALOG_BOX, 102), backgroundX+204, backgroundY+101);
+    auto noButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_DIALOG_BOX, 102), backgroundX+204, backgroundY+101);
     noButtonLabel->setFont(fontBig);
 
     background->setX(backgroundX);
@@ -104,7 +104,7 @@ void ExitConfirm::init()
 
 void ExitConfirm::doYes()
 {
-    Game::getInstance()->setState(new MainMenu());
+    Game::getInstance()->setState(std::make_shared<MainMenu>());
 }
 
 void ExitConfirm::doNo()

@@ -49,19 +49,19 @@ void CritterDialogReview::init()
     setFullscreen(false);
     setModal(true);
 
-    auto background = new UI::Image("art/intrface/review.frm");
+    auto background = std::make_shared<UI::Image>("art/intrface/review.frm");
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
     background->setX(backgroundX);
     background->setY(backgroundY);
 
     // Interface buttons
-    auto doneButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_DONE_BUTTON, backgroundX + 500, backgroundY + 398);
+    auto doneButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::DIALOG_DONE_BUTTON, backgroundX + 500, backgroundY + 398);
     doneButton->addEventHandler("mouseleftclick", std::bind(&CritterDialogReview::onDoneButtonClick, this, std::placeholders::_1));
 
-    auto upButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_BIG_UP_ARROW, backgroundX + 476, backgroundY + 154);
+    auto upButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::DIALOG_BIG_UP_ARROW, backgroundX + 476, backgroundY + 154);
 
-    auto downButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_BIG_DOWN_ARROW, backgroundX + 476, backgroundY + 192);
+    auto downButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::DIALOG_BIG_DOWN_ARROW, backgroundX + 476, backgroundY + 192);
 
     addUI(background);
     addUI(doneButton);

@@ -97,11 +97,11 @@ void Game::init(std::unique_ptr<Settings> settings)
     version += " " + std::to_string(renderer()->width()) + "x" + std::to_string(renderer()->height());
     version += " " + renderer()->name();
 
-    _falltergeistVersion = new UI::TextArea(version, 3, renderer()->height() - 10);
-    _mousePosition = new UI::TextArea("", renderer()->width() - 55, 14);
+    _falltergeistVersion = std::make_shared<UI::TextArea>(version, 3, renderer()->height() - 10);
+    _mousePosition = std::make_shared<UI::TextArea>("", renderer()->width() - 55, 14);
     _animatedPalette = new Graphics::AnimatedPalette();
     _gameTime = new Time();
-    _currentTime = new UI::TextArea(renderer()->width() - 150, renderer()->height() - 10);
+    _currentTime = std::make_shared<UI::TextArea>(renderer()->width() - 150, renderer()->height() - 10);
 
     IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 }
@@ -115,18 +115,18 @@ void Game::shutdown()
 {
     delete _mouse;
     delete _fpsCounter;
-    delete _mousePosition;
-    delete _falltergeistVersion;
+    //delete _mousePosition;
+    //delete _falltergeistVersion;
     _mixer.reset();
     ResourceManager::getInstance()->shutdown();
     while (!_states.empty()) popState();
     _settings.reset();
     delete _gameTime;
-    delete _currentTime;
+    //delete _currentTime;
     delete _renderer;
 }
 
-void Game::pushState(State::State* state)
+void Game::pushState(std::shared_ptr<State::State> state)
 {
     _states.push_back(state);
     if (!state->initialized()) state->init();
@@ -143,7 +143,7 @@ void Game::popState()
     state->emitEvent(make_unique<Event::State>("deactivate"));
 }
 
-void Game::setState(State::State* state)
+void Game::setState(std::shared_ptr<State::State> state)
 {
     while (!_states.empty()) popState();
     pushState(state);
@@ -158,10 +158,12 @@ void Game::run()
         think();
         render();
         SDL_Delay(1);
+        /*
         for (auto state : _statesForDelete)
         {
             delete state;
         }
+        //*/
         _statesForDelete.clear();
     }
     Logger::info("GAME") << "Stopping main loop" << std::endl;
@@ -191,7 +193,7 @@ State::Location* Game::locationState()
 {
     for (auto state : _states)
     {
-        auto location = dynamic_cast<State::Location*>(state);
+        auto location = dynamic_cast<State::Location*>(state.get());
         if (location)
         {
             return location;
@@ -230,12 +232,12 @@ void Game::_initGVARS()
     }
 }
 
-std::vector<State::State*>* Game::states()
+std::vector<std::shared_ptr<State::State>>* Game::states()
 {
     return &_states;
 }
 
-std::vector<State::State*>* Game::statesForRender()
+std::vector<std::shared_ptr<State::State>>* Game::statesForRender()
 {
     // we must render all states from last fullscreen state to the top of stack
     _statesForRender.clear();
@@ -253,7 +255,7 @@ std::vector<State::State*>* Game::statesForRender()
     return &_statesForRender;
 }
 
-const std::vector<State::State*>& Game::statesForThinkAndHandle()
+const std::vector<std::shared_ptr<State::State>>& Game::statesForThinkAndHandle()
 {
     // we must handle all states from top to bottom of stack
     _statesForThinkAndHandle.clear();

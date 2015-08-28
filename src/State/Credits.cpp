@@ -90,12 +90,13 @@ void Credits::init()
             line = "    ";
         }
 
-        auto tx = new UI::TextArea(line,0,y);
+        auto tx = std::make_shared<UI::TextArea>(line,0,y);
         tx->setFont(cur_font);
         tx->setWidth(640);
         tx->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
         addUI(tx);
-        _lines.push_back(tx);
+        // TODO
+        _lines.push_back(tx.get());
         y+=tx->height();
     }
     _lastTicks=SDL_GetTicks();

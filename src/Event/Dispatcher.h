@@ -23,6 +23,7 @@
 // C++ standard includes
 #include <list>
 #include <memory>
+#include <set>
 #include <utility>
 
 // Falltergeist includes
@@ -50,6 +51,7 @@ private:
     void operator=(const Dispatcher&) = delete;
 
     std::list<std::pair<EventTarget*, std::unique_ptr<Event>>> _scheduledEvents;
+    std::set<EventTarget*> _deletedTargets;
 };
 
 }

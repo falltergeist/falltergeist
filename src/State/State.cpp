@@ -45,10 +45,12 @@ State::State() : Event::EventTarget(Game::getInstance()->eventDispatcher())
 
 State::~State()
 {
+    /*
     for (auto ui : _ui)
     {
         delete ui;
     }
+    //*/
 }
 
 void State::init()
@@ -109,24 +111,24 @@ void State::setModal(bool value)
     _modal = value;
 }
 
-UI::Base* State::addUI(UI::Base* ui)
+UI::Base* State::addUI(std::shared_ptr<UI::Base> ui)
 {
     // Add to UI state position
     if (x()) ui->setX(ui->x() + x());
     if (y()) ui->setY(ui->y() + y());
 
     _ui.push_back(ui);
-    return ui;
+    return ui.get();
 }
 
-UI::Base* State::addUI(const std::string& name, UI::Base* ui)
+UI::Base* State::addUI(const std::string& name, std::shared_ptr<UI::Base> ui)
 {
     addUI(ui);
-    _labeledUI.insert(std::pair<std::string, UI::Base*>(name, ui));
-    return ui;
+    _labeledUI.insert({name, ui});
+    return ui.get();
 }
 
-void State::addUI(std::vector<UI::Base*> uis)
+void State::addUI(std::vector<std::shared_ptr<UI::Base>> uis)
 {
     for (auto ui : uis)
     {
@@ -153,7 +155,7 @@ UI::Base* State::getUI(const std::string& name)
 {
     if (_labeledUI.find(name) != _labeledUI.end())
     {
-        return _labeledUI.at(name);
+        return _labeledUI.at(name).get();
     }
     return nullptr;
 }
@@ -187,11 +189,14 @@ void State::render()
             (*it)->render(false);
         }
     }
+    /*
     while (!_uiToDelete.empty())
     {
         delete _uiToDelete.back();
         _uiToDelete.pop_back();
     }
+    //*/
+    _uiToDelete.clear();
 }
 
 void State::popUI()

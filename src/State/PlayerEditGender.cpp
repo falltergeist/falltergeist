@@ -57,31 +57,31 @@ void PlayerEditGender::init()
     auto bgX = (Game::getInstance()->renderer()->width() - 640)*0.5;
     auto bgY = (Game::getInstance()->renderer()->height() - 480)*0.5;
 
-    auto bg = new UI::Image("art/intrface/charwin.frm");
+    auto bg = std::make_shared<UI::Image>("art/intrface/charwin.frm");
     bg->setX(bgX+236);
     bg->setY(bgY+0);
 
-    _maleImage = new UI::ImageList((std::vector<std::string>){
+    _maleImage = std::make_shared<UI::ImageList>(std::vector<std::string>{
                                     "art/intrface/maleoff.frm",
                                     "art/intrface/maleon.frm"
                                 }, bgX+260, bgY+2);
     _maleImage->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onMaleButtonPress(dynamic_cast<Event::Mouse*>(event)); });
 
-    _femaleImage = new UI::ImageList((std::vector<std::string>){
+    _femaleImage = std::make_shared<UI::ImageList>(std::vector<std::string>{
                                                             "art/intrface/femoff.frm",
                                                             "art/intrface/femon.frm"
                                                             }, bgX+310, bgY+2);
     _femaleImage->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onFemaleButtonPress(dynamic_cast<Event::Mouse*>(event)); });
 
-    auto doneBox = new UI::Image("art/intrface/donebox.frm");
+    auto doneBox = std::make_shared<UI::Image>("art/intrface/donebox.frm");
     doneBox->setX(bgX+250);
     doneBox->setY(bgY+42);
 
-    auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX+281, bgY+45);
+    auto doneLabel = std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 100), bgX+281, bgY+45);
     auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
     doneLabel->setFont(font3_b89c28ff);
 
-    auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+260, bgY+45);
+    auto doneButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+260, bgY+45);
     doneButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     addUI(bg);

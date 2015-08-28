@@ -56,8 +56,8 @@ public:
 
 protected:
     unsigned int _timer;
-    UI::TextArea* _name = nullptr;
-    UI::Image* _cursor = nullptr;
+    std::shared_ptr<UI::TextArea> _name;
+    std::shared_ptr<UI::Image> _cursor;
     std::map<char,char> _keyCodes;
 };
 

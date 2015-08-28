@@ -43,8 +43,8 @@ namespace State
 class PlayerEditGender : public State
 {
 protected:
-    UI::ImageList* _maleImage = nullptr;
-    UI::ImageList* _femaleImage = nullptr;
+    std::shared_ptr<UI::ImageList> _maleImage;
+    std::shared_ptr<UI::ImageList> _femaleImage;
     GENDER _gender = GENDER::MALE;
 public:
     PlayerEditGender();

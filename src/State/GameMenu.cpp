@@ -61,17 +61,17 @@ void GameMenu::init()
     setModal(true);
     setFullscreen(false);
 
-    auto background = new UI::Image("art/intrface/opbase.frm");
+    auto background = std::make_shared<UI::Image>("art/intrface/opbase.frm");
     auto panelHeight = Game::getInstance()->locationState()->playerPanelState()->height();
 
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height() - panelHeight)*0.5;
 
-    auto saveGameButton    = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18);
-    auto loadGameButton    = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37);
-    auto preferencesButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*2);
-    auto exitGameButton    = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3);
-    auto doneButton        = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4);
+    auto saveGameButton    = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18);
+    auto loadGameButton    = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37);
+    auto preferencesButton = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*2);
+    auto exitGameButton    = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3);
+    auto doneButton        = std::make_shared<UI::ImageButton>(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4);
 
     preferencesButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doPreferences(); });
     exitGameButton->addEventHandler("mouseleftclick",    [this](Event::Event* event){ this->doExit(); });
@@ -80,33 +80,33 @@ void GameMenu::init()
     auto font = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
 
     // label: save game
-    auto saveGameButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 0), backgroundX+8, backgroundY+26);
+    auto saveGameButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_OPTIONS, 0), backgroundX+8, backgroundY+26);
     saveGameButtonLabel->setFont(font);
     saveGameButtonLabel->setWidth(150);
     saveGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
     saveGameButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doSaveGame(); });
 
     // label: load game
-    auto loadGameButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 1), backgroundX+8, backgroundY+26+37);
+    auto loadGameButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_OPTIONS, 1), backgroundX+8, backgroundY+26+37);
     loadGameButtonLabel->setFont(font);
     loadGameButtonLabel->setWidth(150);
     loadGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
     loadGameButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doLoadGame(); });
 
     // label: preferences
-    auto preferencesButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 2), backgroundX+8, backgroundY+26+37*2);
+    auto preferencesButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_OPTIONS, 2), backgroundX+8, backgroundY+26+37*2);
     preferencesButtonLabel->setFont(font);
     preferencesButtonLabel->setWidth(150);
     preferencesButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: exit game
-    auto exitGameButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 3), backgroundX+8, backgroundY+26+37*3);
+    auto exitGameButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_OPTIONS, 3), backgroundX+8, backgroundY+26+37*3);
     exitGameButtonLabel->setFont(font);
     exitGameButtonLabel->setWidth(150);
     exitGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: done
-    auto doneButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 4), backgroundX+8, backgroundY+26+37*4);
+    auto doneButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_OPTIONS, 4), backgroundX+8, backgroundY+26+37*4);
     doneButtonLabel->setFont(font);
     doneButtonLabel->setWidth(150);
     doneButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
@@ -129,22 +129,22 @@ void GameMenu::init()
 
 void GameMenu::doSaveGame()
 {
-    Game::getInstance()->pushState(new SaveGame());
+    Game::getInstance()->pushState(std::make_shared<SaveGame>());
 }
 
 void GameMenu::doLoadGame()
 {
-    Game::getInstance()->pushState(new LoadGame());
+    Game::getInstance()->pushState(std::make_shared<LoadGame>());
 }
 
 void GameMenu::doPreferences()
 {
-    Game::getInstance()->pushState(new SettingsMenu());
+    Game::getInstance()->pushState(std::make_shared<SettingsMenu>());
 }
 
 void GameMenu::doExit()
 {
-    Game::getInstance()->pushState(new ExitConfirm());
+    Game::getInstance()->pushState(std::make_shared<ExitConfirm>());
 }
 
 void GameMenu::closeMenu()

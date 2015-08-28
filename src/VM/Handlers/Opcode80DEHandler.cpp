@@ -49,7 +49,7 @@ void Opcode80DEHandler::_run()
 
     int msgFileID = _vm->dataStack()->popInteger();
 
-    auto interact = new State::CritterInteract();
+    auto interact = std::make_shared<State::CritterInteract>();
     interact->setBackgroundID(backgroundID);
     interact->setHeadID(headID);
     interact->setMood(mood);
