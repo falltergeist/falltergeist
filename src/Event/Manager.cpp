@@ -23,7 +23,7 @@
  */
 
 // Related headers
-#include "../Event/Event.h"
+#include "../Event/Manager.h"
 
 // C++ standard includes
 
@@ -38,72 +38,25 @@ namespace Event
 
 /**
  * @brief Constructor
- * @param[in] name Event name
  */
-Event::Event(const std::string& name)
+Manager::Manager()
 {
-    _name = name;
 }
 
 /**
  * @brief Destructor
  */
-Event::~Event()
+Manager::~Manager()
 {
 }
 
 /**
- * @brief Returns event name
- * @return Event name
+ * @brief Returns event manager instance
+ * @return Event manager instance
  */
-std::string Event::name() const
+Manager* Manager::getInstance()
 {
-    return _name;
-}
-
-/**
- * @brief Sets event name
- * @param[in] name Event name
- */
-void Event::setName(const std::string& name)
-{
-    _name = name;
-}
-
-/**
- * @brief Returns event emitter
- * @return Event emitter
- */
-Emitter* Event::emitter() const
-{
-    return _emitter;
-}
-
-/**
- * @brief Sets event emitter
- * @param[in] value Event emitter
- */
-void Event::setEmitter(Emitter* value)
-{
-    _emitter = value;
-}
-
-/**
- * @brief Returns if event is handled or not
- * @return Is event handled or not
- */
-bool Event::handled() const
-{
-    return _handled;
-}
-
-/**
- * @brief Sets that event is handled or not
- * @param[in] value Is event handled or not
- */
-void Event::setHandled(bool value)
-{
-    _handled = value;
+    return Base::Singleton<Manager>::get();
 }
 
 }

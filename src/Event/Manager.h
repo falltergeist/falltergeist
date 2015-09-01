@@ -22,12 +22,13 @@
  * THE SOFTWARE.
  */
 
-// Related headers
-#include "../Event/Event.h"
+#ifndef FALLTERGEIST_EVENT_MANAGER_H
+#define FALLTERGEIST_EVENT_MANAGER_H
 
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Base/Singleton.h"
 
 // Third party includes
 
@@ -37,74 +38,27 @@ namespace Event
 {
 
 /**
- * @brief Constructor
- * @param[in] name Event name
+ * @brief The Event Manager class
+ *
+ * This is main event dispatcher class
  */
-Event::Event(const std::string& name)
+class Manager
 {
-    _name = name;
-}
+public:
+    static Manager* getInstance();
 
-/**
- * @brief Destructor
- */
-Event::~Event()
-{
-}
+private:
+    friend class Base::Singleton<Manager>;
 
-/**
- * @brief Returns event name
- * @return Event name
- */
-std::string Event::name() const
-{
-    return _name;
-}
+    Manager();
+    ~Manager();
 
-/**
- * @brief Sets event name
- * @param[in] name Event name
- */
-void Event::setName(const std::string& name)
-{
-    _name = name;
-}
-
-/**
- * @brief Returns event emitter
- * @return Event emitter
- */
-Emitter* Event::emitter() const
-{
-    return _emitter;
-}
-
-/**
- * @brief Sets event emitter
- * @param[in] value Event emitter
- */
-void Event::setEmitter(Emitter* value)
-{
-    _emitter = value;
-}
-
-/**
- * @brief Returns if event is handled or not
- * @return Is event handled or not
- */
-bool Event::handled() const
-{
-    return _handled;
-}
-
-/**
- * @brief Sets that event is handled or not
- * @param[in] value Is event handled or not
- */
-void Event::setHandled(bool value)
-{
-    _handled = value;
-}
+    /// Copy constructor
+    Manager(Manager const&) = delete;
+    /// Assignment
+    void operator=(Manager const&) = delete;
+};
 
 }
 }
+#endif // FALLTERGEIST_EVENT_MANAGER_H
