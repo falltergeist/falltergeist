@@ -14,4 +14,4 @@ compiler:
 
 install:
 - if [ "$TRAVIS_OS_NAME" == "linux" ]; then ./travis/linux.install.sh; fi
-- if [ "$TRAVIS_OS_NAME" == "osx" ]; then ./travis/osx.install.sh; fi
+- if [ "$TRAVIS_OS_NAME" == "osx" ];   then ./travis/osx.install.sh;   fi
