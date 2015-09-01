@@ -17,9 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/ItemsList.h"
+
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Event/Event.h"
+#include "../Event/Mouse.h"
 #include "../Game/ArmorItemObject.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
@@ -28,31 +33,32 @@
 #include "../Graphics/Texture.h"
 #include "../Logger.h"
 #include "../UI/InventoryItem.h"
-#include "../UI/ItemsList.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-
-ItemsList::ItemsList(int x, int y) : ActiveUI(x, y)
+namespace UI
 {
-    _texture = new Texture(_slotWidth, _slotHeight * _slotsNumber);
+
+ItemsList::ItemsList(int x, int y) : Falltergeist::UI::Base(x, y)
+{
+    _texture = new Graphics::Texture(_slotWidth, _slotHeight * _slotsNumber);
     _texture->fill(0x000000FF);
 
-    addEventHandler("mouseleftdown", [this](Event* event){ this->onMouseLeftDown(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mousedragstart", [this](Event* event){ this->onMouseDragStart(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mousedrag", [this](Event* event){ this->onMouseDrag(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mousedragstop", [this](Event* event){ this->onMouseDragStop(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseleftdown",  [this](Event::Event* event){ this->onMouseLeftDown(dynamic_cast<Event::Mouse*>(event)); });
+    addEventHandler("mousedragstart", [this](Event::Event* event){ this->onMouseDragStart(dynamic_cast<Event::Mouse*>(event)); });
+    addEventHandler("mousedrag",      [this](Event::Event* event){ this->onMouseDrag(dynamic_cast<Event::Mouse*>(event)); });
+    addEventHandler("mousedragstop",  [this](Event::Event* event){ this->onMouseDragStop(dynamic_cast<Event::Mouse*>(event)); });
 }
 
-void ItemsList::setItems(std::vector<Game::GameItemObject *>* items)
+void ItemsList::setItems(std::vector<Game::ItemObject*>* items)
 {
     _items = items;
     update();
 }
 
-std::vector<Game::GameItemObject*>* ItemsList::items()
+std::vector<Game::ItemObject*>* ItemsList::items()
 {
     return _items;
 }
@@ -102,34 +108,34 @@ std::vector<InventoryItem*>* ItemsList::inventoryItems()
     return &_inventoryItems;
 }
 
-void ItemsList::onMouseLeftDown(MouseEvent* event)
+void ItemsList::onMouseLeftDown(Event::Mouse* event)
 {
     Logger::critical() << "mouseleftdown" << std::endl;
 }
 
-void ItemsList::onMouseDragStart(MouseEvent* event)
+void ItemsList::onMouseDragStart(Event::Mouse* event)
 {
     unsigned int index = (event->y() - y())/_slotHeight;
     _draggedItem = inventoryItems()->at(index);
-    _draggedItem->setType(InventoryItem::TYPE_DRAG);
+    _draggedItem->setType(InventoryItem::Type::DRAG);
     _draggedItem->setX(event->x());
     _draggedItem->setY(event->y());
     Logger::critical() << "mousedragstart at " << index << " (" << _draggedItem->item()->name() << ")" << std::endl;
 }
 
-void ItemsList::onMouseDrag(MouseEvent* event)
+void ItemsList::onMouseDrag(Event::Mouse* event)
 {
     _draggedItem->setXOffset(_draggedItem->xOffset() + event->xOffset());
     _draggedItem->setYOffset(_draggedItem->yOffset() + event->yOffset());
     Logger::critical() << "mousedrag" << std::endl;
 }
 
-void ItemsList::onMouseDragStop(MouseEvent* event)
+void ItemsList::onMouseDragStop(Event::Mouse* event)
 {
     _draggedItem->setXOffset(0);
     _draggedItem->setYOffset(0);
     _draggedItem->setType(_type);
-    auto itemevent = new MouseEvent("itemdragstop");
+    auto itemevent = new Event::Mouse("itemdragstop");
     itemevent->setX(event->x());
     itemevent->setY(event->y());
     itemevent->setEmitter(this);
@@ -139,7 +145,7 @@ void ItemsList::onMouseDragStop(MouseEvent* event)
     Logger::critical() << "mousedragstop" << std::endl;
 }
 
-void ItemsList::onItemDragStop(MouseEvent* event)
+void ItemsList::onItemDragStop(Event::Mouse* event)
 {
     Logger::critical() << "itemdragstop" << std::endl;
 
@@ -161,12 +167,12 @@ void ItemsList::onItemDragStop(MouseEvent* event)
         itemsList->update();
     }
 
-    if (auto inventoryItem = dynamic_cast<InventoryItem*>(event->emitter()))
+    if (auto inventoryItem = dynamic_cast<UI::InventoryItem*>(event->emitter()))
     {
         // @todo create addItem method
         this->addItem(inventoryItem, 1);
 
-        if (dynamic_cast<Game::GameArmorItemObject*>(inventoryItem->item()) && inventoryItem->type() == InventoryItem::TYPE_SLOT)
+        if (dynamic_cast<Game::ArmorItemObject*>(inventoryItem->item()) && inventoryItem->type() == InventoryItem::Type::SLOT)
         {
             Game::getInstance()->player()->setArmorSlot(nullptr);
         }
@@ -191,7 +197,7 @@ void ItemsList::removeItem(InventoryItem* item, unsigned int amount)
 {
     for (auto it = _items->begin(); it != _items->end(); ++it)
     {
-        Game::GameItemObject* object = *it;
+        Game::ItemObject* object = *it;
         if (object == item->item())
         {
             _items->erase(it);
@@ -231,4 +237,5 @@ void ItemsList::scrollDown()
     this->update();
 }
 
+}
 }

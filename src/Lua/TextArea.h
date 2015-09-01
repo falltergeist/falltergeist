@@ -17,36 +17,41 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_ACTIVEUI_H
-#define FALLTERGEIST_ACTIVEUI_H
+#ifndef FALLTERGEIST_LUA_TEXTAREA_H
+#define FALLTERGEIST_LUA_TEXTAREA_H
 
 // C++ standard includes
-#include <string>
 
 // Falltergeist includes
-#include "../Event/Event.h"
-#include "../Event/MouseEvent.h"
-#include "../Event/KeyboardEvent.h"
-#include "../Graphics/UI.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace Lua
+{
 
-class ActiveUI : public EventEmitter, public UI
+/**
+ * This class provides lua interface to TextArea class
+ * We are forced to have this class because TextArea have methods with strongly typed enums
+ */
+class TextArea : public UI::TextArea
 {
 public:
-    ActiveUI(int x = 0, int y = 0);    
-    virtual ~ActiveUI();
+    TextArea(const std::string& text, int x = 0, int y = 0);
+    TextArea(int x = 0, int y = 0);
+    TextArea(UI::TextArea* textArea, int x = 0, int y = 0);
+    ~TextArea() override;
 
-    virtual void handle(Event* event);
-    static void export_to_lua_script(Lua::Script* script);
+    void setWidth(unsigned int width);
+    unsigned int width() const override;
 
-protected:
-    std::string _downSnd = "";
-    std::string _upSnd = "";
+    void setLuaHorizontalAlign(unsigned align);
+    unsigned luaHorizontalAlign() const;
+
 };
 
 }
-#endif // FALLTERGEIST_ACTIVEUI_H
+}
+#endif // FALLTERGEIST_LUA_TEXTAREA_H

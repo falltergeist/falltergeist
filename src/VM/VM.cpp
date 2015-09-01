@@ -39,14 +39,14 @@
 namespace Falltergeist
 {
 
-VM::VM(libfalltergeist::Int::File* script, Game::GameObject* owner)
+VM::VM(libfalltergeist::Int::File* script, Game::Object* owner)
 {
     _owner = owner;
     _script = script;
     if (!_script) throw Exception("VM::VM() - script is null");
 }
 
-VM::VM(const std::string& filename, Game::GameObject* owner)
+VM::VM(const std::string& filename, Game::Object* owner)
 {
     _owner = owner;
     _script = ResourceManager::getInstance()->intFileType(filename);
@@ -172,7 +172,7 @@ std::vector<VMStackValue>* VM::LVARS()
     return &_LVARS;
 }
 
-Game::GameObject* VM::owner()
+Game::Object* VM::owner()
 {
     return _owner;
 }
@@ -209,24 +209,24 @@ int VM::fixedParam() const
     return _fixedParam;
 }
 
-VM* VM::setTargetObject(Game::GameObject* targetObject)
+VM* VM::setTargetObject(Game::Object* targetObject)
 {
     this->_targetObject = targetObject;
     return this;
 }
 
-Game::GameObject* VM::targetObject() const
+Game::Object* VM::targetObject() const
 {
     return _targetObject;
 }
 
-VM* VM::setSourceObject(Game::GameObject* sourceObject)
+VM* VM::setSourceObject(Game::Object* sourceObject)
 {
     this->_sourceObject = sourceObject;
     return this;
 }
 
-Game::GameObject* VM::sourceObject() const
+Game::Object* VM::sourceObject() const
 {
     return _sourceObject;
 }

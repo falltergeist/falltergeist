@@ -17,35 +17,39 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/MultistateImageButton.h"
+
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Audio/Mixer.h"
+#include "../Event/Event.h"
+#include "../Event/Mouse.h"
 #include "../Exception.h"
-#include "../Graphics/ActiveUI.h"
+#include "../Game/Game.h"
 #include "../Graphics/Texture.h"
 #include "../UI/Image.h"
-#include "../UI/MultistateImageButton.h"
-#include "../Game/Game.h"
-#include "../Audio/AudioMixer.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-
-MultistateImageButton::MultistateImageButton(int x, int y) : ActiveUI(x, y)
+namespace UI
 {
-    addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
+
+MultistateImageButton::MultistateImageButton(int x, int y) : Falltergeist::UI::Base(x, y)
+{
+    addEventHandler("mouseleftclick", [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 }
 
-MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
+MultistateImageButton::MultistateImageButton(Type type, int x, int y) : Falltergeist::UI::Base(x, y)
 {
-    addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mouseleftup", [this](Event* event){ this->_onLeftButtonUp(dynamic_cast<MouseEvent*>(event)); });
-    //Image* image;
+    addEventHandler("mouseleftclick", [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    addEventHandler("mouseleftup", [this](Event::Event* event){ this->_onLeftButtonUp(dynamic_cast<Event::Mouse*>(event)); });
     switch (type)
     {
-        case TYPE_BIG_SWITCH:
+        case Type::BIG_SWITCH:
         {
             auto image = new Image("art/intrface/prfbknbs.frm");
 
@@ -63,11 +67,11 @@ MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : 
             addImage(image3);
             addImage(image4);
             delete image;
-            _downSnd = "sound/sfx/ib3p1xx1.acm";
-            _upSnd = "sound/sfx/ib3lu1x1.acm";
+            _downSound = "sound/sfx/ib3p1xx1.acm";
+            _upSound = "sound/sfx/ib3lu1x1.acm";
             break;
         }
-        case TYPE_SMALL_SWITCH:
+        case Type::SMALL_SWITCH:
         {
             auto image = new Image("art/intrface/prflknbs.frm");
             auto image1 = new Image(22, 25);
@@ -77,8 +81,8 @@ MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : 
             addImage(image1);
             addImage(image2);
             delete image;
-            _downSnd = "sound/sfx/ib2p1xx1.acm";
-            _upSnd = "sound/sfx/ib2lu1x1.acm";
+            _downSound = "sound/sfx/ib2p1xx1.acm";
+            _upSound = "sound/sfx/ib2lu1x1.acm";
             break;
         }
         default:
@@ -87,9 +91,9 @@ MultistateImageButton::MultistateImageButton(unsigned int type, int x, int y) : 
 }
 
 
-MultistateImageButton::MultistateImageButton(ImageList* imageList, int x, int y) : ActiveUI(x, y)
+MultistateImageButton::MultistateImageButton(ImageList* imageList, int x, int y) : Falltergeist::UI::Base(x, y)
 {
-    addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseleftclick", [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); });
     for (auto image: *imageList->images()) _imageList.addImage(new Image(image));
 }
 
@@ -104,7 +108,7 @@ void MultistateImageButton::addImage(Image* image)
     _maxState++;
 }
 
-unsigned int MultistateImageButton::state()
+unsigned int MultistateImageButton::state() const
 {
     return _currentState;
 }
@@ -114,29 +118,21 @@ void MultistateImageButton::setState(unsigned int state)
     _currentState = state;
 }
 
-void MultistateImageButton::setMode(int mode)
+void MultistateImageButton::setMode(Mode mode)
 {
-    switch(mode)
-    {
-        case MODE_CYCLIC:
-        case MODE_PROGRESSION:
-                break;
-        default:
-            throw Exception("MultistateImageButton::setMode(int) - wrong mode number: " + std::to_string(mode));
-    }
     _mode = mode;
 }
 
-int MultistateImageButton::mode()
+MultistateImageButton::Mode MultistateImageButton::mode() const
 {
     return _mode;
 }
 
-void MultistateImageButton::_onLeftButtonClick(MouseEvent* event)
+void MultistateImageButton::_onLeftButtonClick(Event::Mouse* event)
 {
     auto sender = dynamic_cast<MultistateImageButton*>(event->emitter());
 
-    if (sender->mode() == MODE_PROGRESSION)
+    if (sender->mode() == Mode::PROGRESSION)
     {
         if (sender->modeFactor() > 0)
         {
@@ -147,7 +143,7 @@ void MultistateImageButton::_onLeftButtonClick(MouseEvent* event)
             sender->_currentState = (sender->_currentState > 0) ? sender->_currentState + sender->modeFactor() : sender->_maxState - 1;
         }
     }
-    else // MODE_CYCLIC
+    else // Mode::CYCLIC
     {
         if (sender->modeFactor() > 0)
         {
@@ -161,21 +157,21 @@ void MultistateImageButton::_onLeftButtonClick(MouseEvent* event)
     }
 }
 
-void MultistateImageButton::_onLeftButtonUp(MouseEvent* event)
+void MultistateImageButton::_onLeftButtonUp(Event::Mouse* event)
 {
     auto sender = dynamic_cast<MultistateImageButton*>(event->emitter());
 
-    if (!sender->_downSnd.empty())
+    if (!sender->_downSound.empty())
     {
-        Game::getInstance()->mixer()->playACMSound(sender->_downSnd);
+        Game::getInstance()->mixer()->playACMSound(sender->_downSound);
     }
-    if (!sender->_upSnd.empty())
+    if (!sender->_upSound.empty())
     {
-        Game::getInstance()->mixer()->playACMSound(sender->_upSnd);
+        Game::getInstance()->mixer()->playACMSound(sender->_upSound);
     }
 }
 
-Texture* MultistateImageButton::texture()
+Graphics::Texture* MultistateImageButton::texture() const
 {
     return _imageList.images()->at(_currentState)->texture();
 }
@@ -185,19 +181,25 @@ void MultistateImageButton::setModeFactor(int factor)
     _modeFactor = factor;
 }
 
-int MultistateImageButton::modeFactor()
+int MultistateImageButton::modeFactor() const
 {
-    if (_modeFactor >= 0) return 1;
+    if (_modeFactor >= 0)
+    {
+        return 1;
+    }
     return -1;
 }
 
 void MultistateImageButton::setMaxState(unsigned int value)
 {
     _maxState = value;
-    if (_currentState > _maxState) _currentState = _maxState;
+    if (_currentState > _maxState)
+    {
+        _currentState = _maxState;
+    }
 }
 
-unsigned int MultistateImageButton::maxState()
+unsigned int MultistateImageButton::maxState() const
 {
     return _maxState;
 }
@@ -208,10 +210,10 @@ void MultistateImageButton::setMinState(unsigned int value)
     if (_currentState < _minState) _currentState = _minState;
 }
 
-unsigned int MultistateImageButton::minState()
+unsigned int MultistateImageButton::minState() const
 {
     return _minState;
 }
 
-
+}
 }

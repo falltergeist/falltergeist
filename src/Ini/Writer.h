@@ -21,6 +21,7 @@
 #define FALLTERGEIST_INI_WRITER_H
 
 // C++ standard includes
+#include <ostream>
 
 // Falltergeist includes
 
@@ -30,21 +31,20 @@ namespace Falltergeist
 {
 namespace Ini
 {
-
 class File;
 
 class Writer
 {
-private:
-    const File &_ini;
-
 public:
     Writer(const File &ini);
     ~Writer();
+
     void write(std::ostream &stream);
+
+private:
+    const File &_ini;
 };
 
-} // Ini
-} // Falltergeist
-
+}
+}
 #endif // FALLTERGEIST_INI_WRITER_H

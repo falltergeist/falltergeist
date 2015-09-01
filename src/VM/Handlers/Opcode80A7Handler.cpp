@@ -46,7 +46,7 @@ void Opcode80A7Handler::_run()
     auto elevation = _vm->dataStack()->popInteger();
     auto position = _vm->dataStack()->popInteger();
     auto game = Game::getInstance();
-    Game::GameObject* found = nullptr;
+    Game::Object* found = nullptr;
     for (auto object : *game->locationState()->hexagonGrid()->at(position)->objects())
     {
         if (object->PID() == PID && object->elevation() == elevation)

@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_RENDERER_H
-#define FALLTERGEIST_RENDERER_H
+#ifndef FALLTERGEIST_GRAPHICS_RENDERER_H
+#define FALLTERGEIST_GRAPHICS_RENDERER_H
 
 // C++ standard includes
 #include <vector>
@@ -33,9 +33,43 @@
 
 namespace Falltergeist
 {
+namespace Graphics
+{
 
 class Renderer
 {
+
+public:
+    Renderer(unsigned int width, unsigned int height);
+    ~Renderer();
+
+    void init();
+
+    void beginFrame();
+    void endFrame();
+    void think();
+
+    unsigned int width();
+    unsigned int height();
+    float scaleX();
+    float scaleY();
+
+    bool fadeDone();
+    bool fading();
+
+    void fadeIn(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie = false);
+    void fadeOut(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie = false);
+
+    void setCaption(const std::string& caption);
+    SDL_Window* sdlWindow();
+    SDL_Renderer* sdlRenderer();
+
+    std::string name();
+
+    void drawTexture(Texture* texture, int x, int y, int sourceX = 0, int sourceY = 0, int unsigned sourceWidth = 0, unsigned int sourceHeight = 0);
+
+    Texture* screenshot();
+
 protected:
     unsigned int _width;
     unsigned int _height;
@@ -55,38 +89,8 @@ protected:
     std::string _name;
     SDL_Window* _sdlWindow;
     SDL_Renderer* _sdlRenderer;
-
-public:
-    Renderer(unsigned int width, unsigned int height);
-    virtual ~Renderer();
-
-    virtual void init();
-
-    virtual void beginFrame();
-    virtual void endFrame();
-    virtual void think();
-
-    unsigned int width();
-    unsigned int height();
-    float scaleX();
-    float scaleY();
-
-    bool fadeDone();
-    bool fading();
-
-    virtual void fadeIn(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie = false);
-    virtual void fadeOut(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie = false);
-
-    void setCaption(const std::string& caption);
-    SDL_Window* sdlWindow();
-    SDL_Renderer* sdlRenderer();
-
-    virtual std::string name();
-
-    virtual void drawTexture(Texture* texture, int x, int y, int sourceX = 0, int sourceY = 0, int unsigned sourceWidth = 0, unsigned int sourceHeight = 0);
-
-    virtual Texture* screenshot();
 };
 
 }
-#endif // FALLTERGEIST_RENDERER_H
+}
+#endif // FALLTERGEIST_GRAPHICS_RENDERER_H

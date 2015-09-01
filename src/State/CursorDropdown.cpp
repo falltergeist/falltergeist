@@ -17,21 +17,23 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../State/CursorDropdown.h"
+
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Audio/Mixer.h"
 #include "../Exception.h"
+#include "../Game/CritterObject.h"
+#include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../Input/Mouse.h"
-#include "../Game/CritterObject.h"
-#include "../Game/DudeObject.h"
-#include "../State/CursorDropdown.h"
+#include "../Logger.h"
 #include "../State/Location.h"
 #include "../UI/HiddenMask.h"
-#include "Audio/AudioMixer.h"
-#include "../Logger.h"
 
 // Third party includes
 
@@ -40,7 +42,7 @@ namespace Falltergeist
 namespace State
 {
 
-CursorDropdown::CursorDropdown(std::vector<int> icons, bool onlyIcon) : State()
+CursorDropdown::CursorDropdown(std::vector<Input::Mouse::Icon>&& icons, bool onlyIcon) : State()
 {
     if (icons.size() == 0) 
         throw Exception("CursorDropdown::CursorDropdown() - empty icons list!");
@@ -52,7 +54,7 @@ CursorDropdown::CursorDropdown(std::vector<int> icons, bool onlyIcon) : State()
     }
     auto mouse = Game::getInstance()->mouse();
     _initialMouseStack = mouse->states()->size();
-    mouse->pushState(Mouse::NONE);
+    mouse->pushState(Input::Mouse::Cursor::NONE);
     _initialX = mouse->x();
     _initialY = mouse->y();
 }
@@ -89,39 +91,39 @@ void CursorDropdown::showMenu()
         std::string inactiveSurface;
         switch (icon)
         {
-            case Mouse::ICON_INVENTORY:
+            case Input::Mouse::Icon::INVENTORY:
                 activeSurface = "invenh.frm";
                 inactiveSurface = "invenn.frm";
                 break;
-            case Mouse::ICON_CANCEL:
+            case Input::Mouse::Icon::CANCEL:
                 activeSurface = "cancelh.frm";
                 inactiveSurface = "canceln.frm";
                 break;
-            case Mouse::ICON_ROTATE:
+            case Input::Mouse::Icon::ROTATE:
                 activeSurface = "rotateh.frm";
                 inactiveSurface = "rotaten.frm";
                 break;
-            case Mouse::ICON_SKILL:
+            case Input::Mouse::Icon::SKILL:
                 activeSurface = "skillh.frm";
                 inactiveSurface = "skilln.frm";
                 break;
-            case Mouse::ICON_LOOK:
+            case Input::Mouse::Icon::LOOK:
                 activeSurface = "lookh.frm";
                 inactiveSurface = "lookn.frm";
                 break;
-            case Mouse::ICON_TALK:
+            case Input::Mouse::Icon::TALK:
                 activeSurface = "talkh.frm";
                 inactiveSurface = "talkn.frm";
                 break;
-            case Mouse::ICON_PUSH:
+            case Input::Mouse::Icon::PUSH:
                 activeSurface = "pushh.frm";
                 inactiveSurface = "pushn.frm";
                 break;
-            case Mouse::ICON_UNLOAD:
+            case Input::Mouse::Icon::UNLOAD:
                 activeSurface = "unloadh.frm";
                 inactiveSurface = "unloadn.frm";
                 break;
-            case Mouse::ICON_USE:
+            case Input::Mouse::Icon::USE:
                 activeSurface = "usegeth.frm";
                 inactiveSurface = "usegetn.frm";
                 break;
@@ -129,15 +131,15 @@ void CursorDropdown::showMenu()
                 throw Exception("CursorDropdown::init() - unknown icon type");
 
         }
-        _activeIcons.push_back(new Image("art/intrface/" + activeSurface));
+        _activeIcons.push_back(new UI::Image("art/intrface/" + activeSurface));
         _activeIcons.back()->setY(40*i);
-        _inactiveIcons.push_back(new Image("art/intrface/" + inactiveSurface));
+        _inactiveIcons.push_back(new UI::Image("art/intrface/" + inactiveSurface));
         _inactiveIcons.back()->setY(40*i);
         i++;
     }
 
     auto game = Game::getInstance();
-    _surface = new Image(40, 40*_icons.size());
+    _surface = new UI::Image(40, 40*_icons.size());
     _surface->setX(_initialX + 29);
     _surface->setY(_initialY);
     int deltaX = _surface->x() + _surface->width() - game->renderer()->width();
@@ -145,13 +147,13 @@ void CursorDropdown::showMenu()
     if (deltaX > 0)
     {
         _surface->setX(_surface->x() - 40 - 29 - 29);
-        _cursor = new Image("art/intrface/actarrom.frm");
+        _cursor = new UI::Image("art/intrface/actarrom.frm");
         _cursor->setXOffset(-29);
         _cursor->setYOffset(0);
     }
     else
     {
-        _cursor = new Image("art/intrface/actarrow.frm");
+        _cursor = new UI::Image("art/intrface/actarrow.frm");
         _cursor->setXOffset(0);
         _cursor->setYOffset(0);
     }
@@ -180,19 +182,19 @@ void CursorDropdown::showMenu()
     }
 }
 
-Game::GameObject* CursorDropdown::object()
+Game::Object* CursorDropdown::object()
 {
     return _object;
 }
 
-void CursorDropdown::setObject(Game::GameObject* object)
+void CursorDropdown::setObject(Game::Object* object)
 {
     _object = object;
 }
 
-void CursorDropdown::handle(Event* event)
+void CursorDropdown::handle(Event::Event* event)
 {
-    if (auto mouseEvent = dynamic_cast<MouseEvent*>(event)) 
+    if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
         if (mouseEvent->name() == "mouseup" && mouseEvent->leftButton())
         {
@@ -257,7 +259,7 @@ void CursorDropdown::render()
     }
 }
 
-void CursorDropdown::onStateActivate(StateEvent* event)
+void CursorDropdown::onStateActivate(Event::State* event)
 {
     if (_deactivated)
     {
@@ -265,14 +267,14 @@ void CursorDropdown::onStateActivate(StateEvent* event)
     }
 }
 
-void CursorDropdown::onStateDeactivate(StateEvent* event)
+void CursorDropdown::onStateDeactivate(Event::State* event)
 {
     if (!_deactivated)
     {
         auto game = Game::getInstance();
         auto mouse = game->mouse();
         // workaround to get rid of cursor disappearing issues
-        std::vector<unsigned int> icons;
+        std::vector<Input::Mouse::Cursor> icons;
         while (mouse->states()->size() > _initialMouseStack)
         {
             icons.push_back(mouse->state());
@@ -293,7 +295,7 @@ void CursorDropdown::onStateDeactivate(StateEvent* event)
     }
 }
 
-void CursorDropdown::onLeftButtonUp(MouseEvent* event)
+void CursorDropdown::onLeftButtonUp(Event::Mouse* event)
 {
     auto game = Game::getInstance();
     game->popState();

@@ -17,14 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMECONTAINERITEMOBJECT_H
-#define FALLTERGEIST_GAMECONTAINERITEMOBJECT_H
+#ifndef FALLTERGEIST_GAME_CONTAINERITEMOBJECT_H
+#define FALLTERGEIST_GAME_CONTAINERITEMOBJECT_H
 
 // C++ standard includes
 #include <vector>
 
 // Falltergeist includes
-#include "ItemObject.h"
+#include "../Game/ItemObject.h"
 
 // Third party includes
 
@@ -36,26 +36,29 @@ namespace Game
 /**
  * Items able to hold other items in their inventory.
  */
-class GameContainerItemObject : public GameItemObject
+class ContainerItemObject : public ItemObject
 {
+public:
+    ContainerItemObject();
+    ~ContainerItemObject() override;
+
+    std::vector<ItemObject*>* inventory();
+
+    void use_p_proc(CritterObject* usedBy) override;
+
+    bool locked() const;
+    void setLocked(bool locked);
+
+    bool opened() const;
+    void setOpened(bool opened);
+
 protected:
-    std::vector<GameItemObject*> _inventory;
+    std::vector<ItemObject*> _inventory;
     bool _opened = false;
     bool _locked = false;
-public:
-    GameContainerItemObject();
-    virtual ~GameContainerItemObject();
-    std::vector<GameItemObject*>* inventory();
-
-    virtual void use_p_proc(GameCritterObject* usedBy);
-    
-    void setLocked(bool locked);
-    bool locked() const;
-    void setOpened(bool opened);
-    bool opened() const;
 };
 
 }
 }
 
-#endif // FALLTERGEIST_GAMECONTAINERITEMOBJECT_H
+#endif // FALLTERGEIST_GAME_CONTAINERITEMOBJECT_H

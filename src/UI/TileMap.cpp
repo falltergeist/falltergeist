@@ -17,6 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/TileMap.h"
+
 // C++ standard includes
 #include <algorithm>
 #include <cmath>
@@ -25,15 +28,16 @@
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
-#include "../Graphics/Tile.h"
-#include "../Graphics/TileMap.h"
 #include "../LocationCamera.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
+#include "../UI/Tile.h"
 
 // Thrird party includes
 
 namespace  Falltergeist
+{
+namespace UI
 {
 
 TileMap::TileMap()
@@ -100,7 +104,7 @@ void TileMap::_generateTexture()
 
     _square = std::ceil(std::sqrt(numbers.size()));
 
-    _texture = new Texture(_square*80, _square*36);
+    _texture = new Graphics::Texture(_square*80, _square*36);
 
     auto tilesLst = ResourceManager::getInstance()->lstFileType("art/tiles/tiles.lst");
     for (unsigned int i = 0; i != numbers.size(); ++i)
@@ -112,4 +116,5 @@ void TileMap::_generateTexture()
     }
 }
 
+}
 }

@@ -38,28 +38,17 @@ namespace Falltergeist
 {
 namespace Game
 {
-    class GameLocation;
+    class Location;
+}
+namespace Graphics
+{
+    class Texture;
 }
 
-class Surface;
-class Texture;
 class Font;
 
 class ResourceManager
 {
-protected:
-    friend class Singleton<ResourceManager>;
-
-    std::vector<libfalltergeist::Dat::File*> _datFiles;
-    std::unordered_map<std::string, libfalltergeist::Dat::Item*> _datFilesItems;
-    std::unordered_map<std::string, Texture*> _textures;
-    std::unordered_map<std::string, std::shared_ptr<Font>> _fonts;
-    std::unordered_map<unsigned int, Game::GameLocation*> _gameLocations;
-
-    ResourceManager();
-    ~ResourceManager();
-    ResourceManager(const ResourceManager&) = delete;
-    ResourceManager& operator=(const ResourceManager&) = delete;
 
 public:
     static ResourceManager* getInstance();
@@ -84,13 +73,27 @@ public:
     libfalltergeist::Pro::File* proFileType(unsigned int PID);
     libfalltergeist::Rix::File* rixFileType(const std::string& filename);
     libfalltergeist::Sve::File* sveFileType(const std::string& filename);
-    Texture* texture(const std::string& filename);
-    std::unordered_map<std::string, Texture*>* textures();
+    Graphics::Texture* texture(const std::string& filename);
+    std::unordered_map<std::string, Graphics::Texture*>* textures();
     std::shared_ptr<Font> font(const std::string& filename = "font1.aaf", unsigned int color = 0x3ff800ff);
     void unloadResources();
     std::string FIDtoFrmName(unsigned int FID);
-    Game::GameLocation* gameLocation(unsigned int number);
+    Game::Location* gameLocation(unsigned int number);
     void shutdown();
+
+protected:
+    friend class Base::Singleton<ResourceManager>;
+
+    std::vector<libfalltergeist::Dat::File*> _datFiles;
+    std::unordered_map<std::string, libfalltergeist::Dat::Item*> _datFilesItems;
+    std::unordered_map<std::string, Graphics::Texture*> _textures;
+    std::unordered_map<std::string, std::shared_ptr<Font>> _fonts;
+    std::unordered_map<unsigned int, Game::Location*> _gameLocations;
+
+    ResourceManager();
+    ~ResourceManager();
+    ResourceManager(const ResourceManager&) = delete;
+    ResourceManager& operator=(const ResourceManager&) = delete;
 };
 
 }

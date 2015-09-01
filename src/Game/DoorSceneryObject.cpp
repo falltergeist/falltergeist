@@ -17,15 +17,18 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Game/DoorSceneryObject.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Audio/AudioMixer.h"
-#include "../Graphics/Animation.h"
-#include "../Graphics/AnimationQueue.h"
-#include "../Logger.h"
+#include "../Audio/Mixer.h"
+#include "../Event/Event.h"
 #include "../Game/Game.h"
-#include "../Game/DoorSceneryObject.h"
+#include "../Logger.h"
+#include "../UI/Animation.h"
+#include "../UI/AnimationQueue.h"
 #include "../VM/VM.h"
 
 // Third party includes
@@ -35,79 +38,79 @@ namespace Falltergeist
 namespace Game
 {
 
-GameDoorSceneryObject::GameDoorSceneryObject() : GameSceneryObject()
+DoorSceneryObject::DoorSceneryObject() : SceneryObject()
 {
-    _subtype = TYPE_SCENERY_DOOR;
+    _subtype = Subtype::DOOR;
 }
 
-GameDoorSceneryObject::~GameDoorSceneryObject()
+DoorSceneryObject::~DoorSceneryObject()
 {
 }
 
-bool GameDoorSceneryObject::opened() const
+bool DoorSceneryObject::opened() const
 {
     return _opened;
 }
 
-void GameDoorSceneryObject::setOpened(bool value)
+void DoorSceneryObject::setOpened(bool value)
 {
     _opened = value;
 }
 
-bool GameDoorSceneryObject::locked() const
+bool DoorSceneryObject::locked() const
 {
     return _locked;
 }
 
-void GameDoorSceneryObject::setLocked(bool value)
+void DoorSceneryObject::setLocked(bool value)
 {
     _locked = value;
 }
 
-void GameDoorSceneryObject::use_p_proc(GameCritterObject* usedBy)
+void DoorSceneryObject::use_p_proc(CritterObject* usedBy)
 {
-    GameObject::use_p_proc(usedBy);
+    Object::use_p_proc(usedBy);
     if (script() && script()->overrides()) return;
 
     if (!opened())
     {
-        if (AnimationQueue* queue = dynamic_cast<AnimationQueue*>(this->ui()))
+        if (UI::AnimationQueue* queue = dynamic_cast<UI::AnimationQueue*>(this->ui()))
         {
             queue->start();
             queue->currentAnimation()->setReverse(false);
-            queue->addEventHandler("animationEnded", std::bind(&GameDoorSceneryObject::onOpeningAnimationEnded, this, std::placeholders::_1));
+            queue->addEventHandler("animationEnded", std::bind(&DoorSceneryObject::onOpeningAnimationEnded, this, std::placeholders::_1));
             if (_soundId) Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/sodoors") + _soundId + ".acm");
         }
     }
     else
     {
-        if (AnimationQueue* queue = dynamic_cast<AnimationQueue*>(this->ui()))
+        if (UI::AnimationQueue* queue = dynamic_cast<UI::AnimationQueue*>(this->ui()))
         {
             queue->start();
             queue->currentAnimation()->setReverse(true);
-            queue->addEventHandler("animationEnded", std::bind(&GameDoorSceneryObject::onClosingAnimationEnded, this, std::placeholders::_1));
+            queue->addEventHandler("animationEnded", std::bind(&DoorSceneryObject::onClosingAnimationEnded, this, std::placeholders::_1));
             if (_soundId) Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/scdoors") + _soundId + ".acm");
         }
     }
 }
 
-bool GameDoorSceneryObject::canWalkThru() const
+bool DoorSceneryObject::canWalkThru() const
 {
     return opened();
 }
 
-void GameDoorSceneryObject::onOpeningAnimationEnded(Event* event)
+void DoorSceneryObject::onOpeningAnimationEnded(Event::Event* event)
 {
-    auto queue = (AnimationQueue*)event->emitter();
+    auto queue = (UI::AnimationQueue*)event->emitter();
     setOpened(true);
     queue->removeEventHandlers("animationEnded");
     queue->stop();
     Logger::info() << "Door opened: " << opened() << std::endl;
 }
 
-void GameDoorSceneryObject::onClosingAnimationEnded(Event* event)
+void DoorSceneryObject::onClosingAnimationEnded(Event::Event* event)
 {
-    auto queue = (AnimationQueue*)event->emitter();
+    auto queue = (UI::AnimationQueue*)event->emitter();
     setOpened(false);
     queue->removeEventHandlers("animationEnded");
     queue->stop();

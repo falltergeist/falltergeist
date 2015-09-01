@@ -17,18 +17,23 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/AnimationQueue.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Graphics/AnimationQueue.h"
-#include "../Graphics/Animation.h"
+#include "../Event/Event.h"
+#include "../UI/Animation.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace UI
+{
 
-AnimationQueue::AnimationQueue() : ActiveUI()
+AnimationQueue::AnimationQueue() : Falltergeist::UI::Base()
 {
 }
 
@@ -95,7 +100,7 @@ void AnimationQueue::think()
             {
                 if (!_repeat)
                 {
-                    auto event = new Event("animationEnded");
+                    auto event = new Event::Event("animationEnded");
                     emitEvent(event);
                     delete event;
                     _playing = false;
@@ -118,7 +123,7 @@ void AnimationQueue::think()
     }
 }
 
-Texture* AnimationQueue::texture()
+Graphics::Texture* AnimationQueue::texture() const
 {
     return currentAnimation()->texture();
 }
@@ -130,29 +135,30 @@ unsigned int AnimationQueue::pixel(unsigned int x, unsigned int y)
     return currentAnimation()->pixel(x, y);
 }
 
-Animation* AnimationQueue::currentAnimation()
+Animation* AnimationQueue::currentAnimation() const
 {
     return _animations.at(_currentAnimation);
 }
 
-unsigned int AnimationQueue::width()
+unsigned int AnimationQueue::width() const
 {
     return currentAnimation()->width();
 }
 
-unsigned int AnimationQueue::height()
+unsigned int AnimationQueue::height() const
 {
     return currentAnimation()->height();
 }
 
-int AnimationQueue::xOffset()
+int AnimationQueue::xOffset() const
 {
     return currentAnimation()->xOffset();
 }
 
-int AnimationQueue::yOffset()
+int AnimationQueue::yOffset() const
 {
     return currentAnimation()->yOffset();
 }
 
+}
 }

@@ -56,6 +56,7 @@ public:
     std::string get(const std::string& name, const std::string& defaultValue);
 
 private:
+    void _initialize();
     std::string _filename;
     lua_State* _lua_State;
 

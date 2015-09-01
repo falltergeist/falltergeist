@@ -36,16 +36,16 @@ class SaveGame : public State
 {
 public:
     SaveGame();
-    virtual ~SaveGame();
-    virtual void init();
+    ~SaveGame() override;
 
-    void onDoneButtonClick(MouseEvent* event);
-    void onCancelButtonClick(MouseEvent* event);
+    void init() override;
 
-    virtual void onStateActivate(StateEvent* event);
-    virtual void onStateDeactivate(StateEvent* event);
-    
-    virtual void onKeyDown(KeyboardEvent* event);
+    void onDoneButtonClick(Event::Mouse* event);
+    void onCancelButtonClick(Event::Mouse* event);
+
+    void onStateActivate(Event::State* event) override;
+    void onStateDeactivate(Event::State* event) override;
+    void onKeyDown(Event::Keyboard* event) override;
 
 private:
 };

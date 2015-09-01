@@ -17,36 +17,54 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_TILEMAP_H
-#define FALLTERGEIST_TILEMAP_H
+// Related headers
+#include "../UI/Tile.h"
 
 // C++ standard includes
-#include <vector>
-#include <memory>
 
 // Falltergeist includes
+#include "../Game/Game.h"
+#include "../Graphics/Renderer.h"
+#include "../Graphics/Texture.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-
-class Texture;
-class Tile;
-
-class TileMap
+namespace UI
 {
-protected:
-    unsigned int _square = 0;
-    Texture* _texture = 0;
-    std::vector<Tile*> _tiles;
-    void _generateTexture();
-public:
-    TileMap();
-    ~TileMap();
-    std::vector<Tile*>* tiles();
-    void render();
-};
+
+Tile::Tile(unsigned int number, int x, int y)
+{
+    _number = number;
+    _x = x;
+    _y = y;
+}
+
+unsigned int Tile::number() const
+{
+    return _number;
+}
+
+int Tile::x() const
+{
+    return _x;
+}
+
+int Tile::y() const
+{
+    return _y;
+}
+
+unsigned int Tile::index() const
+{
+    return _index;
+}
+
+void Tile::setIndex(unsigned int value)
+{
+    _index = value;
+}
 
 }
-#endif // FALLTERGEIST_TILEMAP_H
+}

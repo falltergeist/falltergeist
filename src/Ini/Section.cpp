@@ -17,12 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Ini/Section.h"
+
 // C++ standard includes
 
 // Falltergeist includes
 #include "../Exception.h"
 #include "../Logger.h"
-#include "../Ini/Section.h"
 
 // Third party includes
 
@@ -30,6 +32,14 @@ namespace Falltergeist
 {
 namespace Ini
 {
+
+Section::Section(const std::string &name) : _name(name)
+{
+}
+
+Section::~Section()
+{
+}
 
 std::string Section::name()
 {
@@ -202,15 +212,6 @@ std::vector<Value> Section::propertyArray(const std::string &name)
     return ret;
 }
 
-Section::Section(const std::string &name) : _name(name)
-{
-}
-
-Section::~Section()
-{
-
-}
-
 Section::iterator Section::begin()
 {
     return _properties.begin();
@@ -231,5 +232,5 @@ Section::const_iterator Section::end() const
     return _properties.end();
 }
 
-} // Ini
-} // Falltergeist
+}
+}

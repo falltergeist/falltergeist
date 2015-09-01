@@ -17,39 +17,42 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_ANIMATEDIMAGE_H
-#define FALLTERGEIST_ANIMATEDIMAGE_H
+#ifndef FALLTERGEIST_UI_ANIMATEDIMAGE_H
+#define FALLTERGEIST_UI_ANIMATEDIMAGE_H
 
 // C++ standard includes
 #include <string>
 
 // Falltergeist includes
-#include "../Graphics/ActiveUI.h"
-#include "../Graphics/UI.h"
+#include "../UI/Base.h"
 
 // Third party includes
 #include <libfalltergeist.h>
 
-
 namespace Falltergeist
 {
-
-class AnimatedImage : public ActiveUI
+namespace UI
 {
-protected:
-    std::vector<Texture*> _slimeTextures;
-    std::vector<Texture*> _fireSlowTextures;
-    std::vector<Texture*> _fireFastTextures;
-    std::vector<Texture*> _shoreTextures;
-    std::vector<Texture*> _monitorTextures;
-    std::vector<Texture*> _reddotTextures;
+
+class AnimatedImage : public Falltergeist::UI::Base
+{
 public:
     AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direction);
-    unsigned int width();
-    unsigned int height();
-    ~AnimatedImage();
-    void render(bool eggTransparency = false);
+    ~AnimatedImage() override;
+
+    unsigned int width() const override;
+    unsigned int height() const override;
+    void render(bool eggTransparency = false) override;
+
+protected:
+    std::vector<Graphics::Texture*> _slimeTextures;
+    std::vector<Graphics::Texture*> _fireSlowTextures;
+    std::vector<Graphics::Texture*> _fireFastTextures;
+    std::vector<Graphics::Texture*> _shoreTextures;
+    std::vector<Graphics::Texture*> _monitorTextures;
+    std::vector<Graphics::Texture*> _reddotTextures;
 };
 
 }
-#endif // FALLTERGEIST_ANIMATEDIMAGE_H
+}
+#endif // FALLTERGEIST_UI_ANIMATEDIMAGE_H

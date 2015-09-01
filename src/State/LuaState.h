@@ -43,7 +43,7 @@ class LuaState : public State
 
 public:
     LuaState(const std::string& filename);
-    virtual ~LuaState();
+    ~LuaState() override;
 
     virtual int x() const;
     virtual void setX(int value);
@@ -59,13 +59,10 @@ public:
 
     virtual void init();
     virtual void think();
-    virtual void handle(Event* event);
+    virtual void handle(Event::Event* event);
     virtual void render();
 
-    virtual void addUI(ActiveUI* ui);
-
-
-    static void export_to_lua_script(Lua::Script* script);
+    virtual void addUI(UI::Base* ui);
 
 private:
     Lua::Script* _script = nullptr;

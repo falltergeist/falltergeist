@@ -36,14 +36,15 @@ class Skilldex : public State
 {
 public:
     Skilldex();
+    ~Skilldex() override;
 
-    virtual void init();
+    void init() override;
 
-    void onCancelButtonClick(MouseEvent* event);
-    virtual void onKeyDown(KeyboardEvent* event);
-    
-    virtual void onStateActivate(StateEvent* event);
-    virtual void onStateDeactivate(StateEvent* event);
+    void onCancelButtonClick(Event::Mouse* event);
+
+    void onKeyDown(Event::Keyboard* event) override;
+    virtual void onStateActivate(Event::State* event) override;
+    virtual void onStateDeactivate(Event::State* event) override;
 
 };
 

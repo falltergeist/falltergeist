@@ -17,49 +17,63 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAME_H
-#define FALLTERGEIST_GAME_H
+#ifndef FALLTERGEIST_GAME_GAME_H
+#define FALLTERGEIST_GAME_GAME_H
 
 // C++ standard includes
-#include <vector>
-#include <string>
 #include <memory>
+#include <string>
+#include <vector>
 
 // Falltergeist includes
+#include "../Base/Singleton.h"
 
 // Third party includes
 #include "SDL.h"
 
 namespace Falltergeist
 {
+namespace Audio
+{
+    class Mixer;
+}
+namespace Graphics
+{
+    class AnimatedPalette;
+    class Renderer;
+}
+namespace Input
+{
+    class Mouse;
+}
+namespace Lua
+{
+    class Script;
+}
 namespace State
 {
     class Location;
     class State;
 }
+namespace UI
+{
+    class FpsCounter;
+    class TextArea;
+}
 class Exception;
-class Screen;
 class ResourceManager;
-class FpsCounter;
-class Mouse;
-class AudioMixer;
-class Renderer;
-class UI;
-class TextArea;
-class AnimatedPalette;
 class Settings;
 
 namespace Game
 {
-
-class GameDudeObject;
-class GameTime;
+class DudeObject;
+class Time;
 
 class Game
 {
 public:
-    ~Game();
     static Game* getInstance();
+    static void exportToLuaScript(Lua::Script* script);
 
     void shutdown();
     std::vector<State::State*>* states();
@@ -70,24 +84,25 @@ public:
     void popState();
     void run();
     void quit();
+    void init(std::unique_ptr<Settings> settings);
 
     void handle();
     void think();
     void render();
 
-    void setPlayer(GameDudeObject* player);
-    GameDudeObject* player();
-    Mouse* mouse();
-    Renderer* renderer();
-    GameTime* gameTime();
+    void setPlayer(DudeObject* player);
+    DudeObject* player();
+    Input::Mouse* mouse() const;
+    Graphics::Renderer* renderer();
+    Time* gameTime();
     State::Location* locationState();
-    AudioMixer* mixer();
+    Audio::Mixer* mixer();
 
     void setGVAR(unsigned int number, int value);
     int GVAR(unsigned int number);
 
-    Settings* settings();
-    AnimatedPalette* animatedPalette();
+    Settings* settings() const;
+    Graphics::AnimatedPalette* animatedPalette();
 
 protected:
     std::vector<int> _GVARS;
@@ -96,29 +111,29 @@ protected:
     std::vector<State::State*> _statesForThinkAndHandle;
     std::vector<State::State*> _statesForDelete;
 
-    GameDudeObject* _player = 0;
-    GameTime* _gameTime = 0;
-    Renderer* _renderer = 0;
-    Mouse* _mouse = 0;
-    AudioMixer* _mixer = 0;
-    FpsCounter* _fpsCounter = 0;
-    TextArea* _mousePosition = 0;
-    TextArea* _currentTime = 0;
-    TextArea* _falltergeistVersion = 0;
-    Settings* _settings = 0;
-    AnimatedPalette* _animatedPalette = 0;
+    DudeObject* _player = nullptr;
+    Time* _gameTime = nullptr;
+    Graphics::Renderer* _renderer = nullptr;
+    Input::Mouse* _mouse = nullptr;
+    std::unique_ptr<Audio::Mixer> _mixer;
+    UI::FpsCounter* _fpsCounter =  nullptr;
+    UI::TextArea* _mousePosition = nullptr;
+    UI::TextArea* _currentTime = nullptr;
+    UI::TextArea* _falltergeistVersion = nullptr;
+    std::unique_ptr<Settings> _settings;
+    Graphics::AnimatedPalette* _animatedPalette = nullptr;
     bool _quit = false;
     SDL_Event _event;
     bool _initialized = false;
-    void _initialize();
-    void _initGVARS();
-private:
-    Game() {}
-    Game(Game const&);
-    void operator=(Game const&);
-    static Game* _instance;
-    static bool _instanceFlag;
 
+private:
+    friend class Base::Singleton<Game>;
+    void _initGVARS();
+
+    Game();
+    ~Game();
+    Game(Game const&) = delete;
+    void operator=(Game const&) = delete;
 };
 
 Game* getInstance();
@@ -126,4 +141,4 @@ Game* getInstance();
 }
 }
 
-#endif // FALLTERGEIST_GAME_H
+#endif // FALLTERGEIST_GAME_GAME_H

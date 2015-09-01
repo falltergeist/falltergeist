@@ -17,13 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMEARMORITEMOBJECT_H
-#define FALLTERGEIST_GAMEARMORITEMOBJECT_H
+#ifndef FALLTERGEIST_GAME_ARMORITEMOBJECT_H
+#define FALLTERGEIST_GAME_ARMORITEMOBJECT_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "ItemObject.h"
+#include "../Game/ItemObject.h"
 
 // Third party includes
 #include <libfalltergeist.h>
@@ -33,11 +33,34 @@ namespace Falltergeist
 namespace Game
 {
 
-/**
+/*
  * Items wearable in "armor" slot.
  */
-class GameArmorItemObject : public GameItemObject
+class ArmorItemObject : public ItemObject
 {
+public:
+
+    ArmorItemObject();
+    ~ArmorItemObject() override;
+
+    int damageResist(DAMAGE type) const; // damage resistance bonus of the armor
+    void setDamageResist(DAMAGE type, int value);
+
+    int damageThreshold(DAMAGE type) const; // damage threshold bonus of the armor
+    void setDamageThreshold(DAMAGE type, int value);
+
+    int perk() const; // special perk given to player when wearing armor
+    void setPerk(int value);
+
+    unsigned int maleFID() const; // base frame ID used when wearing this type of armor by male critter
+    void setMaleFID(unsigned int value);
+
+    unsigned int femaleFID() const; // base frame ID used when wearing this type of armor by female critter
+    void setFemaleFID(unsigned int value);
+
+    unsigned int armorClass() const; // armor class (%)
+    void setArmorClass(unsigned int value);
+
 protected:
     std::vector<int> _damageResist = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::vector<int> _damageThreshold = {0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -45,38 +68,8 @@ protected:
     unsigned int _maleFID = 0;
     unsigned int _femaleFID = 0;
     unsigned int _armorClass = 0;
-public:
-
-    GameArmorItemObject();
-    virtual ~GameArmorItemObject();
-
-    // damage resistance bonus of the armor
-    virtual int damageResist(DAMAGE type) const;
-    void setDamageResist(DAMAGE type, int value);
-
-    // damage threshold bonus of the armor
-    virtual int damageThreshold(DAMAGE type) const;
-    void setDamageThreshold(DAMAGE type, int value);
-
-    // special perk given to player when wearing armor
-    int perk() const;
-    void setPerk(int value);
-
-    // base frame ID used when wearing this type of armor by male critter
-    unsigned int maleFID() const;
-    void setMaleFID(unsigned int value);
-
-    // base frame ID used when wearing this type of armor by female critter
-    unsigned int femaleFID() const;
-    void setFemaleFID(unsigned int value);
-
-    // armor class (%)
-    unsigned int armorClass() const;
-    void setArmorClass(unsigned int value);
-
 };
 
 }
 }
-
-#endif // FALLTERGEIST_GAMEARMORITEMOBJECT_H
+#endif // FALLTERGEIST_GAME_ARMORITEMOBJECT_H

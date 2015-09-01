@@ -17,13 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMEGENERICSCENERYOBJECT_H
-#define FALLTERGEIST_GAMEGENERICSCENERYOBJECT_H
+#ifndef FALLTERGEIST_GAME_GENERICSCENERYOBJECT_H
+#define FALLTERGEIST_GAME_GENERICSCENERYOBJECT_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "SceneryObject.h"
+#include "../Game/SceneryObject.h"
 
 // Third party includes
 
@@ -32,15 +32,17 @@ namespace Falltergeist
 namespace Game
 {
 
-class GameGenericSceneryObject : public GameSceneryObject
+class GenericSceneryObject : public SceneryObject
 {
-protected:
+
 public:
-    GameGenericSceneryObject();
-    virtual ~GameGenericSceneryObject();
+    GenericSceneryObject();
+    ~GenericSceneryObject() override;
+
+protected:
+    bool _useEggTransparency() override;
 };
 
 }
 }
-
-#endif // FALLTERGEIST_GAMEGENERICSCENERYOBJECT_H
+#endif // FALLTERGEIST_GAME_GENERICSCENERYOBJECT_H

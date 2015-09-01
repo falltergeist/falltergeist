@@ -92,10 +92,10 @@ void Opcode810AHandler::_run()
     auto string = _vm->dataStack()->popString();
     auto object = _vm->dataStack()->popObject();
 
-    auto floatMessage = new TextArea(string);
+    auto floatMessage = new UI::TextArea(string);
     floatMessage->setWidth(200);
     floatMessage->setWordWrap(true);
-    floatMessage->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    floatMessage->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
     floatMessage->setFont(ResourceManager::getInstance()->font("font1.aaf", color));
     object->setFloatMessage(floatMessage);
 

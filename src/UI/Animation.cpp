@@ -17,32 +17,36 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/Animation.h"
+
 // C++ standard includes
 #include <cmath>
 
 // Falltergeist includes
-#include "../Graphics/Animation.h"
-#include "../Graphics/AnimationFrame.h"
-#include "../Graphics/Texture.h"
-#include "../Game/Game.h"
-#include "../Graphics/Renderer.h"
-#include "../Graphics/AnimatedPalette.h"
-#include "../ResourceManager.h"
 #include "../Game/DudeObject.h"
-#include "../State/Location.h"
+#include "../Game/Game.h"
+#include "../Graphics/AnimatedPalette.h"
+#include "../Graphics/Renderer.h"
+#include "../Graphics/Texture.h"
 #include "../LocationCamera.h"
+#include "../ResourceManager.h"
+#include "../State/Location.h"
+#include "../UI/AnimationFrame.h"
 
 // Third party includes
 #include "SDL.h"
 
 namespace Falltergeist
 {
+namespace UI
+{
 
-Animation::Animation() : ActiveUI()
+Animation::Animation() : Falltergeist::UI::Base()
 {
 }
 
-Animation::Animation(const std::string& frmName, unsigned int direction) : ActiveUI()
+Animation::Animation(const std::string& frmName, unsigned int direction) : Falltergeist::UI::Base()
 {
     auto frm = ResourceManager::getInstance()->frmFileType(frmName);
     setTexture(ResourceManager::getInstance()->texture(frmName));
@@ -52,7 +56,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Activ
     _xShift = frm->directions()->at(direction)->shiftX();
     _yShift = frm->directions()->at(direction)->shiftY();
 
-    // Смещение кадра в текстуре анимации
+    // Frame offset in texture's animation
     unsigned int x = 0;
     unsigned int y = 0;
 
@@ -92,7 +96,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Activ
 
     if (frm->animatedPalette())
     {
-        AnimatedPalette*  palette=Game::getInstance()->animatedPalette();
+        Graphics::AnimatedPalette*  palette=Game::getInstance()->animatedPalette();
         auto masks = frm->animatedMasks();
 
         if ((*masks)[MASK::MONITOR] != NULL)
@@ -107,7 +111,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Activ
                     mask[j] = palette->color((*masks)[MASK::MONITOR][j],i);
                 }
                 //set
-                auto texture = new Texture(frm->width(), frm->height());
+                auto texture = new Graphics::Texture(frm->width(), frm->height());
                 texture->loadFromRGBA(mask);
                 _monitorTextures.push_back(texture);
             }
@@ -125,7 +129,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Activ
                     mask[j] = palette->color(((*masks)[MASK::SLIME][j]),i);
                 }
                 //set
-                auto texture = new Texture(frm->width(), frm->height());
+                auto texture = new Graphics::Texture(frm->width(), frm->height());
                 texture->loadFromRGBA(mask);
                 _slimeTextures.push_back(texture);
             }
@@ -143,7 +147,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Activ
                     mask[j] = palette->color(((*masks)[MASK::SHORE][j]),i);
                 }
                 //set
-                auto texture = new Texture(frm->width(), frm->height());
+                auto texture = new Graphics::Texture(frm->width(), frm->height());
                 texture->loadFromRGBA(mask);
                 _shoreTextures.push_back(texture);
             }
@@ -162,7 +166,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Activ
                     mask[j] = palette->color(((*masks)[MASK::FIRE_SLOW][j]),i);
                 }
                 //set
-                auto texture = new Texture(frm->width(), frm->height());
+                auto texture = new Graphics::Texture(frm->width(), frm->height());
                 texture->loadFromRGBA(mask);
                 _fireSlowTextures.push_back(texture);
             }
@@ -180,7 +184,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Activ
                     mask[j] = palette->color(((*masks)[MASK::FIRE_FAST][j]),i);
                 }
                 //set
-                auto texture = new Texture(frm->width(), frm->height());
+                auto texture = new Graphics::Texture(frm->width(), frm->height());
                 texture->loadFromRGBA(mask);
                 _fireFastTextures.push_back(texture);
             }
@@ -197,14 +201,13 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Activ
                     mask[j] = palette->color(((*masks)[MASK::REDDOT][j]),i);
                 }
                 //set
-                auto texture = new Texture(frm->width(), frm->height());
+                auto texture = new Graphics::Texture(frm->width(), frm->height());
                 texture->loadFromRGBA(mask);
                 _reddotTextures.push_back(texture);
             }
         }
     }
 }
-
 
 Animation::~Animation()
 {
@@ -220,12 +223,12 @@ std::vector<AnimationFrame*>* Animation::frames()
     return &_animationFrames;
 }
 
-int Animation::xOffset()
+int Animation::xOffset() const
 {
     return _animationFrames.at(_currentFrame)->xOffset() + xShift();
 }
 
-int Animation::yOffset()
+int Animation::yOffset() const
 {
     return _animationFrames.at(_currentFrame)->yOffset() + yShift();
 }
@@ -244,7 +247,7 @@ void Animation::think()
             _currentFrame = _reverse ? frames()->size() - _progress - 1 : _progress;
             if (_actionFrame == _currentFrame)
             {
-                auto event = new Event("actionFrame");
+                auto event = new Event::Event("actionFrame");
                 emitEvent(event);
                 delete event;
             }
@@ -253,7 +256,7 @@ void Animation::think()
         {
             _ended = true;
             _playing = false;
-            auto event = new Event("animationEnded");
+            auto event = new Event::Event("animationEnded");
             emitEvent(event);
             delete event;
         }
@@ -263,7 +266,7 @@ void Animation::think()
 void Animation::render(bool eggTransparency)
 {
     auto frame = frames()->at(_currentFrame);
-    AnimatedPalette* pal = Game::getInstance()->animatedPalette();
+    Graphics::AnimatedPalette* pal = Game::getInstance()->animatedPalette();
 
     if (eggTransparency)
     {
@@ -333,7 +336,7 @@ void Animation::render(bool eggTransparency)
             return;
         }
 
-        if (!_tmptex) _tmptex = new Texture(texture()->width(),texture()->height());
+        if (!_tmptex) _tmptex = new Graphics::Texture(texture()->width(),texture()->height());
         texture()->copyTo(_tmptex);
 
         if (pal->getCounter(MASK::FIRE_FAST) < _fireFastTextures.size())
@@ -381,12 +384,12 @@ void Animation::render(bool eggTransparency)
     }
 }
 
-unsigned int Animation::height()
+unsigned int Animation::height() const
 {
     return _animationFrames.at(_currentFrame)->height();
 }
 
-unsigned int Animation::width()
+unsigned int Animation::width() const
 {
     return _animationFrames.at(_currentFrame)->width();
 }
@@ -401,7 +404,7 @@ unsigned int Animation::pixel(unsigned int x, unsigned int y)
     if (x > frame->width()) return 0;
     if (y > frame->height()) return 0;
 
-    return ActiveUI::pixel(x + frame->x(), y + frame->y());
+    return Falltergeist::UI::Base::pixel(x + frame->x(), y + frame->y());
 }
 
 void Animation::play()
@@ -452,7 +455,7 @@ void Animation::setActionFrame(unsigned int value)
     _actionFrame = value;
 }
 
-int Animation::xShift()
+int Animation::xShift() const
 {
     return _xShift;
 }
@@ -462,7 +465,7 @@ void Animation::setXShift(int value)
     _xShift = value;
 }
 
-int Animation::yShift()
+int Animation::yShift() const
 {
     return _yShift;
 }
@@ -472,4 +475,5 @@ void Animation::setYShift(int value)
     _yShift = value;
 }
 
+}
 }

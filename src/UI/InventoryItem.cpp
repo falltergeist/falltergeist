@@ -17,44 +17,54 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/InventoryItem.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Game/Game.h"
+#include "../Event/Event.h"
+#include "../Event/Mouse.h"
 #include "../Game/DudeObject.h"
+#include "../Game/Game.h"
 #include "../Game/ItemObject.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../Logger.h"
-#include "../UI/InventoryItem.h"
-#include "../UI/ItemsList.h"
 #include "../UI/Image.h"
+#include "../UI/ItemsList.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace UI
+{
 
-InventoryItem::InventoryItem(Game::GameItemObject *item, int x, int y) : ActiveUI(x, y)
+InventoryItem::InventoryItem(Game::ItemObject *item, int x, int y) : Falltergeist::UI::Base(x, y)
 {
     _item = item;
-    addEventHandler("mouseleftdown", [this](Event* event){ this->onMouseLeftDown(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mousedragstart", [this](Event* event){ this->onMouseDragStart(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mousedrag", [this](Event* event){ this->onMouseDrag(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mousedragstop", [this](Event* event){ this->onMouseDragStop(dynamic_cast<MouseEvent*>(event)); });
+    addEventHandler("mouseleftdown", [this](Event::Event* event){ this->onMouseLeftDown(dynamic_cast<Event::Mouse*>(event)); });
+    addEventHandler("mousedragstart", [this](Event::Event* event){ this->onMouseDragStart(dynamic_cast<Event::Mouse*>(event)); });
+    addEventHandler("mousedrag", [this](Event::Event* event){ this->onMouseDrag(dynamic_cast<Event::Mouse*>(event)); });
+    addEventHandler("mousedragstop", [this](Event::Event* event){ this->onMouseDragStop(dynamic_cast<Event::Mouse*>(event)); });
 }
 
-unsigned int InventoryItem::type()
+InventoryItem::~InventoryItem()
+{
+}
+
+InventoryItem::Type InventoryItem::type() const
 {
     return _type;
 }
 
-void InventoryItem::setType(unsigned int value)
+void InventoryItem::setType(Type value)
 {
     _type = value;
 }
 
-Texture* InventoryItem::texture()
+Graphics::Texture* InventoryItem::texture() const
 {
     //if (!_texture)
     //{
@@ -67,10 +77,11 @@ Texture* InventoryItem::texture()
 
     switch (_type)
     {
-        case TYPE_SLOT:
+        case Type::SLOT:
             return _item->inventorySlotUi()->texture();
-        case TYPE_DRAG:
+        case Type::DRAG:
             return _item->inventoryDragUi()->texture();
+        default: {}
     }
 
     return _item->inventoryUi()->texture();
@@ -90,39 +101,39 @@ unsigned int InventoryItem::pixel(unsigned int x, unsigned int y)
     return x < width() && y < height();
 }
 
-Game::GameItemObject* InventoryItem::item()
+Game::ItemObject* InventoryItem::item()
 {
     return _item;
 }
 
-void InventoryItem::setItem(Game::GameItemObject* item)
+void InventoryItem::setItem(Game::ItemObject* item)
 {
     _item = item;
 }
 
-void InventoryItem::onMouseLeftDown(MouseEvent* event)
+void InventoryItem::onMouseLeftDown(Event::Mouse* event)
 {
 }
 
-void InventoryItem::onMouseDragStart(MouseEvent* event)
+void InventoryItem::onMouseDragStart(Event::Mouse* event)
 {
     _oldType = type();
-    setType(TYPE_DRAG);
+    setType(Type::DRAG);
 }
 
-void InventoryItem::onMouseDrag(MouseEvent* event)
+void InventoryItem::onMouseDrag(Event::Mouse* event)
 {
     setXOffset(xOffset() + event->xOffset());
     setYOffset(yOffset() + event->yOffset());
 }
 
-void InventoryItem::onMouseDragStop(MouseEvent* event)
+void InventoryItem::onMouseDragStop(Event::Mouse* event)
 {
     setXOffset(0);
     setYOffset(0);
     setType(_oldType);
 
-    auto itemevent = new MouseEvent("itemdragstop");
+    auto itemevent = new Event::Mouse("itemdragstop");
     itemevent->setX(event->x());
     itemevent->setY(event->y());
     itemevent->setEmitter(this);
@@ -131,7 +142,7 @@ void InventoryItem::onMouseDragStop(MouseEvent* event)
 
 }
 
-void InventoryItem::onArmorDragStop(MouseEvent* event)
+void InventoryItem::onArmorDragStop(Event::Mouse* event)
 {
     // Check if mouse is over this item
     if (event->x() <= x() || event->x() >= x() + width()) return;
@@ -148,14 +159,14 @@ void InventoryItem::onArmorDragStop(MouseEvent* event)
             itemsList->addItem(this, 1);
         }
         this->setItem(itemObject);
-        if (auto armor = dynamic_cast<Game::GameArmorItemObject*>(itemObject))
+        if (auto armor = dynamic_cast<Game::ArmorItemObject*>(itemObject))
         {
             Game::getInstance()->player()->setArmorSlot(armor);
         }
     }
 }
 
-void InventoryItem::onHandDragStop(MouseEvent* event)
+void InventoryItem::onHandDragStop(Event::Mouse* event)
 {
     // Check if mouse is over this item
     if (event->x() <= x() || event->x() >= x() + width()) return;
@@ -174,14 +185,15 @@ void InventoryItem::onHandDragStop(MouseEvent* event)
     }
 }
 
-unsigned int InventoryItem::width()
+unsigned int InventoryItem::width() const
 {
-    return type() == TYPE_SLOT ? 90 : 70;
+    return type() == Type::SLOT ? 90 : 70;
 }
 
-unsigned int InventoryItem::height()
+unsigned int InventoryItem::height() const
 {
-    return type() == TYPE_SLOT ? 63 : 49;
+    return type() == Type::SLOT ? 63 : 49;
 }
 
+}
 }

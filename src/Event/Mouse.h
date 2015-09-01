@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_MOUSEEVENT_H
-#define FALLTERGEIST_MOUSEEVENT_H
+#ifndef FALLTERGEIST_EVENT_MOUSE_H
+#define FALLTERGEIST_EVENT_MOUSE_H
 
 // C++ standard includes
 #include <memory>
@@ -30,45 +30,51 @@
 
 namespace Falltergeist
 {
-
-class MouseEvent : public Event
+namespace Event
 {
-protected:
-    unsigned int _x = 0;
-    unsigned int _y = 0;
-    int _xOffset = 0;
-    int _yOffset = 0;
-    int _leftButton = false;
-    int _rightButton = false;
-    bool _shiftPressed = false;
-    bool _controlPressed = false;
+
+class Mouse : public Event
+{
 public:
-    MouseEvent(const std::string& eventName = "mouse");
-    MouseEvent(MouseEvent* event);
-    virtual ~MouseEvent();
+    Mouse(const std::string& eventName = "mouse");
+    Mouse(Mouse* event);
+    ~Mouse() override;
 
+    unsigned int x() const;
     void setX(unsigned int value);
-    unsigned int x();
 
+    unsigned int y() const;
     void setY(unsigned int value);
-    unsigned int y();
 
+    int xOffset() const;
     void setXOffset(int value);
-    int xOffset();
 
+    int yOffset() const;
     void setYOffset(int value);
-    int yOffset();
 
-    bool leftButton();
+    bool leftButton() const;
     void setLeftButton(bool value);
 
-    bool rightButton();
+    bool rightButton() const;
     void setRightButton(bool value);
-    void setControlPressed(bool _controlPressed);
+
     bool controlPressed() const;
-    void setShiftPressed(bool _shiftPressed);
+    void setControlPressed(bool value);
+
     bool shiftPressed() const;
+    void setShiftPressed(bool value);
+
+protected:
+    bool _controlPressed = false;
+    bool _shiftPressed = false;
+    int _leftButton = false;
+    int _rightButton = false;
+    int _xOffset = 0;
+    int _yOffset = 0;
+    unsigned int _x = 0;
+    unsigned int _y = 0;
 };
 
 }
-#endif // FALLTERGEIST_MOUSEEVENT_H
+}
+#endif // FALLTERGEIST_EVENT_MOUSE_H

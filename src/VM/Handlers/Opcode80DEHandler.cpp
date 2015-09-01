@@ -44,7 +44,7 @@ void Opcode80DEHandler::_run()
     int headID = _vm->dataStack()->popInteger();
     int mood = _vm->dataStack()->popInteger();
 
-    auto critter = dynamic_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
+    auto critter = dynamic_cast<Game::CritterObject*>(_vm->dataStack()->popObject());
     if (!critter) _error("start_gdialog - wrong critter pointer");
 
     int msgFileID = _vm->dataStack()->popInteger();

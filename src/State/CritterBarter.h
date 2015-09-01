@@ -34,15 +34,14 @@ namespace State
 
 class CritterBarter : public State
 {
-private:
 public:
     CritterBarter();
-    ~CritterBarter();
+    ~CritterBarter() override;
 
-    void init();
+    void init() override;
 
-    void onBackgroundClick(Event* event);
-    void onTalkButtonClick(Event* event);
+    void onBackgroundClick(Event::Event* event);
+    void onTalkButtonClick(Event::Event* event);
 };
 
 }

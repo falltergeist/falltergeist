@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_TEXTAREA_H
-#define FALLTERGEIST_TEXTAREA_H
+#ifndef FALLTERGEIST_UI_TEXTAREA_H
+#define FALLTERGEIST_UI_TEXTAREA_H
 
 // C++ standard includes
 #include <cstdint>
@@ -26,7 +26,7 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Graphics/ActiveUI.h"
+#include "../UI/Base.h"
 
 // Third party includes
 #include <libfalltergeist.h>
@@ -37,40 +37,55 @@ class Font;
 class FontString;
 class TextSymbol;
 
-class TextArea : public ActiveUI
+namespace UI
+{
+
+class TextArea : public Falltergeist::UI::Base
 {
 public:
-    enum { HORIZONTAL_ALIGN_LEFT = 1, HORIZONTAL_ALIGN_CENTER, HORIZONTAL_ALIGN_RIGHT, HORIZONTAL_ALIGN_JUSTIFY };
-    enum { VERTICAL_ALIGN_TOP = 1, VERTICAL_ALIGN_CENTER, VERTICAL_ALIGN_BOTTOM, VERTICAL_ALIGN_JUSTIFY };
+    enum class HorizontalAlign : unsigned
+    {
+        LEFT = 1,
+        CENTER,
+        RIGHT,
+        JUSTIFY
+    };
+    enum class VerticalAlign : unsigned
+    {
+        TOP = 1,
+        CENTER,
+        BOTTOM,
+        JUSTIFY
+    };
     TextArea(const std::string& text, int x = 0, int y = 0);
     TextArea(int x = 0, int y = 0);
     TextArea(TextArea* textArea, int x = 0, int y = 0);
-    ~TextArea();
+    ~TextArea() override;
 
+    std::string text() const;
     void setText(const std::string& text);
     void appendText(const std::string& text);
-    std::string text() const;
 
-    void setHorizontalAlign(unsigned char align);
-    unsigned char horizontalAlign() const;
+    HorizontalAlign horizontalAlign() const;
+    void setHorizontalAlign(HorizontalAlign align);
 
-    void setVerticalAlign(unsigned char align);
-    unsigned char verticalAlign() const;
+    VerticalAlign verticalAlign() const;
+    void setVerticalAlign(VerticalAlign align);
 
+    unsigned int height() const override;
     void setHeight(unsigned int height);
-    unsigned int height() const;
 
+    unsigned int width() const override;
     void setWidth(unsigned int width);
-    unsigned int width() const;
 
-    void setWordWrap(bool wordWrap);
     bool wordWrap() const;
+    void setWordWrap(bool wordWrap);
 
-    void setFont(std::shared_ptr<Font> font);
     std::shared_ptr<Font> font();
+    void setFont(std::shared_ptr<Font> font);
 
-    virtual void render(bool eggTransparency = false);
-    virtual unsigned int pixel(unsigned int x, unsigned int y);
+    void render(bool eggTransparency = false) override;
+    unsigned int pixel(unsigned int x, unsigned int y) override;
 
     unsigned int timestampCreated();
 
@@ -86,16 +101,14 @@ public:
     TextArea& operator=(unsigned value);
     TextArea& operator=(signed value);
 
-    static void export_to_lua_script(Lua::Script* script);
-
 protected:
     bool _changed = true;
     std::vector<TextSymbol> _symbols;
     std::string _text;
     std::shared_ptr<Font> _font;
 
-    unsigned char _horizontalAlign = HORIZONTAL_ALIGN_LEFT;
-    unsigned char _verticalAlign = VERTICAL_ALIGN_TOP;
+    HorizontalAlign _horizontalAlign = HorizontalAlign::LEFT;
+    VerticalAlign _verticalAlign = VerticalAlign::TOP;
 
     unsigned int _width = 0;
     unsigned int _height = 0;
@@ -114,4 +127,5 @@ protected:
 };
 
 }
-#endif // FALLTERGEIST_TEXTAREA_H
+}
+#endif // FALLTERGEIST_UI_TEXTAREA_H

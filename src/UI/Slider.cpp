@@ -17,37 +17,43 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/Slider.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../UI/Image.h"
-#include "../UI/Slider.h"
+#include "../Audio/Mixer.h"
+#include "../Event/Event.h"
+#include "../Event/Mouse.h"
 #include "../Game/Game.h"
-#include "../Audio/AudioMixer.h"
+#include "../UI/Image.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-
-Slider::Slider(int x, int y) : ActiveUI(x, y)
+namespace UI
 {
-    addEventHandler("mousedrag", [this](Event* event){ this->_onDrag(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mouseleftdown", [this](Event* event){ this->_onLeftButtonDown(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mouseleftup", [this](Event* event){ this->_onLeftButtonUp(dynamic_cast<MouseEvent*>(event)); });
+
+Slider::Slider(int x, int y) : Falltergeist::UI::Base(x, y)
+{
+    addEventHandler("mousedrag", [this](Event::Event* event){ this->_onDrag(dynamic_cast<Event::Mouse*>(event)); });
+    addEventHandler("mouseleftdown", [this](Event::Event* event){ this->_onLeftButtonDown(dynamic_cast<Event::Mouse*>(event)); });
+    addEventHandler("mouseleftup", [this](Event::Event* event){ this->_onLeftButtonUp(dynamic_cast<Event::Mouse*>(event)); });
     _imageList.addImage("art/intrface/prfsldon.frm");
     _imageList.addImage("art/intrface/prfsldof.frm");
-    _downSnd = "sound/sfx/ib1p1xx1.acm";
-    _upSnd = "sound/sfx/ib1lu1x1.acm";
+    _downSound = "sound/sfx/ib1p1xx1.acm";
+    _upSound = "sound/sfx/ib1lu1x1.acm";
 }
 
 Slider::~Slider()
 {
 }
 
-void Slider::handle(Event* event)
+void Slider::handle(Event::Event* event)
 {
-    if(auto mouseEvent = dynamic_cast<MouseEvent*>(event))
+    if(auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
         if (!texture()) return;
 
@@ -65,17 +71,17 @@ void Slider::handle(Event* event)
                 if (x > 218) x = 218;
                 _xOffset = x;
                 _value = ((maxValue() - minValue())/218)*_xOffset;
-                Game::getInstance()->mixer()->playACMSound(_downSnd);
-                Game::getInstance()->mixer()->playACMSound(_upSnd);
+                Game::getInstance()->mixer()->playACMSound(_downSound);
+                Game::getInstance()->mixer()->playACMSound(_upSound);
                 return;
             }
         }
     }
     //pass it to default handler
-    ActiveUI::handle(event);
+    Falltergeist::UI::Base::handle(event);
 }
 
-void Slider::_onDrag(MouseEvent* event)
+void Slider::_onDrag(Event::Mouse* event)
 {
     auto sender = dynamic_cast<Slider*>(event->emitter());
     auto newOffset = sender->_xOffset + event->xOffset();
@@ -86,31 +92,31 @@ void Slider::_onDrag(MouseEvent* event)
     }
 }
 
-void Slider::_onLeftButtonDown(MouseEvent* event)
+void Slider::_onLeftButtonDown(Event::Mouse* event)
 {
     auto sender = dynamic_cast<Slider*>(event->emitter());
-    if (!sender->_downSnd.empty())
+    if (!sender->_downSound.empty())
     {
-        Game::getInstance()->mixer()->playACMSound(sender->_downSnd);
+        Game::getInstance()->mixer()->playACMSound(sender->_downSound);
     }
 }
 
-void Slider::_onLeftButtonUp(MouseEvent* event)
+void Slider::_onLeftButtonUp(Event::Mouse* event)
 {
     auto sender = dynamic_cast<Slider*>(event->emitter());
-    if (!sender->_upSnd.empty())
+    if (!sender->_upSound.empty())
     {
-        Game::getInstance()->mixer()->playACMSound(sender->_upSnd);
+        Game::getInstance()->mixer()->playACMSound(sender->_upSound);
     }
 }
 
-Texture* Slider::texture()
+Graphics::Texture* Slider::texture() const
 {
     if (_drag) return _imageList.images()->at(0)->texture();
     return _imageList.images()->at(1)->texture();
 }
 
-double Slider::minValue()
+double Slider::minValue() const
 {
     return _minValue;
 }
@@ -120,7 +126,7 @@ void Slider::setMinValue(double value)
     _minValue = value;
 }
 
-double Slider::maxValue()
+double Slider::maxValue() const
 {
     return _maxValue;
 }
@@ -130,7 +136,7 @@ void Slider::setMaxValue(double value)
     _maxValue = value;
 }
 
-double Slider::value()
+double Slider::value() const
 {
     return _value;
 }
@@ -141,9 +147,10 @@ void Slider::setValue(double value)
     _xOffset = (218/(maxValue() - minValue())) * _value;
 }
 
-int Slider::x()
+int Slider::x() const
 {
     return _x + _xOffset;
 }
 
+}
 }

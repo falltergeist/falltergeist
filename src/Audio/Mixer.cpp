@@ -17,11 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Audio/Mixer.h"
+
 // C++ standard includes
 #include <string>
 
 // Falltergeist includes
-#include "../Audio/AudioMixer.h"
 #include "../Exception.h"
 #include "../Logger.h"
 #include "../UI/MvePlayer.h"
@@ -29,19 +31,20 @@
 #include "../ResourceManager.h"
 #include "../Settings.h"
 
-
 // Third party includes
 #include <SDL.h>
 
 namespace Falltergeist
 {
+namespace Audio
+{
 
-AudioMixer::AudioMixer()
+Mixer::Mixer()
 {
     _init();
 }
 
-AudioMixer::~AudioMixer()
+Mixer::~Mixer()
 {
     for (auto& x: _sfx)
     {
@@ -51,7 +54,7 @@ AudioMixer::~AudioMixer()
     Mix_CloseAudio();
 }
 
-void AudioMixer::_init()
+void Mixer::_init()
 {
     std::string message = "[AUDIO] - SDL_Init - ";
     if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
@@ -70,7 +73,7 @@ void AudioMixer::_init()
     Logger::info() << message + "[OK]" << std::endl;
 }
 
-void AudioMixer::stopMusic()
+void Mixer::stopMusic()
 {
     Mix_HookMusic(NULL, NULL);
 }
@@ -82,7 +85,7 @@ void myMusicPlayer(void *udata, uint8_t *stream, int len)
     musicCallback(udata,stream,len);
 }
 
-void AudioMixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len)
+void Mixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len)
 {
     if (_paused) return;
 
@@ -121,21 +124,21 @@ void AudioMixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len)
     }
 }
 
-void AudioMixer::playACMMusic(const std::string& filename, bool loop)
+void Mixer::playACMMusic(const std::string& filename, bool loop)
 {
     Mix_HookMusic(NULL, NULL);
     auto acm = ResourceManager::getInstance()->acmFileType(Game::getInstance()->settings()->musicPath()+filename);
     if (!acm) return;
     _loop = loop;
-    musicCallback = std::bind(&AudioMixer::_musicCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+    musicCallback = std::bind(&Mixer::_musicCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
     acm->init();
     acm->rewind();
     Mix_HookMusic(myMusicPlayer, (void *)acm);
 }
 
-void AudioMixer::_movieCallback(void *udata, uint8_t *stream, uint32_t len)
+void Mixer::_movieCallback(void *udata, uint8_t *stream, uint32_t len)
 {
-    auto pmve = (MvePlayer*)(udata);
+    auto pmve = (UI::MvePlayer*)(udata);
     if (pmve->samplesLeft() <= 0)
     {
         Logger::debug("AUDIO") << "buffer underrun?" << std::endl;
@@ -146,17 +149,17 @@ void AudioMixer::_movieCallback(void *udata, uint8_t *stream, uint32_t len)
     pmve->getAudio(stream, len);
 }
 
-void AudioMixer::playMovieMusic(MvePlayer* mve)
+void Mixer::playMovieMusic(UI::MvePlayer* mve)
 {
-    musicCallback = std::bind(&AudioMixer::_movieCallback,this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+    musicCallback = std::bind(&Mixer::_movieCallback,this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
     Mix_HookMusic(myMusicPlayer, reinterpret_cast<void *>(mve));
 }
 
-void AudioMixer::playACMSound(const std::string& filename)
+void Mixer::playACMSound(const std::string& filename)
 {
     auto acm = ResourceManager::getInstance()->acmFileType(filename);
     if (!acm) return;
-    Logger::debug("AudioMixer") << "playing: " << acm->filename() << std::endl;
+    Logger::debug("Mixer") << "playing: " << acm->filename() << std::endl;
     Mix_Chunk *chunk = NULL;
 
     auto it = _sfx.find(acm->filename());
@@ -195,19 +198,20 @@ void AudioMixer::playACMSound(const std::string& filename)
     Mix_PlayChannel(-1, chunk, 0);
 }
 
-void AudioMixer::stopSounds()
+void Mixer::stopSounds()
 {
     Mix_HaltChannel(-1);
 }
 
-void AudioMixer::pauseMusic()
+void Mixer::pauseMusic()
 {
     _paused = true;
 }
 
-void AudioMixer::resumeMusic()
+void Mixer::resumeMusic()
 {
     _paused = false;
 }
 
+}
 }

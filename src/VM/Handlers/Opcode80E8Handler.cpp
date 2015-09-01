@@ -39,7 +39,7 @@ void Opcode80E8Handler::_run()
     auto &debug = Logger::debug("SCRIPT") << "[80E8] [+] void critter_heal(ObjectPtr who, int amount)" << std::endl;
     int amount = _vm->dataStack()->popInteger();
     debug << "    amount = " << amount << std::endl;
-    auto critter = dynamic_cast<Game::GameCritterObject*>(_vm->dataStack()->popObject());
+    auto critter = dynamic_cast<Game::CritterObject*>(_vm->dataStack()->popObject());
     if (!critter)
     {
         _error("VM::critter_heal - invalid critter pointer");

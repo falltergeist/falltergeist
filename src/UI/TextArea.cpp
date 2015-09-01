@@ -17,6 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/TextArea.h"
+
 // C++ standard includes
 #include <algorithm>
 #include <sstream>
@@ -28,9 +31,7 @@
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
-#include "../Lua/Script.h"
 #include "../ResourceManager.h"
-#include "../UI/TextArea.h"
 #include "../UI/TextSymbol.h"
 
 // Third party includes
@@ -38,20 +39,22 @@
 
 namespace Falltergeist
 {
+namespace UI
+{
 
-TextArea::TextArea(int x, int y) : ActiveUI(x, y)
+TextArea::TextArea(int x, int y) : Falltergeist::UI::Base(x, y)
 {
     _timestampCreated = SDL_GetTicks();
     _calculate();
 }
 
-TextArea::TextArea(const std::string& text, int x, int y) : ActiveUI(x, y)
+TextArea::TextArea(const std::string& text, int x, int y) : Falltergeist::UI::Base(x, y)
 {
     _timestampCreated = SDL_GetTicks();
     setText(text);
 }
 
-TextArea::TextArea(TextArea* textArea, int x, int y) : ActiveUI(x, y)
+TextArea::TextArea(TextArea* textArea, int x, int y) : Falltergeist::UI::Base(x, y)
 {
     _timestampCreated = textArea->_timestampCreated;
     _text = textArea->_text;
@@ -76,13 +79,12 @@ void TextArea::appendText(const std::string& text)
     _calculate();
 }
 
-
-unsigned char TextArea::horizontalAlign() const
+TextArea::HorizontalAlign TextArea::horizontalAlign() const
 {
     return _horizontalAlign;
 }
 
-void TextArea::setHorizontalAlign(unsigned char align)
+void TextArea::setHorizontalAlign(HorizontalAlign align)
 {
     if (_horizontalAlign == align) return;
     _horizontalAlign = align;
@@ -90,12 +92,12 @@ void TextArea::setHorizontalAlign(unsigned char align)
     _calculate();
 }
 
-unsigned char TextArea::verticalAlign() const
+TextArea::VerticalAlign TextArea::verticalAlign() const
 {
     return _verticalAlign;
 }
 
-void TextArea::setVerticalAlign(unsigned char align)
+void TextArea::setVerticalAlign(VerticalAlign align)
 {
     if (_verticalAlign == align) return;
     _verticalAlign = align;
@@ -239,10 +241,10 @@ void TextArea::_calculate()
         unsigned xOffset = 0;
         unsigned yOffset = 0;
 
-        if (_horizontalAlign != HORIZONTAL_ALIGN_LEFT)
+        if (_horizontalAlign != HorizontalAlign::LEFT)
         {
             xOffset = (_width ? _width : _calculatedWidth) - widths.at(i);
-            if(_horizontalAlign == HORIZONTAL_ALIGN_CENTER)
+            if(_horizontalAlign == HorizontalAlign::CENTER)
             {
                 xOffset =  xOffset / 2;
             }
@@ -342,19 +344,5 @@ unsigned int TextArea::pixel(unsigned int x, unsigned int y)
     return 0xFFFFFFFF; // white color
 }
 
-void TextArea::export_to_lua_script(Lua::Script* script)
-{
-    luabridge::getGlobalNamespace(script->luaState())
-        .beginNamespace("game")
-            .beginNamespace("ui")
-                .deriveClass<TextArea, ActiveUI>("TextArea")
-                    .addConstructor<void(*)(const char*, int, int)>()
-                    .addProperty("width", &TextArea::width, &TextArea::setWidth)
-                    .addProperty("horizontalAlign", &TextArea::horizontalAlign, &TextArea::setHorizontalAlign)
-                .endClass()
-            .endNamespace()
-        .endNamespace();
 }
-
 }
-

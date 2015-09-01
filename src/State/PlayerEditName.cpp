@@ -43,6 +43,10 @@ PlayerEditName::PlayerEditName() : State()
 {
 }
 
+PlayerEditName::~PlayerEditName()
+{
+}
+
 void PlayerEditName::init()
 {
     if (_initialized) return;
@@ -93,29 +97,29 @@ void PlayerEditName::init()
 
     _timer = SDL_GetTicks();
 
-    auto bg = new Image("art/intrface/charwin.frm");
+    auto bg = new UI::Image("art/intrface/charwin.frm");
     bg->setX(bgX+22);
     bg->setY(bgY+0);
 
-    auto nameBox = new Image("art/intrface/namebox.frm");
+    auto nameBox = new UI::Image("art/intrface/namebox.frm");
     nameBox->setX(bgX+35);
     nameBox->setY(bgY+10);
 
-    auto doneBox = new Image("art/intrface/donebox.frm");
+    auto doneBox = new UI::Image("art/intrface/donebox.frm");
     doneBox->setX(bgX+35);
     doneBox->setY(bgY+40);
 
-    auto doneLabel = new TextArea(_t(MSG_EDITOR, 100), bgX+65, bgY+43);
+    auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX+65, bgY+43);
     auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
     doneLabel->setFont(font3_b89c28ff);
 
-    auto doneButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, bgX+45, bgY+43);
-    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+45, bgY+43);
+    doneButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    _name = new TextArea(Game::getInstance()->player()->name(), bgX+43, bgY+15);
-    _name->addEventHandler("keydown", [this](Event* event){ this->onTextAreaKeyDown(dynamic_cast<KeyboardEvent*>(event)); });
+    _name = new UI::TextArea(Game::getInstance()->player()->name(), bgX+43, bgY+15);
+    _name->addEventHandler("keydown", [this](Event::Event* event){ this->onTextAreaKeyDown(dynamic_cast<Event::Keyboard*>(event)); });
 
-    _cursor = new Image(5, 8);
+    _cursor = new UI::Image(5, 8);
     _cursor->setX(bgX+83);
     _cursor->setY(bgY+15);
     _cursor->texture()->fill(0x3FF800FF);
@@ -129,9 +133,9 @@ void PlayerEditName::init()
     addUI(_cursor);
 }
 
-void PlayerEditName::onTextAreaKeyDown(KeyboardEvent* event)
+void PlayerEditName::onTextAreaKeyDown(Event::Keyboard* event)
 {
-    auto sender = dynamic_cast<TextArea*>(event->emitter());
+    auto sender = dynamic_cast<UI::TextArea*>(event->emitter());
 
     std::string text = sender->text();
 
@@ -180,13 +184,9 @@ void PlayerEditName::onTextAreaKeyDown(KeyboardEvent* event)
     }
 }
 
-void PlayerEditName::onDoneButtonClick(MouseEvent* event)
+void PlayerEditName::onDoneButtonClick(Event::Mouse* event)
 {
     doDone();
-}
-
-PlayerEditName::~PlayerEditName()
-{
 }
 
 void PlayerEditName::think()
@@ -223,8 +223,6 @@ void PlayerEditName::doDone()
     }
     Game::getInstance()->popState();
 }
-
-
 
 }
 }

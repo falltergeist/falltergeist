@@ -24,8 +24,8 @@
 #include <vector>
 
 // Falltergeist includes
-#include "Object.h"
-#include "ArmorItemObject.h"
+#include "../Game/ArmorItemObject.h"
+#include "../Game/Object.h"
 #include "../PathFinding/Hexagon.h"
 
 // Third party includes
@@ -35,7 +35,10 @@ using namespace libfalltergeist;
 
 namespace Falltergeist
 {
-class Animation;
+namespace UI
+{
+    class Animation;
+}
 
 namespace Game
 {
@@ -44,30 +47,29 @@ class ItemObject;
 /**
  * Critter refers to player, all NPCs, creatures, robots, etc - all movable and shootable objects.
  */
-class GameCritterObject : public GameObject
+class CritterObject : public Object
 {
 
 public:
 
-    GameCritterObject();
-    virtual ~GameCritterObject();
+    CritterObject();
+    ~CritterObject() override;
 
-    // critter's own inventory
-    std::vector<GameItemObject*>* inventory();
-    virtual void setOrientation(int value);
+    std::vector<ItemObject*>* inventory(); // critter's own inventory
+    virtual void setOrientation(Orientation value) override;
 
     std::vector<Hexagon*>* movementQueue();
 
-    GameArmorItemObject* armorSlot() const;
-    void setArmorSlot(GameArmorItemObject* object);
+    ArmorItemObject* armorSlot() const;
+    void setArmorSlot(ArmorItemObject* object);
 
-    GameItemObject* leftHandSlot() const;
-    void setLeftHandSlot(GameItemObject* object);
+    ItemObject* leftHandSlot() const;
+    void setLeftHandSlot(ItemObject* object);
 
-    GameItemObject* rightHandSlot() const;
-    void setRightHandSlot(GameItemObject* object);
+    ItemObject* rightHandSlot() const;
+    void setRightHandSlot(ItemObject* object);
 
-    GameItemObject* currentHandSlot() const;
+    ItemObject* currentHandSlot() const;
 
     GENDER gender() const;
     void setGender(GENDER value);
@@ -149,14 +151,14 @@ public:
     virtual void is_dropping_p_proc();
 
     virtual void think();
-    virtual void onMovementAnimationEnded(Event* event);
+    virtual void onMovementAnimationEnded(Event::Event* event);
 
     virtual bool running() const;
     virtual void setRunning(bool value);
     
     virtual void stopMovement();
 
-    virtual Animation* setActionAnimation(const std::string& action);
+    virtual UI::Animation* setActionAnimation(const std::string& action);
 
 protected:
     bool _moving  = false;
@@ -188,13 +190,13 @@ protected:
     std::vector<int> _traitsTagged = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::vector<int> _damageResist = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::vector<int> _damageThreshold = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-    std::vector<GameItemObject*> _inventory;
+    std::vector<ItemObject*> _inventory;
     std::vector<Hexagon*> _movementQueue;
-    GameArmorItemObject* _armorSlot = 0;
-    GameItemObject* _leftHandSlot = 0;
-    GameItemObject* _rightHandSlot = 0;
+    ArmorItemObject* _armorSlot = 0;
+    ItemObject* _leftHandSlot = 0;
+    ItemObject* _rightHandSlot = 0;
 
-    virtual Animation* _generateMovementAnimation();
+    virtual UI::Animation* _generateMovementAnimation();
     virtual std::string _generateArmorFrmString();
     virtual std::string _generateWeaponFrmString();
     void _setupNextIdleAnim();

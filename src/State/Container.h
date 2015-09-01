@@ -29,32 +29,37 @@
 
 namespace Falltergeist
 {
+namespace Event
+{
+    class Keyboard;
+    class Mouse;
+}
 namespace Game
 {
-    class GameContainerItemObject;
+    class ContainerItemObject;
 }
 namespace State
 {
 
 class Container : public State
 {
-protected:
-    Game::GameContainerItemObject* _object = 0;
 public:
     Container();
-    virtual ~Container();
+    ~Container() override;
 
-    virtual void init();
+    void init() override;
 
-    Game::GameContainerItemObject* object();
-    void setObject(Game::GameContainerItemObject* object);
+    Game::ContainerItemObject* object();
+    void setObject(Game::ContainerItemObject* object);
 
-    void onDoneButtonClick(MouseEvent* event);
+    void onDoneButtonClick(Event::Mouse* event);
     
-    virtual void onStateActivate(StateEvent* event);
-    virtual void onStateDeactivate(StateEvent* event);
-    virtual void onKeyDown(KeyboardEvent* event);
+    void onStateActivate(Event::State* event) override;
+    void onStateDeactivate(Event::State* event) override;
+    void onKeyDown(Event::Keyboard* event) override;
 
+protected:
+    Game::ContainerItemObject* _object = nullptr;
 
 };
 

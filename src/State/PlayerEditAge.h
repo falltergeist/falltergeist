@@ -29,27 +29,33 @@
 
 namespace Falltergeist
 {
-class BigCounter;
+namespace UI
+{
+    class BigCounter;
+}
 
 namespace State
 {
 
 class PlayerEditAge : public State
 {
-protected:
-    BigCounter* _counter = 0;
 public:
     PlayerEditAge();
-    void init();
-    ~PlayerEditAge();
-    void onIncButtonClick(MouseEvent* event);
-    void onDecButtonClick(MouseEvent* event);
-    void onDoneButtonClick(MouseEvent* event);
+    ~PlayerEditAge() override;
+
+    void init() override;
+
+    void onIncButtonClick(Event::Mouse* event);
+    void onDecButtonClick(Event::Mouse* event);
+    void onDoneButtonClick(Event::Mouse* event);
     void doInc();
     void doDec();
     void doDone();
     void doBack();
-    virtual void onKeyDown(KeyboardEvent* event);
+    void onKeyDown(Event::Keyboard* event) override;
+
+protected:
+    UI::BigCounter* _counter = nullptr;
 };
 
 }

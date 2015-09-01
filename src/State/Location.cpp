@@ -17,47 +17,49 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../State/Location.h"
+
 // C++ standard includes
+#include <algorithm>
 #include <cmath>
 #include <list>
-#include <algorithm>
 
 // Falltergeist includes
-#include "../Event/MouseEvent.h"
+#include "../Audio/Mixer.h"
+#include "../Event/Mouse.h"
 #include "../Exception.h"
-#include "../Game/Game.h"
 #include "../Game/ContainerItemObject.h"
-#include "../Game/Time.h"
-#include "../Graphics/Animation.h"
-#include "../Graphics/AnimationQueue.h"
-#include "../Graphics/Renderer.h"
-#include "../Graphics/Tile.h"
-#include "../Graphics/TileMap.h"
-#include "../PathFinding/Hexagon.h"
-#include "../PathFinding/HexagonGrid.h"
-#include "../Input/Mouse.h"
-#include "../LocationCamera.h"
-#include "../Logger.h"
-#include "../ResourceManager.h"
-#include "../Settings.h"
 #include "../Game/Defines.h"
 #include "../Game/DoorSceneryObject.h"
 #include "../Game/DudeObject.h"
 #include "../Game/ExitMiscObject.h"
+#include "../Game/Game.h"
 #include "../Game/Object.h"
 #include "../Game/ObjectFactory.h"
+#include "../Game/Time.h"
 #include "../Game/WeaponItemObject.h"
+#include "../Graphics/Renderer.h"
+#include "../Input/Mouse.h"
+#include "../LocationCamera.h"
+#include "../Logger.h"
+#include "../PathFinding/Hexagon.h"
+#include "../PathFinding/HexagonGrid.h"
+#include "../ResourceManager.h"
+#include "../Settings.h"
 #include "../State/CursorDropdown.h"
 #include "../State/ExitConfirm.h"
-#include "../State/Location.h"
 #include "../State/MainMenu.h"
 #include "../State/PlayerPanel.h"
+#include "../UI/Animation.h"
+#include "../UI/AnimationQueue.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
+#include "../UI/Tile.h"
+#include "../UI/TileMap.h"
 #include "../VM/VM.h"
-#include "Audio/AudioMixer.h"
 
 // Third party includes
 
@@ -72,15 +74,15 @@ const int Location::KEYBOARD_SCROLL_STEP = 35;
 Location::Location() : State()
 {
     auto game = Game::getInstance();
-    game->mouse()->setState(Mouse::ACTION);
+    game->mouse()->setState(Input::Mouse::Cursor::ACTION);
 
     _camera = new LocationCamera(game->renderer()->width(), game->renderer()->height(), 0, 0);
-    _floor = new TileMap();
-    _roof = new TileMap();
+    _floor = new UI::TileMap();
+    _roof = new UI::TileMap();
     _hexagonGrid = new HexagonGrid();
 
-    _hexagonInfo = new TextArea("", game->renderer()->width() - 135, 25);
-    _hexagonInfo->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    _hexagonInfo = new UI::TextArea("", game->renderer()->width() - 135, 25);
+    _hexagonInfo->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
 }
 
@@ -109,12 +111,11 @@ void Location::init()
     game->pushState(_playerPanel);
 }
 
-void Location::onStateActivate(StateEvent* event)
+void Location::onStateActivate(Event::State* event)
 {
-
 }
 
-void Location::onStateDeactivate(StateEvent* event)
+void Location::onStateDeactivate(Event::State* event)
 {
     _objectUnderCursor = NULL;
     _actionCursorTicks = 0;
@@ -153,7 +154,7 @@ void Location::setLocation(const std::string& name)
     // @todo remove old objects from hexagonal grid
     for (auto mapObject : *mapObjects)
     {
-        auto object = Game::GameObjectFactory::createObject(mapObject->PID());
+        auto object = Game::ObjectFactory::getInstance()->createObject(mapObject->PID());
         if (!object)
         {
             Logger::error() << "Location::setLocation() - can't create object with PID: " << mapObject->PID() << std::endl;
@@ -167,7 +168,7 @@ void Location::setLocation(const std::string& name)
         object->setLightIntensity(mapObject->lightIntensity());
         object->setFlags(mapObject->flags());
 
-        if (auto exitGrid = dynamic_cast<Game::GameExitMiscObject*>(object))
+        if (auto exitGrid = dynamic_cast<Game::ExitMiscObject*>(object))
         {
             exitGrid->setExitMapNumber(mapObject->exitMap());
             exitGrid->setExitElevationNumber(mapObject->exitElevation());
@@ -175,11 +176,11 @@ void Location::setLocation(const std::string& name)
             exitGrid->setExitDirection(mapObject->exitOrientation());
         }
 
-        if (auto container = dynamic_cast<Game::GameContainerItemObject*>(object))
+        if (auto container = dynamic_cast<Game::ContainerItemObject*>(object))
         {
             for (auto child : *mapObject->children())
             {
-                auto item = dynamic_cast<Game::GameItemObject*>(Game::GameObjectFactory::createObject(child->PID()));
+                auto item = dynamic_cast<Game::ItemObject*>(Game::ObjectFactory::getInstance()->createObject(child->PID()));
                 if (!item)
                 {
                     Logger::error() << "Location::setLocation() - can't create object with PID: " << child->PID() << std::endl;
@@ -213,14 +214,14 @@ void Location::setLocation(const std::string& name)
         player->setArmorSlot(nullptr);
         // Just for testing
         {
-            player->inventory()->push_back((Game::GameItemObject*)Game::GameObjectFactory::createObject(0x00000003)); // power armor
-            player->inventory()->push_back((Game::GameItemObject*)Game::GameObjectFactory::createObject(0x0000004A)); // leather jacket
-            player->inventory()->push_back((Game::GameItemObject*)Game::GameObjectFactory::createObject(0x00000011)); // combat armor
-            player->inventory()->push_back((Game::GameItemObject*)Game::GameObjectFactory::createObject(0x00000071)); // purple robe
-            auto leftHand = Game::GameObjectFactory::createObject(0x0000000C); // minigun
-            player->setLeftHandSlot(dynamic_cast<Game::GameWeaponItemObject*>(leftHand));
-            auto rightHand = Game::GameObjectFactory::createObject(0x00000007); // spear
-            player->setRightHandSlot(dynamic_cast<Game::GameWeaponItemObject*>(rightHand));
+            player->inventory()->push_back((Game::ItemObject*)Game::ObjectFactory::getInstance()->createObject(0x00000003)); // power armor
+            player->inventory()->push_back((Game::ItemObject*)Game::ObjectFactory::getInstance()->createObject(0x0000004A)); // leather jacket
+            player->inventory()->push_back((Game::ItemObject*)Game::ObjectFactory::getInstance()->createObject(0x00000011)); // combat armor
+            player->inventory()->push_back((Game::ItemObject*)Game::ObjectFactory::getInstance()->createObject(0x00000071)); // purple robe
+            auto leftHand = Game::ObjectFactory::getInstance()->createObject(0x0000000C); // minigun
+            player->setLeftHandSlot(dynamic_cast<Game::WeaponItemObject*>(leftHand));
+            auto rightHand = Game::ObjectFactory::getInstance()->createObject(0x00000007); // spear
+            player->setRightHandSlot(dynamic_cast<Game::WeaponItemObject*>(rightHand));
         }
         player->setPID(0x01000001);
         player->setOrientation(mapFile->defaultOrientation());
@@ -253,58 +254,60 @@ void Location::setLocation(const std::string& name)
             unsigned int tileNum = mapFile->elevations()->at(_currentElevation)->floorTiles()->at(i);
             if (tileNum > 1)
             {
-                auto tile = new Tile(tileNum, x, y);
+                auto tile = new UI::Tile(tileNum, x, y);
                 _floor->tiles()->push_back(tile);
             }
 
             tileNum = mapFile->elevations()->at(_currentElevation)->roofTiles()->at(i);
             if (tileNum > 1)
             {
-                auto tile = new Tile(tileNum, x, y - 104);
+                auto tile = new UI::Tile(tileNum, x, y - 104);
                 _roof->tiles()->push_back(tile);
             }
         }
     }
 }
 
-std::vector<int> Location::getCursorIconsForObject(Game::GameObject* object)
+std::vector<Input::Mouse::Icon> Location::getCursorIconsForObject(Game::Object* object)
 {
-    std::vector<int> icons;
+    std::vector<Input::Mouse::Icon> icons;
     if (object->script() && object->script()->hasFunction("use_p_proc"))
     {
-        icons.push_back(Mouse::ICON_USE);
+        icons.push_back(Input::Mouse::Icon::USE);
     }
-    else if (dynamic_cast<Game::GameDoorSceneryObject*>(object))
+    else if (dynamic_cast<Game::DoorSceneryObject*>(object))
     {
-        icons.push_back(Mouse::ICON_USE);
+        icons.push_back(Input::Mouse::Icon::USE);
     }
-    else if (dynamic_cast<Game::GameContainerItemObject*>(object))
+    else if (dynamic_cast<Game::ContainerItemObject*>(object))
     {
-        icons.push_back(Mouse::ICON_USE);
+        icons.push_back(Input::Mouse::Icon::USE);
     }
 
-    switch(object->type())
+    switch (object->type())
     {
-        case Game::GameObject::TYPE_ITEM:
+        case Game::Object::Type::ITEM:
             break;
-        case Game::GameObject::TYPE_DUDE:
-            icons.push_back(Mouse::ICON_ROTATE);
+        case Game::Object::Type::DUDE:
+            icons.push_back(Input::Mouse::Icon::ROTATE);
             break;
-        case Game::GameObject::TYPE_SCENERY:
+        case Game::Object::Type::SCENERY:
             break;
-        case Game::GameObject::TYPE_CRITTER:
-            icons.push_back(Mouse::ICON_TALK);
+        case Game::Object::Type::CRITTER:
+            icons.push_back(Input::Mouse::Icon::TALK);
+            break;
+        default:
             break;
     }
-    icons.push_back(Mouse::ICON_LOOK);
-    icons.push_back(Mouse::ICON_INVENTORY);
-    icons.push_back(Mouse::ICON_SKILL);
-    icons.push_back(Mouse::ICON_CANCEL);
+    icons.push_back(Input::Mouse::Icon::LOOK);
+    icons.push_back(Input::Mouse::Icon::INVENTORY);
+    icons.push_back(Input::Mouse::Icon::SKILL);
+    icons.push_back(Input::Mouse::Icon::CANCEL);
     return icons;
 }
 
 
-void Location::onObjectMouseEvent(Event* event, Game::GameObject* object)
+void Location::onObjectMouseEvent(Event::Event* event, Game::Object* object)
 {
     if (!object) return;
     if (event->name() == "mouseleftdown")
@@ -325,7 +328,7 @@ void Location::onObjectMouseEvent(Event* event, Game::GameObject* object)
     event->setHandled(true);
 }
 
-void Location::onObjectHover(Event* event, Game::GameObject* object)
+void Location::onObjectHover(Event::Event* event, Game::Object* object)
 {
     if (event->name() == "mouseout")
     {
@@ -344,8 +347,7 @@ void Location::onObjectHover(Event* event, Game::GameObject* object)
     }
 }
 
-
-void Location::onBackgroundClick(MouseEvent* event)
+void Location::onBackgroundClick(Event::Mouse* event)
 {
 }
 
@@ -426,15 +428,15 @@ void Location::think()
         // if scrolling is active
         if (_scrollLeft || _scrollRight || _scrollTop || _scrollBottom)
         {
-            unsigned int state;
-            if (_scrollLeft)   state = Mouse::SCROLL_W;
-            if (_scrollRight)  state = Mouse::SCROLL_E;
-            if (_scrollTop)    state = Mouse::SCROLL_N;
-            if (_scrollBottom) state = Mouse::SCROLL_S;
-            if (_scrollLeft && _scrollTop)     state = Mouse::SCROLL_NW;
-            if (_scrollLeft && _scrollBottom)  state = Mouse::SCROLL_SW;
-            if (_scrollRight && _scrollTop)    state = Mouse::SCROLL_NE;
-            if (_scrollRight && _scrollBottom) state = Mouse::SCROLL_SE;
+            Input::Mouse::Cursor state;
+            if (_scrollLeft)   state = Input::Mouse::Cursor::SCROLL_W;
+            if (_scrollRight)  state = Input::Mouse::Cursor::SCROLL_E;
+            if (_scrollTop)    state = Input::Mouse::Cursor::SCROLL_N;
+            if (_scrollBottom) state = Input::Mouse::Cursor::SCROLL_S;
+            if (_scrollLeft && _scrollTop)     state = Input::Mouse::Cursor::SCROLL_NW;
+            if (_scrollLeft && _scrollBottom)  state = Input::Mouse::Cursor::SCROLL_SW;
+            if (_scrollRight && _scrollTop)    state = Input::Mouse::Cursor::SCROLL_NE;
+            if (_scrollRight && _scrollBottom) state = Input::Mouse::Cursor::SCROLL_SE;
             if (mouse->state() != state)
             {
                 if (mouse->scrollState())
@@ -499,7 +501,7 @@ void Location::think()
     if (_objectUnderCursor && _actionCursorTicks && _actionCursorTicks + DROPDOWN_DELAY < SDL_GetTicks())
     {
         auto game = Game::getInstance();
-        if (_actionCursorButtonPressed || game->mouse()->state() == Mouse::ACTION)
+        if (_actionCursorButtonPressed || game->mouse()->state() == Input::Mouse::Cursor::ACTION)
         {
             if (!_actionCursorButtonPressed && (_actionCursorLastObject != _objectUnderCursor))
             {
@@ -513,7 +515,7 @@ void Location::think()
                 {
                     game->popState();
                 }
-                auto state = new CursorDropdown(icons, !_actionCursorButtonPressed);
+                auto state = new CursorDropdown(std::move(icons), !_actionCursorButtonPressed);
                 state->setObject(_objectUnderCursor);
                 Game::getInstance()->pushState(state);
             }
@@ -529,37 +531,39 @@ void Location::toggleCursorMode()
     auto mouse = game->mouse();
     switch (mouse->state())
     {
-        case Mouse::NONE: // just for testing
+        case Input::Mouse::Cursor::NONE: // just for testing
         {
-            mouse->pushState(Mouse::ACTION);
+            mouse->pushState(Input::Mouse::Cursor::ACTION);
             break;
         }
-        case Mouse::ACTION:
+        case Input::Mouse::Cursor::ACTION:
         {
             auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
             if (!hexagon)
             {
                 break;
             }
-            mouse->pushState(Mouse::HEXAGON_RED);
+            mouse->pushState(Input::Mouse::Cursor::HEXAGON_RED);
             mouse->ui()->setX(hexagon->x() - camera()->x());
             mouse->ui()->setY(hexagon->y() - camera()->y());
             _objectUnderCursor = NULL;
             break;
         }
-        case Mouse::HEXAGON_RED:
+        case Input::Mouse::Cursor::HEXAGON_RED:
         {
             mouse->popState();
             break;
         }
+        default:
+            break;
     }
 }
 
-void Location::handle(Event* event)
+void Location::handle(Event::Event* event)
 {
     auto game = Game::getInstance();
 
-    if (auto mouseEvent = dynamic_cast<MouseEvent*>(event))
+    if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
         auto mouse = Game::getInstance()->mouse();
 
@@ -575,7 +579,7 @@ void Location::handle(Event* event)
         {
             switch (mouse->state())
             {
-                case Mouse::HEXAGON_RED:
+                case Input::Mouse::Cursor::HEXAGON_RED:
                 {
                     // Here goes the movement
                     auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
@@ -599,6 +603,8 @@ void Location::handle(Event* event)
                     _lastClickedTile = hexagon->number();
                     break;
                 }
+                default:
+                    break;
             }
         }
 
@@ -608,7 +614,7 @@ void Location::handle(Event* event)
 
             switch (mouse->state())
             {
-                case Mouse::HEXAGON_RED:
+                case Input::Mouse::Cursor::HEXAGON_RED:
                 {
                     if (!hexagon)
                     {
@@ -618,6 +624,8 @@ void Location::handle(Event* event)
                     mouse->ui()->setY(hexagon->y() - camera()->y());
                     break;
                 }
+                default:
+                    break;
             }
 
             unsigned int scrollArea = 8;
@@ -642,13 +650,13 @@ void Location::handle(Event* event)
             }
         }
         // let event fall down to all objects when using action cursor and within active view
-        if (mouse->state() != Mouse::ACTION && mouse->state() != Mouse::NONE)
+        if (mouse->state() != Input::Mouse::Cursor::ACTION && mouse->state() != Input::Mouse::Cursor::NONE)
         {
             event->setHandled(true);
         }
     }
 
-    if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
+    if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
     {
         if (event->name() == "keyup")
         {
@@ -682,7 +690,7 @@ void Location::handle(Event* event)
     }
 }
 
-void Location::onKeyDown(KeyboardEvent* event)
+void Location::onKeyDown(Event::Keyboard* event)
 {
     switch (event->keyCode())
     {
@@ -692,13 +700,13 @@ void Location::onKeyDown(KeyboardEvent* event)
         case SDLK_COMMA:
         {
             auto player = Game::getInstance()->player();
-            player->setOrientation((player->orientation() + 5) % 6); // rotate left
+            player->setOrientation(player->orientation() + 5); // rotate left
             break;
         }
         case SDLK_PERIOD:
         {
             auto player = Game::getInstance()->player();
-            player->setOrientation((player->orientation() + 1) % 6); // rotate right
+            player->setOrientation(player->orientation() + 1); // rotate right
             break;
         }
         case SDLK_HOME:
@@ -780,7 +788,7 @@ std::map<std::string, VMStackValue>* Location::EVARS()
     return &_EVARS;
 }
 
-void Location::moveObjectToHexagon(Game::GameObject* object, Hexagon* hexagon)
+void Location::moveObjectToHexagon(Game::Object* object, Hexagon* hexagon)
 {
     auto oldHexagon = object->hexagon();
     if (oldHexagon)
@@ -815,7 +823,7 @@ void Location::moveObjectToHexagon(Game::GameObject* object, Hexagon* hexagon)
     hexagon->objects()->push_back(object);
 }
 
-void Location::destroyObject(Game::GameObject* object)
+void Location::destroyObject(Game::Object* object)
 {
     auto objectsAtHex = object->hexagon()->objects();
     object->destroy_p_proc();
@@ -856,36 +864,36 @@ void Location::centerCameraAtHexagon(int tileNum)
     }
 }
 
-void Location::handleAction(Game::GameObject* object, int action)
+void Location::handleAction(Game::Object* object, Input::Mouse::Icon action)
 {
     switch (action)
     {
-        case Mouse::ICON_LOOK:
+        case Input::Mouse::Icon::LOOK:
         {
             object->description_p_proc();
             break;
         }
-        case Mouse::ICON_USE:
+        case Input::Mouse::Icon::USE:
         {
             auto player = Game::getInstance()->player();
             auto animation = player->setActionAnimation("al");
-            animation->addEventHandler("actionFrame", [object, player](Event* event){ object->onUseAnimationActionFrame(event, player); });
+            animation->addEventHandler("actionFrame", [object, player](Event::Event* event){ object->onUseAnimationActionFrame(event, player); });
             break;
         }
-        case Mouse::ICON_ROTATE:
+        case Input::Mouse::Icon::ROTATE:
         {
-            auto dude = dynamic_cast<Game::GameDudeObject*>(object);
+            auto dude = dynamic_cast<Game::DudeObject*>(object);
             if (!dude) throw Exception("Location::handleAction() - only Dude can be rotated");
 
-            int orientation = dude->orientation() + 1;
+            auto orientation = dude->orientation() + 1;
             if (orientation > 5) orientation = 0;
             dude->setOrientation(orientation);
 
             break;
         }
-        case Mouse::ICON_TALK:
+        case Input::Mouse::Icon::TALK:
         {
-            if (auto critter = dynamic_cast<Game::GameCritterObject*>(object))
+            if (auto critter = dynamic_cast<Game::CritterObject*>(object))
             {
                 critter->talk_p_proc();
             }
@@ -894,7 +902,7 @@ void Location::handleAction(Game::GameObject* object, int action)
                 throw Exception("Location::handleAction() - can talk only with critters!");
             }
         }
-
+        default: {}
     }
 }
 

@@ -17,22 +17,27 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/BigCounter.h"
+
 // C++ standard includes
-#include <sstream>
-#include <string.h>
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
-#include "../UI/BigCounter.h"
 #include "../UI/Image.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace UI
+{
 
-BigCounter::BigCounter(int x, int y, unsigned int length) : ActiveUI(x, y)
+using namespace Base;
+
+BigCounter::BigCounter(int x, int y, unsigned int length) : Falltergeist::UI::Base(x, y)
 {
     _length = length;
 }
@@ -41,54 +46,39 @@ BigCounter::~BigCounter()
 {
 }
 
-Texture* BigCounter::texture()
+Graphics::Texture* BigCounter::texture() const
 {
-    if (_texture) return _texture;
+    static const int kCharWidth = 14;
+    static const int kCharHeight = 24;
 
-    auto numbers = std::shared_ptr<Image>(new Image("art/intrface/bignum.frm"));
+    if (_textureOnDemand) return _textureOnDemand.get();
 
-    // number as text
-    std::stringstream ss;
-    ss << _number;
-
-    _texture = new Texture(14*_length, 24);
-
-    char* textNumber = new char[_length + 1]();
-
-    for (unsigned int i = 0; i < _length; ++i)
+    auto numbers = make_unique<Image>("art/intrface/bignum.frm");
+    unsigned int xOffsetByColor = 0;
+    switch (_color)
     {
-        textNumber[i] = '0';
+        case Color::WHITE:
+            break;
+        case Color::RED:
+            xOffsetByColor = 168;
+            break;
     }
 
-    unsigned int length = strlen(ss.str().c_str());
-    unsigned int diff = _length - length;
-    for (unsigned int i = 0; i < length; i++)
-    {
-        textNumber[diff + i] = ss.str().c_str()[i];
-    }
+    _textureOnDemand = Graphics::Texture::generateTextureForNumber(
+        _number, _length, numbers->texture(),
+        kCharWidth, kCharHeight, xOffsetByColor);
+    return _textureOnDemand.get();
+}
 
-    for (unsigned int i = 0; i < _length; i++)
-    {
-        int key = 9 -  ('9' - textNumber[i]);
-        unsigned int x = 14 * key;
-        switch (_color)
-        {
-            case COLOR_WHITE:
-                break;
-            case COLOR_RED:
-                x += 168;
-                break;
-        }
-        numbers->texture()->copyTo(_texture, 14*i, 0, x, 0, 14, 24);
-    }
-    delete [] textNumber;
-    return _texture;
+void BigCounter::setTexture(Graphics::Texture* texture)
+{
+    _textureOnDemand.reset(texture);
 }
 
 void BigCounter::setNumber(unsigned int number)
 {
     if (_number == number) return;
-    delete _texture; _texture = 0;
+    _textureOnDemand.reset();
     _number = number;
 }
 
@@ -98,24 +88,25 @@ unsigned int BigCounter::number()
 }
 
 
-void BigCounter::setColor(unsigned char color)
+void BigCounter::setColor(Color color)
 {
-    switch(color)
+    switch (color)
     {
-        case COLOR_WHITE:
-        case COLOR_RED:
+        case Color::WHITE:
+        case Color::RED:
             if (_color != color)
             {
                 _color = color;
-                delete _texture; _texture = 0;
+                _textureOnDemand.reset();
             }
             break;
     }
 }
 
-unsigned char BigCounter::color()
+BigCounter::Color BigCounter::color()
 {
     return _color;
 }
 
+}
 }

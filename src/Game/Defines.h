@@ -17,9 +17,11 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMEDEFINES_H
-#define FALLTERGEIST_GAMEDEFINES_H
+#ifndef FALLTERGEIST_GAME_DEFINES_H
+#define FALLTERGEIST_GAME_DEFINES_H
 
+namespace Falltergeist
+{
 namespace Game
 {
 
@@ -99,14 +101,6 @@ namespace Game
 #define ANIM_max_anim                 65 // 65
 
 
-// Object orientation
-#define ORIENTATION_NE 0
-#define ORIENTATION_E  1
-#define ORIENTATION_SE 2
-#define ORIENTATION_SW 3
-#define ORIENTATION_W  4
-#define ORIENTATION_NW 5
-
 // Critters FID
 
 #define FID_HMJMPS      0x0100000B   // vault13 jumpsuit male
@@ -115,5 +109,5 @@ namespace Game
 #define FID_HERO_FEMALE 0x0100003D
 
 }
-
-#endif // FALLTERGEIST_GAMEDEFINES_H
+}
+#endif // FALLTERGEIST_GAME_DEFINES_H

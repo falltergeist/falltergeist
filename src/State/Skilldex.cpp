@@ -43,7 +43,11 @@ namespace Falltergeist
 namespace State
 {
 
-Skilldex::Skilldex()
+Skilldex::Skilldex() : State()
+{
+}
+
+Skilldex::~Skilldex()
 {
 }
 
@@ -57,32 +61,32 @@ void Skilldex::init()
 
     // original coordinates = 455x6
     // background size = 185x368
-    auto background = new Image("art/intrface/skldxbox.frm");
+    auto background = new UI::Image("art/intrface/skldxbox.frm");
     auto backgroundX = (Game::getInstance()->renderer()->width() + 640 - 2*background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - 480 + 6);
     background->setX(backgroundX);
     background->setY(backgroundY);
 
     // buttons
-    auto sneakButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44);
-    auto lockpickButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36);
-    auto stealButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*2);
-    auto trapsButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*3);
-    auto firstAidButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*4);
-    auto doctorButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*5);
-    auto scienceButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*6);
-    auto repairButton = new ImageButton(ImageButton::TYPE_SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*7);
-    auto cancelButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+48, backgroundY+338);
+    auto sneakButton    = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44);
+    auto lockpickButton = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36);
+    auto stealButton    = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*2);
+    auto trapsButton    = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*3);
+    auto firstAidButton = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*4);
+    auto doctorButton   = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*5);
+    auto scienceButton  = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*6);
+    auto repairButton   = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*7);
+    auto cancelButton   = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+48, backgroundY+338);
 
     // counters
-    auto sneakCounter = new BigCounter(backgroundX + 111, backgroundY + 48, 3);
-    auto lockpickCounter = new BigCounter(backgroundX + 111, backgroundY + 48 + 36, 3);
-    auto stealCounter = new BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 2, 3);
-    auto trapsCounter = new BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 3, 3);
-    auto firstAidCounter = new BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 4, 3);
-    auto doctorCounter = new BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 5, 3);
-    auto scienceCounter = new BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 6, 3);
-    auto repairCounter = new BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 7, 3);
+    auto sneakCounter    = new UI::BigCounter(backgroundX + 111, backgroundY + 48, 3);
+    auto lockpickCounter = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36, 3);
+    auto stealCounter    = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 2, 3);
+    auto trapsCounter    = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 3, 3);
+    auto firstAidCounter = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 4, 3);
+    auto doctorCounter   = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 5, 3);
+    auto scienceCounter  = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 6, 3);
+    auto repairCounter   = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 7, 3);
 
     //set counters with player's current skill values
     sneakCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::SNEAK));
@@ -95,67 +99,67 @@ void Skilldex::init()
     repairCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::REPAIR));
 
     // events
-    cancelButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCancelButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    cancelButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onCancelButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
     // LABELS
     auto font = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
 
     // label: skilldex (100)
-    auto skilldexLabel = new TextArea(_t(MSG_SKILLDEX, 100), backgroundX+56, backgroundY+14);
+    auto skilldexLabel = new UI::TextArea(_t(MSG_SKILLDEX, 100), backgroundX+56, backgroundY+14);
     skilldexLabel->setFont(font);
     skilldexLabel->setWidth(76);
-    skilldexLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    skilldexLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: sneak (102)
-    auto sneakLabel = new TextArea(_t(MSG_SKILLDEX, 102), backgroundX+17, backgroundY+52);
+    auto sneakLabel = new UI::TextArea(_t(MSG_SKILLDEX, 102), backgroundX+17, backgroundY+52);
     sneakLabel->setFont(font);
     sneakLabel->setWidth(84);
-    sneakLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    sneakLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: lockpick (103)
-    auto lockpickLabel = new TextArea(_t(MSG_SKILLDEX, 103), backgroundX+17, backgroundY+52+36);
+    auto lockpickLabel = new UI::TextArea(_t(MSG_SKILLDEX, 103), backgroundX+17, backgroundY+52+36);
     lockpickLabel->setFont(font);
     lockpickLabel->setWidth(84);
-    lockpickLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    lockpickLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: steal (104)
-    auto stealLabel = new TextArea(_t(MSG_SKILLDEX, 104), backgroundX+17, backgroundY+52+36*2);
+    auto stealLabel = new UI::TextArea(_t(MSG_SKILLDEX, 104), backgroundX+17, backgroundY+52+36*2);
     stealLabel->setFont(font);
     stealLabel->setWidth(84);
-    stealLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    stealLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: traps (105)
-    auto trapsLabel = new TextArea(_t(MSG_SKILLDEX, 105), backgroundX+17, backgroundY+52+36*3);
+    auto trapsLabel = new UI::TextArea(_t(MSG_SKILLDEX, 105), backgroundX+17, backgroundY+52+36*3);
     trapsLabel->setFont(font);
     trapsLabel->setWidth(84);
-    trapsLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    trapsLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: first aid (106)
-    auto firstAidLabel = new TextArea(_t(MSG_SKILLDEX, 106), backgroundX+17, backgroundY+52+36*4);
+    auto firstAidLabel = new UI::TextArea(_t(MSG_SKILLDEX, 106), backgroundX+17, backgroundY+52+36*4);
     firstAidLabel->setFont(font);
     firstAidLabel->setWidth(84);
-    firstAidLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    firstAidLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: doctor (107)
-    auto doctorLabel = new TextArea(_t(MSG_SKILLDEX, 107), backgroundX+17, backgroundY+52+36*5);
+    auto doctorLabel = new UI::TextArea(_t(MSG_SKILLDEX, 107), backgroundX+17, backgroundY+52+36*5);
     doctorLabel->setFont(font);
     doctorLabel->setWidth(84);
-    doctorLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    doctorLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: science (108)
-    auto scienceLabel = new TextArea(_t(MSG_SKILLDEX, 108), backgroundX+17, backgroundY+52+36*6);
+    auto scienceLabel = new UI::TextArea(_t(MSG_SKILLDEX, 108), backgroundX+17, backgroundY+52+36*6);
     scienceLabel->setFont(font);
     scienceLabel->setWidth(84);
-    scienceLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    scienceLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: repair (109)
-    auto repairLabel = new TextArea(_t(MSG_SKILLDEX, 109), backgroundX+17, backgroundY+52+36*7);
+    auto repairLabel = new UI::TextArea(_t(MSG_SKILLDEX, 109), backgroundX+17, backgroundY+52+36*7);
     repairLabel->setFont(font);
     repairLabel->setWidth(84);
-    repairLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    repairLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: cancel (101)
-    auto cancelButtonLabel = new TextArea(_t(MSG_SKILLDEX, 101), backgroundX+70, backgroundY+337);
+    auto cancelButtonLabel = new UI::TextArea(_t(MSG_SKILLDEX, 101), backgroundX+70, backgroundY+337);
     cancelButtonLabel->setFont(font);
 
     // add all buttons and labels and counters
@@ -190,12 +194,12 @@ void Skilldex::init()
 
 }
 
-void Skilldex::onCancelButtonClick(MouseEvent* event)
+void Skilldex::onCancelButtonClick(Event::Mouse* event)
 {
     Game::getInstance()->popState();
 }
 
-void Skilldex::onKeyDown(KeyboardEvent* event)
+void Skilldex::onKeyDown(Event::Keyboard* event)
 {
     if (event->keyCode() == SDLK_ESCAPE)
     {
@@ -203,16 +207,15 @@ void Skilldex::onKeyDown(KeyboardEvent* event)
     }
 }
 
-void Skilldex::onStateActivate(StateEvent* event)
+void Skilldex::onStateActivate(Event::State* event)
 {
-    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
 }
 
-void Skilldex::onStateDeactivate(StateEvent* event)
+void Skilldex::onStateDeactivate(Event::State* event)
 {
     Game::getInstance()->mouse()->popState();
 }
-
 
 }
 }

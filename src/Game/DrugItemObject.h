@@ -17,13 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMEDRUGITEMOBJECT_H
-#define FALLTERGEIST_GAMEDRUGITEMOBJECT_H
+#ifndef FALLTERGEIST_GAME_DRUGITEMOBJECT_H
+#define FALLTERGEIST_GAME_DRUGITEMOBJECT_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "ItemObject.h"
+#include "../Game/ItemObject.h"
 
 // Third party includes
 
@@ -36,15 +36,13 @@ namespace Game
  * Item that can be consumed as drug (drugs, alcohol, food, etc.).
  * Applies temporary effect to a target critter.
  */
-class GameDrugItemObject : public GameItemObject
+class DrugItemObject : public ItemObject
 {
-protected:
 public:
-    GameDrugItemObject();
-    virtual ~GameDrugItemObject();
+    DrugItemObject();
+    ~DrugItemObject() override;
 };
 
 }
 }
-
-#endif // FALLTERGEIST_GAMEDRUGITEMOBJECT_H
+#endif // FALLTERGEIST_GAME_DRUGITEMOBJECT_H

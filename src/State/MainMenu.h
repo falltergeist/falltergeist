@@ -17,14 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_MainMenu_H
-#define FALLTERGEIST_MainMenu_H
+#ifndef FALLTERGEIST_STATE_MAINMENU_H
+#define FALLTERGEIST_STATE_MAINMENU_H
 
 // C++ standard includes
 #include <memory>
 
 // Falltergeist includes
-#include "State.h"
+#include "../State/State.h"
 
 // Third party includes
 
@@ -37,33 +37,34 @@ class MainMenu : public State
 {
 public:
     MainMenu();
-    virtual ~MainMenu();
-    virtual void init();
+    ~MainMenu() override;
 
-    void onExitButtonClick(MouseEvent* event);
-    void onNewGameButtonClick(MouseEvent* event);
-    void onLoadGameButtonClick(MouseEvent* event);
-    void onSettingsButtonClick(MouseEvent* event);
-    void onIntroButtonClick(MouseEvent* event);
-    void onCreditsButtonClick(MouseEvent* event);
+    void init() override;
+
+    void onExitButtonClick(Event::Mouse* event);
+    void onNewGameButtonClick(Event::Mouse* event);
+    void onLoadGameButtonClick(Event::Mouse* event);
+    void onSettingsButtonClick(Event::Mouse* event);
+    void onIntroButtonClick(Event::Mouse* event);
+    void onCreditsButtonClick(Event::Mouse* event);
     void doExit();
     void doNewGame();
     void doLoadGame();
     void doSettings();
     void doIntro();
     void doCredits();
-    virtual void onKeyDown(KeyboardEvent* event);
+    void onKeyDown(Event::Keyboard* event) override;
 
-    void onStateActivate(StateEvent* event);
+    void onStateActivate(Event::State* event);
 
-    void onExitStart(StateEvent* event);
-    void onNewGameStart(StateEvent* event);
-    void onLoadGameStart(StateEvent* event);
-    void onIntroStart(StateEvent* event);
-    void onCreditsStart(StateEvent* event);
+    void onExitStart(Event::State* event);
+    void onNewGameStart(Event::State* event);
+    void onLoadGameStart(Event::State* event);
+    void onIntroStart(Event::State* event);
+    void onCreditsStart(Event::State* event);
 };
 
 }
 }
 
-#endif // FALLTERGEIST_MainMenu_H
+#endif // FALLTERGEIST_STATE_MAINMENU_H

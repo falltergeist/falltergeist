@@ -36,15 +36,16 @@ class PlayerCreateOptions : public State
 {
 public:
     PlayerCreateOptions();
+    ~PlayerCreateOptions() override;
 
-    virtual void init();
+    void init() override;
 
-    void onSaveButtonClick(MouseEvent* event);
-    void onLoadButtonClick(MouseEvent* event);
-    void onPrintToFileButtonClick(MouseEvent* event);
-    void onEraseButtonClick(MouseEvent* event);
-    void onDoneButtonClick(MouseEvent* event);
-    virtual void onKeyDown(KeyboardEvent* event);
+    void onSaveButtonClick(Event::Mouse* event);
+    void onLoadButtonClick(Event::Mouse* event);
+    void onPrintToFileButtonClick(Event::Mouse* event);
+    void onEraseButtonClick(Event::Mouse* event);
+    void onDoneButtonClick(Event::Mouse* event);
+    void onKeyDown(Event::Keyboard* event) override;
 };
 
 }

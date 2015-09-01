@@ -68,11 +68,11 @@ void Start::init()
     setY((renderer->height() - 480)*0.5);
 
     srand(time(NULL)); // seed
-    addUI("splash", new Image("art/splash/" + splashes.at(rand() % splashes.size())));
+    addUI("splash", new UI::Image("art/splash/" + splashes.at(rand() % splashes.size())));
 
     _splashTicks = SDL_GetTicks();
 
-    Game::getInstance()->mouse()->setState(Mouse::WAIT);
+    Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::WAIT);
 }
 
 void Start::think()
@@ -81,7 +81,7 @@ void Start::think()
     State::think();
     if (game->settings()->forceLocation())
     {
-        auto player = new Game::GameDudeObject();
+        auto player = new Game::DudeObject();
         player->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/combat.gcd"));
         game->setPlayer(player);
         game->setState(new Location());

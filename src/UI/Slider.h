@@ -17,43 +17,58 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_SLIDER_H
-#define FALLTERGEIST_SLIDER_H
+#ifndef FALLTERGEIST_UI_SLIDER_H
+#define FALLTERGEIST_UI_SLIDER_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Graphics/ActiveUI.h"
+#include "../UI/Base.h"
 #include "../UI/ImageList.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-
-class Slider : public ActiveUI
+namespace Event
 {
+    class Mouse;
+}
+namespace UI
+{
+
+class ImageList;
+
+class Slider : public Falltergeist::UI::Base
+{
+public:
+    Slider(int x, int y);
+    ~Slider() override;
+
+    Graphics::Texture* texture() const override;
+    int x() const override;
+
+    void handle(Event::Event* event) override;
+
+    double minValue() const;
+    void setMinValue(double value);
+
+    double maxValue() const;
+    void setMaxValue(double value);
+
+    double value() const;
+    void setValue(double value);
+
 protected:
     ImageList _imageList;
     double _minValue = 0.0;
     double _maxValue = 1.0;
     double _value = 0.0;
-    void _onDrag(MouseEvent* event);
-    void _onLeftButtonDown(MouseEvent* event);
-    void _onLeftButtonUp(MouseEvent* event);
-public:
-    Slider(int x, int y);
-    virtual ~Slider();
-    virtual Texture* texture();
-    virtual int x();
-    virtual void handle(Event* event);
-    double minValue();
-    void setMinValue(double value);
-    double maxValue();
-    void setMaxValue(double value);
-    double value();
-    void setValue(double value);
+    void _onDrag(Event::Mouse* event);
+    void _onLeftButtonDown(Event::Mouse* event);
+    void _onLeftButtonUp(Event::Mouse* event);
 };
 
 }
-#endif // FALLTERGEIST_SLIDER_H
+}
+#endif // FALLTERGEIST_UI_SLIDER_H

@@ -38,11 +38,11 @@ void Opcode8046Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8046] [*] op_negate" << std::endl;
     auto value = _vm->dataStack()->pop();
-    if (value.type() == VMStackValue::TYPE_INTEGER) 
+    if (value.type() == VMStackValue::Type::INTEGER)
     {
         _vm->dataStack()->push(- value.integerValue());
     }
-    else if (value.type() == VMStackValue::TYPE_FLOAT)
+    else if (value.type() == VMStackValue::Type::FLOAT)
     {
         _vm->dataStack()->push(- value.floatValue());
     }

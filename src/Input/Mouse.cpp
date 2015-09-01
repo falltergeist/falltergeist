@@ -17,17 +17,19 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Input/Mouse.h"
+
 // C++ standard includes
 
 // Falltergeist includes
 #include "../Game/Game.h"
-#include "../Graphics/AnimationQueue.h"
-#include "../Graphics/Animation.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
-#include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
+#include "../UI/Animation.h"
+#include "../UI/AnimationQueue.h"
 #include "../UI/Image.h"
 
 // Third party includes
@@ -35,31 +37,26 @@
 
 namespace Falltergeist
 {
+namespace Input
+{
 
 Mouse::Mouse()
 {
-    // Hide cursor
-    SDL_ShowCursor(0);
-    // Trap mouse in window         - mouse warp doesn't work currently with this setting -- phobos2077
-    /*if (!Game::getInstance()->settings()->fullscreen())
-    {
-        SDL_SetRelativeMouseMode(SDL_TRUE);
-    }*/
+    SDL_ShowCursor(0); // Hide cursor
 }
 
 Mouse::~Mouse()
 {
     delete _ui;
-    // Show cursor
-    SDL_ShowCursor(1);
+    SDL_ShowCursor(1); // Show cursor
 }
 
-int Mouse::x()
+int Mouse::x() const
 {
     return _x;
 }
 
-int Mouse::y()
+int Mouse::y() const
 {
     return _y;
 }
@@ -82,7 +79,7 @@ void Mouse::setY(int y)
     SDL_WarpMouseInWindow(renderer->sdlWindow(), _x*scaleX, _y*scaleY);
 }
 
-void Mouse::setState(unsigned int state)
+void Mouse::setState(Cursor state)
 {
     _states.clear();
     pushState(state);
@@ -93,7 +90,7 @@ void Mouse::popState()
     if (_states.size() == 0) return;
     if (_states.size() == 1)
     {
-        _setType(NONE);
+        _setType(Cursor::NONE);
     }
     else
     {
@@ -102,110 +99,113 @@ void Mouse::popState()
     _states.pop_back();
 }
 
-void Mouse::pushState(unsigned int state)
+void Mouse::pushState(Cursor state)
 {
     _setType(state);
     _states.push_back(state);
 }
 
-unsigned int Mouse::state()
+Mouse::Cursor Mouse::state() const
 {
-    if (_states.empty()) return NONE;
+    if (_states.empty())
+    {
+        return Cursor::NONE;
+    }
     return _states.back();
 }
 
-void Mouse::_setType(unsigned int state)
+void Mouse::_setType(Cursor state)
 {
     if (this->state() == state) return;
     delete _ui; _ui = 0;
-    switch(state)
+    switch (state)
     {
-        case BIG_ARROW:
-            _ui = new Image("art/intrface/stdarrow.frm");
+        case Cursor::BIG_ARROW:
+            _ui = new UI::Image("art/intrface/stdarrow.frm");
             break;
-        case SCROLL_W:
-            _ui = new Image("art/intrface/scrwest.frm");
+        case Cursor::SCROLL_W:
+            _ui = new UI::Image("art/intrface/scrwest.frm");
             _ui->setYOffset( -_ui->height()*0.5);
             break;
-        case SCROLL_W_X:
-            _ui = new Image("art/intrface/scrwx.frm");
+        case Cursor::SCROLL_W_X:
+            _ui = new UI::Image("art/intrface/scrwx.frm");
             _ui->setYOffset( -_ui->height()*0.5);
             break;
-        case SCROLL_N:
-            _ui = new Image("art/intrface/scrnorth.frm");
+        case Cursor::SCROLL_N:
+            _ui = new UI::Image("art/intrface/scrnorth.frm");
             _ui->setXOffset( -_ui->width()*0.5);
             break;
-        case SCROLL_N_X:
-            _ui = new Image("art/intrface/scrnx.frm");
+        case Cursor::SCROLL_N_X:
+            _ui = new UI::Image("art/intrface/scrnx.frm");
             _ui->setXOffset( -_ui->width()*0.5);
             break;
-        case SCROLL_S:
-            _ui = new Image("art/intrface/scrsouth.frm");
+        case Cursor::SCROLL_S:
+            _ui = new UI::Image("art/intrface/scrsouth.frm");
             _ui->setXOffset( -_ui->width()*0.5);
             _ui->setYOffset( -_ui->height());
             break;
-        case SCROLL_S_X:
-            _ui = new Image("art/intrface/scrsx.frm");
+        case Cursor::SCROLL_S_X:
+            _ui = new UI::Image("art/intrface/scrsx.frm");
             _ui->setXOffset(-_ui->width()*0.5);
             _ui->setYOffset(-_ui->height());
             break;
-        case SCROLL_E:
-            _ui = new Image("art/intrface/screast.frm");
+        case Cursor::SCROLL_E:
+            _ui = new UI::Image("art/intrface/screast.frm");
             _ui->setXOffset( -_ui->width());
             _ui->setYOffset( -_ui->height()*0.5);
             break;
-        case SCROLL_E_X:
-            _ui = new Image("art/intrface/screx.frm");
+        case Cursor::SCROLL_E_X:
+            _ui = new UI::Image("art/intrface/screx.frm");
             _ui->setXOffset(-_ui->width());
             _ui->setYOffset(-_ui->height()*0.5);
             break;
-        case SCROLL_NW:
-            _ui = new Image("art/intrface/scrnwest.frm");
+        case Cursor::SCROLL_NW:
+            _ui = new UI::Image("art/intrface/scrnwest.frm");
             break;
-        case SCROLL_NW_X:
-            _ui = new Image("art/intrface/scrnwx.frm");
+        case Cursor::SCROLL_NW_X:
+            _ui = new UI::Image("art/intrface/scrnwx.frm");
             break;
-        case SCROLL_SW:
-            _ui = new Image("art/intrface/scrswest.frm");
+        case Cursor::SCROLL_SW:
+            _ui = new UI::Image("art/intrface/scrswest.frm");
             _ui->setYOffset(-_ui->height());
             break;
-        case SCROLL_SW_X:
-            _ui = new Image("art/intrface/scrswx.frm");
+        case Cursor::SCROLL_SW_X:
+            _ui = new UI::Image("art/intrface/scrswx.frm");
             _ui->setYOffset(-_ui->height());
             break;
-        case SCROLL_NE:
-            _ui = new Image("art/intrface/scrneast.frm");
+        case Cursor::SCROLL_NE:
+            _ui = new UI::Image("art/intrface/scrneast.frm");
             _ui->setXOffset(-_ui->width());
             break;
-        case SCROLL_NE_X:
-            _ui = new Image("art/intrface/scrnex.frm");
+        case Cursor::SCROLL_NE_X:
+            _ui = new UI::Image("art/intrface/scrnex.frm");
             _ui->setXOffset(-_ui->width());
             break;
-        case SCROLL_SE:
-            _ui = new Image("art/intrface/scrseast.frm");
-            _ui->setXOffset(-_ui->width());
-            _ui->setYOffset(-_ui->height());
-            break;
-        case SCROLL_SE_X:
-            _ui = new Image("art/intrface/scrsex.frm");
+        case Cursor::SCROLL_SE:
+            _ui = new UI::Image("art/intrface/scrseast.frm");
             _ui->setXOffset(-_ui->width());
             _ui->setYOffset(-_ui->height());
             break;
-        case HEXAGON_RED:
-            _ui = new Image("art/intrface/msef000.frm");
+        case Cursor::SCROLL_SE_X:
+            _ui = new UI::Image("art/intrface/scrsex.frm");
+            _ui->setXOffset(-_ui->width());
+            _ui->setYOffset(-_ui->height());
+            break;
+        case Cursor::HEXAGON_RED:
+            _ui = new UI::Image("art/intrface/msef000.frm");
             _ui->setXOffset(- _ui->width()/2);
             _ui->setYOffset(- _ui->height()/2);
             break;
-        case ACTION:
-            _ui = new Image("art/intrface/actarrow.frm");
+        case Cursor::ACTION:
+            _ui = new UI::Image("art/intrface/actarrow.frm");
             break;
-        case HAND:
-            _ui = new Image("art/intrface/hand.frm");
+        case Cursor::HAND:
+            _ui = new UI::Image("art/intrface/hand.frm");
             break;
-        case WAIT:
+        case Cursor::WAIT:
         {
-            auto queue = new AnimationQueue();
-            queue->animations()->push_back(new Animation("art/intrface/wait.frm"));
+            auto queue = new UI::AnimationQueue();
+            queue->animations()->push_back(new UI::Animation("art/intrface/wait.frm"));
             queue->setRepeat(true);
             queue->start();
             _ui = queue;
@@ -213,18 +213,20 @@ void Mouse::_setType(unsigned int state)
             _ui->setYOffset(-_ui->height()*0.5);
             break;
         }
-        case NONE:
+        case Cursor::NONE:
+            break;
+        default:
             break;
     }
 }
 
 void Mouse::render()
 {
-    if (state() == NONE) return;
+    if (state() == Cursor::NONE) return;
 
     if (!_ui) return;
 
-    if (state() != HEXAGON_RED)
+    if (state() != Cursor::HEXAGON_RED)
     {
         _ui->setX(_x);
         _ui->setY(_y);
@@ -244,36 +246,50 @@ bool Mouse::scrollState()
 {
     switch(this->state())
     {
-        case SCROLL_W:
-        case SCROLL_N:
-        case SCROLL_E:
-        case SCROLL_S:
-        case SCROLL_W_X:
-        case SCROLL_NW:
-        case SCROLL_NW_X:
-        case SCROLL_N_X:
-        case SCROLL_NE:
-        case SCROLL_NE_X:
-        case SCROLL_E_X:
-        case SCROLL_SE:
-        case SCROLL_SE_X:
-        case SCROLL_S_X:
-        case SCROLL_SW:
-        case SCROLL_SW_X:
+        case Cursor::SCROLL_W:
+        case Cursor::SCROLL_N:
+        case Cursor::SCROLL_E:
+        case Cursor::SCROLL_S:
+        case Cursor::SCROLL_W_X:
+        case Cursor::SCROLL_NW:
+        case Cursor::SCROLL_NW_X:
+        case Cursor::SCROLL_N_X:
+        case Cursor::SCROLL_NE:
+        case Cursor::SCROLL_NE_X:
+        case Cursor::SCROLL_E_X:
+        case Cursor::SCROLL_SE:
+        case Cursor::SCROLL_SE_X:
+        case Cursor::SCROLL_S_X:
+        case Cursor::SCROLL_SW:
+        case Cursor::SCROLL_SW_X:
             return true;
             break;
+        default:
+            return false;
     }
     return false;
 }
 
-UI* Mouse::ui()
+UI::Base* Mouse::ui()
 {
     return _ui;
 }
 
-std::vector<unsigned int>* Mouse::states()
+std::vector<Mouse::Cursor>* Mouse::states()
 {
     return &_states;
 }
 
+unsigned Mouse::cursor() const
+{
+    return static_cast<unsigned>(state());
+}
+
+void Mouse::setCursor(unsigned value)
+{
+    if (value > static_cast<unsigned>(Cursor::HAND)) return;
+    setState(static_cast<Cursor>(value));
+}
+
+}
 }

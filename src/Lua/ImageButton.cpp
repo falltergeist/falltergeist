@@ -17,62 +17,27 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Lua/ImageButton.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Event/KeyboardEvent.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace Lua
+{
 
-KeyboardEvent::KeyboardEvent(const std::string& name) : Event(name)
+ImageButton::ImageButton(unsigned type, int x, int y) : UI::ImageButton(static_cast<Type>(type), x, y)
 {
 }
 
-KeyboardEvent::~KeyboardEvent()
+ImageButton::~ImageButton()
 {
 }
 
-int KeyboardEvent::keyCode()
-{
-    return _keyCode;
 }
-
-void KeyboardEvent::setKeyCode(int value)
-{
-    _keyCode = value;
-}
-
-bool KeyboardEvent::shiftPressed()
-{
-    return _shiftPressed;
-}
-
-void  KeyboardEvent::setShiftPressed(bool value)
-{
-    _shiftPressed = value;
-}
-
-bool KeyboardEvent::controlPressed()
-{
-    return _controlPressed;
-}
-
-void KeyboardEvent::setControlPressed(bool value)
-{
-    _controlPressed = value;
-}
-
-void KeyboardEvent::setAltPressed(bool _altPressed)
-{
-    this->_altPressed = _altPressed;
-}
-
-bool KeyboardEvent::altPressed() const
-{
-    return _altPressed;
-}
-
 }

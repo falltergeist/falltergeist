@@ -23,36 +23,31 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../UI/Image.h"
+#include "../UI/Base.h"
+#include "../UI/InventoryItem.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace Event
+{
+    class Mouse;
+}
 namespace Game
 {
-    class GameItemObject;
+    class ItemObject;
 }
-class InventoryItem;
-
-class ItemsList : public ActiveUI
+namespace UI
 {
-protected:
-    std::vector<Game::GameItemObject*>* _items = 0;
-    InventoryItem* _draggedItem = 0;
-    std::vector<InventoryItem*> _inventoryItems;
-    unsigned int _type = TYPE_INVENTORY;
-    unsigned int _slotsNumber = 7; // Height of widget in items
-    unsigned int _slotOffset = 0;
-    unsigned int _slotWidth = 77;
-    unsigned int _slotHeight = 40;
-public:
-    enum { TYPE_INVENTORY = 0, TYPE_SLOT};
 
+class ItemsList : public Falltergeist::UI::Base
+{
+public:
     ItemsList(int x = 0, int y = 0);
 
-    void setItems(std::vector<Game::GameItemObject*>* items);
-    std::vector<Game::GameItemObject*>* items();
+    void setItems(std::vector<Game::ItemObject*>* items);
+    std::vector<Game::ItemObject*>* items();
 
     std::vector<InventoryItem*>* inventoryItems();
     InventoryItem* draggedItem();
@@ -74,16 +69,27 @@ public:
     virtual void render(bool eggTransparency = false);
     virtual unsigned int pixel(unsigned int x, unsigned int y);
 
-    void onMouseLeftDown(MouseEvent* event);
-    void onMouseDragStart(MouseEvent* event);
-    void onMouseDrag(MouseEvent* event);
-    void onMouseDragStop(MouseEvent* event);
-    void onItemDragStop(MouseEvent* event);
+    void onMouseLeftDown(Event::Mouse* event);
+    void onMouseDragStart(Event::Mouse* event);
+    void onMouseDrag(Event::Mouse* event);
+    void onMouseDragStop(Event::Mouse* event);
+    void onItemDragStop(Event::Mouse* event);
 
     void addItem(InventoryItem* item, unsigned int ammount);
     void removeItem(InventoryItem* item, unsigned int ammount);
 
+protected:
+    std::vector<Game::ItemObject*>* _items = 0;
+    InventoryItem* _draggedItem = 0;
+    std::vector<InventoryItem*> _inventoryItems;
+    InventoryItem::Type _type = InventoryItem::Type::INVENTORY;
+    unsigned int _slotsNumber = 7; // Height of widget in items
+    unsigned int _slotOffset = 0;
+    unsigned int _slotWidth = 77;
+    unsigned int _slotHeight = 40;
+
 };
 
+}
 }
 #endif // FALLTERGEIST_UI_ITEMSLIST_H

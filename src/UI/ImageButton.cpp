@@ -17,211 +17,209 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/ImageButton.h"
+
 // C++ standard includes
 #include <string>
 
 // Falltergeist includes
-#include "../Audio/AudioMixer.h"
+#include "../Audio/Mixer.h"
+#include "../Event/Event.h"
+#include "../Event/Mouse.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
-#include "../Lua/Script.h"
 #include "../ResourceManager.h"
-#include "../UI/ImageButton.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-
-ImageButton::ImageButton(unsigned int type, int x, int y) : ActiveUI(x, y)
+namespace UI
 {
-    switch (type)
-    {
-        case TYPE_SMALL_RED_CIRCLE:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/lilredup.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/lilreddn.frm"));
-            _downSnd = "sound/sfx/ib1p1xx1.acm";
-            _upSnd = "sound/sfx/ib1lu1x1.acm";
-            break;
-        case TYPE_BIG_RED_CIRCLE:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/bigredup.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/bigreddn.frm"));
-            _downSnd = "sound/sfx/ib2p1xx1.acm";
-            _upSnd = "sound/sfx/ib2lu1x1.acm";
-            break;
-        case TYPE_MENU_RED_CIRCLE:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/menuup.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/menudown.frm"));
-            _downSnd = "sound/sfx/nmselec0.acm";
-            _upSnd = "sound/sfx/nmselec1.acm";
-            break;
-        case TYPE_SKILL_TOGGLE:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/tgskloff.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/tgsklon.frm"));
-            break;
-        case TYPE_PLUS:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/splsoff.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/splson.frm"));
-            break;
-        case TYPE_MINUS:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/snegoff.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/snegon.frm"));
-            break;
-        case TYPE_LEFT_ARROW:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/slu.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sld.frm"));
-            _downSnd = "sound/sfx/ib2p1xx1.acm";
-            _upSnd = "sound/sfx/ib2lu1x1.acm";
-            break;
-        case TYPE_RIGHT_ARROW:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sru.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/srd.frm"));
-            _downSnd = "sound/sfx/ib2p1xx1.acm";
-            _upSnd = "sound/sfx/ib2lu1x1.acm";
-            break;
-        case TYPE_CHECKBOX:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/prfxout.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/prfxin.frm"));
-            _upSnd = "sound/sfx/ib2p1xx1.acm";
-            _checkboxMode = true;
-            break;
-        case TYPE_PLAYER_NAME:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/nameoff.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/nameon.frm"));
-            break;
-        case TYPE_PLAYER_AGE:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/ageoff.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/ageon.frm"));
-            break;
-        case TYPE_PLAYER_GENDER:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sexoff.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sexon.frm"));
-            break;
-        case TYPE_PANEL_INVENTORY:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/invbutup.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/invbutdn.frm"));
-            _downSnd = "sound/sfx/ib2p1xx1.acm";
-            _upSnd = "sound/sfx/ib2lu1x1.acm";
-            break;
-        case TYPE_PANEL_OPTIONS:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/optiup.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/optidn.frm"));
-            _downSnd = "sound/sfx/ib2p1xx1.acm";
-            _upSnd = "sound/sfx/ib2lu1x1.acm";
-            break;
-        case TYPE_PANEL_ATTACK:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sattkbup.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sattkbdn.frm"));
-            _downSnd = "sound/sfx/ib3p1xx1.acm";
-            _upSnd = "sound/sfx/ib3lu1x1.acm";
-            break;
-        case TYPE_PANEL_MAP:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/mapup.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/mapdn.frm"));
-            _downSnd = "sound/sfx/ib2p1xx1.acm";
-            _upSnd = "sound/sfx/ib2lu1x1.acm";
-            break;
-        case TYPE_PANEL_CHA:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/chaup.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/chadn.frm"));
-            _downSnd = "sound/sfx/ib2p1xx1.acm";
-            _upSnd = "sound/sfx/ib2lu1x1.acm";
-            break;
-        case TYPE_PANEL_PIP:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/pipup.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/pipdn.frm"));
-            _downSnd = "sound/sfx/ib2p1xx1.acm";
-            _upSnd = "sound/sfx/ib2lu1x1.acm";
-            break;
-        case TYPE_OPTIONS_BUTTON:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/opbtnoff.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/opbtnon.frm"));
-            _downSnd = "sound/sfx/ib3p1xx1.acm";
-            _upSnd = "sound/sfx/ib3lu1x1.acm";
-            break;
-        case TYPE_SKILLDEX_BUTTON:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/skldxoff.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/skldxon.frm"));
-            _downSnd = "sound/sfx/ib2lu1x1.acm";
-            _upSnd = "sound/sfx/ib1p1xx1.acm";
-            break;
-        case TYPE_INVENTORY_UP_ARROW:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/invupout.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/invupin.frm"));
-            break;
-        case TYPE_INVENTORY_DOWN_ARROW:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/invdnout.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/invdnin.frm"));
-            break;
-        case TYPE_PIPBOY_ALARM_BUTTON:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/alarmout.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/alarmin.frm"));
-            break;
-        case TYPE_DIALOG_RED_BUTTON:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_rdbt2.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_rdbt1.frm"));
-            break;
-        case TYPE_DIALOG_REVIEW_BUTTON:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_rest1.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_rest2.frm"));
-            break;
-        case TYPE_DIALOG_DONE_BUTTON:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_done1.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_done2.frm"));
-            break;
-        case TYPE_DIALOG_BIG_UP_ARROW:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_bgup1.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_bgup2.frm"));
-            break;
-        case TYPE_DIALOG_BIG_DOWN_ARROW:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_bgdn1.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_bgdn2.frm"));
-            break;
-        case TYPE_DIALOG_UP_ARROW:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_up1.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_up2.frm"));
-            break;
-        case TYPE_DIALOG_DOWN_ARROW:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_down1.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_down2.frm"));
-            break;
-        case TYPE_SMALL_UP_ARROW:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/uparwoff.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/uparwon.frm"));
-            break;
-        case TYPE_SMALL_DOWN_ARROW:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/dnarwoff.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/dnarwon.frm"));
-            break;
-        case TYPE_MAP_HOTSPOT:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/hotspot1.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/hotspot2.frm"));
-            break;
-        default:
-            throw Exception("ImageButton::Imagebutton() - wrong button type");
-    }
-    addEventHandler("mouseleftclick", [this](Event* event){ this->_onLeftButtonClick(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mouseleftdown", [this](Event* event){ this->_onLeftButtonDown(dynamic_cast<MouseEvent*>(event)); });
-    addEventHandler("mouseout", [this](Event* event){ this->_onMouseOut(dynamic_cast<MouseEvent*>(event)); });
+
+ImageButton::ImageButton(Type type, int x, int y) : Falltergeist::UI::Base(x, y)
+{
+    _init(type);
 }
 
 ImageButton::~ImageButton()
 {
 }
 
-void ImageButton::export_to_lua_script(Lua::Script* script)
+void ImageButton::_init(Type type)
 {
-    luabridge::getGlobalNamespace(script->luaState())
-        .beginNamespace("game")
-            .beginNamespace("ui")
-                .deriveClass<ImageButton, ActiveUI>("ImageButton")
-                    .addConstructor<void(*)(unsigned int, int, int)>()
-                .endClass()
-            .endNamespace()
-        .endNamespace();
+    switch(type)
+    {
+        case Type::SMALL_RED_CIRCLE:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/lilredup.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/lilreddn.frm"));
+            _downSound = "sound/sfx/ib1p1xx1.acm";
+            _upSound = "sound/sfx/ib1lu1x1.acm";
+            break;
+        case Type::BIG_RED_CIRCLE:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/bigredup.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/bigreddn.frm"));
+            _downSound = "sound/sfx/ib2p1xx1.acm";
+            _upSound = "sound/sfx/ib2lu1x1.acm";
+            break;
+        case Type::MENU_RED_CIRCLE:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/menuup.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/menudown.frm"));
+            _downSound = "sound/sfx/nmselec0.acm";
+            _upSound = "sound/sfx/nmselec1.acm";
+            break;
+        case Type::SKILL_TOGGLE:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/tgskloff.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/tgsklon.frm"));
+            break;
+        case Type::PLUS:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/splsoff.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/splson.frm"));
+            break;
+        case Type::MINUS:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/snegoff.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/snegon.frm"));
+            break;
+        case Type::LEFT_ARROW:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/slu.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sld.frm"));
+            _downSound = "sound/sfx/ib2p1xx1.acm";
+            _upSound = "sound/sfx/ib2lu1x1.acm";
+            break;
+        case Type::RIGHT_ARROW:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sru.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/srd.frm"));
+            _downSound = "sound/sfx/ib2p1xx1.acm";
+            _upSound = "sound/sfx/ib2lu1x1.acm";
+            break;
+        case Type::CHECKBOX:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/prfxout.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/prfxin.frm"));
+            _upSound = "sound/sfx/ib2p1xx1.acm";
+            _checkboxMode = true;
+            break;
+        case Type::PLAYER_NAME:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/nameoff.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/nameon.frm"));
+            break;
+        case Type::PLAYER_AGE:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/ageoff.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/ageon.frm"));
+            break;
+        case Type::PLAYER_GENDER:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sexoff.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sexon.frm"));
+            break;
+        case Type::PANEL_INVENTORY:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/invbutup.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/invbutdn.frm"));
+            _downSound = "sound/sfx/ib2p1xx1.acm";
+            _upSound = "sound/sfx/ib2lu1x1.acm";
+            break;
+        case Type::PANEL_OPTIONS:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/optiup.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/optidn.frm"));
+            _downSound = "sound/sfx/ib2p1xx1.acm";
+            _upSound = "sound/sfx/ib2lu1x1.acm";
+            break;
+        case Type::PANEL_ATTACK:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sattkbup.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sattkbdn.frm"));
+            _downSound = "sound/sfx/ib3p1xx1.acm";
+            _upSound = "sound/sfx/ib3lu1x1.acm";
+            break;
+        case Type::PANEL_MAP:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/mapup.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/mapdn.frm"));
+            _downSound = "sound/sfx/ib2p1xx1.acm";
+            _upSound = "sound/sfx/ib2lu1x1.acm";
+            break;
+        case Type::PANEL_CHA:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/chaup.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/chadn.frm"));
+            _downSound = "sound/sfx/ib2p1xx1.acm";
+            _upSound = "sound/sfx/ib2lu1x1.acm";
+            break;
+        case Type::PANEL_PIP:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/pipup.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/pipdn.frm"));
+            _downSound = "sound/sfx/ib2p1xx1.acm";
+            _upSound = "sound/sfx/ib2lu1x1.acm";
+            break;
+        case Type::OPTIONS_BUTTON:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/opbtnoff.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/opbtnon.frm"));
+            _downSound = "sound/sfx/ib3p1xx1.acm";
+            _upSound = "sound/sfx/ib3lu1x1.acm";
+            break;
+        case Type::SKILLDEX_BUTTON:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/skldxoff.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/skldxon.frm"));
+            _downSound = "sound/sfx/ib2lu1x1.acm";
+            _upSound = "sound/sfx/ib1p1xx1.acm";
+            break;
+        case Type::INVENTORY_UP_ARROW:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/invupout.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/invupin.frm"));
+            break;
+        case Type::INVENTORY_DOWN_ARROW:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/invdnout.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/invdnin.frm"));
+            break;
+        case Type::PIPBOY_ALARM_BUTTON:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/alarmout.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/alarmin.frm"));
+            break;
+        case Type::DIALOG_RED_BUTTON:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_rdbt2.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_rdbt1.frm"));
+            break;
+        case Type::DIALOG_REVIEW_BUTTON:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_rest1.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_rest2.frm"));
+            break;
+        case Type::DIALOG_DONE_BUTTON:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_done1.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_done2.frm"));
+            break;
+        case Type::DIALOG_BIG_UP_ARROW:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_bgup1.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_bgup2.frm"));
+            break;
+        case Type::DIALOG_BIG_DOWN_ARROW:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_bgdn1.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_bgdn2.frm"));
+            break;
+        case Type::DIALOG_UP_ARROW:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_up1.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_up2.frm"));
+            break;
+        case Type::DIALOG_DOWN_ARROW:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_down1.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_down2.frm"));
+            break;
+        case Type::SMALL_UP_ARROW:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/uparwoff.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/uparwon.frm"));
+            break;
+        case Type::SMALL_DOWN_ARROW:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/dnarwoff.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/dnarwon.frm"));
+            break;
+        case Type::MAP_HOTSPOT:
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/hotspot1.frm"));
+            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/hotspot2.frm"));
+            break;
+        default:
+            throw Exception("ImageButton::Imagebutton() - wrong button type");
+    }
+    addEventHandler("mouseleftclick", [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    addEventHandler("mouseleftdown", [this](Event::Event* event){ this->_onLeftButtonDown(dynamic_cast<Event::Mouse*>(event)); });
+    addEventHandler("mouseout", [this](Event::Event* event){ this->_onMouseOut(dynamic_cast<Event::Mouse*>(event)); });
 }
 
-Texture* ImageButton::texture()
+Graphics::Texture* ImageButton::texture() const
 {
     if (_checkboxMode && _checked) return _textures.at(1);
 
@@ -230,35 +228,35 @@ Texture* ImageButton::texture()
     return _textures.at(0);
 }
 
-void ImageButton::_onLeftButtonClick(MouseEvent* event)
+void ImageButton::_onLeftButtonClick(Event::Mouse* event)
 {
     auto sender = dynamic_cast<ImageButton*>(event->emitter());
     if (sender->_checkboxMode)
     {
         sender->_checked = !sender->_checked;
     }
-    if (!sender->_upSnd.empty())
+    if (!sender->_upSound.empty())
     {
-        Game::getInstance()->mixer()->playACMSound(sender->_upSnd);
+        Game::getInstance()->mixer()->playACMSound(sender->_upSound);
     }
 }
 
-void ImageButton::_onLeftButtonDown(MouseEvent* event)
+void ImageButton::_onLeftButtonDown(Event::Mouse* event)
 {
     auto sender = dynamic_cast<ImageButton*>(event->emitter());
-    if (!sender->_downSnd.empty())
+    if (!sender->_downSound.empty())
     {
-        Game::getInstance()->mixer()->playACMSound(sender->_downSnd);
+        Game::getInstance()->mixer()->playACMSound(sender->_downSound);
     }
 }
 
 
-void ImageButton::_onMouseOut(MouseEvent* event)
+void ImageButton::_onMouseOut(Event::Mouse* event)
 {
     auto sender = dynamic_cast<ImageButton*>(event->emitter());
-    if (_leftButtonPressed && !sender->_upSnd.empty())
+    if (_leftButtonPressed && !sender->_upSound.empty())
     {
-        Game::getInstance()->mixer()->playACMSound(sender->_upSnd);
+        Game::getInstance()->mixer()->playACMSound(sender->_upSound);
     }
 }
 
@@ -273,4 +271,5 @@ void ImageButton::setChecked(bool _checked)
     this->_checked = _checked;
 }
 
+}
 }

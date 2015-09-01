@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_HIDDENMASK_H
-#define FALLTERGEIST_HIDDENMASK_H
+#ifndef FALLTERGEIST_UI_HIDDENMASK_H
+#define FALLTERGEIST_UI_HIDDENMASK_H
 
 // C++ standard includes
 
@@ -29,15 +29,25 @@
 
 namespace Falltergeist
 {
+namespace UI
+{
 
+/**
+ * Hidden mask is used to handle events in particular screen area
+ * @todo Must be inherited from UI
+ */
 class HiddenMask : public Image
 {
+
 public:
     HiddenMask(unsigned int width = 0, unsigned int height = 0, int x = 0, int y = 0);
-    virtual unsigned int pixel(unsigned int x, unsigned int y);
-    virtual void render(bool eggTransparency = false);
-    virtual void think();
+    ~HiddenMask() override;
+
+    unsigned int pixel(unsigned int x, unsigned int y) override;
+    void render(bool eggTransparency = false) override;
+    void think() override;
 };
 
 }
-#endif // FALLTERGEIST_HIDDENMASK_H
+}
+#endif // FALLTERGEIST_UI_HIDDENMASK_H

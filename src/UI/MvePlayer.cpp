@@ -17,11 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/MvePlayer.h"
+
 // C++ standard includes
 #include <bitset>
 
 // Falltergeist includes
-#include "../UI/MvePlayer.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Exception.h"
@@ -29,6 +31,7 @@
 
 // Third party includes
 
+//@todo Move this to Crossplatform
 #ifdef __MACH__
 #include <mach/mach_time.h>
 #define CLOCK_REALTIME 0
@@ -48,6 +51,8 @@ int clock_gettime(int clk_id, struct timespec* t)
 #endif
 
 namespace Falltergeist
+{
+namespace UI
 {
 
 static const int16_t audio_exp_table[256] =
@@ -97,7 +102,7 @@ int32_t get_int(uint8_t *data)
 }
 
 
-MvePlayer::MvePlayer(libfalltergeist::Mve::File* mve) : UI()
+MvePlayer::MvePlayer(libfalltergeist::Mve::File* mve) : Falltergeist::UI::Base()
 {
     _texture = NULL;
     _mve = mve;
@@ -740,7 +745,7 @@ void MvePlayer::_initVideoBuffer(uint8_t* data)
     _decodingMap = new uint8_t [(width*height / (8*8))];
 
     if (_texture != NULL) return;
-    _texture = new Texture(width, height);
+    _texture = new Graphics::Texture(width, height);
 }
 
 
@@ -826,7 +831,7 @@ void MvePlayer::_decodeAudio(uint8_t* data, uint32_t len)
 
 void MvePlayer::_processChunk()
 {
-    if (_chunk->type() == CHUNK_END)
+    if (static_cast<Chunk>(_chunk->type()) == Chunk::END)
     {
         _finished = true;
         return;
@@ -834,65 +839,65 @@ void MvePlayer::_processChunk()
 
     for (auto opcode : *_chunk->opcodes())
     {
-        switch (opcode->type())
+        switch (static_cast<Opcode>(opcode->type()))
         {
-            case OPCODE_END_CHUNK:
+            case Opcode::END_CHUNK:
               _chunk = _mve->getNextChunk();
               break;
-            case OPCODE_CREATE_TIMER:
+            case Opcode::CREATE_TIMER:
               _delay = get_int(opcode->data()) * get_short(opcode->data() + 4);
               _timerStarted = true;
               clock_gettime(CLOCK_MONOTONIC, &_lastts);
               break;
-            case OPCODE_END_STREAM:
+            case Opcode::END_STREAM:
                 _finished = true;
                 return;
                 break;
-            case OPCODE_INIT_AUDIO_BUF:
+            case Opcode::INIT_AUDIO_BUF:
                 _initAudioBuffer(opcode->version(), opcode->data());
                 break;
-            case OPCODE_START_AUDIO:
+            case Opcode::START_AUDIO:
                 _playAudio();
                 break;
-            case OPCODE_INIT_VIDIO_BUF:
+            case Opcode::INIT_VIDIO_BUF:
                 //can be called multiple times (intro and tanker)
                 _initVideoBuffer(opcode->data());
                 break;
-            case OPCODE_SEND_BUFFER:
+            case Opcode::SEND_BUFFER:
                 _sendVideoBuffer(opcode->data());
                 //copy buffer to texture (with pallete)
                 break;
-            case OPCODE_AUDIO_DATA:
+            case Opcode::AUDIO_DATA:
                 _decodeAudio(opcode->data(), opcode->length());
                 break;
-            case OPCODE_AUDIO_SILENCE:
+            case Opcode::AUDIO_SILENCE:
                 break;
-            case OPCODE_INIT_VIDEO:
+            case Opcode::INIT_VIDEO:
                 // we don't care about it
                 break;
-            case OPCODE_CREATE_GRADIENT:
+            case Opcode::CREATE_GRADIENT:
                 break;
-            case OPCODE_SET_PALETTE:
+            case Opcode::SET_PALETTE:
                 //can be called several times (intro and tanker)
                 _setPalette(opcode->data());
                 break;
-            case OPCODE_SET_PALETTE_COMPRESSED:
+            case Opcode::SET_PALETTE_COMPRESSED:
                 break;
-            case OPCODE_SET_DECODING_MAP:
+            case Opcode::SET_DECODING_MAP:
                 _setDecodingMap(opcode->data());
                 break;
-            case OPCODE_VIDEO_DATA:
+            case Opcode::VIDEO_DATA:
                 _decodeVideo(opcode->data(), opcode->length());
                 //set (buffer) texture
                 break;
-            case OPCODE_UNKNOWN_0x06:
-            case OPCODE_UNKNOWN_0xe:
-            case OPCODE_UNKNOWN_0x10:
-            case OPCODE_UNKNOWN_0x12:
-            case OPCODE_UNKNOWN_0x13:
-            case OPCODE_UNKNOWN_0x14:
+            case Opcode::UNKNOWN_0x06:
+            case Opcode::UNKNOWN_0xe:
+            case Opcode::UNKNOWN_0x10:
+            case Opcode::UNKNOWN_0x12:
+            case Opcode::UNKNOWN_0x13:
+            case Opcode::UNKNOWN_0x14:
                 break;
-            case OPCODE_UNKNOWN_0x15:
+            case Opcode::UNKNOWN_0x15:
                 break;
         }
     }
@@ -923,4 +928,5 @@ uint32_t MvePlayer::frame()
     return _frame;
 }
 
+}
 }

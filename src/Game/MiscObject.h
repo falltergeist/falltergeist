@@ -17,13 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMEMISCOBJECT_H
-#define FALLTERGEIST_GAMEMISCOBJECT_H
+#ifndef FALLTERGEIST_GAME_MISCOBJECT_H
+#define FALLTERGEIST_GAME_MISCOBJECT_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "Object.h"
+#include "../Game/Object.h"
 
 // Third party includes
 
@@ -32,15 +32,13 @@ namespace Falltergeist
 namespace Game
 {
 
-class GameMiscObject : public GameObject
+class MiscObject : public Object
 {
-protected:
 public:
-    GameMiscObject();
-    virtual ~GameMiscObject();
+    MiscObject();
+    ~MiscObject() override;
 };
 
 }
 }
-
-#endif // FALLTERGEIST_GAMEMISCOBJECT_H
+#endif // FALLTERGEIST_GAME_MISCOBJECT_H

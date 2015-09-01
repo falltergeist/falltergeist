@@ -17,46 +17,190 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/Base.h"
+
 // C++ standard includes
+#include <algorithm>
 
 // Falltergeist includes
-#include "../Graphics/ActiveUI.h"
+#include "../Game/Game.h"
+#include "../Game/DudeObject.h"
+#include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
-#include "../Lua/Script.h"
+#include "../LocationCamera.h"
+#include "../ResourceManager.h"
+#include "../State/Location.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace UI
+{
 
-ActiveUI::ActiveUI(int x, int y) : EventEmitter(), UI(x, y)
+Base::Base(int x, int y) : Event::Emitter()
+{
+    _x = x;
+    _y = y;
+}
+
+Base::~Base()
+{
+    // Delete texture only if it wasn't allocated by Resource Manager
+    if (_texture)
+    {
+        bool found = false;
+        for (auto it = ResourceManager::getInstance()->textures()->begin(); it != ResourceManager::getInstance()->textures()->end(); ++it)
+        {
+            if (it->second == _texture)
+            {
+                found = true;
+                break;
+            }
+        }
+        if (!found) delete _texture;
+    }
+}
+
+int Base::x() const
+{
+    return _x + _xOffset;
+}
+
+void Base::setX(int value)
+{
+    _x = value;
+}
+
+int Base::y() const
+{
+    return _y + _yOffset;
+}
+
+void Base::setY(int value)
+{
+    _y = value;
+}
+
+Graphics::Texture* Base::texture() const
+{
+    return _texture;
+}
+
+void Base::setTexture(Graphics::Texture* texture)
+{
+    _texture = texture;
+}
+
+void Base::think()
 {
 }
 
-ActiveUI::~ActiveUI()
+void Base::render(bool eggTransparency)
 {
+
+    if (eggTransparency)
+    {
+        auto dude = Game::getInstance()->player();
+
+        if (!dude || !Game::getInstance()->locationState())
+        {
+            Game::getInstance()->renderer()->drawTexture(texture(), x(), y());
+            return;
+        }
+
+        auto camera = Game::getInstance()->locationState()->camera();
+
+        int egg_x = dude->hexagon()->x() - camera->x() - 63 + dude->ui()->xOffset();
+        int egg_y = dude->hexagon()->y() - camera->y() - 78 + dude->ui()->yOffset();
+
+        int egg_dx = x() - egg_x;
+        int egg_dy = y() - egg_y;
+
+        auto egg = ResourceManager::getInstance()->texture("data/egg.png");
+
+        //check if egg and texture intersects
+        SDL_Rect egg_rect = { egg_x, egg_y, (int)egg->width(), (int)egg->height() };
+        SDL_Rect tex_rect = { x(), y(), (int)texture()->width(), (int)texture()->height() };
+
+        if (!SDL_HasIntersection(&egg_rect, &tex_rect))
+        {
+            Game::getInstance()->renderer()->drawTexture(texture(), x(), y());
+            return;
+        }
+
+        if (!_tmptex) _tmptex = new Graphics::Texture(texture()->width(),texture()->height());
+        texture()->copyTo(_tmptex);
+
+        _tmptex->blitWithAlpha(egg, egg_dx, egg_dy);
+        Game::getInstance()->renderer()->drawTexture(_tmptex, x(), y());
+    }
+    else
+    {
+        Game::getInstance()->renderer()->drawTexture(texture(), x(), y());
+    }
+
+
+
 }
 
-void ActiveUI::export_to_lua_script(Lua::Script* script)
+void Base::setVisible(bool value)
 {
-    luabridge::getGlobalNamespace(script->luaState())
-        .beginNamespace("game")
-            .beginNamespace("ui")
-                .deriveClass<ActiveUI, UI>("ActiveUI")
-                .endClass()
-            .endNamespace()
-        .endNamespace();
+    _visible = value;
 }
 
-void ActiveUI::handle(Event* event)
+bool Base::visible() const
+{
+    return _visible;
+}
+
+int Base::xOffset() const
+{
+    return _xOffset;
+}
+
+void Base::setXOffset(int xOffset)
+{
+    _xOffset = xOffset;
+}
+
+int Base::yOffset() const
+{
+    return _yOffset;
+}
+
+void Base::setYOffset(int yOffset)
+{
+    _yOffset = yOffset;
+}
+
+unsigned int Base::width() const
+{
+    if (!texture()) return 0;
+    return texture()->width();
+}
+
+unsigned int Base::height() const
+{
+    if (!texture()) return 0;
+    return texture()->height();
+}
+
+unsigned int Base::pixel(unsigned int x, unsigned int y)
+{
+    return texture() ? texture()->pixel(x, y) : 0;
+}
+
+void Base::handle(Event::Event* event)
 {
     if (event->handled()) return;
-    if (auto mouseEvent = dynamic_cast<MouseEvent*>(event))
+    if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
         int x = mouseEvent->x() - this->x();
         int y = mouseEvent->y() - this->y();
 
-        auto newEvent = new MouseEvent(mouseEvent);
+        auto newEvent = new Event::Mouse(mouseEvent);
 
         if (this->pixel(x, y))
         {
@@ -175,10 +319,11 @@ void ActiveUI::handle(Event* event)
         return;
     }
 
-    if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
+    if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
     {
         emitEvent(keyboardEvent);
     }
 }
 
+}
 }

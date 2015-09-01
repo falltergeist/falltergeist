@@ -17,49 +17,27 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Event/State.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Game/Game.h"
-#include "../Graphics/Renderer.h"
-#include "../Graphics/Texture.h"
-#include "../Graphics/Tile.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-
-Tile::Tile(unsigned int number, int x, int y)
+namespace Event
 {
-    _number = number;
-    _x = x;
-    _y = y;
+
+State::State(const std::string& name) : Event(name)
+{
 }
 
-unsigned int Tile::number()
+State::~State()
 {
-    return _number;
 }
 
-int Tile::x()
-{
-    return _x;
 }
-
-int Tile::y()
-{
-    return _y;
-}
-
-unsigned int Tile::index()
-{
-    return _index;
-}
-
-void Tile::setIndex(unsigned int value)
-{
-    _index = value;
-}
-
 }

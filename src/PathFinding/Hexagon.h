@@ -25,6 +25,7 @@
 #include <list>
 
 // Falltergeist includes
+#include "../Game/Object.h"
 
 // Third party includes
 
@@ -32,14 +33,14 @@ namespace Falltergeist
 {
 namespace Game
 {
-    class GameObject;
+    class Object;
 }
 
 class Hexagon
 {
 protected:
     std::vector<Hexagon*> _neighbors;
-    std::list<Game::GameObject*> _objects;
+    std::list<Game::Object*> _objects;
     unsigned int _number = 0; // position in hexagonal grid
 
     int _x = 0;
@@ -68,7 +69,7 @@ public:
 
     std::vector<Hexagon*>* neighbors();
 
-    std::list<Game::GameObject*>* objects();
+    std::list<Game::Object*>* objects();
 
     int cubeX();
     void setCubeX(int value);
@@ -87,7 +88,7 @@ public:
     void setInRender(bool value);
     bool inRender();
 
-    unsigned int orientationTo(Hexagon* hexagon);
+    Game::Orientation orientationTo(Hexagon *hexagon);
 };
 
 }

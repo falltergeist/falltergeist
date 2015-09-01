@@ -17,10 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Game/ArmorItemObject.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "ArmorItemObject.h"
 #include "../Exception.h"
 
 // Third party includes
@@ -30,75 +32,75 @@ namespace Falltergeist
 namespace Game
 {
 
-GameArmorItemObject::GameArmorItemObject() : GameItemObject()
+ArmorItemObject::ArmorItemObject() : ItemObject()
 {
-    _subtype = TYPE_ITEM_ARMOR;
+    _subtype = Subtype::ARMOR;
 }
 
-GameArmorItemObject::~GameArmorItemObject()
+ArmorItemObject::~ArmorItemObject()
 {
 }
 
-int GameArmorItemObject::damageResist(DAMAGE type) const
+int ArmorItemObject::damageResist(DAMAGE type) const
 {
-    if (type > DAMAGE::POISON) throw Exception("GameArmorItemObject::damageResist(type) - type out of range:" + std::to_string((unsigned)type));
+    if (type > DAMAGE::POISON) throw Exception("ArmorItemObject::damageResist(type) - type out of range:" + std::to_string((unsigned)type));
     return _damageResist.at((unsigned)type);
 }
 
-void GameArmorItemObject::setDamageResist(DAMAGE type, int value)
+void ArmorItemObject::setDamageResist(DAMAGE type, int value)
 {
-    if (type > DAMAGE::POISON) throw Exception("GameArmorItemObject::setDamageResist(type, value) - type out of range:" + std::to_string((unsigned)type));
+    if (type > DAMAGE::POISON) throw Exception("ArmorItemObject::setDamageResist(type, value) - type out of range:" + std::to_string((unsigned)type));
     _damageResist.at((unsigned)type) = value;
 }
 
-int GameArmorItemObject::damageThreshold(DAMAGE type) const
+int ArmorItemObject::damageThreshold(DAMAGE type) const
 {
-    if ( type > DAMAGE::POISON) throw Exception("GameArmorItemObject::damageThreshold(type) - type out of range:" + std::to_string((unsigned)type));
+    if ( type > DAMAGE::POISON) throw Exception("ArmorItemObject::damageThreshold(type) - type out of range:" + std::to_string((unsigned)type));
     return _damageThreshold.at((unsigned)type);
 }
 
-void GameArmorItemObject::setDamageThreshold(DAMAGE type, int value)
+void ArmorItemObject::setDamageThreshold(DAMAGE type, int value)
 {
-    if ( type > DAMAGE::POISON) throw Exception("GameArmorItemObject::setDamageThreshold(type, value) - type out of range:" + std::to_string((unsigned)type));
+    if ( type > DAMAGE::POISON) throw Exception("ArmorItemObject::setDamageThreshold(type, value) - type out of range:" + std::to_string((unsigned)type));
     _damageThreshold.at((unsigned)type) = value;
 }
 
-int GameArmorItemObject::perk() const
+int ArmorItemObject::perk() const
 {
     return _perk;
 }
 
-void GameArmorItemObject::setPerk(int value)
+void ArmorItemObject::setPerk(int value)
 {
     _perk = value;
 }
 
-unsigned int GameArmorItemObject::maleFID() const
+unsigned int ArmorItemObject::maleFID() const
 {
     return _maleFID;
 }
 
-void GameArmorItemObject::setMaleFID(unsigned int value)
+void ArmorItemObject::setMaleFID(unsigned int value)
 {
     _maleFID = value;
 }
 
-unsigned int GameArmorItemObject::femaleFID() const
+unsigned int ArmorItemObject::femaleFID() const
 {
     return _femaleFID;
 }
 
-void GameArmorItemObject::setFemaleFID(unsigned int value)
+void ArmorItemObject::setFemaleFID(unsigned int value)
 {
     _femaleFID = value;
 }
 
-unsigned int GameArmorItemObject::armorClass() const
+unsigned int ArmorItemObject::armorClass() const
 {
     return _armorClass;
 }
 
-void GameArmorItemObject::setArmorClass(unsigned int value)
+void ArmorItemObject::setArmorClass(unsigned int value)
 {
     _armorClass = value;
 }

@@ -58,10 +58,10 @@ void Container::init()
     setX((game->renderer()->width()  - 537)/2);
     setY((game->renderer()->height() - 376)/2);
 
-    addUI("background", new Image("art/intrface/loot.frm"));
+    addUI("background", new UI::Image("art/intrface/loot.frm"));
 
-    addUI("button_done", new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 478, 331));
-    getActiveUI("button_done")->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    addUI("button_done", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 478, 331));
+    getUI("button_done")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
 
     // TAKEALL
@@ -73,53 +73,51 @@ void Container::init()
     // invupout
 
 
-    auto dudeList = new ItemsList(170, 35);
+    auto dudeList = new UI::ItemsList(170, 35);
     dudeList->setItems(Game::getInstance()->player()->inventory());
     addUI(dudeList);
 
-    auto containerList = new ItemsList(292, 35);
+    auto containerList = new UI::ItemsList(292, 35);
     containerList->setItems(object()->inventory());
     addUI(containerList);
 
-    dudeList->addEventHandler("itemdragstop", [containerList](Event* event){ containerList->onItemDragStop(dynamic_cast<MouseEvent*>(event)); });
-    containerList->addEventHandler("itemdragstop", [dudeList](Event* event){ dudeList->onItemDragStop(dynamic_cast<MouseEvent*>(event)); });
+    dudeList->addEventHandler("itemdragstop", [containerList](Event::Event* event){ containerList->onItemDragStop(dynamic_cast<Event::Mouse*>(event)); });
+    containerList->addEventHandler("itemdragstop", [dudeList](Event::Event* event){ dudeList->onItemDragStop(dynamic_cast<Event::Mouse*>(event)); });
 
 }
 
-Game::GameContainerItemObject* Container::object()
+Game::ContainerItemObject* Container::object()
 {
     return _object;
 }
 
-void Container::setObject(Game::GameContainerItemObject* object)
+void Container::setObject(Game::ContainerItemObject* object)
 {
     _object = object;
 }
 
-void Container::onDoneButtonClick(MouseEvent* event)
+void Container::onDoneButtonClick(Event::Mouse* event)
 {
     Game::getInstance()->popState();
 }
 
-void Container::onStateActivate(StateEvent* event)
+void Container::onStateActivate(Event::State* event)
 {
-    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
 }
 
-void Container::onStateDeactivate(StateEvent* event)
+void Container::onStateDeactivate(Event::State* event)
 {
     Game::getInstance()->mouse()->popState();
 }
 
-void Container::onKeyDown(KeyboardEvent* event)
+void Container::onKeyDown(Event::Keyboard* event)
 {
     if (event->keyCode() == SDLK_ESCAPE)
     {
         Game::getInstance()->popState();
     }
 }
-
-
 
 }
 }

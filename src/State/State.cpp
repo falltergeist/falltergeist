@@ -17,15 +17,15 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../State/State.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Event/StateEvent.h"
+#include "../Event/State.h"
 #include "../Game/Game.h"
-#include "../Graphics/ActiveUI.h"
 #include "../Graphics/Renderer.h"
-#include "../Graphics/UI.h"
-#include "State.h"
 #include "../UI/ImageList.h"
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
@@ -37,10 +37,10 @@ namespace Falltergeist
 namespace State
 {
 
-State::State() : EventEmitter()
+State::State() : Event::Emitter()
 {
-    addEventHandler("activate",   [this](Event* event){ this->onStateActivate(dynamic_cast<StateEvent*>(event)); });
-    addEventHandler("deactivate", [this](Event* event){ this->onStateDeactivate(dynamic_cast<StateEvent*>(event)); });
+    addEventHandler("activate",   [this](Event::Event* event){ this->onStateActivate(dynamic_cast<Event::State*>(event)); });
+    addEventHandler("deactivate", [this](Event::Event* event){ this->onStateDeactivate(dynamic_cast<Event::State*>(event)); });
 }
 
 State::~State()
@@ -109,13 +109,7 @@ void State::setModal(bool value)
     _modal = value;
 }
 
-ActiveUI* State::addUI(ActiveUI* ui)
-{
-    addUI((UI*)ui);
-    return ui;
-}
-
-UI* State::addUI(UI* ui)
+UI::Base* State::addUI(UI::Base* ui)
 {
     // Add to UI state position
     if (x()) ui->setX(ui->x() + x());
@@ -125,21 +119,14 @@ UI* State::addUI(UI* ui)
     return ui;
 }
 
-UI* State::addUI(const std::string& name, UI* ui)
+UI::Base* State::addUI(const std::string& name, UI::Base* ui)
 {
     addUI(ui);
-    _labeledUI.insert(std::pair<std::string, UI*>(name, ui));
+    _labeledUI.insert(std::pair<std::string, UI::Base*>(name, ui));
     return ui;
 }
 
-ActiveUI* State::addUI(const std::string& name, ActiveUI* ui)
-{
-    addUI(name, (UI*)ui);
-    return ui;
-}
-
-
-void State::addUI(std::vector<UI*> uis)
+void State::addUI(std::vector<UI::Base*> uis)
 {
     for (auto ui : uis)
     {
@@ -147,27 +134,22 @@ void State::addUI(std::vector<UI*> uis)
     }
 }
 
-ActiveUI* State::getActiveUI(const std::string& name)
+UI::TextArea* State::getTextArea(const std::string& name)
 {
-    return dynamic_cast<ActiveUI*>(getUI(name));
+    return dynamic_cast<UI::TextArea*>(getUI(name));
 }
 
-TextArea* State::getTextArea(const std::string& name)
+UI::ImageList* State::getImageList(const std::string& name)
 {
-    return dynamic_cast<TextArea*>(getUI(name));
+    return dynamic_cast<UI::ImageList*>(getUI(name));
 }
 
-ImageList* State::getImageList(const std::string& name)
+UI::SmallCounter* State::getSmallCounter(const std::string& name)
 {
-    return dynamic_cast<ImageList*>(getUI(name));
+    return dynamic_cast<UI::SmallCounter*>(getUI(name));
 }
 
-SmallCounter* State::getSmallCounter(const std::string& name)
-{
-    return dynamic_cast<SmallCounter*>(getUI(name));
-}
-
-UI* State::getUI(const std::string& name)
+UI::Base* State::getUI(const std::string& name)
 {
     if (_labeledUI.find(name) != _labeledUI.end())
     {
@@ -176,10 +158,10 @@ UI* State::getUI(const std::string& name)
     return nullptr;
 }
 
-void State::handle(Event* event)
+void State::handle(Event::Event* event)
 {
     if (event->handled()) return;
-    if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
+    if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
     {
         if (keyboardEvent->name() == "keydown")
         {
@@ -189,9 +171,9 @@ void State::handle(Event* event)
     for (auto it = _ui.rbegin(); it != _ui.rend(); ++it)
     {
         if (event->handled()) return;
-        if (auto activeUI = dynamic_cast<ActiveUI*>(*it))
+        if (auto ui = dynamic_cast<UI::Base*>(*it))
         {
-            activeUI->handle(event);
+            ui->handle(event);
         }
     }
 }
@@ -219,15 +201,15 @@ void State::popUI()
     _ui.pop_back();
 }
 
-void State::onStateActivate(StateEvent* event)
+void State::onStateActivate(Event::State* event)
 {
 }
 
-void State::onStateDeactivate(StateEvent* event)
+void State::onStateDeactivate(Event::State* event)
 {
 }
 
-void State::onKeyDown(KeyboardEvent* event)
+void State::onKeyDown(Event::Keyboard* event)
 {
 }
 

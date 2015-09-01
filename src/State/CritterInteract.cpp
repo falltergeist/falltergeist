@@ -49,12 +49,12 @@ CritterInteract::~CritterInteract()
     camera->setYPosition(_oldCameraY);
 }
 
-void CritterInteract::onStateActivate(StateEvent* event)
+void CritterInteract::onStateActivate(Event::State* event)
 {
-    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
 }
 
-void CritterInteract::onStateDeactivate(StateEvent* event)
+void CritterInteract::onStateDeactivate(Event::State* event)
 {
     Game::getInstance()->mouse()->popState();
 }
@@ -70,7 +70,7 @@ void CritterInteract::init()
     setX((Game::getInstance()->renderer()->width() - 640)*0.5);
     setY((Game::getInstance()->renderer()->height() - 480)*0.5);
 
-    addUI("background", new Image("art/intrface/alltlk.frm"));
+    addUI("background", new UI::Image("art/intrface/alltlk.frm"));
 
     // Centering camera on critter position
     auto locationState = Game::getInstance()->locationState();
@@ -111,12 +111,12 @@ void CritterInteract::setMood(int mood)
     _mood = mood;
 }
 
-Game::GameCritterObject* CritterInteract::critter()
+Game::CritterObject* CritterInteract::critter()
 {
     return _critter;
 }
 
-void CritterInteract::setCritter(Game::GameCritterObject* critter)
+void CritterInteract::setCritter(Game::CritterObject* critter)
 {
     _critter = critter;
 }

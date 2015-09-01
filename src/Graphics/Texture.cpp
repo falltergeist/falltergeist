@@ -17,10 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Graphics/Texture.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Graphics/Texture.h"
+#include "../Base/StlFeatures.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Exception.h"
@@ -29,6 +32,10 @@
 
 namespace Falltergeist
 {
+namespace Graphics
+{
+
+using namespace Base;
 
 Texture::Texture(unsigned int width, unsigned int height)
 {
@@ -288,16 +295,17 @@ bool Texture::blitWithAlpha(Texture* blitMask, int maskOffsetX, int maskOffsetY)
     // TODO: Lock both surfaces only once and then use direct pixel access to blend.
     const auto thisWidth = width();
     const auto thisHeight = height();
-
-    unsigned int maskX = std::max(0, maskOffsetX);
-    unsigned int maskY = std::max(0, maskOffsetY);
-    const unsigned int maskWidth = blitMask->width() - (maskX - maskOffsetX);
-    const unsigned int maskHeight = blitMask->height() - (maskY - maskOffsetY);
+    const auto maskWidth = blitMask->width();
+    const auto maskHeight = blitMask->height();
 
     //This is sloooow. But unfortunately sdl doesnt allow to blit over only alpha =/
-    for (unsigned int x = 0; x < thisWidth && maskX < maskWidth; ++x, ++maskX)
+    for (unsigned int maskX = std::max(0, maskOffsetX), x = maskX - maskOffsetX;
+         x < thisWidth && maskX < maskWidth;
+         ++x, ++maskX)
     {
-        for (unsigned int y = 0; y < thisHeight && maskY < maskHeight; ++y, ++maskY)
+        for (unsigned int maskY = std::max(0, maskOffsetY), y = maskY - maskOffsetY;
+             y < thisHeight && maskY < maskHeight;
+             ++y, ++maskY)
         {
             setPixel(x, y, pixel(x,y) & blitMask->pixel(maskX, maskY));
         }
@@ -306,4 +314,36 @@ bool Texture::blitWithAlpha(Texture* blitMask, int maskOffsetX, int maskOffsetY)
     return true;
 }
 
+// static
+std::unique_ptr<Texture> Texture::generateTextureForNumber(
+    unsigned int number,
+    unsigned int maxLength,
+    Texture* symbolSource,
+    unsigned int charWidth,
+    unsigned int charHeight,
+    unsigned int xOffsetByColor,
+    bool isSigned)
+{
+    const auto charsCount = maxLength + (isSigned ? 1U : 0U);
+    auto texture = make_unique<Texture>(charWidth * charsCount, charHeight);
+
+    // number as text
+    auto number_text = std::to_string(number);
+
+    // Fill counter padding with leading zeroes.
+    if (number_text.size() < maxLength)
+    {
+        number_text.insert(0, maxLength - number_text.size(), '0');
+    }
+
+    for (unsigned int i = 0; i < maxLength; i++)
+    {
+        const unsigned int key = 9 -  ('9' - number_text[i]);
+        const unsigned int x = charWidth * key + xOffsetByColor;
+        symbolSource->copyTo(texture.get(), charWidth * i, 0, x, 0, charWidth, charHeight);
+    }
+    return std::move(texture);
+}
+
+}
 }

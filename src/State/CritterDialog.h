@@ -25,12 +25,21 @@
 
 // Falltergeist includes
 #include "../State/State.h"
-#include "../UI/TextArea.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace Event
+{
+    class Event;
+    class Keyboard;
+}
+namespace UI
+{
+    class TextArea;
+}
+
 namespace State
 {
 
@@ -40,7 +49,7 @@ protected:
 
     std::vector<int> _functions;
     std::vector<int> _reactions;
-    std::vector<TextArea*> _answers;
+    std::vector<UI::TextArea*> _answers;
 
     void _selectAnswer(size_t i);
 
@@ -59,12 +68,12 @@ public:
     bool hasAnswers();
     void addAnswer(const std::string& text);
 
-    void onReviewButtonClick(Event* event);
-    void onBarterButtonClick(Event* event);
-    void onAnswerIn(Event* event);
-    void onAnswerOut(Event* event);
-    void onAnswerClick(Event* event);
-    virtual void onKeyDown(KeyboardEvent* event);
+    void onReviewButtonClick(Event::Event* event);
+    void onBarterButtonClick(Event::Event* event);
+    void onAnswerIn(Event::Event* event);
+    void onAnswerOut(Event::Event* event);
+    void onAnswerClick(Event::Event* event);
+    void onKeyDown(Event::Keyboard* event) override;
 
 };
 

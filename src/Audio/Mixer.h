@@ -17,22 +17,51 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef FALLTERGEIST_AUDIO_MIXER_H
+#define FALLTERGEIST_AUDIO_MIXER_H
+
 // C++ standard includes
+#include <cstdint>
+#include <unordered_map>
 
 // Falltergeist includes
-#include "../Event/StateEvent.h"
+#include <libfalltergeist.h>
 
 // Third party includes
+#include <SDL_mixer.h>
 
 namespace Falltergeist
 {
-
-StateEvent::StateEvent(const std::string& name) : Event(name)
+namespace UI
 {
+    class MvePlayer;
 }
 
-StateEvent::~StateEvent()
+namespace Audio
 {
-}
+
+class Mixer
+{
+public:
+    Mixer();
+    ~Mixer();
+    void stopMusic();
+    void stopSounds();
+    void playACMMusic(const std::string& filename, bool loop = false);
+    void playACMSound(const std::string& filename);
+    void playMovieMusic(UI::MvePlayer* mve);
+    void pauseMusic();
+    void resumeMusic();
+protected:
+    void _init();
+private:
+    void _musicCallback(void* udata, uint8_t* stream, uint32_t len);
+    void _movieCallback(void* udata, uint8_t* stream, uint32_t len);
+    std::unordered_map<std::string,Mix_Chunk*> _sfx;
+    bool _paused = false;
+    bool _loop = false;
+};
 
 }
+}
+#endif // FALLTERGEIST_AUDIO_MIXER_H

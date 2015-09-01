@@ -20,9 +20,9 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Graphics/AnimationQueue.h"
 #include "../../Logger.h"
 #include "../../Game/Object.h"
+#include "../../UI/AnimationQueue.h"
 #include "../../VM/Handlers/Opcode8126Handler.h"
 #include "../../VM/VM.h"
 
@@ -47,7 +47,7 @@ void Opcode8126Handler::_run()
     }
     */
     auto object = _vm->dataStack()->popObject();
-    auto queue = dynamic_cast<AnimationQueue*>(object->ui());
+    auto queue = dynamic_cast<UI::AnimationQueue*>(object->ui());
     if (queue)
     {
         queue->stop();

@@ -37,7 +37,7 @@ Opcode812DHandler::Opcode812DHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode812DHandler::_run()
 {
     Logger::debug("SCRIPT") << "[812D] [+] int is_locked(GameDoorSceneryObject* object)" << std::endl;
-    auto object = dynamic_cast<Game::GameDoorSceneryObject*>(_vm->dataStack()->popObject());
+    auto object = dynamic_cast<Game::DoorSceneryObject*>(_vm->dataStack()->popObject());
     _vm->dataStack()->push(object->locked());
 }
 

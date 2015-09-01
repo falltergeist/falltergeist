@@ -17,21 +17,25 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Event/Mouse.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Event/MouseEvent.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace Event
+{
 
-MouseEvent::MouseEvent(const std::string& name) : Event(name)
+Mouse::Mouse(const std::string& name) : Event(name)
 {
 }
 
-MouseEvent::MouseEvent(MouseEvent* event) : Event("mouse")
+Mouse::Mouse(Mouse* event) : Event("mouse")
 {
     _x = event->_x;
     _y = event->_y;
@@ -44,90 +48,89 @@ MouseEvent::MouseEvent(MouseEvent* event) : Event("mouse")
     _name = event->_name;
 }
 
-MouseEvent::~MouseEvent()
+Mouse::~Mouse()
 {
 }
 
-void MouseEvent::setX(unsigned int value)
+void Mouse::setX(unsigned int value)
 {
     _x = value;
 }
 
-unsigned int MouseEvent::x()
+unsigned int Mouse::x() const
 {
     return _x;
 }
 
-void MouseEvent::setY(unsigned int value)
+void Mouse::setY(unsigned int value)
 {
     _y = value;
 }
 
-unsigned int MouseEvent::y()
+unsigned int Mouse::y() const
 {
     return _y;
 }
 
-void MouseEvent::setXOffset(int value)
+void Mouse::setXOffset(int value)
 {
     _xOffset = value;
 }
 
-int MouseEvent::xOffset()
+int Mouse::xOffset() const
 {
     return _xOffset;
 }
 
-void MouseEvent::setYOffset(int value)
+void Mouse::setYOffset(int value)
 {
     _yOffset = value;
 }
 
-int MouseEvent::yOffset()
+int Mouse::yOffset() const
 {
     return _yOffset;
 }
 
-void MouseEvent::setLeftButton(bool value)
+void Mouse::setLeftButton(bool value)
 {
     _leftButton = value;
 }
 
-bool MouseEvent::leftButton()
+bool Mouse::leftButton() const
 {
     return _leftButton;
 }
 
-void MouseEvent::setRightButton(bool value)
+void Mouse::setRightButton(bool value)
 {
     _rightButton = value;
 }
 
-bool MouseEvent::rightButton()
+bool Mouse::rightButton() const
 {
     return _rightButton;
 }
 
-void MouseEvent::setControlPressed(bool _controlPressed)
+void Mouse::setControlPressed(bool value)
 {
-    this->_controlPressed = _controlPressed;
+    this->_controlPressed = value;
 }
 
-bool MouseEvent::controlPressed() const
+bool Mouse::controlPressed() const
 {
     return _controlPressed;
 }
 
-void MouseEvent::setShiftPressed(bool _shiftPressed)
+void Mouse::setShiftPressed(bool value)
 {
-    this->_shiftPressed = _shiftPressed;
+    this->_shiftPressed = value;
 }
 
-bool MouseEvent::shiftPressed() const
+bool Mouse::shiftPressed() const
 {
     return _shiftPressed;
 }
 
-
-
+}
 }

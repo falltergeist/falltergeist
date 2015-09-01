@@ -38,7 +38,7 @@ Opcode8145Handler::Opcode8145Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8145Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8145] [=] void use_obj_on_obj(void* item, void* target)" << std::endl;
-    auto selfCritter = dynamic_cast<Game::GameCritterObject*>(_vm->owner());
+    auto selfCritter = dynamic_cast<Game::CritterObject*>(_vm->owner());
     if (!selfCritter)
     {
         _error("use_obj_on_obj: owner is not a critter!");

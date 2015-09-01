@@ -46,7 +46,7 @@ void Opcode814CHandler::_run()
     auto grid = Game::getInstance()->locationState()->hexagonGrid();
     auto from_hex = grid->at(from_index);
     auto to_hex = grid->at(to_index);
-    auto rotation = from_hex->orientationTo(to_hex);
+    unsigned int rotation = from_hex->orientationTo(to_hex);
     _vm->dataStack()->push(rotation);
 }
 

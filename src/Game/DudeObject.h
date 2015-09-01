@@ -17,13 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMEDUDEOBJECT_H
-#define FALLTERGEIST_GAMEDUDEOBJECT_H
+#ifndef FALLTERGEIST_GAME_DUDEOBJECT_H
+#define FALLTERGEIST_GAME_DUDEOBJECT_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "CritterObject.h"
+#include "../Game/CritterObject.h"
 #include <libfalltergeist.h>
 
 // Third party includes
@@ -36,18 +36,11 @@ namespace Game
 /**
  * Player-controlled critter
  */
-class GameDudeObject : public GameCritterObject
+class DudeObject : public CritterObject
 {
-protected:
-    int _level = 1;
-    int _experience = 0;
-    int _statsPoints = 0;
-    int _skillsPoints = 3;
-    std::string _biography;
-    virtual void _generateUi();
 public:
-    GameDudeObject();
-    virtual ~GameDudeObject();
+    DudeObject();
+    ~DudeObject() override;
 
     void loadFromGCDFile(libfalltergeist::Gcd::File* gcd);
 
@@ -69,19 +62,25 @@ public:
     int damageResistance() const;
     int poisonResistance() const;
     int radiationResistance() const;
-    // Overloaded
-    int hitPointsMax() const;
-    int actionPointsMax() const;
-    int armorClass() const;
-    int meleeDamage() const;
-    int sequence() const;
-    int healingRate() const;
-    int criticalChance() const;
-    unsigned int carryWeightMax() const;
-    
+
+    int hitPointsMax() const override;
+    int actionPointsMax() const override;
+    int armorClass() const override;
+    int meleeDamage() const override;
+    int sequence() const override;
+    int healingRate() const override;
+    int criticalChance() const override;
+    unsigned int carryWeightMax() const override;
+
+protected:
+    int _level = 1;
+    int _experience = 0;
+    int _statsPoints = 0;
+    int _skillsPoints = 3;
+    std::string _biography;
+    void _generateUi() override;
 };
 
 }
 }
-
-#endif // FALLTERGEIST_GAMEDUDEOBJECT_H
+#endif // FALLTERGEIST_GAME_DUDEOBJECT_H

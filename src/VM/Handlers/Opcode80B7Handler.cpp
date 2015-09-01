@@ -49,7 +49,7 @@ void Opcode80B7Handler::_run()
     auto elevation = _vm->dataStack()->popInteger();
     auto position = _vm->dataStack()->popInteger();
     auto PID = _vm->dataStack()->popInteger();
-    auto object = Game::GameObjectFactory::createObject(PID);
+    auto object = Game::ObjectFactory::getInstance()->createObject(PID);
     auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
     State::Location::moveObjectToHexagon(object, hexagon);
     object->setElevation(elevation);

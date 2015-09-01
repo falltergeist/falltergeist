@@ -17,54 +17,80 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_MULTISTATEIMAGEBUTTON_H
-#define	FALLTERGEIST_MULTISTATEIMAGEBUTTON_H
+#ifndef FALLTERGEIST_UI_MULTISTATEIMAGEBUTTON_H
+#define	FALLTERGEIST_UI_MULTISTATEIMAGEBUTTON_H
 
 // C++ standard includes
 #include <vector>
 
 // Falltergeist includes
-#include "../Graphics/ActiveUI.h"
+#include "../UI/Base.h"
 #include "../UI/ImageList.h"
+
 // Third party includes
 
 namespace Falltergeist
 {
+namespace Event
+{
+    class Mouse;
+}
+namespace UI
+{
+
 class ImageList;
 class Image;
 
-class MultistateImageButton : public ActiveUI
+class MultistateImageButton : public Falltergeist::UI::Base
 {
+public:
+    enum class Mode
+    {
+        PROGRESSION = 1,
+        CYCLIC
+    };
+    enum class Type
+    {
+        BIG_SWITCH = 1,
+        SMALL_SWITCH
+    };
+    MultistateImageButton(int x = 0, int y = 0);
+    MultistateImageButton(Type type, int x = 0, int y = 0);
+    MultistateImageButton(ImageList* imageList, int x = 0, int y = 0);
+    ~MultistateImageButton() override;
+
+    void addImage(Image* image);
+
+    unsigned int state() const;
+    void setState(unsigned int state);
+
+    unsigned int minState() const;
+    void setMinState(unsigned int value);
+
+    unsigned int maxState() const;
+    void setMaxState(unsigned int value);
+
+    Mode mode() const;
+    void setMode(Mode mode);
+
+    int modeFactor() const;
+    void setModeFactor(int factor);
+
+    Graphics::Texture* texture() const override;
+
 protected:
     ImageList _imageList;
     unsigned int _currentState = 0;
-    int _mode = MODE_CYCLIC;
+    Mode _mode = Mode::CYCLIC;
     int _modeFactor = 1; // or -1
     unsigned int _maxState = 0;
     unsigned int _minState = 0;
-    void _onLeftButtonClick(MouseEvent* event);
-    void _onLeftButtonUp(MouseEvent* event);
-public:
-    enum {MODE_PROGRESSION = 1, MODE_CYCLIC};
-    enum {TYPE_BIG_SWITCH = 1, TYPE_SMALL_SWITCH};
-    MultistateImageButton(int x = 0, int y = 0);
-    MultistateImageButton(unsigned int type, int x = 0, int y = 0);
-    MultistateImageButton(ImageList* imageList, int x = 0, int y = 0);
-    virtual ~MultistateImageButton();
-    void addImage(Image* image);
-    unsigned int state();
-    void setState(unsigned int state);
-    unsigned int minState();
-    void setMinState(unsigned int value);
-    unsigned int maxState();
-    void setMaxState(unsigned int value);
-    void setMode(int mode);
-    int mode();
-    void setModeFactor(int factor);
-    int modeFactor();
-    virtual Texture* texture();
+    void _onLeftButtonClick(Event::Mouse* event);
+    void _onLeftButtonUp(Event::Mouse* event);
+
 };
 
 }
-#endif	/* FALLTERGEIST_MULTISTATEIMAGEBUTTON_H */
+}
+#endif	// FALLTERGEIST_UI_MULTISTATEIMAGEBUTTON_H
 

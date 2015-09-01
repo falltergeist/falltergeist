@@ -47,20 +47,15 @@ public:
     };
 
     Value();
-
-    ~Value();
-
-    Value & operator=(const Value &rhs);
-
-
     Value(double doubleVal);
-
     Value(int integerVal);
-
     Value(bool booleanVal);
     Value(const std::string& stringVal);
     Value(const Value &rhs);
     Value(std::vector<Value> iniVal);
+    ~Value();
+
+    Value & operator=(const Value &rhs);
 
     Value::Tag tag() const;
     static std::string tagString(Value::Tag tag);
@@ -83,7 +78,6 @@ private:
     };
 };
 
-} // Ini
-} // Falltergeist
-
+}
+}
 #endif // FALLTERGEIST_INI_VALUE_H

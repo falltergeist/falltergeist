@@ -17,72 +17,76 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_UI_H
-#define FALLTERGEIST_UI_H
+#ifndef FALLTERGEIST_UI_BASE_H
+#define FALLTERGEIST_UI_BASE_H
 
 // C++ standard includes
-#include <memory>
 
 // Falltergeist includes
+#include "../Event/Emitter.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-namespace Lua
+namespace Graphics
 {
-    class Script;
+    class Texture;
 }
 
-class Texture;
+namespace UI
+{
 
-class UI
+class Base : public Event::Emitter
 {
 public:
-    UI(int x = 0, int y = 0);
-    virtual ~UI();
+    Base(int x = 0, int y = 0);
+    ~Base() override;
 
     virtual int x() const;
     virtual void setX(int value);
 
-    virtual int xOffset();
+    virtual int xOffset() const;
     virtual void setXOffset(int xOffset);
 
     virtual int y() const;
     virtual void setY(int value);
 
-    virtual int yOffset();
+    virtual int yOffset() const;
     virtual void setYOffset(int yOffset);
 
-    virtual Texture* texture();
-    virtual void setTexture(Texture* texture);
+    virtual Graphics::Texture* texture() const;
+    virtual void setTexture(Graphics::Texture* texture);
 
+    virtual bool visible() const;
     virtual void setVisible(bool value);
-    virtual bool visible();
 
     virtual void think();
     virtual void render(bool eggTransparency = false);
+    virtual void handle(Event::Event* event);
 
-    virtual unsigned int width();
-    virtual unsigned int height();
+    virtual unsigned int width() const;
+    virtual unsigned int height() const;
 
     virtual unsigned int pixel(unsigned int x, int unsigned y);
-
-    static void export_to_lua_script(Lua::Script* script);
 
 protected:
     int _x = 0;
     int _y = 0;
     int _xOffset = 0;
     int _yOffset = 0;
-    Texture* _texture = 0;
-    Texture* _tmptex = 0;
+    Graphics::Texture* _texture = 0;
+    Graphics::Texture* _tmptex = 0;
     bool _leftButtonPressed = false;
     bool _rightButtonPressed = false;
     bool _drag = false;
     bool _hovered = false;
     bool _visible = true;
+    // @todo Should it really be here?
+    std::string _downSound = "";
+    std::string _upSound = "";
 };
 
 }
-#endif // FALLTERGEIST_UI_H
+}
+#endif // FALLTERGEIST_UI_BASE_H

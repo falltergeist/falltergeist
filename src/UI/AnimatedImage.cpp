@@ -17,33 +17,37 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/AnimatedImage.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Graphics/Texture.h"
-#include "../ResourceManager.h"
-#include "../UI/AnimatedImage.h"
-#include "../Graphics/AnimatedPalette.h"
-#include "../Game/Game.h"
-#include "../Graphics/Renderer.h"
 #include "../Game/DudeObject.h"
-#include "../State/Location.h"
+#include "../Game/Game.h"
+#include "../Graphics/AnimatedPalette.h"
+#include "../Graphics/Renderer.h"
+#include "../Graphics/Texture.h"
 #include "../LocationCamera.h"
+#include "../ResourceManager.h"
+#include "../State/Location.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-
-AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direction)
+namespace UI
 {
 
-    setTexture(new Texture(frm->width(), frm->height()));
+AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direction) : Falltergeist::UI::Base()
+{
+
+    setTexture(new Graphics::Texture(frm->width(), frm->height()));
     _texture->loadFromRGBA(frm->rgba(ResourceManager::getInstance()->palFileType("color.pal")));
     setXOffset(frm->offsetX(direction) + frm->directions()->at(direction)->shiftX());
     setYOffset(frm->offsetY(direction) + frm->directions()->at(direction)->shiftY());
 
-    AnimatedPalette*  palette=Game::getInstance()->animatedPalette();
+    Graphics::AnimatedPalette*  palette=Game::getInstance()->animatedPalette();
     auto masks = frm->animatedMasks();
 
     if ((*masks)[MASK::MONITOR] != NULL)
@@ -57,7 +61,7 @@ AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direc
                 mask[j] = palette->color((*masks)[MASK::MONITOR][j],i);
             }
             //set
-            auto texture = new Texture(frm->width(), frm->height());
+            auto texture = new Graphics::Texture(frm->width(), frm->height());
             texture->loadFromRGBA(mask);
             _monitorTextures.push_back(texture);
         }
@@ -76,7 +80,7 @@ AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direc
                 mask[j] = palette->color(((*masks)[MASK::SLIME][j]),i);
             }
             //set
-            auto texture = new Texture(frm->width(), frm->height());
+            auto texture = new Graphics::Texture(frm->width(), frm->height());
             texture->loadFromRGBA(mask);
             _slimeTextures.push_back(texture);
         }
@@ -95,7 +99,7 @@ AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direc
                 mask[j] = palette->color(((*masks)[MASK::SHORE][j]),i);
             }
             //set
-            auto texture = new Texture(frm->width(), frm->height());
+            auto texture = new Graphics::Texture(frm->width(), frm->height());
             texture->loadFromRGBA(mask);
             _shoreTextures.push_back(texture);
         }
@@ -115,7 +119,7 @@ AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direc
                 mask[j] = palette->color(((*masks)[MASK::FIRE_SLOW][j]),i);
             }
             //set
-            auto texture = new Texture(frm->width(), frm->height());
+            auto texture = new Graphics::Texture(frm->width(), frm->height());
             texture->loadFromRGBA(mask);
             _fireSlowTextures.push_back(texture);
         }
@@ -135,7 +139,7 @@ AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direc
                 mask[j] = palette->color(((*masks)[MASK::FIRE_FAST][j]),i);
             }
             //set
-            auto texture = new Texture(frm->width(), frm->height());
+            auto texture = new Graphics::Texture(frm->width(), frm->height());
             texture->loadFromRGBA(mask);
             _fireFastTextures.push_back(texture);
         }
@@ -155,7 +159,7 @@ AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direc
                 mask[j] = palette->color(((*masks)[MASK::REDDOT][j]),i);
             }
             //set
-            auto texture = new Texture(frm->width(), frm->height());
+            auto texture = new Graphics::Texture(frm->width(), frm->height());
             texture->loadFromRGBA(mask);
             _reddotTextures.push_back(texture);
         }
@@ -167,19 +171,19 @@ AnimatedImage::~AnimatedImage()
 {
 }
 
-unsigned int AnimatedImage::width()
+unsigned int AnimatedImage::width() const
 {
     return texture()->width();
 }
 
-unsigned int AnimatedImage::height()
+unsigned int AnimatedImage::height() const
 {
     return texture()->height();
 }
 
 void AnimatedImage::render(bool eggTransparency)
 {
-    AnimatedPalette* pal = Game::getInstance()->animatedPalette();
+    Graphics::AnimatedPalette* pal = Game::getInstance()->animatedPalette();
 
     if (eggTransparency)
     {
@@ -247,7 +251,7 @@ void AnimatedImage::render(bool eggTransparency)
             return;
         }
 
-        if (!_tmptex) _tmptex = new Texture(texture()->width(),texture()->height());
+        if (!_tmptex) _tmptex = new Graphics::Texture(texture()->width(),texture()->height());
         texture()->copyTo(_tmptex);
 
         if (pal->getCounter(MASK::FIRE_FAST) < _fireFastTextures.size())
@@ -296,4 +300,5 @@ void AnimatedImage::render(bool eggTransparency)
 
 }
 
+}
 }

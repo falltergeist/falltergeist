@@ -36,18 +36,19 @@ class GameMenu : public State
 {
 public:
     GameMenu();
+    ~GameMenu() override;
 
-    virtual void init();
+    void init() override;
 
     void doSaveGame();
     void doLoadGame();
     void doPreferences();
     void doExit();
     void closeMenu();
-    virtual void onKeyDown(KeyboardEvent* event);
-    
-    virtual void onStateActivate(StateEvent* event);
-    virtual void onStateDeactivate(StateEvent* event);
+
+    void onKeyDown(Event::Keyboard* event) override;
+    void onStateActivate(Event::State* event) override;
+    void onStateDeactivate(Event::State* event) override;
 
 };
 

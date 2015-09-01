@@ -22,9 +22,9 @@
 
 // Falltergeist includes
 #include "../State/Credits.h"
-#include "../Event/KeyboardEvent.h"
-#include "../Event/MouseEvent.h"
-#include "../Event/StateEvent.h"
+#include "../Event/Keyboard.h"
+#include "../Event/Mouse.h"
+#include "../Event/State.h"
 #include "../Game/Game.h"
 #include "../UI/TextArea.h"
 #include "../Input/Mouse.h"
@@ -55,7 +55,7 @@ void Credits::init()
     setModal(true);
     setFullscreen(true);
 
-    Game::getInstance()->mouse()->pushState(Mouse::NONE);
+    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
     auto renderer = Game::getInstance()->renderer();
     setX((renderer->width()  - 640)*0.5);
     setY(renderer->height());
@@ -90,10 +90,10 @@ void Credits::init()
             line = "    ";
         }
 
-        auto tx = new TextArea(line,0,y);
+        auto tx = new UI::TextArea(line,0,y);
         tx->setFont(cur_font);
         tx->setWidth(640);
-        tx->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+        tx->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
         addUI(tx);
         _lines.push_back(tx);
         y+=tx->height();
@@ -136,9 +136,9 @@ void Credits::think()
 }
 
 
-void Credits::handle(Event* event)
+void Credits::handle(Event::Event* event)
 {
-    if (auto mouseEvent = dynamic_cast<MouseEvent*>(event))
+    if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
         if (mouseEvent->name() == "mouseup")
         {
@@ -146,7 +146,7 @@ void Credits::handle(Event* event)
         }
     }
 
-    if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
+    if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
     {
         if (keyboardEvent->name() == "keyup")
         {
@@ -158,18 +158,18 @@ void Credits::handle(Event* event)
 void Credits::onCreditsFinished()
 {
     removeEventHandlers("fadedone");
-    addEventHandler("fadedone", [this](Event* event){ this->onCreditsFadeDone(dynamic_cast<StateEvent*>(event)); });
+    addEventHandler("fadedone", [this](Event::Event* event){ this->onCreditsFadeDone(dynamic_cast<Event::State*>(event)); });
     Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
 }
 
-void Credits::onCreditsFadeDone(StateEvent* event)
+void Credits::onCreditsFadeDone(Event::State* event)
 {
     removeEventHandlers("fadedone");
     Game::getInstance()->mouse()->popState();
     Game::getInstance()->popState();
 }
 
-void Credits::onStateActivate(StateEvent* event)
+void Credits::onStateActivate(Event::State* event)
 {
     Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
 }

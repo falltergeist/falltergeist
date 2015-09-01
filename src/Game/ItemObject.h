@@ -17,13 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMEITEMOBJECT_H
-#define FALLTERGEIST_GAMEITEMOBJECT_H
+#ifndef FALLTERGEIST_GAME_ITEMOBJECT_H
+#define FALLTERGEIST_GAME_ITEMOBJECT_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "Object.h"
+#include "../Game/Object.h"
 
 // Third party includes
 
@@ -35,20 +35,24 @@ namespace Game
 /**
  * Item. Can be placed inside other object inventories (critters and containers)
  */
-class GameItemObject : public GameObject
+class ItemObject : public Object
 {
-protected:
-    unsigned int _amount = 1;
-    unsigned int _weight = 0;
-    unsigned int _volume = 0;
-    int _inventoryFID = -1;
-    Image* _inventoryUi = 0;
-    Image* _inventorySlotUi = 0;
-    Image* _inventoryDragUi = 0;
-    virtual void _generateUi();
 public:
-    GameItemObject();
-    virtual ~GameItemObject();
+    enum class Subtype
+    {
+        ARMOR = 0,
+        CONTAINER,
+        DRUG,
+        WEAPON,
+        AMMO,
+        MISC,
+        KEY
+    };
+
+    ItemObject();
+    ~ItemObject() override;
+
+    Subtype subtype() const;
 
     // item stack size in inventory or on the ground
     unsigned int amount() const;
@@ -57,7 +61,7 @@ public:
     // item weight, in pounds
     unsigned int weight() const;
     void setWeight(unsigned int value);
-    
+
     // item volume
     unsigned int volume() const;
     void setVolume(unsigned int volume);
@@ -66,12 +70,23 @@ public:
     int inventoryFID() const;
     void setInventoryFID(int value);
 
-    Image* inventoryUi() const;
-    Image* inventorySlotUi() const;
-    Image* inventoryDragUi() const;
+    UI::Image* inventoryUi() const;
+    UI::Image* inventorySlotUi() const;
+    UI::Image* inventoryDragUi() const;
+
+protected:
+    Subtype _subtype;
+    unsigned int _amount = 1;
+    unsigned int _weight = 0;
+    unsigned int _volume = 0;
+    int _inventoryFID = -1;
+    UI::Image* _inventoryUi = 0;
+    UI::Image* _inventorySlotUi = 0;
+    UI::Image* _inventoryDragUi = 0;
+    void _generateUi() override;
 };
 
 }
 }
 
-#endif // FALLTERGEIST_GAMEITEMOBJECT_H
+#endif // FALLTERGEIST_GAME_ITEMOBJECT_H

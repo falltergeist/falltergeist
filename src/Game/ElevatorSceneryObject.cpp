@@ -17,10 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Game/ElevatorSceneryObject.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "ElevatorSceneryObject.h"
 
 // Third party includes
 
@@ -29,12 +31,12 @@ namespace Falltergeist
 namespace Game
 {
 
-GameElevatorSceneryObject::GameElevatorSceneryObject() : GameSceneryObject()
+ElevatorSceneryObject::ElevatorSceneryObject() : SceneryObject()
 {
-    _subtype = TYPE_SCENERY_ELEVATOR;
+    _subtype = Subtype::ELEVATOR;
 }
 
-GameElevatorSceneryObject::~GameElevatorSceneryObject()
+ElevatorSceneryObject::~ElevatorSceneryObject()
 {
 }
 

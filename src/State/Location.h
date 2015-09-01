@@ -25,6 +25,7 @@
 
 // Falltergeist includes
 #include "State.h"
+#include "../Input/Mouse.h"
 #include "../State/PlayerPanel.h"
 #include "../UI/ImageButton.h"
 
@@ -34,16 +35,18 @@ namespace Falltergeist
 {
 namespace Game
 {
-    class GameObject;
-
+    class Object;
 }
-class Animation;
+namespace UI
+{
+    class Animation;
+    class Image;
+    class Tile;
+    class TileMap;
+}
 class Hexagon;
 class HexagonGrid;
-class Image;
 class LocationCamera;
-class Tile;
-class TileMap;
 class VMStackValue;
 class VM;
 
@@ -71,18 +74,18 @@ protected:
 
     HexagonGrid* _hexagonGrid = 0;
     LocationCamera* _camera = 0;
-    TileMap* _floor = 0;
-    TileMap* _roof = 0;
+    UI::TileMap* _floor = nullptr;
+    UI::TileMap* _roof = nullptr;
     VM* _locationScript = 0;
     std::vector<int> _MVARS;
     std::map<std::string, VMStackValue> _EVARS;
-    std::vector<ActiveUI*> _floatMessages;
+    std::vector<UI::Base*> _floatMessages;
 
     bool _locationEnter = true;
     unsigned int _currentElevation = 0;
     unsigned int _lastClickedTile = 0;
-    Game::GameObject* _objectUnderCursor = NULL;
-    Game::GameObject* _actionCursorLastObject = NULL;
+    Game::Object* _objectUnderCursor = NULL;
+    Game::Object* _actionCursorLastObject = NULL;
     bool _actionCursorButtonPressed = false;
     PlayerPanel* _playerPanel = NULL;
 
@@ -91,10 +94,10 @@ protected:
     bool _scrollTop = false;
     bool _scrollBottom = false;
 
-    std::vector<Game::GameObject*> _objects;
-    TextArea* _hexagonInfo = 0;
+    std::vector<Game::Object*> _objects;
+    UI::TextArea* _hexagonInfo = 0;
     
-    std::vector<int> getCursorIconsForObject(Game::GameObject* object);
+    std::vector<Input::Mouse::Icon> getCursorIconsForObject(Game::Object* object);
 public:
     Location();
     ~Location();
@@ -103,7 +106,7 @@ public:
 
     virtual void init();
     virtual void think();
-    virtual void handle(Event* event);
+    virtual void handle(Event::Event* event);
     virtual void render();
 
     HexagonGrid* hexagonGrid();
@@ -114,23 +117,23 @@ public:
 
     std::map<std::string, VMStackValue>* EVARS();
 
-    static void moveObjectToHexagon(Game::GameObject* object, Hexagon* hexagon);
-    void destroyObject(Game::GameObject* object);
+    static void moveObjectToHexagon(Game::Object* object, Hexagon* hexagon);
+    void destroyObject(Game::Object* object);
     void centerCameraAtHexagon(Hexagon* hexagon);
     void centerCameraAtHexagon(int tileNum);
-    void handleAction(Game::GameObject* object, int action);
+    void handleAction(Game::Object* object, Input::Mouse::Icon action);
     void toggleCursorMode();
     PlayerPanel* playerPanelState();
     
     void displayMessage(const std::string& message);
 
-    void onBackgroundClick(MouseEvent* event);
-    void onObjectMouseEvent(Event* event, Game::GameObject* object);
-    void onObjectHover(Event* event, Game::GameObject* object);
-    virtual void onKeyDown(KeyboardEvent* event);
+    void onBackgroundClick(Event::Mouse* event);
+    void onObjectMouseEvent(Event::Event* event, Game::Object* object);
+    void onObjectHover(Event::Event* event, Game::Object* object);
+    virtual void onKeyDown(Event::Keyboard* event);
 
-    virtual void onStateActivate(StateEvent* event);
-    virtual void onStateDeactivate(StateEvent* event);
+    virtual void onStateActivate(Event::State* event);
+    virtual void onStateDeactivate(Event::State* event);
 
 
 

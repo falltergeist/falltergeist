@@ -39,7 +39,11 @@ namespace Falltergeist
 namespace State
 {
 
-ExitConfirm::ExitConfirm()
+ExitConfirm::ExitConfirm() : State()
+{
+}
+
+ExitConfirm::~ExitConfirm()
 {
 }
 
@@ -51,38 +55,38 @@ void ExitConfirm::init()
     setModal(true);
     setFullscreen(false);
 
-    auto background = new Image("art/intrface/lgdialog.frm");
+    auto background = new UI::Image("art/intrface/lgdialog.frm");
     auto panelHeight = Game::getInstance()->locationState()->playerPanelState()->height();
 
     auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - background->height() - panelHeight)*0.5;
 
-    auto box1 = new Image("art/intrface/donebox.frm");
-    auto box2 = new Image("art/intrface/donebox.frm");
+    auto box1 = new UI::Image("art/intrface/donebox.frm");
+    auto box2 = new UI::Image("art/intrface/donebox.frm");
     box1->setX(backgroundX+38);
     box1->setY(backgroundY+98);
     box2->setX(backgroundX+170);
     box2->setY(backgroundY+98);
 
-    auto yesButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+50, backgroundY+102);
-    auto noButton = new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+183, backgroundY+102);
-    yesButton->addEventHandler("mouseleftclick", [this](Event* event){ this->doYes(); });
-    noButton->addEventHandler("mouseleftclick",  [this](Event* event){ this->doNo(); });
+    auto yesButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+50, backgroundY+102);
+    auto noButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+183, backgroundY+102);
+    yesButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doYes(); });
+    noButton->addEventHandler("mouseleftclick",  [this](Event::Event* event){ this->doNo(); });
 
     // label: Are you sure you want to quit?
     auto font = ResourceManager::getInstance()->font("font1.aaf", 0xb89c28ff);
-    auto quitLabel = new TextArea(_t(MSG_MISC, 0), backgroundX+30, backgroundY+52);
+    auto quitLabel = new UI::TextArea(_t(MSG_MISC, 0), backgroundX+30, backgroundY+52);
     quitLabel->setFont(font);
     quitLabel->setWidth(244);
-    quitLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    quitLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: yes & no
     auto fontBig = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
     // label: yes 101
-    auto yesButtonLabel = new TextArea(_t(MSG_DIALOG_BOX, 101), backgroundX+74, backgroundY+101);
+    auto yesButtonLabel = new UI::TextArea(_t(MSG_DIALOG_BOX, 101), backgroundX+74, backgroundY+101);
     yesButtonLabel->setFont(fontBig);
     // label: no 102
-    auto noButtonLabel = new TextArea(_t(MSG_DIALOG_BOX, 102), backgroundX+204, backgroundY+101);
+    auto noButtonLabel = new UI::TextArea(_t(MSG_DIALOG_BOX, 102), backgroundX+204, backgroundY+101);
     noButtonLabel->setFont(fontBig);
 
     background->setX(backgroundX);
@@ -108,7 +112,7 @@ void ExitConfirm::doNo()
     Game::getInstance()->popState();
 }
 
-void ExitConfirm::onKeyDown(KeyboardEvent* event)
+void ExitConfirm::onKeyDown(Event::Keyboard* event)
 {
     switch (event->keyCode())
     {
@@ -123,16 +127,15 @@ void ExitConfirm::onKeyDown(KeyboardEvent* event)
     }
 }
 
-void ExitConfirm::onStateActivate(StateEvent* event)
+void ExitConfirm::onStateActivate(Event::State* event)
 {
-    Game::getInstance()->mouse()->pushState(Mouse::BIG_ARROW);
+    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
 }
 
-void ExitConfirm::onStateDeactivate(StateEvent* event)
+void ExitConfirm::onStateDeactivate(Event::State* event)
 {
     Game::getInstance()->mouse()->popState();
 }
-
 
 }
 }

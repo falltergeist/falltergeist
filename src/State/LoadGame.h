@@ -17,18 +17,25 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_LoadGame_H
-#define FALLTERGEIST_LoadGame_H
+#ifndef FALLTERGEIST_STATE_LOADGAME_H
+#define FALLTERGEIST_STATE_LOADGAME_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "State.h"
+#include "../State/State.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace Event
+{
+    class Keyboard;
+    class Mouse;
+    class State;
+}
+
 namespace State
 {
 
@@ -36,21 +43,20 @@ class LoadGame : public State
 {
 public:
     LoadGame();
-    virtual ~LoadGame();
+    ~LoadGame() override;
+
     virtual void init();
 
-    void onDoneButtonClick(MouseEvent* event);
+    void onDoneButtonClick(Event::Mouse* event);
     void doCancel();
-    void onCancelFadeDone(StateEvent* event);
-    virtual void onStateActivate(StateEvent* event);
-    virtual void onStateDeactivate(StateEvent* event);
+    void onCancelFadeDone(Event::State* event);
 
-    virtual void onKeyDown(KeyboardEvent* event);
-    
-private:
+    void onStateActivate(Event::State* event) override;
+    void onStateDeactivate(Event::State* event) override;
+    void onKeyDown(Event::Keyboard* event) override;
 };
 
 }
 }
 
-#endif // FALLTERGEIST_LoadGame_H
+#endif // FALLTERGEIST_STATE_LOADGAME_H

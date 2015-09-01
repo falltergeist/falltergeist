@@ -25,7 +25,7 @@
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
-#include "../Event/StateEvent.h"
+#include "../Event/State.h"
 #include "../Game/DudeObject.h"
 #include "../State/NewGame.h"
 #include "../State/Location.h"
@@ -68,58 +68,58 @@ void NewGame::init()
     setX((renderer->width()  - 640)*0.5);
     setY((renderer->height() - 480)*0.5);
 
-    addUI("background", new Image("art/intrface/pickchar.frm"));
+    addUI("background", new UI::Image("art/intrface/pickchar.frm"));
 
-    auto beginGameButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 322));
-    beginGameButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onBeginGameButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    auto beginGameButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 81, 322));
+    beginGameButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onBeginGameButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    auto editButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 436, 319));
-    editButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onEditButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    auto editButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 436, 319));
+    editButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onEditButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    auto createButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 81, 424));
-    createButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onCreateButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    auto createButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 81, 424));
+    createButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onCreateButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    auto backButton = addUI(new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, 461, 424));
-    backButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onBackButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    auto backButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 461, 424));
+    backButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onBackButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    auto prevCharacterButton = addUI(new ImageButton(ImageButton::TYPE_LEFT_ARROW, 292, 320));
-    prevCharacterButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onPrevCharacterButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    auto prevCharacterButton = addUI(new UI::ImageButton(UI::ImageButton::Type::LEFT_ARROW, 292, 320));
+    prevCharacterButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onPrevCharacterButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    auto nextCharacterButton = addUI(new ImageButton(ImageButton::TYPE_RIGHT_ARROW, 318, 320));
-    nextCharacterButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onNextCharacterButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    auto nextCharacterButton = addUI(new UI::ImageButton(UI::ImageButton::Type::RIGHT_ARROW, 318, 320));
+    nextCharacterButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onNextCharacterButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    addUI("images", new ImageList({
+    addUI("images", new UI::ImageList({
                                     "art/intrface/combat.frm",
                                     "art/intrface/stealth.frm",
                                     "art/intrface/diplomat.frm"
                                     }, 27, 23));
 
-    addUI("name", new TextArea(300, 40));
+    addUI("name", new UI::TextArea(300, 40));
 
-    addUI("stats_1", new TextArea(0, 70));
+    addUI("stats_1", new UI::TextArea(0, 70));
     getTextArea("stats_1")->setWidth(362);
-    getTextArea("stats_1")->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    getTextArea("stats_1")->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
-    addUI("stats_2", new TextArea(374, 70));
-    addUI("bio",     new TextArea(437, 40));
+    addUI("stats_2", new UI::TextArea(374, 70));
+    addUI("bio",     new UI::TextArea(437, 40));
 
-    addUI("stats_3", new TextArea(294, 150));
+    addUI("stats_3", new UI::TextArea(294, 150));
     getTextArea("stats_3")->setWidth(85);
-    getTextArea("stats_3")->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_RIGHT);
+    getTextArea("stats_3")->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
-    addUI("stats3_values", new TextArea(383, 150));
+    addUI("stats3_values", new UI::TextArea(383, 150));
 
-    auto combat = new Game::GameDudeObject();
+    auto combat = new Game::DudeObject();
     combat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/combat.gcd"));
     combat->setBiography(ResourceManager::getInstance()->bioFileType("premade/combat.bio")->text());
     _characters.push_back(combat);
 
-    auto stealth = new Game::GameDudeObject();
+    auto stealth = new Game::DudeObject();
     stealth->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/stealth.gcd"));
     stealth->setBiography(ResourceManager::getInstance()->bioFileType("premade/stealth.bio")->text());
     _characters.push_back(stealth);
 
-    auto diplomat = new Game::GameDudeObject();
+    auto diplomat = new Game::DudeObject();
     diplomat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/diplomat.gcd"));
     diplomat->setBiography(ResourceManager::getInstance()->bioFileType("premade/diplomat.bio")->text());
     _characters.push_back(diplomat);
@@ -147,7 +147,7 @@ void NewGame::doEdit()
 
 void NewGame::doCreate()
 {
-    auto none = new Game::GameDudeObject();
+    auto none = new Game::DudeObject();
     none->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/blank.gcd"));
     Game::getInstance()->setPlayer(none);
     Game::getInstance()->pushState(new PlayerCreate());
@@ -156,7 +156,7 @@ void NewGame::doCreate()
 void NewGame::doBack()
 {
     removeEventHandlers("fadedone");
-    addEventHandler("fadedone", [this](Event* event){ this->onBackFadeDone(dynamic_cast<StateEvent*>(event)); });
+    addEventHandler("fadedone", [this](Event::Event* event){ this->onBackFadeDone(dynamic_cast<Event::State*>(event)); });
     Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
 }
 
@@ -186,23 +186,23 @@ void NewGame::doPrev()
     _changeCharacter();
 }
 
-void NewGame::onBackButtonClick(MouseEvent* event)
+void NewGame::onBackButtonClick(Event::Mouse* event)
 {
     doBack();
 }
 
-void NewGame::onBackFadeDone(StateEvent* event)
+void NewGame::onBackFadeDone(Event::State* event)
 {
     removeEventHandlers("fadedone");
     Game::getInstance()->popState();
 }
 
-void NewGame::onPrevCharacterButtonClick(MouseEvent* event)
+void NewGame::onPrevCharacterButtonClick(Event::Mouse* event)
 {
     doPrev();
 }
 
-void NewGame::onNextCharacterButtonClick(MouseEvent* event)
+void NewGame::onNextCharacterButtonClick(Event::Mouse* event)
 {
     doNext();
 }
@@ -263,22 +263,22 @@ void NewGame::_changeCharacter()
     getTextArea("stats3_values")->setText(stats3_values);
 }
 
-void NewGame::onEditButtonClick(MouseEvent* event)
+void NewGame::onEditButtonClick(Event::Mouse* event)
 {
     doEdit();
 }
 
-void NewGame::onCreateButtonClick(MouseEvent* event)
+void NewGame::onCreateButtonClick(Event::Mouse* event)
 {
     doCreate();
 }
 
-void NewGame::onBeginGameButtonClick(MouseEvent* event)
+void NewGame::onBeginGameButtonClick(Event::Mouse* event)
 {
     doBeginGame();
 }
 
-void NewGame::onKeyDown(KeyboardEvent* event)
+void NewGame::onKeyDown(Event::Keyboard* event)
 {
     switch (event->keyCode())
     {
@@ -304,7 +304,7 @@ void NewGame::onKeyDown(KeyboardEvent* event)
     }
 }
 
-void NewGame::onStateActivate(StateEvent* event)
+void NewGame::onStateActivate(Event::State* event)
 {
     Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
 }

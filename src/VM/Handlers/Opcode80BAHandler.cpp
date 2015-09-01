@@ -42,8 +42,8 @@ void Opcode80BAHandler::_run()
     auto object = _vm->dataStack()->popObject();
 
     int amount = 0;
-    auto critter = dynamic_cast<Game::GameCritterObject*>(object);
-    auto container = dynamic_cast<Game::GameContainerItemObject*>(object);
+    auto critter = dynamic_cast<Game::CritterObject*>(object);
+    auto container = dynamic_cast<Game::ContainerItemObject*>(object);
     if (critter)
     {
         for (auto object : *critter->inventory()) if (object->PID() == PID) amount += object->amount();

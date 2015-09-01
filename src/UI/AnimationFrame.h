@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_ANIMATIONFRAME_H
-#define FALLTERGEIST_ANIMATIONFRAME_H
+#ifndef FALLTERGEIST_UI_ANIMATIONFRAME_H
+#define FALLTERGEIST_UI_ANIMATIONFRAME_H
 
 // C++ standard includes
 
@@ -28,9 +28,36 @@
 
 namespace Falltergeist
 {
+namespace UI
+{
 
 class AnimationFrame
 {
+public:
+    AnimationFrame();
+    ~AnimationFrame();
+
+    unsigned int x() const;
+    void setX(unsigned int x);
+
+    unsigned int y() const;
+    void setY(unsigned int y);
+
+    unsigned int width() const;
+    void setWidth(unsigned int width);
+
+    unsigned int height() const;
+    void setHeight(unsigned int height);
+
+    unsigned int xOffset() const;
+    void setXOffset(unsigned int xOffset);
+
+    unsigned int yOffset() const;
+    void setYOffset(unsigned int yOffset);
+
+    unsigned int duration() const;
+    void setDuration(unsigned int duration);
+
 protected:
     // Смещение начала кадра анимации относительно начала спрайта
     unsigned int _x = 0;
@@ -46,32 +73,8 @@ protected:
 
     // Длительность кадра анимации в милисекундах
     unsigned int _duration = 0;
-
-public:
-    AnimationFrame();
-    ~AnimationFrame();
-
-    void setX(unsigned int x);
-    unsigned int x();
-
-    void setY(unsigned int y);
-    unsigned int y();
-
-    void setWidth(unsigned int width);
-    unsigned int width();
-
-    void setHeight(unsigned int height);
-    unsigned int height();
-
-    void setXOffset(unsigned int xOffset);
-    unsigned int xOffset();
-
-    void setYOffset(unsigned int yOffset);
-    unsigned int yOffset();
-
-    void setDuration(unsigned int duration);
-    unsigned int duration();
 };
 
 }
-#endif // FALLTERGEIST_ANIMATIONFRAME_H
+}
+#endif // FALLTERGEIST_UI_ANIMATIONFRAME_H

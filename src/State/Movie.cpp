@@ -17,23 +17,25 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../State/Movie.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Event/KeyboardEvent.h"
-#include "../Event/MouseEvent.h"
+#include "../Audio/Mixer.h"
+#include "../CrossPlatform.h"
+#include "../Event/Keyboard.h"
+#include "../Event/Mouse.h"
 #include "../Game/Game.h"
-#include "../UI/MvePlayer.h"
-#include "../UI/TextArea.h"
+#include "../Graphics/Renderer.h"
+#include "../Ini/File.h"
+#include "../Ini/Parser.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
-#include "../State/Movie.h"
 #include "../State/MainMenu.h"
-#include "../Graphics/Renderer.h"
-#include "../Ini/Parser.h"
-#include "../Ini/File.h"
-#include "../CrossPlatform.h"
-#include "../Audio/AudioMixer.h"
+#include "../UI/MvePlayer.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 
@@ -42,8 +44,9 @@ namespace Falltergeist
 namespace State
 {
 
-Movie::Movie(int id) : _id(id)
+Movie::Movie(int id) : State()
 {
+    _id = id;
 }
 
 Movie::~Movie()
@@ -58,7 +61,7 @@ void Movie::init()
     setFullscreen(true);
     setModal(true);
 
-    Game::getInstance()->mouse()->pushState(Mouse::NONE);
+    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
     auto renderer = Game::getInstance()->renderer();
     setX((renderer->width()  - 640)*0.5);
     setY((renderer->height() - 320)*0.5);
@@ -106,14 +109,14 @@ void Movie::init()
         _subs = ResourceManager::getInstance()->sveFileType(subfile);
         if (_subs) _hasSubs = true;
     }
-    addUI("movie", new MvePlayer(ResourceManager::getInstance()->mveFileType(movie)));
+    addUI("movie", new UI::MvePlayer(ResourceManager::getInstance()->mveFileType(movie)));
 
     auto font0_ffffffff = ResourceManager::getInstance()->font("font1.aaf", 0xffffffff);
-    auto subLabel = new TextArea("", 0, 320+35);
+    auto subLabel = new UI::TextArea("", 0, 320+35);
 
     subLabel->setFont(font0_ffffffff);
     subLabel->setWidth(640);
-    subLabel->setHorizontalAlign(TextArea::HORIZONTAL_ALIGN_CENTER);
+    subLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
     addUI("subs",subLabel);
 
     if (_hasSubs)
@@ -126,11 +129,11 @@ void Movie::think()
 {
     State::think();
 
-    unsigned int frame = dynamic_cast<MvePlayer*>(getUI("movie"))->frame();
+    unsigned int frame = dynamic_cast<UI::MvePlayer*>(getUI("movie"))->frame();
     if ( frame >= _nextSubLine.first)
     {
-        dynamic_cast<TextArea*>(getUI("subs"))->setText(_nextSubLine.second);
-        if (_hasSubs) _nextSubLine = _subs->getSubLine(dynamic_cast<MvePlayer*>(getUI("movie"))->frame());
+        dynamic_cast<UI::TextArea*>(getUI("subs"))->setText(_nextSubLine.second);
+        if (_hasSubs) _nextSubLine = _subs->getSubLine(dynamic_cast<UI::MvePlayer*>(getUI("movie"))->frame());
     }
     if (_effect_index<_effects.size() && frame>=_effects[_effect_index].frame)
     {
@@ -147,19 +150,19 @@ void Movie::think()
 
     if (!_started)
     {
-        Game::getInstance()->mixer()->playMovieMusic(dynamic_cast<MvePlayer*>(getUI("movie")));
+        Game::getInstance()->mixer()->playMovieMusic(dynamic_cast<UI::MvePlayer*>(getUI("movie")));
         _started = true;
     }
-    if ((dynamic_cast<MvePlayer*>(getUI("movie")))->finished())
+    if ((dynamic_cast<UI::MvePlayer*>(getUI("movie")))->finished())
     {
         this->onVideoFinished();
     }
 }
 
 
-void Movie::handle(Event* event)
+void Movie::handle(Event::Event* event)
 {
-    if (auto mouseEvent = dynamic_cast<MouseEvent*>(event))
+    if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
         if (mouseEvent->name() == "mouseup")
         {
@@ -167,7 +170,7 @@ void Movie::handle(Event* event)
         }
     }
 
-    if (auto keyboardEvent = dynamic_cast<KeyboardEvent*>(event))
+    if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
     {
         if (keyboardEvent->name() == "keyup")
         {

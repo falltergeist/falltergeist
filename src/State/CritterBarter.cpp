@@ -53,27 +53,27 @@ void CritterBarter::init()
     setX((Game::getInstance()->renderer()->width() - 640)*0.5);
     setY((Game::getInstance()->renderer()->height() - 480)*0.5 + 291);
 
-    addUI("background",new Image("art/intrface/barter.frm"));
-    getActiveUI("background")->addEventHandler("mouseleftclick", std::bind(&CritterBarter::onBackgroundClick, this, std::placeholders::_1));
+    addUI("background",new UI::Image("art/intrface/barter.frm"));
+    getUI("background")->addEventHandler("mouseleftclick", std::bind(&CritterBarter::onBackgroundClick, this, std::placeholders::_1));
 
-    addUI("offerButton", new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, 40, 162));
+    addUI("offerButton", new UI::ImageButton(UI::ImageButton::Type::DIALOG_RED_BUTTON, 40, 162));
 
-    addUI("talkButton", new ImageButton(ImageButton::TYPE_DIALOG_RED_BUTTON, 583, 162));
-    getActiveUI("talkButton")->addEventHandler("mouseleftclick", std::bind(&CritterBarter::onTalkButtonClick, this, std::placeholders::_1));
+    addUI("talkButton", new UI::ImageButton(UI::ImageButton::Type::DIALOG_RED_BUTTON, 583, 162));
+    getUI("talkButton")->addEventHandler("mouseleftclick", std::bind(&CritterBarter::onTalkButtonClick, this, std::placeholders::_1));
 
-    addUI("mineInventoryScrollUpButton",   new ImageButton(ImageButton::TYPE_DIALOG_UP_ARROW,   190, 56));
-    addUI("mineInventoryScrollDownButton", new ImageButton(ImageButton::TYPE_DIALOG_DOWN_ARROW, 190, 82));
+    addUI("mineInventoryScrollUpButton",   new UI::ImageButton(UI::ImageButton::Type::DIALOG_UP_ARROW,   190, 56));
+    addUI("mineInventoryScrollDownButton", new UI::ImageButton(UI::ImageButton::Type::DIALOG_DOWN_ARROW, 190, 82));
 
-    addUI("theirsInventoryScrollUpButton",   new ImageButton(ImageButton::TYPE_DIALOG_UP_ARROW,   421, 56));
-    addUI("theirsInventoryScrollDownButton", new ImageButton(ImageButton::TYPE_DIALOG_DOWN_ARROW, 421, 82));
+    addUI("theirsInventoryScrollUpButton",   new UI::ImageButton(UI::ImageButton::Type::DIALOG_UP_ARROW,   421, 56));
+    addUI("theirsInventoryScrollDownButton", new UI::ImageButton(UI::ImageButton::Type::DIALOG_DOWN_ARROW, 421, 82));
 }
 
-void CritterBarter::onTalkButtonClick(Event* event)
+void CritterBarter::onTalkButtonClick(Event::Event* event)
 {
     Game::getInstance()->popState();
 }
 
-void CritterBarter::onBackgroundClick(Event* event)
+void CritterBarter::onBackgroundClick(Event::Event* event)
 {
     // to prevent event propagation to dialog state
     event->setHandled(true);

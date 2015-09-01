@@ -38,9 +38,12 @@ namespace Falltergeist
 namespace State
 {
 
-PlayerEditAge::PlayerEditAge():State()
+PlayerEditAge::PlayerEditAge() : State()
 {
+}
 
+PlayerEditAge::~PlayerEditAge()
+{
 }
 
 void PlayerEditAge::init()
@@ -54,34 +57,34 @@ void PlayerEditAge::init()
     auto backgroundX = (Game::getInstance()->renderer()->width() - 640)*0.5;
     auto backgroundY = (Game::getInstance()->renderer()->height() - 480)*0.5;
 
-    auto bg = new Image("art/intrface/charwin.frm");
+    auto bg = new UI::Image("art/intrface/charwin.frm");
     bg->setX(backgroundX+160);
     bg->setY(backgroundY+0);
 
-    auto ageBox = new Image("art/intrface/agebox.frm");
+    auto ageBox = new UI::Image("art/intrface/agebox.frm");
     ageBox->setX(backgroundX+168);
     ageBox->setY(backgroundY+10);
 
-    auto doneBox = new Image("art/intrface/donebox.frm");
+    auto doneBox = new UI::Image("art/intrface/donebox.frm");
     doneBox->setX(backgroundX+175);
     doneBox->setY(backgroundY+40);
 
-    auto decButton = new ImageButton(ImageButton::TYPE_LEFT_ARROW, backgroundX+178, backgroundY+14);
-    decButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDecButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    auto decButton = new UI::ImageButton(UI::ImageButton::Type::LEFT_ARROW, backgroundX+178, backgroundY+14);
+    decButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDecButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    auto incButton = new ImageButton(ImageButton::TYPE_RIGHT_ARROW, backgroundX+262, backgroundY+14);
-    incButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onIncButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    auto incButton = new UI::ImageButton(UI::ImageButton::Type::RIGHT_ARROW, backgroundX+262, backgroundY+14);
+    incButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onIncButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    auto doneButton= new ImageButton(ImageButton::TYPE_SMALL_RED_CIRCLE, backgroundX+188, backgroundY+43);
-    doneButton->addEventHandler("mouseleftclick", [this](Event* event){ this->onDoneButtonClick(dynamic_cast<MouseEvent*>(event)); });
+    auto doneButton= new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+188, backgroundY+43);
+    doneButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 
-    auto doneLabel = new TextArea(_t(MSG_EDITOR, 100), backgroundX+210, backgroundY+43);
+    auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), backgroundX+210, backgroundY+43);
 
     auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
 
     doneLabel->setFont(font3_b89c28ff);
 
-    _counter = new BigCounter(backgroundX+215, backgroundY+13);
+    _counter = new UI::BigCounter(backgroundX+215, backgroundY+13);
     _counter->setNumber(Game::getInstance()->player()->age());
 
     addUI(bg);
@@ -95,21 +98,17 @@ void PlayerEditAge::init()
 
 }
 
-PlayerEditAge::~PlayerEditAge()
-{
-}
-
-void PlayerEditAge::onDecButtonClick(MouseEvent* event)
+void PlayerEditAge::onDecButtonClick(Event::Mouse* event)
 {
     doDec();
 }
 
-void PlayerEditAge::onIncButtonClick(MouseEvent* event)
+void PlayerEditAge::onIncButtonClick(Event::Mouse* event)
 {
     doInc();
 }
 
-void PlayerEditAge::onDoneButtonClick(MouseEvent* event)
+void PlayerEditAge::onDoneButtonClick(Event::Mouse* event)
 {
     doDone();
 }
@@ -145,7 +144,7 @@ void PlayerEditAge::doInc()
     }
 }
 
-void PlayerEditAge::onKeyDown(KeyboardEvent* event)
+void PlayerEditAge::onKeyDown(Event::Keyboard* event)
 {
     switch (event->keyCode())
     {

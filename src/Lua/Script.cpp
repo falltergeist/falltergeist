@@ -21,9 +21,16 @@
 #include <iostream>
 
 // Falltergeist includes
+#include "../Event/Event.h"
 #include "../Exception.h"
 #include "../functions.h"
+#include "../Game/Game.h"
+#include "../Input/Mouse.h"
+#include "../Lua/ImageButton.h"
+#include "../Lua/TextArea.h"
 #include "../Lua/Script.h"
+#include "../State/LuaState.h"
+#include "../UI/Image.h"
 
 // Third party includes
 
@@ -37,14 +44,9 @@ using namespace luabridge;
 Script::Script(const std::string& filename)
 {
     _filename = filename;
-    _lua_State = lua_open();
+    _lua_State = luaL_newstate();
 
-    luaL_openlibs(_lua_State);
-
-    luabridge::getGlobalNamespace(_lua_State)
-        .beginNamespace("game")
-            .addFunction("translate", translate)
-        .endNamespace();
+    _initialize();
 
     if (luaL_loadfile(_lua_State, filename.c_str()))
     {
@@ -54,6 +56,74 @@ Script::Script(const std::string& filename)
         throw Exception("Lua::Script::Script() " + error);
     }
 
+}
+
+void Script::_initialize()
+{
+    luaL_openlibs(_lua_State);
+
+    // luabridge::Namespace::addProperty cannot deduce setter type =(
+    static void (*const setterGameMouse)(Input::Mouse*) = nullptr;
+    static Input::Mouse* (*const getterGameMouse)() = []() -> Input::Mouse*
+    {
+        return Game::getInstance()->mouse();
+    };
+
+    luabridge::getGlobalNamespace(_lua_State)
+        .beginNamespace("game")
+
+            // game.Mouse
+            .beginClass<Input::Mouse>("Mouse")
+                .addProperty("x", &Input::Mouse::x, &Input::Mouse::setX)
+                .addProperty("y", &Input::Mouse::y, &Input::Mouse::setY)
+                .addProperty("cursor", &Input::Mouse::cursor, &Input::Mouse::setCursor)
+            .endClass()
+
+            // game.Event
+            .beginClass<Event::Event>("Event")
+                .addProperty("name", &Event::Event::name, &Event::Event::setName)
+            .endClass()
+
+            // game.State
+            .beginClass<State::LuaState>("State")
+                .addProperty("x", &State::LuaState::x, &State::LuaState::setX)
+                .addProperty("y", &State::LuaState::y, &State::LuaState::setY)
+                .addProperty("fullscreen", &State::LuaState::fullscreen, &State::LuaState::setFullscreen)
+                .addProperty("modal", &State::LuaState::modal, &State::LuaState::setModal)
+                .addFunction("addUI", &State::LuaState::addUI)
+            .endClass()
+            .beginNamespace("ui")
+
+                // game.ui.UI
+                .beginClass<Falltergeist::UI::Base>("UI")
+                    //.addProperty("x", &UI::x, &UI::setX)
+                    //.addProperty("y", &UI::y, &UI::setY)
+                .endClass()
+
+                // game.ui.Image
+                .deriveClass<UI::Image, Falltergeist::UI::Base>("Image")
+                    .addConstructor<void(*)(char const*)>()
+                .endClass()
+
+                // game.ui.ImageButton
+                .deriveClass<Lua::ImageButton, Falltergeist::UI::Base>("ImageButton")
+                    .addConstructor<void(*)(unsigned, int, int)>()
+                .endClass()
+
+                // game.ui.TextArea
+                .deriveClass<Lua::TextArea, Falltergeist::UI::Base>("TextArea")
+                    .addConstructor<void(*)(const char*, int, int)>()
+                    .addProperty("width", &Lua::TextArea::width, &Lua::TextArea::setWidth)
+                    .addProperty("horizontalAlign", &Lua::TextArea::luaHorizontalAlign, &Lua::TextArea::setLuaHorizontalAlign)
+                .endClass()
+            .endNamespace()
+
+            // game.translate
+            .addFunction("translate", translate)
+
+            // game.mouse
+            .addProperty ("mouse", getterGameMouse, setterGameMouse)
+        .endNamespace();
 }
 
 void Script::run()
@@ -81,8 +151,9 @@ bool Script::get(const std::string& name, bool defaultValue)
     {
         return defaultValue;
     }
-
-    return lua_toboolean(_lua_State, -1);
+    bool ret = lua_toboolean(_lua_State, -1);
+    lua_pop(_lua_State, 1);
+    return ret;
 }
 
 int Script::get(const std::string& name, int defaultValue)
@@ -92,7 +163,9 @@ int Script::get(const std::string& name, int defaultValue)
     {
         return defaultValue;
     }
-    return lua_tointeger(_lua_State, -1);
+    int ret = lua_tointeger(_lua_State, -1);
+    lua_pop(_lua_State, 1);
+    return ret;
 }
 
 double Script::get(const std::string& name, double defaultValue)
@@ -102,7 +175,9 @@ double Script::get(const std::string& name, double defaultValue)
     {
         return defaultValue;
     }
-    return lua_tonumber(_lua_State, -1);
+    double ret = lua_tonumber(_lua_State, -1);
+    lua_pop(_lua_State, 1);
+    return ret;
 }
 
 std::string Script::get(const std::string& name, const std::string& defaultValue)
@@ -112,7 +187,9 @@ std::string Script::get(const std::string& name, const std::string& defaultValue
     {
         return defaultValue;
     }
-    return lua_tostring(_lua_State, -1);
+    std::string ret = lua_tostring(_lua_State, -1);
+    lua_pop(_lua_State, 1);
+    return ret;
 }
 
 lua_State* Script::luaState()

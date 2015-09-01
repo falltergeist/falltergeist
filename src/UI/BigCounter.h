@@ -17,40 +17,59 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_BIGCOUNTER_H
-#define FALLTERGEIST_BIGCOUNTER_H
+#ifndef FALLTERGEIST_UI_BIGCOUNTER_H
+#define FALLTERGEIST_UI_BIGCOUNTER_H
 
 // C++ standard includes
-#include <vector>
+#include <memory>
 
 // Falltergeist includes
-#include "../Graphics/ActiveUI.h"
+#include "../UI/Base.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace UI
+{
+
 class Image;
 
-class BigCounter : public ActiveUI
+class BigCounter : public Falltergeist::UI::Base
 {
-protected:
-    unsigned char _color = COLOR_WHITE;
-    unsigned int _number = 0;
-    unsigned int _length = 2;
 public:
-    enum {COLOR_WHITE = 1, COLOR_RED};
+    enum class Color
+    {
+        WHITE = 1,
+        RED
+    };
+
     BigCounter(int x = 0, int y = 0, unsigned int length = 2);
-    ~BigCounter();
+    ~BigCounter() override;
 
-    virtual Texture* texture();
+    Graphics::Texture* texture() const override;
 
-    void setColor(unsigned char color);
-    unsigned char color();
+    void setColor(Color color);
+    Color color();
 
     void setNumber(unsigned int number);
     unsigned int number();
+
+protected:
+    Color _color = Color::WHITE;
+    unsigned int _number = 0;
+    unsigned int _length = 2;
+    mutable std::unique_ptr<Graphics::Texture> _textureOnDemand;
+
+    void setTexture(Graphics::Texture* texture) override; // We should override this method to prevent changing old _texture field.
+
+private:
+    using Falltergeist::UI::Base::_texture; // Hide unused field from childs.
+
+    BigCounter(const BigCounter&) = delete;
+    void operator=(const BigCounter&) = delete;
 };
 
 }
-#endif // FALLTERGEIST_BIGCOUNTER_H
+}
+#endif // FALLTERGEIST_UI_BIGCOUNTER_H

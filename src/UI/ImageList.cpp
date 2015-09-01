@@ -17,28 +17,32 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../UI/ImageList.h"
+
 // C++ standard includes
 
 // Falltergeist includes
 #include "../UI/Image.h"
-#include "../UI/ImageList.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace UI
+{
 
-ImageList::ImageList(std::vector<std::string> imageList, int x, int y) : ActiveUI(x,y)
+ImageList::ImageList(std::vector<std::string> imageList, int x, int y) : Falltergeist::UI::Base(x,y)
 {
     for (auto& frmName : imageList) addImage(new Image(frmName));
 }
 
-ImageList::ImageList(std::vector<Image*> imageList, int x, int y) : ActiveUI(x,y)
+ImageList::ImageList(std::vector<Image*> imageList, int x, int y) : Falltergeist::UI::Base(x,y)
 {
     for (auto& image : imageList) addImage(new Image(image));
 }
 
-ImageList::ImageList(int x, int y) : ActiveUI(x,y)
+ImageList::ImageList(int x, int y) : Falltergeist::UI::Base(x,y)
 {
 }
 
@@ -51,7 +55,7 @@ ImageList::~ImageList()
     }
 }
 
-unsigned int ImageList::currentImage()
+unsigned int ImageList::currentImage() const
 {
     return _currentImage;
 }
@@ -63,7 +67,7 @@ void ImageList::setCurrentImage(unsigned int number)
 
 void ImageList::addImage(Image* image)
 {
-    images()->push_back(image);
+    _images.push_back(image);
 }
 
 void ImageList::addImage(const std::string& filename)
@@ -71,14 +75,15 @@ void ImageList::addImage(const std::string& filename)
     addImage(new Image(filename));
 }
 
-Texture* ImageList::texture()
+Graphics::Texture* ImageList::texture() const
 {
     return images()->at(currentImage())->texture();
 }
 
-std::vector<Image*>* ImageList::images()
+const std::vector<Image*>* ImageList::images() const
 {
     return &_images;
 }
 
+}
 }

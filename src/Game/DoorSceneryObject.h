@@ -17,32 +17,34 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMEDOORSCENERYOBJECT_H
-#define FALLTERGEIST_GAMEDOORSCENERYOBJECT_H
+#ifndef FALLTERGEIST_GAME_DOORSCENERYOBJECT_H
+#define FALLTERGEIST_GAME_DOORSCENERYOBJECT_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "SceneryObject.h"
+#include "../Game/SceneryObject.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace Event
+{
+    class Event;
+}
+
 namespace Game
 {
 
 /**
  * Doors. Can be opened, closed, locked and unlocked.
  */
-class GameDoorSceneryObject : public GameSceneryObject
+class DoorSceneryObject : public SceneryObject
 {
-protected:
-    bool _opened = false;
-    bool _locked = false;
 public:
-    GameDoorSceneryObject();
-    virtual ~GameDoorSceneryObject();
+    DoorSceneryObject();
+    ~DoorSceneryObject() override;
 
     bool opened() const;
     void setOpened(bool value);
@@ -50,16 +52,19 @@ public:
     bool locked() const;
     void setLocked(bool value);
 
-    virtual bool canWalkThru() const;
+    bool canWalkThru() const override;
 
-    virtual void use_p_proc(GameCritterObject* usedBy);
+    void use_p_proc(CritterObject* usedBy) override;
 
+    void onOpeningAnimationEnded(Event::Event* event);
+    void onClosingAnimationEnded(Event::Event* event);
 
-    void onOpeningAnimationEnded(Event* event);
-    void onClosingAnimationEnded(Event* event);
+protected:
+    bool _opened = false;
+    bool _locked = false;
 };
 
 }
 }
 
-#endif // FALLTERGEIST_GAMEDOORSCENERYOBJECT_H
+#endif // FALLTERGEIST_GAME_DOORSCENERYOBJECT_H

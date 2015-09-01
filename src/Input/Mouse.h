@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_MOUSE_H
-#define FALLTERGEIST_MOUSE_H
+#ifndef FALLTERGEIST_INPUT_MOUSE_H
+#define FALLTERGEIST_INPUT_MOUSE_H
 
 // C++ standard includes
 #include <vector>
@@ -29,78 +29,92 @@
 
 namespace Falltergeist
 {
-class UI;
+namespace UI
+{
+    class Base;
+}
+namespace Input
+{
 
 class Mouse
 {
-protected:
-    int _x = 320;
-    int _y = 240;
-    bool _visible = true;
-    unsigned int _type = NONE;
-    std::vector<unsigned int> _states;
-    UI* _ui = 0;
-    void _setType(unsigned int type);
 public:
-    enum {
-        NONE = 0,
-        BIG_ARROW,
-        SCROLL_W,
-        SCROLL_W_X,
-        SCROLL_NW,
-        SCROLL_NW_X,
-        SCROLL_N,
-        SCROLL_N_X,
-        SCROLL_NE,
-        SCROLL_NE_X,
-        SCROLL_E,
-        SCROLL_E_X,
-        SCROLL_SE,
-        SCROLL_SE_X,
-        SCROLL_S,
-        SCROLL_S_X,
-        SCROLL_SW,
-        SCROLL_SW_X,
-        HEXAGON_RED,
-        ACTION,
-        ACTION_REVERSE,
-        WAIT,
-        HAND
+    enum class Cursor : unsigned
+    {
+        NONE           = 0,
+        BIG_ARROW      = 1,
+        SCROLL_W       = 2,
+        SCROLL_W_X     = 3,
+        SCROLL_NW      = 4,
+        SCROLL_NW_X    = 5,
+        SCROLL_N       = 6,
+        SCROLL_N_X     = 7,
+        SCROLL_NE      = 8,
+        SCROLL_NE_X    = 9,
+        SCROLL_E       = 10,
+        SCROLL_E_X     = 11,
+        SCROLL_SE      = 12,
+        SCROLL_SE_X    = 13,
+        SCROLL_S       = 14,
+        SCROLL_S_X     = 15,
+        SCROLL_SW      = 16,
+        SCROLL_SW_X    = 17,
+        HEXAGON_RED    = 18,
+        ACTION         = 19,
+        ACTION_REVERSE = 20,
+        WAIT           = 21,
+        HAND           = 22
     };
-    enum {
-        ICON_ROTATE = 1,
-        ICON_SKILL,
-        ICON_INVENTORY,
-        ICON_CANCEL,
-        ICON_LOOK,
-        ICON_TALK,
-        ICON_PUSH,
-        ICON_UNLOAD,
-        ICON_USE
+
+    enum class Icon : unsigned
+    {
+        ROTATE = 1,
+        SKILL,
+        INVENTORY,
+        CANCEL,
+        LOOK,
+        TALK,
+        PUSH,
+        UNLOAD,
+        USE
     };
     Mouse();
     ~Mouse();
 
-    int x();
+    int x() const;
     void setX(int x);
 
-    int y();
+    int y() const;
     void setY(int y);
 
-    void setState(unsigned int state);
-    void pushState(unsigned int state);
+    void pushState(Cursor state);
     void popState();
-    unsigned int state();
-    std::vector<unsigned int>* states();
+
+    Cursor state() const;
+    void setState(Cursor state);
+
+    unsigned cursor() const; // for lua sripts
+    void setCursor(unsigned value); // for lua scripts
+
+    std::vector<Cursor>* states();
 
     bool scrollState();
 
     void render();
     void think();
 
-    UI* ui();
+    UI::Base* ui();
+
+protected:
+    int _x = 320;
+    int _y = 240;
+    bool _visible = true;
+    Cursor _type = Cursor::NONE;
+    std::vector<Cursor> _states;
+    UI::Base* _ui = nullptr;
+    void _setType(Cursor type);
 };
 
 }
-
-#endif // FALLTERGEIST_MOUSE_H
+}
+#endif // FALLTERGEIST_INPUT_MOUSE_H

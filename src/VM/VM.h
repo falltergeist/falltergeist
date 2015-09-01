@@ -32,8 +32,10 @@
 
 namespace Falltergeist
 {
-    
-namespace Game { class GameObject; }
+namespace Game
+{
+    class Object;
+}
 
 /*
  * VM class represents Virtual Machine for running vanilla Fallout scripts.
@@ -44,9 +46,9 @@ namespace Game { class GameObject; }
 class VM
 {
 protected:
-    Game::GameObject* _owner = nullptr;
-    Game::GameObject* _sourceObject = nullptr;
-    Game::GameObject* _targetObject = nullptr;
+    Game::Object* _owner = nullptr;
+    Game::Object* _sourceObject = nullptr;
+    Game::Object* _targetObject = nullptr;
     int _fixedParam = 0;
     int _actionUsed = 0;
     libfalltergeist::Int::File* _script = 0;
@@ -60,8 +62,8 @@ protected:
     int _SVAR_base = 0;
 
 public:
-    VM(libfalltergeist::Int::File* script, Game::GameObject* owner);
-    VM(const std::string& filename, Game::GameObject* owner);
+    VM(libfalltergeist::Int::File* script, Game::Object* owner);
+    VM(const std::string& filename, Game::Object* owner);
     virtual ~VM();
     void run();
     void initialize();
@@ -80,7 +82,7 @@ public:
     void call(const std::string& name);
     libfalltergeist::Int::File* script();
 
-    Game::GameObject* owner();
+    Game::Object* owner();
 
     unsigned int programCounter();
     void setProgramCounter(unsigned int value);
@@ -96,10 +98,10 @@ public:
     
     VM* setFixedParam(int _fixedParam);
     int fixedParam() const;
-    VM* setTargetObject(Game::GameObject* _targetObject);
-    Game::GameObject* targetObject() const;
-    VM* setSourceObject(Game::GameObject* _sourceObject);
-    Game::GameObject* sourceObject() const;
+    VM* setTargetObject(Game::Object* _targetObject);
+    Game::Object* targetObject() const;
+    VM* setSourceObject(Game::Object* _sourceObject);
+    Game::Object* sourceObject() const;
     VM* setActionUsed(int _actionUsed);
     int actionUsed() const;
 

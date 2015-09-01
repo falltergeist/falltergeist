@@ -17,49 +17,74 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_SMALLCOUNTER_H
-#define FALLTERGEIST_SMALLCOUNTER_H
+#ifndef FALLTERGEIST_UI_SMALLCOUNTER_H
+#define FALLTERGEIST_UI_SMALLCOUNTER_H
 
 // C++ standard includes
-#include <vector>
+#include <memory>
 
 // Falltergeist includes
-#include "../Graphics/ActiveUI.h"
+#include "../UI/Base.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace UI
+{
+
 class Image;
 
-class SmallCounter : public ActiveUI
+class SmallCounter : public Falltergeist::UI::Base
 {
-protected:
-    unsigned char _color = COLOR_WHITE;
-    signed int _number = 0;
-    unsigned int _length = 3;
-    unsigned int _type = UNSIGNED; // unsigned by default
 public:
-    enum {COLOR_WHITE = 1, COLOR_YELLOW, COLOR_RED};
-    enum {UNSIGNED = 0, SIGNED};
+    enum class Color
+    {
+        WHITE = 1,
+        YELLOW,
+        RED
+    };
+    enum class Type
+    {
+        UNSIGNED = 0,
+        SIGNED
+    };
 
     SmallCounter(int x = 0, int y = 0);
-    ~SmallCounter();
+    ~SmallCounter() override;
 
-    virtual Texture* texture();
+    Graphics::Texture* texture() const override;
 
-    void setColor(unsigned char color);
-    unsigned char color();
+    Color color() const;
+    void setColor(Color color);
 
+    unsigned int length() const;
     void setLength(unsigned int length);
-    unsigned int length();
 
+    signed int number() const;
     void setNumber(signed int number);
-    signed int number();
 
-    void setType(unsigned int type);
-    unsigned int type();
+    Type type() const;
+    void setType(Type type);
+
+protected:
+    Color _color = Color::WHITE;
+    signed int _number = 0;
+    unsigned int _length = 3;
+    Type _type = Type::UNSIGNED;
+    mutable std::unique_ptr<Graphics::Texture> _textureOnDemand;
+
+    void setTexture(Graphics::Texture* texture) override;
+
+private:
+    // Hide unused field from childs.
+    using Falltergeist::UI::Base::_texture;
+
+    SmallCounter(const SmallCounter&) = delete;
+    void operator=(const SmallCounter&) = delete;
+    
 };
 
 }
-#endif // FALLTERGEIST_SMALLCOUNTER_H
+}
+#endif // FALLTERGEIST_UI_SMALLCOUNTER_H

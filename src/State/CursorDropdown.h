@@ -26,14 +26,20 @@
 
 // Falltergeist includes
 #include "State.h"
+#include "../Input/Mouse.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace Event
+{
+    class Event;
+    class Mouse;
+}
 namespace Game
 {
-    class GameObject;
+    class Object;
 }
 class Surface;
 class HiddenMask;
@@ -44,36 +50,37 @@ namespace State
 class CursorDropdown : public State
 {
 protected:
-    Game::GameObject* _object;
+    Game::Object* _object = nullptr;
     bool _onlyShowIcon;
-    std::vector<int> _icons;
+    std::vector<Input::Mouse::Icon> _icons;
     int _initialX;
     int _initialY;
     int _previousIcon = 0;
     int _currentIcon = 0;
-    std::vector<UI*> _activeIcons;
-    std::vector<UI*> _inactiveIcons;
-    UI* _surface = 0;
-    UI* _cursor = 0;
+    std::vector<UI::Base*> _activeIcons;
+    std::vector<UI::Base*> _inactiveIcons;
+    UI::Base* _surface = nullptr;
+    UI::Base* _cursor = nullptr;
     bool _deactivated = false;
     unsigned int _initialMouseStack;
     
     void showMenu();
 public:
-    CursorDropdown(std::vector<int> icons, bool onlyIcon = false);
-    virtual ~CursorDropdown();
-    virtual void init();
-    virtual void think();
-    virtual void handle(Event* event);
-    virtual void render();
+    CursorDropdown(std::vector<Input::Mouse::Icon>&& icons, bool onlyIcon = false);
+    ~CursorDropdown() override;
 
-    void onLeftButtonUp(MouseEvent* event);
+    void init() override;
+    void think() override;
+    void handle(Event::Event* event) override;
+    void render() override;
 
-    Game::GameObject* object();
-    void setObject(Game::GameObject* object);
+    void onLeftButtonUp(Event::Mouse* event);
 
-    virtual void onStateActivate(StateEvent* event);
-    virtual void onStateDeactivate(StateEvent* event);
+    Game::Object* object();
+    void setObject(Game::Object* object);
+
+    void onStateActivate(Event::State* event) override;
+    void onStateDeactivate(Event::State* event) override;
 
 };
 

@@ -17,10 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Game/Time.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "Time.h"
 
 // Third party includes
 #include "SDL.h"
@@ -30,22 +32,22 @@ namespace Falltergeist
 namespace Game
 {
 
-GameTime::GameTime()
+Time::Time()
 {
 }
 
-GameTime::~GameTime()
+Time::~Time()
 {
 }
 
-void GameTime::think()
+void Time::think()
 {
     if (SDL_GetTicks() - _timer < 100) return;
     _timer = SDL_GetTicks();
     increaseTicks();
 }
 
-void GameTime::increaseTicks()
+void Time::increaseTicks()
 {
     _ticks++;
 
@@ -55,7 +57,7 @@ void GameTime::increaseTicks()
     }
 }
 
-void GameTime::_increaseSeconds()
+void Time::_increaseSeconds()
 {
     _seconds++;
     if (_seconds == 60)
@@ -65,7 +67,7 @@ void GameTime::_increaseSeconds()
     }
 }
 
-void GameTime::_increaseMinutes()
+void Time::_increaseMinutes()
 {
     _minutes++;
     if (_minutes == 60)
@@ -75,7 +77,7 @@ void GameTime::_increaseMinutes()
     }
 }
 
-void GameTime::_increaseHours()
+void Time::_increaseHours()
 {
     _hours++;
     if (_hours == 24)
@@ -85,7 +87,7 @@ void GameTime::_increaseHours()
     }
 }
 
-void GameTime::_increaseDay()
+void Time::_increaseDay()
 {
     _day++;
 
@@ -136,7 +138,7 @@ void GameTime::_increaseDay()
 
 }
 
-void GameTime::_increaseMonth()
+void Time::_increaseMonth()
 {
     _month++;
     if (_month == 13)
@@ -146,42 +148,42 @@ void GameTime::_increaseMonth()
     }
 }
 
-void GameTime::_increaseYear()
+void Time::_increaseYear()
 {
     _year++;
 }
 
-unsigned int GameTime::ticks()
+unsigned int Time::ticks()
 {
     return _ticks;
 }
 
-unsigned int GameTime::seconds()
+unsigned int Time::seconds()
 {
     return _seconds;
 }
 
-unsigned int GameTime::minutes()
+unsigned int Time::minutes()
 {
     return _minutes;
 }
 
-unsigned int GameTime::hours()
+unsigned int Time::hours()
 {
     return _hours;
 }
 
-unsigned int GameTime::day()
+unsigned int Time::day()
 {
     return _day;
 }
 
-unsigned int GameTime::month()
+unsigned int Time::month()
 {
     return _month;
 }
 
-unsigned int GameTime::year()
+unsigned int Time::year()
 {
     return _year;
 }

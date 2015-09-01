@@ -17,10 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Game/WallObject.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "WallObject.h"
 
 // Third party includes
 
@@ -29,13 +31,18 @@ namespace Falltergeist
 namespace Game
 {
 
-GameWallObject::GameWallObject() : GameObject()
+WallObject::WallObject() : Object()
 {
-    _type = TYPE_WALL;
+    _type = Type::WALL;
 }
 
-GameWallObject::~GameWallObject()
+WallObject::~WallObject()
 {
+}
+
+bool WallObject::_useEggTransparency()
+{
+    return (_trans == Trans::DEFAULT);
 }
 
 }

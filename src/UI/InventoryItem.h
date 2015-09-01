@@ -23,52 +23,63 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Graphics/ActiveUI.h"
+#include "../UI/Base.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace Event
+{
+    class Mouse;
+}
 namespace Game
 {
-    class GameItemObject;
+    class ItemObject;
 }
-
-class InventoryItem : public ActiveUI
+namespace UI
 {
-protected:
-    Game::GameItemObject* _item = 0;
-    unsigned int _type = TYPE_INVENTORY;
-    unsigned int _oldType = TYPE_INVENTORY;
+
+class InventoryItem : public Falltergeist::UI::Base
+{
 public:
-    enum { TYPE_INVENTORY = 0, TYPE_SLOT, TYPE_DRAG };
+    enum class Type
+    {
+        INVENTORY = 0,
+        SLOT,
+        DRAG
+    };
 
-    InventoryItem(Game::GameItemObject* item, int x = 0, int y = 0);
+    InventoryItem(Game::ItemObject* item, int x = 0, int y = 0);
+    ~InventoryItem() override;
 
+    Type type() const;
+    void setType(Type value);
 
-    unsigned int type();
-    void setType(unsigned int value);
+    Game::ItemObject* item();
+    void setItem(Game::ItemObject* item);
 
-    Game::GameItemObject* item();
-    void setItem(Game::GameItemObject* item);
+    void render(bool eggTransparency = false) override;
+    unsigned int pixel(unsigned int x, unsigned int y) override;
+    Graphics::Texture* texture() const override;
+    unsigned int width() const override;
+    unsigned int height() const override;
 
-    virtual void render(bool eggTransparency = false);
-    virtual unsigned int pixel(unsigned int x, unsigned int y);
-    virtual Texture* texture();
-    virtual unsigned int width();
-    virtual unsigned int height();
+    void onMouseLeftDown(Event::Mouse* event);
+    void onMouseDragStart(Event::Mouse* event);
+    void onMouseDrag(Event::Mouse* event);
+    void onMouseDragStop(Event::Mouse* event);
 
-    void onMouseLeftDown(MouseEvent* event);
-    void onMouseDragStart(MouseEvent* event);
-    void onMouseDrag(MouseEvent* event);
-    void onMouseDragStop(MouseEvent* event);
+    void onArmorDragStop(Event::Mouse* event);
+    void onHandDragStop(Event::Mouse* event);
 
-    void onArmorDragStop(MouseEvent* event);
-    void onHandDragStop(MouseEvent* event);
-
-
+protected:
+    Game::ItemObject* _item = nullptr;
+    Type _type = Type::INVENTORY;
+    Type _oldType = Type::INVENTORY;
 
 };
 
+}
 }
 #endif // FALLTERGEIST_UI_INVENTORYITEM_H

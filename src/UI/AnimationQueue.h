@@ -17,54 +17,55 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_ANIMATIONQUEUE_H
-#define FALLTERGEIST_ANIMATIONQUEUE_H
+#ifndef FALLTERGEIST_UI_ANIMATIONQUEUE_H
+#define FALLTERGEIST_UI_ANIMATIONQUEUE_H
 
 // C++ standard includes
 #include <vector>
 
 // Falltergeist includes
-#include "../Event/EventEmitter.h"
-#include "../Graphics/ActiveUI.h"
+#include "../UI/Base.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+namespace UI
+{
+
 class Animation;
 
-class AnimationQueue : public ActiveUI
+class AnimationQueue : public Falltergeist::UI::Base
 {
-protected:
-    bool _playing = false;
-    bool _repeat = false;
-    unsigned int _currentAnimation = 0;
-    std::vector<Animation*> _animations;
 public:
     AnimationQueue();
-    virtual ~AnimationQueue();
+    ~AnimationQueue() override;
 
     std::vector<Animation*>* animations();
-    Animation* currentAnimation();
+    Animation* currentAnimation() const;
 
     void clear();
     void stop();
     void start();
     void setRepeat(bool value);
 
+    Graphics::Texture* texture() const override;
+    void render(bool eggTransparency = false) override;
+    void think() override;
+    unsigned int pixel(unsigned int x, unsigned int y) override;
 
-    virtual Texture* texture();
-    virtual void render(bool eggTransparency = false);
-    virtual void think();
-    virtual unsigned int pixel(unsigned int x, unsigned int y);
+    unsigned int width() const override;
+    unsigned int height() const override;
+    int xOffset() const override;
+    int yOffset() const override;
 
-
-    virtual unsigned int width();
-    virtual unsigned int height();
-    virtual int xOffset();
-    virtual int yOffset();
-
+protected:
+    bool _playing = false;
+    bool _repeat = false;
+    unsigned int _currentAnimation = 0;
+    std::vector<Animation*> _animations;
 };
 
 }
-#endif // FALLTERGEIST_ANIMATIONQUEUE_H
+}
+#endif // FALLTERGEIST_UI_ANIMATIONQUEUE_H

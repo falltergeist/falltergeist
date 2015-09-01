@@ -49,13 +49,13 @@ void Opcode80CBHandler::_run()
     {
         _error("set_critter_stat(who, num, value) - who is null");
     }
-    auto critter = dynamic_cast<Game::GameCritterObject*>(object);
+    auto critter = dynamic_cast<Game::CritterObject*>(object);
     if (!critter)
     {
         _error("set_critter_stat(who, num, value) - who is not a critter");
     }
     critter->setStat((STAT)number, value);
-    if (dynamic_cast<Game::GameDudeObject*>(critter))
+    if (dynamic_cast<Game::DudeObject*>(critter))
     {
         _vm->dataStack()->push(3); // for dude
     }

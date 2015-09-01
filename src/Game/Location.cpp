@@ -17,10 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Game/Location.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "Location.h"
 
 // Third party includes
 
@@ -29,76 +31,80 @@ namespace Falltergeist
 namespace Game
 {
 
-GameLocation::GameLocation()
+Location::Location()
 {
 }
 
-std::string GameLocation::name()
+Location::~Location()
+{
+}
+
+std::string Location::name()
 {
     return _name;
 }
 
-void GameLocation::setName(const std::string& value)
+void Location::setName(const std::string& value)
 {
     _name = value;
 }
 
-std::string GameLocation::filename()
+std::string Location::filename()
 {
     return _filename;
 }
 
-void GameLocation::setFilename(const std::string& value)
+void Location::setFilename(const std::string& value)
 {
     _filename = value;
 }
 
-std::string GameLocation::music()
+std::string Location::music()
 {
     return _music;
 }
 
-void GameLocation::setMusic(const std::string& value)
+void Location::setMusic(const std::string& value)
 {
     _music = value;
 }
 
-std::map<std::string, unsigned int>* GameLocation::ambient()
+std::map<std::string, unsigned int>* Location::ambient()
 {
     return &_ambient;
 }
 
-bool GameLocation::saveable()
+bool Location::saveable()
 {
     return _saveable;
 }
 
-void GameLocation::setSaveable(bool value)
+void Location::setSaveable(bool value)
 {
     _saveable = value;
 }
 
-bool GameLocation::removeBodies()
+bool Location::removeBodies()
 {
     return _removeBodies;
 }
 
-void GameLocation::setRemoveBodies(bool value)
+void Location::setRemoveBodies(bool value)
 {
     _removeBodies = value;
 }
 
-bool GameLocation::pipboy()
+bool Location::pipboy()
 {
     return _pipboy;
 }
 
-void GameLocation::setPipboy(bool value)
+void Location::setPipboy(bool value)
 {
     _pipboy = value;
 }
 
-std::map<unsigned int, unsigned int>* GameLocation::startPoints()
+std::map<unsigned int, unsigned int>* Location::startPoints()
 {
     return &_startPoints;
 }

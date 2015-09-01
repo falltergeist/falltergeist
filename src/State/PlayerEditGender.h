@@ -32,7 +32,10 @@ using namespace libfalltergeist;
 
 namespace Falltergeist
 {
-class ImageList;
+namespace UI
+{
+    class ImageList;
+}
 
 namespace State
 {
@@ -40,16 +43,19 @@ namespace State
 class PlayerEditGender : public State
 {
 protected:
-    ImageList* _maleImage = 0;
-    ImageList* _femaleImage = 0;
+    UI::ImageList* _maleImage = nullptr;
+    UI::ImageList* _femaleImage = nullptr;
     GENDER _gender = GENDER::MALE;
 public:
     PlayerEditGender();
-    void init();
-    void onFemaleButtonPress(MouseEvent* event);
-    void onMaleButtonPress(MouseEvent* event);
-    void onDoneButtonClick(MouseEvent* event);
-    virtual void onKeyDown(KeyboardEvent* event);
+    ~PlayerEditGender() override;
+
+    void init() override;
+
+    void onFemaleButtonPress(Event::Mouse* event);
+    void onMaleButtonPress(Event::Mouse* event);
+    void onDoneButtonClick(Event::Mouse* event);
+    void onKeyDown(Event::Keyboard* event) override;
     void setGender(GENDER gender);
 };
 

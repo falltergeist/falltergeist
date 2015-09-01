@@ -17,94 +17,113 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAMEOBJECT_H
-#define FALLTERGEIST_GAMEOBJECT_H
+#ifndef FALLTERGEIST_GAME_OBJECT_H
+#define FALLTERGEIST_GAME_OBJECT_H
 
 // C++ standard includes
-#include <vector>
-#include <string>
-#include <memory>
 #include <cmath>
+#include <memory>
+#include <string>
+#include <vector>
 
 // Falltergeist includes
-#include "../Event/Event.h"
+#include "../Event/Emitter.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-class ActiveUI;
-class AnimationQueue;
-class Event;
+namespace Event
+{
+    class Event;
+}
+namespace Graphics
+{
+    class Texture;
+}
+namespace UI
+{
+    class AnimationQueue;
+    class Base;
+    class Image;
+    class TextArea;
+}
 class Hexagon;
-class Image;
 class Location;
-class TextArea;
 class VM;
-class Texture;
 
 namespace Game
 {
-class GameCritterObject;
+class CritterObject;
 
-class GameObject : public EventEmitter
+// represents orientation in hexagonal space
+// @todo move this class to separate file!
+class Orientation
 {
-protected:
-    bool _canWalkThru = true;
-    bool _canLightThru = true;
-    bool _canShootThru = true;
-    bool _wallTransEnd = false;
-    bool _flat = false;
-    int _type = -1;
-    int _subtype = -1;
-    int _PID = -1;
-    int _FID = -1;
-    int _elevation = 0;
-    int _orientation = 0;
-    std::string _name;
-    std::string _description;
-    VM* _script = 0;
-    ActiveUI* _ui = 0;
-    Hexagon* _hexagon = 0;
-    virtual void _generateUi();
-    void addUIEventHandlers();
-    TextArea* _floatMessage = 0;
-    bool _inRender = false;
-    unsigned int _trans = 0;
-    unsigned short _lightOrientation;
-    bool _transparent = false;
-    Texture* _tmptex = NULL;
-    unsigned int _lightIntensity = 0;
-    unsigned int _lightRadius = 0;
-public:
-    enum { TYPE_ITEM = 0, TYPE_CRITTER, TYPE_SCENERY, TYPE_WALL, TYPE_TILE, TYPE_MISC, TYPE_DUDE };
-    enum { TYPE_ITEM_ARMOR = 0, TYPE_ITEM_CONTAINER, TYPE_ITEM_DRUG, TYPE_ITEM_WEAPON, TYPE_ITEM_AMMO, TYPE_ITEM_MISC, TYPE_ITEM_KEY };
-    enum { TYPE_SCENERY_DOOR = 0, TYPE_SCENERY_STAIRS, TYPE_SCENERY_ELEVATOR, TYPE_SCENERY_LADDER, TYPE_SCENERY_GENERIC };
-    enum { TRANS_DEFAULT = 0, TRANS_NONE, TRANS_WALL, TRANS_GLASS, TRANS_STEAM, TRANS_ENERGY, TRANS_RED };
-    enum { ORIENTATION_NS = 0, ORIENTATION_EW, ORIENTATION_NC, ORIENTATION_SC, ORIENTATION_EC, ORIENTATION_WC };
+private:
+    unsigned char _dir;
 
-    GameObject();
-    virtual ~GameObject();
+public:
+    enum
+    {
+        NS = 0, EW, NC, SC, EC, WC
+    };
+
+    Orientation(unsigned char value = NS)
+    {
+        _dir = (unsigned char)(value % 6);
+    }
+
+    operator unsigned char() const { return _dir; }
+};
+
+
+class Object : public Event::Emitter
+{
+public:
+    // Object type as defined in prototype
+    enum class Type
+    {
+        ITEM = 0,
+        CRITTER,
+        SCENERY,
+        WALL,
+        TILE,
+        MISC,
+        DUDE
+    };
+
+    enum class Trans
+    {
+        DEFAULT = 0,
+        NONE,
+        WALL,
+        GLASS,
+        STEAM,
+        ENERGY,
+        RED
+    };
+
+    Object();
+    ~Object() override;
 
     // whether this object is transparent in terms of walking through it by a critter
-    bool canWalkThru() const;
+    virtual bool canWalkThru() const;
     virtual void setCanWalkThru(bool value);
     
     // whether this object is transparent to the light
-    bool canLightThru() const;
+    virtual bool canLightThru() const;
     virtual void setCanLightThru(bool value);
 
     // whether this object is transparent to projectiles
-    bool canShootThru() const;
+    virtual bool canShootThru() const;
     virtual void setCanShootThru(bool value);
     
-    bool wallTransEnd() const;
+    virtual bool wallTransEnd() const;
     virtual void setWallTransEnd(bool value);
 
-    // object type (TYPE_ITEM, TYPE_CRITTER, etc.)
-    int type() const;
-    // object subtype (for items and scenery))
-    int subtype() const;
+    // object type
+    Type type() const;
 
     // object prototype ID - refers to numeric ID as used in original game
     int PID() const;
@@ -119,9 +138,9 @@ public:
     void setElevation(int value);
 
     // returns facing direction (0 - 5)
-    int orientation() const;
+    Orientation orientation() const;
     // changes object facing direction (0 - 5)
-    virtual void setOrientation(int value);
+    virtual void setOrientation(Orientation value);
 
     // object name, as defined in proto msg file
     std::string name() const;
@@ -138,27 +157,28 @@ public:
     virtual void render();
     virtual void renderText();
     virtual void think();
-    virtual void handle(Event* event);
+    virtual void handle(Event::Event* event);
 
     // ActiveUI used to display object on screen and capture mouse events
-    ActiveUI* ui() const;
-    void setUI(ActiveUI* ui);
+    UI::Base* ui() const;
+    void setUI(UI::Base* ui);
 
     // Hexagon of object current position
     Hexagon* hexagon() const;
     void setHexagon(Hexagon* hexagon);
 
     // TextArea, currently floating above the object
-    TextArea* floatMessage() const;
-    void setFloatMessage(TextArea* floatMessage);
+    UI::TextArea* floatMessage() const;
+    void setFloatMessage(UI::TextArea* floatMessage);
 
     // is object currently being rendered
     bool inRender() const;
     void setInRender(bool value);
 
     // object translucency mode
-    unsigned int trans() const;
-    void setTrans(unsigned int value);
+    Trans trans() const;
+    // sets object translucency mode
+    void setTrans(Trans value);
 
     // request description of the object to console, may call "description_p_proc" procedure of underlying script entity
     virtual void description_p_proc();
@@ -173,18 +193,18 @@ public:
     // call "map_update_p_proc" when map is updating (once every N frames, after times skip in pipboy)
     virtual void map_update_p_proc();
     // call "pickup_p_proc" of the script entity (when picking up item object)
-    virtual void pickup_p_proc(GameCritterObject* pickedUpBy);
+    virtual void pickup_p_proc(CritterObject* pickedUpBy);
     virtual void spatial_p_proc();
     // perform "use" action, may call "use_p_proc" of the underlying script
-    virtual void use_p_proc(GameCritterObject* usedBy);
+    virtual void use_p_proc(CritterObject* usedBy);
     // perform "use object on" action, may call "use_obj_on_p_proc" procedure
-    virtual void use_obj_on_p_proc(GameObject* objectUsed, GameCritterObject* usedBy);
+    virtual void use_obj_on_p_proc(Object* objectUsed, CritterObject* usedBy);
 
-    virtual void onUseAnimationActionFrame(Event* event, GameCritterObject* critter);
-    virtual void onUseAnimationEnd(Event* event, GameCritterObject* critter);
+    virtual void onUseAnimationActionFrame(Event::Event* event, CritterObject* critter);
+    virtual void onUseAnimationEnd(Event::Event* event, CritterObject* critter);
 
     unsigned short lightOrientation() const;
-    virtual void setLightOrientation(unsigned short orientation);
+    virtual void setLightOrientation(Orientation orientation);
 
     unsigned int lightIntensity() const;
     virtual void setLightIntensity(unsigned int intensity);
@@ -196,9 +216,39 @@ public:
 
     bool flat() const;
     virtual void setFlat(bool value);
+
+protected:
+    bool _canWalkThru = true;
+    bool _canLightThru = true;
+    bool _canShootThru = true;
+    bool _wallTransEnd = false;
+    bool _flat = false;
+    Type _type;
+    int _PID = -1;
+    int _FID = -1;
+    int _elevation = 0;
+    Orientation _orientation;
+    std::string _name;
+    std::string _description;
+    VM* _script = nullptr;
+    UI::Base* _ui = nullptr;
+    Hexagon* _hexagon = nullptr;
+    virtual void _generateUi();
+    void addUIEventHandlers();
+    UI::TextArea* _floatMessage = nullptr;
+    bool _inRender = false;
+    Trans _trans = Trans::DEFAULT;
+    Orientation _lightOrientation;
+    Graphics::Texture* _tmptex = nullptr;
+    unsigned int _lightIntensity = 0;
+    unsigned int _lightRadius = 0;
+    virtual bool _useEggTransparency();
+
+private:
+    bool _getEggTransparency();
+
 };
 
 }
 }
-
-#endif // FALLTERGEIST_GAMEOBJECT_H
+#endif // FALLTERGEIST_GAME_OBJECT_H

@@ -24,34 +24,41 @@
 #include <map>
 
 // Falltergeist includes
-#include "State.h"
+#include "../State/State.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-class TextArea;
-class Image;
+namespace UI
+{
+    class TextArea;
+    class Image;
+}
 
 namespace State
 {
 
 class PlayerEditName : public State
 {
-protected:
-    unsigned int _timer;
-    TextArea* _name = 0;
-    Image* _cursor = 0;
-    std::map<char,char> _keyCodes;
 public:
     PlayerEditName();
-    ~PlayerEditName();
-    void init();
-    void think();
-    void onDoneButtonClick(MouseEvent* event);
-    void onTextAreaKeyDown(KeyboardEvent* event);
+    ~PlayerEditName() override;
+
+    void init() override;
+    void think() override;
+
+    void onDoneButtonClick(Event::Mouse* event);
+    void onTextAreaKeyDown(Event::Keyboard* event);
+
     void doDone();
     void doBack();
+
+protected:
+    unsigned int _timer;
+    UI::TextArea* _name = nullptr;
+    UI::Image* _cursor = nullptr;
+    std::map<char,char> _keyCodes;
 };
 
 

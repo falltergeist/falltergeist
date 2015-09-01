@@ -101,12 +101,12 @@ void VMStack::push(float value)
     push(VMStackValue(value));
 }
 
-Game::GameObject* VMStack::popObject()
+Game::Object* VMStack::popObject()
 {
     return pop().objectValue();
 }
 
-void VMStack::push(Game::GameObject* value)
+void VMStack::push(Game::Object* value)
 {
     push(VMStackValue(value));
 }

@@ -17,13 +17,15 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Game/ItemObject.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Graphics/Animation.h"
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
-#include "ItemObject.h"
+#include "../UI/Animation.h"
 #include "../UI/Image.h"
 
 // Third party includes
@@ -33,91 +35,96 @@ namespace Falltergeist
 namespace Game
 {
 
-GameItemObject::GameItemObject() : GameObject()
+ItemObject::ItemObject() : Object()
 {
-    _type = TYPE_ITEM;
+    _type = Type::ITEM;
 }
 
-GameItemObject::~GameItemObject()
+ItemObject::~ItemObject()
 {
     delete _inventoryDragUi;
     delete _inventorySlotUi;
     delete _inventoryUi;
 }
 
-unsigned int GameItemObject::amount() const
+unsigned int ItemObject::amount() const
 {
     return _amount;
 }
 
-void GameItemObject::setAmount(unsigned int value)
+void ItemObject::setAmount(unsigned int value)
 {
     _amount = value;
 }
 
-unsigned int GameItemObject::weight() const
+unsigned int ItemObject::weight() const
 {
     return _weight;
 }
 
-void GameItemObject::setWeight(unsigned int value)
+void ItemObject::setWeight(unsigned int value)
 {
     _weight = value;
 }
 
-int GameItemObject::inventoryFID() const
+int ItemObject::inventoryFID() const
 {
     return _inventoryFID;
 }
 
-void GameItemObject::setInventoryFID(int value)
+void ItemObject::setInventoryFID(int value)
 {
     _inventoryFID = value;
 }
 
-Image* GameItemObject::inventoryDragUi() const
+UI::Image* ItemObject::inventoryDragUi() const
 {
     return _inventoryDragUi;
 }
 
-void GameItemObject::setVolume(unsigned int volume)
+void ItemObject::setVolume(unsigned int volume)
 {
     _volume = volume;
 }
 
-unsigned int GameItemObject::volume() const
+unsigned int ItemObject::volume() const
 {
     return _volume;
 }
 
-Image* GameItemObject::inventoryUi() const
+UI::Image* ItemObject::inventoryUi() const
 {
     return _inventoryUi;
 }
 
-Image* GameItemObject::inventorySlotUi() const
+UI::Image* ItemObject::inventorySlotUi() const
 {
     return _inventorySlotUi;
 }
 
-void GameItemObject::_generateUi()
+void ItemObject::_generateUi()
 {
-    GameObject::_generateUi();
+    Object::_generateUi();
 
     if (inventoryFID() == -1) return;
 
     // Big unscaled image of item
-    _inventoryDragUi = new Image(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
+    _inventoryDragUi = new UI::Image(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
 
     // Small scaled image
     auto inventoryUiTexture = _inventoryDragUi->texture()->fitTo(57, 40);
-    _inventoryUi = new Image(inventoryUiTexture->width(),inventoryUiTexture->height());
+    _inventoryUi = new UI::Image(inventoryUiTexture->width(),inventoryUiTexture->height());
     _inventoryUi->setTexture(inventoryUiTexture);
 
     // Medium scaled image
     auto inventorySlotUiTexture = _inventoryDragUi->texture()->fitTo(88, 58);
-    _inventorySlotUi = new Image(inventorySlotUiTexture->width(),inventorySlotUiTexture->height());
+    _inventorySlotUi = new UI::Image(inventorySlotUiTexture->width(),inventorySlotUiTexture->height());
     _inventorySlotUi->setTexture(inventorySlotUiTexture);
+}
+
+ItemObject::Subtype ItemObject::subtype() const
+{
+    return _subtype;
 }
 
 }

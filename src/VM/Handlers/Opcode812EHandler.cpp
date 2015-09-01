@@ -42,11 +42,11 @@ void Opcode812EHandler::_run()
     if (object)
     {
         debug << "    PID: 0x" << std::hex << (object ? object->PID() : 0) << std::endl;
-        if (auto door = dynamic_cast<Game::GameDoorSceneryObject*>(object)) 
+        if (auto door = dynamic_cast<Game::DoorSceneryObject*>(object))
         {
             door->setLocked(true);
         }
-        else if (auto container = dynamic_cast<Game::GameContainerItemObject*>(object)) 
+        else if (auto container = dynamic_cast<Game::ContainerItemObject*>(object))
         {
             container->setLocked(true);
         }
