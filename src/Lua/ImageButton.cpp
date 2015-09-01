@@ -39,31 +39,19 @@ ImageButton::~ImageButton()
 ImageButton::ImageButton(const std::string& upImg, const std::string& downImg, const std::string& upSfx,
                          const std::string& downSfx, int x, int y, lua_State* L) :
     UI::ImageButton::ImageButton(upImg, downImg, upSfx, downSfx, x, y),
-    _thinkHandler(L, LUA_REFNIL)
+    _inheritable(L)
 {
 }
 
-void ImageButton::setThinkHandler(luabridge::LuaRef value)
+void ImageButton::subclass(luabridge::LuaRef table)
 {
-    if (value.isFunction())
-    {
-        _thinkHandler = value;
-    }
+    _inheritable.setSubclassTable(table);
 }
 
 void ImageButton::think()
 {
     UI::Base::think();
-    if (_thinkHandler.isFunction())
-    {
-        try
-        {
-            _thinkHandler();
-        }
-        catch (luabridge::LuaException const& e) {
-            Logger::error("Lua") << e.what ();
-        }
-    }
+    _inheritable.callTableMethod("think");
 }
 
 }

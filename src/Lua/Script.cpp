@@ -84,8 +84,8 @@ void Script::_initialize()
 
     luabridge::getGlobalNamespace(_lua_State)
         .beginNamespace("game")
-            .addFunction("addUITest", &AddUI)
-        
+            .addFunction("AddUITest", &AddUI)
+            
             .beginClass<Falltergeist::Point>("Point")
                 .addConstructor<void(*)(int, int)>()
                 .addProperty("x", &Falltergeist::Point::x, &Falltergeist::Point::setX)
@@ -140,7 +140,7 @@ void Script::_initialize()
                 // game.ui.ImageButton
                 .deriveClass<Lua::ImageButton, Falltergeist::UI::Base>("ImageButton")
                     .addConstructor<void(*)(const std::string&, const std::string&, const std::string&, const std::string&, int, int, lua_State*)>()
-                    .addFunction("setThinkHandler", &Lua::ImageButton::setThinkHandler)
+                    .addFunction("subclass", &Lua::ImageButton::subclass)
                 .endClass()
 
                 // game.ui.TextArea

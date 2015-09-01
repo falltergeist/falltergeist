@@ -17,46 +17,45 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_LUA_IMAGEBUTTON_H
-#define FALLTERGEIST_LUA_IMAGEBUTTON_H
+#ifndef FALLTERGEIST_INHERITABLE_H
+#define FALLTERGEIST_INHERITABLE_H
 
 // C++ standard includes
 
-// Falltergeist includes
-#include "../UI/ImageButton.h"
+// Libfalltergeist includes
 
 // Third party includes
 extern "C"
 {
     #include "lua.h"
     #include "lauxlib.h"
-    #include "lualib.h"
 }
 #include "LuaBridge.h"
-#include "../Lua/Inheritable.h"
 
 namespace Falltergeist
 {
 namespace Lua
 {
 
-class ImageButton : public UI::ImageButton
+
+class Inheritable
 {
 public:
+    Inheritable(lua_State* L);
 
-    ImageButton(const std::string& upImg, const std::string& downImg, const std::string& upSfx,
-                const std::string& downSfx, int x, int y, lua_State* L);
+    virtual void setSubclassTable(luabridge::LuaRef value);
 
-    ~ImageButton() override;
+    static void inherit(Inheritable* obj, luabridge::LuaRef value);
 
-    void subclass(luabridge::LuaRef table);
+    // calls given method with only self argument
+    luabridge::LuaRef callTableMethod(const std::string&);
 
-    virtual void think() override;
 
 private:
-    Inheritable _inheritable;
+    luabridge::LuaRef _subclassTable;
 };
 
 }
 }
-#endif // FALLTERGEIST_LUA_IMAGEBUTTON_H
+
+#endif //FALLTERGEIST_INHERITABLE_H
