@@ -43,16 +43,43 @@ class Inheritable
 public:
     Inheritable(lua_State* L);
 
-    virtual void setSubclassTable(luabridge::LuaRef value);
-
-    static void inherit(Inheritable* obj, luabridge::LuaRef value);
+    void setSubclassTable(luabridge::LuaRef value);
 
     // calls given method with only self argument
-    luabridge::LuaRef callTableMethod(const std::string&);
+    luabridge::LuaRef callTableMethod(const std::string&) const;
 
+    // calls given method with self and one argument
+    template <class T1>
+    luabridge::LuaRef callTableMethod(const std::string& method, T1 a1) const
+    {
+        return _callTableMethodInternal(method, [this, a1](luabridge::LuaRef func){ return func(_subclassTable, a1); });
+    }
+
+    // calls given method with self and two arguments
+    template <class T1, class T2>
+    luabridge::LuaRef callTableMethod(const std::string& method, T1 a1, T2 a2) const
+    {
+        return _callTableMethodInternal(method, [this, a1, a2](luabridge::LuaRef func){ return func(_subclassTable, a1, a2); });
+    }
+
+    // calls given method with self and three arguments
+    template <class T1, class T2, class T3>
+    luabridge::LuaRef callTableMethod(const std::string& method, T1 a1, T2 a2, T3 a3) const
+    {
+        return _callTableMethodInternal(method, [this, a1, a2, a3](luabridge::LuaRef func){ return func(_subclassTable, a1, a2, a3); });
+    }
+
+    // calls given method with self and four arguments
+    template <class T1, class T2, class T3, class T4>
+    luabridge::LuaRef callTableMethod(const std::string& method, T1 a1, T2 a2, T3 a3, T4 a4) const
+    {
+        return _callTableMethodInternal(method, [this, a1, a2, a3, a4](luabridge::LuaRef func){ return func(_subclassTable, a1, a2, a3, a4); });
+    }
 
 private:
     luabridge::LuaRef _subclassTable;
+
+    luabridge::LuaRef _callTableMethodInternal(const std::string&, std::function<luabridge::LuaRef(luabridge::LuaRef)>) const;
 };
 
 }

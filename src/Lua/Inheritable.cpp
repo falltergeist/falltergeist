@@ -18,6 +18,7 @@
  */
 
 // C++ standard includes
+#include <functional>
 
 // Libfalltergeist includes
 #include "../Logger.h"
@@ -42,34 +43,27 @@ void Inheritable::setSubclassTable(luabridge::LuaRef value)
     }
     else
     {
-        Logger::error("Lua") << "Inheritable::setInheritedTable(): Value is not table: " << value << std::endl;
+        Logger::error("Lua") << "Inheritable::setInheritedTable(): Value is not a table: " << value << std::endl;
     }
 }
 
-void Inheritable::inherit(Inheritable* obj, luabridge::LuaRef value)
+luabridge::LuaRef Inheritable::callTableMethod(const std::string& method) const
 {
-    obj->setSubclassTable(value);
+    return _callTableMethodInternal(method, [this](luabridge::LuaRef func){ return func(_subclassTable); });
 }
 
-luabridge::LuaRef Inheritable::callTableMethod(const std::string& method)
+
+luabridge::LuaRef Inheritable::_callTableMethodInternal(const std::string& method, std::function<luabridge::LuaRef(luabridge::LuaRef)> handler) const
 {
     if (_subclassTable[method].isFunction())
     {
-        try
-        {
-            return _subclassTable[method](_subclassTable);
-        }
-        catch (luabridge::LuaException const& e)
-        {
-            Logger::error("Lua") << e.what ();
-        }
+        return handler(_subclassTable[method]);
     }
     else
     {
-        Logger::error("Lua") << "Inheritable::_callTableMethod(): value is not a function: " << luabridge::LuaRef(_subclassTable[method]);
+        Logger::error("Lua") << "Inheritable::callTableMethod(): value is not a function: " << luabridge::LuaRef(_subclassTable[method]);
     }
     return luabridge::LuaRef(_subclassTable.state());
 }
-
 }
 }
