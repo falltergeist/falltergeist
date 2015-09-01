@@ -40,7 +40,17 @@ namespace UI
 
 ImageButton::ImageButton(Type type, Point pos) : Base(pos)
 {
-    _init(type);
+    _initFromType(type);
+}
+
+ImageButton::ImageButton(const std::string& upImg, const std::string& downImg, const std::string& upSfx,
+                         const std::string& downSfx, int x, int y) : Base(x, y)
+{
+    _textures.push_back(ResourceManager::getInstance()->texture(upImg));
+    _textures.push_back(ResourceManager::getInstance()->texture(downImg));
+    _downSound = downSfx;
+    _upSound = upSfx;
+    _init();
 }
 
 ImageButton::ImageButton(Type type, int x, int y) : ImageButton(type, Point(x, y))
@@ -51,7 +61,7 @@ ImageButton::~ImageButton()
 {
 }
 
-void ImageButton::_init(Type type)
+void ImageButton::_initFromType(Type type)
 {
     switch(type)
     {
@@ -218,6 +228,12 @@ void ImageButton::_init(Type type)
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
     }
+    _init();
+}
+
+
+void ImageButton::_init()
+{
     addEventHandler("mouseleftclick", [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); });
     addEventHandler("mouseleftdown", [this](Event::Event* event){ this->_onLeftButtonDown(dynamic_cast<Event::Mouse*>(event)); });
     addEventHandler("mouseout", [this](Event::Event* event){ this->_onMouseOut(dynamic_cast<Event::Mouse*>(event)); });

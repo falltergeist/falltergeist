@@ -59,6 +59,18 @@ Script::Script(const std::string& filename)
 
 }
 
+std::vector<Falltergeist::UI::Base*> testUIs;
+
+void AddUI(Falltergeist::UI::Base* ui)
+{
+    testUIs.push_back(ui);
+}
+
+void ThinkTest()
+{
+    for (auto ui : testUIs) ui->think();
+}
+
 void Script::_initialize()
 {
     luaL_openlibs(_lua_State);
@@ -72,6 +84,8 @@ void Script::_initialize()
 
     luabridge::getGlobalNamespace(_lua_State)
         .beginNamespace("game")
+            .addFunction("addUITest", &AddUI)
+        
             .beginClass<Falltergeist::Point>("Point")
                 .addConstructor<void(*)(int, int)>()
                 .addProperty("x", &Falltergeist::Point::x, &Falltergeist::Point::setX)
@@ -125,7 +139,8 @@ void Script::_initialize()
 
                 // game.ui.ImageButton
                 .deriveClass<Lua::ImageButton, Falltergeist::UI::Base>("ImageButton")
-                    .addConstructor<void(*)(unsigned, int, int)>()
+                    .addConstructor<void(*)(const std::string&, const std::string&, const std::string&, const std::string&, int, int, lua_State*)>()
+                    .addFunction("setThinkHandler", &Lua::ImageButton::setThinkHandler)
                 .endClass()
 
                 // game.ui.TextArea

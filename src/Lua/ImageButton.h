@@ -26,6 +26,13 @@
 #include "../UI/ImageButton.h"
 
 // Third party includes
+extern "C"
+{
+    #include "lua.h"
+    #include "lauxlib.h"
+    #include "lualib.h"
+}
+#include "LuaBridge.h"
 
 namespace Falltergeist
 {
@@ -35,8 +42,18 @@ namespace Lua
 class ImageButton : public UI::ImageButton
 {
 public:
-    ImageButton(unsigned type, int x = 0, int y = 0);
+
+    ImageButton(const std::string& upImg, const std::string& downImg, const std::string& upSfx,
+                const std::string& downSfx, int x, int y, lua_State* L);
+
     ~ImageButton() override;
+
+    virtual void think() override;
+
+    void setThinkHandler(luabridge::LuaRef value);
+
+private:
+    luabridge::LuaRef _thinkHandler;
 };
 
 }

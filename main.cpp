@@ -27,6 +27,7 @@
 #include "src/Settings.h"
 #include "src/State/LuaState.h"
 #include "src/State/Start.h"
+#include "src/Lua/Script.h"
 
 // Third party includes
 #include <libfalltergeist.h>
@@ -39,9 +40,15 @@ int main(int argc, char* argv[])
     {
         auto game = Game::Game::getInstance();
         game->init(std::unique_ptr<Settings>(new Settings()));
-        game->setState(new State::Start());
+        {
+            // test inheritance
+            Lua::Script script("test.lua");
+            script.run();
+            Lua::ThinkTest();
+        }
+        //game->setState(new State::Start());
         //game->setState(new State::LuaState("data/scripts/lua/state/mainmenu.lua"));
-        game->run();
+        //game->run();
         game->shutdown();
         return 0;
     }

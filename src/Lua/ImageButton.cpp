@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Logger.h"
 
 // Third party includes
 
@@ -31,12 +32,38 @@ namespace Falltergeist
 namespace Lua
 {
 
-ImageButton::ImageButton(unsigned type, int x, int y) : UI::ImageButton(static_cast<Type>(type), x, y)
+ImageButton::~ImageButton()
 {
 }
 
-ImageButton::~ImageButton()
+ImageButton::ImageButton(const std::string& upImg, const std::string& downImg, const std::string& upSfx,
+                         const std::string& downSfx, int x, int y, lua_State* L) :
+    UI::ImageButton::ImageButton(upImg, downImg, upSfx, downSfx, x, y),
+    _thinkHandler(L, LUA_REFNIL)
 {
+}
+
+void ImageButton::setThinkHandler(luabridge::LuaRef value)
+{
+    if (value.isFunction())
+    {
+        _thinkHandler = value;
+    }
+}
+
+void ImageButton::think()
+{
+    UI::Base::think();
+    if (_thinkHandler.isFunction())
+    {
+        try
+        {
+            _thinkHandler();
+        }
+        catch (luabridge::LuaException const& e) {
+            Logger::error("Lua") << e.what ();
+        }
+    }
 }
 
 }

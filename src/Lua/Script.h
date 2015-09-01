@@ -62,6 +62,8 @@ private:
 
 };
 
+void ThinkTest();
+
 }
 }
 #endif // FALLTERGEIST_LUA_SCRIPT_H
