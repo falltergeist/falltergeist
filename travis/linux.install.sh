@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # gcc 4.8
 sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
 
