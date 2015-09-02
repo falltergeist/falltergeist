@@ -73,7 +73,6 @@ class Game
 {
 public:
     static Game* getInstance();
-    static void exportToLuaScript(Lua::Script* script);
 
     void shutdown();
     std::vector<State::State*>* states();

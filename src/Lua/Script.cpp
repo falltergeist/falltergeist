@@ -59,16 +59,9 @@ Script::Script(const std::string& filename)
 
 }
 
-std::vector<Falltergeist::UI::Base*> testUIs;
-
-void AddUI(Falltergeist::UI::Base* ui)
+int getWtf() 
 {
-    testUIs.push_back(ui);
-}
-
-void ThinkTest()
-{
-    for (auto ui : testUIs) ui->think();
+    return 555;
 }
 
 void Script::_initialize()
@@ -84,7 +77,15 @@ void Script::_initialize()
 
     luabridge::getGlobalNamespace(_lua_State)
         .beginNamespace("game")
-            .addFunction("AddUITest", &AddUI)
+            .beginClass<Falltergeist::Game::Game>("Game")
+                //.addStaticFunction("getInstance", &Falltergeist::Game::Game::getInstance)
+                .addFunction("setState", &Falltergeist::Game::Game::setState)
+                .addFunction("pushState", &Falltergeist::Game::Game::pushState)
+                .addFunction("popState", &Falltergeist::Game::Game::popState)
+                .addFunction("quit", &Falltergeist::Game::Game::quit)
+            .endClass()
+            
+            .addFunction("getInstance", &Falltergeist::Game::Game::getInstance)
             
             .beginClass<Falltergeist::Point>("Point")
                 .addConstructor<void(*)(int, int)>()
@@ -120,7 +121,10 @@ void Script::_initialize()
             .endClass()
 
             // game.State
-            .beginClass<State::LuaState>("State")
+            .beginClass<State::State>("StateBase")
+            .endClass()
+            .deriveClass<State::LuaState, State::State>("State")
+                .addConstructor<void(*)(luabridge::LuaRef)>()
                 .addProperty("position", &State::LuaState::position, &State::LuaState::setPosition)
                 .addProperty("fullscreen", &State::LuaState::fullscreen, &State::LuaState::setFullscreen)
                 .addProperty("modal", &State::LuaState::modal, &State::LuaState::setModal)
@@ -138,8 +142,11 @@ void Script::_initialize()
                 .endClass()
 
                 // game.ui.ImageButton
-                .deriveClass<Lua::ImageButton, Falltergeist::UI::Base>("ImageButton")
-                    .addConstructor<void(*)(const std::string&, const std::string&, const std::string&, const std::string&, int, int, lua_State*)>()
+                .deriveClass<Falltergeist::UI::ImageButton, Falltergeist::UI::Base>("ImageButtonBase")
+                .endClass()
+                
+                .deriveClass<Lua::ImageButton, Falltergeist::UI::ImageButton>("ImageButton")
+                    .addConstructor<void(*)(const std::string&, const std::string&, const std::string&, const std::string&, int, int)>()
                     .addFunction("subclass", &Lua::ImageButton::subclass)
                 .endClass()
 

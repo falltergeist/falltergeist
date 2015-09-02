@@ -33,19 +33,20 @@ extern "C"
     #include "lualib.h"
 }
 #include "LuaBridge.h"
-#include "../Lua/Inheritable.h"
 
 namespace Falltergeist
 {
 namespace Lua
 {
 
+class Inheritable;
+
 class ImageButton : public UI::ImageButton
 {
 public:
 
     ImageButton(const std::string& upImg, const std::string& downImg, const std::string& upSfx,
-                const std::string& downSfx, int x, int y, lua_State* L);
+                const std::string& downSfx, int x, int y);
 
     ~ImageButton() override;
 
@@ -54,7 +55,7 @@ public:
     virtual void think() override;
 
 private:
-    Inheritable _inheritable;
+    std::unique_ptr<Inheritable> _inheritable = nullptr;
 };
 
 }

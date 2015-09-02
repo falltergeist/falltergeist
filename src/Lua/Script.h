@@ -50,6 +50,8 @@ public:
 
     lua_State* luaState();
 
+    void set(luabridge::LuaRef);
+
     bool get(const std::string& name, bool defaultValue = false);
     int  get(const std::string& name, int  defaultValue = 0);
     double get(const std::string& name, double defaultValue = 0);

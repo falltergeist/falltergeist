@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Lua/Inheritable.h"
 #include "../State/State.h"
 
 // Third party includes
@@ -31,10 +32,6 @@ namespace Falltergeist
 {
 class Image;
 
-namespace Lua
-{
-    class Script;
-}
 namespace State
 {
 
@@ -42,7 +39,7 @@ class LuaState : public State
 {
 public:
 
-    LuaState(const std::string& filename);
+    LuaState(luabridge::LuaRef table);
     ~LuaState() override;
 
     bool modal() const override ;
@@ -62,7 +59,7 @@ public:
     void addUI(UI::Base* ui);
 
 private:
-    Lua::Script* _script = nullptr;
+    Lua::Inheritable _inheritable;
 
 };
 

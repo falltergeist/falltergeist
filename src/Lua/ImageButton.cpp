@@ -24,6 +24,7 @@
 
 // Falltergeist includes
 #include "../Logger.h"
+#include "../Lua/Inheritable.h"
 
 // Third party includes
 
@@ -37,21 +38,21 @@ ImageButton::~ImageButton()
 }
 
 ImageButton::ImageButton(const std::string& upImg, const std::string& downImg, const std::string& upSfx,
-                         const std::string& downSfx, int x, int y, lua_State* L) :
-    UI::ImageButton::ImageButton(upImg, downImg, upSfx, downSfx, x, y),
-    _inheritable(L)
+                         const std::string& downSfx, int x, int y) :
+    UI::ImageButton::ImageButton(upImg, downImg, upSfx, downSfx, x, y)
 {
 }
 
 void ImageButton::subclass(luabridge::LuaRef table)
 {
-    _inheritable.setSubclassTable(table);
+    if (!_inheritable) _inheritable = std::unique_ptr<Inheritable>(new Inheritable(table));
 }
 
 void ImageButton::think()
 {
-    UI::Base::think();
-    _inheritable.callTableMethod("think");
+    if (_inheritable && (bool)_inheritable->call("think")) {
+        UI::Base::think();
+    }
 }
 
 }

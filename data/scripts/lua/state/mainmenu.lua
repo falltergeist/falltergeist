@@ -1,8 +1,4 @@
 enum = {
-    BUTTON_TYPE = {
-        MENU_RED_CIRCLE = 3
-    },
-
     TEXT_ALIGN = {
         CENTER = 2
     },
@@ -14,56 +10,66 @@ enum = {
     }
 }
 
+-- main menu state object
+mainMenu = {}
+-- obj is a C++ object
+mainMenu.obj = game.State(mainMenu)
 
--- state is C++ object
-init = function(state)
-    state.modal = true
-    state.fullscreen = true
+function MenuRedCircleButton(x, y)
+    return game.ui.ImageButton("art/intrface/lilredup.frm", "art/intrface/lilreddn.frm", "sound/sfx/ib1lu1x1.acm", "sound/sfx/ib1p1xx1.acm",  x or 0, y or 0)
+end
+
+function mainMenu:init()
+    self.obj.modal = true
+    self.obj.fullscreen = true
 
     game.mouse.cursor = enum.CURSOR.BIG_ARROW
     game.mouse.x = 400
     game.mouse.y = 400
 
-    background = game.ui.Image("art/intrface/mainmenu.frm")
+    local background = game.ui.Image("art/intrface/mainmenu.frm")
     -- Buttons
-    introButton    = game.ui.ImageButton(enum.BUTTON_TYPE.MENU_RED_CIRCLE, 30, 19);
-    newGameButton  = game.ui.ImageButton(enum.BUTTON_TYPE.MENU_RED_CIRCLE, 30, 19 + 41);
-    loadGameButton = game.ui.ImageButton(enum.BUTTON_TYPE.MENU_RED_CIRCLE, 30, 19 + 41*2);
-    settingsButton = game.ui.ImageButton(enum.BUTTON_TYPE.MENU_RED_CIRCLE, 30, 19 + 41*3);
-    creditsButton  = game.ui.ImageButton(enum.BUTTON_TYPE.MENU_RED_CIRCLE, 30, 19 + 41*4);
-    exitButton     = game.ui.ImageButton(enum.BUTTON_TYPE.MENU_RED_CIRCLE, 30, 19 + 41*5);
+    local introButton    = MenuRedCircleButton(30, 19);
+    local newGameButton  = MenuRedCircleButton(30, 19 + 41);
+    local loadGameButton = MenuRedCircleButton(30, 19 + 41*2);
+    local settingsButton = MenuRedCircleButton(30, 19 + 41*3);
+    local creditsButton  = MenuRedCircleButton(30, 19 + 41*4);
+    local exitButton     = MenuRedCircleButton(30, 19 + 41*5);
 
     -- Labels
     --font = game.resourceManager.getFont("font4.aaf", 0xb89c28ff)
 
-    introLabel = game.ui.TextArea(game.translate("intro", "mainmenu"), 50, 20)
+    local introLabel = game.ui.TextArea(game.translate("intro", "mainmenu"), 50, 20)
     --introLabel.font = font
-    introLabel.width = 150
+    -- introLabel.width = 150
     introLabel.horizontalAlign = enum.TEXT_ALIGN.CENTER
 
 
-    state:addUI(background)
-    state:addUI(introButton)
-    state:addUI(newGameButton)
-    state:addUI(loadGameButton)
-    state:addUI(settingsButton)
-    state:addUI(creditsButton)
-    state:addUI(exitButton)
+    self.obj:addUI(background)
+    self.obj:addUI(introButton)
+    self.obj:addUI(newGameButton)
+    self.obj:addUI(loadGameButton)
+    self.obj:addUI(settingsButton)
+    self.obj:addUI(creditsButton)
+    self.obj:addUI(exitButton)
 
-    state:addUI(introLabel)
+    self.obj:addUI(introLabel)
 
 end
 
--- state is C++ object
-think = function(state)
+function mainMenu:think()
 end
 
--- state is C++ object
 -- event is C++ object
-handle = function(state, event)
-    --print(event.name)
+function mainMenu:handle(event)
+    if (event.name == "mousedown") then
+        game.getInstance():quit()
+    end
 end
 
--- state is C++ object
-render = function(state)
+function mainMenu:render()
+
 end
+
+
+do return mainMenu end

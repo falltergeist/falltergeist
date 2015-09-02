@@ -22,7 +22,7 @@
 
 // Falltergeist includes
 #include "../Game/Game.h"
-#include "../Lua/Script.h"
+#include "../Lua/Inheritable.h"
 #include "../State/LuaState.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
@@ -35,15 +35,14 @@ namespace Falltergeist
 namespace State
 {
 
-LuaState::LuaState(const std::string& filename) : State()
+LuaState::LuaState(luabridge::LuaRef table) : State(), _inheritable(table)
 {
-    _script = new Lua::Script(filename);
-    _script->run();
 }
 
 LuaState::~LuaState()
 {
-    delete _script;
+    // remove pointers, Lua will handle deleting the objects
+    _ui.clear();
 }
 
 void LuaState::init()
@@ -51,41 +50,25 @@ void LuaState::init()
     if (_initialized) return;
     State::init();
 
-    luabridge::LuaRef func = luabridge::getGlobal(_script->luaState(), "init");
-    if (func.isFunction())
-    {
-        func(this);
-    }
+    _inheritable.call("init");
 }
 
 void LuaState::think()
 {
     State::think();
-    luabridge::LuaRef func = luabridge::getGlobal(_script->luaState(), "think");
-    if (func.isFunction())
-    {
-        func(this);
-    }
+    _inheritable.call("think");
 }
 
 void LuaState::handle(Event::Event* event)
 {
-    luabridge::LuaRef func = luabridge::getGlobal(_script->luaState(), "handle");
-    if (func.isFunction())
-    {
-        func(this, event);
-    }
+    _inheritable.call("handle", event);
     State::handle(event);
 }
 
 void LuaState::render()
 {
     State::render();
-    luabridge::LuaRef func = luabridge::getGlobal(_script->luaState(), "render");
-    if (func.isFunction())
-    {
-        func(this);
-    }
+    _inheritable.call("render");
 }
 
 void LuaState::addUI(UI::Base* ui)

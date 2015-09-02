@@ -21,6 +21,7 @@
 #include <functional>
 
 // Libfalltergeist includes
+#include "../Exception.h"
 #include "../Logger.h"
 #include "../Lua/Inheritable.h"
 
@@ -31,15 +32,23 @@ namespace Falltergeist
 namespace Lua
 {
 
-Inheritable::Inheritable(lua_State* L) : _subclassTable(L)
+Inheritable::Inheritable(luabridge::LuaRef table) : _table(table)
 {
+    if (table.type() != LUA_TTABLE) {
+        throw Exception("Inheritable(): Value is not a table: " + table.tostring());
+    }
 }
 
-void Inheritable::setSubclassTable(luabridge::LuaRef value)
+luabridge::LuaRef Inheritable::table() const
+{
+    return _table;
+}
+
+void Inheritable::setTable(luabridge::LuaRef value)
 {
     if (value.isTable())
     {
-        _subclassTable = value;
+        _table = value;
     }
     else
     {
@@ -47,23 +56,27 @@ void Inheritable::setSubclassTable(luabridge::LuaRef value)
     }
 }
 
-luabridge::LuaRef Inheritable::callTableMethod(const std::string& method) const
+luabridge::LuaRef Inheritable::call(const std::string& method) const
 {
-    return _callTableMethodInternal(method, [this](luabridge::LuaRef func){ return func(_subclassTable); });
+    return _callInternal(method, [this](luabridge::LuaRef func)
+    {
+        return func(_table);
+    });
 }
 
 
-luabridge::LuaRef Inheritable::_callTableMethodInternal(const std::string& method, std::function<luabridge::LuaRef(luabridge::LuaRef)> handler) const
+luabridge::LuaRef Inheritable::_callInternal(const std::string& method,
+                                             std::function<luabridge::LuaRef(luabridge::LuaRef)> handler) const
 {
-    if (_subclassTable[method].isFunction())
+    if (_table[method].isFunction())
     {
-        return handler(_subclassTable[method]);
+        return handler(_table[method]);
     }
     else
     {
-        Logger::error("Lua") << "Inheritable::callTableMethod(): value is not a function: " << luabridge::LuaRef(_subclassTable[method]);
+        Logger::error("Lua") << "Inheritable::call(): value is not a function: " << luabridge::LuaRef(_table[method]);
     }
-    return luabridge::LuaRef(_subclassTable.state());
+    return luabridge::LuaRef(_table.state());
 }
 }
 }

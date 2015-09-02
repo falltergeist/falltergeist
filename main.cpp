@@ -25,7 +25,6 @@
 #include "src/Game/Game.h"
 #include "src/Logger.h"
 #include "src/Settings.h"
-#include "src/State/LuaState.h"
 #include "src/State/Start.h"
 #include "src/Lua/Script.h"
 
@@ -40,23 +39,22 @@ int main(int argc, char* argv[])
     {
         auto game = Game::Game::getInstance();
         game->init(std::unique_ptr<Settings>(new Settings()));
-        {
-            // test inheritance
-            Lua::Script script("test.lua");
-            script.run();
-            Lua::ThinkTest();
-        }
+        Lua::Script script("data/scripts/lua/_g.lua");
+        // initialize scripted logic
+        script.run();
+
         //game->setState(new State::Start());
-        //game->setState(new State::LuaState("data/scripts/lua/state/mainmenu.lua"));
-        //game->run();
+
+        // run the main game loop
+        game->run();
         game->shutdown();
         return 0;
     }
-    catch(const libfalltergeist::Exception &e)
+    catch (const libfalltergeist::Exception &e)
     {
         Logger::critical() << e.what() << std::endl;
     }
-    catch(const Exception &e)
+    catch (const Exception &e)
     {
         Logger::critical() << e.what() << std::endl;
     }
