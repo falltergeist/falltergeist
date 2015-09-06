@@ -43,6 +43,7 @@
 #include "../UI/TextArea.h"
 
 // Third patry includes
+#include <Gam/File.h>
 #include <SDL_image.h>
 
 namespace Falltergeist

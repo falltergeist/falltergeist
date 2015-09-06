@@ -25,7 +25,6 @@
 #include <unordered_map>
 
 // Falltergeist includes
-#include <libfalltergeist.h>
 
 // Third party includes
 #include <SDL_mixer.h>

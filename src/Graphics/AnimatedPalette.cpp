@@ -27,7 +27,6 @@
 // Third party includes
 #include <SDL.h>
 
-using namespace libfalltergeist;
 
 namespace Falltergeist
 {
