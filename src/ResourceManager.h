@@ -100,6 +100,10 @@ public:
     libfalltergeist::Pro::File* proFileType(unsigned int PID);
     libfalltergeist::Rix::File* rixFileType(const std::string& filename);
     libfalltergeist::Sve::File* sveFileType(const std::string& filename);
+
+    libfalltergeist::Txt::CityFile* cityTxt();
+    libfalltergeist::Txt::MapsFile* mapsTxt();
+
     Graphics::Texture* texture(const std::string& filename);
     std::unordered_map<std::string, Graphics::Texture*>* textures();
     std::shared_ptr<Font> font(const std::string& filename = "font1.aaf", unsigned int color = 0x3ff800ff);

@@ -121,6 +121,9 @@ libfalltergeist::Dat::Item* ResourceManager::datFileItem(std::string filename)
             else if (extension == "pal") item = new libfalltergeist::Pal::File(stream);
             else if (extension == "pro") item = new libfalltergeist::Pro::File(stream);
             else if (extension == "rix") item = new libfalltergeist::Rix::File(stream);
+            else if (filename == "data/city.txt") item = new libfalltergeist::Txt::CityFile(stream);
+            else if (filename == "data/maps.txt") item = new libfalltergeist::Txt::MapsFile(stream);
+            //else if (filename == "worldmap.txt") item = new libfalltergeist::Txt::WorldmapFile(stream);
             else
             {
                 item = new libfalltergeist::Dat::Item(stream);
@@ -230,6 +233,16 @@ libfalltergeist::Rix::File* ResourceManager::rixFileType(const std::string& file
 libfalltergeist::Sve::File* ResourceManager::sveFileType(const std::string& filename)
 {
     return dynamic_cast<libfalltergeist::Sve::File*>(datFileItem(filename));
+}
+
+libfalltergeist::Txt::CityFile* ResourceManager::cityTxt()
+{
+    return dynamic_cast<libfalltergeist::Txt::CityFile*>(datFileItem("data/city.txt"));
+}
+
+libfalltergeist::Txt::MapsFile* ResourceManager::mapsTxt()
+{
+    return dynamic_cast<libfalltergeist::Txt::MapsFile*>(datFileItem("data/maps.txt"));
 }
 
 Graphics::Texture* ResourceManager::texture(const std::string& filename)
