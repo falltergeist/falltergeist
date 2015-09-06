@@ -28,7 +28,8 @@
 #include "../VM/VMStackValue.h"
 
 // Third party includes
-#include <libfalltergeist.h>
+#include <Int/File.h>
+#include <Int/Procedure.h>
 
 namespace Falltergeist
 {
