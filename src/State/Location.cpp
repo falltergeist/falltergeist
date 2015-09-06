@@ -62,6 +62,10 @@
 #include "../VM/VM.h"
 
 // Third party includes
+#include <Gam/File.h>
+#include <Map/Elevation.h>
+#include <Map/File.h>
+#include <Map/Object.h>
 
 namespace Falltergeist
 {

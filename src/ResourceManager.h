@@ -25,14 +25,47 @@
 #include <map>
 #include <memory>
 #include <unordered_map>
+#include <vector>
 
 // Falltergeist includes
 #include "Base/Singleton.h"
 
 // Third party includes
-#include <libfalltergeist.h>
+#include <Lst/File.h>
+#include <Msg/File.h>
+#include <Msg/Message.h>
 
-using namespace libfalltergeist;
+namespace libfalltergeist
+{
+namespace Aaf { class File; }
+namespace Acm { class File; }
+namespace Bio { class File; }
+namespace Dat
+{
+class File;
+class Item;
+}
+namespace Frm { class File; }
+namespace Frm { class File; }
+namespace Fon { class File; }
+namespace Gam { class File; }
+namespace Gcd { class File; }
+namespace Pal { class File; }
+namespace Int { class File; }
+namespace Int { class File; }
+namespace Lst { class File; }
+namespace Map { class File; }
+namespace Mve { class File; }
+namespace Pro { class File; }
+namespace Pro { class File; }
+namespace Rix { class File; }
+namespace Sve { class File; }
+namespace Txt
+{
+class CityFile;
+class MapsFile;
+}
+}
 
 namespace Falltergeist
 {
@@ -73,6 +106,10 @@ public:
     libfalltergeist::Pro::File* proFileType(unsigned int PID);
     libfalltergeist::Rix::File* rixFileType(const std::string& filename);
     libfalltergeist::Sve::File* sveFileType(const std::string& filename);
+
+    libfalltergeist::Txt::CityFile* cityTxt();
+    libfalltergeist::Txt::MapsFile* mapsTxt();
+
     Graphics::Texture* texture(const std::string& filename);
     std::unordered_map<std::string, Graphics::Texture*>* textures();
     std::shared_ptr<Font> font(const std::string& filename = "font1.aaf", unsigned int color = 0x3ff800ff);
