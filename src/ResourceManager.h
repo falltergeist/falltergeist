@@ -103,6 +103,13 @@ public:
 
     libfalltergeist::Txt::CityFile* cityTxt();
     libfalltergeist::Txt::MapsFile* mapsTxt();
+    libfalltergeist::Txt::WorldmapFile* worldmapTxt();
+    libfalltergeist::Txt::EndDeathFile* endDeathTxt();
+    libfalltergeist::Txt::EndGameFile* endGameTxt();
+    libfalltergeist::Txt::GenRepFile* genRepTxt();
+    libfalltergeist::Txt::HolodiskFile* holodiskTxt();
+    libfalltergeist::Txt::KarmaVarFile* karmaVarTxt();
+    libfalltergeist::Txt::QuestsFile* questsTxt();
 
     Graphics::Texture* texture(const std::string& filename);
     std::unordered_map<std::string, Graphics::Texture*>* textures();
