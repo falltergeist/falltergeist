@@ -63,7 +63,7 @@ end
 -- event is C++ object
 function mainMenu:handle(event)
     if (event.name == "mousedown") then
-        game.getInstance():quit()
+        game.instance:quit()
     end
 end
 

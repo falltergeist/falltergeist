@@ -39,8 +39,9 @@ int main(int argc, char* argv[])
     {
         auto game = Game::Game::getInstance();
         game->init(std::unique_ptr<Settings>(new Settings()));
-        Lua::Script script("data/scripts/lua/_g.lua");
+        Lua::Script script("data/scripts/lua/main.lua");
         // initialize scripted logic
+        script.bindGameClasses();
         script.run();
 
         //game->setState(new State::Start());

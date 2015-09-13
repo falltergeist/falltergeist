@@ -42,12 +42,7 @@ std::string translate(std::string key, std::string file)
     Lua::Script script("data/languages/" + locale + "/" + file + ".lua");
     script.run();
 
-    luabridge::LuaRef value = luabridge::getGlobal(script.luaState(), key.c_str());
-    if (value.isString())
-    {
-        return value;
-    }
-    return file + "." + key;
+    return script.get(key, file + "." + key);
 }
 
 std::string _t(MSG_TYPE type, size_t number)
