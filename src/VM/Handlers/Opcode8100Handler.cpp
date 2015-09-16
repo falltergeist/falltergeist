@@ -40,8 +40,7 @@ void Opcode8100Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8100] [+] int obj_pid(void* obj)" << std::endl;
     auto object = _vm->dataStack()->popObject();
-    if (!object) _error("obj_pid - obj is NULL");
-    _vm->dataStack()->push(object->PID());
+    _vm->dataStack()->push(object ? object->PID() : 0);
 }
 
 }
