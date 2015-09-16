@@ -59,6 +59,29 @@ namespace Pro { class File; }
 namespace Pro { class File; }
 namespace Rix { class File; }
 namespace Sve { class File; }
+namespace Txt
+{
+class CityFile;
+class MapsFile;
+class WorldmapFile;
+
+template <typename T>
+class CSVBasedFile;
+
+class EndDeath;
+class EndGame;
+class GenRep;
+class Holodisk;
+class KarmaVar;
+class Quest;
+
+typedef CSVBasedFile<EndDeath> EndDeathFile;
+typedef CSVBasedFile<EndGame> EndGameFile;
+typedef CSVBasedFile<GenRep> GenRepFile;
+typedef CSVBasedFile<Holodisk> HolodiskFile;
+typedef CSVBasedFile<KarmaVar> KarmaVarFile;
+typedef CSVBasedFile<Quest> QuestsFile;
+}
 }
 
 namespace Falltergeist
