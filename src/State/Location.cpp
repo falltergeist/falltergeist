@@ -45,6 +45,7 @@
 #include "../Logger.h"
 #include "../PathFinding/Hexagon.h"
 #include "../PathFinding/HexagonGrid.h"
+#include "../Point.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../State/CursorDropdown.h"
@@ -76,7 +77,7 @@ Location::Location() : State()
     auto game = Game::getInstance();
     game->mouse()->setState(Input::Mouse::Cursor::ACTION);
 
-    _camera = new LocationCamera(game->renderer()->width(), game->renderer()->height(), 0, 0);
+    _camera = new LocationCamera(game->renderer()->size(), Point(0, 0));
     _floor = new UI::TileMap();
     _roof = new UI::TileMap();
     _hexagonGrid = new HexagonGrid();
@@ -135,8 +136,7 @@ void Location::setLocation(const std::string& name)
     _currentElevation = mapFile->defaultElevation();
 
     // Set camera position on default
-    camera()->setXPosition(hexagonGrid()->at(mapFile->defaultPosition())->x());
-    camera()->setYPosition(hexagonGrid()->at(mapFile->defaultPosition())->y());
+    camera()->setCenter(hexagonGrid()->at(mapFile->defaultPosition())->position());
 
     // Initialize MAP vars
     if (mapFile->MVARS()->size() > 0)
@@ -254,14 +254,14 @@ void Location::setLocation(const std::string& name)
             unsigned int tileNum = mapFile->elevations()->at(_currentElevation)->floorTiles()->at(i);
             if (tileNum > 1)
             {
-                auto tile = new UI::Tile(tileNum, x, y);
+                auto tile = new UI::Tile(tileNum, Point(x, y));
                 _floor->tiles()->push_back(tile);
             }
 
             tileNum = mapFile->elevations()->at(_currentElevation)->roofTiles()->at(i);
             if (tileNum > 1)
             {
-                auto tile = new UI::Tile(tileNum, x, y - 104);
+                auto tile = new UI::Tile(tileNum, Point(x, y - 104));
                 _roof->tiles()->push_back(tile);
             }
         }
@@ -416,12 +416,15 @@ void Location::think()
     if (_scrollTicks + 10 < SDL_GetTicks())
     {
         _scrollTicks = SDL_GetTicks();
-        unsigned int scrollDelta = 5;
+        int scrollDelta = 5;
 
         //Game::getInstance()->mouse()->setType(Mouse::ACTION);
 
-        camera()->setXPosition(camera()->xPosition() + (_scrollLeft ? -scrollDelta : (_scrollRight ? scrollDelta : 0)));
-        camera()->setYPosition(camera()->yPosition() + (_scrollTop ? -scrollDelta : (_scrollBottom ? scrollDelta : 0)));
+        Point pScrollDelta = Point(
+            _scrollLeft ? -scrollDelta : (_scrollRight ? scrollDelta : 0),
+            _scrollTop ? -scrollDelta : (_scrollBottom ? scrollDelta : 0)
+        );
+        _camera->setCenter(_camera->center() + pScrollDelta);
 
         auto mouse = Game::getInstance()->mouse();
 
@@ -538,14 +541,13 @@ void Location::toggleCursorMode()
         }
         case Input::Mouse::Cursor::ACTION:
         {
-            auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
+            auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
             if (!hexagon)
             {
                 break;
             }
             mouse->pushState(Input::Mouse::Cursor::HEXAGON_RED);
-            mouse->ui()->setX(hexagon->x() - camera()->x());
-            mouse->ui()->setY(hexagon->y() - camera()->y());
+            mouse->ui()->setPosition(hexagon->position() - _camera->topLeft());
             _objectUnderCursor = NULL;
             break;
         }
@@ -582,7 +584,7 @@ void Location::handle(Event::Event* event)
                 case Input::Mouse::Cursor::HEXAGON_RED:
                 {
                     // Here goes the movement
-                    auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
+                    auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
                     if (!hexagon)
                     {
                         break;
@@ -610,7 +612,7 @@ void Location::handle(Event::Event* event)
 
         if (mouseEvent->name() == "mousemove")
         {
-            auto hexagon = hexagonGrid()->hexagonAt(mouse->x() + camera()->x(), mouse->y() + camera()->y());
+            auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
 
             switch (mouse->state())
             {
@@ -620,25 +622,25 @@ void Location::handle(Event::Event* event)
                     {
                         break;
                     }
-                    mouse->ui()->setX(hexagon->x() - camera()->x());
-                    mouse->ui()->setY(hexagon->y() - camera()->y());
+                    mouse->ui()->setPosition(hexagon->position() - _camera->topLeft());
                     break;
                 }
                 default:
                     break;
             }
 
-            unsigned int scrollArea = 8;
-            _scrollLeft = mouseEvent->x() < scrollArea ? true : false;
-            _scrollRight = mouseEvent->x() > game->renderer()->width()- scrollArea ? true : false;
-            _scrollTop = mouseEvent->y() < scrollArea ? true : false;
-            _scrollBottom = mouseEvent->y() > game->renderer()->height() - scrollArea ? true : false;
+            int scrollArea = 8;
+            Point evPos = mouseEvent->position();
+            _scrollLeft = (evPos.x() < scrollArea);
+            _scrollRight = (evPos.x() > game->renderer()->width()- scrollArea);
+            _scrollTop = (evPos.y() < scrollArea);
+            _scrollBottom = (evPos.y() > game->renderer()->height() - scrollArea);
 
             if (hexagon)
             {
                 std::string text = "Hex number: " + std::to_string(hexagon->number()) + "\n";
                 text += "Hex position: " + std::to_string(hexagon->number()%200) + "," + std::to_string((unsigned int)(hexagon->number()/200)) + "\n";
-                text += "Hex coords: " + std::to_string(hexagon->x()) + "," + std::to_string(hexagon->y()) + "\n";
+                text += "Hex coords: " + std::to_string(hexagon->position().x()) + "," + std::to_string(hexagon->position().y()) + "\n";
                 auto dude = Game::getInstance()->player();
                 auto hex = dude->hexagon();
                 text += "Hex delta:\n dx=" + std::to_string(hex->cubeX()-hexagon->cubeX()) + "\n dy="+ std::to_string(hex->cubeY()-hexagon->cubeY()) + "\n dz=" + std::to_string(hex->cubeZ()-hexagon->cubeZ());
@@ -745,16 +747,16 @@ void Location::onKeyDown(Event::Keyboard* event)
             // @TODO: use skill: repair
             break;
         case SDLK_LEFT:
-            camera()->setXPosition(camera()->xPosition() - KEYBOARD_SCROLL_STEP);
+            _camera->setCenter(_camera->center() + Point(-KEYBOARD_SCROLL_STEP, 0));
             break;
         case SDLK_RIGHT:
-            camera()->setXPosition(camera()->xPosition() + KEYBOARD_SCROLL_STEP);
+            _camera->setCenter(_camera->center() + Point(KEYBOARD_SCROLL_STEP, 0));
             break;
         case SDLK_UP:
-            camera()->setYPosition(camera()->yPosition() - KEYBOARD_SCROLL_STEP);
+            _camera->setCenter(_camera->center() + Point(0, -KEYBOARD_SCROLL_STEP));
             break;
         case SDLK_DOWN:
-            camera()->setYPosition(camera()->yPosition() + KEYBOARD_SCROLL_STEP);
+            _camera->setCenter(_camera->center() + Point(0, KEYBOARD_SCROLL_STEP));
             break;
     }
 }
@@ -849,7 +851,7 @@ void Location::destroyObject(Game::Object* object)
 
 void Location::centerCameraAtHexagon(Hexagon* hexagon)
 {
-    camera()->setPosition(hexagon->x(), hexagon->y());
+    _camera->setCenter(hexagon->position());
 }
 
 void Location::centerCameraAtHexagon(int tileNum)

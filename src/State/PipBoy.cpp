@@ -60,10 +60,10 @@ void PipBoy::init()
 
     // Background
     auto background = new UI::Image("art/intrface/pip.frm");
-    auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
-    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
-    background->setX(backgroundX);
-    background->setY(backgroundY);
+    Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
+    int backgroundX = backgroundPos.x();
+    int backgroundY = backgroundPos.y();
+    background->setPosition(backgroundPos);
 
     // Buttons
     auto alarmButton = new UI::ImageButton(UI::ImageButton::Type::PIPBOY_ALARM_BUTTON, backgroundX+124, backgroundY+13);
@@ -75,22 +75,25 @@ void PipBoy::init()
     // Date and time
 
     // Date
-    auto day = new UI::SmallCounter(backgroundX+21, backgroundY+17);
+    auto day = new UI::SmallCounter(backgroundPos + Point(21, 17));
     day->setNumber(Game::getInstance()->gameTime()->day());
     day->setColor(UI::SmallCounter::Color::WHITE);
     day->setType(UI::SmallCounter::Type::UNSIGNED);
     day->setLength(2);
 
-    auto month = new UI::MonthCounter(static_cast<UI::MonthCounter::Month>(Game::getInstance()->gameTime()->month()), backgroundX+46, backgroundY+18);
+    auto month = new UI::MonthCounter(
+        static_cast<UI::MonthCounter::Month>(Game::getInstance()->gameTime()->month()),
+        backgroundPos + Point(46, 18)
+    );
 
-    auto year = new UI::SmallCounter(backgroundX+84, backgroundY+17);
+    auto year = new UI::SmallCounter(backgroundPos + Point(84, 17));
     year->setNumber(Game::getInstance()->gameTime()->year());
     year->setColor(UI::SmallCounter::Color::WHITE);
     year->setType(UI::SmallCounter::Type::UNSIGNED);
     year->setLength(4);
 
     // Time
-    auto time = new UI::SmallCounter(backgroundX+160, backgroundY+17);
+    auto time = new UI::SmallCounter(backgroundPos + Point(160, 17));
     time->setNumber((Game::getInstance()->gameTime()->hours() * 100) + Game::getInstance()->gameTime()->minutes());
     time->setColor(UI::SmallCounter::Color::WHITE);
     time->setType(UI::SmallCounter::Type::UNSIGNED);

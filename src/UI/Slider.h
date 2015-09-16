@@ -42,11 +42,11 @@ class ImageList;
 class Slider : public Falltergeist::UI::Base
 {
 public:
+    Slider(const Point& pos);
     Slider(int x, int y);
     ~Slider() override;
 
     Graphics::Texture* texture() const override;
-    int x() const override;
 
     void handle(Event::Event* event) override;
 

@@ -54,20 +54,18 @@ void PlayerEditAge::init()
     setFullscreen(false);
     setModal(true);
 
-    auto backgroundX = (Game::getInstance()->renderer()->width() - 640)*0.5;
-    auto backgroundY = (Game::getInstance()->renderer()->height() - 480)*0.5;
+    Point backgroundPos = Point((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
+    int backgroundX = backgroundPos.x();
+    int backgroundY = backgroundPos.y();
 
     auto bg = new UI::Image("art/intrface/charwin.frm");
-    bg->setX(backgroundX+160);
-    bg->setY(backgroundY+0);
+    bg->setPosition(backgroundPos + Point(160, 0));
 
     auto ageBox = new UI::Image("art/intrface/agebox.frm");
-    ageBox->setX(backgroundX+168);
-    ageBox->setY(backgroundY+10);
+    ageBox->setPosition(backgroundPos + Point(168, 10));
 
     auto doneBox = new UI::Image("art/intrface/donebox.frm");
-    doneBox->setX(backgroundX+175);
-    doneBox->setY(backgroundY+40);
+    doneBox->setPosition(backgroundPos + Point(175, 40));
 
     auto decButton = new UI::ImageButton(UI::ImageButton::Type::LEFT_ARROW, backgroundX+178, backgroundY+14);
     decButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDecButtonClick(dynamic_cast<Event::Mouse*>(event)); });

@@ -37,7 +37,7 @@ namespace UI
 
 using namespace Base;
 
-SmallCounter::SmallCounter(int x, int y) : Falltergeist::UI::Base(x, y)
+SmallCounter::SmallCounter(const Point& pos) : Falltergeist::UI::Base(pos)
 {
 }
 

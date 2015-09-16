@@ -41,8 +41,8 @@ namespace Graphics
 
 Renderer::Renderer(unsigned int width, unsigned int height)
 {
-    _width = width;
-    _height = height;
+    _size.setWidth(width);
+    _size.setHeight(height);
 
     std::string message = "Renderer initialization - ";
     if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
@@ -51,6 +51,10 @@ Renderer::Renderer(unsigned int width, unsigned int height)
         throw Exception(SDL_GetError());
     }
     Logger::info("VIDEO") << message + "[OK]" << std::endl;
+}
+
+Renderer::Renderer(const Size& size) : Renderer((unsigned)size.width(), (unsigned)size.height())
+{
 }
 
 Renderer::~Renderer()
@@ -65,7 +69,7 @@ void Renderer::init()
     // Game::getInstance()->engineSettings()->setFullscreen(true);
     // Game::getInstance()->engineSettings()->setScale(1); //or 2, if fullhd device
 
-    std::string message =  "SDL_CreateWindow " + std::to_string(_width) + "x" + std::to_string(_height) + "x" +std::to_string(32)+ " - ";
+    std::string message =  "SDL_CreateWindow " + std::to_string(_size.width()) + "x" + std::to_string(_size.height()) + "x" +std::to_string(32)+ " - ";
 
     uint32_t flags = SDL_WINDOW_SHOWN;
     if (Game::getInstance()->settings()->fullscreen())
@@ -73,7 +77,7 @@ void Renderer::init()
         flags |= SDL_WINDOW_FULLSCREEN;
     }
 
-    _sdlWindow = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _width, _height, flags);
+    _sdlWindow = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _size.width(), _size.height(), flags);
     if (!_sdlWindow)
     {
         throw Exception(message + "[FAIL]");
@@ -98,15 +102,15 @@ void Renderer::init()
         {
             default:
             case 1:
-                _width = _width / (_height / 480.0);
-                _height= 480;
+                _size.setWidth((int)(_size.width() / (_size.height() / 480.0)));
+                _size.setHeight(480);
                 break;
             case 2:
-                _width = _width / (_height / 960.0);
-                _height= 960;
+                _size.setWidth((int)(_size.width() / (_size.height() / 960.0)));
+                _size.setHeight(960);
                 break;
         }
-        SDL_RenderSetLogicalSize(_sdlRenderer, _width, _height);
+        SDL_RenderSetLogicalSize(_sdlRenderer, _size.width(), _size.height());
         SDL_RenderGetScale(_sdlRenderer, &_scaleX, &_scaleY);
     }
 
@@ -239,14 +243,19 @@ void Renderer::endFrame()
     SDL_RenderPresent(_sdlRenderer);
 }
 
-unsigned int Renderer::width()
+int Renderer::width()
 {
-    return _width;
+    return _size.width();
 }
 
-unsigned int Renderer::height()
+int Renderer::height()
 {
-    return _height;
+    return _size.height();
+}
+
+const Size& Renderer::size() const
+{
+    return _size;
 }
 
 void Renderer::drawTexture(Texture* texture, int x, int y, int sourceX, int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
@@ -263,6 +272,11 @@ void Renderer::drawTexture(Texture* texture, int x, int y, int sourceX, int sour
         SDL_Rect src = {(short)sourceX, (short)sourceY, (unsigned short)sourceWidth, (unsigned short)sourceHeight};
         SDL_RenderCopy(_sdlRenderer, texture->sdlTexture(), &src, &dest);
     }
+}
+
+void Renderer::drawTexture(Texture* texture, const Point& pos, const Point& src, const Size& srcSize)
+{
+    drawTexture(texture, pos.x(), pos.y(), src.x(), src.y(), (unsigned int)srcSize.width(), (unsigned int)srcSize.height());
 }
 
 Texture* Renderer::screenshot()

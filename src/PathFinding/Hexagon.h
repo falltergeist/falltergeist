@@ -26,6 +26,7 @@
 
 // Falltergeist includes
 #include "../Game/Object.h"
+#include "../Point.h"
 
 // Third party includes
 
@@ -38,31 +39,12 @@ namespace Game
 
 class Hexagon
 {
-protected:
-    std::vector<Hexagon*> _neighbors;
-    std::list<Game::Object*> _objects;
-    unsigned int _number = 0; // position in hexagonal grid
-
-    int _x = 0;
-    int _y = 0;
-
-    int _cubeX = 0;
-    int _cubeY = 0;
-    int _cubeZ = 0;
-
-    unsigned int _heuristic = 0;
-
-    bool _inRender = false;
-
 public:
     Hexagon();
     Hexagon(unsigned int number);
 
-    int x();
-    void setX(int value);
-
-    int y();
-    void setY(int value);
+    const Point& position() const;
+    void setPosition(const Point& pos);
 
     unsigned int number();
     void setNumber(unsigned int number);
@@ -89,6 +71,21 @@ public:
     bool inRender();
 
     Game::Orientation orientationTo(Hexagon *hexagon);
+
+protected:
+    std::vector<Hexagon*> _neighbors;
+    std::list<Game::Object*> _objects;
+    unsigned int _number = 0; // position in hexagonal grid
+
+    Point _position;
+
+    int _cubeX = 0;
+    int _cubeY = 0;
+    int _cubeZ = 0;
+
+    unsigned int _heuristic = 0;
+
+    bool _inRender = false;
 };
 
 }

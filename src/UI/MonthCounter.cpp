@@ -40,7 +40,7 @@ enum
     MONTH_TEXTURE_HORIZONTAL_OFFSET = 15
 };
 
-MonthCounter::MonthCounter(Month month, int x, int y) : ImageList(x, y), _month(month)
+MonthCounter::MonthCounter(Month month, const Point& pos) : ImageList(pos), _month(month)
 {
     auto months = std::shared_ptr<Image>(new Image("art/intrface/months.frm"));
 
@@ -53,7 +53,7 @@ MonthCounter::MonthCounter(Month month, int x, int y) : ImageList(x, y), _month(
     setCurrentImage(static_cast<unsigned int>(month));
 }
 
-MonthCounter::MonthCounter(int x, int y) : MonthCounter(Month::JANUARY, x, y)
+MonthCounter::MonthCounter(const Point& pos) : MonthCounter(Month::JANUARY, pos)
 {
 }
 

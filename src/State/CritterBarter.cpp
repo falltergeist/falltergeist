@@ -50,8 +50,7 @@ void CritterBarter::init()
     setFullscreen(false);
     setModal(true);
 
-    setX((Game::getInstance()->renderer()->width() - 640)*0.5);
-    setY((Game::getInstance()->renderer()->height() - 480)*0.5 + 291);
+    setPosition((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2 + Point(0, 291));
 
     addUI("background",new UI::Image("art/intrface/barter.frm"));
     getUI("background")->addEventHandler("mouseleftclick", std::bind(&CritterBarter::onBackgroundClick, this, std::placeholders::_1));

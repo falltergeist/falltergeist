@@ -58,10 +58,10 @@ void SettingsMenu::init()
 
     // background
     auto background = new UI::Image("art/intrface/prefscrn.frm");
-    auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
-    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
-    background->setX(backgroundX);
-    background->setY(backgroundY);
+    Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
+    int backgroundX = backgroundPos.x();
+    int backgroundY = backgroundPos.y();
+    background->setPosition(backgroundPos);
     addUI(background);
 
     // Switches (big)
@@ -420,7 +420,7 @@ UI::TextArea* SettingsMenu::_addTextArea(const std::string& message, unsigned in
 
 UI::TextArea* SettingsMenu::_addTextArea(UI::TextArea* parent, unsigned int x, unsigned int y)
 {
-    auto textArea = new UI::TextArea(parent, x, y);
+    auto textArea = new UI::TextArea(*parent, Point(x, y));
     addUI(textArea);
     return textArea;
 }

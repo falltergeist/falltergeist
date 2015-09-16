@@ -50,7 +50,7 @@ public:
         DRAG
     };
 
-    InventoryItem(Game::ItemObject* item, int x = 0, int y = 0);
+    InventoryItem(Game::ItemObject* item, const Point& pos = Point());
     ~InventoryItem() override;
 
     Type type() const;
@@ -60,10 +60,9 @@ public:
     void setItem(Game::ItemObject* item);
 
     void render(bool eggTransparency = false) override;
-    unsigned int pixel(unsigned int x, unsigned int y) override;
+    unsigned int pixel(const Point& pos) override;
     Graphics::Texture* texture() const override;
-    unsigned int width() const override;
-    unsigned int height() const override;
+    Size size() const override;
 
     void onMouseLeftDown(Event::Mouse* event);
     void onMouseDragStart(Event::Mouse* event);

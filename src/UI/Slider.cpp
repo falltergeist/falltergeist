@@ -27,6 +27,7 @@
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
 #include "../Game/Game.h"
+#include "../Point.h"
 #include "../UI/Image.h"
 
 // Third party includes
@@ -36,7 +37,11 @@ namespace Falltergeist
 namespace UI
 {
 
-Slider::Slider(int x, int y) : Falltergeist::UI::Base(x, y)
+Slider::Slider(const Point& pos) : Base(pos)
+{
+}
+
+Slider::Slider(int x, int y) : Falltergeist::UI::Base(Point(x, y))
 {
     addEventHandler("mousedrag", [this](Event::Event* event){ this->_onDrag(dynamic_cast<Event::Mouse*>(event)); });
     addEventHandler("mouseleftdown", [this](Event::Event* event){ this->_onLeftButtonDown(dynamic_cast<Event::Mouse*>(event)); });
@@ -57,20 +62,25 @@ void Slider::handle(Event::Event* event)
     {
         if (!texture()) return;
 
-        int x = mouseEvent->x() - _x;
-        int y = mouseEvent->y() - _y;
+        Point ofs = mouseEvent->position() - _position;
 
         //if we are in slider coordinates and not on thumb (slider size = 218 + thumb size, thumb size = 21)
-        if (x > 0 && x < 239 && y > 0 && y < this->height() && !this->pixel(mouseEvent->x() - _xOffset, mouseEvent->y() - _yOffset))
+        if (ofs.x() > 0 && ofs.x() < 239 && ofs.y() > 0 && ofs.y() < this->size().height() && !this->pixel(mouseEvent->position() - _offset))
         {
             //on left button up only when not dragging thumb
             if (mouseEvent->name() == "mouseup" && mouseEvent->leftButton() && !_drag)
             {
-                x -= 10; //~middle of thumb
-                if (x < 0) x = 0;
-                if (x > 218) x = 218;
-                _xOffset = x;
-                _value = ((maxValue() - minValue())/218)*_xOffset;
+                ofs -= Point(10, 0); //~middle of thumb
+                if (ofs.x() < 0)
+                {
+                    ofs.setX(0);
+                }
+                else if (ofs.y() > 218)
+                {
+                    ofs.setX(218);
+                }
+                _offset.setX(ofs.x());
+                _value = ((maxValue() - minValue()) / 218) * _offset.x();
                 Game::getInstance()->mixer()->playACMSound(_downSound);
                 Game::getInstance()->mixer()->playACMSound(_upSound);
                 return;
@@ -84,11 +94,11 @@ void Slider::handle(Event::Event* event)
 void Slider::_onDrag(Event::Mouse* event)
 {
     auto sender = dynamic_cast<Slider*>(event->emitter());
-    auto newOffset = sender->_xOffset + event->xOffset();
+    auto newOffset = sender->_offset.x() + event->offset().x();
     if (newOffset <= 218 && newOffset >= 0)
     {
-        sender->_xOffset = newOffset;
-        sender->_value = ((sender->maxValue() - sender->minValue())/218)*sender->_xOffset;
+        sender->_offset.setX(newOffset);
+        sender->_value = ((sender->maxValue() - sender->minValue())/218)*sender->offset().x();
     }
 }
 
@@ -144,12 +154,7 @@ double Slider::value() const
 void Slider::setValue(double value)
 {
     _value = value;
-    _xOffset = (218/(maxValue() - minValue())) * _value;
-}
-
-int Slider::x() const
-{
-    return _x + _xOffset;
+    _offset.setX((218/(maxValue() - minValue())) * _value);
 }
 
 }

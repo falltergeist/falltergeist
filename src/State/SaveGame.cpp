@@ -61,10 +61,10 @@ void SaveGame::init()
 
     // background
     auto bg = new UI::Image("art/intrface/lsgame.frm");
-    auto bgX = (game->renderer()->width() - bg->width())*0.5;
-    auto bgY = (game->renderer()->height() - bg->height())*0.5;
-    bg->setX(bgX);
-    bg->setY(bgY);
+    Point bgPos = Point((game->renderer()->size() - bg->size()) / 2);
+    int bgX = bgPos.x();
+    int bgY = bgPos.y();
+    bg->setPosition(bgPos);
     addUI(bg);
 
     // BUTTONS

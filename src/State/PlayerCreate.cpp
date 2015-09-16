@@ -65,10 +65,10 @@ void PlayerCreate::init()
 
     // background
     auto background = new UI::Image("art/intrface/edtrcrte.frm");
-    auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
-    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
-    background->setX(backgroundX);
-    background->setY(backgroundY);
+    Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
+    int backgroundX = backgroundPos.x();
+    int backgroundY = backgroundPos.y();
+    background->setPosition(backgroundPos);
     addUI(background);
 
     // STATS
@@ -81,7 +81,7 @@ void PlayerCreate::init()
         _addTitle(ss.str(), _t(MSG_STATS, 100 + i));       // stat title
         _addDescription(ss.str(), _t(MSG_STATS, 200 + i)); // stat description
         _addImage(ss.str(), new UI::Image("art/skilldex/" + imagesStats[i] + ".frm")); // stat image
-        _addLabel(ss.str(), new UI::TextArea(backgroundX+104, backgroundY+46+33*i));          // stat value label
+        _addLabel(ss.str(), new UI::TextArea("", backgroundX+104, backgroundY+46+33*i));      // stat value label
         _addCounter(ss.str(), new UI::BigCounter(backgroundX+59, backgroundY+37+33*i));       // stat value counter
         _addMask(ss.str(), new UI::HiddenMask(133, 29, backgroundX+14, backgroundY+36+33*i)); // stat click mask
         _addButton(ss.str() + "_increase", new UI::ImageButton(UI::ImageButton::Type::PLUS,  backgroundX+149, backgroundY+38+33*i)); // stat increase button
@@ -239,8 +239,7 @@ void PlayerCreate::init()
 
     _selectedImage = _images.at("stats_1");
     _selectedLabel = _labels.at("stats_1");
-    _selectedImage->setX(backgroundX+480);
-    _selectedImage->setY(backgroundY+310);
+    _selectedImage->setPosition(backgroundPos + Point(480, 310));
     addUI(_selectedImage);
 
     auto font1_000000ff = ResourceManager::getInstance()->font("font1.aaf", 0x000000FF);
@@ -251,15 +250,13 @@ void PlayerCreate::init()
     addUI(_title);
 
     auto line = new UI::Image(270, 2);
-    line->setX(backgroundX+350);
-    line->setY(backgroundY+300);
+    line->setPosition(backgroundPos + Point(350, 300));
     line->texture()->fill(0x000000ff);
     addUI(line);
 
     _description = new UI::TextArea("", backgroundX+350, backgroundY+315);
     _description->setFont(font1_000000ff);
-    _description->setWidth(140);
-    _description->setHeight(120);
+    _description->setSize({140, 120});
     _description->setWordWrap(true);
     addUI(_description);
 }

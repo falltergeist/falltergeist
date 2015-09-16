@@ -38,12 +38,12 @@ namespace Falltergeist
 namespace UI
 {
 
-MultistateImageButton::MultistateImageButton(int x, int y) : Falltergeist::UI::Base(x, y)
+MultistateImageButton::MultistateImageButton(const Point& pos) : Falltergeist::UI::Base(pos)
 {
     addEventHandler("mouseleftclick", [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); });
 }
 
-MultistateImageButton::MultistateImageButton(Type type, int x, int y) : Falltergeist::UI::Base(x, y)
+MultistateImageButton::MultistateImageButton(Type type, int x, int y) : Falltergeist::UI::Base(Point(x, y))
 {
     addEventHandler("mouseleftclick", [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); });
     addEventHandler("mouseleftup", [this](Event::Event* event){ this->_onLeftButtonUp(dynamic_cast<Event::Mouse*>(event)); });
@@ -91,10 +91,10 @@ MultistateImageButton::MultistateImageButton(Type type, int x, int y) : Fallterg
 }
 
 
-MultistateImageButton::MultistateImageButton(ImageList* imageList, int x, int y) : Falltergeist::UI::Base(x, y)
+MultistateImageButton::MultistateImageButton(ImageList* imageList, const Point& pos) : Falltergeist::UI::Base(pos)
 {
     addEventHandler("mouseleftclick", [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); });
-    for (auto image: *imageList->images()) _imageList.addImage(new Image(image));
+    for (auto image: *imageList->images()) _imageList.addImage(new Image(*image));
 }
 
 

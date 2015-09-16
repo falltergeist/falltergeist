@@ -54,8 +54,8 @@ public:
         DECEMBER
     };
 
-    MonthCounter(int x = 0, int y = 0);
-    MonthCounter(Month month, int x = 0, int y = 0);
+    MonthCounter(const Point& pos = Point(0, 0));
+    MonthCounter(Month month, const Point& pos = Point(0, 0));
 
     Month month() const;
     void setMonth(Month month);

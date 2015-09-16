@@ -72,8 +72,7 @@ public:
     void onStateDeactivate(Event::State* event) override;
 
 protected:
-    unsigned int _oldCameraX;
-    unsigned int _oldCameraY;
+    Point _oldCameraCenter;
     int _backgroundID = -1;
     int _headID = -1;
     int _mood = 0;

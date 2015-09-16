@@ -24,6 +24,7 @@
 #include <vector>
 
 // Falltergeist includes
+#include "../Point.h"
 
 // Third party includes
 
@@ -40,7 +41,7 @@ public:
     ~HexagonGrid();
     std::vector<Hexagon*>* hexagons();
     unsigned int distance(Hexagon* from, Hexagon* to);
-    Hexagon* hexagonAt(unsigned int x, unsigned int y);
+    Hexagon* hexagonAt(const Point& pos);
     Hexagon* at(unsigned int index);
     std::vector<Hexagon*> findPath(Hexagon* from, Hexagon* to);
     Hexagon* hexInDirection(Hexagon* from, unsigned short rotation, unsigned int distance);

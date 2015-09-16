@@ -62,8 +62,9 @@ void PlayerCreateOptions::init()
 
     auto background = new UI::Image("art/intrface/opbase.frm");
 
-    auto backgroundX = (Game::getInstance()->renderer()->width() - background->width())*0.5;
-    auto backgroundY = (Game::getInstance()->renderer()->height() - background->height())*0.5;
+    Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
+    int backgroundX = backgroundPos.x();
+    int backgroundY = backgroundPos.y();
 
     auto saveButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18);
     auto loadButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37);
@@ -109,8 +110,7 @@ void PlayerCreateOptions::init()
     doneButtonLabel->setWidth(150);
     doneButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
-    background->setX(backgroundX);
-    background->setY(backgroundY);
+    background->setPosition(backgroundPos);
 
     addUI(background);
 

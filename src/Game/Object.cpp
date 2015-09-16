@@ -256,14 +256,14 @@ void Object::setFloatMessage(UI::TextArea* floatMessage)
     _floatMessage = floatMessage;
 }
 
-static bool to_right_of(int x1, int y1, int x2, int y2)
+static bool to_right_of(const Point& p1, const Point& p2)
 {
-    return (double)(x2 - x1) <= ((double)(y2 - y1) * (double)(4.0/3.0));
+    return (double)(p2.x() - p1.x()) <= ((double)(p2.y() - p1.y()) * (4.0/3.0));
 }
 
-static bool in_front_of(int x1, int y1, int x2, int y2)
+static bool in_front_of(const Point& p1, const Point& p2)
 {
-  return (double)(x2 - x1) <= ((double)(y2 - y1) * -4.0);
+  return (double)(p2.x() - p1.x()) <= ((double)(p2.y() - p1.y()) * -4.0);
 }
 
 void Object::renderText()
@@ -277,8 +277,10 @@ void Object::renderText()
         }
         else
         {
-            message->setX(_ui->x() + _ui->width()*0.5 - message->width()*0.5);
-            message->setY(_ui->y() - 4 - message->height());
+            message->setPosition(_ui->position() + Point(
+                _ui->size().width() / 2 - message->size().width() / 2,
+                -4 - message->size().height()
+            ));
             message->render();
         }
     }
@@ -289,15 +291,19 @@ void Object::render()
     if (!_ui) return;
 
     auto camera = Game::getInstance()->locationState()->camera();
-    _ui->setX(hexagon()->x() - camera->x() - std::floor((double)_ui->width() / 2));
-    _ui->setY(hexagon()->y() - camera->y() - _ui->height());
+    _ui->setPosition(
+        hexagon()->position()
+        - camera->topLeft()
+        - Point(_ui->size().width() / 2, _ui->size().height())
+    );
 
     setInRender(false);
 
-    if (_ui->x() + (int)_ui->width() < 0) return;
-    if (_ui->x() > camera->width()) return;
-    if (_ui->y() + (int)_ui->height() < 0) return;
-    if (_ui->y() > camera->height()) return;
+    // don't draw if outside of screen
+    if (!Rect::intersects(_ui->position(), _ui->size(), Point(0, 0), camera->size()))
+    {
+        return;
+    }
 
     setInRender(true);
 
@@ -308,18 +314,15 @@ void Object::render()
 bool Object::_getEggTransparency()
 {
     auto dude = Game::getInstance()->player();
-    Hexagon *hex;
+    Hexagon * dudeHex;
 
     if (dude->movementQueue()->size())
-        hex = dude->movementQueue()->back();
+        dudeHex = dude->movementQueue()->back();
     else
-        hex = dude->hexagon();
+        dudeHex = dude->hexagon();
 
-    auto obj_x = hexagon()->x();
-    auto obj_y = hexagon()->y();
-
-    auto dude_x = hex->x();
-    auto dude_y = hex->y();
+    auto objPos = hexagon()->position();
+    auto dudePos = dudeHex->position();
 
     bool noBlockTrans = false;
     bool transparent;
@@ -328,18 +331,18 @@ bool Object::_getEggTransparency()
     {
         case Orientation::EW:
         case Orientation::WC:
-            transparent = in_front_of(obj_x, obj_y, dude_x, dude_y);
-            noBlockTrans = to_right_of(obj_x, obj_y, dude_x, dude_y);
+            transparent = in_front_of(objPos, dudePos);
+            noBlockTrans = to_right_of(objPos, dudePos);
             break;
         case Orientation::NC:
-            transparent = (to_right_of(dude_x, dude_y, obj_x, obj_y) | in_front_of(obj_x, obj_y, dude_x, dude_y));
+            transparent = (to_right_of(dudePos, objPos) | in_front_of(objPos, dudePos));
             break;
         case Orientation::SC:
-            transparent = (in_front_of(obj_x, obj_y, dude_x, dude_y) && to_right_of(dude_x, dude_y, obj_x, obj_y));
+            transparent = (in_front_of(objPos, dudePos) && to_right_of(dudePos, objPos));
             break;
         default:
-            transparent = to_right_of(dude_x, dude_y, obj_x, obj_y);
-            noBlockTrans = in_front_of(dude_x, dude_y, obj_x, obj_y);
+            transparent = to_right_of(dudePos, objPos);
+            noBlockTrans = in_front_of(dudePos, objPos);
             break;
     }
 

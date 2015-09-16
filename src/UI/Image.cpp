@@ -39,12 +39,16 @@ Image::Image(const std::string& filename) : Falltergeist::UI::Base()
     setTexture(ResourceManager::getInstance()->texture(filename));
 }
 
-Image::Image(Image* image) : Falltergeist::UI::Base()
+Image::Image(const Image& image) : Falltergeist::UI::Base()
 {
     // @fixme: we should use "clone" feature here
-    setTexture(new Graphics::Texture(image->texture()->width(), image->texture()->height()));
-    unsigned int* pixels = (unsigned int*)image->texture()->sdlSurface()->pixels;
+    setTexture(new Graphics::Texture(image.texture()->width(), image.texture()->height()));
+    unsigned int* pixels = (unsigned int*)image.texture()->sdlSurface()->pixels;
     _texture->loadFromRGBA(pixels);
+}
+
+Image::Image(const Size& size) : Image((unsigned)size.width(), (unsigned)size.height())
+{
 }
 
 Image::Image(unsigned int width, unsigned int height) : Falltergeist::UI::Base()
@@ -80,23 +84,15 @@ Image::Image(libfalltergeist::Frm::File* frm, unsigned int direction) : Fallterg
 
     texture->copyTo(_texture, 0, 0, 0, y, frm->directions()->at(direction)->width(), frm->directions()->at(direction)->height());
     delete texture;
-
-    setXOffset(frm->offsetX(direction) + frm->directions()->at(direction)->shiftX());
-    setYOffset(frm->offsetY(direction) + frm->directions()->at(direction)->shiftY());
+    auto dir = frm->directions()->at(direction);
+    setOffset(
+        frm->offsetX(direction) + dir->shiftX(),
+        frm->offsetY(direction) + dir->shiftY()
+    );
 }
 
 Image::~Image()
 {
-}
-
-unsigned int Image::width() const
-{
-    return texture()->width();
-}
-
-unsigned int Image::height() const
-{
-    return texture()->height();
 }
 
 }

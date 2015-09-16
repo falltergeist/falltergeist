@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <vector>
+#include <Point.h>
 
 // Falltergeist includes
 
@@ -87,6 +88,9 @@ public:
     int y() const;
     void setY(int y);
 
+    const Point& position() const;
+    void setPosition(const Point& pos);
+
     void pushState(Cursor state);
     void popState();
 
@@ -106,8 +110,7 @@ public:
     UI::Base* ui();
 
 protected:
-    int _x = 320;
-    int _y = 240;
+    Point _position {320, 240};
     bool _visible = true;
     Cursor _type = Cursor::NONE;
     std::vector<Cursor> _states;

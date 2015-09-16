@@ -45,8 +45,7 @@ CritterInteract::CritterInteract() : State()
 CritterInteract::~CritterInteract()
 {
     auto camera = Game::getInstance()->locationState()->camera();
-    camera->setXPosition(_oldCameraX);
-    camera->setYPosition(_oldCameraY);
+    camera->setCenter(_oldCameraCenter);
 }
 
 void CritterInteract::onStateActivate(Event::State* event)
@@ -67,18 +66,15 @@ void CritterInteract::init()
     setFullscreen(false);
     setModal(true);
 
-    setX((Game::getInstance()->renderer()->width() - 640)*0.5);
-    setY((Game::getInstance()->renderer()->height() - 480)*0.5);
+    setPosition((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
 
     addUI("background", new UI::Image("art/intrface/alltlk.frm"));
 
     // Centering camera on critter position
     auto locationState = Game::getInstance()->locationState();
-    _oldCameraX = locationState->camera()->xPosition();
-    _oldCameraY = locationState->camera()->yPosition();
+    _oldCameraCenter = locationState->camera()->center();
 
-    locationState->camera()->setXPosition(critter()->hexagon()->x());
-    locationState->camera()->setYPosition(critter()->hexagon()->y() + 100);
+    locationState->camera()->setCenter(critter()->hexagon()->position() + Point(0, 100));
 }
 
 int CritterInteract::backgroundID()

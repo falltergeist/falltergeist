@@ -27,6 +27,7 @@
 
 // Falltergeist includes
 #include "../Graphics/Texture.h"
+#include "../Point.h"
 
 // Third party includes
 #include <SDL.h>
@@ -41,6 +42,7 @@ class Renderer
 
 public:
     Renderer(unsigned int width, unsigned int height);
+    Renderer(const Size& size);
     ~Renderer();
 
     void init();
@@ -49,8 +51,10 @@ public:
     void endFrame();
     void think();
 
-    unsigned int width();
-    unsigned int height();
+    int width();
+    int height();
+    const Size& size() const;
+
     float scaleX();
     float scaleY();
 
@@ -67,12 +71,12 @@ public:
     std::string name();
 
     void drawTexture(Texture* texture, int x, int y, int sourceX = 0, int sourceY = 0, int unsigned sourceWidth = 0, unsigned int sourceHeight = 0);
+    void drawTexture(Texture* texture, const Point& pos, const Point& src = Point(), const Size& srcSize = Size());
 
     Texture* screenshot();
 
 protected:
-    unsigned int _width;
-    unsigned int _height;
+    Size _size;
 
     short _fadeStep = 0;
     unsigned int _fadeTimer = 0;

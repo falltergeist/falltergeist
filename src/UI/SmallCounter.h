@@ -50,7 +50,7 @@ public:
         SIGNED
     };
 
-    SmallCounter(int x = 0, int y = 0);
+    SmallCounter(const Point& pos);
     ~SmallCounter() override;
 
     Graphics::Texture* texture() const override;

@@ -24,6 +24,7 @@
 
 // Falltergeist includes
 #include "../Event/Emitter.h"
+#include "../Point.h"
 
 // Third party includes
 
@@ -41,19 +42,21 @@ class Base : public Event::Emitter
 {
 public:
     Base(int x = 0, int y = 0);
-    ~Base() override;
+    Base(const Point& pos);
+    ~Base();
 
-    virtual int x() const;
-    virtual void setX(int value);
+    int x() const;
+    void setX(int value);
 
-    virtual int xOffset() const;
-    virtual void setXOffset(int xOffset);
+    int y() const;
+    void setY(int value);
 
-    virtual int y() const;
-    virtual void setY(int value);
+    virtual Point position() const;
+    virtual void setPosition(const Point& pos);
 
-    virtual int yOffset() const;
-    virtual void setYOffset(int yOffset);
+    virtual Point offset() const;
+    virtual void setOffset(const Point& pos);
+    void setOffset(int x, int y);
 
     virtual Graphics::Texture* texture() const;
     virtual void setTexture(Graphics::Texture* texture);
@@ -65,16 +68,15 @@ public:
     virtual void render(bool eggTransparency = false);
     virtual void handle(Event::Event* event);
 
-    virtual unsigned int width() const;
-    virtual unsigned int height() const;
+    virtual Size size() const;
 
-    virtual unsigned int pixel(unsigned int x, int unsigned y);
+    virtual unsigned int pixel(const Point& pos);
+    unsigned int pixel(unsigned int x, int unsigned y);
 
 protected:
-    int _x = 0;
-    int _y = 0;
-    int _xOffset = 0;
-    int _yOffset = 0;
+    Point _position;
+    Point _offset;
+
     Graphics::Texture* _texture = 0;
     Graphics::Texture* _tmptex = 0;
     bool _leftButtonPressed = false;

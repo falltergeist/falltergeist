@@ -55,8 +55,7 @@ void Container::init()
 
     auto game = Game::getInstance();
 
-    setX((game->renderer()->width()  - 537)/2);
-    setY((game->renderer()->height() - 376)/2);
+    setPosition((game->renderer()->size() - Point(537, 376)) / 2);
 
     addUI("background", new UI::Image("art/intrface/loot.frm"));
 
@@ -73,11 +72,11 @@ void Container::init()
     // invupout
 
 
-    auto dudeList = new UI::ItemsList(170, 35);
+    auto dudeList = new UI::ItemsList({170, 35});
     dudeList->setItems(Game::getInstance()->player()->inventory());
     addUI(dudeList);
 
-    auto containerList = new UI::ItemsList(292, 35);
+    auto containerList = new UI::ItemsList({292, 35});
     containerList->setItems(object()->inventory());
     addUI(containerList);
 

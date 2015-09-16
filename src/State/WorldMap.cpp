@@ -102,12 +102,11 @@ void WorldMap::init()
         _panel = new UI::Image("art/intrface/wmapbox.frm"); // panel full
         mapWidth = 450;   // fallout 2 map screen width
         mapHeight = 442;  // fallout 2 map screen height
-        mapMinX = (renderWidth - 640)*0.5 + 22;
-        mapMinY = (renderHeight - 480)*0.5 + 21;
+        mapMinX = (renderWidth - 640)/2 + 22;
+        mapMinY = (renderHeight - 480)/2 + 21;
     }
     _screenMap = new UI::Image (mapWidth, mapHeight);
-    _screenMap->setX(mapMinX);
-    _screenMap->setY(mapMinY);
+    _screenMap->setPosition(Point(mapMinX, mapMinY));
 }
 
 void WorldMap::render()
@@ -118,8 +117,8 @@ void WorldMap::render()
 
     // MAP SHOW
     // calculating delta (shift of map to fit to screen)
-    deltaX = worldMapX - mapWidth*0.5;
-    deltaY = worldMapY - mapHeight*0.5;
+    deltaX = worldMapX - mapWidth/2;
+    deltaY = worldMapY - mapHeight/2;
 
     unsigned int worldMapSizeX = tilesNumberX*tileWidth;
     unsigned int worldMapSizeY = tilesNumberY*tileHeight;
@@ -170,8 +169,7 @@ void WorldMap::render()
     _screenMap->render();
 
     // hostpot show
-    _hotspot->setX(mapMinX + worldMapX - deltaX);
-    _hotspot->setY(mapMinY + worldMapY - deltaY);
+    _hotspot->setPosition(Point(mapMinX + worldMapX - deltaX, mapMinY + worldMapY - deltaY));
     _hotspot->render();
 
     // panel
@@ -184,12 +182,11 @@ void WorldMap::render()
     }
     else
     {
-        panelX = (renderWidth - _panel->width())*0.5;
+        panelX = (renderWidth - _panel->size().width()) / 2;
     }
-    panelY = (renderHeight - _panel->height())*0.5;
+    panelY = (renderHeight - _panel->size().height()) / 2;
 
-    _panel->setX(panelX);
-    _panel->setY(panelY);
+    _panel->setPosition(Point(panelX, panelY));
     _panel->render();
 
 }
