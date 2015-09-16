@@ -54,12 +54,12 @@ void PlayerEditGender::init()
     setFullscreen(false);
     setModal(true);
 
-    auto bgX = (Game::getInstance()->renderer()->width() - 640)*0.5;
-    auto bgY = (Game::getInstance()->renderer()->height() - 480)*0.5;
+    Point bgPos = Point((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
+    int bgX = bgPos.x();
+    int bgY = bgPos.y();
 
     auto bg = new UI::Image("art/intrface/charwin.frm");
-    bg->setX(bgX+236);
-    bg->setY(bgY+0);
+    bg->setPosition(bgPos + Point(236, 0));
 
     _maleImage = new UI::ImageList((std::vector<std::string>){
                                     "art/intrface/maleoff.frm",
@@ -74,8 +74,7 @@ void PlayerEditGender::init()
     _femaleImage->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onFemaleButtonPress(dynamic_cast<Event::Mouse*>(event)); });
 
     auto doneBox = new UI::Image("art/intrface/donebox.frm");
-    doneBox->setX(bgX+250);
-    doneBox->setY(bgY+42);
+    doneBox->setPosition(bgPos + Point(250, 42));
 
     auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX+281, bgY+45);
     auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);

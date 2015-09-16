@@ -34,20 +34,16 @@ namespace UI
 
 HiddenMask::HiddenMask(unsigned int width, unsigned int height, int x, int y) : Image(width, height)
 {
-    setX(x);
-    setY(y);
+    setPosition({x, y});
 }
 
 HiddenMask::~HiddenMask()
 {
 }
 
-unsigned int HiddenMask::pixel(unsigned int x, unsigned int y)
+unsigned int HiddenMask::pixel(const Point& pos)
 {
-    if (x > width())  return 0;
-    if (y > height()) return 0;
-
-    return 0xffffffff;
+    return Rect::inRect(pos, this->size()) ? 0xffffffff : 0;
 }
 
 void HiddenMask::render(bool eggTransparency)

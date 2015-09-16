@@ -79,8 +79,7 @@ void Inventory::init()
     auto game = Game::getInstance();
     auto panelHeight = Game::getInstance()->locationState()->playerPanelState()->height();
 
-    setX((game->renderer()->width()  - 499)/2); // 499x377 = art/intrface/invbox.frm
-    setY((game->renderer()->height() - 377 - panelHeight)/2);
+    setPosition((game->renderer()->size() - Point(499, 377 + panelHeight)) / 2); // 499x377 = art/intrface/invbox.frm
 
     addUI("background", new UI::Image("art/intrface/invbox.frm"));
     getUI("background")->addEventHandler("mouserightclick", [this](Event::Event* event){ this->backgroundRightClick(dynamic_cast<Event::Mouse*>(event)); });
@@ -102,8 +101,7 @@ void Inventory::init()
     addUI("player_name", new UI::TextArea(player->name(), screenX, screenY));
 
     auto line1 = new UI::Image(142, 1);
-    line1->setX(screenX);
-    line1->setY(screenY+16);
+    line1->setPosition({screenX, screenY+16});
     line1->texture()->fill(0x3ff800ff); // default green color
 
     std::string statsLabels;
@@ -191,13 +189,11 @@ void Inventory::init()
     auto damageResistanceLabel = new UI::TextArea(ss.str(), screenX+120, screenY+40);
 
     auto line2 = new UI::Image(142, 1);
-    line2->setX(screenX);
-    line2->setY(screenY+94);
+    line2->setPosition({screenX, screenY+94});
     line2->texture()->fill(0x3ff800ff); // default green color
 
     auto line3 = new UI::Image(142, 1);
-    line3->setX(screenX);
-    line3->setY(screenY+134);
+    line3->setPosition({screenX, screenY+134});
     line3->texture()->fill(0x3ff800ff); // default green color
 
     // label: Total Wt: (20)
@@ -236,8 +232,7 @@ void Inventory::init()
 
     // screen info
     auto screenLabel = new UI::TextArea("", screenX, screenY+20);
-    screenLabel->setWidth(140); //screen size
-    screenLabel->setHeight(168);
+    screenLabel->setSize({140, 168}); // screen size
     screenLabel->setVisible(false);
     screenLabel->setWordWrap(true);
 
@@ -257,14 +252,14 @@ void Inventory::init()
     addUI("rightHandLabel", rightHandLabel);
     addUI("screenLabel", screenLabel);
 
-    auto inventoryList = new UI::ItemsList(40, 40);
+    auto inventoryList = new UI::ItemsList({40, 40});
     inventoryList->setItems(game->player()->inventory());
     addUI("inventory_list", inventoryList);
 
     // BIG ICONS
     // icon: armor
     {
-        auto inventoryItem = new UI::InventoryItem(armorSlot, 154, 183);
+        auto inventoryItem = new UI::InventoryItem(armorSlot, {154, 183});
         inventoryItem->setType(UI::InventoryItem::Type::SLOT);
         inventoryItem->addEventHandler("itemdragstop", [inventoryList](Event::Event* event){ inventoryList->onItemDragStop(dynamic_cast<Event::Mouse*>(event)); });
         inventoryList->addEventHandler("itemdragstop", [inventoryItem](Event::Event* event){ inventoryItem->onArmorDragStop(dynamic_cast<Event::Mouse*>(event)); });
@@ -273,7 +268,7 @@ void Inventory::init()
 
     // icon: left hand
     {
-        auto inventoryItem = new UI::InventoryItem(leftHand, 154, 286);
+        auto inventoryItem = new UI::InventoryItem(leftHand, {154, 286});
         inventoryItem->setType(UI::InventoryItem::Type::SLOT);
         inventoryItem->addEventHandler("itemdragstop", [inventoryList](Event::Event* event){ inventoryList->onItemDragStop(dynamic_cast<Event::Mouse*>(event)); });
         inventoryList->addEventHandler("itemdragstop", [inventoryItem](Event::Event* event){ inventoryItem->onHandDragStop(dynamic_cast<Event::Mouse*>(event)); });
@@ -282,7 +277,7 @@ void Inventory::init()
 
     // icon: right hand
     {
-        auto inventoryItem = new UI::InventoryItem(rightHand, 247, 286);
+        auto inventoryItem = new UI::InventoryItem(rightHand, {247, 286});
         inventoryItem->setType(UI::InventoryItem::Type::SLOT);
         inventoryItem->addEventHandler("itemdragstop", [inventoryList](Event::Event* event){ inventoryList->onItemDragStop(dynamic_cast<Event::Mouse*>(event)); });
         inventoryList->addEventHandler("itemdragstop", [inventoryItem](Event::Event* event){ inventoryItem->onHandDragStop(dynamic_cast<Event::Mouse*>(event)); });

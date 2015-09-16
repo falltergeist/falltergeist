@@ -25,6 +25,7 @@
 
 // Falltergeist includes
 #include "../Event/Event.h"
+#include "../Point.h"
 
 // Third party includes
 
@@ -37,20 +38,16 @@ class Mouse : public Event
 {
 public:
     Mouse(const std::string& eventName = "mouse");
-    Mouse(Mouse* event);
+    Mouse(const Mouse& event);
     ~Mouse() override;
 
-    unsigned int x() const;
-    void setX(unsigned int value);
+    const Point& position() const;
 
-    unsigned int y() const;
-    void setY(unsigned int value);
+    void setPosition(const Point& position);
 
-    int xOffset() const;
-    void setXOffset(int value);
+    const Point& offset() const;
 
-    int yOffset() const;
-    void setYOffset(int value);
+    void setOffset(const Point& offset);
 
     bool leftButton() const;
     void setLeftButton(bool value);
@@ -69,10 +66,9 @@ protected:
     bool _shiftPressed = false;
     int _leftButton = false;
     int _rightButton = false;
-    int _xOffset = 0;
-    int _yOffset = 0;
-    unsigned int _x = 0;
-    unsigned int _y = 0;
+
+    Point _position;
+    Point _offset;
 };
 
 }

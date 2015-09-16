@@ -52,12 +52,10 @@ public:
     Graphics::Texture* texture() const override;
     void render(bool eggTransparency = false) override;
     void think() override;
-    unsigned int pixel(unsigned int x, unsigned int y) override;
+    unsigned int pixel(const Point& pos) override;
 
-    unsigned int width() const override;
-    unsigned int height() const override;
-    int xOffset() const override;
-    int yOffset() const override;
+    Size size() const override;
+    Point offset() const override;
 
 protected:
     bool _playing = false;

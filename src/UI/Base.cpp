@@ -39,10 +39,13 @@ namespace Falltergeist
 namespace UI
 {
 
-Base::Base(int x, int y) : Event::Emitter()
+Base::Base(int x, int y) : Base(Point(x, y))
 {
-    _x = x;
-    _y = y;
+}
+
+Base::Base(const Point& pos) : Event::Emitter()
+{
+    _position = pos;
 }
 
 Base::~Base()
@@ -65,22 +68,22 @@ Base::~Base()
 
 int Base::x() const
 {
-    return _x + _xOffset;
+    return (position() + offset()).x();
 }
 
 void Base::setX(int value)
 {
-    _x = value;
+    setPosition(Point(value, position().y()));
 }
 
 int Base::y() const
 {
-    return _y + _yOffset;
+    return _position.y() + _offset.y();
 }
 
 void Base::setY(int value)
 {
-    _y = value;
+    setPosition(Point(position().x(), value));
 }
 
 Graphics::Texture* Base::texture() const
@@ -106,39 +109,37 @@ void Base::render(bool eggTransparency)
 
         if (!dude || !Game::getInstance()->locationState())
         {
-            Game::getInstance()->renderer()->drawTexture(texture(), x(), y());
+            Game::getInstance()->renderer()->drawTexture(texture(), position());
             return;
         }
 
         auto camera = Game::getInstance()->locationState()->camera();
 
-        int egg_x = dude->hexagon()->x() - camera->x() - 63 + dude->ui()->xOffset();
-        int egg_y = dude->hexagon()->y() - camera->y() - 78 + dude->ui()->yOffset();
+        Point eggPos = dude->hexagon()->position() - camera->topLeft() - Point(63, 78) + dude->ui()->offset();
 
-        int egg_dx = x() - egg_x;
-        int egg_dy = y() - egg_y;
+        Point eggDelta = position() - eggPos;
 
         auto egg = ResourceManager::getInstance()->texture("data/egg.png");
 
         //check if egg and texture intersects
-        SDL_Rect egg_rect = { egg_x, egg_y, (int)egg->width(), (int)egg->height() };
+        SDL_Rect egg_rect = { eggPos.x(), eggPos.y(), (int)egg->width(), (int)egg->height() };
         SDL_Rect tex_rect = { x(), y(), (int)texture()->width(), (int)texture()->height() };
 
         if (!SDL_HasIntersection(&egg_rect, &tex_rect))
         {
-            Game::getInstance()->renderer()->drawTexture(texture(), x(), y());
+            Game::getInstance()->renderer()->drawTexture(texture(), position());
             return;
         }
 
         if (!_tmptex) _tmptex = new Graphics::Texture(texture()->width(),texture()->height());
         texture()->copyTo(_tmptex);
 
-        _tmptex->blitWithAlpha(egg, egg_dx, egg_dy);
-        Game::getInstance()->renderer()->drawTexture(_tmptex, x(), y());
+        _tmptex->blitWithAlpha(egg, eggDelta.x(), eggDelta.y());
+        Game::getInstance()->renderer()->drawTexture(_tmptex, position());
     }
     else
     {
-        Game::getInstance()->renderer()->drawTexture(texture(), x(), y());
+        Game::getInstance()->renderer()->drawTexture(texture(), position());
     }
 
 
@@ -155,41 +156,46 @@ bool Base::visible() const
     return _visible;
 }
 
-int Base::xOffset() const
+Point Base::position() const
 {
-    return _xOffset;
+    return _position + _offset;
 }
 
-void Base::setXOffset(int xOffset)
+void Base::setPosition(const Point& pos)
 {
-    _xOffset = xOffset;
+    _position = pos;
 }
 
-int Base::yOffset() const
+Point Base::offset() const
 {
-    return _yOffset;
+    return _offset;
 }
 
-void Base::setYOffset(int yOffset)
+void Base::setOffset(const Point& pos)
 {
-    _yOffset = yOffset;
+    _offset = pos;
 }
 
-unsigned int Base::width() const
+void Base::setOffset(int x, int y)
 {
-    if (!texture()) return 0;
-    return texture()->width();
+    setOffset(Point(x, y));
 }
 
-unsigned int Base::height() const
+Size Base::size() const
 {
-    if (!texture()) return 0;
-    return texture()->height();
+    auto tex = texture();
+    if (!tex) return Size(0, 0);
+    return Size(tex->width(), tex->height());
+}
+
+unsigned int Base::pixel(const Point& pos)
+{
+    return texture() ? texture()->pixel(pos.x(), pos.y()) : 0;
 }
 
 unsigned int Base::pixel(unsigned int x, unsigned int y)
 {
-    return texture() ? texture()->pixel(x, y) : 0;
+    return pixel(Point(x, y));
 }
 
 void Base::handle(Event::Event* event)
@@ -197,12 +203,11 @@ void Base::handle(Event::Event* event)
     if (event->handled()) return;
     if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
-        int x = mouseEvent->x() - this->x();
-        int y = mouseEvent->y() - this->y();
+        Point pos = mouseEvent->position() - this->position();
 
-        auto newEvent = new Event::Mouse(mouseEvent);
+        auto newEvent = new Event::Mouse(*mouseEvent);
 
-        if (this->pixel(x, y))
+        if (this->pixel(pos))
         {
             if (mouseEvent->name() == "mousemove")
             {

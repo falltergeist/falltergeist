@@ -71,8 +71,7 @@ void InventoryDragItem::handle(Event::Event* event)
     if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
         _itemUi->setCurrentImage(1);
-        _itemUi->setX(mouseEvent->x() - _itemUi->width()*0.5);
-        _itemUi->setY(mouseEvent->y() - _itemUi->height()*0.5);
+        _itemUi->setPosition(mouseEvent->position() - _itemUi->size() / 2);
         if (mouseEvent->name() == "mouseup" && mouseEvent->leftButton())
         {
             _itemUi->setCurrentImage(0);

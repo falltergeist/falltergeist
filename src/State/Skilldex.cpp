@@ -24,6 +24,7 @@
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
+#include "../Point.h"
 #include "../ResourceManager.h"
 #include "../State/ExitConfirm.h"
 #include "../State/Skilldex.h"
@@ -62,10 +63,10 @@ void Skilldex::init()
     // original coordinates = 455x6
     // background size = 185x368
     auto background = new UI::Image("art/intrface/skldxbox.frm");
-    auto backgroundX = (Game::getInstance()->renderer()->width() + 640 - 2*background->width())*0.5;
-    auto backgroundY = (Game::getInstance()->renderer()->height() - 480 + 6);
-    background->setX(backgroundX);
-    background->setY(backgroundY);
+    Size rendSize = Game::getInstance()->renderer()->size();
+    auto backgroundX = (rendSize.width() + 640 - 2 * background->size().width()) / 2;
+    auto backgroundY = (rendSize.height() - 480 + 6);
+    background->setPosition({backgroundX, backgroundY});
 
     // buttons
     auto sneakButton    = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44);

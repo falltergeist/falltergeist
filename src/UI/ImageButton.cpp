@@ -38,9 +38,13 @@ namespace Falltergeist
 namespace UI
 {
 
-ImageButton::ImageButton(Type type, int x, int y) : Falltergeist::UI::Base(x, y)
+ImageButton::ImageButton(Type type, Point pos) : Base(pos)
 {
     _init(type);
+}
+
+ImageButton::ImageButton(Type type, int x, int y) : ImageButton(type, Point(x, y))
+{
 }
 
 ImageButton::~ImageButton()

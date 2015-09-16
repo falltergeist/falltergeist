@@ -32,6 +32,7 @@
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../Logger.h"
+#include "../Point.h"
 #include "../UI/InventoryItem.h"
 
 // Third party includes
@@ -41,7 +42,7 @@ namespace Falltergeist
 namespace UI
 {
 
-ItemsList::ItemsList(int x, int y) : Falltergeist::UI::Base(x, y)
+ItemsList::ItemsList(const Point& pos) : Falltergeist::UI::Base(pos)
 {
     _texture = new Graphics::Texture(_slotWidth, _slotHeight * _slotsNumber);
     _texture->fill(0x000000FF);
@@ -84,19 +85,18 @@ void ItemsList::render(bool eggTransparency)
     unsigned int i = 0;
     for (auto item : *inventoryItems())
     {
-        item->setX(x());
-        item->setY(y() + _slotHeight*i);
+        item->setPosition(position() + Point(0, _slotHeight*i));
         item->render();
         i++;
     }
 }
 
-unsigned int ItemsList::pixel(unsigned int x, unsigned int y)
+unsigned int ItemsList::pixel(const Point& pos)
 {
     unsigned int i = 0;
     for (auto item : *inventoryItems())
     {
-        unsigned int pixel = item->pixel(x, y - _slotHeight*i);
+        unsigned int pixel = item->pixel(pos - Point(0, _slotHeight*i));
         if (pixel) return pixel;
         i++;
     }
@@ -115,29 +115,25 @@ void ItemsList::onMouseLeftDown(Event::Mouse* event)
 
 void ItemsList::onMouseDragStart(Event::Mouse* event)
 {
-    unsigned int index = (event->y() - y())/_slotHeight;
+    unsigned int index = (event->position().y() - y())/_slotHeight;
     _draggedItem = inventoryItems()->at(index);
     _draggedItem->setType(InventoryItem::Type::DRAG);
-    _draggedItem->setX(event->x());
-    _draggedItem->setY(event->y());
+    _draggedItem->setPosition(event->position());
     Logger::critical() << "mousedragstart at " << index << " (" << _draggedItem->item()->name() << ")" << std::endl;
 }
 
 void ItemsList::onMouseDrag(Event::Mouse* event)
 {
-    _draggedItem->setXOffset(_draggedItem->xOffset() + event->xOffset());
-    _draggedItem->setYOffset(_draggedItem->yOffset() + event->yOffset());
+    _draggedItem->setOffset(_draggedItem->offset() + event->offset());
     Logger::critical() << "mousedrag" << std::endl;
 }
 
 void ItemsList::onMouseDragStop(Event::Mouse* event)
 {
-    _draggedItem->setXOffset(0);
-    _draggedItem->setYOffset(0);
+    _draggedItem->setOffset(0, 0);
     _draggedItem->setType(_type);
     auto itemevent = new Event::Mouse("itemdragstop");
-    itemevent->setX(event->x());
-    itemevent->setY(event->y());
+    itemevent->setPosition(event->position());
     itemevent->setEmitter(this);
     emitEvent(itemevent);
     delete itemevent;
@@ -150,13 +146,10 @@ void ItemsList::onItemDragStop(Event::Mouse* event)
     Logger::critical() << "itemdragstop" << std::endl;
 
     // check if mouse is in this item list
-
-    int x = event->x() - this->x();
-    int y = event->y() - this->y();
-
-
-    if (x < 0 || x > _slotWidth) return;
-    if (y < 0 || y > _slotHeight*_slotsNumber) return;
+    if (!Rect::inRect(event->position(), position(), Size(_slotWidth, _slotHeight*_slotsNumber)))
+    {
+        return;
+    }
 
     if (auto itemsList = dynamic_cast<ItemsList*>(event->emitter()))
     {

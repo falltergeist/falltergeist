@@ -57,8 +57,7 @@ void Credits::init()
 
     Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
     auto renderer = Game::getInstance()->renderer();
-    setX((renderer->width()  - 640)*0.5);
-    setY(renderer->height());
+    setPosition(Point((renderer->size().width() - 640) / 2, renderer->size().height()));
 
     auto credits = ResourceManager::getInstance()->datFileItem("text/english/credits.txt");
     std::stringstream ss;
@@ -74,13 +73,16 @@ void Credits::init()
     while (std::getline(ss, line))
     {
         auto cur_font = font_default;
-        if (line.find('\r')!=std::string::npos) line.erase(line.find('\r'));
-        if (line[0]=='#')
+        if (line.find('\r') != std::string::npos)
+        {
+            line.erase(line.find('\r'));
+        }
+        if (line[0] == '#')
         {
             line.erase(line.begin());
             cur_font = font_hash;
         }
-        else if (line[0]=='@')
+        else if (line[0] == '@')
         {
             line.erase(line.begin());
             cur_font = font_at;
@@ -90,13 +92,13 @@ void Credits::init()
             line = "    ";
         }
 
-        auto tx = new UI::TextArea(line,0,y);
+        auto tx = new UI::TextArea(line, 0, y);
         tx->setFont(cur_font);
-        tx->setWidth(640);
+        tx->setSize({640, 0});
         tx->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
         addUI(tx);
         _lines.push_back(tx);
-        y+=tx->height();
+        y += tx->size().height();
     }
     _lastTicks=SDL_GetTicks();
 }

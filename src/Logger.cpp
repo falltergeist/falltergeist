@@ -18,6 +18,7 @@
  */
 
 // C++ standard includes
+#include <sstream>
 
 // Falltergeist includes
 #include "Logger.h"
@@ -157,5 +158,31 @@ void Logger::setLevel(const std::string &level)
 
     setLevel(lvl);
 
+}
+
+std::ostream& operator <<(std::ostream& lhs, const Point& rhs)
+{
+    lhs << "(" << rhs.x() << "," << rhs.y() << ")";
+    return lhs;
+}
+
+std::ostream& operator <<(std::ostream& lhs, const Size& rhs)
+{
+    lhs << rhs.width() << "x" << rhs.height();
+    return lhs;
+}
+
+std::string to_string(const Point& point)
+{
+    std::ostringstream sstr;
+    sstr << point;
+    return sstr.str();
+}
+
+std::string to_string(const Size& size)
+{
+    std::ostringstream sstr;
+    sstr << size;
+    return sstr.str();
 }
 }

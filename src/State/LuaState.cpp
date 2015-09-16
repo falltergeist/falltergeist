@@ -94,25 +94,7 @@ void LuaState::addUI(UI::Base* ui)
     State::addUI(ui);
 }
 
-int LuaState::x() const
-{
-    return _x;
-}
 
-void LuaState::setX(int value)
-{
-    _x = value;
-}
-
-int LuaState::y() const
-{
-    return _y;
-}
-
-void LuaState::setY(int value)
-{
-    _y = value;
-}
 
 bool LuaState::fullscreen() const
 {
@@ -132,6 +114,16 @@ bool LuaState::modal() const
 void LuaState::setModal(bool value)
 {
     _modal = value;
+}
+
+const Point& LuaState::position() const
+{
+    return State::position();
+}
+
+void LuaState::setPosition(const Point& pos)
+{
+    State::setPosition(pos);
 }
 
 }

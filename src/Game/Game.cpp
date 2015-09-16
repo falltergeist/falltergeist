@@ -95,14 +95,14 @@ void Game::init(std::unique_ptr<Settings> settings)
     _mouse = new Input::Mouse();
     _fpsCounter = new UI::FpsCounter(renderer()->width() - 42, 2);
 
-    version += " " + std::to_string(renderer()->width()) + "x" + std::to_string(renderer()->height());
+    version += " " + to_string(renderer()->size());
     version += " " + renderer()->name();
 
     _falltergeistVersion = new UI::TextArea(version, 3, renderer()->height() - 10);
     _mousePosition = new UI::TextArea("", renderer()->width() - 55, 14);
     _animatedPalette = new Graphics::AnimatedPalette();
     _gameTime = new Time();
-    _currentTime = new UI::TextArea(renderer()->width() - 150, renderer()->height() - 10);
+    _currentTime = new UI::TextArea("", renderer()->size() - Point(150, 10));
 
     IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 }
@@ -327,8 +327,7 @@ void Game::handle()
                 {
                     SDL_Keymod mods = SDL_GetModState();
                     mouseEvent = new Event::Mouse((_event.type == SDL_MOUSEBUTTONDOWN) ? "mousedown" : "mouseup");
-                    mouseEvent->setX(_event.button.x);
-                    mouseEvent->setY(_event.button.y);
+                    mouseEvent->setPosition({_event.button.x, _event.button.y});
                     mouseEvent->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
                     mouseEvent->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
                     mouseEvent->setShiftPressed(mods & KMOD_SHIFT);
@@ -339,10 +338,8 @@ void Game::handle()
                 case SDL_MOUSEMOTION:
                 {
                     mouseEvent = new Event::Mouse("mousemove");
-                    mouseEvent->setX(_event.motion.x);
-                    mouseEvent->setY(_event.motion.y);
-                    mouseEvent->setXOffset(_event.motion.xrel);
-                    mouseEvent->setYOffset(_event.motion.yrel);
+                    mouseEvent->setPosition({_event.motion.x, _event.motion.y});
+                    mouseEvent->setOffset({_event.motion.xrel,_event.motion.yrel});
                     for (auto state : *statesForThinkAndHandle()) state->handle(mouseEvent);
                     break;
                 }
@@ -391,7 +388,7 @@ void Game::think()
     _animatedPalette->think();
 
     *_mousePosition = "";
-    *_mousePosition << mouse()->x() << " : " << mouse()->y();
+    *_mousePosition << mouse()->position().x() << " : " << mouse()->position().y();
 
     *_currentTime = "";
     *_currentTime << _gameTime->year()  << "-" << _gameTime->month()   << "-" << _gameTime->day() << " "

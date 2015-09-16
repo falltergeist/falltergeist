@@ -32,20 +32,19 @@ namespace Falltergeist
 namespace UI
 {
 
-ImageList::ImageList(std::vector<std::string> imageList, int x, int y) : Falltergeist::UI::Base(x,y)
+ImageList::ImageList(const Point& pos) : Falltergeist::UI::Base(pos)
+{
+}
+
+ImageList::ImageList(std::vector<std::string> imageList, int x, int y) : ImageList(Point(x, y))
 {
     for (auto& frmName : imageList) addImage(new Image(frmName));
 }
 
-ImageList::ImageList(std::vector<Image*> imageList, int x, int y) : Falltergeist::UI::Base(x,y)
+ImageList::ImageList(std::vector<Image*> imageList, int x, int y) : ImageList(Point(x, y))
 {
-    for (auto& image : imageList) addImage(new Image(image));
+    for (auto& image : imageList) addImage(new Image(*image));
 }
-
-ImageList::ImageList(int x, int y) : Falltergeist::UI::Base(x,y)
-{
-}
-
 ImageList::~ImageList()
 {
     while (!_images.empty())

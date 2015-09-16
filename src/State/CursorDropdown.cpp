@@ -140,29 +140,30 @@ void CursorDropdown::showMenu()
 
     auto game = Game::getInstance();
     _surface = new UI::Image(40, 40*_icons.size());
-    _surface->setX(_initialX + 29);
-    _surface->setY(_initialY);
-    int deltaX = _surface->x() + _surface->width() - game->renderer()->width();
-    int deltaY = _surface->y() + _surface->height() - game->renderer()->height() + game->locationState()->playerPanelState()->height();
+    _surface->setPosition({_initialX + 29, _initialY});
+    Point delta = _surface->position()
+                  + _surface->size()
+                  - game->renderer()->size()
+                  + Point(0, game->locationState()->playerPanelState()->height());
+
+    int deltaX = delta.x();
+    int deltaY = delta.y();
     if (deltaX > 0)
     {
         _surface->setX(_surface->x() - 40 - 29 - 29);
         _cursor = new UI::Image("art/intrface/actarrom.frm");
-        _cursor->setXOffset(-29);
-        _cursor->setYOffset(0);
+        _cursor->setOffset(-29, 0);
     }
     else
     {
         _cursor = new UI::Image("art/intrface/actarrow.frm");
-        _cursor->setXOffset(0);
-        _cursor->setYOffset(0);
+        _cursor->setOffset(0, 0);
     }
     if (deltaY > 0)
     {
         _surface->setY(_surface->y() - deltaY);
     }
-    _cursor->setX(_initialX);
-    _cursor->setY(_initialY);
+    _cursor->setPosition({_initialX, _initialY});
     addUI(_cursor);
     addUI(_surface);
     // draw icons on the surface for the first time
@@ -174,8 +175,7 @@ void CursorDropdown::showMenu()
     {
         if (deltaY > 0)
         {
-            game->mouse()->setX(_initialX);
-            game->mouse()->setY(_surface->y());
+            game->mouse()->setPosition({_initialX, _surface->y()});
         }
         Game::getInstance()->mixer()->playACMSound("sound/sfx/iaccuxx1.acm");
         _activeIcons.at(0)->texture()->copyTo(_surface->texture(), 0,  0); // highlight first item
@@ -251,9 +251,11 @@ void CursorDropdown::render()
         if (_currentIcon != _previousIcon) 
         {
             auto inactiveIcon = _inactiveIcons.at(_previousIcon);
-            inactiveIcon->texture()->copyTo(_surface->texture(), inactiveIcon->x(), inactiveIcon->y());
+            Point inactiveIconPos = inactiveIcon->position();
+            inactiveIcon->texture()->copyTo(_surface->texture(), (unsigned)inactiveIconPos.x(), (unsigned)inactiveIconPos.y());
             auto activeIcon = _activeIcons.at(_currentIcon);
-            activeIcon->texture()->copyTo(_surface->texture(), activeIcon->x(), activeIcon->y());
+            Point activeIconPos = activeIcon->position();
+            activeIcon->texture()->copyTo(_surface->texture(), (unsigned)activeIconPos.x(), (unsigned)activeIconPos.y());
         }
         State::render();
     }
@@ -289,8 +291,7 @@ void CursorDropdown::onStateDeactivate(Event::State* event)
                 mouse->pushState(*it);
             }
         }
-        mouse->setX(_initialX);
-        mouse->setY(_initialY);
+        mouse->setPosition({_initialX, _initialY});
         _deactivated = true;
     }
 }

@@ -53,30 +53,36 @@ Mouse::~Mouse()
 
 int Mouse::x() const
 {
-    return _x;
+    return _position.x();
 }
 
 int Mouse::y() const
 {
-    return _y;
+    return _position.y();
 }
 
 void Mouse::setX(int x)
 {
-    _x = x;
-    auto renderer = Game::getInstance()->renderer();
-    float scaleX = renderer->scaleX();
-    float scaleY = renderer->scaleY();
-    SDL_WarpMouseInWindow(renderer->sdlWindow(), _x*scaleX, _y*scaleY);
+    setPosition({x, _position.y()});
 }
 
 void Mouse::setY(int y)
 {
-    _y = y;
+    setPosition({_position.x(), y});
+}
+
+const Point& Mouse::position() const
+{
+    return _position;
+}
+
+void Mouse::setPosition(const Point& pos)
+{
+    _position = pos;
     auto renderer = Game::getInstance()->renderer();
     float scaleX = renderer->scaleX();
     float scaleY = renderer->scaleY();
-    SDL_WarpMouseInWindow(renderer->sdlWindow(), _x*scaleX, _y*scaleY);
+    SDL_WarpMouseInWindow(renderer->sdlWindow(), (int)(pos.x() * scaleX), (int)(pos.y() * scaleY));
 }
 
 void Mouse::setState(Cursor state)
@@ -125,39 +131,35 @@ void Mouse::_setType(Cursor state)
             break;
         case Cursor::SCROLL_W:
             _ui = new UI::Image("art/intrface/scrwest.frm");
-            _ui->setYOffset( -_ui->height()*0.5);
+            _ui->setOffset(0, -_ui->size().height() / 2);
             break;
         case Cursor::SCROLL_W_X:
             _ui = new UI::Image("art/intrface/scrwx.frm");
-            _ui->setYOffset( -_ui->height()*0.5);
+            _ui->setOffset(0, -_ui->size().height() / 2);
             break;
         case Cursor::SCROLL_N:
             _ui = new UI::Image("art/intrface/scrnorth.frm");
-            _ui->setXOffset( -_ui->width()*0.5);
+            _ui->setOffset( -_ui->size().width() / 2, 0);
             break;
         case Cursor::SCROLL_N_X:
             _ui = new UI::Image("art/intrface/scrnx.frm");
-            _ui->setXOffset( -_ui->width()*0.5);
+            _ui->setOffset( -_ui->size().width() / 2, 0);
             break;
         case Cursor::SCROLL_S:
             _ui = new UI::Image("art/intrface/scrsouth.frm");
-            _ui->setXOffset( -_ui->width()*0.5);
-            _ui->setYOffset( -_ui->height());
+            _ui->setOffset( -_ui->size().width() / 2, -_ui->size().height());
             break;
         case Cursor::SCROLL_S_X:
             _ui = new UI::Image("art/intrface/scrsx.frm");
-            _ui->setXOffset(-_ui->width()*0.5);
-            _ui->setYOffset(-_ui->height());
+            _ui->setOffset(-_ui->size().width() / 2, -_ui->size().height());
             break;
         case Cursor::SCROLL_E:
             _ui = new UI::Image("art/intrface/screast.frm");
-            _ui->setXOffset( -_ui->width());
-            _ui->setYOffset( -_ui->height()*0.5);
+            _ui->setOffset( -_ui->size().width(), -_ui->size().height() / 2);
             break;
         case Cursor::SCROLL_E_X:
             _ui = new UI::Image("art/intrface/screx.frm");
-            _ui->setXOffset(-_ui->width());
-            _ui->setYOffset(-_ui->height()*0.5);
+            _ui->setOffset(-_ui->size().width(), -_ui->size().height() / 2);
             break;
         case Cursor::SCROLL_NW:
             _ui = new UI::Image("art/intrface/scrnwest.frm");
@@ -167,34 +169,31 @@ void Mouse::_setType(Cursor state)
             break;
         case Cursor::SCROLL_SW:
             _ui = new UI::Image("art/intrface/scrswest.frm");
-            _ui->setYOffset(-_ui->height());
+            _ui->setOffset(0, -_ui->size().height());
             break;
         case Cursor::SCROLL_SW_X:
             _ui = new UI::Image("art/intrface/scrswx.frm");
-            _ui->setYOffset(-_ui->height());
+            _ui->setOffset(0, -_ui->size().height());
             break;
         case Cursor::SCROLL_NE:
             _ui = new UI::Image("art/intrface/scrneast.frm");
-            _ui->setXOffset(-_ui->width());
+            _ui->setOffset(-_ui->size().width(), 0);
             break;
         case Cursor::SCROLL_NE_X:
             _ui = new UI::Image("art/intrface/scrnex.frm");
-            _ui->setXOffset(-_ui->width());
+            _ui->setOffset(-_ui->size().width(), 0);
             break;
         case Cursor::SCROLL_SE:
             _ui = new UI::Image("art/intrface/scrseast.frm");
-            _ui->setXOffset(-_ui->width());
-            _ui->setYOffset(-_ui->height());
+            _ui->setOffset(-_ui->size().width(), -_ui->size().height());
             break;
         case Cursor::SCROLL_SE_X:
             _ui = new UI::Image("art/intrface/scrsex.frm");
-            _ui->setXOffset(-_ui->width());
-            _ui->setYOffset(-_ui->height());
+            _ui->setOffset(-_ui->size().width(), -_ui->size().height());
             break;
         case Cursor::HEXAGON_RED:
             _ui = new UI::Image("art/intrface/msef000.frm");
-            _ui->setXOffset(- _ui->width()/2);
-            _ui->setYOffset(- _ui->height()/2);
+            _ui->setOffset(- _ui->size().width() / 2, - _ui->size().height() / 2);
             break;
         case Cursor::ACTION:
             _ui = new UI::Image("art/intrface/actarrow.frm");
@@ -209,8 +208,7 @@ void Mouse::_setType(Cursor state)
             queue->setRepeat(true);
             queue->start();
             _ui = queue;
-            _ui->setXOffset(-_ui->width()*0.5);
-            _ui->setYOffset(-_ui->height()*0.5);
+            _ui->setOffset(-_ui->size().width() / 2, -_ui->size().height() / 2);
             break;
         }
         case Cursor::NONE:
@@ -228,17 +226,16 @@ void Mouse::render()
 
     if (state() != Cursor::HEXAGON_RED)
     {
-        _ui->setX(_x);
-        _ui->setY(_y);
+        _ui->setPosition(position());
     }
     _ui->render();
 }
 
 void Mouse::think()
 {
-    SDL_GetMouseState(&_x, &_y);
-    _x=_x/Game::getInstance()->renderer()->scaleX();
-    _y=_y/Game::getInstance()->renderer()->scaleY();
+    SDL_GetMouseState(&_position.rx(), &_position.ry());
+    _position.rx() /= Game::getInstance()->renderer()->scaleX();
+    _position.ry() /= Game::getInstance()->renderer()->scaleY();
     if (_ui) _ui->think();
 }
 

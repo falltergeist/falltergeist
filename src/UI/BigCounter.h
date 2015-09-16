@@ -44,7 +44,8 @@ public:
         RED
     };
 
-    BigCounter(int x = 0, int y = 0, unsigned int length = 2);
+    BigCounter(int x, int y, unsigned int length = 2);
+    BigCounter(const Point& pos = Point(), unsigned int length = 2);
     ~BigCounter() override;
 
     Graphics::Texture* texture() const override;

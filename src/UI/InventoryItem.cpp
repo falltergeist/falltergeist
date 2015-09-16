@@ -31,6 +31,7 @@
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../Logger.h"
+#include "../Point.h"
 #include "../UI/Image.h"
 #include "../UI/ItemsList.h"
 
@@ -41,7 +42,7 @@ namespace Falltergeist
 namespace UI
 {
 
-InventoryItem::InventoryItem(Game::ItemObject *item, int x, int y) : Falltergeist::UI::Base(x, y)
+InventoryItem::InventoryItem(Game::ItemObject *item, const Point& pos) : Falltergeist::UI::Base(pos)
 {
     _item = item;
     addEventHandler("mouseleftdown", [this](Event::Event* event){ this->onMouseLeftDown(dynamic_cast<Event::Mouse*>(event)); });
@@ -92,13 +93,14 @@ void InventoryItem::render(bool eggTransparency)
     //return ActiveUI::render();
     if (!_item) return;
     auto game = Game::getInstance();
-    game->renderer()->drawTexture(texture(), x() + (width() - texture()->width())/2, y() + (height() - texture()->height())/2);
+    Size texSize = Size(texture()->width(), texture()->height());
+    game->renderer()->drawTexture(texture(), position() + (this->size() - texSize) / 2);
 }
 
-unsigned int InventoryItem::pixel(unsigned int x, unsigned int y)
+unsigned int InventoryItem::pixel(const Point& pos)
 {
     if (!_item) return 0;
-    return x < width() && y < height();
+    return Rect::inRect(pos, this->size()) ? 1 : 0;
 }
 
 Game::ItemObject* InventoryItem::item()
@@ -123,19 +125,16 @@ void InventoryItem::onMouseDragStart(Event::Mouse* event)
 
 void InventoryItem::onMouseDrag(Event::Mouse* event)
 {
-    setXOffset(xOffset() + event->xOffset());
-    setYOffset(yOffset() + event->yOffset());
+    setOffset(offset() + event->offset());
 }
 
 void InventoryItem::onMouseDragStop(Event::Mouse* event)
 {
-    setXOffset(0);
-    setYOffset(0);
+    setOffset({0, 0});
     setType(_oldType);
 
     auto itemevent = new Event::Mouse("itemdragstop");
-    itemevent->setX(event->x());
-    itemevent->setY(event->y());
+    itemevent->setPosition(event->position());
     itemevent->setEmitter(this);
     emitEvent(itemevent);
     delete itemevent;
@@ -145,8 +144,10 @@ void InventoryItem::onMouseDragStop(Event::Mouse* event)
 void InventoryItem::onArmorDragStop(Event::Mouse* event)
 {
     // Check if mouse is over this item
-    if (event->x() <= x() || event->x() >= x() + width()) return;
-    if (event->y() <= y() || event->y() >= y() + height()) return;
+    if (!Rect::inRect(event->position(), position(), size()))
+    {
+        return;
+    }
 
     if (ItemsList* itemsList = dynamic_cast<ItemsList*>(event->emitter()))
     {
@@ -169,8 +170,10 @@ void InventoryItem::onArmorDragStop(Event::Mouse* event)
 void InventoryItem::onHandDragStop(Event::Mouse* event)
 {
     // Check if mouse is over this item
-    if (event->x() <= x() || event->x() >= x() + width()) return;
-    if (event->y() <= y() || event->y() >= y() + height()) return;
+    if (!Rect::inRect(event->position(), position(), size()))
+    {
+        return;
+    }
 
     if (ItemsList* itemsList = dynamic_cast<ItemsList*>(event->emitter()))
     {
@@ -185,14 +188,11 @@ void InventoryItem::onHandDragStop(Event::Mouse* event)
     }
 }
 
-unsigned int InventoryItem::width() const
+Size InventoryItem::size() const
 {
-    return type() == Type::SLOT ? 90 : 70;
-}
-
-unsigned int InventoryItem::height() const
-{
-    return type() == Type::SLOT ? 63 : 49;
+    return type() == Type::SLOT
+           ? Size(90, 63)
+           : Size(70, 49);
 }
 
 }

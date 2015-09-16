@@ -63,14 +63,13 @@ void CritterDialog::init()
     setFullscreen(false);
     setModal(false);
 
-    setX((Game::getInstance()->renderer()->width() - 640)*0.5);
-    setY((Game::getInstance()->renderer()->height() - 480)*0.5 + 291);
+    setPosition((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2 + Point(0, 291));
 
     auto background = new UI::Image("art/intrface/di_talk.frm");
     addUI("background", background);
 
     auto question = new UI::TextArea("question", 140, -55);
-    question->setWidth(370);
+    question->setSize({370, 0});
     question->setWordWrap(true);
     addUI("question", question);
 
@@ -201,12 +200,12 @@ void CritterDialog::addAnswer(const std::string& text)
     int y = 50;
     for (auto answer : _answers)
     {
-        y += answer->height() + 5;
+        y += answer->size().height() + 5;
     }
 
     auto answer = new UI::TextArea(line, 140, y);
     answer->setWordWrap(true);
-    answer->setWidth(370);
+    answer->setSize({370, 0});
 
     answer->addEventHandler("mousein", std::bind(&CritterDialog::onAnswerIn, this, std::placeholders::_1));
     answer->addEventHandler("mouseout", std::bind(&CritterDialog::onAnswerOut, this, std::placeholders::_1));

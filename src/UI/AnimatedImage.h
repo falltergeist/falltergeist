@@ -40,8 +40,6 @@ public:
     AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direction);
     ~AnimatedImage() override;
 
-    unsigned int width() const override;
-    unsigned int height() const override;
     void render(bool eggTransparency = false) override;
 
 protected:

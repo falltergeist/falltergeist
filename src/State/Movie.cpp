@@ -63,8 +63,7 @@ void Movie::init()
 
     Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
     auto renderer = Game::getInstance()->renderer();
-    setX((renderer->width()  - 640)*0.5);
-    setY((renderer->height() - 320)*0.5);
+    setPosition((renderer->size() - Point(640, 320)) / 2);
 
     auto lst = ResourceManager::getInstance()->lstFileType("data/movies.lst");
     std::string movie = "art/cuts/" + lst->strings()->at(_id);

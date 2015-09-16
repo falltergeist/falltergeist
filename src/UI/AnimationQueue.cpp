@@ -78,8 +78,7 @@ void AnimationQueue::setRepeat(bool value)
 
 void AnimationQueue::render(bool eggTransparency)
 {
-    currentAnimation()->setX(this->x());
-    currentAnimation()->setY(this->y());
+    currentAnimation()->setPosition(this->position());
     currentAnimation()->render(eggTransparency);
 }
 
@@ -128,11 +127,10 @@ Graphics::Texture* AnimationQueue::texture() const
     return currentAnimation()->texture();
 }
 
-unsigned int AnimationQueue::pixel(unsigned int x, unsigned int y)
+unsigned int AnimationQueue::pixel(const Point& pos)
 {
-    currentAnimation()->setX(this->x());
-    currentAnimation()->setY(this->y());
-    return currentAnimation()->pixel(x, y);
+    currentAnimation()->setPosition(this->position());
+    return currentAnimation()->pixel(pos);
 }
 
 Animation* AnimationQueue::currentAnimation() const
@@ -140,25 +138,14 @@ Animation* AnimationQueue::currentAnimation() const
     return _animations.at(_currentAnimation);
 }
 
-unsigned int AnimationQueue::width() const
+Size AnimationQueue::size() const
 {
-    return currentAnimation()->width();
+    return currentAnimation()->size();
 }
 
-unsigned int AnimationQueue::height() const
+Point AnimationQueue::offset() const
 {
-    return currentAnimation()->height();
+    return currentAnimation()->offset();
 }
-
-int AnimationQueue::xOffset() const
-{
-    return currentAnimation()->xOffset();
-}
-
-int AnimationQueue::yOffset() const
-{
-    return currentAnimation()->yOffset();
-}
-
 }
 }

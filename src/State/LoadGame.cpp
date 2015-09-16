@@ -28,6 +28,7 @@
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
+#include "../Point.h"
 #include "../ResourceManager.h"
 #include "../State/State.h"
 #include "../State/LoadGame.h"
@@ -64,10 +65,10 @@ void LoadGame::init()
 
     // background
     auto bg = new UI::Image("art/intrface/lsgame.frm");
-    auto bgX = (game->renderer()->width() - bg->width())*0.5;
-    auto bgY = (game->renderer()->height() - bg->height())*0.5;
-    bg->setX(bgX);
-    bg->setY(bgY);
+    Point bgPos = Point((game->renderer()->size() - bg->size()) / 2);
+    auto bgX = bgPos.x();
+    auto bgY = bgPos.y();
+    bg->setPosition(bgPos);
     addUI(bg);
 
     // BUTTONS

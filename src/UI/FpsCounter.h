@@ -35,7 +35,8 @@ namespace UI
 class FpsCounter : public TextArea
 {
 public:
-    FpsCounter(int x = 598, int y = 2);
+    FpsCounter(const Point& pos = Point(598, 2));
+    FpsCounter(int x, int y);
     ~FpsCounter() override;
 
     void think() override;

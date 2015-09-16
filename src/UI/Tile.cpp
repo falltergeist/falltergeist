@@ -34,11 +34,10 @@ namespace Falltergeist
 namespace UI
 {
 
-Tile::Tile(unsigned int number, int x, int y)
+Tile::Tile(unsigned int number, const Point& pos)
 {
     _number = number;
-    _x = x;
-    _y = y;
+    _position = pos;
 }
 
 unsigned int Tile::number() const
@@ -46,14 +45,9 @@ unsigned int Tile::number() const
     return _number;
 }
 
-int Tile::x() const
+Point Tile::position() const
 {
-    return _x;
-}
-
-int Tile::y() const
-{
-    return _y;
+    return _position;
 }
 
 unsigned int Tile::index() const

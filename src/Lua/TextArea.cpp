@@ -35,14 +35,6 @@ TextArea::TextArea(const std::string& text, int x, int y) : UI::TextArea(text, x
 {
 }
 
-TextArea::TextArea(int x, int y) : UI::TextArea(x, y)
-{
-}
-
-TextArea::TextArea(UI::TextArea* textArea, int x, int y) : UI::TextArea(textArea, x, y)
-{
-}
-
 TextArea::~TextArea()
 {
 }
@@ -57,16 +49,6 @@ void TextArea::setLuaHorizontalAlign(unsigned align)
     if (align > static_cast<unsigned>(HorizontalAlign::JUSTIFY)) return; //@todo Log error
 
     setHorizontalAlign(static_cast<HorizontalAlign>(align));
-}
-
-void TextArea::setWidth(unsigned int width)
-{
-    TextArea::setWidth(width);
-}
-
-unsigned int TextArea::width() const
-{
-    return TextArea::width();
 }
 
 }
