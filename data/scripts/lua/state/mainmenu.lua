@@ -55,6 +55,8 @@ function mainMenu:init()
 
     self.obj:addUI(introLabel)
 
+    game.renderer:fadeIn(0, 0, 0, 1000)
+
 end
 
 function mainMenu:think()
@@ -63,7 +65,7 @@ end
 -- event is C++ object
 function mainMenu:handle(event)
     if (event.name == "mousedown") then
-        game.instance:quit()
+        game.quit()
     end
 end
 

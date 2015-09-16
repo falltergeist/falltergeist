@@ -12,4 +12,4 @@ package.path = "./data/scripts/lua/?.lua;" .. package.path
 require("state.mainmenu")
 
 
-game.instance:setState(mainMenu.obj)
+game.setState(mainMenu.obj)

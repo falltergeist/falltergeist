@@ -24,6 +24,7 @@
 #include "../Exception.h"
 #include "../functions.h"
 #include "../Game/Game.h"
+#include "../Graphics/Renderer.h"
 #include "../Point.h"
 #include "../Input/Mouse.h"
 #include "../Lua/Binder.h"
@@ -56,31 +57,48 @@ luabridge::Namespace Binder::_gameNamespace()
     return luabridge::getGlobalNamespace(_luaState).beginNamespace("game");
 }
 
+void setState(State::State* state)
+{
+    Game::getInstance()->setState(state);
+}
+
+void pushState(State::State* state)
+{
+    Game::getInstance()->pushState(state);
+}
+
+void popState()
+{
+    Game::getInstance()->popState();
+}
+
+void quit()
+{
+    Game::getInstance()->quit();
+}
+
 void Binder::bindAll()
 {
-    // TODO: better solution?
-    // luabridge::Namespace::addProperty cannot deduce setter type =(
-    static Input::Mouse* (*const getterGameMouse)() = []() -> Input::Mouse*
-    {
-        return Game::getInstance()->mouse();
-    };
-
     _gameNamespace()
-        .beginClass<Falltergeist::Game::Game>("Game")
-            //.addStaticFunction("getInstance", &Falltergeist::Game::Game::getInstance)
-            .addFunction("setState", &Falltergeist::Game::Game::setState)
-            .addFunction("pushState", &Falltergeist::Game::Game::pushState)
-            .addFunction("popState", &Falltergeist::Game::Game::popState)
-            .addFunction("quit", &Falltergeist::Game::Game::quit)
-        .endClass()
-
-        .addProperty("instance", &Falltergeist::Game::Game::getInstance, (void(*)(Game::Game*))nullptr)
+        .addFunction("setState", setState)
+        .addFunction("pushState", pushState)
+        .addFunction("popState", popState)
+        .addFunction("quit", quit)
 
         // game.translate
         .addFunction("translate", translate)
 
         // game.mouse
-        .addProperty ("mouse", getterGameMouse, (void(*)(Input::Mouse*))nullptr)
+        .addProperty<Input::Mouse*,void*>("mouse", []() -> Input::Mouse*
+        {
+            return Game::getInstance()->mouse();
+        })
+
+        // game.renderer
+        .addProperty<Graphics::Renderer*,void*>("renderer", []() -> Graphics::Renderer*
+        {
+            return Game::getInstance()->renderer();
+        })
     ;
 
     _bindBasicClasses();
@@ -92,24 +110,24 @@ void Binder::bindAll()
 void Binder::_bindBasicClasses()
 {
     _gameNamespace()
-        .beginClass<Falltergeist::Point>("Point")
+        .beginClass<Point>("Point")
             .addConstructor<void(*)(int, int)>()
-            .addProperty("x", &Falltergeist::Point::x, &Falltergeist::Point::setX)
-            .addProperty("y", &Falltergeist::Point::y, &Falltergeist::Point::setY)
-            .addFunction("__add", &Falltergeist::Point::add)
-            .addFunction("__sub", &Falltergeist::Point::sub)
-            .addFunction("__mul", &Falltergeist::Point::mul)
-            .addFunction("__div", &Falltergeist::Point::div)
+            .addProperty("x", &Point::x, &Point::setX)
+            .addProperty("y", &Point::y, &Point::setY)
+            .addFunction("__add", &Point::add)
+            .addFunction("__sub", &Point::sub)
+            .addFunction("__mul", &Point::mul)
+            .addFunction("__div", &Point::div)
         .endClass()
 
-        .beginClass<Falltergeist::Size>("Size")
+        .beginClass<Size>("Size")
             .addConstructor<void(*)(int, int)>()
-            .addProperty("width", &Falltergeist::Size::width, &Falltergeist::Size::setWidth)
-            .addProperty("height", &Falltergeist::Size::height, &Falltergeist::Size::setHeight)
-            .addFunction("__add", &Falltergeist::Size::add)
-            .addFunction("__sub", &Falltergeist::Size::sub)
-            .addFunction("__mul", &Falltergeist::Size::mul)
-            .addFunction("__div", &Falltergeist::Size::div)
+            .addProperty("width", &Size::width, &Size::setWidth)
+            .addProperty("height", &Size::height, &Size::setHeight)
+            .addFunction("__add", &Size::add)
+            .addFunction("__sub", &Size::sub)
+            .addFunction("__mul", &Size::mul)
+            .addFunction("__div", &Size::div)
         .endClass()
 
         // game.Mouse
@@ -118,6 +136,13 @@ void Binder::_bindBasicClasses()
             .addProperty("y", &Input::Mouse::y, &Input::Mouse::setY)
             .addProperty("position", &Input::Mouse::position, &Input::Mouse::setPosition)
             .addProperty("cursor", &Input::Mouse::cursor, &Input::Mouse::setCursor)
+        .endClass()
+
+        // game.Mouse
+        .beginClass<Graphics::Renderer>("Renderer")
+            .addProperty("size", &Graphics::Renderer::size)
+            .addFunction("fadeIn", &Graphics::Renderer::fadeIn)
+            .addFunction("fadeOut", &Graphics::Renderer::fadeOut)
         .endClass()
 
         // game.Event
@@ -132,29 +157,35 @@ void Binder::_bindUI()
     _gameNamespace()
         .beginNamespace("ui")
             // game.ui.UI
-            .beginClass<Falltergeist::UI::Base>("UI")
+            .beginClass<UI::Base>("UI")
                 .addProperty("position", &UI::Base::position, &UI::Base::setPosition)
+                .addProperty("offset", &UI::Base::offset, &UI::Base::setOffset)
+                .addProperty("size", &UI::Base::size)
             .endClass()
 
             // game.ui.Image
-            .deriveClass<UI::Image, Falltergeist::UI::Base>("Image")
+            .deriveClass<UI::Image, UI::Base>("Image")
                 .addConstructor<void(*)(char const*)>()
             .endClass()
 
             // game.ui.ImageButton
-            .deriveClass<Falltergeist::UI::ImageButton, Falltergeist::UI::Base>("ImageButtonBase")
+            .deriveClass<UI::ImageButton, UI::Base>("ImageButtonBase")
             .endClass()
 
-            .deriveClass<Lua::ImageButton, Falltergeist::UI::ImageButton>("ImageButton")
+            .deriveClass<Lua::ImageButton, UI::ImageButton>("ImageButton")
                 .addConstructor<void(*)(const std::string&, const std::string&, const std::string&, const std::string&, int, int)>()
                 .addFunction("subclass", &Lua::ImageButton::subclass)
             .endClass()
 
             // game.ui.TextArea
-            .deriveClass<Lua::TextArea, Falltergeist::UI::Base>("TextArea")
+            .deriveClass<Lua::TextArea, UI::Base>("TextArea")
                 .addConstructor<void(*)(const char*, int, int)>()
-                //.addProperty("width", &Lua::TextArea::width, &Lua::TextArea::setWidth)
-                .addProperty("horizontalAlign", &Lua::TextArea::luaHorizontalAlign, &Lua::TextArea::setLuaHorizontalAlign)
+                .addProperty<Size, const Size&>
+                    ("size", &TextArea::size, &TextArea::setSize)
+                .addProperty<std::string, const std::string&>
+                    ("text", &TextArea::text, &TextArea::setText)
+                .addProperty
+                    ("horizontalAlign", &Lua::TextArea::luaHorizontalAlign, &Lua::TextArea::setLuaHorizontalAlign)
             .endClass()
     ;
 }
