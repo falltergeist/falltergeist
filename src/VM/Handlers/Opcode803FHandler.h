@@ -30,6 +30,11 @@
 namespace Falltergeist
 {
 
+/**
+ * @brief 0x803F opcode handler class
+ *
+ * This opcode represents logical OR operation. It tooks 2 boolean values from the stack and pushes boolean value of logical OR operation
+ */
 class Opcode803FHandler : public OpcodeHandler
 {
 public:

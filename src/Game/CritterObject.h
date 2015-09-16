@@ -29,9 +29,7 @@
 #include "../PathFinding/Hexagon.h"
 
 // Third party includes
-#include <libfalltergeist.h>
-
-using namespace libfalltergeist;
+#include <Enums.h>
 
 namespace Falltergeist
 {

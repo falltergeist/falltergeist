@@ -35,7 +35,10 @@
 #include "../UI/AnimationFrame.h"
 
 // Third party includes
-#include "SDL.h"
+#include <Frm/Direction.h>
+#include <Frm/File.h>
+#include <Frm/Frame.h>
+#include <SDL.h>
 
 namespace Falltergeist
 {

@@ -29,7 +29,6 @@
 #include "../UI/Base.h"
 
 // Third party includes
-#include <libfalltergeist.h>
 
 namespace Falltergeist
 {
@@ -81,6 +80,12 @@ public:
 
     bool wordWrap() const;
     void setWordWrap(bool wordWrap);
+    
+    bool outline() const;
+    void setOutline(bool outLine);
+    
+    unsigned int outlineColor() const;
+    void setOutlineColor(unsigned int color);
 
     std::shared_ptr<Font> font();
     void setFont(std::shared_ptr<Font> font);
@@ -88,7 +93,7 @@ public:
     void render(bool eggTransparency = false) override;
     unsigned int pixel(const Point& pos) override;
 
-    unsigned int timestampCreated();
+    unsigned int timestampCreated() const;
 
     TextArea& operator<<(const std::string& text);
     TextArea& operator<<(unsigned value);
@@ -116,8 +121,10 @@ protected:
     // not used when _width || _height are set manualy
     Size _calculatedSize;
 
-    unsigned int _backgroundColor = 0;
     bool _wordWrap = false;
+    bool _outline = false;
+
+    unsigned int _backgroundColor = 0;
     unsigned int _outlineColor = 0;
     unsigned int _timestampCreated = 0;
 

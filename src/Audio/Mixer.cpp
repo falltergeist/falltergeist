@@ -32,6 +32,7 @@
 #include "../Settings.h"
 
 // Third party includes
+#include <Acm/File.h>
 #include <SDL.h>
 
 namespace Falltergeist

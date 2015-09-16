@@ -23,17 +23,18 @@
 #include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
+#include "../Input/Mouse.h"
 #include "../ResourceManager.h"
+#include "../Settings.h"
 #include "../State/SettingsMenu.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/MultistateImageButton.h"
 #include "../UI/Slider.h"
 #include "../UI/TextArea.h"
-#include "../Settings.h"
-#include "../Input/Mouse.h"
 
 // Third party includes
+#include <Aaf/File.h>
 
 namespace Falltergeist
 {

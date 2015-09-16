@@ -26,6 +26,7 @@
 #include "../../Exception.h"
 
 // Third party includes
+#include <libfalltergeist.h>
 
 namespace Falltergeist
 {

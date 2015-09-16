@@ -25,7 +25,7 @@
 // Falltergeist includes
 
 // Third party includes
-#include <libfalltergeist.h>
+#include <Enums.h>
 
 namespace Falltergeist
 {

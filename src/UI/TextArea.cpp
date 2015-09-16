@@ -35,7 +35,7 @@
 #include "../UI/TextSymbol.h"
 
 // Third party includes
-#include "SDL.h"
+#include <SDL.h>
 
 namespace Falltergeist
 {
@@ -148,6 +148,26 @@ bool TextArea::wordWrap() const
     return _wordWrap;
 }
 
+void TextArea::setOutline(bool outline)
+{
+    _outline = outline;
+}
+
+bool TextArea::outline() const
+{
+    return _outline;
+}
+
+void TextArea::setOutlineColor(unsigned int color)
+{
+    _outlineColor = color;
+}
+
+unsigned int TextArea::outlineColor() const
+{
+    return _outlineColor;
+}
+
 Size TextArea::size() const
 {
     return Size(
@@ -247,6 +267,39 @@ void TextArea::_calculate()
         {
             symbol.setX(symbol.x() + xOffset);
             symbol.setY(symbol.y() + yOffset);
+            //outline symbols
+            if(_outline)
+            {
+                std::shared_ptr<Font> outlineFont = ResourceManager::getInstance()->font(symbol.font()->filename(), _outlineColor);
+                
+                auto outlineSymbolLeft = new TextSymbol(symbol.chr(), symbol.x()-1, symbol.y());
+                auto outlineSymbolTopLeft = new TextSymbol(symbol.chr(), symbol.x()-1, symbol.y()-1);
+                auto outlineSymbolBottomLeft = new TextSymbol(symbol.chr(), symbol.x()-1, symbol.y()+1);
+                auto outlineSymbolRight = new TextSymbol(symbol.chr(), symbol.x()+1, symbol.y());
+                auto outlineSymbolTopRight = new TextSymbol(symbol.chr(), symbol.x()+1, symbol.y()-1);
+                auto outlineSymbolBottomRight = new TextSymbol(symbol.chr(), symbol.x()+1, symbol.y()+1);
+                auto outlineSymbolBottom = new TextSymbol(symbol.chr(), symbol.x(), symbol.y()-1);
+                auto outlineSymbolTop = new TextSymbol(symbol.chr(), symbol.x(), symbol.y()+1);
+                
+                outlineSymbolLeft->setFont(outlineFont);
+                outlineSymbolTopLeft->setFont(outlineFont);
+                outlineSymbolBottomLeft->setFont(outlineFont);
+                outlineSymbolRight->setFont(outlineFont);
+                outlineSymbolTopRight->setFont(outlineFont);
+                outlineSymbolBottomRight->setFont(outlineFont);
+                outlineSymbolBottom->setFont(outlineFont);
+                outlineSymbolTop->setFont(outlineFont);
+                
+                _symbols.push_back(*outlineSymbolLeft);
+                _symbols.push_back(*outlineSymbolTopLeft);
+                _symbols.push_back(*outlineSymbolBottomLeft);
+                _symbols.push_back(*outlineSymbolRight);
+                _symbols.push_back(*outlineSymbolTopRight);
+                _symbols.push_back(*outlineSymbolBottomRight);
+                _symbols.push_back(*outlineSymbolBottom);
+                _symbols.push_back(*outlineSymbolTop);
+            }
+        
             _symbols.push_back(symbol);
         }
     }
@@ -258,7 +311,7 @@ std::string TextArea::text() const
     return _text;
 }
 
-unsigned int TextArea::timestampCreated()
+unsigned int TextArea::timestampCreated() const
 {
     return _timestampCreated;
 }

@@ -21,6 +21,7 @@
 #define FALLTERGEIST_OPCODEFACTORY_H
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist include
 #include "../VM/OpcodeHandler.h"
@@ -34,7 +35,7 @@ class VM;
 class OpcodeFactory
 {
 public:
-    static OpcodeHandler* createOpcode(unsigned int number, VM* vm);
+    static std::unique_ptr<OpcodeHandler> createOpcode(unsigned int number, VM* vm);
 };
 
 }

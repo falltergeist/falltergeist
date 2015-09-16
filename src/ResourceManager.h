@@ -25,14 +25,41 @@
 #include <map>
 #include <memory>
 #include <unordered_map>
+#include <vector>
 
 // Falltergeist includes
 #include "Base/Singleton.h"
 
 // Third party includes
-#include <libfalltergeist.h>
+#include <Lst/File.h>
+#include <Msg/File.h>
+#include <Msg/Message.h>
 
-using namespace libfalltergeist;
+namespace libfalltergeist
+{
+namespace Aaf { class File; }
+namespace Acm { class File; }
+namespace Bio { class File; }
+namespace Dat
+{
+class File;
+class Item;
+}
+namespace Frm { class File; }
+namespace Frm { class File; }
+namespace Fon { class File; }
+namespace Gam { class File; }
+namespace Gcd { class File; }
+namespace Pal { class File; }
+namespace Int { class File; }
+namespace Int { class File; }
+namespace Map { class File; }
+namespace Mve { class File; }
+namespace Pro { class File; }
+namespace Pro { class File; }
+namespace Rix { class File; }
+namespace Sve { class File; }
+}
 
 namespace Falltergeist
 {

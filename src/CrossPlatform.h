@@ -46,9 +46,6 @@ protected:
     // If directory did exist, then return false, otherwise return true.
     // Throw runtime_error on failure.
     static bool _createDirectory(const char *dir);
-
-    // Return a pointer to a malloc-allocated buffer containing a copy of str
-    static char *_copyString(const char *str);
 public:
     CrossPlatform();
     ~CrossPlatform();
@@ -65,7 +62,7 @@ public:
 
     // Create directory at given path with parent directories as needed.
     // Throw runtime_error on failure.
-    static void createDirectory(const std::string &path);
+    static void createDirectory(std::string path);
 };
 
 }
