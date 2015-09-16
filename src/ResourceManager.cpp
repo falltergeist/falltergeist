@@ -27,14 +27,15 @@
 #include "CrossPlatform.h"
 #include "Exception.h"
 #include "Font.h"
+#include "Game/Location.h"
 #include "Graphics/Texture.h"
 #include "Logger.h"
 #include "ResourceManager.h"
 #include "Ini/File.h"
 #include "Ini/Parser.h"
-#include "Game/Location.h"
 
 // Third party includes
+#include <libfalltergeist.h>
 #include <SDL_image.h>
 
 namespace Falltergeist

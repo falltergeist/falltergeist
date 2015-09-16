@@ -28,7 +28,8 @@
 #include "Graphics/Texture.h"
 
 // Third party includes
-#include <libfalltergeist.h>
+#include <Aaf/File.h>
+#include <Aaf/Glyph.h>
 
 namespace Falltergeist
 {

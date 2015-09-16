@@ -39,6 +39,8 @@
 #include "../VM/VM.h"
 
 // Third party includes
+#include <Int/File.h>
+#include <Int/Procedure.h>
 
 namespace Falltergeist
 {

@@ -35,7 +35,7 @@
 #include "../UI/TextSymbol.h"
 
 // Third party includes
-#include "SDL.h"
+#include <SDL.h>
 
 namespace Falltergeist
 {
