@@ -319,44 +319,21 @@ bool CrossPlatform::_createDirectory(const char *dir)
         throw std::runtime_error("CreateDirectory failed with code: " + std::to_string(errorId));
     }
 #else
-    #error Platform not supported: CrossPlatform::createDirectoryIfNotExists not implemented
+    #error Platform not supported: CrossPlatform::_createDirectory not implemented
 #endif
     return false;
 }
 
-char *CrossPlatform::_copyString(const char *str)
+void CrossPlatform::createDirectory(std::string path)
 {
-#if defined(__unix__) || defined(__APPLE__)
-    return strdup(str);
-#else
-    char *ret = (char*)malloc((strlen(str) + 1) * sizeof(*str));
-    if (ret != nullptr) strcpy(ret, str);
-    return ret;
-#endif
-}
-
-void CrossPlatform::createDirectory(const std::string &path)
-{
-    char *dir = _copyString(path.c_str());
-
-    try
-    {
-        for (char *dirDelim = strchr(dir, '/'); dirDelim != nullptr; dirDelim = strchr(dirDelim + 1, '/'))
-        {
-            *dirDelim = '\0';
-            // Skip root directory
-            if (dir != dirDelim) _createDirectory(dir);
-            *dirDelim = '/';
-        }
-        _createDirectory(dir);
+    // Start index of 1 means that we skip root directory.
+    for (auto dirDelim = path.find_first_of('/', 1U); dirDelim != std::string::npos;
+         dirDelim = path.find_first_of('/', dirDelim + 1)) {
+        path[dirDelim] = '\0';
+        _createDirectory(path.c_str());
+        path[dirDelim] = '/';
     }
-    catch (const std::runtime_error &)
-    {
-        free(dir);
-        throw;
-    }
-
-    free(dir);
+    _createDirectory(path.c_str());
 }
 
 std::string CrossPlatform::getConfigPath()
