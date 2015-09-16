@@ -30,6 +30,7 @@ namespace Falltergeist
 
 Font::Font(const std::string& filename, unsigned int color)
 {
+    _filename = filename;
     _aaf = ResourceManager::getInstance()->aafFileType(filename);
     _color = color;
 
@@ -93,6 +94,11 @@ unsigned short Font::spaceWidth()
 Graphics::Texture* Font::texture()
 {
     return _texture;
+}
+
+std::string Font::filename() const
+{
+    return _filename;
 }
 
 libfalltergeist::Aaf::File* Font::aaf()
