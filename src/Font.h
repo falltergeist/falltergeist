@@ -36,10 +36,6 @@ namespace Falltergeist
 
 class Font
 {
-protected:
-    unsigned int _color = 0;
-    libfalltergeist::Aaf::File* _aaf = nullptr;
-    Graphics::Texture* _texture = nullptr;
 public:
     Font(const std::string& filename, unsigned int color);
     ~Font();
@@ -54,10 +50,19 @@ public:
 
     unsigned short width();
     unsigned short height();
+    
+    std::string filename() const;
 
     Graphics::Texture* texture();
 
     libfalltergeist::Aaf::File* aaf();
+
+protected:
+    unsigned int _color = 0;
+    libfalltergeist::Aaf::File* _aaf = nullptr;
+    Graphics::Texture* _texture = nullptr;
+    std::string _filename;
+
 };
 
 }
