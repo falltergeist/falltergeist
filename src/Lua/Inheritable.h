@@ -62,7 +62,7 @@ public:
     template<typename ...T>
     luabridge::LuaRef call(const std::string& method, T... args) const
     {
-        return _callInternal(method, [this, args...](const luabridge::LuaRef& func)
+        return _callInternal(method, [&](const luabridge::LuaRef& func)
         {
             return func(_table, args...);
         });
