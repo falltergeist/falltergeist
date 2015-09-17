@@ -58,20 +58,33 @@ public:
     /**
      * Calls "method" with given name and zero or more arguments
      * Table itself will always be passed as a first ("self") argument, so you can take advantage of colon syntax in Lua.
+     *
+     * @return function result or nil if function with given name not exists
      */
     template<typename ...T>
     luabridge::LuaRef call(const std::string& method, T... args) const
     {
-        return _callInternal(method, [&](const luabridge::LuaRef& func)
+        luabridge::LuaRef ref(_table.state()); // init with nil reference
+        if (_tryGetFunction(method, ref))
         {
-            return func(_table, args...);
-        });
+            try
+            {
+                return ref(_table, args...);
+            }
+            catch (luabridge::LuaException ex)
+            {
+                _logError(ex.what());
+            }
+        }
+        return ref;
     }
 
 private:
     luabridge::LuaRef _table;
 
-    luabridge::LuaRef _callInternal(const std::string&, std::function<luabridge::LuaRef(const luabridge::LuaRef&)>) const;
+    bool _tryGetFunction(const std::string&, luabridge::LuaRef&) const;
+
+    void _logError(const std::string& message) const;
 };
 
 }

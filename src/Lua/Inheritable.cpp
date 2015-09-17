@@ -56,18 +56,24 @@ void Inheritable::setTable(luabridge::LuaRef value)
     }
 }
 
-luabridge::LuaRef Inheritable::_callInternal(const std::string& method,
-                                             std::function<luabridge::LuaRef(const luabridge::LuaRef&)> handler) const
+bool Inheritable::_tryGetFunction(const std::string& method, luabridge::LuaRef& ref) const
 {
     if (_table[method].isFunction())
     {
-        return handler(_table[method]);
+        ref = luabridge::LuaRef(_table[method]);
+        return true;
     }
     else
     {
-        Logger::error("Lua") << "Inheritable::call(): value is not a function: " << luabridge::LuaRef(_table[method]);
+        Logger::error("Lua") << "Inheritable::call(): value is not a function: " << luabridge::LuaRef(_table[method]) << std::endl;
     }
-    return luabridge::LuaRef(_table.state());
+    return false;
 }
+
+void Inheritable::_logError(const std::string& message) const
+{
+    Logger::error("Lua") << message << std::endl;
+}
+
 }
 }
