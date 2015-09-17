@@ -56,17 +56,8 @@ void Inheritable::setTable(luabridge::LuaRef value)
     }
 }
 
-luabridge::LuaRef Inheritable::call(const std::string& method) const
-{
-    return _callInternal(method, [this](luabridge::LuaRef func)
-    {
-        return func(_table);
-    });
-}
-
-
 luabridge::LuaRef Inheritable::_callInternal(const std::string& method,
-                                             std::function<luabridge::LuaRef(luabridge::LuaRef)> handler) const
+                                             std::function<luabridge::LuaRef(const luabridge::LuaRef&)> handler) const
 {
     if (_table[method].isFunction())
     {

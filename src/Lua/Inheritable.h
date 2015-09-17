@@ -37,65 +37,41 @@ namespace Falltergeist
 namespace Lua
 {
 
-
+/**
+ * Wrapper for LuaRef pointing to Lua table which acts as an instance of Lua "class" which "inherits" from C++ class.
+ */
 class Inheritable
 {
 public:
     Inheritable(luabridge::LuaRef table);
 
-    // returns underlying table
+    /**
+     * returns the underlying table
+     */
     luabridge::LuaRef table() const;
 
-    // sets table
+    /**
+     * sets table
+     */
     void setTable(luabridge::LuaRef value);
 
-    // calls given method with only self argument
-    luabridge::LuaRef call(const std::string&) const;
-
-    // calls given method with self and one argument
-    template <class T1>
-    luabridge::LuaRef call(const std::string& method, T1 a1) const
+    /**
+     * Calls "method" with given name and zero or more arguments
+     * Table itself will always be passed as a first ("self") argument, so you can take advantage of colon syntax in Lua.
+     */
+    template<typename ...T>
+    luabridge::LuaRef call(const std::string& method, T... args) const
     {
-        return _callInternal(method, [this, a1](luabridge::LuaRef func)
+        return _callInternal(method, [this, args...](const luabridge::LuaRef& func)
         {
-            return func(_table, a1);
-        });
-    }
-
-    // calls given method with self and two arguments
-    template <class T1, class T2>
-    luabridge::LuaRef call(const std::string& method, T1 a1, T2 a2) const
-    {
-        return _callInternal(method, [this, a1, a2](luabridge::LuaRef func)
-        {
-            return func(_table, a1, a2);
-        });
-    }
-
-    // calls given method with self and three arguments
-    template <class T1, class T2, class T3>
-    luabridge::LuaRef call(const std::string& method, T1 a1, T2 a2, T3 a3) const
-    {
-        return _callInternal(method, [this, a1, a2, a3](luabridge::LuaRef func)
-        {
-            return func(_table, a1, a2, a3);
-        });
-    }
-
-    // calls given method with self and four arguments
-    template <class T1, class T2, class T3, class T4>
-    luabridge::LuaRef call(const std::string& method, T1 a1, T2 a2, T3 a3, T4 a4) const
-    {
-        return _callInternal(method, [this, a1, a2, a3, a4](luabridge::LuaRef func)
-        {
-            return func(_table, a1, a2, a3, a4);
+            return func(_table, args...);
         });
     }
 
 private:
     luabridge::LuaRef _table;
 
-    luabridge::LuaRef _callInternal(const std::string&, std::function<luabridge::LuaRef(luabridge::LuaRef)>) const;
+    luabridge::LuaRef _callInternal(const std::string&, std::function<luabridge::LuaRef(const luabridge::LuaRef&)>) const;
 };
 
 }
