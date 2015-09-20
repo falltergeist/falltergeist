@@ -11,6 +11,7 @@ package.path = "./data/scripts/lua/?.lua;" .. package.path
 
 -- require modules
 require("global")
+
 local MainMenu = require("state.MainMenu")
 
 -- initialize game

@@ -42,13 +42,26 @@ public:
     LuaState(luabridge::LuaRef table);
     ~LuaState() override;
 
-    static LuaState* pushNew(luabridge::LuaRef table);
+    template <typename T, typename ...ArgT>
+    static T* pushNew(ArgT... args)
+    {
+        T* obj = new T(args...);
+        Game::getInstance()->pushState(obj);
+        return obj;
+    }
 
     void think() override;
     void handle(Event::Event* event) override;
     void render() override;
 
     void addUI(UI::Base* ui);
+
+
+    virtual void onStateActivate(Event::State* event) override;
+
+    virtual void onStateDeactivate(Event::State* event) override;
+
+    virtual void onKeyDown(Event::Keyboard* event) override;
 
 private:
     Lua::Inheritable _inheritable;

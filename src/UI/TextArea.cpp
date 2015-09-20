@@ -135,6 +135,11 @@ void TextArea::setFont(std::shared_ptr<Font> font)
     _calculate();
 }
 
+void TextArea::setFont(const std::string& fontName, unsigned int color)
+{
+    setFont(ResourceManager::getInstance()->font(fontName, color));
+}
+
 void TextArea::setWordWrap(bool wordWrap)
 {
     if (_wordWrap == wordWrap) return;
@@ -184,9 +189,16 @@ void TextArea::setSize(const Size& size)
     _calculate();
 }
 
+int TextArea::width() const
+{
+    return _size.width() ?: _calculatedSize.width();
+}
+
 void TextArea::setWidth(int width)
 {
-    setSize({width, _size.height()});
+    _size.setWidth(width);
+    _changed = true;
+    _calculate();
 }
 
 void TextArea::_calculate()

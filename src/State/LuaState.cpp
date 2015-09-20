@@ -45,13 +45,6 @@ LuaState::~LuaState()
     _ui.clear();
 }
 
-LuaState* LuaState::pushNew(luabridge::LuaRef table)
-{
-    auto obj = new LuaState(table);
-    Game::getInstance()->pushState(obj);
-    return obj;
-}
-
 void LuaState::think()
 {
     State::think();
@@ -60,8 +53,8 @@ void LuaState::think()
 
 void LuaState::handle(Event::Event* event)
 {
-    _inheritable.call("handle", event);
     State::handle(event);
+    _inheritable.call("handle", event);
 }
 
 void LuaState::render()
@@ -74,6 +67,21 @@ void LuaState::addUI(UI::Base* ui)
 {
     if (!ui) return;
     State::addUI(ui);
+}
+
+void LuaState::onStateActivate(Event::State* event)
+{
+    _inheritable.call("onActivate", event);
+}
+
+void LuaState::onStateDeactivate(Event::State* event)
+{
+    _inheritable.call("onDeactivate", event);
+}
+
+void LuaState::onKeyDown(Event::Keyboard* event)
+{
+    _inheritable.call("onKeyDown", event);
 }
 
 }

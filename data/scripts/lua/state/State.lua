@@ -24,12 +24,34 @@
 -- module/class table
 local State = class "State"
 
-State:wrapEngineClass(game.State)
+State:wrapEngineClass(game.state.State)
 
 function State:initialize()
-    self.obj = game.State.pushNew(self)
+    self.obj = game.state.State.pushNew(self)
 end
 
+function State:fadeIn(func)
+    self:fade(true, 0, 0, 0, 1000, func)
+end
+
+function State:fadeOut(func)
+    self:fade(false, 0, 0, 0, 1000, func)
+end
+
+function State:fade(isIn, r, g, b, delay, func)
+    if isIn then
+        game.renderer:fadeIn(r, g, b, delay)
+    else
+        game.renderer:fadeOut(r, g, b, delay)
+    end
+    if type(func) == "function" then
+        local this = self
+        self.obj:addEventHandler("fadedone", function(...)
+            this.obj:removeEventHandlers("fadedone")
+            func(...)
+        end)
+    end
+end
 
 
 --
@@ -45,6 +67,20 @@ enum.CURSOR = {
     BIG_ARROW = 1,
     WAIT = 21,
     HAND = 22
+}
+
+enum.MSG_FILE = {
+    INVENTORY = 0,
+    LOAD_SAVE = 1,
+    OPTIONS = 2,
+    MISC = 3,
+    EDITOR = 4,
+    TRAITS = 5,
+    SKILLS = 6,
+    STATS = 7,
+    SKILLDEX = 8,
+    DIALOG_BOX = 9,
+    PROTO_ITEMS = 10,
 }
 
 

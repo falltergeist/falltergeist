@@ -13,14 +13,18 @@ function class.Object.wrapEngineClass(tClass, eClass)
     assert(type(tClass) == "table", "Make sure you are using 'Class:wrapEngineClass' (with colon).")
     assert(type(tClass.__instanceDict) == "table", "wrapEngineClass should only be called on a class table.")
 
-    -- cache names of engine class members that can be "get" or "set"
+    -- cache names of engine class members that can be "get", "set" or called
     tClass.__membersGet = {}
     tClass.__membersSet = {}
+    tClass.__membersCall = {}
     local function getMembers(classDef, level)
         level = level or 0
         for k, _ in pairs(classDef) do
             if type(k) == "string" and string.sub(k, 1, 2) ~= "__" then -- instance method
-                tClass.__membersGet[k] = true
+                -- create a wrapping closure for C++ class instance method
+                tClass.__membersCall[k] = function(self, ...)
+                    return self.obj[k](self.obj, ...)
+                end
             end
         end
         for k, _ in pairs(classDef.__propget) do
@@ -36,16 +40,15 @@ function class.Object.wrapEngineClass(tClass, eClass)
 --    print(tostringRecursive(eClass.__class))
     getMembers(eClass.__class)
 
-    print(tostringRecursive(tClass.__membersGet))
-    print(tostringRecursive(tClass.__membersSet))
-
     -- this is a metatable of class instances
     local mt = tClass.__instanceDict
 
     -- allows to get property values and call methods of C++ object
     function mt:__index(k)
-        if (tClass.__membersGet[k] ~= nil) then
-            return self.obj[k]  -- self is the instance
+        if (tClass.__membersCall[k] ~= nil) then
+            return tClass.__membersCall[k]
+        elseif (tClass.__membersGet[k] ~= nil) then
+            return self.obj[k]   -- self is the instance
         end
         return mt[k]
     end
@@ -89,18 +92,3 @@ function tostringRecursive(val, indent, mem)
     return s
 end
 
-
---[[
-function class()
-    local cls = {}
-    cls.__index = cls
-    return cls
-end
-
-function subClass(baseClass)
-    local subClass = {}
-    setmetatable(subClass, baseClass)
-    baseClass.__index = baseClass
-    return subClass
-end
-]]--

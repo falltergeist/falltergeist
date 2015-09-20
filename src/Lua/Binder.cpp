@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Libfalltergeist includes
+#include "../Audio/Mixer.h"
 #include "../Event/Event.h"
 #include "../Exception.h"
 #include "../functions.h"
@@ -29,9 +30,15 @@
 #include "../Input/Mouse.h"
 #include "../Lua/Binder.h"
 #include "../Lua/ImageButton.h"
+#include "../Lua/LuabridgeStack.h"
 #include "../Lua/TextArea.h"
 #include "../Lua/Script.h"
+#include "../State/Credits.h"
+#include "../State/LoadGame.h"
 #include "../State/LuaState.h"
+#include "../State/Movie.h"
+#include "../State/NewGame.h"
+#include "../State/SettingsMenu.h"
 #include "../UI/Image.h"
 
 // Third party includes
@@ -87,6 +94,11 @@ RetT* constructUi(State::State* state, T... args)
     return obj;
 }
 
+std::string _t(size_t msg, size_t number)
+{
+    return Falltergeist::_t((MSG_TYPE)msg, number);
+}
+
 void Binder::bindAll()
 {
     _gameNamespace()
@@ -97,6 +109,8 @@ void Binder::bindAll()
 
         // game.translate
         .addFunction("translate", translate)
+        // game._t
+        .addFunction("_t", _t)
 
         // game.mouse
         .addProperty<Input::Mouse*,void*>("mouse", []() -> Input::Mouse*
@@ -109,11 +123,19 @@ void Binder::bindAll()
         {
             return Game::getInstance()->renderer();
         })
+
+        // game.mixer
+        .addProperty<Audio::Mixer*,void*>("mixer", []()
+        {
+            return Game::getInstance()->mixer();
+        })
     ;
 
     _bindBasicClasses();
+    _bindEvents();
     _bindStates();
     _bindUI();
+    _bindLib();
 }
 
 
@@ -148,17 +170,43 @@ void Binder::_bindBasicClasses()
             .addProperty("cursor", &Input::Mouse::cursor, &Input::Mouse::setCursor)
         .endClass()
 
-        // game.Mouse
+        // game.Renderer
         .beginClass<Graphics::Renderer>("Renderer")
             .addProperty("size", &Graphics::Renderer::size)
             .addFunction("fadeIn", &Graphics::Renderer::fadeIn)
             .addFunction("fadeOut", &Graphics::Renderer::fadeOut)
         .endClass()
 
-        // game.Event
-        .beginClass<Event::Event>("Event")
-            .addProperty("name", &Event::Event::name, &Event::Event::setName)
+        // game.Mixer
+        .beginClass<Audio::Mixer>("Mixer")
+            .addFunction("stopSounds", &Audio::Mixer::stopSounds)
+            .addFunction("stopMusic", &Audio::Mixer::stopMusic)
+            .addFunction("pauseMusic", &Audio::Mixer::pauseMusic)
+            .addFunction("resumeMusic", &Audio::Mixer::resumeMusic)
+            .addFunction("playACMMusic", &Audio::Mixer::playACMMusic)
+            .addFunction("playACMSound", &Audio::Mixer::playACMSound)
+            // .addFunction("playMovieMusic", &Audio::Mixer::playMovieMusic)
         .endClass()
+    ;
+}
+
+void Binder::_bindEvents()
+{
+    _gameNamespace()
+        .beginNamespace("event")
+            // game.Event
+            .beginClass<Event::Event>("Event")
+                .addProperty("name", &Event::Event::name, &Event::Event::setName)
+            .endClass()
+            .deriveClass<Event::Keyboard, Event::Event>("Keyboard")
+                .addProperty("controlPressed", &Event::Keyboard::controlPressed)
+                .addProperty("shiftPressed", &Event::Keyboard::shiftPressed)
+                .addProperty("altPressed", &Event::Keyboard::altPressed)
+                .addProperty("keyCode", &Event::Keyboard::keyCode)
+            .endClass()
+            .deriveClass<Event::State, Event::Event>("State")
+            .endClass()
+        .endNamespace()
     ;
 }
 
@@ -171,6 +219,8 @@ void Binder::_bindUI()
                 .addProperty("position", &UI::Base::position, &UI::Base::setPosition)
                 .addProperty("offset", &UI::Base::offset, &UI::Base::setOffset)
                 .addProperty("size", &UI::Base::size)
+                .addFunction<void(UI::Base::*)(const std::string&, std::function<void(Event::Event*)>)>("addEventHandler", &UI::Base::addEventHandler)
+                .addFunction<void(UI::Base::*)(const std::string&)>("removeEventHandlers", &UI::Base::removeEventHandlers)
             .endClass()
 
             // game.ui.Image
@@ -197,6 +247,7 @@ void Binder::_bindUI()
                     ("text", &TextArea::text, &TextArea::setText)
                 .addProperty
                     ("horizontalAlign", &Lua::TextArea::luaHorizontalAlign, &Lua::TextArea::setLuaHorizontalAlign)
+                .addFunction("setFont", static_cast<void(Lua::TextArea::*)(const std::string&, unsigned int)>(&UI::TextArea::setFont))
             .endClass()
     ;
 }
@@ -204,21 +255,42 @@ void Binder::_bindUI()
 void Binder::_bindStates()
 {
     _gameNamespace()
-        // game.State
-        .beginClass<State::State>("StateBase")
-        .endClass()
-        .deriveClass<State::LuaState, State::State>("State")
-            //.addConstructor<void(*)(luabridge::LuaRef)>()
-            .addStaticFunction("pushNew", &State::LuaState::pushNew)
-            .addProperty<const Point&, const Point&>
-                ("position", &State::State::position, &State::State::setPosition)
-            .addProperty<bool, bool>
-                ("fullscreen", &State::State::fullscreen, &State::State::setFullscreen)
-            .addProperty<bool, bool>
-                ("modal", &State::State::modal, &State::State::setModal)
-            //.addFunction("addUI", &State::LuaState::addUI)
-        .endClass()
+        .beginNamespace("state")
+            .beginClass<State::State>("Base")
+                .addProperty("position", &State::State::position, &State::State::setPosition)
+                .addProperty("fullscreen", &State::State::fullscreen, &State::State::setFullscreen)
+                .addProperty("modal", &State::State::modal, &State::State::setModal)
+                .addFunction<void(State::State::*)(const std::string&, std::function<void(Event::Event*)>)>("addEventHandler", &State::State::addEventHandler)
+                .addFunction<void(State::State::*)(const std::string&)>("removeEventHandlers", &State::State::removeEventHandlers)
+            .endClass()
+            // game.state.State
+            .deriveClass<State::LuaState, State::State>("State")
+                //.addConstructor<void(*)(luabridge::LuaRef)>()
+                .addStaticFunction("pushNew", static_cast<State::LuaState*(*)(luabridge::LuaRef)>(&State::LuaState::pushNew))
+                //.addFunction("addUI", &State::LuaState::addUI)
+            .endClass()
+            .deriveClass<State::NewGame, State::State>("NewGame")
+                .addStaticFunction("pushNew", static_cast<State::NewGame*(*)()>(&State::LuaState::pushNew))
+            .endClass()
+            .deriveClass<State::Credits, State::State>("Credits")
+                .addStaticFunction("pushNew", static_cast<State::Credits*(*)()>(&State::LuaState::pushNew))
+            .endClass()
+            .deriveClass<State::LoadGame, State::State>("LoadGame")
+                .addStaticFunction("pushNew", static_cast<State::LoadGame*(*)()>(&State::LuaState::pushNew))
+            .endClass()
+            .deriveClass<State::Movie, State::State>("Movie")
+                .addStaticFunction("pushNew", static_cast<State::Movie*(*)(int)>(&State::LuaState::pushNew))
+            .endClass()
+            .deriveClass<State::SettingsMenu, State::State>("SettingsMenu")
+                .addStaticFunction("pushNew", static_cast<State::SettingsMenu*(*)()>(&State::LuaState::pushNew))
+            .endClass()
+        .endNamespace()
     ;
+}
+
+void Binder::_bindLib()
+{
+    // TODO?
 }
 
 }

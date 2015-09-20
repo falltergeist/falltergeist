@@ -19,7 +19,7 @@
 
 local Image = class "Image"
 
-TextArea:wrapEngineClass(game.ui.Image)
+Image:wrapEngineClass(game.ui.Image)
 
 function Image:initialize(state, ...)
     self.obj = game.ui.Image.new(state.obj, ...)

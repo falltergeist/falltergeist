@@ -76,6 +76,7 @@ public:
     Size size() const override;
     void setSize(const Size& size);
 
+    int width() const;
     void setWidth(int width);
 
     bool wordWrap() const;
@@ -89,6 +90,7 @@ public:
 
     std::shared_ptr<Font> font();
     void setFont(std::shared_ptr<Font> font);
+    void setFont(const std::string& fontName, unsigned int color);
 
     void render(bool eggTransparency = false) override;
     unsigned int pixel(const Point& pos) override;

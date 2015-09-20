@@ -17,12 +17,16 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_LUA_BINDER_H
-#define FALLTERGEIST_LUA_BINDER_H
+#ifndef FALLTERGEIST_LUA_LUABRIDGESTACK_H
+#define FALLTERGEIST_LUA_LUABRIDGESTACK_H
 
 // C++ standard includes
 
+
 // Libfalltergeist includes
+#include "../Event/Event.h"
+#include "../Exception.h"
+#include "../Lua/Binder.h"
 
 // Third party includes
 extern "C"
@@ -33,35 +37,35 @@ extern "C"
 }
 #include "LuaBridge.h"
 
-namespace Falltergeist
-{
-namespace Lua
+
+/**
+ * Specializations for luabridge::Stack<T>.
+ */
+namespace luabridge
 {
 
 /**
- * Class for Luabridge bindings
+ * Stack specialization for Event Handler functions
  */
-class Binder
+template<>
+struct Stack<std::function<void(Falltergeist::Event::Event*)>>
 {
 public:
-    Binder(lua_State* luaState);
-    ~Binder();
-
-    void bindAll();
-
-private:
-    lua_State* _luaState;
-    luabridge::Namespace _gameNamespace();
-
-    void _bindBasicClasses();
-    void _bindEvents();
-    void _bindUI();
-    void _bindStates();
-    void _bindLib();
-
+    static inline std::function<void(Falltergeist::Event::Event*)> get(lua_State* L, int index)
+    {
+        LuaRef ref = LuaRef::fromStack(L, index);
+        if (ref.isFunction())
+        {
+            return [ref](Falltergeist::Event::Event* event)
+            {
+                // TODO: should pass self as first argument?
+                ref(event);
+            };
+        }
+        throw Falltergeist::Exception("Event handler is not a function!");
+    }
 };
 
 }
-}
 
-#endif //FALLTERGEIST_LUA_BINDER_H
+#endif //FALLTERGEIST_LUA_LUABRIDGESTACK_H
