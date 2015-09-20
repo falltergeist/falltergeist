@@ -45,12 +45,11 @@ LuaState::~LuaState()
     _ui.clear();
 }
 
-void LuaState::init()
+LuaState* LuaState::pushNew(luabridge::LuaRef table)
 {
-    if (_initialized) return;
-    State::init();
-
-    _inheritable.call("init");
+    auto obj = new LuaState(table);
+    Game::getInstance()->pushState(obj);
+    return obj;
 }
 
 void LuaState::think()
@@ -75,38 +74,6 @@ void LuaState::addUI(UI::Base* ui)
 {
     if (!ui) return;
     State::addUI(ui);
-}
-
-
-
-bool LuaState::fullscreen() const
-{
-    return _fullscreen;
-}
-
-void LuaState::setFullscreen(bool value)
-{
-    _fullscreen = value;
-}
-
-bool LuaState::modal() const
-{
-    return _modal;
-}
-
-void LuaState::setModal(bool value)
-{
-    _modal = value;
-}
-
-const Point& LuaState::position() const
-{
-    return State::position();
-}
-
-void LuaState::setPosition(const Point& pos)
-{
-    State::setPosition(pos);
 }
 
 }

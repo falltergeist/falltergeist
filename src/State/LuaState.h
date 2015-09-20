@@ -42,16 +42,8 @@ public:
     LuaState(luabridge::LuaRef table);
     ~LuaState() override;
 
-    bool modal() const override ;
-    void setModal(bool value) override;
+    static LuaState* pushNew(luabridge::LuaRef table);
 
-    bool fullscreen() const override;
-    void setFullscreen(bool value) override;
-
-    const Point& position() const override;
-    void setPosition(const Point& pos) override;
-
-    void init() override;
     void think() override;
     void handle(Event::Event* event) override;
     void render() override;

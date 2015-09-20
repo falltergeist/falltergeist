@@ -64,25 +64,24 @@ public:
     template<typename ...T>
     luabridge::LuaRef call(const std::string& method, T... args) const
     {
-        luabridge::LuaRef ref(_table.state()); // init with nil reference
-        if (_tryGetFunction(method, ref))
+        luabridge::LuaRef func = luabridge::LuaRef(_table[method]);
+        if (func.isFunction())
         {
             try
             {
-                return ref(_table, args...);
+                return _table[method](_table, args...);
             }
             catch (luabridge::LuaException ex)
             {
                 _logError(ex.what());
             }
         }
-        return ref;
+        // return nil reference
+        return luabridge::LuaRef(_table.state());
     }
 
 private:
     luabridge::LuaRef _table;
-
-    bool _tryGetFunction(const std::string&, luabridge::LuaRef&) const;
 
     void _logError(const std::string& message) const;
 };

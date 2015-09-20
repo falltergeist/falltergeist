@@ -57,14 +57,16 @@ luabridge::Namespace Binder::_gameNamespace()
     return luabridge::getGlobalNamespace(_luaState).beginNamespace("game");
 }
 
-void setState(State::State* state)
+/*void setState(State::State* state)
 {
     Game::getInstance()->setState(state);
-}
+}*/
 
-void pushState(State::State* state)
+State::State* pushState(luabridge::LuaRef table)
 {
+    auto state = new State::LuaState(table);
     Game::getInstance()->pushState(state);
+    return state;
 }
 
 void popState()
@@ -77,10 +79,18 @@ void quit()
     Game::getInstance()->quit();
 }
 
+template<class RetT, class ...T>
+RetT* constructUi(State::State* state, T... args)
+{
+    RetT* obj = new RetT(args...);
+    state->addUI(obj);
+    return obj;
+}
+
 void Binder::bindAll()
 {
     _gameNamespace()
-        .addFunction("setState", setState)
+        //.addFunction("setState", setState)
         .addFunction("pushState", pushState)
         .addFunction("popState", popState)
         .addFunction("quit", quit)
@@ -165,7 +175,7 @@ void Binder::_bindUI()
 
             // game.ui.Image
             .deriveClass<UI::Image, UI::Base>("Image")
-                .addConstructor<void(*)(char const*)>()
+                .addStaticFunction("new", static_cast<UI::Image*(*)(State::State* state, const std::string& filename)>(&constructUi))
             .endClass()
 
             // game.ui.ImageButton
@@ -173,13 +183,14 @@ void Binder::_bindUI()
             .endClass()
 
             .deriveClass<Lua::ImageButton, UI::ImageButton>("ImageButton")
-                .addConstructor<void(*)(const std::string&, const std::string&, const std::string&, const std::string&, int, int)>()
+                //.addConstructor<void(*)(const std::string&, const std::string&, const std::string&, const std::string&, int, int)>()
+                .addStaticFunction("new", static_cast<Lua::ImageButton*(*)(State::State*, const std::string&, const std::string&, const std::string&, const std::string&, int, int)>(&constructUi))
                 .addFunction("subclass", &Lua::ImageButton::subclass)
             .endClass()
 
             // game.ui.TextArea
             .deriveClass<Lua::TextArea, UI::Base>("TextArea")
-                .addConstructor<void(*)(const char*, int, int)>()
+                .addStaticFunction("new", static_cast<Lua::TextArea*(*)(State::State*, const std::string&, int, int)>(&constructUi))
                 .addProperty<Size, const Size&>
                     ("size", &TextArea::size, &TextArea::setSize)
                 .addProperty<std::string, const std::string&>
@@ -197,11 +208,15 @@ void Binder::_bindStates()
         .beginClass<State::State>("StateBase")
         .endClass()
         .deriveClass<State::LuaState, State::State>("State")
-            .addConstructor<void(*)(luabridge::LuaRef)>()
-            .addProperty("position", &State::LuaState::position, &State::LuaState::setPosition)
-            .addProperty("fullscreen", &State::LuaState::fullscreen, &State::LuaState::setFullscreen)
-            .addProperty("modal", &State::LuaState::modal, &State::LuaState::setModal)
-            .addFunction("addUI", &State::LuaState::addUI)
+            //.addConstructor<void(*)(luabridge::LuaRef)>()
+            .addStaticFunction("pushNew", &State::LuaState::pushNew)
+            .addProperty<const Point&, const Point&>
+                ("position", &State::State::position, &State::State::setPosition)
+            .addProperty<bool, bool>
+                ("fullscreen", &State::State::fullscreen, &State::State::setFullscreen)
+            .addProperty<bool, bool>
+                ("modal", &State::State::modal, &State::State::setModal)
+            //.addFunction("addUI", &State::LuaState::addUI)
         .endClass()
     ;
 }

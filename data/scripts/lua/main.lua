@@ -9,7 +9,9 @@
 -- setting up package path
 package.path = "./data/scripts/lua/?.lua;" .. package.path
 
-require("state.mainmenu")
+-- require modules
+require("global")
+local MainMenu = require("state.MainMenu")
 
-
-game.setState(mainMenu.obj)
+-- initialize game
+MainMenu:new()
