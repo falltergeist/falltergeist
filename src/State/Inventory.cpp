@@ -41,8 +41,9 @@
 #include "../State/Location.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
-#include "../UI/ItemsList.h"
 #include "../UI/InventoryItem.h"
+#include "../UI/PlayerPanel.h"
+#include "../UI/ItemsList.h"
 #include "../UI/TextArea.h"
 #include "../UI/ImageList.h"
 
@@ -77,7 +78,7 @@ void Inventory::init()
     setFullscreen(false);
 
     auto game = Game::getInstance();
-    auto panelHeight = Game::getInstance()->locationState()->playerPanelState()->height();
+    auto panelHeight = Game::getInstance()->locationState()->playerPanel()->size().height();
 
     setPosition((game->renderer()->size() - Point(499, 377 + panelHeight)) / 2); // 499x377 = art/intrface/invbox.frm
 

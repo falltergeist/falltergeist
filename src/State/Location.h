@@ -26,7 +26,6 @@
 // Falltergeist includes
 #include "State.h"
 #include "../Input/Mouse.h"
-#include "../State/PlayerPanel.h"
 #include "../UI/ImageButton.h"
 
 // Third party includes
@@ -41,6 +40,7 @@ namespace UI
 {
     class Animation;
     class Image;
+    class PlayerPanel;
     class Tile;
     class TileMap;
 }
@@ -62,6 +62,44 @@ namespace State
  */
 class Location : public State
 {
+public:
+    Location();
+    ~Location() override;
+
+    void setLocation(const std::string& name);
+
+    void init();
+    void think() override;
+    void handle(Event::Event* event) override;
+    void render() override;
+
+    HexagonGrid* hexagonGrid();
+    LocationCamera* camera();
+
+    void setMVAR(unsigned int number, int value);
+    int MVAR(unsigned int number);
+
+    std::map<std::string, VMStackValue>* EVARS();
+
+    static void moveObjectToHexagon(Game::Object* object, Hexagon* hexagon);
+    void destroyObject(Game::Object* object);
+    void centerCameraAtHexagon(Hexagon* hexagon);
+    void centerCameraAtHexagon(int tileNum);
+    void handleAction(Game::Object* object, Input::Mouse::Icon action);
+    void toggleCursorMode();
+
+    void displayMessage(const std::string& message);
+
+    void onBackgroundClick(Event::Mouse* event);
+    void onObjectMouseEvent(Event::Event* event, Game::Object* object);
+    void onObjectHover(Event::Event* event, Game::Object* object);
+    void onKeyDown(Event::Keyboard* event) override;
+
+    void onStateActivate(Event::State* event) override;
+    void onStateDeactivate(Event::State* event) override;
+
+    UI::PlayerPanel* playerPanel();
+
 protected:
     
     static const int KEYBOARD_SCROLL_STEP;
@@ -87,7 +125,7 @@ protected:
     Game::Object* _objectUnderCursor = NULL;
     Game::Object* _actionCursorLastObject = NULL;
     bool _actionCursorButtonPressed = false;
-    PlayerPanel* _playerPanel = NULL;
+    UI::PlayerPanel* _playerPanel = nullptr;
 
     bool _scrollLeft = false;
     bool _scrollRight = false;
@@ -98,44 +136,6 @@ protected:
     UI::TextArea* _hexagonInfo = 0;
     
     std::vector<Input::Mouse::Icon> getCursorIconsForObject(Game::Object* object);
-public:
-    Location();
-    ~Location();
-
-    void setLocation(const std::string& name);
-
-    virtual void init();
-    virtual void think();
-    virtual void handle(Event::Event* event);
-    virtual void render();
-
-    HexagonGrid* hexagonGrid();
-    LocationCamera* camera();
-
-    void setMVAR(unsigned int number, int value);
-    int MVAR(unsigned int number);
-
-    std::map<std::string, VMStackValue>* EVARS();
-
-    static void moveObjectToHexagon(Game::Object* object, Hexagon* hexagon);
-    void destroyObject(Game::Object* object);
-    void centerCameraAtHexagon(Hexagon* hexagon);
-    void centerCameraAtHexagon(int tileNum);
-    void handleAction(Game::Object* object, Input::Mouse::Icon action);
-    void toggleCursorMode();
-    PlayerPanel* playerPanelState();
-    
-    void displayMessage(const std::string& message);
-
-    void onBackgroundClick(Event::Mouse* event);
-    void onObjectMouseEvent(Event::Event* event, Game::Object* object);
-    void onObjectHover(Event::Event* event, Game::Object* object);
-    virtual void onKeyDown(Event::Keyboard* event);
-
-    virtual void onStateActivate(Event::State* event);
-    virtual void onStateDeactivate(Event::State* event);
-
-
 
 };
 

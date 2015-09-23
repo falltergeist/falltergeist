@@ -29,6 +29,7 @@
 #include "../State/MainMenu.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
+#include "../UI/PlayerPanel.h"
 #include "../UI/TextArea.h"
 #include "../Input/Mouse.h"
 
@@ -56,7 +57,7 @@ void ExitConfirm::init()
     setFullscreen(false);
 
     auto background = new UI::Image("art/intrface/lgdialog.frm");
-    auto panelHeight = Game::getInstance()->locationState()->playerPanelState()->height();
+    auto panelHeight = Game::getInstance()->locationState()->playerPanel()->size().height();
 
     auto backgroundPos = (Game::getInstance()->renderer()->size() - background->size() - Point(0, panelHeight)) / 2;
 
