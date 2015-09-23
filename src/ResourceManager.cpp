@@ -520,11 +520,6 @@ std::unordered_map<std::string, Graphics::Texture*>* ResourceManager::textures()
 
 Game::Location* ResourceManager::gameLocation(unsigned int number)
 {
-    if (_gameLocations.find(number) != _gameLocations.end())
-    {
-        return _gameLocations.at(number);
-    }
-
     std::istream stream(datFileItem("data/maps.txt"));
     Ini::Parser iniParser(stream);
     auto ini = iniParser.parse();
@@ -533,7 +528,10 @@ Game::Location* ResourceManager::gameLocation(unsigned int number)
     ss << "map " << std::setw(3) << std::setfill('0') << number;
 
     auto section = ini->section(ss.str());
-    if (!section) return 0;
+    if (!section)
+    {
+        return nullptr;
+    }
 
     Game::Location* location = new Game::Location();
 
@@ -555,7 +553,7 @@ Game::Location* ResourceManager::gameLocation(unsigned int number)
         }
         else if (name == "pipboy_active")
         {
-            location->setPipboy(property.second.boolValue());
+            location->setPipboyAllowed(property.second.boolValue());
         }
         else if (name == "saved")
         {
@@ -563,9 +561,7 @@ Game::Location* ResourceManager::gameLocation(unsigned int number)
         }
     }
 
-    _gameLocations.insert(std::make_pair(number, location));
-
-    return _gameLocations.at(number);
+    return location;
 }
 
 void ResourceManager::shutdown()
@@ -573,11 +569,6 @@ void ResourceManager::shutdown()
     for (auto texture : _textures)
     {
         delete texture.second;
-    }
-
-    for (auto location : _gameLocations)
-    {
-        delete location.second;
     }
 
     for (auto item : _datFilesItems)

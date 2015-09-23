@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Game/LocationElevation.h"
 
 // Third party includes
 
@@ -39,74 +40,143 @@ Location::~Location()
 {
 }
 
-std::string Location::name()
+/**
+ * @brief Returns location name
+ * @return Location name
+ */
+std::string Location::name() const
 {
     return _name;
 }
 
+/**
+ * @brief Sets location name
+ * @param value Location name
+ */
 void Location::setName(const std::string& value)
 {
     _name = value;
 }
 
-std::string Location::filename()
+/**
+ * @brief Returns location *.map filename
+ * @return *.map filename
+ */
+std::string Location::filename() const
 {
     return _filename;
 }
 
+/**
+ * @brief Sets *.map filename
+ * @param value *.map filename
+ */
 void Location::setFilename(const std::string& value)
 {
     _filename = value;
 }
 
-std::string Location::music()
+/**
+ * @brief Returns background music filename
+ * @return Music filename
+ */
+std::string Location::music() const
 {
     return _music;
 }
 
+/**
+ * @brief Sets background music filename
+ * @param value Music filename
+ */
 void Location::setMusic(const std::string& value)
 {
     _music = value;
 }
 
-std::map<std::string, unsigned int>* Location::ambient()
+/**
+ * @brief Returns ambient sounds map
+ * std::string - sound filename
+ * unsigned int - probability
+ * @return Sounds map
+ */
+std::map<std::string, unsigned int>* Location::ambientSounds()
 {
-    return &_ambient;
+    return &_ambientSounds;
 }
 
-bool Location::saveable()
+/**
+ * @brief Returns if location need to be saved
+ * @return bool
+ */
+bool Location::saveable() const
 {
     return _saveable;
 }
 
+/**
+ * @brief Sets if location need to be saved
+ * @param value
+ */
 void Location::setSaveable(bool value)
 {
     _saveable = value;
 }
 
-bool Location::removeBodies()
+/**
+ * @brief Returns if dead bodies should be removed when player leave location
+ * @return bool
+ */
+bool Location::removeBodies() const
 {
     return _removeBodies;
 }
 
+/**
+ * @brief Sets if dead bodies should be removed when player leave location
+ * @param value
+ */
 void Location::setRemoveBodies(bool value)
 {
     _removeBodies = value;
 }
 
-bool Location::pipboy()
+/**
+ * @brief Returns if pipboy is allowed in this location
+ * @return bool
+ */
+bool Location::pipboyAllowed() const
 {
-    return _pipboy;
+    return _pipboyAllowed;
 }
 
-void Location::setPipboy(bool value)
+/**
+ * @brief Sets if pipboy is allowed in this location
+ * @param value
+ */
+void Location::setPipboyAllowed(bool value)
 {
-    _pipboy = value;
+    _pipboyAllowed = value;
 }
 
+/**
+ * @brief Returns map of start points
+ * unsigned int - elevation number
+ * unsigned int - hexagon number
+ * @return Start points
+ */
 std::map<unsigned int, unsigned int>* Location::startPoints()
 {
     return &_startPoints;
+}
+
+/**
+ * @brief Returns location elevations
+ * @return Elevations
+ */
+std::vector<Game::LocationElevation*>* Location::elevations()
+{
+    return &_elevations;
 }
 
 }

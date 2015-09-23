@@ -33,44 +33,104 @@ namespace Falltergeist
 {
 namespace Game
 {
+class LocationElevation;
 
+/**
+ * @brief Location class
+ *
+ * This class represents world map locations
+ * It combines properties from MAPS.TXT and *.map files
+ * It also has Game::LocationElevation instancess as its childs
+ */
 class Location
 {
 public:
     Location();
     ~Location();
 
-    std::string name();
+    std::string name() const;
     void setName(const std::string& value);
 
-    std::string filename();
+    std::string filename() const;
     void setFilename(const std::string& value);
 
-    std::string music();
+    std::string music() const;
     void setMusic(const std::string& value);
 
-    std::map<std::string, unsigned int>* ambient();
+    std::map<std::string, unsigned int>* ambientSounds();
 
-    bool saveable();
+    bool saveable() const;
     void setSaveable(bool value);
 
-    bool removeBodies();
+    bool removeBodies() const;
     void setRemoveBodies(bool value);
 
-    bool pipboy();
-    void setPipboy(bool value);
+    bool pipboyAllowed() const;
+    void setPipboyAllowed(bool value);
 
     std::map<unsigned int, unsigned int>* startPoints();
 
+    std::vector<Game::LocationElevation*>* elevations();
+
 protected:
+    /**
+     * @brief Location name
+     * As defined by `lookup_name` in MAPS.TXT
+     */
     std::string _name;
+
+    /**
+     * @brief Location filename
+     * As defined by `map_name` in MAPS.TXT
+     */
     std::string _filename;
+
+    /**
+     * @brief Background music file name
+     * As defined by `music` in MAPS.TXT
+     */
     std::string _music;
-    std::map<std::string, unsigned int> _ambient;
+
+    /**
+     * @brief ambient sounds in location.
+     * As defined by ambiend_sfx in MAPS.TXT
+     * std::string - sound file name
+     * unsigned int - probability
+     */
+    std::map<std::string, unsigned int> _ambientSounds;
+
+    /**
+     * @brief Save location?
+     * As defined by `saved` in MAPS.TXT
+     * F.e.: it must be `false` for random encounters
+     */
     bool _saveable = false;
+
+    /**
+     * @brief Remove dead bodies when player left location?
+     * As defined by `dead_bodies_age` in MAPS.TXT
+     */
     bool _removeBodies = false;
-    bool _pipboy = true;
+
+    /**
+     * @brief  Is pipboy accessible in this location?
+     * Not defined in MAPS.TXT
+     * It changes by game scripts
+     */
+    bool _pipboyAllowed = true;
+
+    /**
+     * @brief Random start points
+     * As defined by `random_start_point_*` in MAPS.TXT
+     * unsigned int - elevation number
+     * unsigned int - hexagon number
+     */
     std::map<unsigned int, unsigned int> _startPoints;
+
+    /**
+     * @brief Map elevations
+     */
+    std::vector<Game::LocationElevation*> _elevations;
 };
 
 }
