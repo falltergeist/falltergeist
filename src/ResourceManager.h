@@ -115,7 +115,6 @@ protected:
     std::unordered_map<std::string, libfalltergeist::Dat::Item*> _datFilesItems;
     std::unordered_map<std::string, Graphics::Texture*> _textures;
     std::unordered_map<std::string, std::shared_ptr<Font>> _fonts;
-    std::unordered_map<unsigned int, Game::Location*> _gameLocations;
 
     ResourceManager();
     ~ResourceManager();

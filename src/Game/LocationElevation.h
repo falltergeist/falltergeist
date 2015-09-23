@@ -21,6 +21,7 @@
 #define FALLTERGEIST_GAME_LOCATIONELEVATION_H
 
 // C++ standard includes
+#include <vector>
 
 // Falltergeist includes
 
@@ -30,12 +31,49 @@ namespace Falltergeist
 {
 namespace Game
 {
+class Object;
 
+/**
+ * @brief Location elevation class
+ *
+ * This class represents each elevation of game location
+ * It contains information about tiles and game objects
+ */
 class LocationElevation
 {
+
 public:
     LocationElevation();
     ~LocationElevation();
+
+    bool canRestHere() const;
+    void setCanRestHere(bool value);
+
+    std::vector<unsigned>* floorTiles();
+    std::vector<unsigned>* roofTiles();
+    std::vector<Game::Object*>* objects();
+
+protected:
+    /**
+     * @brief Can player rest here?
+     * As defined by `can_rest_here` in MAPS.TXT
+     */
+    bool _canRestHere = true;
+
+    /**
+     * @brief Array of ids of floor tiles
+     */
+    std::vector<unsigned> _floorTiles;
+
+    /**
+     * @brief Array of ids of roof tiles
+     */
+    std::vector<unsigned> _roofTiles;
+
+    /**
+     * @brief Array of game objects
+     */
+    std::vector<Game::Object*> _objects;
 };
 
 }
