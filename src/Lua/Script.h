@@ -23,7 +23,6 @@
 // C++ standard includes
 #include <string>
 #include <memory>
-#include <vector>
 
 // Falltergeist includes
 
@@ -34,25 +33,54 @@ extern "C"
     #include "lauxlib.h"
     #include "lualib.h"
 }
-#include "LuaBridge.h"
 
 namespace Falltergeist
 {
 namespace Lua
 {
 
+/**
+ * A wrapper for lua_State. Represents single scripting context.
+ */
 class Script
 {
 public:
+    /**
+     * Creates new script from given script filename.
+     */
     Script(const std::string& filename);
     ~Script();
+
+    /**
+     * Executes the script.
+     */
     void run();
 
     lua_State* luaState();
 
+    /**
+     * Binds all game classes and functions.
+     */
+    void bindGameClasses();
+
+    /**
+     * Returns value of a global variable with given name interpreted as a boolean.
+     */
     bool get(const std::string& name, bool defaultValue = false);
+
+    /**
+     * Returns value of a global variable with given name interpreted as an integer.
+     */
     int  get(const std::string& name, int  defaultValue = 0);
+
+    /**
+     * Returns value of a global variable with given name interpreted as a double.
+     */
     double get(const std::string& name, double defaultValue = 0);
+
+    /**
+     * Returns value of a global variable with given name interpreted as a string.
+     */
     std::string get(const std::string& name, const std::string& defaultValue);
 
 private:
@@ -61,6 +89,7 @@ private:
     lua_State* _lua_State;
 
 };
+
 
 }
 }

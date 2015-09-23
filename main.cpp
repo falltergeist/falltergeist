@@ -25,8 +25,8 @@
 #include "src/Game/Game.h"
 #include "src/Logger.h"
 #include "src/Settings.h"
-#include "src/State/LuaState.h"
 #include "src/State/Start.h"
+#include "src/Lua/Script.h"
 
 // Third party includes
 #include <libfalltergeist.h>
@@ -39,17 +39,25 @@ int main(int argc, char* argv[])
     {
         auto game = Game::Game::getInstance();
         game->init(std::unique_ptr<Settings>(new Settings()));
+
+        // start game from script
+        //Lua::Script script("data/scripts/lua/main.lua");
+        //script.bindGameClasses();
+        //script.run();
+
+        // start game from C++ State
         game->setState(new State::Start());
-        //game->setState(new State::LuaState("data/scripts/lua/state/mainmenu.lua"));
+
+        // run the main game loop
         game->run();
         game->shutdown();
         return 0;
     }
-    catch(const libfalltergeist::Exception &e)
+    catch (const libfalltergeist::Exception &e)
     {
         Logger::critical() << e.what() << std::endl;
     }
-    catch(const Exception &e)
+    catch (const Exception &e)
     {
         Logger::critical() << e.what() << std::endl;
     }

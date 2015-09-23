@@ -17,13 +17,16 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_LUA_IMAGEBUTTON_H
-#define FALLTERGEIST_LUA_IMAGEBUTTON_H
+#ifndef FALLTERGEIST_LUA_LUABRIDGESTACK_H
+#define FALLTERGEIST_LUA_LUABRIDGESTACK_H
 
 // C++ standard includes
 
-// Falltergeist includes
-#include "../UI/ImageButton.h"
+
+// Libfalltergeist includes
+#include "../Event/Event.h"
+#include "../Exception.h"
+#include "../Lua/Binder.h"
 
 // Third party includes
 extern "C"
@@ -34,30 +37,35 @@ extern "C"
 }
 #include "LuaBridge.h"
 
-namespace Falltergeist
-{
-namespace Lua
+
+/**
+ * Specializations for luabridge::Stack<T>.
+ */
+namespace luabridge
 {
 
-class Inheritable;
-
-class ImageButton : public UI::ImageButton
+/**
+ * Stack specialization for Event Handler functions
+ */
+template<>
+struct Stack<std::function<void(Falltergeist::Event::Event*)>>
 {
 public:
-
-    ImageButton(const std::string& upImg, const std::string& downImg, const std::string& upSfx,
-                const std::string& downSfx, int x, int y);
-
-    ~ImageButton() override;
-
-    void subclass(luabridge::LuaRef table);
-
-    virtual void think() override;
-
-private:
-    std::unique_ptr<Inheritable> _inheritable = nullptr;
+    static inline std::function<void(Falltergeist::Event::Event*)> get(lua_State* L, int index)
+    {
+        LuaRef ref = LuaRef::fromStack(L, index);
+        if (ref.isFunction())
+        {
+            return [ref](Falltergeist::Event::Event* event)
+            {
+                // TODO: should pass self as first argument?
+                ref(event);
+            };
+        }
+        throw Falltergeist::Exception("Event handler is not a function!");
+    }
 };
 
 }
-}
-#endif // FALLTERGEIST_LUA_IMAGEBUTTON_H
+
+#endif //FALLTERGEIST_LUA_LUABRIDGESTACK_H

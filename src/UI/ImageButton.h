@@ -78,6 +78,7 @@ public:
     };
     ImageButton(Type type, Point pos = Point());
     ImageButton(Type type, int x, int y);
+    ImageButton(const std::string& upImg, const std::string& downImg, const std::string& upSfx, const std::string& downSfx, int x, int y);
     ~ImageButton() override;
 
     //void setState(unsigned int value);
@@ -94,7 +95,8 @@ protected:
     void _onLeftButtonClick(Event::Mouse* event);
     void _onLeftButtonDown(Event::Mouse* event);
     void _onMouseOut(Event::Mouse* event);
-    void _init(Type type);
+    void _initFromType(Type type);
+    void _init();
 
 };
 

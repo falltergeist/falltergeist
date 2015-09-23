@@ -21,17 +21,9 @@
 #include <iostream>
 
 // Falltergeist includes
-#include "../Event/Event.h"
 #include "../Exception.h"
-#include "../functions.h"
-#include "../Game/Game.h"
-#include "../Point.h"
-#include "../Input/Mouse.h"
-#include "../Lua/ImageButton.h"
-#include "../Lua/TextArea.h"
+#include "../Lua/Binder.h"
 #include "../Lua/Script.h"
-#include "../State/LuaState.h"
-#include "../UI/Image.h"
 
 // Third party includes
 
@@ -39,8 +31,6 @@ namespace Falltergeist
 {
 namespace Lua
 {
-
-using namespace luabridge;
 
 Script::Script(const std::string& filename)
 {
@@ -62,86 +52,12 @@ Script::Script(const std::string& filename)
 void Script::_initialize()
 {
     luaL_openlibs(_lua_State);
+}
 
-    // luabridge::Namespace::addProperty cannot deduce setter type =(
-    static void (*const setterGameMouse)(Input::Mouse*) = nullptr;
-    static Input::Mouse* (*const getterGameMouse)() = []() -> Input::Mouse*
-    {
-        return Game::getInstance()->mouse();
-    };
-
-    luabridge::getGlobalNamespace(_lua_State)
-        .beginNamespace("game")
-            .beginClass<Falltergeist::Point>("Point")
-                .addConstructor<void(*)(int, int)>()
-                .addProperty("x", &Falltergeist::Point::x, &Falltergeist::Point::setX)
-                .addProperty("y", &Falltergeist::Point::y, &Falltergeist::Point::setY)
-                .addFunction("__add", &Falltergeist::Point::add)
-                .addFunction("__sub", &Falltergeist::Point::sub)
-                .addFunction("__mul", &Falltergeist::Point::mul)
-                .addFunction("__div", &Falltergeist::Point::div)
-            .endClass()
-
-            .beginClass<Falltergeist::Size>("Size")
-                .addConstructor<void(*)(int, int)>()
-                .addProperty("width", &Falltergeist::Size::width, &Falltergeist::Size::setWidth)
-                .addProperty("height", &Falltergeist::Size::height, &Falltergeist::Size::setHeight)
-                .addFunction("__add", &Falltergeist::Size::add)
-                .addFunction("__sub", &Falltergeist::Size::sub)
-                .addFunction("__mul", &Falltergeist::Size::mul)
-                .addFunction("__div", &Falltergeist::Size::div)
-            .endClass()
-
-            // game.Mouse
-            .beginClass<Input::Mouse>("Mouse")
-                .addProperty("x", &Input::Mouse::x, &Input::Mouse::setX)
-                .addProperty("y", &Input::Mouse::y, &Input::Mouse::setY)
-                .addProperty("position", &Input::Mouse::position, &Input::Mouse::setPosition)
-                .addProperty("cursor", &Input::Mouse::cursor, &Input::Mouse::setCursor)
-            .endClass()
-
-            // game.Event
-            .beginClass<Event::Event>("Event")
-                .addProperty("name", &Event::Event::name, &Event::Event::setName)
-            .endClass()
-
-            // game.State
-            .beginClass<State::LuaState>("State")
-                .addProperty("position", &State::LuaState::position, &State::LuaState::setPosition)
-                .addProperty("fullscreen", &State::LuaState::fullscreen, &State::LuaState::setFullscreen)
-                .addProperty("modal", &State::LuaState::modal, &State::LuaState::setModal)
-                .addFunction("addUI", &State::LuaState::addUI)
-            .endClass()
-            .beginNamespace("ui")
-                // game.ui.UI
-                .beginClass<Falltergeist::UI::Base>("UI")
-                    .addProperty("position", &UI::Base::position, &UI::Base::setPosition)
-                .endClass()
-
-                // game.ui.Image
-                .deriveClass<UI::Image, Falltergeist::UI::Base>("Image")
-                    .addConstructor<void(*)(char const*)>()
-                .endClass()
-
-                // game.ui.ImageButton
-                .deriveClass<Lua::ImageButton, Falltergeist::UI::Base>("ImageButton")
-                    .addConstructor<void(*)(unsigned, int, int)>()
-                .endClass()
-
-                // game.ui.TextArea
-                .deriveClass<Lua::TextArea, Falltergeist::UI::Base>("TextArea")
-                    .addConstructor<void(*)(const char*, int, int)>()
-                    //.addProperty("width", &Lua::TextArea::width, &Lua::TextArea::setWidth)
-                    .addProperty("horizontalAlign", &Lua::TextArea::luaHorizontalAlign, &Lua::TextArea::setLuaHorizontalAlign)
-                .endClass()
-            .endNamespace()
-
-            // game.translate
-            .addFunction("translate", translate)
-
-            // game.mouse
-            .addProperty ("mouse", getterGameMouse, setterGameMouse)
-        .endNamespace();
+void Script::bindGameClasses()
+{
+    Binder binder(_lua_State);
+    binder.bindAll();
 }
 
 void Script::run()
@@ -169,7 +85,7 @@ bool Script::get(const std::string& name, bool defaultValue)
     {
         return defaultValue;
     }
-    bool ret = lua_toboolean(_lua_State, -1);
+    bool ret = static_cast<bool>(lua_toboolean(_lua_State, -1));
     lua_pop(_lua_State, 1);
     return ret;
 }

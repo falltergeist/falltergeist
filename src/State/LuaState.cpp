@@ -22,7 +22,7 @@
 
 // Falltergeist includes
 #include "../Game/Game.h"
-#include "../Lua/Script.h"
+#include "../Lua/Inheritable.h"
 #include "../State/LuaState.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
@@ -35,57 +35,32 @@ namespace Falltergeist
 namespace State
 {
 
-LuaState::LuaState(const std::string& filename) : State()
+LuaState::LuaState(luabridge::LuaRef table) : State(), _inheritable(table)
 {
-    _script = new Lua::Script(filename);
-    _script->run();
 }
 
 LuaState::~LuaState()
 {
-    delete _script;
-}
-
-void LuaState::init()
-{
-    if (_initialized) return;
-    State::init();
-
-    luabridge::LuaRef func = luabridge::getGlobal(_script->luaState(), "init");
-    if (func.isFunction())
-    {
-        func(this);
-    }
+    // remove pointers, Lua will handle deleting the objects
+    _ui.clear();
 }
 
 void LuaState::think()
 {
     State::think();
-    luabridge::LuaRef func = luabridge::getGlobal(_script->luaState(), "think");
-    if (func.isFunction())
-    {
-        func(this);
-    }
+    _inheritable.call("think");
 }
 
 void LuaState::handle(Event::Event* event)
 {
-    luabridge::LuaRef func = luabridge::getGlobal(_script->luaState(), "handle");
-    if (func.isFunction())
-    {
-        func(this, event);
-    }
     State::handle(event);
+    _inheritable.call("handle", event);
 }
 
 void LuaState::render()
 {
     State::render();
-    luabridge::LuaRef func = luabridge::getGlobal(_script->luaState(), "render");
-    if (func.isFunction())
-    {
-        func(this);
-    }
+    _inheritable.call("render");
 }
 
 void LuaState::addUI(UI::Base* ui)
@@ -94,36 +69,19 @@ void LuaState::addUI(UI::Base* ui)
     State::addUI(ui);
 }
 
-
-
-bool LuaState::fullscreen() const
+void LuaState::onStateActivate(Event::State* event)
 {
-    return _fullscreen;
+    _inheritable.call("onActivate", event);
 }
 
-void LuaState::setFullscreen(bool value)
+void LuaState::onStateDeactivate(Event::State* event)
 {
-    _fullscreen = value;
+    _inheritable.call("onDeactivate", event);
 }
 
-bool LuaState::modal() const
+void LuaState::onKeyDown(Event::Keyboard* event)
 {
-    return _modal;
-}
-
-void LuaState::setModal(bool value)
-{
-    _modal = value;
-}
-
-const Point& LuaState::position() const
-{
-    return State::position();
-}
-
-void LuaState::setPosition(const Point& pos)
-{
-    State::setPosition(pos);
+    _inheritable.call("onKeyDown", event);
 }
 
 }

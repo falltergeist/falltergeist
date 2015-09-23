@@ -17,57 +17,49 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_STATE_LUASTATE_H
-#define FALLTERGEIST_STATE_LUASTATE_H
-
 // C++ standard includes
+#include <functional>
 
-// Falltergeist includes
+// Libfalltergeist includes
+#include "../Exception.h"
+#include "../Logger.h"
 #include "../Lua/Inheritable.h"
-#include "../State/State.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-class Image;
-
-namespace State
+namespace Lua
 {
 
-class LuaState : public State
+Inheritable::Inheritable(luabridge::LuaRef table) : _table(table)
 {
-public:
-
-    LuaState(luabridge::LuaRef table);
-    ~LuaState() override;
-
-    template <typename T, typename ...ArgT>
-    static T* pushNew(ArgT... args)
-    {
-        T* obj = new T(args...);
-        Game::getInstance()->pushState(obj);
-        return obj;
+    if (table.type() != LUA_TTABLE) {
+        throw Exception("Inheritable(): Value is not a table: " + table.tostring());
     }
+}
 
-    void think() override;
-    void handle(Event::Event* event) override;
-    void render() override;
+luabridge::LuaRef Inheritable::table() const
+{
+    return _table;
+}
 
-    void addUI(UI::Base* ui);
+void Inheritable::setTable(luabridge::LuaRef value)
+{
+    if (value.isTable())
+    {
+        _table = value;
+    }
+    else
+    {
+        Logger::error("Lua") << "Inheritable::setInheritedTable(): Value is not a table: " << value << std::endl;
+    }
+}
 
-
-    virtual void onStateActivate(Event::State* event) override;
-
-    virtual void onStateDeactivate(Event::State* event) override;
-
-    virtual void onKeyDown(Event::Keyboard* event) override;
-
-private:
-    Lua::Inheritable _inheritable;
-
-};
+void Inheritable::_logError(const std::string& message) const
+{
+    Logger::error("Lua") << message << std::endl;
+}
 
 }
 }
-#endif // FALLTERGEIST_STATE_LUASTATE_H

@@ -17,43 +17,51 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
-#include "../Lua/ImageButton.h"
+#ifndef FALLTERGEIST_LUA_BINDER_H
+#define FALLTERGEIST_LUA_BINDER_H
 
 // C++ standard includes
 
-// Falltergeist includes
-#include "../Logger.h"
-#include "../Lua/Inheritable.h"
+// Libfalltergeist includes
 
 // Third party includes
+extern "C"
+{
+    #include "lua.h"
+    #include "lauxlib.h"
+    #include "lualib.h"
+}
+#include "LuaBridge.h"
 
 namespace Falltergeist
 {
 namespace Lua
 {
 
-ImageButton::~ImageButton()
+/**
+ * Class for Luabridge bindings
+ */
+class Binder
 {
+public:
+    Binder(lua_State* luaState);
+    ~Binder();
+
+    void bindAll();
+
+private:
+    lua_State* _luaState;
+    luabridge::Namespace _gameNamespace();
+
+    void _bindBasicClasses();
+    void _bindEvents();
+    void _bindUI();
+    void _bindStates();
+    void _bindLib();
+
+};
+
+}
 }
 
-ImageButton::ImageButton(const std::string& upImg, const std::string& downImg, const std::string& upSfx,
-                         const std::string& downSfx, int x, int y) :
-    UI::ImageButton::ImageButton(upImg, downImg, upSfx, downSfx, x, y)
-{
-}
-
-void ImageButton::subclass(luabridge::LuaRef table)
-{
-    if (!_inheritable) _inheritable = std::unique_ptr<Inheritable>(new Inheritable(table));
-}
-
-void ImageButton::think()
-{
-    if (_inheritable && (bool)_inheritable->call("think")) {
-        UI::Base::think();
-    }
-}
-
-}
-}
+#endif //FALLTERGEIST_LUA_BINDER_H
