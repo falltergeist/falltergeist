@@ -23,10 +23,10 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "State.h"
+#include "../State/State.h"
 
 // Third party includes
-#include <Sve/File.h>
+#include <libfalltergeist/Sve/File.h>
 
 namespace Falltergeist
 {

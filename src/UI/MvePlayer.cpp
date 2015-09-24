@@ -30,7 +30,7 @@
 #include "../Logger.h"
 
 // Third party includes
-#include <Mve/Chunk.h>
+#include <libfalltergeist/Mve/Chunk.h>
 
 //@todo Move this to Crossplatform
 #ifdef __MACH__

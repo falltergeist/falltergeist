@@ -29,7 +29,7 @@
 #include "src/State/Start.h"
 
 // Third party includes
-#include <libfalltergeist.h>
+#include <libfalltergeist/Exception.h>
 
 using namespace Falltergeist;
 

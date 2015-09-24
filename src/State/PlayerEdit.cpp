@@ -38,7 +38,6 @@
 #include "../UI/TextArea.h"
 
 // Third party includes
-#include <libfalltergeist.h>
 
 namespace Falltergeist
 {

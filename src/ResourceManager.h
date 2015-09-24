@@ -31,9 +31,9 @@
 #include "Base/Singleton.h"
 
 // Third party includes
-#include <Lst/File.h>
-#include <Msg/File.h>
-#include <Msg/Message.h>
+#include <libfalltergeist/Lst/File.h>
+#include <libfalltergeist/Msg/File.h>
+#include <libfalltergeist/Msg/Message.h>
 
 namespace libfalltergeist
 {

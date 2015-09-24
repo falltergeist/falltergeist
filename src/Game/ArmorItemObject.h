@@ -26,7 +26,7 @@
 #include "../Game/ItemObject.h"
 
 // Third party includes
-#include <Enums.h>
+#include <libfalltergeist/Enums.h>
 
 namespace Falltergeist
 {

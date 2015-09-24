@@ -36,7 +36,7 @@
 #include "../UI/TextArea.h"
 
 // Third party includes
-#include <Bio/File.h>
+#include <libfalltergeist/Bio/File.h>
 
 namespace Falltergeist
 {

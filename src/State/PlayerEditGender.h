@@ -26,7 +26,7 @@
 #include "State.h"
 
 // Third party includes
-#include <Enums.h>
+#include <libfalltergeist/Enums.h>
 
 using namespace libfalltergeist;
 

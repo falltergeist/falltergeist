@@ -44,7 +44,8 @@
 #include "../VM/VM.h"
 
 // Third party includes
-#include <libfalltergeist.h>
+#include <libfalltergeist/Exception.h>
+#include <libfalltergeist/Pro/File.h>
 
 namespace Falltergeist
 {

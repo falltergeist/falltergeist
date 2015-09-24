@@ -34,7 +34,7 @@
 #include "../UI/TextArea.h"
 
 // Third party includes
-#include <Aaf/File.h>
+#include <libfalltergeist/Aaf/File.h>
 
 namespace Falltergeist
 {
