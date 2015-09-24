@@ -18,18 +18,29 @@
 #
 #
 
-FIND_PATH(LIBFALLTERGEIST_INCLUDE_DIR 
-        libfalltergeist/include
-    HINTS
-        ENV LIBFALLTERGEIST_DIR
-        lib
-    PATH_SUFFIXES 
-        include
-    PATHS
-        ~/libfalltergeist/include
-)
 
-FIND_LIBRARY(LIBFALLTERGEIST_LIBRARY 
+if(LIBFALLTERGEIST_EMBEDDED)
+    find_path(LIBFALLTERGEIST_INCLUDE_DIR 
+            libfalltergeist/include
+        HINTS
+            ENV LIBFALLTERGEIST_DIR
+            lib
+        PATH_SUFFIXES 
+            include
+        PATHS
+            ~/libfalltergeist/include
+    )
+else()
+    find_path(LIBFALLTERGEIST_INCLUDE_DIR Exception.h
+              HINTS
+                ENV SDLIMAGEDIR
+                ENV SDLDIR
+              PATH_SUFFIXES include/libfalltergeist 
+    )
+endif()
+
+
+find_library(LIBFALLTERGEIST_LIBRARY 
         falltergeist 
     PATH_SUFFIXES
         dynamic
