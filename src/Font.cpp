@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "Base/StlFeatures.h"
 #include "Font.h"
 #include "ResourceManager.h"
 
@@ -27,6 +28,7 @@
 
 namespace Falltergeist
 {
+using Base::make_unique;
 
 Font::Font(const std::string& filename, unsigned int color)
 {
@@ -34,10 +36,10 @@ Font::Font(const std::string& filename, unsigned int color)
     _aaf = ResourceManager::getInstance()->aafFileType(filename);
     _color = color;
 
-    unsigned int width = _aaf->maximumWidth()*16;
-    unsigned int height = _aaf->maximumHeight()*16;
+    unsigned int width = _aaf->maximumWidth()*16u;
+    unsigned int height = _aaf->maximumHeight()*16u;
 
-    unsigned int* rgba = new unsigned int[width * height]();
+    unsigned int rgba[width * height];
 
     for (unsigned int y = 0; y != height; y++)
     {
@@ -50,15 +52,12 @@ Font::Font(const std::string& filename, unsigned int color)
         }
     }
 
-    _texture = new Graphics::Texture(width, height);
+    _texture = make_unique<Graphics::Texture>(width, height);
     _texture->loadFromRGBA(rgba);
-    delete [] rgba;
-
 }
 
 Font::~Font()
 {
-    delete _texture;
 }
 
 unsigned int Font::color()
@@ -93,7 +92,7 @@ unsigned short Font::spaceWidth()
 
 Graphics::Texture* Font::texture()
 {
-    return _texture;
+    return _texture.get();
 }
 
 std::string Font::filename() const

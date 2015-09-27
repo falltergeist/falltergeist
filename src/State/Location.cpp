@@ -27,6 +27,7 @@
 
 // Falltergeist includes
 #include "../Audio/Mixer.h"
+#include "../Base/StlFeatures.h"
 #include "../Event/Mouse.h"
 #include "../Exception.h"
 #include "../Game/ContainerItemObject.h"
@@ -72,6 +73,7 @@ namespace Falltergeist
 {
 namespace State
 {
+using Base::make_unique;
 
 const int Location::DROPDOWN_DELAY = 350;
 const int Location::KEYBOARD_SCROLL_STEP = 35;
@@ -248,7 +250,6 @@ void Location::setLocation(const std::string& name)
 
     // Generates floor and roof images
     {
-
         for (unsigned int i = 0; i != 100*100; ++i)
         {
             unsigned int tileX = std::ceil(((double)i)/100);
@@ -259,15 +260,13 @@ void Location::setLocation(const std::string& name)
             unsigned int tileNum = mapFile->elevations()->at(_currentElevation)->floorTiles()->at(i);
             if (tileNum > 1)
             {
-                auto tile = new UI::Tile(tileNum, Point(x, y));
-                _floor->tiles()->push_back(tile);
+                _floor->tiles().push_back(make_unique<UI::Tile>(tileNum, Point(x, y)));
             }
 
             tileNum = mapFile->elevations()->at(_currentElevation)->roofTiles()->at(i);
             if (tileNum > 1)
             {
-                auto tile = new UI::Tile(tileNum, Point(x, y - 104));
-                _roof->tiles()->push_back(tile);
+                _roof->tiles().push_back(make_unique<UI::Tile>(tileNum, Point(x, y - 104)));
             }
         }
     }

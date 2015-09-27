@@ -279,7 +279,7 @@ void Renderer::drawTexture(Texture* texture, const Point& pos, const Point& src,
     drawTexture(texture, pos.x(), pos.y(), src.x(), src.y(), (unsigned int)srcSize.width(), (unsigned int)srcSize.height());
 }
 
-Texture* Renderer::screenshot()
+std::unique_ptr<Texture> Renderer::screenshot()
 {
     SDL_Surface* window = SDL_GetWindowSurface(sdlWindow());
     if (!window)
@@ -287,7 +287,7 @@ Texture* Renderer::screenshot()
         throw Exception(SDL_GetError());
     }
 
-    auto texture = new Texture(window->w, window->h);
+    std::unique_ptr<Texture> texture(new Texture(window->w, window->h));
     auto surface = texture->sdlSurface();
     SDL_RenderReadPixels(_sdlRenderer, NULL, surface->format->format, surface->pixels, surface->pitch);
     SDL_FreeSurface(window);

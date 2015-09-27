@@ -45,13 +45,13 @@ public:
     TileMap();
     ~TileMap();
 
-    std::vector<Tile*>* tiles();
+    std::vector<std::unique_ptr<Tile>>& tiles();
     void render();
 
 protected:
     unsigned int _square = 0;
-    Graphics::Texture* _texture = nullptr;
-    std::vector<Tile*> _tiles;
+    std::unique_ptr<Graphics::Texture> _texture = nullptr;
+    std::vector<std::unique_ptr<Tile>> _tiles;
     void _generateTexture();
 
 };

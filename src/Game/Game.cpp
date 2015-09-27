@@ -364,12 +364,10 @@ void Game::handle()
 
                     if (keyboardEvent->keyCode() == SDLK_F12)
                     {
-                        Graphics::Texture* texture = renderer()->screenshot();
+                        auto texture = renderer()->screenshot();
                         std::string name = std::to_string(SDL_GetTicks()) +  ".bmp";
                         SDL_SaveBMP(texture->sdlSurface(), name.c_str());
-                        delete texture;
                         Logger::info("GAME") << "Screenshot saved to " + name << std::endl;
-
                     }
                     break;
                 }

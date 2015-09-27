@@ -21,6 +21,7 @@
 #define FALLTERGEIST_FONT_H
 
 // C++ standard includes
+#include <memory>
 #include <vector>
 #include <string>
 
@@ -60,7 +61,7 @@ public:
 protected:
     unsigned int _color = 0;
     libfalltergeist::Aaf::File* _aaf = nullptr;
-    Graphics::Texture* _texture = nullptr;
+    std::unique_ptr<Graphics::Texture> _texture = nullptr;
     std::string _filename;
 
 };

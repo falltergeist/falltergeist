@@ -50,20 +50,6 @@ Base::Base(const Point& pos) : Event::Emitter()
 
 Base::~Base()
 {
-    // Delete texture only if it wasn't allocated by Resource Manager
-    if (_texture)
-    {
-        bool found = false;
-        for (auto it = ResourceManager::getInstance()->textures()->begin(); it != ResourceManager::getInstance()->textures()->end(); ++it)
-        {
-            if (it->second == _texture)
-            {
-                found = true;
-                break;
-            }
-        }
-        if (!found) delete _texture;
-    }
 }
 
 int Base::x() const
@@ -131,11 +117,14 @@ void Base::render(bool eggTransparency)
             return;
         }
 
-        if (!_tmptex) _tmptex = new Graphics::Texture(texture()->width(),texture()->height());
-        texture()->copyTo(_tmptex);
+        if (!_tmptex)
+        {
+            _tmptex.reset(new Graphics::Texture(texture()->width(), texture()->height()));
+        }
+        texture()->copyTo(_tmptex.get());
 
         _tmptex->blitWithAlpha(egg, eggDelta.x(), eggDelta.y());
-        Game::getInstance()->renderer()->drawTexture(_tmptex, position());
+        Game::getInstance()->renderer()->drawTexture(_tmptex.get(), position());
     }
     else
     {
@@ -328,6 +317,13 @@ void Base::handle(Event::Event* event)
     {
         emitEvent(keyboardEvent);
     }
+}
+
+void Base::_generateTexture(unsigned int width, unsigned int height)
+{
+    auto ptr = new Graphics::Texture(width, height);
+    _generatedTexture.reset(ptr);
+    setTexture(ptr);
 }
 
 unsigned Base::width() const
