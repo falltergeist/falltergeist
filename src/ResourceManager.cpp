@@ -34,7 +34,21 @@
 #include "Ini/File.h"
 
 // Third party includes
-#include <libfalltergeist.h>
+#include <libfalltergeist/Acm/File.h>
+#include <libfalltergeist/Bio/File.h>
+#include <libfalltergeist/Dat/File.h>
+#include <libfalltergeist/Dat/Item.h>
+#include <libfalltergeist/Fon/File.h>
+#include <libfalltergeist/Frm/File.h>
+#include <libfalltergeist/Gam/File.h>
+#include <libfalltergeist/Gcd/File.h>
+#include <libfalltergeist/Int/File.h>
+#include <libfalltergeist/Map/File.h>
+#include <libfalltergeist/Mve/File.h>
+#include <libfalltergeist/Pal/File.h>
+#include <libfalltergeist/Pro/File.h>
+#include <libfalltergeist/Rix/File.h>
+#include <libfalltergeist/Sve/File.h>
 #include <SDL_image.h>
 
 namespace Falltergeist

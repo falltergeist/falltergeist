@@ -27,7 +27,7 @@
 #include "../UI/Base.h"
 
 // Third party includes
-#include <Mve/File.h>
+#include <libfalltergeist/Mve/File.h>
 #include <SDL.h>
 
 namespace Falltergeist

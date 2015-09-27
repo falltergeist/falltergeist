@@ -34,7 +34,7 @@
 #include "../State/Location.h"
 
 // Third party includes
-#include <Frm/Direction.h>
+#include <libfalltergeist/Frm/Direction.h>
 
 namespace Falltergeist
 {

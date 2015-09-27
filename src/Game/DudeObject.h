@@ -26,7 +26,7 @@
 #include "../Game/CritterObject.h"
 
 // Third party includes
-#include <Gcd/File.h>
+#include <libfalltergeist/Gcd/File.h>
 
 namespace Falltergeist
 {

@@ -18,31 +18,39 @@
 #
 #
 
-FIND_PATH(LIBFALLTERGEIST_INCLUDE_DIR 
-        libfalltergeist.h
-    HINTS
-        ENV LIBFALLTERGEIST_DIR
-    PATH_SUFFIXES 
-        include
-        include/falltergeist
-    PATHS
-        ~/libfalltergeist
-)
 
-FIND_LIBRARY(LIBFALLTERGEIST_LIBRARY 
+if(LIBFALLTERGEIST_EMBEDDED)
+    find_path(LIBFALLTERGEIST_INCLUDE_DIR 
+            libfalltergeist/include
+        HINTS
+            ENV LIBFALLTERGEIST_DIR
+            lib
+        PATH_SUFFIXES 
+            include
+        PATHS
+            ~/libfalltergeist/include
+    )
+else()
+    find_path(LIBFALLTERGEIST_INCLUDE_DIR Exception.h
+              HINTS
+                ENV SDLIMAGEDIR
+                ENV SDLDIR
+              PATH_SUFFIXES include/libfalltergeist 
+    )
+endif()
+
+
+find_library(LIBFALLTERGEIST_LIBRARY 
         falltergeist 
     PATH_SUFFIXES
         dynamic
         lib
-        ~/libfalltergeist
+        ~/libfalltergeist/lib
 )
 
-set(LIBFALLTERGEIST_LIBRARIES ${LIBFALLTERGEIST_LIBRARY})
+set(LIBFALLTERGEIST_LIBRARY ${LIBFALLTERGEIST_LIBRARY})
 set(LIBFALLTERGEIST_INCLUDE_DIRS ${LIBFALLTERGEIST_INCLUDE_DIR})
 
 include(FindPackageHandleStandardArgs)
-
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(LIBFALLTERGEIST
-                                  REQUIRED_VARS LIBFALLTERGEIST_LIBRARIES LIBFALLTERGEIST_INCLUDE_DIR)
-
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(LIBFALLTERGEIST REQUIRED_VARS LIBFALLTERGEIST_LIBRARY LIBFALLTERGEIST_INCLUDE_DIR)
 mark_as_advanced(LIBFALLTERGEIST_LIBRARY LIBFALLTERGEIST_INCLUDE_DIR)

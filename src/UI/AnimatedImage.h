@@ -27,7 +27,7 @@
 #include "../UI/Base.h"
 
 // Third party includes
-#include <Frm/File.h>
+#include <libfalltergeist/Frm/File.h>
 
 namespace Falltergeist
 {
