@@ -32,7 +32,6 @@
 #include "Logger.h"
 #include "ResourceManager.h"
 #include "Ini/File.h"
-#include "Ini/Parser.h"
 
 // Third party includes
 #include <libfalltergeist.h>
@@ -121,6 +120,15 @@ libfalltergeist::Dat::Item* ResourceManager::datFileItem(std::string filename)
             else if (extension == "pal") item = new libfalltergeist::Pal::File(stream);
             else if (extension == "pro") item = new libfalltergeist::Pro::File(stream);
             else if (extension == "rix") item = new libfalltergeist::Rix::File(stream);
+            else if (filename == "data/city.txt") item = new libfalltergeist::Txt::CityFile(stream);
+            else if (filename == "data/enddeath.txt") item = new libfalltergeist::Txt::EndDeathFile(stream);
+            else if (filename == "data/endgame.txt") item = new libfalltergeist::Txt::EndGameFile(stream);
+            else if (filename == "data/genrep.txt") item = new libfalltergeist::Txt::GenRepFile(stream);
+            else if (filename == "data/holodisk.txt") item = new libfalltergeist::Txt::HolodiskFile(stream);
+            else if (filename == "data/karmavar.txt") item = new libfalltergeist::Txt::KarmaVarFile(stream);
+            else if (filename == "data/maps.txt") item = new libfalltergeist::Txt::MapsFile(stream);
+            else if (filename == "data/quests.txt") item = new libfalltergeist::Txt::QuestsFile(stream);
+            else if (filename == "data/worldmap.txt") item = new libfalltergeist::Txt::WorldmapFile(stream);
             else
             {
                 item = new libfalltergeist::Dat::Item(stream);
@@ -230,6 +238,51 @@ libfalltergeist::Rix::File* ResourceManager::rixFileType(const std::string& file
 libfalltergeist::Sve::File* ResourceManager::sveFileType(const std::string& filename)
 {
     return dynamic_cast<libfalltergeist::Sve::File*>(datFileItem(filename));
+}
+
+libfalltergeist::Txt::CityFile* ResourceManager::cityTxt()
+{
+    return dynamic_cast<libfalltergeist::Txt::CityFile*>(datFileItem("data/city.txt"));
+}
+
+libfalltergeist::Txt::MapsFile* ResourceManager::mapsTxt()
+{
+    return dynamic_cast<libfalltergeist::Txt::MapsFile*>(datFileItem("data/maps.txt"));
+}
+
+libfalltergeist::Txt::WorldmapFile* ResourceManager::worldmapTxt()
+{
+    return dynamic_cast<libfalltergeist::Txt::WorldmapFile*>(datFileItem("data/worldmap.txt"));
+}
+
+libfalltergeist::Txt::EndDeathFile* ResourceManager::endDeathTxt()
+{
+    return dynamic_cast<libfalltergeist::Txt::EndDeathFile*>(datFileItem("data/enddeath.txt"));
+}
+
+libfalltergeist::Txt::EndGameFile* ResourceManager::endGameTxt()
+{
+    return dynamic_cast<libfalltergeist::Txt::EndGameFile*>(datFileItem("data/endgame.txt"));
+}
+
+libfalltergeist::Txt::GenRepFile* ResourceManager::genRepTxt()
+{
+    return dynamic_cast<libfalltergeist::Txt::GenRepFile*>(datFileItem("data/genrep.txt"));
+}
+
+libfalltergeist::Txt::HolodiskFile* ResourceManager::holodiskTxt()
+{
+    return dynamic_cast<libfalltergeist::Txt::HolodiskFile*>(datFileItem("data/holodisk.txt"));
+}
+
+libfalltergeist::Txt::KarmaVarFile* ResourceManager::karmaVarTxt()
+{
+    return dynamic_cast<libfalltergeist::Txt::KarmaVarFile*>(datFileItem("data/karmavar.txt"));
+}
+
+libfalltergeist::Txt::QuestsFile* ResourceManager::questsTxt()
+{
+    return dynamic_cast<libfalltergeist::Txt::QuestsFile*>(datFileItem("data/quests.txt"));
 }
 
 Graphics::Texture* ResourceManager::texture(const std::string& filename)

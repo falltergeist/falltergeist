@@ -59,6 +59,29 @@ namespace Pro { class File; }
 namespace Pro { class File; }
 namespace Rix { class File; }
 namespace Sve { class File; }
+namespace Txt
+{
+class CityFile;
+class MapsFile;
+class WorldmapFile;
+
+template <typename T>
+class CSVBasedFile;
+
+class EndDeath;
+class EndGame;
+class GenRep;
+class Holodisk;
+class KarmaVar;
+class Quest;
+
+typedef CSVBasedFile<EndDeath> EndDeathFile;
+typedef CSVBasedFile<EndGame> EndGameFile;
+typedef CSVBasedFile<GenRep> GenRepFile;
+typedef CSVBasedFile<Holodisk> HolodiskFile;
+typedef CSVBasedFile<KarmaVar> KarmaVarFile;
+typedef CSVBasedFile<Quest> QuestsFile;
+}
 }
 
 namespace Falltergeist
@@ -100,6 +123,17 @@ public:
     libfalltergeist::Pro::File* proFileType(unsigned int PID);
     libfalltergeist::Rix::File* rixFileType(const std::string& filename);
     libfalltergeist::Sve::File* sveFileType(const std::string& filename);
+
+    libfalltergeist::Txt::CityFile* cityTxt();
+    libfalltergeist::Txt::MapsFile* mapsTxt();
+    libfalltergeist::Txt::WorldmapFile* worldmapTxt();
+    libfalltergeist::Txt::EndDeathFile* endDeathTxt();
+    libfalltergeist::Txt::EndGameFile* endGameTxt();
+    libfalltergeist::Txt::GenRepFile* genRepTxt();
+    libfalltergeist::Txt::HolodiskFile* holodiskTxt();
+    libfalltergeist::Txt::KarmaVarFile* karmaVarTxt();
+    libfalltergeist::Txt::QuestsFile* questsTxt();
+
     Graphics::Texture* texture(const std::string& filename);
     std::unordered_map<std::string, Graphics::Texture*>* textures();
     std::shared_ptr<Font> font(const std::string& filename = "font1.aaf", unsigned int color = 0x3ff800ff);
