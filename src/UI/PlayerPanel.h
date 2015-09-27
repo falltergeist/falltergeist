@@ -70,7 +70,7 @@ private:
     void openSaveGame();
     void openLoadGame();
 
-    void onKeyUp(Event::Keyboard *event);
+    void onKeyDown(Event::Keyboard* event);
 };
 
 }

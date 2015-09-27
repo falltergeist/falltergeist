@@ -62,8 +62,7 @@ PlayerPanel::PlayerPanel() : UI::Base()
     setX((renderer->width() - 640) / 2);
     setY(renderer->height() - _background->height());
 
-    _background->setX(this->x());
-    _background->setY(this->y());
+    _background->setPosition(this->position());
 
     _background->addEventHandler("mouseleftdown", [this](Event::Event* event){
         event->setHandled(true);
@@ -140,7 +139,9 @@ PlayerPanel::PlayerPanel() : UI::Base()
         this->openPipBoy();
     });
 
-    addEventHandler("keyup", [this](Event::Event* event){ this->onKeyUp(dynamic_cast<Event::Keyboard*>(event)); });
+    addEventHandler("keydown", [this](Event::Event* event) {
+        this->onKeyDown(dynamic_cast<Event::Keyboard*>(event));
+    });
 }
 
 PlayerPanel::~PlayerPanel()
@@ -255,7 +256,7 @@ void PlayerPanel::openPipBoy()
     playWindowOpenSfx();
 }
 
-void PlayerPanel::onKeyUp(Event::Keyboard *event)
+void PlayerPanel::onKeyDown(Event::Keyboard* event)
 {
     switch (event->keyCode())
     {
