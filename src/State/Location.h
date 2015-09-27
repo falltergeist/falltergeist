@@ -110,11 +110,11 @@ protected:
     unsigned int _scriptsTicks = 0;
     unsigned int _actionCursorTicks = 0;
 
-    HexagonGrid* _hexagonGrid = 0;
-    LocationCamera* _camera = 0;
-    UI::TileMap* _floor = nullptr;
-    UI::TileMap* _roof = nullptr;
-    VM* _locationScript = 0;
+    std::unique_ptr<HexagonGrid> _hexagonGrid;
+    std::unique_ptr<LocationCamera> _camera;
+    std::unique_ptr<UI::TileMap> _floor;
+    std::unique_ptr<UI::TileMap> _roof ;
+    std::unique_ptr<VM> _locationScript;
     std::vector<int> _MVARS;
     std::map<std::string, VMStackValue> _EVARS;
     std::vector<UI::Base*> _floatMessages;
@@ -125,15 +125,15 @@ protected:
     Game::Object* _objectUnderCursor = NULL;
     Game::Object* _actionCursorLastObject = NULL;
     bool _actionCursorButtonPressed = false;
-    UI::PlayerPanel* _playerPanel = nullptr;
+    std::unique_ptr<UI::PlayerPanel> _playerPanel;
 
     bool _scrollLeft = false;
     bool _scrollRight = false;
     bool _scrollTop = false;
     bool _scrollBottom = false;
 
-    std::vector<Game::Object*> _objects;
-    UI::TextArea* _hexagonInfo = 0;
+    std::vector<std::unique_ptr<Game::Object>> _objects;
+    std::unique_ptr<UI::TextArea> _hexagonInfo;
     
     std::vector<Input::Mouse::Icon> getCursorIconsForObject(Game::Object* object);
 

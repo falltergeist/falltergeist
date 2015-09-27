@@ -24,6 +24,7 @@
 #include <cmath>
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Exception.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
@@ -47,6 +48,8 @@
 
 namespace Falltergeist
 {
+using Base::make_unique;
+
 namespace Game
 {
 
@@ -180,7 +183,7 @@ void Object::_generateUi()
         if (frm->framesPerDirection() > 1)
         {
             auto queue = new UI::AnimationQueue();
-            queue->animations()->push_back(new UI::Animation(ResourceManager::getInstance()->FIDtoFrmName(FID()), orientation()));
+            queue->animations().push_back(make_unique<UI::Animation>(ResourceManager::getInstance()->FIDtoFrmName(FID()), orientation()));
             _ui = queue;
         }
         else if (frm->animatedPalette())

@@ -42,7 +42,7 @@ public:
     Animation(const std::string& frmName, unsigned int direction = 0);
     ~Animation() override;
 
-    std::vector<AnimationFrame*>* frames();
+    std::vector<std::unique_ptr<AnimationFrame>>& frames();
 
     void think() override;
     void render(bool eggTransparency = false) override;
@@ -72,7 +72,7 @@ protected:
     bool _playing = false;
     bool _ended = false;
     bool _reverse = false;
-    std::vector<AnimationFrame*> _animationFrames;
+    std::vector<std::unique_ptr<AnimationFrame>> _animationFrames;
     Point _shift;
     unsigned int _currentFrame = 0;
     unsigned int _actionFrame = 0;

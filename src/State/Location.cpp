@@ -83,26 +83,18 @@ Location::Location() : State()
     auto game = Game::getInstance();
     game->mouse()->setState(Input::Mouse::Cursor::ACTION);
 
-    _camera = new LocationCamera(game->renderer()->size(), Point(0, 0));
-    _floor = new UI::TileMap();
-    _roof = new UI::TileMap();
-    _hexagonGrid = new HexagonGrid();
+    _camera.reset(new LocationCamera(game->renderer()->size(), Point(0, 0)));
+    _floor.reset( new UI::TileMap());
+    _roof.reset(new UI::TileMap());
+    _hexagonGrid.reset(new HexagonGrid());
 
-    _hexagonInfo = new UI::TextArea("", game->renderer()->width() - 135, 25);
+    _hexagonInfo.reset(new UI::TextArea("", game->renderer()->width() - 135, 25));
     _hexagonInfo->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
 }
 
 Location::~Location()
 {
-    for (auto obj : _objects) delete obj;
-    delete _hexagonGrid;
-    delete _camera;
-    delete _floor;
-    delete _roof;
-    delete _locationScript;
-    delete _hexagonInfo;
-    delete _playerPanel;
 }
 
 void Location::init()
@@ -116,7 +108,7 @@ void Location::init()
     auto game = Game::getInstance();
     setLocation("maps/" + game->settings()->initialLocation() + ".map");
 
-    _playerPanel = new UI::PlayerPanel();
+    _playerPanel.reset(new UI::PlayerPanel());
 }
 
 void Location::onStateActivate(Event::State* event)
@@ -125,7 +117,7 @@ void Location::onStateActivate(Event::State* event)
 
 void Location::onStateDeactivate(Event::State* event)
 {
-    _objectUnderCursor = NULL;
+    _objectUnderCursor = nullptr;
     _actionCursorTicks = 0;
 }
 
@@ -212,7 +204,7 @@ void Location::setLocation(const std::string& name)
         auto hexagon = hexagonGrid()->at(mapObject->hexPosition());
         Location::moveObjectToHexagon(object, hexagon);
 
-        _objects.push_back(object);
+        _objects.emplace_back(object);
     }
 
     // Adding dude
@@ -239,13 +231,13 @@ void Location::setLocation(const std::string& name)
         auto hexagon = hexagonGrid()->at(mapFile->defaultPosition());
         Location::moveObjectToHexagon(player, hexagon);
 
-        _objects.push_back(player);
+        _objects.emplace_back(player);
     }
 
     // Location script
     if (mapFile->scriptId() > 0)
     {
-        _locationScript = new VM(ResourceManager::getInstance()->intFileType(mapFile->scriptId()-1), nullptr);
+        _locationScript.reset(new VM(ResourceManager::getInstance()->intFileType(mapFile->scriptId()-1), nullptr));
     }
 
     // Generates floor and roof images
@@ -337,11 +329,11 @@ void Location::onObjectHover(Event::Event* event, Game::Object* object)
     if (event->name() == "mouseout")
     {
         if (_objectUnderCursor == object)
-            _objectUnderCursor = NULL;
+            _objectUnderCursor = nullptr;
     }
     else
     {
-        if (_objectUnderCursor == NULL || event->name() == "mousein")
+        if (_objectUnderCursor == nullptr || event->name() == "mousein")
         {
             _objectUnderCursor = object;
             _actionCursorButtonPressed = false;
@@ -415,7 +407,7 @@ void Location::think()
 
     _playerPanel->think();
 
-    for (auto object : _objects)
+    for (auto& object : _objects)
     {
         object->think();
     }
@@ -473,7 +465,7 @@ void Location::think()
 
         if (_locationScript) _locationScript->initialize();
 
-        for (auto object : _objects)
+        for (auto& object : _objects)
         {
             if (object->script())
             {
@@ -488,8 +480,7 @@ void Location::think()
         // when script is called
         for (auto it = _objects.rbegin(); it != _objects.rend(); ++it)
         {
-            auto object = *it;
-            object->map_enter_p_proc();
+            (*it)->map_enter_p_proc();
         }
     }
     else
@@ -501,7 +492,7 @@ void Location::think()
             {
                 _locationScript->call("map_update_p_proc");
             }
-            for (auto object : _objects)
+            for (auto& object : _objects)
             {
                 object->map_update_p_proc();
             }
@@ -556,7 +547,7 @@ void Location::toggleCursorMode()
             }
             mouse->pushState(Input::Mouse::Cursor::HEXAGON_RED);
             mouse->ui()->setPosition(hexagon->position() - _camera->topLeft());
-            _objectUnderCursor = NULL;
+            _objectUnderCursor = nullptr;
             break;
         }
         case Input::Mouse::Cursor::HEXAGON_RED:
@@ -774,7 +765,7 @@ void Location::onKeyDown(Event::Keyboard* event)
 
 LocationCamera* Location::camera()
 {
-    return _camera;
+    return _camera.get();
 }
 
 void Location::setMVAR(unsigned int number, int value)
@@ -850,13 +841,12 @@ void Location::destroyObject(Game::Object* object)
     if (_objectUnderCursor == object) _objectUnderCursor = nullptr;
     for (auto it = _objects.begin(); it != _objects.end(); ++it)
     {
-        if (*it == object)
+        if ((*it).get() == object)
         {
             _objects.erase(it);
             break;
         }
     }
-    delete object;
 }
 
 void Location::centerCameraAtHexagon(Hexagon* hexagon)
@@ -926,12 +916,12 @@ void Location::displayMessage(const std::string& message)
 
 HexagonGrid* Location::hexagonGrid()
 {
-    return _hexagonGrid;
+    return _hexagonGrid.get();
 }
 
 UI::PlayerPanel* Location::playerPanel()
 {
-    return _playerPanel;
+    return _playerPanel.get();
 }
 
 }

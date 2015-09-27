@@ -42,15 +42,15 @@ public:
     ImageList(std::vector<Image*> imageList, int x, int y);
     ~ImageList() override;
 
-    void addImage(Image* image);
+    void addImage(std::unique_ptr<Image> image);
     void addImage(const std::string& filename);
     void setCurrentImage(unsigned int number);
     unsigned int currentImage() const;
     Graphics::Texture* texture() const override;
-    const std::vector<Image*>* images() const;
+    const std::vector<std::unique_ptr<Image>>& images() const;
 
 protected:
-    std::vector<Image*> _images;
+    std::vector<std::unique_ptr<Image>> _images;
     unsigned int _currentImage = 0;
 };
 

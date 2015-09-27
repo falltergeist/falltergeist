@@ -49,11 +49,6 @@ NewGame::NewGame() : State()
 
 NewGame::~NewGame()
 {
-    while(!_characters.empty())
-    {
-        if (_characters.back() != Game::getInstance()->player()) delete _characters.back();
-        _characters.pop_back();
-    }
 }
 
 void NewGame::init()
@@ -112,17 +107,17 @@ void NewGame::init()
     auto combat = new Game::DudeObject();
     combat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/combat.gcd"));
     combat->setBiography(ResourceManager::getInstance()->bioFileType("premade/combat.bio")->text());
-    _characters.push_back(combat);
+    _characters.emplace_back(combat);
 
     auto stealth = new Game::DudeObject();
     stealth->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/stealth.gcd"));
     stealth->setBiography(ResourceManager::getInstance()->bioFileType("premade/stealth.bio")->text());
-    _characters.push_back(stealth);
+    _characters.emplace_back(stealth);
 
     auto diplomat = new Game::DudeObject();
     diplomat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/diplomat.gcd"));
     diplomat->setBiography(ResourceManager::getInstance()->bioFileType("premade/diplomat.bio")->text());
-    _characters.push_back(diplomat);
+    _characters.emplace_back(diplomat);
 
     _changeCharacter();
 }
@@ -134,14 +129,14 @@ void NewGame::think()
 
 void NewGame::doBeginGame()
 {
-    auto player = _characters.at(_selectedCharacter);
+    auto player = _characters.at(_selectedCharacter).get();
     Game::getInstance()->setPlayer(player);
     Game::getInstance()->setState(new Location());
 }
 
 void NewGame::doEdit()
 {
-    Game::getInstance()->setPlayer(_characters.at(_selectedCharacter));
+    Game::getInstance()->setPlayer(_characters.at(_selectedCharacter).get());
     Game::getInstance()->pushState(new PlayerCreate());
 }
 
@@ -209,7 +204,7 @@ void NewGame::onNextCharacterButtonClick(Event::Mouse* event)
 
 void NewGame::_changeCharacter()
 {
-    auto dude = _characters.at(_selectedCharacter);
+    auto& dude = _characters.at(_selectedCharacter);
    *getTextArea("stats_1") = "";
    *getTextArea("stats_1")
         << _t(MSG_STATS, 100) << " " << (dude->stat(STAT::STRENGTH)     < 10 ? "0" : "") << dude->stat(STAT::STRENGTH)     << "\n"

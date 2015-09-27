@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
@@ -37,6 +38,8 @@
 
 namespace Falltergeist
 {
+using Base::make_unique;
+
 namespace Input
 {
 
@@ -204,7 +207,7 @@ void Mouse::_setType(Cursor state)
         case Cursor::WAIT:
         {
             auto queue = new UI::AnimationQueue();
-            queue->animations()->push_back(new UI::Animation("art/intrface/wait.frm"));
+            queue->animations().push_back(make_unique<UI::Animation>("art/intrface/wait.frm"));
             queue->setRepeat(true);
             queue->start();
             _ui = queue;

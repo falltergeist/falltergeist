@@ -122,8 +122,8 @@ void Slider::_onLeftButtonUp(Event::Mouse* event)
 
 Graphics::Texture* Slider::texture() const
 {
-    if (_drag) return _imageList.images()->at(0)->texture();
-    return _imageList.images()->at(1)->texture();
+    if (_drag) return _imageList.images().at(0)->texture();
+    return _imageList.images().at(1)->texture();
 }
 
 double Slider::minValue() const

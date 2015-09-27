@@ -40,12 +40,6 @@ namespace State
 
 class NewGame : public State
 {
-protected:
-    unsigned char _selectedCharacter = 0;
-    std::vector<Game::DudeObject*> _characters;
-
-    void _changeCharacter();
-
 public:
     NewGame();
     ~NewGame() override;
@@ -68,6 +62,12 @@ public:
     void doNext();
     void doPrev();
     void onKeyDown(Event::Keyboard* event) override;
+
+protected:
+    unsigned char _selectedCharacter = 0;
+    std::vector<std::unique_ptr<Game::DudeObject>> _characters;
+
+    void _changeCharacter();
 };
 
 }

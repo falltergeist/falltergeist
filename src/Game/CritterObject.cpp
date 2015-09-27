@@ -547,10 +547,10 @@ void CritterObject::onMovementAnimationEnded(Event::Event* event)
     if (event->name() == "actionFrame")
     {
         // at each action frame critter switches to the next hex and frame positions are offset relative to the action frame offsets
-        auto actionFrame = animation->frames()->at(animation->actionFrame());
-        for (auto it = animation->frames()->rbegin(); it != animation->frames()->rend(); ++it)
+        auto actionFrame = animation->frames().at(animation->actionFrame()).get();
+        for (auto it = animation->frames().rbegin(); it != animation->frames().rend(); ++it)
         {
-            auto frame = (*it);
+            auto frame = (*it).get();
             frame->setXOffset(frame->xOffset() - actionFrame->xOffset());
             frame->setYOffset(frame->yOffset() - actionFrame->yOffset());
             if (frame == actionFrame) break;

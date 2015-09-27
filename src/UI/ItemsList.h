@@ -49,7 +49,7 @@ public:
     void setItems(std::vector<Game::ItemObject*>* items);
     std::vector<Game::ItemObject*>* items();
 
-    std::vector<InventoryItem*>* inventoryItems();
+    std::vector<std::unique_ptr<InventoryItem>>& inventoryItems();
     InventoryItem* draggedItem();
 
     /*void setSlotsNumber(unsigned int value);
@@ -81,7 +81,7 @@ public:
 protected:
     std::vector<Game::ItemObject*>* _items = 0;
     InventoryItem* _draggedItem = 0;
-    std::vector<InventoryItem*> _inventoryItems;
+    std::vector<std::unique_ptr<InventoryItem>> _inventoryItems;
     InventoryItem::Type _type = InventoryItem::Type::INVENTORY;
     unsigned int _slotsNumber = 7; // Height of widget in items
     unsigned int _slotOffset = 0;

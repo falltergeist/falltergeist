@@ -59,7 +59,7 @@ public:
     MultistateImageButton(ImageList* imageList, const Point& pos);
     ~MultistateImageButton() override;
 
-    void addImage(Image* image);
+    void addImage(std::unique_ptr<Image> image);
 
     unsigned int state() const;
     void setState(unsigned int state);

@@ -24,6 +24,7 @@
 #include <cmath>
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
@@ -42,6 +43,9 @@
 
 namespace Falltergeist
 {
+
+using Base::make_unique;
+
 namespace UI
 {
 
@@ -69,16 +73,16 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
 
     int xOffset = 0;
     int yOffset = 0;
-    for (auto f = 0; f != frm->framesPerDirection(); ++f)
+    for (unsigned int f = 0; f != frm->framesPerDirection(); ++f)
     {
         xOffset += frm->offsetX(direction, f);
         yOffset += frm->offsetY(direction, f);
 
-        auto frame = new AnimationFrame();
+        auto frame = make_unique<AnimationFrame>();
         frame->setWidth(frm->directions()->at(direction)->frames()->at(f)->width());
         frame->setHeight(frm->directions()->at(direction)->frames()->at(f)->height());
-        frame->setXOffset(xOffset);
-        frame->setYOffset(yOffset);
+        frame->setXOffset((unsigned)xOffset);
+        frame->setYOffset((unsigned)yOffset);
         frame->setY(y);
         frame->setX(x);
 
@@ -89,11 +93,11 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
         }
         else
         {
-            frame->setDuration(std::round(1000.0/static_cast<double>(frm->framesPerSecond())));
+            frame->setDuration((unsigned)std::round(1000.0/static_cast<double>(frm->framesPerSecond())));
         }
 
         x += frame->width();
-        frames()->push_back(frame);
+        _animationFrames.push_back(std::move(frame));
     }
 
     if (frm->animatedPalette())
@@ -213,30 +217,25 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
 
 Animation::~Animation()
 {
-    while (!_animationFrames.empty())
-    {
-        delete _animationFrames.back();
-        _animationFrames.pop_back();
-    }
 }
 
-std::vector<AnimationFrame*>* Animation::frames()
+std::vector<std::unique_ptr<AnimationFrame>>& Animation::frames()
 {
-    return &_animationFrames;
+    return _animationFrames;
 }
 
 void Animation::think()
 {
     if (!_playing) return;
 
-    if (SDL_GetTicks() - _frameTicks >= frames()->at(_currentFrame)->duration())
+    if (SDL_GetTicks() - _frameTicks >= _animationFrames.at(_currentFrame)->duration())
     {
         _frameTicks = SDL_GetTicks();
 
         _progress += 1;
-        if (_progress < frames()->size())
+        if (_progress < _animationFrames.size())
         {
-            _currentFrame = _reverse ? frames()->size() - _progress - 1 : _progress;
+            _currentFrame = _reverse ? _animationFrames.size() - _progress - 1 : _progress;
             if (_actionFrame == _currentFrame)
             {
                 auto event = new Event::Event("actionFrame");
@@ -257,7 +256,7 @@ void Animation::think()
 
 void Animation::render(bool eggTransparency)
 {
-    auto frame = frames()->at(_currentFrame);
+    auto& frame = _animationFrames.at(_currentFrame);
     Point framePos = Point(frame->x(), frame->y());
     Size frameSize = Size(frame->width(), frame->height());
     Point offsetPosition = position() + offset();
@@ -382,13 +381,13 @@ void Animation::render(bool eggTransparency)
 
 Size Animation::size() const
 {
-    auto frame = _animationFrames.at(_currentFrame);
+    auto& frame = _animationFrames.at(_currentFrame);
     return Size(frame->width(), frame->height());
 }
 
 Point Animation::offset() const
 {
-    auto frame = _animationFrames.at(_currentFrame);
+    auto& frame = _animationFrames.at(_currentFrame);
     return Point(frame->xOffset(), frame->yOffset()) + shift();
 }
 
@@ -404,7 +403,7 @@ void Animation::setShift(const Point& value)
 
 unsigned int Animation::pixel(const Point& pos)
 {
-    const auto frame = frames()->at(_currentFrame);
+    const auto& frame = _animationFrames.at(_currentFrame);
 
     Point offsetPos = pos - offset();
     if (!Rect::inRect(offsetPos, Size(frame->width(), frame->height())))
@@ -449,7 +448,7 @@ unsigned int Animation::currentFrame() const
 void Animation::setCurrentFrame(unsigned int value)
 {
     _currentFrame = value;
-    _progress = _reverse ? frames()->size() - _currentFrame - 1 : _currentFrame;
+    _progress = _reverse ? _animationFrames.size() - _currentFrame - 1 : _currentFrame;
 }
 
 unsigned int Animation::actionFrame() const

@@ -266,17 +266,6 @@ int DudeObject::criticalChance() const
 void DudeObject::_generateUi()
 {
     CritterObject::_generateUi();
-    return;
-    delete _ui; _ui = 0;
-
-    auto queue = new UI::AnimationQueue();
-    auto animation = _generateMovementAnimation();
-    queue->animations()->push_back(animation);
-    queue->setRepeat(true);
-    queue->start();
-    _ui = queue;
-
-    addUIEventHandlers();
 }
 
 }
