@@ -51,11 +51,11 @@
 #include "../State/CursorDropdown.h"
 #include "../State/ExitConfirm.h"
 #include "../State/MainMenu.h"
-#include "../State/PlayerPanel.h"
 #include "../UI/Animation.h"
 #include "../UI/AnimationQueue.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
+#include "../UI/PlayerPanel.h"
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
 #include "../UI/Tile.h"
@@ -100,6 +100,7 @@ Location::~Location()
     delete _roof;
     delete _locationScript;
     delete _hexagonInfo;
+    delete _playerPanel;
 }
 
 void Location::init()
@@ -112,8 +113,8 @@ void Location::init()
 
     auto game = Game::getInstance();
     setLocation("maps/" + game->settings()->initialLocation() + ".map");
-    _playerPanel = new PlayerPanel();
-    game->pushState(_playerPanel);
+
+    _playerPanel = new UI::PlayerPanel();
 }
 
 void Location::onStateActivate(Event::State* event)
@@ -405,11 +406,15 @@ void Location::render()
     {
         _hexagonInfo->render();
     }
+
+    _playerPanel->render();
 }
 
 void Location::think()
 {
     Game::getInstance()->gameTime()->think();
+
+    _playerPanel->think();
 
     for (auto object : _objects)
     {
@@ -567,8 +572,10 @@ void Location::toggleCursorMode()
 
 void Location::handle(Event::Event* event)
 {
-    auto game = Game::getInstance();
+    _playerPanel->handle(event);
+    if (event->handled()) return;
 
+    auto game = Game::getInstance();
     if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
         auto mouse = Game::getInstance()->mouse();
@@ -918,14 +925,14 @@ void Location::displayMessage(const std::string& message)
     Logger::info("MESSAGE") << message << std::endl;
 }
 
-PlayerPanel* Location::playerPanelState()
-{
-    return _playerPanel;
-}
-
 HexagonGrid* Location::hexagonGrid()
 {
     return _hexagonGrid;
+}
+
+UI::PlayerPanel* Location::playerPanel()
+{
+    return _playerPanel;
 }
 
 }

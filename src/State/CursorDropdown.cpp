@@ -34,6 +34,7 @@
 #include "../Logger.h"
 #include "../State/Location.h"
 #include "../UI/HiddenMask.h"
+#include "../UI/PlayerPanel.h"
 
 // Third party includes
 
@@ -144,7 +145,7 @@ void CursorDropdown::showMenu()
     Point delta = _surface->position()
                   + _surface->size()
                   - game->renderer()->size()
-                  + Point(0, game->locationState()->playerPanelState()->height());
+                  + Point(0, game->locationState()->playerPanel()->size().height());
 
     int deltaX = delta.x();
     int deltaY = delta.y();

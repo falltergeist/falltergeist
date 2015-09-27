@@ -43,13 +43,16 @@ class Base : public Event::Emitter
 public:
     Base(int x = 0, int y = 0);
     Base(const Point& pos);
-    ~Base();
+    ~Base() override;
 
     int x() const;
     void setX(int value);
 
     int y() const;
     void setY(int value);
+
+    virtual unsigned width() const;
+    virtual unsigned height() const;
 
     virtual Point position() const;
     virtual void setPosition(const Point& pos);

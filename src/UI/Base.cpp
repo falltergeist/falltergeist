@@ -330,5 +330,15 @@ void Base::handle(Event::Event* event)
     }
 }
 
+unsigned Base::width() const
+{
+    return size().width();
+}
+
+unsigned Base::height() const
+{
+    return size().height();
+}
+
 }
 }

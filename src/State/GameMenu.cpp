@@ -36,6 +36,7 @@
 #include "../State/SettingsMenu.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
+#include "../UI/PlayerPanel.h"
 #include "../UI/TextArea.h"
 
 // Third party includes
@@ -62,7 +63,7 @@ void GameMenu::init()
     setFullscreen(false);
 
     auto background = new UI::Image("art/intrface/opbase.frm");
-    auto panelHeight = Game::getInstance()->locationState()->playerPanelState()->height();
+    auto panelHeight = Game::getInstance()->locationState()->playerPanel()->size().height();
 
     auto backgroundPos = (Game::getInstance()->renderer()->size() - background->size() - Point(0, panelHeight)) / 2;
     int backgroundX = backgroundPos.x();
