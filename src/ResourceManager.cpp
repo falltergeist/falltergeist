@@ -49,6 +49,10 @@
 #include <libfalltergeist/Pro/File.h>
 #include <libfalltergeist/Rix/File.h>
 #include <libfalltergeist/Sve/File.h>
+#include <libfalltergeist/Txt/CityFile.h>
+#include <libfalltergeist/Txt/CSVBasedFile.h>
+#include <libfalltergeist/Txt/MapsFile.h>
+#include <libfalltergeist/Txt/WorldmapFile.h>
 #include <SDL_image.h>
 
 namespace Falltergeist
