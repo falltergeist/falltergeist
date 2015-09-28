@@ -30,13 +30,17 @@ if(Lua_FIND_VERSION_MAJOR AND Lua_FIND_VERSION_MINOR)
     set(LUA_SUFFIXES "${Lua_FIND_VERSION_MAJOR}${Lua_FIND_VERSION_MINOR}"
                      "${Lua_FIND_VERSION_MAJOR}.${Lua_FIND_VERSION_MINOR}"
                      "-${Lua_FIND_VERSION_MAJOR}.${Lua_FIND_VERSION_MINOR}")
+    if (${Lua_FIND_VERSION} VERSION_EQUAL 5.1)  # luajit is 5.1 - compatible
+        list(APPEND LUA_SUFFIXES "jit-2.0")  # MSYS2
+    endif()
 else(Lua_FIND_VERSION_MAJOR AND Lua_FIND_VERSION_MINOR)
     set(LUA_SUFFIXES "51"
                      "5.1"
                      "-5.1"
                      "52"
                      "5.2"
-                     "-5.2")
+                     "-5.2"
+                     "jit-2.0")
 endif(Lua_FIND_VERSION_MAJOR AND Lua_FIND_VERSION_MINOR)
 
 set(LUA_INCLUDE_SEARCH_PATH include include/lua)
