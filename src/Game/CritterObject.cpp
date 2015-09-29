@@ -24,6 +24,7 @@
 #include <string>
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Exception.h"
 #include "../Game/Defines.h"
 #include "../Game/DudeObject.h"
@@ -44,6 +45,9 @@ namespace Falltergeist
 namespace Game
 {
 
+using namespace std;
+using namespace Base;
+
 CritterObject::CritterObject() : Object()
 {
     _type = Type::CRITTER;
@@ -54,7 +58,7 @@ CritterObject::~CritterObject()
 {
 }
 
-std::vector<ItemObject*>* CritterObject::inventory()
+vector<ItemObject*>* CritterObject::inventory()
 {
     return &_inventory;
 }
@@ -467,7 +471,7 @@ void CritterObject::use_skill_on_p_proc()
 {
 }
 
-std::vector<Hexagon*>* CritterObject::movementQueue()
+vector<Hexagon*>* CritterObject::movementQueue()
 {
     return &_movementQueue;
 }
@@ -480,14 +484,13 @@ void CritterObject::think()
         {
             _moving = true;
 
-            delete _ui;
             _orientation = hexagon()->orientationTo(movementQueue()->back());
             auto animation = _generateMovementAnimation();
             animation->setActionFrame(_running ? 2 : 4);
-            animation->addEventHandler("actionFrame",    std::bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
-            animation->addEventHandler("animationEnded", std::bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
+            animation->addEventHandler("actionFrame",    bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
+            animation->addEventHandler("animationEnded", bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
             animation->play();
-            _ui = animation;
+            _ui = move(animation);
         }
     }
     else
@@ -537,11 +540,11 @@ void CritterObject::onMovementAnimationEnded(Event::Event* event)
         {
             newAnimation->setActionFrame(_running ? 2 : 4);
         }
-        newAnimation->addEventHandler("actionFrame",    std::bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
-        newAnimation->addEventHandler("animationEnded", std::bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
+        newAnimation->addEventHandler("actionFrame",    bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
+        newAnimation->addEventHandler("animationEnded", bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
         newAnimation->play();
-        delete _ui;
-        _ui = animation = newAnimation;
+        animation = newAnimation.get();
+        _ui = move(newAnimation);
     }
 
     if (event->name() == "actionFrame")
@@ -575,9 +578,9 @@ void CritterObject::onMovementAnimationEnded(Event::Event* event)
     }
 }
 
-UI::Animation* CritterObject::_generateMovementAnimation()
+unique_ptr<UI::Animation> CritterObject::_generateMovementAnimation()
 {
-    std::string frmString = _generateArmorFrmString();
+    string frmString = _generateArmorFrmString();
 
     if (_running)
     {
@@ -588,10 +591,10 @@ UI::Animation* CritterObject::_generateMovementAnimation()
         frmString += _generateWeaponFrmString() + "b";
     }
 
-    return new UI::Animation("art/critters/" + frmString + ".frm", orientation());
+    return make_unique<UI::Animation>("art/critters/" + frmString + ".frm", orientation());
 }
 
-UI::Animation* CritterObject::setActionAnimation(const std::string& action)
+UI::Animation* CritterObject::setActionAnimation(const string& action)
 {
     UI::Animation* animation = new UI::Animation("art/critters/" + _generateArmorFrmString() + action + ".frm", orientation());
     animation->addEventHandler("animationEnded", [animation](Event::Event* event)
@@ -617,7 +620,7 @@ int CritterObject::radiationLevel() const
     return _radiationLevel;
 }
 
-std::string CritterObject::_generateArmorFrmString()
+string CritterObject::_generateArmorFrmString()
 {
     if (!armorSlot())
     {
@@ -637,7 +640,7 @@ std::string CritterObject::_generateArmorFrmString()
     }
 }
 
-std::string CritterObject::_generateWeaponFrmString()
+string CritterObject::_generateWeaponFrmString()
 {
     if (auto weapon = dynamic_cast<WeaponItemObject*>(currentHandSlot()))
     {
@@ -710,11 +713,11 @@ void CritterObject::stopMovement()
 {
     _movementQueue.clear();
     // @TODO: _ui probably needs to be always one type
-    if (auto queue = dynamic_cast<UI::AnimationQueue*>(_ui))
+    if (auto queue = dynamic_cast<UI::AnimationQueue*>(_ui.get()))
     {
         queue->stop();
     }
-    else if (auto animation = dynamic_cast<UI::Animation*>(_ui))
+    else if (auto animation = dynamic_cast<UI::Animation*>(_ui.get()))
     {
         animation->stop();
     }

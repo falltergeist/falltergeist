@@ -59,8 +59,6 @@ Object::Object() : Event::Emitter()
 
 Object::~Object()
 {
-    delete _ui;
-    delete _floatMessage;
 }
 
 Object::Type Object::type() const
@@ -139,24 +137,22 @@ void Object::setDescription(const std::string& value)
 
 VM* Object::script() const
 {
-    return _script;
+    return _script.get();
 }
 
 void Object::setScript(VM* script)
 {
-    delete _script;
-    _script = script;
+    _script.reset(script);
 }
 
 UI::Base* Object::ui() const
 {
-    return _ui;
+    return _ui.get();
 }
 
 void Object::setUI(UI::Base* ui)
 {
-    delete _ui;
-    _ui = ui;
+    _ui.reset(ui);
     addUIEventHandlers();
 }
 
@@ -175,24 +171,24 @@ void Object::addUIEventHandlers()
 
 void Object::_generateUi()
 {
-    delete _ui; _ui = 0;
+    _ui.reset();
     auto frm = ResourceManager::getInstance()->frmFileType(FID());
     if (frm)
     {
         frm->rgba(ResourceManager::getInstance()->palFileType("color.pal")); // TODO: figure out, why not calling this brokes animated overlays
         if (frm->framesPerDirection() > 1)
         {
-            auto queue = new UI::AnimationQueue();
+            auto queue = make_unique<UI::AnimationQueue>();
             queue->animations().push_back(make_unique<UI::Animation>(ResourceManager::getInstance()->FIDtoFrmName(FID()), orientation()));
-            _ui = queue;
+            _ui = std::move(queue);
         }
         else if (frm->animatedPalette())
         {
-            _ui = new UI::AnimatedImage(frm, orientation());
+            _ui = make_unique<UI::AnimatedImage>(frm, orientation());
         }
         else
         {
-            _ui = new UI::Image(frm, orientation());
+            _ui =  make_unique<UI::Image>(frm, orientation());
         }
     }
 
@@ -251,12 +247,12 @@ void Object::setHexagon(Hexagon* hexagon)
 
 UI::TextArea* Object::floatMessage() const
 {
-    return _floatMessage;
+    return _floatMessage.get();
 }
 
-void Object::setFloatMessage(UI::TextArea* floatMessage)
+void Object::setFloatMessage(std::unique_ptr<UI::TextArea> floatMessage)
 {
-    _floatMessage = floatMessage;
+    _floatMessage = std::move(floatMessage);
 }
 
 static bool to_right_of(const Point& p1, const Point& p2)
@@ -275,7 +271,6 @@ void Object::renderText()
     {
         if (SDL_GetTicks() - message->timestampCreated() >= 7000)
         {
-            delete floatMessage();
             setFloatMessage(nullptr);
         }
         else

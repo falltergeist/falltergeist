@@ -23,6 +23,7 @@
 #include <cstdlib>
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../PathFinding/Hexagon.h"
 #include "../PathFinding/HexagonGrid.h"
 
@@ -30,6 +31,8 @@
 
 namespace Falltergeist
 {
+
+using namespace Base;
 
 struct HeuristicComparison : public std::binary_function<Hexagon*, Hexagon*, bool>
 {
@@ -48,7 +51,8 @@ HexagonGrid::HexagonGrid()
     {
         for (unsigned int p = 0; p != 200; ++p, ++index)
         {
-            auto hexagon = new Hexagon(index);
+            _hexagons.emplace_back(make_unique<Hexagon>(index));
+            auto& hexagon = _hexagons.back();
             int x = 48*100 + 16*(q+1) - 24*p;
             int y = (q+1)*12 + 6*p + 12;
             if (p&1)
@@ -62,14 +66,13 @@ HexagonGrid::HexagonGrid()
             hexagon->setCubeY(-hexagon->cubeX() - hexagon->cubeZ());
 
             hexagon->setPosition({x, y});
-            _hexagons.push_back(hexagon);
         }
     }
 
     // Creating links between hexagons
     for (index = 0; index != 200*200; ++index)
     {
-        auto hexagon = _hexagons.at(index);
+        auto hexagon = _hexagons.at(index).get();
 
         unsigned int q = index/200; // hexagonal y
         unsigned int p = index%200; // hexagonal x
@@ -92,32 +95,27 @@ HexagonGrid::HexagonGrid()
             index6 = (q+1)*200 + p+1;
         }
 
-        if (index1 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index1));
-        if (index2 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index2));
-        if (index3 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index3));
-        if (index4 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index4));
-        if (index5 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index5));
-        if (index6 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index6));
+        if (index1 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index1).get());
+        if (index2 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index2).get());
+        if (index3 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index3).get());
+        if (index4 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index4).get());
+        if (index5 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index5).get());
+        if (index6 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index6).get());
     }
 }
 
 HexagonGrid::~HexagonGrid()
 {
-    while (!_hexagons.empty())
-    {
-        delete _hexagons.back();
-        _hexagons.pop_back();
-    }
 }
 
-Hexagon* HexagonGrid::at(unsigned int index)
+Hexagon* HexagonGrid::at(size_t index)
 {
-    return _hexagons.at(index);
+    return _hexagons.at(index).get();
 }
 
 Hexagon* HexagonGrid::hexagonAt(const Point& pos)
 {
-    for (auto hexagon : _hexagons)
+    for (auto& hexagon : _hexagons)
     {
         auto hexPos = hexagon->position();
         if (pos.x() >= hexPos.x() - 16
@@ -125,7 +123,7 @@ Hexagon* HexagonGrid::hexagonAt(const Point& pos)
             && pos.y() >= hexPos.y() - 8
             && pos.y() < hexPos.y() + 4)
         {
-            return hexagon;
+            return hexagon.get();
         }
     }
     return nullptr;
@@ -138,7 +136,7 @@ std::vector<Hexagon*>* HexagonGrid::hexagons()
 
 std::vector<Hexagon*> HexagonGrid::findPath(Hexagon* from, Hexagon* to)
 {
-    Hexagon* current = 0;
+    Hexagon* current = nullptr;
     std::vector<Hexagon*> result;
     std::priority_queue<Hexagon*, std::vector<Hexagon*>, HeuristicComparison> unvisited;
     unsigned int cameFrom[200*200] = {};
@@ -183,7 +181,7 @@ std::vector<Hexagon*> HexagonGrid::findPath(Hexagon* from, Hexagon* to)
     while (current->number() != from->number())
     {
         result.push_back(current);
-        current = _hexagons.at(cameFrom[current->number()]);
+        current = _hexagons.at(cameFrom[current->number()]).get();
     }
 
     return result;

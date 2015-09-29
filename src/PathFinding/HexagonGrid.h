@@ -34,18 +34,21 @@ class Hexagon;
 
 class HexagonGrid
 {
-protected:
-    std::vector<Hexagon*> _hexagons;
+    using HexagonVector = std::vector<std::unique_ptr<Hexagon>>;
+
 public:
     HexagonGrid();
     ~HexagonGrid();
     std::vector<Hexagon*>* hexagons();
     unsigned int distance(Hexagon* from, Hexagon* to);
     Hexagon* hexagonAt(const Point& pos);
-    Hexagon* at(unsigned int index);
+    Hexagon* at(size_t index);
     std::vector<Hexagon*> findPath(Hexagon* from, Hexagon* to);
     Hexagon* hexInDirection(Hexagon* from, unsigned short rotation, unsigned int distance);
     std::vector<Hexagon*> ring(Hexagon* from, unsigned int radius);
+
+protected:
+    HexagonVector _hexagons;
 };
 
 }
