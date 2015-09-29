@@ -24,6 +24,7 @@
 #include <vector>
 
 // Falltergeist includes
+#include "../Base/Iterators.h"
 #include "../Point.h"
 
 // Third party includes
@@ -39,7 +40,8 @@ class HexagonGrid
 public:
     HexagonGrid();
     ~HexagonGrid();
-    std::vector<Hexagon*>* hexagons();
+    Base::vector_ptr_decorator<Hexagon> hexagons();
+
     unsigned int distance(Hexagon* from, Hexagon* to);
     Hexagon* hexagonAt(const Point& pos);
     Hexagon* at(size_t index);

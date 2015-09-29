@@ -129,9 +129,9 @@ Hexagon* HexagonGrid::hexagonAt(const Point& pos)
     return nullptr;
 }
 
-std::vector<Hexagon*>* HexagonGrid::hexagons()
+Base::vector_ptr_decorator<Hexagon> HexagonGrid::hexagons()
 {
-    return &_hexagons;
+    return Base::vector_ptr_decorator<Hexagon>(_hexagons);
 }
 
 std::vector<Hexagon*> HexagonGrid::findPath(Hexagon* from, Hexagon* to)

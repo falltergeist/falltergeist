@@ -352,7 +352,7 @@ void Location::render()
     _floor->render();
 
     //render only flat objects first
-    for (auto hexagon : *hexagonGrid()->hexagons())
+    for (auto hexagon : _hexagonGrid->hexagons())
     {
         hexagon->setInRender(false);
         for (auto object : *hexagon->objects())
@@ -369,7 +369,7 @@ void Location::render()
     }
 
     // now render all other objects
-    for (auto hexagon : *hexagonGrid()->hexagons())
+    for (auto hexagon : _hexagonGrid->hexagons())
     {
         hexagon->setInRender(false);
         for (auto object : *hexagon->objects())
@@ -385,7 +385,7 @@ void Location::render()
         }
     }
 
-    for (auto hexagon : *hexagonGrid()->hexagons())
+    for (auto hexagon : _hexagonGrid->hexagons())
     {
         for (auto object : *hexagon->objects())
         {
@@ -679,9 +679,10 @@ void Location::handle(Event::Event* event)
         }
         event->setHandled(true);
     }
-    for (auto it = hexagonGrid()->hexagons()->rbegin(); it != hexagonGrid()->hexagons()->rend(); ++it)
+    auto hexagons = _hexagonGrid->hexagons();
+    for (auto it = hexagons.rbegin(); it != hexagons.rend(); ++it)
     {
-        auto hexagon = *it;
+        Hexagon* hexagon = *it;
         if (!hexagon->inRender()) continue;
         for (auto itt = hexagon->objects()->rbegin(); itt != hexagon->objects()->rend(); ++itt)
         {
