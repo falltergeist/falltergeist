@@ -183,7 +183,7 @@ void Renderer::think()
             _fadeDone = true;
 
             auto event = new Event::State("fadedone");
-            Game::getInstance()->states()->back()->emitEvent(event);
+            Game::getInstance()->topState()->emitEvent(event);
             delete event;
             return;
         }

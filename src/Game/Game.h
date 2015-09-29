@@ -27,6 +27,7 @@
 
 // Falltergeist includes
 #include "../Base/Singleton.h"
+#include "../Game/Time.h"
 
 // Third party includes
 #include "SDL.h"
@@ -67,18 +68,18 @@ class Settings;
 namespace Game
 {
 class DudeObject;
-class Time;
 
 class Game
 {
 public:
     static Game* getInstance();
-    static void exportToLuaScript(Lua::Script* script);
 
     void shutdown();
-    std::vector<State::State*>* states();
-    std::vector<State::State*>* statesForRender();
-    std::vector<State::State*>* statesForThinkAndHandle();
+    /**
+     * Returns pointer to a state at the top of stack.
+     * @param offset optional offset (1 means second from the top, and so on)
+     */
+    State::State* topState(unsigned offset = 0) const;
     void pushState(State::State* state);
     void setState(State::State* state);
     void popState();
@@ -106,25 +107,30 @@ public:
 
 protected:
     std::vector<int> _GVARS;
-    std::vector<State::State*> _states;
-    std::vector<State::State*> _statesForRender;
-    std::vector<State::State*> _statesForThinkAndHandle;
-    std::vector<State::State*> _statesForDelete;
+    std::vector<std::unique_ptr<State::State>> _states;
+    std::vector<std::unique_ptr<State::State>> _statesForDelete;
+    std::vector<State::State*> _activeStates;
+
+    Time _gameTime;
+
+    std::unique_ptr<Graphics::Renderer> _renderer;
+    std::unique_ptr<Audio::Mixer> _mixer;
+    std::unique_ptr<Input::Mouse> _mouse;
+    std::unique_ptr<Settings> _settings;
+    std::unique_ptr<Graphics::AnimatedPalette> _animatedPalette;
+
+    std::unique_ptr<UI::FpsCounter> _fpsCounter;
+    std::unique_ptr<UI::TextArea> _mousePosition, _currentTime, _falltergeistVersion;
 
     DudeObject* _player = nullptr;
-    Time* _gameTime = nullptr;
-    Graphics::Renderer* _renderer = nullptr;
-    Input::Mouse* _mouse = nullptr;
-    std::unique_ptr<Audio::Mixer> _mixer;
-    UI::FpsCounter* _fpsCounter =  nullptr;
-    UI::TextArea* _mousePosition = nullptr;
-    UI::TextArea* _currentTime = nullptr;
-    UI::TextArea* _falltergeistVersion = nullptr;
-    std::unique_ptr<Settings> _settings;
-    Graphics::AnimatedPalette* _animatedPalette = nullptr;
+
     bool _quit = false;
-    SDL_Event _event;
     bool _initialized = false;
+
+    SDL_Event _event;
+
+    std::vector<State::State*> _getVisibleStates();
+    std::vector<State::State*> _getActiveStates();
 
 private:
     friend class Base::Singleton<Game>;

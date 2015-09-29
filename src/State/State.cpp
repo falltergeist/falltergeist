@@ -21,6 +21,7 @@
 #include "../State/State.h"
 
 // C++ standard includes
+#include <algorithm>
 
 // Falltergeist includes
 #include "../Event/State.h"
@@ -45,10 +46,6 @@ State::State() : Event::Emitter()
 
 State::~State()
 {
-    for (auto ui : _ui)
-    {
-        delete ui;
-    }
 }
 
 void State::init()
@@ -58,7 +55,7 @@ void State::init()
 
 void State::think()
 {
-    for (auto ui : _ui)
+    for (auto& ui : _ui)
     {
         ui->think();
     }
@@ -119,12 +116,13 @@ void State::setModal(bool value)
     _modal = value;
 }
 
+// TODO: change to accept unique_ptr
 UI::Base* State::addUI(UI::Base* ui)
 {
     // Add to UI state position
     ui->setPosition(ui->position() + position());
 
-    _ui.push_back(ui);
+    _ui.push_back(std::unique_ptr<UI::Base>(ui));
     return ui;
 }
 
@@ -180,33 +178,26 @@ void State::handle(Event::Event* event)
     for (auto it = _ui.rbegin(); it != _ui.rend(); ++it)
     {
         if (event->handled()) return;
-        if (auto ui = dynamic_cast<UI::Base*>(*it))
-        {
-            ui->handle(event);
-        }
+        (*it)->handle(event);
     }
 }
 
 void State::render()
 {
-    for (auto it = _ui.begin(); it != _ui.end(); ++it)
+    for (auto& ui : _ui)
     {
-        if ((*it)->visible())
+        if (ui->visible())
         {
-            (*it)->render(false);
+            ui->render(false);
         }
     }
-    while (!_uiToDelete.empty())
-    {
-        delete _uiToDelete.back();
-        _uiToDelete.pop_back();
-    }
+    _uiToDelete.clear();
 }
 
 void State::popUI()
 {
     if (_ui.size() == 0) return;
-    _uiToDelete.push_back(_ui.back());
+    _uiToDelete.emplace_back(std::move(_ui.back()));
     _ui.pop_back();
 }
 

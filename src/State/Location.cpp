@@ -513,7 +513,7 @@ void Location::think()
             auto icons = getCursorIconsForObject(_objectUnderCursor);
             if (icons.size() > 0)
             {
-                if (dynamic_cast<CursorDropdown*>(game->states()->back()) != NULL)
+                if (dynamic_cast<CursorDropdown*>(game->topState()) != nullptr)
                 {
                     game->popState();
                 }

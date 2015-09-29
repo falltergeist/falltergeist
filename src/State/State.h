@@ -103,8 +103,8 @@ public:
     virtual void onKeyDown(Event::Keyboard* event);
 
 protected:
-    std::vector<UI::Base*> _ui;
-    std::vector<UI::Base*> _uiToDelete;
+    std::vector<std::unique_ptr<UI::Base>> _ui;
+    std::vector<std::unique_ptr<UI::Base>> _uiToDelete;
     std::map<std::string, UI::Base*> _labeledUI;
 
     Point _position;

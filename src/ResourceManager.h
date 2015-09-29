@@ -68,12 +68,12 @@ class WorldmapFile;
 template <typename T>
 class CSVBasedFile;
 
-class EndDeath;
-class EndGame;
-class GenRep;
-class Holodisk;
-class KarmaVar;
-class Quest;
+struct EndDeath;
+struct EndGame;
+struct GenRep;
+struct Holodisk;
+struct KarmaVar;
+struct Quest;
 
 typedef CSVBasedFile<EndDeath> EndDeathFile;
 typedef CSVBasedFile<EndGame> EndGameFile;
