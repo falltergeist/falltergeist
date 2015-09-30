@@ -330,7 +330,7 @@ void Animation::render(bool eggTransparency)
 
         if (!_tmptex)
         {
-            _tmptex.reset(new Graphics::Texture(texture()->width(),texture()->height()));
+            _tmptex = make_unique<Graphics::Texture>(texture()->width(),texture()->height());
         }
         texture()->copyTo(_tmptex.get());
 

@@ -73,7 +73,8 @@ namespace Falltergeist
 {
 namespace State
 {
-using Base::make_unique;
+
+using namespace Base;
 
 const int Location::DROPDOWN_DELAY = 350;
 const int Location::KEYBOARD_SCROLL_STEP = 35;
@@ -83,12 +84,12 @@ Location::Location() : State()
     auto game = Game::getInstance();
     game->mouse()->setState(Input::Mouse::Cursor::ACTION);
 
-    _camera.reset(new LocationCamera(game->renderer()->size(), Point(0, 0)));
-    _floor.reset( new UI::TileMap());
-    _roof.reset(new UI::TileMap());
-    _hexagonGrid.reset(new HexagonGrid());
+    _camera = make_unique<LocationCamera>(game->renderer()->size(), Point(0, 0));
+    _floor = make_unique<UI::TileMap>();
+    _roof = make_unique<UI::TileMap>();
+    _hexagonGrid = make_unique<HexagonGrid>();
 
-    _hexagonInfo.reset(new UI::TextArea("", game->renderer()->width() - 135, 25));
+    _hexagonInfo = make_unique<UI::TextArea>("", game->renderer()->width() - 135, 25);
     _hexagonInfo->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
 }
@@ -108,7 +109,7 @@ void Location::init()
     auto game = Game::getInstance();
     setLocation("maps/" + game->settings()->initialLocation() + ".map");
 
-    _playerPanel.reset(new UI::PlayerPanel());
+    _playerPanel = make_unique<UI::PlayerPanel>();
 }
 
 void Location::onStateActivate(Event::State* event)
@@ -237,7 +238,7 @@ void Location::setLocation(const std::string& name)
     // Location script
     if (mapFile->scriptId() > 0)
     {
-        _locationScript.reset(new VM(ResourceManager::getInstance()->intFileType(mapFile->scriptId()-1), nullptr));
+        _locationScript = make_unique<VM>(ResourceManager::getInstance()->intFileType(mapFile->scriptId()-1), nullptr);
     }
 
     // Generates floor and roof images

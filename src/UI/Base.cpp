@@ -24,6 +24,7 @@
 #include <algorithm>
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Game/Game.h"
 #include "../Game/DudeObject.h"
 #include "../Graphics/Renderer.h"
@@ -38,6 +39,8 @@ namespace Falltergeist
 {
 namespace UI
 {
+
+using namespace Base;
 
 Base::Base(int x, int y) : Base(Point(x, y))
 {
@@ -119,7 +122,7 @@ void Base::render(bool eggTransparency)
 
         if (!_tmptex)
         {
-            _tmptex.reset(new Graphics::Texture(texture()->width(), texture()->height()));
+            _tmptex = make_unique<Graphics::Texture>(texture()->width(), texture()->height());
         }
         texture()->copyTo(_tmptex.get());
 

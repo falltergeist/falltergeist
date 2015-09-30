@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
@@ -40,6 +41,8 @@ namespace Falltergeist
 {
 namespace UI
 {
+
+using namespace Base;
 
 AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direction) : Falltergeist::UI::Base()
 {
@@ -236,7 +239,7 @@ void AnimatedImage::render(bool eggTransparency)
 
         if (!_tmptex)
         {
-            _tmptex.reset(new Graphics::Texture(texture()->width(), texture()->height()));
+            _tmptex = make_unique<Graphics::Texture>(texture()->width(), texture()->height());
         }
         texture()->copyTo(_tmptex.get());
 

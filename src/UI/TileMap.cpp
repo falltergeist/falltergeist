@@ -25,6 +25,7 @@
 #include <cmath>
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
@@ -40,6 +41,8 @@ namespace  Falltergeist
 {
 namespace UI
 {
+
+using namespace Base;
 
 TileMap::TileMap()
 {
@@ -102,7 +105,7 @@ void TileMap::_generateTexture()
 
     _square = (unsigned)std::ceil(std::sqrt(numbers.size()));
 
-    _texture.reset(new Graphics::Texture(_square*80, _square*36));
+    _texture = make_unique<Graphics::Texture>(_square*80, _square*36);
 
     auto tilesLst = ResourceManager::getInstance()->lstFileType("art/tiles/tiles.lst");
     for (unsigned int i = 0; i != numbers.size(); ++i)
