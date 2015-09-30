@@ -87,8 +87,8 @@ public:
     unsigned int outlineColor() const;
     void setOutlineColor(unsigned int color);
 
-    std::shared_ptr<Font> font();
-    void setFont(std::shared_ptr<Font> font);
+    Font* font();
+    void setFont(Font* font);
 
     void render(bool eggTransparency = false) override;
     unsigned int pixel(const Point& pos) override;
@@ -111,7 +111,7 @@ protected:
     bool _changed = true;
     std::vector<TextSymbol> _symbols;
     std::string _text;
-    std::shared_ptr<Font> _font;
+    Font* _font = nullptr;
 
     HorizontalAlign _horizontalAlign = HorizontalAlign::LEFT;
     VerticalAlign _verticalAlign = VerticalAlign::TOP;
@@ -129,6 +129,7 @@ protected:
     unsigned int _timestampCreated = 0;
 
     void _calculate();
+    void _addOutlineSymbol(const TextSymbol& symb, Font* font, int32_t ofsX, int32_t ofsY);
 
 };
 

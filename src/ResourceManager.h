@@ -135,7 +135,7 @@ public:
     libfalltergeist::Txt::QuestsFile* questsTxt();
 
     Graphics::Texture* texture(const std::string& filename);
-    std::shared_ptr<Font> font(const std::string& filename = "font1.aaf", unsigned int color = 0x3ff800ff);
+    Font* font(const std::string& filename = "font1.aaf", unsigned int color = 0x3ff800ff);
     void unloadResources();
     std::string FIDtoFrmName(unsigned int FID);
     Game::Location* gameLocation(unsigned int number);
@@ -147,7 +147,7 @@ protected:
     std::vector<std::unique_ptr<libfalltergeist::Dat::File>> _datFiles;
     std::unordered_map<std::string, std::unique_ptr<libfalltergeist::Dat::Item>> _datFilesItems;
     std::unordered_map<std::string, std::unique_ptr<Graphics::Texture>> _textures;
-    std::unordered_map<std::string, std::shared_ptr<Font>> _fonts;
+    std::unordered_map<std::string, std::unique_ptr<Font>> _fonts;
 
     ResourceManager();
     ~ResourceManager();

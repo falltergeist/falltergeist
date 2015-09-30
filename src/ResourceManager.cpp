@@ -361,18 +361,19 @@ Graphics::Texture* ResourceManager::texture(const string& filename)
     return texture;
 }
 
-shared_ptr<Font> ResourceManager::font(const string& filename, unsigned int color)
+Font* ResourceManager::font(const string& filename, unsigned int color)
 {
     string fontname = filename + std::to_string(color);
 
     if (_fonts.find(fontname) != _fonts.end())
     {
-        return _fonts.at(fontname);
+        return _fonts.at(fontname).get();
     }
 
-    auto font = shared_ptr<Font>(new Font(filename, color));
-    _fonts.insert(pair<string, shared_ptr<Font>>(fontname, font));
-    return font;
+    auto font = make_unique<Font>(filename, color);
+    Font* fontPtr = font.get();
+    _fonts.insert(make_pair(fontname, std::move(font)));
+    return fontPtr;
 }
 
 Pro::File* ResourceManager::proFileType(unsigned int PID)

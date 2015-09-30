@@ -34,15 +34,16 @@ class Font;
 
 class FontString
 {
+public:
+    FontString(const std::string& text, Font* font = nullptr);
+    Font* font() const;
+    FontString* setFont(Font* font);
+    std::string text() const;
+    FontString* setText(const std::string& text);
+
 protected:
     std::string _text;
-    std::shared_ptr<Font> _font;
-public:
-    FontString(const std::string& text, std::shared_ptr<Font> font = 0);
-    std::shared_ptr<Font> font();
-    FontString* setFont(std::shared_ptr<Font> font);
-    std::string text();
-    FontString* setText(const std::string& text);
+    Font* _font;
 };
 
 }

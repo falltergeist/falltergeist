@@ -119,16 +119,16 @@ void TextArea::setText(const std::string& text)
     _calculate();
 }
 
-std::shared_ptr<Font> TextArea::font()
+Font* TextArea::font()
 {
     if (!_font)
     {
-        return ResourceManager::getInstance()->font();
+        _font = ResourceManager::getInstance()->font();
     }
     return _font;
 }
 
-void TextArea::setFont(std::shared_ptr<Font> font)
+void TextArea::setFont(Font* font)
 {
     _font = font;
     _changed = true;
@@ -267,43 +267,31 @@ void TextArea::_calculate()
         {
             symbol.setX(symbol.x() + xOffset);
             symbol.setY(symbol.y() + yOffset);
-            //outline symbols
-            if(_outline)
+            // outline symbols
+            if (_outline)
             {
-                std::shared_ptr<Font> outlineFont = ResourceManager::getInstance()->font(symbol.font()->filename(), _outlineColor);
-                
-                auto outlineSymbolLeft = new TextSymbol(symbol.chr(), symbol.x()-1, symbol.y());
-                auto outlineSymbolTopLeft = new TextSymbol(symbol.chr(), symbol.x()-1, symbol.y()-1);
-                auto outlineSymbolBottomLeft = new TextSymbol(symbol.chr(), symbol.x()-1, symbol.y()+1);
-                auto outlineSymbolRight = new TextSymbol(symbol.chr(), symbol.x()+1, symbol.y());
-                auto outlineSymbolTopRight = new TextSymbol(symbol.chr(), symbol.x()+1, symbol.y()-1);
-                auto outlineSymbolBottomRight = new TextSymbol(symbol.chr(), symbol.x()+1, symbol.y()+1);
-                auto outlineSymbolBottom = new TextSymbol(symbol.chr(), symbol.x(), symbol.y()-1);
-                auto outlineSymbolTop = new TextSymbol(symbol.chr(), symbol.x(), symbol.y()+1);
-                
-                outlineSymbolLeft->setFont(outlineFont);
-                outlineSymbolTopLeft->setFont(outlineFont);
-                outlineSymbolBottomLeft->setFont(outlineFont);
-                outlineSymbolRight->setFont(outlineFont);
-                outlineSymbolTopRight->setFont(outlineFont);
-                outlineSymbolBottomRight->setFont(outlineFont);
-                outlineSymbolBottom->setFont(outlineFont);
-                outlineSymbolTop->setFont(outlineFont);
-                
-                _symbols.push_back(*outlineSymbolLeft);
-                _symbols.push_back(*outlineSymbolTopLeft);
-                _symbols.push_back(*outlineSymbolBottomLeft);
-                _symbols.push_back(*outlineSymbolRight);
-                _symbols.push_back(*outlineSymbolTopRight);
-                _symbols.push_back(*outlineSymbolBottomRight);
-                _symbols.push_back(*outlineSymbolBottom);
-                _symbols.push_back(*outlineSymbolTop);
+                auto outlineFont = ResourceManager::getInstance()->font(symbol.font()->filename(), _outlineColor);
+
+                _addOutlineSymbol(symbol, outlineFont,  0, -1);
+                _addOutlineSymbol(symbol, outlineFont,  0,  1);
+                _addOutlineSymbol(symbol, outlineFont, -1,  0);
+                _addOutlineSymbol(symbol, outlineFont, -1, -1);
+                _addOutlineSymbol(symbol, outlineFont, -1,  1);
+                _addOutlineSymbol(symbol, outlineFont,  1,  0);
+                _addOutlineSymbol(symbol, outlineFont,  1, -1);
+                _addOutlineSymbol(symbol, outlineFont,  1,  1);
             }
         
             _symbols.push_back(symbol);
         }
     }
     _changed = false;
+}
+
+void TextArea::_addOutlineSymbol(const TextSymbol& symb, Font* font, int32_t ofsX, int32_t ofsY)
+{
+    _symbols.emplace_back(symb.chr(), symb.x() + ofsX, symb.y() + ofsY);
+    _symbols.back().setFont(font);
 }
 
 std::string TextArea::text() const

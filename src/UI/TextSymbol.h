@@ -41,7 +41,7 @@ protected:
     int32_t _x = 0;
     int32_t _y = 0;
 
-    std::shared_ptr<Font> _font;
+    Font* _font;
 
 public:
     TextSymbol(const uint8_t chr, int32_t x = 0, int32_t y = 0);
@@ -49,18 +49,18 @@ public:
 
     virtual ~TextSymbol();
 
-    std::shared_ptr<Font> font();
-    void setFont(std::shared_ptr<Font> font);
+    Font* font() const;
+    void setFont(Font* font);
 
-    int32_t x();
+    int32_t x() const;
     void setX(int32_t x);
 
-    int32_t y();
+    int32_t y() const;
     void setY(int32_t y);
 
     void render(int32_t offsetX = 0, int32_t offsetY = 0);
 
-    uint8_t chr();
+    uint8_t chr() const;
 
 };
 
