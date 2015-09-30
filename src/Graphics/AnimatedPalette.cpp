@@ -33,82 +33,83 @@ namespace Falltergeist
 namespace Graphics
 {
 
+const std::array<unsigned int, 5> AnimatedPalette::_monitorsPalette = {
+    0x6B6B6FFF,
+    0x63677FFF,
+    0x576B8FFF,
+    0x0093A3FF,
+    0x6BBBFFFF
+};
+
+const std::array<unsigned int, 4> AnimatedPalette::_slimePalette = {
+    0x006C00FF,
+    0x0B7307FF,
+    0x1B7B0FFF,
+    0x2B831BFF
+};
+
+const std::array<unsigned int, 6> AnimatedPalette::_shorePalette = {
+    0x533F2BFF,
+    0x4B3B2BFF,
+    0x433727FF,
+    0x3F3327FF,
+    0x372F23FF,
+    0x332B23FF
+};
+
+const std::array<unsigned int, 5> AnimatedPalette::_fireSlowPalette = {
+    0xFF0000FF,
+    0xD70000FF,
+    0x932B0BFF,
+    0xFF7700FF,
+    0xFF3B00FF
+};
+
+const std::array<unsigned int, 5> AnimatedPalette::_fireFastPalette = {
+    0x470000FF,
+    0x7B0000FF,
+    0xB30000FF,
+    0x7B0000FF,
+    0x470000FF
+};
+
 AnimatedPalette::AnimatedPalette()
 {
-    _monitorsPalette = new unsigned int[5];
-    _monitorsPalette[0] = 0x6B6B6FFF;
-    _monitorsPalette[1] = 0x63677FFF;
-    _monitorsPalette[2] = 0x576B8FFF;
-    _monitorsPalette[3] = 0x0093A3FF;
-    _monitorsPalette[4] = 0x6BBBFFFF;
-
-    _slimePalette = new unsigned int[4];
-    _slimePalette[0] = 0x006C00FF;
-    _slimePalette[1] = 0x0B7307FF;
-    _slimePalette[2] = 0x1B7B0FFF;
-    _slimePalette[3] = 0x2B831BFF;
-
-    _shorePalette = new unsigned int[6];
-    _shorePalette[0] = 0x533F2BFF;
-    _shorePalette[1] = 0x4B3B2BFF;
-    _shorePalette[2] = 0x433727FF;
-    _shorePalette[3] = 0x3F3327FF;
-    _shorePalette[4] = 0x372F23FF;
-    _shorePalette[5] = 0x332B23FF;
-
-    _fireSlowPalette = new unsigned int[5];
-    _fireSlowPalette[0] = 0xFF0000FF;
-    _fireSlowPalette[1] = 0xD70000FF;
-    _fireSlowPalette[2] = 0x932B0BFF;
-    _fireSlowPalette[3] = 0xFF7700FF;
-    _fireSlowPalette[4] = 0xFF3B00FF;
-
-    _fireFastPalette = new unsigned int[5];
-    _fireFastPalette[0] = 0x470000FF;
-    _fireFastPalette[1] = 0x7B0000FF;
-    _fireFastPalette[2] = 0xB30000FF;
-    _fireFastPalette[3] = 0x7B0000FF;
-    _fireFastPalette[4] = 0x470000FF;
 }
 
 AnimatedPalette::~AnimatedPalette()
 {
-    delete [] _monitorsPalette;
-    delete [] _slimePalette;
-    delete [] _shorePalette;
-    delete [] _fireSlowPalette;
-    delete [] _fireFastPalette;
 }
 
 unsigned int AnimatedPalette::color(unsigned char index, unsigned char counter)
 {
     if (index >= 233 && index <= 237) // monitors
     {
-        unsigned int newIndex = (index - 233 + counter)%5;
+        unsigned int newIndex = (index - 233 + counter) % _monitorsPalette.size();
         return _monitorsPalette[newIndex];
     }
 
     if (index >= 229 && index <= 232) // slime
     {
-        unsigned int newIndex = (index - 229 + counter)%4;
+        unsigned int newIndex = (index - 229 + counter) % _slimePalette.size();
         return _slimePalette[newIndex];
     }
 
     if (index >= 248 && index <= 253) // shore
     {
-        unsigned int newIndex = (index - 248 + counter)%6;
+        unsigned int newIndex = (index - 248 + counter) % _shorePalette.size();
         return _shorePalette[newIndex];
     }
 
     if (index >= 238 && index <= 242) // slow fire
     {
-        unsigned int newIndex = (index - 238 + counter)%5;
+        unsigned int newIndex = (index - 238 + counter) % _fireSlowPalette.size();
         return _fireSlowPalette[newIndex];
     }
 
     if (index >= 243 && index <= 247) // fast fire
     {
-        unsigned int newIndex = (index - 243 + counter)%5;
+        unsigned int newIndex = (index - 243 + counter) % _fireFastPalette.size();
         return _fireFastPalette[newIndex];
     }
 

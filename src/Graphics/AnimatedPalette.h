@@ -21,6 +21,7 @@
 #define FALLTERGEIST_GRAPHICS_ANIMATEDPALETTE_H
 
 // C++ standard includes
+#include <array>
 
 // Falltergeist includes
 
@@ -43,11 +44,12 @@ public:
     unsigned int getCounter(MASK type);
 
 protected:
-    unsigned int * _slimePalette;
-    unsigned int * _fireSlowPalette;
-    unsigned int * _fireFastPalette;
-    unsigned int * _monitorsPalette;
-    unsigned int * _shorePalette;
+    static const std::array<unsigned int, 5> _monitorsPalette;
+    static const std::array<unsigned int, 4> _slimePalette;
+    static const std::array<unsigned int, 6> _shorePalette;
+    static const std::array<unsigned int, 5> _fireSlowPalette;
+    static const std::array<unsigned int, 5> _fireFastPalette;
+
     unsigned int _slimeTicks = 0;
     unsigned int _slimeCounter = 0;
     unsigned int _fireSlowTicks = 0;

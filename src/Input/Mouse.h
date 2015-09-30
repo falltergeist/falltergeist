@@ -21,10 +21,11 @@
 #define FALLTERGEIST_INPUT_MOUSE_H
 
 // C++ standard includes
+#include <memory>
 #include <vector>
-#include <Point.h>
 
 // Falltergeist includes
+#include "../Point.h"
 
 // Third party includes
 
@@ -97,6 +98,7 @@ public:
     Cursor state() const;
     void setState(Cursor state);
 
+    // todo: probably need to remove this (engine should not be directly tied to Lua)
     unsigned cursor() const; // for lua sripts
     void setCursor(unsigned value); // for lua scripts
 
@@ -114,7 +116,7 @@ protected:
     bool _visible = true;
     Cursor _type = Cursor::NONE;
     std::vector<Cursor> _states;
-    UI::Base* _ui = nullptr;
+    std::unique_ptr<UI::Base> _ui;
     void _setType(Cursor type);
 };
 

@@ -42,9 +42,9 @@ AnimationQueue::~AnimationQueue()
     clear();
 }
 
-std::vector<Animation*>* AnimationQueue::animations()
+std::vector<std::unique_ptr<Animation>>& AnimationQueue::animations()
 {
-    return &_animations;
+    return _animations;
 }
 
 void AnimationQueue::clear()
@@ -52,11 +52,7 @@ void AnimationQueue::clear()
     _currentAnimation = 0;
     _playing = false;
     _repeat = false;
-    while (!_animations.empty())
-    {
-        delete _animations.back();
-        _animations.pop_back();
-    }
+    _animations.clear();
 }
 
 void AnimationQueue::stop()
@@ -135,7 +131,7 @@ unsigned int AnimationQueue::pixel(const Point& pos)
 
 Animation* AnimationQueue::currentAnimation() const
 {
-    return _animations.at(_currentAnimation);
+    return _animations.at(_currentAnimation).get();
 }
 
 Size AnimationQueue::size() const

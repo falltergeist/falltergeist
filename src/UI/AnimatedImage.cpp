@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
@@ -41,10 +42,11 @@ namespace Falltergeist
 namespace UI
 {
 
+using namespace Base;
+
 AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direction) : Falltergeist::UI::Base()
 {
-
-    setTexture(new Graphics::Texture(frm->width(), frm->height()));
+    _generateTexture(frm->width(), frm->height());
     _texture->loadFromRGBA(frm->rgba(ResourceManager::getInstance()->palFileType("color.pal")));
     auto dir = frm->directions()->at(direction);
     setOffset(frm->offsetX(direction) + dir->shiftX(), frm->offsetY(direction) + dir->shiftY());
@@ -54,7 +56,7 @@ AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direc
 
     if ((*masks)[MASK::MONITOR] != NULL)
     {
-        unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
+        unsigned int mask[frm->width() * frm->height()];
         for (auto i = 0; i < 5; i++)
         {
             //modify
@@ -67,105 +69,99 @@ AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direc
             texture->loadFromRGBA(mask);
             _monitorTextures.push_back(texture);
         }
-        delete[] mask;
     }
 
     if ((*masks)[MASK::SLIME] != NULL)
     {
-        unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
+        unsigned int mask[frm->width() * frm->height()];
 
         for (auto i = 0; i < 4; i++)
         {
             //modify
             for (auto j = 0; j < frm->width() * frm->height(); j++)
             {
-                mask[j] = palette->color(((*masks)[MASK::SLIME][j]),i);
+                mask[j] = palette->color(((*masks)[MASK::SLIME][j]), i);
             }
             //set
             auto texture = new Graphics::Texture(frm->width(), frm->height());
             texture->loadFromRGBA(mask);
             _slimeTextures.push_back(texture);
         }
-        delete[] mask;
     }
 
     if ((*masks)[MASK::SHORE] != NULL)
     {
-        unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
+        unsigned int mask[frm->width() * frm->height()];
 
         for (auto i = 0; i < 6; i++)
         {
             //modify
             for (auto j = 0; j < frm->width() * frm->height(); j++)
             {
-                mask[j] = palette->color(((*masks)[MASK::SHORE][j]),i);
+                mask[j] = palette->color(((*masks)[MASK::SHORE][j]), i);
             }
             //set
             auto texture = new Graphics::Texture(frm->width(), frm->height());
             texture->loadFromRGBA(mask);
             _shoreTextures.push_back(texture);
         }
-        delete[] mask;
     }
 
 
     if ((*masks)[MASK::FIRE_SLOW] != NULL)
     {
-        unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
+        unsigned int mask[frm->width() * frm->height()];
 
         for (auto i = 0; i < 5; i++)
         {
             //modify
             for (auto j = 0; j < frm->width() * frm->height(); j++)
             {
-                mask[j] = palette->color(((*masks)[MASK::FIRE_SLOW][j]),i);
+                mask[j] = palette->color(((*masks)[MASK::FIRE_SLOW][j]), i);
             }
             //set
             auto texture = new Graphics::Texture(frm->width(), frm->height());
             texture->loadFromRGBA(mask);
             _fireSlowTextures.push_back(texture);
         }
-        delete[] mask;
     }
 
 
     if ((*masks)[MASK::FIRE_FAST] != NULL)
     {
-        unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
+        unsigned int mask[frm->width() * frm->height()];
 
         for (auto i = 0; i < 5; i++)
         {
             //modify
             for (auto j = 0; j < frm->width() * frm->height(); j++)
             {
-                mask[j] = palette->color(((*masks)[MASK::FIRE_FAST][j]),i);
+                mask[j] = palette->color(((*masks)[MASK::FIRE_FAST][j]), i);
             }
             //set
             auto texture = new Graphics::Texture(frm->width(), frm->height());
             texture->loadFromRGBA(mask);
             _fireFastTextures.push_back(texture);
         }
-        delete[] mask;
     }
 
 
     if ((*masks)[MASK::REDDOT] != NULL)
     {
-        unsigned int* mask = new unsigned int[frm->width() * frm->height()]();
+        unsigned int mask[frm->width() * frm->height()];
 
         for (auto i = 0; i < 16; i++)
         {
             //modify
             for (auto j = 0; j < frm->width() * frm->height(); j++)
             {
-                mask[j] = palette->color(((*masks)[MASK::REDDOT][j]),i);
+                mask[j] = palette->color(((*masks)[MASK::REDDOT][j]), i);
             }
             //set
             auto texture = new Graphics::Texture(frm->width(), frm->height());
             texture->loadFromRGBA(mask);
             _reddotTextures.push_back(texture);
         }
-        delete[] mask;
     }
 }
 
@@ -241,29 +237,32 @@ void AnimatedImage::render(bool eggTransparency)
             return;
         }
 
-        if (!_tmptex) _tmptex = new Graphics::Texture(texture()->width(),texture()->height());
-        texture()->copyTo(_tmptex);
+        if (!_tmptex)
+        {
+            _tmptex = make_unique<Graphics::Texture>(texture()->width(), texture()->height());
+        }
+        texture()->copyTo(_tmptex.get());
 
         if (pal->getCounter(MASK::FIRE_FAST) < _fireFastTextures.size())
-            _fireFastTextures.at(pal->getCounter(MASK::FIRE_FAST))->copyTo(_tmptex);
+            _fireFastTextures.at(pal->getCounter(MASK::FIRE_FAST))->copyTo(_tmptex.get());
 
         if (pal->getCounter(MASK::FIRE_SLOW) < _fireSlowTextures.size())
-            _fireSlowTextures.at(pal->getCounter(MASK::FIRE_SLOW))->copyTo(_tmptex);
+            _fireSlowTextures.at(pal->getCounter(MASK::FIRE_SLOW))->copyTo(_tmptex.get());
 
         if (pal->getCounter(MASK::SLIME) < _slimeTextures.size())
-            _slimeTextures.at(pal->getCounter(MASK::SLIME))->copyTo(_tmptex);
+            _slimeTextures.at(pal->getCounter(MASK::SLIME))->copyTo(_tmptex.get());
 
         if (pal->getCounter(MASK::SHORE) < _shoreTextures.size())
-            _shoreTextures.at(pal->getCounter(MASK::SHORE))->copyTo(_tmptex);
+            _shoreTextures.at(pal->getCounter(MASK::SHORE))->copyTo(_tmptex.get());
 
         if (pal->getCounter(MASK::MONITOR) < _monitorTextures.size())
-            _monitorTextures.at(pal->getCounter(MASK::MONITOR))->copyTo(_tmptex);
+            _monitorTextures.at(pal->getCounter(MASK::MONITOR))->copyTo(_tmptex.get());
 
         if (pal->getCounter(MASK::REDDOT) < _reddotTextures.size())
-            _reddotTextures.at(pal->getCounter(MASK::REDDOT))->copyTo(_tmptex);
+            _reddotTextures.at(pal->getCounter(MASK::REDDOT))->copyTo(_tmptex.get());
 
         _tmptex->blitWithAlpha(egg, eggDelta.x(), eggDelta.y());
-        Game::getInstance()->renderer()->drawTexture(_tmptex, position());
+        Game::getInstance()->renderer()->drawTexture(_tmptex.get(), position());
     }
     else
     {

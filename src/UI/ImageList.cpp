@@ -23,12 +23,15 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../UI/Image.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+using Base::make_unique;
+
 namespace UI
 {
 
@@ -38,20 +41,16 @@ ImageList::ImageList(const Point& pos) : Falltergeist::UI::Base(pos)
 
 ImageList::ImageList(std::vector<std::string> imageList, int x, int y) : ImageList(Point(x, y))
 {
-    for (auto& frmName : imageList) addImage(new Image(frmName));
+    for (auto& frmName : imageList) addImage(make_unique<Image>(frmName));
 }
 
 ImageList::ImageList(std::vector<Image*> imageList, int x, int y) : ImageList(Point(x, y))
 {
-    for (auto& image : imageList) addImage(new Image(*image));
+    for (auto& image : imageList) addImage(make_unique<Image>(*image));
 }
+
 ImageList::~ImageList()
 {
-    while (!_images.empty())
-    {
-        delete _images.back();
-        _images.pop_back();
-    }
 }
 
 unsigned int ImageList::currentImage() const
@@ -64,24 +63,24 @@ void ImageList::setCurrentImage(unsigned int number)
     _currentImage = number;
 }
 
-void ImageList::addImage(Image* image)
+void ImageList::addImage(std::unique_ptr<Image> image)
 {
-    _images.push_back(image);
+    _images.push_back(std::move(image));
 }
 
 void ImageList::addImage(const std::string& filename)
 {
-    addImage(new Image(filename));
+    addImage(make_unique<Image>(filename));
 }
 
 Graphics::Texture* ImageList::texture() const
 {
-    return images()->at(currentImage())->texture();
+    return _images.at(currentImage())->texture();
 }
 
-const std::vector<Image*>* ImageList::images() const
+const std::vector<std::unique_ptr<Image>>& ImageList::images() const
 {
-    return &_images;
+    return _images;
 }
 
 }

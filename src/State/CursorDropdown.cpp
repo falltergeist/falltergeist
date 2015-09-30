@@ -21,6 +21,7 @@
 #include "../State/CursorDropdown.h"
 
 // C++ standard includes
+#include "../Base/StlFeatures.h"
 
 // Falltergeist includes
 #include "../Audio/Mixer.h"
@@ -40,6 +41,8 @@
 
 namespace Falltergeist
 {
+using Base::make_unique;
+
 namespace State
 {
 
@@ -62,13 +65,6 @@ CursorDropdown::CursorDropdown(std::vector<Input::Mouse::Icon>&& icons, bool onl
 
 CursorDropdown::~CursorDropdown()
 {
-    while (!_activeIcons.empty())
-    {
-        delete _activeIcons.back();
-        delete _inactiveIcons.back();
-        _activeIcons.pop_back();
-        _inactiveIcons.pop_back();
-    }
 }
 
 void CursorDropdown::init()
@@ -132,9 +128,9 @@ void CursorDropdown::showMenu()
                 throw Exception("CursorDropdown::init() - unknown icon type");
 
         }
-        _activeIcons.push_back(new UI::Image("art/intrface/" + activeSurface));
+        _activeIcons.push_back(make_unique<UI::Image>("art/intrface/" + activeSurface));
         _activeIcons.back()->setY(40*i);
-        _inactiveIcons.push_back(new UI::Image("art/intrface/" + inactiveSurface));
+        _inactiveIcons.push_back(make_unique<UI::Image>("art/intrface/" + inactiveSurface));
         _inactiveIcons.back()->setY(40*i);
         i++;
     }
@@ -168,7 +164,7 @@ void CursorDropdown::showMenu()
     addUI(_cursor);
     addUI(_surface);
     // draw icons on the surface for the first time
-    for (auto ui : _inactiveIcons)
+    for (auto& ui : _inactiveIcons)
     {
         ui->texture()->copyTo(_surface->texture(), ui->x(), ui->y());
     }
@@ -251,10 +247,10 @@ void CursorDropdown::render()
     {
         if (_currentIcon != _previousIcon) 
         {
-            auto inactiveIcon = _inactiveIcons.at(_previousIcon);
+            auto& inactiveIcon = _inactiveIcons.at(_previousIcon);
             Point inactiveIconPos = inactiveIcon->position();
             inactiveIcon->texture()->copyTo(_surface->texture(), (unsigned)inactiveIconPos.x(), (unsigned)inactiveIconPos.y());
-            auto activeIcon = _activeIcons.at(_currentIcon);
+            auto& activeIcon = _activeIcons.at(_currentIcon);
             Point activeIconPos = activeIcon->position();
             activeIcon->texture()->copyTo(_surface->texture(), (unsigned)activeIconPos.x(), (unsigned)activeIconPos.y());
         }

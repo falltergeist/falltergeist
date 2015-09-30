@@ -68,12 +68,12 @@ class WorldmapFile;
 template <typename T>
 class CSVBasedFile;
 
-class EndDeath;
-class EndGame;
-class GenRep;
-class Holodisk;
-class KarmaVar;
-class Quest;
+struct EndDeath;
+struct EndGame;
+struct GenRep;
+struct Holodisk;
+struct KarmaVar;
+struct Quest;
 
 typedef CSVBasedFile<EndDeath> EndDeathFile;
 typedef CSVBasedFile<EndGame> EndGameFile;
@@ -135,8 +135,7 @@ public:
     libfalltergeist::Txt::QuestsFile* questsTxt();
 
     Graphics::Texture* texture(const std::string& filename);
-    std::unordered_map<std::string, Graphics::Texture*>* textures();
-    std::shared_ptr<Font> font(const std::string& filename = "font1.aaf", unsigned int color = 0x3ff800ff);
+    Font* font(const std::string& filename = "font1.aaf", unsigned int color = 0x3ff800ff);
     void unloadResources();
     std::string FIDtoFrmName(unsigned int FID);
     Game::Location* gameLocation(unsigned int number);
@@ -145,15 +144,17 @@ public:
 protected:
     friend class Base::Singleton<ResourceManager>;
 
-    std::vector<libfalltergeist::Dat::File*> _datFiles;
-    std::unordered_map<std::string, libfalltergeist::Dat::Item*> _datFilesItems;
-    std::unordered_map<std::string, Graphics::Texture*> _textures;
-    std::unordered_map<std::string, std::shared_ptr<Font>> _fonts;
+    std::vector<std::unique_ptr<libfalltergeist::Dat::File>> _datFiles;
+    std::unordered_map<std::string, std::unique_ptr<libfalltergeist::Dat::Item>> _datFilesItems;
+    std::unordered_map<std::string, std::unique_ptr<Graphics::Texture>> _textures;
+    std::unordered_map<std::string, std::unique_ptr<Font>> _fonts;
 
     ResourceManager();
     ~ResourceManager();
     ResourceManager(const ResourceManager&) = delete;
     ResourceManager& operator=(const ResourceManager&) = delete;
+
+    libfalltergeist::Dat::Item* _createItemByName(const std::string& filename, std::ifstream* stream);
 };
 
 }

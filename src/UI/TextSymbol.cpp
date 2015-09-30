@@ -51,7 +51,7 @@ TextSymbol::~TextSymbol()
 {
 }
 
-std::shared_ptr<Font> TextSymbol::font()
+Font* TextSymbol::font() const
 {
     if (!_font)
     {
@@ -60,12 +60,12 @@ std::shared_ptr<Font> TextSymbol::font()
     return _font;
 }
 
-void TextSymbol::setFont(std::shared_ptr<Font> font)
+void TextSymbol::setFont(Font* font)
 {
     _font = font;
 }
 
-int32_t TextSymbol::x()
+int32_t TextSymbol::x() const
 {
     return _x;
 }
@@ -75,7 +75,7 @@ void TextSymbol::setX(int32_t x)
     _x = x;
 }
 
-int32_t TextSymbol::y()
+int32_t TextSymbol::y() const
 {
     return _y;
 }
@@ -92,7 +92,7 @@ void TextSymbol::render(int32_t offsetX, int32_t offsetY)
     Game::getInstance()->renderer()->drawTexture(font()->texture(), x() + offsetX, y() + offsetY, textureX, textureY, font()->width(), font()->height());
 }
 
-uint8_t TextSymbol::chr()
+uint8_t TextSymbol::chr() const
 {
     return _chr;
 }

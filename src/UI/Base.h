@@ -21,6 +21,7 @@
 #define FALLTERGEIST_UI_BASE_H
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
 #include "../Event/Emitter.h"
@@ -62,6 +63,9 @@ public:
     void setOffset(int x, int y);
 
     virtual Graphics::Texture* texture() const;
+    /**
+     * Set to use pre-existing Texture object
+     */
     virtual void setTexture(Graphics::Texture* texture);
 
     virtual bool visible() const;
@@ -74,14 +78,19 @@ public:
     virtual Size size() const;
 
     virtual unsigned int pixel(const Point& pos);
-    unsigned int pixel(unsigned int x, int unsigned y);
+    unsigned int pixel(unsigned int x, unsigned int y);
 
 protected:
     Point _position;
     Point _offset;
 
-    Graphics::Texture* _texture = 0;
-    Graphics::Texture* _tmptex = 0;
+    /**
+     * Generate and set new blank texture with given size
+     */
+    void _generateTexture(unsigned int width, unsigned int height);
+
+    Graphics::Texture* _texture = nullptr;
+    std::unique_ptr<Graphics::Texture> _tmptex;
     bool _leftButtonPressed = false;
     bool _rightButtonPressed = false;
     bool _drag = false;
@@ -90,6 +99,9 @@ protected:
     // @todo Should it really be here?
     std::string _downSound = "";
     std::string _upSound = "";
+
+private:
+    std::unique_ptr<Graphics::Texture> _generatedTexture;
 };
 
 }

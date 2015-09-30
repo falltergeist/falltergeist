@@ -48,7 +48,7 @@ MonthCounter::MonthCounter(Month month, const Point& pos) : ImageList(pos), _mon
     {
         auto monthImage = new Image(MONTH_TEXTURE_WIDTH, MONTH_TEXTURE_HEIGHT);
         months->texture()->copyTo(monthImage->texture(), 0, 0, 0, hOffset, MONTH_TEXTURE_WIDTH, MONTH_TEXTURE_HEIGHT);
-        addImage(monthImage);
+        addImage(std::unique_ptr<Image>(monthImage));
     }
     setCurrentImage(static_cast<unsigned int>(month));
 }

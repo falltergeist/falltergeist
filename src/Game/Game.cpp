@@ -21,6 +21,7 @@
 #include "../Game/Game.h"
 
 // C++ standard includes
+#include <algorithm>
 #include <sstream>
 
 // Falltergeist includes
@@ -73,10 +74,8 @@ void Game::init(std::unique_ptr<Settings> settings)
     _initialized = true;
 
     _settings = std::move(settings);
-    auto width = _settings->screenWidth();
-    auto height = _settings->screenHeight();
 
-    _renderer = new Graphics::Renderer(width, height);
+    _renderer = make_unique<Graphics::Renderer>(_settings->screenWidth(), _settings->screenHeight());
 
     Logger::info("GAME") << CrossPlatform::getVersion() << std::endl;
     Logger::info("GAME") << "Opensource Fallout 2 game engine" << std::endl;
@@ -92,17 +91,16 @@ void Game::init(std::unique_ptr<Settings> settings)
     renderer()->setCaption(version.c_str());
 
     _mixer = make_unique<Audio::Mixer>();
-    _mouse = new Input::Mouse();
-    _fpsCounter = new UI::FpsCounter(renderer()->width() - 42, 2);
+    _mouse = make_unique<Input::Mouse>();
+    _fpsCounter = make_unique<UI::FpsCounter>(renderer()->width() - 42, 2);
 
     version += " " + to_string(renderer()->size());
     version += " " + renderer()->name();
 
-    _falltergeistVersion = new UI::TextArea(version, 3, renderer()->height() - 10);
-    _mousePosition = new UI::TextArea("", renderer()->width() - 55, 14);
-    _animatedPalette = new Graphics::AnimatedPalette();
-    _gameTime = new Time();
-    _currentTime = new UI::TextArea("", renderer()->size() - Point(150, 10));
+    _falltergeistVersion = make_unique<UI::TextArea>(version, 3, renderer()->height() - 10);
+    _mousePosition = make_unique<UI::TextArea>("", renderer()->width() - 55, 14);
+    _animatedPalette = make_unique<Graphics::AnimatedPalette>();
+    _currentTime = make_unique<UI::TextArea>("", renderer()->size() - Point(150, 10));
 
     IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 }
@@ -114,22 +112,15 @@ Game::~Game()
 
 void Game::shutdown()
 {
-    delete _mouse;
-    delete _fpsCounter;
-    delete _mousePosition;
-    delete _falltergeistVersion;
     _mixer.reset();
     ResourceManager::getInstance()->shutdown();
     while (!_states.empty()) popState();
     _settings.reset();
-    delete _gameTime;
-    delete _currentTime;
-    delete _renderer;
 }
 
 void Game::pushState(State::State* state)
 {
-    _states.push_back(state);
+    _states.push_back(std::unique_ptr<State::State>(state));
     if (!state->initialized()) state->init();
 }
 
@@ -137,13 +128,18 @@ void Game::popState()
 {
     if (_states.size() == 0) return;
 
-    auto state = _states.back();
-    _states.pop_back();
-    _statesForDelete.push_back(state);
-
+    auto& state = _states.back();
+    auto findIt = std::find(_activeStates.rbegin(), _activeStates.rend(), state.get());
+    if (findIt != _activeStates.rend())
+    {
+        _activeStates.erase(findIt.base() - 1);
+    }
     auto event = new Event::State("deactivate");
     state->emitEvent(event);
     delete event;
+
+    _statesForDelete.emplace_back(std::move(state));
+    _states.pop_back();
 }
 
 void Game::setState(State::State* state)
@@ -157,14 +153,11 @@ void Game::run()
     Logger::info("GAME") << "Starting main loop" << std::endl;
     while (!_quit)
     {
+        _activeStates = _getActiveStates();
         handle();
         think();
         render();
         SDL_Delay(1);
-        for (auto state : _statesForDelete)
-        {
-            delete state;
-        }
         _statesForDelete.clear();
     }
     Logger::info("GAME") << "Stopping main loop" << std::endl;
@@ -187,14 +180,14 @@ DudeObject* Game::player()
 
 Input::Mouse* Game::mouse() const
 {
-    return _mouse;
+    return _mouse.get();
 }
 
 State::Location* Game::locationState()
 {
-    for (auto state : _states)
+    for (auto& state : _states)
     {
-        auto location = dynamic_cast<State::Location*>(state);
+        auto location = dynamic_cast<State::Location*>(state.get());
         if (location)
         {
             return location;
@@ -233,39 +226,39 @@ void Game::_initGVARS()
     }
 }
 
-std::vector<State::State*>* Game::states()
+State::State* Game::topState(unsigned offset) const
 {
-    return &_states;
+    return (_states.rbegin() + offset)->get();
 }
 
-std::vector<State::State*>* Game::statesForRender()
+std::vector<State::State*> Game::_getVisibleStates()
 {
+    std::vector<State::State*> subset;
     // we must render all states from last fullscreen state to the top of stack
-    _statesForRender.clear();
     auto it = _states.end();
     do
     {
         --it;
     }
-    while(it != _states.begin() && !(*it)->fullscreen());
+    while (it != _states.begin() && !(*it)->fullscreen());
 
     for (; it != _states.end(); ++it)
     {
-        if (*it) _statesForRender.push_back(*it);
+        subset.push_back((*it).get());
     }
-    return &_statesForRender;
+    return subset;
 }
 
-std::vector<State::State*>* Game::statesForThinkAndHandle()
+std::vector<State::State*> Game::_getActiveStates()
 {
     // we must handle all states from top to bottom of stack
-    _statesForThinkAndHandle.clear();
+    std::vector<State::State*> subset;
 
     auto it = _states.rbegin();
     // active states
     for (; it != _states.rend(); ++it)
     {
-        auto state = *it;
+        auto& state = *it;
         if (!state->active())
         {
             auto event = new Event::State("activate");
@@ -273,7 +266,7 @@ std::vector<State::State*>* Game::statesForThinkAndHandle()
             state->setActive(true);
             delete event;
         }
-        _statesForThinkAndHandle.push_back(state);
+        subset.push_back(state.get());
         if (state->modal() || state->fullscreen())
         {
             ++it;
@@ -283,7 +276,7 @@ std::vector<State::State*>* Game::statesForThinkAndHandle()
     // not active states
     for (; it != _states.rend(); ++it)
     {
-        auto state = *it;
+        auto& state = *it;
         if (state->active())
         {
             auto event = new Event::State("deactivate");
@@ -292,13 +285,12 @@ std::vector<State::State*>* Game::statesForThinkAndHandle()
             delete event;
         }
     }
-
-    return &_statesForThinkAndHandle;
+    return subset;
 }
 
 Graphics::Renderer* Game::renderer()
 {
-    return _renderer;
+    return _renderer.get();
 }
 
 Settings* Game::settings() const
@@ -310,7 +302,7 @@ void Game::handle()
 {
     if (_renderer->fading()) return;
 
-    while(SDL_PollEvent(&_event))
+    while (SDL_PollEvent(&_event))
     {
         if (_event.type == SDL_QUIT)
         {
@@ -332,7 +324,7 @@ void Game::handle()
                     mouseEvent->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
                     mouseEvent->setShiftPressed(mods & KMOD_SHIFT);
                     mouseEvent->setControlPressed(mods & KMOD_CTRL);
-                    for (auto state : *statesForThinkAndHandle()) state->handle(mouseEvent);
+                    for (auto state : _activeStates) state->handle(mouseEvent);
                     break;
                 }
                 case SDL_MOUSEMOTION:
@@ -340,7 +332,7 @@ void Game::handle()
                     mouseEvent = new Event::Mouse("mousemove");
                     mouseEvent->setPosition({_event.motion.x, _event.motion.y});
                     mouseEvent->setOffset({_event.motion.xrel,_event.motion.yrel});
-                    for (auto state : *statesForThinkAndHandle()) state->handle(mouseEvent);
+                    for (auto state : _activeStates) state->handle(mouseEvent);
                     break;
                 }
                 case SDL_KEYDOWN:
@@ -350,7 +342,7 @@ void Game::handle()
                     keyboardEvent->setAltPressed(_event.key.keysym.mod & KMOD_ALT);
                     keyboardEvent->setShiftPressed(_event.key.keysym.mod & KMOD_SHIFT);
                     keyboardEvent->setControlPressed(_event.key.keysym.mod & KMOD_CTRL);
-                    for (auto state : *statesForThinkAndHandle()) state->handle(keyboardEvent);
+                    for (auto state : _activeStates) state->handle(keyboardEvent);
                     break;
                 }
                 case SDL_KEYUP:
@@ -360,16 +352,14 @@ void Game::handle()
                     keyboardEvent->setAltPressed(_event.key.keysym.mod & KMOD_ALT);
                     keyboardEvent->setShiftPressed(_event.key.keysym.mod & KMOD_SHIFT);
                     keyboardEvent->setControlPressed(_event.key.keysym.mod & KMOD_CTRL);;
-                    for (auto state : *statesForThinkAndHandle()) state->handle(keyboardEvent);
+                    for (auto state : _activeStates) state->handle(keyboardEvent);
 
                     if (keyboardEvent->keyCode() == SDLK_F12)
                     {
-                        Graphics::Texture* texture = renderer()->screenshot();
+                        auto texture = renderer()->screenshot();
                         std::string name = std::to_string(SDL_GetTicks()) +  ".bmp";
                         SDL_SaveBMP(texture->sdlSurface(), name.c_str());
-                        delete texture;
                         Logger::info("GAME") << "Screenshot saved to " + name << std::endl;
-
                     }
                     break;
                 }
@@ -391,15 +381,15 @@ void Game::think()
     *_mousePosition << mouse()->position().x() << " : " << mouse()->position().y();
 
     *_currentTime = "";
-    *_currentTime << _gameTime->year()  << "-" << _gameTime->month()   << "-" << _gameTime->day() << " "
-                  << _gameTime->hours() << ":" << _gameTime->minutes() << ":" << _gameTime->seconds() << " " << _gameTime->ticks();
+    *_currentTime << _gameTime.year()  << "-" << _gameTime.month()   << "-" << _gameTime.day() << " "
+                  << _gameTime.hours() << ":" << _gameTime.minutes() << ":" << _gameTime.seconds() << " " << _gameTime.ticks();
 
     if (_renderer->fading())
     {
         return;
     }
 
-    for (auto state : *statesForThinkAndHandle())
+    for (auto state : _activeStates)
     {
         state->think();
     }
@@ -409,7 +399,7 @@ void Game::render()
 {
     renderer()->beginFrame();
 
-    for (auto state : *statesForRender())
+    for (auto state : _getVisibleStates())
     {
         state->render();
     }
@@ -433,12 +423,12 @@ void Game::render()
 
 Graphics::AnimatedPalette* Game::animatedPalette()
 {
-    return _animatedPalette;
+    return _animatedPalette.get();
 }
 
 Time* Game::gameTime()
 {
-    return _gameTime;
+    return &_gameTime;
 }
 
 Audio::Mixer* Game::mixer()

@@ -44,7 +44,7 @@ namespace UI
 
 ItemsList::ItemsList(const Point& pos) : Falltergeist::UI::Base(pos)
 {
-    _texture = new Graphics::Texture(_slotWidth, _slotHeight * _slotsNumber);
+    _generateTexture(_slotWidth, _slotHeight * _slotsNumber);
     _texture->fill(0x000000FF);
 
     addEventHandler("mouseleftdown",  [this](Event::Event* event){ this->onMouseLeftDown(dynamic_cast<Event::Mouse*>(event)); });
@@ -66,16 +66,12 @@ std::vector<Game::ItemObject*>* ItemsList::items()
 
 void ItemsList::update()
 {
-    while(!inventoryItems()->empty())
-    {
-        delete inventoryItems()->back();
-        inventoryItems()->pop_back();
-    }
+    _inventoryItems.clear();
 
     for (unsigned int i = _slotOffset; i < items()->size() && i != _slotOffset + _slotsNumber; i++)
     {
-        auto inventoryItem = new InventoryItem(items()->at(i));
-        inventoryItems()->push_back(inventoryItem);
+        auto inventoryItem = std::unique_ptr<InventoryItem>(new InventoryItem(items()->at(i)));
+        _inventoryItems.push_back(std::move(inventoryItem));
     }
 }
 
@@ -83,7 +79,7 @@ void ItemsList::render(bool eggTransparency)
 {
     //ActiveUI::render();
     unsigned int i = 0;
-    for (auto item : *inventoryItems())
+    for (auto& item : _inventoryItems)
     {
         item->setPosition(position() + Point(0, _slotHeight*i));
         item->render();
@@ -94,7 +90,7 @@ void ItemsList::render(bool eggTransparency)
 unsigned int ItemsList::pixel(const Point& pos)
 {
     unsigned int i = 0;
-    for (auto item : *inventoryItems())
+    for (auto& item : _inventoryItems)
     {
         unsigned int pixel = item->pixel(pos - Point(0, _slotHeight*i));
         if (pixel) return pixel;
@@ -103,9 +99,9 @@ unsigned int ItemsList::pixel(const Point& pos)
     return 0;
 }
 
-std::vector<InventoryItem*>* ItemsList::inventoryItems()
+std::vector<std::unique_ptr<InventoryItem>>& ItemsList::inventoryItems()
 {
-    return &_inventoryItems;
+    return _inventoryItems;
 }
 
 void ItemsList::onMouseLeftDown(Event::Mouse* event)
@@ -116,7 +112,7 @@ void ItemsList::onMouseLeftDown(Event::Mouse* event)
 void ItemsList::onMouseDragStart(Event::Mouse* event)
 {
     unsigned int index = (event->position().y() - y())/_slotHeight;
-    _draggedItem = inventoryItems()->at(index);
+    _draggedItem = _inventoryItems.at(index).get();
     _draggedItem->setType(InventoryItem::Type::DRAG);
     _draggedItem->setPosition(event->position());
     Logger::critical() << "mousedragstart at " << index << " (" << _draggedItem->item()->name() << ")" << std::endl;
@@ -202,20 +198,12 @@ void ItemsList::removeItem(InventoryItem* item, unsigned int amount)
 
 bool ItemsList::canScrollUp()
 {
-    if(_slotOffset > 0)
-    {
-        return true;
-    }
-    return false;
+    return _slotOffset > 0;
 }
 
 bool ItemsList::canScrollDown()
 {
-    if(_slotOffset + _slotsNumber >= _items->size())
-    {
-        return false;
-    }
-    return true;
+    return _slotOffset + _slotsNumber < _items->size();
 }
 
 void ItemsList::scrollUp()

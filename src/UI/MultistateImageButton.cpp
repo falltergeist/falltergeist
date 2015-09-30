@@ -51,36 +51,34 @@ MultistateImageButton::MultistateImageButton(Type type, int x, int y) : Fallterg
     {
         case Type::BIG_SWITCH:
         {
-            auto image = new Image("art/intrface/prfbknbs.frm");
+            Image image("art/intrface/prfbknbs.frm");
 
             auto image1 = new Image(46, 47);
-            image->texture()->copyTo(image1->texture(), 0, 0, 0, 0*47, 46, 47);
+            image.texture()->copyTo(image1->texture(), 0, 0, 0, 0*47, 46, 47);
             auto image2 = new Image(46, 47);
-            image->texture()->copyTo(image2->texture(), 0, 0, 0, 1*47, 46, 47);
+            image.texture()->copyTo(image2->texture(), 0, 0, 0, 1*47, 46, 47);
             auto image3 = new Image(46, 47);
-            image->texture()->copyTo(image3->texture(), 0, 0, 0, 2*47, 46, 47);
+            image.texture()->copyTo(image3->texture(), 0, 0, 0, 2*47, 46, 47);
             auto image4 = new Image(46, 47);
-            image->texture()->copyTo(image4->texture(), 0, 0, 0, 3*47, 46, 47);
+            image.texture()->copyTo(image4->texture(), 0, 0, 0, 3*47, 46, 47);
 
-            addImage(image1);
-            addImage(image2);
-            addImage(image3);
-            addImage(image4);
-            delete image;
+            addImage(std::unique_ptr<Image>(image1));
+            addImage(std::unique_ptr<Image>(image2));
+            addImage(std::unique_ptr<Image>(image3));
+            addImage(std::unique_ptr<Image>(image4));
             _downSound = "sound/sfx/ib3p1xx1.acm";
             _upSound = "sound/sfx/ib3lu1x1.acm";
             break;
         }
         case Type::SMALL_SWITCH:
         {
-            auto image = new Image("art/intrface/prflknbs.frm");
+            Image image("art/intrface/prflknbs.frm");
             auto image1 = new Image(22, 25);
             auto image2 = new Image(22, 50);
-            image->texture()->copyTo(image1->texture(), 0, 0, 0, 0, 22, 25);
-            image->texture()->copyTo(image2->texture(), 0, 0, 0, 25, 22, 50);
-            addImage(image1);
-            addImage(image2);
-            delete image;
+            image.texture()->copyTo(image1->texture(), 0, 0, 0, 0, 22, 25);
+            image.texture()->copyTo(image2->texture(), 0, 0, 0, 25, 22, 50);
+            addImage(std::unique_ptr<Image>(image1));
+            addImage(std::unique_ptr<Image>(image2));
             _downSound = "sound/sfx/ib2p1xx1.acm";
             _upSound = "sound/sfx/ib2lu1x1.acm";
             break;
@@ -94,7 +92,10 @@ MultistateImageButton::MultistateImageButton(Type type, int x, int y) : Fallterg
 MultistateImageButton::MultistateImageButton(ImageList* imageList, const Point& pos) : Falltergeist::UI::Base(pos)
 {
     addEventHandler("mouseleftclick", [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); });
-    for (auto image: *imageList->images()) _imageList.addImage(new Image(*image));
+    for (auto& image : imageList->images())
+    {
+        _imageList.addImage(std::unique_ptr<Image>(new Image(*image)));
+    }
 }
 
 
@@ -102,9 +103,9 @@ MultistateImageButton::~MultistateImageButton()
 {
 }
 
-void MultistateImageButton::addImage(Image* image)
+void MultistateImageButton::addImage(std::unique_ptr<Image> image)
 {
-    _imageList.addImage(image);
+    _imageList.addImage(std::move(image));
     _maxState++;
 }
 
@@ -173,7 +174,7 @@ void MultistateImageButton::_onLeftButtonUp(Event::Mouse* event)
 
 Graphics::Texture* MultistateImageButton::texture() const
 {
-    return _imageList.images()->at(_currentState)->texture();
+    return _imageList.images().at(_currentState)->texture();
 }
 
 void MultistateImageButton::setModeFactor(int factor)

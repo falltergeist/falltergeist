@@ -726,8 +726,8 @@ void MvePlayer::_initVideoBuffer(uint8_t* data)
     width = get_short(data) * 8;
     height = get_short(data+2) * 8;
 
-    if (_currentBuf != NULL) return;
-    if (_backBuf != NULL) return;
+    if (_currentBuf != nullptr) return;
+    if (_backBuf != nullptr) return;
 
     _currentBuf = SDL_CreateRGBSurface(0, width, height, 8, 0, 0, 0, 0);
     if (!_currentBuf)
@@ -741,12 +741,12 @@ void MvePlayer::_initVideoBuffer(uint8_t* data)
         throw new Exception(SDL_GetError());
     }
 
-    if (_decodingMap != NULL) return;
+    if (_decodingMap != nullptr) return;
     // decoding map is 4 bits per 8x8 block
     _decodingMap = new uint8_t [(width*height / (8*8))];
 
-    if (_texture != NULL) return;
-    _texture = new Graphics::Texture(width, height);
+    if (_texture != nullptr) return;
+    _generateTexture(width, height);
 }
 
 

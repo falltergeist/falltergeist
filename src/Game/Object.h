@@ -175,7 +175,7 @@ public:
 
     // TextArea, currently floating above the object
     UI::TextArea* floatMessage() const;
-    void setFloatMessage(UI::TextArea* floatMessage);
+    void setFloatMessage(std::unique_ptr<UI::TextArea> floatMessage);
 
     // is object currently being rendered
     bool inRender() const;
@@ -236,16 +236,15 @@ protected:
     Orientation _orientation;
     std::string _name;
     std::string _description;
-    VM* _script = nullptr;
-    UI::Base* _ui = nullptr;
+    std::unique_ptr<VM> _script;
+    std::unique_ptr<UI::Base> _ui;
     Hexagon* _hexagon = nullptr;
     virtual void _generateUi();
     void addUIEventHandlers();
-    UI::TextArea* _floatMessage = nullptr;
+    std::unique_ptr<UI::TextArea> _floatMessage;
     bool _inRender = false;
     Trans _trans = Trans::DEFAULT;
     Orientation _lightOrientation;
-    Graphics::Texture* _tmptex = nullptr;
     unsigned int _lightIntensity = 0;
     unsigned int _lightRadius = 0;
     virtual bool _useEggTransparency();

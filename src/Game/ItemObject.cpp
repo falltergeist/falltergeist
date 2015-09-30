@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
 #include "../UI/Animation.h"
@@ -35,6 +36,8 @@ namespace Falltergeist
 namespace Game
 {
 
+using namespace Base;
+
 ItemObject::ItemObject() : Object()
 {
     _type = Type::ITEM;
@@ -42,9 +45,6 @@ ItemObject::ItemObject() : Object()
 
 ItemObject::~ItemObject()
 {
-    delete _inventoryDragUi;
-    delete _inventorySlotUi;
-    delete _inventoryUi;
 }
 
 unsigned int ItemObject::amount() const
@@ -79,7 +79,7 @@ void ItemObject::setInventoryFID(int value)
 
 UI::Image* ItemObject::inventoryDragUi() const
 {
-    return _inventoryDragUi;
+    return _inventoryDragUi.get();
 }
 
 void ItemObject::setVolume(unsigned int volume)
@@ -94,12 +94,12 @@ unsigned int ItemObject::volume() const
 
 UI::Image* ItemObject::inventoryUi() const
 {
-    return _inventoryUi;
+    return _inventoryUi.get();
 }
 
 UI::Image* ItemObject::inventorySlotUi() const
 {
-    return _inventorySlotUi;
+    return _inventorySlotUi.get();
 }
 
 void ItemObject::_generateUi()
@@ -109,16 +109,16 @@ void ItemObject::_generateUi()
     if (inventoryFID() == -1) return;
 
     // Big unscaled image of item
-    _inventoryDragUi = new UI::Image(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
+    _inventoryDragUi = make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
 
     // Small scaled image
     auto inventoryUiTexture = _inventoryDragUi->texture()->fitTo(57, 40);
-    _inventoryUi = new UI::Image(inventoryUiTexture->width(),inventoryUiTexture->height());
+    _inventoryUi = make_unique<UI::Image>(inventoryUiTexture->width(),inventoryUiTexture->height());
     _inventoryUi->setTexture(inventoryUiTexture);
 
     // Medium scaled image
     auto inventorySlotUiTexture = _inventoryDragUi->texture()->fitTo(88, 58);
-    _inventorySlotUi = new UI::Image(inventorySlotUiTexture->width(),inventorySlotUiTexture->height());
+    _inventorySlotUi = make_unique<UI::Image>(inventorySlotUiTexture->width(),inventorySlotUiTexture->height());
     _inventorySlotUi->setTexture(inventorySlotUiTexture);
 }
 

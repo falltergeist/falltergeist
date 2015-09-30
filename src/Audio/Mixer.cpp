@@ -113,7 +113,7 @@ void Mixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len)
     else
     {
         //all other files are mono. double it
-        uint16_t* tmp = new uint16_t[len/2];
+        uint16_t tmp[len/2];
         uint16_t* sstr = (uint16_t*)stream;
         pacm->readSamples((short int*)tmp, len/4);
         for (uint32_t i = 0; i < len/4; i++)
@@ -121,7 +121,6 @@ void Mixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len)
             sstr[i*2] = tmp[i];
             sstr[i*2+1] = tmp[i];
         }
-        delete [] tmp;
     }
 }
 
@@ -174,7 +173,7 @@ void Mixer::playACMSound(const std::string& filename)
         acm->init();
         auto samples = acm->samples();
 
-        uint8_t *memory = new uint8_t [samples * 2];
+        uint8_t memory[samples * 2];
         auto cnt = acm->readSamples((short*)memory, samples)*2;
 
         SDL_AudioCVT cvt;
@@ -184,8 +183,6 @@ void Mixer::playACMSound(const std::string& filename)
         memcpy(cvt.buf, (uint8_t*)memory, cnt);
         cvt.len = cnt;
         SDL_ConvertAudio(&cvt);
-        // free old buffer
-        delete [] memory;
 
         // make SDL_mixer chunk
         chunk = Mix_QuickLoad_RAW(cvt.buf, cvt.len*cvt.len_ratio);

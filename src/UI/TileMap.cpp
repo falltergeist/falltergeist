@@ -25,6 +25,7 @@
 #include <cmath>
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
@@ -41,18 +42,19 @@ namespace  Falltergeist
 namespace UI
 {
 
+using namespace Base;
+
 TileMap::TileMap()
 {
 }
 
 TileMap::~TileMap()
 {
-    delete _texture;
 }
 
-std::vector<Tile*>* TileMap::tiles()
+std::vector<std::unique_ptr<Tile>>& TileMap::tiles()
 {
-    return &_tiles;
+    return _tiles;
 }
 
 void TileMap::render()
@@ -62,7 +64,7 @@ void TileMap::render()
     auto camera = Game::getInstance()->locationState()->camera();
     auto renderer = Game::getInstance()->renderer();
 
-    for (auto tile : _tiles)
+    for (auto& tile : _tiles)
     {
         const Size tileSize = Size(80, 36);
         if (Rect::intersects(tile->position(), tileSize, camera->topLeft(), camera->size()))
@@ -72,7 +74,7 @@ void TileMap::render()
                 (tile->index() % _square) * tileSize.width(),
                 (tile->index() / _square) * tileSize.height()
             );
-            renderer->drawTexture(_texture, positionOnScreen, square, tileSize);
+            renderer->drawTexture(_texture.get(), positionOnScreen, square, tileSize);
         }
     }
 }
@@ -80,7 +82,7 @@ void TileMap::render()
 void TileMap::_generateTexture()
 {
     std::vector<unsigned int> numbers;
-    for (auto tile : _tiles)
+    for (auto& tile : _tiles)
     {
         auto position = std::find(numbers.begin(), numbers.end(), tile->number());
         if ( position == numbers.end())
@@ -101,9 +103,9 @@ void TileMap::_generateTexture()
         }
     }
 
-    _square = std::ceil(std::sqrt(numbers.size()));
+    _square = (unsigned)std::ceil(std::sqrt(numbers.size()));
 
-    _texture = new Graphics::Texture(_square*80, _square*36);
+    _texture = make_unique<Graphics::Texture>(_square*80, _square*36);
 
     auto tilesLst = ResourceManager::getInstance()->lstFileType("art/tiles/tiles.lst");
     for (unsigned int i = 0; i != numbers.size(); ++i)
@@ -111,7 +113,7 @@ void TileMap::_generateTexture()
         auto texture = ResourceManager::getInstance()->texture("art/tiles/" + tilesLst->strings()->at(numbers.at(i)));
         unsigned int x = (i%_square)*80;
         unsigned int y = (i/_square)*36;
-        texture->copyTo(_texture, x, y);
+        texture->copyTo(_texture.get(), x, y);
     }
 }
 

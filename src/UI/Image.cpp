@@ -42,7 +42,7 @@ Image::Image(const std::string& filename) : Falltergeist::UI::Base()
 Image::Image(const Image& image) : Falltergeist::UI::Base()
 {
     // @fixme: we should use "clone" feature here
-    setTexture(new Graphics::Texture(image.texture()->width(), image.texture()->height()));
+    _generateTexture(image.texture()->width(), image.texture()->height());
     unsigned int* pixels = (unsigned int*)image.texture()->sdlSurface()->pixels;
     _texture->loadFromRGBA(pixels);
 }
@@ -53,7 +53,7 @@ Image::Image(const Size& size) : Image((unsigned)size.width(), (unsigned)size.he
 
 Image::Image(unsigned int width, unsigned int height) : Falltergeist::UI::Base()
 {
-    setTexture(new Graphics::Texture(width, height));
+    _generateTexture(width, height);
 }
 
 Image::Image(Graphics::Texture* texture) : Falltergeist::UI::Base()
@@ -69,11 +69,12 @@ Image::Image(libfalltergeist::Frm::File* frm, unsigned int direction) : Fallterg
     }
 
     // direction texture
-    setTexture(new Graphics::Texture(frm->directions()->at(direction)->width(), frm->directions()->at(direction)->height()));
+    auto directionObj = frm->directions()->at(direction);
+    _generateTexture(directionObj->width(), directionObj->height());
 
     // full frm texture
-    Graphics::Texture* texture = new Graphics::Texture(frm->width(), frm->height());
-    texture->loadFromRGBA(frm->rgba(ResourceManager::getInstance()->palFileType("color.pal")));
+    Graphics::Texture texture(frm->width(), frm->height());
+    texture.loadFromRGBA(frm->rgba(ResourceManager::getInstance()->palFileType("color.pal")));
 
     // direction offset in full texture
     unsigned int y = 0;
@@ -82,8 +83,7 @@ Image::Image(libfalltergeist::Frm::File* frm, unsigned int direction) : Fallterg
         y += frm->directions()->at(direction)->height();
     }
 
-    texture->copyTo(_texture, 0, 0, 0, y, frm->directions()->at(direction)->width(), frm->directions()->at(direction)->height());
-    delete texture;
+    texture.copyTo(_texture, 0, 0, 0, y, frm->directions()->at(direction)->width(), frm->directions()->at(direction)->height());
     auto dir = frm->directions()->at(direction);
     setOffset(
         frm->offsetX(direction) + dir->shiftX(),

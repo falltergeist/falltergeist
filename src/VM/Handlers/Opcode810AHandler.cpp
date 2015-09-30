@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Base/StlFeatures.h"
 #include "../../Logger.h"
 #include "../../ResourceManager.h"
 #include "../../Game/Object.h"
@@ -31,6 +32,8 @@
 
 namespace Falltergeist
 {
+
+using namespace Base;
 
 Opcode810AHandler::Opcode810AHandler(VM* vm) : OpcodeHandler(vm)
 {
@@ -92,14 +95,14 @@ void Opcode810AHandler::_run()
     auto string = _vm->dataStack()->popString();
     auto object = _vm->dataStack()->popObject();
 
-    auto floatMessage = new UI::TextArea(string);
+    auto floatMessage = make_unique<UI::TextArea>(string);
     floatMessage->setWidth(200);
     floatMessage->setWordWrap(true);
     floatMessage->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
     floatMessage->setOutline(true);
     floatMessage->setOutlineColor(0x000000ff);
     floatMessage->setFont(ResourceManager::getInstance()->font("font1.aaf", color));
-    object->setFloatMessage(floatMessage);
+    object->setFloatMessage(std::move(floatMessage));
 
 }
 
