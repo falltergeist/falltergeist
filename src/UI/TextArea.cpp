@@ -37,6 +37,8 @@
 // Third party includes
 #include <SDL.h>
 
+using namespace std;
+
 namespace Falltergeist
 {
 namespace UI
@@ -52,13 +54,13 @@ TextArea::TextArea(int x, int y) : TextArea(Point(x, y))
 {
 }
 
-TextArea::TextArea(const std::string& text, const Point& pos) : Base(pos)
+TextArea::TextArea(const string& text, const Point& pos) : Base(pos)
 {
     _timestampCreated = SDL_GetTicks();
     setText(text);
 }
 
-TextArea::TextArea(const std::string& text, int x, int y) : TextArea(text, Point(x, y))
+TextArea::TextArea(const string& text, int x, int y) : TextArea(text, Point(x, y))
 {
 }
 
@@ -79,7 +81,7 @@ TextArea::~TextArea()
 {
 }
 
-void TextArea::appendText(const std::string& text)
+void TextArea::appendText(const string& text)
 {
     _text += text;
     _changed = true;
@@ -112,7 +114,7 @@ void TextArea::setVerticalAlign(VerticalAlign align)
     _calculate();
 }
 
-void TextArea::setText(const std::string& text)
+void TextArea::setText(const string& text)
 {
     _text = text;
     _changed = true;
@@ -201,39 +203,68 @@ void TextArea::_calculate()
         return;
     }
 
-    unsigned x = 0;
+    unsigned x = 0, wordWidth = 0;
     unsigned y = 0;
 
-    std::vector<std::vector<TextSymbol>> lines = {std::vector<TextSymbol>()};
-    std::vector<unsigned> widths = {0};
+    vector<vector<TextSymbol>> lines = {vector<TextSymbol>()};
+    vector<unsigned> widths = {0};
 
     // Parsing lines of text
     // Cutting lines when it is needed (\n or when exceeding _width)
-    for (auto it = _text.begin(); it != _text.end(); ++it)
+    istringstream istream(_text);
+    string word;
+    istream >> word;
+    while (word.size() > 0)
     {
-        if (*it == ' ')
+        // calculate word width
+        wordWidth = 0;
+        for (unsigned char ch : word)
         {
-            x += font()->aaf()->spaceWidth() + font()->horizontalGap();
+            wordWidth += font()->aaf()->glyphs()->at(ch)->width() + font()->horizontalGap();
         }
-
-        if (*it == '\n' || (_size.width() && x >= (unsigned)_size.width()))
+        // switch to next line if word is too long
+        if (_size.width() && (x + wordWidth) > (unsigned)_size.width())
         {
             widths.back() = x;
             x = 0;
             y += font()->height() + font()->verticalGap();
-            lines.push_back(std::vector<TextSymbol>());
+            lines.emplace_back();
             widths.push_back(0);
         }
+        // include whitespaces
+        while (!istream.eof() && isspace((int)istream.peek())) word.push_back((char)istream.get());
+        // place the word
+        for (unsigned char ch : word)
+        {
+            if (ch == ' ')
+            {
+                x += font()->aaf()->spaceWidth() + font()->horizontalGap();
+            }
 
-        if (*it == ' ' || *it == '\n') continue;
+            if (ch == '\n' || (_size.width() && x >= (unsigned)_size.width()))
+            {
+                widths.back() = x;
+                x = 0;
+                y += font()->height() + font()->verticalGap();
+                lines.push_back(vector<TextSymbol>());
+                widths.push_back(0);
+            }
 
+            if (ch == ' ' || ch == '\n')
+                continue;
 
-        TextSymbol symbol(*it, x, y);
-        symbol.setFont(font());
-        lines.back().push_back(symbol);
+            TextSymbol symbol(ch, x, y);
+            symbol.setFont(font());
+            lines.back().push_back(symbol);
 
-        x += font()->aaf()->glyphs()->at(symbol.chr())->width() + font()->horizontalGap();
-        widths.back() = x;
+            x += font()->aaf()->glyphs()->at(symbol.chr())->width() + font()->horizontalGap();
+            widths.back() = x;
+        }
+        if (istream.eof())
+        {
+            break;
+        }
+        istream >> word;
     }
 
     // Calculating textarea sizes if needed
@@ -294,7 +325,7 @@ void TextArea::_addOutlineSymbol(const TextSymbol& symb, Font* font, int32_t ofs
     _symbols.back().setFont(font);
 }
 
-std::string TextArea::text() const
+string TextArea::text() const
 {
     return _text;
 }
@@ -315,7 +346,7 @@ void TextArea::render(bool eggTransparency)
     }
 }
 
-TextArea& TextArea::operator<<(const std::string& text)
+TextArea& TextArea::operator<<(const string& text)
 {
     appendText(text);
     return *this;
@@ -333,7 +364,7 @@ TextArea& TextArea::operator<<(signed value)
     return *this;
 }
 
-TextArea& TextArea::operator=(const std::string& text)
+TextArea& TextArea::operator=(const string& text)
 {
     setText(text);
     return *this;
@@ -351,7 +382,7 @@ TextArea& TextArea::operator=(signed value)
     return *this;
 }
 
-TextArea& TextArea::operator+=(const std::string& text)
+TextArea& TextArea::operator+=(const string& text)
 {
     appendText(text);
     return *this;
