@@ -25,6 +25,7 @@
 #include "../Event/Keyboard.h"
 #include "../Event/Mouse.h"
 #include "../Event/State.h"
+#include "../Font.h"
 #include "../Game/Game.h"
 #include "../UI/TextArea.h"
 #include "../Input/Mouse.h"
@@ -72,7 +73,8 @@ void Credits::init()
     int y = 0;
     while (std::getline(ss, line))
     {
-        auto cur_font = font_default;
+        Font* cur_font = font_default;
+        int additionalGap = 0;
         if (line.find('\r') != std::string::npos)
         {
             line.erase(line.find('\r'));
@@ -86,6 +88,7 @@ void Credits::init()
         {
             line.erase(line.begin());
             cur_font = font_at;
+            additionalGap = 6;
         }
         else if (line.empty())
         {
@@ -99,7 +102,7 @@ void Credits::init()
         addUI(tx);
         _lines.push_back(tx);
         tx->calculateSize();
-        y += tx->size().height();
+        y += tx->size().height() + cur_font->verticalGap() + additionalGap;
     }
     _lastTicks=SDL_GetTicks();
 }
@@ -109,9 +112,9 @@ void Credits::think()
     State::think();
 
     unsigned long int nt = SDL_GetTicks();
-    if (nt-_lastTicks > 38)
+    if (nt - _lastTicks > 50)
     {
-        setY(y()-1);
+        _position.ry() -= 1;
         long int _lastY = 0;
         for (auto ui: _lines)
         {
