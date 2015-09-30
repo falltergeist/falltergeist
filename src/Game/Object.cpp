@@ -250,9 +250,10 @@ UI::TextArea* Object::floatMessage() const
     return _floatMessage.get();
 }
 
-void Object::setFloatMessage(std::unique_ptr<UI::TextArea> floatMessage)
+void Object::setFloatMessage(std::unique_ptr<UI::TextArea> message)
 {
-    _floatMessage = std::move(floatMessage);
+    if (message) message->calculateSize();
+    _floatMessage = std::move(message);
 }
 
 static bool to_right_of(const Point& p1, const Point& p2)

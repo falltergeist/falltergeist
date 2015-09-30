@@ -73,8 +73,12 @@ public:
     VerticalAlign verticalAlign() const;
     void setVerticalAlign(VerticalAlign align);
 
+    /**
+     * Actual size of text area. It's either fixed value given to setSize() or previously calculated size.
+     */
     Size size() const override;
     void setSize(const Size& size);
+    void calculateSize();
 
     void setWidth(int width);
 
@@ -121,7 +125,7 @@ protected:
     // not used when _width || _height are set manualy
     Size _calculatedSize;
 
-    bool _wordWrap = false;
+    bool _wordWrap = true;
     bool _outline = false;
 
     unsigned int _backgroundColor = 0;

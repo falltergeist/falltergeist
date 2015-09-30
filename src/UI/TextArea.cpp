@@ -47,7 +47,6 @@ namespace UI
 TextArea::TextArea(const Point& pos) : Base(pos)
 {
     _timestampCreated = SDL_GetTicks();
-    _calculate();
 }
 
 TextArea::TextArea(int x, int y) : TextArea(Point(x, y))
@@ -74,7 +73,6 @@ TextArea::TextArea(const TextArea& textArea, Point pos) : Base(pos)
     _horizontalAlign = textArea._horizontalAlign;
     _verticalAlign = textArea._verticalAlign;
     _wordWrap = textArea._wordWrap;
-    _calculate();
 }
 
 TextArea::~TextArea()
@@ -85,7 +83,6 @@ void TextArea::appendText(const string& text)
 {
     _text += text;
     _changed = true;
-    _calculate();
 }
 
 TextArea::HorizontalAlign TextArea::horizontalAlign() const
@@ -98,7 +95,6 @@ void TextArea::setHorizontalAlign(HorizontalAlign align)
     if (_horizontalAlign == align) return;
     _horizontalAlign = align;
     _changed = true;
-    _calculate();
 }
 
 TextArea::VerticalAlign TextArea::verticalAlign() const
@@ -111,14 +107,12 @@ void TextArea::setVerticalAlign(VerticalAlign align)
     if (_verticalAlign == align) return;
     _verticalAlign = align;
     _changed = true;
-    _calculate();
 }
 
 void TextArea::setText(const string& text)
 {
     _text = text;
     _changed = true;
-    _calculate();
 }
 
 Font* TextArea::font()
@@ -134,7 +128,6 @@ void TextArea::setFont(Font* font)
 {
     _font = font;
     _changed = true;
-    _calculate();
 }
 
 void TextArea::setWordWrap(bool wordWrap)
@@ -142,7 +135,6 @@ void TextArea::setWordWrap(bool wordWrap)
     if (_wordWrap == wordWrap) return;
     _wordWrap = wordWrap;
     _changed = true;
-    _calculate();
 }
 
 bool TextArea::wordWrap() const
@@ -178,12 +170,16 @@ Size TextArea::size() const
     );
 }
 
+void TextArea::calculateSize()
+{
+    _calculate();
+}
+
 void TextArea::setSize(const Size& size)
 {
     if (_size == size) return;
     _size = size;
     _changed = true;
-    _calculate();
 }
 
 void TextArea::setWidth(int width)
@@ -213,40 +209,40 @@ void TextArea::_calculate()
     // Cutting lines when it is needed (\n or when exceeding _width)
     istringstream istream(_text);
     string word;
-    istream >> word;
-    while (word.size() > 0)
+    auto aFont = font();
+    auto glyphs = aFont->aaf()->glyphs();
+    while (istream >> word)
     {
         // calculate word width
         wordWidth = 0;
         for (unsigned char ch : word)
         {
-            wordWidth += font()->aaf()->glyphs()->at(ch)->width() + font()->horizontalGap();
+            wordWidth += glyphs->at(ch)->width() + aFont->horizontalGap();
         }
         // switch to next line if word is too long
-        if (_size.width() && (x + wordWidth) > (unsigned)_size.width())
+        if (_size.width() && _wordWrap && (x + wordWidth) > (unsigned)_size.width())
         {
-            widths.back() = x;
-            x = 0;
-            y += font()->height() + font()->verticalGap();
-            lines.emplace_back();
-            widths.push_back(0);
+            word = '\n' + word;
         }
         // include whitespaces
-        while (!istream.eof() && isspace((int)istream.peek())) word.push_back((char)istream.get());
+        while (!istream.eof() && isspace((int)istream.peek()))
+        {
+            word.push_back((char)istream.get());
+        }
         // place the word
         for (unsigned char ch : word)
         {
             if (ch == ' ')
             {
-                x += font()->aaf()->spaceWidth() + font()->horizontalGap();
+                x += aFont->aaf()->spaceWidth() + aFont->horizontalGap();
             }
 
             if (ch == '\n' || (_size.width() && x >= (unsigned)_size.width()))
             {
                 widths.back() = x;
                 x = 0;
-                y += font()->height() + font()->verticalGap();
-                lines.push_back(vector<TextSymbol>());
+                y += aFont->height() + aFont->verticalGap();
+                lines.emplace_back();
                 widths.push_back(0);
             }
 
@@ -254,20 +250,16 @@ void TextArea::_calculate()
                 continue;
 
             TextSymbol symbol(ch, x, y);
-            symbol.setFont(font());
+            symbol.setFont(aFont);
             lines.back().push_back(symbol);
 
-            x += font()->aaf()->glyphs()->at(symbol.chr())->width() + font()->horizontalGap();
+            x += glyphs->at(ch)->width() + aFont->horizontalGap();
             widths.back() = x;
         }
-        if (istream.eof())
-        {
-            break;
-        }
-        istream >> word;
     }
 
     // Calculating textarea sizes if needed
+    _calculatedSize = _size;
     if (_size.width() == 0)
     {
         _calculatedSize.setWidth(*std::max_element(widths.begin(), widths.end()));

@@ -200,6 +200,7 @@ void CritterDialog::addAnswer(const std::string& text)
     int y = 50;
     for (auto answer : _answers)
     {
+        answer->calculateSize();
         y += answer->size().height() + 5;
     }
 

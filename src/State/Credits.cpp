@@ -98,6 +98,7 @@ void Credits::init()
         tx->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
         addUI(tx);
         _lines.push_back(tx);
+        tx->calculateSize();
         y += tx->size().height();
     }
     _lastTicks=SDL_GetTicks();
