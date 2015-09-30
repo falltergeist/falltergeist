@@ -151,6 +151,7 @@ void Location::setLocation(const std::string& name)
 
     auto mapObjects = mapFile->elevations()->at(_currentElevation)->objects();
 
+    auto ticks = SDL_GetTicks();
     // @todo remove old objects from hexagonal grid
     for (auto mapObject : *mapObjects)
     {
@@ -207,6 +208,7 @@ void Location::setLocation(const std::string& name)
 
         _objects.emplace_back(object);
     }
+    Logger::info("GAME") << "Objects loaded in " << (SDL_GetTicks() - ticks) << std::endl;
 
     // Adding dude
     {

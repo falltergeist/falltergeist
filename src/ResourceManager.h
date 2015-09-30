@@ -34,6 +34,7 @@
 #include <libfalltergeist/Lst/File.h>
 #include <libfalltergeist/Msg/File.h>
 #include <libfalltergeist/Msg/Message.h>
+#include <libfalltergeist/Frm/File.h>
 
 namespace libfalltergeist
 {
@@ -145,7 +146,8 @@ protected:
     friend class Base::Singleton<ResourceManager>;
 
     std::vector<std::unique_ptr<libfalltergeist::Dat::File>> _datFiles;
-    std::unordered_map<std::string, std::unique_ptr<libfalltergeist::Dat::Item>> _datFilesItems;
+    std::vector<std::unique_ptr<libfalltergeist::Dat::Item>> _datItems;
+    std::unordered_map<std::string, libfalltergeist::Dat::Item*> _datItemMap;
     std::unordered_map<std::string, std::unique_ptr<Graphics::Texture>> _textures;
     std::unordered_map<std::string, std::unique_ptr<Font>> _fonts;
 

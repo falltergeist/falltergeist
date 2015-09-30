@@ -324,9 +324,11 @@ void Base::handle(Event::Event* event)
 
 void Base::_generateTexture(unsigned int width, unsigned int height)
 {
-    auto ptr = new Graphics::Texture(width, height);
-    _generatedTexture.reset(ptr);
-    setTexture(ptr);
+    if (!_generatedTexture || _generatedTexture->width() != width || _generatedTexture->height() != height)
+    {
+        _generatedTexture = make_unique<Graphics::Texture>(width, height);
+        setTexture(_generatedTexture.get());
+    }
 }
 
 unsigned Base::width() const

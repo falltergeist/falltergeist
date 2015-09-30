@@ -93,15 +93,13 @@ ResourceManager* ResourceManager::getInstance()
 
 Dat::Item* ResourceManager::datFileItem(string filename)
 {
-    locale loc;
-    for (auto it = filename.begin(); it != filename.end(); it++)
-    {
-        *it = std::tolower(*it, loc);
-    }
+    std::transform(filename.begin(), filename.end(), filename.begin(), ::tolower);
+
     // Return item from cache
-    if (_datFilesItems.find(filename) != _datFilesItems.end())
+    auto itemIt = _datItemMap.find(filename);
+    if (itemIt != _datItemMap.end())
     {
-        return _datFilesItems.at(filename).get();
+        return itemIt->second;
     }
 
     // Searching file in Fallout data directory
@@ -127,7 +125,8 @@ Dat::Item* ResourceManager::datFileItem(string filename)
         {
             Dat::Item* item = _createItemByName(filename, &stream);
             item->setFilename(filename);
-            _datFilesItems.insert(make_pair(filename, unique_ptr<Dat::Item>(item)));
+            _datItems.push_back(unique_ptr<Dat::Item>(item));
+            _datItemMap.insert(make_pair(filename, item));
             return item;
         }
     }
@@ -139,6 +138,7 @@ Dat::Item* ResourceManager::datFileItem(string filename)
         if (item)
         {
             Logger::debug("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM " << datfile->filename() << "]" << endl;
+            _datItemMap.insert(make_pair(filename, item));
             return item;
         }
     }
@@ -341,14 +341,14 @@ Graphics::Texture* ResourceManager::texture(const string& filename)
     else if (ext == ".rix")
     {
         auto rix = rixFileType(filename);
-        if (!rix) return 0;
+        if (!rix) return nullptr;
         texture = new Graphics::Texture(rix->width(), rix->height());
         texture->loadFromRGBA(rix->rgba());
     }
     else if (ext == ".frm")
     {
         auto frm = frmFileType(filename);
-        if (!frm) return 0;
+        if (!frm) return nullptr;
         texture = new Graphics::Texture(frm->width(), frm->height());
         texture->loadFromRGBA(frm->rgba(palFileType("color.pal")));
     }
@@ -437,7 +437,8 @@ Pro::File* ResourceManager::proFileType(unsigned int PID)
 
 void ResourceManager::unloadResources()
 {
-    _datFilesItems.clear();
+    _datItems.clear();
+    _datItemMap.clear();
 }
 
 Frm::File* ResourceManager::frmFileType(unsigned int FID)
