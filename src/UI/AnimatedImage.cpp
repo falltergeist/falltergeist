@@ -46,8 +46,7 @@ using namespace Base;
 
 AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direction) : Falltergeist::UI::Base()
 {
-    _generateTexture(frm->width(), frm->height());
-    _texture->loadFromRGBA(frm->rgba(ResourceManager::getInstance()->palFileType("color.pal")));
+    _texture = ResourceManager::getInstance()->texture(frm->filename());
     auto dir = frm->directions()->at(direction);
     setOffset(frm->offsetX(direction) + dir->shiftX(), frm->offsetY(direction) + dir->shiftY());
 

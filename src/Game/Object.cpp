@@ -295,11 +295,10 @@ void Object::render()
         - Point(_ui->size().width() / 2, _ui->size().height())
     );
 
-    setInRender(false);
-
     // don't draw if outside of screen
     if (!Rect::intersects(_ui->position(), _ui->size(), Point(0, 0), camera->size()))
     {
+        setInRender(false);
         return;
     }
 

@@ -30,6 +30,7 @@
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../LocationCamera.h"
+#include "../Logger.h"
 #include "../Point.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
@@ -81,6 +82,7 @@ void TileMap::render()
 
 void TileMap::_generateTexture()
 {
+    auto ticks = SDL_GetTicks();
     std::vector<unsigned int> numbers;
     for (auto& tile : _tiles)
     {
@@ -115,6 +117,8 @@ void TileMap::_generateTexture()
         unsigned int y = (i/_square)*36;
         texture->copyTo(_texture.get(), x, y);
     }
+
+    Logger::info("GAME") << "Tilemap generated in " << (SDL_GetTicks() - ticks) << std::endl;
 }
 
 }
