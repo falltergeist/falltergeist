@@ -196,7 +196,7 @@ void PlayerEditName::think()
         _timer = SDL_GetTicks();
     }
 
-    _cursor->setPosition({bgX + _name->size().width() + 45, _cursor->position().y()});
+    _cursor->setPosition({bgX + _name->textSize().width() + 45, _cursor->position().y()});
 }
 
 void PlayerEditName::doBack()

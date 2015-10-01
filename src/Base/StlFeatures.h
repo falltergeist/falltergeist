@@ -55,14 +55,14 @@ template<class T, std::size_t N> struct UniqueIf<T[N]>
 }  // namespace Detail
 
 template<class T, class... Args>
-typename Detail::UniqueIf<T>::SingleObject
+inline typename Detail::UniqueIf<T>::SingleObject
 make_unique(Args&&... args)
 {
     return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
 }
 
 template<class T>
-typename Detail::UniqueIf<T>::UnknownBound
+inline typename Detail::UniqueIf<T>::UnknownBound
 make_unique(std::size_t n)
 {
     typedef typename std::remove_extent<T>::type U;
@@ -70,7 +70,7 @@ make_unique(std::size_t n)
 }
 
 template<class T, class... Args>
-typename Detail::UniqueIf<T>::KnownBound
+inline typename Detail::UniqueIf<T>::KnownBound
 make_unique(Args&&...) = delete;
 
 }

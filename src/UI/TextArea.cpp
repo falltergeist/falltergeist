@@ -45,7 +45,6 @@ namespace UI
 TextArea::TextArea(const Point& pos) : Base(pos)
 {
     _timestampCreated = SDL_GetTicks();
-    _calculate();
 }
 
 TextArea::TextArea(int x, int y) : TextArea(Point(x, y))
@@ -72,7 +71,6 @@ TextArea::TextArea(const TextArea& textArea, Point pos) : Base(pos)
     _horizontalAlign = textArea._horizontalAlign;
     _verticalAlign = textArea._verticalAlign;
     _wordWrap = textArea._wordWrap;
-    _calculate();
 }
 
 TextArea::~TextArea()
@@ -83,7 +81,6 @@ void TextArea::appendText(const std::string& text)
 {
     _text += text;
     _changed = true;
-    _calculate();
 }
 
 TextArea::HorizontalAlign TextArea::horizontalAlign() const
@@ -96,7 +93,6 @@ void TextArea::setHorizontalAlign(HorizontalAlign align)
     if (_horizontalAlign == align) return;
     _horizontalAlign = align;
     _changed = true;
-    _calculate();
 }
 
 TextArea::VerticalAlign TextArea::verticalAlign() const
@@ -109,14 +105,12 @@ void TextArea::setVerticalAlign(VerticalAlign align)
     if (_verticalAlign == align) return;
     _verticalAlign = align;
     _changed = true;
-    _calculate();
 }
 
 void TextArea::setText(const std::string& text)
 {
     _text = text;
     _changed = true;
-    _calculate();
 }
 
 Font* TextArea::font()
@@ -132,7 +126,16 @@ void TextArea::setFont(Font* font)
 {
     _font = font;
     _changed = true;
-    _calculate();
+}
+
+void TextArea::setFont(const std::string& fontName, unsigned int color)
+{
+    setFont(ResourceManager::getInstance()->font(fontName, color));
+}
+
+std::string TextArea::fontName()
+{
+    return font()->filename();
 }
 
 void TextArea::setWordWrap(bool wordWrap)
@@ -140,7 +143,6 @@ void TextArea::setWordWrap(bool wordWrap)
     if (_wordWrap == wordWrap) return;
     _wordWrap = wordWrap;
     _changed = true;
-    _calculate();
 }
 
 bool TextArea::wordWrap() const
@@ -150,12 +152,12 @@ bool TextArea::wordWrap() const
 
 void TextArea::setOutline(bool outline)
 {
-    _outline = outline;
+    _outlineColor = outline ? 0x000000ff : 0;
 }
 
 bool TextArea::outline() const
 {
-    return _outline;
+    return _outlineColor != 0;
 }
 
 void TextArea::setOutlineColor(unsigned int color)
@@ -176,12 +178,17 @@ Size TextArea::size() const
     );
 }
 
+Size TextArea::textSize()
+{
+    _calculate();
+    return _calculatedSize;
+}
+
 void TextArea::setSize(const Size& size)
 {
     if (_size == size) return;
     _size = size;
     _changed = true;
-    _calculate();
 }
 
 void TextArea::setWidth(int width)
@@ -201,7 +208,7 @@ void TextArea::_calculate()
         return;
     }
 
-    unsigned x = 0;
+    unsigned x = 0, wordWidth = 0;
     unsigned y = 0;
 
     std::vector<std::vector<TextSymbol>> lines = {std::vector<TextSymbol>()};
@@ -209,44 +216,66 @@ void TextArea::_calculate()
 
     // Parsing lines of text
     // Cutting lines when it is needed (\n or when exceeding _width)
-    for (auto it = _text.begin(); it != _text.end(); ++it)
+    std::istringstream istream(_text);
+    std::string word;
+    auto aFont = font();
+    auto glyphs = aFont->aaf()->glyphs();
+    while (istream >> word)
     {
-        if (*it == ' ')
+        // calculate word width
+        wordWidth = 0;
+        for (unsigned char ch : word)
         {
-            x += font()->aaf()->spaceWidth() + font()->horizontalGap();
+            wordWidth += glyphs->at(ch)->width() + aFont->horizontalGap();
         }
-
-        if (*it == '\n' || (_size.width() && x >= (unsigned)_size.width()))
+        // switch to next line if word is too long
+        if (_wordWrap && _size.width() && (x + wordWidth) > (unsigned)_size.width())
         {
+            word = '\n' + word;
+        }
+        // include whitespaces
+        while (!istream.eof() && isspace((int)istream.peek()))
+        {
+            word.push_back((char)istream.get());
+        }
+        // place the word
+        for (unsigned char ch : word)
+        {
+            if (ch == ' ')
+            {
+                x += aFont->aaf()->spaceWidth() + aFont->horizontalGap();
+            }
+
+            if (ch == '\n' || (_wordWrap && _size.width() && x >= (unsigned)_size.width()))
+            {
+                widths.back() = x;
+                x = 0;
+                y += aFont->height() + aFont->verticalGap();
+                lines.emplace_back();
+                widths.push_back(0);
+            }
+
+            if (ch == ' ' || ch == '\n')
+                continue;
+
+            TextSymbol symbol(ch, x, y);
+            symbol.setFont(aFont);
+            lines.back().push_back(symbol);
+
+            x += glyphs->at(ch)->width() + aFont->horizontalGap();
             widths.back() = x;
-            x = 0;
-            y += font()->height() + font()->verticalGap();
-            lines.push_back(std::vector<TextSymbol>());
-            widths.push_back(0);
         }
-
-        if (*it == ' ' || *it == '\n') continue;
-
-
-        TextSymbol symbol(*it, x, y);
-        symbol.setFont(font());
-        lines.back().push_back(symbol);
-
-        x += font()->aaf()->glyphs()->at(symbol.chr())->width() + font()->horizontalGap();
-        widths.back() = x;
     }
 
     // Calculating textarea sizes if needed
-    if (_size.width() == 0)
-    {
-        _calculatedSize.setWidth(*std::max_element(widths.begin(), widths.end()));
-    }
-    if (_size.height() == 0)
-    {
-        _calculatedSize.setHeight(lines.size()*font()->height() + (lines.size() - 1)*font()->verticalGap());
-    }
+    _calculatedSize.setWidth(*std::max_element(widths.begin(), widths.end()));
+    _calculatedSize.setHeight(lines.size()*font()->height() + (lines.size() - 1)*font()->verticalGap());
 
     // Align
+    auto outlineFont = (_outlineColor != 0)
+                       ? ResourceManager::getInstance()->font(aFont->filename(), _outlineColor)
+                       : nullptr;
+
     for (unsigned i = 0; i != lines.size(); ++i)
     {
         auto& line = lines.at(i);
@@ -257,9 +286,9 @@ void TextArea::_calculate()
         if (_horizontalAlign != HorizontalAlign::LEFT)
         {
             xOffset = (_size.width() ? _size.width() : _calculatedSize.width()) - widths.at(i);
-            if(_horizontalAlign == HorizontalAlign::CENTER)
+            if (_horizontalAlign == HorizontalAlign::CENTER)
             {
-                xOffset =  xOffset / 2;
+                xOffset = xOffset / 2;
             }
         }
 
@@ -268,10 +297,8 @@ void TextArea::_calculate()
             symbol.setX(symbol.x() + xOffset);
             symbol.setY(symbol.y() + yOffset);
             // outline symbols
-            if (_outline)
+            if (_outlineColor != 0)
             {
-                auto outlineFont = ResourceManager::getInstance()->font(symbol.font()->filename(), _outlineColor);
-
                 _addOutlineSymbol(symbol, outlineFont,  0, -1);
                 _addOutlineSymbol(symbol, outlineFont,  0,  1);
                 _addOutlineSymbol(symbol, outlineFont, -1,  0);
@@ -308,9 +335,9 @@ void TextArea::render(bool eggTransparency)
 {
     if (_changed) _calculate();
 
+    auto pos = position();
     for (auto& symbol : _symbols)
     {
-        auto pos = position();
         symbol.render(pos.x(), pos.y());
     }
 }

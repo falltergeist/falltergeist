@@ -250,9 +250,9 @@ UI::TextArea* Object::floatMessage() const
     return _floatMessage.get();
 }
 
-void Object::setFloatMessage(std::unique_ptr<UI::TextArea> floatMessage)
+void Object::setFloatMessage(std::unique_ptr<UI::TextArea> message)
 {
-    _floatMessage = std::move(floatMessage);
+    _floatMessage = std::move(message);
 }
 
 static bool to_right_of(const Point& p1, const Point& p2)
@@ -277,7 +277,7 @@ void Object::renderText()
         {
             message->setPosition(_ui->position() + Point(
                 _ui->size().width() / 2 - message->size().width() / 2,
-                -4 - message->size().height()
+                -4 - message->textSize().height()
             ));
             message->render();
         }
