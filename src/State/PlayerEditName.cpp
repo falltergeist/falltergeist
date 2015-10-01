@@ -116,7 +116,6 @@ void PlayerEditName::init()
 
     _name = new UI::TextArea(Game::getInstance()->player()->name(), bgX+43, bgY+15);
     _name->addEventHandler("keydown", [this](Event::Event* event){ this->onTextAreaKeyDown(dynamic_cast<Event::Keyboard*>(event)); });
-    _name->calculateSize();
 
     _cursor = new UI::Image(5, 8);
     _cursor->setPosition(bgPos + Point(83, 15));
@@ -197,7 +196,7 @@ void PlayerEditName::think()
         _timer = SDL_GetTicks();
     }
 
-    _cursor->setPosition({bgX + _name->size().width() + 45, _cursor->position().y()});
+    _cursor->setPosition({bgX + _name->textSize().width() + 45, _cursor->position().y()});
 }
 
 void PlayerEditName::doBack()

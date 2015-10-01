@@ -200,8 +200,7 @@ void CritterDialog::addAnswer(const std::string& text)
     int y = 50;
     for (auto answer : _answers)
     {
-        answer->calculateSize();
-        y += answer->size().height() + 5;
+        y += answer->textSize().height() + 5;
     }
 
     auto answer = new UI::TextArea(line, 140, y);

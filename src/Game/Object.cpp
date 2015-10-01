@@ -252,7 +252,6 @@ UI::TextArea* Object::floatMessage() const
 
 void Object::setFloatMessage(std::unique_ptr<UI::TextArea> message)
 {
-    if (message) message->calculateSize();
     _floatMessage = std::move(message);
 }
 
@@ -278,7 +277,7 @@ void Object::renderText()
         {
             message->setPosition(_ui->position() + Point(
                 _ui->size().width() / 2 - message->size().width() / 2,
-                -4 - message->size().height()
+                -4 - message->textSize().height()
             ));
             message->render();
         }

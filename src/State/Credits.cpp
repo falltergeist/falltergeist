@@ -101,8 +101,7 @@ void Credits::init()
         tx->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
         addUI(tx);
         _lines.push_back(tx);
-        tx->calculateSize();
-        y += tx->size().height() + cur_font->verticalGap() + additionalGap;
+        y += tx->textSize().height() + cur_font->verticalGap() + additionalGap;
     }
     _lastTicks=SDL_GetTicks();
 }

@@ -39,6 +39,9 @@ class TextSymbol;
 namespace UI
 {
 
+/**
+ * Represents a block of text on screen.
+ */
 class TextArea : public Falltergeist::UI::Base
 {
 public:
@@ -56,15 +59,45 @@ public:
         BOTTOM,
         JUSTIFY
     };
+    /**
+     * Creates empty TextArea at the given position.
+     */
     TextArea(const Point& pos = Point());
+
+    /**
+     * Creates empty TextArea at the given position.
+     */
     TextArea(int x = 0, int y = 0);
+
+    /**
+     * Creates TextArea with given text at the given position.
+     */
     TextArea(const std::string& text, const Point& pos = Point());
+
+    /**
+     * Creates TextArea with given text at the given position.
+     */
     TextArea(const std::string& text, int x, int y);
+
+    /**
+     * Creates TextArea as copy of another TextArea, placed at the given position (0,0 by default).
+     */
     TextArea(const TextArea& textArea, Point pos = Point());
     ~TextArea() override;
 
+    /**
+     * Current text content.
+     */
     std::string text() const;
+
+    /**
+     * Replaces text content. Line break character \n is used to span text to multiple lines.
+     */
     void setText(const std::string& text);
+
+    /**
+     * Appends given string to existing text. Line break character \n is used to span text to multiple lines.
+     */
     void appendText(const std::string& text);
 
     HorizontalAlign horizontalAlign() const;
@@ -74,41 +107,108 @@ public:
     void setVerticalAlign(VerticalAlign align);
 
     /**
-     * Actual size of text area. It's either fixed value given to setSize() or previously calculated size.
+     * Size of text area. It's either fixed value given to setSize() or previously calculated size.
      */
     Size size() const override;
+    /**
+     * Sets fixed size of TextArea. If this is not (0, 0) - calls to size() will always return this value,
+     * regardless of actual width/height of TextArea on screen.
+     * If wordWrap is also set to true, lines width will be limited to width provided.
+     */
     void setSize(const Size& size);
-    void calculateSize();
+
+    /**
+     * Size of actual text content of the text area.
+     */
+    Size textSize();
 
     void setWidth(int width);
 
+    /**
+     * Whether Word Wrap is currently enabled or not.
+     */
     bool wordWrap() const;
+
+    /**
+     * Enables or disabled Word Wrap for this control - automatic splitting of lines when they are longer then size().width().
+     */
     void setWordWrap(bool wordWrap);
-    
+
+    /**
+     * Whether text outline is currently enabled or not.
+     */
     bool outline() const;
+
+    /**
+     * Enables or disables text outline. Default outline color is black.
+     */
     void setOutline(bool outLine);
-    
+
+    /**
+     * Current outline color.
+     */
     unsigned int outlineColor() const;
+
+    /**
+     * Sets text outline color. 0 - disables outline, any other color will enable it.
+     */
     void setOutlineColor(unsigned int color);
 
     Font* font();
     void setFont(Font* font);
+
+    /**
+     * Sets font by font filename and color.
+     */
+    void setFont(const std::string& fontName, unsigned int color);
+
+    /**
+     * Current font filename.
+     */
+    std::string fontName();
 
     void render(bool eggTransparency = false) override;
     unsigned int pixel(const Point& pos) override;
 
     unsigned int timestampCreated() const;
 
+    /**
+     * Appends given string to current text.
+     */
     TextArea& operator<<(const std::string& text);
+    /**
+     * Appends string representation of given number.
+     */
     TextArea& operator<<(unsigned value);
+    /**
+     * Appends string representation of given number.
+     */
     TextArea& operator<<(signed value);
 
+    /**
+     * Appends given string to current text.
+     */
     TextArea& operator+=(const std::string& text);
+    /**
+     * Appends string representation of given number.
+     */
     TextArea& operator+=(unsigned value);
+    /**
+     * Appends string representation of given number.
+     */
     TextArea& operator+=(signed value);
 
+    /**
+     * Replaces text content.
+     */
     TextArea& operator=(const std::string& text);
+    /**
+     * Replaces content with string representation of given number.
+     */
     TextArea& operator=(unsigned value);
+    /**
+     * Replaces content with string representation of given number.
+     */
     TextArea& operator=(signed value);
 
 protected:
@@ -120,15 +220,21 @@ protected:
     HorizontalAlign _horizontalAlign = HorizontalAlign::LEFT;
     VerticalAlign _verticalAlign = VerticalAlign::TOP;
 
+    /**
+     * User-defined size. 0 for each dimension represents "auto-size" for this dimension, so size() will return calculated size.
+     */
     Size _size;
 
-    // not used when _width || _height are set manualy
+    /**
+     * Real size of TextArea on screen, as determined by previous _calculate() call.
+     */
     Size _calculatedSize;
 
-    bool _wordWrap = true;
-    bool _outline = false;
+    bool _wordWrap = false;
 
+    // TODO: implement
     unsigned int _backgroundColor = 0;
+
     unsigned int _outlineColor = 0;
     unsigned int _timestampCreated = 0;
 
