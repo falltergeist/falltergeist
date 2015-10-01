@@ -79,8 +79,8 @@ public:
     void removeItem(InventoryItem* item, unsigned int ammount);
 
 protected:
-    std::vector<Game::ItemObject*>* _items = 0;
-    InventoryItem* _draggedItem = 0;
+    std::vector<Game::ItemObject*>* _items = nullptr;
+    InventoryItem* _draggedItem = nullptr;
     std::vector<std::unique_ptr<InventoryItem>> _inventoryItems;
     InventoryItem::Type _type = InventoryItem::Type::INVENTORY;
     unsigned int _slotsNumber = 7; // Height of widget in items

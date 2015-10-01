@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Audio/Mixer.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
 #include "../Game/ArmorItemObject.h"
@@ -31,6 +32,7 @@
 #include "../Game/ItemObject.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
+#include "../Input/Mouse.h"
 #include "../Logger.h"
 #include "../Point.h"
 #include "../UI/InventoryItem.h"
@@ -70,8 +72,7 @@ void ItemsList::update()
 
     for (unsigned int i = _slotOffset; i < items()->size() && i != _slotOffset + _slotsNumber; i++)
     {
-        auto inventoryItem = std::unique_ptr<InventoryItem>(new InventoryItem(items()->at(i)));
-        _inventoryItems.push_back(std::move(inventoryItem));
+        _inventoryItems.push_back(std::unique_ptr<InventoryItem>(new InventoryItem(items()->at(i))));
     }
 }
 
@@ -112,28 +113,41 @@ void ItemsList::onMouseLeftDown(Event::Mouse* event)
 void ItemsList::onMouseDragStart(Event::Mouse* event)
 {
     unsigned int index = (event->position().y() - y())/_slotHeight;
-    _draggedItem = _inventoryItems.at(index).get();
-    _draggedItem->setType(InventoryItem::Type::DRAG);
-    _draggedItem->setPosition(event->position());
-    Logger::critical() << "mousedragstart at " << index << " (" << _draggedItem->item()->name() << ")" << std::endl;
+    if (index < _inventoryItems.size())
+    {
+        Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
+        Game::getInstance()->mixer()->playACMSound("sound/sfx/ipickup1.acm");
+        _draggedItem = _inventoryItems.at(index).get();
+        _draggedItem->setType(InventoryItem::Type::DRAG);
+        _draggedItem->setOffset((event->position() - _draggedItem->position()) - (_draggedItem->size() / 2));
+        Logger::critical() << "mousedragstart at " << index << " (" << _draggedItem->item()->name() << ")" << std::endl;
+    }
 }
 
 void ItemsList::onMouseDrag(Event::Mouse* event)
 {
-    _draggedItem->setOffset(_draggedItem->offset() + event->offset());
-    Logger::critical() << "mousedrag" << std::endl;
+    if (_draggedItem)
+    {
+        _draggedItem->setOffset(_draggedItem->offset() + event->offset());
+    }
+    Logger::critical() << "mousedrag " << event->position() << ", " << event->offset() << std::endl;
 }
 
 void ItemsList::onMouseDragStop(Event::Mouse* event)
 {
-    _draggedItem->setOffset(0, 0);
-    _draggedItem->setType(_type);
-    auto itemevent = new Event::Mouse("itemdragstop");
-    itemevent->setPosition(event->position());
-    itemevent->setEmitter(this);
-    emitEvent(itemevent);
-    delete itemevent;
-    _draggedItem = 0;
+    if (_draggedItem)
+    {
+        Game::getInstance()->mouse()->popState();
+        Game::getInstance()->mixer()->playACMSound("sound/sfx/iputdown.acm");
+        _draggedItem->setOffset(0, 0);
+        _draggedItem->setType(_type);
+        auto itemevent = new Event::Mouse("itemdragstop");
+        itemevent->setPosition(event->position());
+        itemevent->setEmitter(this);
+        emitEvent(itemevent);
+        delete itemevent;
+        _draggedItem = nullptr;
+    }
     Logger::critical() << "mousedragstop" << std::endl;
 }
 
