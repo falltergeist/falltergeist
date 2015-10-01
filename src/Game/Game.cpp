@@ -128,18 +128,18 @@ void Game::popState()
 {
     if (_states.size() == 0) return;
 
-    auto& state = _states.back();
-    auto findIt = std::find(_activeStates.rbegin(), _activeStates.rend(), state.get());
+    State::State* state = _states.back().get();
+    auto findIt = std::find(_activeStates.rbegin(), _activeStates.rend(), state);
     if (findIt != _activeStates.rend())
     {
         _activeStates.erase(findIt.base() - 1);
     }
+    _statesForDelete.emplace_back(std::move(_states.back()));
+    _states.pop_back();
+
     auto event = new Event::State("deactivate");
     state->emitEvent(event);
     delete event;
-
-    _statesForDelete.emplace_back(std::move(state));
-    _states.pop_back();
 }
 
 void Game::setState(State::State* state)
@@ -258,7 +258,7 @@ std::vector<State::State*> Game::_getActiveStates()
     // active states
     for (; it != _states.rend(); ++it)
     {
-        auto& state = *it;
+        auto state = it->get();
         if (!state->active())
         {
             auto event = new Event::State("activate");
@@ -266,7 +266,7 @@ std::vector<State::State*> Game::_getActiveStates()
             state->setActive(true);
             delete event;
         }
-        subset.push_back(state.get());
+        subset.push_back(state);
         if (state->modal() || state->fullscreen())
         {
             ++it;
@@ -276,7 +276,7 @@ std::vector<State::State*> Game::_getActiveStates()
     // not active states
     for (; it != _states.rend(); ++it)
     {
-        auto& state = *it;
+        auto state = it->get();
         if (state->active())
         {
             auto event = new Event::State("deactivate");
