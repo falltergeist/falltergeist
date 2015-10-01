@@ -37,8 +37,6 @@
 // Third party includes
 #include <SDL.h>
 
-using namespace std;
-
 namespace Falltergeist
 {
 namespace UI
@@ -53,13 +51,13 @@ TextArea::TextArea(int x, int y) : TextArea(Point(x, y))
 {
 }
 
-TextArea::TextArea(const string& text, const Point& pos) : Base(pos)
+TextArea::TextArea(const std::string& text, const Point& pos) : Base(pos)
 {
     _timestampCreated = SDL_GetTicks();
     setText(text);
 }
 
-TextArea::TextArea(const string& text, int x, int y) : TextArea(text, Point(x, y))
+TextArea::TextArea(const std::string& text, int x, int y) : TextArea(text, Point(x, y))
 {
 }
 
@@ -79,7 +77,7 @@ TextArea::~TextArea()
 {
 }
 
-void TextArea::appendText(const string& text)
+void TextArea::appendText(const std::string& text)
 {
     _text += text;
     _changed = true;
@@ -109,7 +107,7 @@ void TextArea::setVerticalAlign(VerticalAlign align)
     _changed = true;
 }
 
-void TextArea::setText(const string& text)
+void TextArea::setText(const std::string& text)
 {
     _text = text;
     _changed = true;
@@ -202,13 +200,13 @@ void TextArea::_calculate()
     unsigned x = 0, wordWidth = 0;
     unsigned y = 0;
 
-    vector<vector<TextSymbol>> lines = {vector<TextSymbol>()};
-    vector<unsigned> widths = {0};
+    std::vector<std::vector<TextSymbol>> lines = {std::vector<TextSymbol>()};
+    std::vector<unsigned> widths = {0};
 
     // Parsing lines of text
     // Cutting lines when it is needed (\n or when exceeding _width)
-    istringstream istream(_text);
-    string word;
+    std::istringstream istream(_text);
+    std::string word;
     auto aFont = font();
     auto glyphs = aFont->aaf()->glyphs();
     while (istream >> word)
@@ -317,7 +315,7 @@ void TextArea::_addOutlineSymbol(const TextSymbol& symb, Font* font, int32_t ofs
     _symbols.back().setFont(font);
 }
 
-string TextArea::text() const
+std::string TextArea::text() const
 {
     return _text;
 }
@@ -338,7 +336,7 @@ void TextArea::render(bool eggTransparency)
     }
 }
 
-TextArea& TextArea::operator<<(const string& text)
+TextArea& TextArea::operator<<(const std::string& text)
 {
     appendText(text);
     return *this;
@@ -356,7 +354,7 @@ TextArea& TextArea::operator<<(signed value)
     return *this;
 }
 
-TextArea& TextArea::operator=(const string& text)
+TextArea& TextArea::operator=(const std::string& text)
 {
     setText(text);
     return *this;
@@ -374,7 +372,7 @@ TextArea& TextArea::operator=(signed value)
     return *this;
 }
 
-TextArea& TextArea::operator+=(const string& text)
+TextArea& TextArea::operator+=(const std::string& text)
 {
     appendText(text);
     return *this;
