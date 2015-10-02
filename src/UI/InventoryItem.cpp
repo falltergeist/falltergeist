@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Audio/Mixer.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
 #include "../Game/DudeObject.h"
@@ -30,6 +31,7 @@
 #include "../Game/ItemObject.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
+#include "../Input/Mouse.h"
 #include "../Logger.h"
 #include "../Point.h"
 #include "../UI/Image.h"
@@ -119,6 +121,8 @@ void InventoryItem::onMouseLeftDown(Event::Mouse* event)
 
 void InventoryItem::onMouseDragStart(Event::Mouse* event)
 {
+    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
+    Game::getInstance()->mixer()->playACMSound("sound/sfx/ipickup1.acm");
     _oldType = type();
     setType(Type::DRAG);
 }
@@ -130,6 +134,8 @@ void InventoryItem::onMouseDrag(Event::Mouse* event)
 
 void InventoryItem::onMouseDragStop(Event::Mouse* event)
 {
+    Game::getInstance()->mouse()->popState();
+    Game::getInstance()->mixer()->playACMSound("sound/sfx/iputdown.acm");
     setOffset({0, 0});
     setType(_oldType);
 
@@ -151,6 +157,7 @@ void InventoryItem::onArmorDragStop(Event::Mouse* event)
 
     if (ItemsList* itemsList = dynamic_cast<ItemsList*>(event->emitter()))
     {
+
         InventoryItem* draggedItem = itemsList->draggedItem();
         auto itemObject = draggedItem->item();
         itemsList->removeItem(draggedItem, 1);
@@ -177,22 +184,29 @@ void InventoryItem::onHandDragStop(Event::Mouse* event)
 
     if (ItemsList* itemsList = dynamic_cast<ItemsList*>(event->emitter()))
     {
-        InventoryItem* item = itemsList->draggedItem();
-        itemsList->removeItem(item, 1);
+        InventoryItem* itemUi = itemsList->draggedItem();
+        auto item = itemUi->item();
+        itemsList->removeItem(itemUi, 1);
         // place current weapon back to inventory
         if (_item)
         {
             itemsList->addItem(this, 1);
         }
-        this->setItem(item->item());
+        this->setItem(item);
     }
 }
 
 Size InventoryItem::size() const
 {
-    return type() == Type::SLOT
-           ? Size(90, 63)
-           : Size(70, 49);
+    switch (_type)
+    {
+        case Type::INVENTORY:
+            return Size(70, 49);
+        case Type::SLOT:
+            return Size(90, 63);
+        default:
+            return Base::size();
+    }
 }
 
 }
