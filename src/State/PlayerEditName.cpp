@@ -132,7 +132,7 @@ void PlayerEditName::init()
 
 void PlayerEditName::onTextAreaKeyDown(Event::Keyboard* event)
 {
-    auto sender = dynamic_cast<UI::TextArea*>(event->emitter());
+    auto sender = dynamic_cast<UI::TextArea*>(event->target());
 
     std::string text = sender->text();
 

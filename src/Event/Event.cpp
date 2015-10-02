@@ -71,21 +71,21 @@ void Event::setName(const std::string& name)
 }
 
 /**
- * @brief Returns event emitter
- * @return Event emitter
+ * @brief Returns event target
+ * @return Event target
  */
-Emitter* Event::emitter() const
+EventTarget* Event::target() const
 {
-    return _emitter;
+    return _target;
 }
 
 /**
- * @brief Sets event emitter
- * @param[in] value Event emitter
+ * @brief Sets event target
+ * @param[in] value Event target
  */
-void Event::setEmitter(Emitter* value)
+void Event::setTarget(EventTarget* value)
 {
-    _emitter = value;
+    _target = value;
 }
 
 /**

@@ -38,6 +38,10 @@ namespace Audio
 {
     class Mixer;
 }
+namespace Event
+{
+    class Dispatcher;
+}
 namespace Graphics
 {
     class AnimatedPalette;
@@ -98,6 +102,7 @@ public:
     Time* gameTime();
     State::Location* locationState();
     Audio::Mixer* mixer();
+    Event::Dispatcher* eventDispatcher();
 
     void setGVAR(unsigned int number, int value);
     int GVAR(unsigned int number);
@@ -118,6 +123,7 @@ protected:
     std::unique_ptr<Input::Mouse> _mouse;
     std::unique_ptr<Settings> _settings;
     std::unique_ptr<Graphics::AnimatedPalette> _animatedPalette;
+    std::unique_ptr<Event::Dispatcher> _eventDispatcher;
 
     std::unique_ptr<UI::FpsCounter> _fpsCounter;
     std::unique_ptr<UI::TextArea> _mousePosition, _currentTime, _falltergeistVersion;

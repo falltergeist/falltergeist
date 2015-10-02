@@ -53,7 +53,7 @@ using Base::make_unique;
 namespace Game
 {
 
-Object::Object() : Event::Emitter()
+Object::Object() : Event::EventTarget()
 {
 }
 

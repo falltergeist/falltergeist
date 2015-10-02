@@ -28,6 +28,7 @@
 #include "../Audio/Mixer.h"
 #include "../Base/StlFeatures.h"
 #include "../CrossPlatform.h"
+#include "../Event/Dispatcher.h"
 #include "../Event/State.h"
 #include "../Exception.h"
 #include "../Game/Time.h"
@@ -74,6 +75,8 @@ void Game::init(std::unique_ptr<Settings> settings)
     _initialized = true;
 
     _settings = std::move(settings);
+
+    _eventDispatcher = make_unique<Event::Dispatcher>();
 
     _renderer = make_unique<Graphics::Renderer>(_settings->screenWidth(), _settings->screenHeight());
 

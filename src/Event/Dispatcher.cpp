@@ -17,17 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_EVENT_EMITTER_H
-#define FALLTERGEIST_EVENT_EMITTER_H
+// Related headers
+#include "../Event/Dispatcher.h"
 
 // C++ standard includes
-#include <functional>
-#include <map>
-#include <memory>
-#include <string>
-#include <vector>
 
 // Falltergeist includes
+#include "../Event/EventTarget.h"
 
 // Third party includes
 
@@ -35,21 +31,40 @@ namespace Falltergeist
 {
 namespace Event
 {
-class Event;
 
-class Emitter
+void Dispatcher::postEventHandler(EventTarget* eventTarget, std::unique_ptr<Event> event)
 {
-protected:
-    std::map<std::string, std::vector<std::function<void(Event*)>>> _eventHandlers;
-public:
-    Emitter();
-    virtual ~Emitter();
+    _scheduledTasks.emplace_back(eventTarget, std::move(event));
+}
 
-    void addEventHandler(const std::string& eventName, std::function<void(Event*)> handler);
-    void emitEvent(Event* event);
-    void removeEventHandlers(const std::string& eventName);
-};
+void Dispatcher::processScheduledEvents()
+{
+    using std::swap;
+
+    while (!_scheduledTasks.empty())
+    {
+        swap(_tasksInProcess, _scheduledTasks);
+        for (auto& task : _tasksInProcess)
+        {
+            if (task.first != nullptr)
+            {
+                task.first->processEvent(std::move(task.second));
+            }
+        }
+        _tasksInProcess.clear();
+    }
+}
+
+void Dispatcher::blockEventHandlers(EventTarget* eventTarget)
+{
+    for (auto& pair : _tasksInProcess)
+    {
+        if (pair.first == eventTarget)
+        {
+            pair.first = nullptr;
+        }
+    }
+}
 
 }
 }
-#endif // FALLTERGEIST_EVENT_EMITTER_H

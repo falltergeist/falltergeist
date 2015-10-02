@@ -27,7 +27,7 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Event/Emitter.h"
+#include "EventTarget.h"
 
 // Third party includes
 
@@ -84,7 +84,7 @@ public:
 };
 
 
-class Object : public Event::Emitter
+class Object : public Event::EventTarget
 {
 public:
     // Object type as defined in prototype

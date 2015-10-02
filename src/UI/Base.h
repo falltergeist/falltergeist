@@ -24,7 +24,7 @@
 #include <memory>
 
 // Falltergeist includes
-#include "../Event/Emitter.h"
+#include "EventTarget.h"
 #include "../Point.h"
 
 // Third party includes
@@ -39,7 +39,7 @@ namespace Graphics
 namespace UI
 {
 
-class Base : public Event::Emitter
+class Base : public Event::EventTarget
 {
 public:
     Base(int x = 0, int y = 0);

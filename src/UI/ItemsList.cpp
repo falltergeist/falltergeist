@@ -143,7 +143,7 @@ void ItemsList::onMouseDragStop(Event::Mouse* event)
         _draggedItem->setType(_type);
         auto itemevent = new Event::Mouse("itemdragstop");
         itemevent->setPosition(event->position());
-        itemevent->setEmitter(this);
+        itemevent->setTarget(this);
         emitEvent(itemevent);
         delete itemevent;
         _draggedItem = nullptr;
@@ -161,7 +161,7 @@ void ItemsList::onItemDragStop(Event::Mouse* event)
         return;
     }
 
-    if (auto itemsList = dynamic_cast<ItemsList*>(event->emitter()))
+    if (auto itemsList = dynamic_cast<ItemsList*>(event->target()))
     {
         // @todo create addItem method
         this->addItem(itemsList->draggedItem(), 1);
@@ -170,7 +170,7 @@ void ItemsList::onItemDragStop(Event::Mouse* event)
         itemsList->update();
     }
 
-    if (auto inventoryItem = dynamic_cast<UI::InventoryItem*>(event->emitter()))
+    if (auto inventoryItem = dynamic_cast<UI::InventoryItem*>(event->target()))
     {
         // @todo create addItem method
         this->addItem(inventoryItem, 1);

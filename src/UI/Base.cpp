@@ -46,7 +46,7 @@ Base::Base(int x, int y) : Base(Point(x, y))
 {
 }
 
-Base::Base(const Point& pos) : Event::Emitter()
+Base::Base(const Point& pos) : Event::EventTarget()
 {
     _position = pos;
 }

@@ -465,7 +465,7 @@ void PlayerEdit::think()
 
 void PlayerEdit::onButtonClick(Event::Mouse* event)
 {
-    auto sender = dynamic_cast<UI::ImageButton*>(event->emitter());
+    auto sender = dynamic_cast<UI::ImageButton*>(event->target());
 
     for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
     {
@@ -485,8 +485,8 @@ void PlayerEdit::onLabelClick(Event::Mouse* event)
     for(auto it = _labels.begin(); it != _labels.end(); ++it)
     {
         std::string name = it->first;
-//        if (it->second.get() == event->emitter())
-        if (it->second == event->emitter())
+//        if (it->second.get() == event->target())
+        if (it->second == event->target())
         {
 //            if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0 || name.find("label_") == 0 || name.find("level_") == 0 )
             if (name.find("stats_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0 || name.find("label_") == 0 || name.find("level_") == 0 )
@@ -508,7 +508,7 @@ void PlayerEdit::onMaskClick(Event::Mouse* event)
 {
     for(auto it = _masks.begin(); it != _masks.end(); ++it)
     {
-        if (it->second == event->emitter())
+        if (it->second == event->target())
         {
             std::string name = it->first;
             if (name.find("stats_") == 0)
