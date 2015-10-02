@@ -182,7 +182,12 @@ Size Base::size() const
 
 unsigned int Base::pixel(const Point& pos)
 {
-    return texture() ? texture()->pixel(pos.x(), pos.y()) : 0;
+    if (_tmptex)
+    {
+        return _tmptex->pixel((unsigned)pos.x(), (unsigned)pos.y()) & 0xFF; // return only alpha channel
+    }
+    auto tex = texture();
+    return tex ? tex->pixel((unsigned)pos.x(), (unsigned)pos.y()) : 0;
 }
 
 unsigned int Base::pixel(unsigned int x, unsigned int y)

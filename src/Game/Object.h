@@ -266,7 +266,7 @@ protected:
     virtual bool _useEggTransparency();
 
 private:
-    bool _getEggTransparency();
+    bool _isIntersectsWithEgg();
 
 };
 
