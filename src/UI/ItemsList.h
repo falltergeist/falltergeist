@@ -21,6 +21,7 @@
 #define FALLTERGEIST_UI_ITEMSLIST_H
 
 // C++ standard includes
+#include <vector>
 
 // Falltergeist includes
 #include "../UI/Base.h"

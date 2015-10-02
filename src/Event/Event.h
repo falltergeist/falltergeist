@@ -57,7 +57,13 @@ public:
     void setTarget(EventTarget* value);
 
     bool handled() const;
-    void setHandled(bool value);
+    /**
+     * @brief Sets that event is handled or not.
+     * If called from within handle(Event*) function, affects event capturing process by preventing OS Event to "fall down" to other elements.
+     * If called from within the event handler function, prevents other handlers of the same event to be called.
+     * @param value the handled flag.
+     */
+    void setHandled(bool value = true);
 
 protected:
     /// Is event handled or not

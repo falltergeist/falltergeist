@@ -97,10 +97,6 @@ bool Event::handled() const
     return _handled;
 }
 
-/**
- * @brief Sets that event is handled or not
- * @param[in] value Is event handled or not
- */
 void Event::setHandled(bool value)
 {
     _handled = value;

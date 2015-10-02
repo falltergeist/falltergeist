@@ -27,6 +27,7 @@
 
 // Falltergeist includes
 #include "../Event/Event.h"
+#include "../Event/EventTarget.h"
 
 // Third party includes
 
@@ -34,20 +35,24 @@ namespace Falltergeist
 {
 namespace Event
 {
-class EventTarget;
 
 class Dispatcher
 {
 public:
-    using Task = std::pair<EventTarget*, std::unique_ptr<Event>>;
-
     Dispatcher() {}
 
-    void postEventHandler(EventTarget*, std::unique_ptr<Event> event);
+    void scheduleEvent(std::unique_ptr<Event> event, std::list<EventHandler>* handlers);
     void processScheduledEvents();
     void blockEventHandlers(EventTarget* eventTarget);
 
 private:
+    struct Task
+    {
+        Task(std::unique_ptr<Event> event, std::list<EventHandler>* handlers);
+        std::unique_ptr<Event> event;
+        std::list<EventHandler>* handlers;
+    };
+
     Dispatcher(const Dispatcher&) = delete;
     void operator=(const Dispatcher&) = delete;
 

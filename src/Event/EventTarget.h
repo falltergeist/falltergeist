@@ -22,10 +22,10 @@
 
 // C++ standard includes
 #include <functional>
+#include <list>
 #include <map>
 #include <memory>
 #include <string>
-#include <vector>
 
 // Falltergeist includes
 
@@ -39,20 +39,24 @@ class Event;
 
 class Dispatcher;
 
+// TODO: make proper class with implicit conversion constructors
+using EventHandler = std::function<void(Event*)>;
+
 class EventTarget
 {
 public:
+
     EventTarget(Dispatcher* eventDispatcher);
     virtual ~EventTarget();
 
     /**
      * Adds event handler to given event name.
      */
-    void addEventHandler(const std::string& eventName, std::function<void(Event*)> handler);
+    void addEventHandler(const std::string& eventName, EventHandler handler);
     /**
      * Immediately start processing of event by calling each associated handler.
      */
-    void processEvent(Event* event);
+    //void processEvent(Event* event);
     /**
      * Emit given event to Event Dispatcher for delayed processing.
      */
@@ -63,7 +67,7 @@ public:
     void removeEventHandlers(const std::string& eventName);
 
 protected:
-    std::map<std::string, std::vector<std::function<void(Event*)>>> _eventHandlers;
+    std::map<std::string, std::list<EventHandler>> _eventHandlers;
     Dispatcher* _eventDispatcher;
 };
 

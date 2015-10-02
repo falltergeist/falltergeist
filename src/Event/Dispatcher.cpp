@@ -32,23 +32,34 @@ namespace Falltergeist
 namespace Event
 {
 
-void Dispatcher::postEventHandler(EventTarget* eventTarget, std::unique_ptr<Event> event)
+Dispatcher::Task::Task(std::unique_ptr<Event> event, std::list<EventHandler>* handlers)
+    : event(std::move(event)), handlers(handlers)
 {
-    _scheduledTasks.emplace_back(eventTarget, std::move(event));
+}
+
+void Dispatcher::scheduleEvent(std::unique_ptr<Event> event, std::list<EventHandler>* handlers)
+{
+    _scheduledTasks.emplace_back(std::move(event), handlers);
 }
 
 void Dispatcher::processScheduledEvents()
 {
-    using std::swap;
-
     while (!_scheduledTasks.empty())
     {
         swap(_tasksInProcess, _scheduledTasks);
-        for (auto& task : _tasksInProcess)
+        for (Task& task : _tasksInProcess)
         {
-            if (task.first != nullptr)
+            // after previous tasks this target might already be "dead"
+            if (task.handlers != nullptr)
             {
-                task.first->processEvent(task.second.get());
+                task.event->setHandled(false);
+                for (auto& handler : *task.handlers)
+                {
+                    handler(task.event.get());
+                    // handler may set handled flag to true - to stop other handlers from executing
+                    // also, target may be deleted by any handler, so we should check that on every iteration
+                    if (task.event->handled() || task.handlers == nullptr) break;
+                }
             }
         }
         _tasksInProcess.clear();
@@ -59,13 +70,14 @@ void Dispatcher::blockEventHandlers(EventTarget* eventTarget)
 {
     _scheduledTasks.remove_if([eventTarget](Dispatcher::Task& task)
     {
-        return (task.first == eventTarget);
+        return (task.event->target() == eventTarget);
     });
-    for (auto& pair : _tasksInProcess)
+    for (auto& task : _tasksInProcess)
     {
-        if (pair.first == eventTarget)
+        if (task.event->target() == eventTarget)
         {
-            pair.first = nullptr;
+            task.event->setTarget(nullptr);
+            task.handlers = nullptr;
         }
     }
 }

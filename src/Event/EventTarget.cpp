@@ -39,32 +39,38 @@ EventTarget::EventTarget(Dispatcher* eventDispatcher) : _eventDispatcher(eventDi
 
 EventTarget::~EventTarget()
 {
+    // notify Event Dispatcher that this target was deleted, it should not process any further events for this object
     _eventDispatcher->blockEventHandlers(this);
 }
 
-void EventTarget::addEventHandler(const std::string& eventName, std::function<void(Event*)> handler)
+void EventTarget::addEventHandler(const std::string& eventName, EventHandler handler)
 {
     _eventHandlers[eventName].push_back(handler);
 }
 
-void EventTarget::processEvent(Event* event)
+/*void EventTarget::processEvent(Event* event)
 {
     const auto it = _eventHandlers.find(event->name());
     event->setHandled(false);
     if (it != _eventHandlers.end())
     {
         event->setTarget(this);
-        for (auto eventHandler : it->second)
+        for (auto& eventHandler : it->second)
         {
             if (event->handled()) return;
             eventHandler(event);
         }
     }
-}
+}*/
 
 void EventTarget::emitEvent(std::unique_ptr<Event> event)
 {
-    _eventDispatcher->postEventHandler(this, std::move(event));
+    const auto it = _eventHandlers.find(event->name());
+    if (it != _eventHandlers.end())
+    {
+        event->setTarget(this);
+        _eventDispatcher->scheduleEvent(std::move(event), &it->second);
+    }
 }
 
 void EventTarget::removeEventHandlers(const std::string& eventName)
@@ -72,7 +78,6 @@ void EventTarget::removeEventHandlers(const std::string& eventName)
     const auto it = _eventHandlers.find(eventName);
     if (it != _eventHandlers.end())
     {
-        it->second.clear();
         _eventHandlers.erase(it);
     }
 }

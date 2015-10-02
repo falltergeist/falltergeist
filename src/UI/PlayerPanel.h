@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <memory>
+#include <vector>
 
 // Falltergeist includes
 #include "../UI/Base.h"
