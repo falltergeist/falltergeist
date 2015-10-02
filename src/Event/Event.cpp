@@ -89,7 +89,7 @@ void Event::setTarget(EventTarget* value)
 }
 
 /**
- * @brief Returns if event is handled or not
+ * @brief Returns if event is handled or not.
  * @return Is event handled or not
  */
 bool Event::handled() const

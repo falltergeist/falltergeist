@@ -35,6 +35,18 @@ Keyboard::Keyboard(const std::string& name) : Event(name)
 {
 }
 
+Keyboard::Keyboard(const Keyboard& event, const std::string& newName) : Event(newName)
+{
+    _keyCode = event._keyCode;
+    _shiftPressed = event._shiftPressed;
+    _controlPressed = event._controlPressed;
+    _altPressed = event._altPressed;
+}
+
+Keyboard::Keyboard(const Keyboard& event) : Keyboard(event, event._name)
+{
+}
+
 Keyboard::~Keyboard()
 {
 }

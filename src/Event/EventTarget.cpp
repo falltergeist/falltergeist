@@ -39,7 +39,7 @@ EventTarget::EventTarget(Dispatcher* eventDispatcher) : _eventDispatcher(eventDi
 
 EventTarget::~EventTarget()
 {
-
+    _eventDispatcher->blockEventHandlers(this);
 }
 
 void EventTarget::addEventHandler(const std::string& eventName, std::function<void(Event*)> handler)
@@ -47,7 +47,7 @@ void EventTarget::addEventHandler(const std::string& eventName, std::function<vo
     _eventHandlers[eventName].push_back(handler);
 }
 
-void EventTarget::processEvent(std::unique_ptr<Event> event)
+void EventTarget::processEvent(Event* event)
 {
     const auto it = _eventHandlers.find(event->name());
     event->setHandled(false);

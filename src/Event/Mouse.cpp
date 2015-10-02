@@ -35,7 +35,7 @@ Mouse::Mouse(const std::string& name) : Event(name)
 {
 }
 
-Mouse::Mouse(const Mouse& event) : Event("mouse")
+Mouse::Mouse(const Mouse& event, const std::string& newName) : Event(newName)
 {
     _position = event._position;
     _offset = event._offset;
@@ -43,7 +43,10 @@ Mouse::Mouse(const Mouse& event) : Event("mouse")
     _rightButton = event._rightButton;
     _shiftPressed = event._shiftPressed;
     _controlPressed = event._controlPressed;
-    _name = event._name;
+}
+
+Mouse::Mouse(const Mouse& event) : Mouse(event, event._name)
+{
 }
 
 Mouse::~Mouse()

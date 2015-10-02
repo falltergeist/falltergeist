@@ -140,9 +140,7 @@ void Game::popState()
     _statesForDelete.emplace_back(std::move(_states.back()));
     _states.pop_back();
 
-    auto event = new Event::State("deactivate");
-    state->emitEvent(event);
-    delete event;
+    state->emitEvent(make_unique<Event::State>("deactivate"));
 }
 
 void Game::setState(State::State* state)
@@ -264,10 +262,8 @@ std::vector<State::State*> Game::_getActiveStates()
         auto state = it->get();
         if (!state->active())
         {
-            auto event = new Event::State("activate");
-            state->emitEvent(event);
+            state->emitEvent(make_unique<Event::State>("activate"));
             state->setActive(true);
-            delete event;
         }
         subset.push_back(state);
         if (state->modal() || state->fullscreen())
@@ -282,10 +278,8 @@ std::vector<State::State*> Game::_getActiveStates()
         auto state = it->get();
         if (state->active())
         {
-            auto event = new Event::State("deactivate");
-            state->emitEvent(event);
+            state->emitEvent(make_unique<Event::State>("deactivate"));
             state->setActive(false);
-            delete event;
         }
     }
     return subset;
@@ -301,6 +295,60 @@ Settings* Game::settings() const
     return _settings.get();
 }
 
+std::unique_ptr<Event::Event> Game::_createEventFromSDL(const SDL_Event& sdlEvent)
+{
+    switch (sdlEvent.type)
+    {
+        case SDL_MOUSEBUTTONDOWN:
+        case SDL_MOUSEBUTTONUP:
+        {
+            SDL_Keymod mods = SDL_GetModState();
+            auto mouseEvent = make_unique<Event::Mouse>((sdlEvent.type == SDL_MOUSEBUTTONDOWN) ? "mousedown" : "mouseup");
+            mouseEvent->setPosition({sdlEvent.button.x, sdlEvent.button.y});
+            mouseEvent->setLeftButton(sdlEvent.button.button == SDL_BUTTON_LEFT);
+            mouseEvent->setRightButton(sdlEvent.button.button == SDL_BUTTON_RIGHT);
+            mouseEvent->setShiftPressed(mods & KMOD_SHIFT);
+            mouseEvent->setControlPressed(mods & KMOD_CTRL);
+            return mouseEvent;
+        }
+        case SDL_MOUSEMOTION:
+        {
+            auto mouseEvent = make_unique<Event::Mouse>("mousemove");
+            mouseEvent->setPosition({sdlEvent.motion.x, sdlEvent.motion.y});
+            mouseEvent->setOffset({sdlEvent.motion.xrel,sdlEvent.motion.yrel});
+            return mouseEvent;
+        }
+        case SDL_KEYDOWN:
+        {
+            auto keyboardEvent = make_unique<Event::Keyboard>("keydown");
+            keyboardEvent->setKeyCode(sdlEvent.key.keysym.sym);
+            keyboardEvent->setAltPressed(sdlEvent.key.keysym.mod & KMOD_ALT);
+            keyboardEvent->setShiftPressed(sdlEvent.key.keysym.mod & KMOD_SHIFT);
+            keyboardEvent->setControlPressed(sdlEvent.key.keysym.mod & KMOD_CTRL);
+            return keyboardEvent;
+        }
+        case SDL_KEYUP:
+        {
+            auto keyboardEvent = make_unique<Event::Keyboard>("keyup");
+            keyboardEvent->setKeyCode(sdlEvent.key.keysym.sym);
+            keyboardEvent->setAltPressed(sdlEvent.key.keysym.mod & KMOD_ALT);
+            keyboardEvent->setShiftPressed(sdlEvent.key.keysym.mod & KMOD_SHIFT);
+            keyboardEvent->setControlPressed(sdlEvent.key.keysym.mod & KMOD_CTRL);;
+
+            // TODO: maybe we should make Game an EventTarget too?
+            if (keyboardEvent->keyCode() == SDLK_F12)
+            {
+                auto texture = renderer()->screenshot();
+                std::string name = std::to_string(SDL_GetTicks()) +  ".bmp";
+                SDL_SaveBMP(texture->sdlSurface(), name.c_str());
+                Logger::info("GAME") << "Screenshot saved to " + name << std::endl;
+            }
+            return keyboardEvent;
+        }
+    }
+    return std::unique_ptr<Event::Event>();
+}
+
 void Game::handle()
 {
     if (_renderer->fading()) return;
@@ -313,64 +361,15 @@ void Game::handle()
         }
         else
         {
-            Event::Mouse* mouseEvent = nullptr;
-            Event::Keyboard* keyboardEvent = nullptr;
-            switch (_event.type)
+            auto event = _createEventFromSDL(_event);
+            if (event)
             {
-                case SDL_MOUSEBUTTONDOWN:
-                case SDL_MOUSEBUTTONUP:
-                {
-                    SDL_Keymod mods = SDL_GetModState();
-                    mouseEvent = new Event::Mouse((_event.type == SDL_MOUSEBUTTONDOWN) ? "mousedown" : "mouseup");
-                    mouseEvent->setPosition({_event.button.x, _event.button.y});
-                    mouseEvent->setLeftButton(_event.button.button == SDL_BUTTON_LEFT);
-                    mouseEvent->setRightButton(_event.button.button == SDL_BUTTON_RIGHT);
-                    mouseEvent->setShiftPressed(mods & KMOD_SHIFT);
-                    mouseEvent->setControlPressed(mods & KMOD_CTRL);
-                    for (auto state : _activeStates) state->handle(mouseEvent);
-                    break;
-                }
-                case SDL_MOUSEMOTION:
-                {
-                    mouseEvent = new Event::Mouse("mousemove");
-                    mouseEvent->setPosition({_event.motion.x, _event.motion.y});
-                    mouseEvent->setOffset({_event.motion.xrel,_event.motion.yrel});
-                    for (auto state : _activeStates) state->handle(mouseEvent);
-                    break;
-                }
-                case SDL_KEYDOWN:
-                {
-                    keyboardEvent = new Event::Keyboard("keydown");
-                    keyboardEvent->setKeyCode(_event.key.keysym.sym);
-                    keyboardEvent->setAltPressed(_event.key.keysym.mod & KMOD_ALT);
-                    keyboardEvent->setShiftPressed(_event.key.keysym.mod & KMOD_SHIFT);
-                    keyboardEvent->setControlPressed(_event.key.keysym.mod & KMOD_CTRL);
-                    for (auto state : _activeStates) state->handle(keyboardEvent);
-                    break;
-                }
-                case SDL_KEYUP:
-                {
-                    keyboardEvent = new Event::Keyboard("keyup");
-                    keyboardEvent->setKeyCode(_event.key.keysym.sym);
-                    keyboardEvent->setAltPressed(_event.key.keysym.mod & KMOD_ALT);
-                    keyboardEvent->setShiftPressed(_event.key.keysym.mod & KMOD_SHIFT);
-                    keyboardEvent->setControlPressed(_event.key.keysym.mod & KMOD_CTRL);;
-                    for (auto state : _activeStates) state->handle(keyboardEvent);
-
-                    if (keyboardEvent->keyCode() == SDLK_F12)
-                    {
-                        auto texture = renderer()->screenshot();
-                        std::string name = std::to_string(SDL_GetTicks()) +  ".bmp";
-                        SDL_SaveBMP(texture->sdlSurface(), name.c_str());
-                        Logger::info("GAME") << "Screenshot saved to " + name << std::endl;
-                    }
-                    break;
-                }
+                for (auto state : _activeStates) state->handle(event.get());
             }
-            delete keyboardEvent;
-            delete mouseEvent;
         }
     }
+
+    _eventDispatcher->processScheduledEvents();
 }
 
 void Game::think()
@@ -437,6 +436,11 @@ Time* Game::gameTime()
 Audio::Mixer* Game::mixer()
 {
     return _mixer.get();
+}
+
+Event::Dispatcher* Game::eventDispatcher()
+{
+    return _eventDispatcher.get();
 }
 
 }

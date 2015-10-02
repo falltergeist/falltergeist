@@ -26,7 +26,7 @@
 #include <vector>
 
 // Falltergeist includes
-#include "EventTarget.h"
+#include "../Event/EventTarget.h"
 #include "../Event/Keyboard.h"
 #include "../Event/Mouse.h"
 #include "../Point.h"
@@ -94,8 +94,21 @@ public:
     virtual bool initialized();
     virtual void init();
 
-    virtual void think();
+    /**
+     * @brief Handle all OS events (Mouse, Keyboard, etc.) by this state.
+     * Used in Event Capturing process.
+     * This method is called first in the main loop (before think() and render()).
+     */
     virtual void handle(Event::Event* event);
+    /**
+     * @brief Process all real-time logic of this state.
+     * This method is called after handle() but before render() in the main loop.
+     */
+    virtual void think();
+    /**
+     * @brief Renders all visible objects of this state on screen.
+     * This method is called last in the main loop (after handle() and think()).
+     */
     virtual void render();
 
     virtual void onStateActivate(Event::State* event);

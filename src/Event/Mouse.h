@@ -38,6 +38,7 @@ class Mouse : public Event
 {
 public:
     Mouse(const std::string& eventName = "mouse");
+    Mouse(const Mouse& event, const std::string& newName);
     Mouse(const Mouse& event);
     ~Mouse() override;
 

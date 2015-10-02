@@ -24,6 +24,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <Event/Event.h>
 
 // Falltergeist includes
 #include "../Base/Singleton.h"
@@ -91,8 +92,17 @@ public:
     void quit();
     void init(std::unique_ptr<Settings> settings);
 
+    /**
+     * @brief Handle all incoming events from OS (mouse, keyboard, etc.).
+     */
     void handle();
+    /**
+     * @brief Process real-time logic.
+     */
     void think();
+    /**
+     * @brief Render the game.
+     */
     void render();
 
     void setPlayer(DudeObject* player);
@@ -141,6 +151,7 @@ protected:
 private:
     friend class Base::Singleton<Game>;
     void _initGVARS();
+    std::unique_ptr<Event::Event> _createEventFromSDL(const SDL_Event& sdlEvent);
 
     Game();
     ~Game();

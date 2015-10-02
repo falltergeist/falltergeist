@@ -27,7 +27,6 @@
 #include "../Base/StlFeatures.h"
 #include "../Exception.h"
 #include "../Graphics/Renderer.h"
-#include "../Graphics/Texture.h"
 #include "../Game/CritterObject.h"
 #include "../Game/Defines.h"
 #include "../Game/DudeObject.h"
@@ -53,7 +52,7 @@ using Base::make_unique;
 namespace Game
 {
 
-Object::Object() : Event::EventTarget()
+Object::Object() : Event::EventTarget(Game::getInstance()->eventDispatcher())
 {
 }
 

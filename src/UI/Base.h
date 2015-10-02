@@ -24,7 +24,7 @@
 #include <memory>
 
 // Falltergeist includes
-#include "EventTarget.h"
+#include "../Event/EventTarget.h"
 #include "../Point.h"
 
 // Third party includes
@@ -71,9 +71,22 @@ public:
     virtual bool visible() const;
     virtual void setVisible(bool value);
 
-    virtual void think();
-    virtual void render(bool eggTransparency = false);
+    /**
+     * @brief Handles OS events coming from the State::handle().
+     * Used in Event Capturing process.
+     * This method is called first in the main loop (before think() and render()).
+     */
     virtual void handle(Event::Event* event);
+    /**
+     * @brief Process any real-time actions at each frame.
+     * This method is called after handle() but before render() in the main loop.
+     */
+    virtual void think();
+    /**
+     * @brief Render this UI element on game window.
+     * This method is called last in the main loop (after handle() and think()).
+     */
+    virtual void render(bool eggTransparency = false);
 
     virtual Size size() const;
 

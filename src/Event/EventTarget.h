@@ -52,7 +52,7 @@ public:
     /**
      * Immediately start processing of event by calling each associated handler.
      */
-    void processEvent(std::unique_ptr<Event> event);
+    void processEvent(Event* event);
     /**
      * Emit given event to Event Dispatcher for delayed processing.
      */

@@ -48,7 +48,7 @@ void Dispatcher::processScheduledEvents()
         {
             if (task.first != nullptr)
             {
-                task.first->processEvent(std::move(task.second));
+                task.first->processEvent(task.second.get());
             }
         }
         _tasksInProcess.clear();
@@ -57,6 +57,10 @@ void Dispatcher::processScheduledEvents()
 
 void Dispatcher::blockEventHandlers(EventTarget* eventTarget)
 {
+    _scheduledTasks.remove_if([eventTarget](Dispatcher::Task& task)
+    {
+        return (task.first == eventTarget);
+    });
     for (auto& pair : _tasksInProcess)
     {
         if (pair.first == eventTarget)

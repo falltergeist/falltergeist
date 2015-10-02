@@ -46,7 +46,7 @@ Base::Base(int x, int y) : Base(Point(x, y))
 {
 }
 
-Base::Base(const Point& pos) : Event::EventTarget()
+Base::Base(const Point& pos) : Event::EventTarget(Game::getInstance()->eventDispatcher())
 {
     _position = pos;
 }
@@ -193,32 +193,28 @@ unsigned int Base::pixel(unsigned int x, unsigned int y)
 void Base::handle(Event::Event* event)
 {
     if (event->handled()) return;
+    // TODO: get rid of dynamic_casts by using template member function?
     if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
         Point pos = mouseEvent->position() - this->position();
 
-        auto newEvent = new Event::Mouse(*mouseEvent);
-
-        if (this->pixel(pos))
+        if (this->pixel(pos)) // mouse is over the element
         {
             if (mouseEvent->name() == "mousemove")
             {
                 if (_leftButtonPressed)
                 {
-                    newEvent->setName( _drag ? "mousedrag" : "mousedragstart");
                     if (!_drag) _drag = true;
-                    emitEvent(newEvent);
+                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, _drag ? "mousedrag" : "mousedragstart"));
                 }
                 if (!_hovered)
                 {
                     _hovered = true;
-                    newEvent->setName("mousein");
-                    emitEvent(newEvent);
+                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousein"));
                 }
                 else
                 {
-                    newEvent->setName("mousemove");
-                    emitEvent(newEvent);
+                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousemove"));
                 }
             }
             else if (mouseEvent->name() == "mousedown")
@@ -226,62 +222,53 @@ void Base::handle(Event::Event* event)
                 if (mouseEvent->leftButton())
                 {
                     _leftButtonPressed = true;
-                    newEvent->setName("mouseleftdown");
-                    emitEvent(newEvent);
+                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouseleftdown"));
                 }
                 else if (mouseEvent->rightButton())
                 {
                     _rightButtonPressed = true;
-                    newEvent->setName("mouserightdown");
-                    emitEvent(newEvent);
+                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouserightdown"));
                 }
             }
             else if (mouseEvent->name() == "mouseup")
             {
                 if (mouseEvent->leftButton())
                 {
-                    newEvent->setName("mouseleftup");
-                    emitEvent(newEvent);
+                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouseleftup"));
                     if (_leftButtonPressed)
                     {
                         if (_drag)
                         {
                             _drag = false;
-                            newEvent->setName("mousedragstop");
-                            emitEvent(newEvent);
+                            emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousedragstop"));
                         }
-                        newEvent->setName("mouseleftclick");
-                        emitEvent(newEvent);
+                        emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouseleftclick"));
                     }
                     _leftButtonPressed = false;
                 }
                 else if (mouseEvent->rightButton())
                 {
-                    newEvent->setName("mouserightup");
-                    emitEvent(newEvent);
+                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouserightup"));
                     if (_rightButtonPressed)
                     {
-                        newEvent->setName("mouserightclick");
-                        emitEvent(newEvent);
+                        emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouserightclick"));
                     }
                     _rightButtonPressed = false;
                 }
             }
         }
-        else
+        else // mouse is outside of the element
         {
             if (mouseEvent->name() == "mousemove")
             {
                 if (_drag)
                 {
-                    newEvent->setName("mousedrag");
-                    emitEvent(newEvent);
+                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousedrag"));
                 }
                 if (_hovered)
                 {
                     _hovered = false;
-                    newEvent->setName("mouseout");
-                    emitEvent(newEvent);
+                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouseout"));
                 }
             }
             else if (mouseEvent->name() == "mouseup")
@@ -293,8 +280,7 @@ void Base::handle(Event::Event* event)
                         if (_drag)
                         {
                             _drag = false;
-                            newEvent->setName("mousedragstop");
-                            emitEvent(newEvent);
+                            emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousedragstop"));
                         }
                         _leftButtonPressed = false;
                     }
@@ -308,17 +294,12 @@ void Base::handle(Event::Event* event)
                 }
             }
         }
-        if (newEvent->handled())
-        {
-            event->setHandled(true);
-        }
-        delete newEvent;
         return;
     }
 
     if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
     {
-        emitEvent(keyboardEvent);
+        emitEvent(make_unique<Event::Keyboard>(*keyboardEvent));
     }
 }
 
