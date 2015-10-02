@@ -41,17 +41,12 @@ class Dispatcher
 public:
     Dispatcher() {}
 
-    void scheduleEvent(std::unique_ptr<Event> event, std::list<EventHandler>* handlers);
+    void scheduleEvent(EventTarget* target, std::unique_ptr<Event> event);
     void processScheduledEvents();
     void blockEventHandlers(EventTarget* eventTarget);
 
 private:
-    struct Task
-    {
-        Task(std::unique_ptr<Event> event, std::list<EventHandler>* handlers);
-        std::unique_ptr<Event> event;
-        std::list<EventHandler>* handlers;
-    };
+    using Task = std::pair<EventTarget*, std::unique_ptr<Event>>;
 
     Dispatcher(const Dispatcher&) = delete;
     void operator=(const Dispatcher&) = delete;

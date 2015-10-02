@@ -204,8 +204,8 @@ void Base::handle(Event::Event* event)
             {
                 if (_leftButtonPressed)
                 {
-                    if (!_drag) _drag = true;
                     emitEvent(make_unique<Event::Mouse>(*mouseEvent, _drag ? "mousedrag" : "mousedragstart"));
+                    if (!_drag) _drag = true;
                 }
                 if (!_hovered)
                 {

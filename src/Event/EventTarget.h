@@ -22,10 +22,10 @@
 
 // C++ standard includes
 #include <functional>
-#include <list>
-#include <map>
+#include <unordered_map>
 #include <memory>
 #include <string>
+#include <vector>
 
 // Falltergeist includes
 
@@ -45,7 +45,6 @@ using EventHandler = std::function<void(Event*)>;
 class EventTarget
 {
 public:
-
     EventTarget(Dispatcher* eventDispatcher);
     virtual ~EventTarget();
 
@@ -54,10 +53,6 @@ public:
      */
     void addEventHandler(const std::string& eventName, EventHandler handler);
     /**
-     * Immediately start processing of event by calling each associated handler.
-     */
-    //void processEvent(Event* event);
-    /**
      * Emit given event to Event Dispatcher for delayed processing.
      */
     void emitEvent(std::unique_ptr<Event> event);
@@ -65,9 +60,13 @@ public:
      * Remove all event handlers attached to given event name.
      */
     void removeEventHandlers(const std::string& eventName);
+    /**
+     * Returns all handlers for given event name or empty vector if no handlers were defined.
+     */
+    std::vector<EventHandler> getEventHandlers(const std::string& eventName);
 
-protected:
-    std::map<std::string, std::list<EventHandler>> _eventHandlers;
+private:
+    std::unordered_map<std::string, std::vector<EventHandler>> _eventHandlers;
     Dispatcher* _eventDispatcher;
 };
 

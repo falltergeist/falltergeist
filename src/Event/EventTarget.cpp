@@ -45,7 +45,7 @@ EventTarget::~EventTarget()
 
 void EventTarget::addEventHandler(const std::string& eventName, EventHandler handler)
 {
-    _eventHandlers[eventName].push_back(handler);
+    _eventHandlers[eventName].emplace_back(handler);
 }
 
 /*void EventTarget::processEvent(Event* event)
@@ -69,7 +69,7 @@ void EventTarget::emitEvent(std::unique_ptr<Event> event)
     if (it != _eventHandlers.end())
     {
         event->setTarget(this);
-        _eventDispatcher->scheduleEvent(std::move(event), &it->second);
+        _eventDispatcher->scheduleEvent(this, std::move(event));
     }
 }
 
@@ -78,8 +78,18 @@ void EventTarget::removeEventHandlers(const std::string& eventName)
     const auto it = _eventHandlers.find(eventName);
     if (it != _eventHandlers.end())
     {
-        _eventHandlers.erase(it);
+        it->second.clear();
     }
+}
+
+std::vector<EventHandler> EventTarget::getEventHandlers(const std::string& eventName)
+{
+    const auto it = _eventHandlers.find(eventName);
+    if (it != _eventHandlers.end())
+    {
+        return it->second;
+    }
+    return std::vector<EventHandler>();
 }
 
 }
