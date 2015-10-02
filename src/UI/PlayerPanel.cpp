@@ -64,10 +64,6 @@ PlayerPanel::PlayerPanel() : UI::Base()
 
     _background->setPosition(this->position());
 
-    _background->addEventHandler("mouseleftdown", [this](Event::Event* event){
-        event->setHandled(true);
-    });
-
     _background->addEventHandler("mousein", [this, mouse](Event::Event* event){
         mouse->pushState(Input::Mouse::Cursor::BIG_ARROW);
     });
@@ -85,7 +81,6 @@ PlayerPanel::PlayerPanel() : UI::Base()
         {
             mouse->popState();
         }
-        event->setHandled(true);
     });
 
     // Change hand button

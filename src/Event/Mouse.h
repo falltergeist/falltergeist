@@ -62,11 +62,21 @@ public:
     bool shiftPressed() const;
     void setShiftPressed(bool value);
 
+    /**
+     * Indicates that an obstacle was detected under mouse cursor during event capturing.
+     */
+    bool obstacle() const;
+    /**
+     * Sets obstacle flag. Used for event capturing.
+     */
+    void setObstacle(bool obstacle);
+
 protected:
     bool _controlPressed = false;
     bool _shiftPressed = false;
     int _leftButton = false;
     int _rightButton = false;
+    bool _obstacle = false;
 
     Point _position;
     Point _offset;

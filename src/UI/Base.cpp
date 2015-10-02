@@ -198,7 +198,7 @@ void Base::handle(Event::Event* event)
     {
         Point pos = mouseEvent->position() - this->position();
 
-        if (this->pixel(pos)) // mouse is over the element
+        if (!mouseEvent->obstacle() && this->pixel(pos)) // mouse cursor is over the element
         {
             if (mouseEvent->name() == "mousemove")
             {
@@ -229,6 +229,9 @@ void Base::handle(Event::Event* event)
                     _rightButtonPressed = true;
                     emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouserightdown"));
                 }
+                // mousedown event can not be "interesting" for any other UI's that "behind" this UI,
+                // so we can safely stop event capturing now
+                mouseEvent->setHandled(true);
             }
             else if (mouseEvent->name() == "mouseup")
             {
@@ -256,9 +259,15 @@ void Base::handle(Event::Event* event)
                     _rightButtonPressed = false;
                 }
             }
+            mouseEvent->setObstacle(true);
         }
-        else // mouse is outside of the element
+        else // mouse cursor is outside of this element or other element is in front
         {
+            // stop processing if this element has no active interactions with the mouse
+            if (!_hovered && !_leftButtonPressed && !_rightButtonPressed && !_drag)
+            {
+                return;
+            }
             if (mouseEvent->name() == "mousemove")
             {
                 if (_drag)

@@ -112,5 +112,16 @@ void Mouse::setOffset(const Point& offset)
 {
     _offset = offset;
 }
+
+bool Mouse::obstacle() const
+{
+    return _obstacle;
+}
+
+void Mouse::setObstacle(bool obstacle)
+{
+    _obstacle = obstacle;
+}
+
 }
 }

@@ -228,7 +228,6 @@ void CritterDialog::onAnswerClick(Event::Event* event)
     {
         if (answer == sender)
         {
-            event->setHandled(true);
             _selectAnswer(i);
             return;
         }

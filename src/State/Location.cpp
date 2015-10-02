@@ -324,7 +324,6 @@ void Location::onObjectMouseEvent(Event::Event* event, Game::Object* object)
             _actionCursorButtonPressed = false;
         }
     }
-    event->setHandled(true);
 }
 
 void Location::onObjectHover(Event::Event* event, Game::Object* object)
@@ -342,7 +341,6 @@ void Location::onObjectHover(Event::Event* event, Game::Object* object)
             _actionCursorButtonPressed = false;
         }
         _actionCursorTicks = SDL_GetTicks();
-        event->setHandled(true);
     }
 }
 
