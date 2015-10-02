@@ -31,6 +31,7 @@
 #include "../Event/Dispatcher.h"
 #include "../Event/State.h"
 #include "../Exception.h"
+#include "../Game/DudeObject.h"
 #include "../Game/Time.h"
 #include "../Graphics/AnimatedPalette.h"
 #include "../Graphics/Renderer.h"
@@ -132,11 +133,6 @@ void Game::popState()
     if (_states.size() == 0) return;
 
     State::State* state = _states.back().get();
-    auto findIt = std::find(_activeStates.rbegin(), _activeStates.rend(), state);
-    if (findIt != _activeStates.rend())
-    {
-        _activeStates.erase(findIt.base() - 1);
-    }
     _statesForDelete.emplace_back(std::move(_states.back()));
     _states.pop_back();
 
@@ -154,7 +150,6 @@ void Game::run()
     Logger::info("GAME") << "Starting main loop" << std::endl;
     while (!_quit)
     {
-        _activeStates = _getActiveStates();
         handle();
         think();
         render();
@@ -169,14 +164,14 @@ void Game::quit()
     _quit = true;
 }
 
-void Game::setPlayer(DudeObject* player)
+void Game::setPlayer(std::unique_ptr<DudeObject> player)
 {
-    _player = player;
+    _player = std::move(player);
 }
 
 DudeObject* Game::player()
 {
-    return _player;
+    return _player.get();
 }
 
 Input::Mouse* Game::mouse() const
@@ -353,6 +348,8 @@ void Game::handle()
 {
     if (_renderer->fading()) return;
 
+    std::vector<State::State*> activeStates;
+
     while (SDL_PollEvent(&_event))
     {
         if (_event.type == SDL_QUIT)
@@ -364,7 +361,11 @@ void Game::handle()
             auto event = _createEventFromSDL(_event);
             if (event)
             {
-                for (auto state : _activeStates) state->handle(event.get());
+                if (activeStates.size() == 0)
+                {
+                    activeStates = _getActiveStates();
+                }
+                for (auto state : activeStates) state->handle(event.get());
             }
         }
     }
@@ -391,7 +392,7 @@ void Game::think()
         return;
     }
 
-    for (auto state : _activeStates)
+    for (auto state : _getActiveStates())
     {
         state->think();
     }

@@ -26,6 +26,7 @@
 
 // Falltergeist includes
 #include "../CrossPlatform.h"
+#include "../Event/Mouse.h"
 #include "../Font.h"
 #include "../FontString.h"
 #include "../Game/Game.h"
@@ -36,6 +37,7 @@
 
 // Third party includes
 #include <SDL.h>
+#include <Event/Mouse.h>
 
 namespace Falltergeist
 {
@@ -403,6 +405,16 @@ unsigned int TextArea::pixel(const Point& pos)
         return 0; // transparent
     }
     return 0xFFFFFFFF; // white color
+}
+
+void TextArea::handle(Event::Event* event)
+{
+    Base::handle(event);
+    if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
+    {
+        mouseEvent->setHandled(false);
+        mouseEvent->setObstacle(false);
+    }
 }
 
 }

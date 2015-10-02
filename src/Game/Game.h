@@ -105,7 +105,7 @@ public:
      */
     void render();
 
-    void setPlayer(DudeObject* player);
+    void setPlayer(std::unique_ptr<DudeObject> player);
     DudeObject* player();
     Input::Mouse* mouse() const;
     Graphics::Renderer* renderer();
@@ -124,7 +124,6 @@ protected:
     std::vector<int> _GVARS;
     std::vector<std::unique_ptr<State::State>> _states;
     std::vector<std::unique_ptr<State::State>> _statesForDelete;
-    std::vector<State::State*> _activeStates;
 
     Time _gameTime;
 
@@ -138,7 +137,7 @@ protected:
     std::unique_ptr<UI::FpsCounter> _fpsCounter;
     std::unique_ptr<UI::TextArea> _mousePosition, _currentTime, _falltergeistVersion;
 
-    DudeObject* _player = nullptr;
+    std::unique_ptr<DudeObject> _player;
 
     bool _quit = false;
     bool _initialized = false;
