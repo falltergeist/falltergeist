@@ -64,11 +64,13 @@ PlayerPanel::PlayerPanel() : UI::Base()
 
     _background->setPosition(this->position());
 
-    _background->addEventHandler("mousein", [this, mouse](Event::Event* event){
+    addEventHandler("mousein", [this, mouse](Event::Event* event)
+    {
         mouse->pushState(Input::Mouse::Cursor::BIG_ARROW);
     });
 
-    _background->addEventHandler("mouseout", [this, mouse](Event::Event* event){
+    addEventHandler("mouseout", [this, mouse](Event::Event* event)
+    {
         if (mouse->scrollState())
         {
             // this trick is needed for correct cursor type returning on scrolling
@@ -167,6 +169,11 @@ void PlayerPanel::render(bool eggTransparency)
 void PlayerPanel::handle(Event::Event *event)
 {
     UI::Base::handle(event);
+    if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
+    {
+        mouseEvent->setObstacle(false);
+        mouseEvent->setHandled(false);
+    }
 
     // object in hand
     if (auto item = Game::getInstance()->player()->currentHandSlot())
@@ -360,6 +367,11 @@ void PlayerPanel::openLoadGame()
 {
     Game::getInstance()->pushState(new State::LoadGame());
     playWindowOpenSfx();
+}
+
+unsigned int PlayerPanel::pixel(const Point& pos)
+{
+    return _background->pixel(pos);
 }
 
 }

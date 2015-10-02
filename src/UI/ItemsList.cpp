@@ -125,6 +125,10 @@ void ItemsList::onMouseDragStart(Event::Mouse* event)
         _draggedItem->setOffset((event->position() - _draggedItem->position()) - (_draggedItem->size() / 2));
         Logger::critical() << "mousedragstart at " << index << " (" << _draggedItem->item()->name() << ")" << std::endl;
     }
+    else
+    {
+        _draggedItem = nullptr;
+    }
 }
 
 void ItemsList::onMouseDrag(Event::Mouse* event)
@@ -148,7 +152,6 @@ void ItemsList::onMouseDragStop(Event::Mouse* event)
         itemevent->setPosition(event->position());
         itemevent->setTarget(this);
         emitEvent(std::move(itemevent));
-        _draggedItem = nullptr;
     }
     Logger::critical() << "mousedragstop" << std::endl;
 }

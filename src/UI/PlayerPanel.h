@@ -48,6 +48,9 @@ public:
     ~PlayerPanel() override;
 
     Size size() const override;
+
+    virtual unsigned int pixel(const Point& pos) override;
+
     void render(bool eggTransparency = false) override;
     void handle(Event::Event *event) override;
     void think() override;
