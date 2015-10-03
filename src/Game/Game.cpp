@@ -304,14 +304,14 @@ std::unique_ptr<Event::Event> Game::_createEventFromSDL(const SDL_Event& sdlEven
             mouseEvent->setRightButton(sdlEvent.button.button == SDL_BUTTON_RIGHT);
             mouseEvent->setShiftPressed(mods & KMOD_SHIFT);
             mouseEvent->setControlPressed(mods & KMOD_CTRL);
-            return mouseEvent;
+            return std::move(mouseEvent);
         }
         case SDL_MOUSEMOTION:
         {
             auto mouseEvent = make_unique<Event::Mouse>("mousemove");
             mouseEvent->setPosition({sdlEvent.motion.x, sdlEvent.motion.y});
             mouseEvent->setOffset({sdlEvent.motion.xrel,sdlEvent.motion.yrel});
-            return mouseEvent;
+            return std::move(mouseEvent);
         }
         case SDL_KEYDOWN:
         {
@@ -320,7 +320,7 @@ std::unique_ptr<Event::Event> Game::_createEventFromSDL(const SDL_Event& sdlEven
             keyboardEvent->setAltPressed(sdlEvent.key.keysym.mod & KMOD_ALT);
             keyboardEvent->setShiftPressed(sdlEvent.key.keysym.mod & KMOD_SHIFT);
             keyboardEvent->setControlPressed(sdlEvent.key.keysym.mod & KMOD_CTRL);
-            return keyboardEvent;
+            return std::move(keyboardEvent);
         }
         case SDL_KEYUP:
         {
@@ -338,7 +338,7 @@ std::unique_ptr<Event::Event> Game::_createEventFromSDL(const SDL_Event& sdlEven
                 SDL_SaveBMP(texture->sdlSurface(), name.c_str());
                 Logger::info("GAME") << "Screenshot saved to " + name << std::endl;
             }
-            return keyboardEvent;
+            return std::move(keyboardEvent);
         }
     }
     return std::unique_ptr<Event::Event>();
