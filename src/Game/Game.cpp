@@ -126,6 +126,8 @@ void Game::pushState(State::State* state)
 {
     _states.push_back(std::unique_ptr<State::State>(state));
     if (!state->initialized()) state->init();
+    state->setActive(true);
+    state->emitEvent(make_unique<Event::State>("activate"));
 }
 
 void Game::popState()
@@ -135,7 +137,7 @@ void Game::popState()
     State::State* state = _states.back().get();
     _statesForDelete.emplace_back(std::move(_states.back()));
     _states.pop_back();
-
+    state->setActive(false);
     state->emitEvent(make_unique<Event::State>("deactivate"));
 }
 
@@ -148,6 +150,7 @@ void Game::setState(State::State* state)
 void Game::run()
 {
     Logger::info("GAME") << "Starting main loop" << std::endl;
+    _frame = 0;
     while (!_quit)
     {
         handle();
@@ -155,6 +158,7 @@ void Game::run()
         render();
         SDL_Delay(1);
         _statesForDelete.clear();
+        _frame++;
     }
     Logger::info("GAME") << "Stopping main loop" << std::endl;
 }
@@ -230,6 +234,10 @@ State::State* Game::topState(unsigned offset) const
 std::vector<State::State*> Game::_getVisibleStates()
 {
     std::vector<State::State*> subset;
+    if (_states.size() == 0)
+    {
+        return subset;
+    }
     // we must render all states from last fullscreen state to the top of stack
     auto it = _states.end();
     do
@@ -348,8 +356,6 @@ void Game::handle()
 {
     if (_renderer->fading()) return;
 
-    std::vector<State::State*> activeStates;
-
     while (SDL_PollEvent(&_event))
     {
         if (_event.type == SDL_QUIT)
@@ -361,16 +367,12 @@ void Game::handle()
             auto event = _createEventFromSDL(_event);
             if (event)
             {
-                if (activeStates.size() == 0)
-                {
-                    activeStates = _getActiveStates();
-                }
-                for (auto state : activeStates) state->handle(event.get());
+                for (auto state : _getActiveStates()) state->handle(event.get());
             }
         }
+        // process events generate during handle()
+        _eventDispatcher->processScheduledEvents();
     }
-
-    _eventDispatcher->processScheduledEvents();
 }
 
 void Game::think()
@@ -396,6 +398,8 @@ void Game::think()
     {
         state->think();
     }
+    // process custom events
+    _eventDispatcher->processScheduledEvents();
 }
 
 void Game::render()
@@ -444,5 +448,9 @@ Event::Dispatcher* Game::eventDispatcher()
     return _eventDispatcher.get();
 }
 
+unsigned int Game::frame() const
+{
+    return _frame;
+}
 }
 }

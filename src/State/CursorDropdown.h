@@ -49,22 +49,6 @@ namespace State
 
 class CursorDropdown : public State
 {
-protected:
-    Game::Object* _object = nullptr;
-    bool _onlyShowIcon;
-    std::vector<Input::Mouse::Icon> _icons;
-    int _initialX;
-    int _initialY;
-    int _previousIcon = 0;
-    int _currentIcon = 0;
-    std::vector<std::unique_ptr<UI::Base>> _activeIcons;
-    std::vector<std::unique_ptr<UI::Base>> _inactiveIcons;
-    UI::Base* _surface = nullptr;
-    UI::Base* _cursor = nullptr;
-    bool _deactivated = false;
-    unsigned int _initialMouseStack;
-    
-    void showMenu();
 public:
     CursorDropdown(std::vector<Input::Mouse::Icon>&& icons, bool onlyIcon = false);
     ~CursorDropdown() override;
@@ -82,6 +66,22 @@ public:
     void onStateActivate(Event::State* event) override;
     void onStateDeactivate(Event::State* event) override;
 
+protected:
+    Game::Object* _object = nullptr;
+    bool _onlyShowIcon;
+    std::vector<Input::Mouse::Icon> _icons;
+    int _initialX;
+    int _initialY;
+    int _previousIcon = 0;
+    int _currentIcon = 0;
+    std::vector<std::unique_ptr<UI::Base>> _activeIcons;
+    std::vector<std::unique_ptr<UI::Base>> _inactiveIcons;
+    UI::Base* _surface = nullptr;
+    UI::Base* _cursor = nullptr;
+    bool _deactivated = false;
+    unsigned int _initialMouseStack;
+
+    void showMenu();
 };
 
 }

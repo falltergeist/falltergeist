@@ -120,12 +120,16 @@ public:
     Settings* settings() const;
     Graphics::AnimatedPalette* animatedPalette();
 
+    unsigned int frame() const;
+
 protected:
     std::vector<int> _GVARS;
     std::vector<std::unique_ptr<State::State>> _states;
     std::vector<std::unique_ptr<State::State>> _statesForDelete;
 
     Time _gameTime;
+
+    unsigned int _frame = 0;
 
     std::unique_ptr<Graphics::Renderer> _renderer;
     std::unique_ptr<Audio::Mixer> _mixer;
