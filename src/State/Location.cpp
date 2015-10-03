@@ -636,6 +636,20 @@ void Location::handle(Event::Event* event)
                     mouse->ui()->setPosition(hexagon->position() - _camera->topLeft());
                     break;
                 }
+                case Input::Mouse::Cursor::ACTION:
+                {
+                    // optimization to prevent FPS drops on mouse move
+                    auto ticks = SDL_GetTicks();
+                    if (ticks - _mouseMoveTicks < 50)
+                    {
+                        event->setHandled(true);
+                    }
+                    else
+                    {
+                        _mouseMoveTicks = ticks;
+                    }
+                    break;
+                }
                 default:
                     break;
             }
@@ -694,10 +708,11 @@ void Location::handle(Event::Event* event)
     {
         Hexagon* hexagon = *it;
         if (!hexagon->inRender()) continue;
-        for (auto itt = hexagon->objects()->rbegin(); itt != hexagon->objects()->rend(); ++itt)
+        auto objects = hexagon->objects();
+        for (auto itt = objects->rbegin(); itt != objects->rend(); ++itt)
         {
-            auto object = *itt;
             if (event->handled()) return;
+            auto object = *itt;
             if (!object->inRender()) continue;
             object->handle(event);
         }
