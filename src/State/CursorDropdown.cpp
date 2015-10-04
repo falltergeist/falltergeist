@@ -78,10 +78,9 @@ void CursorDropdown::init()
 
     showMenu();
 
-    addEventHandler("mouseup", [this](Event::Event* event)
+    _mouseUpHandler.add([this](Event::Mouse* mouseEvent)
     {
-        Event::Mouse* mouseEvent;
-        if ((mouseEvent = dynamic_cast<Event::Mouse*>(event)) && mouseEvent->leftButton())
+        if (mouseEvent->leftButton())
         {
             onLeftButtonUp(mouseEvent);
         }
@@ -94,10 +93,10 @@ void CursorDropdown::init()
             event->setHandled(true);
         }
     };
-    addEventHandler("mousemove", moveHandler);
-    addEventHandler("mousedown", [this](Event::Event* event)
+    _mouseMoveHandler.add(moveHandler);
+    _mouseDownHandler.add([this](Event::Mouse* event)
     {
-        if (active() && !dynamic_cast<Event::Mouse*>(event)->leftButton())
+        if (active() && !event->leftButton())
         {
             Game::getInstance()->popState();
         }
@@ -220,8 +219,18 @@ void CursorDropdown::handle(Event::Event* event)
     {
         // TODO: probably need to make invisible panel to catch all mouse events..
 
-        // let state catch all mouse events
-        emitEvent(make_unique<Event::Mouse>(*mouseEvent));
+        if (mouseEvent->name() == "mousedown")
+        {
+            emitEvent(make_unique<Event::Mouse>(*mouseEvent), _mouseDownHandler);
+        }
+        else if (mouseEvent->name() == "mouseup")
+        {
+            emitEvent(make_unique<Event::Mouse>(*mouseEvent), _mouseUpHandler);
+        }
+        else if (mouseEvent->name() == "mousemove")
+        {
+            emitEvent(make_unique<Event::Mouse>(*mouseEvent), _mouseMoveHandler);
+        }
         event->setHandled(true);
     }
 }

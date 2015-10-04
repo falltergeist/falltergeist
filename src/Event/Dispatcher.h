@@ -41,12 +41,18 @@ class Dispatcher
 public:
     Dispatcher() {}
 
-    void scheduleEvent(EventTarget* target, std::unique_ptr<Event> event);
+    template <typename T>
+    void scheduleEvent(EventTarget* target, std::unique_ptr<T> event, Base::Delegate<T*> handler);
     void processScheduledEvents();
     void blockEventHandlers(EventTarget* eventTarget);
 
 private:
-    using Task = std::pair<EventTarget*, std::unique_ptr<Event>>;
+    struct Task
+    {
+        EventTarget* target;
+        std::function<void(Task&)> callback;
+    };
+
 
     Dispatcher(const Dispatcher&) = delete;
     void operator=(const Dispatcher&) = delete;

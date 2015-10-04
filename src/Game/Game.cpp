@@ -127,7 +127,7 @@ void Game::pushState(State::State* state)
     _states.push_back(std::unique_ptr<State::State>(state));
     if (!state->initialized()) state->init();
     state->setActive(true);
-    state->emitEvent(make_unique<Event::State>("activate"));
+    state->emitEvent(make_unique<Event::State>("activate"), state->activateHandler());
 }
 
 void Game::popState()
@@ -138,7 +138,7 @@ void Game::popState()
     _statesForDelete.emplace_back(std::move(_states.back()));
     _states.pop_back();
     state->setActive(false);
-    state->emitEvent(make_unique<Event::State>("deactivate"));
+    state->emitEvent(make_unique<Event::State>("deactivate"), state->deactivateHandler());
 }
 
 void Game::setState(State::State* state)
@@ -265,7 +265,7 @@ std::vector<State::State*> Game::_getActiveStates()
         auto state = it->get();
         if (!state->active())
         {
-            state->emitEvent(make_unique<Event::State>("activate"));
+            state->emitEvent(make_unique<Event::State>("activate"), state->activateHandler());
             state->setActive(true);
         }
         subset.push_back(state);
@@ -281,7 +281,7 @@ std::vector<State::State*> Game::_getActiveStates()
         auto state = it->get();
         if (state->active())
         {
-            state->emitEvent(make_unique<Event::State>("deactivate"));
+            state->emitEvent(make_unique<Event::State>("deactivate"), state->deactivateHandler());
             state->setActive(false);
         }
     }

@@ -93,6 +93,20 @@ public:
     virtual unsigned int pixel(const Point& pos);
     unsigned int pixel(unsigned int x, unsigned int y);
 
+    Event::KeyboardHandler& keyDownHandler() const;
+    Event::KeyboardHandler& keyUpHandler() const;
+
+    Event::MouseHandler& mouseDragStartHandler() const;
+    Event::MouseHandler& mouseDragHandler() const;
+    Event::MouseHandler& mouseDragStopHandler() const;
+    Event::MouseHandler& mouseInHandler() const;
+    Event::MouseHandler& mouseMoveHandler() const;
+    Event::MouseHandler& mouseOutHandler() const;
+    Event::MouseHandler& mouseClickHandler() const;
+    Event::MouseHandler& mouseDownHandler() const;
+    Event::MouseHandler& mouseUpHandler() const;
+    // TODO: mouse hover? (will require additional hoverDelay property)
+
 protected:
     Point _position;
     Point _offset;
@@ -112,6 +126,11 @@ protected:
     // @todo Should it really be here?
     std::string _downSound = "";
     std::string _upSound = "";
+
+    Event::KeyboardHandler _keyDownHandler, _keyUpHandler;
+    Event::MouseHandler _mouseDragStartHandler, _mouseDragHandler, _mouseDragStopHandler,
+                        _mouseInHandler, _mouseMoveHandler, _mouseOutHandler,
+                        _mouseClickHandler, _mouseDownHandler, _mouseUpHandler;
 
 private:
     std::unique_ptr<Graphics::Texture> _generatedTexture;

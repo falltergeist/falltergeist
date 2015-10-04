@@ -72,11 +72,14 @@ public:
     void onArmorDragStop(Event::Mouse* event);
     void onHandDragStop(Event::Mouse* event);
 
+    Event::MouseHandler& itemDragStopHandler();
+
 protected:
     Game::ItemObject* _item = nullptr;
     Type _type = Type::INVENTORY;
     Type _oldType = Type::INVENTORY;
 
+    Event::MouseHandler _itemDragStopHandler;
 };
 
 }

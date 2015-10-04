@@ -57,11 +57,15 @@ public:
     Size size() const override;
     Point offset() const override;
 
+    Event::Handler& animationEndedHandler() const;
+
 protected:
     bool _playing = false;
     bool _repeat = false;
     unsigned int _currentAnimation = 0;
     std::vector<std::unique_ptr<Animation>> _animations;
+
+    Event::Handler _animationEndedHandler;
 };
 
 }

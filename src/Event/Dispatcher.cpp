@@ -32,9 +32,27 @@ namespace Falltergeist
 namespace Event
 {
 
-void Dispatcher::scheduleEvent(EventTarget* target, std::unique_ptr<Event> event)
+
+template<typename T>
+void Dispatcher::scheduleEvent(EventTarget* target, std::unique_ptr<T> eventArg, Base::Delegate<T*> handlerArg)
 {
-    _scheduledTasks.emplace_back(target, std::move(event));
+    // following anonymous function will capture event and associated delegate to be processed later
+    _scheduledTasks.emplace_back(target, std::bind(
+        [] (Dispatcher::Task& task, std::unique_ptr<T>& event, Base::Delegate<T*>& handler)
+        {
+            event->setHandled(false);
+            for (auto& func : handler.functors())
+            {
+                func(event.get());
+                // handler may set handled flag to true - to stop other handlers from executing
+                // also, target may be deleted by any handler, so we should check that on every iteration
+                if (event->handled() || task.target == nullptr) break;
+            }
+        },
+        std::placeholders::_1, // Task&
+        std::move(eventArg),
+        std::move(handlerArg)
+    ));
 }
 
 void Dispatcher::processScheduledEvents()
@@ -45,20 +63,8 @@ void Dispatcher::processScheduledEvents()
         for (Task& task : _tasksInProcess)
         {
             // after previous tasks this target might already be "dead"
-            if (task.first == nullptr) continue;
-
-            // any handler can alter current list of handlers by calling addEventHandler or removeEventHandlers on target,
-            // so we have to use copy here
-            auto handler = task.first->getEventHandler(task.second->name());
-
-            task.second->setHandled(false);
-            for (auto& func : handler.functors())
-            {
-                func(task.second.get());
-                // handler may set handled flag to true - to stop other handlers from executing
-                // also, target may be deleted by any handler, so we should check that on every iteration
-                if (task.second->handled() || task.first == nullptr) break;
-            }
+            if (task.target == nullptr) continue;
+            task.callback(task);
         }
         _tasksInProcess.clear();
     }
@@ -68,13 +74,13 @@ void Dispatcher::blockEventHandlers(EventTarget* eventTarget)
 {
     _scheduledTasks.remove_if([eventTarget](Dispatcher::Task& task)
     {
-        return (task.first == eventTarget);
+        return (task.target == eventTarget);
     });
     for (auto& task : _tasksInProcess)
     {
-        if (task.first == eventTarget)
+        if (task.target == eventTarget)
         {
-            task.first = nullptr;
+            task.target = nullptr;
         }
     }
 }

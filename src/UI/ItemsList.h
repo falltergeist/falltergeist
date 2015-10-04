@@ -79,6 +79,8 @@ public:
     void addItem(InventoryItem* item, unsigned int ammount);
     void removeItem(InventoryItem* item, unsigned int ammount);
 
+    Event::MouseHandler& itemDragStopHandler();
+
 protected:
     std::vector<Game::ItemObject*>* _items = nullptr;
     InventoryItem* _draggedItem = nullptr;
@@ -89,6 +91,7 @@ protected:
     unsigned int _slotWidth = 77;
     unsigned int _slotHeight = 40;
 
+    Event::MouseHandler _itemDragStopHandler;
 };
 
 }

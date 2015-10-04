@@ -21,6 +21,7 @@
 #define FALLTERGEIST_EVENT_HANDLER_H
 
 // C++ standard includes
+#include <functional>
 
 // Falltergeist includes
 #include "../Base/Delegate.h"

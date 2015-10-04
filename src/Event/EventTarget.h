@@ -48,29 +48,12 @@ public:
     virtual ~EventTarget();
 
     /**
-     * Adds event handler to given event name.
-     */
-    void addEventHandler(const std::string& eventName, Handler::Functor handler);
-
-    /**
      * Emit given event to Event Dispatcher for delayed processing.
      */
-    void emitEvent(std::unique_ptr<Event> event);
-    /**
-     * Remove all event handlers attached to given event name.
-     */
-    void removeEventHandlers(const std::string& eventName);
-
-    /**
-     * Returns all handlers for given event name or empty vector if no handlers were defined.
-     */
-    Handler getEventHandler(const std::string& eventName);
-
-protected:
-    Handler& _getEventHandlerRef(const std::string& eventName);
+    template <typename T>
+    void emitEvent(std::unique_ptr<T> event, Base::Delegate<T*> handler);
 
 private:
-    std::unordered_map<std::string, Handler> _eventHandlers;
     Dispatcher* _eventDispatcher;
 };
 

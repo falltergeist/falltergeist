@@ -151,7 +151,7 @@ void ItemsList::onMouseDragStop(Event::Mouse* event)
         auto itemevent = make_unique<Event::Mouse>("itemdragstop");
         itemevent->setPosition(event->position());
         itemevent->setTarget(this);
-        emitEvent(std::move(itemevent));
+        emitEvent(std::move(itemevent), itemDragStopHandler());
     }
     Logger::critical() << "mousedragstop" << std::endl;
 }
@@ -235,6 +235,11 @@ void ItemsList::scrollDown()
 {
     _slotOffset++;
     this->update();
+}
+
+Event::MouseHandler& ItemsList::itemDragStopHandler()
+{
+    return _itemDragStopHandler;
 }
 
 }

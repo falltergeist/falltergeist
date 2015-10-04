@@ -173,9 +173,17 @@ UI::Base* State::getUI(const std::string& name)
 void State::handle(Event::Event* event)
 {
     if (event->handled()) return;
+    // TODO: maybe make handle() a template function to get rid of dynamic_casts?
     if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
     {
-        emitEvent(make_unique<Event::Keyboard>(*keyboardEvent));
+        if (keyboardEvent->name() == "keyup")
+        {
+            emitEvent(make_unique<Event::Keyboard>(*keyboardEvent), keyUpHandler());
+        }
+        else if (keyboardEvent->name() == "keydown")
+        {
+            emitEvent(make_unique<Event::Keyboard>(*keyboardEvent), keyDownHandler());
+        }
     }
     for (auto it = _ui.rbegin(); it != _ui.rend(); ++it)
     {
@@ -223,6 +231,31 @@ bool State::active()
 void State::setActive(bool value)
 {
     _active = value;
+}
+
+Event::StateHandler& State::activateHandler() const
+{
+    return _activateHandler;
+}
+
+Event::StateHandler& State::deactivateHandler() const
+{
+    return _deactivateHandler;
+}
+
+Event::StateHandler& State::fadeDoneHandler() const
+{
+    return _fadeDoneHandler;
+}
+
+Event::KeyboardHandler& State::keyDownHandler() const
+{
+    return _keyDownHandler;
+}
+
+Event::KeyboardHandler& State::keyUpHandler() const
+{
+    return _keyUpHandler;
 }
 
 }

@@ -81,6 +81,9 @@ protected:
     bool _deactivated = false;
     unsigned int _initialMouseStack;
 
+    // TODO: state itself should not catch mouse events! delegate it to some UI (like invisible panel filling the whole screen)
+    Event::MouseHandler _mouseDownHandler, _mouseUpHandler, _mouseMoveHandler;
+
     void showMenu();
 };
 

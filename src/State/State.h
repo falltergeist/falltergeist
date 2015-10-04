@@ -115,6 +115,12 @@ public:
     virtual void onStateDeactivate(Event::State* event);
     virtual void onKeyDown(Event::Keyboard* event);
 
+    Event::StateHandler& activateHandler() const;
+    Event::StateHandler& deactivateHandler() const;
+    Event::StateHandler& fadeDoneHandler() const;
+    Event::KeyboardHandler& keyDownHandler() const;
+    Event::KeyboardHandler& keyUpHandler() const;
+
 protected:
     std::vector<std::unique_ptr<UI::Base>> _ui;
     std::vector<std::unique_ptr<UI::Base>> _uiToDelete;
@@ -128,6 +134,8 @@ protected:
     bool _fullscreen = true; // prevents render all states before this one
     bool _initialized = false;
 
+    Event::StateHandler _activateHandler, _deactivateHandler, _fadeDoneHandler;
+    Event::KeyboardHandler _keyDownHandler, _keyUpHandler;
 };
 
 }

@@ -209,17 +209,17 @@ void Base::handle(Event::Event* event)
             {
                 if (_leftButtonPressed)
                 {
-                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, _drag ? "mousedrag" : "mousedragstart"));
+                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, _drag ? "mousedrag" : "mousedragstart"), _drag ? mouseDragHandler() : mouseDragStartHandler());
                     if (!_drag) _drag = true;
                 }
                 if (!_hovered)
                 {
                     _hovered = true;
-                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousein"));
+                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousein"), mouseInHandler());
                 }
                 else
                 {
-                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousemove"));
+                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousemove"), mouseMoveHandler());
                 }
             }
             else if (mouseEvent->name() == "mousedown")
@@ -227,12 +227,12 @@ void Base::handle(Event::Event* event)
                 if (mouseEvent->leftButton())
                 {
                     _leftButtonPressed = true;
-                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouseleftdown"));
+                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouseleftdown"), mouseDownHandler());
                 }
                 else if (mouseEvent->rightButton())
                 {
                     _rightButtonPressed = true;
-                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouserightdown"));
+                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouserightdown"), mouseDownHandler());
                 }
                 // mousedown event can not be "interesting" for any other UI's that "behind" this UI,
                 // so we can safely stop event capturing now
@@ -242,24 +242,24 @@ void Base::handle(Event::Event* event)
             {
                 if (mouseEvent->leftButton())
                 {
-                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouseleftup"));
+                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouseleftup"), mouseUpHandler());
                     if (_leftButtonPressed)
                     {
                         if (_drag)
                         {
                             _drag = false;
-                            emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousedragstop"));
+                            emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousedragstop"), mouseDragStopHandler());
                         }
-                        emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouseleftclick"));
+                        emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouseleftclick"), mouseClickHandler());
                     }
                     _leftButtonPressed = false;
                 }
                 else if (mouseEvent->rightButton())
                 {
-                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouserightup"));
+                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouserightup"), mouseUpHandler());
                     if (_rightButtonPressed)
                     {
-                        emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouserightclick"));
+                        emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouserightclick"), mouseClickHandler());
                     }
                     _rightButtonPressed = false;
                 }
@@ -277,12 +277,12 @@ void Base::handle(Event::Event* event)
             {
                 if (_drag)
                 {
-                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousedrag"));
+                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousedrag"), mouseDragHandler());
                 }
                 if (_hovered)
                 {
                     _hovered = false;
-                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouseout"));
+                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouseout"), mouseOutHandler());
                 }
             }
             else if (mouseEvent->name() == "mouseup")
@@ -294,7 +294,7 @@ void Base::handle(Event::Event* event)
                         if (_drag)
                         {
                             _drag = false;
-                            emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousedragstop"));
+                            emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousedragstop"), mouseDragStopHandler());
                         }
                         _leftButtonPressed = false;
                     }
@@ -313,7 +313,14 @@ void Base::handle(Event::Event* event)
 
     if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
     {
-        emitEvent(make_unique<Event::Keyboard>(*keyboardEvent));
+        if (keyboardEvent->name() == "keyup")
+        {
+            emitEvent(make_unique<Event::Keyboard>(*keyboardEvent), keyUpHandler());
+        }
+        else if (keyboardEvent->name() == "keydown")
+        {
+            emitEvent(make_unique<Event::Keyboard>(*keyboardEvent), keyDownHandler());
+        }
     }
 }
 
@@ -334,6 +341,62 @@ unsigned Base::width() const
 unsigned Base::height() const
 {
     return size().height();
+}
+
+
+Event::KeyboardHandler& Base::keyDownHandler() const
+{
+    return _keyDownHandler;
+}
+
+Event::KeyboardHandler& Base::keyUpHandler() const
+{
+    return _keyUpHandler;
+}
+
+Event::MouseHandler& Base::mouseDragStartHandler() const
+{
+    return _mouseDragStartHandler;
+}
+
+Event::MouseHandler& Base::mouseDragHandler() const
+{
+    return _mouseDragHandler;
+}
+
+Event::MouseHandler& Base::mouseDragStopHandler() const
+{
+    return _mouseDragStopHandler;
+}
+
+Event::MouseHandler& Base::mouseInHandler() const
+{
+    return _mouseInHandler;
+}
+
+Event::MouseHandler& Base::mouseMoveHandler() const
+{
+    return _mouseMoveHandler;
+}
+
+Event::MouseHandler& Base::mouseOutHandler() const
+{
+    return _mouseOutHandler;
+}
+
+Event::MouseHandler& Base::mouseClickHandler() const
+{
+    return _mouseClickHandler;
+}
+
+Event::MouseHandler& Base::mouseDownHandler() const
+{
+    return _mouseDownHandler;
+}
+
+Event::MouseHandler& Base::mouseUpHandler() const
+{
+    return _mouseUpHandler;
 }
 
 }

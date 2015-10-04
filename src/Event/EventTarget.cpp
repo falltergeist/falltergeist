@@ -43,59 +43,13 @@ EventTarget::~EventTarget()
     _eventDispatcher->blockEventHandlers(this);
 }
 
-void EventTarget::addEventHandler(const std::string& eventName, Handler::Functor handler)
+template<typename T>
+void EventTarget::emitEvent(std::unique_ptr<T> event, Base::Delegate<T*> handler)
 {
-    _eventHandlers[eventName].add(std::move(handler));
+    event->setTarget(this);
+    _eventDispatcher->scheduleEvent<T>(this, std::move(event), handler); // handler copy is necessary here
 }
 
-/*void EventTarget::processEvent(Event* event)
-{
-    const auto it = _eventHandlers.find(event->name());
-    event->setHandled(false);
-    if (it != _eventHandlers.end())
-    {
-        event->setTarget(this);
-        for (auto& eventHandler : it->second)
-        {
-            if (event->handled()) return;
-            eventHandler(event);
-        }
-    }
-}*/
-
-void EventTarget::emitEvent(std::unique_ptr<Event> event)
-{
-    const auto it = _eventHandlers.find(event->name());
-    if (it != _eventHandlers.end())
-    {
-        event->setTarget(this);
-        _eventDispatcher->scheduleEvent(this, std::move(event));
-    }
-}
-
-void EventTarget::removeEventHandlers(const std::string& eventName)
-{
-    const auto it = _eventHandlers.find(eventName);
-    if (it != _eventHandlers.end())
-    {
-        it->second.clear();
-    }
-}
-
-Handler EventTarget::getEventHandler(const std::string& eventName)
-{
-    const auto it = _eventHandlers.find(eventName);
-    if (it != _eventHandlers.end())
-    {
-        return it->second;
-    }
-    return Handler();
-}
-
-Handler& EventTarget::_getEventHandlerRef(const std::string& eventName)
-{
-    return _eventHandlers[eventName];
-}
 
 }
 }
