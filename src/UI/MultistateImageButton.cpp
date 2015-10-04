@@ -40,13 +40,13 @@ namespace UI
 
 MultistateImageButton::MultistateImageButton(const Point& pos) : Falltergeist::UI::Base(pos)
 {
-    onMouseLeftClick() += [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); };
+    mouseClickHandler() += std::bind(&_onMouseClick, this, std::placeholders::_1);
 }
 
 MultistateImageButton::MultistateImageButton(Type type, int x, int y) : Falltergeist::UI::Base(Point(x, y))
 {
-    onMouseLeftClick() += [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); };
-    addEventHandler("mouseleftup", [this](Event::Event* event){ this->_onLeftButtonUp(dynamic_cast<Event::Mouse*>(event)); });
+    mouseClickHandler() += std::bind(&_onMouseClick, this, std::placeholders::_1);
+    mouseUpHandler().add(std::bind(&_onLeftButtonUp, this, std::placeholders::_1));
     switch (type)
     {
         case Type::BIG_SWITCH:
@@ -91,7 +91,7 @@ MultistateImageButton::MultistateImageButton(Type type, int x, int y) : Fallterg
 
 MultistateImageButton::MultistateImageButton(ImageList* imageList, const Point& pos) : Falltergeist::UI::Base(pos)
 {
-    onMouseLeftClick() += [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); };
+    mouseClickHandler() += std::bind(&_onMouseClick, this, std::placeholders::_1);
     for (auto& image : imageList->images())
     {
         _imageList.addImage(std::unique_ptr<Image>(new Image(*image)));
@@ -129,7 +129,7 @@ MultistateImageButton::Mode MultistateImageButton::mode() const
     return _mode;
 }
 
-void MultistateImageButton::_onLeftButtonClick(Event::Mouse* event)
+void MultistateImageButton::_onMouseClick(Event::Mouse* event)
 {
     auto sender = dynamic_cast<MultistateImageButton*>(event->target());
 
@@ -160,6 +160,8 @@ void MultistateImageButton::_onLeftButtonClick(Event::Mouse* event)
 
 void MultistateImageButton::_onLeftButtonUp(Event::Mouse* event)
 {
+    if (!event->leftButton()) return;
+
     auto sender = dynamic_cast<MultistateImageButton*>(event->target());
 
     if (!sender->_downSound.empty())
@@ -214,11 +216,6 @@ void MultistateImageButton::setMinState(unsigned int value)
 unsigned int MultistateImageButton::minState() const
 {
     return _minState;
-}
-
-Event::Handler& MultistateImageButton::onMouseLeftClick()
-{
-    return _getEventHandlerRef("mouseleftclick");
 }
 
 }

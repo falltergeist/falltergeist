@@ -40,8 +40,8 @@ public:
 
     void init() override;
 
-    void onBackgroundClick(Event::Event* event);
-    void onTalkButtonClick(Event::Event* event);
+    void onBackgroundClick(Event::Mouse* event);
+    void onTalkButtonClick(Event::Mouse* event);
 };
 
 }

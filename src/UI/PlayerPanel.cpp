@@ -64,12 +64,12 @@ PlayerPanel::PlayerPanel() : UI::Base()
 
     _background->setPosition(this->position());
 
-    addEventHandler("mousein", [this, mouse](Event::Event* event)
+    mouseInHandler().add([this, mouse](Event::Event* event)
     {
         mouse->pushState(Input::Mouse::Cursor::BIG_ARROW);
     });
 
-    addEventHandler("mouseout", [this, mouse](Event::Event* event)
+    mouseOutHandler().add([this, mouse](Event::Event* event)
     {
         if (mouse->scrollState())
         {
@@ -87,15 +87,15 @@ PlayerPanel::PlayerPanel() : UI::Base()
 
     // Change hand button
     _ui.push_back(std::make_shared<ImageButton>(ImageButton::Type::BIG_RED_CIRCLE, position() + Point(218, 5)));
-    _ui.back()->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->changeHand(); });
+    _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->changeHand(); });
 
     // Inventory button
     _ui.push_back(std::make_shared<ImageButton>(ImageButton::Type::PANEL_INVENTORY, position() + Point(211, 40)));
-    _ui.back()->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->openInventory(); });
+    _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->openInventory(); });
 
     // Options button
     _ui.push_back(std::make_shared<ImageButton>(ImageButton::Type::PANEL_OPTIONS, position() + Point(210, 61)));
-    _ui.back()->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->openGameMenu(); });
+    _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->openGameMenu(); });
 
     // Attack button
     _ui.push_back(std::make_shared<ImageButton>(ImageButton::Type::PANEL_ATTACK, position() + Point(267, 25)));
@@ -114,29 +114,29 @@ PlayerPanel::PlayerPanel() : UI::Base()
 
     // Skilldex button
     _ui.push_back(std::make_shared<ImageButton>(ImageButton::Type::BIG_RED_CIRCLE, position() + Point(523, 5)));
-    _ui.back()->addEventHandler("mouseleftclick", [this](Event::Event* event){
+    _ui.back()->mouseClickHandler().add([this](Event::Event* event){
         this->openSkilldex();
     });
 
     // MAP button
     _ui.push_back(std::make_shared<ImageButton>(ImageButton::Type::PANEL_MAP, position() + Point(526, 39)));
-    _ui.back()->addEventHandler("mouseleftclick", [this](Event::Event* event){
+    _ui.back()->mouseClickHandler().add([this](Event::Event* event){
         this->openMap();
     });
 
     // CHA button
     _ui.push_back(std::make_shared<ImageButton>(ImageButton::Type::PANEL_CHA, position() + Point(526, 58)));
-    _ui.back()->addEventHandler("mouseleftclick", [this](Event::Event* event){
+    _ui.back()->mouseClickHandler().add([this](Event::Event* event){
         this->openCharacterScreen();
     });
 
     // PIP button
     _ui.push_back(std::make_shared<ImageButton>(ImageButton::Type::PANEL_PIP, position() + Point(526, 77)));
-    _ui.back()->addEventHandler("mouseleftclick", [this](Event::Event* event){
+    _ui.back()->mouseClickHandler().add([this](Event::Event* event){
         this->openPipBoy();
     });
 
-    addEventHandler("keydown", [this](Event::Event* event) {
+    keyDownHandler().add([this](Event::Event* event) {
         this->onKeyDown(dynamic_cast<Event::Keyboard*>(event));
     });
 }

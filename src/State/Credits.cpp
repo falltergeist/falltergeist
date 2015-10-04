@@ -162,14 +162,14 @@ void Credits::handle(Event::Event* event)
 
 void Credits::onCreditsFinished()
 {
-    removeEventHandlers("fadedone");
-    addEventHandler("fadedone", [this](Event::Event* event){ this->onCreditsFadeDone(dynamic_cast<Event::State*>(event)); });
+    fadeDoneHandler().clear();
+    fadeDoneHandler().add([this](Event::Event* event){ this->onCreditsFadeDone(dynamic_cast<Event::State*>(event)); });
     Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
 }
 
 void Credits::onCreditsFadeDone(Event::State* event)
 {
-    removeEventHandlers("fadedone");
+    fadeDoneHandler().clear();
     Game::getInstance()->mouse()->popState();
     Game::getInstance()->popState();
 }

@@ -308,17 +308,17 @@ void SettingsMenu::init()
 
     // button: Default
     auto defaultButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+23, backgroundY+450);
-    defaultButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDefaultButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    defaultButton->mouseClickHandler().add(std::bind(&onDefaultButtonClick, this, std::placeholders::_1));
     addUI(defaultButton);
 
     // button: Done
     auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+148, backgroundY+450);
-    doneButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doSave(); });
+    doneButton->mouseClickHandler().add([this](Event::Event* event){ this->doSave(); });
     addUI(doneButton);
 
     // button: Cancel
     auto cancelButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+263, backgroundY+450);
-    cancelButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doCancel(); });
+    cancelButton->mouseClickHandler().add([this](Event::Event* event){ this->doCancel(); });
     addUI(cancelButton);
 
     // button: Affect player speed

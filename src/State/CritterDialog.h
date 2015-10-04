@@ -68,11 +68,11 @@ public:
     bool hasAnswers();
     void addAnswer(const std::string& text);
 
-    void onReviewButtonClick(Event::Event* event);
-    void onBarterButtonClick(Event::Event* event);
-    void onAnswerIn(Event::Event* event);
-    void onAnswerOut(Event::Event* event);
-    void onAnswerClick(Event::Event* event);
+    void onReviewButtonClick(Event::Mouse* event);
+    void onBarterButtonClick(Event::Mouse* event);
+    void onAnswerIn(Event::Mouse* event);
+    void onAnswerOut(Event::Mouse* event);
+    void onAnswerClick(Event::Mouse* event);
     void onKeyDown(Event::Keyboard* event) override;
 
 };

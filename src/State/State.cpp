@@ -43,8 +43,8 @@ using namespace Base;
 
 State::State() : Event::EventTarget(Game::getInstance()->eventDispatcher())
 {
-    addEventHandler("activate",   [this](Event::Event* event){ this->onStateActivate(dynamic_cast<Event::State*>(event)); });
-    addEventHandler("deactivate", [this](Event::Event* event){ this->onStateDeactivate(dynamic_cast<Event::State*>(event)); });
+    activateHandler().add([this](Event::Event* event){ this->onStateActivate(dynamic_cast<Event::State*>(event)); });
+    deactivateHandler().add([this](Event::Event* event){ this->onStateDeactivate(dynamic_cast<Event::State*>(event)); });
 }
 
 State::~State()
@@ -55,7 +55,7 @@ void State::init()
 {
     _initialized = true;
 
-    addEventHandler("keydown", [this](Event::Event* event) { this->onKeyDown(dynamic_cast<Event::Keyboard*>(event)); });
+    keyDownHandler().add([this](Event::Event* event) { this->onKeyDown(dynamic_cast<Event::Keyboard*>(event)); });
 }
 
 void State::think()
@@ -233,27 +233,27 @@ void State::setActive(bool value)
     _active = value;
 }
 
-Event::StateHandler& State::activateHandler() const
+Event::StateHandler& State::activateHandler()
 {
     return _activateHandler;
 }
 
-Event::StateHandler& State::deactivateHandler() const
+Event::StateHandler& State::deactivateHandler()
 {
     return _deactivateHandler;
 }
 
-Event::StateHandler& State::fadeDoneHandler() const
+Event::StateHandler& State::fadeDoneHandler()
 {
     return _fadeDoneHandler;
 }
 
-Event::KeyboardHandler& State::keyDownHandler() const
+Event::KeyboardHandler& State::keyDownHandler()
 {
     return _keyDownHandler;
 }
 
-Event::KeyboardHandler& State::keyUpHandler() const
+Event::KeyboardHandler& State::keyUpHandler()
 {
     return _keyUpHandler;
 }

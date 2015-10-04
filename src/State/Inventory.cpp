@@ -83,15 +83,15 @@ void Inventory::init()
     setPosition((game->renderer()->size() - Point(499, 377 + panelHeight)) / 2); // 499x377 = art/intrface/invbox.frm
 
     addUI("background", new UI::Image("art/intrface/invbox.frm"));
-    getUI("background")->addEventHandler("mouserightclick", [this](Event::Event* event){ this->backgroundRightClick(dynamic_cast<Event::Mouse*>(event)); });
+    getUI("background")->mouseClickHandler().add(std::bind(&backgroundRightClick, this, std::placeholders::_1));
 
     addUI("button_up",   new UI::ImageButton(UI::ImageButton::Type::INVENTORY_UP_ARROW,   128, 40));
     addUI("button_down", new UI::ImageButton(UI::ImageButton::Type::INVENTORY_DOWN_ARROW, 128, 65));
     addUI("button_done", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 438, 328));
 
-    getUI("button_done")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
-    getUI("button_up")->addEventHandler("mouseleftclick",   [this](Event::Event* event){ this->onScrollUpButtonClick(dynamic_cast<Event::Mouse*>(event)); });
-    getUI("button_down")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onScrollDownButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    getUI("button_done")->mouseClickHandler().add(std::bind(&onDoneButtonClick, this, std::placeholders::_1));
+    getUI("button_up")->mouseClickHandler().add(  std::bind(&onScrollUpButtonClick, this, std::placeholders::_1));
+    getUI("button_down")->mouseClickHandler().add(std::bind(&onScrollDownButtonClick, this, std::placeholders::_1));
 
     // screen
     auto screenX = 300;
@@ -262,8 +262,8 @@ void Inventory::init()
     {
         auto inventoryItem = new UI::InventoryItem(armorSlot, {154, 183});
         inventoryItem->setType(UI::InventoryItem::Type::SLOT);
-        inventoryItem->addEventHandler("itemdragstop", [inventoryList](Event::Event* event){ inventoryList->onItemDragStop(dynamic_cast<Event::Mouse*>(event)); });
-        inventoryList->addEventHandler("itemdragstop", [inventoryItem](Event::Event* event){ inventoryItem->onArmorDragStop(dynamic_cast<Event::Mouse*>(event)); });
+        inventoryItem->itemDragStopHandler().add([inventoryList](Event::Mouse* event){ inventoryList->onItemDragStop(event); });
+        inventoryList->itemDragStopHandler().add([inventoryItem](Event::Mouse* event){ inventoryItem->onArmorDragStop(event); });
         addUI(inventoryItem);
     }
 
@@ -271,8 +271,8 @@ void Inventory::init()
     {
         auto inventoryItem = new UI::InventoryItem(leftHand, {154, 286});
         inventoryItem->setType(UI::InventoryItem::Type::SLOT);
-        inventoryItem->addEventHandler("itemdragstop", [inventoryList](Event::Event* event){ inventoryList->onItemDragStop(dynamic_cast<Event::Mouse*>(event)); });
-        inventoryList->addEventHandler("itemdragstop", [inventoryItem](Event::Event* event){ inventoryItem->onHandDragStop(dynamic_cast<Event::Mouse*>(event)); });
+        inventoryItem->itemDragStopHandler().add([inventoryList](Event::Mouse* event){ inventoryList->onItemDragStop(event); });
+        inventoryList->itemDragStopHandler().add([inventoryItem](Event::Mouse* event){ inventoryItem->onHandDragStop(event); });
         addUI(inventoryItem);
     }
 
@@ -280,8 +280,8 @@ void Inventory::init()
     {
         auto inventoryItem = new UI::InventoryItem(rightHand, {247, 286});
         inventoryItem->setType(UI::InventoryItem::Type::SLOT);
-        inventoryItem->addEventHandler("itemdragstop", [inventoryList](Event::Event* event){ inventoryList->onItemDragStop(dynamic_cast<Event::Mouse*>(event)); });
-        inventoryList->addEventHandler("itemdragstop", [inventoryItem](Event::Event* event){ inventoryItem->onHandDragStop(dynamic_cast<Event::Mouse*>(event)); });
+        inventoryItem->itemDragStopHandler().add([inventoryList](Event::Mouse* event){ inventoryList->onItemDragStop(event); });
+        inventoryList->itemDragStopHandler().add([inventoryItem](Event::Mouse* event){ inventoryItem->onHandDragStop(event); });
         addUI(inventoryItem);
     }
 

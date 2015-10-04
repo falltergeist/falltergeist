@@ -306,7 +306,7 @@ std::vector<Input::Mouse::Icon> Location::getCursorIconsForObject(Game::Object* 
 }
 
 
-void Location::onObjectMouseEvent(Event::Event* event, Game::Object* object)
+void Location::onObjectMouseEvent(Event::Mouse* event, Game::Object* object)
 {
     if (!object) return;
     if (event->name() == "mouseleftdown")
@@ -326,7 +326,7 @@ void Location::onObjectMouseEvent(Event::Event* event, Game::Object* object)
     }
 }
 
-void Location::onObjectHover(Event::Event* event, Game::Object* object)
+void Location::onObjectHover(Event::Mouse* event, Game::Object* object)
 {
     if (event->name() == "mouseout")
     {
@@ -905,7 +905,7 @@ void Location::handleAction(Game::Object* object, Input::Mouse::Icon action)
         {
             auto player = Game::getInstance()->player();
             auto animation = player->setActionAnimation("al");
-            animation->addEventHandler("actionFrame", [object, player](Event::Event* event){ object->onUseAnimationActionFrame(event, player); });
+            animation->actionFrameHandler().add([object, player](Event::Event* event){ object->onUseAnimationActionFrame(event, player); });
             break;
         }
         case Input::Mouse::Icon::ROTATE:

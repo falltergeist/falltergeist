@@ -115,11 +115,11 @@ public:
     virtual void onStateDeactivate(Event::State* event);
     virtual void onKeyDown(Event::Keyboard* event);
 
-    Event::StateHandler& activateHandler() const;
-    Event::StateHandler& deactivateHandler() const;
-    Event::StateHandler& fadeDoneHandler() const;
-    Event::KeyboardHandler& keyDownHandler() const;
-    Event::KeyboardHandler& keyUpHandler() const;
+    Event::StateHandler& activateHandler();
+    Event::StateHandler& deactivateHandler();
+    Event::StateHandler& fadeDoneHandler();
+    Event::KeyboardHandler& keyDownHandler();
+    Event::KeyboardHandler& keyUpHandler();
 
 protected:
     std::vector<std::unique_ptr<UI::Base>> _ui;

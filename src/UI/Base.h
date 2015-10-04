@@ -93,18 +93,18 @@ public:
     virtual unsigned int pixel(const Point& pos);
     unsigned int pixel(unsigned int x, unsigned int y);
 
-    Event::KeyboardHandler& keyDownHandler() const;
-    Event::KeyboardHandler& keyUpHandler() const;
+    Event::KeyboardHandler& keyDownHandler();
+    Event::KeyboardHandler& keyUpHandler();
 
-    Event::MouseHandler& mouseDragStartHandler() const;
-    Event::MouseHandler& mouseDragHandler() const;
-    Event::MouseHandler& mouseDragStopHandler() const;
-    Event::MouseHandler& mouseInHandler() const;
-    Event::MouseHandler& mouseMoveHandler() const;
-    Event::MouseHandler& mouseOutHandler() const;
-    Event::MouseHandler& mouseClickHandler() const;
-    Event::MouseHandler& mouseDownHandler() const;
-    Event::MouseHandler& mouseUpHandler() const;
+    Event::MouseHandler& mouseDragStartHandler();
+    Event::MouseHandler& mouseDragHandler();
+    Event::MouseHandler& mouseDragStopHandler();
+    Event::MouseHandler& mouseInHandler();
+    Event::MouseHandler& mouseMoveHandler();
+    Event::MouseHandler& mouseOutHandler();
+    Event::MouseHandler& mouseClickHandler();
+    Event::MouseHandler& mouseDownHandler();
+    Event::MouseHandler& mouseUpHandler();
     // TODO: mouse hover? (will require additional hoverDelay property)
 
 protected:

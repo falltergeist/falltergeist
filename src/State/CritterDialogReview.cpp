@@ -55,7 +55,7 @@ void CritterDialogReview::init()
 
     // Interface buttons
     auto doneButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_DONE_BUTTON, backgroundPos + Point(500, 398));
-    doneButton->addEventHandler("mouseleftclick", std::bind(&CritterDialogReview::onDoneButtonClick, this, std::placeholders::_1));
+    doneButton->mouseClickHandler().add(std::bind(&CritterDialogReview::onDoneButtonClick, this, std::placeholders::_1));
 
     auto upButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_BIG_UP_ARROW, backgroundPos + Point(476, 154));
 
@@ -67,7 +67,7 @@ void CritterDialogReview::init()
     addUI(downButton);
 }
 
-void CritterDialogReview::onDoneButtonClick(Event::Event* event)
+void CritterDialogReview::onDoneButtonClick(Event::Mouse* event)
 {
     Game::getInstance()->popState();
 }

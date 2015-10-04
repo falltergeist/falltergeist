@@ -144,7 +144,7 @@ Point AnimationQueue::offset() const
     return currentAnimation()->offset();
 }
 
-Event::Handler& AnimationQueue::animationEndedHandler() const
+Event::Handler& AnimationQueue::animationEndedHandler()
 {
     return _animationEndedHandler;
 }

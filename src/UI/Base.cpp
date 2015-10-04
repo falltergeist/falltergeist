@@ -344,57 +344,57 @@ unsigned Base::height() const
 }
 
 
-Event::KeyboardHandler& Base::keyDownHandler() const
+Event::KeyboardHandler& Base::keyDownHandler()
 {
     return _keyDownHandler;
 }
 
-Event::KeyboardHandler& Base::keyUpHandler() const
+Event::KeyboardHandler& Base::keyUpHandler()
 {
     return _keyUpHandler;
 }
 
-Event::MouseHandler& Base::mouseDragStartHandler() const
+Event::MouseHandler& Base::mouseDragStartHandler()
 {
     return _mouseDragStartHandler;
 }
 
-Event::MouseHandler& Base::mouseDragHandler() const
+Event::MouseHandler& Base::mouseDragHandler()
 {
     return _mouseDragHandler;
 }
 
-Event::MouseHandler& Base::mouseDragStopHandler() const
+Event::MouseHandler& Base::mouseDragStopHandler()
 {
     return _mouseDragStopHandler;
 }
 
-Event::MouseHandler& Base::mouseInHandler() const
+Event::MouseHandler& Base::mouseInHandler()
 {
     return _mouseInHandler;
 }
 
-Event::MouseHandler& Base::mouseMoveHandler() const
+Event::MouseHandler& Base::mouseMoveHandler()
 {
     return _mouseMoveHandler;
 }
 
-Event::MouseHandler& Base::mouseOutHandler() const
+Event::MouseHandler& Base::mouseOutHandler()
 {
     return _mouseOutHandler;
 }
 
-Event::MouseHandler& Base::mouseClickHandler() const
+Event::MouseHandler& Base::mouseClickHandler()
 {
     return _mouseClickHandler;
 }
 
-Event::MouseHandler& Base::mouseDownHandler() const
+Event::MouseHandler& Base::mouseDownHandler()
 {
     return _mouseDownHandler;
 }
 
-Event::MouseHandler& Base::mouseUpHandler() const
+Event::MouseHandler& Base::mouseUpHandler()
 {
     return _mouseUpHandler;
 }

@@ -25,6 +25,9 @@
 // Falltergeist includes
 #include "../Event/Dispatcher.h"
 #include "../Event/Event.h"
+#include "../Event/Mouse.h"
+#include "../Event/Keyboard.h"
+#include "../Event/State.h"
 
 // Third party includes
 
@@ -50,6 +53,12 @@ void EventTarget::emitEvent(std::unique_ptr<T> event, Base::Delegate<T*> handler
     _eventDispatcher->scheduleEvent<T>(this, std::move(event), handler); // handler copy is necessary here
 }
 
+
+// this was necessary to decouple EventDispatcher from the rest of the classes
+template void EventTarget::emitEvent<Event>(std::unique_ptr<Event>, Base::Delegate<Event*>);
+template void EventTarget::emitEvent<Mouse>(std::unique_ptr<Mouse>, Base::Delegate<Mouse*>);
+template void EventTarget::emitEvent<Keyboard>(std::unique_ptr<Keyboard>, Base::Delegate<Keyboard*>);
+template void EventTarget::emitEvent<State>(std::unique_ptr<State>, Base::Delegate<State*>);
 
 }
 }

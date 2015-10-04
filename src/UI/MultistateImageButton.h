@@ -78,8 +78,6 @@ public:
 
     Graphics::Texture* texture() const override;
 
-    Event::Handler& onMouseLeftClick();
-
 protected:
     ImageList _imageList;
     unsigned int _currentState = 0;
@@ -87,7 +85,7 @@ protected:
     int _modeFactor = 1; // or -1
     unsigned int _maxState = 0;
     unsigned int _minState = 0;
-    void _onLeftButtonClick(Event::Mouse* event);
+    void _onMouseClick(Event::Mouse* event);
     void _onLeftButtonUp(Event::Mouse* event);
 
 };

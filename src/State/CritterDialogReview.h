@@ -41,7 +41,7 @@ public:
 
     void init() override;
 
-    void onDoneButtonClick(Event::Event* event);
+    void onDoneButtonClick(Event::Mouse* event);
 };
 
 }

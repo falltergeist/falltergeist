@@ -218,9 +218,9 @@ void ImageButton::_init(Type type)
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
     }
-    addEventHandler("mouseleftclick", [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); });
-    addEventHandler("mouseleftdown", [this](Event::Event* event){ this->_onLeftButtonDown(dynamic_cast<Event::Mouse*>(event)); });
-    addEventHandler("mouseout", [this](Event::Event* event){ this->_onMouseOut(dynamic_cast<Event::Mouse*>(event)); });
+    mouseClickHandler().add(std::bind(&_onLeftButtonClick, this, std::placeholders::_1));
+    mouseDownHandler().add(std::bind(&_onLeftButtonDown, this, std::placeholders::_1));
+    mouseOutHandler().add(std::bind(&_onMouseOut, this, std::placeholders::_1));
 }
 
 Graphics::Texture* ImageButton::texture() const

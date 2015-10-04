@@ -76,9 +76,9 @@ void PlayerEditAlert::init()
     doneBox->setPosition(bgPos + Point(254, 270));
 
     auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX + 264, bgY + 273);
-    doneButton->addEventHandler("mouseleftclick", [this](Event::Event* event)
+    doneButton->mouseClickHandler().add([this](Event::Mouse* event)
     {
-        this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event));
+        this->onDoneButtonClick(event);
     });
 
     auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX + 284, bgY + 273);

@@ -68,9 +68,9 @@ public:
     bool ended() const;
     bool playing() const;
 
-    Event::Handler& animationEndedHandler() const;
+    Event::Handler& animationEndedHandler();
 
-    Event::Handler& actionFrameHandler() const;
+    Event::Handler& actionFrameHandler();
 
 protected:
     bool _playing = false;

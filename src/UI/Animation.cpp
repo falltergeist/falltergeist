@@ -457,12 +457,12 @@ void Animation::setActionFrame(unsigned int value)
     _actionFrame = value;
 }
 
-Event::Handler& Animation::actionFrameHandler() const
+Event::Handler& Animation::actionFrameHandler()
 {
     return _actionFrameHandler;
 }
 
-Event::Handler& Animation::animationEndedHandler() const
+Event::Handler& Animation::animationEndedHandler()
 {
     return _animationEndedHandler;
 }

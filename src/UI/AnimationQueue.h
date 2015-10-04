@@ -57,7 +57,7 @@ public:
     Size size() const override;
     Point offset() const override;
 
-    Event::Handler& animationEndedHandler() const;
+    Event::Handler& animationEndedHandler();
 
 protected:
     bool _playing = false;

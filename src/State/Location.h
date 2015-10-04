@@ -91,8 +91,8 @@ public:
     void displayMessage(const std::string& message);
 
     void onBackgroundClick(Event::Mouse* event);
-    void onObjectMouseEvent(Event::Event* event, Game::Object* object);
-    void onObjectHover(Event::Event* event, Game::Object* object);
+    void onObjectMouseEvent(Event::Mouse* event, Game::Object* object);
+    void onObjectHover(Event::Mouse* event, Game::Object* object);
     void onKeyDown(Event::Keyboard* event) override;
 
     void onStateActivate(Event::State* event) override;
