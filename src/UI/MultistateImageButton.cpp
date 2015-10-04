@@ -40,12 +40,12 @@ namespace UI
 
 MultistateImageButton::MultistateImageButton(const Point& pos) : Falltergeist::UI::Base(pos)
 {
-    addEventHandler("mouseleftclick", [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    onMouseLeftClick() += [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); };
 }
 
 MultistateImageButton::MultistateImageButton(Type type, int x, int y) : Falltergeist::UI::Base(Point(x, y))
 {
-    addEventHandler("mouseleftclick", [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    onMouseLeftClick() += [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); };
     addEventHandler("mouseleftup", [this](Event::Event* event){ this->_onLeftButtonUp(dynamic_cast<Event::Mouse*>(event)); });
     switch (type)
     {
@@ -91,7 +91,7 @@ MultistateImageButton::MultistateImageButton(Type type, int x, int y) : Fallterg
 
 MultistateImageButton::MultistateImageButton(ImageList* imageList, const Point& pos) : Falltergeist::UI::Base(pos)
 {
-    addEventHandler("mouseleftclick", [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    onMouseLeftClick() += [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); };
     for (auto& image : imageList->images())
     {
         _imageList.addImage(std::unique_ptr<Image>(new Image(*image)));
@@ -214,6 +214,11 @@ void MultistateImageButton::setMinState(unsigned int value)
 unsigned int MultistateImageButton::minState() const
 {
     return _minState;
+}
+
+Event::Handler& MultistateImageButton::onMouseLeftClick()
+{
+    return _getEventHandlerRef("mouseleftclick");
 }
 
 }

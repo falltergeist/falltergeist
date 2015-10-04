@@ -28,6 +28,7 @@
 #include <vector>
 
 // Falltergeist includes
+#include "../Event/Handler.h"
 
 // Third party includes
 
@@ -39,8 +40,6 @@ class Event;
 
 class Dispatcher;
 
-// TODO: make proper class with implicit conversion constructors
-using EventHandler = std::function<void(Event*)>;
 
 class EventTarget
 {
@@ -51,7 +50,8 @@ public:
     /**
      * Adds event handler to given event name.
      */
-    void addEventHandler(const std::string& eventName, EventHandler handler);
+    void addEventHandler(const std::string& eventName, Handler::Functor handler);
+
     /**
      * Emit given event to Event Dispatcher for delayed processing.
      */
@@ -60,13 +60,17 @@ public:
      * Remove all event handlers attached to given event name.
      */
     void removeEventHandlers(const std::string& eventName);
+
     /**
      * Returns all handlers for given event name or empty vector if no handlers were defined.
      */
-    std::vector<EventHandler> getEventHandlers(const std::string& eventName);
+    Handler getEventHandler(const std::string& eventName);
+
+protected:
+    Handler& _getEventHandlerRef(const std::string& eventName);
 
 private:
-    std::unordered_map<std::string, std::vector<EventHandler>> _eventHandlers;
+    std::unordered_map<std::string, Handler> _eventHandlers;
     Dispatcher* _eventDispatcher;
 };
 

@@ -78,6 +78,8 @@ public:
 
     Graphics::Texture* texture() const override;
 
+    Event::Handler& onMouseLeftClick();
+
 protected:
     ImageList _imageList;
     unsigned int _currentState = 0;

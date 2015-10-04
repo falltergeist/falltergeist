@@ -43,9 +43,9 @@ EventTarget::~EventTarget()
     _eventDispatcher->blockEventHandlers(this);
 }
 
-void EventTarget::addEventHandler(const std::string& eventName, EventHandler handler)
+void EventTarget::addEventHandler(const std::string& eventName, Handler::Functor handler)
 {
-    _eventHandlers[eventName].emplace_back(handler);
+    _eventHandlers[eventName].add(std::move(handler));
 }
 
 /*void EventTarget::processEvent(Event* event)
@@ -82,14 +82,19 @@ void EventTarget::removeEventHandlers(const std::string& eventName)
     }
 }
 
-std::vector<EventHandler> EventTarget::getEventHandlers(const std::string& eventName)
+Handler EventTarget::getEventHandler(const std::string& eventName)
 {
     const auto it = _eventHandlers.find(eventName);
     if (it != _eventHandlers.end())
     {
         return it->second;
     }
-    return std::vector<EventHandler>();
+    return Handler();
+}
+
+Handler& EventTarget::_getEventHandlerRef(const std::string& eventName)
+{
+    return _eventHandlers[eventName];
 }
 
 }

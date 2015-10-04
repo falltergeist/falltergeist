@@ -49,12 +49,12 @@ void Dispatcher::processScheduledEvents()
 
             // any handler can alter current list of handlers by calling addEventHandler or removeEventHandlers on target,
             // so we have to use copy here
-            auto handlers = task.first->getEventHandlers(task.second->name());
+            auto handler = task.first->getEventHandler(task.second->name());
 
             task.second->setHandled(false);
-            for (auto& handler : handlers)
+            for (auto& func : handler.functors())
             {
-                handler(task.second.get());
+                func(task.second.get());
                 // handler may set handled flag to true - to stop other handlers from executing
                 // also, target may be deleted by any handler, so we should check that on every iteration
                 if (task.second->handled() || task.first == nullptr) break;
