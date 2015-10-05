@@ -71,25 +71,25 @@ void Event::setName(const std::string& name)
 }
 
 /**
- * @brief Returns event emitter
- * @return Event emitter
+ * @brief Returns event target
+ * @return Event target
  */
-Emitter* Event::emitter() const
+EventTarget* Event::target() const
 {
-    return _emitter;
+    return _target;
 }
 
 /**
- * @brief Sets event emitter
- * @param[in] value Event emitter
+ * @brief Sets event target
+ * @param[in] value Event target
  */
-void Event::setEmitter(Emitter* value)
+void Event::setTarget(EventTarget* value)
 {
-    _emitter = value;
+    _target = value;
 }
 
 /**
- * @brief Returns if event is handled or not
+ * @brief Returns if event is handled or not.
  * @return Is event handled or not
  */
 bool Event::handled() const
@@ -97,10 +97,6 @@ bool Event::handled() const
     return _handled;
 }
 
-/**
- * @brief Sets that event is handled or not
- * @param[in] value Is event handled or not
- */
 void Event::setHandled(bool value)
 {
     _handled = value;

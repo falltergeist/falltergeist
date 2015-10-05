@@ -24,6 +24,7 @@
 #include <algorithm>
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Event/State.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -38,7 +39,9 @@ namespace Falltergeist
 namespace State
 {
 
-State::State() : Event::Emitter()
+using namespace Base;
+
+State::State() : Event::EventTarget(Game::getInstance()->eventDispatcher())
 {
     addEventHandler("activate",   [this](Event::Event* event){ this->onStateActivate(dynamic_cast<Event::State*>(event)); });
     addEventHandler("deactivate", [this](Event::Event* event){ this->onStateDeactivate(dynamic_cast<Event::State*>(event)); });
@@ -51,6 +54,8 @@ State::~State()
 void State::init()
 {
     _initialized = true;
+
+    addEventHandler("keydown", [this](Event::Event* event) { this->onKeyDown(dynamic_cast<Event::Keyboard*>(event)); });
 }
 
 void State::think()
@@ -170,10 +175,7 @@ void State::handle(Event::Event* event)
     if (event->handled()) return;
     if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
     {
-        if (keyboardEvent->name() == "keydown")
-        {
-            onKeyDown(keyboardEvent);
-        }
+        emitEvent(make_unique<Event::Keyboard>(*keyboardEvent));
     }
     for (auto it = _ui.rbegin(); it != _ui.rend(); ++it)
     {

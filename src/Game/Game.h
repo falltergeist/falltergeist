@@ -24,6 +24,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <Event/Event.h>
 
 // Falltergeist includes
 #include "../Base/Singleton.h"
@@ -37,6 +38,10 @@ namespace Falltergeist
 namespace Audio
 {
     class Mixer;
+}
+namespace Event
+{
+    class Dispatcher;
 }
 namespace Graphics
 {
@@ -87,17 +92,27 @@ public:
     void quit();
     void init(std::unique_ptr<Settings> settings);
 
+    /**
+     * @brief Handle all incoming events from OS (mouse, keyboard, etc.).
+     */
     void handle();
+    /**
+     * @brief Process real-time logic.
+     */
     void think();
+    /**
+     * @brief Render the game.
+     */
     void render();
 
-    void setPlayer(DudeObject* player);
+    void setPlayer(std::unique_ptr<DudeObject> player);
     DudeObject* player();
     Input::Mouse* mouse() const;
     Graphics::Renderer* renderer();
     Time* gameTime();
     State::Location* locationState();
     Audio::Mixer* mixer();
+    Event::Dispatcher* eventDispatcher();
 
     void setGVAR(unsigned int number, int value);
     int GVAR(unsigned int number);
@@ -105,24 +120,28 @@ public:
     Settings* settings() const;
     Graphics::AnimatedPalette* animatedPalette();
 
+    unsigned int frame() const;
+
 protected:
     std::vector<int> _GVARS;
     std::vector<std::unique_ptr<State::State>> _states;
     std::vector<std::unique_ptr<State::State>> _statesForDelete;
-    std::vector<State::State*> _activeStates;
 
     Time _gameTime;
+
+    unsigned int _frame = 0;
 
     std::unique_ptr<Graphics::Renderer> _renderer;
     std::unique_ptr<Audio::Mixer> _mixer;
     std::unique_ptr<Input::Mouse> _mouse;
     std::unique_ptr<Settings> _settings;
     std::unique_ptr<Graphics::AnimatedPalette> _animatedPalette;
+    std::unique_ptr<Event::Dispatcher> _eventDispatcher;
 
     std::unique_ptr<UI::FpsCounter> _fpsCounter;
     std::unique_ptr<UI::TextArea> _mousePosition, _currentTime, _falltergeistVersion;
 
-    DudeObject* _player = nullptr;
+    std::unique_ptr<DudeObject> _player;
 
     bool _quit = false;
     bool _initialized = false;
@@ -135,6 +154,7 @@ protected:
 private:
     friend class Base::Singleton<Game>;
     void _initGVARS();
+    std::unique_ptr<Event::Event> _createEventFromSDL(const SDL_Event& sdlEvent);
 
     Game();
     ~Game();

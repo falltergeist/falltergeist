@@ -27,7 +27,6 @@
 #include "../Base/StlFeatures.h"
 #include "../Exception.h"
 #include "../Graphics/Renderer.h"
-#include "../Graphics/Texture.h"
 #include "../Game/CritterObject.h"
 #include "../Game/Defines.h"
 #include "../Game/DudeObject.h"
@@ -53,7 +52,7 @@ using Base::make_unique;
 namespace Game
 {
 
-Object::Object() : Event::Emitter()
+Object::Object() : Event::EventTarget(Game::getInstance()->eventDispatcher())
 {
 }
 
@@ -160,9 +159,11 @@ void Object::addUIEventHandlers()
 {
     if (_ui)
     {
+        // TODO: these event handlers probably need to be set in State::Location
         _ui->addEventHandler("mouseleftdown", std::bind(&State::Location::onObjectMouseEvent, Game::getInstance()->locationState(), std::placeholders::_1, this));
         _ui->addEventHandler("mouseleftclick", std::bind(&State::Location::onObjectMouseEvent, Game::getInstance()->locationState(), std::placeholders::_1, this));
         _ui->addEventHandler("mousein", std::bind(&State::Location::onObjectHover, Game::getInstance()->locationState(), std::placeholders::_1, this));
+        // TODO: get rid of mousemove handler?
         _ui->addEventHandler("mousemove", std::bind(&State::Location::onObjectHover, Game::getInstance()->locationState(), std::placeholders::_1, this));
         _ui->addEventHandler("mouseout", std::bind(&State::Location::onObjectHover, Game::getInstance()->locationState(), std::placeholders::_1, this));
     }
@@ -304,11 +305,11 @@ void Object::render()
 
     setInRender(true);
 
-    _ui->render(_useEggTransparency() && _getEggTransparency());
+    _ui->render(_useEggTransparency() && _isIntersectsWithEgg());
 }
 
 
-bool Object::_getEggTransparency()
+bool Object::_isIntersectsWithEgg()
 {
     auto dude = Game::getInstance()->player();
     Hexagon * dudeHex;
@@ -355,7 +356,10 @@ void Object::think()
 
 void Object::handle(Event::Event* event)
 {
-    if (_ui) _ui->handle(event);
+    if (_ui)
+    {
+        _ui->handle(event);
+    }
 }
 
 bool Object::inRender() const

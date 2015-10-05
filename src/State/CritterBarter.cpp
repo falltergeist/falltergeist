@@ -53,7 +53,6 @@ void CritterBarter::init()
     setPosition((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2 + Point(0, 291));
 
     addUI("background",new UI::Image("art/intrface/barter.frm"));
-    getUI("background")->addEventHandler("mouseleftclick", std::bind(&CritterBarter::onBackgroundClick, this, std::placeholders::_1));
 
     addUI("offerButton", new UI::ImageButton(UI::ImageButton::Type::DIALOG_RED_BUTTON, 40, 162));
 
@@ -74,8 +73,6 @@ void CritterBarter::onTalkButtonClick(Event::Event* event)
 
 void CritterBarter::onBackgroundClick(Event::Event* event)
 {
-    // to prevent event propagation to dialog state
-    event->setHandled(true);
 }
 
 }

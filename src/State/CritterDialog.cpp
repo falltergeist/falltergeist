@@ -96,14 +96,14 @@ void CritterDialog::setQuestion(const std::string& value)
 
 void CritterDialog::onAnswerIn(Event::Event* event)
 {
-    auto sender = dynamic_cast<UI::TextArea*>(event->emitter());
+    auto sender = dynamic_cast<UI::TextArea*>(event->target());
     auto font3_a0a0a0ff = ResourceManager::getInstance()->font("font1.aaf", 0xffff7fff);
     sender->setFont(font3_a0a0a0ff);
 }
 
 void CritterDialog::onAnswerOut(Event::Event* event)
 {
-    auto sender = dynamic_cast<UI::TextArea*>(event->emitter());
+    auto sender = dynamic_cast<UI::TextArea*>(event->target());
     auto font3_3ff800ff = ResourceManager::getInstance()->font("font1.aaf", 0x3ff800ff);
     sender->setFont(font3_3ff800ff);
 }
@@ -221,14 +221,13 @@ bool CritterDialog::hasAnswers()
 
 void CritterDialog::onAnswerClick(Event::Event* event)
 {
-    auto sender = dynamic_cast<UI::TextArea*>(event->emitter());
+    auto sender = dynamic_cast<UI::TextArea*>(event->target());
 
     size_t i = 0;
     for (auto answer : _answers)
     {
         if (answer == sender)
         {
-            event->setHandled(true);
             _selectAnswer(i);
             return;
         }

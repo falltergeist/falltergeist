@@ -22,6 +22,7 @@
 
 // Falltergeist includes
 #include "../functions.h"
+#include "../Base/StlFeatures.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
@@ -42,6 +43,8 @@ namespace Falltergeist
 {
 namespace State
 {
+
+using namespace Base;
 
 NewGame::NewGame() : State()
 {
@@ -103,23 +106,6 @@ void NewGame::init()
     getTextArea("stats_3")->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
     addUI("stats3_values", new UI::TextArea(383, 150));
-
-    auto combat = new Game::DudeObject();
-    combat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/combat.gcd"));
-    combat->setBiography(ResourceManager::getInstance()->bioFileType("premade/combat.bio")->text());
-    _characters.emplace_back(combat);
-
-    auto stealth = new Game::DudeObject();
-    stealth->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/stealth.gcd"));
-    stealth->setBiography(ResourceManager::getInstance()->bioFileType("premade/stealth.bio")->text());
-    _characters.emplace_back(stealth);
-
-    auto diplomat = new Game::DudeObject();
-    diplomat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/diplomat.gcd"));
-    diplomat->setBiography(ResourceManager::getInstance()->bioFileType("premade/diplomat.bio")->text());
-    _characters.emplace_back(diplomat);
-
-    _changeCharacter();
 }
 
 void NewGame::think()
@@ -129,22 +115,23 @@ void NewGame::think()
 
 void NewGame::doBeginGame()
 {
-    auto player = _characters.at(_selectedCharacter).get();
-    Game::getInstance()->setPlayer(player);
+    Game::getInstance()->setPlayer(std::move(_characters.at(_selectedCharacter)));
+    _characters.clear();
     Game::getInstance()->setState(new Location());
 }
 
 void NewGame::doEdit()
 {
-    Game::getInstance()->setPlayer(_characters.at(_selectedCharacter).get());
+    Game::getInstance()->setPlayer(std::move(_characters.at(_selectedCharacter)));
+    _characters.clear();
     Game::getInstance()->pushState(new PlayerCreate());
 }
 
 void NewGame::doCreate()
 {
-    auto none = new Game::DudeObject();
+    auto none = make_unique<Game::DudeObject>();
     none->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/blank.gcd"));
-    Game::getInstance()->setPlayer(none);
+    Game::getInstance()->setPlayer(std::move(none));
     Game::getInstance()->pushState(new PlayerCreate());
 }
 
@@ -301,6 +288,23 @@ void NewGame::onKeyDown(Event::Keyboard* event)
 
 void NewGame::onStateActivate(Event::State* event)
 {
+    auto combat = make_unique<Game::DudeObject>();
+    combat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/combat.gcd"));
+    combat->setBiography(ResourceManager::getInstance()->bioFileType("premade/combat.bio")->text());
+    _characters.emplace_back(std::move(combat));
+
+    auto stealth = make_unique<Game::DudeObject>();
+    stealth->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/stealth.gcd"));
+    stealth->setBiography(ResourceManager::getInstance()->bioFileType("premade/stealth.bio")->text());
+    _characters.emplace_back(std::move(stealth));
+
+    auto diplomat = make_unique<Game::DudeObject>();
+    diplomat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/diplomat.gcd"));
+    diplomat->setBiography(ResourceManager::getInstance()->bioFileType("premade/diplomat.bio")->text());
+    _characters.emplace_back(std::move(diplomat));
+
+    _changeCharacter();
+
     Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
 }
 

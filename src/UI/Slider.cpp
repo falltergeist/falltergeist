@@ -93,7 +93,7 @@ void Slider::handle(Event::Event* event)
 
 void Slider::_onDrag(Event::Mouse* event)
 {
-    auto sender = dynamic_cast<Slider*>(event->emitter());
+    auto sender = dynamic_cast<Slider*>(event->target());
     auto newOffset = sender->_offset.x() + event->offset().x();
     if (newOffset <= 218 && newOffset >= 0)
     {
@@ -104,7 +104,7 @@ void Slider::_onDrag(Event::Mouse* event)
 
 void Slider::_onLeftButtonDown(Event::Mouse* event)
 {
-    auto sender = dynamic_cast<Slider*>(event->emitter());
+    auto sender = dynamic_cast<Slider*>(event->target());
     if (!sender->_downSound.empty())
     {
         Game::getInstance()->mixer()->playACMSound(sender->_downSound);
@@ -113,7 +113,7 @@ void Slider::_onLeftButtonDown(Event::Mouse* event)
 
 void Slider::_onLeftButtonUp(Event::Mouse* event)
 {
-    auto sender = dynamic_cast<Slider*>(event->emitter());
+    auto sender = dynamic_cast<Slider*>(event->target());
     if (!sender->_upSound.empty())
     {
         Game::getInstance()->mixer()->playACMSound(sender->_upSound);

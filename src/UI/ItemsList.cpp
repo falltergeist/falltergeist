@@ -24,6 +24,7 @@
 
 // Falltergeist includes
 #include "../Audio/Mixer.h"
+#include "../Base/StlFeatures.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
 #include "../Game/ArmorItemObject.h"
@@ -43,6 +44,8 @@ namespace Falltergeist
 {
 namespace UI
 {
+
+using namespace Base;
 
 ItemsList::ItemsList(const Point& pos) : Falltergeist::UI::Base(pos)
 {
@@ -122,6 +125,10 @@ void ItemsList::onMouseDragStart(Event::Mouse* event)
         _draggedItem->setOffset((event->position() - _draggedItem->position()) - (_draggedItem->size() / 2));
         Logger::critical() << "mousedragstart at " << index << " (" << _draggedItem->item()->name() << ")" << std::endl;
     }
+    else
+    {
+        _draggedItem = nullptr;
+    }
 }
 
 void ItemsList::onMouseDrag(Event::Mouse* event)
@@ -141,12 +148,10 @@ void ItemsList::onMouseDragStop(Event::Mouse* event)
         Game::getInstance()->mixer()->playACMSound("sound/sfx/iputdown.acm");
         _draggedItem->setOffset(0, 0);
         _draggedItem->setType(_type);
-        auto itemevent = new Event::Mouse("itemdragstop");
+        auto itemevent = make_unique<Event::Mouse>("itemdragstop");
         itemevent->setPosition(event->position());
-        itemevent->setEmitter(this);
-        emitEvent(itemevent);
-        delete itemevent;
-        _draggedItem = nullptr;
+        itemevent->setTarget(this);
+        emitEvent(std::move(itemevent));
     }
     Logger::critical() << "mousedragstop" << std::endl;
 }
@@ -161,7 +166,7 @@ void ItemsList::onItemDragStop(Event::Mouse* event)
         return;
     }
 
-    if (auto itemsList = dynamic_cast<ItemsList*>(event->emitter()))
+    if (auto itemsList = dynamic_cast<ItemsList*>(event->target()))
     {
         // @todo create addItem method
         this->addItem(itemsList->draggedItem(), 1);
@@ -170,7 +175,7 @@ void ItemsList::onItemDragStop(Event::Mouse* event)
         itemsList->update();
     }
 
-    if (auto inventoryItem = dynamic_cast<UI::InventoryItem*>(event->emitter()))
+    if (auto inventoryItem = dynamic_cast<UI::InventoryItem*>(event->target()))
     {
         // @todo create addItem method
         this->addItem(inventoryItem, 1);

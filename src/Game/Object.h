@@ -27,7 +27,7 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Event/Emitter.h"
+#include "../Event/EventTarget.h"
 
 // Third party includes
 
@@ -84,7 +84,7 @@ public:
 };
 
 
-class Object : public Event::Emitter
+class Object : public Event::EventTarget
 {
 public:
     // Object type as defined in prototype
@@ -160,10 +160,26 @@ public:
     VM* script() const;
     void setScript(VM* script);
 
-    virtual void render();
-    virtual void renderText();
-    virtual void think();
+    /**
+     * @brief Handles OS events coming from the State::handle().
+     * Used in Event Capturing process.
+     * This method is called first in the main loop (before think() and render()).
+     */
     virtual void handle(Event::Event* event);
+    /**
+     * @brief Process any real-time actions of the game object (like calling critter_p_proc).
+     * This method is called after handle() but before render() in the main loop.
+     */
+    virtual void think();
+    /**
+     * @brief Render this object, if it has visible UI elements.
+     * This method is called last in the main loop (after handle() and think()).
+     */
+    virtual void render();
+    /**
+     * @brief Render floater text above object, if any.
+     */
+    virtual void renderText();
 
     // ActiveUI used to display object on screen and capture mouse events
     UI::Base* ui() const;
@@ -250,7 +266,7 @@ protected:
     virtual bool _useEggTransparency();
 
 private:
-    bool _getEggTransparency();
+    bool _isIntersectsWithEgg();
 
 };
 

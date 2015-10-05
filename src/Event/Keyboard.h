@@ -36,6 +36,8 @@ class Keyboard : public Event
 {
 public:
     Keyboard(const std::string& name = "keyboard");
+    Keyboard(const Keyboard& event, const std::string& newName);
+    Keyboard(const Keyboard& event);
     ~Keyboard() override;
 
     int keyCode() const;

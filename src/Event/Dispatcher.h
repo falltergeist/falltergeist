@@ -17,17 +17,17 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_EVENT_EMITTER_H
-#define FALLTERGEIST_EVENT_EMITTER_H
+#ifndef FALLTERGEIST_EVENT_DISPATCHER_H
+#define FALLTERGEIST_EVENT_DISPATCHER_H
 
 // C++ standard includes
-#include <functional>
-#include <map>
+#include <list>
 #include <memory>
-#include <string>
-#include <vector>
+#include <utility>
 
 // Falltergeist includes
+#include "../Event/Event.h"
+#include "../Event/EventTarget.h"
 
 // Third party includes
 
@@ -35,21 +35,25 @@ namespace Falltergeist
 {
 namespace Event
 {
-class Event;
 
-class Emitter
+class Dispatcher
 {
-protected:
-    std::map<std::string, std::vector<std::function<void(Event*)>>> _eventHandlers;
 public:
-    Emitter();
-    virtual ~Emitter();
+    Dispatcher() {}
 
-    void addEventHandler(const std::string& eventName, std::function<void(Event*)> handler);
-    void emitEvent(Event* event);
-    void removeEventHandlers(const std::string& eventName);
+    void scheduleEvent(EventTarget* target, std::unique_ptr<Event> event);
+    void processScheduledEvents();
+    void blockEventHandlers(EventTarget* eventTarget);
+
+private:
+    using Task = std::pair<EventTarget*, std::unique_ptr<Event>>;
+
+    Dispatcher(const Dispatcher&) = delete;
+    void operator=(const Dispatcher&) = delete;
+
+    std::list<Task> _scheduledTasks, _tasksInProcess;
 };
 
 }
 }
-#endif // FALLTERGEIST_EVENT_EMITTER_H
+#endif // FALLTERGEIST_EVENT_DISPATCHER_H

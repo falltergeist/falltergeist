@@ -109,6 +109,7 @@ protected:
     unsigned int _scrollTicks = 0;
     unsigned int _scriptsTicks = 0;
     unsigned int _actionCursorTicks = 0;
+    unsigned int _mouseMoveTicks = 0;
 
     std::unique_ptr<HexagonGrid> _hexagonGrid;
     std::unique_ptr<LocationCamera> _camera;

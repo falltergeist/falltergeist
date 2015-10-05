@@ -117,7 +117,10 @@ public:
      */
     void setSize(const Size& size);
 
-    /**
+
+    virtual void handle(Event::Event* event) override;
+
+/**
      * Size of actual text content of the text area.
      */
     Size textSize();

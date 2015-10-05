@@ -66,8 +66,6 @@ void MainMenu::init()
     setModal(true);
     setFullscreen(true);
 
-    Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
-
     auto renderer = Game::getInstance()->renderer();
     setPosition((renderer->size() - Point(640, 480)) / 2);
 
@@ -274,6 +272,7 @@ void MainMenu::onKeyDown(Event::Keyboard* event)
 
 void MainMenu::onStateActivate(Event::State* event)
 {
+    Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
     Game::getInstance()->mixer()->playACMMusic("07desert.acm",true);
     Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
 }

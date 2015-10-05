@@ -85,9 +85,6 @@ Location::Location() : State()
     game->mouse()->setState(Input::Mouse::Cursor::ACTION);
 
     _camera = make_unique<LocationCamera>(game->renderer()->size(), Point(0, 0));
-    _floor = make_unique<UI::TileMap>();
-    _roof = make_unique<UI::TileMap>();
-    _hexagonGrid = make_unique<HexagonGrid>();
 
     _hexagonInfo = make_unique<UI::TextArea>("", game->renderer()->width() - 135, 25);
     _hexagonInfo->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
@@ -124,6 +121,11 @@ void Location::onStateDeactivate(Event::State* event)
 
 void Location::setLocation(const std::string& name)
 {
+    _floor = make_unique<UI::TileMap>();
+    _roof = make_unique<UI::TileMap>();
+    _hexagonGrid = make_unique<HexagonGrid>();
+    _objects.clear();
+
     auto mapFile = ResourceManager::getInstance()->mapFileType(name);
 
     if (mapFile == nullptr)
@@ -233,8 +235,6 @@ void Location::setLocation(const std::string& name)
 
         auto hexagon = hexagonGrid()->at(mapFile->defaultPosition());
         Location::moveObjectToHexagon(player, hexagon);
-
-        _objects.emplace_back(player);
     }
 
     // Location script
@@ -324,7 +324,6 @@ void Location::onObjectMouseEvent(Event::Event* event, Game::Object* object)
             _actionCursorButtonPressed = false;
         }
     }
-    event->setHandled(true);
 }
 
 void Location::onObjectHover(Event::Event* event, Game::Object* object)
@@ -342,7 +341,6 @@ void Location::onObjectHover(Event::Event* event, Game::Object* object)
             _actionCursorButtonPressed = false;
         }
         _actionCursorTicks = SDL_GetTicks();
-        event->setHandled(true);
     }
 }
 
@@ -410,10 +408,13 @@ void Location::think()
 
     _playerPanel->think();
 
+    auto player = Game::getInstance()->player();
+
     for (auto& object : _objects)
     {
         object->think();
     }
+    player->think();
 
     // location scrolling
     if (_scrollTicks + 10 < SDL_GetTicks())
@@ -475,12 +476,17 @@ void Location::think()
                 object->script()->initialize();
             }
         }
+        if (player->script())
+        {
+            player->script()->initialize();
+        }
 
         if (_locationScript) _locationScript->call("map_enter_p_proc");
 
         // By some reason we need to use reverse iterator to prevent scripts problems
         // If we use normal iterators, some exported variables are not initialized on the moment
         // when script is called
+        player->map_enter_p_proc();
         for (auto it = _objects.rbegin(); it != _objects.rend(); ++it)
         {
             (*it)->map_enter_p_proc();
@@ -499,6 +505,7 @@ void Location::think()
             {
                 object->map_update_p_proc();
             }
+            player->map_update_p_proc();
         }
     }
 
@@ -629,6 +636,20 @@ void Location::handle(Event::Event* event)
                     mouse->ui()->setPosition(hexagon->position() - _camera->topLeft());
                     break;
                 }
+                case Input::Mouse::Cursor::ACTION:
+                {
+                    // optimization to prevent FPS drops on mouse move
+                    auto ticks = SDL_GetTicks();
+                    if (ticks - _mouseMoveTicks < 50)
+                    {
+                        event->setHandled(true);
+                    }
+                    else
+                    {
+                        _mouseMoveTicks = ticks;
+                    }
+                    break;
+                }
                 default:
                     break;
             }
@@ -687,10 +708,11 @@ void Location::handle(Event::Event* event)
     {
         Hexagon* hexagon = *it;
         if (!hexagon->inRender()) continue;
-        for (auto itt = hexagon->objects()->rbegin(); itt != hexagon->objects()->rend(); ++itt)
+        auto objects = hexagon->objects();
+        for (auto itt = objects->rbegin(); itt != objects->rend(); ++itt)
         {
-            auto object = *itt;
             if (event->handled()) return;
+            auto object = *itt;
             if (!object->inRender()) continue;
             object->handle(event);
         }

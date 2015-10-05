@@ -238,18 +238,14 @@ void Animation::think()
             _currentFrame = _reverse ? _animationFrames.size() - _progress - 1 : _progress;
             if (_actionFrame == _currentFrame)
             {
-                auto event = new Event::Event("actionFrame");
-                emitEvent(event);
-                delete event;
+                emitEvent(make_unique<Event::Event>("actionFrame"));
             }
         }
         else
         {
             _ended = true;
             _playing = false;
-            auto event = new Event::Event("animationEnded");
-            emitEvent(event);
-            delete event;
+            emitEvent(make_unique<Event::Event>("animationEnded"));
         }
     }
 }

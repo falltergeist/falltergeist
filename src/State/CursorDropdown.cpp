@@ -56,11 +56,6 @@ CursorDropdown::CursorDropdown(std::vector<Input::Mouse::Icon>&& icons, bool onl
     {
         _icons.resize(1);
     }
-    auto mouse = Game::getInstance()->mouse();
-    _initialMouseStack = mouse->states()->size();
-    mouse->pushState(Input::Mouse::Cursor::NONE);
-    _initialX = mouse->x();
-    _initialY = mouse->y();
 }
 
 CursorDropdown::~CursorDropdown()
@@ -76,7 +71,37 @@ void CursorDropdown::init()
     {
         setModal(true);
     }
+
+    auto mouse = Game::getInstance()->mouse();
+    _initialX = mouse->x();
+    _initialY = mouse->y();
+
     showMenu();
+
+    addEventHandler("mouseup", [this](Event::Event* event)
+    {
+        Event::Mouse* mouseEvent;
+        if ((mouseEvent = dynamic_cast<Event::Mouse*>(event)) && mouseEvent->leftButton())
+        {
+            onLeftButtonUp(mouseEvent);
+        }
+    });
+    auto moveHandler = [this](Event::Event* event)
+    {
+        if (active() && _onlyShowIcon)
+        {
+            Game::getInstance()->popState();
+            event->setHandled(true);
+        }
+    };
+    addEventHandler("mousemove", moveHandler);
+    addEventHandler("mousedown", [this](Event::Event* event)
+    {
+        if (active() && !dynamic_cast<Event::Mouse*>(event)->leftButton())
+        {
+            Game::getInstance()->popState();
+        }
+    });
 }
 
 void CursorDropdown::showMenu()
@@ -193,19 +218,11 @@ void CursorDropdown::handle(Event::Event* event)
 {
     if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
-        if (mouseEvent->name() == "mouseup" && mouseEvent->leftButton())
-        {
-            onLeftButtonUp(mouseEvent);
-        }
-        else if (mouseEvent->name() == "mousemove" && _onlyShowIcon)
-        {
-            Game::getInstance()->popState();
-            event->setHandled(true);
-        }
-        else if (mouseEvent->name() == "mousedown" && !mouseEvent->leftButton())
-        {
-            Game::getInstance()->popState();
-        }
+        // TODO: probably need to make invisible panel to catch all mouse events..
+
+        // let state catch all mouse events
+        emitEvent(make_unique<Event::Mouse>(*mouseEvent));
+        event->setHandled(true);
     }
 }
 
@@ -234,7 +251,7 @@ void CursorDropdown::think()
     if (!_onlyShowIcon)
     {
         int xDelta = game->mouse()->x() - _surface->x();
-        if ( xDelta > 40 || xDelta < 0)
+        if (xDelta > 40 || xDelta < 0)
         {
             game->mouse()->setX(_initialX);
         }
@@ -262,8 +279,14 @@ void CursorDropdown::onStateActivate(Event::State* event)
 {
     if (_deactivated)
     {
+        // TODO: why this kludge?
         Game::getInstance()->popState(); // remove when re-activated
+        return;
     }
+
+    auto mouse = Game::getInstance()->mouse();
+    _initialMouseStack = mouse->states()->size();
+    mouse->pushState(Input::Mouse::Cursor::NONE);
 }
 
 void CursorDropdown::onStateDeactivate(Event::State* event)

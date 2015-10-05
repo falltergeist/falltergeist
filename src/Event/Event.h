@@ -37,7 +37,7 @@ namespace Falltergeist
 {
 namespace Event
 {
-class Emitter;
+class EventTarget;
 
 /**
  * @brief Base event class
@@ -53,19 +53,25 @@ public:
     std::string name() const;
     void setName(const std::string& name);
 
-    Emitter* emitter() const;
-    void setEmitter(Emitter* value);
+    EventTarget* target() const;
+    void setTarget(EventTarget* value);
 
     bool handled() const;
-    void setHandled(bool value);
+    /**
+     * @brief Sets that event is handled or not.
+     * If called from within handle(Event*) function, affects event capturing process by preventing OS Event to "fall down" to other elements.
+     * If called from within the event handler function, prevents other handlers of the same event to be called.
+     * @param value the handled flag.
+     */
+    void setHandled(bool value = true);
 
 protected:
     /// Is event handled or not
     bool _handled = false;
     /// Event name
     std::string _name;
-    /// Event emitter
-    Emitter* _emitter = nullptr;
+    /// Event target
+    EventTarget* _target = nullptr;
 };
 
 }

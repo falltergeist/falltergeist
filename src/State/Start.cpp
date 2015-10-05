@@ -23,6 +23,7 @@
 #include <ctime>
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
@@ -43,6 +44,7 @@ namespace Falltergeist
 {
 namespace State
 {
+using namespace Base;
 
 Start::Start() : State()
 {
@@ -80,9 +82,9 @@ void Start::think()
     State::think();
     if (game->settings()->forceLocation())
     {
-        auto player = new Game::DudeObject();
+        auto player = make_unique<Game::DudeObject>();
         player->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/combat.gcd"));
-        game->setPlayer(player);
+        game->setPlayer(std::move(player));
         game->setState(new Location());
         return;
     }
