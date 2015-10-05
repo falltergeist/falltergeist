@@ -265,6 +265,8 @@ void Base::handle(Event::Mouse* mouseEvent)
                         _rightButtonPressed = true;
                         break;
                     }
+                    default:
+                        break;
                 }
                 // mousedown event can not be "interesting" for any other UI's that "behind" this UI,
                 // so we can safely stop event capturing now
@@ -299,6 +301,8 @@ void Base::handle(Event::Mouse* mouseEvent)
                         _rightButtonPressed = false;
                         break;
                     }
+                    default:
+                        break;
                 }
                 break;
             }
@@ -352,9 +356,13 @@ void Base::handle(Event::Mouse* mouseEvent)
                         }
                         break;
                     }
+                    default:
+                        break;
                 }
                 break;
             }
+            default:
+                break;
         }
     }
     return;

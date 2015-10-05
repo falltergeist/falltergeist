@@ -86,13 +86,15 @@ public:
     bool checked();
     void setChecked(bool _checked);
 
+    virtual void handle(Event::Mouse* mouseEvent) override;
+
 protected:
     bool _checkboxMode = false; // remember new state after click
     bool _checked = false;
 
     std::vector<Graphics::Texture*> _textures;
-    void _onLeftButtonClick(Event::Mouse* event);
-    void _onLeftButtonDown(Event::Mouse* event);
+    void _onMouseClick(Event::Mouse* event);
+    void _onMouseDown(Event::Mouse* event);
     void _onMouseOut(Event::Mouse* event);
     void _init(Type type);
 

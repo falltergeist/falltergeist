@@ -129,7 +129,7 @@ void PlayerEditGender::setGender(GENDER gender)
 {
     _gender = gender;
     _maleImage->setCurrentImage(gender == GENDER::MALE ? 0 : 1);
-    _femaleImage->setCurrentImage(gender == GENDER::FEMALE ? 1 : 0);
+    _femaleImage->setCurrentImage(gender == GENDER::FEMALE ? 0 : 1);
 }
 
 }

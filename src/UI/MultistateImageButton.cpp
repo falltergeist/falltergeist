@@ -46,7 +46,7 @@ MultistateImageButton::MultistateImageButton(const Point& pos) : Falltergeist::U
 MultistateImageButton::MultistateImageButton(Type type, int x, int y) : Falltergeist::UI::Base(Point(x, y))
 {
     mouseClickHandler() += std::bind(&_onMouseClick, this, std::placeholders::_1);
-    mouseUpHandler().add(std::bind(&_onLeftButtonUp, this, std::placeholders::_1));
+    mouseUpHandler().add(std::bind(&_onMouseUp, this, std::placeholders::_1));
     switch (type)
     {
         case Type::BIG_SWITCH:
@@ -158,7 +158,7 @@ void MultistateImageButton::_onMouseClick(Event::Mouse* event)
     }
 }
 
-void MultistateImageButton::_onLeftButtonUp(Event::Mouse* event)
+void MultistateImageButton::_onMouseUp(Event::Mouse* event)
 {
     if (!event->leftButton()) return;
 
@@ -216,6 +216,13 @@ void MultistateImageButton::setMinState(unsigned int value)
 unsigned int MultistateImageButton::minState() const
 {
     return _minState;
+}
+
+void MultistateImageButton::handle(Event::Mouse* mouseEvent)
+{
+    // disable right button clicks
+    _rightButtonPressed = false;
+    Base::handle(mouseEvent);
 }
 
 }

@@ -218,8 +218,8 @@ void ImageButton::_init(Type type)
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
     }
-    mouseClickHandler().add(std::bind(&_onLeftButtonClick, this, std::placeholders::_1));
-    mouseDownHandler().add(std::bind(&_onLeftButtonDown, this, std::placeholders::_1));
+    mouseClickHandler().add(std::bind(&_onMouseClick, this, std::placeholders::_1));
+    mouseDownHandler().add(std::bind(&_onMouseDown, this, std::placeholders::_1));
     mouseOutHandler().add(std::bind(&_onMouseOut, this, std::placeholders::_1));
 }
 
@@ -232,7 +232,7 @@ Graphics::Texture* ImageButton::texture() const
     return _textures.at(0);
 }
 
-void ImageButton::_onLeftButtonClick(Event::Mouse* event)
+void ImageButton::_onMouseClick(Event::Mouse* event)
 {
     auto sender = dynamic_cast<ImageButton*>(event->target());
     if (sender->_checkboxMode)
@@ -245,8 +245,10 @@ void ImageButton::_onLeftButtonClick(Event::Mouse* event)
     }
 }
 
-void ImageButton::_onLeftButtonDown(Event::Mouse* event)
+void ImageButton::_onMouseDown(Event::Mouse* event)
 {
+    if (!event->leftButton()) return;
+
     auto sender = dynamic_cast<ImageButton*>(event->target());
     if (!sender->_downSound.empty())
     {
@@ -273,6 +275,13 @@ bool ImageButton::checked()
 void ImageButton::setChecked(bool _checked)
 {
     this->_checked = _checked;
+}
+
+void ImageButton::handle(Event::Mouse* mouseEvent)
+{
+    // disable right button clicks
+    _rightButtonPressed = false;
+    Base::handle(mouseEvent);
 }
 
 }

@@ -618,11 +618,10 @@ void Location::handle(Event::Event* event)
                             {
                                 game->player()->stopMovement();
                                 game->player()->setRunning((_lastClickedTile != 0 && hexagon->number() == _lastClickedTile) || (mouseEvent->shiftPressed() != game->settings()->running()));
-                                for (auto hexagon : path)
+                                for (auto pathHexagon : path)
                                 {
-                                    game->player()->movementQueue()->push_back(hexagon);
+                                    game->player()->movementQueue()->push_back(pathHexagon);
                                 }
-                                //moveObjectToHexagon(game->player(), hexagon);
                             }
                             event->setHandled(true);
                             _lastClickedTile = hexagon->number();
