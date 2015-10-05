@@ -88,6 +88,11 @@ public:
      */
     virtual void render(bool eggTransparency = false);
 
+    /**
+     * @brief Handles mouse events from OS.
+     */
+    virtual void handle(Event::Mouse* mouseEvent);
+
     virtual Size size() const;
 
     virtual unsigned int pixel(const Point& pos);
@@ -96,6 +101,7 @@ public:
     Event::KeyboardHandler& keyDownHandler();
     Event::KeyboardHandler& keyUpHandler();
 
+    // TODO: maybe not all elements should have drag events?
     Event::MouseHandler& mouseDragStartHandler();
     Event::MouseHandler& mouseDragHandler();
     Event::MouseHandler& mouseDragStopHandler();
@@ -118,6 +124,7 @@ protected:
 
     Graphics::Texture* _texture = nullptr;
     std::unique_ptr<Graphics::Texture> _tmptex;
+    
     bool _leftButtonPressed = false;
     bool _rightButtonPressed = false;
     bool _drag = false;

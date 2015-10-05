@@ -31,8 +31,19 @@ namespace Falltergeist
 namespace Event
 {
 
-Keyboard::Keyboard(const std::string& name) : Event(name)
+const char* Keyboard::typeToString(Keyboard::Type type)
 {
+    switch (type)
+    {
+        case Type::KEY_DOWN: return "keydown";
+        case Type::KEY_UP:   return "keyup";
+        default: return "keyboard";
+    }
+}
+
+Keyboard::Keyboard(Keyboard::Type type) : Event(typeToString(type))
+{
+    _type = type;
 }
 
 Keyboard::Keyboard(const Keyboard& event, const std::string& newName) : Event(newName)
@@ -49,6 +60,11 @@ Keyboard::Keyboard(const Keyboard& event) : Keyboard(event, event._name)
 
 Keyboard::~Keyboard()
 {
+}
+
+Keyboard::Type Keyboard::originalType() const
+{
+    return _type;
 }
 
 int Keyboard::keyCode() const

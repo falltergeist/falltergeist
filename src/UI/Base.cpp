@@ -201,79 +201,120 @@ void Base::handle(Event::Event* event)
     // TODO: get rid of dynamic_casts by using template member function?
     if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
-        Point pos = mouseEvent->position() - this->position();
+        handle(mouseEvent);
+    }
 
-        if (!mouseEvent->obstacle() && this->pixel(pos)) // mouse cursor is over the element
+    if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
+    {
+        switch (keyboardEvent->originalType())
         {
-            if (mouseEvent->name() == "mousemove")
+            case Event::Keyboard::Type::KEY_UP:
+            {
+                emitEvent(make_unique<Event::Keyboard>(*keyboardEvent), keyUpHandler());
+                break;
+            }
+            case Event::Keyboard::Type::KEY_DOWN:
+            {
+                emitEvent(make_unique<Event::Keyboard>(*keyboardEvent), keyDownHandler());
+                break;
+            }
+        }
+    }
+}
+
+void Base::handle(Event::Mouse* mouseEvent)
+{
+    using Mouse = Event::Mouse;
+    Point pos = mouseEvent->position() - this->position();
+
+    if (!mouseEvent->obstacle() && this->pixel(pos)) // mouse cursor is over the element
+    {
+        switch (mouseEvent->originalType())
+        {
+            case Mouse::Type::MOVE:
             {
                 if (_leftButtonPressed)
                 {
-                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, _drag ? "mousedrag" : "mousedragstart"), _drag ? mouseDragHandler() : mouseDragStartHandler());
-                    if (!_drag) _drag = true;
+                    emitEvent(make_unique<Mouse>(*mouseEvent, _drag ? "mousedrag" : "mousedragstart"),
+                              _drag ? mouseDragHandler() : mouseDragStartHandler());
+                    _drag = true;
                 }
                 if (!_hovered)
                 {
                     _hovered = true;
-                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousein"), mouseInHandler());
+                    emitEvent(make_unique<Mouse>(*mouseEvent, "mousein"), mouseInHandler());
                 }
                 else
                 {
                     emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousemove"), mouseMoveHandler());
                 }
+                break;
             }
-            else if (mouseEvent->name() == "mousedown")
+            case Mouse::Type::BUTTON_DOWN:
             {
-                if (mouseEvent->leftButton())
+                emitEvent(make_unique<Event::Mouse>(*mouseEvent), mouseDownHandler());
+                switch (mouseEvent->button())
                 {
-                    _leftButtonPressed = true;
-                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouseleftdown"), mouseDownHandler());
-                }
-                else if (mouseEvent->rightButton())
-                {
-                    _rightButtonPressed = true;
-                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouserightdown"), mouseDownHandler());
+                    case Mouse::Button::LEFT:
+                    {
+                        _leftButtonPressed = true;
+                        break;
+                    }
+                    case Mouse::Button::RIGHT:
+                    {
+                        _rightButtonPressed = true;
+                        break;
+                    }
                 }
                 // mousedown event can not be "interesting" for any other UI's that "behind" this UI,
                 // so we can safely stop event capturing now
                 mouseEvent->setHandled(true);
+                break;
             }
-            else if (mouseEvent->name() == "mouseup")
+            case Mouse::Type::BUTTON_UP:
             {
-                if (mouseEvent->leftButton())
+                emitEvent(make_unique<Event::Mouse>(*mouseEvent), mouseUpHandler());
+                switch (mouseEvent->button())
                 {
-                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouseleftup"), mouseUpHandler());
-                    if (_leftButtonPressed)
+                    case Mouse::Button::LEFT:
                     {
-                        if (_drag)
+                        if (_leftButtonPressed)
                         {
-                            _drag = false;
-                            emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousedragstop"), mouseDragStopHandler());
+                            if (_drag)
+                            {
+                                _drag = false;
+                                emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousedragstop"), mouseDragStopHandler());
+                            }
+                            emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouseclick"), mouseClickHandler());
                         }
-                        emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouseleftclick"), mouseClickHandler());
+                        _leftButtonPressed = false;
+                        break;
                     }
-                    _leftButtonPressed = false;
-                }
-                else if (mouseEvent->rightButton())
-                {
-                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouserightup"), mouseUpHandler());
-                    if (_rightButtonPressed)
+                    case Mouse::Button::RIGHT:
                     {
-                        emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouserightclick"), mouseClickHandler());
+                        if (_rightButtonPressed)
+                        {
+                            emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouseclick"), mouseClickHandler());
+                        }
+                        _rightButtonPressed = false;
+                        break;
                     }
-                    _rightButtonPressed = false;
                 }
+                break;
             }
-            mouseEvent->setObstacle(true);
         }
-        else // mouse cursor is outside of this element or other element is in front
+        mouseEvent->setObstacle(true);
+    }
+    else // mouse cursor is outside of this element or other element is in front
+    {
+        // stop processing if this element has no active interactions with the mouse
+        if (!_hovered && !_leftButtonPressed && !_rightButtonPressed && !_drag)
         {
-            // stop processing if this element has no active interactions with the mouse
-            if (!_hovered && !_leftButtonPressed && !_rightButtonPressed && !_drag)
-            {
-                return;
-            }
-            if (mouseEvent->name() == "mousemove")
+            return;
+        }
+        switch (mouseEvent->originalType())
+        {
+            case Mouse::Type::MOVE:
             {
                 if (_drag)
                 {
@@ -284,44 +325,39 @@ void Base::handle(Event::Event* event)
                     _hovered = false;
                     emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouseout"), mouseOutHandler());
                 }
+                break;
             }
-            else if (mouseEvent->name() == "mouseup")
+            case Mouse::Type::BUTTON_UP:
             {
-                if (mouseEvent->leftButton())
+                switch (mouseEvent->button())
                 {
-                    if (_leftButtonPressed)
+                    case Mouse::Button::LEFT:
                     {
-                        if (_drag)
+                        if (_leftButtonPressed)
                         {
-                            _drag = false;
-                            emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousedragstop"), mouseDragStopHandler());
+                            if (_drag)
+                            {
+                                _drag = false;
+                                emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousedragstop"), mouseDragStopHandler());
+                            }
+                            _leftButtonPressed = false;
                         }
-                        _leftButtonPressed = false;
+                        break;
                     }
-                }
-                else if (mouseEvent->rightButton())
-                {
-                    if (_rightButtonPressed)
+                    case Mouse::Button::RIGHT:
                     {
-                        _rightButtonPressed = false;
+                        if (_rightButtonPressed)
+                        {
+                            _rightButtonPressed = false;
+                        }
+                        break;
                     }
                 }
+                break;
             }
         }
-        return;
     }
-
-    if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
-    {
-        if (keyboardEvent->name() == "keyup")
-        {
-            emitEvent(make_unique<Event::Keyboard>(*keyboardEvent), keyUpHandler());
-        }
-        else if (keyboardEvent->name() == "keydown")
-        {
-            emitEvent(make_unique<Event::Keyboard>(*keyboardEvent), keyDownHandler());
-        }
-    }
+    return;
 }
 
 void Base::_generateTexture(unsigned int width, unsigned int height)

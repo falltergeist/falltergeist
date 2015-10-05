@@ -31,18 +31,31 @@ namespace Falltergeist
 namespace Event
 {
 
-Mouse::Mouse(const std::string& name) : Event(name)
+
+const char* Mouse::typeToString(Mouse::Type type)
 {
+    switch (type)
+    {
+        case Type::BUTTON_DOWN: return "mousedown";
+        case Type::BUTTON_UP:   return "mouseup";
+        case Type::MOVE:        return "mousemove";
+        default: return "mouse";
+    }
+}
+
+Mouse::Mouse(Type type) : Event(typeToString(type))
+{
+    _type = type;
 }
 
 Mouse::Mouse(const Mouse& event, const std::string& newName) : Event(newName)
 {
+    _button = event._button;
     _position = event._position;
     _offset = event._offset;
-    _leftButton = event._leftButton;
-    _rightButton = event._rightButton;
     _shiftPressed = event._shiftPressed;
     _controlPressed = event._controlPressed;
+    _altPressed = event._altPressed;
 }
 
 Mouse::Mouse(const Mouse& event) : Mouse(event, event._name)
@@ -53,24 +66,29 @@ Mouse::~Mouse()
 {
 }
 
-void Mouse::setLeftButton(bool value)
+Mouse::Type Mouse::originalType() const
 {
-    _leftButton = value;
+    return _type;
 }
 
 bool Mouse::leftButton() const
 {
-    return _leftButton;
-}
-
-void Mouse::setRightButton(bool value)
-{
-    _rightButton = value;
+    return _button == Button::LEFT;
 }
 
 bool Mouse::rightButton() const
 {
-    return _rightButton;
+    return _button == Button::RIGHT;
+}
+
+Mouse::Button Mouse::button() const
+{
+    return _button;
+}
+
+void Mouse::setButton(Mouse::Button button)
+{
+    _button = button;
 }
 
 void Mouse::setControlPressed(bool value)
@@ -123,5 +141,14 @@ void Mouse::setObstacle(bool obstacle)
     _obstacle = obstacle;
 }
 
+bool Mouse::altPressed() const
+{
+    return _altPressed;
+}
+
+void Mouse::setAltPressed(bool altPressed)
+{
+    _altPressed = altPressed;
+}
 }
 }

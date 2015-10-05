@@ -176,13 +176,18 @@ void State::handle(Event::Event* event)
     // TODO: maybe make handle() a template function to get rid of dynamic_casts?
     if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
     {
-        if (keyboardEvent->name() == "keyup")
+        switch (keyboardEvent->originalType())
         {
-            emitEvent(make_unique<Event::Keyboard>(*keyboardEvent), keyUpHandler());
-        }
-        else if (keyboardEvent->name() == "keydown")
-        {
-            emitEvent(make_unique<Event::Keyboard>(*keyboardEvent), keyDownHandler());
+            case Event::Keyboard::Type::KEY_UP:
+            {
+                emitEvent(make_unique<Event::Keyboard>(*keyboardEvent), keyUpHandler());
+                break;
+            }
+            case Event::Keyboard::Type::KEY_DOWN:
+            {
+                emitEvent(make_unique<Event::Keyboard>(*keyboardEvent), keyDownHandler());
+                break;
+            }
         }
     }
     for (auto it = _ui.rbegin(); it != _ui.rend(); ++it)

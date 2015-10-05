@@ -298,32 +298,52 @@ Settings* Game::settings() const
     return _settings.get();
 }
 
+// TODO: probably need to move this to factory class
 std::unique_ptr<Event::Event> Game::_createEventFromSDL(const SDL_Event& sdlEvent)
 {
+    using Mouse = Event::Mouse;
+    using Keyboard = Event::Keyboard;
     switch (sdlEvent.type)
     {
         case SDL_MOUSEBUTTONDOWN:
         case SDL_MOUSEBUTTONUP:
         {
             SDL_Keymod mods = SDL_GetModState();
-            auto mouseEvent = make_unique<Event::Mouse>((sdlEvent.type == SDL_MOUSEBUTTONDOWN) ? "mousedown" : "mouseup");
+            auto mouseEvent = make_unique<Mouse>((sdlEvent.type == SDL_MOUSEBUTTONDOWN) ? Mouse::Type::BUTTON_DOWN : Mouse::Type::BUTTON_UP);
             mouseEvent->setPosition({sdlEvent.button.x, sdlEvent.button.y});
-            mouseEvent->setLeftButton(sdlEvent.button.button == SDL_BUTTON_LEFT);
-            mouseEvent->setRightButton(sdlEvent.button.button == SDL_BUTTON_RIGHT);
+            switch (sdlEvent.button.button)
+            {
+                case SDL_BUTTON_LEFT:
+                    mouseEvent->setButton(Mouse::Button::LEFT);
+                    break;
+                case SDL_BUTTON_RIGHT:
+                    mouseEvent->setButton(Mouse::Button::RIGHT);
+                    break;
+                case SDL_BUTTON_MIDDLE:
+                    mouseEvent->setButton(Mouse::Button::MIDDLE);
+                    break;
+                case SDL_BUTTON_X1:
+                    mouseEvent->setButton(Mouse::Button::X1);
+                    break;
+                case SDL_BUTTON_X2:
+                    mouseEvent->setButton(Mouse::Button::X2);
+                    break;
+            }
             mouseEvent->setShiftPressed(mods & KMOD_SHIFT);
             mouseEvent->setControlPressed(mods & KMOD_CTRL);
+            mouseEvent->setAltPressed(mods & KMOD_ALT);
             return std::move(mouseEvent);
         }
         case SDL_MOUSEMOTION:
         {
-            auto mouseEvent = make_unique<Event::Mouse>("mousemove");
+            auto mouseEvent = make_unique<Event::Mouse>(Mouse::Type::MOVE);
             mouseEvent->setPosition({sdlEvent.motion.x, sdlEvent.motion.y});
             mouseEvent->setOffset({sdlEvent.motion.xrel,sdlEvent.motion.yrel});
             return std::move(mouseEvent);
         }
         case SDL_KEYDOWN:
         {
-            auto keyboardEvent = make_unique<Event::Keyboard>("keydown");
+            auto keyboardEvent = make_unique<Event::Keyboard>(Keyboard::Type::KEY_DOWN);
             keyboardEvent->setKeyCode(sdlEvent.key.keysym.sym);
             keyboardEvent->setAltPressed(sdlEvent.key.keysym.mod & KMOD_ALT);
             keyboardEvent->setShiftPressed(sdlEvent.key.keysym.mod & KMOD_SHIFT);
@@ -332,7 +352,7 @@ std::unique_ptr<Event::Event> Game::_createEventFromSDL(const SDL_Event& sdlEven
         }
         case SDL_KEYUP:
         {
-            auto keyboardEvent = make_unique<Event::Keyboard>("keyup");
+            auto keyboardEvent = make_unique<Event::Keyboard>(Keyboard::Type::KEY_UP);
             keyboardEvent->setKeyCode(sdlEvent.key.keysym.sym);
             keyboardEvent->setAltPressed(sdlEvent.key.keysym.mod & KMOD_ALT);
             keyboardEvent->setShiftPressed(sdlEvent.key.keysym.mod & KMOD_SHIFT);

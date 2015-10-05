@@ -141,7 +141,7 @@ void InventoryItem::onMouseDragStop(Event::Mouse* event)
     setOffset({0, 0});
     setType(_oldType);
 
-    auto itemevent = make_unique<Event::Mouse>("itemdragstop");
+    auto itemevent = make_unique<Event::Mouse>(*event, "itemdragstop");
     itemevent->setPosition(event->position());
     itemevent->setTarget(this);
     emitEvent(std::move(itemevent), itemDragStopHandler());
