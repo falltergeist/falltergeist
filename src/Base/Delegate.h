@@ -106,6 +106,11 @@ public:
         invoke(std::forward<ArgT...>(args)...);
     }
 
+    explicit operator bool () const
+    {
+        return _functors.size() > 0;
+    }
+
 private:
     FunctorCollection _functors;
 

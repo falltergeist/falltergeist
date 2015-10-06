@@ -49,8 +49,11 @@ EventTarget::~EventTarget()
 template<typename T>
 void EventTarget::emitEvent(std::unique_ptr<T> event, Base::Delegate<T*> handler)
 {
-    event->setTarget(this);
-    _eventDispatcher->scheduleEvent<T>(this, std::move(event), handler); // handler copy is necessary here
+    if (handler)
+    {
+        event->setTarget(this);
+        _eventDispatcher->scheduleEvent<T>(this, std::move(event), handler); // handler copy is necessary here
+    }
 }
 
 

@@ -61,9 +61,17 @@ public:
     State();
     virtual ~State();
 
+    template <class TUi, class ...TCtorArgs>
+    TUi* makeUI(TCtorArgs&&... args)
+    {
+        TUi* ptr = new TUi(std::forward<TCtorArgs>(args)...);
+        _ui.emplace_back(ptr);
+        return ptr;
+    }
+
     UI::Base* addUI(UI::Base* ui);
     UI::Base* addUI(const std::string& name, UI::Base* ui);
-    void addUI(std::vector<UI::Base*> uis);
+    void addUI(const std::vector<UI::Base*>& uis);
     void popUI();
 
     UI::Base* getUI(const std::string& name);
@@ -120,6 +128,7 @@ public:
     Event::StateHandler& fadeDoneHandler();
     Event::KeyboardHandler& keyDownHandler();
     Event::KeyboardHandler& keyUpHandler();
+
 
 protected:
     std::vector<std::unique_ptr<UI::Base>> _ui;

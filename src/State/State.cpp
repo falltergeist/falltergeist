@@ -43,8 +43,10 @@ using namespace Base;
 
 State::State() : Event::EventTarget(Game::getInstance()->eventDispatcher())
 {
-    activateHandler().add([this](Event::Event* event){ this->onStateActivate(dynamic_cast<Event::State*>(event)); });
-    deactivateHandler().add([this](Event::Event* event){ this->onStateDeactivate(dynamic_cast<Event::State*>(event)); });
+    activateHandler().add([this](Event::State* event){ this->onStateActivate(event); });
+    deactivateHandler().add([this](Event::State* event){ this->onStateDeactivate(event); });
+
+    keyDownHandler().add([this](Event::Keyboard* event) { this->onKeyDown(event); });
 }
 
 State::~State()
@@ -54,8 +56,6 @@ State::~State()
 void State::init()
 {
     _initialized = true;
-
-    keyDownHandler().add([this](Event::Event* event) { this->onKeyDown(dynamic_cast<Event::Keyboard*>(event)); });
 }
 
 void State::think()
@@ -138,7 +138,7 @@ UI::Base* State::addUI(const std::string& name, UI::Base* ui)
     return ui;
 }
 
-void State::addUI(std::vector<UI::Base*> uis)
+void State::addUI(const std::vector<UI::Base*>& uis)
 {
     for (auto ui : uis)
     {

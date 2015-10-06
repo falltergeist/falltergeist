@@ -219,19 +219,19 @@ void CursorDropdown::handle(Event::Event* event)
     {
         // TODO: probably need to make invisible panel to catch all mouse events..
 
-        if (mouseEvent->name() == "mousedown")
+        if (mouseEvent->originalType() == Event::Mouse::Type::BUTTON_DOWN)
         {
             emitEvent(make_unique<Event::Mouse>(*mouseEvent), _mouseDownHandler);
         }
-        else if (mouseEvent->name() == "mouseup")
+        else if (mouseEvent->originalType() == Event::Mouse::Type::BUTTON_UP)
         {
             emitEvent(make_unique<Event::Mouse>(*mouseEvent), _mouseUpHandler);
         }
-        else if (mouseEvent->name() == "mousemove")
+        else if (mouseEvent->originalType() == Event::Mouse::Type::MOVE)
         {
             emitEvent(make_unique<Event::Mouse>(*mouseEvent), _mouseMoveHandler);
+            event->setHandled(true);
         }
-        event->setHandled(true);
     }
 }
 
