@@ -52,10 +52,10 @@ ItemsList::ItemsList(const Point& pos) : Falltergeist::UI::Base(pos)
     _generateTexture(_slotWidth, _slotHeight * _slotsNumber);
     _texture->fill(0x000000FF);
 
-    mouseDownHandler().add( std::bind(&onMouseLeftDown, this, std::placeholders::_1));
-    mouseDragStartHandler().add(std::bind(&onMouseDragStart, this, std::placeholders::_1));
-    mouseDragHandler().add(     std::bind(&onMouseDrag, this, std::placeholders::_1));
-    mouseDragStopHandler().add( std::bind(&onMouseDragStop, this, std::placeholders::_1));
+    mouseDownHandler().add( std::bind(&ItemsList::onMouseLeftDown, this, std::placeholders::_1));
+    mouseDragStartHandler().add(std::bind(&ItemsList::onMouseDragStart, this, std::placeholders::_1));
+    mouseDragHandler().add(     std::bind(&ItemsList::onMouseDrag, this, std::placeholders::_1));
+    mouseDragStopHandler().add( std::bind(&ItemsList::onMouseDragStop, this, std::placeholders::_1));
 }
 
 void ItemsList::setItems(std::vector<Game::ItemObject*>* items)

@@ -83,15 +83,15 @@ void Inventory::init()
     setPosition((game->renderer()->size() - Point(499, 377 + panelHeight)) / 2); // 499x377 = art/intrface/invbox.frm
 
     addUI("background", new UI::Image("art/intrface/invbox.frm"));
-    getUI("background")->mouseClickHandler().add(std::bind(&backgroundRightClick, this, std::placeholders::_1));
+    getUI("background")->mouseClickHandler().add(std::bind(&Inventory::backgroundRightClick, this, std::placeholders::_1));
 
     addUI("button_up",   new UI::ImageButton(UI::ImageButton::Type::INVENTORY_UP_ARROW,   128, 40));
     addUI("button_down", new UI::ImageButton(UI::ImageButton::Type::INVENTORY_DOWN_ARROW, 128, 65));
     addUI("button_done", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 438, 328));
 
-    getUI("button_done")->mouseClickHandler().add(std::bind(&onDoneButtonClick, this, std::placeholders::_1));
-    getUI("button_up")->mouseClickHandler().add(  std::bind(&onScrollUpButtonClick, this, std::placeholders::_1));
-    getUI("button_down")->mouseClickHandler().add(std::bind(&onScrollDownButtonClick, this, std::placeholders::_1));
+    getUI("button_done")->mouseClickHandler().add(std::bind(&Inventory::onDoneButtonClick, this, std::placeholders::_1));
+    getUI("button_up")->mouseClickHandler().add(  std::bind(&Inventory::onScrollUpButtonClick, this, std::placeholders::_1));
+    getUI("button_down")->mouseClickHandler().add(std::bind(&Inventory::onScrollDownButtonClick, this, std::placeholders::_1));
 
     // screen
     auto screenX = 300;

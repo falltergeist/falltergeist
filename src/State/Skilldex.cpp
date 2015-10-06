@@ -99,7 +99,7 @@ void Skilldex::init()
     repairCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::REPAIR));
 
     // events
-    cancelButton->mouseClickHandler().add(std::bind(&onCancelButtonClick, this, std::placeholders::_1));
+    cancelButton->mouseClickHandler().add(std::bind(&Skilldex::onCancelButtonClick, this, std::placeholders::_1));
 
     // LABELS
     auto font = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);

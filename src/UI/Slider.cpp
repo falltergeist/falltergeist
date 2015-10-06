@@ -43,9 +43,9 @@ Slider::Slider(const Point& pos) : Base(pos)
 
 Slider::Slider(int x, int y) : Falltergeist::UI::Base(Point(x, y))
 {
-    mouseDragHandler().add(std::bind(&_onDrag, this, std::placeholders::_1));
-    mouseDownHandler().add(std::bind(&_onLeftButtonDown, this, std::placeholders::_1));
-    mouseUpHandler().add(std::bind(&_onLeftButtonUp, this, std::placeholders::_1));
+    mouseDragHandler().add(std::bind(&Slider::_onDrag, this, std::placeholders::_1));
+    mouseDownHandler().add(std::bind(&Slider::_onLeftButtonDown, this, std::placeholders::_1));
+    mouseUpHandler().add(std::bind(&Slider::_onLeftButtonUp, this, std::placeholders::_1));
     _imageList.addImage("art/intrface/prfsldon.frm");
     _imageList.addImage("art/intrface/prfsldof.frm");
     _downSound = "sound/sfx/ib1p1xx1.acm";

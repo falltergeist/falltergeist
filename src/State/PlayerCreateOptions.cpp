@@ -72,11 +72,11 @@ void PlayerCreateOptions::init()
     auto eraseButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3);
     auto doneButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4);
 
-    saveButton->mouseClickHandler().add(   std::bind(&onSaveButtonClick, this, std::placeholders::_1));
-    loadButton->mouseClickHandler().add(   std::bind(&onLoadButtonClick, this, std::placeholders::_1));
-    printToFileButton->mouseClickHandler().add(std::bind(&onPrintToFileButtonClick, this, std::placeholders::_1));
-    eraseButton->mouseClickHandler().add(      std::bind(&onEraseButtonClick, this, std::placeholders::_1));
-    doneButton->mouseClickHandler().add(       std::bind(&onDoneButtonClick, this, std::placeholders::_1));
+    saveButton->mouseClickHandler().add(   std::bind(&PlayerCreateOptions::onSaveButtonClick, this, std::placeholders::_1));
+    loadButton->mouseClickHandler().add(   std::bind(&PlayerCreateOptions::onLoadButtonClick, this, std::placeholders::_1));
+    printToFileButton->mouseClickHandler().add(std::bind(&PlayerCreateOptions::onPrintToFileButtonClick, this, std::placeholders::_1));
+    eraseButton->mouseClickHandler().add(      std::bind(&PlayerCreateOptions::onEraseButtonClick, this, std::placeholders::_1));
+    doneButton->mouseClickHandler().add(       std::bind(&PlayerCreateOptions::onDoneButtonClick, this, std::placeholders::_1));
 
     auto font = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
 

@@ -211,7 +211,7 @@ void PlayerCreate::init()
     // add buttons to the state
     for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
     {
-        it->second->mouseClickHandler().add(std::bind(&onButtonClick, this, std::placeholders::_1));
+        it->second->mouseClickHandler().add(std::bind(&PlayerCreate::onButtonClick, this, std::placeholders::_1));
         addUI(it->second);
     }
 
@@ -219,7 +219,7 @@ void PlayerCreate::init()
     // reverse iterator to change drawing order
     for(auto it = _labels.rbegin(); it != _labels.rend(); ++it)
     {
-        it->second->mouseDownHandler().add(std::bind(&onLabelClick, this, std::placeholders::_1));
+        it->second->mouseDownHandler().add(std::bind(&PlayerCreate::onLabelClick, this, std::placeholders::_1));
         addUI(it->second);
     }
 
@@ -232,7 +232,7 @@ void PlayerCreate::init()
     // add hidden masks
     for(auto it = _masks.begin(); it != _masks.end(); ++it)
     {
-        it->second->mouseDownHandler().add(std::bind(&onMaskClick, this, std::placeholders::_1));
+        it->second->mouseDownHandler().add(std::bind(&PlayerCreate::onMaskClick, this, std::placeholders::_1));
         addUI(it->second);
     }
 

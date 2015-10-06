@@ -308,7 +308,7 @@ void SettingsMenu::init()
 
     // button: Default
     auto defaultButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+23, backgroundY+450);
-    defaultButton->mouseClickHandler().add(std::bind(&onDefaultButtonClick, this, std::placeholders::_1));
+    defaultButton->mouseClickHandler().add(std::bind(&SettingsMenu::onDefaultButtonClick, this, std::placeholders::_1));
     addUI(defaultButton);
 
     // button: Done

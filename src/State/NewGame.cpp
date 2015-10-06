@@ -69,22 +69,22 @@ void NewGame::init()
     addUI("background", new UI::Image("art/intrface/pickchar.frm"));
 
     auto beginGameButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 81, 322));
-    beginGameButton->mouseClickHandler().add(std::bind(&onBeginGameButtonClick, this, std::placeholders::_1));
+    beginGameButton->mouseClickHandler().add(std::bind(&NewGame::onBeginGameButtonClick, this, std::placeholders::_1));
 
     auto editButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 436, 319));
-    editButton->mouseClickHandler().add(std::bind(&onEditButtonClick, this, std::placeholders::_1));
+    editButton->mouseClickHandler().add(std::bind(&NewGame::onEditButtonClick, this, std::placeholders::_1));
 
     auto createButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 81, 424));
-    createButton->mouseClickHandler().add(std::bind(&onCreateButtonClick, this, std::placeholders::_1));
+    createButton->mouseClickHandler().add(std::bind(&NewGame::onCreateButtonClick, this, std::placeholders::_1));
 
     auto backButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 461, 424));
-    backButton->mouseClickHandler().add(std::bind(&onBackButtonClick, this, std::placeholders::_1));
+    backButton->mouseClickHandler().add(std::bind(&NewGame::onBackButtonClick, this, std::placeholders::_1));
 
     auto prevCharacterButton = addUI(new UI::ImageButton(UI::ImageButton::Type::LEFT_ARROW, 292, 320));
-    prevCharacterButton->mouseClickHandler().add(std::bind(&onPrevCharacterButtonClick, this, std::placeholders::_1));
+    prevCharacterButton->mouseClickHandler().add(std::bind(&NewGame::onPrevCharacterButtonClick, this, std::placeholders::_1));
 
     auto nextCharacterButton = addUI(new UI::ImageButton(UI::ImageButton::Type::RIGHT_ARROW, 318, 320));
-    nextCharacterButton->mouseClickHandler().add(std::bind(&onNextCharacterButtonClick, this, std::placeholders::_1));
+    nextCharacterButton->mouseClickHandler().add(std::bind(&NewGame::onNextCharacterButtonClick, this, std::placeholders::_1));
 
     addUI("images", new UI::ImageList({
                                     "art/intrface/combat.frm",

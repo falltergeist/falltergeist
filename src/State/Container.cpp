@@ -60,7 +60,7 @@ void Container::init()
     addUI("background", new UI::Image("art/intrface/loot.frm"));
 
     addUI("button_done", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 478, 331));
-    getUI("button_done")->mouseClickHandler().add(std::bind(&onDoneButtonClick, this, std::placeholders::_1));
+    getUI("button_done")->mouseClickHandler().add(std::bind(&Container::onDoneButtonClick, this, std::placeholders::_1));
 
 
     // TAKEALL

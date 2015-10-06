@@ -76,12 +76,12 @@ void SaveGame::init()
 
     // button: Done
     auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+391, bgY+349);
-    doneButton->mouseClickHandler().add(std::bind(&onDoneButtonClick, this, std::placeholders::_1));
+    doneButton->mouseClickHandler().add(std::bind(&SaveGame::onDoneButtonClick, this, std::placeholders::_1));
     addUI(doneButton);
 
     // button: Cancel
     auto cancelButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+495, bgY+349);
-    cancelButton->mouseClickHandler().add(std::bind(&onCancelButtonClick, this, std::placeholders::_1));
+    cancelButton->mouseClickHandler().add(std::bind(&SaveGame::onCancelButtonClick, this, std::placeholders::_1));
     addUI(cancelButton);
 
     // LABELS

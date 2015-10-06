@@ -75,11 +75,11 @@ void CritterDialog::init()
 
     // Interface buttons
     auto reviewButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_REVIEW_BUTTON, 13, 154);
-    reviewButton->mouseClickHandler().add(std::bind(&onReviewButtonClick, this, std::placeholders::_1));
+    reviewButton->mouseClickHandler().add(std::bind(&CritterDialog::onReviewButtonClick, this, std::placeholders::_1));
     addUI(reviewButton);
 
     auto barterButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_RED_BUTTON, 593, 40);
-    barterButton->mouseClickHandler().add(std::bind(&onBarterButtonClick, this, std::placeholders::_1));
+    barterButton->mouseClickHandler().add(std::bind(&CritterDialog::onBarterButtonClick, this, std::placeholders::_1));
     addUI(barterButton);
 }
 

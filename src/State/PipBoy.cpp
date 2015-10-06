@@ -71,7 +71,7 @@ void PipBoy::init()
     auto automapsButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+394);
     auto archivesButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+423);
     auto closeButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+53, backgroundY+448);
-    closeButton->mouseClickHandler().add(std::bind(&onCloseButtonClick, this, std::placeholders::_1));
+    closeButton->mouseClickHandler().add(std::bind(&PipBoy::onCloseButtonClick, this, std::placeholders::_1));
     // Date and time
 
     // Date

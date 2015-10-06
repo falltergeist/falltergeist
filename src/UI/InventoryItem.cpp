@@ -49,10 +49,10 @@ using namespace Base;
 InventoryItem::InventoryItem(Game::ItemObject *item, const Point& pos) : Falltergeist::UI::Base(pos)
 {
     _item = item;
-    mouseDownHandler().add(std::bind(&onMouseLeftDown, this, std::placeholders::_1));
-    mouseDragStartHandler().add(std::bind(&onMouseDragStart, this, std::placeholders::_1));
-    mouseDragHandler().add(std::bind(&onMouseDrag, this, std::placeholders::_1));
-    mouseDragStopHandler().add(std::bind(&onMouseDragStop, this, std::placeholders::_1));
+    mouseDownHandler().add(std::bind(&InventoryItem::onMouseLeftDown, this, std::placeholders::_1));
+    mouseDragStartHandler().add(std::bind(&InventoryItem::onMouseDragStart, this, std::placeholders::_1));
+    mouseDragHandler().add(std::bind(&InventoryItem::onMouseDrag, this, std::placeholders::_1));
+    mouseDragStopHandler().add(std::bind(&InventoryItem::onMouseDragStop, this, std::placeholders::_1));
 }
 
 InventoryItem::~InventoryItem()

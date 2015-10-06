@@ -40,13 +40,13 @@ namespace UI
 
 MultistateImageButton::MultistateImageButton(const Point& pos) : Falltergeist::UI::Base(pos)
 {
-    mouseClickHandler() += std::bind(&_onMouseClick, this, std::placeholders::_1);
+    mouseClickHandler() += std::bind(&MultistateImageButton::_onMouseClick, this, std::placeholders::_1);
 }
 
 MultistateImageButton::MultistateImageButton(Type type, int x, int y) : Falltergeist::UI::Base(Point(x, y))
 {
-    mouseClickHandler() += std::bind(&_onMouseClick, this, std::placeholders::_1);
-    mouseUpHandler().add(std::bind(&_onMouseUp, this, std::placeholders::_1));
+    mouseClickHandler() += std::bind(&MultistateImageButton::_onMouseClick, this, std::placeholders::_1);
+    mouseUpHandler().add(std::bind(&MultistateImageButton::_onMouseUp, this, std::placeholders::_1));
     switch (type)
     {
         case Type::BIG_SWITCH:
@@ -91,7 +91,7 @@ MultistateImageButton::MultistateImageButton(Type type, int x, int y) : Fallterg
 
 MultistateImageButton::MultistateImageButton(ImageList* imageList, const Point& pos) : Falltergeist::UI::Base(pos)
 {
-    mouseClickHandler() += std::bind(&_onMouseClick, this, std::placeholders::_1);
+    mouseClickHandler() += std::bind(&MultistateImageButton::_onMouseClick, this, std::placeholders::_1);
     for (auto& image : imageList->images())
     {
         _imageList.addImage(std::unique_ptr<Image>(new Image(*image)));

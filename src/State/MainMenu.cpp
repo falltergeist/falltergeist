@@ -73,27 +73,27 @@ void MainMenu::init()
 
     // intro button
     auto introButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19));
-    introButton->mouseClickHandler().add(std::bind(&onIntroButtonClick, this, std::placeholders::_1));
+    introButton->mouseClickHandler().add(std::bind(&MainMenu::onIntroButtonClick, this, std::placeholders::_1));
 
     // new game button
     auto newGameButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41));
-    newGameButton->mouseClickHandler().add(std::bind(&onNewGameButtonClick, this, std::placeholders::_1));
+    newGameButton->mouseClickHandler().add(std::bind(&MainMenu::onNewGameButtonClick, this, std::placeholders::_1));
 
     // load game button
     auto loadGameButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41*2));
-    loadGameButton->mouseClickHandler().add(std::bind(&onLoadGameButtonClick, this, std::placeholders::_1));
+    loadGameButton->mouseClickHandler().add(std::bind(&MainMenu::onLoadGameButtonClick, this, std::placeholders::_1));
 
     // settings button
     auto settingsButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41*3));
-    settingsButton->mouseClickHandler().add(std::bind(&onSettingsButtonClick, this, std::placeholders::_1));
+    settingsButton->mouseClickHandler().add(std::bind(&MainMenu::onSettingsButtonClick, this, std::placeholders::_1));
 
     // credits button
     auto creditsButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41*4));
-    creditsButton->mouseClickHandler().add(std::bind(&onCreditsButtonClick, this, std::placeholders::_1));
+    creditsButton->mouseClickHandler().add(std::bind(&MainMenu::onCreditsButtonClick, this, std::placeholders::_1));
 
     // exit button
     auto exitButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41*5));
-    exitButton->mouseClickHandler().add(std::bind(&onExitButtonClick, this, std::placeholders::_1));
+    exitButton->mouseClickHandler().add(std::bind(&MainMenu::onExitButtonClick, this, std::placeholders::_1));
 
     auto font4 = ResourceManager::getInstance()->font("font4.aaf", 0xb89c28ff);
 

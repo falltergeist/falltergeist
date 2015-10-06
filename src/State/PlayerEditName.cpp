@@ -112,7 +112,7 @@ void PlayerEditName::init()
     doneLabel->setFont(font3_b89c28ff);
 
     auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+45, bgY+43);
-    doneButton->mouseClickHandler().add(std::bind(&onDoneButtonClick, this, std::placeholders::_1));
+    doneButton->mouseClickHandler().add(std::bind(&PlayerEditName::onDoneButtonClick, this, std::placeholders::_1));
 
     _name = new UI::TextArea(Game::getInstance()->player()->name(), bgX+43, bgY+15);
     _name->keyDownHandler().add([this](Event::Event* event){ this->onTextAreaKeyDown(dynamic_cast<Event::Keyboard*>(event)); });

@@ -68,13 +68,13 @@ void PlayerEditAge::init()
     doneBox->setPosition(backgroundPos + Point(175, 40));
 
     auto decButton = new UI::ImageButton(UI::ImageButton::Type::LEFT_ARROW, backgroundX+178, backgroundY+14);
-    decButton->mouseClickHandler().add(std::bind(&onDecButtonClick, this, std::placeholders::_1));
+    decButton->mouseClickHandler().add(std::bind(&PlayerEditAge::onDecButtonClick, this, std::placeholders::_1));
 
     auto incButton = new UI::ImageButton(UI::ImageButton::Type::RIGHT_ARROW, backgroundX+262, backgroundY+14);
-    incButton->mouseClickHandler().add(std::bind(&onIncButtonClick, this, std::placeholders::_1));
+    incButton->mouseClickHandler().add(std::bind(&PlayerEditAge::onIncButtonClick, this, std::placeholders::_1));
 
     auto doneButton= new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+188, backgroundY+43);
-    doneButton->mouseClickHandler().add(std::bind(&onDoneButtonClick, this, std::placeholders::_1));
+    doneButton->mouseClickHandler().add(std::bind(&PlayerEditAge::onDoneButtonClick, this, std::placeholders::_1));
 
     auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), backgroundX+210, backgroundY+43);
 

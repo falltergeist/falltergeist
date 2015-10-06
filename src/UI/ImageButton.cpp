@@ -218,9 +218,9 @@ void ImageButton::_init(Type type)
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
     }
-    mouseClickHandler().add(std::bind(&_onMouseClick, this, std::placeholders::_1));
-    mouseDownHandler().add(std::bind(&_onMouseDown, this, std::placeholders::_1));
-    mouseOutHandler().add(std::bind(&_onMouseOut, this, std::placeholders::_1));
+    mouseClickHandler().add(std::bind(&ImageButton::_onMouseClick, this, std::placeholders::_1));
+    mouseDownHandler().add(std::bind(&ImageButton::_onMouseDown, this, std::placeholders::_1));
+    mouseOutHandler().add(std::bind(&ImageButton::_onMouseOut, this, std::placeholders::_1));
 }
 
 Graphics::Texture* ImageButton::texture() const
