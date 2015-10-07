@@ -223,31 +223,26 @@ void TextArea::_calculate()
     _calculatedSize.setWidth(std::max_element(lines.begin(), lines.end())->width);
     _calculatedSize.setHeight(lines.size()*font()->height() + (lines.size() - 1)*font()->verticalGap());
 
-    // Align
+    // Alignment and outlining
     auto outlineFont = (_outlineColor != 0)
                        ? ResourceManager::getInstance()->font(font()->filename(), _outlineColor)
                        : nullptr;
 
-    for (unsigned i = 0; i != lines.size(); ++i)
+    for (auto& line : lines)
     {
-        auto& line = lines.at(i);
-
-        unsigned xOffset = 0;
-        unsigned yOffset = 0;
-
+        Point offset;
         if (_horizontalAlign != HorizontalAlign::LEFT)
         {
-            xOffset = (_size.width() ? _size.width() : _calculatedSize.width()) - lines.at(i).width;
+            offset.setX((_size.width() ? _size.width() : _calculatedSize.width()) - line.width);
             if (_horizontalAlign == HorizontalAlign::CENTER)
             {
-                xOffset = xOffset / 2;
+                offset.rx() /= 2;
             }
         }
 
         for (auto& symbol : line.symbols)
         {
-            symbol.setX(symbol.x() + xOffset);
-            symbol.setY(symbol.y() + yOffset);
+            symbol.setPosition(symbol.position() + offset);
             // outline symbols
             if (_outlineColor != 0)
             {
@@ -270,9 +265,9 @@ void TextArea::_calculate()
 std::vector<TextArea::Line> TextArea::_generateLines()
 {
     std::vector<Line> lines;
-    lines.emplace_back();
+    lines.emplace_back(); // first line
     
-    unsigned x = 0, y = 0, wordWidth = 0;
+    int x = 0, y = 0, wordWidth = 0;
     
     // Parsing lines of text
     // Cutting lines when it is needed (\n or when exceeding _width)
@@ -293,7 +288,7 @@ std::vector<TextArea::Line> TextArea::_generateLines()
             wordWidth += glyphs->at(ch)->width() + aFont->horizontalGap();
         }
         // switch to next line if word is too long
-        if (_wordWrap && _size.width() && (x + wordWidth) > (unsigned)_size.width())
+        if (_wordWrap && _size.width() && (x + wordWidth) > _size.width())
         {
             word = '\n' + word;
         }
@@ -310,7 +305,7 @@ std::vector<TextArea::Line> TextArea::_generateLines()
                 x += aFont->aaf()->spaceWidth() + aFont->horizontalGap();
             }
 
-            if (ch == '\n' || (_wordWrap && _size.width() && x >= (unsigned)_size.width()))
+            if (ch == '\n' || (_wordWrap && _size.width() && x >= _size.width()))
             {
                 lines.back().width = x;
                 x = 0;
@@ -325,7 +320,7 @@ std::vector<TextArea::Line> TextArea::_generateLines()
             if (ch == ' ' || ch == '\n')
                 continue;
 
-            TextSymbol symbol(ch, x, y);
+            TextSymbol symbol(ch, {x, y});
             symbol.setFont(aFont);
             Line& line = lines.back();
             line.symbols.push_back(symbol);
@@ -339,7 +334,7 @@ std::vector<TextArea::Line> TextArea::_generateLines()
 
 void TextArea::_addOutlineSymbol(const TextSymbol& symb, Font* font, int32_t ofsX, int32_t ofsY)
 {
-    _symbols.emplace_back(symb.chr(), symb.x() + ofsX, symb.y() + ofsY);
+    _symbols.emplace_back(symb.chr(), symb.position() + Point(ofsX, ofsY));
     _symbols.back().setFont(font);
 }
 
@@ -360,7 +355,7 @@ void TextArea::render(bool eggTransparency)
     auto pos = position();
     for (auto& symbol : _symbols)
     {
-        symbol.render(pos.x(), pos.y());
+        symbol.render(pos);
     }
 }
 

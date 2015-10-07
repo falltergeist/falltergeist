@@ -32,18 +32,16 @@
 namespace Falltergeist
 {
 
-TextSymbol::TextSymbol(const uint8_t chr, int32_t x, int32_t y)
+TextSymbol::TextSymbol(const uint8_t chr, const Point& position)
 {
     _chr = chr;
-    setX(x);
-    setY(y);
+    setPosition(position);
 }
 
 TextSymbol::TextSymbol(const TextSymbol& other)
 {
     _chr = other._chr;
-    _x = other._x;
-    _y = other._y;
+    _position = other._position;
     _font = other._font;
 }
 
@@ -65,31 +63,22 @@ void TextSymbol::setFont(Font* font)
     _font = font;
 }
 
-int32_t TextSymbol::x() const
+Point TextSymbol::position() const
 {
-    return _x;
+    return _position;
 }
 
-void TextSymbol::setX(int32_t x)
+void TextSymbol::setPosition(const Point& position)
 {
-    _x = x;
+    _position = position;
 }
 
-int32_t TextSymbol::y() const
-{
-    return _y;
-}
-
-void TextSymbol::setY(int32_t y)
-{
-    _y = y;
-}
-
-void TextSymbol::render(int32_t offsetX, int32_t offsetY)
+void TextSymbol::render(const Point& offset)
 {
     unsigned textureX = (chr()%16) * font()->width();
     unsigned textureY = (chr()/16) * font()->height();
-    Game::getInstance()->renderer()->drawTexture(font()->texture(), x() + offsetX, y() + offsetY, textureX, textureY, font()->width(), font()->height());
+    Point drawPos = _position + offset;
+    Game::getInstance()->renderer()->drawTexture(font()->texture(), drawPos.x(), drawPos.y(), textureX, textureY, font()->width(), font()->height());
 }
 
 uint8_t TextSymbol::chr() const

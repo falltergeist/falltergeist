@@ -42,5 +42,10 @@ void ScrollableTextArea::setLineOffset(int offset)
     _lineOffset = offset;
 }
 
+virtual std::vector<TextArea::Line> ScrollableTextArea::_generateLines()
+{
+    return TextArea::_generateLines();
+}
+
 }
 }

@@ -51,6 +51,10 @@ public:
 
 protected:
     int _lineOffset = 0;
+    
+    using Line = TextArea::Line;
+    
+    virtual std::vector<Line> _generateLines() override;
 
 };
 

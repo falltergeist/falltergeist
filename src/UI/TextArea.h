@@ -260,7 +260,9 @@ protected:
     unsigned int _timestampCreated = 0;
 
     void _calculate();
-    std::vector<Line> _generateLines();
+    
+    virtual std::vector<Line> _generateLines();
+    
     void _addOutlineSymbol(const TextSymbol& symb, Font* font, int32_t ofsX, int32_t ofsY);
 
 };

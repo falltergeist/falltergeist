@@ -25,6 +25,7 @@
 #include <memory>
 
 // Falltergeist includes
+#include "../Point.h"
 
 // Third party includes
 
@@ -33,18 +34,11 @@ namespace Falltergeist
 
 class Font;
 
+// TODO: move inside TextArea class? This class is useless elsewhere.
 class TextSymbol
 {
-protected:
-    uint8_t _chr;
-
-    int32_t _x = 0;
-    int32_t _y = 0;
-
-    Font* _font;
-
 public:
-    TextSymbol(const uint8_t chr, int32_t x = 0, int32_t y = 0);
+    TextSymbol(const uint8_t chr, const Point& position);
     TextSymbol(const TextSymbol& other);
 
     virtual ~TextSymbol();
@@ -52,16 +46,20 @@ public:
     Font* font() const;
     void setFont(Font* font);
 
-    int32_t x() const;
-    void setX(int32_t x);
+    Point position() const;
+    void setPosition(const Point&);
 
-    int32_t y() const;
-    void setY(int32_t y);
-
-    void render(int32_t offsetX = 0, int32_t offsetY = 0);
+    void render(const Point& offset);
 
     uint8_t chr() const;
 
+protected:
+    uint8_t _chr;
+
+    Point _position;
+
+    Font* _font;
+    
 };
 
 }
