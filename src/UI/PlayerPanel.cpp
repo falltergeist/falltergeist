@@ -42,6 +42,7 @@
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/SmallCounter.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 
@@ -135,6 +136,46 @@ PlayerPanel::PlayerPanel() : UI::Base()
     _ui.back()->mouseClickHandler().add([this](Event::Event* event){
         this->openPipBoy();
     });
+
+    // Message log
+    _messageLog = std::make_shared<UI::TextArea>(position() + Point(25, 25));
+    _messageLog->setSize({165, 60});
+    _messageLog->setWordWrap(true);
+    _ui.push_back(_messageLog);
+
+    _messageLog->mouseClickHandler().add([this](Event::Mouse* event)
+        {
+            Point relPos = event->position() - position() - _messageLog->position();
+            if (relPos.y() < (_messageLog->size().height() / 2))
+            {
+                if (_messageLog->lineOffset() > 0)
+                {
+                    _messageLog->setLineOffset(_messageLog->lineOffset() - 1);
+                }
+            }
+            else if (_messageLog->overflown())
+            {
+                _messageLog->setLineOffset(_messageLog->lineOffset() + 1);
+            }
+        });
+    _messageLog->mouseMoveHandler().add([this](Event::Mouse* event)
+        {
+            auto mouse = Game::getInstance()->mouse();
+            Point relPos = event->position() - position() - _messageLog->position();
+            auto state = relPos.y() < (_messageLog->size().height() / 2)
+                ? Input::Mouse::Cursor::SMALL_UP_ARROW
+                : Input::Mouse::Cursor::SMALL_DOWN_ARROW;
+
+            if (mouse->state() != state)
+            {
+                mouse->setState(state);
+            }
+        });
+
+     _messageLog->mouseOutHandler().add([](Event::Mouse* event)
+        {
+            Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
+        });
 
     keyDownHandler().add([this](Event::Event* event) {
         this->onKeyDown(dynamic_cast<Event::Keyboard*>(event));
@@ -372,6 +413,16 @@ void PlayerPanel::openLoadGame()
 unsigned int PlayerPanel::pixel(const Point& pos)
 {
     return _background->pixel(pos);
+}
+
+void PlayerPanel::displayMessage(const std::string& message)
+{
+    Game::getInstance()->mixer()->playACMSound("sound/sfx/monitor.acm");
+    std::string msg = message + "\n";
+    msg += 0x95;
+    msg += " ";
+    *_messageLog << msg;
+    _messageLog->setLineOffset(_messageLog->numLines() - 5);
 }
 
 }

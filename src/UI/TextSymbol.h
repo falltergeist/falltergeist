@@ -39,9 +39,6 @@ class TextSymbol
 {
 public:
     TextSymbol(const uint8_t chr, const Point& position);
-    TextSymbol(const TextSymbol& other);
-
-    virtual ~TextSymbol();
 
     Font* font() const;
     void setFont(Font* font);
@@ -59,7 +56,7 @@ protected:
     Point _position;
 
     Font* _font;
-    
+
 };
 
 }

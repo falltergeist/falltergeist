@@ -69,9 +69,46 @@ void CritterDialog::init()
     addUI("background", background);
 
     auto question = new UI::TextArea("question", 140, -55);
-    question->setSize({370, 45});
+    question->setSize({370, 43});
     question->setWordWrap(true);
     addUI("question", question);
+
+    question->mouseClickHandler().add([this, question](Event::Mouse* event)
+        {
+            Point relPos = event->position() - position() - question->position();
+            if (relPos.y() < (question->size().height() / 2))
+            {
+                if (question->lineOffset() > 0)
+                {
+                    question->setLineOffset(question->lineOffset() - 4);
+                }
+            }
+            else if (question->lineOffset() < question->numLines() - 4)
+            {
+                question->setLineOffset(question->lineOffset() + 4);
+            }
+        });
+    question->mouseMoveHandler().add([this, question](Event::Mouse* event)
+        {
+            if (question->numLines() > 4)
+            {
+                auto mouse = Game::getInstance()->mouse();
+                Point relPos = event->position() - position() - question->position();
+                auto state = relPos.y() < (question->size().height() / 2)
+                    ? Input::Mouse::Cursor::SMALL_UP_ARROW
+                    : Input::Mouse::Cursor::SMALL_DOWN_ARROW;
+
+                if (mouse->state() != state)
+                {
+                    mouse->setState(state);
+                }
+            }
+        });
+
+     question->mouseOutHandler().add([question](Event::Mouse* event)
+        {
+            Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
+        });
 
     // Interface buttons
     auto reviewButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_REVIEW_BUTTON, 13, 154);
@@ -91,7 +128,7 @@ void CritterDialog::think()
 void CritterDialog::setQuestion(const std::string& value)
 {
     auto question = getTextArea("question");
-    question->setText(value);
+    question->setText(std::string("  ") + value);
 }
 
 void CritterDialog::onAnswerIn(Event::Mouse* event)

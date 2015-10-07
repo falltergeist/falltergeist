@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_UI_TEXTAREA_H
-#define FALLTERGEIST_UI_TEXTAREA_H
+#ifndef FALLTERGEIST_UI_SCROLLABLETEXTAREA_H
+#define FALLTERGEIST_UI_SCROLLABLETEXTAREA_H
 
 // C++ standard includes
 #include <cstdint>
@@ -44,20 +44,19 @@ class ScrollableTextArea : public TextArea
 public:
     using TextArea::TextArea;
 
-    ~ScrollableTextArea() override;
-    
-    int lineOffset() const;
-    void setLineOffset(int);
+    unsigned lineOffset() const;
+    void setLineOffset(unsigned);
 
 protected:
     int _lineOffset = 0;
     
     using Line = TextArea::Line;
-    
-    virtual std::vector<Line> _generateLines() override;
+
+
 
 };
 
 }
 }
-#endif // FALLTERGEIST_UI_TEXTAREA_H
+
+#endif // FALLTERGEIST_UI_SCROLLABLETEXTAREA_H

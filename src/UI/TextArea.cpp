@@ -83,6 +83,7 @@ void TextArea::appendText(const std::string& text)
 {
     _text += text;
     _changed = true;
+    _lines.clear();
 }
 
 TextArea::HorizontalAlign TextArea::horizontalAlign() const
@@ -113,6 +114,7 @@ void TextArea::setText(const std::string& text)
 {
     _text = text;
     _changed = true;
+    _lines.clear();
 }
 
 Font* TextArea::font()
@@ -128,6 +130,7 @@ void TextArea::setFont(Font* font)
 {
     _font = font;
     _changed = true;
+    _lines.clear();
 }
 
 void TextArea::setFont(const std::string& fontName, unsigned int color)
@@ -145,6 +148,7 @@ void TextArea::setWordWrap(bool wordWrap)
     if (_wordWrap == wordWrap) return;
     _wordWrap = wordWrap;
     _changed = true;
+    _lines.clear();
 }
 
 bool TextArea::wordWrap() const
@@ -165,11 +169,23 @@ bool TextArea::outline() const
 void TextArea::setOutlineColor(unsigned int color)
 {
     _outlineColor = color;
+    _changed = true;
 }
 
 unsigned int TextArea::outlineColor() const
 {
     return _outlineColor;
+}
+
+int TextArea::lineOffset() const
+{
+    return _lineOffset;
+}
+
+void TextArea::setLineOffset(int offset)
+{
+    _lineOffset = offset;
+    _changed = true;
 }
 
 Size TextArea::size() const
@@ -182,14 +198,18 @@ Size TextArea::size() const
 
 Size TextArea::textSize()
 {
-    _calculate();
+    _updateSymbols();
     return _calculatedSize;
+}
+
+bool TextArea::overflown()
+{
+    return _overflown;
 }
 
 int TextArea::numLines()
 {
-    _calculate();
-    return _numLines;
+    return _lines.size();
 }
 
 void TextArea::setSize(const Size& size)
@@ -204,8 +224,8 @@ void TextArea::setWidth(int width)
     setSize({width, _size.height()});
 }
 
-// TODO: refactoring of this functions would be nice
-void TextArea::_calculate()
+// TODO: refactoring of this function would be nice
+void TextArea::_updateSymbols()
 {
     if (!_changed) return;
 
@@ -217,20 +237,43 @@ void TextArea::_calculate()
         return;
     }
 
-    auto lines = _generateLines();
+    unsigned maxLines = _size.height()
+           ? (unsigned)(_size.height() + font()->verticalGap()) / (font()->height() + font()->verticalGap())
+           : 0u;
+
+    if (_lines.empty())
+    {
+        _lines = _generateLines(0, 0);
+    }
+
+    // TODO: maybe move this code to another class?
+
+    // at positive offset, skip number of first lines
+    int lineOffset = _lineOffset > 0 ? _lineOffset : 0;
+    auto lineBegin = _lines.cbegin() + lineOffset;
+    auto lineEnd = std::min(_lines.cbegin() + lineOffset + maxLines, _lines.cend());
+
+    int numLines = std::distance(lineBegin, lineEnd);
 
     // Calculating textarea sizes if needed
-    _calculatedSize.setWidth(std::max_element(lines.begin(), lines.end())->width);
-    _calculatedSize.setHeight(lines.size()*font()->height() + (lines.size() - 1)*font()->verticalGap());
+    _calculatedSize.setWidth(std::max_element(lineBegin, lineEnd)->width);
+    _calculatedSize.setHeight(numLines*font()->height() + (numLines - 1)*font()->verticalGap());
 
     // Alignment and outlining
     auto outlineFont = (_outlineColor != 0)
                        ? ResourceManager::getInstance()->font(font()->filename(), _outlineColor)
                        : nullptr;
 
-    for (auto& line : lines)
+    Point offset;
+    // on negative offset, add padding at the top
+    if (_lineOffset < 0)
     {
-        Point offset;
+        offset.setY((font()->height() + font()->verticalGap()) * (- _lineOffset));
+    }
+    // TODO: Y coords are already off-set in _generateLines!
+    for (auto it = lineBegin; it != lineEnd; ++it)
+    {
+        auto& line = *it;
         if (_horizontalAlign != HorizontalAlign::LEFT)
         {
             offset.setX((_size.width() ? _size.width() : _calculatedSize.width()) - line.width);
@@ -240,7 +283,7 @@ void TextArea::_calculate()
             }
         }
 
-        for (auto& symbol : line.symbols)
+        for (TextSymbol symbol : line.symbols)
         {
             symbol.setPosition(symbol.position() + offset);
             // outline symbols
@@ -262,12 +305,15 @@ void TextArea::_calculate()
     _changed = false;
 }
 
-std::vector<TextArea::Line> TextArea::_generateLines()
+std::vector<TextArea::Line> TextArea::_generateLines(unsigned int maxLines, int lineOffset)
 {
+    //static_assert(std::is_trivially_copyable<TextSymbol>(), "TextSymbol should be trivially copyable.");
+
     std::vector<Line> lines;
-    lines.emplace_back(); // first line
+    lines.resize(lineOffset < 0 ? 1 + (size_t)(- lineOffset) : 1);
     
     int x = 0, y = 0, wordWidth = 0;
+    int lineBreaks = 0;
     
     // Parsing lines of text
     // Cutting lines when it is needed (\n or when exceeding _width)
@@ -275,9 +321,6 @@ std::vector<TextArea::Line> TextArea::_generateLines()
     std::string word;
     auto aFont = font();
     auto glyphs = aFont->aaf()->glyphs();
-    unsigned int maxLines = _size.height() 
-        ? (_size.height() + font()->verticalGap()) / (font()->height() + font()->verticalGap())
-        : 0;
     
     while (istream >> word)
     {
@@ -307,26 +350,34 @@ std::vector<TextArea::Line> TextArea::_generateLines()
 
             if (ch == '\n' || (_wordWrap && _size.width() && x >= _size.width()))
             {
-                lines.back().width = x;
-                x = 0;
-                y += aFont->height() + aFont->verticalGap();
                 if (maxLines && lines.size() >= maxLines)
                 {
+                    _overflown = true;
                     return lines;
                 }
-                lines.emplace_back();
+
+                if (lineBreaks >= lineOffset)
+                {
+                    lines.back().width = x;
+                    x = 0;
+                    y += aFont->height() + aFont->verticalGap();
+                    lines.emplace_back();
+                }
+                ++lineBreaks;
             }
 
             if (ch == ' ' || ch == '\n')
                 continue;
 
-            TextSymbol symbol(ch, {x, y});
-            symbol.setFont(aFont);
             Line& line = lines.back();
-            line.symbols.push_back(symbol);
-
-            x += glyphs->at(ch)->width() + aFont->horizontalGap();
-            line.width = x;
+            if (lineBreaks >= lineOffset)
+            {
+                TextSymbol symbol(ch, {x, y});
+                symbol.setFont(aFont);
+                line.symbols.push_back(symbol);
+                x += glyphs->at(ch)->width() + aFont->horizontalGap();
+                line.width = x;
+            }
         }
     }
     return lines;
@@ -350,7 +401,8 @@ unsigned int TextArea::timestampCreated() const
 
 void TextArea::render(bool eggTransparency)
 {
-    if (_changed) _calculate();
+    if (_changed)
+        _updateSymbols();
 
     auto pos = position();
     for (auto& symbol : _symbols)

@@ -38,17 +38,6 @@ TextSymbol::TextSymbol(const uint8_t chr, const Point& position)
     setPosition(position);
 }
 
-TextSymbol::TextSymbol(const TextSymbol& other)
-{
-    _chr = other._chr;
-    _position = other._position;
-    _font = other._font;
-}
-
-TextSymbol::~TextSymbol()
-{
-}
-
 Font* TextSymbol::font() const
 {
     if (!_font)

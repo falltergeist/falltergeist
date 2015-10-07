@@ -36,7 +36,7 @@ namespace UI
 
 Image::Image(const std::string& filename) : Falltergeist::UI::Base()
 {
-    setTexture(ResourceManager::getInstance()->texture(filename));
+    setTexture(filename);
 }
 
 Image::Image(const Image& image) : Falltergeist::UI::Base()
@@ -92,6 +92,11 @@ Image::Image(libfalltergeist::Frm::File* frm, unsigned int direction) : Fallterg
 
 Image::~Image()
 {
+}
+
+void Image::setTexture(const std::string& filename)
+{
+    setTexture(ResourceManager::getInstance()->texture(filename));
 }
 
 }

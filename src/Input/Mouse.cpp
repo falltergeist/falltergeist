@@ -203,6 +203,12 @@ void Mouse::_setType(Cursor state)
         case Cursor::HAND:
             _ui = make_unique<UI::Image>("art/intrface/hand.frm");
             break;
+        case Cursor::SMALL_DOWN_ARROW:
+            _ui = make_unique<UI::Image>("art/intrface/sdnarrow.frm");
+            break;
+        case Cursor::SMALL_UP_ARROW:
+            _ui = make_unique<UI::Image>("art/intrface/suparrow.frm");
+            break;
         case Cursor::WAIT:
         {
             auto queue = make_unique<UI::AnimationQueue>();

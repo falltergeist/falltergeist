@@ -32,20 +32,16 @@ namespace Falltergeist
 namespace UI
 {
 
-int ScrollableTextArea::lineOffset() const
+unsigned ScrollableTextArea::lineOffset() const
 {
     return _lineOffset;
 }
 
-void ScrollableTextArea::setLineOffset(int offset)
+void ScrollableTextArea::setLineOffset(unsigned offset)
 {
     _lineOffset = offset;
 }
 
-virtual std::vector<TextArea::Line> ScrollableTextArea::_generateLines()
-{
-    return TextArea::_generateLines();
-}
 
 }
 }

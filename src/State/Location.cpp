@@ -688,6 +688,10 @@ void Location::onMouseMove(Event::Mouse* mouseEvent)
 {
     auto mouse = Game::getInstance()->mouse();
     auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
+    if (mouse->states()->empty())
+    {
+        mouse->setState(Input::Mouse::Cursor::ACTION);
+    }
     if (mouse->state() == Input::Mouse::Cursor::HEXAGON_RED && hexagon)
     {
         mouse->ui()->setPosition(hexagon->position() - _camera->topLeft());
@@ -934,7 +938,7 @@ void Location::handleAction(Game::Object* object, Input::Mouse::Icon action)
 
 void Location::displayMessage(const std::string& message)
 {
-    Game::getInstance()->mixer()->playACMSound("sound/sfx/monitor.acm");
+    _playerPanel->displayMessage(message);
     Logger::info("MESSAGE") << message << std::endl;
 }
 

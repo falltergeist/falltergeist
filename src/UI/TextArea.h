@@ -117,20 +117,25 @@ public:
      */
     void setSize(const Size& size);
 
+    void setWidth(int width);
+
 
     virtual void handle(Event::Event* event) override;
 
     /**
      * Size of actual text content of the text area.
      */
-    Size textSize(); 
-    
+    Size textSize();
+
     /**
-     * Number of actual lines of text as rendered.
+     * Returns true if text currently contained in TextArea does not fit withing given height.
+     */
+    bool overflown();
+
+    /**
+     * Actual number of lines contained within TextArea. Will be greater than number of visible lines when overflown.
      */
     int numLines();
-
-    void setWidth(int width);
 
     /**
      * Whether Word Wrap is currently enabled or not.
@@ -161,6 +166,16 @@ public:
      * Sets text outline color. 0 - disables outline, any other color will enable it.
      */
     void setOutlineColor(unsigned int color);
+
+    /**
+     * Current line offset.
+     */
+    int lineOffset() const;
+    /**
+     * Sets number of lines to adjust vertical position. Positive - up, negative - down.
+     */
+    void setLineOffset(int);
+
 
     Font* font();
     void setFont(Font* font);
@@ -223,16 +238,20 @@ protected:
     struct Line
     {
         // line width in pixels
-        unsigned width = 0;
+        int width = 0;
         std::vector<TextSymbol> symbols;
         
-        bool operator < (const Line& rhs) 
+        bool operator < (const Line& rhs) const
         { 
             return width < rhs.width; 
         }
     };
-    
+
+    /**
+     * If true, _symbols will be regenerated on next render().
+     */
     bool _changed = true;
+
     std::vector<TextSymbol> _symbols;
     std::string _text;
     Font* _font = nullptr;
@@ -246,11 +265,17 @@ protected:
     Size _size;
 
     /**
-     * Real size of TextArea on screen, as determined by previous _calculate() call.
+     * Real size of TextArea on screen, as determined by previous _updateSymbols() call.
      */
     Size _calculatedSize;
-    int _numLines;
+    /**
+     * Lines of text. Cleared along with _changed flag when it is required to recalculate symbol positions.
+     */
+    std::vector<Line> _lines;
 
+    int _lineOffset = 0;
+
+    bool _overflown = false;
     bool _wordWrap = false;
 
     // TODO: implement
@@ -259,9 +284,14 @@ protected:
     unsigned int _outlineColor = 0;
     unsigned int _timestampCreated = 0;
 
-    void _calculate();
-    
-    virtual std::vector<Line> _generateLines();
+    virtual void _updateSymbols();
+
+    /**
+     * Splits text from string into a vector of lines.
+     * @param maxLines maximum number of lines to generate, 0 for no limit.
+     * @param offset number of first lines to skip.
+     */
+    virtual std::vector<Line> _generateLines(unsigned int maxLines = 0, int lineOffset = 0);
     
     void _addOutlineSymbol(const TextSymbol& symb, Font* font, int32_t ofsX, int32_t ofsY);
 

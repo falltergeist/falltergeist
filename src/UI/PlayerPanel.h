@@ -39,6 +39,7 @@ namespace UI
 {
 class Image;
 class SmallCounter;
+class TextArea;
 
 class PlayerPanel : public UI::Base
 {
@@ -55,6 +56,8 @@ public:
     void handle(Event::Event *event) override;
     void think() override;
 
+    void displayMessage(const std::string& message);
+
     void playWindowOpenSfx();
 
 private:
@@ -62,6 +65,7 @@ private:
     std::shared_ptr<Image> _background;
     std::shared_ptr<SmallCounter> _hitPoints;
     std::shared_ptr<SmallCounter> _armorClass;
+    std::shared_ptr<TextArea> _messageLog;
     std::vector<std::shared_ptr<UI::Base>> _ui;
 
     void changeHand();
