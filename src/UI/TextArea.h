@@ -120,10 +120,15 @@ public:
 
     virtual void handle(Event::Event* event) override;
 
-/**
+    /**
      * Size of actual text content of the text area.
      */
-    Size textSize();
+    Size textSize(); 
+    
+    /**
+     * Number of actual lines of text as rendered.
+     */
+    int numLines();
 
     void setWidth(int width);
 
@@ -215,6 +220,18 @@ public:
     TextArea& operator=(signed value);
 
 protected:
+    struct Line
+    {
+        // line width in pixels
+        unsigned width = 0;
+        std::vector<TextSymbol> symbols;
+        
+        bool operator < (const Line& rhs) 
+        { 
+            return width < rhs.width; 
+        }
+    };
+    
     bool _changed = true;
     std::vector<TextSymbol> _symbols;
     std::string _text;
@@ -232,6 +249,7 @@ protected:
      * Real size of TextArea on screen, as determined by previous _calculate() call.
      */
     Size _calculatedSize;
+    int _numLines;
 
     bool _wordWrap = false;
 
@@ -242,6 +260,7 @@ protected:
     unsigned int _timestampCreated = 0;
 
     void _calculate();
+    std::vector<Line> _generateLines();
     void _addOutlineSymbol(const TextSymbol& symb, Font* font, int32_t ofsX, int32_t ofsY);
 
 };

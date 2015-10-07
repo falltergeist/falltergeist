@@ -69,7 +69,7 @@ void CritterDialog::init()
     addUI("background", background);
 
     auto question = new UI::TextArea("question", 140, -55);
-    question->setSize({370, 0});
+    question->setSize({370, 45});
     question->setWordWrap(true);
     addUI("question", question);
 

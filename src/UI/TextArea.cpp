@@ -34,10 +34,10 @@
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
 #include "../UI/TextSymbol.h"
+#include "../Logger.h"
 
 // Third party includes
 #include <SDL.h>
-#include <Event/Mouse.h>
 
 namespace Falltergeist
 {
@@ -186,6 +186,12 @@ Size TextArea::textSize()
     return _calculatedSize;
 }
 
+int TextArea::numLines()
+{
+    _calculate();
+    return _numLines;
+}
+
 void TextArea::setSize(const Size& size)
 {
     if (_size == size) return;
@@ -198,6 +204,7 @@ void TextArea::setWidth(int width)
     setSize({width, _size.height()});
 }
 
+// TODO: refactoring of this functions would be nice
 void TextArea::_calculate()
 {
     if (!_changed) return;
@@ -210,18 +217,73 @@ void TextArea::_calculate()
         return;
     }
 
-    unsigned x = 0, wordWidth = 0;
-    unsigned y = 0;
+    auto lines = _generateLines();
 
-    std::vector<std::vector<TextSymbol>> lines = {std::vector<TextSymbol>()};
-    std::vector<unsigned> widths = {0};
+    // Calculating textarea sizes if needed
+    _calculatedSize.setWidth(std::max_element(lines.begin(), lines.end())->width);
+    _calculatedSize.setHeight(lines.size()*font()->height() + (lines.size() - 1)*font()->verticalGap());
 
+    // Align
+    auto outlineFont = (_outlineColor != 0)
+                       ? ResourceManager::getInstance()->font(font()->filename(), _outlineColor)
+                       : nullptr;
+
+    for (unsigned i = 0; i != lines.size(); ++i)
+    {
+        auto& line = lines.at(i);
+
+        unsigned xOffset = 0;
+        unsigned yOffset = 0;
+
+        if (_horizontalAlign != HorizontalAlign::LEFT)
+        {
+            xOffset = (_size.width() ? _size.width() : _calculatedSize.width()) - lines.at(i).width;
+            if (_horizontalAlign == HorizontalAlign::CENTER)
+            {
+                xOffset = xOffset / 2;
+            }
+        }
+
+        for (auto& symbol : line.symbols)
+        {
+            symbol.setX(symbol.x() + xOffset);
+            symbol.setY(symbol.y() + yOffset);
+            // outline symbols
+            if (_outlineColor != 0)
+            {
+                _addOutlineSymbol(symbol, outlineFont,  0, -1);
+                _addOutlineSymbol(symbol, outlineFont,  0,  1);
+                _addOutlineSymbol(symbol, outlineFont, -1,  0);
+                _addOutlineSymbol(symbol, outlineFont, -1, -1);
+                _addOutlineSymbol(symbol, outlineFont, -1,  1);
+                _addOutlineSymbol(symbol, outlineFont,  1,  0);
+                _addOutlineSymbol(symbol, outlineFont,  1, -1);
+                _addOutlineSymbol(symbol, outlineFont,  1,  1);
+            }
+        
+            _symbols.push_back(symbol);
+        }
+    }
+    _changed = false;
+}
+
+std::vector<TextArea::Line> TextArea::_generateLines()
+{
+    std::vector<Line> lines;
+    lines.emplace_back();
+    
+    unsigned x = 0, y = 0, wordWidth = 0;
+    
     // Parsing lines of text
     // Cutting lines when it is needed (\n or when exceeding _width)
     std::istringstream istream(_text);
     std::string word;
     auto aFont = font();
     auto glyphs = aFont->aaf()->glyphs();
+    unsigned int maxLines = _size.height() 
+        ? (_size.height() + font()->verticalGap()) / (font()->height() + font()->verticalGap())
+        : 0;
+    
     while (istream >> word)
     {
         // calculate word width
@@ -250,11 +312,14 @@ void TextArea::_calculate()
 
             if (ch == '\n' || (_wordWrap && _size.width() && x >= (unsigned)_size.width()))
             {
-                widths.back() = x;
+                lines.back().width = x;
                 x = 0;
                 y += aFont->height() + aFont->verticalGap();
+                if (maxLines && lines.size() >= maxLines)
+                {
+                    return lines;
+                }
                 lines.emplace_back();
-                widths.push_back(0);
             }
 
             if (ch == ' ' || ch == '\n')
@@ -262,59 +327,14 @@ void TextArea::_calculate()
 
             TextSymbol symbol(ch, x, y);
             symbol.setFont(aFont);
-            lines.back().push_back(symbol);
+            Line& line = lines.back();
+            line.symbols.push_back(symbol);
 
             x += glyphs->at(ch)->width() + aFont->horizontalGap();
-            widths.back() = x;
+            line.width = x;
         }
     }
-
-    // Calculating textarea sizes if needed
-    _calculatedSize.setWidth(*std::max_element(widths.begin(), widths.end()));
-    _calculatedSize.setHeight(lines.size()*font()->height() + (lines.size() - 1)*font()->verticalGap());
-
-    // Align
-    auto outlineFont = (_outlineColor != 0)
-                       ? ResourceManager::getInstance()->font(aFont->filename(), _outlineColor)
-                       : nullptr;
-
-    for (unsigned i = 0; i != lines.size(); ++i)
-    {
-        auto& line = lines.at(i);
-
-        unsigned xOffset = 0;
-        unsigned yOffset = 0;
-
-        if (_horizontalAlign != HorizontalAlign::LEFT)
-        {
-            xOffset = (_size.width() ? _size.width() : _calculatedSize.width()) - widths.at(i);
-            if (_horizontalAlign == HorizontalAlign::CENTER)
-            {
-                xOffset = xOffset / 2;
-            }
-        }
-
-        for (auto& symbol : line)
-        {
-            symbol.setX(symbol.x() + xOffset);
-            symbol.setY(symbol.y() + yOffset);
-            // outline symbols
-            if (_outlineColor != 0)
-            {
-                _addOutlineSymbol(symbol, outlineFont,  0, -1);
-                _addOutlineSymbol(symbol, outlineFont,  0,  1);
-                _addOutlineSymbol(symbol, outlineFont, -1,  0);
-                _addOutlineSymbol(symbol, outlineFont, -1, -1);
-                _addOutlineSymbol(symbol, outlineFont, -1,  1);
-                _addOutlineSymbol(symbol, outlineFont,  1,  0);
-                _addOutlineSymbol(symbol, outlineFont,  1, -1);
-                _addOutlineSymbol(symbol, outlineFont,  1,  1);
-            }
-        
-            _symbols.push_back(symbol);
-        }
-    }
-    _changed = false;
+    return lines;
 }
 
 void TextArea::_addOutlineSymbol(const TextSymbol& symb, Font* font, int32_t ofsX, int32_t ofsY)
