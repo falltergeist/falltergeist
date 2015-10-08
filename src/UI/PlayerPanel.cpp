@@ -43,7 +43,6 @@
 #include "../UI/ImageButton.h"
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
-#include "../Logger.h"
 
 // Third party includes
 
@@ -142,6 +141,7 @@ PlayerPanel::PlayerPanel() : UI::Base()
     _messageLog = std::make_shared<UI::TextArea>(position() + Point(23, 24));
     _messageLog->setSize({165, 60});
     _messageLog->setWordWrap(true);
+    _messageLog->setCustomLineShifts({0, 1, 2, 3, 4, 5});
     _ui.push_back(_messageLog);
 
     _messageLog->mouseDownHandler().add([this](Event::Mouse* event)
@@ -176,11 +176,6 @@ PlayerPanel::PlayerPanel() : UI::Base()
         {
             auto mouse = Game::getInstance()->mouse();
             Point relPos = event->position() - _messageLog->position();
-            Logger::info("PlayerPanel") <<
-                "relPos: " << relPos <<
-                ", StatePos: " << position() <<
-                ", EventPos: " << event->position() <<
-                ", TextPos: " << _messageLog->position() << std::endl;
 
             auto state = relPos.y() < (_messageLog->size().height() / 2)
                 ? Input::Mouse::Cursor::SMALL_UP_ARROW
@@ -270,7 +265,7 @@ void PlayerPanel::think()
         itemUi->think();
     }
 
-    if (_scrollingLogTimer && (SDL_GetTicks() > _scrollingLogTimer + 300)
+    if (_scrollingLogTimer && (SDL_GetTicks() > _scrollingLogTimer + 150)
         && ((_scrollingLog < 0 && _messageLog->lineOffset() > 0)
             || (_scrollingLog > 0 && _messageLog->lineOffset() < _messageLog->numLines() - 6)))
     {

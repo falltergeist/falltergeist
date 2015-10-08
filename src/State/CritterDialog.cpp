@@ -70,6 +70,7 @@ void CritterDialog::init()
 
     auto question = new UI::TextArea("question", 140, -62);
     question->setSize({375, 53});
+    // TODO: maybe padding properties should be removed from TextArea to simplify it. Use invisible panel for mouse interactions.
     question->setPadding({0, 5}, {0, 5});
     question->setWordWrap(true);
     addUI("question", question);
@@ -128,6 +129,7 @@ void CritterDialog::think()
     State::think();
 }
 
+// TODO: add auto-text scrolling after 10 seconds (when it's longer than 4 lines)
 void CritterDialog::setQuestion(const std::string& value)
 {
     auto question = getTextArea("question");

@@ -200,6 +200,12 @@ public:
      */
     void setLineOffset(int);
 
+    const std::vector<int>& customLineShifts() const;
+    /**
+     * Sets custom horizontal shifting for each if displayed line. This is applied after alignment and doesn't affect TextArea size.
+     */
+    void setCustomLineShifts(std::vector<int> shifts);
+
 
     Font* font();
     void setFont(Font* font);
@@ -310,6 +316,7 @@ protected:
     bool _wordWrap = false;
 
     Size _paddingTopLeft, _paddingBottomRight;
+    std::vector<int> _customLineShifts;
 
     // TODO: implement
     unsigned int _backgroundColor = 0;

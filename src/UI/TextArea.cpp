@@ -279,9 +279,12 @@ void TextArea::_updateSymbols()
     // lines are generated with respect to horizontal padding only, so we should only change vertical;
     // on negative offset, add padding at the top, on positive - shift lines upwards
     offset.setY(_paddingTopLeft.height() + (font()->height() + font()->verticalGap()) * (- _lineOffset));
-    for (auto it = lineBegin; it != lineEnd; ++it)
+    // index of visible line
+    size_t lineIdx = _lineOffset < 0 ? (size_t)(- _lineOffset) : 0;
+    for (auto it = lineBegin; it != lineEnd; ++it, ++lineIdx)
     {
         auto& line = *it;
+        offset.setX(0);
         if (_horizontalAlign != HorizontalAlign::LEFT)
         {
             offset.setX((_size.width() ? _size.width() : _calculatedSize.width()) - line.width);
@@ -289,6 +292,10 @@ void TextArea::_updateSymbols()
             {
                 offset.rx() /= 2;
             }
+        }
+        if (lineIdx < _customLineShifts.size())
+        {
+            offset.rx() += _customLineShifts[lineIdx];
         }
 
         for (TextSymbol symbol : line.symbols)
@@ -524,6 +531,16 @@ void TextArea::setPadding(const Size& topLeft, const Size& bottomRight)
 {
     setPaddingTopLeft(topLeft);
     setPaddingBottomRight(bottomRight);
+}
+
+const std::vector<int>& TextArea::customLineShifts() const
+{
+    return _customLineShifts;
+}
+
+void TextArea::setCustomLineShifts(std::vector<int> shifts)
+{
+    _customLineShifts = shifts;
 }
 
 }
