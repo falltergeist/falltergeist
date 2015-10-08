@@ -145,7 +145,7 @@ PlayerPanel::PlayerPanel() : UI::Base()
 
     _messageLog->mouseClickHandler().add([this](Event::Mouse* event)
         {
-            Point relPos = event->position() - position() - _messageLog->position();
+            Point relPos = event->position() - _messageLog->position();
             if (relPos.y() < (_messageLog->size().height() / 2))
             {
                 if (_messageLog->lineOffset() > 0)
@@ -161,7 +161,7 @@ PlayerPanel::PlayerPanel() : UI::Base()
     _messageLog->mouseMoveHandler().add([this](Event::Mouse* event)
         {
             auto mouse = Game::getInstance()->mouse();
-            Point relPos = event->position() - position() - _messageLog->position();
+            Point relPos = event->position() - _messageLog->position();
             auto state = relPos.y() < (_messageLog->size().height() / 2)
                 ? Input::Mouse::Cursor::SMALL_UP_ARROW
                 : Input::Mouse::Cursor::SMALL_DOWN_ARROW;
@@ -418,11 +418,10 @@ unsigned int PlayerPanel::pixel(const Point& pos)
 void PlayerPanel::displayMessage(const std::string& message)
 {
     Game::getInstance()->mixer()->playACMSound("sound/sfx/monitor.acm");
-    std::string msg = message + "\n";
-    msg += 0x95;
-    msg += " ";
+    std::string msg = "\n\x95 ";
+    msg += message;
     *_messageLog << msg;
-    _messageLog->setLineOffset(_messageLog->numLines() - 5);
+    _messageLog->setLineOffset(_messageLog->numLines() - 6);
 }
 
 }

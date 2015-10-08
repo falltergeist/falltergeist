@@ -75,7 +75,7 @@ void CritterDialog::init()
 
     question->mouseClickHandler().add([this, question](Event::Mouse* event)
         {
-            Point relPos = event->position() - position() - question->position();
+            Point relPos = event->position() - question->position();
             if (relPos.y() < (question->size().height() / 2))
             {
                 if (question->lineOffset() > 0)
@@ -93,7 +93,7 @@ void CritterDialog::init()
             if (question->numLines() > 4)
             {
                 auto mouse = Game::getInstance()->mouse();
-                Point relPos = event->position() - position() - question->position();
+                Point relPos = event->position() - question->position();
                 auto state = relPos.y() < (question->size().height() / 2)
                     ? Input::Mouse::Cursor::SMALL_UP_ARROW
                     : Input::Mouse::Cursor::SMALL_DOWN_ARROW;

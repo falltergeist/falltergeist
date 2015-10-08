@@ -235,6 +235,12 @@ public:
     TextArea& operator=(signed value);
 
 protected:
+    /*struct TextSymbol
+    {
+        uint8_t chr;
+        Point position;
+    };*/
+
     struct Line
     {
         // line width in pixels
@@ -284,16 +290,23 @@ protected:
     unsigned int _outlineColor = 0;
     unsigned int _timestampCreated = 0;
 
+    /**
+     * Update symbols, if needed.
+     */
     virtual void _updateSymbols();
 
     /**
-     * Splits text from string into a vector of lines.
-     * @param maxLines maximum number of lines to generate, 0 for no limit.
-     * @param offset number of first lines to skip.
+     * If needed, updates lines by splitting source string.
      */
-    virtual std::vector<Line> _generateLines(unsigned int maxLines = 0, int lineOffset = 0);
+    virtual void _updateLines();
     
     void _addOutlineSymbol(const TextSymbol& symb, Font* font, int32_t ofsX, int32_t ofsY);
+
+    /**
+     * Call when it is required to recalculate symbol positions.
+     * @param lines true to also rebuild line composition.
+     */
+    void _needUpdate(bool lines = false);
 
 };
 
