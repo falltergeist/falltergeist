@@ -68,6 +68,10 @@ private:
     std::shared_ptr<TextArea> _messageLog;
     std::vector<std::shared_ptr<UI::Base>> _ui;
 
+    char _scrollingLog = 0;
+    // TODO: replace with real timer
+    unsigned int _scrollingLogTimer = 0;
+
     void changeHand();
     void openCharacterScreen();
     void openGameMenu();

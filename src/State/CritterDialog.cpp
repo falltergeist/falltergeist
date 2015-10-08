@@ -68,11 +68,13 @@ void CritterDialog::init()
     auto background = new UI::Image("art/intrface/di_talk.frm");
     addUI("background", background);
 
-    auto question = new UI::TextArea("question", 140, -55);
-    question->setSize({370, 43});
+    auto question = new UI::TextArea("question", 140, -62);
+    question->setSize({375, 53});
+    question->setPadding({0, 5}, {0, 5});
     question->setWordWrap(true);
     addUI("question", question);
 
+    // TODO: maybe move text scrolling into separate UI? Though it is only in two places and works slightly differently...
     question->mouseClickHandler().add([this, question](Event::Mouse* event)
         {
             Point relPos = event->position() - question->position();
@@ -88,6 +90,7 @@ void CritterDialog::init()
                 question->setLineOffset(question->lineOffset() + 4);
             }
         });
+
     question->mouseMoveHandler().add([this, question](Event::Mouse* event)
         {
             if (question->numLines() > 4)
@@ -206,6 +209,16 @@ void CritterDialog::onKeyDown(Event::Keyboard* event)
 
         if (keyOffset < _answers.size()) _selectAnswer(keyOffset);
         return;
+    }
+
+    auto question = dynamic_cast<UI::TextArea*>(getUI("question"));
+    if (key == SDLK_UP && question->lineOffset() > 0)
+    {
+        question->setLineOffset(question->lineOffset() - 4);
+    }
+    else if (key == SDLK_DOWN && question->lineOffset() < question->numLines() - 4)
+    {
+        question->setLineOffset(question->lineOffset() + 4);
     }
 }
 

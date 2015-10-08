@@ -43,6 +43,7 @@
 #include "../UI/ImageButton.h"
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
+#include "../Logger.h"
 
 // Third party includes
 
@@ -138,30 +139,49 @@ PlayerPanel::PlayerPanel() : UI::Base()
     });
 
     // Message log
-    _messageLog = std::make_shared<UI::TextArea>(position() + Point(25, 25));
+    _messageLog = std::make_shared<UI::TextArea>(position() + Point(23, 24));
     _messageLog->setSize({165, 60});
     _messageLog->setWordWrap(true);
     _ui.push_back(_messageLog);
 
-    _messageLog->mouseClickHandler().add([this](Event::Mouse* event)
+    _messageLog->mouseDownHandler().add([this](Event::Mouse* event)
         {
+            _scrollingLog = 0;
             Point relPos = event->position() - _messageLog->position();
             if (relPos.y() < (_messageLog->size().height() / 2))
             {
                 if (_messageLog->lineOffset() > 0)
                 {
-                    _messageLog->setLineOffset(_messageLog->lineOffset() - 1);
+                    _scrollingLog = -1;
                 }
             }
             else if (_messageLog->overflown())
             {
-                _messageLog->setLineOffset(_messageLog->lineOffset() + 1);
+                _scrollingLog = 1;
+            }
+            if (_scrollingLog != 0)
+            {
+                _messageLog->setLineOffset(_messageLog->lineOffset() + _scrollingLog);
+                _scrollingLogTimer = SDL_GetTicks();
             }
         });
+
+    _messageLog->mouseUpHandler().add([this](Event::Mouse* event)
+        {
+            _scrollingLog = 0;
+            _scrollingLogTimer = 0;
+        });
+
     _messageLog->mouseMoveHandler().add([this](Event::Mouse* event)
         {
             auto mouse = Game::getInstance()->mouse();
             Point relPos = event->position() - _messageLog->position();
+            Logger::info("PlayerPanel") <<
+                "relPos: " << relPos <<
+                ", StatePos: " << position() <<
+                ", EventPos: " << event->position() <<
+                ", TextPos: " << _messageLog->position() << std::endl;
+
             auto state = relPos.y() < (_messageLog->size().height() / 2)
                 ? Input::Mouse::Cursor::SMALL_UP_ARROW
                 : Input::Mouse::Cursor::SMALL_DOWN_ARROW;
@@ -172,8 +192,10 @@ PlayerPanel::PlayerPanel() : UI::Base()
             }
         });
 
-     _messageLog->mouseOutHandler().add([](Event::Mouse* event)
+     _messageLog->mouseOutHandler().add([this](Event::Mouse* event)
         {
+            _scrollingLog = 0;
+            _scrollingLogTimer = 0;
             Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
         });
 
@@ -248,6 +270,13 @@ void PlayerPanel::think()
         itemUi->think();
     }
 
+    if (_scrollingLogTimer && (SDL_GetTicks() > _scrollingLogTimer + 300)
+        && ((_scrollingLog < 0 && _messageLog->lineOffset() > 0)
+            || (_scrollingLog > 0 && _messageLog->lineOffset() < _messageLog->numLines() - 6)))
+    {
+        _messageLog->setLineOffset(_messageLog->lineOffset() + _scrollingLog);
+        _scrollingLogTimer = SDL_GetTicks();
+    }
 }
 
 void PlayerPanel::playWindowOpenSfx()
@@ -418,7 +447,7 @@ unsigned int PlayerPanel::pixel(const Point& pos)
 void PlayerPanel::displayMessage(const std::string& message)
 {
     Game::getInstance()->mixer()->playACMSound("sound/sfx/monitor.acm");
-    std::string msg = "\n\x95 ";
+    std::string msg = "\n\x95";
     msg += message;
     *_messageLog << msg;
     _messageLog->setLineOffset(_messageLog->numLines() - 6);

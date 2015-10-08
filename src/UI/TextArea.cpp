@@ -33,7 +33,6 @@
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
-#include "../UI/TextSymbol.h"
 #include "../Logger.h"
 
 // Third party includes
@@ -249,19 +248,23 @@ void TextArea::_updateSymbols()
 
     // at positive offset, skip number of first lines
     auto lineBegin = _lines.cbegin() + (_lineOffset > 0 ? _lineOffset : 0);
-    auto lineEnd = _size.height()
-        ? std::max(
+    auto lineEnd = _lines.cend();
+    if (_size.height())
+    {
+        // calculate how much lines we can fit inside TextArea, taking vertical padding into account
+        auto activeHeight = _size.height() - _paddingTopLeft.height() - _paddingBottomRight.height();
+        lineEnd = std::max(
             std::min(
-                _lines.cbegin() + _lineOffset + ((_size.height() + font()->verticalGap()) / (font()->height() + font()->verticalGap())),
+                _lines.cbegin() + _lineOffset + ((activeHeight + font()->verticalGap()) / (font()->height() + font()->verticalGap())),
                 _lines.cend()
             ),
             _lines.cbegin()
-        )
-        : _lines.cend();
+        );
+    }
 
     int numVisibleLines = std::distance(lineBegin, lineEnd);
 
-    _overflown = (_lines.size() > numVisibleLines);
+    _overflown = ((int)_lines.size() > numVisibleLines);
 
     // Calculating textarea sizes if needed
     _calculatedSize.setWidth(std::max_element(lineBegin, lineEnd)->width);
@@ -273,8 +276,9 @@ void TextArea::_updateSymbols()
                        : nullptr;
 
     Point offset;
+    // lines are generated with respect to horizontal padding only, so we should only change vertical;
     // on negative offset, add padding at the top, on positive - shift lines upwards
-    offset.setY((font()->height() + font()->verticalGap()) * (- _lineOffset));
+    offset.setY(_paddingTopLeft.height() + (font()->height() + font()->verticalGap()) * (- _lineOffset));
     for (auto it = lineBegin; it != lineEnd; ++it)
     {
         auto& line = *it;
@@ -289,7 +293,7 @@ void TextArea::_updateSymbols()
 
         for (TextSymbol symbol : line.symbols)
         {
-            symbol.setPosition(symbol.position() + offset);
+            symbol.position += offset;
             // outline symbols
             if (_outlineColor != 0)
             {
@@ -311,48 +315,60 @@ void TextArea::_updateSymbols()
 
 void TextArea::_updateLines()
 {
-    //static_assert(std::is_trivially_copyable<TextSymbol>(), "TextSymbol should be trivially copyable.");
     // check if already generated
     if (!_lines.empty()) return;
 
     _lines.resize(1);
-    
-    int x = 0, y = 0, wordWidth = 0;
+
+    // here we respect only horizontal padding in order to properly wrap lines; vertical is handled on higher level
+    int x = _paddingTopLeft.width(),
+        y = 0,
+        wordWidth = 0,
+        maxWidth = _size.width() ? (_size.width() - _paddingBottomRight.width()) : 0;
     
     // Parsing lines of text
     // Cutting lines when it is needed (\n or when exceeding _width)
     std::istringstream istream(_text);
-    std::string word;
+    std::string word, part;
     auto aFont = font();
     auto glyphs = aFont->aaf()->glyphs();
-    
-    while (istream >> word)
+
+    // on first iteation, process only leading whitespaces
+    while (!istream.eof() && isspace((int)istream.peek()))
     {
-        // calculate word width
-        wordWidth = 0;
-        for (unsigned char ch : word)
+        part.push_back((char)istream.get());
+    }
+    do
+    {
+        if (word.size() > 0)
         {
-            wordWidth += glyphs->at(ch)->width() + aFont->horizontalGap();
+            // calculate word width
+            wordWidth = 0;
+            for (unsigned char ch : word)
+            {
+                wordWidth += glyphs->at(ch)->width() + aFont->horizontalGap();
+            }
+            // switch to next line if word is too long
+            if (_wordWrap && maxWidth && (x + wordWidth) > maxWidth)
+            {
+                part.push_back('\n');
+            }
+            part += word;
+            // include trailing whitespaces
+            while (!istream.eof() && isspace((int)istream.peek()))
+            {
+                part.push_back((char)istream.get());
+            }
         }
-        // switch to next line if word is too long
-        if (_wordWrap && _size.width() && (x + wordWidth) > _size.width())
-        {
-            word = '\n' + word;
-        }
-        // include whitespaces
-        while (!istream.eof() && isspace((int)istream.peek()))
-        {
-            word.push_back((char)istream.get());
-        }
-        // place the word
-        for (unsigned char ch : word)
+        // place the part
+        for (unsigned char ch : part)
         {
             if (ch == ' ')
             {
                 x += aFont->aaf()->spaceWidth() + aFont->horizontalGap();
             }
 
-            if (ch == '\n' || (_wordWrap && _size.width() && x >= _size.width()))
+            if (ch == '\n' || (_wordWrap && maxWidth && x >= maxWidth))
             {
                 _lines.back().width = x;
                 x = 0;
@@ -364,19 +380,19 @@ void TextArea::_updateLines()
                 continue;
 
             Line& line = _lines.back();
-            TextSymbol symbol(ch, {x, y});
-            symbol.setFont(aFont);
+            TextSymbol symbol {ch, {x, y}, aFont};
             line.symbols.push_back(symbol);
             x += glyphs->at(ch)->width() + aFont->horizontalGap();
             line.width = x;
         }
-    }
+        part.clear();
+
+    } while (istream >> word);
 }
 
 void TextArea::_addOutlineSymbol(const TextSymbol& symb, Font* font, int32_t ofsX, int32_t ofsY)
 {
-    _symbols.emplace_back(symb.chr(), symb.position() + Point(ofsX, ofsY));
-    _symbols.back().setFont(font);
+    _symbols.emplace_back(TextSymbol {symb.chr, symb.position + Point(ofsX, ofsY), font});
 }
 
 std::string TextArea::text() const
@@ -397,9 +413,15 @@ void TextArea::render(bool eggTransparency)
     }
 
     auto pos = position();
+    auto renderer = Game::getInstance()->renderer();
+
     for (auto& symbol : _symbols)
     {
-        symbol.render(pos);
+        auto aFont = symbol.font ?: font();
+        unsigned textureX = (symbol.chr%16) * aFont->width();
+        unsigned textureY = (symbol.chr/16) * aFont->height();
+        Point drawPos = symbol.position + pos;
+        renderer->drawTexture(aFont->texture(), drawPos.x(), drawPos.y(), textureX, textureY, aFont->width(), aFont->height());
     }
 }
 
@@ -474,6 +496,34 @@ void TextArea::handle(Event::Event* event)
         mouseEvent->setHandled(false);
         mouseEvent->setObstacle(false);
     }
+}
+
+const Size& TextArea::paddingTopLeft() const
+{
+    return _paddingTopLeft;
+}
+
+void TextArea::setPaddingTopLeft(const Size& pad)
+{
+    _needUpdate(_paddingTopLeft.width() != pad.width());
+    _paddingTopLeft = pad;
+}
+
+const Size& TextArea::paddingBottomRight() const
+{
+    return _paddingBottomRight;
+}
+
+void TextArea::setPaddingBottomRight(const Size& pad)
+{
+    _needUpdate(_paddingBottomRight.width() != pad.width());
+    _paddingBottomRight = pad;
+}
+
+void TextArea::setPadding(const Size& topLeft, const Size& bottomRight)
+{
+    setPaddingTopLeft(topLeft);
+    setPaddingBottomRight(bottomRight);
 }
 
 }

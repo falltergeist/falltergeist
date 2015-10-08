@@ -205,9 +205,11 @@ void Mouse::_setType(Cursor state)
             break;
         case Cursor::SMALL_DOWN_ARROW:
             _ui = make_unique<UI::Image>("art/intrface/sdnarrow.frm");
+            _ui->setOffset(-5, -10);
             break;
         case Cursor::SMALL_UP_ARROW:
             _ui = make_unique<UI::Image>("art/intrface/suparrow.frm");
+            _ui->setOffset(-5, 0);
             break;
         case Cursor::WAIT:
         {

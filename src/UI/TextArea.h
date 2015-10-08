@@ -148,6 +148,30 @@ public:
     void setWordWrap(bool wordWrap);
 
     /**
+     * Top and left text padding.
+     */
+    const Size& paddingTopLeft() const;
+    /**
+     * Sets top and left text padding, in pixels, relative to TextArea position.
+     */
+    void setPaddingTopLeft(const Size& paddingTopLeft);
+
+    /**
+     * Bottom and right text padding.
+     */
+    const Size& paddingBottomRight() const;
+    /**
+     * Sets bottom and right text padding, ix pixels, relative to TextArea position + size.
+     * Has no effect if size is not set.
+     */
+    void setPaddingBottomRight(const Size& paddingBottomRight);
+
+    /**
+     * Sets both top-left and bottom-right padding.
+     */
+    void setPadding(const Size& topLeft, const Size& bottomRight);
+
+/**
      * Whether text outline is currently enabled or not.
      */
     bool outline() const;
@@ -235,11 +259,12 @@ public:
     TextArea& operator=(signed value);
 
 protected:
-    /*struct TextSymbol
+    struct TextSymbol
     {
         uint8_t chr;
         Point position;
-    };*/
+        Font* font;
+    };
 
     struct Line
     {
@@ -283,6 +308,8 @@ protected:
 
     bool _overflown = false;
     bool _wordWrap = false;
+
+    Size _paddingTopLeft, _paddingBottomRight;
 
     // TODO: implement
     unsigned int _backgroundColor = 0;
