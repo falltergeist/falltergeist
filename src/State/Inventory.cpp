@@ -278,8 +278,8 @@ void Inventory::init()
     {
         auto inventoryItem = new UI::InventoryItem(leftHand, {154, 286});
         inventoryItem->setType(UI::InventoryItem::Type::SLOT);
-        inventoryItem->itemDragStopHandler().add([inventoryList](Event::Mouse* event){ inventoryList->onItemDragStop(event); });
-        inventoryList->itemDragStopHandler().add([inventoryItem](Event::Mouse* event){ inventoryItem->onHandDragStop(event); });
+        inventoryItem->itemDragStopHandler().add([inventoryList](Event::Mouse* event){ inventoryList->onItemDragStop(event, HAND::LEFT); });
+        inventoryList->itemDragStopHandler().add([inventoryItem](Event::Mouse* event){ inventoryItem->onHandDragStop(event, HAND::LEFT); });
         addUI(inventoryItem);
     }
 
@@ -287,8 +287,8 @@ void Inventory::init()
     {
         auto inventoryItem = new UI::InventoryItem(rightHand, {247, 286});
         inventoryItem->setType(UI::InventoryItem::Type::SLOT);
-        inventoryItem->itemDragStopHandler().add([inventoryList](Event::Mouse* event){ inventoryList->onItemDragStop(event); });
-        inventoryList->itemDragStopHandler().add([inventoryItem](Event::Mouse* event){ inventoryItem->onHandDragStop(event); });
+        inventoryItem->itemDragStopHandler().add([inventoryList](Event::Mouse* event){ inventoryList->onItemDragStop(event, HAND::RIGHT); });
+        inventoryList->itemDragStopHandler().add([inventoryItem](Event::Mouse* event){ inventoryItem->onHandDragStop(event, HAND::RIGHT); });
         addUI(inventoryItem);
     }
 

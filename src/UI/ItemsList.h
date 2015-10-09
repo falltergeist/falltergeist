@@ -74,6 +74,7 @@ public:
     void onMouseDragStart(Event::Mouse* event);
     void onMouseDrag(Event::Mouse* event);
     void onMouseDragStop(Event::Mouse* event);
+    void onItemDragStop(Event::Mouse* event, HAND hand);
     void onItemDragStop(Event::Mouse* event);
 
     void addItem(InventoryItem* item, unsigned int ammount);
