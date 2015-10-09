@@ -111,6 +111,35 @@ void Location::init()
     _mouseDownHandler.add(std::bind(&Location::onMouseDown, this, std::placeholders::_1));
     _mouseUpHandler.add(std::bind(&Location::onMouseUp, this, std::placeholders::_1));
     _mouseMoveHandler.add(std::bind(&Location::onMouseMove, this, std::placeholders::_1));
+
+    // action cursor stuff
+    _actionCursorTimer.setInterval((unsigned)DROPDOWN_DELAY);
+    _actionCursorTimer.tickHandler().add([this](Event::Event*)
+         {
+            if (!_objectUnderCursor) return;
+
+            auto game = Game::getInstance();
+            if (_actionCursorButtonPressed || game->mouse()->state() == Input::Mouse::Cursor::ACTION)
+            {
+                if (!_actionCursorButtonPressed && (_actionCursorLastObject != _objectUnderCursor))
+                {
+                    _objectUnderCursor->look_at_p_proc();
+                    _actionCursorLastObject = _objectUnderCursor;
+                }
+                auto icons = getCursorIconsForObject(_objectUnderCursor);
+                if (icons.size() > 0)
+                {
+                    if (dynamic_cast<CursorDropdown*>(game->topState()) != nullptr)
+                    {
+                        game->popState();
+                    }
+                    auto state = new CursorDropdown(std::move(icons), !_actionCursorButtonPressed);
+                    state->setObject(_objectUnderCursor);
+                    Game::getInstance()->pushState(state);
+                }
+            }
+            _actionCursorButtonPressed = false;
+         });
 }
 
 void Location::onStateActivate(Event::State* event)
@@ -127,7 +156,7 @@ void Location::onStateActivate(Event::State* event)
 void Location::onStateDeactivate(Event::State* event)
 {
     _objectUnderCursor = nullptr;
-    _actionCursorTicks = 0;
+    _actionCursorTimer.stop();
 }
 
 void Location::setLocation(const std::string& name)
@@ -325,7 +354,7 @@ void Location::onObjectMouseEvent(Event::Mouse* event, Game::Object* object)
         if (event->name() == "mousedown")
         {
             _objectUnderCursor = object;
-            _actionCursorTicks = SDL_GetTicks();
+            _actionCursorTimer.start();
             _actionCursorButtonPressed = true;
         }
         else if (event->name() == "mouseclick")
@@ -354,7 +383,7 @@ void Location::onObjectHover(Event::Mouse* event, Game::Object* object)
             _objectUnderCursor = object;
             _actionCursorButtonPressed = false;
         }
-        _actionCursorTicks = SDL_GetTicks();
+        _actionCursorTimer.start();
     }
 }
 
@@ -521,32 +550,7 @@ void Location::think()
         }
     }
 
-    // action cursor stuff
-    if (_objectUnderCursor && _actionCursorTicks && _actionCursorTicks + DROPDOWN_DELAY < SDL_GetTicks())
-    {
-        auto game = Game::getInstance();
-        if (_actionCursorButtonPressed || game->mouse()->state() == Input::Mouse::Cursor::ACTION)
-        {
-            if (!_actionCursorButtonPressed && (_actionCursorLastObject != _objectUnderCursor))
-            {
-                _objectUnderCursor->look_at_p_proc();
-                _actionCursorLastObject = _objectUnderCursor;
-            }
-            auto icons = getCursorIconsForObject(_objectUnderCursor);
-            if (icons.size() > 0)
-            {
-                if (dynamic_cast<CursorDropdown*>(game->topState()) != nullptr)
-                {
-                    game->popState();
-                }
-                auto state = new CursorDropdown(std::move(icons), !_actionCursorButtonPressed);
-                state->setObject(_objectUnderCursor);
-                Game::getInstance()->pushState(state);
-            }
-        }
-        _actionCursorButtonPressed = false;
-        _actionCursorTicks = 0;
-    }
+    _actionCursorTimer.think();
 
     State::think();
 }

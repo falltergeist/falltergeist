@@ -24,14 +24,13 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include <Event/Event.h>
 
 // Falltergeist includes
 #include "../Base/Singleton.h"
 #include "../Game/Time.h"
 
 // Third party includes
-#include "SDL.h"
+#include <SDL.h>
 
 namespace Falltergeist
 {
@@ -41,6 +40,7 @@ namespace Audio
 }
 namespace Event
 {
+    class Event;
     class Dispatcher;
 }
 namespace Graphics

@@ -27,6 +27,7 @@
 #include "State.h"
 #include "../Input/Mouse.h"
 #include "../UI/ImageButton.h"
+#include "../Game/Timer.h"
 
 // Third party includes
 
@@ -115,6 +116,7 @@ protected:
     unsigned int _scriptsTicks = 0;
     unsigned int _actionCursorTicks = 0;
     unsigned int _mouseMoveTicks = 0;
+    Game::Timer _actionCursorTimer;
 
     std::unique_ptr<HexagonGrid> _hexagonGrid;
     std::unique_ptr<LocationCamera> _camera;
