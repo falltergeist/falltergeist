@@ -149,7 +149,6 @@ void ItemsList::onMouseDragStop(Event::Mouse* event)
         _draggedItem->setOffset(0, 0);
         _draggedItem->setType(_type);
         auto itemevent = make_unique<Event::Mouse>(*event, "itemdragstop");
-        itemevent->setPosition(event->position());
         itemevent->setTarget(this);
         emitEvent(std::move(itemevent), itemDragStopHandler());
     }

@@ -695,11 +695,11 @@ void Location::onMouseMove(Event::Mouse* mouseEvent)
 
     int scrollArea = 8;
     auto renderer = Game::getInstance()->renderer();
-    Point evPos = mouseEvent->position();
-    _scrollLeft = (evPos.x() < scrollArea);
-    _scrollRight = (evPos.x() > renderer->width()- scrollArea);
-    _scrollTop = (evPos.y() < scrollArea);
-    _scrollBottom = (evPos.y() > renderer->height() - scrollArea);
+    Point mpos = mouse->position();
+    _scrollLeft = (mpos.x() < scrollArea);
+    _scrollRight = (mpos.x() > renderer->width() - scrollArea);
+    _scrollTop = (mpos.y() < scrollArea);
+    _scrollBottom = (mpos.y() > renderer->height() - scrollArea);
 
     if (hexagon)
     {
