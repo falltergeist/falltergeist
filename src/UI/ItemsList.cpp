@@ -137,7 +137,7 @@ void ItemsList::onMouseDrag(Event::Mouse* event)
     {
         _draggedItem->setOffset(_draggedItem->offset() + event->offset());
     }
-    Logger::critical() << "mousedrag " << event->position() << ", " << event->offset() << std::endl;
+    //Logger::critical() << "mousedrag " << event->position() << ", " << event->offset() << std::endl;
 }
 
 void ItemsList::onMouseDragStop(Event::Mouse* event)
@@ -149,16 +149,15 @@ void ItemsList::onMouseDragStop(Event::Mouse* event)
         _draggedItem->setOffset(0, 0);
         _draggedItem->setType(_type);
         auto itemevent = make_unique<Event::Mouse>(*event, "itemdragstop");
-        itemevent->setPosition(event->position());
         itemevent->setTarget(this);
         emitEvent(std::move(itemevent), itemDragStopHandler());
     }
-    Logger::critical() << "mousedragstop" << std::endl;
+    //Logger::critical() << "mousedragstop" << std::endl;
 }
 
 void ItemsList::onItemDragStop(Event::Mouse* event)
 {
-    Logger::critical() << "itemdragstop" << std::endl;
+    //Logger::critical() << "itemdragstop" << std::endl;
 
     // check if mouse is in this item list
     if (!Rect::inRect(event->position(), position(), Size(_slotWidth, _slotHeight*_slotsNumber)))
@@ -187,7 +186,28 @@ void ItemsList::onItemDragStop(Event::Mouse* event)
         inventoryItem->setItem(0);
     }
 
-    Logger::critical() << "IN!" << std::endl;
+    //Logger::critical() << "IN!" << std::endl;
+}
+
+void ItemsList::onItemDragStop(Event::Mouse* event, HAND hand)
+{
+    // check if mouse is in this item list
+    if (Rect::inRect(event->position(), position(), Size(_slotWidth, _slotHeight*_slotsNumber)))
+    {
+        if (auto inventoryItem = dynamic_cast<UI::InventoryItem*>(event->target()))
+        {
+            this->addItem(inventoryItem, 1);
+            if (hand == HAND::LEFT)
+            {
+                Game::getInstance()->player()->setLeftHandSlot(nullptr);
+            }
+            else
+            {
+                Game::getInstance()->player()->setRightHandSlot(nullptr);
+            }
+            inventoryItem->setItem(0);
+        }
+    }
 }
 
 InventoryItem* ItemsList::draggedItem()

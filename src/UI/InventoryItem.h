@@ -26,6 +26,7 @@
 #include "../UI/Base.h"
 
 // Third party includes
+#include <libfalltergeist/Enums.h>
 
 namespace Falltergeist
 {
@@ -70,7 +71,7 @@ public:
     void onMouseDragStop(Event::Mouse* event);
 
     void onArmorDragStop(Event::Mouse* event);
-    void onHandDragStop(Event::Mouse* event);
+    void onHandDragStop(Event::Mouse* event, HAND hand);
 
     Event::MouseHandler& itemDragStopHandler();
 

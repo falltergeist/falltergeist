@@ -56,17 +56,24 @@ namespace State
 
 Inventory::Inventory() : State()
 {
-    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::ACTION);
+    pushHandler().add([this](Event::State* ev)
+        {
+            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::ACTION);
+        });
+    popHandler().add([this](Event::State* ev)
+        {
+            // If hand cursor now
+            if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND)
+            {
+                Game::getInstance()->mouse()->popState();
+            }
+            Game::getInstance()->mouse()->popState();
+        });
 }
 
 Inventory::~Inventory()
 {
-    // If hand cursor now
-    if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND)
-    {
-        Game::getInstance()->mouse()->popState();
-    }
-    Game::getInstance()->mouse()->popState();
+
 }
 
 void Inventory::init()
@@ -271,8 +278,8 @@ void Inventory::init()
     {
         auto inventoryItem = new UI::InventoryItem(leftHand, {154, 286});
         inventoryItem->setType(UI::InventoryItem::Type::SLOT);
-        inventoryItem->itemDragStopHandler().add([inventoryList](Event::Mouse* event){ inventoryList->onItemDragStop(event); });
-        inventoryList->itemDragStopHandler().add([inventoryItem](Event::Mouse* event){ inventoryItem->onHandDragStop(event); });
+        inventoryItem->itemDragStopHandler().add([inventoryList](Event::Mouse* event){ inventoryList->onItemDragStop(event, HAND::LEFT); });
+        inventoryList->itemDragStopHandler().add([inventoryItem](Event::Mouse* event){ inventoryItem->onHandDragStop(event, HAND::LEFT); });
         addUI(inventoryItem);
     }
 
@@ -280,8 +287,8 @@ void Inventory::init()
     {
         auto inventoryItem = new UI::InventoryItem(rightHand, {247, 286});
         inventoryItem->setType(UI::InventoryItem::Type::SLOT);
-        inventoryItem->itemDragStopHandler().add([inventoryList](Event::Mouse* event){ inventoryList->onItemDragStop(event); });
-        inventoryList->itemDragStopHandler().add([inventoryItem](Event::Mouse* event){ inventoryItem->onHandDragStop(event); });
+        inventoryItem->itemDragStopHandler().add([inventoryList](Event::Mouse* event){ inventoryList->onItemDragStop(event, HAND::RIGHT); });
+        inventoryList->itemDragStopHandler().add([inventoryItem](Event::Mouse* event){ inventoryItem->onHandDragStop(event, HAND::RIGHT); });
         addUI(inventoryItem);
     }
 

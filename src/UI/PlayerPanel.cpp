@@ -233,13 +233,6 @@ void PlayerPanel::handle(Event::Event *event)
         mouseEvent->setHandled(false);
     }
 
-    // object in hand
-    if (auto item = Game::getInstance()->player()->currentHandSlot())
-    {
-        auto itemUi = item->inventoryDragUi();
-        itemUi->handle(event);
-    }
-
     for (auto it = _ui.rbegin(); it != _ui.rend(); ++it)
     {
         if (event->handled()) return;

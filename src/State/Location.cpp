@@ -115,6 +115,13 @@ void Location::init()
 
 void Location::onStateActivate(Event::State* event)
 {
+    // correct position of "red hexagon" after popups
+    auto mouse = Game::getInstance()->mouse();
+    auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
+    if (mouse->state() == Input::Mouse::Cursor::HEXAGON_RED && hexagon)
+    {
+        mouse->ui()->setPosition(hexagon->position() - _camera->topLeft());
+    }
 }
 
 void Location::onStateDeactivate(Event::State* event)
@@ -699,11 +706,11 @@ void Location::onMouseMove(Event::Mouse* mouseEvent)
 
     int scrollArea = 8;
     auto renderer = Game::getInstance()->renderer();
-    Point evPos = mouseEvent->position();
-    _scrollLeft = (evPos.x() < scrollArea);
-    _scrollRight = (evPos.x() > renderer->width()- scrollArea);
-    _scrollTop = (evPos.y() < scrollArea);
-    _scrollBottom = (evPos.y() > renderer->height() - scrollArea);
+    Point mpos = mouse->position();
+    _scrollLeft = (mpos.x() < scrollArea);
+    _scrollRight = (mpos.x() > renderer->width() - scrollArea);
+    _scrollTop = (mpos.y() < scrollArea);
+    _scrollBottom = (mpos.y() > renderer->height() - scrollArea);
 
     if (hexagon)
     {

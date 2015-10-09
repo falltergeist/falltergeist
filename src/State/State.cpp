@@ -238,6 +238,16 @@ void State::setActive(bool value)
     _active = value;
 }
 
+Event::StateHandler& State::pushHandler()
+{
+    return _pushHandler;
+}
+
+Event::StateHandler& State::popHandler()
+{
+    return _popHandler;
+}
+
 Event::StateHandler& State::activateHandler()
 {
     return _activateHandler;

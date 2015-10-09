@@ -66,9 +66,15 @@ public:
      */
     Type originalType() const;
 
+    /**
+     * Cursor position on screen.
+     */
     const Point& position() const;
     void setPosition(const Point& position);
 
+    /**
+     * The offset for which cursor moved relative to last event. Used for move events.
+     */
     const Point& offset() const;
     void setOffset(const Point& offset);
 
