@@ -97,14 +97,20 @@ void Game::init(std::unique_ptr<Settings> settings)
     _mixer = make_unique<Audio::Mixer>();
     _mouse = make_unique<Input::Mouse>();
     _fpsCounter = make_unique<UI::FpsCounter>(renderer()->width() - 42, 2);
+    _fpsCounter->setWidth(42);
+    _fpsCounter->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
     version += " " + to_string(renderer()->size());
     version += " " + renderer()->name();
 
     _falltergeistVersion = make_unique<UI::TextArea>(version, 3, renderer()->height() - 10);
     _mousePosition = make_unique<UI::TextArea>("", renderer()->width() - 55, 14);
+    _mousePosition->setWidth(55);
+    _mousePosition->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
     _animatedPalette = make_unique<Graphics::AnimatedPalette>();
     _currentTime = make_unique<UI::TextArea>("", renderer()->size() - Point(150, 10));
+    _currentTime->setWidth(150);
+    _currentTime->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
     IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 }

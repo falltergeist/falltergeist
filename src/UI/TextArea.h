@@ -128,11 +128,6 @@ public:
     Size textSize();
 
     /**
-     * Returns true if text currently contained in TextArea does not fit withing given height.
-     */
-    bool overflown();
-
-    /**
      * Actual number of lines contained within TextArea. Will be greater than number of visible lines when overflown.
      */
     int numLines();
@@ -312,7 +307,6 @@ protected:
 
     int _lineOffset = 0;
 
-    bool _overflown = false;
     bool _wordWrap = false;
 
     Size _paddingTopLeft, _paddingBottomRight;

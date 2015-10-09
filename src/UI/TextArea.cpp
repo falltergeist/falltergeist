@@ -206,12 +206,6 @@ Size TextArea::textSize()
     return _calculatedSize;
 }
 
-bool TextArea::overflown()
-{
-    _updateSymbols();
-    return _overflown;
-}
-
 int TextArea::numLines()
 {
     _updateLines();
@@ -263,8 +257,6 @@ void TextArea::_updateSymbols()
     }
 
     int numVisibleLines = std::distance(lineBegin, lineEnd);
-
-    _overflown = ((int)_lines.size() > numVisibleLines);
 
     // Calculating textarea sizes if needed
     _calculatedSize.setWidth(std::max_element(lineBegin, lineEnd)->width);

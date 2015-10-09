@@ -155,7 +155,7 @@ PlayerPanel::PlayerPanel() : UI::Base()
                     _scrollingLog = -1;
                 }
             }
-            else if (_messageLog->overflown())
+            else if (_messageLog->lineOffset() < _messageLog->numLines() - 6)
             {
                 _scrollingLog = 1;
             }

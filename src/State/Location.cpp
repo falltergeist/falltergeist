@@ -87,6 +87,7 @@ Location::Location() : State()
     _camera = make_unique<LocationCamera>(game->renderer()->size(), Point(0, 0));
 
     _hexagonInfo = make_unique<UI::TextArea>("", game->renderer()->width() - 135, 25);
+    _hexagonInfo->setWidth(135);
     _hexagonInfo->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
 }
