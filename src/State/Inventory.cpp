@@ -56,17 +56,24 @@ namespace State
 
 Inventory::Inventory() : State()
 {
-    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::ACTION);
+    pushHandler().add([this](Event::State* ev)
+        {
+            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::ACTION);
+        });
+    popHandler().add([this](Event::State* ev)
+        {
+            // If hand cursor now
+            if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND)
+            {
+                Game::getInstance()->mouse()->popState();
+            }
+            Game::getInstance()->mouse()->popState();
+        });
 }
 
 Inventory::~Inventory()
 {
-    // If hand cursor now
-    if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND)
-    {
-        Game::getInstance()->mouse()->popState();
-    }
-    Game::getInstance()->mouse()->popState();
+
 }
 
 void Inventory::init()

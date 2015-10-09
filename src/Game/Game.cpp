@@ -126,6 +126,7 @@ void Game::pushState(State::State* state)
 {
     _states.push_back(std::unique_ptr<State::State>(state));
     if (!state->initialized()) state->init();
+    state->emitEvent(make_unique<Event::State>("push"), state->pushHandler());
     state->setActive(true);
     state->emitEvent(make_unique<Event::State>("activate"), state->activateHandler());
 }
@@ -139,6 +140,7 @@ void Game::popState()
     _states.pop_back();
     state->setActive(false);
     state->emitEvent(make_unique<Event::State>("deactivate"), state->deactivateHandler());
+    state->emitEvent(make_unique<Event::State>("pop"), state->popHandler());
 }
 
 void Game::setState(State::State* state)

@@ -123,8 +123,25 @@ public:
     virtual void onStateDeactivate(Event::State* event);
     virtual void onKeyDown(Event::Keyboard* event);
 
+    /**
+     * Invoked when state becomes active to receive events (when first pushed and after other modal states are removed from "above").
+     */
     Event::StateHandler& activateHandler();
+    /**
+     * Invoked when state becomes inactive and won't receive any more events (when popped and also when other modal state is pushed on top of it).
+     */
     Event::StateHandler& deactivateHandler();
+    /**
+     * Invoked when state is pushed to the stack, right before the first "activate".
+     */
+    Event::StateHandler& pushHandler();
+    /**
+     * Invoked when state is popped from the stack, right after last "deactivate".
+     */
+    Event::StateHandler& popHandler();
+    /**
+     * Invoked when Renderer has finished fadein/fadeout process.
+     */
     Event::StateHandler& fadeDoneHandler();
     Event::KeyboardHandler& keyDownHandler();
     Event::KeyboardHandler& keyUpHandler();
@@ -143,7 +160,7 @@ protected:
     bool _fullscreen = true; // prevents render all states before this one
     bool _initialized = false;
 
-    Event::StateHandler _activateHandler, _deactivateHandler, _fadeDoneHandler;
+    Event::StateHandler _activateHandler, _deactivateHandler, _fadeDoneHandler, _pushHandler, _popHandler;
     Event::KeyboardHandler _keyDownHandler, _keyUpHandler;
 };
 
