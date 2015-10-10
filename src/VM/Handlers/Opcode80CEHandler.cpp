@@ -20,6 +20,10 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Game/CritterObject.h"
+#include "../../Game/Game.h"
+#include "../../PathFinding/HexagonGrid.h"
+#include "../../State/Location.h"
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80CEHandler.h"
 #include "../../VM/VM.h"
@@ -35,12 +39,34 @@ Opcode80CEHandler::Opcode80CEHandler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
+// TODO: handle ANIMATE_INTERRUPT
 void Opcode80CEHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80CE] [=] void animate_move_obj_to_tile(void* who, int tile, int speed)" << std::endl;
-    _vm->dataStack()->popInteger();
-    _vm->dataStack()->popInteger();
-    _vm->dataStack()->popObject();
+    int speed = _vm->dataStack()->popInteger();
+    int tile = _vm->dataStack()->popInteger();
+    auto object = _vm->dataStack()->popObject();
+
+    // ANIMATE_WALK      (0)
+    // ANIMATE_RUN       (1)
+    // ANIMATE_INTERRUPT (16) - flag to interrupt current animation
+    auto critter = dynamic_cast<Game::CritterObject*>(object);
+    auto state = Game::Game::getInstance()->locationState();
+    if (state)
+    {
+        auto tileObj = state->hexagonGrid()->at(tile);
+        auto path = state->hexagonGrid()->findPath(object->hexagon(), tileObj);
+        if (path.size())
+        {
+            critter->stopMovement();
+            critter->setRunning((speed & 1) != 0);
+            auto queue = critter->movementQueue();
+            for (auto pathHexagon : path)
+            {
+                queue->push_back(pathHexagon);
+            }
+        }
+    }
 }
 
 }
