@@ -74,6 +74,11 @@ void TimerAbstract::stop()
     _enabled = false;
 }
 
+bool TimerAbstract::enabled() const
+{
+    return _enabled;
+}
+
 unsigned int TimerAbstract::interval() const
 {
     return _interval;

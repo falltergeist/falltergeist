@@ -39,15 +39,22 @@ void Opcode80E1Handler::_run()
 {
     // @TODO: add implementation
     Logger::debug("SCRIPT") << "[80E1] [*] int metarule3(int meta, int p1, int p2, int p3)" << std::endl;
-    /* auto arg3 = */ (void)_vm->dataStack()->popInteger();
-    /* auto arg2 = */ (void)_vm->dataStack()->popInteger();
+    auto arg3 = _vm->dataStack()->pop();
+    auto arg2 = _vm->dataStack()->pop();
     auto arg1 = _vm->dataStack()->pop();
     auto meta = _vm->dataStack()->popInteger();
     int result = 0;
     switch(meta)
     {
         case 100: // rm_fixed_timer_event(object, fixed_param, 0)
+        {
+            auto state = Game::Game::getInstance()->locationState();
+            if (state)
+            {
+                state->removeTimerEvent(arg1.objectValue(), arg2.integerValue());
+            }
             break;
+        }
         case 101: // mark subtile visited on worldmap - mark_world_subtile_visited(x, y, radius)
             break;
         case 102: // METARULE3_SET_WM_MUSIC - (map index, ACM file name)
@@ -63,8 +70,14 @@ void Opcode80E1Handler::_run()
         case 107: // int art_change_fid_num(ObjectPtr who, int fid) - change base FID num for object
             break;
         case 108: // void tile_set_center(int tileNum) - center camera on given tile
-            Game::getInstance()->locationState()->centerCameraAtHexagon(arg1.integerValue());
+        {
+            auto state = Game::Game::getInstance()->locationState();
+            if (state)
+            {
+                state->centerCameraAtHexagon(arg1.integerValue());
+            }
             break;
+        }
         default:
             _error("metarule3 - unknown meta: " + std::to_string(meta));
             break;

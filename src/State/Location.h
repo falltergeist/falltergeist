@@ -22,11 +22,13 @@
 
 // C++ standard includes
 #include <memory>
+#include <list>
 
 // Falltergeist includes
-#include "State.h"
+#include "../State/State.h"
 #include "../Input/Mouse.h"
 #include "../UI/ImageButton.h"
+#include "../Game/Object.h"
 #include "../Game/Timer.h"
 
 // Third party includes
@@ -93,6 +95,10 @@ public:
 
     void displayMessage(const std::string& message);
 
+    void addTimerEvent(Game::Object* obj, int delay, int fixedParam = 0);
+    void removeTimerEvent(Game::Object* obj);
+    void removeTimerEvent(Game::Object* obj, int fixedParam);
+
     void onBackgroundClick(Event::Mouse* event);
     void onObjectMouseEvent(Event::Mouse* event, Game::Object* object);
     void onObjectHover(Event::Mouse* event, Game::Object* object);
@@ -107,6 +113,12 @@ public:
     UI::PlayerPanel* playerPanel();
 
 protected:
+    struct TimerEvent
+    {
+        Game::Object* object;
+        Game::GameTimer timer;
+        int fixedParam;
+    };
     
     static const int KEYBOARD_SCROLL_STEP;
     static const int DROPDOWN_DELAY;
@@ -117,6 +129,8 @@ protected:
     unsigned int _actionCursorTicks = 0;
     unsigned int _mouseMoveTicks = 0;
     Game::Timer _actionCursorTimer;
+    // for VM opcode add_timer_event
+    std::list<TimerEvent> _timerEvents;
 
     std::unique_ptr<HexagonGrid> _hexagonGrid;
     std::unique_ptr<LocationCamera> _camera;

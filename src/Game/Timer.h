@@ -45,6 +45,8 @@ public:
 
     void stop();
 
+    bool enabled() const;
+
     unsigned int interval() const;
 
     void setInterval(unsigned int interval);

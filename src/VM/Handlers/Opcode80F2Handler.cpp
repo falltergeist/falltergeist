@@ -39,7 +39,8 @@ void Opcode80F2Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80F2] [=] int game_ticks(int seconds)" << std::endl;
     auto seconds = _vm->dataStack()->popInteger();
-    _vm->dataStack()->push(seconds*1000);
+    // one second equals 10 game ticks
+    _vm->dataStack()->push(seconds * 10);
 }
 
 }

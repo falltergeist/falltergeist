@@ -115,7 +115,7 @@ void Location::init()
     // action cursor stuff
     _actionCursorTimer.setInterval((unsigned)DROPDOWN_DELAY);
     _actionCursorTimer.tickHandler().add([this](Event::Event*)
-         {
+        {
             if (!_objectUnderCursor) return;
 
             auto game = Game::getInstance();
@@ -139,7 +139,7 @@ void Location::init()
                 }
             }
             _actionCursorButtonPressed = false;
-         });
+        });
 }
 
 void Location::onStateActivate(Event::State* event)
@@ -550,7 +550,18 @@ void Location::think()
         }
     }
 
+    // timers processing
     _actionCursorTimer.think();
+
+    for (auto it = _timerEvents.begin(); it != _timerEvents.end(); )
+    {
+        it->timer.think();
+        if (!it->timer.enabled())
+        {
+            it = _timerEvents.erase(it);
+        }
+        else ++it;
+    }
 
     State::think();
 }
@@ -957,6 +968,30 @@ HexagonGrid* Location::hexagonGrid()
 UI::PlayerPanel* Location::playerPanel()
 {
     return _playerPanel;
+}
+
+
+void Location::addTimerEvent(Game::Object* obj, int delay, int fixedParam)
+{
+    Game::GameTimer timer((unsigned)delay);
+    timer.start();
+    timer.tickHandler().add([this, obj, fixedParam](Event::Event*)
+        {
+            auto vm = obj->script();
+            vm->setFixedParam(fixedParam);
+            vm->call("timed_event_p_proc");
+        });
+    _timerEvents.emplace_back(TimerEvent {obj, std::move(timer), fixedParam});
+}
+
+void Location::removeTimerEvent(Game::Object* obj)
+{
+    _timerEvents.remove_if([=](Location::TimerEvent& item) { return item.object == obj; });
+}
+
+void Location::removeTimerEvent(Game::Object* obj, int fixedParam)
+{
+    _timerEvents.remove_if([=](Location::TimerEvent& item) { return item.object == obj && item.fixedParam == fixedParam; });
 }
 
 }
