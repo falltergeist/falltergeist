@@ -52,6 +52,7 @@ public:
 
     Size size() const override;
     Point offset() const override;
+    Point rawOffset() const;
 
     unsigned int pixel(const Point& pos) override;
 

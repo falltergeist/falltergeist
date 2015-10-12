@@ -390,6 +390,11 @@ Point Animation::offset() const
     return _offset + Point(frame->xOffset(), frame->yOffset()) + shift();
 }
 
+Point Animation::rawOffset() const
+{
+    return _offset;
+}
+
 const Point& Animation::shift() const
 {
     return _shift;

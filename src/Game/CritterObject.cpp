@@ -508,17 +508,21 @@ void CritterObject::think()
     Object::think();
 }
 
-static const std::array<int, 6> tileOffsets = {16, 32, 16, -16, -32, -16};
+static const std::array<int, 6> xTileOffsets = {16, 32, 16, -16, -32, -16};
+static const std::array<int, 6> yTileOffsets = {-12, 0, 12,  12,   0, -12};
 
 // TODO: refactor
 void CritterObject::onMovementAnimationFrame(Event::Event* event)
 {
     Orientation curOrient = orientation();
-    int offsetThreshold = tileOffsets[curOrient];
+    int xThreshold = xTileOffsets[curOrient];
+    int yThreshold = yTileOffsets[curOrient];
     auto animation = dynamic_cast<UI::Animation*>(ui());
-    Point visibleOffset = animation->offset();
-    if ((offsetThreshold > 0 && (visibleOffset.x() > offsetThreshold || visibleOffset.y() > offsetThreshold))
-       || (offsetThreshold < 0 && (visibleOffset.x() < offsetThreshold || visibleOffset.y() < offsetThreshold)))
+    Point offsetFromTile = animation->offset() - animation->shift();
+    if ((xThreshold > 0 && offsetFromTile.x() >= xThreshold)
+       || (xThreshold < 0 && offsetFromTile.x() <= xThreshold)
+       || (yThreshold > 0 && offsetFromTile.y() >= yThreshold)
+       || (yThreshold < 0 && offsetFromTile.y() <= yThreshold))
     {
         auto hexagon = movementQueue()->back();
         movementQueue()->pop_back();
@@ -547,15 +551,18 @@ void CritterObject::onMovementAnimationFrame(Event::Event* event)
             }
             else if (animation->currentFrame() > 0)
             {
-                auto firstFrame = animation->frames().at(0).get();
-                auto prevFrame = animation->frames().at(animation->currentFrame() - 1).get();
-                // adjust animation shift
-                // current frame offset relative to first frame offset (whole animation could be offset by some value)
-                int relOfsX = firstFrame->xOffset() - prevFrame->xOffset();
-                int relOfsY = firstFrame->yOffset() - prevFrame->yOffset();
-                // compensate for move offset
-                animation->setOffset(Point(relOfsX, relOfsY));
-                animation->setActionFrame(animation->currentFrame() - 1);
+                // adjust offsets of all following frames
+                auto curFrame = animation->frames().at(animation->currentFrame()).get();
+                auto ofsP = Point(-curFrame->xOffset(), -curFrame->yOffset());
+                for (auto it = animation->frames().rbegin(); it != animation->frames().rend(); ++it)
+                {
+                    auto frame = (*it).get();
+                    frame->setXOffset(frame->xOffset() - curFrame->xOffset());
+                    frame->setYOffset(frame->yOffset() - curFrame->yOffset());
+                    if (frame == curFrame) break;
+                }
+                //animation->setOffset(animation->rawOffset() - Point(xThreshold, yThreshold));
+                Logger::critical("Critter") << "Offset at " << animation->currentFrame() << " by " << ofsP << " from " << offsetFromTile << std::endl;
             }
         }
     }
@@ -563,10 +570,11 @@ void CritterObject::onMovementAnimationFrame(Event::Event* event)
 
 void CritterObject::onMovementAnimationEnded(Event::Event* event)
 {
-    auto animation = dynamic_cast<UI::Animation*>(ui());
-    animation->setCurrentFrame(0);
-    animation->setOffset(Point(0, 0));
-    animation->play();
+    auto newAnimation = _generateMovementAnimation();
+    newAnimation->frameHandler().add(bind(&CritterObject::onMovementAnimationFrame, this, placeholders::_1));
+    newAnimation->animationEndedHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
+    newAnimation->play();
+    _ui = move(newAnimation);
 }
 
 unique_ptr<UI::Animation> CritterObject::_generateMovementAnimation()
