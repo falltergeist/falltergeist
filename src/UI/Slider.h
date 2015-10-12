@@ -21,6 +21,7 @@
 #define FALLTERGEIST_UI_SLIDER_H
 
 // C++ standard includes
+#include <string>
 
 // Falltergeist includes
 #include "../UI/Base.h"
@@ -64,6 +65,9 @@ protected:
     double _minValue = 0.0;
     double _maxValue = 1.0;
     double _value = 0.0;
+    std::string _downSound;
+    std::string _upSound;
+    
     void _onDrag(Event::Mouse* event);
     void _onLeftButtonDown(Event::Mouse* event);
     void _onLeftButtonUp(Event::Mouse* event);

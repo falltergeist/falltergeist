@@ -68,8 +68,8 @@ void ExitConfirm::init()
 
     auto yesButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundPos + Point(50, 102));
     auto noButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundPos + Point(183, 102));
-    yesButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doYes(); });
-    noButton->addEventHandler("mouseleftclick",  [this](Event::Event* event){ this->doNo(); });
+    yesButton->mouseClickHandler().add([this](Event::Event* event){ this->doYes(); });
+    noButton->mouseClickHandler().add( [this](Event::Event* event){ this->doNo(); });
 
     // label: Are you sure you want to quit?
     auto font = ResourceManager::getInstance()->font("font1.aaf", 0xb89c28ff);

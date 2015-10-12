@@ -17,34 +17,31 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_CRITTER_BARTER_STATE_H
-#define FALLTERGEIST_CRITTER_BARTER_STATE_H
+#ifndef FALLTERGEIST_EVENT_HANDLER_H
+#define FALLTERGEIST_EVENT_HANDLER_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../State/State.h"
-
-// Third party includes
+#include "../Base/Delegate.h"
 
 namespace Falltergeist
 {
-namespace State
+namespace Event
 {
+class Event;
+class Mouse;
+class Keyboard;
+class State;
 
-class CritterBarter : public State
-{
-public:
-    CritterBarter();
-    ~CritterBarter() override;
+// TODO: copy-pasting Base::Delegate code instead of using template might improve compilation speed
 
-    void init() override;
-
-    void onBackgroundClick(Event::Mouse* event);
-    void onTalkButtonClick(Event::Mouse* event);
-};
+using Handler = Base::Delegate<Event*>;
+using MouseHandler = Base::Delegate<Mouse*>;
+using KeyboardHandler = Base::Delegate<Keyboard*>;
+using StateHandler = Base::Delegate<State*>;
 
 }
 }
 
-#endif // FALLTERGEIST_CRITTER_BARTER_STATE_H
+#endif //FALLTERGEIST_EVENT_HANDLER_H

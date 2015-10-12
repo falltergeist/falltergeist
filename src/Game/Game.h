@@ -24,7 +24,6 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include <Event/Event.h>
 
 // Falltergeist includes
 #include "../Base/Singleton.h"
@@ -42,6 +41,7 @@ namespace Audio
 namespace Event
 {
     class Dispatcher;
+    class Event;
 }
 namespace Graphics
 {

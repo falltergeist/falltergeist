@@ -49,10 +49,10 @@ using namespace Base;
 InventoryItem::InventoryItem(Game::ItemObject *item, const Point& pos) : Falltergeist::UI::Base(pos)
 {
     _item = item;
-    addEventHandler("mouseleftdown", [this](Event::Event* event){ this->onMouseLeftDown(dynamic_cast<Event::Mouse*>(event)); });
-    addEventHandler("mousedragstart", [this](Event::Event* event){ this->onMouseDragStart(dynamic_cast<Event::Mouse*>(event)); });
-    addEventHandler("mousedrag", [this](Event::Event* event){ this->onMouseDrag(dynamic_cast<Event::Mouse*>(event)); });
-    addEventHandler("mousedragstop", [this](Event::Event* event){ this->onMouseDragStop(dynamic_cast<Event::Mouse*>(event)); });
+    mouseDownHandler().add(std::bind(&InventoryItem::onMouseLeftDown, this, std::placeholders::_1));
+    mouseDragStartHandler().add(std::bind(&InventoryItem::onMouseDragStart, this, std::placeholders::_1));
+    mouseDragHandler().add(std::bind(&InventoryItem::onMouseDrag, this, std::placeholders::_1));
+    mouseDragStopHandler().add(std::bind(&InventoryItem::onMouseDragStop, this, std::placeholders::_1));
 }
 
 InventoryItem::~InventoryItem()
@@ -127,6 +127,7 @@ void InventoryItem::onMouseDragStart(Event::Mouse* event)
     Game::getInstance()->mixer()->playACMSound("sound/sfx/ipickup1.acm");
     _oldType = type();
     setType(Type::DRAG);
+    setOffset((event->position() - _position) - size() / 2);
 }
 
 void InventoryItem::onMouseDrag(Event::Mouse* event)
@@ -141,10 +142,10 @@ void InventoryItem::onMouseDragStop(Event::Mouse* event)
     setOffset({0, 0});
     setType(_oldType);
 
-    auto itemevent = make_unique<Event::Mouse>("itemdragstop");
+    auto itemevent = make_unique<Event::Mouse>(*event, "itemdragstop");
     itemevent->setPosition(event->position());
     itemevent->setTarget(this);
-    emitEvent(std::move(itemevent));
+    emitEvent(std::move(itemevent), itemDragStopHandler());
 }
 
 void InventoryItem::onArmorDragStop(Event::Mouse* event)
@@ -174,7 +175,7 @@ void InventoryItem::onArmorDragStop(Event::Mouse* event)
     }
 }
 
-void InventoryItem::onHandDragStop(Event::Mouse* event)
+void InventoryItem::onHandDragStop(Event::Mouse* event, HAND hand)
 {
     // Check if mouse is over this item
     if (!Rect::inRect(event->position(), position(), size()))
@@ -193,6 +194,15 @@ void InventoryItem::onHandDragStop(Event::Mouse* event)
             itemsList->addItem(this, 1);
         }
         this->setItem(item);
+        auto player = Game::getInstance()->player();
+        if (hand == HAND::LEFT)
+        {
+            player->setLeftHandSlot(item);
+        }
+        else
+        {
+            player->setRightHandSlot(item);
+        }
     }
 }
 
@@ -209,5 +219,9 @@ Size InventoryItem::size() const
     }
 }
 
+Event::MouseHandler& InventoryItem::itemDragStopHandler()
+{
+    return _itemDragStopHandler;
+}
 }
 }

@@ -238,14 +238,14 @@ void Animation::think()
             _currentFrame = _reverse ? _animationFrames.size() - _progress - 1 : _progress;
             if (_actionFrame == _currentFrame)
             {
-                emitEvent(make_unique<Event::Event>("actionFrame"));
+                emitEvent(make_unique<Event::Event>("actionFrame"), actionFrameHandler());
             }
         }
         else
         {
             _ended = true;
             _playing = false;
-            emitEvent(make_unique<Event::Event>("animationEnded"));
+            emitEvent(make_unique<Event::Event>("animationEnded"), animationEndedHandler());
         }
     }
 }
@@ -457,5 +457,14 @@ void Animation::setActionFrame(unsigned int value)
     _actionFrame = value;
 }
 
+Event::Handler& Animation::actionFrameHandler()
+{
+    return _actionFrameHandler;
+}
+
+Event::Handler& Animation::animationEndedHandler()
+{
+    return _animationEndedHandler;
+}
 }
 }

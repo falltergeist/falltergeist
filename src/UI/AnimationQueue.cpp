@@ -97,7 +97,7 @@ void AnimationQueue::think()
             {
                 if (!_repeat)
                 {
-                    emitEvent(make_unique<Event::Event>("animationEnded"));
+                    emitEvent(make_unique<Event::Event>("animationEnded"), animationEndedHandler());
                     _playing = false;
                     return;
                 }
@@ -143,5 +143,11 @@ Point AnimationQueue::offset() const
 {
     return currentAnimation()->offset();
 }
+
+Event::Handler& AnimationQueue::animationEndedHandler()
+{
+    return _animationEndedHandler;
+}
+
 }
 }

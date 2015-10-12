@@ -74,10 +74,13 @@ public:
     void onMouseDragStart(Event::Mouse* event);
     void onMouseDrag(Event::Mouse* event);
     void onMouseDragStop(Event::Mouse* event);
+    void onItemDragStop(Event::Mouse* event, HAND hand);
     void onItemDragStop(Event::Mouse* event);
 
     void addItem(InventoryItem* item, unsigned int ammount);
     void removeItem(InventoryItem* item, unsigned int ammount);
+
+    Event::MouseHandler& itemDragStopHandler();
 
 protected:
     std::vector<Game::ItemObject*>* _items = nullptr;
@@ -89,6 +92,7 @@ protected:
     unsigned int _slotWidth = 77;
     unsigned int _slotHeight = 40;
 
+    Event::MouseHandler _itemDragStopHandler;
 };
 
 }

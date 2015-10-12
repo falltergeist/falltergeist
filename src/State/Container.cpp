@@ -60,7 +60,7 @@ void Container::init()
     addUI("background", new UI::Image("art/intrface/loot.frm"));
 
     addUI("button_done", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 478, 331));
-    getUI("button_done")->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    getUI("button_done")->mouseClickHandler().add(std::bind(&Container::onDoneButtonClick, this, std::placeholders::_1));
 
 
     // TAKEALL
@@ -80,8 +80,8 @@ void Container::init()
     containerList->setItems(object()->inventory());
     addUI(containerList);
 
-    dudeList->addEventHandler("itemdragstop", [containerList](Event::Event* event){ containerList->onItemDragStop(dynamic_cast<Event::Mouse*>(event)); });
-    containerList->addEventHandler("itemdragstop", [dudeList](Event::Event* event){ dudeList->onItemDragStop(dynamic_cast<Event::Mouse*>(event)); });
+    dudeList->itemDragStopHandler().add([containerList](Event::Mouse* event){ containerList->onItemDragStop(event); });
+    containerList->itemDragStopHandler().add([dudeList](Event::Mouse* event){ dudeList->onItemDragStop(event); });
 
 }
 

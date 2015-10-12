@@ -487,8 +487,8 @@ void CritterObject::think()
             _orientation = hexagon()->orientationTo(movementQueue()->back());
             auto animation = _generateMovementAnimation();
             animation->setActionFrame(_running ? 2 : 4);
-            animation->addEventHandler("actionFrame",    bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
-            animation->addEventHandler("animationEnded", bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
+            animation->actionFrameHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
+            animation->animationEndedHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
             animation->play();
             _ui = move(animation);
         }
@@ -540,8 +540,8 @@ void CritterObject::onMovementAnimationEnded(Event::Event* event)
         {
             newAnimation->setActionFrame(_running ? 2 : 4);
         }
-        newAnimation->addEventHandler("actionFrame",    bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
-        newAnimation->addEventHandler("animationEnded", bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
+        newAnimation->actionFrameHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
+        newAnimation->animationEndedHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
         newAnimation->play();
         animation = newAnimation.get();
         _ui = move(newAnimation);
@@ -597,7 +597,7 @@ unique_ptr<UI::Animation> CritterObject::_generateMovementAnimation()
 UI::Animation* CritterObject::setActionAnimation(const string& action)
 {
     UI::Animation* animation = new UI::Animation("art/critters/" + _generateArmorFrmString() + action + ".frm", orientation());
-    animation->addEventHandler("animationEnded", [animation](Event::Event* event)
+    animation->animationEndedHandler().add([animation](Event::Event* event)
     {
         animation->setCurrentFrame(0);
     });

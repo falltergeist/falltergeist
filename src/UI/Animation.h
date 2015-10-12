@@ -68,6 +68,10 @@ public:
     bool ended() const;
     bool playing() const;
 
+    Event::Handler& animationEndedHandler();
+
+    Event::Handler& actionFrameHandler();
+
 protected:
     bool _playing = false;
     bool _ended = false;
@@ -85,6 +89,7 @@ protected:
     std::vector<Graphics::Texture*> _monitorTextures;
     std::vector<Graphics::Texture*> _reddotTextures;
 
+    Event::Handler _actionFrameHandler, _animationEndedHandler;
 };
 
 }

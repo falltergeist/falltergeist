@@ -80,12 +80,12 @@ void LoadGame::init()
 
     // button: Done
     auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+391, bgY+349);
-    doneButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    doneButton->mouseClickHandler().add(std::bind(&LoadGame::onDoneButtonClick, this, std::placeholders::_1));
     addUI(doneButton);
 
     // button: Cancel
     auto cancelButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+495, bgY+349);
-    cancelButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doCancel(); });
+    cancelButton->mouseClickHandler().add([this](Event::Event* event){ this->doCancel(); });
     addUI(cancelButton);
 
     // LABELS
@@ -117,8 +117,8 @@ void LoadGame::doCancel()
 {
     if (!Game::getInstance()->locationState())
     {
-        removeEventHandlers("fadedone");
-        addEventHandler("fadedone", [this](Event::Event* event){ this->onCancelFadeDone(dynamic_cast<Event::State*>(event)); });
+        fadeDoneHandler().clear();
+        fadeDoneHandler().add([this](Event::Event* event){ this->onCancelFadeDone(dynamic_cast<Event::State*>(event)); });
         Game::getInstance()->renderer()->fadeOut(255,255,255,1000);
     }
     else
@@ -129,7 +129,7 @@ void LoadGame::doCancel()
 
 void LoadGame::onCancelFadeDone(Event::State* event)
 {
-    removeEventHandlers("fadedone");
+    fadeDoneHandler().clear();
     Game::getInstance()->popState();
 }
 

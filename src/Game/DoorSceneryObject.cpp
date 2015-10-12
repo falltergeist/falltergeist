@@ -78,7 +78,7 @@ void DoorSceneryObject::use_p_proc(CritterObject* usedBy)
         {
             queue->start();
             queue->currentAnimation()->setReverse(false);
-            queue->addEventHandler("animationEnded", std::bind(&DoorSceneryObject::onOpeningAnimationEnded, this, std::placeholders::_1));
+            queue->animationEndedHandler().add(std::bind(&DoorSceneryObject::onOpeningAnimationEnded, this, std::placeholders::_1));
             if (_soundId) Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/sodoors") + _soundId + ".acm");
         }
     }
@@ -88,7 +88,7 @@ void DoorSceneryObject::use_p_proc(CritterObject* usedBy)
         {
             queue->start();
             queue->currentAnimation()->setReverse(true);
-            queue->addEventHandler("animationEnded", std::bind(&DoorSceneryObject::onClosingAnimationEnded, this, std::placeholders::_1));
+            queue->animationEndedHandler().add(std::bind(&DoorSceneryObject::onClosingAnimationEnded, this, std::placeholders::_1));
             if (_soundId) Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/scdoors") + _soundId + ".acm");
         }
     }
@@ -103,7 +103,7 @@ void DoorSceneryObject::onOpeningAnimationEnded(Event::Event* event)
 {
     auto queue = (UI::AnimationQueue*)event->target();
     setOpened(true);
-    queue->removeEventHandlers("animationEnded");
+    queue->animationEndedHandler().clear();
     queue->stop();
     Logger::info() << "Door opened: " << opened() << std::endl;
 }
@@ -112,7 +112,7 @@ void DoorSceneryObject::onClosingAnimationEnded(Event::Event* event)
 {
     auto queue = (UI::AnimationQueue*)event->target();
     setOpened(false);
-    queue->removeEventHandlers("animationEnded");
+    queue->animationEndedHandler().clear();
     queue->stop();
     Logger::info() << "Door opened: " << opened() << std::endl;
 }

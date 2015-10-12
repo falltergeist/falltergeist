@@ -73,6 +73,8 @@ public:
     void handle(Event::Event* event) override;
     void render() override;
 
+    void handleByGameObjects(Event::Mouse* event);
+
     HexagonGrid* hexagonGrid();
     LocationCamera* camera();
 
@@ -91,9 +93,12 @@ public:
     void displayMessage(const std::string& message);
 
     void onBackgroundClick(Event::Mouse* event);
-    void onObjectMouseEvent(Event::Event* event, Game::Object* object);
-    void onObjectHover(Event::Event* event, Game::Object* object);
+    void onObjectMouseEvent(Event::Mouse* event, Game::Object* object);
+    void onObjectHover(Event::Mouse* event, Game::Object* object);
     void onKeyDown(Event::Keyboard* event) override;
+    void onMouseUp(Event::Mouse* event);
+    void onMouseDown(Event::Mouse* event);
+    void onMouseMove(Event::Mouse* event);
 
     void onStateActivate(Event::State* event) override;
     void onStateDeactivate(Event::State* event) override;
@@ -126,7 +131,7 @@ protected:
     Game::Object* _objectUnderCursor = NULL;
     Game::Object* _actionCursorLastObject = NULL;
     bool _actionCursorButtonPressed = false;
-    std::unique_ptr<UI::PlayerPanel> _playerPanel;
+    UI::PlayerPanel* _playerPanel;
 
     bool _scrollLeft = false;
     bool _scrollRight = false;
@@ -135,6 +140,8 @@ protected:
 
     std::vector<std::unique_ptr<Game::Object>> _objects;
     std::unique_ptr<UI::TextArea> _hexagonInfo;
+
+    Event::MouseHandler _mouseDownHandler, _mouseUpHandler, _mouseMoveHandler;
     
     std::vector<Input::Mouse::Icon> getCursorIconsForObject(Game::Object* object);
 

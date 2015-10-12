@@ -65,13 +65,13 @@ void PlayerEditGender::init()
                                     "art/intrface/maleoff.frm",
                                     "art/intrface/maleon.frm"
                                 }, bgX+260, bgY+2);
-    _maleImage->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onMaleButtonPress(dynamic_cast<Event::Mouse*>(event)); });
+    _maleImage->mouseClickHandler().add(std::bind(&PlayerEditGender::onMaleButtonPress, this, std::placeholders::_1));
 
     _femaleImage = new UI::ImageList((std::vector<std::string>){
                                                             "art/intrface/femoff.frm",
                                                             "art/intrface/femon.frm"
                                                             }, bgX+310, bgY+2);
-    _femaleImage->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onFemaleButtonPress(dynamic_cast<Event::Mouse*>(event)); });
+    _femaleImage->mouseClickHandler().add(std::bind(&PlayerEditGender::onFemaleButtonPress, this, std::placeholders::_1));
 
     auto doneBox = new UI::Image("art/intrface/donebox.frm");
     doneBox->setPosition(bgPos + Point(250, 42));
@@ -81,7 +81,7 @@ void PlayerEditGender::init()
     doneLabel->setFont(font3_b89c28ff);
 
     auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+260, bgY+45);
-    doneButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    doneButton->mouseClickHandler().add(std::bind(&PlayerEditGender::onDoneButtonClick, this, std::placeholders::_1));
 
     addUI(bg);
     addUI(doneBox);
@@ -128,7 +128,7 @@ void PlayerEditGender::onKeyDown(Event::Keyboard* event)
 void PlayerEditGender::setGender(GENDER gender)
 {
     _gender = gender;
-    _maleImage->setCurrentImage(gender == GENDER::MALE ? 0 : 1);
+    _maleImage->setCurrentImage(gender == GENDER::MALE ? 1 : 0);
     _femaleImage->setCurrentImage(gender == GENDER::FEMALE ? 1 : 0);
 }
 

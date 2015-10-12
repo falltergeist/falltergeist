@@ -75,9 +75,9 @@ void GameMenu::init()
     auto exitGameButton    = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3);
     auto doneButton        = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4);
 
-    preferencesButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doPreferences(); });
-    exitGameButton->addEventHandler("mouseleftclick",    [this](Event::Event* event){ this->doExit(); });
-    doneButton->addEventHandler("mouseleftclick",        [this](Event::Event* event){ this->closeMenu(); });
+    preferencesButton->mouseClickHandler().add([this](Event::Event* event){ this->doPreferences(); });
+    exitGameButton->mouseClickHandler().add(   [this](Event::Event* event){ this->doExit(); });
+    doneButton->mouseClickHandler().add(       [this](Event::Event* event){ this->closeMenu(); });
 
     auto font = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
 
@@ -86,14 +86,14 @@ void GameMenu::init()
     saveGameButtonLabel->setFont(font);
     saveGameButtonLabel->setSize({150, 0});
     saveGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
-    saveGameButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doSaveGame(); });
+    saveGameButton->mouseClickHandler().add([this](Event::Event* event){ this->doSaveGame(); });
 
     // label: load game
     auto loadGameButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 1), backgroundX+8, backgroundY+26+37);
     loadGameButtonLabel->setFont(font);
     loadGameButtonLabel->setSize({150, 0});
     loadGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
-    loadGameButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->doLoadGame(); });
+    loadGameButton->mouseClickHandler().add([this](Event::Event* event){ this->doLoadGame(); });
 
     // label: preferences
     auto preferencesButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 2), backgroundX+8, backgroundY+26+37*2);

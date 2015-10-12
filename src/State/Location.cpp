@@ -106,11 +106,22 @@ void Location::init()
     auto game = Game::getInstance();
     setLocation("maps/" + game->settings()->initialLocation() + ".map");
 
-    _playerPanel = make_unique<UI::PlayerPanel>();
+    _playerPanel = makeUI<UI::PlayerPanel>();
+
+    _mouseDownHandler.add(std::bind(&Location::onMouseDown, this, std::placeholders::_1));
+    _mouseUpHandler.add(std::bind(&Location::onMouseUp, this, std::placeholders::_1));
+    _mouseMoveHandler.add(std::bind(&Location::onMouseMove, this, std::placeholders::_1));
 }
 
 void Location::onStateActivate(Event::State* event)
 {
+    // correct position of "red hexagon" after popups
+    auto mouse = Game::getInstance()->mouse();
+    auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
+    if (mouse->state() == Input::Mouse::Cursor::HEXAGON_RED && hexagon)
+    {
+        mouse->ui()->setPosition(hexagon->position() - _camera->topLeft());
+    }
 }
 
 void Location::onStateDeactivate(Event::State* event)
@@ -306,27 +317,30 @@ std::vector<Input::Mouse::Icon> Location::getCursorIconsForObject(Game::Object* 
 }
 
 
-void Location::onObjectMouseEvent(Event::Event* event, Game::Object* object)
+void Location::onObjectMouseEvent(Event::Mouse* event, Game::Object* object)
 {
     if (!object) return;
-    if (event->name() == "mouseleftdown")
+    if (event->button() == Event::Mouse::Button::LEFT)
     {
-        _objectUnderCursor = object;
-        _actionCursorTicks = SDL_GetTicks();
-        _actionCursorButtonPressed = true;
-    }
-    else if (event->name() == "mouseleftclick")
-    {
-        auto icons = getCursorIconsForObject(object);
-        if (icons.size() > 0)
+        if (event->name() == "mousedown")
         {
-            handleAction(object, icons.front());
-            _actionCursorButtonPressed = false;
+            _objectUnderCursor = object;
+            _actionCursorTicks = SDL_GetTicks();
+            _actionCursorButtonPressed = true;
+        }
+        else if (event->name() == "mouseclick")
+        {
+            auto icons = getCursorIconsForObject(object);
+            if (icons.size() > 0)
+            {
+                handleAction(object, icons.front());
+                _actionCursorButtonPressed = false;
+            }
         }
     }
 }
 
-void Location::onObjectHover(Event::Event* event, Game::Object* object)
+void Location::onObjectHover(Event::Mouse* event, Game::Object* object)
 {
     if (event->name() == "mouseout")
     {
@@ -399,14 +413,12 @@ void Location::render()
         _hexagonInfo->render();
     }
 
-    _playerPanel->render();
+    State::render();
 }
 
 void Location::think()
 {
     Game::getInstance()->gameTime()->think();
-
-    _playerPanel->think();
 
     auto player = Game::getInstance()->player();
 
@@ -535,6 +547,8 @@ void Location::think()
         _actionCursorButtonPressed = false;
         _actionCursorTicks = 0;
     }
+
+    State::think();
 }
 
 void Location::toggleCursorMode()
@@ -572,73 +586,34 @@ void Location::toggleCursorMode()
 
 void Location::handle(Event::Event* event)
 {
-    _playerPanel->handle(event);
+    State::handle(event);
     if (event->handled()) return;
 
-    auto game = Game::getInstance();
     if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
+        using Mouse = Event::Mouse;
         auto mouse = Game::getInstance()->mouse();
 
-        // Right button pressed
-        if (mouseEvent->name() == "mousedown" && mouseEvent->rightButton())
+        switch (mouseEvent->originalType())
         {
-            toggleCursorMode();
-            event->setHandled(true);
-        }
-
-        // Left button up
-        if (mouseEvent->name() == "mouseup" && mouseEvent->leftButton())
-        {
-            switch (mouse->state())
+            case Mouse::Type::BUTTON_DOWN:
             {
-                case Input::Mouse::Cursor::HEXAGON_RED:
-                {
-                    // Here goes the movement
-                    auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
-                    if (!hexagon)
-                    {
-                        break;
-                    }
-
-                    auto path = hexagonGrid()->findPath(game->player()->hexagon(), hexagon);
-                    if (path.size())
-                    {
-                        game->player()->stopMovement();
-                        game->player()->setRunning((_lastClickedTile != 0 && hexagon->number() == _lastClickedTile) || (mouseEvent->shiftPressed() != game->settings()->running()));
-                        for (auto hexagon : path)
-                        {
-                            game->player()->movementQueue()->push_back(hexagon);
-                        }
-                        //moveObjectToHexagon(game->player(), hexagon);
-                    }
-                    event->setHandled(true);
-                    _lastClickedTile = hexagon->number();
-                    break;
-                }
-                default:
-                    break;
+                emitEvent(make_unique<Event::Mouse>(*mouseEvent), _mouseDownHandler);
+                break;
             }
-        }
-
-        if (mouseEvent->name() == "mousemove")
-        {
-            auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
-
-            switch (mouse->state())
+            case Mouse::Type::BUTTON_UP:
             {
-                case Input::Mouse::Cursor::HEXAGON_RED:
-                {
-                    if (!hexagon)
-                    {
-                        break;
-                    }
-                    mouse->ui()->setPosition(hexagon->position() - _camera->topLeft());
-                    break;
-                }
-                case Input::Mouse::Cursor::ACTION:
+                emitEvent(make_unique<Event::Mouse>(*mouseEvent), _mouseUpHandler);
+                break;
+            }
+            case Mouse::Type::MOVE:
+            {
+                emitEvent(make_unique<Event::Mouse>(*mouseEvent), _mouseMoveHandler);
+
+                if (mouse->state() == Input::Mouse::Cursor::ACTION)
                 {
                     // optimization to prevent FPS drops on mouse move
+                    // TODO: replace with a Timer?
                     auto ticks = SDL_GetTicks();
                     if (ticks - _mouseMoveTicks < 50)
                     {
@@ -648,61 +623,20 @@ void Location::handle(Event::Event* event)
                     {
                         _mouseMoveTicks = ticks;
                     }
-                    break;
                 }
-                default:
-                    break;
-            }
-
-            int scrollArea = 8;
-            Point evPos = mouseEvent->position();
-            _scrollLeft = (evPos.x() < scrollArea);
-            _scrollRight = (evPos.x() > game->renderer()->width()- scrollArea);
-            _scrollTop = (evPos.y() < scrollArea);
-            _scrollBottom = (evPos.y() > game->renderer()->height() - scrollArea);
-
-            if (hexagon)
-            {
-                std::string text = "Hex number: " + std::to_string(hexagon->number()) + "\n";
-                text += "Hex position: " + std::to_string(hexagon->number()%200) + "," + std::to_string((unsigned int)(hexagon->number()/200)) + "\n";
-                text += "Hex coords: " + std::to_string(hexagon->position().x()) + "," + std::to_string(hexagon->position().y()) + "\n";
-                auto dude = Game::getInstance()->player();
-                auto hex = dude->hexagon();
-                text += "Hex delta:\n dx=" + std::to_string(hex->cubeX()-hexagon->cubeX()) + "\n dy="+ std::to_string(hex->cubeY()-hexagon->cubeY()) + "\n dz=" + std::to_string(hex->cubeZ()-hexagon->cubeZ());
-                _hexagonInfo->setText(text);
-            }
-            else
-            {
-                _hexagonInfo->setText("No hex");
+                break;
             }
         }
         // let event fall down to all objects when using action cursor and within active view
-        if (mouse->state() != Input::Mouse::Cursor::ACTION && mouse->state() != Input::Mouse::Cursor::NONE)
+        if (!mouseEvent->handled() && (mouse->state() == Input::Mouse::Cursor::ACTION || mouse->state() == Input::Mouse::Cursor::NONE))
         {
-            event->setHandled(true);
+            handleByGameObjects(mouseEvent);
         }
     }
+}
 
-    if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
-    {
-        if (event->name() == "keyup")
-        {
-            switch (keyboardEvent->keyCode())
-            {
-                // JUST FOR ANIMATION TESTING
-                case SDLK_r:
-                {
-                    game->player()->setRunning(!game->player()->running());
-                    break;
-                }
-            }
-        }
-        else if (event->name() == "keydown")
-        {
-            onKeyDown(keyboardEvent);
-        }
-        event->setHandled(true);
-    }
+void Location::handleByGameObjects(Event::Mouse* event)
+{
     auto hexagons = _hexagonGrid->hexagons();
     for (auto it = hexagons.rbegin(); it != hexagons.rend(); ++it)
     {
@@ -716,6 +650,77 @@ void Location::handle(Event::Event* event)
             if (!object->inRender()) continue;
             object->handle(event);
         }
+    }
+}
+
+void Location::onMouseDown(Event::Mouse* event)
+{
+    if (event->rightButton())
+    {
+        toggleCursorMode();
+        event->setHandled(true);
+    }
+}
+
+void Location::onMouseUp(Event::Mouse* event)
+{
+    if (event->leftButton())
+    {
+        auto game = Game::getInstance();
+        auto mouse = game->mouse();
+        if (mouse->state() == Input::Mouse::Cursor::HEXAGON_RED)
+        {
+            // Here goes the movement
+            auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
+            if (hexagon)
+            {
+                auto path = hexagonGrid()->findPath(game->player()->hexagon(), hexagon);
+                if (path.size())
+                {
+                    game->player()->stopMovement();
+                    game->player()->setRunning((_lastClickedTile != 0 && hexagon->number() == _lastClickedTile) || (event->shiftPressed() != game->settings()->running()));
+                    for (auto pathHexagon : path)
+                    {
+                        game->player()->movementQueue()->push_back(pathHexagon);
+                    }
+                }
+                event->setHandled(true);
+                _lastClickedTile = hexagon->number();
+            }
+        }
+    }
+}
+
+void Location::onMouseMove(Event::Mouse* mouseEvent)
+{
+    auto mouse = Game::getInstance()->mouse();
+    auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
+    if (mouse->state() == Input::Mouse::Cursor::HEXAGON_RED && hexagon)
+    {
+        mouse->ui()->setPosition(hexagon->position() - _camera->topLeft());
+    }
+
+    int scrollArea = 8;
+    auto renderer = Game::getInstance()->renderer();
+    Point mpos = mouse->position();
+    _scrollLeft = (mpos.x() < scrollArea);
+    _scrollRight = (mpos.x() > renderer->width() - scrollArea);
+    _scrollTop = (mpos.y() < scrollArea);
+    _scrollBottom = (mpos.y() > renderer->height() - scrollArea);
+
+    if (hexagon)
+    {
+        std::string text = "Hex number: " + std::to_string(hexagon->number()) + "\n";
+        text += "Hex position: " + std::to_string(hexagon->number()%200) + "," + std::to_string((unsigned int)(hexagon->number()/200)) + "\n";
+        text += "Hex coords: " + std::to_string(hexagon->position().x()) + "," + std::to_string(hexagon->position().y()) + "\n";
+        auto dude = Game::getInstance()->player();
+        auto hex = dude->hexagon();
+        text += "Hex delta:\n dx=" + std::to_string(hex->cubeX()-hexagon->cubeX()) + "\n dy="+ std::to_string(hex->cubeY()-hexagon->cubeY()) + "\n dz=" + std::to_string(hex->cubeZ()-hexagon->cubeZ());
+        _hexagonInfo->setText(text);
+    }
+    else
+    {
+        _hexagonInfo->setText("No hex");
     }
 }
 
@@ -905,7 +910,7 @@ void Location::handleAction(Game::Object* object, Input::Mouse::Icon action)
         {
             auto player = Game::getInstance()->player();
             auto animation = player->setActionAnimation("al");
-            animation->addEventHandler("actionFrame", [object, player](Event::Event* event){ object->onUseAnimationActionFrame(event, player); });
+            animation->actionFrameHandler().add([object, player](Event::Event* event){ object->onUseAnimationActionFrame(event, player); });
             break;
         }
         case Input::Mouse::Icon::ROTATE:
@@ -947,7 +952,7 @@ HexagonGrid* Location::hexagonGrid()
 
 UI::PlayerPanel* Location::playerPanel()
 {
-    return _playerPanel.get();
+    return _playerPanel;
 }
 
 }

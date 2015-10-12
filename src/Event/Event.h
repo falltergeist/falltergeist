@@ -26,7 +26,6 @@
 #define FALLTERGEIST_EVENT_EVENT_H
 
 // C++ standard includes
-#include <memory>
 #include <string>
 
 // Falltergeist includes

@@ -244,7 +244,7 @@ void PlayerEdit::init()
     // add buttons to the state
     for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
     {
-        it->second->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+        it->second->mouseClickHandler().add(std::bind(&PlayerEdit::onButtonClick, this, std::placeholders::_1));
         addUI(it->second);
     }
 
@@ -252,7 +252,7 @@ void PlayerEdit::init()
     // reverse iterator to change drawing order
     for(auto it = _labels.rbegin(); it != _labels.rend(); ++it)
     {
-        it->second->addEventHandler("mouseleftdown", [this](Event::Event* event){ this->onLabelClick(dynamic_cast<Event::Mouse*>(event)); });
+        it->second->mouseDownHandler().add(std::bind(&PlayerEdit::onLabelClick, this, std::placeholders::_1));
         addUI(it->second);
     }
 
@@ -265,7 +265,7 @@ void PlayerEdit::init()
     // add hidden masks
     for(auto it = _masks.begin(); it != _masks.end(); ++it)
     {
-        it->second->addEventHandler("mouseleftdown", [this](Event::Event* event){ this->onMaskClick(dynamic_cast<Event::Mouse*>(event)); });
+        it->second->mouseDownHandler().add(std::bind(&PlayerEdit::onMaskClick, this, std::placeholders::_1));
         addUI(it->second);
     }
 

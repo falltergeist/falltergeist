@@ -23,7 +23,6 @@
 // C++ standard includes
 #include <list>
 #include <memory>
-#include <utility>
 
 // Falltergeist includes
 #include "../Event/Event.h"
@@ -41,17 +40,35 @@ class Dispatcher
 public:
     Dispatcher() {}
 
-    void scheduleEvent(EventTarget* target, std::unique_ptr<Event> event);
+    template<typename T>
+    void scheduleEvent(EventTarget* target, std::unique_ptr<T> eventArg, Base::Delegate<T*> handlerArg);
+
     void processScheduledEvents();
     void blockEventHandlers(EventTarget* eventTarget);
 
 private:
-    using Task = std::pair<EventTarget*, std::unique_ptr<Event>>;
+    struct AbstractTask
+    {
+        AbstractTask(EventTarget* target);
+        EventTarget* target;
+        virtual void perform() = 0;
+    };
+
+    template <typename T>
+    struct Task : AbstractTask
+    {
+        Task(EventTarget* target, std::unique_ptr<T> event, Base::Delegate<T*> handler);
+        void perform() override;
+
+        std::unique_ptr<T> event;
+        Base::Delegate<T*> handler;
+    };
+
 
     Dispatcher(const Dispatcher&) = delete;
     void operator=(const Dispatcher&) = delete;
 
-    std::list<Task> _scheduledTasks, _tasksInProcess;
+    std::list<std::unique_ptr<AbstractTask>> _scheduledTasks, _tasksInProcess;
 };
 
 }

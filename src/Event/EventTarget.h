@@ -21,13 +21,10 @@
 #define FALLTERGEIST_EVENT_EMITTER_H
 
 // C++ standard includes
-#include <functional>
-#include <unordered_map>
 #include <memory>
-#include <string>
-#include <vector>
 
 // Falltergeist includes
+#include "../Event/Handler.h"
 
 // Third party includes
 
@@ -39,8 +36,6 @@ class Event;
 
 class Dispatcher;
 
-// TODO: make proper class with implicit conversion constructors
-using EventHandler = std::function<void(Event*)>;
 
 class EventTarget
 {
@@ -49,24 +44,12 @@ public:
     virtual ~EventTarget();
 
     /**
-     * Adds event handler to given event name.
-     */
-    void addEventHandler(const std::string& eventName, EventHandler handler);
-    /**
      * Emit given event to Event Dispatcher for delayed processing.
      */
-    void emitEvent(std::unique_ptr<Event> event);
-    /**
-     * Remove all event handlers attached to given event name.
-     */
-    void removeEventHandlers(const std::string& eventName);
-    /**
-     * Returns all handlers for given event name or empty vector if no handlers were defined.
-     */
-    std::vector<EventHandler> getEventHandlers(const std::string& eventName);
+    template <typename T>
+    void emitEvent(std::unique_ptr<T> event, const Base::Delegate<T*>& handler);
 
 private:
-    std::unordered_map<std::string, std::vector<EventHandler>> _eventHandlers;
     Dispatcher* _eventDispatcher;
 };
 

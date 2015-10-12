@@ -72,11 +72,11 @@ void PlayerCreateOptions::init()
     auto eraseButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3);
     auto doneButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4);
 
-    saveButton->addEventHandler("mouseleftclick",    [this](Event::Event* event){ this->onSaveButtonClick(dynamic_cast<Event::Mouse*>(event)); });
-    loadButton->addEventHandler("mouseleftclick",    [this](Event::Event* event){ this->onLoadButtonClick(dynamic_cast<Event::Mouse*>(event)); });
-    printToFileButton->addEventHandler("mouseleftclick", [this](Event::Event* event){ this->onPrintToFileButtonClick(dynamic_cast<Event::Mouse*>(event)); });
-    eraseButton->addEventHandler("mouseleftclick",       [this](Event::Event* event){ this->onEraseButtonClick(dynamic_cast<Event::Mouse*>(event)); });
-    doneButton->addEventHandler("mouseleftclick",        [this](Event::Event* event){ this->onDoneButtonClick(dynamic_cast<Event::Mouse*>(event)); });
+    saveButton->mouseClickHandler().add(   std::bind(&PlayerCreateOptions::onSaveButtonClick, this, std::placeholders::_1));
+    loadButton->mouseClickHandler().add(   std::bind(&PlayerCreateOptions::onLoadButtonClick, this, std::placeholders::_1));
+    printToFileButton->mouseClickHandler().add(std::bind(&PlayerCreateOptions::onPrintToFileButtonClick, this, std::placeholders::_1));
+    eraseButton->mouseClickHandler().add(      std::bind(&PlayerCreateOptions::onEraseButtonClick, this, std::placeholders::_1));
+    doneButton->mouseClickHandler().add(       std::bind(&PlayerCreateOptions::onDoneButtonClick, this, std::placeholders::_1));
 
     auto font = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
 

@@ -88,10 +88,30 @@ public:
      */
     virtual void render(bool eggTransparency = false);
 
+    /**
+     * @brief Handles mouse events from OS.
+     */
+    virtual void handle(Event::Mouse* mouseEvent);
+
     virtual Size size() const;
 
     virtual unsigned int pixel(const Point& pos);
     unsigned int pixel(unsigned int x, unsigned int y);
+
+    Event::KeyboardHandler& keyDownHandler();
+    Event::KeyboardHandler& keyUpHandler();
+
+    // TODO: maybe not all elements should have drag events?
+    Event::MouseHandler& mouseDragStartHandler();
+    Event::MouseHandler& mouseDragHandler();
+    Event::MouseHandler& mouseDragStopHandler();
+    Event::MouseHandler& mouseInHandler();
+    Event::MouseHandler& mouseMoveHandler();
+    Event::MouseHandler& mouseOutHandler();
+    Event::MouseHandler& mouseClickHandler();
+    Event::MouseHandler& mouseDownHandler();
+    Event::MouseHandler& mouseUpHandler();
+    // TODO: mouse hover? (will require additional hoverDelay property)
 
 protected:
     Point _position;
@@ -104,14 +124,17 @@ protected:
 
     Graphics::Texture* _texture = nullptr;
     std::unique_ptr<Graphics::Texture> _tmptex;
+    
     bool _leftButtonPressed = false;
     bool _rightButtonPressed = false;
     bool _drag = false;
     bool _hovered = false;
     bool _visible = true;
-    // @todo Should it really be here?
-    std::string _downSound = "";
-    std::string _upSound = "";
+
+    Event::KeyboardHandler _keyDownHandler, _keyUpHandler;
+    Event::MouseHandler _mouseDragStartHandler, _mouseDragHandler, _mouseDragStopHandler,
+                        _mouseInHandler, _mouseMoveHandler, _mouseOutHandler,
+                        _mouseClickHandler, _mouseDownHandler, _mouseUpHandler;
 
 private:
     std::unique_ptr<Graphics::Texture> _generatedTexture;

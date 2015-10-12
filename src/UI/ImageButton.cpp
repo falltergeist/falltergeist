@@ -218,9 +218,9 @@ void ImageButton::_init(Type type)
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
     }
-    addEventHandler("mouseleftclick", [this](Event::Event* event){ this->_onLeftButtonClick(dynamic_cast<Event::Mouse*>(event)); });
-    addEventHandler("mouseleftdown", [this](Event::Event* event){ this->_onLeftButtonDown(dynamic_cast<Event::Mouse*>(event)); });
-    addEventHandler("mouseout", [this](Event::Event* event){ this->_onMouseOut(dynamic_cast<Event::Mouse*>(event)); });
+    mouseClickHandler().add(std::bind(&ImageButton::_onMouseClick, this, std::placeholders::_1));
+    mouseDownHandler().add(std::bind(&ImageButton::_onMouseDown, this, std::placeholders::_1));
+    mouseOutHandler().add(std::bind(&ImageButton::_onMouseOut, this, std::placeholders::_1));
 }
 
 Graphics::Texture* ImageButton::texture() const
@@ -232,7 +232,7 @@ Graphics::Texture* ImageButton::texture() const
     return _textures.at(0);
 }
 
-void ImageButton::_onLeftButtonClick(Event::Mouse* event)
+void ImageButton::_onMouseClick(Event::Mouse* event)
 {
     auto sender = dynamic_cast<ImageButton*>(event->target());
     if (sender->_checkboxMode)
@@ -245,8 +245,10 @@ void ImageButton::_onLeftButtonClick(Event::Mouse* event)
     }
 }
 
-void ImageButton::_onLeftButtonDown(Event::Mouse* event)
+void ImageButton::_onMouseDown(Event::Mouse* event)
 {
+    if (!event->leftButton()) return;
+
     auto sender = dynamic_cast<ImageButton*>(event->target());
     if (!sender->_downSound.empty())
     {
@@ -273,6 +275,13 @@ bool ImageButton::checked()
 void ImageButton::setChecked(bool _checked)
 {
     this->_checked = _checked;
+}
+
+void ImageButton::handle(Event::Mouse* mouseEvent)
+{
+    // disable right button clicks
+    _rightButtonPressed = false;
+    Base::handle(mouseEvent);
 }
 
 }

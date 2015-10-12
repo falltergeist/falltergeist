@@ -21,10 +21,14 @@
 #include "EventTarget.h"
 
 // C++ standard includes
+#include <type_traits>
 
 // Falltergeist includes
 #include "../Event/Dispatcher.h"
 #include "../Event/Event.h"
+#include "../Event/Mouse.h"
+#include "../Event/Keyboard.h"
+#include "../Event/State.h"
 
 // Third party includes
 
@@ -43,54 +47,23 @@ EventTarget::~EventTarget()
     _eventDispatcher->blockEventHandlers(this);
 }
 
-void EventTarget::addEventHandler(const std::string& eventName, EventHandler handler)
+template<typename T>
+void EventTarget::emitEvent(std::unique_ptr<T> event, const Base::Delegate<T*>& handler)
 {
-    _eventHandlers[eventName].emplace_back(handler);
-}
-
-/*void EventTarget::processEvent(Event* event)
-{
-    const auto it = _eventHandlers.find(event->name());
-    event->setHandled(false);
-    if (it != _eventHandlers.end())
+    static_assert(std::is_base_of<Event, T>::value, "T should be derived from Event::Event.");
+    if (handler)
     {
         event->setTarget(this);
-        for (auto& eventHandler : it->second)
-        {
-            if (event->handled()) return;
-            eventHandler(event);
-        }
-    }
-}*/
-
-void EventTarget::emitEvent(std::unique_ptr<Event> event)
-{
-    const auto it = _eventHandlers.find(event->name());
-    if (it != _eventHandlers.end())
-    {
-        event->setTarget(this);
-        _eventDispatcher->scheduleEvent(this, std::move(event));
+        _eventDispatcher->scheduleEvent<T>(this, std::move(event), handler); // handler copy is necessary here
     }
 }
 
-void EventTarget::removeEventHandlers(const std::string& eventName)
-{
-    const auto it = _eventHandlers.find(eventName);
-    if (it != _eventHandlers.end())
-    {
-        it->second.clear();
-    }
-}
 
-std::vector<EventHandler> EventTarget::getEventHandlers(const std::string& eventName)
-{
-    const auto it = _eventHandlers.find(eventName);
-    if (it != _eventHandlers.end())
-    {
-        return it->second;
-    }
-    return std::vector<EventHandler>();
-}
+// this was necessary to decouple EventDispatcher from the rest of the classes
+template void EventTarget::emitEvent<Event>(std::unique_ptr<Event>, const Base::Delegate<Event*>&);
+template void EventTarget::emitEvent<Mouse>(std::unique_ptr<Mouse>, const Base::Delegate<Mouse*>&);
+template void EventTarget::emitEvent<Keyboard>(std::unique_ptr<Keyboard>, const Base::Delegate<Keyboard*>&);
+template void EventTarget::emitEvent<State>(std::unique_ptr<State>, const Base::Delegate<State*>&);
 
 }
 }

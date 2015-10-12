@@ -81,6 +81,8 @@ protected:
     bool _deactivated = false;
     unsigned int _initialMouseStack;
 
+    Event::MouseHandler _mouseDownHandler, _mouseUpHandler, _mouseMoveHandler;
+
     void showMenu();
 };
 
