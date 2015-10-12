@@ -228,11 +228,15 @@ void Animation::think()
 {
     if (!_playing) return;
 
+    // TODO: handle cases when main loop FPS is lower than animation FPS
     if (SDL_GetTicks() - _frameTicks >= _animationFrames.at(_currentFrame)->duration())
     {
         _frameTicks = SDL_GetTicks();
 
         _progress += 1;
+        
+        emitEvent(make_unique<Event::Event>("frame"), frameHandler());
+        
         if (_progress < _animationFrames.size())
         {
             _currentFrame = _reverse ? _animationFrames.size() - _progress - 1 : _progress;
@@ -457,6 +461,11 @@ void Animation::setActionFrame(unsigned int value)
     _actionFrame = value;
 }
 
+Event::Handler& Animation::frameHandler()
+{
+    return _frameHandler;
+}
+
 Event::Handler& Animation::actionFrameHandler()
 {
     return _actionFrameHandler;
@@ -466,5 +475,6 @@ Event::Handler& Animation::animationEndedHandler()
 {
     return _animationEndedHandler;
 }
+
 }
 }
