@@ -471,6 +471,7 @@ void CritterObject::use_skill_on_p_proc()
 {
 }
 
+// TODO: probably need to remove movement queue logic to separate class.
 vector<Hexagon*>* CritterObject::movementQueue()
 {
     return &_movementQueue;
@@ -486,8 +487,7 @@ void CritterObject::think()
 
             _orientation = hexagon()->orientationTo(movementQueue()->back());
             auto animation = _generateMovementAnimation();
-            animation->setActionFrame(_running ? 2 : 4);
-            animation->actionFrameHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
+            animation->frameHandler().add(bind(&CritterObject::onMovementAnimationFrame, this, placeholders::_1));
             animation->animationEndedHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
             animation->play();
             _ui = move(animation);
@@ -508,74 +508,65 @@ void CritterObject::think()
     Object::think();
 }
 
-void CritterObject::onMovementAnimationEnded(Event::Event* event)
+static const std::array<int, 6> tileOffsets = {16, 32, 16, -16, -32, -16};
+
+// TODO: refactor
+void CritterObject::onMovementAnimationFrame(Event::Event* event)
 {
-    auto hexagon = movementQueue()->back();
-    movementQueue()->pop_back();
-    Game::getInstance()->locationState()->moveObjectToHexagon(this, hexagon);
+    Orientation curOrient = orientation();
+    int offsetThreshold = tileOffsets[curOrient];
     auto animation = dynamic_cast<UI::Animation*>(ui());
-
-    if (movementQueue()->size() == 0)
+    Point visibleOffset = animation->offset();
+    if ((offsetThreshold > 0 && (visibleOffset.x() > offsetThreshold || visibleOffset.y() > offsetThreshold))
+       || (offsetThreshold < 0 && (visibleOffset.x() < offsetThreshold || visibleOffset.y() < offsetThreshold)))
     {
-        _moving = false;
-        animation->stop();
-        setActionAnimation("aa")->stop();
-        _setupNextIdleAnim();
-        return;
-    }
-
-    auto newHexagon = movementQueue()->back();
-    auto newOrientation = this->hexagon()->orientationTo(newHexagon);
-
-    if (event->name() == "animationEnded" || newOrientation != orientation())
-    {
-        _orientation = newOrientation;
-        auto newAnimation = _generateMovementAnimation();
-        if (event->name() == "actionFrame")
+        auto hexagon = movementQueue()->back();
+        movementQueue()->pop_back();
+        Game::getInstance()->locationState()->moveObjectToHexagon(this, hexagon);
+        if (movementQueue()->size() == 0)
         {
-            newAnimation->setCurrentFrame(animation->currentFrame());
-            newAnimation->setActionFrame(animation->actionFrame());
+            _moving = false;
+            animation->stop();
+            setActionAnimation("aa")->stop();
+            _setupNextIdleAnim();
         }
         else
         {
-            newAnimation->setActionFrame(_running ? 2 : 4);
-        }
-        newAnimation->actionFrameHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
-        newAnimation->animationEndedHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
-        newAnimation->play();
-        animation = newAnimation.get();
-        _ui = move(newAnimation);
-    }
-
-    if (event->name() == "actionFrame")
-    {
-        // at each action frame critter switches to the next hex and frame positions are offset relative to the action frame offsets
-        auto actionFrame = animation->frames().at(animation->actionFrame()).get();
-        for (auto it = animation->frames().rbegin(); it != animation->frames().rend(); ++it)
-        {
-            auto frame = (*it).get();
-            frame->setXOffset(frame->xOffset() - actionFrame->xOffset());
-            frame->setYOffset(frame->yOffset() - actionFrame->yOffset());
-            if (frame == actionFrame) break;
-        }
-
-        if (_running)
-        {
-            switch (animation->actionFrame())
+            auto nextHexagon = movementQueue()->back();
+            auto nextOrientation = this->hexagon()->orientationTo(nextHexagon);
+            if (nextOrientation != orientation())
             {
-                // those frame numbers were guessed to make seamless running animation
-                case 2:
-                    animation->setActionFrame(4);
-                    break;
-                case 4:
-                    animation->setActionFrame(6);
-                    break;
-                case 5:
-                    animation->setActionFrame(7);
-                    break;
+                _orientation = nextOrientation;
+                auto newAnimation = _generateMovementAnimation();
+                newAnimation->setCurrentFrame(animation->currentFrame());
+                newAnimation->frameHandler().add(bind(&CritterObject::onMovementAnimationFrame, this, placeholders::_1));
+                newAnimation->animationEndedHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
+                newAnimation->play();
+                animation = newAnimation.get();
+                _ui = move(newAnimation);
+            }
+            else if (animation->currentFrame() > 0)
+            {
+                auto firstFrame = animation->frames().at(0).get();
+                auto prevFrame = animation->frames().at(animation->currentFrame() - 1).get();
+                // adjust animation shift
+                // current frame offset relative to first frame offset (whole animation could be offset by some value)
+                int relOfsX = firstFrame->xOffset() - prevFrame->xOffset();
+                int relOfsY = firstFrame->yOffset() - prevFrame->yOffset();
+                // compensate for move offset
+                animation->setOffset(Point(relOfsX, relOfsY));
+                animation->setActionFrame(animation->currentFrame() - 1);
             }
         }
     }
+}
+
+void CritterObject::onMovementAnimationEnded(Event::Event* event)
+{
+    auto animation = dynamic_cast<UI::Animation*>(ui());
+    animation->setCurrentFrame(0);
+    animation->setOffset(Point(0, 0));
+    animation->play();
 }
 
 unique_ptr<UI::Animation> CritterObject::_generateMovementAnimation()
@@ -596,7 +587,9 @@ unique_ptr<UI::Animation> CritterObject::_generateMovementAnimation()
 
 UI::Animation* CritterObject::setActionAnimation(const string& action)
 {
-    UI::Animation* animation = new UI::Animation("art/critters/" + _generateArmorFrmString() + action + ".frm", orientation());
+    string animName = _generateArmorFrmString();
+    animName += (action == "aa") ? _generateWeaponFrmString() + "a" : action;
+    UI::Animation* animation = new UI::Animation("art/critters/" + animName + ".frm", orientation());
     animation->animationEndedHandler().add([animation](Event::Event* event)
     {
         animation->setCurrentFrame(0);
@@ -608,6 +601,11 @@ UI::Animation* CritterObject::setActionAnimation(const string& action)
     queue->start();*/
     setUI(animation);
     return animation;
+}
+
+void CritterObject::_generateUi()
+{
+    setActionAnimation("aa")->stop();
 }
 
 void CritterObject::setRadiationLevel(int radiationLevel)

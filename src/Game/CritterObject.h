@@ -150,6 +150,7 @@ public:
 
     virtual void think();
     virtual void onMovementAnimationEnded(Event::Event* event);
+    virtual void onMovementAnimationFrame(Event::Event* event);
 
     virtual bool running() const;
     virtual void setRunning(bool value);
@@ -190,6 +191,7 @@ protected:
     std::vector<int> _damageThreshold = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::vector<ItemObject*> _inventory;
     std::vector<Hexagon*> _movementQueue;
+    Point _moveAnimShift;
     ArmorItemObject* _armorSlot = 0;
     ItemObject* _leftHandSlot = 0;
     ItemObject* _rightHandSlot = 0;
@@ -198,6 +200,8 @@ protected:
     virtual std::string _generateArmorFrmString();
     virtual std::string _generateWeaponFrmString();
     void _setupNextIdleAnim();
+    virtual void _generateUi();
+
 
 };
 

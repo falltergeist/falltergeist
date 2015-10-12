@@ -53,6 +53,7 @@
 #include "../State/ExitConfirm.h"
 #include "../State/MainMenu.h"
 #include "../UI/Animation.h"
+#include "../UI/AnimationFrame.h"
 #include "../UI/AnimationQueue.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
@@ -410,6 +411,12 @@ void Location::render()
     //_roof->render();
     if (active())
     {
+        auto plAnim = dynamic_cast<UI::Animation*>(Game::getInstance()->player()->ui());
+        auto plCurFr = plAnim->frames().at(plAnim->currentFrame()).get();
+        _hexagonInfo->setText(
+        "\nFrame: " + std::to_string(plAnim->currentFrame()) 
+        + "\nShift: " + to_string(plAnim->offset()) 
+        + "\nOffs: " + std::to_string(plCurFr->xOffset()) + ", " + std::to_string(plCurFr->yOffset()));
         _hexagonInfo->render();
     }
 

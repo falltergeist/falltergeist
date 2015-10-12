@@ -235,11 +235,10 @@ void Animation::think()
 
         _progress += 1;
         
-        emitEvent(make_unique<Event::Event>("frame"), frameHandler());
-        
         if (_progress < _animationFrames.size())
         {
             _currentFrame = _reverse ? _animationFrames.size() - _progress - 1 : _progress;
+            emitEvent(make_unique<Event::Event>("frame"), frameHandler());
             if (_actionFrame == _currentFrame)
             {
                 emitEvent(make_unique<Event::Event>("actionFrame"), actionFrameHandler());
@@ -388,7 +387,7 @@ Size Animation::size() const
 Point Animation::offset() const
 {
     auto& frame = _animationFrames.at(_currentFrame);
-    return Point(frame->xOffset(), frame->yOffset()) + shift();
+    return _offset + Point(frame->xOffset(), frame->yOffset()) + shift();
 }
 
 const Point& Animation::shift() const
@@ -416,6 +415,7 @@ unsigned int Animation::pixel(const Point& pos)
 void Animation::play()
 {
     _playing = true;
+    _ended = false;
 }
 
 void Animation::stop()
