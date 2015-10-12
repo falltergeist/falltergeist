@@ -130,9 +130,6 @@ protected:
     bool _drag = false;
     bool _hovered = false;
     bool _visible = true;
-    // @todo Should it really be here?
-    std::string _downSound = "";
-    std::string _upSound = "";
 
     Event::KeyboardHandler _keyDownHandler, _keyUpHandler;
     Event::MouseHandler _mouseDragStartHandler, _mouseDragHandler, _mouseDragStopHandler,

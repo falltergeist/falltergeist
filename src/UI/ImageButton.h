@@ -21,6 +21,7 @@
 #define FALLTERGEIST_UI_IMAGEBUTTON_H
 
 // C++ standard includes
+#include <string>
 #include <vector>
 
 // Falltergeist includes
@@ -90,7 +91,10 @@ public:
 
 protected:
     bool _checkboxMode = false; // remember new state after click
-    bool _checked = false;
+    bool _checked = false;    
+    
+    std::string _downSound;
+    std::string _upSound;
 
     std::vector<Graphics::Texture*> _textures;
     void _onMouseClick(Event::Mouse* event);

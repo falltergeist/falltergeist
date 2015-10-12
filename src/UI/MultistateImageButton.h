@@ -21,6 +21,7 @@
 #define	FALLTERGEIST_UI_MULTISTATEIMAGEBUTTON_H
 
 // C++ standard includes
+#include <string>
 #include <vector>
 
 // Falltergeist includes
@@ -87,6 +88,9 @@ protected:
     int _modeFactor = 1; // or -1
     unsigned int _maxState = 0;
     unsigned int _minState = 0;
+    std::string _downSound;
+    std::string _upSound;
+    
     void _onMouseClick(Event::Mouse* event);
     void _onMouseUp(Event::Mouse* event);
 
