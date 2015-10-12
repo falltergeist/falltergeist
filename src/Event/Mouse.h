@@ -21,7 +21,6 @@
 #define FALLTERGEIST_EVENT_MOUSE_H
 
 // C++ standard includes
-#include <memory>
 
 // Falltergeist includes
 #include "../Event/Event.h"

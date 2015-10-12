@@ -21,10 +21,17 @@
 #include "../Event/Dispatcher.h"
 
 // C++ standard includes
+#include <functional>
+#include <type_traits>
+#include <utility>
 
 // Falltergeist includes
-#include "../Event/EventTarget.h"
 #include "../Base/StlFeatures.h"
+#include "../Event/EventTarget.h"
+#include "../Event/Event.h"
+#include "../Event/Mouse.h"
+#include "../Event/Keyboard.h"
+#include "../Event/State.h"
 
 // Third party includes
 
@@ -41,6 +48,7 @@ template <typename T>
 Dispatcher::Task<T>::Task(EventTarget* target, std::unique_ptr<T> event, Base::Delegate<T*> handler)
     : AbstractTask(target), event(std::move(event)), handler(handler)
 {
+    static_assert(std::is_base_of<Event, T>::value, "T should be derived from Event::Event.");
 }
 
 template <typename T>

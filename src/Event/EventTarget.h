@@ -21,11 +21,7 @@
 #define FALLTERGEIST_EVENT_EMITTER_H
 
 // C++ standard includes
-#include <functional>
-#include <unordered_map>
 #include <memory>
-#include <string>
-#include <vector>
 
 // Falltergeist includes
 #include "../Event/Handler.h"
@@ -51,7 +47,7 @@ public:
      * Emit given event to Event Dispatcher for delayed processing.
      */
     template <typename T>
-    void emitEvent(std::unique_ptr<T> event, Base::Delegate<T*> handler);
+    void emitEvent(std::unique_ptr<T> event, const Base::Delegate<T*>& handler);
 
 private:
     Dispatcher* _eventDispatcher;

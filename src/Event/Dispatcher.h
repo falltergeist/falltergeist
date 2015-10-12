@@ -21,10 +21,8 @@
 #define FALLTERGEIST_EVENT_DISPATCHER_H
 
 // C++ standard includes
-#include <functional>
 #include <list>
 #include <memory>
-#include <utility>
 
 // Falltergeist includes
 #include "../Event/Event.h"

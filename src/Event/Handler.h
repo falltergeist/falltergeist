@@ -21,18 +21,18 @@
 #define FALLTERGEIST_EVENT_HANDLER_H
 
 // C++ standard includes
-#include <functional>
 
 // Falltergeist includes
 #include "../Base/Delegate.h"
-#include "../Event/Mouse.h"
-#include "../Event/Keyboard.h"
-#include "../Event/State.h"
 
 namespace Falltergeist
 {
 namespace Event
 {
+class Event;
+class Mouse;
+class Keyboard;
+class State;
 
 // TODO: copy-pasting Base::Delegate code instead of using template might improve compilation speed
 

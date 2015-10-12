@@ -21,10 +21,8 @@
 #define FALLTERGEIST_GAME_OBJECT_H
 
 // C++ standard includes
-#include <cmath>
 #include <memory>
 #include <string>
-#include <vector>
 
 // Falltergeist includes
 #include "../Event/EventTarget.h"

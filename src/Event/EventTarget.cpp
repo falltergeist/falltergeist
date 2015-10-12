@@ -21,6 +21,7 @@
 #include "EventTarget.h"
 
 // C++ standard includes
+#include <type_traits>
 
 // Falltergeist includes
 #include "../Event/Dispatcher.h"
@@ -47,8 +48,9 @@ EventTarget::~EventTarget()
 }
 
 template<typename T>
-void EventTarget::emitEvent(std::unique_ptr<T> event, Base::Delegate<T*> handler)
+void EventTarget::emitEvent(std::unique_ptr<T> event, const Base::Delegate<T*>& handler)
 {
+    static_assert(std::is_base_of<Event, T>::value, "T should be derived from Event::Event.");
     if (handler)
     {
         event->setTarget(this);
@@ -58,10 +60,10 @@ void EventTarget::emitEvent(std::unique_ptr<T> event, Base::Delegate<T*> handler
 
 
 // this was necessary to decouple EventDispatcher from the rest of the classes
-template void EventTarget::emitEvent<Event>(std::unique_ptr<Event>, Base::Delegate<Event*>);
-template void EventTarget::emitEvent<Mouse>(std::unique_ptr<Mouse>, Base::Delegate<Mouse*>);
-template void EventTarget::emitEvent<Keyboard>(std::unique_ptr<Keyboard>, Base::Delegate<Keyboard*>);
-template void EventTarget::emitEvent<State>(std::unique_ptr<State>, Base::Delegate<State*>);
+template void EventTarget::emitEvent<Event>(std::unique_ptr<Event>, const Base::Delegate<Event*>&);
+template void EventTarget::emitEvent<Mouse>(std::unique_ptr<Mouse>, const Base::Delegate<Mouse*>&);
+template void EventTarget::emitEvent<Keyboard>(std::unique_ptr<Keyboard>, const Base::Delegate<Keyboard*>&);
+template void EventTarget::emitEvent<State>(std::unique_ptr<State>, const Base::Delegate<State*>&);
 
 }
 }
