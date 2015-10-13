@@ -26,6 +26,7 @@
 #include "../Audio/Mixer.h"
 #include "../Event/Event.h"
 #include "../Event/Keyboard.h"
+#include "../Game/ItemObject.h"
 #include "../Game/Game.h"
 #include "../Game/DudeObject.h"
 #include "../Graphics/Renderer.h"

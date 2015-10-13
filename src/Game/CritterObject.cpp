@@ -27,16 +27,17 @@
 // Falltergeist includes
 #include "../Base/StlFeatures.h"
 #include "../Exception.h"
+#include "../Game/ArmorItemObject.h"
 #include "../Game/Defines.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Game/WeaponItemObject.h"
 #include "../Logger.h"
+#include "../PathFinding/Hexagon.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../UI/Animation.h"
 #include "../UI/AnimationFrame.h"
-#include "../UI/AnimationQueue.h"
 #include "../VM/VM.h"
 
 // Third party includes
@@ -530,7 +531,7 @@ bool isOutsideOfHexForDirection(Point offset, Orientation orient)
 void CritterObject::onMovementAnimationFrame(Event::Event* event)
 {
     auto animation = dynamic_cast<UI::Animation*>(ui());
-    auto curFrameOfs = animation->offset() + animation->currentFramePtr()->offset();
+    auto curFrameOfs = animation->frameOffset();
     if (isOutsideOfHexForDirection(curFrameOfs, _orientation))
     {
         // if we stepped too much away from current hex center, switch to the next hex
@@ -559,7 +560,7 @@ void CritterObject::onMovementAnimationFrame(Event::Event* event)
                 newAnimation->play();
                 animation = newAnimation.get();
                 _ui = move(newAnimation);
-                curFrameOfs = animation->currentFramePtr()->offset();
+                curFrameOfs = animation->frameOffset();
                             
                 // on turns, center frames on current hex
                 ofs -= curFrameOfs;
@@ -610,10 +611,6 @@ UI::Animation* CritterObject::setActionAnimation(const string& action)
         animation->setCurrentFrame(0);
     });
     animation->play();
-    /*auto queue = new AnimationQueue();
-    queue->setRepeat(true);
-    queue->animations()->push_back(animation);
-    queue->start();*/
     setUI(animation);
     return animation;
 }
@@ -737,12 +734,7 @@ void CritterObject::setRunning(bool value)
 void CritterObject::stopMovement()
 {
     _movementQueue.clear();
-    // @TODO: _ui probably needs to be always one type
-    if (auto queue = dynamic_cast<UI::AnimationQueue*>(_ui.get()))
-    {
-        queue->stop();
-    }
-    else if (auto animation = dynamic_cast<UI::Animation*>(_ui.get()))
+    if (auto animation = dynamic_cast<UI::Animation*>(_ui.get()))
     {
         animation->stop();
     }
@@ -764,6 +756,10 @@ void CritterObject::setAge(unsigned value)
     _age = value;
 }
 
+UI::Animation* CritterObject::animation()
+{
+    return dynamic_cast<UI::Animation*>(ui());
+}
 
 }
 }

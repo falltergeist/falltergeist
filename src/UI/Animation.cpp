@@ -30,6 +30,7 @@
 #include "../Graphics/AnimatedPalette.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
+#include "../PathFinding/Hexagon.h"
 #include "../LocationCamera.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
@@ -290,7 +291,7 @@ void Animation::render(bool eggTransparency)
         }
 
         auto camera = Game::getInstance()->locationState()->camera();
-        Point eggPos = dude->hexagon()->position() - camera->topLeft() - Point(63, 78) + dude->ui()->offset();
+        Point eggPos = dude->hexagon()->position() - camera->topLeft() + dude->eggOffset();
 
         Point eggDelta = position() - eggPos;
 
@@ -449,6 +450,11 @@ void Animation::setCurrentFrame(unsigned int value)
 AnimationFrame* Animation::currentFramePtr() const
 {
     return _animationFrames.at(_currentFrame).get();
+}
+
+Point Animation::frameOffset() const
+{
+    return offset() + currentFramePtr()->offset();
 }
 
 unsigned int Animation::actionFrame() const

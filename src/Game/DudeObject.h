@@ -24,6 +24,7 @@
 
 // Falltergeist includes
 #include "../Game/CritterObject.h"
+#include "../Point.h"
 
 // Third party includes
 #include <libfalltergeist/Gcd/File.h>
@@ -71,6 +72,11 @@ public:
     int healingRate() const override;
     int criticalChance() const override;
     unsigned int carryWeightMax() const override;
+
+    /**
+     * Offset where to draw egg relative to dude hex.
+     */
+    Point eggOffset();
 
 protected:
     int _level = 1;

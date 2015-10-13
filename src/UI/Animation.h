@@ -65,6 +65,11 @@ public:
     void setCurrentFrame(unsigned int value);
     AnimationFrame* currentFramePtr() const;
 
+    /**
+     * Offset of the current frame.
+     */
+    Point frameOffset() const;
+
     unsigned int actionFrame() const;
     void setActionFrame(unsigned int value);
     AnimationFrame* actionFramePtr() const;

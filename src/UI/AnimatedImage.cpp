@@ -30,6 +30,7 @@
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../LocationCamera.h"
+#include "../PathFinding/Hexagon.h"
 #include "../Point.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
@@ -202,7 +203,7 @@ void AnimatedImage::render(bool eggTransparency)
 
         auto camera = Game::getInstance()->locationState()->camera();
 
-        Point eggPos = dude->hexagon()->position() - camera->topLeft() - Point(63, 78) + dude->ui()->offset();
+        Point eggPos = dude->hexagon()->position() - camera->topLeft() + dude->eggOffset();
 
         Point eggDelta = position() - eggPos;
 

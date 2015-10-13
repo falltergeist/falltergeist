@@ -24,6 +24,7 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode810DHandler.h"
 #include "../../VM/VM.h"
+#include "../../Game/ItemObject.h"
 #include "../../Game/CritterObject.h"
 
 // Third party includes
