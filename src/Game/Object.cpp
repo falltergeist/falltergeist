@@ -287,7 +287,7 @@ void Object::renderText()
 
 void Object::render()
 {
-    if (!_ui) return;
+    if (!_ui || !_hexagon) return;
 
     auto camera = Game::getInstance()->locationState()->camera();
     _ui->setPosition(

@@ -26,6 +26,7 @@
 #include "../../Game/Object.h"
 #include "../../Game/CritterObject.h"
 #include "../../Game/ContainerItemObject.h"
+#include "../../State/Location.h"
 #include "../../VM/VM.h"
 
 
@@ -44,21 +45,34 @@ void Opcode8116Handler::_run()
     Logger::debug("SCRIPT") << "[8116] [+] void add_mult_objs_to_inven(GameObject* who, GameItemObject* item, int amount)" << std::endl;
     auto amount = _vm->dataStack()->popInteger();
     auto item = dynamic_cast<Game::ItemObject*>(_vm->dataStack()->popObject());
+    auto invenObj = _vm->dataStack()->popObject();
+
     if (!item) _error("add_mult_objs_to_inven - item not instanceof GameItemObject");
     item->setAmount(amount);
     // who can be critter or container
-    auto object = _vm->dataStack()->popObject();
-    if (auto critter = dynamic_cast<Game::CritterObject*>(object))
+    std::vector<Game::ItemObject*>* inven;
+    if (auto critterObj = dynamic_cast<Game::CritterObject*>(invenObj))
     {
-        critter->inventory()->push_back(item);
+        inven = critterObj->inventory();
     }
-    else if (auto container = dynamic_cast<Game::ContainerItemObject*>(object))
+    else if (auto contObj = dynamic_cast<Game::ContainerItemObject*>(invenObj))
     {
-        container->inventory()->push_back(item);
+        inven = contObj->inventory();
     }
     else
     {
         _error("add_mult_objs_to_inven - wrong WHO parameter");
+    }
+
+    inven->push_back(item);
+
+    if (item->hexagon())
+    {
+        auto location = Game::Game::getInstance()->locationState();
+        if (location)
+        {
+            location->moveObjectToHexagon(item, nullptr);
+        }
     }
 }
 

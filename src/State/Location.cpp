@@ -206,6 +206,22 @@ void Location::setLocation(const std::string& name)
             }
         }
 
+        // TODO: use common interface...
+        if (auto critter = dynamic_cast<Game::CritterObject*>(object))
+        {
+            for (auto child : *mapObject->children())
+            {
+                auto item = dynamic_cast<Game::ItemObject*>(Game::ObjectFactory::getInstance()->createObject(child->PID()));
+                if (!item)
+                {
+                    Logger::error() << "Location::setLocation() - can't create object with PID: " << child->PID() << std::endl;
+                    continue;
+                }
+                item->setAmount(child->ammount());
+                critter->inventory()->push_back(item);
+            }
+        }
+
         if (mapObject->scriptId() > 0)
         {
             auto intFile = ResourceManager::getInstance()->intFileType(mapObject->scriptId());
@@ -856,7 +872,10 @@ void Location::moveObjectToHexagon(Game::Object* object, Hexagon* hexagon)
     }
 
     object->setHexagon(hexagon);
-    hexagon->objects()->push_back(object);
+    if (hexagon)
+    {
+        hexagon->objects()->push_back(object);
+    }
 }
 
 void Location::destroyObject(Game::Object* object)
