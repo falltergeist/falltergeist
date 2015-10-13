@@ -158,7 +158,7 @@ void Game::run()
         handle();
         think();
         render();
-        SDL_Delay(100);
+        SDL_Delay(1);
         _statesForDelete.clear();
         _frame++;
     }

@@ -49,11 +49,11 @@ public:
     unsigned int height() const;
     void setHeight(unsigned int height);
 
-    unsigned int xOffset() const;
-    void setXOffset(unsigned int xOffset);
+    int xOffset() const;
+    void setXOffset(int xOffset);
 
-    unsigned int yOffset() const;
-    void setYOffset(unsigned int yOffset);
+    int yOffset() const;
+    void setYOffset(int yOffset);
 
     unsigned int duration() const;
     void setDuration(unsigned int duration);
@@ -68,8 +68,8 @@ protected:
     unsigned int _width = 0;
 
     // Offset of animation frame on screen relative to first animation frame
-    unsigned int _xOffset = 0;
-    unsigned int _yOffset = 0;
+    int _xOffset = 0;
+    int _yOffset = 0;
 
     // Duration of animation frame in milliseconds
     unsigned int _duration = 0;

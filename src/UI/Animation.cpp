@@ -93,7 +93,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
         }
         else
         {
-            frame->setDuration((unsigned)std::round(1000.0/static_cast<double>(frm->framesPerSecond())));
+            frame->setDuration((unsigned)std::round(10000.0/static_cast<double>(frm->framesPerSecond())));
         }
 
         x += frame->width();
@@ -421,6 +421,7 @@ void Animation::play()
 {
     _playing = true;
     _ended = false;
+    _frameTicks = SDL_GetTicks();
 }
 
 void Animation::stop()

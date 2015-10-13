@@ -511,18 +511,24 @@ void CritterObject::think()
 static const std::array<int, 6> xTileOffsets = {16, 32, 16, -16, -32, -16};
 static const std::array<int, 6> yTileOffsets = {-12, 0, 12,  12,   0, -12};
 
+// TODO: move somewhere appropriate
+bool isOutsideOfHexForDirection(Point offset, Orientation orient)
+{
+    int xThreshold = xTileOffsets[orient];
+    int yThreshold = yTileOffsets[orient];
+    return (xThreshold > 0 && offset.x() >= xThreshold)
+        || (xThreshold < 0 && offset.x() <= xThreshold)
+        || (yThreshold > 0 && offset.y() >= yThreshold)
+        || (yThreshold < 0 && offset.y() <= yThreshold);
+}
+
 // TODO: refactor
 void CritterObject::onMovementAnimationFrame(Event::Event* event)
 {
-    Orientation curOrient = orientation();
-    int xThreshold = xTileOffsets[curOrient];
-    int yThreshold = yTileOffsets[curOrient];
     auto animation = dynamic_cast<UI::Animation*>(ui());
-    Point offsetFromTile = animation->offset() - animation->shift();
-    if ((xThreshold > 0 && offsetFromTile.x() >= xThreshold)
-       || (xThreshold < 0 && offsetFromTile.x() <= xThreshold)
-       || (yThreshold > 0 && offsetFromTile.y() >= yThreshold)
-       || (yThreshold < 0 && offsetFromTile.y() <= yThreshold))
+    auto curFrame = animation->frames().at(animation->currentFrame()).get();
+    Point curFrameOfs(curFrame->xOffset(), curFrame->yOffset());
+    if (isOutsideOfHexForDirection(curFrameOfs, _orientation))
     {
         auto hexagon = movementQueue()->back();
         movementQueue()->pop_back();
@@ -548,33 +554,38 @@ void CritterObject::onMovementAnimationFrame(Event::Event* event)
                 newAnimation->play();
                 animation = newAnimation.get();
                 _ui = move(newAnimation);
+                curFrame = animation->frames().at(animation->currentFrame()).get();
+                curFrameOfs = Point(curFrame->xOffset(), curFrame->yOffset());
             }
-            else if (animation->currentFrame() > 0)
+            // calculate offset to position animation correctly relative to current hex
+            Point ofs;
+            do
             {
-                // adjust offsets of all following frames
-                auto curFrame = animation->frames().at(animation->currentFrame()).get();
-                auto ofsP = Point(-curFrame->xOffset(), -curFrame->yOffset());
-                for (auto it = animation->frames().rbegin(); it != animation->frames().rend(); ++it)
-                {
-                    auto frame = (*it).get();
-                    frame->setXOffset(frame->xOffset() - curFrame->xOffset());
-                    frame->setYOffset(frame->yOffset() - curFrame->yOffset());
-                    if (frame == curFrame) break;
-                }
-                //animation->setOffset(animation->rawOffset() - Point(xThreshold, yThreshold));
-                Logger::critical("Critter") << "Offset at " << animation->currentFrame() << " by " << ofsP << " from " << offsetFromTile << std::endl;
+                ofs -= Point(xTileOffsets[_orientation], yTileOffsets[_orientation]);
+            } while (isOutsideOfHexForDirection(curFrameOfs + ofs, _orientation));
+            // adjust offsets of all following frames
+            for (auto it = animation->frames().rbegin(); it != animation->frames().rend(); ++it)
+            {
+                auto frame = (*it).get();
+                frame->setXOffset(frame->xOffset() + ofs.x());
+                frame->setYOffset(frame->yOffset() + ofs.y());
+                if (frame == curFrame) break;
             }
+            //animation->setOffset(animation->rawOffset() - Point(xThreshold, yThreshold));
+            Logger::critical("Critter") << "Offset at " << animation->currentFrame() << " by " << ofs << " from " << curFrameOfs << std::endl;
         }
     }
 }
 
 void CritterObject::onMovementAnimationEnded(Event::Event* event)
 {
-    auto newAnimation = _generateMovementAnimation();
-    newAnimation->frameHandler().add(bind(&CritterObject::onMovementAnimationFrame, this, placeholders::_1));
-    newAnimation->animationEndedHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
-    newAnimation->play();
-    _ui = move(newAnimation);
+    {
+        auto newAnimation = _generateMovementAnimation();
+        newAnimation->frameHandler().add(bind(&CritterObject::onMovementAnimationFrame, this, placeholders::_1));
+        newAnimation->animationEndedHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
+        newAnimation->play();
+        _ui = move(newAnimation);
+    }
 }
 
 unique_ptr<UI::Animation> CritterObject::_generateMovementAnimation()
