@@ -91,7 +91,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
         }
         else
         {
-            frame->setDuration((unsigned)std::round(10000.0/static_cast<double>(frm->framesPerSecond())));
+            frame->setDuration((unsigned)std::round(1000.0 / static_cast<double>(frm->framesPerSecond())));
         }
 
         x += frame->width();
@@ -254,8 +254,8 @@ void Animation::think()
 void Animation::render(bool eggTransparency)
 {
     auto& frame = _animationFrames.at(_currentFrame);
-    Point framePos = Point(frame->x(), frame->y());
-    Size frameSize = Size(frame->width(), frame->height());
+    Point framePos = frame->position();
+    Size frameSize = frame->size();
     Point offsetPosition = position() + offset();
     Point offsetFramePos = framePos + offset();
     Graphics::AnimatedPalette* pal = Game::getInstance()->animatedPalette();
@@ -378,14 +378,13 @@ void Animation::render(bool eggTransparency)
 
 Size Animation::size() const
 {
-    auto& frame = _animationFrames.at(_currentFrame);
-    return Size(frame->width(), frame->height());
+    return _animationFrames.at(_currentFrame)->size();
 }
 
 Point Animation::offset() const
 {
     auto& frame = _animationFrames.at(_currentFrame);
-    return _offset + Point(frame->xOffset(), frame->yOffset()) + shift();
+    return _offset + frame->offset() + shift();
 }
 
 Point Animation::rawOffset() const
@@ -408,11 +407,11 @@ unsigned int Animation::pixel(const Point& pos)
     const auto& frame = _animationFrames.at(_currentFrame);
 
     Point offsetPos = pos - offset();
-    if (!Rect::inRect(offsetPos, Size(frame->width(), frame->height())))
+    if (!Rect::inRect(offsetPos, frame->size()))
     {
         return 0;
     }
-    return Base::pixel(offsetPos + Point(frame->x(), frame->y()));
+    return Base::pixel(offsetPos + frame->position());
 }
 
 void Animation::play()

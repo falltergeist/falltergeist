@@ -523,6 +523,9 @@ bool isOutsideOfHexForDirection(Point offset, Orientation orient)
 }
 
 // TODO: refactor
+// I suggest processing all frames beforehand - adjusting positions to remain within hex boundaries 
+// and defining "action frames" (multiple frames per animation). This will allow to re-use Animation object 
+// for different animation cycles. 
 void CritterObject::onMovementAnimationFrame(Event::Event* event)
 {
     auto animation = dynamic_cast<UI::Animation*>(ui());
@@ -543,7 +546,8 @@ void CritterObject::onMovementAnimationFrame(Event::Event* event)
         {
             auto nextHexagon = movementQueue()->back();
             auto nextOrientation = this->hexagon()->orientationTo(nextHexagon);
-            if (nextOrientation != orientation())
+            Point ofs;
+            if (nextOrientation != _orientation)
             {
                 _orientation = nextOrientation;
                 auto newAnimation = _generateMovementAnimation();
@@ -554,35 +558,40 @@ void CritterObject::onMovementAnimationFrame(Event::Event* event)
                 animation = newAnimation.get();
                 _ui = move(newAnimation);
                 curFrame = animation->frames().at(animation->currentFrame()).get();
+                            
+                // on turns, center frames on current hex
+                ofs -= curFrame->offset();
             }
-            // calculate offset to position animation correctly relative to current hex
-            Point ofs, oldOfs = curFrame->offset();
-            do
+            else
             {
                 ofs -= Point(xTileOffsets[_orientation], yTileOffsets[_orientation]);
-            } while (isOutsideOfHexForDirection(curFrame->offset() + ofs, _orientation));
-            // adjust offsets of all following frames
-            for (auto it = animation->frames().rbegin(); it != animation->frames().rend(); ++it)
-            {
-                auto frame = (*it).get();
-                frame->setOffset(frame->offset() + ofs);
-                if (frame == curFrame) break;
             }
-            //animation->setOffset(animation->rawOffset() - Point(xThreshold, yThreshold));
-            Logger::critical("Critter") << "Offset at " << animation->currentFrame() << " by " << ofs << " from " << oldOfs << std::endl;
+            // TODO: add Point::empty(), Point::operator bool()
+            if (ofs.x() || ofs.y())
+            {
+                Point oldOfs = curFrame->offset();
+                // adjust offsets of all following frames
+                for (auto it = animation->frames().rbegin(); it != animation->frames().rend(); ++it)
+                {
+                    auto frame = (*it).get();
+                    frame->setOffset(frame->offset() + ofs);
+                    if (frame == curFrame) break;
+                }
+                Logger::critical("Critter") << "Offset at " << animation->currentFrame() << " by " << ofs << " from " << oldOfs << std::endl;
+            }            
         }
     }
 }
 
 void CritterObject::onMovementAnimationEnded(Event::Event* event)
 {
-    {
-        auto newAnimation = _generateMovementAnimation();
-        newAnimation->frameHandler().add(bind(&CritterObject::onMovementAnimationFrame, this, placeholders::_1));
-        newAnimation->animationEndedHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
-        newAnimation->play();
-        _ui = move(newAnimation);
-    }
+    // it is neccesary to generate new animation with "fresh" frame offsets, otherwise
+    // CritterObject::onMovementAnimationFrame() won't be able to detect hex switches.
+    auto newAnimation = _generateMovementAnimation();
+    newAnimation->frameHandler().add(bind(&CritterObject::onMovementAnimationFrame, this, placeholders::_1));
+    newAnimation->animationEndedHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
+    newAnimation->play();
+    _ui = move(newAnimation);
 }
 
 unique_ptr<UI::Animation> CritterObject::_generateMovementAnimation()
