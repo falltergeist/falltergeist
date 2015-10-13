@@ -527,8 +527,7 @@ void CritterObject::onMovementAnimationFrame(Event::Event* event)
 {
     auto animation = dynamic_cast<UI::Animation*>(ui());
     auto curFrame = animation->frames().at(animation->currentFrame()).get();
-    Point curFrameOfs(curFrame->xOffset(), curFrame->yOffset());
-    if (isOutsideOfHexForDirection(curFrameOfs, _orientation))
+    if (isOutsideOfHexForDirection(curFrame->offset(), _orientation))
     {
         auto hexagon = movementQueue()->back();
         movementQueue()->pop_back();
@@ -555,24 +554,22 @@ void CritterObject::onMovementAnimationFrame(Event::Event* event)
                 animation = newAnimation.get();
                 _ui = move(newAnimation);
                 curFrame = animation->frames().at(animation->currentFrame()).get();
-                curFrameOfs = Point(curFrame->xOffset(), curFrame->yOffset());
             }
             // calculate offset to position animation correctly relative to current hex
-            Point ofs;
+            Point ofs, oldOfs = curFrame->offset();
             do
             {
                 ofs -= Point(xTileOffsets[_orientation], yTileOffsets[_orientation]);
-            } while (isOutsideOfHexForDirection(curFrameOfs + ofs, _orientation));
+            } while (isOutsideOfHexForDirection(curFrame->offset() + ofs, _orientation));
             // adjust offsets of all following frames
             for (auto it = animation->frames().rbegin(); it != animation->frames().rend(); ++it)
             {
                 auto frame = (*it).get();
-                frame->setXOffset(frame->xOffset() + ofs.x());
-                frame->setYOffset(frame->yOffset() + ofs.y());
+                frame->setOffset(frame->offset() + ofs);
                 if (frame == curFrame) break;
             }
             //animation->setOffset(animation->rawOffset() - Point(xThreshold, yThreshold));
-            Logger::critical("Critter") << "Offset at " << animation->currentFrame() << " by " << ofs << " from " << curFrameOfs << std::endl;
+            Logger::critical("Critter") << "Offset at " << animation->currentFrame() << " by " << ofs << " from " << oldOfs << std::endl;
         }
     }
 }

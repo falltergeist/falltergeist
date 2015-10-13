@@ -79,12 +79,10 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
         yOffset += frm->offsetY(direction, f);
 
         auto frame = make_unique<AnimationFrame>();
-        frame->setWidth(frm->directions()->at(direction)->frames()->at(f)->width());
-        frame->setHeight(frm->directions()->at(direction)->frames()->at(f)->height());
-        frame->setXOffset((unsigned)xOffset);
-        frame->setYOffset((unsigned)yOffset);
-        frame->setY(y);
-        frame->setX(x);
+        auto srcFrame = frm->directions()->at(direction)->frames()->at(f);
+        frame->setSize(Size(srcFrame->width(), srcFrame->height()));
+        frame->setOffset({xOffset, yOffset});
+        frame->setPosition(Point(x, y));
 
         auto fps = frm->framesPerSecond();
         if (fps == 0)
