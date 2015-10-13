@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Event/Event.h"
 #include "../Game/Timer.h"
 #include "../Game/Game.h"
 #include "../Game/Time.h"
