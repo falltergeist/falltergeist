@@ -405,9 +405,12 @@ unsigned int Animation::pixel(const Point& pos)
 
 void Animation::play()
 {
-    _playing = true;
-    _ended = false;
-    _frameTicks = SDL_GetTicks();
+    if (!_playing)
+    {
+        _playing = true;
+        _ended = false;
+        _frameTicks = SDL_GetTicks();
+    }
 }
 
 void Animation::stop()

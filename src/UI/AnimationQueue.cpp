@@ -109,7 +109,7 @@ void AnimationQueue::think()
                 }
             }
         }
-        else
+        else if (!currentAnimation()->playing())
         {
             currentAnimation()->play();
         }
