@@ -47,12 +47,13 @@ public:
     void think() override;
     void render(bool eggTransparency = false) override;
 
+    /**
+     * Additional offset, specific to current direction and taken from source FRM file.
+     */
     const Point& shift() const;
     void setShift(const Point& value);
 
     Size size() const override;
-    Point offset() const override;
-    Point rawOffset() const;
 
     unsigned int pixel(const Point& pos) override;
 
@@ -62,9 +63,11 @@ public:
 
     unsigned int currentFrame() const;
     void setCurrentFrame(unsigned int value);
+    AnimationFrame* currentFramePtr() const;
 
     unsigned int actionFrame() const;
     void setActionFrame(unsigned int value);
+    AnimationFrame* actionFramePtr() const;
 
     bool ended() const;
     bool playing() const;

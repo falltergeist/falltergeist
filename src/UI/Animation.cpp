@@ -256,8 +256,8 @@ void Animation::render(bool eggTransparency)
     auto& frame = _animationFrames.at(_currentFrame);
     Point framePos = frame->position();
     Size frameSize = frame->size();
-    Point offsetPosition = position() + offset();
-    Point offsetFramePos = framePos + offset();
+    Point offsetPosition = position() + shift() + frame->offset();
+    Point offsetFramePos = framePos + shift() + frame->offset();
     Graphics::AnimatedPalette* pal = Game::getInstance()->animatedPalette();
 
     if (eggTransparency)
@@ -381,17 +381,6 @@ Size Animation::size() const
     return _animationFrames.at(_currentFrame)->size();
 }
 
-Point Animation::offset() const
-{
-    auto& frame = _animationFrames.at(_currentFrame);
-    return _offset + frame->offset() + shift();
-}
-
-Point Animation::rawOffset() const
-{
-    return _offset;
-}
-
 const Point& Animation::shift() const
 {
     return _shift;
@@ -454,6 +443,11 @@ void Animation::setCurrentFrame(unsigned int value)
     _progress = _reverse ? _animationFrames.size() - _currentFrame - 1 : _currentFrame;
 }
 
+AnimationFrame* Animation::currentFramePtr() const
+{
+    return _animationFrames.at(_currentFrame).get();
+}
+
 unsigned int Animation::actionFrame() const
 {
     return _actionFrame;
@@ -462,6 +456,11 @@ unsigned int Animation::actionFrame() const
 void Animation::setActionFrame(unsigned int value)
 {
     _actionFrame = value;
+}
+
+AnimationFrame* Animation::actionFramePtr() const
+{
+    return _animationFrames.at(_actionFrame).get();
 }
 
 Event::Handler& Animation::frameHandler()

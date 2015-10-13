@@ -529,9 +529,10 @@ bool isOutsideOfHexForDirection(Point offset, Orientation orient)
 void CritterObject::onMovementAnimationFrame(Event::Event* event)
 {
     auto animation = dynamic_cast<UI::Animation*>(ui());
-    auto curFrame = animation->frames().at(animation->currentFrame()).get();
-    if (isOutsideOfHexForDirection(curFrame->offset(), _orientation))
+    auto curFrameOfs = animation->offset() + animation->currentFramePtr()->offset();
+    if (isOutsideOfHexForDirection(curFrameOfs, _orientation))
     {
+        // if we stepped too much away from current hex center, switch to the next hex
         auto hexagon = movementQueue()->back();
         movementQueue()->pop_back();
         Game::getInstance()->locationState()->moveObjectToHexagon(this, hexagon);
@@ -557,41 +558,29 @@ void CritterObject::onMovementAnimationFrame(Event::Event* event)
                 newAnimation->play();
                 animation = newAnimation.get();
                 _ui = move(newAnimation);
-                curFrame = animation->frames().at(animation->currentFrame()).get();
+                curFrameOfs = animation->currentFramePtr()->offset();
                             
                 // on turns, center frames on current hex
-                ofs -= curFrame->offset();
+                ofs -= curFrameOfs;
             }
             else
             {
                 ofs -= Point(xTileOffsets[_orientation], yTileOffsets[_orientation]);
             }
-            // TODO: add Point::empty(), Point::operator bool()
-            if (ofs.x() || ofs.y())
-            {
-                Point oldOfs = curFrame->offset();
-                // adjust offsets of all following frames
-                for (auto it = animation->frames().rbegin(); it != animation->frames().rend(); ++it)
-                {
-                    auto frame = (*it).get();
-                    frame->setOffset(frame->offset() + ofs);
-                    if (frame == curFrame) break;
-                }
-                Logger::critical("Critter") << "Offset at " << animation->currentFrame() << " by " << ofs << " from " << oldOfs << std::endl;
-            }            
+            animation->setOffset(animation->offset() + ofs);
         }
     }
 }
 
 void CritterObject::onMovementAnimationEnded(Event::Event* event)
 {
-    // it is neccesary to generate new animation with "fresh" frame offsets, otherwise
-    // CritterObject::onMovementAnimationFrame() won't be able to detect hex switches.
-    auto newAnimation = _generateMovementAnimation();
-    newAnimation->frameHandler().add(bind(&CritterObject::onMovementAnimationFrame, this, placeholders::_1));
-    newAnimation->animationEndedHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
-    newAnimation->play();
-    _ui = move(newAnimation);
+    auto animation = dynamic_cast<UI::Animation*>(ui());
+    if (!animation) throw Exception("UI::Animation expected!");
+    // get offset of the last frame
+    Point lastFrameOfs = animation->offset() + animation->currentFramePtr()->offset();
+    animation->setCurrentFrame(0);
+    animation->setOffset(lastFrameOfs);
+    animation->play();
 }
 
 unique_ptr<UI::Animation> CritterObject::_generateMovementAnimation()

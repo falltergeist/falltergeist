@@ -411,12 +411,6 @@ void Location::render()
     //_roof->render();
     if (active())
     {
-        auto plAnim = dynamic_cast<UI::Animation*>(Game::getInstance()->player()->ui());
-        auto plCurFr = plAnim->frames().at(plAnim->currentFrame()).get();
-        _hexagonInfo->setText(
-          "\nFrame: " + std::to_string(plAnim->currentFrame()) 
-        + "\nOffset: " + to_string(plAnim->offset()) 
-        + "\nFr. Ofs: "  + std::to_string((int)plCurFr->xOffset()) + ", " + std::to_string((int)plCurFr->yOffset()));
         _hexagonInfo->render();
     }
 
