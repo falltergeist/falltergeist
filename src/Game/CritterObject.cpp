@@ -21,6 +21,7 @@
 #include "../Game/CritterObject.h"
 
 // C++ standard includes
+#include <array>
 #include <string>
 
 // Falltergeist includes
