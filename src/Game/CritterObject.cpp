@@ -617,6 +617,18 @@ UI::Animation* CritterObject::setActionAnimation(const string& action)
     return animation;
 }
 
+UI::Animation* CritterObject::setWeaponAnimation(char animCode)
+{
+    animCode = tolower(animCode);
+    if (animCode < 'c' || animCode > 'l') throw Exception(std::string("Invalid weapon anim code: ") + animCode);
+    auto anim = setActionAnimation(_generateWeaponFrmString() + animCode);
+    anim->animationEndedHandler().add([this](Event::Event* evt)
+        {
+            setActionAnimation("aa")->stop();
+        });
+    return anim;
+}
+
 void CritterObject::_generateUi()
 {
     setActionAnimation("aa")->stop();

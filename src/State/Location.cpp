@@ -238,6 +238,7 @@ void Location::setLocation(const std::string& name)
             player->setLeftHandSlot(dynamic_cast<Game::WeaponItemObject*>(leftHand));
             auto rightHand = Game::ObjectFactory::getInstance()->createObject(0x00000007); // spear
             player->setRightHandSlot(dynamic_cast<Game::WeaponItemObject*>(rightHand));
+            player->setActionAnimation("aa")->stop();
         }
         player->setPID(0x01000001);
         player->setOrientation(mapFile->defaultOrientation());

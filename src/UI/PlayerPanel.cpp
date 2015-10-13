@@ -39,6 +39,7 @@
 #include "../State/SaveGame.h"
 #include "../State/Skilldex.h"
 #include "../State/WorldMap.h"
+#include "../UI/Animation.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/SmallCounter.h"
@@ -210,7 +211,28 @@ void PlayerPanel::playWindowOpenSfx()
 void PlayerPanel::changeHand()
 {
     auto player = Game::getInstance()->player();
+    auto lastSlot = player->currentHandSlot();
+    auto takeOut = [player](Event::Event* evt)
+        {
+            if (player->currentHandSlot())
+            {
+                player->setWeaponAnimation('C'); // takeout
+            }
+        };
+    if (lastSlot)
+    {
+        // put away
+        auto anim = player->setWeaponAnimation('D');
+        Event::Handler origHandler = anim->animationEndedHandler();
+        anim->animationEndedHandler().clear();
+        anim->animationEndedHandler().add(takeOut);
+        anim->animationEndedHandler().add(origHandler);
+    }
     player->setCurrentHand(player->currentHand() == HAND::RIGHT ? HAND::LEFT : HAND::RIGHT);
+    if (!lastSlot)
+    {
+        takeOut(nullptr);
+    }    
     playWindowOpenSfx();
 
 }
@@ -223,7 +245,13 @@ void PlayerPanel::openGameMenu()
 
 void PlayerPanel::openInventory()
 {
-    Game::getInstance()->pushState(new State::Inventory());
+    auto state = new State::Inventory();
+    state->popHandler().add([this](Event::State* evt)
+        {
+            // update player frame
+            Game::getInstance()->player()->setActionAnimation("aa")->stop();
+        });
+    Game::getInstance()->pushState(state);
     playWindowOpenSfx();
 }
 

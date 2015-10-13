@@ -158,6 +158,7 @@ public:
     virtual void stopMovement();
 
     virtual UI::Animation* setActionAnimation(const std::string& action);
+    UI::Animation* setWeaponAnimation(char animCode);
 
 protected:
     bool _moving  = false;
