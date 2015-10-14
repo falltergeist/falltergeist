@@ -35,9 +35,11 @@ namespace Falltergeist
 namespace UI
 {
 
-class Image : public Falltergeist::UI::Base
+class Image : public Base
 {
 public:
+    using Base::setTexture;
+
     Image(const std::string& filename);
     Image(unsigned int width, unsigned int height);
     Image(const Size& size);
@@ -45,6 +47,8 @@ public:
     Image(Graphics::Texture* texture);
     Image(libfalltergeist::Frm::File* frm, unsigned int direction);
     ~Image() override;
+
+    void setTexture(const std::string& filename);
 };
 
 }

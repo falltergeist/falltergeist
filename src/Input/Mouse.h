@@ -23,6 +23,7 @@
 // C++ standard includes
 #include <memory>
 #include <vector>
+#include <UI/Image.h>
 
 // Falltergeist includes
 #include "../Point.h"
@@ -41,6 +42,7 @@ namespace Input
 class Mouse
 {
 public:
+    // TODO: need to consider getting rid of mouse cursor state stack, it's not convenient to use
     enum class Cursor : unsigned
     {
         NONE           = 0,
@@ -65,9 +67,11 @@ public:
         ACTION         = 19,
         ACTION_REVERSE = 20,
         WAIT           = 21,
-        HAND           = 22
+        HAND           = 22,
+        SMALL_UP_ARROW = 23,
+        SMALL_DOWN_ARROW = 24
     };
-
+    // TODO: this is specific to CursorDropdown state, should not be here
     enum class Icon : unsigned
     {
         ROTATE = 1,

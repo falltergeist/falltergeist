@@ -117,15 +117,20 @@ public:
      */
     void setSize(const Size& size);
 
+    void setWidth(int width);
+
 
     virtual void handle(Event::Event* event) override;
 
-/**
+    /**
      * Size of actual text content of the text area.
      */
     Size textSize();
 
-    void setWidth(int width);
+    /**
+     * Actual number of lines contained within TextArea. Will be greater than number of visible lines when overflown.
+     */
+    int numLines();
 
     /**
      * Whether Word Wrap is currently enabled or not.
@@ -138,6 +143,30 @@ public:
     void setWordWrap(bool wordWrap);
 
     /**
+     * Top and left text padding.
+     */
+    const Size& paddingTopLeft() const;
+    /**
+     * Sets top and left text padding, in pixels, relative to TextArea position.
+     */
+    void setPaddingTopLeft(const Size& paddingTopLeft);
+
+    /**
+     * Bottom and right text padding.
+     */
+    const Size& paddingBottomRight() const;
+    /**
+     * Sets bottom and right text padding, ix pixels, relative to TextArea position + size.
+     * Has no effect if size is not set.
+     */
+    void setPaddingBottomRight(const Size& paddingBottomRight);
+
+    /**
+     * Sets both top-left and bottom-right padding.
+     */
+    void setPadding(const Size& topLeft, const Size& bottomRight);
+
+/**
      * Whether text outline is currently enabled or not.
      */
     bool outline() const;
@@ -156,6 +185,22 @@ public:
      * Sets text outline color. 0 - disables outline, any other color will enable it.
      */
     void setOutlineColor(unsigned int color);
+
+    /**
+     * Current line offset.
+     */
+    int lineOffset() const;
+    /**
+     * Sets number of lines to adjust vertical position. Positive - up, negative - down.
+     */
+    void setLineOffset(int);
+
+    const std::vector<int>& customLineShifts() const;
+    /**
+     * Sets custom horizontal shifting for each if displayed line. This is applied after alignment and doesn't affect TextArea size.
+     */
+    void setCustomLineShifts(std::vector<int> shifts);
+
 
     Font* font();
     void setFont(Font* font);
@@ -215,7 +260,30 @@ public:
     TextArea& operator=(signed value);
 
 protected:
+    struct TextSymbol
+    {
+        uint8_t chr;
+        Point position;
+        Font* font;
+    };
+
+    struct Line
+    {
+        // line width in pixels
+        int width = 0;
+        std::vector<TextSymbol> symbols;
+        
+        bool operator < (const Line& rhs) const
+        { 
+            return width < rhs.width; 
+        }
+    };
+
+    /**
+     * If true, _symbols will be regenerated on next render().
+     */
     bool _changed = true;
+
     std::vector<TextSymbol> _symbols;
     std::string _text;
     Font* _font = nullptr;
@@ -229,11 +297,20 @@ protected:
     Size _size;
 
     /**
-     * Real size of TextArea on screen, as determined by previous _calculate() call.
+     * Real size of TextArea on screen, as determined by previous _updateSymbols() call.
      */
     Size _calculatedSize;
+    /**
+     * Lines of text. Cleared along with _changed flag when it is required to recalculate symbol positions.
+     */
+    std::vector<Line> _lines;
+
+    int _lineOffset = 0;
 
     bool _wordWrap = false;
+
+    Size _paddingTopLeft, _paddingBottomRight;
+    std::vector<int> _customLineShifts;
 
     // TODO: implement
     unsigned int _backgroundColor = 0;
@@ -241,8 +318,23 @@ protected:
     unsigned int _outlineColor = 0;
     unsigned int _timestampCreated = 0;
 
-    void _calculate();
+    /**
+     * Update symbols, if needed.
+     */
+    virtual void _updateSymbols();
+
+    /**
+     * If needed, updates lines by splitting source string.
+     */
+    virtual void _updateLines();
+    
     void _addOutlineSymbol(const TextSymbol& symb, Font* font, int32_t ofsX, int32_t ofsY);
+
+    /**
+     * Call when it is required to recalculate symbol positions.
+     * @param lines true to also rebuild line composition.
+     */
+    void _needUpdate(bool lines = false);
 
 };
 

@@ -42,6 +42,7 @@ enum MSG_TYPE
     MSG_STATS,
     MSG_SKILLDEX,
     MSG_DIALOG_BOX,
+    MSG_PROTO,
     MSG_PROTO_ITEMS,
 
     // Should be last entry.

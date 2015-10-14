@@ -68,10 +68,51 @@ void CritterDialog::init()
     auto background = new UI::Image("art/intrface/di_talk.frm");
     addUI("background", background);
 
-    auto question = new UI::TextArea("question", 140, -55);
-    question->setSize({370, 0});
+    auto question = new UI::TextArea("question", 140, -62);
+    question->setSize({375, 53});
+    // TODO: maybe padding properties should be removed from TextArea to simplify it. Use invisible panel for mouse interactions.
+    question->setPadding({0, 5}, {0, 5});
     question->setWordWrap(true);
     addUI("question", question);
+
+    // TODO: maybe move text scrolling into separate UI? Though it is only in two places and works slightly differently...
+    question->mouseClickHandler().add([this, question](Event::Mouse* event)
+        {
+            Point relPos = event->position() - question->position();
+            if (relPos.y() < (question->size().height() / 2))
+            {
+                if (question->lineOffset() > 0)
+                {
+                    question->setLineOffset(question->lineOffset() - 4);
+                }
+            }
+            else if (question->lineOffset() < question->numLines() - 4)
+            {
+                question->setLineOffset(question->lineOffset() + 4);
+            }
+        });
+
+    question->mouseMoveHandler().add([this, question](Event::Mouse* event)
+        {
+            if (question->numLines() > 4)
+            {
+                auto mouse = Game::getInstance()->mouse();
+                Point relPos = event->position() - question->position();
+                auto state = relPos.y() < (question->size().height() / 2)
+                    ? Input::Mouse::Cursor::SMALL_UP_ARROW
+                    : Input::Mouse::Cursor::SMALL_DOWN_ARROW;
+
+                if (mouse->state() != state)
+                {
+                    mouse->setState(state);
+                }
+            }
+        });
+
+     question->mouseOutHandler().add([question](Event::Mouse* event)
+        {
+            Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
+        });
 
     // Interface buttons
     auto reviewButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_REVIEW_BUTTON, 13, 154);
@@ -88,10 +129,11 @@ void CritterDialog::think()
     State::think();
 }
 
+// TODO: add auto-text scrolling after 10 seconds (when it's longer than 4 lines)
 void CritterDialog::setQuestion(const std::string& value)
 {
     auto question = getTextArea("question");
-    question->setText(value);
+    question->setText(std::string("  ") + value);
 }
 
 void CritterDialog::onAnswerIn(Event::Mouse* event)
@@ -169,6 +211,16 @@ void CritterDialog::onKeyDown(Event::Keyboard* event)
 
         if (keyOffset < _answers.size()) _selectAnswer(keyOffset);
         return;
+    }
+
+    auto question = dynamic_cast<UI::TextArea*>(getUI("question"));
+    if (key == SDLK_UP && question->lineOffset() > 0)
+    {
+        question->setLineOffset(question->lineOffset() - 4);
+    }
+    else if (key == SDLK_DOWN && question->lineOffset() < question->numLines() - 4)
+    {
+        question->setLineOffset(question->lineOffset() + 4);
     }
 }
 

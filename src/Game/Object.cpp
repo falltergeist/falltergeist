@@ -26,6 +26,7 @@
 // Falltergeist includes
 #include "../Base/StlFeatures.h"
 #include "../Exception.h"
+#include "../functions.h"
 #include "../Graphics/Renderer.h"
 #include "../Game/CritterObject.h"
 #include "../Game/Defines.h"
@@ -386,7 +387,12 @@ void Object::description_p_proc()
     }
     if (useDefault)
     {
-        Game::getInstance()->locationState()->displayMessage(description());
+        auto descr = description();
+        if (descr.empty())
+        {
+            descr = _t(MSG_TYPE::MSG_PROTO, 493);
+        }
+        Game::getInstance()->locationState()->displayMessage(descr);
     }
 }
 
