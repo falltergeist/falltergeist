@@ -68,7 +68,6 @@ void Start::init()
 
     setPosition((renderer->size() - Point(640, 480)) / 2);
 
-    srand(time(NULL)); // seed
     addUI("splash", new UI::Image("art/splash/" + splashes.at(rand() % splashes.size())));
 
     _splashTicks = SDL_GetTicks();

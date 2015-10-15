@@ -113,6 +113,8 @@ void Game::init(std::unique_ptr<Settings> settings)
     _currentTime->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
     IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
+
+    srand(time(0)); /// randomization
 }
 
 Game::~Game()
