@@ -20,11 +20,11 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Game/Game.h"
 #include "../../Logger.h"
+#include "../../State/Location.h"
 #include "../../VM/Handlers/Opcode80F0Handler.h"
 #include "../../VM/VM.h"
-
-
 
 // Third party includes
 
@@ -38,9 +38,14 @@ Opcode80F0Handler::Opcode80F0Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80F0Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80F0] [=] void add_timer_event(void* obj, int time, int info)" << std::endl;
-    _vm->dataStack()->popInteger();
-    _vm->dataStack()->popInteger();
-    _vm->dataStack()->popObject();
+    int fixedParam = _vm->dataStack()->popInteger();
+    int delay = _vm->dataStack()->popInteger();
+    Game::Object* object = _vm->dataStack()->popObject();
+    auto state = Game::Game::getInstance()->locationState();
+    if (state)
+    {
+        state->addTimerEvent(object, delay, fixedParam);
+    }
 }
 
 }

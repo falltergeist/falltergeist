@@ -30,7 +30,7 @@
 #include "../Game/Time.h"
 
 // Third party includes
-#include "SDL.h"
+#include <SDL.h>
 
 namespace Falltergeist
 {
@@ -40,6 +40,7 @@ namespace Audio
 }
 namespace Event
 {
+    class Event;
     class Dispatcher;
     class Event;
 }
