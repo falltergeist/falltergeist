@@ -23,6 +23,7 @@
 // C++ standard includes
 #include <algorithm>
 #include <sstream>
+#include <ctime>
 
 // Falltergeist includes
 #include "../Audio/Mixer.h"
