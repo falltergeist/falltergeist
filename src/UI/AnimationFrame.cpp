@@ -39,64 +39,64 @@ AnimationFrame::~AnimationFrame()
 {
 }
 
-void AnimationFrame::setX(unsigned int x)
+Point AnimationFrame::position() const
 {
-    _x = x;
+    return _position;
+}
+
+void AnimationFrame::setPosition(const Point& pos)
+{
+    _position = pos;
 }
 
 unsigned int AnimationFrame::x() const
 {
-    return _x;
-}
-
-void AnimationFrame::setY(unsigned int y)
-{
-    _y = y;
+    return _position.x();
 }
 
 unsigned int AnimationFrame::y() const
 {
-    return _y;
+    return _position.y();
 }
 
-void AnimationFrame::setWidth(unsigned int width)
+Size AnimationFrame::size() const
 {
-    _width = width;
+    return _size;
+}
+
+void AnimationFrame::setSize(const Size& size)
+{
+    _size = size;
 }
 
 unsigned int AnimationFrame::width() const
 {
-    return _width;
-}
-
-void AnimationFrame::setHeight(unsigned int height)
-{
-    _height = height;
+    return _size.width();
 }
 
 unsigned int AnimationFrame::height() const
 {
-    return _height;
+    return _size.height();
 }
 
-void AnimationFrame::setXOffset(unsigned int xOffset)
+Point AnimationFrame::offset() const
 {
-    _xOffset = xOffset;
+    return _offset;
 }
 
-unsigned int AnimationFrame::xOffset() const
+void AnimationFrame::setOffset(const Point& ofs)
 {
-    return _xOffset;
+    _offset = ofs;
 }
 
-void AnimationFrame::setYOffset(unsigned int yOffset)
+int AnimationFrame::xOffset() const
 {
-    _yOffset = yOffset;
+    return _offset.x();
 }
 
-unsigned int AnimationFrame::yOffset() const
+int AnimationFrame::yOffset() const
 {
-    return _yOffset;
+    return _offset.y();
 }
 
 void AnimationFrame::setDuration(unsigned int duration)

@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Point.h"
 
 // Third party includes
 
@@ -36,40 +37,38 @@ class AnimationFrame
 public:
     AnimationFrame();
     ~AnimationFrame();
+    
+    Point position() const;
+    void setPosition(const Point&);
 
     unsigned int x() const;
-    void setX(unsigned int x);
-
     unsigned int y() const;
-    void setY(unsigned int y);
-
+    
+    
+    Size size() const;
+    void setSize(const Size&);
+    
     unsigned int width() const;
-    void setWidth(unsigned int width);
-
     unsigned int height() const;
-    void setHeight(unsigned int height);
+    
+    Point offset() const;
+    void setOffset(const Point&);
 
-    unsigned int xOffset() const;
-    void setXOffset(unsigned int xOffset);
-
-    unsigned int yOffset() const;
-    void setYOffset(unsigned int yOffset);
-
+    int xOffset() const;
+    int yOffset() const;
+    
     unsigned int duration() const;
     void setDuration(unsigned int duration);
 
 protected:
     // Offset of animation frame position relative to sprite position
-    unsigned int _x = 0;
-    unsigned int _y = 0;
+    Point _position;
 
     // Animation frame width and height
-    unsigned int _height = 0;
-    unsigned int _width = 0;
+    Size _size;
 
     // Offset of animation frame on screen relative to first animation frame
-    unsigned int _xOffset = 0;
-    unsigned int _yOffset = 0;
+    Point _offset;
 
     // Duration of animation frame in milliseconds
     unsigned int _duration = 0;

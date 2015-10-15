@@ -27,6 +27,7 @@
 #include "../Base/StlFeatures.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
+#include "../Game/ArmorItemObject.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Game/ItemObject.h"

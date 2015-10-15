@@ -24,9 +24,7 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Game/ArmorItemObject.h"
 #include "../Game/Object.h"
-#include "../PathFinding/Hexagon.h"
 
 // Third party includes
 #include <libfalltergeist/Enums.h>
@@ -41,6 +39,7 @@ namespace UI
 namespace Game
 {
 class ItemObject;
+class ArmorItemObject;
 
 /**
  * Critter refers to player, all NPCs, creatures, robots, etc - all movable and shootable objects.
@@ -150,6 +149,7 @@ public:
 
     virtual void think();
     virtual void onMovementAnimationEnded(Event::Event* event);
+    virtual void onMovementAnimationFrame(Event::Event* event);
 
     virtual bool running() const;
     virtual void setRunning(bool value);
@@ -157,6 +157,9 @@ public:
     virtual void stopMovement();
 
     virtual UI::Animation* setActionAnimation(const std::string& action);
+    UI::Animation* setWeaponAnimation(char animCode);
+
+    UI::Animation* animation();
 
 protected:
     bool _moving  = false;
@@ -190,6 +193,7 @@ protected:
     std::vector<int> _damageThreshold = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::vector<ItemObject*> _inventory;
     std::vector<Hexagon*> _movementQueue;
+
     ArmorItemObject* _armorSlot = 0;
     ItemObject* _leftHandSlot = 0;
     ItemObject* _rightHandSlot = 0;
@@ -198,6 +202,8 @@ protected:
     virtual std::string _generateArmorFrmString();
     virtual std::string _generateWeaponFrmString();
     void _setupNextIdleAnim();
+    virtual void _generateUi();
+
 
 };
 

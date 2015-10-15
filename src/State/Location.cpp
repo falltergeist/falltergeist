@@ -53,6 +53,7 @@
 #include "../State/ExitConfirm.h"
 #include "../State/MainMenu.h"
 #include "../UI/Animation.h"
+#include "../UI/AnimationFrame.h"
 #include "../UI/AnimationQueue.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
@@ -206,6 +207,22 @@ void Location::setLocation(const std::string& name)
             }
         }
 
+        // TODO: use common interface...
+        if (auto critter = dynamic_cast<Game::CritterObject*>(object))
+        {
+            for (auto child : *mapObject->children())
+            {
+                auto item = dynamic_cast<Game::ItemObject*>(Game::ObjectFactory::getInstance()->createObject(child->PID()));
+                if (!item)
+                {
+                    Logger::error() << "Location::setLocation() - can't create object with PID: " << child->PID() << std::endl;
+                    continue;
+                }
+                item->setAmount(child->ammount());
+                critter->inventory()->push_back(item);
+            }
+        }
+
         if (mapObject->scriptId() > 0)
         {
             auto intFile = ResourceManager::getInstance()->intFileType(mapObject->scriptId());
@@ -238,6 +255,7 @@ void Location::setLocation(const std::string& name)
             player->setLeftHandSlot(dynamic_cast<Game::WeaponItemObject*>(leftHand));
             auto rightHand = Game::ObjectFactory::getInstance()->createObject(0x00000007); // spear
             player->setRightHandSlot(dynamic_cast<Game::WeaponItemObject*>(rightHand));
+            player->setActionAnimation("aa")->stop();
         }
         player->setPID(0x01000001);
         player->setOrientation(mapFile->defaultOrientation());
@@ -859,7 +877,10 @@ void Location::moveObjectToHexagon(Game::Object* object, Hexagon* hexagon)
     }
 
     object->setHexagon(hexagon);
-    hexagon->objects()->push_back(object);
+    if (hexagon)
+    {
+        hexagon->objects()->push_back(object);
+    }
 }
 
 void Location::destroyObject(Game::Object* object)

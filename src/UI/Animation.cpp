@@ -30,6 +30,7 @@
 #include "../Graphics/AnimatedPalette.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
+#include "../PathFinding/Hexagon.h"
 #include "../LocationCamera.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
@@ -79,12 +80,10 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
         yOffset += frm->offsetY(direction, f);
 
         auto frame = make_unique<AnimationFrame>();
-        frame->setWidth(frm->directions()->at(direction)->frames()->at(f)->width());
-        frame->setHeight(frm->directions()->at(direction)->frames()->at(f)->height());
-        frame->setXOffset((unsigned)xOffset);
-        frame->setYOffset((unsigned)yOffset);
-        frame->setY(y);
-        frame->setX(x);
+        auto srcFrame = frm->directions()->at(direction)->frames()->at(f);
+        frame->setSize(Size(srcFrame->width(), srcFrame->height()));
+        frame->setOffset({xOffset, yOffset});
+        frame->setPosition(Point(x, y));
 
         auto fps = frm->framesPerSecond();
         if (fps == 0)
@@ -93,7 +92,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
         }
         else
         {
-            frame->setDuration((unsigned)std::round(1000.0/static_cast<double>(frm->framesPerSecond())));
+            frame->setDuration((unsigned)std::round(1000.0 / static_cast<double>(frm->framesPerSecond())));
         }
 
         x += frame->width();
@@ -228,14 +227,17 @@ void Animation::think()
 {
     if (!_playing) return;
 
+    // TODO: handle cases when main loop FPS is lower than animation FPS
     if (SDL_GetTicks() - _frameTicks >= _animationFrames.at(_currentFrame)->duration())
     {
         _frameTicks = SDL_GetTicks();
 
         _progress += 1;
+        
         if (_progress < _animationFrames.size())
         {
             _currentFrame = _reverse ? _animationFrames.size() - _progress - 1 : _progress;
+            emitEvent(make_unique<Event::Event>("frame"), frameHandler());
             if (_actionFrame == _currentFrame)
             {
                 emitEvent(make_unique<Event::Event>("actionFrame"), actionFrameHandler());
@@ -253,10 +255,10 @@ void Animation::think()
 void Animation::render(bool eggTransparency)
 {
     auto& frame = _animationFrames.at(_currentFrame);
-    Point framePos = Point(frame->x(), frame->y());
-    Size frameSize = Size(frame->width(), frame->height());
-    Point offsetPosition = position() + offset();
-    Point offsetFramePos = framePos + offset();
+    Point framePos = frame->position();
+    Size frameSize = frame->size();
+    Point offsetPosition = position() + shift() + frame->offset();
+    Point offsetFramePos = framePos + shift() + frame->offset();
     Graphics::AnimatedPalette* pal = Game::getInstance()->animatedPalette();
 
     if (eggTransparency)
@@ -289,7 +291,7 @@ void Animation::render(bool eggTransparency)
         }
 
         auto camera = Game::getInstance()->locationState()->camera();
-        Point eggPos = dude->hexagon()->position() - camera->topLeft() - Point(63, 78) + dude->ui()->offset();
+        Point eggPos = dude->hexagon()->position() - camera->topLeft() + dude->eggOffset();
 
         Point eggDelta = position() - eggPos;
 
@@ -377,14 +379,7 @@ void Animation::render(bool eggTransparency)
 
 Size Animation::size() const
 {
-    auto& frame = _animationFrames.at(_currentFrame);
-    return Size(frame->width(), frame->height());
-}
-
-Point Animation::offset() const
-{
-    auto& frame = _animationFrames.at(_currentFrame);
-    return Point(frame->xOffset(), frame->yOffset()) + shift();
+    return _animationFrames.at(_currentFrame)->size();
 }
 
 const Point& Animation::shift() const
@@ -402,16 +397,21 @@ unsigned int Animation::pixel(const Point& pos)
     const auto& frame = _animationFrames.at(_currentFrame);
 
     Point offsetPos = pos - offset();
-    if (!Rect::inRect(offsetPos, Size(frame->width(), frame->height())))
+    if (!Rect::inRect(offsetPos, frame->size()))
     {
         return 0;
     }
-    return Base::pixel(offsetPos + Point(frame->x(), frame->y()));
+    return Base::pixel(offsetPos + frame->position());
 }
 
 void Animation::play()
 {
-    _playing = true;
+    if (!_playing)
+    {
+        _playing = true;
+        _ended = false;
+        _frameTicks = SDL_GetTicks();
+    }
 }
 
 void Animation::stop()
@@ -447,6 +447,16 @@ void Animation::setCurrentFrame(unsigned int value)
     _progress = _reverse ? _animationFrames.size() - _currentFrame - 1 : _currentFrame;
 }
 
+AnimationFrame* Animation::currentFramePtr() const
+{
+    return _animationFrames.at(_currentFrame).get();
+}
+
+Point Animation::frameOffset() const
+{
+    return offset() + currentFramePtr()->offset();
+}
+
 unsigned int Animation::actionFrame() const
 {
     return _actionFrame;
@@ -455,6 +465,16 @@ unsigned int Animation::actionFrame() const
 void Animation::setActionFrame(unsigned int value)
 {
     _actionFrame = value;
+}
+
+AnimationFrame* Animation::actionFramePtr() const
+{
+    return _animationFrames.at(_actionFrame).get();
+}
+
+Event::Handler& Animation::frameHandler()
+{
+    return _frameHandler;
 }
 
 Event::Handler& Animation::actionFrameHandler()
@@ -466,5 +486,6 @@ Event::Handler& Animation::animationEndedHandler()
 {
     return _animationEndedHandler;
 }
+
 }
 }

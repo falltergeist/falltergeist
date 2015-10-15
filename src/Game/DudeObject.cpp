@@ -268,5 +268,10 @@ void DudeObject::_generateUi()
     CritterObject::_generateUi();
 }
 
+Point DudeObject::eggOffset()
+{
+    return animation()->frameOffset() + animation()->shift() - Point(63, 78);
+}
+
 }
 }

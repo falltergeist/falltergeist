@@ -47,11 +47,13 @@ public:
     void think() override;
     void render(bool eggTransparency = false) override;
 
+    /**
+     * Additional offset, specific to current direction and taken from source FRM file.
+     */
     const Point& shift() const;
     void setShift(const Point& value);
 
     Size size() const override;
-    Point offset() const override;
 
     unsigned int pixel(const Point& pos) override;
 
@@ -61,16 +63,32 @@ public:
 
     unsigned int currentFrame() const;
     void setCurrentFrame(unsigned int value);
+    AnimationFrame* currentFramePtr() const;
+
+    /**
+     * Offset of the current frame.
+     */
+    Point frameOffset() const;
 
     unsigned int actionFrame() const;
     void setActionFrame(unsigned int value);
+    AnimationFrame* actionFramePtr() const;
 
     bool ended() const;
     bool playing() const;
 
+    /**
+     * Invoked when animation has ended.
+     */
     Event::Handler& animationEndedHandler();
-
+    /**
+     * Invoked when animation "action" frame is reached
+     */
     Event::Handler& actionFrameHandler();
+    /**
+     * Invoked on every frame of animation
+     */
+    Event::Handler& frameHandler();
 
 protected:
     bool _playing = false;
@@ -89,7 +107,7 @@ protected:
     std::vector<Graphics::Texture*> _monitorTextures;
     std::vector<Graphics::Texture*> _reddotTextures;
 
-    Event::Handler _actionFrameHandler, _animationEndedHandler;
+    Event::Handler _frameHandler, _actionFrameHandler, _animationEndedHandler;
 };
 
 }
