@@ -27,6 +27,15 @@
 
 // Third party includes
 
+#if defined(_MSC_VER)
+#define NORETURN __declspec(noreturn)
+#elif defined(__clang__) || defined(__GNUC__)
+// Use C++11 attribute, supported by Clang and g++ >= 4.8
+#define NORETURN [[noreturn]]
+#else
+#define NORETURN
+#endif
+
 namespace Falltergeist
 {
 class VM;
@@ -41,7 +50,7 @@ protected:
     // print warning message to log
     void _warning(const std::string& message);
     // prints error message to logs and throws VMErrorException
-    void _error(const std::string& message);
+    NORETURN void _error(const std::string& message);
 public:
     OpcodeHandler(VM* vm);
     virtual ~OpcodeHandler();

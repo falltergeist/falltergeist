@@ -33,45 +33,45 @@ namespace Falltergeist
 namespace Graphics
 {
 
-const std::array<unsigned int, 5> AnimatedPalette::_monitorsPalette = {
+const std::array<unsigned int, 5> AnimatedPalette::_monitorsPalette = {{
     0x6B6B6FFF,
     0x63677FFF,
     0x576B8FFF,
     0x0093A3FF,
     0x6BBBFFFF
-};
+}};
 
-const std::array<unsigned int, 4> AnimatedPalette::_slimePalette = {
+const std::array<unsigned int, 4> AnimatedPalette::_slimePalette = {{
     0x006C00FF,
     0x0B7307FF,
     0x1B7B0FFF,
     0x2B831BFF
-};
+}};
 
-const std::array<unsigned int, 6> AnimatedPalette::_shorePalette = {
+const std::array<unsigned int, 6> AnimatedPalette::_shorePalette = {{
     0x533F2BFF,
     0x4B3B2BFF,
     0x433727FF,
     0x3F3327FF,
     0x372F23FF,
     0x332B23FF
-};
+}};
 
-const std::array<unsigned int, 5> AnimatedPalette::_fireSlowPalette = {
+const std::array<unsigned int, 5> AnimatedPalette::_fireSlowPalette = {{
     0xFF0000FF,
     0xD70000FF,
     0x932B0BFF,
     0xFF7700FF,
     0xFF3B00FF
-};
+}};
 
-const std::array<unsigned int, 5> AnimatedPalette::_fireFastPalette = {
+const std::array<unsigned int, 5> AnimatedPalette::_fireFastPalette = {{
     0x470000FF,
     0x7B0000FF,
     0xB30000FF,
     0x7B0000FF,
     0x470000FF
-};
+}};
 
 AnimatedPalette::AnimatedPalette()
 {
