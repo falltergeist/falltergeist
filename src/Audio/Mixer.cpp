@@ -211,5 +211,17 @@ void Mixer::resumeMusic()
     _paused = false;
 }
 
+double Mixer::musicVolume()
+{
+    return (double)Mix_VolumeMusic(-1) / MIX_MAX_VOLUME;
+}
+    
+void Mixer::setMusicVolume(double volume)
+{
+    if (volume < 0.0) volume = 0.0;
+    else if (volume > 1.0) volume = 1.0;
+    Mix_VolumeMusic((int)(volume * MIX_MAX_VOLUME));
+}
+
 }
 }

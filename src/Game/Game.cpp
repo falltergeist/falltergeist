@@ -96,6 +96,7 @@ void Game::init(std::unique_ptr<Settings> settings)
     renderer()->setCaption(version.c_str());
 
     _mixer = make_unique<Audio::Mixer>();
+    _mixer->setMusicVolume(_settings->musicVolume());
     _mouse = make_unique<Input::Mouse>();
     _fpsCounter = make_unique<UI::FpsCounter>(renderer()->width() - 42, 2);
     _fpsCounter->setWidth(42);

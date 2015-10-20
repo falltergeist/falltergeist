@@ -21,6 +21,8 @@
 
 // Falltergeist includes
 #include "../functions.h"
+#include "../Audio/Mixer.h"
+#include "../Base/StlFeatures.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
@@ -40,6 +42,8 @@ namespace Falltergeist
 {
 namespace State
 {
+
+using namespace Base;
 
 SettingsMenu::SettingsMenu() : State()
 {
@@ -348,6 +352,10 @@ void SettingsMenu::init()
     auto musicVolumeSlider = new UI::Slider(backgroundX+384, backgroundY+196+51);
     musicVolumeSlider->setValue(Game::getInstance()->settings()->musicVolume());
     addUI("music_volume", musicVolumeSlider);
+    musicVolumeSlider->changeHandler().add([=](Event::Event* evt) 
+    {
+        Game::getInstance()->mixer()->setMusicVolume(musicVolumeSlider->value());
+    });
 
     // SOUND EFFECTS VOLUME SLIDER
     auto soundEffectsVolumeSlider = new UI::Slider(backgroundX+384, backgroundY+196+51*2);

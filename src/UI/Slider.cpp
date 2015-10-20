@@ -24,6 +24,7 @@
 
 // Falltergeist includes
 #include "../Audio/Mixer.h"
+#include "../Base/StlFeatures.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
 #include "../Game/Game.h"
@@ -36,6 +37,8 @@ namespace Falltergeist
 {
 namespace UI
 {
+
+using namespace Base;
 
 Slider::Slider(const Point& pos) : Base(pos)
 {
@@ -81,6 +84,7 @@ void Slider::handle(Event::Event* event)
                 }
                 _offset.setX(ofs.x());
                 _value = ((maxValue() - minValue()) / 218) * _offset.x();
+                emitEvent(make_unique<Event::Event>("change"), changeHandler());
                 Game::getInstance()->mixer()->playACMSound(_downSound);
                 Game::getInstance()->mixer()->playACMSound(_upSound);
                 return;
@@ -99,6 +103,7 @@ void Slider::_onDrag(Event::Mouse* event)
     {
         sender->_offset.setX(newOffset);
         sender->_value = ((sender->maxValue() - sender->minValue())/218)*sender->offset().x();
+        emitEvent(make_unique<Event::Event>("change"), changeHandler());
     }
 }
 
@@ -155,6 +160,12 @@ void Slider::setValue(double value)
 {
     _value = value;
     _offset.setX((218/(maxValue() - minValue())) * _value);
+    emitEvent(make_unique<Event::Event>("change"), changeHandler());
+}
+
+Event::Handler& Slider::changeHandler()
+{
+    return _changeHandler;
 }
 
 }
