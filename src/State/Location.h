@@ -132,6 +132,8 @@ protected:
     Game::Timer _ambientSfxTimer;
     // for VM opcode add_timer_event
     std::list<TimerEvent> _timerEvents;
+    // TODO: move to Game::Location class?
+    std::map<std::string, unsigned char> _ambientSfx;
 
     std::unique_ptr<HexagonGrid> _hexagonGrid;
     std::unique_ptr<LocationCamera> _camera;
