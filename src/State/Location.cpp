@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <algorithm>
+#include <cstdlib>
 #include <cmath>
 #include <list>
 
@@ -63,12 +64,14 @@
 #include "../UI/Tile.h"
 #include "../UI/TileMap.h"
 #include "../VM/VM.h"
+#include "../functions.h"
 
 // Third party includes
 #include <libfalltergeist/Gam/File.h>
 #include <libfalltergeist/Map/Elevation.h>
 #include <libfalltergeist/Map/File.h>
 #include <libfalltergeist/Map/Object.h>
+#include <libfalltergeist/Txt/MapsFile.h>
 
 namespace Falltergeist
 {
@@ -324,6 +327,55 @@ void Location::setLocation(const std::string& name)
             }
         }
     }
+    
+    auto maps = ResourceManager::getInstance()->mapsTxt()->maps();
+    auto mapShortName = path_basename(name, true);
+    auto it = std::find_if(maps.begin(), maps.end(), [&](const libfalltergeist::Txt::Map& map) 
+    {
+        return map.name == mapShortName; 
+    });
+    
+    if (it != maps.end())
+    {
+        if (!it->music.empty() && Game::getInstance()->settings()->musicVolume() > 0.0001)
+        {
+            Logger::info("Location") << "Playing music " << it->music << std::endl;
+            Game::getInstance()->mixer()->playACMMusic(it->music + ".acm");
+        }
+        else
+        {
+            Logger::info("Location") << "Map " << mapShortName << " has no music." << std::endl;
+        }
+        _ambientSfx = it->ambientSfx;
+        if (!_ambientSfx.empty())
+        {
+            _ambientSfxTimer.tickHandler().add([this, &mapShortName](Event::Event* evt) 
+            {
+                unsigned char rnd = std::rand() % 100, sum = 0;
+                auto it = _ambientSfx.cbegin();
+                while (it != _ambientSfx.cend() && (sum + it->second) < rnd) 
+                {
+                    sum += it->second;
+                    ++it;
+                }
+                if (it != _ambientSfx.cend())
+                {
+                    Logger::info("Location") << "Playing ambient sfx " << it->first << std::endl;
+                    Game::getInstance()->mixer()->playACMSound("sound/sfx/" + it->first + ".acm");
+                }
+                else
+                {
+                    Logger::error("Location") << "Could not match ambient sfx for map " << mapShortName << " with " << rnd << std::endl;
+                }
+                _ambientSfxTimer.start(std::rand() % 10000 + 20000);
+            });
+            _ambientSfxTimer.start(10000);
+        }
+        else
+        {
+            Logger::error("Location") << "No ambient sfx for map " << mapShortName << std::endl;
+        }
+    }
 }
 
 std::vector<Input::Mouse::Icon> Location::getCursorIconsForObject(Game::Object* object)
@@ -571,6 +623,7 @@ void Location::think()
 
     // timers processing
     _actionCursorTimer.think();
+    _ambientSfxTimer.think();
 
     for (auto it = _timerEvents.begin(); it != _timerEvents.end(); )
     {

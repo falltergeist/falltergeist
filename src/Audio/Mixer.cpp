@@ -211,5 +211,18 @@ void Mixer::resumeMusic()
     _paused = false;
 }
 
+double Mixer::musicVolume()
+{
+    return _musicVolume;
+}
+    
+void Mixer::setMusicVolume(double volume)
+{
+    // TODO: implement volume
+    if (volume < 0.0) volume = 0.0;
+    else if (volume > 1.0) volume = 1.0;
+    _musicVolume = volume;
+}
+
 }
 }

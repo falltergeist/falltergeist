@@ -38,8 +38,6 @@ namespace Event
 namespace UI
 {
 
-class ImageList;
-
 class Slider : public Falltergeist::UI::Base
 {
 public:
@@ -59,6 +57,8 @@ public:
 
     double value() const;
     void setValue(double value);
+    
+    Event::Handler& changeHandler();
 
 protected:
     ImageList _imageList;
@@ -67,6 +67,7 @@ protected:
     double _value = 0.0;
     std::string _downSound;
     std::string _upSound;
+    Event::Handler _changeHandler;
     
     void _onDrag(Event::Mouse* event);
     void _onLeftButtonDown(Event::Mouse* event);

@@ -52,14 +52,27 @@ public:
     void playMovieMusic(UI::MvePlayer* mve);
     void pauseMusic();
     void resumeMusic();
+    /**
+     * @return current music volume
+     */
+    double musicVolume();
+    /**
+     * @brief Sets volume of music
+     * @param volume from 0.0 to 1.0
+     */
+    void setMusicVolume(double volume);
+    
 protected:
     void _init();
+    
 private:
     void _musicCallback(void* udata, uint8_t* stream, uint32_t len);
     void _movieCallback(void* udata, uint8_t* stream, uint32_t len);
     std::unordered_map<std::string, Mix_Chunk*> _sfx;
     bool _paused = false;
     bool _loop = false;
+    
+    double _musicVolume = 1.0;
 };
 
 }

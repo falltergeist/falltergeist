@@ -49,11 +49,11 @@ void TimerAbstract::think()
     {
         // Invoke directly without Event Dispatcher, for now.
         Event::Event event("tick");
-        _tickHandler.invoke(&event);
         if (!_repeat)
         {
             _enabled = false;
         }
+        _tickHandler.invoke(&event);
     }
 }
 

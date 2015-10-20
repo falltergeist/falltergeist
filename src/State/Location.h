@@ -129,8 +129,11 @@ protected:
     unsigned int _actionCursorTicks = 0;
     unsigned int _mouseMoveTicks = 0;
     Game::Timer _actionCursorTimer;
+    Game::Timer _ambientSfxTimer;
     // for VM opcode add_timer_event
     std::list<TimerEvent> _timerEvents;
+    // TODO: move to Game::Location class?
+    std::map<std::string, unsigned char> _ambientSfx;
 
     std::unique_ptr<HexagonGrid> _hexagonGrid;
     std::unique_ptr<LocationCamera> _camera;
