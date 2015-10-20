@@ -63,12 +63,14 @@
 #include "../UI/Tile.h"
 #include "../UI/TileMap.h"
 #include "../VM/VM.h"
+#include "../functions.h"
 
 // Third party includes
 #include <libfalltergeist/Gam/File.h>
 #include <libfalltergeist/Map/Elevation.h>
 #include <libfalltergeist/Map/File.h>
 #include <libfalltergeist/Map/Object.h>
+#include <libfalltergeist/Txt/MapsFile.h>
 
 namespace Falltergeist
 {
@@ -324,6 +326,24 @@ void Location::setLocation(const std::string& name)
             }
         }
     }
+    
+    auto maps = ResourceManager::getInstance()->mapsTxt()->maps();
+    auto mapShortName = path_basename(name, true);
+    auto it = std::find_if(maps.begin(), maps.end(), [&](const libfalltergeist::Txt::Map& map) 
+    {
+        return map.name == mapShortName; 
+    });
+    
+    if (it != maps.end() && !it->music.empty())
+    {
+        Logger::info("Location") << "Playing music " << it->music << std::endl;
+        Game::getInstance()->mixer()->playACMMusic(it->music);
+    }
+    else
+    {
+        Logger::info("Location") << "Map " << mapShortName << " has no music." << std::endl;
+    }
+    // TODO: ambient SFX
 }
 
 std::vector<Input::Mouse::Icon> Location::getCursorIconsForObject(Game::Object* object)

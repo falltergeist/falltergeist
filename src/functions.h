@@ -53,5 +53,7 @@ std::string translate(std::string key, std::string file);
 
 std::string _t(MSG_TYPE type, size_t number);
 
+std::string path_basename(const std::string& path, bool removeExtension = false);
+
 }
 #endif // FALLTERGEIST_FUNCTIONS_H

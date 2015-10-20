@@ -18,6 +18,7 @@
  */
 
 // C++ standard includes
+#include <algorithm>
 #include <type_traits>
 
 // Falltergeist includes
@@ -76,6 +77,22 @@ std::string _t(MSG_TYPE type, size_t number)
 
     auto msg = ResourceManager::getInstance()->msgFileType(msgFiles[type]);
     return msg->message(number)->text();
+}
+
+std::string path_basename(const std::string& path, bool removeExtension)
+{
+    auto filename = std::string( 
+        std::find_if(path.rbegin(), path.rend(), [](char c) { return c == '/' || c == '\\'; }).base(),
+        path.end());
+        
+    if (removeExtension)
+    {
+        auto pivot = std::find(filename.rbegin(), filename.rend(), '.');
+        return pivot == filename.rend()
+            ? filename
+            : std::string(filename.begin(), pivot.base() - 1);
+    }
+    return filename;
 }
 
 }
