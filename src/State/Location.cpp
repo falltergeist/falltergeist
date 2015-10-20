@@ -337,10 +337,10 @@ void Location::setLocation(const std::string& name)
     
     if (it != maps.end())
     {
-        if (!it->music.empty())
+        if (!it->music.empty() && Game::getInstance()->settings()->musicVolume() > 0.0001)
         {
             Logger::info("Location") << "Playing music " << it->music << std::endl;
-            Game::getInstance()->mixer()->playACMMusic(it->music);
+            Game::getInstance()->mixer()->playACMMusic(it->music + ".acm");
         }
         else
         {

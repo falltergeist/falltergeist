@@ -71,6 +71,8 @@ private:
     std::unordered_map<std::string, Mix_Chunk*> _sfx;
     bool _paused = false;
     bool _loop = false;
+    
+    double _musicVolume = 1.0;
 };
 
 }
