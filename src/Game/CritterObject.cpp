@@ -535,10 +535,14 @@ void CritterObject::onMovementAnimationFrame(Event::Event* event)
     if (isOutsideOfHexForDirection(curFrameOfs, _orientation))
     {
         // if we stepped too much away from current hex center, switch to the next hex
-        auto hexagon = movementQueue()->back();
-        movementQueue()->pop_back();
-        Game::getInstance()->locationState()->moveObjectToHexagon(this, hexagon);
-        if (movementQueue()->size() == 0)
+        auto moveQueue = movementQueue();
+        if (!moveQueue->empty())
+        {
+            auto hexagon = moveQueue->back();
+            moveQueue->pop_back();
+            Game::getInstance()->locationState()->moveObjectToHexagon(this, hexagon);
+        }
+        if (moveQueue->empty())
         {
             _moving = false;
             animation->stop();
@@ -547,7 +551,7 @@ void CritterObject::onMovementAnimationFrame(Event::Event* event)
         }
         else
         {
-            auto nextHexagon = movementQueue()->back();
+            auto nextHexagon = moveQueue->back();
             auto nextOrientation = this->hexagon()->orientationTo(nextHexagon);
             Point ofs;
             if (nextOrientation != _orientation)
