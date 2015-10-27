@@ -156,12 +156,18 @@ void Location::onStateActivate(Event::State* event)
     {
         mouse->ui()->setPosition(hexagon->position() - _camera->topLeft());
     }
+    if (!_deactivated)
+    {
+        playMusic();
+    }
+    _deactivated = false;
 }
 
 void Location::onStateDeactivate(Event::State* event)
 {
     _objectUnderCursor = nullptr;
     _actionCursorTimer.stop();
+    _deactivated = true;
 }
 
 void Location::setLocation(const std::string& name)
@@ -339,8 +345,8 @@ void Location::setLocation(const std::string& name)
     {
         if (!it->music.empty() && Game::getInstance()->settings()->musicVolume() > 0.0001)
         {
-            Logger::info("Location") << "Playing music " << it->music << std::endl;
-            Game::getInstance()->mixer()->playACMMusic(it->music + ".acm");
+            Logger::info("Location") << "Found music " << it->music << std::endl;
+            _musicString = it->music;
         }
         else
         {
@@ -1071,6 +1077,11 @@ void Location::removeTimerEvent(Game::Object* obj)
 void Location::removeTimerEvent(Game::Object* obj, int fixedParam)
 {
     _timerEvents.remove_if([=](Location::TimerEvent& item) { return item.object == obj && item.fixedParam == fixedParam; });
+}
+
+void Location::playMusic()
+{
+    Game::getInstance()->mixer()->playACMMusic(_musicString + ".acm");
 }
 
 }

@@ -51,11 +51,11 @@ namespace State
 
 MainMenu::MainMenu() : State()
 {
+    popHandler().add([this](Event::State* event){ this->onStatePop(event); });
 }
 
 MainMenu::~MainMenu()
 {
-    Game::getInstance()->mixer()->stopMusic();
 }
 
 void MainMenu::init()
@@ -275,6 +275,11 @@ void MainMenu::onStateActivate(Event::State* event)
     Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
     Game::getInstance()->mixer()->playACMMusic("07desert.acm",true);
     Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
+}
+
+void MainMenu::onStatePop(Event::State* event)
+{
+    Game::getInstance()->mixer()->stopMusic();
 }
 
 }

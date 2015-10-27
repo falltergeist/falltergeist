@@ -134,6 +134,8 @@ protected:
     std::list<TimerEvent> _timerEvents;
     // TODO: move to Game::Location class?
     std::map<std::string, unsigned char> _ambientSfx;
+    std::string _musicString;
+    bool _deactivated;
 
     std::unique_ptr<HexagonGrid> _hexagonGrid;
     std::unique_ptr<LocationCamera> _camera;
@@ -163,6 +165,7 @@ protected:
     Event::MouseHandler _mouseDownHandler, _mouseUpHandler, _mouseMoveHandler;
     
     std::vector<Input::Mouse::Icon> getCursorIconsForObject(Game::Object* object);
+    void playMusic();
 
 };
 
