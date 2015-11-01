@@ -134,6 +134,7 @@ void CritterDialog::setQuestion(const std::string& value)
 {
     auto question = getTextArea("question");
     question->setText(std::string("  ") + value);
+    question->setLineOffset(0);
 }
 
 void CritterDialog::onAnswerIn(Event::Mouse* event)
