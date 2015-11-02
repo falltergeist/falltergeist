@@ -241,7 +241,10 @@ void TextArea::_updateSymbols()
     _updateLines();
 
     // at positive offset, skip number of first lines
-    auto lineBegin = _lines.cbegin() + (_lineOffset > 0 ? _lineOffset : 0);
+    auto lineBegin = std::min(
+        _lines.cbegin() + (_lineOffset > 0 ? _lineOffset : 0),
+        _lines.cend()
+    );
     auto lineEnd = _lines.cend();
     if (_size.height())
     {
@@ -259,8 +262,15 @@ void TextArea::_updateSymbols()
     int numVisibleLines = std::distance(lineBegin, lineEnd);
 
     // Calculating textarea sizes if needed
-    _calculatedSize.setWidth(std::max_element(lineBegin, lineEnd)->width);
-    _calculatedSize.setHeight(numVisibleLines * font()->height() + (numVisibleLines - 1) * font()->verticalGap());
+    if (numVisibleLines > 0)
+    {
+        _calculatedSize.setWidth(std::max_element(lineBegin, lineEnd)->width);
+        _calculatedSize.setHeight(numVisibleLines * font()->height() + (numVisibleLines - 1) * font()->verticalGap());
+    }
+    else
+    {
+        _calculatedSize = Size(0, 0);
+    }
 
     // Alignment and outlining
     auto outlineFont = (_outlineColor != 0)
