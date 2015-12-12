@@ -66,4 +66,11 @@ public:
 };
 
 }
+
+#if defined(__MACH__) || defined(_MSC_VER)
+#define CLOCK_REALTIME 0
+#define CLOCK_MONOTONIC 0
+extern int clock_gettime(int clk_id, struct timespec* t);
+#endif
+
 #endif // FALLTERGEIST_CROSSPLATFORM_H

@@ -105,7 +105,7 @@ void Game::init(std::unique_ptr<Settings> settings)
     version += " " + to_string(renderer()->size());
     version += " " + renderer()->name();
 
-    _falltergeistVersion = make_unique<UI::TextArea>(version, 3, renderer()->height() - 10);
+    _falltergeistVersion = std::make_unique<UI::TextArea>(version, 3, renderer()->height() - 10);
     _mousePosition = make_unique<UI::TextArea>("", renderer()->width() - 55, 14);
     _mousePosition->setWidth(55);
     _mousePosition->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
@@ -310,6 +310,13 @@ Settings* Game::settings() const
     return _settings.get();
 }
 
+namespace {
+    template <typename type_t>
+    bool nonzero(type_t exp) {
+        return exp != 0;
+    }
+}
+
 // TODO: probably need to move this to factory class
 std::unique_ptr<Event::Event> Game::_createEventFromSDL(const SDL_Event& sdlEvent)
 {
@@ -341,9 +348,9 @@ std::unique_ptr<Event::Event> Game::_createEventFromSDL(const SDL_Event& sdlEven
                     mouseEvent->setButton(Mouse::Button::X2);
                     break;
             }
-            mouseEvent->setShiftPressed(mods & KMOD_SHIFT);
-            mouseEvent->setControlPressed(mods & KMOD_CTRL);
-            mouseEvent->setAltPressed(mods & KMOD_ALT);
+            mouseEvent->setShiftPressed(nonzero(mods & KMOD_SHIFT));
+            mouseEvent->setControlPressed(nonzero(mods & KMOD_CTRL));
+            mouseEvent->setAltPressed(nonzero(mods & KMOD_ALT));
             return std::move(mouseEvent);
         }
         case SDL_MOUSEMOTION:
@@ -356,19 +363,19 @@ std::unique_ptr<Event::Event> Game::_createEventFromSDL(const SDL_Event& sdlEven
         case SDL_KEYDOWN:
         {
             auto keyboardEvent = make_unique<Event::Keyboard>(Keyboard::Type::KEY_DOWN);
-            keyboardEvent->setKeyCode(sdlEvent.key.keysym.sym);
-            keyboardEvent->setAltPressed(sdlEvent.key.keysym.mod & KMOD_ALT);
-            keyboardEvent->setShiftPressed(sdlEvent.key.keysym.mod & KMOD_SHIFT);
-            keyboardEvent->setControlPressed(sdlEvent.key.keysym.mod & KMOD_CTRL);
+            keyboardEvent->setKeyCode(nonzero(sdlEvent.key.keysym.sym));
+            keyboardEvent->setAltPressed(nonzero(sdlEvent.key.keysym.mod & KMOD_ALT));
+            keyboardEvent->setShiftPressed(nonzero(sdlEvent.key.keysym.mod & KMOD_SHIFT));
+            keyboardEvent->setControlPressed(nonzero(sdlEvent.key.keysym.mod & KMOD_CTRL));
             return std::move(keyboardEvent);
         }
         case SDL_KEYUP:
         {
             auto keyboardEvent = make_unique<Event::Keyboard>(Keyboard::Type::KEY_UP);
-            keyboardEvent->setKeyCode(sdlEvent.key.keysym.sym);
-            keyboardEvent->setAltPressed(sdlEvent.key.keysym.mod & KMOD_ALT);
-            keyboardEvent->setShiftPressed(sdlEvent.key.keysym.mod & KMOD_SHIFT);
-            keyboardEvent->setControlPressed(sdlEvent.key.keysym.mod & KMOD_CTRL);;
+            keyboardEvent->setKeyCode(nonzero(sdlEvent.key.keysym.sym));
+            keyboardEvent->setAltPressed(nonzero(sdlEvent.key.keysym.mod & KMOD_ALT));
+            keyboardEvent->setShiftPressed(nonzero(sdlEvent.key.keysym.mod & KMOD_SHIFT));
+            keyboardEvent->setControlPressed(nonzero(sdlEvent.key.keysym.mod & KMOD_CTRL));
 
             // TODO: maybe we should make Game an EventTarget too?
             if (keyboardEvent->keyCode() == SDLK_F12)

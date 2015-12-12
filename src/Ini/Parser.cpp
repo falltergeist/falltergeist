@@ -23,6 +23,8 @@
 // C++ standard includes
 #include <algorithm>
 #include <sstream>
+#include <functional>
+#include <cctype>
 
 // Falltergeist includes
 #include "../Logger.h"

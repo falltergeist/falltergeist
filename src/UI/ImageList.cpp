@@ -41,7 +41,7 @@ ImageList::ImageList(const Point& pos) : Falltergeist::UI::Base(pos)
 
 ImageList::ImageList(std::vector<std::string> imageList, int x, int y) : ImageList(Point(x, y))
 {
-    for (auto& frmName : imageList) addImage(make_unique<Image>(frmName));
+    for (auto& frmName : imageList) addImage(std::make_unique<Image>(frmName));
 }
 
 ImageList::ImageList(std::vector<Image*> imageList, int x, int y) : ImageList(Point(x, y))
@@ -70,7 +70,7 @@ void ImageList::addImage(std::unique_ptr<Image> image)
 
 void ImageList::addImage(const std::string& filename)
 {
-    addImage(make_unique<Image>(filename));
+    addImage(std::make_unique<Image>(filename));
 }
 
 Graphics::Texture* ImageList::texture() const

@@ -23,13 +23,13 @@
 #include <cerrno>
 #include <cstdlib>
 #include <cstring>
-#include <dirent.h>
 #include <fstream>
 #include <stdexcept>
 #include <SDL.h>
 
 #if defined(__unix__) || defined(__APPLE__)
     #include <sys/param.h>
+    #include <dirent.h>
 #endif
 
 #if defined(__linux__)
@@ -48,6 +48,12 @@
     #include <sys/stat.h>
     #include <sys/types.h>
     #include <unistd.h>
+#endif
+
+#if defined(_MSC_VER)
+    #define assert(X) { if (!(X)) __debugbreak(); }
+#else
+    #include <cassert>
 #endif
 
 // Falltergeist includes
@@ -379,3 +385,31 @@ std::vector<std::string> CrossPlatform::getDataPaths()
 }
 
 }
+
+#if defined(__MACH__)
+#include <mach/mach_time.h>
+#define CLOCK_REALTIME 0
+#define CLOCK_MONOTONIC 0
+int clock_gettime(int clk_id, struct timespec* t)
+{
+    static mach_timebase_info_data_t timebase;
+    mach_timebase_info(&timebase);
+    uint64_t time;
+    time = mach_absolute_time();
+    double nseconds = ((double)time * (double)timebase.numer) / ((double)timebase.denom);
+    double seconds = ((double)time * (double)timebase.numer) / ((double)timebase.denom * 1e9);
+    t->tv_sec = seconds;
+    t->tv_nsec = nseconds;
+    return 0;
+}
+#endif
+
+#ifdef _MSC_VER
+#define CLOCK_REALTIME 0
+#define CLOCK_MONOTONIC 0
+int clock_gettime(int clk_id, struct timespec* t)
+{
+    assert(!"todo");
+    return 0;
+}
+#endif

@@ -95,7 +95,7 @@ void Opcode810AHandler::_run()
     auto string = _vm->dataStack()->popString();
     auto object = _vm->dataStack()->popObject();
 
-    auto floatMessage = make_unique<UI::TextArea>(string);
+    auto floatMessage = std::make_unique<UI::TextArea>(string);
     floatMessage->setWidth(200);
     floatMessage->setWordWrap(true);
     floatMessage->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
