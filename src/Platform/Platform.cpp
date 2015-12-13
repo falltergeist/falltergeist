@@ -384,32 +384,30 @@ std::vector<std::string> CrossPlatform::getDataPaths()
     return _dataPaths;
 }
 
-}
-
+void CrossPlatform::getTime(TimeInfo * out) {
+    if (!out)
+        throw Exception("nullptr passed into getTime");
 #if defined(__MACH__)
-#include <mach/mach_time.h>
-#define CLOCK_REALTIME 0
-#define CLOCK_MONOTONIC 0
-int clock_gettime(int clk_id, struct timespec* t)
-{
     static mach_timebase_info_data_t timebase;
     mach_timebase_info(&timebase);
     uint64_t time;
     time = mach_absolute_time();
     double nseconds = ((double)time * (double)timebase.numer) / ((double)timebase.denom);
     double seconds = ((double)time * (double)timebase.numer) / ((double)timebase.denom * 1e9);
-    t->tv_sec = seconds;
-    t->tv_nsec = nseconds;
-    return 0;
-}
+    out->_sec = seconds;
+    out->_nano = nseconds;
+#else
+    struct timespec t;
+    if (clock_gettime(CLOCK_MONOTONIC, &ts) == 0)
+    {
+        out->_sec = t.tv_sec;
+        out->_nano = t.tv_nsec;
+    }
+    else
+    {
+        throw Exception("call to clock_gettime failed");
+    }
 #endif
+}
 
-#ifdef _MSC_VER
-#define CLOCK_REALTIME 0
-#define CLOCK_MONOTONIC 0
-int clock_gettime(int clk_id, struct timespec* t)
-{
-    assert(!"todo");
-    return 0;
-}
-#endif
+} // namespace Falltergeist

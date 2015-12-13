@@ -32,6 +32,11 @@
 namespace Falltergeist
 {
 
+struct TimeInfo {
+    unsigned long long _sec;
+    unsigned long long _nano;
+};
+
 class CrossPlatform
 {
 protected:
@@ -63,14 +68,10 @@ public:
     // Create directory at given path with parent directories as needed.
     // Throw runtime_error on failure.
     static void createDirectory(std::string path);
+
+    static void getTime(TimeInfo *out);
 };
 
 }
-
-#if defined(__MACH__) || defined(_MSC_VER)
-#define CLOCK_REALTIME 0
-#define CLOCK_MONOTONIC 0
-extern int clock_gettime(int clk_id, struct timespec* t);
-#endif
 
 #endif // FALLTERGEIST_CROSSPLATFORM_H

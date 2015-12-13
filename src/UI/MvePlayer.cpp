@@ -830,7 +830,7 @@ void MvePlayer::_processChunk()
             case Opcode::CREATE_TIMER:
               _delay = get_int(opcode->data()) * get_short(opcode->data() + 4);
               _timerStarted = true;
-              clock_gettime(CLOCK_MONOTONIC, &_lastts);
+              CrossPlatform::getTime(&_lastts);
               break;
             case Opcode::END_STREAM:
                 _finished = true;
@@ -890,9 +890,9 @@ void MvePlayer::think()
 {
     if (!_timerStarted) return;
 
-    struct timespec ts;
-    clock_gettime(CLOCK_MONOTONIC, &ts);
-    uint32_t nsec = (ts.tv_nsec - _lastts.tv_nsec);
+    struct TimeInfo ts;
+    CrossPlatform::getTime(&ts);
+    uint32_t nsec = (ts._nano - _lastts._nano);
 
     if (nsec >= _delay*1000) // 66728
     {
