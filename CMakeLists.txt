@@ -69,7 +69,7 @@ include_directories(${CMAKE_SOURCE_DIR}/lib/LuaBridge/Source/LuaBridge)
 file(GLOB_RECURSE SOURCES  src/*.cpp)
 file(GLOB_RECURSE HEADERS  src/*.h)
 
-if(NOT MSCV)
+if(NOT MSVC)
     add_definitions (-std=c++11 -Wall)
 endif()
 
