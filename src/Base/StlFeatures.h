@@ -54,7 +54,7 @@ template<class T, std::size_t N> struct UniqueIf<T[N]>
 
 }  // namespace Detail
 
-#if not defined(_MSC_VER)
+#if !defined(_MSC_VER)
 template<class T, class... Args>
 inline typename Detail::UniqueIf<T>::SingleObject
 make_unique(Args&&... args)
@@ -73,6 +73,9 @@ make_unique(std::size_t n)
 template<class T, class... Args>
 inline typename Detail::UniqueIf<T>::KnownBound
 make_unique(Args&&...) = delete;
+#else
+// Visual Studio 2015 implements make_unique
+using std::make_unique;
 #endif
 
 }
