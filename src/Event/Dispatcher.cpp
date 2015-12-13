@@ -67,7 +67,7 @@ void Dispatcher::Task<T>::perform()
 template<typename T>
 void Dispatcher::scheduleEvent(EventTarget* target, std::unique_ptr<T> eventArg, Base::Delegate<T*> handlerArg)
 {
-    _scheduledTasks.emplace_back(std::make_unique<Task<T>>(target, std::move(eventArg), std::move(handlerArg)));
+    _scheduledTasks.emplace_back(make_unique<Task<T>>(target, std::move(eventArg), std::move(handlerArg)));
 }
 
 void Dispatcher::processScheduledEvents()

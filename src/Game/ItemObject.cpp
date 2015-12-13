@@ -109,7 +109,7 @@ void ItemObject::_generateUi()
     if (inventoryFID() == -1) return;
 
     // Big unscaled image of item
-    _inventoryDragUi = std::make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
+    _inventoryDragUi = make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
 
     // Small scaled image
     auto inventoryUiTexture = _inventoryDragUi->texture()->fitTo(57, 40);

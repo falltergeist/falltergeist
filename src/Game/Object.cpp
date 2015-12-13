@@ -48,7 +48,7 @@
 
 namespace Falltergeist
 {
-using Base::make_unique;
+using namespace Base;
 
 namespace Game
 {
@@ -181,16 +181,16 @@ void Object::_generateUi()
         if (frm->framesPerDirection() > 1)
         {
             auto queue = make_unique<UI::AnimationQueue>();
-            queue->animations().push_back(std::make_unique<UI::Animation>(ResourceManager::getInstance()->FIDtoFrmName(FID()), orientation()));
+            queue->animations().push_back(make_unique<UI::Animation>(ResourceManager::getInstance()->FIDtoFrmName(FID()), orientation()));
             _ui = std::move(queue);
         }
         else if (frm->animatedPalette())
         {
-            _ui = std::make_unique<UI::AnimatedImage>(frm, orientation());
+            _ui = make_unique<UI::AnimatedImage>(frm, orientation());
         }
         else
         {
-            _ui = std::make_unique<UI::Image>(frm, orientation());
+            _ui = make_unique<UI::Image>(frm, orientation());
         }
     }
 

@@ -44,8 +44,7 @@
 
 namespace Falltergeist
 {
-
-using Base::make_unique;
+using namespace Base;
 
 namespace UI
 {

@@ -28,7 +28,7 @@
 
 namespace Falltergeist
 {
-using Base::make_unique;
+using namespace Base;
 
 Font::Font(const std::string& filename, unsigned int color)
 {

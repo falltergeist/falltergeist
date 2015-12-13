@@ -41,7 +41,7 @@
 
 namespace Falltergeist
 {
-using Base::make_unique;
+using namespace Base;
 
 namespace State
 {
@@ -152,9 +152,9 @@ void CursorDropdown::showMenu()
                 throw Exception("CursorDropdown::init() - unknown icon type");
 
         }
-        _activeIcons.push_back(std::make_unique<UI::Image>("art/intrface/" + activeSurface));
+        _activeIcons.push_back(make_unique<UI::Image>("art/intrface/" + activeSurface));
         _activeIcons.back()->setY(40*i);
-        _inactiveIcons.push_back(std::make_unique<UI::Image>("art/intrface/" + inactiveSurface));
+        _inactiveIcons.push_back(make_unique<UI::Image>("art/intrface/" + inactiveSurface));
         _inactiveIcons.back()->setY(40*i);
         i++;
     }

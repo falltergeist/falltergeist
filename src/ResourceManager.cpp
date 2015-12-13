@@ -61,7 +61,7 @@ namespace Falltergeist
 
 using namespace std;
 using namespace libfalltergeist;
-using Base::make_unique;
+using namespace Base;
 
 namespace
 {
@@ -77,7 +77,7 @@ ResourceManager::ResourceManager()
     for (auto it = files->begin(); it != files->end(); ++it)
     {
         string path = CrossPlatform::findFalloutDataPath() + "/" + (*it);
-        _datFiles.push_back(std::make_unique<Dat::File>(path));
+        _datFiles.push_back(make_unique<Dat::File>(path));
     }
 }
 
@@ -370,7 +370,7 @@ Font* ResourceManager::font(const string& filename, unsigned int color)
         return _fonts.at(fontname).get();
     }
 
-    auto font = std::make_unique<Font>(filename, color);
+    auto font = make_unique<Font>(filename, color);
     Font* fontPtr = font.get();
     _fonts.insert(make_pair(fontname, std::move(font)));
     return fontPtr;

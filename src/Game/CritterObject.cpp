@@ -602,7 +602,7 @@ unique_ptr<UI::Animation> CritterObject::_generateMovementAnimation()
         frmString += _generateWeaponFrmString() + "b";
     }
 
-    return std::make_unique<UI::Animation>("art/critters/" + frmString + ".frm", orientation());
+    return make_unique<UI::Animation>("art/critters/" + frmString + ".frm", orientation());
 }
 
 UI::Animation* CritterObject::setActionAnimation(const string& action)

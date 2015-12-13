@@ -349,11 +349,11 @@ void CrossPlatform::getTime(TimeInfo * out) {
     out->_sec = seconds;
     out->_nano = nseconds;
 #else
-    struct timespec t;
+    struct timespec ts;
     if (clock_gettime(CLOCK_MONOTONIC, &ts) == 0)
     {
-        out->_sec = t.tv_sec;
-        out->_nano = t.tv_nsec;
+        out->_sec = ts.tv_sec;
+        out->_nano = ts.tv_nsec;
     }
     else
     {
