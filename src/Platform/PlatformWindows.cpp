@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
+#if defined(_WIN32) || defined(_MSC_VER)
 
 // C++ standard includes
 
@@ -25,36 +26,7 @@
 #include <cstring>
 #include <fstream>
 #include <stdexcept>
-#include <SDL.h>
-
-#if defined(__unix__) || defined(__APPLE__)
-    #include <sys/param.h>
-    #include <dirent.h>
-#endif
-
-#if defined(__linux__)
-    #include <mntent.h>
-#endif
-
-#if defined (__APPLE__) || defined(BSD)
-    #include <sys/ucred.h>
-    #include <sys/mount.h>
-#endif
-
-#if defined(_WIN32) || defined(WIN32)
-    #include <windows.h>
-    #include <shlobj.h>
-#elif defined(__unix__) || defined(__APPLE__)
-    #include <sys/stat.h>
-    #include <sys/types.h>
-    #include <unistd.h>
-#endif
-
-#if defined(_MSC_VER)
-    #define assert(X) { if (!(X)) __debugbreak(); }
-#else
-    #include <cassert>
-#endif
+#include <time.h>
 
 // Falltergeist includes
 #include "Platform.h"
@@ -62,6 +34,9 @@
 #include "../Logger.h"
 
 // Third party includes
+#include <SDL.h>
+#include <windows.h>
+#include <shlobj.h>
 
 namespace Falltergeist
 {
@@ -71,8 +46,7 @@ std::string CrossPlatform::_version;
 std::string CrossPlatform::_falloutDataPath;
 std::string CrossPlatform::_falltergeistDataPath;
 std::vector<std::string> *CrossPlatform::_dataFiles = 0;
-const std::vector<std::string> CrossPlatform::necessaryDatFiles = {"master.dat", "critter.dat"};
-
+const std::vector<std::string> CrossPlatform::necessaryDatFiles = { "master.dat", "critter.dat" };
 
 CrossPlatform::CrossPlatform()
 {
@@ -85,36 +59,23 @@ CrossPlatform::~CrossPlatform()
 std::string CrossPlatform::getVersion()
 {
     if (_version.length() > 0) return _version;
-
     _version = "Falltergeist 0.2.0";
-#if defined(_WIN32) || defined(WIN32)
     _version += " (Windows)";
-#elif defined(__linux__)
-    _version += " (Linux)";
-#elif defined(__APPLE__)
-    _version += " (Apple)";
-#elif defined(BSD)
-    _version += " (BSD)";
-#endif
     return _version;
 }
 
 std::string CrossPlatform::getHomeDirectory()
 {
-#if defined(_WIN32) || defined(WIN32)
-    char cwd[256];
+    char cwd[MAX_PATH];
     LPITEMIDLIST pidl;
-    SHGetSpecialFolderLocation(NULL, CSIDL_PROFILE  ,&pidl);
+    SHGetSpecialFolderLocation(NULL, CSIDL_PROFILE, &pidl);
     SHGetPathFromIDList(pidl, cwd);
-#else
-    char *cwd = getenv("HOME");
-#endif
     return std::string(cwd);
 }
 
 std::string CrossPlatform::getExecutableDirectory()
 {
-    char* buffer=SDL_GetBasePath();
+    char* buffer = SDL_GetBasePath();
     std::string path(buffer);
     SDL_free(buffer);
     return path;
@@ -123,12 +84,11 @@ std::string CrossPlatform::getExecutableDirectory()
 std::vector<std::string> CrossPlatform::getCdDrivePaths()
 {
     std::vector<std::string> result;
-#if defined(_WIN32) || defined(WIN32)
     // Looking for data files on CD-ROM drives
-    char buf[256];
+    char buf[MAX_PATH];
     GetLogicalDriveStringsA(sizeof(buf), buf);
 
-    for(char * s = buf; *s; s += strlen(s) + 1)
+    for (char * s = buf; *s; s += strlen(s) + 1)
     {
         if (GetDriveTypeA(s) == DRIVE_CDROM)
         {
@@ -136,36 +96,6 @@ std::vector<std::string> CrossPlatform::getCdDrivePaths()
         }
     }
 
-#elif defined(__linux__)
-    FILE *mtab = setmntent("/etc/mtab", "r");
-    struct mntent *m;
-    struct mntent mnt;
-    char strings[4096];
-    while ((m = getmntent_r(mtab, &mnt, strings, sizeof(strings))))
-    {
-        std::string directory = mnt.mnt_dir;
-        std::string type = mnt.mnt_type;
-        if (type == "iso9660")
-        {
-            result.push_back(directory);
-        }
-    }
-    endmntent(mtab);
-#elif defined (BSD)
-    struct statfs *mntbuf;
-    int mntsize = getmntinfo(&mntbuf, MNT_NOWAIT);
-    for ( int i = 0; i < mntsize; i++ )
-    {
-        std::string directory = ((struct statfs *)&mntbuf[i])->f_mntonname;
-        std::string type = ((struct statfs *)&mntbuf[i])->f_fstypename;
-        if (type == "cd9660")
-        {
-            result.push_back(directory);
-        }
-    }
-#else
-    throw Exception("CD-ROM detection not supported");
-#endif
     return result;
 }
 
@@ -196,22 +126,22 @@ std::string CrossPlatform::findFalloutDataPath()
     for (auto &directory : directories)
     {
         if (std::all_of(
-                necessaryDatFiles.begin(),
-                necessaryDatFiles.end(),
-                [directory](const std::string& file) {
-                    std::ifstream stream(directory + "/" + file);
-                    if (stream)
-                    {
-                        Logger::info() << "Searching in directory: " << directory << " " << file << " [FOUND]" << std::endl;
-                        return true;
-                    }
-                    else
-                    {
-                        Logger::info() << "Searching in directory: " << directory << " " << file << " [NOT FOUND]" << std::endl;
-                        return false;
-                    }
-                })
-                )
+            necessaryDatFiles.begin(),
+            necessaryDatFiles.end(),
+            [directory](const std::string& file) {
+            std::ifstream stream(directory + "/" + file);
+            if (stream)
+            {
+                Logger::info() << "Searching in directory: " << directory << " " << file << " [FOUND]" << std::endl;
+                return true;
+            }
+            else
+            {
+                Logger::info() << "Searching in directory: " << directory << " " << file << " [NOT FOUND]" << std::endl;
+                return false;
+            }
+        })
+            )
         {
             _falloutDataPath = directory;
             return _falloutDataPath;
@@ -258,53 +188,37 @@ std::vector<std::string> *CrossPlatform::findFalloutDataFiles()
     if (_dataFiles)
         return _dataFiles;
 
-    // looking for all available dat files in directory
-    DIR *pxDir = opendir(CrossPlatform::findFalloutDataPath().c_str());
-    if (!pxDir)
-    {
+    std::string path = CrossPlatform::findFalloutDataPath() + "*";
+    WIN32_FIND_DATA findData;
+    ZeroMemory(&findData, sizeof(findData));
+    HANDLE handle = FindFirstFileA(path.c_str(), &findData);
+    if (handle == INVALID_HANDLE_VALUE) {
         throw Exception("Can't open data directory: " + CrossPlatform::findFalloutDataPath());
     }
+
     _dataFiles = new std::vector<std::string>(necessaryDatFiles);
-    struct dirent *pxItem = 0;
-    while ((pxItem = readdir(pxDir)))
-    {
-        std::string filename(pxItem->d_name);
+
+    do {
+        std::string filename(findData.cFileName);
+
         if (filename.length() > 4) // exclude . and ..
         {
             std::string ext = filename.substr(filename.size() - 4, 4);
             if (ext == ".dat")
             {
                 if (filename.length() == 12 && filename.substr(0, 5) == "patch")
-                    _dataFiles->insert(_dataFiles->begin(),filename);
+                    _dataFiles->insert(_dataFiles->begin(), filename);
             }
         }
-    }
-    closedir(pxDir);
 
+    } while (FindNextFile(handle, &findData));
+
+    FindClose(handle);
     return _dataFiles;
 }
 
 bool CrossPlatform::_createDirectory(const char *dir)
 {
-#if defined(__unix__) || defined(__APPLE__) // Linux, OS X, BSD
-    struct stat st;
-
-    if (stat(dir, &st) == 0)
-    {
-        // Directory already exists
-        if (S_ISDIR(st.st_mode))
-            return false;
-
-        throw std::runtime_error("Path `" + std::string(dir) + "' already exists and is not a directory");
-    }
-    else
-    {
-        if (mkdir(dir, S_IRWXU) == 0)
-            return true;
-
-        throw std::runtime_error(strerror(errno));
-    }
-#elif defined(_WIN32) || defined(WIN32) // Windows
     DWORD attrs = GetFileAttributes(dir);
 
     // Assume path exists
@@ -317,16 +231,13 @@ bool CrossPlatform::_createDirectory(const char *dir)
     }
     else
     {
-        if (CreateDirectory(dir,NULL) != 0) return true;
+        if (CreateDirectory(dir, NULL) != 0) return true;
 
         DWORD errorId = GetLastError();
 
         // FIXME: Use FormatMessage to get error string
         throw std::runtime_error("CreateDirectory failed with code: " + std::to_string(errorId));
     }
-#else
-    #error Platform not supported: CrossPlatform::_createDirectory not implemented
-#endif
     return false;
 }
 
@@ -344,70 +255,39 @@ void CrossPlatform::createDirectory(std::string path)
 
 std::string CrossPlatform::getConfigPath()
 {
-#if defined(__unix__)
-    char *maybeConfigHome = getenv("XDG_CONFIG_HOME");
-    if (maybeConfigHome == nullptr || *maybeConfigHome == '\0')
-        return getHomeDirectory() + "/.config/falltergeist";
-    return std::string(maybeConfigHome) + "/falltergeist";
-#elif defined(__APPLE__)
-    return getHomeDirectory() + "/Library/Application Support/falltergeist";
-#elif defined(_WIN32) || defined(WIN32)
-    char path[256];
+    char path[MAX_PATH];
     SHGetFolderPath(nullptr, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, 0, path);
     return std::string(path) + "/falltergeist";
-#else
-    #error Platform not supported: CrossPlatform::getConfigPath not implemented
-#endif
 }
 
 std::vector<std::string> CrossPlatform::getDataPaths()
 {
     std::vector<std::string> _dataPaths;
-#if defined(__unix__)
-    char *maybeDataHome = getenv("XDG_DATA_HOME");
-    if (maybeDataHome == nullptr || *maybeDataHome == '\0')
-        _dataPaths.push_back(getHomeDirectory() + "/.local/share/falltergeist");
-    else
-        _dataPaths.push_back(std::string(maybeDataHome) + "/falltergiest");
-
-    std::string sharedir = getExecutableDirectory()+"/../share/falltergeist";
-
-    DIR *pxDir = opendir(sharedir.c_str());
-    if(pxDir)
-    {
-        _dataPaths.push_back(sharedir.c_str());
-    }
-    closedir(pxDir);
-#else
     _dataPaths.push_back(getConfigPath());
-#endif
     return _dataPaths;
 }
 
 void CrossPlatform::getTime(TimeInfo * out) {
     if (!out)
         throw Exception("nullptr passed into getTime");
-#if defined(__MACH__)
-    static mach_timebase_info_data_t timebase;
-    mach_timebase_info(&timebase);
-    uint64_t time;
-    time = mach_absolute_time();
-    double nseconds = ((double)time * (double)timebase.numer) / ((double)timebase.denom);
-    double seconds = ((double)time * (double)timebase.numer) / ((double)timebase.denom * 1e9);
-    out->_sec = seconds;
-    out->_nano = nseconds;
-#else
-    struct timespec t;
-    if (clock_gettime(CLOCK_MONOTONIC, &ts) == 0)
+
+    // Get ticks per second
+    LARGE_INTEGER Frequency;
+    if (QueryPerformanceFrequency(&Frequency) == FALSE)
     {
-        out->_sec = t.tv_sec;
-        out->_nano = t.tv_nsec;
+        throw Exception("Call to QueryPerformanceFrequency failed");
     }
-    else
+
+    // Get current tick count
+    LARGE_INTEGER time;
+    if (QueryPerformanceCounter(&time) == FALSE)
     {
-        throw Exception("call to clock_gettime failed");
+        throw Exception("Call to QueryPerformanceCounter failed");
     }
-#endif
+
+    out->_sec = time.QuadPart / Frequency.QuadPart;
+    out->_nano = time.QuadPart / (Frequency.QuadPart / 1000000000ull);
+}
 }
 
-} // namespace Falltergeist
+#endif // #if defined(_WIN32)

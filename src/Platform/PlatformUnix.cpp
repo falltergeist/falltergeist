@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
+#if defined(__unix__) || defined(__APPLE__) || defined(__linux__)
 
 // C++ standard includes
 
@@ -32,6 +33,12 @@
     #include <dirent.h>
 #endif
 
+#if defined(__MACH__)
+    #include <mach/mach_time.h>
+#else
+    #include <time.h>
+#endif
+
 #if defined(__linux__)
     #include <mntent.h>
 #endif
@@ -41,19 +48,10 @@
     #include <sys/mount.h>
 #endif
 
-#if defined(_WIN32) || defined(WIN32)
-    #include <windows.h>
-    #include <shlobj.h>
-#elif defined(__unix__) || defined(__APPLE__)
+#if defined(__unix__) || defined(__APPLE__)
     #include <sys/stat.h>
     #include <sys/types.h>
     #include <unistd.h>
-#endif
-
-#if defined(_MSC_VER)
-    #define assert(X) { if (!(X)) __debugbreak(); }
-#else
-    #include <cassert>
 #endif
 
 // Falltergeist includes
@@ -87,9 +85,7 @@ std::string CrossPlatform::getVersion()
     if (_version.length() > 0) return _version;
 
     _version = "Falltergeist 0.2.0";
-#if defined(_WIN32) || defined(WIN32)
-    _version += " (Windows)";
-#elif defined(__linux__)
+#if defined(__linux__)
     _version += " (Linux)";
 #elif defined(__APPLE__)
     _version += " (Apple)";
@@ -101,20 +97,13 @@ std::string CrossPlatform::getVersion()
 
 std::string CrossPlatform::getHomeDirectory()
 {
-#if defined(_WIN32) || defined(WIN32)
-    char cwd[256];
-    LPITEMIDLIST pidl;
-    SHGetSpecialFolderLocation(NULL, CSIDL_PROFILE  ,&pidl);
-    SHGetPathFromIDList(pidl, cwd);
-#else
     char *cwd = getenv("HOME");
-#endif
     return std::string(cwd);
 }
 
 std::string CrossPlatform::getExecutableDirectory()
 {
-    char* buffer=SDL_GetBasePath();
+    char* buffer = SDL_GetBasePath();
     std::string path(buffer);
     SDL_free(buffer);
     return path;
@@ -123,20 +112,7 @@ std::string CrossPlatform::getExecutableDirectory()
 std::vector<std::string> CrossPlatform::getCdDrivePaths()
 {
     std::vector<std::string> result;
-#if defined(_WIN32) || defined(WIN32)
-    // Looking for data files on CD-ROM drives
-    char buf[256];
-    GetLogicalDriveStringsA(sizeof(buf), buf);
-
-    for(char * s = buf; *s; s += strlen(s) + 1)
-    {
-        if (GetDriveTypeA(s) == DRIVE_CDROM)
-        {
-            result.push_back(std::string(s));
-        }
-    }
-
-#elif defined(__linux__)
+#if defined(__linux__)
     FILE *mtab = setmntent("/etc/mtab", "r");
     struct mntent *m;
     struct mntent mnt;
@@ -304,26 +280,6 @@ bool CrossPlatform::_createDirectory(const char *dir)
 
         throw std::runtime_error(strerror(errno));
     }
-#elif defined(_WIN32) || defined(WIN32) // Windows
-    DWORD attrs = GetFileAttributes(dir);
-
-    // Assume path exists
-    if (attrs != INVALID_FILE_ATTRIBUTES)
-    {
-        // Directory already exists
-        if (attrs & FILE_ATTRIBUTE_DIRECTORY) return false;
-
-        throw std::runtime_error("Path `" + std::string(dir) + "' already exists and is not a directory");
-    }
-    else
-    {
-        if (CreateDirectory(dir,NULL) != 0) return true;
-
-        DWORD errorId = GetLastError();
-
-        // FIXME: Use FormatMessage to get error string
-        throw std::runtime_error("CreateDirectory failed with code: " + std::to_string(errorId));
-    }
 #else
     #error Platform not supported: CrossPlatform::_createDirectory not implemented
 #endif
@@ -351,10 +307,6 @@ std::string CrossPlatform::getConfigPath()
     return std::string(maybeConfigHome) + "/falltergeist";
 #elif defined(__APPLE__)
     return getHomeDirectory() + "/Library/Application Support/falltergeist";
-#elif defined(_WIN32) || defined(WIN32)
-    char path[256];
-    SHGetFolderPath(nullptr, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, 0, path);
-    return std::string(path) + "/falltergeist";
 #else
     #error Platform not supported: CrossPlatform::getConfigPath not implemented
 #endif
@@ -409,5 +361,6 @@ void CrossPlatform::getTime(TimeInfo * out) {
     }
 #endif
 }
+}
 
-} // namespace Falltergeist
+#endif // #if defined(__unix__) || defined(__APPLE__) || defined(__linux__)
