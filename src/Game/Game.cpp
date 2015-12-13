@@ -28,7 +28,7 @@
 // Falltergeist includes
 #include "../Audio/Mixer.h"
 #include "../Base/StlFeatures.h"
-#include "../CrossPlatform.h"
+#include "../Platform/Platform.h"
 #include "../Event/Dispatcher.h"
 #include "../Event/State.h"
 #include "../Exception.h"

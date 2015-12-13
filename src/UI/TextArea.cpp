@@ -25,7 +25,7 @@
 #include <sstream>
 
 // Falltergeist includes
-#include "../CrossPlatform.h"
+#include "../Platform/Platform.h"
 #include "../Event/Mouse.h"
 #include "../Font.h"
 #include "../FontString.h"

@@ -28,7 +28,7 @@
 #include "../Graphics/Renderer.h"
 #include "../Exception.h"
 #include "../Logger.h"
-#include "../CrossPlatform.h"
+#include "../Platform/Platform.h"
 
 // Third party includes
 #include <libfalltergeist/Mve/Chunk.h>

@@ -23,7 +23,7 @@
 #include <stdexcept>
 
 // Falltergeist includes
-#include "CrossPlatform.h"
+#include "Platform/Platform.h"
 #include "Exception.h"
 #include "Logger.h"
 #include "Lua/Script.h"

@@ -25,7 +25,7 @@
 
 // Falltergeist includes
 #include "Base/StlFeatures.h"
-#include "CrossPlatform.h"
+#include "Platform/Platform.h"
 #include "Exception.h"
 #include "Font.h"
 #include "Game/Location.h"
