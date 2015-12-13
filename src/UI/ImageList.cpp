@@ -41,14 +41,12 @@ ImageList::ImageList(const Point& pos) : Falltergeist::UI::Base(pos)
 
 ImageList::ImageList(std::vector<std::string> imageList, int x, int y) : ImageList(Point(x, y))
 {
-    for (auto& frmName : imageList)
-        addImage(make_unique<Image>(frmName));
+    for (auto& frmName : imageList) addImage(make_unique<Image>(frmName));
 }
 
 ImageList::ImageList(std::vector<Image*> imageList, int x, int y) : ImageList(Point(x, y))
 {
-    for (auto& image : imageList)
-        addImage(make_unique<Image>(*image));
+    for (auto& image : imageList) addImage(make_unique<Image>(*image));
 }
 
 ImageList::~ImageList()
