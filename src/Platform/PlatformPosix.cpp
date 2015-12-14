@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
-#if defined(__unix__) || defined(__APPLE__) || defined(__linux__)
+#if defined(__unix__) || defined(__APPLE__) || defined(__MACH__) || defined(__linux__)
 
 // C++ standard includes
 
@@ -363,4 +363,4 @@ void CrossPlatform::getTime(TimeInfo * out) {
 }
 }
 
-#endif // #if defined(__unix__) || defined(__APPLE__) || defined(__linux__)
+#endif // #if defined(__unix__) || defined(__APPLE__) || defined(__MACH__) || defined(__linux__)
