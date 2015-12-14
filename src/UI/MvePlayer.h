@@ -25,6 +25,7 @@
 
 // Falltergeist includes
 #include "../UI/Base.h"
+#include "../Platform/Platform.h"
 
 // Third party includes
 #include <libfalltergeist/Mve/File.h>
@@ -65,7 +66,7 @@ private:
     uint32_t _audioBufSize = 0;
     uint32_t _samplesReady = 0;
 
-    struct timespec _lastts;
+    struct TimeInfo _lastts;
     SDL_Surface* _currentBuf = NULL;
     SDL_Surface* _backBuf = NULL;
 

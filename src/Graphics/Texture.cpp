@@ -21,6 +21,7 @@
 #include "../Graphics/Texture.h"
 
 // C++ standard includes
+#include <algorithm>
 
 // Falltergeist includes
 #include "../Base/StlFeatures.h"

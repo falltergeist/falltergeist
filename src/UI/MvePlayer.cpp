@@ -28,28 +28,10 @@
 #include "../Graphics/Renderer.h"
 #include "../Exception.h"
 #include "../Logger.h"
+#include "../Platform/Platform.h"
 
 // Third party includes
 #include <libfalltergeist/Mve/Chunk.h>
-
-//@todo Move this to Crossplatform
-#ifdef __MACH__
-#include <mach/mach_time.h>
-#define CLOCK_REALTIME 0
-#define CLOCK_MONOTONIC 0
-int clock_gettime(int clk_id, struct timespec* t)
-{
-    static mach_timebase_info_data_t timebase;
-    mach_timebase_info(&timebase);
-    uint64_t time;
-    time = mach_absolute_time();
-    double nseconds = ((double)time * (double)timebase.numer)/((double)timebase.denom);
-    double seconds = ((double)time * (double)timebase.numer)/((double)timebase.denom * 1e9);
-    t->tv_sec = seconds;
-    t->tv_nsec = nseconds;
-    return 0;
-}
-#endif
 
 namespace Falltergeist
 {
@@ -848,7 +830,7 @@ void MvePlayer::_processChunk()
             case Opcode::CREATE_TIMER:
               _delay = get_int(opcode->data()) * get_short(opcode->data() + 4);
               _timerStarted = true;
-              clock_gettime(CLOCK_MONOTONIC, &_lastts);
+              CrossPlatform::getTime(&_lastts);
               break;
             case Opcode::END_STREAM:
                 _finished = true;
@@ -908,9 +890,9 @@ void MvePlayer::think()
 {
     if (!_timerStarted) return;
 
-    struct timespec ts;
-    clock_gettime(CLOCK_MONOTONIC, &ts);
-    uint32_t nsec = (ts.tv_nsec - _lastts.tv_nsec);
+    struct TimeInfo ts;
+    CrossPlatform::getTime(&ts);
+    uint32_t nsec = (ts._nano - _lastts._nano);
 
     if (nsec >= _delay*1000) // 66728
     {

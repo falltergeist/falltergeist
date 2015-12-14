@@ -24,7 +24,7 @@
 
 // Falltergeist includes
 #include "../Audio/Mixer.h"
-#include "../CrossPlatform.h"
+#include "../Platform/Platform.h"
 #include "../Event/Keyboard.h"
 #include "../Event/Mouse.h"
 #include "../Game/Game.h"

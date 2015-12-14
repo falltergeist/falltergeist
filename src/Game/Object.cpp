@@ -48,7 +48,7 @@
 
 namespace Falltergeist
 {
-using Base::make_unique;
+using namespace Base;
 
 namespace Game
 {
@@ -190,7 +190,7 @@ void Object::_generateUi()
         }
         else
         {
-            _ui =  make_unique<UI::Image>(frm, orientation());
+            _ui = make_unique<UI::Image>(frm, orientation());
         }
     }
 

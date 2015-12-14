@@ -25,7 +25,7 @@
 
 // Falltergeist includes
 #include "Base/StlFeatures.h"
-#include "CrossPlatform.h"
+#include "Platform/Platform.h"
 #include "Exception.h"
 #include "Font.h"
 #include "Game/Location.h"
@@ -61,7 +61,7 @@ namespace Falltergeist
 
 using namespace std;
 using namespace libfalltergeist;
-using Base::make_unique;
+using namespace Base;
 
 namespace
 {

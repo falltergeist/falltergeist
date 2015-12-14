@@ -28,7 +28,7 @@
 // Falltergeist includes
 #include "../Audio/Mixer.h"
 #include "../Base/StlFeatures.h"
-#include "../CrossPlatform.h"
+#include "../Platform/Platform.h"
 #include "../Event/Dispatcher.h"
 #include "../Event/State.h"
 #include "../Exception.h"
@@ -368,7 +368,7 @@ std::unique_ptr<Event::Event> Game::_createEventFromSDL(const SDL_Event& sdlEven
             keyboardEvent->setKeyCode(sdlEvent.key.keysym.sym);
             keyboardEvent->setAltPressed(sdlEvent.key.keysym.mod & KMOD_ALT);
             keyboardEvent->setShiftPressed(sdlEvent.key.keysym.mod & KMOD_SHIFT);
-            keyboardEvent->setControlPressed(sdlEvent.key.keysym.mod & KMOD_CTRL);;
+            keyboardEvent->setControlPressed(sdlEvent.key.keysym.mod & KMOD_CTRL);
 
             // TODO: maybe we should make Game an EventTarget too?
             if (keyboardEvent->keyCode() == SDLK_F12)

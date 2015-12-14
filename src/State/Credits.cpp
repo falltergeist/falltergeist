@@ -31,7 +31,7 @@
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../Graphics/Renderer.h"
-#include "../CrossPlatform.h"
+#include "../Platform/Platform.h"
 
 // Third party includes
 

@@ -201,7 +201,7 @@
 
 namespace Falltergeist
 {
-using Base::make_unique;
+using namespace Base;
 
 std::unique_ptr<OpcodeHandler> OpcodeFactory::createOpcode(unsigned int number, VM* vm)
 {
