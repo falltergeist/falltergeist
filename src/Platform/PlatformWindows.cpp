@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
-#if defined(_WIN32) || defined(_MSC_VER)
 
 // C++ standard includes
 
@@ -289,5 +288,3 @@ void CrossPlatform::getTime(TimeInfo * out) {
     out->_nano = time.QuadPart / (Frequency.QuadPart / 1000000000ull);
 }
 }
-
-#endif // #if defined(_WIN32)

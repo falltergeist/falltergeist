@@ -69,6 +69,15 @@ include_directories(${CMAKE_SOURCE_DIR}/lib/LuaBridge/Source/LuaBridge)
 file(GLOB_RECURSE SOURCES  src/*.cpp)
 file(GLOB_RECURSE HEADERS  src/*.h)
 
+# Select platform based on host OS
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+    # Use only PlatformWindows
+    list(REMOVE_ITEM SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/PlatformPosix.cpp)
+else()
+    # Use only PlatformPosix
+    list(REMOVE_ITEM SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/PlatformWindows.cpp)
+endif()
+
 if(NOT MSVC)
     add_definitions (-std=c++11 -Wall)
 endif()
