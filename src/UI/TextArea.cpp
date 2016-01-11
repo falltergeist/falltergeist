@@ -28,7 +28,6 @@
 #include "../CrossPlatform.h"
 #include "../Event/Mouse.h"
 #include "../Font.h"
-#include "../FontString.h"
 #include "../Format/Aaf/Glyph.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"

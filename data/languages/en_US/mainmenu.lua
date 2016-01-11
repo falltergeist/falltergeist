@@ -1,6 +1,0 @@
-intro = "INTRO"
-new_game = "NEW GAME"
-load_game = "LOAD GAME"
-options = "OPTIONS"
-credits = "CREDITS"
-exit = "EXIT"
