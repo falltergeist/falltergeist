@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../VFS/File.h"
 
 // Third party includes
 
@@ -33,12 +34,18 @@ namespace VFS
 namespace Plugin
 {
 
-DatFile::DatFile()
+DatFile::DatFile() : IPlugin()
 {
 }
 
 DatFile::~DatFile()
 {
+}
+
+Falltergeist::VFS::File* DatFile::open(std::string filename)
+{
+    // @todo implementation goes here
+    return nullptr;
 }
 
 }

@@ -35,5 +35,9 @@ File::File()
 {
 }
 
+File::~File()
+{
+}
+
 }
 }

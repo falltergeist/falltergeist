@@ -23,6 +23,8 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../VFS/Plugin/DatFile.h"
+#include "../VFS/Plugin/System.h"
 
 // Third party includes
 
@@ -33,7 +35,43 @@ namespace VFS
 
 VFS::VFS()
 {
+    _plugins.push_back(new Plugin::System);
+    _plugins.push_back(new Plugin::DatFile);
 }
+
+VFS::~VFS()
+{
+    for (auto& item : _cache)
+    {
+        delete item.second;
+    }
+
+    for (auto plugin : _plugins)
+    {
+        delete plugin;
+    }
+}
+
+File* VFS::open(const std::string filename)
+{
+    if (_cache.find(filename) != _cache.end())
+    {
+        return _cache.at(filename);
+    }
+
+    for(auto plugin : _plugins)
+    {
+        auto file = plugin->open(filename);
+        if (file)
+        {
+            _cache.insert(std::make_pair(filename, file));
+            return file;
+        }
+    }
+
+    return nullptr;
+}
+
 
 }
 }

@@ -41,7 +41,7 @@ class IPlugin
 {
 public:
     virtual ~IPlugin() {}
-    virtual std::unique_ptr<Falltergeist::VFS::File> open(std::string filename) = 0;
+    virtual Falltergeist::VFS::File* open(std::string filename) = 0;
 };
 
 }

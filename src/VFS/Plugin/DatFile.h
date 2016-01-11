@@ -38,7 +38,10 @@ class DatFile : public IPlugin
 {
 public:
     DatFile();
-    virtual ~DatFile() override;
+    ~DatFile() override;
+
+    Falltergeist::VFS::File* open(std::string filename) override;
+
 };
 
 }

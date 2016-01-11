@@ -17,13 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_VFS_FILE_H
-#define FALLTERGEIST_VFS_FILE_H
+#ifndef FALLTERGEIST_VFS_PLUGIN_SYSTEM_H
+#define FALLTERGEIST_VFS_PLUGIN_SYSTEM_H
 
 // C++ standard includes
-#include <string>
 
 // Falltergeist includes
+#include "../../VFS/Plugin/IPlugin.h"
 
 // Third party includes
 
@@ -31,24 +31,20 @@ namespace Falltergeist
 {
 namespace VFS
 {
-
 namespace Plugin
 {
-    class IPlugin;
-}
 
-class File
+class System : public IPlugin
 {
 public:
-    File();
-    virtual ~File();
+    System();
+    ~System() override;
 
-protected:
-    std::string _filename;
-    Plugin::IPlugin* _iplugin = nullptr;
+    Falltergeist::VFS::File* open(std::string filename) override;
 
 };
 
 }
 }
-#endif // FALLTERGEIST_VFS_FILE_H
+}
+#endif // FALLTERGEIST_VFS_PLUGIN_SYSTEM_H
