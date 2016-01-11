@@ -74,10 +74,9 @@ Format::Pro::File* fetchProFileType(unsigned int PID)
 
 ResourceManager::ResourceManager()
 {
-    vector<string> * files = CrossPlatform::findFalloutDataFiles();
-    for (auto it = files->begin(); it != files->end(); ++it)
+    for (auto filename : CrossPlatform::findFalloutDataFiles())
     {
-        string path = CrossPlatform::findFalloutDataPath() + "/" + (*it);
+        string path = CrossPlatform::findFalloutDataPath() + "/" + filename;
         _datFiles.push_back(make_unique<Format::Dat::File>(path));
     }
 }

@@ -21,6 +21,7 @@
 #define FALLTERGEIST_VFS_PLUGIN_DATFILE_H
 
 // C++ standard includes
+#include <string>
 
 // Falltergeist includes
 #include "../../VFS/Plugin/IPlugin.h"
@@ -37,7 +38,7 @@ namespace Plugin
 class DatFile : public IPlugin
 {
 public:
-    DatFile();
+    DatFile(const std::string filename);
     ~DatFile() override;
 
     Falltergeist::VFS::File* open(std::string filename) override;

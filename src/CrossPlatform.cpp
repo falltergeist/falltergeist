@@ -64,8 +64,8 @@ namespace Falltergeist
 std::string CrossPlatform::_version;
 std::string CrossPlatform::_falloutDataPath;
 std::string CrossPlatform::_falltergeistDataPath;
-std::vector<std::string> *CrossPlatform::_dataFiles = 0;
-const std::vector<std::string> CrossPlatform::necessaryDatFiles = {"master.dat", "critter.dat"};
+std::vector<std::string> CrossPlatform::_dataFiles;
+const std::vector<std::string> CrossPlatform::_necessaryDatFiles = {"master.dat", "critter.dat"};
 
 
 CrossPlatform::CrossPlatform()
@@ -190,8 +190,8 @@ std::string CrossPlatform::findFalloutDataPath()
     for (auto &directory : directories)
     {
         if (std::all_of(
-                necessaryDatFiles.begin(),
-                necessaryDatFiles.end(),
+                _necessaryDatFiles.begin(),
+                _necessaryDatFiles.end(),
                 [directory](const std::string& file) {
                     std::ifstream stream(directory + "/" + file);
                     if (stream)
@@ -247,10 +247,9 @@ std::string CrossPlatform::findFalltergeistDataPath()
 }
 
 // this method looks for available dat files
-std::vector<std::string> *CrossPlatform::findFalloutDataFiles()
+std::vector<std::string> CrossPlatform::findFalloutDataFiles()
 {
-    if (_dataFiles)
-        return _dataFiles;
+    if (_dataFiles.size()) return _dataFiles;
 
     // looking for all available dat files in directory
     DIR *pxDir = opendir(CrossPlatform::findFalloutDataPath().c_str());
@@ -258,7 +257,7 @@ std::vector<std::string> *CrossPlatform::findFalloutDataFiles()
     {
         throw Exception("Can't open data directory: " + CrossPlatform::findFalloutDataPath());
     }
-    _dataFiles = new std::vector<std::string>(necessaryDatFiles);
+    _dataFiles = _necessaryDatFiles;
     struct dirent *pxItem = 0;
     while ((pxItem = readdir(pxDir)))
     {
@@ -269,7 +268,7 @@ std::vector<std::string> *CrossPlatform::findFalloutDataFiles()
             if (ext == ".dat")
             {
                 if (filename.length() == 12 && filename.substr(0, 5) == "patch")
-                    _dataFiles->insert(_dataFiles->begin(),filename);
+                    _dataFiles.insert(_dataFiles.begin(),filename);
             }
         }
     }

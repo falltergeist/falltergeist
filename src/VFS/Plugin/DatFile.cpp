@@ -34,7 +34,7 @@ namespace VFS
 namespace Plugin
 {
 
-DatFile::DatFile() : IPlugin()
+DatFile::DatFile(const std::string filename) : IPlugin()
 {
 }
 

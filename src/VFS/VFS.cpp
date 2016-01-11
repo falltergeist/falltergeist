@@ -21,8 +21,12 @@
 #include "../VFS/VFS.h"
 
 // C++ standard includes
+#include <string>
+#include <vector>
 
 // Falltergeist includes
+#include "../CrossPlatform.h"
+#include "../VFS/File.h"
 #include "../VFS/Plugin/DatFile.h"
 #include "../VFS/Plugin/System.h"
 
@@ -35,8 +39,17 @@ namespace VFS
 
 VFS::VFS()
 {
+    // OS filesystem plugin. Read directly from disk
     _plugins.push_back(new Plugin::System);
-    _plugins.push_back(new Plugin::DatFile);
+
+    // one plugin instance per DAT file
+    for (auto filename : CrossPlatform::findFalloutDataFiles())
+    {
+        _plugins.push_back(new Plugin::DatFile(CrossPlatform::findFalloutDataPath() + "/" + filename));
+    }
+
+    // Here comes other plugins
+    // Zip archives... network repos... etc
 }
 
 VFS::~VFS()
@@ -71,7 +84,6 @@ File* VFS::open(const std::string filename)
 
     return nullptr;
 }
-
 
 }
 }

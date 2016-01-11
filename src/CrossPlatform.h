@@ -37,9 +37,9 @@ class CrossPlatform
 protected:
     static std::string _falloutDataPath;
     static std::string _falltergeistDataPath;
-    static std::vector<std::string>* _dataFiles;
+    static std::vector<std::string> _dataFiles;
     static std::string _version;
-    const static std::vector<std::string> necessaryDatFiles;
+    const static std::vector<std::string> _necessaryDatFiles;
 
 
     // Create directory at given path, if not already exists.
@@ -55,8 +55,8 @@ public:
     static std::string getExecutableDirectory();
     static std::vector<std::string> getCdDrivePaths();
     static std::string findFalloutDataPath();
+    static std::vector<std::string> findFalloutDataFiles();
     static std::string findFalltergeistDataPath();
-    static std::vector<std::string> * findFalloutDataFiles();
     static std::string getConfigPath();
     static std::vector<std::string> getDataPaths();
 

@@ -27,7 +27,6 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../VFS/Plugin/IPlugin.h"
 
 // Third party includes
