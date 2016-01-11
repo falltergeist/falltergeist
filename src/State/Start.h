@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -17,13 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_Start_H
-#define FALLTERGEIST_Start_H
+#ifndef FALLTERGEIST_STATE_START_H
+#define FALLTERGEIST_STATE_START_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "State.h"
+#include "../State/State.h"
 
 // Third party includes
 
@@ -34,16 +34,18 @@ namespace State
 
 class Start : public State
 {
-protected:
-    unsigned int _splashTicks = 0;
 public:
     Start();
-    virtual ~Start();
-    virtual void think();
-    virtual void init();
+    ~Start() override;
+
+    void think() override;
+    void init() override;
+
+protected:
+    unsigned int _splashTicks = 0;
 };
 
 }
 }
 
-#endif // FALLTERGEIST_Start_H
+#endif // FALLTERGEIST_START_START_H

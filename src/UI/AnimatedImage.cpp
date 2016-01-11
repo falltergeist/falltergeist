@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -24,6 +24,8 @@
 
 // Falltergeist includes
 #include "../Base/StlFeatures.h"
+#include "../Format/Frm/File.h"
+#include "../Format/Frm/Direction.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
@@ -36,7 +38,6 @@
 #include "../State/Location.h"
 
 // Third party includes
-#include <libfalltergeist/Frm/Direction.h>
 
 namespace Falltergeist
 {
@@ -45,7 +46,7 @@ namespace UI
 
 using namespace Base;
 
-AnimatedImage::AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direction) : Falltergeist::UI::Base()
+AnimatedImage::AnimatedImage(Format::Frm::File* frm, unsigned int direction) : Falltergeist::UI::Base()
 {
     _texture = ResourceManager::getInstance()->texture(frm->filename());
     auto dir = frm->directions()->at(direction);

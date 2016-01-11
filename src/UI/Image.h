@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -27,11 +27,16 @@
 #include "../UI/Base.h"
 
 // Third party includes
-#include <libfalltergeist/Frm/File.h>
-#include <libfalltergeist/Frm/Direction.h>
 
 namespace Falltergeist
 {
+namespace Format
+{
+namespace Frm
+{
+    class File;
+}
+}
 namespace UI
 {
 
@@ -45,7 +50,7 @@ public:
     Image(const Size& size);
     Image(const Image& image);
     Image(Graphics::Texture* texture);
-    Image(libfalltergeist::Frm::File* frm, unsigned int direction);
+    Image(Format::Frm::File* frm, unsigned int direction);
     ~Image() override;
 
     void setTexture(const std::string& filename);

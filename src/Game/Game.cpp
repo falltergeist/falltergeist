@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -32,22 +32,22 @@
 #include "../Event/Dispatcher.h"
 #include "../Event/State.h"
 #include "../Exception.h"
+#include "../Format/Gam/File.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Time.h"
 #include "../Graphics/AnimatedPalette.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
-#include "../Lua/Script.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../State/State.h"
 #include "../State/Location.h"
 #include "../UI/FpsCounter.h"
 #include "../UI/TextArea.h"
+#include "../VFS/VFS.h"
 
 // Third patry includes
-#include <libfalltergeist/Gam/File.h>
 #include <SDL_image.h>
 
 namespace Falltergeist
@@ -78,6 +78,7 @@ void Game::init(std::unique_ptr<Settings> settings)
 
     _settings = std::move(settings);
 
+    _vfs = make_unique<VFS::VFS>();
     _eventDispatcher = make_unique<Event::Dispatcher>();
 
     _renderer = make_unique<Graphics::Renderer>(_settings->screenWidth(), _settings->screenHeight());

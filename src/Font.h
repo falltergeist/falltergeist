@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -27,13 +27,19 @@
 
 // Falltergeist includes
 #include "Graphics/Texture.h"
+#include "Format/Aaf/File.h"
 
 // Third party includes
-#include <libfalltergeist/Aaf/File.h>
-#include <libfalltergeist/Aaf/Glyph.h>
 
 namespace Falltergeist
 {
+namespace Format
+{
+namespace Aaf
+{
+    class File;
+}
+}
 
 class Font
 {
@@ -56,11 +62,11 @@ public:
 
     Graphics::Texture* texture();
 
-    libfalltergeist::Aaf::File* aaf();
+    Format::Aaf::File* aaf();
 
 protected:
     unsigned int _color = 0;
-    libfalltergeist::Aaf::File* _aaf = nullptr;
+    Format::Aaf::File* _aaf = nullptr;
     std::unique_ptr<Graphics::Texture> _texture = nullptr;
     std::string _filename;
 

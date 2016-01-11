@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -26,10 +26,16 @@
 #include "../State/State.h"
 
 // Third party includes
-#include <libfalltergeist/Sve/File.h>
 
 namespace Falltergeist
 {
+namespace Format
+{
+namespace Sve
+{
+    class File;
+}
+}
 class MvePlayer;
 
 namespace State
@@ -62,7 +68,7 @@ private:
     int _id;
     bool _started;
     std::pair<unsigned int,std::string> _nextSubLine;
-    libfalltergeist::Sve::File* _subs;
+    Format::Sve::File* _subs = nullptr;
     bool _hasSubs = false;
     std::vector<effect_t> _effects;
     unsigned int _effect_index=0;

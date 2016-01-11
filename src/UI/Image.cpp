@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -24,6 +24,8 @@
 
 // Falltergeist includes
 #include "../Exception.h"
+#include "../Format/Frm/File.h"
+#include "../Format/Frm/Direction.h"
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
 
@@ -61,7 +63,7 @@ Image::Image(Graphics::Texture* texture) : Falltergeist::UI::Base()
     setTexture(texture);
 }
 
-Image::Image(libfalltergeist::Frm::File* frm, unsigned int direction) : Falltergeist::UI::Base()
+Image::Image(Format::Frm::File* frm, unsigned int direction) : Falltergeist::UI::Base()
 {
     if (direction >= frm->directions()->size())
     {

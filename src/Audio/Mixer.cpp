@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -25,14 +25,14 @@
 
 // Falltergeist includes
 #include "../Exception.h"
-#include "../Logger.h"
-#include "../UI/MvePlayer.h"
+#include "../Format/Acm/File.h"
 #include "../Game/Game.h"
+#include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
+#include "../UI/MvePlayer.h"
 
 // Third party includes
-#include <libfalltergeist/Acm/File.h>
 #include <SDL.h>
 
 namespace Falltergeist
@@ -90,7 +90,7 @@ void Mixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len)
 {
     if (_paused) return;
 
-    auto pacm = (libfalltergeist::Acm::File*)(udata);
+    auto pacm = (Format::Acm::File*)(udata);
     if (pacm->samplesLeft() <= 0)
     {
         if (_loop)

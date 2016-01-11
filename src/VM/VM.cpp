@@ -24,6 +24,11 @@
 
 // Falltergeist includes
 #include "../Exception.h"
+#include "../Format/Int/File.h"
+#include "../Format/Int/Procedure.h"
+#include "../Format/Lst/File.h"
+#include "../Format/Msg/File.h"
+#include "../Format/Msg/Message.h"
 #include "../Game/Game.h"
 #include "../Game/Object.h"
 #include "../Logger.h"
@@ -39,7 +44,7 @@
 namespace Falltergeist
 {
 
-VM::VM(libfalltergeist::Int::File* script, Game::Object* owner)
+VM::VM(Format::Int::File* script, Game::Object* owner)
 {
     _owner = owner;
     _script = script;
@@ -136,7 +141,7 @@ std::string VM::msgMessage(int msg_file_num, int msg_num)
     return msg->message(msg_num)->text();
 }
 
-libfalltergeist::Int::File* VM::script()
+Format::Int::File* VM::script()
 {
     return _script;
 }

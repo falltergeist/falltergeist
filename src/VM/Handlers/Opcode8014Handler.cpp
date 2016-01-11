@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Format/Int/File.h"
 #include "../../Game/Game.h"
 #include "../../State/Location.h"
 #include "../../Logger.h"

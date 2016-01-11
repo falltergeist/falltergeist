@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -23,6 +23,8 @@
 
 // Falltergeist includes
 #include "../Exception.h"
+#include "../Format/Int/File.h"
+#include "../Format/Int/Procedure.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../LocationCamera.h"
@@ -39,8 +41,6 @@
 #include "../VM/VM.h"
 
 // Third party includes
-#include <libfalltergeist/Int/File.h>
-#include <libfalltergeist/Int/Procedure.h>
 
 namespace Falltergeist
 {

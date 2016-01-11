@@ -1,6 +1,0 @@
-[submodule "libfalltergeist"]
-path = lib/libfalltergeist
-url = https://github.com/falltergeist/libfalltergeist.git
-[submodule "lib/LuaBridge"]
-	path = lib/LuaBridge
-	url = https://github.com/falltergeist/LuaBridge

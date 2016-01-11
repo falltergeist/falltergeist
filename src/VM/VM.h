@@ -28,11 +28,16 @@
 #include "../VM/VMStackValue.h"
 
 // Third party includes
-#include <libfalltergeist/Int/File.h>
-#include <libfalltergeist/Int/Procedure.h>
 
 namespace Falltergeist
 {
+namespace Format
+{
+namespace Int
+{
+    class File;
+}
+}
 namespace Game
 {
     class Object;
@@ -52,7 +57,7 @@ protected:
     Game::Object* _targetObject = nullptr;
     int _fixedParam = 0;
     int _actionUsed = 0;
-    libfalltergeist::Int::File* _script = 0;
+    Format::Int::File* _script = 0;
     bool _initialized = false;
     bool _overrides = false;
     VMStack _dataStack;
@@ -63,7 +68,7 @@ protected:
     int _SVAR_base = 0;
 
 public:
-    VM(libfalltergeist::Int::File* script, Game::Object* owner);
+    VM(Format::Int::File* script, Game::Object* owner);
     VM(const std::string& filename, Game::Object* owner);
     virtual ~VM();
     void run();
@@ -81,7 +86,7 @@ public:
     bool hasFunction(const std::string& name);
 
     void call(const std::string& name);
-    libfalltergeist::Int::File* script();
+    Format::Int::File* script();
 
     Game::Object* owner();
 

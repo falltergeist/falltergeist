@@ -1,5 +1,5 @@
 #
-# Copyright 2012-2015 Falltergeist Developers.
+# Copyright 2012-2016 Falltergeist Developers.
 #
 # This file is part of Falltergeist.
 #
@@ -18,6 +18,6 @@
 #
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-    install(TARGETS falltergeist-bin RUNTIME DESTINATION bin)
+    install(TARGETS falltergeist RUNTIME DESTINATION bin)
     install(DIRECTORY data DESTINATION share/falltergeist)
 endif()

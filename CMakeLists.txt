@@ -1,5 +1,5 @@
 #
-# Copyright 2012-2015 Falltergeist Developers.
+# Copyright 2012-2016 Falltergeist Developers.
 #
 # This file is part of Falltergeist.
 #
@@ -24,21 +24,15 @@ cmake_minimum_required(VERSION 2.8)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 project(falltergeist)
-set(falltergeist_VERSION  0.2.0)
-
-option(LIBFALLTERGEIST_EMBEDDED "Use embedded libfalltergeist" ON)
+set(falltergeist_VERSION  0.3.0)
 
 include_directories(src)
 
-if(LIBFALLTERGEIST_EMBEDDED)
-    set(LIBFALLTERGEIST_LIBRARY falltergeist)
-    set(LIBFALLTERGEIST_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/lib/libfalltergeist/include")
-    include_directories(${LIBFALLTERGEIST_INCLUDE_DIR})
-    set(LIBFALLTERGEIST_EMBEDDED ON CACHE BOOL "")
-else()
-    find_package(LIBFALLTERGEIST REQUIRED)
-    include_directories(${LIBFALLTERGEIST_INCLUDE_DIR})
-endif()
+find_package(ZLIB REQUIRED)
+if(NOT ZLIB_FOUND)
+    message(FATAL_ERROR "zlib library not found")
+endif(NOT ZLIB_FOUND)
+include_directories(${ZLIB_INCLUDE_DIRS})
 
 find_package(SDL2 REQUIRED)
 if(NOT SDL2_FOUND)
@@ -58,26 +52,12 @@ if(NOT SDLIMAGE_FOUND)
 endif(NOT SDLIMAGE_FOUND)
 include_directories(${SDLIMAGE_INCLUDE_DIR})
 
-find_package(Lua 5.1 REQUIRED)
-if (NOT LUA_FOUND)
-    message(FATAL_ERROR "Lua library not found")
-endif(NOT LUA_FOUND)
-include_directories(${LUA_INCLUDE_DIR})
-
-include_directories(${CMAKE_SOURCE_DIR}/lib/LuaBridge/Source/LuaBridge)
-
 file(GLOB_RECURSE SOURCES  src/*.cpp)
-file(GLOB_RECURSE HEADERS  src/*.h)
 
 add_definitions (-std=c++11 -Wall)
 
-if(LIBFALLTERGEIST_EMBEDDED)
-    add_subdirectory(lib/libfalltergeist)
-endif()
-
-add_executable(falltergeist-bin main.cpp ${SOURCES} ${HEADERS})
-set_target_properties(falltergeist-bin PROPERTIES OUTPUT_NAME falltergeist)
-target_link_libraries(falltergeist-bin ${SDL2_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLIMAGE_LIBRARY} ${LIBFALLTERGEIST_LIBRARY} ${LUA_LIBRARY})
+add_executable(falltergeist main.cpp ${SOURCES})
+target_link_libraries(falltergeist ${ZLIB_LIBRARIES} ${SDL2_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLIMAGE_LIBRARY})
 
 include(cmake/install/windows.cmake)
 include(cmake/install/linux.cmake)

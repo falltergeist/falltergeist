@@ -1,5 +1,5 @@
 #
-# Copyright 2012-2015 Falltergeist Developers.
+# Copyright 2012-2016 Falltergeist Developers.
 #
 # This file is part of Falltergeist.
 #
@@ -18,7 +18,7 @@
 #
 
 if(WIN32)
-    install(TARGETS falltergeist-bin RUNTIME DESTINATION .)
+    install(TARGETS falltergeist RUNTIME DESTINATION .)
     install(DIRECTORY data DESTINATION .)
 
     #MinGW runtime

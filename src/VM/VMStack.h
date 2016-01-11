@@ -24,7 +24,7 @@
 #include <vector>
 #include <memory>
 
-// libfalltergeist includes
+// Falltergeist includes
 
 // Third party includes
 

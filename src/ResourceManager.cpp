@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -28,6 +28,27 @@
 #include "CrossPlatform.h"
 #include "Exception.h"
 #include "Font.h"
+#include "Format/Acm/File.h"
+#include "Format/Bio/File.h"
+#include "Format/Dat/File.h"
+#include "Format/Dat/Item.h"
+#include "Format/Fon/File.h"
+#include "Format/Frm/File.h"
+#include "Format/Gam/File.h"
+#include "Format/Gcd/File.h"
+#include "Format/Int/File.h"
+#include "Format/Lst/File.h"
+#include "Format/Map/File.h"
+#include "Format/Msg/File.h"
+#include "Format/Mve/File.h"
+#include "Format/Pal/File.h"
+#include "Format/Pro/File.h"
+#include "Format/Rix/File.h"
+#include "Format/Sve/File.h"
+#include "Format/Txt/CityFile.h"
+#include "Format/Txt/CSVBasedFile.h"
+#include "Format/Txt/MapsFile.h"
+#include "Format/Txt/WorldmapFile.h"
 #include "Game/Location.h"
 #include "Graphics/Texture.h"
 #include "Logger.h"
@@ -35,37 +56,17 @@
 #include "Ini/File.h"
 
 // Third party includes
-#include <libfalltergeist/Acm/File.h>
-#include <libfalltergeist/Bio/File.h>
-#include <libfalltergeist/Dat/File.h>
-#include <libfalltergeist/Dat/Item.h>
-#include <libfalltergeist/Fon/File.h>
-#include <libfalltergeist/Frm/File.h>
-#include <libfalltergeist/Gam/File.h>
-#include <libfalltergeist/Gcd/File.h>
-#include <libfalltergeist/Int/File.h>
-#include <libfalltergeist/Map/File.h>
-#include <libfalltergeist/Mve/File.h>
-#include <libfalltergeist/Pal/File.h>
-#include <libfalltergeist/Pro/File.h>
-#include <libfalltergeist/Rix/File.h>
-#include <libfalltergeist/Sve/File.h>
-#include <libfalltergeist/Txt/CityFile.h>
-#include <libfalltergeist/Txt/CSVBasedFile.h>
-#include <libfalltergeist/Txt/MapsFile.h>
-#include <libfalltergeist/Txt/WorldmapFile.h>
 #include <SDL_image.h>
 
 namespace Falltergeist
 {
 
 using namespace std;
-using namespace libfalltergeist;
 using Base::make_unique;
 
 namespace
 {
-Pro::File* fetchProFileType(unsigned int PID)
+Format::Pro::File* fetchProFileType(unsigned int PID)
 {
     return ResourceManager::getInstance()->proFileType(PID);
 }
@@ -77,7 +78,7 @@ ResourceManager::ResourceManager()
     for (auto it = files->begin(); it != files->end(); ++it)
     {
         string path = CrossPlatform::findFalloutDataPath() + "/" + (*it);
-        _datFiles.push_back(make_unique<Dat::File>(path));
+        _datFiles.push_back(make_unique<Format::Dat::File>(path));
     }
 }
 
@@ -91,7 +92,7 @@ ResourceManager* ResourceManager::getInstance()
     return Base::Singleton<ResourceManager>::get();
 }
 
-Dat::Item* ResourceManager::datFileItem(string filename)
+Format::Dat::Item* ResourceManager::datFileItem(string filename)
 {
     std::transform(filename.begin(), filename.end(), filename.begin(), ::tolower);
 
@@ -123,9 +124,9 @@ Dat::Item* ResourceManager::datFileItem(string filename)
 
         if (stream.is_open())
         {
-            Dat::Item* item = _createItemByName(filename, &stream);
+            Format::Dat::Item* item = _createItemByName(filename, &stream);
             item->setFilename(filename);
-            _datItems.push_back(unique_ptr<Dat::Item>(item));
+            _datItems.push_back(unique_ptr<Format::Dat::Item>(item));
             _datItemMap.insert(make_pair(filename, item));
             return item;
         }
@@ -146,102 +147,102 @@ Dat::Item* ResourceManager::datFileItem(string filename)
     return 0;
 }
 
-Dat::Item* ResourceManager::_createItemByName(const string& filename, ifstream* stream)
+Format::Dat::Item* ResourceManager::_createItemByName(const string& filename, ifstream* stream)
 {
     string extension = filename.substr(filename.length() - 3, 3);
-    if      (extension == "aaf") return new Aaf::File(stream);
-    else if (extension == "acm") return new Acm::File(stream);
-    else if (extension == "bio") return new Bio::File(stream);
-    else if (extension == "fon") return new Fon::File(stream);
-    else if (extension == "frm") return new Frm::File(stream);
-    else if (extension == "gam") return new Gam::File(stream);
-    else if (extension == "gcd") return new Gcd::File(stream);
-    else if (extension == "int") return new Int::File(stream);
-    else if (extension == "lst") return new Lst::File(stream);
-    else if (extension == "map") return new Map::File(stream);
-    else if (extension == "msg") return new Msg::File(stream);
-    else if (extension == "mve") return new Mve::File(stream);
-    else if (extension == "pal") return new Pal::File(stream);
-    else if (extension == "pro") return new Pro::File(stream);
-    else if (extension == "rix") return new Rix::File(stream);
-    else if (filename == "data/city.txt")       return new Txt::CityFile(stream);
-    else if (filename == "data/enddeath.txt")   return new Txt::EndDeathFile(stream);
-    else if (filename == "data/endgame.txt")    return new Txt::EndGameFile(stream);
-    else if (filename == "data/genrep.txt")     return new Txt::GenRepFile(stream);
-    else if (filename == "data/holodisk.txt")   return new Txt::HolodiskFile(stream);
-    else if (filename == "data/karmavar.txt")   return new Txt::KarmaVarFile(stream);
-    else if (filename == "data/maps.txt")       return new Txt::MapsFile(stream);
-    else if (filename == "data/quests.txt")     return new Txt::QuestsFile(stream);
-    else if (filename == "data/worldmap.txt")   return new Txt::WorldmapFile(stream);
+    if      (extension == "aaf") return new Format::Aaf::File(stream);
+    else if (extension == "acm") return new Format::Acm::File(stream);
+    else if (extension == "bio") return new Format::Bio::File(stream);
+    else if (extension == "fon") return new Format::Fon::File(stream);
+    else if (extension == "frm") return new Format::Frm::File(stream);
+    else if (extension == "gam") return new Format::Gam::File(stream);
+    else if (extension == "gcd") return new Format::Gcd::File(stream);
+    else if (extension == "int") return new Format::Int::File(stream);
+    else if (extension == "lst") return new Format::Lst::File(stream);
+    else if (extension == "map") return new Format::Map::File(stream);
+    else if (extension == "msg") return new Format::Msg::File(stream);
+    else if (extension == "mve") return new Format::Mve::File(stream);
+    else if (extension == "pal") return new Format::Pal::File(stream);
+    else if (extension == "pro") return new Format::Pro::File(stream);
+    else if (extension == "rix") return new Format::Rix::File(stream);
+    else if (filename == "data/city.txt")       return new Format::Txt::CityFile(stream);
+    else if (filename == "data/enddeath.txt")   return new Format::Txt::EndDeathFile(stream);
+    else if (filename == "data/endgame.txt")    return new Format::Txt::EndGameFile(stream);
+    else if (filename == "data/genrep.txt")     return new Format::Txt::GenRepFile(stream);
+    else if (filename == "data/holodisk.txt")   return new Format::Txt::HolodiskFile(stream);
+    else if (filename == "data/karmavar.txt")   return new Format::Txt::KarmaVarFile(stream);
+    else if (filename == "data/maps.txt")       return new Format::Txt::MapsFile(stream);
+    else if (filename == "data/quests.txt")     return new Format::Txt::QuestsFile(stream);
+    else if (filename == "data/worldmap.txt")   return new Format::Txt::WorldmapFile(stream);
     else
     {
-        return new Dat::Item(stream);
+        return new Format::Dat::Item(stream);
     }
 }
 
-Frm::File* ResourceManager::frmFileType(const string& filename)
+Format::Frm::File* ResourceManager::frmFileType(const string& filename)
 {
-    return dynamic_cast<Frm::File*>(datFileItem(filename));
+    return dynamic_cast<Format::Frm::File*>(datFileItem(filename));
 }
 
-Pal::File* ResourceManager::palFileType(const string& filename)
+Format::Pal::File* ResourceManager::palFileType(const string& filename)
 {
-    return dynamic_cast<Pal::File*>(datFileItem(filename));
+    return dynamic_cast<Format::Pal::File*>(datFileItem(filename));
 }
 
-Lst::File* ResourceManager::lstFileType(const string& filename)
+Format::Lst::File* ResourceManager::lstFileType(const string& filename)
 {
-    return dynamic_cast<Lst::File*>(datFileItem(filename));
+    return dynamic_cast<Format::Lst::File*>(datFileItem(filename));
 }
 
-Aaf::File* ResourceManager::aafFileType(const string& filename)
+Format::Aaf::File* ResourceManager::aafFileType(const string& filename)
 {
-    return dynamic_cast<Aaf::File*>(datFileItem(filename));
+    return dynamic_cast<Format::Aaf::File*>(datFileItem(filename));
 }
 
-Acm::File* ResourceManager::acmFileType(const string& filename)
+Format::Acm::File* ResourceManager::acmFileType(const string& filename)
 {
-    return dynamic_cast<Acm::File*>(datFileItem(filename));
+    return dynamic_cast<Format::Acm::File*>(datFileItem(filename));
 }
 
-Fon::File* ResourceManager::fonFileType(const string& filename)
+Format::Fon::File* ResourceManager::fonFileType(const string& filename)
 {
-    return dynamic_cast<Fon::File*>(datFileItem(filename));
+    return dynamic_cast<Format::Fon::File*>(datFileItem(filename));
 }
 
-Gam::File* ResourceManager::gamFileType(const string& filename)
+Format::Gam::File* ResourceManager::gamFileType(const string& filename)
 {
-    return dynamic_cast<Gam::File*>(datFileItem(filename));
+    return dynamic_cast<Format::Gam::File*>(datFileItem(filename));
 }
 
-Gcd::File* ResourceManager::gcdFileType(const string& filename)
+Format::Gcd::File* ResourceManager::gcdFileType(const string& filename)
 {
-    return dynamic_cast<Gcd::File*>(datFileItem(filename));
+    return dynamic_cast<Format::Gcd::File*>(datFileItem(filename));
 }
 
-Int::File* ResourceManager::intFileType(const string& filename)
+Format::Int::File* ResourceManager::intFileType(const string& filename)
 {
-    return dynamic_cast<Int::File*>(datFileItem(filename));
+    return dynamic_cast<Format::Int::File*>(datFileItem(filename));
 }
 
-Msg::File* ResourceManager::msgFileType(const string& filename)
+Format::Msg::File* ResourceManager::msgFileType(const string& filename)
 {
-    return dynamic_cast<Msg::File*>(datFileItem(filename));
+    return dynamic_cast<Format::Msg::File*>(datFileItem(filename));
 }
 
-Mve::File* ResourceManager::mveFileType(const string& filename)
+Format::Mve::File* ResourceManager::mveFileType(const string& filename)
 {
-    return dynamic_cast<Mve::File*>(datFileItem(filename));
+    return dynamic_cast<Format::Mve::File*>(datFileItem(filename));
 }
 
-Bio::File* ResourceManager::bioFileType(const string& filename)
+Format::Bio::File* ResourceManager::bioFileType(const string& filename)
 {
-    return dynamic_cast<Bio::File*>(datFileItem(filename));
+    return dynamic_cast<Format::Bio::File*>(datFileItem(filename));
 }
 
-Map::File* ResourceManager::mapFileType(const string& filename)
+Format::Map::File* ResourceManager::mapFileType(const string& filename)
 {
-    auto item = dynamic_cast<Map::File*>(datFileItem(filename));
+    auto item = dynamic_cast<Format::Map::File*>(datFileItem(filename));
     if (item)
     {
         item->setCallback(&fetchProFileType);
@@ -249,64 +250,64 @@ Map::File* ResourceManager::mapFileType(const string& filename)
     return item;
 }
 
-Pro::File* ResourceManager::proFileType(const string& filename)
+Format::Pro::File* ResourceManager::proFileType(const string& filename)
 {
-    return dynamic_cast<Pro::File*>(datFileItem(filename));
+    return dynamic_cast<Format::Pro::File*>(datFileItem(filename));
 }
 
-Rix::File* ResourceManager::rixFileType(const string& filename)
+Format::Rix::File* ResourceManager::rixFileType(const string& filename)
 {
-    return dynamic_cast<Rix::File*>(datFileItem(filename));
+    return dynamic_cast<Format::Rix::File*>(datFileItem(filename));
 }
 
-Sve::File* ResourceManager::sveFileType(const string& filename)
+Format::Sve::File* ResourceManager::sveFileType(const string& filename)
 {
-    return dynamic_cast<Sve::File*>(datFileItem(filename));
+    return dynamic_cast<Format::Sve::File*>(datFileItem(filename));
 }
 
-Txt::CityFile* ResourceManager::cityTxt()
+Format::Txt::CityFile* ResourceManager::cityTxt()
 {
-    return dynamic_cast<Txt::CityFile*>(datFileItem("data/city.txt"));
+    return dynamic_cast<Format::Txt::CityFile*>(datFileItem("data/city.txt"));
 }
 
-Txt::MapsFile* ResourceManager::mapsTxt()
+Format::Txt::MapsFile* ResourceManager::mapsTxt()
 {
-    return dynamic_cast<Txt::MapsFile*>(datFileItem("data/maps.txt"));
+    return dynamic_cast<Format::Txt::MapsFile*>(datFileItem("data/maps.txt"));
 }
 
-Txt::WorldmapFile* ResourceManager::worldmapTxt()
+Format::Txt::WorldmapFile* ResourceManager::worldmapTxt()
 {
-    return dynamic_cast<Txt::WorldmapFile*>(datFileItem("data/worldmap.txt"));
+    return dynamic_cast<Format::Txt::WorldmapFile*>(datFileItem("data/worldmap.txt"));
 }
 
-Txt::EndDeathFile* ResourceManager::endDeathTxt()
+Format::Txt::EndDeathFile* ResourceManager::endDeathTxt()
 {
-    return dynamic_cast<Txt::EndDeathFile*>(datFileItem("data/enddeath.txt"));
+    return dynamic_cast<Format::Txt::EndDeathFile*>(datFileItem("data/enddeath.txt"));
 }
 
-Txt::EndGameFile* ResourceManager::endGameTxt()
+Format::Txt::EndGameFile* ResourceManager::endGameTxt()
 {
-    return dynamic_cast<Txt::EndGameFile*>(datFileItem("data/endgame.txt"));
+    return dynamic_cast<Format::Txt::EndGameFile*>(datFileItem("data/endgame.txt"));
 }
 
-Txt::GenRepFile* ResourceManager::genRepTxt()
+Format::Txt::GenRepFile* ResourceManager::genRepTxt()
 {
-    return dynamic_cast<Txt::GenRepFile*>(datFileItem("data/genrep.txt"));
+    return dynamic_cast<Format::Txt::GenRepFile*>(datFileItem("data/genrep.txt"));
 }
 
-Txt::HolodiskFile* ResourceManager::holodiskTxt()
+Format::Txt::HolodiskFile* ResourceManager::holodiskTxt()
 {
-    return dynamic_cast<Txt::HolodiskFile*>(datFileItem("data/holodisk.txt"));
+    return dynamic_cast<Format::Txt::HolodiskFile*>(datFileItem("data/holodisk.txt"));
 }
 
-Txt::KarmaVarFile* ResourceManager::karmaVarTxt()
+Format::Txt::KarmaVarFile* ResourceManager::karmaVarTxt()
 {
-    return dynamic_cast<Txt::KarmaVarFile*>(datFileItem("data/karmavar.txt"));
+    return dynamic_cast<Format::Txt::KarmaVarFile*>(datFileItem("data/karmavar.txt"));
 }
 
-Txt::QuestsFile* ResourceManager::questsTxt()
+Format::Txt::QuestsFile* ResourceManager::questsTxt()
 {
-    return dynamic_cast<Txt::QuestsFile*>(datFileItem("data/quests.txt"));
+    return dynamic_cast<Format::Txt::QuestsFile*>(datFileItem("data/quests.txt"));
 }
 
 Graphics::Texture* ResourceManager::texture(const string& filename)
@@ -376,7 +377,7 @@ Font* ResourceManager::font(const string& filename, unsigned int color)
     return fontPtr;
 }
 
-Pro::File* ResourceManager::proFileType(unsigned int PID)
+Format::Pro::File* ResourceManager::proFileType(unsigned int PID)
 {
     unsigned int typeId = PID >> 24;
     string listFile;
@@ -441,13 +442,13 @@ void ResourceManager::unloadResources()
     _datItemMap.clear();
 }
 
-Frm::File* ResourceManager::frmFileType(unsigned int FID)
+Format::Frm::File* ResourceManager::frmFileType(unsigned int FID)
 {
     if (FIDtoFrmName(FID) == "") return 0;
     return frmFileType(FIDtoFrmName(FID));
 }
 
-Int::File* ResourceManager::intFileType(unsigned int SID)
+Format::Int::File* ResourceManager::intFileType(unsigned int SID)
 {
     auto lst = lstFileType("scripts/scripts.lst");
     if (SID >= lst->strings()->size())

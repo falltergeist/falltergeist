@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -23,11 +23,12 @@
 #include <stdexcept>
 
 // Falltergeist includes
+#include "Base/StlFeatures.h"
 #include "CrossPlatform.h"
 #include "Exception.h"
 #include "Logger.h"
-#include "Lua/Script.h"
 #include "Ini/File.h"
+#include "Ini/Section.h"
 #include "Ini/Writer.h"
 #include "Settings.h"
 
@@ -35,6 +36,8 @@
 
 namespace Falltergeist
 {
+
+using namespace Base;
 
 Settings::Settings()
 {
@@ -50,25 +53,23 @@ Settings::~Settings()
 
 bool Settings::save()
 {
-    CrossPlatform::createDirectory(CrossPlatform::getConfigPath());
-    std::string configFile = CrossPlatform::getConfigPath() + "/config.lua";
-    std::ofstream stream(configFile);
+    auto file = make_unique<Ini::File>();
 
-    Logger::info() << "Saving config to " << configFile << std::endl;
+    auto video = file->section("video");
+    video->setPropertyInt("width", _screenWidth);
+    video->setPropertyInt("height", _screenHeight);
+    video->setPropertyInt("scale", _scale);
+    video->setPropertyBool("fullscreen", _fullscreen);
 
-    if (!stream)
-    {
-        Logger::warning() << "Cannot open config file at `" << configFile << "`;" << std::endl;
-        return false;
-    }
+    auto audio = file->section("audio");
+    audio->setPropertyBool("enabled", _audioEnabled);
+    audio->setPropertyDouble("master_volume", _masterVolume);
+    audio->setPropertyDouble("music_volume", _musicVolume);
+    audio->setPropertyDouble("voice_volume", _voiceVolume);
 
-    stream << "-- video" << std::endl
-           << "width = "  << _screenWidth << std::endl
-           << "height = " << _screenHeight << std::endl
-           << "scale = "  << _scale << std::endl
-           << "fullscreen = " << (_fullscreen ? "true" : "false") << std::endl
+
+    /*
            << "-- audio"  << std::endl
-           << "audio_enabled = " << (_audioEnabled ? "true" : "false") << std::endl
            << "master_volume = " << std::to_string(_masterVolume) << std::endl
            << "music_volume = " <<  std::to_string(_musicVolume) << std::endl
            << "voice_volume = " <<  std::to_string(_voiceVolume) << std::endl
@@ -102,6 +103,7 @@ bool Settings::save()
            << "text_delay = " << std::to_string(_textDelay) << std::endl
            << "violence_level = " << _violenceLevel << std::endl;
 
+    */
     return true;
 }
 
@@ -131,64 +133,7 @@ bool Settings::forceLocation() const
 }
 
 bool Settings::load()
-{
-    std::string configFile = CrossPlatform::getConfigPath() + "/config.lua";
-    std::ifstream stream(configFile);
-
-    Logger::info() << "Loading config from " << configFile << std::endl;
-
-    if (!stream)
-    {
-        Logger::warning() << "Cannot open config file at `" << configFile << "`;" << std::endl;
-        return false;
-    }
-
-    Lua::Script script(configFile);
-    script.run();
-
-    _screenWidth  = script.get("width",  (int)_screenWidth);
-    _screenHeight = script.get("height", (int)_screenHeight);
-    _scale        = script.get("scale",  (int)_scale);
-    if (_scale > 2) _scale = 2;
-    _fullscreen   = script.get("fullscreen", (bool)_fullscreen);
-
-    _audioEnabled    = script.get("audio_enabled", (bool)_audioEnabled);
-    _masterVolume    = script.get("master_volume", (double)_masterVolume);
-    _musicVolume     = script.get("music_volume",  (double)_musicVolume);
-    _voiceVolume     = script.get("voice_volume",  (double)_voiceVolume);
-    _sfxVolume       = script.get("sfx_volume",    (double)_sfxVolume);
-    _musicPath       = script.get("music_path",    (const std::string&)_musicPath);
-    _audioBufferSize = script.get("audio_buffer_size",   (int)_audioBufferSize);
-
-    _loggerLevel  = script.get("logger_level", (const std::string&)_loggerLevel);
-    Logger::setLevel(_loggerLevel);
-    _loggerColors = script.get("logger_colors", (bool)_loggerColors);
-    Logger::useColors(_loggerColors);
-
-    _initLocation  = script.get("init_location",  (const std::string&)_initLocation);
-    _forceLocation = script.get("force_location", (bool)_forceLocation);
-
-    _displayFps           = script.get("display_fps",            (bool)_displayFps);
-    _worldMapFullscreen   = script.get("worldmap_fullscreen",    (bool)_worldMapFullscreen);
-    _displayMousePosition = script.get("display_mouse_position", (bool)_displayMousePosition);
-
-    _brightness       = script.get("brightness",        (double)_brightness);
-    _gameDifficulty   = script.get("game_difficulty",   (int)_gameDifficulty);
-    _combatDifficulty = script.get("combat_difficulty", (int)_combatDifficulty);
-    _combatLooks      = script.get("combat_looks",      (bool)_combatLooks);
-    _combatMessages   = script.get("combat_messages",   (bool)_combatMessages);
-    _combatTaunts     = script.get("combat_taunts",     (bool)_combatTaunts);
-    _combatSpeed      = script.get("combat_speed",      (int)_combatSpeed);
-    _itemHighlight    = script.get("item_highlight",    (bool)_itemHighlight);
-    _languageFilter   = script.get("language_filter",   (bool)_languageFilter);
-    _mouseSensitivity = script.get("mouse_sensitivity", (double)_mouseSensitivity);
-    _playerSpeedup    = script.get("player_speedup",    (bool)_playerSpeedup);
-    _running          = script.get("running",           (bool)_running);
-    _subtitles        = script.get("subtitles",         (bool)_subtitles);
-    _targetHighlight  = script.get("target_highlight",  (bool)_targetHighlight);
-    _textDelay        = script.get("text_delay",        (double)_textDelay);
-    _violenceLevel    = script.get("violence_level",    (int)_violenceLevel);
-
+{    
     return true;
 }
 

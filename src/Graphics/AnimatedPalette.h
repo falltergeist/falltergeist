@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -24,9 +24,9 @@
 #include <array>
 
 // Falltergeist includes
+#include "../Format/Enums.h"
 
 // Third party includes
-#include <libfalltergeist/Enums.h>
 
 namespace Falltergeist
 {

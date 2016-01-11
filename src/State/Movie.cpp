@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -27,6 +27,8 @@
 #include "../CrossPlatform.h"
 #include "../Event/Keyboard.h"
 #include "../Event/Mouse.h"
+#include "../Format/Lst/File.h"
+#include "../Format/Sve/File.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Ini/File.h"

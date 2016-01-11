@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -98,37 +98,37 @@ void MainMenu::init()
     auto font4 = ResourceManager::getInstance()->font("font4.aaf", 0xb89c28ff);
 
     // "Intro" label
-    auto introButtonLabel = new UI::TextArea(translate("intro", "mainmenu"), 50, 20);
+    auto introButtonLabel = new UI::TextArea("INTRO", 50, 20);
     introButtonLabel->setFont(font4);
     introButtonLabel->setWidth(150);
     introButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // "New Game" label
-    auto newGameButtonLabel = new UI::TextArea(translate("new_game", "mainmenu"), 50, 20 + 41);
+    auto newGameButtonLabel = new UI::TextArea("NEW GAME", 50, 20 + 41);
     newGameButtonLabel->setFont(font4);
     newGameButtonLabel->setWidth(150);
     newGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // "Load Game" label
-    auto loadGameButtonLabel = new UI::TextArea(translate("load_game", "mainmenu"), 50, 20 + 41*2);
+    auto loadGameButtonLabel = new UI::TextArea("LOAD GAME", 50, 20 + 41*2);
     loadGameButtonLabel->setFont(font4);
     loadGameButtonLabel->setWidth(150);
     loadGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // "Options" label
-    auto optionsButtonLabel = new UI::TextArea(translate("options", "mainmenu"), 50, 20 + 41*3);
+    auto optionsButtonLabel = new UI::TextArea("OPTIONS", 50, 20 + 41*3);
     optionsButtonLabel->setFont(font4);
     optionsButtonLabel->setWidth(150);
     optionsButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // "Credits" label
-    auto creditsButtonLabel = new UI::TextArea(translate("credits", "mainmenu"), 50, 20 + 41*4);
+    auto creditsButtonLabel = new UI::TextArea("CREDITS", 50, 20 + 41*4);
     creditsButtonLabel->setFont(font4);
     creditsButtonLabel->setWidth(150);
     creditsButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // "Exit" label
-    auto exitButtonLabel = new UI::TextArea(translate("exit", "mainmenu"), 50, 20 + 41*5);
+    auto exitButtonLabel = new UI::TextArea("EXIT", 50, 20 + 41*5);
     exitButtonLabel->setFont(font4);
     exitButtonLabel->setWidth(150);
     exitButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);

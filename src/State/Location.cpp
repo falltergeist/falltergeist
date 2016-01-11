@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -31,6 +31,11 @@
 #include "../Base/StlFeatures.h"
 #include "../Event/Mouse.h"
 #include "../Exception.h"
+#include "../Format/Map/File.h"
+#include "../Format/Map/Elevation.h"
+#include "../Format/Map/Object.h"
+#include "../Format/Txt/MapsFile.h"
+#include "../Format/Gam/File.h"
 #include "../Game/ContainerItemObject.h"
 #include "../Game/Defines.h"
 #include "../Game/DoorSceneryObject.h"
@@ -67,11 +72,6 @@
 #include "../functions.h"
 
 // Third party includes
-#include <libfalltergeist/Gam/File.h>
-#include <libfalltergeist/Map/Elevation.h>
-#include <libfalltergeist/Map/File.h>
-#include <libfalltergeist/Map/Object.h>
-#include <libfalltergeist/Txt/MapsFile.h>
 
 namespace Falltergeist
 {
@@ -330,7 +330,7 @@ void Location::setLocation(const std::string& name)
     
     auto maps = ResourceManager::getInstance()->mapsTxt()->maps();
     auto mapShortName = path_basename(name, true);
-    auto it = std::find_if(maps.begin(), maps.end(), [&](const libfalltergeist::Txt::Map& map) 
+    auto it = std::find_if(maps.begin(), maps.end(), [&](const Format::Txt::Map& map)
     {
         return map.name == mapShortName; 
     });

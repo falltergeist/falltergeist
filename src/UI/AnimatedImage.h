@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -27,17 +27,23 @@
 #include "../UI/Base.h"
 
 // Third party includes
-#include <libfalltergeist/Frm/File.h>
 
 namespace Falltergeist
 {
+namespace Format
+{
+namespace Frm
+{
+    class File;
+}
+}
 namespace UI
 {
 
 class AnimatedImage : public Falltergeist::UI::Base
 {
 public:
-    AnimatedImage(libfalltergeist::Frm::File* frm, unsigned int direction);
+    AnimatedImage(Format::Frm::File* frm, unsigned int direction);
     ~AnimatedImage() override;
 
     void render(bool eggTransparency = false) override;

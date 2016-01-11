@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -20,6 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Format/Int/File.h"
+#include "../../Format/Int/Procedure.h"
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8005Handler.h"
 #include "../../VM/VM.h"

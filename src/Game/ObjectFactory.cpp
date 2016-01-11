@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -23,6 +23,10 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Format/Int/File.h"
+#include "../Format/Msg/File.h"
+#include "../Format/Msg/Message.h"
+#include "../Format/Pro/File.h"
 #include "../Game/AmmoItemObject.h"
 #include "../Game/ArmorItemObject.h"
 #include "../Game/ContainerItemObject.h"
@@ -44,8 +48,6 @@
 #include "../VM/VM.h"
 
 // Third party includes
-#include <libfalltergeist/Exception.h>
-#include <libfalltergeist/Pro/File.h>
 
 namespace Falltergeist
 {
@@ -136,7 +138,7 @@ Object* ObjectFactory::createObject(unsigned int PID)
                 object->setName(msg->message(proto->messageId())->text());
                 object->setDescription(msg->message(proto->messageId() + 1)->text());
             }
-            catch (libfalltergeist::Exception) {}
+            catch (Exception) {}
             break;
         }
         case OBJECT_TYPE::CRITTER:
@@ -148,7 +150,7 @@ Object* ObjectFactory::createObject(unsigned int PID)
                 object->setName(msg->message(proto->messageId())->text());
                 object->setDescription(msg->message(proto->messageId() + 1)->text());
             }
-            catch (libfalltergeist::Exception) {}
+            catch (Exception) {}
 
             for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
             {
@@ -212,7 +214,7 @@ Object* ObjectFactory::createObject(unsigned int PID)
                 object->setName(msg->message(proto->messageId())->text());
                 object->setDescription(msg->message(proto->messageId() + 1)->text());
             }
-            catch (libfalltergeist::Exception) {}
+            catch (Exception) {}
 
             ((SceneryObject*)object)->setSoundId((char)proto->soundId());
 
@@ -250,7 +252,7 @@ Object* ObjectFactory::createObject(unsigned int PID)
                 object->setName(msg->message(proto->messageId())->text());
                 object->setDescription(msg->message(proto->messageId() + 1)->text());
             }
-            catch (libfalltergeist::Exception) {}
+            catch (Exception) {}
 
             //first two bytes are orientation. second two - unknown
             unsigned short orientation = proto->flagsExt() >> 16;
@@ -307,7 +309,7 @@ Object* ObjectFactory::createObject(unsigned int PID)
                 object->setName(msg->message(proto->messageId())->text());
                 object->setDescription(msg->message(proto->messageId() + 1)->text());
             }
-            catch (libfalltergeist::Exception) {}
+            catch (Exception) {}
             break;
         }
     }

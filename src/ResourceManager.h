@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -31,12 +31,10 @@
 #include "Base/Singleton.h"
 
 // Third party includes
-#include <libfalltergeist/Lst/File.h>
-#include <libfalltergeist/Msg/File.h>
-#include <libfalltergeist/Msg/Message.h>
-#include <libfalltergeist/Frm/File.h>
 
-namespace libfalltergeist
+namespace Falltergeist
+{
+namespace Format
 {
 namespace Aaf { class File; }
 namespace Acm { class File; }
@@ -47,14 +45,14 @@ class File;
 class Item;
 }
 namespace Frm { class File; }
-namespace Frm { class File; }
 namespace Fon { class File; }
 namespace Gam { class File; }
 namespace Gcd { class File; }
 namespace Pal { class File; }
 namespace Int { class File; }
-namespace Int { class File; }
+namespace Lst { class File; }
 namespace Map { class File; }
+namespace Msg { class File; }
 namespace Mve { class File; }
 namespace Pro { class File; }
 namespace Pro { class File; }
@@ -84,6 +82,7 @@ typedef CSVBasedFile<KarmaVar> KarmaVarFile;
 typedef CSVBasedFile<Quest> QuestsFile;
 }
 }
+}
 
 namespace Falltergeist
 {
@@ -104,36 +103,36 @@ class ResourceManager
 public:
     static ResourceManager* getInstance();
 
-    libfalltergeist::Aaf::File* aafFileType(const std::string& filename);
-    libfalltergeist::Acm::File* acmFileType(const std::string& filename);
-    libfalltergeist::Bio::File* bioFileType(const std::string& filename);
-    libfalltergeist::Dat::Item* datFileItem(std::string filename);
-    libfalltergeist::Frm::File* frmFileType(const std::string& filename);
-    libfalltergeist::Frm::File* frmFileType(unsigned int FID);
-    libfalltergeist::Fon::File* fonFileType(const std::string& filename);
-    libfalltergeist::Gam::File* gamFileType(const std::string& filename);
-    libfalltergeist::Gcd::File* gcdFileType(const std::string& filename);
-    libfalltergeist::Pal::File* palFileType(const std::string& filename);
-    libfalltergeist::Int::File* intFileType(const std::string& filename);
-    libfalltergeist::Int::File* intFileType(unsigned int SID);
-    libfalltergeist::Lst::File* lstFileType(const std::string& filename);
-    libfalltergeist::Map::File* mapFileType(const std::string& filename);
-    libfalltergeist::Msg::File* msgFileType(const std::string& filename);
-    libfalltergeist::Mve::File* mveFileType(const std::string& filename);
-    libfalltergeist::Pro::File* proFileType(const std::string& filename);
-    libfalltergeist::Pro::File* proFileType(unsigned int PID);
-    libfalltergeist::Rix::File* rixFileType(const std::string& filename);
-    libfalltergeist::Sve::File* sveFileType(const std::string& filename);
+    Format::Aaf::File* aafFileType(const std::string& filename);
+    Format::Acm::File* acmFileType(const std::string& filename);
+    Format::Bio::File* bioFileType(const std::string& filename);
+    Format::Dat::Item* datFileItem(std::string filename);
+    Format::Frm::File* frmFileType(const std::string& filename);
+    Format::Frm::File* frmFileType(unsigned int FID);
+    Format::Fon::File* fonFileType(const std::string& filename);
+    Format::Gam::File* gamFileType(const std::string& filename);
+    Format::Gcd::File* gcdFileType(const std::string& filename);
+    Format::Pal::File* palFileType(const std::string& filename);
+    Format::Int::File* intFileType(const std::string& filename);
+    Format::Int::File* intFileType(unsigned int SID);
+    Format::Lst::File* lstFileType(const std::string& filename);
+    Format::Map::File* mapFileType(const std::string& filename);
+    Format::Msg::File* msgFileType(const std::string& filename);
+    Format::Mve::File* mveFileType(const std::string& filename);
+    Format::Pro::File* proFileType(const std::string& filename);
+    Format::Pro::File* proFileType(unsigned int PID);
+    Format::Rix::File* rixFileType(const std::string& filename);
+    Format::Sve::File* sveFileType(const std::string& filename);
 
-    libfalltergeist::Txt::CityFile* cityTxt();
-    libfalltergeist::Txt::MapsFile* mapsTxt();
-    libfalltergeist::Txt::WorldmapFile* worldmapTxt();
-    libfalltergeist::Txt::EndDeathFile* endDeathTxt();
-    libfalltergeist::Txt::EndGameFile* endGameTxt();
-    libfalltergeist::Txt::GenRepFile* genRepTxt();
-    libfalltergeist::Txt::HolodiskFile* holodiskTxt();
-    libfalltergeist::Txt::KarmaVarFile* karmaVarTxt();
-    libfalltergeist::Txt::QuestsFile* questsTxt();
+    Format::Txt::CityFile* cityTxt();
+    Format::Txt::MapsFile* mapsTxt();
+    Format::Txt::WorldmapFile* worldmapTxt();
+    Format::Txt::EndDeathFile* endDeathTxt();
+    Format::Txt::EndGameFile* endGameTxt();
+    Format::Txt::GenRepFile* genRepTxt();
+    Format::Txt::HolodiskFile* holodiskTxt();
+    Format::Txt::KarmaVarFile* karmaVarTxt();
+    Format::Txt::QuestsFile* questsTxt();
 
     Graphics::Texture* texture(const std::string& filename);
     Font* font(const std::string& filename = "font1.aaf", unsigned int color = 0x3ff800ff);
@@ -145,9 +144,9 @@ public:
 protected:
     friend class Base::Singleton<ResourceManager>;
 
-    std::vector<std::unique_ptr<libfalltergeist::Dat::File>> _datFiles;
-    std::vector<std::unique_ptr<libfalltergeist::Dat::Item>> _datItems;
-    std::unordered_map<std::string, libfalltergeist::Dat::Item*> _datItemMap;
+    std::vector<std::unique_ptr<Format::Dat::File>> _datFiles;
+    std::vector<std::unique_ptr<Format::Dat::Item>> _datItems;
+    std::unordered_map<std::string, Format::Dat::Item*> _datItemMap;
     std::unordered_map<std::string, std::unique_ptr<Graphics::Texture>> _textures;
     std::unordered_map<std::string, std::unique_ptr<Font>> _fonts;
 
@@ -156,7 +155,7 @@ protected:
     ResourceManager(const ResourceManager&) = delete;
     ResourceManager& operator=(const ResourceManager&) = delete;
 
-    libfalltergeist::Dat::Item* _createItemByName(const std::string& filename, std::ifstream* stream);
+    Format::Dat::Item* _createItemByName(const std::string& filename, std::ifstream* stream);
 };
 
 }

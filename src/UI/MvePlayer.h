@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -27,18 +27,25 @@
 #include "../UI/Base.h"
 
 // Third party includes
-#include <libfalltergeist/Mve/File.h>
 #include <SDL.h>
 
 namespace Falltergeist
 {
+namespace Format
+{
+namespace Mve
+{
+    class Chunk;
+    class File;
+}
+}
 namespace UI
 {
 
 class MvePlayer : public Falltergeist::UI::Base
 {
 public:
-    MvePlayer(libfalltergeist::Mve::File* mve);
+    MvePlayer(Format::Mve::File* mve);
     ~MvePlayer() override;
 
     void think() override;
@@ -49,8 +56,8 @@ public:
     uint32_t frame();
 
 private:
-    libfalltergeist::Mve::File* _mve = nullptr;
-    std::shared_ptr<libfalltergeist::Mve::Chunk> _chunk;
+    Format::Mve::File* _mve = nullptr;
+    std::shared_ptr<Format::Mve::Chunk> _chunk;
 
     bool _timerStarted = false;
     bool _finished = false;

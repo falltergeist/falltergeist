@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -23,6 +23,7 @@
 // Falltergeist includes
 #include "../functions.h"
 #include "../Base/StlFeatures.h"
+#include "../Format/Bio/File.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
@@ -37,7 +38,6 @@
 #include "../UI/TextArea.h"
 
 // Third party includes
-#include <libfalltergeist/Bio/File.h>
 
 namespace Falltergeist
 {

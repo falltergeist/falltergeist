@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -25,6 +25,7 @@
 #include <functional>
 
 // Falltergeist includes
+#include "../Format/Gcd/File.h"
 #include "../Game/Game.h"
 #include "../Game/WeaponItemObject.h"
 #include "../Logger.h"
@@ -36,8 +37,6 @@
 #include "../UI/Image.h"
 
 // Third party includes
-
-using namespace libfalltergeist;
 
 namespace Falltergeist
 {
@@ -53,7 +52,7 @@ DudeObject::~DudeObject()
 {
 }
 
-void DudeObject::loadFromGCDFile(libfalltergeist::Gcd::File* gcd)
+void DudeObject::loadFromGCDFile(Format::Gcd::File* gcd)
 {
     for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
     {

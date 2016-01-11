@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -20,13 +20,13 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Format/Int/File.h"
+#include "../../Format/Int/Procedure.h"
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode8028Handler.h"
 #include "../../VM/VM.h"
-#include "../../Exception.h"
 
 // Third party includes
-#include "libfalltergeist/Exception.h"
 
 namespace Falltergeist
 {
@@ -39,14 +39,7 @@ void Opcode8028Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8028] [?] int lookup_string_proc(string)" << std::endl;
     std::string name = _vm->dataStack()->popString();
-    try
-    {
-        _vm->dataStack()->push((int)_vm->script()->procedure(name)->bodyOffset());
-    }
-    catch (libfalltergeist::Exception &e)
-    {
-        throw Exception(std::string("lookup_string_proc - ") + e.what());
-    }
+    _vm->dataStack()->push((int)_vm->script()->procedure(name)->bodyOffset());
 }
 
 }

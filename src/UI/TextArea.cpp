@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -29,6 +29,7 @@
 #include "../Event/Mouse.h"
 #include "../Font.h"
 #include "../FontString.h"
+#include "../Format/Aaf/Glyph.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"

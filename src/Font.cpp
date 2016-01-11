@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -100,7 +100,7 @@ std::string Font::filename() const
     return _filename;
 }
 
-libfalltergeist::Aaf::File* Font::aaf()
+Format::Aaf::File* Font::aaf()
 {
     return _aaf;
 }

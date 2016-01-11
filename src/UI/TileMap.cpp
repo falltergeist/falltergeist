@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -26,6 +26,7 @@
 
 // Falltergeist includes
 #include "../Base/StlFeatures.h"
+#include "../Format/Lst/File.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"

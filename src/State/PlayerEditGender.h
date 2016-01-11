@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_PlayerEditGender_H
-#define FALLTERGEIST_PlayerEditGender_H
+#ifndef FALLTERGEIST_STATE_PLAYEREDITGENDER_H
+#define FALLTERGEIST_STATE_PLAYEREDITGENDER_H
 
 // C++ standard includes
 
@@ -26,9 +26,6 @@
 #include "State.h"
 
 // Third party includes
-#include <libfalltergeist/Enums.h>
-
-using namespace libfalltergeist;
 
 namespace Falltergeist
 {
@@ -61,5 +58,4 @@ public:
 
 }
 }
-
-#endif // FALLTERGEIST_PlayerEditGender_H
+#endif // FALLTERGEIST_STATE_PLAYEREDITGENDER_H

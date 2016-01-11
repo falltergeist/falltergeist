@@ -20,6 +20,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Format/Int/File.h"
 #include "../../Logger.h"
 #include "../../VM/Handlers/OpcodeA001Handler.h"
 #include "../../VM/VM.h"

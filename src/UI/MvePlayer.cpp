@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -24,13 +24,14 @@
 #include <bitset>
 
 // Falltergeist includes
+#include "../Format/Mve/Chunk.h"
+#include "../Format/Mve/File.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Exception.h"
 #include "../Logger.h"
 
 // Third party includes
-#include <libfalltergeist/Mve/Chunk.h>
 
 //@todo Move this to Crossplatform
 #ifdef __MACH__
@@ -103,7 +104,7 @@ int32_t get_int(uint8_t *data)
 }
 
 
-MvePlayer::MvePlayer(libfalltergeist::Mve::File* mve) : Falltergeist::UI::Base()
+MvePlayer::MvePlayer(Format::Mve::File* mve) : Falltergeist::UI::Base()
 {
     _texture = NULL;
     _mve = mve;

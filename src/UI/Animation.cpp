@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -25,6 +25,9 @@
 
 // Falltergeist includes
 #include "../Base/StlFeatures.h"
+#include "../Format/Frm/File.h"
+#include "../Format/Frm/Direction.h"
+#include "../Format/Frm/Frame.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
@@ -37,9 +40,6 @@
 #include "../UI/AnimationFrame.h"
 
 // Third party includes
-#include <libfalltergeist/Frm/Direction.h>
-#include <libfalltergeist/Frm/File.h>
-#include <libfalltergeist/Frm/Frame.h>
 #include <SDL.h>
 
 namespace Falltergeist

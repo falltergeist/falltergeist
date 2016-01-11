@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -27,10 +27,16 @@
 #include "../Point.h"
 
 // Third party includes
-#include <libfalltergeist/Gcd/File.h>
 
 namespace Falltergeist
 {
+namespace Format
+{
+namespace Gcd
+{
+    class File;
+}
+}
 namespace Game
 {
 
@@ -43,7 +49,7 @@ public:
     DudeObject();
     ~DudeObject() override;
 
-    void loadFromGCDFile(libfalltergeist::Gcd::File* gcd);
+    void loadFromGCDFile(Format::Gcd::File* gcd);
 
     int experience() const;
     void setExperience(int value);
