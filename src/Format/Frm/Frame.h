@@ -29,7 +29,7 @@
 #include <cstdint>
 #include <vector>
 
-// libfalltergeist includes
+// Falltergeist includes
 
 // Third party includes
 

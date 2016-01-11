@@ -24,7 +24,7 @@
 
 // C++ standard includes
 
-// libfalltergeist includes
+// Falltergeist includes
 #include "../Pal/Color.h"
 
 // Third party includes

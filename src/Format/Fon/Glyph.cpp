@@ -24,12 +24,14 @@
 
 // C++ standard includes
 
-// libfalltergeist includes
+// Falltergeist includes
 #include "../Fon/Glyph.h"
 
 // Third party includes
 
-namespace libfalltergeist
+namespace Falltergeist
+{
+namespace Format
 {
 namespace Fon
 {
@@ -42,5 +44,6 @@ Glyph::~Glyph()
 {
 }
 
+}
 }
 }

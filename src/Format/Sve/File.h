@@ -22,15 +22,15 @@
  * SOFTWARE.
  */
 
-#ifndef LIBFALLTERGEIST_SVE_FILE_H
-#define LIBFALLTERGEIST_SVE_FILE_H
+#ifndef FALLTERGEIST_FORMAT_SVE_FILE_H
+#define FALLTERGEIST_FORMAT_SVE_FILE_H
 
 // C++ standard includes
 #include <cstdint>
 #include <map>
 #include <string>
 
-// libfalltergeist includes
+// Falltergeist includes
 #include "../Dat/Item.h"
 
 // Third party includes
@@ -61,4 +61,4 @@ protected:
 }
 }
 }
-#endif // LIBFALLTERGEIST_SVE_FILE_H
+#endif // FALLTERGEIST_FORMAT_SVE_FILE_H

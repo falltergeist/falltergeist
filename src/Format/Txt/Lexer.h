@@ -28,7 +28,7 @@
 // C++ standard includes
 #include <sstream>
 
-// Libfalltergeist includes
+// Falltergeist includes
 
 // Third party includes
 

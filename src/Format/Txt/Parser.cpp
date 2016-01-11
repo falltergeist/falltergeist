@@ -29,7 +29,7 @@
 #include <algorithm>
 #include <functional>
 
-// Libfalltergeist includes
+// Falltergeist includes
 
 // Third party includes
 

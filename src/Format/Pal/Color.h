@@ -28,7 +28,7 @@
 // C++ standard includes
 #include <cstdint>
 
-// libfalltergeist includes
+// Falltergeist includes
 
 // Third party includes
 

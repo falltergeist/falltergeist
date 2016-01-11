@@ -28,7 +28,7 @@
 // C++ standard includes
 #include <vector>
 
-// Libfalltergeist includes
+// Falltergeist includes
 #include "../Txt/BaseFile.h"
 
 // Third party includes

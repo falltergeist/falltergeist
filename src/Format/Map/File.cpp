@@ -26,7 +26,7 @@
 #include <algorithm>
 #include <iostream>
 
-// libfalltergeist includes
+// Falltergeist includes
 #include "../../Exception.h"
 #include "../Map/File.h"
 #include "../Map/Elevation.h"

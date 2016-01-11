@@ -24,7 +24,7 @@
 
 // C++ standard includes
 
-// libfalltergeist includes
+// Falltergeist includes
 #include "../Rix/File.h"
 
 // Third party includes

@@ -29,7 +29,7 @@
 #include <ostream>
 #include <string>
 
-// Libfalltergeist includes
+// Falltergeist includes
 
 // Third party includes
 

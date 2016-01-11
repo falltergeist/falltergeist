@@ -24,7 +24,7 @@
 
 // C++ standard includes
 
-// libfalltergeist includes
+// Falltergeist includes
 #include "../Pro/File.h"
 
 // Third party includes

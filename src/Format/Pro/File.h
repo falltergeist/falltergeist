@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
-#ifndef LIBFALLTERGEIST_PRO_FILE_H
-#define LIBFALLTERGEIST_PRO_FILE_H
+#ifndef FALLTERGEIST_FORMAT_PRO_FILE_H
+#define FALLTERGEIST_FORMAT_PRO_FILE_H
 
 // C++ standard includes
 #include <vector>
 
-// libfalltergeist includes
+// Falltergeist includes
 #include "../Dat/Item.h"
 
 // Third party includes
@@ -150,4 +150,4 @@ protected:
 }
 }
 }
-#endif // LIBFALLTERGEIST_PRO_FILE_H
+#endif // FALLTERGEIST_FORMAT_PRO_FILE_H

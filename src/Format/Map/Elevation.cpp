@@ -24,7 +24,7 @@
 
 // C++ standard includes
 
-// libfalltergeist includes
+// Falltergeist includes
 #include "../Map/Elevation.h"
 #include "../Map/Object.h"
 

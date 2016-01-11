@@ -28,7 +28,7 @@
 // C++ standard includes
 #include <list>
 
-// Libfalltergeist includes
+// Falltergeist includes
 #include "../../Format/Dat/Item.h"
 
 // Third party includes

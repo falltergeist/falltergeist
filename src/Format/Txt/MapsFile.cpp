@@ -24,7 +24,7 @@
 
 // C++ standard includes
 
-// Libfalltergeist includes
+// Falltergeist includes
 #include "../Ini/File.h"
 #include "../Ini/Parser.h"
 #include "../Txt/MapsFile.h"

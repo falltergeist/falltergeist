@@ -22,14 +22,14 @@
  * SOFTWARE.
  */
 
-#ifndef LIBFALLTERGEIST_MAP_OBJECT_H
-#define LIBFALLTERGEIST_MAP_OBJECT_H
+#ifndef FALLTERGEIST_FORMAT_MAP_OBJECT_H
+#define FALLTERGEIST_FORMAT_MAP_OBJECT_H
 
 // C++ standard includes
 #include <memory>
 #include <vector>
 
-// libfalltergeist includes
+// Falltergeist includes
 
 // Third party includes
 
@@ -190,4 +190,4 @@ protected:
 }
 }
 }
-#endif // LIBFALLTERGEIST_MAP_OBJECT_H
+#endif // FALLTERGEIST_FORMAT_MAP_OBJECT_H

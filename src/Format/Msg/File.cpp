@@ -26,7 +26,7 @@
 #include <string>
 #include <cstdlib>
 
-// libfalltergeist includes
+// Falltergeist includes
 #include "../../Exception.h"
 #include "../../Format/Msg/File.h"
 #include "../../Format/Msg/Message.h"

@@ -24,7 +24,7 @@
 
 // C++ standard includes
 
-// libfalltergeist includes
+// Falltergeist includes
 #include "../Mve/Chunk.h"
 
 // Third party includes

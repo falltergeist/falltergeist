@@ -31,7 +31,7 @@
 #include <string>
 #include <vector>
 
-// Libfalltergeist includes
+// Falltergeist includes
 #include "../Ini/Value.h"
 #include "../Txt/Parser.h"
 

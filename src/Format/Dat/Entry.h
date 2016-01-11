@@ -30,7 +30,7 @@
 #include <memory>
 #include <string>
 
-// libfalltergeist includes
+// Falltergeist includes
 
 // Third party includes
 

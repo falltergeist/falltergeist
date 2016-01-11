@@ -29,7 +29,7 @@
 #include <algorithm>
 #include <sstream>
 
-// Libfalltergeist includes
+// Falltergeist includes
 #include "../Txt/CSVParser.h"
 
 // Third party includes

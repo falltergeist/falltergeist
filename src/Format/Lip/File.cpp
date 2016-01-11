@@ -25,7 +25,7 @@
 // C++ standard includes
 #include <algorithm>
 
-// libfalltergeist includes
+// Falltergeist includes
 #include "../Lip/File.h"
 #include "../../Exception.h"
 

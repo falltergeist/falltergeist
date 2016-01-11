@@ -25,7 +25,7 @@
 // C++ standard includes
 #include <cstring>
 
-// libfalltergeist includes
+// Falltergeist includes
 #include "../Mve/Chunk.h"
 #include "../Mve/File.h"
 #include "../../Exception.h"

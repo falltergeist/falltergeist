@@ -25,7 +25,7 @@
 // C++ standard includes
 #include <algorithm>
 
-// libfalltergeist includes
+// Falltergeist includes
 #include "../Frm/Direction.h"
 #include "../Frm/Frame.h"
 

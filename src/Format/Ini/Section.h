@@ -30,7 +30,7 @@
 #include <string>
 #include <vector>
 
-// Libfalltergeist includes
+// Falltergeist includes
 #include "../Ini/Value.h"
 
 // Third party includes

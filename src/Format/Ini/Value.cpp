@@ -30,7 +30,7 @@
 #include <sstream>
 #include <algorithm>
 
-// Libfalltergeist includes
+// Falltergeist includes
 #include "../../Exception.h"
 
 // Third party includes

@@ -29,7 +29,7 @@
 #include <string>
 #include <vector>
 
-// libfalltergeist includes
+// Falltergeist includes
 #include "../Dat/Item.h"
 
 // Third party includes
@@ -61,4 +61,4 @@ protected:
 }
 }
 }
-#endif // LIBFALLTERGEIST_FORMAT_LST_FILE_H
+#endif // FALLTERGEIST_FORMAT_LST_FILE_H

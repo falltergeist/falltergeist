@@ -29,7 +29,7 @@
 #include <map>
 #include <vector>
 
-// libfalltergeist includes
+// Falltergeist includes
 #include "../Dat/Item.h"
 #include "../Enums.h"
 

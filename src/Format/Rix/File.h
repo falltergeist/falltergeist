@@ -27,7 +27,7 @@
 
 // C++ standard includes
 
-// libfalltergeist includes
+// Falltergeist includes
 #include "../Dat/Item.h"
 #include "../Enums.h"
 

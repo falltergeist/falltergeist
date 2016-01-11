@@ -28,7 +28,7 @@
 // C++ standard includes
 #include <functional>
 
-// Libfalltergeist includes
+// Falltergeist includes
 
 // Third party includes
 

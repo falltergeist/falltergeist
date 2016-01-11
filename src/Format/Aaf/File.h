@@ -79,4 +79,4 @@ protected:
 }
 }
 }
-#endif // LIBFALLTERGEIST_FORMAT_AAF_FILE_H
+#endif // FALLTERGEIST_FORMAT_AAF_FILE_H

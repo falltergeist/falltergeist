@@ -24,7 +24,7 @@
 
 // C++ standard includes
 
-// Libfalltergeist includes
+// Falltergeist includes
 #include "../Txt/CSVBasedFile.h"
 #include "../Txt/CSVParser.h"
 

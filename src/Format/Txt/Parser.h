@@ -29,7 +29,7 @@
 #include <string>
 #include <vector>
 
-// Libfalltergeist includes
+// Falltergeist includes
 
 // Third party includes
 

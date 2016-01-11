@@ -24,7 +24,7 @@
 
 // C++ standard includes
 
-// Libfalltergeist includes
+// Falltergeist includes
 #include "Lexer.h"
 
 // Third party includes

@@ -24,7 +24,7 @@
 
 // DISCLAIMER.
 // This code was taken from the ACMReader plugin of the GemRB project (http://gemrb.org)
-// and then adapted for libfalltergeist. All credit goes to the original authors.
+// and then adapted for Falltergeist. All credit goes to the original authors.
 // Link to the plugin: https://github.com/gemrb/gemrb/tree/8e759bc6874a80d4a8d73bf79603624465b3aeb0/gemrb/plugins/ACMReader
 
 #ifndef FALLTERGEIST_FORMAT_ACM_GENERAL_H

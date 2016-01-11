@@ -24,14 +24,14 @@
 
 // DISCLAIMER.
 // This code was taken from the ACMReader plugin of the GemRB project (http://gemrb.org)
-// and then adapted for libfalltergeist. All credit goes to the original authors.
+// and then adapted for Falltergeist. All credit goes to the original authors.
 
 #ifndef FALLTERGEIST_FORMAT_ACM_VALUEUNPACKER_H
 #define FALLTERGEIST_FORMAT_ACM_VALUEUNPACKER_H
 
 // C++ standard includes
 
-// libfalltergeist includes
+// Falltergeist includes
 #include "../Dat/Item.h"
 
 // Third party includes

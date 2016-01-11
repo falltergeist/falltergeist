@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
-#ifndef LIBFALLTERGEIST_ENUMS_H
-#define LIBFALLTERGEIST_ENUMS_H
+#ifndef FALLTERGEIST_FORMAT_ENUMS_H
+#define FALLTERGEIST_FORMAT_ENUMS_H
 
 // C++ standard includes
 #include <stdint.h>
 
-// libfalltergeist includes
+// Falltergeist includes
 
 // Third party includes
 
@@ -182,4 +182,4 @@ enum class GENDER : char
     FEMALE
 };
 
-#endif // LIBFALLTERGEIST_ENUMS_H
+#endif // FALLTERGEIST_FORMAT_ENUMS_H

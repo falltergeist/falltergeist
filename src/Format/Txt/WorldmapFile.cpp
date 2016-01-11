@@ -25,7 +25,7 @@
 // C++ standard includes
 #include <sstream>
 
-// Libfalltergeist includes
+// Falltergeist includes
 #include "../Ini/File.h"
 #include "../Ini/Parser.h"
 #include "../Txt/Lexer.h"

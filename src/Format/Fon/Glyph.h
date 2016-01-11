@@ -22,16 +22,18 @@
  * SOFTWARE.
  */
 
-#ifndef LIBFALLTERGEIST_FON_GLYPH_H
-#define LIBFALLTERGEIST_FON_GLYPH_H
+#ifndef FALLTERGEIST_FORMAT_FON_GLYPH_H
+#define FALLTERGEIST_FORMAT_FON_GLYPH_H
 
 // C++ standard includes
 
-// libfalltergeist includes
+// Falltergeist includes
 
 // Third party includes
 
-namespace libfalltergeist
+namespace Falltergeist
+{
+namespace Format
 {
 namespace Fon
 {
@@ -47,4 +49,5 @@ public:
 
 }
 }
-#endif // LIBFALLTERGEIST_FON_GLYPH_H
+}
+#endif // FALLTERGEIST_FORMAT_FON_GLYPH_H

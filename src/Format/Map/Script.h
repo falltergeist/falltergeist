@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
-#ifndef LIBFALLTERGEIST_MAP_SCRIPT_H
-#define LIBFALLTERGEIST_MAP_SCRIPT_H
+#ifndef FALLTERGEIST_FORMAT_MAP_SCRIPT_H
+#define FALLTERGEIST_FORMAT_MAP_SCRIPT_H
 
 // C++ standard includes
 #include <cstdint>
 
-// libfalltergeist includes
+// Falltergeist includes
 
 // Third party includes
 
@@ -77,4 +77,4 @@ protected:
 }
 }
 }
-#endif // LIBFALLTERGEIST_MAP_SCRIPT_H
+#endif // FALLTERGEIST_FORMAT_MAP_SCRIPT_H

@@ -28,7 +28,7 @@
 // C++ standard includes
 #include <vector>
 
-// libfalltergeist includes
+// Falltergeist includes
 #include "../../Format/Dat/Item.h"
 
 // Third party includes
@@ -62,4 +62,4 @@ protected:
 }
 }
 }
-#endif // LIBFALLTERGEIST_FORMAT_MSG_FILE_H
+#endif // FALLTERGEIST_FORMAT_MSG_FILE_H
