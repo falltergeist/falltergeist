@@ -56,6 +56,7 @@ public:
     void onKeyDown(Event::Keyboard* event) override;
 
     void onStateActivate(Event::State* event);
+    void onStatePop(Event::State* event);
 
     void onExitStart(Event::State* event);
     void onNewGameStart(Event::State* event);
