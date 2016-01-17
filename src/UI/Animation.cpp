@@ -38,6 +38,7 @@
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../UI/AnimationFrame.h"
+#include "../functions.h"
 
 // Third party includes
 #include <SDL.h>
@@ -209,6 +210,33 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
                 auto texture = new Graphics::Texture(frm->width(), frm->height());
                 texture->loadFromRGBA(mask);
                 _reddotTextures.push_back(texture);
+            }
+        }
+    }
+
+    // TODO: probably need to move this to Action classes to fix responsibilities?
+    std::string frmBaseName = path_basename(frmName, true);
+    if (frmBaseName.size() == 8)
+    {
+        char weaponCode = (char)std::toupper(frmBaseName.at(6));
+        char animCode = (char)std::toupper(frmBaseName.at(7));
+        // a dirty hack, applied to "weapon" animation (except walking)
+        if (animCode != 'B' && weaponCode >= 'D' && weaponCode <= 'M')
+        {
+            // adjust shift by looking at "stand with no weapon" animation shift
+            std::string frmName2 = frmName;
+            *(frmName2.rbegin() + 5) = 'A';
+            *(frmName2.rbegin() + 4) = 'A';
+            auto standFrm = ResourceManager::getInstance()->frmFileType(frmName2);
+            if (standFrm && standFrm->directions()->size() > direction)
+            {
+                auto dir2 = standFrm->directions()->at(direction);
+                if (animCode == 'D')
+                {
+                    _shift = Point(0, 0);
+                }
+                _shift.rx() += dir2->shiftX();
+                _shift.ry() += dir2->shiftY();
             }
         }
     }
