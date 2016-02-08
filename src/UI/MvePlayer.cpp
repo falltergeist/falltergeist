@@ -28,6 +28,7 @@
 #include "../Format/Mve/File.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
+#include "../Graphics/Texture.h"
 #include "../Exception.h"
 #include "../Logger.h"
 

@@ -55,6 +55,7 @@ public:
     void loadFromRGBA(unsigned int* data);
 
     void bind(uint8_t unit=0);
+    void unbind(uint8_t unit=0);
 
 protected:
     GLuint _textureID;

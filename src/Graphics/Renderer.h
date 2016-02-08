@@ -26,7 +26,6 @@
 #include <string>
 
 // Falltergeist includes
-#include "../Graphics/Texture.h"
 #include "../Point.h"
 
 // Third party includes
@@ -81,11 +80,11 @@ public:
     void setCaption(const std::string& caption);
     SDL_Window* sdlWindow();
 
-    GLuint GetVAO();
-    GLuint GetVVBO();
-    GLuint GetTVBO();
-    GLuint GetEBO();
-    glm::mat4 GetMVP();
+    GLuint getVAO();
+    GLuint getVVBO();
+    GLuint getTVBO();
+    GLuint getEBO();
+    glm::mat4 getMVP();
 
 
 

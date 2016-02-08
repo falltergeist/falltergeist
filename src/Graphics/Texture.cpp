@@ -182,6 +182,20 @@ void Texture::bind(uint8_t unit)
     }
 }
 
+void Texture::unbind(uint8_t unit)
+{
+/*    if (unit > GL_MAX_TEXTURE_UNITS)
+    {
+        // die horribly
+        return;
+    }
+*/
+    if (_textureID > 0) {
+        glActiveTexture(GL_TEXTURE0+unit);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+}
+
 
 }
 }

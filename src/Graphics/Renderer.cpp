@@ -338,23 +338,23 @@ float Renderer::scaleY()
     return _scaleY;
 }
 
-    GLuint Renderer::GetVAO() {
+    GLuint Renderer::getVAO() {
         return _vao;
     }
 
-    GLuint Renderer::GetVVBO() {
+    GLuint Renderer::getVVBO() {
         return _coord_vbo;
     }
 
-    GLuint Renderer::GetTVBO() {
+    GLuint Renderer::getTVBO() {
         return _texcoord_vbo;
     }
 
-    glm::mat4 Renderer::GetMVP() {
+    glm::mat4 Renderer::getMVP() {
         return _MVP;
     }
 
-    GLuint Renderer::GetEBO() {
+    GLuint Renderer::getEBO() {
         return _ebo;
     }
 }

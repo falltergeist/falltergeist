@@ -50,7 +50,7 @@ public:
 
 protected:
     unsigned int _square = 0;
-    std::unique_ptr<Graphics::Texture> _texture = nullptr;
+    std::unique_ptr<Graphics::Texture> _texture;// TODO: newrender = nullptr;
     std::vector<std::unique_ptr<Tile>> _tiles;
     void _generateTexture();
 
