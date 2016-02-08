@@ -26,6 +26,7 @@
 #include "../Exception.h"
 #include "../Format/Frm/File.h"
 #include "../Format/Frm/Direction.h"
+#include "../Graphics/Sprite.h"
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
 
@@ -36,12 +37,12 @@ namespace Falltergeist
 namespace UI
 {
 
-Image::Image(const std::string& filename) : Falltergeist::UI::Base()
+Image::Image(const std::string& filename) : Falltergeist::UI::Base(), _sprite(filename)
 {
-    setTexture(filename);
+    //setTexture(filename);
 }
-
-Image::Image(const Image& image) : Falltergeist::UI::Base()
+/*
+Image::Image(const Image& image) : Falltergeist::UI::Base(), _sprite("")
 {
     // @fixme: we should use "clone" feature here
     _generateTexture(image.texture()->width(), image.texture()->height());
@@ -53,17 +54,17 @@ Image::Image(const Size& size) : Image((unsigned)size.width(), (unsigned)size.he
 {
 }
 
-Image::Image(unsigned int width, unsigned int height) : Falltergeist::UI::Base()
+Image::Image(unsigned int width, unsigned int height) : Falltergeist::UI::Base(), _sprite("")
 {
     _generateTexture(width, height);
 }
 
-Image::Image(Graphics::Texture* texture) : Falltergeist::UI::Base()
+Image::Image(Graphics::Texture* texture) : Falltergeist::UI::Base(), _sprite("")
 {
     setTexture(texture);
 }
 
-Image::Image(Format::Frm::File* frm, unsigned int direction) : Falltergeist::UI::Base()
+Image::Image(Format::Frm::File* frm, unsigned int direction) : Falltergeist::UI::Base(), _sprite("")
 {
     if (direction >= frm->directions()->size())
     {
@@ -91,7 +92,7 @@ Image::Image(Format::Frm::File* frm, unsigned int direction) : Falltergeist::UI:
         frm->offsetY(direction) + dir->shiftY()
     );
 }
-
+*/
 Image::~Image()
 {
 }
@@ -101,5 +102,14 @@ void Image::setTexture(const std::string& filename)
     setTexture(ResourceManager::getInstance()->texture(filename));
 }
 
+void Image::render(bool eggTransparency)
+{
+  _sprite.render(x(),y());
+}
+
+Image::Image(Format::Frm::File *frm) : Falltergeist::UI::Base(), _sprite(frm)
+{
+
+}
 }
 }

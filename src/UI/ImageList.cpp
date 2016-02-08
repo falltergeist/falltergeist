@@ -46,7 +46,7 @@ ImageList::ImageList(std::vector<std::string> imageList, int x, int y) : ImageLi
 
 ImageList::ImageList(std::vector<Image*> imageList, int x, int y) : ImageList(Point(x, y))
 {
-    for (auto& image : imageList) addImage(make_unique<Image>(*image));
+// TODO: newrender    for (auto& image : imageList) addImage(make_unique<Image>(*image));
 }
 
 ImageList::~ImageList()

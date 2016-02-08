@@ -105,8 +105,8 @@ void WorldMap::init()
         mapMinX = (renderWidth - 640)/2 + 22;
         mapMinY = (renderHeight - 480)/2 + 21;
     }
-    _screenMap = new UI::Image (mapWidth, mapHeight);
-    _screenMap->setPosition(Point(mapMinX, mapMinY));
+    // TODO: newrender _screenMap = new UI::Image (mapWidth, mapHeight);
+    //_screenMap->setPosition(Point(mapMinX, mapMinY));
 }
 
 void WorldMap::render()

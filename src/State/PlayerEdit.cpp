@@ -281,10 +281,10 @@ void PlayerEdit::init()
     _title->setFont(font2_000000ff);
     addUI(_title);
 
-    auto line = new UI::Image(270, 2);
-    line->setPosition(backgroundPos + Point(350, 300));
+//    auto line = new UI::Image(270, 2);
+//    line->setPosition(backgroundPos + Point(350, 300));
 // TODO: newrender    line->texture()->fill(0x000000ff);
-    addUI(line);
+//    addUI(line);
 
     _description = new UI::TextArea("", backgroundX+350, backgroundY+315);
     _description->setFont(font1_000000ff);

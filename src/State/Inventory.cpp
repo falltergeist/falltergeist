@@ -108,8 +108,8 @@ void Inventory::init()
 
     addUI("player_name", new UI::TextArea(player->name(), screenX, screenY));
 
-    auto line1 = new UI::Image(142, 1);
-    line1->setPosition({screenX, screenY+16});
+    //auto line1 = new UI::Image(142, 1);
+    //line1->setPosition({screenX, screenY+16});
 //TODO:: newrender    line1->texture()->fill(0x3ff800ff); // default green color
 
     std::string statsLabels;
@@ -196,12 +196,12 @@ void Inventory::init()
     }
     auto damageResistanceLabel = new UI::TextArea(ss.str(), screenX+120, screenY+40);
 
-    auto line2 = new UI::Image(142, 1);
-    line2->setPosition({screenX, screenY+94});
+    //auto line2 = new UI::Image(142, 1);
+    //line2->setPosition({screenX, screenY+94});
 // TODO: newrender    line2->texture()->fill(0x3ff800ff); // default green color
 
-    auto line3 = new UI::Image(142, 1);
-    line3->setPosition({screenX, screenY+134});
+    //auto line3 = new UI::Image(142, 1);
+    //line3->setPosition({screenX, screenY+134});
 // TODO: newrender    line3->texture()->fill(0x3ff800ff); // default green color
 
     // label: Total Wt: (20)
@@ -245,14 +245,14 @@ void Inventory::init()
     screenLabel->setWordWrap(true);
 
 
-    addUI(line1);
+   // addUI(line1);
     addUI("textLabel", textLabel);
     addUI("hitPointsLabel", hitPointsLabel);
     addUI("armorClassLabel", armorClassLabel);
     addUI("damageThresholdLabel", damageThresholdLabel);
     addUI("damageResistanceLabel", damageResistanceLabel);
-    addUI("line2", line2);
-    addUI("line3", line3);
+    //addUI("line2", line2);
+    //addUI("line3", line3);
     addUI("totalWtLabel", totalWtLabel);
     addUI("weightLabel", weightLabel);
     addUI("weightMaxLabel", weightMaxLabel);

@@ -117,8 +117,8 @@ void PlayerEditName::init()
     _name = new UI::TextArea(Game::getInstance()->player()->name(), bgX+43, bgY+15);
     _name->keyDownHandler().add([this](Event::Event* event){ this->onTextAreaKeyDown(dynamic_cast<Event::Keyboard*>(event)); });
 
-    _cursor = new UI::Image(5, 8);
-    _cursor->setPosition(bgPos + Point(83, 15));
+//    _cursor = new UI::Image(5, 8);
+//    _cursor->setPosition(bgPos + Point(83, 15));
 // TODO: newrender    _cursor->texture()->fill(0x3FF800FF);
 
     addUI(bg);
@@ -127,7 +127,7 @@ void PlayerEditName::init()
     addUI(doneLabel);
     addUI(doneButton);
     addUI(_name);
-    addUI(_cursor);
+//    addUI(_cursor);
 }
 
 void PlayerEditName::onTextAreaKeyDown(Event::Keyboard* event)

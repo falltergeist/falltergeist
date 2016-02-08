@@ -22,6 +22,7 @@
 
 #include <string>
 #include "Texture.h"
+#include "../Format/Frm/File.h"
 
 namespace Falltergeist
 {
@@ -32,7 +33,8 @@ class Sprite
 {
 
 public:
-    Sprite(std::string filename);
+    Sprite(const std::string& filename);
+    Sprite(Format::Frm::File* frm);
     void render(int x, int y, unsigned int width, unsigned int height);
     void render(int x, int y);
 

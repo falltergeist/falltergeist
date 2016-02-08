@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <string>
+#include <Graphics/Sprite.h>
 
 // Falltergeist includes
 #include "../UI/Base.h"
@@ -30,6 +31,12 @@
 
 namespace Falltergeist
 {
+
+namespace Graphics
+{
+class Sprite;
+}
+
 namespace Format
 {
 namespace Frm
@@ -46,14 +53,20 @@ public:
     using Base::setTexture;
 
     Image(const std::string& filename);
-    Image(unsigned int width, unsigned int height);
+    Image(Format::Frm::File* frm);//, unsigned int direction);
+
+    /*Image(unsigned int width, unsigned int height);
     Image(const Size& size);
     Image(const Image& image);
     Image(Graphics::Texture* texture);
-    Image(Format::Frm::File* frm, unsigned int direction);
+    Image(Format::Frm::File* frm, unsigned int direction);*/
     ~Image() override;
+    virtual void render(bool eggTransparency = false);
 
     void setTexture(const std::string& filename);
+
+private:
+    Graphics::Sprite _sprite;
 };
 
 }

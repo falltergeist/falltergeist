@@ -32,7 +32,7 @@ namespace Falltergeist
 namespace UI
 {
 
-HiddenMask::HiddenMask(unsigned int width, unsigned int height, int x, int y) : Image(width, height)
+HiddenMask::HiddenMask(unsigned int width, unsigned int height, int x, int y)// : Image(width, height)
 {
     setPosition({x, y});
 }

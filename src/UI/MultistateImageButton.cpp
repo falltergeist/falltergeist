@@ -97,7 +97,7 @@ MultistateImageButton::MultistateImageButton(ImageList* imageList, const Point& 
     mouseClickHandler() += std::bind(&MultistateImageButton::_onMouseClick, this, std::placeholders::_1);
     for (auto& image : imageList->images())
     {
-        _imageList.addImage(std::unique_ptr<Image>(new Image(*image)));
+        // TODO: newrender _imageList.addImage(std::unique_ptr<Image>(new Image(*image)));
     }
 }
 

@@ -161,6 +161,7 @@ void Renderer::init()
     ResourceManager::getInstance()->shader("default");
     ResourceManager::getInstance()->shader("sprite");
     ResourceManager::getInstance()->shader("font");
+    ResourceManager::getInstance()->shader("animation");
     Logger::info("RENDERER") << "[OK]" << std::endl;
 
     Logger::info("RENDERER") << "Generating buffers" << std::endl;

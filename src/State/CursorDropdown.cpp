@@ -160,7 +160,7 @@ void CursorDropdown::showMenu()
     }
 
     auto game = Game::getInstance();
-    _surface = new UI::Image(40, 40*_icons.size());
+/* TODO: newrender    _surface = new UI::Image(40, 40*_icons.size());
     _surface->setPosition({_initialX + 29, _initialY});
     Point delta = _surface->position()
                   + _surface->size()
@@ -187,6 +187,7 @@ void CursorDropdown::showMenu()
     _cursor->setPosition({_initialX, _initialY});
     addUI(_cursor);
     addUI(_surface);
+    */
     // draw icons on the surface for the first time
     for (auto& ui : _inactiveIcons)
     {
@@ -194,7 +195,7 @@ void CursorDropdown::showMenu()
     }
     if (!_onlyShowIcon)
     {
-        if (deltaY > 0)
+        // TODO: newrenderif (deltaY > 0)
         {
             game->mouse()->setPosition({_initialX, _surface->y()});
         }

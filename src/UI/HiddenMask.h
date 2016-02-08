@@ -36,7 +36,7 @@ namespace UI
  * Hidden mask is used to handle events in particular screen area
  * @todo Must be inherited from UI
  */
-class HiddenMask : public Image
+class HiddenMask : public Base//Image
 {
 
 public:

@@ -21,13 +21,14 @@
 #include <Game/Game.h>
 #include "Sprite.h"
 #include "Renderer.h"
+#include "../Format/Frm/File.h"
 
 namespace Falltergeist
 {
 namespace Graphics
 {
 
-Sprite::Sprite(std::string fname)
+Sprite::Sprite(const std::string& fname)
 {
   _texture = ResourceManager::getInstance()->texture(fname);
 }
@@ -98,6 +99,11 @@ void Sprite::render(int x, int y, unsigned int width, unsigned int height)
 void Sprite::render(int x, int y)
 {
     render(x, y, _texture->width(), _texture->height());
+}
+
+Sprite::Sprite(Format::Frm::File *frm)
+{
+    _texture = ResourceManager::getInstance()->texture(frm->filename());
 }
 }
 }
