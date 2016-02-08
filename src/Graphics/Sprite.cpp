@@ -58,6 +58,8 @@ void Sprite::render(int x, int y, unsigned int width, unsigned int height)
 
     GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("tex",0));
 
+    GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("fade",Game::getInstance()->renderer()->fadeColor()));
+
     GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("MVP",
                                                                            Game::getInstance()->renderer()->getMVP()));
 

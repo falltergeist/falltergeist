@@ -406,5 +406,9 @@ void Renderer::drawLine(const Point &start, const Point &end, SDL_Color color)
     drawLine(start.x(), start.y(), end.x(), end.y(), color);
 }
 
+glm::vec4 Renderer::fadeColor()
+{
+    return glm::vec4((float)_fadeColor.r/255.0, (float)_fadeColor.g/255.0, (float)_fadeColor.b/255.0, (float)_fadeColor.a/255.0);
+}
 }
 }
