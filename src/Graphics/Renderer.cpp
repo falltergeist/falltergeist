@@ -360,17 +360,17 @@ GLuint Renderer::getEBO() {
     return _ebo;
 }
 
-void Renderer::drawLine(int x1, int y1, int x2, int y2, SDL_Color color)
+void Renderer::drawLine(int x1, int y1, int x2, int y2, SDL_Color color, unsigned int thickness)
 {
     std::vector<glm::vec2> vertices;
 
-    // TODO: scaling
-    glm::vec2 start    = glm::vec2( (float)x1, (float)y1);
-    glm::vec2 end   = glm::vec2( (float)(x2), (float)y2);
     glm::vec4 fcolor = glm::vec4((float)color.r/255.0f, (float)color.g/255.0f, (float)color.b/255.0f, (float)color.a/255.0f);
 
-    vertices.push_back(start);
-    vertices.push_back(end);
+    vertices.push_back(glm::vec2((float)x1, (float)y1));
+    vertices.push_back(glm::vec2((float)x1, (float)y1+(float)thickness));
+    vertices.push_back(glm::vec2((float)x2, (float)y2));
+    vertices.push_back(glm::vec2((float)x2, (float)y2+(float)thickness));
+
 
     GL_CHECK(ResourceManager::getInstance()->shader("default")->use());
 
@@ -388,9 +388,11 @@ void Renderer::drawLine(int x1, int y1, int x2, int y2, SDL_Color color)
 
     GL_CHECK(glVertexAttribPointer(ResourceManager::getInstance()->shader("default")->getAttrib("Position"), 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
+    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Game::getInstance()->renderer()->getEBO()));
+
     GL_CHECK(glEnableVertexAttribArray(ResourceManager::getInstance()->shader("default")->getAttrib("Position")));
 
-    GL_CHECK(glDrawArrays(GL_LINES, 0, 2));
+    GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0 ));
 
     GL_CHECK(glDisableVertexAttribArray(ResourceManager::getInstance()->shader("default")->getAttrib("Position")));
 
@@ -401,9 +403,9 @@ void Renderer::drawLine(int x1, int y1, int x2, int y2, SDL_Color color)
     GL_CHECK(ResourceManager::getInstance()->shader("default")->unuse());
 }
 
-void Renderer::drawLine(const Point &start, const Point &end, SDL_Color color)
+void Renderer::drawLine(const Point &start, const Point &end, SDL_Color color, unsigned int thickness)
 {
-    drawLine(start.x(), start.y(), end.x(), end.y(), color);
+    drawLine(start.x(), start.y(), end.x(), end.y(), color, thickness);
 }
 
 glm::vec4 Renderer::fadeColor()

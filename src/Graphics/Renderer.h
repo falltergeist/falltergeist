@@ -86,8 +86,8 @@ public:
     GLuint getEBO();
     glm::mat4 getMVP();
 
-    void drawLine(int x1, int y1, int x2, int y2, SDL_Color color);
-    void drawLine(const Point& start, const Point& end , SDL_Color color);
+    void drawLine(int x1, int y1, int x2, int y2, SDL_Color color, unsigned int thickness = 1);
+    void drawLine(const Point& start, const Point& end , SDL_Color color, unsigned int thickness = 1);
 
     glm::vec4 fadeColor();
 
