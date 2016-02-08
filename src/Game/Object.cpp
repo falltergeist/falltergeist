@@ -193,7 +193,7 @@ void Object::_generateUi()
         }
         else
         {
-            _ui =  make_unique<UI::Image>(frm);// TODO: newrender, orientation());
+            _ui =  make_unique<UI::Image>(frm, orientation());
         }
     }
 

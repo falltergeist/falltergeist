@@ -53,7 +53,7 @@ public:
     using Base::setTexture;
 
     Image(const std::string& filename);
-    Image(Format::Frm::File* frm);//, unsigned int direction);
+    Image(Format::Frm::File* frm, unsigned int direction);
 
     /*Image(unsigned int width, unsigned int height);
     Image(const Size& size);

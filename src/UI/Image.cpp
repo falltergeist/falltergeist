@@ -99,17 +99,20 @@ Image::~Image()
 
 void Image::setTexture(const std::string& filename)
 {
-    setTexture(ResourceManager::getInstance()->texture(filename));
+//    setTexture(ResourceManager::getInstance()->texture(filename));
 }
 
 void Image::render(bool eggTransparency)
 {
-  _sprite.render(x(),y());
+  _sprite.render(position().x()+offset().x(),position().y()+offset().y());
 }
 
-Image::Image(Format::Frm::File *frm) : Falltergeist::UI::Base(), _sprite(frm)
+Image::Image(Format::Frm::File *frm, unsigned int direction) : Falltergeist::UI::Base(), _sprite(frm)
 {
-
+    auto dir = frm->directions()->at(direction);
+    setOffset(frm->offsetX(direction) + dir->shiftX(),
+      frm->offsetY(direction) + dir->shiftY());
 }
+
 }
 }
