@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <cmath>
+#include <iostream>
 
 // Falltergeist includes
 #include "../Base/StlFeatures.h"
@@ -299,6 +300,7 @@ void Object::render()
         - camera->topLeft()
         - Point(_ui->size().width() / 2, _ui->size().height())
     );
+    std::cerr << _ui->size().width() <<"x"<<_ui->size().height() << std::endl;
 
     // don't draw if outside of screen
     if (!Rect::intersects(_ui->position(), _ui->size(), Point(0, 0), camera->size()))

@@ -33,6 +33,16 @@ Sprite::Sprite(const std::string& fname)
   _texture = ResourceManager::getInstance()->texture(fname);
 }
 
+unsigned int Sprite::width()
+{
+    return _texture->width();
+}
+
+unsigned int Sprite::height()
+{
+    return _texture->height();
+}
+
 void Sprite::render(int x, int y, unsigned int width, unsigned int height)
 {
     std::vector<glm::vec2> vertices;

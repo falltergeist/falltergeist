@@ -21,6 +21,7 @@
 #include "../UI/Image.h"
 
 // C++ standard includes
+#include <iostream>
 
 // Falltergeist includes
 #include "../Exception.h"
@@ -104,6 +105,7 @@ void Image::setTexture(const std::string& filename)
 
 void Image::render(bool eggTransparency)
 {
+  std::cerr << position().x() << ":" << position().y() << " " << offset().x() << ":" << offset().y() << std::endl;
   _sprite.render(position().x()+offset().x(),position().y()+offset().y());
 }
 
@@ -113,6 +115,12 @@ Image::Image(Format::Frm::File *frm, unsigned int direction) : Falltergeist::UI:
     setOffset(frm->offsetX(direction) + dir->shiftX(),
       frm->offsetY(direction) + dir->shiftY());
 }
+
+Size Image::size()
+{
+    return Size(_sprite.width(), _sprite.height());
+}
+
 
 }
 }
