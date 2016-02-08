@@ -159,6 +159,7 @@ void Renderer::init()
 
     Logger::info("RENDERER") << "Loading default shaders" << std::endl;
     ResourceManager::getInstance()->shader("default");
+    ResourceManager::getInstance()->shader("sprite");
     ResourceManager::getInstance()->shader("font");
     Logger::info("RENDERER") << "[OK]" << std::endl;
 
@@ -338,24 +339,71 @@ float Renderer::scaleY()
     return _scaleY;
 }
 
-    GLuint Renderer::getVAO() {
-        return _vao;
-    }
+GLuint Renderer::getVAO() {
+    return _vao;
+}
 
-    GLuint Renderer::getVVBO() {
-        return _coord_vbo;
-    }
+GLuint Renderer::getVVBO() {
+    return _coord_vbo;
+}
 
-    GLuint Renderer::getTVBO() {
-        return _texcoord_vbo;
-    }
+GLuint Renderer::getTVBO() {
+    return _texcoord_vbo;
+}
 
-    glm::mat4 Renderer::getMVP() {
-        return _MVP;
-    }
+glm::mat4 Renderer::getMVP() {
+    return _MVP;
+}
 
-    GLuint Renderer::getEBO() {
-        return _ebo;
-    }
+GLuint Renderer::getEBO() {
+    return _ebo;
+}
+
+void Renderer::drawLine(int x1, int y1, int x2, int y2, SDL_Color color)
+{
+    std::vector<glm::vec2> vertices;
+
+    // TODO: scaling
+    glm::vec2 start    = glm::vec2( (float)x1, (float)y1);
+    glm::vec2 end   = glm::vec2( (float)(x2), (float)y2);
+    glm::vec4 fcolor = glm::vec4((float)color.r/255.0f, (float)color.g/255.0f, (float)color.b/255.0f, (float)color.a/255.0f);
+
+    vertices.push_back(start);
+    vertices.push_back(end);
+
+    GL_CHECK(ResourceManager::getInstance()->shader("default")->use());
+
+    GL_CHECK(ResourceManager::getInstance()->shader("default")->setUniform("color", fcolor));
+
+    GL_CHECK(ResourceManager::getInstance()->shader("default")->setUniform("MVP", getMVP()));
+
+
+    GL_CHECK(glBindVertexArray(getVAO()));
+
+
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getVVBO()));
+
+    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec2), &vertices[0], GL_DYNAMIC_DRAW));
+
+    GL_CHECK(glVertexAttribPointer(ResourceManager::getInstance()->shader("default")->getAttrib("Position"), 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+
+    GL_CHECK(glEnableVertexAttribArray(ResourceManager::getInstance()->shader("default")->getAttrib("Position")));
+
+    GL_CHECK(glDrawArrays(GL_LINES, 0, 2));
+
+    GL_CHECK(glDisableVertexAttribArray(ResourceManager::getInstance()->shader("default")->getAttrib("Position")));
+
+    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    GL_CHECK(glBindVertexArray(0));
+
+    GL_CHECK(ResourceManager::getInstance()->shader("default")->unuse());
+}
+
+void Renderer::drawLine(const Point &start, const Point &end, SDL_Color color)
+{
+    drawLine(start.x(), start.y(), end.x(), end.y(), color);
+}
+
 }
 }
