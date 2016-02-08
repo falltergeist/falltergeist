@@ -37,8 +37,8 @@ public:
     Sprite(Format::Frm::File* frm);
     void render(int x, int y, unsigned int width, unsigned int height);
     void render(int x, int y);
-    unsigned int width();
-    unsigned int height();
+    unsigned int width() const;
+    unsigned int height() const;
 
 private:
     Texture* _texture;

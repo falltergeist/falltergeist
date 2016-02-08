@@ -65,7 +65,7 @@ public:
 
     void setTexture(const std::string& filename);
 
-    virtual Size size();
+    virtual Size size() const override;
 private:
     Graphics::Sprite _sprite;
 };

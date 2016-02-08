@@ -33,12 +33,12 @@ Sprite::Sprite(const std::string& fname)
   _texture = ResourceManager::getInstance()->texture(fname);
 }
 
-unsigned int Sprite::width()
+unsigned int Sprite::width() const
 {
     return _texture->width();
 }
 
-unsigned int Sprite::height()
+unsigned int Sprite::height() const
 {
     return _texture->height();
 }

@@ -97,8 +97,8 @@ void Texture::loadFromSurface(SDL_Surface* surface)
         return;
     }
 
-    _width = surface->w;
-    _height = surface->h;
+//    _width = surface->w;
+//    _height = surface->h;
     int newWidth = NearestPowerOf2(_width);
     int newHeight = NearestPowerOf2(_height);
 
