@@ -430,7 +430,7 @@ void TextArea::render(bool eggTransparency)
         unsigned textureX = (symbol.chr%16) * aFont->width();
         unsigned textureY = (symbol.chr/16) * aFont->height();
         Point drawPos = symbol.position + pos;
-        renderer->drawTexture(aFont->texture(), drawPos.x(), drawPos.y(), textureX, textureY, aFont->width(), aFont->height());
+// TODO: newrender        renderer->drawTexture(aFont->texture(), drawPos.x(), drawPos.y(), textureX, textureY, aFont->width(), aFont->height());
     }
 }
 

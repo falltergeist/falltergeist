@@ -283,7 +283,7 @@ void PlayerEdit::init()
 
     auto line = new UI::Image(270, 2);
     line->setPosition(backgroundPos + Point(350, 300));
-    line->texture()->fill(0x000000ff);
+// TODO: newrender    line->texture()->fill(0x000000ff);
     addUI(line);
 
     _description = new UI::TextArea("", backgroundX+350, backgroundY+315);

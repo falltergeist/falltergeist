@@ -162,7 +162,7 @@ void WorldMap::render()
                 (((deltaY<=worldTileMinY) && (worldTileMinY<=deltaY+(signed int)mapHeight)) ||
                 ((deltaY<=worldTileMinY+(signed int)tileHeight) && (worldTileMinY+(signed int)tileHeight<=deltaY+(signed int)mapHeight))) )
             {
-                _tiles->texture()->copyTo(_screenMap->texture(), x*tileWidth-deltaX, y*tileHeight-deltaY, 0, 0, tileWidth, tileHeight);
+// TODO: newrender                _tiles->texture()->copyTo(_screenMap->texture(), x*tileWidth-deltaX, y*tileHeight-deltaY, 0, 0, tileWidth, tileHeight);
             }
         }
     }

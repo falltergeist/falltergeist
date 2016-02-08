@@ -190,7 +190,7 @@ void CursorDropdown::showMenu()
     // draw icons on the surface for the first time
     for (auto& ui : _inactiveIcons)
     {
-        ui->texture()->copyTo(_surface->texture(), ui->x(), ui->y());
+// TODO: newrender        ui->texture()->copyTo(_surface->texture(), ui->x(), ui->y());
     }
     if (!_onlyShowIcon)
     {
@@ -199,7 +199,7 @@ void CursorDropdown::showMenu()
             game->mouse()->setPosition({_initialX, _surface->y()});
         }
         Game::getInstance()->mixer()->playACMSound("sound/sfx/iaccuxx1.acm");
-        _activeIcons.at(0)->texture()->copyTo(_surface->texture(), 0,  0); // highlight first item
+// TODO: newrender        _activeIcons.at(0)->texture()->copyTo(_surface->texture(), 0,  0); // highlight first item
     }
 }
 
@@ -275,10 +275,10 @@ void CursorDropdown::render()
         {
             auto& inactiveIcon = _inactiveIcons.at(_previousIcon);
             Point inactiveIconPos = inactiveIcon->position();
-            inactiveIcon->texture()->copyTo(_surface->texture(), (unsigned)inactiveIconPos.x(), (unsigned)inactiveIconPos.y());
+// TODO: newrender            inactiveIcon->texture()->copyTo(_surface->texture(), (unsigned)inactiveIconPos.x(), (unsigned)inactiveIconPos.y());
             auto& activeIcon = _activeIcons.at(_currentIcon);
             Point activeIconPos = activeIcon->position();
-            activeIcon->texture()->copyTo(_surface->texture(), (unsigned)activeIconPos.x(), (unsigned)activeIconPos.y());
+// TODO: newrender            activeIcon->texture()->copyTo(_surface->texture(), (unsigned)activeIconPos.x(), (unsigned)activeIconPos.y());
         }
         State::render();
     }

@@ -99,7 +99,7 @@ void InventoryItem::render(bool eggTransparency)
     if (!_item) return;
     auto game = Game::getInstance();
     Size texSize = Size(texture()->width(), texture()->height());
-    game->renderer()->drawTexture(texture(), position() + (this->size() - texSize) / 2);
+// TODO: newrender    game->renderer()->drawTexture(texture(), position() + (this->size() - texSize) / 2);
 }
 
 unsigned int InventoryItem::pixel(const Point& pos)

@@ -43,13 +43,14 @@ enum
 MonthCounter::MonthCounter(Month month, const Point& pos) : ImageList(pos), _month(month)
 {
     auto months = std::shared_ptr<Image>(new Image("art/intrface/months.frm"));
-
+/* TODO: newrender
     for (auto i = 0, hOffset = 0; i < 12; ++i, hOffset += MONTH_TEXTURE_HORIZONTAL_OFFSET)
     {
         auto monthImage = new Image(MONTH_TEXTURE_WIDTH, MONTH_TEXTURE_HEIGHT);
         months->texture()->copyTo(monthImage->texture(), 0, 0, 0, hOffset, MONTH_TEXTURE_WIDTH, MONTH_TEXTURE_HEIGHT);
         addImage(std::unique_ptr<Image>(monthImage));
     }
+*/
     setCurrentImage(static_cast<unsigned int>(month));
 }
 

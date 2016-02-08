@@ -26,7 +26,10 @@
 // Falltergeist includes
 
 // Third party includes
+#include "GL/glew.h"
 #include "SDL.h"
+#include "SDL_opengl.h"
+
 
 namespace Falltergeist
 {
@@ -41,60 +44,25 @@ public:
     Texture(SDL_Surface* surface);
     ~Texture();
 
-    SDL_Surface* sdlSurface();
-    SDL_Texture* sdlTexture();
-
-    void update();
-
-    SDL_Color colorModifier();
-    void setColorModifier(SDL_Color color);
-
     unsigned int width();
     unsigned int height();
 
-    unsigned int pixel(unsigned int x, unsigned int y);
-    void setPixel(unsigned int x, unsigned int y, unsigned int color);
+    unsigned int textureWidth();
+    unsigned int textureHeight();
 
-    void fill(unsigned int color);
-
-    void copyTo(Texture* destination, unsigned int destinationX = 0, unsigned int destinationY = 0, unsigned int sourceX = 0, unsigned int sourceY = 0, unsigned int sourceWidth = 0, unsigned int sourceHeight = 0);
-
-    Texture* resize(unsigned int width, unsigned int height);
-    Texture* fitTo(unsigned int width, unsigned int height);
-
+    void loadFromSurface(SDL_Surface* surface);
     void loadFromRGB(unsigned int* data);
     void loadFromRGBA(unsigned int* data);
-    void loadFromImage(const std::string& name);
 
-    void setBlendMode(SDL_BlendMode blendMode);
-    SDL_BlendMode blendMode();
-
-    bool blitWithAlpha(Texture* blitMask, int maskOffsetX, int maskOffsetY);
-
-    // Helpers to build some specific textures.
-    static std::unique_ptr<Texture> generateTextureForNumber(
-        unsigned int number,
-        unsigned int maxLength,
-        Texture* symbolSource,
-        unsigned int charWidth,
-        unsigned int charHeight,
-        unsigned int xOffsetByColor,
-        bool isSigned = false);
+    void bind(uint8_t unit=0);
 
 protected:
-
+    GLuint _textureID;
     unsigned int _width = 0;
     unsigned int _height = 0;
 
-    SDL_Texture* _sdlTexture = 0;
-    SDL_Surface* _sdlSurface = 0;
-
-    SDL_Color _colorModifier = {255, 255, 255, 255};
-    SDL_BlendMode _blendMode = SDL_BLENDMODE_BLEND;
-
-    bool _changed = false;
-
-    void _init();
+    unsigned int _textureWidth = 0;
+    unsigned int _textureHeight = 0;
 };
 
 }

@@ -65,7 +65,7 @@ Graphics::Texture* SmallCounter::texture() const
             xOffsetByColor = 240;
             break;
     }
-
+/* TODO: newrender
     // number as text, always positive
     auto texture = Graphics::Texture::generateTextureForNumber(
         abs(_number), _length, numbers->texture(),
@@ -77,7 +77,10 @@ Graphics::Texture* SmallCounter::texture() const
         // sign of _number
         numbers->texture()->copyTo(texture.get(), 0, 0, signOffset, 0, kCharWidth, kCharHeight);
     }
+
     return (_textureOnDemand = std::move(texture)).get();
+*/
+    return _textureOnDemand.get();
 }
 
 void SmallCounter::setTexture(Graphics::Texture* texture)

@@ -104,7 +104,6 @@ void Game::init(std::unique_ptr<Settings> settings)
     _fpsCounter->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
     version += " " + to_string(renderer()->size());
-    version += " " + renderer()->name();
 
     _falltergeistVersion = make_unique<UI::TextArea>(version, 3, renderer()->height() - 10);
     _mousePosition = make_unique<UI::TextArea>("", renderer()->width() - 55, 14);
@@ -374,9 +373,9 @@ std::unique_ptr<Event::Event> Game::_createEventFromSDL(const SDL_Event& sdlEven
             // TODO: maybe we should make Game an EventTarget too?
             if (keyboardEvent->keyCode() == SDLK_F12)
             {
-                auto texture = renderer()->screenshot();
+//                auto texture = renderer()->screenshot();
                 std::string name = std::to_string(SDL_GetTicks()) +  ".bmp";
-                SDL_SaveBMP(texture->sdlSurface(), name.c_str());
+//                SDL_SaveBMP(texture->sdlSurface(), name.c_str());
                 Logger::info("GAME") << "Screenshot saved to " + name << std::endl;
             }
             return std::move(keyboardEvent);

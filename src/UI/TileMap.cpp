@@ -76,7 +76,7 @@ void TileMap::render()
                 (tile->index() % _square) * tileSize.width(),
                 (tile->index() / _square) * tileSize.height()
             );
-            renderer->drawTexture(_texture.get(), positionOnScreen, square, tileSize);
+// TODO: newrender            renderer->drawTexture(_texture.get(), positionOnScreen, square, tileSize);
         }
     }
 }
@@ -116,7 +116,7 @@ void TileMap::_generateTexture()
         auto texture = ResourceManager::getInstance()->texture("art/tiles/" + tilesLst->strings()->at(numbers.at(i)));
         unsigned int x = (i%_square)*80;
         unsigned int y = (i/_square)*36;
-        texture->copyTo(_texture.get(), x, y);
+// TODO: newrender        texture->copyTo(_texture.get(), x, y);
     }
 
     Logger::info("GAME") << "Tilemap generated in " << (SDL_GetTicks() - ticks) << std::endl;

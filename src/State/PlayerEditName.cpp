@@ -119,7 +119,7 @@ void PlayerEditName::init()
 
     _cursor = new UI::Image(5, 8);
     _cursor->setPosition(bgPos + Point(83, 15));
-    _cursor->texture()->fill(0x3FF800FF);
+// TODO: newrender    _cursor->texture()->fill(0x3FF800FF);
 
     addUI(bg);
     addUI(nameBox);

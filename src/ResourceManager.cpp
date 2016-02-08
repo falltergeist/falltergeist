@@ -376,6 +376,22 @@ Font* ResourceManager::font(const string& filename, unsigned int color)
     return fontPtr;
 }
 
+
+Graphics::Shader* ResourceManager::shader(const string& filename)
+{
+    if (_shaders.find(filename) != _shaders.end())
+    {
+        return _shaders.at(filename).get();
+    }
+
+    Graphics::Shader* shader = nullptr;
+    shader = new Graphics::Shader(filename);
+
+    _shaders.insert(make_pair(filename, unique_ptr<Graphics::Shader>(shader)));
+    return shader;
+}
+
+
 Format::Pro::File* ResourceManager::proFileType(unsigned int PID)
 {
     unsigned int typeId = PID >> 24;

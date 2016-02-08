@@ -173,7 +173,7 @@ AnimatedImage::~AnimatedImage()
 void AnimatedImage::render(bool eggTransparency)
 {
     Graphics::AnimatedPalette* pal = Game::getInstance()->animatedPalette();
-
+/* TODO: newrender
     if (eggTransparency)
     {
         auto dude = Game::getInstance()->player();
@@ -287,6 +287,7 @@ void AnimatedImage::render(bool eggTransparency)
         if (pal->getCounter(MASK::REDDOT) < _reddotTextures.size())
             Game::getInstance()->renderer()->drawTexture(_reddotTextures.at(pal->getCounter(MASK::REDDOT)), position());
     }
+    */
 
 }
 

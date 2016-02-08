@@ -67,10 +67,11 @@ Graphics::Texture* BigCounter::texture() const
             xOffsetByColor = 168;
             break;
     }
-
+/* TODO: newrender
     _textureOnDemand = Graphics::Texture::generateTextureForNumber(
         _number, _length, numbers->texture(),
         kCharWidth, kCharHeight, xOffsetByColor);
+*/
     return _textureOnDemand.get();
 }
 

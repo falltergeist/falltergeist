@@ -26,6 +26,7 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
+#include <Graphics/Shader.h>
 
 // Falltergeist includes
 #include "Base/Singleton.h"
@@ -136,6 +137,7 @@ public:
 
     Graphics::Texture* texture(const std::string& filename);
     Font* font(const std::string& filename = "font1.aaf", unsigned int color = 0x3ff800ff);
+    Graphics::Shader* shader(const std::string& filename);
     void unloadResources();
     std::string FIDtoFrmName(unsigned int FID);
     Game::Location* gameLocation(unsigned int number);
@@ -149,6 +151,7 @@ protected:
     std::unordered_map<std::string, Format::Dat::Item*> _datItemMap;
     std::unordered_map<std::string, std::unique_ptr<Graphics::Texture>> _textures;
     std::unordered_map<std::string, std::unique_ptr<Font>> _fonts;
+    std::unordered_map<std::string, std::unique_ptr<Graphics::Shader>> _shaders;
 
     ResourceManager();
     ~ResourceManager();

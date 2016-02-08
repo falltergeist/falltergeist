@@ -110,7 +110,7 @@ void Inventory::init()
 
     auto line1 = new UI::Image(142, 1);
     line1->setPosition({screenX, screenY+16});
-    line1->texture()->fill(0x3ff800ff); // default green color
+//TODO:: newrender    line1->texture()->fill(0x3ff800ff); // default green color
 
     std::string statsLabels;
     for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
@@ -198,11 +198,11 @@ void Inventory::init()
 
     auto line2 = new UI::Image(142, 1);
     line2->setPosition({screenX, screenY+94});
-    line2->texture()->fill(0x3ff800ff); // default green color
+// TODO: newrender    line2->texture()->fill(0x3ff800ff); // default green color
 
     auto line3 = new UI::Image(142, 1);
     line3->setPosition({screenX, screenY+134});
-    line3->texture()->fill(0x3ff800ff); // default green color
+// TODO: newrender    line3->texture()->fill(0x3ff800ff); // default green color
 
     // label: Total Wt: (20)
     auto weight = player->carryWeight();

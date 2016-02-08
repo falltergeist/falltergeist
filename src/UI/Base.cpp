@@ -92,7 +92,7 @@ void Base::think()
 
 void Base::render(bool eggTransparency)
 {
-
+/* TODO: newrender
     if (eggTransparency)
     {
         auto dude = Game::getInstance()->player();
@@ -134,6 +134,7 @@ void Base::render(bool eggTransparency)
     {
         Game::getInstance()->renderer()->drawTexture(texture(), position());
     }
+    */
 
 
 
@@ -183,12 +184,15 @@ Size Base::size() const
 
 unsigned int Base::pixel(const Point& pos)
 {
+/* TODO: newrender
     if (_tmptex)
     {
         return _tmptex->pixel((unsigned)pos.x(), (unsigned)pos.y()) & 0xFF; // return only alpha channel
     }
     auto tex = texture();
     return tex ? tex->pixel((unsigned)pos.x(), (unsigned)pos.y()) : 0;
+*/
+return 0;
 }
 
 unsigned int Base::pixel(unsigned int x, unsigned int y)

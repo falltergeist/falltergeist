@@ -254,6 +254,7 @@ void Animation::think()
 
 void Animation::render(bool eggTransparency)
 {
+/* TODO: newrender
     auto& frame = _animationFrames.at(_currentFrame);
     Point framePos = frame->position();
     Size frameSize = frame->size();
@@ -375,6 +376,7 @@ void Animation::render(bool eggTransparency)
         if (pal->getCounter(MASK::REDDOT) < _reddotTextures.size())
             Game::getInstance()->renderer()->drawTexture(_reddotTextures.at(pal->getCounter(MASK::REDDOT)), offsetPosition, framePos, frameSize);
     }
+    */
 }
 
 Size Animation::size() const

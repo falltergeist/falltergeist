@@ -52,7 +52,7 @@ MultistateImageButton::MultistateImageButton(Type type, int x, int y) : Fallterg
         case Type::BIG_SWITCH:
         {
             Image image("art/intrface/prfbknbs.frm");
-
+/* TODO: newrender
             auto image1 = new Image(46, 47);
             image.texture()->copyTo(image1->texture(), 0, 0, 0, 0*47, 46, 47);
             auto image2 = new Image(46, 47);
@@ -66,6 +66,7 @@ MultistateImageButton::MultistateImageButton(Type type, int x, int y) : Fallterg
             addImage(std::unique_ptr<Image>(image2));
             addImage(std::unique_ptr<Image>(image3));
             addImage(std::unique_ptr<Image>(image4));
+*/
             _downSound = "sound/sfx/ib3p1xx1.acm";
             _upSound = "sound/sfx/ib3lu1x1.acm";
             break;
@@ -73,12 +74,14 @@ MultistateImageButton::MultistateImageButton(Type type, int x, int y) : Fallterg
         case Type::SMALL_SWITCH:
         {
             Image image("art/intrface/prflknbs.frm");
+/* TODO: newrender
             auto image1 = new Image(22, 25);
             auto image2 = new Image(22, 50);
             image.texture()->copyTo(image1->texture(), 0, 0, 0, 0, 22, 25);
             image.texture()->copyTo(image2->texture(), 0, 0, 0, 25, 22, 50);
             addImage(std::unique_ptr<Image>(image1));
             addImage(std::unique_ptr<Image>(image2));
+*/
             _downSound = "sound/sfx/ib2p1xx1.acm";
             _upSound = "sound/sfx/ib2lu1x1.acm";
             break;

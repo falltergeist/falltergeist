@@ -45,8 +45,8 @@ Image::Image(const Image& image) : Falltergeist::UI::Base()
 {
     // @fixme: we should use "clone" feature here
     _generateTexture(image.texture()->width(), image.texture()->height());
-    unsigned int* pixels = (unsigned int*)image.texture()->sdlSurface()->pixels;
-    _texture->loadFromRGBA(pixels);
+// TODO: newrender    unsigned int* pixels = (unsigned int*)image.texture()->sdlSurface()->pixels;
+//    _texture->loadFromRGBA(pixels);
 }
 
 Image::Image(const Size& size) : Image((unsigned)size.width(), (unsigned)size.height())
@@ -84,7 +84,7 @@ Image::Image(Format::Frm::File* frm, unsigned int direction) : Falltergeist::UI:
         y += frm->directions()->at(direction)->height();
     }
 
-    texture->copyTo(_texture, 0, 0, 0, y, frm->directions()->at(direction)->width(), frm->directions()->at(direction)->height());
+// TODO: newrender    texture->copyTo(_texture, 0, 0, 0, y, frm->directions()->at(direction)->width(), frm->directions()->at(direction)->height());
     auto dir = frm->directions()->at(direction);
     setOffset(
         frm->offsetX(direction) + dir->shiftX(),

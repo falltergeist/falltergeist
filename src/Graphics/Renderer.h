@@ -30,12 +30,26 @@
 #include "../Point.h"
 
 // Third party includes
+#define GL_GLEXT_PROTOTYPES
 #include <SDL.h>
+#include <GL/glew.h>
+#include <glm/glm.hpp>
+#include <SDL_opengl.h>
+
 
 namespace Falltergeist
 {
 namespace Graphics
 {
+
+#define GL_CHECK(x) do { \
+    x; \
+    int _err = glGetError(); \
+    if (_err) { \
+        printf("GL Error %d at %d, %s", _err, __LINE__, __func__); \
+        exit(-1); \
+    } \
+} while (0)
 
 class Renderer
 {
@@ -66,14 +80,19 @@ public:
 
     void setCaption(const std::string& caption);
     SDL_Window* sdlWindow();
-    SDL_Renderer* sdlRenderer();
 
-    std::string name();
+    GLuint GetVAO();
+    GLuint GetVVBO();
+    GLuint GetTVBO();
+    GLuint GetEBO();
+    glm::mat4 GetMVP();
 
-    void drawTexture(Texture* texture, int x, int y, int sourceX = 0, int sourceY = 0, int unsigned sourceWidth = 0, unsigned int sourceHeight = 0);
-    void drawTexture(Texture* texture, const Point& pos, const Point& src = Point(), const Size& srcSize = Size());
 
-    std::unique_ptr<Texture> screenshot();
+
+//    void drawTexture(Texture* texture, int x, int y, int sourceX = 0, int sourceY = 0, int unsigned sourceWidth = 0, unsigned int sourceHeight = 0);
+//    void drawTexture(Texture* texture, const Point& pos, const Point& src = Point(), const Size& srcSize = Size());
+
+    void screenshot();
 
 protected:
     Size _size;
@@ -90,9 +109,16 @@ protected:
     float _scaleX = 1.0;
     float _scaleY = 1.0;
 
-    std::string _name;
     SDL_Window* _sdlWindow;
-    SDL_Renderer* _sdlRenderer;
+    SDL_GLContext _glcontext;
+    GLuint _vao;
+    GLuint _ebo;
+    GLuint _texcoord_vbo;
+    GLuint _coord_vbo;
+    glm::mat4 _MVP;
+    GLint _major;
+    GLint _minor;
+
 };
 
 }

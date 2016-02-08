@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <cmath>
+#include <ResourceManager.h>
 
 // Falltergeist includes
 #include "../Base/StlFeatures.h"
@@ -34,6 +35,7 @@
 #include "../State/State.h"
 
 // Third party includes
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace Falltergeist
 {
@@ -41,6 +43,7 @@ namespace Graphics
 {
 
 using namespace Base;
+
 
 Renderer::Renderer(unsigned int width, unsigned int height)
 {
@@ -74,7 +77,7 @@ void Renderer::init()
 
     std::string message =  "SDL_CreateWindow " + std::to_string(_size.width()) + "x" + std::to_string(_size.height()) + "x" +std::to_string(32)+ " - ";
 
-    uint32_t flags = SDL_WINDOW_SHOWN;
+    uint32_t flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
     if (Game::getInstance()->settings()->fullscreen())
     {
         flags |= SDL_WINDOW_FULLSCREEN;
@@ -88,17 +91,21 @@ void Renderer::init()
 
     Logger::info("RENDERER") << message + "[OK]" << std::endl;
 
-    message =  "SDL_CreateRenderer - ";
-    _sdlRenderer = SDL_CreateRenderer(_sdlWindow, -1, SDL_RENDERER_ACCELERATED);
-    if (!_sdlRenderer)
+    message =  "Init OpenGL - ";
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    _glcontext = SDL_GL_CreateContext(_sdlWindow);
+
+    if (!_glcontext)
     {
         throw Exception(message + "[FAIL]");
     }
 
     Logger::info("RENDERER") << message + "[OK]" << std::endl;
 
-    SDL_SetRenderDrawBlendMode(_sdlRenderer, SDL_BLENDMODE_BLEND);
-
+/*
+ * TODO: newrender
     if (Game::getInstance()->settings()->scale() != 0)
     {
         switch (Game::getInstance()->settings()->scale())
@@ -116,60 +123,83 @@ void Renderer::init()
         SDL_RenderSetLogicalSize(_sdlRenderer, _size.width(), _size.height());
         SDL_RenderGetScale(_sdlRenderer, &_scaleX, &_scaleY);
     }
+*/
 
-    SDL_RendererInfo rendererInfo;
-    SDL_GetRendererInfo(_sdlRenderer, &rendererInfo);
+    glGetIntegerv(GL_MAJOR_VERSION, &_major);
+    glGetIntegerv(GL_MINOR_VERSION, &_minor);
 
-    Logger::info("RENDERER") << "name: " << rendererInfo.name << std::endl;
-    if (rendererInfo.flags & SDL_RENDERER_SOFTWARE)
-    {
-        Logger::info("RENDERER") << "flags: SDL_RENDERER_SOFTWARE" << std::endl;
-    }
-    if (rendererInfo.flags & SDL_RENDERER_ACCELERATED)
-    {
-        Logger::info("RENDERER") << "flags: SDL_RENDERER_ACCELERATED" << std::endl;
-    }
-    Logger::info("RENDERER") << "num_texture_formats: " << rendererInfo.num_texture_formats << std::endl;
-    for (unsigned int i = 0; i != 16; i++)
-    {
-        auto& info = Logger::info("RENDERER");
-        info << "texture_formats[" << i << "]: ";
-        auto format = rendererInfo.texture_formats[i];
+    Logger::info("RENDERER") << "Using OpenGL " << _major << "." << _minor << std::endl;
+    Logger::info("RENDERER") << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
+    Logger::info("RENDERER") << "Version: " << glGetString(GL_VERSION) << std::endl;
+    Logger::info("RENDERER") << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
 
-        switch (format)
-        {
-            case SDL_PIXELFORMAT_INDEX1LSB:
-                info << "SDL_PIXELFORMAT_INDEX1LSB";
-                break;
-            case SDL_PIXELFORMAT_INDEX1MSB:
-                info << "SDL_PIXELFORMAT_INDEX1MSB";
-                break;
-            case SDL_PIXELFORMAT_INDEX4LSB:
-                info << "SDL_PIXELFORMAT_INDEX4LSB";
-                break;
-            case SDL_PIXELFORMAT_INDEX4MSB:
-                info << "SDL_PIXELFORMAT_INDEX4MSB";
-                break;
-            case SDL_PIXELFORMAT_INDEX8:
-                info << "SDL_PIXELFORMAT_INDEX8";
-                break;
-            case SDL_PIXELFORMAT_RGBA8888:
-                info << "SDL_PIXELFORMAT_RGBA8888";
-                break;
-            case SDL_PIXELFORMAT_ARGB8888:
-                info << "SDL_PIXELFORMAT_ARGB8888";
-                break;
-            case SDL_PIXELFORMAT_RGB888:
-                info << "SDL_PIXELFORMAT_RGB888";
-                break;
-            default:
-                info << format;
-                break;
-        }
-        info << std::endl;
+
+    message =  "Init GLEW - ";
+    glewExperimental = GL_TRUE;
+    GLenum err = glewInit();
+    glGetError(); // glew sometimes throws bad enum, so clean it
+    if (GLEW_OK != err)
+    {
+        throw Exception(message + "[FAIL]: " + std::string((char*)glewGetErrorString(err)));
     }
-    Logger::info("RENDERER") << "max_texture_width: " << rendererInfo.max_texture_width << std::endl;
-    Logger::info("RENDERER") << "max_texture_height: " << rendererInfo.max_texture_height << std::endl;
+    Logger::info("RENDERER") << message + "[OK]" << std::endl;
+    Logger::info("RENDERER") << "Using GLEW " << glewGetString(GLEW_VERSION) << std::endl;
+
+    Logger::info("RENDERER") << "Extensions: " << std::endl;
+
+    GLint count;
+    glGetIntegerv( GL_NUM_EXTENSIONS,&count );
+
+    GLint i;
+    for (i = 0; i<count; i++)
+    {
+        Logger::info("RENDERER") << (const char*)glGetStringi( GL_EXTENSIONS, i ) << std::endl;
+    }
+
+
+    Logger::info("RENDERER") << "Loading default shaders" << std::endl;
+    ResourceManager::getInstance()->shader("default");
+    ResourceManager::getInstance()->shader("font");
+    Logger::info("RENDERER") << "[OK]" << std::endl;
+
+    Logger::info("RENDERER") << "Generating buffers" << std::endl;
+
+    // generate VBOs for verts and tex
+    GL_CHECK(glGenVertexArrays(1, &_vao));
+
+    GL_CHECK(glBindVertexArray(_vao));
+
+    GL_CHECK(glGenBuffers(1, &_coord_vbo));
+    GL_CHECK(glGenBuffers(1, &_texcoord_vbo));
+
+    // pre-populate texture-coord buffer, because for sprites texture == polygon size
+    glm::vec2 uv_up_left    = glm::vec2( 0.0, 0.0 );
+    glm::vec2 uv_up_right   = glm::vec2( 1.0, 0.0 );
+    glm::vec2 uv_down_right = glm::vec2( 1.0, 1.0 );
+    glm::vec2 uv_down_left  = glm::vec2( 0.0, 1.0 );
+
+    std::vector<glm::vec2> UVs;
+
+    UVs.push_back(uv_up_left   );
+    UVs.push_back(uv_down_left );
+    UVs.push_back(uv_up_right  );
+    UVs.push_back(uv_down_right);
+
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texcoord_vbo));
+    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, UVs.size() * sizeof(glm::vec2), &UVs[0], GL_STATIC_DRAW));
+
+    // pre-populate element buffer. 6 elements, because we draw as triangles
+    GL_CHECK(glGenBuffers(1, &_ebo));
+    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
+    GLushort indexes[6] = { 0, 1, 2, 3, 2, 1 };
+    GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(GLushort), indexes, GL_STATIC_DRAW));
+
+
+    // generate projection matrix
+    _MVP = glm::ortho(0.0, (double)_size.width(), (double)_size.height(), 0.0, -1.0, 1.0);
+
+
+
 }
 
 void Renderer::think()
@@ -228,7 +258,10 @@ void Renderer::fadeOut(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool 
 
 void Renderer::beginFrame()
 {
-    SDL_RenderClear(_sdlRenderer);
+    GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+    GL_CHECK(glEnable(GL_BLEND));
+    GL_CHECK(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
     think();
 }
 
@@ -236,13 +269,10 @@ void Renderer::endFrame()
 {
     if (!fadeDone())
     {
-        SDL_Color color;
-        SDL_GetRenderDrawColor(_sdlRenderer, &color.r, &color.g, &color.b, &color.a);
-        SDL_SetRenderDrawColor(_sdlRenderer, _fadeColor.r, _fadeColor.g, _fadeColor.b, _fadeColor.a);
-        SDL_RenderFillRect(_sdlRenderer, NULL);
-        SDL_SetRenderDrawColor(_sdlRenderer, color.r, color.g, color.b, color.a);
+        //TODO: newrender
     }
-    SDL_RenderPresent(_sdlRenderer);
+    GL_CHECK(glDisable(GL_BLEND));
+    SDL_GL_SwapWindow(_sdlWindow);
 }
 
 int Renderer::width()
@@ -260,6 +290,7 @@ const Size& Renderer::size() const
     return _size;
 }
 
+    /*
 void Renderer::drawTexture(Texture* texture, int x, int y, int sourceX, int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
 {
     if (!texture) return;
@@ -280,25 +311,11 @@ void Renderer::drawTexture(Texture* texture, const Point& pos, const Point& src,
 {
     drawTexture(texture, pos.x(), pos.y(), src.x(), src.y(), (unsigned int)srcSize.width(), (unsigned int)srcSize.height());
 }
+*/
 
-std::unique_ptr<Texture> Renderer::screenshot()
+void Renderer::screenshot()
 {
-    SDL_Surface* window = SDL_GetWindowSurface(sdlWindow());
-    if (!window)
-    {
-        throw Exception(SDL_GetError());
-    }
-
-    std::unique_ptr<Texture> texture(new Texture(window->w, window->h));
-    auto surface = texture->sdlSurface();
-    SDL_RenderReadPixels(_sdlRenderer, NULL, surface->format->format, surface->pixels, surface->pitch);
-    SDL_FreeSurface(window);
-    return texture;
-}
-
-std::string Renderer::name()
-{
-    return _name;
+    return;
 }
 
 void Renderer::setCaption(const std::string& caption)
@@ -311,11 +328,6 @@ SDL_Window* Renderer::sdlWindow()
     return _sdlWindow;
 }
 
-SDL_Renderer* Renderer::sdlRenderer()
-{
-    return _sdlRenderer;
-}
-
 float Renderer::scaleX()
 {
     return _scaleX;
@@ -326,5 +338,24 @@ float Renderer::scaleY()
     return _scaleY;
 }
 
+    GLuint Renderer::GetVAO() {
+        return _vao;
+    }
+
+    GLuint Renderer::GetVVBO() {
+        return _coord_vbo;
+    }
+
+    GLuint Renderer::GetTVBO() {
+        return _texcoord_vbo;
+    }
+
+    glm::mat4 Renderer::GetMVP() {
+        return _MVP;
+    }
+
+    GLuint Renderer::GetEBO() {
+        return _ebo;
+    }
 }
 }

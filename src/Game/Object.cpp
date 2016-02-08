@@ -512,6 +512,7 @@ void Object::onUseAnimationEnd(Event::Event* event, CritterObject* critter)
 void Object::setTrans(Trans value)
 {
     _trans = value;
+    /* TODO: newrender
     if (_ui)
     {
         SDL_Color modifier = _ui->texture()->colorModifier();
@@ -533,6 +534,7 @@ void Object::setTrans(Trans value)
         }
         _ui->texture()->setColorModifier(modifier);
     }
+     */
 }
 
 Object::Trans Object::trans() const
