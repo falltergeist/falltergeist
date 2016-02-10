@@ -73,6 +73,7 @@ public:
     int16_t offsetY(unsigned int direction = 0, unsigned int frame = 0) const;
 
     uint32_t* rgba(Pal::File* palFile);
+    std::vector<bool>* mask(Pal::File* palFile);
     bool animatedPalette();
     std::map<MASK, uint8_t*>* animatedMasks();
     std::vector<Direction*>* directions();
@@ -87,6 +88,7 @@ protected:
     std::map<MASK, uint8_t*> _animatedMasks;
     std::vector<Direction*> _directions;
     virtual void _initialize();
+    std::vector<bool> _mask;
 
 };
 

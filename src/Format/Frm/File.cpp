@@ -198,6 +198,35 @@ uint32_t* File::rgba(Pal::File* palFile)
     return _rgba;
 }
 
+std::vector<bool>* File::mask(Pal::File* palFile)
+{
+    if (!_mask.empty()) return &_mask;
+
+    uint16_t w = width();
+    uint16_t h = height();
+
+    _mask.reserve(w*h);
+
+    unsigned positionY = 0;
+    for (auto direction : _directions)
+    {
+        unsigned positionX = 0;
+        for (auto frame : *direction->frames())
+        {
+            for (unsigned y = 0; y != frame->height(); ++y)
+            {
+                for (unsigned x = 0; x != frame->width(); ++x)
+                {
+                    _mask[((y + positionY)*w) + x + positionX] = (palFile->color(frame->index(x, y))->alpha() > 0);
+                }
+            }
+            positionX += frame->width();
+        }
+        positionY += direction->height();
+    }
+    return &_mask;
+}
+
 int16_t File::offsetX(unsigned int direction, unsigned int frame) const
 {
     if (direction >= _directions.size()) direction = 0;
