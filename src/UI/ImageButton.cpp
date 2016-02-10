@@ -286,11 +286,11 @@ void ImageButton::render(bool eggTransparency)
 {
     if ((_checkboxMode && _checked) || (_hovered && _leftButtonPressed))
     {
-      _butup->render(position().x(),position().y());
+      _butdown->render(position().x(),position().y());
       return;
     }
 
-    _butdown->render(position().x(),position().y());
+    _butup->render(position().x(),position().y());
 
 }
 
@@ -302,10 +302,10 @@ void ImageButton::render(bool eggTransparency)
     bool ImageButton::opaque(unsigned int x, unsigned int y) {
         if ((_checkboxMode && _checked) || (_hovered && _leftButtonPressed))
         {
-            return _butup->opaque(x,y);
+            return _butdown->opaque(x,y);
         }
 
-        return _butdown->opaque(x,y);
+        return _butup->opaque(x,y);
     }
 }
 }
