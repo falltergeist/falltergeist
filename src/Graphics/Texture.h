@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <memory>
+#include <vector>
 
 // Falltergeist includes
 
@@ -57,6 +58,9 @@ public:
     void bind(uint8_t unit=0);
     void unbind(uint8_t unit=0);
 
+    bool opaque(unsigned int x, unsigned int y);
+    void setMask(std::vector<bool> mask);
+
 protected:
     GLuint _textureID;
     unsigned int _width = 0;
@@ -64,6 +68,8 @@ protected:
 
     unsigned int _textureWidth = 0;
     unsigned int _textureHeight = 0;
+    std::vector<bool> _mask;
+
 };
 
 }

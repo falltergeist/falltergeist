@@ -295,5 +295,17 @@ void ImageButton::render(bool eggTransparency)
 }
 
 
+    bool ImageButton::opaque(const Point &pos) {
+        return opaque(pos.x(),pos.y());
+    }
+
+    bool ImageButton::opaque(unsigned int x, unsigned int y) {
+        if ((_checkboxMode && _checked) || (_hovered && _leftButtonPressed))
+        {
+            return _butup->opaque(x,y);
+        }
+
+        return _butdown->opaque(x,y);
+    }
 }
 }

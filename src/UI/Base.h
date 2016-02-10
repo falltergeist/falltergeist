@@ -98,6 +98,8 @@ public:
     virtual unsigned int pixel(const Point& pos);
     unsigned int pixel(unsigned int x, unsigned int y);
 
+    virtual bool opaque(const Point &pos) { return false; }
+
     Event::KeyboardHandler& keyDownHandler();
     Event::KeyboardHandler& keyUpHandler();
 

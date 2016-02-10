@@ -122,5 +122,12 @@ Size Image::size() const
 }
 
 
+    bool Image::opaque(unsigned int x, unsigned int y) {
+        return _sprite.opaque(x, y);
+    }
+
+    bool Image::opaque(const Point &pos) {
+        return opaque(pos.x(), pos.y());
+    }
 }
 }

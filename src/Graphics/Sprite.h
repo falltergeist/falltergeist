@@ -39,6 +39,7 @@ public:
     void render(int x, int y);
     unsigned int width() const;
     unsigned int height() const;
+    bool opaque(unsigned int x, unsigned int y);
 
 private:
     Texture* _texture;

@@ -117,5 +117,10 @@ Sprite::Sprite(Format::Frm::File *frm)
 {
     _texture = ResourceManager::getInstance()->texture(frm->filename());
 }
+
+bool Sprite::opaque(unsigned int x, unsigned int y) {
+    return _texture->opaque(x, y);
+}
+
 }
 }

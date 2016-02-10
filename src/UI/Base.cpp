@@ -232,7 +232,7 @@ void Base::handle(Event::Mouse* mouseEvent)
     using Mouse = Event::Mouse;
     Point relPos = mouseEvent->position() - this->position();
 
-    if (!mouseEvent->obstacle() && this->pixel(relPos)) // mouse cursor is over the element
+    if (!mouseEvent->obstacle() && this->opaque(relPos)) // mouse cursor is over the element
     {
         switch (mouseEvent->originalType())
         {

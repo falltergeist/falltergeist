@@ -351,6 +351,7 @@ Graphics::Texture* ResourceManager::texture(const string& filename)
         if (!frm) return nullptr;
         texture = new Graphics::Texture(frm->width(), frm->height());
         texture->loadFromRGBA(frm->rgba(palFileType("color.pal")));
+        texture->setMask(*frm->mask(palFileType("color.pal")));
     }
     else
     {

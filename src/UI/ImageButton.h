@@ -89,6 +89,8 @@ public:
 
     virtual void handle(Event::Mouse* mouseEvent) override;
     virtual void render(bool eggTransparency = false) override;
+    bool opaque(unsigned int x, unsigned int y);
+    virtual bool opaque(const Point &pos) override;
 
 
 protected:

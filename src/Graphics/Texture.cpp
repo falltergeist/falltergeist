@@ -195,5 +195,20 @@ void Texture::unbind(uint8_t unit)
 }
 
 
+bool Texture::opaque(unsigned int x, unsigned int y) {
+    if (y*width()+x < _mask.size()) {
+        return _mask.at(y * width() + x);
+    }
+    else
+    {
+        return true;
+    }
+
+}
+
+void Texture::setMask(std::vector<bool> mask) {
+    _mask=mask;
+}
+
 }
 }

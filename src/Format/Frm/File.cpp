@@ -205,7 +205,7 @@ std::vector<bool>* File::mask(Pal::File* palFile)
     uint16_t w = width();
     uint16_t h = height();
 
-    _mask.reserve(w*h);
+    _mask.resize(w*h, true);
 
     unsigned positionY = 0;
     for (auto direction : _directions)
