@@ -118,16 +118,6 @@ enum class FRM_TYPE : char
     INVENTORY
 };
 
-enum class MASK
-{
-    SLIME = 0,
-    FIRE_SLOW = 2,
-    FIRE_FAST = 4,
-    MONITOR = 8,
-    REDDOT = 16,
-    SHORE = 32
-};
-
 enum class PROCEDURE_FLAG
 {
     TIMED       = 0x01,

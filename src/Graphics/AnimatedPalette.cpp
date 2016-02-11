@@ -176,25 +176,5 @@ void AnimatedPalette::think()
     }
 }
 
-unsigned int AnimatedPalette::getCounter(MASK type)
-{
-    switch (type)
-    {
-        case MASK::SLIME:
-            return _slimeCounter;
-        case MASK::MONITOR:
-            return _monitorsCounter;
-        case MASK::SHORE:
-            return _shoreCounter;
-        case MASK::FIRE_FAST:
-            return _fireFastCounter;
-        case MASK::FIRE_SLOW:
-            return _fireSlowCounter;
-        case MASK::REDDOT:
-            return _blinkingRedCounter;
-    }
-    return 0;
-}
-
 }
 }

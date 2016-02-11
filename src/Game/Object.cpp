@@ -40,7 +40,6 @@
 #include "../PathFinding/Hexagon.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
-#include "../UI/AnimatedImage.h"
 #include "../UI/Animation.h"
 #include "../UI/AnimationQueue.h"
 #include "../UI/Image.h"
@@ -186,10 +185,6 @@ void Object::_generateUi()
             auto queue = make_unique<UI::AnimationQueue>();
             queue->animations().push_back(make_unique<UI::Animation>(ResourceManager::getInstance()->FIDtoFrmName(FID()), orientation()));
             _ui = std::move(queue);
-        }
-        else if (frm->animatedPalette())
-        {
-            _ui = make_unique<UI::AnimatedImage>(frm, orientation());
         }
         else
         {

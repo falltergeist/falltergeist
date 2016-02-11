@@ -41,7 +41,6 @@ public:
 
     unsigned int color(unsigned char index, unsigned char counter);
     void think();
-    unsigned int getCounter(MASK type);
 
 protected:
     static const std::array<unsigned int, 5> _monitorsPalette;

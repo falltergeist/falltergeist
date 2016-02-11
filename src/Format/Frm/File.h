@@ -74,8 +74,7 @@ public:
 
     uint32_t* rgba(Pal::File* palFile);
     std::vector<bool>* mask(Pal::File* palFile);
-    bool animatedPalette();
-    std::map<MASK, uint8_t*>* animatedMasks();
+
     std::vector<Direction*>* directions();
 
 protected:
@@ -85,7 +84,7 @@ protected:
     uint16_t _framesPerDirection = 0;
     uint16_t _actionFrame = 0;
     bool _animatedPalette = false;
-    std::map<MASK, uint8_t*> _animatedMasks;
+
     std::vector<Direction*> _directions;
     virtual void _initialize();
     std::vector<bool> _mask;
