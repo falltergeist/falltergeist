@@ -45,9 +45,14 @@ public:
     Slider(int x, int y);
     ~Slider() override;
 
-    Graphics::Texture* texture() const override;
-
     void handle(Event::Event* event) override;
+
+
+    virtual Size size() const override;
+
+    virtual bool opaque(const Point &pos) override;
+
+    virtual void render(bool eggTransparency) override;
 
     double minValue() const;
     void setMinValue(double value);

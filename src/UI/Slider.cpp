@@ -18,6 +18,7 @@
  */
 
 // Related headers
+#include <iostream>
 #include "../UI/Slider.h"
 
 // C++ standard includes
@@ -63,12 +64,14 @@ void Slider::handle(Event::Event* event)
 {
     if(auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
     {
-        if (!texture()) return;
+        //if (!texture()) return;
 
         Point ofs = mouseEvent->position() - _position;
 
+        bool opaque = _imageList.images().at(0)->opaque(mouseEvent->position() - _offset);
+
         //if we are in slider coordinates and not on thumb (slider size = 218 + thumb size, thumb size = 21)
-        if (ofs.x() > 0 && ofs.x() < 239 && ofs.y() > 0 && ofs.y() < this->size().height() && !this->pixel(mouseEvent->position() - _offset))
+        if (ofs.x() > 0 && ofs.x() < 239 && ofs.y() > 0 && ofs.y() < _imageList.images().at(0)->size().height() && !opaque)
         {
             //on left button up only when not dragging thumb
             if (mouseEvent->name() == "mouseup" && mouseEvent->leftButton() && !_drag)
@@ -84,6 +87,7 @@ void Slider::handle(Event::Event* event)
                 }
                 _offset.setX(ofs.x());
                 _value = ((maxValue() - minValue()) / 218) * _offset.x();
+                std::cout << _value << " : " << _offset.x() << std::endl;
                 emitEvent(make_unique<Event::Event>("change"), changeHandler());
                 Game::getInstance()->mixer()->playACMSound(_downSound);
                 Game::getInstance()->mixer()->playACMSound(_upSound);
@@ -125,12 +129,6 @@ void Slider::_onLeftButtonUp(Event::Mouse* event)
     }
 }
 
-Graphics::Texture* Slider::texture() const
-{
-    if (_drag) return _imageList.images().at(0)->texture();
-    return _imageList.images().at(1)->texture();
-}
-
 double Slider::minValue() const
 {
     return _minValue;
@@ -159,7 +157,7 @@ double Slider::value() const
 void Slider::setValue(double value)
 {
     _value = value;
-    _offset.setX((218/(maxValue() - minValue())) * _value);
+    _offset.setX((218.f/(maxValue() - minValue())) * _value);
     emitEvent(make_unique<Event::Event>("change"), changeHandler());
 }
 
@@ -168,5 +166,22 @@ Event::Handler& Slider::changeHandler()
     return _changeHandler;
 }
 
+void Slider::render(bool eggTransparency)
+{
+    _imageList.images().at(0)->setPosition(position());
+    _imageList.images().at(1)->setPosition(position());
+    if (_drag) _imageList.images().at(0)->render(eggTransparency);
+    else _imageList.images().at(1)->render(eggTransparency);
+}
+
+bool Slider::opaque(const Point &pos)
+{
+    return _imageList.images().at(0)->opaque(pos);
+}
+
+Size Slider::size() const
+{
+    return _imageList.images().at(0)->size();
+}
 }
 }
