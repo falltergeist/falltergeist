@@ -71,6 +71,7 @@ void Movie::render(int x, int y)
     vertices.push_back(vertex_up_right);
     vertices.push_back(vertex_down_left);
 
+    // TODO: different shader
 
     GL_CHECK(ResourceManager::getInstance()->shader("sprite")->use());
 
