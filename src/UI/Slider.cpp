@@ -18,7 +18,6 @@
  */
 
 // Related headers
-#include <iostream>
 #include "../UI/Slider.h"
 
 // C++ standard includes
@@ -86,8 +85,7 @@ void Slider::handle(Event::Event* event)
                     ofs.setX(218);
                 }
                 _offset.setX(ofs.x());
-                _value = ((maxValue() - minValue()) / 218) * _offset.x();
-                std::cout << _value << " : " << _offset.x() << std::endl;
+                _value = ((maxValue() - minValue()) / 218.f) * (float)_offset.x();
                 emitEvent(make_unique<Event::Event>("change"), changeHandler());
                 Game::getInstance()->mixer()->playACMSound(_downSound);
                 Game::getInstance()->mixer()->playACMSound(_upSound);
@@ -106,7 +104,7 @@ void Slider::_onDrag(Event::Mouse* event)
     if (newOffset <= 218 && newOffset >= 0)
     {
         sender->_offset.setX(newOffset);
-        sender->_value = ((sender->maxValue() - sender->minValue())/218)*sender->offset().x();
+        sender->_value = ((sender->maxValue() - sender->minValue())/218.f)*(float)sender->offset().x();
         emitEvent(make_unique<Event::Event>("change"), changeHandler());
     }
 }
@@ -168,6 +166,7 @@ Event::Handler& Slider::changeHandler()
 
 void Slider::render(bool eggTransparency)
 {
+
     _imageList.images().at(0)->setPosition(position());
     _imageList.images().at(1)->setPosition(position());
     if (_drag) _imageList.images().at(0)->render(eggTransparency);
