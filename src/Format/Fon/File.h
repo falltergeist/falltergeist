@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2012-2015 Falltergeist developers
+ * Copyright (c) 2012-2016 Falltergeist developers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -39,6 +39,8 @@ namespace Format
 namespace Fon
 {
 
+class Glyph;
+
 class File : public Dat::Item
 {
 
@@ -46,9 +48,27 @@ public:
     File(Dat::Entry* datFileEntry);
     File(std::ifstream* stream);
     virtual ~File();
+    uint32_t* rgba();
+
+    std::vector<Glyph*>* glyphs();
+
+    uint32_t maximumHeight() const;
+    uint32_t maximumWidth() const;
+    uint32_t horizontalGap() const;
+    uint32_t verticalGap() const;
+    uint32_t spaceWidth() const;
+
 
 protected:
     virtual void _initialize();
+    std::vector<Glyph*> _glyphs;
+    uint32_t _maximumHeight = 0;
+    uint32_t _maximumWidth = 0;
+    uint32_t _horizontalGap = 0;
+    uint32_t _spaceWidth = 0;
+    uint32_t _verticalGap = 0;
+    uint32_t* _rgba = 0;
+    uint32_t _numchars;
 
 };
 
