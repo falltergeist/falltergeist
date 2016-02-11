@@ -50,12 +50,14 @@ Texture::Texture(unsigned int width, unsigned int height)
 {
     _width = width;
     _height = height;
+    glGenTextures(1, &_textureID);
 }
 
 Texture::Texture(SDL_Surface* surface)
 {
     _width = surface->w;
     _height = surface->h;
+    glGenTextures(1, &_textureID);
     loadFromSurface(surface);
 }
 
@@ -123,7 +125,6 @@ void Texture::loadFromSurface(SDL_Surface* surface)
     SDL_SetSurfaceBlendMode( surface, SDL_BLENDMODE_NONE );
     SDL_BlitSurface(surface, &area, resizedSurface, &area);
 
-    glGenTextures(1, &_textureID);
     glBindTexture(GL_TEXTURE_2D, _textureID);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, resizedSurface->w, resizedSurface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, resizedSurface->pixels);

@@ -28,7 +28,6 @@
 #include "../Format/Mve/File.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
-#include "../Graphics/Texture.h"
 #include "../Exception.h"
 #include "../Logger.h"
 
@@ -107,7 +106,7 @@ int32_t get_int(uint8_t *data)
 
 MvePlayer::MvePlayer(Format::Mve::File* mve) : Falltergeist::UI::Base()
 {
-    _texture = NULL;
+    _movie = new Graphics::Movie();
     _mve = mve;
     _mve->setPosition(26);
     _chunk = _mve->getNextChunk();
@@ -121,6 +120,7 @@ MvePlayer::~MvePlayer()
 {
     delete [] _decodingMap;
     delete [] _audioBuf;
+    delete _movie;
 
     SDL_FreeSurface(_currentBuf);
     SDL_FreeSurface(_backBuf);
@@ -133,7 +133,7 @@ void MvePlayer::render(bool eggTransparency)
     {
         return;
     }
-// TODO: newrender    Game::getInstance()->renderer()->drawTexture(_texture, _position, Point(0, 0), Size(640, 320));
+    _movie->render(_position.x(),_position.y());
 }
 
 SDL_Rect relClose(uint32_t b, int8_t sign, uint32_t _x, uint32_t _y)
@@ -661,10 +661,9 @@ void MvePlayer::_decodeVideo(uint8_t* data, uint32_t len)
     }
     _decodeFrame(data + 14, len - 14);
 
-
-    SDL_PixelFormat* format = SDL_AllocFormat(SDL_PIXELFORMAT_RGB888);
+    SDL_PixelFormat* format = SDL_AllocFormat(SDL_PIXELFORMAT_BGR888);
     SDL_Surface *temp = SDL_ConvertSurface(_currentBuf, format, 0);
-    _texture->loadFromRGB((unsigned int*)temp->pixels);
+    _movie->loadFromSurface(temp);
     SDL_FreeSurface(temp);
     SDL_FreeFormat(format);
 }
@@ -747,8 +746,6 @@ void MvePlayer::_initVideoBuffer(uint8_t* data)
     // decoding map is 4 bits per 8x8 block
     _decodingMap = new uint8_t [(width*height / (8*8))];
 
-    if (_texture != nullptr) return;
-    _generateTexture(width, height);
 }
 
 

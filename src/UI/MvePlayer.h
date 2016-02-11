@@ -25,6 +25,7 @@
 
 // Falltergeist includes
 #include "../UI/Base.h"
+#include "../Graphics/Movie.h"
 
 // Third party includes
 #include <SDL.h>
@@ -58,6 +59,8 @@ public:
 private:
     Format::Mve::File* _mve = nullptr;
     std::shared_ptr<Format::Mve::Chunk> _chunk;
+
+    Graphics::Movie* _movie;
 
     bool _timerStarted = false;
     bool _finished = false;
