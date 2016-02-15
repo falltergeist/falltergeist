@@ -26,7 +26,8 @@
 #include <string>
 
 // Falltergeist includes
-#include "Graphics/Texture.h"
+#include "Texture.h"
+#include "../Point.h"
 
 // Third party includes
 
@@ -53,7 +54,7 @@ public:
     virtual std::string filename() const { return _filename; }
     virtual Graphics::Texture *texture() { return _texture.get(); }
 
-    virtual void render(std::vector<TextSymbol> _symbols, SDL_Color color, SDL_Color outline) {}
+    virtual void render(std::vector<TextSymbol> _symbols, Point& pos, SDL_Color color, SDL_Color outline);
 
 protected:
     std::unique_ptr<Graphics::Texture> _texture = nullptr;
