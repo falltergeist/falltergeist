@@ -1,0 +1,65 @@
+/*
+ * Copyright 2012-2016 Falltergeist Developers.
+ *
+ * This file is part of Falltergeist.
+ *
+ * Falltergeist is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Falltergeist is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "Base/StlFeatures.h"
+#include <ResourceManager.h>
+#include "AAF.h"
+
+namespace Falltergeist {
+using Base::make_unique;
+namespace Graphics {
+
+
+AAF::AAF(const std::string& filename) {
+    _filename = filename;
+    _aaf = ResourceManager::getInstance()->aafFileType(filename);
+
+    unsigned int width = _aaf->maximumWidth()*16u;
+    unsigned int height = _aaf->maximumHeight()*16u;
+
+
+    _texture = make_unique<Graphics::Texture>(width, height);
+    _texture->loadFromRGBA(_aaf->rgba());
+}
+
+AAF::~AAF() {
+
+}
+
+unsigned short AAF::horizontalGap() {
+    return _aaf->horizontalGap();
+}
+
+unsigned short AAF::verticalGap() {
+    return _aaf->verticalGap();
+}
+
+unsigned short AAF::spaceWidth() {
+    return _aaf->spaceWidth();
+}
+
+unsigned short AAF::width() {
+    return _aaf->maximumWidth();
+}
+
+unsigned short AAF::height() {
+    return _aaf->maximumHeight();
+}
+}
+}
