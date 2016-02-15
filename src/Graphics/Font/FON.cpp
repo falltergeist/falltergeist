@@ -26,7 +26,7 @@ using Base::make_unique;
 namespace Graphics {
 
 
-FON::FON(const std::string& filename) {
+FON::FON(const std::string& filename) : Font() {
     _filename = filename;
     _fon = ResourceManager::getInstance()->fonFileType(filename);
 

@@ -26,7 +26,7 @@ using Base::make_unique;
 namespace Graphics {
 
 
-AAF::AAF(const std::string& filename) {
+AAF::AAF(const std::string& filename) : Font() {
     _filename = filename;
     _aaf = ResourceManager::getInstance()->aafFileType(filename);
 
@@ -36,6 +36,8 @@ AAF::AAF(const std::string& filename) {
 
     _texture = make_unique<Graphics::Texture>(width, height);
     _texture->loadFromRGBA(_aaf->rgba());
+
+
 }
 
 AAF::~AAF() {

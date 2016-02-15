@@ -33,10 +33,16 @@
 namespace Falltergeist {
 namespace Graphics {
 
+struct TextSymbol
+{
+    uint8_t chr;
+    Point position;
+};
+
 class Font {
 public:
-    Font() { }
-    virtual ~Font() { }
+    Font();
+    virtual ~Font();
 
     virtual unsigned short horizontalGap() { return 0; }
     virtual unsigned short verticalGap() { return 0; }
@@ -47,11 +53,15 @@ public:
     virtual std::string filename() const { return _filename; }
     virtual Graphics::Texture *texture() { return _texture.get(); }
 
-    virtual void render(const std::string& text, SDL_Color color, SDL_Color outline) {}
+    virtual void render(std::vector<TextSymbol> _symbols, SDL_Color color, SDL_Color outline) {}
 
 protected:
     std::unique_ptr<Graphics::Texture> _texture = nullptr;
     std::string _filename;
+    GLuint _vao;
+    GLuint _coords;
+    GLuint _texCoords;
+    GLuint _ebo;
 
 };
 
