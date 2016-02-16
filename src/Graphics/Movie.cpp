@@ -21,6 +21,7 @@
 #include <Game/Game.h>
 #include "Movie.h"
 #include "Renderer.h"
+#include "Shader.h"
 
 namespace Falltergeist
 {

@@ -74,10 +74,10 @@ void Font::render(std::vector<TextSymbol> _symbols, Point& pos, SDL_Color color,
             vertices.push_back(vertex_down_left );
             vertices.push_back(vertex_down_right);
 
-            glm::vec2 tex_up_left    = glm::vec2( textureX/(float)tex->width(), textureY/(float)tex->height() );
-            glm::vec2 tex_up_right   = glm::vec2( (textureX+(float)width())/(float)tex->width(), textureY/(float)tex->height() );
-            glm::vec2 tex_down_left  = glm::vec2( textureX/(float)tex->width(), (textureY+(float)height())/(float)tex->height() );
-            glm::vec2 tex_down_right = glm::vec2( (textureX+(float)width())/(float)tex->width(), (textureY+(float)height())/(float)tex->height() );
+            glm::vec2 tex_up_left    = glm::vec2( textureX/(float)tex->textureWidth(), textureY/(float)tex->textureHeight() );
+            glm::vec2 tex_up_right   = glm::vec2( (textureX+(float)width())/(float)tex->textureWidth(), textureY/(float)tex->textureHeight() );
+            glm::vec2 tex_down_left  = glm::vec2( textureX/(float)tex->textureWidth(), (textureY+(float)height())/(float)tex->textureHeight() );
+            glm::vec2 tex_down_right = glm::vec2( (textureX+(float)width())/(float)tex->textureWidth(), (textureY+(float)height())/(float)tex->textureHeight() );
 
             UV.push_back(tex_up_left   );
             UV.push_back(tex_up_right  );
@@ -100,6 +100,8 @@ void Font::render(std::vector<TextSymbol> _symbols, Point& pos, SDL_Color color,
         GL_CHECK(ResourceManager::getInstance()->shader("font")->setUniform("tex",0));
 
         GL_CHECK(ResourceManager::getInstance()->shader("font")->setUniform("MVP", Game::getInstance()->renderer()->getMVP()));
+        GL_CHECK(ResourceManager::getInstance()->shader("font")->setUniform("color", glm::vec4((float)color.r/255.f, (float)color.g/255.f, (float)color.b/255.f, (float)color.a/255.f)));
+        GL_CHECK(ResourceManager::getInstance()->shader("font")->setUniform("outlineColor", glm::vec4((float)outline.r/255.f, (float)outline.g/255.f, (float)outline.b/255.f, (float)outline.a/255.f)));
 
 
         GL_CHECK(glBindVertexArray(_vao));

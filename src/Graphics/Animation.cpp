@@ -27,6 +27,7 @@
 #include "../Format/Frm/Direction.h"
 #include "../Format/Frm/Frame.h"
 #include "Renderer.h"
+#include "Shader.h"
 
 
 namespace Falltergeist

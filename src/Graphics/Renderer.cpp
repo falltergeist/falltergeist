@@ -33,6 +33,7 @@
 #include "../Logger.h"
 #include "../Settings.h"
 #include "../State/State.h"
+#include "Shader.h"
 
 // Third party includes
 #include <glm/gtc/matrix_transform.hpp>

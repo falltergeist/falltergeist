@@ -112,7 +112,7 @@ void Movie::init()
     }
     addUI("movie", new UI::MvePlayer(ResourceManager::getInstance()->mveFileType(movie)));
 
-    auto font0_ffffffff = ResourceManager::getInstance()->font("font1.aaf", 0xffffffff);
+    auto font0_ffffffff = ResourceManager::getInstance()->font("font1.aaf");
     auto subLabel = new UI::TextArea("", 0, 320+35);
 
     subLabel->setFont(font0_ffffffff);

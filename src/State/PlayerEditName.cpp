@@ -108,8 +108,7 @@ void PlayerEditName::init()
     doneBox->setPosition(bgPos + Point(35, 40));
 
     auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX+65, bgY+43);
-    auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
-    doneLabel->setFont(font3_b89c28ff);
+    doneLabel->setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
 
     auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+45, bgY+43);
     doneButton->mouseClickHandler().add(std::bind(&PlayerEditName::onDoneButtonClick, this, std::placeholders::_1));

@@ -78,9 +78,7 @@ void PlayerEditAge::init()
 
     auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), backgroundX+210, backgroundY+43);
 
-    auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
-
-    doneLabel->setFont(font3_b89c28ff);
+    doneLabel->setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
 
     _counter = new UI::BigCounter(backgroundX+215, backgroundY+13);
     _counter->setNumber(Game::getInstance()->player()->age());

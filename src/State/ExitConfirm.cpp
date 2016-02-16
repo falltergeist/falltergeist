@@ -72,20 +72,18 @@ void ExitConfirm::init()
     noButton->mouseClickHandler().add( [this](Event::Event* event){ this->doNo(); });
 
     // label: Are you sure you want to quit?
-    auto font = ResourceManager::getInstance()->font("font1.aaf", 0xb89c28ff);
     auto quitLabel = new UI::TextArea(_t(MSG_MISC, 0), backgroundPos + Point(30, 52));
-    quitLabel->setFont(font);
+    quitLabel->setFont("font1.aaf", {0xb8,0x9c, 0x28, 0xff});
     quitLabel->setSize({244, 0});
     quitLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: yes & no
-    auto fontBig = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
     // label: yes 101
     auto yesButtonLabel = new UI::TextArea(_t(MSG_DIALOG_BOX, 101), backgroundPos + Point(74, 101));
-    yesButtonLabel->setFont(fontBig);
+    yesButtonLabel->setFont("font3.aaf", {0xb8,0x9c,0x28,0xff});
     // label: no 102
     auto noButtonLabel = new UI::TextArea(_t(MSG_DIALOG_BOX, 102), backgroundPos + Point(204, 101));
-    noButtonLabel->setFont(fontBig);
+    noButtonLabel->setFont("font3.aaf", {0xb8,0x9c,0x28,0xff});
 
     background->setPosition(backgroundPos);
 

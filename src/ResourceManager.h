@@ -26,7 +26,7 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
-#include <Graphics/Shader.h>
+
 
 // Falltergeist includes
 #include "Base/Singleton.h"
@@ -38,6 +38,7 @@ namespace Falltergeist
 namespace Format
 {
 namespace Aaf { class File; }
+namespace Fon { class File; }
 namespace Acm { class File; }
 namespace Bio { class File; }
 namespace Dat
@@ -94,9 +95,10 @@ namespace Game
 namespace Graphics
 {
     class Texture;
+    class Font;
+    class Shader;
 }
 
-class Font;
 
 class ResourceManager
 {
@@ -136,7 +138,7 @@ public:
     Format::Txt::QuestsFile* questsTxt();
 
     Graphics::Texture* texture(const std::string& filename);
-    Font* font(const std::string& filename = "font1.aaf", unsigned int color = 0x3ff800ff);
+    Graphics::Font* font(const std::string& filename = "font1.aaf");
     Graphics::Shader* shader(const std::string& filename);
     void unloadResources();
     std::string FIDtoFrmName(unsigned int FID);
@@ -150,7 +152,7 @@ protected:
     std::vector<std::unique_ptr<Format::Dat::Item>> _datItems;
     std::unordered_map<std::string, Format::Dat::Item*> _datItemMap;
     std::unordered_map<std::string, std::unique_ptr<Graphics::Texture>> _textures;
-    std::unordered_map<std::string, std::unique_ptr<Font>> _fonts;
+    std::unordered_map<std::string, std::unique_ptr<Graphics::Font>> _fonts;
     std::unordered_map<std::string, std::unique_ptr<Graphics::Shader>> _shaders;
 
     ResourceManager();

@@ -102,65 +102,66 @@ void Skilldex::init()
     cancelButton->mouseClickHandler().add(std::bind(&Skilldex::onCancelButtonClick, this, std::placeholders::_1));
 
     // LABELS
-    auto font = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
+    std::string font = "font3.aaf";
+    SDL_Color color = {0xb8, 0x9c, 0x28, 0xff};
 
     // label: skilldex (100)
     auto skilldexLabel = new UI::TextArea(_t(MSG_SKILLDEX, 100), backgroundX+56, backgroundY+14);
-    skilldexLabel->setFont(font);
+    skilldexLabel->setFont(font, color);
     skilldexLabel->setWidth(76);
     skilldexLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: sneak (102)
     auto sneakLabel = new UI::TextArea(_t(MSG_SKILLDEX, 102), backgroundX+17, backgroundY+52);
-    sneakLabel->setFont(font);
+    sneakLabel->setFont(font, color);
     sneakLabel->setWidth(84);
     sneakLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: lockpick (103)
     auto lockpickLabel = new UI::TextArea(_t(MSG_SKILLDEX, 103), backgroundX+17, backgroundY+52+36);
-    lockpickLabel->setFont(font);
+    lockpickLabel->setFont(font, color);
     lockpickLabel->setWidth(84);
     lockpickLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: steal (104)
     auto stealLabel = new UI::TextArea(_t(MSG_SKILLDEX, 104), backgroundX+17, backgroundY+52+36*2);
-    stealLabel->setFont(font);
+    stealLabel->setFont(font, color);
     stealLabel->setWidth(84);
     stealLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: traps (105)
     auto trapsLabel = new UI::TextArea(_t(MSG_SKILLDEX, 105), backgroundX+17, backgroundY+52+36*3);
-    trapsLabel->setFont(font);
+    trapsLabel->setFont(font, color);
     trapsLabel->setWidth(84);
     trapsLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: first aid (106)
     auto firstAidLabel = new UI::TextArea(_t(MSG_SKILLDEX, 106), backgroundX+17, backgroundY+52+36*4);
-    firstAidLabel->setFont(font);
+    firstAidLabel->setFont(font, color);
     firstAidLabel->setWidth(84);
     firstAidLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: doctor (107)
     auto doctorLabel = new UI::TextArea(_t(MSG_SKILLDEX, 107), backgroundX+17, backgroundY+52+36*5);
-    doctorLabel->setFont(font);
+    doctorLabel->setFont(font, color);
     doctorLabel->setWidth(84);
     doctorLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: science (108)
     auto scienceLabel = new UI::TextArea(_t(MSG_SKILLDEX, 108), backgroundX+17, backgroundY+52+36*6);
-    scienceLabel->setFont(font);
+    scienceLabel->setFont(font, color);
     scienceLabel->setWidth(84);
     scienceLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: repair (109)
     auto repairLabel = new UI::TextArea(_t(MSG_SKILLDEX, 109), backgroundX+17, backgroundY+52+36*7);
-    repairLabel->setFont(font);
+    repairLabel->setFont(font, color);
     repairLabel->setWidth(84);
     repairLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: cancel (101)
     auto cancelButtonLabel = new UI::TextArea(_t(MSG_SKILLDEX, 101), backgroundX+70, backgroundY+337);
-    cancelButtonLabel->setFont(font);
+    cancelButtonLabel->setFont(font, color);
 
     // add all buttons and labels and counters
     addUI(background);

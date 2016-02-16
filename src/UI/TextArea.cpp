@@ -123,7 +123,7 @@ void TextArea::setText(const std::string& text)
     _needUpdate(true);
 }
 
-Font* TextArea::font()
+Graphics::Font* TextArea::font()
 {
     if (!_font)
     {
@@ -132,15 +132,23 @@ Font* TextArea::font()
     return _font;
 }
 
-void TextArea::setFont(Font* font)
+void TextArea::setFont(Graphics::Font* font)
 {
     _font = font;
     _needUpdate(true);
 }
 
-void TextArea::setFont(const std::string& fontName, unsigned int color)
+
+void TextArea::setFont(Graphics::Font *font, SDL_Color color)
 {
-    setFont(ResourceManager::getInstance()->font(fontName, color));
+    setFont(font);
+    _color = color;
+}
+
+void TextArea::setFont(const std::string& fontName, SDL_Color color)
+{
+    setFont(ResourceManager::getInstance()->font(fontName));
+    _color = color;
 }
 
 std::string TextArea::fontName()
@@ -160,23 +168,27 @@ bool TextArea::wordWrap() const
     return _wordWrap;
 }
 
+void TextArea::setColor(SDL_Color color)
+{
+    _color = color;
+}
+
 void TextArea::setOutline(bool outline)
 {
-    _outlineColor = outline ? 0x000000ff : 0;
+    _outlineColor.a = outline ? 255 : 0;
 }
 
 bool TextArea::outline() const
 {
-    return _outlineColor != 0;
+    return _outlineColor.a != 0;
 }
 
-void TextArea::setOutlineColor(unsigned int color)
+void TextArea::setOutlineColor(SDL_Color color)
 {
     _outlineColor = color;
-    _needUpdate();
 }
 
-unsigned int TextArea::outlineColor() const
+SDL_Color TextArea::outlineColor() const
 {
     return _outlineColor;
 }
@@ -272,10 +284,7 @@ void TextArea::_updateSymbols()
         _calculatedSize = Size(0, 0);
     }
 
-    // Alignment and outlining
-    auto outlineFont = (_outlineColor != 0)
-                       ? ResourceManager::getInstance()->font(font()->filename(), _outlineColor)
-                       : nullptr;
+    // Alignment
 
     Point offset;
     // lines are generated with respect to horizontal padding only, so we should only change vertical;
@@ -300,22 +309,10 @@ void TextArea::_updateSymbols()
             offset.rx() += _customLineShifts[lineIdx];
         }
 
-        for (TextSymbol symbol : line.symbols)
+        for (Graphics::TextSymbol symbol : line.symbols)
         {
             symbol.position += offset;
             // outline symbols
-            if (_outlineColor != 0)
-            {
-                _addOutlineSymbol(symbol, outlineFont,  0, -1);
-                _addOutlineSymbol(symbol, outlineFont,  0,  1);
-                _addOutlineSymbol(symbol, outlineFont, -1,  0);
-                _addOutlineSymbol(symbol, outlineFont, -1, -1);
-                _addOutlineSymbol(symbol, outlineFont, -1,  1);
-                _addOutlineSymbol(symbol, outlineFont,  1,  0);
-                _addOutlineSymbol(symbol, outlineFont,  1, -1);
-                _addOutlineSymbol(symbol, outlineFont,  1,  1);
-            }
-        
             _symbols.push_back(symbol);
         }
     }
@@ -340,7 +337,6 @@ void TextArea::_updateLines()
     std::istringstream istream(_text);
     std::string word, part;
     auto aFont = font();
-    auto glyphs = aFont->aaf()->glyphs();
 
     // on first iteation, process only leading whitespaces
     while (!istream.eof() && isspace((int)istream.peek()))
@@ -355,7 +351,7 @@ void TextArea::_updateLines()
             wordWidth = 0;
             for (unsigned char ch : word)
             {
-                wordWidth += glyphs->at(ch)->width() + aFont->horizontalGap();
+                wordWidth += aFont->glyphWidth(ch) + aFont->horizontalGap();
             }
             // switch to next line if word is too long
             if (_wordWrap && maxWidth && (x + wordWidth) > maxWidth)
@@ -374,7 +370,7 @@ void TextArea::_updateLines()
         {
             if (ch == ' ')
             {
-                x += aFont->aaf()->spaceWidth() + aFont->horizontalGap();
+                x += aFont->spaceWidth() + aFont->horizontalGap();
             }
 
             if (ch == '\n' || (_wordWrap && maxWidth && x >= maxWidth))
@@ -389,19 +385,14 @@ void TextArea::_updateLines()
                 continue;
 
             Line& line = _lines.back();
-            TextSymbol symbol {ch, {x, y}, aFont};
+            Graphics::TextSymbol symbol {ch, {x, y}};
             line.symbols.push_back(symbol);
-            x += glyphs->at(ch)->width() + aFont->horizontalGap();
+            x += aFont->glyphWidth(ch) + aFont->horizontalGap();
             line.width = x;
         }
         part.clear();
 
     } while (istream >> word);
-}
-
-void TextArea::_addOutlineSymbol(const TextSymbol& symb, Font* font, int32_t ofsX, int32_t ofsY)
-{
-    _symbols.emplace_back(TextSymbol {symb.chr, symb.position + Point(ofsX, ofsY), font});
 }
 
 std::string TextArea::text() const
@@ -422,16 +413,7 @@ void TextArea::render(bool eggTransparency)
     }
 
     auto pos = position();
-    auto renderer = Game::getInstance()->renderer();
-
-    for (auto& symbol : _symbols)
-    {
-        auto aFont = symbol.font ?: font();
-        unsigned textureX = (symbol.chr%16) * aFont->width();
-        unsigned textureY = (symbol.chr/16) * aFont->height();
-        Point drawPos = symbol.position + pos;
-// TODO: newrender        renderer->drawTexture(aFont->texture(), drawPos.x(), drawPos.y(), textureX, textureY, aFont->width(), aFont->height());
-    }
+    font()->render(_symbols, pos, _color, _outlineColor);
 }
 
 TextArea& TextArea::operator<<(const std::string& text)

@@ -27,7 +27,6 @@
 #include "Base/StlFeatures.h"
 #include "CrossPlatform.h"
 #include "Exception.h"
-#include "Font.h"
 #include "Format/Acm/File.h"
 #include "Format/Bio/File.h"
 #include "Format/Dat/File.h"
@@ -50,13 +49,17 @@
 #include "Format/Txt/MapsFile.h"
 #include "Format/Txt/WorldmapFile.h"
 #include "Game/Location.h"
+#include "Graphics/Font.h"
 #include "Graphics/Texture.h"
+#include "Graphics/Shader.h"
 #include "Logger.h"
 #include "ResourceManager.h"
 #include "Ini/File.h"
 
 // Third party includes
 #include <SDL_image.h>
+#include <Graphics/Font/AAF.h>
+#include <Graphics/Font/FON.h>
 
 namespace Falltergeist
 {
@@ -362,18 +365,26 @@ Graphics::Texture* ResourceManager::texture(const string& filename)
     return texture;
 }
 
-Font* ResourceManager::font(const string& filename, unsigned int color)
+Graphics::Font* ResourceManager::font(const string& filename)
 {
-    string fontname = filename + std::to_string(color);
 
-    if (_fonts.find(fontname) != _fonts.end())
+    if (_fonts.find(filename) != _fonts.end())
     {
-        return _fonts.at(fontname).get();
+        return _fonts.at(filename).get();
     }
 
-    auto font = make_unique<Font>(filename, color);
-    Font* fontPtr = font.get();
-    _fonts.insert(make_pair(fontname, std::move(font)));
+    std::string ext = filename.substr(filename.length() - 4);
+    Graphics::Font* fontPtr = nullptr;
+
+    if (ext == ".aaf")
+    {
+        fontPtr = new Graphics::AAF(filename);
+    }
+    else if (ext == ".fon")
+    {
+        fontPtr = new Graphics::FON(filename);
+    }
+    _fonts.insert(make_pair(filename, unique_ptr<Graphics::Font>(fontPtr)));
     return fontPtr;
 }
 

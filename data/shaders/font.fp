@@ -1,13 +1,13 @@
 #version 330
 
 uniform sampler2D tex;
+uniform vec4 outlineColor;
+uniform vec4 color;
 in vec2 UV;
 out vec4 fragColor;
 
 void main(void)
 {
-    vec4 outlineColor = vec4(1,0,0,1);
-
     ivec2 texSize = textureSize(tex,0);
 
     vec2 off = 1.0 / texSize;
@@ -19,7 +19,7 @@ void main(void)
     vec4 s = texture(tex, vec2(tc.x, tc.y + off.y));
     vec4 w = texture(tex, vec2(tc.x - off.x, tc.y));
 
-    vec4 origColor = c;
+    vec4 origColor = vec4(color.rgb, c.a);
 
     float ua = 0.0;
     ua = mix(ua, 1.0, c.a);
@@ -33,8 +33,8 @@ void main(void)
     fragColor = underColor;
     fragColor = mix(fragColor, origColor, origColor.a);
 
-    if (fragColor.a > 0.0)
-        fragColor.a = 1.0;
+//    if (fragColor.a > 0.0)
+//        fragColor.a = 1.0;
 
 //  fragColor = texture(tex, UV);
 //  fragColor = vec4(1.0, 0.0, 0.0, 1.0);

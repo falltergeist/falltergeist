@@ -95,41 +95,42 @@ void MainMenu::init()
     auto exitButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19 + 41*5));
     exitButton->mouseClickHandler().add(std::bind(&MainMenu::onExitButtonClick, this, std::placeholders::_1));
 
-    auto font4 = ResourceManager::getInstance()->font("font4.aaf", 0xb89c28ff);
+    auto font4 = ResourceManager::getInstance()->font("font4.aaf");
+    SDL_Color color = {0xb8, 0x9c, 0x28, 0xff};
 
     // "Intro" label
     auto introButtonLabel = new UI::TextArea("INTRO", 50, 20);
-    introButtonLabel->setFont(font4);
+    introButtonLabel->setFont(font4, color);
     introButtonLabel->setWidth(150);
     introButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // "New Game" label
     auto newGameButtonLabel = new UI::TextArea("NEW GAME", 50, 20 + 41);
-    newGameButtonLabel->setFont(font4);
+    newGameButtonLabel->setFont(font4, color);
     newGameButtonLabel->setWidth(150);
     newGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // "Load Game" label
     auto loadGameButtonLabel = new UI::TextArea("LOAD GAME", 50, 20 + 41*2);
-    loadGameButtonLabel->setFont(font4);
+    loadGameButtonLabel->setFont(font4, color);
     loadGameButtonLabel->setWidth(150);
     loadGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // "Options" label
     auto optionsButtonLabel = new UI::TextArea("OPTIONS", 50, 20 + 41*3);
-    optionsButtonLabel->setFont(font4);
+    optionsButtonLabel->setFont(font4, color);
     optionsButtonLabel->setWidth(150);
     optionsButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // "Credits" label
     auto creditsButtonLabel = new UI::TextArea("CREDITS", 50, 20 + 41*4);
-    creditsButtonLabel->setFont(font4);
+    creditsButtonLabel->setFont(font4, color);
     creditsButtonLabel->setWidth(150);
     creditsButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // "Exit" label
     auto exitButtonLabel = new UI::TextArea("EXIT", 50, 20 + 41*5);
-    exitButtonLabel->setFont(font4);
+    exitButtonLabel->setFont(font4, color);
     exitButtonLabel->setWidth(150);
     exitButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
