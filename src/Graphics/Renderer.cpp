@@ -110,6 +110,7 @@ void Renderer::init()
     }
 
     Logger::info("RENDERER") << message + "[OK]" << std::endl;
+    SDL_GL_SetSwapInterval(0);
 
 /*
  * TODO: newrender
