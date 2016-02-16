@@ -191,11 +191,13 @@ void PlayerEditName::think()
     State::think();
     if (SDL_GetTicks() - _timer > 300)
     {
-        _cursor->setVisible(!_cursor->visible());
+        // TODO: newrender
+        //_cursor->setVisible(!_cursor->visible());
         _timer = SDL_GetTicks();
     }
 
-    _cursor->setPosition({bgX + _name->textSize().width() + 45, _cursor->position().y()});
+    // TODO: newrender
+    //_cursor->setPosition({bgX + _name->textSize().width() + 45, _cursor->position().y()});
 }
 
 void PlayerEditName::doBack()
