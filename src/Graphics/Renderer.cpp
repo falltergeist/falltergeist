@@ -368,16 +368,16 @@ GLuint Renderer::getEBO() {
     return _ebo;
 }
 
-void Renderer::drawLine(int x1, int y1, int x2, int y2, SDL_Color color, unsigned int thickness)
+void Renderer::drawPoly(int x, int y, int w, int h, SDL_Color color)
 {
     std::vector<glm::vec2> vertices;
 
     glm::vec4 fcolor = glm::vec4((float)color.r/255.0f, (float)color.g/255.0f, (float)color.b/255.0f, (float)color.a/255.0f);
 
-    vertices.push_back(glm::vec2((float)x1, (float)y1));
-    vertices.push_back(glm::vec2((float)x1, (float)y1+(float)thickness));
-    vertices.push_back(glm::vec2((float)x2, (float)y2));
-    vertices.push_back(glm::vec2((float)x2, (float)y2+(float)thickness));
+    vertices.push_back(glm::vec2((float)x, (float)y));
+    vertices.push_back(glm::vec2((float)x, (float)y+(float)h));
+    vertices.push_back(glm::vec2((float)x+(float)w, (float)y));
+    vertices.push_back(glm::vec2((float)x+(float)w, (float)y+(float)h));
 
 
     GL_CHECK(ResourceManager::getInstance()->shader("default")->use());
@@ -411,9 +411,9 @@ void Renderer::drawLine(int x1, int y1, int x2, int y2, SDL_Color color, unsigne
     GL_CHECK(ResourceManager::getInstance()->shader("default")->unuse());
 }
 
-void Renderer::drawLine(const Point &start, const Point &end, SDL_Color color, unsigned int thickness)
+void Renderer::drawPoly(const Point &pos, const Size &size, SDL_Color color)
 {
-    drawLine(start.x(), start.y(), end.x(), end.y(), color, thickness);
+    drawPoly(pos.x(), pos.y(), size.width(), size.height(), color);
 }
 
 glm::vec4 Renderer::fadeColor()
