@@ -67,6 +67,8 @@ TextArea::TextArea(const TextArea& textArea, Point pos) : Base(pos)
     _timestampCreated = textArea._timestampCreated;
     _text = textArea._text;
     _font = textArea._font;
+    _color = textArea._color;
+    _outlineColor = textArea._outlineColor;
     _backgroundColor = textArea._backgroundColor;
     _size = textArea._size;
     _horizontalAlign = textArea._horizontalAlign;

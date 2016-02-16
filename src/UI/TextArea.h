@@ -309,8 +309,8 @@ protected:
 
     // TODO: implement
     SDL_Color _backgroundColor = {0,0,0,0};
-
-    SDL_Color _color = {255,255,255,255};
+    // TODO: should be white, and properly set to green in states/ui
+    SDL_Color _color = {0x3f, 0xf8, 0x00, 0xff};
     SDL_Color _outlineColor = {0,0,0,0};
     unsigned int _timestampCreated = 0;
 
