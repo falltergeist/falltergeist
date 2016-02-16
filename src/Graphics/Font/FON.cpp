@@ -17,9 +17,11 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Base/StlFeatures.h"
-#include <ResourceManager.h>
+#include "../../Base/StlFeatures.h"
+#include "../../ResourceManager.h"
 #include "FON.h"
+#include "../../Format/Fon/Glyph.h"
+
 
 namespace Falltergeist {
 using Base::make_unique;
@@ -60,6 +62,12 @@ unsigned short FON::width() {
 
 unsigned short FON::height() {
     return _fon->maximumHeight();
+}
+
+
+unsigned short FON::glyphWidth(uint8_t ch)
+{
+    return _fon->glyphs()->at(ch)->width();
 }
 }
 }

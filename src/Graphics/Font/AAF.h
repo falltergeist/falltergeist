@@ -20,7 +20,7 @@
 #ifndef FALLTERGEIST_GRAPHICS_FONT_AAF_H
 #define FALLTERGEIST_GRAPHICS_FONT_AAF_H
 
-#include <Format/Aaf/File.h>
+#include "../../Format/Aaf/File.h"
 #include "../Font.h"
 
 namespace Falltergeist {
@@ -37,6 +37,8 @@ public:
     virtual unsigned short spaceWidth() override;
     virtual unsigned short width() override;
     virtual unsigned short height() override;
+    virtual unsigned short glyphWidth(uint8_t ch) override;
+
 
 private:
     Format::Aaf::File* _aaf = nullptr;

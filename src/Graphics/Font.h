@@ -50,6 +50,7 @@ public:
     virtual unsigned short spaceWidth() { return 0; }
     virtual unsigned short width() { return 0; }
     virtual unsigned short height() { return 0; }
+    virtual unsigned short glyphWidth(uint8_t ch) { return 0; }
 
     virtual std::string filename() const { return _filename; }
     virtual Graphics::Texture *texture() { return _texture.get(); }

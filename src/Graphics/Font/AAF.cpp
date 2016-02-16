@@ -17,9 +17,10 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Base/StlFeatures.h"
-#include <ResourceManager.h>
+#include "../../Base/StlFeatures.h"
+#include "../../ResourceManager.h"
 #include "AAF.h"
+#include "../../Format/Aaf/Glyph.h"
 
 namespace Falltergeist {
 using Base::make_unique;
@@ -63,5 +64,11 @@ unsigned short AAF::width() {
 unsigned short AAF::height() {
     return _aaf->maximumHeight();
 }
+
+unsigned short AAF::glyphWidth(uint8_t ch)
+{
+    return _aaf->glyphs()->at(ch)->width();
+}
+
 }
 }

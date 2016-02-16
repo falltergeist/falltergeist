@@ -20,7 +20,7 @@
 #ifndef FALLTERGEIST_GRAPHICS_FONT_FON_H
 #define FALLTERGEIST_GRAPHICS_FONT_FON_H
 
-#include <Format/Fon/File.h>
+#include "../../Format/Fon/File.h"
 #include "../Font.h"
 
 namespace Falltergeist {
@@ -37,6 +37,7 @@ public:
     virtual unsigned short spaceWidth() override;
     virtual unsigned short width() override;
     virtual unsigned short height() override;
+    virtual unsigned short glyphWidth(uint8_t ch) override;
 
 private:
     Format::Fon::File* _fon = nullptr;
