@@ -65,6 +65,12 @@ Renderer::Renderer(const Size& size) : Renderer((unsigned)size.width(), (unsigne
 
 Renderer::~Renderer()
 {
+    GL_CHECK(glDeleteBuffers(1, &_coord_vbo));
+    GL_CHECK(glDeleteBuffers(1, &_texcoord_vbo));
+    GL_CHECK(glDeleteBuffers(1, &_ebo));
+
+    GL_CHECK(glDeleteVertexArrays(1, &_vao));
+
 }
 
 void Renderer::init()

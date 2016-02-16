@@ -42,7 +42,11 @@ Font::Font()
 
 Font::~Font()
 {
+    GL_CHECK(glDeleteBuffers(1, &_coords));
+    GL_CHECK(glDeleteBuffers(1, &_texCoords));
+    GL_CHECK(glDeleteBuffers(1, &_ebo));
 
+    GL_CHECK(glDeleteVertexArrays(1, &_vao));
 }
 
 void Font::render(std::vector<TextSymbol> _symbols, Point& pos, SDL_Color color, SDL_Color outline)
