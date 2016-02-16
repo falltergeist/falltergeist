@@ -330,6 +330,14 @@ protected:
      */
     void _needUpdate(bool lines = false);
 
+    GLuint _vao;
+    GLuint _coords;
+    GLuint _texCoords;
+    GLuint _ebo;
+    int _cnt = 0;
+    void _initBuffers();
+    void _updateBuffers(std::vector<Graphics::TextSymbol> _symbols);
+
 };
 
 }
