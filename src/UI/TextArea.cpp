@@ -475,6 +475,7 @@ void TextArea::render(bool eggTransparency)
     GL_CHECK(glBindVertexArray(0));
 
     GL_CHECK(ResourceManager::getInstance()->shader("font")->unuse());
+    GL_CHECK(font()->texture()->unbind(0));
 
 //    font()->render( pos, _color, _outlineColor);
 }
