@@ -219,6 +219,8 @@ public:
     void render(bool eggTransparency = false) override;
     unsigned int pixel(const Point& pos) override;
 
+    virtual bool opaque(const Point &pos) override;
+
     unsigned int timestampCreated() const;
 
     /**

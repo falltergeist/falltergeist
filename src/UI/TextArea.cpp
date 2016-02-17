@@ -656,5 +656,8 @@ void TextArea::_updateBuffers(std::vector<Graphics::TextSymbol> _symbols)
     GL_CHECK(glBindVertexArray(0));
 }
 
+bool TextArea::opaque(const Point &pos) {
+    return Rect::inRect(pos, this->size());
+}
 }
 }
