@@ -86,8 +86,8 @@ public:
     GLuint getEBO();
     glm::mat4 getMVP();
 
-    void drawPoly(int x, int y, int w, int h, SDL_Color color);
-    void drawPoly(const Point& pos, const Size& size , SDL_Color color);
+    void drawRect(int x, int y, int w, int h, SDL_Color color);
+    void drawRect(const Point &pos, const Size &size, SDL_Color color);
 
     glm::vec4 fadeColor();
 

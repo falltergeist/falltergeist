@@ -368,7 +368,7 @@ GLuint Renderer::getEBO() {
     return _ebo;
 }
 
-void Renderer::drawPoly(int x, int y, int w, int h, SDL_Color color)
+void Renderer::drawRect(int x, int y, int w, int h, SDL_Color color)
 {
     std::vector<glm::vec2> vertices;
 
@@ -411,9 +411,9 @@ void Renderer::drawPoly(int x, int y, int w, int h, SDL_Color color)
     GL_CHECK(ResourceManager::getInstance()->shader("default")->unuse());
 }
 
-void Renderer::drawPoly(const Point &pos, const Size &size, SDL_Color color)
+void Renderer::drawRect(const Point &pos, const Size &size, SDL_Color color)
 {
-    drawPoly(pos.x(), pos.y(), size.width(), size.height(), color);
+    drawRect(pos.x(), pos.y(), size.width(), size.height(), color);
 }
 
 glm::vec4 Renderer::fadeColor()
