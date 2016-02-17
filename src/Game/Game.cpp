@@ -373,10 +373,7 @@ std::unique_ptr<Event::Event> Game::_createEventFromSDL(const SDL_Event& sdlEven
             // TODO: maybe we should make Game an EventTarget too?
             if (keyboardEvent->keyCode() == SDLK_F12)
             {
-//                auto texture = renderer()->screenshot();
-                std::string name = std::to_string(SDL_GetTicks()) +  ".bmp";
-//                SDL_SaveBMP(texture->sdlSurface(), name.c_str());
-                Logger::info("GAME") << "Screenshot saved to " + name << std::endl;
+                renderer()->screenshot();
             }
             return std::move(keyboardEvent);
         }

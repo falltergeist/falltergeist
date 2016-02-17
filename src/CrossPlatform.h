@@ -63,6 +63,8 @@ public:
     // Create directory at given path with parent directories as needed.
     // Throw runtime_error on failure.
     static void createDirectory(std::string path);
+
+    static bool fileExists(std::string file);
 };
 
 }

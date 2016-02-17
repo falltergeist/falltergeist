@@ -37,6 +37,9 @@
 
 // Third party includes
 #include <glm/gtc/matrix_transform.hpp>
+#include <SDL_image.h>
+#include <sys/stat.h>
+#include <CrossPlatform.h>
 
 namespace Falltergeist
 {
@@ -324,7 +327,64 @@ void Renderer::drawTexture(Texture* texture, const Point& pos, const Point& src,
 
 void Renderer::screenshot()
 {
+    std::string filename;
+    Uint32 rmask, gmask, bmask, amask;
+    SDL_Surface* output;
+
+    int iter = 0;
+    do {
+        std::string siter = std::to_string(iter);
+        if(siter.size()<3)
+            siter.insert(0, 3 - siter.size(), '0');
+        filename = "screenshot" + siter + ".png";
+        iter++;
+    } while (CrossPlatform::fileExists(filename) && iter < 1000);
+
+    if (CrossPlatform::fileExists(filename)) {
+        Logger::warning("GAME") << "Too many screenshots" << std::endl;
+        return;
+    }
+
+
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+    rmask = 0xff000000;
+    gmask = 0x00ff0000;
+    bmask = 0x0000ff00;
+    amask = 0x000000ff;
+#else
+    rmask = 0x000000ff;
+    gmask = 0x0000ff00;
+    bmask = 0x00ff0000;
+    amask = 0xff000000;
+#endif
+
+    output = SDL_CreateRGBSurface(0, width(), height(), 32, rmask, gmask, bmask, amask);
+    uint8_t *destPixels = (uint8_t*)output->pixels;
+    uint8_t *srcPixels = new uint8_t[width() * height() * 4];
+
+    glReadBuffer(GL_BACK);
+    glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, srcPixels);
+
+    for(int y=0; y<height(); ++y)
+    {
+        for(int x=0; x<width(); ++x)
+        {
+            uint8_t* pDestPix = &destPixels[((width() * y) + x) * 4];
+            uint8_t* pSrcPix = &srcPixels[((width() * ((height()-1) - y)) + x) * 4];
+            pDestPix[0] = pSrcPix[0];
+            pDestPix[1] = pSrcPix[1];
+            pDestPix[2] = pSrcPix[2];
+            pDestPix[3] = 255;
+        }
+    }
+
+    IMG_SavePNG(output,filename.c_str());
+    delete[] srcPixels;
+    SDL_FreeSurface(output);
+    Logger::info("GAME") << "Screenshot saved to " + filename << std::endl;
+
     return;
+
 }
 
 void Renderer::setCaption(const std::string& caption)
