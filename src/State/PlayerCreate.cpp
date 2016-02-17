@@ -38,6 +38,7 @@
 #include "../UI/HiddenMask.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
+#include "../UI/Rectangle.h"
 
 // Third party includes
 
@@ -244,10 +245,8 @@ void PlayerCreate::init()
     _title->setFont("font2.aaf", {0,0,0,0xff});
     addUI(_title);
 
-//    auto line = new UI::Image(270, 2);
-//    line->setPosition(backgroundPos + Point(350, 300));
-// TODO:: newrender    line->texture()->fill(0x000000ff);
-//    addUI(line);
+    auto line = new UI::Rectangle(backgroundPos + Point(350, 300), Size(270, 2), { 0x00, 0x00, 0x00, 0xff });
+    addUI(line);
 
     _description = new UI::TextArea("", backgroundX+350, backgroundY+315);
     _description->setFont("font1.aaf", {0,0,0,0xff});

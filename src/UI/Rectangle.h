@@ -22,6 +22,7 @@
 
 #include <Point.h>
 #include "Base.h"
+#include <SDL.h>
 
 namespace Falltergeist {
 namespace UI {
