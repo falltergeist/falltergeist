@@ -66,6 +66,7 @@ void ImageList::setCurrentImage(unsigned int number)
 void ImageList::addImage(std::unique_ptr<Image> image)
 {
     _images.push_back(std::move(image));
+    _images.back()->setPosition(position());
 }
 
 void ImageList::addImage(const std::string& filename)
@@ -83,5 +84,12 @@ const std::vector<std::unique_ptr<Image>>& ImageList::images() const
     return _images;
 }
 
+void ImageList::render(bool eggTransparency) {
+    _images.at(currentImage())->render(eggTransparency);
+}
+
+bool ImageList::opaque(const Point &pos) {
+    return _images.at(currentImage())->opaque(pos);
+}
 }
 }

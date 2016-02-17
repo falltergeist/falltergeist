@@ -49,6 +49,10 @@ public:
     Graphics::Texture* texture() const override;
     const std::vector<std::unique_ptr<Image>>& images() const;
 
+    virtual bool opaque(const Point &pos) override;
+
+    virtual void render(bool eggTransparency) override;
+
 protected:
     std::vector<std::unique_ptr<Image>> _images;
     unsigned int _currentImage = 0;
