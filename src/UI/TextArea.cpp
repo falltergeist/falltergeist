@@ -269,6 +269,8 @@ void TextArea::_updateSymbols()
 
     if (_text.empty())
     {
+        _updateBuffers();
+        _calculatedSize = Size(0, 0);
         _changed = false;
         return;
     }
@@ -339,6 +341,7 @@ void TextArea::_updateSymbols()
             _symbols.push_back(symbol);
         }
     }
+    _updateBuffers();
     _changed = false;
 }
 
@@ -433,7 +436,6 @@ void TextArea::render(bool eggTransparency)
     if (_changed)
     {
         _updateSymbols();
-        _updateBuffers(_symbols);
     }
 
     auto pos = position();
@@ -591,7 +593,7 @@ void TextArea::setCustomLineShifts(std::vector<int> shifts)
     _customLineShifts = shifts;
 }
 
-void TextArea::_updateBuffers(std::vector<Graphics::TextSymbol> _symbols)
+void TextArea::_updateBuffers()
 {
     std::vector<glm::vec2> vertices;
     std::vector<glm::vec2> UV;

@@ -338,7 +338,7 @@ protected:
     GLuint _ebo;
     int _cnt = 0;
     void _initBuffers();
-    void _updateBuffers(std::vector<Graphics::TextSymbol> _symbols);
+    void _updateBuffers();
 
 };
 
