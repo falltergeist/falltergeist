@@ -93,6 +93,7 @@ void PlayerEditGender::init()
 
 void PlayerEditGender::onDoneButtonClick(Event::Mouse* event)
 {
+    Game::getInstance()->player()->setGender(_gender);
     Game::getInstance()->popState();
 }
 
