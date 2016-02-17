@@ -115,7 +115,7 @@ void Movie::init()
     auto font0_ffffffff = ResourceManager::getInstance()->font("font1.aaf");
     auto subLabel = new UI::TextArea("", 0, 320+35);
 
-    subLabel->setFont(font0_ffffffff);
+    subLabel->setFont(font0_ffffffff, {0xFF, 0xFF, 0xFF, 0xFF});
     subLabel->setWidth(640);
     subLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
     addUI("subs",subLabel);
