@@ -246,9 +246,8 @@ bool Renderer::fading()
 
 void Renderer::fadeIn(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie)
 {
-    // @fixme: rgb color is not used here
     _inmovie = inmovie;
-    _fadeColor.a = 255;
+    _fadeColor = {r, g, b, 255};
     _fadeAlpha = 255;
     _fadeStep = -1;
     _fadeDone = false;
