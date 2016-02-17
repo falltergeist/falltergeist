@@ -24,13 +24,13 @@
 #include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
-#include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
 #include "../Game/DudeObject.h"
 #include "../State/PlayerEditName.h"
 #include "../UI/TextArea.h"
 #include "../UI/ImageButton.h"
 #include "../UI/Image.h"
+#include "../UI/Rectangle.h"
 
 // Third party includes
 
@@ -116,9 +116,7 @@ void PlayerEditName::init()
     _name = new UI::TextArea(Game::getInstance()->player()->name(), bgX+43, bgY+15);
     _name->keyDownHandler().add([this](Event::Event* event){ this->onTextAreaKeyDown(dynamic_cast<Event::Keyboard*>(event)); });
 
-//    _cursor = new UI::Image(5, 8);
-//    _cursor->setPosition(bgPos + Point(83, 15));
-// TODO: newrender    _cursor->texture()->fill(0x3FF800FF);
+    _cursor = new UI::Rectangle(bgPos + Point(83, 15) ,{5,8}, {0x3F, 0xF8, 0x00, 0xFF});
 
     addUI(bg);
     addUI(nameBox);
@@ -126,7 +124,7 @@ void PlayerEditName::init()
     addUI(doneLabel);
     addUI(doneButton);
     addUI(_name);
-//    addUI(_cursor);
+    addUI(_cursor);
 }
 
 void PlayerEditName::onTextAreaKeyDown(Event::Keyboard* event)
@@ -191,13 +189,10 @@ void PlayerEditName::think()
     State::think();
     if (SDL_GetTicks() - _timer > 300)
     {
-        // TODO: newrender
-        //_cursor->setVisible(!_cursor->visible());
+        _cursor->setVisible(!_cursor->visible());
         _timer = SDL_GetTicks();
     }
-
-    // TODO: newrender
-    //_cursor->setPosition({bgX + _name->textSize().width() + 45, _cursor->position().y()});
+    _cursor->setPosition({bgX + _name->textSize().width() + 45, _cursor->position().y()});
 }
 
 void PlayerEditName::doBack()
