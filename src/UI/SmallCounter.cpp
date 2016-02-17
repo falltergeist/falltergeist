@@ -44,7 +44,7 @@ SmallCounter::SmallCounter(const Point& pos) : Falltergeist::UI::Base(pos)
 SmallCounter::~SmallCounter()
 {
 }
-
+/* TODO: newrender
 Graphics::Texture* SmallCounter::texture() const
 {
     static const int kCharWidth = 9;
@@ -65,7 +65,6 @@ Graphics::Texture* SmallCounter::texture() const
             xOffsetByColor = 240;
             break;
     }
-/* TODO: newrender
     // number as text, always positive
     auto texture = Graphics::Texture::generateTextureForNumber(
         abs(_number), _length, numbers->texture(),
@@ -79,19 +78,21 @@ Graphics::Texture* SmallCounter::texture() const
     }
 
     return (_textureOnDemand = std::move(texture)).get();
-*/
+
     return _textureOnDemand.get();
 }
+
 
 void SmallCounter::setTexture(Graphics::Texture* texture)
 {
     _textureOnDemand.reset(texture);
 }
+*/
 
 void SmallCounter::setLength(unsigned int length)
 {
     if (_length == length) return;
-    _textureOnDemand.reset();
+    //_textureOnDemand.reset();
     _length = length;
 }
 
@@ -103,7 +104,7 @@ unsigned int SmallCounter::length() const
 void SmallCounter::setNumber(signed int number)
 {
     if (_number == number) return;
-    _textureOnDemand.reset();
+    //_textureOnDemand.reset();
     _number = number;
 }
 
@@ -122,7 +123,7 @@ void SmallCounter::setColor(Color color)
             if (_color != color)
             {
                 _color = color;
-                _textureOnDemand.reset();
+                //_textureOnDemand.reset();
             }
             break;
     }

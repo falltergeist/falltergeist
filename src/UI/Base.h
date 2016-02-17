@@ -62,12 +62,6 @@ public:
     virtual void setOffset(const Point& pos);
     void setOffset(int x, int y);
 
-    virtual Graphics::Texture* texture() const;
-    /**
-     * Set to use pre-existing Texture object
-     */
-    virtual void setTexture(Graphics::Texture* texture);
-
     virtual bool visible() const;
     virtual void setVisible(bool value);
 
@@ -95,9 +89,6 @@ public:
 
     virtual Size size() const;
 
-    virtual unsigned int pixel(const Point& pos);
-    unsigned int pixel(unsigned int x, unsigned int y);
-
     virtual bool opaque(const Point &pos) { return false; }
 
     Event::KeyboardHandler& keyDownHandler();
@@ -119,14 +110,6 @@ protected:
     Point _position;
     Point _offset;
 
-    /**
-     * Generate and set new blank texture with given size
-     */
-    void _generateTexture(unsigned int width, unsigned int height);
-
-    Graphics::Texture* _texture = nullptr;
-    std::unique_ptr<Graphics::Texture> _tmptex;
-    
     bool _leftButtonPressed = false;
     bool _rightButtonPressed = false;
     bool _drag = false;
@@ -138,8 +121,6 @@ protected:
                         _mouseInHandler, _mouseMoveHandler, _mouseOutHandler,
                         _mouseClickHandler, _mouseDownHandler, _mouseUpHandler;
 
-private:
-    std::unique_ptr<Graphics::Texture> _generatedTexture;
 };
 
 }

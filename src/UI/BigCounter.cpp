@@ -50,6 +50,7 @@ BigCounter::~BigCounter()
 {
 }
 
+/* TODO: newrender
 Graphics::Texture* BigCounter::texture() const
 {
     static const int kCharWidth = 14;
@@ -67,11 +68,11 @@ Graphics::Texture* BigCounter::texture() const
             xOffsetByColor = 168;
             break;
     }
-/* TODO: newrender
+ TODO: newrender
     _textureOnDemand = Graphics::Texture::generateTextureForNumber(
         _number, _length, numbers->texture(),
         kCharWidth, kCharHeight, xOffsetByColor);
-*/
+
     return _textureOnDemand.get();
 }
 
@@ -79,11 +80,12 @@ void BigCounter::setTexture(Graphics::Texture* texture)
 {
     _textureOnDemand.reset(texture);
 }
+*/
 
 void BigCounter::setNumber(unsigned int number)
 {
     if (_number == number) return;
-    _textureOnDemand.reset();
+    //_textureOnDemand.reset();
     _number = number;
 }
 
@@ -102,7 +104,7 @@ void BigCounter::setColor(Color color)
             if (_color != color)
             {
                 _color = color;
-                _textureOnDemand.reset();
+                //_textureOnDemand.reset();
             }
             break;
     }

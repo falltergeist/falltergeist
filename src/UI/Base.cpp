@@ -76,16 +76,6 @@ void Base::setY(int value)
     setPosition(Point(position().x(), value));
 }
 
-Graphics::Texture* Base::texture() const
-{
-    return _texture;
-}
-
-void Base::setTexture(Graphics::Texture* texture)
-{
-    _texture = texture;
-}
-
 void Base::think()
 {
 }
@@ -177,27 +167,7 @@ void Base::setOffset(int x, int y)
 
 Size Base::size() const
 {
-    auto tex = texture();
-    if (!tex) return Size(0, 0);
-    return Size(tex->width(), tex->height());
-}
-
-unsigned int Base::pixel(const Point& pos)
-{
-/* TODO: newrender
-    if (_tmptex)
-    {
-        return _tmptex->pixel((unsigned)pos.x(), (unsigned)pos.y()) & 0xFF; // return only alpha channel
-    }
-    auto tex = texture();
-    return tex ? tex->pixel((unsigned)pos.x(), (unsigned)pos.y()) : 0;
-*/
-return 0;
-}
-
-unsigned int Base::pixel(unsigned int x, unsigned int y)
-{
-    return pixel(Point(x, y));
+    return Size(0, 0);
 }
 
 void Base::handle(Event::Event* event)
@@ -371,15 +341,6 @@ void Base::handle(Event::Mouse* mouseEvent)
         }
     }
     return;
-}
-
-void Base::_generateTexture(unsigned int width, unsigned int height)
-{
-    if (!_generatedTexture || _generatedTexture->width() != width || _generatedTexture->height() != height)
-    {
-        _generatedTexture = make_unique<Graphics::Texture>(width, height);
-        setTexture(_generatedTexture.get());
-    }
 }
 
 unsigned Base::width() const

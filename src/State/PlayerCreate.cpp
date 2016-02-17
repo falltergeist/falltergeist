@@ -296,6 +296,7 @@ void PlayerCreate::_addImage(const std::string& name, UI::Image* image)
 
 void PlayerCreate::think()
 {
+    // TODO: this shit shouldn't be updated each fucking frame, duh
     State::think();
     auto player = Game::getInstance()->player();
 
@@ -394,7 +395,8 @@ void PlayerCreate::think()
 
         _title->setText(_titles.at(name));
         _description->setText(_descriptions.at(name));
-        _selectedImage->setTexture(_images.at(name)->texture());
+        // TODO: newrender
+        // _selectedImage->setTexture(_images.at(name)->texture());
 
         SDL_Color font1_ffff7fff = {0xff, 0xff, 0x7f, 0xff};
         SDL_Color font1_ffffffff = {0xff, 0xff, 0xff, 0xff};
@@ -519,7 +521,8 @@ void PlayerCreate::onButtonClick(Event::Mouse* event)
             if (name.find("stats_") == 0)
             {
                 _selectedLabel = _labels.at(name.substr(0,7));
-                _selectedImage->setTexture(_images.at(name.substr(0,7))->texture());
+                // TODO: newrender
+                // _selectedImage->setTexture(_images.at(name.substr(0,7))->texture());
                 unsigned int number = atoi(name.substr(6,1).c_str());
                 if (name.find("_increase") == 7)
                 {
@@ -535,7 +538,8 @@ void PlayerCreate::onButtonClick(Event::Mouse* event)
             {
                 unsigned int number = atoi(name.substr(7).c_str());
                 _selectedLabel = _labels.at(name);
-                _selectedImage->setTexture(_images.at(name)->texture());
+                // TODO: newrender
+                // _selectedImage->setTexture(_images.at(name)->texture());
 
                 if (!_traitToggle(number - 1))
                 {
@@ -549,7 +553,8 @@ void PlayerCreate::onButtonClick(Event::Mouse* event)
             {
                 unsigned int number = atoi(name.substr(7).c_str());
                 _selectedLabel = _labels.at(name);
-                _selectedImage->setTexture(_images.at(name)->texture());
+                // TODO: newrender
+                // _selectedImage->setTexture(_images.at(name)->texture());
                 if (!_skillToggle(number - 1))
                 {
                     auto state = new PlayerEditAlert();
@@ -576,7 +581,8 @@ void PlayerCreate::onLabelClick(Event::Mouse* event)
                     label = name.substr(0, name.find("_value"));
                 }
                 _selectedLabel = _labels.at(label.c_str());
-                _selectedImage->setTexture(_images.at(label.c_str())->texture());
+                // TODO: newrender
+                // _selectedImage->setTexture(_images.at(label.c_str())->texture());
             }
         }
     }
@@ -592,7 +598,8 @@ void PlayerCreate::onMaskClick(Event::Mouse* event)
             if (name.find("stats_") == 0)
             {
                 _selectedLabel = _labels.at(name);
-                _selectedImage->setTexture(_images.at(name)->texture());
+                // TODO: newrender
+                // _selectedImage->setTexture(_images.at(name)->texture());
             }
         }
     }

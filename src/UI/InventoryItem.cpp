@@ -69,7 +69,7 @@ void InventoryItem::setType(Type value)
 {
     _type = value;
 }
-
+/*
 Graphics::Texture* InventoryItem::texture() const
 {
     //if (!_texture)
@@ -92,20 +92,14 @@ Graphics::Texture* InventoryItem::texture() const
 
     return _item->inventoryUi()->texture();
 }
-
+*/
 void InventoryItem::render(bool eggTransparency)
 {
     //return ActiveUI::render();
     if (!_item) return;
     auto game = Game::getInstance();
-    Size texSize = Size(texture()->width(), texture()->height());
+    //Size texSize = Size(texture()->width(), texture()->height());
 // TODO: newrender    game->renderer()->drawTexture(texture(), position() + (this->size() - texSize) / 2);
-}
-
-unsigned int InventoryItem::pixel(const Point& pos)
-{
-    if (!_item) return 0;
-    return Rect::inRect(pos, this->size()) ? 1 : 0;
 }
 
 Game::ItemObject* InventoryItem::item()
@@ -216,13 +210,18 @@ Size InventoryItem::size() const
         case Type::SLOT:
             return Size(90, 63);
         default:
-            return Base::size();
+            return Base::size(); // TODO: newrender
     }
 }
 
 Event::MouseHandler& InventoryItem::itemDragStopHandler()
 {
     return _itemDragStopHandler;
+}
+
+bool InventoryItem::opaque(const Point &pos) {
+    if (!_item) return false;
+    return Rect::inRect(pos, this->size());
 }
 }
 }

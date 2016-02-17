@@ -77,8 +77,6 @@ public:
     int modeFactor() const;
     void setModeFactor(int factor);
 
-    Graphics::Texture* texture() const override;
-
     virtual void handle(Event::Mouse* mouseEvent) override;
 
 protected:

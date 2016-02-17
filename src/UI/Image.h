@@ -50,8 +50,6 @@ namespace UI
 class Image : public Base
 {
 public:
-    using Base::setTexture;
-
     Image(const std::string& filename);
     Image(Format::Frm::File* frm, unsigned int direction);
 

@@ -50,11 +50,11 @@ public:
 
     Size size() const override;
 
-    virtual unsigned int pixel(const Point& pos) override;
-
     void render(bool eggTransparency = false) override;
     void handle(Event::Event *event) override;
     void think() override;
+
+    virtual bool opaque(const Point &pos) override;
 
     void displayMessage(const std::string& message);
 

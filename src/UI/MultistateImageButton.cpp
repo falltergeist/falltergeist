@@ -176,12 +176,12 @@ void MultistateImageButton::_onMouseUp(Event::Mouse* event)
         Game::getInstance()->mixer()->playACMSound(sender->_upSound);
     }
 }
-
+/*
 Graphics::Texture* MultistateImageButton::texture() const
 {
     return _imageList.images().at(_currentState)->texture();
 }
-
+*/
 void MultistateImageButton::setModeFactor(int factor)
 {
     _modeFactor = factor;

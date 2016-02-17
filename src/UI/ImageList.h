@@ -46,7 +46,6 @@ public:
     void addImage(const std::string& filename);
     void setCurrentImage(unsigned int number);
     unsigned int currentImage() const;
-    Graphics::Texture* texture() const override;
     const std::vector<std::unique_ptr<Image>>& images() const;
 
     virtual bool opaque(const Point &pos) override;

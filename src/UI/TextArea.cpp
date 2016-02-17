@@ -536,15 +536,6 @@ TextArea& TextArea::operator+=(signed value)
     return *this;
 }
 
-unsigned int TextArea::pixel(const Point& pos)
-{
-    if (!Rect::inRect(pos, this->size()))
-    {
-        return 0; // transparent
-    }
-    return 0xFFFFFFFF; // white color
-}
-
 void TextArea::handle(Event::Event* event)
 {
     Base::handle(event);

@@ -74,11 +74,6 @@ void ImageList::addImage(const std::string& filename)
     addImage(make_unique<Image>(filename));
 }
 
-Graphics::Texture* ImageList::texture() const
-{
-    return _images.at(currentImage())->texture();
-}
-
 const std::vector<std::unique_ptr<Image>>& ImageList::images() const
 {
     return _images;

@@ -118,17 +118,6 @@ void AnimationQueue::think()
     }
 }
 
-Graphics::Texture* AnimationQueue::texture() const
-{
-    return currentAnimation()->texture();
-}
-
-unsigned int AnimationQueue::pixel(const Point& pos)
-{
-    currentAnimation()->setPosition(this->position());
-    return currentAnimation()->pixel(pos);
-}
-
 Animation* AnimationQueue::currentAnimation() const
 {
     return _animations.at(_currentAnimation).get();
@@ -149,5 +138,9 @@ Event::Handler& AnimationQueue::animationEndedHandler()
     return _animationEndedHandler;
 }
 
+bool AnimationQueue::opaque(const Point &pos) {
+    currentAnimation()->setPosition(this->position());
+    return currentAnimation()->opaque(pos);
+}
 }
 }

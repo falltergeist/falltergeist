@@ -53,8 +53,6 @@ public:
     SmallCounter(const Point& pos);
     ~SmallCounter() override;
 
-    Graphics::Texture* texture() const override;
-
     Color color() const;
     void setColor(Color color);
 
@@ -72,13 +70,10 @@ protected:
     signed int _number = 0;
     unsigned int _length = 3;
     Type _type = Type::UNSIGNED;
-    mutable std::unique_ptr<Graphics::Texture> _textureOnDemand;
 
-    void setTexture(Graphics::Texture* texture) override;
 
 private:
     // Hide unused field from childs.
-    using Falltergeist::UI::Base::_texture;
 
     SmallCounter(const SmallCounter&) = delete;
     void operator=(const SmallCounter&) = delete;

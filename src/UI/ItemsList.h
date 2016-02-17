@@ -68,7 +68,6 @@ public:
     bool canScrollDown();
 
     virtual void render(bool eggTransparency = false);
-    virtual unsigned int pixel(const Point& pos);
 
     void onMouseLeftDown(Event::Mouse* event);
     void onMouseDragStart(Event::Mouse* event);

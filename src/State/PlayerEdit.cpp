@@ -420,7 +420,8 @@ void PlayerEdit::think()
 
         _title->setText(_titles.at(name));
         _description->setText(_descriptions.at(name));
-        _selectedImage->setTexture(_images.at(name)->texture());
+        // TODO: newrender
+        // _selectedImage->setTexture(_images.at(name)->texture());
 
         SDL_Color font1_ffff7fff = {0xff, 0xff, 0x7f, 0xff};
         SDL_Color font1_ffffffff = {0xff, 0xff, 0xff, 0xff};
@@ -493,7 +494,8 @@ void PlayerEdit::onLabelClick(Event::Mouse* event)
                     label = name.substr(0, name.find("_value"));
                 }
                 _selectedLabel = _labels.at(label.c_str());
-                _selectedImage->setTexture(_images.at(label.c_str())->texture());
+                // TODO: newrender
+                // _selectedImage->setTexture(_images.at(label.c_str())->texture());
             }
         }
     }
@@ -509,7 +511,8 @@ void PlayerEdit::onMaskClick(Event::Mouse* event)
             if (name.find("stats_") == 0)
             {
                 _selectedLabel = _labels.at(name);
-                _selectedImage->setTexture(_images.at(name)->texture());
+                // TODO: newrender
+                // _selectedImage->setTexture(_images.at(name)->texture());
             }
         }
     }

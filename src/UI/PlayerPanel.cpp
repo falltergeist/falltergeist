@@ -456,11 +456,6 @@ void PlayerPanel::openLoadGame()
     playWindowOpenSfx();
 }
 
-unsigned int PlayerPanel::pixel(const Point& pos)
-{
-    return _background->pixel(pos);
-}
-
 void PlayerPanel::displayMessage(const std::string& message)
 {
     Game::getInstance()->mixer()->playACMSound("sound/sfx/monitor.acm");
@@ -470,5 +465,8 @@ void PlayerPanel::displayMessage(const std::string& message)
     _messageLog->setLineOffset(_messageLog->numLines() - 6);
 }
 
+bool PlayerPanel::opaque(const Point &pos) {
+    return _background->opaque(pos);
+}
 }
 }

@@ -57,7 +57,8 @@ Animation::Animation() : Falltergeist::UI::Base()
 Animation::Animation(const std::string& frmName, unsigned int direction) : Falltergeist::UI::Base()
 {
     auto frm = ResourceManager::getInstance()->frmFileType(frmName);
-    setTexture(ResourceManager::getInstance()->texture(frmName));
+    // TODO: newrender
+    //setTexture(ResourceManager::getInstance()->texture(frmName));
 
     _actionFrame = frm->actionFrame();
     auto dir = frm->directions()->at(direction);
@@ -209,6 +210,7 @@ void Animation::setShift(const Point& value)
     _shift = value;
 }
 
+/* TODO: newrender
 unsigned int Animation::pixel(const Point& pos)
 {
     const auto& frame = _animationFrames.at(_currentFrame);
@@ -220,6 +222,7 @@ unsigned int Animation::pixel(const Point& pos)
     }
     return Base::pixel(offsetPos + frame->position());
 }
+*/
 
 void Animation::play()
 {
