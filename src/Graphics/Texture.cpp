@@ -197,7 +197,7 @@ void Texture::unbind(uint8_t unit)
 
 
 bool Texture::opaque(unsigned int x, unsigned int y) {
-    if (y<width() && x<height() && (y*width()+x < _mask.size())) {
+    if (x<width() && y<height() && (y*width()+x < _mask.size())) {
         return _mask.at(y * width() + x);
     }
     else
