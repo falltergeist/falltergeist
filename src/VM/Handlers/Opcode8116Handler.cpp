@@ -47,7 +47,12 @@ void Opcode8116Handler::_run()
     auto item = dynamic_cast<Game::ItemObject*>(_vm->dataStack()->popObject());
     auto invenObj = _vm->dataStack()->popObject();
 
-    if (!item) _error("add_mult_objs_to_inven - item not instanceof GameItemObject");
+    if (!item)
+    {
+        _error("add_mult_objs_to_inven - item not instanceof GameItemObject");
+        return;
+    }
+
     item->setAmount(amount);
     // who can be critter or container
     std::vector<Game::ItemObject*>* inven;
@@ -62,6 +67,7 @@ void Opcode8116Handler::_run()
     else
     {
         _error("add_mult_objs_to_inven - wrong WHO parameter");
+        return;
     }
 
     inven->push_back(item);
