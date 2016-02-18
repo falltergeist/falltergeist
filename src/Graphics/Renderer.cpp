@@ -144,6 +144,8 @@ void Renderer::init()
     Logger::info("RENDERER") << "Version: " << glGetString(GL_VERSION) << std::endl;
     Logger::info("RENDERER") << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
 
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &_maxTexSize);
+
 
     message =  "Init GLEW - ";
     glewExperimental = GL_TRUE;
@@ -478,6 +480,11 @@ void Renderer::drawRect(const Point &pos, const Size &size, SDL_Color color)
 glm::vec4 Renderer::fadeColor()
 {
     return glm::vec4((float)_fadeColor.r/255.0, (float)_fadeColor.g/255.0, (float)_fadeColor.b/255.0, (float)_fadeColor.a/255.0);
+}
+
+uint32_t Renderer::maxTextureSize()
+{
+    return _maxTexSize;
 }
 }
 }
