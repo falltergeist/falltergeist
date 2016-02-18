@@ -98,7 +98,7 @@ public:
 
     void screenshot();
 
-    uint32_t maxTextureSize();
+    int32_t maxTextureSize();
 
 protected:
     Size _size;
@@ -124,7 +124,7 @@ protected:
     glm::mat4 _MVP;
     GLint _major;
     GLint _minor;
-    uint32_t _maxTexSize;
+    int32_t _maxTexSize;
 
 };
 

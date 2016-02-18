@@ -482,7 +482,7 @@ glm::vec4 Renderer::fadeColor()
     return glm::vec4((float)_fadeColor.r/255.0, (float)_fadeColor.g/255.0, (float)_fadeColor.b/255.0, (float)_fadeColor.a/255.0);
 }
 
-uint32_t Renderer::maxTextureSize()
+int32_t Renderer::maxTextureSize()
 {
     return _maxTexSize;
 }
