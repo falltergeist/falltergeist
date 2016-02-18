@@ -326,6 +326,8 @@ void Location::setLocation(const std::string& name)
                 _roof->tiles().push_back(make_unique<UI::Tile>(tileNum, Point(x, y - 104)));
             }
         }
+        _floor->init();
+        _roof->init();
     }
     
     auto maps = ResourceManager::getInstance()->mapsTxt()->maps();
@@ -465,7 +467,7 @@ void Location::onBackgroundClick(Event::Mouse* event)
 void Location::render()
 {
     _floor->render();
-
+/*
     //render only flat objects first
     for (auto hexagon : _hexagonGrid->hexagons())
     {
@@ -513,7 +515,7 @@ void Location::render()
         _hexagonInfo->render();
     }
 
-    State::render();
+    State::render();*/
 }
 
 void Location::think()

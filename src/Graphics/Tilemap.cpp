@@ -17,16 +17,20 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "../Base/StlFeatures.h"
 #include <ResourceManager.h>
 #include <Game/Game.h>
+#include <iostream>
 #include "Tilemap.h"
 #include "Shader.h"
+#include "Sprite.h"
 
 namespace Falltergeist {
 namespace Graphics {
 
+using Base::make_unique;
 
-Tilemap::Tilemap(std::vector<Point> coords, std::vector<Point> textureCoords, SDL_Surface *surface)
+Tilemap::Tilemap(std::vector<glm::vec2> coords, std::vector<glm::vec2> textureCoords)
 {
     GL_CHECK(glGenVertexArrays(1, &_vao));
     GL_CHECK(glBindVertexArray(_vao));
@@ -38,16 +42,16 @@ Tilemap::Tilemap(std::vector<Point> coords, std::vector<Point> textureCoords, SD
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coords));
     //update coords
+    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, coords.size() * sizeof(glm::vec2), &coords[0], GL_STATIC_DRAW));
+
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoords));
     //update texcoords
+    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, textureCoords.size() * sizeof(glm::vec2), &textureCoords[0], GL_STATIC_DRAW));
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
     GL_CHECK(glBindVertexArray(0));
 
-    // set texture
-    _texture = new Texture(surface->w, surface->h);
-    _texture->loadFromSurface(surface);
 }
 
 Tilemap::~Tilemap()
@@ -59,12 +63,12 @@ Tilemap::~Tilemap()
     GL_CHECK(glDeleteVertexArrays(1, &_vao));
 }
 
-void Tilemap::render(const Point &pos, std::vector<GLuint> indexes)
+void Tilemap::render(const Point &pos, std::vector<GLuint> indexes, uint32_t atlas)
 {
 
     GL_CHECK(ResourceManager::getInstance()->shader("tilemap")->use());
 
-    GL_CHECK(_texture->bind(0));
+    GL_CHECK(_textures.at(atlas).get()->bind(0));
 
     GL_CHECK(ResourceManager::getInstance()->shader("tilemap")->setUniform("tex",0));
 
@@ -72,9 +76,7 @@ void Tilemap::render(const Point &pos, std::vector<GLuint> indexes)
                                                                           Game::getInstance()->renderer()->getMVP()));
 
     // set camera offset
-    GL_CHECK(ResourceManager::getInstance()->shader("tilemap")->setUniform("offset", glm::vec2((float)pos.x(), (float(pos.y())) )));
-
-
+    GL_CHECK(ResourceManager::getInstance()->shader("tilemap")->setUniform("offset", glm::vec2((float)pos.x(), (float)pos.y()) ));
 
     GL_CHECK(glBindVertexArray(_vao));
 
@@ -89,14 +91,15 @@ void Tilemap::render(const Point &pos, std::vector<GLuint> indexes)
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
 
+    //std::cout << pos.x() << " : " << pos.y() << " | " << indexes.size();
     // update indexes
-    GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexes.size() * sizeof(GLushort), &indexes[0], GL_DYNAMIC_DRAW));
+    GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexes.size() * sizeof(GLuint), &indexes[0], GL_DYNAMIC_DRAW));
 
     GL_CHECK(glEnableVertexAttribArray(ResourceManager::getInstance()->shader("tilemap")->getAttrib("Position")));
 
     GL_CHECK(glEnableVertexAttribArray(ResourceManager::getInstance()->shader("tilemap")->getAttrib("TexCoord")));
 
-    GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0 ));
+    GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0 ));
 
     GL_CHECK(glDisableVertexAttribArray(ResourceManager::getInstance()->shader("tilemap")->getAttrib("Position")));
 
@@ -107,8 +110,14 @@ void Tilemap::render(const Point &pos, std::vector<GLuint> indexes)
     GL_CHECK(glBindVertexArray(0));
 
     GL_CHECK(ResourceManager::getInstance()->shader("tilemap")->unuse());
-    GL_CHECK(_texture->unbind(0));
+    GL_CHECK(_textures.at(atlas).get()->unbind(0));
 }
 
+void Tilemap::addTexture(SDL_Surface *surface)
+{
+    _textures.push_back(make_unique<Texture>(surface->w, surface->h));
+    _textures.back().get()->loadFromSurface(surface);
+
+}
 }
 }

@@ -25,6 +25,7 @@
 #include <memory>
 
 // Falltergeist includes
+#include "../Graphics/Renderer.h"
 
 // Third party includes
 
@@ -33,6 +34,7 @@ namespace Falltergeist
 namespace Graphics
 {
     class Texture;
+    class Tilemap;
 }
 namespace UI
 {
@@ -47,13 +49,13 @@ public:
 
     std::vector<std::unique_ptr<Tile>>& tiles();
     void render();
+    void init();
 
 protected:
-    unsigned int _square = 0;
-    std::unique_ptr<Graphics::Texture> _texture;// TODO: newrender = nullptr;
     std::vector<std::unique_ptr<Tile>> _tiles;
-    void _generateTexture();
-
+    uint32_t _tilesPerAtlas;
+    std::unique_ptr<Graphics::Tilemap> _tilemap;
+    uint32_t _atlases;
 };
 
 }

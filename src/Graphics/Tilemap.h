@@ -32,16 +32,17 @@ namespace Graphics
 class Tilemap
 {
 public:
-    Tilemap(std::vector<Point> coords, std::vector<Point> textureCoords, SDL_Surface *surface);
+    Tilemap(std::vector<glm::vec2> coords, std::vector<glm::vec2> textureCoords);
     ~Tilemap();
-    void render(const Point &pos, std::vector<GLuint> indexes);
+    void render(const Point &pos, std::vector<GLuint> indexes, uint32_t atlas);
+    void addTexture(SDL_Surface* surface);
 
 private:
     GLuint _vao;
     GLuint _coords;
     GLuint _texCoords;
     GLuint _ebo;
-    Texture* _texture;
+    std::vector<std::unique_ptr<Texture>> _textures;
 };
 
 }

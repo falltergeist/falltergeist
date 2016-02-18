@@ -175,6 +175,7 @@ void Renderer::init()
     ResourceManager::getInstance()->shader("sprite");
     ResourceManager::getInstance()->shader("font");
     ResourceManager::getInstance()->shader("animation");
+    ResourceManager::getInstance()->shader("tilemap");
     Logger::info("RENDERER") << "[OK]" << std::endl;
 
     Logger::info("RENDERER") << "Generating buffers" << std::endl;
@@ -484,6 +485,7 @@ glm::vec4 Renderer::fadeColor()
 
 int32_t Renderer::maxTextureSize()
 {
+    return 1024;
     return _maxTexSize;
 }
 }
