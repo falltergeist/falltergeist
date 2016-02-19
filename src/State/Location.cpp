@@ -469,48 +469,30 @@ void Location::render()
     _floor->render();
 
     //render only flat objects first
-    for (auto hexagon : _hexagonGrid->hexagons())
+
+    for (auto &object: _objects)
     {
-        hexagon->setInRender(false);
-        for (auto object : *hexagon->objects())
+        if (object->flat())
         {
-            if (object->flat())
-            {
-                object->render();
-                if (object->inRender())
-                {
-                    hexagon->setInRender(true);
-                }
-            }
+            object->render();
+            object->hexagon()->setInRender(object->inRender());
         }
     }
 
-    // now render all other objects
-    for (auto hexagon : _hexagonGrid->hexagons())
+    for (auto &object: _objects)
     {
-        hexagon->setInRender(false);
-        for (auto object : *hexagon->objects())
+        if (!object->flat())
         {
-            if (!object->flat())
-            {
-                object->render();
-                if (object->inRender())
-                {
-                    hexagon->setInRender(true);
-                }
-            }
+            //object->render();
+            object->hexagon()->setInRender(object->inRender());
         }
     }
 
-    for (auto hexagon : _hexagonGrid->hexagons())
+    for (auto &object: _objects)
     {
-        for (auto object : *hexagon->objects())
-        {
-            object->renderText();
-            // todo
-            // object->renderOutline();
-        }
+        object->renderText();
     }
+
     _roof->render();
     if (active())
     {
@@ -728,6 +710,13 @@ void Location::handle(Event::Event* event)
 
 void Location::handleByGameObjects(Event::Mouse* event)
 {
+    for (auto &object: _objects)
+    {
+        if (event->handled()) return;
+        if (!object->inRender()) continue;
+        object->handle(event);
+    }
+/*
     auto hexagons = _hexagonGrid->hexagons();
     for (auto it = hexagons.rbegin(); it != hexagons.rend(); ++it)
     {
@@ -742,6 +731,7 @@ void Location::handleByGameObjects(Event::Mouse* event)
             object->handle(event);
         }
     }
+    */
 }
 
 void Location::onMouseDown(Event::Mouse* event)

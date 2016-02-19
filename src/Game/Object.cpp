@@ -285,6 +285,7 @@ void Object::renderText()
 
 void Object::render()
 {
+
     if (!_ui || !_hexagon) return;
 
     auto camera = Game::getInstance()->locationState()->camera();
@@ -309,6 +310,11 @@ void Object::render()
 
 bool Object::_isIntersectsWithEgg()
 {
+    //only walls and scenery are affected by egg
+    if (_type != Type::WALL && _type !=Type::SCENERY)
+    {
+        return false;
+    }
     auto dude = Game::getInstance()->player();
     Hexagon * dudeHex;
 
