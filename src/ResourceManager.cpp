@@ -314,7 +314,7 @@ Format::Txt::QuestsFile* ResourceManager::questsTxt()
 
 Graphics::Texture* ResourceManager::texture(const string& filename)
 {
-    if (_textures.find(filename) != _textures.end())
+    if (_textures.count(filename))
     {
         return _textures.at(filename).get();
     }
@@ -368,7 +368,7 @@ Graphics::Texture* ResourceManager::texture(const string& filename)
 Graphics::Font* ResourceManager::font(const string& filename)
 {
 
-    if (_fonts.find(filename) != _fonts.end())
+    if (_fonts.count(filename))
     {
         return _fonts.at(filename).get();
     }
@@ -391,7 +391,7 @@ Graphics::Font* ResourceManager::font(const string& filename)
 
 Graphics::Shader* ResourceManager::shader(const string& filename)
 {
-    if (_shaders.find(filename) != _shaders.end())
+    if (_shaders.count(filename))
     {
         return _shaders.at(filename).get();
     }
