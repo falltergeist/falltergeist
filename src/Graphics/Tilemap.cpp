@@ -49,6 +49,12 @@ Tilemap::Tilemap(std::vector<glm::vec2> coords, std::vector<glm::vec2> textureCo
     //update texcoords
     GL_CHECK(glBufferData(GL_ARRAY_BUFFER, textureCoords.size() * sizeof(glm::vec2), &textureCoords[0], GL_STATIC_DRAW));
 
+    std::cout << "cs " << coords.size() << " ts " << textureCoords.size() << std::endl;
+    for (int i =0; i<10; i++)
+    {
+        std::cout << coords.at(i).x << " " << coords.at(i).y << std::endl;
+    }
+
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
     GL_CHECK(glBindVertexArray(0));
 
@@ -99,7 +105,7 @@ void Tilemap::render(const Point &pos, std::vector<GLuint> indexes, uint32_t atl
 
     GL_CHECK(glEnableVertexAttribArray(ResourceManager::getInstance()->shader("tilemap")->getAttrib("TexCoord")));
 
-    GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0 ));
+    GL_CHECK(glDrawElements(GL_TRIANGLES, indexes.size(), GL_UNSIGNED_INT, 0 ));
 
     GL_CHECK(glDisableVertexAttribArray(ResourceManager::getInstance()->shader("tilemap")->getAttrib("Position")));
 

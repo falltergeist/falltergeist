@@ -68,30 +68,7 @@ void TileMap::init()
 
     for (auto& tile : _tiles)
     {
-        // push vertices
-        std::cout << (float)(tile->position().x()) << " : " << (float)(tile->position().y()) << std::endl;
-//        vertices.push_back(glm::vec2(0.0,0.0));
-//        vertices.push_back(glm::vec2(80.0,0.0));
-//        vertices.push_back(glm::vec2(0.0,36.0));
 
-        //double vx = tile->position().x() - 4560.0;
-        //double vy = tile->position().y() - 2016.0;
-        double vx = 4560.0;
-        double vy = 2016.0;
-        double vw = 80.0;
-        double vh = 36.0;
-
-        vertices.push_back(glm::vec2(vx, vy));
-        vertices.push_back( glm::vec2(vx+vw, vy) );
-        vertices.push_back(glm::vec2(vx, vy+vh));
-        vertices.push_back(glm::vec2(vx+vw, vy+vh));
-
-
-/*        vertices.push_back(glm::vec2(0.0,0.0));
-        vertices.push_back(glm::vec2(80.0,0.0));
-        vertices.push_back(glm::vec2(0.0,36.0));
-        vertices.push_back(glm::vec2(80.0,36.0));
-*/
 
 
         auto position = std::find(numbers.begin(), numbers.end(), tile->number());
@@ -111,6 +88,22 @@ void TileMap::init()
                 }
             }
         }
+
+    }
+
+    for (auto& tile : _tiles)
+    {
+        // push vertices
+        float vx = tile->position().x();
+        float vy = tile->position().y();
+        float vw = vx+80.0;
+        float vh = vy+36.0;
+
+        vertices.push_back(glm::vec2(vx, vy));
+        vertices.push_back( glm::vec2(vw, vy) );
+        vertices.push_back(glm::vec2(vx, vh));
+        vertices.push_back(glm::vec2(vw, vh));
+
         //push tilecoords
         uint32_t tIndex = tile->index() % _tilesPerAtlas;
 
@@ -120,15 +113,18 @@ void TileMap::init()
         float y = (tIndex / maxW) * 36;
         float fy = y / (float)Game::getInstance()->renderer()->maxTextureSize();
 
-        float w = (fx+80.f) / (float)Game::getInstance()->renderer()->maxTextureSize();
-        float h = (fy+36.f) / (float)Game::getInstance()->renderer()->maxTextureSize();
+        float w = (x+80.0) / (float)Game::getInstance()->renderer()->maxTextureSize();
+        float h = (y+36.0) / (float)Game::getInstance()->renderer()->maxTextureSize();
 
-        UV.push_back(glm::vec2(x,y));
-        UV.push_back(glm::vec2(w,y));
-        UV.push_back(glm::vec2(x,h));
+        UV.push_back(glm::vec2(fx,fy));
+        UV.push_back(glm::vec2(w,fy));
+        UV.push_back(glm::vec2(fx,h));
         UV.push_back(glm::vec2(w,h));
 
     }
+
+    std::cout << "vert " << vertices.size() << std::endl;
+    std::cout << "text " << UV.size() << std::endl;
 
     _tilemap = make_unique<Graphics::Tilemap>(vertices, UV);
 
@@ -141,7 +137,7 @@ void TileMap::init()
 
     for (uint8_t i=0;i<_atlases;i++)
     {
-        SDL_Surface* tmp = SDL_CreateRGBSurface(0,Game::getInstance()->renderer()->maxTextureSize(), Game::getInstance()->renderer()->maxTextureSize(), 32, 0,0,0,0);
+        SDL_Surface* tmp = SDL_CreateRGBSurface(0,Game::getInstance()->renderer()->maxTextureSize(), Game::getInstance()->renderer()->maxTextureSize(), 32, 0xff000000,0x00ff0000,0x0000ff00,0x000000ff);
         for (unsigned int j = _tilesPerAtlas*i; j < std::min((uint32_t)numbers.size(), (uint32_t)_tilesPerAtlas*(i+1)); ++j)
         {
             auto frm = ResourceManager::getInstance()->frmFileType("art/tiles/" + tilesLst->strings()->at(numbers.at(j)));
@@ -155,6 +151,7 @@ void TileMap::init()
         }
         //push new atlas
         _tilemap->addTexture(tmp);
+        IMG_SavePNG(tmp, "text.png");
         SDL_FreeSurface(tmp);
     }
 
@@ -185,20 +182,13 @@ void TileMap::render()
         const Size tileSize = Size(80, 36);
         if (Rect::intersects(tile->position(), tileSize, camera->topLeft(), camera->size()))
         {
-            std::cout << "t: " << tile->position().x() << " : " << tile->position().y() << std::endl;
-            std::cout << "c: " << camera->topLeft().x() << " : " << camera->topLeft().y() << std::endl;
-            //Point positionOnScreen = tile->position() - camera->topLeft();
-            //std::cout << "p: " << positionOnScreen.x() << " : " << positionOnScreen.y() << std::endl;
             uint32_t aIndex = tile->index() / _tilesPerAtlas;
-            //std::cout << "aIndex: " << aIndex << " vsize: " << indexes.size();
             indexes.at(aIndex).push_back(cnt*4);
             indexes.at(aIndex).push_back(cnt*4+1);
             indexes.at(aIndex).push_back(cnt*4+2);
             indexes.at(aIndex).push_back(cnt*4+3);
             indexes.at(aIndex).push_back(cnt*4+2);
             indexes.at(aIndex).push_back(cnt*4+1);
-
-            //Point positionOnScreen = tile->position() - camera->topLeft();
         }
         cnt++;
     }

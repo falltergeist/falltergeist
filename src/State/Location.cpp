@@ -467,7 +467,7 @@ void Location::onBackgroundClick(Event::Mouse* event)
 void Location::render()
 {
     _floor->render();
-/*
+
     //render only flat objects first
     for (auto hexagon : _hexagonGrid->hexagons())
     {
@@ -507,15 +507,17 @@ void Location::render()
         for (auto object : *hexagon->objects())
         {
             object->renderText();
+            // todo
+            // object->renderOutline();
         }
     }
-    //_roof->render();
+    _roof->render();
     if (active())
     {
         _hexagonInfo->render();
     }
 
-    State::render();*/
+    State::render();
 }
 
 void Location::think()
