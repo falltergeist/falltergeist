@@ -269,7 +269,7 @@ void Location::setLocation(const std::string& name)
         auto hexagon = hexagonGrid()->at(mapObject->hexPosition());
         Location::moveObjectToHexagon(object, hexagon);
 
-        // flat objects are like tiles. they dont think/handle anyhing, and rendered first.
+        // flat objects are like tiles. they don't think (but has handlers) and rendered first.
         if (object->flat())
         {
             _flatObjects.emplace_back(object);
@@ -714,6 +714,14 @@ void Location::handle(Event::Event* event)
 void Location::handleByGameObjects(Event::Mouse* event)
 {
     for (auto &object: _objects)
+    {
+        if (event->handled()) return;
+        if (!object->inRender()) continue;
+        object->handle(event);
+    }
+
+    // sadly, flat objects do handle events.
+    for (auto &object: _flatObjects)
     {
         if (event->handled()) return;
         if (!object->inRender()) continue;
