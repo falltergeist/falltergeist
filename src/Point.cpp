@@ -335,14 +335,11 @@ bool Rect::inRect(const Point& needle, const Point& topLeft, const Size& size)
 
 bool Rect::intersects(const Point& topLeft1, const Size& size1, const Point& topLeft2, const Size& size2)
 {
-    // This is faster, than summing Points. Don't ask.
-    int bx1 = topLeft1.x()+size1.width();
-    int bx2 = topLeft2.x()+size2.width();
-    int by1 = topLeft1.y()+size1.height();
-    int by2 = topLeft2.y()+size2.height();
+    const Point bottomRight1 = topLeft1 + size1;
+    const Point bottomRight2 = topLeft2 + size2;
 
-    return !(std::max(topLeft1.x(), topLeft2.x()) > std::min(bx1, bx2)
-             || std::max(topLeft1.y(), topLeft2.y()) > std::min(by1, by2));
+    return !(std::max(topLeft1.x(), topLeft2.x()) > std::min(bottomRight1.x(), bottomRight2.x())
+             || std::max(topLeft1.y(), topLeft2.y()) > std::min(bottomRight1.y(), bottomRight2.y()));
 }
 
 // end Rect class

@@ -158,6 +158,7 @@ protected:
     bool _scrollBottom = false;
 
     std::vector<std::unique_ptr<Game::Object>> _objects;
+    std::vector<std::unique_ptr<Game::Object>> _flatObjects;
     std::unique_ptr<UI::TextArea> _hexagonInfo;
 
     Event::MouseHandler _mouseDownHandler, _mouseUpHandler, _mouseMoveHandler;

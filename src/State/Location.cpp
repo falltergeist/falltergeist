@@ -269,7 +269,16 @@ void Location::setLocation(const std::string& name)
         auto hexagon = hexagonGrid()->at(mapObject->hexPosition());
         Location::moveObjectToHexagon(object, hexagon);
 
-        _objects.emplace_back(object);
+        // flat objects are like tiles. they dont think/handle anyhing, and rendered first.
+        if (object->flat())
+        {
+            _flatObjects.emplace_back(object);
+        }
+        else
+        {
+            _objects.emplace_back(object);
+        }
+
     }
     Logger::info("GAME") << "Objects loaded in " << (SDL_GetTicks() - ticks) << std::endl;
 
@@ -470,22 +479,16 @@ void Location::render()
 
     //render only flat objects first
 
-    for (auto &object: _objects)
+    for (auto &object: _flatObjects)
     {
-        if (object->flat())
-        {
-            object->render();
-            object->hexagon()->setInRender(object->inRender());
-        }
+        object->render();
+        object->hexagon()->setInRender(object->inRender());
     }
 
     for (auto &object: _objects)
     {
-        if (!object->flat())
-        {
-            //object->render();
-            object->hexagon()->setInRender(object->inRender());
-        }
+        //object->render();
+        object->hexagon()->setInRender(object->inRender());
     }
 
     for (auto &object: _objects)
