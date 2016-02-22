@@ -434,8 +434,8 @@ void Inventory::_screenShow (unsigned int PID)
     auto armorClassLabel = getTextArea("armorClassLabel");
     auto damageThresholdLabel = getTextArea("damageThresholdLabel");
     auto damageResistanceLabel = getTextArea("damageResistanceLabel");
-    auto line2 = dynamic_cast<UI::Image*>(getUI("line2"));
-    auto line3 = dynamic_cast<UI::Image*>(getUI("line3"));
+    auto line2 = getUI("line2");
+    auto line3 = getUI("line3");
     auto totalWtLabel = getTextArea("totalWtLabel");
     auto weightLabel = getTextArea("weightLabel");
     auto weightMaxLabel = getTextArea("weightMaxLabel");
