@@ -261,7 +261,6 @@ Size InventoryItem::size() const
             return Size(90, 63);
         default:
             return Size(57, 40);
-            //return Base::size(); // TODO: newrender
     }
 }
 

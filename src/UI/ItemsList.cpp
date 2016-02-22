@@ -49,9 +49,6 @@ using namespace Base;
 
 ItemsList::ItemsList(const Point& pos) : Falltergeist::UI::Base(pos)
 {
-//    _generateTexture(_slotWidth, _slotHeight * _slotsNumber);
-// TODO: newrender    _texture->fill(0x000000FF);
-
     mouseDownHandler().add( std::bind(&ItemsList::onMouseLeftDown, this, std::placeholders::_1));
     mouseDragStartHandler().add(std::bind(&ItemsList::onMouseDragStart, this, std::placeholders::_1));
     mouseDragHandler().add(     std::bind(&ItemsList::onMouseDrag, this, std::placeholders::_1));
@@ -90,19 +87,6 @@ void ItemsList::render(bool eggTransparency)
         i++;
     }
 }
-/* TODO: newrender
-unsigned int ItemsList::pixel(const Point& pos)
-{
-    unsigned int i = 0;
-    for (auto& item : _inventoryItems)
-    {
-        unsigned int pixel = item->pixel(pos - Point(0, _slotHeight*i));
-        if (pixel) return pixel;
-        i++;
-    }
-    return 0;
-}
-*/
 
 std::vector<std::unique_ptr<InventoryItem>>& ItemsList::inventoryItems()
 {
