@@ -30,6 +30,8 @@
 
 namespace Falltergeist
 {
+using namespace std;
+
 namespace UI
 {
 
@@ -40,18 +42,15 @@ enum
     MONTH_TEXTURE_HORIZONTAL_OFFSET = 15
 };
 
-MonthCounter::MonthCounter(Month month, const Point& pos) : ImageList(pos), _month(month)
+MonthCounter::MonthCounter(Month month, const Point& pos) : Base(pos), _month(month)
 {
-    auto months = std::shared_ptr<Image>(new Image("art/intrface/months.frm"));
-/* TODO: newrender
-    for (auto i = 0, hOffset = 0; i < 12; ++i, hOffset += MONTH_TEXTURE_HORIZONTAL_OFFSET)
+    _sprite = make_shared<Graphics::Sprite>("art/intrface/months.frm");
+
+    for (auto i = 0; i<12; i++)
     {
-        auto monthImage = new Image(MONTH_TEXTURE_WIDTH, MONTH_TEXTURE_HEIGHT);
-        months->texture()->copyTo(monthImage->texture(), 0, 0, 0, hOffset, MONTH_TEXTURE_WIDTH, MONTH_TEXTURE_HEIGHT);
-        addImage(std::unique_ptr<Image>(monthImage));
+        _rects.push_back({0,i*15,29,14});
     }
-*/
-    setCurrentImage(static_cast<unsigned int>(month));
+    _size = Size(29,14);
 }
 
 MonthCounter::MonthCounter(const Point& pos) : MonthCounter(Month::JANUARY, pos)
@@ -66,7 +65,23 @@ MonthCounter::Month MonthCounter::month() const
 void MonthCounter::setMonth(Month month)
 {
     _month = month;
-    setCurrentImage(static_cast<unsigned int>(month));
+}
+
+bool MonthCounter::opaque(const Point &pos)
+{
+    if (pos.x() > _size.width() || pos.x()<0 || pos.y() > _size.height() || pos.y()<0)
+    {
+        return false;
+    }
+
+    SDL_Rect rect = _rects.at(_month);
+    return _sprite->opaque(pos.x()+rect.x, pos.y()+rect.y);
+}
+
+void MonthCounter::render(bool eggTransparency)
+{
+    SDL_Rect rect = _rects.at(_month);
+    _sprite->render(position().x(),position().y(), rect.x, rect.y, rect.w, rect.h);
 }
 
 }
