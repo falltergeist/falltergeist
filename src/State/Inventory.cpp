@@ -19,6 +19,7 @@
 
 // C++ standard includes
 #include <sstream>
+#include <UI/Rectangle.h>
 
 // Falltergeist includes
 #include "../Event/Event.h"
@@ -108,9 +109,7 @@ void Inventory::init()
 
     addUI("player_name", new UI::TextArea(player->name(), screenX, screenY));
 
-    //auto line1 = new UI::Image(142, 1);
-    //line1->setPosition({screenX, screenY+16});
-//TODO:: newrender    line1->texture()->fill(0x3ff800ff); // default green color
+    auto line1 = new UI::Rectangle(Point(screenX, screenY+16), Size(142, 1), {0x3f, 0xf8, 0x00, 0xff} );
 
     std::string statsLabels;
     for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
@@ -196,13 +195,8 @@ void Inventory::init()
     }
     auto damageResistanceLabel = new UI::TextArea(ss.str(), screenX+120, screenY+40);
 
-    //auto line2 = new UI::Image(142, 1);
-    //line2->setPosition({screenX, screenY+94});
-// TODO: newrender    line2->texture()->fill(0x3ff800ff); // default green color
-
-    //auto line3 = new UI::Image(142, 1);
-    //line3->setPosition({screenX, screenY+134});
-// TODO: newrender    line3->texture()->fill(0x3ff800ff); // default green color
+    auto line2 = new UI::Rectangle(Point(screenX, screenY+94), Size(142, 1), {0x3f, 0xf8, 0x00, 0xff} );
+    auto line3 = new UI::Rectangle(Point(screenX, screenY+134), Size(142, 1), {0x3f, 0xf8, 0x00, 0xff} );
 
     // label: Total Wt: (20)
     auto weight = player->carryWeight();
@@ -245,14 +239,14 @@ void Inventory::init()
     screenLabel->setWordWrap(true);
 
 
-   // addUI(line1);
+    addUI(line1);
     addUI("textLabel", textLabel);
     addUI("hitPointsLabel", hitPointsLabel);
     addUI("armorClassLabel", armorClassLabel);
     addUI("damageThresholdLabel", damageThresholdLabel);
     addUI("damageResistanceLabel", damageResistanceLabel);
-    //addUI("line2", line2);
-    //addUI("line3", line3);
+    addUI("line2", line2);
+    addUI("line3", line3);
     addUI("totalWtLabel", totalWtLabel);
     addUI("weightLabel", weightLabel);
     addUI("weightMaxLabel", weightMaxLabel);
