@@ -138,10 +138,15 @@ void InventoryItem::render(bool eggTransparency)
 
             if (newWidth <= 57)
             {
+                texSize = Size(newWidth, 40);
+                _item->inventoryUi()->setPosition(position() + (this->size() - texSize) / 2);
+
                 _item->inventoryUi()->render(Size(newWidth, 40), false);
                 return;
             }
             newHeight = static_cast<unsigned int>(static_cast<double>(_item->inventoryUi()->height()) * static_cast<double>(widthRatio));
+            texSize = Size(57, newHeight);
+            _item->inventoryUi()->setPosition(position() + (this->size() - texSize) / 2);
             _item->inventoryUi()->render(Size(57, newHeight), false);
             break;
     }
@@ -255,7 +260,8 @@ Size InventoryItem::size() const
         case Type::SLOT:
             return Size(90, 63);
         default:
-            return Base::size(); // TODO: newrender
+            return Size(57, 40);
+            //return Base::size(); // TODO: newrender
     }
 }
 
