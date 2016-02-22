@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_CursorDropdown_H
-#define FALLTERGEIST_CursorDropdown_H
+#ifndef FALLTERGEIST_CURSORDROPDOWN_H
+#define FALLTERGEIST_CURSORDROPDOWN_H
 
 // C++ standard includes
 #include <vector>
@@ -41,8 +41,6 @@ namespace Game
 {
     class Object;
 }
-class Surface;
-class HiddenMask;
 
 namespace State
 {
@@ -72,12 +70,11 @@ protected:
     std::vector<Input::Mouse::Icon> _icons;
     int _initialX;
     int _initialY;
-    int _previousIcon = 0;
     int _currentIcon = 0;
     std::vector<std::unique_ptr<UI::Base>> _activeIcons;
     std::vector<std::unique_ptr<UI::Base>> _inactiveIcons;
-    UI::Base* _surface = nullptr;
     UI::Base* _cursor = nullptr;
+    Point _iconsPos;
     bool _deactivated = false;
     unsigned int _initialMouseStack;
 
@@ -89,4 +86,4 @@ protected:
 }
 }
 
-#endif // FALLTERGEIST_CursorDropdown_H
+#endif // FALLTERGEIST_CURSORDROPDOWN_H
