@@ -69,7 +69,7 @@ void PlayerCreate::init()
     int backgroundX = backgroundPos.x();
     int backgroundY = backgroundPos.y();
     background->setPosition(backgroundPos);
-    addUI(background);
+    addUI("bg",background);
 
     // STATS
     std::string imagesStats[] = { "strength", "perceptn", "endur", "charisma", "intel", "agility", "luck"};
@@ -239,7 +239,6 @@ void PlayerCreate::init()
     _selectedImage = _images.at("stats_1");
     _selectedLabel = _labels.at("stats_1");
     _selectedImage->setPosition(backgroundPos + Point(480, 310));
-    addUI(_selectedImage);
 
     _title = new UI::TextArea("", backgroundX+350, backgroundY+275);
     _title->setFont("font2.aaf", {0,0,0,0xff});
@@ -252,7 +251,7 @@ void PlayerCreate::init()
     _description->setFont("font1.aaf", {0,0,0,0xff});
     _description->setSize({140, 120});
     _description->setWordWrap(true);
-    addUI(_description);
+//    addUI(_description);
 }
 
 UI::TextArea* PlayerCreate::_addLabel(const std::string& name, UI::TextArea* label)
@@ -395,8 +394,8 @@ void PlayerCreate::think()
 
         _title->setText(_titles.at(name));
         _description->setText(_descriptions.at(name));
-        // TODO: newrender
-        // _selectedImage->setTexture(_images.at(name)->texture());
+
+        _selectedImage = _images.at(name);
 
         SDL_Color font1_ffff7fff = {0xff, 0xff, 0x7f, 0xff};
         SDL_Color font1_ffffffff = {0xff, 0xff, 0xff, 0xff};
@@ -521,8 +520,8 @@ void PlayerCreate::onButtonClick(Event::Mouse* event)
             if (name.find("stats_") == 0)
             {
                 _selectedLabel = _labels.at(name.substr(0,7));
-                // TODO: newrender
-                // _selectedImage->setTexture(_images.at(name.substr(0,7))->texture());
+
+                _selectedImage = _images.at(name.substr(0,7));
                 unsigned int number = atoi(name.substr(6,1).c_str());
                 if (name.find("_increase") == 7)
                 {
@@ -538,8 +537,7 @@ void PlayerCreate::onButtonClick(Event::Mouse* event)
             {
                 unsigned int number = atoi(name.substr(7).c_str());
                 _selectedLabel = _labels.at(name);
-                // TODO: newrender
-                // _selectedImage->setTexture(_images.at(name)->texture());
+                _selectedImage = _images.at(name);
 
                 if (!_traitToggle(number - 1))
                 {
@@ -553,8 +551,8 @@ void PlayerCreate::onButtonClick(Event::Mouse* event)
             {
                 unsigned int number = atoi(name.substr(7).c_str());
                 _selectedLabel = _labels.at(name);
-                // TODO: newrender
-                // _selectedImage->setTexture(_images.at(name)->texture());
+
+                _selectedImage = _images.at(name);
                 if (!_skillToggle(number - 1))
                 {
                     auto state = new PlayerEditAlert();
@@ -581,8 +579,7 @@ void PlayerCreate::onLabelClick(Event::Mouse* event)
                     label = name.substr(0, name.find("_value"));
                 }
                 _selectedLabel = _labels.at(label.c_str());
-                // TODO: newrender
-                // _selectedImage->setTexture(_images.at(label.c_str())->texture());
+                _selectedImage = _images.at(label.c_str());
             }
         }
     }
@@ -598,8 +595,7 @@ void PlayerCreate::onMaskClick(Event::Mouse* event)
             if (name.find("stats_") == 0)
             {
                 _selectedLabel = _labels.at(name);
-                // TODO: newrender
-                // _selectedImage->setTexture(_images.at(name)->texture());
+                _selectedImage = _images.at(name);
             }
         }
     }
@@ -695,5 +691,15 @@ void PlayerCreate::onKeyDown(Event::Keyboard* event)
     }
 }
 
+void PlayerCreate::render()
+{
+    State::render();
+    auto background = getUI("bg");
+    Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
+    _selectedImage->setPosition(backgroundPos + Point(480, 310));
+    _selectedImage->render();
+    _description->setPosition(backgroundPos + Point(350, 315));
+    _description->render();
+}
 }
 }
