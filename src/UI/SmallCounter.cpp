@@ -39,60 +39,26 @@ using namespace Base;
 
 SmallCounter::SmallCounter(const Point& pos) : Falltergeist::UI::Base(pos)
 {
+    _sprite = std::make_shared<Graphics::Sprite>("art/intrface/numbers.frm");
+
+    for (int cl = 0; cl<3; cl++) //colors
+    {
+        for (int i = 0; i < 12; i++) // numbers
+        {
+            _rects.push_back({120*cl+i * 9, 0, 9, 17});
+        }
+        // signs are 6 px wide
+        _rects.push_back({120*cl+108 + 0 * 6, 0, 6, 17});
+        _rects.push_back({120*cl+108 + 1 * 6, 0, 6, 17});
+    }
 }
 
 SmallCounter::~SmallCounter()
 {
 }
-/* TODO: newrender
-Graphics::Texture* SmallCounter::texture() const
-{
-    static const int kCharWidth = 9;
-    static const int kCharHeight = 16;
-
-    if (_textureOnDemand) return _textureOnDemand.get();
-
-    auto numbers = make_unique<Image>("art/intrface/numbers.frm");
-    unsigned int xOffsetByColor = 0;
-    switch (_color)
-    {
-        case Color::WHITE:
-            break;
-        case Color::YELLOW:
-            xOffsetByColor = 120;
-            break;
-        case Color::RED:
-            xOffsetByColor = 240;
-            break;
-    }
-    // number as text, always positive
-    auto texture = Graphics::Texture::generateTextureForNumber(
-        abs(_number), _length, numbers->texture(),
-        kCharWidth, kCharHeight, xOffsetByColor, true);
-    if (_type == Type::SIGNED)
-    {
-        // must be 9*13+1, but it is 113
-        const auto signOffset = _number < 0 ? kCharWidth * 12 + 1 : 113;
-        // sign of _number
-        numbers->texture()->copyTo(texture.get(), 0, 0, signOffset, 0, kCharWidth, kCharHeight);
-    }
-
-    return (_textureOnDemand = std::move(texture)).get();
-
-    return _textureOnDemand.get();
-}
-
-
-void SmallCounter::setTexture(Graphics::Texture* texture)
-{
-    _textureOnDemand.reset(texture);
-}
-*/
 
 void SmallCounter::setLength(unsigned int length)
 {
-    if (_length == length) return;
-    //_textureOnDemand.reset();
     _length = length;
 }
 
@@ -103,9 +69,12 @@ unsigned int SmallCounter::length() const
 
 void SmallCounter::setNumber(signed int number)
 {
-    if (_number == number) return;
-    //_textureOnDemand.reset();
     _number = number;
+    _numberText = std::to_string(number);
+    if (_numberText.size() < _length)
+    {
+        _numberText.insert(0, _length - _numberText.size(), '0');
+    }
 }
 
 signed int SmallCounter::number() const
@@ -120,11 +89,7 @@ void SmallCounter::setColor(Color color)
         case Color::WHITE:
         case Color::YELLOW:
         case Color::RED:
-            if (_color != color)
-            {
-                _color = color;
-                //_textureOnDemand.reset();
-            }
+            _color = color;
             break;
     }
 }
@@ -144,5 +109,45 @@ SmallCounter::Type SmallCounter::type() const
     return _type;
 }
 
+void SmallCounter::render(bool eggTransparency)
+{
+    int pad = 0;
+    if (_type == Type::SIGNED)
+    {
+        if (_number < 0)
+        {
+            SDL_Rect rect = _rects.at(12*_color);
+            _sprite->render(position().x(), position().y(), rect.x, rect.y, rect.w, rect.h);
+        }
+        else
+        {
+            SDL_Rect rect = _rects.at(13*_color);
+            _sprite->render(position().x(), position().y(), rect.x, rect.y, rect.w, rect.h);
+        }
+        pad = 6;
+    }
+    for (unsigned int i=0; i<_length;i++)
+    {
+        int num = _numberText.at(i)-'0';
+        switch (_color)
+        {
+            case Color::YELLOW:
+                num+=14;
+                break;
+            case Color::RED:
+                num+=28;
+                break;
+            case Color::WHITE:
+            default:
+                break;
+        }
+        SDL_Rect rect = _rects.at(num);
+        _sprite->render(position().x()+pad+i*9, position().y(), rect.x, rect.y, rect.w, rect.h);
+    }
+}
+
+bool SmallCounter::opaque(const Point &pos) {
+    return false;
+}
 }
 }

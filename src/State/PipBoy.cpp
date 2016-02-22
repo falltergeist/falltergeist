@@ -76,10 +76,10 @@ void PipBoy::init()
 
     // Date
     auto day = new UI::SmallCounter(backgroundPos + Point(21, 17));
+    day->setLength(2);
     day->setNumber(Game::getInstance()->gameTime()->day());
     day->setColor(UI::SmallCounter::Color::WHITE);
     day->setType(UI::SmallCounter::Type::UNSIGNED);
-    day->setLength(2);
 
     auto month = new UI::MonthCounter(
         static_cast<UI::MonthCounter::Month>(Game::getInstance()->gameTime()->month()),
@@ -87,17 +87,17 @@ void PipBoy::init()
     );
 
     auto year = new UI::SmallCounter(backgroundPos + Point(84, 17));
+    year->setLength(4);
     year->setNumber(Game::getInstance()->gameTime()->year());
     year->setColor(UI::SmallCounter::Color::WHITE);
     year->setType(UI::SmallCounter::Type::UNSIGNED);
-    year->setLength(4);
 
     // Time
     auto time = new UI::SmallCounter(backgroundPos + Point(160, 17));
+    time->setLength(4);
     time->setNumber((Game::getInstance()->gameTime()->hours() * 100) + Game::getInstance()->gameTime()->minutes());
     time->setColor(UI::SmallCounter::Color::WHITE);
     time->setType(UI::SmallCounter::Type::UNSIGNED);
-    time->setLength(4);
 
     addUI(background);
 

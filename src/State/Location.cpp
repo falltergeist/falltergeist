@@ -487,7 +487,7 @@ void Location::render()
 
     for (auto &object: _objects)
     {
-        //object->render();
+        object->render();
         object->hexagon()->setInRender(object->inRender());
     }
 

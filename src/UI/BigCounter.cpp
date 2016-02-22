@@ -55,38 +55,6 @@ BigCounter::~BigCounter()
 {
 }
 
-/* TODO: newrender
-Graphics::Texture* BigCounter::texture() const
-{
-    static const int kCharWidth = 14;
-    static const int kCharHeight = 24;
-
-    if (_textureOnDemand) return _textureOnDemand.get();
-
-    auto numbers = make_unique<Image>("art/intrface/bignum.frm");
-    unsigned int xOffsetByColor = 0;
-    switch (_color)
-    {
-        case Color::WHITE:
-            break;
-        case Color::RED:
-            xOffsetByColor = 168;
-            break;
-    }
- TODO: newrender
-    _textureOnDemand = Graphics::Texture::generateTextureForNumber(
-        _number, _length, numbers->texture(),
-        kCharWidth, kCharHeight, xOffsetByColor);
-
-    return _textureOnDemand.get();
-}
-
-void BigCounter::setTexture(Graphics::Texture* texture)
-{
-    _textureOnDemand.reset(texture);
-}
-*/
-
 void BigCounter::setNumber(unsigned int number)
 {
     _number = number;
@@ -126,7 +94,7 @@ BigCounter::Color BigCounter::color()
 
 void BigCounter::render(bool eggTransparency)
 {
-    for (int i=0; i<_length;i++)
+    for (unsigned int i=0; i<_length;i++)
     {
         int num = _numberText.at(i)-'0';
         if (_color==Color::RED)

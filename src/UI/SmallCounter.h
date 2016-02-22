@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <memory>
+#include <Graphics/Sprite.h>
 
 // Falltergeist includes
 #include "../UI/Base.h"
@@ -38,13 +39,13 @@ class Image;
 class SmallCounter : public Falltergeist::UI::Base
 {
 public:
-    enum class Color
+    enum Color
     {
         WHITE = 1,
         YELLOW,
         RED
     };
-    enum class Type
+    enum Type
     {
         UNSIGNED = 0,
         SIGNED
@@ -68,9 +69,17 @@ public:
 protected:
     Color _color = Color::WHITE;
     signed int _number = 0;
+    std::string _numberText = "";
     unsigned int _length = 3;
     Type _type = Type::UNSIGNED;
+    std::shared_ptr<Graphics::Sprite> _sprite;
+    std::vector<SDL_Rect> _rects;
 
+
+public:
+    virtual void render(bool eggTransparency) override;
+
+    virtual bool opaque(const Point &pos) override;
 
 private:
     // Hide unused field from childs.
