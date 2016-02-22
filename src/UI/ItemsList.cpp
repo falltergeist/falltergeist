@@ -263,5 +263,15 @@ Event::MouseHandler& ItemsList::itemDragStopHandler()
     return _itemDragStopHandler;
 }
 
+bool ItemsList::opaque(const Point &pos) {
+    unsigned int i = 0;
+    for (auto& item : _inventoryItems)
+    {
+        bool pixel = item->opaque(pos - Point(0, _slotHeight*i));
+        if (pixel) return pixel;
+        i++;
+    }
+    return false;
+}
 }
 }

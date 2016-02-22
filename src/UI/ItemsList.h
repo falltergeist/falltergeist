@@ -81,6 +81,9 @@ public:
 
     Event::MouseHandler& itemDragStopHandler();
 
+
+    virtual bool opaque(const Point &pos) override;
+
 protected:
     std::vector<Game::ItemObject*>* _items = nullptr;
     InventoryItem* _draggedItem = nullptr;
