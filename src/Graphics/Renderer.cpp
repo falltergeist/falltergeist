@@ -188,22 +188,6 @@ void Renderer::init()
     GL_CHECK(glGenBuffers(1, &_coord_vbo));
     GL_CHECK(glGenBuffers(1, &_texcoord_vbo));
 
-    // pre-populate texture-coord buffer, because for sprites texture == polygon size
-    glm::vec2 uv_up_left    = glm::vec2( 0.0, 0.0 );
-    glm::vec2 uv_up_right   = glm::vec2( 1.0, 0.0 );
-    glm::vec2 uv_down_right = glm::vec2( 1.0, 1.0 );
-    glm::vec2 uv_down_left  = glm::vec2( 0.0, 1.0 );
-
-    std::vector<glm::vec2> UVs;
-
-    UVs.push_back(uv_up_left   );
-    UVs.push_back(uv_down_left );
-    UVs.push_back(uv_up_right  );
-    UVs.push_back(uv_down_right);
-
-    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texcoord_vbo));
-    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, UVs.size() * sizeof(glm::vec2), &UVs[0], GL_STATIC_DRAW));
-
     // pre-populate element buffer. 6 elements, because we draw as triangles
     GL_CHECK(glGenBuffers(1, &_ebo));
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));

@@ -21,6 +21,7 @@
 #define FALLTERGEIST_GRAPHICS_SPRITE_H
 
 #include <string>
+#include <Point.h>
 #include "Texture.h"
 #include "../Format/Frm/File.h"
 
@@ -37,6 +38,7 @@ public:
     Sprite(Format::Frm::File* frm);
     void render(int x, int y, unsigned int width, unsigned int height);
     void render(int x, int y);
+    void render(int x, int y, int dx, int dy, unsigned int width, unsigned int height);
     unsigned int width() const;
     unsigned int height() const;
     bool opaque(unsigned int x, unsigned int y);
