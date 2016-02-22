@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <memory>
+#include <Graphics/Sprite.h>
 
 // Falltergeist includes
 #include "../UI/Base.h"
@@ -57,7 +58,15 @@ public:
 protected:
     Color _color = Color::WHITE;
     unsigned int _number = 0;
+    std::string _numberText = "";
     unsigned int _length = 2;
+    std::shared_ptr<Graphics::Sprite> _sprite;
+    std::vector<SDL_Rect> _rects;
+
+public:
+    virtual void render(bool eggTransparency) override;
+
+    virtual bool opaque(const Point &pos) override;
 
 private:
 
