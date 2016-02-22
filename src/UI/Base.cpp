@@ -409,5 +409,9 @@ Event::MouseHandler& Base::mouseUpHandler()
     return _mouseUpHandler;
 }
 
+void Base::render(const Size &size, bool eggTransparency)
+{
+    render(eggTransparency);
+}
 }
 }

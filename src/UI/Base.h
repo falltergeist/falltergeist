@@ -81,6 +81,7 @@ public:
      * This method is called last in the main loop (after handle() and think()).
      */
     virtual void render(bool eggTransparency = false);
+    virtual void render(const Size& size, bool eggTransparency = false);
 
     /**
      * @brief Handles mouse events from OS.

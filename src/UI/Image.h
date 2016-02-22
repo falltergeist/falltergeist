@@ -61,6 +61,8 @@ public:
     ~Image() override;
     virtual void render(bool eggTransparency = false);
 
+    virtual void render(const Size &size, bool eggTransparency) override;
+
     void setTexture(const std::string& filename);
     bool opaque(unsigned int x, unsigned int y);
     virtual bool opaque(const Point &pos) override;

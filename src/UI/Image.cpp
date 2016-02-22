@@ -122,12 +122,20 @@ Size Image::size() const
 }
 
 
-    bool Image::opaque(unsigned int x, unsigned int y) {
-        return _sprite.opaque(x, y);
-    }
+bool Image::opaque(unsigned int x, unsigned int y)
+{
+    return _sprite.opaque(x, y);
+}
 
-    bool Image::opaque(const Point &pos) {
-        return opaque(pos.x(), pos.y());
-    }
+bool Image::opaque(const Point &pos)
+{
+    return opaque(pos.x(), pos.y());
+}
+
+void Image::render(const Size &size, bool eggTransparency)
+{
+    _sprite.render(position().x(),position().y(), size.width(), size.height());
+}
+
 }
 }

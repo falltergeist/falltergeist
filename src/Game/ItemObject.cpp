@@ -110,6 +110,8 @@ void ItemObject::_generateUi()
 
     // Big unscaled image of item
     _inventoryDragUi = make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
+    _inventoryUi = make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
+    _inventorySlotUi = make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
 /* TODO: newrender
     // Small scaled image
     auto inventoryUiTexture = _inventoryDragUi->texture()->fitTo(57, 40);

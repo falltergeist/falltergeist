@@ -254,7 +254,7 @@ void Inventory::init()
     addUI("rightHandLabel", rightHandLabel);
     addUI("screenLabel", screenLabel);
 
-    auto inventoryList = new UI::ItemsList({40, 40});
+    auto inventoryList = new UI::ItemsList(Point(40, 40));
     inventoryList->setItems(game->player()->inventory());
     addUI("inventory_list", inventoryList);
 
