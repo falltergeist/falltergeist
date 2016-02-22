@@ -39,7 +39,6 @@ class ImageList : public Falltergeist::UI::Base
 public:
     ImageList(const Point& pos = Point());
     ImageList(std::vector<std::string> imageList, int x, int y);
-    ImageList(std::vector<Image*> imageList, int x, int y);
     ~ImageList() override;
 
     void addImage(std::unique_ptr<Image> image);
