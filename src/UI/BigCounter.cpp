@@ -102,7 +102,7 @@ void BigCounter::render(bool eggTransparency)
             num += 12;
         }
         SDL_Rect rect = _rects.at(num);
-        _sprite->render(position().x()+i*14, position().y(), rect.x, rect.y, rect.w, rect.h);
+        _sprite->renderCropped(position().x() + i * 14, position().y(), rect.x, rect.y, rect.w, rect.h);
     }
 }
 

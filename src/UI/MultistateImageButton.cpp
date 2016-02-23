@@ -201,7 +201,7 @@ void MultistateImageButton::handle(Event::Mouse* mouseEvent)
 
 void MultistateImageButton::render(bool eggTransparency) {
     SDL_Rect rect = _rects.at(_currentState);
-    _sprite->render(position().x(),position().y(), rect.x, rect.y, rect.w, rect.h);
+    _sprite->renderCropped(position().x(), position().y(), rect.x, rect.y, rect.w, rect.h);
 }
 
 bool MultistateImageButton::opaque(const Point &pos) {

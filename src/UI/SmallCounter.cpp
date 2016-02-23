@@ -117,12 +117,12 @@ void SmallCounter::render(bool eggTransparency)
         if (_number < 0)
         {
             SDL_Rect rect = _rects.at(12*_color);
-            _sprite->render(position().x(), position().y(), rect.x, rect.y, rect.w, rect.h);
+            _sprite->renderCropped(position().x(), position().y(), rect.x, rect.y, rect.w, rect.h);
         }
         else
         {
             SDL_Rect rect = _rects.at(13*_color);
-            _sprite->render(position().x(), position().y(), rect.x, rect.y, rect.w, rect.h);
+            _sprite->renderCropped(position().x(), position().y(), rect.x, rect.y, rect.w, rect.h);
         }
         pad = 6;
     }
@@ -142,7 +142,7 @@ void SmallCounter::render(bool eggTransparency)
                 break;
         }
         SDL_Rect rect = _rects.at(num);
-        _sprite->render(position().x()+pad+i*9, position().y(), rect.x, rect.y, rect.w, rect.h);
+        _sprite->renderCropped(position().x() + pad + i * 9, position().y(), rect.x, rect.y, rect.w, rect.h);
     }
 }
 

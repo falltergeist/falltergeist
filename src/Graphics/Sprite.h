@@ -36,9 +36,11 @@ class Sprite
 public:
     Sprite(const std::string& filename);
     Sprite(Format::Frm::File* frm);
-    void render(int x, int y, unsigned int width, unsigned int height);
-    void render(int x, int y);
-    void render(int x, int y, int dx, int dy, unsigned int width, unsigned int height);
+    void renderScaled(int x, int y, unsigned int width, unsigned int height, bool transparency = false,
+                      bool light = false);
+    void render(int x, int y, bool transparency = false, bool light = false);
+    void renderCropped(int x, int y, int dx, int dy, unsigned int width, unsigned int height, bool transparency = false,
+                       bool light = false);
     unsigned int width() const;
     unsigned int height() const;
     bool opaque(unsigned int x, unsigned int y);

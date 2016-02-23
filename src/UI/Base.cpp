@@ -413,5 +413,13 @@ void Base::render(const Size &size, bool eggTransparency)
 {
     render(eggTransparency);
 }
+
+void Base::setLight(bool light) {
+    _light = light;
+}
+
+bool Base::light() {
+    return _light;
+}
 }
 }

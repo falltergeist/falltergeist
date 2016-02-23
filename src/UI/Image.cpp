@@ -104,7 +104,7 @@ void Image::setTexture(const std::string& filename)
 
 void Image::render(bool eggTransparency)
 {
-  _sprite.render(position().x(),position().y());
+  _sprite.render(position().x(),position().y(), eggTransparency, light());
 }
 
 Image::Image(Format::Frm::File *frm, unsigned int direction) : Falltergeist::UI::Base(), _sprite(frm)
@@ -134,7 +134,7 @@ bool Image::opaque(const Point &pos)
 
 void Image::render(const Size &size, bool eggTransparency)
 {
-    _sprite.render(position().x(),position().y(), size.width(), size.height());
+    _sprite.renderScaled(position().x(), position().y(), size.width(), size.height(), eggTransparency, light());
 }
 
 }

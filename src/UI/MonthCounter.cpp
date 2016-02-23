@@ -81,7 +81,7 @@ bool MonthCounter::opaque(const Point &pos)
 void MonthCounter::render(bool eggTransparency)
 {
     SDL_Rect rect = _rects.at(_month);
-    _sprite->render(position().x(),position().y(), rect.x, rect.y, rect.w, rect.h);
+    _sprite->renderCropped(position().x(), position().y(), rect.x, rect.y, rect.w, rect.h);
 }
 
 }

@@ -107,9 +107,13 @@ public:
     Event::MouseHandler& mouseUpHandler();
     // TODO: mouse hover? (will require additional hoverDelay property)
 
+    virtual void setLight(bool light);
+    virtual bool light();
+
 protected:
     Point _position;
     Point _offset;
+    bool _light = false;
 
     bool _leftButtonPressed = false;
     bool _rightButtonPressed = false;

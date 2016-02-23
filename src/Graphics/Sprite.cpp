@@ -46,7 +46,7 @@ unsigned int Sprite::height() const
 }
 
 // render, optionally scaled
-void Sprite::render(int x, int y, unsigned int width, unsigned int height)
+void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height, bool transparency, bool light)
 {
     std::vector<glm::vec2> vertices;
     std::vector<glm::vec2> UV;
@@ -85,8 +85,12 @@ void Sprite::render(int x, int y, unsigned int width, unsigned int height)
     GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("cnt", Game::getInstance()->animatedPalette()->counters()));
 
     int lightLevel = 100;
-    if (auto state = Game::getInstance()->locationState()) {
-        lightLevel = state->lightLevel();
+    if (light)
+    {
+        if (auto state = Game::getInstance()->locationState())
+        {
+            lightLevel = state->lightLevel();
+        }
     }
     GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("global_light", lightLevel));
 
@@ -126,13 +130,14 @@ void Sprite::render(int x, int y, unsigned int width, unsigned int height)
     GL_CHECK(_texture->unbind(0));
 }
 
-void Sprite::render(int x, int y)
+void Sprite::render(int x, int y, bool transparency, bool light)
 {
-    render(x, y, _texture->width(), _texture->height());
+    renderScaled(x, y, _texture->width(), _texture->height(), transparency, light);
 }
 
 // render just a part of texture, unscaled
-void Sprite::render(int x, int y, int dx, int dy, unsigned int width, unsigned int height)
+void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, unsigned int height, bool transparency,
+                           bool light)
 {
     std::vector<glm::vec2> vertices;
     std::vector<glm::vec2> UV;
@@ -167,6 +172,18 @@ void Sprite::render(int x, int y, int dx, int dy, unsigned int width, unsigned i
 
     GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("MVP",
                                                                           Game::getInstance()->renderer()->getMVP()));
+
+    GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("cnt", Game::getInstance()->animatedPalette()->counters()));
+
+    int lightLevel = 100;
+    if (light)
+    {
+        if (auto state = Game::getInstance()->locationState())
+        {
+            lightLevel = state->lightLevel();
+        }
+    }
+    GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("global_light", lightLevel));
 
 
     GL_CHECK(glBindVertexArray(Game::getInstance()->renderer()->getVAO()));
