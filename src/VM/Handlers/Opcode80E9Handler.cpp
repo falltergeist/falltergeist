@@ -20,6 +20,8 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include <Game/Game.h>
+#include <State/Location.h>
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80E9Handler.h"
 #include "../../VM/VM.h"
@@ -36,7 +38,10 @@ Opcode80E9Handler::Opcode80E9Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80E9Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80E9] [*] void set_light_level(int level)" << std::endl;
-    /* auto level = */ (void)_vm->dataStack()->popInteger();
+    auto level = _vm->dataStack()->popInteger();
+    if (level<0) level=0;
+    if (level>100) level=100;
+    Game::getInstance()->locationState()->setLightLevel(level);
 }
 
 }

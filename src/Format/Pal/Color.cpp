@@ -95,10 +95,20 @@ Color::operator int() const
 
 Color::operator unsigned int() const
 {
-    uint8_t k = 4;
+    uint8_t k;
+    if (_nomod) {
+        k = 1;
+    }
+    else
+    {
+        k = 4;
+    }
     return ((red() * k) << 24) | ((green() * k) << 16) | ((blue() * k) << 8) | alpha();
 }
 
+void Color::nomod() {
+_nomod= true;
+}
 }
 }
 }

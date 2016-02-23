@@ -20,10 +20,11 @@
 #include "../Base/StlFeatures.h"
 #include <ResourceManager.h>
 #include <Game/Game.h>
-#include <iostream>
 #include "Tilemap.h"
 #include "Shader.h"
 #include "Sprite.h"
+#include "AnimatedPalette.h"
+#include "../State/Location.h"
 
 namespace Falltergeist {
 namespace Graphics {
@@ -32,6 +33,7 @@ using Base::make_unique;
 
 Tilemap::Tilemap(std::vector<glm::vec2> coords, std::vector<glm::vec2> textureCoords)
 {
+
     GL_CHECK(glGenVertexArrays(1, &_vao));
     GL_CHECK(glBindVertexArray(_vao));
 
@@ -39,6 +41,8 @@ Tilemap::Tilemap(std::vector<glm::vec2> coords, std::vector<glm::vec2> textureCo
     GL_CHECK(glGenBuffers(1, &_coords));
     GL_CHECK(glGenBuffers(1, &_texCoords));
     GL_CHECK(glGenBuffers(1, &_ebo));
+
+    if (coords.size()<=0 || textureCoords.size() <=0) return;
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coords));
     //update coords
@@ -48,12 +52,6 @@ Tilemap::Tilemap(std::vector<glm::vec2> coords, std::vector<glm::vec2> textureCo
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoords));
     //update texcoords
     GL_CHECK(glBufferData(GL_ARRAY_BUFFER, textureCoords.size() * sizeof(glm::vec2), &textureCoords[0], GL_STATIC_DRAW));
-
-    std::cout << "cs " << coords.size() << " ts " << textureCoords.size() << std::endl;
-    for (int i =0; i<10; i++)
-    {
-        std::cout << coords.at(i).x << " " << coords.at(i).y << std::endl;
-    }
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
     GL_CHECK(glBindVertexArray(0));
@@ -71,6 +69,7 @@ Tilemap::~Tilemap()
 
 void Tilemap::render(const Point &pos, std::vector<GLuint> indexes, uint32_t atlas)
 {
+    if (indexes.size()<=0) return;
 
     GL_CHECK(ResourceManager::getInstance()->shader("tilemap")->use());
 
@@ -83,6 +82,16 @@ void Tilemap::render(const Point &pos, std::vector<GLuint> indexes, uint32_t atl
 
     // set camera offset
     GL_CHECK(ResourceManager::getInstance()->shader("tilemap")->setUniform("offset", glm::vec2((float)pos.x(), (float)pos.y()) ));
+
+    GL_CHECK(ResourceManager::getInstance()->shader("tilemap")->setUniform("fade",Game::getInstance()->renderer()->fadeColor()));
+
+    GL_CHECK(ResourceManager::getInstance()->shader("tilemap")->setUniform("cnt", Game::getInstance()->animatedPalette()->counters()));
+    int lightLevel = 100;
+    if (auto state = Game::getInstance()->locationState()) {
+        lightLevel = state->lightLevel();
+    }
+    GL_CHECK(ResourceManager::getInstance()->shader("tilemap")->setUniform("global_light", lightLevel));
+
 
     GL_CHECK(glBindVertexArray(_vao));
 
@@ -97,7 +106,6 @@ void Tilemap::render(const Point &pos, std::vector<GLuint> indexes, uint32_t atl
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
 
-    //std::cout << pos.x() << " : " << pos.y() << " | " << indexes.size();
     // update indexes
     GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexes.size() * sizeof(GLuint), &indexes[0], GL_DYNAMIC_DRAW));
 

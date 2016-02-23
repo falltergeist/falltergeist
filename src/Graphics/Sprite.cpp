@@ -22,6 +22,8 @@
 #include "Sprite.h"
 #include "Renderer.h"
 #include "Shader.h"
+#include "AnimatedPalette.h"
+#include "../State/Location.h"
 
 namespace Falltergeist
 {
@@ -80,6 +82,13 @@ void Sprite::render(int x, int y, unsigned int width, unsigned int height)
     GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("MVP",
                                                                            Game::getInstance()->renderer()->getMVP()));
 
+    GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("cnt", Game::getInstance()->animatedPalette()->counters()));
+
+    int lightLevel = 100;
+    if (auto state = Game::getInstance()->locationState()) {
+        lightLevel = state->lightLevel();
+    }
+    GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("global_light", lightLevel));
 
     GL_CHECK(glBindVertexArray(Game::getInstance()->renderer()->getVAO()));
 

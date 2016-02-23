@@ -89,6 +89,7 @@ void File::_initialize()
         // magic, sorry
         _colors.at(i)->setAlpha(51);
         _colors.at(i)->setRed(153);
+        _colors.at(i)->nomod();
     }
 
     // SLIME

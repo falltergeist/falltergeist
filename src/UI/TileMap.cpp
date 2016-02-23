@@ -123,9 +123,6 @@ void TileMap::init()
 
     }
 
-    std::cout << "vert " << vertices.size() << std::endl;
-    std::cout << "text " << UV.size() << std::endl;
-
     _tilemap = make_unique<Graphics::Tilemap>(vertices, UV);
 
     Logger::info("GAME") << "Tilemap uniq tiles " << numbers.size() << std::endl;
@@ -138,11 +135,13 @@ void TileMap::init()
     for (uint8_t i=0;i<_atlases;i++)
     {
         SDL_Surface* tmp = SDL_CreateRGBSurface(0,Game::getInstance()->renderer()->maxTextureSize(), Game::getInstance()->renderer()->maxTextureSize(), 32, 0xff000000,0x00ff0000,0x0000ff00,0x000000ff);
+        SDL_SetSurfaceBlendMode(tmp, SDL_BLENDMODE_NONE);
         for (unsigned int j = _tilesPerAtlas*i; j < std::min((uint32_t)numbers.size(), (uint32_t)_tilesPerAtlas*(i+1)); ++j)
         {
             auto frm = ResourceManager::getInstance()->frmFileType("art/tiles/" + tilesLst->strings()->at(numbers.at(j)));
 
             SDL_Surface* tileSurf = SDL_CreateRGBSurfaceFrom(frm->rgba(ResourceManager::getInstance()->palFileType("color.pal")), 80, 36, 32, 80*4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+            SDL_SetSurfaceBlendMode(tileSurf, SDL_BLENDMODE_NONE);
             int x = (j % maxW) * 80;
             int y = (j / maxW) * 36;
             SDL_Rect rect = {x,y,80,36};
@@ -151,7 +150,7 @@ void TileMap::init()
         }
         //push new atlas
         _tilemap->addTexture(tmp);
-        IMG_SavePNG(tmp, "text.png");
+//        IMG_SavePNG(tmp, "text.png");
         SDL_FreeSurface(tmp);
     }
 

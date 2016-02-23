@@ -200,6 +200,10 @@ namespace Falltergeist {
             glUniform3fv(getUniform(uniform), 1, glm::value_ptr(vec));
         }
 
+        void Shader::setUniform(const std::string &uniform, std::vector<GLuint> vec) {
+            glUniform1iv(getUniform(uniform), vec.size(), (const int*)&vec[0]);
+        }
+
         void Shader::setUniform(const std::string &uniform, const glm::vec4 &vec) {
             glUniform4fv(getUniform(uniform), 1, glm::value_ptr(vec));
         }

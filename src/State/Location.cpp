@@ -496,7 +496,7 @@ void Location::render()
         object->renderText();
     }
 
-    _roof->render();
+    //_roof->render();
     if (active())
     {
         _hexagonInfo->render();
@@ -1078,5 +1078,14 @@ void Location::removeTimerEvent(Game::Object* obj, int fixedParam)
     _timerEvents.remove_if([=](Location::TimerEvent& item) { return item.object == obj && item.fixedParam == fixedParam; });
 }
 
+unsigned short Location::lightLevel()
+{
+    return _lightLevel;
+}
+
+void Location::setLightLevel(unsigned short level)
+{
+    _lightLevel = level;
+}
 }
 }

@@ -110,6 +110,9 @@ public:
     void onStateActivate(Event::State* event) override;
     void onStateDeactivate(Event::State* event) override;
 
+    unsigned short lightLevel();
+    void setLightLevel(unsigned short level);
+
     UI::PlayerPanel* playerPanel();
 
 protected:
@@ -164,6 +167,8 @@ protected:
     Event::MouseHandler _mouseDownHandler, _mouseUpHandler, _mouseMoveHandler;
     
     std::vector<Input::Mouse::Icon> getCursorIconsForObject(Game::Object* object);
+
+    unsigned short _lightLevel = 100;
 
 };
 

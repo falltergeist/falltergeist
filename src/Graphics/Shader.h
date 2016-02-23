@@ -73,6 +73,7 @@ namespace Falltergeist {
             void setUniform(const std::string &uniform, const glm::vec2 &vec);
 
             void setUniform(const std::string &uniform, const glm::vec3 &vec);
+            void setUniform(const std::string &uniform, std::vector<GLuint> vec);
 
             void setUniform(const std::string &uniform, const glm::vec4 &vec);
 
