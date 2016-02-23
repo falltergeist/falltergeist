@@ -3,6 +3,7 @@
 uniform sampler2D tex;
 uniform vec4 outlineColor;
 uniform vec4 color;
+uniform vec4 fade;
 in vec2 UV;
 out vec4 fragColor;
 
@@ -33,6 +34,8 @@ void main(void)
     fragColor = underColor;
     fragColor = mix(fragColor, origColor, origColor.a);
 
+    fragColor = mix(fragColor, fade, fade.a);
+    fragColor.a = origColor.a;
 //    if (fragColor.a > 0.0)
 //        fragColor.a = 1.0;
 

@@ -450,6 +450,7 @@ void TextArea::render(bool eggTransparency)
     GL_CHECK(ResourceManager::getInstance()->shader("font")->setUniform("offset", glm::vec2((float)pos.x(), (float(pos.y())) )));
     GL_CHECK(ResourceManager::getInstance()->shader("font")->setUniform("color", glm::vec4((float)_color.r/255.f, (float)_color.g/255.f, (float)_color.b/255.f, (float)_color.a/255.f)));
     GL_CHECK(ResourceManager::getInstance()->shader("font")->setUniform("outlineColor", glm::vec4((float)_outlineColor.r/255.f, (float)_outlineColor.g/255.f, (float)_outlineColor.b/255.f, (float)_outlineColor.a/255.f)));
+    GL_CHECK(ResourceManager::getInstance()->shader("font")->setUniform("fade",Game::getInstance()->renderer()->fadeColor()));
 
 
     GL_CHECK(glBindVertexArray(_vao));
