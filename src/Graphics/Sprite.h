@@ -44,9 +44,11 @@ public:
     unsigned int width() const;
     unsigned int height() const;
     bool opaque(unsigned int x, unsigned int y);
+    void shader(const std::string& shader);
 
 private:
     Texture* _texture;
+    std::string _shader = "sprite";
 };
 
 }

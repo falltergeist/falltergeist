@@ -42,6 +42,17 @@ namespace UI
 class Base : public Event::EventTarget
 {
 public:
+    enum class Trans
+    {
+        DEFAULT = 0,
+        NONE,
+        WALL,
+        GLASS,
+        STEAM,
+        ENERGY,
+        RED
+    };
+
     Base(int x = 0, int y = 0);
     Base(const Point& pos);
     ~Base() override;
@@ -109,11 +120,16 @@ public:
 
     virtual void setLight(bool light);
     virtual bool light();
+    // object translucency mode
+    UI::Base::Trans trans() const;
+    // sets object translucency mode
+    void setTrans(UI::Base::Trans value);
 
 protected:
     Point _position;
     Point _offset;
     bool _light = false;
+    UI::Base::Trans _trans = UI::Base::Trans::DEFAULT;
 
     bool _leftButtonPressed = false;
     bool _rightButtonPressed = false;

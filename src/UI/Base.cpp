@@ -421,5 +421,13 @@ void Base::setLight(bool light) {
 bool Base::light() {
     return _light;
 }
+
+UI::Base::Trans Base::trans() const {
+    return _trans;
+}
+
+void Base::setTrans(UI::Base::Trans value) {
+    _trans = value;
+}
 }
 }

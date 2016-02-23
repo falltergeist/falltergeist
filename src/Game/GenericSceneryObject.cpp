@@ -42,7 +42,7 @@ GenericSceneryObject::~GenericSceneryObject()
 
 bool GenericSceneryObject::_useEggTransparency()
 {
-    return (_trans == Trans::DEFAULT);
+    return (_trans == UI::Base::Trans::DEFAULT);
 }
 }
 }

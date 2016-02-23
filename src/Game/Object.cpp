@@ -510,10 +510,15 @@ void Object::onUseAnimationEnd(Event::Event* event, CritterObject* critter)
     critter->setActionAnimation("aa")->stop();
 }
 
-void Object::setTrans(Trans value)
+void Object::setTrans(UI::Base::Trans value)
 {
     _trans = value;
+    if (_ui)
+    {
+        _ui->setTrans(value);
+    }
     /* TODO: newrender
+     *
     if (_ui)
     {
         SDL_Color modifier = _ui->texture()->colorModifier();
@@ -538,7 +543,7 @@ void Object::setTrans(Trans value)
      */
 }
 
-Object::Trans Object::trans() const
+UI::Base::Trans Object::trans() const
 {
     return _trans;
 }
@@ -580,12 +585,12 @@ void Object::setFlags(unsigned int flags)
     setCanLightThru((flags & 0x20000000) != 0);
     setCanShootThru((flags & 0x80000000) != 0);
 
-    if (flags & 0x00004000) setTrans(Object::Trans::RED);
-    if (flags & 0x00008000) setTrans(Object::Trans::NONE);
-    if (flags & 0x00010000) setTrans(Object::Trans::WALL);
-    if (flags & 0x00020000) setTrans(Object::Trans::GLASS);
-    if (flags & 0x00040000) setTrans(Object::Trans::STEAM);
-    if (flags & 0x00080000) setTrans(Object::Trans::ENERGY);
+    if (flags & 0x00004000) setTrans(UI::Base::Trans::RED);
+    if (flags & 0x00008000) setTrans(UI::Base::Trans::NONE);
+    if (flags & 0x00010000) setTrans(UI::Base::Trans::WALL);
+    if (flags & 0x00020000) setTrans(UI::Base::Trans::GLASS);
+    if (flags & 0x00040000) setTrans(UI::Base::Trans::STEAM);
+    if (flags & 0x00080000) setTrans(UI::Base::Trans::ENERGY);
     if (flags & 0x10000000) setWallTransEnd(true);
 }
 

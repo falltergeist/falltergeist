@@ -23,6 +23,7 @@
 // C++ standard includes
 #include <memory>
 #include <string>
+#include <UI/Base.h>
 
 // Falltergeist includes
 #include "../Event/EventTarget.h"
@@ -97,16 +98,6 @@ public:
         DUDE
     };
 
-    enum class Trans
-    {
-        DEFAULT = 0,
-        NONE,
-        WALL,
-        GLASS,
-        STEAM,
-        ENERGY,
-        RED
-    };
 
     Object();
     ~Object() override;
@@ -196,9 +187,9 @@ public:
     void setInRender(bool value);
 
     // object translucency mode
-    Trans trans() const;
+    UI::Base::Trans trans() const;
     // sets object translucency mode
-    void setTrans(Trans value);
+    void setTrans(UI::Base::Trans value);
 
     // request description of the object to console, may call "description_p_proc" procedure of underlying script entity
     virtual void description_p_proc();
@@ -257,7 +248,7 @@ protected:
     void addUIEventHandlers();
     std::unique_ptr<UI::TextArea> _floatMessage;
     bool _inRender = false;
-    Trans _trans = Trans::DEFAULT;
+    UI::Base::Trans _trans = UI::Base::Trans::DEFAULT;
     Orientation _lightOrientation;
     unsigned int _lightIntensity = 0;
     unsigned int _lightRadius = 0;

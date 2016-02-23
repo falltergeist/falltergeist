@@ -1061,9 +1061,12 @@ void Location::addTimerEvent(Game::Object* obj, int delay, int fixedParam)
     timer.start();
     timer.tickHandler().add([this, obj, fixedParam](Event::Event*)
         {
-            auto vm = obj->script();
-            vm->setFixedParam(fixedParam);
-            vm->call("timed_event_p_proc");
+            if (obj)
+            if (auto vm = obj->script())
+            {
+                vm->setFixedParam(fixedParam);
+                vm->call("timed_event_p_proc");
+            }
         });
     _timerEvents.emplace_back(TimerEvent {obj, std::move(timer), fixedParam});
 }

@@ -18,6 +18,7 @@
  */
 
 // Related headers
+#include <iostream>
 #include "../UI/Image.h"
 
 // C++ standard includes
@@ -104,11 +105,37 @@ void Image::setTexture(const std::string& filename)
 
 void Image::render(bool eggTransparency)
 {
+    switch (_trans)
+    {
+        case Trans::GLASS:
+            _sprite.shader("sprite_glass");
+            break;
+        case Trans::ENERGY:
+            _sprite.shader("sprite_energy");
+            break;
+        case Trans::RED:
+            _sprite.shader("sprite_red");
+            break;
+        case Trans::STEAM:
+            _sprite.shader("sprite_steam");
+            break;
+        case Trans::NONE:
+        case Trans::DEFAULT:
+        case Trans::WALL:
+        default:
+            _sprite.shader("sprite");
+            break;
+    }
   _sprite.render(position().x(),position().y(), eggTransparency, light());
 }
 
 Image::Image(Format::Frm::File *frm, unsigned int direction) : Falltergeist::UI::Base(), _sprite(frm)
 {
+    if (direction >= frm->directions()->size())
+    {
+        //throw Exception("Image::Image(frm, direction) - direction not found: " + std::to_string(direction));
+        direction = 0;
+    }
     auto dir = frm->directions()->at(direction);
     setOffset(frm->offsetX(direction) + dir->shiftX(),
       frm->offsetY(direction) + dir->shiftY());
