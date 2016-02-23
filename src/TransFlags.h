@@ -17,34 +17,23 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
-#include <TransFlags.h>
-#include "../Game/WallObject.h"
+#ifndef FALLTERGEIST_TRANSFLAGS_H
+#define FALLTERGEIST_TRANSFLAGS_H
 
-// C++ standard includes
+namespace Falltergeist {
 
-// Falltergeist includes
-
-// Third party includes
-
-namespace Falltergeist
-{
-namespace Game
-{
-
-WallObject::WallObject() : Object()
-{
-    _type = Type::WALL;
+class TransFlags {
+public:
+    enum Trans {
+        DEFAULT = 0,
+        NONE,
+        WALL,
+        GLASS,
+        STEAM,
+        ENERGY,
+        RED
+    };
+};
 }
 
-WallObject::~WallObject()
-{
-}
-
-bool WallObject::_useEggTransparency()
-{
-    return (_trans == Falltergeist::TransFlags::Trans::DEFAULT);
-}
-
-}
-}
+#endif //FALLTERGEIST_TRANSFLAGS_H

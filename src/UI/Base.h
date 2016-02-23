@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <memory>
+#include <TransFlags.h>
 
 // Falltergeist includes
 #include "../Event/EventTarget.h"
@@ -42,16 +43,6 @@ namespace UI
 class Base : public Event::EventTarget
 {
 public:
-    enum class Trans
-    {
-        DEFAULT = 0,
-        NONE,
-        WALL,
-        GLASS,
-        STEAM,
-        ENERGY,
-        RED
-    };
 
     Base(int x = 0, int y = 0);
     Base(const Point& pos);
@@ -121,15 +112,15 @@ public:
     virtual void setLight(bool light);
     virtual bool light();
     // object translucency mode
-    UI::Base::Trans trans() const;
+    Falltergeist::TransFlags::Trans trans() const;
     // sets object translucency mode
-    void setTrans(UI::Base::Trans value);
+    void setTrans(Falltergeist::TransFlags::Trans value);
 
 protected:
     Point _position;
     Point _offset;
     bool _light = false;
-    UI::Base::Trans _trans = UI::Base::Trans::DEFAULT;
+    Falltergeist::TransFlags::Trans _trans = Falltergeist::TransFlags::Trans::DEFAULT;
 
     bool _leftButtonPressed = false;
     bool _rightButtonPressed = false;

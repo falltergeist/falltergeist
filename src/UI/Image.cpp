@@ -30,6 +30,7 @@
 #include "../Graphics/Sprite.h"
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
+#include "TransFlags.h"
 
 // Third party includes
 
@@ -105,28 +106,8 @@ void Image::setTexture(const std::string& filename)
 
 void Image::render(bool eggTransparency)
 {
-    switch (_trans)
-    {
-        case Trans::GLASS:
-            _sprite.shader("sprite_glass");
-            break;
-        case Trans::ENERGY:
-            _sprite.shader("sprite_energy");
-            break;
-        case Trans::RED:
-            _sprite.shader("sprite_red");
-            break;
-        case Trans::STEAM:
-            _sprite.shader("sprite_steam");
-            break;
-        case Trans::NONE:
-        case Trans::DEFAULT:
-        case Trans::WALL:
-        default:
-            _sprite.shader("sprite");
-            break;
-    }
-  _sprite.render(position().x(),position().y(), eggTransparency, light());
+    _sprite.trans(_trans);
+    _sprite.render(position().x(),position().y(), eggTransparency, light());
 }
 
 Image::Image(Format::Frm::File *frm, unsigned int direction) : Falltergeist::UI::Base(), _sprite(frm)

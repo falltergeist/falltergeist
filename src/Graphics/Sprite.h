@@ -22,6 +22,7 @@
 
 #include <string>
 #include <Point.h>
+#include <TransFlags.h>
 #include "Texture.h"
 #include "../Format/Frm/File.h"
 
@@ -44,11 +45,11 @@ public:
     unsigned int width() const;
     unsigned int height() const;
     bool opaque(unsigned int x, unsigned int y);
-    void shader(const std::string& shader);
+    void trans(Falltergeist::TransFlags::Trans _trans);
 
 private:
     Texture* _texture;
-    std::string _shader = "sprite";
+    Falltergeist::TransFlags::Trans _trans = Falltergeist::TransFlags::Trans::NONE;
 };
 
 }

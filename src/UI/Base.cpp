@@ -33,6 +33,7 @@
 #include "../PathFinding/Hexagon.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
+#include "TransFlags.h"
 
 // Third party includes
 
@@ -422,11 +423,11 @@ bool Base::light() {
     return _light;
 }
 
-UI::Base::Trans Base::trans() const {
+TransFlags::Trans Base::trans() const {
     return _trans;
 }
 
-void Base::setTrans(UI::Base::Trans value) {
+void Base::setTrans(TransFlags::Trans value) {
     _trans = value;
 }
 }

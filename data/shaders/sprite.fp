@@ -3,6 +3,7 @@ uniform sampler2D tex;
 uniform vec4 fade;
 uniform int cnt[6];
 uniform int global_light;
+uniform int trans;
 in vec2 UV;
 out vec4 fragColor;
 
@@ -49,55 +50,97 @@ void main(void)
         fireFastPalette[4] = vec3(0.27, 0.0, 0.0);
 
     vec4 origColor = texture(tex, UV);
-    if (origColor.a == 0.2 && origColor.r == 0.6)
+
+    if (trans == 3) // glass
     {
-        int index = int(round(origColor.b * 255.0)) / 51;
+        origColor.r=0.0;
+        origColor.g=0.0;
+        origColor.b=1.0;
+        if (origColor.a>0)
+        {
+            origColor.a=0.5;
+        }
+        origColor.rgb = origColor.rgb/100*global_light;
+    }
+    else if (trans == 4) // steam
+    {
+        origColor.rgb = origColor.rgb/100*global_light;
+    }
+    else if (trans == 5) // energy
+    {
+        origColor.r=0.0;
+        origColor.g=1.0;
+        origColor.b=1.0;
+        if (origColor.a>0)
+        {
+            origColor.a=0.5;
+        }
+        origColor.rgb = origColor.rgb/100*global_light;
+    }
+    else if (trans == 6) // red
+    {
+        origColor.r=1.0;
+        origColor.g=0.0;
+        origColor.b=0.0;
+        if (origColor.a>0)
+        {
+            origColor.a=0.5;
+        }
+        origColor.rgb = origColor.rgb/100*global_light;
+    }
+    else
+    {
 
-        if (index<0) index = 0;
+        if (origColor.a == 0.2 && origColor.r == 0.6)
+        {
+            int index = int(round(origColor.b * 255.0)) / 51;
 
-        if (origColor.g == 0.0)
-        {
-            if (index>3) index = 3;
-            int newIndex = (index + cnt[0]) % 4;
-            origColor.rgb = slimePalette[newIndex];
-        }
-        else if (origColor.g == 0.2)
-        {
-            if (index>4) index = 4;
-            int newIndex = (index + cnt[1]) % 5;
-            origColor.rgb = monitorsPalette[newIndex];
-        }
-        else if (origColor.g == 0.4)
-        {
-            if (index>4) index = 4;
-            int newIndex = (index + cnt[2]) % 5;
-            origColor.rgb = fireSlowPalette[newIndex];
-        }
-        else if (origColor.g == 0.6)
-        {
-            if (index>4) index = 4;
-            int newIndex = (index + cnt[3]) % 5;
-            origColor.rgb = fireFastPalette[newIndex];
-        }
-        else if (origColor.g == 0.8)
-        {
-            if (index>5) index = 5;
-            int newIndex = (index + cnt[4]) % 6;
-            origColor.rgb = shorePalette[newIndex];
-        }
-        else if (origColor.g == 1.0)
-        {
-            origColor.rgb = vec3((cnt[5]*4)/255.0,0,0);
-        }
+            if (index<0) index = 0;
 
-        origColor.a = 1.0;
-   }
-   else
-   {
-     // add light
-     origColor.rgb = origColor.rgb/100*global_light;
-   }
+            if (origColor.g == 0.0)
+            {
+                if (index>3) index = 3;
+                int newIndex = (index + cnt[0]) % 4;
+                origColor.rgb = slimePalette[newIndex];
+            }
+            else if (origColor.g == 0.2)
+            {
+                if (index>4) index = 4;
+                int newIndex = (index + cnt[1]) % 5;
+                origColor.rgb = monitorsPalette[newIndex];
+            }
+            else if (origColor.g == 0.4)
+            {
+                if (index>4) index = 4;
+                int newIndex = (index + cnt[2]) % 5;
+                origColor.rgb = fireSlowPalette[newIndex];
+            }
+            else if (origColor.g == 0.6)
+            {
+                if (index>4) index = 4;
+                int newIndex = (index + cnt[3]) % 5;
+                origColor.rgb = fireFastPalette[newIndex];
+            }
+            else if (origColor.g == 0.8)
+            {
+                if (index>5) index = 5;
+                int newIndex = (index + cnt[4]) % 6;
+                origColor.rgb = shorePalette[newIndex];
+            }
+            else if (origColor.g == 1.0)
+            {
+                origColor.rgb = vec3((cnt[5]*4)/255.0,0,0);
+            }
 
-   fragColor = mix(origColor, fade, fade.a);
-   fragColor.a = origColor.a;
+            origColor.a = 1.0;
+        }
+        else
+        {
+            // add light
+            origColor.rgb = origColor.rgb/100*global_light;
+        }
+    }
+
+    fragColor = mix(origColor, fade, fade.a);
+    fragColor.a = origColor.a;
 }

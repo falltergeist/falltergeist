@@ -19,6 +19,7 @@
 
 #include <ResourceManager.h>
 #include <Game/Game.h>
+#include <TransFlags.h>
 #include "Sprite.h"
 #include "Renderer.h"
 #include "Shader.h"
@@ -71,6 +72,8 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
     UV.push_back(uv_up_right  );
     UV.push_back(uv_down_right);
 
+    std::string _shader = "sprite";
+
     GL_CHECK(ResourceManager::getInstance()->shader(_shader)->use());
 
     GL_CHECK(_texture->bind(0));
@@ -93,6 +96,7 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
         }
     }
     GL_CHECK(ResourceManager::getInstance()->shader(_shader)->setUniform("global_light", lightLevel));
+    GL_CHECK(ResourceManager::getInstance()->shader(_shader)->setUniform("trans", _trans));
 
     GL_CHECK(glBindVertexArray(Game::getInstance()->renderer()->getVAO()));
 
@@ -162,6 +166,8 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
     UV.push_back(uv_up_right  );
     UV.push_back(uv_down_right);
 
+    std::string _shader = "sprite";
+
     GL_CHECK(ResourceManager::getInstance()->shader(_shader)->use());
 
     GL_CHECK(_texture->bind(0));
@@ -184,6 +190,8 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
         }
     }
     GL_CHECK(ResourceManager::getInstance()->shader(_shader)->setUniform("global_light", lightLevel));
+
+    GL_CHECK(ResourceManager::getInstance()->shader(_shader)->setUniform("trans", _trans));
 
 
     GL_CHECK(glBindVertexArray(Game::getInstance()->renderer()->getVAO()));
@@ -232,9 +240,9 @@ bool Sprite::opaque(unsigned int x, unsigned int y)
     return _texture->opaque(x, y);
 }
 
-void Sprite::shader(const std::string &shader)
+void Sprite::trans(Falltergeist::TransFlags::Trans trans)
 {
-    _shader = shader;
+    _trans=trans;
 }
 }
 }
