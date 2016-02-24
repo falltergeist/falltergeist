@@ -22,6 +22,8 @@
 #include <ResourceManager.h>
 #include <Point.h>
 #include <Game/Game.h>
+#include <SDL_image.h>
+#include <iostream>
 #include "Animation.h"
 #include "../Format/Frm/File.h"
 #include "../Format/Frm/Direction.h"
@@ -48,6 +50,7 @@ Animation::Animation(const std::string &filename)
     GL_CHECK(glGenBuffers(1, &_ebo));
 
     _texture = ResourceManager::getInstance()->texture(filename);
+
     Format::Frm::File* frm = ResourceManager::getInstance()->frmFileType(filename);
 
     _stride = frm->framesPerDirection();
@@ -112,20 +115,20 @@ void Animation::render(int x, int y, unsigned int direction, unsigned int frame)
                                                                           Game::getInstance()->renderer()->getMVP()));
 
 
-    GL_CHECK(glBindVertexArray(Game::getInstance()->renderer()->getVAO()));
+    GL_CHECK(glBindVertexArray(_vao));
 
 
-    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getVVBO()));
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coords));
     GL_CHECK(glVertexAttribPointer(ResourceManager::getInstance()->shader("animation")->getAttrib("Position"), 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
 
-    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getTVBO()));
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoords));
     GL_CHECK(glVertexAttribPointer(ResourceManager::getInstance()->shader("animation")->getAttrib("TexCoord"), 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
-    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Game::getInstance()->renderer()->getEBO()));
-
+    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
 
     GLushort indexes[6] = {(GLushort) (pos * 4), (GLushort) (pos * 4 + 1), (GLushort) (pos * 4 + 2), (GLushort) (pos * 4 + 3), (GLushort) (pos * 4 + 2), (GLushort) (pos * 4 + 1)};
+
 
     GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(GLushort), indexes, GL_STATIC_DRAW));
 

@@ -29,6 +29,7 @@ namespace Graphics
 
 class Animation
 {
+public:
     Animation(const std::string& filename);
     ~Animation();
     void render(int x, int y, unsigned int direction, unsigned int frame);

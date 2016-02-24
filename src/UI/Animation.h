@@ -23,6 +23,7 @@
 // C++ standard includes
 #include <vector>
 #include <string>
+#include <Graphics/Animation.h>
 
 // Falltergeist includes
 #include "../UI/Base.h"
@@ -100,6 +101,8 @@ protected:
     unsigned int _frameTicks = 0;
 
     Event::Handler _frameHandler, _actionFrameHandler, _animationEndedHandler;
+    std::unique_ptr<Graphics::Animation> _animation;
+    unsigned int _direction;
 };
 
 }

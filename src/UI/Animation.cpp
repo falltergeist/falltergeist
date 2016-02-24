@@ -56,7 +56,9 @@ Animation::Animation() : Falltergeist::UI::Base()
 
 Animation::Animation(const std::string& frmName, unsigned int direction) : Falltergeist::UI::Base()
 {
+    _direction = direction;
     auto frm = ResourceManager::getInstance()->frmFileType(frmName);
+    _animation = make_unique<Graphics::Animation>(frmName);
     // TODO: newrender
     //setTexture(ResourceManager::getInstance()->texture(frmName));
 
@@ -143,6 +145,9 @@ void Animation::think()
 
 void Animation::render(bool eggTransparency)
 {
+    auto& frame = _animationFrames.at(_currentFrame);
+    Point offsetPosition = position() + shift() + frame->offset();
+    _animation->render(offsetPosition.x(),offsetPosition.y(),_direction,_currentFrame);
 /* TODO: newrender
     auto& frame = _animationFrames.at(_currentFrame);
     Point framePos = frame->position();
