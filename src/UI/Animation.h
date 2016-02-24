@@ -48,7 +48,10 @@ public:
     void think() override;
     void render(bool eggTransparency = false) override;
 
-    /**
+
+    virtual bool opaque(const Point &pos) override;
+
+/**
      * Additional offset, specific to current direction and taken from source FRM file.
      */
     const Point& shift() const;

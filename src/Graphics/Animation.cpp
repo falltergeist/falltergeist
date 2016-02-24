@@ -149,6 +149,10 @@ void Animation::render(int x, int y, unsigned int direction, unsigned int frame)
     GL_CHECK(_texture->unbind(0));
 }
 
+bool Animation::opaque(unsigned int x, unsigned int y)
+{
+    return _texture->opaque(x, y);
+}
 }
 }
 

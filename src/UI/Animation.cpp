@@ -312,5 +312,16 @@ Event::Handler& Animation::animationEndedHandler()
     return _animationEndedHandler;
 }
 
+bool Animation::opaque(const Point &pos) {
+    const auto& frame = _animationFrames.at(_currentFrame);
+
+    Point offsetPos = pos - offset();
+    if (!Rect::inRect(offsetPos, frame->size()))
+    {
+        return 0;
+    }
+    offsetPos +=frame->position();
+    return _animation->opaque(offsetPos.x(),offsetPos.y());
+}
 }
 }

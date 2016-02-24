@@ -33,6 +33,7 @@ public:
     Animation(const std::string& filename);
     ~Animation();
     void render(int x, int y, unsigned int direction, unsigned int frame);
+    bool opaque(unsigned int x, unsigned int y);
 private:
     GLuint _vao;
     GLuint _coords;
