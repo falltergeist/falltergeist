@@ -519,30 +519,6 @@ void Object::setTrans(Falltergeist::TransFlags::Trans value)
     {
         _ui->setTrans(value);
     }
-    /* TODO: newrender
-     *
-    if (_ui)
-    {
-        SDL_Color modifier = _ui->texture()->colorModifier();
-        switch (_trans)
-        {
-            case Trans::GLASS:
-                modifier.a = 128;
-                break;
-            case Trans::ENERGY:
-                modifier = {200, 200, 0, 128};
-                break;
-            case Trans::RED:
-                modifier = {255, 0, 0, 128};
-                break;
-            case Trans::NONE:
-            default:
-                modifier = {255, 255, 255, 255};
-                break;
-        }
-        _ui->texture()->setColorModifier(modifier);
-    }
-     */
 }
 
 Falltergeist::TransFlags::Trans Object::trans() const

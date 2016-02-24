@@ -523,7 +523,7 @@ void Location::render()
             }
         }
     }
-    
+
     for (auto &object: _objects)
     {
         object->renderText();

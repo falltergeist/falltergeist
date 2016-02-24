@@ -53,17 +53,11 @@ public:
     Image(const std::string& filename);
     Image(Format::Frm::File* frm, unsigned int direction);
 
-    /*Image(unsigned int width, unsigned int height);
-    Image(const Size& size);
-    Image(const Image& image);
-    Image(Graphics::Texture* texture);
-    Image(Format::Frm::File* frm, unsigned int direction);*/
     ~Image() override;
     virtual void render(bool eggTransparency = false);
 
     virtual void render(const Size &size, bool eggTransparency = false) override;
 
-    void setTexture(const std::string& filename);
     bool opaque(unsigned int x, unsigned int y);
     virtual bool opaque(const Point &pos) override;
 

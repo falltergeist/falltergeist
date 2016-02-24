@@ -266,10 +266,6 @@ void Renderer::beginFrame()
 
 void Renderer::endFrame()
 {
-    if (!fadeDone())
-    {
-        //TODO: newrender
-    }
     GL_CHECK(glDisable(GL_BLEND));
     SDL_GL_SwapWindow(_sdlWindow);
 }
