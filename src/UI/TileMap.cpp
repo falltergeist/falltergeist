@@ -179,7 +179,7 @@ void TileMap::render()
     for (auto& tile : _tiles)
     {
         const Size tileSize = Size(80, 36);
-        if (Rect::intersects(tile->position(), tileSize, camera->topLeft(), camera->size()))
+        if (tile->enabled() && Rect::intersects(tile->position(), tileSize, camera->topLeft(), camera->size()))
         {
             uint32_t aIndex = tile->index() / _tilesPerAtlas;
             indexes.at(aIndex).push_back(cnt*4);

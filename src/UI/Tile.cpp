@@ -60,5 +60,19 @@ void Tile::setIndex(unsigned int value)
     _index = value;
 }
 
+void Tile::enable()
+{
+    _enabled = true;
+}
+
+void Tile::disable()
+{
+    _enabled = false;
+}
+
+bool Tile::enabled()
+{
+    return _enabled;
+}
 }
 }
