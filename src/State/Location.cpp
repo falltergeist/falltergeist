@@ -267,7 +267,7 @@ void Location::setLocation(const std::string& name)
         }
 
         auto hexagon = hexagonGrid()->at(mapObject->hexPosition());
-        Location::moveObjectToHexagon(object, hexagon);
+        moveObjectToHexagon(object, hexagon, false);
 
         // flat objects are like tiles. they don't think (but has handlers) and rendered first.
         if (object->flat())
@@ -305,7 +305,7 @@ void Location::setLocation(const std::string& name)
         player->setScript(new VM(ResourceManager::getInstance()->intFileType(0), player));
 
         auto hexagon = hexagonGrid()->at(mapFile->defaultPosition());
-        Location::moveObjectToHexagon(player, hexagon);
+        moveObjectToHexagon(player, hexagon);
     }
 
     // Location script
@@ -478,19 +478,19 @@ void Location::render()
     _floor->render();
 
     //render only flat objects first
-/*
-    for (auto &object: _flatObjects)
+
+    for (auto &object: _rflatObjects)
     {
         object->render();
         object->hexagon()->setInRender(object->inRender());
     }
 
-    for (auto &object: _objects)
+    for (auto &object: _robjects)
     {
         object->render();
         object->hexagon()->setInRender(object->inRender());
     }
-*/
+/*
     for (auto hexagon : _hexagonGrid->hexagons())
     {
         hexagon->setInRender(false);
@@ -523,7 +523,7 @@ void Location::render()
             }
         }
     }
-
+*/
     for (auto &object: _objects)
     {
         object->renderText();
@@ -746,8 +746,8 @@ void Location::handle(Event::Event* event)
 
 void Location::handleByGameObjects(Event::Mouse* event)
 {
-    /*
-    for (auto &object: _objects)
+
+    for (auto &object: _robjects)
     {
         if (event->handled()) return;
         if (!object->inRender()) continue;
@@ -755,13 +755,13 @@ void Location::handleByGameObjects(Event::Mouse* event)
     }
 
     // sadly, flat objects do handle events.
-    for (auto &object: _flatObjects)
+    for (auto &object: _rflatObjects)
     {
         if (event->handled()) return;
         if (!object->inRender()) continue;
         object->handle(event);
     }
-*/
+/*
     auto hexagons = _hexagonGrid->hexagons();
     for (auto it = hexagons.rbegin(); it != hexagons.rend(); ++it)
     {
@@ -776,7 +776,7 @@ void Location::handleByGameObjects(Event::Mouse* event)
             object->handle(event);
         }
     }
-
+*/
 }
 
 void Location::onMouseDown(Event::Mouse* event)
@@ -952,7 +952,7 @@ std::map<std::string, VMStackValue>* Location::EVARS()
     return &_EVARS;
 }
 
-void Location::moveObjectToHexagon(Game::Object* object, Hexagon* hexagon)
+void Location::moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool update)
 {
     auto oldHexagon = object->hexagon();
     if (oldHexagon)
@@ -987,6 +987,30 @@ void Location::moveObjectToHexagon(Game::Object* object, Hexagon* hexagon)
     if (hexagon)
     {
         hexagon->objects()->push_back(object);
+    }
+    // TODO: recreate _objects array for rendering/handling
+    if (update)
+    {
+        _robjects.clear();
+        _rflatObjects.clear();
+        auto hexagons = _hexagonGrid->hexagons();
+        for (auto it = hexagons.begin(); it != hexagons.end(); ++it)
+        {
+            Hexagon* hexagon = *it;
+            auto objects = hexagon->objects();
+            for (auto itt = objects->begin(); itt != objects->end(); ++itt)
+            {
+                auto object = *itt;
+                if (object->flat())
+                {
+                    _rflatObjects.push_back(object);
+                }
+                else
+                {
+                    _robjects.push_back(object);
+                }
+            }
+        }
     }
 }
 

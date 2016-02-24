@@ -86,7 +86,7 @@ public:
 
     std::map<std::string, VMStackValue>* EVARS();
 
-    static void moveObjectToHexagon(Game::Object* object, Hexagon* hexagon);
+    void moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool update = true);
     void destroyObject(Game::Object* object);
     void centerCameraAtHexagon(Hexagon* hexagon);
     void centerCameraAtHexagon(int tileNum);
@@ -162,6 +162,9 @@ protected:
 
     std::vector<std::unique_ptr<Game::Object>> _objects;
     std::vector<std::unique_ptr<Game::Object>> _flatObjects;
+
+    std::vector<Game::Object*> _robjects;
+    std::vector<Game::Object*> _rflatObjects;
     std::unique_ptr<UI::TextArea> _hexagonInfo;
 
     Event::MouseHandler _mouseDownHandler, _mouseUpHandler, _mouseMoveHandler;
