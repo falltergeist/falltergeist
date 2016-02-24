@@ -53,9 +53,9 @@ void main(void)
 
     if (trans == 3) // glass
     {
-        origColor.r=0.0;
-        origColor.g=0.0;
-        origColor.b=1.0;
+        //origColor.r=0.0;
+        //origColor.g=0.0;
+        //origColor.b=1.0;
         if (origColor.a>0)
         {
             origColor.a=0.5;
@@ -68,9 +68,9 @@ void main(void)
     }
     else if (trans == 5) // energy
     {
-        origColor.r=0.0;
-        origColor.g=1.0;
-        origColor.b=1.0;
+        origColor.r=0.78;
+        origColor.g=0.78;
+        origColor.b=0.0;
         if (origColor.a>0)
         {
             origColor.a=0.5;
