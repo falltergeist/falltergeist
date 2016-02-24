@@ -190,8 +190,9 @@ void Object::_generateUi()
         else
         {
             _ui =  make_unique<UI::Image>(frm, orientation());
-            _ui->setLight(true);
+
         }
+        _ui->setLight(true);
     }
 
     addUIEventHandlers();

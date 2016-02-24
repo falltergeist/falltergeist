@@ -64,6 +64,12 @@ void main(void)
     }
     else if (trans == 4) // steam
     {
+        if (origColor.a>0)
+        {
+            float gray = dot(origColor.rgb, vec3( 0.21, 0.72, 0.07 ));
+            origColor.rgb = vec3(gray,gray,gray);
+            origColor.a = 0.75;
+        }
         origColor.rgb = origColor.rgb/100*global_light;
     }
     else if (trans == 5) // energy

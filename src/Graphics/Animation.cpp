@@ -23,13 +23,15 @@
 #include <Point.h>
 #include <Game/Game.h>
 #include <SDL_image.h>
-#include <iostream>
+#include <TransFlags.h>
 #include "Animation.h"
 #include "../Format/Frm/File.h"
 #include "../Format/Frm/Direction.h"
 #include "../Format/Frm/Frame.h"
 #include "Renderer.h"
 #include "Shader.h"
+#include "AnimatedPalette.h"
+#include "../State/Location.h"
 
 
 namespace Falltergeist
@@ -99,7 +101,7 @@ Animation::~Animation()
 
 }
 
-void Animation::render(int x, int y, unsigned int direction, unsigned int frame)
+void Animation::render(int x, int y, unsigned int direction, unsigned int frame, bool light)
 {
     int pos = direction*_stride+frame;
 
@@ -113,6 +115,23 @@ void Animation::render(int x, int y, unsigned int direction, unsigned int frame)
 
     GL_CHECK(ResourceManager::getInstance()->shader("animation")->setUniform("MVP",
                                                                           Game::getInstance()->renderer()->getMVP()));
+
+    GL_CHECK(ResourceManager::getInstance()->shader("animation")->setUniform("fade",Game::getInstance()->renderer()->fadeColor()));
+
+    GL_CHECK(ResourceManager::getInstance()->shader("animation")->setUniform("cnt", Game::getInstance()->animatedPalette()->counters()));
+
+    int lightLevel = 100;
+    if (light)
+    {
+        if (auto state = Game::getInstance()->locationState())
+        {
+            lightLevel = state->lightLevel();
+        }
+    }
+    GL_CHECK(ResourceManager::getInstance()->shader("animation")->setUniform("global_light", lightLevel));
+
+    GL_CHECK(ResourceManager::getInstance()->shader("animation")->setUniform("trans", _trans));
+
 
 
     GL_CHECK(glBindVertexArray(_vao));
@@ -153,6 +172,12 @@ bool Animation::opaque(unsigned int x, unsigned int y)
 {
     return _texture->opaque(x, y);
 }
+
+void Animation::trans(Falltergeist::TransFlags::Trans trans)
+{
+    _trans=trans;
+}
+
 }
 }
 

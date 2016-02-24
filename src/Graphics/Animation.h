@@ -21,6 +21,7 @@
 #include <GL/glew.h>
 #include <SDL_opengl.h>
 #include "Texture.h"
+#include "../TransFlags.h"
 
 namespace Falltergeist
 {
@@ -32,8 +33,9 @@ class Animation
 public:
     Animation(const std::string& filename);
     ~Animation();
-    void render(int x, int y, unsigned int direction, unsigned int frame);
+    void render(int x, int y, unsigned int direction, unsigned int frame, bool light = false);
     bool opaque(unsigned int x, unsigned int y);
+    void trans(Falltergeist::TransFlags::Trans _trans);
 private:
     GLuint _vao;
     GLuint _coords;
@@ -41,6 +43,7 @@ private:
     GLuint _ebo;
     Texture* _texture;
     int _stride;
+    Falltergeist::TransFlags::Trans _trans = Falltergeist::TransFlags::Trans::NONE;
 public:
 };
 
