@@ -746,6 +746,7 @@ void Location::handle(Event::Event* event)
 
 void Location::handleByGameObjects(Event::Mouse* event)
 {
+    /*
     for (auto &object: _objects)
     {
         if (event->handled()) return;
@@ -760,7 +761,7 @@ void Location::handleByGameObjects(Event::Mouse* event)
         if (!object->inRender()) continue;
         object->handle(event);
     }
-/*
+*/
     auto hexagons = _hexagonGrid->hexagons();
     for (auto it = hexagons.rbegin(); it != hexagons.rend(); ++it)
     {
@@ -775,7 +776,7 @@ void Location::handleByGameObjects(Event::Mouse* event)
             object->handle(event);
         }
     }
-    */
+
 }
 
 void Location::onMouseDown(Event::Mouse* event)

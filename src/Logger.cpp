@@ -42,7 +42,7 @@ std::ostream &Logger::log(Logger::Level level, const std::string &subsystem)
 {
     // A /dev/null-like stream
     static std::ostream nullstream(nullptr);
-    /*if (level < _level)*/ return nullstream;
+    if (level < _level) return nullstream;
     std::string subsystemMsg = " ";
     if (subsystem.size() > 0) subsystemMsg = " [" + subsystem + "] ";
     return std::cout << levelString(level) << subsystemMsg << std::dec;
