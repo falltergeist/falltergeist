@@ -148,7 +148,7 @@ void Animation::render(bool eggTransparency)
     auto& frame = _animationFrames.at(_currentFrame);
     Point offsetPosition = position() + shift() + frame->offset();
     _animation->trans(_trans);
-    _animation->render(offsetPosition.x(),offsetPosition.y(),_direction,_currentFrame, light());
+    _animation->render(offsetPosition.x(), offsetPosition.y(), _direction, _currentFrame, eggTransparency, light());
 /* TODO: newrender
     auto& frame = _animationFrames.at(_currentFrame);
     Point framePos = frame->position();

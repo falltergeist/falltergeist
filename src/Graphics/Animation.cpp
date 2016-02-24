@@ -101,7 +101,7 @@ Animation::~Animation()
 
 }
 
-void Animation::render(int x, int y, unsigned int direction, unsigned int frame, bool light)
+void Animation::render(int x, int y, unsigned int direction, unsigned int frame, bool transparency, bool light)
 {
     int pos = direction*_stride+frame;
 
