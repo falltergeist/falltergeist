@@ -478,7 +478,7 @@ void Location::render()
     _floor->render();
 
     //render only flat objects first
-
+/*
     for (auto &object: _flatObjects)
     {
         object->render();
@@ -490,7 +490,40 @@ void Location::render()
         object->render();
         object->hexagon()->setInRender(object->inRender());
     }
+*/
+    for (auto hexagon : _hexagonGrid->hexagons())
+    {
+        hexagon->setInRender(false);
+        for (auto object : *hexagon->objects())
+        {
+            if (object->flat())
+            {
+                object->render();
+                if (object->inRender())
+                {
+                    hexagon->setInRender(true);
+                }
+            }
+        }
+    }
 
+    // now render all other objects
+    for (auto hexagon : _hexagonGrid->hexagons())
+    {
+        hexagon->setInRender(false);
+        for (auto object : *hexagon->objects())
+        {
+            if (!object->flat())
+            {
+                object->render();
+                if (object->inRender())
+                {
+                    hexagon->setInRender(true);
+                }
+            }
+        }
+    }
+    
     for (auto &object: _objects)
     {
         object->renderText();
