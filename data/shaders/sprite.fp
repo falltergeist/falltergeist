@@ -10,44 +10,49 @@ out vec4 fragColor;
 void main(void)
 {
 
-    vec3 monitorsPalette[5];
-        monitorsPalette[0] = vec3(0.42, 0.42, 0.43);
-        monitorsPalette[1] = vec3(0.38, 0.40, 0.49);
-        monitorsPalette[2] = vec3(0.34, 0.42, 0.56);
-        monitorsPalette[3] = vec3(0.00, 0.57, 0.63);
-        monitorsPalette[4] = vec3(0.42, 0.73, 1.00);
+    const vec3 monitorsPalette[5] = vec3[](
+            vec3(0.42, 0.42, 0.43),
+            vec3(0.38, 0.40, 0.49),
+            vec3(0.34, 0.42, 0.56),
+            vec3(0.00, 0.57, 0.63),
+            vec3(0.42, 0.73, 1.00)
+        );
 
 
-    vec3 slimePalette[4];
-        slimePalette[0] = vec3(0.00, 0.42, 0.00);
-        slimePalette[1] = vec3(0.04, 0.45, 0.02);
-        slimePalette[2] = vec3(0.10, 0.48, 0.05);
-        slimePalette[3] = vec3(0.16, 0.51, 0.10);
+        const vec3 slimePalette[4] = vec3[] (
+            vec3(0.00, 0.42, 0.00),
+            vec3(0.04, 0.45, 0.02),
+            vec3(0.10, 0.48, 0.05),
+            vec3(0.16, 0.51, 0.10)
+        );
 
 
-    vec3 shorePalette[6];
-        shorePalette[0] = vec3(0.32, 0.24, 0.16);
-        shorePalette[1] = vec3(0.29, 0.23, 0.16);
-        shorePalette[2] = vec3(0.26, 0.21, 0.15);
-        shorePalette[3] = vec3(0.24, 0.20, 0.15);
-        shorePalette[4] = vec3(0.21, 0.18, 0.14);
-        shorePalette[5] = vec3(0.20, 0.16, 0.14);
+        const vec3 shorePalette[6] = vec3[] (
+            vec3(0.32, 0.24, 0.16),
+            vec3(0.29, 0.23, 0.16),
+            vec3(0.26, 0.21, 0.15),
+            vec3(0.24, 0.20, 0.15),
+            vec3(0.21, 0.18, 0.14),
+            vec3(0.20, 0.16, 0.14)
+        );
 
 
-    vec3 fireSlowPalette[5];
-        fireSlowPalette[0] = vec3(1.0, 0.0, 0.0);
-        fireSlowPalette[1] = vec3(0.84, 0.0, 0.0);
-        fireSlowPalette[2] = vec3(0.57, 0.16, 0.04);
-        fireSlowPalette[3] = vec3(1.0, 0.46, 0.0);
-        fireSlowPalette[4] = vec3(1.0, 0.23, 0.0);
+        const vec3 fireSlowPalette[5] = vec3[] (
+            vec3(1.00, 0.00, 0.00),
+            vec3(0.84, 0.00, 0.00),
+            vec3(0.57, 0.16, 0.04),
+            vec3(1.00, 0.46, 0.00),
+            vec3(1.00, 0.23, 0.00)
+        );
 
 
-    vec3 fireFastPalette[5];
-        fireFastPalette[0] = vec3(0.27, 0.0, 0.0);
-        fireFastPalette[1] = vec3(0.48, 0.0, 0.0);
-        fireFastPalette[2] = vec3(0.70, 0.0, 0.0);
-        fireFastPalette[3] = vec3(0.48, 0.0, 0.0);
-        fireFastPalette[4] = vec3(0.27, 0.0, 0.0);
+        const vec3 fireFastPalette[5] = vec3[] (
+            vec3(0.27, 0.0, 0.0),
+            vec3(0.48, 0.0, 0.0),
+            vec3(0.70, 0.0, 0.0),
+            vec3(0.48, 0.0, 0.0),
+            vec3(0.27, 0.0, 0.0)
+        );
 
     vec4 origColor = texture(tex, UV);
 
