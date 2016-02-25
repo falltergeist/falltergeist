@@ -45,11 +45,11 @@ public:
     Texture(SDL_Surface* surface);
     ~Texture();
 
-    unsigned int width();
-    unsigned int height();
+    unsigned int width() const;
+    unsigned int height() const;
 
-    unsigned int textureWidth();
-    unsigned int textureHeight();
+    unsigned int textureWidth() const;
+    unsigned int textureHeight() const;
 
     void loadFromSurface(SDL_Surface* surface);
     void loadFromRGB(unsigned int* data);

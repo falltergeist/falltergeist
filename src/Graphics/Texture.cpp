@@ -69,22 +69,22 @@ Texture::~Texture()
     }
 }
 
-unsigned int Texture::width()
+unsigned int Texture::width() const
 {
     return _width;
 }
 
-unsigned int Texture::height()
+unsigned int Texture::height() const
 {
     return _height;
 }
 
-unsigned int Texture::textureWidth()
+unsigned int Texture::textureWidth() const
 {
     return _textureWidth;
 }
 
-unsigned int Texture::textureHeight()
+unsigned int Texture::textureHeight() const
 {
     return _textureHeight;
 }
