@@ -143,9 +143,7 @@ namespace Falltergeist {
         }
 
         GLint Shader::getUniform(const std::string &uniform) const {
-            auto it = _uniforms.find(uniform);
-
-            if (it == _uniforms.end()) {
+            if (!_uniforms.count(uniform)) {
                 GLint loc = glGetUniformLocation(_progId, uniform.c_str());
                 if (loc == -1)
                     Logger::warning("RENDERER") << "Attention: uniform '" << uniform << "' does not exist in " << _progId << std::endl;
@@ -153,13 +151,11 @@ namespace Falltergeist {
                 _uniforms[uniform] = loc;
                 return loc;
             }
-            else return it->second;
+            else return _uniforms.at(uniform);
         }
 
         GLint Shader::getAttrib(const std::string &attrib) const {
-            auto it = _attribs.find(attrib);
-
-            if (it == _attribs.end()) {
+            if (!_attribs.count(attrib)) {
                 GLint loc = glGetAttribLocation(_progId, attrib.c_str());
                 if (loc == -1)
                     Logger::warning("RENDERER") << "Attention: attrib '" << attrib << "' does not exist in " << _progId << std::endl;
@@ -168,7 +164,7 @@ namespace Falltergeist {
                 _attribs[attrib] = loc;
                 return loc;
             }
-            else return it->second;
+            else return _attribs.at(attrib);
         }
 
         void Shader::setUniform(const std::string &uniform, int i) {
