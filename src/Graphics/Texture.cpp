@@ -46,14 +46,15 @@ int NearestPowerOf2(int n) {
     return x;
 }
 
-Texture::Texture(unsigned int width, unsigned int height)
+Texture::Texture(unsigned int width, unsigned int height) : _size(width, height)
 {
     _width = width;
     _height = height;
+
     glGenTextures(1, &_textureID);
 }
 
-Texture::Texture(SDL_Surface* surface)
+Texture::Texture(SDL_Surface* surface): _size(surface->w, surface->h)
 {
     _width = surface->w;
     _height = surface->h;
@@ -89,6 +90,9 @@ unsigned int Texture::textureHeight() const
     return _textureHeight;
 }
 
+Size Texture::size() const {
+    return _size;
+}
 
 void Texture::loadFromSurface(SDL_Surface* surface)
 {

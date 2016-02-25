@@ -44,6 +44,7 @@ public:
                        bool light = false);
     unsigned int width() const;
     unsigned int height() const;
+    Size size() const;
     bool opaque(unsigned int x, unsigned int y);
     void trans(Falltergeist::TransFlags::Trans _trans);
 

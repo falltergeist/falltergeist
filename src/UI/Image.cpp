@@ -67,9 +67,10 @@ Image::Image(Format::Frm::File *frm, unsigned int direction) : Falltergeist::UI:
 
 Size Image::size() const
 {
-    int w = _sprite.width();
-    int h = _sprite.height();
-    return Size(w,h);
+//    int w = _sprite.width();
+//    int h = _sprite.height();
+//    return Size(w,h);
+    return _sprite.size();
 }
 
 

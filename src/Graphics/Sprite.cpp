@@ -53,6 +53,9 @@ Sprite::Sprite(Format::Frm::File *frm) : Sprite(frm->filename())
 
 }
 
+Size Sprite::size() const {
+    return _texture->size();
+}
 
 unsigned int Sprite::width() const
 {

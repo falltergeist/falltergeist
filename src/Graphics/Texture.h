@@ -23,6 +23,7 @@
 // C++ standard includes
 #include <memory>
 #include <vector>
+#include <Point.h>
 
 // Falltergeist includes
 
@@ -61,10 +62,13 @@ public:
     bool opaque(unsigned int x, unsigned int y);
     void setMask(std::vector<bool> mask);
 
+    Size size() const;
+
 protected:
     GLuint _textureID;
     unsigned int _width = 0;
     unsigned int _height = 0;
+    Size _size;
 
     unsigned int _textureWidth = 0;
     unsigned int _textureHeight = 0;
