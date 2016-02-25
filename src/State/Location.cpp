@@ -326,13 +326,13 @@ void Location::setLocation(const std::string& name)
             unsigned int tileNum = mapFile->elevations()->at(_currentElevation)->floorTiles()->at(i);
             if (tileNum > 1)
             {
-                _floor->tiles().push_back(make_unique<UI::Tile>(tileNum, Point(x, y)));
+                _floor->tiles()[i] = make_unique<UI::Tile>(tileNum, Point(x, y));
             }
 
             tileNum = mapFile->elevations()->at(_currentElevation)->roofTiles()->at(i);
             if (tileNum > 1)
             {
-                _roof->tiles().push_back(make_unique<UI::Tile>(tileNum, Point(x, y - 104)));
+                _roof->tiles()[i] = make_unique<UI::Tile>(tileNum, Point(x, y - 104));
             }
         }
         _floor->init();
@@ -529,7 +529,7 @@ void Location::render()
         object->renderText();
     }
 
-    //_roof->render();
+    _roof->render();
     if (active())
     {
         _hexagonInfo->render();
@@ -1010,6 +1010,28 @@ void Location::moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool 
                     _robjects.push_back(object);
                 }
             }
+        }
+    }
+
+    if (auto dude = dynamic_cast<Game::DudeObject*>(object))
+    {
+        int x = dude->hexagon()->number() % 200;
+        int y = dude->hexagon()->number() / 200;
+        x /= 2;
+        y /= 2;
+        int tilenum = y*100+x;
+
+        if (!_roof->inside() && _roof->tiles().count(tilenum))
+        {
+            // we was outside, now are inside
+            _roof->disable(tilenum);
+            _roof->setInside(true);
+        }
+        else if(_roof->inside() && !_roof->tiles().count(tilenum))
+        {
+            // we was inside, now are outside
+            _roof->enableAll();
+            _roof->setInside(false);
         }
     }
 }

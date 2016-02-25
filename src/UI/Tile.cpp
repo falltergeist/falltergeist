@@ -34,7 +34,7 @@ namespace Falltergeist
 namespace UI
 {
 
-Tile::Tile(unsigned int number, const Point& pos)
+Tile::Tile(unsigned int number, const Point &pos)
 {
     _number = number;
     _position = pos;
@@ -74,5 +74,6 @@ bool Tile::enabled()
 {
     return _enabled;
 }
+
 }
 }

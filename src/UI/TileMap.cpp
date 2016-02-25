@@ -66,8 +66,9 @@ void TileMap::init()
 
     Logger::info("GAME") << "Tilemap tiles " << _tiles.size() << std::endl;
 
-    for (auto& tile : _tiles)
+    for (auto& it : _tiles)
     {
+        auto& tile = it.second;
 
 
 
@@ -91,8 +92,9 @@ void TileMap::init()
 
     }
 
-    for (auto& tile : _tiles)
+    for (auto& it : _tiles)
     {
+        auto& tile = it.second;
         // push vertices
         float vx = tile->position().x();
         float vy = tile->position().y();
@@ -161,11 +163,6 @@ TileMap::~TileMap()
 {
 }
 
-std::vector<std::unique_ptr<Tile>>& TileMap::tiles()
-{
-    return _tiles;
-}
-
 void TileMap::render()
 {
     auto camera = Game::getInstance()->locationState()->camera();
@@ -176,8 +173,9 @@ void TileMap::render()
     }
     int cnt=0;
 
-    for (auto& tile : _tiles)
+    for (auto& it : _tiles)
     {
+        auto& tile = it.second;
         const Size tileSize = Size(80, 36);
         if (tile->enabled() && Rect::intersects(tile->position(), tileSize, camera->topLeft(), camera->size()))
         {
@@ -199,6 +197,51 @@ void TileMap::render()
 
     }
 
+}
+
+void TileMap::setInside(bool inside)
+{
+    _inside = inside;
+}
+
+bool TileMap::inside()
+{
+    return _inside;
+}
+
+void TileMap::enableAll()
+{
+    for (auto& tile: _tiles)
+    {
+        tile.second->enable();
+    }
+
+}
+
+std::map<unsigned int, std::unique_ptr<Tile>> &TileMap::tiles() {
+    return _tiles;
+}
+
+void TileMap::disable(unsigned int num)
+{
+    int x = num % 100;
+    int y = num / 100;
+    _floodDisable(x,y);
+}
+
+void TileMap::_floodDisable(int x, int y)
+{
+    // TODO: this is basic 4-way floodfill
+    // maybe better replace it with scanlines or QuickFill
+    int num = y*100+x;
+    if (_tiles.count(num) && _tiles.at(num)->enabled())
+    {
+        _tiles.at(num)->disable();
+        _floodDisable(x+1,y);
+        _floodDisable(x-1,y);
+        _floodDisable(x,y+1);
+        _floodDisable(x,y-1);
+    }
 }
 
 }

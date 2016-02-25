@@ -41,7 +41,7 @@ namespace UI
 class Tile
 {
 public:
-    Tile(unsigned int number, const Point& pos = Point());
+    Tile(unsigned int number, const Point &pos);
 
     unsigned int number() const;
 
@@ -52,6 +52,7 @@ public:
     void enable();
     void disable();
     bool enabled();
+
 
 protected:
     unsigned int _index = 0;
