@@ -54,6 +54,18 @@ void TextArea::_initBuffers()
     GL_CHECK(glGenBuffers(1, &_ebo));
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
     GL_CHECK(glBindVertexArray(0));
+
+    auto shader = ResourceManager::getInstance()->shader("font");
+
+    _uniformTex = shader->getUniform("tex");
+    _uniformFade = shader->getUniform("fade");
+    _uniformMVP = shader->getUniform("MVP");
+    _uniformOffset = shader->getUniform("offset");
+    _uniformColor = shader->getUniform("color");
+    _uniformOutline = shader->getUniform("outlineColor");
+
+    _attribPos = shader->getAttrib("Position");
+    _attribTex = shader->getAttrib("TexCoord");
 }
 
 TextArea::TextArea(const Point& pos) : Base(pos)
@@ -440,44 +452,46 @@ void TextArea::render(bool eggTransparency)
 
     auto pos = position();
 
-    GL_CHECK(ResourceManager::getInstance()->shader("font")->use());
+    auto shader = ResourceManager::getInstance()->shader("font");
+
+    GL_CHECK(shader->use());
 
     GL_CHECK(font()->texture()->bind(0));
 
-    GL_CHECK(ResourceManager::getInstance()->shader("font")->setUniform("tex",0));
+    GL_CHECK(shader->setUniform(_uniformTex,0));
 
-    GL_CHECK(ResourceManager::getInstance()->shader("font")->setUniform("MVP", Game::getInstance()->renderer()->getMVP()));
-    GL_CHECK(ResourceManager::getInstance()->shader("font")->setUniform("offset", glm::vec2((float)pos.x(), (float(pos.y())) )));
-    GL_CHECK(ResourceManager::getInstance()->shader("font")->setUniform("color", glm::vec4((float)_color.r/255.f, (float)_color.g/255.f, (float)_color.b/255.f, (float)_color.a/255.f)));
-    GL_CHECK(ResourceManager::getInstance()->shader("font")->setUniform("outlineColor", glm::vec4((float)_outlineColor.r/255.f, (float)_outlineColor.g/255.f, (float)_outlineColor.b/255.f, (float)_outlineColor.a/255.f)));
-    GL_CHECK(ResourceManager::getInstance()->shader("font")->setUniform("fade",Game::getInstance()->renderer()->fadeColor()));
+    GL_CHECK(shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
+    GL_CHECK(shader->setUniform(_uniformOffset, glm::vec2((float)pos.x(), (float(pos.y())) )));
+    GL_CHECK(shader->setUniform(_uniformColor, glm::vec4((float)_color.r/255.f, (float)_color.g/255.f, (float)_color.b/255.f, (float)_color.a/255.f)));
+    GL_CHECK(shader->setUniform(_uniformOutline, glm::vec4((float)_outlineColor.r/255.f, (float)_outlineColor.g/255.f, (float)_outlineColor.b/255.f, (float)_outlineColor.a/255.f)));
+    GL_CHECK(shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
 
 
     GL_CHECK(glBindVertexArray(_vao));
 
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coords));
-    GL_CHECK(glVertexAttribPointer(ResourceManager::getInstance()->shader("font")->getAttrib("Position"), 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+    GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoords));
-    GL_CHECK(glVertexAttribPointer(ResourceManager::getInstance()->shader("font")->getAttrib("TexCoord"), 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+    GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
 
-    GL_CHECK(glEnableVertexAttribArray(ResourceManager::getInstance()->shader("font") ->getAttrib("Position")));
-    GL_CHECK(glEnableVertexAttribArray(ResourceManager::getInstance()->shader("font")->getAttrib("TexCoord")));
+    GL_CHECK(glEnableVertexAttribArray(_attribPos));
+    GL_CHECK(glEnableVertexAttribArray(_attribTex));
 
     GL_CHECK(glDrawElements(GL_TRIANGLES, _cnt, GL_UNSIGNED_SHORT, 0 ));
 
-    GL_CHECK(glDisableVertexAttribArray(ResourceManager::getInstance()->shader("font")->getAttrib("Position")));
-    GL_CHECK(glDisableVertexAttribArray(ResourceManager::getInstance()->shader("font")->getAttrib("TexCoord")));
+    GL_CHECK(glDisableVertexAttribArray(_attribPos));
+    GL_CHECK(glDisableVertexAttribArray(_attribTex));
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
     GL_CHECK(glBindVertexArray(0));
 
-    GL_CHECK(ResourceManager::getInstance()->shader("font")->unuse());
+    GL_CHECK(shader->unuse());
     GL_CHECK(font()->texture()->unbind(0));
 
 //    font()->render( pos, _color, _outlineColor);

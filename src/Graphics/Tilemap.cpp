@@ -56,6 +56,18 @@ Tilemap::Tilemap(std::vector<glm::vec2> coords, std::vector<glm::vec2> textureCo
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
     GL_CHECK(glBindVertexArray(0));
 
+    auto shader = ResourceManager::getInstance()->shader("tilemap");
+
+    _uniformTex = shader->getUniform("tex");
+    _uniformFade = shader->getUniform("fade");
+    _uniformMVP = shader->getUniform("MVP");
+    _uniformCnt = shader->getUniform("cnt");
+    _uniformLight = shader->getUniform("global_light");
+    _uniformOffset = shader->getUniform("offset");
+
+    _attribPos = shader->getAttrib("Position");
+    _attribTex = shader->getAttrib("TexCoord");
+
 }
 
 Tilemap::~Tilemap()
@@ -71,59 +83,61 @@ void Tilemap::render(const Point &pos, std::vector<GLuint> indexes, uint32_t atl
 {
     if (indexes.size()<=0) return;
 
-    GL_CHECK(ResourceManager::getInstance()->shader("tilemap")->use());
+    auto shader = ResourceManager::getInstance()->shader("tilemap");
+
+    GL_CHECK(shader->use());
 
     GL_CHECK(_textures.at(atlas).get()->bind(0));
 
-    GL_CHECK(ResourceManager::getInstance()->shader("tilemap")->setUniform("tex",0));
+    GL_CHECK(shader->setUniform(_uniformTex,0));
 
-    GL_CHECK(ResourceManager::getInstance()->shader("tilemap")->setUniform("MVP",
-                                                                          Game::getInstance()->renderer()->getMVP()));
+    GL_CHECK(shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
 
     // set camera offset
-    GL_CHECK(ResourceManager::getInstance()->shader("tilemap")->setUniform("offset", glm::vec2((float)pos.x(), (float)pos.y()) ));
+    GL_CHECK(shader->setUniform(_uniformOffset, glm::vec2((float)pos.x(), (float)pos.y()) ));
 
-    GL_CHECK(ResourceManager::getInstance()->shader("tilemap")->setUniform("fade",Game::getInstance()->renderer()->fadeColor()));
+    GL_CHECK(shader->setUniform(_uniformFade,Game::getInstance()->renderer()->fadeColor()));
 
-    GL_CHECK(ResourceManager::getInstance()->shader("tilemap")->setUniform("cnt", Game::getInstance()->animatedPalette()->counters()));
+    GL_CHECK(shader->setUniform(_uniformCnt, Game::getInstance()->animatedPalette()->counters()));
+
     int lightLevel = 100;
     if (auto state = Game::getInstance()->locationState()) {
         lightLevel = state->lightLevel();
     }
-    GL_CHECK(ResourceManager::getInstance()->shader("tilemap")->setUniform("global_light", lightLevel));
+    GL_CHECK(shader->setUniform(_uniformLight, lightLevel));
 
 
     GL_CHECK(glBindVertexArray(_vao));
 
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coords));
-    GL_CHECK(glVertexAttribPointer(ResourceManager::getInstance()->shader("tilemap")->getAttrib("Position"), 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+    GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoords));
 
-    GL_CHECK(glVertexAttribPointer(ResourceManager::getInstance()->shader("tilemap")->getAttrib("TexCoord"), 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+    GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
 
     // update indexes
     GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexes.size() * sizeof(GLuint), &indexes[0], GL_DYNAMIC_DRAW));
 
-    GL_CHECK(glEnableVertexAttribArray(ResourceManager::getInstance()->shader("tilemap")->getAttrib("Position")));
+    GL_CHECK(glEnableVertexAttribArray(_attribPos));
 
-    GL_CHECK(glEnableVertexAttribArray(ResourceManager::getInstance()->shader("tilemap")->getAttrib("TexCoord")));
+    GL_CHECK(glEnableVertexAttribArray(_attribTex));
 
     GL_CHECK(glDrawElements(GL_TRIANGLES, indexes.size(), GL_UNSIGNED_INT, 0 ));
 
-    GL_CHECK(glDisableVertexAttribArray(ResourceManager::getInstance()->shader("tilemap")->getAttrib("Position")));
+    GL_CHECK(glDisableVertexAttribArray(_attribPos));
 
-    GL_CHECK(glDisableVertexAttribArray(ResourceManager::getInstance()->shader("tilemap")->getAttrib("TexCoord")));
+    GL_CHECK(glDisableVertexAttribArray(_attribTex));
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
     GL_CHECK(glBindVertexArray(0));
 
-    GL_CHECK(ResourceManager::getInstance()->shader("tilemap")->unuse());
+    GL_CHECK(shader->unuse());
     GL_CHECK(_textures.at(atlas).get()->unbind(0));
 }
 

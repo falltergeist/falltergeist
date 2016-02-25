@@ -43,6 +43,16 @@ private:
     GLuint _texCoords;
     GLuint _ebo;
     std::vector<std::unique_ptr<Texture>> _textures;
+
+    GLint _uniformTex;
+    GLint _uniformFade;
+    GLint _uniformMVP;
+    GLint _uniformCnt;
+    GLint _uniformLight;
+    GLint _uniformOffset;
+
+    GLint _attribPos;
+    GLint _attribTex;
 };
 
 }

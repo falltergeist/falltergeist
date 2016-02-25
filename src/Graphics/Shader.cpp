@@ -208,6 +208,47 @@ namespace Falltergeist {
             glUniformMatrix4fv(getUniform(uniform), 1, GL_FALSE, glm::value_ptr(mat));
         }
 
+    void Shader::setUniform(const GLint &uniform, int i) {
+        glUniform1i((uniform), i);
+    }
+
+    void Shader::setUniform(const GLint &uniform, float x) {
+        glUniform1f((uniform), x);
+    }
+
+    void Shader::setUniform(const GLint &uniform, float x, float y) {
+        glUniform2f((uniform), x, y);
+    }
+
+    void Shader::setUniform(const GLint &uniform, float x, float y, float z) {
+        glUniform3f((uniform), x, y, z);
+    }
+
+    void Shader::setUniform(const GLint &uniform, float x, float y, float z, float w) {
+        glUniform4f((uniform), x, y, z, w);
+    }
+
+    void Shader::setUniform(const GLint &uniform, const glm::vec2 &vec) {
+        glUniform2fv((uniform), 1, glm::value_ptr(vec));
+    }
+
+
+    void Shader::setUniform(const GLint &uniform, const glm::vec3 &vec) {
+        glUniform3fv((uniform), 1, glm::value_ptr(vec));
+    }
+
+    void Shader::setUniform(const GLint &uniform, std::vector<GLuint> vec) {
+        glUniform1iv((uniform), vec.size(), (const int*)&vec[0]);
+    }
+
+    void Shader::setUniform(const GLint &uniform, const glm::vec4 &vec) {
+        glUniform4fv((uniform), 1, glm::value_ptr(vec));
+    }
+
+    void Shader::setUniform(const GLint &uniform, const glm::mat4 &mat) {
+        glUniformMatrix4fv((uniform), 1, GL_FALSE, glm::value_ptr(mat));
+    }
+
 
     }
 }

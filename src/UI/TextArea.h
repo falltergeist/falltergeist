@@ -339,6 +339,16 @@ protected:
     void _initBuffers();
     void _updateBuffers();
 
+    GLint _uniformTex;
+    GLint _uniformFade;
+    GLint _uniformMVP;
+    GLint _uniformOffset;
+    GLint _uniformColor;
+    GLint _uniformOutline;
+
+    GLint _attribPos;
+    GLint _attribTex;
+
 };
 
 }

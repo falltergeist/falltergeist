@@ -34,7 +34,25 @@ namespace Graphics
 Sprite::Sprite(const std::string& fname)
 {
   _texture = ResourceManager::getInstance()->texture(fname);
+
+    auto shader = ResourceManager::getInstance()->shader("sprite");
+
+    _uniformTex = shader->getUniform("tex");
+    _uniformFade = shader->getUniform("fade");
+    _uniformMVP = shader->getUniform("MVP");
+    _uniformCnt = shader->getUniform("cnt");
+    _uniformLight = shader->getUniform("global_light");
+    _uniformTrans = shader->getUniform("trans");
+
+    _attribPos = shader->getAttrib("Position");
+    _attribTex = shader->getAttrib("TexCoord");
 }
+
+Sprite::Sprite(Format::Frm::File *frm) : Sprite(frm->filename())
+{
+
+}
+
 
 unsigned int Sprite::width() const
 {
@@ -81,13 +99,14 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
 
     GL_CHECK(_texture->bind(0));
 
-    GL_CHECK(shader->setUniform("tex",0));
+    GL_CHECK(shader->setUniform(_uniformTex,0));
 
-    GL_CHECK(shader->setUniform("fade", Game::getInstance()->renderer()->fadeColor()));
 
-    GL_CHECK(shader->setUniform("MVP", Game::getInstance()->renderer()->getMVP()));
+    GL_CHECK(shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
 
-    GL_CHECK(shader->setUniform("cnt", Game::getInstance()->animatedPalette()->counters()));
+    GL_CHECK(shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
+
+    GL_CHECK(shader->setUniform(_uniformCnt, Game::getInstance()->animatedPalette()->counters()));
 
     int lightLevel = 100;
     if (light)
@@ -97,11 +116,9 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
             lightLevel = state->lightLevel();
         }
     }
-    GL_CHECK(shader->setUniform("global_light", lightLevel));
-    GL_CHECK(shader->setUniform("trans", _trans));
+    GL_CHECK(shader->setUniform(_uniformLight, lightLevel));
+    GL_CHECK(shader->setUniform(_uniformTrans, _trans));
 
-    GLint posAttrib = shader->getAttrib("Position");
-    GLint texAttrib = shader->getAttrib("TexCoord");
 
     GL_CHECK(glBindVertexArray(Game::getInstance()->renderer()->getVAO()));
 
@@ -110,26 +127,26 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
 
     GL_CHECK(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec2), &vertices[0], GL_DYNAMIC_DRAW));
 
-    GL_CHECK(glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+    GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getTVBO()));
 
     GL_CHECK(glBufferData(GL_ARRAY_BUFFER, UV.size() * sizeof(glm::vec2), &UV[0], GL_DYNAMIC_DRAW));
 
-    GL_CHECK(glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+    GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Game::getInstance()->renderer()->getEBO()));
 
-    GL_CHECK(glEnableVertexAttribArray(posAttrib));
+    GL_CHECK(glEnableVertexAttribArray(_attribPos));
 
-    GL_CHECK(glEnableVertexAttribArray(texAttrib));
+    GL_CHECK(glEnableVertexAttribArray(_attribTex));
 
     GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0 ));
 
-    GL_CHECK(glDisableVertexAttribArray(posAttrib));
+    GL_CHECK(glDisableVertexAttribArray(_attribPos));
 
-    GL_CHECK(glDisableVertexAttribArray(texAttrib));
+    GL_CHECK(glDisableVertexAttribArray(_attribTex));
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
@@ -171,20 +188,19 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
     UV.push_back(uv_up_right  );
     UV.push_back(uv_down_right);
 
-    std::string _shader = "sprite";
+    auto shader = ResourceManager::getInstance()->shader("sprite");
 
-    GL_CHECK(ResourceManager::getInstance()->shader(_shader)->use());
+    GL_CHECK(shader->use());
 
     GL_CHECK(_texture->bind(0));
 
-    GL_CHECK(ResourceManager::getInstance()->shader(_shader)->setUniform("tex",0));
+    GL_CHECK(shader->setUniform(_uniformTex, 0));
 
-    GL_CHECK(ResourceManager::getInstance()->shader(_shader)->setUniform("fade",Game::getInstance()->renderer()->fadeColor()));
+    GL_CHECK(shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
 
-    GL_CHECK(ResourceManager::getInstance()->shader(_shader)->setUniform("MVP",
-                                                                          Game::getInstance()->renderer()->getMVP()));
+    GL_CHECK(shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
 
-    GL_CHECK(ResourceManager::getInstance()->shader(_shader)->setUniform("cnt", Game::getInstance()->animatedPalette()->counters()));
+    GL_CHECK(shader->setUniform(_uniformCnt, Game::getInstance()->animatedPalette()->counters()));
 
     int lightLevel = 100;
     if (light)
@@ -194,9 +210,9 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
             lightLevel = state->lightLevel();
         }
     }
-    GL_CHECK(ResourceManager::getInstance()->shader(_shader)->setUniform("global_light", lightLevel));
+    GL_CHECK(shader->setUniform(_uniformLight, lightLevel));
 
-    GL_CHECK(ResourceManager::getInstance()->shader(_shader)->setUniform("trans", _trans));
+    GL_CHECK(shader->setUniform(_uniformTrans, _trans));
 
 
     GL_CHECK(glBindVertexArray(Game::getInstance()->renderer()->getVAO()));
@@ -206,38 +222,33 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
 
     GL_CHECK(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec2), &vertices[0], GL_DYNAMIC_DRAW));
 
-    GL_CHECK(glVertexAttribPointer(ResourceManager::getInstance()->shader(_shader)->getAttrib("Position"), 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+    GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getTVBO()));
 
     GL_CHECK(glBufferData(GL_ARRAY_BUFFER, UV.size() * sizeof(glm::vec2), &UV[0], GL_DYNAMIC_DRAW));
 
-    GL_CHECK(glVertexAttribPointer(ResourceManager::getInstance()->shader(_shader)->getAttrib("TexCoord"), 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+    GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Game::getInstance()->renderer()->getEBO()));
 
-    GL_CHECK(glEnableVertexAttribArray(ResourceManager::getInstance()->shader(_shader)->getAttrib("Position")));
+    GL_CHECK(glEnableVertexAttribArray(_attribPos));
 
-    GL_CHECK(glEnableVertexAttribArray(ResourceManager::getInstance()->shader(_shader)->getAttrib("TexCoord")));
+    GL_CHECK(glEnableVertexAttribArray(_attribTex));
 
     GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0 ));
 
-    GL_CHECK(glDisableVertexAttribArray(ResourceManager::getInstance()->shader(_shader)->getAttrib("Position")));
+    GL_CHECK(glDisableVertexAttribArray(_attribPos));
 
-    GL_CHECK(glDisableVertexAttribArray(ResourceManager::getInstance()->shader(_shader)->getAttrib("TexCoord")));
+    GL_CHECK(glDisableVertexAttribArray(_attribTex));
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
     GL_CHECK(glBindVertexArray(0));
 
-    GL_CHECK(ResourceManager::getInstance()->shader(_shader)->unuse());
+    GL_CHECK(shader->unuse());
     GL_CHECK(_texture->unbind(0));
-}
-
-Sprite::Sprite(Format::Frm::File *frm)
-{
-    _texture = ResourceManager::getInstance()->texture(frm->filename());
 }
 
 bool Sprite::opaque(unsigned int x, unsigned int y)

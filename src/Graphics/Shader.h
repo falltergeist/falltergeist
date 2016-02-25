@@ -79,6 +79,25 @@ namespace Falltergeist {
 
             void setUniform(const std::string &uniform, const glm::mat4 &mat);
 
+            void setUniform(const GLint &uniform, int i);
+
+            void setUniform(const GLint &uniform, float x);
+
+            void setUniform(const GLint &uniform, float x, float y);
+
+            void setUniform(const GLint &uniform, float x, float y, float z);
+
+            void setUniform(const GLint &uniform, float x, float y, float z, float w);
+
+            void setUniform(const GLint &uniform, const glm::vec2 &vec);
+
+            void setUniform(const GLint &uniform, const glm::vec3 &vec);
+            void setUniform(const GLint &uniform, std::vector<GLuint> vec);
+
+            void setUniform(const GLint &uniform, const glm::vec4 &vec);
+
+            void setUniform(const GLint &uniform, const glm::mat4 &mat);
+
             GLint getAttrib(const std::string &attrib) const;
 
             GLint getUniform(const std::string &uniform) const;
