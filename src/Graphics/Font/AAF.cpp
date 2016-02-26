@@ -35,10 +35,6 @@ AAF::AAF(const std::string& filename) : Font() {
     unsigned int width = (_aaf->maximumWidth()+2)*16u;
     unsigned int height = (_aaf->maximumHeight()+2)*16u;
 
-    std::string fname = filename+".png";
-    SDL_Surface* tileSurf = SDL_CreateRGBSurfaceFrom(_aaf->rgba(), width, height, 32, width*4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
-    IMG_SavePNG(tileSurf, fname.c_str());
-    SDL_FreeSurface(tileSurf);
     _texture = make_unique<Graphics::Texture>(width, height);
     _texture->loadFromRGBA(_aaf->rgba());
 
