@@ -38,9 +38,9 @@
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../UI/AnimationFrame.h"
+#include "Base.h"
 
 // Third party includes
-#include <SDL.h>
 
 namespace Falltergeist
 {
@@ -148,7 +148,8 @@ void Animation::render(bool eggTransparency)
     auto& frame = _animationFrames.at(_currentFrame);
     Point offsetPosition = position() + shift() + frame->offset();
     _animation->trans(_trans);
-    _animation->render(offsetPosition.x(), offsetPosition.y(), _direction, _currentFrame, eggTransparency, light());
+    _animation->render(offsetPosition.x(), offsetPosition.y(), _direction, _currentFrame, eggTransparency, light(),
+                       _outline);
 /* TODO: newrender
     auto& frame = _animationFrames.at(_currentFrame);
     Point framePos = frame->position();
@@ -215,20 +216,6 @@ void Animation::setShift(const Point& value)
 {
     _shift = value;
 }
-
-/* TODO: newrender
-unsigned int Animation::pixel(const Point& pos)
-{
-    const auto& frame = _animationFrames.at(_currentFrame);
-
-    Point offsetPos = pos - offset();
-    if (!Rect::inRect(offsetPos, frame->size()))
-    {
-        return 0;
-    }
-    return Base::pixel(offsetPos + frame->position());
-}
-*/
 
 void Animation::play()
 {
@@ -324,5 +311,6 @@ bool Animation::opaque(const Point &pos) {
     offsetPos +=frame->position();
     return _animation->opaque(offsetPos.x(),offsetPos.y());
 }
+
 }
 }

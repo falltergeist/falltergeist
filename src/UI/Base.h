@@ -27,6 +27,7 @@
 // Falltergeist includes
 #include "../Event/EventTarget.h"
 #include "../Point.h"
+#include "../UI/Base.h"
 
 // Third party includes
 
@@ -116,6 +117,8 @@ public:
     // sets object translucency mode
     void setTrans(Falltergeist::TransFlags::Trans value);
 
+    void setOutline(int outline);
+
 protected:
     Point _position;
     Point _offset;
@@ -133,6 +136,7 @@ protected:
                         _mouseInHandler, _mouseMoveHandler, _mouseOutHandler,
                         _mouseClickHandler, _mouseDownHandler, _mouseUpHandler;
 
+    int _outline = 0;
 };
 
 }

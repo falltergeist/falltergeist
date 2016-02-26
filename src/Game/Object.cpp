@@ -588,5 +588,27 @@ bool Object::_useEggTransparency()
     return false;
 }
 
+void Object::renderOutline(int type)
+{
+        if (!_ui || !_hexagon) return;
+
+        auto camera = Game::getInstance()->locationState()->camera();
+        _ui->setPosition(
+                hexagon()->position()
+                - camera->topLeft()
+                - Point(_ui->size().width() / 2, _ui->size().height())
+        );
+
+        // don't draw if outside of screen
+        if (!Rect::intersects(_ui->position(), _ui->size(), Point(0, 0), camera->size()))
+        {
+            setInRender(false);
+            return;
+        }
+
+        _ui->setOutline(type);
+        _ui->render(false);
+        _ui->setOutline(0);
+}
 }
 }

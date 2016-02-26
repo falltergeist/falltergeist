@@ -104,6 +104,7 @@ Animation::Animation(const std::string &filename)
     _uniformLight = shader->getUniform("global_light");
     _uniformTrans = shader->getUniform("trans");
     _uniformOffset = shader->getUniform("offset");
+    _uniformOutline = shader->getUniform("outline");
 
     _attribPos = shader->getAttrib("Position");
     _attribTex = shader->getAttrib("TexCoord");
@@ -114,7 +115,7 @@ Animation::~Animation()
 
 }
 
-void Animation::render(int x, int y, unsigned int direction, unsigned int frame, bool transparency, bool light)
+void Animation::render(int x, int y, unsigned int direction, unsigned int frame, bool transparency, bool light, int outline)
 {
     int pos = direction*_stride+frame;
 
@@ -146,6 +147,7 @@ void Animation::render(int x, int y, unsigned int direction, unsigned int frame,
     GL_CHECK(shader->setUniform(_uniformLight, lightLevel));
 
     GL_CHECK(shader->setUniform(_uniformTrans, _trans));
+    GL_CHECK(shader->setUniform(_uniformOutline, outline));
 
 
 

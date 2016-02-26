@@ -18,6 +18,7 @@
  */
 
 // Related headers
+#include "../UI/Animation.h"
 #include "../UI/Base.h"
 
 // C++ standard includes
@@ -430,5 +431,12 @@ TransFlags::Trans Base::trans() const {
 void Base::setTrans(TransFlags::Trans value) {
     _trans = value;
 }
+
+void Base::setOutline(int outline)
+{
+    _outline=outline;
+}
+
+
 }
 }

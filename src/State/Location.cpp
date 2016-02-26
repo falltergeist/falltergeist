@@ -530,6 +530,16 @@ void Location::render()
     }
 
     _roof->render();
+
+    // just for testing
+    for (auto &object: _objects)
+    {
+        if (auto critter = dynamic_cast<Game::CritterObject*>(object.get()))
+        {
+            object->renderOutline(1);
+        }
+    }
+
     if (active())
     {
         _hexagonInfo->render();

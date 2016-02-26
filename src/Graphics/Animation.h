@@ -33,7 +33,7 @@ class Animation
 public:
     Animation(const std::string& filename);
     ~Animation();
-    void render(int x, int y, unsigned int direction, unsigned int frame, bool transparency, bool light);
+    void render(int x, int y, unsigned int direction, unsigned int frame, bool transparency = false, bool light = false, int outline = 0);
     bool opaque(unsigned int x, unsigned int y);
     void trans(Falltergeist::TransFlags::Trans _trans);
 private:
@@ -52,6 +52,7 @@ private:
     GLint _uniformLight;
     GLint _uniformTrans;
     GLint _uniformOffset;
+    GLint _uniformOutline;
 
     GLint _attribPos;
     GLint _attribTex;

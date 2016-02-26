@@ -167,6 +167,12 @@ public:
      * This method is called last in the main loop (after handle() and think()).
      */
     virtual void render();
+
+    /**
+    * @brief Render object outline, if it has visible UI elements.
+    */
+    virtual void renderOutline(int type);
+
     /**
      * @brief Render floater text above object, if any.
      */
