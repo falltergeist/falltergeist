@@ -20,11 +20,15 @@
 #include <ResourceManager.h>
 #include <Game/Game.h>
 #include <TransFlags.h>
+#include <iostream>
 #include "Sprite.h"
 #include "Renderer.h"
 #include "Shader.h"
 #include "AnimatedPalette.h"
 #include "../State/Location.h"
+#include "../Game/DudeObject.h"
+#include "../LocationCamera.h"
+#include "../PathFinding/Hexagon.h"
 
 namespace Falltergeist
 {
@@ -38,11 +42,14 @@ Sprite::Sprite(const std::string& fname)
     auto shader = ResourceManager::getInstance()->shader("sprite");
 
     _uniformTex = shader->getUniform("tex");
+    _uniformEggTex = shader->getUniform("eggTex");
     _uniformFade = shader->getUniform("fade");
     _uniformMVP = shader->getUniform("MVP");
     _uniformCnt = shader->getUniform("cnt");
     _uniformLight = shader->getUniform("global_light");
     _uniformTrans = shader->getUniform("trans");
+    _uniformDoEgg = shader->getUniform("doegg");
+    _uniformEggPos = shader->getUniform("eggpos");
 
     _attribPos = shader->getAttrib("Position");
     _attribTex = shader->getAttrib("TexCoord");
@@ -96,13 +103,45 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
     UV.push_back(uv_up_right  );
     UV.push_back(uv_down_right);
 
+    glm::vec2 eggVec;
+    if (transparency)
+    {
+        auto dude = Game::getInstance()->player();
+        if (!dude || !Game::getInstance()->locationState()) {
+            transparency = false;
+        }
+        else {
+            auto camera = Game::getInstance()->locationState()->camera();
+            Point eggPos = dude->hexagon()->position() - camera->topLeft() + dude->eggOffset();
+
+            SDL_Rect egg_rect = {eggPos.x(), eggPos.y(), 129, 98};
+            SDL_Rect tex_rect = {x, y, (int) _texture->width(), (int) _texture->height()};
+
+            if (!SDL_HasIntersection(&egg_rect, &tex_rect)) {
+                transparency = false;
+            }
+            else {
+                eggVec = glm::vec2((float) (eggPos.x()-x), (float) (eggPos.y()-y));
+                //std::cout << eggPos.x() -x << " : " << eggPos.y() - y << std::endl;
+            }
+        }
+    }
+
+
+
     auto shader = ResourceManager::getInstance()->shader("sprite");
 
     GL_CHECK(shader->use());
 
     GL_CHECK(_texture->bind(0));
+    GL_CHECK(Game::getInstance()->renderer()->egg()->bind(1));
 
     GL_CHECK(shader->setUniform(_uniformTex,0));
+    GL_CHECK(shader->setUniform(_uniformEggTex,1));
+
+    GL_CHECK(shader->setUniform(_uniformEggPos, eggVec));
+
+    GL_CHECK(shader->setUniform(_uniformDoEgg, transparency));
 
 
     GL_CHECK(shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
@@ -157,6 +196,8 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
 
     GL_CHECK(shader->unuse());
     GL_CHECK(_texture->unbind(0));
+    GL_CHECK(Game::getInstance()->renderer()->egg()->unbind(1));
+
 }
 
 void Sprite::render(int x, int y, bool transparency, bool light)
@@ -191,13 +232,42 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
     UV.push_back(uv_up_right  );
     UV.push_back(uv_down_right);
 
+    glm::vec2 eggVec;
+    if (transparency)
+    {
+        auto dude = Game::getInstance()->player();
+        if (!dude || !Game::getInstance()->locationState()) {
+            transparency = false;
+        }
+        else {
+            auto camera = Game::getInstance()->locationState()->camera();
+            Point eggPos = dude->hexagon()->position() - camera->topLeft() + dude->eggOffset();
+
+            SDL_Rect egg_rect = {eggPos.x(), eggPos.y(), 129, 98};
+            SDL_Rect tex_rect = {x, y, (int) _texture->width(), (int) _texture->height()};
+
+            if (!SDL_HasIntersection(&egg_rect, &tex_rect))
+            {
+                transparency = false;
+            }
+            else
+            {
+                eggVec = glm::vec2((float) (eggPos.x() - x), (float) (eggPos.y() - y));
+                std::cout << eggPos.x() -x << " : " << eggPos.y() - y << std::endl;
+            }
+        }
+
+    }
+
     auto shader = ResourceManager::getInstance()->shader("sprite");
 
     GL_CHECK(shader->use());
 
     GL_CHECK(_texture->bind(0));
+    GL_CHECK(Game::getInstance()->renderer()->egg()->bind(1));
 
     GL_CHECK(shader->setUniform(_uniformTex, 0));
+    GL_CHECK(shader->setUniform(_uniformEggTex, 1));
 
     GL_CHECK(shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
 
@@ -216,6 +286,10 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
     GL_CHECK(shader->setUniform(_uniformLight, lightLevel));
 
     GL_CHECK(shader->setUniform(_uniformTrans, _trans));
+
+    GL_CHECK(shader->setUniform(_uniformEggPos, eggVec));
+
+    GL_CHECK(shader->setUniform(_uniformDoEgg, transparency));
 
 
     GL_CHECK(glBindVertexArray(Game::getInstance()->renderer()->getVAO()));
@@ -252,6 +326,7 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
 
     GL_CHECK(shader->unuse());
     GL_CHECK(_texture->unbind(0));
+    GL_CHECK(Game::getInstance()->renderer()->egg()->unbind(1));
 }
 
 bool Sprite::opaque(unsigned int x, unsigned int y)

@@ -198,6 +198,9 @@ void Renderer::init()
     // generate projection matrix
     _MVP = glm::ortho(0.0, (double)_size.width(), (double)_size.height(), 0.0, -1.0, 1.0);
 
+    // load egg
+
+    _egg = ResourceManager::getInstance()->texture("data/egg.png");
 
 
 }
@@ -467,6 +470,10 @@ int32_t Renderer::maxTextureSize()
 {
     return 1024;
     return _maxTexSize;
+}
+
+Texture *Renderer::egg() {
+    return _egg;
 }
 }
 }

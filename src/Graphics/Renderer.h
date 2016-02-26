@@ -27,6 +27,7 @@
 
 // Falltergeist includes
 #include "../Point.h"
+#include "Texture.h"
 
 // Third party includes
 #define GL_GLEXT_PROTOTYPES
@@ -100,6 +101,8 @@ public:
 
     int32_t maxTextureSize();
 
+    Texture* egg();
+
 protected:
     Size _size;
 
@@ -125,6 +128,8 @@ protected:
     GLint _major;
     GLint _minor;
     int32_t _maxTexSize;
+
+    Texture* _egg;
 
 };
 

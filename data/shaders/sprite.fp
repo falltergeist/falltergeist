@@ -1,9 +1,14 @@
 #version 330
+#extension GL_EXT_gpu_shader4 : enable
+
 uniform sampler2D tex;
+uniform sampler2D eggTex;
 uniform vec4 fade;
 uniform int cnt[6];
 uniform int global_light;
 uniform int trans;
+uniform bool doegg;
+uniform vec2 eggpos;
 in vec2 UV;
 out vec4 fragColor;
 
@@ -154,4 +159,24 @@ void main(void)
 
     fragColor = mix(origColor, fade, fade.a);
     fragColor.a = origColor.a;
+
+    if (doegg)
+    {
+        ivec2 size = textureSize2D(tex,0);
+
+        ivec2 pixelpos = ivec2(UV.x*size.x, UV.y*size.y );
+
+        pixelpos = pixelpos-ivec2(eggpos);
+
+
+        if (pixelpos.x>=0 && pixelpos.x<129 && pixelpos.y>=0 && pixelpos.y<98)
+        {
+            vec4 pixel2 = texelFetch2D(eggTex, pixelpos, 0);
+
+            if (pixel2.a < fragColor.a)
+            {
+                fragColor.a = pixel2.a;
+            }
+        }
+    }
 }

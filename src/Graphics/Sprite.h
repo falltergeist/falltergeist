@@ -53,11 +53,14 @@ private:
     Falltergeist::TransFlags::Trans _trans = Falltergeist::TransFlags::Trans::NONE;
 
     GLint _uniformTex;
+    GLint _uniformEggTex;
     GLint _uniformFade;
     GLint _uniformMVP;
     GLint _uniformCnt;
     GLint _uniformLight;
     GLint _uniformTrans;
+    GLint _uniformDoEgg;
+    GLint _uniformEggPos;
 
     GLint _attribPos;
     GLint _attribTex;
