@@ -105,8 +105,6 @@ void WorldMap::init()
         mapMinX = (renderWidth - 640)/2 + 22;
         mapMinY = (renderHeight - 480)/2 + 21;
     }
-    // TODO: newrender _screenMap = new UI::Image (mapWidth, mapHeight);
-    //_screenMap->setPosition(Point(mapMinX, mapMinY));
 }
 
 void WorldMap::render()
@@ -162,11 +160,11 @@ void WorldMap::render()
                 (((deltaY<=worldTileMinY) && (worldTileMinY<=deltaY+(signed int)mapHeight)) ||
                 ((deltaY<=worldTileMinY+(signed int)tileHeight) && (worldTileMinY+(signed int)tileHeight<=deltaY+(signed int)mapHeight))) )
             {
-// TODO: newrender                _tiles->texture()->copyTo(_screenMap->texture(), x*tileWidth-deltaX, y*tileHeight-deltaY, 0, 0, tileWidth, tileHeight);
+                _tiles->images().at(y*tilesNumberX+x)->setPosition(Point(x*tileWidth-deltaX, y*tileHeight-deltaY));
+                _tiles->images().at(y*tilesNumberX+x)->render();
             }
         }
     }
-    _screenMap->render();
 
     // hostpot show
     _hotspot->setPosition(Point(mapMinX + worldMapX - deltaX, mapMinY + worldMapY - deltaY));
