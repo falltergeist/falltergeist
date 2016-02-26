@@ -609,25 +609,25 @@ void TextArea::_updateBuffers()
     auto tex = font()->texture();
     for ( auto symbol: _symbols )
     {
-        float textureX = (symbol.chr%16) * font()->width();
-        float textureY = (symbol.chr/16) * font()->height();
+        float textureX = (symbol.chr%16) * font()->width()+(symbol.chr%16)*2+1;
+        float textureY = (symbol.chr/16) * font()->height()+(symbol.chr/16)*2+1;
 
         Point drawPos = symbol.position;
 
-        glm::vec2 vertex_up_left    = glm::vec2( (float)drawPos.x(), (float)drawPos.y() );
-        glm::vec2 vertex_up_right   = glm::vec2( (float)drawPos.x()+(float)font()->width(), (float)drawPos.y() );
-        glm::vec2 vertex_down_left  = glm::vec2( (float)drawPos.x(), (float)drawPos.y()+(float)font()->height() );
-        glm::vec2 vertex_down_right = glm::vec2( (float)drawPos.x()+(float)font()->width(), (float)drawPos.y()+(float)font()->height() );
+        glm::vec2 vertex_up_left    = glm::vec2( (float)drawPos.x()-1.0, (float)drawPos.y()-1.0 );
+        glm::vec2 vertex_up_right   = glm::vec2( (float)drawPos.x()+(float)font()->width()+1.0, (float)drawPos.y()-1.0 );
+        glm::vec2 vertex_down_left  = glm::vec2( (float)drawPos.x()-1.0, (float)drawPos.y()+(float)font()->height()+1.0 );
+        glm::vec2 vertex_down_right = glm::vec2( (float)drawPos.x()+(float)font()->width()+1.0, (float)drawPos.y()+(float)font()->height()+1.0 );
 
         vertices.push_back(vertex_up_left   );
         vertices.push_back(vertex_up_right  );
         vertices.push_back(vertex_down_left );
         vertices.push_back(vertex_down_right);
 
-        glm::vec2 tex_up_left    = glm::vec2( textureX/(float)tex->textureWidth(), textureY/(float)tex->textureHeight() );
-        glm::vec2 tex_up_right   = glm::vec2( (textureX+(float)font()->width())/(float)tex->textureWidth(), textureY/(float)tex->textureHeight() );
-        glm::vec2 tex_down_left  = glm::vec2( textureX/(float)tex->textureWidth(), (textureY+(float)font()->height())/(float)tex->textureHeight() );
-        glm::vec2 tex_down_right = glm::vec2( (textureX+(float)font()->width())/(float)tex->textureWidth(), (textureY+(float)font()->height())/(float)tex->textureHeight() );
+        glm::vec2 tex_up_left    = glm::vec2( (textureX-1.0)/(float)tex->textureWidth(), (textureY-1.0)/(float)tex->textureHeight() );
+        glm::vec2 tex_up_right   = glm::vec2( (textureX+(float)font()->width()+1.0)/(float)tex->textureWidth(), (textureY-1.0)/(float)tex->textureHeight() );
+        glm::vec2 tex_down_left  = glm::vec2( (textureX-1.0)/(float)tex->textureWidth(), (textureY+(float)font()->height()+1.0)/(float)tex->textureHeight() );
+        glm::vec2 tex_down_right = glm::vec2( (textureX+(float)font()->width()+1.0)/(float)tex->textureWidth(), (textureY+(float)font()->height()+1.0)/(float)tex->textureHeight() );
 
         UV.push_back(tex_up_left   );
         UV.push_back(tex_up_right  );

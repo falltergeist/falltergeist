@@ -90,12 +90,12 @@ void File::_initialize()
 uint32_t *File::rgba()
 {
     if (_rgba) return _rgba;
-    _rgba = new uint32_t[_maximumWidth * _maximumHeight * 256]();
+    _rgba = new uint32_t[(_maximumWidth+2)*16 * (_maximumHeight+2) * 16]();
 
     for (unsigned int i=0; i < _numchars; i++)
     {
-        uint32_t glyphY = (i/16) * _maximumHeight;
-        uint32_t glyphX = (i%16) * _maximumWidth;
+        uint32_t glyphY = (i/16) * _maximumHeight+(i/16)*2+1;
+        uint32_t glyphX = (i%16) * _maximumWidth+(i%16)*2+1;
 
         // Move glyph to bottom
         glyphY += _maximumHeight - _glyphs.at(i)->height();
@@ -114,11 +114,11 @@ uint32_t *File::rgba()
 
                     if (b & (1 << (7 - (x % 8))))
                     {
-                        _rgba[(glyphY + y)*_maximumWidth*16  + glyphX + x] = 0xFFFFFFFF;
+                        _rgba[(glyphY + y)*(_maximumWidth+2)*16  + glyphX + x] = 0xFFFFFFFF;
                     }
                     else
                     {
-                        _rgba[(glyphY + y)*_maximumWidth*16  + glyphX + x] = 0x00000000;
+                        _rgba[(glyphY + y)*(_maximumWidth+2)*16  + glyphX + x] = 0x00000000;
                     }
                 }
             }

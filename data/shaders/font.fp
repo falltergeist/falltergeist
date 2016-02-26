@@ -23,24 +23,18 @@ void main(void)
     vec4 origColor = vec4(color.rgb, c.a);
 
     float ua = 0.0;
-    ua = mix(ua, 1.0, c.a);
-    ua = mix(ua, 1.0, n.a);
-    ua = mix(ua, 1.0, e.a);
-    ua = mix(ua, 1.0, s.a);
-    ua = mix(ua, 1.0, w.a);
+    if (c.a == 0.0 && ( n.a > 0.0 || e.a>0.0 || s.a>0.0 || w.a>0.0))
+    {
+        origColor = outlineColor;
+    }
 
-    vec4 underColor = outlineColor * vec4(ua);
+    //vec4 underColor = outlineColor * vec4(ua);
 
-    fragColor = underColor;
-    fragColor = mix(fragColor, origColor, origColor.a);
+    //origColor = mix(underColor, origColor, origColor.a);
 
-    fragColor = mix(fragColor, fade, fade.a);
+    fragColor = mix(origColor, fade, fade.a);
     fragColor.a = origColor.a;
-//    if (fragColor.a > 0.0)
-//        fragColor.a = 1.0;
 
-//  fragColor = texture(tex, UV);
-//  fragColor = vec4(1.0, 0.0, 0.0, 1.0);
-//  fragColor.g = 0.0;
-//  fragColor.b = 0.0;
+    //if (fragColor.a > 0.0)
+    //    fragColor.a = 1.0;
 }

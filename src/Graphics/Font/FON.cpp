@@ -32,8 +32,8 @@ FON::FON(const std::string& filename) : Font() {
     _filename = filename;
     _fon = ResourceManager::getInstance()->fonFileType(filename);
 
-    unsigned int width = _fon->maximumWidth()*16u;
-    unsigned int height = _fon->maximumHeight()*16u;
+    unsigned int width = (_fon->maximumWidth()+2)*16u;
+    unsigned int height = (_fon->maximumHeight()+2)*16u;
 
 
     _texture = make_unique<Graphics::Texture>(width, height);
