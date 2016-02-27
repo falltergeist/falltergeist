@@ -64,6 +64,12 @@ if(NOT GLEW_FOUND)
 endif(NOT GLEW_FOUND)
 include_directories(${GLEW_INCLUDE_DIR})
 
+find_package(GLM REQUIRED)
+if(NOT GLM_FOUND)
+    message(FATAL_ERROR "GLM library not found")
+endif(NOT GLM_FOUND)
+include_directories(${GLM_INCLUDE_DIRS})
+
 file(GLOB_RECURSE SOURCES  src/*.cpp)
 
 add_definitions (-std=c++11 -Wall)
