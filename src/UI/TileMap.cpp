@@ -248,14 +248,22 @@ void TileMap::_floodDisable(int x, int y)
 bool TileMap::opaque(const Point &pos)
 {
     auto camera = Game::getInstance()->locationState()->camera();
+
+
+    auto tilesLst = ResourceManager::getInstance()->lstFileType("art/tiles/tiles.lst");
     for (auto& it : _tiles)
     {
         auto& tile = it.second;
         const Size tileSize = Size(80, 36);
         if (tile->enabled() && Rect::inRect(pos+camera->topLeft(), tile->position(),tileSize))
         {
-            return true;
-            //uint32_t aIndex = tile->index() / _tilesPerAtlas;
+            auto frm = ResourceManager::getInstance()->frmFileType("art/tiles/" + tilesLst->strings()->at(tile->number()));
+            auto mask = frm->mask(ResourceManager::getInstance()->palFileType("color.pal"));
+            auto position = pos-tile->position()+camera->topLeft()+Point(1,1);
+
+            if ((position.y()*82+position.x() < mask->size())) {
+                if (mask->at(position.y()*82+position.x())) return true;
+            }
         }
     }
     return false;

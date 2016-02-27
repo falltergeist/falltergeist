@@ -332,7 +332,7 @@ void Location::setLocation(const std::string& name)
             tileNum = mapFile->elevations()->at(_currentElevation)->roofTiles()->at(i);
             if (tileNum > 1)
             {
-                _roof->tiles()[i] = make_unique<UI::Tile>(tileNum, Point(x, y - 104));
+                _roof->tiles()[i] = make_unique<UI::Tile>(tileNum, Point(x, y - 96));
             }
         }
         _floor->init();

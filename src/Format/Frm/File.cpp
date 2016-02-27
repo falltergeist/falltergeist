@@ -207,10 +207,10 @@ std::vector<bool>* File::mask(Pal::File* palFile)
 
     _mask.resize(w*h, true);
 
-    unsigned positionY = 0;
+    unsigned positionY = 1;
     for (auto direction : _directions)
     {
-        unsigned positionX = 0;
+        unsigned positionX = 1;
         for (auto frame : *direction->frames())
         {
             for (unsigned y = 0; y != frame->height(); ++y)
@@ -220,7 +220,7 @@ std::vector<bool>* File::mask(Pal::File* palFile)
                     _mask[((y + positionY)*w) + x + positionX] = (palFile->color(frame->index(x, y))->alpha() > 0);
                 }
             }
-            positionX += frame->width();
+            positionX += frame->width()+2;
         }
         positionY += direction->height();
     }
