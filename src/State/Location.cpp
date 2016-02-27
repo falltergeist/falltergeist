@@ -760,14 +760,17 @@ void Location::handle(Event::Event* event)
         // let event fall down to all objects when using action cursor and within active view
         if (!mouseEvent->handled() && (mouse->state() == Input::Mouse::Cursor::ACTION || mouse->state() == Input::Mouse::Cursor::NONE))
         {
-            handleByGameObjects(mouseEvent);
+            if (!_roof->opaque(mouse->position()))
+            {
+                handleByGameObjects(mouseEvent);
+            }
         }
     }
 }
 
 void Location::handleByGameObjects(Event::Mouse* event)
 {
-
+/*
     for (auto &object: _robjects)
     {
         if (event->handled()) return;
@@ -782,7 +785,7 @@ void Location::handleByGameObjects(Event::Mouse* event)
         if (!object->inRender()) continue;
         object->handle(event);
     }
-/*
+*/
     auto hexagons = _hexagonGrid->hexagons();
     for (auto it = hexagons.rbegin(); it != hexagons.rend(); ++it)
     {
@@ -797,7 +800,7 @@ void Location::handleByGameObjects(Event::Mouse* event)
             object->handle(event);
         }
     }
-*/
+
 }
 
 void Location::onMouseDown(Event::Mouse* event)

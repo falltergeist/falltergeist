@@ -55,6 +55,7 @@ public:
     bool inside();
     void enableAll();
     void disable(unsigned int num);
+    bool opaque(const Point& pos);
 
 protected:
     std::map<unsigned int, std::unique_ptr<Tile>> _tiles;

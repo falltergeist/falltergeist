@@ -245,5 +245,20 @@ void TileMap::_floodDisable(int x, int y)
     }
 }
 
+bool TileMap::opaque(const Point &pos)
+{
+    auto camera = Game::getInstance()->locationState()->camera();
+    for (auto& it : _tiles)
+    {
+        auto& tile = it.second;
+        const Size tileSize = Size(80, 36);
+        if (tile->enabled() && Rect::inRect(pos+camera->topLeft(), tile->position(),tileSize))
+        {
+            return true;
+            //uint32_t aIndex = tile->index() / _tilesPerAtlas;
+        }
+    }
+    return false;
+}
 }
 }
