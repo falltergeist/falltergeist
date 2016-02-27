@@ -770,22 +770,24 @@ void Location::handle(Event::Event* event)
 
 void Location::handleByGameObjects(Event::Mouse* event)
 {
-/*
-    for (auto &object: _robjects)
+
+    for (auto it = _robjects.rbegin(); it != _robjects.rend(); ++it)
     {
+        auto object = *it;
         if (event->handled()) return;
         if (!object->inRender()) continue;
         object->handle(event);
     }
 
     // sadly, flat objects do handle events.
-    for (auto &object: _rflatObjects)
+    for (auto it = _rflatObjects.rbegin(); it != _rflatObjects.rend(); ++it)
     {
+        auto object = *it;
         if (event->handled()) return;
         if (!object->inRender()) continue;
         object->handle(event);
     }
-*/
+/*
     auto hexagons = _hexagonGrid->hexagons();
     for (auto it = hexagons.rbegin(); it != hexagons.rend(); ++it)
     {
@@ -800,7 +802,7 @@ void Location::handleByGameObjects(Event::Mouse* event)
             object->handle(event);
         }
     }
-
+*/
 }
 
 void Location::onMouseDown(Event::Mouse* event)
