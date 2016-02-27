@@ -47,8 +47,8 @@ Animation::Animation(const std::string &filename)
     GL_CHECK(glBindVertexArray(_vao));
 
     // generate VBOs for verts and tex
-    GL_CHECK(glGenBuffers(1, &_coords));
-    GL_CHECK(glGenBuffers(1, &_texCoords));
+    GL_CHECK(glGenBuffers(1, &_coordsVBO));
+    GL_CHECK(glGenBuffers(1, &_texCoordsVBO));
     GL_CHECK(glGenBuffers(1, &_ebo));
 
     _texture = ResourceManager::getInstance()->texture(filename);
@@ -57,8 +57,6 @@ Animation::Animation(const std::string &filename)
 
     _stride = frm->framesPerDirection();
 
-    std::vector<glm::vec2> vertices;
-    std::vector<glm::vec2> texCoords;
 
     int offsetX=1;
     int offsetY=1;
@@ -70,15 +68,15 @@ Animation::Animation(const std::string &filename)
         {
             auto srcFrame = direction->frames()->at(f);
 
-            vertices.push_back(glm::vec2(0.0,0.0));
-            vertices.push_back(glm::vec2(0.0,(float)srcFrame->height()+2.0));
-            vertices.push_back(glm::vec2((float)srcFrame->width()+2.0,0.0));
-            vertices.push_back(glm::vec2((float)srcFrame->width()+2.0,(float)srcFrame->height()+2.0));
+            _vertices.push_back(glm::vec2(0.0,0.0));
+            _vertices.push_back(glm::vec2(0.0,(float)srcFrame->height()+2.0));
+            _vertices.push_back(glm::vec2((float)srcFrame->width()+2.0,0.0));
+            _vertices.push_back(glm::vec2((float)srcFrame->width()+2.0,(float)srcFrame->height()+2.0));
 
-            texCoords.push_back(glm::vec2( (float)(offsetX-1.0)/(float)_texture->textureWidth(), (float)(offsetY-1.0)/(float)_texture->textureHeight() ));
-            texCoords.push_back(glm::vec2( (float)(offsetX-1.0)/(float)_texture->textureWidth(), (float)(offsetY+srcFrame->height()+1.0)/(float)_texture->textureHeight() ));
-            texCoords.push_back(glm::vec2( (float)(offsetX+srcFrame->width()+1.0)/(float)_texture->textureWidth(), (float)(offsetY-1.0)/(float)_texture->textureHeight() ));
-            texCoords.push_back(glm::vec2( (float)(offsetX+srcFrame->width()+1.0)/(float)_texture->textureWidth(), (float)(offsetY+srcFrame->height()+1.0)/(float)_texture->textureHeight() ));
+            _texCoords.push_back(glm::vec2( (float)(offsetX-1.0)/(float)_texture->textureWidth(), (float)(offsetY-1.0)/(float)_texture->textureHeight() ));
+            _texCoords.push_back(glm::vec2( (float)(offsetX-1.0)/(float)_texture->textureWidth(), (float)(offsetY+srcFrame->height()+1.0)/(float)_texture->textureHeight() ));
+            _texCoords.push_back(glm::vec2( (float)(offsetX+srcFrame->width()+1.0)/(float)_texture->textureWidth(), (float)(offsetY-1.0)/(float)_texture->textureHeight() ));
+            _texCoords.push_back(glm::vec2( (float)(offsetX+srcFrame->width()+1.0)/(float)_texture->textureWidth(), (float)(offsetY+srcFrame->height()+1.0)/(float)_texture->textureHeight() ));
 
             offsetX+=srcFrame->width()+2;
 
@@ -87,11 +85,11 @@ Animation::Animation(const std::string &filename)
 
     }
 
-    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coords));
-    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec2), &vertices[0], GL_STATIC_DRAW));
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coordsVBO));
+    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(glm::vec2), &_vertices[0], GL_STATIC_DRAW));
 
-    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoords));
-    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(glm::vec2), &texCoords[0], GL_STATIC_DRAW));
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoordsVBO));
+    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, _texCoords.size() * sizeof(glm::vec2), &_texCoords[0], GL_STATIC_DRAW));
 
     GL_CHECK(glBindVertexArray(0));
 
@@ -106,6 +104,9 @@ Animation::Animation(const std::string &filename)
     _uniformOffset = shader->getUniform("offset");
     _uniformOutline = shader->getUniform("outline");
 
+    _uniformTexStart = shader->getUniform("texStart");
+    _uniformTexHeight = shader->getUniform("texHeight");
+
     _attribPos = shader->getAttrib("Position");
     _attribTex = shader->getAttrib("TexCoord");
 }
@@ -118,6 +119,11 @@ Animation::~Animation()
 void Animation::render(int x, int y, unsigned int direction, unsigned int frame, bool transparency, bool light, int outline)
 {
     int pos = direction*_stride+frame;
+
+    float texStart = _texCoords.at(pos*4).y;
+    float texEnd = _texCoords.at(pos*4+3).y;
+    float texHeight = texEnd-texStart;
+
 
 
     auto shader = ResourceManager::getInstance()->shader("animation");
@@ -149,16 +155,19 @@ void Animation::render(int x, int y, unsigned int direction, unsigned int frame,
     GL_CHECK(shader->setUniform(_uniformTrans, _trans));
     GL_CHECK(shader->setUniform(_uniformOutline, outline));
 
+    GL_CHECK(shader->setUniform(_uniformTexStart, texStart));
+    GL_CHECK(shader->setUniform(_uniformTexHeight, texHeight));
+
 
 
     GL_CHECK(glBindVertexArray(_vao));
 
 
-    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coords));
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coordsVBO));
     GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
 
-    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoords));
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoordsVBO));
     GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));

@@ -18,8 +18,7 @@
  */
 
 #include <iosfwd>
-#include <GL/glew.h>
-#include <SDL_opengl.h>
+#include "../Graphics/Renderer.h"
 #include "Texture.h"
 #include "../TransFlags.h"
 
@@ -38,12 +37,15 @@ public:
     void trans(Falltergeist::TransFlags::Trans _trans);
 private:
     GLuint _vao;
-    GLuint _coords;
-    GLuint _texCoords;
+    GLuint _coordsVBO;
+    GLuint _texCoordsVBO;
     GLuint _ebo;
     Texture* _texture;
     int _stride;
     Falltergeist::TransFlags::Trans _trans = Falltergeist::TransFlags::Trans::NONE;
+
+    std::vector<glm::vec2> _vertices;
+    std::vector<glm::vec2> _texCoords;
 
     GLint _uniformTex;
     GLint _uniformFade;
@@ -53,6 +55,8 @@ private:
     GLint _uniformTrans;
     GLint _uniformOffset;
     GLint _uniformOutline;
+    GLint _uniformTexStart;
+    GLint _uniformTexHeight;
 
     GLint _attribPos;
     GLint _attribTex;

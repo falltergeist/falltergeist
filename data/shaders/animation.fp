@@ -5,6 +5,8 @@ uniform int cnt[6];
 uniform int global_light;
 uniform int trans;
 uniform int outline;
+uniform float texStart;
+uniform float texHeight;
 in vec2 UV;
 out vec4 fragColor;
 
@@ -155,10 +157,17 @@ void main(void)
     }
     else
     {
+        ivec2 texSize = textureSize(tex,0);
         vec4 outlineColor = vec4(0.0,0.0,0.0,0.0);
         if (outline == 1) // red, animated
         {
-            outlineColor = vec4(1.0,0.0,0.0,1.0);
+            float texPos = UV.y - texStart;
+            float prop = (texHeight)/5;
+            int idx = int(texPos / prop);
+            if (idx>4) idx = 4;
+            int newIdx = (idx + cnt[3]) % 5;
+
+            outlineColor = vec4(fireFastPalette[newIdx],1.0);
         }
         else if (outline == 2) // yellow
         {
@@ -168,8 +177,6 @@ void main(void)
         {
             outlineColor = vec4(0.0,1.0,0.0,1.0);
         }
-
-        ivec2 texSize = textureSize(tex,0);
 
         vec2 off = 1.0 / texSize;
         vec2 tc = UV.st;
