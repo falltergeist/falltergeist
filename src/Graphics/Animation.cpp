@@ -60,27 +60,27 @@ Animation::Animation(const std::string &filename)
     std::vector<glm::vec2> vertices;
     std::vector<glm::vec2> texCoords;
 
-    int offsetX=0;
-    int offsetY=0;
+    int offsetX=1;
+    int offsetY=1;
 
     for (auto direction : *frm->directions())
     {
-        offsetX = 0;
+        offsetX = 1;
         for (unsigned int f = 0; f != frm->framesPerDirection(); ++f)
         {
             auto srcFrame = direction->frames()->at(f);
 
             vertices.push_back(glm::vec2(0.0,0.0));
-            vertices.push_back(glm::vec2(0.0,(float)srcFrame->height()));
-            vertices.push_back(glm::vec2((float)srcFrame->width(),0.0));
-            vertices.push_back(glm::vec2((float)srcFrame->width(),(float)srcFrame->height()));
+            vertices.push_back(glm::vec2(0.0,(float)srcFrame->height()+2.0));
+            vertices.push_back(glm::vec2((float)srcFrame->width()+2.0,0.0));
+            vertices.push_back(glm::vec2((float)srcFrame->width()+2.0,(float)srcFrame->height()+2.0));
 
-            texCoords.push_back(glm::vec2( (float)offsetX/(float)_texture->textureWidth(), (float)offsetY/(float)_texture->textureHeight() ));
-            texCoords.push_back(glm::vec2( (float)offsetX/(float)_texture->textureWidth(), (float)(offsetY+srcFrame->height())/(float)_texture->textureHeight() ));
-            texCoords.push_back(glm::vec2( (float)(offsetX+srcFrame->width())/(float)_texture->textureWidth(), (float)offsetY/(float)_texture->textureHeight() ));
-            texCoords.push_back(glm::vec2( (float)(offsetX+srcFrame->width())/(float)_texture->textureWidth(), (float)(offsetY+srcFrame->height())/(float)_texture->textureHeight() ));
+            texCoords.push_back(glm::vec2( (float)(offsetX-1.0)/(float)_texture->textureWidth(), (float)(offsetY-1.0)/(float)_texture->textureHeight() ));
+            texCoords.push_back(glm::vec2( (float)(offsetX-1.0)/(float)_texture->textureWidth(), (float)(offsetY+srcFrame->height()+1.0)/(float)_texture->textureHeight() ));
+            texCoords.push_back(glm::vec2( (float)(offsetX+srcFrame->width()+1.0)/(float)_texture->textureWidth(), (float)(offsetY-1.0)/(float)_texture->textureHeight() ));
+            texCoords.push_back(glm::vec2( (float)(offsetX+srcFrame->width()+1.0)/(float)_texture->textureWidth(), (float)(offsetY+srcFrame->height()+1.0)/(float)_texture->textureHeight() ));
 
-            offsetX+=srcFrame->width();
+            offsetX+=srcFrame->width()+2;
 
         }
         offsetY+=direction->height();

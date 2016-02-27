@@ -2,7 +2,6 @@
 
 uniform mat4 MVP;
 uniform vec2 offset;
-uniform int outline;
 in vec2 Position;
 in vec2 TexCoord;
 out vec2 UV;
@@ -10,25 +9,5 @@ out vec2 UV;
 void main(void)
 {
   UV = TexCoord;
-  vec2 pos = Position;
-  if (outline!=0)
-  {
-    if (pos.x == 0.0)
-    {
-        pos.x-=0.5;
-    }
-    else
-    {
-        pos.x+=1.0;
-    }
-    if (pos.y == 0.0)
-    {
-        pos.y-=0.5;
-    }
-    else
-    {
-        pos.y+=1.0;
-    }
-  }
-  gl_Position = MVP*vec4(pos+offset, 0.0, 1.0);
+  gl_Position = MVP*vec4(Position+offset, 0.0, 1.0);
 }

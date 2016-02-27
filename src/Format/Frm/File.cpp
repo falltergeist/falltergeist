@@ -178,10 +178,10 @@ uint32_t* File::rgba(Pal::File* palFile)
 
     uint16_t w = width();
 
-    unsigned positionY = 0;
+    unsigned positionY = 1;
     for (auto direction : _directions)
     {
-        unsigned positionX = 0;
+        unsigned positionX = 1;
         for (auto frame : *direction->frames())
         {
             for (unsigned y = 0; y != frame->height(); ++y)
@@ -191,7 +191,7 @@ uint32_t* File::rgba(Pal::File* palFile)
                     _rgba[((y + positionY)*w) + x + positionX] = *palFile->color(frame->index(x, y));
                 }
             }
-            positionX += frame->width();
+            positionX += frame->width()+2;
         }
         positionY += direction->height();
     }

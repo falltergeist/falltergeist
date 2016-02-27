@@ -80,7 +80,7 @@ uint16_t Direction::width() const
     std::vector<uint16_t> widths;
     for (auto frame : _frames)
     {
-        widths.push_back(frame->width());
+        widths.push_back(frame->width()+2);
     }
     return (*std::max_element(widths.begin(), widths.end())) * _frames.size();
 }
@@ -90,7 +90,7 @@ uint16_t Direction::height() const
     std::vector<uint16_t> heights;
     for (auto frame : _frames)
     {
-        heights.push_back(frame->height());
+        heights.push_back(frame->height()+2);
     }
     return *std::max_element(heights.begin(), heights.end());
 }

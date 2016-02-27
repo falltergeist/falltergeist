@@ -181,7 +181,7 @@ void main(void)
             vec4 w = texture(tex, vec2(tc.x - off.x, tc.y));
 
             float ua = 0.0;
-            if (c.a != 0.0 && ( n.a == 0.0 || e.a==0.0 || s.a==0.0 || w.a==0.0))
+            if (c.a == 0.0 && ( n.a != 0.0 || e.a!=0.0 || s.a!=0.0 || w.a!=0.0))
             {
                 origColor = outlineColor;
             }

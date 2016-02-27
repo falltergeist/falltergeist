@@ -59,8 +59,6 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
     _direction = direction;
     auto frm = ResourceManager::getInstance()->frmFileType(frmName);
     _animation = make_unique<Graphics::Animation>(frmName);
-    // TODO: newrender
-    //setTexture(ResourceManager::getInstance()->texture(frmName));
 
     _actionFrame = frm->actionFrame();
     auto dir = frm->directions()->at(direction);
@@ -75,8 +73,8 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
         y += frm->directions()->at(d)->height(); //? может i - 1
     }
 
-    int xOffset = 0;
-    int yOffset = 0;
+    int xOffset = 1;
+    int yOffset = 1;
     for (unsigned int f = 0; f != frm->framesPerDirection(); ++f)
     {
         xOffset += frm->offsetX(direction, f);
@@ -98,7 +96,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
             frame->setDuration((unsigned)std::round(1000.0 / static_cast<double>(frm->framesPerSecond())));
         }
 
-        x += frame->width();
+        x += frame->width()+2;
         _animationFrames.push_back(std::move(frame));
     }
 
