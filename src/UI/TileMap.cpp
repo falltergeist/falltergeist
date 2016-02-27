@@ -261,7 +261,7 @@ bool TileMap::opaque(const Point &pos)
             auto mask = frm->mask(ResourceManager::getInstance()->palFileType("color.pal"));
             auto position = pos-tile->position()+camera->topLeft()+Point(1,1);
 
-            if ((position.y()*82+position.x() < mask->size())) {
+            if ((position.y()*82+position.x()) > 0 &&  ((unsigned)(position.y()*82+position.x()) < mask->size())) {
                 if (mask->at(position.y()*82+position.x())) return true;
             }
         }

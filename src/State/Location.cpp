@@ -547,6 +547,7 @@ void Location::render()
     {
         if (auto critter = dynamic_cast<Game::CritterObject*>(object.get()))
         {
+            (void)critter;
             object->renderOutline(1);
         }
     }
