@@ -38,8 +38,8 @@ public:
     Sprite(const std::string& filename);
     Sprite(Format::Frm::File* frm);
     void renderScaled(int x, int y, unsigned int width, unsigned int height, bool transparency = false,
-                      bool light = false);
-    void render(int x, int y, bool transparency = false, bool light = false);
+                      bool light = false, int outline = 0);
+    void render(int x, int y, bool transparency = false, bool light = false, int outline = 0);
     void renderCropped(int x, int y, int dx, int dy, unsigned int width, unsigned int height, bool transparency = false,
                        bool light = false);
     unsigned int width() const;
@@ -61,6 +61,7 @@ private:
     GLint _uniformTrans;
     GLint _uniformDoEgg;
     GLint _uniformEggPos;
+    GLint _uniformOutline;
 
     GLint _attribPos;
     GLint _attribTex;

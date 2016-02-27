@@ -477,8 +477,12 @@ void Location::render()
 {
     _floor->render();
 
+    // render hex cursor
+    if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HEXAGON_RED)
+    {
+        Game::getInstance()->mouse()->render();
+    }
     //render only flat objects first
-
     for (auto &object: _rflatObjects)
     {
         object->render();
@@ -530,6 +534,13 @@ void Location::render()
     }
 
     _roof->render();
+
+    // render hex object outline
+    if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HEXAGON_RED)
+    {
+        Game::getInstance()->mouse()->renderOutline();
+    }
+
 
     // just for testing
     for (auto &object: _objects)

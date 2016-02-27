@@ -155,40 +155,40 @@ void main(void)
     }
     else
     {
-        vec4 outlineColor;
-        if (outline == 1) // red
+        vec4 outlineColor = vec4(0.0,0.0,0.0,0.0);
+        if (outline == 1) // red, animated
         {
             outlineColor = vec4(1.0,0.0,0.0,1.0);
         }
-        else if (outline == 1) // yellow
+        else if (outline == 2) // yellow
         {
             outlineColor = vec4(1.0,1.0,0.0,1.0);
         }
-        else if (outline == 1) // green
+        else if (outline == 3) // green
         {
             outlineColor = vec4(0.0,1.0,0.0,1.0);
         }
 
         ivec2 texSize = textureSize(tex,0);
 
-            vec2 off = 1.0 / texSize;
-            vec2 tc = UV.st;
+        vec2 off = 1.0 / texSize;
+        vec2 tc = UV.st;
 
-            vec4 c = texture(tex, tc);
-            vec4 n = texture(tex, vec2(tc.x, tc.y - off.y));
-            vec4 e = texture(tex, vec2(tc.x + off.x, tc.y));
-            vec4 s = texture(tex, vec2(tc.x, tc.y + off.y));
-            vec4 w = texture(tex, vec2(tc.x - off.x, tc.y));
+        vec4 c = texture(tex, tc);
+        vec4 n = texture(tex, vec2(tc.x, tc.y - off.y));
+        vec4 e = texture(tex, vec2(tc.x + off.x, tc.y));
+        vec4 s = texture(tex, vec2(tc.x, tc.y + off.y));
+        vec4 w = texture(tex, vec2(tc.x - off.x, tc.y));
 
-            float ua = 0.0;
-            if (c.a == 0.0 && ( n.a != 0.0 || e.a!=0.0 || s.a!=0.0 || w.a!=0.0))
-            {
-                origColor = outlineColor;
-            }
-            else
-            {
-                origColor = vec4(0.0, 0.0, 0.0, 0.0);
-            }
+        float ua = 0.0;
+        if (c.a == 0.0 && ( n.a != 0.0 || e.a!=0.0 || s.a!=0.0 || w.a!=0.0))
+        {
+            origColor = outlineColor;
+        }
+        else
+        {
+            origColor = vec4(0.0, 0.0, 0.0, 0.0);
+        }
     }
 
     fragColor = mix(origColor, fade, fade.a);

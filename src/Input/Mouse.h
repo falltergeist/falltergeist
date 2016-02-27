@@ -111,6 +111,7 @@ public:
     bool scrollState();
 
     void render();
+    void renderOutline();
     void think();
 
     UI::Base* ui();

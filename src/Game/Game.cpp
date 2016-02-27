@@ -453,7 +453,11 @@ void Game::render()
     }
 
     _currentTime->render();
-    _mouse->render();
+    // hexagon is rendered in location after floor
+    if (_mouse->state() != Input::Mouse::Cursor::HEXAGON_RED)
+    {
+        _mouse->render();
+    }
     renderer()->endFrame();
 }
 

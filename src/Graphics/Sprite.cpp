@@ -50,6 +50,7 @@ Sprite::Sprite(const std::string& fname)
     _uniformTrans = shader->getUniform("trans");
     _uniformDoEgg = shader->getUniform("doegg");
     _uniformEggPos = shader->getUniform("eggpos");
+    _uniformOutline = shader->getUniform("outline");
 
     _attribPos = shader->getAttrib("Position");
     _attribTex = shader->getAttrib("TexCoord");
@@ -75,7 +76,7 @@ unsigned int Sprite::height() const
 }
 
 // render, optionally scaled
-void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height, bool transparency, bool light)
+void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height, bool transparency, bool light, int outline)
 {
     std::vector<glm::vec2> vertices;
     std::vector<glm::vec2> UV;
@@ -143,6 +144,8 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
 
     GL_CHECK(shader->setUniform(_uniformDoEgg, transparency));
 
+    GL_CHECK(shader->setUniform(_uniformOutline, outline));
+
 
     GL_CHECK(shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
 
@@ -200,9 +203,9 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
 
 }
 
-void Sprite::render(int x, int y, bool transparency, bool light)
+void Sprite::render(int x, int y, bool transparency, bool light, int outline)
 {
-    renderScaled(x, y, _texture->width(), _texture->height(), transparency, light);
+    renderScaled(x, y, _texture->width(), _texture->height(), transparency, light, outline);
 }
 
 // render just a part of texture, unscaled
@@ -290,6 +293,8 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
     GL_CHECK(shader->setUniform(_uniformEggPos, eggVec));
 
     GL_CHECK(shader->setUniform(_uniformDoEgg, transparency));
+
+    GL_CHECK(shader->setUniform(_uniformOutline, false));
 
 
     GL_CHECK(glBindVertexArray(Game::getInstance()->renderer()->getVAO()));
