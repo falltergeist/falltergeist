@@ -22,7 +22,7 @@
 
 // C++ standard includes
 #include <array>
-#include <glm/detail/type_vec.hpp>
+#include <glm/glm.hpp>
 #include <vector>
 
 // Falltergeist includes
