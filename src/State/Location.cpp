@@ -305,6 +305,7 @@ void Location::setLocation(const std::string& name)
         player->setScript(new VM(ResourceManager::getInstance()->intFileType(0), player));
 
         auto hexagon = hexagonGrid()->at(mapFile->defaultPosition());
+        _objects.emplace_back(player);
         moveObjectToHexagon(player, hexagon);
     }
 
@@ -483,13 +484,13 @@ void Location::render()
         Game::getInstance()->mouse()->render();
     }
     //render only flat objects first
-    for (auto &object: _rflatObjects)
+    for (auto &object: _flatObjects)
     {
         object->render();
         object->hexagon()->setInRender(object->inRender());
     }
 
-    for (auto &object: _robjects)
+    for (auto &object: _objects)
     {
         object->render();
         object->hexagon()->setInRender(object->inRender());
@@ -545,10 +546,11 @@ void Location::render()
     // just for testing
     for (auto &object: _objects)
     {
-        if (auto critter = dynamic_cast<Game::CritterObject*>(object.get()))
+        if (dynamic_cast<Game::CritterObject*>(object.get()))
         {
-            (void)critter;
-            object->renderOutline(1);
+            if (!dynamic_cast<Game::DudeObject*>(object.get())) {
+                object->renderOutline(1);
+            }
         }
     }
 
@@ -772,18 +774,18 @@ void Location::handle(Event::Event* event)
 void Location::handleByGameObjects(Event::Mouse* event)
 {
 
-    for (auto it = _robjects.rbegin(); it != _robjects.rend(); ++it)
+    for (auto it = _objects.rbegin(); it != _objects.rend(); ++it)
     {
-        auto object = *it;
+        auto object = (*it).get();
         if (event->handled()) return;
         if (!object->inRender()) continue;
         object->handle(event);
     }
 
     // sadly, flat objects do handle events.
-    for (auto it = _rflatObjects.rbegin(); it != _rflatObjects.rend(); ++it)
+    for (auto it = _flatObjects.rbegin(); it != _flatObjects.rend(); ++it)
     {
-        auto object = *it;
+        auto object = (*it).get();
         if (event->handled()) return;
         if (!object->inRender()) continue;
         object->handle(event);
@@ -1018,26 +1020,18 @@ void Location::moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool 
     // TODO: recreate _objects array for rendering/handling
     if (update)
     {
-        _robjects.clear();
-        _rflatObjects.clear();
-        auto hexagons = _hexagonGrid->hexagons();
-        for (auto it = hexagons.begin(); it != hexagons.end(); ++it)
-        {
-            Hexagon* hexagon = *it;
-            auto objects = hexagon->objects();
-            for (auto itt = objects->begin(); itt != objects->end(); ++itt)
-            {
-                auto object = *itt;
-                if (object->flat())
+        _objects.sort(
+                [](std::unique_ptr<Game::Object> &obj1, std::unique_ptr<Game::Object> &obj2) -> bool
                 {
-                    _rflatObjects.push_back(object);
+                    return obj1->hexagon()->number() < obj2->hexagon()->number();
                 }
-                else
+        );
+        _flatObjects.sort(
+                [](std::unique_ptr<Game::Object> &obj1, std::unique_ptr<Game::Object> &obj2) -> bool
                 {
-                    _robjects.push_back(object);
+                    return obj1->hexagon()->number() < obj2->hexagon()->number();
                 }
-            }
-        }
+        );
     }
 
     if (auto dude = dynamic_cast<Game::DudeObject*>(object))

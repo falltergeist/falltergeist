@@ -160,11 +160,9 @@ protected:
     bool _scrollTop = false;
     bool _scrollBottom = false;
 
-    std::vector<std::unique_ptr<Game::Object>> _objects;
-    std::vector<std::unique_ptr<Game::Object>> _flatObjects;
+    std::list<std::unique_ptr<Game::Object>> _objects;
+    std::list<std::unique_ptr<Game::Object>> _flatObjects;
 
-    std::vector<Game::Object*> _robjects;
-    std::vector<Game::Object*> _rflatObjects;
     std::unique_ptr<UI::TextArea> _hexagonInfo;
 
     Event::MouseHandler _mouseDownHandler, _mouseUpHandler, _mouseMoveHandler;
