@@ -8,7 +8,10 @@ sudo apt-get update -qq
 sudo apt-get install -qq libsdl2-dev
 sudo apt-get install -qq libsdl2-mixer-dev
 sudo apt-get install -qq libsdl2-image-dev
-sudo apt-get install -qq liblua5.1-dev
+sudo apt-get install -qq libglew1.6-dev
+sudo apt-get install -qq libglm-dev
+sudo apt-get install -qq mesa-common-dev
+
 
 if [ "$CXX" = "clang++" ]; then sudo apt-get install -qq libstdc++-4.8-dev; fi
 if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
