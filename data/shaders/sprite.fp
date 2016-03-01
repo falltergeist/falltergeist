@@ -1,5 +1,4 @@
 #version 330
-#extension GL_EXT_gpu_shader4 : enable
 
 uniform sampler2D tex;
 uniform sampler2D eggTex;
@@ -203,7 +202,7 @@ void main(void)
 
     if (doegg && outline == 0)
     {
-        ivec2 size = textureSize2D(tex,0);
+        ivec2 size = textureSize(tex,0);
 
         ivec2 pixelpos = ivec2(UV.x*size.x, UV.y*size.y );
 
@@ -212,7 +211,7 @@ void main(void)
 
         if (pixelpos.x>=0 && pixelpos.x<129 && pixelpos.y>=0 && pixelpos.y<98)
         {
-            vec4 pixel2 = texelFetch2D(eggTex, pixelpos, 0);
+            vec4 pixel2 = texelFetch(eggTex, pixelpos, 0);
 
             if (pixel2.a < fragColor.a)
             {
