@@ -147,7 +147,7 @@ Game::Orientation Hexagon::orientationTo(Hexagon *hexagon)
     {
         // trigonometry magic.
         // basically, we try to find angle to second hex in circle, where first hex is center
-        // and then find out to which of 60º slices it belongs
+        // and then find out to which of 60ï¿½ slices it belongs
 
         double degree = atan2((double)-dy, (double)dx) * 180.0 * 0.3183098862851122; //  180 * 1/PI
 
@@ -167,6 +167,25 @@ Game::Orientation Hexagon::orientationTo(Hexagon *hexagon)
     }
 
     return Game::Orientation(result);
+}
+
+unsigned int Hexagon::addLight(unsigned int light)
+{
+    _light+=light;
+    if (_light > 65536) _light = 65536;
+    return _light;
+}
+
+unsigned int Hexagon::subLight(unsigned int light)
+{
+    _light-=light;
+    if ((int)_light < 0) _light = 0;
+    return _light;
+}
+
+unsigned int Hexagon::light()
+{
+    return _light;
 }
 
 }

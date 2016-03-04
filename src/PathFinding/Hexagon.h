@@ -72,6 +72,10 @@ public:
 
     Game::Orientation orientationTo(Hexagon *hexagon);
 
+    unsigned int addLight(unsigned int light);
+    unsigned int subLight(unsigned int light);
+    unsigned int light();
+
 protected:
     std::vector<Hexagon*> _neighbors;
     std::list<Game::Object*> _objects;
@@ -86,6 +90,8 @@ protected:
     unsigned int _heuristic = 0;
 
     bool _inRender = false;
+
+    unsigned int _light;
 };
 
 }
