@@ -91,7 +91,7 @@ protected:
 
     bool _inRender = false;
 
-    unsigned int _light;
+    unsigned int _light = 655;
 };
 
 }
