@@ -179,7 +179,7 @@ unsigned int Hexagon::addLight(unsigned int light)
 unsigned int Hexagon::subLight(unsigned int light)
 {
     _light-=light;
-    if ((int)_light < 0) _light = 0;
+    if ((int)_light < 655) _light = 655;
     return _light;
 }
 
