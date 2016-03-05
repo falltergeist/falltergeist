@@ -147,7 +147,19 @@ void Animation::render(int x, int y, unsigned int direction, unsigned int frame,
     {
         if (auto state = Game::getInstance()->locationState())
         {
-            lightLevel = state->lightLevel();
+            if ( state->lightLevel() < 0xA000 )
+            {
+                lightLevel = (state->lightLevel() - 0x4000) * 100 / 0x6000;
+
+            }
+            else if ( state->lightLevel() == 0xA000 )
+            {
+                lightLevel = 50;
+            }
+            else
+            {
+                lightLevel = (state->lightLevel() - 0xA000) * 100 / 0x6000;
+            }
         }
     }
     GL_CHECK(shader->setUniform(_uniformLight, lightLevel));

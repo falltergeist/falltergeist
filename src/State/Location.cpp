@@ -1182,13 +1182,16 @@ void Location::removeTimerEvent(Game::Object* obj, int fixedParam)
     _timerEvents.remove_if([=](Location::TimerEvent& item) { return item.object == obj && item.fixedParam == fixedParam; });
 }
 
-unsigned short Location::lightLevel()
+unsigned int Location::lightLevel()
 {
     return _lightLevel;
 }
 
-void Location::setLightLevel(unsigned short level)
+void Location::setLightLevel(unsigned int level)
 {
+    // TODO: check night vision perk and increase light by 20% (20% of what, maximum or current?)
+    if (level>0x10000) level=0x10000;
+    if (level<0x4000) level=0x4000;
     _lightLevel = level;
 }
 }

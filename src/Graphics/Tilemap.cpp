@@ -101,8 +101,21 @@ void Tilemap::render(const Point &pos, std::vector<GLuint> indexes, uint32_t atl
     GL_CHECK(shader->setUniform(_uniformCnt, Game::getInstance()->animatedPalette()->counters()));
 
     int lightLevel = 100;
-    if (auto state = Game::getInstance()->locationState()) {
-        lightLevel = state->lightLevel();
+    if (auto state = Game::getInstance()->locationState())
+    {
+        if ( state->lightLevel() < 0xA000 )
+        {
+            lightLevel = (state->lightLevel() - 0x4000) * 100 / 0x6000;
+
+        }
+        else if ( state->lightLevel() == 0xA000 )
+        {
+            lightLevel = 50;
+        }
+        else
+        {
+            lightLevel = (state->lightLevel() - 0xA000) * 100 / 0x6000;
+        }
     }
     GL_CHECK(shader->setUniform(_uniformLight, lightLevel));
 

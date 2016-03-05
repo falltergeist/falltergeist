@@ -41,7 +41,22 @@ void Opcode80E9Handler::_run()
     auto level = _vm->dataStack()->popInteger();
     if (level<0) level=0;
     if (level>100) level=100;
-    Game::getInstance()->locationState()->setLightLevel(level);
+
+    unsigned int light;
+    if ( level < 50 )
+    {
+        light = 0x4000 + level * 0x6000 / 100;
+    }
+    else if ( level == 50 )
+    {
+        light = 0xA000;
+    }
+    else
+    {
+        light = 0xA000 + level * 0x6000 / 100;
+    }
+
+    Game::getInstance()->locationState()->setLightLevel(light);
 }
 
 }
