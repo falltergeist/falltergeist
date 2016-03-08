@@ -39,15 +39,17 @@ class ImageList : public Falltergeist::UI::Base
 public:
     ImageList(const Point& pos = Point());
     ImageList(std::vector<std::string> imageList, int x, int y);
-    ImageList(std::vector<Image*> imageList, int x, int y);
     ~ImageList() override;
 
     void addImage(std::unique_ptr<Image> image);
     void addImage(const std::string& filename);
     void setCurrentImage(unsigned int number);
     unsigned int currentImage() const;
-    Graphics::Texture* texture() const override;
     const std::vector<std::unique_ptr<Image>>& images() const;
+
+    virtual bool opaque(const Point &pos) override;
+
+    virtual void render(bool eggTransparency) override;
 
 protected:
     std::vector<std::unique_ptr<Image>> _images;

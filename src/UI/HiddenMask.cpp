@@ -32,18 +32,13 @@ namespace Falltergeist
 namespace UI
 {
 
-HiddenMask::HiddenMask(unsigned int width, unsigned int height, int x, int y) : Image(width, height)
+HiddenMask::HiddenMask(unsigned int width, unsigned int height, int x, int y)// : Image(width, height)
 {
     setPosition({x, y});
 }
 
 HiddenMask::~HiddenMask()
 {
-}
-
-unsigned int HiddenMask::pixel(const Point& pos)
-{
-    return Rect::inRect(pos, this->size()) ? 0xffffffff : 0;
 }
 
 void HiddenMask::render(bool eggTransparency)
@@ -54,5 +49,8 @@ void HiddenMask::think()
 {
 }
 
+bool HiddenMask::opaque(const Point &pos) {
+    return Rect::inRect(pos, this->size());
+}
 }
 }

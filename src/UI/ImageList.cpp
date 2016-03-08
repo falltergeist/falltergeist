@@ -44,11 +44,6 @@ ImageList::ImageList(std::vector<std::string> imageList, int x, int y) : ImageLi
     for (auto& frmName : imageList) addImage(make_unique<Image>(frmName));
 }
 
-ImageList::ImageList(std::vector<Image*> imageList, int x, int y) : ImageList(Point(x, y))
-{
-    for (auto& image : imageList) addImage(make_unique<Image>(*image));
-}
-
 ImageList::~ImageList()
 {
 }
@@ -66,6 +61,7 @@ void ImageList::setCurrentImage(unsigned int number)
 void ImageList::addImage(std::unique_ptr<Image> image)
 {
     _images.push_back(std::move(image));
+    _images.back()->setPosition(position());
 }
 
 void ImageList::addImage(const std::string& filename)
@@ -73,15 +69,17 @@ void ImageList::addImage(const std::string& filename)
     addImage(make_unique<Image>(filename));
 }
 
-Graphics::Texture* ImageList::texture() const
-{
-    return _images.at(currentImage())->texture();
-}
-
 const std::vector<std::unique_ptr<Image>>& ImageList::images() const
 {
     return _images;
 }
 
+void ImageList::render(bool eggTransparency) {
+    _images.at(currentImage())->render(eggTransparency);
+}
+
+bool ImageList::opaque(const Point &pos) {
+    return _images.at(currentImage())->opaque(pos);
+}
 }
 }

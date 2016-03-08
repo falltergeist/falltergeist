@@ -125,7 +125,7 @@ void State::setModal(bool value)
 UI::Base* State::addUI(UI::Base* ui)
 {
     // Add to UI state position
-    ui->setPosition(ui->position() + position());
+    ui->setPosition(ui->position() - ui->offset() + position());
 
     _ui.push_back(std::unique_ptr<UI::Base>(ui));
     return ui;

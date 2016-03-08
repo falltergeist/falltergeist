@@ -61,9 +61,9 @@ public:
     void setItem(Game::ItemObject* item);
 
     void render(bool eggTransparency = false) override;
-    unsigned int pixel(const Point& pos) override;
-    Graphics::Texture* texture() const override;
     Size size() const override;
+
+    virtual bool opaque(const Point &pos) override;
 
     void onMouseLeftDown(Event::Mouse* event);
     void onMouseDragStart(Event::Mouse* event);

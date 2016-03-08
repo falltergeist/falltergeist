@@ -78,6 +78,9 @@ public:
     void init() override;
     void think() override;
 
+
+    virtual void render() override;
+
     void onMaskClick(Event::Mouse* event);
     void onButtonClick(Event::Mouse* event);
     void onAgeButtonClick(Event::Mouse* event);

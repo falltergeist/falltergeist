@@ -178,10 +178,10 @@ uint32_t* File::rgba(Pal::File* palFile)
 
     uint16_t w = width();
 
-    unsigned positionY = 0;
+    unsigned positionY = 1;
     for (auto direction : _directions)
     {
-        unsigned positionX = 0;
+        unsigned positionX = 1;
         for (auto frame : *direction->frames())
         {
             for (unsigned y = 0; y != frame->height(); ++y)
@@ -191,11 +191,40 @@ uint32_t* File::rgba(Pal::File* palFile)
                     _rgba[((y + positionY)*w) + x + positionX] = *palFile->color(frame->index(x, y));
                 }
             }
-            positionX += frame->width();
+            positionX += frame->width()+2;
         }
         positionY += direction->height();
     }
     return _rgba;
+}
+
+std::vector<bool>* File::mask(Pal::File* palFile)
+{
+    if (!_mask.empty()) return &_mask;
+
+    uint16_t w = width();
+    uint16_t h = height();
+
+    _mask.resize(w*h, true);
+
+    unsigned positionY = 1;
+    for (auto direction : _directions)
+    {
+        unsigned positionX = 1;
+        for (auto frame : *direction->frames())
+        {
+            for (unsigned y = 0; y != frame->height(); ++y)
+            {
+                for (unsigned x = 0; x != frame->width(); ++x)
+                {
+                    _mask[((y + positionY)*w) + x + positionX] = (palFile->color(frame->index(x, y))->alpha() > 0);
+                }
+            }
+            positionX += frame->width()+2;
+        }
+        positionY += direction->height();
+    }
+    return &_mask;
 }
 
 int16_t File::offsetX(unsigned int direction, unsigned int frame) const
@@ -208,93 +237,6 @@ int16_t File::offsetY(unsigned int direction, unsigned int frame) const
 {
     if (direction >= _directions.size()) direction = 0;
     return _directions.at(direction)->frames()->at(frame)->offsetY();
-}
-
-bool File::animatedPalette()
-{
-    if (_animatedMasks.empty()) animatedMasks();
-    return _animatedPalette;
-}
-
-std::map<MASK, uint8_t*>* File::animatedMasks()
-{
-    if (!_animatedMasks.empty()) return &_animatedMasks;
-
-    uint16_t w = width();
-    uint16_t h = height();
-
-    unsigned int positionY = 0;
-    for (auto direction : _directions)
-    {
-        unsigned int positionX = 0;
-        for (auto frame : *direction->frames())
-        {
-            for (unsigned int y = 0; y != frame->height(); ++y)
-            {
-                for (unsigned int x = 0; x != frame->width(); ++x)
-                {
-                    uint8_t index = frame->index(x, y);
-
-                    if (index >=229 && index <= 232)
-                    {
-                        if (!_animatedMasks[MASK::SLIME])
-                        {
-                            _animatedMasks[MASK::SLIME] = new uint8_t [w*h]();
-                        }
-                        _animatedMasks[MASK::SLIME][((y + positionY)*w) + x + positionX] = index;
-                    }
-                    else if (index >=233 && index <= 237)
-                    {
-                        if (!_animatedMasks[MASK::MONITOR])
-                        {
-                            _animatedMasks[MASK::MONITOR] = new uint8_t [w*h]();
-                        }
-                        _animatedMasks[MASK::MONITOR][((y + positionY)*w) + x + positionX] = index;
-
-                    }
-                    else if (index >=238 && index <= 242)
-                    {
-                        if (!_animatedMasks[MASK::FIRE_SLOW])
-                        {
-                            _animatedMasks[MASK::FIRE_SLOW] = new uint8_t [w*h]();
-                        }
-                        _animatedMasks[MASK::FIRE_SLOW][((y + positionY)*w) + x + positionX] = index;
-                    }
-                    else if (index >=243 && index <= 247)
-                    {
-                        if (!_animatedMasks[MASK::FIRE_FAST])
-                        {
-                            _animatedMasks[MASK::FIRE_FAST] = new uint8_t [w*h]();
-                        }
-                        _animatedMasks[MASK::FIRE_FAST][((y + positionY)*w) + x + positionX] = index;
-                    }
-                    else if (index >=248 && index <= 253)
-                    {
-                        if (!_animatedMasks[MASK::SHORE])
-                        {
-                            _animatedMasks[MASK::SHORE] = new uint8_t [w*h]();
-                        }
-                        _animatedMasks[MASK::SHORE][((y + positionY)*w) + x + positionX] = index;
-                    }
-                    else if (index == 254)
-                    {
-                        if (!_animatedMasks[MASK::REDDOT])
-                        {
-                            _animatedMasks[MASK::REDDOT] = new uint8_t [w*h]();
-                        }
-                        _animatedMasks[MASK::REDDOT][((y + positionY)*w) + x + positionX] = index;
-                    }
-                    if (index >= 229 && index <= 254)
-                    {
-                        _animatedPalette = true;
-                    }
-                }
-            }
-            positionX += direction->width();
-        }
-        positionY += direction->height();
-    }
-    return &_animatedMasks;
 }
 
 }

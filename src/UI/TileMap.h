@@ -22,9 +22,11 @@
 
 // C++ standard includes
 #include <vector>
+#include <map>
 #include <memory>
 
 // Falltergeist includes
+#include "../Graphics/Renderer.h"
 
 // Third party includes
 
@@ -33,6 +35,7 @@ namespace Falltergeist
 namespace Graphics
 {
     class Texture;
+    class Tilemap;
 }
 namespace UI
 {
@@ -45,15 +48,22 @@ public:
     TileMap();
     ~TileMap();
 
-    std::vector<std::unique_ptr<Tile>>& tiles();
+    std::map<unsigned int, std::unique_ptr<Tile>>&tiles();
     void render();
+    void init();
+    void setInside(bool inside);
+    bool inside();
+    void enableAll();
+    void disable(unsigned int num);
+    bool opaque(const Point& pos);
 
 protected:
-    unsigned int _square = 0;
-    std::unique_ptr<Graphics::Texture> _texture = nullptr;
-    std::vector<std::unique_ptr<Tile>> _tiles;
-    void _generateTexture();
-
+    std::map<unsigned int, std::unique_ptr<Tile>> _tiles;
+    uint32_t _tilesPerAtlas;
+    std::unique_ptr<Graphics::Tilemap> _tilemap;
+    uint32_t _atlases;
+    bool _inside = false;
+    void _floodDisable(int x, int y);
 };
 
 }

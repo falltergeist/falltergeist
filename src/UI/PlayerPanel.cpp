@@ -104,13 +104,13 @@ PlayerPanel::PlayerPanel() : UI::Base()
     _ui.push_back(std::make_shared<ImageButton>(ImageButton::Type::PANEL_ATTACK, position() + Point(267, 25)));
 
     // Hit points
-    _hitPoints = std::make_shared<SmallCounter>(position() + Point(471, 40));
+    _hitPoints = std::make_shared<SmallCounter>(position() + Point(473, 40));
     _hitPoints->setType(SmallCounter::Type::SIGNED);
     _hitPoints->setNumber(game->player()->hitPoints());
     _ui.push_back(_hitPoints);
 
     // Armor class
-    _armorClass = std::make_shared<SmallCounter>(position() + Point(472, 76));
+    _armorClass = std::make_shared<SmallCounter>(position() + Point(473, 76));
     _armorClass->setType(SmallCounter::Type::SIGNED);
     _armorClass->setNumber(game->player()->armorClass());
     _ui.push_back(_armorClass);
@@ -456,11 +456,6 @@ void PlayerPanel::openLoadGame()
     playWindowOpenSfx();
 }
 
-unsigned int PlayerPanel::pixel(const Point& pos)
-{
-    return _background->pixel(pos);
-}
-
 void PlayerPanel::displayMessage(const std::string& message)
 {
     Game::getInstance()->mixer()->playACMSound("sound/sfx/monitor.acm");
@@ -470,5 +465,8 @@ void PlayerPanel::displayMessage(const std::string& message)
     _messageLog->setLineOffset(_messageLog->numLines() - 6);
 }
 
+bool PlayerPanel::opaque(const Point &pos) {
+    return _background->opaque(pos);
+}
 }
 }

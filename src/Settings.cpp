@@ -107,7 +107,7 @@ bool Settings::save()
     preferences->setPropertyBool("player_speedup", _playerSpeedup);
     preferences->setPropertyBool("running", _running);
     preferences->setPropertyBool("subtitles", _subtitles);
-    preferences->setPropertyBool("targe_highlight", _targetHighlight);
+    preferences->setPropertyBool("target_highlight", _targetHighlight);
     preferences->setPropertyDouble("text_delay", _textDelay);
     preferences->setPropertyInt("violence_level", _violenceLevel);
 
@@ -212,7 +212,7 @@ bool Settings::load()
         _playerSpeedup = preferences->propertyBool("player_speedup", _playerSpeedup);
         _running = preferences->propertyBool("running", _running);
         _subtitles = preferences->propertyBool("subtitles", _subtitles);
-        _targetHighlight = preferences->propertyBool("targe_highlight", _targetHighlight);
+        _targetHighlight = preferences->propertyBool("target_highlight", _targetHighlight);
         _textDelay = preferences->propertyDouble("text_delay", _textDelay);
         _violenceLevel = preferences->propertyInt("violence_level", _violenceLevel);
     }

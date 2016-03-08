@@ -49,10 +49,10 @@ public:
     void start();
     void setRepeat(bool value);
 
-    Graphics::Texture* texture() const override;
     void render(bool eggTransparency = false) override;
     void think() override;
-    unsigned int pixel(const Point& pos) override;
+
+    virtual bool opaque(const Point &pos) override;
 
     Size size() const override;
     Point offset() const override;

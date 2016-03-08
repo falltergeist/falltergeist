@@ -85,21 +85,22 @@ void SaveGame::init()
     addUI(cancelButton);
 
     // LABELS
-    auto font3_907824ff = ResourceManager::getInstance()->font("font3.aaf", 0x907824ff);
+    std::string font3_907824ff = "font3.aaf";
+    SDL_Color color = {0x90, 0x78, 0x24, 0xff};
 
     // SAVE GAME LABEL
     auto saveGameLabel = new UI::TextArea(_t(MSG_LOAD_SAVE, 109), bgX+48, bgY+27);
-    saveGameLabel->setFont(font3_907824ff);
+    saveGameLabel->setFont(font3_907824ff, color);
     addUI(saveGameLabel);
 
     // DONE BUTTON LABEL
     auto doneButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 300), bgX+410, bgY+348);
-    doneButtonLabel->setFont(font3_907824ff);
+    doneButtonLabel->setFont(font3_907824ff, color);
     addUI(doneButtonLabel);
 
     // CANCEL BUTTON LABEL
     auto cancelButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 121), bgX+515, bgY+348);
-    cancelButtonLabel->setFont(font3_907824ff);
+    cancelButtonLabel->setFont(font3_907824ff, color);
     addUI(cancelButtonLabel);
 }
 

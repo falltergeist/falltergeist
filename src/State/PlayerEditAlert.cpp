@@ -65,12 +65,11 @@ void PlayerEditAlert::init()
 
     bg->setPosition(bgPos + Point(164, 173));
 
-    auto font1_ff9f48ff = ResourceManager::getInstance()->font("font1.aaf", 0xff9f48ff);
 
     auto message = new UI::TextArea(_message.c_str(), bgPos + Point(194, 213));
     message->setWidth(250);
     message->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
-    message->setFont(font1_ff9f48ff);
+    message->setFont("font1.aaf", {0xff, 0x9f, 0x48, 0xff});
 
     auto doneBox = new UI::Image("art/intrface/donebox.frm");
     doneBox->setPosition(bgPos + Point(254, 270));
@@ -82,8 +81,7 @@ void PlayerEditAlert::init()
     });
 
     auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX + 284, bgY + 273);
-    auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
-    doneLabel->setFont(font3_b89c28ff);
+    doneLabel->setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
 
     addUI(bg);
     addUI(message);

@@ -335,10 +335,11 @@ bool Rect::inRect(const Point& needle, const Point& topLeft, const Size& size)
 
 bool Rect::intersects(const Point& topLeft1, const Size& size1, const Point& topLeft2, const Size& size2)
 {
-    Point bottomRight1 = topLeft1 + size1;
-    Point bottomRight2 = topLeft2 + size2;
-    return (bottomRight1.x() >= topLeft2.x() && bottomRight1.y() >= topLeft2.y())
-           || (bottomRight2.x() >= topLeft1.x() && bottomRight2.y() >= topLeft1.y());
+    const Point bottomRight1 = topLeft1 + size1;
+    const Point bottomRight2 = topLeft2 + size2;
+
+    return !(std::max(topLeft1.x(), topLeft2.x()) > std::min(bottomRight1.x(), bottomRight2.x())
+             || std::max(topLeft1.y(), topLeft2.y()) > std::min(bottomRight1.y(), bottomRight2.y()));
 }
 
 // end Rect class

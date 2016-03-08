@@ -335,6 +335,37 @@ void CrossPlatform::createDirectory(std::string path)
     _createDirectory(path.c_str());
 }
 
+bool CrossPlatform::fileExists(std::string file)
+{
+#if defined(__unix__) || defined(__APPLE__) // Linux, OS X, BSD
+    struct stat st;
+
+    if (stat(file.c_str(), &st) == 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+#elif defined(_WIN32) || defined(WIN32) // Windows
+    DWORD attrs = GetFileAttributes(dir);
+
+    // Assume path exists
+    if (attrs != INVALID_FILE_ATTRIBUTES)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+#else
+    #error Platform not supported: CrossPlatform::_createDirectory not implemented
+#endif
+    return false;
+}
+
 std::string CrossPlatform::getConfigPath()
 {
 #if defined(__unix__)

@@ -34,7 +34,7 @@ namespace Falltergeist
 namespace UI
 {
 
-Tile::Tile(unsigned int number, const Point& pos)
+Tile::Tile(unsigned int number, const Point &pos)
 {
     _number = number;
     _position = pos;
@@ -58,6 +58,21 @@ unsigned int Tile::index() const
 void Tile::setIndex(unsigned int value)
 {
     _index = value;
+}
+
+void Tile::enable()
+{
+    _enabled = true;
+}
+
+void Tile::disable()
+{
+    _enabled = false;
+}
+
+bool Tile::enabled()
+{
+    return _enabled;
 }
 
 }

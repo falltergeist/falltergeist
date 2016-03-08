@@ -19,6 +19,7 @@
 
 // C++ standard includes
 #include <sstream>
+#include <UI/Rectangle.h>
 
 // Falltergeist includes
 #include "../Event/Event.h"
@@ -108,9 +109,7 @@ void Inventory::init()
 
     addUI("player_name", new UI::TextArea(player->name(), screenX, screenY));
 
-    auto line1 = new UI::Image(142, 1);
-    line1->setPosition({screenX, screenY+16});
-    line1->texture()->fill(0x3ff800ff); // default green color
+    auto line1 = new UI::Rectangle(Point(screenX, screenY+16), Size(142, 1), {0x3f, 0xf8, 0x00, 0xff} );
 
     std::string statsLabels;
     for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
@@ -196,13 +195,8 @@ void Inventory::init()
     }
     auto damageResistanceLabel = new UI::TextArea(ss.str(), screenX+120, screenY+40);
 
-    auto line2 = new UI::Image(142, 1);
-    line2->setPosition({screenX, screenY+94});
-    line2->texture()->fill(0x3ff800ff); // default green color
-
-    auto line3 = new UI::Image(142, 1);
-    line3->setPosition({screenX, screenY+134});
-    line3->texture()->fill(0x3ff800ff); // default green color
+    auto line2 = new UI::Rectangle(Point(screenX, screenY+94), Size(142, 1), {0x3f, 0xf8, 0x00, 0xff} );
+    auto line3 = new UI::Rectangle(Point(screenX, screenY+134), Size(142, 1), {0x3f, 0xf8, 0x00, 0xff} );
 
     // label: Total Wt: (20)
     auto weight = player->carryWeight();
@@ -219,7 +213,7 @@ void Inventory::init()
     auto weightMaxLabel = new UI::TextArea(ss.str(), screenX+94, screenY+180);
     if (weight>weightMax)
     {
-        weightLabel->setFont(ResourceManager::getInstance()->font("font1.aaf", 0xff0000ff));
+        weightLabel->setFont("font1.aaf", {0xff, 0x00, 0x00, 0xff});
     }
 
     // label: left hand
@@ -260,7 +254,7 @@ void Inventory::init()
     addUI("rightHandLabel", rightHandLabel);
     addUI("screenLabel", screenLabel);
 
-    auto inventoryList = new UI::ItemsList({40, 40});
+    auto inventoryList = new UI::ItemsList(Point(40, 40));
     inventoryList->setItems(game->player()->inventory());
     addUI("inventory_list", inventoryList);
 
@@ -440,8 +434,8 @@ void Inventory::_screenShow (unsigned int PID)
     auto armorClassLabel = getTextArea("armorClassLabel");
     auto damageThresholdLabel = getTextArea("damageThresholdLabel");
     auto damageResistanceLabel = getTextArea("damageResistanceLabel");
-    auto line2 = dynamic_cast<UI::Image*>(getUI("line2"));
-    auto line3 = dynamic_cast<UI::Image*>(getUI("line3"));
+    auto line2 = getUI("line2");
+    auto line3 = getUI("line3");
     auto totalWtLabel = getTextArea("totalWtLabel");
     auto weightLabel = getTextArea("weightLabel");
     auto weightMaxLabel = getTextArea("weightMaxLabel");

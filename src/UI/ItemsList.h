@@ -68,7 +68,6 @@ public:
     bool canScrollDown();
 
     virtual void render(bool eggTransparency = false);
-    virtual unsigned int pixel(const Point& pos);
 
     void onMouseLeftDown(Event::Mouse* event);
     void onMouseDragStart(Event::Mouse* event);
@@ -81,6 +80,9 @@ public:
     void removeItem(InventoryItem* item, unsigned int ammount);
 
     Event::MouseHandler& itemDragStopHandler();
+
+
+    virtual bool opaque(const Point &pos) override;
 
 protected:
     std::vector<Game::ItemObject*>* _items = nullptr;

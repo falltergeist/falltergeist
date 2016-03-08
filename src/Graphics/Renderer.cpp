@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <cmath>
+#include <ResourceManager.h>
 
 // Falltergeist includes
 #include "../Base/StlFeatures.h"
@@ -32,8 +33,13 @@
 #include "../Logger.h"
 #include "../Settings.h"
 #include "../State/State.h"
+#include "Shader.h"
 
 // Third party includes
+#include <glm/gtc/matrix_transform.hpp>
+#include <SDL_image.h>
+#include <sys/stat.h>
+#include <CrossPlatform.h>
 
 namespace Falltergeist
 {
@@ -41,6 +47,7 @@ namespace Graphics
 {
 
 using namespace Base;
+
 
 Renderer::Renderer(unsigned int width, unsigned int height)
 {
@@ -62,6 +69,12 @@ Renderer::Renderer(const Size& size) : Renderer((unsigned)size.width(), (unsigne
 
 Renderer::~Renderer()
 {
+    GL_CHECK(glDeleteBuffers(1, &_coord_vbo));
+    GL_CHECK(glDeleteBuffers(1, &_texcoord_vbo));
+    GL_CHECK(glDeleteBuffers(1, &_ebo));
+
+    GL_CHECK(glDeleteVertexArrays(1, &_vao));
+
 }
 
 void Renderer::init()
@@ -74,7 +87,7 @@ void Renderer::init()
 
     std::string message =  "SDL_CreateWindow " + std::to_string(_size.width()) + "x" + std::to_string(_size.height()) + "x" +std::to_string(32)+ " - ";
 
-    uint32_t flags = SDL_WINDOW_SHOWN;
+    uint32_t flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
     if (Game::getInstance()->settings()->fullscreen())
     {
         flags |= SDL_WINDOW_FULLSCREEN;
@@ -88,17 +101,22 @@ void Renderer::init()
 
     Logger::info("RENDERER") << message + "[OK]" << std::endl;
 
-    message =  "SDL_CreateRenderer - ";
-    _sdlRenderer = SDL_CreateRenderer(_sdlWindow, -1, SDL_RENDERER_ACCELERATED);
-    if (!_sdlRenderer)
+    message =  "Init OpenGL - ";
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    _glcontext = SDL_GL_CreateContext(_sdlWindow);
+
+    if (!_glcontext)
     {
         throw Exception(message + "[FAIL]");
     }
 
     Logger::info("RENDERER") << message + "[OK]" << std::endl;
+    SDL_GL_SetSwapInterval(0);
 
-    SDL_SetRenderDrawBlendMode(_sdlRenderer, SDL_BLENDMODE_BLEND);
-
+/*
+ * TODO: newrender
     if (Game::getInstance()->settings()->scale() != 0)
     {
         switch (Game::getInstance()->settings()->scale())
@@ -116,60 +134,75 @@ void Renderer::init()
         SDL_RenderSetLogicalSize(_sdlRenderer, _size.width(), _size.height());
         SDL_RenderGetScale(_sdlRenderer, &_scaleX, &_scaleY);
     }
+*/
 
-    SDL_RendererInfo rendererInfo;
-    SDL_GetRendererInfo(_sdlRenderer, &rendererInfo);
+    glGetIntegerv(GL_MAJOR_VERSION, &_major);
+    glGetIntegerv(GL_MINOR_VERSION, &_minor);
 
-    Logger::info("RENDERER") << "name: " << rendererInfo.name << std::endl;
-    if (rendererInfo.flags & SDL_RENDERER_SOFTWARE)
-    {
-        Logger::info("RENDERER") << "flags: SDL_RENDERER_SOFTWARE" << std::endl;
-    }
-    if (rendererInfo.flags & SDL_RENDERER_ACCELERATED)
-    {
-        Logger::info("RENDERER") << "flags: SDL_RENDERER_ACCELERATED" << std::endl;
-    }
-    Logger::info("RENDERER") << "num_texture_formats: " << rendererInfo.num_texture_formats << std::endl;
-    for (unsigned int i = 0; i != 16; i++)
-    {
-        auto& info = Logger::info("RENDERER");
-        info << "texture_formats[" << i << "]: ";
-        auto format = rendererInfo.texture_formats[i];
+    Logger::info("RENDERER") << "Using OpenGL " << _major << "." << _minor << std::endl;
+    Logger::info("RENDERER") << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
+    Logger::info("RENDERER") << "Version: " << glGetString(GL_VERSION) << std::endl;
+    Logger::info("RENDERER") << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
 
-        switch (format)
-        {
-            case SDL_PIXELFORMAT_INDEX1LSB:
-                info << "SDL_PIXELFORMAT_INDEX1LSB";
-                break;
-            case SDL_PIXELFORMAT_INDEX1MSB:
-                info << "SDL_PIXELFORMAT_INDEX1MSB";
-                break;
-            case SDL_PIXELFORMAT_INDEX4LSB:
-                info << "SDL_PIXELFORMAT_INDEX4LSB";
-                break;
-            case SDL_PIXELFORMAT_INDEX4MSB:
-                info << "SDL_PIXELFORMAT_INDEX4MSB";
-                break;
-            case SDL_PIXELFORMAT_INDEX8:
-                info << "SDL_PIXELFORMAT_INDEX8";
-                break;
-            case SDL_PIXELFORMAT_RGBA8888:
-                info << "SDL_PIXELFORMAT_RGBA8888";
-                break;
-            case SDL_PIXELFORMAT_ARGB8888:
-                info << "SDL_PIXELFORMAT_ARGB8888";
-                break;
-            case SDL_PIXELFORMAT_RGB888:
-                info << "SDL_PIXELFORMAT_RGB888";
-                break;
-            default:
-                info << format;
-                break;
-        }
-        info << std::endl;
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &_maxTexSize);
+
+
+    message =  "Init GLEW - ";
+    glewExperimental = GL_TRUE;
+    GLenum err = glewInit();
+    glGetError(); // glew sometimes throws bad enum, so clean it
+    if (GLEW_OK != err)
+    {
+        throw Exception(message + "[FAIL]: " + std::string((char*)glewGetErrorString(err)));
     }
-    Logger::info("RENDERER") << "max_texture_width: " << rendererInfo.max_texture_width << std::endl;
-    Logger::info("RENDERER") << "max_texture_height: " << rendererInfo.max_texture_height << std::endl;
+    Logger::info("RENDERER") << message + "[OK]" << std::endl;
+    Logger::info("RENDERER") << "Using GLEW " << glewGetString(GLEW_VERSION) << std::endl;
+
+    Logger::info("RENDERER") << "Extensions: " << std::endl;
+
+    GLint count;
+    glGetIntegerv( GL_NUM_EXTENSIONS,&count );
+
+    GLint i;
+    for (i = 0; i<count; i++)
+    {
+        Logger::info("RENDERER") << (const char*)glGetStringi( GL_EXTENSIONS, i ) << std::endl;
+    }
+
+
+    Logger::info("RENDERER") << "Loading default shaders" << std::endl;
+    ResourceManager::getInstance()->shader("default");
+    ResourceManager::getInstance()->shader("sprite");
+    ResourceManager::getInstance()->shader("font");
+    ResourceManager::getInstance()->shader("animation");
+    ResourceManager::getInstance()->shader("tilemap");
+    Logger::info("RENDERER") << "[OK]" << std::endl;
+
+    Logger::info("RENDERER") << "Generating buffers" << std::endl;
+
+    // generate VBOs for verts and tex
+    GL_CHECK(glGenVertexArrays(1, &_vao));
+
+    GL_CHECK(glBindVertexArray(_vao));
+
+    GL_CHECK(glGenBuffers(1, &_coord_vbo));
+    GL_CHECK(glGenBuffers(1, &_texcoord_vbo));
+
+    // pre-populate element buffer. 6 elements, because we draw as triangles
+    GL_CHECK(glGenBuffers(1, &_ebo));
+    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
+    GLushort indexes[6] = { 0, 1, 2, 3, 2, 1 };
+    GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(GLushort), indexes, GL_STATIC_DRAW));
+
+
+    // generate projection matrix
+    _MVP = glm::ortho(0.0, (double)_size.width(), (double)_size.height(), 0.0, -1.0, 1.0);
+
+    // load egg
+
+    _egg = ResourceManager::getInstance()->texture("data/egg.png");
+
+
 }
 
 void Renderer::think()
@@ -206,9 +239,8 @@ bool Renderer::fading()
 
 void Renderer::fadeIn(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie)
 {
-    // @fixme: rgb color is not used here
     _inmovie = inmovie;
-    _fadeColor.a = 255;
+    _fadeColor = {r, g, b, 255};
     _fadeAlpha = 255;
     _fadeStep = -1;
     _fadeDone = false;
@@ -228,21 +260,17 @@ void Renderer::fadeOut(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool 
 
 void Renderer::beginFrame()
 {
-    SDL_RenderClear(_sdlRenderer);
+    GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+    GL_CHECK(glEnable(GL_BLEND));
+    GL_CHECK(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
     think();
 }
 
 void Renderer::endFrame()
 {
-    if (!fadeDone())
-    {
-        SDL_Color color;
-        SDL_GetRenderDrawColor(_sdlRenderer, &color.r, &color.g, &color.b, &color.a);
-        SDL_SetRenderDrawColor(_sdlRenderer, _fadeColor.r, _fadeColor.g, _fadeColor.b, _fadeColor.a);
-        SDL_RenderFillRect(_sdlRenderer, NULL);
-        SDL_SetRenderDrawColor(_sdlRenderer, color.r, color.g, color.b, color.a);
-    }
-    SDL_RenderPresent(_sdlRenderer);
+    GL_CHECK(glDisable(GL_BLEND));
+    SDL_GL_SwapWindow(_sdlWindow);
 }
 
 int Renderer::width()
@@ -260,6 +288,7 @@ const Size& Renderer::size() const
     return _size;
 }
 
+    /*
 void Renderer::drawTexture(Texture* texture, int x, int y, int sourceX, int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
 {
     if (!texture) return;
@@ -280,25 +309,68 @@ void Renderer::drawTexture(Texture* texture, const Point& pos, const Point& src,
 {
     drawTexture(texture, pos.x(), pos.y(), src.x(), src.y(), (unsigned int)srcSize.width(), (unsigned int)srcSize.height());
 }
+*/
 
-std::unique_ptr<Texture> Renderer::screenshot()
+void Renderer::screenshot()
 {
-    SDL_Surface* window = SDL_GetWindowSurface(sdlWindow());
-    if (!window)
-    {
-        throw Exception(SDL_GetError());
+    std::string filename;
+    Uint32 rmask, gmask, bmask, amask;
+    SDL_Surface* output;
+
+    int iter = 0;
+    do {
+        std::string siter = std::to_string(iter);
+        if(siter.size()<3)
+            siter.insert(0, 3 - siter.size(), '0');
+        filename = "screenshot" + siter + ".png";
+        iter++;
+    } while (CrossPlatform::fileExists(filename) && iter < 1000);
+
+    if (CrossPlatform::fileExists(filename)) {
+        Logger::warning("GAME") << "Too many screenshots" << std::endl;
+        return;
     }
 
-    std::unique_ptr<Texture> texture(new Texture(window->w, window->h));
-    auto surface = texture->sdlSurface();
-    SDL_RenderReadPixels(_sdlRenderer, NULL, surface->format->format, surface->pixels, surface->pitch);
-    SDL_FreeSurface(window);
-    return texture;
-}
 
-std::string Renderer::name()
-{
-    return _name;
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+    rmask = 0xff000000;
+    gmask = 0x00ff0000;
+    bmask = 0x0000ff00;
+    amask = 0x000000ff;
+#else
+    rmask = 0x000000ff;
+    gmask = 0x0000ff00;
+    bmask = 0x00ff0000;
+    amask = 0xff000000;
+#endif
+
+    output = SDL_CreateRGBSurface(0, width(), height(), 32, rmask, gmask, bmask, amask);
+    uint8_t *destPixels = (uint8_t*)output->pixels;
+    uint8_t *srcPixels = new uint8_t[width() * height() * 4];
+
+    glReadBuffer(GL_BACK);
+    glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, srcPixels);
+
+    for(int y=0; y<height(); ++y)
+    {
+        for(int x=0; x<width(); ++x)
+        {
+            uint8_t* pDestPix = &destPixels[((width() * y) + x) * 4];
+            uint8_t* pSrcPix = &srcPixels[((width() * ((height()-1) - y)) + x) * 4];
+            pDestPix[0] = pSrcPix[0];
+            pDestPix[1] = pSrcPix[1];
+            pDestPix[2] = pSrcPix[2];
+            pDestPix[3] = 255;
+        }
+    }
+
+    IMG_SavePNG(output,filename.c_str());
+    delete[] srcPixels;
+    SDL_FreeSurface(output);
+    Logger::info("GAME") << "Screenshot saved to " + filename << std::endl;
+
+    return;
+
 }
 
 void Renderer::setCaption(const std::string& caption)
@@ -311,11 +383,6 @@ SDL_Window* Renderer::sdlWindow()
     return _sdlWindow;
 }
 
-SDL_Renderer* Renderer::sdlRenderer()
-{
-    return _sdlRenderer;
-}
-
 float Renderer::scaleX()
 {
     return _scaleX;
@@ -326,5 +393,87 @@ float Renderer::scaleY()
     return _scaleY;
 }
 
+GLuint Renderer::getVAO() {
+    return _vao;
+}
+
+GLuint Renderer::getVVBO() {
+    return _coord_vbo;
+}
+
+GLuint Renderer::getTVBO() {
+    return _texcoord_vbo;
+}
+
+glm::mat4 Renderer::getMVP() {
+    return _MVP;
+}
+
+GLuint Renderer::getEBO() {
+    return _ebo;
+}
+
+void Renderer::drawRect(int x, int y, int w, int h, SDL_Color color)
+{
+    std::vector<glm::vec2> vertices;
+
+    glm::vec4 fcolor = glm::vec4((float)color.r/255.0f, (float)color.g/255.0f, (float)color.b/255.0f, (float)color.a/255.0f);
+
+    vertices.push_back(glm::vec2((float)x, (float)y));
+    vertices.push_back(glm::vec2((float)x, (float)y+(float)h));
+    vertices.push_back(glm::vec2((float)x+(float)w, (float)y));
+    vertices.push_back(glm::vec2((float)x+(float)w, (float)y+(float)h));
+
+
+    GL_CHECK(ResourceManager::getInstance()->shader("default")->use());
+
+    GL_CHECK(ResourceManager::getInstance()->shader("default")->setUniform("color", fcolor));
+
+    GL_CHECK(ResourceManager::getInstance()->shader("default")->setUniform("MVP", getMVP()));
+
+
+    GL_CHECK(glBindVertexArray(getVAO()));
+
+
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getVVBO()));
+
+    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec2), &vertices[0], GL_DYNAMIC_DRAW));
+
+    GL_CHECK(glVertexAttribPointer(ResourceManager::getInstance()->shader("default")->getAttrib("Position"), 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+
+    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Game::getInstance()->renderer()->getEBO()));
+
+    GL_CHECK(glEnableVertexAttribArray(ResourceManager::getInstance()->shader("default")->getAttrib("Position")));
+
+    GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0 ));
+
+    GL_CHECK(glDisableVertexAttribArray(ResourceManager::getInstance()->shader("default")->getAttrib("Position")));
+
+    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    GL_CHECK(glBindVertexArray(0));
+
+    GL_CHECK(ResourceManager::getInstance()->shader("default")->unuse());
+}
+
+void Renderer::drawRect(const Point &pos, const Size &size, SDL_Color color)
+{
+    drawRect(pos.x(), pos.y(), size.width(), size.height(), color);
+}
+
+glm::vec4 Renderer::fadeColor()
+{
+    return glm::vec4((float)_fadeColor.r/255.0, (float)_fadeColor.g/255.0, (float)_fadeColor.b/255.0, (float)_fadeColor.a/255.0);
+}
+
+int32_t Renderer::maxTextureSize()
+{
+    return 1024;
+    return _maxTexSize;
+}
+
+Texture *Renderer::egg() {
+    return _egg;
+}
 }
 }

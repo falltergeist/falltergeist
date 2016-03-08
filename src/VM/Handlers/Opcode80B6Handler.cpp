@@ -52,7 +52,7 @@ void Opcode80B6Handler::_run()
         _error("move_to: object is NULL");
     }
     auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
-    State::Location::moveObjectToHexagon(object, hexagon);
+    Game::getInstance()->locationState()->moveObjectToHexagon(object, hexagon);
     object->setElevation(elevation);
     if (object == Game::getInstance()->player()) {
         Game::getInstance()->locationState()->centerCameraAtHexagon(object->hexagon());

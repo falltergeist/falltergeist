@@ -23,7 +23,8 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../UI/ImageList.h"
+#include <Graphics/Sprite.h>
+#include "Base.h"
 
 // Third party includes
 
@@ -34,11 +35,11 @@ namespace UI
 
 class Image;
 
-class MonthCounter : public ImageList
+class MonthCounter : public Base
 {
 public:
 
-    enum class Month
+    enum Month
     {
         JANUARY = 0,
         FEBRUARY,
@@ -60,8 +61,17 @@ public:
     Month month() const;
     void setMonth(Month month);
 
+
+    virtual bool opaque(const Point &pos) override;
+
+
+    virtual void render(bool eggTransparency) override;
+
 private:
     Month _month;
+    Size _size;
+    std::shared_ptr<Graphics::Sprite> _sprite;
+    std::vector<SDL_Rect> _rects;
 };
 
 }

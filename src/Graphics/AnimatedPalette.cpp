@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "Renderer.h"
 
 // Third party includes
 #include <SDL.h>
@@ -33,45 +34,6 @@ namespace Falltergeist
 namespace Graphics
 {
 
-const std::array<unsigned int, 5> AnimatedPalette::_monitorsPalette = {
-    0x6B6B6FFF,
-    0x63677FFF,
-    0x576B8FFF,
-    0x0093A3FF,
-    0x6BBBFFFF
-};
-
-const std::array<unsigned int, 4> AnimatedPalette::_slimePalette = {
-    0x006C00FF,
-    0x0B7307FF,
-    0x1B7B0FFF,
-    0x2B831BFF
-};
-
-const std::array<unsigned int, 6> AnimatedPalette::_shorePalette = {
-    0x533F2BFF,
-    0x4B3B2BFF,
-    0x433727FF,
-    0x3F3327FF,
-    0x372F23FF,
-    0x332B23FF
-};
-
-const std::array<unsigned int, 5> AnimatedPalette::_fireSlowPalette = {
-    0xFF0000FF,
-    0xD70000FF,
-    0x932B0BFF,
-    0xFF7700FF,
-    0xFF3B00FF
-};
-
-const std::array<unsigned int, 5> AnimatedPalette::_fireFastPalette = {
-    0x470000FF,
-    0x7B0000FF,
-    0xB30000FF,
-    0x7B0000FF,
-    0x470000FF
-};
 
 AnimatedPalette::AnimatedPalette()
 {
@@ -81,45 +43,7 @@ AnimatedPalette::~AnimatedPalette()
 {
 }
 
-unsigned int AnimatedPalette::color(unsigned char index, unsigned char counter)
-{
-    if (index >= 233 && index <= 237) // monitors
-    {
-        unsigned int newIndex = (index - 233 + counter) % _monitorsPalette.size();
-        return _monitorsPalette[newIndex];
-    }
 
-    if (index >= 229 && index <= 232) // slime
-    {
-        unsigned int newIndex = (index - 229 + counter) % _slimePalette.size();
-        return _slimePalette[newIndex];
-    }
-
-    if (index >= 248 && index <= 253) // shore
-    {
-        unsigned int newIndex = (index - 248 + counter) % _shorePalette.size();
-        return _shorePalette[newIndex];
-    }
-
-    if (index >= 238 && index <= 242) // slow fire
-    {
-        unsigned int newIndex = (index - 238 + counter) % _fireSlowPalette.size();
-        return _fireSlowPalette[newIndex];
-    }
-
-    if (index >= 243 && index <= 247) // fast fire
-    {
-        unsigned int newIndex = (index - 243 + counter) % _fireFastPalette.size();
-        return _fireFastPalette[newIndex];
-    }
-
-    if (index == 254) // blinking red
-    {
-        return ((((counter*4)) << 24)) | 0x000000FF;
-    }
-
-    return 0x00000000;
-}
 
 void AnimatedPalette::think()
 {
@@ -176,25 +100,16 @@ void AnimatedPalette::think()
     }
 }
 
-unsigned int AnimatedPalette::getCounter(MASK type)
-{
-    switch (type)
-    {
-        case MASK::SLIME:
-            return _slimeCounter;
-        case MASK::MONITOR:
-            return _monitorsCounter;
-        case MASK::SHORE:
-            return _shoreCounter;
-        case MASK::FIRE_FAST:
-            return _fireFastCounter;
-        case MASK::FIRE_SLOW:
-            return _fireSlowCounter;
-        case MASK::REDDOT:
-            return _blinkingRedCounter;
-    }
-    return 0;
+std::vector<GLuint> AnimatedPalette::counters() {
+    std::vector<GLuint> cnt;
+    cnt.reserve(6);
+    cnt.push_back(_slimeCounter);
+    cnt.push_back(_monitorsCounter);
+    cnt.push_back(_fireSlowCounter);
+    cnt.push_back(_fireFastCounter);
+    cnt.push_back(_shoreCounter);
+    cnt.push_back(_blinkingRedCounter);
+    return cnt;
 }
-
 }
 }

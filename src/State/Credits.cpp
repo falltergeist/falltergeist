@@ -66,14 +66,18 @@ void Credits::init()
     ss << credits;
     std::string line;
 
-    auto font_default = ResourceManager::getInstance()->font("font4.aaf", 0x907824ff);
-    auto font_at = ResourceManager::getInstance()->font("font3.aaf", 0x706050ff);
-    auto font_hash = ResourceManager::getInstance()->font("font4.aaf", 0x8c8c84ff);
+    auto font_default = ResourceManager::getInstance()->font("font4.aaf");
+    SDL_Color default_color = {0x90, 0x78, 0x24, 0xFF};
+    auto font_at = ResourceManager::getInstance()->font("font3.aaf");
+    SDL_Color at_color = { 0x70, 0x60, 0x50, 0xFF};
+    auto font_hash = ResourceManager::getInstance()->font("font4.aaf");
+    SDL_Color hash_color = { 0x8c, 0x8c, 0x84, 0xFF};
 
     int y = 0;
     while (std::getline(ss, line))
     {
-        Font* cur_font = font_default;
+        Graphics::Font* cur_font = font_default;
+        SDL_Color cur_color = default_color;
         int additionalGap = 0;
         if (line.find('\r') != std::string::npos)
         {
@@ -83,11 +87,13 @@ void Credits::init()
         {
             line.erase(line.begin());
             cur_font = font_hash;
+            cur_color = hash_color;
         }
         else if (line[0] == '@')
         {
             line.erase(line.begin());
             cur_font = font_at;
+            cur_color = at_color;
             additionalGap = 6;
         }
         else if (line.empty())
@@ -96,7 +102,7 @@ void Credits::init()
         }
 
         auto tx = new UI::TextArea(line, 0, y);
-        tx->setFont(cur_font);
+        tx->setFont(cur_font, cur_color);
         tx->setSize({640, 0});
         tx->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
         addUI(tx);

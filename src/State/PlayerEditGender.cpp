@@ -77,8 +77,7 @@ void PlayerEditGender::init()
     doneBox->setPosition(bgPos + Point(250, 42));
 
     auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX+281, bgY+45);
-    auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
-    doneLabel->setFont(font3_b89c28ff);
+    doneLabel->setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
 
     auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+260, bgY+45);
     doneButton->mouseClickHandler().add(std::bind(&PlayerEditGender::onDoneButtonClick, this, std::placeholders::_1));
@@ -94,6 +93,7 @@ void PlayerEditGender::init()
 
 void PlayerEditGender::onDoneButtonClick(Event::Mouse* event)
 {
+    Game::getInstance()->player()->setGender(_gender);
     Game::getInstance()->popState();
 }
 

@@ -26,6 +26,7 @@
 
 // Falltergeist includes
 #include "../UI/Base.h"
+#include "../Graphics/Sprite.h"
 
 // Third party includes
 
@@ -82,21 +83,25 @@ public:
     ~ImageButton() override;
 
     //void setState(unsigned int value);
-    Graphics::Texture* texture() const;
 
     bool checked();
     void setChecked(bool _checked);
 
     virtual void handle(Event::Mouse* mouseEvent) override;
+    virtual void render(bool eggTransparency = false) override;
+    bool opaque(unsigned int x, unsigned int y);
+    virtual bool opaque(const Point &pos) override;
+
 
 protected:
     bool _checkboxMode = false; // remember new state after click
-    bool _checked = false;    
-    
+    bool _checked = false;
+
     std::string _downSound;
     std::string _upSound;
+    std::shared_ptr<Graphics::Sprite> _butup;
+    std::shared_ptr<Graphics::Sprite> _butdown;
 
-    std::vector<Graphics::Texture*> _textures;
     void _onMouseClick(Event::Mouse* event);
     void _onMouseDown(Event::Mouse* event);
     void _onMouseOut(Event::Mouse* event);

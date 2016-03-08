@@ -18,6 +18,7 @@
  */
 
 // Related headers
+#include <TransFlags.h>
 #include "../Game/GenericSceneryObject.h"
 
 // C++ standard includes
@@ -42,7 +43,7 @@ GenericSceneryObject::~GenericSceneryObject()
 
 bool GenericSceneryObject::_useEggTransparency()
 {
-    return (_trans == Trans::DEFAULT);
+    return (_trans == Falltergeist::TransFlags::Trans::DEFAULT);
 }
 }
 }

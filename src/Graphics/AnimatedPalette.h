@@ -22,9 +22,12 @@
 
 // C++ standard includes
 #include <array>
+#include <glm/glm.hpp>
+#include <vector>
 
 // Falltergeist includes
 #include "../Format/Enums.h"
+#include "Renderer.h"
 
 // Third party includes
 
@@ -39,16 +42,10 @@ public:
     AnimatedPalette();
     ~AnimatedPalette();
 
-    unsigned int color(unsigned char index, unsigned char counter);
+    std::vector<GLuint> counters();
     void think();
-    unsigned int getCounter(MASK type);
 
 protected:
-    static const std::array<unsigned int, 5> _monitorsPalette;
-    static const std::array<unsigned int, 4> _slimePalette;
-    static const std::array<unsigned int, 6> _shorePalette;
-    static const std::array<unsigned int, 5> _fireSlowPalette;
-    static const std::array<unsigned int, 5> _fireFastPalette;
 
     unsigned int _slimeTicks = 0;
     unsigned int _slimeCounter = 0;

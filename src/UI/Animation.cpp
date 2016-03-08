@@ -38,9 +38,9 @@
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../UI/AnimationFrame.h"
+#include "Base.h"
 
 // Third party includes
-#include <SDL.h>
 
 namespace Falltergeist
 {
@@ -56,8 +56,9 @@ Animation::Animation() : Falltergeist::UI::Base()
 
 Animation::Animation(const std::string& frmName, unsigned int direction) : Falltergeist::UI::Base()
 {
+    _direction = direction;
     auto frm = ResourceManager::getInstance()->frmFileType(frmName);
-    setTexture(ResourceManager::getInstance()->texture(frmName));
+    _animation = make_unique<Graphics::Animation>(frmName);
 
     _actionFrame = frm->actionFrame();
     auto dir = frm->directions()->at(direction);
@@ -72,8 +73,8 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
         y += frm->directions()->at(d)->height(); //? может i - 1
     }
 
-    int xOffset = 0;
-    int yOffset = 0;
+    int xOffset = 1;
+    int yOffset = 1;
     for (unsigned int f = 0; f != frm->framesPerDirection(); ++f)
     {
         xOffset += frm->offsetX(direction, f);
@@ -95,123 +96,11 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
             frame->setDuration((unsigned)std::round(1000.0 / static_cast<double>(frm->framesPerSecond())));
         }
 
-        x += frame->width();
+        x += frame->width()+2;
         _animationFrames.push_back(std::move(frame));
     }
 
-    if (frm->animatedPalette())
-    {
-        Graphics::AnimatedPalette*  palette=Game::getInstance()->animatedPalette();
-        auto masks = frm->animatedMasks();
 
-        if ((*masks)[MASK::MONITOR] != NULL)
-        {
-            for (auto i=0; i<5; i++)
-            {
-                unsigned int mask[frm->width() * frm->height()];
-
-                //modify
-                for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
-                {
-                    mask[j] = palette->color((*masks)[MASK::MONITOR][j], i);
-                }
-                //set
-                auto texture = new Graphics::Texture(frm->width(), frm->height());
-                texture->loadFromRGBA(mask);
-                _monitorTextures.push_back(texture);
-            }
-        }
-
-        if ((*masks)[MASK::SLIME] != NULL)
-        {
-            for (auto i=0; i<4; i++)
-            {
-                unsigned int mask[frm->width() * frm->height()];
-
-                //modify
-                for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
-                {
-                    mask[j] = palette->color(((*masks)[MASK::SLIME][j]), i);
-                }
-                //set
-                auto texture = new Graphics::Texture(frm->width(), frm->height());
-                texture->loadFromRGBA(mask);
-                _slimeTextures.push_back(texture);
-            }
-        }
-
-        if ((*masks)[MASK::SHORE] != NULL)
-        {
-            for (auto i=0; i<6; i++)
-            {
-                unsigned int mask[frm->width() * frm->height()];
-
-                //modify
-                for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
-                {
-                    mask[j] = palette->color(((*masks)[MASK::SHORE][j]), i);
-                }
-                //set
-                auto texture = new Graphics::Texture(frm->width(), frm->height());
-                texture->loadFromRGBA(mask);
-                _shoreTextures.push_back(texture);
-            }
-        }
-
-
-        if ((*masks)[MASK::FIRE_SLOW] != NULL)
-        {
-            for (auto i=0; i<5; i++)
-            {
-                unsigned int mask[frm->width() * frm->height()];
-
-                //modify
-                for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
-                {
-                    mask[j] = palette->color(((*masks)[MASK::FIRE_SLOW][j]), i);
-                }
-                //set
-                auto texture = new Graphics::Texture(frm->width(), frm->height());
-                texture->loadFromRGBA(mask);
-                _fireSlowTextures.push_back(texture);
-            }
-        }
-
-
-        if ((*masks)[MASK::FIRE_FAST] != NULL)
-        {
-            for (auto i=0; i<5; i++)
-            {
-                unsigned int mask[frm->width() * frm->height()];
-                //modify
-                for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
-                {
-                    mask[j] = palette->color(((*masks)[MASK::FIRE_FAST][j]), i);
-                }
-                //set
-                auto texture = new Graphics::Texture(frm->width(), frm->height());
-                texture->loadFromRGBA(mask);
-                _fireFastTextures.push_back(texture);
-            }
-        }
-
-        if ((*masks)[MASK::REDDOT] != NULL)
-        {
-            for (auto i=0; i<16; i++)
-            {
-                unsigned int mask[frm->width() * frm->height()];
-                //modify
-                for (unsigned int j = 0; j< frm->width() * frm->height(); j++)
-                {
-                    mask[j] = palette->color(((*masks)[MASK::REDDOT][j]), i);
-                }
-                //set
-                auto texture = new Graphics::Texture(frm->width(), frm->height());
-                texture->loadFromRGBA(mask);
-                _reddotTextures.push_back(texture);
-            }
-        }
-    }
 }
 
 Animation::~Animation()
@@ -255,6 +144,12 @@ void Animation::think()
 void Animation::render(bool eggTransparency)
 {
     auto& frame = _animationFrames.at(_currentFrame);
+    Point offsetPosition = position() + shift() + frame->offset();
+    _animation->trans(_trans);
+    _animation->render(offsetPosition.x(), offsetPosition.y(), _direction, _currentFrame, eggTransparency, light(),
+                       _outline);
+/* TODO: newrender
+    auto& frame = _animationFrames.at(_currentFrame);
     Point framePos = frame->position();
     Size frameSize = frame->size();
     Point offsetPosition = position() + shift() + frame->offset();
@@ -268,25 +163,6 @@ void Animation::render(bool eggTransparency)
         if (!dude || !Game::getInstance()->locationState())
         {
             Game::getInstance()->renderer()->drawTexture(_texture, offsetPosition, framePos, frameSize);
-
-            if (pal->getCounter(MASK::FIRE_FAST) < _fireFastTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_fireFastTextures.at(pal->getCounter(MASK::FIRE_FAST)), position(), framePos, frameSize);
-
-            if (pal->getCounter(MASK::FIRE_SLOW) < _fireSlowTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_fireSlowTextures.at(pal->getCounter(MASK::FIRE_SLOW)), position(), framePos, frameSize);
-
-            if (pal->getCounter(MASK::SLIME) < _slimeTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_slimeTextures.at(pal->getCounter(MASK::SLIME)), position(), framePos, frameSize);
-
-            if (pal->getCounter(MASK::SHORE) < _shoreTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_shoreTextures.at(pal->getCounter(MASK::SHORE)), position(), framePos, frameSize);
-
-            if (pal->getCounter(MASK::MONITOR) < _monitorTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_monitorTextures.at(pal->getCounter(MASK::MONITOR)), position(), framePos, frameSize);
-
-            if (pal->getCounter(MASK::REDDOT) < _reddotTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_reddotTextures.at(pal->getCounter(MASK::REDDOT)), position(), framePos, frameSize);
-
             return;
         }
 
@@ -305,24 +181,6 @@ void Animation::render(bool eggTransparency)
         {
             Game::getInstance()->renderer()->drawTexture(_texture, offsetPosition, framePos, frameSize);
 
-            if (pal->getCounter(MASK::FIRE_FAST) < _fireFastTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_fireFastTextures.at(pal->getCounter(MASK::FIRE_FAST)), offsetPosition, framePos, frameSize);
-
-            if (pal->getCounter(MASK::FIRE_SLOW) < _fireSlowTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_fireSlowTextures.at(pal->getCounter(MASK::FIRE_SLOW)), offsetPosition, framePos, frameSize);
-
-            if (pal->getCounter(MASK::SLIME) < _slimeTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_slimeTextures.at(pal->getCounter(MASK::SLIME)), position(), offsetFramePos, frameSize);
-
-            if (pal->getCounter(MASK::SHORE) < _shoreTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_shoreTextures.at(pal->getCounter(MASK::SHORE)), position(), offsetFramePos, frameSize);
-
-            if (pal->getCounter(MASK::MONITOR) < _monitorTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_monitorTextures.at(pal->getCounter(MASK::MONITOR)), position(), offsetFramePos, frameSize);
-
-            if (pal->getCounter(MASK::REDDOT) < _reddotTextures.size())
-                Game::getInstance()->renderer()->drawTexture(_reddotTextures.at(pal->getCounter(MASK::REDDOT)), position(), offsetFramePos, frameSize);
-
             return;
         }
 
@@ -332,49 +190,14 @@ void Animation::render(bool eggTransparency)
         }
         texture()->copyTo(_tmptex.get());
 
-        if (pal->getCounter(MASK::FIRE_FAST) < _fireFastTextures.size())
-            _fireFastTextures.at(pal->getCounter(MASK::FIRE_FAST))->copyTo(_tmptex.get());
-
-        if (pal->getCounter(MASK::FIRE_SLOW) < _fireSlowTextures.size())
-           _fireSlowTextures.at(pal->getCounter(MASK::FIRE_SLOW))->copyTo(_tmptex.get());
-
-        if (pal->getCounter(MASK::SLIME) < _slimeTextures.size())
-            _slimeTextures.at(pal->getCounter(MASK::SLIME))->copyTo(_tmptex.get());
-
-        if (pal->getCounter(MASK::SHORE) < _shoreTextures.size())
-            _shoreTextures.at(pal->getCounter(MASK::SHORE))->copyTo(_tmptex.get());
-
-        if (pal->getCounter(MASK::MONITOR) < _monitorTextures.size())
-            _monitorTextures.at(pal->getCounter(MASK::MONITOR))->copyTo(_tmptex.get());
-
-        if (pal->getCounter(MASK::REDDOT) < _reddotTextures.size())
-            _reddotTextures.at(pal->getCounter(MASK::REDDOT))->copyTo(_tmptex.get());
-
         _tmptex->blitWithAlpha(egg, eggDelta.x(), eggDelta.y());
         Game::getInstance()->renderer()->drawTexture(_tmptex.get(), offsetPosition, framePos, frameSize);
     }
     else
     {
         Game::getInstance()->renderer()->drawTexture(_texture, offsetPosition, framePos, frameSize);
-
-        if (pal->getCounter(MASK::FIRE_FAST) < _fireFastTextures.size())
-            Game::getInstance()->renderer()->drawTexture(_fireFastTextures.at(pal->getCounter(MASK::FIRE_FAST)), offsetPosition, framePos, frameSize);
-
-        if (pal->getCounter(MASK::FIRE_SLOW) < _fireSlowTextures.size())
-            Game::getInstance()->renderer()->drawTexture(_fireSlowTextures.at(pal->getCounter(MASK::FIRE_SLOW)), offsetPosition, framePos, frameSize);
-
-        if (pal->getCounter(MASK::SLIME) < _slimeTextures.size())
-            Game::getInstance()->renderer()->drawTexture(_slimeTextures.at(pal->getCounter(MASK::SLIME)), offsetPosition, framePos, frameSize);
-
-        if (pal->getCounter(MASK::SHORE) < _shoreTextures.size())
-            Game::getInstance()->renderer()->drawTexture(_shoreTextures.at(pal->getCounter(MASK::SHORE)), offsetPosition, framePos, frameSize);
-
-        if (pal->getCounter(MASK::MONITOR) < _monitorTextures.size())
-            Game::getInstance()->renderer()->drawTexture(_monitorTextures.at(pal->getCounter(MASK::MONITOR)), offsetPosition, framePos, frameSize);
-
-        if (pal->getCounter(MASK::REDDOT) < _reddotTextures.size())
-            Game::getInstance()->renderer()->drawTexture(_reddotTextures.at(pal->getCounter(MASK::REDDOT)), offsetPosition, framePos, frameSize);
     }
+    */
 }
 
 Size Animation::size() const
@@ -390,18 +213,6 @@ const Point& Animation::shift() const
 void Animation::setShift(const Point& value)
 {
     _shift = value;
-}
-
-unsigned int Animation::pixel(const Point& pos)
-{
-    const auto& frame = _animationFrames.at(_currentFrame);
-
-    Point offsetPos = pos - offset();
-    if (!Rect::inRect(offsetPos, frame->size()))
-    {
-        return 0;
-    }
-    return Base::pixel(offsetPos + frame->position());
 }
 
 void Animation::play()
@@ -485,6 +296,18 @@ Event::Handler& Animation::actionFrameHandler()
 Event::Handler& Animation::animationEndedHandler()
 {
     return _animationEndedHandler;
+}
+
+bool Animation::opaque(const Point &pos) {
+    const auto& frame = _animationFrames.at(_currentFrame);
+
+    Point offsetPos = pos - offset();
+    if (!Rect::inRect(offsetPos, frame->size()))
+    {
+        return 0;
+    }
+    offsetPos +=frame->position();
+    return _animation->opaque(offsetPos.x(),offsetPos.y());
 }
 
 }

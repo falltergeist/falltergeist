@@ -31,7 +31,6 @@
 #include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
-#include "../UI/AnimatedImage.h"
 #include "../UI/Animation.h"
 #include "../UI/AnimationQueue.h"
 #include "../UI/Image.h"

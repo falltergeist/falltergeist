@@ -110,16 +110,8 @@ void ItemObject::_generateUi()
 
     // Big unscaled image of item
     _inventoryDragUi = make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
-
-    // Small scaled image
-    auto inventoryUiTexture = _inventoryDragUi->texture()->fitTo(57, 40);
-    _inventoryUi = make_unique<UI::Image>(inventoryUiTexture->width(),inventoryUiTexture->height());
-    _inventoryUi->setTexture(inventoryUiTexture);
-
-    // Medium scaled image
-    auto inventorySlotUiTexture = _inventoryDragUi->texture()->fitTo(88, 58);
-    _inventorySlotUi = make_unique<UI::Image>(inventorySlotUiTexture->width(),inventorySlotUiTexture->height());
-    _inventorySlotUi->setTexture(inventorySlotUiTexture);
+    _inventoryUi = make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
+    _inventorySlotUi = make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
 }
 
 ItemObject::Subtype ItemObject::subtype() const

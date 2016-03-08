@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <cmath>
+#include <TransFlags.h>
 
 // Falltergeist includes
 #include "../Base/StlFeatures.h"
@@ -40,12 +41,12 @@
 #include "../PathFinding/Hexagon.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
-#include "../UI/AnimatedImage.h"
 #include "../UI/Animation.h"
 #include "../UI/AnimationQueue.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
 #include "../VM/VM.h"
+#include "TransFlags.h"
 
 // Third party includes
 
@@ -180,21 +181,18 @@ void Object::_generateUi()
     auto frm = ResourceManager::getInstance()->frmFileType(FID());
     if (frm)
     {
-        frm->rgba(ResourceManager::getInstance()->palFileType("color.pal")); // TODO: figure out, why not calling this brokes animated overlays
         if (frm->framesPerDirection() > 1)
         {
             auto queue = make_unique<UI::AnimationQueue>();
             queue->animations().push_back(make_unique<UI::Animation>(ResourceManager::getInstance()->FIDtoFrmName(FID()), orientation()));
             _ui = std::move(queue);
         }
-        else if (frm->animatedPalette())
-        {
-            _ui = make_unique<UI::AnimatedImage>(frm, orientation());
-        }
         else
         {
             _ui =  make_unique<UI::Image>(frm, orientation());
+
         }
+        _ui->setLight(true);
     }
 
     addUIEventHandlers();
@@ -291,6 +289,7 @@ void Object::renderText()
 
 void Object::render()
 {
+
     if (!_ui || !_hexagon) return;
 
     auto camera = Game::getInstance()->locationState()->camera();
@@ -315,6 +314,11 @@ void Object::render()
 
 bool Object::_isIntersectsWithEgg()
 {
+    //only walls and scenery are affected by egg
+    if (_type != Type::WALL && _type !=Type::SCENERY)
+    {
+        return false;
+    }
     auto dude = Game::getInstance()->player();
     Hexagon * dudeHex;
 
@@ -509,33 +513,16 @@ void Object::onUseAnimationEnd(Event::Event* event, CritterObject* critter)
     critter->setActionAnimation("aa")->stop();
 }
 
-void Object::setTrans(Trans value)
+void Object::setTrans(Falltergeist::TransFlags::Trans value)
 {
     _trans = value;
     if (_ui)
     {
-        SDL_Color modifier = _ui->texture()->colorModifier();
-        switch (_trans)
-        {
-            case Trans::GLASS:
-                modifier.a = 128;
-                break;
-            case Trans::ENERGY:
-                modifier = {200, 200, 0, 128};
-                break;
-            case Trans::RED:
-                modifier = {255, 0, 0, 128};
-                break;
-            case Trans::NONE:
-            default:
-                modifier = {255, 255, 255, 255};
-                break;
-        }
-        _ui->texture()->setColorModifier(modifier);
+        _ui->setTrans(value);
     }
 }
 
-Object::Trans Object::trans() const
+Falltergeist::TransFlags::Trans Object::trans() const
 {
     return _trans;
 }
@@ -577,12 +564,12 @@ void Object::setFlags(unsigned int flags)
     setCanLightThru((flags & 0x20000000) != 0);
     setCanShootThru((flags & 0x80000000) != 0);
 
-    if (flags & 0x00004000) setTrans(Object::Trans::RED);
-    if (flags & 0x00008000) setTrans(Object::Trans::NONE);
-    if (flags & 0x00010000) setTrans(Object::Trans::WALL);
-    if (flags & 0x00020000) setTrans(Object::Trans::GLASS);
-    if (flags & 0x00040000) setTrans(Object::Trans::STEAM);
-    if (flags & 0x00080000) setTrans(Object::Trans::ENERGY);
+    if (flags & 0x00004000) setTrans(Falltergeist::TransFlags::Trans::RED);
+    if (flags & 0x00008000) setTrans(Falltergeist::TransFlags::Trans::NONE);
+    if (flags & 0x00010000) setTrans(Falltergeist::TransFlags::Trans::WALL);
+    if (flags & 0x00020000) setTrans(Falltergeist::TransFlags::Trans::GLASS);
+    if (flags & 0x00040000) setTrans(Falltergeist::TransFlags::Trans::STEAM);
+    if (flags & 0x00080000) setTrans(Falltergeist::TransFlags::Trans::ENERGY);
     if (flags & 0x10000000) setWallTransEnd(true);
 }
 
@@ -601,5 +588,27 @@ bool Object::_useEggTransparency()
     return false;
 }
 
+void Object::renderOutline(int type)
+{
+        if (!_ui || !_hexagon) return;
+
+        auto camera = Game::getInstance()->locationState()->camera();
+        _ui->setPosition(
+                hexagon()->position()
+                - camera->topLeft()
+                - Point(_ui->size().width() / 2, _ui->size().height())
+        );
+
+        // don't draw if outside of screen
+        if (!Rect::intersects(_ui->position(), _ui->size(), Point(0, 0), camera->size()))
+        {
+            setInRender(false);
+            return;
+        }
+
+        _ui->setOutline(type);
+        _ui->render(false);
+        _ui->setOutline(0);
+}
 }
 }

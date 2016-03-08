@@ -44,7 +44,11 @@ void Opcode80D9Handler::_run()
     auto item = dynamic_cast<Game::ItemObject*>(_vm->dataStack()->popObject());
     auto invenObj = _vm->dataStack()->popObject();
 
-    if (!item) _error("rm_obj_from_inven - item not instanceof GameItemObject");
+    if (!item)
+    {
+        _error("rm_obj_from_inven - item not instanceof GameItemObject");
+        return;
+    }
 
     std::vector<Game::ItemObject*>* inven;
     if (auto critterObj = dynamic_cast<Game::CritterObject*>(invenObj))
@@ -58,6 +62,7 @@ void Opcode80D9Handler::_run()
     else
     {
         _error("rm_obj_from_inven - wrong WHO parameter");
+        return;
     }
     auto it = std::find(inven->begin(), inven->end(), item);
     if (it != inven->end())

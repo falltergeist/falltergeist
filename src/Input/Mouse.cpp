@@ -300,5 +300,20 @@ void Mouse::setCursor(unsigned value)
     setState(static_cast<Cursor>(value));
 }
 
+void Mouse::renderOutline()
+{
+    if (state() == Cursor::NONE) return;
+
+    if (_ui)
+    {
+        if (state() != Cursor::HEXAGON_RED)
+        {
+            _ui->setPosition(position());
+        }
+        _ui->setOutline(1);
+        _ui->render();
+        _ui->setOutline(0);
+    }
+}
 }
 }

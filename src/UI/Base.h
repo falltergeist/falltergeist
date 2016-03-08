@@ -22,10 +22,12 @@
 
 // C++ standard includes
 #include <memory>
+#include <TransFlags.h>
 
 // Falltergeist includes
 #include "../Event/EventTarget.h"
 #include "../Point.h"
+#include "../UI/Base.h"
 
 // Third party includes
 
@@ -42,6 +44,7 @@ namespace UI
 class Base : public Event::EventTarget
 {
 public:
+
     Base(int x = 0, int y = 0);
     Base(const Point& pos);
     ~Base() override;
@@ -62,12 +65,6 @@ public:
     virtual void setOffset(const Point& pos);
     void setOffset(int x, int y);
 
-    virtual Graphics::Texture* texture() const;
-    /**
-     * Set to use pre-existing Texture object
-     */
-    virtual void setTexture(Graphics::Texture* texture);
-
     virtual bool visible() const;
     virtual void setVisible(bool value);
 
@@ -87,6 +84,7 @@ public:
      * This method is called last in the main loop (after handle() and think()).
      */
     virtual void render(bool eggTransparency = false);
+    virtual void render(const Size& size, bool eggTransparency = false);
 
     /**
      * @brief Handles mouse events from OS.
@@ -95,8 +93,7 @@ public:
 
     virtual Size size() const;
 
-    virtual unsigned int pixel(const Point& pos);
-    unsigned int pixel(unsigned int x, unsigned int y);
+    virtual bool opaque(const Point &pos) { return false; }
 
     Event::KeyboardHandler& keyDownHandler();
     Event::KeyboardHandler& keyUpHandler();
@@ -113,18 +110,21 @@ public:
     Event::MouseHandler& mouseUpHandler();
     // TODO: mouse hover? (will require additional hoverDelay property)
 
+    virtual void setLight(bool light);
+    virtual bool light();
+    // object translucency mode
+    Falltergeist::TransFlags::Trans trans() const;
+    // sets object translucency mode
+    void setTrans(Falltergeist::TransFlags::Trans value);
+
+    void setOutline(int outline);
+
 protected:
     Point _position;
     Point _offset;
+    bool _light = false;
+    Falltergeist::TransFlags::Trans _trans = Falltergeist::TransFlags::Trans::DEFAULT;
 
-    /**
-     * Generate and set new blank texture with given size
-     */
-    void _generateTexture(unsigned int width, unsigned int height);
-
-    Graphics::Texture* _texture = nullptr;
-    std::unique_ptr<Graphics::Texture> _tmptex;
-    
     bool _leftButtonPressed = false;
     bool _rightButtonPressed = false;
     bool _drag = false;
@@ -136,8 +136,7 @@ protected:
                         _mouseInHandler, _mouseMoveHandler, _mouseOutHandler,
                         _mouseClickHandler, _mouseDownHandler, _mouseUpHandler;
 
-private:
-    std::unique_ptr<Graphics::Texture> _generatedTexture;
+    int _outline = 0;
 };
 
 }

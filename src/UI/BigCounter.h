@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <memory>
+#include <Graphics/Sprite.h>
 
 // Falltergeist includes
 #include "../UI/Base.h"
@@ -48,8 +49,6 @@ public:
     BigCounter(const Point& pos = Point(), unsigned int length = 2);
     ~BigCounter() override;
 
-    Graphics::Texture* texture() const override;
-
     void setColor(Color color);
     Color color();
 
@@ -59,13 +58,17 @@ public:
 protected:
     Color _color = Color::WHITE;
     unsigned int _number = 0;
+    std::string _numberText = "";
     unsigned int _length = 2;
-    mutable std::unique_ptr<Graphics::Texture> _textureOnDemand;
+    std::shared_ptr<Graphics::Sprite> _sprite;
+    std::vector<SDL_Rect> _rects;
 
-    void setTexture(Graphics::Texture* texture) override; // We should override this method to prevent changing old _texture field.
+public:
+    virtual void render(bool eggTransparency) override;
+
+    virtual bool opaque(const Point &pos) override;
 
 private:
-    using Falltergeist::UI::Base::_texture; // Hide unused field from childs.
 
     BigCounter(const BigCounter&) = delete;
     void operator=(const BigCounter&) = delete;

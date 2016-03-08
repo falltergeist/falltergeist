@@ -30,7 +30,6 @@
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
-#include "../Graphics/Texture.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
 #include "../State/Location.h"
@@ -160,10 +159,10 @@ void CursorDropdown::showMenu()
     }
 
     auto game = Game::getInstance();
-    _surface = new UI::Image(40, 40*_icons.size());
-    _surface->setPosition({_initialX + 29, _initialY});
-    Point delta = _surface->position()
-                  + _surface->size()
+
+    _iconsPos = Point(_initialX + 29, _initialY);
+    Point delta = Point(_initialX + 29, _initialY)
+                  + Size(40, 40*_icons.size())
                   - game->renderer()->size()
                   + Point(0, game->locationState()->playerPanel()->size().height());
 
@@ -171,7 +170,7 @@ void CursorDropdown::showMenu()
     int deltaY = delta.y();
     if (deltaX > 0)
     {
-        _surface->setX(_surface->x() - 40 - 29 - 29);
+        _iconsPos.setX(_iconsPos.x() - 40 - 29 - 29);
         _cursor = new UI::Image("art/intrface/actarrom.frm");
         _cursor->setOffset(-29, 0);
     }
@@ -182,24 +181,18 @@ void CursorDropdown::showMenu()
     }
     if (deltaY > 0)
     {
-        _surface->setY(_surface->y() - deltaY);
+        _iconsPos.setY(_iconsPos.y() - deltaY);
     }
     _cursor->setPosition({_initialX, _initialY});
     addUI(_cursor);
-    addUI(_surface);
-    // draw icons on the surface for the first time
-    for (auto& ui : _inactiveIcons)
-    {
-        ui->texture()->copyTo(_surface->texture(), ui->x(), ui->y());
-    }
+
     if (!_onlyShowIcon)
     {
         if (deltaY > 0)
         {
-            game->mouse()->setPosition({_initialX, _surface->y()});
+            game->mouse()->setPosition({_initialX, _iconsPos.y()});
         }
         Game::getInstance()->mixer()->playACMSound("sound/sfx/iaccuxx1.acm");
-        _activeIcons.at(0)->texture()->copyTo(_surface->texture(), 0,  0); // highlight first item
     }
 }
 
@@ -243,23 +236,27 @@ void CursorDropdown::think()
     
     const int mousePixelsForItem = 10;
     // select current icon
-    _previousIcon = _currentIcon;
-    _currentIcon = (game->mouse()->y() - _surface->y())/mousePixelsForItem;
+    _currentIcon = (game->mouse()->y() - _iconsPos.y())/mousePixelsForItem;
+
     if (_currentIcon < 0)
     {
         if (!_onlyShowIcon)
-            game->mouse()->setY(_surface->y());
+        {
+            game->mouse()->setY(_iconsPos.y());
+        }
         _currentIcon = 0;
     }
     if ((unsigned int)_currentIcon >= _icons.size())
     {
         if (!_onlyShowIcon)
-            game->mouse()->setY(_surface->y() + _icons.size()*mousePixelsForItem);
+        {
+            game->mouse()->setY(_iconsPos.y() + _icons.size() * mousePixelsForItem);
+        }
         _currentIcon = _icons.size() - 1;
     }
     if (!_onlyShowIcon)
     {
-        int xDelta = game->mouse()->x() - _surface->x();
+        int xDelta = game->mouse()->x() - _iconsPos.x();
         if (xDelta > 40 || xDelta < 0)
         {
             game->mouse()->setX(_initialX);
@@ -271,14 +268,18 @@ void CursorDropdown::render()
 {
     if (!_deactivated)
     {
-        if (_currentIcon != _previousIcon) 
+        for (unsigned int i = 0; i < _icons.size(); i++)
         {
-            auto& inactiveIcon = _inactiveIcons.at(_previousIcon);
-            Point inactiveIconPos = inactiveIcon->position();
-            inactiveIcon->texture()->copyTo(_surface->texture(), (unsigned)inactiveIconPos.x(), (unsigned)inactiveIconPos.y());
-            auto& activeIcon = _activeIcons.at(_currentIcon);
-            Point activeIconPos = activeIcon->position();
-            activeIcon->texture()->copyTo(_surface->texture(), (unsigned)activeIconPos.x(), (unsigned)activeIconPos.y());
+            if (i==(unsigned)_currentIcon)
+            {
+                _activeIcons.at(i)->setOffset(_iconsPos);
+                _activeIcons.at(i)->render();
+            }
+            else
+            {
+                _inactiveIcons.at(i)->setOffset(_iconsPos);
+                _inactiveIcons.at(i)->render();
+            }
         }
         State::render();
     }

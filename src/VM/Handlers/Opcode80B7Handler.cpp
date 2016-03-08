@@ -51,7 +51,7 @@ void Opcode80B7Handler::_run()
     auto PID = _vm->dataStack()->popInteger();
     auto object = Game::ObjectFactory::getInstance()->createObject(PID);
     auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
-    State::Location::moveObjectToHexagon(object, hexagon);
+    Game::getInstance()->locationState()->moveObjectToHexagon(object, hexagon);
     object->setElevation(elevation);
     if (SID > 0)
     {

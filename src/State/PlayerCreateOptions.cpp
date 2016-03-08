@@ -78,35 +78,36 @@ void PlayerCreateOptions::init()
     eraseButton->mouseClickHandler().add(      std::bind(&PlayerCreateOptions::onEraseButtonClick, this, std::placeholders::_1));
     doneButton->mouseClickHandler().add(       std::bind(&PlayerCreateOptions::onDoneButtonClick, this, std::placeholders::_1));
 
-    auto font = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
+    auto font = ResourceManager::getInstance()->font("font3.aaf");
+    SDL_Color color = {0xb8, 0x9c, 0x28, 0xff};
 
     // label: save
     auto saveButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 600), backgroundX+8, backgroundY+26);
-    saveButtonLabel->setFont(font);
+    saveButtonLabel->setFont(font, color);
     saveButtonLabel->setWidth(150);
     saveButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: load
     auto loadButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 601), backgroundX+8, backgroundY+26+37);
-    loadButtonLabel->setFont(font);
+    loadButtonLabel->setFont(font, color);
     loadButtonLabel->setWidth(150);
     loadButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: print to file
     auto printToFileButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 602), backgroundX+8, backgroundY+26+37*2);
-    printToFileButtonLabel->setFont(font);
+    printToFileButtonLabel->setFont(font, color);
     printToFileButtonLabel->setWidth(150);
     printToFileButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: erase
     auto eraseButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 603), backgroundX+8, backgroundY+26+37*3);
-    eraseButtonLabel->setFont(font);
+    eraseButtonLabel->setFont(font, color);
     eraseButtonLabel->setWidth(150);
     eraseButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
     // label: done
     auto doneButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 604), backgroundX+8, backgroundY+26+37*4);
-    doneButtonLabel->setFont(font);
+    doneButtonLabel->setFont(font, color);
     doneButtonLabel->setWidth(150);
     doneButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 

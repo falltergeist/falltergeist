@@ -49,7 +49,7 @@ void Opcode80A9Handler::_run()
     auto game = Game::Game::getInstance();
     auto player = game->player();
     auto hexagon = game->locationState()->hexagonGrid()->at(position);
-    State::Location::moveObjectToHexagon(player, hexagon);
+    Game::getInstance()->locationState()->moveObjectToHexagon(player, hexagon);
                 //player->setPosition(position);
     player->setOrientation(orientation);
     player->setElevation(elevation);

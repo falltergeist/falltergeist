@@ -23,6 +23,7 @@
 // C++ standard includes
 #include <vector>
 #include <string>
+#include <Graphics/Animation.h>
 
 // Falltergeist includes
 #include "../UI/Base.h"
@@ -47,15 +48,16 @@ public:
     void think() override;
     void render(bool eggTransparency = false) override;
 
-    /**
+
+    virtual bool opaque(const Point &pos) override;
+
+/**
      * Additional offset, specific to current direction and taken from source FRM file.
      */
     const Point& shift() const;
     void setShift(const Point& value);
 
     Size size() const override;
-
-    unsigned int pixel(const Point& pos) override;
 
     void play();
     void stop();
@@ -100,14 +102,10 @@ protected:
     unsigned int _actionFrame = 0;
     unsigned int _progress = 0;
     unsigned int _frameTicks = 0;
-    std::vector<Graphics::Texture*> _slimeTextures;
-    std::vector<Graphics::Texture*> _fireSlowTextures;
-    std::vector<Graphics::Texture*> _fireFastTextures;
-    std::vector<Graphics::Texture*> _shoreTextures;
-    std::vector<Graphics::Texture*> _monitorTextures;
-    std::vector<Graphics::Texture*> _reddotTextures;
 
     Event::Handler _frameHandler, _actionFrameHandler, _animationEndedHandler;
+    std::unique_ptr<Graphics::Animation> _animation;
+    unsigned int _direction;
 };
 
 }

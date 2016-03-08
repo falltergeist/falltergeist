@@ -38,6 +38,7 @@
 #include "../UI/HiddenMask.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
+#include "../UI/Rectangle.h"
 
 // Third party includes
 
@@ -68,7 +69,7 @@ void PlayerCreate::init()
     int backgroundX = backgroundPos.x();
     int backgroundY = backgroundPos.y();
     background->setPosition(backgroundPos);
-    addUI(background);
+    addUI("bg",background);
 
     // STATS
     std::string imagesStats[] = { "strength", "perceptn", "endur", "charisma", "intel", "agility", "luck"};
@@ -140,15 +141,13 @@ void PlayerCreate::init()
     _addDescription("health_1", _t(MSG_STATS, 207));
     _addImage("health_1", new UI::Image("art/skilldex/" + imagesHealth[0] + ".frm"));
 
-    auto font1_0x183018ff = ResourceManager::getInstance()->font("font1.aaf", 0x183018ff);
-
     for (unsigned int i = 0; i != 7; ++i)
     {
         std::stringstream ss;
         ss << "health_" << (i+2);
         _addTitle(ss.str(), _t(MSG_EDITOR, 312 + i));
         _addDescription(ss.str(), _t(MSG_EDITOR, 400 + i));
-        _addLabel(ss.str(), new UI::TextArea(_t(MSG_EDITOR, 312 + i), backgroundX+194, backgroundY+46+13*(i+1)))->setFont(font1_0x183018ff);
+        _addLabel(ss.str(), new UI::TextArea(_t(MSG_EDITOR, 312 + i), backgroundX+194, backgroundY+46+13*(i+1)))->setFont("font1.aaf", {0x18, 0x30, 0x18, 0xff});
         _addImage(ss.str(), new UI::Image("art/skilldex/" + imagesHealth[i+1] + ".frm"));
     }
 
@@ -171,21 +170,22 @@ void PlayerCreate::init()
     _addButton("done",    new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+455, backgroundY+454));
     _addButton("cancel",  new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+554, backgroundY+454));
 
-    auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
+    auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf");
+    SDL_Color color = {0xb8, 0x9c, 0x28, 0xff};
 
-    _addLabel("options", new UI::TextArea(_t(MSG_EDITOR, 101), backgroundX+365, backgroundY+453))->setFont(font3_b89c28ff);
-    _addLabel("next",    new UI::TextArea(_t(MSG_EDITOR, 100), backgroundX+473, backgroundY+453))->setFont(font3_b89c28ff);
-    _addLabel("cancel",  new UI::TextArea(_t(MSG_EDITOR, 102), backgroundX+571, backgroundY+453))->setFont(font3_b89c28ff);
+    _addLabel("options", new UI::TextArea(_t(MSG_EDITOR, 101), backgroundX+365, backgroundY+453))->setFont(font3_b89c28ff, color);
+    _addLabel("next",    new UI::TextArea(_t(MSG_EDITOR, 100), backgroundX+473, backgroundY+453))->setFont(font3_b89c28ff, color);
+    _addLabel("cancel",  new UI::TextArea(_t(MSG_EDITOR, 102), backgroundX+571, backgroundY+453))->setFont(font3_b89c28ff, color);
     auto label = _addLabel("name",    new UI::TextArea(Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7));
     label->setWidth(150);
     label->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
-    label->setFont(font3_b89c28ff);
-    _addLabel("age",     new UI::TextArea(_t(MSG_EDITOR, 104), backgroundX+163, backgroundY+7))->setFont(font3_b89c28ff);
-    _addLabel("gender",  new UI::TextArea(_t(MSG_EDITOR, Game::getInstance()->player()->gender() == GENDER::MALE ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff);
-    _addLabel("label_1", new UI::TextArea(_t(MSG_EDITOR, 116), backgroundX+14, backgroundY+286))->setFont(font3_b89c28ff);  // char points
-    _addLabel("label_2", new UI::TextArea(_t(MSG_EDITOR, 139), backgroundX+50, backgroundY+326))->setFont(font3_b89c28ff);  // optinal traits
-    _addLabel("label_3", new UI::TextArea(_t(MSG_EDITOR, 117), backgroundX+383, backgroundY+5))->setFont(font3_b89c28ff);   // skills
-    _addLabel("label_4", new UI::TextArea(_t(MSG_EDITOR, 138), backgroundX+428, backgroundY+233))->setFont(font3_b89c28ff); // tag skills
+    label->setFont(font3_b89c28ff, color);
+    _addLabel("age",     new UI::TextArea(_t(MSG_EDITOR, 104), backgroundX+163, backgroundY+7))->setFont(font3_b89c28ff, color);
+    _addLabel("gender",  new UI::TextArea(_t(MSG_EDITOR, Game::getInstance()->player()->gender() == GENDER::MALE ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff, color);
+    _addLabel("label_1", new UI::TextArea(_t(MSG_EDITOR, 116), backgroundX+14, backgroundY+286))->setFont(font3_b89c28ff, color);  // char points
+    _addLabel("label_2", new UI::TextArea(_t(MSG_EDITOR, 139), backgroundX+50, backgroundY+326))->setFont(font3_b89c28ff, color);  // optinal traits
+    _addLabel("label_3", new UI::TextArea(_t(MSG_EDITOR, 117), backgroundX+383, backgroundY+5))->setFont(font3_b89c28ff, color);   // skills
+    _addLabel("label_4", new UI::TextArea(_t(MSG_EDITOR, 138), backgroundX+428, backgroundY+233))->setFont(font3_b89c28ff, color); // tag skills
     _addTitle("label_1", _t(MSG_EDITOR, 120));
     _addTitle("label_2", _t(MSG_EDITOR, 146));
     _addTitle("label_3", _t(MSG_EDITOR, 150));
@@ -239,25 +239,19 @@ void PlayerCreate::init()
     _selectedImage = _images.at("stats_1");
     _selectedLabel = _labels.at("stats_1");
     _selectedImage->setPosition(backgroundPos + Point(480, 310));
-    addUI(_selectedImage);
-
-    auto font1_000000ff = ResourceManager::getInstance()->font("font1.aaf", 0x000000FF);
-    auto font2_000000ff = ResourceManager::getInstance()->font("font2.aaf", 0x000000FF);
 
     _title = new UI::TextArea("", backgroundX+350, backgroundY+275);
-    _title->setFont(font2_000000ff);
+    _title->setFont("font2.aaf", {0,0,0,0xff});
     addUI(_title);
 
-    auto line = new UI::Image(270, 2);
-    line->setPosition(backgroundPos + Point(350, 300));
-    line->texture()->fill(0x000000ff);
+    auto line = new UI::Rectangle(backgroundPos + Point(350, 300), Size(270, 2), { 0x00, 0x00, 0x00, 0xff });
     addUI(line);
 
     _description = new UI::TextArea("", backgroundX+350, backgroundY+315);
-    _description->setFont(font1_000000ff);
+    _description->setFont("font1.aaf", {0,0,0,0xff});
     _description->setSize({140, 120});
     _description->setWordWrap(true);
-    addUI(_description);
+//    addUI(_description);
 }
 
 UI::TextArea* PlayerCreate::_addLabel(const std::string& name, UI::TextArea* label)
@@ -301,6 +295,7 @@ void PlayerCreate::_addImage(const std::string& name, UI::Image* image)
 
 void PlayerCreate::think()
 {
+    // TODO: this shit shouldn't be updated each fucking frame, duh
     State::think();
     auto player = Game::getInstance()->player();
 
@@ -363,30 +358,30 @@ void PlayerCreate::think()
     {
         std::string name = it->first;
 
-        auto font1_3ff800ff = ResourceManager::getInstance()->font("font1.aaf", 0x3ff800ff);
-        auto font1_a0a0a0ff = ResourceManager::getInstance()->font("font1.aaf", 0xa0a0a0ff);
-        auto font1_183018ff = ResourceManager::getInstance()->font("font1.aaf", 0x183018ff);
+        SDL_Color font1_3ff800ff = {0x3f, 0xf8, 0x00, 0xff};
+        SDL_Color font1_a0a0a0ff = {0xa0, 0xa0, 0xa0, 0xff};
+        SDL_Color font1_183018ff = {0x18, 0x30, 0x18, 0xff};
 
         if (name.find("stats_") == 0 || name.find("params_") == 0)
         {
-            it->second->setFont(font1_3ff800ff);
+            it->second->setColor(font1_3ff800ff);
         }
 
         if (name.find("traits_") == 0)
         {
             unsigned number = atoi(name.substr(7).c_str()) - 1;
-            it->second->setFont(player->traitTagged((TRAIT)number) ? font1_a0a0a0ff : font1_3ff800ff);
+            it->second->setColor(player->traitTagged((TRAIT)number) ? font1_a0a0a0ff : font1_3ff800ff);
         }
 
         if (name.find("skills_") == 0)
         {
             unsigned number = atoi(name.substr(7).c_str()) - 1;
-            it->second->setFont(player->skillTagged((SKILL)number) ? font1_a0a0a0ff : font1_3ff800ff);
+            it->second->setColor(player->skillTagged((SKILL)number) ? font1_a0a0a0ff : font1_3ff800ff);
         }
 
         if (name.find("health_") == 0)
         {
-            it->second->setFont(name.compare("health_1") == 0 ? font1_3ff800ff : font1_183018ff);
+            it->second->setColor(name.compare("health_1") == 0 ? font1_3ff800ff : font1_183018ff);
         }
     }
 
@@ -399,39 +394,40 @@ void PlayerCreate::think()
 
         _title->setText(_titles.at(name));
         _description->setText(_descriptions.at(name));
-        _selectedImage->setTexture(_images.at(name)->texture());
 
-        auto font1_ffff7fff = ResourceManager::getInstance()->font("font1.aaf", 0xffff7fff);
-        auto font1_ffffffff = ResourceManager::getInstance()->font("font1.aaf", 0xffffffff);
-        auto font1_707820ff = ResourceManager::getInstance()->font("font1.aaf", 0x707820ff);
+        _selectedImage = _images.at(name);
+
+        SDL_Color font1_ffff7fff = {0xff, 0xff, 0x7f, 0xff};
+        SDL_Color font1_ffffffff = {0xff, 0xff, 0xff, 0xff};
+        SDL_Color font1_707820ff = {0x70, 0x78, 0x20, 0xff};
 
         if (name.find("stats_") == 0)
         {
-            it->second->setFont(font1_ffff7fff);
+            it->second->setColor(font1_ffff7fff);
         }
 
         if (name.find("params_") == 0)
         {
-            it->second->setFont(font1_ffff7fff);
-            _labels.at(name+"_value")->setFont(font1_ffff7fff);
+            it->second->setColor(font1_ffff7fff);
+            _labels.at(name+"_value")->setColor(font1_ffff7fff);
         }
 
         if (name.find("traits_") == 0)
         {
             unsigned number = atoi(name.substr(7).c_str()) - 1;
-            it->second->setFont(player->traitTagged((TRAIT)number) ? font1_ffffffff : font1_ffff7fff);
+            it->second->setColor(player->traitTagged((TRAIT)number) ? font1_ffffffff : font1_ffff7fff);
         }
 
         if (name.find("skills_") == 0)
         {
             unsigned number = atoi(name.substr(7).c_str()) - 1;
-            it->second->setFont(player->skillTagged((SKILL)number) ? font1_ffffffff : font1_ffff7fff);
-            _labels.at(name+"_value")->setFont(player->skillTagged((SKILL)number) ? font1_ffffffff : font1_ffff7fff);
+            it->second->setColor(player->skillTagged((SKILL)number) ? font1_ffffffff : font1_ffff7fff);
+            _labels.at(name+"_value")->setColor(player->skillTagged((SKILL)number) ? font1_ffffffff : font1_ffff7fff);
         }
 
         if (name.find("health_") == 0)
         {
-            it->second->setFont(name.compare("health_1") == 0 ? font1_ffff7fff : font1_707820ff);
+            it->second->setColor(name.compare("health_1") == 0 ? font1_ffff7fff : font1_707820ff);
         }
     }
 
@@ -524,7 +520,8 @@ void PlayerCreate::onButtonClick(Event::Mouse* event)
             if (name.find("stats_") == 0)
             {
                 _selectedLabel = _labels.at(name.substr(0,7));
-                _selectedImage->setTexture(_images.at(name.substr(0,7))->texture());
+
+                _selectedImage = _images.at(name.substr(0,7));
                 unsigned int number = atoi(name.substr(6,1).c_str());
                 if (name.find("_increase") == 7)
                 {
@@ -540,7 +537,7 @@ void PlayerCreate::onButtonClick(Event::Mouse* event)
             {
                 unsigned int number = atoi(name.substr(7).c_str());
                 _selectedLabel = _labels.at(name);
-                _selectedImage->setTexture(_images.at(name)->texture());
+                _selectedImage = _images.at(name);
 
                 if (!_traitToggle(number - 1))
                 {
@@ -554,7 +551,8 @@ void PlayerCreate::onButtonClick(Event::Mouse* event)
             {
                 unsigned int number = atoi(name.substr(7).c_str());
                 _selectedLabel = _labels.at(name);
-                _selectedImage->setTexture(_images.at(name)->texture());
+
+                _selectedImage = _images.at(name);
                 if (!_skillToggle(number - 1))
                 {
                     auto state = new PlayerEditAlert();
@@ -581,7 +579,7 @@ void PlayerCreate::onLabelClick(Event::Mouse* event)
                     label = name.substr(0, name.find("_value"));
                 }
                 _selectedLabel = _labels.at(label.c_str());
-                _selectedImage->setTexture(_images.at(label.c_str())->texture());
+                _selectedImage = _images.at(label.c_str());
             }
         }
     }
@@ -597,7 +595,7 @@ void PlayerCreate::onMaskClick(Event::Mouse* event)
             if (name.find("stats_") == 0)
             {
                 _selectedLabel = _labels.at(name);
-                _selectedImage->setTexture(_images.at(name)->texture());
+                _selectedImage = _images.at(name);
             }
         }
     }
@@ -693,5 +691,15 @@ void PlayerCreate::onKeyDown(Event::Keyboard* event)
     }
 }
 
+void PlayerCreate::render()
+{
+    State::render();
+    auto background = getUI("bg");
+    Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
+    _selectedImage->setPosition(backgroundPos + Point(480, 310));
+    _selectedImage->render();
+    _description->setPosition(backgroundPos + Point(350, 315));
+    _description->render();
+}
 }
 }

@@ -64,11 +64,6 @@ void Glyph::setWidth(uint16_t width)
     _width = width;
 }
 
-std::vector<unsigned char>* Glyph::data()
-{
-    return &_data;
-}
-
 uint32_t Glyph::dataOffset() const
 {
     return _dataOffset;

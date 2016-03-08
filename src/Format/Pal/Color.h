@@ -61,11 +61,13 @@ public:
     void setAlpha(uint8_t alpha);
     uint8_t alpha() const;
 
+    void nomod();
 protected:
     uint8_t _red;
     uint8_t _green;
     uint8_t _blue;
     uint8_t _alpha;
+    bool _nomod = false;
 
 
 };

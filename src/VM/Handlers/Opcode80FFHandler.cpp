@@ -51,7 +51,7 @@ void Opcode80FFHandler::_run()
         _error("critter_attempt_placement - invalid critter pointer");
     }
     auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
-    State::Location::moveObjectToHexagon(critter, hexagon);
+    Game::getInstance()->locationState()->moveObjectToHexagon(critter, hexagon);
     critter->setElevation(elevation);
     _vm->dataStack()->push(1);
 }

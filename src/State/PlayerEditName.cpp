@@ -24,13 +24,13 @@
 #include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
-#include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
 #include "../Game/DudeObject.h"
 #include "../State/PlayerEditName.h"
 #include "../UI/TextArea.h"
 #include "../UI/ImageButton.h"
 #include "../UI/Image.h"
+#include "../UI/Rectangle.h"
 
 // Third party includes
 
@@ -108,8 +108,7 @@ void PlayerEditName::init()
     doneBox->setPosition(bgPos + Point(35, 40));
 
     auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX+65, bgY+43);
-    auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf", 0xb89c28ff);
-    doneLabel->setFont(font3_b89c28ff);
+    doneLabel->setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
 
     auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+45, bgY+43);
     doneButton->mouseClickHandler().add(std::bind(&PlayerEditName::onDoneButtonClick, this, std::placeholders::_1));
@@ -117,9 +116,7 @@ void PlayerEditName::init()
     _name = new UI::TextArea(Game::getInstance()->player()->name(), bgX+43, bgY+15);
     _name->keyDownHandler().add([this](Event::Event* event){ this->onTextAreaKeyDown(dynamic_cast<Event::Keyboard*>(event)); });
 
-    _cursor = new UI::Image(5, 8);
-    _cursor->setPosition(bgPos + Point(83, 15));
-    _cursor->texture()->fill(0x3FF800FF);
+    _cursor = new UI::Rectangle(bgPos + Point(83, 15) ,{5,8}, {0x3F, 0xF8, 0x00, 0xFF});
 
     addUI(bg);
     addUI(nameBox);
@@ -195,7 +192,6 @@ void PlayerEditName::think()
         _cursor->setVisible(!_cursor->visible());
         _timer = SDL_GetTicks();
     }
-
     _cursor->setPosition({bgX + _name->textSize().width() + 45, _cursor->position().y()});
 }
 

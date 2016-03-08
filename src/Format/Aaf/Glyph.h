@@ -47,8 +47,6 @@ public:
     Glyph(uint16_t width, uint16_t height);
     ~Glyph();
 
-    std::vector<unsigned char>* data();
-
     uint16_t width() const;
     void setWidth(uint16_t width);
 

@@ -119,18 +119,20 @@ void SettingsMenu::init()
     addUI("item_highlight",itemHightlightSwitch);
 
     // LABELS
-    auto font1_907824ff = ResourceManager::getInstance()->font("font1.aaf", 0x907824ff);
-    auto font3_907824ff = ResourceManager::getInstance()->font("font3.aaf", 0x907824ff);
-    auto font4_907824ff = ResourceManager::getInstance()->font("font4.aaf", 0x907824ff);
+    SDL_Color color = {0x90, 0x78, 0x24, 0xff};
+
+    std::string font1_907824ff = "font1.aaf";
+    std::string font3_907824ff = "font3.aaf";
+    std::string font4_907824ff = "font4.aaf";
 
     // GAME PREFERENCES
-    _addTextArea(_t(MSG_OPTIONS, 100), backgroundX+74, backgroundY+10)->setFont(font4_907824ff);
+    _addTextArea(_t(MSG_OPTIONS, 100), backgroundX+74, backgroundY+10)->setFont(font4_907824ff, color);
 
     // COMBAT DIFFICULTY
     auto difficulty = _addTextArea(_t(MSG_OPTIONS, 102), backgroundX+21, backgroundY+48);
     difficulty->setWidth(158);
     difficulty->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
-    difficulty->setFont(font1_907824ff);
+    difficulty->setFont(font1_907824ff, color);
 
     // GAME DIFFICULTY
     _addTextArea(difficulty, backgroundX+21, backgroundY+48+77)->setText(_t(MSG_OPTIONS, 101));
@@ -146,7 +148,7 @@ void SettingsMenu::init()
 
     // COMBAT MESSAGES
     auto combatMessages = _addTextArea(_t(MSG_OPTIONS, 106), backgroundX+206, backgroundY+49);
-    combatMessages->setFont(font1_907824ff);
+    combatMessages->setFont(font1_907824ff, color);
 
     // COMBAT TAUNTS
     _addTextArea(combatMessages, backgroundX+206, backgroundY+49+66)->setText(_t(MSG_OPTIONS, 107));
@@ -165,7 +167,7 @@ void SettingsMenu::init()
 
     // COMBAT SPEED
     auto combatSpeed = _addTextArea(_t(MSG_OPTIONS, 112), backgroundX+384, backgroundY+19);
-    combatSpeed->setFont(font1_907824ff);
+    combatSpeed->setFont(font1_907824ff, color);
 
     // TEXT DELAY
     _addTextArea(combatSpeed, backgroundX+384, backgroundY+95)->setText(_t(MSG_OPTIONS, 113));
@@ -191,120 +193,120 @@ void SettingsMenu::init()
     // DEFAULT BUTTON LABEL
     auto label = _addTextArea(combatSpeed, backgroundX+43, backgroundY+449);
     label->setText(_t(MSG_OPTIONS, 120));
-    label->setFont(font3_907824ff);
+    label->setFont(font3_907824ff, color);
 
     // DONE BUTTON LABEL
     label = _addTextArea(combatSpeed, backgroundX+169, backgroundY+449);
     label->setText(_t(MSG_OPTIONS, 300));
-    label->setFont(font3_907824ff);
+    label->setFont(font3_907824ff, color);
 
     // CANCEL BUTTON LABEL
     label = _addTextArea(combatSpeed, backgroundX+283, backgroundY+449);
     label->setText(_t(MSG_OPTIONS, 121));
-    label->setFont(font3_907824ff);
+    label->setFont(font3_907824ff, color);
 
     // COMBAT DIFFICULTY SWITCH LABELS
-    _addTextArea(_t(MSG_OPTIONS, 203), backgroundX+43, backgroundY+81)->setFont(font1_907824ff);     // EASY
-    _addTextArea(_t(MSG_OPTIONS, 204), backgroundX+68, backgroundY+67)->setFont(font1_907824ff);     // NORMAL
-    _addTextArea(_t(MSG_OPTIONS, 205), backgroundX+122, backgroundY+81)->setFont(font1_907824ff);    // HARD
+    _addTextArea(_t(MSG_OPTIONS, 203), backgroundX+43, backgroundY+81)->setFont(font1_907824ff, color);     // EASY
+    _addTextArea(_t(MSG_OPTIONS, 204), backgroundX+68, backgroundY+67)->setFont(font1_907824ff, color);     // NORMAL
+    _addTextArea(_t(MSG_OPTIONS, 205), backgroundX+122, backgroundY+81)->setFont(font1_907824ff, color);    // HARD
 
     // GAME DIFFICULTY SWITCH LABELS
-    _addTextArea(_t(MSG_OPTIONS, 206), backgroundX+13, backgroundY+159)->setFont(font1_907824ff);    // WIMPY
-    _addTextArea(_t(MSG_OPTIONS, 207), backgroundX+68, backgroundY+145)->setFont(font1_907824ff);    // NORMAL
-    _addTextArea(_t(MSG_OPTIONS, 208), backgroundX+122, backgroundY+159)->setFont(font1_907824ff);   // ROUGH
+    _addTextArea(_t(MSG_OPTIONS, 206), backgroundX+13, backgroundY+159)->setFont(font1_907824ff, color);    // WIMPY
+    _addTextArea(_t(MSG_OPTIONS, 207), backgroundX+68, backgroundY+145)->setFont(font1_907824ff, color);    // NORMAL
+    _addTextArea(_t(MSG_OPTIONS, 208), backgroundX+122, backgroundY+159)->setFont(font1_907824ff, color);   // ROUGH
 
     // VIOLENCE LEVEL SWITCH LABELS
-    _addTextArea(_t(MSG_OPTIONS, 214), backgroundX+56, backgroundY+236)->setFont(font1_907824ff);    // NONE
-    _addTextArea(_t(MSG_OPTIONS, 215), backgroundX+65, backgroundY+222)->setFont(font1_907824ff);    // MINIMUM
-    _addTextArea(_t(MSG_OPTIONS, 207), backgroundX+122, backgroundY+236)->setFont(font1_907824ff);   // NORMAL
+    _addTextArea(_t(MSG_OPTIONS, 214), backgroundX+56, backgroundY+236)->setFont(font1_907824ff, color);    // NONE
+    _addTextArea(_t(MSG_OPTIONS, 215), backgroundX+65, backgroundY+222)->setFont(font1_907824ff, color);    // MINIMUM
+    _addTextArea(_t(MSG_OPTIONS, 207), backgroundX+122, backgroundY+236)->setFont(font1_907824ff, color);   // NORMAL
     label = _addTextArea(_t(MSG_OPTIONS, 216), backgroundX+122, backgroundY+257);
-    label->setFont(font1_907824ff);
+    label->setFont(font1_907824ff, color);
     label->setWidth(60); // MAXIMUM BLOOD
 
     // TARGET HIGHLIGHT SWITCH LABELS
-    _addTextArea(_t(MSG_OPTIONS, 202), backgroundX+42, backgroundY+319)->setFont(font1_907824ff);    // OFF
-    _addTextArea(_t(MSG_OPTIONS, 201), backgroundX+88, backgroundY+305)->setFont(font1_907824ff);    // ON
+    _addTextArea(_t(MSG_OPTIONS, 202), backgroundX+42, backgroundY+319)->setFont(font1_907824ff, color);    // OFF
+    _addTextArea(_t(MSG_OPTIONS, 201), backgroundX+88, backgroundY+305)->setFont(font1_907824ff, color);    // ON
     label = _addTextArea(_t(MSG_OPTIONS, 213), backgroundX+122, backgroundY+319);
-    label->setFont(font1_907824ff);
+    label->setFont(font1_907824ff, color);
     label->setWidth(70);
     label->setWordWrap(true); // TARGETING ONLY
 
     // COMBAT LOOKS SWITCH LABELS
-    _addTextArea(_t(MSG_OPTIONS, 202), backgroundX+42, backgroundY+397)->setFont(font1_907824ff);    // OFF
-    _addTextArea(_t(MSG_OPTIONS, 201), backgroundX+88, backgroundY+383)->setFont(font1_907824ff);    // ON
+    _addTextArea(_t(MSG_OPTIONS, 202), backgroundX+42, backgroundY+397)->setFont(font1_907824ff, color);    // OFF
+    _addTextArea(_t(MSG_OPTIONS, 201), backgroundX+88, backgroundY+383)->setFont(font1_907824ff, color);    // ON
 
     // COMBAT MESSAGES SWITCH LABELS
     auto verboseLabel = _addTextArea(_t(MSG_OPTIONS, 211), backgroundX+203, backgroundY+69);         // VERBOSE
-    verboseLabel->setFont(font1_907824ff);
+    verboseLabel->setFont(font1_907824ff, color);
     verboseLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
     verboseLabel->setWidth(100);
-    _addTextArea(_t(MSG_OPTIONS, 212), backgroundX+320, backgroundY+69)->setFont(font1_907824ff);    // BRIEF
+    _addTextArea(_t(MSG_OPTIONS, 212), backgroundX+320, backgroundY+69)->setFont(font1_907824ff, color);    // BRIEF
 
     // COMBAT TAUNTS SWITCH LABELS
     _addTextArea(verboseLabel, backgroundX+203, backgroundY+69+67)->setText(_t(MSG_OPTIONS, 202)); // OFF
-    _addTextArea(_t(MSG_OPTIONS, 201), backgroundX+320, backgroundY+69+67)->setFont(font1_907824ff); // ON
+    _addTextArea(_t(MSG_OPTIONS, 201), backgroundX+320, backgroundY+69+67)->setFont(font1_907824ff, color); // ON
 
     // LANGUAGE FILTER SWITCH LABELS
     _addTextArea(verboseLabel, backgroundX+203, backgroundY+69+67+66)->setText(_t(MSG_OPTIONS, 202)); // OFF
-    _addTextArea(_t(MSG_OPTIONS, 201), backgroundX+320, backgroundY+69+67+66)->setFont(font1_907824ff); // ON
+    _addTextArea(_t(MSG_OPTIONS, 201), backgroundX+320, backgroundY+69+67+66)->setFont(font1_907824ff, color); // ON
 
     // RUNNING SWITCH LABELS
     _addTextArea(verboseLabel, backgroundX+203, backgroundY+69+67+66+64)->setText(_t(MSG_OPTIONS, 209)); // NORMAL
-    _addTextArea(_t(MSG_OPTIONS, 219), backgroundX+320, backgroundY+69+67+66+64)->setFont(font1_907824ff); // ALWAYS
+    _addTextArea(_t(MSG_OPTIONS, 219), backgroundX+320, backgroundY+69+67+66+64)->setFont(font1_907824ff, color); // ALWAYS
 
     // SUBTITLES SWITCH LABELS
     _addTextArea(verboseLabel, backgroundX+203, backgroundY+69+67+66+66+65)->setText(_t(MSG_OPTIONS, 202)); // OFF
-    _addTextArea(_t(MSG_OPTIONS, 201), backgroundX+320, backgroundY+69+66+67+66+65)->setFont(font1_907824ff); // OFF
+    _addTextArea(_t(MSG_OPTIONS, 201), backgroundX+320, backgroundY+69+66+67+66+65)->setFont(font1_907824ff, color); // OFF
 
     // ITEM HIGHLIGHT SWITCH LABELS
     _addTextArea(verboseLabel, backgroundX+203, backgroundY+69+67+66+64+65+68)->setText(_t(MSG_OPTIONS, 202)); // OFF
-    _addTextArea(_t(MSG_OPTIONS, 201), backgroundX+320, backgroundY+69+64+67+66+65+68)->setFont(font1_907824ff); // ON
+    _addTextArea(_t(MSG_OPTIONS, 201), backgroundX+320, backgroundY+69+64+67+66+65+68)->setFont(font1_907824ff, color); // ON
 
     // AFFECT PLAYER SPEECH
-    _addTextArea(_t(MSG_OPTIONS, 122), backgroundX+405, backgroundY+72)->setFont(font1_907824ff);
+    _addTextArea(_t(MSG_OPTIONS, 122), backgroundX+405, backgroundY+72)->setFont(font1_907824ff, color);
 
     // COMBAT SPEED SLIDER LABELS
-    _addTextArea(_t(MSG_OPTIONS, 209), backgroundX+384, backgroundY+38)->setFont(font1_907824ff);      // NORMAL
+    _addTextArea(_t(MSG_OPTIONS, 209), backgroundX+384, backgroundY+38)->setFont(font1_907824ff, color);      // NORMAL
     auto fastestLabel = _addTextArea(_t(MSG_OPTIONS, 210), backgroundX+524, backgroundY+38);           // FASTEST
-    fastestLabel->setFont(font1_907824ff);
+    fastestLabel->setFont(font1_907824ff, color);
     fastestLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
     fastestLabel->setWidth(100);
 
     // TEXT DELAY SLIDER LABELS
-    _addTextArea(_t(MSG_OPTIONS, 217), backgroundX+384, backgroundY+113)->setFont(font1_907824ff);     // SLOW
-    _addTextArea(_t(MSG_OPTIONS, 209), backgroundX+469, backgroundY+113)->setFont(font1_907824ff);     // NORMAL
+    _addTextArea(_t(MSG_OPTIONS, 217), backgroundX+384, backgroundY+113)->setFont(font1_907824ff, color);     // SLOW
+    _addTextArea(_t(MSG_OPTIONS, 209), backgroundX+469, backgroundY+113)->setFont(font1_907824ff, color);     // NORMAL
     _addTextArea(fastestLabel, backgroundX+524, backgroundY+113)->setText(_t(MSG_OPTIONS, 218));       // FASTER
 
     // MASTER AUDIO VOLUME SLIDER LABELS
-    _addTextArea(_t(MSG_OPTIONS, 202), backgroundX+384, backgroundY+184)->setFont(font1_907824ff);     // OFF
-    _addTextArea(_t(MSG_OPTIONS, 221), backgroundX+450, backgroundY+184)->setFont(font1_907824ff);     // QUIET
-    _addTextArea(_t(MSG_OPTIONS, 209), backgroundX+494, backgroundY+184)->setFont(font1_907824ff);     // NORMAL
+    _addTextArea(_t(MSG_OPTIONS, 202), backgroundX+384, backgroundY+184)->setFont(font1_907824ff, color);     // OFF
+    _addTextArea(_t(MSG_OPTIONS, 221), backgroundX+450, backgroundY+184)->setFont(font1_907824ff, color);     // QUIET
+    _addTextArea(_t(MSG_OPTIONS, 209), backgroundX+494, backgroundY+184)->setFont(font1_907824ff, color);     // NORMAL
     _addTextArea(fastestLabel, backgroundX+524, backgroundY+184)->setText(_t(MSG_OPTIONS, 222));       // LOUD
 
     // MUSIC/MOVIE VOLUME SLIDER LABELS
-    _addTextArea(_t(MSG_OPTIONS, 202), backgroundX+384, backgroundY+184+51)->setFont(font1_907824ff);  // OFF
-    _addTextArea(_t(MSG_OPTIONS, 221), backgroundX+450, backgroundY+184+51)->setFont(font1_907824ff);  // QUIET
-    _addTextArea(_t(MSG_OPTIONS, 209), backgroundX+494, backgroundY+184+51)->setFont(font1_907824ff);  // NORMAL
+    _addTextArea(_t(MSG_OPTIONS, 202), backgroundX+384, backgroundY+184+51)->setFont(font1_907824ff, color);  // OFF
+    _addTextArea(_t(MSG_OPTIONS, 221), backgroundX+450, backgroundY+184+51)->setFont(font1_907824ff, color);  // QUIET
+    _addTextArea(_t(MSG_OPTIONS, 209), backgroundX+494, backgroundY+184+51)->setFont(font1_907824ff, color);  // NORMAL
     _addTextArea(fastestLabel, backgroundX+524, backgroundY+184+51)->setText(_t(MSG_OPTIONS, 222));    // LOUD
 
     // SOUND EFFECTS SLIDER LABELS
-    _addTextArea(_t(MSG_OPTIONS, 202), backgroundX+384, backgroundY+184+51*2)->setFont(font1_907824ff);// OFF
-    _addTextArea(_t(MSG_OPTIONS, 221), backgroundX+450, backgroundY+184+51*2)->setFont(font1_907824ff);// QUIET
-    _addTextArea(_t(MSG_OPTIONS, 209), backgroundX+494, backgroundY+184+51*2)->setFont(font1_907824ff);// NORMAL
+    _addTextArea(_t(MSG_OPTIONS, 202), backgroundX+384, backgroundY+184+51*2)->setFont(font1_907824ff, color);// OFF
+    _addTextArea(_t(MSG_OPTIONS, 221), backgroundX+450, backgroundY+184+51*2)->setFont(font1_907824ff, color);// QUIET
+    _addTextArea(_t(MSG_OPTIONS, 209), backgroundX+494, backgroundY+184+51*2)->setFont(font1_907824ff, color);// NORMAL
     _addTextArea(fastestLabel, backgroundX+524, backgroundY+184+51*2)->setText(_t(MSG_OPTIONS, 222));  // LOUD
 
     // SPEECH VOLUME SLIDER LABELS
-    _addTextArea(_t(MSG_OPTIONS, 202), backgroundX+384, backgroundY+184+51*3)->setFont(font1_907824ff);// OFF
-    _addTextArea(_t(MSG_OPTIONS, 221), backgroundX+450, backgroundY+184+51*3)->setFont(font1_907824ff);// QUIET
-    _addTextArea(_t(MSG_OPTIONS, 209), backgroundX+494, backgroundY+184+51*3)->setFont(font1_907824ff);// NORMAL
+    _addTextArea(_t(MSG_OPTIONS, 202), backgroundX+384, backgroundY+184+51*3)->setFont(font1_907824ff, color);// OFF
+    _addTextArea(_t(MSG_OPTIONS, 221), backgroundX+450, backgroundY+184+51*3)->setFont(font1_907824ff, color);// QUIET
+    _addTextArea(_t(MSG_OPTIONS, 209), backgroundX+494, backgroundY+184+51*3)->setFont(font1_907824ff, color);// NORMAL
     _addTextArea(fastestLabel, backgroundX+524, backgroundY+184+51*3)->setText(_t(MSG_OPTIONS, 222));  // LOUD
 
     // BRIGHTNESS LEVEL SLIDER LABELS
-    _addTextArea(_t(MSG_OPTIONS, 209), backgroundX+384, backgroundY+184+51*4)->setFont(font1_907824ff);// NORMAL
+    _addTextArea(_t(MSG_OPTIONS, 209), backgroundX+384, backgroundY+184+51*4)->setFont(font1_907824ff, color);// NORMAL
     _addTextArea(fastestLabel, backgroundX+524, backgroundY+184+51*4)->setText(_t(MSG_OPTIONS, 223));  // BRIGHTER
 
     // MOUSE SENSITIVITY SLIDER LABELS
-    _addTextArea(_t(MSG_OPTIONS, 209), backgroundX+384, backgroundY+184+51*5)->setFont(font1_907824ff);// NORMAL
+    _addTextArea(_t(MSG_OPTIONS, 209), backgroundX+384, backgroundY+184+51*5)->setFont(font1_907824ff, color);// NORMAL
     _addTextArea(fastestLabel, backgroundX+524, backgroundY+184+51*5)->setText(_t(MSG_OPTIONS, 218));  // FASTER
 
     // BUTTONS

@@ -69,7 +69,7 @@ void InventoryItem::setType(Type value)
 {
     _type = value;
 }
-
+/*
 Graphics::Texture* InventoryItem::texture() const
 {
     //if (!_texture)
@@ -92,20 +92,64 @@ Graphics::Texture* InventoryItem::texture() const
 
     return _item->inventoryUi()->texture();
 }
-
+*/
 void InventoryItem::render(bool eggTransparency)
 {
     //return ActiveUI::render();
     if (!_item) return;
-    auto game = Game::getInstance();
-    Size texSize = Size(texture()->width(), texture()->height());
-    game->renderer()->drawTexture(texture(), position() + (this->size() - texSize) / 2);
-}
 
-unsigned int InventoryItem::pixel(const Point& pos)
-{
-    if (!_item) return 0;
-    return Rect::inRect(pos, this->size()) ? 1 : 0;
+    double widthRatio;
+    double heightRatio;
+    unsigned int newWidth;
+    unsigned int newHeight;
+    Size texSize;
+
+    switch (_type)
+    {
+        case Type::SLOT:
+            widthRatio = static_cast<double>(88) / static_cast<double>(_item->inventorySlotUi()->width());
+            heightRatio = static_cast<double>(58) / static_cast<double>(_item->inventorySlotUi()->height());
+
+            newWidth = static_cast<unsigned int>(static_cast<double>(_item->inventorySlotUi()->width()) * static_cast<double>(heightRatio));
+
+            if (newWidth <= 88)
+            {
+                texSize = Size(newWidth, 58);
+                _item->inventorySlotUi()->setPosition(position() + (this->size() - texSize) / 2);
+                _item->inventorySlotUi()->render(Size(newWidth, 58), false);
+                return;
+            }
+            newHeight = static_cast<unsigned int>(static_cast<double>(_item->inventorySlotUi()->height()) * static_cast<double>(widthRatio));
+            texSize = Size(88, newHeight);
+            _item->inventorySlotUi()->setPosition(position() + (this->size() - texSize) / 2);
+            _item->inventorySlotUi()->render(Size(88, newHeight), false);
+            break;
+        case Type::DRAG:
+            _item->inventoryDragUi()->setPosition(position());
+            _item->inventoryDragUi()->render();
+            break;
+        default:
+            _item->inventoryUi()->setPosition(position());
+
+            widthRatio = static_cast<double>(57) / static_cast<double>(_item->inventoryUi()->width());
+            heightRatio = static_cast<double>(40) / static_cast<double>(_item->inventoryUi()->height());
+
+            newWidth = static_cast<unsigned int>(static_cast<double>(_item->inventoryUi()->width()) * static_cast<double>(heightRatio));
+
+            if (newWidth <= 57)
+            {
+                texSize = Size(newWidth, 40);
+                _item->inventoryUi()->setPosition(position() + (this->size() - texSize) / 2);
+
+                _item->inventoryUi()->render(Size(newWidth, 40), false);
+                return;
+            }
+            newHeight = static_cast<unsigned int>(static_cast<double>(_item->inventoryUi()->height()) * static_cast<double>(widthRatio));
+            texSize = Size(57, newHeight);
+            _item->inventoryUi()->setPosition(position() + (this->size() - texSize) / 2);
+            _item->inventoryUi()->render(Size(57, newHeight), false);
+            break;
+    }
 }
 
 Game::ItemObject* InventoryItem::item()
@@ -216,13 +260,18 @@ Size InventoryItem::size() const
         case Type::SLOT:
             return Size(90, 63);
         default:
-            return Base::size();
+            return Size(57, 40);
     }
 }
 
 Event::MouseHandler& InventoryItem::itemDragStopHandler()
 {
     return _itemDragStopHandler;
+}
+
+bool InventoryItem::opaque(const Point &pos) {
+    if (!_item) return false;
+    return Rect::inRect(pos, this->size());
 }
 }
 }

@@ -36,15 +36,17 @@ namespace UI
  * Hidden mask is used to handle events in particular screen area
  * @todo Must be inherited from UI
  */
-class HiddenMask : public Image
+class HiddenMask : public Base//Image
 {
 
 public:
     HiddenMask(unsigned int width = 0, unsigned int height = 0, int x = 0, int y = 0);
     ~HiddenMask() override;
 
-    unsigned int pixel(const Point& pos) override;
     void render(bool eggTransparency = false) override;
+
+    virtual bool opaque(const Point &pos) override;
+
     void think() override;
 };
 

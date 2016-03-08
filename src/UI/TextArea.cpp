@@ -27,11 +27,11 @@
 // Falltergeist includes
 #include "../CrossPlatform.h"
 #include "../Event/Mouse.h"
-#include "../Font.h"
-#include "../Format/Aaf/Glyph.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
+#include "../Graphics/Font.h"
+#include "../Graphics/Shader.h"
 #include "../ResourceManager.h"
 #include "../Logger.h"
 
@@ -43,9 +43,35 @@ namespace Falltergeist
 namespace UI
 {
 
+void TextArea::_initBuffers()
+{
+    GL_CHECK(glGenVertexArrays(1, &_vao));
+    GL_CHECK(glBindVertexArray(_vao));
+
+    // generate VBOs for verts and tex
+    GL_CHECK(glGenBuffers(1, &_coords));
+    GL_CHECK(glGenBuffers(1, &_texCoords));
+    GL_CHECK(glGenBuffers(1, &_ebo));
+    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
+    GL_CHECK(glBindVertexArray(0));
+
+    auto shader = ResourceManager::getInstance()->shader("font");
+
+    _uniformTex = shader->getUniform("tex");
+    _uniformFade = shader->getUniform("fade");
+    _uniformMVP = shader->getUniform("MVP");
+    _uniformOffset = shader->getUniform("offset");
+    _uniformColor = shader->getUniform("color");
+    _uniformOutline = shader->getUniform("outlineColor");
+
+    _attribPos = shader->getAttrib("Position");
+    _attribTex = shader->getAttrib("TexCoord");
+}
+
 TextArea::TextArea(const Point& pos) : Base(pos)
 {
     _timestampCreated = SDL_GetTicks();
+    _initBuffers();
 }
 
 TextArea::TextArea(int x, int y) : TextArea(Point(x, y))
@@ -56,6 +82,7 @@ TextArea::TextArea(const std::string& text, const Point& pos) : Base(pos)
 {
     _timestampCreated = SDL_GetTicks();
     setText(text);
+    _initBuffers();
 }
 
 TextArea::TextArea(const std::string& text, int x, int y) : TextArea(text, Point(x, y))
@@ -67,15 +94,23 @@ TextArea::TextArea(const TextArea& textArea, Point pos) : Base(pos)
     _timestampCreated = textArea._timestampCreated;
     _text = textArea._text;
     _font = textArea._font;
+    _color = textArea._color;
+    _outlineColor = textArea._outlineColor;
     _backgroundColor = textArea._backgroundColor;
     _size = textArea._size;
     _horizontalAlign = textArea._horizontalAlign;
     _verticalAlign = textArea._verticalAlign;
     _wordWrap = textArea._wordWrap;
+    _initBuffers();
 }
 
 TextArea::~TextArea()
 {
+    GL_CHECK(glDeleteBuffers(1, &_coords));
+    GL_CHECK(glDeleteBuffers(1, &_texCoords));
+    GL_CHECK(glDeleteBuffers(1, &_ebo));
+
+    GL_CHECK(glDeleteVertexArrays(1, &_vao));
 }
 
 void TextArea::_needUpdate(bool lines)
@@ -123,7 +158,7 @@ void TextArea::setText(const std::string& text)
     _needUpdate(true);
 }
 
-Font* TextArea::font()
+Graphics::Font* TextArea::font()
 {
     if (!_font)
     {
@@ -132,15 +167,23 @@ Font* TextArea::font()
     return _font;
 }
 
-void TextArea::setFont(Font* font)
+void TextArea::setFont(Graphics::Font* font)
 {
     _font = font;
     _needUpdate(true);
 }
 
-void TextArea::setFont(const std::string& fontName, unsigned int color)
+
+void TextArea::setFont(Graphics::Font *font, SDL_Color color)
 {
-    setFont(ResourceManager::getInstance()->font(fontName, color));
+    setFont(font);
+    _color = color;
+}
+
+void TextArea::setFont(const std::string& fontName, SDL_Color color)
+{
+    setFont(ResourceManager::getInstance()->font(fontName));
+    _color = color;
 }
 
 std::string TextArea::fontName()
@@ -160,23 +203,27 @@ bool TextArea::wordWrap() const
     return _wordWrap;
 }
 
+void TextArea::setColor(SDL_Color color)
+{
+    _color = color;
+}
+
 void TextArea::setOutline(bool outline)
 {
-    _outlineColor = outline ? 0x000000ff : 0;
+    _outlineColor.a = outline ? 255 : 0;
 }
 
 bool TextArea::outline() const
 {
-    return _outlineColor != 0;
+    return _outlineColor.a != 0;
 }
 
-void TextArea::setOutlineColor(unsigned int color)
+void TextArea::setOutlineColor(SDL_Color color)
 {
     _outlineColor = color;
-    _needUpdate();
 }
 
-unsigned int TextArea::outlineColor() const
+SDL_Color TextArea::outlineColor() const
 {
     return _outlineColor;
 }
@@ -234,6 +281,8 @@ void TextArea::_updateSymbols()
 
     if (_text.empty())
     {
+        _updateBuffers();
+        _calculatedSize = Size(0, 0);
         _changed = false;
         return;
     }
@@ -272,10 +321,7 @@ void TextArea::_updateSymbols()
         _calculatedSize = Size(0, 0);
     }
 
-    // Alignment and outlining
-    auto outlineFont = (_outlineColor != 0)
-                       ? ResourceManager::getInstance()->font(font()->filename(), _outlineColor)
-                       : nullptr;
+    // Alignment
 
     Point offset;
     // lines are generated with respect to horizontal padding only, so we should only change vertical;
@@ -300,25 +346,14 @@ void TextArea::_updateSymbols()
             offset.rx() += _customLineShifts[lineIdx];
         }
 
-        for (TextSymbol symbol : line.symbols)
+        for (Graphics::TextSymbol symbol : line.symbols)
         {
             symbol.position += offset;
             // outline symbols
-            if (_outlineColor != 0)
-            {
-                _addOutlineSymbol(symbol, outlineFont,  0, -1);
-                _addOutlineSymbol(symbol, outlineFont,  0,  1);
-                _addOutlineSymbol(symbol, outlineFont, -1,  0);
-                _addOutlineSymbol(symbol, outlineFont, -1, -1);
-                _addOutlineSymbol(symbol, outlineFont, -1,  1);
-                _addOutlineSymbol(symbol, outlineFont,  1,  0);
-                _addOutlineSymbol(symbol, outlineFont,  1, -1);
-                _addOutlineSymbol(symbol, outlineFont,  1,  1);
-            }
-        
             _symbols.push_back(symbol);
         }
     }
+    _updateBuffers();
     _changed = false;
 }
 
@@ -340,7 +375,6 @@ void TextArea::_updateLines()
     std::istringstream istream(_text);
     std::string word, part;
     auto aFont = font();
-    auto glyphs = aFont->aaf()->glyphs();
 
     // on first iteation, process only leading whitespaces
     while (!istream.eof() && isspace((int)istream.peek()))
@@ -355,7 +389,7 @@ void TextArea::_updateLines()
             wordWidth = 0;
             for (unsigned char ch : word)
             {
-                wordWidth += glyphs->at(ch)->width() + aFont->horizontalGap();
+                wordWidth += aFont->glyphWidth(ch) + aFont->horizontalGap();
             }
             // switch to next line if word is too long
             if (_wordWrap && maxWidth && (x + wordWidth) > maxWidth)
@@ -374,7 +408,7 @@ void TextArea::_updateLines()
         {
             if (ch == ' ')
             {
-                x += aFont->aaf()->spaceWidth() + aFont->horizontalGap();
+                x += aFont->spaceWidth() + aFont->horizontalGap();
             }
 
             if (ch == '\n' || (_wordWrap && maxWidth && x >= maxWidth))
@@ -389,19 +423,14 @@ void TextArea::_updateLines()
                 continue;
 
             Line& line = _lines.back();
-            TextSymbol symbol {ch, {x, y}, aFont};
+            Graphics::TextSymbol symbol {ch, {x, y}};
             line.symbols.push_back(symbol);
-            x += glyphs->at(ch)->width() + aFont->horizontalGap();
+            x += aFont->glyphWidth(ch) + aFont->horizontalGap();
             line.width = x;
         }
         part.clear();
 
     } while (istream >> word);
-}
-
-void TextArea::_addOutlineSymbol(const TextSymbol& symb, Font* font, int32_t ofsX, int32_t ofsY)
-{
-    _symbols.emplace_back(TextSymbol {symb.chr, symb.position + Point(ofsX, ofsY), font});
 }
 
 std::string TextArea::text() const
@@ -422,16 +451,50 @@ void TextArea::render(bool eggTransparency)
     }
 
     auto pos = position();
-    auto renderer = Game::getInstance()->renderer();
 
-    for (auto& symbol : _symbols)
-    {
-        auto aFont = symbol.font ?: font();
-        unsigned textureX = (symbol.chr%16) * aFont->width();
-        unsigned textureY = (symbol.chr/16) * aFont->height();
-        Point drawPos = symbol.position + pos;
-        renderer->drawTexture(aFont->texture(), drawPos.x(), drawPos.y(), textureX, textureY, aFont->width(), aFont->height());
-    }
+    auto shader = ResourceManager::getInstance()->shader("font");
+
+    GL_CHECK(shader->use());
+
+    GL_CHECK(font()->texture()->bind(0));
+
+    GL_CHECK(shader->setUniform(_uniformTex,0));
+
+    GL_CHECK(shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
+    GL_CHECK(shader->setUniform(_uniformOffset, glm::vec2((float)pos.x(), (float(pos.y())) )));
+    GL_CHECK(shader->setUniform(_uniformColor, glm::vec4((float)_color.r/255.f, (float)_color.g/255.f, (float)_color.b/255.f, (float)_color.a/255.f)));
+    GL_CHECK(shader->setUniform(_uniformOutline, glm::vec4((float)_outlineColor.r/255.f, (float)_outlineColor.g/255.f, (float)_outlineColor.b/255.f, (float)_outlineColor.a/255.f)));
+    GL_CHECK(shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
+
+
+    GL_CHECK(glBindVertexArray(_vao));
+
+
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coords));
+    GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+
+
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoords));
+    GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+
+    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
+
+    GL_CHECK(glEnableVertexAttribArray(_attribPos));
+    GL_CHECK(glEnableVertexAttribArray(_attribTex));
+
+    GL_CHECK(glDrawElements(GL_TRIANGLES, _cnt, GL_UNSIGNED_SHORT, 0 ));
+
+    GL_CHECK(glDisableVertexAttribArray(_attribPos));
+    GL_CHECK(glDisableVertexAttribArray(_attribTex));
+
+    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    GL_CHECK(glBindVertexArray(0));
+
+    GL_CHECK(shader->unuse());
+    GL_CHECK(font()->texture()->unbind(0));
+
+//    font()->render( pos, _color, _outlineColor);
 }
 
 TextArea& TextArea::operator<<(const std::string& text)
@@ -488,15 +551,6 @@ TextArea& TextArea::operator+=(signed value)
     return *this;
 }
 
-unsigned int TextArea::pixel(const Point& pos)
-{
-    if (!Rect::inRect(pos, this->size()))
-    {
-        return 0; // transparent
-    }
-    return 0xFFFFFFFF; // white color
-}
-
 void TextArea::handle(Event::Event* event)
 {
     Base::handle(event);
@@ -545,5 +599,73 @@ void TextArea::setCustomLineShifts(std::vector<int> shifts)
     _customLineShifts = shifts;
 }
 
+void TextArea::_updateBuffers()
+{
+    std::vector<glm::vec2> vertices;
+    std::vector<glm::vec2> UV;
+    std::vector<GLushort> indexes;
+
+    int cnt = 0;
+    auto tex = font()->texture();
+    for ( auto symbol: _symbols )
+    {
+        float textureX = (symbol.chr%16) * font()->width()+(symbol.chr%16)*2+1;
+        float textureY = (symbol.chr/16) * font()->height()+(symbol.chr/16)*2+1;
+
+        Point drawPos = symbol.position;
+
+        glm::vec2 vertex_up_left    = glm::vec2( (float)drawPos.x()-1.0, (float)drawPos.y()-1.0 );
+        glm::vec2 vertex_up_right   = glm::vec2( (float)drawPos.x()+(float)font()->width()+1.0, (float)drawPos.y()-1.0 );
+        glm::vec2 vertex_down_left  = glm::vec2( (float)drawPos.x()-1.0, (float)drawPos.y()+(float)font()->height()+1.0 );
+        glm::vec2 vertex_down_right = glm::vec2( (float)drawPos.x()+(float)font()->width()+1.0, (float)drawPos.y()+(float)font()->height()+1.0 );
+
+        vertices.push_back(vertex_up_left   );
+        vertices.push_back(vertex_up_right  );
+        vertices.push_back(vertex_down_left );
+        vertices.push_back(vertex_down_right);
+
+        glm::vec2 tex_up_left    = glm::vec2( (textureX-1.0)/(float)tex->textureWidth(), (textureY-1.0)/(float)tex->textureHeight() );
+        glm::vec2 tex_up_right   = glm::vec2( (textureX+(float)font()->width()+1.0)/(float)tex->textureWidth(), (textureY-1.0)/(float)tex->textureHeight() );
+        glm::vec2 tex_down_left  = glm::vec2( (textureX-1.0)/(float)tex->textureWidth(), (textureY+(float)font()->height()+1.0)/(float)tex->textureHeight() );
+        glm::vec2 tex_down_right = glm::vec2( (textureX+(float)font()->width()+1.0)/(float)tex->textureWidth(), (textureY+(float)font()->height()+1.0)/(float)tex->textureHeight() );
+
+        UV.push_back(tex_up_left   );
+        UV.push_back(tex_up_right  );
+        UV.push_back(tex_down_left );
+        UV.push_back(tex_down_right);
+
+        indexes.push_back(cnt*4);
+        indexes.push_back(cnt*4+1);
+        indexes.push_back(cnt*4+2);
+        indexes.push_back(cnt*4+3);
+        indexes.push_back(cnt*4+2);
+        indexes.push_back(cnt*4+1);
+        cnt++;
+    }
+    _cnt = indexes.size();
+
+
+
+    GL_CHECK(glBindVertexArray(_vao));
+
+
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coords));
+    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec2), &vertices[0], GL_DYNAMIC_DRAW));
+
+
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoords));
+    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, UV.size() * sizeof(glm::vec2), &UV[0], GL_DYNAMIC_DRAW));
+
+    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
+    GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexes.size() * sizeof(GLushort), &indexes[0], GL_DYNAMIC_DRAW));
+
+    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    GL_CHECK(glBindVertexArray(0));
+}
+
+bool TextArea::opaque(const Point &pos) {
+    return Rect::inRect(pos, this->size());
+}
 }
 }

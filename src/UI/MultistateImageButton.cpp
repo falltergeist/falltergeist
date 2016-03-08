@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Audio/Mixer.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
@@ -35,6 +36,9 @@
 
 namespace Falltergeist
 {
+using namespace std;
+using Base::make_unique;
+
 namespace UI
 {
 
@@ -51,34 +55,26 @@ MultistateImageButton::MultistateImageButton(Type type, int x, int y) : Fallterg
     {
         case Type::BIG_SWITCH:
         {
-            Image image("art/intrface/prfbknbs.frm");
+            _sprite = make_shared<Graphics::Sprite>("art/intrface/prfbknbs.frm");
+            _rects.push_back({0,0*47,46,47});
+            _rects.push_back({0,1*47,46,47});
+            _rects.push_back({0,2*47,46,47});
+            _rects.push_back({0,3*47,46,47});
+            _maxState = 4;
+            _size = Size(46,47);
 
-            auto image1 = new Image(46, 47);
-            image.texture()->copyTo(image1->texture(), 0, 0, 0, 0*47, 46, 47);
-            auto image2 = new Image(46, 47);
-            image.texture()->copyTo(image2->texture(), 0, 0, 0, 1*47, 46, 47);
-            auto image3 = new Image(46, 47);
-            image.texture()->copyTo(image3->texture(), 0, 0, 0, 2*47, 46, 47);
-            auto image4 = new Image(46, 47);
-            image.texture()->copyTo(image4->texture(), 0, 0, 0, 3*47, 46, 47);
-
-            addImage(std::unique_ptr<Image>(image1));
-            addImage(std::unique_ptr<Image>(image2));
-            addImage(std::unique_ptr<Image>(image3));
-            addImage(std::unique_ptr<Image>(image4));
             _downSound = "sound/sfx/ib3p1xx1.acm";
             _upSound = "sound/sfx/ib3lu1x1.acm";
             break;
         }
         case Type::SMALL_SWITCH:
         {
-            Image image("art/intrface/prflknbs.frm");
-            auto image1 = new Image(22, 25);
-            auto image2 = new Image(22, 50);
-            image.texture()->copyTo(image1->texture(), 0, 0, 0, 0, 22, 25);
-            image.texture()->copyTo(image2->texture(), 0, 0, 0, 25, 22, 50);
-            addImage(std::unique_ptr<Image>(image1));
-            addImage(std::unique_ptr<Image>(image2));
+            _sprite = make_shared<Graphics::Sprite>("art/intrface/prflknbs.frm");
+            _rects.push_back({0,0*25,22,25});
+            _rects.push_back({0,1*25,22,25});
+            _maxState = 2;
+            _size = Size(22,25);
+
             _downSound = "sound/sfx/ib2p1xx1.acm";
             _upSound = "sound/sfx/ib2lu1x1.acm";
             break;
@@ -88,25 +84,8 @@ MultistateImageButton::MultistateImageButton(Type type, int x, int y) : Fallterg
     }
 }
 
-
-MultistateImageButton::MultistateImageButton(ImageList* imageList, const Point& pos) : Falltergeist::UI::Base(pos)
-{
-    mouseClickHandler() += std::bind(&MultistateImageButton::_onMouseClick, this, std::placeholders::_1);
-    for (auto& image : imageList->images())
-    {
-        _imageList.addImage(std::unique_ptr<Image>(new Image(*image)));
-    }
-}
-
-
 MultistateImageButton::~MultistateImageButton()
 {
-}
-
-void MultistateImageButton::addImage(std::unique_ptr<Image> image)
-{
-    _imageList.addImage(std::move(image));
-    _maxState++;
 }
 
 unsigned int MultistateImageButton::state() const
@@ -174,11 +153,6 @@ void MultistateImageButton::_onMouseUp(Event::Mouse* event)
     }
 }
 
-Graphics::Texture* MultistateImageButton::texture() const
-{
-    return _imageList.images().at(_currentState)->texture();
-}
-
 void MultistateImageButton::setModeFactor(int factor)
 {
     _modeFactor = factor;
@@ -225,5 +199,23 @@ void MultistateImageButton::handle(Event::Mouse* mouseEvent)
     Base::handle(mouseEvent);
 }
 
+void MultistateImageButton::render(bool eggTransparency) {
+    SDL_Rect rect = _rects.at(_currentState);
+    _sprite->renderCropped(position().x(), position().y(), rect.x, rect.y, rect.w, rect.h);
+}
+
+bool MultistateImageButton::opaque(const Point &pos) {
+    if (pos.x() > _size.width() || pos.x()<0 || pos.y() > _size.height() || pos.y()<0)
+    {
+        return false;
+    }
+
+    SDL_Rect rect = _rects.at(_currentState);
+    return _sprite->opaque(pos.x()+rect.x, pos.y()+rect.y);
+}
+
+Size MultistateImageButton::size() const {
+    return _size;
+}
 }
 }

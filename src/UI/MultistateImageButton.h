@@ -23,6 +23,7 @@
 // C++ standard includes
 #include <string>
 #include <vector>
+#include <Graphics/Sprite.h>
 
 // Falltergeist includes
 #include "../UI/Base.h"
@@ -57,10 +58,7 @@ public:
     };
     MultistateImageButton(const Point& pos);
     MultistateImageButton(Type type, int x, int y);
-    MultistateImageButton(ImageList* imageList, const Point& pos);
     ~MultistateImageButton() override;
-
-    void addImage(std::unique_ptr<Image> image);
 
     unsigned int state() const;
     void setState(unsigned int state);
@@ -77,14 +75,22 @@ public:
     int modeFactor() const;
     void setModeFactor(int factor);
 
-    Graphics::Texture* texture() const override;
-
     virtual void handle(Event::Mouse* mouseEvent) override;
 
+
+    virtual bool opaque(const Point &pos) override;
+
+    virtual void render(bool eggTransparency) override;
+
+
+    virtual Size size() const override;
+
 protected:
-    ImageList _imageList;
+    std::shared_ptr<Graphics::Sprite> _sprite;
+    std::vector<SDL_Rect> _rects;
     unsigned int _currentState = 0;
     Mode _mode = Mode::CYCLIC;
+    Size _size;
     int _modeFactor = 1; // or -1
     unsigned int _maxState = 0;
     unsigned int _minState = 0;

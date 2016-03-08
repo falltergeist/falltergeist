@@ -26,10 +26,13 @@
 #define FALLTERGEIST_FORMAT_FON_GLYPH_H
 
 // C++ standard includes
-
+#include <vector>
+#include <cstdint>
 // Falltergeist includes
 
 // Third party includes
+
+
 
 namespace Falltergeist
 {
@@ -40,10 +43,23 @@ namespace Fon
 
 class Glyph
 {
-
 public:
-    Glyph();
+    Glyph(uint32_t width, uint32_t height);
     ~Glyph();
+
+    uint32_t width() const;
+    void setWidth(uint32_t width);
+
+    uint32_t height() const;
+    void setHeight(uint32_t height);
+
+    uint32_t dataOffset() const;
+    void setDataOffset(uint32_t value);
+
+protected:
+    uint16_t _width = 0;
+    uint16_t _height = 0;
+    uint32_t _dataOffset = 0;
 
 };
 

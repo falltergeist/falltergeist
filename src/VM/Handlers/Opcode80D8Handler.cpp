@@ -45,7 +45,11 @@ void Opcode80D8Handler::_run()
     auto item = dynamic_cast<Game::ItemObject*>(_vm->dataStack()->popObject());
     auto invenObj = _vm->dataStack()->popObject();
 
-    if (!item) _error("add_obj_to_inven - item not instanceof GameItemObject");
+    if (!item)
+    {
+        _error("add_obj_to_inven - item not instanceof GameItemObject");
+        return;
+    }
 
     std::vector<Game::ItemObject*>* inven;
     if (auto critterObj = dynamic_cast<Game::CritterObject*>(invenObj))
@@ -59,6 +63,7 @@ void Opcode80D8Handler::_run()
     else
     {
         _error("add_obj_to_inven - wrong WHO parameter");
+        return;
     }
 
     inven->push_back(item);

@@ -267,9 +267,18 @@ void Location::setLocation(const std::string& name)
         }
 
         auto hexagon = hexagonGrid()->at(mapObject->hexPosition());
-        Location::moveObjectToHexagon(object, hexagon);
+        moveObjectToHexagon(object, hexagon, false);
 
-        _objects.emplace_back(object);
+        // flat objects are like tiles. they don't think (but has handlers) and rendered first.
+        if (object->flat())
+        {
+            _flatObjects.emplace_back(object);
+        }
+        else
+        {
+            _objects.emplace_back(object);
+        }
+
     }
     Logger::info("GAME") << "Objects loaded in " << (SDL_GetTicks() - ticks) << std::endl;
 
@@ -296,7 +305,8 @@ void Location::setLocation(const std::string& name)
         player->setScript(new VM(ResourceManager::getInstance()->intFileType(0), player));
 
         auto hexagon = hexagonGrid()->at(mapFile->defaultPosition());
-        Location::moveObjectToHexagon(player, hexagon);
+        _objects.emplace_back(player);
+        moveObjectToHexagon(player, hexagon);
     }
 
     // Location script
@@ -317,15 +327,17 @@ void Location::setLocation(const std::string& name)
             unsigned int tileNum = mapFile->elevations()->at(_currentElevation)->floorTiles()->at(i);
             if (tileNum > 1)
             {
-                _floor->tiles().push_back(make_unique<UI::Tile>(tileNum, Point(x, y)));
+                _floor->tiles()[i] = make_unique<UI::Tile>(tileNum, Point(x, y));
             }
 
             tileNum = mapFile->elevations()->at(_currentElevation)->roofTiles()->at(i);
             if (tileNum > 1)
             {
-                _roof->tiles().push_back(make_unique<UI::Tile>(tileNum, Point(x, y - 104)));
+                _roof->tiles()[i] = make_unique<UI::Tile>(tileNum, Point(x, y - 96));
             }
         }
+        _floor->init();
+        _roof->init();
     }
     
     auto maps = ResourceManager::getInstance()->mapsTxt()->maps();
@@ -466,7 +478,24 @@ void Location::render()
 {
     _floor->render();
 
+    // render hex cursor
+    if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HEXAGON_RED)
+    {
+        Game::getInstance()->mouse()->render();
+    }
     //render only flat objects first
+    for (auto &object: _flatObjects)
+    {
+        object->render();
+        object->hexagon()->setInRender(object->inRender());
+    }
+
+    for (auto &object: _objects)
+    {
+        object->render();
+        object->hexagon()->setInRender(object->inRender());
+    }
+/*
     for (auto hexagon : _hexagonGrid->hexagons())
     {
         hexagon->setInRender(false);
@@ -499,15 +528,32 @@ void Location::render()
             }
         }
     }
-
-    for (auto hexagon : _hexagonGrid->hexagons())
+*/
+    for (auto &object: _objects)
     {
-        for (auto object : *hexagon->objects())
+        object->renderText();
+    }
+
+    _roof->render();
+
+    // render hex object outline
+    if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HEXAGON_RED)
+    {
+        Game::getInstance()->mouse()->renderOutline();
+    }
+
+
+    // just for testing
+    for (auto &object: _objects)
+    {
+        if (dynamic_cast<Game::CritterObject*>(object.get()))
         {
-            object->renderText();
+            if (!dynamic_cast<Game::DudeObject*>(object.get())) {
+                object->renderOutline(1);
+            }
         }
     }
-    //_roof->render();
+
     if (active())
     {
         _hexagonInfo->render();
@@ -717,13 +763,34 @@ void Location::handle(Event::Event* event)
         // let event fall down to all objects when using action cursor and within active view
         if (!mouseEvent->handled() && (mouse->state() == Input::Mouse::Cursor::ACTION || mouse->state() == Input::Mouse::Cursor::NONE))
         {
-            handleByGameObjects(mouseEvent);
+            if (!_roof->opaque(mouse->position()))
+            {
+                handleByGameObjects(mouseEvent);
+            }
         }
     }
 }
 
 void Location::handleByGameObjects(Event::Mouse* event)
 {
+
+    for (auto it = _objects.rbegin(); it != _objects.rend(); ++it)
+    {
+        auto object = (*it).get();
+        if (event->handled()) return;
+        if (!object->inRender()) continue;
+        object->handle(event);
+    }
+
+    // sadly, flat objects do handle events.
+    for (auto it = _flatObjects.rbegin(); it != _flatObjects.rend(); ++it)
+    {
+        auto object = (*it).get();
+        if (event->handled()) return;
+        if (!object->inRender()) continue;
+        object->handle(event);
+    }
+/*
     auto hexagons = _hexagonGrid->hexagons();
     for (auto it = hexagons.rbegin(); it != hexagons.rend(); ++it)
     {
@@ -738,6 +805,7 @@ void Location::handleByGameObjects(Event::Mouse* event)
             object->handle(event);
         }
     }
+*/
 }
 
 void Location::onMouseDown(Event::Mouse* event)
@@ -913,7 +981,7 @@ std::map<std::string, VMStackValue>* Location::EVARS()
     return &_EVARS;
 }
 
-void Location::moveObjectToHexagon(Game::Object* object, Hexagon* hexagon)
+void Location::moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool update)
 {
     auto oldHexagon = object->hexagon();
     if (oldHexagon)
@@ -948,6 +1016,44 @@ void Location::moveObjectToHexagon(Game::Object* object, Hexagon* hexagon)
     if (hexagon)
     {
         hexagon->objects()->push_back(object);
+    }
+    // TODO: recreate _objects array for rendering/handling
+    if (update)
+    {
+        _objects.sort(
+                [](std::unique_ptr<Game::Object> &obj1, std::unique_ptr<Game::Object> &obj2) -> bool
+                {
+                    return obj1->hexagon()->number() < obj2->hexagon()->number();
+                }
+        );
+        _flatObjects.sort(
+                [](std::unique_ptr<Game::Object> &obj1, std::unique_ptr<Game::Object> &obj2) -> bool
+                {
+                    return obj1->hexagon()->number() < obj2->hexagon()->number();
+                }
+        );
+    }
+
+    if (auto dude = dynamic_cast<Game::DudeObject*>(object))
+    {
+        int x = dude->hexagon()->number() % 200;
+        int y = dude->hexagon()->number() / 200;
+        x /= 2;
+        y /= 2;
+        int tilenum = y*100+x;
+
+        if (!_roof->inside() && _roof->tiles().count(tilenum))
+        {
+            // we was outside, now are inside
+            _roof->disable(tilenum);
+            _roof->setInside(true);
+        }
+        else if(_roof->inside() && !_roof->tiles().count(tilenum))
+        {
+            // we was inside, now are outside
+            _roof->enableAll();
+            _roof->setInside(false);
+        }
     }
 }
 
@@ -1056,9 +1162,12 @@ void Location::addTimerEvent(Game::Object* obj, int delay, int fixedParam)
     timer.start();
     timer.tickHandler().add([this, obj, fixedParam](Event::Event*)
         {
-            auto vm = obj->script();
-            vm->setFixedParam(fixedParam);
-            vm->call("timed_event_p_proc");
+            if (obj)
+            if (auto vm = obj->script())
+            {
+                vm->setFixedParam(fixedParam);
+                vm->call("timed_event_p_proc");
+            }
         });
     _timerEvents.emplace_back(TimerEvent {obj, std::move(timer), fixedParam});
 }
@@ -1073,5 +1182,14 @@ void Location::removeTimerEvent(Game::Object* obj, int fixedParam)
     _timerEvents.remove_if([=](Location::TimerEvent& item) { return item.object == obj && item.fixedParam == fixedParam; });
 }
 
+unsigned short Location::lightLevel()
+{
+    return _lightLevel;
+}
+
+void Location::setLightLevel(unsigned short level)
+{
+    _lightLevel = level;
+}
 }
 }

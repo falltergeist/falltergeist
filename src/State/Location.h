@@ -86,7 +86,7 @@ public:
 
     std::map<std::string, VMStackValue>* EVARS();
 
-    static void moveObjectToHexagon(Game::Object* object, Hexagon* hexagon);
+    void moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool update = true);
     void destroyObject(Game::Object* object);
     void centerCameraAtHexagon(Hexagon* hexagon);
     void centerCameraAtHexagon(int tileNum);
@@ -109,6 +109,9 @@ public:
 
     void onStateActivate(Event::State* event) override;
     void onStateDeactivate(Event::State* event) override;
+
+    unsigned short lightLevel();
+    void setLightLevel(unsigned short level);
 
     UI::PlayerPanel* playerPanel();
 
@@ -157,12 +160,16 @@ protected:
     bool _scrollTop = false;
     bool _scrollBottom = false;
 
-    std::vector<std::unique_ptr<Game::Object>> _objects;
+    std::list<std::unique_ptr<Game::Object>> _objects;
+    std::list<std::unique_ptr<Game::Object>> _flatObjects;
+
     std::unique_ptr<UI::TextArea> _hexagonInfo;
 
     Event::MouseHandler _mouseDownHandler, _mouseUpHandler, _mouseMoveHandler;
     
     std::vector<Input::Mouse::Icon> getCursorIconsForObject(Game::Object* object);
+
+    unsigned short _lightLevel = 100;
 
 };
 

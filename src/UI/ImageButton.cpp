@@ -24,6 +24,7 @@
 #include <string>
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
 #include "../Audio/Mixer.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
@@ -35,8 +36,12 @@
 
 namespace Falltergeist
 {
+using namespace std;
+using Base::make_unique;
+
 namespace UI
 {
+
 
 ImageButton::ImageButton(Type type, Point pos) : Base(pos)
 {
@@ -56,180 +61,173 @@ void ImageButton::_init(Type type)
     switch(type)
     {
         case Type::SMALL_RED_CIRCLE:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/lilredup.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/lilreddn.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/lilredup.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/lilreddn.frm");
+
             _downSound = "sound/sfx/ib1p1xx1.acm";
             _upSound = "sound/sfx/ib1lu1x1.acm";
             break;
         case Type::BIG_RED_CIRCLE:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/bigredup.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/bigreddn.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/bigredup.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/bigreddn.frm");
             _downSound = "sound/sfx/ib2p1xx1.acm";
             _upSound = "sound/sfx/ib2lu1x1.acm";
             break;
         case Type::MENU_RED_CIRCLE:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/menuup.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/menudown.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/menuup.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/menudown.frm");
             _downSound = "sound/sfx/nmselec0.acm";
             _upSound = "sound/sfx/nmselec1.acm";
             break;
         case Type::SKILL_TOGGLE:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/tgskloff.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/tgsklon.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/tgskloff.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/tgsklon.frm");
             break;
         case Type::PLUS:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/splsoff.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/splson.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/splsoff.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/splson.frm");
             break;
         case Type::MINUS:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/snegoff.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/snegon.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/snegoff.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/snegon.frm");
             break;
         case Type::LEFT_ARROW:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/slu.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sld.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/slu.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/sld.frm");
             _downSound = "sound/sfx/ib2p1xx1.acm";
             _upSound = "sound/sfx/ib2lu1x1.acm";
             break;
         case Type::RIGHT_ARROW:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sru.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/srd.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/sru.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/srd.frm");
             _downSound = "sound/sfx/ib2p1xx1.acm";
             _upSound = "sound/sfx/ib2lu1x1.acm";
             break;
         case Type::CHECKBOX:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/prfxout.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/prfxin.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/prfxout.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/prfxin.frm");
             _upSound = "sound/sfx/ib2p1xx1.acm";
             _checkboxMode = true;
             break;
         case Type::PLAYER_NAME:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/nameoff.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/nameon.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/nameoff.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/nameon.frm");
             break;
         case Type::PLAYER_AGE:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/ageoff.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/ageon.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/ageoff.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/ageon.frm");
             break;
         case Type::PLAYER_GENDER:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sexoff.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sexon.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/sexoff.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/sexon.frm");
             break;
         case Type::PANEL_INVENTORY:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/invbutup.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/invbutdn.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/invbutup.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/invbutdn.frm");
             _downSound = "sound/sfx/ib2p1xx1.acm";
             _upSound = "sound/sfx/ib2lu1x1.acm";
             break;
         case Type::PANEL_OPTIONS:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/optiup.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/optidn.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/optiup.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/optidn.frm");
             _downSound = "sound/sfx/ib2p1xx1.acm";
             _upSound = "sound/sfx/ib2lu1x1.acm";
             break;
         case Type::PANEL_ATTACK:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sattkbup.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/sattkbdn.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/sattkbup.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/sattkbdn.frm");
             _downSound = "sound/sfx/ib3p1xx1.acm";
             _upSound = "sound/sfx/ib3lu1x1.acm";
             break;
         case Type::PANEL_MAP:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/mapup.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/mapdn.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/mapup.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/mapdn.frm");
             _downSound = "sound/sfx/ib2p1xx1.acm";
             _upSound = "sound/sfx/ib2lu1x1.acm";
             break;
         case Type::PANEL_CHA:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/chaup.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/chadn.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/chaup.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/chadn.frm");
             _downSound = "sound/sfx/ib2p1xx1.acm";
             _upSound = "sound/sfx/ib2lu1x1.acm";
             break;
         case Type::PANEL_PIP:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/pipup.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/pipdn.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/pipup.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/pipdn.frm");
             _downSound = "sound/sfx/ib2p1xx1.acm";
             _upSound = "sound/sfx/ib2lu1x1.acm";
             break;
         case Type::OPTIONS_BUTTON:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/opbtnoff.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/opbtnon.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/opbtnoff.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/opbtnon.frm");
             _downSound = "sound/sfx/ib3p1xx1.acm";
             _upSound = "sound/sfx/ib3lu1x1.acm";
             break;
         case Type::SKILLDEX_BUTTON:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/skldxoff.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/skldxon.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/skldxoff.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/skldxon.frm");
             _downSound = "sound/sfx/ib2lu1x1.acm";
             _upSound = "sound/sfx/ib1p1xx1.acm";
             break;
         case Type::INVENTORY_UP_ARROW:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/invupout.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/invupin.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/invupout.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/invupin.frm");
             break;
         case Type::INVENTORY_DOWN_ARROW:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/invdnout.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/invdnin.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/invdnout.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/invdnin.frm");
             break;
         case Type::PIPBOY_ALARM_BUTTON:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/alarmout.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/alarmin.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/alarmout.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/alarmin.frm");
             break;
         case Type::DIALOG_RED_BUTTON:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_rdbt2.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_rdbt1.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/di_rdbt2.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/di_rdbt1.frm");
             break;
         case Type::DIALOG_REVIEW_BUTTON:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_rest1.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_rest2.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/di_rest1.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/di_rest2.frm");
             break;
         case Type::DIALOG_DONE_BUTTON:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_done1.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_done2.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/di_done1.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/di_done2.frm");
             break;
         case Type::DIALOG_BIG_UP_ARROW:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_bgup1.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_bgup2.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/di_bgup1.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/di_bgup2.frm");
             break;
         case Type::DIALOG_BIG_DOWN_ARROW:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_bgdn1.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_bgdn2.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/di_bgdn1.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/di_bgdn2.frm");
             break;
         case Type::DIALOG_UP_ARROW:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_up1.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_up2.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/di_up1.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/di_up2.frm");
             break;
         case Type::DIALOG_DOWN_ARROW:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_down1.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/di_down2.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/di_down1.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/di_down2.frm");
             break;
         case Type::SMALL_UP_ARROW:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/uparwoff.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/uparwon.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/uparwoff.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/uparwon.frm");
             break;
         case Type::SMALL_DOWN_ARROW:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/dnarwoff.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/dnarwon.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/dnarwoff.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/dnarwon.frm");
             break;
         case Type::MAP_HOTSPOT:
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/hotspot1.frm"));
-            _textures.push_back(ResourceManager::getInstance()->texture("art/intrface/hotspot2.frm"));
+            _butup = make_shared<Graphics::Sprite>("art/intrface/hotspot1.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/hotspot2.frm");
             break;
         default:
             throw Exception("ImageButton::Imagebutton() - wrong button type");
     }
+
     mouseClickHandler().add(std::bind(&ImageButton::_onMouseClick, this, std::placeholders::_1));
     mouseDownHandler().add(std::bind(&ImageButton::_onMouseDown, this, std::placeholders::_1));
     mouseOutHandler().add(std::bind(&ImageButton::_onMouseOut, this, std::placeholders::_1));
-}
-
-Graphics::Texture* ImageButton::texture() const
-{
-    if (_checkboxMode && _checked) return _textures.at(1);
-
-    if (_hovered && _leftButtonPressed) return _textures.at(1);
-
-    return _textures.at(0);
 }
 
 void ImageButton::_onMouseClick(Event::Mouse* event)
@@ -284,5 +282,30 @@ void ImageButton::handle(Event::Mouse* mouseEvent)
     Base::handle(mouseEvent);
 }
 
+void ImageButton::render(bool eggTransparency)
+{
+    if ((_checkboxMode && _checked) || (_hovered && _leftButtonPressed))
+    {
+      _butdown->render(position().x(),position().y());
+      return;
+    }
+
+    _butup->render(position().x(),position().y());
+
+}
+
+
+    bool ImageButton::opaque(const Point &pos) {
+        return opaque(pos.x(),pos.y());
+    }
+
+    bool ImageButton::opaque(unsigned int x, unsigned int y) {
+        if ((_checkboxMode && _checked) || (_hovered && _leftButtonPressed))
+        {
+            return _butdown->opaque(x,y);
+        }
+
+        return _butup->opaque(x,y);
+    }
 }
 }

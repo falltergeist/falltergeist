@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_WorldMap_H
-#define FALLTERGEIST_WorldMap_H
+#ifndef FALLTERGEIST_WORLDMAP_H
+#define FALLTERGEIST_WORLDMAP_H
 
 // C++ standard includes
 
@@ -54,7 +54,6 @@ public:
 
 private:
     UI::Image* _panel = nullptr;
-    UI::Image* _screenMap = nullptr;
     UI::ImageList* _tiles = nullptr;
     UI::ImageButton* _hotspot = nullptr;
 
@@ -84,4 +83,4 @@ private:
 }
 }
 
-#endif // FALLTERGEIST_WorldMap_H
+#endif // FALLTERGEIST_WORLDMAP_H

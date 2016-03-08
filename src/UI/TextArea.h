@@ -27,14 +27,12 @@
 
 // Falltergeist includes
 #include "../UI/Base.h"
+#include "../Graphics/Font.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-class Font;
-class FontString;
-class TextSymbol;
 
 namespace UI
 {
@@ -166,7 +164,9 @@ public:
      */
     void setPadding(const Size& topLeft, const Size& bottomRight);
 
-/**
+    void setColor(SDL_Color color);
+
+    /**
      * Whether text outline is currently enabled or not.
      */
     bool outline() const;
@@ -179,12 +179,12 @@ public:
     /**
      * Current outline color.
      */
-    unsigned int outlineColor() const;
+    SDL_Color outlineColor() const;
 
     /**
      * Sets text outline color. 0 - disables outline, any other color will enable it.
      */
-    void setOutlineColor(unsigned int color);
+    void setOutlineColor(SDL_Color color);
 
     /**
      * Current line offset.
@@ -202,13 +202,14 @@ public:
     void setCustomLineShifts(std::vector<int> shifts);
 
 
-    Font* font();
-    void setFont(Font* font);
+    Graphics::Font* font();
+    void setFont(Graphics::Font* font);
+    void setFont(Graphics::Font* font, SDL_Color color);
 
     /**
      * Sets font by font filename and color.
      */
-    void setFont(const std::string& fontName, unsigned int color);
+    void setFont(const std::string& fontName, SDL_Color color);
 
     /**
      * Current font filename.
@@ -216,7 +217,8 @@ public:
     std::string fontName();
 
     void render(bool eggTransparency = false) override;
-    unsigned int pixel(const Point& pos) override;
+
+    virtual bool opaque(const Point &pos) override;
 
     unsigned int timestampCreated() const;
 
@@ -260,18 +262,12 @@ public:
     TextArea& operator=(signed value);
 
 protected:
-    struct TextSymbol
-    {
-        uint8_t chr;
-        Point position;
-        Font* font;
-    };
 
     struct Line
     {
         // line width in pixels
         int width = 0;
-        std::vector<TextSymbol> symbols;
+        std::vector<Graphics::TextSymbol> symbols;
         
         bool operator < (const Line& rhs) const
         { 
@@ -284,9 +280,9 @@ protected:
      */
     bool _changed = true;
 
-    std::vector<TextSymbol> _symbols;
+    std::vector<Graphics::TextSymbol> _symbols;
     std::string _text;
-    Font* _font = nullptr;
+    Graphics::Font* _font = nullptr;
 
     HorizontalAlign _horizontalAlign = HorizontalAlign::LEFT;
     VerticalAlign _verticalAlign = VerticalAlign::TOP;
@@ -313,9 +309,10 @@ protected:
     std::vector<int> _customLineShifts;
 
     // TODO: implement
-    unsigned int _backgroundColor = 0;
-
-    unsigned int _outlineColor = 0;
+    SDL_Color _backgroundColor = {0,0,0,0};
+    // TODO: should be white, and properly set to green in states/ui
+    SDL_Color _color = {0x3f, 0xf8, 0x00, 0xff};
+    SDL_Color _outlineColor = {0,0,0,0};
     unsigned int _timestampCreated = 0;
 
     /**
@@ -327,14 +324,30 @@ protected:
      * If needed, updates lines by splitting source string.
      */
     virtual void _updateLines();
-    
-    void _addOutlineSymbol(const TextSymbol& symb, Font* font, int32_t ofsX, int32_t ofsY);
 
     /**
      * Call when it is required to recalculate symbol positions.
      * @param lines true to also rebuild line composition.
      */
     void _needUpdate(bool lines = false);
+
+    GLuint _vao;
+    GLuint _coords;
+    GLuint _texCoords;
+    GLuint _ebo;
+    int _cnt = 0;
+    void _initBuffers();
+    void _updateBuffers();
+
+    GLint _uniformTex;
+    GLint _uniformFade;
+    GLint _uniformMVP;
+    GLint _uniformOffset;
+    GLint _uniformColor;
+    GLint _uniformOutline;
+
+    GLint _attribPos;
+    GLint _attribTex;
 
 };
 

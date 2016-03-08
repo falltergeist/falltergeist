@@ -52,12 +52,30 @@ if(NOT SDLIMAGE_FOUND)
 endif(NOT SDLIMAGE_FOUND)
 include_directories(${SDLIMAGE_INCLUDE_DIR})
 
+find_package(OpenGL REQUIRED)
+if(NOT OPENGL_FOUND)
+    message(FATAL_ERROR "GL library not found")
+endif(NOT OPENGL_FOUND)
+include_directories(${OPENGL_INCLUDE_DIR})
+
+find_package(GLEW REQUIRED)
+if(NOT GLEW_FOUND)
+    message(FATAL_ERROR "GLEW library not found")
+endif(NOT GLEW_FOUND)
+include_directories(${GLEW_INCLUDE_DIR})
+
+find_package(GLM REQUIRED)
+if(NOT GLM_FOUND)
+    message(FATAL_ERROR "GLM library not found")
+endif(NOT GLM_FOUND)
+include_directories(${GLM_INCLUDE_DIRS})
+
 file(GLOB_RECURSE SOURCES  src/*.cpp)
 
 add_definitions (-std=c++11 -Wall)
 
 add_executable(falltergeist main.cpp ${SOURCES})
-target_link_libraries(falltergeist ${ZLIB_LIBRARIES} ${SDL2_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLIMAGE_LIBRARY})
+target_link_libraries(falltergeist ${ZLIB_LIBRARIES} ${SDL2_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLIMAGE_LIBRARY} ${OPENGL_gl_LIBRARY} ${GLEW_LIBRARY})
 
 include(cmake/install/windows.cmake)
 include(cmake/install/linux.cmake)

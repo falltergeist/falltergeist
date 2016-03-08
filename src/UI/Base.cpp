@@ -18,6 +18,7 @@
  */
 
 // Related headers
+#include "../UI/Animation.h"
 #include "../UI/Base.h"
 
 // C++ standard includes
@@ -33,6 +34,7 @@
 #include "../PathFinding/Hexagon.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
+#include "TransFlags.h"
 
 // Third party includes
 
@@ -76,23 +78,13 @@ void Base::setY(int value)
     setPosition(Point(position().x(), value));
 }
 
-Graphics::Texture* Base::texture() const
-{
-    return _texture;
-}
-
-void Base::setTexture(Graphics::Texture* texture)
-{
-    _texture = texture;
-}
-
 void Base::think()
 {
 }
 
 void Base::render(bool eggTransparency)
 {
-
+/* TODO: newrender
     if (eggTransparency)
     {
         auto dude = Game::getInstance()->player();
@@ -134,6 +126,7 @@ void Base::render(bool eggTransparency)
     {
         Game::getInstance()->renderer()->drawTexture(texture(), position());
     }
+    */
 
 
 
@@ -176,24 +169,7 @@ void Base::setOffset(int x, int y)
 
 Size Base::size() const
 {
-    auto tex = texture();
-    if (!tex) return Size(0, 0);
-    return Size(tex->width(), tex->height());
-}
-
-unsigned int Base::pixel(const Point& pos)
-{
-    if (_tmptex)
-    {
-        return _tmptex->pixel((unsigned)pos.x(), (unsigned)pos.y()) & 0xFF; // return only alpha channel
-    }
-    auto tex = texture();
-    return tex ? tex->pixel((unsigned)pos.x(), (unsigned)pos.y()) : 0;
-}
-
-unsigned int Base::pixel(unsigned int x, unsigned int y)
-{
-    return pixel(Point(x, y));
+    return Size(0, 0);
 }
 
 void Base::handle(Event::Event* event)
@@ -228,7 +204,7 @@ void Base::handle(Event::Mouse* mouseEvent)
     using Mouse = Event::Mouse;
     Point relPos = mouseEvent->position() - this->position();
 
-    if (!mouseEvent->obstacle() && this->pixel(relPos)) // mouse cursor is over the element
+    if (!mouseEvent->obstacle() && this->opaque(relPos)) // mouse cursor is over the element
     {
         switch (mouseEvent->originalType())
         {
@@ -369,15 +345,6 @@ void Base::handle(Event::Mouse* mouseEvent)
     return;
 }
 
-void Base::_generateTexture(unsigned int width, unsigned int height)
-{
-    if (!_generatedTexture || _generatedTexture->width() != width || _generatedTexture->height() != height)
-    {
-        _generatedTexture = make_unique<Graphics::Texture>(width, height);
-        setTexture(_generatedTexture.get());
-    }
-}
-
 unsigned Base::width() const
 {
     return size().width();
@@ -443,6 +410,33 @@ Event::MouseHandler& Base::mouseUpHandler()
 {
     return _mouseUpHandler;
 }
+
+void Base::render(const Size &size, bool eggTransparency)
+{
+    render(eggTransparency);
+}
+
+void Base::setLight(bool light) {
+    _light = light;
+}
+
+bool Base::light() {
+    return _light;
+}
+
+TransFlags::Trans Base::trans() const {
+    return _trans;
+}
+
+void Base::setTrans(TransFlags::Trans value) {
+    _trans = value;
+}
+
+void Base::setOutline(int outline)
+{
+    _outline=outline;
+}
+
 
 }
 }
