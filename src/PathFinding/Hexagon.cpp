@@ -166,7 +166,7 @@ Game::Orientation Hexagon::orientationTo(Hexagon *hexagon)
         result = 2;
     }
 
-    return Game::Orientation(result);
+    return Game::Orientation(result); // TODO: this is wrong. orientation!=direction
 }
 
 unsigned int Hexagon::addLight(unsigned int light)

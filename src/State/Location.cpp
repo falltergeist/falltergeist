@@ -388,6 +388,7 @@ void Location::setLocation(const std::string& name)
             Logger::error("Location") << "No ambient sfx for map " << mapShortName << std::endl;
         }
     }
+    initLight();
 }
 
 std::vector<Input::Mouse::Icon> Location::getCursorIconsForObject(Game::Object* object)
@@ -874,7 +875,8 @@ void Location::onMouseMove(Event::Mouse* mouseEvent)
         text += "Hex coords: " + std::to_string(hexagon->position().x()) + "," + std::to_string(hexagon->position().y()) + "\n";
         auto dude = Game::getInstance()->player();
         auto hex = dude->hexagon();
-        text += "Hex delta:\n dx=" + std::to_string(hex->cubeX()-hexagon->cubeX()) + "\n dy="+ std::to_string(hex->cubeY()-hexagon->cubeY()) + "\n dz=" + std::to_string(hex->cubeZ()-hexagon->cubeZ());
+        text += "Hex delta:\n dx=" + std::to_string(hex->cubeX()-hexagon->cubeX()) + "\n dy="+ std::to_string(hex->cubeY()-hexagon->cubeY()) + "\n dz=" + std::to_string(hex->cubeZ()-hexagon->cubeZ()) + "\n";
+        text += "Hex light: " + std::to_string(hexagon->light()) + "\n";
         _hexagonInfo->setText(text);
     }
     else
@@ -986,6 +988,11 @@ void Location::moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool 
     auto oldHexagon = object->hexagon();
     if (oldHexagon)
     {
+        if (update)
+        {
+            _hexagonGrid->initLight(oldHexagon, false);
+        }
+
         for (auto it = oldHexagon->objects()->begin(); it != oldHexagon->objects()->end(); ++it)
         {
             if (*it == object)
@@ -1032,6 +1039,10 @@ void Location::moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool 
                     return obj1->hexagon()->number() < obj2->hexagon()->number();
                 }
         );
+        if(hexagon)
+        {
+            _hexagonGrid->initLight(hexagon, true);
+        }
     }
 
     if (auto dude = dynamic_cast<Game::DudeObject*>(object))
@@ -1193,6 +1204,14 @@ void Location::setLightLevel(unsigned int level)
     if (level>0x10000) level=0x10000;
     if (level<0x4000) level=0x4000;
     _lightLevel = level;
+}
+
+void Location::initLight()
+{
+    for (auto hex: _hexagonGrid->hexagons())
+    {
+        _hexagonGrid->initLight(hex);
+    }
 }
 }
 }

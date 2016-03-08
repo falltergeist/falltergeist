@@ -48,6 +48,7 @@ public:
     std::vector<Hexagon*> findPath(Hexagon* from, Hexagon* to);
     Hexagon* hexInDirection(Hexagon* from, unsigned short rotation, unsigned int distance);
     std::vector<Hexagon*> ring(Hexagon* from, unsigned int radius);
+    void initLight(Hexagon* hex, bool add = true);
 
 protected:
     HexagonVector _hexagons;

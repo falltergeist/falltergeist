@@ -115,6 +115,8 @@ public:
 
     UI::PlayerPanel* playerPanel();
 
+    void initLight();
+
 protected:
     struct TimerEvent
     {
