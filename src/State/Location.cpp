@@ -175,7 +175,61 @@ void Location::setLocation(const std::string& name)
     {
         _vertices.push_back(glm::vec2(hex->position().x(), hex->position().y()));
     }
-    _lightmap = new Graphics::Lightmap(_vertices);
+    std::vector<GLuint> indexes;
+    for (auto hexagon : _hexagonGrid->hexagons())
+    {
+        /*if (!Rect::inRect(hexagon->position()-camera()->topLeft(),Size(Game::getInstance()->renderer()->width(),Game::getInstance()->renderer()->height())))
+        {
+            continue;
+        }*/
+        bool doup=true;
+        bool dodown = true;
+        if (hexagon->number() % 200 == 0)
+        {
+            doup=false;
+        }
+        if ((hexagon->number()+1) % 200 == 0)
+        {
+            dodown=false;
+        }
+        if (hexagon->number()<200)
+        {
+            doup = false;
+        }
+        if (hexagon->number()>=39800)
+        {
+            dodown = false;
+        }
+        if (dodown)
+        {
+            indexes.push_back(hexagon->number());
+            if (hexagon->number() % 2) // odd
+            {
+                indexes.push_back(hexagon->number()+200);
+                indexes.push_back(hexagon->number()+1);
+            }
+            else
+            {
+                indexes.push_back(hexagon->number()+200);
+                indexes.push_back(hexagon->number()+201);
+            }
+        }
+        if (doup)
+        {
+            indexes.push_back(hexagon->number());
+            if (hexagon->number() % 2) // odd
+            {
+                indexes.push_back(hexagon->number()-200);
+                indexes.push_back(hexagon->number()-201);
+            }
+            else
+            {
+                indexes.push_back(hexagon->number()-200);
+                indexes.push_back(hexagon->number()-1);
+            }
+        }
+    }
+    _lightmap = new Graphics::Lightmap(_vertices,indexes);
 
     auto mapFile = ResourceManager::getInstance()->mapFileType(name);
 
@@ -486,57 +540,8 @@ void Location::render()
 {
     _floor->render();
 
-    std::vector<GLuint> indexes;
-    for (auto hexagon : _hexagonGrid->hexagons())
-    {
-        bool doup=true;
-        bool dodown = true;
-        if (hexagon->number() % 200 == 0)
-        {
-            doup=false;
-        }
-        if ((hexagon->number()+1) % 200 == 0)
-        {
-            dodown=false;
-        }
-        if (hexagon->number()<200)
-        {
-            doup = false;
-        }
-        if (hexagon->number()>=39800)
-        {
-            dodown = false;
-        }
-        if (dodown)
-        {
-            indexes.push_back(hexagon->number());
-            if (hexagon->number() % 2) // odd
-            {
-                indexes.push_back(hexagon->number()+200);
-                indexes.push_back(hexagon->number()+1);
-            }
-            else
-            {
-                indexes.push_back(hexagon->number()+200);
-                indexes.push_back(hexagon->number()+201);
-            }
-        }
-        if (doup)
-        {
-            indexes.push_back(hexagon->number());
-            if (hexagon->number() % 2) // odd
-            {
-                indexes.push_back(hexagon->number()-200);
-                indexes.push_back(hexagon->number()-201);
-            }
-            else
-            {
-                indexes.push_back(hexagon->number()-200);
-                indexes.push_back(hexagon->number()-1);
-            }
-        }
-    }
-    _lightmap->render(_camera->topLeft(),indexes);
+
+    _lightmap->render(_camera->topLeft());
 
     // render hex cursor
     if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HEXAGON_RED)
@@ -1105,23 +1110,10 @@ void Location::moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool 
             for (auto hex: _hexagonGrid->hexagons())
             {
                 int lightLevel = 100;
-                //int light = std::max(hex->light(),_lightLevel);
                 unsigned int light = hex->light();
                 if (light<=_lightLevel) light=655;
                 lightLevel = light / ((65536-655)/100);
-                /*if ( light < 0xA000 )
-                {
-                    lightLevel = (light - 0x4000) * 100 / 0x6000;
 
-                }
-                else if ( light == 0xA000 )
-                {
-                    lightLevel = 50;
-                }
-                else
-                {
-                    lightLevel = (light - 0xA000) * 100 / 0x6000;
-                }*/
                 float l = lightLevel/100.0;
                 lights.push_back(l);
             }
@@ -1308,24 +1300,11 @@ void Location::initLight()
     for (auto hex: _hexagonGrid->hexagons())
     {
         int lightLevel = 100;
-        //int light = std::max(hex->light(),_lightLevel);
 
         unsigned int light = hex->light();
         if (light<=_lightLevel) light=655;
         lightLevel = light / ((65536-655)/100);
-        /*if ( light < 0xA000 )
-        {
-            lightLevel = (light - 0x4000) * 100 / 0x6000;
 
-        }
-        else if ( light == 0xA000 )
-        {
-            lightLevel = 50;
-        }
-        else
-        {
-            lightLevel = (light - 0xA000) * 100 / 0x6000;
-        }*/
         float l = lightLevel/100.0;
         lights.push_back(l);
     }

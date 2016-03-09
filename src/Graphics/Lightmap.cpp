@@ -29,7 +29,7 @@ namespace Falltergeist {
 namespace Graphics {
 
 
-Lightmap::Lightmap(std::vector<glm::vec2> coords)
+Lightmap::Lightmap(std::vector<glm::vec2> coords,std::vector<GLuint> indexes)
 {
     GL_CHECK(glGenVertexArrays(1, &_vao));
     GL_CHECK(glBindVertexArray(_vao));
@@ -51,6 +51,10 @@ Lightmap::Lightmap(std::vector<glm::vec2> coords)
 //    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, textureCoords.size() * sizeof(glm::vec2), &textureCoords[0], GL_STATIC_DRAW));
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
+    // update indexes
+    GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexes.size() * sizeof(GLuint), &indexes[0], GL_DYNAMIC_DRAW));
+    _indexes = indexes.size();
+
     GL_CHECK(glBindVertexArray(0));
 
     auto shader = ResourceManager::getInstance()->shader("lightmap");
@@ -68,9 +72,9 @@ Lightmap::~Lightmap()
 
 }
 
-void Lightmap::render(const Falltergeist::Point &pos, std::vector<GLuint> indexes)
+void Lightmap::render(const Falltergeist::Point &pos)
 {
-    if (indexes.size()<=0) return;
+    //if (indexes.size()<=0) return;
 
     GL_CHECK(glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE, GL_SRC_ALPHA, GL_ONE));
     auto shader = ResourceManager::getInstance()->shader("lightmap");
@@ -98,14 +102,12 @@ void Lightmap::render(const Falltergeist::Point &pos, std::vector<GLuint> indexe
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
 
-    // update indexes
-    GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexes.size() * sizeof(GLuint), &indexes[0], GL_DYNAMIC_DRAW));
 
     GL_CHECK(glEnableVertexAttribArray(_attribPos));
 
     GL_CHECK(glEnableVertexAttribArray(_attribLights));
 
-    GL_CHECK(glDrawElements(GL_TRIANGLES, indexes.size(), GL_UNSIGNED_INT, 0 ));
+    GL_CHECK(glDrawElements(GL_TRIANGLES, _indexes, GL_UNSIGNED_INT, 0 ));
 
     GL_CHECK(glDisableVertexAttribArray(_attribPos));
 

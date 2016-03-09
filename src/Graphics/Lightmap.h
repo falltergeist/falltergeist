@@ -29,9 +29,9 @@ namespace Graphics {
 class Lightmap
 {
 public:
-    Lightmap(std::vector<glm::vec2> coords);
+    Lightmap(std::vector<glm::vec2> coords, std::vector<GLuint> indexes);
     ~Lightmap();
-    void render(const Point &pos, std::vector<GLuint> indexes);
+    void render(const Point &pos);
     void update(std::vector<float> lights);
 
 private:
@@ -46,6 +46,7 @@ private:
 
     GLint _attribPos;
     GLint _attribLights;
+    unsigned int _indexes;
 
 };
 
