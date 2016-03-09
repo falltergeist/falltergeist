@@ -590,7 +590,7 @@ void HexagonGrid::initLight(Hexagon *hex, bool add)
                             {
 
                                 // if wall -> check light orientation
-                                if (auto wall = dynamic_cast<Game::WallObject*>(object))
+                                /*if (auto wall = dynamic_cast<Game::WallObject*>(object))
                                 {
 
                                     if (wall->lightOrientation() == Game::Orientation::EC || wall->lightOrientation() == Game::Orientation::WC)
@@ -620,9 +620,9 @@ void HexagonGrid::initLight(Hexagon *hex, bool add)
                                     }
                                 }
                                 else
-                                {
+                                {*/
                                     block = true;
-                                }
+                                //}
 
 
                                 break;
@@ -639,6 +639,7 @@ void HexagonGrid::initLight(Hexagon *hex, bool add)
                             }
                         }
                     }
+
                     blocked[blockerIndex] = block;
                     ringIndex++;
                     blockerIndex++;

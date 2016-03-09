@@ -30,6 +30,8 @@
 #include "../UI/ImageButton.h"
 #include "../Game/Object.h"
 #include "../Game/Timer.h"
+#include <Graphics/Lightmap.h>
+
 
 // Third party includes
 
@@ -172,6 +174,7 @@ protected:
     std::vector<Input::Mouse::Icon> getCursorIconsForObject(Game::Object* object);
 
     unsigned int _lightLevel = 0x4000;
+    Falltergeist::Graphics::Lightmap* _lightmap;
 
 };
 

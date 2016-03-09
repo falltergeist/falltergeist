@@ -188,4 +188,9 @@ unsigned int Hexagon::light()
     return _light;
 }
 
+unsigned int Hexagon::setLight(unsigned int light)
+{
+    _light = light;
+    return _light;
+}
 }

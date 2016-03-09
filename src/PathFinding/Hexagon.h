@@ -74,6 +74,7 @@ public:
 
     unsigned int addLight(unsigned int light);
     unsigned int subLight(unsigned int light);
+    unsigned int setLight(unsigned int light);
     unsigned int light();
 
 protected:
