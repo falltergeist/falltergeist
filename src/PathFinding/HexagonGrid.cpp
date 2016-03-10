@@ -20,12 +20,13 @@
 // C++ standard includes
 #include <functional>
 #include <queue>
+#include <array>
 #include <cstdlib>
 #include <iostream>
-#include <Game/WallObject.h>
 
 // Falltergeist includes
 #include "../Base/StlFeatures.h"
+#include "../Game/WallObject.h"
 #include "../PathFinding/Hexagon.h"
 #include "../PathFinding/HexagonGrid.h"
 
@@ -590,7 +591,7 @@ void HexagonGrid::initLight(Hexagon *hex, bool add)
                             {
 
                                 // if wall -> check light orientation
-                                /*if (auto wall = dynamic_cast<Game::WallObject*>(object))
+                                if (auto wall = dynamic_cast<Game::WallObject*>(object))
                                 {
 
                                     if (wall->lightOrientation() == Game::Orientation::EC || wall->lightOrientation() == Game::Orientation::WC)
@@ -619,10 +620,10 @@ void HexagonGrid::initLight(Hexagon *hex, bool add)
                                         lightHex = false;
                                     }
                                 }
-                                else
-                                {*/
+                                //else
+                                {
                                     block = true;
-                                //}
+                                }
 
 
                                 break;
