@@ -183,6 +183,7 @@ bool Settings::load()
     if (logger)
     {
         _loggerLevel = logger->propertyString("level", _loggerLevel);
+        Logger::setLevel(_loggerLevel);
         _loggerColors = logger->propertyBool("colors", _loggerColors);
     }
 
