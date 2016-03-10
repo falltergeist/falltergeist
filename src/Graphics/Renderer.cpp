@@ -176,6 +176,7 @@ void Renderer::init()
     ResourceManager::getInstance()->shader("font");
     ResourceManager::getInstance()->shader("animation");
     ResourceManager::getInstance()->shader("tilemap");
+    ResourceManager::getInstance()->shader("lightmap");
     Logger::info("RENDERER") << "[OK]" << std::endl;
 
     Logger::info("RENDERER") << "Generating buffers" << std::endl;
