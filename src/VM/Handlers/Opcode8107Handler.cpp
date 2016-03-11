@@ -17,13 +17,10 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// C++ standard includes
-
 // Falltergeist includes
-#include <Game/Game.h>
-#include <State/Location.h>
+#include <Game/Object.h>
 #include "../../Logger.h"
-#include "../../VM/Handlers/Opcode80E9Handler.h"
+#include "../../VM/Handlers/Opcode8107Handler.h"
 #include "../../VM/VM.h"
 
 // Third party includes
@@ -31,36 +28,30 @@
 namespace Falltergeist
 {
 
-Opcode80E9Handler::Opcode80E9Handler(VM* vm) : OpcodeHandler(vm)
+Opcode8107Handler::Opcode8107Handler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode80E9Handler::_run()
+void Opcode8107Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[80E9] [*] void set_light_level(int level)" << std::endl;
+    Logger::debug("SCRIPT") << "[8107] [*] void obj_set_light_level(Object* object, int level, int radius)" << std::endl;
+    auto object = _vm->dataStack()->popObject();
     auto level = _vm->dataStack()->popInteger();
-
+    auto radius = _vm->dataStack()->popInteger();
     if (level > 100 || level < 0)
     {
-        _warning("set_light_level: level should be 0-100");
+        _warning("obj_set_light_level: level should be 0-100");
+        return;
+    }
+    if (radius > 8 || radius < 0)
+    {
+        _warning("obj_set_light_level: radius should be 0-8");
         return;
     }
 
-    unsigned int light;
-    if ( level < 50 )
-    {
-        light = 0x4000 + level * 0x6000 / 100;
-    }
-    else if ( level == 50 )
-    {
-        light = 0xA000;
-    }
-    else
-    {
-        light = 0xA000 + level * 0x6000 / 100;
-    }
-
-    Game::getInstance()->locationState()->setLightLevel(light);
+    unsigned int light = 65536/100*level;
+    object->setLightIntensity(light);
+    object->setLightRadius(radius);
 }
 
 }
