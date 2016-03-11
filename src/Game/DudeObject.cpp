@@ -45,6 +45,8 @@ namespace Game
 DudeObject::DudeObject() : CritterObject()
 {
     _type = Type::DUDE;
+    setLightIntensity(65536);
+    setLightRadius(4);
 }
 
 DudeObject::~DudeObject()

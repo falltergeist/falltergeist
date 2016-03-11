@@ -30,6 +30,8 @@
 #include "../UI/ImageButton.h"
 #include "../Game/Object.h"
 #include "../Game/Timer.h"
+#include <Graphics/Lightmap.h>
+
 
 // Third party includes
 
@@ -110,10 +112,12 @@ public:
     void onStateActivate(Event::State* event) override;
     void onStateDeactivate(Event::State* event) override;
 
-    unsigned short lightLevel();
-    void setLightLevel(unsigned short level);
+    unsigned int lightLevel();
+    void setLightLevel(unsigned int level);
 
     UI::PlayerPanel* playerPanel();
+
+    void initLight();
 
 protected:
     struct TimerEvent
@@ -169,7 +173,8 @@ protected:
     
     std::vector<Input::Mouse::Icon> getCursorIconsForObject(Game::Object* object);
 
-    unsigned short _lightLevel = 100;
+    unsigned int _lightLevel = 0x4000;
+    Falltergeist::Graphics::Lightmap* _lightmap;
 
 };
 

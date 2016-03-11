@@ -170,6 +170,66 @@ void Location::setLocation(const std::string& name)
     _roof = make_unique<UI::TileMap>();
     _hexagonGrid = make_unique<HexagonGrid>();
     _objects.clear();
+    std::vector<glm::vec2> _vertices;
+    for (auto hex : _hexagonGrid->hexagons())
+    {
+        _vertices.push_back(glm::vec2(hex->position().x(), hex->position().y()));
+    }
+    std::vector<GLuint> indexes;
+    for (auto hexagon : _hexagonGrid->hexagons())
+    {
+        /*if (!Rect::inRect(hexagon->position()-camera()->topLeft(),Size(Game::getInstance()->renderer()->width(),Game::getInstance()->renderer()->height())))
+        {
+            continue;
+        }*/
+        bool doup=true;
+        bool dodown = true;
+        if (hexagon->number() % 200 == 0)
+        {
+            doup=false;
+        }
+        if ((hexagon->number()+1) % 200 == 0)
+        {
+            dodown=false;
+        }
+        if (hexagon->number()<200)
+        {
+            doup = false;
+        }
+        if (hexagon->number()>=39800)
+        {
+            dodown = false;
+        }
+        if (dodown)
+        {
+            indexes.push_back(hexagon->number());
+            if (hexagon->number() % 2) // odd
+            {
+                indexes.push_back(hexagon->number()+200);
+                indexes.push_back(hexagon->number()+1);
+            }
+            else
+            {
+                indexes.push_back(hexagon->number()+200);
+                indexes.push_back(hexagon->number()+201);
+            }
+        }
+        if (doup)
+        {
+            indexes.push_back(hexagon->number());
+            if (hexagon->number() % 2) // odd
+            {
+                indexes.push_back(hexagon->number()-200);
+                indexes.push_back(hexagon->number()-201);
+            }
+            else
+            {
+                indexes.push_back(hexagon->number()-200);
+                indexes.push_back(hexagon->number()-1);
+            }
+        }
+    }
+    _lightmap = new Graphics::Lightmap(_vertices,indexes);
 
     auto mapFile = ResourceManager::getInstance()->mapFileType(name);
 
@@ -388,6 +448,8 @@ void Location::setLocation(const std::string& name)
             Logger::error("Location") << "No ambient sfx for map " << mapShortName << std::endl;
         }
     }
+    initLight();
+
 }
 
 std::vector<Input::Mouse::Icon> Location::getCursorIconsForObject(Game::Object* object)
@@ -478,6 +540,9 @@ void Location::render()
 {
     _floor->render();
 
+
+    _lightmap->render(_camera->topLeft());
+
     // render hex cursor
     if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HEXAGON_RED)
     {
@@ -544,12 +609,13 @@ void Location::render()
 
 
     // just for testing
-    for (auto &object: _objects)
+    if (Game::getInstance()->settings()->targetHighlight())
     {
-        if (dynamic_cast<Game::CritterObject*>(object.get()))
-        {
-            if (!dynamic_cast<Game::DudeObject*>(object.get())) {
-                object->renderOutline(1);
+        for (auto &object: _objects) {
+            if (dynamic_cast<Game::CritterObject *>(object.get())) {
+                if (!dynamic_cast<Game::DudeObject *>(object.get())) {
+                    object->renderOutline(1);
+                }
             }
         }
     }
@@ -874,7 +940,8 @@ void Location::onMouseMove(Event::Mouse* mouseEvent)
         text += "Hex coords: " + std::to_string(hexagon->position().x()) + "," + std::to_string(hexagon->position().y()) + "\n";
         auto dude = Game::getInstance()->player();
         auto hex = dude->hexagon();
-        text += "Hex delta:\n dx=" + std::to_string(hex->cubeX()-hexagon->cubeX()) + "\n dy="+ std::to_string(hex->cubeY()-hexagon->cubeY()) + "\n dz=" + std::to_string(hex->cubeZ()-hexagon->cubeZ());
+        text += "Hex delta:\n dx=" + std::to_string(hex->cubeX()-hexagon->cubeX()) + "\n dy="+ std::to_string(hex->cubeY()-hexagon->cubeY()) + "\n dz=" + std::to_string(hex->cubeZ()-hexagon->cubeZ()) + "\n";
+        text += "Hex light: " + std::to_string(hexagon->light()) + "\n";
         _hexagonInfo->setText(text);
     }
     else
@@ -986,6 +1053,11 @@ void Location::moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool 
     auto oldHexagon = object->hexagon();
     if (oldHexagon)
     {
+        if (update)
+        {
+            //_hexagonGrid->initLight(oldHexagon, false);
+        }
+
         for (auto it = oldHexagon->objects()->begin(); it != oldHexagon->objects()->end(); ++it)
         {
             if (*it == object)
@@ -1032,6 +1104,24 @@ void Location::moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool 
                     return obj1->hexagon()->number() < obj2->hexagon()->number();
                 }
         );
+        if(hexagon)
+        {
+            initLight();
+            /*_hexagonGrid->initLight(hexagon, true);
+            std::vector<float> lights;
+            for (auto hex: _hexagonGrid->hexagons())
+            {
+                int lightLevel = 100;
+                unsigned int light = hex->light();
+                if (light<=_lightLevel) light=655;
+                lightLevel = light / ((65536-655)/100);
+
+                float l = lightLevel/100.0;
+                lights.push_back(l);
+            }
+            _lightmap->update(lights);*/
+
+        }
     }
 
     if (auto dude = dynamic_cast<Game::DudeObject*>(object))
@@ -1182,14 +1272,46 @@ void Location::removeTimerEvent(Game::Object* obj, int fixedParam)
     _timerEvents.remove_if([=](Location::TimerEvent& item) { return item.object == obj && item.fixedParam == fixedParam; });
 }
 
-unsigned short Location::lightLevel()
+unsigned int Location::lightLevel()
 {
     return _lightLevel;
 }
 
-void Location::setLightLevel(unsigned short level)
+void Location::setLightLevel(unsigned int level)
 {
+    // TODO: check night vision perk and increase light by 20% (20% of what, maximum or current?)
+    if (level>0x10000) level=0x10000;
+    if (level<0x4000) level=0x4000;
     _lightLevel = level;
+    initLight();
+}
+
+void Location::initLight()
+{
+    for (auto hex: _hexagonGrid->hexagons())
+    {
+        hex->setLight(655);
+    }
+
+    for (auto hex: _hexagonGrid->hexagons())
+    {
+        _hexagonGrid->initLight(hex);
+    }
+
+    std::vector<float> lights;
+    for (auto hex: _hexagonGrid->hexagons())
+    {
+        int lightLevel = 100;
+
+        unsigned int light = hex->light();
+        if (light<=_lightLevel) light=655;
+        lightLevel = light / ((65536-655)/100);
+
+        float l = lightLevel/100.0;
+        lights.push_back(l);
+    }
+    _lightmap->update(lights);
+
 }
 }
 }

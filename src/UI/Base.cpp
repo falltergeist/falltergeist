@@ -438,5 +438,9 @@ void Base::setOutline(int outline)
 }
 
 
+void Base::setLightLevel(unsigned int level)
+{
+    _lightLevel = level;
+}
 }
 }

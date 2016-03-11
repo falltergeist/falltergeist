@@ -192,7 +192,6 @@ void Object::_generateUi()
             _ui =  make_unique<UI::Image>(frm, orientation());
 
         }
-        _ui->setLight(true);
     }
 
     addUIEventHandlers();
@@ -307,7 +306,8 @@ void Object::render()
     }
 
     setInRender(true);
-
+    _ui->setLight(true);
+    _ui->setLightLevel(hexagon()->light());
     _ui->render(_useEggTransparency() && _isIntersectsWithEgg());
 }
 
@@ -559,10 +559,10 @@ unsigned int Object::lightRadius() const
 
 void Object::setFlags(unsigned int flags)
 {
-    setFlat((flags & 0x00000008) != 0);
-    setCanWalkThru((flags & 0x00000010) != 0);
-    setCanLightThru((flags & 0x20000000) != 0);
-    setCanShootThru((flags & 0x80000000) != 0);
+    setFlat((flags & 0x00000008));
+    setCanWalkThru((flags & 0x00000010));
+    setCanLightThru((flags & 0x20000000));
+    setCanShootThru((flags & 0x80000000));
 
     if (flags & 0x00004000) setTrans(Falltergeist::TransFlags::Trans::RED);
     if (flags & 0x00008000) setTrans(Falltergeist::TransFlags::Trans::NONE);

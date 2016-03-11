@@ -17,50 +17,28 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef FALLTERGEIST_OPCODE8107HANDLER_H
+#define FALLTERGEIST_OPCODE8107HANDLER_H
+
 // C++ standard includes
 
 // Falltergeist includes
-#include <Game/Game.h>
-#include <State/Location.h>
-#include "../../Logger.h"
-#include "../../VM/Handlers/Opcode80E9Handler.h"
-#include "../../VM/VM.h"
+#include "../../VM/OpcodeHandler.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Opcode80E9Handler::Opcode80E9Handler(VM* vm) : OpcodeHandler(vm)
+class Opcode8107Handler : public OpcodeHandler
 {
-}
-
-void Opcode80E9Handler::_run()
-{
-    Logger::debug("SCRIPT") << "[80E9] [*] void set_light_level(int level)" << std::endl;
-    auto level = _vm->dataStack()->popInteger();
-
-    if (level > 100 || level < 0)
-    {
-        _warning("set_light_level: level should be 0-100");
-        return;
-    }
-
-    unsigned int light;
-    if ( level < 50 )
-    {
-        light = 0x4000 + level * 0x6000 / 100;
-    }
-    else if ( level == 50 )
-    {
-        light = 0xA000;
-    }
-    else
-    {
-        light = 0xA000 + level * 0x6000 / 100;
-    }
-
-    Game::getInstance()->locationState()->setLightLevel(light);
-}
+public:
+    Opcode8107Handler(VM* vm);
+private:
+    void _run();
+};
 
 }
+
+
+#endif //FALLTERGEIST_OPCODE8107HANDLER_H

@@ -20,10 +20,12 @@
 // C++ standard includes
 #include <functional>
 #include <queue>
+#include <array>
 #include <cstdlib>
 
 // Falltergeist includes
 #include "../Base/StlFeatures.h"
+#include "../Game/WallObject.h"
 #include "../PathFinding/Hexagon.h"
 #include "../PathFinding/HexagonGrid.h"
 
@@ -236,7 +238,7 @@ Hexagon* HexagonGrid::hexInDirection(Hexagon* from, unsigned short rotation, uns
     int index = 200*q + p;
     if (index < 0 || index >= 200*200)
     {
-        return from;
+        return nullptr;
     }
     return at(index);
 
@@ -270,4 +272,386 @@ std::vector<Hexagon*> HexagonGrid::ring(Hexagon* from, unsigned int radius)
     return result;
 }
 
+void HexagonGrid::initLight(Hexagon *hex, bool add)
+{
+
+
+    auto objectsAtHex = hex->objects();
+    for (auto it = objectsAtHex->begin(); it != objectsAtHex->end(); ++it)
+    {
+        auto object = *it;
+        if (object->lightIntensity()>0 && object->lightRadius()>0)
+        {
+            // 36 hexes per direction
+            std::array<bool, 36*6> blocked;
+            blocked.fill(false);
+
+            auto prevTwo = [&blocked](int idx, int radius, int dir) -> bool
+            {
+                idx = idx-(radius-1)*6-dir;
+                return blocked[idx-1] && blocked[idx];
+            };
+
+            auto isBlocked = [&blocked](int coneIdx, int radius, int dir) -> bool
+            {
+                dir = dir % 6;
+                int base = 0;
+                int r = radius;
+                while (r>0)
+                {
+                    base+=(r-1)*6;
+                    r--;
+                }
+
+
+                return blocked[base+coneIdx+radius*dir];
+            };
+
+            auto index = [](int coneIdx, int radius, int dir) -> int
+            {
+                dir = dir % 6;
+                int base = 0;
+                int r = radius;
+                while (r>0)
+                {
+                    base+=(r-1)*6;
+                    r--;
+                }
+
+
+                return base+coneIdx+radius*dir;
+            };
+
+            int light = object->lightIntensity();
+            if (add)
+            {
+                hex->addLight(light);
+            }
+            else
+            {
+                hex->subLight(light);
+            }
+            int perRadius = (light - 655) / (object->lightRadius()+1);
+
+            int blockerIndex = 0;
+
+            for (unsigned int radius = 1; radius<= object->lightRadius();radius++)
+            {
+                light-=perRadius;
+                int ringIndex=0;
+                for (auto ringhex : ring(hex,radius))
+                {
+                    if (!ringhex) //invalid hex
+                    {
+                        ringIndex++;
+                        blockerIndex++;
+                        continue;
+                    }
+                    int dir = ringIndex / radius;
+
+                    int coneIdx = ringIndex % radius;
+
+                    bool block = false;
+                    switch (radius)
+                    {
+                        case 1:
+                            block = false;
+                            break;
+                        case 2:
+                            switch (coneIdx)
+                            {
+                                case 0:
+                                    block = isBlocked(0, radius-1, dir);
+                                    break;
+                                case 1:
+                                    block = prevTwo(blockerIndex,radius,dir);
+                                    break;
+                            }
+                            break;
+                        case 3:
+                            switch (coneIdx)
+                            {
+                                case 0:
+                                    block = isBlocked(0, radius-1, dir);
+                                    break;
+                                case 1:
+                                    block = prevTwo(blockerIndex,radius,dir);
+                                    break;
+                                case 2:
+                                    block = prevTwo(blockerIndex,radius,dir);
+                                    break;
+                            }
+                            break;
+                        case 4:
+                            switch (coneIdx)
+                            {
+                                case 0:
+                                    block = isBlocked(0, radius-1, dir);
+                                    break;
+                                case 1:
+                                    block = prevTwo(blockerIndex,radius,dir);
+                                    break;
+                                case 2:
+                                    block = prevTwo(blockerIndex,radius,dir)
+                                            || isBlocked(1, 2, dir);
+                                    break;
+                                case 3:
+                                    block = prevTwo(blockerIndex,radius,dir)
+                                            || prevTwo(index(2,3,dir),radius-1,dir) ;
+                                    break;
+                            }
+                            break;
+                        case 5:
+                            switch (coneIdx)
+                            {
+                                case 0:
+                                    block = isBlocked(0, radius-1, dir);
+                                    break;
+                                case 1:
+                                    block = prevTwo(blockerIndex,radius,dir);
+                                    break;
+                                case 2:
+
+                                    block = (isBlocked(1, 3, dir) && (isBlocked(2,3,dir) || isBlocked(1, 4, dir)))
+                                            || (isBlocked(2,4,dir) && (isBlocked(1, 4, dir) || isBlocked(1, 3, dir)))
+                                            || ((isBlocked(1, 4, dir) || isBlocked(1, 3, dir)) & isBlocked(1,2,dir));
+                                    break;
+                                case 3:
+                                    block = ((isBlocked(3, 4, dir) || isBlocked(2, 3, dir)) && isBlocked(2, 4, dir))
+                                            || (isBlocked(2, 3, dir) && (isBlocked(3, 4, dir) || isBlocked(1, 3, dir)))
+                                            || ((isBlocked(3, 4, dir) || isBlocked(2, 3, dir) || isBlocked(0, 2, dir + 1)) && isBlocked(1, 2, dir));
+                                    break;
+                                case 4:
+                                    block = prevTwo(blockerIndex,radius,dir)
+                                            || prevTwo(index(3,4,dir),radius-1,dir)
+                                            || prevTwo(index(2,3,dir),radius-2,dir);
+                                    break;
+                            }
+                            break;
+                        case 6:
+                            switch (coneIdx)
+                            {
+                                case 0:
+                                    block = isBlocked(0, radius-1, dir);
+                                    break;
+                                case 1:
+                                    block = prevTwo(blockerIndex,radius,dir);
+                                    break;
+                                case 2:
+                                    block = ((isBlocked(1,5, dir) || isBlocked(1,4,dir) || isBlocked(1,3,dir) || isBlocked(0,1,dir)) && isBlocked(2,5,dir))
+                                            || isBlocked(1,3,dir)
+                                            || (isBlocked(2,4,dir) && isBlocked(1,4,dir));
+                                    break;
+                                case 3:
+                                    block =  prevTwo(blockerIndex, radius, dir)
+                                            || prevTwo(index(2,4,dir), radius-2, dir)
+                                            || isBlocked(1,2,dir)
+                                            || isBlocked(2,4,dir);
+                                    break;
+                                case 4:
+                                    block = (prevTwo(index(3,5,dir), radius-1, dir)
+                                            || isBlocked(1,2,dir))
+                                            || isBlocked(2,3,dir)
+                                            || prevTwo(index(2,3,dir), radius-3, dir)
+                                            || ((isBlocked(4,5,dir) || isBlocked(3,4,dir) || isBlocked(2,3,dir) || isBlocked(0,1, dir+1))
+                                                && isBlocked(3,5,dir));
+                                    break;
+                                case 5:
+                                    block = prevTwo(blockerIndex,radius,dir)
+                                            || prevTwo(index(4,5,dir),radius-1,dir)
+                                            || prevTwo(index(3,4,dir),radius-2,dir)
+                                            || prevTwo(index(2,3,dir),radius-3,dir);
+                                    break;
+                            }
+                            break;
+                        case 7:
+                            switch (coneIdx)
+                            {
+                                case 0:
+                                    block = isBlocked(0, radius-1, dir);
+                                    break;
+                                case 1:
+                                    block = prevTwo(blockerIndex,radius,dir);
+                                    break;
+                                case 2:
+                                    block = prevTwo(blockerIndex,radius,dir)
+                                                     || isBlocked(1,4,dir)
+                                                     || isBlocked(1,3,dir)
+                                                     || ((isBlocked(0, radius-1, dir) || isBlocked(2,5,dir)) && isBlocked(1,5,dir));
+
+                                    break;
+                                case 3:
+                                    block = prevTwo(blockerIndex,radius,dir)
+                                            || (isBlocked(2,5,dir) && (isBlocked(3,6,dir) || isBlocked(3,5,dir) || isBlocked(2,3,dir)))
+                                            || isBlocked(1,2,dir)
+                                            || (isBlocked(1,3,dir) && (isBlocked(3,6,dir) || isBlocked(2,4,dir) || isBlocked(2,3,dir)))
+                                            || ((isBlocked(2,6,dir) || isBlocked(2,5,dir) || isBlocked(1,4,dir) || isBlocked(1,3,dir) || isBlocked(0,1,dir)) && isBlocked(2,4,dir));
+
+                                    break;
+                                case 4:
+                                    block = prevTwo(blockerIndex, radius, dir)
+                                            || (isBlocked(3,5,dir) && (isBlocked(3,6,dir) || isBlocked(2,5,dir) || isBlocked(1,3,dir)))
+                                            || (isBlocked(2,4,dir) && (isBlocked(4,6,dir) || isBlocked(3,5,dir) || isBlocked(3,4,dir) || isBlocked(0,1,dir+1)))
+                                            || isBlocked(1,2,dir)
+                                            || (isBlocked(2,3,dir) && (isBlocked(3,6,dir) || isBlocked(2,4,dir) || isBlocked(1,3,dir)));
+
+                                    break;
+                                case 5:
+                                    block = prevTwo(blockerIndex,radius, dir)
+                                            || (isBlocked(4,5,dir) && (isBlocked(4,6,dir) || isBlocked(3,5,dir) || isBlocked(1,2,dir)))
+                                            || isBlocked(2,3,dir)
+                                            || (isBlocked(0,2,dir+1) && isBlocked(1,2,dir))
+                                            || isBlocked(3,4,dir);
+
+                                    break;
+                                case 6:
+                                    block = prevTwo(blockerIndex,radius,dir)
+                                            || prevTwo(index(5,6,dir),radius-1,dir)
+                                            || prevTwo(index(4,5,dir),radius-2,dir)
+                                            || prevTwo(index(3,4,dir),radius-3,dir)
+                                            || prevTwo(index(2,3,dir),radius-4,dir);
+                                    break;
+                            }
+                            break;
+                        case 8:
+                            switch (coneIdx)
+                            {
+                                case 0:
+                                    block = isBlocked(0, radius-1, dir);
+                                    break;
+                                case 1:
+                                    block = prevTwo(blockerIndex,radius,dir);
+                                    break;
+                                case 2:
+                                    block = ((isBlocked(2,7,dir) || isBlocked(2,6,dir) || isBlocked(2,5,dir) || isBlocked(2,4,dir)) && isBlocked(1,5,dir))
+                                            || ((isBlocked(1,6,dir) || isBlocked(1,5,dir) || isBlocked(0,3,dir)) && isBlocked(1,2,dir))
+                                            || (isBlocked(1,3,dir) && (isBlocked(1,6,dir) || isBlocked(1,5,dir) || isBlocked(0,3,dir)))
+                                            || isBlocked(1,4,dir);
+                                    break;
+                                case 3:
+                                    block = (isBlocked(3,7,dir) && (isBlocked(2,7,dir) || isBlocked(0,1,dir)))
+                                            || (isBlocked(2,6,dir) && (isBlocked(3,7,dir) || isBlocked(3,6,dir) || isBlocked(2,4,dir) || isBlocked(1,2,dir)))
+                                            || isBlocked(2,5,dir)
+                                            || (isBlocked(1,4,dir) && (isBlocked(3,7,dir) || isBlocked(2,4,dir) || isBlocked(1,2,dir) || isBlocked(2,5,dir)))
+                                            || (isBlocked(0,2,dir) && isBlocked(1,2,dir))
+                                            || ((isBlocked(3,7,dir) || isBlocked(3,6,dir) || isBlocked(2,4,dir) || isBlocked(2,3,dir) || isBlocked(1,2,dir)) && isBlocked(1,3,dir));
+
+                                    break;
+                                case 4:
+                                    block = prevTwo(blockerIndex,radius,dir)
+                                            || prevTwo(index(3,6,dir),radius-2,dir)
+                                            || prevTwo(index(2,4,dir),radius-4,dir)
+                                            || isBlocked(3,6,dir)
+                                            || isBlocked(2,4,dir)
+                                            || isBlocked(1,2,dir);
+                                    break;
+                                case 5:
+                                    block = (isBlocked(4,7,dir) && (isBlocked(5,7,dir) || isBlocked(0,1,dir)))
+                                            || (isBlocked(4,6,dir) && (isBlocked(4,7,dir) || isBlocked(3,6,dir) || isBlocked(2,4,dir) || isBlocked(1,2,dir)))
+                                            || isBlocked(3,5,dir)
+                                            || (isBlocked(0,2,dir+1) && isBlocked(1,2,dir))
+                                            || ((isBlocked(4,7,dir) || isBlocked(3,6,dir) || isBlocked(2,4,dir) || isBlocked(1,3,dir) || isBlocked(1,2,dir)) && isBlocked(2,3,dir))
+                                            || (isBlocked(3,4,dir) && (isBlocked(2,4,dir) || isBlocked(1,2,dir) || isBlocked(4,7,dir)));
+                                    break;
+                                case 6:
+                                    block = ((isBlocked(5,7,dir) || isBlocked(4,6,dir) || isBlocked(3,5,dir) || isBlocked(2,4,dir)) && isBlocked(4,5,dir))
+                                            || isBlocked(3,4,dir)
+                                            || (isBlocked(2,3,dir) && (isBlocked(5,6,dir) || isBlocked(4,5,dir) || isBlocked(0,3,dir+1)))
+                                            || ((isBlocked(5,6,dir) || isBlocked(4,5,dir) || isBlocked(0,3,dir+1)) && isBlocked(1,2,dir));
+
+                                    break;
+                                case 7:
+                                    block = prevTwo(blockerIndex,radius,dir)
+                                            || prevTwo(index(6,7,dir),radius-1,dir)
+                                            || prevTwo(index(5,6,dir),radius-2,dir)
+                                            || prevTwo(index(4,5,dir),radius-3,dir)
+                                            || prevTwo(index(3,4,dir),radius-4,dir)
+                                            || prevTwo(index(2,3,dir),radius-5,dir);
+                                    break;
+                            }
+                            break;
+                        default:
+                            break;
+
+                    }
+
+                    if (!block)
+                    {
+                        // find objs/walls
+                        bool lightHex = true;
+                        for (auto it2 = ringhex->objects()->begin(); it2 != ringhex->objects()->end(); ++it2)
+                        {
+                            auto curObject = *it2;
+                            // dead objects block nothing
+                            //if (curObject->dead()) continue;
+                            // flat objects block nothing
+                            if (curObject->flat()) continue;
+                            if (curObject->type()==Game::Object::Type::DUDE) continue;
+
+                            if (!curObject->canLightThru())
+                            {
+                                // if wall -> check light orientation
+                                if (auto wall = dynamic_cast<Game::WallObject*>(curObject))
+                                {
+                                    if (wall->lightOrientation() == Game::Orientation::EW || wall->lightOrientation() == Game::Orientation::EC)
+                                    {
+                                        if ( (dir != 4) && (dir != 5) && (dir>0 || coneIdx > 0) && (dir != 3 || ((coneIdx>=0 && coneIdx<=1) || (radius==3 && coneIdx==2) )))
+                                        {
+                                            lightHex = false;
+                                        }
+                                    }
+                                    else if (wall->lightOrientation() == Game::Orientation::NC)
+                                    {
+                                        if( dir != 0 && dir != 5)
+                                        {
+                                            lightHex = false;
+                                        }
+                                    }
+                                    else if (wall->lightOrientation() == Game::Orientation::SC)
+                                    {
+                                        if( (dir>0) && dir != 1 && dir != 4 && dir != 5 && (dir != 3 || ((coneIdx>=0 && coneIdx<=1) || (radius==3 && coneIdx==2) )))
+                                        {
+                                            lightHex = false;
+                                        }
+                                    }
+                                    else if (dir != 0 && dir != 1 && ( dir != 5 || coneIdx==0 ))
+                                    {
+                                        lightHex = false;
+                                    }
+                                }
+                                else
+                                {
+                                    if (dir>=1 && dir <=3 )
+                                    {
+                                        lightHex=false;
+                                    }
+                                }
+
+                                block = true;
+
+                                break;
+                            }
+
+                        }
+                        if (lightHex)
+                        {
+                            if (add) {
+                                ringhex->addLight(light);
+                            }
+                            else {
+                                ringhex->subLight(light);
+                            }
+                        }
+                    }
+
+                    blocked[blockerIndex] = block;
+                    ringIndex++;
+                    blockerIndex++;
+                }
+
+            }
+        }
+    }
+
+}
 }

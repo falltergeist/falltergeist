@@ -50,7 +50,7 @@ Image::~Image()
 void Image::render(bool eggTransparency)
 {
     _sprite.trans(_trans);
-    _sprite.render(position().x(),position().y(), eggTransparency, light(), _outline);
+    _sprite.render(position().x(),position().y(), eggTransparency, light(), _outline, _lightLevel);
 }
 
 Image::Image(Format::Frm::File *frm, unsigned int direction) : Falltergeist::UI::Base(), _sprite(frm)
