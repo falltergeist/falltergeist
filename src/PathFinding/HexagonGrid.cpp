@@ -575,6 +575,7 @@ void HexagonGrid::initLight(Hexagon *hex, bool add)
                             break;
 
                     }
+
                     if (!block)
                     {
                         // find objs/walls
@@ -620,11 +621,15 @@ void HexagonGrid::initLight(Hexagon *hex, bool add)
                                         lightHex = false;
                                     }
                                 }
-                                //else
+                                else
                                 {
-                                    block = true;
+                                    if (dir>=1 && dir <=3 )
+                                    {
+                                        lightHex=false;
+                                    }
                                 }
 
+                                block = true;
 
                                 break;
                             }
