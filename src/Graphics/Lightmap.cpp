@@ -74,9 +74,9 @@ Lightmap::~Lightmap()
 
 void Lightmap::render(const Falltergeist::Point &pos)
 {
-    //if (indexes.size()<=0) return;
+    if (_indexes<=0) return;
 
-    GL_CHECK(glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE, GL_SRC_ALPHA, GL_ONE));
+    GL_CHECK(glBlendFunc(GL_DST_COLOR, GL_SRC_COLOR));
     auto shader = ResourceManager::getInstance()->shader("lightmap");
 
     GL_CHECK(shader->use());
