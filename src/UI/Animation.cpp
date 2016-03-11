@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <cmath>
+#include <iostream>
 
 // Falltergeist includes
 #include "../Base/StlFeatures.h"
@@ -147,7 +148,7 @@ void Animation::render(bool eggTransparency)
     Point offsetPosition = position() + shift() + frame->offset();
     _animation->trans(_trans);
     _animation->render(offsetPosition.x(), offsetPosition.y(), _direction, _currentFrame, eggTransparency, light(),
-                       _outline);
+                       _outline, _lightLevel);
 /* TODO: newrender
     auto& frame = _animationFrames.at(_currentFrame);
     Point framePos = frame->position();

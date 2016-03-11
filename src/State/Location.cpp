@@ -609,12 +609,13 @@ void Location::render()
 
 
     // just for testing
-    for (auto &object: _objects)
+    if (Game::getInstance()->settings()->targetHighlight())
     {
-        if (dynamic_cast<Game::CritterObject*>(object.get()))
-        {
-            if (!dynamic_cast<Game::DudeObject*>(object.get())) {
-                object->renderOutline(1);
+        for (auto &object: _objects) {
+            if (dynamic_cast<Game::CritterObject *>(object.get())) {
+                if (!dynamic_cast<Game::DudeObject *>(object.get())) {
+                    object->renderOutline(1);
+                }
             }
         }
     }
@@ -1054,7 +1055,7 @@ void Location::moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool 
     {
         if (update)
         {
-            _hexagonGrid->initLight(oldHexagon, false);
+            //_hexagonGrid->initLight(oldHexagon, false);
         }
 
         for (auto it = oldHexagon->objects()->begin(); it != oldHexagon->objects()->end(); ++it)
@@ -1105,7 +1106,8 @@ void Location::moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool 
         );
         if(hexagon)
         {
-            _hexagonGrid->initLight(hexagon, true);
+            initLight();
+            /*_hexagonGrid->initLight(hexagon, true);
             std::vector<float> lights;
             for (auto hex: _hexagonGrid->hexagons())
             {
@@ -1117,7 +1119,7 @@ void Location::moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool 
                 float l = lightLevel/100.0;
                 lights.push_back(l);
             }
-            _lightmap->update(lights);
+            _lightmap->update(lights);*/
 
         }
     }

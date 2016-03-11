@@ -32,7 +32,8 @@ class Animation
 public:
     Animation(const std::string& filename);
     ~Animation();
-    void render(int x, int y, unsigned int direction, unsigned int frame, bool transparency = false, bool light = false, int outline = 0);
+    void render(int x, int y, unsigned int direction, unsigned int frame, bool transparency = false, bool light = false, int outline = 0,
+                unsigned int lightValue=0);
     bool opaque(unsigned int x, unsigned int y);
     void trans(Falltergeist::TransFlags::Trans _trans);
 private:

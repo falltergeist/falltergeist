@@ -22,7 +22,6 @@
 #include <queue>
 #include <array>
 #include <cstdlib>
-#include <iostream>
 
 // Falltergeist includes
 #include "../Base/StlFeatures.h"
@@ -287,13 +286,13 @@ void HexagonGrid::initLight(Hexagon *hex, bool add)
             std::array<bool, 36*6> blocked;
             blocked.fill(false);
 
-            auto prevTwo = [blocked](int idx, int radius, int dir) -> bool
+            auto prevTwo = [&blocked](int idx, int radius, int dir) -> bool
             {
                 idx = idx-(radius-1)*6-dir;
                 return blocked[idx-1] && blocked[idx];
             };
 
-            auto isBlocked = [blocked](int coneIdx, int radius, int dir) -> bool
+            auto isBlocked = [&blocked](int coneIdx, int radius, int dir) -> bool
             {
                 dir = dir % 6;
                 int base = 0;
@@ -582,20 +581,19 @@ void HexagonGrid::initLight(Hexagon *hex, bool add)
                         bool lightHex = true;
                         for (auto it2 = ringhex->objects()->begin(); it2 != ringhex->objects()->end(); ++it2)
                         {
-                            auto curObject = *it;
+                            auto curObject = *it2;
                             // dead objects block nothing
                             //if (curObject->dead()) continue;
                             // flat objects block nothing
                             if (curObject->flat()) continue;
+                            if (curObject->type()==Game::Object::Type::DUDE) continue;
 
                             if (!curObject->canLightThru())
                             {
-
                                 // if wall -> check light orientation
-                                if (auto wall = dynamic_cast<Game::WallObject*>(object))
+                                if (auto wall = dynamic_cast<Game::WallObject*>(curObject))
                                 {
-
-                                    if (wall->lightOrientation() == Game::Orientation::EC || wall->lightOrientation() == Game::Orientation::WC)
+                                    if (wall->lightOrientation() == Game::Orientation::EW || wall->lightOrientation() == Game::Orientation::EC)
                                     {
                                         if ( (dir != 4) && (dir != 5) && (dir>0 || coneIdx > 0) && (dir != 3 || ((coneIdx>=0 && coneIdx<=1) || (radius==3 && coneIdx==2) )))
                                         {

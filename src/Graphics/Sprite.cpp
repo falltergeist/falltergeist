@@ -76,7 +76,7 @@ unsigned int Sprite::height() const
 }
 
 // render, optionally scaled
-void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height, bool transparency, bool light, int outline)
+void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height, bool transparency, bool light, int outline, unsigned int lightValue)
 {
     std::vector<glm::vec2> vertices;
     std::vector<glm::vec2> UV;
@@ -158,19 +158,8 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
     {
         if (auto state = Game::getInstance()->locationState())
         {
-            if ( state->lightLevel() < 0xA000 )
-            {
-                lightLevel = (state->lightLevel() - 0x4000) * 100 / 0x6000;
-
-            }
-            else if ( state->lightLevel() == 0xA000 )
-            {
-                lightLevel = 50;
-            }
-            else
-            {
-                lightLevel = (state->lightLevel() - 0xA000) * 100 / 0x6000;
-            }
+            if (lightValue<=state->lightLevel()) lightValue=state->lightLevel();
+            lightLevel = lightValue / ((65536-655)/100);
         }
     }
     GL_CHECK(shader->setUniform(_uniformLight, lightLevel));
@@ -215,14 +204,14 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
 
 }
 
-void Sprite::render(int x, int y, bool transparency, bool light, int outline)
+void Sprite::render(int x, int y, bool transparency, bool light, int outline, unsigned int lightValue)
 {
-    renderScaled(x, y, _texture->width(), _texture->height(), transparency, light, outline);
+    renderScaled(x, y, _texture->width(), _texture->height(), transparency, light, outline, lightValue);
 }
 
 // render just a part of texture, unscaled
 void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, unsigned int height, bool transparency,
-                           bool light)
+                           bool light, unsigned int lightValue)
 {
     std::vector<glm::vec2> vertices;
     std::vector<glm::vec2> UV;
@@ -295,19 +284,8 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
     {
         if (auto state = Game::getInstance()->locationState())
         {
-            if ( state->lightLevel() < 0xA000 )
-            {
-                lightLevel = (state->lightLevel() - 0x4000) * 100 / 0x6000;
-
-            }
-            else if ( state->lightLevel() == 0xA000 )
-            {
-                lightLevel = 50;
-            }
-            else
-            {
-                lightLevel = (state->lightLevel() - 0xA000) * 100 / 0x6000;
-            }
+            if (lightValue<=state->lightLevel()) lightValue=state->lightLevel();
+            lightLevel = lightValue / ((65536-655)/100);
         }
     }
     GL_CHECK(shader->setUniform(_uniformLight, lightLevel));

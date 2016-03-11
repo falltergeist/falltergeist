@@ -112,6 +112,7 @@ public:
 
     virtual void setLight(bool light);
     virtual bool light();
+    virtual void setLightLevel(unsigned int level);
     // object translucency mode
     Falltergeist::TransFlags::Trans trans() const;
     // sets object translucency mode
@@ -137,6 +138,7 @@ protected:
                         _mouseClickHandler, _mouseDownHandler, _mouseUpHandler;
 
     int _outline = 0;
+    unsigned int _lightLevel;
 };
 
 }

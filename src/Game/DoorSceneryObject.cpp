@@ -27,6 +27,7 @@
 #include "../Event/Event.h"
 #include "../Game/Game.h"
 #include "../Logger.h"
+#include "../State/Location.h"
 #include "../UI/Animation.h"
 #include "../UI/AnimationQueue.h"
 #include "../VM/VM.h"
@@ -55,6 +56,7 @@ bool DoorSceneryObject::opened() const
 void DoorSceneryObject::setOpened(bool value)
 {
     _opened = value;
+    setCanLightThru(_opened);
 }
 
 bool DoorSceneryObject::locked() const
@@ -105,6 +107,7 @@ void DoorSceneryObject::onOpeningAnimationEnded(Event::Event* event)
     setOpened(true);
     queue->animationEndedHandler().clear();
     queue->stop();
+    Game::getInstance()->locationState()->initLight();
     Logger::info() << "Door opened: " << opened() << std::endl;
 }
 
@@ -114,6 +117,7 @@ void DoorSceneryObject::onClosingAnimationEnded(Event::Event* event)
     setOpened(false);
     queue->animationEndedHandler().clear();
     queue->stop();
+    Game::getInstance()->locationState()->initLight();
     Logger::info() << "Door opened: " << opened() << std::endl;
 }
 

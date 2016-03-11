@@ -238,7 +238,7 @@ public:
 
 protected:
     bool _canWalkThru = true;
-    bool _canLightThru = true;
+    bool _canLightThru = false;
     bool _canShootThru = true;
     bool _wallTransEnd = false;
     bool _flat = false;

@@ -24,6 +24,7 @@
 #include <Game/Game.h>
 #include <SDL_image.h>
 #include <TransFlags.h>
+#include <iostream>
 #include "Animation.h"
 #include "../Format/Frm/File.h"
 #include "../Format/Frm/Direction.h"
@@ -116,7 +117,7 @@ Animation::~Animation()
 
 }
 
-void Animation::render(int x, int y, unsigned int direction, unsigned int frame, bool transparency, bool light, int outline)
+void Animation::render(int x, int y, unsigned int direction, unsigned int frame, bool transparency, bool light, int outline, unsigned int lightValue)
 {
     int pos = direction*_stride+frame;
 
@@ -147,19 +148,8 @@ void Animation::render(int x, int y, unsigned int direction, unsigned int frame,
     {
         if (auto state = Game::getInstance()->locationState())
         {
-            if ( state->lightLevel() < 0xA000 )
-            {
-                lightLevel = (state->lightLevel() - 0x4000) * 100 / 0x6000;
-
-            }
-            else if ( state->lightLevel() == 0xA000 )
-            {
-                lightLevel = 50;
-            }
-            else
-            {
-                lightLevel = (state->lightLevel() - 0xA000) * 100 / 0x6000;
-            }
+            if (lightValue<=state->lightLevel()) lightValue=state->lightLevel();
+            lightLevel = lightValue / ((65536-655)/100);
         }
     }
     GL_CHECK(shader->setUniform(_uniformLight, lightLevel));
