@@ -22,6 +22,7 @@
 #include <CrossPlatform.h>
 #include <Logger.h>
 #include <fstream>
+#include <Exception.h>
 
 namespace Falltergeist {
     namespace Graphics {
@@ -57,9 +58,10 @@ namespace Falltergeist {
                 glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &len);
                 GLchar *log = (GLchar *) malloc(len);
                 glGetShaderInfoLog(shader, len, NULL, log);
-                Logger::warning("RENDERER") << "Failed to compile shader: '" << log << std::endl;
+                Logger::error("RENDERER") << "Failed to compile shader: '" << log << std::endl;
                 free(log);
                 shader = 0;
+                throw Exception("Failed to compile shader.");
             }
             return shader;
         }
@@ -77,6 +79,15 @@ namespace Falltergeist {
 
             std::ifstream fpfile(fprog);
             std::ifstream vpfile(vprog);
+
+            if (!fpfile.is_open())
+            {
+                throw Exception("Can't open shader source "+fprog);
+            }
+            if (!vpfile.is_open())
+            {
+                throw Exception("Can't open shader source "+vprog);
+            }
 
             std::string fpsrc;
             std::string vpsrc;
@@ -125,6 +136,7 @@ namespace Falltergeist {
                         glDeleteShader(*it);
                     glDeleteProgram(_progId);
                     _progId = 0;
+                    throw Exception("Failed to link shader");
                     return false;
                 }
             return true;
