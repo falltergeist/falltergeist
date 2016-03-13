@@ -136,13 +136,37 @@ void Renderer::init()
     }
 */
 
-    glGetIntegerv(GL_MAJOR_VERSION, &_major);
-    glGetIntegerv(GL_MINOR_VERSION, &_minor);
+    char *version_string = (char*)glGetString(GL_VERSION);
+    if (version_string[0]-'0' >=3) //we have atleast gl 3.0
+    {
+        glGetIntegerv(GL_MAJOR_VERSION, &_major);
+        glGetIntegerv(GL_MINOR_VERSION, &_minor);
+        _renderpath = RenderPath::OGL3;
+    }
+    else
+    {
+        _major = version_string[0]-'0';
+        _minor = version_string[2]-'0';
+        _renderpath = RenderPath::OGL21;
+    }
+
 
     Logger::info("RENDERER") << "Using OpenGL " << _major << "." << _minor << std::endl;
     Logger::info("RENDERER") << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
-    Logger::info("RENDERER") << "Version: " << glGetString(GL_VERSION) << std::endl;
+    Logger::info("RENDERER") << "Version string: " << glGetString(GL_VERSION) << std::endl;
     Logger::info("RENDERER") << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
+    switch (_renderpath)
+    {
+        case RenderPath::OGL21:
+            Logger::info("RENDERER") << "Render path: OpenGL 2.1"  << std::endl;
+            break;
+        case RenderPath::OGL3:
+            Logger::info("RENDERER") << "Render path: OpenGL 3.0+" << std::endl;
+            break;
+        default:
+            break;
+    }
+
 
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &_maxTexSize);
 
@@ -160,13 +184,20 @@ void Renderer::init()
 
     Logger::info("RENDERER") << "Extensions: " << std::endl;
 
-    GLint count;
-    glGetIntegerv( GL_NUM_EXTENSIONS,&count );
-
-    GLint i;
-    for (i = 0; i<count; i++)
+    if (_renderpath==RenderPath::OGL3)
     {
-        Logger::info("RENDERER") << (const char*)glGetStringi( GL_EXTENSIONS, i ) << std::endl;
+        GLint count;
+        glGetIntegerv(GL_NUM_EXTENSIONS, &count);
+
+        GLint i;
+        for (i = 0; i < count; i++)
+        {
+            Logger::info("RENDERER") << (const char *) glGetStringi(GL_EXTENSIONS, i) << std::endl;
+        }
+    }
+    else
+    {
+        Logger::info("RENDERER") << (const char *) glGetString(GL_EXTENSIONS) << std::endl;
     }
 
 

@@ -46,7 +46,7 @@ namespace Graphics
     x; \
     int _err = glGetError(); \
     if (_err) { \
-        printf("GL Error %d at %d, %s", _err, __LINE__, __func__); \
+        printf("GL Error %d at %d, %s in %s", _err, __LINE__, __func__, __FILE__); \
         exit(-1); \
     } \
 } while (0)
@@ -54,6 +54,12 @@ namespace Graphics
 class Renderer
 {
 
+    enum class RenderPath {
+        OGL21 = 0,
+        OGL3,
+        GLES1,
+        GLES2
+    };
 public:
     Renderer(unsigned int width, unsigned int height);
     Renderer(const Size& size);
@@ -105,6 +111,7 @@ public:
 
 protected:
     Size _size;
+    RenderPath _renderpath = RenderPath::OGL21;
 
     short _fadeStep = 0;
     unsigned int _fadeTimer = 0;
