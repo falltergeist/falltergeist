@@ -26,6 +26,7 @@
 
 // Falltergeist includes
 #include "../Base/StlFeatures.h"
+#include "../Point.h"
 #include "../Event/State.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
@@ -34,6 +35,7 @@
 #include "../Settings.h"
 #include "../State/State.h"
 #include "Shader.h"
+#include "Texture.h"
 
 // Third party includes
 #include <glm/gtc/matrix_transform.hpp>
@@ -506,6 +508,11 @@ int32_t Renderer::maxTextureSize()
 
 Texture *Renderer::egg() {
     return _egg;
+}
+
+Renderer::RenderPath Renderer::renderPath()
+{
+    return _renderpath;
 }
 }
 }
