@@ -17,15 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#include <iosfwd>
-#include <ResourceManager.h>
-#include <Point.h>
-#include <Game/Game.h>
-#include <SDL_image.h>
-#include <TransFlags.h>
-#include <iostream>
+// Related headers
 #include "Animation.h"
+
+// C++ standart includes
+#include "../ResourceManager.h"
+#include "../Point.h"
+#include "../Game/Game.h"
+#include "../TransFlags.h"
 #include "../Format/Frm/File.h"
 #include "../Format/Frm/Direction.h"
 #include "../Format/Frm/Frame.h"
@@ -33,6 +32,9 @@
 #include "Shader.h"
 #include "AnimatedPalette.h"
 #include "../State/Location.h"
+
+// Third-party includes
+#include <SDL_image.h>
 
 
 namespace Falltergeist

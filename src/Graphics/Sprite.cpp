@@ -17,18 +17,24 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ResourceManager.h>
-#include <Game/Game.h>
-#include <TransFlags.h>
-#include <iostream>
+// Related headers
 #include "Sprite.h"
-#include "Renderer.h"
-#include "Shader.h"
+
+// C++ standard headers
+
+// Falltergeist headers
 #include "AnimatedPalette.h"
-#include "../State/Location.h"
 #include "../Game/DudeObject.h"
+#include "../Game/Game.h"
 #include "../LocationCamera.h"
 #include "../PathFinding/Hexagon.h"
+#include "Renderer.h"
+#include "../ResourceManager.h"
+#include "Shader.h"
+#include "../State/Location.h"
+#include "../TransFlags.h"
+
+// Third-party includes
 
 namespace Falltergeist
 {
@@ -123,7 +129,6 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
             }
             else {
                 eggVec = glm::vec2((float) (eggPos.x()-x), (float) (eggPos.y()-y));
-                //std::cout << eggPos.x() -x << " : " << eggPos.y() - y << std::endl;
             }
         }
     }
@@ -257,7 +262,6 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
             else
             {
                 eggVec = glm::vec2((float) (eggPos.x() - x), (float) (eggPos.y() - y));
-                std::cout << eggPos.x() -x << " : " << eggPos.y() - y << std::endl;
             }
         }
 
