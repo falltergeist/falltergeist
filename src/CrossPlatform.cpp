@@ -80,7 +80,7 @@ std::string CrossPlatform::getVersion()
 {
     if (_version.length() > 0) return _version;
 
-    _version = "Falltergeist 0.2.0";
+    _version = "Falltergeist 0.3.0";
 #if defined(_WIN32) || defined(WIN32)
     _version += " (Windows)";
 #elif defined(__linux__)

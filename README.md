@@ -4,7 +4,7 @@ Falltergeist [![build status](https://secure.travis-ci.org/falltergeist/fallterg
 Opensource crossplatform Fallout 2™ engine writen in C++ and SDL.
 https://falltergeist.org/
 
-Current version: 0.2.0
+Current version: 0.3.0
 
 IRC channel: #falltergeist on [freenode.net](http://webchat.freenode.net/?channels=falltergeist)
 
@@ -12,15 +12,15 @@ Jabber chanel: falltergeist on conference.jabber.ru
 
 ##Dependencies
 
-- [SDL](http://www.libsdl.org) (libsdl2)
-- [SDL\_mixer](http://www.libsdl.org/projects/SDL_mixer/) (libsdl2-mixer)
-- [SDL\_image](http://www.libsdl.org/projects/SDL_image/) (libsdl2-image)
-- [Lua](http://www.lua.org/) (liblua)
+- [SDL2](http://www.libsdl.org) (libsdl2)
+- [SDL2\_mixer](http://www.libsdl.org/projects/SDL_mixer/) (libsdl2-mixer)
+- [SDL2\_image](http://www.libsdl.org/projects/SDL_image/) (libsdl2-image)
+- [GLEW](http://glew.sourceforge.net/)
+- [GLM](http://glm.g-truc.net/)
 
 ##Compilation under linux
 
 ```
-git submodule update --init
 cmake . && make
 ```
 
