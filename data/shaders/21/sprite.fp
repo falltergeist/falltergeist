@@ -203,15 +203,22 @@ void main(void)
 
     if (doegg && outline == 0)
     {
-        ivec2 pixelpos = ivec2(UV.x*texSize.x, UV.y*texSize.y );
+        float texel_x = eggpos.x * (1. / 256.0);
+        float texel_y = eggpos.y * (1. / 128.0);
 
-        pixelpos = pixelpos-ivec2(eggpos);
+        vec2 pos = UV;
+        pos.x /= (256.0 / texSize.x);
+        pos.y /= (texSize.y / 128.0);
+        pos.x -= texel_x;
+        pos.y -= texel_y;
+
+        vec2 pixelpos = pos;
+        pixelpos.x *= 256.0;
+        pixelpos.y *= 128.0;
 
         if (pixelpos.x>=0 && pixelpos.x<129 && pixelpos.y>=0 && pixelpos.y<98)
         {
-            vec2 fpixelpos = 1.0 / pixelpos;
-            vec4 pixel2 = texture2D(eggTex, pixelpos);
-
+            vec4 pixel2 = texture2D(eggTex, pos);
             if (pixel2.a < gl_FragColor.a)
             {
                 gl_FragColor.a = pixel2.a;
