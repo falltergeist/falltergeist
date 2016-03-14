@@ -10,6 +10,11 @@ uniform float texHeight;
 uniform vec2 texSize;
 varying vec2 UV;
 
+bool almosteq(in float val, in float val2)
+{
+    return (val >= (val2-0.05) && val <= (val2 + 0.05));
+}
+
 void main(void)
 {
 
@@ -104,43 +109,43 @@ void main(void)
         else
         {
 
-            if (origColor.a == 0.2 && origColor.r == 0.6)
+            if (almosteq(origColor.a,0.2) && almosteq(origColor.r, 0.6))
             {
                 int index = int(round(origColor.b * 255.0)) / 51;
 
                 if (index<0) index = 0;
 
-                if (origColor.g == 0.0)
+                if (almosteq(origColor.g, 0.0))
                 {
                     if (index>3) index = 3;
                     int newIndex = int(mod((index + cnt[0]), 4));
                     origColor.rgb = slimePalette[newIndex];
                 }
-                else if (origColor.g == 0.2)
+                else if (almosteq(origColor.g, 0.2))
                 {
                     if (index>4) index = 4;
                     int newIndex = int(mod((index + cnt[1]), 5));
                     origColor.rgb = monitorsPalette[newIndex];
                 }
-                else if (origColor.g == 0.4)
+                else if (almosteq(origColor.g, 0.4))
                 {
                     if (index>4) index = 4;
                     int newIndex = int(mod((index + cnt[2]), 5));
                     origColor.rgb = fireSlowPalette[newIndex];
                 }
-                else if (origColor.g == 0.6)
+                else if (almosteq(origColor.g, 0.6))
                 {
                     if (index>4) index = 4;
                     int newIndex = int(mod((index + cnt[3]), 5));
                     origColor.rgb = fireFastPalette[newIndex];
                 }
-                else if (origColor.g == 0.8)
+                else if (almosteq(origColor.g, 0.8))
                 {
                     if (index>5) index = 5;
                     int newIndex = int(mod((index + cnt[4]), 6));
                     origColor.rgb = shorePalette[newIndex];
                 }
-                else if (origColor.g == 1.0)
+                else if (almosteq(origColor.g, 1.0))
                 {
                     origColor.rgb = vec3((cnt[5]*4)/255.0,0,0);
                 }
