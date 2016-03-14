@@ -17,18 +17,24 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ResourceManager.h>
-#include <Game/Game.h>
-#include <TransFlags.h>
-#include <iostream>
+// Related headers
 #include "Sprite.h"
-#include "Renderer.h"
-#include "Shader.h"
+
+// C++ standard headers
+
+// Falltergeist headers
 #include "AnimatedPalette.h"
-#include "../State/Location.h"
 #include "../Game/DudeObject.h"
+#include "../Game/Game.h"
 #include "../LocationCamera.h"
 #include "../PathFinding/Hexagon.h"
+#include "Renderer.h"
+#include "../ResourceManager.h"
+#include "Shader.h"
+#include "../State/Location.h"
+#include "../TransFlags.h"
+
+// Third-party includes
 
 namespace Falltergeist
 {
@@ -42,6 +48,10 @@ Sprite::Sprite(const std::string& fname)
     auto shader = ResourceManager::getInstance()->shader("sprite");
 
     _uniformTex = shader->getUniform("tex");
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21)
+    {
+        _uniformTexSize = shader->getUniform("texSize");
+    }
     _uniformEggTex = shader->getUniform("eggTex");
     _uniformFade = shader->getUniform("fade");
     _uniformMVP = shader->getUniform("MVP");
@@ -123,7 +133,6 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
             }
             else {
                 eggVec = glm::vec2((float) (eggPos.x()-x), (float) (eggPos.y()-y));
-                //std::cout << eggPos.x() -x << " : " << eggPos.y() - y << std::endl;
             }
         }
     }
@@ -165,6 +174,10 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
     GL_CHECK(shader->setUniform(_uniformLight, lightLevel));
     GL_CHECK(shader->setUniform(_uniformTrans, _trans));
 
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21)
+    {
+        GL_CHECK(shader->setUniform(_uniformTexSize, glm::vec2( (float)_texture->textureWidth(), (float)_texture->textureHeight() )));
+    }
 
     GL_CHECK(glBindVertexArray(Game::getInstance()->renderer()->getVAO()));
 
@@ -257,7 +270,6 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
             else
             {
                 eggVec = glm::vec2((float) (eggPos.x() - x), (float) (eggPos.y() - y));
-                std::cout << eggPos.x() -x << " : " << eggPos.y() - y << std::endl;
             }
         }
 
@@ -297,6 +309,11 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
     GL_CHECK(shader->setUniform(_uniformDoEgg, transparency));
 
     GL_CHECK(shader->setUniform(_uniformOutline, false));
+
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21)
+    {
+        GL_CHECK(shader->setUniform(_uniformTexSize, glm::vec2( (float)_texture->textureWidth(), (float)_texture->textureHeight() )));
+    }
 
 
     GL_CHECK(glBindVertexArray(Game::getInstance()->renderer()->getVAO()));

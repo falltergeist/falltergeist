@@ -17,13 +17,18 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ResourceManager.h>
+// Related headers
 #include "Lightmap.h"
-#include <ResourceManager.h>
-#include <Game/Game.h>
-#include <iostream>
+
+// C++ standard includes
+
+// Falltergeist includes
+#include "../Game/Game.h"
+#include "../ResourceManager.h"
 #include "Shader.h"
 #include "../State/Location.h"
+
+// Third-party includes
 
 namespace Falltergeist {
 namespace Graphics {

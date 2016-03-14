@@ -1,10 +1,10 @@
-#version 330
+#version 120
 
 uniform mat4 MVP;
-in vec2 Position;
-in vec2 TexCoord;
+attribute vec2 Position;
+attribute vec2 TexCoord;
 uniform vec2 offset;
-out vec2 UV;
+varying vec2 UV;
 
 void main(void)
 {

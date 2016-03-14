@@ -27,34 +27,39 @@
 
 // Falltergeist includes
 #include "../Point.h"
-#include "Texture.h"
 
 // Third party includes
-#define GL_GLEXT_PROTOTYPES
+//#define GL_GLEXT_PROTOTYPES
 #include <SDL.h>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
-#include <SDL_opengl.h>
-
 
 namespace Falltergeist
 {
 namespace Graphics
 {
 
+class Texture;
+
 #define GL_CHECK(x) do { \
     x; \
     int _err = glGetError(); \
     if (_err) { \
-        printf("GL Error %d at %d, %s", _err, __LINE__, __func__); \
+        printf("GL Error %d at %d, %s in %s", _err, __LINE__, __func__, __FILE__); \
         exit(-1); \
     } \
 } while (0)
 
 class Renderer
 {
-
 public:
+    enum class RenderPath {
+        OGL21 = 0,
+        OGL32,
+        GLES1,
+        GLES2
+    };
+
     Renderer(unsigned int width, unsigned int height);
     Renderer(const Size& size);
     ~Renderer();
@@ -103,8 +108,11 @@ public:
 
     Texture* egg();
 
+    RenderPath renderPath();
+
 protected:
     Size _size;
+    RenderPath _renderpath = RenderPath::OGL21;
 
     short _fadeStep = 0;
     unsigned int _fadeTimer = 0;

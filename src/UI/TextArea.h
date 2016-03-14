@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <Graphics/TextArea.h>
 
 // Falltergeist includes
 #include "../UI/Base.h"
@@ -331,24 +332,8 @@ protected:
      */
     void _needUpdate(bool lines = false);
 
-    GLuint _vao;
-    GLuint _coords;
-    GLuint _texCoords;
-    GLuint _ebo;
-    int _cnt = 0;
-    void _initBuffers();
+    Graphics::TextArea _textArea;
     void _updateBuffers();
-
-    GLint _uniformTex;
-    GLint _uniformFade;
-    GLint _uniformMVP;
-    GLint _uniformOffset;
-    GLint _uniformColor;
-    GLint _uniformOutline;
-
-    GLint _attribPos;
-    GLint _attribTex;
-
 };
 
 }

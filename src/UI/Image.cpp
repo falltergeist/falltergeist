@@ -18,7 +18,6 @@
  */
 
 // Related headers
-#include <iostream>
 #include "../UI/Image.h"
 
 // C++ standard includes
@@ -30,7 +29,7 @@
 #include "../Graphics/Sprite.h"
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
-#include "TransFlags.h"
+#include "../TransFlags.h"
 
 // Third party includes
 

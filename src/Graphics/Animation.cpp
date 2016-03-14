@@ -17,15 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#include <iosfwd>
-#include <ResourceManager.h>
-#include <Point.h>
-#include <Game/Game.h>
-#include <SDL_image.h>
-#include <TransFlags.h>
-#include <iostream>
+// Related headers
 #include "Animation.h"
+
+// C++ standart includes
+#include "../ResourceManager.h"
+#include "../Point.h"
+#include "../Game/Game.h"
+#include "../TransFlags.h"
 #include "../Format/Frm/File.h"
 #include "../Format/Frm/Direction.h"
 #include "../Format/Frm/Frame.h"
@@ -33,6 +32,9 @@
 #include "Shader.h"
 #include "AnimatedPalette.h"
 #include "../State/Location.h"
+
+// Third-party includes
+#include <SDL_image.h>
 
 
 namespace Falltergeist
@@ -97,6 +99,10 @@ Animation::Animation(const std::string &filename)
     auto shader = ResourceManager::getInstance()->shader("animation");
 
     _uniformTex = shader->getUniform("tex");
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21)
+    {
+        _uniformTexSize = shader->getUniform("texSize");
+    }
     _uniformFade = shader->getUniform("fade");
     _uniformMVP = shader->getUniform("MVP");
     _uniformCnt = shader->getUniform("cnt");
@@ -159,7 +165,10 @@ void Animation::render(int x, int y, unsigned int direction, unsigned int frame,
 
     GL_CHECK(shader->setUniform(_uniformTexStart, texStart));
     GL_CHECK(shader->setUniform(_uniformTexHeight, texHeight));
-
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21)
+    {
+        GL_CHECK(shader->setUniform(_uniformTexSize, glm::vec2( (float)_texture->textureWidth(), (float)_texture->textureHeight() ) ));
+    }
 
 
     GL_CHECK(glBindVertexArray(_vao));

@@ -17,11 +17,22 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
 #include "Shader.h"
-#include <glm/gtc/type_ptr.hpp>
-#include <CrossPlatform.h>
-#include <Logger.h>
+
+// C++ standard includes
 #include <fstream>
+
+// Falltergeist includes
+#include "../CrossPlatform.h"
+#include "../Exception.h"
+#include "../Logger.h"
+#include "../Game/Game.h"
+#include "Renderer.h"
+
+// Third-party includes
+#include <glm/gtc/type_ptr.hpp>
+
 
 namespace Falltergeist {
     namespace Graphics {
@@ -57,9 +68,10 @@ namespace Falltergeist {
                 glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &len);
                 GLchar *log = (GLchar *) malloc(len);
                 glGetShaderInfoLog(shader, len, NULL, log);
-                Logger::warning("RENDERER") << "Failed to compile shader: '" << log << std::endl;
+                Logger::error("RENDERER") << "Failed to compile shader: '" << log << std::endl;
                 free(log);
                 shader = 0;
+                throw Exception("Failed to compile shader.");
             }
             return shader;
         }
@@ -68,15 +80,36 @@ namespace Falltergeist {
         bool Shader::_load(std::string fname) {
             _progId = 0;
 
+            std::string rpath = "21/";
+            switch (Game::getInstance()->renderer()->renderPath())
+            {
+                case Renderer::RenderPath::OGL21:
+                    rpath = "21/";
+                    break;
+                case Renderer::RenderPath::OGL32 :
+                    rpath = "32/";
+                    break;
+                default:
+                    break;
+            }
             // TODO: use resource manager
-            std::string fprog = std::string(CrossPlatform::findFalltergeistDataPath() + "data/shaders/" +fname+".fp");
-            std::string vprog = std::string(CrossPlatform::findFalltergeistDataPath() + "data/shaders/" +fname+".vp");
+            std::string fprog = std::string(CrossPlatform::findFalltergeistDataPath() + "data/shaders/" +rpath +fname+".fp");
+            std::string vprog = std::string(CrossPlatform::findFalltergeistDataPath() + "data/shaders/" +rpath +fname+".vp");
 
             Logger::info("RENDERER") << "Loading shader " << fprog << std::endl;
             Logger::info("RENDERER") << "Loading shader " << vprog << std::endl;
 
             std::ifstream fpfile(fprog);
             std::ifstream vpfile(vprog);
+
+            if (!fpfile.is_open())
+            {
+                throw Exception("Can't open shader source "+fprog);
+            }
+            if (!vpfile.is_open())
+            {
+                throw Exception("Can't open shader source "+vprog);
+            }
 
             std::string fpsrc;
             std::string vpsrc;
@@ -125,6 +158,7 @@ namespace Falltergeist {
                         glDeleteShader(*it);
                     glDeleteProgram(_progId);
                     _progId = 0;
+                    throw Exception("Failed to link shader");
                     return false;
                 }
             return true;

@@ -24,7 +24,6 @@
 
 // C++ standard includes
 #include <algorithm>
-#include <iostream>
 
 // Falltergeist includes
 #include "../../Exception.h"

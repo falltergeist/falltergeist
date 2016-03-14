@@ -20,14 +20,16 @@
 #ifndef FALLTERGEIST_GRAPHICS_SHADER_H
 #define FALLTERGEIST_GRAPHICS_SHADER_H
 
-#include <stdio.h>
-#include <stdlib.h>
+// C++ standard includes
 #include <string>
 #include <map>
 #include <vector>
+
+// Falltergeist includes
+
+// Third-party includes
 #include <SDL.h>
 #include <GL/glew.h>
-#include <SDL_opengl.h>
 #include <glm/glm.hpp>
 
 namespace Falltergeist {

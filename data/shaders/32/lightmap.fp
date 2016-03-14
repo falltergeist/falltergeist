@@ -1,4 +1,4 @@
-#version 330
+#version 150
 
 uniform vec4 fade;
 in float fLight;

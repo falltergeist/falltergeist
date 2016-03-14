@@ -19,8 +19,6 @@
 
 // C++ standard includes
 #include <sstream>
-#include <iostream>
-#include <UI/Rectangle.h>
 
 // Falltergeist includes
 #include "../Font.h"
@@ -37,6 +35,7 @@
 #include "../UI/HiddenMask.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
+#include "../UI/Rectangle.h"
 
 // Third party includes
 

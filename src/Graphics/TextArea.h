@@ -17,53 +17,57 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iosfwd>
+#ifndef FALLTERGEIST_GRAPHICS_TEXTAREA_H
+#define FALLTERGEIST_GRAPHICS_TEXTAREA_H
+
+// C++ standard includes
+#include <cstdint>
+#include <string>
+#include <vector>
+
+// Falltergeist includes
+#include "../Graphics/Font.h"
 #include "../Graphics/Renderer.h"
-#include "Texture.h"
-#include "../TransFlags.h"
+
+// Third party includes
 
 namespace Falltergeist
 {
+
 namespace Graphics
 {
 
-class Animation
+class TextArea
 {
 public:
-    Animation(const std::string& filename);
-    ~Animation();
-    void render(int x, int y, unsigned int direction, unsigned int frame, bool transparency = false, bool light = false, int outline = 0,
-                unsigned int lightValue=0);
-    bool opaque(unsigned int x, unsigned int y);
-    void trans(Falltergeist::TransFlags::Trans _trans);
-private:
-    GLuint _vao;
-    GLuint _coordsVBO;
-    GLuint _texCoordsVBO;
-    GLuint _ebo;
-    Texture* _texture;
-    int _stride;
-    Falltergeist::TransFlags::Trans _trans = Falltergeist::TransFlags::Trans::NONE;
+    TextArea();
+    ~TextArea();
 
-    std::vector<glm::vec2> _vertices;
-    std::vector<glm::vec2> _texCoords;
+    void render(Point& pos, Graphics::Font* font, SDL_Color _color, SDL_Color _outlineColor);
+    void updateBuffers(std::vector<glm::vec2> vertices, std::vector<glm::vec2> UV,  std::vector<GLushort> indexes);
+
+
+
+protected:
+    GLuint _vao;
+    GLuint _coords;
+    GLuint _texCoords;
+    GLuint _ebo;
+    int _cnt = 0;
 
     GLint _uniformTex;
     GLint _uniformTexSize;
     GLint _uniformFade;
     GLint _uniformMVP;
-    GLint _uniformCnt;
-    GLint _uniformLight;
-    GLint _uniformTrans;
     GLint _uniformOffset;
+    GLint _uniformColor;
     GLint _uniformOutline;
-    GLint _uniformTexStart;
-    GLint _uniformTexHeight;
 
     GLint _attribPos;
     GLint _attribTex;
-public:
+
 };
 
 }
 }
+#endif // FALLTERGEIST_GRAPHICS_TEXTAREA_H

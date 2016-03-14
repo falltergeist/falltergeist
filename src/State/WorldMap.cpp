@@ -18,7 +18,6 @@
  */
 
 // C++ standard includes
-#include <iostream>
 
 // Falltergeist includes
 #include "../Game/Game.h"
