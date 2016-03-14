@@ -49,6 +49,7 @@ private:
     std::vector<glm::vec2> _texCoords;
 
     GLint _uniformTex;
+    GLint _uniformTexSize;
     GLint _uniformFade;
     GLint _uniformMVP;
     GLint _uniformCnt;

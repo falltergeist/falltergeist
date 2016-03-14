@@ -58,6 +58,10 @@ void TextArea::_initBuffers()
     auto shader = ResourceManager::getInstance()->shader("font");
 
     _uniformTex = shader->getUniform("tex");
+    if (Game::getInstance()->renderer()->renderPath() == Graphics::Renderer::RenderPath::OGL21)
+    {
+        _uniformTexSize = shader->getUniform("texSize");
+    }
     _uniformFade = shader->getUniform("fade");
     _uniformMVP = shader->getUniform("MVP");
     _uniformOffset = shader->getUniform("offset");
@@ -465,6 +469,10 @@ void TextArea::render(bool eggTransparency)
     GL_CHECK(shader->setUniform(_uniformColor, glm::vec4((float)_color.r/255.f, (float)_color.g/255.f, (float)_color.b/255.f, (float)_color.a/255.f)));
     GL_CHECK(shader->setUniform(_uniformOutline, glm::vec4((float)_outlineColor.r/255.f, (float)_outlineColor.g/255.f, (float)_outlineColor.b/255.f, (float)_outlineColor.a/255.f)));
     GL_CHECK(shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
+    if (Game::getInstance()->renderer()->renderPath() == Graphics::Renderer::RenderPath::OGL21)
+    {
+        GL_CHECK(shader->setUniform(_uniformTexSize, glm::vec2( (float)font()->texture()->textureWidth(), (float)font()->texture()->textureHeight() )));
+    }
 
 
     GL_CHECK(glBindVertexArray(_vao));

@@ -340,6 +340,7 @@ protected:
     void _updateBuffers();
 
     GLint _uniformTex;
+    GLint _uniformTexSize;
     GLint _uniformFade;
     GLint _uniformMVP;
     GLint _uniformOffset;

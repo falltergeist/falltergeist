@@ -48,6 +48,10 @@ Sprite::Sprite(const std::string& fname)
     auto shader = ResourceManager::getInstance()->shader("sprite");
 
     _uniformTex = shader->getUniform("tex");
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21)
+    {
+        _uniformTexSize = shader->getUniform("texSize");
+    }
     _uniformEggTex = shader->getUniform("eggTex");
     _uniformFade = shader->getUniform("fade");
     _uniformMVP = shader->getUniform("MVP");
@@ -170,6 +174,10 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
     GL_CHECK(shader->setUniform(_uniformLight, lightLevel));
     GL_CHECK(shader->setUniform(_uniformTrans, _trans));
 
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21)
+    {
+        GL_CHECK(shader->setUniform(_uniformTexSize, glm::vec2( (float)_texture->textureWidth(), (float)_texture->textureHeight() )));
+    }
 
     GL_CHECK(glBindVertexArray(Game::getInstance()->renderer()->getVAO()));
 
@@ -301,6 +309,11 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
     GL_CHECK(shader->setUniform(_uniformDoEgg, transparency));
 
     GL_CHECK(shader->setUniform(_uniformOutline, false));
+
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21)
+    {
+        GL_CHECK(shader->setUniform(_uniformTexSize, glm::vec2( (float)_texture->textureWidth(), (float)_texture->textureHeight() )));
+    }
 
 
     GL_CHECK(glBindVertexArray(Game::getInstance()->renderer()->getVAO()));
