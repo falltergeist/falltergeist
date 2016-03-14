@@ -1,9 +1,9 @@
-#version 330
+#version 150
 
 uniform mat4 MVP;
+uniform vec2 offset;
 in vec2 Position;
 in vec2 TexCoord;
-uniform vec2 offset;
 out vec2 UV;
 
 void main(void)

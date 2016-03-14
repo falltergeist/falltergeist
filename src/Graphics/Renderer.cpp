@@ -143,7 +143,14 @@ void Renderer::init()
     {
         glGetIntegerv(GL_MAJOR_VERSION, &_major);
         glGetIntegerv(GL_MINOR_VERSION, &_minor);
-        _renderpath = RenderPath::OGL3;
+        if (_major==3 && _minor<2) // anything lower 3.2
+        {
+            _renderpath = RenderPath::OGL21;
+        }
+        else
+        {
+            _renderpath = RenderPath::OGL32;
+        }
     }
     else
     {
@@ -162,7 +169,7 @@ void Renderer::init()
         case RenderPath::OGL21:
             Logger::info("RENDERER") << "Render path: OpenGL 2.1"  << std::endl;
             break;
-        case RenderPath::OGL3:
+        case RenderPath::OGL32:
             Logger::info("RENDERER") << "Render path: OpenGL 3.0+" << std::endl;
             break;
         default:
@@ -186,7 +193,7 @@ void Renderer::init()
 
     Logger::info("RENDERER") << "Extensions: " << std::endl;
 
-    if (_renderpath==RenderPath::OGL3)
+    if (_renderpath==RenderPath::OGL32)
     {
         GLint count;
         glGetIntegerv(GL_NUM_EXTENSIONS, &count);

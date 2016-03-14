@@ -86,8 +86,8 @@ namespace Falltergeist {
                 case Renderer::RenderPath::OGL21:
                     rpath = "21/";
                     break;
-                case Renderer::RenderPath::OGL3 :
-                    rpath = "30/";
+                case Renderer::RenderPath::OGL32 :
+                    rpath = "32/";
                     break;
                 default:
                     break;

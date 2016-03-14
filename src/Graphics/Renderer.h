@@ -55,7 +55,7 @@ class Renderer
 public:
     enum class RenderPath {
         OGL21 = 0,
-        OGL3,
+        OGL32,
         GLES1,
         GLES2
     };

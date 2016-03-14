@@ -1,4 +1,4 @@
-#version 330
+#version 150
 
 uniform mat4 MVP;
 in vec2 Position;
