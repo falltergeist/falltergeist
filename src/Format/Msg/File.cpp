@@ -117,6 +117,10 @@ void File::_initialize()
             {
                 text.replace(text.find("\n"), 1, "");
             }
+            while (text.find("\r") != std::string::npos)
+            {
+                text.replace(text.find("\r"), 1, "");
+            }
 
             auto message = new Message();
             message->setNumber(std::stoi(number));
