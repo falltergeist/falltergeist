@@ -62,14 +62,14 @@ Lightmap::Lightmap(std::vector<glm::vec2> coords,std::vector<GLuint> indexes)
 
     GL_CHECK(glBindVertexArray(0));
 
-    auto shader = ResourceManager::getInstance()->shader("lightmap");
+    _shader = ResourceManager::getInstance()->shader("lightmap");
 
-    _uniformFade = shader->getUniform("fade");
-    _uniformMVP = shader->getUniform("MVP");
-    _uniformOffset = shader->getUniform("offset");
+    _uniformFade = _shader->getUniform("fade");
+    _uniformMVP = _shader->getUniform("MVP");
+    _uniformOffset = _shader->getUniform("offset");
 
-    _attribPos = shader->getAttrib("Position");
-    _attribLights = shader->getAttrib("lights");
+    _attribPos = _shader->getAttrib("Position");
+    _attribLights = _shader->getAttrib("lights");
 }
 
 Lightmap::~Lightmap()
@@ -82,16 +82,15 @@ void Lightmap::render(const Falltergeist::Point &pos)
     if (_indexes<=0) return;
 
     GL_CHECK(glBlendFunc(GL_DST_COLOR, GL_SRC_COLOR));
-    auto shader = ResourceManager::getInstance()->shader("lightmap");
 
-    GL_CHECK(shader->use());
+    GL_CHECK(_shader->use());
 
-    GL_CHECK(shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
+    GL_CHECK(_shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
 
     // set camera offset
-    GL_CHECK(shader->setUniform(_uniformOffset, glm::vec2((float)pos.x(), (float)pos.y()) ));
+    GL_CHECK(_shader->setUniform(_uniformOffset, glm::vec2((float)pos.x(), (float)pos.y()) ));
 
-    GL_CHECK(shader->setUniform(_uniformFade,Game::getInstance()->renderer()->fadeColor()));
+    GL_CHECK(_shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
 
 
     GL_CHECK(glBindVertexArray(_vao));
@@ -122,7 +121,7 @@ void Lightmap::render(const Falltergeist::Point &pos)
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
     GL_CHECK(glBindVertexArray(0));
 
-    GL_CHECK(shader->unuse());
+    GL_CHECK(_shader->unuse());
     GL_CHECK(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 }
 
