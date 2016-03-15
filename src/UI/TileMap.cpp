@@ -174,11 +174,13 @@ void TileMap::render()
     }
     int cnt=0;
 
+    auto topLeft = camera->topLeft();
+    auto size = camera->size();
     for (auto& it : _tiles)
     {
         auto& tile = it.second;
         const Size tileSize = Size(80, 36);
-        if (tile->enabled() && Rect::intersects(tile->position(), tileSize, camera->topLeft(), camera->size()))
+        if (tile->enabled() && Rect::intersects(tile->position(), tileSize, topLeft, size))
         {
             uint32_t aIndex = tile->index() / _tilesPerAtlas;
             indexes.at(aIndex).push_back(cnt*4);
@@ -194,7 +196,7 @@ void TileMap::render()
     for (uint32_t i = 0; i< _atlases; i++)
     {
         //render atlas with indexes->at(atlasIndex)
-        _tilemap.get()->render(camera->topLeft(), indexes.at(i), i);
+        _tilemap.get()->render(topLeft, indexes.at(i), i);
 
     }
 
