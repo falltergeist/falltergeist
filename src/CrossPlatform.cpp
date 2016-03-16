@@ -349,7 +349,7 @@ bool CrossPlatform::fileExists(std::string file)
         return false;
     }
 #elif defined(_WIN32) || defined(WIN32) // Windows
-    DWORD attrs = GetFileAttributes(dir);
+    DWORD attrs = GetFileAttributes(file.c_str());
 
     // Assume path exists
     if (attrs != INVALID_FILE_ATTRIBUTES)
