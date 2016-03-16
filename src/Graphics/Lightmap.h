@@ -22,6 +22,7 @@
 
 #include "../Point.h"
 #include "Renderer.h"
+#include "Shader.h"
 
 namespace Falltergeist {
 namespace Graphics {
@@ -47,6 +48,7 @@ private:
     GLint _attribPos;
     GLint _attribLights;
     unsigned int _indexes;
+    Graphics::Shader*_shader;
 
 };
 

@@ -28,6 +28,7 @@
 // Falltergeist includes
 #include "../Graphics/Font.h"
 #include "../Graphics/Renderer.h"
+#include "Shader.h"
 
 // Third party includes
 
@@ -65,6 +66,7 @@ protected:
 
     GLint _attribPos;
     GLint _attribTex;
+    Graphics::Shader*_shader;
 
 };
 

@@ -21,6 +21,7 @@
 #include "../Graphics/Renderer.h"
 #include "Texture.h"
 #include "../TransFlags.h"
+#include "Shader.h"
 
 namespace Falltergeist
 {
@@ -62,6 +63,7 @@ private:
 
     GLint _attribPos;
     GLint _attribTex;
+    Graphics::Shader*_shader;
 public:
 };
 

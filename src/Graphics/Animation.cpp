@@ -94,33 +94,35 @@ Animation::Animation(const std::string &filename)
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoordsVBO));
     GL_CHECK(glBufferData(GL_ARRAY_BUFFER, _texCoords.size() * sizeof(glm::vec2), &_texCoords[0], GL_STATIC_DRAW));
 
-    GL_CHECK(glBindVertexArray(0));
+    _shader = ResourceManager::getInstance()->shader("animation");
 
-    auto shader = ResourceManager::getInstance()->shader("animation");
-
-    _uniformTex = shader->getUniform("tex");
+    _uniformTex = _shader->getUniform("tex");
     if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21)
     {
-        _uniformTexSize = shader->getUniform("texSize");
+        _uniformTexSize = _shader->getUniform("texSize");
     }
-    _uniformFade = shader->getUniform("fade");
-    _uniformMVP = shader->getUniform("MVP");
-    _uniformCnt = shader->getUniform("cnt");
-    _uniformLight = shader->getUniform("global_light");
-    _uniformTrans = shader->getUniform("trans");
-    _uniformOffset = shader->getUniform("offset");
-    _uniformOutline = shader->getUniform("outline");
+    _uniformFade = _shader->getUniform("fade");
+    _uniformMVP = _shader->getUniform("MVP");
+    _uniformCnt = _shader->getUniform("cnt");
+    _uniformLight = _shader->getUniform("global_light");
+    _uniformTrans = _shader->getUniform("trans");
+    _uniformOffset = _shader->getUniform("offset");
+    _uniformOutline = _shader->getUniform("outline");
 
-    _uniformTexStart = shader->getUniform("texStart");
-    _uniformTexHeight = shader->getUniform("texHeight");
+    _uniformTexStart = _shader->getUniform("texStart");
+    _uniformTexHeight = _shader->getUniform("texHeight");
 
-    _attribPos = shader->getAttrib("Position");
-    _attribTex = shader->getAttrib("TexCoord");
+    _attribPos = _shader->getAttrib("Position");
+    _attribTex = _shader->getAttrib("TexCoord");
 }
 
 Animation::~Animation()
 {
+    GL_CHECK(glDeleteBuffers(1, &_coordsVBO));
+    GL_CHECK(glDeleteBuffers(1, &_texCoordsVBO));
+    GL_CHECK(glDeleteBuffers(1, &_ebo));
 
+    GL_CHECK(glDeleteVertexArrays(1, &_vao));
 }
 
 void Animation::render(int x, int y, unsigned int direction, unsigned int frame, bool transparency, bool light, int outline, unsigned int lightValue)
@@ -131,23 +133,19 @@ void Animation::render(int x, int y, unsigned int direction, unsigned int frame,
     float texEnd = _texCoords.at(pos*4+3).y;
     float texHeight = texEnd-texStart;
 
-
-
-    auto shader = ResourceManager::getInstance()->shader("animation");
-
-    GL_CHECK(shader->use());
+    GL_CHECK(_shader->use());
 
     GL_CHECK(_texture->bind(0));
 
-    GL_CHECK(shader->setUniform(_uniformTex, 0));
+    GL_CHECK(_shader->setUniform(_uniformTex, 0));
 
-    GL_CHECK(shader->setUniform(_uniformOffset, glm::vec2((float)x, (float)y)));
+    GL_CHECK(_shader->setUniform(_uniformOffset, glm::vec2((float)x, (float)y)));
 
-    GL_CHECK(shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
+    GL_CHECK(_shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
 
-    GL_CHECK(shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
+    GL_CHECK(_shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
 
-    GL_CHECK(shader->setUniform(_uniformCnt, Game::getInstance()->animatedPalette()->counters()));
+    GL_CHECK(_shader->setUniform(_uniformCnt, Game::getInstance()->animatedPalette()->counters()));
 
     int lightLevel = 100;
     if (light)
@@ -158,16 +156,24 @@ void Animation::render(int x, int y, unsigned int direction, unsigned int frame,
             lightLevel = lightValue / ((65536-655)/100);
         }
     }
-    GL_CHECK(shader->setUniform(_uniformLight, lightLevel));
+    GL_CHECK(_shader->setUniform(_uniformLight, lightLevel));
 
-    GL_CHECK(shader->setUniform(_uniformTrans, _trans));
-    GL_CHECK(shader->setUniform(_uniformOutline, outline));
+    GL_CHECK(_shader->setUniform(_uniformTrans, _trans));
+    GL_CHECK(_shader->setUniform(_uniformOutline, outline));
 
-    GL_CHECK(shader->setUniform(_uniformTexStart, texStart));
-    GL_CHECK(shader->setUniform(_uniformTexHeight, texHeight));
+    GL_CHECK(_shader->setUniform(_uniformTexStart, texStart));
+    GL_CHECK(_shader->setUniform(_uniformTexHeight, texHeight));
     if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21)
     {
-        GL_CHECK(shader->setUniform(_uniformTexSize, glm::vec2( (float)_texture->textureWidth(), (float)_texture->textureHeight() ) ));
+        GL_CHECK(_shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->textureWidth(), (float)_texture->textureHeight() ) ));
+    }
+
+
+    GLint curvao;
+    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+    if ((GLuint)curvao != _vao)
+    {
+        GL_CHECK(glBindVertexArray(_vao));
     }
 
 
@@ -196,13 +202,6 @@ void Animation::render(int x, int y, unsigned int direction, unsigned int frame,
     GL_CHECK(glDisableVertexAttribArray(_attribPos));
 
     GL_CHECK(glDisableVertexAttribArray(_attribTex));
-
-    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindVertexArray(0));
-
-    GL_CHECK(shader->unuse());
-    GL_CHECK(_texture->unbind(0));
 }
 
 bool Animation::opaque(unsigned int x, unsigned int y)

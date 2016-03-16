@@ -421,7 +421,7 @@ void Location::setLocation(const std::string& name)
         _ambientSfx = it->ambientSfx;
         if (!_ambientSfx.empty())
         {
-            _ambientSfxTimer.tickHandler().add([this, &mapShortName](Event::Event* evt) 
+            _ambientSfxTimer.tickHandler().add([this, mapShortName](Event::Event* evt)
             {
                 unsigned char rnd = std::rand() % 100, sum = 0;
                 auto it = _ambientSfx.cbegin();

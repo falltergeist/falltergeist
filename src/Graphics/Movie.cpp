@@ -97,7 +97,13 @@ void Movie::render(int x, int y)
                                                                            Game::getInstance()->renderer()->getMVP()));
 
 
-    GL_CHECK(glBindVertexArray(Game::getInstance()->renderer()->getVAO()));
+    GLint curvao;
+    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+    GLint vao = Game::getInstance()->renderer()->getVAO();
+    if (curvao != vao)
+    {
+        GL_CHECK(glBindVertexArray(vao));
+    }
 
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getVVBO()));
@@ -125,12 +131,7 @@ void Movie::render(int x, int y)
 
     GL_CHECK(glDisableVertexAttribArray(ResourceManager::getInstance()->shader("sprite")->getAttrib("TexCoord")));
 
-    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindVertexArray(0));
-
-    GL_CHECK(ResourceManager::getInstance()->shader("sprite")->unuse());
-    GL_CHECK(_texture->unbind(0));
+//    GL_CHECK(glBindVertexArray(0));
 }
 
 

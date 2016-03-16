@@ -56,17 +56,17 @@ Tilemap::Tilemap(std::vector<glm::vec2> coords, std::vector<glm::vec2> textureCo
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
     GL_CHECK(glBindVertexArray(0));
 
-    auto shader = ResourceManager::getInstance()->shader("tilemap");
+    _shader = ResourceManager::getInstance()->shader("tilemap");
 
-    _uniformTex = shader->getUniform("tex");
-    _uniformFade = shader->getUniform("fade");
-    _uniformMVP = shader->getUniform("MVP");
-    _uniformCnt = shader->getUniform("cnt");
-    _uniformLight = shader->getUniform("global_light");
-    _uniformOffset = shader->getUniform("offset");
+    _uniformTex = _shader->getUniform("tex");
+    _uniformFade = _shader->getUniform("fade");
+    _uniformMVP = _shader->getUniform("MVP");
+    _uniformCnt = _shader->getUniform("cnt");
+    _uniformLight = _shader->getUniform("global_light");
+    _uniformOffset = _shader->getUniform("offset");
 
-    _attribPos = shader->getAttrib("Position");
-    _attribTex = shader->getAttrib("TexCoord");
+    _attribPos = _shader->getAttrib("Position");
+    _attribTex = _shader->getAttrib("TexCoord");
 
 }
 
@@ -83,22 +83,20 @@ void Tilemap::render(const Point &pos, std::vector<GLuint> indexes, uint32_t atl
 {
     if (indexes.size()<=0) return;
 
-    auto shader = ResourceManager::getInstance()->shader("tilemap");
-
-    GL_CHECK(shader->use());
+    GL_CHECK(_shader->use());
 
     GL_CHECK(_textures.at(atlas).get()->bind(0));
 
-    GL_CHECK(shader->setUniform(_uniformTex,0));
+    GL_CHECK(_shader->setUniform(_uniformTex, 0));
 
-    GL_CHECK(shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
+    GL_CHECK(_shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
 
     // set camera offset
-    GL_CHECK(shader->setUniform(_uniformOffset, glm::vec2((float)pos.x(), (float)pos.y()) ));
+    GL_CHECK(_shader->setUniform(_uniformOffset, glm::vec2((float)pos.x(), (float)pos.y()) ));
 
-    GL_CHECK(shader->setUniform(_uniformFade,Game::getInstance()->renderer()->fadeColor()));
+    GL_CHECK(_shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
 
-    GL_CHECK(shader->setUniform(_uniformCnt, Game::getInstance()->animatedPalette()->counters()));
+    GL_CHECK(_shader->setUniform(_uniformCnt, Game::getInstance()->animatedPalette()->counters()));
 
     int lightLevel = 100;
     if (auto state = Game::getInstance()->locationState())
@@ -117,11 +115,14 @@ void Tilemap::render(const Point &pos, std::vector<GLuint> indexes, uint32_t atl
             lightLevel = (state->lightLevel() - 0xA000) * 100 / 0x6000;
         }
     }
-    GL_CHECK(shader->setUniform(_uniformLight, lightLevel));
+    GL_CHECK(_shader->setUniform(_uniformLight, lightLevel));
 
-
-    GL_CHECK(glBindVertexArray(_vao));
-
+    GLint curvao;
+    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+    if (curvao != _vao)
+    {
+        GL_CHECK(glBindVertexArray(_vao));
+    }
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coords));
     GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
@@ -145,13 +146,6 @@ void Tilemap::render(const Point &pos, std::vector<GLuint> indexes, uint32_t atl
     GL_CHECK(glDisableVertexAttribArray(_attribPos));
 
     GL_CHECK(glDisableVertexAttribArray(_attribTex));
-
-    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindVertexArray(0));
-
-    GL_CHECK(shader->unuse());
-    GL_CHECK(_textures.at(atlas).get()->unbind(0));
 }
 
 void Tilemap::addTexture(SDL_Surface *surface)

@@ -43,27 +43,26 @@ namespace Graphics
 
 Sprite::Sprite(const std::string& fname)
 {
-  _texture = ResourceManager::getInstance()->texture(fname);
+    _texture = ResourceManager::getInstance()->texture(fname);
+    _shader = ResourceManager::getInstance()->shader("sprite");
 
-    auto shader = ResourceManager::getInstance()->shader("sprite");
-
-    _uniformTex = shader->getUniform("tex");
+    _uniformTex = _shader->getUniform("tex");
     if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21)
     {
-        _uniformTexSize = shader->getUniform("texSize");
+        _uniformTexSize = _shader->getUniform("texSize");
     }
-    _uniformEggTex = shader->getUniform("eggTex");
-    _uniformFade = shader->getUniform("fade");
-    _uniformMVP = shader->getUniform("MVP");
-    _uniformCnt = shader->getUniform("cnt");
-    _uniformLight = shader->getUniform("global_light");
-    _uniformTrans = shader->getUniform("trans");
-    _uniformDoEgg = shader->getUniform("doegg");
-    _uniformEggPos = shader->getUniform("eggpos");
-    _uniformOutline = shader->getUniform("outline");
+    _uniformEggTex = _shader->getUniform("eggTex");
+    _uniformFade = _shader->getUniform("fade");
+    _uniformMVP = _shader->getUniform("MVP");
+    _uniformCnt = _shader->getUniform("cnt");
+    _uniformLight = _shader->getUniform("global_light");
+    _uniformTrans = _shader->getUniform("trans");
+    _uniformDoEgg = _shader->getUniform("doegg");
+    _uniformEggPos = _shader->getUniform("eggpos");
+    _uniformOutline = _shader->getUniform("outline");
 
-    _attribPos = shader->getAttrib("Position");
-    _attribTex = shader->getAttrib("TexCoord");
+    _attribPos = _shader->getAttrib("Position");
+    _attribTex = _shader->getAttrib("TexCoord");
 }
 
 Sprite::Sprite(Format::Frm::File *frm) : Sprite(frm->filename())
@@ -137,30 +136,26 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
         }
     }
 
-
-
-    auto shader = ResourceManager::getInstance()->shader("sprite");
-
-    GL_CHECK(shader->use());
+    GL_CHECK(_shader->use());
 
     GL_CHECK(_texture->bind(0));
     GL_CHECK(Game::getInstance()->renderer()->egg()->bind(1));
 
-    GL_CHECK(shader->setUniform(_uniformTex,0));
-    GL_CHECK(shader->setUniform(_uniformEggTex,1));
+    GL_CHECK(_shader->setUniform(_uniformTex, 0));
+    GL_CHECK(_shader->setUniform(_uniformEggTex, 1));
 
-    GL_CHECK(shader->setUniform(_uniformEggPos, eggVec));
+    GL_CHECK(_shader->setUniform(_uniformEggPos, eggVec));
 
-    GL_CHECK(shader->setUniform(_uniformDoEgg, transparency));
+    GL_CHECK(_shader->setUniform(_uniformDoEgg, transparency));
 
-    GL_CHECK(shader->setUniform(_uniformOutline, outline));
+    GL_CHECK(_shader->setUniform(_uniformOutline, outline));
 
 
-    GL_CHECK(shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
+    GL_CHECK(_shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
 
-    GL_CHECK(shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
+    GL_CHECK(_shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
 
-    GL_CHECK(shader->setUniform(_uniformCnt, Game::getInstance()->animatedPalette()->counters()));
+    GL_CHECK(_shader->setUniform(_uniformCnt, Game::getInstance()->animatedPalette()->counters()));
 
     int lightLevel = 100;
     if (light)
@@ -171,15 +166,21 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
             lightLevel = lightValue / ((65536-655)/100);
         }
     }
-    GL_CHECK(shader->setUniform(_uniformLight, lightLevel));
-    GL_CHECK(shader->setUniform(_uniformTrans, _trans));
+    GL_CHECK(_shader->setUniform(_uniformLight, lightLevel));
+    GL_CHECK(_shader->setUniform(_uniformTrans, _trans));
 
     if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21)
     {
-        GL_CHECK(shader->setUniform(_uniformTexSize, glm::vec2( (float)_texture->textureWidth(), (float)_texture->textureHeight() )));
+        GL_CHECK(_shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->textureWidth(), (float)_texture->textureHeight() )));
     }
 
-    GL_CHECK(glBindVertexArray(Game::getInstance()->renderer()->getVAO()));
+    GLint curvao;
+    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+    GLint vao = Game::getInstance()->renderer()->getVAO();
+    if (curvao != vao)
+    {
+        GL_CHECK(glBindVertexArray(vao));
+    }
 
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getVVBO()));
@@ -206,15 +207,6 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
     GL_CHECK(glDisableVertexAttribArray(_attribPos));
 
     GL_CHECK(glDisableVertexAttribArray(_attribTex));
-
-    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindVertexArray(0));
-
-    GL_CHECK(shader->unuse());
-    GL_CHECK(_texture->unbind(0));
-    GL_CHECK(Game::getInstance()->renderer()->egg()->unbind(1));
-
 }
 
 void Sprite::render(int x, int y, bool transparency, bool light, int outline, unsigned int lightValue)
@@ -275,21 +267,19 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
 
     }
 
-    auto shader = ResourceManager::getInstance()->shader("sprite");
-
-    GL_CHECK(shader->use());
+    GL_CHECK(_shader->use());
 
     GL_CHECK(_texture->bind(0));
     GL_CHECK(Game::getInstance()->renderer()->egg()->bind(1));
 
-    GL_CHECK(shader->setUniform(_uniformTex, 0));
-    GL_CHECK(shader->setUniform(_uniformEggTex, 1));
+    GL_CHECK(_shader->setUniform(_uniformTex, 0));
+    GL_CHECK(_shader->setUniform(_uniformEggTex, 1));
 
-    GL_CHECK(shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
+    GL_CHECK(_shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
 
-    GL_CHECK(shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
+    GL_CHECK(_shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
 
-    GL_CHECK(shader->setUniform(_uniformCnt, Game::getInstance()->animatedPalette()->counters()));
+    GL_CHECK(_shader->setUniform(_uniformCnt, Game::getInstance()->animatedPalette()->counters()));
 
     int lightLevel = 100;
     if (light)
@@ -300,24 +290,28 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
             lightLevel = lightValue / ((65536-655)/100);
         }
     }
-    GL_CHECK(shader->setUniform(_uniformLight, lightLevel));
+    GL_CHECK(_shader->setUniform(_uniformLight, lightLevel));
 
-    GL_CHECK(shader->setUniform(_uniformTrans, _trans));
+    GL_CHECK(_shader->setUniform(_uniformTrans, _trans));
 
-    GL_CHECK(shader->setUniform(_uniformEggPos, eggVec));
+    GL_CHECK(_shader->setUniform(_uniformEggPos, eggVec));
 
-    GL_CHECK(shader->setUniform(_uniformDoEgg, transparency));
+    GL_CHECK(_shader->setUniform(_uniformDoEgg, transparency));
 
-    GL_CHECK(shader->setUniform(_uniformOutline, false));
+    GL_CHECK(_shader->setUniform(_uniformOutline, false));
 
     if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21)
     {
-        GL_CHECK(shader->setUniform(_uniformTexSize, glm::vec2( (float)_texture->textureWidth(), (float)_texture->textureHeight() )));
+        GL_CHECK(_shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->textureWidth(), (float)_texture->textureHeight() )));
     }
 
-
-    GL_CHECK(glBindVertexArray(Game::getInstance()->renderer()->getVAO()));
-
+    GLint curvao;
+    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+    GLint vao = Game::getInstance()->renderer()->getVAO();
+    if (curvao != vao)
+    {
+        GL_CHECK(glBindVertexArray(vao));
+    }
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getVVBO()));
 
@@ -343,14 +337,6 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
     GL_CHECK(glDisableVertexAttribArray(_attribPos));
 
     GL_CHECK(glDisableVertexAttribArray(_attribTex));
-
-    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindVertexArray(0));
-
-    GL_CHECK(shader->unuse());
-    GL_CHECK(_texture->unbind(0));
-    GL_CHECK(Game::getInstance()->renderer()->egg()->unbind(1));
 }
 
 bool Sprite::opaque(unsigned int x, unsigned int y)

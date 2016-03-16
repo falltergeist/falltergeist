@@ -55,21 +55,21 @@ TextArea::TextArea()
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
     GL_CHECK(glBindVertexArray(0));
 
-    auto shader = ResourceManager::getInstance()->shader("font");
+    _shader = ResourceManager::getInstance()->shader("font");
 
-    _uniformTex = shader->getUniform("tex");
+    _uniformTex = _shader->getUniform("tex");
     if (Game::getInstance()->renderer()->renderPath() == Graphics::Renderer::RenderPath::OGL21)
     {
-        _uniformTexSize = shader->getUniform("texSize");
+        _uniformTexSize = _shader->getUniform("texSize");
     }
-    _uniformFade = shader->getUniform("fade");
-    _uniformMVP = shader->getUniform("MVP");
-    _uniformOffset = shader->getUniform("offset");
-    _uniformColor = shader->getUniform("color");
-    _uniformOutline = shader->getUniform("outlineColor");
+    _uniformFade = _shader->getUniform("fade");
+    _uniformMVP = _shader->getUniform("MVP");
+    _uniformOffset = _shader->getUniform("offset");
+    _uniformColor = _shader->getUniform("color");
+    _uniformOutline = _shader->getUniform("outlineColor");
 
-    _attribPos = shader->getAttrib("Position");
-    _attribTex = shader->getAttrib("TexCoord");
+    _attribPos = _shader->getAttrib("Position");
+    _attribTex = _shader->getAttrib("TexCoord");
 }
 
 TextArea::~TextArea()
@@ -85,27 +85,29 @@ TextArea::~TextArea()
 void TextArea::render(Point& pos, Graphics::Font* font, SDL_Color _color, SDL_Color _outlineColor)
 {
 
-    auto shader = ResourceManager::getInstance()->shader("font");
-
-    GL_CHECK(shader->use());
+    GL_CHECK(_shader->use());
 
     GL_CHECK(font->texture()->bind(0));
 
-    GL_CHECK(shader->setUniform(_uniformTex,0));
+    GL_CHECK(_shader->setUniform(_uniformTex, 0));
 
-    GL_CHECK(shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
-    GL_CHECK(shader->setUniform(_uniformOffset, glm::vec2((float)pos.x(), (float(pos.y())) )));
-    GL_CHECK(shader->setUniform(_uniformColor, glm::vec4((float)_color.r/255.f, (float)_color.g/255.f, (float)_color.b/255.f, (float)_color.a/255.f)));
-    GL_CHECK(shader->setUniform(_uniformOutline, glm::vec4((float)_outlineColor.r/255.f, (float)_outlineColor.g/255.f, (float)_outlineColor.b/255.f, (float)_outlineColor.a/255.f)));
-    GL_CHECK(shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
+    GL_CHECK(_shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
+    GL_CHECK(_shader->setUniform(_uniformOffset, glm::vec2((float)pos.x(), (float(pos.y())) )));
+    GL_CHECK(_shader->setUniform(_uniformColor, glm::vec4((float)_color.r / 255.f, (float)_color.g / 255.f, (float)_color.b / 255.f, (float)_color.a / 255.f)));
+    GL_CHECK(_shader->setUniform(_uniformOutline, glm::vec4((float)_outlineColor.r / 255.f, (float)_outlineColor.g / 255.f, (float)_outlineColor.b / 255.f, (float)_outlineColor.a / 255.f)));
+    GL_CHECK(_shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
     if (Game::getInstance()->renderer()->renderPath() == Graphics::Renderer::RenderPath::OGL21)
     {
-        GL_CHECK(shader->setUniform(_uniformTexSize, glm::vec2( (float)font->texture()->textureWidth(), (float)font->texture()->textureHeight() )));
+        GL_CHECK(_shader->setUniform(_uniformTexSize, glm::vec2((float)font->texture()->textureWidth(), (float)font->texture()->textureHeight() )));
     }
 
 
-    GL_CHECK(glBindVertexArray(_vao));
-
+    GLint curvao;
+    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+    if ((GLuint)curvao != _vao)
+    {
+        GL_CHECK(glBindVertexArray(_vao));
+    }
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coords));
     GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
@@ -123,13 +125,6 @@ void TextArea::render(Point& pos, Graphics::Font* font, SDL_Color _color, SDL_Co
 
     GL_CHECK(glDisableVertexAttribArray(_attribPos));
     GL_CHECK(glDisableVertexAttribArray(_attribTex));
-
-    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindVertexArray(0));
-
-    GL_CHECK(shader->unuse());
-    GL_CHECK(font->texture()->unbind(0));
 }
 
 void TextArea::updateBuffers(std::vector<glm::vec2> vertices, std::vector<glm::vec2> UV,  std::vector<GLushort> indexes)
@@ -137,9 +132,12 @@ void TextArea::updateBuffers(std::vector<glm::vec2> vertices, std::vector<glm::v
     _cnt = indexes.size();
 
 
-
-    GL_CHECK(glBindVertexArray(_vao));
-
+    GLint curvao;
+    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+    if ((GLuint)curvao != _vao)
+    {
+        GL_CHECK(glBindVertexArray(_vao));
+    }
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coords));
     GL_CHECK(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec2), &vertices[0], GL_DYNAMIC_DRAW));
@@ -153,7 +151,6 @@ void TextArea::updateBuffers(std::vector<glm::vec2> vertices, std::vector<glm::v
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindVertexArray(0));
 }
 
 }
