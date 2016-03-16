@@ -473,8 +473,13 @@ void Renderer::drawRect(int x, int y, int w, int h, SDL_Color color)
     GL_CHECK(ResourceManager::getInstance()->shader("default")->setUniform("MVP", getMVP()));
 
 
-    GL_CHECK(glBindVertexArray(getVAO()));
-
+    GLint curvao;
+    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+    GLint vao = getVAO();
+    if (curvao != vao)
+    {
+        GL_CHECK(glBindVertexArray(vao));
+    }
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getVVBO()));
 
@@ -490,11 +495,6 @@ void Renderer::drawRect(int x, int y, int w, int h, SDL_Color color)
 
     GL_CHECK(glDisableVertexAttribArray(ResourceManager::getInstance()->shader("default")->getAttrib("Position")));
 
-    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindVertexArray(0));
-
-    GL_CHECK(ResourceManager::getInstance()->shader("default")->unuse());
 }
 
 void Renderer::drawRect(const Point &pos, const Size &size, SDL_Color color)

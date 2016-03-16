@@ -94,8 +94,6 @@ Animation::Animation(const std::string &filename)
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoordsVBO));
     GL_CHECK(glBufferData(GL_ARRAY_BUFFER, _texCoords.size() * sizeof(glm::vec2), &_texCoords[0], GL_STATIC_DRAW));
 
-    GL_CHECK(glBindVertexArray(0));
-
     _shader = ResourceManager::getInstance()->shader("animation");
 
     _uniformTex = _shader->getUniform("tex");
@@ -120,7 +118,11 @@ Animation::Animation(const std::string &filename)
 
 Animation::~Animation()
 {
+    GL_CHECK(glDeleteBuffers(1, &_coordsVBO));
+    GL_CHECK(glDeleteBuffers(1, &_texCoordsVBO));
+    GL_CHECK(glDeleteBuffers(1, &_ebo));
 
+    GL_CHECK(glDeleteVertexArrays(1, &_vao));
 }
 
 void Animation::render(int x, int y, unsigned int direction, unsigned int frame, bool transparency, bool light, int outline, unsigned int lightValue)
@@ -167,6 +169,14 @@ void Animation::render(int x, int y, unsigned int direction, unsigned int frame,
     }
 
 
+    GLint curvao;
+    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+    if ((GLuint)curvao != _vao)
+    {
+        GL_CHECK(glBindVertexArray(_vao));
+    }
+
+
     GL_CHECK(glBindVertexArray(_vao));
 
 
@@ -192,13 +202,6 @@ void Animation::render(int x, int y, unsigned int direction, unsigned int frame,
     GL_CHECK(glDisableVertexAttribArray(_attribPos));
 
     GL_CHECK(glDisableVertexAttribArray(_attribTex));
-
-    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindVertexArray(0));
-
-    GL_CHECK(_shader->unuse());
-    GL_CHECK(_texture->unbind(0));
 }
 
 bool Animation::opaque(unsigned int x, unsigned int y)

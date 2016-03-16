@@ -179,9 +179,22 @@ void Texture::bind(uint8_t unit)
         return;
     }
 */
-    if (_textureID > 0) {
-      glActiveTexture(GL_TEXTURE0+unit);
-      glBindTexture(GL_TEXTURE_2D, _textureID);
+    GLint curunit;
+    GLint curtexture;
+
+    if (_textureID > 0)
+    {
+        glGetIntegerv(GL_ACTIVE_TEXTURE, &curunit);
+        glGetIntegerv(GL_TEXTURE_BINDING_2D, &curtexture);
+
+        if (curunit != GL_TEXTURE0+unit)
+        {
+            glActiveTexture(GL_TEXTURE0+unit);
+        }
+        if (curunit != GL_TEXTURE0+unit || (GLuint)curtexture != _textureID)
+        {
+            glBindTexture(GL_TEXTURE_2D, _textureID);
+        }
     }
 }
 

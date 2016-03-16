@@ -165,7 +165,12 @@ namespace Falltergeist {
         }
 
         void Shader::use() {
-            glUseProgram(_progId);
+            GLint cur;
+            glGetIntegerv(GL_CURRENT_PROGRAM, &cur);
+            if ((GLuint)cur!=_progId)
+            {
+                glUseProgram(_progId);
+            }
         }
 
         void Shader::unuse() {

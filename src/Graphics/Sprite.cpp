@@ -174,7 +174,13 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
         GL_CHECK(_shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->textureWidth(), (float)_texture->textureHeight() )));
     }
 
-    GL_CHECK(glBindVertexArray(Game::getInstance()->renderer()->getVAO()));
+    GLint curvao;
+    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+    GLint vao = Game::getInstance()->renderer()->getVAO();
+    if (curvao != vao)
+    {
+        GL_CHECK(glBindVertexArray(vao));
+    }
 
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getVVBO()));
@@ -201,15 +207,6 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
     GL_CHECK(glDisableVertexAttribArray(_attribPos));
 
     GL_CHECK(glDisableVertexAttribArray(_attribTex));
-
-    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindVertexArray(0));
-
-    GL_CHECK(_shader->unuse());
-    GL_CHECK(_texture->unbind(0));
-    GL_CHECK(Game::getInstance()->renderer()->egg()->unbind(1));
-
 }
 
 void Sprite::render(int x, int y, bool transparency, bool light, int outline, unsigned int lightValue)
@@ -308,9 +305,13 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
         GL_CHECK(_shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->textureWidth(), (float)_texture->textureHeight() )));
     }
 
-
-    GL_CHECK(glBindVertexArray(Game::getInstance()->renderer()->getVAO()));
-
+    GLint curvao;
+    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+    GLint vao = Game::getInstance()->renderer()->getVAO();
+    if (curvao != vao)
+    {
+        GL_CHECK(glBindVertexArray(vao));
+    }
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getVVBO()));
 
@@ -336,14 +337,6 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
     GL_CHECK(glDisableVertexAttribArray(_attribPos));
 
     GL_CHECK(glDisableVertexAttribArray(_attribTex));
-
-    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindVertexArray(0));
-
-    GL_CHECK(_shader->unuse());
-    GL_CHECK(_texture->unbind(0));
-    GL_CHECK(Game::getInstance()->renderer()->egg()->unbind(1));
 }
 
 bool Sprite::opaque(unsigned int x, unsigned int y)

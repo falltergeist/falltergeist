@@ -52,15 +52,12 @@ Lightmap::Lightmap(std::vector<glm::vec2> coords,std::vector<GLuint> indexes)
 
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _lights));
-    //update texcoords
-//    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, textureCoords.size() * sizeof(glm::vec2), &textureCoords[0], GL_STATIC_DRAW));
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
     // update indexes
     GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexes.size() * sizeof(GLuint), &indexes[0], GL_DYNAMIC_DRAW));
     _indexes = indexes.size();
 
-    GL_CHECK(glBindVertexArray(0));
 
     _shader = ResourceManager::getInstance()->shader("lightmap");
 
@@ -74,7 +71,11 @@ Lightmap::Lightmap(std::vector<glm::vec2> coords,std::vector<GLuint> indexes)
 
 Lightmap::~Lightmap()
 {
+    GL_CHECK(glDeleteBuffers(1, &_coords));
+    GL_CHECK(glDeleteBuffers(1, &_lights));
+    GL_CHECK(glDeleteBuffers(1, &_ebo));
 
+    GL_CHECK(glDeleteVertexArrays(1, &_vao));
 }
 
 void Lightmap::render(const Falltergeist::Point &pos)
@@ -93,7 +94,12 @@ void Lightmap::render(const Falltergeist::Point &pos)
     GL_CHECK(_shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
 
 
-    GL_CHECK(glBindVertexArray(_vao));
+    GLint curvao;
+    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+    if ((GLuint)curvao != _vao)
+    {
+        GL_CHECK(glBindVertexArray(_vao));
+    }
 
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coords));
@@ -117,21 +123,21 @@ void Lightmap::render(const Falltergeist::Point &pos)
 
     GL_CHECK(glDisableVertexAttribArray(_attribLights));
 
-    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindVertexArray(0));
-
-    GL_CHECK(_shader->unuse());
     GL_CHECK(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 }
 
 void Lightmap::update(std::vector<float> lights)
 {
-    GL_CHECK(glBindVertexArray(_vao));
+    GLint curvao;
+    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+    if ((GLuint)curvao != _vao)
+    {
+        GL_CHECK(glBindVertexArray(_vao));
+    }
+
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _lights));
     //update lights
     GL_CHECK(glBufferData(GL_ARRAY_BUFFER, lights.size() * sizeof(float), &lights[0], GL_STATIC_DRAW));
-    GL_CHECK(glBindVertexArray(0));
 
 }
 }

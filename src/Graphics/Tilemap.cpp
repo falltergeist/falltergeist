@@ -117,9 +117,12 @@ void Tilemap::render(const Point &pos, std::vector<GLuint> indexes, uint32_t atl
     }
     GL_CHECK(_shader->setUniform(_uniformLight, lightLevel));
 
-
-    GL_CHECK(glBindVertexArray(_vao));
-
+    GLint curvao;
+    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+    if (curvao != _vao)
+    {
+        GL_CHECK(glBindVertexArray(_vao));
+    }
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coords));
     GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
@@ -143,13 +146,6 @@ void Tilemap::render(const Point &pos, std::vector<GLuint> indexes, uint32_t atl
     GL_CHECK(glDisableVertexAttribArray(_attribPos));
 
     GL_CHECK(glDisableVertexAttribArray(_attribTex));
-
-    GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GL_CHECK(glBindVertexArray(0));
-
-    GL_CHECK(_shader->unuse());
-    GL_CHECK(_textures.at(atlas).get()->unbind(0));
 }
 
 void Tilemap::addTexture(SDL_Surface *surface)
