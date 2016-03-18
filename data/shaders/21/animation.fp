@@ -111,7 +111,7 @@ void main(void)
 
             if (almosteq(origColor.a,0.2) && almosteq(origColor.r, 0.6))
             {
-                int index = int(round(origColor.b * 255.0)) / 51;
+                int index = int(origColor.b * 255.0) / 51;
 
                 if (index<0) index = 0;
 
