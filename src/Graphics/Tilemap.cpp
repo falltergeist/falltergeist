@@ -119,7 +119,7 @@ void Tilemap::render(const Point &pos, std::vector<GLuint> indexes, uint32_t atl
 
     GLint curvao;
     glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-    if (curvao != _vao)
+    if ((GLuint)curvao != _vao)
     {
         GL_CHECK(glBindVertexArray(_vao));
     }
