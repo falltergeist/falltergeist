@@ -104,14 +104,26 @@ void Renderer::init()
     Logger::info("RENDERER") << message + "[OK]" << std::endl;
 
     message =  "Init OpenGL - ";
+    // specifically request 3.2, because fucking Mesa ignores core flag with version < 3
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     _glcontext = SDL_GL_CreateContext(_sdlWindow);
 
     if (!_glcontext)
     {
-        throw Exception(message + "[FAIL]");
+        // ok, try and create 2.1 context then
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, 0);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+        _glcontext = SDL_GL_CreateContext(_sdlWindow);
+
+        if (!_glcontext)
+        {
+            throw Exception(message + "[FAIL]");
+        }
     }
 
     Logger::info("RENDERER") << message + "[OK]" << std::endl;
@@ -328,29 +340,6 @@ const Size& Renderer::size() const
 {
     return _size;
 }
-
-    /*
-void Renderer::drawTexture(Texture* texture, int x, int y, int sourceX, int sourceY, unsigned int sourceWidth, unsigned int sourceHeight)
-{
-    if (!texture) return;
-    if (!sourceX && !sourceY && !sourceWidth && !sourceHeight)
-    {
-        SDL_Rect dest = {(short)x, (short)y, (unsigned short)texture->width(), (unsigned short)texture->height()};
-        SDL_RenderCopy(_sdlRenderer, texture->sdlTexture(), NULL, &dest);
-    }
-    else
-    {
-        SDL_Rect dest = {(short)x, (short)y, (unsigned short)sourceWidth, (unsigned short)sourceHeight};
-        SDL_Rect src = {(short)sourceX, (short)sourceY, (unsigned short)sourceWidth, (unsigned short)sourceHeight};
-        SDL_RenderCopy(_sdlRenderer, texture->sdlTexture(), &src, &dest);
-    }
-}
-
-void Renderer::drawTexture(Texture* texture, const Point& pos, const Point& src, const Size& srcSize)
-{
-    drawTexture(texture, pos.x(), pos.y(), src.x(), src.y(), (unsigned int)srcSize.width(), (unsigned int)srcSize.height());
-}
-*/
 
 void Renderer::screenshot()
 {
