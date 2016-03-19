@@ -232,6 +232,7 @@ void ImageButton::_init(Type type)
 
 void ImageButton::_onMouseClick(Event::Mouse* event)
 {
+    if(!_enabled) return;
     auto sender = dynamic_cast<ImageButton*>(event->target());
     if (sender->_checkboxMode)
     {
@@ -245,7 +246,7 @@ void ImageButton::_onMouseClick(Event::Mouse* event)
 
 void ImageButton::_onMouseDown(Event::Mouse* event)
 {
-    if (!event->leftButton()) return;
+    if (!event->leftButton() || !_enabled) return;
 
     auto sender = dynamic_cast<ImageButton*>(event->target());
     if (!sender->_downSound.empty())
@@ -257,6 +258,7 @@ void ImageButton::_onMouseDown(Event::Mouse* event)
 
 void ImageButton::_onMouseOut(Event::Mouse* event)
 {
+    if(!_enabled) return;
     auto sender = dynamic_cast<ImageButton*>(event->target());
     if (_leftButtonPressed && !sender->_upSound.empty())
     {
@@ -275,6 +277,16 @@ void ImageButton::setChecked(bool _checked)
     this->_checked = _checked;
 }
 
+bool ImageButton::enabled()
+{
+    return _enabled;
+}
+
+void ImageButton::setEnabled(bool _enabled)
+{
+    this->_enabled = _enabled;
+}
+
 void ImageButton::handle(Event::Mouse* mouseEvent)
 {
     // disable right button clicks
@@ -284,6 +296,7 @@ void ImageButton::handle(Event::Mouse* mouseEvent)
 
 void ImageButton::render(bool eggTransparency)
 {
+    if(!_enabled) return;
     if ((_checkboxMode && _checked) || (_hovered && _leftButtonPressed))
     {
       _butdown->render(position().x(),position().y());
