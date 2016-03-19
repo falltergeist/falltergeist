@@ -95,6 +95,8 @@ void Inventory::init()
 
     addUI("button_up",   new UI::ImageButton(UI::ImageButton::Type::INVENTORY_UP_ARROW,   128, 40));
     addUI("button_down", new UI::ImageButton(UI::ImageButton::Type::INVENTORY_DOWN_ARROW, 128, 65));
+    addUI("button_up_disabled", new UI::ImageButton(UI::ImageButton::Type::INVENTORY_UP_DISABLED_ARROW, 128, 40));
+    addUI("button_down_disabled", new UI::ImageButton(UI::ImageButton::Type::INVENTORY_DOWN_DISABLED_ARROW, 128, 65));    
     addUI("button_done", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 438, 328));
 
     getUI("button_done")->mouseClickHandler().add(std::bind(&Inventory::onDoneButtonClick, this, std::placeholders::_1));
@@ -286,6 +288,17 @@ void Inventory::init()
         addUI(inventoryItem);
     }
 
+    //initialize inventory scroll buttons
+    toggleScrollUpBtn(false);
+    if(inventoryList->canScrollDown())
+    {
+        toggleScrollDownBtn(true);
+    }
+    else
+    {
+        toggleScrollDownBtn(false);
+    }
+
 }
 
 void Inventory::onDoneButtonClick(Event::Mouse* event)
@@ -299,6 +312,15 @@ void Inventory::onScrollUpButtonClick(Event::Mouse* event)
     if(inventory->canScrollUp())
     {
         inventory->scrollUp();
+        //enable/disable scroll buttons on upward scroll
+        if(!inventory->canScrollUp())
+        {
+            toggleScrollUpBtn(false);
+        }
+        if(inventory->canScrollDown())
+        {
+            toggleScrollDownBtn(true);
+        }
     }
 }
 
@@ -308,6 +330,47 @@ void Inventory::onScrollDownButtonClick(Event::Mouse* event)
     if(inventory->canScrollDown())
     {
         inventory->scrollDown();
+        //enable/disable scroll buttons on downward scroll
+        if(!inventory->canScrollDown())
+        {
+            toggleScrollDownBtn(false);
+        }
+        if(inventory->canScrollUp())
+        {
+            toggleScrollUpBtn(true);
+        }
+    }
+}
+
+void Inventory::toggleScrollUpBtn(bool toggle)
+{
+    auto scrollUpBtn = dynamic_cast<UI::ImageButton*>(getUI("button_up"));
+    auto scrollUpBtnDisabled = dynamic_cast<UI::ImageButton*>(getUI("button_up_disabled"));
+    if(toggle)
+    {
+        scrollUpBtnDisabled->setEnabled(false);
+        scrollUpBtn->setEnabled(true);
+    }
+    else
+    {
+        scrollUpBtn->setEnabled(false);
+        scrollUpBtnDisabled->setEnabled(true);
+    }
+}
+
+void Inventory::toggleScrollDownBtn(bool toggle)
+{
+    auto scrollDownBtn = dynamic_cast<UI::ImageButton*>(getUI("button_down"));
+    auto scrollDownBtnDisabled = dynamic_cast<UI::ImageButton*>(getUI("button_down_disabled"));
+    if(toggle)
+    {
+        scrollDownBtnDisabled->setEnabled(false);
+        scrollDownBtn->setEnabled(true);
+    }
+    else
+    {
+        scrollDownBtn->setEnabled(false);
+        scrollDownBtnDisabled->setEnabled(true);   
     }
 }
 
