@@ -299,6 +299,7 @@ void ImageButton::setEnabled(bool _enabled)
 
 void ImageButton::handle(Event::Mouse* mouseEvent)
 {
+    if(!_enabled) return;
     // disable right button clicks
     _rightButtonPressed = false;
     Base::handle(mouseEvent);
