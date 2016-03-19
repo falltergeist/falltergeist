@@ -17,6 +17,7 @@ Jabber chanel: falltergeist on conference.jabber.ru
 - [SDL2\_image](http://www.libsdl.org/projects/SDL_image/) (libsdl2-image)
 - [GLEW](http://glew.sourceforge.net/)
 - [GLM](http://glm.g-truc.net/)
+- [Zlib](http://www.zlib.net/) (Zlib)
 
 ##Compilation under linux
 
@@ -28,7 +29,7 @@ cmake . && make
 
 Put master.dat and critter.dat files into the falltergeist data directory, that is
 
-* `~/.local/share/falltergeist/` on Linux,
+* `~/.local/share/falltergeist/`  or `/usr/local/share/falltergiest` (for global installs) on Linux,
 *  `~/Library/Application Support/falltergeist` on OS X,
 * `%APPDATA%/falltergeist` on Windows,
 
