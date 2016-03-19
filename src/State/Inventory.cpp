@@ -289,14 +289,14 @@ void Inventory::init()
     }
 
     //initialize inventory scroll buttons
-    toggleScrollUpBtn(false);
+    enableScrollUpButton(false);
     if(inventoryList->canScrollDown())
     {
-        toggleScrollDownBtn(true);
+        enableScrollDownButton(true);
     }
     else
     {
-        toggleScrollDownBtn(false);
+        enableScrollDownButton(false);
     }
 
 }
@@ -315,11 +315,11 @@ void Inventory::onScrollUpButtonClick(Event::Mouse* event)
         //enable/disable scroll buttons on upward scroll
         if(!inventory->canScrollUp())
         {
-            toggleScrollUpBtn(false);
+            enableScrollUpButton(false);
         }
         if(inventory->canScrollDown())
         {
-            toggleScrollDownBtn(true);
+            enableScrollDownButton(true);
         }
     }
 }
@@ -333,45 +333,29 @@ void Inventory::onScrollDownButtonClick(Event::Mouse* event)
         //enable/disable scroll buttons on downward scroll
         if(!inventory->canScrollDown())
         {
-            toggleScrollDownBtn(false);
+            enableScrollDownButton(false);
         }
         if(inventory->canScrollUp())
         {
-            toggleScrollUpBtn(true);
+            enableScrollUpButton(true);
         }
     }
 }
 
-void Inventory::toggleScrollUpBtn(bool toggle)
+void Inventory::enableScrollUpButton(bool enable)
 {
-    auto scrollUpBtn = dynamic_cast<UI::ImageButton*>(getUI("button_up"));
-    auto scrollUpBtnDisabled = dynamic_cast<UI::ImageButton*>(getUI("button_up_disabled"));
-    if(toggle)
-    {
-        scrollUpBtnDisabled->setEnabled(false);
-        scrollUpBtn->setEnabled(true);
-    }
-    else
-    {
-        scrollUpBtn->setEnabled(false);
-        scrollUpBtnDisabled->setEnabled(true);
-    }
+    auto scrollUpButton = dynamic_cast<UI::ImageButton*>(getUI("button_up"));
+    auto scrollUpButtonDisabled = dynamic_cast<UI::ImageButton*>(getUI("button_up_disabled"));
+    scrollUpButtonDisabled->setEnabled(!enable);
+    scrollUpButton->setEnabled(enable);
 }
 
-void Inventory::toggleScrollDownBtn(bool toggle)
+void Inventory::enableScrollDownButton(bool enable)
 {
-    auto scrollDownBtn = dynamic_cast<UI::ImageButton*>(getUI("button_down"));
-    auto scrollDownBtnDisabled = dynamic_cast<UI::ImageButton*>(getUI("button_down_disabled"));
-    if(toggle)
-    {
-        scrollDownBtnDisabled->setEnabled(false);
-        scrollDownBtn->setEnabled(true);
-    }
-    else
-    {
-        scrollDownBtn->setEnabled(false);
-        scrollDownBtnDisabled->setEnabled(true);   
-    }
+    auto scrollDownButton = dynamic_cast<UI::ImageButton*>(getUI("button_down"));
+    auto scrollDownButtonDisabled = dynamic_cast<UI::ImageButton*>(getUI("button_down_disabled"));
+    scrollDownButtonDisabled->setEnabled(!enable);
+    scrollDownButton->setEnabled(enable);
 }
 
 void Inventory::onArmorSlotMouseDown(Event::Mouse* event)

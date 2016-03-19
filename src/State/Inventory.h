@@ -46,8 +46,8 @@ public:
     void onArmorSlotMouseDown(Event::Mouse* event);
     void onLeftHandSlotMouseDown(Event::Mouse* event);
     void onRightHandSlotMouseDown(Event::Mouse* event);
-    void toggleScrollDownBtn(bool toggle);
-    void toggleScrollUpBtn(bool toggle);
+    void enableScrollDownButton(bool enable);
+    void enableScrollUpButton(bool enable);
     //void onSlotMouseDown(Event::Mouse* event);
     //void onSlotMouseUp(Event::Mouse* event);
     //void onSlotDrag(Event::Mouse* event);
