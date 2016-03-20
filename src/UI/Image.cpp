@@ -48,6 +48,7 @@ Image::~Image()
 
 void Image::render(bool eggTransparency)
 {
+    if(!this->visible()) return;
     _sprite.trans(_trans);
     _sprite.render(position().x(),position().y(), eggTransparency, light(), _outline, _lightLevel);
 }
@@ -85,6 +86,7 @@ bool Image::opaque(const Point &pos)
 
 void Image::render(const Size &size, bool eggTransparency)
 {
+    if(!this->visible()) return;
     _sprite.renderScaled(position().x(), position().y(), size.width(), size.height(), eggTransparency, light(), _outline);
 }
 
