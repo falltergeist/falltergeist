@@ -95,8 +95,12 @@ void Inventory::init()
 
     addUI("button_up",   new UI::ImageButton(UI::ImageButton::Type::INVENTORY_UP_ARROW,   128, 40));
     addUI("button_down", new UI::ImageButton(UI::ImageButton::Type::INVENTORY_DOWN_ARROW, 128, 65));
-    addUI("button_up_disabled", new UI::ImageButton(UI::ImageButton::Type::INVENTORY_UP_DISABLED_ARROW, 128, 40));
-    addUI("button_down_disabled", new UI::ImageButton(UI::ImageButton::Type::INVENTORY_DOWN_DISABLED_ARROW, 128, 65));    
+    auto buttonDownDisabled = new UI::Image("art/intrface/invdnds.frm");
+    auto buttonUpDisabled = new UI::Image("art/intrface/invupds.frm");
+    buttonUpDisabled->setPosition(Point(128, 40));
+    buttonDownDisabled->setPosition(Point(128, 65));
+    addUI("button_up_disabled", buttonUpDisabled);
+    addUI("button_down_disabled", buttonDownDisabled);
     addUI("button_done", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 438, 328));
 
     getUI("button_done")->mouseClickHandler().add(std::bind(&Inventory::onDoneButtonClick, this, std::placeholders::_1));
@@ -345,16 +349,16 @@ void Inventory::onScrollDownButtonClick(Event::Mouse* event)
 void Inventory::enableScrollUpButton(bool enable)
 {
     auto scrollUpButton = dynamic_cast<UI::ImageButton*>(getUI("button_up"));
-    auto scrollUpButtonDisabled = dynamic_cast<UI::ImageButton*>(getUI("button_up_disabled"));
-    scrollUpButtonDisabled->setEnabled(!enable);
+    auto scrollUpButtonDisabled = dynamic_cast<UI::Image*>(getUI("button_up_disabled"));
+    scrollUpButtonDisabled->setVisible(!enable);
     scrollUpButton->setEnabled(enable);
 }
 
 void Inventory::enableScrollDownButton(bool enable)
 {
     auto scrollDownButton = dynamic_cast<UI::ImageButton*>(getUI("button_down"));
-    auto scrollDownButtonDisabled = dynamic_cast<UI::ImageButton*>(getUI("button_down_disabled"));
-    scrollDownButtonDisabled->setEnabled(!enable);
+    auto scrollDownButtonDisabled = dynamic_cast<UI::Image*>(getUI("button_down_disabled"));
+    scrollDownButtonDisabled->setVisible(!enable);
     scrollDownButton->setEnabled(enable);
 }
 

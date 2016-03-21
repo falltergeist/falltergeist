@@ -201,6 +201,7 @@ void Base::handle(Event::Event* event)
 
 void Base::handle(Event::Mouse* mouseEvent)
 {
+    if(!_visible) return;
     using Mouse = Event::Mouse;
     Point relPos = mouseEvent->position() - this->position();
 
