@@ -178,15 +178,6 @@ void ImageButton::_init(Type type)
             _butup = make_shared<Graphics::Sprite>("art/intrface/invdnout.frm");
             _butdown = make_shared<Graphics::Sprite>("art/intrface/invdnin.frm");
             break;
-        //for now, make both _butup and _butdown same picture for single image ImageButtons
-        case Type::INVENTORY_UP_DISABLED_ARROW:
-            _butup = make_shared<Graphics::Sprite>("art/intrface/invupds.frm");
-            _butdown = make_shared<Graphics::Sprite>("art/intrface/invupds.frm");
-            break;
-        case Type::INVENTORY_DOWN_DISABLED_ARROW:
-            _butup = make_shared<Graphics::Sprite>("art/intrface/invdnds.frm");
-            _butdown = make_shared<Graphics::Sprite>("art/intrface/invdnds.frm");
-            break;
         case Type::PIPBOY_ALARM_BUTTON:
             _butup = make_shared<Graphics::Sprite>("art/intrface/alarmout.frm");
             _butdown = make_shared<Graphics::Sprite>("art/intrface/alarmin.frm");
