@@ -303,6 +303,7 @@ void Inventory::init()
         enableScrollDownButton(false);
     }
 
+    inventoryList->itemsListModifiedHandler().add([this](Event::Event* event){ this->onInventoryModified(); });
 }
 
 void Inventory::onDoneButtonClick(Event::Mouse* event)
@@ -344,6 +345,21 @@ void Inventory::onScrollDownButtonClick(Event::Mouse* event)
             enableScrollUpButton(true);
         }
     }
+}
+
+void Inventory::onInventoryModified()
+{
+    auto inventory = dynamic_cast<UI::ItemsList*>(getUI("inventory_list"));
+    /*
+    this would scroll up when an item is removed and you are at the bottom
+    of the list to fix the gap, but a bug is causing slotOffset to be crazy number
+    if(inventory->items()->size() - inventory->slotOffset() <  inventory->slotsNumber())
+    {
+        inventory->scrollUp();
+    }
+    */
+    enableScrollDownButton(inventory->canScrollDown());
+    enableScrollUpButton(inventory->canScrollUp());
 }
 
 void Inventory::enableScrollUpButton(bool enable)

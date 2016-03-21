@@ -53,10 +53,12 @@ public:
     //void onSlotDrag(Event::Mouse* event);
     void backgroundRightClick(Event::Mouse* event);
     void onKeyDown(Event::Keyboard* event) override;
+    void onInventoryModified();
 
 private:
     std::string _handItemSummary (Game::ItemObject* hand);
     void _screenShow (unsigned int PID);
+
 };
 
 }
