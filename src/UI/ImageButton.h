@@ -87,6 +87,9 @@ public:
     bool checked();
     void setChecked(bool _checked);
 
+    bool enabled();
+    void setEnabled(bool _enabled);
+
     virtual void handle(Event::Mouse* mouseEvent) override;
     virtual void render(bool eggTransparency = false) override;
     bool opaque(unsigned int x, unsigned int y);
@@ -96,6 +99,7 @@ public:
 protected:
     bool _checkboxMode = false; // remember new state after click
     bool _checked = false;
+    bool _enabled = true;
 
     std::string _downSound;
     std::string _upSound;

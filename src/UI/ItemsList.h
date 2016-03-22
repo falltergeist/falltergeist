@@ -67,6 +67,9 @@ public:
     bool canScrollUp();
     bool canScrollDown();
 
+    unsigned int slotsNumber();
+    unsigned int slotOffset();
+
     virtual void render(bool eggTransparency = false);
 
     void onMouseLeftDown(Event::Mouse* event);
@@ -80,6 +83,7 @@ public:
     void removeItem(InventoryItem* item, unsigned int ammount);
 
     Event::MouseHandler& itemDragStopHandler();
+    Event::Handler& itemsListModifiedHandler();
 
 
     virtual bool opaque(const Point &pos) override;
@@ -95,6 +99,7 @@ protected:
     unsigned int _slotHeight = 40;
 
     Event::MouseHandler _itemDragStopHandler;
+    Event::Handler _itemsListModifiedHandler;
 };
 
 }

@@ -169,6 +169,7 @@ void ImageButton::_init(Type type)
             _downSound = "sound/sfx/ib2lu1x1.acm";
             _upSound = "sound/sfx/ib1p1xx1.acm";
             break;
+        //TODO: add sound effects for inventory scroll buttons
         case Type::INVENTORY_UP_ARROW:
             _butup = make_shared<Graphics::Sprite>("art/intrface/invupout.frm");
             _butdown = make_shared<Graphics::Sprite>("art/intrface/invupin.frm");
@@ -232,6 +233,7 @@ void ImageButton::_init(Type type)
 
 void ImageButton::_onMouseClick(Event::Mouse* event)
 {
+    if(!_enabled) return;
     auto sender = dynamic_cast<ImageButton*>(event->target());
     if (sender->_checkboxMode)
     {
@@ -245,7 +247,7 @@ void ImageButton::_onMouseClick(Event::Mouse* event)
 
 void ImageButton::_onMouseDown(Event::Mouse* event)
 {
-    if (!event->leftButton()) return;
+    if (!event->leftButton() || !_enabled) return;
 
     auto sender = dynamic_cast<ImageButton*>(event->target());
     if (!sender->_downSound.empty())
@@ -257,6 +259,7 @@ void ImageButton::_onMouseDown(Event::Mouse* event)
 
 void ImageButton::_onMouseOut(Event::Mouse* event)
 {
+    if(!_enabled) return;
     auto sender = dynamic_cast<ImageButton*>(event->target());
     if (_leftButtonPressed && !sender->_upSound.empty())
     {
@@ -275,8 +278,19 @@ void ImageButton::setChecked(bool _checked)
     this->_checked = _checked;
 }
 
+bool ImageButton::enabled()
+{
+    return _enabled;
+}
+
+void ImageButton::setEnabled(bool _enabled)
+{
+    this->_enabled = _enabled;
+}
+
 void ImageButton::handle(Event::Mouse* mouseEvent)
 {
+    if(!_enabled) return;
     // disable right button clicks
     _rightButtonPressed = false;
     Base::handle(mouseEvent);
@@ -284,6 +298,7 @@ void ImageButton::handle(Event::Mouse* mouseEvent)
 
 void ImageButton::render(bool eggTransparency)
 {
+    if(!_enabled) return;
     if ((_checkboxMode && _checked) || (_hovered && _leftButtonPressed))
     {
       _butdown->render(position().x(),position().y());

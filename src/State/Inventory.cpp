@@ -95,6 +95,12 @@ void Inventory::init()
 
     addUI("button_up",   new UI::ImageButton(UI::ImageButton::Type::INVENTORY_UP_ARROW,   128, 40));
     addUI("button_down", new UI::ImageButton(UI::ImageButton::Type::INVENTORY_DOWN_ARROW, 128, 65));
+    auto buttonDownDisabled = new UI::Image("art/intrface/invdnds.frm");
+    auto buttonUpDisabled = new UI::Image("art/intrface/invupds.frm");
+    buttonUpDisabled->setPosition(Point(128, 40));
+    buttonDownDisabled->setPosition(Point(128, 65));
+    addUI("button_up_disabled", buttonUpDisabled);
+    addUI("button_down_disabled", buttonDownDisabled);
     addUI("button_done", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 438, 328));
 
     getUI("button_done")->mouseClickHandler().add(std::bind(&Inventory::onDoneButtonClick, this, std::placeholders::_1));
@@ -286,6 +292,18 @@ void Inventory::init()
         addUI(inventoryItem);
     }
 
+    //initialize inventory scroll buttons
+    enableScrollUpButton(false);
+    if(inventoryList->canScrollDown())
+    {
+        enableScrollDownButton(true);
+    }
+    else
+    {
+        enableScrollDownButton(false);
+    }
+
+    inventoryList->itemsListModifiedHandler().add([this](Event::Event* event){ this->onInventoryModified(); });
 }
 
 void Inventory::onDoneButtonClick(Event::Mouse* event)
@@ -299,6 +317,15 @@ void Inventory::onScrollUpButtonClick(Event::Mouse* event)
     if(inventory->canScrollUp())
     {
         inventory->scrollUp();
+        //enable/disable scroll buttons on upward scroll
+        if(!inventory->canScrollUp())
+        {
+            enableScrollUpButton(false);
+        }
+        if(inventory->canScrollDown())
+        {
+            enableScrollDownButton(true);
+        }
     }
 }
 
@@ -308,7 +335,47 @@ void Inventory::onScrollDownButtonClick(Event::Mouse* event)
     if(inventory->canScrollDown())
     {
         inventory->scrollDown();
+        //enable/disable scroll buttons on downward scroll
+        if(!inventory->canScrollDown())
+        {
+            enableScrollDownButton(false);
+        }
+        if(inventory->canScrollUp())
+        {
+            enableScrollUpButton(true);
+        }
     }
+}
+
+void Inventory::onInventoryModified()
+{
+    auto inventory = dynamic_cast<UI::ItemsList*>(getUI("inventory_list"));
+    /*
+    this would scroll up when an item is removed and you are at the bottom
+    of the list to fix the gap, but a bug is causing slotOffset to be crazy number
+    if(inventory->items()->size() - inventory->slotOffset() <  inventory->slotsNumber())
+    {
+        inventory->scrollUp();
+    }
+    */
+    enableScrollDownButton(inventory->canScrollDown());
+    enableScrollUpButton(inventory->canScrollUp());
+}
+
+void Inventory::enableScrollUpButton(bool enable)
+{
+    auto scrollUpButton = dynamic_cast<UI::ImageButton*>(getUI("button_up"));
+    auto scrollUpButtonDisabled = dynamic_cast<UI::Image*>(getUI("button_up_disabled"));
+    scrollUpButtonDisabled->setVisible(!enable);
+    scrollUpButton->setEnabled(enable);
+}
+
+void Inventory::enableScrollDownButton(bool enable)
+{
+    auto scrollDownButton = dynamic_cast<UI::ImageButton*>(getUI("button_down"));
+    auto scrollDownButtonDisabled = dynamic_cast<UI::Image*>(getUI("button_down_disabled"));
+    scrollDownButtonDisabled->setVisible(!enable);
+    scrollDownButton->setEnabled(enable);
 }
 
 void Inventory::onArmorSlotMouseDown(Event::Mouse* event)

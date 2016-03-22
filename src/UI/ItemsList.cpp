@@ -204,6 +204,7 @@ void ItemsList::addItem(InventoryItem* item, unsigned int amount)
 {
     _items->push_back(item->item());
     this->update();
+    emitEvent(make_unique<Event::Event>("itemsListModified"), itemsListModifiedHandler());
 }
 
 void ItemsList::removeItem(InventoryItem* item, unsigned int amount)
@@ -218,6 +219,7 @@ void ItemsList::removeItem(InventoryItem* item, unsigned int amount)
         }
     }
     this->update();
+    emitEvent(make_unique<Event::Event>("itemsListModified"), itemsListModifiedHandler());
 }
 
 bool ItemsList::canScrollUp()
@@ -242,9 +244,24 @@ void ItemsList::scrollDown()
     this->update();
 }
 
+unsigned int ItemsList::slotsNumber()
+{
+    return _slotsNumber;
+}
+
+unsigned int ItemsList::slotOffset()
+{
+    return _slotOffset;
+}
+
 Event::MouseHandler& ItemsList::itemDragStopHandler()
 {
     return _itemDragStopHandler;
+}
+
+Event::Handler& ItemsList::itemsListModifiedHandler()
+{
+    return _itemsListModifiedHandler;
 }
 
 bool ItemsList::opaque(const Point &pos) {

@@ -46,15 +46,19 @@ public:
     void onArmorSlotMouseDown(Event::Mouse* event);
     void onLeftHandSlotMouseDown(Event::Mouse* event);
     void onRightHandSlotMouseDown(Event::Mouse* event);
+    void enableScrollDownButton(bool enable);
+    void enableScrollUpButton(bool enable);
     //void onSlotMouseDown(Event::Mouse* event);
     //void onSlotMouseUp(Event::Mouse* event);
     //void onSlotDrag(Event::Mouse* event);
     void backgroundRightClick(Event::Mouse* event);
     void onKeyDown(Event::Keyboard* event) override;
+    void onInventoryModified();
 
 private:
     std::string _handItemSummary (Game::ItemObject* hand);
     void _screenShow (unsigned int PID);
+
 };
 
 }
