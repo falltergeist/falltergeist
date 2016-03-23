@@ -78,6 +78,7 @@ void AnimationQueue::render(bool eggTransparency)
 {
     currentAnimation()->setLightLevel(_lightLevel);
     currentAnimation()->setLight(light());
+    currentAnimation()->setTrans(_trans);
     currentAnimation()->setPosition(this->position());
     currentAnimation()->render(eggTransparency);
 }
