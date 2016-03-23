@@ -93,8 +93,8 @@ namespace Falltergeist {
                     break;
             }
             // TODO: use resource manager
-            std::string fprog = std::string(CrossPlatform::findFalltergeistDataPath() + "data/shaders/" +rpath +fname+".fp");
-            std::string vprog = std::string(CrossPlatform::findFalltergeistDataPath() + "data/shaders/" +rpath +fname+".vp");
+            std::string fprog = std::string(CrossPlatform::findFalltergeistDataPath() + "/data/shaders/" +rpath +fname+".fp");
+            std::string vprog = std::string(CrossPlatform::findFalltergeistDataPath() + "/data/shaders/" +rpath +fname+".vp");
 
             Logger::info("RENDERER") << "Loading shader " << fprog << std::endl;
             Logger::info("RENDERER") << "Loading shader " << vprog << std::endl;
