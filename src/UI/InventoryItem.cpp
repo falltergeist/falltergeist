@@ -206,6 +206,7 @@ void InventoryItem::onArmorDragStop(Event::Mouse* event)
 
         InventoryItem* draggedItem = itemsList->draggedItem();
         auto itemObject = draggedItem->item();
+        if(itemObject->subtype() != Game::ItemObject::Subtype::ARMOR) return;
         itemsList->removeItem(draggedItem, 1);
         // place current armor back to inventory
         if (_item)
