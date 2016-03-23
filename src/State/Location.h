@@ -173,7 +173,7 @@ protected:
     
     std::vector<Input::Mouse::Icon> getCursorIconsForObject(Game::Object* object);
 
-    unsigned int _lightLevel = 0x4000;
+    unsigned int _lightLevel = 0x10000;
     Falltergeist::Graphics::Lightmap* _lightmap;
 
 };
