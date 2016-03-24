@@ -138,26 +138,37 @@ void File::_initialize()
                 auto script = new Script();
                 script->setPID(int32());
 
-                uint32(); // unknown1
+                uint32(); // next script. unused
 
                 switch ((script->PID() & 0xFF000000) >> 24)
                 {
+                    case 0:
+                        script->setType(Script::Type::SYSTEM);
+                        break;
                     case 1:
-                        uint32(); //unknown 2
-                        uint32(); //unknown 3
+                        script->setType(Script::Type::SPATIAL);
+                        script->setSpatialTile(uint32());
+                        script->setSpatialRadius(uint32());
                         break;
                     case 2:
-                        uint32(); //unknown 2
+                        script->setType(Script::Type::TIMER);
+                        script->setTimerTime(uint32());
+                        break;
+                    case 3:
+                        script->setType(Script::Type::ITEM);
+                        break;
+                    case 4:
+                        script->setType(Script::Type::CRITTER);
                         break;
                     default:
                         break;
                 }
-                uint32(); //unknown 4
+                uint32(); //flags
                 script->setScriptId(int32());
                 uint32(); //unknown 5
-                uint32(); //unknown 6
-                uint32(); //unknown 7
-                uint32(); //unknown 8
+                uint32(); //oid
+                uint32(); //local var offset
+                uint32(); //loal var cnt
                 uint32(); //unknown 9
                 uint32(); //unknown 10
                 uint32(); //unknown 11
@@ -184,7 +195,7 @@ void File::_initialize()
             }
             if (check != count)
             {
-                throw Exception("File::open() - rror reading scripts: check is incorrect");
+                throw Exception("File::open() - error reading scripts: check is incorrect");
             }
         }
     }
@@ -217,12 +228,12 @@ Object* File::_readObject()
 {
     auto object =new Object();
 
-    object->setUnknown1(uint32());
+    object->setOID(uint32());
     object->setHexPosition(int32());
-    object->setUnknown2(uint32());
-    object->setUnknown3(uint32());
-    object->setUnknown4(uint32());
-    object->setUnknown5(uint32());
+    object->setX(uint32());
+    object->setY(uint32());
+    object->setSx(uint32());
+    object->setSy(uint32());
     object->setFrameNumber(uint32());
     object->setOrientation(uint32());
     uint32_t FID = uint32();
@@ -233,10 +244,10 @@ Object* File::_readObject()
     uint32_t PID = uint32();
     object->setObjectTypeId(PID >> 24);
     object->setObjectId(0x00FFFFFF & PID);
-    object->setUnknown7(uint32());
+    object->setCombatId(uint32());
     object->setLightRadius(uint32());
     object->setLightIntensity(uint32());
-    object->setUnknown10(uint32());
+    object->setOutline(uint32());
 
     int32_t SID = int32();
     if (SID != -1)
@@ -257,7 +268,7 @@ Object* File::_readObject()
     }
 
     object->setInventorySize(uint32());
-    object->setUnknown11(uint32());
+    object->setMaxInventorySize(uint32());
     object->setUnknown12(uint32());
     object->setUnknown13(uint32());
 

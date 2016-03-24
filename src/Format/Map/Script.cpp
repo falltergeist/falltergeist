@@ -64,6 +64,45 @@ void Script::setScriptId(int32_t value)
     _scriptId = value;
 }
 
+Script::Type Script::type()
+{
+    return _type;
+}
+
+void Script::setType(Script::Type type)
+{
+    _type = type;
+}
+
+void Script::setSpatialTile(uint32_t tile)
+{
+    _spatialTile = tile;
+}
+
+uint32_t Script::spatialTile()
+{
+    return _spatialTile;
+}
+
+void Script::setSpatialRadius(uint32_t radius)
+{
+    _spatialRadius = radius;
+}
+
+uint32_t Script::spatialRadius()
+{
+    return _spatialRadius;
+}
+
+void Script::setTimerTime(uint32_t time)
+{
+    _timerTime = time;
+}
+
+uint32_t Script::timerTime()
+{
+    return _timerTime;
+}
 }
 }
 }
