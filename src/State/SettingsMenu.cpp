@@ -129,13 +129,13 @@ void SettingsMenu::init()
     _addTextArea(_t(MSG_OPTIONS, 100), backgroundX+74, backgroundY+10)->setFont(font4_907824ff, color);
 
     // COMBAT DIFFICULTY
-    auto difficulty = _addTextArea(_t(MSG_OPTIONS, 102), backgroundX+21, backgroundY+48);
+    auto difficulty = _addTextArea(_t(MSG_OPTIONS, 101), backgroundX+21, backgroundY+48);
     difficulty->setWidth(158);
     difficulty->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
     difficulty->setFont(font3_907824ff, color);
 
     // GAME DIFFICULTY
-    _addTextArea(difficulty, backgroundX+21, backgroundY+48+77)->setText(_t(MSG_OPTIONS, 101));
+    _addTextArea(difficulty, backgroundX+21, backgroundY+48+77)->setText(_t(MSG_OPTIONS, 102));
 
     // VIOLENCE LEVEL
     _addTextArea(difficulty, backgroundX+21, backgroundY+48+156)->setText(_t(MSG_OPTIONS, 103));
