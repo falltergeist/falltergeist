@@ -219,15 +219,15 @@ void SettingsMenu::init()
     _addTextArea(_t(MSG_OPTIONS, 214), backgroundX+48, backgroundY+236)->setFont(font1_907824ff, color);    // NONE
     _addTextArea(_t(MSG_OPTIONS, 215), backgroundX+83, backgroundY+222)->setFont(font1_907824ff, color);    // MINIMUM
     _addTextArea(_t(MSG_OPTIONS, 207), backgroundX+122, backgroundY+236)->setFont(font1_907824ff, color);   // NORMAL
-    label = _addTextArea(_t(MSG_OPTIONS, 216), backgroundX+122, backgroundY+257);
+    label = _addTextArea(_t(MSG_OPTIONS, 216).insert(8, " "), backgroundX+122, backgroundY+257);
     label->setFont(font1_907824ff, color);
-    label->setWidth(60);
+    label->setWidth(50);
     label->setWordWrap(true); // MAXIMUM BLOOD
 
     // TARGET HIGHLIGHT SWITCH LABELS
     _addTextArea(_t(MSG_OPTIONS, 202), backgroundX+59, backgroundY+319)->setFont(font1_907824ff, color);    // OFF
     _addTextArea(_t(MSG_OPTIONS, 201), backgroundX+95, backgroundY+305)->setFont(font1_907824ff, color);    // ON
-    label = _addTextArea(_t(MSG_OPTIONS, 213), backgroundX+122, backgroundY+319);
+    label = _addTextArea(_t(MSG_OPTIONS, 213).insert(10, " "), backgroundX+122, backgroundY+319);
     label->setFont(font1_907824ff, color);
     label->setWidth(60);
     label->setWordWrap(true); // TARGETING ONLY
