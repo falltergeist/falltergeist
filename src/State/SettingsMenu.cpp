@@ -132,7 +132,7 @@ void SettingsMenu::init()
     auto difficulty = _addTextArea(_t(MSG_OPTIONS, 102), backgroundX+21, backgroundY+48);
     difficulty->setWidth(158);
     difficulty->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
-    difficulty->setFont(font1_907824ff, color);
+    difficulty->setFont(font3_907824ff, color);
 
     // GAME DIFFICULTY
     _addTextArea(difficulty, backgroundX+21, backgroundY+48+77)->setText(_t(MSG_OPTIONS, 101));
@@ -148,7 +148,7 @@ void SettingsMenu::init()
 
     // COMBAT MESSAGES
     auto combatMessages = _addTextArea(_t(MSG_OPTIONS, 106), backgroundX+206, backgroundY+49);
-    combatMessages->setFont(font1_907824ff, color);
+    combatMessages->setFont(font3_907824ff, color);
 
     // COMBAT TAUNTS
     _addTextArea(combatMessages, backgroundX+206, backgroundY+49+66)->setText(_t(MSG_OPTIONS, 107));
@@ -167,7 +167,7 @@ void SettingsMenu::init()
 
     // COMBAT SPEED
     auto combatSpeed = _addTextArea(_t(MSG_OPTIONS, 112), backgroundX+384, backgroundY+19);
-    combatSpeed->setFont(font1_907824ff, color);
+    combatSpeed->setFont(font3_907824ff, color);
 
     // TEXT DELAY
     _addTextArea(combatSpeed, backgroundX+384, backgroundY+95)->setText(_t(MSG_OPTIONS, 113));
