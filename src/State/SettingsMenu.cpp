@@ -69,12 +69,12 @@ void SettingsMenu::init()
     addUI(background);
 
     // Switches (big)
-    auto combatDifficultySwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+71);
+    auto combatDifficultySwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+149);
     combatDifficultySwitch->setMaxState(3);
     combatDifficultySwitch->setState(Game::getInstance()->settings()->combatDifficulty());
     addUI("combat_difficulty",combatDifficultySwitch);
 
-    auto gameDifficultySwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+149);
+    auto gameDifficultySwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+71);
     gameDifficultySwitch->setMaxState(3);
     gameDifficultySwitch->setState(Game::getInstance()->settings()->gameDifficulty());
     addUI("game_difficulty",gameDifficultySwitch);
