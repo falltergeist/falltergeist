@@ -320,25 +320,27 @@ Object* File::_readObject()
             break;
         case OBJECT_TYPE::SCENERY:
             object->setObjectSubtypeId(callback()(PID)->subtypeId());
+            uint32_t elevhex;  // elev+hex
+            uint32_t hex;
+            uint32_t elev;
             switch((SCENERY_TYPE)object->objectSubtypeId())
             {
                 case SCENERY_TYPE::LADDER_TOP:
                 case SCENERY_TYPE::LADDER_BOTTOM:
                 case SCENERY_TYPE::STAIRS:
-                    uint32_t elevhex = uint32();  // elev+hex
-                    uint32_t hex = elevhex & 0xFFFF;
-                    uint32_t elev = ((elevhex >> 28) & 0xf) >> 1;
+                    elevhex = uint32();  // elev+hex
+                    hex = elevhex & 0xFFFF;
+                    elev = ((elevhex >> 28) & 0xf) >> 1;
                     object->setExitMap(int32()); // map id
                     object->setExitPosition(hex);
                     object->setExitElevation(elev);
-                    break;
                     break;
                 case SCENERY_TYPE::ELEVATOR:
                     object->setElevatorType(uint32()); // elevator type - sometimes -1
                     object->setElevatorLevel(uint32()); // current level - sometimes -1
                     break;
                 case SCENERY_TYPE::DOOR:
-                    object->setOpened(uint32()!=0)// is opened;
+                    object->setOpened(uint32()!=0);// is opened;
                     break;
                 case SCENERY_TYPE::GENERIC:
                     break;
