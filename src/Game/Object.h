@@ -236,6 +236,9 @@ public:
     bool flat() const;
     virtual void setFlat(bool value);
 
+    unsigned int defaultFrame();
+    virtual void setDefaultFrame(unsigned int frame);
+
 protected:
     bool _canWalkThru = true;
     bool _canLightThru = false;
@@ -261,6 +264,8 @@ protected:
     unsigned int _lightIntensity = 0;
     unsigned int _lightRadius = 0;
     virtual bool _useEggTransparency();
+
+    unsigned int _defaultFrame;
 
 private:
     bool _isIntersectsWithEgg();
