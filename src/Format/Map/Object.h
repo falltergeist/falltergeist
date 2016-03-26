@@ -145,6 +145,24 @@ public:
 
     int exitOrientation();
     void setExitOrientation(int value);
+    
+    int elevatorType();
+    void setElevatorType(int type);
+
+    int elevatorLevel();
+    void setElevatorLevel(int level);
+
+    bool opened();
+    void setOpened(bool opened);
+
+    int AIPacket();
+    void setAIPacket(int packet);
+
+    int ammo();
+    void setAmmo(int ammo);
+
+    int ammoPID();
+    void setAmmoPID(int PID);
 
     std::vector<Object*>* children();
 
@@ -179,6 +197,13 @@ protected:
     int _exitOrientation;
     int _exitElevation;
     int _exitMap;
+
+    int _elevatorType = 0;
+    int _elevatorLevel = 0;
+    bool _opened = false;
+    int _AIPacket = 0;
+    int _ammo = 0;
+    int _ammoPID = 0;
 
     int _mapScriptId = -1;
     int _scriptId = -1;

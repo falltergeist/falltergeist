@@ -393,6 +393,68 @@ void Object::setAmmount(unsigned int value)
     _ammount = value;
 }
 
+
+int Object::elevatorType()
+{
+    return _elevatorType;
+}
+
+void Object::setElevatorType(int type)
+{
+    _elevatorType = type;
+}
+
+int Object::elevatorLevel()
+{
+    return _elevatorLevel;
+}
+
+void Object::setElevatorLevel(int level)
+{
+    _elevatorLevel = level;
+}
+
+bool Object::opened()
+{
+    return _opened;
+}
+
+void Object::setOpened(bool opened)
+{
+    _opened = opened;
+}
+
+int Object::AIPacket()
+{
+    return _AIPacket;
+}
+
+void Object::setAIPacket(int packet)
+{
+    _AIPacket = packet;
+}
+
+int Object::ammo()
+{
+    return _ammo;
+}
+
+void Object::setAmmo(int ammo)
+{
+    _ammo = ammo;
+}
+
+int Object::ammoPID()
+{
+    return _ammoPID;
+}
+
+void Object::setAmmoPID(int PID)
+{
+    _ammoPID = PID;
+}
+
+
 }
 }
 }

@@ -166,7 +166,7 @@ void File::_initialize()
                 uint32(); //flags
                 script->setScriptId(int32());
                 uint32(); //unknown 5
-                uint32(); //oid
+                uint32(); //oid == object->OID
                 uint32(); //local var offset
                 uint32(); //loal var cnt
                 uint32(); //unknown 9
@@ -279,17 +279,17 @@ Object* File::_readObject()
             switch((ITEM_TYPE)object->objectSubtypeId())
             {
                 case ITEM_TYPE::AMMO:
-                    uint32();
+                    object->setAmmo(uint32()); // bullets
                     break;
                 case ITEM_TYPE::KEY:
-                    uint32();
+                    uint32(); // keycode = -1 in all maps. saves only? ignore for now
                     break;
                 case ITEM_TYPE::MISC:
-                    uint32();
+                    object->setAmmo(uint32()); //charges - have strangely high values, or negative.
                     break;
                 case ITEM_TYPE::WEAPON:
-                    uint32();
-                    uint32();
+                    object->setAmmo(uint32()); // ammo
+                    object->setAmmoPID(uint32()); // ammo pid
                     break;
                 case ITEM_TYPE::ARMOR:
                     break;
@@ -302,16 +302,16 @@ Object* File::_readObject()
             }
             break;
         case OBJECT_TYPE::CRITTER:
-            uint32();
-            uint32();
-            uint32();
-            uint32();
-            uint32();
-            uint32();
-            uint32();
-            uint32();
-            uint32();
-            uint32();
+            uint32(); //reaction to player - saves only
+            uint32(); //current mp - saves only
+            uint32(); //combat results - saves only
+            uint32(); //damage last turn - saves only
+            object->setAIPacket(uint32()); // AI packet - is it different from .pro? well, it can be
+            uint32(); // team - always 1? saves only?
+            uint32(); // who hit me - saves only
+            uint32(); // hit points - saves only, otherwise = value from .pro
+            uint32(); // rad - always 0 - saves only
+            uint32(); // poison - always 0 - saves only
             object->setFrmId(FID & 0x00000FFF);
             object->setObjectID1((FID & 0x0000F000) >> 12);
             object->setObjectID2((FID & 0x00FF0000) >> 16);
@@ -324,19 +324,21 @@ Object* File::_readObject()
             {
                 case SCENERY_TYPE::LADDER_TOP:
                 case SCENERY_TYPE::LADDER_BOTTOM:
-                    uint32();
-                    uint32();
-                    break;
                 case SCENERY_TYPE::STAIRS:
-                    uint32();
-                    uint32();
+                    uint32_t elevhex = uint32();  // elev+hex
+                    uint32_t hex = elevhex & 0xFFFF;
+                    uint32_t elev = ((elevhex >> 28) & 0xf) >> 1;
+                    object->setExitMap(int32()); // map id
+                    object->setExitPosition(hex);
+                    object->setExitElevation(elev);
+                    break;
                     break;
                 case SCENERY_TYPE::ELEVATOR:
-                    uint32();
-                    uint32();
+                    object->setElevatorType(uint32()); // elevator type - sometimes -1
+                    object->setElevatorLevel(uint32()); // current level - sometimes -1
                     break;
                 case SCENERY_TYPE::DOOR:
-                    uint32();
+                    object->setOpened(uint32()!=0)// is opened;
                     break;
                 case SCENERY_TYPE::GENERIC:
                     break;
