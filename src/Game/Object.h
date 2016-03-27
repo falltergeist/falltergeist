@@ -212,7 +212,6 @@ public:
     virtual void map_update_p_proc();
     // call "pickup_p_proc" of the script entity (when picking up item object)
     virtual void pickup_p_proc(CritterObject* pickedUpBy);
-    virtual void spatial_p_proc();
     // perform "use" action, may call "use_p_proc" of the underlying script
     virtual void use_p_proc(CritterObject* usedBy);
     // perform "use object on" action, may call "use_obj_on_p_proc" procedure

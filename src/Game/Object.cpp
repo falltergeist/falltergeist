@@ -477,10 +477,6 @@ void Object::pickup_p_proc(CritterObject* pickedUpBy)
     // @TODO: standard handler
 }
 
-void Object::spatial_p_proc()
-{
-}
-
 void Object::use_obj_on_p_proc(Object* objectUsed, CritterObject* usedBy)
 {
     if (script() && script()->hasFunction("use_obj_on_p_proc"))
