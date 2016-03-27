@@ -175,6 +175,7 @@
 #include "../VM/Handlers/Opcode8130Handler.h"
 #include "../VM/Handlers/Opcode8131Handler.h"
 #include "../VM/Handlers/Opcode8132Handler.h"
+#include "../VM/Handlers/Opcode8133Handler.h"
 #include "../VM/Handlers/Opcode8134Handler.h"
 #include "../VM/Handlers/Opcode8136Handler.h"
 #include "../VM/Handlers/Opcode8137Handler.h"
@@ -185,6 +186,7 @@
 #include "../VM/Handlers/Opcode8145Handler.h"
 #include "../VM/Handlers/Opcode8147Handler.h"
 #include "../VM/Handlers/Opcode8149Handler.h"
+#include "../VM/Handlers/Opcode814AHandler.h"
 #include "../VM/Handlers/Opcode814BHandler.h"
 #include "../VM/Handlers/Opcode814CHandler.h"
 #include "../VM/Handlers/Opcode814EHandler.h"
@@ -366,6 +368,7 @@ std::unique_ptr<OpcodeHandler> OpcodeFactory::createOpcode(unsigned int number, 
         case 0x8130: return make_unique<Opcode8130Handler>(vm);
         case 0x8131: return make_unique<Opcode8131Handler>(vm);
         case 0x8132: return make_unique<Opcode8132Handler>(vm);
+        case 0x8133: return make_unique<Opcode8133Handler>(vm);
         case 0x8134: return make_unique<Opcode8134Handler>(vm);
         case 0x8136: return make_unique<Opcode8136Handler>(vm);
         case 0x8137: return make_unique<Opcode8137Handler>(vm);
@@ -376,6 +379,7 @@ std::unique_ptr<OpcodeHandler> OpcodeFactory::createOpcode(unsigned int number, 
         case 0x8145: return make_unique<Opcode8145Handler>(vm);
         case 0x8147: return make_unique<Opcode8147Handler>(vm);
         case 0x8149: return make_unique<Opcode8149Handler>(vm);
+        case 0x814A: return make_unique<Opcode814AHandler>(vm);
         case 0x814B: return make_unique<Opcode814BHandler>(vm);
         case 0x814C: return make_unique<Opcode814CHandler>(vm);
         case 0x814E: return make_unique<Opcode814EHandler>(vm);
