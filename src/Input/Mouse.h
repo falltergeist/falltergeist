@@ -39,6 +39,8 @@ namespace UI
 namespace Input
 {
 
+using Graphics::Point;
+
 class Mouse
 {
 public:

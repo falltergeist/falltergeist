@@ -37,6 +37,8 @@ namespace Game
     class Object;
 }
 
+using Graphics::Point;
+
 class Hexagon
 {
 public:

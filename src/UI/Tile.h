@@ -38,6 +38,8 @@ namespace Graphics
 namespace UI
 {
 
+using Graphics::Point;
+
 class Tile
 {
 public:

@@ -33,6 +33,7 @@
 #include "../Game/ObjectFactory.h"
 #include "../Game/WeaponItemObject.h"
 #include "../Graphics/Renderer.h"
+#include "../Graphics/Size.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../State/State.h"
@@ -115,7 +116,7 @@ void Inventory::init()
 
     addUI("player_name", new UI::TextArea(player->name(), screenX, screenY));
 
-    auto line1 = new UI::Rectangle(Point(screenX, screenY+16), Size(142, 1), {0x3f, 0xf8, 0x00, 0xff} );
+    auto line1 = new UI::Rectangle(Point(screenX, screenY+16), Graphics::Size(142, 1), {0x3f, 0xf8, 0x00, 0xff} );
 
     std::string statsLabels;
     for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
@@ -201,8 +202,8 @@ void Inventory::init()
     }
     auto damageResistanceLabel = new UI::TextArea(ss.str(), screenX+120, screenY+40);
 
-    auto line2 = new UI::Rectangle(Point(screenX, screenY+94), Size(142, 1), {0x3f, 0xf8, 0x00, 0xff} );
-    auto line3 = new UI::Rectangle(Point(screenX, screenY+134), Size(142, 1), {0x3f, 0xf8, 0x00, 0xff} );
+    auto line2 = new UI::Rectangle(Point(screenX, screenY+94), Graphics::Size(142, 1), {0x3f, 0xf8, 0x00, 0xff} );
+    auto line3 = new UI::Rectangle(Point(screenX, screenY+134), Graphics::Size(142, 1), {0x3f, 0xf8, 0x00, 0xff} );
 
     // label: Total Wt: (20)
     auto weight = player->carryWeight();

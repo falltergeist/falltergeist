@@ -244,7 +244,7 @@ void PlayerCreate::init()
     _title->setFont("font2.aaf", {0,0,0,0xff});
     addUI(_title);
 
-    auto line = new UI::Rectangle(backgroundPos + Point(350, 300), Size(270, 2), { 0x00, 0x00, 0x00, 0xff });
+    auto line = new UI::Rectangle(backgroundPos + Point(350, 300), Graphics::Size(270, 2), { 0x00, 0x00, 0x00, 0xff });
     addUI(line);
 
     _description = new UI::TextArea("", backgroundX+350, backgroundY+315);

@@ -18,7 +18,7 @@
  */
 
 // Related headers
-#include "EventTarget.h"
+#include "../Event/EventTarget.h"
 
 // C++ standard includes
 #include <type_traits>

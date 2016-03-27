@@ -31,6 +31,7 @@
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
+#include "../Graphics/Rect.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../PathFinding/Hexagon.h"
@@ -38,17 +39,17 @@
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../UI/AnimationFrame.h"
-#include "Base.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-
 using Base::make_unique;
 
 namespace UI
 {
+
+using Graphics::Rect;
 
 Animation::Animation() : Falltergeist::UI::Base()
 {

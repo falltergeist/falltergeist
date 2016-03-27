@@ -21,6 +21,8 @@
 #include "../Graphics/Animation.h"
 
 // C++ standart includes
+
+// Falltergeist includes
 #include "../Format/Frm/File.h"
 #include "../Format/Frm/Direction.h"
 #include "../Format/Frm/Frame.h"

@@ -22,14 +22,14 @@
 
 // C++ standard includes
 #include <array>
-#include <glm/glm.hpp>
 #include <vector>
 
 // Falltergeist includes
 #include "../Format/Enums.h"
-#include "Renderer.h"
+#include "../Graphics/Renderer.h"
 
 // Third party includes
+#include <glm/glm.hpp>
 
 namespace Falltergeist
 {

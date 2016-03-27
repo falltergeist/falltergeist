@@ -32,6 +32,7 @@
 #include "../Game/Game.h"
 #include "../Game/ItemObject.h"
 #include "../Graphics/Point.h"
+#include "../Graphics/Rect.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../Input/Mouse.h"
@@ -46,6 +47,7 @@ namespace Falltergeist
 namespace UI
 {
 using namespace Base;
+using Graphics::Rect;
 
 InventoryItem::InventoryItem(Game::ItemObject *item, const Point& pos) : Falltergeist::UI::Base(pos)
 {

@@ -30,9 +30,10 @@
 
 // Third-party includes
 
-namespace Falltergeist {
-namespace Graphics {
-
+namespace Falltergeist
+{
+namespace Graphics
+{
 
 Lightmap::Lightmap(std::vector<glm::vec2> coords,std::vector<GLuint> indexes)
 {
@@ -78,7 +79,7 @@ Lightmap::~Lightmap()
     GL_CHECK(glDeleteVertexArrays(1, &_vao));
 }
 
-void Lightmap::render(const Falltergeist::Point &pos)
+void Lightmap::render(const Point &pos)
 {
     if (_indexes<=0) return;
 
@@ -138,7 +139,7 @@ void Lightmap::update(std::vector<float> lights)
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _lights));
     //update lights
     GL_CHECK(glBufferData(GL_ARRAY_BUFFER, lights.size() * sizeof(float), &lights[0], GL_STATIC_DRAW));
-
 }
+
 }
 }

@@ -29,8 +29,10 @@
 
 // Third party includes
 
-namespace Falltergeist {
-namespace Graphics {
+namespace Falltergeist
+{
+namespace Graphics
+{
 
 class Lightmap
 {
@@ -59,5 +61,4 @@ private:
 
 }
 }
-
 #endif //FALLTERGEIST_GRAPHICS_LIGHTMAP_H

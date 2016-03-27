@@ -40,6 +40,8 @@ namespace Gcd
 namespace Game
 {
 
+using Graphics::Point;
+
 /**
  * Player-controlled critter
  */

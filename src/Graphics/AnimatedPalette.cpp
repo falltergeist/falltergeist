@@ -23,17 +23,15 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "Renderer.h"
+#include "../Graphics/Renderer.h"
 
 // Third party includes
 #include <SDL.h>
-
 
 namespace Falltergeist
 {
 namespace Graphics
 {
-
 
 AnimatedPalette::AnimatedPalette()
 {
@@ -42,8 +40,6 @@ AnimatedPalette::AnimatedPalette()
 AnimatedPalette::~AnimatedPalette()
 {
 }
-
-
 
 void AnimatedPalette::think()
 {
@@ -111,5 +107,6 @@ std::vector<GLuint> AnimatedPalette::counters() {
     cnt.push_back(_blinkingRedCounter);
     return cnt;
 }
+
 }
 }

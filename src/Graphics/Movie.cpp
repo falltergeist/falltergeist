@@ -17,11 +17,18 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ResourceManager.h>
-#include <Game/Game.h>
-#include "Movie.h"
-#include "Renderer.h"
-#include "Shader.h"
+// Related headers
+#include "../Graphics/Movie.h"
+
+// C++ standard includes
+
+// Falltergeist includes
+#include "../Game/Game.h"
+#include "../Graphics/Renderer.h"
+#include "../Graphics/Shader.h"
+#include "../ResourceManager.h"
+
+// Third party includes
 
 namespace Falltergeist
 {
@@ -133,7 +140,6 @@ void Movie::render(int x, int y)
 
 //    GL_CHECK(glBindVertexArray(0));
 }
-
 
 }
 }

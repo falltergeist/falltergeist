@@ -30,6 +30,7 @@
 #include "../Format/Msg/File.h"
 #include "../Format/Msg/Message.h"
 #include "../functions.h"
+#include "../Graphics/Rect.h"
 #include "../Graphics/Renderer.h"
 #include "../Game/CritterObject.h"
 #include "../Game/Defines.h"
@@ -297,7 +298,7 @@ void Object::render()
     );
 
     // don't draw if outside of screen
-    if (!Rect::intersects(_ui->position(), _ui->size(), Point(0, 0), camera->size()))
+    if (!Graphics::Rect::intersects(_ui->position(), _ui->size(), Point(0, 0), camera->size()))
     {
         setInRender(false);
         return;
@@ -616,7 +617,7 @@ void Object::renderOutline(int type)
         );
 
         // don't draw if outside of screen
-        if (!Rect::intersects(_ui->position(), _ui->size(), Point(0, 0), camera->size()))
+        if (!Graphics::Rect::intersects(_ui->position(), _ui->size(), Point(0, 0), camera->size()))
         {
             setInRender(false);
             return;

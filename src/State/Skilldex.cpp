@@ -64,7 +64,7 @@ void Skilldex::init()
     // original coordinates = 455x6
     // background size = 185x368
     auto background = new UI::Image("art/intrface/skldxbox.frm");
-    Size rendSize = Game::getInstance()->renderer()->size();
+    Graphics::Size rendSize = Game::getInstance()->renderer()->size();
     auto backgroundX = (rendSize.width() + 640 - 2 * background->size().width()) / 2;
     auto backgroundY = (rendSize.height() - 480 + 6);
     background->setPosition({backgroundX, backgroundY});

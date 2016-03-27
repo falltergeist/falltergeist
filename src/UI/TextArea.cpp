@@ -29,6 +29,7 @@
 #include "../Event/Mouse.h"
 #include "../Game/Game.h"
 #include "../Graphics/Font.h"
+#include "../Graphics/Rect.h"
 #include "../ResourceManager.h"
 #include "../Logger.h"
 
@@ -39,6 +40,8 @@ namespace Falltergeist
 {
 namespace UI
 {
+
+using Graphics::Rect;
 
 TextArea::TextArea(const Point& pos) : Base(pos)
 {
@@ -568,8 +571,10 @@ void TextArea::_updateBuffers()
     _textArea.updateBuffers(vertices,UV,indexes);
 }
 
-bool TextArea::opaque(const Point &pos) {
+bool TextArea::opaque(const Point &pos)
+{
     return Rect::inRect(pos, this->size());
 }
+
 }
 }

@@ -55,6 +55,8 @@ namespace UI
 namespace State
 {
 
+using Graphics::Point;
+
 class State : public Event::EventTarget
 {
 public:

@@ -17,17 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_UI_TILEMAP_H
-#define FALLTERGEIST_UI_TILEMAP_H
+#ifndef FALLTERGEIST_GRAPHICS_RECT_H
+#define FALLTERGEIST_GRAPHICS_RECT_H
 
 // C++ standard includes
-#include <map>
-#include <memory>
 
 // Falltergeist includes
 #include "../Graphics/Point.h"
-#include "../Graphics/Rect.h"
-#include "../Graphics/Renderer.h"
+#include "../Graphics/Size.h"
 
 // Third party includes
 
@@ -35,41 +32,21 @@ namespace Falltergeist
 {
 namespace Graphics
 {
-    class Texture;
-    class Tilemap;
-}
-namespace UI
-{
 
-using Graphics::Point;
-using Graphics::Rect;
-
-class Tile;
-
-class TileMap
+// static class for Rectangle-related function
+class Rect
 {
 public:
-    TileMap();
-    ~TileMap();
+    // checks if given point is located withing the rectangle specified by size
+    static bool inRect(const Point& needle, const Size& size);
 
-    std::map<unsigned int, std::unique_ptr<Tile>>&tiles();
-    void render();
-    void init();
-    void setInside(bool inside);
-    bool inside();
-    void enableAll();
-    void disable(unsigned int num);
-    bool opaque(const Point& pos);
+    // checks if given point is located withing the rectangle with given top-left position and size
+    static bool inRect(const Point& needle, const Point& topLeft, const Size& size);
 
-protected:
-    std::map<unsigned int, std::unique_ptr<Tile>> _tiles;
-    uint32_t _tilesPerAtlas;
-    std::unique_ptr<Graphics::Tilemap> _tilemap;
-    uint32_t _atlases;
-    bool _inside = false;
-    void _floodDisable(int x, int y);
+    // checks if two rectangles, given as their top-left positions and sizes, intersect each other
+    static bool intersects(const Point& topLeft1, const Size& size1, const Point& topLeft2, const Size& size2);
 };
 
 }
 }
-#endif // FALLTERGEIST_UI_TILEMAP_H
+#endif // FALLTERGEIST_GRAPHICS_RECT_H

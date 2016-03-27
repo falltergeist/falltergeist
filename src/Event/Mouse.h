@@ -33,6 +33,8 @@ namespace Falltergeist
 namespace Event
 {
 
+using Graphics::Point;
+
 class Mouse : public Event
 {
 public:

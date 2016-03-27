@@ -27,6 +27,7 @@
 
 // Falltergeist includes
 #include "../Graphics/Point.h"
+#include "../Graphics/Size.h"
 
 // Third party includes
 #include <SDL.h>
