@@ -55,7 +55,7 @@ void Opcode810CHandler::_run()
         }
         case 1010: // ANIMATE_SET_FRAME. direction is frame number
         {
-            _warning("op_anim - unimplemented ANIMATE_SET_FRAME";
+            _warning("op_anim - unimplemented ANIMATE_SET_FRAME");
             break;
         }
         default: //  set animation? direction is forward/backward
