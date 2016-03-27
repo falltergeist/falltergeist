@@ -180,7 +180,7 @@ void Object::_generateUi()
     auto frm = ResourceManager::getInstance()->frmFileType(FID());
     if (frm)
     {
-        if (frm->framesPerDirection() > 1)
+        if (frm->framesPerDirection() > 1 || frm->directions()->size() > 1)
         {
             auto queue = make_unique<UI::AnimationQueue>();
             queue->animations().push_back(make_unique<UI::Animation>(ResourceManager::getInstance()->FIDtoFrmName(FID()), orientation()));
