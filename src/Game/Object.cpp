@@ -583,6 +583,24 @@ void Object::setFlat(bool value)
     _flat = value;
 }
 
+
+unsigned int Object::defaultFrame()
+{
+    return _defaultFrame;
+}
+
+void Object::setDefaultFrame(unsigned int frame)
+{
+    _defaultFrame = frame;
+    if (_ui)
+    {
+        if (auto anim = dynamic_cast<UI::AnimationQueue*>(_ui.get()))
+        {
+            anim->currentAnimation()->setCurrentFrame(_defaultFrame);
+        }
+    }
+}
+
 bool Object::_useEggTransparency()
 {
     return false;

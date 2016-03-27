@@ -138,26 +138,37 @@ void File::_initialize()
                 auto script = new Script();
                 script->setPID(int32());
 
-                uint32(); // unknown1
+                uint32(); // next script. unused
 
                 switch ((script->PID() & 0xFF000000) >> 24)
                 {
+                    case 0:
+                        script->setType(Script::Type::SYSTEM);
+                        break;
                     case 1:
-                        uint32(); //unknown 2
-                        uint32(); //unknown 3
+                        script->setType(Script::Type::SPATIAL);
+                        script->setSpatialTile(uint32());
+                        script->setSpatialRadius(uint32());
                         break;
                     case 2:
-                        uint32(); //unknown 2
+                        script->setType(Script::Type::TIMER);
+                        script->setTimerTime(uint32());
+                        break;
+                    case 3:
+                        script->setType(Script::Type::ITEM);
+                        break;
+                    case 4:
+                        script->setType(Script::Type::CRITTER);
                         break;
                     default:
                         break;
                 }
-                uint32(); //unknown 4
+                uint32(); //flags
                 script->setScriptId(int32());
                 uint32(); //unknown 5
-                uint32(); //unknown 6
-                uint32(); //unknown 7
-                uint32(); //unknown 8
+                uint32(); //oid == object->OID
+                uint32(); //local var offset
+                uint32(); //loal var cnt
                 uint32(); //unknown 9
                 uint32(); //unknown 10
                 uint32(); //unknown 11
@@ -184,7 +195,7 @@ void File::_initialize()
             }
             if (check != count)
             {
-                throw Exception("File::open() - rror reading scripts: check is incorrect");
+                throw Exception("File::open() - error reading scripts: check is incorrect");
             }
         }
     }
@@ -217,12 +228,12 @@ Object* File::_readObject()
 {
     auto object =new Object();
 
-    object->setUnknown1(uint32());
+    object->setOID(uint32());
     object->setHexPosition(int32());
-    object->setUnknown2(uint32());
-    object->setUnknown3(uint32());
-    object->setUnknown4(uint32());
-    object->setUnknown5(uint32());
+    object->setX(uint32());
+    object->setY(uint32());
+    object->setSx(uint32());
+    object->setSy(uint32());
     object->setFrameNumber(uint32());
     object->setOrientation(uint32());
     uint32_t FID = uint32();
@@ -233,10 +244,10 @@ Object* File::_readObject()
     uint32_t PID = uint32();
     object->setObjectTypeId(PID >> 24);
     object->setObjectId(0x00FFFFFF & PID);
-    object->setUnknown7(uint32());
+    object->setCombatId(uint32());
     object->setLightRadius(uint32());
     object->setLightIntensity(uint32());
-    object->setUnknown10(uint32());
+    object->setOutline(uint32());
 
     int32_t SID = int32();
     if (SID != -1)
@@ -257,7 +268,7 @@ Object* File::_readObject()
     }
 
     object->setInventorySize(uint32());
-    object->setUnknown11(uint32());
+    object->setMaxInventorySize(uint32());
     object->setUnknown12(uint32());
     object->setUnknown13(uint32());
 
@@ -268,17 +279,17 @@ Object* File::_readObject()
             switch((ITEM_TYPE)object->objectSubtypeId())
             {
                 case ITEM_TYPE::AMMO:
-                    uint32();
+                    object->setAmmo(uint32()); // bullets
                     break;
                 case ITEM_TYPE::KEY:
-                    uint32();
+                    uint32(); // keycode = -1 in all maps. saves only? ignore for now
                     break;
                 case ITEM_TYPE::MISC:
-                    uint32();
+                    object->setAmmo(uint32()); //charges - have strangely high values, or negative.
                     break;
                 case ITEM_TYPE::WEAPON:
-                    uint32();
-                    uint32();
+                    object->setAmmo(uint32()); // ammo
+                    object->setAmmoPID(uint32()); // ammo pid
                     break;
                 case ITEM_TYPE::ARMOR:
                     break;
@@ -291,16 +302,16 @@ Object* File::_readObject()
             }
             break;
         case OBJECT_TYPE::CRITTER:
-            uint32();
-            uint32();
-            uint32();
-            uint32();
-            uint32();
-            uint32();
-            uint32();
-            uint32();
-            uint32();
-            uint32();
+            uint32(); //reaction to player - saves only
+            uint32(); //current mp - saves only
+            uint32(); //combat results - saves only
+            uint32(); //damage last turn - saves only
+            object->setAIPacket(uint32()); // AI packet - is it different from .pro? well, it can be
+            uint32(); // team - always 1? saves only?
+            uint32(); // who hit me - saves only
+            uint32(); // hit points - saves only, otherwise = value from .pro
+            uint32(); // rad - always 0 - saves only
+            uint32(); // poison - always 0 - saves only
             object->setFrmId(FID & 0x00000FFF);
             object->setObjectID1((FID & 0x0000F000) >> 12);
             object->setObjectID2((FID & 0x00FF0000) >> 16);
@@ -309,23 +320,27 @@ Object* File::_readObject()
             break;
         case OBJECT_TYPE::SCENERY:
             object->setObjectSubtypeId(callback()(PID)->subtypeId());
+            uint32_t elevhex;  // elev+hex
+            uint32_t hex;
+            uint32_t elev;
             switch((SCENERY_TYPE)object->objectSubtypeId())
             {
                 case SCENERY_TYPE::LADDER_TOP:
                 case SCENERY_TYPE::LADDER_BOTTOM:
-                    uint32();
-                    uint32();
-                    break;
                 case SCENERY_TYPE::STAIRS:
-                    uint32();
-                    uint32();
+                    elevhex = uint32();  // elev+hex
+                    hex = elevhex & 0xFFFF;
+                    elev = ((elevhex >> 28) & 0xf) >> 1;
+                    object->setExitMap(int32()); // map id
+                    object->setExitPosition(hex);
+                    object->setExitElevation(elev);
                     break;
                 case SCENERY_TYPE::ELEVATOR:
-                    uint32();
-                    uint32();
+                    object->setElevatorType(uint32()); // elevator type - sometimes -1
+                    object->setElevatorLevel(uint32()); // current level - sometimes -1
                     break;
                 case SCENERY_TYPE::DOOR:
-                    uint32();
+                    object->setOpened(uint32()!=0);// is opened;
                     break;
                 case SCENERY_TYPE::GENERIC:
                     break;

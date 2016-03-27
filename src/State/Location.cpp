@@ -275,6 +275,8 @@ void Location::setLocation(const std::string& name)
         object->setLightRadius(mapObject->lightRadius());
         object->setLightIntensity(mapObject->lightIntensity());
         object->setFlags(mapObject->flags());
+        object->setDefaultFrame(mapObject->frameNumber());
+
 
         if (auto exitGrid = dynamic_cast<Game::ExitMiscObject*>(object))
         {
@@ -282,6 +284,11 @@ void Location::setLocation(const std::string& name)
             exitGrid->setExitElevationNumber(mapObject->exitElevation());
             exitGrid->setExitHexagonNumber(mapObject->exitPosition());
             exitGrid->setExitDirection(mapObject->exitOrientation());
+        }
+
+        if (auto door = dynamic_cast<Game::DoorSceneryObject*>(object))
+        {
+            door->setOpened(mapObject->opened());
         }
 
         if (auto container = dynamic_cast<Game::ContainerItemObject*>(object))

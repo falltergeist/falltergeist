@@ -79,6 +79,8 @@ void DoorSceneryObject::use_p_proc(CritterObject* usedBy)
         if (UI::AnimationQueue* queue = dynamic_cast<UI::AnimationQueue*>(this->ui()))
         {
             queue->start();
+            // TODO:  i'm not sure. maybe we just need to reset animation progress on reverse change
+            queue->currentAnimation()->stop();
             queue->currentAnimation()->setReverse(false);
             queue->animationEndedHandler().add(std::bind(&DoorSceneryObject::onOpeningAnimationEnded, this, std::placeholders::_1));
             if (_soundId) Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/sodoors") + _soundId + ".acm");
@@ -89,6 +91,7 @@ void DoorSceneryObject::use_p_proc(CritterObject* usedBy)
         if (UI::AnimationQueue* queue = dynamic_cast<UI::AnimationQueue*>(this->ui()))
         {
             queue->start();
+            queue->currentAnimation()->stop();
             queue->currentAnimation()->setReverse(true);
             queue->animationEndedHandler().add(std::bind(&DoorSceneryObject::onClosingAnimationEnded, this, std::placeholders::_1));
             if (_soundId) Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/scdoors") + _soundId + ".acm");
