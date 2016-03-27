@@ -109,6 +109,11 @@ std::string CrossPlatform::getHomeDirectory()
 std::string CrossPlatform::getExecutableDirectory()
 {
     char* buffer=SDL_GetBasePath();
+    if (buffer == NULL)
+    {
+        Logger::warning() << "SDL_GetBasePath() not able to obtain a path on this platform" << std::endl;
+        return "./";
+    }
     std::string path(buffer);
     SDL_free(buffer);
     return path;
@@ -400,8 +405,8 @@ std::vector<std::string> CrossPlatform::getDataPaths()
     if(pxDir)
     {
         _dataPaths.push_back(sharedir.c_str());
+        closedir(pxDir);
     }
-    closedir(pxDir);
 #else
     _dataPaths.push_back(getConfigPath());
 #endif
