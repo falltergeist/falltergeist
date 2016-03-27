@@ -171,6 +171,11 @@ void OpcodeComparisonHandler::_run()
                     result = _compare(aValue.toString(), bValue.stringValue()); // OBJECT op STRING - compare object name
                     break;
                 }
+                case VMStackValue::Type::OBJECT:
+                {
+                    result = _compare(aValue.objectValue(), bValue.objectValue()); // OBJECT op OBJECT
+                    break;
+                }
                 default:
                 {
                     _error(std::string() + _cmpOpcodeName() + ": invalid right argument type: " + bValue.typeName());
