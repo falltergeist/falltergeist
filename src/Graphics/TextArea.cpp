@@ -28,10 +28,10 @@
 #include "../CrossPlatform.h"
 #include "../Event/Mouse.h"
 #include "../Game/Game.h"
-#include "../Graphics/Renderer.h"
-#include "../Graphics/Texture.h"
 #include "../Graphics/Font.h"
+#include "../Graphics/Renderer.h"
 #include "../Graphics/Shader.h"
+#include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
 #include "../Logger.h"
 

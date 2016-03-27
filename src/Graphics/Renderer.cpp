@@ -22,7 +22,7 @@
 
 // C++ standard includes
 #include <cmath>
-#include <ResourceManager.h>
+#include <sys/stat.h>
 
 // Falltergeist includes
 #include "../CrossPlatform.h"
@@ -31,17 +31,17 @@
 #include "../Exception.h"
 #include "../Game/Game.h"
 #include "../Graphics/Point.h"
+#include "../Graphics/Shader.h"
+#include "../Graphics/Texture.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
+#include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../State/State.h"
-#include "Shader.h"
-#include "Texture.h"
 
 // Third party includes
 #include <glm/gtc/matrix_transform.hpp>
 #include <SDL_image.h>
-#include <sys/stat.h>
 
 namespace Falltergeist
 {
@@ -49,7 +49,6 @@ namespace Graphics
 {
 
 using namespace Base;
-
 
 Renderer::Renderer(unsigned int width, unsigned int height)
 {
@@ -76,7 +75,6 @@ Renderer::~Renderer()
     GL_CHECK(glDeleteBuffers(1, &_ebo));
 
     GL_CHECK(glDeleteVertexArrays(1, &_vao));
-
 }
 
 void Renderer::init()
@@ -502,7 +500,8 @@ int32_t Renderer::maxTextureSize()
     return _maxTexSize;
 }
 
-Texture *Renderer::egg() {
+Texture *Renderer::egg()
+{
     return _egg;
 }
 
@@ -510,5 +509,6 @@ Renderer::RenderPath Renderer::renderPath()
 {
     return _renderpath;
 }
+
 }
 }

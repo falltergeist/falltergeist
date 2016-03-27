@@ -160,7 +160,7 @@ void Tilemap::addTexture(SDL_Surface *surface)
 {
     _textures.push_back(make_unique<Texture>(surface->w, surface->h));
     _textures.back().get()->loadFromSurface(surface);
-
 }
+
 }
 }

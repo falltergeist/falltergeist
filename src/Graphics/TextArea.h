@@ -28,13 +28,12 @@
 // Falltergeist includes
 #include "../Graphics/Font.h"
 #include "../Graphics/Renderer.h"
-#include "Shader.h"
+#include "../Graphics/Shader.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-
 namespace Graphics
 {
 
