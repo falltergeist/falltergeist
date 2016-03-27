@@ -34,6 +34,7 @@
 #include "../Format/Map/File.h"
 #include "../Format/Map/Elevation.h"
 #include "../Format/Map/Object.h"
+#include "../Format/Map/Script.h"
 #include "../Format/Txt/MapsFile.h"
 #include "../Format/Gam/File.h"
 #include "../Game/ContainerItemObject.h"
@@ -44,6 +45,7 @@
 #include "../Game/Game.h"
 #include "../Game/Object.h"
 #include "../Game/ObjectFactory.h"
+#include "../Game/SpatialObject.h"
 #include "../Game/Time.h"
 #include "../Game/WeaponItemObject.h"
 #include "../Graphics/Point.h"
@@ -382,6 +384,28 @@ void Location::setLocation(const std::string& name)
         _locationScript = make_unique<VM>(ResourceManager::getInstance()->intFileType(mapFile->scriptId()-1), nullptr);
     }
 
+    // Spatials
+    for (auto script: *mapFile->scripts())
+    {
+        if (script->type() == Format::Map::Script::Type::SPATIAL)
+        {
+            auto tile = script->spatialTile();
+            auto hex = tile & 0xFFFF;
+            auto elev = ((tile >> 28) & 0xf) >> 1;
+            if (elev == _currentElevation)
+            {
+                auto spatial = new Game::SpatialObject(script->spatialRadius());
+                spatial->setElevation(elev);
+                spatial->setHexagon(_hexagonGrid->at(hex));
+                auto intFile = ResourceManager::getInstance()->intFileType(script->scriptId());
+                if (intFile) spatial->setScript(new VM(intFile, spatial));
+
+                _spatials.emplace_back(spatial);
+            }
+
+        }
+    }
+
     // Generates floor and roof images
     {
         for (unsigned int i = 0; i != 100*100; ++i)
@@ -705,6 +729,13 @@ void Location::think()
             if (object->script())
             {
                 object->script()->initialize();
+            }
+        }
+        for (auto& spatial: _spatials)
+        {
+            if (spatial->script())
+            {
+                spatial->script()->initialize();
             }
         }
         if (player->script())
@@ -1096,6 +1127,16 @@ void Location::moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool 
     {
         hexagon->objects()->push_back(object);
     }
+
+    if (object->type() == Game::Object::Type::CRITTER || object->type() == Game::Object::Type::DUDE)
+        for (auto &spatial: _spatials)
+        {
+            if (_hexagonGrid->distance(spatial->hexagon(), hexagon) <= spatial->radius())
+            {
+                spatial->spatial_p_proc(object);
+            }
+        }
+
     // TODO: recreate _objects array for rendering/handling
     if (update)
     {

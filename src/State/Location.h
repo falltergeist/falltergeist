@@ -40,6 +40,7 @@ namespace Falltergeist
 namespace Game
 {
     class Object;
+    class SpatialObject;
 }
 namespace UI
 {
@@ -177,6 +178,8 @@ protected:
 
     unsigned int _lightLevel = 0x10000;
     Falltergeist::Graphics::Lightmap* _lightmap;
+
+    std::vector<std::unique_ptr<Game::SpatialObject>> _spatials;
 
 };
 
