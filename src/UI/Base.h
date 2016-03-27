@@ -22,11 +22,11 @@
 
 // C++ standard includes
 #include <memory>
-#include <TransFlags.h>
 
 // Falltergeist includes
 #include "../Event/EventTarget.h"
-#include "../Point.h"
+#include "../Graphics/Point.h"
+#include "../Graphics/TransFlags.h"
 #include "../UI/Base.h"
 
 // Third party includes
@@ -114,9 +114,9 @@ public:
     virtual bool light();
     virtual void setLightLevel(unsigned int level);
     // object translucency mode
-    Falltergeist::TransFlags::Trans trans() const;
+    Graphics::TransFlags::Trans trans() const;
     // sets object translucency mode
-    void setTrans(Falltergeist::TransFlags::Trans value);
+    void setTrans(Graphics::TransFlags::Trans value);
 
     void setOutline(int outline);
 
@@ -124,7 +124,7 @@ protected:
     Point _position;
     Point _offset;
     bool _light = false;
-    Falltergeist::TransFlags::Trans _trans = Falltergeist::TransFlags::Trans::DEFAULT;
+    Graphics::TransFlags::Trans _trans = Graphics::TransFlags::Trans::DEFAULT;
 
     bool _leftButtonPressed = false;
     bool _rightButtonPressed = false;

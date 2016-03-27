@@ -17,11 +17,16 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// C++ standard includes
 #include <iosfwd>
+
+// Falltergeist includes
 #include "../Graphics/Renderer.h"
-#include "Texture.h"
-#include "../TransFlags.h"
-#include "Shader.h"
+#include "../Graphics/Shader.h"
+#include "../Graphics/Texture.h"
+#include "../Graphics/TransFlags.h"
+
+// Thirdparty includes
 
 namespace Falltergeist
 {
@@ -36,7 +41,7 @@ public:
     void render(int x, int y, unsigned int direction, unsigned int frame, bool transparency = false, bool light = false, int outline = 0,
                 unsigned int lightValue=0);
     bool opaque(unsigned int x, unsigned int y);
-    void trans(Falltergeist::TransFlags::Trans _trans);
+    void trans(Graphics::TransFlags::Trans _trans);
 private:
     GLuint _vao;
     GLuint _coordsVBO;
@@ -44,7 +49,7 @@ private:
     GLuint _ebo;
     Texture* _texture;
     int _stride;
-    Falltergeist::TransFlags::Trans _trans = Falltergeist::TransFlags::Trans::NONE;
+    Graphics::TransFlags::Trans _trans = Graphics::TransFlags::Trans::NONE;
 
     std::vector<glm::vec2> _vertices;
     std::vector<glm::vec2> _texCoords;

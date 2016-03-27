@@ -31,11 +31,11 @@
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Game/ItemObject.h"
+#include "../Graphics/Point.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
-#include "../Point.h"
 #include "../UI/Image.h"
 #include "../UI/ItemsList.h"
 

@@ -24,22 +24,22 @@
 #include <algorithm>
 #include <cmath>
 #include <vector>
-#include <SDL_image.h>
 
 // Falltergeist includes
 #include "../Base/StlFeatures.h"
 #include "../Format/Lst/File.h"
 #include "../Game/Game.h"
+#include "../Graphics/Point.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Tilemap.h"
 #include "../LocationCamera.h"
 #include "../Logger.h"
-#include "../Point.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../UI/Tile.h"
 
 // Thrird party includes
+#include <SDL_image.h>
 
 namespace  Falltergeist
 {

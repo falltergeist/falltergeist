@@ -26,8 +26,8 @@
 #include <string>
 
 // Falltergeist includes
-#include "Texture.h"
-#include "../Point.h"
+#include "../Graphics/Point.h"
+#include "../Graphics/Texture.h"
 
 // Third party includes
 

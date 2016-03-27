@@ -25,7 +25,7 @@
 #include <iostream>
 
 // Falltergeist includes
-#include "Point.h"
+#include "Graphics/Point.h"
 
 // Third party includes
 

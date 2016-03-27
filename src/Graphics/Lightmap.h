@@ -20,9 +20,14 @@
 #ifndef FALLTERGEIST_GRAPHICS_LIGHTMAP_H
 #define FALLTERGEIST_GRAPHICS_LIGHTMAP_H
 
-#include "../Point.h"
-#include "Renderer.h"
-#include "Shader.h"
+// C++ standard includes
+
+// Falltergeist includes
+#include "../Graphics/Point.h"
+#include "../Graphics/Renderer.h"
+#include "../Graphics/Shader.h"
+
+// Third party includes
 
 namespace Falltergeist {
 namespace Graphics {

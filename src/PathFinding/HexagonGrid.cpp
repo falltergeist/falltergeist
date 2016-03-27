@@ -18,10 +18,10 @@
  */
 
 // C++ standard includes
-#include <functional>
-#include <queue>
 #include <array>
 #include <cstdlib>
+#include <functional>
+#include <queue>
 
 // Falltergeist includes
 #include "../Base/StlFeatures.h"

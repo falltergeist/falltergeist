@@ -22,7 +22,6 @@
 
 // C++ standard includes
 #include <cmath>
-#include <TransFlags.h>
 
 // Falltergeist includes
 #include "../Base/StlFeatures.h"
@@ -46,7 +45,6 @@
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
 #include "../VM/VM.h"
-#include "TransFlags.h"
 
 // Third party includes
 
@@ -513,7 +511,7 @@ void Object::onUseAnimationEnd(Event::Event* event, CritterObject* critter)
     critter->setActionAnimation("aa")->stop();
 }
 
-void Object::setTrans(Falltergeist::TransFlags::Trans value)
+void Object::setTrans(Graphics::TransFlags::Trans value)
 {
     _trans = value;
     if (_ui)
@@ -522,7 +520,7 @@ void Object::setTrans(Falltergeist::TransFlags::Trans value)
     }
 }
 
-Falltergeist::TransFlags::Trans Object::trans() const
+Graphics::TransFlags::Trans Object::trans() const
 {
     return _trans;
 }
@@ -564,12 +562,12 @@ void Object::setFlags(unsigned int flags)
     setCanLightThru((flags & 0x20000000));
     setCanShootThru((flags & 0x80000000));
 
-    if (flags & 0x00004000) setTrans(Falltergeist::TransFlags::Trans::RED);
-    if (flags & 0x00008000) setTrans(Falltergeist::TransFlags::Trans::NONE);
-    if (flags & 0x00010000) setTrans(Falltergeist::TransFlags::Trans::WALL);
-    if (flags & 0x00020000) setTrans(Falltergeist::TransFlags::Trans::GLASS);
-    if (flags & 0x00040000) setTrans(Falltergeist::TransFlags::Trans::STEAM);
-    if (flags & 0x00080000) setTrans(Falltergeist::TransFlags::Trans::ENERGY);
+    if (flags & 0x00004000) setTrans(Graphics::TransFlags::Trans::RED);
+    if (flags & 0x00008000) setTrans(Graphics::TransFlags::Trans::NONE);
+    if (flags & 0x00010000) setTrans(Graphics::TransFlags::Trans::WALL);
+    if (flags & 0x00020000) setTrans(Graphics::TransFlags::Trans::GLASS);
+    if (flags & 0x00040000) setTrans(Graphics::TransFlags::Trans::STEAM);
+    if (flags & 0x00080000) setTrans(Graphics::TransFlags::Trans::ENERGY);
     if (flags & 0x10000000) setWallTransEnd(true);
 }
 
@@ -628,5 +626,6 @@ void Object::renderOutline(int type)
         _ui->render(false);
         _ui->setOutline(0);
 }
+
 }
 }

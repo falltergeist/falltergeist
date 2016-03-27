@@ -28,7 +28,7 @@
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
 #include "../Game/Game.h"
-#include "../Point.h"
+#include "../Graphics/Point.h"
 #include "../UI/Image.h"
 
 // Third party includes

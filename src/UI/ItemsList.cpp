@@ -31,11 +31,11 @@
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Game/ItemObject.h"
+#include "../Graphics/Point.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
-#include "../Point.h"
 #include "../UI/InventoryItem.h"
 
 // Third party includes

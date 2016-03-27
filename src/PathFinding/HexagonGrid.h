@@ -25,7 +25,7 @@
 
 // Falltergeist includes
 #include "../Base/Iterators.h"
-#include "../Point.h"
+#include "../Graphics/Point.h"
 
 // Third party includes
 

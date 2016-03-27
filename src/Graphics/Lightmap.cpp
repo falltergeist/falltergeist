@@ -18,14 +18,14 @@
  */
 
 // Related headers
-#include "Lightmap.h"
+#include "../Graphics/Lightmap.h"
 
 // C++ standard includes
 
 // Falltergeist includes
 #include "../Game/Game.h"
+#include "../Graphics/Shader.h"
 #include "../ResourceManager.h"
-#include "Shader.h"
 #include "../State/Location.h"
 
 // Third-party includes

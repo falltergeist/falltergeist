@@ -17,24 +17,26 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../State/Skilldex.h"
+
 // C++ standard includes
 
 // Falltergeist includes
 #include "../functions.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
+#include "../Graphics/Point.h"
 #include "../Graphics/Renderer.h"
-#include "../Point.h"
+#include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../State/ExitConfirm.h"
-#include "../State/Skilldex.h"
 #include "../State/Location.h"
 #include "../State/SettingsMenu.h"
 #include "../UI/BigCounter.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
-#include "../Input/Mouse.h"
 
 // Third party includes
 

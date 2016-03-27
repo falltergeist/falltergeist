@@ -17,10 +17,11 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_TRANSFLAGS_H
-#define FALLTERGEIST_TRANSFLAGS_H
+#ifndef FALLTERGEIST_GRAPHICS_TRANSFLAGS_H
+#define FALLTERGEIST_GRAPHICS_TRANSFLAGS_H
 
 namespace Falltergeist {
+namespace Graphics {
 
 class TransFlags {
 public:
@@ -34,6 +35,7 @@ public:
         RED
     };
 };
-}
 
-#endif //FALLTERGEIST_TRANSFLAGS_H
+}
+}
+#endif //FALLTERGEIST_GRAPHICS_TRANSFLAGS_H

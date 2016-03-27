@@ -26,16 +26,16 @@
 #include "../Event/State.h"
 #include "../functions.h"
 #include "../Game/Game.h"
+#include "../Graphics/Point.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
-#include "../Point.h"
 #include "../ResourceManager.h"
 #include "../State/State.h"
 #include "../State/LoadGame.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
-#include "../UI/TextArea.h"
 #include "../UI/ImageList.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 

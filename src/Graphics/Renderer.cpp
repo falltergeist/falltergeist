@@ -25,11 +25,12 @@
 #include <ResourceManager.h>
 
 // Falltergeist includes
+#include "../CrossPlatform.h"
 #include "../Base/StlFeatures.h"
-#include "../Point.h"
 #include "../Event/State.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
+#include "../Graphics/Point.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
 #include "../Settings.h"
@@ -41,7 +42,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <SDL_image.h>
 #include <sys/stat.h>
-#include <CrossPlatform.h>
 
 namespace Falltergeist
 {

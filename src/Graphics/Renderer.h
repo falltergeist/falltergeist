@@ -26,10 +26,9 @@
 #include <string>
 
 // Falltergeist includes
-#include "../Point.h"
+#include "../Graphics/Point.h"
 
 // Third party includes
-//#define GL_GLEXT_PROTOTYPES
 #include <SDL.h>
 #include <GL/glew.h>
 #include <glm/glm.hpp>

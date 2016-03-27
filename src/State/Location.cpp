@@ -22,8 +22,8 @@
 
 // C++ standard includes
 #include <algorithm>
-#include <cstdlib>
 #include <cmath>
+#include <cstdlib>
 #include <list>
 
 // Falltergeist includes
@@ -46,13 +46,13 @@
 #include "../Game/ObjectFactory.h"
 #include "../Game/Time.h"
 #include "../Game/WeaponItemObject.h"
+#include "../Graphics/Point.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../LocationCamera.h"
 #include "../Logger.h"
 #include "../PathFinding/Hexagon.h"
 #include "../PathFinding/HexagonGrid.h"
-#include "../Point.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../State/CursorDropdown.h"

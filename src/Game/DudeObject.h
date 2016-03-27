@@ -24,7 +24,7 @@
 
 // Falltergeist includes
 #include "../Game/CritterObject.h"
-#include "../Point.h"
+#include "../Graphics/Point.h"
 
 // Third party includes
 

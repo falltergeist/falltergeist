@@ -21,7 +21,6 @@
 #define FALLTERGEIST_UI_TILEMAP_H
 
 // C++ standard includes
-#include <vector>
 #include <map>
 #include <memory>
 

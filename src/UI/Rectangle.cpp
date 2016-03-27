@@ -17,31 +17,43 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Game/Game.h>
-#include "Rectangle.h"
+// Related headers
+#include "../UI/Rectangle.h"
+
+// C++ standard includes
+
+// Falltergeist includes
+#include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 
-namespace Falltergeist {
-namespace UI {
+// Third party includes
 
+namespace Falltergeist
+{
+namespace UI
+{
 
-Rectangle::Rectangle(const Point &pos, const Size &size, SDL_Color color) : Base(pos), _size(size), _color(color) {
-
+Rectangle::Rectangle(const Point &pos, const Size &size, SDL_Color color) : Base(pos), _size(size), _color(color)
+{
 }
 
-void Rectangle::render(bool eggTransparency) {
+void Rectangle::render(bool eggTransparency)
+{
     Game::getInstance()->renderer()->drawRect(position(),_size, _color);
 }
 
-bool Rectangle::opaque(unsigned int x, unsigned int y) {
+bool Rectangle::opaque(unsigned int x, unsigned int y)
+{
     return false;
 }
 
-bool Rectangle::opaque(const Point &pos) {
+bool Rectangle::opaque(const Point &pos)
+{
     return false;
 }
 
-Size Rectangle::size() const {
+Size Rectangle::size() const
+{
     return _size;
 }
 

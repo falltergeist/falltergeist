@@ -17,17 +17,25 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// C++ standard includes
+
+// Falltergeist includes
+
 #include "../Base/StlFeatures.h"
-#include <ResourceManager.h>
-#include <Game/Game.h>
-#include "Tilemap.h"
-#include "Shader.h"
-#include "Sprite.h"
-#include "AnimatedPalette.h"
+#include "../Game/Game.h"
+#include "../Graphics/AnimatedPalette.h"
+#include "../Graphics/Shader.h"
+#include "../Graphics/Sprite.h"
+#include "../Graphics/Tilemap.h"
+#include "../ResourceManager.h"
 #include "../State/Location.h"
 
-namespace Falltergeist {
-namespace Graphics {
+// Third party includes
+
+namespace Falltergeist
+{
+namespace Graphics
+{
 
 using Base::make_unique;
 

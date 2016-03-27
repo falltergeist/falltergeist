@@ -23,12 +23,11 @@
 // C++ standard includes
 #include <memory>
 #include <string>
-#include <UI/Base.h>
-#include <TransFlags.h>
 
 // Falltergeist includes
 #include "../Event/EventTarget.h"
-#include "TransFlags.h"
+#include "../Graphics/TransFlags.h"
+#include "../UI/Base.h"
 
 // Third party includes
 
@@ -195,9 +194,9 @@ public:
     void setInRender(bool value);
 
     // object translucency mode
-    Falltergeist::TransFlags::Trans trans() const;
+    Graphics::TransFlags::Trans trans() const;
     // sets object translucency mode
-    void setTrans(Falltergeist::TransFlags::Trans value);
+    void setTrans(Graphics::TransFlags::Trans value);
 
     // request description of the object to console, may call "description_p_proc" procedure of underlying script entity
     virtual void description_p_proc();
@@ -259,7 +258,7 @@ protected:
     void addUIEventHandlers();
     std::unique_ptr<UI::TextArea> _floatMessage;
     bool _inRender = false;
-    Falltergeist::TransFlags::Trans _trans = Falltergeist::TransFlags::Trans::DEFAULT;
+    Graphics::TransFlags::Trans _trans = Graphics::TransFlags::Trans::DEFAULT;
     Orientation _lightOrientation;
     unsigned int _lightIntensity = 0;
     unsigned int _lightRadius = 0;

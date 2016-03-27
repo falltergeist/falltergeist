@@ -18,21 +18,21 @@
  */
 
 // Related headers
-#include "Sprite.h"
+#include "../Graphics/Sprite.h"
 
 // C++ standard headers
 
 // Falltergeist headers
-#include "AnimatedPalette.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
+#include "../Graphics/AnimatedPalette.h"
+#include "../Graphics/Renderer.h"
+#include "../Graphics/Shader.h"
+#include "../Graphics/TransFlags.h"
 #include "../LocationCamera.h"
 #include "../PathFinding/Hexagon.h"
-#include "Renderer.h"
 #include "../ResourceManager.h"
-#include "Shader.h"
 #include "../State/Location.h"
-#include "../TransFlags.h"
 
 // Third-party includes
 
@@ -344,9 +344,10 @@ bool Sprite::opaque(unsigned int x, unsigned int y)
     return _texture->opaque(x+1, y+1);
 }
 
-void Sprite::trans(Falltergeist::TransFlags::Trans trans)
+void Sprite::trans(Graphics::TransFlags::Trans trans)
 {
     _trans=trans;
 }
+
 }
 }

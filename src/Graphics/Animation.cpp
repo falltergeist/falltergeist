@@ -18,24 +18,23 @@
  */
 
 // Related headers
-#include "Animation.h"
+#include "../Graphics/Animation.h"
 
 // C++ standart includes
-#include "../ResourceManager.h"
-#include "../Point.h"
-#include "../Game/Game.h"
-#include "../TransFlags.h"
 #include "../Format/Frm/File.h"
 #include "../Format/Frm/Direction.h"
 #include "../Format/Frm/Frame.h"
-#include "Renderer.h"
-#include "Shader.h"
-#include "AnimatedPalette.h"
+#include "../Game/Game.h"
+#include "../Graphics/AnimatedPalette.h"
+#include "../Graphics/Point.h"
+#include "../Graphics/Renderer.h"
+#include "../Graphics/Shader.h"
+#include "../Graphics/TransFlags.h"
+#include "../ResourceManager.h"
 #include "../State/Location.h"
 
 // Third-party includes
 #include <SDL_image.h>
-
 
 namespace Falltergeist
 {
@@ -209,12 +208,10 @@ bool Animation::opaque(unsigned int x, unsigned int y)
     return _texture->opaque(x, y);
 }
 
-void Animation::trans(Falltergeist::TransFlags::Trans trans)
+void Animation::trans(Graphics::TransFlags::Trans trans)
 {
     _trans=trans;
 }
 
 }
 }
-
-

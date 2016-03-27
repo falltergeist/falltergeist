@@ -29,7 +29,7 @@
 #include "../Event/EventTarget.h"
 #include "../Event/Keyboard.h"
 #include "../Event/Mouse.h"
-#include "../Point.h"
+#include "../Graphics/Point.h"
 
 // Third party includes
 

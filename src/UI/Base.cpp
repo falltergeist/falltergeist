@@ -18,7 +18,6 @@
  */
 
 // Related headers
-#include "../UI/Animation.h"
 #include "../UI/Base.h"
 
 // C++ standard includes
@@ -30,11 +29,12 @@
 #include "../Game/DudeObject.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
+#include "../Graphics/TransFlags.h"
 #include "../LocationCamera.h"
 #include "../PathFinding/Hexagon.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
-#include "TransFlags.h"
+#include "../UI/Animation.h"
 
 // Third party includes
 
@@ -417,19 +417,23 @@ void Base::render(const Size &size, bool eggTransparency)
     render(eggTransparency);
 }
 
-void Base::setLight(bool light) {
+void Base::setLight(bool light)
+{
     _light = light;
 }
 
-bool Base::light() {
+bool Base::light()
+{
     return _light;
 }
 
-TransFlags::Trans Base::trans() const {
+Graphics::TransFlags::Trans Base::trans() const
+{
     return _trans;
 }
 
-void Base::setTrans(TransFlags::Trans value) {
+void Base::setTrans(Graphics::TransFlags::Trans value)
+{
     _trans = value;
 }
 
@@ -438,10 +442,10 @@ void Base::setOutline(int outline)
     _outline=outline;
 }
 
-
 void Base::setLightLevel(unsigned int level)
 {
     _lightLevel = level;
 }
+
 }
 }

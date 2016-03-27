@@ -20,12 +20,19 @@
 #ifndef FALLTERGEIST_UI_RECTANGLE_H
 #define FALLTERGEIST_UI_RECTANGLE_H
 
-#include <Point.h>
-#include "Base.h"
+// C++ standard includes
+
+// Falltergeist includes
+#include "../Graphics/Point.h"
+#include "../UI/Base.h"
+
+// Third party includes
 #include <SDL.h>
 
-namespace Falltergeist {
-namespace UI {
+namespace Falltergeist
+{
+namespace UI
+{
 
 class Rectangle : public Base
 {
@@ -38,6 +45,7 @@ public:
     virtual bool opaque(const Point &pos) override;
 
     virtual Size size() const override;
+
 private:
     Size _size;
     SDL_Color _color;
