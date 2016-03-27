@@ -1320,5 +1320,16 @@ void Location::initLight()
     _lightmap->update(lights);
 
 }
+
+Game::Object *Location::addObject(unsigned int PID, unsigned int position, unsigned int elevation)
+{
+    auto object = Game::ObjectFactory::getInstance()->createObject(PID);
+    _objects.emplace_back(object);
+    moveObjectToHexagon(object, hexagonGrid()->at(position));
+    object->setElevation(elevation);
+    return object;
+}
+
+
 }
 }

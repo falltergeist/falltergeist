@@ -119,6 +119,8 @@ public:
 
     void initLight();
 
+    Game::Object* addObject(unsigned int PID, unsigned int position, unsigned int elevation);
+
 protected:
     struct TimerEvent
     {
