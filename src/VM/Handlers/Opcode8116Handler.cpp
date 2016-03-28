@@ -72,6 +72,7 @@ void Opcode8116Handler::_run()
 
     inven->push_back(item);
 
+    /* WTF
     if (item->hexagon())
     {
         auto location = Game::Game::getInstance()->locationState();
@@ -80,6 +81,7 @@ void Opcode8116Handler::_run()
             location->moveObjectToHexagon(item, nullptr);
         }
     }
+     */
 }
 
 }
