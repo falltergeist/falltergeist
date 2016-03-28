@@ -1195,10 +1195,11 @@ void Location::moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool 
     }
 }
 
-void Location::destroyObject(Game::Object* object)
+
+void Location::removeObjectFromMap(Game::Object *object)
 {
     auto objectsAtHex = object->hexagon()->objects();
-    object->destroy_p_proc();
+
     for (auto it = objectsAtHex->begin(); it != objectsAtHex->end(); ++it)
     {
         if (*it == object)
@@ -1216,6 +1217,13 @@ void Location::destroyObject(Game::Object* object)
             break;
         }
     }
+}
+
+
+void Location::destroyObject(Game::Object* object)
+{
+    object->destroy_p_proc();
+    removeObjectFromMap(object);
 }
 
 void Location::centerCameraAtHexagon(Hexagon* hexagon)

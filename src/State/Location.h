@@ -90,6 +90,7 @@ public:
     std::map<std::string, VMStackValue>* EVARS();
 
     void moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool update = true);
+    void removeObjectFromMap(Game::Object *object);
     void destroyObject(Game::Object* object);
     void centerCameraAtHexagon(Hexagon* hexagon);
     void centerCameraAtHexagon(int tileNum);
