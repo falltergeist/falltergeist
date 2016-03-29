@@ -17,39 +17,26 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef FALLTERGEIST_OPCODE814AHANDLER_H
+#define FALLTERGEIST_OPCODE814AHANDLER_H
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Handlers/Opcode8100Handler.h"
-#include "../../Game/Game.h"
-#include "../../Game/Object.h"
-#include "../../Game/ObjectFactory.h"
-#include "../../VM/VM.h"
+#include "../../VM/OpcodeHandler.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Opcode8100Handler::Opcode8100Handler(VM* vm) : OpcodeHandler(vm)
+class Opcode814AHandler : public OpcodeHandler
 {
-}
-
-void Opcode8100Handler::_run()
-{
-    Logger::debug("SCRIPT") << "[8100] [+] int obj_pid(void* obj)" << std::endl;
-    auto object = _vm->dataStack()->popObject();
-    if (!object)
-    {
-        _vm->dataStack()->push(0);
-    }
-    else
-    {
-        _vm->dataStack()->push(object->PID());
-    }
-}
+public:
+    Opcode814AHandler(VM* vm);
+private:
+    void _run();
+};
 
 }
-
-
+#endif

@@ -180,7 +180,7 @@ void Object::_generateUi()
     auto frm = ResourceManager::getInstance()->frmFileType(FID());
     if (frm)
     {
-        if (frm->framesPerDirection() > 1)
+        if (frm->framesPerDirection() > 1 || frm->directions()->size() > 1)
         {
             auto queue = make_unique<UI::AnimationQueue>();
             queue->animations().push_back(make_unique<UI::Animation>(ResourceManager::getInstance()->FIDtoFrmName(FID()), orientation()));
@@ -475,10 +475,6 @@ void Object::pickup_p_proc(CritterObject* pickedUpBy)
             ->call("pickup_p_proc");
     }
     // @TODO: standard handler
-}
-
-void Object::spatial_p_proc()
-{
 }
 
 void Object::use_obj_on_p_proc(Object* objectUsed, CritterObject* usedBy)

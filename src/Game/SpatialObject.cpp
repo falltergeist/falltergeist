@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -17,39 +17,45 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../Game/SpatialObject.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Handlers/Opcode8100Handler.h"
-#include "../../Game/Game.h"
-#include "../../Game/Object.h"
-#include "../../Game/ObjectFactory.h"
-#include "../../VM/VM.h"
+#include "../Base/StlFeatures.h"
+#include "../Exception.h"
+#include "../Game/Game.h"
+#include "../Logger.h"
+#include "../PathFinding/Hexagon.h"
+#include "../VM/VM.h"
 
 // Third party includes
 
-namespace Falltergeist
+namespace Falltergeist {
+namespace Game {
+
+SpatialObject::SpatialObject(unsigned int radius) : Object(), _radius(radius)
 {
 
-Opcode8100Handler::Opcode8100Handler(VM* vm) : OpcodeHandler(vm)
-{
 }
 
-void Opcode8100Handler::_run()
+
+void SpatialObject::spatial_p_proc(Object *source)
 {
-    Logger::debug("SCRIPT") << "[8100] [+] int obj_pid(void* obj)" << std::endl;
-    auto object = _vm->dataStack()->popObject();
-    if (!object)
+    if (_script && _script->hasFunction("spatial_p_proc"))
     {
-        _vm->dataStack()->push(0);
-    }
-    else
-    {
-        _vm->dataStack()->push(object->PID());
+        _script
+                ->setSourceObject(source)
+                ->call("spatial_p_proc");
     }
 }
 
+unsigned int SpatialObject::radius()
+{
+    return _radius;
 }
 
 
+}
+}

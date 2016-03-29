@@ -21,35 +21,26 @@
 
 // Falltergeist includes
 #include "../../Logger.h"
-#include "../../VM/Handlers/Opcode8100Handler.h"
-#include "../../Game/Game.h"
-#include "../../Game/Object.h"
-#include "../../Game/ObjectFactory.h"
+#include "../../VM/Handlers/Opcode814AHandler.h"
 #include "../../VM/VM.h"
+#include "../../Game/Object.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
 
-Opcode8100Handler::Opcode8100Handler(VM* vm) : OpcodeHandler(vm)
+Opcode814AHandler::Opcode814AHandler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode8100Handler::_run()
+void Opcode814AHandler::_run()
 {
-    Logger::debug("SCRIPT") << "[8100] [+] int obj_pid(void* obj)" << std::endl;
-    auto object = _vm->dataStack()->popObject();
-    if (!object)
-    {
-        _vm->dataStack()->push(0);
-    }
-    else
-    {
-        _vm->dataStack()->push(object->PID());
-    }
+    // @TODO
+    Logger::debug("SCRIPT") << "[814A] [*] int art_anim(int fid)" << std::endl;
+    _vm->dataStack()->popInteger();
+    _vm->dataStack()->push(0);
 }
 
 }
-
 

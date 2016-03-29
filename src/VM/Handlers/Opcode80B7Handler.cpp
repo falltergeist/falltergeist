@@ -49,10 +49,7 @@ void Opcode80B7Handler::_run()
     auto elevation = _vm->dataStack()->popInteger();
     auto position = _vm->dataStack()->popInteger();
     auto PID = _vm->dataStack()->popInteger();
-    auto object = Game::ObjectFactory::getInstance()->createObject(PID);
-    auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);
-    Game::getInstance()->locationState()->moveObjectToHexagon(object, hexagon);
-    object->setElevation(elevation);
+    auto object = Game::getInstance()->locationState()->addObject(PID, position, elevation);
     if (SID > 0)
     {
         auto intFile = ResourceManager::getInstance()->intFileType(SID);
@@ -60,6 +57,10 @@ void Opcode80B7Handler::_run()
         {
             object->setScript(new VM(intFile, object));
         }
+    }
+    if (object->script())
+    {
+        object->script()->initialize();
     }
     _vm->dataStack()->push(object);
 }

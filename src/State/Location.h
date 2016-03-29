@@ -40,6 +40,7 @@ namespace Falltergeist
 namespace Game
 {
     class Object;
+    class SpatialObject;
 }
 namespace UI
 {
@@ -89,6 +90,7 @@ public:
     std::map<std::string, VMStackValue>* EVARS();
 
     void moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool update = true);
+    void removeObjectFromMap(Game::Object *object);
     void destroyObject(Game::Object* object);
     void centerCameraAtHexagon(Hexagon* hexagon);
     void centerCameraAtHexagon(int tileNum);
@@ -118,6 +120,8 @@ public:
     UI::PlayerPanel* playerPanel();
 
     void initLight();
+
+    Game::Object* addObject(unsigned int PID, unsigned int position, unsigned int elevation);
 
 protected:
     struct TimerEvent
@@ -175,6 +179,8 @@ protected:
 
     unsigned int _lightLevel = 0x10000;
     Falltergeist::Graphics::Lightmap* _lightmap;
+
+    std::vector<std::unique_ptr<Game::SpatialObject>> _spatials;
 
 };
 

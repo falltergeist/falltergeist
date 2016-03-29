@@ -38,13 +38,24 @@ Opcode80CFHandler::Opcode80CFHandler(VM* vm) : OpcodeHandler(vm)
 void Opcode80CFHandler::_run()
 {
     Logger::debug("SCRIPT") << "[80CF] [=] int tile_in_tile_rect(int tile1, int tile2, int tile3, int tile4, int tile)" << std::endl;
-    _vm->dataStack()->popInteger();
-    _vm->dataStack()->popInteger();
-    _vm->dataStack()->popInteger();
-    _vm->dataStack()->popInteger();
-    _vm->dataStack()->popInteger();
-    // @TODO: implement
-    _vm->dataStack()->push(0);
+    int targetHex = _vm->dataStack()->popInteger();
+    int bottomRight = _vm->dataStack()->popInteger();
+    /*int bottomLeft = */_vm->dataStack()->popInteger();
+    /*int upperRight = */_vm->dataStack()->popInteger();
+    int upperLeft = _vm->dataStack()->popInteger();
+
+    // That's how original engine does this:
+    int targetX = targetHex % 200;
+    int targetY = targetHex / 200;
+
+    int upperLeftX = upperLeft % 200;
+    int upperLeftY = upperLeft / 200;
+
+    int bottomRightX = bottomRight % 200;
+    int bottomRightY = bottomRight / 200;
+
+    bool in = (targetX <= upperLeftX && targetY >= upperLeftY && targetX >= bottomRightX && targetY <= bottomRightY);
+    _vm->dataStack()->push(in);
 }
 
 }

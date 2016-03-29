@@ -23,6 +23,9 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80D3Handler.h"
 #include "../../VM/VM.h"
+#include "../../Game/Game.h"
+#include "../../State/Location.h"
+#include "../../PathFinding/HexagonGrid.h"
 
 
 
@@ -38,9 +41,10 @@ Opcode80D3Handler::Opcode80D3Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode80D3Handler::_run()
 {
     Logger::debug("SCRIPT") << "[80D3] int tile_distance_objs(void* p2, void* p1)" << std::endl;
-    _vm->dataStack()->popObject();
-    _vm->dataStack()->popObject();
-    _vm->dataStack()->push(10);
+    auto obj1 = _vm->dataStack()->popObject();
+    auto obj2 = _vm->dataStack()->popObject();
+    int distance = Game::getInstance()->locationState()->hexagonGrid()->distance(obj1->hexagon(), obj2->hexagon());
+    _vm->dataStack()->push(distance);
 }
 
 }

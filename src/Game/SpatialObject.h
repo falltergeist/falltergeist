@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -17,39 +17,31 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef FALLTERGEIST_GAME_SPATIALOBJECT_H
+#define FALLTERGEIST_GAME_SPATIALOBJECT_H
+
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Handlers/Opcode8100Handler.h"
-#include "../../Game/Game.h"
-#include "../../Game/Object.h"
-#include "../../Game/ObjectFactory.h"
-#include "../../VM/VM.h"
+#include "../Game/Object.h"
 
 // Third party includes
 
-namespace Falltergeist
-{
+namespace Falltergeist {
+namespace Game {
 
-Opcode8100Handler::Opcode8100Handler(VM* vm) : OpcodeHandler(vm)
-{
+
+class SpatialObject : public Object {
+public:
+    SpatialObject(unsigned int radius);
+    void spatial_p_proc(Object* source);
+    unsigned int radius();
+
+private:
+    unsigned int _radius;
+};
 }
-
-void Opcode8100Handler::_run()
-{
-    Logger::debug("SCRIPT") << "[8100] [+] int obj_pid(void* obj)" << std::endl;
-    auto object = _vm->dataStack()->popObject();
-    if (!object)
-    {
-        _vm->dataStack()->push(0);
-    }
-    else
-    {
-        _vm->dataStack()->push(object->PID());
-    }
-}
-
 }
 
 
+#endif //FALLTERGEIST_GAME_SPATIALOBJECT_H

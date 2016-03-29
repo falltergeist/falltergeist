@@ -38,6 +38,7 @@ Opcode8149Handler::Opcode8149Handler(VM* vm) : OpcodeHandler(vm)
 
 void Opcode8149Handler::_run()
 {
+    // TODO: should it return FID of current animation?
     Logger::debug("SCRIPT") << "[8149] [+] int obj_art_fid(void* obj)" << std::endl;
     auto object = _vm->dataStack()->popObject();
     _vm->dataStack()->push(object->FID());

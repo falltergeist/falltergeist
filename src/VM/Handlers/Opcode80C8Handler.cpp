@@ -23,6 +23,7 @@
 #include "../../Logger.h"
 #include "../../VM/Handlers/Opcode80C8Handler.h"
 #include "../../VM/VM.h"
+#include "../../Game/Object.h"
 
 
 
@@ -39,8 +40,20 @@ void Opcode80C8Handler::_run()
 {
     // @TODO: implement
     Logger::debug("SCRIPT") << "[80C8] [=] int obj_type(void* obj)" << std::endl;
-    _vm->dataStack()->popObject();
-    _vm->dataStack()->push(0);
+    auto object = _vm->dataStack()->popObject();
+    Game::Object::Type type = object->type();
+    switch (type)
+    {
+        case Game::Object::Type::CRITTER:
+        case Game::Object::Type::DUDE:
+            _vm->dataStack()->push(1);
+            break;
+        default:
+            _vm->dataStack()->push((int)type);
+            break;
+
+    }
+    //_vm->dataStack()->push(object);
 }
 
 }

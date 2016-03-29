@@ -40,21 +40,28 @@ void Opcode810CHandler::_run()
 {
     int direction = _vm->dataStack()->popInteger();
     int animation = _vm->dataStack()->popInteger();
-    auto critter = static_cast<Game::CritterObject*>(_vm->dataStack()->popObject());
+    auto object = static_cast<Game::Object*>(_vm->dataStack()->popObject());
 
     Logger::debug("SCRIPT") << "[810C] [*] void anim(GameCritterObject* who, int animation, int direction)" << std::endl
                             << "    direction = 0x" << std::hex << direction << std::endl
                             << "    animation = 0x" << std::hex << animation << std::endl;
     switch (animation)
     {
-        case 1000: // ANIMATE_ROTATION
+        case 1000: // ANIMATE_ROTATION. direction is orientation
         {
-            critter->setActionAnimation("aa");
+            object->setOrientation(direction);
+            //critter->setActionAnimation("aa");
             break;
         }
-        default:
+        case 1010: // ANIMATE_SET_FRAME. direction is frame number
         {
-            _error("op_anim - unimplemented animation: " + std::to_string(animation));
+            _warning("op_anim - unimplemented ANIMATE_SET_FRAME");
+            break;
+        }
+        default: //  set animation? direction is forward/backward
+        {
+            _warning("op_anim - unimplemented animation: " + std::to_string(animation));
+            break;
         }
     }
 }

@@ -77,7 +77,7 @@ void Opcode8116Handler::_run()
         auto location = Game::Game::getInstance()->locationState();
         if (location)
         {
-            location->moveObjectToHexagon(item, nullptr);
+            location->removeObjectFromMap(item);
         }
     }
 }

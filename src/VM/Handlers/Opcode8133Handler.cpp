@@ -21,10 +21,7 @@
 
 // Falltergeist includes
 #include "../../Logger.h"
-#include "../../VM/Handlers/Opcode8100Handler.h"
-#include "../../Game/Game.h"
-#include "../../Game/Object.h"
-#include "../../Game/ObjectFactory.h"
+#include "../../VM/Handlers/Opcode8133Handler.h"
 #include "../../VM/VM.h"
 
 // Third party includes
@@ -32,22 +29,13 @@
 namespace Falltergeist
 {
 
-Opcode8100Handler::Opcode8100Handler(VM* vm) : OpcodeHandler(vm)
+Opcode8133Handler::Opcode8133Handler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode8100Handler::_run()
+void Opcode8133Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8100] [+] int obj_pid(void* obj)" << std::endl;
-    auto object = _vm->dataStack()->popObject();
-    if (!object)
-    {
-        _vm->dataStack()->push(0);
-    }
-    else
-    {
-        _vm->dataStack()->push(object->PID());
-    }
+    Logger::debug("SCRIPT") << "[8134] [=] void game_ui_disable()" << std::endl;
 }
 
 }
