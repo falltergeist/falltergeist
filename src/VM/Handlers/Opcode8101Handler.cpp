@@ -20,7 +20,9 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Game/Game.h"
 #include "../../Logger.h"
+#include "../../State/Location.h"
 #include "../../VM/Handlers/Opcode8101Handler.h"
 #include "../../VM/VM.h"
 
@@ -38,7 +40,7 @@ Opcode8101Handler::Opcode8101Handler(VM* vm) : OpcodeHandler(vm)
 void Opcode8101Handler::_run()
 {
     Logger::debug("SCRIPT") << "[8101] [=] int cur_map_index()" << std::endl;
-    _vm->dataStack()->push(3);
+    _vm->dataStack()->push(Game::getInstance()->locationState()->currentMapIndex());
 }
 
 }
