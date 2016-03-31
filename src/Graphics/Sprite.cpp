@@ -93,6 +93,8 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
     vertices.reserve(4);
     UV.reserve(4);
 
+    x--;
+    y--;
     glm::vec2 vertex_up_left    = glm::vec2( (float)x, (float)y);
     glm::vec2 vertex_up_right   = glm::vec2( (float)(x+width), (float)y);
     glm::vec2 vertex_down_right = glm::vec2( (float)(x+width), (float)(y+height));
