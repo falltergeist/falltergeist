@@ -133,6 +133,7 @@
 #include "../VM/Handlers/Opcode80F4Handler.h"
 #include "../VM/Handlers/Opcode80F6Handler.h"
 #include "../VM/Handlers/Opcode80F7Handler.h"
+#include "../VM/Handlers/Opcode80F8Handler.h"
 #include "../VM/Handlers/Opcode80F9Handler.h"
 #include "../VM/Handlers/Opcode80FAHandler.h"
 #include "../VM/Handlers/Opcode80FBHandler.h"
@@ -326,6 +327,7 @@ std::unique_ptr<OpcodeHandler> OpcodeFactory::createOpcode(unsigned int number, 
         case 0x80F4: return make_unique<Opcode80F4Handler>(vm);
         case 0x80F6: return make_unique<Opcode80F6Handler>(vm);
         case 0x80F7: return make_unique<Opcode80F7Handler>(vm);
+        case 0x80F8: return make_unique<Opcode80F8Handler>(vm);
         case 0x80F9: return make_unique<Opcode80F9Handler>(vm);
         case 0x80FA: return make_unique<Opcode80FAHandler>(vm);
         case 0x80FB: return make_unique<Opcode80FBHandler>(vm);

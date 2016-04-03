@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -21,11 +21,14 @@
 
 // Falltergeist includes
 #include "../../Game/Game.h"
+#include "../../Graphics/Rect.h"
+#include "../../LocationCamera.h"
 #include "../../Logger.h"
+#include "../../PathFinding/Hexagon.h"
+#include "../../PathFinding/HexagonGrid.h"
 #include "../../State/Location.h"
-#include "../../VM/Handlers/Opcode8101Handler.h"
+#include "../../VM/Handlers/Opcode80F8Handler.h"
 #include "../../VM/VM.h"
-
 
 
 // Third party includes
@@ -33,14 +36,18 @@
 namespace Falltergeist
 {
 
-Opcode8101Handler::Opcode8101Handler(VM* vm) : OpcodeHandler(vm)
+Opcode80F8Handler::Opcode80F8Handler(VM* vm) : OpcodeHandler(vm)
 {
 }
 
-void Opcode8101Handler::_run()
+void Opcode80F8Handler::_run()
 {
-    Logger::debug("SCRIPT") << "[8101] [=] int cur_map_index()" << std::endl;
-    _vm->dataStack()->push(Game::getInstance()->locationState()->currentMapIndex());
+    Logger::debug("SCRIPT") << "[80F8] [=] bool tile_is_visible (int hex)" << std::endl;
+    int hexnum = _vm->dataStack()->popInteger();
+    auto hex = Game::getInstance()->locationState()->hexagonGrid()->at(hexnum);
+    bool inrect = Graphics::Rect::inRect( Point( hex->position() - Game::getInstance()->locationState()->camera()->topLeft() ),
+                                          Game::getInstance()->locationState()->camera()->size() );
+    _vm->dataStack()->push(inrect);
 }
 
 }

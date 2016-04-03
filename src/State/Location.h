@@ -117,6 +117,8 @@ public:
     unsigned int lightLevel();
     void setLightLevel(unsigned int level);
 
+    unsigned int currentMapIndex();
+
     UI::PlayerPanel* playerPanel();
 
     void initLight();
@@ -157,6 +159,7 @@ protected:
 
     bool _locationEnter = true;
     unsigned int _currentElevation = 0;
+    unsigned int _currentMap = 0;
     unsigned int _lastClickedTile = 0;
     Game::Object* _objectUnderCursor = NULL;
     Game::Object* _actionCursorLastObject = NULL;
