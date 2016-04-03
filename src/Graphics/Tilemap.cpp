@@ -100,7 +100,7 @@ void Tilemap::render(const Point &pos, std::vector<GLuint> indexes, uint32_t atl
     GL_CHECK(_shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
 
     // set camera offset
-    GL_CHECK(_shader->setUniform(_uniformOffset, glm::vec2((float)pos.x(), (float)pos.y()) ));
+    GL_CHECK(_shader->setUniform(_uniformOffset, glm::vec2((float)pos.x()+1.0, (float)pos.y()+2.0) ));
 
     GL_CHECK(_shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
 

@@ -440,6 +440,8 @@ void Location::setLocation(const std::string& name)
     
     if (it != maps.end())
     {
+        _currentMap = it-maps.begin();
+
         if (!it->music.empty() && Game::getInstance()->settings()->musicVolume() > 0.0001)
         {
             Logger::info("Location") << "Playing music " << it->music << std::endl;
@@ -1379,6 +1381,10 @@ Game::Object *Location::addObject(unsigned int PID, unsigned int position, unsig
     return object;
 }
 
+unsigned int Location::currentMapIndex()
+{
+    return _currentMap;
+}
 
 }
 }

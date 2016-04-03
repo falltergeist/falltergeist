@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -17,16 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
-#include "../../VM/Handler/Opcode8101Handler.h"
+#ifndef FALLTERGEIST_VM_OPCODE80F8_H
+#define FALLTERGEIST_VM_OPCODE80F8_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Game/Game.h"
-#include "../../Logger.h"
-#include "../../State/Location.h"
-#include "../../VM/Script.h"
+#include "../../VM/OpcodeHandler.h"
 
 // Third party includes
 
@@ -36,15 +33,15 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8101::Opcode8101(VM::Script* script) : OpcodeHandler(script)
+            class Opcode80F8 : public OpcodeHandler
             {
-            }
+                public:
+                    Opcode80F8(VM::Script* script);
 
-            void Opcode8101::_run()
-            {
-                Logger::debug("SCRIPT") << "[8101] [=] int cur_map_index()" << std::endl;
-                _script->dataStack()->push(Game::getInstance()->locationState()->currentMapIndex());
-            }
+                private:
+                    void _run() override;
+            };
         }
     }
 }
+#endif // FALLTERGEIST_VM_OPCODE80F8_H

@@ -135,6 +135,7 @@
 #include "../VM/Handler/Opcode80F4Handler.h"
 #include "../VM/Handler/Opcode80F6Handler.h"
 #include "../VM/Handler/Opcode80F7Handler.h"
+#include "../VM/Handler/Opcode80F8Handler.h"
 #include "../VM/Handler/Opcode80F9Handler.h"
 #include "../VM/Handler/Opcode80FAHandler.h"
 #include "../VM/Handler/Opcode80FBHandler.h"
@@ -329,6 +330,7 @@ namespace Falltergeist
                 case 0x80F4: return make_unique<Handler::Opcode80F4>(script);
                 case 0x80F6: return make_unique<Handler::Opcode80F6>(script);
                 case 0x80F7: return make_unique<Handler::Opcode80F7>(script);
+                case 0x80F8: return make_unique<Handler::Opcode80F8>(script);
                 case 0x80F9: return make_unique<Handler::Opcode80F9>(script);
                 case 0x80FA: return make_unique<Handler::Opcode80FA>(script);
                 case 0x80FB: return make_unique<Handler::Opcode80FB>(script);
