@@ -37,6 +37,7 @@
 #include "../Format/Map/Script.h"
 #include "../Format/Txt/MapsFile.h"
 #include "../Format/Gam/File.h"
+#include "../functions.h"
 #include "../Game/ContainerItemObject.h"
 #include "../Game/Defines.h"
 #include "../Game/DoorSceneryObject.h"
@@ -70,8 +71,7 @@
 #include "../UI/TextArea.h"
 #include "../UI/Tile.h"
 #include "../UI/TileMap.h"
-#include "../VM/VM.h"
-#include "../functions.h"
+#include "../VM/Script.h"
 
 // Third party includes
 
@@ -327,12 +327,12 @@ void Location::setLocation(const std::string& name)
         if (mapObject->scriptId() > 0)
         {
             auto intFile = ResourceManager::getInstance()->intFileType(mapObject->scriptId());
-            if (intFile) object->setScript(new VM(intFile,object));
+            if (intFile) object->setScript(new VM::Script(intFile,object));
         }
         if (mapObject->mapScriptId() > 0 && mapObject->mapScriptId() != mapObject->scriptId())
         {
             auto intFile = ResourceManager::getInstance()->intFileType(mapObject->mapScriptId());
-            if (intFile) object->setScript(new VM(intFile, object));
+            if (intFile) object->setScript(new VM::Script(intFile, object));
         }
 
         auto hexagon = hexagonGrid()->at(mapObject->hexPosition());
@@ -371,7 +371,7 @@ void Location::setLocation(const std::string& name)
         player->setOrientation(mapFile->defaultOrientation());
 
         // Player script
-        player->setScript(new VM(ResourceManager::getInstance()->intFileType(0), player));
+        player->setScript(new VM::Script(ResourceManager::getInstance()->intFileType(0), player));
 
         auto hexagon = hexagonGrid()->at(mapFile->defaultPosition());
         _objects.emplace_back(player);
@@ -381,7 +381,7 @@ void Location::setLocation(const std::string& name)
     // Location script
     if (mapFile->scriptId() > 0)
     {
-        _locationScript = make_unique<VM>(ResourceManager::getInstance()->intFileType(mapFile->scriptId()-1), nullptr);
+        _locationScript = make_unique<VM::Script>(ResourceManager::getInstance()->intFileType(mapFile->scriptId()-1), nullptr);
     }
 
     // Spatials
@@ -398,7 +398,7 @@ void Location::setLocation(const std::string& name)
                 spatial->setElevation(elev);
                 spatial->setHexagon(_hexagonGrid->at(hex));
                 auto intFile = ResourceManager::getInstance()->intFileType(script->scriptId());
-                if (intFile) spatial->setScript(new VM(intFile, spatial));
+                if (intFile) spatial->setScript(new VM::Script(intFile, spatial));
 
                 _spatials.emplace_back(spatial);
             }
@@ -1081,7 +1081,7 @@ int Location::MVAR(unsigned int number)
     return _MVARS.at(number);
 }
 
-std::map<std::string, VMStackValue>* Location::EVARS()
+std::map<std::string, VM::StackValue>* Location::EVARS()
 {
     return &_EVARS;
 }

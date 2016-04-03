@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_OPCODEHANDLER_H
-#define FALLTERGEIST_OPCODEHANDLER_H
+#ifndef FALLTERGEIST_VM_OPCODEHANDLER_H
+#define FALLTERGEIST_VM_OPCODEHANDLER_H
 
 // C++ standard includes
 #include <memory>
@@ -29,24 +29,26 @@
 
 namespace Falltergeist
 {
-class VM;
+    namespace VM
+    {
+        class Script;
 
-class OpcodeHandler
-{
-protected:
-    VM* _vm;
-    unsigned int _offset;
+        class OpcodeHandler
+        {
+            public:
+                OpcodeHandler(VM::Script* script);
+                virtual ~OpcodeHandler();
+                void run();
+            protected:
+                VM::Script* _script;
+                unsigned int _offset;
 
-    virtual void _run();
-    // print warning message to log
-    void _warning(const std::string& message);
-    // prints error message to logs and throws VMErrorException
-    void _error(const std::string& message);
-public:
-    OpcodeHandler(VM* vm);
-    virtual ~OpcodeHandler();
-    void run();
-};
-
+                virtual void _run();
+                // print warning message to log
+                void _warning(const std::string& message);
+                // prints error message to logs and throws VM::ErrorException
+                void _error(const std::string& message);
+        };
+    }
 }
-#endif // FALLTERGEIST_OPCODEHANDLER_H
+#endif // FALLTERGEIST_VM_OPCODEHANDLER_H

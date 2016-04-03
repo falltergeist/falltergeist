@@ -27,11 +27,14 @@
 
 // Third party includes
 
-namespace Falltergeist {
-namespace Game {
+namespace Falltergeist
+{
+namespace Game
+{
 
+class SpatialObject : public Object
+{
 
-class SpatialObject : public Object {
 public:
     SpatialObject(unsigned int radius);
     void spatial_p_proc(Object* source);
@@ -40,8 +43,7 @@ public:
 private:
     unsigned int _radius;
 };
+
 }
 }
-
-
 #endif //FALLTERGEIST_GAME_SPATIALOBJECT_H

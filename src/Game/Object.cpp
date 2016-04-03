@@ -45,7 +45,7 @@
 #include "../UI/AnimationQueue.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
-#include "../VM/VM.h"
+#include "../VM/Script.h"
 
 // Third party includes
 
@@ -138,12 +138,12 @@ void Object::setDescription(const std::string& value)
     _description = value;
 }
 
-VM* Object::script() const
+VM::Script* Object::script() const
 {
     return _script.get();
 }
 
-void Object::setScript(VM* script)
+void Object::setScript(VM::Script* script)
 {
     _script.reset(script);
 }

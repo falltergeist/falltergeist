@@ -37,7 +37,10 @@ namespace Game
 {
     class CritterObject;
 }
-class VM;
+namespace VM
+{
+    class Script;
+}
 
 namespace State
 {
@@ -65,8 +68,8 @@ public:
     int msgFileID();
     void setMsgFileID(int value);
 
-    VM* script();
-    void setScript(VM* script);
+    VM::Script* script();
+    void setScript(VM::Script* script);
     
     void onStateActivate(Event::State* event) override;
     void onStateDeactivate(Event::State* event) override;
@@ -77,7 +80,7 @@ protected:
     int _headID = -1;
     int _mood = 0;
     int _msgFileID = -1;
-    VM* _script;
+    VM::Script* _script = nullptr;
     Game::CritterObject* _critter = nullptr;
 };
 

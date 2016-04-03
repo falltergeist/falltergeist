@@ -30,7 +30,7 @@
 #include "../State/Location.h"
 #include "../UI/Animation.h"
 #include "../UI/AnimationQueue.h"
-#include "../VM/VM.h"
+#include "../VM/Script.h"
 
 // Third party includes
 

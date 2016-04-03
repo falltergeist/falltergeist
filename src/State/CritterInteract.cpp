@@ -127,12 +127,12 @@ void CritterInteract::setMsgFileID(int value)
     _msgFileID = value;
 }
 
-VM* CritterInteract::script()
+VM::Script* CritterInteract::script()
 {
     return _script;
 }
 
-void CritterInteract::setScript(VM* script)
+void CritterInteract::setScript(VM::Script* script)
 {
     _script = script;
 }

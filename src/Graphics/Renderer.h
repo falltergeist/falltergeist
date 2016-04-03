@@ -53,7 +53,8 @@ class Texture;
 class Renderer
 {
 public:
-    enum class RenderPath {
+    enum class RenderPath
+    {
         OGL21 = 0,
         OGL32,
         GLES1,

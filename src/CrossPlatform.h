@@ -21,8 +21,8 @@
 #define FALLTERGEIST_CROSSPLATFORM_H
 
 // C++ standard includes
-#include <string>
 #include <list>
+#include <string>
 #include <vector>
 
 // Falltergeist includes
@@ -34,18 +34,7 @@ namespace Falltergeist
 
 class CrossPlatform
 {
-protected:
-    static std::string _falloutDataPath;
-    static std::string _falltergeistDataPath;
-    static std::vector<std::string> _dataFiles;
-    static std::string _version;
-    const static std::vector<std::string> _necessaryDatFiles;
 
-
-    // Create directory at given path, if not already exists.
-    // If directory did exist, then return false, otherwise return true.
-    // Throw runtime_error on failure.
-    static bool _createDirectory(const char *dir);
 public:
     CrossPlatform();
     ~CrossPlatform();
@@ -65,6 +54,18 @@ public:
     static void createDirectory(std::string path);
 
     static bool fileExists(std::string file);
+
+protected:
+    static std::string _falloutDataPath;
+    static std::string _falltergeistDataPath;
+    static std::vector<std::string> _dataFiles;
+    static std::string _version;
+    const static std::vector<std::string> _necessaryDatFiles;
+
+    // Create directory at given path, if not already exists.
+    // If directory did exist, then return false, otherwise return true.
+    // Throw runtime_error on failure.
+    static bool _createDirectory(const char *dir);
 };
 
 }

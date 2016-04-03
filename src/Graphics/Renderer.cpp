@@ -245,12 +245,10 @@ void Renderer::init()
     GLushort indexes[6] = { 0, 1, 2, 3, 2, 1 };
     GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(GLushort), indexes, GL_STATIC_DRAW));
 
-
     // generate projection matrix
     _MVP = glm::ortho(0.0, (double)_size.width(), (double)_size.height(), 0.0, -1.0, 1.0);
 
     // load egg
-
     _egg = ResourceManager::getInstance()->texture("data/egg.png");
 
 
@@ -346,15 +344,20 @@ void Renderer::screenshot()
     SDL_Surface* output;
 
     int iter = 0;
-    do {
+    do
+    {
         std::string siter = std::to_string(iter);
-        if(siter.size()<3)
+        if(siter.size() < 3)
+        {
             siter.insert(0, 3 - siter.size(), '0');
+        }
         filename = "screenshot" + siter + ".png";
         iter++;
-    } while (CrossPlatform::fileExists(filename) && iter < 1000);
+    }
+    while (CrossPlatform::fileExists(filename) && iter < 1000);
 
-    if (CrossPlatform::fileExists(filename)) {
+    if (CrossPlatform::fileExists(filename))
+    {
         Logger::warning("GAME") << "Too many screenshots" << std::endl;
         return;
     }
@@ -421,23 +424,28 @@ float Renderer::scaleY()
     return _scaleY;
 }
 
-GLuint Renderer::getVAO() {
+GLuint Renderer::getVAO()
+{
     return _vao;
 }
 
-GLuint Renderer::getVVBO() {
+GLuint Renderer::getVVBO()
+{
     return _coord_vbo;
 }
 
-GLuint Renderer::getTVBO() {
+GLuint Renderer::getTVBO()
+{
     return _texcoord_vbo;
 }
 
-glm::mat4 Renderer::getMVP() {
+glm::mat4 Renderer::getMVP()
+{
     return _MVP;
 }
 
-GLuint Renderer::getEBO() {
+GLuint Renderer::getEBO()
+{
     return _ebo;
 }
 

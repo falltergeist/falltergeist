@@ -38,7 +38,7 @@
 #include "../State/Location.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
-#include "../VM/VM.h"
+#include "../VM/Script.h"
 
 // Third party includes
 

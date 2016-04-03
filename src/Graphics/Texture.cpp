@@ -24,9 +24,9 @@
 
 // Falltergeist includes
 #include "../Base/StlFeatures.h"
+#include "../Exception.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
-#include "../Exception.h"
 
 // Third party includes
 

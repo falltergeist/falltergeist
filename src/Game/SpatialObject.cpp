@@ -28,18 +28,18 @@
 #include "../Game/Game.h"
 #include "../Logger.h"
 #include "../PathFinding/Hexagon.h"
-#include "../VM/VM.h"
+#include "../VM/Script.h"
 
 // Third party includes
 
-namespace Falltergeist {
-namespace Game {
+namespace Falltergeist
+{
+namespace Game
+{
 
 SpatialObject::SpatialObject(unsigned int radius) : Object(), _radius(radius)
 {
-
 }
-
 
 void SpatialObject::spatial_p_proc(Object *source)
 {
@@ -55,7 +55,6 @@ unsigned int SpatialObject::radius()
 {
     return _radius;
 }
-
 
 }
 }

@@ -45,7 +45,7 @@
 #include "../Game/WeaponItemObject.h"
 #include "../Exception.h"
 #include "../ResourceManager.h"
-#include "../VM/VM.h"
+#include "../VM/Script.h"
 
 // Third party includes
 
@@ -320,7 +320,7 @@ Object* ObjectFactory::createObject(unsigned int PID)
     if (proto->scriptId() > 0)
     {
         auto intFile = ResourceManager::getInstance()->intFileType(proto->scriptId());
-        if (intFile) object->setScript(new VM(intFile, object));
+        if (intFile) object->setScript(new VM::Script(intFile, object));
     }
 
     return object;

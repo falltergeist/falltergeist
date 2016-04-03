@@ -48,9 +48,13 @@ namespace UI
     class Image;
     class TextArea;
 }
+namespace VM
+{
+    class Script;
+}
+
 class Hexagon;
 class Location;
-class VM;
 
 namespace Game
 {
@@ -147,8 +151,8 @@ public:
     void setDescription(const std::string& value);
 
     // script entity associated with the object
-    VM* script() const;
-    void setScript(VM* script);
+    VM::Script* script() const;
+    void setScript(VM::Script* script);
 
     /**
      * @brief Handles OS events coming from the State::handle().
@@ -250,7 +254,7 @@ protected:
     Orientation _orientation;
     std::string _name;
     std::string _description;
-    std::unique_ptr<VM> _script;
+    std::unique_ptr<VM::Script> _script;
     std::unique_ptr<UI::Base> _ui;
     Hexagon* _hexagon = nullptr;
     virtual void _generateUi();

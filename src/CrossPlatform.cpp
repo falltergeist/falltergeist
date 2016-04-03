@@ -18,7 +18,6 @@
  */
 
 // C++ standard includes
-
 #include <algorithm>
 #include <cerrno>
 #include <cstdlib>
@@ -26,7 +25,6 @@
 #include <dirent.h>
 #include <fstream>
 #include <stdexcept>
-#include <SDL.h>
 
 #if defined(__unix__) || defined(__APPLE__)
     #include <sys/param.h>
@@ -37,13 +35,13 @@
 #endif
 
 #if defined (__APPLE__) || defined(BSD)
-    #include <sys/ucred.h>
     #include <sys/mount.h>
+    #include <sys/ucred.h>
 #endif
 
 #if defined(_WIN32) || defined(WIN32)
-    #include <windows.h>
     #include <shlobj.h>
+    #include <windows.h>
 #elif defined(__unix__) || defined(__APPLE__)
     #include <sys/stat.h>
     #include <sys/types.h>
@@ -56,6 +54,7 @@
 #include "Logger.h"
 
 // Third party includes
+#include <SDL.h>
 
 namespace Falltergeist
 {

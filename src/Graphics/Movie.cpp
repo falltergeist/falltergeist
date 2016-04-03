@@ -44,7 +44,9 @@ Movie::Movie()
 Movie::~Movie()
 {
     if (_texture)
+    {
         delete _texture;
+    }
 }
 
 unsigned int Movie::width() const
@@ -100,9 +102,7 @@ void Movie::render(int x, int y)
 
     GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("fade",Game::getInstance()->renderer()->fadeColor()));
 
-    GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("MVP",
-                                                                           Game::getInstance()->renderer()->getMVP()));
-
+    GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("MVP", Game::getInstance()->renderer()->getMVP()));
 
     GLint curvao;
     glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
