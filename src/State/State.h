@@ -24,6 +24,7 @@
 #include <map>
 #include <memory>
 #include <vector>
+#include <VM/Script.h>
 
 // Falltergeist includes
 #include "../Event/EventTarget.h"
@@ -147,6 +148,8 @@ public:
     Event::StateHandler& fadeDoneHandler();
     Event::KeyboardHandler& keyDownHandler();
     Event::KeyboardHandler& keyUpHandler();
+
+    void scriptFade(VM::Script* script, bool in);
 
 
 protected:

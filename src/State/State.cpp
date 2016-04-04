@@ -273,5 +273,22 @@ Event::KeyboardHandler& State::keyUpHandler()
     return _keyUpHandler;
 }
 
+
+void State::scriptFade(VM::Script *script, bool in)
+{
+    fadeDoneHandler().clear();
+    fadeDoneHandler().add([this, script](Event::Event* event){ fadeDoneHandler().clear(); script->run();});
+    if (in)
+    {
+        Game::getInstance()->renderer()->fadeIn(0, 0, 0, 1000);
+    }
+    else
+    {
+        Game::getInstance()->renderer()->fadeOut(0, 0, 0, 1000);
+    }
+
+}
+
+
 }
 }
