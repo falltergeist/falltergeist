@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_MOVIE_H
-#define FALLTERGEIST_MOVIE_H
+#ifndef FALLTERGEIST_STATE_MOVIE_H
+#define FALLTERGEIST_STATE_MOVIE_H
 
 // C++ standard includes
 
@@ -29,51 +29,48 @@
 
 namespace Falltergeist
 {
-namespace Format
-{
-namespace Sve
-{
-    class File;
+    namespace Format
+    {
+        namespace Sve
+        {
+            class File;
+        }
+    }
+    class MvePlayer;
+
+    namespace State
+    {
+        typedef struct
+        {
+            unsigned int frame;
+            int direction;
+            int r;
+            int g;
+            int b;
+            int frames;
+        } effect_t;
+
+        class Movie : public State
+        {
+            public:
+                Movie(int id);
+                ~Movie() override;
+
+                void init() override;
+                void think() override;
+                void handle(Event::Event* event) override;
+
+                void onVideoFinished();
+
+            private:
+                int _id;
+                bool _started;
+                std::pair<unsigned int,std::string> _nextSubLine;
+                Format::Sve::File* _subs = nullptr;
+                bool _hasSubs = false;
+                std::vector<effect_t> _effects;
+                unsigned int _effect_index=0;
+        };
+    }
 }
-}
-class MvePlayer;
-
-namespace State
-{
-
-typedef struct
-{
-    unsigned int frame;
-    int direction;
-    int r;
-    int g;
-    int b;
-    int frames;
-} effect_t;
-
-class Movie : public State
-{
-protected:
-public:
-    Movie(int id);
-    ~Movie() override;
-
-    void init() override;
-    void think() override;
-    void handle(Event::Event* event) override;
-
-    void onVideoFinished();
-
-private:
-    int _id;
-    bool _started;
-    std::pair<unsigned int,std::string> _nextSubLine;
-    Format::Sve::File* _subs = nullptr;
-    bool _hasSubs = false;
-    std::vector<effect_t> _effects;
-    unsigned int _effect_index=0;
-};
-
-}
-}
-#endif // FALLTERGEIST_MOVIE_H
+#endif // FALLTERGEIST_STATE_MOVIE_H

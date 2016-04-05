@@ -17,125 +17,125 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../State/CritterInteract.h"
+
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Game/CritterObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
+#include "../Input/Mouse.h"
 #include "../LocationCamera.h"
 #include "../PathFinding/Hexagon.h"
-#include "../Game/CritterObject.h"
-#include "../State/CritterInteract.h"
 #include "../State/CursorDropdown.h"
 #include "../State/Location.h"
 #include "../UI/Image.h"
-#include "../Input/Mouse.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-namespace State
-{
+    namespace State
+    {
+        CritterInteract::CritterInteract() : State()
+        {
+        }
 
-CritterInteract::CritterInteract() : State()
-{
-}
+        CritterInteract::~CritterInteract()
+        {
+            auto camera = Game::getInstance()->locationState()->camera();
+            camera->setCenter(_oldCameraCenter);
+        }
 
-CritterInteract::~CritterInteract()
-{
-    auto camera = Game::getInstance()->locationState()->camera();
-    camera->setCenter(_oldCameraCenter);
-}
+        void CritterInteract::onStateActivate(Event::State* event)
+        {
+            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+        }
 
-void CritterInteract::onStateActivate(Event::State* event)
-{
-    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
-}
+        void CritterInteract::onStateDeactivate(Event::State* event)
+        {
+            Game::getInstance()->mouse()->popState();
+        }
 
-void CritterInteract::onStateDeactivate(Event::State* event)
-{
-    Game::getInstance()->mouse()->popState();
-}
+        void CritterInteract::init()
+        {
+            if (_initialized) return;
+            State::init();
 
-void CritterInteract::init()
-{
-    if (_initialized) return;
-    State::init();
+            setFullscreen(false);
+            setModal(true);
 
-    setFullscreen(false);
-    setModal(true);
+            setPosition((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
 
-    setPosition((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
+            addUI("background", new UI::Image("art/intrface/alltlk.frm"));
 
-    addUI("background", new UI::Image("art/intrface/alltlk.frm"));
+            // Centering camera on critter position
+            auto locationState = Game::getInstance()->locationState();
+            _oldCameraCenter = locationState->camera()->center();
 
-    // Centering camera on critter position
-    auto locationState = Game::getInstance()->locationState();
-    _oldCameraCenter = locationState->camera()->center();
+            locationState->camera()->setCenter(critter()->hexagon()->position() + Point(0, 100));
+        }
 
-    locationState->camera()->setCenter(critter()->hexagon()->position() + Point(0, 100));
-}
+        int CritterInteract::backgroundID()
+        {
+            return _backgroundID;
+        }
 
-int CritterInteract::backgroundID()
-{
-    return _backgroundID;
-}
+        void CritterInteract::setBackgroundID(int backgroundID)
+        {
+            _backgroundID = backgroundID;
+        }
 
-void CritterInteract::setBackgroundID(int backgroundID)
-{
-    _backgroundID = backgroundID;
-}
+        int CritterInteract::headID()
+        {
+            return _headID;
+        }
 
-int CritterInteract::headID()
-{
-    return _headID;
-}
+        void CritterInteract::setHeadID(int headID)
+        {
+            _headID = headID;
+        }
 
-void CritterInteract::setHeadID(int headID)
-{
-    _headID = headID;
-}
+        int CritterInteract::mood()
+        {
+            return _mood;
+        }
 
-int CritterInteract::mood()
-{
-    return _mood;
-}
+        void CritterInteract::setMood(int mood)
+        {
+            _mood = mood;
+        }
 
-void CritterInteract::setMood(int mood)
-{
-    _mood = mood;
-}
+        Game::CritterObject* CritterInteract::critter()
+        {
+            return _critter;
+        }
 
-Game::CritterObject* CritterInteract::critter()
-{
-    return _critter;
-}
+        void CritterInteract::setCritter(Game::CritterObject* critter)
+        {
+            _critter = critter;
+        }
 
-void CritterInteract::setCritter(Game::CritterObject* critter)
-{
-    _critter = critter;
-}
+        int CritterInteract::msgFileID()
+        {
+            return _msgFileID;
+        }
 
-int CritterInteract::msgFileID()
-{
-    return _msgFileID;
-}
+        void CritterInteract::setMsgFileID(int value)
+        {
+            _msgFileID = value;
+        }
 
-void CritterInteract::setMsgFileID(int value)
-{
-    _msgFileID = value;
-}
+        VM::Script* CritterInteract::script()
+        {
+            return _script;
+        }
 
-VM::Script* CritterInteract::script()
-{
-    return _script;
-}
-
-void CritterInteract::setScript(VM::Script* script)
-{
-    _script = script;
-}
-
-}
+        void CritterInteract::setScript(VM::Script* script)
+        {
+            _script = script;
+        }
+    }
 }

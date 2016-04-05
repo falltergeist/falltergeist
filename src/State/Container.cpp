@@ -17,6 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../State/Container.h"
+
 // C++ standard includes
 
 // Falltergeist includes
@@ -24,99 +27,96 @@
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
+#include "../Input/Mouse.h"
 #include "../Logger.h"
-#include "../State/Container.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/ItemsList.h"
-#include "../Input/Mouse.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-namespace State
-{
-
-Container::Container() : State()
-{
-}
-
-Container::~Container()
-{
-}
-
-void Container::init()
-{
-    if (_initialized) return;
-
-    setModal(true);
-    setFullscreen(false);
-
-    auto game = Game::getInstance();
-
-    setPosition((game->renderer()->size() - Point(537, 376)) / 2);
-
-    addUI("background", new UI::Image("art/intrface/loot.frm"));
-
-    addUI("button_done", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 478, 331));
-    getUI("button_done")->mouseClickHandler().add(std::bind(&Container::onDoneButtonClick, this, std::placeholders::_1));
-
-
-    // TAKEALL
-    // invmadn
-    // invmaup
-
-    // invupds
-    // invupin
-    // invupout
-
-
-    auto dudeList = new UI::ItemsList({170, 35});
-    dudeList->setItems(Game::getInstance()->player()->inventory());
-    addUI(dudeList);
-
-    auto containerList = new UI::ItemsList({292, 35});
-    containerList->setItems(object()->inventory());
-    addUI(containerList);
-
-    dudeList->itemDragStopHandler().add([containerList](Event::Mouse* event){ containerList->onItemDragStop(event); });
-    containerList->itemDragStopHandler().add([dudeList](Event::Mouse* event){ dudeList->onItemDragStop(event); });
-
-}
-
-Game::ContainerItemObject* Container::object()
-{
-    return _object;
-}
-
-void Container::setObject(Game::ContainerItemObject* object)
-{
-    _object = object;
-}
-
-void Container::onDoneButtonClick(Event::Mouse* event)
-{
-    Game::getInstance()->popState();
-}
-
-void Container::onStateActivate(Event::State* event)
-{
-    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
-}
-
-void Container::onStateDeactivate(Event::State* event)
-{
-    Game::getInstance()->mouse()->popState();
-}
-
-void Container::onKeyDown(Event::Keyboard* event)
-{
-    if (event->keyCode() == SDLK_ESCAPE)
+    namespace State
     {
-        Game::getInstance()->popState();
-    }
-}
+        Container::Container() : State()
+        {
+        }
 
-}
+        Container::~Container()
+        {
+        }
+
+        void Container::init()
+        {
+            if (_initialized) return;
+
+            setModal(true);
+            setFullscreen(false);
+
+            auto game = Game::getInstance();
+
+            setPosition((game->renderer()->size() - Point(537, 376)) / 2);
+
+            addUI("background", new UI::Image("art/intrface/loot.frm"));
+
+            addUI("button_done", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 478, 331));
+            getUI("button_done")->mouseClickHandler().add(std::bind(&Container::onDoneButtonClick, this, std::placeholders::_1));
+
+
+            // TAKEALL
+            // invmadn
+            // invmaup
+
+            // invupds
+            // invupin
+            // invupout
+
+
+            auto dudeList = new UI::ItemsList({170, 35});
+            dudeList->setItems(Game::getInstance()->player()->inventory());
+            addUI(dudeList);
+
+            auto containerList = new UI::ItemsList({292, 35});
+            containerList->setItems(object()->inventory());
+            addUI(containerList);
+
+            dudeList->itemDragStopHandler().add([containerList](Event::Mouse* event){ containerList->onItemDragStop(event); });
+            containerList->itemDragStopHandler().add([dudeList](Event::Mouse* event){ dudeList->onItemDragStop(event); });
+
+        }
+
+        Game::ContainerItemObject* Container::object()
+        {
+            return _object;
+        }
+
+        void Container::setObject(Game::ContainerItemObject* object)
+        {
+            _object = object;
+        }
+
+        void Container::onDoneButtonClick(Event::Mouse* event)
+        {
+            Game::getInstance()->popState();
+        }
+
+        void Container::onStateActivate(Event::State* event)
+        {
+            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+        }
+
+        void Container::onStateDeactivate(Event::State* event)
+        {
+            Game::getInstance()->mouse()->popState();
+        }
+
+        void Container::onKeyDown(Event::Keyboard* event)
+        {
+            if (event->keyCode() == SDLK_ESCAPE)
+            {
+                Game::getInstance()->popState();
+            }
+        }
+    }
 }

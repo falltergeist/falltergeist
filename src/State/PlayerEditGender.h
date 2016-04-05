@@ -23,39 +23,38 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "State.h"
+#include "../Format/Enums.h"
+#include "../State/State.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-namespace UI
-{
-    class ImageList;
-}
+    namespace UI
+    {
+        class ImageList;
+    }
+    namespace State
+    {
+        class PlayerEditGender : public State
+        {
+            public:
+                PlayerEditGender();
+                ~PlayerEditGender() override;
 
-namespace State
-{
+                void init() override;
 
-class PlayerEditGender : public State
-{
-protected:
-    UI::ImageList* _maleImage = nullptr;
-    UI::ImageList* _femaleImage = nullptr;
-    GENDER _gender = GENDER::MALE;
-public:
-    PlayerEditGender();
-    ~PlayerEditGender() override;
+                void onFemaleButtonPress(Event::Mouse* event);
+                void onMaleButtonPress(Event::Mouse* event);
+                void onDoneButtonClick(Event::Mouse* event);
+                void onKeyDown(Event::Keyboard* event) override;
+                void setGender(GENDER gender);
 
-    void init() override;
-
-    void onFemaleButtonPress(Event::Mouse* event);
-    void onMaleButtonPress(Event::Mouse* event);
-    void onDoneButtonClick(Event::Mouse* event);
-    void onKeyDown(Event::Keyboard* event) override;
-    void setGender(GENDER gender);
-};
-
-}
+            protected:
+                UI::ImageList* _maleImage = nullptr;
+                UI::ImageList* _femaleImage = nullptr;
+                GENDER _gender = GENDER::MALE;
+        };
+    }
 }
 #endif // FALLTERGEIST_STATE_PLAYEREDITGENDER_H

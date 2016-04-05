@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_PlayerEditName_H
-#define FALLTERGEIST_PlayerEditName_H
+#ifndef FALLTERGEIST_STATE_PLAYEREDITNAME_H
+#define FALLTERGEIST_STATE_PLAYEREDITNAME_H
 
 // C++ standard includes
 #include <map>
@@ -30,39 +30,34 @@
 
 namespace Falltergeist
 {
-namespace UI
-{
-    class TextArea;
-    class Rectangle;
+    namespace UI
+    {
+        class Rectangle;
+        class TextArea;
+    }
+    namespace State
+    {
+        class PlayerEditName : public State
+        {
+            public:
+                PlayerEditName();
+                ~PlayerEditName() override;
+
+                void init() override;
+                void think() override;
+
+                void onDoneButtonClick(Event::Mouse* event);
+                void onTextAreaKeyDown(Event::Keyboard* event);
+
+                void doDone();
+                void doBack();
+
+            protected:
+                unsigned int _timer;
+                UI::TextArea* _name = nullptr;
+                UI::Rectangle* _cursor = nullptr;
+                std::map<char,char> _keyCodes;
+        };
+    }
 }
-
-namespace State
-{
-
-class PlayerEditName : public State
-{
-public:
-    PlayerEditName();
-    ~PlayerEditName() override;
-
-    void init() override;
-    void think() override;
-
-    void onDoneButtonClick(Event::Mouse* event);
-    void onTextAreaKeyDown(Event::Keyboard* event);
-
-    void doDone();
-    void doBack();
-
-protected:
-    unsigned int _timer;
-    UI::TextArea* _name = nullptr;
-    UI::Rectangle* _cursor = nullptr;
-    std::map<char,char> _keyCodes;
-};
-
-
-}
-}
-
-#endif // FALLTERGEIST_PlayerEditName_H
+#endif // FALLTERGEIST_STATE_PLAYEREDITNAME_H

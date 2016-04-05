@@ -29,16 +29,14 @@
 
 namespace Falltergeist
 {
-namespace Event
-{
-
-class State : public Event
-{
-public:
-    State(const std::string& name);
-    ~State() override;
-};
-
-}
+    namespace Event
+    {
+        class State : public Event
+        {
+            public:
+                State(const std::string& name);
+                ~State() override;
+        };
+    }
 }
 #endif // FALLTERGEIST_EVENT_STATE_H

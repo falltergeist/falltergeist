@@ -54,14 +54,12 @@ namespace Falltergeist
         class Script;
         class StackValue;
     }
-
     class Hexagon;
     class HexagonGrid;
     class LocationCamera;
 
     namespace State
     {
-    
         /**
          * Location state works whenever player is on some map.
          * This state holds pointers to all object on current map, hexagon grid and other map-specific information.
@@ -77,7 +75,7 @@ namespace Falltergeist
 
                 void setLocation(const std::string& name);
 
-                void init();
+                void init() override;
                 void think() override;
                 void handle(Event::Event* event) override;
                 void render() override;
@@ -190,5 +188,4 @@ namespace Falltergeist
         };
     }
 }
-
 #endif // FALLTERGEIST_STATE_LOCATION_H

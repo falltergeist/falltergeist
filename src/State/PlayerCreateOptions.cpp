@@ -41,129 +41,127 @@
 
 namespace Falltergeist
 {
-namespace State
-{
-
-PlayerCreateOptions::PlayerCreateOptions() : State()
-{
-}
-
-PlayerCreateOptions::~PlayerCreateOptions()
-{
-}
-
-void PlayerCreateOptions::init()
-{
-    if (_initialized) return;
-    State::init();
-
-    setModal(true);
-    setFullscreen(false);
-
-    auto background = new UI::Image("art/intrface/opbase.frm");
-
-    Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
-    int backgroundX = backgroundPos.x();
-    int backgroundY = backgroundPos.y();
-
-    auto saveButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18);
-    auto loadButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37);
-    auto printToFileButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*2);
-    auto eraseButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3);
-    auto doneButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4);
-
-    saveButton->mouseClickHandler().add(   std::bind(&PlayerCreateOptions::onSaveButtonClick, this, std::placeholders::_1));
-    loadButton->mouseClickHandler().add(   std::bind(&PlayerCreateOptions::onLoadButtonClick, this, std::placeholders::_1));
-    printToFileButton->mouseClickHandler().add(std::bind(&PlayerCreateOptions::onPrintToFileButtonClick, this, std::placeholders::_1));
-    eraseButton->mouseClickHandler().add(      std::bind(&PlayerCreateOptions::onEraseButtonClick, this, std::placeholders::_1));
-    doneButton->mouseClickHandler().add(       std::bind(&PlayerCreateOptions::onDoneButtonClick, this, std::placeholders::_1));
-
-    auto font = ResourceManager::getInstance()->font("font3.aaf");
-    SDL_Color color = {0xb8, 0x9c, 0x28, 0xff};
-
-    // label: save
-    auto saveButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 600), backgroundX+8, backgroundY+26);
-    saveButtonLabel->setFont(font, color);
-    saveButtonLabel->setWidth(150);
-    saveButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
-
-    // label: load
-    auto loadButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 601), backgroundX+8, backgroundY+26+37);
-    loadButtonLabel->setFont(font, color);
-    loadButtonLabel->setWidth(150);
-    loadButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
-
-    // label: print to file
-    auto printToFileButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 602), backgroundX+8, backgroundY+26+37*2);
-    printToFileButtonLabel->setFont(font, color);
-    printToFileButtonLabel->setWidth(150);
-    printToFileButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
-
-    // label: erase
-    auto eraseButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 603), backgroundX+8, backgroundY+26+37*3);
-    eraseButtonLabel->setFont(font, color);
-    eraseButtonLabel->setWidth(150);
-    eraseButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
-
-    // label: done
-    auto doneButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 604), backgroundX+8, backgroundY+26+37*4);
-    doneButtonLabel->setFont(font, color);
-    doneButtonLabel->setWidth(150);
-    doneButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
-
-    background->setPosition(backgroundPos);
-
-    addUI(background);
-
-    addUI(saveButton);
-    addUI(loadButton);
-    addUI(printToFileButton);
-    addUI(eraseButton);
-    addUI(doneButton);
-
-    addUI(saveButtonLabel);
-    addUI(loadButtonLabel);
-    addUI(printToFileButtonLabel);
-    addUI(eraseButtonLabel);
-    addUI(doneButtonLabel);
-}
-
-void PlayerCreateOptions::onSaveButtonClick(Event::Mouse* event)
-{
-//    Game::getInstance()->pushState(new SavePlayerStatState());
-}
-
-void PlayerCreateOptions::onLoadButtonClick(Event::Mouse* event)
-{
-//    Game::getInstance()->pushState(new LoadPlayerStatState());
-}
-
-void PlayerCreateOptions::onPrintToFileButtonClick(Event::Mouse* event)
-{
-//    Game::getInstance()->pushState(new SettingsMenu());
-}
-
-void PlayerCreateOptions::onEraseButtonClick(Event::Mouse* event)
-{
-//    Game::getInstance()->pushState(new EraseConfirmState());
-}
-
-void PlayerCreateOptions::onDoneButtonClick(Event::Mouse* event)
-{
-    Game::getInstance()->popState();
-}
-
-void PlayerCreateOptions::onKeyDown(Event::Keyboard* event)
-{
-    switch (event->keyCode())
+    namespace State
     {
-        case SDLK_ESCAPE:
-        case SDLK_RETURN:
-        case SDLK_d:
-            Game::getInstance()->popState();
-            break;
-    }
-}
+        PlayerCreateOptions::PlayerCreateOptions() : State()
+        {
+        }
 
-}
+        PlayerCreateOptions::~PlayerCreateOptions()
+        {
+        }
+
+        void PlayerCreateOptions::init()
+        {
+            if (_initialized) return;
+            State::init();
+
+            setModal(true);
+            setFullscreen(false);
+
+            auto background = new UI::Image("art/intrface/opbase.frm");
+
+            Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
+            int backgroundX = backgroundPos.x();
+            int backgroundY = backgroundPos.y();
+
+            auto saveButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18);
+            auto loadButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37);
+            auto printToFileButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*2);
+            auto eraseButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3);
+            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4);
+
+            saveButton->mouseClickHandler().add(   std::bind(&PlayerCreateOptions::onSaveButtonClick, this, std::placeholders::_1));
+            loadButton->mouseClickHandler().add(   std::bind(&PlayerCreateOptions::onLoadButtonClick, this, std::placeholders::_1));
+            printToFileButton->mouseClickHandler().add(std::bind(&PlayerCreateOptions::onPrintToFileButtonClick, this, std::placeholders::_1));
+            eraseButton->mouseClickHandler().add(      std::bind(&PlayerCreateOptions::onEraseButtonClick, this, std::placeholders::_1));
+            doneButton->mouseClickHandler().add(       std::bind(&PlayerCreateOptions::onDoneButtonClick, this, std::placeholders::_1));
+
+            auto font = ResourceManager::getInstance()->font("font3.aaf");
+            SDL_Color color = {0xb8, 0x9c, 0x28, 0xff};
+
+            // label: save
+            auto saveButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 600), backgroundX+8, backgroundY+26);
+            saveButtonLabel->setFont(font, color);
+            saveButtonLabel->setWidth(150);
+            saveButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+
+            // label: load
+            auto loadButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 601), backgroundX+8, backgroundY+26+37);
+            loadButtonLabel->setFont(font, color);
+            loadButtonLabel->setWidth(150);
+            loadButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+
+            // label: print to file
+            auto printToFileButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 602), backgroundX+8, backgroundY+26+37*2);
+            printToFileButtonLabel->setFont(font, color);
+            printToFileButtonLabel->setWidth(150);
+            printToFileButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+
+            // label: erase
+            auto eraseButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 603), backgroundX+8, backgroundY+26+37*3);
+            eraseButtonLabel->setFont(font, color);
+            eraseButtonLabel->setWidth(150);
+            eraseButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+
+            // label: done
+            auto doneButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 604), backgroundX+8, backgroundY+26+37*4);
+            doneButtonLabel->setFont(font, color);
+            doneButtonLabel->setWidth(150);
+            doneButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+
+            background->setPosition(backgroundPos);
+
+            addUI(background);
+
+            addUI(saveButton);
+            addUI(loadButton);
+            addUI(printToFileButton);
+            addUI(eraseButton);
+            addUI(doneButton);
+
+            addUI(saveButtonLabel);
+            addUI(loadButtonLabel);
+            addUI(printToFileButtonLabel);
+            addUI(eraseButtonLabel);
+            addUI(doneButtonLabel);
+        }
+
+        void PlayerCreateOptions::onSaveButtonClick(Event::Mouse* event)
+        {
+        //    Game::getInstance()->pushState(new SavePlayerStatState());
+        }
+
+        void PlayerCreateOptions::onLoadButtonClick(Event::Mouse* event)
+        {
+        //    Game::getInstance()->pushState(new LoadPlayerStatState());
+        }
+
+        void PlayerCreateOptions::onPrintToFileButtonClick(Event::Mouse* event)
+        {
+        //    Game::getInstance()->pushState(new SettingsMenu());
+        }
+
+        void PlayerCreateOptions::onEraseButtonClick(Event::Mouse* event)
+        {
+        //    Game::getInstance()->pushState(new EraseConfirmState());
+        }
+
+        void PlayerCreateOptions::onDoneButtonClick(Event::Mouse* event)
+        {
+            Game::getInstance()->popState();
+        }
+
+        void PlayerCreateOptions::onKeyDown(Event::Keyboard* event)
+        {
+            switch (event->keyCode())
+            {
+                case SDLK_ESCAPE:
+                case SDLK_RETURN:
+                case SDLK_d:
+                    Game::getInstance()->popState();
+                    break;
+            }
+        }
+    }
 }

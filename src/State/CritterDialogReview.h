@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_CRITTER_DIALOG_REVIEW_STATE_H
-#define FALLTERGEIST_CRITTER_DIALOG_REVIEW_STATE_H
+#ifndef FALLTERGEIST_STATE_CRITTERDIALOGREVIEW_H
+#define FALLTERGEIST_STATE_CRITTERDIALOGREVIEW_H
 
 // C++ standard includes
 
@@ -29,22 +29,18 @@
 
 namespace Falltergeist
 {
-namespace State
-{
+    namespace State
+    {
+        class CritterDialogReview : public State
+        {
+            public:
+                CritterDialogReview();
+                ~CritterDialogReview() override;
 
-class CritterDialogReview : public State
-{
-private:
-public:
-    CritterDialogReview();
-    ~CritterDialogReview() override;
+                void init() override;
 
-    void init() override;
-
-    void onDoneButtonClick(Event::Mouse* event);
-};
-
+                void onDoneButtonClick(Event::Mouse* event);
+        };
+    }
 }
-}
-
-#endif // FALLTERGEIST_CRITTER_DIALOG_REVIEW_STATE_H
+#endif // FALLTERGEIST_STATE_CRITTERDIALOGREVIEW_H

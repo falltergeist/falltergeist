@@ -30,104 +30,102 @@
 
 namespace Falltergeist
 {
-namespace Event
-{
-
-using Graphics::Point;
-
-class Mouse : public Event
-{
-public:
-    enum class Button
+    namespace Event
     {
-        NONE = 0,
-        LEFT,
-        RIGHT,
-        MIDDLE,
-        X1,
-        X2
-    };
+        using Graphics::Point;
 
-    enum class Type
-    {
-        BUTTON_DOWN,
-        BUTTON_UP,
-        MOVE
-    };
+        class Mouse : public Event
+        {
+            public:
+                enum class Button
+                {
+                    NONE = 0,
+                    LEFT,
+                    RIGHT,
+                    MIDDLE,
+                    X1,
+                    X2
+                };
 
-    static const char* typeToString(Type);
+                enum class Type
+                {
+                    BUTTON_DOWN,
+                    BUTTON_UP,
+                    MOVE
+                };
 
-    Mouse(Type type);
-    Mouse(const Mouse& event, const std::string& newName);
-    Mouse(const Mouse& event);
-    ~Mouse() override;
+                static const char* typeToString(Type);
 
-    /**
-     * @brief Type of an original event from OS.
-     */
-    Type originalType() const;
+                Mouse(Type type);
+                Mouse(const Mouse& event, const std::string& newName);
+                Mouse(const Mouse& event);
+                ~Mouse() override;
 
-    /**
-     * Cursor position on screen.
-     */
-    const Point& position() const;
-    void setPosition(const Point& position);
+                /**
+                 * @brief Type of an original event from OS.
+                 */
+                Type originalType() const;
 
-    /**
-     * The offset for which cursor moved relative to last event. Used for move events.
-     */
-    const Point& offset() const;
-    void setOffset(const Point& offset);
+                /**
+                 * Cursor position on screen.
+                 */
+                const Point& position() const;
+                void setPosition(const Point& position);
 
-    /**
-     * @brief Which button was pressed during mouse button events.
-     */
-    Button button() const;
-    void setButton(Button);
+                /**
+                 * The offset for which cursor moved relative to last event. Used for move events.
+                 */
+                const Point& offset() const;
+                void setOffset(const Point& offset);
 
-    bool leftButton() const;
+                /**
+                 * @brief Which button was pressed during mouse button events.
+                 */
+                Button button() const;
+                void setButton(Button);
 
-    bool rightButton() const;
+                bool leftButton() const;
 
-    /**
-     * @brief Whether control key is pressed.
-     */
-    bool controlPressed() const;
-    void setControlPressed(bool value);
+                bool rightButton() const;
 
-    /**
-     * @brief Whether shift key is pressed.
-     */
-    bool shiftPressed() const;
-    void setShiftPressed(bool value);
+                /**
+                 * @brief Whether control key is pressed.
+                 */
+                bool controlPressed() const;
+                void setControlPressed(bool value);
 
-    /**
-     * @brief Whether alt key is pressed.
-     */
-    bool altPressed() const;
-    void setAltPressed(bool altPressed);
+                /**
+                 * @brief Whether shift key is pressed.
+                 */
+                bool shiftPressed() const;
+                void setShiftPressed(bool value);
 
-    /**
-     * Indicates that an obstacle was detected under mouse cursor during event capturing.
-     */
-    bool obstacle() const;
-    /**
-     * Sets obstacle flag. Used for event capturing.
-     */
-    void setObstacle(bool obstacle);
+                /**
+                 * @brief Whether alt key is pressed.
+                 */
+                bool altPressed() const;
+                void setAltPressed(bool altPressed);
 
-protected:
-    bool _controlPressed = false;
-    bool _shiftPressed = false;
-    bool _altPressed = false;
-    bool _obstacle = false;
-    Button _button = Button::NONE;
-    Type _type;
+                /**
+                 * Indicates that an obstacle was detected under mouse cursor during event capturing.
+                 */
+                bool obstacle() const;
+                /**
+                 * Sets obstacle flag. Used for event capturing.
+                 */
+                void setObstacle(bool obstacle);
 
-    Point _position;
-    Point _offset;
-};
+            protected:
+                bool _controlPressed = false;
+                bool _shiftPressed = false;
+                bool _altPressed = false;
+                bool _obstacle = false;
+                Button _button = Button::NONE;
+                Type _type;
 
-}
+                Point _position;
+                Point _offset;
+        };
+    }
 }
 #endif // FALLTERGEIST_EVENT_MOUSE_H

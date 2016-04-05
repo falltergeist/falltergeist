@@ -29,34 +29,30 @@
 
 namespace Falltergeist
 {
-namespace Event
-{
-    class Keyboard;
-    class Mouse;
-    class State;
+    namespace Event
+    {
+        class Keyboard;
+        class Mouse;
+        class State;
+    }
+    namespace State
+    {
+        class LoadGame : public State
+        {
+            public:
+                LoadGame();
+                ~LoadGame() override;
+
+                void init() override;
+
+                void onDoneButtonClick(Event::Mouse* event);
+                void doCancel();
+                void onCancelFadeDone(Event::State* event);
+
+                void onStateActivate(Event::State* event) override;
+                void onStateDeactivate(Event::State* event) override;
+                void onKeyDown(Event::Keyboard* event) override;
+        };
+    }
 }
-
-namespace State
-{
-
-class LoadGame : public State
-{
-public:
-    LoadGame();
-    ~LoadGame() override;
-
-    virtual void init();
-
-    void onDoneButtonClick(Event::Mouse* event);
-    void doCancel();
-    void onCancelFadeDone(Event::State* event);
-
-    void onStateActivate(Event::State* event) override;
-    void onStateDeactivate(Event::State* event) override;
-    void onKeyDown(Event::Keyboard* event) override;
-};
-
-}
-}
-
 #endif // FALLTERGEIST_STATE_LOADGAME_H

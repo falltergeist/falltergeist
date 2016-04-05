@@ -23,12 +23,12 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Script.h"
 #include "../../Game/Game.h"
-#include "../../State/State.h"
 #include "../../Graphics/Renderer.h"
-#include "../HaltException.h"
+#include "../../Logger.h"
+#include "../../State/State.h"
+#include "../../VM/HaltException.h"
+#include "../../VM/Script.h"
 
 // Third party includes
 

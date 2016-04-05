@@ -29,51 +29,49 @@
 
 namespace Falltergeist
 {
-namespace Event
-{
-
-class Keyboard : public Event
-{
-public:
-    enum class Type
+    namespace Event
     {
-        KEY_DOWN,
-        KEY_UP
-    };
+        class Keyboard : public Event
+        {
+            public:
+                enum class Type
+                {
+                    KEY_DOWN,
+                    KEY_UP
+                };
 
-    static const char* typeToString(Type);
+                static const char* typeToString(Type);
 
-    Keyboard(Type type);
-    Keyboard(const Keyboard& event, const std::string& newName);
-    Keyboard(const Keyboard& event);
-    ~Keyboard() override;
+                Keyboard(Type type);
+                Keyboard(const Keyboard& event, const std::string& newName);
+                Keyboard(const Keyboard& event);
+                ~Keyboard() override;
 
-    /**
-     * @brief Type of an original event from OS.
-     */
-    Type originalType() const;
+                /**
+                 * @brief Type of an original event from OS.
+                 */
+                Type originalType() const;
 
-    int keyCode() const;
-    void setKeyCode(int value);
+                int keyCode() const;
+                void setKeyCode(int value);
 
-    bool shiftPressed() const;
-    void setShiftPressed(bool value);
+                bool shiftPressed() const;
+                void setShiftPressed(bool value);
 
-    bool controlPressed() const;
-    void setControlPressed(bool value);
+                bool controlPressed() const;
+                void setControlPressed(bool value);
 
-    bool altPressed() const;
-    void setAltPressed(bool value);
+                bool altPressed() const;
+                void setAltPressed(bool value);
 
-protected:
-    bool _altPressed = false;
-    bool _controlPressed = false;
-    bool _shiftPressed = false;
-    int _keyCode = 0;
+            protected:
+                bool _altPressed = false;
+                bool _controlPressed = false;
+                bool _shiftPressed = false;
+                int _keyCode = 0;
 
-    Type _type;
-};
-
-}
+                Type _type;
+        };
+    }
 }
 #endif // FALLTERGEIST_EVENT_KEYBOARD_H

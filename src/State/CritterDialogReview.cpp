@@ -17,12 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../State/CritterDialogReview.h"
+
 // C++ standard includes
 
 // Falltergeist includes
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
-#include "../State/CritterDialogReview.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 
@@ -30,47 +32,45 @@
 
 namespace Falltergeist
 {
-namespace State
-{
+    namespace State
+    {
+        CritterDialogReview::CritterDialogReview() : State()
+        {
+        }
 
-CritterDialogReview::CritterDialogReview() : State()
-{
-}
+        CritterDialogReview::~CritterDialogReview()
+        {
+        }
 
-CritterDialogReview::~CritterDialogReview()
-{
-}
+        void CritterDialogReview::init()
+        {
+            if (_initialized) return;
+            State::init();
 
-void CritterDialogReview::init()
-{
-    if (_initialized) return;
-    State::init();
+            setFullscreen(false);
+            setModal(true);
 
-    setFullscreen(false);
-    setModal(true);
+            auto background = new UI::Image("art/intrface/review.frm");
+            Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
+            background->setPosition(backgroundPos);
 
-    auto background = new UI::Image("art/intrface/review.frm");
-    Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
-    background->setPosition(backgroundPos);
+            // Interface buttons
+            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_DONE_BUTTON, backgroundPos + Point(500, 398));
+            doneButton->mouseClickHandler().add(std::bind(&CritterDialogReview::onDoneButtonClick, this, std::placeholders::_1));
 
-    // Interface buttons
-    auto doneButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_DONE_BUTTON, backgroundPos + Point(500, 398));
-    doneButton->mouseClickHandler().add(std::bind(&CritterDialogReview::onDoneButtonClick, this, std::placeholders::_1));
+            auto upButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_BIG_UP_ARROW, backgroundPos + Point(476, 154));
 
-    auto upButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_BIG_UP_ARROW, backgroundPos + Point(476, 154));
+            auto downButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_BIG_DOWN_ARROW, backgroundPos + Point(476, 192));
 
-    auto downButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_BIG_DOWN_ARROW, backgroundPos + Point(476, 192));
+            addUI(background);
+            addUI(doneButton);
+            addUI(upButton);
+            addUI(downButton);
+        }
 
-    addUI(background);
-    addUI(doneButton);
-    addUI(upButton);
-    addUI(downButton);
-}
-
-void CritterDialogReview::onDoneButtonClick(Event::Mouse* event)
-{
-    Game::getInstance()->popState();
-}
-
-}
+        void CritterDialogReview::onDoneButtonClick(Event::Mouse* event)
+        {
+            Game::getInstance()->popState();
+        }
+    }
 }

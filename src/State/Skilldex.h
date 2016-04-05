@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_Skilldex_H
-#define FALLTERGEIST_Skilldex_H
+#ifndef FALLTERGEIST_STATE_SKILLDEX_H
+#define FALLTERGEIST_STATE_SKILLDEX_H
 
 // C++ standard includes
 
@@ -29,26 +29,22 @@
 
 namespace Falltergeist
 {
-namespace State
-{
+    namespace State
+    {
+        class Skilldex : public State
+        {
+            public:
+                Skilldex();
+                ~Skilldex() override;
 
-class Skilldex : public State
-{
-public:
-    Skilldex();
-    ~Skilldex() override;
+                void init() override;
 
-    void init() override;
+                void onCancelButtonClick(Event::Mouse* event);
 
-    void onCancelButtonClick(Event::Mouse* event);
-
-    void onKeyDown(Event::Keyboard* event) override;
-    virtual void onStateActivate(Event::State* event) override;
-    virtual void onStateDeactivate(Event::State* event) override;
-
-};
-
+                void onKeyDown(Event::Keyboard* event) override;
+                void onStateActivate(Event::State* event) override;
+                void onStateDeactivate(Event::State* event) override;
+        };
+    }
 }
-}
-
-#endif // FALLTERGEIST_Skilldex_H
+#endif // FALLTERGEIST_STATE_SKILLDEX_H

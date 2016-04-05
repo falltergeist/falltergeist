@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_Inventory_H
-#define FALLTERGEIST_Inventory_H
+#ifndef FALLTERGEIST_STATE_INVENTORY_H
+#define FALLTERGEIST_STATE_INVENTORY_H
 
 // C++ standard includes
 
@@ -29,39 +29,39 @@
 
 namespace Falltergeist
 {
-namespace State
-{
+    namespace Game
+    {
+        class ItemObject;
+    }
+    namespace State
+    {
+        class Inventory : public State
+        {
+            public:
+                Inventory();
+                ~Inventory() override;
 
-class Inventory : public State
-{
-public:
-    Inventory();
-    ~Inventory() override;
+                void init() override;
 
-    void init() override;
+                void onDoneButtonClick(Event::Mouse* event);
+                void onScrollUpButtonClick(Event::Mouse* event);
+                void onScrollDownButtonClick(Event::Mouse* event);
+                void onArmorSlotMouseDown(Event::Mouse* event);
+                void onLeftHandSlotMouseDown(Event::Mouse* event);
+                void onRightHandSlotMouseDown(Event::Mouse* event);
+                void enableScrollDownButton(bool enable);
+                void enableScrollUpButton(bool enable);
+                //void onSlotMouseDown(Event::Mouse* event);
+                //void onSlotMouseUp(Event::Mouse* event);
+                //void onSlotDrag(Event::Mouse* event);
+                void backgroundRightClick(Event::Mouse* event);
+                void onKeyDown(Event::Keyboard* event) override;
+                void onInventoryModified();
 
-    void onDoneButtonClick(Event::Mouse* event);
-    void onScrollUpButtonClick(Event::Mouse* event);
-    void onScrollDownButtonClick(Event::Mouse* event);
-    void onArmorSlotMouseDown(Event::Mouse* event);
-    void onLeftHandSlotMouseDown(Event::Mouse* event);
-    void onRightHandSlotMouseDown(Event::Mouse* event);
-    void enableScrollDownButton(bool enable);
-    void enableScrollUpButton(bool enable);
-    //void onSlotMouseDown(Event::Mouse* event);
-    //void onSlotMouseUp(Event::Mouse* event);
-    //void onSlotDrag(Event::Mouse* event);
-    void backgroundRightClick(Event::Mouse* event);
-    void onKeyDown(Event::Keyboard* event) override;
-    void onInventoryModified();
-
-private:
-    std::string _handItemSummary (Game::ItemObject* hand);
-    void _screenShow (unsigned int PID);
-
-};
-
+            private:
+                std::string _handItemSummary (Game::ItemObject* hand);
+                void _screenShow (unsigned int PID);
+        };
+    }
 }
-}
-
-#endif // FALLTERGEIST_Inventory_H
+#endif // FALLTERGEIST_STATE_INVENTORY_H

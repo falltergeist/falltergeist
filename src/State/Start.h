@@ -29,23 +29,20 @@
 
 namespace Falltergeist
 {
-namespace State
-{
+    namespace State
+    {
+        class Start : public State
+        {
+            public:
+                Start();
+                ~Start() override;
 
-class Start : public State
-{
-public:
-    Start();
-    ~Start() override;
+                void think() override;
+                void init() override;
 
-    void think() override;
-    void init() override;
-
-protected:
-    unsigned int _splashTicks = 0;
-};
-
+            protected:
+                unsigned int _splashTicks = 0;
+        };
+    }
 }
-}
-
 #endif // FALLTERGEIST_START_START_H

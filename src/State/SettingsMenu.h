@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_SettingsMenu_H
-#define FALLTERGEIST_SettingsMenu_H
+#ifndef FALLTERGEIST_STATE_SETTINGSMENU_H
+#define FALLTERGEIST_STATE_SETTINGSMENU_H
 
 // C++ standard includes
 #include <map>
@@ -30,44 +30,40 @@
 
 namespace Falltergeist
 {
-namespace Event
-{
-    class Keyboard;
-    class Mouse;
-    class State;
+    namespace Event
+    {
+        class Keyboard;
+        class Mouse;
+        class State;
+    }
+    namespace UI
+    {
+        class TextArea;
+    }
+    namespace State
+    {
+        class SettingsMenu : public State
+        {
+            public:
+                SettingsMenu();
+                ~SettingsMenu() override;
+
+                void init() override;
+                void think() override;
+
+                void onDefaultButtonClick(Event::Mouse* event);
+                void doCancel();
+                void doSave();
+
+                void onKeyDown(Event::Keyboard* event) override;
+                void onStateActivate(Event::State* event) override;
+                void onStateDeactivate(Event::State* event) override;
+            protected:
+                std::map<std::string, UI::TextArea*> _labels;
+                UI::TextArea* _addLabel(const std::string& name, UI::TextArea* label);
+                UI::TextArea* _addTextArea(const std::string& message, unsigned int x, unsigned int y);
+                UI::TextArea* _addTextArea(UI::TextArea* parent, unsigned int x, unsigned int y);
+        };
+    }
 }
-namespace UI
-{
-    class TextArea;
-}
-
-namespace State
-{
-
-class SettingsMenu : public State
-{
-protected:
-    std::map<std::string, UI::TextArea*> _labels;
-    UI::TextArea* _addLabel(const std::string& name, UI::TextArea* label);
-    UI::TextArea* _addTextArea(const std::string& message, unsigned int x, unsigned int y);
-    UI::TextArea* _addTextArea(UI::TextArea* parent, unsigned int x, unsigned int y);
-public:
-    SettingsMenu();
-    ~SettingsMenu() override;
-
-    void init() override;
-    void think() override;
-
-    void onDefaultButtonClick(Event::Mouse* event);
-    void doCancel();
-    void doSave();
-
-    void onKeyDown(Event::Keyboard* event) override;
-    void onStateActivate(Event::State* event) override;
-    void onStateDeactivate(Event::State* event) override;
-};
-
-}
-}
-
-#endif // FALLTERGEIST_SettingsMenu_H
+#endif // FALLTERGEIST_STATE_SETTINGSMENU_H
