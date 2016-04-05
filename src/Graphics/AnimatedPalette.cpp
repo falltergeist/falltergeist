@@ -64,7 +64,7 @@ void AnimatedPalette::think()
         _shoreTicks = SDL_GetTicks();
 
         _shoreCounter++;
-        if (_shoreCounter >= 6) _slimeCounter = 0;
+        if (_shoreCounter >= 6) _shoreCounter = 0;
     }
 
     if (_fireSlowTicks + 200 < SDL_GetTicks())
