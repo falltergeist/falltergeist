@@ -25,6 +25,10 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Script.h"
+#include "../../Game/Game.h"
+#include "../../State/State.h"
+#include "../../Graphics/Renderer.h"
+#include "../HaltException.h"
 
 // Third party includes
 
@@ -40,9 +44,13 @@ namespace Falltergeist
 
             void Opcode8136::_run()
             {
-                int time = _script->dataStack()->popInteger();
+                int time = _script->dataStack()->popInteger(); // original engine ignores time
                 Logger::debug("SCRIPT") << "[8136] [=] void gfade_out(int time)" << std::endl
                                         << "    time = " << time << std::endl;
+
+                auto state = Game::getInstance()->topState();
+                state->scriptFade(_script, false);
+                throw HaltException();
             }
         }
     }
