@@ -32,6 +32,7 @@
 #include "../State/CursorDropdown.h"
 #include "../State/Location.h"
 #include "../UI/Image.h"
+#include "../Audio/Mixer.h"
 
 // Third party includes
 
@@ -52,11 +53,30 @@ namespace Falltergeist
         void CritterInteract::onStateActivate(Event::State* event)
         {
             Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+            if (_headID >= 0)
+            {
+                // stop music completely
+                Game::getInstance()->mixer()->stopMusic();
+            }
+            else
+            {
+                // lower music volume
+                Game::getInstance()->mixer()->setMusicVolume(Game::getInstance()->mixer()->musicVolume()/2.0);
+            }
         }
 
         void CritterInteract::onStateDeactivate(Event::State* event)
         {
             Game::getInstance()->mouse()->popState();
+            if (_headID >= 0)
+            {
+                Game::getInstance()->mixer()->playACMMusic(Game::getInstance()->mixer()->lastMusic(), true);
+            }
+            else
+            {
+                // restore music volume
+                Game::getInstance()->mixer()->setMusicVolume(Game::getInstance()->mixer()->musicVolume()*2.0);
+            }
         }
 
         void CritterInteract::init()
