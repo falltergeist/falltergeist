@@ -133,6 +133,7 @@ namespace Falltergeist
             Mix_HookMusic(NULL, NULL);
             auto acm = ResourceManager::getInstance()->acmFileType(Game::getInstance()->settings()->musicPath()+filename);
             if (!acm) return;
+            _lastMusic = filename;
             _loop = loop;
             musicCallback = std::bind(&Mixer::_musicCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
             acm->init();
@@ -227,4 +228,11 @@ namespace Falltergeist
             _musicVolume = volume;
         }
     }
+
+    std::string &Audio::Mixer::lastMusic()
+    {
+        return _lastMusic;
+    }
+
+
 }

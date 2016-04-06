@@ -50,6 +50,7 @@ namespace Falltergeist
                 void playMovieMusic(UI::MvePlayer* mve);
                 void pauseMusic();
                 void resumeMusic();
+                std::string& lastMusic();
                 /**
                  * @return current music volume
                  */
@@ -72,6 +73,7 @@ namespace Falltergeist
 
                 double _musicVolume = 1.0;
                 SDL_AudioFormat _format;
+                std::string _lastMusic = "";
         };
     }
 }
