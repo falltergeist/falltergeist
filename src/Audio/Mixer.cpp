@@ -71,6 +71,8 @@ namespace Falltergeist
                 throw Exception(Mix_GetError());
             }
             Logger::info() << message + "[OK]" << std::endl;
+            int frequency, channels;
+            Mix_QuerySpec(&frequency, &_format, &channels);
         }
 
         void Mixer::stopMusic()
@@ -107,7 +109,10 @@ namespace Falltergeist
             if (pacm->filename().find("music") != std::string::npos)
             {
                 // music is stereo. just fetch
-                pacm->readSamples((short int*)stream, len/2);
+                uint16_t tmp[len/2];
+                pacm->readSamples((short int*)tmp, len/2);
+                SDL_memset(stream, 0, len);
+                SDL_MixAudioFormat(stream, (uint8_t*)tmp, _format, len, SDL_MIX_MAXVOLUME * _musicVolume);
             }
             else
             {
@@ -217,7 +222,6 @@ namespace Falltergeist
 
         void Mixer::setMusicVolume(double volume)
         {
-            // TODO: implement volume
             if (volume < 0.0) volume = 0.0;
             else if (volume > 1.0) volume = 1.0;
             _musicVolume = volume;

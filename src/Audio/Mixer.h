@@ -71,6 +71,7 @@ namespace Falltergeist
                 bool _loop = false;
 
                 double _musicVolume = 1.0;
+                SDL_AudioFormat _format;
         };
     }
 }
