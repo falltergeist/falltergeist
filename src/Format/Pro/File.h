@@ -86,6 +86,8 @@ public:
     uint32_t critterSequence() const;
     uint32_t critterHealingRate() const;
     uint32_t critterCriticalChance() const;
+    uint32_t critterAge() const;
+    uint32_t critterGender() const;
 
     std::vector<uint32_t>* critterStats();
     std::vector<uint32_t>* critterStatsBonus();
@@ -129,6 +131,8 @@ protected:
     uint32_t _critterSequence = 0;
     uint32_t _critterHealingRate = 0;
     uint32_t _critterCriticalChance = 0;
+    uint32_t _critterAge;
+    uint32_t _critterGender;
     uint32_t _lightDistance = 0;
     uint32_t _lightIntencity = 0;
     uint32_t _flags = 0;
