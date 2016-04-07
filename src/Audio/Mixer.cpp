@@ -180,7 +180,7 @@ namespace Falltergeist
                 acm->init();
                 auto samples = acm->samples();
 
-                uint8_t memory[samples * 2];
+                uint8_t* memory = new uint8_t[samples * 2];
                 auto cnt = acm->readSamples((short*)memory, samples)*2;
 
                 SDL_AudioCVT cvt;
@@ -188,6 +188,7 @@ namespace Falltergeist
 
                 cvt.buf = (Uint8*)malloc(cnt*cvt.len_mult);
                 memcpy(cvt.buf, (uint8_t*)memory, cnt);
+                delete[] memory;
                 cvt.len = cnt;
                 SDL_ConvertAudio(&cvt);
 
