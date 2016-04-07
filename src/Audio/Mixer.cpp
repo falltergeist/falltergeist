@@ -109,15 +109,16 @@ namespace Falltergeist
             if (pacm->filename().find("music") != std::string::npos)
             {
                 // music is stereo. just fetch
-                uint16_t tmp[len/2];
+                uint16_t* tmp = new uint16_t[len/2];
                 pacm->readSamples((short int*)tmp, len/2);
                 SDL_memset(stream, 0, len);
                 SDL_MixAudioFormat(stream, (uint8_t*)tmp, _format, len, SDL_MIX_MAXVOLUME * _musicVolume);
+                delete[] tmp;
             }
             else
             {
                 //all other files are mono. double it
-                uint16_t tmp[len/2];
+                uint16_t* tmp = new uint16_t[len/2];
                 uint16_t* sstr = (uint16_t*)stream;
                 pacm->readSamples((short int*)tmp, len/4);
                 for (uint32_t i = 0; i < len/4; i++)
@@ -125,6 +126,7 @@ namespace Falltergeist
                     sstr[i*2] = tmp[i];
                     sstr[i*2+1] = tmp[i];
                 }
+                delete[] tmp;
             }
         }
 
