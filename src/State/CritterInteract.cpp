@@ -23,15 +23,20 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Base/StlFeatures.h"
+#include "../Format/Lst/File.h"
 #include "../Game/CritterObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../LocationCamera.h"
 #include "../PathFinding/Hexagon.h"
+#include "../ResourceManager.h"
 #include "../State/CursorDropdown.h"
 #include "../State/Location.h"
 #include "../UI/Image.h"
+#include "../UI/Animation.h"
+#include "../UI/AnimationQueue.h"
 #include "../Audio/Mixer.h"
 
 // Third party includes
@@ -40,6 +45,8 @@ namespace Falltergeist
 {
     namespace State
     {
+        using Base::make_unique;
+
         CritterInteract::CritterInteract() : State()
         {
         }
@@ -88,6 +95,28 @@ namespace Falltergeist
             setModal(true);
 
             setPosition((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
+
+            if (backgroundID() >= 0 && headID() >= 0)
+            {
+                auto lst = ResourceManager::getInstance()->lstFileType("art/backgrnd/backgrnd.lst");
+                std::string bgImage = "art/backgrnd/" + lst->strings()->at(backgroundID());
+                auto bg = new UI::Image(bgImage);
+                bg->setPosition({128, 15});
+                addUI(bg);
+
+                auto headlst = ResourceManager::getInstance()->lstFileType("art/heads/heads.lst");
+                std::string headImage = "art/heads/" + headlst->strings()->at(headID());
+                headImage=headImage.substr(0,headImage.find(","));
+                headImage+="gf2.frm";
+
+                auto head = new UI::AnimationQueue();
+                head->animations().push_back(make_unique<UI::Animation>(headImage));
+                head->setRepeat(true);
+                head->start();
+
+                head->setPosition({128, 15});
+                addUI(head);
+            }
 
             addUI("background", new UI::Image("art/intrface/alltlk.frm"));
 
