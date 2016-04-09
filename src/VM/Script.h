@@ -64,6 +64,7 @@ namespace Falltergeist
                 void setOverrides(bool Value);
                 void setInitialized(bool value);
                 std::string msgMessage(int msg_file_num, int msg_num);
+                std::string msgSpeech(int msg_file_num, int msg_num);
                 /*
                  * Returns filename of an .int script file
                  */
