@@ -194,6 +194,15 @@ namespace Falltergeist
             // start timer
         }
 
+        static inline int _phonemeToFrame(unsigned int phoneme)
+        {
+            static const int8_t frames[] = {0,3,1,1,3,1,1,1,7,8,7,3,1,8,1,7,7,6,6,2,2,2,2,4,4,5,5,2,2,2,2,2,6,2,2,5,8,2,2,2,2,8};
+            if (phoneme<=41)
+            {
+                return frames[phoneme];
+            }
+            return 0;
+        }
 
         void CritterInteract::think()
         {
