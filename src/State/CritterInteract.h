@@ -72,6 +72,8 @@ namespace Falltergeist
                 void onStateActivate(Event::State* event) override;
                 void onStateDeactivate(Event::State* event) override;
 
+                void playSpeech(const std::string& speech);
+
             protected:
                 Point _oldCameraCenter;
                 int _backgroundID = -1;
@@ -80,6 +82,7 @@ namespace Falltergeist
                 int _msgFileID = -1;
                 VM::Script* _script = nullptr;
                 Game::CritterObject* _critter = nullptr;
+                std::string _headName;
         };
     }
 }

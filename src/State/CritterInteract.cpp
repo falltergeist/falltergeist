@@ -63,7 +63,7 @@ namespace Falltergeist
             if (_headID >= 0)
             {
                 // stop music completely
-                Game::getInstance()->mixer()->stopMusic();
+                //Game::getInstance()->mixer()->stopMusic();
             }
             else
             {
@@ -105,12 +105,13 @@ namespace Falltergeist
                 addUI(bg);
 
                 auto headlst = ResourceManager::getInstance()->lstFileType("art/heads/heads.lst");
-                std::string headImage = "art/heads/" + headlst->strings()->at(headID());
+                std::string headImage = headlst->strings()->at(headID());
                 headImage=headImage.substr(0,headImage.find(","));
+                _headName = headImage;
                 headImage+="gf2.frm";
 
                 auto head = new UI::AnimationQueue();
-                head->animations().push_back(make_unique<UI::Animation>(headImage));
+                head->animations().push_back(make_unique<UI::Animation>("art/heads/" + headImage));
                 head->setRepeat(true);
                 head->start();
 
@@ -186,5 +187,12 @@ namespace Falltergeist
         {
             _script = script;
         }
+
+        void CritterInteract::playSpeech(const std::string &speech)
+        {
+            Game::getInstance()->mixer()->playACMSpeech(_headName+"/"+speech+".acm");
+        }
+
+
     }
 }

@@ -26,6 +26,7 @@
 #include "../../Game/Game.h"
 #include "../../Logger.h"
 #include "../../State/CritterDialog.h"
+#include "../../State/CritterInteract.h"
 #include "../../VM/Script.h"
 #include "../../VM/StackValue.h"
 
@@ -56,6 +57,14 @@ namespace Falltergeist
                     auto msg_num = _script->dataStack()->popInteger();
                     auto msg_file_num = _script->dataStack()->popInteger();
                     dialog->setQuestion(_script->msgMessage(msg_file_num, msg_num));
+                    auto speech = _script->msgSpeech(msg_file_num, msg_num);
+                    if (speech != "")
+                    {
+                        if (auto interact = dynamic_cast<State::CritterInteract*>(Game::getInstance()->topState(1)))
+                        {
+                            interact->playSpeech(speech);
+                        }
+                    }
                 }
             }
         }
