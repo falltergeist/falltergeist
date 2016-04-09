@@ -181,6 +181,7 @@ void Animation::stop()
     _playing = false;
     _ended = false;
     _progress = 0;
+    _currentFrame = 0;
 }
 
 void Animation::setReverse(bool value)
