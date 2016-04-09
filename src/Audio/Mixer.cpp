@@ -106,28 +106,12 @@ namespace Falltergeist
             }
 
 
-            if (pacm->filename().find("music") != std::string::npos)
-            {
-                // music is stereo. just fetch
-                uint16_t* tmp = new uint16_t[len/2];
-                pacm->readSamples((short int*)tmp, len/2);
-                SDL_memset(stream, 0, len);
-                SDL_MixAudioFormat(stream, (uint8_t*)tmp, _format, len, SDL_MIX_MAXVOLUME * _musicVolume);
-                delete[] tmp;
-            }
-            else
-            {
-                //all other files are mono. double it
-                uint16_t* tmp = new uint16_t[len/2];
-                uint16_t* sstr = (uint16_t*)stream;
-                pacm->readSamples((short int*)tmp, len/4);
-                for (uint32_t i = 0; i < len/4; i++)
-                {
-                    sstr[i*2] = tmp[i];
-                    sstr[i*2+1] = tmp[i];
-                }
-                delete[] tmp;
-            }
+            // music is stereo. just fetch
+            uint16_t* tmp = new uint16_t[len/2];
+            pacm->readSamples((short int*)tmp, len/2);
+            SDL_memset(stream, 0, len);
+            SDL_MixAudioFormat(stream, (uint8_t*)tmp, _format, len, SDL_MIX_MAXVOLUME * _musicVolume);
+            delete[] tmp;
         }
 
         void Mixer::playACMMusic(const std::string& filename, bool loop)
@@ -138,6 +122,39 @@ namespace Falltergeist
             _lastMusic = filename;
             _loop = loop;
             musicCallback = std::bind(&Mixer::_musicCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+            acm->init();
+            acm->rewind();
+            Mix_HookMusic(myMusicPlayer, (void *)acm);
+        }
+
+        void Mixer::_speechCallback(void *udata, uint8_t *stream, uint32_t len)
+        {
+            if (_paused) return;
+
+            auto pacm = (Format::Acm::File*)(udata);
+            if (pacm->samplesLeft() <= 0)
+            {
+                Mix_HookMusic(NULL,NULL);
+                return;
+            }
+
+            uint16_t* tmp = new uint16_t[len/2];
+            uint16_t* sstr = (uint16_t*)stream;
+            pacm->readSamples((short int*)tmp, len/4);
+            for (uint32_t i = 0; i < len/4; i++)
+            {
+                sstr[i*2] = tmp[i];
+                sstr[i*2+1] = tmp[i];
+            }
+            delete[] tmp;
+        }
+
+        void Mixer::playACMSpeech(const std::string& filename)
+        {
+            Mix_HookMusic(NULL, NULL);
+            auto acm = ResourceManager::getInstance()->acmFileType("sound/speech/"+filename);
+            if (!acm) return;
+            musicCallback = std::bind(&Mixer::_speechCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
             acm->init();
             acm->rewind();
             Mix_HookMusic(myMusicPlayer, (void *)acm);
