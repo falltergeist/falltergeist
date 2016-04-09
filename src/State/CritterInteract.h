@@ -46,6 +46,8 @@ namespace Falltergeist
         class CritterInteract : public State
         {
             public:
+                virtual void think() override;
+
                 CritterInteract();
                 ~CritterInteract() override;
 

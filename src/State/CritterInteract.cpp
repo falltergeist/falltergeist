@@ -191,6 +191,15 @@ namespace Falltergeist
         void CritterInteract::playSpeech(const std::string &speech)
         {
             Game::getInstance()->mixer()->playACMSpeech(_headName+"/"+speech+".acm");
+            // start timer
+        }
+
+
+        void CritterInteract::think()
+        {
+            State::think();
+            // switch state
+            // if playing speech - set phoneme frame
         }
 
 
