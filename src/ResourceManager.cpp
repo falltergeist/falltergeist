@@ -36,6 +36,7 @@
 #include "Format/Gam/File.h"
 #include "Format/Gcd/File.h"
 #include "Format/Int/File.h"
+#include "Format/Lip/File.h"
 #include "Format/Lst/File.h"
 #include "Format/Map/File.h"
 #include "Format/Msg/File.h"
@@ -160,6 +161,7 @@ Format::Dat::Item* ResourceManager::_createItemByName(const string& filename, if
     else if (extension == "gam") return new Format::Gam::File(stream);
     else if (extension == "gcd") return new Format::Gcd::File(stream);
     else if (extension == "int") return new Format::Int::File(stream);
+    else if (extension == "lip") return new Format::Lip::File(stream);
     else if (extension == "lst") return new Format::Lst::File(stream);
     else if (extension == "map") return new Format::Map::File(stream);
     else if (extension == "msg") return new Format::Msg::File(stream);
@@ -190,6 +192,11 @@ Format::Frm::File* ResourceManager::frmFileType(const string& filename)
 Format::Pal::File* ResourceManager::palFileType(const string& filename)
 {
     return dynamic_cast<Format::Pal::File*>(datFileItem(filename));
+}
+
+Format::Lip::File* ResourceManager::lipFileType(const string& filename)
+{
+    return dynamic_cast<Format::Lip::File*>(datFileItem(filename));
 }
 
 Format::Lst::File* ResourceManager::lstFileType(const string& filename)
