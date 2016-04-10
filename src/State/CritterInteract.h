@@ -29,6 +29,13 @@
 
 namespace Falltergeist
 {
+    namespace Format
+    {
+        namespace Lip
+        {
+            class File;
+        }
+    }
     namespace Event
     {
         class State;
@@ -46,6 +53,11 @@ namespace Falltergeist
         class CritterInteract : public State
         {
             public:
+                enum class Phase {
+                    FIDGET = 0,
+                    TRANSITION,
+                    TALK
+                };
                 virtual void think() override;
 
                 CritterInteract();
@@ -85,6 +97,11 @@ namespace Falltergeist
                 VM::Script* _script = nullptr;
                 Game::CritterObject* _critter = nullptr;
                 std::string _headName;
+                uint32_t _startTime;
+                uint32_t _nextIndex;
+                Phase _phase = Phase::FIDGET;
+                Format::Lip::File* _lips = nullptr;
+
         };
     }
 }

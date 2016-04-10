@@ -18,6 +18,7 @@
  */
 
 // Related headers
+#include <iostream>
 #include "../State/CritterInteract.h"
 
 // C++ standard includes
@@ -25,6 +26,7 @@
 // Falltergeist includes
 #include "../Base/StlFeatures.h"
 #include "../Format/Lst/File.h"
+#include "../Format/Lip/File.h"
 #include "../Game/CritterObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -116,7 +118,7 @@ namespace Falltergeist
                 head->start();
 
                 head->setPosition({128, 15});
-                addUI(head);
+                addUI("head",head);
             }
 
             addUI("background", new UI::Image("art/intrface/alltlk.frm"));
@@ -192,6 +194,20 @@ namespace Falltergeist
         {
             Game::getInstance()->mixer()->playACMSpeech(_headName+"/"+speech+".acm");
             // start timer
+            _startTime = SDL_GetTicks();
+            _nextIndex = 0;
+            _phase = Phase::TALK;
+            if (_lips)
+            {
+                delete _lips;
+            }
+            _lips = ResourceManager::getInstance()->lipFileType("sound/speech/"+_headName+"/"+speech+".lip");
+            auto head = dynamic_cast<UI::AnimationQueue*>(getUI("head"));
+            head->stop();
+            head->clear();
+            std::string headImage = _headName;
+            headImage+="gp.frm";
+            head->animations().push_back(make_unique<UI::Animation>("art/heads/" + headImage));
         }
 
         static inline int _phonemeToFrame(unsigned int phoneme)
@@ -208,7 +224,35 @@ namespace Falltergeist
         {
             State::think();
             // switch state
-            // if playing speech - set phoneme frame
+            switch (_phase)
+            {
+                case Phase::FIDGET:
+                    break;
+                case Phase::TALK:
+                    // if playing speech - set phoneme frame
+
+                    if (_nextIndex < _lips->phonemes().size() && SDL_GetTicks()-_startTime>=_lips->timestamps().at(_nextIndex))
+                    {
+                        //set frame
+                        auto head = dynamic_cast<UI::AnimationQueue*>(getUI("head"));
+                        head->currentAnimation()->setCurrentFrame(_phonemeToFrame(_lips->phonemes().at(_nextIndex)));
+                        _nextIndex++;
+                    }
+                    if (SDL_GetTicks()-_startTime>= (_lips->acmSize()*1000 / 22050 /2))
+                    {
+                        _phase = Phase::FIDGET;
+                        auto head = dynamic_cast<UI::AnimationQueue*>(getUI("head"));
+                        head->clear();
+                        std::string headImage = _headName;
+                        headImage+="gf2.frm";
+                        head->animations().push_back(make_unique<UI::Animation>("art/heads/" + headImage));
+                        head->setRepeat(true);
+                        head->start();
+                    }
+                    break;
+                case Phase::TRANSITION:
+                    break;
+            }
         }
 
 
