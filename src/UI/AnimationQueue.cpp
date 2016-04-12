@@ -101,6 +101,7 @@ void AnimationQueue::think()
                 if (!_repeat)
                 {
                     emitEvent(make_unique<Event::Event>("animationEnded"), animationEndedHandler());
+                    currentAnimation()->stop();
                     _playing = false;
                     return;
                 }
