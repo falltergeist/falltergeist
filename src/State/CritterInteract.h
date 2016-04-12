@@ -24,6 +24,7 @@
 
 // Falltergeist includes
 #include "../State/State.h"
+#include "../Game/Timer.h"
 
 // Third party includes
 
@@ -101,6 +102,10 @@ namespace Falltergeist
                 uint32_t _nextIndex;
                 Phase _phase = Phase::FIDGET;
                 Format::Lip::File* _lips = nullptr;
+                int32_t _goodFidgets;
+                int32_t _neutralFidgets;
+                int32_t _badFidgets;
+                Game::Timer _fidgetTimer;
 
         };
     }

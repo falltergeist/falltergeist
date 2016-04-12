@@ -108,14 +108,31 @@ namespace Falltergeist
 
                 auto headlst = ResourceManager::getInstance()->lstFileType("art/heads/heads.lst");
                 std::string headImage = headlst->strings()->at(headID());
+
+                auto fidgets = headImage.substr(headImage.find(",")+1);
+                sscanf(fidgets.c_str(),"%d,%d,%d", &_goodFidgets, &_neutralFidgets, &_badFidgets);
+
                 headImage=headImage.substr(0,headImage.find(","));
+
                 _headName = headImage;
-                headImage+="gf2.frm";
+
+                _fidgetTimer.tickHandler().add([this](Event::Event* evt){
+                    uint8_t fidget = rand() % 3 + 1;
+                    auto headImage = _headName + "g" + "f" + std::to_string(fidget)+".frm";
+                    auto head = dynamic_cast<UI::AnimationQueue*>(getUI("head"));
+                    head->clear();
+                    head->animations().push_back(make_unique<UI::Animation>("art/heads/" + headImage));
+                    //head->setRepeat(true);
+                    head->start();
+                    _fidgetTimer.start(std::rand() % 5000 + 5000);
+
+                });
+                headImage+="gf1.frm";
 
                 auto head = new UI::AnimationQueue();
                 head->animations().push_back(make_unique<UI::Animation>("art/heads/" + headImage));
-                head->setRepeat(true);
-                head->start();
+                //head->setRepeat(true);
+                //head->start();
 
                 head->setPosition({128, 15});
                 addUI("head",head);
@@ -192,15 +209,13 @@ namespace Falltergeist
 
         void CritterInteract::playSpeech(const std::string &speech)
         {
+            _fidgetTimer.stop();
             Game::getInstance()->mixer()->playACMSpeech(_headName+"/"+speech+".acm");
             // start timer
             _startTime = SDL_GetTicks();
             _nextIndex = 0;
             _phase = Phase::TALK;
-            if (_lips)
-            {
-                delete _lips;
-            }
+
             _lips = ResourceManager::getInstance()->lipFileType("sound/speech/"+_headName+"/"+speech+".lip");
             auto head = dynamic_cast<UI::AnimationQueue*>(getUI("head"));
             head->stop();
@@ -223,13 +238,16 @@ namespace Falltergeist
         void CritterInteract::think()
         {
             State::think();
+
             // switch state
             switch (_phase)
             {
                 case Phase::FIDGET:
+                    _fidgetTimer.think();
                     break;
                 case Phase::TALK:
                     // if playing speech - set phoneme frame
+
 
                     if (_nextIndex < _lips->phonemes().size() && SDL_GetTicks()-_startTime>=_lips->timestamps().at(_nextIndex))
                     {
@@ -241,13 +259,14 @@ namespace Falltergeist
                     if (SDL_GetTicks()-_startTime>= (_lips->acmSize()*1000 / 22050 /2))
                     {
                         _phase = Phase::FIDGET;
-                        auto head = dynamic_cast<UI::AnimationQueue*>(getUI("head"));
+                        _fidgetTimer.start(0);
+                        /*auto head = dynamic_cast<UI::AnimationQueue*>(getUI("head"));
                         head->clear();
                         std::string headImage = _headName;
                         headImage+="gf2.frm";
                         head->animations().push_back(make_unique<UI::Animation>("art/heads/" + headImage));
-                        head->setRepeat(true);
-                        head->start();
+                        //head->setRepeat(true);
+                        head->start();*/
                     }
                     break;
                 case Phase::TRANSITION:
