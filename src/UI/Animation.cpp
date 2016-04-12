@@ -90,7 +90,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
         auto fps = frm->framesPerSecond();
         if (fps == 0)
         {
-            frame->setDuration(10);
+            frame->setDuration(100);
         }
         else
         {
