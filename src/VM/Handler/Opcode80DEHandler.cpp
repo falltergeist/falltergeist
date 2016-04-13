@@ -56,6 +56,7 @@ namespace Falltergeist
                 if (headID > -1)
                 {
                     auto reaction = _script->LVARS()->at(0).integerValue();
+                    Logger::debug("SCRIPT") << "Initial reaction: " << reaction << std::endl;
                     if (reaction <= -10)
                     {
                         mood = State::CritterInteract::Mood::BAD;

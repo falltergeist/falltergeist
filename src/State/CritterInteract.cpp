@@ -167,7 +167,7 @@ namespace Falltergeist
             _headID = headID;
         }
 
-        Mood CritterInteract::mood()
+        CritterInteract::Mood CritterInteract::mood()
         {
             return _mood;
         }
