@@ -118,7 +118,20 @@ namespace Falltergeist
 
                 _fidgetTimer.tickHandler().add([this](Event::Event* evt){
                     uint8_t fidget = rand() % 3 + 1;
-                    auto headImage = _headName + "g" + "f" + std::to_string(fidget)+".frm";
+                    auto headImage = _headName;
+                    switch (_mood)
+                    {
+                        case CritterInteract::Mood::BAD:
+                            headImage+="b";
+                            break;
+                        case CritterInteract::Mood::NEUTRAL:
+                            headImage+="n";
+                            break;
+                        case CritterInteract::Mood::GOOD:
+                            headImage+="g";
+                            break;
+                    }
+                    headImage += "f" + std::to_string(fidget)+".frm";
                     auto head = dynamic_cast<UI::AnimationQueue*>(getUI("head"));
                     head->clear();
                     head->animations().push_back(make_unique<UI::Animation>("art/heads/" + headImage));
@@ -221,7 +234,19 @@ namespace Falltergeist
             head->stop();
             head->clear();
             std::string headImage = _headName;
-            headImage+="gp.frm";
+            switch (_mood)
+            {
+                case CritterInteract::Mood::BAD:
+                    headImage+="b";
+                    break;
+                case CritterInteract::Mood::NEUTRAL:
+                    headImage+="n";
+                    break;
+                case CritterInteract::Mood::GOOD:
+                    headImage+="g";
+                    break;
+            }
+            headImage+="p.frm";
             head->animations().push_back(make_unique<UI::Animation>("art/heads/" + headImage));
         }
 
