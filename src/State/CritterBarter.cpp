@@ -49,7 +49,7 @@ namespace Falltergeist
             State::init();
 
             setFullscreen(false);
-            setModal(true);
+            setModal(false);
 
             setPosition((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2 + Point(0, 291));
 

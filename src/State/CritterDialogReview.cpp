@@ -48,7 +48,7 @@ namespace Falltergeist
             State::init();
 
             setFullscreen(false);
-            setModal(true);
+            setModal(false);
 
             auto background = new UI::Image("art/intrface/review.frm");
             Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
