@@ -25,6 +25,7 @@
 // Falltergeist includes
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
+#include "../State/CritterInteract.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 
@@ -70,7 +71,10 @@ namespace Falltergeist
 
         void CritterDialogReview::onDoneButtonClick(Event::Mouse* event)
         {
-            Game::getInstance()->popState();
+            if (auto interact = dynamic_cast<CritterInteract*>(Game::getInstance()->topState(1)))
+            {
+                interact->switchSubState(CritterInteract::SubState::DIALOG);
+            }
         }
     }
 }

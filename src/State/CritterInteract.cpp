@@ -34,6 +34,9 @@
 #include "../LocationCamera.h"
 #include "../PathFinding/Hexagon.h"
 #include "../ResourceManager.h"
+#include "../State/CritterDialog.h"
+#include "../State/CritterDialogReview.h"
+#include "../State/CritterBarter.h"
 #include "../State/CursorDropdown.h"
 #include "../State/Location.h"
 #include "../UI/Image.h"
@@ -51,12 +54,18 @@ namespace Falltergeist
 
         CritterInteract::CritterInteract() : State()
         {
+            _dialog=new CritterDialog();
+            _review=new CritterDialogReview();
+            _barter=new CritterBarter();
         }
 
         CritterInteract::~CritterInteract()
         {
             auto camera = Game::getInstance()->locationState()->camera();
             camera->setCenter(_oldCameraCenter);
+            delete _dialog;
+            delete _review;
+            delete _barter;
         }
 
         void CritterInteract::onStateActivate(Event::State* event)
@@ -299,6 +308,48 @@ namespace Falltergeist
             }
         }
 
+        CritterDialog* CritterInteract::dialog()
+        {
+            return _dialog;
+        }
+
+        CritterDialogReview* CritterInteract::dialogReview()
+        {
+            return _review;
+        }
+
+        CritterBarter* CritterInteract::barter()
+        {
+            return _barter;
+        }
+
+        void CritterInteract::switchSubState(CritterInteract::SubState state)
+        {
+            if (_state!=SubState::NONE)
+            {
+                Game::getInstance()->popState(false);
+            }
+            _state = state;
+            switch (state)
+            {
+                case SubState::DIALOG:
+                    Game::getInstance()->pushState(_dialog);
+                    break;
+                case SubState::BARTER:
+                    Game::getInstance()->pushState(_barter);
+                    break;
+                case SubState::REVIEW:
+                    Game::getInstance()->pushState(_review);
+                    break;
+                default:
+                    break;
+            }
+        }
+
 
     }
+
+
+
+
 }

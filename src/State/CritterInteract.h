@@ -51,6 +51,10 @@ namespace Falltergeist
     }
     namespace State
     {
+        class CritterDialog;
+        class CritterBarter;
+        class CritterDialogReview;
+
         class CritterInteract : public State
         {
             public:
@@ -70,6 +74,14 @@ namespace Falltergeist
                     GOOD = 49,
                     NEUTRAL = 50,
                     BAD = 51
+                };
+
+                enum class SubState {
+                    NONE= 0,
+                    DIALOG,
+                    BARTER,
+                    REVIEW,
+                    CONTROL
                 };
                 virtual void think() override;
 
@@ -101,7 +113,13 @@ namespace Falltergeist
 
                 void playSpeech(const std::string& speech);
 
-            protected:
+                CritterDialog* dialog();
+                CritterDialogReview* dialogReview();
+                CritterBarter* barter();
+                void switchSubState(SubState state);
+
+
+        protected:
                 Point _oldCameraCenter;
                 int _backgroundID = -1;
                 int _headID = -1;
@@ -118,6 +136,12 @@ namespace Falltergeist
                 int32_t _neutralFidgets;
                 int32_t _badFidgets;
                 Game::Timer _fidgetTimer;
+
+                CritterDialog* _dialog;
+                CritterBarter* _barter;
+                CritterDialogReview* _review;
+
+                SubState _state = SubState::NONE;
 
         };
     }

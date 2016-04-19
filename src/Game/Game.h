@@ -93,7 +93,8 @@ public:
     State::State* topState(unsigned offset = 0) const;
     void pushState(State::State* state);
     void setState(State::State* state);
-    void popState();
+    void popState(bool doDelete = true);
+
     void run();
     void quit();
     void init(std::unique_ptr<Settings> settings);

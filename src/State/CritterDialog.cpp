@@ -174,15 +174,23 @@ namespace Falltergeist
         void CritterDialog::onReviewButtonClick(Event::Mouse* event)
         {
             // FIXME : don't create new state each time the button is clicked
-            auto state = new CritterDialogReview();
-            Game::getInstance()->pushState(state);
+            if (auto interact = dynamic_cast<CritterInteract*>(Game::getInstance()->topState(1)))
+            {
+                interact->switchSubState(CritterInteract::SubState::REVIEW);
+            }
+            //auto state = new CritterDialogReview();
+            //Game::getInstance()->pushState(state);
         }
 
         void CritterDialog::onBarterButtonClick(Event::Mouse* event)
         {
             // FIXME : don't create new state each time the button is clicked
-            auto state = new CritterBarter();
-            Game::getInstance()->pushState(state);
+            if (auto interact = dynamic_cast<CritterInteract*>(Game::getInstance()->topState(1)))
+            {
+                interact->switchSubState(CritterInteract::SubState::BARTER);
+            }
+            //auto state = new CritterBarter();
+            //Game::getInstance()->pushState(state);
         }
 
         void CritterDialog::onKeyDown(Event::Keyboard* event)
