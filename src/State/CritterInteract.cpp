@@ -324,6 +324,9 @@ namespace Falltergeist
 
         void CritterInteract::switchSubState(CritterInteract::SubState state)
         {
+            Game::getInstance()->mixer()->stopMusic();
+            _phase = Phase::FIDGET;
+            _fidgetTimer.start(0);
             if (_state!=SubState::NONE)
             {
                 Game::getInstance()->popState(false);
