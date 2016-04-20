@@ -249,7 +249,7 @@ namespace Falltergeist
             dialog->script()->setProgramCounter(newOffset);
             // play transition, if needed, then run script.
             dialog->transition(static_cast<CritterInteract::Reaction>(reaction));
-            dialog->script()->run();
+            //dialog->script()->run();
         }
 
 

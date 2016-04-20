@@ -18,7 +18,6 @@
  */
 
 // Related headers
-#include <iostream>
 #include "../State/CritterInteract.h"
 
 // C++ standard includes
@@ -349,11 +348,100 @@ namespace Falltergeist
 
         void CritterInteract::transition(Reaction reaction)
         {
-            std::cout << "Said: " << static_cast<int>(reaction) << std::endl;
-            /*auto head = dynamic_cast<UI::AnimationQueue*>(dialog->getUI("head"));
-           head->animations().push_back();
-           head->animationEndedHandler().add(&CritterDialog::onTransitionEnded, this, std::placeholders::_1);
-           head->start();*/
+            auto newmood = _mood;
+
+            if (headID()!= -1)
+            {
+
+                switch (reaction)
+                {
+                    case Reaction::BAD:
+                        switch (_mood)
+                        {
+                            case Mood::NEUTRAL:
+                                newmood = Mood::BAD;
+                                break;
+                            case Mood::GOOD:
+                                newmood = Mood::NEUTRAL;
+                                break;
+                            case Mood::BAD:
+                                break;
+                        }
+                        break;
+                    case Reaction::GOOD:
+                        switch (_mood)
+                        {
+                            case Mood::NEUTRAL:
+                                newmood = Mood::GOOD;
+                                break;
+                            case Mood::GOOD:
+                                break;
+                            case Mood::BAD:
+                                newmood = Mood::NEUTRAL;
+                                break;
+                        }
+                        break;
+                    case Reaction::NEUTRAL:
+                        // neutral answers doesn't affect mood
+                        break;
+                }
+
+            }
+            if (headID()!=-1 && newmood != _mood)
+            {
+
+                auto head = dynamic_cast<UI::AnimationQueue *>(getUI("head"));
+                std::string headImage = _headName;
+                switch (_mood)
+                {
+                    case Mood::BAD:
+                        headImage+="b";
+                        break;
+                    case Mood::NEUTRAL:
+                        headImage+="n";
+                        break;
+                    case Mood::GOOD:
+                        headImage+="g";
+                        break;
+                }
+
+                switch (newmood)
+                {
+                    case Mood::BAD:
+                        headImage+="b";
+                        break;
+                    case Mood::NEUTRAL:
+                        headImage+="n";
+                        break;
+                    case Mood::GOOD:
+                        headImage+="g";
+                        break;
+                }
+
+                _mood = newmood;
+                headImage += ".frm";
+                if (_phase == Phase::TALK)
+                {
+                    head->stop();
+                    head->animations().clear();
+                }
+                _phase = Phase::TRANSITION;
+                head->animations().push_back(make_unique<UI::Animation>("art/heads/" + headImage));
+                head->animationEndedHandler().add(std::bind(&CritterInteract::onMoodTransitionEnded, this, std::placeholders::_1));
+                head->start();
+            }
+            else
+            {
+                script()->run();
+            }
+        }
+
+
+        void CritterInteract::onMoodTransitionEnded(Event::Event *event)
+        {
+            auto head = dynamic_cast<UI::AnimationQueue *>(getUI("head"));
+            head->animationEndedHandler().clear();
+            script()->run();
         }
     }
 

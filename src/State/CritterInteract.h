@@ -118,6 +118,7 @@ namespace Falltergeist
                 CritterBarter* barter();
                 void switchSubState(SubState state);
                 void transition(Reaction reaction);
+                void onMoodTransitionEnded(Event::Event* event);
 
 
         protected:
