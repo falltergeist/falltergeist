@@ -40,6 +40,9 @@ namespace Falltergeist
                 void init() override;
 
                 void onDoneButtonClick(Event::Mouse* event);
+            private:
+                std::string _critterName;
+
         };
     }
 }

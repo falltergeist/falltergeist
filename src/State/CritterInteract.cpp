@@ -347,6 +347,14 @@ namespace Falltergeist
         }
 
 
+        void CritterInteract::transition(Reaction reaction)
+        {
+            std::cout << "Said: " << static_cast<int>(reaction) << std::endl;
+            /*auto head = dynamic_cast<UI::AnimationQueue*>(dialog->getUI("head"));
+           head->animations().push_back();
+           head->animationEndedHandler().add(&CritterDialog::onTransitionEnded, this, std::placeholders::_1);
+           head->start();*/
+        }
     }
 
 

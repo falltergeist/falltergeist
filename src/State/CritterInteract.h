@@ -117,6 +117,7 @@ namespace Falltergeist
                 CritterDialogReview* dialogReview();
                 CritterBarter* barter();
                 void switchSubState(SubState state);
+                void transition(Reaction reaction);
 
 
         protected:

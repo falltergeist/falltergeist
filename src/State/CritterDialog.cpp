@@ -34,10 +34,9 @@
 #include "../LocationCamera.h"
 #include "../PathFinding/Hexagon.h"
 #include "../ResourceManager.h"
-#include "../State/CritterBarter.h"
-#include "../State/CritterDialogReview.h"
 #include "../State/CritterInteract.h"
 #include "../State/Location.h"
+#include "../UI/AnimationQueue.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
 #include "../VM/Script.h"
@@ -133,6 +132,7 @@ namespace Falltergeist
         // TODO: add auto-text scrolling after 10 seconds (when it's longer than 4 lines)
         void CritterDialog::setQuestion(const std::string& value)
         {
+            // TODO: add to log
             auto question = getTextArea("question");
             question->setText(std::string("  ") + value);
             question->setLineOffset(0);
@@ -173,24 +173,18 @@ namespace Falltergeist
 
         void CritterDialog::onReviewButtonClick(Event::Mouse* event)
         {
-            // FIXME : don't create new state each time the button is clicked
             if (auto interact = dynamic_cast<CritterInteract*>(Game::getInstance()->topState(1)))
             {
                 interact->switchSubState(CritterInteract::SubState::REVIEW);
             }
-            //auto state = new CritterDialogReview();
-            //Game::getInstance()->pushState(state);
         }
 
         void CritterDialog::onBarterButtonClick(Event::Mouse* event)
         {
-            // FIXME : don't create new state each time the button is clicked
             if (auto interact = dynamic_cast<CritterInteract*>(Game::getInstance()->topState(1)))
             {
                 interact->switchSubState(CritterInteract::SubState::BARTER);
             }
-            //auto state = new CritterBarter();
-            //Game::getInstance()->pushState(state);
         }
 
         void CritterDialog::onKeyDown(Event::Keyboard* event)
@@ -236,16 +230,25 @@ namespace Falltergeist
         {
             if (i >= _answers.size()) throw Exception("No answer with number " + std::to_string(i));
 
+            //TODO: add answer to log.
+
             auto game = Game::getInstance();
             auto dialog = dynamic_cast<CritterInteract*>(game->topState(1));
 
             // @todo optimize
             int newOffset = dialog->script()->script()->procedures()->at(_functions.at(i))->bodyOffset();
             int oldOffset = dialog->script()->programCounter() - 2;
+            int reaction = 50;
+            if (i < _reactions.size())
+            {
+                reaction = _reactions.at(i);
+            }
             deleteAnswers();
             dialog->script()->dataStack()->push(0); // arguments counter;
             dialog->script()->returnStack()->push(oldOffset); // return adrress
             dialog->script()->setProgramCounter(newOffset);
+            // play transition, if needed, then run script.
+            dialog->transition(static_cast<CritterInteract::Reaction>(reaction));
             dialog->script()->run();
         }
 
