@@ -348,6 +348,7 @@ namespace Falltergeist
 
         void CritterInteract::transition(Reaction reaction)
         {
+            Game::getInstance()->mixer()->stopMusic();
             auto newmood = _mood;
 
             if (headID()!= -1)
