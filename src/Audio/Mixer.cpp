@@ -247,12 +247,14 @@ namespace Falltergeist
             else if (volume > 1.0) volume = 1.0;
             _musicVolume = volume;
         }
+
+        std::string &Mixer::lastMusic()
+        {
+            return _lastMusic;
+        }
     }
 
-    std::string &Audio::Mixer::lastMusic()
-    {
-        return _lastMusic;
-    }
+
 
 
 }
