@@ -42,6 +42,9 @@ namespace Falltergeist
                 void onDoneButtonClick(Event::Mouse* event);
 
                 void setCritterName(const std::string& value);
+
+                void addAnswer(const std::string& value);
+                void addQuestion(const std::string& value);
             private:
                 std::string _critterName;
 

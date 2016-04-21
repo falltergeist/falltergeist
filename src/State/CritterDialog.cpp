@@ -35,6 +35,7 @@
 #include "../PathFinding/Hexagon.h"
 #include "../ResourceManager.h"
 #include "../State/CritterInteract.h"
+#include "../State/CritterDialogReview.h"
 #include "../State/Location.h"
 #include "../UI/AnimationQueue.h"
 #include "../UI/Image.h"
@@ -132,7 +133,11 @@ namespace Falltergeist
         // TODO: add auto-text scrolling after 10 seconds (when it's longer than 4 lines)
         void CritterDialog::setQuestion(const std::string& value)
         {
-            // TODO: add to log
+            auto game = Game::getInstance();
+            auto dialog = dynamic_cast<CritterInteract*>(game->topState(1));
+
+            dialog->dialogReview()->addQuestion(std::string("  ") + value);
+
             auto question = getTextArea("question");
             question->setText(std::string("  ") + value);
             question->setLineOffset(0);
@@ -230,10 +235,10 @@ namespace Falltergeist
         {
             if (i >= _answers.size()) throw Exception("No answer with number " + std::to_string(i));
 
-            //TODO: add answer to log.
-
             auto game = Game::getInstance();
             auto dialog = dynamic_cast<CritterInteract*>(game->topState(1));
+
+            dialog->dialogReview()->addAnswer(_answers.at(i)->text().substr(1));
 
             // @todo optimize
             int newOffset = dialog->script()->script()->procedures()->at(_functions.at(i))->bodyOffset();

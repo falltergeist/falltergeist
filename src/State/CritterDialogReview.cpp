@@ -81,5 +81,15 @@ namespace Falltergeist
         {
             _critterName = value;
         }
+
+        void CritterDialogReview::addAnswer(const std::string &value)
+        {
+        }
+
+        void CritterDialogReview::addQuestion(const std::string &value)
+        {
+        }
+
+
     }
 }
