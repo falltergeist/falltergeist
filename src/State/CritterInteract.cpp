@@ -40,6 +40,7 @@
 #include "../State/Location.h"
 #include "../UI/Image.h"
 #include "../UI/Animation.h"
+#include "../UI/AnimationFrame.h"
 #include "../UI/AnimationQueue.h"
 #include "../Audio/Mixer.h"
 
@@ -155,7 +156,8 @@ namespace Falltergeist
                 //head->setRepeat(true);
                 //head->start();
 
-                head->setPosition({128, 15});
+                int offset = 388/2 - head->currentAnimation()->width()/2;
+                head->setPosition({128+offset, 15});
                 addUI("head",head);
             }
 
