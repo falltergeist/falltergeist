@@ -74,6 +74,7 @@ namespace Falltergeist
             if (_headID >= 0)
             {
                 // stop music completely
+                // TODO: because Dialog state is activated *before* Interact, this stops speech too =/
                 //Game::getInstance()->mixer()->stopMusic();
             }
             else
@@ -144,7 +145,7 @@ namespace Falltergeist
                     auto head = dynamic_cast<UI::AnimationQueue*>(getUI("head"));
                     head->clear();
                     head->animations().push_back(make_unique<UI::Animation>("art/heads/" + headImage));
-                    //head->setRepeat(true);
+
                     head->start();
                     _fidgetTimer.start(std::rand() % 5000 + 5000);
 
@@ -153,8 +154,6 @@ namespace Falltergeist
 
                 auto head = new UI::AnimationQueue();
                 head->animations().push_back(make_unique<UI::Animation>("art/heads/" + headImage));
-                //head->setRepeat(true);
-                //head->start();
 
                 int offset = 388/2 - head->currentAnimation()->width()/2;
                 head->setPosition({128+offset, 15});
@@ -303,13 +302,6 @@ namespace Falltergeist
                     {
                         _phase = Phase::FIDGET;
                         _fidgetTimer.start(0);
-                        /*auto head = dynamic_cast<UI::AnimationQueue*>(getUI("head"));
-                        head->clear();
-                        std::string headImage = _headName;
-                        headImage+="gf2.frm";
-                        head->animations().push_back(make_unique<UI::Animation>("art/heads/" + headImage));
-                        //head->setRepeat(true);
-                        head->start();*/
                     }
                     break;
                 case Phase::TRANSITION:

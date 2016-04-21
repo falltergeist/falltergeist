@@ -70,7 +70,6 @@ namespace Falltergeist
 
         void CritterBarter::onTalkButtonClick(Event::Mouse* event)
         {
-            //Game::getInstance()->popState();
             if (auto interact = dynamic_cast<CritterInteract*>(Game::getInstance()->topState(1)))
             {
                 interact->switchSubState(CritterInteract::SubState::DIALOG);
