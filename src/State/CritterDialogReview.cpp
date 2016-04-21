@@ -76,5 +76,10 @@ namespace Falltergeist
                 interact->switchSubState(CritterInteract::SubState::DIALOG);
             }
         }
+
+        void CritterDialogReview::setCritterName(const std::string &value)
+        {
+            _critterName = value;
+        }
     }
 }
