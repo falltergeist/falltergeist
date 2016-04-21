@@ -163,6 +163,14 @@ namespace Falltergeist
 
             addUI("background", new UI::Image("art/intrface/alltlk.frm"));
 
+            auto hilight1 = new UI::Image("data/hilight1.png");
+            hilight1->setPosition({423,20});
+            addUI(hilight1);
+
+            auto hilight2 = new UI::Image("data/hilight2.png");
+            hilight2->setPosition({128,84});
+            addUI(hilight2);
+
             // Centering camera on critter position
             auto locationState = Game::getInstance()->locationState();
             _oldCameraCenter = locationState->camera()->center();
