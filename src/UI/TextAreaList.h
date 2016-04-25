@@ -43,6 +43,7 @@ public:
     const std::vector<std::unique_ptr<TextArea>>& textAreas() const;
     void scrollDown(int count = 1);
     void scrollUp(int count = 1);
+    void scrollTo(int index);
 
     virtual bool opaque(const Point &pos) override;
 
@@ -53,7 +54,7 @@ public:
 protected:
     Size _size;
     std::vector<std::unique_ptr<TextArea>> _areas;
-    unsigned int _areaIndex = 0;
+    int _areaIndex = 0;
     unsigned int _visibleCount = 0;
     int _totalHeight = 0;
     void _recalculatePositions();

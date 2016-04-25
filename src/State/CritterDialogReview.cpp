@@ -67,8 +67,10 @@ using Graphics::Size;
             doneButton->mouseClickHandler().add(std::bind(&CritterDialogReview::onDoneButtonClick, this, std::placeholders::_1));
 
             auto upButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_BIG_UP_ARROW, backgroundPos + Point(476, 154));
+            upButton->mouseClickHandler().add(std::bind(&CritterDialogReview::onUpButtonClick, this, std::placeholders::_1));
 
             auto downButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_BIG_DOWN_ARROW, backgroundPos + Point(476, 192));
+            downButton->mouseClickHandler().add(std::bind(&CritterDialogReview::onDownButtonClick, this, std::placeholders::_1));
 
             addUI(background);
             addUI(doneButton);
@@ -79,6 +81,14 @@ using Graphics::Size;
             addUI("list",list);
         }
 
+
+        void CritterDialogReview::onStateActivate(Event::State *event)
+        {
+            auto list = dynamic_cast<UI::TextAreaList*>(getUI("list"));
+            list->scrollTo(0);
+        }
+
+
         void CritterDialogReview::onDoneButtonClick(Event::Mouse* event)
         {
             if (auto interact = dynamic_cast<CritterInteract*>(Game::getInstance()->topState(1)))
@@ -86,6 +96,20 @@ using Graphics::Size;
                 interact->switchSubState(CritterInteract::SubState::DIALOG);
             }
         }
+
+
+        void CritterDialogReview::onUpButtonClick(Event::Mouse *event)
+        {
+            auto list = dynamic_cast<UI::TextAreaList*>(getUI("list"));
+            list->scrollUp(4);
+        }
+
+        void CritterDialogReview::onDownButtonClick(Event::Mouse *event)
+        {
+            auto list = dynamic_cast<UI::TextAreaList*>(getUI("list"));
+            list->scrollDown(4);
+        }
+
 
         void CritterDialogReview::setCritterName(const std::string &value)
         {

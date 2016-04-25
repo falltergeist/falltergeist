@@ -74,20 +74,45 @@ bool TextAreaList::opaque(const Point &pos)
 
 void TextAreaList::render(bool eggTransparency)
 {
-    for (unsigned int i = _areaIndex; i < _visibleCount; i++)
+    for (unsigned int i = 0; i < _visibleCount; i++)
     {
-        _areas.at(i)->render(eggTransparency);
+        _areas.at(_areaIndex+i)->render(eggTransparency);
     }
+}
+
+
+void TextAreaList::scrollTo(int index)
+{
+    _areaIndex=index;
+    if (_areaIndex>=(int)_areas.size())
+    {
+        _areaIndex=_areas.size();
+    }
+    if (_areaIndex<0)
+    {
+        _areaIndex=0;
+    }
+    _recalculatePositions();
 }
 
 
 void TextAreaList::scrollDown(int count)
 {
+    if (_areaIndex+count>=(int)_areas.size())
+    {
+        return;
+    }
+    _areaIndex+=count;
     _recalculatePositions();
 }
 
 void TextAreaList::scrollUp(int count)
 {
+    if (_areaIndex-count<0)
+    {
+        return;
+    }
+    _areaIndex-=count;
     _recalculatePositions();
 }
 

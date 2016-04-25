@@ -39,7 +39,11 @@ namespace Falltergeist
 
                 void init() override;
 
+                virtual void onStateActivate(Event::State *event) override;
+
                 void onDoneButtonClick(Event::Mouse* event);
+                void onUpButtonClick(Event::Mouse* event);
+                void onDownButtonClick(Event::Mouse* event);
 
                 void setCritterName(const std::string& value);
 
