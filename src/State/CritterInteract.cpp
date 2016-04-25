@@ -57,6 +57,8 @@ namespace Falltergeist
             _dialog=new CritterDialog();
             _review=new CritterDialogReview();
             _barter=new CritterBarter();
+            // pre-init review, so we can push questions/answers to it.
+            _review->init();
         }
 
         CritterInteract::~CritterInteract()
