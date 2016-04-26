@@ -81,6 +81,8 @@ public:
     int criticalChance() const override;
     unsigned int carryWeightMax() const override;
 
+    virtual std::string scrName() const override;
+
     /**
      * Offset where to draw egg relative to dude hex.
      */

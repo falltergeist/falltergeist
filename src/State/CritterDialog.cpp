@@ -34,10 +34,10 @@
 #include "../LocationCamera.h"
 #include "../PathFinding/Hexagon.h"
 #include "../ResourceManager.h"
-#include "../State/CritterBarter.h"
-#include "../State/CritterDialogReview.h"
 #include "../State/CritterInteract.h"
+#include "../State/CritterDialogReview.h"
 #include "../State/Location.h"
+#include "../UI/AnimationQueue.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
 #include "../VM/Script.h"
@@ -133,6 +133,11 @@ namespace Falltergeist
         // TODO: add auto-text scrolling after 10 seconds (when it's longer than 4 lines)
         void CritterDialog::setQuestion(const std::string& value)
         {
+            auto game = Game::getInstance();
+            auto dialog = dynamic_cast<CritterInteract*>(game->topState(1));
+
+            dialog->dialogReview()->addQuestion(std::string("  ") + value);
+
             auto question = getTextArea("question");
             question->setText(std::string("  ") + value);
             question->setLineOffset(0);
@@ -173,16 +178,18 @@ namespace Falltergeist
 
         void CritterDialog::onReviewButtonClick(Event::Mouse* event)
         {
-            // FIXME : don't create new state each time the button is clicked
-            auto state = new CritterDialogReview();
-            Game::getInstance()->pushState(state);
+            if (auto interact = dynamic_cast<CritterInteract*>(Game::getInstance()->topState(1)))
+            {
+                interact->switchSubState(CritterInteract::SubState::REVIEW);
+            }
         }
 
         void CritterDialog::onBarterButtonClick(Event::Mouse* event)
         {
-            // FIXME : don't create new state each time the button is clicked
-            auto state = new CritterBarter();
-            Game::getInstance()->pushState(state);
+            if (auto interact = dynamic_cast<CritterInteract*>(Game::getInstance()->topState(1)))
+            {
+                interact->switchSubState(CritterInteract::SubState::BARTER);
+            }
         }
 
         void CritterDialog::onKeyDown(Event::Keyboard* event)
@@ -231,14 +238,23 @@ namespace Falltergeist
             auto game = Game::getInstance();
             auto dialog = dynamic_cast<CritterInteract*>(game->topState(1));
 
+            dialog->dialogReview()->addAnswer(_answers.at(i)->text().substr(1));
+
             // @todo optimize
             int newOffset = dialog->script()->script()->procedures()->at(_functions.at(i))->bodyOffset();
             int oldOffset = dialog->script()->programCounter() - 2;
+            int reaction = 50;
+            if (i < _reactions.size())
+            {
+                reaction = _reactions.at(i);
+            }
             deleteAnswers();
             dialog->script()->dataStack()->push(0); // arguments counter;
             dialog->script()->returnStack()->push(oldOffset); // return adrress
             dialog->script()->setProgramCounter(newOffset);
-            dialog->script()->run();
+            // play transition, if needed, then run script.
+            dialog->transition(static_cast<CritterInteract::Reaction>(reaction));
+            //dialog->script()->run();
         }
 
 

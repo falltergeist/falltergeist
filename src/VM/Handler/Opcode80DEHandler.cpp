@@ -47,13 +47,29 @@ namespace Falltergeist
                 Logger::debug("SCRIPT") << "[80DE] [*] void start_gdialog(int msgFileID, GameCritterObject* critter, int mood, int headID, int backgroundID)" << std::endl;
                 int backgroundID = _script->dataStack()->popInteger();
                 int headID = _script->dataStack()->popInteger();
-                int mood = _script->dataStack()->popInteger();
+                State::CritterInteract::Mood mood = static_cast<State::CritterInteract::Mood>(_script->dataStack()->popInteger());
             
                 auto critter = dynamic_cast<Game::CritterObject*>(_script->dataStack()->popObject());
                 if (!critter) _error("start_gdialog - wrong critter pointer");
             
                 int msgFileID = _script->dataStack()->popInteger();
-            
+                if (headID > -1)
+                {
+                    auto reaction = _script->LVARS()->at(0).integerValue();
+                    Logger::debug("SCRIPT") << "Initial reaction: " << reaction << std::endl;
+                    if (reaction <= -10)
+                    {
+                        mood = State::CritterInteract::Mood::BAD;
+                    }
+                    else if (reaction <= 10)
+                    {
+                        mood = State::CritterInteract::Mood::NEUTRAL;
+                    }
+                    else
+                    {
+                        mood = State::CritterInteract::Mood::GOOD;
+                    }
+                }
                 auto interact = new State::CritterInteract();
                 interact->setBackgroundID(backgroundID);
                 interact->setHeadID(headID);

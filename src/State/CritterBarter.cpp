@@ -25,7 +25,8 @@
 // Falltergeist includes
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
-#include "../State/CritterDialog.h"
+//#include "../State/CritterDialog.h"
+#include "../State/CritterInteract.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 
@@ -49,7 +50,7 @@ namespace Falltergeist
             State::init();
 
             setFullscreen(false);
-            setModal(true);
+            setModal(false);
 
             setPosition((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2 + Point(0, 291));
 
@@ -69,7 +70,10 @@ namespace Falltergeist
 
         void CritterBarter::onTalkButtonClick(Event::Mouse* event)
         {
-            Game::getInstance()->popState();
+            if (auto interact = dynamic_cast<CritterInteract*>(Game::getInstance()->topState(1)))
+            {
+                interact->switchSubState(CritterInteract::SubState::DIALOG);
+            }
         }
 
         void CritterBarter::onBackgroundClick(Event::Mouse* event)

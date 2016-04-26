@@ -210,8 +210,8 @@ void TextArea::setLineOffset(int offset)
 Size TextArea::size() const
 {
     return Size(
-        _size.width() ?: _calculatedSize.width(),
-        _size.height() ?: _calculatedSize.height()
+        _size.width() ? _size.width() : _calculatedSize.width(),
+        _size.height() ? _size.height() : _calculatedSize.height()
     );
 }
 

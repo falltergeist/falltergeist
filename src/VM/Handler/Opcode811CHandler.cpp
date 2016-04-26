@@ -24,8 +24,11 @@
 
 // Falltergeist includes
 #include "../../Game/Game.h"
+#include "../../Game/Object.h"
 #include "../../Logger.h"
 #include "../../State/CritterDialog.h"
+#include "../../State/CritterDialogReview.h"
+#include "../../State/CritterInteract.h"
 #include "../../VM/Script.h"
 
 // Third party includes
@@ -43,8 +46,12 @@ namespace Falltergeist
             void Opcode811C::_run()
             {
                 Logger::debug("SCRIPT") << "[811C] [?] gsay_start" << std::endl;
-                auto dialog = new State::CritterDialog();
-                Game::getInstance()->pushState(dialog);
+
+                if (auto interact = dynamic_cast<Falltergeist::State::CritterInteract*>(Game::getInstance()->topState()))
+                {
+                    interact->dialogReview()->setCritterName(_script->owner()->scrName());
+                    interact->switchSubState(State::CritterInteract::SubState::DIALOG);
+                }
             }
         }
     }

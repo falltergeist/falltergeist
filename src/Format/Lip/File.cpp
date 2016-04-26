@@ -63,25 +63,25 @@ void File::_initialize()
         throw Exception("Invalid LIP file.");
     }
     *this >> _unknown1 >> _unknown2 >> _unknown3;
-    *this >> _acm_size >> _phonems_count;
+    *this >> _acmSize >> _phonemesCount;
     *this >> _unknown4;
-    *this >> _markers_count;
-    this->readBytes(_acm_name, 8);
+    *this >> _markersCount;
+    this->readBytes(_acmName, 8);
     this->readBytes(_unknown5, 4);
 
-    for (uint32_t i=0; i < _phonems_count; i++)
+    for (uint32_t i=0; i < _phonemesCount; i++)
     {
-        uint8_t phonem;
-        *this >> phonem;
-        _phonems.push_back(phonem);
+        uint8_t phoneme;
+        *this >> phoneme;
+        _phonemes.push_back(phoneme);
     }
 
-    for (uint32_t i=0; i < _markers_count; i++)
+    for (uint32_t i=0; i < _markersCount; i++)
     {
         uint32_t stype, smarker;
         *this >> stype >> smarker;
-        _marker_samples.push_back(smarker);
-        _marker_timestamps.push_back(smarker*1000 / 22050 /2); //ms
+        _markerSamples.push_back(smarker);
+        _markerTimestamps.push_back(smarker*1000 / 22050 /2); //ms
     }
 
 }
@@ -94,32 +94,39 @@ void File::init()
 std::string File::acmName()
 {
     _initialize();
-    return std::string((char*)_acm_name)+std::string((char*)_unknown5);
+    return std::string((char*)_acmName)+std::string((char*)_unknown5);
 }
 
-uint32_t File::pcount()
+uint32_t File::phonemesCount()
 {
     _initialize();
-    return _phonems_count;
+    return _phonemesCount;
 }
 
-uint32_t File::mcount()
+uint32_t File::markersCount()
 {
     _initialize();
-    return _markers_count;
+    return _markersCount;
 }
 
 uint32_t File::acmSize()
 {
     _initialize();
-    return _acm_size;
+    return _acmSize;
 }
 
-std::vector<uint32_t>* File::timestamps()
+std::vector<uint32_t>& File::timestamps()
 {
     _initialize();
-    return &_marker_timestamps;
+    return _markerTimestamps;
 }
+
+std::vector<uint8_t> &File::phonemes()
+{
+    _initialize();
+    return _phonemes;
+}
+
 
 }
 }

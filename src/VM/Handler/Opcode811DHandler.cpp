@@ -26,6 +26,7 @@
 #include "../../Game/Game.h"
 #include "../../Logger.h"
 #include "../../State/CritterDialog.h"
+#include "../../State/CritterInteract.h"
 #include "../../VM/HaltException.h"
 #include "../../VM/Script.h"
 
@@ -50,7 +51,11 @@ namespace Falltergeist
                     _script->dataStack()->push(0); // function return value
                     throw HaltException();
                 }
-                Game::getInstance()->popState(); // dialog state
+                if (auto interact = dynamic_cast<Falltergeist::State::CritterInteract*>(Game::getInstance()->topState(1)))
+                {
+                    interact->switchSubState(State::CritterInteract::SubState::NONE);
+                }
+                //Game::getInstance()->popState(); // dialog state
             }
         }
     }

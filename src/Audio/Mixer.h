@@ -46,10 +46,12 @@ namespace Falltergeist
                 void stopMusic();
                 void stopSounds();
                 void playACMMusic(const std::string& filename, bool loop = false);
+                void playACMSpeech(const std::string& filename);
                 void playACMSound(const std::string& filename);
                 void playMovieMusic(UI::MvePlayer* mve);
                 void pauseMusic();
                 void resumeMusic();
+                std::string& lastMusic();
                 /**
                  * @return current music volume
                  */
@@ -65,12 +67,15 @@ namespace Falltergeist
 
             private:
                 void _musicCallback(void* udata, uint8_t* stream, uint32_t len);
+                void _speechCallback(void* udata, uint8_t* stream, uint32_t len);
                 void _movieCallback(void* udata, uint8_t* stream, uint32_t len);
                 std::unordered_map<std::string, Mix_Chunk*> _sfx;
                 bool _paused = false;
                 bool _loop = false;
 
                 double _musicVolume = 1.0;
+                SDL_AudioFormat _format;
+                std::string _lastMusic = "";
         };
     }
 }

@@ -61,7 +61,7 @@ namespace Falltergeist
             unsigned int renderHeight = Game::getInstance()->renderer()->height();
 
             // loading map tiles
-            _tiles = new UI::ImageList((std::vector<std::string>){
+            _tiles = new UI::ImageList({
                                     "art/intrface/wrldmp00.frm",
                                     "art/intrface/wrldmp01.frm",
                                     "art/intrface/wrldmp02.frm",

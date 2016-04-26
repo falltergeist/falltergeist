@@ -31,6 +31,8 @@
 #include "../Base/StlFeatures.h"
 #include "../Event/Mouse.h"
 #include "../Exception.h"
+#include "../Format/Msg/File.h"
+#include "../Format/Msg/Message.h"
 #include "../Format/Map/File.h"
 #include "../Format/Map/Elevation.h"
 #include "../Format/Map/Object.h"
@@ -326,12 +328,30 @@ namespace Falltergeist
                 if (mapObject->scriptId() > 0)
                 {
                     auto intFile = ResourceManager::getInstance()->intFileType(mapObject->scriptId());
-                    if (intFile) object->setScript(new VM::Script(intFile,object));
+                    if (intFile)
+                    {
+                        object->setScript(new VM::Script(intFile, object));
+                        object->setSID(mapObject->scriptId());
+                    }
                 }
                 if (mapObject->mapScriptId() > 0 && mapObject->mapScriptId() != mapObject->scriptId())
                 {
                     auto intFile = ResourceManager::getInstance()->intFileType(mapObject->mapScriptId());
-                    if (intFile) object->setScript(new VM::Script(intFile, object));
+                    if (intFile)
+                    {
+                        object->setScript(new VM::Script(intFile, object));
+                        object->setSID(mapObject->mapScriptId());
+                    }
+                }
+
+                if (object->SID()>0)
+                {
+                    auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/scrname.msg");
+                    try
+                    {
+                        object->setScrName(msg->message(object->SID()+101)->text());
+                    }
+                    catch (Exception) {}
                 }
 
                 auto hexagon = hexagonGrid()->at(mapObject->hexPosition());

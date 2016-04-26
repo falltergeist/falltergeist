@@ -141,12 +141,19 @@ void Game::pushState(State::State* state)
     state->emitEvent(make_unique<Event::State>("activate"), state->activateHandler());
 }
 
-void Game::popState()
+void Game::popState(bool doDelete)
 {
     if (_states.size() == 0) return;
 
     State::State* state = _states.back().get();
-    _statesForDelete.emplace_back(std::move(_states.back()));
+    if (doDelete)
+    {
+        _statesForDelete.emplace_back(std::move(_states.back()));
+    }
+    else
+    {
+        _states.back().release();
+    }
     _states.pop_back();
     state->setActive(false);
     state->emitEvent(make_unique<Event::State>("deactivate"), state->deactivateHandler());

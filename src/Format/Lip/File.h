@@ -50,10 +50,11 @@ public:
     ~File();
     void init();
     std::string acmName();
-    uint32_t pcount();
-    uint32_t mcount();
+    uint32_t phonemesCount();
+    uint32_t markersCount();
     uint32_t acmSize();
-    std::vector<uint32_t>* timestamps();
+    std::vector<uint32_t>& timestamps();
+    std::vector<uint8_t>& phonemes();
 
 protected:
     virtual void _initialize();
@@ -61,15 +62,15 @@ protected:
     uint32_t _unknown1;
     uint32_t _unknown2;
     uint32_t _unknown3;
-    uint32_t _acm_size;
-    uint32_t _phonems_count;
+    uint32_t _acmSize;
+    uint32_t _phonemesCount;
     uint32_t _unknown4;
-    uint32_t _markers_count;
-    uint8_t  _acm_name[8];
+    uint32_t _markersCount;
+    uint8_t  _acmName[8];
     uint8_t  _unknown5[4];
-    std::vector<uint8_t> _phonems;
-    std::vector<uint32_t> _marker_samples;
-    std::vector<uint32_t> _marker_timestamps;
+    std::vector<uint8_t> _phonemes;
+    std::vector<uint32_t> _markerSamples;
+    std::vector<uint32_t> _markerTimestamps;
 
 };
 

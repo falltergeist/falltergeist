@@ -510,8 +510,8 @@ void CritterObject::think()
     Object::think();
 }
 
-static const std::array<int, 6> xTileOffsets = {16, 32, 16, -16, -32, -16};
-static const std::array<int, 6> yTileOffsets = {-12, 0, 12,  12,   0, -12};
+static const std::array<int, 6> xTileOffsets = {{16, 32, 16, -16, -32, -16}};
+static const std::array<int, 6> yTileOffsets = {{-12, 0, 12,  12,   0, -12}};
 
 // TODO: move somewhere appropriate
 bool isOutsideOfHexForDirection(Point offset, Orientation orient)

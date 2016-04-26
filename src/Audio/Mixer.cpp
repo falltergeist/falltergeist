@@ -71,6 +71,8 @@ namespace Falltergeist
                 throw Exception(Mix_GetError());
             }
             Logger::info() << message + "[OK]" << std::endl;
+            int frequency, channels;
+            Mix_QuerySpec(&frequency, &_format, &channels);
         }
 
         void Mixer::stopMusic()
@@ -104,23 +106,12 @@ namespace Falltergeist
             }
 
 
-            if (pacm->filename().find("music") != std::string::npos)
-            {
-                // music is stereo. just fetch
-                pacm->readSamples((short int*)stream, len/2);
-            }
-            else
-            {
-                //all other files are mono. double it
-                uint16_t tmp[len/2];
-                uint16_t* sstr = (uint16_t*)stream;
-                pacm->readSamples((short int*)tmp, len/4);
-                for (uint32_t i = 0; i < len/4; i++)
-                {
-                    sstr[i*2] = tmp[i];
-                    sstr[i*2+1] = tmp[i];
-                }
-            }
+            // music is stereo. just fetch
+            uint16_t* tmp = new uint16_t[len/2];
+            pacm->readSamples((short int*)tmp, len/2);
+            SDL_memset(stream, 0, len);
+            SDL_MixAudioFormat(stream, (uint8_t*)tmp, _format, len, SDL_MIX_MAXVOLUME * _musicVolume);
+            delete[] tmp;
         }
 
         void Mixer::playACMMusic(const std::string& filename, bool loop)
@@ -128,8 +119,42 @@ namespace Falltergeist
             Mix_HookMusic(NULL, NULL);
             auto acm = ResourceManager::getInstance()->acmFileType(Game::getInstance()->settings()->musicPath()+filename);
             if (!acm) return;
+            _lastMusic = filename;
             _loop = loop;
             musicCallback = std::bind(&Mixer::_musicCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+            acm->init();
+            acm->rewind();
+            Mix_HookMusic(myMusicPlayer, (void *)acm);
+        }
+
+        void Mixer::_speechCallback(void *udata, uint8_t *stream, uint32_t len)
+        {
+            if (_paused) return;
+
+            auto pacm = (Format::Acm::File*)(udata);
+            if (pacm->samplesLeft() <= 0)
+            {
+                Mix_HookMusic(NULL,NULL);
+                return;
+            }
+
+            uint16_t* tmp = new uint16_t[len/2];
+            uint16_t* sstr = (uint16_t*)stream;
+            pacm->readSamples((short int*)tmp, len/4);
+            for (uint32_t i = 0; i < len/4; i++)
+            {
+                sstr[i*2] = tmp[i];
+                sstr[i*2+1] = tmp[i];
+            }
+            delete[] tmp;
+        }
+
+        void Mixer::playACMSpeech(const std::string& filename)
+        {
+            Mix_HookMusic(NULL, NULL);
+            auto acm = ResourceManager::getInstance()->acmFileType("sound/speech/"+filename);
+            if (!acm) return;
+            musicCallback = std::bind(&Mixer::_speechCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
             acm->init();
             acm->rewind();
             Mix_HookMusic(myMusicPlayer, (void *)acm);
@@ -172,7 +197,7 @@ namespace Falltergeist
                 acm->init();
                 auto samples = acm->samples();
 
-                uint8_t memory[samples * 2];
+                uint8_t* memory = new uint8_t[samples * 2];
                 auto cnt = acm->readSamples((short*)memory, samples)*2;
 
                 SDL_AudioCVT cvt;
@@ -180,6 +205,7 @@ namespace Falltergeist
 
                 cvt.buf = (Uint8*)malloc(cnt*cvt.len_mult);
                 memcpy(cvt.buf, (uint8_t*)memory, cnt);
+                delete[] memory;
                 cvt.len = cnt;
                 SDL_ConvertAudio(&cvt);
 
@@ -217,10 +243,18 @@ namespace Falltergeist
 
         void Mixer::setMusicVolume(double volume)
         {
-            // TODO: implement volume
             if (volume < 0.0) volume = 0.0;
             else if (volume > 1.0) volume = 1.0;
             _musicVolume = volume;
         }
+
+        std::string &Mixer::lastMusic()
+        {
+            return _lastMusic;
+        }
     }
+
+
+
+
 }

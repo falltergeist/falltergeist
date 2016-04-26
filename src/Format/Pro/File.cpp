@@ -209,8 +209,8 @@ void File::_initialize()
                 _damageResist.at(i) = uint32();
             }
 
-            uint32(); // age
-            uint32(); // sex
+            _critterAge=uint32(); // age
+            _critterGender=uint32(); // sex
 
             for (unsigned int i = 0; i != 7; ++i)
             {
@@ -427,6 +427,18 @@ uint32_t File::critterHealingRate() const
 {
     return _critterHealingRate;
 }
+
+
+uint32_t File::critterAge() const
+{
+    return _critterAge;
+}
+
+uint32_t File::critterGender() const
+{
+    return _critterGender;
+}
+
 
 uint32_t File::weight() const
 {

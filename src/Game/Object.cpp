@@ -91,6 +91,18 @@ void Object::setFID(int value)
     _generateUi();
 }
 
+
+int Object::SID() const
+{
+    return _SID;
+}
+
+void Object::setSID(int value)
+{
+    _SID = value;
+}
+
+
 int Object::elevation() const
 {
     return _elevation;
@@ -126,6 +138,16 @@ std::string Object::name() const
 void Object::setName(const std::string& value)
 {
     _name = value;
+}
+
+std::string Object::scrName() const
+{
+    return _scrName;
+}
+
+void Object::setScrName(const std::string& value)
+{
+    _scrName = value;
 }
 
 std::string Object::description() const

@@ -133,6 +133,10 @@ public:
     int FID() const;
     virtual void setFID(int value);
 
+    // script ID
+    int SID() const;
+    virtual void setSID(int value);
+
     // object current elevation index on the map (0-based)
     int elevation() const;
     void setElevation(int value);
@@ -149,6 +153,11 @@ public:
     // object description, as defined in proto msg file
     std::string description() const;
     void setDescription(const std::string& value);
+
+    // object name from scrname.msg
+    virtual std::string scrName() const;
+    void setScrName(const std::string& value);
+
 
     // script entity associated with the object
     VM::Script* script() const;
@@ -250,9 +259,11 @@ protected:
     Type _type;
     int _PID = -1;
     int _FID = -1;
+    int _SID = -1;
     int _elevation = 0;
     Orientation _orientation;
     std::string _name;
+    std::string _scrName;
     std::string _description;
     std::unique_ptr<VM::Script> _script;
     std::unique_ptr<UI::Base> _ui;

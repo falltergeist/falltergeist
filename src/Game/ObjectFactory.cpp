@@ -175,6 +175,8 @@ Object* ObjectFactory::createObject(unsigned int PID)
                 ((CritterObject*)object)->setDamageResist((DAMAGE)i, proto->damageResist()->at(i));
                 ((CritterObject*)object)->setDamageThreshold((DAMAGE)i, proto->damageThreshold()->at(i));
             }
+            ((CritterObject*)object)->setGender(proto->critterGender() ? GENDER::FEMALE : GENDER::MALE);
+            ((CritterObject*)object)->setAge(proto->critterAge());
             break;
         }
         case OBJECT_TYPE::SCENERY:
