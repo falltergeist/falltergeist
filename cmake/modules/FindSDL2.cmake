@@ -83,6 +83,7 @@ FIND_PATH(SDL2_INCLUDE_DIR SDL.h
   /opt/local # DarwinPorts
   /opt/csw # Blastwave
   /opt
+  ${PROJECT_ROOT_DIR}/ext/SDL2
 )
 #MESSAGE("SDL2_INCLUDE_DIR is ${SDL2_INCLUDE_DIR}")
 
@@ -96,6 +97,7 @@ FIND_LIBRARY(SDL2_LIBRARY_TEMP
   /opt/local
   /opt/csw
   /opt
+  ${PROJECT_ROOT_DIR}/ext/SDL2
 )
 
 #MESSAGE("SDL2_LIBRARY_TEMP is ${SDL2_LIBRARY_TEMP}")
@@ -116,6 +118,7 @@ IF(NOT SDL2_BUILDING_LIBRARY)
       /opt/local
       /opt/csw
       /opt
+      ${PROJECT_ROOT_DIR}/ext/SDL2
     )
   ENDIF(NOT ${SDL2_INCLUDE_DIR} MATCHES ".framework")
 ENDIF(NOT SDL2_BUILDING_LIBRARY)
