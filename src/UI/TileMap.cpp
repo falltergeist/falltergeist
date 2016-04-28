@@ -24,9 +24,9 @@
 #include <algorithm>
 #include <cmath>
 #include <vector>
+#include <memory>
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../Format/Lst/File.h"
 #include "../Game/Game.h"
 #include "../Graphics/Point.h"
@@ -45,8 +45,6 @@ namespace  Falltergeist
 {
 namespace UI
 {
-
-using namespace Base;
 
 TileMap::TileMap()
 {
@@ -125,7 +123,7 @@ void TileMap::init()
 
     }
 
-    _tilemap = make_unique<Graphics::Tilemap>(vertices, UV);
+    _tilemap = std::make_unique<Graphics::Tilemap>(vertices, UV);
 
     Logger::info("GAME") << "Tilemap uniq tiles " << numbers.size() << std::endl;
 

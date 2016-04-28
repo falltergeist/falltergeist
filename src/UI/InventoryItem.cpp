@@ -21,10 +21,10 @@
 #include "../UI/InventoryItem.h"
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
 #include "../Audio/Mixer.h"
-#include "../Base/StlFeatures.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
 #include "../Game/ArmorItemObject.h"
@@ -46,7 +46,6 @@ namespace Falltergeist
 {
 namespace UI
 {
-using namespace Base;
 using Graphics::Rect;
 
 InventoryItem::InventoryItem(Game::ItemObject *item, const Point& pos) : Falltergeist::UI::Base(pos)
@@ -189,7 +188,7 @@ void InventoryItem::onMouseDragStop(Event::Mouse* event)
     setOffset({0, 0});
     setType(_oldType);
 
-    auto itemevent = make_unique<Event::Mouse>(*event, "itemdragstop");
+    auto itemevent = std::make_unique<Event::Mouse>(*event, "itemdragstop");
     itemevent->setPosition(event->position());
     itemevent->setTarget(this);
     emitEvent(std::move(itemevent), itemDragStopHandler());

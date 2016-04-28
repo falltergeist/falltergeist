@@ -24,7 +24,6 @@
 
 // Falltergeist includes
 #include "../Audio/Mixer.h"
-#include "../Base/StlFeatures.h"
 #include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -43,7 +42,6 @@ namespace Falltergeist
 {
     namespace State
     {
-        using namespace Base;
 
         SettingsMenu::SettingsMenu() : State()
         {

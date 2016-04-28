@@ -18,10 +18,10 @@
  */
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
 
-#include "../Base/StlFeatures.h"
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
 #include "../Graphics/Shader.h"
@@ -36,8 +36,6 @@ namespace Falltergeist
 {
 namespace Graphics
 {
-
-using Base::make_unique;
 
 Tilemap::Tilemap(std::vector<glm::vec2> coords, std::vector<glm::vec2> textureCoords)
 {
@@ -158,7 +156,7 @@ void Tilemap::render(const Point &pos, std::vector<GLuint> indexes, uint32_t atl
 
 void Tilemap::addTexture(SDL_Surface *surface)
 {
-    _textures.push_back(make_unique<Texture>(surface->w, surface->h));
+    _textures.push_back(std::make_unique<Texture>(surface->w, surface->h));
     _textures.back().get()->loadFromSurface(surface);
 }
 

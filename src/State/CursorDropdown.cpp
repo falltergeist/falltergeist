@@ -21,7 +21,7 @@
 #include "../State/CursorDropdown.h"
 
 // C++ standard includes
-#include "../Base/StlFeatures.h"
+#include <memory>
 
 // Falltergeist includes
 #include "../Audio/Mixer.h"
@@ -42,8 +42,6 @@ namespace Falltergeist
 {
     namespace State
     {
-        using Base::make_unique;
-
         CursorDropdown::CursorDropdown(std::vector<Input::Mouse::Icon>&& icons, bool onlyIcon) : State()
         {
             if (icons.size() == 0)
@@ -150,9 +148,9 @@ namespace Falltergeist
                         throw Exception("CursorDropdown::init() - unknown icon type");
 
                 }
-                _activeIcons.push_back(make_unique<UI::Image>("art/intrface/" + activeSurface));
+                _activeIcons.push_back(std::make_unique<UI::Image>("art/intrface/" + activeSurface));
                 _activeIcons.back()->setY(40*i);
-                _inactiveIcons.push_back(make_unique<UI::Image>("art/intrface/" + inactiveSurface));
+                _inactiveIcons.push_back(std::make_unique<UI::Image>("art/intrface/" + inactiveSurface));
                 _inactiveIcons.back()->setY(40*i);
                 i++;
             }
@@ -213,15 +211,15 @@ namespace Falltergeist
 
                 if (mouseEvent->originalType() == Event::Mouse::Type::BUTTON_DOWN)
                 {
-                    emitEvent(make_unique<Event::Mouse>(*mouseEvent), _mouseDownHandler);
+                    emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), _mouseDownHandler);
                 }
                 else if (mouseEvent->originalType() == Event::Mouse::Type::BUTTON_UP)
                 {
-                    emitEvent(make_unique<Event::Mouse>(*mouseEvent), _mouseUpHandler);
+                    emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), _mouseUpHandler);
                 }
                 else if (mouseEvent->originalType() == Event::Mouse::Type::MOVE)
                 {
-                    emitEvent(make_unique<Event::Mouse>(*mouseEvent), _mouseMoveHandler);
+                    emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), _mouseMoveHandler);
                     event->setHandled(true);
                 }
             }

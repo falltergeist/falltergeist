@@ -21,10 +21,10 @@
 #include "../UI/ItemsList.h"
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
 #include "../Audio/Mixer.h"
-#include "../Base/StlFeatures.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
 #include "../Game/ArmorItemObject.h"
@@ -46,7 +46,6 @@ namespace Falltergeist
 namespace UI
 {
 
-using namespace Base;
 using Graphics::Rect;
 
 ItemsList::ItemsList(const Point& pos) : Falltergeist::UI::Base(pos)
@@ -135,7 +134,7 @@ void ItemsList::onMouseDragStop(Event::Mouse* event)
         Game::getInstance()->mixer()->playACMSound("sound/sfx/iputdown.acm");
         _draggedItem->setOffset(0, 0);
         _draggedItem->setType(_type);
-        auto itemevent = make_unique<Event::Mouse>(*event, "itemdragstop");
+        auto itemevent = std::make_unique<Event::Mouse>(*event, "itemdragstop");
         itemevent->setTarget(this);
         emitEvent(std::move(itemevent), itemDragStopHandler());
     }
@@ -206,7 +205,7 @@ void ItemsList::addItem(InventoryItem* item, unsigned int amount)
 {
     _items->push_back(item->item());
     this->update();
-    emitEvent(make_unique<Event::Event>("itemsListModified"), itemsListModifiedHandler());
+    emitEvent(std::make_unique<Event::Event>("itemsListModified"), itemsListModifiedHandler());
 }
 
 void ItemsList::removeItem(InventoryItem* item, unsigned int amount)
@@ -221,7 +220,7 @@ void ItemsList::removeItem(InventoryItem* item, unsigned int amount)
         }
     }
     this->update();
-    emitEvent(make_unique<Event::Event>("itemsListModified"), itemsListModifiedHandler());
+    emitEvent(std::make_unique<Event::Event>("itemsListModified"), itemsListModifiedHandler());
 }
 
 bool ItemsList::canScrollUp()

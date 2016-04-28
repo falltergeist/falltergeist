@@ -21,9 +21,9 @@
 #include "../Input/Mouse.h"
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
@@ -38,7 +38,6 @@
 
 namespace Falltergeist
 {
-using Base::make_unique;
 
 namespace Input
 {
@@ -129,92 +128,92 @@ void Mouse::_setType(Cursor state)
     switch (state)
     {
         case Cursor::BIG_ARROW:
-            _ui = make_unique<UI::Image>("art/intrface/stdarrow.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/stdarrow.frm");
             break;
         case Cursor::SCROLL_W:
-            _ui = make_unique<UI::Image>("art/intrface/scrwest.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/scrwest.frm");
             _ui->setOffset(0, -_ui->size().height() / 2);
             break;
         case Cursor::SCROLL_W_X:
-            _ui = make_unique<UI::Image>("art/intrface/scrwx.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/scrwx.frm");
             _ui->setOffset(0, -_ui->size().height() / 2);
             break;
         case Cursor::SCROLL_N:
-            _ui = make_unique<UI::Image>("art/intrface/scrnorth.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/scrnorth.frm");
             _ui->setOffset( -_ui->size().width() / 2, 0);
             break;
         case Cursor::SCROLL_N_X:
-            _ui = make_unique<UI::Image>("art/intrface/scrnx.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/scrnx.frm");
             _ui->setOffset( -_ui->size().width() / 2, 0);
             break;
         case Cursor::SCROLL_S:
-            _ui = make_unique<UI::Image>("art/intrface/scrsouth.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/scrsouth.frm");
             _ui->setOffset( -_ui->size().width() / 2, -_ui->size().height());
             break;
         case Cursor::SCROLL_S_X:
-            _ui = make_unique<UI::Image>("art/intrface/scrsx.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/scrsx.frm");
             _ui->setOffset(-_ui->size().width() / 2, -_ui->size().height());
             break;
         case Cursor::SCROLL_E:
-            _ui = make_unique<UI::Image>("art/intrface/screast.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/screast.frm");
             _ui->setOffset( -_ui->size().width(), -_ui->size().height() / 2);
             break;
         case Cursor::SCROLL_E_X:
-            _ui = make_unique<UI::Image>("art/intrface/screx.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/screx.frm");
             _ui->setOffset(-_ui->size().width(), -_ui->size().height() / 2);
             break;
         case Cursor::SCROLL_NW:
-            _ui = make_unique<UI::Image>("art/intrface/scrnwest.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/scrnwest.frm");
             break;
         case Cursor::SCROLL_NW_X:
-            _ui = make_unique<UI::Image>("art/intrface/scrnwx.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/scrnwx.frm");
             break;
         case Cursor::SCROLL_SW:
-            _ui = make_unique<UI::Image>("art/intrface/scrswest.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/scrswest.frm");
             _ui->setOffset(0, -_ui->size().height());
             break;
         case Cursor::SCROLL_SW_X:
-            _ui = make_unique<UI::Image>("art/intrface/scrswx.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/scrswx.frm");
             _ui->setOffset(0, -_ui->size().height());
             break;
         case Cursor::SCROLL_NE:
-            _ui = make_unique<UI::Image>("art/intrface/scrneast.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/scrneast.frm");
             _ui->setOffset(-_ui->size().width(), 0);
             break;
         case Cursor::SCROLL_NE_X:
-            _ui = make_unique<UI::Image>("art/intrface/scrnex.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/scrnex.frm");
             _ui->setOffset(-_ui->size().width(), 0);
             break;
         case Cursor::SCROLL_SE:
-            _ui = make_unique<UI::Image>("art/intrface/scrseast.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/scrseast.frm");
             _ui->setOffset(-_ui->size().width(), -_ui->size().height());
             break;
         case Cursor::SCROLL_SE_X:
-            _ui = make_unique<UI::Image>("art/intrface/scrsex.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/scrsex.frm");
             _ui->setOffset(-_ui->size().width(), -_ui->size().height());
             break;
         case Cursor::HEXAGON_RED:
-            _ui = make_unique<UI::Image>("art/intrface/msef000.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/msef000.frm");
             _ui->setOffset(- _ui->size().width() / 2, - _ui->size().height() / 2);
             break;
         case Cursor::ACTION:
-            _ui = make_unique<UI::Image>("art/intrface/actarrow.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/actarrow.frm");
             break;
         case Cursor::HAND:
-            _ui = make_unique<UI::Image>("art/intrface/hand.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/hand.frm");
             break;
         case Cursor::SMALL_DOWN_ARROW:
-            _ui = make_unique<UI::Image>("art/intrface/sdnarrow.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/sdnarrow.frm");
             _ui->setOffset(-5, -10);
             break;
         case Cursor::SMALL_UP_ARROW:
-            _ui = make_unique<UI::Image>("art/intrface/suparrow.frm");
+            _ui = std::make_unique<UI::Image>("art/intrface/suparrow.frm");
             _ui->setOffset(-5, 0);
             break;
         case Cursor::WAIT:
         {
-            auto queue = make_unique<UI::AnimationQueue>();
-            queue->animations().push_back(make_unique<UI::Animation>("art/intrface/wait.frm"));
+            auto queue = std::make_unique<UI::AnimationQueue>();
+            queue->animations().push_back(std::make_unique<UI::Animation>("art/intrface/wait.frm"));
             queue->setRepeat(true);
             queue->start();
             _ui = std::move(queue);

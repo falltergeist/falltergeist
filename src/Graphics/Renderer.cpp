@@ -23,10 +23,10 @@
 // C++ standard includes
 #include <cmath>
 #include <sys/stat.h>
+#include <memory>
 
 // Falltergeist includes
 #include "../CrossPlatform.h"
-#include "../Base/StlFeatures.h"
 #include "../Event/State.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
@@ -47,8 +47,6 @@ namespace Falltergeist
 {
 namespace Graphics
 {
-
-using namespace Base;
 
 Renderer::Renderer(unsigned int width, unsigned int height)
 {
@@ -268,7 +266,7 @@ void Renderer::think()
             _fadeDone = true;
 
             auto state = Game::getInstance()->topState();
-            state->emitEvent(make_unique<Event::State>("fadedone"), state->fadeDoneHandler());
+            state->emitEvent(std::make_unique<Event::State>("fadedone"), state->fadeDoneHandler());
             return;
         }
         _fadeTimer = ticks;

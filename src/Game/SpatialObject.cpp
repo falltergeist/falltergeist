@@ -23,7 +23,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
 #include "../Logger.h"

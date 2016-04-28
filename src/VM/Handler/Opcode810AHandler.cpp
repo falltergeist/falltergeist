@@ -21,9 +21,9 @@
 #include "../../VM/Handler/Opcode810AHandler.h"
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
-#include "../../Base/StlFeatures.h"
 #include "../../Game/Object.h"
 #include "../../Logger.h"
 #include "../../ResourceManager.h"
@@ -38,8 +38,6 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            using namespace Base;
-
             Opcode810A::Opcode810A(VM::Script* script) : OpcodeHandler(script)
             {
             }
@@ -100,7 +98,7 @@ namespace Falltergeist
                 auto string = _script->dataStack()->popString();
                 auto object = _script->dataStack()->popObject();
 
-                auto floatMessage = make_unique<UI::TextArea>(string);
+                auto floatMessage = std::make_unique<UI::TextArea>(string);
                 floatMessage->setWidth(200);
                 floatMessage->setWordWrap(true);
                 floatMessage->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);

@@ -23,7 +23,6 @@
 #include <stdexcept>
 
 // Falltergeist includes
-#include "Base/StlFeatures.h"
 #include "CrossPlatform.h"
 #include "Exception.h"
 #include "Logger.h"
@@ -36,8 +35,6 @@
 
 namespace Falltergeist
 {
-
-using namespace Base;
 
 Settings::Settings()
 {

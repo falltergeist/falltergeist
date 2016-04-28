@@ -23,7 +23,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
 #include "../UI/Image.h"
@@ -34,8 +33,6 @@ namespace Falltergeist
 {
 namespace UI
 {
-
-using namespace Base;
 
 BigCounter::BigCounter(int x, int y, unsigned int length) : BigCounter(Point(x, y), length)
 {

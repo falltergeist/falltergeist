@@ -22,9 +22,9 @@
 
 // C++ standard includes
 #include <algorithm>
+#include <memory>
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../Event/State.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -38,8 +38,6 @@ namespace Falltergeist
 {
     namespace State
     {
-        using namespace Base;
-
         State::State() : Event::EventTarget(Game::getInstance()->eventDispatcher())
         {
             activateHandler().add([this](Event::State* event){ this->onStateActivate(event); });
@@ -179,12 +177,12 @@ namespace Falltergeist
                 {
                     case Event::Keyboard::Type::KEY_UP:
                     {
-                        emitEvent(make_unique<Event::Keyboard>(*keyboardEvent), keyUpHandler());
+                        emitEvent(std::make_unique<Event::Keyboard>(*keyboardEvent), keyUpHandler());
                         break;
                     }
                     case Event::Keyboard::Type::KEY_DOWN:
                     {
-                        emitEvent(make_unique<Event::Keyboard>(*keyboardEvent), keyDownHandler());
+                        emitEvent(std::make_unique<Event::Keyboard>(*keyboardEvent), keyDownHandler());
                         break;
                     }
                 }

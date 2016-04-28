@@ -23,7 +23,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -34,8 +33,6 @@ namespace Falltergeist
 {
 namespace Graphics
 {
-
-using namespace Base;
 
 int NearestPowerOf2(int n)
 {

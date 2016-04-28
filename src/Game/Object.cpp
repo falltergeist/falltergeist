@@ -22,9 +22,9 @@
 
 // C++ standard includes
 #include <cmath>
+#include <memory>
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../Exception.h"
 #include "../Format/Frm/File.h"
 #include "../Format/Msg/File.h"
@@ -51,7 +51,6 @@
 
 namespace Falltergeist
 {
-using Base::make_unique;
 
 namespace Game
 {
@@ -204,13 +203,13 @@ void Object::_generateUi()
     {
         if (frm->framesPerDirection() > 1 || frm->directions()->size() > 1)
         {
-            auto queue = make_unique<UI::AnimationQueue>();
-            queue->animations().push_back(make_unique<UI::Animation>(ResourceManager::getInstance()->FIDtoFrmName(FID()), orientation()));
+            auto queue = std::make_unique<UI::AnimationQueue>();
+            queue->animations().push_back(std::make_unique<UI::Animation>(ResourceManager::getInstance()->FIDtoFrmName(FID()), orientation()));
             _ui = std::move(queue);
         }
         else
         {
-            _ui =  make_unique<UI::Image>(frm, orientation());
+            _ui =  std::make_unique<UI::Image>(frm, orientation());
 
         }
     }

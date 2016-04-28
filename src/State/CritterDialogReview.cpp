@@ -23,7 +23,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../Game/Game.h"
 #include "../Game/DudeObject.h"
 #include "../Graphics/Renderer.h"
@@ -38,7 +37,6 @@
 
 namespace Falltergeist
 {
-using Base::make_unique;
 using Graphics::Size;
     namespace State
     {
