@@ -14,5 +14,5 @@ sudo apt-get install -qq mesa-common-dev
 
 
 if [ "$CXX" = "clang++" ]; then sudo apt-get install -qq libstdc++-4.8-dev; fi
-if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
-if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
+if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.9; fi
+if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
