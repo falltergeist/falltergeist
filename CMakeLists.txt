@@ -77,8 +77,11 @@ else()
     add_definitions (-std=c++14 -Wall)
 endif()
 
-
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+add_executable(falltergeist main.cpp ${SOURCES} "package/windows.rc")
+else()
 add_executable(falltergeist main.cpp ${SOURCES})
+endif()
 target_link_libraries(falltergeist ${ZLIB_LIBRARIES} ${SDL2_LIBRARY} ${SDL_MIXER_LIBRARY} ${SDL_IMAGE_LIBRARY} ${OPENGL_gl_LIBRARY} ${GLEW_LIBRARY})
 
 include(cmake/install/windows.cmake)
