@@ -25,6 +25,7 @@
 #include <fstream>
 #include <stdexcept>
 #include <cctype>
+#include <chrono>
 
 #if defined(__unix__) || defined(__APPLE__)
     #include <sys/param.h>
@@ -462,22 +463,8 @@ uint32_t CrossPlatform::microtime()
     uint64_t time = mach_absolute_time();
     return ((double)time * (double)timebase.numer) / ((double)timebase.denom);
 #elif defined(_WIN32) || defined(WIN32)
-    static LARGE_INTEGER Frequency;
-
-    if (!Frequency.QuadPart)
-    {
-        if (QueryPerformanceFrequency(&Frequency) == FALSE)
-        {
-            throw Exception("Call to QueryPerformanceFrequency failed");
-        }
-    }
-    LARGE_INTEGER time;
-    if (QueryPerformanceCounter(&time) == FALSE)
-    {
-       throw Exception("Call to QueryPerformanceCounter failed");
-    }
-
-    return time.QuadPart / (Frequency.QuadPart / 1000000000ull);
+    auto now = std::chrono::high_resolution_clock::now();
+    return std::chrono::time_point_cast<std::chrono::nanoseconds>(now).time_since_epoch().count();
 #else
     struct timespec ts;
     clock_gettime(CLOCK_MONOTONIC, &ts);
