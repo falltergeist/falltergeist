@@ -3,6 +3,7 @@ os:
   - osx
 
 language: cpp
+sudo: required
 
 script:
   - cmake .
