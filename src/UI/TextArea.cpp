@@ -268,7 +268,7 @@ void TextArea::_updateSymbols()
         // calculate how much lines we can fit inside TextArea, taking vertical padding into account
         auto activeHeight = _size.height() - _paddingTopLeft.height() - _paddingBottomRight.height();
 
-        if ((_lineOffset + ((activeHeight + font()->verticalGap()) / (font()->height() + font()->verticalGap()))) < _lines.size())
+        if ((_lineOffset + ((activeHeight + font()->verticalGap()) / (font()->height() + font()->verticalGap()))) < (int)_lines.size())
         {
             lineEnd = std::max(
                 std::min(
