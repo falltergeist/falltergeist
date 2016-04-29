@@ -37,8 +37,11 @@ namespace Graphics
 
 Lightmap::Lightmap(std::vector<glm::vec2> coords,std::vector<GLuint> indexes)
 {
-    GL_CHECK(glGenVertexArrays(1, &_vao));
-    GL_CHECK(glBindVertexArray(_vao));
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
+    {
+        GL_CHECK(glGenVertexArrays(1, &_vao));
+        GL_CHECK(glBindVertexArray(_vao));
+    }
 
     // generate VBOs for verts and tex
     GL_CHECK(glGenBuffers(1, &_coords));
@@ -76,7 +79,10 @@ Lightmap::~Lightmap()
     GL_CHECK(glDeleteBuffers(1, &_lights));
     GL_CHECK(glDeleteBuffers(1, &_ebo));
 
-    GL_CHECK(glDeleteVertexArrays(1, &_vao));
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
+    {
+        GL_CHECK(glDeleteVertexArrays(1, &_vao));
+    }
 }
 
 void Lightmap::render(const Point &pos)
@@ -94,12 +100,14 @@ void Lightmap::render(const Point &pos)
 
     GL_CHECK(_shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
 
-
-    GLint curvao;
-    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-    if ((GLuint)curvao != _vao)
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
     {
-        GL_CHECK(glBindVertexArray(_vao));
+        GLint curvao;
+        glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+        if ((GLuint)curvao != _vao)
+        {
+            GL_CHECK(glBindVertexArray(_vao));
+        }
     }
 
 
@@ -129,11 +137,14 @@ void Lightmap::render(const Point &pos)
 
 void Lightmap::update(std::vector<float> lights)
 {
-    GLint curvao;
-    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-    if ((GLuint)curvao != _vao)
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
     {
-        GL_CHECK(glBindVertexArray(_vao));
+        GLint curvao;
+        glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+        if ((GLuint)curvao != _vao)
+        {
+            GL_CHECK(glBindVertexArray(_vao));
+        }
     }
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _lights));

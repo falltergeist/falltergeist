@@ -104,12 +104,15 @@ void Movie::render(int x, int y)
 
     GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("MVP", Game::getInstance()->renderer()->getMVP()));
 
-    GLint curvao;
-    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-    GLint vao = Game::getInstance()->renderer()->getVAO();
-    if (curvao != vao)
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
     {
-        GL_CHECK(glBindVertexArray(vao));
+        GLint curvao;
+        glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+        GLint vao = Game::getInstance()->renderer()->getVAO();
+        if (curvao != vao)
+        {
+            GL_CHECK(glBindVertexArray(vao));
+        }
     }
 
 

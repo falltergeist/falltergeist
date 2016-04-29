@@ -72,7 +72,10 @@ Renderer::~Renderer()
     GL_CHECK(glDeleteBuffers(1, &_texcoord_vbo));
     GL_CHECK(glDeleteBuffers(1, &_ebo));
 
-    GL_CHECK(glDeleteVertexArrays(1, &_vao));
+    if (_renderpath == RenderPath::OGL32)
+    {
+        GL_CHECK(glDeleteVertexArrays(1, &_vao));
+    }
 }
 
 void Renderer::init()
@@ -229,10 +232,13 @@ void Renderer::init()
 
     Logger::info("RENDERER") << "Generating buffers" << std::endl;
 
-    // generate VBOs for verts and tex
-    GL_CHECK(glGenVertexArrays(1, &_vao));
+    if (_renderpath==RenderPath::OGL32)
+    {
+        // generate VBOs for verts and tex
+        GL_CHECK(glGenVertexArrays(1, &_vao));
 
-    GL_CHECK(glBindVertexArray(_vao));
+        GL_CHECK(glBindVertexArray(_vao));
+    }
 
     GL_CHECK(glGenBuffers(1, &_coord_vbo));
     GL_CHECK(glGenBuffers(1, &_texcoord_vbo));
@@ -465,13 +471,15 @@ void Renderer::drawRect(int x, int y, int w, int h, SDL_Color color)
 
     GL_CHECK(ResourceManager::getInstance()->shader("default")->setUniform("MVP", getMVP()));
 
-
-    GLint curvao;
-    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-    GLint vao = getVAO();
-    if (curvao != vao)
+    if (_renderpath==RenderPath::OGL32)
     {
-        GL_CHECK(glBindVertexArray(vao));
+        GLint curvao;
+        glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+        GLint vao = getVAO();
+        if (curvao != vao)
+        {
+            GL_CHECK(glBindVertexArray(vao));
+        }
     }
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getVVBO()));

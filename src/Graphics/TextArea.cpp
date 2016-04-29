@@ -45,15 +45,18 @@ namespace Graphics
 
 TextArea::TextArea()
 {
-    GL_CHECK(glGenVertexArrays(1, &_vao));
-    GL_CHECK(glBindVertexArray(_vao));
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
+    {
+        GL_CHECK(glGenVertexArrays(1, &_vao));
+        GL_CHECK(glBindVertexArray(_vao));
+    }
 
     // generate VBOs for verts and tex
     GL_CHECK(glGenBuffers(1, &_coords));
     GL_CHECK(glGenBuffers(1, &_texCoords));
     GL_CHECK(glGenBuffers(1, &_ebo));
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
-    GL_CHECK(glBindVertexArray(0));
+//    GL_CHECK(glBindVertexArray(0));
 
     _shader = ResourceManager::getInstance()->shader("font");
 
@@ -77,8 +80,10 @@ TextArea::~TextArea()
     GL_CHECK(glDeleteBuffers(1, &_coords));
     GL_CHECK(glDeleteBuffers(1, &_texCoords));
     GL_CHECK(glDeleteBuffers(1, &_ebo));
-
-    GL_CHECK(glDeleteVertexArrays(1, &_vao));
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
+    {
+        GL_CHECK(glDeleteVertexArrays(1, &_vao));
+    }
 }
 
 
@@ -101,12 +106,14 @@ void TextArea::render(Point& pos, Graphics::Font* font, SDL_Color _color, SDL_Co
         GL_CHECK(_shader->setUniform(_uniformTexSize, glm::vec2((float)font->texture()->textureWidth(), (float)font->texture()->textureHeight() )));
     }
 
-
-    GLint curvao;
-    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-    if ((GLuint)curvao != _vao)
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
     {
-        GL_CHECK(glBindVertexArray(_vao));
+        GLint curvao;
+        glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+        if ((GLuint)curvao != _vao)
+        {
+            GL_CHECK(glBindVertexArray(_vao));
+        }
     }
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coords));
@@ -131,12 +138,14 @@ void TextArea::updateBuffers(std::vector<glm::vec2> vertices, std::vector<glm::v
 {
     _cnt = indexes.size();
 
-
-    GLint curvao;
-    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-    if ((GLuint)curvao != _vao)
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
     {
-        GL_CHECK(glBindVertexArray(_vao));
+        GLint curvao;
+        glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+        if ((GLuint)curvao != _vao)
+        {
+            GL_CHECK(glBindVertexArray(_vao));
+        }
     }
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coords));
