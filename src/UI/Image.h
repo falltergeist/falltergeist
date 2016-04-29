@@ -54,7 +54,7 @@ public:
     Image(Format::Frm::File* frm, unsigned int direction);
 
     ~Image() override;
-    virtual void render(bool eggTransparency = false);
+    virtual void render(bool eggTransparency = false) override;
 
     virtual void render(const Size &size, bool eggTransparency = false) override;
 
