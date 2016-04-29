@@ -2,7 +2,7 @@
 sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
 
 #clang 3.6
-sudo add-apt-repository llvm-toolchain-precise-3.6 -y
+#sudo add-apt-repository llvm-toolchain-precise-3.6 -y
 
 # sdl2
 sudo add-apt-repository ppa:zoogie/sdl2-snapshots -y
@@ -16,7 +16,7 @@ sudo apt-get install -qq libglm-dev
 sudo apt-get install -qq mesa-common-dev
 
 
-if [ "$CXX" = "clang++" ]; then sudo apt-get install -qq clang-3.6; fi
-if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.6" CC="clang-3.6"; fi
+#if [ "$CXX" = "clang++" ]; then sudo apt-get install -qq clang-3.6; fi
+#if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.6" CC="clang-3.6"; fi
 if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.9; fi
 if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
