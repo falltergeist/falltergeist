@@ -89,6 +89,10 @@ TextArea::~TextArea()
 
 void TextArea::render(Point& pos, Graphics::Font* font, SDL_Color _color, SDL_Color _outlineColor)
 {
+    if (!_cnt)
+    {
+        return;
+    }
 
     GL_CHECK(_shader->use());
 
@@ -136,6 +140,11 @@ void TextArea::render(Point& pos, Graphics::Font* font, SDL_Color _color, SDL_Co
 
 void TextArea::updateBuffers(std::vector<glm::vec2> vertices, std::vector<glm::vec2> UV,  std::vector<GLushort> indexes)
 {
+    if (!vertices.size())
+    {
+        _cnt = 0;
+        return;
+    }
     _cnt = indexes.size();
 
     if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
