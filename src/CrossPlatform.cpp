@@ -24,6 +24,7 @@
 #include <cstring>
 #include <fstream>
 #include <stdexcept>
+#include <cctype>
 
 #if defined(__unix__) || defined(__APPLE__)
     #include <sys/param.h>
@@ -262,7 +263,8 @@ std::vector<std::string> CrossPlatform::findFalloutDataFiles()
 #if defined(_WIN32) || defined(WIN32) // Windows
     HANDLE hFind = INVALID_HANDLE_VALUE;
     WIN32_FIND_DATA ffd;
-    std::string path = CrossPlatform::findFalloutDataPath()+"\\*";
+    std::string path = CrossPlatform::findFalloutDataPath()+"*";
+    _dataFiles = _necessaryDatFiles;
     hFind = FindFirstFile(path.c_str(), &ffd);
 
     if (INVALID_HANDLE_VALUE == hFind)
@@ -278,6 +280,7 @@ std::vector<std::string> CrossPlatform::findFalloutDataFiles()
         else
         {
             std::string filename(ffd.cFileName);
+            std::transform(filename.begin(), filename.end(), filename.begin(), ::tolower);
             if (filename.length() > 4) // exclude . and ..
             {
                 std::string ext = filename.substr(filename.size() - 4, 4);
@@ -301,6 +304,7 @@ std::vector<std::string> CrossPlatform::findFalloutDataFiles()
     while ((pxItem = readdir(pxDir)))
     {
         std::string filename(pxItem->d_name);
+        std::transform(filename.begin(), filename.end(), filename.begin(), ::tolower);
         if (filename.length() > 4) // exclude . and ..
         {
             std::string ext = filename.substr(filename.size() - 4, 4);
