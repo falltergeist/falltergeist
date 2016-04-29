@@ -22,12 +22,12 @@
 #include <cerrno>
 #include <cstdlib>
 #include <cstring>
-#include <dirent.h>
 #include <fstream>
 #include <stdexcept>
 
 #if defined(__unix__) || defined(__APPLE__)
     #include <sys/param.h>
+    #include <dirent.h>
 #endif
 
 #if defined(__linux__)
@@ -46,6 +46,10 @@
     #include <sys/stat.h>
     #include <sys/types.h>
     #include <unistd.h>
+#endif
+
+#if defined(__MACH__)
+    #include <mach/mach_time.h>
 #endif
 
 // Falltergeist includes
@@ -255,6 +259,37 @@ std::vector<std::string> CrossPlatform::findFalloutDataFiles()
 {
     if (_dataFiles.size()) return _dataFiles;
 
+#if defined(_WIN32) || defined(WIN32) // Windows
+    HANDLE hFind = INVALID_HANDLE_VALUE;
+    WIN32_FIND_DATA ffd;
+    std::string path = CrossPlatform::findFalloutDataPath()+"\\*";
+    hFind = FindFirstFile(path.c_str(), &ffd);
+
+    if (INVALID_HANDLE_VALUE == hFind)
+    {
+      return _dataFiles;
+    }
+
+    do {
+        if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+        {
+            continue;
+        }
+        else
+        {
+            std::string filename(ffd.cFileName);
+            if (filename.length() > 4) // exclude . and ..
+            {
+                std::string ext = filename.substr(filename.size() - 4, 4);
+                if (ext == ".dat")
+                {
+                    if (filename.length() == 12 && filename.substr(0, 5) == "patch")
+                        _dataFiles.insert(_dataFiles.begin(),filename);
+                }
+            }
+        }
+    } while (FindNextFile(hFind, &ffd) != 0);
+#else
     // looking for all available dat files in directory
     DIR *pxDir = opendir(CrossPlatform::findFalloutDataPath().c_str());
     if (!pxDir)
@@ -277,7 +312,7 @@ std::vector<std::string> CrossPlatform::findFalloutDataFiles()
         }
     }
     closedir(pxDir);
-
+#endif
     return _dataFiles;
 }
 
@@ -410,6 +445,40 @@ std::vector<std::string> CrossPlatform::getDataPaths()
     _dataPaths.push_back(getConfigPath());
 #endif
     return _dataPaths;
+}
+
+uint32_t CrossPlatform::microtime()
+{
+#if defined(__MACH__)
+    static mach_timebase_info_data_t timebase;
+    if ( timebase.denom == 0 ) {
+        (void) mach_timebase_info(&timebase);
+    }
+
+    uint64_t time = mach_absolute_time();
+    return ((double)time * (double)timebase.numer) / ((double)timebase.denom);
+#elif defined(_WIN32) || defined(WIN32)
+    static LARGE_INTEGER Frequency;
+
+    if (!Frequency.QuadPart)
+    {
+        if (QueryPerformanceFrequency(&Frequency) == FALSE)
+        {
+            throw Exception("Call to QueryPerformanceFrequency failed");
+        }
+    }
+    LARGE_INTEGER time;
+    if (QueryPerformanceCounter(&time) == FALSE)
+    {
+       throw Exception("Call to QueryPerformanceCounter failed");
+    }
+
+    return time.QuadPart / (Frequency.QuadPart / 1000000000ull);
+#else
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return ts.tv_nsec;
+#endif
 }
 
 }
