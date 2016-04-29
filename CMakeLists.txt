@@ -72,7 +72,11 @@ include_directories(${GLM_INCLUDE_DIR})
 
 file(GLOB_RECURSE SOURCES  src/*.cpp)
 
-add_definitions (-std=c++14 -Wall)
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+else()
+    add_definitions (-std=c++14 -Wall)
+endif()
+
 
 add_executable(falltergeist main.cpp ${SOURCES})
 target_link_libraries(falltergeist ${ZLIB_LIBRARIES} ${SDL2_LIBRARY} ${SDL_MIXER_LIBRARY} ${SDL_IMAGE_LIBRARY} ${OPENGL_gl_LIBRARY} ${GLEW_LIBRARY})
