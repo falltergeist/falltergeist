@@ -46,7 +46,7 @@ namespace Falltergeist
 
                 void init() override;
                 void render() override;
-                void handle(Event::Event* event);
+                void handle(Event::Event* event) override;
                 void onKeyDown(Event::Keyboard* event) override;
                 void onStateActivate(Event::State* event) override;
                 void onStateDeactivate(Event::State* event) override;
