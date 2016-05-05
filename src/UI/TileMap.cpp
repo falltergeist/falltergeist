@@ -107,10 +107,10 @@ void TileMap::init()
         //push tilecoords
         uint32_t tIndex = tile->index() % _tilesPerAtlas;
 
-        float x = (tIndex % maxW) * 80;
+        float x = (float)((tIndex % maxW) * 80);
         float fx = x / (float)Game::getInstance()->renderer()->maxTextureSize();
 
-        float y = (tIndex / maxW) * 36;
+        float y = (float)((tIndex / maxW) * 36);
         float fy = y / (float)Game::getInstance()->renderer()->maxTextureSize();
 
         float w = (x+80.0) / (float)Game::getInstance()->renderer()->maxTextureSize();

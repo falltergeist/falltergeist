@@ -1378,10 +1378,15 @@ namespace Falltergeist
             std::vector<float> lights;
             for (auto hex: _hexagonGrid->hexagons())
             {
-                int lightLevel = 100;
+                int lightLevel;
 
                 unsigned int light = hex->light();
-                if (light<=_lightLevel) light=655;
+
+                if (light<=_lightLevel)
+                {
+                    light=655;
+                }
+
                 lightLevel = light / ((65536-655)/100);
 
                 float l = lightLevel/100.0;

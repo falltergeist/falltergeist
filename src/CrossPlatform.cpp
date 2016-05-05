@@ -192,7 +192,7 @@ std::string CrossPlatform::findFalloutDataPath()
         std::vector<std::string> cdDrives = getCdDrivePaths();
         directories.insert(directories.end(), cdDrives.begin(), cdDrives.end());
     }
-    catch (Exception e)
+    catch (Exception& e)
     {
         Logger::error() << e.what() << std::endl;
     }

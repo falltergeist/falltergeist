@@ -245,7 +245,7 @@ Hexagon* HexagonGrid::hexInDirection(Hexagon* from, unsigned short rotation, uns
 std::vector<Hexagon*> HexagonGrid::ring(Hexagon* from, unsigned int radius)
 {
     std::vector<Hexagon*> result;
-    Hexagon* current = nullptr;
+    Hexagon* current;
     unsigned int dir = 0;
     if (radius == 0)
     {
