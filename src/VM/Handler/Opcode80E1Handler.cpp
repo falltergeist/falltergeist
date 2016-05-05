@@ -44,10 +44,12 @@ namespace Falltergeist
             {
                 // @TODO: add implementation
                 Logger::debug("SCRIPT") << "[80E1] [*] int metarule3(int meta, int p1, int p2, int p3)" << std::endl;
-                auto arg3 = _script->dataStack()->pop();
-                auto arg2 = _script->dataStack()->pop();
-                auto arg1 = _script->dataStack()->pop();
-                auto meta = _script->dataStack()->popInteger();
+                auto dataStack = _script->dataStack();
+
+                auto arg3 = dataStack->pop();
+                auto arg2 = dataStack->pop();
+                auto arg1 = dataStack->pop();
+                auto meta = dataStack->popInteger();
                 int result = 0;
                 switch(meta)
                 {
@@ -87,7 +89,7 @@ namespace Falltergeist
                         _error("metarule3 - unknown meta: " + std::to_string(meta));
                         break;
                 }
-                _script->dataStack()->push(result);
+                dataStack->push(result);
             }
         }
     }

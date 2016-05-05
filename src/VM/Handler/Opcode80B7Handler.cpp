@@ -48,10 +48,11 @@ namespace Falltergeist
             void Opcode80B7::_run()
             {
                 Logger::debug("SCRIPT") << "[80B7] [+] GameObject* create_object_sid(int PID, int position, int elevation, int SID)" << std::endl;
-                auto SID = _script->dataStack()->popInteger();
-                auto elevation = _script->dataStack()->popInteger();
-                auto position = _script->dataStack()->popInteger();
-                auto PID = _script->dataStack()->popInteger();
+                auto dataStack = _script->dataStack();
+                auto SID = dataStack->popInteger();
+                auto elevation = dataStack->popInteger();
+                auto position = dataStack->popInteger();
+                auto PID = dataStack->popInteger();
                 auto object = Game::getInstance()->locationState()->addObject(PID, position, elevation);
                 if (SID > 0)
                 {

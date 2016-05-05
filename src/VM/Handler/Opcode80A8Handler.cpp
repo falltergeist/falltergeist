@@ -41,10 +41,11 @@ namespace Falltergeist
             void Opcode80A8::_run()
             {
                 Logger::debug("SCRIPT") << "[80A8] [=] void set_map_start(int x, int y, int elev, int rot)" << std::endl;
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popInteger();
+                auto dataStack = _script->dataStack();
+                dataStack->popInteger();
+                dataStack->popInteger();
+                dataStack->popInteger();
+                dataStack->popInteger();
             }
         }
     }

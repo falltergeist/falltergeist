@@ -954,14 +954,15 @@ namespace Falltergeist
                     auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
                     if (hexagon)
                     {
-                        auto path = hexagonGrid()->findPath(game->player()->hexagon(), hexagon);
+                        auto player = game->player();
+                        auto path = hexagonGrid()->findPath(player->hexagon(), hexagon);
                         if (path.size())
                         {
-                            game->player()->stopMovement();
-                            game->player()->setRunning((_lastClickedTile != 0 && hexagon->number() == _lastClickedTile) || (event->shiftPressed() != game->settings()->running()));
+                            player->stopMovement();
+                            player->setRunning((_lastClickedTile != 0 && hexagon->number() == _lastClickedTile) || (event->shiftPressed() != game->settings()->running()));
                             for (auto pathHexagon : path)
                             {
-                                game->player()->movementQueue()->push_back(pathHexagon);
+                                player->movementQueue()->push_back(pathHexagon);
                             }
                         }
                         event->setHandled(true);
@@ -1258,7 +1259,7 @@ namespace Falltergeist
             {
                 centerCameraAtHexagon(_hexagonGrid->at((unsigned int)tileNum));
             }
-            catch (std::out_of_range ex)
+            catch (std::out_of_range& ex)
             {
                 throw Exception(std::string("Tile number out of range: ") + std::to_string(tileNum));
             }

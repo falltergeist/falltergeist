@@ -45,14 +45,17 @@ namespace Falltergeist
             void Opcode80D5::_run()
             {
                 Logger::debug("SCRIPT") << "[80D5] [*] int tile_num_in_direction(int start_tile, int dir, int distance)" << std::endl;
-                auto distance = _script->dataStack()->popInteger();
-                auto dir = _script->dataStack()->popInteger();
-                auto start_tile = _script->dataStack()->popInteger();
+
+                auto dataStack = _script->dataStack();
+
+                auto distance = dataStack->popInteger();
+                auto dir = dataStack->popInteger();
+                auto start_tile = dataStack->popInteger();
 
                 if (dir < 0 || dir > 5 || distance < 0)
                 {
                     //error?
-                    _script->dataStack()->push(start_tile);
+                    dataStack->push(start_tile);
                 }
                 else
                 {
@@ -60,12 +63,12 @@ namespace Falltergeist
                     auto hex = grid->hexInDirection(grid->at(start_tile), dir, distance);
                     if (hex)
                     {
-                        _script->dataStack()->push(hex->number());
+                        dataStack->push(hex->number());
 
                     }
                     else
                     {
-                        _script->dataStack()->push(start_tile);
+                        dataStack->push(start_tile);
                     }
                 }
             }

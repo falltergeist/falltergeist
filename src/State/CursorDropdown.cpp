@@ -313,7 +313,7 @@ namespace Falltergeist
                 {
                     icons.pop_back(); // remove empty icon from CursorDropdown state
                     // place only new icons back in stack
-                    for (auto it = icons.rbegin(); it != icons.rend(); it++)
+                    for (auto it = icons.rbegin(); it != icons.rend(); ++it)
                     {
                         mouse->pushState(*it);
                     }

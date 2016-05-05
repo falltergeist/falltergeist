@@ -41,10 +41,11 @@ namespace Falltergeist
             void Opcode80F3::_run()
             {
                 Logger::debug("SCRIPT") << "[80F3] [=] int has_trait(int type,void* who, int trait)" << std::endl;
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popObject();
-                _script->dataStack()->popInteger();
-                _script->dataStack()->push(1);
+                auto dataStack = _script->dataStack();
+                dataStack->popInteger();
+                dataStack->popObject();
+                dataStack->popInteger();
+                dataStack->push(1);
             }
         }
     }

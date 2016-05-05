@@ -41,11 +41,12 @@ namespace Falltergeist
             void Opcode8102::_run()
             {
                 Logger::debug("SCRIPT") << "[8102] [*] int critter_add_trait(void* who, int trait_type, int trait, int amount) " << std::endl;
-                /* auto amount = */ (void)_script->dataStack()->popInteger();
-                /* auto trait = */ (void)_script->dataStack()->popInteger();
-                /* auto trait_type = */ (void)_script->dataStack()->popInteger();
-                /* auto who = */ (void)_script->dataStack()->popObject();
-                _script->dataStack()->push(0);
+                auto dataStack = _script->dataStack();
+                /* auto amount = */ (void)dataStack->popInteger();
+                /* auto trait = */ (void)dataStack->popInteger();
+                /* auto trait_type = */ (void)dataStack->popInteger();
+                /* auto who = */ (void)dataStack->popObject();
+                dataStack->push(0);
             }
         }
     }

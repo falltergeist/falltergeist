@@ -46,10 +46,12 @@ namespace Falltergeist
             void Opcode80A9::_run()
             {
                 Logger::debug("SCRIPT") << "[80A9] [+] void override_map_start(int x, int y, int elevation, int orientation)" << std::endl;
-                auto orientation = _script->dataStack()->popInteger();
-                auto elevation = _script->dataStack()->popInteger();
-                auto y = _script->dataStack()->popInteger();
-                auto x = _script->dataStack()->popInteger();
+                auto dataStack = _script->dataStack();
+
+                auto orientation = dataStack->popInteger();
+                auto elevation = dataStack->popInteger();
+                auto y = dataStack->popInteger();
+                auto x = dataStack->popInteger();
                 auto position = y*200 + x;
                 auto game = Game::Game::getInstance();
                 auto player = game->player();
