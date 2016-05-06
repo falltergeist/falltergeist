@@ -819,7 +819,7 @@ void MvePlayer::_processChunk()
         return;
     }
 
-    auto opcodes = *_chunk->opcodes();
+    const auto& opcodes = *_chunk->opcodes();
     for (const auto& opcode : opcodes)
     {
         switch (static_cast<Opcode>(opcode->type()))
