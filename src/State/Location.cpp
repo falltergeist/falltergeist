@@ -351,7 +351,7 @@ namespace Falltergeist
                     {
                         object->setScrName(msg->message(object->SID()+101)->text());
                     }
-                    catch (Exception) {}
+                    catch (const Exception& e) {}
                 }
 
                 auto hexagon = hexagonGrid()->at(mapObject->hexPosition());
@@ -1259,7 +1259,7 @@ namespace Falltergeist
             {
                 centerCameraAtHexagon(_hexagonGrid->at((unsigned int)tileNum));
             }
-            catch (std::out_of_range& ex)
+            catch (const std::out_of_range& ex)
             {
                 throw Exception(std::string("Tile number out of range: ") + std::to_string(tileNum));
             }
