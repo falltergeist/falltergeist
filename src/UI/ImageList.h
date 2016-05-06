@@ -50,6 +50,7 @@ public:
     virtual bool opaque(const Point &pos) override;
 
     virtual void render(bool eggTransparency) override;
+    virtual void setPosition(const Point &pos) override;
 
 protected:
     std::vector<std::unique_ptr<Image>> _images;
