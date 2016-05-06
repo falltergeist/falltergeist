@@ -185,6 +185,7 @@ void Animation::stop()
 void Animation::setReverse(bool value)
 {
     _reverse = value;
+    setCurrentFrame(value ? _animationFrames.size()-1 : 0);
 }
 
 bool Animation::ended() const

@@ -57,6 +57,11 @@ void DoorSceneryObject::setOpened(bool value)
 {
     _opened = value;
     setCanLightThru(_opened);
+
+    if (UI::AnimationQueue* queue = dynamic_cast<UI::AnimationQueue*>(this->ui()))
+    {
+        queue->currentAnimation()->setReverse(value);
+    }
 }
 
 bool DoorSceneryObject::locked() const
@@ -79,9 +84,6 @@ void DoorSceneryObject::use_p_proc(CritterObject* usedBy)
         if (UI::AnimationQueue* queue = dynamic_cast<UI::AnimationQueue*>(this->ui()))
         {
             queue->start();
-            // TODO:  i'm not sure. maybe we just need to reset animation progress on reverse change
-            queue->currentAnimation()->stop();
-            queue->currentAnimation()->setReverse(false);
             queue->animationEndedHandler().add(std::bind(&DoorSceneryObject::onOpeningAnimationEnded, this, std::placeholders::_1));
             if (_soundId) Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/sodoors") + _soundId + ".acm");
         }
@@ -91,8 +93,6 @@ void DoorSceneryObject::use_p_proc(CritterObject* usedBy)
         if (UI::AnimationQueue* queue = dynamic_cast<UI::AnimationQueue*>(this->ui()))
         {
             queue->start();
-            queue->currentAnimation()->stop();
-            queue->currentAnimation()->setReverse(true);
             queue->animationEndedHandler().add(std::bind(&DoorSceneryObject::onClosingAnimationEnded, this, std::placeholders::_1));
             if (_soundId) Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/scdoors") + _soundId + ".acm");
         }
@@ -110,6 +110,7 @@ void DoorSceneryObject::onOpeningAnimationEnded(Event::Event* event)
     setOpened(true);
     queue->animationEndedHandler().clear();
     queue->stop();
+    queue->currentAnimation()->setReverse(true);
     Game::getInstance()->locationState()->initLight();
     Logger::info() << "Door opened: " << opened() << std::endl;
 }
@@ -120,6 +121,7 @@ void DoorSceneryObject::onClosingAnimationEnded(Event::Event* event)
     setOpened(false);
     queue->animationEndedHandler().clear();
     queue->stop();
+    queue->currentAnimation()->setReverse(false);
     Game::getInstance()->locationState()->initLight();
     Logger::info() << "Door opened: " << opened() << std::endl;
 }
