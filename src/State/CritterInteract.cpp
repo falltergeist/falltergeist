@@ -21,9 +21,9 @@
 #include "../State/CritterInteract.h"
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../Format/Lst/File.h"
 #include "../Format/Lip/File.h"
 #include "../Game/CritterObject.h"
@@ -50,7 +50,6 @@ namespace Falltergeist
 {
     namespace State
     {
-        using Base::make_unique;
 
         CritterInteract::CritterInteract() : State()
         {
@@ -146,7 +145,7 @@ namespace Falltergeist
                     headImage += "f" + std::to_string(fidget)+".frm";
                     auto head = dynamic_cast<UI::AnimationQueue*>(getUI("head"));
                     head->clear();
-                    head->animations().push_back(make_unique<UI::Animation>("art/heads/" + headImage));
+                    head->animations().push_back(std::make_unique<UI::Animation>("art/heads/" + headImage));
 
                     head->start();
                     _fidgetTimer.start(std::rand() % 5000 + 5000);
@@ -155,7 +154,7 @@ namespace Falltergeist
                 headImage+="gf1.frm";
 
                 auto head = new UI::AnimationQueue();
-                head->animations().push_back(make_unique<UI::Animation>("art/heads/" + headImage));
+                head->animations().push_back(std::make_unique<UI::Animation>("art/heads/" + headImage));
 
                 int offset = 388/2 - head->currentAnimation()->width()/2;
                 head->setPosition({128+offset, 15});
@@ -266,7 +265,7 @@ namespace Falltergeist
                     break;
             }
             headImage+="p.frm";
-            head->animations().push_back(make_unique<UI::Animation>("art/heads/" + headImage));
+            head->animations().push_back(std::make_unique<UI::Animation>("art/heads/" + headImage));
         }
 
         static inline int _phonemeToFrame(unsigned int phoneme)
@@ -434,7 +433,7 @@ namespace Falltergeist
                     head->animations().clear();
                 }
                 _phase = Phase::TRANSITION;
-                head->animations().push_back(make_unique<UI::Animation>("art/heads/" + headImage));
+                head->animations().push_back(std::make_unique<UI::Animation>("art/heads/" + headImage));
                 head->animationEndedHandler().add(std::bind(&CritterInteract::onMoodTransitionEnded, this, std::placeholders::_1));
                 head->start();
             }

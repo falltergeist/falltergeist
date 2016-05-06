@@ -21,9 +21,9 @@
 #include "../../Graphics/Font/FON.h"
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
-#include "../../Base/StlFeatures.h"
 #include "../../Format/Fon/Glyph.h"
 #include "../../ResourceManager.h"
 
@@ -34,7 +34,6 @@ namespace Falltergeist
 namespace Graphics
 {
 
-using Base::make_unique;
 
 FON::FON(const std::string& filename) : Font()
 {
@@ -45,7 +44,7 @@ FON::FON(const std::string& filename) : Font()
     unsigned int height = (_fon->maximumHeight()+2)*16u;
 
 
-    _texture = make_unique<Graphics::Texture>(width, height);
+    _texture = std::make_unique<Graphics::Texture>(width, height);
     _texture->loadFromRGBA(_fon->rgba());
 }
 

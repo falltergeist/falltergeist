@@ -46,21 +46,23 @@ namespace Falltergeist
             {
                 Logger::debug("SCRIPT") << "[8121] [+] void giQ_Option(int iq_test, int msg_list, int msg_num, procedure target, int reaction)" << std::endl;
 
-                auto reaction = _script->dataStack()->popInteger();
-                auto function = _script->dataStack()->popInteger();
+                auto dataStack = _script->dataStack();
+
+                auto reaction = dataStack->popInteger();
+                auto function = dataStack->popInteger();
                 std::string text;
-                if (_script->dataStack()->top().type() == StackValue::Type::STRING)
+                if (dataStack->top().type() == StackValue::Type::STRING)
                 {
-                    text = _script->dataStack()->popString();
-                    _script->dataStack()->popInteger(); // msg_list
+                    text = dataStack->popString();
+                    dataStack->popInteger(); // msg_list
                 }
                 else
                 {
-                    auto msg_num = _script->dataStack()->popInteger();
-                    auto msg_file_num = _script->dataStack()->popInteger();
+                    auto msg_num = dataStack->popInteger();
+                    auto msg_file_num = dataStack->popInteger();
                     text = _script->msgMessage(msg_file_num, msg_num);
                 }
-                auto iq = _script->dataStack()->popInteger();
+                auto iq = dataStack->popInteger();
                 auto game = Game::getInstance();
                 auto dialog = dynamic_cast<State::CritterDialog*>(game->topState());
                 if (iq >= 0)

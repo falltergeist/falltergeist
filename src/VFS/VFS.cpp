@@ -65,7 +65,7 @@ VFS::~VFS()
     }
 }
 
-File* VFS::open(const std::string filename)
+File* VFS::open(const std::string& filename)
 {
     if (_cache.find(filename) != _cache.end())
     {

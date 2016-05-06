@@ -23,10 +23,10 @@
 // C++ standard includes
 #include <functional>
 #include <type_traits>
+#include <memory>
 #include <utility>
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../Event/EventTarget.h"
 #include "../Event/Event.h"
 #include "../Event/Keyboard.h"
@@ -39,7 +39,6 @@ namespace Falltergeist
 {
     namespace Event
     {
-        using namespace Base;
 
         Dispatcher::AbstractTask::AbstractTask(EventTarget* target) : target(target) {}
 
@@ -66,7 +65,7 @@ namespace Falltergeist
         template<typename T>
         void Dispatcher::scheduleEvent(EventTarget* target, std::unique_ptr<T> eventArg, Base::Delegate<T*> handlerArg)
         {
-            _scheduledTasks.emplace_back(make_unique<Task<T>>(target, std::move(eventArg), std::move(handlerArg)));
+            _scheduledTasks.emplace_back(std::make_unique<Task<T>>(target, std::move(eventArg), std::move(handlerArg)));
         }
 
         void Dispatcher::processScheduledEvents()

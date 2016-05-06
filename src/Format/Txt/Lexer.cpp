@@ -23,6 +23,8 @@
  */
 
 // C++ standard includes
+#include <cctype>
+#include <clocale>
 
 // Falltergeist includes
 #include "Lexer.h"

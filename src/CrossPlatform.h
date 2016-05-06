@@ -55,6 +55,8 @@ public:
 
     static bool fileExists(std::string file);
 
+    static uint32_t microtime();
+
 protected:
     static std::string _falloutDataPath;
     static std::string _falltergeistDataPath;

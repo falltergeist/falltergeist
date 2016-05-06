@@ -24,7 +24,6 @@
 #include <string>
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../Audio/Mixer.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
@@ -37,7 +36,6 @@
 namespace Falltergeist
 {
 using namespace std;
-using Base::make_unique;
 
 namespace UI
 {

@@ -115,11 +115,11 @@ namespace Falltergeist
                 {
                     opcodeHandler->run();
                 }
-                catch (HaltException& e)
+                catch (const HaltException& e)
                 {
                     return;
                 }
-                catch (ErrorException& e)
+                catch (const ErrorException& e)
                 {
                     Logger::error("SCRIPT") << e.what() << " in [" << std::hex << opcode << "] at " << _script->filename() << ":0x" << offset << std::endl;
                     _dataStack.values()->clear();

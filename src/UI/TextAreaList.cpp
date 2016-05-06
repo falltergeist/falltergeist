@@ -23,7 +23,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../Graphics/Rect.h"
 #include "../UI/TextArea.h"
 
@@ -32,7 +31,6 @@
 
 namespace Falltergeist
 {
-using Base::make_unique;
 
 namespace UI
 {

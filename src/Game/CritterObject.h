@@ -147,7 +147,7 @@ public:
     virtual void use_skill_on_p_proc();
     virtual void is_dropping_p_proc();
 
-    virtual void think();
+    virtual void think() override;
     virtual void onMovementAnimationEnded(Event::Event* event);
     virtual void onMovementAnimationFrame(Event::Event* event);
 
@@ -202,7 +202,7 @@ protected:
     virtual std::string _generateArmorFrmString();
     virtual std::string _generateWeaponFrmString();
     void _setupNextIdleAnim();
-    virtual void _generateUi();
+    virtual void _generateUi() override;
 
 
 };

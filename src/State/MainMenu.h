@@ -54,7 +54,7 @@ namespace Falltergeist
                 void doCredits();
                 void onKeyDown(Event::Keyboard* event) override;
 
-                void onStateActivate(Event::State* event);
+                void onStateActivate(Event::State* event) override;
 
                 void onExitStart(Event::State* event);
                 void onNewGameStart(Event::State* event);

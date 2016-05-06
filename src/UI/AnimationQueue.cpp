@@ -21,9 +21,9 @@
 #include "../UI/AnimationQueue.h"
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../Event/Event.h"
 #include "../UI/Animation.h"
 
@@ -33,7 +33,6 @@ namespace Falltergeist
 {
 namespace UI
 {
-using namespace Base;
 
 AnimationQueue::AnimationQueue() : Falltergeist::UI::Base()
 {
@@ -100,7 +99,7 @@ void AnimationQueue::think()
             {
                 if (!_repeat)
                 {
-                    emitEvent(make_unique<Event::Event>("animationEnded"), animationEndedHandler());
+                    emitEvent(std::make_unique<Event::Event>("animationEnded"), animationEndedHandler());
                     currentAnimation()->stop();
                     _playing = false;
                     return;

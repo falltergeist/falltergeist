@@ -54,7 +54,7 @@ namespace Falltergeist
                 Type type() const;
                 bool isNumber() const;
                 // returns integer value or throws exception if it's not integer
-                int integerValue() const;
+                int32_t integerValue() const;
                 // returns float value or throws exception if it's not float
                 float floatValue() const;
                 // returns string value or throws exception if it's not string
@@ -65,7 +65,7 @@ namespace Falltergeist
                 // converts value of any type to string representation
                 std::string toString() const;
                 // converts any value to integer representation
-                int toInteger() const;
+                int32_t toInteger() const;
                 bool toBoolean() const;
 
                 const char* typeName() const;
@@ -75,7 +75,7 @@ namespace Falltergeist
                 Type _type = Type::INTEGER;
                 union
                 {
-                    int _intValue;
+                    int32_t _intValue;
                     float _floatValue;
                     Game::Object* _objectValue;
                 };

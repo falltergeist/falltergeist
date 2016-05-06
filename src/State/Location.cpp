@@ -25,10 +25,10 @@
 #include <cmath>
 #include <cstdlib>
 #include <list>
+#include <memory>
 
 // Falltergeist includes
 #include "../Audio/Mixer.h"
-#include "../Base/StlFeatures.h"
 #include "../Event/Mouse.h"
 #include "../Exception.h"
 #include "../Format/Msg/File.h"
@@ -91,9 +91,9 @@ namespace Falltergeist
             auto game = Game::getInstance();
             game->mouse()->setState(Input::Mouse::Cursor::ACTION);
 
-            _camera = make_unique<LocationCamera>(game->renderer()->size(), Point(0, 0));
+            _camera = std::make_unique<LocationCamera>(game->renderer()->size(), Point(0, 0));
 
-            _hexagonInfo = make_unique<UI::TextArea>("", game->renderer()->width() - 135, 25);
+            _hexagonInfo = std::make_unique<UI::TextArea>("", game->renderer()->width() - 135, 25);
             _hexagonInfo->setWidth(135);
             _hexagonInfo->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
@@ -169,9 +169,9 @@ namespace Falltergeist
 
         void Location::setLocation(const std::string& name)
         {
-            _floor = make_unique<UI::TileMap>();
-            _roof = make_unique<UI::TileMap>();
-            _hexagonGrid = make_unique<HexagonGrid>();
+            _floor = std::make_unique<UI::TileMap>();
+            _roof = std::make_unique<UI::TileMap>();
+            _hexagonGrid = std::make_unique<HexagonGrid>();
             _objects.clear();
             std::vector<glm::vec2> _vertices;
             for (auto hex : _hexagonGrid->hexagons())
@@ -351,7 +351,7 @@ namespace Falltergeist
                     {
                         object->setScrName(msg->message(object->SID()+101)->text());
                     }
-                    catch (Exception) {}
+                    catch (const Exception& e) {}
                 }
 
                 auto hexagon = hexagonGrid()->at(mapObject->hexPosition());
@@ -400,7 +400,7 @@ namespace Falltergeist
             // Location script
             if (mapFile->scriptId() > 0)
             {
-                _locationScript = make_unique<VM::Script>(ResourceManager::getInstance()->intFileType(mapFile->scriptId()-1), nullptr);
+                _locationScript = std::make_unique<VM::Script>(ResourceManager::getInstance()->intFileType(mapFile->scriptId()-1), nullptr);
             }
 
             // Spatials
@@ -437,13 +437,13 @@ namespace Falltergeist
                     unsigned int tileNum = mapFile->elevations()->at(_currentElevation)->floorTiles()->at(i);
                     if (tileNum > 1)
                     {
-                        _floor->tiles()[i] = make_unique<UI::Tile>(tileNum, Point(x, y));
+                        _floor->tiles()[i] = std::make_unique<UI::Tile>(tileNum, Point(x, y));
                     }
 
                     tileNum = mapFile->elevations()->at(_currentElevation)->roofTiles()->at(i);
                     if (tileNum > 1)
                     {
-                        _roof->tiles()[i] = make_unique<UI::Tile>(tileNum, Point(x, y - 96));
+                        _roof->tiles()[i] = std::make_unique<UI::Tile>(tileNum, Point(x, y - 96));
                     }
                 }
                 _floor->init();
@@ -856,17 +856,17 @@ namespace Falltergeist
                 {
                     case Mouse::Type::BUTTON_DOWN:
                     {
-                        emitEvent(make_unique<Event::Mouse>(*mouseEvent), _mouseDownHandler);
+                        emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), _mouseDownHandler);
                         break;
                     }
                     case Mouse::Type::BUTTON_UP:
                     {
-                        emitEvent(make_unique<Event::Mouse>(*mouseEvent), _mouseUpHandler);
+                        emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), _mouseUpHandler);
                         break;
                     }
                     case Mouse::Type::MOVE:
                     {
-                        emitEvent(make_unique<Event::Mouse>(*mouseEvent), _mouseMoveHandler);
+                        emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), _mouseMoveHandler);
 
                         if (mouse->state() == Input::Mouse::Cursor::ACTION)
                         {
@@ -954,14 +954,15 @@ namespace Falltergeist
                     auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
                     if (hexagon)
                     {
-                        auto path = hexagonGrid()->findPath(game->player()->hexagon(), hexagon);
+                        auto player = game->player();
+                        auto path = hexagonGrid()->findPath(player->hexagon(), hexagon);
                         if (path.size())
                         {
-                            game->player()->stopMovement();
-                            game->player()->setRunning((_lastClickedTile != 0 && hexagon->number() == _lastClickedTile) || (event->shiftPressed() != game->settings()->running()));
+                            player->stopMovement();
+                            player->setRunning((_lastClickedTile != 0 && hexagon->number() == _lastClickedTile) || (event->shiftPressed() != game->settings()->running()));
                             for (auto pathHexagon : path)
                             {
-                                game->player()->movementQueue()->push_back(pathHexagon);
+                                player->movementQueue()->push_back(pathHexagon);
                             }
                         }
                         event->setHandled(true);
@@ -1258,7 +1259,7 @@ namespace Falltergeist
             {
                 centerCameraAtHexagon(_hexagonGrid->at((unsigned int)tileNum));
             }
-            catch (std::out_of_range ex)
+            catch (const std::out_of_range& ex)
             {
                 throw Exception(std::string("Tile number out of range: ") + std::to_string(tileNum));
             }
@@ -1378,10 +1379,15 @@ namespace Falltergeist
             std::vector<float> lights;
             for (auto hex: _hexagonGrid->hexagons())
             {
-                int lightLevel = 100;
+                int lightLevel;
 
                 unsigned int light = hex->light();
-                if (light<=_lightLevel) light=655;
+
+                if (light<=_lightLevel)
+                {
+                    light=655;
+                }
+
                 lightLevel = light / ((65536-655)/100);
 
                 float l = lightLevel/100.0;

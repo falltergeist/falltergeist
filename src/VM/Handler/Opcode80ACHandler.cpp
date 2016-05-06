@@ -41,10 +41,11 @@ namespace Falltergeist
             void Opcode80AC::_run()
             {
                 Logger::debug("SCRIPT") << "[80AC] [=] int roll_vs_skill(ObjectPtr who, int skill, int modifier)" << std::endl;
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popObject();
-                _script->dataStack()->push(2);
+                auto dataStack = _script->dataStack();
+                dataStack->popInteger();
+                dataStack->popInteger();
+                dataStack->popObject();
+                dataStack->push(2);
             }
         }
     }

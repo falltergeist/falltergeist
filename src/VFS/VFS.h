@@ -49,7 +49,7 @@ public:
     VFS();
     virtual ~VFS();
 
-    File* open(const std::string filename);
+    File* open(const std::string& filename);
 
 protected:
     std::vector<Plugin::IPlugin*> _plugins;

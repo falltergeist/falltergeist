@@ -112,7 +112,7 @@ void WorldmapFile::_parseText(std::istream& stream)
                         Lexer lexer(pair.second.str());
                         enc.distance = _parseNumericExpression(lexer);
                     }
-                    catch (std::ios::failure)
+                    catch (const std::ios::failure& e)
                     {
                         // TODO: warnings
                     }
@@ -222,7 +222,7 @@ InventoryItem WorldmapFile::_parseInventoryItem(const std::string& value)
             }
         }
     }
-    catch (std::ios::failure)
+    catch (const std::ios::failure& e)
     {
         // TODO: warnings?
     }
@@ -285,7 +285,7 @@ EncounterTableEntry WorldmapFile::_parseEncounterTableEntry(const Ini::Value& va
                     while (lexer.expect(Lexer::T_AND));
                 }
             }
-            catch (std::ios::failure)
+            catch (const std::ios::failure& e)
             {
                 // TODO: warnings?
             }
@@ -321,7 +321,7 @@ Condition WorldmapFile::_parseCondition(const std::string& value)
         }
         while (lexer.expect(Lexer::T_AND));
     }
-    catch (std::ios::failure)
+    catch (const std::ios::failure& e)
     {
         // TODO: warnings?
     }

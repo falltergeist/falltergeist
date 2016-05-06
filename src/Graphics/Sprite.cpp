@@ -176,12 +176,15 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
         GL_CHECK(_shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->textureWidth(), (float)_texture->textureHeight() )));
     }
 
-    GLint curvao;
-    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-    GLint vao = Game::getInstance()->renderer()->getVAO();
-    if (curvao != vao)
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
     {
-        GL_CHECK(glBindVertexArray(vao));
+        GLint curvao;
+        glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+        GLint vao = Game::getInstance()->renderer()->getVAO();
+        if (curvao != vao)
+        {
+            GL_CHECK(glBindVertexArray(vao));
+        }
     }
 
 
@@ -307,12 +310,15 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
         GL_CHECK(_shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->textureWidth(), (float)_texture->textureHeight() )));
     }
 
-    GLint curvao;
-    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-    GLint vao = Game::getInstance()->renderer()->getVAO();
-    if (curvao != vao)
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
     {
-        GL_CHECK(glBindVertexArray(vao));
+        GLint curvao;
+        glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+        GLint vao = Game::getInstance()->renderer()->getVAO();
+        if (curvao != vao)
+        {
+            GL_CHECK(glBindVertexArray(vao));
+        }
     }
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getVVBO()));

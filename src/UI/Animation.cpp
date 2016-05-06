@@ -22,9 +22,9 @@
 
 // C++ standard includes
 #include <cmath>
+#include <memory>
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../Format/Frm/File.h"
 #include "../Format/Frm/Direction.h"
 #include "../Format/Frm/Frame.h"
@@ -44,8 +44,6 @@
 
 namespace Falltergeist
 {
-using Base::make_unique;
-
 namespace UI
 {
 
@@ -59,7 +57,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
 {
     _direction = direction;
     auto frm = ResourceManager::getInstance()->frmFileType(frmName);
-    _animation = make_unique<Graphics::Animation>(frmName);
+    _animation = std::make_unique<Graphics::Animation>(frmName);
 
     _actionFrame = frm->actionFrame();
     auto dir = frm->directions()->at(direction);
@@ -81,7 +79,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
         xOffset += frm->offsetX(direction, f);
         yOffset += frm->offsetY(direction, f);
 
-        auto frame = make_unique<AnimationFrame>();
+        auto frame = std::make_unique<AnimationFrame>();
         auto srcFrame = frm->directions()->at(direction)->frames()->at(f);
         frame->setSize(Size(srcFrame->width(), srcFrame->height()));
         frame->setOffset({xOffset, yOffset});
@@ -127,17 +125,17 @@ void Animation::think()
         if (_progress < _animationFrames.size())
         {
             _currentFrame = _reverse ? _animationFrames.size() - _progress - 1 : _progress;
-            emitEvent(make_unique<Event::Event>("frame"), frameHandler());
+            emitEvent(std::make_unique<Event::Event>("frame"), frameHandler());
             if (_actionFrame == _currentFrame)
             {
-                emitEvent(make_unique<Event::Event>("actionFrame"), actionFrameHandler());
+                emitEvent(std::make_unique<Event::Event>("actionFrame"), actionFrameHandler());
             }
         }
         else
         {
             _ended = true;
             _playing = false;
-            emitEvent(make_unique<Event::Event>("animationEnded"), animationEndedHandler());
+            emitEvent(std::make_unique<Event::Event>("animationEnded"), animationEndedHandler());
         }
     }
 }

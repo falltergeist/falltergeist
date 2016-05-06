@@ -41,11 +41,13 @@ namespace Falltergeist
             void Opcode80CF::_run()
             {
                 Logger::debug("SCRIPT") << "[80CF] [=] int tile_in_tile_rect(int tile1, int tile2, int tile3, int tile4, int tile)" << std::endl;
-                int targetHex = _script->dataStack()->popInteger();
-                int bottomRight = _script->dataStack()->popInteger();
-                /*int bottomLeft = */_script->dataStack()->popInteger();
-                /*int upperRight = */_script->dataStack()->popInteger();
-                int upperLeft = _script->dataStack()->popInteger();
+                auto dataStack = _script->dataStack();
+
+                int targetHex = dataStack->popInteger();
+                int bottomRight = dataStack->popInteger();
+                /*int bottomLeft = */dataStack->popInteger();
+                /*int upperRight = */dataStack->popInteger();
+                int upperLeft = dataStack->popInteger();
 
                 // That's how original engine does this:
                 int targetX = targetHex % 200;

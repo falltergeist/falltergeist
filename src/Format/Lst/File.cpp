@@ -24,6 +24,8 @@
 
 // C++ standard includes
 #include <algorithm>
+#include <functional>
+#include <cctype>
 
 // Falltergeist includes
 #include "../Lst/File.h"

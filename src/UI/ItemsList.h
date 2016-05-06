@@ -70,7 +70,7 @@ public:
     unsigned int slotsNumber();
     unsigned int slotOffset();
 
-    virtual void render(bool eggTransparency = false);
+    virtual void render(bool eggTransparency = false) override;
 
     void onMouseLeftDown(Event::Mouse* event);
     void onMouseDragStart(Event::Mouse* event);

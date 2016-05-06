@@ -42,14 +42,17 @@ namespace Falltergeist
             {
                 Logger::debug("SCRIPT") << "[80D0] [=] void attack_complex(ObjectPtr who, int called_shot, int num_attacks, int bonus"
                                         ", int min_damage, int max_damage, int attacker_results, int target_results)" << std::endl;
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popObject();
+
+                auto dataStack = _script->dataStack();
+
+                dataStack->popInteger();
+                dataStack->popInteger();
+                dataStack->popInteger();
+                dataStack->popInteger();
+                dataStack->popInteger();
+                dataStack->popInteger();
+                dataStack->popInteger();
+                dataStack->popObject();
             }
         }
     }

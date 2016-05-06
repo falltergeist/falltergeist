@@ -41,10 +41,11 @@ namespace Falltergeist
             void Opcode8117::_run()
             {
                 Logger::debug("SCRIPT") << "[8117] [=] int rm_mult_objs_from_inven(void* who, void* obj, int count)" << std::endl;
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popObject();
-                _script->dataStack()->popObject();
-                _script->dataStack()->push(0);
+                auto dataStack = _script->dataStack();
+                dataStack->popInteger();
+                dataStack->popObject();
+                dataStack->popObject();
+                dataStack->push(0);
             }
         }
     }

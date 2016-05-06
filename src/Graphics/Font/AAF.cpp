@@ -21,9 +21,9 @@
 #include "../../Graphics/Font/AAF.h"
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
-#include "../../Base/StlFeatures.h"
 #include "../../Format/Aaf/Glyph.h"
 #include "../../ResourceManager.h"
 
@@ -35,7 +35,6 @@ namespace Falltergeist
 namespace Graphics
 {
 
-using Base::make_unique;
 
 AAF::AAF(const std::string& filename) : Font()
 {
@@ -45,7 +44,7 @@ AAF::AAF(const std::string& filename) : Font()
     unsigned int width = (_aaf->maximumWidth()+2)*16u;
     unsigned int height = (_aaf->maximumHeight()+2)*16u;
 
-    _texture = make_unique<Graphics::Texture>(width, height);
+    _texture = std::make_unique<Graphics::Texture>(width, height);
     _texture->loadFromRGBA(_aaf->rgba());
 
 

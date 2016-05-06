@@ -22,9 +22,9 @@
 #include <sstream>
 #include <iomanip>
 #include <locale>
+#include <memory>
 
 // Falltergeist includes
-#include "Base/StlFeatures.h"
 #include "CrossPlatform.h"
 #include "Exception.h"
 #include "Format/Acm/File.h"
@@ -66,7 +66,6 @@ namespace Falltergeist
 {
 
 using namespace std;
-using Base::make_unique;
 
 namespace
 {
@@ -81,7 +80,7 @@ ResourceManager::ResourceManager()
     for (auto filename : CrossPlatform::findFalloutDataFiles())
     {
         string path = CrossPlatform::findFalloutDataPath() + "/" + filename;
-        _datFiles.push_back(make_unique<Format::Dat::File>(path));
+        _datFiles.push_back(std::make_unique<Format::Dat::File>(path));
     }
 }
 
@@ -403,8 +402,7 @@ Graphics::Shader* ResourceManager::shader(const string& filename)
         return _shaders.at(filename).get();
     }
 
-    Graphics::Shader* shader = nullptr;
-    shader = new Graphics::Shader(filename);
+    Graphics::Shader* shader = new Graphics::Shader(filename);
 
     _shaders.insert(make_pair(filename, unique_ptr<Graphics::Shader>(shader)));
     return shader;

@@ -64,7 +64,7 @@ namespace Falltergeist
 
             private:
                 int _id;
-                bool _started;
+                bool _started = false;
                 std::pair<unsigned int,std::string> _nextSubLine;
                 Format::Sve::File* _subs = nullptr;
                 bool _hasSubs = false;

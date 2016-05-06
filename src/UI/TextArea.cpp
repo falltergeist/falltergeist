@@ -267,13 +267,21 @@ void TextArea::_updateSymbols()
     {
         // calculate how much lines we can fit inside TextArea, taking vertical padding into account
         auto activeHeight = _size.height() - _paddingTopLeft.height() - _paddingBottomRight.height();
-        lineEnd = std::max(
-            std::min(
-                _lines.cbegin() + _lineOffset + ((activeHeight + font()->verticalGap()) / (font()->height() + font()->verticalGap())),
-                _lines.cend()
-            ),
-            _lines.cbegin()
-        );
+
+        if ((_lineOffset + ((activeHeight + font()->verticalGap()) / (font()->height() + font()->verticalGap()))) < (int)_lines.size())
+        {
+            lineEnd = std::max(
+                std::min(
+                    _lines.cbegin() + _lineOffset + ((activeHeight + font()->verticalGap()) / (font()->height() + font()->verticalGap())),
+                    _lines.cend()
+                ),
+                _lines.cbegin()
+            );
+        }
+        else
+        {
+            lineEnd = _lines.cend();
+        }
     }
 
     int numVisibleLines = std::distance(lineBegin, lineEnd);
