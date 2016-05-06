@@ -819,10 +819,9 @@ void MvePlayer::_processChunk()
         return;
     }
 
-    auto opcodes = _chunk->opcodes();
-    for (unsigned int i=0; i < opcodes->size();i++)
+    auto opcodes = *_chunk->opcodes();
+    for (const auto& opcode : opcodes)
     {
-        auto opcode = opcodes->at(i);
         switch (static_cast<Opcode>(opcode->type()))
         {
             case Opcode::END_CHUNK:
