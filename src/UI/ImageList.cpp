@@ -80,5 +80,17 @@ void ImageList::render(bool eggTransparency) {
 bool ImageList::opaque(const Point &pos) {
     return _images.at(currentImage())->opaque(pos);
 }
+
+
+void ImageList::setPosition(const Point &pos)
+{
+    Base::setPosition(pos);
+    for (auto& image: _images)
+    {
+        image->setPosition(position());
+    }
+}
+
+
 }
 }
