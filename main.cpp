@@ -27,9 +27,54 @@
 #include "src/Settings.h"
 #include "src/State/Start.h"
 
+#include "src/ResourceManager.h"
+#include <cassert>
+#include <iostream>
+
 // Third party includes
 
 using namespace Falltergeist;
+
+namespace
+{
+void FIDTest()
+{
+    std::cout << "start test\n";
+    for (unsigned int fid = 0; fid < UINT_MAX; ++fid)
+    {
+        std::string old_frmName;
+        std::string new_frmName;
+        bool expectException = false;
+        std::string exceptionMessage;
+        try
+        {
+            old_frmName = ResourceManager::getInstance()->FIDtoFrmName_DEPRECATED(fid);
+        }
+        catch(const Exception& ex)
+        {
+            exceptionMessage = ex.what();
+            expectException = true;
+        }
+
+        try
+        {
+            new_frmName = ResourceManager::getInstance()->FIDtoFrmName(fid);
+            assert(old_frmName == new_frmName);
+        }
+        catch(const Exception& ex)
+        {
+            assert(expectException);
+            assert(std::string(ex.what()) == exceptionMessage);
+        }
+
+        if (fid % 10000 == 0)
+        {
+            std::cout << "FID = " << fid << "\n";
+        }
+    }
+    std::cout << "end test\n";
+}
+}
 
 int main(int argc, char* argv[])
 {
@@ -37,6 +82,10 @@ int main(int argc, char* argv[])
     {
         auto game = Game::Game::getInstance();
         game->init(std::unique_ptr<Settings>(new Settings()));
+
+        FIDTest();
+        return 0;
+
         game->setState(new State::Start());
         game->run();
         game->shutdown();
