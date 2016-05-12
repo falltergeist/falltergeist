@@ -74,6 +74,72 @@ Format::Pro::File* fetchProFileType(unsigned int PID)
 {
     return ResourceManager::getInstance()->proFileType(PID);
 }
+
+using CritterFRMSuffix = std::pair<char, char>;
+
+CritterFRMSuffix CritterFRMSuffixForAnimation(unsigned int animId, unsigned int weaponId)
+{
+    const char weaponCode = weaponId + 0x63;
+    if (animId >= 0x26 && animId <= 0x2F)
+    {
+        if (weaponId >= 0x0B || weaponId == 0) throw Exception("Critter weaponId unsupported value");
+        return { weaponCode, static_cast<char>(animId + 0x3D) };
+    }
+    else if (animId == 0x24)
+    {
+        return { 'c', 'h' };
+    }
+    else if (animId == 0x25)
+    {
+        return { 'c', 'j' };
+    }
+    else if (animId == 0x40)
+    {
+        return { 'n', 'a' };
+    }
+    else if (animId >= 0x30)
+    {
+        return { 'r', static_cast<char>(animId + 0x31) };
+    }
+    else if (animId >= 0x14)
+    {
+        return { 'b', static_cast<char>(animId + 0x4d) };
+    }
+    else if (animId == 0x12)
+    {
+        if (weaponId == 0x01)
+        {
+            return { 'd', 'm' };
+        }
+        else if (weaponId == 0x04)
+        {
+            return { 'g', 'm' };
+        }
+        else
+        {
+            return { 'a', 's' };
+        }
+    }
+    else if (animId == 0x0D)
+    {
+        if (weaponId > 0)
+        {
+            return { weaponCode, 'e' };
+        }
+        else
+        {
+            return { 'a', 'n' };
+        }
+    }
+    else if (animId <= 0x01 && weaponId > 0)
+    {
+        return { weaponCode, static_cast<char>(animId + 0x61) };
+    }
+    else
+    {
+        return { 'a', static_cast<char>(animId + 0x61) };
+    }
+}
 }
 
 ResourceManager::ResourceManager()
@@ -490,211 +556,6 @@ Format::Int::File* ResourceManager::intFileType(unsigned int SID)
     }
 
     return intFileType("scripts/" + lst->strings()->at(SID));
-}
-
-string ResourceManager::FIDtoFrmName_DEPRECATED(unsigned int FID)
-{
-    string prefix;
-    string lstFile;
-
-    auto baseId = FID & 0x00000FFF;
-    auto type = FID >> 24;
-
-    switch ((FRM_TYPE)type)
-    {
-        case FRM_TYPE::ITEM:
-            prefix = "art/items/";
-            lstFile = "items.lst";
-            break;
-        case FRM_TYPE::CRITTER:
-        {
-            unsigned int weaponId = (FID & 0x0000F000) >> 12;
-            unsigned int animId = (FID & 0x00FF0000) >> 16;
-            unsigned int ID3 = (FID & 0xF0000000) >> 28;
-            auto lst = lstFileType("art/critters/critters.lst");
-            string frmName = lst->strings()->at(baseId);
-            string frmBase = frmName.substr(0, 6);
-
-            if (animId >= 0x26 && animId <= 0x2F)
-            {
-                if (weaponId >= 0x0B || weaponId == 0) throw Exception("Critter weaponId unsupported value");
-                frmBase += weaponId + 0x63;
-                frmBase += animId + 0x3D;
-            }
-            else if (animId == 0x24)
-            {
-                frmBase += "ch";
-            }
-            else if (animId == 0x25)
-            {
-                frmBase += "cj";
-            }
-            else if (animId == 0x40)
-            {
-                frmBase += "na";
-            }
-            else if (animId >= 0x30)
-            {
-                frmBase += "r";
-                frmBase += animId + 0x31;
-            }
-            else if (animId >= 0x14)
-            {
-                frmBase += "b";
-                frmBase += animId + 0x4d;
-            }
-            else if (animId == 0x12)
-            {
-                if (weaponId == 0x01)
-                {
-                    frmBase += "dm";
-                }
-                else if (weaponId == 0x04)
-                {
-                    frmBase += "gm";
-                }
-                else
-                {
-                    frmBase += "as";
-                }
-            }
-            else if (animId == 0x0D)
-            {
-                if (weaponId > 0)
-                {
-                    frmBase += weaponId + 0x63;
-                    frmBase += "e";
-                }
-                else
-                {
-                    frmBase += "an";
-                }
-            }
-            else if (animId <= 0x01 && weaponId > 0)
-            {
-                frmBase += weaponId + 0x63;
-                frmBase += animId + 0x61;
-            }
-            else
-            {
-                frmBase += "a";
-                frmBase += animId + 0x61;
-            }
-
-            string extensions[] = {"frm", "frm0", "frm1", "frm2", "fr3", "frm4", "frm5", "frm6"};
-            frmBase += "." + extensions[ID3];
-
-            return "art/critters/" + frmBase;
-        }
-        case FRM_TYPE::SCENERY:
-            prefix = "art/scenery/";
-            lstFile = "scenery.lst";
-            break;
-        case FRM_TYPE::WALL:
-            prefix = "art/walls/";
-            lstFile = "walls.lst";
-            break;
-        case FRM_TYPE::TILE:
-            prefix = "art/tiles/";
-            lstFile = "tiles.lst";
-            break;
-        case FRM_TYPE::MISC:
-            prefix = "art/misc/";
-            lstFile = "misc.lst";
-
-            // Map scroll blockers
-            if (baseId == 1) return "art/misc/scrblk.frm";
-            break;
-        case FRM_TYPE::INTERFACE:
-            prefix = "art/intrface/";
-            lstFile = "intrface.lst";
-            break;
-        case FRM_TYPE::INVENTORY:
-            prefix = "art/inven/";
-            lstFile = "inven.lst";
-            break;
-        default:
-            throw Exception("ResourceManager::FIDtoFrmName - wrong type");
-            break;
-    }
-    auto lst = lstFileType(prefix + lstFile);
-    if (baseId >= lst->strings()->size())
-    {
-        Logger::error() << "ResourceManager::FIDtoFrmName(unsigned int) - LST size " << lst->strings()->size() << " <= frmID: " << baseId << " frmType: " << type << endl;
-        return "";
-    }
-    return prefix + lst->strings()->at(baseId);
-}
-
-namespace
-{
-
-using CritterFRMSuffix = std::pair<char, char>;
-
-CritterFRMSuffix CritterFRMSuffixForAnimation(unsigned int animId, unsigned int weaponId)
-{
-    const char weaponCode = weaponId + 0x63;
-    if (animId >= 0x26 && animId <= 0x2F)
-    {
-        if (weaponId >= 0x0B || weaponId == 0) throw Exception("Critter weaponId unsupported value");
-        return { weaponCode, static_cast<char>(animId + 0x3D) };
-    }
-    else if (animId == 0x24)
-    {
-        return { 'c', 'h' };
-    }
-    else if (animId == 0x25)
-    {
-        return { 'c', 'j' };
-    }
-    else if (animId == 0x40)
-    {
-        return { 'n', 'a' };
-    }
-    else if (animId >= 0x30)
-    {
-        return { 'r', static_cast<char>(animId + 0x31) };
-    }
-    else if (animId >= 0x14)
-    {
-        return { 'b', static_cast<char>(animId + 0x4d) };
-    }
-    else if (animId == 0x12)
-    {
-        if (weaponId == 0x01)
-        {
-            return { 'd', 'm' };
-        }
-        else if (weaponId == 0x04)
-        {
-            return { 'g', 'm' };
-        }
-        else
-        {
-            return { 'a', 's' };
-        }
-    }
-    else if (animId == 0x0D)
-    {
-        if (weaponId > 0)
-        {
-            return { weaponCode, 'e' };
-        }
-        else
-        {
-            return { 'a', 'n' };
-        }
-    }
-    else if (animId <= 0x01 && weaponId > 0)
-    {
-        return { weaponCode, static_cast<char>(animId + 0x61) };
-    }
-    else
-    {
-        return { 'a', static_cast<char>(animId + 0x61) };
-    }
-}
-
 }
 
 string ResourceManager::FIDtoFrmName(unsigned int FID)

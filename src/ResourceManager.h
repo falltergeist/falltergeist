@@ -146,7 +146,6 @@ public:
     Game::Location* gameLocation(unsigned int number);
     void shutdown();
 
-    std::string FIDtoFrmName_DEPRECATED(unsigned int FID);
     std::string FIDtoFrmName(unsigned int FID);
 
 protected:
