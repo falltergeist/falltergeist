@@ -143,9 +143,11 @@ public:
     Graphics::Font* font(const std::string& filename = "font1.aaf");
     Graphics::Shader* shader(const std::string& filename);
     void unloadResources();
-    std::string FIDtoFrmName(unsigned int FID);
     Game::Location* gameLocation(unsigned int number);
     void shutdown();
+
+    std::string FIDtoFrmName_DEPRECATED(unsigned int FID);
+    std::string FIDtoFrmName(unsigned int FID);
 
 protected:
     friend class Base::Singleton<ResourceManager>;
