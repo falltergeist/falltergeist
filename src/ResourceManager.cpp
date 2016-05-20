@@ -171,7 +171,7 @@ Format::Dat::Item* ResourceManager::datFileItem(const std::string& filename)
     }
 
     std::string filenameLowered(filename);
-    std::transform(filenameLowered.begin(), filenameLowered.end(), filenameLowered.begin(), &::tolower);
+    std::transform(filenameLowered.begin(), filenameLowered.end(), filenameLowered.begin(), ::tolower);
     // Make a second try to find an item.
     itemIt = _datItemMap.find(filenameLowered);
     if (itemIt != _datItemMap.end())
@@ -550,8 +550,10 @@ void ResourceManager::unloadResources()
 
 Format::Frm::File* ResourceManager::frmFileType(unsigned int FID)
 {
-    if (FIDtoFrmName(FID) == "") return 0;
-    return frmFileType(FIDtoFrmName(FID));
+    const auto& frmName = FIDtoFrmName(FID);
+
+    if (frmName.empty()) return nullptr;
+    return frmFileType(frmName);
 }
 
 Format::Int::File* ResourceManager::intFileType(unsigned int SID)
