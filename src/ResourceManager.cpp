@@ -602,7 +602,7 @@ string ResourceManager::FIDtoFrmName(unsigned int FID)
     auto lst = lstFileType(typeArtDescription.lstFilePath);
     if (baseId >= lst->strings()->size())
     {
-        //Logger::error() << "ResourceManager::FIDtoFrmName(unsigned int) - LST size " << lst->strings()->size() << " <= frmID: " << baseId << " frmType: " << (unsigned)type << endl;
+        Logger::error() << "ResourceManager::FIDtoFrmName(unsigned int) - LST size " << lst->strings()->size() << " <= frmID: " << baseId << " frmType: " << (unsigned)type << endl;
         return std::string();
     }
 
