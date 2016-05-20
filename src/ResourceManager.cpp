@@ -18,12 +18,12 @@
  */
 
 // C++ standard includes
-#include <array>
 #include <fstream>
 #include <sstream>
 #include <iomanip>
 #include <locale>
 #include <memory>
+#include <utility>
 
 // Falltergeist includes
 #include "CrossPlatform.h"
@@ -161,10 +161,8 @@ ResourceManager* ResourceManager::getInstance()
     return Base::Singleton<ResourceManager>::get();
 }
 
-Format::Dat::Item* ResourceManager::datFileItem(string filename)
+Format::Dat::Item* ResourceManager::datFileItem(const std::string& filename)
 {
-    std::transform(filename.begin(), filename.end(), filename.begin(), ::tolower);
-
     // Return item from cache
     auto itemIt = _datItemMap.find(filename);
     if (itemIt != _datItemMap.end())
@@ -172,9 +170,18 @@ Format::Dat::Item* ResourceManager::datFileItem(string filename)
         return itemIt->second;
     }
 
+    std::string filenameLowered(filename);
+    std::transform(filenameLowered.begin(), filenameLowered.end(), filenameLowered.begin(), &::tolower);
+    // Make a second try to find an item.
+    itemIt = _datItemMap.find(filenameLowered);
+    if (itemIt != _datItemMap.end())
+    {
+        return itemIt->second;
+    }
+
     // Searching file in Fallout data directory
     {
-        string path = CrossPlatform::findFalloutDataPath() + "/" + filename;
+        string path = CrossPlatform::findFalloutDataPath() + "/" + filenameLowered;
         ifstream stream;
         stream.open(path, ios_base::binary);
         if (stream.is_open())
@@ -183,7 +190,7 @@ Format::Dat::Item* ResourceManager::datFileItem(string filename)
         }
         else
         {
-            path = CrossPlatform::findFalltergeistDataPath() + "/" + filename;
+            path = CrossPlatform::findFalltergeistDataPath() + "/" + filenameLowered;
             stream.open(path, ios_base::binary);
             if (stream.is_open())
             {
@@ -193,10 +200,10 @@ Format::Dat::Item* ResourceManager::datFileItem(string filename)
 
         if (stream.is_open())
         {
-            Format::Dat::Item* item = _createItemByName(filename, &stream);
-            item->setFilename(filename);
+            Format::Dat::Item* item = _createItemByName(filenameLowered, &stream);
+            item->setFilename(filenameLowered);
             _datItems.push_back(unique_ptr<Format::Dat::Item>(item));
-            _datItemMap.insert(make_pair(filename, item));
+            _datItemMap.insert(make_pair(filenameLowered, item));
             return item;
         }
     }
@@ -204,11 +211,11 @@ Format::Dat::Item* ResourceManager::datFileItem(string filename)
     // Search in DAT files
     for (auto& datfile : _datFiles)
     {
-        auto item = datfile->item(filename.c_str());
+        auto item = datfile->item(filename);
         if (item)
         {
             Logger::debug("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM " << datfile->filename() << "]" << endl;
-            _datItemMap.insert(make_pair(filename, item));
+            _datItemMap.insert(make_pair(filenameLowered, item));
             return item;
         }
     }
