@@ -560,57 +560,40 @@ Format::Int::File* ResourceManager::intFileType(unsigned int SID)
 
 string ResourceManager::FIDtoFrmName(unsigned int FID)
 {
-    string prefix;
-    string lstFile;
+    const auto baseId = FID & 0x00000FFF;
+    const auto type = static_cast<FRM_TYPE>(FID >> 24);
 
-    auto baseId = FID & 0x00000FFF;
-    auto type = static_cast<FRM_TYPE>(FID >> 24);
-
-    switch (type)
+    if (type == FRM_TYPE::MISC && baseId == 1)
     {
-        case FRM_TYPE::ITEM:
-            prefix = "art/items/";
-            lstFile = "items.lst";
-            break;
-        case FRM_TYPE::CRITTER:
-            prefix = "art/critters/";
-            lstFile = "critters.lst";
-            break;
-        case FRM_TYPE::SCENERY:
-            prefix = "art/scenery/";
-            lstFile = "scenery.lst";
-            break;
-        case FRM_TYPE::WALL:
-            prefix = "art/walls/";
-            lstFile = "walls.lst";
-            break;
-        case FRM_TYPE::TILE:
-            prefix = "art/tiles/";
-            lstFile = "tiles.lst";
-            break;
-        case FRM_TYPE::MISC:
-            // Map scroll blockers
-            if (baseId == 1) return "art/misc/scrblk.frm";
-
-            prefix = "art/misc/";
-            lstFile = "misc.lst";
-            break;
-        case FRM_TYPE::INTERFACE:
-            prefix = "art/intrface/";
-            lstFile = "intrface.lst";
-            break;
-        case FRM_TYPE::INVENTORY:
-            prefix = "art/inven/";
-            lstFile = "inven.lst";
-            break;
-        default:
-            throw Exception("ResourceManager::FIDtoFrmName - wrong type");
-            break;
+        static const std::string SCROLL_BLOCKERS_PATH("art/misc/scrblk.frm");
+        // Map scroll blockers
+        return SCROLL_BLOCKERS_PATH;
     }
-    auto lst = lstFileType(prefix + lstFile);
+
+    static struct TypeArtListDecription
+    {
+        const std::string prefixPath;
+        const std::string lstFilePath;
+    } const frmTypeDescription[] =
+    {
+        { "art/items/", "art/items/items.lst" },
+        { "art/critters/", "art/critters/critters.lst" },
+        { "art/scenery/", "art/scenery/scenery.lst" },
+        { "art/walls/", "art/walls/walls.lst" },
+        { "art/tiles/", "art/tiles/tiles.lst" },
+        { "art/misc/", "art/misc/misc.lst" },
+        { "art/intrface/", "art/intrface/intrface.lst" },
+        { "art/inven/", "art/inven/inven.lst" },
+    };
+
+    if (type > FRM_TYPE::INVENTORY)
+        throw Exception("ResourceManager::FIDtoFrmName - wrong type");
+
+    const auto& typeArtDescription = frmTypeDescription[static_cast<size_t>(type)];
+    auto lst = lstFileType(typeArtDescription.lstFilePath);
     if (baseId >= lst->strings()->size())
     {
-        Logger::error() << "ResourceManager::FIDtoFrmName(unsigned int) - LST size " << lst->strings()->size() << " <= frmID: " << baseId << " frmType: " << (unsigned)type << endl;
+        //Logger::error() << "ResourceManager::FIDtoFrmName(unsigned int) - LST size " << lst->strings()->size() << " <= frmID: " << baseId << " frmType: " << (unsigned)type << endl;
         return std::string();
     }
 
@@ -631,7 +614,7 @@ string ResourceManager::FIDtoFrmName(unsigned int FID)
         frmName.append({ suffix.first, suffix.second, '.' });
         frmName += extensions[ID3];
     }
-    return prefix + frmName;
+    return typeArtDescription.prefixPath + frmName;
 }
 
 Game::Location* ResourceManager::gameLocation(unsigned int number)
