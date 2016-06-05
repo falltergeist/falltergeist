@@ -56,6 +56,8 @@ ImageButton::~ImageButton()
 
 void ImageButton::_init(Type type)
 {
+	_type = type;
+
     switch(type)
     {
         case Type::SMALL_RED_CIRCLE:

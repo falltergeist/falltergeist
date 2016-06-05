@@ -101,7 +101,16 @@ PlayerPanel::PlayerPanel() : UI::Base()
     _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->openGameMenu(); });
 
     // Attack button
+    _isAttackBtnPressed = false;
     _ui.push_back(std::make_shared<ImageButton>(ImageButton::Type::PANEL_ATTACK, position() + Point(267, 25)));
+
+    _ui.back()->mouseDownHandler().add([this](Event::Event* event){
+    		_isAttackBtnPressed = true;
+        });
+
+    _ui.back()->mouseUpHandler().add([this](Event::Event* event){
+    		_isAttackBtnPressed = false;
+        });
 
     // Hit points
     _hitPoints = std::make_shared<SmallCounter>(position() + Point(473, 40));
@@ -210,6 +219,17 @@ Size PlayerPanel::size() const
     return _background->size();
 }
 
+void PlayerPanel::renderHandSlot()
+{
+	if (auto item = Game::getInstance()->player()->currentHandSlot())
+	{
+		auto itemUi = item->inventoryDragUi();
+		Point p = _isAttackBtnPressed ? Point(361, 58) : Point(360, 60);
+		itemUi->setPosition(position() + p - itemUi->size() / 2);
+		itemUi->render();
+	}
+}
+
 void PlayerPanel::render(bool eggTransparency)
 {
     for (auto it = _ui.begin(); it != _ui.end(); ++it)
@@ -218,12 +238,14 @@ void PlayerPanel::render(bool eggTransparency)
     }
 
     // object in hand
-    if (auto item = Game::getInstance()->player()->currentHandSlot())
-    {
-        auto itemUi = item->inventoryDragUi();
-        itemUi->setPosition(position() + Point(360, 60) - itemUi->size() / 2);
-        itemUi->render();
-    }
+    renderHandSlot();
+
+//    if (auto item = Game::getInstance()->player()->currentHandSlot())
+//    {
+//        auto itemUi = item->inventoryDragUi();
+//        itemUi->setPosition(position() + Point(360, 60) - itemUi->size() / 2);
+//        itemUi->render();
+//    }
 }
 
 void PlayerPanel::handle(Event::Event *event)

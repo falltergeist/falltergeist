@@ -95,11 +95,13 @@ public:
     bool opaque(unsigned int x, unsigned int y);
     virtual bool opaque(const Point &pos) override;
 
+    Type getType(){ return _type; }
 
 protected:
     bool _checkboxMode = false; // remember new state after click
     bool _checked = false;
     bool _enabled = true;
+    Type _type;
 
     std::string _downSound;
     std::string _upSound;
