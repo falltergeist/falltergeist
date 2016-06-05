@@ -105,11 +105,11 @@ PlayerPanel::PlayerPanel() : UI::Base()
     _ui.push_back(std::make_shared<ImageButton>(ImageButton::Type::PANEL_ATTACK, position() + Point(267, 25)));
 
     _ui.back()->mouseDownHandler().add([this](Event::Event* event){
-    		_isAttackBtnPressed = true;
+            _isAttackBtnPressed = true;
         });
 
     _ui.back()->mouseUpHandler().add([this](Event::Event* event){
-    		_isAttackBtnPressed = false;
+            _isAttackBtnPressed = false;
         });
 
     // Hit points
@@ -221,13 +221,13 @@ Size PlayerPanel::size() const
 
 void PlayerPanel::renderHandSlot()
 {
-	if (auto item = Game::getInstance()->player()->currentHandSlot())
-	{
-		auto itemUi = item->inventoryDragUi();
-		Point p = _isAttackBtnPressed ? Point(361, 58) : Point(360, 60);
-		itemUi->setPosition(position() + p - itemUi->size() / 2);
-		itemUi->render();
-	}
+    if (auto item = Game::getInstance()->player()->currentHandSlot())
+    {
+        auto itemUi = item->inventoryDragUi();
+        Point p = _isAttackBtnPressed ? Point(361, 58) : Point(360, 60);
+        itemUi->setPosition(position() + p - itemUi->size() / 2);
+        itemUi->render();
+    }
 }
 
 void PlayerPanel::render(bool eggTransparency)
