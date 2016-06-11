@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Graphics/Rect.h"
 #include "../Graphics/Texture.h"
 
 // Third party includes
@@ -49,8 +50,10 @@ void HiddenMask::think()
 {
 }
 
-bool HiddenMask::opaque(const Point &pos) {
-    return Rect::inRect(pos, this->size());
+bool HiddenMask::opaque(const Point &pos)
+{
+    return Graphics::Rect::inRect(pos, this->size());
 }
+
 }
 }

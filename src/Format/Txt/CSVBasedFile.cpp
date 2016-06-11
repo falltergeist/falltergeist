@@ -66,7 +66,7 @@ void CSVBasedFile<ItemType>::_parseText(std::istream& istr)
         {
             _items.push_back(_parseItem(row));
         }
-        catch (std::out_of_range)
+        catch (const std::out_of_range& e)
         {
             // TODO: warnings?
         }

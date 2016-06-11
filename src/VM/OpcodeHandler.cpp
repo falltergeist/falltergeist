@@ -17,49 +17,50 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Related headers
+#include "../VM/OpcodeHandler.h"
+
 // C++ standard includes
 
 // Falltergeist includes
 #include "../Format/Int/File.h"
-#include "../VM/OpcodeHandler.h"
-#include "../VM/VM.h"
-#include "../VM/VMErrorException.h"
 #include "../Logger.h"
+#include "../VM/ErrorException.h"
+#include "../VM/Script.h"
 
 // Third party icnludes
 
 namespace Falltergeist
 {
+    namespace VM
+    {
+        OpcodeHandler::OpcodeHandler(VM::Script* script) : _script(script)
+        {
+            _offset = script->programCounter();
+        }
 
-OpcodeHandler::OpcodeHandler(VM* vm) : _vm(vm)
-{
-    _offset = vm->programCounter();
-}
+        OpcodeHandler::~OpcodeHandler()
+        {
+        }
 
-OpcodeHandler::~OpcodeHandler()
-{
-}
+        void OpcodeHandler::run()
+        {
+            _script->setProgramCounter(_script->programCounter() + 2);
+            _run();
+        }
 
+        void OpcodeHandler::_run()
+        {
+        }
 
-void OpcodeHandler::run()
-{
-    _vm->setProgramCounter(_vm->programCounter() + 2);
-    _run();
-}
+        void OpcodeHandler::_warning(const std::string& message)
+        {
+            Logger::warning("SCRIPT") << message << " at " << _script->script()->filename() << ":0x" << std::hex << _offset << std::endl;
+        }
 
-void OpcodeHandler::_run()
-{
-
-}
-
-void OpcodeHandler::_warning(const std::string& message)
-{
-    Logger::warning("SCRIPT") << message << " at " << _vm->script()->filename() << ":0x" << std::hex << _offset << std::endl;
-}
-
-void OpcodeHandler::_error(const std::string& message)
-{
-    throw VMErrorException(message);
-}
-
+        void OpcodeHandler::_error(const std::string& message)
+        {
+            throw ErrorException(message);
+        }
+    }
 }

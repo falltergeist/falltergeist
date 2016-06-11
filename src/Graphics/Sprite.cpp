@@ -18,21 +18,21 @@
  */
 
 // Related headers
-#include "Sprite.h"
+#include "../Graphics/Sprite.h"
 
 // C++ standard headers
 
 // Falltergeist headers
-#include "AnimatedPalette.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
+#include "../Graphics/AnimatedPalette.h"
+#include "../Graphics/Renderer.h"
+#include "../Graphics/Shader.h"
+#include "../Graphics/TransFlags.h"
 #include "../LocationCamera.h"
 #include "../PathFinding/Hexagon.h"
-#include "Renderer.h"
 #include "../ResourceManager.h"
-#include "Shader.h"
 #include "../State/Location.h"
-#include "../TransFlags.h"
 
 // Third-party includes
 
@@ -93,10 +93,12 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
     vertices.reserve(4);
     UV.reserve(4);
 
-    glm::vec2 vertex_up_left    = glm::vec2( (float)x-1.0, (float)y-1.0);
-    glm::vec2 vertex_up_right   = glm::vec2( (float)(x+width+1.0), (float)y-1.0);
-    glm::vec2 vertex_down_right = glm::vec2( (float)(x+width+1.0), (float)(y+height+1.0));
-    glm::vec2 vertex_down_left  = glm::vec2( (float)x-1.0, (float)(y+height+1.0));
+    x--;
+    y--;
+    glm::vec2 vertex_up_left    = glm::vec2( (float)x, (float)y);
+    glm::vec2 vertex_up_right   = glm::vec2( (float)(x+width), (float)y);
+    glm::vec2 vertex_down_right = glm::vec2( (float)(x+width), (float)(y+height));
+    glm::vec2 vertex_down_left  = glm::vec2( (float)x, (float)(y+height));
 
     vertices.push_back(vertex_up_left   );
     vertices.push_back(vertex_down_left );
@@ -174,12 +176,15 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
         GL_CHECK(_shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->textureWidth(), (float)_texture->textureHeight() )));
     }
 
-    GLint curvao;
-    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-    GLint vao = Game::getInstance()->renderer()->getVAO();
-    if (curvao != vao)
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
     {
-        GL_CHECK(glBindVertexArray(vao));
+        GLint curvao;
+        glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+        GLint vao = Game::getInstance()->renderer()->getVAO();
+        if (curvao != vao)
+        {
+            GL_CHECK(glBindVertexArray(vao));
+        }
     }
 
 
@@ -305,12 +310,15 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
         GL_CHECK(_shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->textureWidth(), (float)_texture->textureHeight() )));
     }
 
-    GLint curvao;
-    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-    GLint vao = Game::getInstance()->renderer()->getVAO();
-    if (curvao != vao)
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
     {
-        GL_CHECK(glBindVertexArray(vao));
+        GLint curvao;
+        glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+        GLint vao = Game::getInstance()->renderer()->getVAO();
+        if (curvao != vao)
+        {
+            GL_CHECK(glBindVertexArray(vao));
+        }
     }
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getVVBO()));
@@ -344,9 +352,10 @@ bool Sprite::opaque(unsigned int x, unsigned int y)
     return _texture->opaque(x+1, y+1);
 }
 
-void Sprite::trans(Falltergeist::TransFlags::Trans trans)
+void Sprite::trans(Graphics::TransFlags::Trans trans)
 {
     _trans=trans;
 }
+
 }
 }

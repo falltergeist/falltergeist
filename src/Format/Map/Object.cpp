@@ -53,12 +53,12 @@ std::vector<Object*>* Object::children()
     return &_children;
 }
 
-unsigned int Object::unknown1()
+unsigned int Object::OID()
 {
     return _unknown1;
 }
 
-void Object::setUnknown1(unsigned int value)
+void Object::setOID(unsigned int value)
 {
     _unknown1 = value;
 }
@@ -73,32 +73,32 @@ void Object::setHexPosition(int value)
     _hexPosition = value;
 }
 
-unsigned int Object::unknown2()
+unsigned int Object::x()
 {
     return _unknown2;
 }
 
-void Object::setUnknown2(unsigned int value)
+void Object::setX(unsigned int value)
 {
     _unknown2 = value;
 }
 
-unsigned int Object::unknown3()
+unsigned int Object::y()
 {
     return _unknown3;
 }
 
-void Object::setUnknown3(unsigned int value)
+void Object::setY(unsigned int value)
 {
     _unknown3 = value;
 }
 
-unsigned int Object::unknown4()
+unsigned int Object::sx()
 {
     return _unknown4;
 }
 
-void Object::setUnknown4(unsigned int value)
+void Object::setSx(unsigned int value)
 {
     _unknown4 = value;
 }
@@ -148,12 +148,12 @@ void Object::setFrmId(unsigned int value)
     _frmId = value;
 }
 
-unsigned int Object::unknown5()
+unsigned int Object::sy()
 {
     return _unknown5;
 }
 
-void Object::setUnknown5(unsigned int value)
+void Object::setSy(unsigned int value)
 {
     _unknown5 = value;
 }
@@ -243,12 +243,12 @@ void Object::setFlags(unsigned int value)
     _flags = value;
 }
 
-unsigned int Object::unknown7()
+unsigned int Object::combatId()
 {
     return _unknown7;
 }
 
-void Object::setUnknown7(unsigned int value)
+void Object::setCombatId(unsigned int value)
 {
     _unknown7 = value;
 }
@@ -293,12 +293,12 @@ void Object::setMapScriptId(int value)
     _mapScriptId = value;
 }
 
-unsigned int Object::unknown10()
+unsigned int Object::outline()
 {
     return _unknown10;
 }
 
-void Object::setUnknown10(unsigned int value)
+void Object::setOutline(unsigned int value)
 {
     _unknown10 = value;
 }
@@ -313,12 +313,12 @@ void Object::setInventorySize(unsigned int value)
     _inventorySize = value;
 }
 
-unsigned int Object::unknown11()
+unsigned int Object::maxInventorySize()
 {
     return _unknown11;
 }
 
-void Object::setUnknown11(unsigned int value)
+void Object::setMaxInventorySize(unsigned int value)
 {
     _unknown11 = value;
 }
@@ -392,6 +392,68 @@ void Object::setAmmount(unsigned int value)
 {
     _ammount = value;
 }
+
+
+int Object::elevatorType()
+{
+    return _elevatorType;
+}
+
+void Object::setElevatorType(int type)
+{
+    _elevatorType = type;
+}
+
+int Object::elevatorLevel()
+{
+    return _elevatorLevel;
+}
+
+void Object::setElevatorLevel(int level)
+{
+    _elevatorLevel = level;
+}
+
+bool Object::opened()
+{
+    return _opened;
+}
+
+void Object::setOpened(bool opened)
+{
+    _opened = opened;
+}
+
+int Object::AIPacket()
+{
+    return _AIPacket;
+}
+
+void Object::setAIPacket(int packet)
+{
+    _AIPacket = packet;
+}
+
+int Object::ammo()
+{
+    return _ammo;
+}
+
+void Object::setAmmo(int ammo)
+{
+    _ammo = ammo;
+}
+
+int Object::ammoPID()
+{
+    return _ammoPID;
+}
+
+void Object::setAmmoPID(int PID)
+{
+    _ammoPID = PID;
+}
+
 
 }
 }

@@ -25,6 +25,8 @@
 // C++ standard includes
 #include <vector>
 #include <algorithm>
+#include <cctype>
+#include <functional>
 
 // Falltergeist includes
 #include "../../Format/Gam/File.h"

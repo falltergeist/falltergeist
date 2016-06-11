@@ -24,6 +24,7 @@ if (WIN32)
 		NAMES glm/glm.hpp
 		PATHS
 		$ENV{PROGRAMFILES}/include
+		${PROJECT_ROOT_DIR}/ext/GLM/include
 		${GLM_ROOT_DIR}/include
 		DOC "The directory where glm/glm.hpp resides")
 else()

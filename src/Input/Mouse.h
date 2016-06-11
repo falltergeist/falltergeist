@@ -23,10 +23,10 @@
 // C++ standard includes
 #include <memory>
 #include <vector>
-#include <UI/Image.h>
 
 // Falltergeist includes
-#include "../Point.h"
+#include "../Graphics/Point.h"
+#include "../UI/Image.h"
 
 // Third party includes
 
@@ -38,6 +38,8 @@ namespace UI
 }
 namespace Input
 {
+
+using Graphics::Point;
 
 class Mouse
 {

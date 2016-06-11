@@ -22,34 +22,31 @@
 
 // C++ standard includes
 #include <cmath>
-#include <ResourceManager.h>
+#include <sys/stat.h>
+#include <memory>
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
-#include "../Point.h"
+#include "../CrossPlatform.h"
 #include "../Event/State.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
+#include "../Graphics/Point.h"
+#include "../Graphics/Shader.h"
+#include "../Graphics/Texture.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
+#include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../State/State.h"
-#include "Shader.h"
-#include "Texture.h"
 
 // Third party includes
 #include <glm/gtc/matrix_transform.hpp>
 #include <SDL_image.h>
-#include <sys/stat.h>
-#include <CrossPlatform.h>
 
 namespace Falltergeist
 {
 namespace Graphics
 {
-
-using namespace Base;
-
 
 Renderer::Renderer(unsigned int width, unsigned int height)
 {
@@ -75,8 +72,10 @@ Renderer::~Renderer()
     GL_CHECK(glDeleteBuffers(1, &_texcoord_vbo));
     GL_CHECK(glDeleteBuffers(1, &_ebo));
 
-    GL_CHECK(glDeleteVertexArrays(1, &_vao));
-
+    if (_renderpath == RenderPath::OGL32)
+    {
+        GL_CHECK(glDeleteVertexArrays(1, &_vao));
+    }
 }
 
 void Renderer::init()
@@ -233,10 +232,13 @@ void Renderer::init()
 
     Logger::info("RENDERER") << "Generating buffers" << std::endl;
 
-    // generate VBOs for verts and tex
-    GL_CHECK(glGenVertexArrays(1, &_vao));
+    if (_renderpath==RenderPath::OGL32)
+    {
+        // generate VBOs for verts and tex
+        GL_CHECK(glGenVertexArrays(1, &_vao));
 
-    GL_CHECK(glBindVertexArray(_vao));
+        GL_CHECK(glBindVertexArray(_vao));
+    }
 
     GL_CHECK(glGenBuffers(1, &_coord_vbo));
     GL_CHECK(glGenBuffers(1, &_texcoord_vbo));
@@ -247,12 +249,10 @@ void Renderer::init()
     GLushort indexes[6] = { 0, 1, 2, 3, 2, 1 };
     GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(GLushort), indexes, GL_STATIC_DRAW));
 
-
     // generate projection matrix
     _MVP = glm::ortho(0.0, (double)_size.width(), (double)_size.height(), 0.0, -1.0, 1.0);
 
     // load egg
-
     _egg = ResourceManager::getInstance()->texture("data/egg.png");
 
 
@@ -272,7 +272,7 @@ void Renderer::think()
             _fadeDone = true;
 
             auto state = Game::getInstance()->topState();
-            state->emitEvent(make_unique<Event::State>("fadedone"), state->fadeDoneHandler());
+            state->emitEvent(std::make_unique<Event::State>("fadedone"), state->fadeDoneHandler());
             return;
         }
         _fadeTimer = ticks;
@@ -348,15 +348,20 @@ void Renderer::screenshot()
     SDL_Surface* output;
 
     int iter = 0;
-    do {
+    do
+    {
         std::string siter = std::to_string(iter);
-        if(siter.size()<3)
+        if(siter.size() < 3)
+        {
             siter.insert(0, 3 - siter.size(), '0');
+        }
         filename = "screenshot" + siter + ".png";
         iter++;
-    } while (CrossPlatform::fileExists(filename) && iter < 1000);
+    }
+    while (CrossPlatform::fileExists(filename) && iter < 1000);
 
-    if (CrossPlatform::fileExists(filename)) {
+    if (CrossPlatform::fileExists(filename))
+    {
         Logger::warning("GAME") << "Too many screenshots" << std::endl;
         return;
     }
@@ -423,23 +428,28 @@ float Renderer::scaleY()
     return _scaleY;
 }
 
-GLuint Renderer::getVAO() {
+GLuint Renderer::getVAO()
+{
     return _vao;
 }
 
-GLuint Renderer::getVVBO() {
+GLuint Renderer::getVVBO()
+{
     return _coord_vbo;
 }
 
-GLuint Renderer::getTVBO() {
+GLuint Renderer::getTVBO()
+{
     return _texcoord_vbo;
 }
 
-glm::mat4 Renderer::getMVP() {
+glm::mat4 Renderer::getMVP()
+{
     return _MVP;
 }
 
-GLuint Renderer::getEBO() {
+GLuint Renderer::getEBO()
+{
     return _ebo;
 }
 
@@ -461,13 +471,15 @@ void Renderer::drawRect(int x, int y, int w, int h, SDL_Color color)
 
     GL_CHECK(ResourceManager::getInstance()->shader("default")->setUniform("MVP", getMVP()));
 
-
-    GLint curvao;
-    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-    GLint vao = getVAO();
-    if (curvao != vao)
+    if (_renderpath==RenderPath::OGL32)
     {
-        GL_CHECK(glBindVertexArray(vao));
+        GLint curvao;
+        glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+        GLint vao = getVAO();
+        if (curvao != vao)
+        {
+            GL_CHECK(glBindVertexArray(vao));
+        }
     }
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getVVBO()));
@@ -502,7 +514,8 @@ int32_t Renderer::maxTextureSize()
     return _maxTexSize;
 }
 
-Texture *Renderer::egg() {
+Texture *Renderer::egg()
+{
     return _egg;
 }
 
@@ -510,5 +523,6 @@ Renderer::RenderPath Renderer::renderPath()
 {
     return _renderpath;
 }
+
 }
 }

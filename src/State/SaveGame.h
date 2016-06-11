@@ -17,40 +17,35 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_SaveGame_H
-#define FALLTERGEIST_SaveGame_H
+#ifndef FALLTERGEIST_STATE_SAVEGAME_H
+#define FALLTERGEIST_STATE_SAVEGAME_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "State.h"
+#include "../State/State.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-namespace State
-{
+    namespace State
+    {
+        class SaveGame : public State
+        {
+            public:
+                SaveGame();
+                ~SaveGame() override;
 
-class SaveGame : public State
-{
-public:
-    SaveGame();
-    ~SaveGame() override;
+                void init() override;
 
-    void init() override;
+                void onDoneButtonClick(Event::Mouse* event);
+                void onCancelButtonClick(Event::Mouse* event);
 
-    void onDoneButtonClick(Event::Mouse* event);
-    void onCancelButtonClick(Event::Mouse* event);
-
-    void onStateActivate(Event::State* event) override;
-    void onStateDeactivate(Event::State* event) override;
-    void onKeyDown(Event::Keyboard* event) override;
-
-private:
-};
-
+                void onStateActivate(Event::State* event) override;
+                void onStateDeactivate(Event::State* event) override;
+                void onKeyDown(Event::Keyboard* event) override;
+        };
+    }
 }
-}
-
-#endif // FALLTERGEIST_SaveGame_H
+#endif // FALLTERGEIST_STATE_SAVEGAME_H

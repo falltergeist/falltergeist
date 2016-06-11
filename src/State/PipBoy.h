@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_PipBoy_H
-#define FALLTERGEIST_PipBoy_H
+#ifndef FALLTERGEIST_STATE_PIPBOY_H
+#define FALLTERGEIST_STATE_PIPBOY_H
 
 // C++ standard includes
 #include "../State/State.h"
@@ -27,22 +27,19 @@
 
 namespace Falltergeist
 {
-namespace State
-{
+    namespace State
+    {
+        class PipBoy : public State
+        {
+            public:
+                PipBoy();
+                ~PipBoy() override;
 
-class PipBoy : public State
-{
-public:
-    PipBoy();
-    ~PipBoy() override;
+                void init() override;
 
-    void init() override;
-
-    void onCloseButtonClick(Event::Mouse* event);
-    void onKeyDown(Event::Keyboard* event) override;
-};
-
+                void onCloseButtonClick(Event::Mouse* event);
+                void onKeyDown(Event::Keyboard* event) override;
+        };
+    }
 }
-}
-
-#endif // FALLTERGEIST_Location_H
+#endif // FALLTERGEIST_STATE_PIPBOY_H

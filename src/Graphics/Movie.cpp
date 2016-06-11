@@ -17,11 +17,18 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ResourceManager.h>
-#include <Game/Game.h>
-#include "Movie.h"
-#include "Renderer.h"
-#include "Shader.h"
+// Related headers
+#include "../Graphics/Movie.h"
+
+// C++ standard includes
+
+// Falltergeist includes
+#include "../Game/Game.h"
+#include "../Graphics/Renderer.h"
+#include "../Graphics/Shader.h"
+#include "../ResourceManager.h"
+
+// Third party includes
 
 namespace Falltergeist
 {
@@ -37,7 +44,9 @@ Movie::Movie()
 Movie::~Movie()
 {
     if (_texture)
+    {
         delete _texture;
+    }
 }
 
 unsigned int Movie::width() const
@@ -93,16 +102,17 @@ void Movie::render(int x, int y)
 
     GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("fade",Game::getInstance()->renderer()->fadeColor()));
 
-    GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("MVP",
-                                                                           Game::getInstance()->renderer()->getMVP()));
+    GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("MVP", Game::getInstance()->renderer()->getMVP()));
 
-
-    GLint curvao;
-    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-    GLint vao = Game::getInstance()->renderer()->getVAO();
-    if (curvao != vao)
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
     {
-        GL_CHECK(glBindVertexArray(vao));
+        GLint curvao;
+        glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+        GLint vao = Game::getInstance()->renderer()->getVAO();
+        if (curvao != vao)
+        {
+            GL_CHECK(glBindVertexArray(vao));
+        }
     }
 
 
@@ -133,7 +143,6 @@ void Movie::render(int x, int y)
 
 //    GL_CHECK(glBindVertexArray(0));
 }
-
 
 }
 }

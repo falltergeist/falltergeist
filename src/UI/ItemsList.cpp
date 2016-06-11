@@ -21,21 +21,22 @@
 #include "../UI/ItemsList.h"
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
 #include "../Audio/Mixer.h"
-#include "../Base/StlFeatures.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
 #include "../Game/ArmorItemObject.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Game/ItemObject.h"
+#include "../Graphics/Point.h"
+#include "../Graphics/Rect.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
-#include "../Point.h"
 #include "../UI/InventoryItem.h"
 
 // Third party includes
@@ -45,7 +46,7 @@ namespace Falltergeist
 namespace UI
 {
 
-using namespace Base;
+using Graphics::Rect;
 
 ItemsList::ItemsList(const Point& pos) : Falltergeist::UI::Base(pos)
 {
@@ -133,7 +134,7 @@ void ItemsList::onMouseDragStop(Event::Mouse* event)
         Game::getInstance()->mixer()->playACMSound("sound/sfx/iputdown.acm");
         _draggedItem->setOffset(0, 0);
         _draggedItem->setType(_type);
-        auto itemevent = make_unique<Event::Mouse>(*event, "itemdragstop");
+        auto itemevent = std::make_unique<Event::Mouse>(*event, "itemdragstop");
         itemevent->setTarget(this);
         emitEvent(std::move(itemevent), itemDragStopHandler());
     }
@@ -204,6 +205,7 @@ void ItemsList::addItem(InventoryItem* item, unsigned int amount)
 {
     _items->push_back(item->item());
     this->update();
+    emitEvent(std::make_unique<Event::Event>("itemsListModified"), itemsListModifiedHandler());
 }
 
 void ItemsList::removeItem(InventoryItem* item, unsigned int amount)
@@ -218,6 +220,7 @@ void ItemsList::removeItem(InventoryItem* item, unsigned int amount)
         }
     }
     this->update();
+    emitEvent(std::make_unique<Event::Event>("itemsListModified"), itemsListModifiedHandler());
 }
 
 bool ItemsList::canScrollUp()
@@ -242,9 +245,24 @@ void ItemsList::scrollDown()
     this->update();
 }
 
+unsigned int ItemsList::slotsNumber()
+{
+    return _slotsNumber;
+}
+
+unsigned int ItemsList::slotOffset()
+{
+    return _slotOffset;
+}
+
 Event::MouseHandler& ItemsList::itemDragStopHandler()
 {
     return _itemDragStopHandler;
+}
+
+Event::Handler& ItemsList::itemsListModifiedHandler()
+{
+    return _itemsListModifiedHandler;
 }
 
 bool ItemsList::opaque(const Point &pos) {

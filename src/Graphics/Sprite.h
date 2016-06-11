@@ -20,12 +20,17 @@
 #ifndef FALLTERGEIST_GRAPHICS_SPRITE_H
 #define FALLTERGEIST_GRAPHICS_SPRITE_H
 
+// C++ standard includes
 #include <string>
-#include <Point.h>
-#include <TransFlags.h>
-#include "Texture.h"
+
+// Falltergeist includes
+#include "../Graphics/Point.h"
+#include "../Graphics/Shader.h"
+#include "../Graphics/Texture.h"
+#include "../Graphics/TransFlags.h"
 #include "../Format/Frm/File.h"
-#include "Shader.h"
+
+// Third party includes
 
 namespace Falltergeist
 {
@@ -47,11 +52,11 @@ public:
     unsigned int height() const;
     Size size() const;
     bool opaque(unsigned int x, unsigned int y);
-    void trans(Falltergeist::TransFlags::Trans _trans);
+    void trans(Graphics::TransFlags::Trans _trans);
 
 private:
     Texture* _texture;
-    Falltergeist::TransFlags::Trans _trans = Falltergeist::TransFlags::Trans::NONE;
+    Graphics::TransFlags::Trans _trans = Graphics::TransFlags::Trans::NONE;
 
     GLint _uniformTex;
     GLint _uniformTexSize;
@@ -72,6 +77,4 @@ private:
 
 }
 }
-
-
 #endif //FALLTERGEIST_GRAPHICS_SPRITE_H

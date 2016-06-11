@@ -25,7 +25,7 @@
 
 // Falltergeist includes
 #include "../Base/Iterators.h"
-#include "../Point.h"
+#include "../Graphics/Point.h"
 
 // Third party includes
 
@@ -43,7 +43,7 @@ public:
     Base::vector_ptr_decorator<Hexagon> hexagons();
 
     unsigned int distance(Hexagon* from, Hexagon* to);
-    Hexagon* hexagonAt(const Point& pos);
+    Hexagon* hexagonAt(const Graphics::Point& pos);
     Hexagon* at(size_t index);
     std::vector<Hexagon*> findPath(Hexagon* from, Hexagon* to);
     Hexagon* hexInDirection(Hexagon* from, unsigned short rotation, unsigned int distance);

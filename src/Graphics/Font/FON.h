@@ -20,14 +20,21 @@
 #ifndef FALLTERGEIST_GRAPHICS_FONT_FON_H
 #define FALLTERGEIST_GRAPHICS_FONT_FON_H
 
+// C++ standard includes
+
+// Falltergeist includes
 #include "../../Format/Fon/File.h"
-#include "../Font.h"
+#include "../../Graphics/Font.h"
 
-namespace Falltergeist {
-namespace Graphics {
+// Third party includes
 
+namespace Falltergeist
+{
+namespace Graphics
+{
 
-class FON : public Graphics::Font {
+class FON : public Graphics::Font
+{
 public:
     FON(const std::string& filename);
     ~FON();
@@ -43,8 +50,6 @@ private:
     Format::Fon::File* _fon = nullptr;
 };
 
-
 }
 }
-
 #endif //FALLTERGEIST_GRAPHICS_FONT_FON_H

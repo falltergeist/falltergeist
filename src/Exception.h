@@ -31,7 +31,7 @@
 namespace Falltergeist
 {
 
-class Exception : std::exception
+class Exception : public std::exception
 {
 private:
     std::string _message;

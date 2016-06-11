@@ -28,16 +28,14 @@
 
 namespace Falltergeist
 {
-namespace Event
-{
+    namespace Event
+    {
+        State::State(const std::string& name) : Event(name)
+        {
+        }
 
-State::State(const std::string& name) : Event(name)
-{
-}
-
-State::~State()
-{
-}
-
-}
+        State::~State()
+        {
+        }
+    }
 }

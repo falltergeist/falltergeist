@@ -20,14 +20,22 @@
 #ifndef FALLTERGEIST_GRAPHICS_FONT_AAF_H
 #define FALLTERGEIST_GRAPHICS_FONT_AAF_H
 
+// C++ standard includes
+
+// Falltergeist includes
 #include "../../Format/Aaf/File.h"
-#include "../Font.h"
+#include "../../Graphics/Font.h"
 
-namespace Falltergeist {
-namespace Graphics {
+// Third party includes
 
+namespace Falltergeist
+{
+namespace Graphics
+{
 
-class AAF : public Graphics::Font {
+class AAF : public Graphics::Font
+{
+
 public:
     AAF(const std::string& filename);
     ~AAF();
@@ -44,8 +52,6 @@ private:
     Format::Aaf::File* _aaf = nullptr;
 };
 
-
 }
 }
-
 #endif //FALLTERGEIST_GRAPHICS_FONT_AAF_H

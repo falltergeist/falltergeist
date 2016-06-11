@@ -25,12 +25,16 @@
 #include <iostream>
 
 // Falltergeist includes
-#include "Point.h"
+#include "Graphics/Point.h"
+#include "Graphics/Size.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+
+using Graphics::Point;
+using Graphics::Size;
 
 class Logger
 {

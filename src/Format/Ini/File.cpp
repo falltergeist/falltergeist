@@ -52,7 +52,7 @@ Section& File::section(const std::string &name)
     if (it == _sectionIdxMap.end())
     {
         auto idx = _sections.size();
-        _sections.push_back(std::move(Section(name)));
+        _sections.emplace_back(name);
         _sectionIdxMap[name] = idx;
         return _sections.at(idx);
     }

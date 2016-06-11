@@ -18,18 +18,18 @@
  */
 
 // C++ standard includes
-
 #include <algorithm>
 #include <cerrno>
 #include <cstdlib>
 #include <cstring>
-#include <dirent.h>
 #include <fstream>
 #include <stdexcept>
-#include <SDL.h>
+#include <cctype>
+#include <chrono>
 
 #if defined(__unix__) || defined(__APPLE__)
     #include <sys/param.h>
+    #include <dirent.h>
 #endif
 
 #if defined(__linux__)
@@ -37,17 +37,21 @@
 #endif
 
 #if defined (__APPLE__) || defined(BSD)
-    #include <sys/ucred.h>
     #include <sys/mount.h>
+    #include <sys/ucred.h>
 #endif
 
 #if defined(_WIN32) || defined(WIN32)
-    #include <windows.h>
     #include <shlobj.h>
+    #include <windows.h>
 #elif defined(__unix__) || defined(__APPLE__)
     #include <sys/stat.h>
     #include <sys/types.h>
     #include <unistd.h>
+#endif
+
+#if defined(__MACH__)
+    #include <mach/mach_time.h>
 #endif
 
 // Falltergeist includes
@@ -56,6 +60,7 @@
 #include "Logger.h"
 
 // Third party includes
+#include <SDL.h>
 
 namespace Falltergeist
 {
@@ -109,6 +114,11 @@ std::string CrossPlatform::getHomeDirectory()
 std::string CrossPlatform::getExecutableDirectory()
 {
     char* buffer=SDL_GetBasePath();
+    if (buffer == NULL)
+    {
+        Logger::warning() << "SDL_GetBasePath() not able to obtain a path on this platform" << std::endl;
+        return "./";
+    }
     std::string path(buffer);
     SDL_free(buffer);
     return path;
@@ -182,7 +192,7 @@ std::string CrossPlatform::findFalloutDataPath()
         std::vector<std::string> cdDrives = getCdDrivePaths();
         directories.insert(directories.end(), cdDrives.begin(), cdDrives.end());
     }
-    catch (Exception e)
+    catch (const Exception& e)
     {
         Logger::error() << e.what() << std::endl;
     }
@@ -251,6 +261,39 @@ std::vector<std::string> CrossPlatform::findFalloutDataFiles()
 {
     if (_dataFiles.size()) return _dataFiles;
 
+#if defined(_WIN32) || defined(WIN32) // Windows
+    HANDLE hFind = INVALID_HANDLE_VALUE;
+    WIN32_FIND_DATA ffd;
+    std::string path = CrossPlatform::findFalloutDataPath()+"*";
+    _dataFiles = _necessaryDatFiles;
+    hFind = FindFirstFile(path.c_str(), &ffd);
+
+    if (INVALID_HANDLE_VALUE == hFind)
+    {
+      return _dataFiles;
+    }
+
+    do {
+        if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+        {
+            continue;
+        }
+        else
+        {
+            std::string filename(ffd.cFileName);
+            std::transform(filename.begin(), filename.end(), filename.begin(), ::tolower);
+            if (filename.length() > 4) // exclude . and ..
+            {
+                std::string ext = filename.substr(filename.size() - 4, 4);
+                if (ext == ".dat")
+                {
+                    if (filename.length() == 12 && filename.substr(0, 5) == "patch")
+                        _dataFiles.insert(_dataFiles.begin(),filename);
+                }
+            }
+        }
+    } while (FindNextFile(hFind, &ffd) != 0);
+#else
     // looking for all available dat files in directory
     DIR *pxDir = opendir(CrossPlatform::findFalloutDataPath().c_str());
     if (!pxDir)
@@ -262,6 +305,7 @@ std::vector<std::string> CrossPlatform::findFalloutDataFiles()
     while ((pxItem = readdir(pxDir)))
     {
         std::string filename(pxItem->d_name);
+        std::transform(filename.begin(), filename.end(), filename.begin(), ::tolower);
         if (filename.length() > 4) // exclude . and ..
         {
             std::string ext = filename.substr(filename.size() - 4, 4);
@@ -273,7 +317,7 @@ std::vector<std::string> CrossPlatform::findFalloutDataFiles()
         }
     }
     closedir(pxDir);
-
+#endif
     return _dataFiles;
 }
 
@@ -400,12 +444,32 @@ std::vector<std::string> CrossPlatform::getDataPaths()
     if(pxDir)
     {
         _dataPaths.push_back(sharedir.c_str());
+        closedir(pxDir);
     }
-    closedir(pxDir);
 #else
     _dataPaths.push_back(getConfigPath());
 #endif
     return _dataPaths;
+}
+
+uint32_t CrossPlatform::microtime()
+{
+#if defined(__MACH__)
+    static mach_timebase_info_data_t timebase;
+    if ( timebase.denom == 0 ) {
+        (void) mach_timebase_info(&timebase);
+    }
+
+    uint64_t time = mach_absolute_time();
+    return ((double)time * (double)timebase.numer) / ((double)timebase.denom);
+#elif defined(_WIN32) || defined(WIN32)
+    auto now = std::chrono::high_resolution_clock::now();
+    return std::chrono::time_point_cast<std::chrono::nanoseconds>(now).time_since_epoch().count();
+#else
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return ts.tv_nsec;
+#endif
 }
 
 }

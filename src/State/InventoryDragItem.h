@@ -17,40 +17,36 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_InventoryDragItem_H
-#define FALLTERGEIST_InventoryDragItem_H
+#ifndef FALLTERGEIST_STATE_INVENTORYDRAGITEM_H
+#define FALLTERGEIST_STATE_INVENTORYDRAGITEM_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "State.h"
+#include "../State/State.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-namespace UI
-{
-    class ImageList;
+    namespace UI
+    {
+        class ImageList;
+    }
+    namespace State
+    {
+        class InventoryDragItem : public State
+        {
+            public:
+                InventoryDragItem(UI::ImageList* itemUi);
+                ~InventoryDragItem() override;
+
+                void init() override;
+                void handle(Event::Event* event) override;
+
+            protected:
+                UI::ImageList* _itemUi = nullptr;
+        };
+    }
 }
-
-namespace State
-{
-
-class InventoryDragItem : public State
-{
-public:
-    InventoryDragItem(UI::ImageList* itemUi);
-    ~InventoryDragItem() override;
-
-    void init() override;
-    void handle(Event::Event* event) override;
-
-protected:
-    UI::ImageList* _itemUi = nullptr;
-};
-
-}
-}
-
-#endif // FALLTERGEIST_InventoryDragItem_H
+#endif // FALLTERGEIST_STATE_INVENTORYDRAGITEM_H

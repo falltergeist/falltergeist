@@ -21,18 +21,18 @@
 #define FALLTERGEIST_GRAPHICS_RENDERER_H
 
 // C++ standard includes
-#include <vector>
 #include <memory>
 #include <string>
+#include <vector>
 
 // Falltergeist includes
-#include "../Point.h"
+#include "../Graphics/Point.h"
+#include "../Graphics/Size.h"
 
 // Third party includes
-//#define GL_GLEXT_PROTOTYPES
-#include <SDL.h>
-#include <GL/glew.h>
 #include <glm/glm.hpp>
+#include <GL/glew.h>
+#include <SDL.h>
 
 namespace Falltergeist
 {
@@ -53,7 +53,8 @@ class Texture;
 class Renderer
 {
 public:
-    enum class RenderPath {
+    enum class RenderPath
+    {
         OGL21 = 0,
         OGL32,
         GLES1,

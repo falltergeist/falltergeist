@@ -17,38 +17,35 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_PlayerEditAlert_H
-#define FALLTERGEIST_PlayerEditAlert_H
+#ifndef FALLTERGEIST_STATE_PLAYEREDITALERT_H
+#define FALLTERGEIST_STATE_PLAYEREDITALERT_H
 
 // C++ standard includes
 #include <string>
 
 // Falltergeist includes
-#include "State.h"
+#include "../State/State.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-namespace State
-{
+    namespace State
+    {
+        class PlayerEditAlert : public State
+        {
+            public:
+                PlayerEditAlert();
+                ~PlayerEditAlert() override;
 
-class PlayerEditAlert : public State
-{
-protected:
-    std::string _message;
-public:
-    PlayerEditAlert();
-    ~PlayerEditAlert() override;
+                void setMessage(const std::string& message);
 
-    void setMessage(const std::string& message);
+                void init() override;
 
-    void init() override;
-
-    void onDoneButtonClick(Event::Mouse* event);
-};
-
+                void onDoneButtonClick(Event::Mouse* event);
+            protected:
+                std::string _message;
+        };
+    }
 }
-}
-
-#endif // FALLTERGEIST_PlayerEditAlert_H
+#endif // FALLTERGEIST_STATE_PLAYEREDITALERT_H

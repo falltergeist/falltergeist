@@ -23,12 +23,11 @@
 // C++ standard includes
 #include <memory>
 #include <string>
-#include <UI/Base.h>
-#include <TransFlags.h>
 
 // Falltergeist includes
 #include "../Event/EventTarget.h"
-#include "TransFlags.h"
+#include "../Graphics/TransFlags.h"
+#include "../UI/Base.h"
 
 // Third party includes
 
@@ -49,9 +48,13 @@ namespace UI
     class Image;
     class TextArea;
 }
+namespace VM
+{
+    class Script;
+}
+
 class Hexagon;
 class Location;
-class VM;
 
 namespace Game
 {
@@ -130,6 +133,10 @@ public:
     int FID() const;
     virtual void setFID(int value);
 
+    // script ID
+    int SID() const;
+    virtual void setSID(int value);
+
     // object current elevation index on the map (0-based)
     int elevation() const;
     void setElevation(int value);
@@ -147,9 +154,14 @@ public:
     std::string description() const;
     void setDescription(const std::string& value);
 
+    // object name from scrname.msg
+    virtual std::string scrName() const;
+    void setScrName(const std::string& value);
+
+
     // script entity associated with the object
-    VM* script() const;
-    void setScript(VM* script);
+    VM::Script* script() const;
+    void setScript(VM::Script* script);
 
     /**
      * @brief Handles OS events coming from the State::handle().
@@ -195,9 +207,9 @@ public:
     void setInRender(bool value);
 
     // object translucency mode
-    Falltergeist::TransFlags::Trans trans() const;
+    Graphics::TransFlags::Trans trans() const;
     // sets object translucency mode
-    void setTrans(Falltergeist::TransFlags::Trans value);
+    void setTrans(Graphics::TransFlags::Trans value);
 
     // request description of the object to console, may call "description_p_proc" procedure of underlying script entity
     virtual void description_p_proc();
@@ -213,7 +225,6 @@ public:
     virtual void map_update_p_proc();
     // call "pickup_p_proc" of the script entity (when picking up item object)
     virtual void pickup_p_proc(CritterObject* pickedUpBy);
-    virtual void spatial_p_proc();
     // perform "use" action, may call "use_p_proc" of the underlying script
     virtual void use_p_proc(CritterObject* usedBy);
     // perform "use object on" action, may call "use_obj_on_p_proc" procedure
@@ -236,6 +247,9 @@ public:
     bool flat() const;
     virtual void setFlat(bool value);
 
+    unsigned int defaultFrame();
+    virtual void setDefaultFrame(unsigned int frame);
+
 protected:
     bool _canWalkThru = true;
     bool _canLightThru = false;
@@ -245,22 +259,26 @@ protected:
     Type _type;
     int _PID = -1;
     int _FID = -1;
+    int _SID = -1;
     int _elevation = 0;
     Orientation _orientation;
     std::string _name;
+    std::string _scrName;
     std::string _description;
-    std::unique_ptr<VM> _script;
+    std::unique_ptr<VM::Script> _script;
     std::unique_ptr<UI::Base> _ui;
     Hexagon* _hexagon = nullptr;
     virtual void _generateUi();
     void addUIEventHandlers();
     std::unique_ptr<UI::TextArea> _floatMessage;
     bool _inRender = false;
-    Falltergeist::TransFlags::Trans _trans = Falltergeist::TransFlags::Trans::DEFAULT;
+    Graphics::TransFlags::Trans _trans = Graphics::TransFlags::Trans::DEFAULT;
     Orientation _lightOrientation;
     unsigned int _lightIntensity = 0;
     unsigned int _lightRadius = 0;
     virtual bool _useEggTransparency();
+
+    unsigned int _defaultFrame;
 
 private:
     bool _isIntersectsWithEgg();

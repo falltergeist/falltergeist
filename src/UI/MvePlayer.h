@@ -75,7 +75,7 @@ private:
     uint32_t _audioBufSize = 0;
     uint32_t _samplesReady = 0;
 
-    struct timespec _lastts;
+    uint32_t _lastts;
     SDL_Surface* _currentBuf = NULL;
     SDL_Surface* _backBuf = NULL;
 

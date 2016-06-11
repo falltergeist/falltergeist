@@ -28,8 +28,8 @@
 #include "../Format/Frm/Direction.h"
 #include "../Graphics/Sprite.h"
 #include "../Graphics/Texture.h"
+#include "../Graphics/TransFlags.h"
 #include "../ResourceManager.h"
-#include "../TransFlags.h"
 
 // Third party includes
 

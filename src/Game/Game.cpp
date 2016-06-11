@@ -24,10 +24,10 @@
 #include <algorithm>
 #include <sstream>
 #include <ctime>
+#include <memory>
 
 // Falltergeist includes
 #include "../Audio/Mixer.h"
-#include "../Base/StlFeatures.h"
 #include "../CrossPlatform.h"
 #include "../Event/Dispatcher.h"
 #include "../Event/State.h"
@@ -78,10 +78,10 @@ void Game::init(std::unique_ptr<Settings> settings)
 
     _settings = std::move(settings);
 
-    _vfs = make_unique<VFS::VFS>();
-    _eventDispatcher = make_unique<Event::Dispatcher>();
+    _vfs = std::make_unique<VFS::VFS>();
+    _eventDispatcher = std::make_unique<Event::Dispatcher>();
 
-    _renderer = make_unique<Graphics::Renderer>(_settings->screenWidth(), _settings->screenHeight());
+    _renderer = std::make_unique<Graphics::Renderer>(_settings->screenWidth(), _settings->screenHeight());
 
     Logger::info("GAME") << CrossPlatform::getVersion() << std::endl;
     Logger::info("GAME") << "Opensource Fallout 2 game engine" << std::endl;
@@ -96,21 +96,21 @@ void Game::init(std::unique_ptr<Settings> settings)
     std::string version = CrossPlatform::getVersion();
     renderer()->setCaption(version.c_str());
 
-    _mixer = make_unique<Audio::Mixer>();
+    _mixer = std::make_unique<Audio::Mixer>();
     _mixer->setMusicVolume(_settings->musicVolume());
-    _mouse = make_unique<Input::Mouse>();
-    _fpsCounter = make_unique<UI::FpsCounter>(renderer()->width() - 42, 2);
+    _mouse = std::make_unique<Input::Mouse>();
+    _fpsCounter = std::make_unique<UI::FpsCounter>(renderer()->width() - 42, 2);
     _fpsCounter->setWidth(42);
     _fpsCounter->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
     version += " " + to_string(renderer()->size());
 
-    _falltergeistVersion = make_unique<UI::TextArea>(version, 3, renderer()->height() - 10);
-    _mousePosition = make_unique<UI::TextArea>("", renderer()->width() - 55, 14);
+    _falltergeistVersion = std::make_unique<UI::TextArea>(version, 3, renderer()->height() - 10);
+    _mousePosition = std::make_unique<UI::TextArea>("", renderer()->width() - 55, 14);
     _mousePosition->setWidth(55);
     _mousePosition->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
-    _animatedPalette = make_unique<Graphics::AnimatedPalette>();
-    _currentTime = make_unique<UI::TextArea>("", renderer()->size() - Point(150, 10));
+    _animatedPalette = std::make_unique<Graphics::AnimatedPalette>();
+    _currentTime = std::make_unique<UI::TextArea>("", renderer()->size() - Point(150, 10));
     _currentTime->setWidth(150);
     _currentTime->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
@@ -136,21 +136,28 @@ void Game::pushState(State::State* state)
 {
     _states.push_back(std::unique_ptr<State::State>(state));
     if (!state->initialized()) state->init();
-    state->emitEvent(make_unique<Event::State>("push"), state->pushHandler());
+    state->emitEvent(std::make_unique<Event::State>("push"), state->pushHandler());
     state->setActive(true);
-    state->emitEvent(make_unique<Event::State>("activate"), state->activateHandler());
+    state->emitEvent(std::make_unique<Event::State>("activate"), state->activateHandler());
 }
 
-void Game::popState()
+void Game::popState(bool doDelete)
 {
     if (_states.size() == 0) return;
 
     State::State* state = _states.back().get();
-    _statesForDelete.emplace_back(std::move(_states.back()));
+    if (doDelete)
+    {
+        _statesForDelete.emplace_back(std::move(_states.back()));
+    }
+    else
+    {
+        _states.back().release();
+    }
     _states.pop_back();
     state->setActive(false);
-    state->emitEvent(make_unique<Event::State>("deactivate"), state->deactivateHandler());
-    state->emitEvent(make_unique<Event::State>("pop"), state->popHandler());
+    state->emitEvent(std::make_unique<Event::State>("deactivate"), state->deactivateHandler());
+    state->emitEvent(std::make_unique<Event::State>("pop"), state->popHandler());
 }
 
 void Game::setState(State::State* state)
@@ -277,7 +284,7 @@ std::vector<State::State*> Game::_getActiveStates()
         auto state = it->get();
         if (!state->active())
         {
-            state->emitEvent(make_unique<Event::State>("activate"), state->activateHandler());
+            state->emitEvent(std::make_unique<Event::State>("activate"), state->activateHandler());
             state->setActive(true);
         }
         subset.push_back(state);
@@ -293,7 +300,7 @@ std::vector<State::State*> Game::_getActiveStates()
         auto state = it->get();
         if (state->active())
         {
-            state->emitEvent(make_unique<Event::State>("deactivate"), state->deactivateHandler());
+            state->emitEvent(std::make_unique<Event::State>("deactivate"), state->deactivateHandler());
             state->setActive(false);
         }
     }
@@ -321,7 +328,7 @@ std::unique_ptr<Event::Event> Game::_createEventFromSDL(const SDL_Event& sdlEven
         case SDL_MOUSEBUTTONUP:
         {
             SDL_Keymod mods = SDL_GetModState();
-            auto mouseEvent = make_unique<Mouse>((sdlEvent.type == SDL_MOUSEBUTTONDOWN) ? Mouse::Type::BUTTON_DOWN : Mouse::Type::BUTTON_UP);
+            auto mouseEvent = std::make_unique<Mouse>((sdlEvent.type == SDL_MOUSEBUTTONDOWN) ? Mouse::Type::BUTTON_DOWN : Mouse::Type::BUTTON_UP);
             mouseEvent->setPosition({sdlEvent.button.x, sdlEvent.button.y});
             switch (sdlEvent.button.button)
             {
@@ -348,14 +355,14 @@ std::unique_ptr<Event::Event> Game::_createEventFromSDL(const SDL_Event& sdlEven
         }
         case SDL_MOUSEMOTION:
         {
-            auto mouseEvent = make_unique<Event::Mouse>(Mouse::Type::MOVE);
+            auto mouseEvent = std::make_unique<Event::Mouse>(Mouse::Type::MOVE);
             mouseEvent->setPosition({sdlEvent.motion.x, sdlEvent.motion.y});
             mouseEvent->setOffset({sdlEvent.motion.xrel,sdlEvent.motion.yrel});
             return std::move(mouseEvent);
         }
         case SDL_KEYDOWN:
         {
-            auto keyboardEvent = make_unique<Event::Keyboard>(Keyboard::Type::KEY_DOWN);
+            auto keyboardEvent = std::make_unique<Event::Keyboard>(Keyboard::Type::KEY_DOWN);
             keyboardEvent->setKeyCode(sdlEvent.key.keysym.sym);
             keyboardEvent->setAltPressed(sdlEvent.key.keysym.mod & KMOD_ALT);
             keyboardEvent->setShiftPressed(sdlEvent.key.keysym.mod & KMOD_SHIFT);
@@ -364,7 +371,7 @@ std::unique_ptr<Event::Event> Game::_createEventFromSDL(const SDL_Event& sdlEven
         }
         case SDL_KEYUP:
         {
-            auto keyboardEvent = make_unique<Event::Keyboard>(Keyboard::Type::KEY_UP);
+            auto keyboardEvent = std::make_unique<Event::Keyboard>(Keyboard::Type::KEY_UP);
             keyboardEvent->setKeyCode(sdlEvent.key.keysym.sym);
             keyboardEvent->setAltPressed(sdlEvent.key.keysym.mod & KMOD_ALT);
             keyboardEvent->setShiftPressed(sdlEvent.key.keysym.mod & KMOD_SHIFT);

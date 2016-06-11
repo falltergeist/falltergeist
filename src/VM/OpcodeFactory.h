@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_OPCODEFACTORY_H
-#define FALLTERGEIST_OPCODEFACTORY_H
+#ifndef FALLTERGEIST_VM_OPCODEFACTORY_H
+#define FALLTERGEIST_VM_OPCODEFACTORY_H
 
 // C++ standard includes
 #include <memory>
@@ -30,13 +30,15 @@
 
 namespace Falltergeist
 {
-class VM;
+    namespace VM
+    {
+        class Script;
 
-class OpcodeFactory
-{
-public:
-    static std::unique_ptr<OpcodeHandler> createOpcode(unsigned int number, VM* vm);
-};
-
+        class OpcodeFactory
+        {
+            public:
+                static std::unique_ptr<OpcodeHandler> createOpcode(unsigned int number, VM::Script* script);
+        };
+    }
 }
-#endif // FALLTERGEIST_OPCODEFACTORY_H
+#endif // FALLTERGEIST_VM_OPCODEFACTORY_H

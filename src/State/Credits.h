@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_CREDITS_H
-#define FALLTERGEIST_CREDITS_H
+#ifndef FALLTERGEIST_STATE_CREDITS_H
+#define FALLTERGEIST_STATE_CREDITS_H
 
 // C++ standard includes
 
@@ -29,32 +29,29 @@
 
 namespace Falltergeist
 {
-namespace UI
-{
-    class TextArea;
+    namespace UI
+    {
+        class TextArea;
+    }
+    namespace State
+    {
+        class Credits : public State
+        {
+            public:
+                Credits();
+                ~Credits() override;
+
+                void init() override;
+                void think() override;
+                void handle(Event::Event* event) override;
+
+                void onCreditsFinished();
+                void onCreditsFadeDone(Event::State* event);
+                void onStateActivate(Event::State* event) override;
+            private:
+                std::vector<UI::TextArea*> _lines;
+                unsigned long int _lastTicks;
+        };
+    }
 }
-namespace State
-{
-
-class Credits : public State
-{
-public:
-    Credits();
-    ~Credits() override;
-
-    void init() override;
-    void think() override;
-    void handle(Event::Event* event) override;
-
-    void onCreditsFinished();
-    void onCreditsFadeDone(Event::State* event);
-    void onStateActivate(Event::State* event) override;
-private:
-    std::vector<UI::TextArea*> _lines;
-    unsigned long int _lastTicks;
-};
-
-}
-}
-
-#endif // FALLTERGEIST_CREDITS_H
+#endif // FALLTERGEIST_STATE_CREDITS_H

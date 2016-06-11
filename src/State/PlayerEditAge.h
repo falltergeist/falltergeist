@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_PlayerEditAge_H
-#define FALLTERGEIST_PlayerEditAge_H
+#ifndef FALLTERGEIST_STATE_PLAYEREDITAGE_H
+#define FALLTERGEIST_STATE_PLAYEREDITAGE_H
 
 // C++ standard includes
 
@@ -29,36 +29,32 @@
 
 namespace Falltergeist
 {
-namespace UI
-{
-    class BigCounter;
+    namespace UI
+    {
+        class BigCounter;
+    }
+    namespace State
+    {
+        class PlayerEditAge : public State
+        {
+            public:
+                PlayerEditAge();
+                ~PlayerEditAge() override;
+
+                void init() override;
+
+                void onIncButtonClick(Event::Mouse* event);
+                void onDecButtonClick(Event::Mouse* event);
+                void onDoneButtonClick(Event::Mouse* event);
+                void doInc();
+                void doDec();
+                void doDone();
+                void doBack();
+                void onKeyDown(Event::Keyboard* event) override;
+
+            protected:
+                UI::BigCounter* _counter = nullptr;
+        };
+    }
 }
-
-namespace State
-{
-
-class PlayerEditAge : public State
-{
-public:
-    PlayerEditAge();
-    ~PlayerEditAge() override;
-
-    void init() override;
-
-    void onIncButtonClick(Event::Mouse* event);
-    void onDecButtonClick(Event::Mouse* event);
-    void onDoneButtonClick(Event::Mouse* event);
-    void doInc();
-    void doDec();
-    void doDone();
-    void doBack();
-    void onKeyDown(Event::Keyboard* event) override;
-
-protected:
-    UI::BigCounter* _counter = nullptr;
-};
-
-}
-}
-
-#endif // FALLTERGEIST_PlayerEditAge_H
+#endif // FALLTERGEIST_STATE_PLAYEREDITAGE_H

@@ -18,23 +18,23 @@
  */
 
 // Related headers
-#include "../UI/Animation.h"
 #include "../UI/Base.h"
 
 // C++ standard includes
 #include <algorithm>
+#include <memory>
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../Game/Game.h"
 #include "../Game/DudeObject.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
+#include "../Graphics/TransFlags.h"
 #include "../LocationCamera.h"
 #include "../PathFinding/Hexagon.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
-#include "TransFlags.h"
+#include "../UI/Animation.h"
 
 // Third party includes
 
@@ -187,12 +187,12 @@ void Base::handle(Event::Event* event)
         {
             case Event::Keyboard::Type::KEY_UP:
             {
-                emitEvent(make_unique<Event::Keyboard>(*keyboardEvent), keyUpHandler());
+                emitEvent(std::make_unique<Event::Keyboard>(*keyboardEvent), keyUpHandler());
                 break;
             }
             case Event::Keyboard::Type::KEY_DOWN:
             {
-                emitEvent(make_unique<Event::Keyboard>(*keyboardEvent), keyDownHandler());
+                emitEvent(std::make_unique<Event::Keyboard>(*keyboardEvent), keyDownHandler());
                 break;
             }
         }
@@ -201,6 +201,7 @@ void Base::handle(Event::Event* event)
 
 void Base::handle(Event::Mouse* mouseEvent)
 {
+    if(!_visible) return;
     using Mouse = Event::Mouse;
     Point relPos = mouseEvent->position() - this->position();
 
@@ -212,24 +213,24 @@ void Base::handle(Event::Mouse* mouseEvent)
             {
                 if (_leftButtonPressed)
                 {
-                    emitEvent(make_unique<Mouse>(*mouseEvent, _drag ? "mousedrag" : "mousedragstart"),
+                    emitEvent(std::make_unique<Mouse>(*mouseEvent, _drag ? "mousedrag" : "mousedragstart"),
                               _drag ? mouseDragHandler() : mouseDragStartHandler());
                     _drag = true;
                 }
                 if (!_hovered)
                 {
                     _hovered = true;
-                    emitEvent(make_unique<Mouse>(*mouseEvent, "mousein"), mouseInHandler());
+                    emitEvent(std::make_unique<Mouse>(*mouseEvent, "mousein"), mouseInHandler());
                 }
                 else
                 {
-                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousemove"), mouseMoveHandler());
+                    emitEvent(std::make_unique<Event::Mouse>(*mouseEvent, "mousemove"), mouseMoveHandler());
                 }
                 break;
             }
             case Mouse::Type::BUTTON_DOWN:
             {
-                emitEvent(make_unique<Event::Mouse>(*mouseEvent), mouseDownHandler());
+                emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), mouseDownHandler());
                 switch (mouseEvent->button())
                 {
                     case Mouse::Button::LEFT:
@@ -252,7 +253,7 @@ void Base::handle(Event::Mouse* mouseEvent)
             }
             case Mouse::Type::BUTTON_UP:
             {
-                emitEvent(make_unique<Event::Mouse>(*mouseEvent), mouseUpHandler());
+                emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), mouseUpHandler());
                 switch (mouseEvent->button())
                 {
                     case Mouse::Button::LEFT:
@@ -262,9 +263,9 @@ void Base::handle(Event::Mouse* mouseEvent)
                             if (_drag)
                             {
                                 _drag = false;
-                                emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousedragstop"), mouseDragStopHandler());
+                                emitEvent(std::make_unique<Event::Mouse>(*mouseEvent, "mousedragstop"), mouseDragStopHandler());
                             }
-                            emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouseclick"), mouseClickHandler());
+                            emitEvent(std::make_unique<Event::Mouse>(*mouseEvent, "mouseclick"), mouseClickHandler());
                         }
                         _leftButtonPressed = false;
                         break;
@@ -273,7 +274,7 @@ void Base::handle(Event::Mouse* mouseEvent)
                     {
                         if (_rightButtonPressed)
                         {
-                            emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouseclick"), mouseClickHandler());
+                            emitEvent(std::make_unique<Event::Mouse>(*mouseEvent, "mouseclick"), mouseClickHandler());
                         }
                         _rightButtonPressed = false;
                         break;
@@ -299,12 +300,12 @@ void Base::handle(Event::Mouse* mouseEvent)
             {
                 if (_drag)
                 {
-                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousedrag"), mouseDragHandler());
+                    emitEvent(std::make_unique<Event::Mouse>(*mouseEvent, "mousedrag"), mouseDragHandler());
                 }
                 if (_hovered)
                 {
                     _hovered = false;
-                    emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mouseout"), mouseOutHandler());
+                    emitEvent(std::make_unique<Event::Mouse>(*mouseEvent, "mouseout"), mouseOutHandler());
                 }
                 break;
             }
@@ -319,7 +320,7 @@ void Base::handle(Event::Mouse* mouseEvent)
                             if (_drag)
                             {
                                 _drag = false;
-                                emitEvent(make_unique<Event::Mouse>(*mouseEvent, "mousedragstop"), mouseDragStopHandler());
+                                emitEvent(std::make_unique<Event::Mouse>(*mouseEvent, "mousedragstop"), mouseDragStopHandler());
                             }
                             _leftButtonPressed = false;
                         }
@@ -416,19 +417,23 @@ void Base::render(const Size &size, bool eggTransparency)
     render(eggTransparency);
 }
 
-void Base::setLight(bool light) {
+void Base::setLight(bool light)
+{
     _light = light;
 }
 
-bool Base::light() {
+bool Base::light()
+{
     return _light;
 }
 
-TransFlags::Trans Base::trans() const {
+Graphics::TransFlags::Trans Base::trans() const
+{
     return _trans;
 }
 
-void Base::setTrans(TransFlags::Trans value) {
+void Base::setTrans(Graphics::TransFlags::Trans value)
+{
     _trans = value;
 }
 
@@ -437,10 +442,10 @@ void Base::setOutline(int outline)
     _outline=outline;
 }
 
-
 void Base::setLightLevel(unsigned int level)
 {
     _lightLevel = level;
 }
+
 }
 }

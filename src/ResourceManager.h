@@ -52,6 +52,7 @@ namespace Gam { class File; }
 namespace Gcd { class File; }
 namespace Pal { class File; }
 namespace Int { class File; }
+namespace Lip { class File; }
 namespace Lst { class File; }
 namespace Map { class File; }
 namespace Msg { class File; }
@@ -118,6 +119,7 @@ public:
     Format::Pal::File* palFileType(const std::string& filename);
     Format::Int::File* intFileType(const std::string& filename);
     Format::Int::File* intFileType(unsigned int SID);
+    Format::Lip::File* lipFileType(const std::string& filename);
     Format::Lst::File* lstFileType(const std::string& filename);
     Format::Map::File* mapFileType(const std::string& filename);
     Format::Msg::File* msgFileType(const std::string& filename);

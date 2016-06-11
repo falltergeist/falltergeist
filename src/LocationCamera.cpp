@@ -28,7 +28,6 @@
 namespace Falltergeist
 {
 
-
 LocationCamera::LocationCamera(const Size& size, const Point& center)
 {
     setSize(size);

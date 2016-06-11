@@ -17,51 +17,65 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <SDL_image.h>
-#include "../../Base/StlFeatures.h"
-#include "../../ResourceManager.h"
-#include "AAF.h"
+// Related headers
+#include "../../Graphics/Font/AAF.h"
+
+// C++ standard includes
+#include <memory>
+
+// Falltergeist includes
 #include "../../Format/Aaf/Glyph.h"
+#include "../../ResourceManager.h"
 
-namespace Falltergeist {
-using Base::make_unique;
-namespace Graphics {
+// Third party includes
+#include <SDL_image.h>
+
+namespace Falltergeist
+{
+namespace Graphics
+{
 
 
-AAF::AAF(const std::string& filename) : Font() {
+AAF::AAF(const std::string& filename) : Font()
+{
     _filename = filename;
     _aaf = ResourceManager::getInstance()->aafFileType(filename);
 
     unsigned int width = (_aaf->maximumWidth()+2)*16u;
     unsigned int height = (_aaf->maximumHeight()+2)*16u;
 
-    _texture = make_unique<Graphics::Texture>(width, height);
+    _texture = std::make_unique<Graphics::Texture>(width, height);
     _texture->loadFromRGBA(_aaf->rgba());
 
 
 }
 
-AAF::~AAF() {
-
+AAF::~AAF()
+{
 }
 
-unsigned short AAF::horizontalGap() {
+unsigned short AAF::horizontalGap()
+{
     return _aaf->horizontalGap();
 }
 
-unsigned short AAF::verticalGap() {
+unsigned short AAF::verticalGap()
+{
     return _aaf->verticalGap();
 }
 
-unsigned short AAF::spaceWidth() {
+unsigned short AAF::spaceWidth()
+{
     return _aaf->spaceWidth();
 }
 
-unsigned short AAF::width() {
+unsigned short AAF::width()
+{
     return _aaf->maximumWidth();
 }
 
-unsigned short AAF::height() {
+unsigned short AAF::height()
+{
     return _aaf->maximumHeight();
 }
 

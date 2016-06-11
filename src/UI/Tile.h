@@ -24,7 +24,7 @@
 #include <memory>
 
 // Falltergeist includes
-#include "../Point.h"
+#include "../Graphics/Point.h"
 
 // Third party includes
 
@@ -37,6 +37,8 @@ namespace Graphics
 
 namespace UI
 {
+
+using Graphics::Point;
 
 class Tile
 {

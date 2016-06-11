@@ -38,7 +38,7 @@ namespace Plugin
 class DatFile : public IPlugin
 {
 public:
-    DatFile(const std::string filename);
+    DatFile(const std::string& filename);
     ~DatFile() override;
 
     Falltergeist::VFS::File* open(std::string filename) override;

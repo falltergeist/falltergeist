@@ -29,6 +29,7 @@
 #include "../Event/Mouse.h"
 #include "../Game/Game.h"
 #include "../Graphics/Font.h"
+#include "../Graphics/Rect.h"
 #include "../ResourceManager.h"
 #include "../Logger.h"
 
@@ -39,6 +40,8 @@ namespace Falltergeist
 {
 namespace UI
 {
+
+using Graphics::Rect;
 
 TextArea::TextArea(const Point& pos) : Base(pos)
 {
@@ -207,8 +210,8 @@ void TextArea::setLineOffset(int offset)
 Size TextArea::size() const
 {
     return Size(
-        _size.width() ?: _calculatedSize.width(),
-        _size.height() ?: _calculatedSize.height()
+        _size.width() ? _size.width() : _calculatedSize.width(),
+        _size.height() ? _size.height() : _calculatedSize.height()
     );
 }
 
@@ -264,13 +267,21 @@ void TextArea::_updateSymbols()
     {
         // calculate how much lines we can fit inside TextArea, taking vertical padding into account
         auto activeHeight = _size.height() - _paddingTopLeft.height() - _paddingBottomRight.height();
-        lineEnd = std::max(
-            std::min(
-                _lines.cbegin() + _lineOffset + ((activeHeight + font()->verticalGap()) / (font()->height() + font()->verticalGap())),
-                _lines.cend()
-            ),
-            _lines.cbegin()
-        );
+
+        if ((_lineOffset + ((activeHeight + font()->verticalGap()) / (font()->height() + font()->verticalGap()))) < (int)_lines.size())
+        {
+            lineEnd = std::max(
+                std::min(
+                    _lines.cbegin() + _lineOffset + ((activeHeight + font()->verticalGap()) / (font()->height() + font()->verticalGap())),
+                    _lines.cend()
+                ),
+                _lines.cbegin()
+            );
+        }
+        else
+        {
+            lineEnd = _lines.cend();
+        }
     }
 
     int numVisibleLines = std::distance(lineBegin, lineEnd);
@@ -568,8 +579,10 @@ void TextArea::_updateBuffers()
     _textArea.updateBuffers(vertices,UV,indexes);
 }
 
-bool TextArea::opaque(const Point &pos) {
+bool TextArea::opaque(const Point &pos)
+{
     return Rect::inRect(pos, this->size());
 }
+
 }
 }

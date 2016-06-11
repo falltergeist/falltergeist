@@ -273,5 +273,12 @@ Point DudeObject::eggOffset()
     return animation()->frameOffset() + animation()->shift() - Point(63, 78);
 }
 
+
+std::string DudeObject::scrName() const
+{
+    return _name;
+}
+
+
 }
 }

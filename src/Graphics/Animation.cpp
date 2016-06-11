@@ -18,24 +18,25 @@
  */
 
 // Related headers
-#include "Animation.h"
+#include "../Graphics/Animation.h"
 
 // C++ standart includes
-#include "../ResourceManager.h"
-#include "../Point.h"
-#include "../Game/Game.h"
-#include "../TransFlags.h"
+
+// Falltergeist includes
 #include "../Format/Frm/File.h"
 #include "../Format/Frm/Direction.h"
 #include "../Format/Frm/Frame.h"
-#include "Renderer.h"
-#include "Shader.h"
-#include "AnimatedPalette.h"
+#include "../Game/Game.h"
+#include "../Graphics/AnimatedPalette.h"
+#include "../Graphics/Point.h"
+#include "../Graphics/Renderer.h"
+#include "../Graphics/Shader.h"
+#include "../Graphics/TransFlags.h"
+#include "../ResourceManager.h"
 #include "../State/Location.h"
 
 // Third-party includes
 #include <SDL_image.h>
-
 
 namespace Falltergeist
 {
@@ -46,8 +47,11 @@ Animation::Animation(const std::string &filename)
 {
     // create buffers
     // generate VAO
-    GL_CHECK(glGenVertexArrays(1, &_vao));
-    GL_CHECK(glBindVertexArray(_vao));
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
+    {
+        GL_CHECK(glGenVertexArrays(1, &_vao));
+        GL_CHECK(glBindVertexArray(_vao));
+    }
 
     // generate VBOs for verts and tex
     GL_CHECK(glGenBuffers(1, &_coordsVBO));
@@ -122,7 +126,10 @@ Animation::~Animation()
     GL_CHECK(glDeleteBuffers(1, &_texCoordsVBO));
     GL_CHECK(glDeleteBuffers(1, &_ebo));
 
-    GL_CHECK(glDeleteVertexArrays(1, &_vao));
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
+    {
+        GL_CHECK(glDeleteVertexArrays(1, &_vao));
+    }
 }
 
 void Animation::render(int x, int y, unsigned int direction, unsigned int frame, bool transparency, bool light, int outline, unsigned int lightValue)
@@ -169,16 +176,15 @@ void Animation::render(int x, int y, unsigned int direction, unsigned int frame,
     }
 
 
-    GLint curvao;
-    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-    if ((GLuint)curvao != _vao)
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
     {
-        GL_CHECK(glBindVertexArray(_vao));
+        GLint curvao;
+        glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
+        if ((GLuint)curvao != _vao)
+        {
+            GL_CHECK(glBindVertexArray(_vao));
+        }
     }
-
-
-    GL_CHECK(glBindVertexArray(_vao));
-
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coordsVBO));
     GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
@@ -209,12 +215,10 @@ bool Animation::opaque(unsigned int x, unsigned int y)
     return _texture->opaque(x, y);
 }
 
-void Animation::trans(Falltergeist::TransFlags::Trans trans)
+void Animation::trans(Graphics::TransFlags::Trans trans)
 {
     _trans=trans;
 }
 
 }
 }
-
-

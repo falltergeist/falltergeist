@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_CRITTER_BARTER_STATE_H
-#define FALLTERGEIST_CRITTER_BARTER_STATE_H
+#ifndef FALLTERGEIST_STATE_CRITTERBARTER_H
+#define FALLTERGEIST_STATE_CRITTERBARTER_H
 
 // C++ standard includes
 
@@ -29,22 +29,19 @@
 
 namespace Falltergeist
 {
-namespace State
-{
+    namespace State
+    {
+        class CritterBarter : public State
+        {
+            public:
+                CritterBarter();
+                ~CritterBarter() override;
 
-class CritterBarter : public State
-{
-public:
-    CritterBarter();
-    ~CritterBarter() override;
+                void init() override;
 
-    void init() override;
-
-    void onBackgroundClick(Event::Mouse* event);
-    void onTalkButtonClick(Event::Mouse* event);
-};
-
+                void onBackgroundClick(Event::Mouse* event);
+                void onTalkButtonClick(Event::Mouse* event);
+        };
+    }
 }
-}
-
-#endif // FALLTERGEIST_CRITTER_BARTER_STATE_H
+#endif // FALLTERGEIST_STATE_CRITTERBARTER_H

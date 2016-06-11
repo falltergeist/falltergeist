@@ -65,7 +65,10 @@ void File::_initialize()
 
     for (unsigned i = 1; i != 256; ++i)
     {
-        _colors.push_back(new Color(uint8(), uint8(), uint8()));
+        uint8_t r = uint8();
+        uint8_t g = uint8();
+        uint8_t b = uint8();
+        _colors.push_back(new Color(r,g,b));
     }
 
     // I guess this section requires a little explanation

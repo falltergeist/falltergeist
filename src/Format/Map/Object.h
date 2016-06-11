@@ -50,23 +50,23 @@ public:
     unsigned int ammount();
     void setAmmount(unsigned int value);
 
-    unsigned int unknown1();
-    void setUnknown1(unsigned int value);
+    unsigned int OID();
+    void setOID(unsigned int value);
 
     int hexPosition();
     void setHexPosition(int value);
 
-    unsigned int unknown2();
-    void setUnknown2(unsigned int value);
+    unsigned int x();
+    void setX(unsigned int value);
 
-    unsigned int unknown3();
-    void setUnknown3(unsigned int value);
+    unsigned int y();
+    void setY(unsigned int value);
 
-    unsigned int unknown4();
-    void setUnknown4(unsigned int value);
+    unsigned int sx();
+    void setSx(unsigned int value);
 
-    unsigned int unknown5();
-    void setUnknown5(unsigned int value);
+    unsigned int sy();
+    void setSy(unsigned int value);
 
     unsigned int frameNumber();
     void setFrameNumber(unsigned int value);
@@ -105,8 +105,8 @@ public:
     unsigned int objectID3();
     void setObjectID3(unsigned int value);
 
-    unsigned int unknown7();
-    void setUnknown7(unsigned int value);
+    unsigned int combatId();
+    void setCombatId(unsigned int value);
 
     unsigned int lightRadius();
     void setLightRadius(unsigned int value);
@@ -114,8 +114,8 @@ public:
     unsigned int lightIntensity();
     void setLightIntensity(unsigned int value);
 
-    unsigned int unknown10();
-    void setUnknown10(unsigned int value);
+    unsigned int outline();
+    void setOutline(unsigned int value);
 
     int scriptId();
     void setScriptId(int value);
@@ -125,8 +125,8 @@ public:
     unsigned int inventorySize();
     void setInventorySize(unsigned int value);
 
-    unsigned int unknown11();
-    void setUnknown11(unsigned int value);
+    unsigned int maxInventorySize();
+    void setMaxInventorySize(unsigned int value);
 
     unsigned int unknown12();
     void setUnknown12(unsigned int value);
@@ -145,6 +145,24 @@ public:
 
     int exitOrientation();
     void setExitOrientation(int value);
+    
+    int elevatorType();
+    void setElevatorType(int type);
+
+    int elevatorLevel();
+    void setElevatorLevel(int level);
+
+    bool opened();
+    void setOpened(bool opened);
+
+    int AIPacket();
+    void setAIPacket(int packet);
+
+    int ammo();
+    void setAmmo(int ammo);
+
+    int ammoPID();
+    void setAmmoPID(int PID);
 
     std::vector<Object*>* children();
 
@@ -179,6 +197,13 @@ protected:
     int _exitOrientation;
     int _exitElevation;
     int _exitMap;
+
+    int _elevatorType = 0;
+    int _elevatorLevel = 0;
+    bool _opened = false;
+    int _AIPacket = 0;
+    int _ammo = 0;
+    int _ammoPID = 0;
 
     int _mapScriptId = -1;
     int _scriptId = -1;

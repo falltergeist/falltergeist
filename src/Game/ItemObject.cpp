@@ -21,9 +21,9 @@
 #include "../Game/ItemObject.h"
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
 #include "../UI/Animation.h"
@@ -109,9 +109,9 @@ void ItemObject::_generateUi()
     if (inventoryFID() == -1) return;
 
     // Big unscaled image of item
-    _inventoryDragUi = make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
-    _inventoryUi = make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
-    _inventorySlotUi = make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
+    _inventoryDragUi = std::make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
+    _inventoryUi = std::make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
+    _inventorySlotUi = std::make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
 }
 
 ItemObject::Subtype ItemObject::subtype() const

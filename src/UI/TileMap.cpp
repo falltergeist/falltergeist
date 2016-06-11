@@ -24,29 +24,27 @@
 #include <algorithm>
 #include <cmath>
 #include <vector>
-#include <SDL_image.h>
+#include <memory>
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../Format/Lst/File.h"
 #include "../Game/Game.h"
+#include "../Graphics/Point.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Tilemap.h"
 #include "../LocationCamera.h"
 #include "../Logger.h"
-#include "../Point.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../UI/Tile.h"
 
 // Thrird party includes
+#include <SDL_image.h>
 
 namespace  Falltergeist
 {
 namespace UI
 {
-
-using namespace Base;
 
 TileMap::TileMap()
 {
@@ -109,10 +107,10 @@ void TileMap::init()
         //push tilecoords
         uint32_t tIndex = tile->index() % _tilesPerAtlas;
 
-        float x = (tIndex % maxW) * 80;
+        float x = (float)((tIndex % maxW) * 80);
         float fx = x / (float)Game::getInstance()->renderer()->maxTextureSize();
 
-        float y = (tIndex / maxW) * 36;
+        float y = (float)((tIndex / maxW) * 36);
         float fy = y / (float)Game::getInstance()->renderer()->maxTextureSize();
 
         float w = (x+80.0) / (float)Game::getInstance()->renderer()->maxTextureSize();
@@ -125,7 +123,7 @@ void TileMap::init()
 
     }
 
-    _tilemap = make_unique<Graphics::Tilemap>(vertices, UV);
+    _tilemap = std::make_unique<Graphics::Tilemap>(vertices, UV);
 
     Logger::info("GAME") << "Tilemap uniq tiles " << numbers.size() << std::endl;
 

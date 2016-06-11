@@ -21,21 +21,22 @@
 #include "../UI/InventoryItem.h"
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
 #include "../Audio/Mixer.h"
-#include "../Base/StlFeatures.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
 #include "../Game/ArmorItemObject.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Game/ItemObject.h"
+#include "../Graphics/Point.h"
+#include "../Graphics/Rect.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
-#include "../Point.h"
 #include "../UI/Image.h"
 #include "../UI/ItemsList.h"
 
@@ -45,7 +46,7 @@ namespace Falltergeist
 {
 namespace UI
 {
-using namespace Base;
+using Graphics::Rect;
 
 InventoryItem::InventoryItem(Game::ItemObject *item, const Point& pos) : Falltergeist::UI::Base(pos)
 {
@@ -104,50 +105,54 @@ void InventoryItem::render(bool eggTransparency)
     unsigned int newHeight;
     Size texSize;
 
+    auto slotUi = _item->inventorySlotUi();
+    auto dragUi = _item->inventoryDragUi();
+    auto inventoryUi = _item->inventoryUi();
+
     switch (_type)
     {
         case Type::SLOT:
-            widthRatio = static_cast<double>(88) / static_cast<double>(_item->inventorySlotUi()->width());
-            heightRatio = static_cast<double>(58) / static_cast<double>(_item->inventorySlotUi()->height());
+            widthRatio = static_cast<double>(88) / static_cast<double>(slotUi->width());
+            heightRatio = static_cast<double>(58) / static_cast<double>(slotUi->height());
 
-            newWidth = static_cast<unsigned int>(static_cast<double>(_item->inventorySlotUi()->width()) * static_cast<double>(heightRatio));
+            newWidth = static_cast<unsigned int>(static_cast<double>(slotUi->width()) * static_cast<double>(heightRatio));
 
             if (newWidth <= 88)
             {
                 texSize = Size(newWidth, 58);
-                _item->inventorySlotUi()->setPosition(position() + (this->size() - texSize) / 2);
-                _item->inventorySlotUi()->render(Size(newWidth, 58), false);
+                slotUi->setPosition(position() + (this->size() - texSize) / 2);
+                slotUi->render(Size(newWidth, 58), false);
                 return;
             }
-            newHeight = static_cast<unsigned int>(static_cast<double>(_item->inventorySlotUi()->height()) * static_cast<double>(widthRatio));
+            newHeight = static_cast<unsigned int>(static_cast<double>(slotUi->height()) * static_cast<double>(widthRatio));
             texSize = Size(88, newHeight);
-            _item->inventorySlotUi()->setPosition(position() + (this->size() - texSize) / 2);
-            _item->inventorySlotUi()->render(Size(88, newHeight), false);
+            slotUi->setPosition(position() + (this->size() - texSize) / 2);
+            slotUi->render(Size(88, newHeight), false);
             break;
         case Type::DRAG:
-            _item->inventoryDragUi()->setPosition(position());
-            _item->inventoryDragUi()->render();
+            dragUi->setPosition(position());
+            dragUi->render();
             break;
         default:
-            _item->inventoryUi()->setPosition(position());
+            inventoryUi->setPosition(position());
 
-            widthRatio = static_cast<double>(57) / static_cast<double>(_item->inventoryUi()->width());
-            heightRatio = static_cast<double>(40) / static_cast<double>(_item->inventoryUi()->height());
+            widthRatio = static_cast<double>(57) / static_cast<double>(inventoryUi->width());
+            heightRatio = static_cast<double>(40) / static_cast<double>(inventoryUi->height());
 
-            newWidth = static_cast<unsigned int>(static_cast<double>(_item->inventoryUi()->width()) * static_cast<double>(heightRatio));
+            newWidth = static_cast<unsigned int>(static_cast<double>(inventoryUi->width()) * static_cast<double>(heightRatio));
 
             if (newWidth <= 57)
             {
                 texSize = Size(newWidth, 40);
-                _item->inventoryUi()->setPosition(position() + (this->size() - texSize) / 2);
+                inventoryUi->setPosition(position() + (this->size() - texSize) / 2);
 
-                _item->inventoryUi()->render(Size(newWidth, 40), false);
+                inventoryUi->render(Size(newWidth, 40), false);
                 return;
             }
-            newHeight = static_cast<unsigned int>(static_cast<double>(_item->inventoryUi()->height()) * static_cast<double>(widthRatio));
+            newHeight = static_cast<unsigned int>(static_cast<double>(inventoryUi->height()) * static_cast<double>(widthRatio));
             texSize = Size(57, newHeight);
-            _item->inventoryUi()->setPosition(position() + (this->size() - texSize) / 2);
-            _item->inventoryUi()->render(Size(57, newHeight), false);
+            inventoryUi->setPosition(position() + (this->size() - texSize) / 2);
+            inventoryUi->render(Size(57, newHeight), false);
             break;
     }
 }
@@ -187,7 +192,7 @@ void InventoryItem::onMouseDragStop(Event::Mouse* event)
     setOffset({0, 0});
     setType(_oldType);
 
-    auto itemevent = make_unique<Event::Mouse>(*event, "itemdragstop");
+    auto itemevent = std::make_unique<Event::Mouse>(*event, "itemdragstop");
     itemevent->setPosition(event->position());
     itemevent->setTarget(this);
     emitEvent(std::move(itemevent), itemDragStopHandler());
@@ -206,6 +211,7 @@ void InventoryItem::onArmorDragStop(Event::Mouse* event)
 
         InventoryItem* draggedItem = itemsList->draggedItem();
         auto itemObject = draggedItem->item();
+        if(itemObject->subtype() != Game::ItemObject::Subtype::ARMOR) return;
         itemsList->removeItem(draggedItem, 1);
         // place current armor back to inventory
         if (_item)

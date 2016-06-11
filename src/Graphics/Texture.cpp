@@ -23,10 +23,9 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
+#include "../Exception.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
-#include "../Exception.h"
 
 // Third party includes
 
@@ -35,12 +34,12 @@ namespace Falltergeist
 namespace Graphics
 {
 
-using namespace Base;
-
-int NearestPowerOf2(int n) {
+int NearestPowerOf2(int n)
+{
     if (!n) return n; //(0 == 2^0)
     int x = 1;
-    while (x < n) {
+    while (x < n)
+    {
         x <<= 1;
     }
     return x;
@@ -64,7 +63,8 @@ Texture::Texture(SDL_Surface* surface): _size(surface->w, surface->h)
 
 Texture::~Texture()
 {
-    if (_textureID > 0) {
+    if (_textureID > 0)
+    {
         glDeleteTextures(1, &_textureID);
         _textureID = 0;
     }
@@ -90,7 +90,8 @@ unsigned int Texture::textureHeight() const
     return _textureHeight;
 }
 
-Size Texture::size() const {
+Size Texture::size() const
+{
     return _size;
 }
 
@@ -99,12 +100,11 @@ void Texture::loadFromSurface(SDL_Surface* surface)
     SDL_Surface* resizedSurface = NULL;
     SDL_Rect area;
 
-    if (surface == NULL) {
+    if (surface == NULL)
+    {
         return;
     }
 
-//    _width = surface->w;
-//    _height = surface->h;
     int newWidth = NearestPowerOf2(_width);
     int newHeight = NearestPowerOf2(_height);
 
@@ -206,25 +206,27 @@ void Texture::unbind(uint8_t unit)
         return;
     }
 */
-    if (_textureID > 0) {
+    if (_textureID > 0)
+    {
         glActiveTexture(GL_TEXTURE0+unit);
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 }
 
-
-bool Texture::opaque(unsigned int x, unsigned int y) {
-    if (x<width() && y<height() && (y*width()+x < _mask.size())) {
+bool Texture::opaque(unsigned int x, unsigned int y)
+{
+    if (x<width() && y<height() && (y*width()+x < _mask.size()))
+    {
         return _mask.at(y * width() + x);
     }
     else
     {
         return false;
     }
-
 }
 
-void Texture::setMask(std::vector<bool> mask) {
+void Texture::setMask(std::vector<bool> mask)
+{
     _mask=mask;
 }
 

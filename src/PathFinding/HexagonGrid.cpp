@@ -18,13 +18,13 @@
  */
 
 // C++ standard includes
-#include <functional>
-#include <queue>
 #include <array>
 #include <cstdlib>
+#include <functional>
+#include <queue>
+#include <memory>
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../Game/WallObject.h"
 #include "../PathFinding/Hexagon.h"
 #include "../PathFinding/HexagonGrid.h"
@@ -33,8 +33,6 @@
 
 namespace Falltergeist
 {
-
-using namespace Base;
 
 struct HeuristicComparison : public std::binary_function<Hexagon*, Hexagon*, bool>
 {
@@ -53,7 +51,7 @@ HexagonGrid::HexagonGrid()
     {
         for (unsigned int p = 0; p != 200; ++p, ++index)
         {
-            _hexagons.emplace_back(make_unique<Hexagon>(index));
+            _hexagons.emplace_back(std::make_unique<Hexagon>(index));
             auto& hexagon = _hexagons.back();
             int x = 48*100 + 16*(q+1) - 24*p;
             int y = (q+1)*12 + 6*p + 12;
@@ -247,14 +245,15 @@ Hexagon* HexagonGrid::hexInDirection(Hexagon* from, unsigned short rotation, uns
 std::vector<Hexagon*> HexagonGrid::ring(Hexagon* from, unsigned int radius)
 {
     std::vector<Hexagon*> result;
-    Hexagon* current = nullptr;
-    unsigned int dir = 0;
+
     if (radius == 0)
     {
         result.push_back(from);
         return result;
     }
-    current = hexInDirection(from, dir, radius);
+
+    unsigned int dir = 0;
+    Hexagon* current = hexInDirection(from, dir, radius);
     dir = 2;
     for (unsigned int d = 0; d < 6; d++)
     {

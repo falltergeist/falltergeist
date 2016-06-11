@@ -45,7 +45,7 @@
 #include "../Game/WeaponItemObject.h"
 #include "../Exception.h"
 #include "../ResourceManager.h"
-#include "../VM/VM.h"
+#include "../VM/Script.h"
 
 // Third party includes
 
@@ -138,7 +138,7 @@ Object* ObjectFactory::createObject(unsigned int PID)
                 object->setName(msg->message(proto->messageId())->text());
                 object->setDescription(msg->message(proto->messageId() + 1)->text());
             }
-            catch (Exception) {}
+            catch (const Exception& e) {}
             break;
         }
         case OBJECT_TYPE::CRITTER:
@@ -150,7 +150,7 @@ Object* ObjectFactory::createObject(unsigned int PID)
                 object->setName(msg->message(proto->messageId())->text());
                 object->setDescription(msg->message(proto->messageId() + 1)->text());
             }
-            catch (Exception) {}
+            catch (const Exception& e) {}
 
             for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
             {
@@ -175,6 +175,8 @@ Object* ObjectFactory::createObject(unsigned int PID)
                 ((CritterObject*)object)->setDamageResist((DAMAGE)i, proto->damageResist()->at(i));
                 ((CritterObject*)object)->setDamageThreshold((DAMAGE)i, proto->damageThreshold()->at(i));
             }
+            ((CritterObject*)object)->setGender(proto->critterGender() ? GENDER::FEMALE : GENDER::MALE);
+            ((CritterObject*)object)->setAge(proto->critterAge());
             break;
         }
         case OBJECT_TYPE::SCENERY:
@@ -214,7 +216,7 @@ Object* ObjectFactory::createObject(unsigned int PID)
                 object->setName(msg->message(proto->messageId())->text());
                 object->setDescription(msg->message(proto->messageId() + 1)->text());
             }
-            catch (Exception) {}
+            catch (const Exception& e) {}
 
             ((SceneryObject*)object)->setSoundId((char)proto->soundId());
 
@@ -252,7 +254,7 @@ Object* ObjectFactory::createObject(unsigned int PID)
                 object->setName(msg->message(proto->messageId())->text());
                 object->setDescription(msg->message(proto->messageId() + 1)->text());
             }
-            catch (Exception) {}
+            catch (const Exception& e) {}
 
             //first two bytes are orientation. second two - unknown
             unsigned short orientation = proto->flagsExt() >> 16;
@@ -309,7 +311,7 @@ Object* ObjectFactory::createObject(unsigned int PID)
                 object->setName(msg->message(proto->messageId())->text());
                 object->setDescription(msg->message(proto->messageId() + 1)->text());
             }
-            catch (Exception) {}
+            catch (const Exception& e) {}
             break;
         }
     }
@@ -320,7 +322,7 @@ Object* ObjectFactory::createObject(unsigned int PID)
     if (proto->scriptId() > 0)
     {
         auto intFile = ResourceManager::getInstance()->intFileType(proto->scriptId());
-        if (intFile) object->setScript(new VM(intFile, object));
+        if (intFile) object->setScript(new VM::Script(intFile, object));
     }
 
     return object;

@@ -88,7 +88,7 @@ void Item::_initialize()
 
             // unpacking
             z_stream zStream;
-            zStream.total_in  = zStream.avail_in  = _datFileEntry->packedSize();
+            zStream.total_in  = _datFileEntry->packedSize();
             zStream.avail_in = _datFileEntry->packedSize();
             zStream.next_in  = (unsigned char *)packedData;
             zStream.total_out = zStream.avail_out = _size;

@@ -22,15 +22,16 @@
 
 // C++ standard includes
 #include <cmath>
+#include <memory>
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../Format/Frm/File.h"
 #include "../Format/Frm/Direction.h"
 #include "../Format/Frm/Frame.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
+#include "../Graphics/Rect.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../PathFinding/Hexagon.h"
@@ -38,17 +39,15 @@
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../UI/AnimationFrame.h"
-#include "Base.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-
-using Base::make_unique;
-
 namespace UI
 {
+
+using Graphics::Rect;
 
 Animation::Animation() : Falltergeist::UI::Base()
 {
@@ -58,7 +57,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
 {
     _direction = direction;
     auto frm = ResourceManager::getInstance()->frmFileType(frmName);
-    _animation = make_unique<Graphics::Animation>(frmName);
+    _animation = std::make_unique<Graphics::Animation>(frmName);
 
     _actionFrame = frm->actionFrame();
     auto dir = frm->directions()->at(direction);
@@ -80,7 +79,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
         xOffset += frm->offsetX(direction, f);
         yOffset += frm->offsetY(direction, f);
 
-        auto frame = make_unique<AnimationFrame>();
+        auto frame = std::make_unique<AnimationFrame>();
         auto srcFrame = frm->directions()->at(direction)->frames()->at(f);
         frame->setSize(Size(srcFrame->width(), srcFrame->height()));
         frame->setOffset({xOffset, yOffset});
@@ -89,7 +88,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
         auto fps = frm->framesPerSecond();
         if (fps == 0)
         {
-            frame->setDuration(1000);
+            frame->setDuration(100);
         }
         else
         {
@@ -126,17 +125,17 @@ void Animation::think()
         if (_progress < _animationFrames.size())
         {
             _currentFrame = _reverse ? _animationFrames.size() - _progress - 1 : _progress;
-            emitEvent(make_unique<Event::Event>("frame"), frameHandler());
+            emitEvent(std::make_unique<Event::Event>("frame"), frameHandler());
             if (_actionFrame == _currentFrame)
             {
-                emitEvent(make_unique<Event::Event>("actionFrame"), actionFrameHandler());
+                emitEvent(std::make_unique<Event::Event>("actionFrame"), actionFrameHandler());
             }
         }
         else
         {
             _ended = true;
             _playing = false;
-            emitEvent(make_unique<Event::Event>("animationEnded"), animationEndedHandler());
+            emitEvent(std::make_unique<Event::Event>("animationEnded"), animationEndedHandler());
         }
     }
 }
@@ -180,11 +179,13 @@ void Animation::stop()
     _playing = false;
     _ended = false;
     _progress = 0;
+    _currentFrame = 0;
 }
 
 void Animation::setReverse(bool value)
 {
     _reverse = value;
+    setCurrentFrame(value ? _animationFrames.size()-1 : 0);
 }
 
 bool Animation::ended() const

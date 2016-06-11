@@ -22,15 +22,15 @@
 
 // C++ standard includes
 #include <cmath>
-#include <TransFlags.h>
+#include <memory>
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../Exception.h"
 #include "../Format/Frm/File.h"
 #include "../Format/Msg/File.h"
 #include "../Format/Msg/Message.h"
 #include "../functions.h"
+#include "../Graphics/Rect.h"
 #include "../Graphics/Renderer.h"
 #include "../Game/CritterObject.h"
 #include "../Game/Defines.h"
@@ -45,14 +45,12 @@
 #include "../UI/AnimationQueue.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
-#include "../VM/VM.h"
-#include "TransFlags.h"
+#include "../VM/Script.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-using Base::make_unique;
 
 namespace Game
 {
@@ -92,6 +90,18 @@ void Object::setFID(int value)
     _generateUi();
 }
 
+
+int Object::SID() const
+{
+    return _SID;
+}
+
+void Object::setSID(int value)
+{
+    _SID = value;
+}
+
+
 int Object::elevation() const
 {
     return _elevation;
@@ -129,6 +139,16 @@ void Object::setName(const std::string& value)
     _name = value;
 }
 
+std::string Object::scrName() const
+{
+    return _scrName;
+}
+
+void Object::setScrName(const std::string& value)
+{
+    _scrName = value;
+}
+
 std::string Object::description() const
 {
     return _description;
@@ -139,12 +159,12 @@ void Object::setDescription(const std::string& value)
     _description = value;
 }
 
-VM* Object::script() const
+VM::Script* Object::script() const
 {
     return _script.get();
 }
 
-void Object::setScript(VM* script)
+void Object::setScript(VM::Script* script)
 {
     _script.reset(script);
 }
@@ -181,15 +201,15 @@ void Object::_generateUi()
     auto frm = ResourceManager::getInstance()->frmFileType(FID());
     if (frm)
     {
-        if (frm->framesPerDirection() > 1)
+        if (frm->framesPerDirection() > 1 || frm->directions()->size() > 1)
         {
-            auto queue = make_unique<UI::AnimationQueue>();
-            queue->animations().push_back(make_unique<UI::Animation>(ResourceManager::getInstance()->FIDtoFrmName(FID()), orientation()));
+            auto queue = std::make_unique<UI::AnimationQueue>();
+            queue->animations().push_back(std::make_unique<UI::Animation>(ResourceManager::getInstance()->FIDtoFrmName(FID()), orientation()));
             _ui = std::move(queue);
         }
         else
         {
-            _ui =  make_unique<UI::Image>(frm, orientation());
+            _ui =  std::make_unique<UI::Image>(frm, orientation());
 
         }
     }
@@ -299,7 +319,7 @@ void Object::render()
     );
 
     // don't draw if outside of screen
-    if (!Rect::intersects(_ui->position(), _ui->size(), Point(0, 0), camera->size()))
+    if (!Graphics::Rect::intersects(_ui->position(), _ui->size(), Point(0, 0), camera->size()))
     {
         setInRender(false);
         return;
@@ -478,10 +498,6 @@ void Object::pickup_p_proc(CritterObject* pickedUpBy)
     // @TODO: standard handler
 }
 
-void Object::spatial_p_proc()
-{
-}
-
 void Object::use_obj_on_p_proc(Object* objectUsed, CritterObject* usedBy)
 {
     if (script() && script()->hasFunction("use_obj_on_p_proc"))
@@ -513,7 +529,7 @@ void Object::onUseAnimationEnd(Event::Event* event, CritterObject* critter)
     critter->setActionAnimation("aa")->stop();
 }
 
-void Object::setTrans(Falltergeist::TransFlags::Trans value)
+void Object::setTrans(Graphics::TransFlags::Trans value)
 {
     _trans = value;
     if (_ui)
@@ -522,7 +538,7 @@ void Object::setTrans(Falltergeist::TransFlags::Trans value)
     }
 }
 
-Falltergeist::TransFlags::Trans Object::trans() const
+Graphics::TransFlags::Trans Object::trans() const
 {
     return _trans;
 }
@@ -564,12 +580,12 @@ void Object::setFlags(unsigned int flags)
     setCanLightThru((flags & 0x20000000));
     setCanShootThru((flags & 0x80000000));
 
-    if (flags & 0x00004000) setTrans(Falltergeist::TransFlags::Trans::RED);
-    if (flags & 0x00008000) setTrans(Falltergeist::TransFlags::Trans::NONE);
-    if (flags & 0x00010000) setTrans(Falltergeist::TransFlags::Trans::WALL);
-    if (flags & 0x00020000) setTrans(Falltergeist::TransFlags::Trans::GLASS);
-    if (flags & 0x00040000) setTrans(Falltergeist::TransFlags::Trans::STEAM);
-    if (flags & 0x00080000) setTrans(Falltergeist::TransFlags::Trans::ENERGY);
+    if (flags & 0x00004000) setTrans(Graphics::TransFlags::Trans::RED);
+    if (flags & 0x00008000) setTrans(Graphics::TransFlags::Trans::NONE);
+    if (flags & 0x00010000) setTrans(Graphics::TransFlags::Trans::WALL);
+    if (flags & 0x00020000) setTrans(Graphics::TransFlags::Trans::GLASS);
+    if (flags & 0x00040000) setTrans(Graphics::TransFlags::Trans::STEAM);
+    if (flags & 0x00080000) setTrans(Graphics::TransFlags::Trans::ENERGY);
     if (flags & 0x10000000) setWallTransEnd(true);
 }
 
@@ -581,6 +597,24 @@ bool Object::flat() const
 void Object::setFlat(bool value)
 {
     _flat = value;
+}
+
+
+unsigned int Object::defaultFrame()
+{
+    return _defaultFrame;
+}
+
+void Object::setDefaultFrame(unsigned int frame)
+{
+    _defaultFrame = frame;
+    if (_ui)
+    {
+        if (auto anim = dynamic_cast<UI::AnimationQueue*>(_ui.get()))
+        {
+            anim->currentAnimation()->setCurrentFrame(_defaultFrame);
+        }
+    }
 }
 
 bool Object::_useEggTransparency()
@@ -600,7 +634,7 @@ void Object::renderOutline(int type)
         );
 
         // don't draw if outside of screen
-        if (!Rect::intersects(_ui->position(), _ui->size(), Point(0, 0), camera->size()))
+        if (!Graphics::Rect::intersects(_ui->position(), _ui->size(), Point(0, 0), camera->size()))
         {
             setInRender(false);
             return;
@@ -610,5 +644,6 @@ void Object::renderOutline(int type)
         _ui->render(false);
         _ui->setOutline(0);
 }
+
 }
 }

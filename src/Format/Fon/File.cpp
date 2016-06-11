@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
+// Related headers
+#include "../Fon/File.h"
+
 // C++ standard includes
 
 // Falltergeist includes
-#include <vector>
-#include "../Fon/File.h"
 #include "../Fon/Glyph.h"
-
 
 // Third party includes
 

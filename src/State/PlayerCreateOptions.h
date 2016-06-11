@@ -17,38 +17,35 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_PLAYERCREATEOPTIONS_H
-#define FALLTERGEIST_PLAYERCREATEOPTIONS_H
+#ifndef FALLTERGEIST_STATE_PLAYERCREATEOPTIONS_H
+#define FALLTERGEIST_STATE_PLAYERCREATEOPTIONS_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "State.h"
+#include "../State/State.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-namespace State
-{
+    namespace State
+    {
+        class PlayerCreateOptions : public State
+        {
+            public:
+                PlayerCreateOptions();
+                ~PlayerCreateOptions() override;
 
-class PlayerCreateOptions : public State
-{
-public:
-    PlayerCreateOptions();
-    ~PlayerCreateOptions() override;
+                void init() override;
 
-    void init() override;
-
-    void onSaveButtonClick(Event::Mouse* event);
-    void onLoadButtonClick(Event::Mouse* event);
-    void onPrintToFileButtonClick(Event::Mouse* event);
-    void onEraseButtonClick(Event::Mouse* event);
-    void onDoneButtonClick(Event::Mouse* event);
-    void onKeyDown(Event::Keyboard* event) override;
-};
-
+                void onSaveButtonClick(Event::Mouse* event);
+                void onLoadButtonClick(Event::Mouse* event);
+                void onPrintToFileButtonClick(Event::Mouse* event);
+                void onEraseButtonClick(Event::Mouse* event);
+                void onDoneButtonClick(Event::Mouse* event);
+                void onKeyDown(Event::Keyboard* event) override;
+        };
+    }
 }
-}
-
-#endif // FALLTERGEIST_PLAYERCREATEOPTIONS_H
+#endif // FALLTERGEIST_STATE_PLAYERCREATEOPTIONS_H

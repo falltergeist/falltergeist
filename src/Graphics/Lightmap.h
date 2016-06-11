@@ -20,12 +20,19 @@
 #ifndef FALLTERGEIST_GRAPHICS_LIGHTMAP_H
 #define FALLTERGEIST_GRAPHICS_LIGHTMAP_H
 
-#include "../Point.h"
-#include "Renderer.h"
-#include "Shader.h"
+// C++ standard includes
 
-namespace Falltergeist {
-namespace Graphics {
+// Falltergeist includes
+#include "../Graphics/Point.h"
+#include "../Graphics/Renderer.h"
+#include "../Graphics/Shader.h"
+
+// Third party includes
+
+namespace Falltergeist
+{
+namespace Graphics
+{
 
 class Lightmap
 {
@@ -54,5 +61,4 @@ private:
 
 }
 }
-
 #endif //FALLTERGEIST_GRAPHICS_LIGHTMAP_H

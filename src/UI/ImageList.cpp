@@ -21,16 +21,15 @@
 #include "../UI/ImageList.h"
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../UI/Image.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-using Base::make_unique;
 
 namespace UI
 {
@@ -41,7 +40,7 @@ ImageList::ImageList(const Point& pos) : Falltergeist::UI::Base(pos)
 
 ImageList::ImageList(std::vector<std::string> imageList, int x, int y) : ImageList(Point(x, y))
 {
-    for (auto& frmName : imageList) addImage(make_unique<Image>(frmName));
+    for (auto& frmName : imageList) addImage(std::make_unique<Image>(frmName));
 }
 
 ImageList::~ImageList()
@@ -66,7 +65,7 @@ void ImageList::addImage(std::unique_ptr<Image> image)
 
 void ImageList::addImage(const std::string& filename)
 {
-    addImage(make_unique<Image>(filename));
+    addImage(std::make_unique<Image>(filename));
 }
 
 const std::vector<std::unique_ptr<Image>>& ImageList::images() const
@@ -81,5 +80,17 @@ void ImageList::render(bool eggTransparency) {
 bool ImageList::opaque(const Point &pos) {
     return _images.at(currentImage())->opaque(pos);
 }
+
+
+void ImageList::setPosition(const Point &pos)
+{
+    Base::setPosition(pos);
+    for (auto& image: _images)
+    {
+        image->setPosition(position());
+    }
+}
+
+
 }
 }

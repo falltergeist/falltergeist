@@ -23,9 +23,9 @@
 // C++ standard includes
 #include <array>
 #include <string>
+#include <memory>
 
 // Falltergeist includes
-#include "../Base/StlFeatures.h"
 #include "../Exception.h"
 #include "../Game/ArmorItemObject.h"
 #include "../Game/Defines.h"
@@ -38,7 +38,7 @@
 #include "../State/Location.h"
 #include "../UI/Animation.h"
 #include "../UI/AnimationFrame.h"
-#include "../VM/VM.h"
+#include "../VM/Script.h"
 
 // Third party includes
 
@@ -510,8 +510,8 @@ void CritterObject::think()
     Object::think();
 }
 
-static const std::array<int, 6> xTileOffsets = {16, 32, 16, -16, -32, -16};
-static const std::array<int, 6> yTileOffsets = {-12, 0, 12,  12,   0, -12};
+static const std::array<int, 6> xTileOffsets = {{16, 32, 16, -16, -32, -16}};
+static const std::array<int, 6> yTileOffsets = {{-12, 0, 12,  12,   0, -12}};
 
 // TODO: move somewhere appropriate
 bool isOutsideOfHexForDirection(Point offset, Orientation orient)
@@ -602,7 +602,7 @@ unique_ptr<UI::Animation> CritterObject::_generateMovementAnimation()
         frmString += _generateWeaponFrmString() + "b";
     }
 
-    return make_unique<UI::Animation>("art/critters/" + frmString + ".frm", orientation());
+    return std::make_unique<UI::Animation>("art/critters/" + frmString + ".frm", orientation());
 }
 
 UI::Animation* CritterObject::setActionAnimation(const string& action)

@@ -24,7 +24,6 @@
 #include <string>
 
 // Falltergeist includes
-#include "../../Base/StlFeatures.h"
 
 // Third party includes
 

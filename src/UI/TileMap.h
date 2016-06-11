@@ -21,11 +21,12 @@
 #define FALLTERGEIST_UI_TILEMAP_H
 
 // C++ standard includes
-#include <vector>
 #include <map>
 #include <memory>
 
 // Falltergeist includes
+#include "../Graphics/Point.h"
+#include "../Graphics/Rect.h"
 #include "../Graphics/Renderer.h"
 
 // Third party includes
@@ -39,6 +40,9 @@ namespace Graphics
 }
 namespace UI
 {
+
+using Graphics::Point;
+using Graphics::Rect;
 
 class Tile;
 
