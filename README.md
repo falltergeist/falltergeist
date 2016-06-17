@@ -17,7 +17,7 @@ Jabber chanel: falltergeist on conference.jabber.ru
 - [SDL2\_image](http://www.libsdl.org/projects/SDL_image/) (libsdl2-image)
 - [GLEW](http://glew.sourceforge.net/)
 - [GLM](http://glm.g-truc.net/)
-- [Zlib](http://www.zlib.net/) (Zlib)
+- [Zlib](http://www.zlib.net/) (zlib1g)
 
 ##Compilation under linux
 
