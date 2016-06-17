@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Falltergeist
-Comment=Remake of Fallout 2
+Comment=Open Source Fallout 2 Engine
 Categories=Game;RolePlaying;
 Exec=falltergeist
 Terminal=false
