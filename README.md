@@ -12,12 +12,12 @@ Jabber chanel: falltergeist on conference.jabber.ru
 
 ##Dependencies
 
-- [SDL2](http://www.libsdl.org) (libsdl2)
-- [SDL2\_mixer](http://www.libsdl.org/projects/SDL_mixer/) (libsdl2-mixer)
-- [SDL2\_image](http://www.libsdl.org/projects/SDL_image/) (libsdl2-image)
+- [SDL2](http://www.libsdl.org) 
+- [SDL2\_mixer](http://www.libsdl.org/projects/SDL_mixer/) 
+- [SDL2\_image](http://www.libsdl.org/projects/SDL_image/) 
 - [GLEW](http://glew.sourceforge.net/)
 - [GLM](http://glm.g-truc.net/)
-- [Zlib](http://www.zlib.net/) (zlib1g)
+- [Zlib](http://www.zlib.net/) 
 
 ##Compilation under linux
 
