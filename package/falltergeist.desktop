@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Falltergeist
+Comment=Remake of Fallout 2
+Categories=Game;RolePlaying;
+Exec=falltergeist
+Terminal=false
+
