@@ -23,7 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include <Graphics/Sprite.h>
+#include "../Graphics/Sprite.h"
 #include "Base.h"
 
 // Third party includes

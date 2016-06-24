@@ -24,9 +24,9 @@
 #include <cstdint>
 #include <string>
 #include <vector>
-#include <Graphics/TextArea.h>
 
 // Falltergeist includes
+#include "../Graphics/TextArea.h"
 #include "../UI/Base.h"
 #include "../Graphics/Font.h"
 
