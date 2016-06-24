@@ -45,7 +45,7 @@
 #include "../UI/ImageButton.h"
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
-
+#include "../Logger.h"
 // Third party includes
 
 namespace Falltergeist
@@ -105,12 +105,17 @@ PlayerPanel::PlayerPanel() : UI::Base()
     _ui.push_back(std::make_shared<ImageButton>(ImageButton::Type::PANEL_ATTACK, position() + Point(267, 25)));
 
     _ui.back()->mouseDownHandler().add([this](Event::Event* event){
-            _isAttackBtnPressed = true;
-        });
+        if(auto mouse = dynamic_cast<Event::Mouse*>(event))
+        {
+            if(mouse->leftButton())
+                _isAttackBtnPressed = true;
+        }
+    });
 
     _ui.back()->mouseUpHandler().add([this](Event::Event* event){
-            _isAttackBtnPressed = false;
-        });
+        _isAttackBtnPressed = false;
+    });
+
 
     // Hit points
     _hitPoints = std::make_shared<SmallCounter>(position() + Point(473, 40));

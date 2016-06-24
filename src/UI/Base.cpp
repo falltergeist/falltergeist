@@ -35,7 +35,7 @@
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../UI/Animation.h"
-
+#include "../Logger.h"
 // Third party includes
 
 namespace Falltergeist
@@ -211,14 +211,17 @@ void Base::handle(Event::Mouse* mouseEvent)
         {
             case Mouse::Type::MOVE:
             {
+
                 if (_leftButtonPressed)
                 {
+                    //Logger::critical() << "move left press" << std::endl;
                     emitEvent(std::make_unique<Mouse>(*mouseEvent, _drag ? "mousedrag" : "mousedragstart"),
                               _drag ? mouseDragHandler() : mouseDragStartHandler());
                     _drag = true;
                 }
                 if (!_hovered)
                 {
+                    //Logger::critical() << "move hover" << std::endl;
                     _hovered = true;
                     emitEvent(std::make_unique<Mouse>(*mouseEvent, "mousein"), mouseInHandler());
                 }
@@ -230,12 +233,15 @@ void Base::handle(Event::Mouse* mouseEvent)
             }
             case Mouse::Type::BUTTON_DOWN:
             {
+                //Logger::critical() << "button down" << std::endl;
                 emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), mouseDownHandler());
                 switch (mouseEvent->button())
                 {
                     case Mouse::Button::LEFT:
                     {
-                        _leftButtonPressed = true;
+                        if(_leftButtonPressed==false)
+                            _leftButtonPressed = true;
+
                         break;
                     }
                     case Mouse::Button::RIGHT:
@@ -322,6 +328,8 @@ void Base::handle(Event::Mouse* mouseEvent)
                                 _drag = false;
                                 emitEvent(std::make_unique<Event::Mouse>(*mouseEvent, "mousedragstop"), mouseDragStopHandler());
                             }
+
+                            emitEvent(std::make_unique<Event::Mouse>(*mouseEvent, "mouseup"), mouseUpHandler());
                             _leftButtonPressed = false;
                         }
                         break;
@@ -330,6 +338,7 @@ void Base::handle(Event::Mouse* mouseEvent)
                     {
                         if (_rightButtonPressed)
                         {
+                            emitEvent(std::make_unique<Event::Mouse>(*mouseEvent, "mouseup"), mouseUpHandler());
                             _rightButtonPressed = false;
                         }
                         break;
