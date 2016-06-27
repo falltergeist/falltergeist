@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Falltergeist
+Comment=Open Source Fallout 2 Engine
+Categories=Game;RolePlaying;
+Exec=falltergeist
+Terminal=false
+

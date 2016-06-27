@@ -20,4 +20,5 @@
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
     install(TARGETS falltergeist RUNTIME DESTINATION bin)
     install(DIRECTORY data DESTINATION share/falltergeist)
+    install(FILES package/falltergeist.desktop DESTINATION share/applications)
 endif()
