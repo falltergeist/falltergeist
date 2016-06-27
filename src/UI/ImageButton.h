@@ -95,7 +95,6 @@ public:
     bool opaque(unsigned int x, unsigned int y);
     virtual bool opaque(const Point &pos) override;
 
-
 protected:
     bool _checkboxMode = false; // remember new state after click
     bool _checked = false;

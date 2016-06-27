@@ -211,6 +211,7 @@ void Base::handle(Event::Mouse* mouseEvent)
         {
             case Mouse::Type::MOVE:
             {
+
                 if (_leftButtonPressed)
                 {
                     emitEvent(std::make_unique<Mouse>(*mouseEvent, _drag ? "mousedrag" : "mousedragstart"),
@@ -235,7 +236,9 @@ void Base::handle(Event::Mouse* mouseEvent)
                 {
                     case Mouse::Button::LEFT:
                     {
-                        _leftButtonPressed = true;
+                        if(_leftButtonPressed==false)
+                            _leftButtonPressed = true;
+
                         break;
                     }
                     case Mouse::Button::RIGHT:
@@ -322,6 +325,8 @@ void Base::handle(Event::Mouse* mouseEvent)
                                 _drag = false;
                                 emitEvent(std::make_unique<Event::Mouse>(*mouseEvent, "mousedragstop"), mouseDragStopHandler());
                             }
+
+                            emitEvent(std::make_unique<Event::Mouse>(*mouseEvent, "mouseup"), mouseUpHandler());
                             _leftButtonPressed = false;
                         }
                         break;
@@ -330,6 +335,7 @@ void Base::handle(Event::Mouse* mouseEvent)
                     {
                         if (_rightButtonPressed)
                         {
+                            emitEvent(std::make_unique<Event::Mouse>(*mouseEvent, "mouseup"), mouseUpHandler());
                             _rightButtonPressed = false;
                         }
                         break;

@@ -257,12 +257,12 @@ void ImageButton::_onMouseDown(Event::Mouse* event)
 
 void ImageButton::_onMouseOut(Event::Mouse* event)
 {
-    if(!_enabled) return;
-    auto sender = dynamic_cast<ImageButton*>(event->target());
-    if (_leftButtonPressed && !sender->_upSound.empty())
-    {
-        Game::getInstance()->mixer()->playACMSound(sender->_upSound);
-    }
+//    if(!_enabled) return;
+//    auto sender = dynamic_cast<ImageButton*>(event->target());
+//    if (_leftButtonPressed && !sender->_upSound.empty())
+//    {
+//        Game::getInstance()->mixer()->playACMSound(sender->_upSound);
+//    }
 }
 
 
@@ -297,7 +297,7 @@ void ImageButton::handle(Event::Mouse* mouseEvent)
 void ImageButton::render(bool eggTransparency)
 {
     if(!_enabled) return;
-    if ((_checkboxMode && _checked) || (_hovered && _leftButtonPressed))
+    if ((_checkboxMode && _checked) || (_leftButtonPressed))
     {
       _butdown->render(position().x(),position().y());
       return;
