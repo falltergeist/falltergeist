@@ -51,6 +51,8 @@
 #include "Format/Txt/WorldmapFile.h"
 #include "Game/Location.h"
 #include "Graphics/Font.h"
+#include "Graphics/Font/AAF.h"
+#include "Graphics/Font/FON.h"
 #include "Graphics/Texture.h"
 #include "Graphics/Shader.h"
 #include "Logger.h"
@@ -59,8 +61,6 @@
 
 // Third party includes
 #include <SDL_image.h>
-#include <Graphics/Font/AAF.h>
-#include <Graphics/Font/FON.h>
 
 namespace Falltergeist
 {
