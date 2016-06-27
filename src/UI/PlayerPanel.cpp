@@ -45,7 +45,7 @@
 #include "../UI/ImageButton.h"
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
-#include "../Logger.h"
+
 // Third party includes
 
 namespace Falltergeist
