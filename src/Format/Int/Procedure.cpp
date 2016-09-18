@@ -92,37 +92,37 @@ void Procedure::setArgumentsCounter(uint32_t value)
 
 bool Procedure::isTimed()
 {
-    return flags() & (unsigned)PROCEDURE_FLAG::TIMED;
+    return static_cast<bool>(flags() & (unsigned)PROCEDURE_FLAG::TIMED);
 }
 
 bool Procedure::isConditional()
 {
-    return flags() & (unsigned)PROCEDURE_FLAG::CONDITIONAL;
+    return static_cast<bool>(flags() & (unsigned)PROCEDURE_FLAG::CONDITIONAL);
 }
 
 bool Procedure::isImported()
 {
-    return flags() & (unsigned)PROCEDURE_FLAG::IMPORTED;
+    return static_cast<bool>(flags() & (unsigned)PROCEDURE_FLAG::IMPORTED);
 }
 
 bool Procedure::isExported()
 {
-    return flags() & (unsigned)PROCEDURE_FLAG::EXPORTED;
+    return static_cast<bool>(flags() & (unsigned)PROCEDURE_FLAG::EXPORTED);
 }
 
 bool Procedure::isCritical()
 {
-    return flags() & (unsigned)PROCEDURE_FLAG::CRITICAL;
+    return static_cast<bool>(flags() & (unsigned)PROCEDURE_FLAG::CRITICAL);
 }
 
 bool Procedure::isPure()
 {
-    return flags() & (unsigned)PROCEDURE_FLAG::PURE;
+    return static_cast<bool>(flags() & (unsigned)PROCEDURE_FLAG::PURE);
 }
 
 bool Procedure::isInline()
 {
-    return flags() & (unsigned)PROCEDURE_FLAG::INLINE;
+    return static_cast<bool>(flags() & (unsigned)PROCEDURE_FLAG::INLINE);
 }
 
 std::string Procedure::name() const

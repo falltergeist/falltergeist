@@ -26,7 +26,6 @@
 
 // Falltergeist includes
 #include "../Sve/File.h"
-#include "../../Exception.h"
 
 // Third party includes
 

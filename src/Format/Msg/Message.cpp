@@ -44,12 +44,12 @@ Message::~Message()
 {
 }
 
-void Message::setNumber(unsigned int number)
+void Message::setNumber(unsigned long number)
 {
     _number = number;
 }
 
-unsigned int Message::number()
+unsigned long Message::number()
 {
     return _number;
 }
