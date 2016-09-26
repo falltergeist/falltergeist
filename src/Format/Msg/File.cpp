@@ -143,7 +143,9 @@ Message* File::message(unsigned long number)
 {
     auto message_iterator = _messages_map.find(number);
     if (message_iterator != _messages_map.end())
+    {
         return message_iterator->second;
+    }
     throw Exception("File::message() - number is out of range: " + std::to_string(number));
 }
 
