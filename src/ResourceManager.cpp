@@ -108,30 +108,33 @@ Format::Dat::Item* ResourceManager::datFileItem(string filename)
     // Searching file in Fallout data directory
     {
         string path = CrossPlatform::findFalloutDataPath() + "/" + filename;
-        ifstream stream;
-        stream.open(path, ios_base::binary);
-        if (stream.is_open())
+
+        // FIXME: use move semantics (see issue #486)
+        ifstream* stream = new ifstream();
+        stream->open(path, ios_base::binary);
+        if (stream->is_open())
         {
             Logger::debug("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM FALLOUT DATA DIR]" << endl;
         }
         else
         {
             path = CrossPlatform::findFalltergeistDataPath() + "/" + filename;
-            stream.open(path, ios_base::binary);
-            if (stream.is_open())
+            stream->open(path, ios_base::binary);
+            if (stream->is_open())
             {
                 Logger::debug("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM FALLTERGEIST DATA DIR]" << endl;
             }
         }
 
-        if (stream.is_open())
+        if (stream->is_open())
         {
-            Format::Dat::Item* item = _createItemByName(filename, &stream);
+            Format::Dat::Item* item = _createItemByName(filename, stream);
             item->setFilename(filename);
             _datItems.push_back(unique_ptr<Format::Dat::Item>(item));
             _datItemMap.insert(make_pair(filename, item));
             return item;
         }
+        delete stream;
     }
 
     // Search in DAT files
