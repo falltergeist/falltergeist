@@ -64,8 +64,8 @@ namespace Falltergeist
                 unsigned int totalBottlecaps = bottlecaps;
                 for(auto item: *inventory)
                 {
-                    if((int)item->subtype() == (int)ITEM_TYPE::CONTAINER)
-                        totalBottlecaps += countBottlecaps(item->inventory(), totalBottlecaps);
+                    if(auto containerItem = dynamic_cast<Game::ContainerItemObject*>(item))
+                        totalBottlecaps += countBottlecaps(containerItem->inventory(), totalBottlecaps);
                     else if(item->PID() == (int)ITEM_PID::PID_BOTTLE_CAPS)
                         totalBottlecaps += item->amount();
                 }

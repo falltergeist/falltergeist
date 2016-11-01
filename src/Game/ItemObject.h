@@ -70,8 +70,6 @@ public:
     int inventoryFID() const;
     void setInventoryFID(int value);
 
-    std::vector<ItemObject*>* inventory();
-
     UI::Image* inventoryUi() const;
     UI::Image* inventorySlotUi() const;
     UI::Image* inventoryDragUi() const;
@@ -81,7 +79,6 @@ protected:
     unsigned int _amount = 1;
     unsigned int _weight = 0;
     unsigned int _volume = 0;
-    std::vector<ItemObject*> _inventory;
     int _inventoryFID = -1;
     std::unique_ptr<UI::Image> _inventoryUi, _inventorySlotUi, _inventoryDragUi;
     void _generateUi() override;
