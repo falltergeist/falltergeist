@@ -21,12 +21,15 @@
 #include "../../VM/Handler/Opcode8138Handler.h"
 
 // C++ standard includes
+#include <vector>
 
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Script.h"
 #include "../../Game/ContainerItemObject.h"
 #include "../../Game/CritterObject.h"
+#include "../../Game/ItemObject.h"
+#include "../../Format/Enums.h"
 
 // Third party includes
 
@@ -36,46 +39,37 @@ namespace Falltergeist
     {
         namespace Handler
         {
+        
             Opcode8138::Opcode8138(VM::Script* script) : OpcodeHandler(script)
             {
             }
 
             void Opcode8138::_run()
-            {
-                //TODO: search ContainerItemObject and CritterObject inventories recursively if it has container itemobjects in it
-                //for now recursive inventories are not yet implemented since ItemObject has no inventory vector
-                
+            {             
                 Logger::debug("SCRIPT") << "[8138] [=] int item_caps_total(void* obj)" << std::endl;
                 auto object = _script->dataStack()->popObject();
                 if (auto container = dynamic_cast<Game::ContainerItemObject*>(object))
-                {
-                    for(auto item: *container->inventory())
-                    {   
-                        if(item->PID() == 519)
-                        {
-                            _script->dataStack()->push(item->amount());
-                            return;
-                        }
-                    }
-                    _script->dataStack()->push(0);
-                }
+                    _script->dataStack()->push(countBottlecaps(container->inventory(), 0));
                 else if (auto critter = dynamic_cast<Game::CritterObject*>(object))
-                {
-                    for(auto item: *critter->inventory())
-                    {   
-                        if(item->PID() == 519)
-                        {
-                            _script->dataStack()->push(item->amount());
-                            return;
-                        }
-                    }
-                    _script->dataStack()->push(0);
-                }
+                    _script->dataStack()->push(countBottlecaps(critter->inventory(), 0));
                 else
                 {
                     _error("item_caps_total: object type has no inventory!");
                     _script->dataStack()->push(0);
                 }
+            }
+
+            unsigned int Opcode8138::countBottlecaps(std::vector<Game::ItemObject*>* inventory, unsigned int bottlecaps)
+            {
+                unsigned int totalBottlecaps = bottlecaps;
+                for(auto item: *inventory)
+                {
+                    if((int)item->subtype() == (int)ITEM_TYPE::CONTAINER)
+                        totalBottlecaps += countBottlecaps(item->inventory(), totalBottlecaps);
+                    else if(item->PID() == (int)ITEM_PID::PID_BOTTLE_CAPS)
+                        totalBottlecaps += item->amount();
+                }
+                return totalBottlecaps;
             }
         }
     }

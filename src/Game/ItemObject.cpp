@@ -77,6 +77,12 @@ void ItemObject::setInventoryFID(int value)
     _inventoryFID = value;
 }
 
+std::vector<ItemObject*>* ItemObject::inventory()
+{
+    return &_inventory;
+}
+
+
 UI::Image* ItemObject::inventoryDragUi() const
 {
     return _inventoryDragUi.get();
