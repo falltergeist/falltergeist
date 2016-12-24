@@ -1,7 +1,6 @@
 CMakeCache.txt
 CMakeLists.txt.user
 CMakeFiles/*
-lib/libfalltergeist/*
 Makefile
 cmake_install.cmake
 falltergeist.layout
@@ -14,3 +13,4 @@ falltergeist.cbp
 *.autosave
 /src/nbproject/private/
 nbproject/
+ext

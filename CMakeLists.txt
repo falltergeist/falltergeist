@@ -62,7 +62,7 @@ find_package(GLEW REQUIRED)
 if(NOT GLEW_FOUND)
     message(FATAL_ERROR "GLEW library not found")
 endif(NOT GLEW_FOUND)
-include_directories(${GLEW_INCLUDE_PATH})
+include_directories(${GLEW_INCLUDE_DIR})
 
 find_package(GLM REQUIRED)
 if(NOT GLM_FOUND)
