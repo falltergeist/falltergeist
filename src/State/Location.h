@@ -38,6 +38,7 @@ namespace Falltergeist
 {
     namespace Game
     {
+        class Location;
         class Object;
         class SpatialObject;
     }
@@ -84,6 +85,9 @@ namespace Falltergeist
 
                 HexagonGrid* hexagonGrid();
                 LocationCamera* camera();
+
+                std::shared_ptr<Falltergeist::Game::Location> location();
+                void setLocation(std::shared_ptr<Falltergeist::Game::Location> location);
 
                 void setMVAR(unsigned int number, int value);
                 int MVAR(unsigned int number);
@@ -158,6 +162,7 @@ namespace Falltergeist
                 std::map<std::string, VM::StackValue> _EVARS;
                 std::vector<UI::Base*> _floatMessages;
 
+                std::shared_ptr<Falltergeist::Game::Location> _location;
                 bool _locationEnter = true;
                 unsigned int _currentElevation = 0;
                 unsigned int _currentMap = 0;

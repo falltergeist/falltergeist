@@ -46,6 +46,7 @@
 #include "../Game/DudeObject.h"
 #include "../Game/ExitMiscObject.h"
 #include "../Game/Game.h"
+#include "../Game/Location.h"
 #include "../Game/Object.h"
 #include "../Game/ObjectFactory.h"
 #include "../Game/SpatialObject.h"
@@ -101,7 +102,7 @@ namespace Falltergeist
 
         Location::~Location()
         {
-        }
+        } 
 
         void Location::init()
         {
@@ -112,7 +113,7 @@ namespace Falltergeist
             setModal(true);
 
             auto game = Game::getInstance();
-            setLocation("maps/" + game->settings()->initialLocation() + ".map");
+            setLocation(game->settings()->initialLocation());
 
             _playerPanel = makeUI<UI::PlayerPanel>();
 
@@ -169,10 +170,10 @@ namespace Falltergeist
 
         void Location::setLocation(const std::string& name)
         {
+            _objects.clear();
             _floor = std::make_unique<UI::TileMap>();
             _roof = std::make_unique<UI::TileMap>();
             _hexagonGrid = std::make_unique<HexagonGrid>();
-            _objects.clear();
             std::vector<glm::vec2> _vertices;
             for (auto hex : _hexagonGrid->hexagons())
             {
@@ -233,30 +234,28 @@ namespace Falltergeist
                 }
             }
             _lightmap = new Graphics::Lightmap(_vertices,indexes);
-
-            auto mapFile = ResourceManager::getInstance()->mapFileType(name);
-
+            
+            
+            std::string mapFileName = "maps/" + name + ".map";
+            auto mapFile = ResourceManager::getInstance()->mapFileType(mapFileName);
             if (mapFile == nullptr)
             {
                 auto defaultSettings = new Settings;
-                Logger::warning() << "No such map: `" << name << "`; using default map" << std::endl;
+                Logger::warning() << "No such map: `" << mapFileName << "`; using default map" << std::endl;
                 mapFile = ResourceManager::getInstance()->mapFileType("maps/" + defaultSettings->initialLocation() + ".map");
             }
 
-            _currentElevation = mapFile->defaultElevation();
+            _location = std::make_shared<Falltergeist::Game::Location>();           
+            _location->loadFromMapFile(mapFile);
 
+            _currentElevation = _location->defaultElevationIndex();
             // Set camera position on default
-            camera()->setCenter(hexagonGrid()->at(mapFile->defaultPosition())->position());
+            camera()->setCenter(hexagonGrid()->at(_location->defaultPosition())->position());
 
-            // Initialize MAP vars
-            if (mapFile->MVARS()->size() > 0)
+            // @todo Use _location->MVARS instead of local member
+            for (auto mvar : *_location->MVARS())
             {
-                auto name = mapFile->name();
-                auto gam = ResourceManager::getInstance()->gamFileType("maps/" + name.substr(0, name.find(".")) + ".gam");
-                for (auto mvar : *gam->MVARS())
-                {
-                    _MVARS.push_back(mvar.second);
-                }
+                _MVARS.push_back(mvar);
             }
 
             auto mapObjects = mapFile->elevations()->at(_currentElevation)->objects();
@@ -1409,6 +1408,16 @@ namespace Falltergeist
         unsigned int Location::currentMapIndex()
         {
             return _currentMap;
+        }
+        
+        std::shared_ptr<Falltergeist::Game::Location> Location::location()
+        {
+            return _location;
+        }
+
+        void Location::setLocation(std::shared_ptr<Falltergeist::Game::Location> location)
+        {
+            _location = location;
         }
     }
 }

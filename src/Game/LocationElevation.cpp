@@ -28,61 +28,59 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
+    namespace Game
+    {
+        LocationElevation::LocationElevation()
+        {
+        }
 
-LocationElevation::LocationElevation()
-{
-}
+        LocationElevation::~LocationElevation()
+        {
+        }
 
-LocationElevation::~LocationElevation()
-{
-}
+        /**
+         * @brief Returns if player can rest on this elevation
+         * @return bool
+         */
+        bool LocationElevation::canRestHere() const
+        {
+            return _canRestHere;
+        }
 
-/**
- * @brief Returns if player can rest on this elevation
- * @return bool
- */
-bool LocationElevation::canRestHere() const
-{
-    return _canRestHere;
-}
+        /**
+         * @brief Sets if player can rest on this elevation
+         * @param[in] value
+         */
+        void LocationElevation::setCanRestHere(bool value)
+        {
+            _canRestHere = value;
+        }
 
-/**
- * @brief Sets if player can rest on this elevation
- * @param[in] value
- */
-void LocationElevation::setCanRestHere(bool value)
-{
-    _canRestHere = value;
-}
+        /**
+         * @brief Returns array of ids of floor tiles
+         * @return Floor tiles
+         */
+        std::vector<unsigned>* LocationElevation::floorTiles()
+        {
+            return &_floorTiles;
+        }
 
-/**
- * @brief Returns array of ids of floor tiles
- * @return Floor tiles
- */
-std::vector<unsigned>* LocationElevation::floorTiles()
-{
-    return &_floorTiles;
-}
+        /**
+         * @brief Returns array of ids of roof tiles
+         * @return Roof tiles
+         */
+        std::vector<unsigned>* LocationElevation::roofTiles()
+        {
+            return &_roofTiles;
+        }
 
-/**
- * @brief Returns array of ids of roof tiles
- * @return Roof tiles
- */
-std::vector<unsigned>* LocationElevation::roofTiles()
-{
-    return &_roofTiles;
-}
-
-/**
- * @brief Returns array of game objects
- * @return Game objects
- */
-std::vector<Game::Object*>* LocationElevation::objects()
-{
-    return &_objects;
-}
-
-}
+        /**
+         * @brief Returns array of game objects
+         * @return Game objects
+         */
+        std::vector<Game::Object*>* LocationElevation::objects()
+        {
+            return &_objects;
+        }
+    }
 }
