@@ -5,7 +5,7 @@ os:
 language: cpp
 sudo: required
 osx_image: xcode7.3
-dist: precise
+dist: trusty
 
 script:
   - cmake .
