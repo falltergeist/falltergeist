@@ -1,0 +1,29 @@
+[requires]
+zlib/1.2.11@lasote/stable
+SDL2/2.0.5@lasote/stable
+SDL2_image/2.0.1@lasote/stable
+SDL2_mixer/2.0.1@a_teammate/testing
+opengl/0.0-3.0@lasote/vcpkg
+glew/2.0.0@lasote/vcpkg
+glm/0.9.7.6@dlarudgus20/stable
+
+[generators]
+cmake
+
+[options]
+SDL2:directx=False
+SDL2:fPIC=True
+SDL2:shared=False
+SDL2_image:fPIC=True
+SDL2_image:fast_jpg_load=False
+SDL2_image:shared=False
+SDL2_mixer:fPIC=True
+SDL2_mixer:shared=True
+libjpeg-turbo:SSE=True
+libjpeg-turbo:shared=True
+libpng:shared=True
+zlib:shared=True
+
+[imports]
+bin, *.dll -> ./bin # Copies all dll files from packages bin folder to my "bin" folder
+lib, *.dylib* -> ./bin # Copies all dylib files from packages lib folder to my "bin" folder
