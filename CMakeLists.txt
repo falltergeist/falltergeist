@@ -77,12 +77,9 @@ endif()
 
 file(GLOB_RECURSE SOURCES  src/*.cpp)
 
-if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-  if(MINGW)
-	add_definitions(-std=c++14 -Wall)
-  endif()
-else()
-    add_definitions (-std=c++14 -Wall)
+set(CMAKE_CXX_STANDARD 14)
+if(NOT CMAKE_SYSTEM_NAME MATCHES "Windows" OR MINGW)
+	add_definitions(-Wall)
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
