@@ -86,10 +86,13 @@ else()
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-	add_executable(falltergeist main.cpp ${SOURCES} "package/windows.rc")
+	add_executable(falltergeist main.cpp ${SOURCES} "package/windows.rc" pchheader.cpp)
 else()
-	add_executable(falltergeist main.cpp ${SOURCES})
+	add_executable(falltergeist main.cpp ${SOURCES} pchheader.cpp)
 endif()
+
+include(cmake/modules/PrecompiledHeader.cmake)
+add_precompiled_header(falltergeist pchheader.h FORCEINCLUDE SOURCE_CXX pchheader.cpp)
 
 if (CONAN_LIBS)
 	target_link_libraries(falltergeist ${CONAN_LIBS})
