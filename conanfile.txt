@@ -1,0 +1,11 @@
+[requires]
+zlib/1.2.11@lasote/stable
+SDL2/2.0.5@lasote/stable
+SDL2_image/2.0.1@lasote/stable
+SDL2_mixer/2.0.1@a_teammate/testing
+opengl/0.0-3.0@lasote/vcpkg
+glew/2.0.0@lasote/vcpkg
+glm/0.9.7.6@dlarudgus20/stable
+
+[generators]
+cmake
