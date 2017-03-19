@@ -9,3 +9,21 @@ glm/0.9.7.6@dlarudgus20/stable
 
 [generators]
 cmake
+
+[options]
+SDL2:directx=False
+SDL2:fPIC=True
+SDL2:shared=False
+SDL2_image:fPIC=True
+SDL2_image:fast_jpg_load=False
+SDL2_image:shared=False
+SDL2_mixer:fPIC=True
+SDL2_mixer:shared=True
+libjpeg-turbo:SSE=True
+libjpeg-turbo:shared=True
+libpng:shared=True
+zlib:shared=True
+
+[imports]
+bin, *.dll -> ./bin # Copies all dll files from packages bin folder to my "bin" folder
+lib, *.dylib* -> ./bin # Copies all dylib files from packages lib folder to my "bin" folder
