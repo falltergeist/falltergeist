@@ -22,3 +22,4 @@ if [ "$CXX" = "clang++" ]; then sudo apt-get install -qq clang-3.6; fi
 if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.6" CC="clang-3.6"; fi
 if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.9; fi
 if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
+if [ "$CXX" = "g++" ]; then sudo add-apt-repository ppa:george-edison55/cmake-3.x -y; fi
