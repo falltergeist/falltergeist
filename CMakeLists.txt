@@ -77,7 +77,6 @@ endif()
 
 file(GLOB_RECURSE SOURCES  src/*.cpp)
 
-set(CMAKE_CXX_STANDARD 14)
 if(NOT MSVC)
 	add_definitions(-Wall)
 endif()
@@ -87,6 +86,12 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 else()
 	add_executable(falltergeist main.cpp ${SOURCES} pchheader.cpp)
 endif()
+
+set_target_properties(falltergeist PROPERTIES
+    CXX_STANDARD 14
+    CXX_STANDARD_REQUIRED YES
+    CXX_EXTENSIONS NO
+)
 
 include(cmake/modules/PrecompiledHeader.cmake)
 add_precompiled_header(falltergeist pchheader.h FORCEINCLUDE SOURCE_CXX pchheader.cpp)
