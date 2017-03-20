@@ -83,13 +83,14 @@ if(NOT CMAKE_SYSTEM_NAME MATCHES "Windows" OR MINGW)
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-	add_executable(falltergeist main.cpp ${SOURCES} "package/windows.rc" pchheader.cpp)
-else()
-	add_executable(falltergeist main.cpp ${SOURCES} pchheader.cpp)
+    set(_additional_includes "${_additional_includes} package/windows.rc")
+	
+    include(cmake/modules/PrecompiledHeader.cmake)
+    add_precompiled_header(falltergeist pchheader.h FORCEINCLUDE SOURCE_CXX pchheader.cpp)
+	set(_additional_includes "${_additional_includes} pchheader.cpp")
 endif()
 
-include(cmake/modules/PrecompiledHeader.cmake)
-add_precompiled_header(falltergeist pchheader.h FORCEINCLUDE SOURCE_CXX pchheader.cpp)
+add_executable(falltergeist main.cpp ${SOURCES} ${_additional_includes})
 
 if (CONAN_LIBS)
 	target_link_libraries(falltergeist ${CONAN_LIBS})
