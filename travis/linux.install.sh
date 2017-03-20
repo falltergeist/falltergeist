@@ -8,11 +8,8 @@ echo "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.6 main" | sudo t
 
 # sdl2
 sudo add-apt-repository ppa:zoogie/sdl2-snapshots -y
-# cmake 3.x
-sudo add-apt-repository ppa:george-edison55/cmake-3.x -y
 
 sudo apt-get update -qq
-sudo apt-get upgrade
 sudo apt-get install -qq libsdl2-dev
 sudo apt-get install -qq libsdl2-mixer-dev
 sudo apt-get install -qq libsdl2-image-dev
@@ -20,7 +17,9 @@ sudo apt-get install -qq libglew1.6-dev
 sudo apt-get install -qq libglm-dev
 sudo apt-get install -qq mesa-common-dev
 
+
 if [ "$CXX" = "clang++" ]; then sudo apt-get install -qq clang-3.6; fi
 if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.6" CC="clang-3.6"; fi
 if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.9; fi
 if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
+if [ "$CXX" = "g++" ]; then sudo add-apt-repository ppa:george-edison55/cmake-3.x -y; fi
