@@ -20,7 +20,7 @@
 # It must be set before project
 set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Choose the type of build (by default Debug)")
 
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 project(falltergeist)
@@ -77,22 +77,21 @@ endif()
 
 file(GLOB_RECURSE SOURCES  src/*.cpp)
 
-if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-  if(MINGW)
-	add_definitions(-std=c++14 -Wall)
-  endif()
-else()
-    add_definitions (-std=c++14 -Wall)
+set(CMAKE_CXX_STANDARD 14)
+if(NOT CMAKE_SYSTEM_NAME MATCHES "Windows" OR MINGW)
+	add_definitions(-Wall)
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-	add_executable(falltergeist main.cpp ${SOURCES} "package/windows.rc" pchheader.cpp)
-else()
-	add_executable(falltergeist main.cpp ${SOURCES} pchheader.cpp)
+    set(_additional_includes "${_additional_includes} package/windows.rc")
+	
+    include(cmake/modules/PrecompiledHeader.cmake)
+    add_precompiled_header(falltergeist pchheader.h FORCEINCLUDE SOURCE_CXX pchheader.cpp)
+	set(_additional_includes "${_additional_includes} pchheader.cpp")
 endif()
 
-include(cmake/modules/PrecompiledHeader.cmake)
-add_precompiled_header(falltergeist pchheader.h FORCEINCLUDE SOURCE_CXX pchheader.cpp)
+
+add_executable(falltergeist main.cpp ${SOURCES} ${_additional_includes})
 
 if (CONAN_LIBS)
 	target_link_libraries(falltergeist ${CONAN_LIBS})
