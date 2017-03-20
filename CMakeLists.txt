@@ -78,7 +78,7 @@ endif()
 file(GLOB_RECURSE SOURCES  src/*.cpp)
 
 set(CMAKE_CXX_STANDARD 14)
-if(NOT CMAKE_SYSTEM_NAME MATCHES "Windows" OR MINGW)
+if(NOT MSVC)
 	add_definitions(-Wall)
 endif()
 
