@@ -9,7 +9,7 @@ dist: precise
 
 script:
   - cmake .
-  - make
+  - make -j2
 
 compiler:
   - clang
