@@ -77,19 +77,24 @@ endif()
 
 file(GLOB_RECURSE SOURCES  src/*.cpp)
 
-set(CMAKE_CXX_STANDARD 14)
-if(NOT MSVC)
+if(MSVC)
+	set(_additional_includes "package/windows.rc" pchheader.cpp)
+endif()
+
+add_executable(falltergeist main.cpp ${SOURCES} ${_additional_includes})
+
+set_target_properties(falltergeist PROPERTIES
+	CXX_STANDARD 14
+	CXX_STANDARD_REQUIRED YES
+	CXX_EXTENSIONS NO
+)
+
+if(MSVC)
+	include(cmake/modules/PrecompiledHeader.cmake)
+	add_precompiled_header(falltergeist pchheader.h FORCEINCLUDE SOURCE_CXX pchheader.cpp)
+else()
 	add_definitions(-Wall)
 endif()
-
-if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-	add_executable(falltergeist main.cpp ${SOURCES} "package/windows.rc" pchheader.cpp)
-else()
-	add_executable(falltergeist main.cpp ${SOURCES} pchheader.cpp)
-endif()
-
-include(cmake/modules/PrecompiledHeader.cmake)
-add_precompiled_header(falltergeist pchheader.h FORCEINCLUDE SOURCE_CXX pchheader.cpp)
 
 if (CONAN_LIBS)
 	target_link_libraries(falltergeist ${CONAN_LIBS})
