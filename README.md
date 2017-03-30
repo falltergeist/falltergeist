@@ -10,7 +10,7 @@ IRC channel: #falltergeist on [freenode.net](http://webchat.freenode.net/?channe
 
 Jabber chanel: falltergeist on conference.jabber.ru
 
-##Dependencies
+## Dependencies
 
 - [SDL2](http://www.libsdl.org) 
 - [SDL2\_mixer](http://www.libsdl.org/projects/SDL_mixer/) 
@@ -19,7 +19,7 @@ Jabber chanel: falltergeist on conference.jabber.ru
 - [GLM](http://glm.g-truc.net/)
 - [Zlib](http://www.zlib.net/) 
 
-##Compilation under linux
+## Compilation under linux
 
 ```
 cmake . && make
