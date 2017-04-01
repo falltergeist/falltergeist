@@ -40,7 +40,7 @@ namespace Falltergeist
 
             void Opcode802C::_run()
             {
-                _script->setSVARbase(_script->dataStack()->size());
+                _script->setSVARbase(static_cast<int>(_script->dataStack()->size()));
                 Logger::debug("SCRIPT") << "[802C] [*] op_set_global = " << _script->SVARbase() << std::endl;
             }
         }

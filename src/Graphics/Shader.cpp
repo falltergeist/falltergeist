@@ -31,6 +31,7 @@
 #include "../Logger.h"
 
 // Third-party includes
+#define GLM_FORCE_RADIANS
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Falltergeist
@@ -272,7 +273,7 @@ void Shader::setUniform(const std::string &uniform, const glm::vec3 &vec)
 
 void Shader::setUniform(const std::string &uniform, std::vector<GLuint> vec)
 {
-    glUniform1iv(getUniform(uniform), vec.size(), (const int*)&vec[0]);
+    glUniform1iv(getUniform(uniform), static_cast<GLsizei>(vec.size()), (const int*)&vec[0]);
 }
 
 void Shader::setUniform(const std::string &uniform, const glm::vec4 &vec)
@@ -322,7 +323,7 @@ void Shader::setUniform(const GLint &uniform, const glm::vec3 &vec)
 
 void Shader::setUniform(const GLint &uniform, std::vector<GLuint> vec)
 {
-    glUniform1iv((uniform), vec.size(), (const int*)&vec[0]);
+    glUniform1iv((uniform), static_cast<GLsizei>(vec.size()), (const int*)&vec[0]);
 }
 
 void Shader::setUniform(const GLint &uniform, const glm::vec4 &vec)

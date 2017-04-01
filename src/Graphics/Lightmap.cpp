@@ -35,7 +35,7 @@ namespace Falltergeist
 namespace Graphics
 {
 
-Lightmap::Lightmap(std::vector<glm::vec2> coords,std::vector<GLuint> indexes)
+Lightmap::Lightmap(std::vector<glm::vec2> coords, std::vector<GLuint> indexes)
 {
     if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
     {
@@ -60,7 +60,7 @@ Lightmap::Lightmap(std::vector<glm::vec2> coords,std::vector<GLuint> indexes)
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
     // update indexes
     GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexes.size() * sizeof(GLuint), &indexes[0], GL_DYNAMIC_DRAW));
-    _indexes = indexes.size();
+    _indexes = static_cast<unsigned>(indexes.size());
 
 
     _shader = ResourceManager::getInstance()->shader("lightmap");

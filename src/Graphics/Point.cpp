@@ -78,15 +78,15 @@ Point& Point::operator -=(const Point& rhs)
 
 Point& Point::operator *=(double rhs)
 {
-    _x *= rhs;
-    _y *= rhs;
+    _x = static_cast<int>(_x * rhs);
+    _y = static_cast<int>(_y * rhs);
     return *this;
 }
 
 Point& Point::operator /=(double rhs)
 {
-    _x /= rhs;
-    _y /= rhs;
+    _x = static_cast<int>(_x / rhs);
+    _y = static_cast<int>(_y / rhs);
     return *this;
 }
 

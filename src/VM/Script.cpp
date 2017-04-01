@@ -115,7 +115,7 @@ namespace Falltergeist
                 {
                     opcodeHandler->run();
                 }
-                catch (const HaltException& e)
+                catch (const HaltException&)
                 {
                     return;
                 }

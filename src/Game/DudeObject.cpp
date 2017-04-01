@@ -136,7 +136,7 @@ int DudeObject::hitPointsMax() const
     int value = 15;
     value += statTotal(STAT::ENDURANCE) * 2;
     value += statTotal(STAT::STRENGTH);
-    value += (2 + ceil(statTotal(STAT::ENDURANCE)/2))*(level() - 1);
+    value += (2 + static_cast<int>(ceil(statTotal(STAT::ENDURANCE)/2))) * (level() - 1);
     return value;
 }
 
@@ -164,7 +164,7 @@ int DudeObject::armorClass() const
 int DudeObject::actionPointsMax() const
 {
     unsigned int value = 0;
-    value += 5 + ceil(statTotal(STAT::AGILITY)/2);
+    value += 5 + static_cast<int>(ceil(statTotal(STAT::AGILITY) / 2));
     if (traitTagged(TRAIT::BRUISER))
     {
         value -= 2;
@@ -239,9 +239,9 @@ int DudeObject::sequence() const
 
 int DudeObject::healingRate() const
 {
-    unsigned int value = 0;
-    unsigned int en = statTotal(STAT::ENDURANCE);
-    value += ceil((en > 10 ? 10 : en) / 3);
+    int value = 0;
+    int en = statTotal(STAT::ENDURANCE);
+    value += static_cast<int>(ceil((en > 10 ? 10 : en) / 3));
     if (value == 0) value = 1;
 
     if (traitTagged(TRAIT::FAST_METABOLISM))

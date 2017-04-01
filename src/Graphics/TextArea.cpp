@@ -145,7 +145,7 @@ void TextArea::updateBuffers(std::vector<glm::vec2> vertices, std::vector<glm::v
         _cnt = 0;
         return;
     }
-    _cnt = indexes.size();
+    _cnt = static_cast<int>(indexes.size());
 
     if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
     {

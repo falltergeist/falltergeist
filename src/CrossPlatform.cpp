@@ -461,10 +461,10 @@ uint32_t CrossPlatform::microtime()
     }
 
     uint64_t time = mach_absolute_time();
-    return ((double)time * (double)timebase.numer) / ((double)timebase.denom);
+    return static_cast<uint32_t>(((double)time * (double)timebase.numer) / ((double)timebase.denom));
 #elif defined(_WIN32) || defined(WIN32)
     auto now = std::chrono::high_resolution_clock::now();
-    return std::chrono::time_point_cast<std::chrono::nanoseconds>(now).time_since_epoch().count();
+    return static_cast<uint32_t>(std::chrono::time_point_cast<std::chrono::nanoseconds>(now).time_since_epoch().count());
 #else
     struct timespec ts;
     clock_gettime(CLOCK_MONOTONIC, &ts);

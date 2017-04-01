@@ -42,7 +42,7 @@ namespace Falltergeist
             {
                 auto argumentsCounter = _script->dataStack()->popInteger();
                 _script->returnStack()->push(_script->DVARbase());
-                _script->setDVARBase(_script->dataStack()->size() - argumentsCounter);
+                _script->setDVARBase(static_cast<int>(_script->dataStack()->size()) - argumentsCounter);
                 Logger::debug("SCRIPT") << "[802B] [*] op_push_base = " << _script->DVARbase() << std::endl;
             }
         }

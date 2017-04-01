@@ -54,7 +54,7 @@ namespace Falltergeist
             return value;
         }
 
-        int Stack::size()
+        size_t Stack::size()
         {
             return _values.size();
         }

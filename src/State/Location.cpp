@@ -350,7 +350,7 @@ namespace Falltergeist
                     {
                         object->setScrName(msg->message(object->SID()+101)->text());
                     }
-                    catch (const Exception& e) {}
+                    catch (const Exception&) {}
                 }
 
                 auto hexagon = hexagonGrid()->at(mapObject->hexPosition());
@@ -428,8 +428,8 @@ namespace Falltergeist
             {
                 for (unsigned int i = 0; i != 100*100; ++i)
                 {
-                    unsigned int tileX = std::ceil(((double)i)/100);
-                    unsigned int tileY = i%100;
+                    unsigned int tileX = static_cast<unsigned>(std::ceil(((double)i)/100));
+                    unsigned int tileY = i % 100;
                     unsigned int x = (100 - tileY - 1)*48 + 32*(tileX - 1);
                     unsigned int y = tileX*24 +(tileY - 1)*12 + 1;
 
@@ -458,7 +458,7 @@ namespace Falltergeist
 
             if (it != maps.end())
             {
-                _currentMap = it-maps.begin();
+                _currentMap = static_cast<unsigned>(it - maps.begin());
 
                 if (!it->music.empty() && Game::getInstance()->settings()->musicVolume() > 0.0001)
                 {
@@ -1258,7 +1258,7 @@ namespace Falltergeist
             {
                 centerCameraAtHexagon(_hexagonGrid->at((unsigned int)tileNum));
             }
-            catch (const std::out_of_range& ex)
+            catch (const std::out_of_range&)
             {
                 throw Exception(std::string("Tile number out of range: ") + std::to_string(tileNum));
             }
@@ -1389,7 +1389,7 @@ namespace Falltergeist
 
                 lightLevel = light / ((65536-655)/100);
 
-                float l = lightLevel/100.0;
+                float l = static_cast<float>(lightLevel / 100.0);
                 lights.push_back(l);
             }
             _lightmap->update(lights);

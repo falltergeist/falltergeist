@@ -458,7 +458,7 @@ void Object::look_at_p_proc()
     {
         auto protoMsg = ResourceManager::getInstance()->msgFileType("text/english/game/proto.msg");
         char buf[512];
-        sprintf(buf, protoMsg->message(490)->text().c_str(), name().c_str());
+        sprintf_s(buf, protoMsg->message(490)->text().c_str(), name().c_str());
         Game::getInstance()->locationState()->displayMessage(std::string(buf));
     }
 }

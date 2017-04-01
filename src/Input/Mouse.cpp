@@ -244,8 +244,10 @@ void Mouse::render()
 void Mouse::think()
 {
     SDL_GetMouseState(&_position.rx(), &_position.ry());
-    _position.rx() /= Game::getInstance()->renderer()->scaleX();
-    _position.ry() /= Game::getInstance()->renderer()->scaleY();
+    _position = Point(
+        static_cast<int>(_position.x() / Game::getInstance()->renderer()->scaleX()),
+        static_cast<int>(_position.y() / Game::getInstance()->renderer()->scaleY())
+    );
     if (_ui)
     {
         _ui->think();

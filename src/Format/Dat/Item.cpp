@@ -61,7 +61,7 @@ void Item::_initialize()
     if (_stream != 0)
     {
         _stream->seekg(0, std::ios::end);
-        _size = _stream->tellg();
+        _size = static_cast<int32_t>(_stream->tellg());
         _stream->seekg(0, std::ios::beg);
 
         _buffer = new uint8_t[_size];
@@ -160,7 +160,7 @@ Item* Item::setPosition(unsigned int pos)
 uint32_t Item::position()
 {
     _initialize();
-    return gptr() - eback();
+    return static_cast<uint32_t>(gptr() - eback());
 }
 
 Item* Item::skipBytes(unsigned int numberOfBytes)

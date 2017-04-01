@@ -262,7 +262,7 @@ namespace Falltergeist
         void CritterDialog::addAnswer(const std::string& text)
         {
             std::string line = "";
-            line += 0x95;
+            line += '\x95';
             line += " ";
             line += text;
 

@@ -674,7 +674,7 @@ void MvePlayer::_setPalette(uint8_t* data)
     uint8_t* pal = data;
     pal+=4;
 
-    for (uint8_t i = start; i <= count; i++)
+    for (uint16_t i = start; i <= count; i++)
     {
         palette[i].r = *(pal++) << 2;
         palette[i].g = *(pal++) << 2;

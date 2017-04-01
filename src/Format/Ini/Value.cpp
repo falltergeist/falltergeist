@@ -76,7 +76,7 @@ int Value::toInt() const
     {
         return std::stoi(_value);
     }
-    catch (const std::invalid_argument& e)
+    catch (const std::invalid_argument&)
     {
         return 0;
     }
@@ -88,7 +88,7 @@ double Value::toDouble() const
     {
         return std::stod(_value);
     }
-    catch (const std::invalid_argument& e)
+    catch (const std::invalid_argument&)
     {
         return 0.0;
     }

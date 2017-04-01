@@ -124,7 +124,7 @@ void Animation::think()
         
         if (_progress < _animationFrames.size())
         {
-            _currentFrame = _reverse ? _animationFrames.size() - _progress - 1 : _progress;
+            _currentFrame = _reverse ? static_cast<unsigned>(_animationFrames.size()) - _progress - 1 : _progress;
             emitEvent(std::make_unique<Event::Event>("frame"), frameHandler());
             if (_actionFrame == _currentFrame)
             {
@@ -185,7 +185,7 @@ void Animation::stop()
 void Animation::setReverse(bool value)
 {
     _reverse = value;
-    setCurrentFrame(value ? _animationFrames.size()-1 : 0);
+    setCurrentFrame(value ? static_cast<unsigned>(_animationFrames.size()) - 1 : 0);
 }
 
 bool Animation::ended() const
@@ -206,7 +206,7 @@ unsigned int Animation::currentFrame() const
 void Animation::setCurrentFrame(unsigned int value)
 {
     _currentFrame = value;
-    _progress = _reverse ? _animationFrames.size() - _currentFrame - 1 : _currentFrame;
+    _progress = _reverse ? static_cast<unsigned>(_animationFrames.size()) - _currentFrame - 1 : _currentFrame;
 }
 
 AnimationFrame* Animation::currentFramePtr() const
