@@ -90,6 +90,9 @@ set_target_properties(falltergeist PROPERTIES
 )
 
 if(MSVC)
+	set_property(TARGET falltergeist
+		APPEND PROPERTY LINK_FLAGS /NODEFAULTLIB:MSVCRT
+	)
 	include(cmake/modules/PrecompiledHeader.cmake)
 	add_precompiled_header(falltergeist pchheader.h FORCEINCLUDE SOURCE_CXX pchheader.cpp)
 else()
