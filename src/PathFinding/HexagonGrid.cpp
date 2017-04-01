@@ -164,11 +164,16 @@ std::vector<Hexagon*> HexagonGrid::findPath(Hexagon* from, Hexagon* to)
             if (!neighbor->canWalkThru()) continue;
 
             unsigned int newCost = costSoFar[current->number()] + 1;
-            if (!costSoFar[neighbor->number()] || newCost < costSoFar[neighbor->number()])
+            auto &heighborCost = costSoFar[neighbor->number()];
+            if (heighborCost == 0 || newCost < heighborCost)
             {
-                costSoFar[neighbor->number()] = newCost;
-                neighbor->setHeuristic(distance(neighbor, to) + newCost);
-                unvisited.push(neighbor);
+                // add hexagon to unvisited queue only once and don't change heuristic
+                if (heighborCost == 0)
+                {
+                    neighbor->setHeuristic(distance(neighbor, to) + newCost);
+                    unvisited.push(neighbor);
+                }
+                heighborCost = newCost;
                 cameFrom[neighbor->number()] = current->number();
             }
         }
