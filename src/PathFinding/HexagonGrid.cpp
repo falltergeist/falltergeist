@@ -19,6 +19,7 @@
 
 // C++ standard includes
 #include <array>
+#include <map>
 #include <cstdlib>
 #include <functional>
 #include <queue>
