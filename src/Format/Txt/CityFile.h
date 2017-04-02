@@ -29,7 +29,7 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../../Format/Txt/BaseFile.h"
+#include "../Dat/Item.h"
 
 // Third party includes
 
@@ -37,6 +37,11 @@ namespace Falltergeist
 {
 namespace Format
 {
+namespace Dat
+{
+class Stream;
+}
+
 namespace Txt
 {
 
@@ -100,10 +105,10 @@ struct City
 /**
  * @brief CITY.TXT
  */
-class CityFile : public BaseFile
+class CityFile : public Dat::Item
 {
 public:
-    using BaseFile::BaseFile;
+    CityFile(Dat::Stream&& stream);
 
     const std::vector<City>& cities() const;
 
@@ -111,7 +116,7 @@ protected:
     std::vector<City> _cities;
 
 
-    void _parseText(std::istream& istr) override;
+    void _parseText(std::istream& istr);
 
     City::Size _sizeByName(std::string name) const;
 };

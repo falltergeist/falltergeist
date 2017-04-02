@@ -29,7 +29,7 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Txt/BaseFile.h"
+#include "../Dat/Item.h"
 
 // Third party includes
 
@@ -37,6 +37,11 @@ namespace Falltergeist
 {
 namespace Format
 {
+namespace Dat
+{
+class Stream;
+}
+
 namespace Txt
 {
 
@@ -73,17 +78,17 @@ struct Map
 /**
  * @brief CITY.TXT
  */
-class MapsFile : public BaseFile
+class MapsFile : public Dat::Item
 {
 public:
-    using BaseFile::BaseFile;
+    MapsFile(Dat::Stream&& stream);
 
     const std::vector<Map>& maps() const;
 
 protected:
     std::vector<Map> _maps;
 
-    void _parseText(std::istream& istr) override;
+    void _parseText(std::istream& istr);
 };
 
 }

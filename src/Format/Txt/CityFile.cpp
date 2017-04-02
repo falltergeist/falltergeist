@@ -25,6 +25,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Format/Dat/Stream.h"
 #include "../../Format/Ini/File.h"
 #include "../../Format/Ini/Parser.h"
 #include "../../Format/Txt/CityFile.h"
@@ -37,6 +38,11 @@ namespace Format
 {
 namespace Txt
 {
+
+CityFile::CityFile(Dat::Stream&& stream)
+{
+    _parseText(std::istream(&stream));
+}
 
 const std::vector<City>& CityFile::cities() const
 {

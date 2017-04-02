@@ -26,6 +26,7 @@
 #include <sstream>
 
 // Falltergeist includes
+#include "../Dat/Stream.h"
 #include "../Ini/File.h"
 #include "../Ini/Parser.h"
 #include "../Txt/Lexer.h"
@@ -456,6 +457,11 @@ LogicalExpression::Operator WorldmapFile::_operatorByLexem(int lexem)
         default:
             return LogicalExpression::Operator::NONE;
     }
+}
+
+WorldmapFile::WorldmapFile(Dat::Stream&& stream)
+{
+    _parseText(std::istream(&stream));
 }
 
 }
