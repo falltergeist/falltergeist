@@ -76,15 +76,14 @@ struct Map
 class MapsFile : public BaseFile
 {
 public:
-    MapsFile(std::ifstream* stream);
-    MapsFile(Dat::Entry* datFileEntry);
+    using BaseFile::BaseFile;
 
     const std::vector<Map>& maps() const;
 
 protected:
     std::vector<Map> _maps;
 
-    virtual void _parseText(std::istream& istr) override;
+    void _parseText(std::istream& istr) override;
 };
 
 }

@@ -39,17 +39,18 @@ namespace Falltergeist
 {
 namespace Format
 {
+namespace Dat
+{
+class Stream;
+}
+
 namespace Gcd
 {
 
 class File : public Dat::Item
 {
-
 public:
-
-    File(Dat::Entry* datFileEntry);
-    File(std::ifstream* stream);
-    ~File();
+    File(Dat::Stream&& stream);
 
     void setStat(STAT number, uint32_t value);
     uint32_t stat(STAT number) const;
@@ -232,9 +233,6 @@ protected:
     TRAIT _secondTrait = TRAIT::NONE;
 
     uint32_t _characterPoints;
-
-    virtual void _initialize();
-
 };
 
 }

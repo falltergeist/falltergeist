@@ -245,8 +245,7 @@ struct WorldmapTile
 class WorldmapFile : public BaseFile
 {
 public:
-    WorldmapFile(std::ifstream* stream);
-    WorldmapFile(Dat::Entry* datFileEntry);
+    using BaseFile::BaseFile;
 
     int numHorizontalTiles;
 
@@ -258,7 +257,7 @@ public:
 
 protected:
 
-    virtual void _parseText(std::istream& istr) override;
+    void _parseText(std::istream& istr) override;
 
     EncounterObject _parseEncounterObject(const Ini::Value&);
     InventoryItem _parseInventoryItem(const std::string&);

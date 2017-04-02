@@ -26,6 +26,7 @@
 #include <cstdint>
 
 // Falltergeist includes
+#include "../../Format/Dat/Stream.h"
 #include "../../Format/Bio/File.h"
 
 // Third party includes
@@ -37,29 +38,10 @@ namespace Format
 namespace Bio
 {
 
-File::File(Dat::Entry* datFileEntry) : Dat::Item(datFileEntry)
-{
-    _initialize();
-}
-
-File::File(std::ifstream* stream) : Dat::Item(stream)
-{
-    _initialize();
-}
-
-File::~File()
-{
-}
-
-void File::_initialize()
-{
-    if (_initialized) return;
-    Dat::Item::_initialize();
-    Dat::Item::setPosition(0);
-
-    for (unsigned i = 0; i != this->size(); ++i)
-    {
-        _text += uint8();
+File::File(Dat::Stream&& stream) {
+    stream.setPosition(0);
+    for (unsigned i = 0; i != stream.size(); ++i) {
+        _text += stream.uint8();
     }
 }
 

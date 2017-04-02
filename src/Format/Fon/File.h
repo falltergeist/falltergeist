@@ -37,6 +37,11 @@ namespace Falltergeist
 {
 namespace Format
 {
+namespace Dat
+{
+class Stream;
+}
+
 namespace Fon
 {
 
@@ -46,11 +51,11 @@ class File : public Dat::Item
 {
 
 public:
-    File(Dat::Entry* datFileEntry);
-    File(std::ifstream* stream);
-    virtual ~File();
+    File(Dat::Stream&& stream);
+    ~File() override;
     uint32_t* rgba();
 
+    // TODO: return by reference
     std::vector<Glyph*>* glyphs();
 
     uint32_t maximumHeight() const;
@@ -61,7 +66,7 @@ public:
 
 
 protected:
-    virtual void _initialize();
+    // TODO: replace with vector of objects
     std::vector<Glyph*> _glyphs;
     uint32_t _maximumHeight = 0;
     uint32_t _maximumWidth = 0;
@@ -70,7 +75,7 @@ protected:
     uint32_t _verticalGap = 0;
     uint32_t* _rgba = 0;
     uint32_t _numchars;
-
+    void _loadRgba(Dat::Stream& stream);
 };
 
 }

@@ -32,6 +32,7 @@
 
 // Falltergeist includes
 #include "../../Format/Dat/Item.h"
+#include "../../Format/Dat/Stream.h"
 
 // Third party includes
 
@@ -45,27 +46,38 @@ class Procedure;
 
 class File : public Dat::Item
 {
-
 public:
-    File(Dat::Entry* datFileEntry);
-    File(std::ifstream * stream);
+    File(Dat::Stream&& stream);
     virtual ~File();
 
+    // TODO: return by reference
     std::vector<Procedure*>* procedures();
     Procedure* procedure(std::string name);
 
     std::map<unsigned int, std::string>* identifiers();
     std::map<unsigned int, std::string>* strings();
 
+    // current position in script file
+    unsigned int position();
+    // set current position in script file
+    void setPosition(unsigned int);
+    // the size of script file
+    uint32_t size();
+    // read the next opcode
+    uint16_t readOpcode();
+    // read the next value
+    uint32_t readValue();
+
 protected:
+    Dat::Stream _stream;
+
+    // TODO: replace with vector of objects
     std::vector<Procedure*> _procedures;
 
     std::map<unsigned int, std::string> _functions;
     std::vector<unsigned int> _functionsOffsets;
     std::map<unsigned int, std::string> _identifiers;
     std::map<unsigned int, std::string> _strings;
-    virtual void _initialize();
-
 };
 
 }

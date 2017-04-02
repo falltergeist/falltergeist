@@ -38,17 +38,6 @@ namespace Format
 namespace Txt
 {
 
-
-MapsFile::MapsFile(std::ifstream* stream) : BaseFile(stream)
-{
-    _initialize();
-}
-
-MapsFile::MapsFile(Dat::Entry* datFileEntry) : BaseFile(datFileEntry)
-{
-    _initialize();
-}
-
 const std::vector<Map>& MapsFile::maps() const
 {
     return _maps;

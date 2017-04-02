@@ -39,9 +39,13 @@ namespace Falltergeist
 {
 namespace Format
 {
+namespace Dat
+{
+class Stream;
+}
 namespace Pal
 {
-    class File;
+class File;
 }
 namespace Frm
 {
@@ -49,11 +53,8 @@ class Direction;
 
 class File : public Dat::Item
 {
-
 public:
-
-    File(Dat::Entry* datFileEntry);
-    File(std::ifstream* stream);
+    File(Dat::Stream&& stream);
     ~File();
 
     uint32_t version() const;
@@ -62,12 +63,8 @@ public:
     uint16_t actionFrame() const;
 
     uint16_t width() const;
-    uint16_t width(unsigned int direction) const;
-    uint16_t width(unsigned int direction, unsigned int frame) const;
 
     uint16_t height() const;
-    uint16_t height(unsigned int direction) const;
-    uint16_t height(unsigned int direction, unsigned int frame) const;
 
     int16_t offsetX(unsigned int direction = 0, unsigned int frame = 0) const;
     int16_t offsetY(unsigned int direction = 0, unsigned int frame = 0) const;
@@ -78,17 +75,16 @@ public:
     std::vector<Direction*>* directions();
 
 protected:
+    // TODO: use vector
     uint32_t* _rgba = 0;
     uint32_t _version = 0;
     uint16_t _framesPerSecond = 0;
     uint16_t _framesPerDirection = 0;
     uint16_t _actionFrame = 0;
     bool _animatedPalette = false;
-
+    // TODO: replace with vector of objects
     std::vector<Direction*> _directions;
-    virtual void _initialize();
     std::vector<bool> _mask;
-
 };
 
 }

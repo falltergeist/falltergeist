@@ -25,8 +25,9 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Format/Gcd/File.h"
 #include "../../Exception.h"
+#include "../../Format/Dat/Stream.h"
+#include "../../Format/Gcd/File.h"
 
 // Third party includes
 
@@ -37,120 +38,104 @@ namespace Format
 namespace Gcd
 {
 
-File::File(Dat::Entry* datFileEntry) : Dat::Item(datFileEntry)
+File::File(Dat::Stream&& stream)
 {
-    _initialize();
-}
+    stream.setPosition(0);
 
-File::File(std::ifstream * stream) : Dat::Item(stream)
-{
-    _initialize();
-}
-
-File::~File()
-{
-}
-
-void File::_initialize()
-{
-    if (_initialized) return;
-    Dat::Item::_initialize();
-    Dat::Item::setPosition(0);
-
-    uint32(); // unknown 1
+    stream.uint32(); // unknown 1
 
     // primary stats
     for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
     {
-        setStat((STAT)i, uint32());
+        setStat((STAT)i, stream.uint32());
     }
 
     // secondary stats
-    _hitPoints = uint32();
-    _actionPoints = uint32();
-    _armorClass = uint32();
+    _hitPoints = stream.uint32();
+    _actionPoints = stream.uint32();
+    _armorClass = stream.uint32();
 
-    uint32(); // unknown 2
+    stream.uint32(); // unknown 2
 
-    _meleeDamage = uint32();
-    _carryWeight = uint32();
-    _sequence    = uint32();
-    _healingRate = uint32();
-    _criticalChance      = uint32();
-    _criticalHitModifier = uint32();
+    _meleeDamage = stream.uint32();
+    _carryWeight = stream.uint32();
+    _sequence    = stream.uint32();
+    _healingRate = stream.uint32();
+    _criticalChance      = stream.uint32();
+    _criticalHitModifier = stream.uint32();
 
     for (unsigned i = (unsigned)DAMAGE::NORMAL; i <= (unsigned)DAMAGE::EXPLOSIVE; i++)
     {
-        setDamage((DAMAGE)i, uint32());
+        setDamage((DAMAGE)i, stream.uint32());
     }
     for (unsigned i = (unsigned)DAMAGE::NORMAL; i <= (unsigned)DAMAGE::EXPLOSIVE; i++)
     {
-        setResistance((DAMAGE)i, uint32());
+        setResistance((DAMAGE)i, stream.uint32());
     }
 
-    _radiationResistance = uint32();
-    _poisonResistance    = uint32();
-    _age    = uint32();
-    _gender = (GENDER)uint32();
+    _radiationResistance = stream.uint32();
+    _poisonResistance    = stream.uint32();
+    _age    = stream.uint32();
+    _gender = (GENDER)stream.uint32();
 
     // bonuses to primary stats
     for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
     {
-        setStatBonus((STAT)i, uint32());
+        setStatBonus((STAT)i, stream.uint32());
     }
 
     // bonuses to secondary stats
-    _hitPointsBonus    = uint32();
-    _actionPointsBonus = uint32();
-    _armorClassBonus   = uint32();
+    _hitPointsBonus    = stream.uint32();
+    _actionPointsBonus = stream.uint32();
+    _armorClassBonus   = stream.uint32();
 
-    uint32(); // unknown 3
+    stream.uint32(); // unknown 3
 
-    _meleeDamageBonus = uint32();
-    _carryWeightBonus = uint32();
-    _sequenceBonus    = uint32();
-    _healingRateBonus = uint32();
-    _criticalChanceBonus      = uint32();
-    _criticalHitModifierBonus = uint32();
+    _meleeDamageBonus = stream.uint32();
+    _carryWeightBonus = stream.uint32();
+    _sequenceBonus    = stream.uint32();
+    _healingRateBonus = stream.uint32();
+    _criticalChanceBonus      = stream.uint32();
+    _criticalHitModifierBonus = stream.uint32();
 
     for (unsigned i = (unsigned)DAMAGE::NORMAL; i <= (unsigned)DAMAGE::EXPLOSIVE; i++)
     {
-        setDamageBonus((DAMAGE)i, uint32());
+        setDamageBonus((DAMAGE)i, stream.uint32());
     }
     for (unsigned i = (unsigned)DAMAGE::NORMAL; i <= (unsigned)DAMAGE::EXPLOSIVE; i++)
     {
-        setResistanceBonus((DAMAGE)i, uint32());
+        setResistanceBonus((DAMAGE)i, stream.uint32());
     }
 
-    _radiationResistanceBonus = uint32();
-    _poisonResistanceBonus    = uint32();
-    _ageBonus    = uint32();
-    _genderBonus = uint32();
+    _radiationResistanceBonus = stream.uint32();
+    _poisonResistanceBonus    = stream.uint32();
+    _ageBonus    = stream.uint32();
+    _genderBonus = stream.uint32();
 
     //skills
     for (unsigned i = (unsigned)SKILL::SMALL_GUNS; i <= (unsigned)SKILL::OUTDOORSMAN; i++)
     {
-        setSkill((SKILL)i, uint32());
+        setSkill((SKILL)i, stream.uint32());
     }
 
     // unknown
-    uint32(); // unknown 4
-    uint32(); // unknown 5
-    uint32(); // unknown 6
-    uint32(); // unknown 7
+    stream.uint32(); // unknown 4
+    stream.uint32(); // unknown 5
+    stream.uint32(); // unknown 6
+    stream.uint32(); // unknown 7
 
     // name
     uint8_t name[32];
-    this->readBytes(name, 32);
+    stream.readBytes(name, 32);
     setName((char*)name);
 
-    _firstTaggedSkill  = (SKILL)int32();
-    _secondTaggedSkill = (SKILL)int32();
-    _thirdTaggedSkill  = (SKILL)int32();
-    _fourthTaggedSkill = (SKILL)int32();
-    _firstTrait  = (TRAIT)int32();
-    _secondTrait = (TRAIT)int32();
-    _characterPoints = uint32();
+    _firstTaggedSkill  = (SKILL)stream.int32();
+    _secondTaggedSkill = (SKILL)stream.int32();
+    _thirdTaggedSkill  = (SKILL)stream.int32();
+    _fourthTaggedSkill = (SKILL)stream.int32();
+    _firstTrait  = (TRAIT)stream.int32();
+    _secondTrait = (TRAIT)stream.int32();
+    _characterPoints = stream.uint32();
 }
 
 uint32_t File::stat(STAT number) const

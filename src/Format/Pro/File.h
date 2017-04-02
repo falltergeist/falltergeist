@@ -37,16 +37,18 @@ namespace Falltergeist
 {
 namespace Format
 {
+namespace Dat
+{
+class Stream;
+}
+
 namespace Pro
 {
 
 class File : public Dat::Item
 {
-
 public:
-    File(Dat::Entry* datFileEntry);
-    File(std::ifstream* stream);
-    ~File();
+    File(Dat::Stream&& stream);
 
     uint8_t soundId() const;
 
@@ -147,8 +149,6 @@ protected:
     std::vector<uint32_t> _critterSkills = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::vector<uint32_t> _damageResist = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::vector<uint32_t> _damageThreshold = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-    virtual void _initialize();
 };
 
 }

@@ -26,6 +26,7 @@
 #include <cstring>
 
 // Falltergeist includes
+#include "../Dat/Stream.h"
 #include "../Mve/Chunk.h"
 #include "../Mve/File.h"
 #include "../../Exception.h"
@@ -39,26 +40,10 @@ namespace Format
 namespace Mve
 {
 
-File::File(Dat::Entry* datFileEntry) : Dat::Item(datFileEntry)
+File::File(Dat::Stream&& stream) : _stream(std::move(stream))
 {
-    _initialize();
-}
-
-File::File(std::ifstream* stream) : Dat::Item(stream)
-{
-    _initialize();
-}
-
-File::~File()
-{
-}
-
-void File::_initialize()
-{
-    if (_initialized) return;
-    Dat::Item::_initialize();
-    Dat::Item::setPosition(0);
-    setEndianness(ENDIANNESS::LITTLE);
+    _stream.setPosition(0);
+    _stream.setEndianness(ENDIANNESS::LITTLE);
     // header
     const char  MVE_HEADER[]  = "Interplay MVE File\x1A";
     const int16_t MVE_HDRCONST1 = 0x001A;
@@ -67,38 +52,42 @@ void File::_initialize()
     int16_t check1, check2, check3;
 
     char head[20];
-    readBytes((uint8_t*)head,20);
+    _stream.readBytes((uint8_t*)head,20);
 
     if (strncmp(head,MVE_HEADER,20)!=0)
     {
         throw Exception("Invalid MVE file.!");
     }
-    *this >> check1 >> check2 >> check3;
+    _stream >> check1 >> check2 >> check3;
     if  (!(check1 == MVE_HDRCONST1 && check2 == MVE_HDRCONST2 && check3 == MVE_HDRCONST3))
     {
         throw Exception("Invalid MVE file.");
     }
 }
 
-std::shared_ptr<Chunk> File::getNextChunk()
+std::unique_ptr<Chunk> File::getNextChunk()
 {
-    if (this->position() < this->size())
+    if (_stream.position() < _stream.size())
     {
-        auto chunk = std::shared_ptr<Chunk>(new Chunk());
-        chunk->setLength(uint16());
-        chunk->setType(uint16());
+        auto chunk = std::make_unique<Chunk>();
+        chunk->setLength(_stream.uint16());
+        chunk->setType(_stream.uint16());
         for (unsigned i = 0; i < chunk->length();)
         {
-            auto opcode = new Opcode(uint16());
-            opcode->setType(uint8());
-            opcode->setVersion(uint8());
-            this->readBytes((uint8_t*)opcode->data(), opcode->length());
+            auto opcode = new Opcode(_stream.uint16());
+            opcode->setType(_stream.uint8());
+            opcode->setVersion(_stream.uint8());
+            _stream.readBytes((uint8_t*)opcode->data(), opcode->length());
             chunk->opcodes()->push_back(opcode);
             i += opcode->length() + 4;
         }
         return chunk;
     }
     return nullptr;
+}
+
+void File::setPosition(unsigned int position) {
+    _stream.setPosition(position);
 }
 
 }

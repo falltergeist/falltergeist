@@ -23,16 +23,12 @@
  */
 
 // C++ standard includes
-#include <string.h> // for memcpy
 #include <algorithm>
 
 // Falltergeist includes
-#include "../../Format/Dat/Entry.h"
-#include "../../Format/Dat/File.h"
 #include "../../Format/Dat/Item.h"
 
 // Third party includes
-#include "zlib.h"
 
 namespace Falltergeist
 {

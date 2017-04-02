@@ -27,6 +27,7 @@
 #include "../CrossPlatform.h"
 #include "../Event/Keyboard.h"
 #include "../Event/Mouse.h"
+#include "../Format/Dat/MiscFile.h"
 #include "../Format/Lst/File.h"
 #include "../Format/Sve/File.h"
 #include "../Game/Game.h"
@@ -75,10 +76,10 @@ namespace Falltergeist
 
             if (cfglst->strings()->at(_id)!="reserved.cfg")
             {
-                auto moviecfg = ResourceManager::getInstance()->datFileItem(moviecfgfile);
+                auto moviecfg = ResourceManager::getInstance()->miscFileType(moviecfgfile);
                 //parse ini
-                moviecfg->setPosition(0);
-                std::istream str(moviecfg);
+                moviecfg->stream().setPosition(0);
+                std::istream str(&moviecfg->stream());
                 auto inifile = new Ini::Parser(str);
                 auto ini = inifile->parse();
                 int total_effects = ini->section("info")->propertyInt("total_effects",0);

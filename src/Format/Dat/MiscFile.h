@@ -22,14 +22,17 @@
  * SOFTWARE.
  */
 
+#ifndef FALLTERGEIST_FORMAT_DAT_MISC_FILE_H
+#define FALLTERGEIST_FORMAT_DAT_MISC_FILE_H
+
 // C++ standard includes
-#include <algorithm>
-#include <functional>
-#include <cctype>
+#include <fstream>
+#include <string>
+#include <memory>
 
 // Falltergeist includes
-#include "../Dat/Stream.h"
-#include "../Lst/File.h"
+#include "../../Format/Dat/Item.h"
+#include "../../Format/Dat/Stream.h"
 
 // Third party includes
 
@@ -37,60 +40,22 @@ namespace Falltergeist
 {
 namespace Format
 {
-namespace Lst
+namespace Dat
 {
 
-File::File(Dat::Stream&& stream)
+// A simple file
+class MiscFile : public Item
 {
-    stream.setPosition(0);
+public:
+    MiscFile(Stream&& stream);
 
-    std::string line;
-    unsigned char ch;
-    for (unsigned int i = 0; i != stream.size(); ++i)
-    {
-        stream >> ch;
-        if (ch == 0x0D) // \r
-        {
-            // do nothing
-        }
-        else if (ch == 0x0A) // \n
-        {
-            _addString(line);
-            line.clear();
-        }
-        else
-        {
-            line += ch;
-        }
-    }
-    if (line.size() != 0)
-    {
-        _addString(line);
-    }
-}
+    Stream& stream();
 
-void File::_addString(std::string line)
-{
-    // strip comments
-    if (auto pos = line.find(";")) line = line.substr(0, pos);
-
-    // rtrim
-    line.erase(std::find_if(line.rbegin(), line.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), line.end());
-
-    // replace slashes
-    std::replace(line.begin(),line.end(),'\\','/');
-
-    // to lower
-    std::transform(line.begin(),line.end(),line.begin(), ::tolower);
-
-    _strings.push_back(line);
-}
-
-std::vector<std::string>* File::strings()
-{
-    return &_strings;
-}
+protected:
+    Stream _stream;
+};
 
 }
 }
 }
+#endif //FALLTERGEIST_FORMAT_DAT_MISC_FILE_H

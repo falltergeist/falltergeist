@@ -58,7 +58,7 @@ public:
 
 private:
     Format::Mve::File* _mve = nullptr;
-    std::shared_ptr<Format::Mve::Chunk> _chunk;
+    std::unique_ptr<Format::Mve::Chunk> _chunk;
 
     Graphics::Movie* _movie;
 

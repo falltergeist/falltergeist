@@ -38,18 +38,6 @@ namespace Txt
 {
 
 template <typename ItemType>
-CSVBasedFile<ItemType>::CSVBasedFile(std::ifstream* stream) : BaseFile(stream)
-{
-    _initialize();
-}
-
-template <typename ItemType>
-CSVBasedFile<ItemType>::CSVBasedFile(Dat::Entry* datFileEntry) : BaseFile(datFileEntry)
-{
-    _initialize();
-}
-
-template <typename ItemType>
 const std::list<ItemType>& CSVBasedFile<ItemType>::items() const
 {
     return _items;

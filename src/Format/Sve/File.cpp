@@ -25,8 +25,9 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Sve/File.h"
 #include "../../Exception.h"
+#include "../Dat/Stream.h"
+#include "../Sve/File.h"
 
 // Third party includes
 
@@ -37,32 +38,16 @@ namespace Format
 namespace Sve
 {
 
-File::File(Dat::Entry* datFileEntry) : Dat::Item(datFileEntry)
+File::File(Dat::Stream&& stream)
 {
-    _initialize();
-}
-
-File::File(std::ifstream* stream) : Dat::Item(stream)
-{
-    _initialize();
-}
-
-File::~File()
-{
-}
-
-void File::_initialize()
-{
-    if (_initialized) return;
-    Dat::Item::_initialize();
-    Dat::Item::setPosition(0);
+    stream.setPosition(0);
 
     std::string line;
 
     unsigned char ch;
-    for(unsigned int i = 0; i != this->size(); ++i)
+    for (unsigned int i = 0; i != stream.size(); ++i)
     {
-        *this >> ch;
+        stream >> ch;
         if (ch == 0x0D) // \r
         {
             // do nothing
@@ -96,13 +81,15 @@ void File::_addString(std::string line)
 
 std::pair<int,std::string> File::getSubLine(int frame)
 {
-    _initialize();
     auto it = _subs.lower_bound(frame);
-
-    if (it != _subs.end())
+    if (it != _subs.end()) 
+    {
         return *it;
+    }
     else
+    {
         return std::pair<int,std::string>(999999, "");
+    }
 }
 
 }

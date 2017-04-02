@@ -31,6 +31,7 @@
 
 // Falltergeist includes
 #include "../Dat/Item.h"
+#include "../Dat/Stream.h"
 
 // Third party includes
 
@@ -38,10 +39,16 @@ namespace Falltergeist
 {
 namespace Format
 {
+namespace Dat
+{
+class Stream;
+}
+
 namespace Pro
 {
     class File;
 }
+
 namespace Map
 {
 class Elevation;
@@ -52,14 +59,12 @@ typedef Pro::File* (*ProFileTypeLoaderCallback)(uint32_t);
 
 class File : public Dat::Item
 {
-
 public:
-    File(Dat::Entry* datFileEntry);
-    File(std::ifstream* stream);
+    File(Dat::Stream&& stream);
     ~File();
 
-    File* setCallback(ProFileTypeLoaderCallback callback);
-    ProFileTypeLoaderCallback callback() const;
+    // TODO: get rid of two-step initialization
+    void init(ProFileTypeLoaderCallback callback);
 
     std::vector<Elevation*>* elevations();
     std::vector<Script*>* scripts();
@@ -80,7 +85,7 @@ public:
     std::string name() const;
 
 protected:
-    ProFileTypeLoaderCallback _proFileTypeLoaderCallback = 0;
+    Dat::Stream _stream;
 
     std::vector<Elevation*> _elevations;
     std::vector<Script*> _scripts;
@@ -102,10 +107,7 @@ protected:
 
     std::string _name;
 
-    Object* _readObject();
-    virtual void _initialize();
-
-
+    Object* _readObject(Dat::Stream& stream, ProFileTypeLoaderCallback callback);
 };
 
 }

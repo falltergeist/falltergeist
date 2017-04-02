@@ -37,6 +37,11 @@ namespace Falltergeist
 {
 namespace Format
 {
+namespace Dat
+{
+class Stream;
+}
+
 namespace Msg
 {
 
@@ -44,18 +49,17 @@ class Message;
 
 class File : public Dat::Item
 {
-
 public:
-    File(Dat::Entry* datFileEntry);
-    File(std::ifstream* stream);
+    File(Dat::Stream&& stream);
     ~File();
 
+    // TODO: return by reference
     std::vector<Message*>* messages();
     Message* message(unsigned int number);
 
 protected:
+    // TODO: use vector of objects
     std::vector<Message*> _messages;
-    virtual void _initialize();
 
 };
 

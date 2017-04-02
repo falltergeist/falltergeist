@@ -45,7 +45,7 @@ namespace Format
 namespace Acm
 {
 
-File::File(Dat::Stream&& stream) : _stream(stream)
+File::File(Dat::Stream&& stream) : _stream(std::move(stream))
 {
     _stream.setPosition(0);
     _stream.setEndianness(ENDIANNESS::LITTLE);

@@ -25,6 +25,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Format/Dat/Stream.h"
 #include "../../Format/Txt/BaseFile.h"
 
 // Third party includes
@@ -36,22 +37,16 @@ namespace Format
 namespace Txt
 {
 
-BaseFile::BaseFile(std::ifstream* stream) : Item(stream)
+BaseFile::BaseFile(Dat::Stream&& stream)
 {
-}
+    stream.setPosition(0);
 
-BaseFile::BaseFile(Dat::Entry* datFileEntry) : Item(datFileEntry)
-{
-}
-
-void BaseFile::_initialize()
-{
-    if (_initialized) return;
-    Dat::Item::_initialize();
-    Dat::Item::setPosition(0);
-
-    std::istream istr(this);
+    std::istream istr(&stream);
     _parseText(istr);
+}
+
+std::istream BaseFile::_istream() {
+
 }
 
 }

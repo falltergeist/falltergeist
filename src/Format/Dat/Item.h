@@ -46,7 +46,7 @@ namespace Dat
 class Item
 {
 public:
-    virtual ~Item() = 0;
+    virtual ~Item() {}
 
     Item& setFilename(const std::string& filename);
     std::string filename();

@@ -33,6 +33,8 @@
 #include "../../Format/Dat/Entry.h"
 #include "../../Format/Dat/File.h"
 #include "../../Format/Dat/Item.h"
+#include "../../Format/Dat/MiscFile.h"
+#include "../../Format/Dat/Stream.h"
 #include "../../Format/Fon/File.h"
 #include "../../Format/Frm/File.h"
 #include "../../Format/Gam/File.h"
@@ -173,8 +175,15 @@ File* File::readBytes(char * destination, unsigned int numberOfBytes)
     return this;
 }
 
+template <class T>
+T* itemFromEntry(Entry* entry)
+{
+    return new T(Stream(*entry));
+}
+
 Item* File::item(const std::string filename)
 {
+    using std::move;
     if (_items.find(filename) != _items.end())
     {
         return _items.at(filename);
@@ -187,35 +196,38 @@ Item* File::item(const std::string filename)
         std::string extension = filename.substr(filename.length() - 3, 3);
 
         Item* item = nullptr;
-        if      (extension == "aaf") item = new Aaf::File(entry);
-        else if (extension == "acm") item = new Acm::File(entry);
-        else if (extension == "bio") item = new Bio::File(entry);
-        else if (extension == "fon") item = new Fon::File(entry);
-        else if (extension == "frm") item = new Frm::File(entry);
-        else if (extension == "gam") item = new Gam::File(entry);
-        else if (extension == "gcd") item = new Gcd::File(entry);
-        else if (extension == "int") item = new Int::File(entry);
-        else if (extension == "lip") item = new Lip::File(entry);
-        else if (extension == "lst") item = new Lst::File(entry);
-        else if (extension == "map") item = new Map::File(entry);
-        else if (extension == "msg") item = new Msg::File(entry);
-        else if (extension == "mve") item = new Mve::File(entry);
-        else if (extension == "pal") item = new Pal::File(entry);
-        else if (extension == "pro") item = new Pro::File(entry);
-        else if (extension == "rix") item = new Rix::File(entry);
-        else if (extension == "sve") item = new Sve::File(entry);
-        else if (filename == "data/city.txt") item = new Txt::CityFile(entry);
-        else if (filename == "data/enddeath.txt") item = new Txt::EndDeathFile(entry);
-        else if (filename == "data/endgame.txt") item = new Txt::EndGameFile(entry);
-        else if (filename == "data/genrep.txt") item = new Txt::GenRepFile(entry);
-        else if (filename == "data/holodisk.txt") item = new Txt::HolodiskFile(entry);
-        else if (filename == "data/karmavar.txt") item = new Txt::KarmaVarFile(entry);
-        else if (filename == "data/maps.txt") item = new Txt::MapsFile(entry);
-        else if (filename == "data/quests.txt") item = new Txt::QuestsFile(entry);
-        else if (filename == "data/worldmap.txt") item = new Txt::WorldmapFile(entry);
-        else item = new Item(entry);
+        if      (extension == "aaf") item = itemFromEntry<Aaf::File>(entry);
+        else if (extension == "acm") item = itemFromEntry<Acm::File>(entry);
+        else if (extension == "bio") item = itemFromEntry<Bio::File>(entry);
+        else if (extension == "fon") item = itemFromEntry<Fon::File>(entry);
+        else if (extension == "frm") item = itemFromEntry<Frm::File>(entry);
+        else if (extension == "gam") item = itemFromEntry<Gam::File>(entry);
+        else if (extension == "gcd") item = itemFromEntry<Gcd::File>(entry);
+        else if (extension == "int") item = itemFromEntry<Int::File>(entry);
+        else if (extension == "lip") item = itemFromEntry<Lip::File>(entry);
+        else if (extension == "lst") item = itemFromEntry<Lst::File>(entry);
+        else if (extension == "map") item = itemFromEntry<Map::File>(entry);
+        else if (extension == "msg") item = itemFromEntry<Msg::File>(entry);
+        else if (extension == "mve") item = itemFromEntry<Mve::File>(entry);
+        else if (extension == "pal") item = itemFromEntry<Pal::File>(entry);
+        else if (extension == "pro") item = itemFromEntry<Pro::File>(entry);
+        else if (extension == "rix") item = itemFromEntry<Rix::File>(entry);
+        else if (extension == "sve") item = itemFromEntry<Sve::File>(entry);
+        else if (filename == "data/city.txt")     item = itemFromEntry<Txt::CityFile>(entry);
+        else if (filename == "data/enddeath.txt") item = itemFromEntry<Txt::EndDeathFile>(entry);
+        else if (filename == "data/endgame.txt")  item = itemFromEntry<Txt::EndGameFile>(entry);
+        else if (filename == "data/genrep.txt")   item = itemFromEntry<Txt::GenRepFile>(entry);
+        else if (filename == "data/holodisk.txt") item = itemFromEntry<Txt::HolodiskFile>(entry);
+        else if (filename == "data/karmavar.txt") item = itemFromEntry<Txt::KarmaVarFile>(entry);
+        else if (filename == "data/maps.txt")     item = itemFromEntry<Txt::MapsFile>(entry);
+        else if (filename == "data/quests.txt")   item = itemFromEntry<Txt::QuestsFile>(entry);
+        else if (filename == "data/worldmap.txt") item = itemFromEntry<Txt::WorldmapFile>(entry);
+        else item = itemFromEntry<Format::Dat::MiscFile>(entry);
 
-        _items.insert(std::make_pair(filename, item));
+        if (item != nullptr)
+        {
+            _items.insert(std::make_pair(filename, item));
+        }
         return item;
     }
 

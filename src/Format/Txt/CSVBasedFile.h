@@ -203,13 +203,12 @@ template <typename ItemType>
 class CSVBasedFile : public BaseFile
 {
 public:
-    CSVBasedFile(std::ifstream* stream);
-    CSVBasedFile(Dat::Entry* datFileEntry);
+    using BaseFile::BaseFile;
 
     const std::list<ItemType>& items() const;
 
 protected:
-    virtual void _parseText(std::istream& istr) override;
+    void _parseText(std::istream& istr) override;
 
     /**
      * Parses next item

@@ -21,12 +21,12 @@
 #define FALLTERGEIST_RESOURCEMANAGER_H
 
 // C++ standard includes
+#include <fstream>
 #include <string>
 #include <map>
 #include <memory>
 #include <unordered_map>
 #include <vector>
-
 
 // Falltergeist includes
 #include "Base/Singleton.h"
@@ -45,6 +45,8 @@ namespace Dat
 {
 class File;
 class Item;
+class MiscFile;
+class Stream;
 }
 namespace Frm { class File; }
 namespace Fon { class File; }
@@ -128,6 +130,7 @@ public:
     Format::Pro::File* proFileType(unsigned int PID);
     Format::Rix::File* rixFileType(const std::string& filename);
     Format::Sve::File* sveFileType(const std::string& filename);
+    Format::Dat::MiscFile* miscFileType(const std::string& filename);
 
     Format::Txt::CityFile* cityTxt();
     Format::Txt::MapsFile* mapsTxt();
@@ -144,7 +147,6 @@ public:
     Graphics::Shader* shader(const std::string& filename);
     void unloadResources();
     std::string FIDtoFrmName(unsigned int FID);
-    Game::Location* gameLocation(unsigned int number);
     void shutdown();
 
 protected:
@@ -162,7 +164,7 @@ protected:
     ResourceManager(const ResourceManager&) = delete;
     ResourceManager& operator=(const ResourceManager&) = delete;
 
-    Format::Dat::Item* _createItemByName(const std::string& filename, std::ifstream* stream);
+    Format::Dat::Item* _createItemByName(const std::string& filename, std::ifstream& stream);
 };
 
 }

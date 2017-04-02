@@ -37,6 +37,11 @@ namespace Falltergeist
 {
 namespace Format
 {
+namespace Dat
+{
+class Stream;
+}
+
 namespace Txt
 {
 
@@ -45,18 +50,9 @@ namespace Txt
  */
 class BaseFile : public Dat::Item
 {
-
-public:
-    BaseFile(std::ifstream* stream);
-    BaseFile(Dat::Entry* datFileEntry);
-
 protected:
-    virtual void _initialize() override;
-
-    /**
-     * Called when initializing file.
-     */
-    virtual void _parseText(std::istream& istr) = 0;
+    // create an istream from given Dat::Stream
+    std::istream& _istream(Dat::Stream& stream);
 };
 
 }

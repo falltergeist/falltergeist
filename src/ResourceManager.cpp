@@ -29,7 +29,9 @@
 #include "Exception.h"
 #include "Format/Acm/File.h"
 #include "Format/Bio/File.h"
+#include "Format/Dat/Stream.h"
 #include "Format/Dat/File.h"
+#include "Format/Dat/MiscFile.h"
 #include "Format/Dat/Item.h"
 #include "Format/Fon/File.h"
 #include "Format/Frm/File.h"
@@ -109,32 +111,31 @@ Format::Dat::Item* ResourceManager::datFileItem(string filename)
     {
         string path = CrossPlatform::findFalloutDataPath() + "/" + filename;
 
-        // FIXME: use move semantics (see issue #486)
-        ifstream* stream = new ifstream();
-        stream->open(path, ios_base::binary);
-        if (stream->is_open())
+        ifstream stream;
+        stream.open(path, ios_base::binary);
+        if (stream.is_open())
         {
             Logger::debug("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM FALLOUT DATA DIR]" << endl;
         }
         else
         {
             path = CrossPlatform::findFalltergeistDataPath() + "/" + filename;
-            stream->open(path, ios_base::binary);
-            if (stream->is_open())
+            stream.open(path, ios_base::binary);
+            if (stream.is_open())
             {
                 Logger::debug("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM FALLTERGEIST DATA DIR]" << endl;
             }
         }
 
-        if (stream->is_open())
+        if (stream.is_open())
         {
             Format::Dat::Item* item = _createItemByName(filename, stream);
             item->setFilename(filename);
             _datItems.push_back(unique_ptr<Format::Dat::Item>(item));
             _datItemMap.insert(make_pair(filename, item));
+            stream.close();
             return item;
         }
-        delete stream;
     }
 
     // Search in DAT files
@@ -149,40 +150,46 @@ Format::Dat::Item* ResourceManager::datFileItem(string filename)
         }
     }
     Logger::error("RESOURCE MANAGER") << "Loading file: " << filename << " [ NOT FOUND]" << endl;
-    return 0;
+    return nullptr;
 }
 
-Format::Dat::Item* ResourceManager::_createItemByName(const string& filename, ifstream* stream)
+template <class T>
+Format::Dat::Item* createItemByStream(ifstream& stream)
+{
+    return new T(Format::Dat::Stream(stream));
+}
+
+Format::Dat::Item* ResourceManager::_createItemByName(const string& filename, ifstream& stream)
 {
     string extension = filename.substr(filename.length() - 3, 3);
-    if      (extension == "aaf") return new Format::Aaf::File(stream);
-    else if (extension == "acm") return new Format::Acm::File(stream);
-    else if (extension == "bio") return new Format::Bio::File(stream);
-    else if (extension == "fon") return new Format::Fon::File(stream);
-    else if (extension == "frm") return new Format::Frm::File(stream);
-    else if (extension == "gam") return new Format::Gam::File(stream);
-    else if (extension == "gcd") return new Format::Gcd::File(stream);
-    else if (extension == "int") return new Format::Int::File(stream);
-    else if (extension == "lip") return new Format::Lip::File(stream);
-    else if (extension == "lst") return new Format::Lst::File(stream);
-    else if (extension == "map") return new Format::Map::File(stream);
-    else if (extension == "msg") return new Format::Msg::File(stream);
-    else if (extension == "mve") return new Format::Mve::File(stream);
-    else if (extension == "pal") return new Format::Pal::File(stream);
-    else if (extension == "pro") return new Format::Pro::File(stream);
-    else if (extension == "rix") return new Format::Rix::File(stream);
-    else if (filename == "data/city.txt")       return new Format::Txt::CityFile(stream);
-    else if (filename == "data/enddeath.txt")   return new Format::Txt::EndDeathFile(stream);
-    else if (filename == "data/endgame.txt")    return new Format::Txt::EndGameFile(stream);
-    else if (filename == "data/genrep.txt")     return new Format::Txt::GenRepFile(stream);
-    else if (filename == "data/holodisk.txt")   return new Format::Txt::HolodiskFile(stream);
-    else if (filename == "data/karmavar.txt")   return new Format::Txt::KarmaVarFile(stream);
-    else if (filename == "data/maps.txt")       return new Format::Txt::MapsFile(stream);
-    else if (filename == "data/quests.txt")     return new Format::Txt::QuestsFile(stream);
-    else if (filename == "data/worldmap.txt")   return new Format::Txt::WorldmapFile(stream);
+    if      (extension == "aaf") return createItemByStream<Format::Aaf::File>(stream);
+    else if (extension == "acm") return createItemByStream<Format::Acm::File>(stream);
+    else if (extension == "bio") return createItemByStream<Format::Bio::File>(stream);
+    else if (extension == "fon") return createItemByStream<Format::Fon::File>(stream);
+    else if (extension == "frm") return createItemByStream<Format::Frm::File>(stream);
+    else if (extension == "gam") return createItemByStream<Format::Gam::File>(stream);
+    else if (extension == "gcd") return createItemByStream<Format::Gcd::File>(stream);
+    else if (extension == "int") return createItemByStream<Format::Int::File>(stream);
+    else if (extension == "lip") return createItemByStream<Format::Lip::File>(stream);
+    else if (extension == "lst") return createItemByStream<Format::Lst::File>(stream);
+    else if (extension == "map") return createItemByStream<Format::Map::File>(stream);
+    else if (extension == "msg") return createItemByStream<Format::Msg::File>(stream);
+    else if (extension == "mve") return createItemByStream<Format::Mve::File>(stream);
+    else if (extension == "pal") return createItemByStream<Format::Pal::File>(stream);
+    else if (extension == "pro") return createItemByStream<Format::Pro::File>(stream);
+    else if (extension == "rix") return createItemByStream<Format::Rix::File>(stream);
+    else if (filename == "data/city.txt")       return createItemByStream<Format::Txt::CityFile>(stream);
+    else if (filename == "data/enddeath.txt")   return createItemByStream<Format::Txt::EndDeathFile>(stream);
+    else if (filename == "data/endgame.txt")    return createItemByStream<Format::Txt::EndGameFile>(stream);
+    else if (filename == "data/genrep.txt")     return createItemByStream<Format::Txt::GenRepFile>(stream);
+    else if (filename == "data/holodisk.txt")   return createItemByStream<Format::Txt::HolodiskFile>(stream);
+    else if (filename == "data/karmavar.txt")   return createItemByStream<Format::Txt::KarmaVarFile>(stream);
+    else if (filename == "data/maps.txt")       return createItemByStream<Format::Txt::MapsFile>(stream);
+    else if (filename == "data/quests.txt")     return createItemByStream<Format::Txt::QuestsFile>(stream);
+    else if (filename == "data/worldmap.txt")   return createItemByStream<Format::Txt::WorldmapFile>(stream);
     else
     {
-        return new Format::Dat::Item(stream);
+        return createItemByStream<Format::Dat::MiscFile>(stream);
     }
 }
 
@@ -256,7 +263,7 @@ Format::Map::File* ResourceManager::mapFileType(const string& filename)
     auto item = dynamic_cast<Format::Map::File*>(datFileItem(filename));
     if (item)
     {
-        item->setCallback(&fetchProFileType);
+        item->init(&fetchProFileType);
     }
     return item;
 }
@@ -274,6 +281,11 @@ Format::Rix::File* ResourceManager::rixFileType(const string& filename)
 Format::Sve::File* ResourceManager::sveFileType(const string& filename)
 {
     return dynamic_cast<Format::Sve::File*>(datFileItem(filename));
+}
+
+Falltergeist::Format::Dat::MiscFile* ResourceManager::miscFileType(const std::string& filename)
+{
+    return dynamic_cast<Format::Dat::MiscFile*>(datFileItem(filename));
 }
 
 Format::Txt::CityFile* ResourceManager::cityTxt()
@@ -626,52 +638,6 @@ string ResourceManager::FIDtoFrmName(unsigned int FID)
         return "";
     }
     return prefix + lst->strings()->at(baseId);
-}
-
-Game::Location* ResourceManager::gameLocation(unsigned int number)
-{
-    istream stream(datFileItem("data/maps.txt"));
-    Ini::Parser iniParser(stream);
-    auto ini = iniParser.parse();
-
-    stringstream ss;
-    ss << "map " << setw(3) << setfill('0') << number;
-
-    auto section = ini->section(ss.str());
-    if (!section)
-    {
-        return nullptr;
-    }
-
-    Game::Location* location = new Game::Location();
-
-    for (auto property : *section.get())
-    {
-        string name = property.first;
-        Logger::critical() << name << endl;
-        if (name == "lookup_name")
-        {
-            location->setName(property.second.value());
-        }
-        else if (name == "map_name")
-        {
-            location->setFilename("maps/" + property.second.value()+ ".map");
-        }
-        else if (name == "music")
-        {
-            location->setMusic(property.second.value());
-        }
-        else if (name == "pipboy_active")
-        {
-            location->setPipboyAllowed(property.second.boolValue());
-        }
-        else if (name == "saved")
-        {
-            location->setSaveable(property.second.boolValue());
-        }
-    }
-
-    return location;
 }
 
 void ResourceManager::shutdown()

@@ -25,6 +25,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Dat/Stream.h"
 #include "../Pal/Color.h"
 #include "../Pal/File.h"
 
@@ -37,37 +38,17 @@ namespace Format
 namespace Pal
 {
 
-File::File(Dat::Entry* datFileEntry) : Dat::Item(datFileEntry)
+File::File(Dat::Stream&& stream)
 {
-    _initialize();
-}
-
-File::File(std::ifstream* stream) : Dat::Item(stream)
-{
-    _initialize();
-}
-
-File::~File()
-{
-    for (auto color : _colors)
-    {
-        delete color;
-    }
-}
-
-void File::_initialize()
-{
-    if (_initialized) return;
-    Dat::Item::_initialize();
-    Dat::Item::setPosition(3);
+    stream.setPosition(3);
 
     _colors.push_back(new Color(0, 0, 0, 0)); // zero color (transparent)
 
     for (unsigned i = 1; i != 256; ++i)
     {
-        uint8_t r = uint8();
-        uint8_t g = uint8();
-        uint8_t b = uint8();
+        uint8_t r = stream.uint8();
+        uint8_t g = stream.uint8();
+        uint8_t b = stream.uint8();
         _colors.push_back(new Color(r,g,b));
     }
 
@@ -133,11 +114,12 @@ void File::_initialize()
     // ALARM
     _colors.at(254)->setGreen(255); //
     _colors.at(254)->setBlue(0);
+}
 
-
-
-
-
+File::~File() {
+    for (auto color : _colors) {
+        delete color;
+    }
 }
 
 std::vector<Color*>* File::colors()

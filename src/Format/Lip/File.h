@@ -38,17 +38,18 @@ namespace Falltergeist
 {
 namespace Format
 {
+namespace Dat
+{
+class Stream;
+}
+
 namespace Lip
 {
 
 class File : public Dat::Item
 {
-
 public:
-    File(Dat::Entry* datFileEntry);
-    File(std::ifstream* stream);
-    ~File();
-    void init();
+    File(Dat::Stream&& stream);
     std::string acmName();
     uint32_t phonemesCount();
     uint32_t markersCount();
@@ -57,7 +58,6 @@ public:
     std::vector<uint8_t>& phonemes();
 
 protected:
-    virtual void _initialize();
     uint32_t _version;
     uint32_t _unknown1;
     uint32_t _unknown2;

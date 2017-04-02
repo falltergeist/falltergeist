@@ -46,17 +46,6 @@ const char* NumericExpression::TIME_OF_DAY = "time_of_day";    // returns curren
 const char* NumericExpression::GLOBAL      = "Global";         // game global variable value
 const char* NumericExpression::RAND        = "Rand";           // a random value between 0 and 99
 
-
-WorldmapFile::WorldmapFile(std::ifstream* stream) : BaseFile(stream)
-{
-    _initialize();
-}
-
-WorldmapFile::WorldmapFile(Dat::Entry* datFileEntry) : BaseFile(datFileEntry)
-{
-    _initialize();
-}
-
 void WorldmapFile::_parseText(std::istream& stream)
 {
     Ini::Parser parser(stream);

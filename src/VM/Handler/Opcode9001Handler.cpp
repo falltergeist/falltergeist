@@ -42,9 +42,8 @@ namespace Falltergeist
 
             void Opcode9001::_run()
             {
-                unsigned int data;
-                unsigned short nextOpcode;
-                *(_script->script()) >> data >> nextOpcode;
+                unsigned int data = _script->script()->readValue();
+                unsigned short nextOpcode = _script->script()->readOpcode();
 
                 // Skip 4 readed bytes
                 _script->setProgramCounter(_script->programCounter() + 4);

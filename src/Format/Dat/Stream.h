@@ -51,7 +51,9 @@ public:
     Stream(std::ifstream& stream);
     Stream(Dat::Entry& datFileEntry);
 
+    Stream(Stream&&) = default;
     Stream(const Stream&) = delete;
+    Stream& operator= (Stream&&) = default;
     Stream& operator= (const Stream&) = delete;
 
     virtual std::streambuf::int_type underflow();

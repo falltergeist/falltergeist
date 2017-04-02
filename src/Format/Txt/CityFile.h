@@ -103,8 +103,7 @@ struct City
 class CityFile : public BaseFile
 {
 public:
-    CityFile(std::ifstream* stream);
-    CityFile(Dat::Entry* datFileEntry);
+    using BaseFile::BaseFile;
 
     const std::vector<City>& cities() const;
 
@@ -112,7 +111,7 @@ protected:
     std::vector<City> _cities;
 
 
-    virtual void _parseText(std::istream& istr) override;
+    void _parseText(std::istream& istr) override;
 
     City::Size _sizeByName(std::string name) const;
 };

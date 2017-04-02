@@ -28,6 +28,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Dat/Stream.h"
 #include "../Fon/Glyph.h"
 
 // Third party includes
@@ -39,41 +40,19 @@ namespace Format
 namespace Fon
 {
 
-File::File(Dat::Entry* datFileEntry) : Dat::Item(datFileEntry)
-{
-    _initialize();
-}
+File::File(Dat::Stream&& stream) {
+    stream.setPosition(0);
 
-File::File(std::ifstream* stream) : Dat::Item(stream)
-{
-    _initialize();
-}
-
-File::~File()
-{
-    for (auto glyph : _glyphs)
-    {
-        delete glyph;
-    }
-    delete [] _rgba;
-}
-
-void File::_initialize()
-{
-    if (_initialized) return;
-    Dat::Item::_initialize();
-    Dat::Item::setPosition(0);
-
-    _numchars = uint32();
-    _maximumHeight = uint32();
-    _horizontalGap = uint32();
+    _numchars = stream.uint32();
+    _maximumHeight = stream.uint32();
+    _horizontalGap = stream.uint32();
     _verticalGap = _horizontalGap; // i hope
-    skipBytes(8);
+    stream.skipBytes(8);
 
-    for (unsigned int i=0;i<_numchars;i++)
+    for (unsigned int i = 0; i < _numchars; ++i)
     {
-        uint32_t width = uint32();
-        uint32_t offset = uint32();
+        uint32_t width = stream.uint32();
+        uint32_t offset = stream.uint32();
 
         if (width > _maximumWidth)
         {
@@ -81,15 +60,22 @@ void File::_initialize()
         }
         _glyphs.push_back(new Glyph(width, _maximumHeight));
         _glyphs.back()->setDataOffset(offset);
-
     }
 
     _spaceWidth = _glyphs.at(0x20)->width();
+
+    _loadRgba(stream);
 }
 
-uint32_t *File::rgba()
+File::~File() {
+    for (auto glyph : _glyphs) {
+        delete glyph;
+    }
+    delete[] _rgba;
+}
+
+void File::_loadRgba(Dat::Stream& stream)
 {
-    if (_rgba) return _rgba;
     _rgba = new uint32_t[(_maximumWidth+2)*16 * (_maximumHeight+2) * 16]();
 
     for (unsigned int i=0; i < _numchars; i++)
@@ -104,13 +90,13 @@ uint32_t *File::rgba()
         {
             uint32_t offset = _glyphs.at(i)->dataOffset();
             uint32_t bytesPerLine = (_glyphs.at(i)->width() + 7) / 8;
-            for(unsigned int y = 0; y < _maximumHeight; y++)
+            for (unsigned int y = 0; y < _maximumHeight; y++)
             {
-                for(unsigned int x = 0; x < _glyphs.at(i)->width(); x++)
+                for (unsigned int x = 0; x < _glyphs.at(i)->width(); x++)
                 {
                     // [offset + y * bytesPerLine + (x / 8)]
-                    setPosition(0x0414+offset + y * bytesPerLine + (x / 8));
-                    uint8_t b = uint8();
+                    stream.setPosition(0x0414+offset + y * bytesPerLine + (x / 8));
+                    uint8_t b = stream.uint8();
 
                     if (b & (1 << (7 - (x % 8))))
                     {
@@ -125,6 +111,9 @@ uint32_t *File::rgba()
 
         }
     }
+}
+
+uint32_t* File::rgba() {
     return _rgba;
 }
 
@@ -157,6 +146,7 @@ uint32_t File::spaceWidth() const
 {
     return _spaceWidth;
 }
+
 }
 }
 }

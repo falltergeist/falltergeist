@@ -40,6 +40,11 @@ namespace Falltergeist
 {
 namespace Format
 {
+namespace Dat
+{
+class Stream;
+}
+
 namespace Aaf
 {
 
@@ -71,7 +76,7 @@ protected:
     uint16_t _verticalGap = 0;
     uint32_t* _rgba = 0;
 
-    uint32_t* _loadRgba(Dat::Stream& stream);
+    void _loadRgba(Dat::Stream& stream);
 };
 
 }

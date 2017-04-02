@@ -23,13 +23,11 @@
  */
 
 // C++ standard includes
+#include <string.h> // for memcpy
 #include <algorithm>
-#include <functional>
-#include <cctype>
 
 // Falltergeist includes
-#include "../Dat/Stream.h"
-#include "../Lst/File.h"
+#include "../../Format/Dat/MiscFile.h"
 
 // Third party includes
 
@@ -37,58 +35,14 @@ namespace Falltergeist
 {
 namespace Format
 {
-namespace Lst
+namespace Dat
 {
 
-File::File(Dat::Stream&& stream)
+MiscFile::MiscFile(Stream&& stream) : _stream(std::move(stream)) {}
+
+Stream& MiscFile::stream()
 {
-    stream.setPosition(0);
-
-    std::string line;
-    unsigned char ch;
-    for (unsigned int i = 0; i != stream.size(); ++i)
-    {
-        stream >> ch;
-        if (ch == 0x0D) // \r
-        {
-            // do nothing
-        }
-        else if (ch == 0x0A) // \n
-        {
-            _addString(line);
-            line.clear();
-        }
-        else
-        {
-            line += ch;
-        }
-    }
-    if (line.size() != 0)
-    {
-        _addString(line);
-    }
-}
-
-void File::_addString(std::string line)
-{
-    // strip comments
-    if (auto pos = line.find(";")) line = line.substr(0, pos);
-
-    // rtrim
-    line.erase(std::find_if(line.rbegin(), line.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), line.end());
-
-    // replace slashes
-    std::replace(line.begin(),line.end(),'\\','/');
-
-    // to lower
-    std::transform(line.begin(),line.end(),line.begin(), ::tolower);
-
-    _strings.push_back(line);
-}
-
-std::vector<std::string>* File::strings()
-{
-    return &_strings;
+    return _stream;
 }
 
 }

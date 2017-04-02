@@ -26,6 +26,7 @@
 #include <cmath>
 
 // Falltergeist includes
+#include "../../Format/Dat/Stream.h"
 #include "../../Format/Aaf/File.h"
 #include "../../Format/Aaf/Glyph.h"
 
@@ -74,7 +75,7 @@ File::~File() {
     delete[] _rgba;
 }
 
-uint32_t* File::_loadRgba(Dat::Stream& stream)
+void File::_loadRgba(Dat::Stream& stream)
 {
     //_rgba = new uint32_t[_maximumWidth * _maximumHeight * 256]();
     // leave 1 px around glyph

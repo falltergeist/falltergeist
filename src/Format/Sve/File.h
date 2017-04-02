@@ -39,20 +39,21 @@ namespace Falltergeist
 {
 namespace Format
 {
+namespace Dat
+{
+class Stream;
+}
+
 namespace Sve
 {
 
 class File : public Dat::Item
 {
-
 public:
-    File(Dat::Entry* datFileEntry);
-    File(std::ifstream* stream);
-    ~File();
+    File(Dat::Stream&& stream);
     std::pair<int,std::string> getSubLine(int frame);
 
 protected:
-    virtual void _initialize();
     std::map<int,std::string> _subs;
     void _addString(std::string line);
 

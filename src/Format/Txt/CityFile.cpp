@@ -38,16 +38,6 @@ namespace Format
 namespace Txt
 {
 
-CityFile::CityFile(std::ifstream* stream) : BaseFile(stream)
-{
-    _initialize();
-}
-
-CityFile::CityFile(Dat::Entry* datFileEntry) : BaseFile(datFileEntry)
-{
-    _initialize();
-}
-
 const std::vector<City>& CityFile::cities() const
 {
     return _cities;
