@@ -32,6 +32,7 @@
 #include <cstdlib>
 
 // Falltergeist includes
+#include "..\..\Format\Dat\Stream.h"
 #include "Unpacker.h"
 
 // Third party includes
@@ -542,7 +543,7 @@ int ValueUnpacker::t3_7bits(int pass, int /*ind*/)
     return 1;
 }
 
-ValueUnpacker::ValueUnpacker(int levCnt, int sbCount, Dat::Item *stream)
+ValueUnpacker::ValueUnpacker(int levCnt, int sbCount, Dat::Stream *stream)
 {
     _levels = levCnt;
     _subblocks = sbCount;

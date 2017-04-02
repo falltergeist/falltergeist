@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef FALLTERGEIST_FORMAT_DAT_ITEM_H
-#define FALLTERGEIST_FORMAT_DAT_ITEM_H
+#ifndef FALLTERGEIST_FORMAT_DAT_STREAM_H
+#define FALLTERGEIST_FORMAT_DAT_STREAM_H
 
 // C++ standard includes
 #include <fstream>
@@ -44,12 +44,15 @@ namespace Dat
 
 class Entry;
 
+// An abstract data stream for binary resource files loaded from either Dat file or a file system
 class Stream: public std::streambuf
 {
 public:
     Stream(std::ifstream& stream);
     Stream(Dat::Entry& datFileEntry);
-    ~Stream();
+
+    Stream(const Stream&) = delete;
+    Stream& operator= (const Stream&) = delete;
 
     virtual std::streambuf::int_type underflow();
 
@@ -79,12 +82,13 @@ public:
     Stream& operator>>(int8_t &value);
 
 private:
-    uint8_t* _buffer = nullptr;
+    std::vector<uint8_t> _buffer;
     int32_t _size;
     ENDIANNESS _endianness = ENDIANNESS::BIG;
+    char* _rawBuffer();
 };
 
 }
 }
 }
-#endif //FALLTERGEIST_FORMAT_DAT_ITEM_H
+#endif //FALLTERGEIST_FORMAT_DAT_STREAM_H

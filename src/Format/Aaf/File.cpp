@@ -38,43 +38,22 @@ namespace Format
 namespace Aaf
 {
 
-File::File(Dat::Entry* datFileEntry): Dat::Item(datFileEntry)
+File::File(Dat::Stream&& stream)
 {
-    _initialize();
-}
+    stream.setPosition(0);
 
-File::File(std::ifstream* stream): Dat::Item(stream)
-{
-    _initialize();
-}
-
-File::~File()
-{
-    for (auto glyph : _glyphs)
-    {
-        delete glyph;
-    }
-    delete [] _rgba;
-}
-
-void File::_initialize()
-{
-    if (_initialized) return;
-    Dat::Item::_initialize();
-    Dat::Item::setPosition(0);
-
-    _signature     = uint32(); // should be "AAFF"
-    _maximumHeight = uint16();
-    _horizontalGap = uint16();
-    _spaceWidth    = uint16();
-    _verticalGap   = uint16();
+    _signature     = stream.uint32(); // should be "AAFF"
+    _maximumHeight = stream.uint16();
+    _horizontalGap = stream.uint16();
+    _spaceWidth    = stream.uint16();
+    _verticalGap   = stream.uint16();
 
     // Glyphs info
     for (unsigned i = 0; i != 256; ++i)
     {
-        uint16_t width  = uint16();
-        uint16_t height = uint16();
-        uint32_t offset = uint32();
+        uint16_t width  = stream.uint16();
+        uint16_t height = stream.uint16();
+        uint32_t offset = stream.uint32();
 
         if (width > _maximumWidth)
         {
@@ -84,11 +63,19 @@ void File::_initialize()
         _glyphs.push_back(new Glyph(width, height));
         _glyphs.back()->setDataOffset(offset);
     }
+
+    _loadRgba(stream);
 }
 
-uint32_t* File::rgba()
+File::~File() {
+    for (auto glyph : _glyphs) {
+        delete glyph;
+    }
+    delete[] _rgba;
+}
+
+uint32_t* File::_loadRgba(Dat::Stream& stream)
 {
-    if (_rgba) return _rgba;
     //_rgba = new uint32_t[_maximumWidth * _maximumHeight * 256]();
     // leave 1 px around glyph
     _rgba = new uint32_t[((_maximumWidth+2)*16) * ((_maximumHeight+2) * 16)]();
@@ -101,13 +88,13 @@ uint32_t* File::rgba()
         // Move glyph to bottom
         glyphY += _maximumHeight - _glyphs.at(i)->height();
 
-        setPosition(0x080C + _glyphs.at(i)->dataOffset());
+        stream.setPosition(0x080C + _glyphs.at(i)->dataOffset());
 
         for (uint16_t y = 0; y != _glyphs.at(i)->height(); ++y)
         {
             for (uint16_t x = 0; x != _glyphs.at(i)->width(); ++x)
             {
-                uint8_t byte = uint8();
+                uint8_t byte = stream.uint8();
                 if (byte != 0)
                 {
                     uint8_t alpha = 0;
@@ -142,6 +129,9 @@ uint32_t* File::rgba()
             }
         }
     }
+}
+
+uint32_t* File::rgba() {
     return _rgba;
 }
 

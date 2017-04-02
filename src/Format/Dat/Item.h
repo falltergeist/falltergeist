@@ -42,59 +42,17 @@ namespace Format
 namespace Dat
 {
 
-class Entry;
-
-class Item: public std::streambuf
+// A base class for all game resource files
+class Item
 {
-
 public:
+    virtual ~Item() = 0;
 
-    Item(std::ifstream* stream);
-    Item(Dat::Entry* datFileEntry);
-    ~Item();
-
-    virtual std::streambuf::int_type underflow();
-
-    Item* setFilename(const std::string filename);
+    Item& setFilename(const std::string& filename);
     std::string filename();
-
-    Item* readBytes(uint8_t* destination, uint32_t size);
-    Item* skipBytes(unsigned int numberOfBytes);
-    Item* setPosition(unsigned int position);
-    uint32_t position();
-    uint32_t size();
-
-    unsigned int bytesRemains();
-
-    ENDIANNESS endianness();
-    void setEndianness(ENDIANNESS value);
-
-    uint32_t uint32();
-    int32_t int32();
-    uint16_t uint16();
-    int16_t int16();
-    uint8_t uint8();
-    int8_t int8();
-
-    Item& operator>>(uint32_t &value);
-    Item& operator>>(int32_t &value);
-    Item& operator>>(uint16_t &value);
-    Item& operator>>(int16_t &value);
-    Item& operator>>(uint8_t &value);
-    Item& operator>>(int8_t &value);
 
 protected:
     std::string _filename;
-    Entry* _datFileEntry = nullptr;
-    std::ifstream* _stream = nullptr;
-
-    uint8_t* _buffer = nullptr;
-    int32_t _size;
-    ENDIANNESS _endianness = ENDIANNESS::BIG;
-
-    bool _initialized = false;
-    virtual void _initialize();
-
 };
 
 }

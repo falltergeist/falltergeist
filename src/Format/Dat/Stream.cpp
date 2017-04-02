@@ -48,16 +48,17 @@ Stream::Stream(std::ifstream& stream)
     _size = static_cast<int32_t>(stream.tellg());
     stream.seekg(0, std::ios::beg);
 
-    _buffer = new uint8_t[_size];
-    stream.read((char*)_buffer, _size);
-    setg((char*)_buffer, (char*)_buffer, (char*)_buffer + _size);
+    _buffer.reserve(_size);
+    auto cBuf = _rawBuffer();
+    stream.read(cBuf, _size);
+    setg(cBuf, cBuf, cBuf + _size);
 }
-
 
 Stream::Stream(Entry& datFileEntry)
 {
     _size = datFileEntry.unpackedSize();
-    _buffer = new uint8_t[_size];
+    _buffer.reserve(_size);
+    auto cBuf = _rawBuffer();
 
     auto datFile = datFileEntry.datFile();
     unsigned int oldPos = datFile->position();
@@ -72,9 +73,9 @@ Stream::Stream(Entry& datFileEntry)
         z_stream zStream;
         zStream.total_in = datFileEntry.packedSize();
         zStream.avail_in = datFileEntry.packedSize();
-        zStream.next_in = (unsigned char *)packedData.data();
+        zStream.next_in = reinterpret_cast<unsigned char*>(packedData.data());
         zStream.total_out = zStream.avail_out = _size;
-        zStream.next_out = (unsigned char *)_buffer;
+        zStream.next_out = reinterpret_cast<unsigned char*>(_buffer.data());
         zStream.zalloc = Z_NULL;
         zStream.zfree = Z_NULL;
         zStream.opaque = Z_NULL;
@@ -82,16 +83,11 @@ Stream::Stream(Entry& datFileEntry)
         inflate(&zStream, Z_FINISH);      // zlib function
         inflateEnd(&zStream);             // zlib function
     } else {
-        datFile->readBytes((char*)_buffer, _size);
+        datFile->readBytes(cBuf, _size);
     }
 
     datFile->setPosition(oldPos);
-    setg((char*)_buffer, (char*)_buffer, (char*)_buffer + _size);
-}
-
-Stream::~Stream()
-{
-    delete [] _buffer;
+    setg(cBuf, cBuf, cBuf + _size);
 }
 
 uint32_t Stream::size()
@@ -110,7 +106,8 @@ std::streambuf::int_type Stream::underflow()
 
 Stream& Stream::setPosition(unsigned int pos)
 {
-    setg((char*)_buffer, (char*)_buffer + pos, (char*)_buffer + _size);
+    auto cBuf = _rawBuffer();
+    setg(cBuf, cBuf + pos, cBuf + _size);
     return *this;
 }
 
@@ -121,7 +118,8 @@ uint32_t Stream::position()
 
 Stream& Stream::skipBytes(unsigned int numberOfBytes)
 {
-    setg((char*)_buffer, gptr() + numberOfBytes, (char*)_buffer + _size);
+    auto cBuf = _rawBuffer();
+    setg(cBuf, gptr() + numberOfBytes, cBuf + _size);
     return *this;
 }
 
@@ -131,10 +129,14 @@ Stream& Stream::readBytes(uint8_t* destination, uint32_t size)
     return *this;
 }
 
+char* Stream::_rawBuffer()
+{
+    return reinterpret_cast<char*>(_buffer.data());
+}
 
 Stream& Stream::operator>>(uint32_t &value)
 {
-    char * buff = reinterpret_cast<char *>(&value);
+    char* buff = reinterpret_cast<char*>(&value);
     sgetn(buff, sizeof(value));
     if (endianness() == ENDIANNESS::BIG) std::reverse(buff, buff + sizeof(value));
     return *this;
@@ -147,7 +149,7 @@ Stream& Stream::operator>>(int32_t &value)
 
 Stream& Stream::operator>>(uint16_t &value)
 {
-    char * buff = reinterpret_cast<char *>(&value);
+    char* buff = reinterpret_cast<char*>(&value);
     sgetn(buff, sizeof(value));
     if (endianness() == ENDIANNESS::BIG) std::reverse(buff, buff + sizeof(value));
     return *this;
@@ -160,7 +162,7 @@ Stream& Stream::operator>>(int16_t &value)
 
 Stream& Stream::operator>>(uint8_t &value)
 {
-    sgetn(reinterpret_cast<char *>(&value), sizeof(value));
+    sgetn(reinterpret_cast<char*>(&value), sizeof(value));
     return *this;
 }
 
