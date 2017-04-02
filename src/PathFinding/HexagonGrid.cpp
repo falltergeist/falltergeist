@@ -94,7 +94,7 @@ namespace Falltergeist
 				index5 = q * 200 + p + 1;
 				index6 = (q + 1) * 200 + p + 1;
 			}
-			std::array<Hexagon*, 6 > &neighbour= hexagon->neighbors();
+			std::array<Hexagon*, 6 >& neighbour= hexagon->neighbors();
 			
 			if (index1 < _hexagons.size()) neighbour[0] = _hexagons.at(index1).get();
 			if (index2 < _hexagons.size()) neighbour[1] = _hexagons.at(index2).get();

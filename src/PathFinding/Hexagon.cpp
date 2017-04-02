@@ -32,19 +32,11 @@
 namespace Falltergeist
 {
 
-Hexagon::Hexagon()
-{
-	for (int i = 0; i < _neighbors.size(); i++) {
-		_neighbors[i] = nullptr;
-	}
-}
+Hexagon::Hexagon(){}
 
 Hexagon::Hexagon(unsigned int number)
 {
     setNumber(number);
-	for (int i = 0; i < 6; i++) {
-		_neighbors[i] = nullptr;
-	}
 }
 
 std::array<Hexagon*, 6> &Hexagon::neighbors()

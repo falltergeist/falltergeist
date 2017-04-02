@@ -52,7 +52,7 @@ public:
 
 	inline void setNumber(unsigned int number){_number = number;}
 
-    std::array<Hexagon*,6> &neighbors();
+    std::array<Hexagon*,6>& neighbors();
 
     std::list<Game::Object*>* objects();
 
