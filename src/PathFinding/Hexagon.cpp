@@ -34,26 +34,22 @@ namespace Falltergeist
 
 Hexagon::Hexagon()
 {
+	for (int i = 0; i < _neighbors.size(); i++) {
+		_neighbors[i] = nullptr;
+	}
 }
 
 Hexagon::Hexagon(unsigned int number)
 {
     setNumber(number);
+	for (int i = 0; i < 6; i++) {
+		_neighbors[i] = nullptr;
+	}
 }
 
-unsigned int Hexagon::number()
+std::array<Hexagon*, 6> &Hexagon::neighbors()
 {
-    return _number;
-}
-
-void Hexagon::setNumber(unsigned int number)
-{
-    _number = number;
-}
-
-std::vector<Hexagon*>* Hexagon::neighbors()
-{
-    return &_neighbors;
+    return _neighbors;
 }
 
 std::list<Game::Object*>* Hexagon::objects()
@@ -71,46 +67,6 @@ void Hexagon::setPosition(const Point& pos)
     _position = pos;
 }
 
-int Hexagon::cubeX()
-{
-    return _cubeX;
-}
-
-void Hexagon::setCubeX(int value)
-{
-    _cubeX = value;
-}
-
-int Hexagon::cubeY()
-{
-    return _cubeY;
-}
-
-void Hexagon::setCubeY(int value)
-{
-    _cubeY = value;
-}
-
-int Hexagon::cubeZ()
-{
-    return _cubeZ;
-}
-
-void Hexagon::setCubeZ(int value)
-{
-    _cubeZ = value;
-}
-
-unsigned int Hexagon::heuristic()
-{
-    return _heuristic;
-}
-
-void Hexagon::setHeuristic(unsigned int value)
-{
-    _heuristic = value;
-}
-
 bool Hexagon::canWalkThru()
 {
     bool canWalkThru = true;
@@ -125,15 +81,7 @@ bool Hexagon::canWalkThru()
     return canWalkThru;
 }
 
-bool Hexagon::inRender()
-{
-    return _inRender;
-}
 
-void Hexagon::setInRender(bool value)
-{
-    _inRender = value;
-}
 
 Game::Orientation Hexagon::orientationTo(Hexagon *hexagon)
 {

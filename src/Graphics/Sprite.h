@@ -48,16 +48,13 @@ public:
     void render(int x, int y, bool transparency = false, bool light = false, int outline = 0, unsigned int lightValue=0);
     void renderCropped(int x, int y, int dx, int dy, unsigned int width, unsigned int height, bool transparency = false,
                        bool light = false, unsigned int lightValue=0);
-    unsigned int width() const;
-    unsigned int height() const;
-    Size size() const;
+	inline Size size() const {return _texture->size();}
+	inline unsigned int width() const{return _texture->width();}
+	inline unsigned int height() const{return _texture->height();}
     bool opaque(unsigned int x, unsigned int y);
     void trans(Graphics::TransFlags::Trans _trans);
 
 private:
-    Texture* _texture;
-    Graphics::TransFlags::Trans _trans = Graphics::TransFlags::Trans::NONE;
-
     GLint _uniformTex;
     GLint _uniformTexSize;
     GLint _uniformEggTex;
@@ -72,6 +69,8 @@ private:
 
     GLint _attribPos;
     GLint _attribTex;
+	Texture* _texture;
+	Graphics::TransFlags::Trans _trans = Graphics::TransFlags::Trans::NONE;
     Graphics::Shader*_shader;
 };
 
