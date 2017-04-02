@@ -21,7 +21,7 @@
 #define FALLTERGEIST_HEXAGON_H
 
 // C++ standard includes
-#include <vector>
+#include <array>
 #include <list>
 
 // Falltergeist includes
