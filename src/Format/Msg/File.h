@@ -51,10 +51,11 @@ public:
     ~File();
 
     std::vector<Message*>* messages();
-    Message* message(unsigned int number);
+    Message* message(unsigned long number);
 
 protected:
-    std::vector<Message*> _messages;
+    std::map<unsigned long, Message*> _messages_map;
+    std::vector<Message*>             _messages_vector;
     virtual void _initialize();
 
 };

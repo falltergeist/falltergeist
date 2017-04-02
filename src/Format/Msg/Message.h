@@ -46,8 +46,8 @@ public:
     Message();
     ~Message();
 
-    void setNumber(unsigned int number);
-    unsigned int number();
+    void setNumber(unsigned long number);
+    unsigned long number();
 
     void setSound(std::string sound);
     std::string sound();
@@ -59,7 +59,7 @@ public:
     operator std::string();
 
 protected:
-    unsigned int _number = 0;
+    unsigned long _number = 0;
     std::string _sound;
     std::string _text;
 

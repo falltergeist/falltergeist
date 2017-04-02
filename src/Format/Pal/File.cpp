@@ -99,35 +99,35 @@ void File::_initialize()
     for (unsigned int i=229; i<=232; i++)
     {
         _colors.at(i)->setGreen(0); //
-        _colors.at(i)->setBlue((i-229)*51);
+        _colors.at(i)->setBlue(static_cast<uint8_t>((i-229)*51));
     }
 
     // MONITORS
     for (unsigned int i=233; i<=237; i++)
     {
         _colors.at(i)->setGreen(51); //
-        _colors.at(i)->setBlue((i-233)*51);
+        _colors.at(i)->setBlue(static_cast<uint8_t>((i-233)*51));
     }
 
     // SLOW FIRE
     for (unsigned int i=238; i<=242; i++)
     {
         _colors.at(i)->setGreen(102); //
-        _colors.at(i)->setBlue((i-238)*51);
+        _colors.at(i)->setBlue(static_cast<uint8_t>((i-238)*51));
     }
 
     // FAST FIRE
     for (unsigned int i=243; i<=247; i++)
     {
         _colors.at(i)->setGreen(153); //
-        _colors.at(i)->setBlue((i-243)*51);
+        _colors.at(i)->setBlue(static_cast<uint8_t>((i-243)*51));
     }
 
     // SHORE
     for (unsigned int i=248; i<=253; i++)
     {
         _colors.at(i)->setGreen(204); //
-        _colors.at(i)->setBlue((i-248)*51);
+        _colors.at(i)->setBlue(static_cast<uint8_t>((i-248)*51));
     }
 
     // ALARM

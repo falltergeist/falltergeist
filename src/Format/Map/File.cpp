@@ -112,7 +112,7 @@ void File::_initialize()
     {
         _elevations.push_back(new Elevation);
 
-        for (unsigned i = 0; i < 10000; i++)
+        for (unsigned j = 0; j < 10000; j++)
         {
             _elevations.back()->roofTiles()->push_back(uint16());
             _elevations.back()->floorTiles()->push_back(uint16());
@@ -212,7 +212,7 @@ void File::_initialize()
 
             if (object->inventorySize() > 0)
             {
-                for (unsigned int i = 0; i != object->inventorySize(); ++i)
+                for (unsigned int inv_counter = 0; inv_counter != object->inventorySize(); ++inv_counter)
                 {
                     uint32_t ammount = uint32();
                     auto subobject = _readObject();

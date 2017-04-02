@@ -24,7 +24,8 @@
 
 // C++ standard includes
 #include <string>
-#include <cstdlib>
+#include <map>
+#include <algorithm>
 
 // Falltergeist includes
 #include "../../Exception.h"
@@ -52,10 +53,11 @@ File::File(std::ifstream* stream) : Dat::Item(stream)
 
 File::~File()
 {
-    for (auto message : _messages)
+    for (auto message : _messages_vector)
     {
         delete message;
     }
+    _messages_map.clear();
 }
 
 void File::_initialize()
@@ -123,27 +125,26 @@ void File::_initialize()
             }
 
             auto message = new Message();
-            message->setNumber(std::stoi(number));
+            message->setNumber(std::stoul(number));
             message->setSound(sound);
             message->setText(text);
-            _messages.push_back(message);
+            _messages_vector.push_back(message);
+            _messages_map.insert(std::map<unsigned long, Message*>::value_type(std::stoi(number), message));
         }
     }
 }
 
 std::vector<Message*>* File::messages()
 {
-    return &_messages;
+    return &_messages_vector;
 }
 
-Message* File::message(unsigned int number)
+Message* File::message(unsigned long number)
 {
-    for (auto message : _messages)
+    auto message_iterator = _messages_map.find(number);
+    if (message_iterator != _messages_map.end())
     {
-        if (message->number() == number)
-        {
-            return message;
-        }
+        return message_iterator->second;
     }
     throw Exception("File::message() - number is out of range: " + std::to_string(number));
 }

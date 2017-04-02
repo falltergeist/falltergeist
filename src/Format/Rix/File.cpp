@@ -76,7 +76,7 @@ void File::_initialize()
         uint8_t r = uint8();
         uint8_t g = uint8();
         uint8_t b = uint8();
-        palette[i] = (r << 26 | g << 18 | b << 10 | 0x000000FF);  // RGBA
+        palette[i] = static_cast<uint32_t >(r << 26 | g << 18 | b << 10 | 0x000000FF);  // RGBA
     }
 
     _rgba = new uint32_t[_width*_height];

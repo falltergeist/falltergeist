@@ -92,7 +92,7 @@ std::shared_ptr<Chunk> File::getNextChunk()
             auto opcode = new Opcode(uint16());
             opcode->setType(uint8());
             opcode->setVersion(uint8());
-            this->readBytes((uint8_t*)opcode->data(), opcode->length());
+            this->readBytes(opcode->data(), opcode->length());
             chunk->opcodes()->push_back(opcode);
             i += opcode->length() + 4;
         }

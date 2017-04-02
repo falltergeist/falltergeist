@@ -114,8 +114,8 @@ void File::_initialize()
                         _damageThreshold.at(i) = uint32();
                     }
                     _perk           = int32();
-                    _armorMaleFID   = int32();
-                    _armorFemaleFID = int32();
+                    _armorMaleFID   = uint32();
+                    _armorFemaleFID = uint32();
                     break;
                 }
                 case ITEM_TYPE::CONTAINER:

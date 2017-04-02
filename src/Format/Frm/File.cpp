@@ -113,9 +113,9 @@ void File::_initialize()
             frame->setOffsetY(int16());
 
             // Pixels data
-            for (unsigned y = 0; y != frame->height(); ++y)
+            for (uint16_t y = 0; y != frame->height(); ++y)
             {
-                for (unsigned x = 0; x != frame->width(); ++x)
+                for (uint16_t x = 0; x != frame->width(); ++x)
                 {
                     frame->setIndex(x, y, uint8());
                 }
@@ -184,9 +184,9 @@ uint32_t* File::rgba(Pal::File* palFile)
         unsigned positionX = 1;
         for (auto frame : *direction->frames())
         {
-            for (unsigned y = 0; y != frame->height(); ++y)
+            for (uint16_t y = 0; y != frame->height(); ++y)
             {
-                for (unsigned x = 0; x != frame->width(); ++x)
+                for (uint16_t x = 0; x != frame->width(); ++x)
                 {
                     _rgba[((y + positionY)*w) + x + positionX] = *palFile->color(frame->index(x, y));
                 }
@@ -213,9 +213,9 @@ std::vector<bool>* File::mask(Pal::File* palFile)
         unsigned positionX = 1;
         for (auto frame : *direction->frames())
         {
-            for (unsigned y = 0; y != frame->height(); ++y)
+            for (uint16_t y = 0; y != frame->height(); ++y)
             {
-                for (unsigned x = 0; x != frame->width(); ++x)
+                for (uint16_t x = 0; x != frame->width(); ++x)
                 {
                     _mask[((y + positionY)*w) + x + positionX] = (palFile->color(frame->index(x, y))->alpha() > 0);
                 }
