@@ -140,8 +140,8 @@ namespace Falltergeist
                     {
                         result = std::stoi(_stringValue, nullptr, 0);
                     }
-                    catch (const std::invalid_argument& ex) { }
-                    catch (const std::out_of_range& ex) { }
+                    catch (const std::invalid_argument&) { }
+                    catch (const std::out_of_range&) { }
                     return result;
                 }
                 case Type::OBJECT:  return (int)(_objectValue != nullptr);

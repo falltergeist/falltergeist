@@ -30,22 +30,21 @@
 
 namespace Falltergeist
 {
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode802A::Opcode802A(VM::Script* script) : OpcodeHandler(script)
-            {
-            }
+namespace VM
+{
+namespace Handler
+{
 
-            void Opcode802A::_run()
-            {
-                Logger::debug("SCRIPT") << "[802A] [*] op_pop_to_base" << std::endl;
-                while (_script->dataStack()->size() > _script->DVARbase())
-                {
-                    _script->dataStack()->pop();
-                }
-            }
-        }
+Opcode802A::Opcode802A(VM::Script* script) : OpcodeHandler(script) {
+}
+
+void Opcode802A::_run() {
+    Logger::debug("SCRIPT") << "[802A] [*] op_pop_to_base" << std::endl;
+    while (_script->dataStack()->size() > _script->DVARbase()) {
+        _script->dataStack()->pop();
     }
+}
+
+}
+}
 }

@@ -21,6 +21,7 @@
 #include "../State/CritterInteract.h"
 
 // C++ standard includes
+#include <cstdio>
 #include <memory>
 
 // Falltergeist includes
@@ -120,8 +121,9 @@ namespace Falltergeist
                 auto headlst = ResourceManager::getInstance()->lstFileType("art/heads/heads.lst");
                 std::string headImage = headlst->strings()->at(headID());
 
-                auto fidgets = headImage.substr(headImage.find(",")+1);
-                sscanf(fidgets.c_str(),"%d,%d,%d", &_goodFidgets, &_neutralFidgets, &_badFidgets);
+                auto fidgets = headImage.substr(headImage.find(",") + 1);
+
+                sscanf(fidgets.c_str(), "%d,%d,%d", &_goodFidgets, &_neutralFidgets, &_badFidgets);
 
                 headImage=headImage.substr(0,headImage.find(","));
 

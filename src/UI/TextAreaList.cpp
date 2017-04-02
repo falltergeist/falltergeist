@@ -82,13 +82,13 @@ void TextAreaList::render(bool eggTransparency)
 void TextAreaList::scrollTo(int index)
 {
     _areaIndex=index;
-    if (_areaIndex>=(int)_areas.size())
+    if (_areaIndex >= static_cast<int>(_areas.size()))
     {
-        _areaIndex=_areas.size();
+        _areaIndex = static_cast<int>(_areas.size());
     }
-    if (_areaIndex<0)
+    if (_areaIndex < 0)
     {
-        _areaIndex=0;
+        _areaIndex = 0;
     }
     _recalculatePositions();
 }

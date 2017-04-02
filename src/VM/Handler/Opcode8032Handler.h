@@ -29,19 +29,20 @@
 
 namespace Falltergeist
 {
-    namespace VM
-    {
-        namespace Handler
-        {
-            class Opcode8032 : public OpcodeHandler
-            {
-                public:
-                    Opcode8032(VM::Script* script);
+namespace VM
+{
+namespace Handler
+{
 
-                private:
-                    void _run() override;
-            };
-        }
-    }
+class Opcode8032 : public OpcodeHandler {
+public:
+    Opcode8032(VM::Script* script);
+
+private:
+    void _run() override;
+};
+
+}
+}
 }
 #endif // FALLTERGEIST_VM_HANDLER_OPCODE8032_H

@@ -147,7 +147,7 @@ File* File::setPosition(unsigned int position)
 
 unsigned int File::position()
 {
-    return _stream->tellg();
+    return static_cast<unsigned>(_stream->tellg());
 }
 
 unsigned int File::size(void)
@@ -156,7 +156,7 @@ unsigned int File::size(void)
     _stream->seekg(0,std::ios::end);
     auto currentPosition = _stream->tellg();
     _stream->seekg(oldPosition, std::ios::beg);
-    return currentPosition;
+    return static_cast<unsigned>(currentPosition);
 }
 
 File* File::skipBytes(unsigned int numberOfBytes)

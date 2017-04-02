@@ -33,7 +33,7 @@
 namespace Falltergeist
 {
 
-std::string _t(MSG_TYPE type, size_t number)
+std::string _t(MSG_TYPE type, unsigned int number)
 {
     static const std::string msgFiles[] = {
         "text/english/game/inventry.msg",

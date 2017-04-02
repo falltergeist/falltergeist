@@ -224,7 +224,7 @@ Size TextArea::textSize()
 int TextArea::numLines()
 {
     _updateLines();
-    return _lines.size();
+    return static_cast<int>(_lines.size());
 }
 
 void TextArea::setSize(const Size& size)
@@ -284,7 +284,7 @@ void TextArea::_updateSymbols()
         }
     }
 
-    int numVisibleLines = std::distance(lineBegin, lineEnd);
+    auto numVisibleLines = static_cast<int>(std::distance(lineBegin, lineEnd));
 
     // Calculating textarea sizes if needed
     if (numVisibleLines > 0)
@@ -543,8 +543,8 @@ void TextArea::_updateBuffers()
     auto tex = font()->texture();
     for ( auto symbol: _symbols )
     {
-        float textureX = (symbol.chr%16) * font()->width()+(symbol.chr%16)*2+1;
-        float textureY = (symbol.chr/16) * font()->height()+(symbol.chr/16)*2+1;
+        auto textureX = static_cast<float>((symbol.chr % 16) * font()->width() + (symbol.chr % 16) * 2 + 1);
+        auto textureY = static_cast<float>((symbol.chr / 16) * font()->height() + (symbol.chr / 16) * 2 + 1);
 
         Point drawPos = symbol.position;
 

@@ -116,7 +116,7 @@ void Game::init(std::unique_ptr<Settings> settings)
 
     IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 
-    srand(time(0)); /// randomization
+    srand(static_cast<unsigned>(time(0))); /// randomization
 
     atexit(SDL_Quit);
 }

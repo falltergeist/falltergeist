@@ -73,7 +73,7 @@ void TileMap::init()
         auto position = std::find(numbers.begin(), numbers.end(), tile->number());
         if ( position == numbers.end())
         {
-            tile->setIndex(numbers.size());
+            tile->setIndex(static_cast<unsigned>(numbers.size()));
             numbers.push_back(tile->number());
         }
         else
@@ -94,10 +94,10 @@ void TileMap::init()
     {
         auto& tile = it.second;
         // push vertices
-        float vx = tile->position().x();
-        float vy = tile->position().y();
-        float vw = vx+80.0;
-        float vh = vy+36.0;
+        float vx = static_cast<float>(tile->position().x());
+        float vy = static_cast<float>(tile->position().y());
+        float vw = static_cast<float>(vx + 80.0);
+        float vh = static_cast<float>(vy + 36.0);
 
         vertices.push_back(glm::vec2(vx, vy));
         vertices.push_back( glm::vec2(vw, vy) );
@@ -113,8 +113,8 @@ void TileMap::init()
         float y = (float)((tIndex / maxW) * 36);
         float fy = y / (float)Game::getInstance()->renderer()->maxTextureSize();
 
-        float w = (x+80.0) / (float)Game::getInstance()->renderer()->maxTextureSize();
-        float h = (y+36.0) / (float)Game::getInstance()->renderer()->maxTextureSize();
+        float w = static_cast<float>(x + 80.0) / Game::getInstance()->renderer()->maxTextureSize();
+        float h = static_cast<float>(y + 36.0) / Game::getInstance()->renderer()->maxTextureSize();
 
         UV.push_back(glm::vec2(fx,fy));
         UV.push_back(glm::vec2(w,fy));

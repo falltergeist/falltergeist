@@ -112,8 +112,8 @@ namespace Falltergeist
                                 {
                                     arg2 = std::stof(bValue.stringValue());
                                 }
-                                catch (const std::invalid_argument& ex) { }
-                                catch (const std::out_of_range& ex) { }
+                                catch (const std::invalid_argument&) { }
+                                catch (const std::out_of_range&) { }
                                 result = _compare(arg1, arg2); // FLOAT op STRING (parsed as float)
                                 break;
                             }
@@ -140,8 +140,8 @@ namespace Falltergeist
                                 {
                                     arg1 = std::stof(aValue.stringValue());
                                 }
-                                catch (const std::invalid_argument& ex) { }
-                                catch (const std::out_of_range& ex) { }
+                                catch (const std::invalid_argument&) { }
+                                catch (const std::out_of_range&) { }
                                 result = _compare(arg1, bValue.floatValue()); // STRING (as float) op FLOAT
                                 break;
                             }

@@ -30,21 +30,21 @@
 
 namespace Falltergeist
 {
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode802B::Opcode802B(VM::Script* script) : OpcodeHandler(script)
-            {
-            }
+namespace VM
+{
+namespace Handler
+{
 
-            void Opcode802B::_run()
-            {
-                auto argumentsCounter = _script->dataStack()->popInteger();
-                _script->returnStack()->push(_script->DVARbase());
-                _script->setDVARBase(_script->dataStack()->size() - argumentsCounter);
-                Logger::debug("SCRIPT") << "[802B] [*] op_push_base = " << _script->DVARbase() << std::endl;
-            }
-        }
-    }
+Opcode802B::Opcode802B(VM::Script* script) : OpcodeHandler(script) {
+}
+
+void Opcode802B::_run() {
+    auto argumentsCounter = _script->dataStack()->popInteger();
+    _script->returnStack()->push(static_cast<unsigned>(_script->DVARbase()));
+    _script->setDVARBase(_script->dataStack()->size() - argumentsCounter);
+    Logger::debug("SCRIPT") << "[802B] [*] op_push_base = " << _script->DVARbase() << std::endl;
+}
+
+}
+}
 }

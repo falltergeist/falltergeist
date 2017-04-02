@@ -110,7 +110,7 @@ namespace Falltergeist
             uint16_t* tmp = new uint16_t[len/2];
             pacm->readSamples((short int*)tmp, len/2);
             SDL_memset(stream, 0, len);
-            SDL_MixAudioFormat(stream, (uint8_t*)tmp, _format, len, SDL_MIX_MAXVOLUME * _musicVolume);
+            SDL_MixAudioFormat(stream, (uint8_t*)tmp, _format, len, static_cast<int>(SDL_MIX_MAXVOLUME * _musicVolume));
             delete[] tmp;
         }
 
@@ -210,7 +210,7 @@ namespace Falltergeist
                 SDL_ConvertAudio(&cvt);
 
                 // make SDL_mixer chunk
-                chunk = Mix_QuickLoad_RAW(cvt.buf, cvt.len*cvt.len_ratio);
+                chunk = Mix_QuickLoad_RAW(cvt.buf, static_cast<uint32_t>(cvt.len * cvt.len_ratio));
                 if (_sfx.size() > 100) // TODO: make this configurable
                 {
                     Mix_FreeChunk(_sfx.begin()->second);

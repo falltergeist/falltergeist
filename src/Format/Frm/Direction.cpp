@@ -82,7 +82,7 @@ uint16_t Direction::width() const
     {
         widths.push_back(frame->width()+2);
     }
-    return (*std::max_element(widths.begin(), widths.end())) * _frames.size();
+    return static_cast<uint16_t>((*std::max_element(widths.begin(), widths.end())) * _frames.size());
 }
 
 uint16_t Direction::height() const

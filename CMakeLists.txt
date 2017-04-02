@@ -79,6 +79,7 @@ file(GLOB_RECURSE SOURCES  src/*.cpp)
 
 if(MSVC)
 	set(_additional_includes "package/windows.rc" pchheader.cpp)
+	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 
 add_executable(falltergeist main.cpp ${SOURCES} ${_additional_includes})
@@ -90,6 +91,9 @@ set_target_properties(falltergeist PROPERTIES
 )
 
 if(MSVC)
+	set_property(TARGET falltergeist
+		APPEND PROPERTY LINK_FLAGS /NODEFAULTLIB:MSVCRT
+	)
 	include(cmake/modules/PrecompiledHeader.cmake)
 	add_precompiled_header(falltergeist pchheader.h FORCEINCLUDE SOURCE_CXX pchheader.cpp)
 else()

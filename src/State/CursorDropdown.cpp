@@ -159,7 +159,7 @@ namespace Falltergeist
 
             _iconsPos = Point(_initialX + 29, _initialY);
             Point delta = Point(_initialX + 29, _initialY)
-                          + Size(40, 40*_icons.size())
+                          + Size(40, 40 * static_cast<int>(_icons.size()))
                           - game->renderer()->size()
                           + Point(0, game->locationState()->playerPanel()->size().height());
 
@@ -247,9 +247,9 @@ namespace Falltergeist
             {
                 if (!_onlyShowIcon)
                 {
-                    game->mouse()->setY(_iconsPos.y() + _icons.size() * mousePixelsForItem);
+                    game->mouse()->setY(_iconsPos.y() + static_cast<int>(_icons.size()) * mousePixelsForItem);
                 }
-                _currentIcon = _icons.size() - 1;
+                _currentIcon = static_cast<int>(_icons.size()) - 1;
             }
             if (!_onlyShowIcon)
             {
@@ -292,7 +292,7 @@ namespace Falltergeist
             }
 
             auto mouse = Game::getInstance()->mouse();
-            _initialMouseStack = mouse->states()->size();
+            _initialMouseStack = static_cast<unsigned>(mouse->states()->size());
             mouse->pushState(Input::Mouse::Cursor::NONE);
         }
 

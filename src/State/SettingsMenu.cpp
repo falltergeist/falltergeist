@@ -446,6 +446,7 @@ namespace Falltergeist
         void SettingsMenu::doSave()
         {
             auto settings = Game::getInstance()->settings();
+            // TODO: remove C-style casts
             settings->setCombatDifficulty(((UI::MultistateImageButton*)getUI("combat_difficulty"))->state());
             settings->setGameDifficulty(((UI::MultistateImageButton*)getUI("game_difficulty"))->state());
             settings->setViolenceLevel(((UI::MultistateImageButton*)getUI("violence_level"))->state());
@@ -464,7 +465,7 @@ namespace Falltergeist
             settings->setSfxVolume(((UI::Slider*)getUI("sfx_volume"))->value());
 
             settings->setTextDelay(((UI::Slider*)getUI("text_delay"))->value());
-            settings->setCombatSpeed(((UI::Slider*)getUI("combat_speed"))->value());
+            settings->setCombatSpeed(static_cast<unsigned>(((UI::Slider*)getUI("combat_speed"))->value()));
             settings->setBrightness(((UI::Slider*)getUI("brightness"))->value());
             settings->setMouseSensitivity(((UI::Slider*)getUI("mouse_sensitivity"))->value());
 

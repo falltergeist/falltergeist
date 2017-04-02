@@ -154,7 +154,7 @@ double Slider::value() const
 void Slider::setValue(double value)
 {
     _value = value;
-    _offset.setX((218.f/(maxValue() - minValue())) * _value);
+    _offset.setX(static_cast<int>((218.f/(maxValue() - minValue())) * _value));
     emitEvent(std::make_unique<Event::Event>("change"), changeHandler());
 }
 

@@ -40,6 +40,7 @@
 #include "../State/State.h"
 
 // Third party includes
+#define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 #include <SDL_image.h>
 
@@ -297,7 +298,7 @@ void Renderer::fadeIn(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool i
     _fadeAlpha = 255;
     _fadeStep = -1;
     _fadeDone = false;
-    _fadeDelay = round(time / 256);
+    _fadeDelay = static_cast<unsigned>(round(time / 256));
 }
 
 void Renderer::fadeOut(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie)
@@ -307,7 +308,7 @@ void Renderer::fadeOut(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool 
     _fadeAlpha = 0;
     _fadeStep = 1;
     _fadeDone = false;
-    _fadeDelay = round(time / 256);
+    _fadeDelay = static_cast<unsigned>(round(time / 256));
 }
 
 

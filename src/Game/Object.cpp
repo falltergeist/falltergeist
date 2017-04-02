@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <cmath>
+#include <cstdio>
 #include <memory>
 
 // Falltergeist includes

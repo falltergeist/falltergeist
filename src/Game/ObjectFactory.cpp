@@ -138,7 +138,7 @@ Object* ObjectFactory::createObject(unsigned int PID)
                 object->setName(msg->message(proto->messageId())->text());
                 object->setDescription(msg->message(proto->messageId() + 1)->text());
             }
-            catch (const Exception& e) {}
+            catch (const Exception&) {}
             break;
         }
         case OBJECT_TYPE::CRITTER:
@@ -150,7 +150,7 @@ Object* ObjectFactory::createObject(unsigned int PID)
                 object->setName(msg->message(proto->messageId())->text());
                 object->setDescription(msg->message(proto->messageId() + 1)->text());
             }
-            catch (const Exception& e) {}
+            catch (const Exception&) {}
 
             for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
             {
@@ -216,7 +216,7 @@ Object* ObjectFactory::createObject(unsigned int PID)
                 object->setName(msg->message(proto->messageId())->text());
                 object->setDescription(msg->message(proto->messageId() + 1)->text());
             }
-            catch (const Exception& e) {}
+            catch (const Exception&) {}
 
             ((SceneryObject*)object)->setSoundId((char)proto->soundId());
 
@@ -254,7 +254,7 @@ Object* ObjectFactory::createObject(unsigned int PID)
                 object->setName(msg->message(proto->messageId())->text());
                 object->setDescription(msg->message(proto->messageId() + 1)->text());
             }
-            catch (const Exception& e) {}
+            catch (const Exception&) {}
 
             //first two bytes are orientation. second two - unknown
             unsigned short orientation = proto->flagsExt() >> 16;
@@ -311,7 +311,7 @@ Object* ObjectFactory::createObject(unsigned int PID)
                 object->setName(msg->message(proto->messageId())->text());
                 object->setDescription(msg->message(proto->messageId() + 1)->text());
             }
-            catch (const Exception& e) {}
+            catch (const Exception&) {}
             break;
         }
     }
