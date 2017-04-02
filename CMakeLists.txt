@@ -79,6 +79,7 @@ file(GLOB_RECURSE SOURCES  src/*.cpp)
 
 if(MSVC)
 	set(_additional_includes "package/windows.rc" pchheader.cpp)
+	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 
 add_executable(falltergeist main.cpp ${SOURCES} ${_additional_includes})
