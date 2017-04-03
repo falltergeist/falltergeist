@@ -48,7 +48,7 @@ Stream::Stream(std::ifstream& stream)
     _size = static_cast<int32_t>(stream.tellg());
     stream.seekg(0, std::ios::beg);
 
-    _buffer.reserve(_size);
+    _buffer.resize(_size);
     auto cBuf = _rawBuffer();
     stream.read(cBuf, _size);
     setg(cBuf, cBuf, cBuf + _size);
@@ -57,7 +57,7 @@ Stream::Stream(std::ifstream& stream)
 Stream::Stream(Entry& datFileEntry)
 {
     _size = datFileEntry.unpackedSize();
-    _buffer.reserve(_size);
+    _buffer.resize(_size);
     auto cBuf = _rawBuffer();
 
     auto datFile = datFileEntry.datFile();
@@ -65,8 +65,7 @@ Stream::Stream(Entry& datFileEntry)
     datFile->setPosition(datFileEntry.dataOffset());
 
     if (datFileEntry.compressed()) {
-        std::vector<char> packedData;
-        packedData.reserve(datFileEntry.packedSize());
+        Base::Buffer<char> packedData(datFileEntry.packedSize());
         datFile->readBytes(packedData.data(), datFileEntry.packedSize());
 
         // unpacking

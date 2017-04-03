@@ -52,13 +52,13 @@ class File
 
 public:
     File();
-    File(std::string pathToFile);
+    File(const std::string& pathToFile);
     virtual ~File();
 
     std::string filename();
-    File* setFilename(std::string filename);
+    File* setFilename(const std::string& filename);
 
-    Item* item(std::string filename);
+    Item* item(const std::string& filename);
 
     File* readBytes(char* destination, unsigned int numberOfBytes);
     File* skipBytes(unsigned int numberOfBytes);
@@ -81,7 +81,7 @@ protected:
     std::string _filename;
     bool _initialized = false;
     void _initialize();
-
+    Item* File::_createItemByName(const std::string& filename, Entry& entry);
 };
 
 }

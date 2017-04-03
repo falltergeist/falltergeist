@@ -31,6 +31,7 @@
 #include <memory>
 
 // Falltergeist includes
+#include "../../Base/Buffer.h"
 #include "../../Format/Enums.h"
 
 // Third party includes
@@ -84,7 +85,7 @@ public:
     Stream& operator>>(int8_t &value);
 
 private:
-    std::vector<uint8_t> _buffer;
+    Base::Buffer<uint8_t> _buffer;
     int32_t _size;
     ENDIANNESS _endianness = ENDIANNESS::BIG;
     char* _rawBuffer();
