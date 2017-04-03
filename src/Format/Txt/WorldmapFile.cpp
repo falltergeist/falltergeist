@@ -461,7 +461,8 @@ LogicalExpression::Operator WorldmapFile::_operatorByLexem(int lexem)
 
 WorldmapFile::WorldmapFile(Dat::Stream&& stream)
 {
-    _parseText(std::istream(&stream));
+    std::istream istr(&stream);
+    _parseText(istr);
 }
 
 }

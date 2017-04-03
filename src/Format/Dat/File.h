@@ -81,7 +81,7 @@ protected:
     std::string _filename;
     bool _initialized = false;
     void _initialize();
-    Item* File::_createItemByName(const std::string& filename, Entry& entry);
+    Item* _createItemByName(const std::string& filename, Entry& entry);
 };
 
 }

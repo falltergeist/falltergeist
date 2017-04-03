@@ -115,4 +115,4 @@ private:
 }
 }
 
-#endif FALLTERGEIST_BASE_BUFFER_H
+#endif // FALLTERGEIST_BASE_BUFFER_H

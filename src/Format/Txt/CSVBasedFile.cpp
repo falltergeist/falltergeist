@@ -39,9 +39,10 @@ namespace Txt
 {
 
 template <typename ItemType>
-CSVBasedFile<ItemType>::CSVBasedFile(Dat::Stream&& stream) {
-
-    _parseText(std::istream(&stream));
+CSVBasedFile<ItemType>::CSVBasedFile(Dat::Stream&& stream)
+{
+    std::istream istr(&stream);
+    _parseText(istr);
 }
 
 template <typename ItemType>

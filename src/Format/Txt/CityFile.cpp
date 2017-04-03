@@ -41,7 +41,8 @@ namespace Txt
 
 CityFile::CityFile(Dat::Stream&& stream)
 {
-    _parseText(std::istream(&stream));
+    std::istream istr(&stream);
+    _parseText(istr);
 }
 
 const std::vector<City>& CityFile::cities() const

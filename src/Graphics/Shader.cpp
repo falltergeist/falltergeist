@@ -125,7 +125,7 @@ bool Shader::_load(std::string fname)
     std::string vpsrc;
 
     fpfile.seekg(0, std::ios::end);
-    fpsrc.reserve(fpfile.tellg());
+    fpsrc.reserve(static_cast<size_t>(fpfile.tellg()));
     fpfile.seekg(0, std::ios::beg);
 
     fpsrc.assign((std::istreambuf_iterator<char>(fpfile)),
@@ -133,7 +133,7 @@ bool Shader::_load(std::string fname)
     fpfile.close();
 
     vpfile.seekg(0, std::ios::end);
-    vpsrc.reserve(vpfile.tellg());
+    vpsrc.reserve(static_cast<size_t>(vpfile.tellg()));
     vpfile.seekg(0, std::ios::beg);
 
     vpsrc.assign((std::istreambuf_iterator<char>(vpfile)),

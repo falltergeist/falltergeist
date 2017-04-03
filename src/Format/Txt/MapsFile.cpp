@@ -41,7 +41,8 @@ namespace Txt
 
 MapsFile::MapsFile(Dat::Stream&& stream)
 {
-    _parseText(std::istream(&stream));
+    std::istream istr(&stream);
+    _parseText(istr);
 }
 
 const std::vector<Map>& MapsFile::maps() const

@@ -30,7 +30,7 @@
 namespace Falltergeist
 {
 
-enum MSG_TYPE
+enum MSG_TYPE : unsigned int
 {
     MSG_INVENTORY = 0,
     MSG_LOAD_SAVE,
