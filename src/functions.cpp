@@ -59,7 +59,7 @@ std::string _t(MSG_TYPE type, unsigned int number)
     }
 
     auto msg = ResourceManager::getInstance()->msgFileType(msgFiles[type]);
-    return msg->message(number)->text();
+    return msg->message(number)->text;
 }
 
 std::string path_basename(const std::string& path, bool removeExtension)
