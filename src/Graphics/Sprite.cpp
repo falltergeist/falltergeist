@@ -70,17 +70,18 @@ Sprite::Sprite(Format::Frm::File *frm) : Sprite(frm->filename())
 
 }
 
-Size Sprite::size() const {		
+Size Sprite::size() const
+{		
      return _texture->size();		
 }		
  		
 unsigned int Sprite::width() const		
-{		
+{
     return _texture->width();		
 }		
  		
 unsigned int Sprite::height() const		
-{		
+{
    return _texture->height();		
 }
 
