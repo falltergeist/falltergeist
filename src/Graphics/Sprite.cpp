@@ -88,18 +88,18 @@ unsigned int Sprite::height() const
 // render, optionally scaled
 void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height, bool transparency, bool light, int outline, unsigned int lightValue)
 {
-	glm::vec2 vertices[4] = {
-		glm::vec2((float)x, (float)y),
-		glm::vec2((float)x, (float)(y + height)),
-		glm::vec2((float)(x + width), (float)y),
-		glm::vec2((float)(x + width), (float)(y + height))
-	};
-	glm::vec2 UV[4] = {
-		glm::vec2(0.0, 0.0),
-		glm::vec2(0.0, (float)_texture->height() / (float)_texture->textureHeight()),
-		glm::vec2((float)_texture->width() / (float)_texture->textureWidth(), 0.0),
-		glm::vec2((float)_texture->width() / (float)_texture->textureWidth(), (float)_texture->height() / (float)_texture->textureHeight())
-	};
+    glm::vec2 vertices[4] = {
+        glm::vec2((float)x, (float)y),
+        glm::vec2((float)x, (float)(y + height)),
+        glm::vec2((float)(x + width), (float)y),
+        glm::vec2((float)(x + width), (float)(y + height))
+    };
+    glm::vec2 UV[4] = {
+        glm::vec2(0.0, 0.0),
+        glm::vec2(0.0, (float)_texture->height() / (float)_texture->textureHeight()),
+        glm::vec2((float)_texture->width() / (float)_texture->textureWidth(), 0.0),
+        glm::vec2((float)_texture->width() / (float)_texture->textureWidth(), (float)_texture->height() / (float)_texture->textureHeight())
+    };
 
     x--;
     y--;
@@ -212,18 +212,18 @@ void Sprite::render(int x, int y, bool transparency, bool light, int outline, un
 void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, unsigned int height, bool transparency,
                            bool light, unsigned int lightValue)
 {
-	glm::vec2 vertices[4] = {
-		glm::vec2((float)x, (float)y),
-		glm::vec2((float)x, (float)(y + height)),
-		glm::vec2((float)(x + width), (float)y),
-		glm::vec2((float)(x + width), (float)(y + height))
-	};
+    glm::vec2 vertices[4] = {
+        glm::vec2((float)x, (float)y),
+        glm::vec2((float)x, (float)(y + height)),
+        glm::vec2((float)(x + width), (float)y),
+        glm::vec2((float)(x + width), (float)(y + height))
+    };
     glm::vec2 UV[4] = {
-		glm::vec2((float)dx / (float)_texture->textureWidth(), (float)dy / (float)_texture->textureHeight()),
-		glm::vec2((float)dx / (float)_texture->textureWidth(), (float)(dy + height) / (float)_texture->textureHeight()),
-		glm::vec2((float)(dx + width) / (float)_texture->textureWidth(), (float)dy / (float)_texture->textureHeight()),
-		glm::vec2((float)(dx + width) / (float)_texture->textureWidth(), (float)(dy + height) / (float)_texture->textureHeight())
-	};
+        glm::vec2((float)dx / (float)_texture->textureWidth(), (float)dy / (float)_texture->textureHeight()),
+        glm::vec2((float)dx / (float)_texture->textureWidth(), (float)(dy + height) / (float)_texture->textureHeight()),
+        glm::vec2((float)(dx + width) / (float)_texture->textureWidth(), (float)dy / (float)_texture->textureHeight()),
+        glm::vec2((float)(dx + width) / (float)_texture->textureWidth(), (float)(dy + height) / (float)_texture->textureHeight())
+    };
 
     glm::vec2 eggVec;
     if (transparency)
