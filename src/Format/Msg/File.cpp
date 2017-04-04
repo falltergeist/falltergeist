@@ -55,7 +55,7 @@ File::~File()
 {
     for (auto message : _messages)
     {
-        delete message;
+        delete message.second;
     }
 }
 
