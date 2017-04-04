@@ -96,15 +96,53 @@ ResourceManager* ResourceManager::getInstance()
     return Base::Singleton<ResourceManager>::get();
 }
 
+template <class T, class SourceType>
+std::unique_ptr<Format::Dat::Item> createItem(SourceType& src) {
+    return std::make_unique<T>(Format::Dat::Stream(src));
+}
+
+template <class SourceType>
+std::unique_ptr<Format::Dat::Item> createItemByName(const string& filename, SourceType& src) {
+    string extension = filename.substr(filename.length() - 3, 3);
+    if (extension == "aaf") return createItem<Format::Aaf::File>(src);
+    else if (extension == "acm") return createItem<Format::Acm::File>(src);
+    else if (extension == "bio") return createItem<Format::Bio::File>(src);
+    else if (extension == "fon") return createItem<Format::Fon::File>(src);
+    else if (extension == "frm") return createItem<Format::Frm::File>(src);
+    else if (extension == "gam") return createItem<Format::Gam::File>(src);
+    else if (extension == "gcd") return createItem<Format::Gcd::File>(src);
+    else if (extension == "int") return createItem<Format::Int::File>(src);
+    else if (extension == "lip") return createItem<Format::Lip::File>(src);
+    else if (extension == "lst") return createItem<Format::Lst::File>(src);
+    else if (extension == "map") return createItem<Format::Map::File>(src);
+    else if (extension == "msg") return createItem<Format::Msg::File>(src);
+    else if (extension == "mve") return createItem<Format::Mve::File>(src);
+    else if (extension == "pal") return createItem<Format::Pal::File>(src);
+    else if (extension == "pro") return createItem<Format::Pro::File>(src);
+    else if (extension == "rix") return createItem<Format::Rix::File>(src);
+    else if (filename == "data/city.txt")       return createItem<Format::Txt::CityFile>(src);
+    else if (filename == "data/enddeath.txt")   return createItem<Format::Txt::EndDeathFile>(src);
+    else if (filename == "data/endgame.txt")    return createItem<Format::Txt::EndGameFile>(src);
+    else if (filename == "data/genrep.txt")     return createItem<Format::Txt::GenRepFile>(src);
+    else if (filename == "data/holodisk.txt")   return createItem<Format::Txt::HolodiskFile>(src);
+    else if (filename == "data/karmavar.txt")   return createItem<Format::Txt::KarmaVarFile>(src);
+    else if (filename == "data/maps.txt")       return createItem<Format::Txt::MapsFile>(src);
+    else if (filename == "data/quests.txt")     return createItem<Format::Txt::QuestsFile>(src);
+    else if (filename == "data/worldmap.txt")   return createItem<Format::Txt::WorldmapFile>(src);
+    else {
+        return createItem<Format::Dat::MiscFile>(src);
+    }
+}
+
 Format::Dat::Item* ResourceManager::datFileItem(string filename)
 {
     std::transform(filename.begin(), filename.end(), filename.begin(), ::tolower);
 
     // Return item from cache
-    auto itemIt = _datItemMap.find(filename);
-    if (itemIt != _datItemMap.end())
+    auto itemIt = _datItems.find(filename);
+    if (itemIt != _datItems.end())
     {
-        return itemIt->second;
+        return itemIt->second.get();
     }
 
     // Searching file in Fallout data directory
@@ -129,68 +167,31 @@ Format::Dat::Item* ResourceManager::datFileItem(string filename)
 
         if (stream.is_open())
         {
-            Format::Dat::Item* item = _createItemByName(filename, stream);
+            auto item = createItemByName(filename, stream);
+            auto itemPtr = item.get();
             item->setFilename(filename);
-            _datItems.push_back(unique_ptr<Format::Dat::Item>(item));
-            _datItemMap.insert(make_pair(filename, item));
+            _datItems.emplace(filename, std::move(item));
             stream.close();
-            return item;
+            return itemPtr;
         }
     }
 
     // Search in DAT files
     for (auto& datfile : _datFiles)
     {
-        auto item = datfile->item(filename.c_str());
-        if (item)
+        auto entry = datfile->entry(filename);
+        if (entry != nullptr)
         {
             Logger::debug("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM " << datfile->filename() << "]" << endl;
-            _datItemMap.insert(make_pair(filename, item));
-            return item;
+            auto item = createItemByName(filename, *entry);
+            auto itemPtr = item.get();
+            item->setFilename(filename);
+            _datItems.emplace(filename, std::move(item));
+            return itemPtr;
         }
     }
     Logger::error("RESOURCE MANAGER") << "Loading file: " << filename << " [ NOT FOUND]" << endl;
     return nullptr;
-}
-
-template <class T>
-Format::Dat::Item* createItemByStream(ifstream& stream)
-{
-    return new T(Format::Dat::Stream(stream));
-}
-
-Format::Dat::Item* ResourceManager::_createItemByName(const string& filename, ifstream& stream)
-{
-    string extension = filename.substr(filename.length() - 3, 3);
-    if      (extension == "aaf") return createItemByStream<Format::Aaf::File>(stream);
-    else if (extension == "acm") return createItemByStream<Format::Acm::File>(stream);
-    else if (extension == "bio") return createItemByStream<Format::Bio::File>(stream);
-    else if (extension == "fon") return createItemByStream<Format::Fon::File>(stream);
-    else if (extension == "frm") return createItemByStream<Format::Frm::File>(stream);
-    else if (extension == "gam") return createItemByStream<Format::Gam::File>(stream);
-    else if (extension == "gcd") return createItemByStream<Format::Gcd::File>(stream);
-    else if (extension == "int") return createItemByStream<Format::Int::File>(stream);
-    else if (extension == "lip") return createItemByStream<Format::Lip::File>(stream);
-    else if (extension == "lst") return createItemByStream<Format::Lst::File>(stream);
-    else if (extension == "map") return createItemByStream<Format::Map::File>(stream);
-    else if (extension == "msg") return createItemByStream<Format::Msg::File>(stream);
-    else if (extension == "mve") return createItemByStream<Format::Mve::File>(stream);
-    else if (extension == "pal") return createItemByStream<Format::Pal::File>(stream);
-    else if (extension == "pro") return createItemByStream<Format::Pro::File>(stream);
-    else if (extension == "rix") return createItemByStream<Format::Rix::File>(stream);
-    else if (filename == "data/city.txt")       return createItemByStream<Format::Txt::CityFile>(stream);
-    else if (filename == "data/enddeath.txt")   return createItemByStream<Format::Txt::EndDeathFile>(stream);
-    else if (filename == "data/endgame.txt")    return createItemByStream<Format::Txt::EndGameFile>(stream);
-    else if (filename == "data/genrep.txt")     return createItemByStream<Format::Txt::GenRepFile>(stream);
-    else if (filename == "data/holodisk.txt")   return createItemByStream<Format::Txt::HolodiskFile>(stream);
-    else if (filename == "data/karmavar.txt")   return createItemByStream<Format::Txt::KarmaVarFile>(stream);
-    else if (filename == "data/maps.txt")       return createItemByStream<Format::Txt::MapsFile>(stream);
-    else if (filename == "data/quests.txt")     return createItemByStream<Format::Txt::QuestsFile>(stream);
-    else if (filename == "data/worldmap.txt")   return createItemByStream<Format::Txt::WorldmapFile>(stream);
-    else
-    {
-        return createItemByStream<Format::Dat::MiscFile>(stream);
-    }
 }
 
 Format::Frm::File* ResourceManager::frmFileType(const string& filename)
@@ -486,7 +487,6 @@ Format::Pro::File* ResourceManager::proFileType(unsigned int PID)
 void ResourceManager::unloadResources()
 {
     _datItems.clear();
-    _datItemMap.clear();
 }
 
 Format::Frm::File* ResourceManager::frmFileType(unsigned int FID)

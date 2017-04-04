@@ -153,8 +153,7 @@ protected:
     friend class Base::Singleton<ResourceManager>;
 
     std::vector<std::unique_ptr<Format::Dat::File>> _datFiles;
-    std::vector<std::unique_ptr<Format::Dat::Item>> _datItems;
-    std::unordered_map<std::string, Format::Dat::Item*> _datItemMap;
+    std::unordered_map<std::string, std::unique_ptr<Format::Dat::Item>> _datItems;
     std::unordered_map<std::string, std::unique_ptr<Graphics::Texture>> _textures;
     std::unordered_map<std::string, std::unique_ptr<Graphics::Font>> _fonts;
     std::unordered_map<std::string, std::unique_ptr<Graphics::Shader>> _shaders;
@@ -163,8 +162,6 @@ protected:
     ~ResourceManager();
     ResourceManager(const ResourceManager&) = delete;
     ResourceManager& operator=(const ResourceManager&) = delete;
-
-    Format::Dat::Item* _createItemByName(const std::string& filename, std::ifstream& stream);
 };
 
 }

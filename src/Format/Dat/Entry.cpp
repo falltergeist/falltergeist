@@ -43,23 +43,19 @@ Entry::Entry(File* datFile)
     _datFile = datFile;
 }
 
-Entry::~Entry()
-{
-}
-
-std::string Entry::filename()
+std::string Entry::filename() const
 {
     return _filename;
 }
 
 void Entry::setFilename(std::string value)
 {
-    std::replace(value.begin(),value.end(),'\\','/');
-    std::transform(value.begin(),value.end(),value.begin(), ::tolower);
+    std::replace(value.begin(), value.end(), '\\','/');
+    std::transform(value.begin(), value.end(), value.begin(), ::tolower);
     _filename = value;
 }
 
-uint32_t Entry::packedSize()
+uint32_t Entry::packedSize() const
 {
     return _packedSize;
 }
@@ -69,7 +65,7 @@ void Entry::setPackedSize(uint32_t value)
     _packedSize = value;
 }
 
-uint32_t Entry::unpackedSize()
+uint32_t Entry::unpackedSize() const
 {
     return _unpackedSize;
 }
@@ -79,7 +75,7 @@ void Entry::setUnpackedSize(uint32_t value)
     _unpackedSize = value;
 }
 
-uint32_t Entry::dataOffset()
+uint32_t Entry::dataOffset() const
 {
     return _dataOffset;
 }
@@ -89,7 +85,7 @@ void Entry::setDataOffset(uint32_t value)
     _dataOffset = value;
 }
 
-bool Entry::compressed()
+bool Entry::compressed() const
 {
     return _compressed;
 }

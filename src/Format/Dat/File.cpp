@@ -30,8 +30,6 @@
 #include "../../Format/Aaf/File.h"
 #include "../../Format/Acm/File.h"
 #include "../../Format/Bio/File.h"
-#include "../../Format/Dat/Entry.h"
-#include "../../Format/Dat/File.h"
 #include "../../Format/Dat/Item.h"
 #include "../../Format/Dat/MiscFile.h"
 #include "../../Format/Dat/Stream.h"
@@ -54,6 +52,8 @@
 #include "../../Format/Txt/MapsFile.h"
 #include "../Txt/WorldmapFile.h"
 
+#include "../../Format/Dat/File.h"
+
 // Third party includes
 
 namespace Falltergeist
@@ -74,21 +74,7 @@ File::File(const std::string& filename)
     _initialize();
 }
 
-File::~File()
-{
-    for (auto item : _items)
-    {
-        delete item.second;
-    }
-
-    for (auto entry : _entries)
-    {
-        delete entry;
-    }
-    delete _stream;
-}
-
-std::string File::filename()
+std::string File::filename() const
 {
     return _filename;
 }
@@ -101,12 +87,8 @@ File* File::setFilename(const std::string& filename)
 
 void File::_initialize()
 {
-    if (_initialized) return;
-    _initialized = true;
-
-    _stream = new std::ifstream();
-    _stream->open(filename(), std::ios_base::binary);
-    if (!_stream->is_open())
+    _stream.open(filename(), std::ios_base::binary);
+    if (!_stream.is_open())
     {
         throw Exception("File::_initialize() - can't open stream: " + filename());
     }
@@ -133,31 +115,29 @@ void File::_initialize()
     //reading files data one by one
     for (unsigned int i = 0; i != filesTotalNumber; ++i)
     {
-        auto entry = new Entry(this);
-
-        *this >> *entry;
-
-        _entries.push_back(entry);
+        Entry entry(this);
+        *this >> entry;
+        _entries.emplace(entry.filename(), std::move(entry));
     }
 }
 
 File* File::setPosition(unsigned int position)
 {
-    _stream->seekg(position, std::ios::beg);
+    _stream.seekg(position, std::ios::beg);
     return this;
 }
 
 unsigned int File::position()
 {
-    return static_cast<unsigned>(_stream->tellg());
+    return static_cast<unsigned>(_stream.tellg());
 }
 
 unsigned int File::size(void)
 {
-    auto oldPosition = _stream->tellg();
-    _stream->seekg(0,std::ios::end);
-    auto currentPosition = _stream->tellg();
-    _stream->seekg(oldPosition, std::ios::beg);
+    auto oldPosition = _stream.tellg();
+    _stream.seekg(0,std::ios::end);
+    auto currentPosition = _stream.tellg();
+    _stream.seekg(oldPosition, std::ios::beg);
     return static_cast<unsigned>(currentPosition);
 }
 
@@ -167,74 +147,20 @@ File* File::skipBytes(unsigned int numberOfBytes)
     return this;
 }
 
-File* File::readBytes(char * destination, unsigned int numberOfBytes)
+File* File::readBytes(char* destination, unsigned int numberOfBytes)
 {
     unsigned int position = this->position();
-    _stream->read(destination, numberOfBytes);
+    _stream.read(destination, numberOfBytes);
     setPosition(position + numberOfBytes);
     return this;
 }
 
-template <class T>
-inline T* itemFromEntry(Entry& entry)
+Entry* File::entry(const std::string& filename)
 {
-    return new T(Stream(entry));
-}
-
-Item* File::_createItemByName(const std::string& filename, Entry& entry)
-{
-    std::string extension = filename.substr(filename.length() - 3, 3);
-
-    if (extension == "aaf") return itemFromEntry<Aaf::File>(entry);
-    else if (extension == "acm") return itemFromEntry<Acm::File>(entry);
-    else if (extension == "bio") return itemFromEntry<Bio::File>(entry);
-    else if (extension == "fon") return itemFromEntry<Fon::File>(entry);
-    else if (extension == "frm") return itemFromEntry<Frm::File>(entry);
-    else if (extension == "gam") return itemFromEntry<Gam::File>(entry);
-    else if (extension == "gcd") return itemFromEntry<Gcd::File>(entry);
-    else if (extension == "int") return itemFromEntry<Int::File>(entry);
-    else if (extension == "lip") return itemFromEntry<Lip::File>(entry);
-    else if (extension == "lst") return itemFromEntry<Lst::File>(entry);
-    else if (extension == "map") return itemFromEntry<Map::File>(entry);
-    else if (extension == "msg") return itemFromEntry<Msg::File>(entry);
-    else if (extension == "mve") return itemFromEntry<Mve::File>(entry);
-    else if (extension == "pal") return itemFromEntry<Pal::File>(entry);
-    else if (extension == "pro") return itemFromEntry<Pro::File>(entry);
-    else if (extension == "rix") return itemFromEntry<Rix::File>(entry);
-    else if (extension == "sve") return itemFromEntry<Sve::File>(entry);
-    else if (filename == "data/city.txt")     return itemFromEntry<Txt::CityFile>(entry);
-    else if (filename == "data/enddeath.txt") return itemFromEntry<Txt::EndDeathFile>(entry);
-    else if (filename == "data/endgame.txt")  return itemFromEntry<Txt::EndGameFile>(entry);
-    else if (filename == "data/genrep.txt")   return itemFromEntry<Txt::GenRepFile>(entry);
-    else if (filename == "data/holodisk.txt") return itemFromEntry<Txt::HolodiskFile>(entry);
-    else if (filename == "data/karmavar.txt") return itemFromEntry<Txt::KarmaVarFile>(entry);
-    else if (filename == "data/maps.txt")     return itemFromEntry<Txt::MapsFile>(entry);
-    else if (filename == "data/quests.txt")   return itemFromEntry<Txt::QuestsFile>(entry);
-    else if (filename == "data/worldmap.txt") return itemFromEntry<Txt::WorldmapFile>(entry);
-    else return itemFromEntry<Format::Dat::MiscFile>(entry);
-}
-
-Item* File::item(const std::string& filename)
-{
-    using std::move;
-    if (_items.find(filename) != _items.end())
-    {
-        return _items.at(filename);
+    auto entryIt = _entries.find(filename);
+    if (entryIt != _entries.end()) {
+        return &entryIt->second;
     }
-
-    for (auto entry : _entries)
-    {
-        if (entry->filename() != filename) continue;
-
-        auto item = _createItemByName(filename, *entry);
-        item->setFilename(filename);
-        if (item != nullptr)
-        {
-            _items.insert(std::make_pair(filename, item));
-        }
-        return item;
-    }
-
     return nullptr;
 }
 
