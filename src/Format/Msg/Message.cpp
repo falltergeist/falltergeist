@@ -23,7 +23,7 @@
  */
 
 // C++ standard includes
-
+#include <string>
 // Falltergeist includes
 #include "../../Format/Msg/Message.h"
 
