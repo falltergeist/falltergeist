@@ -25,6 +25,7 @@
 // C++ standard includes
 #include <string>
 #include <cstdlib>
+#include <utility>
 
 // Falltergeist includes
 #include "../../Exception.h"
@@ -127,7 +128,7 @@ void File::_initialize()
 				found->second->_desc = text;
 			}
 			else {
-				Msgs.insert(std::make_pair(std::stoi(number), new MsgStruct(sound, text)));
+				_messages.insert(std::make_pair(std::stoi(number), new Message(sound, text)));
 			}
         }
     }
