@@ -70,6 +70,20 @@ Sprite::Sprite(Format::Frm::File *frm) : Sprite(frm->filename())
 
 }
 
+Size Sprite::size() const {		
+     return _texture->size();		
+}		
+ 		
+unsigned int Sprite::width() const		
+{		
+    return _texture->width();		
+}		
+ 		
+unsigned int Sprite::height() const		
+{		
+   return _texture->height();		
+}
+
 // render, optionally scaled
 void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height, bool transparency, bool light, int outline, unsigned int lightValue)
 {
