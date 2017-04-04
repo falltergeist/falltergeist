@@ -122,11 +122,13 @@ void File::_initialize()
                 text.replace(text.find("\r"), 1, "");
             }
 
-            auto message = new Message();
-            message->setNumber(std::stoi(number));
-            message->setSound(sound);
-            message->setText(text);
-            _messages.push_back(message);
+			auto found = _messages.find(std::stoi(number));
+			if (found != _messages.end()) {
+				found->second->_desc = text;
+			}
+			else {
+				Msgs.insert(std::make_pair(std::stoi(number), new MsgStruct(sound, text)));
+			}
         }
     }
 }
@@ -138,13 +140,10 @@ std::vector<Message*>* File::messages()
 
 Message* File::message(unsigned int number)
 {
-    for (auto message : _messages)
-    {
-        if (message->number() == number)
-        {
-            return message;
-        }
-    }
+	auto found = _messages.find(number);
+	if (found != _messages.end()) {
+		return found->second;
+	}
     throw Exception("File::message() - number is out of range: " + std::to_string(number));
 }
 

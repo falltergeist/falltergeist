@@ -23,9 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Format/Int/File.h"
-#include "../Format/Msg/File.h"
-#include "../Format/Msg/Message.h"
+#include "../Format/Unified/UnifiedFile.h"
 #include "../Format/Pro/File.h"
 #include "../Game/AmmoItemObject.h"
 #include "../Game/ArmorItemObject.h"
@@ -132,25 +130,27 @@ Object* ObjectFactory::createObject(unsigned int PID)
             ((ItemObject*)object)->setWeight(proto->weight());
             // @TODO: ((GameItemObject*)object)->setVolume(proto->containerSize());
             ((ItemObject*)object)->setInventoryFID(proto->inventoryFID());
-            auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_item.msg");
+            auto msg = ResourceManager::getInstance()->unifiedFileType("text/english/game/pro_item.msg");
             try
             {
-                object->setName(msg->message(proto->messageId())->text());
-                object->setDescription(msg->message(proto->messageId() + 1)->text());
+				auto obj = msg->Msgs.find(proto->messageId())->second;
+				object->setName(obj->text);
+				object->setDescription(obj->desc);
             }
-            catch (const Exception&) {}
+            catch (const Exception& e) {}
             break;
         }
         case OBJECT_TYPE::CRITTER:
         {
             object = new CritterObject();
-            auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_crit.msg");
+            auto msg = ResourceManager::getInstance()->unifiedFileType("text/english/game/pro_crit.msg");
             try
             {
-                object->setName(msg->message(proto->messageId())->text());
-                object->setDescription(msg->message(proto->messageId() + 1)->text());
+				auto obj = msg->Msgs.find(proto->messageId())->second;
+				object->setName(obj->text);
+				object->setDescription(obj->desc);
             }
-            catch (const Exception&) {}
+            catch (const Exception& e) {}
 
             for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
             {
@@ -210,13 +210,14 @@ Object* ObjectFactory::createObject(unsigned int PID)
                     break;
                 }
             }
-            auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_scen.msg");
+            auto msg = ResourceManager::getInstance()->unifiedFileType("text/english/game/pro_scen.msg");
             try
             {
-                object->setName(msg->message(proto->messageId())->text());
-                object->setDescription(msg->message(proto->messageId() + 1)->text());
+				auto obj = msg->Msgs.find(proto->messageId())->second;
+				object->setName(obj->text);
+				object->setDescription(obj->desc);
             }
-            catch (const Exception&) {}
+            catch (const Exception& e) {}
 
             ((SceneryObject*)object)->setSoundId((char)proto->soundId());
 
@@ -248,13 +249,14 @@ Object* ObjectFactory::createObject(unsigned int PID)
         case OBJECT_TYPE::WALL:
         {
             object = new WallObject();
-            auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_wall.msg");
+            auto msg = ResourceManager::getInstance()->unifiedFileType("text/english/game/pro_wall.msg");
             try
             {
-                object->setName(msg->message(proto->messageId())->text());
-                object->setDescription(msg->message(proto->messageId() + 1)->text());
+				auto obj = msg->Msgs.find(proto->messageId())->second;
+				object->setName(obj->text);
+				object->setDescription(obj->desc);
             }
-            catch (const Exception&) {}
+            catch (const Exception& e) {}
 
             //first two bytes are orientation. second two - unknown
             unsigned short orientation = proto->flagsExt() >> 16;
@@ -305,13 +307,14 @@ Object* ObjectFactory::createObject(unsigned int PID)
                     break;
             }
 
-            auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_misc.msg");
+            auto msg = ResourceManager::getInstance()->unifiedFileType("text/english/game/pro_misc.msg");
             try
             {
-                object->setName(msg->message(proto->messageId())->text());
-                object->setDescription(msg->message(proto->messageId() + 1)->text());
+				auto obj = msg->Msgs.find(proto->messageId())->second;
+                object->setName(obj->text);
+                object->setDescription(obj->desc);
             }
-            catch (const Exception&) {}
+            catch (const Exception& e) {}
             break;
         }
     }

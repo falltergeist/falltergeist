@@ -44,24 +44,12 @@ class Message
 
 public:
     Message();
+	Message(std::string &s, std::string &t);
     ~Message();
 
-    void setNumber(unsigned int number);
-    unsigned int number();
-
-    void setSound(std::string sound);
-    std::string sound();
-
-    void setText(std::string text);
-    std::string text();
-    std::string* textPointer();
-
-    operator std::string();
-
-protected:
-    unsigned int _number = 0;
     std::string _sound;
     std::string _text;
+	std::string _desc;
 
 };
 
