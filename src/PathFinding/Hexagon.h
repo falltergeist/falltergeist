@@ -21,7 +21,7 @@
 #define FALLTERGEIST_HEXAGON_H
 
 // C++ standard includes
-#include <vector>
+#include <array>
 #include <list>
 
 // Falltergeist includes
@@ -48,29 +48,35 @@ public:
     const Point& position() const;
     void setPosition(const Point& pos);
 
-    unsigned int number();
-    void setNumber(unsigned int number);
+	inline unsigned int number(){return _number;}
 
-    std::vector<Hexagon*>* neighbors();
+	inline void setNumber(unsigned int number){_number = number;}
+
+    std::array<Hexagon*,6>& neighbors();
 
     std::list<Game::Object*>* objects();
 
-    int cubeX();
-    void setCubeX(int value);
+	inline int cubeX(){return _cubeX;}
 
-    int cubeY();
-    void setCubeY(int value);
+	inline void setCubeX(int value){_cubeX = value;}
 
-    int cubeZ();
-    void setCubeZ(int value);
+	inline int cubeY(){return _cubeY;}
 
-    unsigned int heuristic();
-    void setHeuristic(unsigned int value);
+	inline void setCubeY(int value){_cubeY = value;}
+
+	inline int cubeZ(){return _cubeZ;}
+
+	inline void setCubeZ(int value){_cubeZ = value;}
+
+	inline unsigned int heuristic(){return _heuristic;}
+
+	inline void setHeuristic(unsigned int value){_heuristic = value;}
 
     bool canWalkThru();
 
-    void setInRender(bool value);
-    bool inRender();
+	inline bool inRender(){return _inRender;}
+
+	inline void setInRender(bool value){_inRender = value;}
 
     Game::Orientation orientationTo(Hexagon *hexagon);
 
@@ -80,7 +86,7 @@ public:
     unsigned int light();
 
 protected:
-    std::vector<Hexagon*> _neighbors;
+	std::array<Hexagon*, 6>_neighbors;
     std::list<Game::Object*> _objects;
     unsigned int _number = 0; // position in hexagonal grid
 
